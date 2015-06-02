@@ -195,6 +195,7 @@ class MailManager extends BaseManager
         foreach ($users as $recepteurMail => $recepteurName)
         {   
             $options["u"]  = $recepteurName;
+            $options = $this->getAllOptions($options);
 
             //prepare content
             $content        = $this->replaceContent($mail->getBody(), NULL , $options);
@@ -541,6 +542,7 @@ class MailManager extends BaseManager
             $options["nomdestinataire"]  = $recepteurName;
             $options["maildestinataire"] = $recepteurMail;
             $options["u"]  = $recepteurName;
+            $options = $this->getAllOptions($options);
             
             //prepare content
             $content        = $this->replaceContent($mail->getBody(), NULL , $options);
@@ -575,6 +577,7 @@ class MailManager extends BaseManager
         {
             $options["nomdestinataire"]  = $recepteurName;
             $options["maildestinataire"] = $recepteurMail;
+            $options = $this->getAllOptions($options);
             
             //prepare content
             $content        = $this->replaceContent($mail->getBody(), NULL , $options);
@@ -609,6 +612,7 @@ class MailManager extends BaseManager
         {
             $options["nomdestinataire"]  = $recepteurName;
             $options["maildestinataire"] = $recepteurMail;
+            $options = $this->getAllOptions($options);
             
             //prepare content
             $content        = $this->replaceContent($mail->getBody(), NULL , $options);
@@ -642,6 +646,7 @@ class MailManager extends BaseManager
         foreach ($users as $recepteurMail => $recepteurName)
         {   
             $options["u"]  = $recepteurName;
+            $options = $this->getAllOptions($options);
 
             //prepare content
             $content        = $this->replaceContent($mail->getBody(), NULL , $options);
