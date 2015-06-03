@@ -6,6 +6,7 @@
  */
 namespace HopitalNumerique\InterventionBundle\Form;
 
+use Doctrine\ORM\EntityRepository;
 use Symfony\Component\Security\Core\SecurityContext;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -136,7 +137,7 @@ abstract class InterventionDemandeType extends AbstractType
                 'required' => false
             ))
             ->add('objets', 'entity', array(
-                'choices'  => $this->formInterventionDemandeManager->getObjetsChoices($this->interventionDemande->getAmbassadeur()),
+                'choices'  => $this->formInterventionDemandeManager->getObjetsChoices(),
                 'label'    => 'Ma sollicitation porte sur la/les production(s) ANAP suivante(s)',
                 'class'    => 'HopitalNumeriqueObjetBundle:Objet',
                 'property' => 'titre',
@@ -145,22 +146,38 @@ abstract class InterventionDemandeType extends AbstractType
                 'attr'     => array('class' => 'hopitalnumerique_interventionbundle_interventiondemande_objets')
             ))
             ->add('connaissances', 'genemu_jqueryselect2_entity', array(
-                'choices'  => $this->formInterventionDemandeManager->getConnaissancesChoices($this->interventionDemande->getAmbassadeur()),
+                // 'choices'  => $this->formInterventionDemandeManager->getConnaissancesChoices($this->interventionDemande->getAmbassadeur()),
                 'label'    => 'Ma sollicitation porte sur la/les connaissances(s) métier(s) suivante(s)',
                 'class'    => 'HopitalNumeriqueReferenceBundle:Reference',
                 'property' => 'libelle',
                 'multiple' => true,
                 'required' => true,
-                'group_by' => 'parentName'
+                'group_by' => 'parentName',
+                'query_builder' => function(EntityRepository $er) {
+                    return $er->createQueryBuilder('ref')
+                        ->where('ref.code = :code')
+                        ->leftJoin('ref.etat', 'etat')
+                            ->andWhere('etat.id = 3')
+                        ->setParameter('code', 'PERIMETRE_FONCTIONNEL_DOMAINES_FONCTIONNELS')
+                        ->orderBy('ref.order', 'ASC');
+                }
             ))
             ->add('connaissancesSI', 'genemu_jqueryselect2_entity', array(
-                'choices'  => $this->formInterventionDemandeManager->getConnaissancesSIChoices($this->interventionDemande->getAmbassadeur()),
+                // 'choices'  => $this->formInterventionDemandeManager->getConnaissancesSIChoices($this->interventionDemande->getAmbassadeur()),
                 'label'    => 'Ma sollicitation porte sur la/les connaissance(s) SI suivante(s)',
                 'class'    => 'HopitalNumeriqueReferenceBundle:Reference',
                 'property' => 'libelle',
                 'multiple' => true,
                 'required' => true,
-                'group_by' => 'parentName'
+                'group_by' => 'parentName',
+                'query_builder' => function(EntityRepository $er) {
+                    return $er->createQueryBuilder('ref')
+                        ->where('ref.code = :code')
+                        ->leftJoin('ref.etat', 'etat')
+                            ->andWhere('etat.id = 3')
+                        ->setParameter('code', 'CONNAISSANCES_AMBASSADEUR_SI')
+                        ->orderBy('ref.order', 'ASC');
+                }
             ))
             ->add('objetsAutres', 'textarea', array(
                 'label'    => 'Ma sollicitation porte sur une autre production / un autre thème',

@@ -48,16 +48,21 @@ class ImportExcelChapitreManager extends ChapitreManagerAutodiag
             if(!is_null($chapitreDonnees['id']))
             {
                 $chapitre = $this->findOneBy(array('id' => $chapitreDonnees['id']));
+
             }
             if(is_null($chapitre))
             {
-                //Création d'une nouvelle catégorie
+                //Création d'une nouvelle chapitre
                 $chapitre = $this->createEmpty();
                 $chapitre->setOrder($key + 1);
                 if(array_key_exists('id', $chapitreDonnees) && !is_null($chapitreDonnees['id']))
                 {
                     $chapitre->setId($chapitreDonnees['id']);
                 }
+            }
+            elseif($chapitre->getOutil()->getId() !== $outil->getId())
+            {
+                die('Erreur dans les chapitres : Vous modifié un chapitre d\'un autre autodiagnostic !');
             }
 
             $tool  = new Chaine( $chapitreDonnees['libelle'] );
