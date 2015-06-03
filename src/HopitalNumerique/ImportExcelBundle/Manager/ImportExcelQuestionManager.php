@@ -39,8 +39,14 @@ class ImportExcelQuestionManager extends QuestManagerAutodiag
 
         foreach ($arrayQuestions as $questionDonnees) 
         {
-            //Création d'une nouvelle catégorie
-            $question = $this->createEmpty();
+            $question = array_key_exists('id', $questionDonnees) && !is_null($questionDonnees['id']) ? $this->findOneById() : $this->createEmpty();
+
+            //Dans le cas où le findOneById n'a rien trouvé
+            if(is_null($question))
+            {
+                //Création d'une nouvelle catégorie
+                $question = $this->createEmpty();
+            }
 
             //Récupération du chapitre
             if(trim($questionDonnees['numChapitre']) !== "")
