@@ -63,13 +63,6 @@ class ImportExcelQuestionManager extends QuestManagerAutodiag
                 }
                 else
                 {
-
-                echo '<pre>';
-                
-                \Doctrine\Common\Util\Debug::dump($questionDonnees['numQuestion']);
-                \Doctrine\Common\Util\Debug::dump(!is_null($chapitre));
-                \Doctrine\Common\Util\Debug::dump($chapitre);
-                die();
                     //Dans le cas où cette question ne correspond à aucun chapitre on stop les questions
                     die('La question ' . $questionDonnees['numQuestion'] . ' ne correspond à aucun chapitre, veuillez le corriger.');
                     break;
