@@ -1412,6 +1412,11 @@ class InterventionDemande
 
         foreach ($connaissances as $connaissance)
         {
+            if(is_null($connaissance->getParent()))
+            {
+                continue;
+            }
+
             if(!array_key_exists($connaissance->getParent()->getId(), $connaissancesOrdered))
             {
                 $connaissancesOrdered[$connaissance->getParent()->getId()] = array();
@@ -1430,6 +1435,11 @@ class InterventionDemande
 
         foreach ($connaissancesSI as $connaissance)
         {
+            if(is_null($connaissance->getParent()))
+            {
+                continue;
+            }
+            
             if(!array_key_exists($connaissance->getParent()->getId(), $connaissancesOrdered))
             {
                 $connaissancesOrdered[$connaissance->getParent()->getId()] = array();

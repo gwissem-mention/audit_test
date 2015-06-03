@@ -76,12 +76,11 @@ class InterventionDemandeManager
     /**
      * Retourne la liste des objets pour les listes de formulaire.
      *
-     * @param \HopitalNumerique\UserBundle\Entity\User $ambassadeur L'ambassadeur pour le filtre
      * @return array Liste des objets pour les listes de formulaire
      */
-    public function getObjetsChoices(User $ambassadeur = null)
+    public function getObjetsChoices()
     {
-        return is_null($ambassadeur) ? $this->objetManager->getObjetsByTypes( array(175, 176, 177, 178, 179, 180, 181, 182) ) : $this->objetManager->getObjetsByAmbassadeur($ambassadeur);
+        return $this->objetManager->getObjetsByTypes( array(175, 176, 177, 178, 179, 180, 181, 182) );
     }
     /**
      * Retourne la liste des objets pour les listes de formulaire.
@@ -93,7 +92,7 @@ class InterventionDemandeManager
     {
         if(is_null($ambassadeur))
         {
-            return $this->referenceManager->findBy(array('code' => 'CONNAISSANCES_AMBASSADEUR'), array('order' => 'ASC'));
+            return $this->referenceManager->findBy(array('code' => 'PERIMETRE_FONCTIONNEL_DOMAINES_FONCTIONNELS'), array('order' => 'ASC'));
         }
         else
         {
