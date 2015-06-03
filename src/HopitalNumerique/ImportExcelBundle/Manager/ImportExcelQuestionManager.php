@@ -39,13 +39,17 @@ class ImportExcelQuestionManager extends QuestManagerAutodiag
 
         foreach ($arrayQuestions as $questionDonnees) 
         {
-            $question = array_key_exists('id', $questionDonnees) && !is_null($questionDonnees['id']) ? $this->findOneById() : $this->createEmpty();
+            $question = array_key_exists('id', $questionDonnees) && !is_null($questionDonnees['id']) ? $this->findOneById($questionDonnees['id']) : null;
 
             //Dans le cas où le findOneById n'a rien trouvé
             if(is_null($question))
             {
                 //Création d'une nouvelle catégorie
                 $question = $this->createEmpty();
+                if(array_key_exists('id', $questionDonnees) && !is_null($questionDonnees['id']))
+                {
+                    $question->setId($questionDonnees['id']);
+                }
             }
 
             //Récupération du chapitre
@@ -59,6 +63,13 @@ class ImportExcelQuestionManager extends QuestManagerAutodiag
                 }
                 else
                 {
+
+                echo '<pre>';
+                
+                \Doctrine\Common\Util\Debug::dump($questionDonnees['numQuestion']);
+                \Doctrine\Common\Util\Debug::dump(!is_null($chapitre));
+                \Doctrine\Common\Util\Debug::dump($chapitre);
+                die();
                     //Dans le cas où cette question ne correspond à aucun chapitre on stop les questions
                     die('La question ' . $questionDonnees['numQuestion'] . ' ne correspond à aucun chapitre, veuillez le corriger.');
                     break;
@@ -104,7 +115,7 @@ class ImportExcelQuestionManager extends QuestManagerAutodiag
             $question->setLien($questionDonnees['lien']);
             $question->setDescriptionLien($questionDonnees['descriptionLien']);
 
-            $this->save( $question );
+            $this->saveForceId( $question );
 
             $arrayIdsQuestions[$questionDonnees['id']] = $question->getId();
         }

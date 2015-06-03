@@ -216,6 +216,18 @@ class Chapitre
     }
 
     /**
+     * Set id
+     *
+     * @return Chapitre 
+     */
+    public function setId($id)
+    {
+        $this->id = $id;
+
+        return $this;
+    }
+
+    /**
      * Set title
      *
      * @param string $title

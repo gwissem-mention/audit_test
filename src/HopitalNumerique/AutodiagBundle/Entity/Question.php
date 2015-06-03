@@ -193,6 +193,18 @@ class Question
     }
 
     /**
+     * Set id
+     *
+     * @return Question 
+     */
+    public function setId($id)
+    {
+        $this->id = $id;
+
+        return $this;
+    }
+
+    /**
      * Set texte
      *
      * @param string $texte

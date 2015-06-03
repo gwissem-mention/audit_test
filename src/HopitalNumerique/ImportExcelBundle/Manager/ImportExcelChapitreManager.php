@@ -54,6 +54,10 @@ class ImportExcelChapitreManager extends ChapitreManagerAutodiag
                 //Création d'une nouvelle catégorie
                 $chapitre = $this->createEmpty();
                 $chapitre->setOrder($key + 1);
+                if(array_key_exists('id', $chapitreDonnees) && !is_null($chapitreDonnees['id']))
+                {
+                    $chapitre->setId($chapitreDonnees['id']);
+                }
             }
 
             $tool  = new Chaine( $chapitreDonnees['libelle'] );
@@ -86,8 +90,8 @@ class ImportExcelChapitreManager extends ChapitreManagerAutodiag
 
             $chapitre->setOutil($outil);
 
-            $this->save( $chapitre );
-            
+            $this->saveForceId( $chapitre );
+
             $arrayIdsChapitres[('' != $chapitreDonnees['id'] ? $chapitreDonnees['id'] : $chapitre->getId())] = $chapitre->getId();
         }
         
