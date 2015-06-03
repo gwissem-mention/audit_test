@@ -261,9 +261,9 @@ class ObjetManager extends BaseManager
      *
      * @return array
      */
-    public function getObjetsByTypes( $types, $limit = 0 )
+    public function getObjetsByTypes( $types, $limit = 0 , $order = array( 'champ' => 'obj.dateModification', 'tri' => 'DESC'))
     {
-        return $this->getRepository()->getObjetsByTypes( $types, $limit )->getQuery()->getResult();
+        return $this->getRepository()->getObjetsByTypes( $types, $limit, $order )->getQuery()->getResult();
     }
 
     /**

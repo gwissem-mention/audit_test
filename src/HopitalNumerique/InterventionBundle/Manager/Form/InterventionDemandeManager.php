@@ -80,7 +80,10 @@ class InterventionDemandeManager
      */
     public function getObjetsChoices()
     {
-        return $this->objetManager->getObjetsByTypes( array(175, 176, 177, 178, 179, 180, 181, 182) );
+        return $this->objetManager->getObjetsByTypes( array(175, 176, 177, 178, 179, 180, 181, 182), 0, array(
+            'champ' => 'obj.titre',
+            'tri'   => 'ASC'
+        ));
     }
     /**
      * Retourne la liste des objets pour les listes de formulaire.
