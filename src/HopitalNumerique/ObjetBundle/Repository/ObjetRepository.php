@@ -99,7 +99,7 @@ class ObjetRepository extends EntityRepository
      *
      * @return QueryBuilder
      */
-    public function getObjetsByTypes( $types, $limit = 0 )
+    public function getObjetsByTypes( $types, $limit = 0, $order )
     {
         $qb = $this->_em->createQueryBuilder();
         $qb->select('obj')
@@ -117,7 +117,7 @@ class ObjetRepository extends EntityRepository
                 )
             )
             ->setParameter('today', new \DateTime() )
-            ->orderBy('obj.dateModification', 'DESC')
+            ->orderBy($order['champ'], $order['tri'])
             ->setParameter('types', $types );
         
         if( $limit !== 0 )
