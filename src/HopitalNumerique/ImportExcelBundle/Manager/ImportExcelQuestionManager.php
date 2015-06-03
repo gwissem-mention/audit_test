@@ -51,6 +51,10 @@ class ImportExcelQuestionManager extends QuestManagerAutodiag
                     $question->setId($questionDonnees['id']);
                 }
             }
+            elseif($question->getChapitre()->getOutil()->getId() !== $outil->getId())
+            {
+                die('Erreur dans les questions : Vous modifié une question d\'un autre autodiagnostic !');
+            }
 
             //Récupération du chapitre
             if(trim($questionDonnees['numChapitre']) !== "")
