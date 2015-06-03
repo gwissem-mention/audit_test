@@ -183,6 +183,23 @@ abstract class Manager
     }
 
     /**
+     * Enregistre l'entitée en autorisant le forcage de l'id
+     *
+     * @param Entity $entity L'entitée
+     *
+     * @return empty
+     */
+    public function saveForceId( $entity )
+    {
+        $this->_em->persist( $entity );
+
+        $metadata = $this->_em->getClassMetaData(get_class($entity));
+        $metadata->setIdGeneratorType(\Doctrine\ORM\Mapping\ClassMetadata::GENERATOR_TYPE_NONE);
+
+        $this->_em->flush();
+    }
+
+    /**
      * Retourne 1 élément filtré selon les critères
      *
      * @param array $criteria Les critères
