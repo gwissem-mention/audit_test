@@ -636,6 +636,8 @@ class ObjetManager extends BaseManager
             }
         }
 
+        usort($actualites, array($this,"triArrayObjetDateAntichronologique"));
+
         return $actualites;
     }
     
@@ -771,7 +773,10 @@ class ObjetManager extends BaseManager
 
 
 
-
+    private function triArrayObjetDateAntichronologique($a, $b)
+    {
+        return $a->date > $b->date ? 0 : 1;
+    }
     /**
      * Filtre les reférences en fonction de l'objet passés en paramètre
      *
