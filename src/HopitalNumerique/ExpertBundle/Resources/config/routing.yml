@@ -1,0 +1,36 @@
+hopital_numerique_expert_homepage:
+    pattern:  /expert/activite
+    defaults: { _controller: HopitalNumeriqueExpertBundle:ActiviteExpert:index }
+
+hopitalnumerique_expert_expert_activite:
+    pattern:  /expert_activite
+    defaults: { _controller: "HopitalNumeriqueExpertBundle:ActiviteExpert:index" }
+    requirements: 
+        _method: GET|POST
+
+hopitalnumerique_expert_expert_activite_add:
+    pattern:  /expert_activite/add
+    defaults: { _controller: "HopitalNumeriqueExpertBundle:ActiviteExpert:add" }
+    requirements: 
+        _method: GET|POST
+
+hopitalnumerique_expert_expert_activite_show:
+    pattern:  /expert_activite/show/{id}
+    defaults: { _controller: "HopitalNumeriqueExpertBundle:ActiviteExpert:show" }
+    requirements:
+        id: \d+
+        _method: GET
+
+hopitalnumerique_expert_expert_activite_edit:
+    pattern:  /expert_activite/edit/{id}
+    defaults: { _controller: "HopitalNumeriqueExpertBundle:ActiviteExpert:edit" }
+    requirements:
+        id: \d+
+        _method: GET|POST
+
+hopitalnumerique_expert_expert_activite_delete:
+    pattern:  /expert_activite/delete/{id}.{_format}
+    defaults: { _controller: "HopitalNumeriqueExpertBundle:ActiviteExpert:delete", _format: json }
+    requirements: 
+        id: \d+
+        _method: POST|DELETE

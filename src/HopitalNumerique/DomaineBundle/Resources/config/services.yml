@@ -1,6 +1,6 @@
 parameters:
     #Options
-    hopital_numerique_domaine.options:parameters:
+    hopital_numerique_domaine.options:
     hopitalnumerique_domaine.manager.domaine.class: HopitalNumerique\DomaineBundle\Manager\DomaineManager
     hopitalnumerique_domaine.grid.domaine.class: HopitalNumerique\DomaineBundle\Grid\DomaineGrid
     hopitalnumerique_domaine.form.domaine.class: HopitalNumerique\DomaineBundle\Form\DomaineType

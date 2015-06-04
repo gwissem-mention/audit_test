@@ -14,6 +14,7 @@ assetic:
         - NodevoGestionnaireMediaBundle
         - NodevoCookieBundle
         - HopitalNumeriqueAdminBundle
+        - HopitalNumeriqueExpertBundle
         - HopitalNumeriqueInterventionBundle
         - HopitalNumeriqueUserBundle
         - HopitalNumeriqueReferenceBundle

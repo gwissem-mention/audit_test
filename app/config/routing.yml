@@ -110,6 +110,10 @@ hopital_numerique_module:
     resource: "@HopitalNumeriqueModuleBundle/Resources/config/routing.yml"
     prefix:   /
 
+hopital_numerique_expert:
+    resource: "@HopitalNumeriqueExpertBundle/Resources/config/routing.yml"
+    prefix:   /admin
+
 # Bundles Hopital Numérique : partie Admin ET partie Front
 hopital_numerique_user:
     resource: "@HopitalNumeriqueUserBundle/Resources/config/routing.yml"

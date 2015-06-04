@@ -1,0 +1,57 @@
+{% extends 'NodevoAdminBundle::admin.html.twig' %}
+
+{% block stylesheets %}
+    {{parent()}}
+    {% stylesheets output="compiled/hopitalnumerique-expert-activite.css" filter="cssrewrite, ?yui_css"
+        "@fancybox_css"
+        "@select2_css"
+        "@validationEngine_css"
+        'bundles/hopitalnumeriqueexpert/css/style.css'
+    %}
+        <link rel="stylesheet" href="{{ asset_url }}" />
+    {% endstylesheets %}
+{% endblock %}
+
+{% block javascripts %}
+    {{parent()}}
+    {% javascripts output="compiled/hopitalnumerique-expert-activite.js"
+        "@fancybox_js"
+        "@validationEngine_js"
+        "@select2_js"
+        'bundles/hopitalnumeriqueexpert/js/script.js'
+    %}
+        <script type="text/javascript" src="{{ asset_url }}"></script>
+    {% endjavascripts %}
+{% endblock %}
+
+{% block h1Title %}
+    {% if activiteexpert.id %}
+        Editer une activité d'expert
+    {% else %}
+        Ajouter une activité d'expert
+    {% endif %}
+{% endblock %}
+
+{% block toolbarButton %}
+    <a class="btn btn-default" href="{{ path('hopitalnumerique_expert_expert_activite') }}" title="Retour à la liste"><i class="fa fa-reply"></i></a>
+    <div onclick="$('form').submit();" class="btn btn-default" title="Enregistrer"><i class="fa fa-check"></i></div>
+    <div onclick="$('#do').val('save-close');$('form').submit();" class="btn btn-default" title="Enregistrer et Fermer"><i class="fa fa-save"></i></div>
+    {% if activiteexpert.id %}
+        <div onclick='deleteWithConfirm("{{ path('hopitalnumerique_expert_expert_activite_delete', { 'id': activiteexpert.id }) }}");' class="btn btn-default" title="Supprimer"><i class="fa fa-trash-o"></i></div>
+    {% endif %}
+{% endblock %}
+
+{% block body %}
+    <div class="col-sm-12">
+        <div class="panel panel-midnightblue">
+            <div class="panel-heading">
+                <h4>Informations</h4>
+            </div>
+
+            <div class="panel-body">
+                {% form_theme form 'NodevoAdminBundle::form.html.twig' %}
+                {{ form(form) }}
+            </div>
+        </div>
+    </div>
+{% endblock %}
