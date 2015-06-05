@@ -38,6 +38,8 @@ class EvenementExpertGrid extends Grid implements GridInterface
     public function setActionsButtons()
     {
         $this->addActionButton( new Action\EditButton( 'hopitalnumerique_expert_evenement_expert_edit' ) );
+        $this->addActionButton( new Action\FancyButton( 'hopitalnumerique_expert_expert_activite_parametrage' ) );
+
     }
 
     /**

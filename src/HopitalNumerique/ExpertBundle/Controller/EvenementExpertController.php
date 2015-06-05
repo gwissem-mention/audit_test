@@ -46,6 +46,18 @@ class EvenementExpertController extends Controller
 
         return $this->renderForm('hopitalnumerique_expert_evenementexpert', $evenementexpert, 'HopitalNumeriqueExpertBundle:EvenementExpert:edit.html.twig' );
     }
+    
+    /**
+     * POPIN : Partage de resultat
+     */
+    public function parametrageAction()
+    {
+        $montantVacation = $this->get('hopitalnumerique_reference.manager.reference')->findOneById(560);
+
+        return $this->render( 'HopitalNumeriqueExpertBundle:EvenementExpert:fancy.html.twig' , array(
+            'montantVacation' => $montantVacation
+        ));
+    }
 
 
 

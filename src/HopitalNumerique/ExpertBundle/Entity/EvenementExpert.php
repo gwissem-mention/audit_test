@@ -62,7 +62,6 @@ class EvenementExpert
         $this->nbVacation = 1;
     }
 
-
     /**
      * Get id
      *

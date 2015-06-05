@@ -6,12 +6,25 @@
 {% block stylesheets %}
     {{ parent() }}
     {{ block('grid_stylesheets')}}
+    {% stylesheets output="compiled/hopitalnumerique-expert-evenement-index.css" filter="cssrewrite, ?yui_css"
+        "@fancybox_css"
+        'bundles/hopitalnumeriqueexpert/css/style.css'
+    %}
+        <link rel="stylesheet" href="{{ asset_url }}" />
+    {% endstylesheets %}
 {% endblock %}
 
 {% block javascripts %}
     {{ parent() }}
     {{ block('grid_javascripts')}}
+    {% javascripts output="compiled/hopitalnumerique-expert-evenement-index.js"
+        "@fancybox_js"
+        'bundles/hopitalnumeriqueexpert/js/index.js'
+    %}
+        <script type="text/javascript" src="{{ asset_url }}"></script>
+    {% endjavascripts %}
 {% endblock %}
+
 
 {% block h1Title %}
     Gestion des EvenementExpert
