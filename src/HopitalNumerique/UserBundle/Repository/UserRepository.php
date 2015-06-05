@@ -487,7 +487,7 @@ class UserRepository extends EntityRepository
         $qb->select('COUNT(user.etablissementRattachementSante)')
            ->from('HopitalNumeriqueUserBundle:User', 'user')
            ->where('user.etablissementRattachementSante IS NOT NULL')
-           ->distinct();
+           ->groupBy('user.etablissementRattachementSante');
     
         return $qb;
   }

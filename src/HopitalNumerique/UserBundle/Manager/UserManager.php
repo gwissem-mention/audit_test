@@ -311,6 +311,6 @@ class UserManager extends BaseManager
    * @return int
    */
   public function getNbEtablissements() {
-    return $this->getRepository()->getNbEtablissements()->getQuery()->getSingleScalarResult();
+    return count($this->getRepository()->getNbEtablissements()->getQuery()->getResult());
   }
 }

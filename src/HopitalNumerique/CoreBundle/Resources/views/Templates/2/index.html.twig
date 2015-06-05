@@ -213,7 +213,7 @@
             <div class="col-md-3 no-padding" id="sidebar">
                 <div id="block-chiffres-cles">
                     <div class="col-md-4 center">
-                        <span class="chiffre-cle">{{ nb_eta }}</span>
+                        <span class="chiffre-cle">{% if nb_eta > 672 %}{{ nb_eta }}{% else %}672{% endif %}</span>
                         <p>Établissements inscrits</p>
                     </div>
                     <div class="col-md-4 center">
