@@ -2,10 +2,8 @@
 
 {% block stylesheets %}
     {{parent()}}
-    {% stylesheets output="compiled/hopitalnumerique-expert-activite.css" filter="cssrewrite, ?yui_css"
-        "@select2_css"
+    {% stylesheets output="compiled/hopitalnumerique-expert-evenement.css" filter="cssrewrite, ?yui_css"
         "@validationEngine_css"
-        'bundles/hopitalnumeriqueexpert/css/style.css'
     %}
         <link rel="stylesheet" href="{{ asset_url }}" />
     {% endstylesheets %}
@@ -13,30 +11,26 @@
 
 {% block javascripts %}
     {{parent()}}
-    {% javascripts output="compiled/hopitalnumerique-expert-activite.js"
+    {% javascripts output="compiled/hopitalnumerique-expert-evenement.js"
         "@validationEngine_js"
-        "@select2_js"
-        'bundles/hopitalnumeriqueexpert/js/script.js'
+        'bundles/hopitalnumeriqueexpert/js/evenement.js'
     %}
         <script type="text/javascript" src="{{ asset_url }}"></script>
     {% endjavascripts %}
 {% endblock %}
 
 {% block h1Title %}
-    {% if activiteexpert.id %}
-        Editer une activité d'expert
+    {% if evenementexpert.id %}
+        Editer un évenement de l'activite <strong>{{activiteExpert.titre}}</strong>
     {% else %}
-        Ajouter une activité d'expert
+        Ajouter un évenement de l'activite <strong>{{activiteExpert.titre}}</strong>
     {% endif %}
 {% endblock %}
 
 {% block toolbarButton %}
-    <a class="btn btn-default" href="{{ path('hopitalnumerique_expert_expert_activite') }}" title="Retour à la liste"><i class="fa fa-reply"></i></a>
+    <a class="btn btn-default" href="{{ path('hopitalnumerique_expert_evenement_expert', {'id' : activiteExpert.id}) }}" title="Retour à la liste"><i class="fa fa-reply"></i></a>
     <div onclick="$('form').submit();" class="btn btn-default" title="Enregistrer"><i class="fa fa-check"></i></div>
     <div onclick="$('#do').val('save-close');$('form').submit();" class="btn btn-default" title="Enregistrer et Fermer"><i class="fa fa-save"></i></div>
-    {% if activiteexpert.id %}
-        <div onclick='deleteWithConfirm("{{ path('hopitalnumerique_expert_expert_activite_delete', { 'id': activiteexpert.id }) }}");' class="btn btn-default" title="Supprimer"><i class="fa fa-trash-o"></i></div>
-    {% endif %}
 {% endblock %}
 
 {% block body %}

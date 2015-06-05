@@ -2,6 +2,9 @@ parameters:
     hopitalnumerique_expert.manager.activiteexpert.class: HopitalNumerique\ExpertBundle\Manager\ActiviteExpertManager
     hopitalnumerique_expert.grid.activiteexpert.class: HopitalNumerique\ExpertBundle\Grid\ActiviteExpertGrid
     hopitalnumerique_expert.form.activiteexpert.class: HopitalNumerique\ExpertBundle\Form\ActiviteExpertType
+    hopitalnumerique_expert.manager.evenementexpert.class: HopitalNumerique\ExpertBundle\Manager\EvenementExpertManager
+    hopitalnumerique_expert.grid.evenementexpert.class: HopitalNumerique\ExpertBundle\Grid\EvenementExpertGrid
+    hopitalnumerique_expert.form.evenementexpert.class: HopitalNumerique\ExpertBundle\Form\EvenementExpertType
 
 services:
     hopitalnumerique_expert.manager.activiteexpert:
@@ -19,3 +22,19 @@ services:
         arguments: ["@hopitalnumerique_expert.manager.activiteexpert", "@validator"]
         tags:
             - { name: form.type, alias: hopitalnumerique_expert_activiteexpert }
+
+    hopitalnumerique_expert.manager.evenementexpert:
+        class: %hopitalnumerique_expert.manager.evenementexpert.class%
+        arguments: ["@doctrine.orm.entity_manager"]
+        calls:
+           - [ setCache, [ @liip_doctrine_cache.ns.main ] ]
+
+    hopitalnumerique_expert.grid.evenementexpert:
+        class: %hopitalnumerique_expert.grid.evenementexpert.class%
+        arguments: ["@service_container"]
+
+    hopitalnumerique_expert.form.evenementexpert:
+        class: %hopitalnumerique_expert.form.evenementexpert.class%
+        arguments: ["@hopitalnumerique_expert.manager.evenementexpert", "@validator"]
+        tags:
+            - { name: form.type, alias: hopitalnumerique_expert_evenementexpert }

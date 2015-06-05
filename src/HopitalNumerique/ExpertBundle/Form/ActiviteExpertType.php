@@ -58,7 +58,7 @@ class ActiviteExpertType extends AbstractType
                     },
             ))
             ->add('nbVacationParExpert', 'integer', array(
-                'required'   => false, 
+                'required'   => true, 
                 'label'      => 'Nombre de vacations par expert',
                 'attr'        => array(
                         'class' => 'validate[required,custom[integer],min[0]]'
@@ -87,7 +87,7 @@ class ActiviteExpertType extends AbstractType
                 'query_builder' => function(EntityRepository $er) {
                     return $er->createQueryBuilder('ref')
                               ->where('ref.code = :etat')
-                              ->setParameter('etat', 'UO_EXPERTS')
+                              ->setParameter('etat', 'UO_PRESTATAIRE')
                               ->orderBy('ref.libelle', 'ASC');
                 },
                 'attr'         => array('class' => 'validate[required]')
@@ -118,10 +118,10 @@ class ActiviteExpertType extends AbstractType
                 },
                 'attr'         => array('class' => 'validate[required]')
             )) 
-            ->add('etatValidation', 'checkbox', array(
-                'required'   => false, 
-                'label'      => 'Validation'
-            ))
+            // ->add('etatValidation', 'checkbox', array(
+            //     'required'   => false, 
+            //     'label'      => 'Validation'
+            // ))
             ;
     }
 

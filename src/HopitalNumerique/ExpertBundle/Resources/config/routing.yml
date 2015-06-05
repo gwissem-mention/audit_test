@@ -1,36 +1,75 @@
-hopital_numerique_expert_homepage:
-    pattern:  /expert/activite
-    defaults: { _controller: HopitalNumeriqueExpertBundle:ActiviteExpert:index }
-
+#Activité expert
+#-Grid
 hopitalnumerique_expert_expert_activite:
-    pattern:  /expert_activite
+    pattern:  /expert/activite
     defaults: { _controller: "HopitalNumeriqueExpertBundle:ActiviteExpert:index" }
     requirements: 
         _method: GET|POST
 
+#-Gestion entity
 hopitalnumerique_expert_expert_activite_add:
-    pattern:  /expert_activite/add
+    pattern:  /expert/activite/add
     defaults: { _controller: "HopitalNumeriqueExpertBundle:ActiviteExpert:add" }
     requirements: 
         _method: GET|POST
 
 hopitalnumerique_expert_expert_activite_show:
-    pattern:  /expert_activite/show/{id}
+    pattern:  /expert/activite/show/{id}
     defaults: { _controller: "HopitalNumeriqueExpertBundle:ActiviteExpert:show" }
     requirements:
         id: \d+
         _method: GET
 
 hopitalnumerique_expert_expert_activite_edit:
-    pattern:  /expert_activite/edit/{id}
+    pattern:  /expert/activite/edit/{id}
     defaults: { _controller: "HopitalNumeriqueExpertBundle:ActiviteExpert:edit" }
     requirements:
         id: \d+
         _method: GET|POST
 
 hopitalnumerique_expert_expert_activite_delete:
-    pattern:  /expert_activite/delete/{id}.{_format}
+    pattern:  /expert/activite/delete/{id}.{_format}
     defaults: { _controller: "HopitalNumeriqueExpertBundle:ActiviteExpert:delete", _format: json }
     requirements: 
         id: \d+
         _method: POST|DELETE
+
+#-Fancy de modif de la vacation
+hopitalnumerique_expert_expert_activite_parametrage:
+    pattern:  /expert/activite/parametrage
+    defaults: { _controller: "HopitalNumeriqueExpertBundle:ActiviteExpert:parametrage" }
+    requirements: 
+        id : \d+ 
+
+#-Action du grid
+hopitalnumerique_expert_expert_payer_facture:
+    pattern:  /expert/activite/payer/{id}
+    defaults: { _controller: "HopitalNumeriqueExpertBundle:ActiviteExpert:payerFacture" }
+    requirements:
+        id: \d+
+        _method: GET|POST
+
+#-Suppression de masse du grid
+delete_mass:
+    path:     /expert/activite/deleteMass
+    defaults: { _controller: HopitalNumeriqueExpertBundle:ActiviteExpertMassController:deleteMass }
+
+#Evenement expert
+hopitalnumerique_expert_evenement_expert:
+    pattern:  /expert/evenement/{id}   #id de l'activité
+    defaults: { _controller: "HopitalNumeriqueExpertBundle:EvenementExpert:index" }
+    requirements: 
+        _method: GET|POST
+
+hopitalnumerique_expert_evenement_expert_add:
+    pattern:  /expert/evenement/add/{id}  #id de l'activité
+    defaults: { _controller: "HopitalNumeriqueExpertBundle:EvenementExpert:add" }
+    requirements: 
+        _method: GET|POST
+
+hopitalnumerique_expert_evenement_expert_edit:
+    pattern:  /expert/evenement/edit/{id}  #id de l'evenement
+    defaults: { _controller: "HopitalNumeriqueExpertBundle:EvenementExpert:edit" }
+    requirements:
+        id: \d+
+        _method: GET|POST

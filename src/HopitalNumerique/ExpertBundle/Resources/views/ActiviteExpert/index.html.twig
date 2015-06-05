@@ -6,11 +6,23 @@
 {% block stylesheets %}
     {{ parent() }}
     {{ block('grid_stylesheets')}}
+    {% stylesheets output="compiled/hopitalnumerique-expert-activite-index.css" filter="cssrewrite, ?yui_css"
+        "@fancybox_css"
+        'bundles/hopitalnumeriqueexpert/css/style.css'
+    %}
+        <link rel="stylesheet" href="{{ asset_url }}" />
+    {% endstylesheets %}
 {% endblock %}
 
 {% block javascripts %}
     {{ parent() }}
     {{ block('grid_javascripts')}}
+    {% javascripts output="compiled/hopitalnumerique-expert-activite-index.js"
+        "@fancybox_js"
+        'bundles/hopitalnumeriqueexpert/js/index.js'
+    %}
+        <script type="text/javascript" src="{{ asset_url }}"></script>
+    {% endjavascripts %}
 {% endblock %}
 
 {% block h1Title %}
@@ -18,6 +30,7 @@
 {% endblock %}
 
 {% block toolbarButton %}
+    <a class="btn btn-primary fancy fancybox.ajax" href="{{path('hopitalnumerique_expert_expert_activite_parametrage')}}" title="Parametrage du montant de la vacation" id="parametrageVacation" style="margin-right: 30px;" ><i class="fa fa-cogs"></i></a>
     <a class="btn btn-default" href="{{ path('hopitalnumerique_expert_expert_activite_add') }}" title="Ajouter une activité d'expert"><i class="fa fa-plus"></i></a>
 {% endblock %}
 

@@ -1,8 +1,4 @@
 $(document).ready(function() {
-    
-    // $('input.datepicker').datepicker({
-    //     dateFormat:'dd-mm-yy'
-    // });
 
     //Date début
     $( "#hopitalnumerique_expert_activiteexpert_dateDebut" ).datepicker({
@@ -28,11 +24,12 @@ $(document).ready(function() {
     });
     $( "#hopitalnumerique_expert_activiteexpert_dateFin" ).datepicker( "option", "showAnim", "fadeIn" );
 
-
     $('select.select2').select2();
 
     //bind de Validation Engine
     if( $('form.toValidate').length > 0 )
+    {
         $('form.toValidate').validationEngine();
+    }
 
 });

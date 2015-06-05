@@ -27,6 +27,16 @@ class ActiviteExpert
     protected $id;
 
     /**
+     * Liste des événements lié à l'activité
+     * 
+     * @var /HopitalNumerique/ExpertBundle/Entity/EvenementExpert
+     * 
+     * @ORM\OneToMany(targetEntity="EvenementExpert", mappedBy="activite", cascade={"persist", "remove" })
+     * @ORM\OrderBy({"date" = "DESC"})
+     */
+    protected $evenements;
+
+    /**
      * @var string
      *
      * @ORM\Column(name="exp_titre", type="string", length=255)
@@ -82,7 +92,7 @@ class ActiviteExpert
      * @ORM\ManyToOne(targetEntity="\HopitalNumerique\ReferenceBundle\Entity\Reference", cascade={"persist"})
      * @ORM\JoinColumn(name="ref_unite_oeuvre_concerne", referencedColumnName="ref_id")
      *
-     * @GRID\Column(field="uniteOeuvreConcerne.libelle", options = {"comment" = "Type d activite sur la table référence avec le code UO_EXPERTS"})
+     * @GRID\Column(field="uniteOeuvreConcerne.libelle", options = {"comment" = "Type d activite sur la table référence avec le code UO_PRESTATAIRE"})
      */
     protected $uniteOeuvreConcerne;
 
@@ -111,6 +121,15 @@ class ActiviteExpert
      */
     protected $etat;
 
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->expertConcernes = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->anapiens = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->etatValidation = false;
+    }
 
     /**
      * Get id
@@ -236,14 +255,7 @@ class ActiviteExpert
     {
         return $this->etatValidation;
     }
-    /**
-     * Constructor
-     */
-    public function __construct()
-    {
-        $this->expertConcernes = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->anapiens = new \Doctrine\Common\Collections\ArrayCollection();
-    }
+
 
     /**
      * Set typeActivite
@@ -401,5 +413,38 @@ class ActiviteExpert
     public function getEtat()
     {
         return $this->etat;
+    }
+
+    /**
+     * Add evenements
+     *
+     * @param \HopitalNumerique\ExpertBundle\Entity\EvenementExpert $evenements
+     * @return ActiviteExpert
+     */
+    public function addEvenement(\HopitalNumerique\ExpertBundle\Entity\EvenementExpert $evenements)
+    {
+        $this->evenements[] = $evenements;
+
+        return $this;
+    }
+
+    /**
+     * Remove evenements
+     *
+     * @param \HopitalNumerique\ExpertBundle\Entity\EvenementExpert $evenements
+     */
+    public function removeEvenement(\HopitalNumerique\ExpertBundle\Entity\EvenementExpert $evenements)
+    {
+        $this->evenements->removeElement($evenements);
+    }
+
+    /**
+     * Get evenements
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getEvenements()
+    {
+        return $this->evenements;
     }
 }
