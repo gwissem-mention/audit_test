@@ -19,6 +19,7 @@ class EvenementExpertGrid extends Grid implements GridInterface
     {
         $this->setSource( 'HopitalNumeriqueExpertBundle:EvenementExpert' );
         $this->setNoDataMessage('Aucun evenementexpert à afficher.');
+        $this->setButtonSize(49);
     }
 
     /**
