@@ -27,7 +27,7 @@ class ActiviteExpert
     protected $id;
 
     /**
-     * Liste des événements lié à l'activité
+     * Liste des événements liés à l'activité
      * 
      * @var /HopitalNumerique/ExpertBundle/Entity/EvenementExpert
      * 
@@ -35,6 +35,16 @@ class ActiviteExpert
      * @ORM\OrderBy({"date" = "DESC"})
      */
     protected $evenements;
+
+    /**
+     * Liste des dates fictives liées à l'activité
+     * 
+     * @var /HopitalNumerique/ExpertBundle/Entity/EvenementExpert
+     * 
+     * @ORM\OneToMany(targetEntity="EvenementExpert", mappedBy="activite", cascade={"persist", "remove" })
+     * @ORM\OrderBy({"date" = "DESC"})
+     */
+    protected $dateFictives;
 
     /**
      * @var string
@@ -446,5 +456,58 @@ class ActiviteExpert
     public function getEvenements()
     {
         return $this->evenements;
+    }
+
+    /**
+     * Get evenements
+     *
+     * @return integer
+     */
+    public function getMiniNbPresenceEvenements()
+    {
+        $nbMiniPresence = -1;
+
+        foreach ($this->evenements as $evenement) 
+        {
+            if($nbMiniPresence === -1 || $nbMiniPresence > $evenement->getExpertsPresents())
+            {
+                $nbMiniPresence = $evenement->getExpertsPresents();
+            }
+        }
+
+        return $nbMiniPresence;
+    }
+
+    /**
+     * Add dateFictives
+     *
+     * @param \HopitalNumerique\ExpertBundle\Entity\EvenementExpert $dateFictives
+     * @return ActiviteExpert
+     */
+    public function addDateFictive(\HopitalNumerique\ExpertBundle\Entity\EvenementExpert $dateFictives)
+    {
+        $this->dateFictives[] = $dateFictives;
+
+        return $this;
+    }
+
+    /**
+     * Remove dateFictives
+     *
+     * @param \HopitalNumerique\ExpertBundle\Entity\EvenementExpert $dateFictives
+     */
+    public function removeDateFictive(\HopitalNumerique\ExpertBundle\Entity\EvenementExpert $dateFictives)
+    {
+        $this->dateFictives->removeElement($dateFictives);
+    }
+
+    /**
+     * Get dateFictives
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getDateFictives()
+    {
+        return $this->dateFictives;
     }
 }

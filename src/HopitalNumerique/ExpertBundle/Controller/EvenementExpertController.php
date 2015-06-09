@@ -3,9 +3,11 @@
 namespace HopitalNumerique\ExpertBundle\Controller;
 
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
 use HopitalNumerique\ExpertBundle\Entity\ActiviteExpert;
+use HopitalNumerique\ExpertBundle\Entity\EvenementExpert;
 
 /**
  * EvenementExpert controller.
@@ -50,13 +52,32 @@ class EvenementExpertController extends Controller
     /**
      * POPIN : Partage de resultat
      */
-    public function parametrageAction()
+    public function parametrageAction(EvenementExpert $evenementExpert)
     {
-        $montantVacation = $this->get('hopitalnumerique_reference.manager.reference')->findOneById(560);
-
         return $this->render( 'HopitalNumeriqueExpertBundle:EvenementExpert:fancy.html.twig' , array(
-            'montantVacation' => $montantVacation
+            'evenementExpert' => $evenementExpert
         ));
+    }
+    
+    /**
+     * POPIN : gestion de la présence des experts
+     */
+    public function parametrageSaveAction(EvenementExpert $evenementExpert, Request $request)
+    {
+        //Mise à jour de la présence des experts
+        $expertsId = json_decode( $this->get('request')->request->get('experts') );
+
+        $presences = $this->get('hopitalnumerique_expert.manager.evenementpresenceexpert')->findBy(array('evenement' => $evenementExpert));
+
+        foreach ($presences as &$presence) 
+        {
+            $presence->setDate(new \DateTime());
+            $presence->setPresent(in_array($presence->getExpertConcerne()->getId(), $expertsId));
+        }
+
+        $this->get('hopitalnumerique_expert.manager.evenementpresenceexpert')->save($presences);
+
+        return new Response('{"success":true}', 200);
     }
 
 
@@ -91,6 +112,7 @@ class EvenementExpertController extends Controller
 
                 //On utilise notre Manager pour gérer la sauvegarde de l'objet
                 $this->get('hopitalnumerique_expert.manager.evenementexpert')->save($evenementexpert);
+                $this->get('hopitalnumerique_expert.manager.evenementpresenceexpert')->majExperts($evenementexpert);
                 
                 // On envoi une 'flash' pour indiquer à l'utilisateur que l'entité est ajoutée
                 $this->get('session')->getFlashBag()->add( ($new ? 'success' : 'info') , 'EvenementExpert ' . ($new ? 'ajouté.' : 'mis à jour.') ); 

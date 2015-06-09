@@ -100,26 +100,21 @@ class ActiviteExpertController extends Controller
     }
 
     /**
-     * Action Annuler, on dévérouille l'objet et on redirige vers l'index
+     * [payerFactureAction description]
+     *
+     * @param ActiviteExpert $activiteExpert [description]
+     *
+     * @return [type]
      */
-    public function cancelAction( $id, $message )
+    public function genererFactureAction(ActiviteExpert $activiteExpert)
     {
-        $objet = $this->get('hopitalnumerique_objet.manager.objet')->findOneBy( array('id' => $id) );
+        $nbDateNecessaire = $activiteExpert->getNbVacationParExpert() - $activiteExpert->getMiniNbPresenceEvenements();
 
-        //On récupère l'user connecté et son role
-        $user  = $this->get('security.context')->getToken()->getUser();
-        
-        //si l'user connecté est propriétaire de l'objet ou si l'user est admin : unlock autorisé
-        if( $user->hasRole('ROLE_ADMINISTRATEUR_1') || $objet->getLockedBy() == $user ) {
-            $this->get('hopitalnumerique_objet.manager.objet')->unlock($objet);
+        $this->get('hopitalnumerique_expert.manager.activiteexpert')->save($activiteExpert);
 
-            //si on à appellé l'action depuis le button du grid, on met un message à l'user, sinon pas besoin de message
-            if( !is_null($message ) )
-                $this->get('session')->getFlashBag()->add( 'info' , 'Objet dévérouillé.' );
-        }else
-            $this->get('session')->getFlashBag()->add( 'danger' , 'Vous n\'avez pas l\'autorisation de déverrouiller cet objet.' );
-        
-        return $this->redirect( $this->generateUrl('hopitalnumerique_objet_objet') );
+        $this->get('session')->getFlashBag()->add( 'info' , 'Facture payées.' );
+
+        return $this->redirect( $this->generateUrl('hopitalnumerique_expert_expert_activite') );
     }
 
 
@@ -161,6 +156,10 @@ class ActiviteExpertController extends Controller
 
                     //On utilise notre Manager pour gérer la sauvegarde de l'objet
                     $this->get('hopitalnumerique_expert.manager.activiteexpert')->save($activiteexpert);
+                    foreach ($activiteexpert->getEvenements() as $evenementexpert)
+                    {
+                        $this->get('hopitalnumerique_expert.manager.evenementpresenceexpert')->majExperts($evenementexpert);
+                    }
                     
                     // On envoi une 'flash' pour indiquer à l'utilisateur que l'entité est ajoutée
                     $this->get('session')->getFlashBag()->add( ($new ? 'success' : 'info') , 'Une activite expert ' . ($new ? 'ajouté.' : 'mis à jour.') ); 

@@ -34,6 +34,27 @@ hopitalnumerique_expert_expert_activite_delete:
         id: \d+
         _method: POST|DELETE
 
+hopitalnumerique_expert_expert_ajout_date_fictive:
+    pattern:  /expert/activite/ajout-date-fictive/{id}
+    defaults: { _controller: "HopitalNumeriqueExpertBundle:DateFictive:add" }
+    requirements:
+        id: \d+
+        _method: GET|POST
+
+hopitalnumerique_expert_expert_liste_date_fictive:
+    pattern:  /expert/activite/liste-date-fictive/{id}
+    defaults: { _controller: "HopitalNumeriqueExpertBundle:DateFictive:list" }
+    requirements:
+        id: \d+
+        _method: GET
+
+hopitalnumerique_expert_expert_delete_date_fictive:
+    pattern:  /expert/activite/delete-date-fictive/{id}
+    defaults: { _controller: "HopitalNumeriqueExpertBundle:DateFictive:delete"}
+    requirements: 
+        id: \d+
+        _method: POST|GET
+
 #-Fancy de modif de la vacation
 hopitalnumerique_expert_expert_activite_parametrage:
     pattern:  /expert/activite/parametrage
@@ -73,3 +94,16 @@ hopitalnumerique_expert_evenement_expert_edit:
     requirements:
         id: \d+
         _method: GET|POST
+
+#-Fancy de modif de la vacation
+hopitalnumerique_expert_expert_expert_parametrage:
+    pattern:  /expert/evenement/parametrage/{id}
+    defaults: { _controller: "HopitalNumeriqueExpertBundle:EvenementExpert:parametrage" }
+    requirements: 
+        id : \d+ 
+
+hopitalnumerique_expert_expert_expert_parametrage_save:
+    pattern:  /expert/evenement/parametrage/{id}/save
+    defaults: { _controller: "HopitalNumeriqueExpertBundle:EvenementExpert:parametrageSave" }
+    requirements:
+        id: \d+

@@ -27,14 +27,14 @@
 
 
 {% block h1Title %}
-    Gestion des EvenementExpert
+    Gestion des évenements de l'activité
 {% endblock %}
 
 {% block toolbarButton %}
+    <a class="btn btn-default" href="{{ path('hopitalnumerique_expert_expert_activite') }}" title="Retour à la liste"><i class="fa fa-reply"></i></a>
     <a class="btn btn-default" href="{{ path('hopitalnumerique_expert_evenement_expert_add', {'id' : activiteExpert.id }) }}" title="Ajouter un EvenementExpert"><i class="fa fa-plus"></i></a>
 {% endblock %}
 
 {% block body %}
     {{ grid(grid, _self) }}
 {% endblock %}
-

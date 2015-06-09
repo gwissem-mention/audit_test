@@ -55,6 +55,15 @@ class EvenementExpert
     protected $date;
 
     /**
+     * Liste des experts lié à l'activité pour gerer leur présence
+     * 
+     * @var /HopitalNumerique/ExpertBundle/Entity/EvenementPresenceExpert
+     * 
+     * @ORM\OneToMany(targetEntity="EvenementPresenceExpert", mappedBy="evenement", cascade={"persist", "remove" })
+     */
+    protected $experts;
+
+    /**
      * Initialisation de l'entitée (valeurs par défaut)
      */
     public function __construct()
@@ -162,5 +171,78 @@ class EvenementExpert
     public function getActivite()
     {
         return $this->activite;
+    }
+
+    /**
+     * Add experts
+     *
+     * @param \HopitalNumerique\ExpertBundle\Entity\EvenementPresenceExpert $experts
+     * @return EvenementExpert
+     */
+    public function addExpert(\HopitalNumerique\ExpertBundle\Entity\EvenementPresenceExpert $experts)
+    {
+        $this->experts[] = $experts;
+
+        return $this;
+    }
+
+    /**
+     * Remove experts
+     *
+     * @param \HopitalNumerique\ExpertBundle\Entity\EvenementPresenceExpert $experts
+     */
+    public function removeExpert(\HopitalNumerique\ExpertBundle\Entity\EvenementPresenceExpert $experts)
+    {
+        $this->experts->removeElement($experts);
+    }
+
+    /**
+     * Get experts
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getExperts()
+    {
+        return $this->experts;
+    }
+
+    /**
+     * Get nombre de présents dans les experts
+     *
+     * @return integer 
+     */
+    public function getExpertsPresents()
+    {
+        $nbPresents = 0;
+
+        foreach ($this->experts as $expert) 
+        {
+            if(!is_null($expert->getExpertConcerne()) && $expert->getPresent())
+            {
+                $nbPresents++;
+            }
+        }
+
+        return $nbPresents;
+    }
+
+    /**
+     * Get les ids des domaines concerné par l'user
+     *
+     * @return array[integer]
+     */
+    public function getExpertsIds()
+    {
+        $expertsId = array();
+
+        foreach ($this->experts as $expert) 
+        {
+            if(!is_null($expert->getExpertConcerne()))
+            {
+                $expertsId[] = $expert->getExpertConcerne()->getId();
+            }
+        }
+
+        return $expertsId;
     }
 }

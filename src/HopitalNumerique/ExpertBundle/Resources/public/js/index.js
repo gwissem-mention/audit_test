@@ -4,8 +4,8 @@ $(document).ready(function()
         'padding'   : 0,
         'autoSize'  : false,
         'width'     : '50%',
-        'scrolling' : 'no',
+        'scrolling' : 'yes',
         'showCloseButton' : true,
-        'height' : '290px'
+        'height' : '350px'
     });
 });
