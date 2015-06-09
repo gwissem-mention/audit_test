@@ -95,6 +95,14 @@ hopitalnumerique_expert_evenement_expert_edit:
         id: \d+
         _method: GET|POST
 
+#---Impression Fiche
+hopitalnumerique_expert_evenement_expert_impression_fiche:
+    pattern:  /expert/evenement/fiche-presence/{id}
+    defaults: { _controller: "HopitalNumeriqueExpertBundle:EvenementExpert:impressionFichePresence" }
+    requirements:
+        id: \d+
+        _method: GET
+
 #-Fancy de modif de la vacation
 hopitalnumerique_expert_expert_expert_parametrage:
     pattern:  /expert/evenement/parametrage/{id}

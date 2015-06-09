@@ -31,6 +31,7 @@
     <a class="btn btn-default" href="{{ path('hopitalnumerique_expert_evenement_expert', {'id' : activiteExpert.id}) }}" title="Retour à la liste"><i class="fa fa-reply"></i></a>
     <div onclick="$('form').submit();" class="btn btn-default" title="Enregistrer"><i class="fa fa-check"></i></div>
     <div onclick="$('#do').val('save-close');$('form').submit();" class="btn btn-default" title="Enregistrer et Fermer"><i class="fa fa-save"></i></div>
+    <a class="btn btn-default" href="{{ path('hopitalnumerique_expert_evenement_expert_impression_fiche', {'id' : activiteExpert.id}) }}" title="Impression de la fiche de présence"><i class="fa fa-external-link"></i></a>
 {% endblock %}
 
 {% block body %}

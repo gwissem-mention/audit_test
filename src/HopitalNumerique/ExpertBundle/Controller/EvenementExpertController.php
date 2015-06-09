@@ -80,6 +80,37 @@ class EvenementExpertController extends Controller
         return new Response('{"success":true}', 200);
     }
 
+    /**
+     * Impression du pdf de la fiche de présence
+     * 
+     * @author Gaetan MELCHILSEN
+     * @copyright Nodevo
+     */
+    public function impressionFichePresenceAction( EvenementExpert $evenementExpert )
+    {
+        $html = $this->renderView('HopitalNumeriqueExpertBundle:EvenementExpert/pdf:fichePresence.html.twig', array(
+            'evenementExpert' => $evenementExpert
+        ));
+
+        $options = array(
+            'margin-bottom' => 10,
+            'margin-left'   => 4,
+            'margin-right'  => 4,
+            'margin-top'    => 10,
+            'encoding'      => 'UTF-8',
+            'orientation'   => 'Landscape'
+        );
+
+        return new Response(
+            $this->get('knp_snappy.pdf')->getOutputFromHtml($html, $options, true),
+            200,
+            array(
+                'Content-Type'          => 'application/pdf',
+                'Content-Disposition'   => 'attachment; filename="Fiche_presence_'.$evenementExpert->getActivite()->getTitre().'_'.$evenementExpert->getNom()->getLibelle().'_'.$evenementExpert->getDate()->format('d/m/Y').'.pdf"'
+            )
+        );
+    }
+
 
 
 
