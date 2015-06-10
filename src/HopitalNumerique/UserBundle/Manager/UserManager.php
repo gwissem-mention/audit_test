@@ -99,7 +99,7 @@ class UserManager extends BaseManager
             
             $dateCourante = new \DateTime($user['contra']);
             $dateCourante->add($interval);
-            $users[$key]['contra'] = ('' != $user['contra']) ? ($dateCourante >= $aujourdHui) : false;
+            $user['contra'] = ('' != $user['contra']) ? ($dateCourante >= $aujourdHui) : false;
 
             //Gestion du domaine
             $user['domaines'] = array_key_exists($user['id'], $domainesByUsers) ? $domainesByUsers[$user['id']]['url'] : '';
