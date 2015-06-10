@@ -32,3 +32,11 @@ VALUES
 INSERT INTO `hn_reference` (`ref_id`, `parent_id`, `ref_libelle`, `ref_code`, `ref_etat`, `ref_dictionnaire`, `ref_recherche`, `ref_lock`, `ref_order`)
 VALUES
     (560, NULL, '0', 'MONTANT_VACATION', 3, 0, 0, 0, 1);
+
+INSERT INTO `core_menu_item` (`itm_id`, `itm_parent`, `mnu_menu`, `itm_name`, `itm_route`, `itm_route_parameters`, `itm_route_absolute`, `itm_uri`, `itm_icon`, `itm_display`, `itm_display_children`, `itm_role`, `itm_order`)
+VALUES
+    (NULL, 68, 3, 'Suivi de l\'activité', 'hopitalnumerique_expert_front_index', NULL, NULL, NULL, NULL, 1, 0, 'IS_AUTHENTICATED_ANONYMOUSLY', 10);
+
+INSERT INTO `core_ressource` (`res_id`, `res_nom`, `res_pattern`, `res_order`, `res_type`)
+VALUES
+    (NULL, 'FrontOffice - Tableau de bord : Suivi d\'activité', '/^\\/compte-hn\\/suivi-activite/', 20, 2);

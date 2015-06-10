@@ -52,7 +52,12 @@ class ActiviteExpertGrid extends Grid implements GridInterface
         $this->addActionButton( new Action\EditButton( 'hopitalnumerique_expert_expert_activite_edit' ) );
         $this->addActionButton( new Action\FilsButton( 'hopitalnumerique_expert_evenement_expert' ) );
 
-        //Custom Unlock button : Affiche le bouton dévérouillé si la ligne est vérouillée
+        //générer la facture pour l'activité
+        $genererFactureButton = new \APY\DataGridBundle\Grid\Action\RowAction('', 'hopitalnumerique_expert_expert_generer_facture');
+        $genererFactureButton->setRouteParameters( array('id') );
+        $genererFactureButton->setAttributes( array('class'=>'btn btn-primary fa fa-external-link','title' => 'Générer les factures') );
+        $this->addActionButton( $genererFactureButton );
+
         $payerButton = new \APY\DataGridBundle\Grid\Action\RowAction('', 'hopitalnumerique_expert_expert_payer_facture');
         $payerButton->setRouteParameters( array('id') );
         $payerButton->setAttributes( array('class'=>'btn btn-warning fa fa-money','title' => 'Payer les factures') );

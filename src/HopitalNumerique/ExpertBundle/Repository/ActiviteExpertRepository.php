@@ -47,4 +47,44 @@ class ActiviteExpertRepository extends EntityRepository
             
         return $qb;
     }
+
+    /**
+     * Recupération des activités concernant l'expert
+     *
+     * @param int $expertId Identifiant de l'expert
+     *
+     * @return [type]
+     */
+    public function getActivitesForExpert($idExpert)
+    {
+        $qb = $this->_em->createQueryBuilder();
+        $qb->select('actE')
+            ->from('HopitalNumeriqueExpertBundle:ActiviteExpert', 'actE')
+            ->leftJoin('actE.expertConcernes', 'exp')
+                ->where('exp.id = :idExpert')
+                ->setParameter('idExpert', $idExpert)
+            ->orderBy('actE.dateFin', 'DESC');
+            
+        return $qb;
+    }
+
+    /**
+     * Recupération des activités concernant l'anapien
+     *
+     * @param int $expertId Identifiant de l'anapien
+     *
+     * @return [type]
+     */
+    public function getActivitesForAnapien($idAnapien)
+    {
+        $qb = $this->_em->createQueryBuilder();
+        $qb->select('actE')
+            ->from('HopitalNumeriqueExpertBundle:ActiviteExpert', 'actE')
+            ->leftJoin('actE.anapiens', 'anap')
+                ->where('anap.id = :idAnapien')
+                ->setParameter('idAnapien', $idAnapien)
+            ->orderBy('actE.dateFin', 'DESC');
+            
+        return $qb;
+    }
 }

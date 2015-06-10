@@ -50,5 +50,29 @@ class ActiviteExpertManager extends BaseManager
 
         return array_values($activiteExpertsForGrid);
     }
+    
+    /**
+     * Recupération des activités concernant l'expert
+     *
+     * @param int $expertId Identifiant de l'expert
+     *
+     * @return [type]
+     */
+    public function getActivitesForExpert($idExpert)
+    {
+        return $this->getRepository()->getActivitesForExpert($idExpert)->getQuery()->getResult();
+    }
+    
+    /**
+     * Recupération des activités concernant l'anapien
+     *
+     * @param int $expertId Identifiant de l'anapien
+     *
+     * @return [type]
+     */
+    public function getActivitesForAnapien($idAnapien)
+    {
+        return $this->getRepository()->getActivitesForAnapien($idAnapien)->getQuery()->getResult();
+    }
 
 }

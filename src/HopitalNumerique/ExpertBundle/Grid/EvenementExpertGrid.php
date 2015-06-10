@@ -17,7 +17,8 @@ class EvenementExpertGrid extends Grid implements GridInterface
      */
     public function setConfig()
     {
-        $this->setSource( 'HopitalNumeriqueExpertBundle:EvenementExpert' );
+        $this->setSource( 'hopitalnumerique_expert.manager.evenementexpert' );
+        $this->setSourceType( self::SOURCE_TYPE_MANAGER );
         $this->setNoDataMessage('Aucun evenementexpert à afficher.');
         $this->setButtonSize(49);
     }
@@ -28,7 +29,7 @@ class EvenementExpertGrid extends Grid implements GridInterface
     public function setColumns()
     {
         //field, titre, isSortable, size 
-        $this->addColonne( new Column\AssocColumn('nom.libelle', 'Nom') );  
+        $this->addColonne( new Column\TextColumn('nom', 'Nom') );  
         $this->addColonne( (new Column\DateColumn('date', 'Date', 'd/m/Y'))->setSize(250) );
         $this->addColonne( (new Column\TextColumn('nbVacation', 'Nombre de vacation'))->setSize(120) );     
     }

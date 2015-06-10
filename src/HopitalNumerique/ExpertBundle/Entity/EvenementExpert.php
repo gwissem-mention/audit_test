@@ -9,7 +9,7 @@ use APY\DataGridBundle\Grid\Mapping as GRID;
  * EvenementExpert
  *
  * @ORM\Table(name="hn_expert_evenement")
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="HopitalNumerique\ExpertBundle\Repository\EvenementExpertRepository")
  */
 class EvenementExpert
 {
@@ -234,6 +234,11 @@ class EvenementExpert
     public function getExpertsIds()
     {
         $expertsId = array();
+
+        if(is_null($this->experts))
+        {
+            return array();
+        }
 
         foreach ($this->experts as $expert) 
         {

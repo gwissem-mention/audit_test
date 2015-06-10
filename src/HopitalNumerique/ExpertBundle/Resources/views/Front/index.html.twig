@@ -1,0 +1,107 @@
+{% extends 'HopitalNumeriqueAccountBundle::layout.html.twig' %}
+
+{% block stylesheets %}
+    {{parent()}}
+    {% stylesheets output="compiled/hopitalnumerique-expert-activite-front.css" filter="cssrewrite, ?yui_css" 
+        'bundles/hopitalnumeriqueexpert/css/style.css'
+    %}
+        <link rel="stylesheet" href="{{ asset_url }}" />
+    {% endstylesheets %}
+{% endblock %}
+
+{% block headerTitle %}Suivi de l'activité{% endblock %}
+
+{% block headerDesc %}
+    <p>Liste de vos activité en tant qu'expert.</p>
+{% endblock %}
+
+{% block content%}
+    <div class="col-md-12">
+        <table class="table activiteTable">
+            <thead>
+                <tr>
+                    <th>Titre de l'activité</th>
+                    <th>Dates de l'activité</th>
+                    <th>Nom du prestataire</th>
+                    <th>Unité d'œuvre concernée</th>
+                    <th>Reliquat</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for activite in activites %}
+
+                    {# Ligne de l'activité #}
+                    <tr>
+                        <td>{{activite.titre}}</td>
+                        <td>{{activite.dateDebut|date('d/m/Y')}} - {{activite.dateFin|date('d/m/Y')}}</td>
+                        <td>{{activite.prestataire.libelle}}</td>
+                        <td>{{activite.uniteOeuvreConcerne.libelle}}</td>
+                        <td>[ 0 ]</td>
+                    </tr>
+
+                    {# Ligne de 'travail attendu' #}
+                    <tr>
+                        <td class="backInactif" colspan="2"></td>
+                        <td class="backTitle bold">Travail attendu</td>
+                        <td class="backTitle bold">Montant total</td>
+                        <td class="backInactif"></td>
+                    </tr>
+
+                    {# Ligne des valeurs de 'travail attendu' #}
+                    <tr>
+                        <td class="backInactif" colspan="2"></td>
+                        <td>{{activite.nbVacationParExpert}}</td>
+                        <td>{{activite.nbVacationParExpert * montantVacation}} €</td>
+                        <td class="backInactif"></td>
+                    </tr>
+    
+
+                    {# Ligne d'entete evenement #}
+                    <tr>
+                        <td class="backInactif" colspan="2"></td>
+                        <td class="backTitle bold">Évènement</td>
+                        <td class="backTitle bold">Nombre de vacations (euros)</td>
+                        <td class="backInactif"></td>
+                    </tr>
+                    {# Lignes des événements #}
+                    {% for evenement in activite.evenements %}
+                        {# Ligne des valeurs de 'travail attendu' #}
+                        <tr>
+                            <td class="backInactif" colspan="2"></td>
+                            <td>{{evenement.nom.libelle}}, le {{evenement.date|date('d/m/Y')}}</td>
+                            <td>{{evenement.nbVacation * montantVacation}} €</td>
+                            <td class="backInactif"></td>
+                        </tr>
+                    {% else %}
+                        <tr>
+                            <td class="backInactif" colspan="2"></td>
+                            <td colspan="2">- Aucun événement pour cette activité -</td>
+                            <td class="backInactif"></td>
+                        </tr>
+                    {% endfor %}
+
+                    {# Ligne de l'état de l'activité #}
+                    <tr>
+                        <td class="backInactif" colspan="2"></td>
+                        <td class="backTitle bold">Etat d'avancement</td>
+                        <td class="backTitle bold">Etat de paiement</td>
+                        <td class="backInactif"></td>
+                    </tr>
+
+                    {# Ligne des valeurs de l'etat de l'activité #}
+                    <tr>
+                        <td class="backInactif" colspan="2"></td>
+                        <td>{{activite.etat.libelle}}</td>
+                        <td>{% if activite.etatValidation %}Payé{% else %}En attente{% endif %}</td>
+                        <td class="backInactif"></td>
+                    </tr>
+
+                {% else %}
+                    <tr>
+                        <td colspan="5" align="center"> - Aucune activité - </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+{% endblock %}

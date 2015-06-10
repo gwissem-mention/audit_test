@@ -41,12 +41,15 @@ class EvenementPresenceExpertManager extends BaseManager
             $expertsIds[] = $expert->getId();
         }
 
-        //Retire les experts qui ne sont plus dans l'activité
-        foreach ($evenementExpert->getExperts() as $expertEvenement) 
-        {
-            if(!in_array($expertEvenement->getExpertConcerne()->getId(), $expertsIds))
+        if(!is_null($evenementExpert->getExperts()))
+        {   
+            //Retire les experts qui ne sont plus dans l'activité
+            foreach ($evenementExpert->getExperts() as $expertEvenement) 
             {
-                $this->delete($expertEvenement);
+                if(!in_array($expertEvenement->getExpertConcerne()->getId(), $expertsIds))
+                {
+                    $this->delete($expertEvenement);
+                }
             }
         }
 

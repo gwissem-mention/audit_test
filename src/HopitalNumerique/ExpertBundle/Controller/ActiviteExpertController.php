@@ -110,11 +110,9 @@ class ActiviteExpertController extends Controller
     {
         $nbDateNecessaire = $activiteExpert->getNbVacationParExpert() - $activiteExpert->getMiniNbPresenceEvenements();
 
-        $this->get('hopitalnumerique_expert.manager.activiteexpert')->save($activiteExpert);
-
-        $this->get('session')->getFlashBag()->add( 'info' , 'Facture payées.' );
-
-        return $this->redirect( $this->generateUrl('hopitalnumerique_expert_expert_activite') );
+        echo '<pre>';
+        \Doctrine\Common\Util\Debug::dump($nbDateNecessaire);
+        die();
     }
 
 
@@ -156,9 +154,13 @@ class ActiviteExpertController extends Controller
 
                     //On utilise notre Manager pour gérer la sauvegarde de l'objet
                     $this->get('hopitalnumerique_expert.manager.activiteexpert')->save($activiteexpert);
-                    foreach ($activiteexpert->getEvenements() as $evenementexpert)
+
+                    if(!$new)
                     {
-                        $this->get('hopitalnumerique_expert.manager.evenementpresenceexpert')->majExperts($evenementexpert);
+                        foreach ($activiteexpert->getEvenements() as $evenementexpert)
+                        {
+                            $this->get('hopitalnumerique_expert.manager.evenementpresenceexpert')->majExperts($evenementexpert);
+                        }
                     }
                     
                     // On envoi une 'flash' pour indiquer à l'utilisateur que l'entité est ajoutée
