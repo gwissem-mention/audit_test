@@ -380,8 +380,19 @@ class QuestionnaireController extends Controller
                     $champFile = $questionFiles->getTypeQuestion()->getLibelle() . '_' . $questionFiles->getId() . '_' . $questionFiles->getAlias(); 
 
                     $file = $form[$champFile]->getData();
+
+                    $mimeTypes = array(
+                        "application/x-compressed",
+                        "application/x-zip-compressed",
+                        "application/zip",
+                        "multipart/x-zip",
+                        "application/pdf",
+                        "application/msword",
+                        "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+                    );
+
                     // Si le fichier n'est pas un pdf, on ne continue pas la validation du formulaire et on retourne sur celui-ci avec un message d'information
-                    if ($file && $file->getMimeType() !== "application/pdf")
+                    if ($file && !in_array($file->getMimeType(), $mimeTypes))
                     {
                         $this->get('session')->getFlashBag()->add( ('danger') , 'Vous ne pouvez uploader que des fichiers pdf pour le '. $questionFiles->getAlias() . '.' );
 
