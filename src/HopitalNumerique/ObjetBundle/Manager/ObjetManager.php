@@ -607,9 +607,9 @@ class ObjetManager extends BaseManager
      *
      * @return array
      */
-    public function getActualitesByCategorie( $categories, $role, $limit = 0 )
+    public function getActualitesByCategorie( $categories, $role, $limit = 0, $order = array( 'champ' => 'obj.dateModification', 'tri' => 'DESC') )
     {
-        $articles   = $this->getObjetsByTypes( $categories, $limit );
+        $articles   = $this->getObjetsByTypes( $categories, $limit, $order );
         $actualites = array();
 
         foreach($articles as $article) {
