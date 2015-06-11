@@ -217,8 +217,41 @@ $(document).ready(function() {
 
     
     $("#recherche_textuelle").change(function(){
+        RechercheExalead();
+    });
 
-        $('.recherche_textuelle_avancee').css({ display:'none' });
+    
+    affichagePlaceholder();
+});
+
+//fancybox daffichage de la synthese
+enquire.register("screen and (max-width: 991px)", {
+    match : function() {
+        $(function() {
+            $(document).unbind('click.fb-start');
+            $('a.synthese').attr('target','_blank');
+        });
+    },
+    unmatch : function() {
+        $(function() {
+            $('a.synthese').fancybox({
+                'padding'   : 0,
+                'autoSize'  : false,
+                'width'     : '80%',
+                'scrolling' : 'no'
+            });
+            $('a.synthese').attr('target','');
+        });
+    }
+});
+
+
+/**
+ * Fonction appellée lors d'une recherche exalead
+ */
+function RechercheExalead()
+{
+    $('.recherche_textuelle_avancee').css({ display:'none' });
         if($("#recherche_textuelle").val() != '')
         {
             $(".placeholder").hide();
@@ -257,32 +290,7 @@ $(document).ready(function() {
         updateResultats( true );
 
         resetRequete();
-    });
-
-    
-    affichagePlaceholder();
-});
-
-//fancybox daffichage de la synthese
-enquire.register("screen and (max-width: 991px)", {
-    match : function() {
-        $(function() {
-            $(document).unbind('click.fb-start');
-            $('a.synthese').attr('target','_blank');
-        });
-    },
-    unmatch : function() {
-        $(function() {
-            $('a.synthese').fancybox({
-                'padding'   : 0,
-                'autoSize'  : false,
-                'width'     : '80%',
-                'scrolling' : 'no'
-            });
-            $('a.synthese').attr('target','');
-        });
-    }
-});
+}
 
 /**
  * Prend en compte la requete par défaut ou la requete active
