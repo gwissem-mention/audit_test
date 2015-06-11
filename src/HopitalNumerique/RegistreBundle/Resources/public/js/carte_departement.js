@@ -155,6 +155,9 @@ function afficheCarteFrance(donneesParRegionJSON, remplissage)
                 
                 //Puis rechargement de l'input avec les regions selectionnées en JSON
                 $('#selected-region').val(JSON.stringify(regionsSelectionnes));
+
+
+                appliquerRegionsSelectionnees();
             };
          })(region[state], state);
         

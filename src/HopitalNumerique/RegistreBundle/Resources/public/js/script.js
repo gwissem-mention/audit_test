@@ -42,6 +42,8 @@ function selectionnerToutesRegions()
     
     //la recrée avec toutes les régions supprimées
     afficheCarteFrance(regionJSON, true);
+    
+    appliquerRegionsSelectionnees();
 }
 
 /**
@@ -59,6 +61,8 @@ function deselectionnerToutesRegions()
     
     //la recrée avec toutes les régions supprimées
     afficheCarteFrance(regionJSON);
+
+    appliquerRegionsSelectionnees();
 }
 
 /*
