@@ -581,6 +581,16 @@ class ObjetManager extends BaseManager
     }
 
     /**
+     * Récupération du nombre de vue total de toutes les publications
+     *
+     * @return int
+     */
+    public function getNbVuesPublication()
+    {
+        return $this->getRepository()->getNbVuesPublication()->getQuery()->getSingleScalarResult();
+    }
+
+    /**
      * Retorune l'arbo des articles
      *
      * @return array

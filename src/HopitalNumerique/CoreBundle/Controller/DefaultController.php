@@ -80,7 +80,8 @@ class DefaultController extends Controller
         $alaune = $this->get('hopitalnumerique_objet.manager.objet')->getArticleAlaUne();
 
         // Get nombres de publications consultées
-        $nb_pub_consultees = $this->get('hopitalnumerique_objet.manager.consultation')->getNbConsultations();
+        // $nb_pub_consultees = $this->get('hopitalnumerique_objet.manager.consultation')->getNbConsultations();
+        $nb_pub_consultees = $this->get('hopitalnumerique_objet.manager.objet')->getNbVuesPublication();
 
         $view = 'HopitalNumeriqueCoreBundle:Templates/' .  $request->getSession()->get('templateId') . ':index.html.twig'; 
 
