@@ -75,6 +75,9 @@
     #recherche #arbo-type-prod { padding: 0;}
     #recherche #arbo-recherche-textuelle { padding: 0;}
     #recherche #bloc_filtres{ margin-top:10px;padding-left:0px; padding-right: 15px;}
+
+    #recherche .alertExalead{ margin-top: 10px; width: 100%;}
+    #recherche .alertExalead span.label{ text-align: center; display: block; margin-left: auto; margin-right: auto;width: 317px; cursor: pointer; }
     
 	.recherche_textuelle_avancee { background-color:#f4f4f4;border-color:#ccc;border-style:solid;border-width:1px;display:none;left:0px;position:absolute;top:33px;width:100%;z-index:1000; }
 	    .recherche_textuelle_avancee .close { float:right;font-size:15px;padding:10px; }
