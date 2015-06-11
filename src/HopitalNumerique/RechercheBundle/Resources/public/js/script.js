@@ -523,7 +523,7 @@ function updateResultats( cleanSession )
             if(search != "")
             {
                 search = JSON.parse(search);
-                $("#resultats p, #resultats h4, #resultats h5, #resultats a").highlight( search, { wordsOnly: false } );
+                $("#resultats p").highlight( search, { wordsOnly: false } );
             }
 
             placeholderExalead();
