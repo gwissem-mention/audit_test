@@ -219,6 +219,18 @@
                                 </div>
     
                                 <div class="form-group">
+                                    {{ form_label(form.btnSociaux) }}
+                                    <div class="col-md-5">
+                                        {{ form_widget(form.btnSociaux) }}
+                                    </div>
+                                    <div class="col-md-5 col-md-offset-7">
+                                        <div class="help-block">
+                                            {{ form_errors(form.btnSociaux) }}
+                                        </div>
+                                    </div>
+                                </div>
+    
+                                <div class="form-group">
                                     {{ form_label(form.commentaires) }}
                                     <div class="col-md-5">
                                         {{ form_widget(form.commentaires) }}

@@ -108,6 +108,13 @@ class Objet
     /**
      * @var boolean
      *
+     * @ORM\Column(name="obj_btn_sociaux", type="boolean", options = {"comment" = "Boutons des reseaux sociaux autorisés sur l objet ?"})
+     */
+    private $btnSociaux;
+
+    /**
+     * @var boolean
+     *
      * @Gedmo\Versioned
      * @ORM\Column(name="obj_notes", type="boolean", options = {"comment" = "Notes autorisées sur l objet ?"})
      */
@@ -1801,5 +1808,28 @@ class Objet
     public function getPublicationPlusConsulte()
     {
         return $this->publicationPlusConsulte;
+    }
+
+    /**
+     * Set btnSociaux
+     *
+     * @param boolean $btnSociaux
+     * @return Objet
+     */
+    public function setBtnSociaux($btnSociaux)
+    {
+        $this->btnSociaux = $btnSociaux;
+
+        return $this;
+    }
+
+    /**
+     * Get btnSociaux
+     *
+     * @return boolean 
+     */
+    public function getBtnSociaux()
+    {
+        return $this->btnSociaux;
     }
 }
