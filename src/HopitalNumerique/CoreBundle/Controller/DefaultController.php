@@ -23,7 +23,7 @@ class DefaultController extends Controller
         $allCategories = $this->get('hopitalnumerique_reference.manager.reference')->findBy( array( 'parent' => 188) );
         $user          = $this->get('security.context')->getToken()->getUser();
         $role          = $this->get('nodevo_role.manager.role')->getUserRole($user);
-        $actualites    = $this->get('hopitalnumerique_objet.manager.objet')->getActualitesByCategorie( $allCategories, $role, 3 );
+        $actualites    = $this->get('hopitalnumerique_objet.manager.objet')->getActualitesByCategorie( $allCategories, $role, 3, array( 'champ' => 'obj.dateCreation', 'tri' => 'DESC') );
 
         // Get publications (production)
         $publications  = $this->get('hopitalnumerique_objet.manager.objet')->getObjetsByNbVue();
@@ -80,7 +80,8 @@ class DefaultController extends Controller
         $alaune = $this->get('hopitalnumerique_objet.manager.objet')->getArticleAlaUne();
 
         // Get nombres de publications consultées
-        $nb_pub_consultees = $this->get('hopitalnumerique_objet.manager.consultation')->getNbConsultations();
+        // $nb_pub_consultees = $this->get('hopitalnumerique_objet.manager.consultation')->getNbConsultations();
+        $nb_pub_consultees = $this->get('hopitalnumerique_objet.manager.objet')->getNbVuesPublication();
 
         $view = 'HopitalNumeriqueCoreBundle:Templates/' .  $request->getSession()->get('templateId') . ':index.html.twig'; 
 
