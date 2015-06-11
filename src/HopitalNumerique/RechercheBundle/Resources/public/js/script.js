@@ -517,12 +517,14 @@ function showLess(that, btn)
 {
     //Maj Cookie val
     cookieName = (btn == 1) ? 'showMorePointsDurs' : 'showMoreProductions';
-    $.cookie(cookieName, 2, {path: '/' } );
+    $.cookie(cookieName, 3, {path: '/' } );
 
     var i = 0;
     $(that).parent().parent().find('.results > div').each(function( i ){
         if( i !== 0 && i !== 1)
+        {
             $(this).slideUp();
+        }
     });
 
     $(that).parent().find('.showMore').show();
@@ -534,13 +536,13 @@ function showLess(that, btn)
  */
 function showMore(that, btn)
 {
-    toHide       = 2;
+    toHide       = 500;
     elementsLeft = 0;
     cookieName   = (btn == 1) ? 'showMorePointsDurs' : 'showMoreProductions';
 
     //set Default value if not exist
     if( $.cookie(cookieName) == undefined )
-        $.cookie(cookieName, 2, {path: '/' });
+        $.cookie(cookieName, 3, {path: '/' });
 
     //get cookie val
     showMoreCookieVal = $.cookie(cookieName);
