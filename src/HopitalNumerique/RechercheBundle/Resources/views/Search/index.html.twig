@@ -100,6 +100,69 @@
                     </div> 
 
                     <hr />
+
+<script type="text/javascript">
+/**
+ * Fonction appellée lors d'une recherche exalead
+ */
+function RechercheExalead()
+{
+    $('.recherche_textuelle_avancee').css({ display:'none' });
+
+    //Vérif avant de lancer une requete
+    if(($("#recherche_textuelle").val().length < 2 ) || ($("#recherche_textuelle").val().length <= 4 && $("#recherche_textuelle").val().indexOf("*") >= 0 ))
+    {
+        $('#recherche .alertExalead').show("slow");
+    }
+    else
+    {
+        $('#recherche .alertExalead').hide("slow");
+        if($("#recherche_textuelle").val() != '')
+        {
+            $(".placeholder").hide();
+            $("#bloc_filtres").show();
+            $("#bloc_exalead").removeClass();
+            $("#bloc_exalead").addClass('col-md-6');
+            showPlaceholder = false;
+            $("#dest").removeClass('hide');
+            $(".requete h2").addClass('ropen');
+        }
+        else
+        {
+            if($(".placeholder-aucunCritere").length)
+            {
+                $('#resultats').html('');
+                $(".arbo-requete").find('li').addClass('hide');
+                $(".placeholder").show();
+                showPlaceholder = true;
+                $("#dest").addClass('hide');
+                $(".requete h2").removeClass('ropen rclose');
+            }
+            $(".placeholder-aucunCritere").remove();
+        }
+
+        if($(".arbo-requete").find('li:not(.hide)').length == 0 && !$("#dest").hasClass('hide'))
+        {
+            if($(".placeholder-aucunCritere").length == 0)
+            {
+                $(".arbo-requete").append('<small class="placeholder-aucunCritere"><span class="text-muted">Aucun critère de recherche textuelle.</span></small>');
+            }
+        }
+
+        //Mise à jour du cradre "Requete de recherche"
+        $("#arbo-recherche-textuelle").html($("#recherche_textuelle").val() == '' ? '<small><span class="text-muted">Aucune recherche textuelle.</span></small>' : '<small><span>' + $("#recherche_textuelle").val() +'</span></small>');
+
+        updateResultats( true );
+
+        resetRequete();
+    }
+}
+</script>
+
+<style type="text/css">
+    #recherche .alertExalead{ margin-top: 10px; width: 100%;}
+    #recherche .alertExalead span.label{ text-align: center; display: block; margin-left: auto; margin-right: auto;width: 317px; cursor: pointer; }
+</style>
                         
                     <div class="row">
                         {% if domaineCurrentId == 1 %}
@@ -150,6 +213,11 @@
                             </select>
                             <input type="hidden" id="categ_production_select_vals" value="{{categoriesProductionActif}}" />
                             <input type="hidden" id="categ_production_select_vals_chargement" value="{{categoriesProductionActifJSON}}" />
+                        </div>
+
+                                
+                        <div class="col-md-12 alertExalead" style="display:none">
+                            <span class="label label-danger">Merci de préciser votre recherche (3 caractères minimum)</span>
                         </div>
                     </div> 
                     <div class="clearfix"></div>

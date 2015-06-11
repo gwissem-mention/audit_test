@@ -111,6 +111,9 @@ $(document).ready(function() {
         }
     });
 
+    $('#recherche .alertExalead span.label').on('click', function(){
+        $('#recherche .alertExalead').hide("slow");
+    });
     
     //init : open first categ
     $('#origin li.level0:first').addClass('active').find('ol:first').slideDown();
@@ -252,44 +255,44 @@ enquire.register("screen and (max-width: 991px)", {
 function RechercheExalead()
 {
     $('.recherche_textuelle_avancee').css({ display:'none' });
-        if($("#recherche_textuelle").val() != '')
+    if($("#recherche_textuelle").val() != '')
+    {
+        $(".placeholder").hide();
+        $("#bloc_filtres").show();
+        $("#bloc_exalead").removeClass();
+        $("#bloc_exalead").addClass('col-md-6');
+        showPlaceholder = false;
+        $("#dest").removeClass('hide');
+        $(".requete h2").addClass('ropen');
+    }
+    else
+    {
+        if($(".placeholder-aucunCritere").length)
         {
-            $(".placeholder").hide();
-            $("#bloc_filtres").show();
-            $("#bloc_exalead").removeClass();
-            $("#bloc_exalead").addClass('col-md-6');
-            showPlaceholder = false;
-            $("#dest").removeClass('hide');
-            $(".requete h2").addClass('ropen');
+            $('#resultats').html('');
+            $(".arbo-requete").find('li').addClass('hide');
+            $(".placeholder").show();
+            showPlaceholder = true;
+            $("#dest").addClass('hide');
+            $(".requete h2").removeClass('ropen rclose');
         }
-        else
+        $(".placeholder-aucunCritere").remove();
+    }
+
+    if($(".arbo-requete").find('li:not(.hide)').length == 0 && !$("#dest").hasClass('hide'))
+    {
+        if($(".placeholder-aucunCritere").length == 0)
         {
-            if($(".placeholder-aucunCritere").length)
-            {
-                $('#resultats').html('');
-                $(".arbo-requete").find('li').addClass('hide');
-                $(".placeholder").show();
-                showPlaceholder = true;
-                $("#dest").addClass('hide');
-                $(".requete h2").removeClass('ropen rclose');
-            }
-            $(".placeholder-aucunCritere").remove();
+            $(".arbo-requete").append('<small class="placeholder-aucunCritere"><span class="text-muted">Aucun critère de recherche textuelle.</span></small>');
         }
+    }
 
-        if($(".arbo-requete").find('li:not(.hide)').length == 0 && !$("#dest").hasClass('hide'))
-        {
-            if($(".placeholder-aucunCritere").length == 0)
-            {
-                $(".arbo-requete").append('<small class="placeholder-aucunCritere"><span class="text-muted">Aucun critère de recherche textuelle.</span></small>');
-            }
-        }
+    //Mise à jour du cradre "Requete de recherche"
+    $("#arbo-recherche-textuelle").html($("#recherche_textuelle").val() == '' ? '<small><span class="text-muted">Aucune recherche textuelle.</span></small>' : '<small><span>' + $("#recherche_textuelle").val() +'</span></small>');
 
-        //Mise à jour du cradre "Requete de recherche"
-        $("#arbo-recherche-textuelle").html($("#recherche_textuelle").val() == '' ? '<small><span class="text-muted">Aucune recherche textuelle.</span></small>' : '<small><span>' + $("#recherche_textuelle").val() +'</span></small>');
+    updateResultats( true );
 
-        updateResultats( true );
-
-        resetRequete();
+    resetRequete();
 }
 
 /**
