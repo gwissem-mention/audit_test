@@ -55,6 +55,19 @@ class ObjetRepository extends EntityRepository
             
         return $qb;
     }
+
+    /**
+     * Récupération du nombre de vue total de toutes les publications
+     *
+     * @return QueryBuilder
+     */
+    public function getNbVuesPublication()
+    {
+        return $this->_em->createQueryBuilder()
+                         ->select('sum(obj.nbVue)')
+                         ->from('HopitalNumeriqueObjetBundle:Objet', 'obj')
+                         ->andWhere('obj.isArticle = 0');
+    }
     
     /**
      * Récupère les données du grid pour un ambassadeur sous forme de tableau correctement formaté

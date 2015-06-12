@@ -277,6 +277,10 @@ div.homepage  {
 #slide {
     overflow: hidden;
 }
+#slide a{
+    color: #FFFFFF;
+    text-decoration:underline;
+}
 #slide.slick-slider {
     margin-bottom: 0px;
 }

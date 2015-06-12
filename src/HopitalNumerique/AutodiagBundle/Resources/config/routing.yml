@@ -338,6 +338,19 @@ hopitalnumerique_autodiag_front_comptehn_generate_synthese:
     pattern:  /compte-hn/autodiagnostic/generate-synthese
     defaults: { _controller: "HopitalNumeriqueAutodiagBundle:Front:synthese" }
 
+hopitalnumerique_autodiag_front_resultat_partage_mail_fancy:
+    pattern:  /autodiagnostic/resultat/partage-par-mail/{id}
+    defaults: { _controller: "HopitalNumeriqueAutodiagBundle:PartageResultat:fancy" }
+    requirements:
+        id: \d+
+
+hopitalnumerique_autodiag_front_resultat_envoie_mail_fancy:
+    pattern:  /autodiagnostic/resultat/envoie-mail/{id}
+    defaults: { _controller: "HopitalNumeriqueAutodiagBundle:PartageResultat:envoieMail" }
+    requirements:
+        id: \d+
+        _format: json
+
 # Processus
 hopitalnumerique_autodiag_process_add:
     pattern: /admin/outil/process/add/{numero}

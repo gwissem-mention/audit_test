@@ -119,7 +119,7 @@ window.open ("report/showReport.action?"+request,null,"location=no,menubar=0,res
             {% else %}
                 <div class="col-md-12">
             {% endif %}
-            {% if ActivateRsxSociaux %}
+            {% if ActivateRsxSociaux and objet.btnSociaux %}
                     <div class="reseaux-sociaux pull-right">
                         <div class="tweet pull-left">
                             {% set currentPath = app.request.getUri %}
@@ -180,7 +180,7 @@ window.open ("report/showReport.action?"+request,null,"location=no,menubar=0,res
                         {% else %}
                             <div class="col-md-12">
                         {% endif %}
-                        {% if ActivateRsxSociaux %}
+                        {% if ActivateRsxSociaux and objet.btnSociaux %}
                                 <div class="reseaux-sociaux pull-right">
                                     <div class="tweet pull-left">
                                         {% set currentPath = app.request.getUri %}
@@ -280,7 +280,7 @@ window.open ("report/showReport.action?"+request,null,"location=no,menubar=0,res
                 {% else %}
                     <div class="col-md-12">
                 {% endif %}
-                {% if ActivateRsxSociaux %}
+                {% if ActivateRsxSociaux and objet.btnSociaux %}
                         <div class="reseaux-sociaux pull-right">
                             <div class="tweet pull-left">
                                 {% set currentPath = app.request.getUri %}

@@ -7,6 +7,8 @@
     {{parent()}}
     {% stylesheets output="compiled/hopitalnumerique-autodiag-front-resultat.css" filter="cssrewrite, ?yui_css" 
         "@jquery_qtip2_css"
+        "@validationEngine_css"
+        'bundles/nodevoadmin/plugins/nodevoLoader/nodevoLoader.css'
         'bundles/hopitalnumeriqueautodiag/css/front.css'
     %}
         <link rel="stylesheet" href="{{ asset_url }}" />
@@ -20,6 +22,8 @@
     {% javascripts output="compiled/hopitalnumerique-autodiag-front-resultat.js" 
         '@highcharts_js'
         '@jquery_qtip2_js'
+        "@validationEngine_js"
+        'bundles/nodevoadmin/plugins/nodevoLoader/nodevoLoader.js'
         'bundles/hopitalnumeriqueautodiag/js/resultats.js'
     %}
         <script type="text/javascript" src="{{ asset_url }}"></script>

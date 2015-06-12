@@ -158,7 +158,11 @@ abstract class InterventionDemandeType extends AbstractType
                         ->where('ref.code = :code')
                         ->leftJoin('ref.etat', 'etat')
                             ->andWhere('etat.id = 3')
-                        ->setParameter('code', 'PERIMETRE_FONCTIONNEL_DOMAINES_FONCTIONNELS')
+                        ->andWhere('ref.parent = :idParent')
+                        ->setParameters(array(
+                            'code'     => 'PERIMETRE_FONCTIONNEL_DOMAINES_FONCTIONNELS',
+                            'idParent' => 221
+                        ))
                         ->orderBy('ref.order', 'ASC');
                 }
             ))

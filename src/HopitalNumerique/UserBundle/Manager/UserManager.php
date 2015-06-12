@@ -88,18 +88,18 @@ class UserManager extends BaseManager
             $questionnairesByUser = array_key_exists($user['id'], $questionnaireByUser) ? $questionnaireByUser[$user['id']] : array();
             
             //Récupèration d'un booléen : Vérification de réponses pour le questionnaire expert, que son role n'est pas expert et que sa candidature n'a pas encore été refusé
-            $users[$key]['expert'] = (in_array($idExpert, $questionnairesByUser) 
+            $user['expert'] = (in_array($idExpert, $questionnairesByUser) 
                                         && !in_array('ROLE_EXPERT_6', $user["roles"]) 
                                         && !$this->_managerRefusCandidature->refusExisteByUserByQuestionnaire($user['id'], $idExpert, $refusCandidature));
             
             //Récupèration d'un booléen : Vérification de réponses pour le questionnaire expert, que son role n'est pas expert et que sa candidature n'a pas encore été refusé
-            $users[$key]['ambassadeur'] = (in_array($idAmbassadeur, $questionnairesByUser) 
+            $user['ambassadeur'] = (in_array($idAmbassadeur, $questionnairesByUser) 
                                         && !in_array('ROLE_AMBASSADEUR_7', $user["roles"]) 
                                         && !$this->_managerRefusCandidature->refusExisteByUserByQuestionnaire($user['id'], $idAmbassadeur, $refusCandidature));
             
             $dateCourante = new \DateTime($user['contra']);
             $dateCourante->add($interval);
-            $users[$key]['contra'] = ('' != $user['contra']) ? ($dateCourante >= $aujourdHui) : false;
+            $user['contra'] = ('' != $user['contra']) ? ($dateCourante >= $aujourdHui) : false;
 
             //Gestion du domaine
             $user['domaines'] = array_key_exists($user['id'], $domainesByUsers) ? $domainesByUsers[$user['id']]['url'] : '';

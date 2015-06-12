@@ -1,0 +1,103 @@
+{% extends 'HopitalNumeriqueCoreBundle:Default:fancybox.html.twig' %}
+
+{% block fancybox %}
+    <div class="panel panel-midnightblue" style="margin:0" >
+        <div class="panel-heading">
+            <h4>{% block fancy_titre %}{% endblock %}</h4>
+        </div>
+
+        <div class="panel-body" >
+            <form action="#" class="toValidate" id="form-partage-mail">
+                <div class="form-group">
+                    <div class="col-md-12">
+                        <label for="destinataire">Destinataire</label>
+                    </div>
+                    <div class="col-md-12">
+                        <input type="text" class="form-control validate[required,custom[email]]" id="destinataire" name="destinataire" placeholder="exemple@mail.com" />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-md-12">
+                        <label for="sujet">Sujet</label>
+                    </div>
+                    <div class="col-md-12">
+                        <input type="text" class="form-control validate[required]" id="sujet" name="sujet" value="{{resultat.outil.title}} - {{resultat.name}}" />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-md-12">
+                        <label for="message">Message</label>
+                    </div>
+                    <div class="col-md-12">
+                        <textarea name="message" id="message-refus" style="width:100%" rows="9" class="validate[required]">Bonjour,
+
+Vous trouverez ci-joint mon résultat en pièce-jointe.
+
+Cordialement,</textarea>
+                    </div>
+                </div>
+            </form>
+    
+            <div class="col-md-12" id="zone-alerte" style="display:none">
+                <span class="label label-danger">Le fichier n'existe plus, veuillez le regénérer en cliquant sur le bouton "Télécharger".</span>
+            </div>
+
+            <input id="url-envoie-mail" type="hidden" value='{{path('hopitalnumerique_autodiag_front_resultat_envoie_mail_fancy', {'id':resultat.id})}}'>
+            
+            <div class="panel-footer" >
+                <div class="row">
+                    <div class="btn-toolbar pull-right">
+                        <div onclick="$.fancybox.close(true);" class="btn-danger btn">Fermer</div>
+                        <div onclick="envoyerMail();" class="btn-primary btn">Envoyer</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <style type="text/css">
+        .panel-heading{height: 1px;}
+        .btn-toolbar{margin-right: 15px;}
+        #zone-alerte span{ width: 450px; display: block; margin: 5px auto;}
+    </style>
+
+    <script type="text/javascript">
+
+        $(document).ready(function() {
+            //bind de Validation Engine
+            if( $('form.toValidate').length > 0 )
+            {
+                $('form.toValidate').validationEngine();
+            }
+        });
+
+        function envoyerMail()
+        {
+            if ( $('form.toValidate').validationEngine('validate') ) {
+                var loader = $('.fancybox-inner').nodevoLoader().start();
+                 $.ajax({
+                    url  : $('#url-envoie-mail').val(),
+                    data : $('#form-partage-mail').serialize(),
+                    type     : 'POST',
+                    dataType : 'json',
+                    success  : function( data ){
+                        if(data.success)
+                        {
+                            loader.finished();
+                            $.fancybox.close(true);
+                        }
+                        else
+                        {
+                            $("#zone-alerte").show();
+                            loader.finished();
+                        }
+                    },
+                    error: function(data){
+                        $("#zone-alerte").show();
+                        loader.finished();
+                    }
+                });
+            }
+        }
+    </script>
+{% endblock %}

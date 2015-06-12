@@ -36,7 +36,7 @@
         {% if allowDelete %}
             <div onclick='deleteWithConfirm("{{ path('nodevo_mail_mail_delete', { 'id': mail.id }) }}");' class="btn btn-default" title="Supprimer"><i class="fa fa-trash-o"></i></div>
         {% endif %}
-        <a class="btn btn-default" href="{{ path('nodevo_mail_mail_test') }}" title="Tester"><i class="fa fa-envelope"></i></a>
+        <a class="btn btn-default" href="{{ path('nodevo_mail_mail_test', {'id' : mail.id }) }}" title="Tester"><i class="fa fa-envelope"></i></a>
     {% endif %}
 {% endblock %}
 

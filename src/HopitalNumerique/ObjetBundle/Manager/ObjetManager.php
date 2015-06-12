@@ -581,6 +581,16 @@ class ObjetManager extends BaseManager
     }
 
     /**
+     * Récupération du nombre de vue total de toutes les publications
+     *
+     * @return int
+     */
+    public function getNbVuesPublication()
+    {
+        return $this->getRepository()->getNbVuesPublication()->getQuery()->getSingleScalarResult();
+    }
+
+    /**
      * Retorune l'arbo des articles
      *
      * @return array
@@ -607,9 +617,9 @@ class ObjetManager extends BaseManager
      *
      * @return array
      */
-    public function getActualitesByCategorie( $categories, $role, $limit = 0 )
+    public function getActualitesByCategorie( $categories, $role, $limit = 0, $order = array( 'champ' => 'obj.dateModification', 'tri' => 'DESC') )
     {
-        $articles   = $this->getObjetsByTypes( $categories, $limit );
+        $articles   = $this->getObjetsByTypes( $categories, $limit, $order );
         $actualites = array();
 
         foreach($articles as $article) {
