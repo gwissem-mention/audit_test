@@ -46,6 +46,9 @@ $(document).ready(function() {
 function addDateFictive( url )
 {
     if ( $('#form_date_fictive form').validationEngine('validate') ) {
+
+        var loader = $('.options').nodevoLoader().start();
+
         $.ajax({
             url     : url,
             data    :  $('#form_date_fictive form').serialize(),
@@ -53,6 +56,7 @@ function addDateFictive( url )
             success : function( data ){
                 // Refresh de la liste
                 $('#dates-fictives').html( data );
+                loader.finished();
             }
         });
     }

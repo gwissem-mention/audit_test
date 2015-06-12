@@ -40,8 +40,14 @@ class EvenementExpertGrid extends Grid implements GridInterface
     public function setActionsButtons()
     {
         $this->addActionButton( new Action\EditButton( 'hopitalnumerique_expert_evenement_expert_edit' ) );
-        $this->addActionButton( new Action\FancyButton( 'hopitalnumerique_expert_expert_expert_parametrage' ) );
-        $this->addActionButton( new Action\DownloadButton( 'hopitalnumerique_expert_evenement_expert_impression_fiche' ) );
+
+        $fancyButton = new Action\FancyButton( 'hopitalnumerique_expert_expert_expert_parametrage' );
+        $fancyButton->setAttributes(array('class'=>'btn btn-primary fancy fancybox.ajax fa fa-users','title' => 'Attester les présences'));
+        $this->addActionButton($fancyButton);
+
+        $downloadButton = new Action\DownloadButton( 'hopitalnumerique_expert_evenement_expert_impression_fiche' );
+        $downloadButton->setAttributes(array('class'=>'btn btn-warning fa fa-download','title' => 'Télécharger la feuille d\'émargement'));
+        $this->addActionButton($downloadButton);
 
     }
 

@@ -31,16 +31,6 @@
                                 <span class="input-group-addon no-value"><i class="fa fa-question-circle"></i></span>
                                 <span class="input-group-addon value-ko"><i class="fa fa-ban"></i></span>
                             </div>
-                            <div class="gestion-label">
-                                <div class="no-user">
-                                    <span class="label label-danger">Montant de vacation non trouvé.</span>
-                                </div>
-                                <div class="user-find">
-                                    <span class="label label-success">Montant de vacation trouvé <i class="fa fa-check"></i></span>
-                                    <span class="label label-info search">Sauvegarde en cours <i class="fa fa-spin fa-spinner"></i> ...</span>
-                                    <span class="label label-success finish">Sauvegardé <i class="fa fa-check"></i></span>
-                                </div>
-                            </div>
                             <div class="toolbar">
                                 <div onclick="rechercheEtValidationPartage();" class="btn btn-success pull-right" title="Rechercher & Partager"><i class="fa fa-floppy-o"> </i>Sauvegarder</div>
                             </div>
@@ -105,24 +95,8 @@
                 type     : 'post',
                 dataType : 'json',
                 success : function( data ){
-                    if(!data.success)
+                    if(data.success)
                     {
-                        $(".no-user span").html('Aucun utilisateur trouvé.');
-                        $('.value-ok, .user-find').hide();
-                        $('.value-search').hide();
-                        $('.no-value').hide();
-                        $('.value-ko, .no-user').show();
-                    }
-                    else
-                    {
-                        $('.value-ok, .user-find').show();
-                        $('.value-search').hide();
-                        $('.no-value').hide();
-                        $('.value-ko, .no-user').hide();
-
-                        $('.user-find .search').hide();
-                        $('.user-find .finish').show();
-
                         setTimeout(function(){
                             $.fancybox.close();
                         }, 300);

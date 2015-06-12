@@ -5,6 +5,7 @@
     {% stylesheets output="compiled/hopitalnumerique-expert-activite.css" filter="cssrewrite, ?yui_css"
         "@select2_css"
         "@validationEngine_css"
+        'bundles/nodevoadmin/plugins/nodevoLoader/nodevoLoader.css'
     %}
         <link rel="stylesheet" href="{{ asset_url }}" />
     {% endstylesheets %}
@@ -15,6 +16,7 @@
     {% javascripts output="compiled/hopitalnumerique-expert-activite.js"
         "@validationEngine_js"
         "@select2_js"
+        'bundles/nodevoadmin/plugins/nodevoLoader/nodevoLoader.js'
         'bundles/hopitalnumeriqueexpert/js/script.js'
     %}
         <script type="text/javascript" src="{{ asset_url }}"></script>
@@ -63,11 +65,11 @@
                         <div id="form_date_fictive" class="col-md-6">
                             <form id="hopitalnumerique_reponse" novalidate="novalidate" class="form-horizontal toValidate" action="" method="post" name="hopitalnumerique_reponse">
                                 <div class="form-group">
-                                    <label class="col-sm-4 control-label required" for="libelle_reponse">
+                                    <label class="col-sm-5 control-label required" for="libelle_reponse">
                                         Choisir une nouvelle date
                                         <span title="Ce champ est requis" style="color:red;font-size:10px">*</span>
                                     </label>
-                                    <div class="col-sm-8">
+                                    <div class="col-sm-7">
                                         <input type="text" id="date_fictive" name="date_fictive" required="required" class="validate[required] form-control">
                                     </div>
                                     <input type="hidden" name="question" id="expBesoinId" value="id" />

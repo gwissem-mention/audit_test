@@ -32,7 +32,7 @@ class DateFictiveActiviteExpert
      * @var integer
      *
      * @ORM\ManyToOne(targetEntity="ActiviteExpert", inversedBy="dateFictives")
-     * @ORM\JoinColumn(name="eadf_activite", referencedColumnName="exp_id")
+     * @ORM\JoinColumn(name="eadf_activite", referencedColumnName="exp_id", onDelete="CASCADE")
      */
     protected $activite;
 

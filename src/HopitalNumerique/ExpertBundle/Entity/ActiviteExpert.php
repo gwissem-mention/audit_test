@@ -41,7 +41,7 @@ class ActiviteExpert
      * 
      * @var /HopitalNumerique/ExpertBundle/Entity/EvenementExpert
      * 
-     * @ORM\OneToMany(targetEntity="EvenementExpert", mappedBy="activite", cascade={"persist", "remove" })
+     * @ORM\OneToMany(targetEntity="EvenementExpert", mappedBy="activite", cascade={"remove" })
      * @ORM\OrderBy({"date" = "DESC"})
      */
     protected $dateFictives;

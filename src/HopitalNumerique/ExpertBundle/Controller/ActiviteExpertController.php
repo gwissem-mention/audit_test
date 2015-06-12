@@ -42,18 +42,6 @@ class ActiviteExpertController extends Controller
     }
 
     /**
-     * Affiche le ActiviteExpert en fonction de son ID passé en paramètre.
-     * 
-     * @param integer $id Id de ActiviteExpert.
-     */
-    public function showAction( ActiviteExpert $activiteExpert )
-    {
-        return $this->render('HopitalNumeriqueExpertBundle:ActiviteExpert:show.html.twig', array(
-            'activiteExpert' => $activiteExpert,
-        ));
-    }
-
-    /**
      * Suppresion d'un ActiviteExpert.
      * 
      * @param integer $id Id de ActiviteExpert.

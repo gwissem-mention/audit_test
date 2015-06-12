@@ -40,3 +40,18 @@ VALUES
 INSERT INTO `core_ressource` (`res_id`, `res_nom`, `res_pattern`, `res_order`, `res_type`)
 VALUES
     (NULL, 'FrontOffice - Tableau de bord : Suivi d\'activité', '/^\\/compte-hn\\/suivi-activite/', 20, 2);
+
+
+#Lien menu BO
+INSERT INTO `core_menu_item` (`itm_id`, `itm_parent`, `mnu_menu`, `itm_name`, `itm_route`, `itm_route_parameters`, `itm_route_absolute`, `itm_uri`, `itm_icon`, `itm_display`, `itm_display_children`, `itm_role`, `itm_order`)
+VALUES
+    (220, NULL, 1, 'Activité des experts', 'hopitalnumerique_expert_expert_activite', '[]', NULL, NULL, 'fa fa-briefcase', 1, 1, 'IS_AUTHENTICATED_ANONYMOUSLY', 14);
+
+INSERT INTO `core_menu_item` (`itm_id`, `itm_parent`, `mnu_menu`, `itm_name`, `itm_route`, `itm_route_parameters`, `itm_route_absolute`, `itm_uri`, `itm_icon`, `itm_display`, `itm_display_children`, `itm_role`, `itm_order`)
+VALUES
+    (NULL, 220, 1, 'Activité des experts - Edition', 'hopitalnumerique_expert_expert_activite', NULL, 0, NULL, NULL, 0, 0, 'IS_AUTHENTICATED_ANONYMOUSLY', 1),
+    (NULL, 220, 1, 'Evenement des experts', 'hopitalnumerique_expert_evenement_expert', NULL, 0, NULL, NULL, 0, 0, 'IS_AUTHENTICATED_ANONYMOUSLY', 1),
+    (NULL, 220, 1, 'Evenement des experts - Edition ', 'hopitalnumerique_expert_evenement_expert_edit', NULL, 0, NULL, NULL, 0, 0, 'IS_AUTHENTICATED_ANONYMOUSLY', 1),
+    (NULL, 220, 1, 'Activité des experts - Ajout', 'hopitalnumerique_expert_expert_activite_add', NULL, 0, NULL, NULL, 0, 0, 'IS_AUTHENTICATED_ANONYMOUSLY', 1),
+    (NULL, 220, 1, 'Evenement des experts - Ajout', 'hopitalnumerique_expert_evenement_expert_add', NULL, 0, NULL, NULL, 0, 0, 'IS_AUTHENTICATED_ANONYMOUSLY', 1)
+;

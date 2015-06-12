@@ -48,9 +48,11 @@ class ActiviteExpertGrid extends Grid implements GridInterface
      */
     public function setActionsButtons()
     {
-        $this->addActionButton( new Action\ShowButton( 'hopitalnumerique_expert_expert_activite_show' ) );
         $this->addActionButton( new Action\EditButton( 'hopitalnumerique_expert_expert_activite_edit' ) );
-        $this->addActionButton( new Action\FilsButton( 'hopitalnumerique_expert_evenement_expert' ) );
+        
+        $evenementButton = new Action\FilsButton( 'hopitalnumerique_expert_evenement_expert' );
+        $evenementButton->setAttributes(array('class'=>'btn btn-success fa fa-list','title' => 'Gestion des évènements'));
+        $this->addActionButton( $evenementButton );
 
         //générer la facture pour l'activité
         $genererFactureButton = new \APY\DataGridBundle\Grid\Action\RowAction('', 'hopitalnumerique_expert_expert_generer_facture');

@@ -17,7 +17,7 @@ class EvenementExpertType extends AbstractType
                 'class'         => 'HopitalNumeriqueReferenceBundle:Reference',
                 'property'      => 'libelle',
                 'required'      => true,
-                'label'         => 'Type d\'activité',
+                'label'         => 'Type d\'évènement',
                 'empty_value'   => ' - ',
                 'query_builder' => function(EntityRepository $er) {
                     return $er->createQueryBuilder('ref')

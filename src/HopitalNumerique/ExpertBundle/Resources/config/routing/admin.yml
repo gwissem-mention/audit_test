@@ -13,16 +13,9 @@ hopitalnumerique_expert_expert_activite_add:
     requirements: 
         _method: GET|POST
 
-hopitalnumerique_expert_expert_activite_show:
-    pattern:  /expert/activite/show/{id}
-    defaults: { _controller: "HopitalNumeriqueExpertBundle:ActiviteExpert:show" }
-    requirements:
-        id: \d+
-        _method: GET
-
 hopitalnumerique_expert_expert_activite_edit:
     pattern:  /expert/activite/edit/{id}
-    defaults: { _controller: "HopitalNumeriqueExpertBundle:ActiviteExpert:edit" }
+    defaults: { _controller: "HopitalNumeriqueExpertBundle:ActiviteExpert:edit", id: 1 }
     requirements:
         id: \d+
         _method: GET|POST
@@ -85,19 +78,19 @@ delete_mass:
 #Evenement expert
 hopitalnumerique_expert_evenement_expert:
     pattern:  /expert/evenement/{id}   #id de l'activité
-    defaults: { _controller: "HopitalNumeriqueExpertBundle:EvenementExpert:index" }
+    defaults: { _controller: "HopitalNumeriqueExpertBundle:EvenementExpert:index", id: 1 }
     requirements: 
         _method: GET|POST
 
 hopitalnumerique_expert_evenement_expert_add:
     pattern:  /expert/evenement/add/{id}  #id de l'activité
-    defaults: { _controller: "HopitalNumeriqueExpertBundle:EvenementExpert:add" }
+    defaults: { _controller: "HopitalNumeriqueExpertBundle:EvenementExpert:add" , id: 1}
     requirements: 
         _method: GET|POST
 
 hopitalnumerique_expert_evenement_expert_edit:
     pattern:  /expert/evenement/edit/{id}  #id de l'evenement
-    defaults: { _controller: "HopitalNumeriqueExpertBundle:EvenementExpert:edit" }
+    defaults: { _controller: "HopitalNumeriqueExpertBundle:EvenementExpert:edit", id: 1 }
     requirements:
         id: \d+
         _method: GET|POST
