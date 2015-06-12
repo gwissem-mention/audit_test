@@ -564,7 +564,7 @@ class MailManager extends BaseManager
      * @param array $user    Utilisateurs qui recevras l'email (tableau configuré en config.yml)
      * @param array $options Variables à remplacer dans le template : '%nomDansLeTemplate' => valeurDeRemplacement
      *
-     * @return Swift_Message
+     * @return Swift_Message[]
      */
     public function sendContactMail( $users, $options )
     {
@@ -591,6 +591,50 @@ class MailManager extends BaseManager
         }
 
         return $mailsToSend;
+    }
+
+    /**
+     * Envoi un mail de partage de résultat d'autodiag (différent des autres envoie de mail)
+     *
+     * @param array                                            $options  Variables à remplacer dans le template : '%nomDansLeTemplate' => valeurDeRemplacement
+     * @param \HopitalNumerique\AutodiagBundle\Entity\Resultat $resultat Résultat à partager
+     *
+     * @return Swift_Message
+     */
+    public function sendPartageResultatAutodiag( $options, $resultat )
+    {
+        $mail = $this->findOneById(50);
+
+        if(is_null($resultat->getUser()))
+        {
+            return null;
+        }
+        
+        $user                      = $resultat->getUser();
+        $options["nomexpediteur"]  = $user->getPrenom() . ' ' . $user->getNom();
+        $options["mailexpediteur"] = $user->getEmail();
+        $destinataire              = $options["destinataire"];
+        $options                   = $this->getAllOptions($options);
+        
+        //prepare content
+        $content        = $this->replaceContent($mail->getBody(), NULL , $options);
+        $expediteurMail = $this->replaceContent($mail->getExpediteurMail(), NULL, $options);
+        $expediteurName = $this->replaceContent($mail->getExpediteurName(), NULL, $options);
+        $content        = $this->replaceContent($mail->getBody(), NULL, $options);
+
+        $from           = array($expediteurMail => $expediteurName );
+        $subject        = $this->replaceContent($mail->getObjet(), $resultat->getUser(), $options);
+        
+        $mail = $this->sendMail( $subject, $from, array($destinataire), $content, $this->_mailAnap );
+
+        $fileName = __ROOT_DIRECTORY__ . '/files/autodiag/' . $resultat->getPdf();
+
+        if(file_exists($fileName))
+        {
+            $mail->attach(\Swift_Attachment::fromPath($fileName));
+        }
+
+        return $mail;
     }
 
     /**
