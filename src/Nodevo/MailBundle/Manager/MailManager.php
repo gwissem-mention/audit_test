@@ -516,6 +516,8 @@ class MailManager extends BaseManager
                                             'topicId'    => $topicId
                                         ))) .'" target="_blank" >Nouveau message</a>';
 
+        $options['pseudouser'] = (!is_null($user->getPseudonymeForum()) && $user->getPseudonymeForum() != '' ) ? $user->getPseudonymeForum() : $user->getAppellation();
+
         $mail = $this->findOneById(36);
     
         return $this->generationMail($user, $mail, $options);

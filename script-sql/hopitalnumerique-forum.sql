@@ -1,0 +1,1 @@
+/* 10:06:30 HN */ UPDATE `core_mail` SET `mail_body` = 'Bonjour %user,\r\n\r\nUn nouveau message a été posté sur un forum d’Hôpital Numérique par %pseudouser :\r\n- Forum : %forum\r\n- Catégorie : %categorie\r\n- Thème : %theme\r\n- Fil de discussion : %fildiscusssion\r\n- Lien vers le message : %lienversmessage\r\n\r\nCordialement,' WHERE `mail_id` = '36';
