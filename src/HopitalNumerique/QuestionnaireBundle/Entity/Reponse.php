@@ -9,6 +9,7 @@ use Doctrine\ORM\Mapping as ORM;
  *
  * @ORM\Table("hn_questionnaire_reponse")
  * @ORM\Entity(repositoryClass="HopitalNumerique\QuestionnaireBundle\Repository\ReponseRepository")
+ * @ORM\HasLifecycleCallbacks
  */
 class Reponse
 {
@@ -66,7 +67,18 @@ class Reponse
      * @ORM\Column(name="param_id", type="integer", nullable=true, options = {"comment" = "Éventuelle clef étrangère"})
      */
     private $paramId;
-    
+
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="rep_date_update", type="datetime", nullable = true, options = {"comment" = "Date de mise a jour de la reponse"})
+     */
+    private $dateUpdate;
+
+    public function __construct()
+    {
+        $this->dateUpdate = new \DateTime();
+    }
     
     /**
      * Get id
@@ -233,6 +245,38 @@ class Reponse
     public function setParamId($paramId)
     {
         $this->paramId = $paramId;
+    }
+
+    /**
+     * Set dateUpdate
+     *
+     * @param \DateTime $dateUpdate
+     * @return Reponse
+     */
+    public function setDateUpdate($dateUpdate)
+    {
+        $this->dateUpdate = $dateUpdate;
+
+        return $this;
+    }
+
+    /**
+     * Get dateUpdate
+     *
+     * @return \DateTime 
+     */
+    public function getDateUpdate()
+    {
+        return $this->dateUpdate;
+    }
+
+    /**
+     * @ORM\PrePersist()
+     * @ORM\PreUpdate()
+     */
+    public function majDateUpdate()
+    {
+        $this->dateUpdate = new \DateTime();
     }
     
     

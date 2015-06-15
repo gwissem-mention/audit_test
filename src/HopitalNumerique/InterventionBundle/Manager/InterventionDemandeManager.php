@@ -11,6 +11,7 @@ use Nodevo\ToolsBundle\Manager\Manager as BaseManager;
 use Doctrine\ORM\EntityManager;
 use HopitalNumerique\InterventionBundle\Entity\InterventionDemande;
 use HopitalNumerique\InterventionBundle\Entity\InterventionEtat;
+use HopitalNumerique\InterventionBundle\Entity\InterventionEvaluationEtat;
 use HopitalNumerique\InterventionBundle\Manager\InterventionEtatManager;
 use Symfony\Bundle\FrameworkBundle\Routing\Router;
 use HopitalNumerique\UserBundle\Entity\User;
@@ -364,7 +365,9 @@ class InterventionDemandeManager extends BaseManager
     {
         $interventionDemandes = $this->_repository->getGridDonneesCmsiDemandesNouvelles($this->utilisateurConnecte);
 
-        return $interventionDemandes;
+        $interventionDemandes = $this->reorderInterventionDemandeForGrid($interventionDemandes);
+
+        return array_values($interventionDemandes);
     }
     /**
      * Retourne les données formatées pour la création du grid des demandes d'intervention traitées pour le CMSI.
@@ -375,7 +378,9 @@ class InterventionDemandeManager extends BaseManager
     {
         $interventionDemandes = $this->_repository->getGridDonneesCmsiDemandesTraitees($this->utilisateurConnecte);
 
-        return $interventionDemandes;
+        $interventionDemandes = $this->reorderInterventionDemandeForGrid($interventionDemandes);
+
+        return array_values($interventionDemandes);
     }
     /**
      * Retourne les données formatées pour la création du grid des demandes d'intervention pour le directeur.
@@ -386,7 +391,9 @@ class InterventionDemandeManager extends BaseManager
     {
         $interventionDemandes = $this->_repository->getGridDonneesDirecteurSuiviDemandes($this->utilisateurConnecte);
     
-        return $interventionDemandes;
+        $interventionDemandes = $this->reorderInterventionDemandeForGrid($interventionDemandes);
+
+        return array_values($interventionDemandes);
     }
     /**
      * Retourne les données formatées pour la création du grid des demandes d'intervention pour l'ambassadeur.
@@ -397,7 +404,9 @@ class InterventionDemandeManager extends BaseManager
     {
         $interventionDemandes = $this->_repository->getGridDonneesAmbassadeurDemandes($this->utilisateurConnecte);
 
-        return $interventionDemandes;
+        $interventionDemandes = $this->reorderInterventionDemandeForGrid($interventionDemandes);
+
+        return array_values($interventionDemandes);
     }
     /**
      * Retourne les données formatées pour la création du grid des demandes d'intervention pour l'établissement.
@@ -409,7 +418,9 @@ class InterventionDemandeManager extends BaseManager
         $referent = $this->utilisateurConnecte;
         $interventionDemandes = $this->_repository->getGridDonneesEtablissementDemandes($referent);
     
-        return $interventionDemandes;
+        $interventionDemandes = $this->reorderInterventionDemandeForGrid($interventionDemandes);
+
+        return array_values($interventionDemandes);
     }
     /**
      * Retourne les données formatées pour la création du grid des demandes d'intervention pour l'administration.
@@ -420,7 +431,9 @@ class InterventionDemandeManager extends BaseManager
     {
         $interventionDemandes = $this->_repository->getGridDonneesAdminDemandes();
 
-        return $interventionDemandes;
+        $interventionDemandes = $this->reorderInterventionDemandeForGrid($interventionDemandes);
+
+        return array_values($interventionDemandes);
     }
     
     /**
@@ -652,6 +665,12 @@ class InterventionDemandeManager extends BaseManager
         $this->changeEvaluationEtatInterventionDemandesRegroupees($interventionDemande, $interventionEvaluationEtat);
 
         $interventionDemande->setEvaluationEtat($interventionEvaluationEtat);
+
+        if($interventionEvaluationEtat->getId() === InterventionEvaluationEtat::getInterventionEvaluationEtatEvalueId())
+        {
+            $interventionDemande->setEvaluationDate(new \DateTime());
+        }
+
         $this->save($interventionDemande);
     }
     /**
@@ -860,5 +879,19 @@ class InterventionDemandeManager extends BaseManager
             'export-demandes-intervention.csv',
             $charset
         );
+    }
+
+
+
+    private function reorderInterventionDemandeForGrid($interventionDemandes)
+    {
+        $interventionDemandesOrdered = array();
+
+        foreach ($interventionDemandes as $interventionDemande) 
+        {
+            $interventionDemandesOrdered[$interventionDemande['id']] = $interventionDemande;
+        }
+
+        return $interventionDemandesOrdered;
     }
 }
