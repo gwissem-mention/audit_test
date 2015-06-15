@@ -3,6 +3,7 @@
 namespace HopitalNumerique\ExpertBundle\Manager;
 
 use Nodevo\ToolsBundle\Manager\Manager as BaseManager;
+use HopitalNumerique\ExpertBundle\Entity\ActiviteExpert;
 
 /**
  * Manager de l'entité ActiviteExpert.
@@ -49,6 +50,74 @@ class ActiviteExpertManager extends BaseManager
         }
 
         return array_values($activiteExpertsForGrid);
+    }
+
+    /**
+     * Récupération de l'ensemble des experts lié à l'activité sous forme de tableau array(id)= prenom NOM
+     *
+     * @param ActiviteExpert $activiteExpert [description]
+     *
+     * @return array
+     */
+    public function getExperts(ActiviteExpert $activiteExpert)
+    {
+        $experts = array();
+
+        foreach ($activiteExpert->getExpertConcernes() as $expert)
+        {
+            $experts[$expert->getId()] = $expert->getPrenom() . ' ' .strtoupper($expert->getNom()); 
+        }
+
+        return $experts;
+    }
+
+    /**
+     * Récupération des experts et de leur vacations pour la facture par Activité
+     *
+     * @param ActiviteExpert $activiteExpert [description]
+     *
+     * @return [type]
+     */
+    public function getExpertsAndVacationForActivite(ActiviteExpert $activiteExpert)
+    {
+        $experts = array();
+        $compteurDateFictive = 0;
+
+        foreach ($activiteExpert->getEvenements() as $evenement) 
+        {
+            foreach ($evenement->getExperts() as $expertPresence) 
+            {
+                if(!array_key_exists($expertPresence->getExpertConcerne()->getId(), $experts))
+                {
+                    $experts[$expertPresence->getExpertConcerne()->getId()] = array();
+                }
+                if($expertPresence->getPresent())
+                {
+                    $experts[$expertPresence->getExpertConcerne()->getId()][$evenement->getDate()->format('d/m/y')] = array(
+                        'fictive'     => 'false',
+                        'nbVacations' => $evenement->getNbVacation()
+                    );
+                }
+                else
+                {
+                    for ($i=0; $i <= $evenement->getNbVacation(); $i++) 
+                    { 
+                        $experts[$expertPresence->getExpertConcerne()->getId()][$activiteExpert->getDateFictives()[$compteurDateFictive]->getDate()->format('d/m/y')] = array(
+                            'fictive'     => 'true',
+                            'nbVacations' => 1
+                        );
+                        $compteurDateFictive++;
+                    }
+                }
+            }
+        }
+
+        foreach ($experts as &$expert) 
+        {
+            ksort($expert);
+        }
+
+        return $experts;
     }
     
     /**

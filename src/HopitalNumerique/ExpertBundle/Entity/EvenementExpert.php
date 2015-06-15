@@ -219,7 +219,7 @@ class EvenementExpert
         {
             if(!is_null($expert->getExpertConcerne()) && $expert->getPresent())
             {
-                $nbPresents++;
+                $nbPresents += $this->nbVacation;
             }
         }
 

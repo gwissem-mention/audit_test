@@ -39,9 +39,9 @@ class ActiviteExpert
     /**
      * Liste des dates fictives liées à l'activité
      * 
-     * @var /HopitalNumerique/ExpertBundle/Entity/EvenementExpert
+     * @var /HopitalNumerique/ExpertBundle/Entity/DateFictiveActiviteExpert
      * 
-     * @ORM\OneToMany(targetEntity="EvenementExpert", mappedBy="activite", cascade={"remove" })
+     * @ORM\OneToMany(targetEntity="DateFictiveActiviteExpert", mappedBy="activite", cascade={"remove" })
      * @ORM\OrderBy({"date" = "DESC"})
      */
     protected $dateFictives;
@@ -467,11 +467,28 @@ class ActiviteExpert
     {
         $nbMiniPresence = -1;
 
+        $presenceExpertByActivite = array();
         foreach ($this->evenements as $evenement) 
         {
-            if($nbMiniPresence === -1 || $nbMiniPresence > $evenement->getExpertsPresents())
+            foreach ($evenement->getExperts() as $expertPresence)
             {
-                $nbMiniPresence = $evenement->getExpertsPresents();
+                if($expertPresence->getPresent())
+                {
+                    if(!array_key_exists($expertPresence->getExpertConcerne()->getId(), $presenceExpertByActivite))
+                    {
+                        $presenceExpertByActivite[$expertPresence->getExpertConcerne()->getId()] = 0;
+                    }
+
+                    $presenceExpertByActivite[$expertPresence->getExpertConcerne()->getId()] += $evenement->getNbVacation();
+                }
+            }
+        }
+
+        foreach ($presenceExpertByActivite as $nbVacationParExpert) 
+        {
+            if($nbVacationParExpert < $nbMiniPresence || $nbMiniPresence === -1)
+            {
+                $nbMiniPresence = $nbVacationParExpert;
             }
         }
 

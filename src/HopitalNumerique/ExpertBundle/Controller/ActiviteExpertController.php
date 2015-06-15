@@ -98,9 +98,42 @@ class ActiviteExpertController extends Controller
     {
         $nbDateNecessaire = $activiteExpert->getNbVacationParExpert() - $activiteExpert->getMiniNbPresenceEvenements();
 
-        echo '<pre>';
-        \Doctrine\Common\Util\Debug::dump($nbDateNecessaire);
-        die();
+        if($nbDateNecessaire > count($activiteExpert->getDateFictives()))
+        {
+            $nbDateAAjouter = $nbDateNecessaire - count($activiteExpert->getDateFictives());
+
+            // On envoi une 'flash' pour indiquer à l'utilisateur que l'entité est ajoutée
+            $this->get('session')->getFlashBag()->add( 'danger', 'Il manque '. $nbDateAAjouter .' date(s) fictive(s) pour l\'activité "' . $activiteExpert->getTitre() . '".' );
+            
+            return $this->redirect( $this->generateUrl('hopitalnumerique_expert_expert_activite' ) );
+        }
+
+        $experts     = $this->get('hopitalnumerique_expert.manager.activiteexpert')->getExpertsAndVacationForActivite($activiteExpert);
+        $expertsById = $this->get('hopitalnumerique_expert.manager.activiteexpert')->getExperts($activiteExpert);
+
+        $html = $this->renderView('HopitalNumeriqueExpertBundle:ActiviteExpert/pdf:facture.html.twig', array(
+            'activiteExpert' => $activiteExpert,
+            'experts'        => $experts,
+            'expertsById'    => $expertsById
+        ));
+
+        $options = array(
+            'margin-bottom' => 10,
+            'margin-left'   => 4,
+            'margin-right'  => 4,
+            'margin-top'    => 10,
+            'encoding'      => 'UTF-8',
+            'orientation'   => 'Landscape'
+        );
+
+        return new Response(
+            $this->get('knp_snappy.pdf')->getOutputFromHtml($html, $options, true),
+            200,
+            array(
+                'Content-Type'          => 'application/pdf',
+                'Content-Disposition'   => 'attachment; filename="Attestation_'.$activiteExpert->getTitre().'.pdf"'
+            )
+        );
     }
 
 
@@ -161,7 +194,7 @@ class ActiviteExpertController extends Controller
             }
             else
             {
-                $message = (!is_null($experts) && count($experts) > 0) ? 'experts concernés' : 'anapiens';
+                $message = (!is_null($experts) && count($experts) > 0) ? 'anapiens' : 'experts concernés';
                 $this->get('session')->getFlashBag()->add('danger', 'Attention la liste '.$message.' ne peut pas être vide.' );
             }
         }
