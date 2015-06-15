@@ -235,6 +235,26 @@ class UserRepository extends EntityRepository
 
         return $qb;
     }
+    
+    /**
+     * Retourne la liste des utilisateurs étant assigné au domaine
+     *
+     * @param int $idDomaine Identifiant du domaine à filtrer
+     *
+     * @return QueryBuilder
+     */
+    public function findUsersByDomaine( $idDomaine )
+    {
+        $qb = $this->_em->createQueryBuilder();
+    
+        $qb->select('user')
+            ->from('HopitalNumeriqueUserBundle:User', 'user')
+            ->leftJoin('user.domaines', 'domaine')
+            ->where('domaine.id = :idDomaine')
+            ->setParameter('idDomaine', $idDomaine);
+
+        return $qb;
+    }
 
     /**
      * Retourne le premier utilisateur correspondant au role et à la région demandés

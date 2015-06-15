@@ -225,6 +225,18 @@ class UserManager extends BaseManager
     }
 
     /**
+     * Retourne la liste des utilisateurs étant assigné au domaine
+     *
+     * @param int $idDomaine Identifiant du domaine à filtrer
+     *
+     * @return array
+     */
+    public function findUsersByDomaine( $idDomaine )
+    {
+        return $this->getRepository()->findUsersByDomaine($idDomaine)->getQuery()->getResult();
+    }
+
+    /**
      * Retourne le premier utilisateur correspondant au role et à la région demandés
      *
      * @param string $role      Le rôle demandé

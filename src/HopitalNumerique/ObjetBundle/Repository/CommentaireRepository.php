@@ -29,4 +29,25 @@ class CommentaireRepository extends EntityRepository
             
         return $qb;
     }
+
+    /**
+     * Retourne la liste des commentaires étant assigné au domaine
+     *
+     * @param int $idDomaine Identifiant du domaine à filtrer
+     *
+     * @return QueryBuilder
+     */
+    public function findCommentaireByDomaine( $idDomaine )
+    {
+        $qb = $this->_em->createQueryBuilder();
+    
+        $qb->select('comm')
+            ->from('HopitalNumeriqueObjetBundle:Commentaire', 'comm')
+            ->leftJoin('comm.objet', 'objet')
+            ->leftJoin('objet.domaines', 'domaine')
+            ->where('domaine.id = :idDomaine')
+            ->setParameter('idDomaine', $idDomaine);
+
+        return $qb;
+    }
 }

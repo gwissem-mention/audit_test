@@ -29,4 +29,9 @@ class NoteManager extends BaseManager
     {
         return $this->getRepository()->countNbNoteByObjet( $idObjet, $isContenu )->getQuery()->getSingleScalarResult();
     }
+
+    public function findNoteByDomaine( $idDomaine )
+    {
+        return $this->getRepository()->findNoteByDomaine($idDomaine)->getQuery()->getResult();
+    }
 }
