@@ -87,6 +87,7 @@ abstract class DemandesAbstractGrid extends Grid implements GridInterface
         foreach ($colonneLabels as $colonneLabel)
             $this->ignoreColonne($colonneLabel);
     }
+
     /**
      * Ignore une colonne (ne pas afficher dans le filtre).
      * 
@@ -116,6 +117,7 @@ abstract class DemandesAbstractGrid extends Grid implements GridInterface
         $colonneDemandeurInformations->setFilterable(false)->setSortable(false);
         $this->addColonne($colonneDemandeurInformations);
     }
+
     /**
      * Ajoute la colonne Ambassadeur.
      *
@@ -127,6 +129,7 @@ abstract class DemandesAbstractGrid extends Grid implements GridInterface
         $colonneAmbassadeurInformations->setFilterable(false)->setSortable(false);
         $this->addColonne($colonneAmbassadeurInformations);
     }
+
     /**
      * Ajoute la colonne InterventionInitiateurType.
      * 
@@ -138,6 +141,7 @@ abstract class DemandesAbstractGrid extends Grid implements GridInterface
         $colonneInterventionInitiateurType->setFilterable(false)->setSortable(false);
         $this->addColonne($colonneInterventionInitiateurType);
     }
+
     /**
      * Ajoute la colonne DateCreation.
      * 
@@ -149,6 +153,7 @@ abstract class DemandesAbstractGrid extends Grid implements GridInterface
         $colonneDateCreationLibelle->setFilterable(false)->setSortable(false);
         $this->addColonne($colonneDateCreationLibelle);
     }
+
     /**
      * Ajoute la colonne InterventionEtat.
      *
@@ -160,6 +165,7 @@ abstract class DemandesAbstractGrid extends Grid implements GridInterface
         $colonneInterventionEtatLibelle->setFilterable(false)->setSortable(false);
         $this->addColonne($colonneInterventionEtatLibelle);
     }
+
     /**
      * Ajoute la colonne DateChoix.
      *
@@ -167,7 +173,7 @@ abstract class DemandesAbstractGrid extends Grid implements GridInterface
      */
     protected function addColonneDateChoix()
     {
-        $colonneDateChoix = new Column\TextColumn('dateChoix', 'Date choix');
+        $colonneDateChoix = new Column\TextColumn('dateChoix', 'Dates');
         $colonneDateChoix->setFilterable(false)->setSortable(false);
         $colonneDateChoix->manipulateRenderCell(
             function($value, \APY\DataGridBundle\Grid\Row $row) {
@@ -176,6 +182,7 @@ abstract class DemandesAbstractGrid extends Grid implements GridInterface
         );
         $this->addColonne($colonneDateChoix);
     }
+
     /**
      * Ajoute la colonne DateChoix.
      *
@@ -192,7 +199,7 @@ abstract class DemandesAbstractGrid extends Grid implements GridInterface
                 {
                     return '<button class="btn btn-warning btn-xs" data-evaluation-demande="'.$row->getField('id').'" title="Envoyer une relance"><span class="glyphicon glyphicon-send"></span></button>';
                 }
-                else if ($row->getField('evaluationEtatId') == InterventionEvaluationEtat::getInterventionEvaluationEtatEvalueId())
+                elseif ($row->getField('evaluationEtatId') == InterventionEvaluationEtat::getInterventionEvaluationEtatEvalueId())
                 {
                     return '<a class="btn btn-info btn-xs" href="'.$router->generate('hopital_numerique_intervention_evaluation_voir', array('interventionDemande' => $row->getField('id'))).'"><span class="glyphicon glyphicon-eye-open"></span></a>';
                 }
@@ -215,6 +222,7 @@ abstract class DemandesAbstractGrid extends Grid implements GridInterface
             ($row->getField('referentRegionLibelle') != null ? '<br>'.$row->getField('referentRegionLibelle') : '')
         ;
     }
+
     /**
      * Fonction de rendu de la cellule Ambassadeur.
      * 
@@ -227,6 +235,7 @@ abstract class DemandesAbstractGrid extends Grid implements GridInterface
             ($row->getField('ambassadeurRegionLibelle') != null ? '<br>'.$row->getField('ambassadeurRegionLibelle') : '')
         ;
     }
+
     /**
      * Fonction de rendu de la cellule CMSI.
      * 
@@ -238,6 +247,7 @@ abstract class DemandesAbstractGrid extends Grid implements GridInterface
             '<strong>'.$row->getField('cmsi_nom').'</strong>'
         ;
     }
+
     /**
      * Fonction de rendu de la cellule Date choix.
      * 
@@ -249,19 +259,26 @@ abstract class DemandesAbstractGrid extends Grid implements GridInterface
         if ($row->getField('cmsiDateChoixLibelle') != null)
         {
             $dateChoixCmsi = new \DateTime($row->getField('cmsiDateChoixLibelle'));
-            $dateChoix .= '<div>CMSI : '.$dateChoixCmsi->format('d/m/Y').'</div>';
+            $dateChoix .= '<div><strong>CMSI :</strong> '.$dateChoixCmsi->format('d/m/Y').'</div>';
         }
         if ($row->getField('ambassadeurDateChoixLibelle') != null)
         {
             $dateChoixAmbassadeur = new \DateTime($row->getField('ambassadeurDateChoixLibelle'));
-            $dateChoix .= '<div>Ambassadeur : '.$dateChoixAmbassadeur->format('d/m/Y').'</div>';
+            $dateChoix .= '<div><strong>Ambassadeur :</strong> '.$dateChoixAmbassadeur->format('d/m/Y').'</div>';
+        }
+        if($row->getField('evaluationEtatId') == InterventionEvaluationEtat::getInterventionEvaluationEtatEvalueId())
+        {
+            //Récupérer la vrai date en fonction des réponses au questionnaire d'évaluation
+            $dateChoixEvaluation = $row->getField('evaluationDateLibelle') === "" ? "Date non communiquée" : (new \DateTime($row->getField('evaluationDateLibelle')))->format('d/m/Y');
+            $dateChoix .= '<div><strong>Évaluation : </strong>'.$dateChoixEvaluation.'</div>';
         }
         return $dateChoix;
     }
+
     /**
      * Fonction de rendu de la cellule initiateur.
      *
-     * @return string Le contenu de la cellule Date choix
+     * @return string Le contenu de la cellule initiateur
      */
     public static function renderCellInitiateur($value, $row)
     {
@@ -269,11 +286,11 @@ abstract class DemandesAbstractGrid extends Grid implements GridInterface
         {
             return '<span class="glyphicon glyphicon-user" title="Initié par CMSI"></span>';
         }
-        else if ($row->getField('interventionInitiateurId') == InterventionInitiateur::getInterventionInitiateurEtablissementId())
+        elseif ($row->getField('interventionInitiateurId') == InterventionInitiateur::getInterventionInitiateurEtablissementId())
         {
             return '<span class="glyphicon glyphicon-home" title="Initié par ES"></span>';
         }
-        else if ($row->getField('interventionInitiateurId') == InterventionInitiateur::getInterventionInitiateurAnapId())
+        elseif ($row->getField('interventionInitiateurId') == InterventionInitiateur::getInterventionInitiateurAnapId())
         {
             return '<span class="glyphicon glyphicon-briefcase" title="Initié par ANAP"></span>';
         }
