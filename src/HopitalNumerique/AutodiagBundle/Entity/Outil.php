@@ -180,6 +180,13 @@ class Outil
      * @ORM\Column(name="out_plan_action_priorise", type="boolean", options = {"comment" = "Definir un plan d action priorise pour cet outil ?"})
      */
     private $planActionPriorise;
+
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="out_show_taux_replissage_radar", type="boolean", options = {"comment" = "Afficher le tableau de taux de remplissage du radar dans les resultats ?"})
+     */
+    private $showTauxRemplissageRadar;
     
     /**
      * @var string Libellé du résultat par processus
@@ -1485,5 +1492,28 @@ class Outil
         }
 
         return $domainesId;
+    }
+
+    /**
+     * Set showTauxRemplissageRadar
+     *
+     * @param boolean $showTauxRemplissageRadar
+     * @return Outil
+     */
+    public function setShowTauxRemplissageRadar($showTauxRemplissageRadar)
+    {
+        $this->showTauxRemplissageRadar = $showTauxRemplissageRadar;
+
+        return $this;
+    }
+
+    /**
+     * Get showTauxRemplissageRadar
+     *
+     * @return boolean 
+     */
+    public function getShowTauxRemplissageRadar()
+    {
+        return $this->showTauxRemplissageRadar;
     }
 }

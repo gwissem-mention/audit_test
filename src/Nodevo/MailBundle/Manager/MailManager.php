@@ -552,7 +552,7 @@ class MailManager extends BaseManager
             $expediteurName = $this->replaceContent($mail->getExpediteurName(), NULL, $options);
             $content        = $this->replaceContent($mail->getBody(), NULL, $options);
             $from           = array($expediteurMail => $expediteurName );
-            $subject        = $this->replaceContent($mail->getObjet(), $user, $options);
+            $subject        = $this->replaceContent($mail->getObjet(), NULL, $options);
             
             $mailsToSend[] = $this->sendMail( $subject, $from, array($recepteurMail => $recepteurName), $content, $this->_mailAnap );
         }
@@ -587,7 +587,7 @@ class MailManager extends BaseManager
             $expediteurName = $this->replaceContent($mail->getExpediteurName(), NULL, $options);
             $content        = $this->replaceContent($mail->getBody(), NULL, $options);
             $from           = array($expediteurMail => $expediteurName );
-            $subject        = $this->replaceContent($mail->getObjet(), $user, $options);
+            $subject        = $this->replaceContent($mail->getObjet(), NULL, $options);
             
             $mailsToSend[] = $this->sendMail( $subject, $from, array($recepteurMail => $recepteurName), $content, $this->_mailAnap );
         }
@@ -666,7 +666,7 @@ class MailManager extends BaseManager
             $expediteurName = $this->replaceContent($mail->getExpediteurName(), NULL, $options);
             $content        = $this->replaceContent($mail->getBody(), NULL, $options);
             $from           = array($expediteurMail => $expediteurName );
-            $subject        = $this->replaceContent($mail->getObjet(), $user, $options);
+            $subject        = $this->replaceContent($mail->getObjet(), NULL, $options);
             
             $mailsToSend[] = $this->sendMail( $subject, $from, array($recepteurMail => $recepteurName), $content, $this->_mailAnap );
         }
@@ -700,7 +700,7 @@ class MailManager extends BaseManager
             $expediteurName = $this->replaceContent($mail->getExpediteurName(), NULL, $options);
             $content        = $this->replaceContent($mail->getBody(), NULL, $options);
             $from           = array($expediteurMail => $expediteurName );
-            $subject        = $this->replaceContent($mail->getObjet(), $user, $options);
+            $subject        = $this->replaceContent($mail->getObjet(), NULL, $options);
             
             $mailsToSend[] = $this->sendMail( $subject, $from, array($recepteurMail => $recepteurName), $content, $this->_mailAnap );
         }

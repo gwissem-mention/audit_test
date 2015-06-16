@@ -627,6 +627,10 @@ class FrontController extends Controller
                 }  
             }
         }
+
+        // echo '<pre>';
+        // var_dump($graphiques['radar']->datas);
+        // die();
         
         $radarChartBenchmarkCouleurDecile2 = ($resultat->getOutil()->getRadarChartBenchmarkCouleurDecile2() == 'vert' ? '#76e57e' : '#ff7a7a');
         $radarChartBenchmarkCouleurDecile8 = ($resultat->getOutil()->getRadarChartBenchmarkCouleurDecile8() == 'vert' ? '#76e57e' : '#ff7a7a');
