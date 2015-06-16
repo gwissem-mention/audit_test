@@ -32,6 +32,10 @@ HopitalNumerique\ForumBundle\Entity\Post:
             type: datetime
             column: unlocked_until_date
             nullable: true
+        enAttente:
+            type: boolean
+            column: en_attente
+            nullable: false
         pieceJointe:
             type: string
             length: 128

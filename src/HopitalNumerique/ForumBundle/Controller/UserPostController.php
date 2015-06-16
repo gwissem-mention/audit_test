@@ -19,6 +19,22 @@ class UserPostController extends UserPostControllerBase
      * 
      * @param \HopitalNumerique\ForumBundle\Entity\Post $post
      */
+    public function activierPostEnAttenteAction(Post $post)
+    {
+        $post->setEnAttente(false);
+
+        $this->container->get('hopitalnumerique_forum.manager.post')->save($post);
+
+        $this->container->get('session')->getFlashBag()->add('success', 'Le post de '.$post->getCreatedBy()->getAppellation().' a été activé.');
+
+        return $this->redirectResponse($this->path('ccdn_forum_user_topic_show', array('topicId' => $post->getTopic()->getId())));
+    }
+
+    /**
+     * Télécharge la PJ du post.
+     * 
+     * @param \HopitalNumerique\ForumBundle\Entity\Post $post
+     */
     public function downloadPieceJointeAction(Post $post)
     {
         $nomPieceJointe = substr($post->getPieceJointe(), 0, strrpos($post->getPieceJointe(), '_')).substr($post->getPieceJointe(), strrpos($post->getPieceJointe(), '.'));

@@ -522,6 +522,37 @@ class MailManager extends BaseManager
     
         return $this->generationMail($user, $mail, $options);
     }
+    
+    /**
+     * [sendInscriptionSession description]
+     *
+     * @param  [type] $user    [description]
+     * @param  [type] $options [description]
+     *
+     * @return [type]
+     */
+    public function sendNouveauMessageForumAttenteModerationMail( $users, $options, $topicId )
+    {
+
+        $mail = $this->findOneById(51);
+
+        //Création du lien dans le mail
+        $options['lienversmessage'] = '<a href="'. $this->_requestStack->getCurrentRequest()->getUriForPath( $this->_router->generate( 'ccdn_forum_user_topic_show', array(
+                                            'forumName' => $options['forum'],
+                                            'topicId'    => $topicId
+                                        ))) .'" target="_blank" >Nouveau message</a>';
+
+        $toSend = array();
+        foreach ($users as $user) 
+        {
+            $options['user']       = $user->getNomPrenom();
+            $options['pseudouser'] = (!is_null($user->getPseudonymeForum()) && $user->getPseudonymeForum() != '' ) ? $user->getPseudonymeForum() : $user->getAppellation();
+
+            $toSend[] = $this->generationMail($user, $mail, $options);
+        }
+
+        return $toSend;
+    }
 
     /**
      * [sendInscriptionSession description]

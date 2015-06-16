@@ -123,7 +123,7 @@ ccdn_forum_forum:
             change_topics_board:
                 class:                CCDNForum\ForumBundle\Form\Handler\Moderator\Topic\TopicChangeBoardFormHandler
             post_create:
-                class:                CCDNForum\ForumBundle\Form\Handler\User\Post\PostCreateFormHandler
+                class:                HopitalNumerique\ForumBundle\Form\Handler\User\Post\PostCreateFormHandler
             post_update:
                 class:                CCDNForum\ForumBundle\Form\Handler\User\Post\PostUpdateFormHandler
             post_delete:
