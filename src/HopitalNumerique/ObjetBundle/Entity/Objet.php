@@ -10,6 +10,8 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Nodevo\ToolsBundle\Validator\Constraints as Nodevo;
 use Gedmo\Mapping\Annotation as Gedmo;
 
+use Eko\FeedBundle\Item\Writer\RoutedItemInterface;
+
 /**
  * Objet
  *
@@ -19,7 +21,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
  * @ORM\HasLifecycleCallbacks
  * @Gedmo\Loggable
  */
-class Objet
+class Objet implements RoutedItemInterface
 {
     const FICHIER_1    = 1;
     const FICHIER_2    = 2;
@@ -1832,4 +1834,41 @@ class Objet
     {
         return $this->btnSociaux;
     }
+
+    
+    // vvvv     Flux RSS      vvvv
+    
+    public function getFeedItemTitle()
+    {
+        return $this->titre;
+    }
+
+    public function getFeedItemDescription()
+    {
+        return $this->resume;
+    }
+
+    public function getFeedItemPubDate()
+    {
+        return is_null($this->dateModification) ? $this->dateCreation : $this->dateModification ;
+    }
+
+    public function getFeedItemRouteName()
+    {
+        return 'hopital_numerique_publication_publication_objet';
+    }
+
+    public function getFeedItemRouteParameters()
+    {
+        return array(
+            'id'    => $this->id,
+            'alias' => $this->alias
+        );
+    }
+
+    public function getFeedItemUrlAnchor()
+    {
+        return "";
+    }
+
 }

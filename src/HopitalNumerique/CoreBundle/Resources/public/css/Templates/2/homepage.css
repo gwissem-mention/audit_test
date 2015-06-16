@@ -769,6 +769,10 @@ div.homepage  {
     font-weight: bold;
 }
 
+.fluxRSS{
+    margin-right: 25px;
+}
+
 .lire-suite, .lire-suite:hover {
     color:#d60030;
 }

@@ -371,7 +371,8 @@
                             {% endif %}
                         {% endfor %}
                         <div class="clearfix"></div>
-                        <a href="{{path('hopital_numerique_publication_actualite')}}" class="readmore"><i class="fa fa-angle-right"></i> Voir toutes les actualités</a>
+                        <a href="{{path('hopital_numerique_publication_actualite')}}" class="readmore pull-left"><i class="fa fa-angle-right"></i> Voir toutes les actualités</a>
+                        <a href="{{path('hopitalnumerique_objet_objet_feed_rss')}}" class="pull-right btn btn-warning fluxRSS"><i class="fa fa-rss"></i></a>
                     {% else %}
                     - Aucunes actualités -
                     {% endif %}

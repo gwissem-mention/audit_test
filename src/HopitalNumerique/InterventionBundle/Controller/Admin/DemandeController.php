@@ -124,7 +124,7 @@ class DemandeController extends \HopitalNumerique\InterventionBundle\Controller\
         //Lance les workflow de chaque passage à évaluer
         foreach ($interventionDemandes as $interventionDemande) 
         {
-            if (!is_null($interventionDemande->getEvaluationEtat()) && $interventionDemande->getEvaluationEtat()->getId() !== InterventionEvaluationEtat::getInterventionEvaluationEtatEvalueId())
+            if (is_null($interventionDemande->getEvaluationEtat()) || $interventionDemande->getEvaluationEtat()->getId() !== InterventionEvaluationEtat::getInterventionEvaluationEtatEvalueId())
             {
                 $interventionDemande->setRemboursementEtat( $this->get('hopitalnumerique_reference.manager.reference')->findOneBy(array('id' => 5)) );
                 

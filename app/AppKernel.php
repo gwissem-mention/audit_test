@@ -70,6 +70,7 @@ class AppKernel extends Kernel
             new Liuggio\ExcelBundle\LiuggioExcelBundle(),
             new Nodevo\CookieBundle\NodevoCookieBundle(),
             new Nodevo\FormBundle\NodevoFormBundle(),
+            new Eko\FeedBundle\EkoFeedBundle(),
         );
 
         if (in_array($this->getEnvironment(), array('dev', 'test'))) {
