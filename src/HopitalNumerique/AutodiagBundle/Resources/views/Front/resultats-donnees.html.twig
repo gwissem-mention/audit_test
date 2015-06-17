@@ -194,16 +194,45 @@
             
             {# Affichage du graphique spider #}
             {% if graphiques['radar'] is defined %}
+
                 {% set chart = graphiques['radar'] %}
                 <h3>{{chart.title|capitalize}}</h3>
                 <p>
                     {{resultat.outil.commentaireGraphRadar|raw}}
                 </p>
                 <div class="row">
-                    <div id="radarChart"></div>
-                    <input type="hidden" id="datas-radar" value="{{chart.datas|json_encode()}}">
-                    <div class="col-md-12">
-                        <p id="chaptersNonConcernes"></p>
+                    {% if resultat.outil.showTauxRemplissageRadar %}
+                        <div class="col-md-2">
+                            <table class="table table-hover table-bordered table-striped" style="vertical-align:center">
+                                <thead>
+                                    <tr>
+                                        <td>
+                                            <strong>Chapitres</strong>
+                                        </td>
+                                        <td>
+                                            <strong>Taux remplissage</strong>
+                                        </td>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for data in chart.datas %}
+                                        <tr>
+                                            <td>{{data.title}}</td>
+                                            <td>{{data.taux}} %</td>
+                                        </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="col-md-10">
+                    {% else %}
+                        <div>
+                    {% endif %}
+                        <div id="radarChart"></div>
+                        <input type="hidden" id="datas-radar" value="{{chart.datas|json_encode()}}">
+                        <div class="col-md-12">
+                            <p id="chaptersNonConcernes"></p>
+                        </div>
                     </div>
                 </div>
                 <div class="page-break"></div>

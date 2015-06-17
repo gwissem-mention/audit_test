@@ -38,7 +38,10 @@ hopital_numerique_publication_actualite_categorie:
     pattern:  /actualites/{id}-{libelle}
     defaults: { _controller: "HopitalNumeriquePublicationBundle:Actualite:categorie", id:1, libelle:libelle}
 
-
+# Flux RSS
+hopitalnumerique_objet_objet_feed_rss:
+    pattern:  /publications.rss
+    defaults: { _controller: "HopitalNumeriqueObjetBundle:Objet:feed" }
 
 #Commentaire
 #--Suppression

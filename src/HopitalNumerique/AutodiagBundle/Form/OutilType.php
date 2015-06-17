@@ -112,6 +112,11 @@ class OutilType extends AbstractType
                 'required' => false,
                 'attr'     => array('onclick' => "toggle('radarChart');")
             ))
+            ->add('showTauxRemplissageRadar', 'checkbox', array(
+                'required'    => false,
+                'label'       => 'Afficher le tableau \'taux de remplissage\' du graphique radar ?',
+                'attr'        => array('class' => '')
+            ))
             ->add('radarChartLabel', 'text', array(
                 'max_length' => 255, 
                 'required'   => true, 

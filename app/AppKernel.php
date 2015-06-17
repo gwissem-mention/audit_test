@@ -59,6 +59,7 @@ class AppKernel extends Kernel
             new HopitalNumerique\FlashBundle\HopitalNumeriqueFlashBundle(),
             new HopitalNumerique\GlossaireBundle\HopitalNumeriqueGlossaireBundle(),
             new HopitalNumerique\DomaineBundle\HopitalNumeriqueDomaineBundle(),
+            new HopitalNumerique\ExpertBundle\HopitalNumeriqueExpertBundle(),
             //-v- Bundles du Forum -v-
             new Knp\Bundle\PaginatorBundle\KnpPaginatorBundle(),
             new CCDNForum\ForumBundle\CCDNForumForumBundle(),
@@ -70,7 +71,7 @@ class AppKernel extends Kernel
             new Liuggio\ExcelBundle\LiuggioExcelBundle(),
             new Nodevo\CookieBundle\NodevoCookieBundle(),
             new Nodevo\FormBundle\NodevoFormBundle(),
-            new HopitalNumerique\ExpertBundle\HopitalNumeriqueExpertBundle(),
+            new Eko\FeedBundle\EkoFeedBundle(),
         );
 
         if (in_array($this->getEnvironment(), array('dev', 'test'))) {

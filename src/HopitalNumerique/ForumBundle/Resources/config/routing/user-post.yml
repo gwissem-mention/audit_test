@@ -25,3 +25,8 @@ ccdn_forum_user_post_download:
     pattern: /post/{post}/telecharge
     defaults: { _controller: HopitalNumeriqueForumBundle:UserPost:downloadPieceJointe, _locale: fr }
     methods: GET
+
+ccdn_forum_user_post_activation_enattente:
+    pattern: /post/{post}/activation
+    defaults: { _controller: HopitalNumeriqueForumBundle:UserPost:activierPostEnAttente, _locale: fr, forumName: Public }
+    methods: GET

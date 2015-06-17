@@ -22,6 +22,18 @@ class Post extends BasePost
     private $pieceJointeFile;
 
     /**
+     * @var boolean
+     */
+    private $enAttente;
+
+    public function __construct()
+    {
+        $this->enAttente = false;
+        
+        parent::__construct();
+    }
+
+    /**
      * Get body
      *
      * @return string
@@ -29,6 +41,29 @@ class Post extends BasePost
     public function getBody()
     {
         return $this->body;
+    }
+
+    /**
+     * Set enAttente
+     *
+     * @param boolean $enAttente
+     * @return Topic
+     */
+    public function setEnAttente($enAttente)
+    {
+        $this->enAttente = $enAttente;
+
+        return $this;
+    }
+
+    /**
+     * Get enAttente
+     *
+     * @return boolean 
+     */
+    public function getEnAttente()
+    {
+        return $this->enAttente;
     }
     
     /**
