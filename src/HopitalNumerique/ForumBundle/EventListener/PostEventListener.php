@@ -60,9 +60,7 @@ class PostEventListener implements EventSubscriberInterface
             //Sauvegarde du post modifié
             $this->_postModel->savePost($post);
 
-            //Envoie de mail aux admins
-            $admins = $this->_userManager->findUsersByRole('ROLE_ADMINISTRATEUR_1');
-
+            //Envoie de mail au mail de contact renseigné dans le domaine
             $options = array(
                 'forum'             => $post->getTopic()->getBoard()->getCategory()->getForum()->getName(),
                 'categorie'         => $post->getTopic()->getBoard()->getCategory()->getName(),
@@ -71,11 +69,8 @@ class PostEventListener implements EventSubscriberInterface
                 'lienversmessage'   => 'lien'
             );
 
-            $mails = $this->_mailManager->sendNouveauMessageForumAttenteModerationMail($admins, $options, $post->getTopic()->getId());
-            foreach ($mails as $mail) 
-            {
-                $this->_mailer->send($mail);
-            }
+            $mail = $this->_mailManager->sendNouveauMessageForumAttenteModerationMail($options, $post->getTopic()->getId());
+            $this->_mailer->send($mail);
         }
     }
 }

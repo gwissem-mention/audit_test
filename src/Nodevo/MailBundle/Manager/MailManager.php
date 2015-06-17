@@ -531,9 +531,8 @@ class MailManager extends BaseManager
      *
      * @return [type]
      */
-    public function sendNouveauMessageForumAttenteModerationMail( $users, $options, $topicId )
+    public function sendNouveauMessageForumAttenteModerationMail( $options, $topicId )
     {
-
         $mail = $this->findOneById(51);
 
         //Création du lien dans le mail
@@ -541,17 +540,21 @@ class MailManager extends BaseManager
                                             'forumName' => $options['forum'],
                                             'topicId'    => $topicId
                                         ))) .'" target="_blank" >Nouveau message</a>';
+ 
+        $domaine = $this->_domaineManager->findOneById($this->_session->get('domaineId'));
+        $destinataire              = $domaine->getAdresseMailContact();
+        $options                   = $this->getAllOptions($options);
+        
+        //prepare content
+        $content = $this->replaceContent($mail->getBody(), NULL , $options);
+        $from    = array($mail->getExpediteurMail() => $mail->getExpediteurName() );
+        $cci     = $this->_expediteurEnCopie ? array_merge( $this->_mailAnap, $from ) : $this->_mailAnap;
+        $cci     = ($mail->getId() === 1 || $mail->getId() === 2) ? false : $cci;
+        $subject = $this->replaceContent($mail->getObjet(), NULL, $options);
+        
+        $mailToSend = $this->sendMail( $subject, $from, array($destinataire), $content, $this->_mailAnap );
 
-        $toSend = array();
-        foreach ($users as $user) 
-        {
-            $options['user']       = $user->getNomPrenom();
-            $options['pseudouser'] = (!is_null($user->getPseudonymeForum()) && $user->getPseudonymeForum() != '' ) ? $user->getPseudonymeForum() : $user->getAppellation();
-
-            $toSend[] = $this->generationMail($user, $mail, $options);
-        }
-
-        return $toSend;
+        return $mailToSend;
     }
 
     /**
