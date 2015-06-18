@@ -59,6 +59,7 @@ class AppKernel extends Kernel
             new HopitalNumerique\FlashBundle\HopitalNumeriqueFlashBundle(),
             new HopitalNumerique\GlossaireBundle\HopitalNumeriqueGlossaireBundle(),
             new HopitalNumerique\DomaineBundle\HopitalNumeriqueDomaineBundle(),
+            new HopitalNumerique\ExpertBundle\HopitalNumeriqueExpertBundle(),
             //-v- Bundles du Forum -v-
             new Knp\Bundle\PaginatorBundle\KnpPaginatorBundle(),
             new CCDNForum\ForumBundle\CCDNForumForumBundle(),
