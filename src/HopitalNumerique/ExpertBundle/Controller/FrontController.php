@@ -22,7 +22,7 @@ class FrontController extends Controller
         //On récupère l'utilisateur qui est connecté
         $user = $this->get('security.context')->getToken()->getUser();
 
-        $totalVacation      = 0;
+        $totalVacation      = array();
         $evenementVacations = array();
 
         if($this->get('security.context')->isGranted('ROLE_EXPERT_6'))
@@ -32,6 +32,8 @@ class FrontController extends Controller
             //Calcul des vacations des différentes activité en fonctions de la présence ou non des différents experts
             foreach ($activites as $activite) 
             {
+                $totalVacation[$activite->getId()] = 0;
+
                 foreach ($activite->getEvenements() as $evenement) 
                 {
                     foreach ($evenement->getExperts() as $expert) 
@@ -50,7 +52,7 @@ class FrontController extends Controller
                         if($expert->getPresent())
                         {
                             $evenementVacations[$evenement->getId()]++;
-                            $totalVacation += $evenement->getNbVacation();
+                            $totalVacation[$activite->getId()] += $evenement->getNbVacation();
                         }
                     }
                 }
@@ -63,6 +65,8 @@ class FrontController extends Controller
             //Calcul des vacations des différentes activité en fonctions de la présence ou non des différents experts
             foreach ($activites as $activite) 
             {
+                $totalVacation[$activite->getId()] = 0;
+
                 foreach ($activite->getEvenements() as $evenement) 
                 {
                     foreach ($evenement->getExperts() as $expert) 
@@ -75,7 +79,7 @@ class FrontController extends Controller
                         if($expert->getPresent())
                         {
                             $evenementVacations[$evenement->getId()]++;
-                            $totalVacation += $evenement->getNbVacation();
+                            $totalVacation[$activite->getId()] += $evenement->getNbVacation();
                         }
                     }
                 }

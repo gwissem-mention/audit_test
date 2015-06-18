@@ -33,13 +33,13 @@
                     <tr>
                         <td>{{activite.titre}}</td>
                         <td>{{activite.dateDebut|date('d/m/Y')}} - {{activite.dateFin|date('d/m/Y')}}</td>
-                        <td>{{activite.prestataire.libelle}}</td>
-                        <td>{{activite.uniteOeuvreConcerne.libelle}}</td>
+                        <td>{% if activite.prestataire is not null %}{{activite.prestataire.libelle}}{% endif %}</td>
+                        <td>{% if activite.uniteOeuvreConcerne is not null %}{{activite.uniteOeuvreConcerne.libelle}}{% endif %}</td>
                         <td>
                             {% if is_granted('ROLE_EXPERT_6') %}
-                                {{activite.nbVacationParExpert - totalVacation}}
+                                {{activite.nbVacationParExpert - totalVacation[activite.id]}}
                             {% else %}
-                                {{activite.nbVacationParExpert * activite.expertConcernes|length - totalVacation}}
+                                {{activite.nbVacationParExpert * activite.expertConcernes|length - totalVacation[activite.id]}}
                             {% endif %}
                         </td>
                     </tr>
