@@ -12,7 +12,7 @@
 {% block headerTitle %}Suivi de l'activité{% endblock %}
 
 {% block headerDesc %}
-    <p>Liste de vos activité en tant qu'expert.</p>
+    <p>Liste de vos activités en tant {% if is_granted('ROLE_EXPERT_6') %}qu'expert{% else %}que référent de l'anap{% endif %}.</p>
 {% endblock %}
 
 {% block content%}
@@ -35,7 +35,13 @@
                         <td>{{activite.dateDebut|date('d/m/Y')}} - {{activite.dateFin|date('d/m/Y')}}</td>
                         <td>{{activite.prestataire.libelle}}</td>
                         <td>{{activite.uniteOeuvreConcerne.libelle}}</td>
-                        <td>[ 0 ]</td>
+                        <td>
+                            {% if is_granted('ROLE_EXPERT_6') %}
+                                {{activite.nbVacationParExpert - totalVacation}}
+                            {% else %}
+                                {{activite.nbVacationParExpert * activite.expertConcernes|length - totalVacation}}
+                            {% endif %}
+                        </td>
                     </tr>
 
                     {# Ligne de 'travail attendu' #}
@@ -49,8 +55,20 @@
                     {# Ligne des valeurs de 'travail attendu' #}
                     <tr>
                         <td class="backInactif" colspan="2"></td>
-                        <td>{{activite.nbVacationParExpert}}</td>
-                        <td>{{activite.nbVacationParExpert * montantVacation}} €</td>
+                        <td>
+                            {% if is_granted('ROLE_EXPERT_6') %}
+                                {{activite.nbVacationParExpert}}
+                            {% else %}
+                                {{activite.nbVacationParExpert * activite.expertConcernes|length}}
+                            {% endif %}
+                        </td>
+                        <td>
+                            {% if is_granted('ROLE_EXPERT_6') %}
+                                {{activite.nbVacationParExpert * montantVacation}} €
+                            {% else %}
+                                {{activite.nbVacationParExpert * montantVacation * activite.expertConcernes|length}} €
+                            {% endif %}
+                        </td>
                         <td class="backInactif"></td>
                     </tr>
     
@@ -68,7 +86,12 @@
                         <tr>
                             <td class="backInactif" colspan="2"></td>
                             <td>{{evenement.nom.libelle}}, le {{evenement.date|date('d/m/Y')}}</td>
-                            <td>{{evenement.nbVacation * montantVacation}} €</td>
+                            <td>
+                                {% if evenement.id in evenementVacations|keys %}
+                                    {{evenement.nbVacation * evenementVacations[evenement.id]}} ( {{evenement.nbVacation * montantVacation * evenementVacations[evenement.id]}} € )</td>
+                                {% else %}
+                                    {{evenement.nbVacation }} ( {{evenement.nbVacation * montantVacation}} € )</td>
+                                {% endif %}
                             <td class="backInactif"></td>
                         </tr>
                     {% else %}

@@ -1,7 +1,7 @@
-.activiteTable thead tr { color:#D60030;text-transform:uppercase; font-size: 12px}
+.activiteTable thead tr { color:#FFFFFF;text-transform:uppercase; font-size: 12px}
 .activiteTable thead tr a { color:#FFFFFF; font-size: 12px }
-.activiteTable thead th { background-color:#FCE9DA; vertical-align: middle }
+.activiteTable thead th { background-color:#6f3596; vertical-align: middle }
 .activiteTable th, .activiteTable td { border: 1px solid #ddd;padding:4px; }
 .activiteTable tbody tr td.backInactif { background-color:#e5e5e5; border-top: 1px solid #e5e5e5; border-bottom: 1px solid #e5e5e5;}
-.activiteTable tbody tr td.backTitle { background-color:#FCE9DA; color:#D60030;}
+.activiteTable tbody tr td.backTitle { background-color:#6f3596; color:#FFFFFF;}
 .activiteTable tbody tr td.bold { font-weight:bold; }

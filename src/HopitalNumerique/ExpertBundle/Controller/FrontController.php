@@ -22,13 +22,64 @@ class FrontController extends Controller
         //On récupère l'utilisateur qui est connecté
         $user = $this->get('security.context')->getToken()->getUser();
 
+        $totalVacation      = 0;
+        $evenementVacations = array();
+
         if($this->get('security.context')->isGranted('ROLE_EXPERT_6'))
         {
             $activites = $this->get('hopitalnumerique_expert.manager.activiteexpert')->getActivitesForExpert($user->getId());
+
+            //Calcul des vacations des différentes activité en fonctions de la présence ou non des différents experts
+            foreach ($activites as $activite) 
+            {
+                foreach ($activite->getEvenements() as $evenement) 
+                {
+                    foreach ($evenement->getExperts() as $expert) 
+                    {
+                        //Récupération des données de l'expert courant uniquement
+                        if($expert->getExpertConcerne()->getId() !== $user->getId())
+                        {
+                            continue;
+                        } 
+
+                        if(!array_key_exists($evenement->getId(), $evenementVacations))
+                        {
+                            $evenementVacations[$evenement->getId()] = 0;
+                        }
+
+                        if($expert->getPresent())
+                        {
+                            $evenementVacations[$evenement->getId()]++;
+                            $totalVacation += $evenement->getNbVacation();
+                        }
+                    }
+                }
+            }
         }
         elseif($this->get('security.context')->isGranted('ROLE_ADMINISTRATEUR_1') || $this->get('security.context')->isGranted('ROLE_ANAP_MEMBRES_2'))
         {
             $activites = $this->get('hopitalnumerique_expert.manager.activiteexpert')->getActivitesForAnapien($user->getId());
+
+            //Calcul des vacations des différentes activité en fonctions de la présence ou non des différents experts
+            foreach ($activites as $activite) 
+            {
+                foreach ($activite->getEvenements() as $evenement) 
+                {
+                    foreach ($evenement->getExperts() as $expert) 
+                    {
+                        if(!array_key_exists($evenement->getId(), $evenementVacations))
+                        {
+                            $evenementVacations[$evenement->getId()] = 0;
+                        }
+
+                        if($expert->getPresent())
+                        {
+                            $evenementVacations[$evenement->getId()]++;
+                            $totalVacation += $evenement->getNbVacation();
+                        }
+                    }
+                }
+            }
         }
         else
         {
@@ -38,8 +89,10 @@ class FrontController extends Controller
         $montantVacation = intval($this->get('hopitalnumerique_reference.manager.reference')->findOneById(560)->getLibelle());
 
         return $this->render('HopitalNumeriqueExpertBundle:Front:index.html.twig', array(
-            'activites'       => $activites,
-            'montantVacation' => $montantVacation
+            'activites'          => $activites,
+            'totalVacation'      => $totalVacation,
+            'montantVacation'    => $montantVacation,
+            'evenementVacations' => $evenementVacations
         ));
     }
 }
