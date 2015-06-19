@@ -257,7 +257,7 @@ function RechercheExalead()
     $('.recherche_textuelle_avancee').css({ display:'none' });
 
     //Vérif avant de lancer une requete
-    if(($("#recherche_textuelle").val().length < 2 ) || ($("#recherche_textuelle").val().length <= 4 && $("#recherche_textuelle").val().indexOf("*") >= 0 ))
+    if(($("#recherche_textuelle").val().length < 2 ) || ($("#recherche_textuelle").val().length <= 3 && $("#recherche_textuelle").val().indexOf("*") >= 0 ))
     {
         $('#recherche .alertExalead').show("slow");
     }
