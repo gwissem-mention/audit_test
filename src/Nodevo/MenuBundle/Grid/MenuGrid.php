@@ -16,7 +16,10 @@ class MenuGrid extends Grid implements GridInterface
      */
     public function setConfig()
     {
-        $this->setSource( 'NodevoMenuBundle:Menu' );
+        $this->setSource( 'nodevo_menu.manager.menu' );
+        $this->setSourceType( self::SOURCE_TYPE_MANAGER );
+        $this->showIDColumn( false );
+        $this->setFilterIdColumn( false );
         $this->setNoDataMessage( 'Aucun élément de menu présent' );
     }
 
@@ -28,10 +31,6 @@ class MenuGrid extends Grid implements GridInterface
         $this->addColonne( new Column\TextColumn('name', 'Nom') );
         $this->addColonne( new Column\TextColumn('alias', 'Alias') );
         $this->addColonne( new Column\LockedColumn() );
-
-        /* Colonnes inactives */
-        $this->addColonne( new Column\BlankColumn('cssClass') );
-        $this->addColonne( new Column\BlankColumn('cssId') );
     }
 
     /**
