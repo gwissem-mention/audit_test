@@ -71,6 +71,7 @@ window.open ("report/showReport.action?"+request,null,"location=no,menubar=0,res
         </div>
         <div class="col-md-2">
             <div class="btn btn-sm btn-default print btnprint" onclick="print();"><i class="fa fa-print"></i></div>
+            <a href="{{path('hopitalnumerique_objet_objet_feed_rss')}}" class="pull-right btn btn-sm btn-default btnrss"><i class="fa fa-rss"></i></a>
             <a class="btn btn-sm btn-default back btnBack" href="{{path('hopital_numerique_recherche_homepage')}}"><i class="fa fa-reply"></i></a>
         </div>
         {# Cas Contenu #}
