@@ -52,7 +52,7 @@ class PostEventListener implements EventSubscriberInterface
 
         // Check if there is a url in the text
         preg_match_all($reg_exUrl, $post->getBody(), $matchesURLTemp);
-        if(count($matchesURLTemp[0]) > 0 )
+        if(count($matchesURLTemp[0]) > 0 || strstr($post->getBody(), '[URL'))
         {
             //Desactive le post
             $post->setEnAttente(true);
@@ -60,13 +60,16 @@ class PostEventListener implements EventSubscriberInterface
             //Sauvegarde du post modifié
             $this->_postModel->savePost($post);
 
+            $user = $post->getCreatedBy();
+
             //Envoie de mail au mail de contact renseigné dans le domaine
             $options = array(
                 'forum'             => $post->getTopic()->getBoard()->getCategory()->getForum()->getName(),
                 'categorie'         => $post->getTopic()->getBoard()->getCategory()->getName(),
                 'theme'             => $post->getTopic()->getBoard()->getName(),
                 'fildiscusssion'    => $post->getTopic()->getTitle(),
-                'lienversmessage'   => 'lien'
+                'lienversmessage'   => 'lien',
+                'pseudouser'        => !is_null($user->getPseudonymeForum()) ? $user->getPseudonymeForum() : $user->getNomPrenom()
             );
 
             $mail = $this->_mailManager->sendNouveauMessageForumAttenteModerationMail($options, $post->getTopic()->getId());
