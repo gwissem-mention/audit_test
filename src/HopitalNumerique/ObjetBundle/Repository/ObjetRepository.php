@@ -97,7 +97,7 @@ class ObjetRepository extends EntityRepository
         $qb = $this->_em->createQueryBuilder();
         $qb->select('obj')
             ->from('HopitalNumeriqueObjetBundle:Objet', 'obj')
-            ->where('obj.etat = 3')
+            ->where('obj.etat = :idEtat')
             ->leftJoin('obj.types','refTypes')
             ->andWhere(
                 $qb->expr()->orx(
@@ -109,8 +109,9 @@ class ObjetRepository extends EntityRepository
                 )
             )
             ->setParameters(array(
+                'idEtat'      => 3,
                 'code_artcle' => 'CATEGORIE_ARTICLE',
-                'code_objet' => 'CATEGORIE_OBJET'
+                'code_objet'  => 'CATEGORIE_OBJET'
             ))
             ->orderBy('obj.dateCreation', 'DESC');
         
