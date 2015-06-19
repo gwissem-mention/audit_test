@@ -75,5 +75,13 @@ class PostEventListener implements EventSubscriberInterface
             $mail = $this->_mailManager->sendNouveauMessageForumAttenteModerationMail($options, $post->getTopic()->getId());
             $this->_mailer->send($mail);
         }
+        else
+        {
+            //Desactive le post
+            $post->setEnAttente(false);
+
+            //Sauvegarde du post modifié
+            $this->_postModel->savePost($post);
+        }
     }
 }

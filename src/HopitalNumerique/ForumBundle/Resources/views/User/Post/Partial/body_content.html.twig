@@ -2,14 +2,14 @@
 
     {% if post.enAttente %}
 
-        <div class="label label-danger center-block">Les liens de ce post sont en attente de modération de la part d'un administrateur.</div>
+        <div class="label label-danger center-block">Ce message est en attente de modération par administrateur.</div>
 
         {%- if is_granted('ROLE_ADMINISTRATEUR_1') -%}
 
                 <div class="bg-danger">{{- BBCode_Parse(post.getBody)|raw -}}</div>
 
                 <div class="clearfix"></div>
-                <a class="pull-right btn btn-primary" style="margin-top:10px;" href="{{path('ccdn_forum_user_post_activation_enattente', {'post': post.id})}}"><i class="fa fa-check"></i> Valider le lien</a>
+                <a class="pull-right btn btn-primary" style="margin-top:10px;" href="{{path('ccdn_forum_user_post_activation_enattente', {'post': post.id})}}"><i class="fa fa-check"></i> Valider ce message</a>
 
         {% endif %}
 
