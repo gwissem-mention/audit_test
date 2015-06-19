@@ -98,6 +98,20 @@ class ObjetRepository extends EntityRepository
         $qb->select('obj')
             ->from('HopitalNumeriqueObjetBundle:Objet', 'obj')
             ->where('obj.etat = 3')
+            ->leftJoin('obj.types','refTypes')
+            ->andWhere(
+                $qb->expr()->orx(
+                    $qb->expr()->andX(
+                        $qb->expr()->isNotNull('refTypes.parent'),
+                        $qb->expr()->eq('refTypes.code', ':code_artcle')
+                    ),
+                    $qb->expr()->eq('refTypes.code', ':code_objet')
+                )
+            )
+            ->setParameters(array(
+                'code_artcle' => 'CATEGORIE_ARTICLE',
+                'code_objet' => 'CATEGORIE_OBJET'
+            ))
             ->orderBy('obj.dateCreation', 'DESC');
         
         return $qb;
