@@ -257,13 +257,21 @@ function RechercheExalead()
     $('.recherche_textuelle_avancee').css({ display:'none' });
 
     //Vérif avant de lancer une requete
-    if(($("#recherche_textuelle").val().length < 2 ) || ($("#recherche_textuelle").val().length <= 3 && $("#recherche_textuelle").val().indexOf("*") >= 0 ))
+    if(($("#recherche_textuelle").val().length < 2 ))
     {
         $('#recherche .alertExalead').show("slow");
+        $('#recherche .alertExaleadEtoile').hide("slow");
+    }
+    else if(($("#recherche_textuelle").val().length <= 3 && $("#recherche_textuelle").val().indexOf("*") >= 0 ))
+    {
+        $('#recherche .alertExaleadEtoile').show("slow");
+        $('#recherche .alertExalead').hide("slow");
+
     }
     else
     {
         $('#recherche .alertExalead').hide("slow");
+        $('#recherche .alertExaleadEtoile').hide("slow");
         if($("#recherche_textuelle").val() != '')
         {
             $(".placeholder").hide();
