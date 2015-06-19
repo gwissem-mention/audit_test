@@ -299,12 +299,6 @@ class ObjetController extends Controller
      */
     public function feedAction()
     {
-        //on récupère les actus
-        // $allCategories = $this->get('hopitalnumerique_reference.manager.reference')->findBy( array( 'parent' => 188) );
-        // $user          = $this->get('security.context')->getToken()->getUser();
-        // $role          = $this->get('nodevo_role.manager.role')->getUserRole($user);
-        // $actualites    = $this->get('hopitalnumerique_objet.manager.objet')->getActualitesByCategorie( $allCategories, $role );
-
         $actualites = $this->get('hopitalnumerique_objet.manager.objet')->findAll();
 
         $feed = $this->get('eko_feed.feed.manager')->get('objet');

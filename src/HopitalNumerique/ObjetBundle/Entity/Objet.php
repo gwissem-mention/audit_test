@@ -1845,7 +1845,7 @@ class Objet implements RoutedItemInterface
 
     public function getFeedItemDescription()
     {
-        return $this->resume;
+        return "";//$this->resume;
     }
 
     public function getFeedItemPubDate()
