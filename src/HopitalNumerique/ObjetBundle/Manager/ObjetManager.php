@@ -85,6 +85,11 @@ class ObjetManager extends BaseManager
         return $this->getRepository()->getObjetsForDashboard()->getQuery()->getResult();
     }
 
+    public function getObjetsForRSS()
+    {
+        return $this->getRepository()->getObjetsForRSS()->getQuery()->getResult();
+    }
+
     /**
      * Retourne la liste des objets en fonction des dates passées en param
      *

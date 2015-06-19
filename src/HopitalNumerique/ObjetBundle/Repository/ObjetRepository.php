@@ -88,6 +88,22 @@ class ObjetRepository extends EntityRepository
     }
     
     /**
+     * Récupère les objets pour le flux RSS
+     *
+     * @return QueryBuilder
+     */
+    public function getObjetsForRSS()
+    {
+        $qb = $this->_em->createQueryBuilder();
+        $qb->select('obj')
+            ->from('HopitalNumeriqueObjetBundle:Objet', 'obj')
+            ->where('obj.etat = 3')
+            ->orderBy('obj.dateCreation', 'DESC');
+        
+        return $qb;
+    }
+    
+    /**
      * Récupère les objets pour un ambassadeur passé en param
      *
      * @return QueryBuilder

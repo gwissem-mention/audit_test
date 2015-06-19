@@ -299,7 +299,7 @@ class ObjetController extends Controller
      */
     public function feedAction()
     {
-        $actualites = $this->get('hopitalnumerique_objet.manager.objet')->findAll();
+        $actualites = $this->get('hopitalnumerique_objet.manager.objet')->getObjetsForRSS();
 
         $feed = $this->get('eko_feed.feed.manager')->get('objet');
         $feed->addFromArray($actualites);
