@@ -140,7 +140,7 @@ class DemandeController extends Controller
                 {
                     $this->gereEnvoiMailChangementEtat($this->interventionDemande);
                 }
-                if (is_null($this->interventionDemande->getEvaluationEtat()) && $this->interventionDemande->getEvaluationEtat()->getId() === InterventionEvaluationEtat::getInterventionEvaluationEtatEvalueId())
+                if (!is_null($this->interventionDemande->getEvaluationEtat()) && $this->interventionDemande->getEvaluationEtat()->getId() === InterventionEvaluationEtat::getInterventionEvaluationEtatEvalueId())
                 {
                     $this->interventionDemande->setRemboursementEtat( $this->get('hopitalnumerique_reference.manager.reference')->findOneBy(array('id' => 5)) );
                     
