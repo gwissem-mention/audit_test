@@ -259,7 +259,7 @@ function RechercheExalead()
     //Vérif avant de lancer une requete
     if(($("#recherche_textuelle").val().length < 2 ))
     {
-        $('#recherche .alertExalead').show("slow");@
+        $('#recherche .alertExalead').show("slow");
         $('#recherche .alertExaleadEtoile').hide("slow");
     }
     else if(($("#recherche_textuelle").val().length <= 3 && $("#recherche_textuelle").val().indexOf("*") >= 0 ))
