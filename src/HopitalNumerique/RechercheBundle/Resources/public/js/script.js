@@ -542,7 +542,7 @@ function showLess(that, btn)
 
     var i = 0;
     $(that).parent().parent().find('.results > div').each(function( i ){
-        if( i !== 0 && i !== 1)
+        if( i !== 0 && i !== 1 && i !== 2)
         {
             $(this).slideUp();
         }
