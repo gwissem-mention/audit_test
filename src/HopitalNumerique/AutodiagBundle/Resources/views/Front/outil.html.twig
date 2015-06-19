@@ -1,4 +1,4 @@
-{% extends sansGabarit ? "HopitalNumeriqueCoreBundle::layout_sans_gabarit.html.twig" : 'HopitalNumeriqueCoreBundle:Templates:' ~ templateCurrentId ~ '/layout.html.twig' %}
+{% extends sansGabarit ? "HopitalNumeriqueCoreBundle:Templates:" ~ templateCurrentId ~ "/layout_sans_gabarit.html.twig" : 'HopitalNumeriqueCoreBundle:Templates:' ~ templateCurrentId ~ '/layout.html.twig' %}
 
 {# Référencement #}
 {% block title %}{{parent()}} - Autodiagnostic{% endblock %}
