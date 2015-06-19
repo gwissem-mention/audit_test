@@ -1,4 +1,4 @@
-_<?php
+<?php
 /**
  * Contrôleur des formulaires de demandes d'intervention dans l'administration.
  * 
