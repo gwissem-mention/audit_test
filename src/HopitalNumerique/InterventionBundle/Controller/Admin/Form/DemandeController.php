@@ -1,4 +1,4 @@
-<?php
+_<?php
 /**
  * Contrôleur des formulaires de demandes d'intervention dans l'administration.
  * 
@@ -10,6 +10,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Response;
 use HopitalNumerique\InterventionBundle\Entity\InterventionDemande;
 use HopitalNumerique\InterventionBundle\Entity\InterventionEtat;
+use HopitalNumerique\InterventionBundle\Entity\InterventionEvaluationEtat;
 
 /**
  * Contrôleur des formulaires de demandes d'intervention dans l'administration.
@@ -138,6 +139,13 @@ class DemandeController extends Controller
                 if( $this->get('hopitalnumerique_intervention.manager.interventiondemande')->isEtatActuelUpdated($this->interventionDemande) )
                 {
                     $this->gereEnvoiMailChangementEtat($this->interventionDemande);
+                }
+                if (is_null($this->interventionDemande->getEvaluationEtat()) || $this->interventionDemande->getEvaluationEtat()->getId() !== InterventionEvaluationEtat::getInterventionEvaluationEtatEvalueId())
+                {
+                    $this->interventionDemande->setRemboursementEtat( $this->get('hopitalnumerique_reference.manager.reference')->findOneBy(array('id' => 5)) );
+                    
+                    $this->get('hopitalnumerique_intervention.manager.intervention_demande')->changeEtat($this->interventionDemande, $this->container->get('hopitalnumerique_intervention.manager.intervention_etat')->getInterventionEtatTermine());
+                    $this->get('hopitalnumerique_intervention.manager.intervention_demande')->changeEvaluationEtat($this->interventionDemande, $this->container->get('hopitalnumerique_intervention.manager.intervention_evaluation_etat')->getInterventionEvaluationEtatEvalue());
                 }
                 $this->get('hopitalnumerique_intervention.manager.interventiondemande')->save($this->interventionDemande);
                 $this->get('session')->getFlashBag()->add('success', 'La demande d\'intervention a été modifiée.');
