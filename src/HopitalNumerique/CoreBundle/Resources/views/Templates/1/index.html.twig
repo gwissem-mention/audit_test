@@ -146,14 +146,21 @@
     {% block body %}
         <div id="homepage" >
             <div class="col-md-12">
-                <a class="infos btn btn-success" href="{{path('hopitalnumerique_autodiag_front_outil', {'outil' : 17, 'alias': 'macrodiagnostic'})}}">Autodiag</a>
+                <a class="infos btn btn-success" href="{{path('hopitalnumerique_autodiag_front_outil', {'outil' : 17, 'alias': 'macrodiagnostic'})}}">Commencez le macrodiag</a>
+                <a class="infos btn btn-success" href="/compte-hn/autodiagnostic">Continuez mon macrodiag</a>
+                <br />
+                <br />
+            </div>
+            <div class="col-md-12">
                 <a class="infos btn btn-rose" href="javascript:alert('Parcours non disponible pour ce domaine.')">Parcours guidé</a>
                 <a class="infos btn btn-rose" href="javascript:alert('Recherche non disponible pour ce domaine.')" >Recherche avancée</a>
                 <a class="infos btn btn-rose" href="javascript:alert('Recherche non disponible pour ce domaine.')">Recherche aidée</a>
+                <br />
+                <br />
             </div>
         </div>
-    {% endblock body %}
-        <div class="clearfix"></div>
+    {% endblock body %}        
+<div class="clearfix"></div>
     {% endblock %}
 
     <input type="hidden" id="fancy-recherche-url" value="{{path('hopital_numerique_expbesoin_rechercheFancy', {'id' : 1 })}}" />

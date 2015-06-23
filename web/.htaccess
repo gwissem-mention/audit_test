@@ -50,3 +50,40 @@ DirectoryIndex app.php
         # RedirectTemp cannot be used instead
     </IfModule>
 </IfModule>
+
+#Redirection du lien donné à la presse
+Redirect permanent /medias/Objets/Fichiers/Acc_HN-LOT4-Articulation_DPI_DS-Vdef.pdf http://www.monhopitalnumerique.fr/publication/403-identifier-les-enjeux-de-l-articulation-entre-dossier-patient-commun-et-dossiers-de-specialite
+
+# KILL THEM ETAGS
+Header unset ETag
+FileETag none
+
+# DEFLATE COMPRESSION
+SetOutputFilter DEFLATE
+AddOutputFilterByType DEFLATE text/html text/css text/plain text/xml application/x-javascript application/x-httpd-php
+BrowserMatch ^Mozilla/4 gzip-only-text/html
+BrowserMatch ^Mozilla/4\.0[678] no-gzip
+BrowserMatch \bMSIE !no-gzip !gzip-only-text/html
+BrowserMatch \bMSI[E] !no-gzip !gzip-only-text/html
+SetEnvIfNoCase Request_URI \.(?:gif|jpe?g|png)$ no-gzip
+Header append Vary User-Agent env=!dont-vary
+
+# COMPRESS
+AddOutputFilterByType DEFLATE text/javascript application/javascript text/css application/xhtml+xml text/html text/plain application/json text/xml
+
+# BEGIN Expire headers
+ExpiresActive On
+ExpiresByType text/css "access plus 30 days"
+ExpiresByType text/javascript "access plus 7 days"
+ExpiresByType application/x-javascript "access plus 7 days"
+ExpiresByType application/javascript "access plus 7 days"
+ExpiresByType image/x-icon "access plus 7 days"
+ExpiresByType image/vnd.microsoft.icon "access plus 7 days"
+ExpiresByType image/png "access plus 30 days"
+ExpiresByType image/gif "access plus 30 days"
+ExpiresByType image/jpeg "access plus 30 days"
+ExpiresByType image/jpg "access plus 30 days"
+ExpiresByType application/x-shockwave-flash "access plus 60 days"
+<FilesMatch "\\.(ico|jpe?g|png|gif|swf|gz|ttf)$">
+    Header set Cache-Control "max-age=2592000, public"
+</FilesMatch>
