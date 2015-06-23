@@ -200,7 +200,10 @@ class FrontController extends Controller
                 $enCours = $this->get('hopitalnumerique_reference.manager.reference')->findOneBy( array('id' => 418) );
 
                 //get Resultat for last one note valided
-                $resultat = $this->get('hopitalnumerique_autodiag.manager.resultat')->findOneBy( array('outil' => $outil, 'user' => $user, 'statut' => $enCours ) );
+                //$resultat = $this->get('hopitalnumerique_autodiag.manager.resultat')->findOneBy( array('outil' => $outil, 'user' => $user, 'statut' => $enCours ) );
+                //GME 23/06 : Annulation de la recup du dernier 'en cours' mais création d'un nouveau dans tout les cas
+                $resultat = $this->get('hopitalnumerique_autodiag.manager.resultat')->createEmpty();
+                $resultat->setOutil( $outil );
             }
         }
         
