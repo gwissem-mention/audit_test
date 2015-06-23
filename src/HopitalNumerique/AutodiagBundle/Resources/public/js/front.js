@@ -179,6 +179,11 @@ function calcAvancement()
 
         avancement = nbQuestions > 0 ? number_format((nbQuestionsAnswered * 100) / nbQuestions, 0) : 0;
 
+        if(nbQuestionsAnswered > 0 && avancement < 1)
+        {
+            avancement = 1;
+        }
+
         //0%
         if(avancement == 0)
         {
@@ -205,6 +210,12 @@ function calcAvancement()
     });
 
     avancementTotal = totalQuestions > 0 ? number_format((totalQuestionsAnswered * 100) / totalQuestions, 0) : 0;
+
+    if(totalQuestionsAnswered > 0 && avancementTotal < 1)
+    {
+        avancementTotal = 1;
+    }
+
     $('#autodiag .progress-bar').css('width', avancementTotal + '%');
     $('#autodiag .progress-bar').html(avancementTotal + '%');
     $('#autodiag .progress-bar').attr('aria-valuenow', avancementTotal);
