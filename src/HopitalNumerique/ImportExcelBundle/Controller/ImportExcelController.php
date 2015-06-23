@@ -53,6 +53,10 @@ class ImportExcelController extends Controller
      */
     public function downloadExportAction(Outil $outil)
     {
+        
+        //Plantage sinon
+        ini_set('memory_limit', '512M');
+        
         if( file_exists( __ROOT_DIRECTORY__ . '/files/autodiag/Gabarit_autodiag.xlsx') )
         {
             //Récupèration du fichier excel
