@@ -56,6 +56,26 @@ $(document).ready(function(){
             $('.carte-france-hover').stop().fadeIn(200);
         }
     )
+
+    if($("#slide img.uploadedFile").height() > $("#sidebar").height())
+    {
+        $("#slide img.uploadedFile").height($("#sidebar").height());
+    }
+    else
+    {
+        $("#sidebar").height($("#slide img.uploadedFile").height());
+    }
+});
+
+$( window ).resize(function() {
+    if($("#slide img.uploadedFile").height() > $("#sidebar").height())
+    {
+        $("#slide img.uploadedFile").height($("#sidebar").height());
+    }
+    else
+    {
+        $("#sidebar").height($("#slide img.uploadedFile").height());
+    }
 });
 
 function retourDerniereQuestion(idQuestion)

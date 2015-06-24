@@ -746,6 +746,7 @@ div.homepage  {
     .home-right {
         margin-top: 20px;
     }
+    #search-help #expression-du-besoin .aide-presentation{display: none;}
 }
 
 #search-help {height: 215px; padding-left: 30px;}
@@ -760,6 +761,7 @@ div.homepage  {
 /* Liens des reponses */
 #search-help #expression-du-besoin .aide .aide-liens {height: auto; padding: 10px 0 30px 5px;}
 #search-help #expression-du-besoin .aide .aide-liens .cursor{cursor: pointer;}
+#search-help #expression-du-besoin .aide .aide-liens .question-description{text-align: center;}
 #search-help #expression-du-besoin .aide .aide-liens .description_perso{font-size: 13px;}
 #search-help #expression-du-besoin .aide .aide-liens .btn_recherche_avancee{margin-top: 20px;}
 #search-help #expression-du-besoin .aide .aide-liens label{font-size: 16px; margin-bottom: 15px;}

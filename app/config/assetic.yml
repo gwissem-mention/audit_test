@@ -145,6 +145,10 @@ assetic:
             inputs:
                 - "%kernel.root_dir%/Resources/components/slick.js/slick/slick.min.js"
             filters : [ ?yui_js ]
+        jquery_mosaicflow_js:
+            inputs:
+                - "%kernel.root_dir%/Resources/components/jquery.mosaicflow/jquery.mosaicflow.min.js"
+            filters : [ ?yui_js ]
         #CSS
         bbcode_css:
             inputs:

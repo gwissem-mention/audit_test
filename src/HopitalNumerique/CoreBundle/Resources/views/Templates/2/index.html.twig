@@ -137,35 +137,6 @@
             <div class="clearfix"></div>
         </div>
 
-        <script type="text/javascript">
-
-            $(document).ready(function() {
-                if($("#slide img.uploadedFile").height() < $("#sidebar").height())
-                {
-                    $("#slide img.uploadedFile").height($("#sidebar").height());
-                }
-                else
-                {
-                    $("#sidebar").height($("#slide img.uploadedFile").height());
-                }
-            });
-
-            $( window ).resize(function() {
-                console.log($( window ).width());
-                $("#slide img.uploadedFile").height($("#sidebar").height());
-            });
-
-        </script>
-        <style type="text/css">
-            #slide {position: relative;}
-            #slide img.uploadedFile{position: absolute;}
-
-            @media screen and (max-width: 991px) {    
-                #search-help #expression-du-besoin .aide-presentation{display: none;}
-            }
-            
-        </style>
-
         <div id="header-slide" class="col-md-12 no-padding">
         <div class="row">
             <div class="col-md-9 no-padding">

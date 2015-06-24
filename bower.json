@@ -33,6 +33,7 @@
     "qtip2": "2.2.0",
     "gridster": "0.5.2",
     "bootstrap-multiselect": "~0.9",
-    "slick.js": "*"
+    "slick.js": "*",
+    "jquery.mosaicflow": "0.2.5"
   }
 }

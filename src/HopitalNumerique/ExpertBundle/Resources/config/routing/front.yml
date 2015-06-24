@@ -1,3 +1,7 @@
 hopitalnumerique_expert_front_index:
     pattern:  /suivi-activite
     defaults: { _controller: "HopitalNumeriqueExpertBundle:Front:index" }
+
+hopitalnumerique_expert_front_expert:
+    pattern:  /les-experts
+    defaults: { _controller: "HopitalNumeriqueExpertBundle:Front:expert" }

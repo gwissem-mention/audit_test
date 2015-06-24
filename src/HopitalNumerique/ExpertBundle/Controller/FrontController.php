@@ -99,4 +99,14 @@ class FrontController extends Controller
             'evenementVacations' => $evenementVacations
         ));
     }
+
+    /**
+     * [expertAction description]
+     *
+     * @return [type]
+     */
+    public function expertAction()
+    {
+        return $this->render('HopitalNumeriqueExpertBundle:Front:expert.html.twig', array());
+    }
 }
