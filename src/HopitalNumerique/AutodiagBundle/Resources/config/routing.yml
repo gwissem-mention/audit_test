@@ -206,13 +206,13 @@ hopitalnumerique_autodiag_resultat_detail:
         id : \d+ 
 
 hopitalnumerique_autodiag_resultat_share:
-    pattern:  /admin/outil/resultat/partage/{id}
+    pattern:  /compte-hn/autodiagnostic/partage/{id}
     defaults: { _controller: "HopitalNumeriqueAutodiagBundle:Resultat:share" }
     requirements: 
         id : \d+ 
 
 hopitalnumerique_autodiag_resultat_share_duplication:
-    pattern:  /admin/outil/resultat/partage/duplication
+    pattern:  /compte-hn/autodiagnostic/partage/duplication
     defaults: { _controller: "HopitalNumeriqueAutodiagBundle:Resultat:shareDuplication" }
     requirements: 
         id : \d+ 
