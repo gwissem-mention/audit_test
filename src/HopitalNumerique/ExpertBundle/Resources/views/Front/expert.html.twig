@@ -30,6 +30,14 @@
             <h3 class="violet">Les experts</h3>
         </div> 
 
+        <div class="clearfix mosaicflow">
+            {% for idUser,mosaique in mosaiques %}
+                <div class="mosaicflow__item">
+                    <img width="200px" {#height="300"#} src="{{mosaique}}" alt="Photo de profil">
+                </div>
+            {% endfor %}
+        </div>
+        
         <div class="clearfix"></div>
     </div>
 {% endblock body %}

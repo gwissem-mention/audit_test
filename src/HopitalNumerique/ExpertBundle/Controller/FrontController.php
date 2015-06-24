@@ -107,6 +107,16 @@ class FrontController extends Controller
      */
     public function expertAction()
     {
-        return $this->render('HopitalNumeriqueExpertBundle:Front:expert.html.twig', array());
+        $users = $this->get('hopitalnumerique_user.manager.user')->findUsersByRole('ROLE_EXPERT_6');
+
+        $images = array();
+        foreach ($users as $user) 
+        {
+            $images[$user->getId()] = $user->getWebPath(); 
+        }
+
+        return $this->render('HopitalNumeriqueExpertBundle:Front:expert.html.twig', array(
+            'mosaiques' => $images
+        ));
     }
 }
