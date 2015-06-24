@@ -7,7 +7,7 @@
 {% block stylesheets %}
     {{parent()}}
     {% stylesheets output="compiled/hopitalnumerique-les-experts-index.css" filter="cssrewrite, ?yui_css"
-        'bundles/hopitalnumeriqueregistre/css/style.css'
+        'bundles/hopitalnumeriqueexpert/css/expert.css'
     %}
         <link rel="stylesheet" href="{{ asset_url }}" />
     {% endstylesheets %}
@@ -28,16 +28,21 @@
         {# En-tête #}
         <div class="col-md-12">
             <h3 class="violet">Les experts</h3>
+             <div class="text-muted">
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer lobortis magna arcu, eu cursus nibh ultricies ac. Aenean pellentesque sodales pharetra. Integer mattis orci in neque accumsan, eu eleifend arcu pulvinar. Vestibulum eleifend enim et dignissim ultrices. Vestibulum sagittis ligula erat, eu sodales ex suscipit nec. Sed ac sapien id metus maximus venenatis eu quis leo. Praesent mollis sagittis ipsum, in dapibus turpis venenatis quis. 
+            </div>
         </div> 
 
-        <div class="clearfix mosaicflow">
-            {% for idUser,mosaique in mosaiques %}
-                <div class="mosaicflow__item">
-                    <img width="200px" {#height="300"#} src="{{mosaique}}" alt="Photo de profil">
-                </div>
-            {% endfor %}
+        <div id="mosaique-experts" class="col-md-12">
+            <div class="clearfix mosaicflow" data-item-selector=".mosaicflow__item" data-min-item-width="250">
+                {% for idUser,mosaique in mosaiques %}
+                    <div class="mosaicflow__item" style="position:relative;">
+                        <img width="400px" src="{{mosaique}}" title="{{experts[idUser]}}" alt="Photo de {{experts[idUser]}}" />
+                        <p class="description-mosaique">{{experts[idUser]}}</p>
+                    </div>
+                {% endfor %}
+            </div>
         </div>
-        
         <div class="clearfix"></div>
     </div>
 {% endblock body %}

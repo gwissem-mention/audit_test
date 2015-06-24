@@ -57,14 +57,16 @@ $(document).ready(function(){
         }
     )
 
-    if($("#slide img.uploadedFile").height() > $("#sidebar").height())
-    {
-        $("#slide img.uploadedFile").height($("#sidebar").height());
-    }
-    else
-    {
-        $("#sidebar").height($("#slide img.uploadedFile").height());
-    }
+    $("#slide img.uploadedFile").height($("#sidebar").height());
+
+    // if($("#slide img.uploadedFile").height() > $("#sidebar").height())
+    // {
+    //     $("#slide img.uploadedFile").height($("#sidebar").height());
+    // }
+    // else
+    // {
+    //     $("#sidebar").height($("#slide img.uploadedFile").height());
+    // }
 });
 
 $( window ).resize(function() {
