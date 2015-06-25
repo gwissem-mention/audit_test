@@ -5,4 +5,13 @@ $(document).ready(function() {
             $( this ).find('.description-mosaique').hide();
         }
     );
+
+    $('.fancy').fancybox({
+        'padding'   : 0,
+        'autoSize'  : false,
+        'width'     : '70%',
+        'scrolling' : 'yes',
+        'showCloseButton' : true,
+        'height' : 'auto'
+    });
 });

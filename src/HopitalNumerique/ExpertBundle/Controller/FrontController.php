@@ -7,6 +7,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 use HopitalNumerique\ExpertBundle\Entity\ActiviteExpert;
+use HopitalNumerique\UserBundle\Entity\User;
 
 class FrontController extends Controller
 {
@@ -97,6 +98,13 @@ class FrontController extends Controller
             'totalVacation'      => $totalVacation,
             'montantVacation'    => $montantVacation,
             'evenementVacations' => $evenementVacations
+        ));
+    }
+    
+    public function biographieAction(User $user)
+    {
+        return $this->render( 'HopitalNumeriqueExpertBundle:Front:fancy.html.twig' , array(
+            'user' => $user
         ));
     }
 

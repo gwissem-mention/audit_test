@@ -1,13 +1,8 @@
-#experts .mosaicflow__column {float:left;}
-#experts .mosaicflow__item img {display:block;width:100%;height:auto;}
+#experts #logoExpert {margin-top: 30px;}
 
+#experts .mosaicflow__column {float:left;}
+#experts .mosaicflow__item img {display:block;width:100%;height:auto; border: 1px solid #FFFFFF}
 
 #experts #mosaique-experts { margin-top: 30px;}
-
-#experts #mosaique-experts .description-mosaique{background: hsla(0, 0%, 0%, 0.5) none repeat scroll 0 0;bottom: 0;color: #fff;
-    font-size: 14px;
-    left: 0;
-    margin: 0;
-    display: none;
-    padding: 5px;position: absolute;text-shadow: 1px 1px 1px hsla(0, 0%, 0%, 0.75);transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1) 0s;width: 100%;z-index: 99px;}
-    
+#experts #mosaique-experts .description-mosaique{padding:20px 15px !important;background: hsla(0, 0%, 0%, 0.9) none repeat scroll 0 0;bottom: 0;color: #fff;font-size: 14px;left: 0;margin: 0;display: none; padding: 5px;position: absolute;transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1) 0s;width: 100%;z-index: 99px;}
+#experts #mosaique-experts .description-mosaique a{font-size: 10px;}

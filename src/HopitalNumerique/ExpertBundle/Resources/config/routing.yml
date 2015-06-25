@@ -9,3 +9,7 @@ hopital_numerique_expert_front:
 hopitalnumerique_expert_front_expert:
     pattern:  /les-experts
     defaults: { _controller: "HopitalNumeriqueExpertBundle:Front:expert" }
+
+hopitalnumerique_expert_front_expert_biographie:
+    pattern:  /les-experts/{id}/biographie
+    defaults: { _controller: "HopitalNumeriqueExpertBundle:Front:biographie" }
