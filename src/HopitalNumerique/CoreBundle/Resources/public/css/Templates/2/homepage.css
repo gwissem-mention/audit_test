@@ -257,7 +257,7 @@ div.homepage  {
     right: 5px;
 }
 #slide .slick-dots li button::before {
-    font-size: 20px;
+    font-size: 55px;
     line-height: 20px;
     position: absolute;
     top: 0px;
