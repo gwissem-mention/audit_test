@@ -218,6 +218,8 @@ div.homepage  {
 }
 #slide {
     overflow: hidden;
+    position:relative; 
+    height: 570px;
 }
 #slide a{
     color: #FFFFFF;
@@ -229,9 +231,14 @@ div.homepage  {
 #slide .slick-slide {
     position: relative;
 }
-#slide .slick-slide img {
+#slide .slick-slide img.uploadedFile {
     display: block;
     width: 100%;
+}
+#slide .slick-slide img.bandeau-anap {
+    position:absolute; 
+    width:400px; 
+    right:0;
 }
 
 #slide .slick-prev-custom {
@@ -775,7 +782,7 @@ div.homepage  {
         margin-top:20px;
     }
 
-    #search-help #expression-du-besoin .aide .aide-liens { padding-left: 0 !important;}
+    #search-help #expression-du-besoin .aide .aide-liens { padding-left: 0 !important; padding-bottom: 0 !important;}
     #search-help #expression-du-besoin .aide .aide-liens .question-description{margin-bottom: 15px;}
 
     .slick-slide .text-content p {

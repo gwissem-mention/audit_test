@@ -133,13 +133,13 @@
 
         <div id="header-slide" class="col-md-12 no-padding">
             <div class="col-md-9 no-padding">
-                <div id="slide" class="col-md-12 no-padding" style="position:relative; height: 570px; overflow:hidden;">
+                <div id="slide" class="col-md-12 no-padding">
                     {% for article in articlesALaUne %}
                         <div>
                             {% if loop.first %}
-                                <img style="position:absolute; width:400px; right:0" src="{{asset('bundles/hopitalnumeriquecore/img/anap_slideshow.png')}}" alt="HOPITAL NUMERIQUE" />
+                                <img class="bandeau-anap" src="{{asset('bundles/hopitalnumeriquecore/img/anap_slideshow.png')}}" alt="HOPITAL NUMERIQUE" />
                             {% endif %}
-                            <img class="uploadedFile" src="{{ article.vignette }}" alt="Slideshow" style="width:100%;">
+                            <img class="uploadedFile" src="{{ article.vignette }}" alt="Slideshow">
                             <div class="block-text-slide-{{loop.index}}">
                                 {{article.resume|parsePublication|raw}}
                             </div>
