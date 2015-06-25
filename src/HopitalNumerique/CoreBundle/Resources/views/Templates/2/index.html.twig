@@ -137,7 +137,6 @@
     </style>
 
         <div id="header-slide" class="col-md-12 no-padding">
-        <div class="row">
             <div class="col-md-9 no-padding">
                 <div id="slide" class="col-md-12 no-padding" style="position:relative; height: 570px; overflow:hidden;">
                     {% for article in articlesALaUne %}
@@ -200,27 +199,24 @@
                     <div class="clearfix"></div>
                 </div>
             </div>
-            <div class="row">
-                <div class="col-md-9 no-padding">
-                    <div id="search-help">
-                        {{ render(controller("HopitalNumeriqueRechercheBundle:ExpBesoin:rechercheNoPopin", {'expBesoinGestion': 1} )) }}
-                    </div>
+            <div class="col-md-9 no-padding">
+                <div id="search-help">
+                    {{ render(controller("HopitalNumeriqueRechercheBundle:ExpBesoin:rechercheNoPopin", {'expBesoinGestion': 1} )) }}
                 </div>
-                <div class="col-md-3 no-padding">
-                    <div id="block-carte-france">
-                        <div class="carte-france-hover">
-                            <h2><a href="{{ path('hopital_numerique_registre_homepage') }}">Vous êtes à la recherche<br /><strong>d'un ambassadeur dans votre région ?</strong></a></h2>
-                            <a href="{{ path('hopital_numerique_registre_homepage') }}"><img src="{{asset('bundles/hopitalnumeriquecore/img/picto-ambassadeurs.png')}}" alt="Carte de France"/></a>
+            </div>
+            <div class="col-md-3 no-padding">
+                <div id="block-carte-france">
+                    <div class="carte-france-hover">
+                        <h2><a href="{{ path('hopital_numerique_registre_homepage') }}">Vous êtes à la recherche<br /><strong>d'un ambassadeur dans votre région ?</strong></a></h2>
+                        <a href="{{ path('hopital_numerique_registre_homepage') }}"><img src="{{asset('bundles/hopitalnumeriquecore/img/picto-ambassadeurs.png')}}" alt="Carte de France"/></a>
 
-                        </div>
-                        <div class="carte-france">
-                            <h2><a href="{{ path('hopital_numerique_registre_homepage') }}">PRÈS DE CHEZ VOUS</a></h2>
-                            <a href="{{ path('hopital_numerique_registre_homepage') }}"><img src="{{asset('bundles/hopitalnumeriquecore/img/carte-france.png')}}" alt="Carte de France"/></a>
-                        </div>
+                    </div>
+                    <div class="carte-france">
+                        <h2><a href="{{ path('hopital_numerique_registre_homepage') }}">PRÈS DE CHEZ VOUS</a></h2>
+                        <a href="{{ path('hopital_numerique_registre_homepage') }}"><img src="{{asset('bundles/hopitalnumeriquecore/img/carte-france.png')}}" alt="Carte de France"/></a>
                     </div>
                 </div>
             </div>
-        </div>
         <div class="clearfix"></div>
     </div>
 <div class="col-md-12 no-padding" id="content">
