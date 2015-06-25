@@ -747,6 +747,7 @@ div.homepage  {
         margin-top: 20px;
     }
     #search-help #expression-du-besoin .aide-presentation{display: none;}
+    #search-help #expression-du-besoin .aide .aide-liens {height: auto; padding: 10px 15px 30px 5px;}
 }
 
 #search-help {height: 215px; padding-left: 30px;}
