@@ -70,15 +70,22 @@ $(document).ready(function(){
 });
 
 $( window ).resize(function() {
-    if($("#slide img.uploadedFile").height() < 570)
+    if($( window ).width() > 990 )
     {
-        $("#slide img.uploadedFile").height('100%');
-        $("#slide img.uploadedFile").width('auto');
+        if($("#slide img.uploadedFile").height() < 570)
+        {
+            $("#slide img.uploadedFile").height('100%');
+            $("#slide img.uploadedFile").width('auto');
+        }
+        else
+        {
+            $("#slide img.uploadedFile").height('auto');
+            $("#slide img.uploadedFile").width('100%');
+        }
     }
     else
     {
-        $("#slide img.uploadedFile").height('auto');
-        $("#slide img.uploadedFile").width('100%');
+        $("#slide").height($("#slide img.uploadedFile").height());
     }
 });
 

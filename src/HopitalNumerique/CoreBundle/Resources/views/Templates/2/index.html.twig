@@ -124,17 +124,12 @@
 
         {# Menu #}
         <div class="col-md-12" id="menu-container">
-            <div class="col-md-10 col-sm-12">
+            <div class="col-md-12 col-sm-12">
                 {{ knp_menu_render('menu-main-front', {'currentClass': 'active', 'ancestorClass':'active','template':'HopitalNumeriqueCoreBundle::menu.html.twig'}) }}
                 {{ knp_menu_render('menu-main-front', {'currentClass': 'active', 'ancestorClass':'active','template':'HopitalNumeriqueCoreBundle::menu_responsive.html.twig'}) }}
             </div>
             <div class="clearfix"></div>
         </div>
-
-    <style type="text/css">
-        #sidebar{height: 570px !important; overflow: scroll; background-color: #dbdbdb;}
-        #block-chiffres-cles{background-color: #FFFFFF}
-    </style>
 
         <div id="header-slide" class="col-md-12 no-padding">
             <div class="col-md-9 no-padding">
@@ -310,6 +305,7 @@
                         <div class="clearfix"></div>
                         <a href="{{path('hopital_numerique_publication_actualite')}}" class="readmore pull-left"><i class="fa fa-angle-right"></i> Voir toutes les actualités</a>
                         <a href="{{path('hopitalnumerique_objet_objet_feed_rss')}}" class="pull-right btn btn-xs btn-rose fluxRSS"><i class="fa fa-rss"></i></a>
+                        <div class="clearfix"></div>
                     {% else %}
                     - Aucunes actualités -
                     {% endif %}

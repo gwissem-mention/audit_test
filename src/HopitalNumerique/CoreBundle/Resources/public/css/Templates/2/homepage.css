@@ -630,7 +630,7 @@ div.homepage  {
     font-size: 1.5em;
 }
 #block-home-menu {
-    margin-top:20px;
+    margin-top:5px;
 }
 .block-home-menu {
     text-align: center;
@@ -732,23 +732,7 @@ div.homepage  {
     color:#d60030;
 }
 
-@media (max-width: 767px) {
-    .home-right {
-        margin-top:20px;
-    }
-
-    .slick-slide .text-content p {
-        display: none;
-    }
-}
-
-@media (max-width:991px) {
-    .home-right {
-        margin-top: 20px;
-    }
-    #search-help #expression-du-besoin .aide-presentation{display: none;}
-    #search-help #expression-du-besoin .aide .aide-liens {height: auto; padding: 10px 15px 30px 5px;}
-}
+#sidebar{height: 570px !important; overflow: scroll; background-color: #dbdbdb;}
 
 #search-help {height: 215px; padding-left: 30px;}
 #search-help #expression-du-besoin {padding:15px;height: auto;}
@@ -775,3 +759,28 @@ div.homepage  {
 #search-help #expression-du-besoin .aide .aide-liens .reponse .bloc-reponse .mode-normal{display:block;}
 #search-help #expression-du-besoin .aide .aide-liens .reponse .bloc-reponse .mode-tablette{display:none;}
 #search-help #expression-du-besoin .aide .aide-liens .reponse .bloc-reponse .icone{width: 9px; height: 10px; float: right;margin:4px 0 0;background: transparent url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAkAAAAKCAYAAABmBXS+AAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAyRpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuMy1jMDExIDY2LjE0NTY2MSwgMjAxMi8wMi8wNi0xNDo1NjoyNyAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvIiB4bWxuczp4bXBNTT0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL21tLyIgeG1sbnM6c3RSZWY9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9SZXNvdXJjZVJlZiMiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENTNiAoTWFjaW50b3NoKSIgeG1wTU06SW5zdGFuY2VJRD0ieG1wLmlpZDoxQzhDRjM3OTBGMkExMUU0QjFDNEQ2NUJERkY3RkQzNyIgeG1wTU06RG9jdW1lbnRJRD0ieG1wLmRpZDoxQzhDRjM3QTBGMkExMUU0QjFDNEQ2NUJERkY3RkQzNyI+IDx4bXBNTTpEZXJpdmVkRnJvbSBzdFJlZjppbnN0YW5jZUlEPSJ4bXAuaWlkOjFDOENGMzc3MEYyQTExRTRCMUM0RDY1QkRGRjdGRDM3IiBzdFJlZjpkb2N1bWVudElEPSJ4bXAuZGlkOjFDOENGMzc4MEYyQTExRTRCMUM0RDY1QkRGRjdGRDM3Ii8+IDwvcmRmOkRlc2NyaXB0aW9uPiA8L3JkZjpSREY+IDwveDp4bXBtZXRhPiA8P3hwYWNrZXQgZW5kPSJyIj8++F4kFAAAAHtJREFUeNpifCgZ0sjAwFDHgADzgTgFiP/BBJiAuB6Im5AUJQLxHKgcXBEDIYUsSBL1ULoOSSEIpCArgikEiVUhKfzPhKaIA4iNkfj/gfgoE5qCDUDsjqQA5Mt5TIQUwHzHiabgH7ICmO+ygZgZiPdAxZYA8UJkhwIEGACmOxn13WZlAgAAAABJRU5ErkJggg==')  no-repeat bottom right;}
+
+
+@media (max-width:991px) {
+    #block-carte-france{display: none;}
+    .home-right {
+        margin-top: 20px;
+    }
+    #search-help {padding-left: 0px;}
+    #search-help #expression-du-besoin .aide-presentation{display: none;}
+    #search-help #expression-du-besoin .aide .aide-liens {height: auto; padding: 10px 15px 30px 5px !important;}
+}
+@media (max-width: 767px) {
+    .home-right {
+        margin-top:20px;
+    }
+
+    #search-help #expression-du-besoin .aide .aide-liens { padding-left: 0 !important;}
+    #search-help #expression-du-besoin .aide .aide-liens .question-description{margin-bottom: 15px;}
+
+    .slick-slide .text-content p {
+        display: none;
+    }
+
+    #search-help {height: 100%; padding-left: 15px; }
+}
