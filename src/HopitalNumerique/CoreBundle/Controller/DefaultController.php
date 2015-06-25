@@ -74,7 +74,7 @@ class DefaultController extends Controller
           }
         }
         $nb_fils = $i;
-        $topics = $this->get('hopitalnumerique_forum.manager.topic')->getLastTopicsForum($idForum,10);
+        $topics = $this->get('hopitalnumerique_forum.manager.topic')->getLastTopicsForum($idForum,5);
 
         // Get Article à la une
         $alaune = $this->get('hopitalnumerique_objet.manager.objet')->getArticleAlaUne();

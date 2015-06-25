@@ -57,7 +57,7 @@ $(document).ready(function(){
         }
     )
 
-    $("#slide img.uploadedFile").height($("#sidebar").height());
+    // $("#slide img.uploadedFile").height($("#sidebar").height());
 
     // if($("#slide img.uploadedFile").height() > $("#sidebar").height())
     // {
@@ -70,13 +70,15 @@ $(document).ready(function(){
 });
 
 $( window ).resize(function() {
-    if($("#slide img.uploadedFile").height() > $("#sidebar").height())
+    if($("#slide img.uploadedFile").height() < 570)
     {
-        $("#slide img.uploadedFile").height($("#sidebar").height());
+        $("#slide img.uploadedFile").height('100%');
+        $("#slide img.uploadedFile").width('auto');
     }
     else
     {
-        $("#sidebar").height($("#slide img.uploadedFile").height());
+        $("#slide img.uploadedFile").height('auto');
+        $("#slide img.uploadedFile").width('100%');
     }
 });
 

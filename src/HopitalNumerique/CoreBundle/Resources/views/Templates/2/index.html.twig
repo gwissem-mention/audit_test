@@ -124,12 +124,6 @@
 
         {# Menu #}
         <div class="col-md-12" id="menu-container">
-            <div class="onbottom onbottomdown pull-left">
-                <a href="#actus"><i class="fa fa-angle-down"></i></a>
-            </div>
-            <div class="onbottom onbottomup pull-left" style="display:none">
-                <a href="#body"><i class="fa fa-angle-up"></i></a>
-            </div>
             <div class="col-md-10 col-sm-12">
                 {{ knp_menu_render('menu-main-front', {'currentClass': 'active', 'ancestorClass':'active','template':'HopitalNumeriqueCoreBundle::menu.html.twig'}) }}
                 {{ knp_menu_render('menu-main-front', {'currentClass': 'active', 'ancestorClass':'active','template':'HopitalNumeriqueCoreBundle::menu_responsive.html.twig'}) }}
@@ -137,15 +131,21 @@
             <div class="clearfix"></div>
         </div>
 
-    <style type="text/css">#sidebar{height: 780px;}</style>
+    <style type="text/css">
+        #sidebar{height: 570px !important; overflow: scroll; background-color: #dbdbdb;}
+        #block-chiffres-cles{background-color: #FFFFFF}
+    </style>
 
         <div id="header-slide" class="col-md-12 no-padding">
         <div class="row">
             <div class="col-md-9 no-padding">
-                <div id="slide" class="col-md-12 no-padding">
+                <div id="slide" class="col-md-12 no-padding" style="position:relative; height: 570px; overflow:hidden;">
                     {% for article in articlesALaUne %}
                         <div>
-                            <img class="uploadedFile" src="{{ article.vignette }}" alt="Slideshow">
+                            {% if loop.first %}
+                                <img style="position:absolute; width:400px; right:0" src="{{asset('bundles/hopitalnumeriquecore/img/anap_slideshow.png')}}" alt="HOPITAL NUMERIQUE" />
+                            {% endif %}
+                            <img class="uploadedFile" src="{{ article.vignette }}" alt="Slideshow" style="width:100%;">
                             <div class="block-text-slide-{{loop.index}}">
                                 {{article.resume|parsePublication|raw}}
                             </div>
