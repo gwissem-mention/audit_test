@@ -2,9 +2,12 @@
 <div id="resultats">
     <div class="col-md-12">
         <div class="btn-toolbar">
-            <a href="{{path('hopitalnumerique_autodiag_front_resultat_pdf', {'id':resultat.id})}}" class="print btn btn-default pull-right" title="Télacharger les résultats en PDF"><i class="fa fa-download" style="margin-right:5px"></i>Télécharger</a>
+            <a href="{{path('hopitalnumerique_autodiag_front_resultat_pdf', {'id':resultat.id})}}" class="print btn btn-default pull-right" title="Télécharger les résultats en PDF"><i class="fa fa-download" style="margin-right:5px"></i>Télécharger</a>
+            {% if app.user and resultat.user is not null %}
+                <a href="{{path('hopitalnumerique_autodiag_front_resultat_partage_mail_fancy', {'id':resultat.id})}}" id="partage-mail" class="print fancybox.ajax btn btn-default pull-right" title="Partager le résultat PDF par mail"><i class="fa fa-envelope" style="margin-right:5px"></i>Envoyer par mail</a>
+            {% endif %}
             {% if app.user and resultat.statut.id == 418 %}
-            <a  href="{{path('hopitalnumerique_autodiag_front_resultat_validate', { 'id':resultat.id })}}" class="valid_button print btn btn-default pull-right"><i class="fa fa-check" style="margin-right:5px"></i>Conserver cette réponse dans mon historique</a>
+                <a  href="{{path('hopitalnumerique_autodiag_front_resultat_validate', { 'id':resultat.id })}}" class="valid_button print btn btn-default pull-right"><i class="fa fa-check" style="margin-right:5px"></i>Conserver cette réponse dans mon historique</a>
             {% endif %}
         
         {% if back is defined and back %}
@@ -191,16 +194,45 @@
             
             {# Affichage du graphique spider #}
             {% if graphiques['radar'] is defined %}
+
                 {% set chart = graphiques['radar'] %}
                 <h3>{{chart.title|capitalize}}</h3>
                 <p>
                     {{resultat.outil.commentaireGraphRadar|raw}}
                 </p>
                 <div class="row">
-                    <div id="radarChart"></div>
-                    <input type="hidden" id="datas-radar" value="{{chart.datas|json_encode()}}">
-                    <div class="col-md-12">
-                        <p id="chaptersNonConcernes"></p>
+                    {% if resultat.outil.showTauxRemplissageRadar %}
+                        <div class="col-md-2">
+                            <table class="table table-hover table-bordered table-striped" style="vertical-align:center">
+                                <thead>
+                                    <tr>
+                                        <td>
+                                            <strong>Chapitres</strong>
+                                        </td>
+                                        <td>
+                                            <strong>Taux remplissage</strong>
+                                        </td>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for data in chart.datas %}
+                                        <tr>
+                                            <td>{{data.title}}</td>
+                                            <td>{{data.taux}} %</td>
+                                        </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="col-md-10">
+                    {% else %}
+                        <div>
+                    {% endif %}
+                        <div id="radarChart"></div>
+                        <input type="hidden" id="datas-radar" value="{{chart.datas|json_encode()}}">
+                        <div class="col-md-12">
+                            <p id="chaptersNonConcernes"></p>
+                        </div>
                     </div>
                 </div>
                 <div class="page-break"></div>

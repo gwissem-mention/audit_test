@@ -17,8 +17,11 @@ class DomaineGrid extends Grid implements GridInterface
      */
     public function setConfig()
     {
-        $this->setSource( 'HopitalNumeriqueDomaineBundle:Domaine' );
         $this->setNoDataMessage('Aucun domaine à afficher.');
+        $this->setSource( 'hopitalnumerique_domaine.manager.domaine' );
+        $this->setSourceType( self::SOURCE_TYPE_MANAGER );
+        $this->showIDColumn( false );
+        $this->setFilterIdColumn( false );
     }
 
     /**
@@ -30,7 +33,7 @@ class DomaineGrid extends Grid implements GridInterface
         $this->addColonne( new Column\TextColumn('nom', 'Nom') );
         $this->addColonne( new Column\TextColumn('url', 'Url') );
         $this->addColonne( new Column\TextColumn('adresseMailContact', 'Adresse mail de contact') );
-        $this->addColonne( new Column\AssocColumn('template.nom', 'Template') );
+        $this->addColonne( new Column\TextColumn('templateNom', 'Template') );
     }
 
     /**

@@ -33,14 +33,20 @@ class ObjetController extends Controller
         $user  = $this->get('security.context')->getToken()->getUser();
         
         //si l'user connecté est propriétaire de l'objet ou si l'user est admin : unlock autorisé
-        if( $user->hasRole('ROLE_ADMINISTRATEUR_1') || $objet->getLockedBy() == $user ) {
+        if( $user->hasRole('ROLE_ADMINISTRATEUR_1') || $objet->getLockedBy() == $user ) 
+        {
             $this->get('hopitalnumerique_objet.manager.objet')->unlock($objet);
 
             //si on à appellé l'action depuis le button du grid, on met un message à l'user, sinon pas besoin de message
             if( !is_null($message ) )
+            {
                 $this->get('session')->getFlashBag()->add( 'info' , 'Objet dévérouillé.' );
-        }else
+            }
+        }
+        else
+        {
             $this->get('session')->getFlashBag()->add( 'danger' , 'Vous n\'avez pas l\'autorisation de déverrouiller cet objet.' );
+        }
         
         return $this->redirect( $this->generateUrl('hopitalnumerique_objet_objet') );
     }
@@ -52,7 +58,8 @@ class ObjetController extends Controller
     {
         $objet = $this->get('hopitalnumerique_objet.manager.objet')->createEmpty();
 
-        if( $type == 2 ) {
+        if( $type == 2 ) 
+        {
           $objet->setArticle(true);
         }
 
@@ -151,7 +158,8 @@ class ObjetController extends Controller
     public function deleteMassAction( $primaryKeys, $allPrimaryKeys )
     {
         //get all selected Users
-        if($allPrimaryKeys == 1){
+        if($allPrimaryKeys == 1)
+        {
             $rawDatas = $this->get('hopitalnumerique_objet.manager.objet')->getRawData();
             foreach($rawDatas as $data)
             {
@@ -283,6 +291,26 @@ class ObjetController extends Controller
         
         return new Response(json_encode($result), 200);
     }
+
+    /**
+     * Generate the article feed (RSS)
+     *
+     * @return Response XML Feed
+     */
+    public function feedAction()
+    {
+        $actualites = $this->get('hopitalnumerique_objet.manager.objet')->getObjetsForRSS();
+
+        $feed = $this->get('eko_feed.feed.manager')->get('objet');
+        $feed->addFromArray($actualites);
+
+        return new Response($feed->render('rss'));
+    }
+
+
+
+
+
 
 
 

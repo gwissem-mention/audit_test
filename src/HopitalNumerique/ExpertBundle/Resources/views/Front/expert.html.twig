@@ -1,0 +1,53 @@
+{% extends 'HopitalNumeriqueCoreBundle:Templates:' ~ templateCurrentId ~ '/layout.html.twig' %}
+
+{# Référencement #}
+{% block title %}{{parent()}} - Experts{% endblock %}
+{% block metadesc %}Les experts{% endblock %}
+
+{% block stylesheets %}
+    {{parent()}}
+    {% stylesheets output="compiled/hopitalnumerique-les-experts-index.css" filter="cssrewrite, ?yui_css"
+        "@fancybox_css"
+        'bundles/hopitalnumeriqueexpert/css/expert.css'
+    %}
+        <link rel="stylesheet" href="{{ asset_url }}" />
+    {% endstylesheets %}
+{% endblock %}
+
+{% block javascripts %}
+    {{parent()}}
+    {% javascripts output="compiled/hopitalnumerique-les-experts-index.js"
+        "@fancybox_js"
+        "@jquery_mosaicflow_js"
+        'bundles/hopitalnumeriqueexpert/js/expert.js'
+    %}
+        <script type="text/javascript" src="{{ asset_url }}"></script>
+    {% endjavascripts %}
+{% endblock %}
+
+{% block body %}
+    <div id="experts">
+        {# En-tête #}
+        <div class="col-md-12">
+            
+            <img src="{{asset('bundles/hopitalnumeriquecore/img/bandeau-expert.jpg')}}" alt="Les experts" id="logoExpert" width="100%" />
+
+            <h3 class="violet">Les experts</h3>
+             <div class="text-muted">
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer lobortis magna arcu, eu cursus nibh ultricies ac. Aenean pellentesque sodales pharetra. Integer mattis orci in neque accumsan, eu eleifend arcu pulvinar. Vestibulum eleifend enim et dignissim ultrices. Vestibulum sagittis ligula erat, eu sodales ex suscipit nec. Sed ac sapien id metus maximus venenatis eu quis leo. Praesent mollis sagittis ipsum, in dapibus turpis venenatis quis. 
+            </div>
+        </div> 
+
+        <div id="mosaique-experts" class="col-md-12">
+            <div class="clearfix mosaicflow" data-item-selector=".mosaicflow__item" data-min-item-width="250">
+                {% for idUser,mosaique in mosaiques %}
+                    <div class="mosaicflow__item" style="position:relative;">
+                        <img width="400px" src="{{mosaique}}" title="{{experts[idUser]}}" alt="Photo de {{experts[idUser]}}" />
+                        <p class="description-mosaique">{{experts[idUser]}} <br /><a class="fancy fancybox.ajax" href="{{path('hopitalnumerique_expert_front_expert_biographie', {'id': idUser})}}" id="parametrageVacation" style="margin-right: 30px;" >En savoir plus</a></p>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+        <div class="clearfix"></div>
+    </div>
+{% endblock body %}

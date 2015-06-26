@@ -142,7 +142,9 @@ class EvaluationController extends Controller
 
                 //Si l'id de la question n'a pas été récupéré alors on ne sauvegarde pas la question (exemple avec le cas particulier du token du formulaire)
                 if (0 === $idQuestion || '' === $idQuestion || '_token' === $key)
+                {
                     continue;
+                }
                 
                 $question = $this->get('hopitalnumerique_questionnaire.manager.question')->findOneBy(array('id' => $idQuestion));
 

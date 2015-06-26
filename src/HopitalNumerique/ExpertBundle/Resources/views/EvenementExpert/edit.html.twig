@@ -1,0 +1,51 @@
+{% extends 'NodevoAdminBundle::admin.html.twig' %}
+
+{% block stylesheets %}
+    {{parent()}}
+    {% stylesheets output="compiled/hopitalnumerique-expert-evenement.css" filter="cssrewrite, ?yui_css"
+        "@validationEngine_css"
+    %}
+        <link rel="stylesheet" href="{{ asset_url }}" />
+    {% endstylesheets %}
+{% endblock %}
+
+{% block javascripts %}
+    {{parent()}}
+    {% javascripts output="compiled/hopitalnumerique-expert-evenement.js"
+        "@validationEngine_js"
+        'bundles/hopitalnumeriqueexpert/js/evenement.js'
+    %}
+        <script type="text/javascript" src="{{ asset_url }}"></script>
+    {% endjavascripts %}
+{% endblock %}
+
+{% block h1Title %}
+    {% if evenementexpert.id %}
+        Editer un évenement de l'activite <strong>{{activiteExpert.titre}}</strong>
+    {% else %}
+        Ajouter un évenement de l'activite <strong>{{activiteExpert.titre}}</strong>
+    {% endif %}
+{% endblock %}
+
+{% block toolbarButton %}
+    <a class="btn btn-default" href="{{ path('hopitalnumerique_expert_evenement_expert', {'id' : activiteExpert.id}) }}" title="Retour à la liste"><i class="fa fa-reply"></i></a>
+    <div onclick="$('form').submit();" class="btn btn-default" title="Enregistrer"><i class="fa fa-check"></i></div>
+    <div onclick="$('#do').val('save-close');$('form').submit();" class="btn btn-default" title="Enregistrer et Fermer"><i class="fa fa-save"></i></div>
+{% endblock %}
+
+{% block body %}
+    <div class="col-sm-12">
+        <div class="panel panel-midnightblue">
+            <div class="panel-heading">
+                <h4>Informations</h4>
+            </div>
+
+            <div class="panel-body">
+                {% form_theme form 'NodevoAdminBundle::form.html.twig' %}
+                {{ form(form) }}
+
+                <p class="text-muted col-md-offset-3" style="margin-top:30px;"><i>Pour ajouter des types, ajouter des références avec le code TYPE_EVENEMENT.</i></p>
+            </div>
+        </div>
+    </div>
+{% endblock %}

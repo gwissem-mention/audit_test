@@ -231,7 +231,56 @@ class UserRepository extends EntityRepository
         $qb->select('user')
             ->from('HopitalNumeriqueUserBundle:User', 'user')
             ->where('user.roles LIKE :role')
-            ->setParameter('role', '%'.$role.'%');
+            ->setParameter('role', '%'.$role.'%')
+            ->orderBy('user.nom', 'ASC')
+            ->addOrderBy('user.prenom', 'DESC');
+
+        return $qb;
+    }
+    
+    /**
+     * Retourne la liste des utilisateurs possédant les roles demandés
+     *
+     * @param array $role Le rôle demandé
+     *
+     * @return QueryBuilder
+     */
+    public function findUsersByRoles( $roles )
+    {
+        $qb = $this->_em->createQueryBuilder();
+    
+        $qb->select('user')
+            ->from('HopitalNumeriqueUserBundle:User', 'user');
+
+            foreach ($roles as $key => $role) 
+            {
+                $qb->orWhere('user.roles LIKE :role' . $key )
+                    ->setParameter('role'. $key, '%'.$role.'%');
+            }
+
+            $qb->orderBy('user.nom', 'ASC')
+                ->addOrderBy('user.prenom', 'DESC');
+            
+
+        return $qb;
+    }
+    
+    /**
+     * Retourne la liste des utilisateurs étant assigné au domaine
+     *
+     * @param int $idDomaine Identifiant du domaine à filtrer
+     *
+     * @return QueryBuilder
+     */
+    public function findUsersByDomaine( $idDomaine )
+    {
+        $qb = $this->_em->createQueryBuilder();
+    
+        $qb->select('user')
+            ->from('HopitalNumeriqueUserBundle:User', 'user')
+            ->leftJoin('user.domaines', 'domaine')
+            ->where('domaine.id = :idDomaine')
+            ->setParameter('idDomaine', $idDomaine);
 
         return $qb;
     }

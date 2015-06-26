@@ -8,6 +8,8 @@ parameters:
     hopitalnumerique_forum.component.bb_code.tag_integrator.class: HopitalNumerique\ForumBundle\Component\BBCode\TagIntegrator
     #CronLogger
     hopitalnumerique_forum.service.logger.cronlogger.class: HopitalNumerique\ForumBundle\DependencyInjection\Logger\CronLogger
+    #Listener
+    hopitalnumerique_forum.listener.post.class: HopitalNumerique\ForumBundle\EventListener\PostEventListener
     hopitalnumerique_forum.bb_parser.tags:
         - '\CCDNComponent\BBCode\Node\Lexeme\Tag\Format\Bold'
         - '\CCDNComponent\BBCode\Node\Lexeme\Tag\Format\Heading1'
@@ -70,3 +72,10 @@ services:
             - %hopitalnumerique_forum.bb_parser.tags%
         tags:
             - { name: ccdn_component_bb_code.tag }
+    #EventListener
+    #--Post
+    hopitalnumerique_forum.listener.post:
+        class: %hopitalnumerique_forum.listener.post.class%
+        arguments: ["@ccdn_forum_forum.model.post", "@nodevo_mail.manager.mail", "@hopitalnumerique_user.manager.user", "@mailer"]
+        tags:
+            - { name: 'kernel.event_subscriber' }

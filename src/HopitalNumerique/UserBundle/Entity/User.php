@@ -575,6 +575,14 @@ class User extends BaseUser
     protected $domaines;
 
     /**
+     * @var string
+     *
+     * @ORM\Column(name="usr_biographie", nullable=true, type="text")
+     * @Gedmo\Versioned
+     */
+    protected $biographie;
+
+    /**
      * Constructor
      */
     public function __construct()
@@ -1532,6 +1540,27 @@ class User extends BaseUser
     public function setRemarque($remarque)
     {
         $this->remarque = $remarque;
+        return $this;
+    }
+
+    /**
+     * Get biographie
+     *
+     * @return string $biographie
+     */
+    public function getBiographie()
+    {
+        return $this->biographie;
+    }
+    
+    /**
+     * Set biographie
+     *
+     * @param string $biographie
+     */
+    public function setBiographie($biographie)
+    {
+        $this->biographie = $biographie;
         return $this;
     }
     

@@ -227,8 +227,8 @@ class DefaultController extends Controller
 
         $interval     = new \DateInterval('P1M');
         $today        = new \DateTime('now');
-        $notes        = $this->get('hopitalnumerique_objet.manager.note')->findAll();
-        $commentaires = $this->get('hopitalnumerique_objet.manager.commentaire')->findAll();
+        $notes        = $this->get('hopitalnumerique_objet.manager.note')->findNoteByDomaine(1);
+        $commentaires = $this->get('hopitalnumerique_objet.manager.commentaire')->findCommentaireByDomaine(1);
         foreach($publications as $publication) 
         {
             if( $publication['etat'] == 4 || (!is_null($publication['dateDebutPublication']) && $publication['dateDebutPublication'] > $today) || ( !is_null($publication['dateFinPublication']) && $publication['dateFinPublication'] < $today) )
@@ -338,7 +338,7 @@ class DefaultController extends Controller
             'contribution'       => 0
         );
 
-        $users          = $this->get('hopitalnumerique_user.manager.user')->findAll();
+        $users          = $this->get('hopitalnumerique_user.manager.user')->findUsersByDomaine(1);
         $blocUser['nb'] = count($users);
 
         //Get Questionnaire Infos

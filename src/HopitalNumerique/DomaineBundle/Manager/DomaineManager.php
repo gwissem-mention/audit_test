@@ -11,6 +11,16 @@ class DomaineManager extends BaseManager
 {
     protected $_class = 'HopitalNumerique\DomaineBundle\Entity\Domaine';
 
+    /**
+     * Override : Récupère les données pour le grid sous forme de tableau
+     *
+     * @return array
+     */
+    public function getDatasForGrid( \StdClass $condition = null )
+    {
+        return $this->getRepository()->getDatasForGrid( $condition )->getQuery()->getResult();
+    }
+
     public function getDomaineFromHttpHost($httpHost)
     {
         return $this->getRepository()->getDomaineFromHttpHost($httpHost)->getQuery()->getOneOrNullResult();

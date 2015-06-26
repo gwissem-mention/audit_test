@@ -74,6 +74,13 @@ class InterventionDemande
      * @ORM\Column(name="interv_ambassadeur_date_derniere_relance", type="datetime", nullable=true)
      */
     private $ambassadeurDateDerniereRelance;
+
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="interv_date_evaluation", type="datetime", nullable=true)
+     */
+    private $evaluationDate;
     
     /**
      * @var string
@@ -1449,5 +1456,28 @@ class InterventionDemande
         }
 
         return $connaissancesOrdered;
+    }
+
+    /**
+     * Set evaluationDate
+     *
+     * @param \DateTime $evaluationDate
+     * @return InterventionDemande
+     */
+    public function setEvaluationDate($evaluationDate)
+    {
+        $this->evaluationDate = $evaluationDate;
+
+        return $this;
+    }
+
+    /**
+     * Get evaluationDate
+     *
+     * @return \DateTime 
+     */
+    public function getEvaluationDate()
+    {
+        return $this->evaluationDate;
     }
 }

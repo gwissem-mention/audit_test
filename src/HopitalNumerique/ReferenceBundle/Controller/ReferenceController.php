@@ -4,6 +4,9 @@ namespace HopitalNumerique\ReferenceBundle\Controller;
 
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\Request;
+
+use HopitalNumerique\ReferenceBundle\Entity\Reference;
 
 /**
  * Reference controller.
@@ -70,6 +73,18 @@ class ReferenceController extends Controller
         $reference = $this->get('hopitalnumerique_reference.manager.reference')->findOneBy( array('id' => $id) );
 
         return $this->renderForm('hopitalnumerique_reference_reference', $reference, 'HopitalNumeriqueReferenceBundle:Reference:edit.html.twig' );
+    }
+
+    public function saveReferenceAjaxAction(Request $request, Reference $reference)
+    {
+        $montant = $request->request->get('montant');
+        $reference->setLibelle($montant);
+
+        $this->get('hopitalnumerique_reference.manager.reference')->save($reference);
+
+        $response = json_encode(array('success' => true));
+
+        return new Response($response, 200);
     }
 
     /**

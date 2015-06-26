@@ -76,7 +76,8 @@ class SubscriberListener extends CCDNSubscriberListener
                             'categorie'         => $topic->getBoard()->getCategory()->getName(),
                             'theme'             => $topic->getBoard()->getName(),
                             'fildiscusssion'    => $topic->getTitle(),
-                            'lienversmessage'   => 'lien'
+                            'lienversmessage'   => 'lien',
+                            'pseudouser'        => !is_null($user->getPseudonymeForum()) ? $user->getPseudonymeForum() : $user->getNomPrenom()
                         );
                         $mail = $this->mailManager->sendNouveauMessageForumMail($subscription->getOwnedBy(), $options, $topic->getId());
                         $this->mailer->send($mail);

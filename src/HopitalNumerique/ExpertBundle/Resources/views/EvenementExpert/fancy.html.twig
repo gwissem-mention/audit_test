@@ -1,0 +1,95 @@
+<div class="panel panel-midnightblue" style="margin:0" >
+    <div class="panel-heading" style="height:65px">
+        <h4 style="line-height:22px; padding: 10px 0">{{evenementExpert.nom.libelle}} ({{evenementExpert.date|date('d/m/Y')}}) - Gestion des experts liés à cette activité</h4>
+    </div>
+
+    <div class="panel-body" id="panel-experts" >
+        <div class="tableContent" >
+            <table id="experts-tab" class="table" >
+                <thead>
+                    <tr>
+                        <th width="60px" align="center"><input type="checkbox" class="checkAll" /></th>
+                        <th>Nom</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for expert in evenementExpert.experts %}
+                        <tr class="expert expert-{{expert.id}}" data-id="{{expert.expertConcerne.id}}" >
+                            <td align="center">
+                                <input type="checkbox" class="checkbox" id="checkbox-{{expert.expertConcerne.id}}"{% if expert.present %} checked="checked"{% endif %} />
+                            </td>
+
+                            <td>
+                                <label for="checkbox-{{expert.id}}" style="width:100%;">{{expert.expertConcerne.getAppellation()}}</label>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>    
+        </div>
+        
+        <div class="panel-footer" >
+            <div class="row">
+                <div class="btn-toolbar pull-right">
+                    <div onclick="$.fancybox.close(true);" class="btn-danger btn">Fermer</div>
+                    <div onclick="saveExpert();" class="btn-primary btn">Enregistrer</div>
+                    <input type="hidden" id="save-experts-url" value="{{path('hopitalnumerique_expert_expert_expert_parametrage_save',{'id':evenementExpert.id})}}" />
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    $(document).ready(function() {
+        //click de la checkbox globale
+        $('#experts-tab .checkAll').on('click', function(){
+            if( $('.checkAll').prop('checked') ){
+                $('#experts-tab .checkbox').each(function(){
+                    $(this).prop('checked', 'checked');
+                })
+            }else{
+                $('#experts-tab .checkbox').each(function(){
+                    $(this).prop('checked', false);
+                })
+            }
+        });
+    });
+
+    //Sauvegarde les références de l'objet et du contenu
+    function saveExpert()
+    {
+        var experts = [];
+        var loader  = $('.panel-body').nodevoLoader().start();
+
+        $('#experts-tab .expert').each(function() 
+        {
+            //si la référence est cochée, on l'ajoute dans les références à linker
+            if ( $(this).find('.checkbox').prop('checked') ) 
+            {
+                var expert = {};
+
+                //expert id
+                expert = $(this).data('id');
+                experts.push( expert );
+            }
+        });
+
+        //JSONify IT !
+        json = JSON.stringify( experts );
+
+        //save the value
+        $.ajax({
+            url  : $('#save-experts-url').val(),
+            data : {
+                experts : json
+            },
+            type     : 'POST',
+            dataType : 'json',
+            success  : function( data ){
+                loader.finished();
+                $.fancybox.close(true);
+            }
+        });
+    }
+</script>

@@ -10,6 +10,16 @@ $(document).ready(function() {
         });
      }
 
+    $('#partage-mail').fancybox({
+        'padding'   : 0,
+        'autoSize'  : false,
+        'width'     : '50%',
+        'scrolling' : 'no',
+        'showCloseButton' : true,
+        'height' : '432px'
+    });
+
+
     //si on a cacher TOUS les chapitres, on affiche le message empty
     allHidden = true;
     $('#chapitres .chapter').each(function(){

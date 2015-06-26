@@ -1,0 +1,15 @@
+hopital_numerique_expert_admin:
+    resource: "@HopitalNumeriqueExpertBundle/Resources/config/routing/admin.yml"
+    prefix:   /admin
+
+hopital_numerique_expert_front:
+    resource: "@HopitalNumeriqueExpertBundle/Resources/config/routing/front.yml"
+    prefix:   /compte-hn
+
+hopitalnumerique_expert_front_expert:
+    pattern:  /les-experts
+    defaults: { _controller: "HopitalNumeriqueExpertBundle:Front:expert" }
+
+hopitalnumerique_expert_front_expert_biographie:
+    pattern:  /les-experts/{id}/biographie
+    defaults: { _controller: "HopitalNumeriqueExpertBundle:Front:biographie" }

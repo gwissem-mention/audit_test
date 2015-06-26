@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="fr">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="description" content="{% block metadesc %}{{domaineCurrent.nom}}{% endblock %}">
+        <meta name="keywords" content="{% block metakeywords %}{% endblock %}">
+        <meta name="author" content="NODEVO">
+
+        <title>{{domaineCurrent.nom}} - Partage de résultat</title>
+    </head>
+
+    <body>
+        <div class="panel panel-midnightblue" style="margin:0" >
+            <div class="panel-heading" style="height:5px"></div>
+            <div class="clearfix"></div>
+            <div id="panel-partage">
+                <div class="tableContent" id="parametrage">
+                    <div class="content">
+                        <div class="col-md-12 title">
+                            <div class="col-md-12 violet title-autodiag">Parametrage du montant de la vacation</div>
+                        </div>
+                        <div class="col-md-12 body">
+                            <div class="form-label">Montant d'une vacation</div>
+                            <div class="input-group">
+                                <span class="input-group-addon" title="Entrez une adresse e-mail"><i class="fa fa-eur"></i></span>
+                                <input id="montant-vacation" type="text" class="form-control" placeholder="Montant d'une vacation" aria-describedby="basic-addon1" value="{{montantVacation.libelle}}" />
+                                <span class="input-group-addon value-ok"><i class="fa fa-check"></i></span>
+                                <span class="input-group-addon value-search"><i class="fa fa-spinner fa-spin"></i></span>
+                                <span class="input-group-addon no-value"><i class="fa fa-question-circle"></i></span>
+                                <span class="input-group-addon value-ko"><i class="fa fa-ban"></i></span>
+                            </div>
+                            <div class="toolbar">
+                                <div onclick="rechercheEtValidationPartage();" class="btn btn-success pull-right" title="Rechercher & Partager"><i class="fa fa-floppy-o"> </i>Sauvegarder</div>
+                            </div>
+                            <div class="clearfix"></div>
+                        </div>
+                        <div class="clearfix"></div>
+                    </div>
+                </div>
+                <div class="clearfix"></div>
+
+                <input type="hidden" id="url-requete-sauvegarde-montant-vacation" value="{{ path("hopitalnumerique_reference_reference_save_ajax", {'id': 560}) }}" />
+
+            </div>
+            <div class="clearfix"></div>
+        </div>
+    </body>
+    <style type="text/css">
+    #parametrage {padding:15px;height: 273px;}
+    #parametrage .content .title {padding:15px;background-color:#F4F4F4;font-size: 16px; font-weight: bold;}
+    #parametrage .content .title i{color:#1C1C1C;}
+    #parametrage .content .body {padding:15px;background-color:#F4F4F4; margin-top: 10px}
+    #parametrage .content .body .input-group .value-ok{color:#4BA24B;}
+    #parametrage .content .body .input-group .value-ko{color:#C3302C;}
+    #parametrage .content .body .input-group .value-search{color:#1C1C1C;}
+    #parametrage .content .body .input-group .no-value{color:#1C1C1C;}
+    #parametrage .content .body .gestion-label {text-align: center;margin-top: 10px;height: 20px;}
+    #parametrage .content .body .toolbar{margin-top: 10px;}
+    #parametrage .content .body .toolbar .btn i{margin-right: 5px;}
+    </style>
+</html>
+<script type="text/javascript">
+    var requestAjaxRecherche;
+
+    $(document).ready(function() {
+        $('.value-ok, .user-find, .user-find .finish').hide();
+        $('.value-search').hide();
+        $('.no-value').show();
+        $('.value-ko, .no-user').hide();
+    });
+
+    function rechercheEtValidationPartage()
+    {
+        if($('#recherche-user-email').val() != '')
+        {
+            var path   = $('#url-requete-sauvegarde-montant-vacation').val();
+
+            $('.value-ok, .user-find').hide();
+            $('.value-search').show();
+            $('.no-value').hide();
+            $('.value-ko, .no-user').hide();
+
+            if(requestAjaxRecherche != null )
+            {
+                requestAjaxRecherche.abort();
+            }
+
+            requestAjaxRecherche = $.ajax({
+                url      : path,
+                data : {
+                    montant : $('#montant-vacation').val()
+                },
+                type     : 'post',
+                dataType : 'json',
+                success : function( data ){
+                    if(data.success)
+                    {
+                        setTimeout(function(){
+                            $.fancybox.close();
+                        }, 300);
+                    }
+                }
+            });
+        }
+        else
+        {
+            $('.value-ok, .user-find').hide();
+            $('.value-search').hide();
+            $('.no-value').show();
+            $('.value-ko, .no-user').hide();
+        }
+    } 
+</script>

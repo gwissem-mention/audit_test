@@ -10,6 +10,22 @@ use Doctrine\ORM\Query\Expr\Join;
  */
 class DomaineRepository extends EntityRepository
 {
+    /**
+     * Récupère les données du grid sous forme de tableau correctement formaté
+     *
+     * @return Query Builder
+     */
+    public function getDatasForGrid($domainesIds, $condition = null)
+    {
+        $qb = $this->_em->createQueryBuilder();
+        $qb->select('domaine.id, domaine.adresseMailContact, domaine.nom, domaine.url, template.nom as templateNom')
+            ->from('HopitalNumeriqueDomaineBundle:Domaine', 'domaine')
+            ->leftJoin('domaine.template', 'template')
+            ->orderBy('domaine.nom');
+            
+        return $qb;
+    }
+
     public function getDomainesUserConnectedForForm($idUser)
     {
         $qb = $this->_em->createQueryBuilder();

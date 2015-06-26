@@ -204,3 +204,15 @@ stof_doctrine_extensions:
     orm:
         default: 
             loggable: true
+
+#Flux RSS
+eko_feed:
+    feeds:
+        objet:
+            title:       'Publications'
+            description: 'Dernières publications'
+            link:
+                route_name: hopital_numerique_publication_publication_objet
+                route_params: {id: 1}
+            encoding:    'utf-8'
+            author:      'ANAP' # Only required for Atom feeds

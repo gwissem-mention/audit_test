@@ -78,14 +78,6 @@
                     <a href="{{path('hopital_numerique_homepage')}}" class="h1">{{domaineCurrent.nom}}</a>
                     <div class="h2">{{domaineCurrent.description}}</div>
                 </div>
-                <div id="bloc_exalead_header" class="pull-left">
-                    <div id="recherche_textuelle_group">
-                     <span class="bt-recherche pull-right">
-                        <a class="infos btn btn-rose" href="{{path('hopital_numerique_recherche_parcours_homepage_front', {'id' :  1})}}">Parcours guidé</a>
-                        <a class="infos btn btn-orange" href="{{path('hopital_numerique_recherche_homepage')}}" id="search-avance-header-home">Recherche avancée</a>
-                     </span>
-                    </div>
-                </div>
 
                 <div class="loggedUser pull-right">
                     <div class="connexion">
@@ -113,9 +105,9 @@
                     {% endif %}
                 </div>
                 <div id="logoHn" class="pull-right">
-                    {#<a href="http://www.anap.fr/" target="_blank">
+                    <a href="http://www.anap.fr/" target="_blank">
                         <img src="{{asset('bundles/hopitalnumeriquecore/img/logo-anap-small.jpg')}}" alt="ANAP" />
-                    </a>#}
+                    </a>
                     <a href="http://www.sante.gouv.fr/le-programme-hopital-numerique.html" targt="_blank">
                         <img src="{{asset('bundles/hopitalnumeriquecore/img/logo-hn-small.jpg')}}" alt="HOPITAL NUMERIQUE" />
                     </a>

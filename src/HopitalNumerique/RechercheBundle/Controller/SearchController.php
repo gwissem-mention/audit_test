@@ -431,8 +431,8 @@ class SearchController extends Controller
         $cookies = $request->cookies;
 
         //set Cookies vals
-        $showMorePointsDurs  = $cookies->has('showMorePointsDurs')  ? intval($cookies->get('showMorePointsDurs'))  : 2;
-        $showMoreProductions = $cookies->has('showMoreProductions') ? intval($cookies->get('showMoreProductions')) : 2;
+        $showMorePointsDurs  = $cookies->has('showMorePointsDurs')  ? intval($cookies->get('showMorePointsDurs'))  : 3;
+        $showMoreProductions = $cookies->has('showMoreProductions') ? intval($cookies->get('showMoreProductions')) : 3;
 
         //Sauvegarde des stats
         if(!is_null($references))

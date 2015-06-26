@@ -18,7 +18,26 @@ class ActualiteController extends Controller
 
         //render
         return $this->render('HopitalNumeriquePublicationBundle:Actualite:index.html.twig', array(
-            'actualites' => $actualites
+            'actualites' => $actualites,
+            'type'       => 'normal'
+        ));
+    }
+
+    /**
+     * Article ambassadeur
+     */
+    public function ambassadeurAction()
+    {
+        //on récupère les actus
+        $allCategories = $this->get('hopitalnumerique_reference.manager.reference')->findBy( array( 'id' => 570) );
+        $user          = $this->get('security.context')->getToken()->getUser();
+        $role          = $this->get('nodevo_role.manager.role')->getUserRole($user);
+        $actualites    = $this->get('hopitalnumerique_objet.manager.objet')->getActualitesByCategorie( $allCategories, $role );
+
+        //render
+        return $this->render('HopitalNumeriquePublicationBundle:Actualite:index.html.twig', array(
+            'actualites' => $actualites,
+            'type'       => 'ambassadeur'
         ));
     }
 

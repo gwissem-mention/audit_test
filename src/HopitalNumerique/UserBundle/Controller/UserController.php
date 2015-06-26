@@ -807,6 +807,7 @@ class UserController extends Controller
         {
             $form->remove('plainPassword');
             $form->remove('remarque');
+            $form->remove('biographie');
             $form->remove('domaines');
             $form->remove('raisonDesinscription');
             $form->remove('file');

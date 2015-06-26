@@ -1,0 +1,24 @@
+<div id="panel-recherche">
+    <div class="tableContent" id="expression-du-besoin">
+        {% for expBesoin in expBesoins %}
+            <div id="expBesoin-{{expBesoin.id}}" class="expression-du-besoin-form" data-id="{{expBesoin.id}}">
+                {% include "HopitalNumeriqueRechercheBundle:ExpBesoin:Fancy/Partial/expbesoin_nopopin_formulaire.html.twig" with { 'expBesoin':expBesoin } %}
+            </div>
+            <div class="clearfix"></div>
+        {% endfor %}
+
+        <input type="hidden" id="expBesoin-actif-id" value="" />
+        <input type="hidden" id="reponses-json" value="{{ reponses }}" />
+
+    </div>
+    <div class="clearfix"></div>
+
+    <input type="hidden" id="url-modification-session-recherche" value="{{ path("hopital_numerique_expbesoin_modification_session_recherche") }}" />
+    <input type="hidden" id="url-recherche" value="{{ path("hopital_numerique_recherche_homepage") }}" />
+    <input type="hidden" id="url-sauvegarde-clic-stat" value="{{ path("hopital_numerique_expbesoin_stat_add") }}" />
+
+</div>
+<div class="clearfix"></div>
+
+{# Sauvegarde des différents clics des réponses #}
+<input type="hidden" id="order-clic" value="[]" />

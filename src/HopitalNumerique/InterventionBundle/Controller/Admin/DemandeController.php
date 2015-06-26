@@ -7,6 +7,7 @@
 namespace HopitalNumerique\InterventionBundle\Controller\Admin;
 
 use HopitalNumerique\InterventionBundle\Entity\InterventionDemande;
+use HopitalNumerique\InterventionBundle\Entity\InterventionEvaluationEtat;
 
 /**
  * Contrôleur des demandes d'intervention pour la console administrative.
@@ -98,5 +99,40 @@ class DemandeController extends \HopitalNumerique\InterventionBundle\Controller\
         }
         
         return $this->get('hopitalnumerique_intervention.manager.intervention_demande')->getExportCsv($primaryKeys, $this->container->getParameter('kernel.charset'));
+    }
+    
+    /**
+     * Evaluer en masse les demandes d'intervention.
+     *
+     * @param array $primaryKeys    ID des lignes sélectionnées
+     * @param boolean $allPrimaryKeys 
+     *
+     * @return Redirect
+     */
+    public function evaluationMassAction($primaryKeys, $allPrimaryKeys)
+    {
+        if ($allPrimaryKeys == 1){
+            $rawDatas = $this->get('hopitalnumerique_intervention.manager.intervention_demande')->findAll();
+            foreach($rawDatas as $data)
+            {
+                $primaryKeys[] = $data->getId();
+            }
+        }
+
+        $interventionDemandes = $this->get('hopitalnumerique_intervention.manager.intervention_demande')->findBy(array('id' => $primaryKeys));
+
+        //Lance les workflow de chaque passage à évaluer
+        foreach ($interventionDemandes as $interventionDemande) 
+        {
+            if (is_null($interventionDemande->getEvaluationEtat()) || $interventionDemande->getEvaluationEtat()->getId() !== InterventionEvaluationEtat::getInterventionEvaluationEtatEvalueId())
+            {
+                $interventionDemande->setRemboursementEtat( $this->get('hopitalnumerique_reference.manager.reference')->findOneBy(array('id' => 5)) );
+                
+                $this->get('hopitalnumerique_intervention.manager.intervention_demande')->changeEtat($interventionDemande, $this->container->get('hopitalnumerique_intervention.manager.intervention_etat')->getInterventionEtatTermine());
+                $this->get('hopitalnumerique_intervention.manager.intervention_demande')->changeEvaluationEtat($interventionDemande, $this->container->get('hopitalnumerique_intervention.manager.intervention_evaluation_etat')->getInterventionEvaluationEtatEvalue());
+            }
+        }
+        
+        return $this->redirect( $this->generateUrl('hopital_numerique_intervention_admin_liste') );
     }
 }

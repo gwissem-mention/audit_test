@@ -1,0 +1,31 @@
+{% block fancybox %}
+    <div id="biographie">
+        <div class="col-md-5">
+            <img width="100%" src="{{user.getWebPath()}}" title="{{user.getAppellation()}}" alt="Photo de user.getAppellation()}}" />
+        </div>
+        <div class="col-md-7">
+            <h2>{{user.getPrenomNom()}}</h2>
+            <div class="biographie-user">
+                {% if user.biographie is not null %}
+                    {{user.biographie|raw}}
+                {% else %}
+                    <span class="text-muted">Biographie en cours de rédaction...</span>
+                {% endif %}
+            </div>
+        </div>
+        
+        <div class="clearfix"></div>
+
+    </div>
+
+    <style type="text/css">
+        #biographie {padding: 30px 15px; }
+        h2 {color:#d60030; margin-top:0;}
+    </style>
+
+    <script type="text/javascript">
+        $(document).ready(function() {
+
+        });
+    </script>
+{% endblock %}

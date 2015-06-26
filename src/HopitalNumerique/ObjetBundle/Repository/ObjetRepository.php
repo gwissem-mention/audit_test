@@ -88,6 +88,37 @@ class ObjetRepository extends EntityRepository
     }
     
     /**
+     * Récupère les objets pour le flux RSS
+     *
+     * @return QueryBuilder
+     */
+    public function getObjetsForRSS()
+    {
+        $qb = $this->_em->createQueryBuilder();
+        $qb->select('obj')
+            ->from('HopitalNumeriqueObjetBundle:Objet', 'obj')
+            ->where('obj.etat = :idEtat')
+            ->leftJoin('obj.types','refTypes')
+            ->andWhere(
+                $qb->expr()->orx(
+                    $qb->expr()->andX(
+                        $qb->expr()->isNotNull('refTypes.parent'),
+                        $qb->expr()->eq('refTypes.code', ':code_artcle')
+                    ),
+                    $qb->expr()->eq('refTypes.code', ':code_objet')
+                )
+            )
+            ->setParameters(array(
+                'idEtat'      => 3,
+                'code_artcle' => 'CATEGORIE_ARTICLE',
+                'code_objet'  => 'CATEGORIE_OBJET'
+            ))
+            ->orderBy('obj.dateCreation', 'DESC');
+        
+        return $qb;
+    }
+    
+    /**
      * Récupère les objets pour un ambassadeur passé en param
      *
      * @return QueryBuilder
@@ -205,7 +236,11 @@ class ObjetRepository extends EntityRepository
             ->from('HopitalNumeriqueObjetBundle:Objet', 'obj')
             ->innerJoin('obj.types','refType')
             ->leftJoin('obj.etat','refEtat')
-            ->leftJoin('refType.parent','parentType');
+            ->leftJoin('refType.parent','parentType')
+            ->leftJoin('obj.domaines','domaine')
+                ->where('domaine.id = :idDomaine')
+                ->setParameter('idDomaine', 1)
+            ;
         
         return $qb;
     }

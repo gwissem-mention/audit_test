@@ -2,7 +2,7 @@
 
 {% block file_widget %}
     {% spaceless %}
-        {% if data is not null or data is not empty %}
+        {% if (data is not null or data is not empty) and data.id is defined %}
             <a id="downloadFile{{ id }}" href="{{path('hopitalnumerique_reponse_download', {'reponse':data.id})}}">{{ data.lib }}</a>
             <input id={{ id }} type="{{ type }}" {{ block('widget_attributes') }} {% if value is not empty %}value="{{ value }}" {% endif %}/>
             <script>$('#{{ id }}').addClass('inputFile{{ id }}') ;$('.inputFile{{ id }}').hide();</script>
