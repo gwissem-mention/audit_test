@@ -117,50 +117,32 @@ class FrontController extends Controller
     {
         $users   = $this->get('hopitalnumerique_user.manager.user')->findUsersByRole('ROLE_EXPERT_6');
         $experts = array();
+        $images  = array();
 
-        $images = array(
-            '1329' => '',
-            '254' => '',
-            '1335' => '',
-            '1328' => '',
-            '1333' => '',
-            '1325' => '',
-            '1188' => '',
-            '1326' => '',
-            '1114' => '',
-            '1572' => '',
-            '1334' => '',
-            '1090' => '',
-            '1331' => '',
-            '1025' => ''
-        );
+        foreach ($users as $user) 
+        {
+            $images[$user->getId()] = $user->getNom();
+        }
 
         foreach ($users as $user) 
         {
             if(array_key_exists($user->getId(), $images))
             {
-                $images[$user->getId()] = $user->getWebPath(); 
-                $experts[$user->getId()] = $user->getAppellation(); 
+                if(!is_null($user->getWebPath()))
+                {
+                    $images[$user->getId()] = $user->getWebPath(); 
+                    $experts[$user->getId()] = $user->getAppellation(); 
+                }
+                else
+                {
+                    unset($images[$user->getId()]);
+                }
             }
         }
-
-        $images = $this->shuffle_assoc($images);
 
         return $this->render('HopitalNumeriqueExpertBundle:Front:expert.html.twig', array(
             'mosaiques' => $images,
             'experts'   => $experts
         ));
     }
-
-    private function shuffle_assoc($list) { 
-      if (!is_array($list)) return $list; 
-
-      $keys = array_keys($list); 
-      shuffle($keys); 
-      $random = array(); 
-      foreach ($keys as $key) { 
-        $random[$key] = $list[$key]; 
-      }
-      return $random; 
-    } 
 }
