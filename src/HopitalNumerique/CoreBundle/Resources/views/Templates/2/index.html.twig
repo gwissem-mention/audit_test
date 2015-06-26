@@ -77,6 +77,7 @@
 </head>
 <body>
 {% include 'NodevoCookieBundle:Cookie:index.html.twig' %}
+{{ block('flashBags') }}
 <div class="homepage" id="body">
     <div class="col-md-12 no-padding" id="header-container">
         <div id="header" class="col-md-12">
@@ -220,7 +221,6 @@
     </div>
 <div class="col-md-12 no-padding" id="content">
 
-    {{ block('flashBags') }}
     {% if error is defined and error %}
         <div class="alert nalert-warning" onclick="$(this).slideUp();" >
             {{ error.messageKey|trans(error.messageData, 'security') }}
@@ -246,9 +246,9 @@
             </div>
             <div class="block-home-menu autodiag col-md-3 col-sm-6 col-xs-12">
                 <div class="col-md-12 no-padding" style="background:url({{asset('bundles/hopitalnumeriquecore/img/02-bloc-AUTODIAG.jpg')}}) no-repeat top center;-webkit-background-size:cover;-moz-background-size:cover;-o-background-size:cover;background-size:cover;">
-                    <a href="/publication/438-MonHopitalNumerique.fr" class="img-link"></a>
+                    <a href="/publication/article/438-MonHopitalNumerique.fr" class="img-link"></a>
                     <div class="block-bottom">
-                        <a href="/publication/438-MonHopitalNumerique.fr"></a>
+                        <a href="/publication/article/438-MonHopitalNumerique.fr"></a>
                         <h2>AUTODIAGNOSTIC</h2>
                         <p><img src="{{asset('bundles/hopitalnumeriquecore/img/picto-autodiag.png')}}" alt="Autodiagnostic"/></p>
                     </div>
