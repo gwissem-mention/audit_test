@@ -72,7 +72,7 @@ class ObjetType extends AbstractType
 
                     //cas objet existe + is ARTICLE
                     if( $datas->isArticle() ){
-                        $qb->andWhere('ref.id != 188','ref.code = :article')
+                        $qb->andWhere('ref.id != 188','ref.id != 570','ref.code = :article')
                            ->setParameter('article', 'CATEGORIE_ARTICLE');
                     //cas objet existe + is OBJET
                     }elseif( !$datas->isArticle() ) {
