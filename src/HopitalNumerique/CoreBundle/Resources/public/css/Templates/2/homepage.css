@@ -738,6 +738,8 @@ div.homepage  {
     color:#d60030;
 }
 
+#slide .slick-list{height: 100%}
+#slide .slick-list .slick-track{height: 100%}
 #sidebar{min-height: 500px; background-color: #F1F1F1;}
 
 #search-help {height: 215px; padding-left: 30px;}
