@@ -56,36 +56,15 @@ $(document).ready(function(){
             $('.carte-france-hover').stop().fadeIn(200);
         }
     )
-
-    // $("#slide img.uploadedFile").height($("#sidebar").height());
-
-    // if($("#slide img.uploadedFile").height() > $("#sidebar").height())
-    // {
-    //     $("#slide img.uploadedFile").height($("#sidebar").height());
-    // }
-    // else
-    // {
-    //     $("#sidebar").height($("#slide img.uploadedFile").height());
-    // }
 });
 
 $( window ).resize(function() {
     if($( window ).width() > 990 )
     {
-        if($("#slide img.uploadedFile").height() < 570)
-        {
-            $("#slide img.uploadedFile").height('100%');
-            $("#slide img.uploadedFile").width('auto');
-        }
-        else
-        {
-            $("#slide img.uploadedFile").height('auto');
-            $("#slide img.uploadedFile").width('100%');
-        }
-    }
-    else
-    {
-        $("#slide").height($("#slide img.uploadedFile").height());
+        $("#slide").height($("#sidebar").height());
+        $("#slide .slick-list").height($("#sidebar").height());
+        $("#slide .slick-list .slick-track").height($("#sidebar").height());
+        $("#slide .slick-list .slick-track .image-slide").height($("#sidebar").height());
     }
 });
 
