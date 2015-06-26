@@ -391,7 +391,7 @@ div.homepage  {
 }
 #block-last-publications {
     color: #d60030;
-    padding: 10px 10px 10px 20px;
+    padding: 10px 10px 0 20px;
     background-color: #F1F1F1;
 }
 #block-last-publications ul {
@@ -443,8 +443,7 @@ div.homepage  {
 }
 #block-fil-discussion ul li {
     color: #d60030;
-    margin-bottom: 10px;
-    border-bottom: dotted 1px #fff;
+    margin-bottom: 5px;
     font-size: 0.9em;
 }
 #block-fil-discussion h2{
@@ -741,7 +740,7 @@ div.homepage  {
 
 #slide .slick-list{height: 100%}
 #slide .slick-list .slick-track{height: 100%}
-#sidebar{min-height: 500px; background-color: #F1F1F1;}
+#sidebar{min-height: 400px; background-color: #F1F1F1;}
 
 #search-help {height: 215px; padding-left: 30px;}
 #search-help #expression-du-besoin {padding:15px;height: auto;}
