@@ -56,6 +56,13 @@ $(document).ready(function(){
             $('.carte-france-hover').stop().fadeIn(200);
         }
     )
+    if($( window ).width() > 990 )
+    {
+        $("#slide").height($("#sidebar").height());
+        $("#slide .slick-list").height($("#sidebar").height());
+        $("#slide .slick-list .slick-track").height($("#sidebar").height());
+        $("#slide .slick-list .slick-track .image-slide").height($("#sidebar").height());
+    }
 });
 
 $( window ).resize(function() {

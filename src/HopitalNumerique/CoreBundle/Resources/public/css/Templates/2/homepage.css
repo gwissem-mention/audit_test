@@ -239,6 +239,7 @@ div.homepage  {
     position:absolute; 
     width:400px; 
     right:0;
+    top:0;
 }
 
 #slide .slick-prev-custom {
