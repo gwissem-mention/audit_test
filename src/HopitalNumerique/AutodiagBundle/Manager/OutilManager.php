@@ -188,9 +188,9 @@ class OutilManager extends BaseManager
         {
             $chapitreCaracteristiques['moyenne'] += $moyenneChapitreByResultat['moyenne'];
         }
-        $chapitreCaracteristiques['moyenne'] = $chapitreCaracteristiques['moyenne'] / count($moyennesChapitreByResultat);
-        $chapitreCaracteristiques['decile2'] = $moyennesChapitreByResultat[ceil(count($moyennesChapitreByResultat) * 0.2) - 1]['moyenne'];
-        $chapitreCaracteristiques['decile8'] = $moyennesChapitreByResultat[ceil(count($moyennesChapitreByResultat) * 0.8) - 1]['moyenne'];
+        $chapitreCaracteristiques['moyenne'] = count($moyennesChapitreByResultat) !== 0 ? $chapitreCaracteristiques['moyenne'] / count($moyennesChapitreByResultat) : 0;
+        $chapitreCaracteristiques['decile2'] = count($moyennesChapitreByResultat) !== 0 ? $moyennesChapitreByResultat[ceil(count($moyennesChapitreByResultat) * 0.2) - 1]['moyenne'] : 0;
+        $chapitreCaracteristiques['decile8'] = count($moyennesChapitreByResultat) !== 0 ? $moyennesChapitreByResultat[ceil(count($moyennesChapitreByResultat) * 0.8) - 1]['moyenne'] : 0;
         
         $chapitreCaracteristiques['moyennePourcentage'] = intval($chapitreCaracteristiques['moyenne'] * 100);
         $chapitreCaracteristiques['decile2Pourcentage'] = intval($chapitreCaracteristiques['decile2'] * 100);
