@@ -219,6 +219,7 @@ class AmbassadeurController extends Controller
         //Changement du rôle à ambassadeur de l'utilisateur
         $role = $this->get('nodevo_role.manager.role')->findOneBy(array('role' => 'ROLE_AMBASSADEUR_7'));
         $user->setRoles( array( $role ) );
+        $user->setAlreadyBeAmbassadeur(true);
 
         $CMSI = $this->get('hopitalnumerique_user.manager.user')->findUsersByRoleAndRegion($user->getRegion(), 'ROLE_ARS_CMSI_4');
         //Envoie du mail de validation de la candidature

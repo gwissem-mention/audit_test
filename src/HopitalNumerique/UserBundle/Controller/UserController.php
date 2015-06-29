@@ -918,6 +918,14 @@ class UserController extends Controller
                         //--BO--
                         //set Role for User : not mapped field
                         $user->setRoles( array( $role->getRole() ) );
+                        if( $role->getRole() == 'ROLE_AMBASSADEUR_7' )
+                        {
+                            $user->setAlreadyBeAmbassadeur(true);
+                        }
+                        elseif( $role->getRole() == 'ROLE_EXPERT_6' )
+                        {
+                            $user->setAlreadyBeExpert(true);
+                        }
                         $this->get('event_dispatcher')->dispatch( 'user_nodevo.update', new UserEvent($user));
                     }
                 }

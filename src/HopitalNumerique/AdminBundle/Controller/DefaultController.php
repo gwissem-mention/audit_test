@@ -377,11 +377,11 @@ class DefaultController extends Controller
             $questionnairesByUser = array_key_exists($user->getId(), $questionnaireByUser) ? $questionnaireByUser[ $user->getId() ] : array();
             
             //Récupèration d'un booléen : Vérification de réponses pour le questionnaire expert, que son role n'est pas expert et que sa candidature n'a pas encore été refusé
-            if (in_array($idExpert, $questionnairesByUser) && !$user->hasRoleExpert() && !$this->get('hopitalnumerique_user.manager.refus_candidature')->refusExisteByUserByQuestionnaire($user->getId(), $idExpert, $refusCandidature))
+            if (in_array($idExpert, $questionnairesByUser) && !$user->hasRoleExpert() && !$user->getAlreadyBeExpert() && !$this->get('hopitalnumerique_user.manager.refus_candidature')->refusExisteByUserByQuestionnaire($user->getId(), $idExpert, $refusCandidature))
                 $blocUser['expCandidats']++;
             
             //Récupèration d'un booléen : Vérification de réponses pour le questionnaire expert, que son role n'est pas expert et que sa candidature n'a pas encore été refusé
-            if (in_array($idAmbassadeur, $questionnairesByUser) && !$user->hasRoleAmbassadeur() && !$this->get('hopitalnumerique_user.manager.refus_candidature')->refusExisteByUserByQuestionnaire($user->getId(), $idAmbassadeur, $refusCandidature))
+            if (in_array($idAmbassadeur, $questionnairesByUser) && !$user->hasRoleAmbassadeur() && !$user->getAlreadyBeAmbassadeur() && !$this->get('hopitalnumerique_user.manager.refus_candidature')->refusExisteByUserByQuestionnaire($user->getId(), $idAmbassadeur, $refusCandidature))
                 $blocUser['ambCandidats']++;
 
             if (in_array($idExpert, $questionnairesByUser) && !$this->get('hopitalnumerique_user.manager.refus_candidature')->refusExisteByUserByQuestionnaire($user->getId(), $idExpert, $refusCandidature))

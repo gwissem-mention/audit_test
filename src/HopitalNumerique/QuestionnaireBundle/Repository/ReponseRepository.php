@@ -119,9 +119,13 @@ class ReponseRepository extends EntityRepository
             ->from('\HopitalNumerique\QuestionnaireBundle\Entity\Reponse', 'reponse')
             ->leftJoin('reponse.question', 'question')
             ->leftJoin('reponse.user', 'user')
-            ->leftJoin('question.questionnaire', 'questionnaire', 'WITH', 'questionnaire.id = :expertId OR questionnaire.id = :ambassadeurId')
-            ->setParameter('expertId', $idExpert)
-            ->setParameter('ambassadeurId', $idAmbassadeur)
+            ->leftJoin('question.questionnaire', 'questionnaire')
+                // ->where('questionnaire.id = :expertId OR questionnaire.id = :ambassadeurId')
+                // ->setParameters(array(
+                //         'expertId'      => $idExpert,
+                //         'ambassadeurId' => $idAmbassadeur
+                //     )
+                // )
             ->groupBy('user, questionnaire');
         
         return $qb->getQuery();

@@ -583,20 +583,36 @@ class User extends BaseUser
     protected $biographie;
 
     /**
+     * @var boolean
+     *
+     * @ORM\Column(name="usr_already_be_ambassadeur", type="boolean", options = {"comment" = "A deja ete ambassadeur ?"})
+     */
+    protected $alreadyBeAmbassadeur;
+
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="usr_already_be_expert", type="boolean", options = {"comment" = "A deja ete expert ?"})
+     */
+    protected $alreadyBeExpert;
+
+    /**
      * Constructor
      */
     public function __construct()
     {
         parent::__construct();
         
-        $this->objets     = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->username   = '';
-        $this->pseudonymeForum = '';
-        $this->enabled    = 1;
-        $this->civilite   = array();
-        $this->lock       = false;
-        $this->archiver   = false;
-        $this->nbVisites  = 0;
+        $this->objets               = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->username             = '';
+        $this->pseudonymeForum      = '';
+        $this->enabled              = 1;
+        $this->civilite             = array();
+        $this->lock                 = false;
+        $this->archiver             = false;
+        $this->alreadyBeAmbassadeur = false;
+        $this->alreadyBeExpert      = false;
+        $this->nbVisites            = 0;
     }
 
     public function getConfirmationToken()
@@ -1229,6 +1245,46 @@ class User extends BaseUser
     public function setArchiver($archiver)
     {
         $this->archiver = $archiver;
+    }
+
+    /**
+     * Get alreadyBeAmbassadeur
+     *
+     * @return boolean $alreadyBeAmbassadeur
+     */
+    public function getAlreadyBeAmbassadeur()
+    {
+        return $this->alreadyBeAmbassadeur;
+    }
+    
+    /**
+     * Set alreadyBeAmbassadeur
+     *
+     * @param boolean $alreadyBeAmbassadeur
+     */
+    public function setAlreadyBeAmbassadeur($alreadyBeAmbassadeur)
+    {
+        $this->alreadyBeAmbassadeur = $alreadyBeAmbassadeur;
+    }
+
+    /**
+     * Get alreadyBeExpert
+     *
+     * @return boolean $alreadyBeExpert
+     */
+    public function getAlreadyBeExpert()
+    {
+        return $this->alreadyBeExpert;
+    }
+    
+    /**
+     * Set alreadyBeExpert
+     *
+     * @param boolean $alreadyBeExpert
+     */
+    public function setAlreadyBeExpert($alreadyBeExpert)
+    {
+        $this->alreadyBeExpert = $alreadyBeExpert;
     }
 
     /**
