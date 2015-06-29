@@ -100,6 +100,7 @@
         #resultats #graphiques .tableContainer{overflow: hidden; overflow-x:auto;}
         #resultats #graphiques .table .vertical-align{vertical-align: middle}
         #resultats #graphiques .table .reverse{cursor:pointer;}
+        #resultats #taux-remplissage-radar tbody tr td{font-size: 11px;}
         
     /* Process */
     #resultats #process_bloc {}
