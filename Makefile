@@ -61,9 +61,9 @@ maj-prod:
 	sudo chmod -R 777 app/cache app/logs;
 	php -d memory_limit=-1 app/console c:cl --env=prod;
 	sudo chmod -R 777 app/cache app/logs;
+        sudo php -d memory_limit=-1 app/console d:s:u --dump-sql;
+        sudo php -d memory_limit=-1 app/console d:s:u --force
 	php -d memory_limit=-1 app/console a:i --env=prod;
 	sudo chmod -R 777 app/cache app/logs;
 	php -d memory_limit=-1 app/console a:d --env=prod;
 	sudo chmod -R 777 app/cache app/logs;
-	sudo php -d memory_limit=-1 app/console d:s:u --dump-sql;
-	sudo php -d memory_limit=-1 app/console d:s:u --force
