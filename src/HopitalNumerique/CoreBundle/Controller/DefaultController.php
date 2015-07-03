@@ -44,7 +44,7 @@ class DefaultController extends Controller
               $forumName = "Ambassadeurs";
               break;
             case 'ROLE_EXPERT_6':
-              $idForum = 3;
+              $idForum = 2;
               $forumName = "Experts";
               break;
             case 'ROLE_ARS_CMSI_4':

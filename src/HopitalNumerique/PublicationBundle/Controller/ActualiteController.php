@@ -29,7 +29,7 @@ class ActualiteController extends Controller
     public function ambassadeurAction()
     {
         //on récupère les actus
-        $allCategories = $this->get('hopitalnumerique_reference.manager.reference')->findBy( array( 'id' => 570) );
+        $allCategories = $this->get('hopitalnumerique_reference.manager.reference')->findBy( array( 'parent' => 570) );
         $user          = $this->get('security.context')->getToken()->getUser();
         $role          = $this->get('nodevo_role.manager.role')->getUserRole($user);
         $actualites    = $this->get('hopitalnumerique_objet.manager.objet')->getActualitesByCategorie( $allCategories, $role );
