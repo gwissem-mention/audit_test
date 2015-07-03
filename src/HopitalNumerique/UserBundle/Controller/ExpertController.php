@@ -127,6 +127,7 @@ class ExpertController extends Controller
         //Changement du rôle à ambassadeur de l'utilisateur
         $role = $this->get('nodevo_role.manager.role')->findOneBy(array('role' => 'ROLE_EXPERT_6'));
         $user->setRoles( array( $role ) );
+        $user->setAlreadyBeExpert(true);
     
         //Envoie du mail de validation de la candidature
         $mail = $this->get('nodevo_mail.manager.mail')->sendValidationCandidatureExpertMail($user);

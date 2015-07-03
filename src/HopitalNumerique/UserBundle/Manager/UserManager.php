@@ -90,12 +90,14 @@ class UserManager extends BaseManager
             //Récupèration d'un booléen : Vérification de réponses pour le questionnaire expert, que son role n'est pas expert et que sa candidature n'a pas encore été refusé
             $user['expert'] = (in_array($idExpert, $questionnairesByUser) 
                                         && !in_array('ROLE_EXPERT_6', $user["roles"]) 
-                                        && !$this->_managerRefusCandidature->refusExisteByUserByQuestionnaire($user['id'], $idExpert, $refusCandidature));
+                                        && !$this->_managerRefusCandidature->refusExisteByUserByQuestionnaire($user['id'], $idExpert, $refusCandidature)
+                                        && !$user["alreadyBeExpert"]);
             
-            //Récupèration d'un booléen : Vérification de réponses pour le questionnaire expert, que son role n'est pas expert et que sa candidature n'a pas encore été refusé
+            //Récupèration d'un booléen : Vérification de réponses pour le questionnaire ambassadeur, que son role n'est pas expert et que sa candidature n'a pas encore été refusé
             $user['ambassadeur'] = (in_array($idAmbassadeur, $questionnairesByUser) 
                                         && !in_array('ROLE_AMBASSADEUR_7', $user["roles"]) 
-                                        && !$this->_managerRefusCandidature->refusExisteByUserByQuestionnaire($user['id'], $idAmbassadeur, $refusCandidature));
+                                        && !$this->_managerRefusCandidature->refusExisteByUserByQuestionnaire($user['id'], $idAmbassadeur, $refusCandidature)
+                                        && !$user["alreadyBeAmbassadeur"]);
             
             $dateCourante = new \DateTime($user['contra']);
             $dateCourante->add($interval);

@@ -25,6 +25,8 @@ class UserRepository extends EntityRepository
                         user.email, 
                         user.nom, 
                         user.prenom,
+                        user.alreadyBeAmbassadeur,
+                        user.alreadyBeExpert,
                         refRegion.libelle as region, 
                         user.roles,
                         refEtat.libelle as etat, 
