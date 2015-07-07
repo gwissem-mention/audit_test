@@ -373,7 +373,14 @@ class ObjetController extends Controller
 
                 //Object security isArticle = false
                 if( is_null($objet->isArticle()) )
+                {
                     $objet->setArticle( false );
+                }
+                else
+                {
+                    $domaines = $this->get('hopitalnumerique_domaine.manager.domaine')->findBy(array('id' =>1 ));
+                    $objet->setDomaines($domaines);
+                }
                 
                 //Met à jour la date de modification
                 $notify = $form->get("modified")->getData();
