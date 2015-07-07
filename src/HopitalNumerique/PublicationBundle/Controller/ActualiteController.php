@@ -44,7 +44,7 @@ class ActualiteController extends Controller
     /**
      * Article Action
      */
-    public function categorieAction($id, $libelle)
+    public function categorieAction($id, $libelle, $type)
     {
         //on récupère les actus
         $categories = $this->get('hopitalnumerique_reference.manager.reference')->findBy( array( 'id' => $id) );
@@ -54,23 +54,32 @@ class ActualiteController extends Controller
 
         //render
         return $this->render('HopitalNumeriquePublicationBundle:Actualite:index.html.twig', array(
-            'actualites' => $actualites
+            'actualites' => $actualites,
+            'type'       => $type
         ));
     }
 
     /**
      * Partial render : bloc liste des actualités colonne left
      */
-    public function actualitesAction()
+    public function actualitesAction($type)
     {
-        $allCategories = $this->get('hopitalnumerique_reference.manager.reference')->findBy( array( 'parent' => 188) );
+        if('ambassadeur' === $type)
+        {
+            $allCategories = $this->get('hopitalnumerique_reference.manager.reference')->findBy( array( 'parent' => 570) );
+        }
+        else
+        {
+            $allCategories = $this->get('hopitalnumerique_reference.manager.reference')->findBy( array( 'parent' => 188) );
+        }
 
         //Show categ with articles only
         $categories = $this->get('hopitalnumerique_objet.manager.objet')->getCategoriesWithArticles( $allCategories );
 
         //render
         return $this->render('HopitalNumeriquePublicationBundle:Actualite:actualites.html.twig', array(
-            'categories' => $categories
+            'categories' => $categories,
+            'type'       => $type
         ));
     }
 }

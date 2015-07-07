@@ -104,7 +104,19 @@ class PublicationController extends Controller
 
         //Si l'user connecté à le rôle requis pour voir l'objet
         if( $this->checkAuthorization( $objet ) === false )
-            return $this->redirect( $this->generateUrl('hopital_numerique_homepage') );
+        {
+            if(is_null($alias))
+            {
+                $urlPublication = $this->generateUrl('hopital_numerique_publication_publication_contenu_without_alias', array('id' => $id, 'idc' => $idc));
+            }
+            else
+            {
+                $urlPublication = $this->generateUrl('hopital_numerique_publication_publication_contenu', array('id' => $id, 'idc' => $idc, 'alias' => $alias, 'aliasc' => $aliasc));
+            }
+            $urlPublication = rtrim(strtr(base64_encode($urlPublication), '+/', '-_'), '=');
+            return $this->redirect( $this->generateUrl('account_login', array('urlToRedirect' => $urlPublication) ) );
+            // return $this->redirect( $this->generateUrl('hopital_numerique_homepage') );
+        }
 
         //on récupère le contenu
         $contenu = $this->get('hopitalnumerique_objet.manager.contenu')->findOneBy( array( 'id' => $idc ) );
@@ -203,7 +215,12 @@ class PublicationController extends Controller
 
         //Si l'user connecté à le rôle requis pour voir l'objet
         if( $this->checkAuthorization( $objet ) === false )
-            return $this->redirect( $this->generateUrl('hopital_numerique_homepage') );
+        {
+            $urlPublication = $this->generateUrl('hopital_numerique_publication_publication_article', array('categorie' => $categorie, 'id' => $id, 'alias' => $alias));
+            $urlPublication = rtrim(strtr(base64_encode($urlPublication), '+/', '-_'), '=');
+            return $this->redirect( $this->generateUrl('account_login', array('urlToRedirect' => $urlPublication) ) );
+            // return $this->redirect( $this->generateUrl('hopital_numerique_homepage') );
+        }
 
         //on récupère l'item de menu courant
         $request     = $this->get('request');
