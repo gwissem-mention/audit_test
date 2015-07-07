@@ -48,12 +48,42 @@ class SessionController extends Controller
      */
     public function addAction(\HopitalNumerique\ModuleBundle\Entity\Module $module)
     {
+        $sessions = $this->get('hopitalnumerique_module.manager.session')->findAll();
+        $sessionsToSave = array();
+
+        foreach ($sessions as $session) 
+        {
+            $restrictionsNew = $this->get('nodevo_role.manager.role')->getRoleByArrayName(array('ROLE_ANAP_MEMBRES_2', 'ROLE_ADMINISTRATEUR_1', 'ROLE_EXPERT_6'));
+
+            foreach ($restrictionsNew as $new) 
+            {
+                $existe = false;
+                foreach ($session->getRestrictionAcces() as $restriction) 
+                {
+                    if($restriction->getId() === $new->getId())
+                    {
+                        $existe = true;
+                        break;
+                    }
+                }
+                if(!$existe)
+                {
+                    $session->addRestrictionAcces($new);
+                }
+            }
+
+            $sessionsToSave[] = $session;
+        }
+
+        $this->get('hopitalnumerique_module.manager.session')->save($sessionsToSave);
+        die('die');
+
         $session = $this->get('hopitalnumerique_module.manager.session')->createEmpty();
         //Valeurs par défaut lors de la création
         $session->setModule( $module );
         $session->setEtat($this->get('hopitalnumerique_reference.manager.reference')->findOneBy( array( 'id' => 403) ));
         $session->getDefaultValueFromModule();
-        $session->setRestrictionAcces($this->get('nodevo_role.manager.role')->getRoleByArrayName(array('ROLE_AMBASSADEUR_7', 'ROLE_ARS_CMSI_4', 'ROLE_ARS_-_HORS_CMSI_100', 'ROLE_ARS_-_CMSI_101', 'ROLE_GCS_12')));
+        $session->setRestrictionAcces($this->get('nodevo_role.manager.role')->getRoleByArrayName(array('ROLE_AMBASSADEUR_7', 'ROLE_ARS_CMSI_4', 'ROLE_ARS_-_HORS_CMSI_100', 'ROLE_ARS_-_CMSI_101', 'ROLE_GCS_12', 'ROLE_ANAP_MEMBRES_2', 'ROLE_ADMINISTRATEUR_1', 'ROLE_EXPERT_6')));
 
         return $this->renderForm('hopitalnumerique_module_session', $session, 'HopitalNumeriqueModuleBundle:Back/Session:edit.html.twig' );
     }
