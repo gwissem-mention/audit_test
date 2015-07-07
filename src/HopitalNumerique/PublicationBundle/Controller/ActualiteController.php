@@ -44,7 +44,7 @@ class ActualiteController extends Controller
     /**
      * Article Action
      */
-    public function categorieAction($id, $libelle)
+    public function categorieAction($id, $libelle, $type)
     {
         //on récupère les actus
         $categories = $this->get('hopitalnumerique_reference.manager.reference')->findBy( array( 'id' => $id) );
@@ -54,7 +54,8 @@ class ActualiteController extends Controller
 
         //render
         return $this->render('HopitalNumeriquePublicationBundle:Actualite:index.html.twig', array(
-            'actualites' => $actualites
+            'actualites' => $actualites,
+            'type'       => $type
         ));
     }
 
@@ -77,7 +78,8 @@ class ActualiteController extends Controller
 
         //render
         return $this->render('HopitalNumeriquePublicationBundle:Actualite:actualites.html.twig', array(
-            'categories' => $categories
+            'categories' => $categories,
+            'type'       => $type
         ));
     }
 }

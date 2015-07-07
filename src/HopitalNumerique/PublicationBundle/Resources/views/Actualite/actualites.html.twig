@@ -3,7 +3,9 @@
         <ul>
             <li class="first"><a href="{{path('hopital_numerique_publication_actualite')}}">Toute l'actualité</a></li>
             {% for categorie in categories %}
-                <li><a href="{{path('hopital_numerique_publication_actualite_categorie',{'id':categorie.id,'libelle':categorie.libelle})}}">{{categorie.libelle}}</a></li>
+                <li>
+                    <a href="{% if type == 'ambassadeur'%}{{path('hopital_numerique_publication_actualite_categorie_ambassadeur',{'id':categorie.id,'libelle':categorie.libelle})}}{% else %}{{path('hopital_numerique_publication_actualite_categorie',{'id':categorie.id,'libelle':categorie.libelle})}}{% endif %}">{{categorie.libelle}}</a>
+                </li>
             {% endfor %}
         </ul>
     </div>
