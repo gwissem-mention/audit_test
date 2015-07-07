@@ -206,7 +206,7 @@
                 <input type="integer" class="form-control input-sm question" name="{{questionName}}" id="{{questionId}}" value="{% if reponse['value'] != -1 %}{{reponse['value']}}{% endif %}" />
             {% endif %}
 
-            <textarea rows="5" class="form-control input-sm remarque" name="remarques-{{questionName}}" id="{{questionId}}_remarque" style="{% if reponse['remarque'] is not defined or reponse['remarque'] == '' %}display:none{% endif %}" placeholder="Remarques" value="{% if reponse['remarque'] is defined and reponse['remarque'] != '' %}{{reponse['remarque']}}{% endif %}"></textarea>
+            <textarea rows="5" class="form-control input-sm remarque" name="remarques-{{questionName}}" id="{{questionId}}_remarque" style="{% if reponse['remarque'] is not defined or reponse['remarque'] == '' %}display:none{% endif %}" placeholder="Remarques" value="{% if reponse['remarque'] is defined and reponse['remarque'] != '' %}{{reponse['remarque']}}{% endif %}">{% if reponse['remarque'] is defined and reponse['remarque'] != '' %}{{reponse['remarque']}}{% endif %}</textarea>
         </div>
         <div class="col-md-1 col-sm-1 qOptions">
             <div class="icon pull-left"><i class="fa {% if question.colored == "-1" %}colored-inverse{% endif %}"></i></div>
