@@ -14,17 +14,12 @@
 
 {% block body %}
     <div id="actualites">
+        <div class="col-md-3">
+            <p class="titre">Hôpital <br />Numérique</p>
+            {{ render(controller("HopitalNumeriquePublicationBundle:Actualite:actualites", {'type' : type})) }}
+        </div>
         
-        {% if type == "normal" %}
-            <div class="col-md-3">
-                <p class="titre">Hôpital <br />Numérique</p>
-                {{ render(controller("HopitalNumeriquePublicationBundle:Actualite:actualites")) }}
-            </div>
-            
-            <div class="col-md-9" >
-        {% else %}
-            <div class="col-md-12">
-        {% endif %}
+        <div class="col-md-9" >
             <div class="col-md-12">
                 {% for actu in actualites %}
                     <div class="actu">

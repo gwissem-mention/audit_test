@@ -61,9 +61,16 @@ class ActualiteController extends Controller
     /**
      * Partial render : bloc liste des actualités colonne left
      */
-    public function actualitesAction()
+    public function actualitesAction($type)
     {
-        $allCategories = $this->get('hopitalnumerique_reference.manager.reference')->findBy( array( 'parent' => 188) );
+        if('ambassadeur' === $type)
+        {
+            $allCategories = $this->get('hopitalnumerique_reference.manager.reference')->findBy( array( 'parent' => 570) );
+        }
+        else
+        {
+            $allCategories = $this->get('hopitalnumerique_reference.manager.reference')->findBy( array( 'parent' => 188) );
+        }
 
         //Show categ with articles only
         $categories = $this->get('hopitalnumerique_objet.manager.objet')->getCategoriesWithArticles( $allCategories );
