@@ -50,7 +50,7 @@ class PublicationController extends Controller
         $cacheDriver = new ApcCache();
         $cacheName = "_publication_objet_" . $objet->getId();
         // $cacheDriver->delete($cacheName);
-        if ($cacheDriver->contains($cacheName))
+        if (false)//$cacheDriver->contains($cacheName))
         {
             $cache = $cacheDriver->fetch($cacheName);
 
