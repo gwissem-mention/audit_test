@@ -52,7 +52,7 @@ class CronLogger
         
         $logsExistants   = $this->session->get($this->sessionName);
         $logsExistants[] = $message;
-        $this->session->set($this->sessionName, $logsExistants);
+        $this->session->set($this->sessionName, $logsExistants); 
     }
 
     /**
@@ -69,7 +69,9 @@ class CronLogger
         {
             echo '<ul>';
             foreach ($pagesApced as $pageApced)
+            {
                 echo '<li>'.$pageApced.'</li>';
+            }
             echo '</ul>';
         }
         else echo '<p>Aucune page apc-ifiée.</p>';
