@@ -104,7 +104,7 @@ class PublicationController extends Controller
                 'contenus'    => $contenus
             );
 
-            $cacheDriver->save($cacheName, $cache, "86400");
+            $cacheDriver->save($cacheName, $cache, "604800");
         }
 
         //render
@@ -260,7 +260,7 @@ class PublicationController extends Controller
                 'ambassadeurs'     => $ambassadeurs
             );
 
-            $cacheDriver->save($cacheName, $cache, "86400");
+            $cacheDriver->save($cacheName, $cache, "604800");
         }
 
         //render
