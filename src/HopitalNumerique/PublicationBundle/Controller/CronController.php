@@ -15,8 +15,8 @@ class CronController extends Controller
     {
         if ($id == 'THX3GNSYUUBW8D6TDAPG9Y79E7MC348RS5BFFZZHVJCJ4RQVQN')
         {
-            // ini_set("memory_limit","512M");
-            // ini_set('max_execution_time', 0);
+            ini_set("memory_limit","512M");
+            ini_set('max_execution_time', 0);
             
             $cacheDriver = new ApcCache();
             $objets = $this->get('hopitalnumerique_objet.manager.objet')->findBy(array('etat' => 3));
@@ -29,41 +29,43 @@ class CronController extends Controller
                 $cacheName = "_publication_objet_" . $objet->getId();
                 $cacheDriver->delete($cacheName);
 
-                $url = $this->generateUrl('hopital_numerique_publication_publication_objet', array( 'id' => $objet->getId() ), true );
+                $this->forward('HopitalNumeriquePublicationBundle:Publication:objet', array( 'id' => $objet->getId() ));
 
-                $handle = curl_init($url);
-                curl_setopt($handle,  CURLOPT_RETURNTRANSFER, TRUE);
-                $response = curl_exec($handle);
+                // $url = $this->generateUrl('hopital_numerique_publication_publication_objet', array( 'id' => $objet->getId() ), true );
+
+                // $handle = curl_init($url);
+                // curl_setopt($handle,  CURLOPT_RETURNTRANSFER, TRUE);
+                // $response = curl_exec($handle);
 
                 $resultat .= "<li>" . $objet->getId() . " - " . $objet->getTitre() . "</li>";
 
-                curl_close($handle);
+                // curl_close($handle);
             }
 
             $resultat .= "</ul><br />";
 
-            $contenus = $this->get('hopitalnumerique_objet.manager.contenu')->findAll();
+            // $contenus = $this->get('hopitalnumerique_objet.manager.contenu')->findAll();
 
-            $resultat .= "Cache créé pour les contenus suivants : <ul>";
+            // $resultat .= "Cache créé pour les contenus suivants : <ul>";
 
-            foreach ($contenus as $contenu) 
-            {
-                //Destruction du cache APC concernant la page à regenerer
-                $cacheName = "_publication_contenu_" . $contenu->getId();
-                $cacheDriver->delete($cacheName);
+            // foreach ($contenus as $contenu) 
+            // {
+            //     //Destruction du cache APC concernant la page à regenerer
+            //     $cacheName = "_publication_contenu_" . $contenu->getId();
+            //     $cacheDriver->delete($cacheName);
 
-                $url = $this->generateUrl('hopital_numerique_publication_publication_contenu', array( 'id' => $contenu->getObjet()->getId(), 'idc' => $contenu->getId() ), true );
+            //     $url = $this->generateUrl('hopital_numerique_publication_publication_contenu', array( 'id' => $contenu->getObjet()->getId(), 'idc' => $contenu->getId() ), true );
 
-                $handle = curl_init($url);
-                curl_setopt($handle,  CURLOPT_RETURNTRANSFER, TRUE);
-                $response = curl_exec($handle);
+            //     $handle = curl_init($url);
+            //     curl_setopt($handle,  CURLOPT_RETURNTRANSFER, TRUE);
+            //     $response = curl_exec($handle);
 
-                $resultat .= "<li>" . $contenu->getId() . " - " . $contenu->getTitre() . "</li>";
+            //     $resultat .= "<li>" . $contenu->getId() . " - " . $contenu->getTitre() . "</li>";
 
-                curl_close($handle);
-            }
+            //     curl_close($handle);
+            // }
 
-            $resultat .= "</ul><br />";
+            // $resultat .= "</ul><br />";
             $resultat .= "<p>Fin du traitement : OK.</p>";
 
             return new Response($resultat);
