@@ -59,7 +59,6 @@ class CronController extends Controller
     {
         if ($id == 'THX3GNSYUUBW8D6TDAPG9Y79E7MC348RS5BFFZZHVJCJ4RQVQN')
         {
-            die('die');
             return new Response($this->get('hopitalnumerique_publication.service.logger.cronlogger')->getHtml());
         }
 

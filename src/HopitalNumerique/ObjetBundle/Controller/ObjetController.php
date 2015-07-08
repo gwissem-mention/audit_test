@@ -5,6 +5,7 @@ namespace HopitalNumerique\ObjetBundle\Controller;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Response;
 use \Nodevo\ToolsBundle\Tools\Chaine;
+use Doctrine\Common\Cache\ApcCache;
 
 /**
  * Objet controller.
@@ -390,6 +391,11 @@ class ObjetController extends Controller
                 //si on à choisis fermer et sauvegarder : on unlock l'user (unlock + save)
                 $do = $request->request->get('do');
                 $this->get('hopitalnumerique_objet.manager.objet')->unlock($objet);
+
+                //Destruction du cache APC concernant l'objet
+                $cacheDriver = new ApcCache();
+                $cacheName = "_publication_objet_" . $objet->getId();
+                $cacheDriver->delete($cacheName);
                 
                 //reload glossaire stuff
                 $this->get('hopitalnumerique_glossaire.manager.glossaire')->parsePublications( array($objet) );
