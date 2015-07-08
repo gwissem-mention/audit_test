@@ -64,6 +64,11 @@ hopital_numerique_publication_commentaire_add:
     pattern:  /publication/commentaire/add
     defaults: { _controller: "HopitalNumeriqueObjetBundle:Commentaire:add"}
 
+#CRON
+hopitalnumerique_publication_apc_cron:
+    pattern:  /cron-publication/{id}
+    defaults: { _controller: HopitalNumeriquePublicationBundle:Cron:generationAPC}
+
 #Note
 #--Ajout
 hopital_numerique_publication_note_add:
