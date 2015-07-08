@@ -49,7 +49,7 @@ class CronController extends Controller
                 $this->get('hopitalnumerique_publication.service.logger.cronlogger')->addLog('( Contenu ) ' . $contenu->getId() . " - " . $contenu->getTitre());
             }
 
-            return new Response($this->get('hopitalnumerique_module.service.logger.cronlogger')->getHtml()."<p>Fin du traitement : OK.</p>");
+            return new Response($this->get('hopitalnumerique_publication.service.logger.cronlogger')->getHtml()."<p>Fin du traitement : OK.</p>");
         }
         
         return new Response('Clef invalide.');
@@ -59,7 +59,7 @@ class CronController extends Controller
     {
         if ($id == 'THX3GNSYUUBW8D6TDAPG9Y79E7MC348RS5BFFZZHVJCJ4RQVQN')
         {
-            return new Response($this->get('hopitalnumerique_module.service.logger.cronlogger')->getHtml());
+            return new Response($this->get('hopitalnumerique_publication.service.logger.cronlogger')->getHtml());
         }
 
         return new Response('Clef invalide.');
