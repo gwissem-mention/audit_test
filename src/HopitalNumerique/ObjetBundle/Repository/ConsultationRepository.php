@@ -33,6 +33,25 @@ class ConsultationRepository extends EntityRepository
                     ->orderBy('clt.dateLastConsulted', 'DESC');
     }
 
+    public function getUsersConcerneByObjet($idObjet, $domaineIds)
+    {
+        $qb = $this->_em->createQueryBuilder();
+
+        return $qb->select('clt')
+                    ->from('HopitalNumeriqueObjetBundle:Consultation', 'clt')
+                    ->leftJoin('clt.objet','obj')
+                        ->andWhere('obj.id = :idObjet')
+                    ->leftJoin('clt.domaine', 'domaine')
+                        ->andWhere('domaine.id IN (:domaineIds)')
+                        ->setParameters(array(
+                            'idObjet'    => $idObjet,
+                            'domaineIds' => $domaineIds
+                        ))
+                    ->leftJoin('clt.user', 'user')
+                    ->groupBy('user')
+                    ->orderBy('clt.dateLastConsulted', 'DESC');   
+    }
+
     /**
      * Get nombre consultations
      *

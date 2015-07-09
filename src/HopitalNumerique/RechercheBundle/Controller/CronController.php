@@ -127,9 +127,9 @@ class CronController extends Controller
                             $options['requete']                = ucfirst($requete->getNom());
 
                             //send mail
-                            $mail = $this->get('nodevo_mail.manager.mail')->sendNotificationRequete($user, $options );
-                            $this->get('mailer')->send($mail);
-                            $this->get('hopitalnumerique_recherche.service.logger.cronlogger')->addLog('mail send to : ' . $user->getEmail() );
+                            // $mail = $this->get('nodevo_mail.manager.mail')->sendNotificationRequete($user, $options );
+                            // $this->get('mailer')->send($mail);
+                            // $this->get('hopitalnumerique_recherche.service.logger.cronlogger')->addLog('mail send to : ' . $user->getEmail() );
                         }
                     }
                 }

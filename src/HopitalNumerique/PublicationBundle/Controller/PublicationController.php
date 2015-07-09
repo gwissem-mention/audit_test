@@ -37,7 +37,10 @@ class PublicationController extends Controller
         $types = $this->get('hopitalnumerique_objet.manager.objet')->formatteTypes( $objet->getTypes() );
 
         //set Consultation entry
-        $this->get('hopitalnumerique_objet.manager.consultation')->consulted( $domaine, $objet );
+        if(!$objet->isArticle())
+        {
+            $this->get('hopitalnumerique_objet.manager.consultation')->consulted( $domaine, $objet );
+        }
 
         //On récupère l'utilisateur qui est connecté
         $user = $this->get('security.context')->getToken()->getUser();
@@ -165,7 +168,10 @@ class PublicationController extends Controller
         $note = $this->get('hopitalnumerique_objet.manager.note')->findOneBy(array('user' => $user, 'contenu' => $contenu));
 
         //set Consultation entry
-        $this->get('hopitalnumerique_objet.manager.consultation')->consulted( $domaine, $contenu, true );
+        if(!$objet->isArticle())
+        {
+            $this->get('hopitalnumerique_objet.manager.consultation')->consulted( $domaine, $contenu, true );
+        }
 
         $contenuTemp      = $contenu;
         $breadCrumbsArray = array();

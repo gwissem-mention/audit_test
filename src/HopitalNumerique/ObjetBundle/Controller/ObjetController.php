@@ -79,6 +79,14 @@ class ObjetController extends Controller
     {
         //Récupération de l'entité passée en paramètre
         $objet = $this->get('hopitalnumerique_objet.manager.objet')->findOneBy( array('id' => $id) );
+
+        if(is_null($objet))
+        {
+            $this->get('session')->getFlashBag()->add( 'info' , 'L\'objet n\'existe pas.' ); 
+
+            return $this->redirect( $this->generateUrl('hopitalnumerique_objet_objet'));
+        }
+
         $user  = $this->get('security.context')->getToken()->getUser();
 
         // l'objet est locked, on redirige vers la home page
@@ -379,14 +387,50 @@ class ObjetController extends Controller
                 }
                 else
                 {
-                    $domaines = $this->get('hopitalnumerique_domaine.manager.domaine')->findBy(array('id' =>1 ));
+                    $domaines = $this->get('hopitalnumerique_domaine.manager.domaine')->findBy(array('id' => 1 ));
                     $objet->setDomaines($domaines);
                 }
                 
                 //Met à jour la date de modification
                 $notify = $form->get("modified")->getData();
                 if( $notify === "1")
+                {
                     $objet->setDateModification( new \DateTime() );
+
+                    //Récupération des consultations
+                    $consultations = $this->get('hopitalnumerique_objet.manager.consultation')->getConultationsByObjet($objet);
+
+                    $mails = array();
+
+                    if(count($objet->getDomaines()) != 1)
+                    {
+                        if(in_array(1, $objet->getDomainesId()))
+                        {
+                            $domaineUrl = $this->get('hopitalnumerique_domaine.manager.domaine')->findOneBy(array('id' => 1 ))->getUrl();
+                        }
+                    }
+                    else
+                    {
+                        $domaineUrl = $objet->getDomaines()[0]->getUrl();
+                    }
+
+                    foreach ($consultations as $consultation)
+                    {
+                        $user = $consultation->getUser();
+
+                        $options = array(
+                            'titrepublication' => $objet->getTitre(),
+                            'lienpublication'  => '<a href="'.$domaineUrl.'/'.$this->generateUrl('hopital_numerique_publication_publication_objet', array('id' => $objet->getId(), 'alias' => $objet->getAlias())).'" >Lien vers la publication</a>'
+                        );
+
+                        $mails[] = $this->get('nodevo_mail.manager.mail')->sendNotificationRequete($user, $options );
+                    }
+
+                    foreach ($mails as $mail) 
+                    {
+                        $this->get('mailer')->send($mail);
+                    }
+                }
                 
                 //si on à choisis fermer et sauvegarder : on unlock l'user (unlock + save)
                 $do = $request->request->get('do');
