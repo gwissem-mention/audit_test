@@ -8,6 +8,7 @@ use Nodevo\AclBundle\Manager\RessourceManager;
 use Nodevo\RoleBundle\Manager\RoleManager;
 
 use Doctrine\ORM\EntityManager;
+use Doctrine\Common\Cache\ApcCache;
 
 use Symfony\Component\Security\Core\Authorization\Voter\VoterInterface;
 
@@ -149,16 +150,38 @@ class AclManager extends BaseManager
      */
     public function checkAuthorization( $url, $user )
     {
+        $cacheDriver = new ApcCache();
+
         if( $url === '#' || $url === '/' || substr($url, 0, 11) === 'javascript:')
             return VoterInterface::ACCESS_GRANTED;
 
+        if ($cacheDriver->contains("_acl_roles"))
+        {
+            $rolesByRole = $cacheDriver->fetch("_acl_roles");
+        }
+        else
+        {
+            //Récupération des roles par 'role'
+            $roles = $this->_roleManager->findAll();
+            $rolesByRole = array();
+
+            foreach ($roles as $role) 
+            {
+                $rolesByRole[$role->getRole()] = $role;
+            }
+
+            $cacheDriver->save("_acl_roles", $rolesByRole, "86400");
+        }
+
         if( $user === 'anon.' )
-            $roles = $this->_roleManager->findOneBy(array('role'=>'ROLE_ANONYME_10'));
+        {
+            $roles = $this->getRolesOfUser(array('ROLE_ANONYME_10'), $rolesByRole);
+        }
         else{
             if( $user->hasRole('ROLE_ADMINISTRATEUR_1') )
                 return VoterInterface::ACCESS_GRANTED;
 
-            $roles = $this->_roleManager->findBy(array('role'=> $user->getRoles() ));
+            $roles = $this->getRolesOfUser($user->getRoles(), $rolesByRole);
         }
         
         //search in DB ressource matching this url
@@ -169,7 +192,26 @@ class AclManager extends BaseManager
             return VoterInterface::ACCESS_DENIED;
 
         //search if Acl matching role and Ressource exist
-        $acl = $this->findOneBy( array('role' => $roles, 'ressource' => $ressource) );
+        if ($cacheDriver->contains("_acl_acls"))
+        {
+            $acls = $cacheDriver->fetch("_acl_acls");
+        }
+        else
+        {
+            $acls = $this->getAclByRessourceByRole();
+            $cacheDriver->save("_acl_acls", $acls, "86400");
+        }
+
+        if(count($acls) > 0
+            && array_key_exists($roles[0]->getId(), $acls)
+            && array_key_exists($ressource->getId(), $acls[$roles[0]->getId()]))
+        {
+            $acl = $acls[$roles[0]->getId()][$ressource->getId()];
+        }
+        else
+        {
+            $acl = null;
+        }
 
         //if no acl matching exist, access denied
         if ( is_null($acl) )
@@ -190,6 +232,23 @@ class AclManager extends BaseManager
         return $acl->getRead() ? VoterInterface::ACCESS_GRANTED : VoterInterface::ACCESS_DENIED;
     }
 
+    public function getAclByRessourceByRole()
+    {
+        $acls = $this->findAll();
+        $aclsOrdered = array();
+
+        foreach ($acls as $acl) 
+        {
+            if(!array_key_exists($acl->getRole()->getId(), $aclsOrdered))
+            {
+                $aclsOrdered[$acl->getRole()->getId()] = array();
+            }
+
+            $aclsOrdered[$acl->getRole()->getId()][$acl->getRessource()->getId()] = $acl;
+        }
+
+        return $aclsOrdered;
+    }
 
 
 
@@ -197,6 +256,20 @@ class AclManager extends BaseManager
 
 
 
+    private function getRolesOfUser($rolesOfUsers , $roles)
+    {
+        $rolesUsers = array();
+
+        foreach ($rolesOfUsers as $roleUser) 
+        {
+            if(array_key_exists($roleUser, $roles))
+            {
+                $rolesUsers[] = $roles[$roleUser];
+            }
+        }
+
+        return $rolesUsers;
+    }
 
     /**
      * Gère les options passées en paramètre

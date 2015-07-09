@@ -2,6 +2,8 @@ parameters:
     hopitalnumerique_publication.twig.publication.class: HopitalNumerique\PublicationBundle\Twig\PublicationExtension
     #Options
     hopital_numerique_publication.options:
+    #CronLogger
+    hopitalnumerique_publication.service.logger.cronlogger.class: HopitalNumerique\PublicationBundle\DependencyInjection\Logger\CronLogger
 
 services:
     #Extension Twig
@@ -10,3 +12,8 @@ services:
         arguments : ["@service_container"]
         tags:
             - { name: twig.extension }
+
+    #Cronlogger
+    hopitalnumerique_publication.service.logger.cronlogger:
+        class: "%hopitalnumerique_publication.service.logger.cronlogger.class%"
+        arguments: ["@logger", "@session"]

@@ -4,6 +4,8 @@ namespace HopitalNumerique\ObjetBundle\Manager;
 use Nodevo\ToolsBundle\Manager\Manager as BaseManager;
 use Doctrine\ORM\EntityManager;
 
+use HopitalNumerique\ObjetBundle\Entity\Objet;
+
 /**
  * Manager de l'entité Consultation.
  */
@@ -37,7 +39,7 @@ class ConsultationManager extends BaseManager
     }
 
     /**
-     * On met l'objet en consulté (création si first visite, ou update de la date)
+     * On met l'objet en consulté (création si première visite, ou update de la date)
      *
      * @param Objet $objet     La publication visitée
      * @param bool  $isContenu Is contenu ?
@@ -49,7 +51,7 @@ class ConsultationManager extends BaseManager
         $user = $this->_securityContext->getToken()->getUser();
 
         if( $user != "anon.") {
-            $consultation = $isContenu ? $this->findOneBy( array( 'objet'=>$objet->getObjet(), 'contenu'=>$objet, 'user'=>$user) ) : $this->findOneBy( array('objet'=>$objet, 'user'=>$user, 'contenu'=>null) );
+            $consultation = $isContenu ? $this->findOneBy( array( 'objet'=>$objet->getObjet(), 'contenu'=>$objet, 'user'=>$user, 'domaine' => $domaine) ) : $this->findOneBy( array('objet'=>$objet, 'user'=>$user, 'contenu'=>null, 'domaine' => $domaine) );
 
             //new
             if( is_null($consultation) ){
@@ -65,8 +67,11 @@ class ConsultationManager extends BaseManager
                 
                 $consultation->setUser( $user );
             //update
-            }else
+            }
+            else
+            {
                 $consultation->setDateLastConsulted( new \DateTime() );
+            }
             
             $this->save( $consultation );
         }
@@ -123,6 +128,19 @@ class ConsultationManager extends BaseManager
         }
         
         return $objets;
+    }
+
+    /**
+     * Récupère les consultations concernées par l'objet passé en param
+     *
+     * @param Objet  $objet      [description]
+     * @param [type] $domaineIds [description]
+     *
+     * @return [type]
+     */
+    public function getConultationsByObjet(Objet $objet)
+    {
+        return $this->getRepository()->getUsersConcerneByObjet($objet->getId(), $objet->getDomainesId())->getQuery()->getResult();
     }
 
     /**

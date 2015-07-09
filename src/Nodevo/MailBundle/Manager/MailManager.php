@@ -309,7 +309,7 @@ class MailManager extends BaseManager
     public function sendNotificationRequete( $user, $options )
     {
         $mail = $this->findOneById(29);
-    
+
         return $this->generationMail($user, $mail, $options);
     }
 

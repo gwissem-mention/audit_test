@@ -40,6 +40,9 @@ class RequeteController extends Controller
 
         //get connected user
         $user = $this->get('security.context')->getToken()->getUser();
+        //get domaine courant
+        $domaineId = $this->get('request')->getSession()->get('domaineId');
+        $domaine   = $this->get('hopitalnumerique_domaine.manager.domaine')->findOneById($domaineId);
 
         $add = false;
         //cas AJOUT
@@ -54,6 +57,7 @@ class RequeteController extends Controller
 
         $requete->setRefs( $references );
         $requete->setUser( $user );
+        $requete->setDomaine($domaine);
 
         //Categ de la multi select
         $requete->setCategPointDur( $categPointDur );
