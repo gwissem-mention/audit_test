@@ -42,7 +42,7 @@ class LoginHandler implements AuthenticationSuccessHandlerInterface
         }
 
         //Si l'utilisateur n'a pas accès au BackOffice et qu'il n'a pas encore ce domaine on lui assigne
-        if(!$this->_aclManager->checkAuthorization($this->router->generate('hopital_numerique_admin_homepage' ), $user) && !in_array($domaineCurrentId, $user->getDomainesId()))
+        if($this->_aclManager->checkAuthorization($this->router->generate('hopital_numerique_admin_homepage' ), $user) == -1 && !in_array($domaineCurrentId, $user->getDomainesId()))
         {
             //Récupération de l'entité
             $domaineCurrent = $this->_domaineManager->findOneById($domaineCurrentId);
