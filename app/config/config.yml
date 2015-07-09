@@ -100,7 +100,7 @@ swiftmailer:
 liip_doctrine_cache:
     namespaces:
         main:
-            type: array
+            type: apc
 
 # Gestion des users via FOSUserBundle
 fos_user:
