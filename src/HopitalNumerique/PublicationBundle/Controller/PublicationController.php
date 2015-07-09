@@ -49,7 +49,6 @@ class PublicationController extends Controller
         //~~APC~~
         $cacheDriver = new ApcCache();
         $cacheName = "_publication_objet_" . $objet->getId();
-        // $cacheDriver->delete($cacheName);
         if ($cacheDriver->contains($cacheName))
         {
             $cache = $cacheDriver->fetch($cacheName);
@@ -105,7 +104,7 @@ class PublicationController extends Controller
                 'contenus'    => $contenus
             );
 
-            $cacheDriver->save($cacheName, $cache, "86400");
+            $cacheDriver->save($cacheName, $cache, "604800");
         }
 
         //render
@@ -261,7 +260,7 @@ class PublicationController extends Controller
                 'ambassadeurs'     => $ambassadeurs
             );
 
-            $cacheDriver->save($cacheName, $cache, "86400");
+            $cacheDriver->save($cacheName, $cache, "604800");
         }
 
         //render
