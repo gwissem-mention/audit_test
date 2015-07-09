@@ -49,7 +49,7 @@ class ConsultationManager extends BaseManager
         $user = $this->_securityContext->getToken()->getUser();
 
         if( $user != "anon.") {
-            $consultation = $isContenu ? $this->findOneBy( array( 'objet'=>$objet->getObjet(), 'contenu'=>$objet, 'user'=>$user) ) : $this->findOneBy( array('objet'=>$objet, 'user'=>$user, 'contenu'=>null) );
+            $consultation = $isContenu ? $this->findOneBy( array( 'objet'=>$objet->getObjet(), 'contenu'=>$objet, 'user'=>$user, 'domaine' => $domaine) ) : $this->findOneBy( array('objet'=>$objet, 'user'=>$user, 'contenu'=>null, 'domaine' => $domaine) );
 
             //new
             if( is_null($consultation) ){
@@ -65,8 +65,11 @@ class ConsultationManager extends BaseManager
                 
                 $consultation->setUser( $user );
             //update
-            }else
+            }
+            else
+            {
                 $consultation->setDateLastConsulted( new \DateTime() );
+            }
             
             $this->save( $consultation );
         }
