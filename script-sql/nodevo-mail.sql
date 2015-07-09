@@ -1,9 +1,1 @@
-/* 11:29:09 HN */ 
-UPDATE `core_mail` 
-SET 
-    `mail_objet` = '[ANAP] - Mise à jour d\'une publication',
-    `mail_description` = 'Mail de notification d\'une mise à jour de notification', 
-    `mail_body` = 'Bonjour %u,\r\n\r\nLa publication %titrepublication vient d\'être mise à jour.\r\n\r\nCordialement,' 
-WHERE `mail_id` = '29';
-
 /* 16:17:27 HN */ UPDATE `core_mail` SET `mail_body` = 'Bonjour %u,\r\n\r\nLa publication %titrepublication vient d\'être mise à jour.\nVous pouvez consulter cette dernière à l\'adresse suivante : %lienpublication\r\n\r\nCordialement,' WHERE `mail_id` = '29';
