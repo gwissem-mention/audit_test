@@ -1,6 +1,6 @@
 <?php
 
-die("Site en maintenance, la plateforme sera rétablie dans 5 minutes.");
+//die("Site en maintenance, la plateforme sera rétablie dans 5 minutes.");
 
 use Symfony\Component\HttpFoundation\Request;
 
