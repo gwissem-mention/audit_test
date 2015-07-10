@@ -1,5 +1,7 @@
 <?php
 
+die("Site en maintenance, la plateforme sera rétablie dans 5 minutes.");
+
 use Symfony\Component\HttpFoundation\Request;
 
 define('__WEB_DIRECTORY__', __DIR__);
