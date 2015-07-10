@@ -67,7 +67,3 @@ maj-prod:
 	sudo chmod -R 777 app/cache app/logs;
 	php -d memory_limit=-1 app/console a:d --env=prod;
 	sudo chmod -R 777 app/cache app/logs;
-
-droit:
-	sudo chown -R nobody .
-	sudo setfacl -dR -m u::rwX app/cache app/logs
