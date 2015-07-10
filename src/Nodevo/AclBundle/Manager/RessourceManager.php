@@ -33,7 +33,7 @@ class RessourceManager extends BaseManager
         {
             $ressources = $this->findAll();
 
-            $cacheDriver->save("_acl_ressources_all", $ressources, "86400");
+            $cacheDriver->save("_acl_ressources_all", $ressources, null);
         }
 
         foreach( $ressources as $ressource ) {
