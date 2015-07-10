@@ -51,7 +51,7 @@
                 <p class="titre">Hôpital <br />Numérique</p>
                 {% set menu = root[parent] %}
                 {{ knp_menu_render(menu, {'currentClass': 'active','breadcrumb' : 'no', 'ancestorClass':'active','template':'HopitalNumeriqueCoreBundle::menu.html.twig'}) }}
-                {{ render(controller("HopitalNumeriquePublicationBundle:Actualite:actualites")) }}
+                {{ render(controller("HopitalNumeriquePublicationBundle:Actualite:actualites", { 'types' : types } )) }}
             </div>
         {% endif %}
 
