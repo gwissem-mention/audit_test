@@ -170,7 +170,7 @@ class AclManager extends BaseManager
                 $rolesByRole[$role->getRole()] = $role;
             }
 
-            $cacheDriver->save("_acl_roles", $rolesByRole, "86400");
+            $cacheDriver->save("_acl_roles", $rolesByRole, null);
         }
 
         if( $user === 'anon.' )
@@ -199,7 +199,7 @@ class AclManager extends BaseManager
         else
         {
             $acls = $this->getAclByRessourceByRole();
-            $cacheDriver->save("_acl_acls", $acls, "86400");
+            $cacheDriver->save("_acl_acls", $acls, null);
         }
 
         if(count($acls) > 0
