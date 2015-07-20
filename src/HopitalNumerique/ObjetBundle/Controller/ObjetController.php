@@ -385,7 +385,7 @@ class ObjetController extends Controller
                 {
                     $objet->setArticle( false );
                 }
-                else
+                elseif(!in_array(1, $objet->getDomainesId()))
                 {
                     $domaines = $this->get('hopitalnumerique_domaine.manager.domaine')->findBy(array('id' => 1 ));
                     $objet->setDomaines($domaines);
