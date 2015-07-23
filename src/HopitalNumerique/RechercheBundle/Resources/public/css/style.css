@@ -33,8 +33,8 @@
     /* Parents */
     #recherche #origin ol{padding : 0;}
     #recherche #origin li{position: relative;}
-    #recherche #origin li.level0{background: #703695 url('../img/level0.png') no-repeat 95% 15px; }
-    #recherche #origin li.level0.active{background: #703695 url('../img/level0-active.png') no-repeat 95% 15px;}
+    #recherche #origin li.level0{background: #d60030 url('../img/level0.png') no-repeat 95% 15px; }
+    #recherche #origin li.level0.active{background: #d60030 url('../img/level0-active.png') no-repeat 95% 15px;}
     #recherche #origin li.level0 span{padding:15px 10px 10px 17px; width: 100%; display: block; cursor:pointer; text-transform: uppercase; color: #ffffff; font-size: 16px; font-weight: bold}
     #recherche #origin li.level0 ol{display: none; }
 
@@ -43,14 +43,14 @@
     #recherche #origin li.level0 ol li.level1.childs{background: #f4f4f4 url('../img/level1.png') no-repeat 95% 15px;}
     #recherche #origin li.level0 ol li.level1.childs.active{background: #f4f4f4 url('../img/level1-active.png') no-repeat 95% 15px;}
     #recherche #origin li.level0 ol li.level1.empty{background: #f4f4f4;}
-    #recherche #origin li.level0 ol li.level1.active span{color:#703695; font-weight: bold}
+    #recherche #origin li.level0 ol li.level1.active span{color:#d60030; font-weight: bold}
     #recherche #origin li.level0 ol li.level1 span{ font-weight: bold; font-size: 12px; color:#000000; text-transform: none; padding:10px 30px 10px 15px;}
     #recherche #origin li.level0 ol li.level1 i.pull-left{ margin:12px 5px 0 15px;cursor: pointer}
     #recherche #origin li.level0 ol li.level1 ol{display: none;}
 
     /* 2nd niveau de sous-catégories */
     #recherche #origin li.level0 ol li.level1 ol li.level2{}
-    #recherche #origin li.level0 ol li.level1 ol li.level2.active span{color:#703695;}
+    #recherche #origin li.level0 ol li.level1 ol li.level2.active span{color:#d60030;}
     #recherche #origin li.level0 ol li.level1 ol li.level2 span{color:#070707; font-weight: normal; padding:5px 25px 5px 30px; position: relative; z-index: 5}
     #recherche #origin li.level0 ol li.level1 ol li.level2 i.pull-right{color:#070707; position: absolute; right: 10px; top:7px;}
     #recherche #origin li.level0 ol li.level1 ol li.level2 i.pull-left{ margin:6px 5px 0 30px;cursor: pointer; position: relative; z-index: 10}
