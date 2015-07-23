@@ -20,6 +20,7 @@ class ObjetGrid extends Grid implements GridInterface
         $this->setSource( 'hopitalnumerique_objet.manager.objet' );
         $this->setSourceType( self::SOURCE_TYPE_MANAGER );
         $this->setNoDataMessage('Aucun Objet à afficher.');
+        $this->showIDColumn( false );
     }
 
     /**
@@ -27,8 +28,7 @@ class ObjetGrid extends Grid implements GridInterface
      */
     public function setColumns()
     {
-        //$this->addColonne( new Column\TextColumn('id', 'ID') );
-        $this->addColonne( new Column\TextColumn('titre', 'Titre') );
+        $this->addColonne( new Column\TextColumn('id', 'Numéro de facture') );
         $this->addColonne( new Column\TextColumn('titre', 'Titre') );
         $this->addColonne( new Column\TextColumn('types','Catégories') );
         $this->addColonne( new Column\TextColumn('domaineNom','Domaine(s) associé(s)') );
