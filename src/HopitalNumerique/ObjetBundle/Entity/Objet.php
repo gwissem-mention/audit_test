@@ -1845,7 +1845,6 @@ class Objet implements RoutedItemInterface
 
     public function getFeedItemDescription()
     {
-	return substr($this->resume, 0, strpos(wordwrap($this->resume, 400), "\n"));;
         return "";//$this->resume;
     }
 
