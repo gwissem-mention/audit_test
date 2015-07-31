@@ -68,6 +68,8 @@ class ObjetManager extends BaseManager
             {
                 $resultatsForGrid[$result['id']]['domaineNom'] .= ";" . $result['domaineNom'];
             }
+
+            $resultatsForGrid[$result['id']]['idObjet'] = $result['id'];
         }
 
         $results = array_merge($resultatsForGrid);

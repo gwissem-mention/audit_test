@@ -28,7 +28,7 @@ class ObjetGrid extends Grid implements GridInterface
      */
     public function setColumns()
     {
-        $this->addColonne( new Column\TextColumn('id', 'Numéro de facture') );
+        $this->addColonne( new Column\TextColumn('idObjet', 'ID') );
         $this->addColonne( new Column\TextColumn('titre', 'Titre') );
         $this->addColonne( new Column\TextColumn('types','Catégories') );
         $this->addColonne( new Column\TextColumn('domaineNom','Domaine(s) associé(s)') );
@@ -76,9 +76,6 @@ class ObjetGrid extends Grid implements GridInterface
             return !$row->getField('isArticle') ? $action : null;
         });
         $this->addActionButton( $referencesButton );
-
-        //Delete
-        // $this->addActionButton( new Action\DeleteButton( 'hopitalnumerique_objet_objet_delete' ) );
 
         //Custom Unlock button : Affiche le bouton dévérouillé si la ligne est vérouillée
         $unlockButton = new \APY\DataGridBundle\Grid\Action\RowAction('', 'hopitalnumerique_objet_objet_cancel');
