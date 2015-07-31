@@ -161,7 +161,7 @@ class FrontController extends Controller
         if(is_null($request->request->get('remplissage'))  || $request->request->get('remplissage') == 0 || $request->request->get('remplissage') == '' || $request->request->get('remplissage') == false )
         {
             // On envoi une 'flash' pour indiquer à l'utilisateur que l'outil à été enregistré
-            $this->get('session')->getFlashBag()->add( 'info', 'Veuillez renseigné au moins une réponse avant d\'enregistrer votre autodiagnostic.' );
+            $this->get('session')->getFlashBag()->add( 'info', 'Veuillez renseigner au moins une réponse avant d\'enregistrer votre autodiagnostic.' );
 
             return $this->redirect( $this->generateUrl('hopitalnumerique_autodiag_front_outil', array( 'outil' => $outil->getId(), 'alias' => $outil->getAlias() ) ) );
         }
