@@ -31,7 +31,7 @@
                         <th style="width:80px;font-size:11px;vertical-align:middle">Durée</th>
                         <th style="width:195px;font-size:11px;vertical-align:middle">Horaires</th>
                         <th style="font-size:11px;vertical-align:middle">Lieu</th>
-                        <th style="width:72px;font-size:11px">Places restantes</th>
+                        <th style="width:72px;font-size:11px">Places disponibles</th>
                         <th style="width:70px;font-size:11px">Vous êtes inscrit</th>
                         <th style="width:86px;font-size:11px"></th>
                     </tr>
@@ -79,7 +79,7 @@
                                     title="Plus de places restantes"
                                 {% endif %}
                                 >
-                                    {{session.nombrePlaceDisponible - session.getInscriptionsAccepte()|length}}/{{session.nombrePlaceDisponible}}
+                                    {{session.getInscriptionsAccepte()|length}}/{{session.nombrePlaceDisponible}}
                                 </td>
                                 <td>
                                     {% set userInscrit = false %}

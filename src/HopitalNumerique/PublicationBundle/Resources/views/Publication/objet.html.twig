@@ -476,7 +476,7 @@ window.open ("report/showReport.action?"+request,null,"location=no,menubar=0,res
         {# Gestion des commantaires #}
         {% if objet.commentaires %}
             {# Cas Contenu #}
-            {% if contenu is defined %}
+            {% if contenu is defined and (contenu is not sameas(false) or contenu is not sameas(false)) %}
                 {# Include la liste des commentaires #}
                 {% include 'HopitalNumeriquePublicationBundle:Publication:Partials/liste_commentaires.html.twig' with { 'objet' : contenu, 'isContenu' : true } %}
             {# Cas objet #}
