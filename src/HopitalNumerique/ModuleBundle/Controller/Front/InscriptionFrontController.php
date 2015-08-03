@@ -165,4 +165,25 @@ class InscriptionFrontController extends Controller
 
         return $this->get('hopitalnumerique_module.manager.session')->exportCsv( $colonnes, $datas, 'export-liste-participant-session.csv', $kernelCharset );
     }
+
+    public function annulationInscriptionAction(Inscription $inscription)
+    {
+        //On récupère l'utilisateur qui est connecté
+        $user = $this->get('security.context')->getToken()->getUser();
+
+        if($user->getId() === $inscription->getUser()->getId())
+        {
+            $this->get('hopitalnumerique_module.manager.inscription')->toogleEtatInscription( array($inscription), $this->get('hopitalnumerique_reference.manager.reference')->findOneBy( array( 'id' => 409) ) );
+            $this->get('hopitalnumerique_module.manager.inscription')->toogleEtatParticipation( array($inscription), $this->get('hopitalnumerique_reference.manager.reference')->findOneBy( array( 'id' => 412) ) );
+            $this->get('hopitalnumerique_module.manager.inscription')->toogleEtatEvaluation( array($inscription), $this->get('hopitalnumerique_reference.manager.reference')->findOneBy( array( 'id' => 430) ) );   
+            
+            $this->get('session')->getFlashBag()->add( ('success') , 'Votre inscription à la session "'. $inscription->getSession()->getModule()->getTitre() .'" été annulée.' );
+        }
+        else
+        {
+            $this->get('session')->getFlashBag()->add( ('danger') , 'Vous ne pouvez annuler que les inscriptions vous concernant.' );
+        }
+
+        return $this->redirect( $this->generateUrl('hopitalnumerique_module_inscription_index_front') );
+    }
 }

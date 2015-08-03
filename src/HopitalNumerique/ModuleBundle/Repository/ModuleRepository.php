@@ -63,4 +63,27 @@ class ModuleRepository extends EntityRepository
         
         return $qb;
     }
+
+    /**
+     * Récupère les modules du domaine passé en param
+     *
+     * @return array(Module)
+     * 
+     * @author Gaetan MELCHILSEN
+     * @copyright Nodevo
+     */
+    public function getModuleActifForDomaine($domaineId)
+    {
+        $qb = $this->_em->createQueryBuilder();
+        $qb->select('mod')
+            ->from('HopitalNumeriqueModuleBundle:Module', 'mod')
+            ->leftJoin('mod.statut', 'refEtat')
+            ->where('refEtat.id = 3')
+            ->leftJoin('mod.domaines', 'domaine')
+            ->andWhere('domaine.id = :domaineId')
+            ->setParameter('domaineId', $domaineId )
+            ->orderBy('mod.titre');
+        
+        return $qb;
+    }
 }

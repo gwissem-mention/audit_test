@@ -63,6 +63,12 @@ class ModuleManager extends BaseManager
     {
         return $this->getRepository()->getAllInscriptionsBySessionsActivesNonPasseesByModules()->getQuery()->getResult();
     }
+
+    
+    public function getModuleActifForDomaine($domaineId)
+    {
+        return $this->getRepository()->getModuleActifForDomaine($domaineId)->getQuery()->getResult();
+    }
     
     
     

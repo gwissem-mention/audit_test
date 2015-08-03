@@ -15,6 +15,12 @@ hopitalnumerique_module_inscription_export_liste_front:
     requirements:
         id: \d+
 
+hopitalnumerique_module_inscription_annulation_inscription_front:
+    pattern:  /module-thematiques/annulation-inscription/{id}
+    defaults: { _controller: HopitalNumeriqueModuleBundle:Front/InscriptionFront:annulationInscription, id: 1}
+    requirements:
+        id: \d+
+
 hopitalnumerique_module_session_evaluation_front:
     pattern:  /module-thematiques/session/{id}/evaluations
     defaults: { _controller: HopitalNumeriqueModuleBundle:Front/SessionFront:evaluation, id: 1}
