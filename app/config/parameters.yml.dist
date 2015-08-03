@@ -2,7 +2,7 @@ parameters:
     database_driver: pdo_mysql
     database_host: local.nodevo.com
     database_port: null
-    database_name: wwwhopitalnumeriquecom
+    database_name: wwwhopitalnumeriquecom_prod
     database_user: dbuser
     database_password: LpqdPpp2SWCtTyB7
 
