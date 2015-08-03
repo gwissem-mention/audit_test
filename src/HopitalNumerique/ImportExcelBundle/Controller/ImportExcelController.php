@@ -55,7 +55,7 @@ class ImportExcelController extends Controller
     {
         
         //Plantage sinon
-        ini_set('memory_limit', '512M');
+        ini_set('memory_limit', '2048M');
         
         if( file_exists( __ROOT_DIRECTORY__ . '/files/autodiag/Gabarit_autodiag.xlsx') )
         {
@@ -248,7 +248,7 @@ class ImportExcelController extends Controller
     public function readAndSaveAction(Request $request, Outil $outil)
     {
         //Gros import, fait sauter les limites de tailles/temps
-        ini_set("memory_limit","512M");
+        ini_set("memory_limit","2048M");
         ini_set('max_execution_time', 0);
         
         $outil->setDernierImportUser($this->getUser());
