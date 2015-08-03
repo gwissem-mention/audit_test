@@ -43,7 +43,7 @@ class ModuleType extends AbstractType
                     'class'         => 'HopitalNumeriqueObjetBundle:Objet',
                     'property'      => 'titre',
                     'multiple'      => true,
-                    'required'      => true,
+                    'required'      => false,
                     'label'         => 'Productions concernées',
                     'empty_value'   => ' - ',
                     'attr'          => array('class' => 'productions'),
@@ -55,7 +55,7 @@ class ModuleType extends AbstractType
                     'class'         => 'HopitalNumeriqueReferenceBundle:Reference',
                     'property'      => 'libelle',
                     'multiple'      => true,
-                    'required'      => true,
+                    'required'      => false,
                     'group_by'      => 'parentName',
                     'label'         => 'Connaissances concernées',
                     'empty_value'   => ' - ',
@@ -137,9 +137,12 @@ class ModuleType extends AbstractType
                     'required'      => false,
                     'label'         => 'Formateur',
                     'empty_value'   => ' - ',
-                    'query_builder' => function(EntityRepository $er) {
+                    'query_builder' => function(EntityRepository $er) use ($connectedUser){
                         return $er->createQueryBuilder('user')
-                            ->where('user.enabled = ' . 1)
+                            ->leftJoin('user.domaines', 'domaine')
+                            ->where('domaine.id IN (:domainesIds)')
+                                ->setParameter('domainesIds', $connectedUser->getDomainesId())
+                            ->andWhere('user.enabled = ' . 1)
                             ->orderBy('user.nom', 'ASC');
                     }
             ))
