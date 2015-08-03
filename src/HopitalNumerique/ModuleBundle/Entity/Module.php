@@ -219,6 +219,41 @@ class Module
     protected $domaines;
 
     /**
+     * @var boolean
+     *
+     * @ORM\Column(name="mod_accuse_inscription", type="boolean")
+     */
+    protected $mailAccuseInscription;
+
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="mod_confirmation_inscription", type="boolean")
+     */
+    protected $mailConfirmationInscription;
+
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="mod_refus_inscription", type="boolean")
+     */
+    protected $mailRefusInscription;
+
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="mod_rappel_evaluation", type="boolean")
+     */
+    protected $mailRappelEvalution;
+
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="mod_alerte_evaluation", type="boolean")
+     */
+    protected $mailAlerteEvaluation;
+
+    /**
      * Constructor
      */
     public function __construct()
@@ -813,5 +848,120 @@ class Module
         }
 
         return $domainesId;
+    }
+
+    /**
+     * Set mailAccuseInscription
+     *
+     * @param boolean $mailAccuseInscription
+     * @return Module
+     */
+    public function setMailAccuseInscription($mailAccuseInscription)
+    {
+        $this->mailAccuseInscription = $mailAccuseInscription;
+
+        return $this;
+    }
+
+    /**
+     * Get mailAccuseInscription
+     *
+     * @return boolean 
+     */
+    public function getMailAccuseInscription()
+    {
+        return $this->mailAccuseInscription;
+    }
+
+    /**
+     * Set mailConfirmationInscription
+     *
+     * @param boolean $mailConfirmationInscription
+     * @return Module
+     */
+    public function setMailConfirmationInscription($mailConfirmationInscription)
+    {
+        $this->mailConfirmationInscription = $mailConfirmationInscription;
+
+        return $this;
+    }
+
+    /**
+     * Get mailConfirmationInscription
+     *
+     * @return boolean 
+     */
+    public function getMailConfirmationInscription()
+    {
+        return $this->mailConfirmationInscription;
+    }
+
+    /**
+     * Set mailRefusInscription
+     *
+     * @param boolean $mailRefusInscription
+     * @return Module
+     */
+    public function setMailRefusInscription($mailRefusInscription)
+    {
+        $this->mailRefusInscription = $mailRefusInscription;
+
+        return $this;
+    }
+
+    /**
+     * Get mailRefusInscription
+     *
+     * @return boolean 
+     */
+    public function getMailRefusInscription()
+    {
+        return $this->mailRefusInscription;
+    }
+
+    /**
+     * Set mailRappelEvalution
+     *
+     * @param boolean $mailRappelEvalution
+     * @return Module
+     */
+    public function setMailRappelEvalution($mailRappelEvalution)
+    {
+        $this->mailRappelEvalution = $mailRappelEvalution;
+
+        return $this;
+    }
+
+    /**
+     * Get mailRappelEvalution
+     *
+     * @return boolean 
+     */
+    public function getMailRappelEvalution()
+    {
+        return $this->mailRappelEvalution;
+    }
+
+    /**
+     * Set mailAlerteEvaluation
+     *
+     * @param boolean $mailAlerteEvaluation
+     * @return Module
+     */
+    public function setMailAlerteEvaluation($mailAlerteEvaluation)
+    {
+        $this->mailAlerteEvaluation = $mailAlerteEvaluation;
+
+        return $this;
+    }
+
+    /**
+     * Get mailAlerteEvaluation
+     *
+     * @return boolean 
+     */
+    public function getMailAlerteEvaluation()
+    {
+        return $this->mailAlerteEvaluation;
     }
 }

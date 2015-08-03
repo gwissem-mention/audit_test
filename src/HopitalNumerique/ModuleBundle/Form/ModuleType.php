@@ -153,6 +153,32 @@ class ModuleType extends AbstractType
                             'rows'   => 3
                     ),
             ))
+
+            ->add('mailAccuseInscription', 'checkbox', array(
+                'required'   => false, 
+                'label'      => 'Envoyer le mail d\'accusé de réception d\'inscription ?'
+            ))
+
+            ->add('mailConfirmationInscription', 'checkbox', array(
+                'required'   => false, 
+                'label'      => 'Envoyer le mail de confirmation d\'inscription ?'
+            ))
+
+            ->add('mailRefusInscription', 'checkbox', array(
+                'required'   => false, 
+                'label'      => 'Envoyer le mail de refus ?'
+            ))
+
+            ->add('mailRappelEvalution', 'checkbox', array(
+                'required'   => false, 
+                'label'      => 'Envoyer le mail de rappel d\'évalution ?'
+            ))
+
+            ->add('mailAlerteEvaluation', 'checkbox', array(
+                'required'   => false, 
+                'label'      => 'Envoyer le mail d\'alerte pour l\'évaluation ?'
+            ))
+
             ->add('file', 'file', array(
                     'required' => false, 
                     'label'    => 'Pièce-jointe'
