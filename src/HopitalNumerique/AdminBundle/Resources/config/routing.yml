@@ -1,7 +1,7 @@
 hopital_numerique_admin_homepage:
-    pattern:  /
+    pattern:  /admin/
     defaults: { _controller: HopitalNumeriqueAdminBundle:Default:index }
 
 hopital_numerique_admin_homepage_reorder:
-    pattern:  /reorder
+    pattern:  /admin/reorder
     defaults: { _controller: HopitalNumeriqueAdminBundle:Default:reorder }

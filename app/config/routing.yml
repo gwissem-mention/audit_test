@@ -92,7 +92,7 @@ hopital_numerique_etablissement:
 
 hopital_numerique_admin:
     resource: "@HopitalNumeriqueAdminBundle/Resources/config/routing.yml"
-    prefix:   /admin
+    prefix:   /
 
 hopital_numerique_objet:
     resource: "@HopitalNumeriqueObjetBundle/Resources/config/routing.yml"
