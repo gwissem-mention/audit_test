@@ -210,6 +210,15 @@ class Module
     protected $statut;
 
     /**
+     * @ORM\ManyToMany(targetEntity="\HopitalNumerique\DomaineBundle\Entity\Domaine", cascade={"persist"})
+     * @ORM\JoinTable(name="hn_domaine_gestions_modules",
+     *      joinColumns={ @ORM\JoinColumn(name="mod_id", referencedColumnName="mod_id", onDelete="CASCADE")},
+     *      inverseJoinColumns={ @ORM\JoinColumn(name="dom_id", referencedColumnName="dom_id", onDelete="CASCADE")}
+     * )
+     */
+    protected $domaines;
+
+    /**
      * Constructor
      */
     public function __construct()
@@ -753,5 +762,56 @@ class Module
         }
 
         return $connaissancesOrdered;
+    }
+
+    /**
+     * Add domaines
+     *
+     * @param \HopitalNumerique\DomaineBundle\Entity\Domaine $domaines
+     * @return Module
+     */
+    public function addDomaine(\HopitalNumerique\DomaineBundle\Entity\Domaine $domaines)
+    {
+        $this->domaines[] = $domaines;
+
+        return $this;
+    }
+
+    /**
+     * Remove domaines
+     *
+     * @param \HopitalNumerique\DomaineBundle\Entity\Domaine $domaines
+     */
+    public function removeDomaine(\HopitalNumerique\DomaineBundle\Entity\Domaine $domaines)
+    {
+        $this->domaines->removeElement($domaines);
+    }
+
+    /**
+     * Get domaines
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getDomaines()
+    {
+        return $this->domaines;
+    }
+    
+    
+    /**
+     * Get les ids des domaines
+     *
+     * @return array[integer]
+     */
+    public function getDomainesId()
+    {
+        $domainesId = array();
+
+        foreach ($this->domaines as $domaine) 
+        {
+            $domainesId[] = $domaine->getId();
+        }
+
+        return $domainesId;
     }
 }

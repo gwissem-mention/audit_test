@@ -21,14 +21,21 @@ class ModuleRepository extends EntityRepository
      * @author Gaetan MELCHILSEN
      * @copyright Nodevo
      */
-    public function getDatasForGrid()
+    public function getDatasForGrid($domainesIds, $condition = null)
     {
         $qb = $this->_em->createQueryBuilder();
-        $qb->select('mod.id, mod.titre, refEtat.libelle as statut, productions.titre as prod_titre')
+        $qb->select('mod.id, mod.titre, refEtat.libelle as statut, productions.titre as prod_titre, domaine.nom as domaineNom')
             ->from('HopitalNumeriqueModuleBundle:Module', 'mod')
             ->leftJoin('mod.statut','refEtat')
             ->leftJoin('mod.productions','productions')
-            ->orderBy('mod.titre');
+            ->leftJoin('mod.domaines', 'domaine')
+                ->where($qb->expr()->orX(
+                    $qb->expr()->in('domaine.id', ':domainesId'),
+                    $qb->expr()->isNull('domaine.id')
+                ))
+            ->setParameter('domainesId', $domainesIds)
+            ->orderBy('mod.titre')
+            ->groupBy('mod.id', 'domaine.id');
         
         return $qb;
     }

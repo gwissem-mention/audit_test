@@ -7,6 +7,8 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 use Doctrine\ORM\EntityRepository;
 
+use HopitalNumerique\UserBundle\Manager\UserManager;
+
 /**
  * 
  * @author Gaetan MELCHILSEN
@@ -15,14 +17,19 @@ use Doctrine\ORM\EntityRepository;
 class ModuleType extends AbstractType
 {
     private $_constraints = array();
+    private $_userManager;
     
-    public function __construct($manager, $validator)
+    public function __construct($manager, $validator, UserManager $userManager)
     {
         $this->_constraints = $manager->getConstraints( $validator );
+
+        $this->_userManager = $userManager;
     }
     
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
+        $connectedUser = $this->_userManager->getUserConnected();
+
         $builder
             ->add('titre', 'text', array(
                     'max_length' => $this->_constraints['titre']['maxlength'],
@@ -61,6 +68,17 @@ class ModuleType extends AbstractType
                             ->orderBy('parent.libelle', 'ASC')
                             ->addOrderBy('ref.order', 'ASC');
                     }
+            ))
+            ->add('domaines', 'entity', array(
+                'class'       => 'HopitalNumeriqueDomaineBundle:Domaine',
+                'property'    => 'nom',
+                'required'    => false,
+                'multiple'    => true,
+                'label'       => 'Domaine(s) associé(s)',
+                'empty_value' => ' - ',
+                'query_builder' => function(EntityRepository $er) use ($connectedUser){
+                    return $er->getDomainesUserConnectedForForm($connectedUser->getId());
+                }
             ))
             ->add('duree', 'entity', array(
                     'class'         => 'HopitalNumeriqueReferenceBundle:Reference',
