@@ -36,6 +36,9 @@ class DemandesGrid extends DemandesAbstractGrid
         
         parent::setColumns();
         
+        $colonneId = new Column\TextColumn('idIntervention', 'ID');
+        $this->addColonne($colonneId);
+        
         $colonneInterventionInitiateurType = new Column\TextColumn('interventionInitiateurType', '');
         $colonneInterventionInitiateurType->setAlign('center');
         $colonneInterventionInitiateurType->setFilterable(false);
