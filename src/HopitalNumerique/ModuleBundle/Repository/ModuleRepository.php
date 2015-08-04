@@ -21,14 +21,21 @@ class ModuleRepository extends EntityRepository
      * @author Gaetan MELCHILSEN
      * @copyright Nodevo
      */
-    public function getDatasForGrid()
+    public function getDatasForGrid($domainesIds, $condition = null)
     {
         $qb = $this->_em->createQueryBuilder();
-        $qb->select('mod.id, mod.titre, refEtat.libelle as statut, productions.titre as prod_titre')
+        $qb->select('mod.id, mod.titre, refEtat.libelle as statut, productions.titre as prod_titre, domaine.nom as domaineNom')
             ->from('HopitalNumeriqueModuleBundle:Module', 'mod')
             ->leftJoin('mod.statut','refEtat')
             ->leftJoin('mod.productions','productions')
-            ->orderBy('mod.titre');
+            ->leftJoin('mod.domaines', 'domaine')
+                ->where($qb->expr()->orX(
+                    $qb->expr()->in('domaine.id', ':domainesId'),
+                    $qb->expr()->isNull('domaine.id')
+                ))
+            ->setParameter('domainesId', $domainesIds)
+            ->orderBy('mod.titre')
+            ->groupBy('mod.id', 'domaine.id');
         
         return $qb;
     }
@@ -52,6 +59,29 @@ class ModuleRepository extends EntityRepository
             ->andWhere('session.dateSession >= :today')
             ->setParameter('today', new \DateTime() )
             ->leftJoin('session.inscriptions', 'inscription', Join::WITH, 'inscription.etatInscription = 407')
+            ->orderBy('mod.titre');
+        
+        return $qb;
+    }
+
+    /**
+     * Récupère les modules du domaine passé en param
+     *
+     * @return array(Module)
+     * 
+     * @author Gaetan MELCHILSEN
+     * @copyright Nodevo
+     */
+    public function getModuleActifForDomaine($domaineId)
+    {
+        $qb = $this->_em->createQueryBuilder();
+        $qb->select('mod')
+            ->from('HopitalNumeriqueModuleBundle:Module', 'mod')
+            ->leftJoin('mod.statut', 'refEtat')
+            ->where('refEtat.id = 3')
+            ->leftJoin('mod.domaines', 'domaine')
+            ->andWhere('domaine.id = :domaineId')
+            ->setParameter('domaineId', $domaineId )
             ->orderBy('mod.titre');
         
         return $qb;

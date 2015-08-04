@@ -358,10 +358,13 @@ class MailManager extends BaseManager
         $toSend = array();
         foreach ($inscriptions as $key => $inscription) 
         {
-            $toSend[] = $this->generationMail($inscription->getUser(), $mail, array(
-                            'date'    => $inscription->getSession()->getDateSession()->format('d/m/Y'),
-                            'module'  => $inscription->getSession()->getModule()->getTitre()
-            ));
+            if($inscription->getSession()->getModule()->getMailConfirmationInscription())
+            {
+                $toSend[] = $this->generationMail($inscription->getUser(), $mail, array(
+                                'date'    => $inscription->getSession()->getDateSession()->format('d/m/Y'),
+                                'module'  => $inscription->getSession()->getModule()->getTitre()
+                )); 
+            }
         }
     
         return $toSend;
@@ -382,11 +385,14 @@ class MailManager extends BaseManager
         $toSend = array();
         foreach ($inscriptions as $key => $inscription) 
         {
-            $toSend[] = $this->generationMail($inscription->getUser(), $mail, array(
-                            'date'      => $inscription->getSession()->getDateSession()->format('d/m/Y'),
-                            'module'    => $inscription->getSession()->getModule()->getTitre(),
-                            'textRefus' => $options['textRefus']
-            ));
+            if($inscription->getSession()->getModule()->getMailRefusInscription())
+            {
+                $toSend[] = $this->generationMail($inscription->getUser(), $mail, array(
+                                'date'      => $inscription->getSession()->getDateSession()->format('d/m/Y'),
+                                'module'    => $inscription->getSession()->getModule()->getTitre(),
+                                'textRefus' => $options['textRefus']
+                ));
+            }
         }
     
         return $toSend;
@@ -407,22 +413,25 @@ class MailManager extends BaseManager
         $toSend = array();
         foreach ($inscriptions as $key => $inscription) 
         {
-            $mailTemp = $this->generationMail($inscription->getUser(), $mail, array(
-                            'date'      => $inscription->getSession()->getDateSession()->format('d/m/Y'),
-                            'module'    => $inscription->getSession()->getModule()->getTitre(),
-                            'texteMail' => $inscription->getSession()->getTextMailRappel()
-            ));
-
-            if(!is_null($inscription->getSession()->getAbsolutePath()) && trim($inscription->getSession()->getAbsolutePath()) !== "")
+            if($inscription->getSession()->getModule()->getMailRappelEvalution())
             {
-                $mailTemp->attach(\Swift_Attachment::fromPath($inscription->getSession()->getAbsolutePath()), "application/octet-stream");
-            }
-            elseif(!is_null($inscription->getSession()->getModule()->getAbsolutePath()) && trim($inscription->getSession()->getModule()->getAbsolutePath()) !== "")
-            {
-                $mailTemp->attach(\Swift_Attachment::fromPath($inscription->getSession()->getModule()->getAbsolutePath()), "application/octet-stream");
-            }
+                $mailTemp = $this->generationMail($inscription->getUser(), $mail, array(
+                                'date'      => $inscription->getSession()->getDateSession()->format('d/m/Y'),
+                                'module'    => $inscription->getSession()->getModule()->getTitre(),
+                                'texteMail' => $inscription->getSession()->getTextMailRappel()
+                ));
 
-            $toSend[] = $mailTemp;
+                if(!is_null($inscription->getSession()->getAbsolutePath()) && trim($inscription->getSession()->getAbsolutePath()) !== "")
+                {
+                    $mailTemp->attach(\Swift_Attachment::fromPath($inscription->getSession()->getAbsolutePath()), "application/octet-stream");
+                }
+                elseif(!is_null($inscription->getSession()->getModule()->getAbsolutePath()) && trim($inscription->getSession()->getModule()->getAbsolutePath()) !== "")
+                {
+                    $mailTemp->attach(\Swift_Attachment::fromPath($inscription->getSession()->getModule()->getAbsolutePath()), "application/octet-stream");
+                }
+
+                $toSend[] = $mailTemp;
+            }
         }
     
         return $toSend;
@@ -443,14 +452,17 @@ class MailManager extends BaseManager
         $toSend = array();
         foreach ($inscriptions as $key => $inscription) 
         {
-            $toSend[] = $this->generationMail($inscription->getUser(), $mail, array(
-                            'date'    => $inscription->getSession()->getDateSession()->format('d/m/Y'),
-                            'module'  => $inscription->getSession()->getModule()->getTitre(),
-                            'url'     => '<a href="'. $this->_requestStack->getCurrentRequest()->getUriForPath( $this->_router->generate( 'hopitalnumerique_module_evaluation_form_front', array(
-                                            'id' => $inscription->getSession()->getId() 
-                                        ))) .'" target="_blank" >Hopital Numérique</a>'
+            if($inscription->getSession()->getModule()->getMailAlerteEvaluation())
+            {
+                $toSend[] = $this->generationMail($inscription->getUser(), $mail, array(
+                                'date'    => $inscription->getSession()->getDateSession()->format('d/m/Y'),
+                                'module'  => $inscription->getSession()->getModule()->getTitre(),
+                                'url'     => '<a href="'. $this->_requestStack->getCurrentRequest()->getUriForPath( $this->_router->generate( 'hopitalnumerique_module_evaluation_form_front', array(
+                                                'id' => $inscription->getSession()->getId() 
+                                            ))) .'" target="_blank" >Hopital Numérique</a>'
 
-            ));
+                ));
+            }
         }
     
         return $toSend;

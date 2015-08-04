@@ -57,6 +57,7 @@
                     
                     {# Formulaire : #}
                     {{ form_row(form.titre) }}
+                    {{ form_row(form.domaines) }}
                     {{ form_row(form.productions) }}
                     {{ form_row(form.connaissances) }}
                     {{ form_row(form.duree) }}
@@ -66,6 +67,11 @@
                     {{ form_row(form.nombrePlaceDisponible) }}
                     {{ form_row(form.prerequis) }}
                     {{ form_row(form.formateur) }}
+                    {{ form_row(form.mailAccuseInscription) }}
+                    {{ form_row(form.mailConfirmationInscription) }}
+                    {{ form_row(form.mailRefusInscription) }}
+                    {{ form_row(form.mailRappelEvalution) }}
+                    {{ form_row(form.mailAlerteEvaluation) }}
                     {{ form_row(form.textMailRappel) }}
                     {# Gestion de l'upload #}
                     <div class="form-group">

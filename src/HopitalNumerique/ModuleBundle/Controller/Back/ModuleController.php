@@ -178,15 +178,6 @@ class ModuleController extends Controller
             // On bind les données du form
             $form->handleRequest($request);
 
-            $productions = $form->get("productions")->getData();
-            if( count($productions) == 0 ) {
-                $this->get('session')->getFlashBag()->add('danger', 'Veuillez sélectionner une production.');
-                return $this->render( $view , array(
-                    'form'   => $form->createView(),
-                    'module' => $module
-                ));
-            }
-
             //si le formulaire est valide
             if ($form->isValid()) {
                 //test ajout ou edition

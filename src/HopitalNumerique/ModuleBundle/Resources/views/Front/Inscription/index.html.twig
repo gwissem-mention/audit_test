@@ -34,11 +34,14 @@
             <thead>
                 <tr>
                     <th>Module</th>
-                    <th>Début de la session</th>
+                    <th>Début</th>
+                    <th></th>
                     <th>Etat inscription</th>
                     <th>Evaluation</th>
-                    <th>Etat facture</th>
-                    <th>Etat remb.</th>
+                    {% if is_granted('ROLE_AMBASSADEUR_7') %}
+                        <th>Etat facture</th>
+                        <th>Etat remb.</th>
+                    {% endif %}
                 </tr>
             </thead>
             <tbody>
@@ -48,6 +51,9 @@
                             <a href="{{path('hopitalnumerique_module_module_show_front',{'id':inscription.session.module.id})}}">{{inscription.session.module.titre}}</a>
                         </td>
                         <td>{{inscription.session.dateSession|date('d/m/Y')}}</td>
+                        <td>
+                            <a class="btn btn-danger btn-sm" href="{{path('hopitalnumerique_module_inscription_annulation_inscription_front',{'id':inscription.id})}}"><i class="fa fa-times-circle"></i></a>
+                        </td>
                         <td>{% if inscription.etatInscription != null %}{{inscription.etatInscription.libelle}}{% endif %}</td>
                         <td>
                             <div class="btn-group"> 
@@ -64,26 +70,28 @@
                                 {% endif %}
                             </div>
                         </td>
-                        <td>
-                            {% if app.user|checkAuthorization( path('hopitalnumerique_paiement_front') ) %}
-                                {% if inscription.etatRemboursement != null %}{{inscription.etatRemboursement.libelle}} (N.{{inscription.facture.user.id ~ inscription.facture.id}}){% endif %}
-                            {% else %}
-                                NA
-                            {% endif %}
-                        </td>
-                        <td>
-                            {% if app.user|checkAuthorization( path('hopitalnumerique_paiement_front') ) %}
-                                {% if inscription.facture is not null %}
-                                    {% if inscription.facture.payee %}Payée{% else %}Non Payée{% endif%} : {{inscription.facture.total}}€
+                        {% if is_granted('ROLE_AMBASSADEUR_7') %}
+                            <td>
+                                {% if app.user|checkAuthorization( path('hopitalnumerique_paiement_front') ) %}
+                                    {% if inscription.etatRemboursement != null %}{{inscription.etatRemboursement.libelle}} (N.{{inscription.facture.user.id ~ inscription.facture.id}}){% endif %}
+                                {% else %}
+                                    NA
                                 {% endif %}
-                            {% else %}
-                                NA
-                            {% endif %}
-                        </td>
+                            </td>
+                            <td>
+                                {% if app.user|checkAuthorization( path('hopitalnumerique_paiement_front') ) %}
+                                    {% if inscription.facture is not null %}
+                                        {% if inscription.facture.payee %}Payée{% else %}Non Payée{% endif%} : {{inscription.facture.total}}€
+                                    {% endif %}
+                                {% else %}
+                                    NA
+                                {% endif %}
+                            </td>
+                        {% endif %}
                     </tr>
                 {% else %}
                     <tr>
-                        <td colspan="7"> - Aucune inscription - </td>
+                        <td colspan="{% if is_granted('ROLE_AMBASSADEUR_7') %}7{% else %}5{% endif %}"> - Aucune inscription - </td>
                     </tr>
                 {% endfor %}
             </tbody>

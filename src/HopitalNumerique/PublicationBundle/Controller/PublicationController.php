@@ -426,7 +426,7 @@ class PublicationController extends Controller
                     $resume               = explode('<!-- pagebreak -->', $contenu->getContenu() );
                 }
 
-                $production->resume   = html_entity_decode(strip_tags($resume[0]), 2 | 0, 'UTF-8');
+                $production->resume   = $resume[0];
                 $production->updated  = false;
                 $production->new      = false;
                 $production->type     = $this->getType($objet);

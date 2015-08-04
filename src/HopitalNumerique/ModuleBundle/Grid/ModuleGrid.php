@@ -36,6 +36,9 @@ class ModuleGrid extends Grid implements GridInterface
     {
         //field, titre, isSortable, size
         $this->addColonne( new Column\TextColumn('titre', 'Titre') );
+
+        $domaineColumn = new Column\TextColumn('domaineNom', 'Domaine(s) associé(s)');
+        $this->addColonne( $domaineColumn );
         
         $productionColumn = new Column\TextColumn('prod_titre', 'Productions concernées');
         $productionColumn->setSize( 400 );

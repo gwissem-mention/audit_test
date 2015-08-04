@@ -7,6 +7,8 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 use Doctrine\ORM\EntityRepository;
 
+use HopitalNumerique\UserBundle\Manager\UserManager;
+
 /**
  * 
  * @author Gaetan MELCHILSEN
@@ -15,14 +17,19 @@ use Doctrine\ORM\EntityRepository;
 class ModuleType extends AbstractType
 {
     private $_constraints = array();
+    private $_userManager;
     
-    public function __construct($manager, $validator)
+    public function __construct($manager, $validator, UserManager $userManager)
     {
         $this->_constraints = $manager->getConstraints( $validator );
+
+        $this->_userManager = $userManager;
     }
     
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
+        $connectedUser = $this->_userManager->getUserConnected();
+
         $builder
             ->add('titre', 'text', array(
                     'max_length' => $this->_constraints['titre']['maxlength'],
@@ -36,7 +43,7 @@ class ModuleType extends AbstractType
                     'class'         => 'HopitalNumeriqueObjetBundle:Objet',
                     'property'      => 'titre',
                     'multiple'      => true,
-                    'required'      => true,
+                    'required'      => false,
                     'label'         => 'Productions concernées',
                     'empty_value'   => ' - ',
                     'attr'          => array('class' => 'productions'),
@@ -48,7 +55,7 @@ class ModuleType extends AbstractType
                     'class'         => 'HopitalNumeriqueReferenceBundle:Reference',
                     'property'      => 'libelle',
                     'multiple'      => true,
-                    'required'      => true,
+                    'required'      => false,
                     'group_by'      => 'parentName',
                     'label'         => 'Connaissances concernées',
                     'empty_value'   => ' - ',
@@ -61,6 +68,17 @@ class ModuleType extends AbstractType
                             ->orderBy('parent.libelle', 'ASC')
                             ->addOrderBy('ref.order', 'ASC');
                     }
+            ))
+            ->add('domaines', 'entity', array(
+                'class'       => 'HopitalNumeriqueDomaineBundle:Domaine',
+                'property'    => 'nom',
+                'required'    => false,
+                'multiple'    => true,
+                'label'       => 'Domaine(s) associé(s)',
+                'empty_value' => ' - ',
+                'query_builder' => function(EntityRepository $er) use ($connectedUser){
+                    return $er->getDomainesUserConnectedForForm($connectedUser->getId());
+                }
             ))
             ->add('duree', 'entity', array(
                     'class'         => 'HopitalNumeriqueReferenceBundle:Reference',
@@ -119,9 +137,12 @@ class ModuleType extends AbstractType
                     'required'      => false,
                     'label'         => 'Formateur',
                     'empty_value'   => ' - ',
-                    'query_builder' => function(EntityRepository $er) {
+                    'query_builder' => function(EntityRepository $er) use ($connectedUser){
                         return $er->createQueryBuilder('user')
-                            ->where('user.enabled = ' . 1)
+                            ->leftJoin('user.domaines', 'domaine')
+                            ->where('domaine.id IN (:domainesIds)')
+                                ->setParameter('domainesIds', $connectedUser->getDomainesId())
+                            ->andWhere('user.enabled = ' . 1)
                             ->orderBy('user.nom', 'ASC');
                     }
             ))
@@ -132,6 +153,32 @@ class ModuleType extends AbstractType
                             'rows'   => 3
                     ),
             ))
+
+            ->add('mailAccuseInscription', 'checkbox', array(
+                'required'   => false, 
+                'label'      => 'Envoyer le mail d\'accusé de réception d\'inscription ?'
+            ))
+
+            ->add('mailConfirmationInscription', 'checkbox', array(
+                'required'   => false, 
+                'label'      => 'Envoyer le mail de confirmation d\'inscription ?'
+            ))
+
+            ->add('mailRefusInscription', 'checkbox', array(
+                'required'   => false, 
+                'label'      => 'Envoyer le mail de refus ?'
+            ))
+
+            ->add('mailRappelEvalution', 'checkbox', array(
+                'required'   => false, 
+                'label'      => 'Envoyer le mail de rappel d\'évalution ?'
+            ))
+
+            ->add('mailAlerteEvaluation', 'checkbox', array(
+                'required'   => false, 
+                'label'      => 'Envoyer le mail d\'alerte pour l\'évaluation ?'
+            ))
+
             ->add('file', 'file', array(
                     'required' => false, 
                     'label'    => 'Pièce-jointe'

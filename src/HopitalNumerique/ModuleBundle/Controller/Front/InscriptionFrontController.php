@@ -37,13 +37,16 @@ class InscriptionFrontController extends Controller
         {
             $this->get('hopitalnumerique_module.manager.inscription')->save($inscription);
 
-            //envoi du mail de confirmation d'inscription
-            $options = array(
-                'module' => $session->getModule()->getTitre(),
-                'date'   => $session->getDateSession()->format('d/m/Y')
-            );
-            $mail = $this->get('nodevo_mail.manager.mail')->sendInscriptionSession($user, $options);
-            $this->get('mailer')->send($mail);
+            if($session->getModule()->getMailAccuseInscription())
+            { 
+                //envoi du mail de confirmation d'inscription
+                $options = array(
+                    'module' => $session->getModule()->getTitre(),
+                    'date'   => $session->getDateSession()->format('d/m/Y')
+                );
+                $mail = $this->get('nodevo_mail.manager.mail')->sendInscriptionSession($user, $options);
+                $this->get('mailer')->send($mail);
+            }
 
             // On envoi une 'flash' pour indiquer à l'utilisateur que le fichier n'existe pas: suppression manuelle sur le serveur
             $this->get('session')->getFlashBag()->add( ('success') , 'Votre inscription a été prise en compte.' );
@@ -161,5 +164,26 @@ class InscriptionFrontController extends Controller
         $kernelCharset = $this->container->getParameter('kernel.charset');
 
         return $this->get('hopitalnumerique_module.manager.session')->exportCsv( $colonnes, $datas, 'export-liste-participant-session.csv', $kernelCharset );
+    }
+
+    public function annulationInscriptionAction(Inscription $inscription)
+    {
+        //On récupère l'utilisateur qui est connecté
+        $user = $this->get('security.context')->getToken()->getUser();
+
+        if($user->getId() === $inscription->getUser()->getId())
+        {
+            $this->get('hopitalnumerique_module.manager.inscription')->toogleEtatInscription( array($inscription), $this->get('hopitalnumerique_reference.manager.reference')->findOneBy( array( 'id' => 409) ) );
+            $this->get('hopitalnumerique_module.manager.inscription')->toogleEtatParticipation( array($inscription), $this->get('hopitalnumerique_reference.manager.reference')->findOneBy( array( 'id' => 412) ) );
+            $this->get('hopitalnumerique_module.manager.inscription')->toogleEtatEvaluation( array($inscription), $this->get('hopitalnumerique_reference.manager.reference')->findOneBy( array( 'id' => 430) ) );   
+            
+            $this->get('session')->getFlashBag()->add( ('success') , 'Votre inscription à la session "'. $inscription->getSession()->getModule()->getTitre() .'" été annulée.' );
+        }
+        else
+        {
+            $this->get('session')->getFlashBag()->add( ('danger') , 'Vous ne pouvez annuler que les inscriptions vous concernant.' );
+        }
+
+        return $this->redirect( $this->generateUrl('hopitalnumerique_module_inscription_index_front') );
     }
 }

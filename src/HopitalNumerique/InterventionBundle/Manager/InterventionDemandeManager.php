@@ -890,6 +890,7 @@ class InterventionDemandeManager extends BaseManager
         foreach ($interventionDemandes as $interventionDemande) 
         {
             $interventionDemandesOrdered[$interventionDemande['id']] = $interventionDemande;
+            $interventionDemandesOrdered[$interventionDemande['id']]['idIntervention'] = $interventionDemande['id'];
         }
 
         return $interventionDemandesOrdered;

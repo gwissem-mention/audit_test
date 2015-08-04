@@ -200,11 +200,11 @@
 
                             <div class="panel-body">
                                 <ol>
+                                    <li><strong>{{blocInterventions['demandees'] + blocInterventions['attente'] + blocInterventions['en-cours'] + blocInterventions['refusees'] + blocInterventions['annulees']}}</strong> demandes d'interventions</li>
                                     <li><strong>{{blocInterventions['demandees']}}</strong> interventions demandées</li>
                                     <li><strong>{{blocInterventions['attente']}}</strong> interventions mises en attente</li>
                                     <li><strong>{{blocInterventions['en-cours']}}</strong> interventions en cours</li>
-                                    <li><strong>{{blocInterventions['refusees']}}</strong> interventions refusées</li>
-                                    <li><strong>{{blocInterventions['annulees']}}</strong> interventions annulées</li>
+                                    <li><strong>{{blocInterventions['refusees'] + blocInterventions['annulees']}}</strong> interventions refusées ou annulées</li>
                                 </ol>
                             </div>
                         </div>

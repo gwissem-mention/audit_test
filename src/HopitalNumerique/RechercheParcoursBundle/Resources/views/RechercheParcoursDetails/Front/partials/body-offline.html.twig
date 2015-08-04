@@ -1,15 +1,15 @@
 <div id="pointsdurs" class="col-md-12">
     {% set count = 0 %}
-    {% for objet in objets if (objet['categ'] in rechercheParcours.recherchesParcoursGestion.getPublicationString() and (objet['primary'] >= 1) ) %}
+    {% for objet in objets if rechercheParcours.recherchesParcoursGestion is not null and (objet['categ'] in rechercheParcours.recherchesParcoursGestion.getPublicationString() and (objet['primary'] >= 1) ) %}
         {% set count = count + 1 %}
     {% endfor %}
-    <h4>{% if rechercheParcours.recherchesParcoursGestion.getPublicationString()|length == 1 %}{{rechercheParcours.recherchesParcoursGestion.getPublicationString()[0] ~ '(s)'|upper}}{% else %}PUBLICATION(S){% endif %} ( {{count}} Résultat{% if count > 1%}s{% endif %} )</h4>
+    <h4>{% if rechercheParcours.recherchesParcoursGestion is not null and rechercheParcours.recherchesParcoursGestion.getPublicationString()|length == 1 %}{{rechercheParcours.recherchesParcoursGestion.getPublicationString()[0] ~ '(s)'|upper}}{% else %}PUBLICATION(S){% endif %} ( {{count}} Résultat{% if count > 1%}s{% endif %} )</h4>
     <div class="wrapper-results">
         <div class="background-violet"></div>
         <div class="row">
         <div class="col-md-8 results">
             {% set count = 0 %}
-            {% for objet in objets if (objet['categ'] in rechercheParcours.recherchesParcoursGestion.getPublicationString() and objet['primary']) %}
+            {% for objet in objets if rechercheParcours.recherchesParcoursGestion is not null and (objet['categ'] in rechercheParcours.recherchesParcoursGestion.getPublicationString() and objet['primary']) %}
                 {% include 'HopitalNumeriqueRechercheParcoursBundle:RechercheParcoursDetails:Front/partials/points-durs-offline.html.twig' with {'objet': objet } %}
             {% else %}
                 <p> - Aucun point dur trouvé - </p>
