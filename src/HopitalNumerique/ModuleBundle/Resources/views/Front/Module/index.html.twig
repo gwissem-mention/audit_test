@@ -16,9 +16,133 @@
 
 {% block contenu %}
     <div class="col-md-12">
-        {% for module in modules %}
-            {{ moduleMaccros.createTableauSession(module) }}
-        {% endfor %}
+        <div class="panel">
+            <div class="col-md-12 table-responsive table-module">
+
+                <h4 class="violet titre">Liste des sessions à venir</h4>
+                                    
+                <table class="table table-striped table-hover table-condensed table-bordered">
+                    <thead>
+                        <tr class="grid-row-titles">
+                            <th style="width:80px;font-size:11px;vertical-align:middle">Début de la session</th>
+                            <th style="width:80px;font-size:11px;vertical-align:middle">Module</th>
+                            <th style="width:80px;font-size:11px;vertical-align:middle">Durée</th>
+                            <th style="width:195px;font-size:11px;vertical-align:middle">Horaires</th>
+                            <th style="font-size:11px;vertical-align:middle">Lieu</th>
+                            <th style="width:72px;font-size:11px">Places disponibles</th>
+                            <th style="width:70px;font-size:11px">Vous êtes inscrit</th>
+                            <th style="width:86px;font-size:11px"></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for key,session in sessions %}
+                            {# Vérification de l'accès #}
+                            {% set autorisation = false %}
+                            {% for roleAutorise in session.restrictionAcces %}
+                                {% if roleAutorise.role in app.user.roles %}
+                                    {% set autorisation = true %}
+                                {% endif %}
+                            {% endfor %}
+                            {# On affiche uniquement les dates non dépassées #}
+                            {% if date(session.dateOuvertureInscription) <= date() 
+                                  and date(session.dateFermetureInscription) > date() 
+                                  and autorisation %}
+                            {% set uneSessionAffichees = true %}
+                                <tr>
+                                    <td class=
+                                        {% if date(session.dateSession) < date('+7days') %}
+                                            "warning-off" title="Session prévue dans moins de 7 jours">
+                                        {% elseif date(session.dateSession) < date('+1month') %}
+                                            "info-off" title="Session prévue dans moins d'un mois">
+                                        {% else %}
+                                            "success-off" title="Session prévue dans plus d'un mois">
+                                        {% endif %}
+                                        {{session.dateSession|date("d/m/Y")}}
+                                    </td>
+                                    <td title="{{session.module.description}}" style="cursor:help">
+                                        {{session.module.titre}}
+                                    </td>
+                                    <td>
+                                        {{session.duree.libelle}}
+                                    </td>
+                                    <td>
+                                        {{session.horaires}}
+                                    </td>
+                                    <td>
+                                        {{ session.lieu}}
+                                    </td>
+                                    <td align="center" class={% if (session.nombrePlaceDisponible - session.getInscriptionsAccepte()|length) > (session.nombrePlaceDisponible / 10) %}"success-off"{% elseif (session.nombrePlaceDisponible - session.getInscriptionsAccepte()|length) > 0 %}"warning-off"{% else %}"danger-off"{% endif %}
+                                    {% if (session.nombrePlaceDisponible - session.getInscriptionsAccepte()|length) > (session.nombrePlaceDisponible / 10) %}
+                                        title="Places restantes suffisantes"
+                                    {% elseif (session.nombrePlaceDisponible - session.getInscriptionsAccepte()|length) > 0 %}
+                                        title="Places restantes bientôt écoulées"
+                                    {% else %}
+                                        title="Plus de places restantes"
+                                    {% endif %}
+                                    >
+                                        {{session.nombrePlaceDisponible - session.getInscriptionsAccepte()|length}}
+                                    </td>
+                                    <td>
+                                        {% set userInscrit = false %}
+                                        {% set userRefuser = false %}
+                                        {% set userEnAttente = false %}
+                                        {% set userAnnule    = false %}
+                                        {% set userAParticipe = false %}
+                                        {# Parcourt la liste des utilisateurs inscrits à la session #}
+                                        {% for key,inscription in session.getInscriptions() %}
+                                            {# Si l'utilisateur connecté est inscrit alors on set la variable userEnAttente à true #}
+                                            {% if app.user is not null and app.user.id == inscription.user.id %}
+                                                {# Si l'inscription de l'utilisateur connecté est accepté alors on set la variable userInscrit à true #}
+                                                {% if inscription.etatInscription.id == 407 %}
+                                                    {% set userInscrit = true %}
+                                                {% endif %}
+                                                {# Si l'inscription de l'utilisateur connecté est accepté alors on set la variable userInscrit à true #}
+                                                {% if inscription.etatInscription.id == 408 %}
+                                                    {% set userRefuser = true %}
+                                                {% endif %}
+                                                {# Si l'inscription de l'utilisateur connecté est accepté alors on set la variable userInscrit à true #}
+                                                {% if inscription.etatInscription.id == 406 %}
+                                                    {% set userEnAttente = true %}
+                                                {% endif %}
+                                                {# Si l'inscription de l'utilisateur connecté est accepté alors on set la variable userInscrit à true #}
+                                                {% if inscription.etatInscription.id == 409 %}
+                                                    {% set userAnnule = true %}
+                                                {% endif %}
+                                                {# Si l'utilisateur connecté a participé alors on set la variable userAParticipe à true #}
+                                                {% if inscription.etatParticipation.id == 411 %}
+                                                    {% set userAParticipe = true %}
+                                                {% endif %}
+                                            {% endif %}
+                                        {% endfor %}
+                                        {% if userInscrit %}
+                                            <span class="inscrit">{{session.etat.libelle}}</span>
+                                        {% elseif userRefuser %}
+                                            <span class="refuser">{{session.etat.libelle}}</span>
+                                        {% elseif userEnAttente %}
+                                            <span class="en-attente">{{session.etat.libelle}}</span>
+                                        {% elseif userAnnule %}
+                                            <span class="annule">{{session.etat.libelle}}</span>
+                                        {% endif %}
+                                    </td>
+                                    {# Gestion de la taille en fonction du nombre de bouton qu'il y aura a afficher #}
+                                    <td style="min-width:86px;">
+                                        <div class="btn-group">
+                                            <a class="btn btn-info link fancybox.ajax" href="{{path('hopitalnumerique_module_session_description_front',{'id':session.id})}}"><i class="fa fa-info-circle"></i></a>
+                                            <a class="btn btn-success link" href="{{path('hopitalnumerique_module_session_informations_front',{'id':session.id})}}"><i class="fa fa-arrow-right"></i></a>
+                                        </div>
+                                    </td>
+                                </tr>
+                            {% else %}
+                                <tr><td colspan="7">- Aucune session planifiée -</td></tr>
+                            {% endif %}
+                        {% else %}
+                            <tr><td colspan="7">- Aucune session planifiée -</td></tr>
+                        {% endfor %} 
+                    </tbody>
+                </table>                    
+            </div>
+            <div class="clearfix"></div>
+        </div>
     </div>
     <div class="clearfix"></div>
 {% endblock contenu %}

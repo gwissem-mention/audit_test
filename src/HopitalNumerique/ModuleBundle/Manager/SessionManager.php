@@ -142,6 +142,18 @@ class SessionManager extends BaseManager
     }
 
     /**
+     * Retourne la liste des sessions du domaine courrant étant en court d'inscription et active
+     *
+     * @param idDomaine $idDomaine Domaine concerné
+     * 
+     * @return array
+     */
+    public function getSessionsInscriptionOuverteModuleDomaine( $idDomaine )
+    {
+        return $this->getRepository()->getSessionsInscriptionOuverteModuleDomaine( $idDomaine )->getQuery()->getResult();
+    }
+
+    /**
      * Retourne la liste des sessions du formateur
      *
      * @param User $user L'utilisateur concerné
