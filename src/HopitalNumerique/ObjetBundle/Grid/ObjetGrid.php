@@ -28,7 +28,7 @@ class ObjetGrid extends Grid implements GridInterface
      */
     public function setColumns()
     {
-        $this->addColonne( new Column\TextColumn('idObjet', 'ID') );
+        $this->addColonne( new Column\NumberColumn('idObjet', 'ID') );
         $this->addColonne( new Column\TextColumn('titre', 'Titre') );
         $this->addColonne( new Column\TextColumn('types','Catégories') );
         $this->addColonne( new Column\TextColumn('domaineNom','Domaine(s) associé(s)') );
