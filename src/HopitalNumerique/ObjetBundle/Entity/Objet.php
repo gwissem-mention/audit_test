@@ -259,6 +259,12 @@ class Objet implements RoutedItemInterface
     protected $etat;
 
     /**
+     * @ORM\ManyToOne(targetEntity="\HopitalNumerique\ReferenceBundle\Entity\Reference", cascade={"persist"})
+     * @ORM\JoinColumn(name="ref_cible_diffusion", referencedColumnName="ref_id")
+     */
+    protected $cibleDiffusion;
+
+    /**
      * @ORM\ManyToMany(targetEntity="\Nodevo\RoleBundle\Entity\Role")
      * @ORM\JoinTable(name="hn_objet_role",
      *      joinColumns={ @ORM\JoinColumn(name="obj_id", referencedColumnName="obj_id")},
@@ -1871,4 +1877,27 @@ class Objet implements RoutedItemInterface
         return "";
     }
 
+
+    /**
+     * Set cibleDiffusion
+     *
+     * @param \HopitalNumerique\ReferenceBundle\Entity\Reference $cibleDiffusion
+     * @return Objet
+     */
+    public function setCibleDiffusion(\HopitalNumerique\ReferenceBundle\Entity\Reference $cibleDiffusion = null)
+    {
+        $this->cibleDiffusion = $cibleDiffusion;
+
+        return $this;
+    }
+
+    /**
+     * Get cibleDiffusion
+     *
+     * @return \HopitalNumerique\ReferenceBundle\Entity\Reference 
+     */
+    public function getCibleDiffusion()
+    {
+        return $this->cibleDiffusion;
+    }
 }

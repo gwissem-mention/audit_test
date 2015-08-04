@@ -51,6 +51,18 @@ class ObjetType extends AbstractType
                               ->orderBy('ref.order', 'ASC');
                 }
             ))
+            ->add('cibleDiffusion', 'entity', array(
+                'class'         => 'HopitalNumeriqueReferenceBundle:Reference',
+                'property'      => 'libelle',
+                'required'      => false,
+                'label'         => 'Cible de diffusion',
+                'query_builder' => function(EntityRepository $er) {
+                    return $er->createQueryBuilder('ref')
+                              ->where('ref.code = :code')
+                              ->setParameter('code', 'CIBLE_DIFFUSION')
+                              ->orderBy('ref.order', 'ASC');
+                }
+            ))
             ->add('roles', 'entity', array(
                 'class'    => 'NodevoRoleBundle:Role',
                 'property' => 'name',
