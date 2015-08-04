@@ -191,12 +191,20 @@
                 <div class="panel">
                     <div class="col-md-12 table-responsive table-module">
 
-                        <h4 class="violet titre">Vous êtes inscrit à cette session</h4>
+                        {% if session.userIsInscritAndAnnule(app.user) %}
+                            <h4 class="violet titre">Votre inscription est annulée</h4>
 
-                        <div class="description">
-                            <p>Vous êtes déjà inscrit à cette session, vous recevrez un mail de confirmation de participation dans les plus brefs délais.
-                            Vous pouvez suivre votre demande dans votre <a href="{{path('hopitalnumerique_module_inscription_index_front')}}">tableau de bord</a>.</p>
-                        </div>
+                            <div class="description">
+                                <p>Vous pouvez <u>contacter un administrateur</u> pour plus de précision.</p>
+                            </div>
+                        {% else %}
+                            <h4 class="violet titre">Vous êtes inscrit à cette session</h4>
+
+                            <div class="description">
+                                <p>Vous êtes déjà inscrit à cette session, vous recevrez un mail de confirmation de participation dans les plus brefs délais.
+                                Vous pouvez suivre votre demande dans votre <a href="{{path('hopitalnumerique_module_inscription_index_front')}}">tableau de bord</a>.</p>
+                            </div>
+                        {% endif %}
                         <div class="clearfix"></div>
                         
                     </div>
