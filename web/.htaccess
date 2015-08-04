@@ -87,3 +87,10 @@ ExpiresByType application/x-shockwave-flash "access plus 60 days"
 <FilesMatch "\\.(ico|jpe?g|png|gif|swf|gz|ttf)$">
     Header set Cache-Control "max-age=2592000, public"
 </FilesMatch>
+
+<FilesMatch "\.(ttf|otf|eot|woff)$">
+  <IfModule mod_headers.c>
+    Header set Access-Control-Allow-Origin "*"
+  </IfModule>
+</FilesMatch>
+
