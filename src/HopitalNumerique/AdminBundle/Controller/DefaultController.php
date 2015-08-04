@@ -26,7 +26,7 @@ class DefaultController extends Controller
         $blocUser          = $this->getBlockuser();
         $blocObjets        = $this->getBlockObjets();
         $blocForum         = $this->getBlockForum();
-        $blocInterventions = array( 'demandees' => 0, 'attente' => 0, 'en-cours' => 0, 'refusees' => 0, 'annulees' => 0 );
+        $blocInterventions = array( 'total' => 0, 'demandees' => 0, 'attente' => 0, 'en-cours' => 0, 'refusees' => 0, 'annulees' => 0 );
         $blocSessions      = array( 'inscriptions' => 0, 'next' => array() );
         $blocPaiements     = array( 'apayer' => 0, 'attente' => 0, 'janvier' => 0 );
 
@@ -34,6 +34,8 @@ class DefaultController extends Controller
         $interventions = $this->get('hopitalnumerique_intervention.manager.intervention_demande')->findAll();
         foreach($interventions as $intervention){
             $etat = $intervention->getInterventionEtat()->getId();
+            
+            $blocInterventions['total']++;
 
             if( $etat == 14 || $etat == 17 || $etat == 18 || $etat == 19)
                 $blocInterventions['demandees']++;
