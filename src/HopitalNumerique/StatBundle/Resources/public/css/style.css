@@ -28,6 +28,11 @@
 #erreurs-curl-filtres label{margin-top: 10px;margin-bottom: 2px;}
 #erreurs-curl-tableau {margin-top: 15px;}
 
+#erreurs-curl-autodiag-filtres .button-generation {margin-top: 15px;}
+#erreurs-curl-autodiag-filtres {padding-bottom:15px;border-bottom: 1px solid #EDEEF0}
+#erreurs-curl-autodiag-filtres label{margin-top: 10px;margin-bottom: 2px;}
+#erreurs-curl-autodiag-tableau {margin-top: 15px;}
+
 #stat-clic-filtres .button-generation {margin-top: 15px;}
 #stat-clic-filtres {padding-bottom:15px;border-bottom: 1px solid #EDEEF0}
 #stat-clic-filtres label{margin-top: 10px;margin-bottom: 2px;}

@@ -9,7 +9,7 @@ use Symfony\Component\HttpFoundation\Response;
 class ErreursController extends Controller
 {
     /**
-     * Cron de suppression des topics
+     * Cron de check des urls des objets
      */
     public function cronAction($id)
     {
