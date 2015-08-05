@@ -4,6 +4,7 @@
     {{parent()}}
     {% stylesheets output="compiled/hopitalnumerique-module-front-inscription-index.css" filter="cssrewrite, ?yui_css"
         "@fancybox_css" 
+        'bundles/nodevoadmin/plugins/apprise/apprise.css'
         'bundles/hopitalnumeriquemodule/css/Front/inscription/style.css'
     %}
         <link rel="stylesheet" href="{{ asset_url }}" />
@@ -14,6 +15,7 @@
     {{parent()}}
     {% javascripts output="compiled/hopitalnumerique-module-front-inscription-index.js"
         "@fancybox_js"
+        'bundles/nodevoadmin/plugins/apprise/apprise.js'
         'bundles/hopitalnumeriquemodule/js/Front/script.js'
     %}
         <script type="text/javascript" src="{{ asset_url }}"></script>
@@ -35,13 +37,13 @@
                 <tr>
                     <th>Module</th>
                     <th>Début</th>
-                    <th></th>
                     <th>Etat inscription</th>
                     <th>Evaluation</th>
                     {% if is_granted('ROLE_AMBASSADEUR_7') %}
                         <th>Etat facture</th>
                         <th>Etat remb.</th>
                     {% endif %}
+                    <th></th>
                 </tr>
             </thead>
             <tbody>
@@ -51,9 +53,6 @@
                             <a href="{{path('hopitalnumerique_module_module_show_front',{'id':inscription.session.module.id})}}">{{inscription.session.module.titre}}</a>
                         </td>
                         <td>{{inscription.session.dateSession|date('d/m/Y')}}</td>
-                        <td>
-                            <a class="btn btn-danger btn-sm" href="{{path('hopitalnumerique_module_inscription_annulation_inscription_front',{'id':inscription.id})}}"><i class="fa fa-times-circle"></i></a>
-                        </td>
                         <td>{% if inscription.etatInscription != null %}{{inscription.etatInscription.libelle}}{% endif %}</td>
                         <td>
                             <div class="btn-group"> 
@@ -88,6 +87,9 @@
                                 {% endif %}
                             </td>
                         {% endif %}
+                        <td>
+                            <a class="btn btn-danger btn-sm" title="Annuler mon inscription" onclick="annulationInscription('{{path('hopitalnumerique_module_inscription_annulation_inscription_front',{'id':inscription.id})}}')"><i class="fa fa-times-circle"></i></a>
+                        </td>
                     </tr>
                 {% else %}
                     <tr>

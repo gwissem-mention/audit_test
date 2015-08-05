@@ -79,7 +79,7 @@
                                     title="Plus de places restantes"
                                 {% endif %}
                                 >
-                                    {{session.getInscriptionsAccepte()|length}}/{{session.nombrePlaceDisponible}}
+                                    {{session.nombrePlaceDisponible - session.getInscriptionsAccepte()|length}}
                                 </td>
                                 <td>
                                     {% set userInscrit = false %}

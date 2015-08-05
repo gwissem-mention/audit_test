@@ -93,6 +93,36 @@ class SessionRepository extends EntityRepository
     /**
      * Retourne la liste des sessions ou l'utilisateur doit/à participé pour le dashboard user
      *
+     * @param idDomaine $idDomaine Domaine concerné
+     * 
+     * @return QueryBuilder
+     */
+    public function getSessionsInscriptionOuverteModuleDomaine($idDomaine)
+    {
+        $qb = $this->_em->createQueryBuilder();
+        $qb->select('ses')
+            ->from('HopitalNumeriqueModuleBundle:Session', 'ses')
+            ->leftJoin('ses.etat','etat')
+            ->leftJoin('ses.module','module')
+            ->leftJoin('module.domaines', 'domaine')
+            ->where('domaine.id = :idDomaine')
+            ->andWhere('ses.dateOuvertureInscription <= :today')
+            ->andWhere('ses.dateFermetureInscription >= :today')
+            ->andWhere('etat.id >= :idEtat')
+            ->setParameters( array(
+                'idDomaine' => $idDomaine,
+                'today'     => new \DateTime(),
+                'idEtat'    => 403
+            ))
+            ->groupBy('ses.id')
+            ->orderBy('ses.dateSession', 'ASC');
+
+        return $qb;
+    }
+
+    /**
+     * Retourne la liste des sessions ou l'utilisateur doit/à participé pour le dashboard user
+     *
      * @param User $user L'utilisateur concerné
      * 
      * @return QueryBuilder

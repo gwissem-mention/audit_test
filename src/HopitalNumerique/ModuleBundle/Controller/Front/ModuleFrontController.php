@@ -21,8 +21,11 @@ class ModuleFrontController extends Controller
         //Récupération de l'entité passée en paramètre
         $modules = $this->get('hopitalnumerique_module.manager.module')->getModuleActifForDomaine($domaineId);
 
+        $sessions = $this->get('hopitalnumerique_module.manager.session')->getSessionsInscriptionOuverteModuleDomaine($this->get('request')->getSession()->get('domaineId'));
+        
         return $this->render('HopitalNumeriqueModuleBundle:Front/Module:index.html.twig', array( 
-            'modules'           => $modules
+            'modules'  => $modules,
+            'sessions' => $sessions
         ));
     }
 

@@ -672,6 +672,33 @@ class Session
         return false;
     }
 
+    /**
+     * Permet de vérifier si l'utilisateur passé en param est inscrit pour cette session
+     *
+     * @param HopitalNumeriqueUserBundleEntityUser $user utilisateur à vérifier
+     *
+     * @return boolean Utilisateur passé en param inscrit
+     */
+    public function userIsInscritAndAnnule(\HopitalNumerique\UserBundle\Entity\User $user)
+    {
+        if( is_null($user) )
+            return false;
+
+        //Recherche pour chacune des inscriptions à ce module l'utilisateur passé en param
+        foreach ($this->inscriptions as $inscription) 
+        {
+            //Si l'utilisateur existe
+            if($inscription->getUser()->getId() === $user->getId() 
+                && $inscription->getEtatInscription()->getId() === 409)
+            {
+                //&& $inscription->isInscrit())
+                return true;
+            }
+        }
+
+        return false;
+    }
+
     // ----------------------------------------
     // --- Gestion de l'upload des fichiers ---
     // ----------------------------------------

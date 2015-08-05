@@ -184,6 +184,6 @@ class InscriptionFrontController extends Controller
             $this->get('session')->getFlashBag()->add( ('danger') , 'Vous ne pouvez annuler que les inscriptions vous concernant.' );
         }
 
-        return $this->redirect( $this->generateUrl('hopitalnumerique_module_inscription_index_front') );
+        return new Response('{"success":true}', 200);
     }
 }
