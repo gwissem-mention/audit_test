@@ -345,6 +345,14 @@ class QuestionnaireType extends AbstractType
                             'data'        => is_null($reponseCourante) ? null : $reponseCourante->getEtablissement()
                     ));
                     break;
+                case 'commentaire':
+                    $builder->add($question->getTypeQuestion()->getLibelle() . '_' . $question->getId(). '_' . $question->getAlias(), 'nodevocommentaire', array(
+                        'data'      => $question->getCommentaire(),
+                        'mapped'    => false,
+                        'label'     => ' ',
+                        'required'  => false
+                    ));
+                    break;
             	default:
             	    $builder->add($question->getTypeQuestion()->getLibelle() . '_' . $question->getId(). '_' . $question->getAlias(), $question->getTypeQuestion()->getLibelle(), array(
         	            'required'   => $question->getObligatoire(),

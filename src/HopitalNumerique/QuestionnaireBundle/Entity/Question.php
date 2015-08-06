@@ -81,6 +81,13 @@ class Question
      * @ORM\OneToMany(targetEntity="\HopitalNumerique\QuestionnaireBundle\Entity\Reponse", mappedBy="question", cascade={"persist", "remove" })
      */
     protected $reponses;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="que_commentaire", type="text", nullable=true, options = {"comment" = "Commentaire pour le type commentaire"})
+     */
+    protected $commentaire;
     
     public function __construct()
     {
@@ -315,5 +322,28 @@ class Question
     public function getReferenceParamTri()
     {
         return $this->referenceParamTri;
+    }
+
+    /**
+     * Set commentaire
+     *
+     * @param string $commentaire
+     * @return Question
+     */
+    public function setCommentaire($commentaire)
+    {
+        $this->commentaire = $commentaire;
+
+        return $this;
+    }
+
+    /**
+     * Get commentaire
+     *
+     * @return string 
+     */
+    public function getCommentaire()
+    {
+        return $this->commentaire;
     }
 }

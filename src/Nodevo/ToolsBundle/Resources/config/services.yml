@@ -8,3 +8,9 @@ services:
         class: %nodevo_tools.twig.extensions.class%
         tags:
             - { name: twig.extension }
+
+    #Champ de formulaire
+    form.type.nodevocommentaire:
+        class: Nodevo\ToolsBundle\Form\Type\NodevoCommentaireType
+        tags:
+            -  { name: form.type, alias: nodevocommentaire }

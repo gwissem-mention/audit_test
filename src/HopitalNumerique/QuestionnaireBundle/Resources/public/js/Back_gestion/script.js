@@ -73,11 +73,12 @@ function saveQuestion( url )
         url      : url,
         data     : 
         {
-            id              : $('#idQuestion').val(),
-            libelle         : $('#libelle_question').val(),
-            typeQuestion    : $('#typeQuestion').val(),
-            refTypeQuestion : $('#typeQuestion_reference').val(),
-            obligatoire     : $('#questionObligatoire').is(":checked")
+            id                   : $('#idQuestion').val(),
+            libelle              : $('#libelle_question').val(),
+            typeQuestion         : $('#typeQuestion').val(),
+            refTypeQuestion      : $('#typeQuestion_reference').val(),
+            commentaire_question : $('#commentaire_question').val(),
+            obligatoire          : $('#questionObligatoire').is(":checked")
         },
         type     : 'POST',
         dataType : 'json',

@@ -61,6 +61,16 @@
                 </select>
             </div>
         </div>
+        <div id="commentaireQuestion" style="display:none;">
+            <div class="col-md-12">
+                <label class="control-label required" for="commentaire_question">
+                    Le commentaire affiché sur le questionnaire en FrontOffice
+                </label>
+            </div>
+            <div class="col-md-12">
+                <textarea name="commentaire_question" id="commentaire_question" class="form-control" placeholder="Écrire un commentaire qui sera affiché dans le FrontOffice." rows="9">{{question.commentaire}}</textarea>
+            </div>
+        </div>
 
         <input type="hidden" name="questionId" id="idQuestion" value="{{question.id}}" />
         <input type="hidden" name="typeQuestionId" id="idTypeQuestion" value="{% if question.typeQuestion is defined and question.typeQuestion is not null %}{{question.typeQuestion.id}}{% endif %}" />
@@ -92,6 +102,13 @@
                 $('.bloc-obligatoire').hide();
             }
         }
+        else if(idTypeQuestion == 13)
+        {
+            //Cache la liste des codes refs
+            $('#zoneReferenceTypeQuestion').hide();
+            $('.bloc-obligatoire').hide();
+            $('#commentaireQuestion').show();
+        }
         else
         {
             //Cache la liste des codes refs
@@ -107,15 +124,18 @@
                 case '3':
                 case '4':
                 case '6':
+                case '12':
                     $('#typeQuestion_reference').val('');
                     $('#zoneReferenceTypeQuestion').hide();
                     $('.bloc-obligatoire').show();
+                    $('#commentaireQuestion').hide();
                     break;
                 //Référence unique
                 case '5':
                 case '8':
                     $('#zoneReferenceTypeQuestion').show();
                     $('.bloc-obligatoire').show();
+                    $('#commentaireQuestion').hide();
                     break;
                 //Liste déroulante à choix multiple
                 case '11':
@@ -123,6 +143,13 @@
                     $('#questionObligatoire').removeAttr( "checked" );
                     $('.bloc-obligatoire').hide();
                     $('#zoneReferenceTypeQuestion').show();
+                    $('#commentaireQuestion').hide();
+                    break;
+                //Affichage d'un textarea pour noter le commentaire
+                case '13':
+                    $('#zoneReferenceTypeQuestion').hide();
+                    $('#commentaireQuestion').show();
+                    $('.bloc-obligatoire').hide();
                     break;
             }
 
