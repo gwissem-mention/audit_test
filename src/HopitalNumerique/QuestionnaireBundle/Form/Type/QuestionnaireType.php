@@ -327,6 +327,24 @@ class QuestionnaireType extends AbstractType
         	            'data'       => is_null($reponseCourante) ? '' : $reponseCourante->getReponse()
             	    ));
             	    break;
+                case 'etablissement':
+                    $builder->add($question->getTypeQuestion()->getLibelle() . '_' . $question->getId(). '_' . $question->getAlias(), 'genemu_jqueryselect2_entity', array(
+                            'class'       => 'HopitalNumeriqueEtablissementBundle:Etablissement',
+                            'property'    => 'appellation',
+                            'required'    => $question->getObligatoire(),
+                            'label'       => $question->getLibelle(),
+                            'mapped'      => false,
+                            'read_only'   => $this->_readOnly,
+                            'disabled'    => $this->_readOnly,
+                            'empty_value' => ' - ',
+                            'attr'        => $attr,
+                            'query_builder' => function(EntityRepository $er) use ($question){
+                                return $er->createQueryBuilder('eta')
+                                ->orderBy('eta.nom', 'ASC');
+                            },
+                            'data'        => is_null($reponseCourante) ? null : $reponseCourante->getEtablissement()
+                    ));
+                    break;
             	default:
             	    $builder->add($question->getTypeQuestion()->getLibelle() . '_' . $question->getId(). '_' . $question->getAlias(), $question->getTypeQuestion()->getLibelle(), array(
         	            'required'   => $question->getObligatoire(),
