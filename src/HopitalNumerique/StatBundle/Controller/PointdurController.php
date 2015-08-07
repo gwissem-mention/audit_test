@@ -22,8 +22,11 @@ class PointdurController extends Controller
         $paramsFonct[] = $this->get('hopitalnumerique_reference.manager.reference')->findOneBy(array('id' => 294));
         $paramsFonct[] = $this->get('hopitalnumerique_reference.manager.reference')->findOneBy(array('id' => 295));
 
+        $fonctionsUser = $this->get('hopitalnumerique_reference.manager.reference')->findBy(array('code' => 'CONTEXTE_FONCTION_INTERNAUTE'), array('libelle' => 'ASC'));
+
         return $this->render('HopitalNumeriqueStatBundle:Back:partials/PointsDurs/bloc.html.twig', array(
-            'paramsFonct' => $paramsFonct
+            'paramsFonct'   => $paramsFonct,
+            'fonctionsUser' => $fonctionsUser
         ));
     }
 
@@ -42,8 +45,9 @@ class PointdurController extends Controller
 
         $perimFonctId = intval($request->request->get('perimFonctionnellesSelect'));
         $profilType   = $request->request->get('profilTypeSelect');
+        $fonctionUser = $request->request->get('fonctionUserSelect');
 
-        $res = $this->generationTableau($dateDebut , $dateFin, $perimFonctId, $profilType);
+        $res = $this->generationTableau($dateDebut , $dateFin, $perimFonctId, $profilType, $fonctionUser);
         
         return $this->render('HopitalNumeriqueStatBundle:Back:partials/PointsDurs/tableau.html.twig', array(
             'notes'          => $res['notes'],
@@ -66,8 +70,9 @@ class PointdurController extends Controller
         $dateFin      = $request->request->get('dateFin-pointDur');
         $perimFonctId = intval($request->request->get('perimFonctionnellesSelect'));
         $profilType   = $request->request->get('profilTypeSelect');
+        $fonctionUser = $request->request->get('fonctionUserSelect');
 
-        $donneesTab = $this->generationTableau($dateDebut , $dateFin, $perimFonctId, $profilType);
+        $donneesTab = $this->generationTableau($dateDebut , $dateFin, $perimFonctId, $profilType, $fonctionUser);
 
         //Colonnes communes
         $colonnes = array( 
@@ -92,7 +97,7 @@ class PointdurController extends Controller
      *
      * @return array
      */
-    private function generationTableau($dateDebut , $dateFin, $perimFonctId, $profilType)
+    private function generationTableau($dateDebut , $dateFin, $perimFonctId, $profilType, $fonctionUser)
     {
         //Récupération des dates sous forme DateTime
         $dateDebutDateTime = $dateDebut === "" ? null : new \DateTime($dateDebut);
@@ -105,6 +110,8 @@ class PointdurController extends Controller
         $referencesTemp[] = $perimFonct = $this->get('hopitalnumerique_reference.manager.reference')->findOneBy(array('id' => $perimFonctId));
         //Récupération du parent du périmetre fonctionnelle
         $referencesTemp[] = $this->get('hopitalnumerique_reference.manager.reference')->findOneBy(array('id' => $perimFonct->getParent()->getId()));
+        //Récupération de la fonction
+        $referencesTemp[] = $this->get('hopitalnumerique_reference.manager.reference')->findOneBy(array('id' => $fonctionUser));
 
         //Récupération des références liées aux Types ES ou aux profils
         if('typeES' === $profilType)

@@ -55,6 +55,23 @@
                                     </div>
                                 </div>
                             </div>
+                            <div class="row">
+                                {# Select du choix de la fonction #}
+                                <div class="col-md-12">
+                                    <label class="control-label required" for="fonctionUser">
+                                        Choix de la fonction
+                                        <span title="Ce champ est requis" style="color:red;font-size:10px">*</span>
+                                    </label>
+                                    <div class="blocParamFonct">
+                                        <select name="fonctionUserSelect" id="fonctionUser" class="form-control validate[required]" data-prompt-position="bottomLeft">
+                                            <option value=""> - </option>
+                                            {% for fonction in fonctionsUser %}
+                                                <option value="{{fonction.id}}" >{{fonction.libelle}}</option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
                         </form>
                         <div class="row">
                             {# Boutton de génération du tableau #}
