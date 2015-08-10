@@ -134,11 +134,10 @@ class SessionType extends AbstractType
                     }
             ))
             ->add('textMailRappel', 'textarea', array(
-                    'required' => true,
+                    'required' => false,
                     'label'    => 'Texte du mail de rappel',
                     'attr'        => array(
-                            'rows'   => 2,
-                            'class' => $this->_constraints['textMailRappel']['class']
+                            'rows'   => 2
                     ),
             ))
             ->add('file', 'file', array(
