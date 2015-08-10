@@ -2,8 +2,8 @@
 
 <div id="sous-menu">
     <ul class="list-unstyled">
-        {# Tout les modules #}
-        <li {% if moduleSelectionne is null %}class="active"{% endif %}><a href={{ path("hopitalnumerique_module_module_front") }}><span>Tout les modules</span></a></li>
+        {# Tous les modules #}
+        <li {% if moduleSelectionne is null %}class="active"{% endif %}><a href={{ path("hopitalnumerique_module_module_front") }}><span>Tous les modules</span></a></li>
 
         {# Affichage des modules un par un #}
         {% for module in modules %}
