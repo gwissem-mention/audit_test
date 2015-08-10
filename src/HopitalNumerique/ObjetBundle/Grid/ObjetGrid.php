@@ -37,7 +37,7 @@ class ObjetGrid extends Grid implements GridInterface
                 $filtres['types'] = 'Article';
                 break;
             case 'non-publie':
-                $filtres['etat'] = 'Actif';
+                $filtres['etat'] = 'Inactif';
                 break;
         }
 
