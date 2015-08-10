@@ -124,7 +124,6 @@
                 case '3':
                 case '4':
                 case '6':
-                case '12':
                     $('#typeQuestion_reference').val('');
                     $('#zoneReferenceTypeQuestion').hide();
                     $('.bloc-obligatoire').show();
@@ -143,6 +142,12 @@
                     $('#questionObligatoire').removeAttr( "checked" );
                     $('.bloc-obligatoire').hide();
                     $('#zoneReferenceTypeQuestion').show();
+                    $('#commentaireQuestion').hide();
+                    break;
+                case '12':
+                    $('#typeQuestion_reference').val('');
+                    $('#zoneReferenceTypeQuestion').hide();
+                    $('.bloc-obligatoire').hide();
                     $('#commentaireQuestion').hide();
                     break;
                 //Affichage d'un textarea pour noter le commentaire
