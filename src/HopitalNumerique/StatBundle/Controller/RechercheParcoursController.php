@@ -22,8 +22,11 @@ class RechercheParcoursController extends Controller
         $paramsFonct[] = $this->get('hopitalnumerique_reference.manager.reference')->findOneBy(array('id' => 294));
         $paramsFonct[] = $this->get('hopitalnumerique_reference.manager.reference')->findOneBy(array('id' => 295));
 
+        $fonctionsUser = $this->get('hopitalnumerique_reference.manager.reference')->findBy(array('code' => 'CONTEXTE_FONCTION_INTERNAUTE'), array('libelle' => 'ASC'));
+
         return $this->render('HopitalNumeriqueStatBundle:Back:partials/RechercheParcours/bloc.html.twig', array(
-            'paramsFonct' => $paramsFonct
+            'paramsFonct'   => $paramsFonct,
+            'fonctionsUser' => $fonctionsUser
         ));
     }
 
@@ -42,8 +45,9 @@ class RechercheParcoursController extends Controller
 
         $perimFonctId = intval($request->request->get('perimFonctionnellesSelect'));
         $profilType   = $request->request->get('profilTypeSelect');
+        $fonctionUser = $request->request->get('fonctionUserSelect');
 
-        $res = $this->generationTableau($dateDebut , $dateFin, $perimFonctId, $profilType);
+        $res = $this->generationTableau($dateDebut , $dateFin, $perimFonctId, $profilType, $fonctionUser);
         
         return $this->render('HopitalNumeriqueStatBundle:Back:partials/RechercheParcours/tableau.html.twig', array(
             'notesMoyenneParEtape' => $res['notesMoyenneParEtape'],
@@ -66,8 +70,9 @@ class RechercheParcoursController extends Controller
         $dateFin      = $request->request->get('dateFin-rechercheParcours');
         $perimFonctId = intval($request->request->get('perimFonctionnellesSelect'));
         $profilType   = $request->request->get('profilTypeSelect');
+        $fonctionUser = $request->request->get('fonctionUserSelect');
 
-        $donneesTab = $this->generationTableau($dateDebut , $dateFin, $perimFonctId, $profilType);
+        $donneesTab = $this->generationTableau($dateDebut , $dateFin, $perimFonctId, $profilType, $fonctionUser);
 
         //Colonnes communes
         $colonnes = array( 
@@ -93,7 +98,7 @@ class RechercheParcoursController extends Controller
      *
      * @return array
      */
-    private function generationTableau($dateDebut , $dateFin, $perimFonctId, $profilType)
+    private function generationTableau($dateDebut , $dateFin, $perimFonctId, $profilType, $fonctionUser)
     {
         //Récupération des dates sous forme DateTime
         $dateDebutDateTime = $dateDebut === "" ? null : new \DateTime($dateDebut);
@@ -159,7 +164,7 @@ class RechercheParcoursController extends Controller
         }
 
         //Récupération de la note moyenne par étapes dans un tableau (étapeId => moyenne arrondie à l'entier)
-        $notesMoyenneParEtape = $this->get('hopitalnumerique_recherche_parcours.manager.matrise_user')->getAverageAllEtapesAllUser($profilType);
+        $notesMoyenneParEtape = $this->get('hopitalnumerique_recherche_parcours.manager.matrise_user')->getAverageAllEtapesAllUser($profilType, $fonctionUser);
 
         return array(
             'notesMoyenneParEtape' => $notesMoyenneParEtape,

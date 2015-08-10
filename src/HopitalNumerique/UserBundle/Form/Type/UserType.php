@@ -296,8 +296,23 @@ class UserType extends AbstractType
             ->add('fonctionDansEtablissementSante', 'text', array(
                     'max_length' => $this->_constraints['fonctionDansEtablissementSante']['maxlength'],
                     'required'   => false,
-                    'label'      => 'Fonction dans l\'établissement',
+                    'label'      => 'Libellé fonction',
                     'attr'       => array('class' => $this->_constraints['fonctionDansEtablissementSante']['class'] . ' etablissement_sante' )
+            ))
+            
+            ->add('fonctionDansEtablissementSanteReferencement', 'entity', array(
+                    'class'       => 'HopitalNumeriqueReferenceBundle:Reference',
+                    'property'    => 'libelle',
+                    'required'    => false,
+                    'label'       => 'Fonction',
+                    'empty_value' => ' - ',
+                    'attr'        => array('class' => 'etablissement_sante'),
+                    'query_builder' => function(EntityRepository $er) {
+                        return $er->createQueryBuilder('ref')
+                        ->where('ref.code = :etat')
+                        ->setParameter('etat', 'CONTEXTE_FONCTION_INTERNAUTE')
+                        ->orderBy('ref.libelle', 'ASC');
+                    }
             ))
             
             ->add('profilEtablissementSante', 'entity', array(

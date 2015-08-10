@@ -1,5 +1,6 @@
 {% block javascripts %}
     {% javascripts output="compiled/hopitalnumerique-questionnaire-questionnaire-edit-front.js"
+        "@select2_js"
         'bundles/hopitalnumeriquequestionnaire/js/script.js'
     %}
         <script type="text/javascript" src="{{ asset_url }}"></script>
@@ -8,6 +9,7 @@
 
 {% block stylesheets %}
     {% stylesheets output="compiled/hopitalnumerique-questionnaire-questionnaire-edit-front.css" filter="cssrewrite, ?yui_css"
+        "@select2_css"
         'bundles/hopitalnumeriquequestionnaire/css/questionnaire.css'
     %}
         <link rel="stylesheet" href="{{ asset_url }}" />
@@ -47,4 +49,5 @@
         {{ form_javascript(form) }}
         {{ form(form, { 'action': path('hopitalnumerique_questionnaire_edit_front', {'user' : user.id, 'questionnaire' :questionnaire.id }) } ) }}
     {% endif %}
+
 </div>

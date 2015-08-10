@@ -460,6 +460,10 @@ class QuestionnaireController extends Controller
                     {
                         $reponse->setReference($this->get('hopitalnumerique_reference.manager.reference')->findOneBy(array('id' => $param)));
                     }
+                    elseif('etablissement' === $typeParam)
+                    {
+                        $reponse->setEtablissement($this->get('hopitalnumerique_etablissement.manager.etablissement')->findOneBy(array('id' => $param)));
+                    }
                     elseif('entitymultiple' === $typeParam || 'entitycheckbox' === $typeParam)
                     {
                         if(is_null($reponse->getReferenceMulitple())){

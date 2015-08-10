@@ -92,4 +92,65 @@ class ErrorUrlManager extends BaseManager
         return $results;
     }
 
+    /**
+     * Récupère les url pour l'export des liens de l'autodiag
+     *
+     * @return array
+     */
+    public function getDatasForExportAutodiag( $donneesTab )
+    {
+        $results        = array();
+        $errorsUrl      = $this->findAll();
+        $errorsUrlByUrl = array();
+        foreach ($errorsUrl as $errorUrl) 
+        {
+            $errorsUrlByUrl[$errorUrl->getUrl()] = $errorUrl;
+        }
+
+        echo '<pre>';var_dump($donneesTab['urls']);die('die');
+
+        //Boucle sur les différentes catégories
+        foreach ($donneesTab['urls'] as $idChapitre => $arrayUrls) 
+        {
+            //Parmis les catégories, boucle sur les objets
+            foreach ($arrayUrls as $typeUrl => $urls) 
+            {
+                //Parcours l'ensemble des objets et contenu
+                foreach ($urls as $id => $url) 
+                {
+                    $row = array();
+
+                    $row['type'] = ucfirst($keyURL);
+                    $row['idObjet'] = $keyObjetUrl;
+                    $row['titreObjet'] = $donneesTab['objets'][$keyObjetUrl]->getTitre();
+                    //$row['infradoc'] = ($keyObjetOrContenu != 'objet') ?  (is_null($donneesTab['objets'][$keyObjetUrl]->getContenuById($keyObjetOrContenu)) ? '' : ( $donneesTab['objets'][$keyObjetUrl]->getContenuById($keyObjetOrContenu)->getOrder() . ' ' .  $donneesTab['objets'][$keyObjetUrl]->getContenuById($keyObjetOrContenu)->getTitre() ) : '';
+                    $row['url'] = $urlObjetUrl;
+                    $row['valide'] = (array_key_exists($urlObjetUrl, $errorsUrlByUrl)) ? ($errorsUrlByUrl[$urlObjetUrl]->getOk() ? 'Valide' : 'Non valide') : 'A vérifier';
+
+                    if($keyObjetOrContenu != 'objet')
+                    {
+                        if(!is_null($donneesTab['objets'][$keyObjetUrl]->getContenuById($keyObjetOrContenu)))
+                        {
+                            $row['infradoc'] = $donneesTab['objets'][$keyObjetUrl]->getContenuById($keyObjetOrContenu)->getOrder() . ' ' .  $donneesTab['objets'][$keyObjetUrl]->getContenuById($keyObjetOrContenu)->getTitre();
+                        }
+                        else
+                        {
+                            $row['infradoc'] = '';
+                        }
+                    }
+                    else
+                    {
+                        $row['infradoc'] = '';
+                    }
+                    
+                    //add row To Results
+                    $results[] = $row;
+                   
+                }
+            }
+        }
+
+        return $results;
+    }
+
 }

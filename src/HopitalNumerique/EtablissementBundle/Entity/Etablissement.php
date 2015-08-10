@@ -363,4 +363,27 @@ class Etablissement
     {
         return $this->nom.' - '.$this->finess;
     }
+
+    /**
+     * Add usersRattachement
+     *
+     * @param \HopitalNumerique\UserBundle\Entity\User $usersRattachement
+     * @return Etablissement
+     */
+    public function addUsersRattachement(\HopitalNumerique\UserBundle\Entity\User $usersRattachement)
+    {
+        $this->usersRattachement[] = $usersRattachement;
+
+        return $this;
+    }
+
+    /**
+     * Remove usersRattachement
+     *
+     * @param \HopitalNumerique\UserBundle\Entity\User $usersRattachement
+     */
+    public function removeUsersRattachement(\HopitalNumerique\UserBundle\Entity\User $usersRattachement)
+    {
+        $this->usersRattachement->removeElement($usersRattachement);
+    }
 }

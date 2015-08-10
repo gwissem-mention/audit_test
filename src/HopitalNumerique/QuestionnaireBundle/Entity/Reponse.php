@@ -50,6 +50,12 @@ class Reponse
      * @ORM\JoinColumn(name="ref_reference", referencedColumnName="ref_id")
      */
     protected $reference;
+    
+    /**
+     * @ORM\ManyToOne(targetEntity="\HopitalNumerique\EtablissementBundle\Entity\Etablissement", cascade={"persist"})
+     * @ORM\JoinColumn(name="eta_id", referencedColumnName="eta_id")
+     */
+    protected $etablissement;
 
     /**
      * @ORM\ManyToMany(targetEntity="\HopitalNumerique\ReferenceBundle\Entity\Reference")
@@ -282,4 +288,27 @@ class Reponse
     
     // ---------------------Test de file---------------------------------
     public $file;
+
+    /**
+     * Set etablissement
+     *
+     * @param \HopitalNumerique\EtablissementBundle\Entity\Etablissement $etablissement
+     * @return Reponse
+     */
+    public function setEtablissement(\HopitalNumerique\EtablissementBundle\Entity\Etablissement $etablissement = null)
+    {
+        $this->etablissement = $etablissement;
+
+        return $this;
+    }
+
+    /**
+     * Get etablissement
+     *
+     * @return \HopitalNumerique\EtablissementBundle\Entity\Etablissement 
+     */
+    public function getEtablissement()
+    {
+        return $this->etablissement;
+    }
 }

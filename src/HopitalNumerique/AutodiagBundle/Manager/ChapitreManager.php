@@ -254,6 +254,19 @@ class ChapitreManager extends BaseManager
         return $chapitresStdclasses;
     }
 
+    public function getChapitresById()
+    {
+        $chapitres = $this->findAll();
+        $chapitresOrdered = array();
+
+        foreach ($chapitres as $chapitre)
+        {
+            $chapitresOrdered[$chapitre->getId()] = $chapitre;
+        }
+
+        return $chapitresOrdered;
+    }
+
 
 
 

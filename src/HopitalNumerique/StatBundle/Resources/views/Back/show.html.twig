@@ -63,6 +63,11 @@
                 </div>
                 
                 <div class="row">
+                    {# Erreurs dans les urls #}
+                    {{ render(controller("HopitalNumeriqueStatBundle:ErreursAutodiag:index")) }}
+                </div>
+                
+                <div class="row">
                     {# Requetes des productions #}
                     {{ render(controller("HopitalNumeriqueStatBundle:ItemRequete:indexProduction")) }}
                 </div>

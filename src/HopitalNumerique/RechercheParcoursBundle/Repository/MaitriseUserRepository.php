@@ -42,7 +42,7 @@ class MaitriseUserRepository extends EntityRepository
      *
      * @return QueryBuilder
      */
-    public function getAverageAllEtapesAllUser($profilType)
+    public function getAverageAllEtapesAllUser($profilType, $fonctionUser = null)
     {
         $qb = $this->_em->createQueryBuilder();
 
@@ -62,12 +62,21 @@ class MaitriseUserRepository extends EntityRepository
                     
                     $qb->from('\HopitalNumerique\RechercheParcoursBundle\Entity\MaitriseUser', 'notes')
                             ->andWhere('notes.nonConcerne = :nonConcerne')
-                            ->setParameter('nonConcerne', false)
                             ->leftJoin('notes.rechercheParcoursDetails', 'etape')
                             ->leftJoin('notes.user', 'user')
                             //Ne pas prendre en compte les admins (méthode moche)
                             ->andWhere('user.roles != :adminId')
-                            ->setParameter('adminId', 'a:1:{i:0;s:21:"ROLE_ADMINISTRATEUR_1";}');
+                            ->setParameters(array(
+                                'adminId'      => 'a:1:{i:0;s:21:"ROLE_ADMINISTRATEUR_1";}',
+                                'nonConcerne'  => false
+                            ));
+
+                    if(!is_null($fonctionUser))
+                    {
+                        $qb->leftJoin('user.fonctionDansEtablissementSanteReferencement', 'fonction')
+                            ->andWhere('fonction.id = :fonctionUser')
+                            ->setParameter('fonctionUser', $fonctionUser);
+                    }
 
                     if("profil" === $profilType)
                     {

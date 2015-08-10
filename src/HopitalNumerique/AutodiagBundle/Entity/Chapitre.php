@@ -473,6 +473,22 @@ class Chapitre
     {
         return $this->questions;
     }
+ 
+    /**
+     * Get questions
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getQuestionsById()
+    {
+        $questionsOrdered = array();
+
+        foreach ($this->questions as $question) 
+        {
+            $questionsOrdered[$question->getId()] = $question;
+        }
+        return $questionsOrdered;
+    }
 
     /**
      * Get references

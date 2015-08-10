@@ -23,6 +23,27 @@ class ObjetGrid extends Grid implements GridInterface
         $this->showIDColumn( false );
     }
 
+    public function setDefaultFiltreFromController($filtre)
+    {
+        $filtres = array();
+
+        $this->setPersistence(false);
+
+        switch ($filtre) {
+            case 'point-dur':
+                $filtres['types'] = 'Point dur';
+                break;
+            case 'production':
+                $filtres['types'] = 'Article';
+                break;
+            case 'non-publie':
+                $filtres['etat'] = 'Actif';
+                break;
+        }
+
+        $this->setDefaultFilters($filtres);
+    }
+
     /**
      * Ajoute les colonnes du grid Objet.
      */

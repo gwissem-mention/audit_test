@@ -96,6 +96,7 @@ class QuestionController extends Controller
         //Récupération des ids passés en data
         $idQuestion     = $request->request->get('id');
         $idTypeQuestion = $request->request->get('typeQuestion');
+        $commentaire    = $request->request->get('commentaire_question');
         $obligatoire    = $request->request->get('obligatoire') === "true" ? true : false;
 
         //Récupère la question
@@ -107,6 +108,10 @@ class QuestionController extends Controller
         if($typeQuestion->getId() == 1)
         {
             $verifJS = $obligatoire ? 'validate[required,minSize[1],maxSize[255]]' : 'validate[maxSize[255]]';
+        }
+        elseif($typeQuestion->getId() == 13)
+        {
+            $question->setCommentaire($commentaire);
         }
         else
         {

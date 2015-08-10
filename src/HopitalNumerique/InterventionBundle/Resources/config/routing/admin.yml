@@ -1,6 +1,6 @@
 hopital_numerique_intervention_admin_liste:
-    pattern:  /demandes/liste
-    defaults: { _controller: "HopitalNumeriqueInterventionBundle:Admin/Demande:liste" }
+    pattern:  /demandes/liste/{filtre}
+    defaults: { _controller: "HopitalNumeriqueInterventionBundle:Admin/Demande:liste", filtre: null }
     requirements:
         _method: GET|POST
 

@@ -55,10 +55,30 @@ hopital_numerique_stat_erreurs_curl_with_base:
 hopital_numerique_stat_erreurs_curl_generate_tableau:
     pattern: /admin/statistiques/show/erreurs/generate
     defaults: { _controller: HopitalNumeriqueStatBundle:Erreurs:generateTableau}
+
+hopital_numerique_stat_erreurs_curl_autodiag:
+    pattern: /admin/statistiques/show/erreurs-autodiag
+    defaults: { _controller: HopitalNumeriqueStatBundle:ErreursAutodiag:curl}
+
+hopital_numerique_stat_erreurs_export_csv_autodiag:
+    pattern: /admin/statistiques/show/erreurs-autodiag/exportCSV
+    defaults: { _controller: HopitalNumeriqueStatBundle:ErreursAutodiag:exportCSV}
+
+hopital_numerique_stat_erreurs_curl_with_base_autodiag:
+    pattern: /admin/statistiques/show/erreurs-autodiagWithBase
+    defaults: { _controller: HopitalNumeriqueStatBundle:ErreursAutodiag:curlWithBase}
+
+hopital_numerique_stat_erreurs_curl_generate_tableau_autodiag:
+    pattern: /admin/statistiques/show/erreurs-autodiag/generate
+    defaults: { _controller: HopitalNumeriqueStatBundle:ErreursAutodiag:generateTableau}
 #---CRON
 hopital_numerique_stat_erreurs_cron:
     pattern:  /cron-quotidien/erreurs-url/{id}
     defaults: { _controller: HopitalNumeriqueStatBundle:Erreurs:cron}
+
+hopital_numerique_stat_erreurs_cron_autodiag:
+    pattern:  /cron-quotidien/erreurs-url-autodiag/{id}
+    defaults: { _controller: HopitalNumeriqueStatBundle:ErreursAutodiag:cron}
 
 #-Stats clic
 hopital_numerique_stat_stat_clic_generate_tableau:

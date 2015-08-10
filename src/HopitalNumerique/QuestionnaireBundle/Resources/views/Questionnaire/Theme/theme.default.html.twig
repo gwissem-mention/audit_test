@@ -15,6 +15,15 @@
     {% endspaceless %}
 {% endblock file_widget %}
 
+{% block nodevocommentaire_label %}
+{% endblock %}
+
+{% block nodevocommentaire_widget %}
+    {% spaceless %}
+        <strong>{{data}}</strong>
+    {% endspaceless %}
+{% endblock %}
+
 {% block choice_widget_expanded %}
 {% spaceless %}
     <div {{ block('widget_container_attributes') }}>

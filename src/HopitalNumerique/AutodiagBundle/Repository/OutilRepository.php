@@ -31,6 +31,26 @@ class OutilRepository extends EntityRepository
         return $qb;
     }
 
+    public function getOutilsByDate(\DateTime $dateDebut = null, \DateTime $dateFin = null)
+    {
+        $qb = $this->_em->createQueryBuilder();
+        $qb->select('out')
+            ->from('HopitalNumeriqueAutodiagBundle:Outil', 'out');
+
+            if(!is_null($dateDebut))
+            {
+                $qb->where('out.dateCreation <= :dateDebut')
+                    ->setParameter('dateDebut', $dateDebut);
+            }
+            if(!is_null($dateDebut))
+            {
+                $qb->andWhere('out.dateCreation >= :dateFin')
+                    ->setParameter('dateFin', $dateFin);
+            }
+            
+        return $qb;
+    }
+
     /**
      * Retourne un tableau à 2 dimensions avec les duos de tous les Resultat/Chapitre.
      * 
