@@ -50,14 +50,16 @@ class UserGrid extends Grid implements GridInterface
                 $filtres['domaines'] = 'Mon Hôpital Numérique';
                 break;
             case 'Utilisateur-actif':
-                $filtres['etat'] = 'Actif';
-                $filtres['domaines'] = 'Mon Hôpital Numérique';
+                $filtres['etat']      = 'Actif';
+                $filtres['domaines']  = 'Mon Hôpital Numérique';
+                //Not working
                 $filtres['nbVisites'] = array('operator' => 'gt' , 'from' => 0);
                 break;
             case 'Utilisateur-ES':
-                $filtres['etat'] = 'Actif';
-                $filtres['roles'] = 'ROLE_ES_8';
-                $filtres['domaines'] = 'Mon Hôpital Numérique';
+                $filtres['etat']      = 'Actif';
+                $filtres['roles']     = 'ROLE_ES_8';
+                $filtres['domaines']  = 'Mon Hôpital Numérique';
+                //Not working
                 $filtres['nbVisites'] = array('operator' => 'gt' , 'from' => 0);
                 break;
             //Not working
