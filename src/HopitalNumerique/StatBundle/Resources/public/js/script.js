@@ -137,6 +137,31 @@ $(document).ready(function() {
         });
         $( "#datepicker-datefin-erreursCurl" ).datepicker( "option", "showAnim", "fadeIn" );
 
+        //----Pour autodiag
+        //Date début
+        $( "#datepicker-datedebut-erreursCurl-autodiag" ).datepicker({
+            defaultDate: "now",
+            changeMonth: true,
+            numberOfMonths: 1,
+            dateFormat: "dd-mm-yy",
+            onClose: function( selectedDate ) {
+                $( "#datepicker-datefin-erreursCurl-autodiag" ).datepicker( "option", "minDate", selectedDate );
+            }
+        });
+        $( "#datepicker-datedebut-erreursCurl-autodiag" ).datepicker( "option", "showAnim", "fadeIn" );
+
+        //Date de fin
+        $( "#datepicker-datefin-erreursCurl-autodiag" ).datepicker({
+            defaultDate: "+1d",
+            changeMonth: true,
+            numberOfMonths: 1,
+            dateFormat: "dd-mm-yy",
+            onClose: function( selectedDate ) {
+                $( "#datepicker-datedebut-erreursCurl-autodiag" ).datepicker( "option", "maxDate", selectedDate );
+            }
+        });
+        $( "#datepicker-datefin-erreursCurl-autodiag" ).datepicker( "option", "showAnim", "fadeIn" );
+
         //---Stat clic
 
         //Date début
@@ -354,6 +379,29 @@ $(document).ready(function() {
         }
     }
 
+    function generationErreursCurlAutodiag(url)
+    {
+        if ( $('#form-erreurs-curl-autodiag').validationEngine('validate') ) 
+        {
+            var loaderButton  = $('#generation-tableau-erreurs-curl-autodiag').nodevoLoader().start();
+            var loaderTableau = $('#erreurs-curl-autodiag-tableau').nodevoLoader().start();
+
+            $.ajax({
+                url     : url,
+                data    :  $('#form-erreurs-curl-autodiag').serialize(),
+                type    : 'POST',
+                success : function( data ){
+                    //Ajout de la réponse
+                    $('#erreurs-curl-autodiag-tableau').html( data );
+                    loaderButton.finished();
+                    loaderTableau.finished();
+                    $("#check-url-erreurs-curl-autodiag").show();
+                    $("#check-url-erreurs-curl-autodiag-with-base").show();
+                }
+            });
+        }
+    }
+
     function checkAllUrl( withBase )
     {
         $("#item-erreurs-curl .url-check").each(function(){
@@ -389,6 +437,14 @@ $(document).ready(function() {
         if ( $('#form-erreurs-curl').validationEngine('validate') ) 
         {
             $('#form-erreurs-curl').submit();
+        }
+    }
+
+    function exportCSVErreursUrlAutodiag()
+    {
+        if ( $('#form-erreurs-curl-autodiag').validationEngine('validate') ) 
+        {
+            $('#form-erreurs-curl-autodiag').submit();
         }
     }
 

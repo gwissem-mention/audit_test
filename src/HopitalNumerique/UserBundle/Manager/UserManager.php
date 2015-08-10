@@ -106,6 +106,9 @@ class UserManager extends BaseManager
             //Gestion du domaine
             $user['domaines'] = array_key_exists($user['id'], $domainesByUsers) ? $domainesByUsers[$user['id']]['url'] : '';
 
+            unset($user["alreadyBeExpert"]);
+            unset($user["alreadyBeAmbassadeur"]);
+
             $usersForGrid[] = $user;
         }
         

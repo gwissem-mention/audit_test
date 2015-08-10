@@ -395,6 +395,12 @@ class User extends BaseUser
 
     /**
      * @ORM\ManyToOne(targetEntity="\HopitalNumerique\ReferenceBundle\Entity\Reference", cascade={"persist"})
+     * @ORM\JoinColumn(name="ref_fonction_etablissement_sante", referencedColumnName="ref_id")
+     */
+    protected $fonctionDansEtablissementSanteReferencement;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="\HopitalNumerique\ReferenceBundle\Entity\Reference", cascade={"persist"})
      * @ORM\JoinColumn(name="ref_profil_etablissement_sante", referencedColumnName="ref_id")
      * @Gedmo\Versioned
      */
@@ -1142,6 +1148,29 @@ class User extends BaseUser
     public function setFonctionDansEtablissementSante($fonctionDansEtablissementSante)
     {
         $this->fonctionDansEtablissementSante = $fonctionDansEtablissementSante;
+    }
+    
+    /**
+     * Set fonctionDansEtablissementSanteReferencement
+     *
+     * @param \HopitalNumerique\ReferenceBundle\Entity\Reference $fonctionDansEtablissementSanteReferencement
+     */
+    public function setFonctionDansEtablissementSanteReferencement($fonctionDansEtablissementSanteReferencement)
+    {
+        if($fonctionDansEtablissementSanteReferencement instanceof \HopitalNumerique\ReferenceBundle\Entity\Reference )
+            $this->fonctionDansEtablissementSanteReferencement = $fonctionDansEtablissementSanteReferencement;
+        else
+            $this->fonctionDansEtablissementSanteReferencement = null;
+    }
+    
+    /**
+     * Get fonctionDansEtablissementSanteReferencement
+     *
+     * @return \HopitalNumerique\ReferenceBundle\Entity\Reference $fonctionDansEtablissementSanteReferencement
+     */
+    public function getFonctionDansEtablissementSanteReferencement()
+    {
+        return $this->fonctionDansEtablissementSanteReferencement;
     }
     
     /**

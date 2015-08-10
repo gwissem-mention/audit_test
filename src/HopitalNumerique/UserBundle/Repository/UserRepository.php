@@ -37,7 +37,11 @@ class UserRepository extends EntityRepository
             ->from('HopitalNumeriqueUserBundle:User', 'user')
             ->leftJoin('user.etat','refEtat')
             ->leftJoin('user.region','refRegion')
-            ->leftJoin('user.contractualisations', 'contractualisation', 'WITH', 'contractualisation.archiver = 0')
+            ->leftJoin('user.contractualisations', 'contractualisation')
+                ->where($qb->expr()->orX(
+                    $qb->expr()->eq('contractualisation.archiver', 0),
+                    $qb->expr()->isNull('contractualisation.id')
+                ))
             ->groupBy('user')
             ->orderBy('user.dateInscription', 'DESC')
             ->addOrderBy('user.username');

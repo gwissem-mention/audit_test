@@ -1,0 +1,53 @@
+<div class="table table-responsive">
+    <table id="item-erreurs-curl" class="table table-hover" style="margin:0 auto; border-collapse:collapse;">
+        <thead>
+            <tr class="grid-row-titles" style="background-color:#34495E;">
+                <th style="text-align:center;font-size:12px;vertical-align:middle;border:1px solid #e3e3e3;margin: 0; padding: 0;color: #ffffff;" width="5%" height="25px"><strong>Id autodiag</strong></th>
+                <th style="text-align:center;font-size:12px;vertical-align:middle;border:1px solid #e3e3e3;margin: 0; padding: 0;color: #ffffff;" width="25%" height="25px"><strong>Titre autodiag</strong></th>
+                <th style="text-align:center;font-size:12px;vertical-align:middle;border:1px solid #e3e3e3;margin: 0; padding: 0;color: #ffffff;" width="23%" height="25px"><strong>Chapitre</strong></th>
+                <th style="text-align:center;font-size:12px;vertical-align:middle;border:1px solid #e3e3e3;margin: 0; padding: 0;color: #ffffff;" width="22%" height="25px"><strong>Question</strong></th>
+                <th style="text-align:center;font-size:12px;vertical-align:middle;border:1px solid #e3e3e3;margin: 0; padding: 0;color: #ffffff;" width="15%" height="25px"><strong>Url</strong></th>
+                <th style="text-align:center;font-size:12px;vertical-align:middle;border:1px solid #e3e3e3;margin: 0; padding: 0;color: #ffffff;" width="10%" height="25px"><strong>Valide</strong></th>
+            </tr>
+        </thead>
+        <tbody>
+            {# Boucle sur les catégories 'Publication', 'Infradoc', 'Article' ... #}
+            {% for keyUrl, url in urls %}
+                <tr style="background-color:#34495E;">
+                    <td colspan="6" style="text-align:center;font-size:12px;vertical-align:middle;border:1px solid #e3e3e3;margin: 0; padding: 0; color: #ffffff" height="25px">
+                        <strong>{{allChapitres[keyUrl].outil.title|capitalize}}</strong> - {{allChapitres[keyUrl].title}}
+                    </td>
+                </tr>
+                {# Boucle sur les objets par catégorie #}
+                {% for typeUrl, arrayUrl in url %}
+                    {# Boucle sur les objets/ contenu #}
+                    {% for key, currentUrl in arrayUrl %}
+                        <tr>
+                            <td style="border:1px solid #e3e3e3;font-size:12px;text-align:center;">
+                                <a target="_blank" href="{{path('hopitalnumerique_autodiag_outil_edit', {'id': allChapitres[keyUrl].outil.id})}}">{{allChapitres[keyUrl].outil.id}}</a>
+                            </td>
+                            <td style="border:1px solid #e3e3e3;font-size:12px;text-align:center;">
+                                {{allChapitres[keyUrl].outil.title}}
+                            </td>
+                            <td style="border:1px solid #e3e3e3;font-size:12px;text-align:center;">
+                                {{allChapitres[keyUrl].title}}
+                            </td>
+                            <td style="border:1px solid #e3e3e3;font-size:12px;text-align:center;">
+                                {% if typeUrl == "questions" %}
+                                	{{allChapitres[keyUrl].getQuestionsById()[key].texte}}
+                                {% endif %}
+                            </td>
+                            <td style="border:1px solid #e3e3e3;font-size:11px;">
+                                <a target="_blank" href="{{currentUrl}}">{{currentUrl|truncate(30)}}</a>
+                            </td>
+                            <td id="check-url-{{keyUrl}}-{{key}}" class="url-check" style="border:1px solid #e3e3e3;text-align:center;" data-url="{{currentUrl}}">
+                            </td>
+                        </tr>
+                    {% endfor %}
+                {% endfor %}  
+            {% endfor %}  
+        </tbody>
+    </table>
+    <input type="hidden" id="curl-url" value="{{path('hopital_numerique_stat_erreurs_curl')}}" />
+    <input type="hidden" id="curl-url-with-base" value="{{path('hopital_numerique_stat_erreurs_curl_with_base')}}" />
+</div>

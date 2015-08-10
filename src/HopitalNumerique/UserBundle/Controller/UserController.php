@@ -178,9 +178,14 @@ class UserController extends Controller
     /**
      * Affichage des utilisateurs
      */
-    public function indexAction()
+    public function indexAction($filtre = null)
     {
         $grid = $this->get('hopitalnumerique_user.grid.user');
+
+        if(!is_null($filtre))
+        {
+            $grid->setDefaultFiltreFromController($filtre);
+        }
 
         return $grid->render('HopitalNumeriqueUserBundle:User:index.html.twig');
     }

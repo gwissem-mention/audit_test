@@ -27,6 +27,34 @@ class UserGrid extends Grid implements GridInterface
         $this->setButtonSize(49);
     }
 
+    public function setDefaultFiltreFromController($filtre)
+    {
+        $filtres = array();
+
+        $this->setPersistence(false);
+
+        switch ($filtre) {
+            case 'Ambassadeur':
+                $filtres['roles'] = 'ROLE_AMBASSADEUR_7';
+                break;
+            case 'Candidat-ambassadeur':
+                $filtres['ambassadeur'] = 1;
+                break;
+            case 'Expert':
+                $filtres['roles'] = 'ROLE_EXPERT_6';
+                break;
+            case 'Candidat-expert':
+                $filtres['expert'] = 1;
+                break;
+            //Not working
+            case 'Ambassadeur-docs-a-renouvler':
+                $filtres['contra'] = 'false';
+                break;
+        }
+
+        $this->setDefaultFilters($filtres);
+    }
+
     /**
      * Ajoute les colonnes visibles du grid
      */
@@ -71,6 +99,9 @@ class UserGrid extends Grid implements GridInterface
         $contractualisationColumn = new Column\TextColumn('contra', 'À jour');
         $contractualisationColumn->setSize( 75 );
         $contractualisationColumn->setAlign('center');
+        $contractualisationColumn->setFilterType('select');
+        $contractualisationColumn->setSelectFrom('values');
+        $contractualisationColumn->setOperatorsVisible( false );
         //Affichage de l'icone uniquement si le role fait parti de $arrayRolesDateContractualisation
         $contractualisationColumn->manipulateRenderCell(
             function($value, \APY\DataGridBundle\Grid\Row $row) use ($arrayRolesDateContractualisation) {

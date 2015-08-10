@@ -130,6 +130,11 @@ class OutilManager extends BaseManager
         $this->_em->flush();
     }
 
+    public function getOutilsByDate(\DateTime $dateDebut = null, \DateTime $dateFin = null)
+    {
+        return $this->getRepository()->getOutilsByDate($dateDebut, $dateFin)->getQuery()->getResult();
+    }
+
     /**
      * 
      * @param Outil $outil

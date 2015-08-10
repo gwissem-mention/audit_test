@@ -1,0 +1,45 @@
+{# Tableau des stats des requetes fantomes des autodiags (chapitre/question) #}
+<div class="panel panel-default gray">
+    <a data-toggle="collapse" data-parent="#accordion" href="#collapseErreursCurlAutodiag" class="collapsed" id="tableau_erreurs-curl-autodiag">
+        <div class="panel-heading"><h4>Erreurs dans les urls - autodiag</h4></div>
+    </a>
+    <div id="collapseErreursCurlAutodiag" class="collapse" style="height: 0px;">
+
+        <div class="panel-body">
+            <div class="col-md-12">
+                <div class="form-group">
+                    
+                    {# Points durs #}
+                    <div id="erreurs-curl-autodiag-filtres">
+                        <form id ="form-erreurs-curl-autodiag" action="{{path('hopital_numerique_stat_erreurs_export_csv_autodiag')}}" method="POST">
+                            <div class="row">
+                                {# Date de début #}
+                                <div class="col-md-6">
+                                    <label for="datepicker-datedebut-erreursCurlAutodiag">Date de début: </label><input type="text" class="form-control" id="datepicker-datedebut-erreursCurlAutodiag" name="datedebut-erreursCurlAutodiag">
+                                </div>
+                                {# Date de fin #}
+                                <div class="col-md-6">
+                                    <label for="datepicker-datefin-erreursCurlAutodiag">Date de fin: </label><input type="text" class="form-control" name="dateFin-erreursCurlAutodiag" id="datepicker-datefin-erreursCurlAutodiag">
+                                </div>
+                            </div>
+                        </form>
+                        <div class="row">
+                            {# Boutton de génération du tableau #}
+                            <div class="col-md-12 button-generation">
+                                {#<div id="export-csv-erreurs-autodiag-urls" onclick="exportCSVErreursUrlAutodiag();" class="finish btn btn-primary pull-right" title="Export CSV" ><i class="fa fa-download"></i></div>#}
+                                <div id="generation-tableau-erreurs-curl-autodiag" onclick="generationErreursCurlAutodiag( '{{path('hopital_numerique_stat_erreurs_curl_generate_tableau_autodiag')}}' );" class="finish btn btn-success pull-right" title="Générer le tableau" ><i class="fa fa-bar-chart-o"></i></div>
+                                <div id="check-url-erreurs-curl-autodiag-with-base" onclick="checkAllUrl(false);" class="finish btn btn-info pull-right" title="Vérifier les url déjà vérifiées par le CRON" ><i class="fa fa-play"></i></div>
+                                {#<div id="check-url-erreurs-curl-autodiag" onclick="checkAllUrl(true);" class="finish btn btn-primary pull-right" title="Relancer la vérification des urls" ><i class="fa fa-step-forward"></i></div>#}
+                            </div>
+                        </div>
+                        <div class="clearfix"></div>
+                    </div>
+                    {# Bloc de génération du tableau #}
+                    <div id="erreurs-curl-autodiag-tableau">
+                    </div>
+
+                </div>
+            </div>  
+        </div>
+    </div>
+</div>
