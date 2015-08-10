@@ -42,15 +42,17 @@
                 <a class="btn btn-default" href="{{ path('hopital_numerique_recherche_parcours_homepage_front', {'id': 1}) }}" title="Retour à la recherche guidée"><i class="fa fa-reply"></i></a>
             </div>
         </div>
-
-        <style type="text/css">
-        </style>
         
         <div class="en-tete">
             <div class="en-tete-scroll">
                 {# Include du chemin de fer #}
                 {% include 'HopitalNumeriqueRechercheParcoursBundle:RechercheParcoursDetails:Front/partials/chemin_de_fer.html.twig' with { 'rechercheParcours' : rechercheParcours, 'etapeSelected' : etapesSelected.id } %}
-            </div>
+            </div>        
+            
+            {% if etapesSelected.showChildren %}
+                {# Include des fils de l'item courant du chemin de fer #}
+                {% include 'HopitalNumeriqueRechercheParcoursBundle:RechercheParcoursDetails:Front/partials/chemin_de_fer_fils.html.twig' %}
+            {% endif %}
 
             <div class="description">
                 <div class="col-md-8 row">

@@ -88,11 +88,12 @@ hopital_numerique_recherche_parcours_homepage_front:
 
 #Recherche par parcours - détails
 hopital_numerique_recherche_parcours_details_index_front:
-    pattern:  /recherche-par-parcours/details/{id}-{alias}/{idEtape}-{etape}
-    defaults: { _controller: "HopitalNumeriqueRechercheParcoursBundle:RechercheParcoursDetails:indexFront", id: 1 , idEtape: 0,alias: 'recherche-parcours',etape: '' }
+    pattern:  /recherche-par-parcours/details/{id}-{alias}/{idEtape}-{etape}/{idRefEtapeChild}-{libRefEtapeChild}
+    defaults: { _controller: "HopitalNumeriqueRechercheParcoursBundle:RechercheParcoursDetails:indexFront", id: 1 , idEtape: 0,alias: 'recherche-parcours',etape: '', idRefEtapeChild: null, libRefEtapeChild:'' }
     requirements:
         id : \d+
         idEtape : \d+
+        idRefEtapeChild : \d*
 
 #sauvegarde des notes
 hopital_numerique_recherche_parcours_details_save_note_front:

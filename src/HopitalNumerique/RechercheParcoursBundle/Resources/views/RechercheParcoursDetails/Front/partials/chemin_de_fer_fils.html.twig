@@ -1,0 +1,20 @@
+<div class="chemin-de-fer-childs">
+    {% for referenceChild in refChilds %}
+        <span class="bloc-etape-child">
+            <a class="bloc-etape-child {% if refChildSelected.id == referenceChild.id %}selected{% endif %}" href="{{ path("hopital_numerique_recherche_parcours_details_index_front" , {
+                'id':rechercheParcours.id, 
+                'alias':rechercheParcours.reference.libelle|minifieMoi(),
+                'idEtape':etapesSelected.id, 
+                'etape':etapesSelected.reference.libelle|minifieMoi(),
+                'idRefEtapeChild':referenceChild.id,
+                'libRefEtapeChild':referenceChild.libelle|minifieMoi()}) }}" 
+                {#% if app.user and etapesSelected.id in notesMoyenneParEtape|keys %}
+                    title="Taux de maîtrise de l'étape : {{notesMoyenneParEtape[etapesSelected.id]}} %"
+                {% endif %#}
+
+            >
+                {{referenceChild.libelle}}
+            </a>
+        </span>
+    {% endfor %}
+</div>

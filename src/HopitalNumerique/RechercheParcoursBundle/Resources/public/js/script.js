@@ -135,7 +135,8 @@ function saveDetails( url )
         url     : url,
         data    : 
         {
-            description: $('#description_detail').val()
+            description: $('#description_detail').val(),
+            showChild:   $('#checkbox_show_child').prop('checked')
         },
         type    : 'POST',
         dataType : 'json',
