@@ -62,8 +62,8 @@
 
                             <div class="panel-body">
                                 <ol>
-                                    <li><strong>{{blocUser['ambCandidats']}}</strong> candidats</li>
-                                    <li><strong>{{blocUser['ambassadeurs']}}</strong> ambassadeurs</li>
+                                    <li><a href="{{path('hopital_numerique_user_homepage', {'filtre' : 'Candidat-ambassadeur'})}}"><strong>{{blocUser['ambCandidats']}}</strong> candidats</a></li>
+                                    <li><a href="{{path('hopital_numerique_user_homepage', {'filtre' : 'Ambassadeur'})}}"><strong>{{blocUser['ambassadeurs']}}</strong> ambassadeurs</a></li>
                                     <li><strong>{{blocUser['ambassadeursMAPF']}}</strong> ambassadeurs ayant suivi un MAPF</li>
                                     <li><strong>{{blocUser['ambCandidatsRecues']}}</strong> candidatures reçues</li>
                                     <li><strong>{{blocUser['conventions']}}</strong> ambassadeurs avec docs à renouveler</li>
@@ -83,8 +83,8 @@
 
                             <div class="panel-body">
                                 <ol>
-                                    <li><strong>{{blocUser['expCandidats']}}</strong> candidats</li>
-                                    <li><strong>{{blocUser['experts']}}</strong> experts</li>
+                                    <li><a href="{{path('hopital_numerique_user_homepage', {'filtre' : 'Candidat-expert'})}}"><strong>{{blocUser['expCandidats']}}</strong> candidats</a></li>
+                                    <li><a href="{{path('hopital_numerique_user_homepage', {'filtre' : 'Expert'})}}"><strong>{{blocUser['experts']}}</strong> experts</a></li>
                                     <li><strong>{{blocUser['expCandidatsRecues']}}</strong> candidatures reçues</li>
                                     <li><strong>{{blocUser['contribution']}}</strong> contributions au forum depuis 7 jours</li>
                                 </ol>
@@ -103,9 +103,9 @@
 
                             <div class="panel-body">
                                 <ol>
-                                    <li><strong>{{blocObjets['points-durs']}}</strong> points durs</li>
-                                    <li><strong>{{blocObjets['productions']}}</strong> productions</li>
-                                    <li><strong>{{blocObjets['publications-non-publiees']}}</strong> publications non publiées</li>
+                                    <li><a href="{{path('hopitalnumerique_objet_objet', {'filtre' : 'point-dur'})}}"><strong>{{blocObjets['points-durs']}}</strong> points durs</a></li>
+                                    <li><a href="{{path('hopitalnumerique_objet_objet', {'filtre' : 'production'})}}"><strong>{{blocObjets['productions']}}</strong> productions</a></li>
+                                    <li><a href="{{path('hopitalnumerique_objet_objet', {'filtre' : 'non-publie'})}}"><strong>{{blocObjets['publications-non-publiees']}}</strong> publications non publiées</a></li>
                                     <li><strong>{{blocObjets['nb-notes']}}</strong> notes</span>, <strong>{{blocObjets['nb-commentaires']}}</strong> commentaires</li>
                                     <li><strong>{{blocObjets['pourcent-note-publication']}}</strong>% des notes > 3,5/5</li>
                                 </ol>
@@ -200,10 +200,10 @@
 
                             <div class="panel-body">
                                 <ol>
-                                    <li><strong>{{blocInterventions['total']}}</strong> demandes d'interventions</li>
-                                    <li><strong>{{blocInterventions['demandees']}}</strong> interventions demandées</li>
-                                    <li><strong>{{blocInterventions['attente']}}</strong> interventions mises en attente</li>
-                                    <li><strong>{{blocInterventions['en-cours']}}</strong> interventions en cours</li>
+                                    <li><a href="{{path('hopital_numerique_intervention_admin_liste')}}"><strong>{{blocInterventions['total']}}</strong> demandes d'interventions</a></li>
+                                    <li><a href="{{path('hopital_numerique_intervention_admin_liste', {'filtre':"Interventions-demandees"})}}"><strong>{{blocInterventions['demandees']}}</strong> interventions demandées</a></li>
+                                    <li><a href="{{path('hopital_numerique_intervention_admin_liste', {'filtre':"Interventions-en-attente"})}}"><strong>{{blocInterventions['attente']}}</strong> interventions mises en attente</a></li>
+                                    <li><a href="{{path('hopital_numerique_intervention_admin_liste', {'filtre':"Interventions-en-cours"})}}"><strong>{{blocInterventions['en-cours']}}</strong> interventions en cours</a></li>
                                     <li><strong>{{blocInterventions['refusees'] + blocInterventions['annulees']}}</strong> interventions refusées ou annulées</li>
                                 </ol>
                             </div>
@@ -221,7 +221,7 @@
 
                             <div class="panel-body">
                                 <ol>
-                                    <li><strong>{{blocSessions['inscriptions']}}</strong> demandes d'inscriptions en attente</li>
+                                    <li><a href="{{path('hopitalnumerique_module_module_allinscription')}}"><strong>{{blocSessions['inscriptions']}}</strong> demandes d'inscriptions en attente</a></li>
                                 </ol>
                             </div>
                         </div>

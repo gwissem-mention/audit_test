@@ -37,9 +37,14 @@ class DemandeController extends \HopitalNumerique\InterventionBundle\Controller\
      *
      * @return \Symfony\Component\HttpFoundation\Response La vue de la liste de demandes d'intervention
      */
-    public function listeAction()
+    public function listeAction($filtre = null)
     {
         $gridDemandes = $this->get('hopitalnumerique_intervention.grid.admin.intervention_demandes');
+
+        if(!is_null($filtre))
+        {
+            $gridDemandes->setDefaultFiltreFromController($filtre);
+        }
 
         return $gridDemandes->render('HopitalNumeriqueInterventionBundle:Admin/Demande:liste.html.twig');
     }

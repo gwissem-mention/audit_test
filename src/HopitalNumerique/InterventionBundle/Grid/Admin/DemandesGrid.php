@@ -27,6 +27,27 @@ class DemandesGrid extends DemandesAbstractGrid
         $this->ignoreColonnes(array('interventionInitiateurId', 'nombreDemandesRegroupees', 'nombreDemandesPrincipales', 'ambassadeurRegionLibelle', 'referentEtablissementNom', 'referentEtablissementFiness', 'referentRegionLibelle', 'cmsiDateChoixLibelle', 'ambassadeurDateChoixLibelle'));
     }
 
+    public function setDefaultFiltreFromController($filtre)
+    {
+        $filtres = array();
+
+        $this->setPersistence(false);
+
+        switch ($filtre) {
+            case 'Interventions-demandees':
+                $filtres['interventionEtatLibelle'] = 'Accepté par le CMSI';
+                break;
+            case 'Interventions-en-attente':
+                $filtres['interventionEtatLibelle'] = 'Mise en attente par le CMSI';
+                break;
+            case 'Interventions-en-cours':
+                $filtres['interventionEtatLibelle'] = 'Accepté par l\'ambassadeur';
+                break;
+        }
+
+        $this->setDefaultFilters($filtres);
+    }
+
     /**
      * Ajoute les colonnes visibles du grid
      */
