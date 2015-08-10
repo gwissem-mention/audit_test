@@ -29,7 +29,7 @@ class CronController extends Controller
 
                 foreach ($sessions as $session)
                 {
-                    if($session->getDateSession() == $oneWeek)
+                    if($session->getDateSession() == $oneWeek && !is_null($session->getTextMailRappel()) && $session->getTextMailRappel() != "")
                     {
                         //récupérations des inscriptions acceptées≤
                         $inscriptions = $session->getInscriptionsAccepte();

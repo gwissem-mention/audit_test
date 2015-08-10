@@ -180,11 +180,7 @@ class Session
 
     /**
      * @var string
-     *
-     * @Assert\NotBlank(message="Le texte du mail de rappel ne peut pas être vide.")
-     * @Nodevo\Javascript(class="validate[required]")
-     * 
-     * @ORM\Column(name="ses_textMailRappel", type="text", options = {"comment" = "Texte du mail de rappel de la session"})
+     * @ORM\Column(name="ses_textMailRappel", type="text", nullable=true, options = {"comment" = "Texte du mail de rappel de la session"})
      */
     protected $textMailRappel;
 
