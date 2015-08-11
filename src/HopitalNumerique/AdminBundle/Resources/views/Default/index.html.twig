@@ -42,8 +42,8 @@
 
                             <div class="panel-body">
                                 <ol>
-                                    <li><a href="{{path('hopital_numerique_user_homepage', {'filtre' : 'Utilisateur-hopital-numerique'})}}"><strong>{{blocUser['nb']}}</strong> comptes</a></li>
-                                    <li><a href="{{path('hopital_numerique_user_homepage', {'filtre' : 'Utilisateur-actif'})}}"><strong>{{blocUser['actif']}}</strong> comptes actifs</a></li>
+                                    <li><a href="{{path('hopital_numerique_user_homepage_filtre', {'filtre' : 'Utilisateur-hopital-numerique'})}}"><strong>{{blocUser['nb']}}</strong> comptes</a></li>
+                                    <li><a href="{{path('hopital_numerique_user_homepage_filtre', {'filtre' : 'Utilisateur-actif'})}}"><strong>{{blocUser['actif']}}</strong> comptes actifs</a></li>
                                     <li><strong>{{blocUser['es']}}</strong> comptes de type ES</li>
                                     <li><strong>{{ blocUser['nb'] - blocUser['es'] }}</strong> compte de type "Autres ES"</li>
                                 </ol>
@@ -62,8 +62,8 @@
 
                             <div class="panel-body">
                                 <ol>
-                                    <li><a href="{{path('hopital_numerique_user_homepage', {'filtre' : 'Candidat-ambassadeur'})}}"><strong>{{blocUser['ambCandidats']}}</strong> candidats</a></li>
-                                    <li><a href="{{path('hopital_numerique_user_homepage', {'filtre' : 'Ambassadeur'})}}"><strong>{{blocUser['ambassadeurs']}}</strong> ambassadeurs</a></li>
+                                    <li><a href="{{path('hopital_numerique_user_homepage_filtre', {'filtre' : 'Candidat-ambassadeur'})}}"><strong>{{blocUser['ambCandidats']}}</strong> candidats</a></li>
+                                    <li><a href="{{path('hopital_numerique_user_homepage_filtre', {'filtre' : 'Ambassadeur'})}}"><strong>{{blocUser['ambassadeurs']}}</strong> ambassadeurs</a></li>
                                     <li><strong>{{blocUser['ambassadeursMAPF']}}</strong> ambassadeurs ayant suivi un MAPF</li>
                                     <li><strong>{{blocUser['ambCandidatsRecues']}}</strong> candidatures reçues</li>
                                     <li><strong>{{blocUser['conventions']}}</strong> ambassadeurs avec docs à renouveler</li>
@@ -83,8 +83,8 @@
 
                             <div class="panel-body">
                                 <ol>
-                                    <li><a href="{{path('hopital_numerique_user_homepage', {'filtre' : 'Candidat-expert'})}}"><strong>{{blocUser['expCandidats']}}</strong> candidats</a></li>
-                                    <li><a href="{{path('hopital_numerique_user_homepage', {'filtre' : 'Expert'})}}"><strong>{{blocUser['experts']}}</strong> experts</a></li>
+                                    <li><a href="{{path('hopital_numerique_user_homepage_filtre', {'filtre' : 'Candidat-expert'})}}"><strong>{{blocUser['expCandidats']}}</strong> candidats</a></li>
+                                    <li><a href="{{path('hopital_numerique_user_homepage_filtre', {'filtre' : 'Expert'})}}"><strong>{{blocUser['experts']}}</strong> experts</a></li>
                                     <li><strong>{{blocUser['expCandidatsRecues']}}</strong> candidatures reçues</li>
                                     <li><strong>{{blocUser['contribution']}}</strong> contributions au forum depuis 7 jours</li>
                                 </ol>
