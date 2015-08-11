@@ -22,11 +22,8 @@ class PointdurController extends Controller
         $paramsFonct[] = $this->get('hopitalnumerique_reference.manager.reference')->findOneBy(array('id' => 294));
         $paramsFonct[] = $this->get('hopitalnumerique_reference.manager.reference')->findOneBy(array('id' => 295));
 
-        $fonctionsUser = $this->get('hopitalnumerique_reference.manager.reference')->findBy(array('code' => 'CONTEXTE_FONCTION_INTERNAUTE'), array('libelle' => 'ASC'));
-
         return $this->render('HopitalNumeriqueStatBundle:Back:partials/PointsDurs/bloc.html.twig', array(
-            'paramsFonct'   => $paramsFonct,
-            'fonctionsUser' => $fonctionsUser
+            'paramsFonct'   => $paramsFonct
         ));
     }
 
@@ -45,9 +42,8 @@ class PointdurController extends Controller
 
         $perimFonctId = intval($request->request->get('perimFonctionnellesSelect'));
         $profilType   = $request->request->get('profilTypeSelect');
-        $fonctionUser = $request->request->get('fonctionUserSelect');
 
-        $res = $this->generationTableau($dateDebut , $dateFin, $perimFonctId, $profilType, $fonctionUser);
+        $res = $this->generationTableau($dateDebut , $dateFin, $perimFonctId, $profilType);
         
         return $this->render('HopitalNumeriqueStatBundle:Back:partials/PointsDurs/tableau.html.twig', array(
             'notes'          => $res['notes'],
@@ -70,9 +66,8 @@ class PointdurController extends Controller
         $dateFin      = $request->request->get('dateFin-pointDur');
         $perimFonctId = intval($request->request->get('perimFonctionnellesSelect'));
         $profilType   = $request->request->get('profilTypeSelect');
-        $fonctionUser = $request->request->get('fonctionUserSelect');
 
-        $donneesTab = $this->generationTableau($dateDebut , $dateFin, $perimFonctId, $profilType, $fonctionUser);
+        $donneesTab = $this->generationTableau($dateDebut , $dateFin, $perimFonctId, $profilType);
 
         //Colonnes communes
         $colonnes = array( 
@@ -92,12 +87,18 @@ class PointdurController extends Controller
         return $this->get('hopitalnumerique_recherche_parcours.manager.matrise_user')->exportCsv( $colonnes, $datas, 'export-points-dur.csv', $kernelCharset );
     }
 
+
+
+
+
+
+
     /**
      * Code appelé lors de la génération du tableau et de l'export CSV
      *
      * @return array
      */
-    private function generationTableau($dateDebut , $dateFin, $perimFonctId, $profilType, $fonctionUser)
+    private function generationTableau($dateDebut , $dateFin, $perimFonctId, $profilType)
     {
         //Récupération des dates sous forme DateTime
         $dateDebutDateTime = $dateDebut === "" ? null : new \DateTime($dateDebut);
@@ -110,8 +111,6 @@ class PointdurController extends Controller
         $referencesTemp[] = $perimFonct = $this->get('hopitalnumerique_reference.manager.reference')->findOneBy(array('id' => $perimFonctId));
         //Récupération du parent du périmetre fonctionnelle
         $referencesTemp[] = $this->get('hopitalnumerique_reference.manager.reference')->findOneBy(array('id' => $perimFonct->getParent()->getId()));
-        //Récupération de la fonction
-        $referencesTemp[] = $this->get('hopitalnumerique_reference.manager.reference')->findOneBy(array('id' => $fonctionUser));
 
         //Récupération des références liées aux Types ES ou aux profils
         if('typeES' === $profilType)
@@ -140,6 +139,22 @@ class PointdurController extends Controller
             $referencesTemp[] = $refTemp  = $this->get('hopitalnumerique_reference.manager.reference')->findOneBy(array('id' => 283));
             $referencesTemp[] = $refTemp2 = $this->get('hopitalnumerique_reference.manager.reference')->findOneBy(array('id' => 284));
             $referencesTemp[] = $refTemp3 = $this->get('hopitalnumerique_reference.manager.reference')->findOneBy(array('id' => 285));
+
+            if(!is_null($refTemp))
+                $entetesTableau[$refTemp->getId()]  = $refTemp->getLibelle();
+            if(!is_null($refTemp2))
+                $entetesTableau[$refTemp2->getId()] = $refTemp2->getLibelle();
+            if(!is_null($refTemp3))
+                $entetesTableau[$refTemp3->getId()] = $refTemp3->getLibelle();
+            $entetesTableau["NC"]               = "NC";
+        }
+        elseif('fonction' === $profilType)
+        {
+            $referencesTemp[] = $this->get('hopitalnumerique_reference.manager.reference')->findOneBy(array('id' => 222));
+            $referencesTemp[] = $this->get('hopitalnumerique_reference.manager.reference')->findOneBy(array('id' => 278));
+            $referencesTemp[] = $refTemp  = $this->get('hopitalnumerique_reference.manager.reference')->findOneBy(array('id' => 286));
+            $referencesTemp[] = $refTemp2 = $this->get('hopitalnumerique_reference.manager.reference')->findOneBy(array('id' => 287));
+            $referencesTemp[] = $refTemp3 = $this->get('hopitalnumerique_reference.manager.reference')->findOneBy(array('id' => 288));
 
             if(!is_null($refTemp))
                 $entetesTableau[$refTemp->getId()]  = $refTemp->getLibelle();

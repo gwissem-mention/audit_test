@@ -22,11 +22,8 @@ class RechercheParcoursController extends Controller
         $paramsFonct[] = $this->get('hopitalnumerique_reference.manager.reference')->findOneBy(array('id' => 294));
         $paramsFonct[] = $this->get('hopitalnumerique_reference.manager.reference')->findOneBy(array('id' => 295));
 
-        $fonctionsUser = $this->get('hopitalnumerique_reference.manager.reference')->findBy(array('code' => 'CONTEXTE_FONCTION_INTERNAUTE'), array('libelle' => 'ASC'));
-
         return $this->render('HopitalNumeriqueStatBundle:Back:partials/RechercheParcours/bloc.html.twig', array(
-            'paramsFonct'   => $paramsFonct,
-            'fonctionsUser' => $fonctionsUser
+            'paramsFonct'   => $paramsFonct
         ));
     }
 
@@ -45,9 +42,8 @@ class RechercheParcoursController extends Controller
 
         $perimFonctId = intval($request->request->get('perimFonctionnellesSelect'));
         $profilType   = $request->request->get('profilTypeSelect');
-        $fonctionUser = $request->request->get('fonctionUserSelect');
 
-        $res = $this->generationTableau($dateDebut , $dateFin, $perimFonctId, $profilType, $fonctionUser);
+        $res = $this->generationTableau($dateDebut , $dateFin, $perimFonctId, $profilType);
         
         return $this->render('HopitalNumeriqueStatBundle:Back:partials/RechercheParcours/tableau.html.twig', array(
             'notesMoyenneParEtape' => $res['notesMoyenneParEtape'],
@@ -70,9 +66,8 @@ class RechercheParcoursController extends Controller
         $dateFin      = $request->request->get('dateFin-rechercheParcours');
         $perimFonctId = intval($request->request->get('perimFonctionnellesSelect'));
         $profilType   = $request->request->get('profilTypeSelect');
-        $fonctionUser = $request->request->get('fonctionUserSelect');
 
-        $donneesTab = $this->generationTableau($dateDebut , $dateFin, $perimFonctId, $profilType, $fonctionUser);
+        $donneesTab = $this->generationTableau($dateDebut , $dateFin, $perimFonctId, $profilType);
 
         //Colonnes communes
         $colonnes = array( 
@@ -98,7 +93,7 @@ class RechercheParcoursController extends Controller
      *
      * @return array
      */
-    private function generationTableau($dateDebut , $dateFin, $perimFonctId, $profilType, $fonctionUser)
+    private function generationTableau($dateDebut , $dateFin, $perimFonctId, $profilType)
     {
         //Récupération des dates sous forme DateTime
         $dateDebutDateTime = $dateDebut === "" ? null : new \DateTime($dateDebut);
@@ -152,6 +147,22 @@ class RechercheParcoursController extends Controller
 
             $entetesTableau["NC"] = "NC";
         }
+        elseif('fonction' === $profilType)
+        {
+            $fonctions[] = $refTemp  = $this->get('hopitalnumerique_reference.manager.reference')->findOneBy(array('id' => 286));
+            $fonctions[] = $refTemp2 = $this->get('hopitalnumerique_reference.manager.reference')->findOneBy(array('id' => 287));
+            $fonctions[] = $refTemp3 = $this->get('hopitalnumerique_reference.manager.reference')->findOneBy(array('id' => 288));
+
+            foreach ($fonctions as $key => $fonction) 
+            {
+                if(!is_null($fonction))
+                {
+                    $entetesTableau[$fonction->getId()] = $fonction->getLibelle();
+                }
+            }
+
+            $entetesTableau["NC"] = "NC";
+        }
 
         //Récupération des notes triées par users
         $etapes = array();
@@ -164,7 +175,7 @@ class RechercheParcoursController extends Controller
         }
 
         //Récupération de la note moyenne par étapes dans un tableau (étapeId => moyenne arrondie à l'entier)
-        $notesMoyenneParEtape = $this->get('hopitalnumerique_recherche_parcours.manager.matrise_user')->getAverageAllEtapesAllUser($profilType, $fonctionUser);
+        $notesMoyenneParEtape = $this->get('hopitalnumerique_recherche_parcours.manager.matrise_user')->getAverageAllEtapesAllUser($profilType);
 
         return array(
             'notesMoyenneParEtape' => $notesMoyenneParEtape,
