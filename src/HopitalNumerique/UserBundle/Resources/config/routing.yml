@@ -63,8 +63,12 @@ hopitalnumerique_user_ambassadeur_front_edit:
 
 #Utilisateur
 hopital_numerique_user_homepage:
-    pattern:  /admin/user/{filtre}
-    defaults: { _controller: HopitalNumeriqueUserBundle:User:index, filtre: null }
+    pattern:  /admin/user
+    defaults: { _controller: HopitalNumeriqueUserBundle:User:index }
+
+hopital_numerique_user_homepage_filtre:
+    pattern:  /admin/user-filtre/{filtre}
+    defaults: { _controller: HopitalNumeriqueUserBundle:User:indexFiltre, filtre: null }
 
 hopital_numerique_user_add:
     pattern:  /admin/user/add
