@@ -192,10 +192,13 @@ function calculNoteMoyenne()
         $("#note-moyenne span").attr("class", function(i, val){
             return couleur;
         });
-        $("#recherche-par-parcours-details .en-tete .en-tete-scroll .chemin-de-fer .bloc-etape-selected a").attr('title','Taux de maîtrise de l\'étape : '+ parseInt(noteTotal / compteur, 0) +' %');
-        $("#recherche-par-parcours-details .en-tete .en-tete-scroll .chemin-de-fer .bloc-etape-selected a").attr("class", function(i, val){
-            return couleur;
-        });
+        if(!$("#recherche-par-parcours-details .en-tete .en-tete-scroll .chemin-de-fer .bloc-etape-selected").data('showchildren'))
+        {
+            $("#recherche-par-parcours-details .en-tete .en-tete-scroll .chemin-de-fer .bloc-etape-selected a").attr('title','Taux de maîtrise de l\'étape : '+ parseInt(noteTotal / compteur, 0) +' %');
+            $("#recherche-par-parcours-details .en-tete .en-tete-scroll .chemin-de-fer .bloc-etape-selected a").attr("class", function(i, val){
+                return couleur;
+            });
+        }
     }
     else
     {
@@ -203,9 +206,12 @@ function calculNoteMoyenne()
         $("#note-moyenne span").attr("class", function(i, val){
             return couleur;
         });
-        $("#recherche-par-parcours-details .en-tete .en-tete-scroll .chemin-de-fer .bloc-etape-selected a").attr('title','Taux de maîtrise de l\'étape : '+ parseInt("0", 0) +' %');
-        $("#recherche-par-parcours-details .en-tete .en-tete-scroll .chemin-de-fer .bloc-etape-selected a").attr("class", function(i, val){
-            return couleur;
-        });
+        if(!$("#recherche-par-parcours-details .en-tete .en-tete-scroll .chemin-de-fer .bloc-etape-selected").data('showchildren'))
+        {
+            $("#recherche-par-parcours-details .en-tete .en-tete-scroll .chemin-de-fer .bloc-etape-selected a").attr('title','Taux de maîtrise de l\'étape : '+ parseInt("0", 0) +' %');
+            $("#recherche-par-parcours-details .en-tete .en-tete-scroll .chemin-de-fer .bloc-etape-selected a").attr("class", function(i, val){
+                return couleur;
+            });
+        }
     }
 }

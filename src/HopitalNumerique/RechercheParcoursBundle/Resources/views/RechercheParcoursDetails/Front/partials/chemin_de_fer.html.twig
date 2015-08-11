@@ -24,7 +24,7 @@
                     {% if loop.last %}
                         {% set lastEtapeSelected = true %}
                     {% endif %}
-                    <div class="bloc-etape-selected">
+                    <div class="bloc-etape-selected" data-showchildren="{% if recherchesParcoursDetail.showChildren %}true{% else %}false{% endif %}">
                         <a class="{{couleurEtape}} tooltip-etape" href="{{ path("hopital_numerique_recherche_parcours_details_index_front" , {'id':rechercheParcours.id, 'alias':rechercheParcours.reference.libelle|minifieMoi(),'idEtape':recherchesParcoursDetail.id, 'etape':recherchesParcoursDetail.reference.libelle|minifieMoi()}) }}" {% if app.user and recherchesParcoursDetail.id in notesMoyenneParEtape|keys %}title="Taux de maîtrise de l'étape : {{notesMoyenneParEtape[recherchesParcoursDetail.id]}} %"{% endif %}>
                             {{recherchesParcoursDetail.reference.libelle}}
                         </a>
