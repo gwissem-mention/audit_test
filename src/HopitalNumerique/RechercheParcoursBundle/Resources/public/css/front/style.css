@@ -83,6 +83,12 @@
 #recherche-par-parcours-details .en-tete .en-tete-scroll .chemin-de-fer .bloc-etape-selected a.red{border-bottom: 3px solid #C93358}
 #recherche-par-parcours-details .en-tete .en-tete-scroll .chemin-de-fer .bloc-etape-selected .icone{background: transparent url('../../img/pointe_violette.png')  no-repeat bottom left;width: 29px; height: 63px;float:left; z-index:3;}
 
+/* -- Chemin de fer - childs -- */
+#recherche-par-parcours-details .en-tete .chemin-de-fer-childs{text-align: center; margin: 15px 0;}
+#recherche-par-parcours-details .en-tete .chemin-de-fer-childs .bloc-etape-child a{margin: 10px 15px; color:#712F98; text-transform: uppercase; padding: 5px;}
+#recherche-par-parcours-details .en-tete .chemin-de-fer-childs .bloc-etape-child a.selected{background-color:#712F98 ;color:#ffffff;}
+
+
 /* Général */
 #recherche-par-parcours-details .note { width: 300px; height: 40px; background-color:#F4F4F4; margin-top: 10px;}
 #recherche-par-parcours-details .note .pourcentage{border:0;background-color:#F4F4F4; font-weight:bold;}

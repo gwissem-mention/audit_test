@@ -14,8 +14,12 @@
                         </label>
                     </div>
                     <div class="col-sm-12">
-                        <textarea rows="12" class="form-control" name="description_detail" id="description_detail">{{rechercheParcoursDetails.description}}</textarea>
+                        <textarea rows="11" class="form-control" name="description_detail" id="description_detail">{{rechercheParcoursDetails.description}}</textarea>
                     </div>
+                </div>
+                <div class="col-md-12">
+                    <input type="checkbox" class="pull-left" id="checkbox_show_child" name="checkbox_show_child" {% if rechercheParcoursDetails.showChildren %} checked="checked"{% endif %} style="margin-top:5px;margin-right:5px;"/>
+                    <label class="labelCheckbox pull-left" for="checkbox_show_child">Afficher les enfants de cette étape</div>
                 </div>
                 <div class="clearfix"></div>
             </form>

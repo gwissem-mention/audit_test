@@ -7,6 +7,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
+use HopitalNumerique\ReferenceBundle\Entity\Reference;
 use HopitalNumerique\RechercheParcoursBundle\Entity\RechercheParcours;
 use HopitalNumerique\RechercheParcoursBundle\Entity\RechercheParcoursDetails;
 
@@ -112,6 +113,7 @@ class RechercheParcoursDetailsController extends Controller
     public function editSaveAction( Request $request, RechercheParcoursDetails $rechercheParcoursDetails )
     {
         $rechercheParcoursDetails->setDescription($request->request->get('description'));
+        $rechercheParcoursDetails->setShowChildren($request->request->get('showChild') == "true");
 
         $this->get('hopitalnumerique_recherche_parcours.manager.recherche_parcours_details')->save( $rechercheParcoursDetails );
 
@@ -130,7 +132,7 @@ class RechercheParcoursDetailsController extends Controller
      *
      * @return [type]
      */
-    public function indexFrontAction($id, $alias, $idEtape, $etape )
+    public function indexFrontAction($id, $alias, $idEtape, $etape,$idRefEtapeChild = null, $libRefEtapeChild = null )
     {
         //Récup!ère la recherche par parcours passé en param
         $rechercheParcours   = $this->get('hopitalnumerique_recherche_parcours.manager.recherche_parcours')->findOneBy( array( 'id' => $id ) );
@@ -200,11 +202,33 @@ class RechercheParcoursDetailsController extends Controller
         //Récupération des références + Tri pour l'affichage des points dur
         $referenceRechercheParcours        = $this->get('hopitalnumerique_reference.manager.reference')->findOneBy( array( 'id' => intval($rechercheParcours->getReference()->getId()) ) );
         $referenceRechercheParcoursDetails = $this->get('hopitalnumerique_reference.manager.reference')->findOneBy( array( 'id' => intval($rechercheParcoursDetails->getReference()->getId()) ) );
+        $refChilds = $this->get('hopitalnumerique_reference.manager.reference')->findBy( array( 
+                        'parent' => intval( $rechercheParcoursDetails->getReference()->getId() )
+                    ));
+        $refChildSelected = null;
 
         $referencesTemp = array();
         $referencesTemp[] = $referenceRechercheParcours;
         $referencesTemp[] = $referenceRechercheParcoursDetails;
 
+        //Dans le cas où l'on affiche les enfants du détails, on récupère les références enfant de la référence du détail
+        if($rechercheParcoursDetails->getShowChildren() and !is_null($idRefEtapeChild))
+        {
+            $refChildSelected = $this->get('hopitalnumerique_reference.manager.reference')->findOneBy( array( 
+                        'id' => intval( $idRefEtapeChild )
+                    ));
+
+            $referencesTemp[] = $refChildSelected;
+        }
+        elseif(count($refChilds) > 0)
+        {
+            foreach ( $refChilds as $refChild)
+            {
+                $referencesTemp[] = $refChild;
+            }
+
+            $refChildSelected = $refChilds[0];
+        }
 
         //Récupération des infos de l'utilisateur, si il y en a un connecté, pour ajouter les filtres "Etablissement" et "Métier"
         if('anon.' !== $user)
@@ -217,14 +241,6 @@ class RechercheParcoursDetailsController extends Controller
             if(!is_null($user->getProfilEtablissementSante()))
                $referencesTemp[] =  $user->getProfilEtablissementSante();
                 
-        }
-
-        $refChilds = $this->get('hopitalnumerique_reference.manager.reference')->findBy( array( 
-                        'parent' => intval( $rechercheParcoursDetails->getReference()->getId() )
-                    ));
-        foreach ( $refChilds as $refChild)
-        {
-            $referencesTemp[] = $refChild;
         }
 
         //Parcourt les références de la réponse, puis les tris pour l'affichage de la recherche
@@ -337,7 +353,9 @@ class RechercheParcoursDetailsController extends Controller
             'objets'               => $objets,
             'notes'                => $notes,
             'notesJSON'            => json_encode($notesJSON),
-            'notesMoyenneParEtape' => $notesMoyenneParEtape
+            'notesMoyenneParEtape' => $notesMoyenneParEtape,
+            'refChilds'            => $refChilds,
+            'refChildSelected'     => $refChildSelected
         ));
     }
 

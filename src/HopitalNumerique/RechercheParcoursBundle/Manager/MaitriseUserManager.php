@@ -215,10 +215,10 @@ class MaitriseUserManager extends BaseManager
      *
      * @return array Tableau des moyenne triées par étape
      */
-    public function getAverageAllEtapesAllUser( $profilType, $fonctionUser = null)
+    public function getAverageAllEtapesAllUser( $profilType)
     {
         //Récupération du tableau des objets maitrisés
-        $objetsMaitrises = $this->getRepository()->getAverageAllEtapesAllUser( $profilType, $fonctionUser )->getQuery()->getResult();
+        $objetsMaitrises = $this->getRepository()->getAverageAllEtapesAllUser( $profilType )->getQuery()->getResult();
         
         $moyennes = array();
         //Cast des moyenne en int arrondi à l'entier
