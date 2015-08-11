@@ -67,7 +67,7 @@ hopital_numerique_user_homepage:
     defaults: { _controller: HopitalNumeriqueUserBundle:User:index }
 
 hopital_numerique_user_homepage_filtre:
-    pattern:  /admin/user-filtre/{filtre}
+    pattern:  /admin/user-avec-filtre/{filtre}
     defaults: { _controller: HopitalNumeriqueUserBundle:User:indexFiltre, filtre: null }
 
 hopital_numerique_user_add:
