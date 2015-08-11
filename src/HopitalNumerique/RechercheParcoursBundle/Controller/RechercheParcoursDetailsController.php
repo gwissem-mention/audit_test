@@ -212,11 +212,18 @@ class RechercheParcoursDetailsController extends Controller
         $referencesTemp[] = $referenceRechercheParcoursDetails;
 
         //Dans le cas où l'on affiche les enfants du détails, on récupère les références enfant de la référence du détail
-        if($rechercheParcoursDetails->getShowChildren() and !is_null($idRefEtapeChild))
+        if($rechercheParcoursDetails->getShowChildren())
         {
-            $refChildSelected = $this->get('hopitalnumerique_reference.manager.reference')->findOneBy( array( 
-                        'id' => intval( $idRefEtapeChild )
-                    ));
+            if(is_null($idRefEtapeChild))
+            {
+                $refChildSelected = $refChilds[0];
+            }
+            else
+            {
+                $refChildSelected = $this->get('hopitalnumerique_reference.manager.reference')->findOneBy( array( 
+                                        'id' => intval( $idRefEtapeChild )
+                                    ));
+            } 
 
             $referencesTemp[] = $refChildSelected;
         }
@@ -226,8 +233,21 @@ class RechercheParcoursDetailsController extends Controller
             {
                 $referencesTemp[] = $refChild;
             }
+        }
 
-            $refChildSelected = $refChilds[0];
+        if($rechercheParcoursDetails->getShowChildren())
+        {
+            //GME 11/08/2015 : Ajout d'un tableau des ref parents lors de l'affichage des enfants pour la récup des notes 
+            //Correspondant à la recherche du parent
+            $referencesTempParent = array();
+            foreach ($referencesTemp as $ref) 
+            {
+                $referencesTempParent[] = $ref;
+            }
+            foreach ( $refChilds as $refChild)
+            {
+                $referencesTempParent[] = $refChild;
+            }
         }
 
         //Récupération des infos de l'utilisateur, si il y en a un connecté, pour ajouter les filtres "Etablissement" et "Métier"
@@ -235,11 +255,25 @@ class RechercheParcoursDetailsController extends Controller
         {
             //Type d'établissement
             if(!is_null($user->getStatutEtablissementSante()))
-               $referencesTemp[] =  $user->getStatutEtablissementSante();
+            {
+                $referencesTemp[] =  $user->getStatutEtablissementSante();
+
+                if($rechercheParcoursDetails->getShowChildren())
+                {
+                    $referencesTempParent[] =  $user->getStatutEtablissementSante();
+                }
+            }
 
             //Métier internaute
             if(!is_null($user->getProfilEtablissementSante()))
-               $referencesTemp[] =  $user->getProfilEtablissementSante();
+            {
+                $referencesTemp[] =  $user->getProfilEtablissementSante();
+                
+                if($rechercheParcoursDetails->getShowChildren())
+                {
+                    $referencesTempParent[] =  $user->getProfilEtablissementSante();
+                }
+            }
                 
         }
 
@@ -273,6 +307,39 @@ class RechercheParcoursDetailsController extends Controller
                     break;
             }
         }
+        if($rechercheParcoursDetails->getShowChildren())
+        {
+            //Recherche de l'étape parent
+            foreach ($referencesTempParent as $reference) 
+            {
+                //Récupère la référence courante
+                $referenceTemp = $reference;
+
+                //Récupère le premier parent
+                while(!is_null($referenceTemp->getParent())
+                        && $referenceTemp->getParent()->getId() != null)
+                {
+                    $referenceTemp = $referenceTemp->getParent();
+                }
+
+                //Trie la référence dans la bonne catégorie
+                switch ($referenceTemp->getId()) 
+                {
+                    case 220:
+                        $referencesParent['categ1'][] = $reference->getId();
+                        break;
+                    case 221:
+                        $referencesParent['categ2'][] = $reference->getId();
+                        break;
+                    case 223:
+                        $referencesParent['categ3'][] = $reference->getId();
+                        break;
+                    case 222:
+                        $referencesParent['categ4'][] = $reference->getId();
+                        break;
+                }
+            }
+        }
 
         $request       = $this->get('request');
         $domaineId     = $request->getSession()->get('domaineId');
@@ -300,13 +367,30 @@ class RechercheParcoursDetailsController extends Controller
             }
         }
 
+        if($rechercheParcoursDetails->getShowChildren())
+        {
+            //Récupérations
+            $objetsParents         = $this->get('hopitalnumerique_recherche.manager.search')->getObjetsForRecherche( $referencesParent, $role, $refsPonderees );
+            $objetsParents         = $this->get('hopitalnumerique_objet.manager.consultation')->updateObjetsWithConnectedUser( $domaineId, $objetsParents, $user );
+
+            foreach ($objetsParents as $key => $objet) 
+            {
+                if(!in_array($objet['id'], $objetsDuDomaineIds))
+                {
+                    unset($objetsParents[$key]);
+                }
+            }
+        }
+
         //En mode connecté
         if('anon.' !== $user)
         {
             //Récupération des notes existante sur les points dur pour l'utilisateur courant 
             $notes = $this->get('hopitalnumerique_recherche_parcours.manager.matrise_user')->getAllOrderedByPointDurForParcoursEtape( $user, $rechercheParcoursDetails->getId() );
 
-            foreach ($objets as $objet) 
+            $objetsForNote = $rechercheParcoursDetails->getShowChildren() ? $objetsParents : $objets;
+            
+            foreach ($objetsForNote as $objet) 
             {
                 if( in_array($objet["categ"], $rechercheParcours->getRecherchesParcoursGestion()->getPublicationString())
                     && ($objet['primary'] >= 1)
@@ -327,7 +411,7 @@ class RechercheParcoursDetailsController extends Controller
             }
 
             //Dans le cas où des points-dur ont une date dépassée, changement de groupe de restriction ou passé inactif
-            $notes = $this->get('hopitalnumerique_recherche_parcours.manager.matrise_user')->cleanNotesByObjet( $notes, $objets );
+            $notes = $this->get('hopitalnumerique_recherche_parcours.manager.matrise_user')->cleanNotesByObjet( $notes, $objetsForNote );
 
             $notesJSON = array();
             //Set d'un tableau de note en JSOn pour le chargement des slides
@@ -346,6 +430,8 @@ class RechercheParcoursDetailsController extends Controller
             $notesJSON            = json_encode(array('id' => 0));
             $notesMoyenneParEtape = array();
         }
+
+        // echo '<pre>';var_dump($notesMoyenneParEtape);die('die');
 
         return $this->render('HopitalNumeriqueRechercheParcoursBundle:RechercheParcoursDetails:Front/index.html.twig', array(
             'rechercheParcours'    => $rechercheParcours,

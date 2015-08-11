@@ -1,7 +1,11 @@
 #partie Objet
 hopitalnumerique_objet_objet:
-    pattern:  /objet/{filtre}
-    defaults: { _controller: "HopitalNumeriqueObjetBundle:Objet:index", filtre: null }
+    pattern:  /objet
+    defaults: { _controller: "HopitalNumeriqueObjetBundle:Objet:index" }
+
+hopitalnumerique_objet_objet_filtre:
+    pattern:  /objet-avec-filtre/{filtre}
+    defaults: { _controller: "HopitalNumeriqueObjetBundle:Objet:indexFiltre", filtre: null }
 
 hopitalnumerique_objet_objet_add:
     pattern:  /objet/add/{type}
