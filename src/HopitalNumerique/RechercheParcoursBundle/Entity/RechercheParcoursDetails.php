@@ -52,6 +52,13 @@ class RechercheParcoursDetails
     protected $order;
 
     /**
+     * @var boolean
+     *
+     * @ORM\Column(name="rrpd_afficher_enfant", type="boolean", options = {"comment" = "Afficher les enfants de la reference en front"})
+     */
+    protected $showChildren;
+
+    /**
      * Get id
      *
      * @return integer 
@@ -133,5 +140,28 @@ class RechercheParcoursDetails
     {
         $this->order = $order;
         return $this;
+    }
+
+    /**
+     * Set showChildren
+     *
+     * @param boolean $showChildren
+     * @return RechercheParcoursDetails
+     */
+    public function setShowChildren($showChildren)
+    {
+        $this->showChildren = $showChildren;
+
+        return $this;
+    }
+
+    /**
+     * Get showChildren
+     *
+     * @return boolean 
+     */
+    public function getShowChildren()
+    {
+        return $this->showChildren;
     }
 }

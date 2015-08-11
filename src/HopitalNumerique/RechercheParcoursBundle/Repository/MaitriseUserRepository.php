@@ -42,7 +42,7 @@ class MaitriseUserRepository extends EntityRepository
      *
      * @return QueryBuilder
      */
-    public function getAverageAllEtapesAllUser($profilType, $fonctionUser = null)
+    public function getAverageAllEtapesAllUser($profilType)
     {
         $qb = $this->_em->createQueryBuilder();
 
@@ -53,6 +53,10 @@ class MaitriseUserRepository extends EntityRepository
                     elseif("typeES" === $profilType)
                     {
                         $qb->select('etape.id as etapeId, avg(notes.pourcentageMaitrise) as moyenne, count(notes.pourcentageMaitrise) as nbNote, count(DISTINCT notes.user) as nbUser, statutEtablissementSante.id as filtreId');
+                    }
+                    elseif("fonction" === $profilType)
+                    {
+                        $qb->select('etape.id as etapeId, avg(notes.pourcentageMaitrise) as moyenne, count(notes.pourcentageMaitrise) as nbNote, count(DISTINCT notes.user) as nbUser, fonction.id as filtreId');
                     }
                     else
                     {
@@ -71,13 +75,6 @@ class MaitriseUserRepository extends EntityRepository
                                 'nonConcerne'  => false
                             ));
 
-                    if(!is_null($fonctionUser))
-                    {
-                        $qb->leftJoin('user.fonctionDansEtablissementSanteReferencement', 'fonction')
-                            ->andWhere('fonction.id = :fonctionUser')
-                            ->setParameter('fonctionUser', $fonctionUser);
-                    }
-
                     if("profil" === $profilType)
                     {
                         $qb->leftJoin('user.profilEtablissementSante', 'profilEtablissementSante')
@@ -87,6 +84,11 @@ class MaitriseUserRepository extends EntityRepository
                     {
                         $qb->leftJoin('user.statutEtablissementSante', 'statutEtablissementSante')
                            ->groupBy('etape.id, statutEtablissementSante.id');
+                    }
+                    elseif("fonction" === $profilType)
+                    {
+                        $qb->leftJoin('user.fonctionDansEtablissementSanteReferencement', 'fonction')
+                           ->groupBy('etape.id, fonction.id');
                     }
                     else
                     {
