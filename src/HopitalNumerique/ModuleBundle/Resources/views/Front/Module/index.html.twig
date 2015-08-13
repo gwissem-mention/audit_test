@@ -47,7 +47,7 @@
                             {% if date(session.dateOuvertureInscription) <= date() 
                                   and date(session.dateFermetureInscription) > date() 
                                   and autorisation %}
-                            {% set uneSessionAffichees = true %}
+                                {% set uneSessionAffichees = true %}
                                 <tr>
                                     <td class=
                                         {% if date(session.dateSession) < date('+7days') %}
@@ -132,11 +132,9 @@
                                         </div>
                                     </td>
                                 </tr>
-                            {% else %}
-                                <tr><td colspan="7">- Aucune session planifiée -</td></tr>
                             {% endif %}
                         {% else %}
-                            <tr><td colspan="7">- Aucune session planifiée -</td></tr>
+                            <tr><td colspan="8">- Aucune session planifiée -</td></tr>
                         {% endfor %} 
                     </tbody>
                 </table>                    
