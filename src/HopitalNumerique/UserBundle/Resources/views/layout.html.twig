@@ -10,7 +10,7 @@
         <title>{% block title %}Hopital Numérique{% endblock %}</title>
 
         <link href='http://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600' rel='stylesheet' type='text/css'>
-        <link rel="shortcut icon" href="{{ asset('favicon.ico') }}" />
+        <link rel="shortcut icon" href="{% if domaineCurrent.id != 1 %}{{ asset('favicon_anap.ico') }}{% else %}{{ asset('favicon_anap.ico') }}{% endif %}" />
         {% block stylesheets %}
             {% stylesheets output="compiled/login.css" filter="cssrewrite, ?yui_css"
                 'bundles/nodevoadmin/css/avant.css'
