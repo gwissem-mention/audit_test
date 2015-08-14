@@ -198,7 +198,7 @@ class UserType extends AbstractType
                             'query_builder' => function(EntityRepository $er) use ($connectedUser) { 
                                 if($this->_securityContext->isGranted('ROLE_ADMINISTRATEUR_1'))
                                 {
-                                    return $er->createQueryBuilder('dom')->orderBy('dom.name');
+                                    return $er->createQueryBuilder('dom')->orderBy('dom.nom');
                                 }
                                 else
                                 {
