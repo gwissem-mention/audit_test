@@ -3,6 +3,9 @@
 namespace HopitalNumerique\ModuleBundle\Manager;
 
 use Nodevo\ToolsBundle\Manager\Manager as BaseManager;
+use Doctrine\ORM\EntityManager;
+use HopitalNumerique\UserBundle\Manager\UserManager;
+
 
 /**
  * Manager de l'entité Inscription.
@@ -13,6 +16,24 @@ use Nodevo\ToolsBundle\Manager\Manager as BaseManager;
 class InscriptionManager extends BaseManager
 {
     protected $_class = 'HopitalNumerique\ModuleBundle\Entity\Inscription';
+    
+    /**
+     * @var \HopitalNumerique\UserBundle\Manager\UserManager UserManager
+     */
+    private $_userManager;
+    
+    /**
+     * Constructeur du manager de Session.
+     * 
+     * @param \Doctrine\ORM\EntityManager $em EntityManager
+     * @param \HopitalNumerique\UserBundle\Manager\UserManager $userManager UserManager
+     */
+    public function __construct(EntityManager $em, UserManager $userManager)
+    {
+        parent::__construct($em);
+        
+        $this->_userManager = $userManager;
+    }
 
     /**
      * Override : Récupère les données pour le grid sous forme de tableau
@@ -69,7 +90,8 @@ class InscriptionManager extends BaseManager
      */
     public function getAllDatasForGrid( $condition = null )
     {
-        $inscriptions = $this->getRepository()->getAllDatasForGrid( $condition )->getQuery()->getResult();
+        $domainesIds     = $this->_userManager->getUserConnected()->getDomainesId();
+        $inscriptions = $this->getRepository()->getAllDatasForGrid( $domainesIds, $condition )->getQuery()->getResult();
 
         $result = array();
 
@@ -92,6 +114,16 @@ class InscriptionManager extends BaseManager
                 }
             }
 
+            $domaineNom = '';
+            foreach ($inscription->getSession()->getModule()->getDomaines() as $domaine) 
+            {
+                if($domaineNom !== '')
+                {
+                    $domaineNom .= ' ; ';
+                }
+                $domaineNom .= $domaine->getNom();
+            }
+
             $result[$key] = array(
                 'id'                  => $inscription->getId(),
                 'userId'              => $inscription->getUser()->getId(),
@@ -107,6 +139,7 @@ class InscriptionManager extends BaseManager
                 'nbInscrits'          => $nbInscritsAccepte,
                 'nbInscritsEnAttente' => $nbInscritsEnAttente,
                 'placeRestantes'      => $nbPlacesRestantes . '/' . $inscription->getSession()->getNombrePlaceDisponible(),
+                'domaineNom'          => $domaineNom
                 // 'etatParticipation' => $inscription->getEtatParticipation()->getLibelle(),
                 // 'etatEvaluation'    => $inscription->getEtatEvaluation()->getLibelle(),
             );

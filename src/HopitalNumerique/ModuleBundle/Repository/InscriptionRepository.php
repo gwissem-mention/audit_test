@@ -58,17 +58,23 @@ class InscriptionRepository extends EntityRepository
      * @author Gaetan MELCHILSEN
      * @copyright Nodevo
      */
-    public function getAllDatasForGrid( $condition )
+    public function getAllDatasForGrid( $domainesIds, $condition )
     {
         $qb = $this->_em->createQueryBuilder();
         $qb->select('ins')
             ->from('HopitalNumeriqueModuleBundle:Inscription', 'ins')
             ->leftJoin('ins.session','ses')
+                ->leftJoin('ses.module', 'mod')
+                    ->leftJoin('mod.domaines', 'domaine')
+                        ->andWhere($qb->expr()->orX(
+                            $qb->expr()->in('domaine.id', ':domainesId'),
+                            $qb->expr()->isNull('domaine.id')
+                        ))
+                    ->setParameter('domainesId', $domainesIds)
             ->leftJoin('ses.etat','refEtat')
-            ->andWhere('refEtat.id = 403')
+                ->andWhere('refEtat.id = 403')
             ->leftJoin('ins.user','user')
-            // ->leftJoin('ses.module','module')
-            ->groupBy('ins.id')
+            ->groupBy('ins.id', 'domaine.id')
             ->orderBy('user.nom');
 
         return $qb;

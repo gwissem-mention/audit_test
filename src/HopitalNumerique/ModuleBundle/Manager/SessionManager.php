@@ -6,6 +6,7 @@ use Nodevo\ToolsBundle\Manager\Manager as BaseManager;
 use Doctrine\ORM\EntityManager;
 use HopitalNumerique\QuestionnaireBundle\Manager\ReponseManager;
 use HopitalNumerique\ReferenceBundle\Manager\ReferenceManager;
+use HopitalNumerique\UserBundle\Manager\UserManager;
 
 /**
  * Manager de l'entité Session.
@@ -28,18 +29,25 @@ class SessionManager extends BaseManager
     private $referenceManager;
     
     /**
+     * @var \HopitalNumerique\UserBundle\Manager\UserManager UserManager
+     */
+    private $_userManager;
+    
+    /**
      * Constructeur du manager de Session.
      * 
      * @param \Doctrine\ORM\EntityManager $em EntityManager
      * @param \HopitalNumerique\QuestionnaireBundle\Manager\ReponseManager $reponseManager ReponseManager
      * @param \HopitalNumerique\ReferenceBundle\Manager\ReferenceManager $referenceManager ReferenceManager
+     * @param \HopitalNumerique\UserBundle\Manager\UserManager $userManager UserManager
      */
-    public function __construct(EntityManager $em, ReponseManager $reponseManager, ReferenceManager $referenceManager)
+    public function __construct(EntityManager $em, ReponseManager $reponseManager, ReferenceManager $referenceManager, UserManager $userManager)
     {
         parent::__construct($em);
         
-        $this->reponseManager = $reponseManager;
+        $this->reponseManager   = $reponseManager;
         $this->referenceManager = $referenceManager;
+        $this->_userManager     = $userManager;
     }
 
     /**
@@ -101,9 +109,9 @@ class SessionManager extends BaseManager
      */
     public function getAllDatasForGrid( $condition = null )
     {
-        $sessions = $this->getRepository()->getAllDatasForGrid( $condition )->getQuery()->getResult();
+        $domainesIds     = $this->_userManager->getUserConnected()->getDomainesId();
 
-        $result = array();
+        $sessions = $this->getRepository()->getAllDatasForGrid( $domainesIds, $condition )->getQuery()->getResult();
 
         foreach ($sessions as $key => $session) 
         {
@@ -122,6 +130,16 @@ class SessionManager extends BaseManager
                 }
             }
 
+            $domaineNom = '';
+            foreach ($session->getModule()->getDomaines() as $domaine) 
+            {
+                if($domaineNom !== '')
+                {
+                    $domaineNom .= ' ; ';
+                }
+                $domaineNom .= $domaine->getNom();
+            }
+
             $result[$key] = array(
                 'id'                       => $session->getId(),
                 'moduleTitre'              => $session->getModule()->getTitre(),
@@ -134,7 +152,8 @@ class SessionManager extends BaseManager
                 'nbInscritsEnAttente'      => $nbInscritsEnAttente,
                 'placeRestantes'           => $nbPlacesRestantes . '/' . $session->getNombrePlaceDisponible(),
                 'etat'                     => $session->getEtat()->getLibelle(),
-                'archiver'                 => $session->getArchiver()
+                'archiver'                 => $session->getArchiver(),
+                'domaineNom'               => $domaineNom
             );
         }
 

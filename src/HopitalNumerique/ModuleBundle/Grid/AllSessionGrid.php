@@ -35,6 +35,9 @@ class AllSessionGrid extends Grid implements GridInterface
         $moduleColumn = new Column\TextColumn('moduleTitre', 'Module');
         $this->addColonne( $moduleColumn );
 
+        $domaineColumn = new Column\TextColumn('domaineNom', 'Domaine(s) associé(s)');
+        $this->addColonne( $domaineColumn );
+
         $dateOuvertureInscriptionColumn = new Column\DateColumn('dateOuvertureInscription', 'Date d\'ouverture des inscriptions');
         $dateOuvertureInscriptionColumn->setSize( 150 );
         $this->addColonne( $dateOuvertureInscriptionColumn );
