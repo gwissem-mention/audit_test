@@ -22,8 +22,8 @@
         "@tinymce_js"
         'bundles/nodevogestionnairemedia/js/moxiemanager/js/moxman.loader.min.js'
         'bundles/nodevogestionnairemedia/js/MoxieManager.js'
-        'bundles/hopitalnumeriqueautodiag/js/script.js'
         'bundles/hopitalnumeriqueautodiag/js/outil/ProcessFormulaire.js'
+        'bundles/hopitalnumeriqueautodiag/js/script.js'
     %}
         <script type="text/javascript" src="{{ asset_url }}"></script>
     {% endjavascripts %}
@@ -34,6 +34,10 @@
     %}
         <script type="text/javascript" src="{{ asset_url }}"></script>
     {% endjavascripts %}
+    <script type="text/javascript">
+        NodevoGestionnaireMediaBundle_MoxieManager.PARAMETRES_GLOBAUX_URL = '{{ url('nodevo_gestionnaire_media_moxiemanager_json_parametres') }}';
+        NodevoGestionnaireMediaBundle_MoxieManager.initParametresGlobaux();
+    </script>
     {% if (form.process|length > 0) %}
         <script type="text/javascript"><!--
             $(document).ready(function() {
@@ -41,8 +45,6 @@
                     HopitalNumeriqueAutodiagBundle_OutilProcessFormulaire.addProcessChamp({{ process.id }});
                 {% endfor %}
             });
-            NodevoGestionnaireMediaBundle_MoxieManager.PARAMETRES_GLOBAUX_URL = '{{ url('nodevo_gestionnaire_media_moxiemanager_json_parametres') }}';
-            NodevoGestionnaireMediaBundle_MoxieManager.initParametresGlobaux();
         </script>
     {% endif %}
 {% endblock %}
