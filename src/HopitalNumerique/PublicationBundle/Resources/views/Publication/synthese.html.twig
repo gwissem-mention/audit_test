@@ -11,7 +11,7 @@
         <title>{{domaineCurrent.nom}} - Synthèse</title>
 
         <link href='http://fonts.googleapis.com/css?family=Viga|Open+Sans:400,700' rel='stylesheet' type='text/css'>
-        <link rel="shortcut icon" href="{{ asset('favicon.ico') }}" />
+        <link rel="shortcut icon" href="{% if domaineCurrent.id != 1 %}{{ asset('favicon_anap.ico') }}{% else %}{{ asset('favicon_anap.ico') }}{% endif %}" />
 
         {% block stylesheets %}
             {% if templateCurrentId == 1 %}
