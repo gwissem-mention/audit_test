@@ -11,7 +11,7 @@
         <title>{{domaineCurrent.nom}} - Instructions</title>
 
         <link href='http://fonts.googleapis.com/css?family=Viga|Open+Sans:400,700' rel='stylesheet' type='text/css'>
-        <link rel="shortcut icon" href="{{ asset('favicon.ico') }}" />
+        <link rel="shortcut icon" href="{% if domaineCurrent.id != 1 %}{{ asset('favicon_anap.ico') }}{% else %}{{ asset('favicon_anap.ico') }}{% endif %}" />
         {% block stylesheets %}
             {% if templateCurrentId == 1 %}
                 {% stylesheets output="compiled/hopitalnumerique-autodiag-front-fancy-1.css" filter="cssrewrite, ?yui_css" 
