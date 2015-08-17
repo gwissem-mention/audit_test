@@ -9,18 +9,21 @@ use Doctrine\ORM\EntityRepository;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
+use HopitalNumerique\UserBundle\Manager\UserManager;
 
 class UserType extends AbstractType
 {
     private $_constraints = array();
     private $_managerRole;
     private $_securityContext;
+    private $_userManager;
 
-    public function __construct($manager, $validator, $managerRole, $securityContext)
+    public function __construct($manager, $validator, $managerRole, $securityContext, UserManager $userManager)
     {
         $this->_constraints = $manager->getConstraints( $validator );
         $this->_managerRole = $managerRole;
         $this->_securityContext = $securityContext;
+        $this->_userManager = $userManager;
     }
 
     public function setDefaultOptions(OptionsResolverInterface $resolver)
@@ -46,6 +49,7 @@ class UserType extends AbstractType
     {
         $datas = $options['data'];
         $roles = $datas->getRoles();
+        $connectedUser = $this->_userManager->getUserConnected();
 
         $builder->add('username', 'text', array(
                 'max_length' => $this->_constraints['username']['maxlength'],
@@ -168,10 +172,19 @@ class UserType extends AbstractType
                         'empty_value'   => ' - ',
                         'attr'          => array('class'=>'validate[required]'),
                         'query_builder' => function(EntityRepository $er) {
-                            return $er->createQueryBuilder('ro')
+                            $qb = $er->createQueryBuilder('ro')
                                       ->where('ro.etat != :etat')
-                                      ->setParameter('etat', 4)
-                                      ->orderBy('ro.name');
+                                      ->setParameter('etat', 4);
+
+                            if(!$this->_securityContext->isGranted('ROLE_ADMINISTRATEUR_1'))
+                            {
+                                $qb->andWhere('ro.id NOT IN (:rolesAdmins)')
+                                    ->setParameter('rolesAdmins' , array(1, 106));
+                            }
+
+                            $qb->orderBy('ro.name');
+
+                            return $qb;
                         },
                         'data' => $this->_managerRole->findOneBy( array('role'=>$roles[0]) )
                     ))
@@ -181,7 +194,17 @@ class UserType extends AbstractType
                             'required'    => false,
                             'multiple'    => true,
                             'label'       => 'Domaine(s) concerné(s)',
-                            'empty_value' => ' - '
+                            'empty_value' => ' - ',
+                            'query_builder' => function(EntityRepository $er) use ($connectedUser) { 
+                                if($this->_securityContext->isGranted('ROLE_ADMINISTRATEUR_1'))
+                                {
+                                    return $er->createQueryBuilder('dom')->orderBy('dom.nom');
+                                }
+                                else
+                                {
+                                    return $er->getDomainesUserConnectedForForm($connectedUser->getId());
+                                }
+                            }
                     ))
                     ->add('remarque', 'textarea', array(
                         'required'   => false, 

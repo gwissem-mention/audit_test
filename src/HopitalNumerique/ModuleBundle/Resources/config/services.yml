@@ -44,7 +44,7 @@ services:
     #--Manager
     hopitalnumerique_module.manager.session:
         class: %hopitalnumerique_module.manager.session.class%
-        arguments: ["@doctrine.orm.entity_manager", "@hopitalnumerique_questionnaire.manager.reponse", "@hopitalnumerique_reference.manager.reference"]
+        arguments: ["@doctrine.orm.entity_manager", "@hopitalnumerique_questionnaire.manager.reponse", "@hopitalnumerique_reference.manager.reference", "@hopitalnumerique_user.manager.user"]
         calls:
            - [ setCache, [ @liip_doctrine_cache.ns.main ] ]
 
@@ -69,7 +69,7 @@ services:
     #--Manager
     hopitalnumerique_module.manager.inscription:
         class: %hopitalnumerique_module.manager.inscription.class%
-        arguments: ["@doctrine.orm.entity_manager"]
+        arguments: ["@doctrine.orm.entity_manager", "@hopitalnumerique_user.manager.user"]
         calls:
            - [ setCache, [ @liip_doctrine_cache.ns.main ] ]
 

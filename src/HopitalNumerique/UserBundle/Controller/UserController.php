@@ -826,6 +826,14 @@ class UserController extends Controller
             $form->remove('raisonDesinscription');
             $form->remove('file');
         }
+        
+        //GME : ticket 3088 = un admin de domaine ne peut modifier son propre role ni ses domaines
+        if($this->get('security.context')->isGranted('ROLE_ADMINISTRATEUR_DE_DOMAINE_106')
+            && ($this->get('security.context')->getToken()->getUser()->getId() === $user->getId()))
+        {
+            $form->remove('roles');
+            $form->remove('domaines');
+        }
 
         $request = $this->get('request');
 

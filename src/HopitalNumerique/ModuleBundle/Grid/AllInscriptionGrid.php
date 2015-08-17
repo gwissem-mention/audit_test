@@ -35,6 +35,9 @@ class AllInscriptionGrid extends BaseInscriptionGrid
 
         $moduleColumn = new Column\TextColumn('moduleTitre', 'Module');
         $this->addColonne( $moduleColumn );
+
+        $domaineColumn = new Column\TextColumn('domaineNom', 'Domaine(s) associé(s)');
+        $this->addColonne( $domaineColumn );
         
         $dateSessionColumn = new Column\DateColumn('dateSession', 'Date de début de la session');
         $this->addColonne( $dateSessionColumn );

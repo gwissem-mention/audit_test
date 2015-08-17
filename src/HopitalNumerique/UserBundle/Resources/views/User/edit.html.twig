@@ -110,8 +110,11 @@
                     {{ form_row(form.region) }}
                     {{ form_row(form.departement) }} 
                     {{ form_row(form.profilEtablissementSante) }}
-                    {{ form_row(form.roles) }}
-                    {{ form_row(form.domaines) }}
+
+                    {% if not (is_granted('ROLE_ADMINISTRATEUR_DE_DOMAINE_106') and (app.user.id == user.id)) %}
+                        {{ form_row(form.roles) }}
+                        {{ form_row(form.domaines) }}
+                    {% endif %}
 
                     {% if user.id != 1 %}
                         {{ form_row(form.etat) }}
