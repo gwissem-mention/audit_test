@@ -792,3 +792,18 @@ div.homepage  {
 
     #search-help {height: 100%; padding-left: 15px; }
 }
+
+/* ALERTES NODEVO - Flash messages */
+    .alert{margin:10px 15px 0;}
+    .nalert-success { color: #333333; background-color: #b4dc00; border-color: #d6e9c6;}
+    .nalert-success hr { border-top-color: #c9e2b3;}
+    .nalert-success .alert-link {color: #2b542c;}
+    .nalert-info { color: #333333; background-color: #b4dc00; border-color: #d6e9c6;}
+    .nalert-info hr {border-top-color: #a6e1ec;}
+    .nalert-info .alert-link {color: #245269;}
+    .nalert-warning {color: #ffffff; background-color: #6b309c; border-color: #faebcc;}
+    .nalert-warning hr { border-top-color: #f7e1b5;}
+    .nalert-warning .alert-link {color: #66512c;}
+    .nalert-danger {color: #ffffff;background-color: #cb324e;border-color: #ebccd1;}
+    .nalert-danger hr {border-top-color: #e4b9c0;}
+    .nalert-danger .alert-link {color: #843534;}

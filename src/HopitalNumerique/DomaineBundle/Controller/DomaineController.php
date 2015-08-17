@@ -114,11 +114,14 @@ class DomaineController extends Controller
 
                 $admins = $this->get('hopitalnumerique_user.manager.user')->findUsersByRole('ROLE_ADMINISTRATEUR_1');
 
-                foreach ($admins as $key => $admin) 
+                if($new)
                 {
-                    $admins[$key]->addDomaine($domaine);
+                    foreach ($admins as $key => $admin) 
+                    {
+                        $admins[$key]->addDomaine($domaine);
+                    }
+                    $this->get('hopitalnumerique_user.manager.user')->save($admins);
                 }
-                $this->get('hopitalnumerique_user.manager.user')->save($admins);
                 
                 // On envoi une 'flash' pour indiquer à l'utilisateur que l'entité est ajoutée
                 $this->get('session')->getFlashBag()->add( ($new ? 'success' : 'info') , 'Domaine ' . ($new ? 'ajouté.' : 'mis à jour.') ); 

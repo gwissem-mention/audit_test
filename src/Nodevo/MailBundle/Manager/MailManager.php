@@ -8,6 +8,8 @@ use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use FOS\UserBundle\Model\UserInterface;
 
+use Symfony\Component\HttpFoundation\Request;
+
 use HopitalNumerique\DomaineBundle\Manager\DomaineManager;
 use HopitalNumerique\UserBundle\Entity\User;
 use HopitalNumerique\AutodiagBundle\Entity\Outil;
@@ -554,10 +556,13 @@ class MailManager extends BaseManager
         $domaine = $this->_domaineManager->findOneById($this->_session->get('domaineId'));
         $destinataire              = $domaine->getAdresseMailContact();
         $options                   = $this->getAllOptions($options);
+
+        $mailExpediteur = $this->replaceContent($mail->getExpediteurMail(), NULL, $options);
+        $nameExpediteur = $this->replaceContent($mail->getExpediteurName(), NULL, $options);
         
         //prepare content
         $content = $this->replaceContent($mail->getBody(), NULL , $options);
-        $from    = array($mail->getExpediteurMail() => $mail->getExpediteurName() );
+        $from    = array($mailExpediteur => $nameExpediteur );
         $cci     = $this->_expediteurEnCopie ? array_merge( $this->_mailAnap, $from ) : $this->_mailAnap;
         $cci     = ($mail->getId() === 1 || $mail->getId() === 2) ? false : $cci;
         $subject = $this->replaceContent($mail->getObjet(), NULL, $options);
@@ -827,7 +832,16 @@ class MailManager extends BaseManager
 
     private function setOptions()
     {
-        $this->_optionsMail = array('subjectDomaine' => $this->getDomaineSubjet());
+        $domaine = $this->_domaineManager->findOneById( $this->_session->get('domaineId') );
+
+        $this->_optionsMail = array(
+            'subjectDomaine' => $this->getDomaineSubjet(),
+            'mailContactDomaineCurrent' => $domaine->getAdresseMailContact(),
+            'nomContactDomaineCurrent' => $domaine->getNom(),
+        );
+        
+
+        return $this;
     }
 
     /**
@@ -854,9 +868,12 @@ class MailManager extends BaseManager
     {
         $options = $this->getAllOptions($options);
 
+        $mailExpediteur = $this->replaceContent($mail->getExpediteurMail(), null, $options);
+        $nameExpediteur = $this->replaceContent($mail->getExpediteurName(), null, $options);
+
         //prepare content
         $body    = $this->replaceContent($mail->getBody(), $user, $options);
-        $from    = array($mail->getExpediteurMail() => $mail->getExpediteurName() );
+        $from    = array($mailExpediteur => $nameExpediteur );
         $cci     = $this->_expediteurEnCopie ? array_merge( $this->_mailAnap, $from ) : $this->_mailAnap;
         $cci     = ($mail->getId() === 1 || $mail->getId() === 2) ? false : $cci;
         $subject = $this->replaceContent($mail->getObjet(), $user, $options);
@@ -884,7 +901,7 @@ class MailManager extends BaseManager
                 $variableARemplacer = '%' . $key;
                 //Remplacement de la mise en forme
                 $message = nl2br($option);
-                //Mise à jour du body du mail
+                //Mise à jour du contenu passé en arg
                 $content = str_replace($variableARemplacer, $message, $content);
             }
         }
@@ -895,7 +912,7 @@ class MailManager extends BaseManager
             $content = str_replace('%p', $user->getPlainPassword(), $content);
         }
         
-        $content = str_replace('%s', '<a href="'. $this->_requestStack->getCurrentRequest()->getUriForPath($this->_router->generate('hopital_numerique_homepage')) .'" target="_blank" >Hopital Numérique</a>', $content);
+        $content = str_replace('%s', '<a href="'. $this->_requestStack->getCurrentRequest()->getUriForPath($this->_router->generate('hopital_numerique_homepage')) .'" target="_blank" >'. $this->_domaineManager->findOneById($this->_session->get('domaineId'))->getNom() .'</a>', $content);
 
         return $content;
     }
@@ -930,7 +947,7 @@ class MailManager extends BaseManager
 
         //prepare Mail
         $mail = \Swift_Message::newInstance()
-                        ->setSubject( $subject )
+                        ->setSubject( $this->replaceContent($subject, NULL, array() ) )
                         ->setFrom( $from )
                         ->setTo( $destinataire )
                         ->setBody( $bodyTxt )

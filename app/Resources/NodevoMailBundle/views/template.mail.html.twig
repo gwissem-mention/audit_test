@@ -13,7 +13,8 @@
     <body>
         <table style="width:100%">
             <tr>
-                <img alt="Logo Hôpital Numérique" style="margin-left:5px; float:left;" src="{{app.request.getSchemeAndHttpHost() ~ asset('bundles/hopitalnumeriquecore/img/hopitalnumerique.jpg')}}" />
+                <img src="{{app.request.getSchemeAndHttpHost()}}/{{ domaineCurrent.getWebPath() }}" alt="Logo {{domaineCurrent.nom}}" style="margin-left:5px; float:left;" />
+                {# <img alt="Logo Hôpital Numérique" style="margin-left:5px; float:left;" src="{{app.request.getSchemeAndHttpHost() ~ asset('bundles/hopitalnumeriquecore/img/hopitalnumerique.jpg')}}" /> #}
                 <img alt="Logo ANAP" style="float:right;" src="{{app.request.getSchemeAndHttpHost() ~ asset('bundles/hopitalnumeriquecore/img/anap.jpg')}}" />
                 <br style="clear:both;" />
             </tr>
@@ -29,7 +30,7 @@
                 <br />
                 <p style="font-weight: bold;">
                     <img alt="L'équipe" src="{{app.request.getSchemeAndHttpHost() ~ asset('bundles/hopitalnumeriquecore/img/common-sprite/users.jpg')}}"></img> 
-                    <span>L'équipe Hôpital Numérique</span>
+                    <span>L'équipe {{domaineCurrent.nom}}</span>
                 </p>
             </tr>
         </table>
