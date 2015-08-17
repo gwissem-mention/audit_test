@@ -111,6 +111,17 @@ class DomaineController extends Controller
 
                 //On utilise notre Manager pour gérer la sauvegarde de l'objet
                 $this->get('hopitalnumerique_domaine.manager.domaine')->save($domaine);
+
+                $admins = $this->get('hopitalnumerique_user.manager.user')->findUsersByRole('ROLE_ADMINISTRATEUR_1');
+
+                if($new)
+                {
+                    foreach ($admins as $key => $admin) 
+                    {
+                        $admins[$key]->addDomaine($domaine);
+                    }
+                    $this->get('hopitalnumerique_user.manager.user')->save($admins);
+                }
                 
                 // On envoi une 'flash' pour indiquer à l'utilisateur que l'entité est ajoutée
                 $this->get('session')->getFlashBag()->add( ($new ? 'success' : 'info') , 'Domaine ' . ($new ? 'ajouté.' : 'mis à jour.') ); 
