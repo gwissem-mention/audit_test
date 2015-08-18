@@ -15,7 +15,9 @@
             <tr>
                 <img src="{{app.request.getSchemeAndHttpHost()}}/{{ domaineCurrent.getWebPath() }}" alt="Logo {{domaineCurrent.nom}}" style="margin-left:5px; float:left;" />
                 {# <img alt="Logo Hôpital Numérique" style="margin-left:5px; float:left;" src="{{app.request.getSchemeAndHttpHost() ~ asset('bundles/hopitalnumeriquecore/img/hopitalnumerique.jpg')}}" /> #}
-                <img alt="Logo ANAP" style="float:right;" src="{{app.request.getSchemeAndHttpHost() ~ asset('bundles/hopitalnumeriquecore/img/anap.jpg')}}" />
+                {% if domaineCurrent.id == 1 %}
+                    <img alt="Logo ANAP" style="float:right;" src="{{app.request.getSchemeAndHttpHost() ~ asset('bundles/hopitalnumeriquecore/img/anap.jpg')}}" />
+                {% endif %}
                 <br style="clear:both;" />
             </tr>
             <tr>

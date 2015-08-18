@@ -168,6 +168,10 @@ nodevo_faq:
     resource: "@NodevoFaqBundle/Resources/config/routing.yml"
     prefix:   /
 
+nodevo_textedynamique:
+    resource: "@NodevoTexteDynamiqueBundle/Resources/config/routing.yml"
+    prefix:   /
+
 nodevo_gestionnaire_media:
     resource: "@NodevoGestionnaireMediaBundle/Resources/config/routing.yml"
     prefix:   /admin/media

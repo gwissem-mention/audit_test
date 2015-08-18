@@ -1,0 +1,39 @@
+parameters:
+    #Options
+    nodevo_textedynamique.options:
+
+    #Code
+    nodevo_textedynamique.manager.code.class: Nodevo\TexteDynamiqueBundle\Manager\CodeManager
+    nodevo_textedynamique.grid.code.class: Nodevo\TexteDynamiqueBundle\Grid\CodeGrid
+    nodevo_textedynamique.form.code.class: Nodevo\TexteDynamiqueBundle\Form\Type\CodeType
+
+    #Extensions twig
+    nodevo_textedynamique.twig.extensions.class: Nodevo\TexteDynamiqueBundle\Twig\CodeExtension
+
+services:
+    #Modules
+    #--Manager
+    nodevo_textedynamique.manager.code:
+        class: %nodevo_textedynamique.manager.code.class%
+        arguments: ["@doctrine.orm.entity_manager", "@hopitalnumerique_user.manager.user"]
+        calls:
+           - [ setCache, [ @liip_doctrine_cache.ns.main ] ]
+
+    #--Grid
+    nodevo_textedynamique.grid.code:
+        class: %nodevo_textedynamique.grid.code.class%
+        arguments: ["@service_container"]
+
+    #--Formulaire
+    nodevo_textedynamique.form.code:
+        class: %nodevo_textedynamique.form.code.class%
+        arguments: ["@nodevo_textedynamique.manager.code", "@validator", "@hopitalnumerique_user.manager.user"]
+        tags:
+            - { name: form.type, alias: nodevo_textedynamique_code }
+
+    #Extension Twig        
+    nodevo_textedynamique.twig.nodevo_textedynamique:
+        class: %nodevo_textedynamique.twig.extensions.class%
+        arguments: ["@service_container"]
+        tags:
+            - { name: twig.extension }
