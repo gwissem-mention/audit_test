@@ -1,0 +1,68 @@
+{% extends 'NodevoAdminBundle::admin.html.twig' %}
+
+{% block h1Title %}
+    {% if code.id %}
+        Editer un code
+    {% else %}
+        Ajouter un code
+    {% endif %}
+{% endblock %}
+
+{% block javascripts %}
+    {{parent()}}
+    {% javascripts output="compiled/nodevo-textedynamique-code-edit.js"
+        "@fancybox_js" 
+        "@nestable_js"
+        "@jquery_toggles_js"
+        "@validationEngine_js"
+        "@json_js"
+        "@tinymce_js"
+        'bundles/nodevogestionnairemedia/js/moxiemanager/js/moxman.loader.min.js'
+        'bundles/nodevogestionnairemedia/js/MoxieManager.js'
+        'bundles/nodevotextedynamique/js/script.js'
+    %}
+        <script type="text/javascript" src="{{ asset_url }}"></script>
+    {% endjavascripts %}
+{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    {% stylesheets output="compiled/nodevo-textedynamique-code.css" filter="cssrewrite, ?yui_css" 
+        "@fancybox_css"
+        "@validationEngine_css"
+        "@jquery_toggles_css"
+        'bundles/nodevoadmin/css/jquery.nestable.css'
+        'bundles/hopitalnumeriqueautodiag/css/style.css'
+        'bundles/nodevoadmin/css/toggles.css'
+    %}
+        <link rel="stylesheet" href="{{ asset_url }}" />
+    {% endstylesheets %}
+{% endblock %}
+
+{% block toolbarButton %}
+    <a class="btn btn-default" href="{{ path('nodevo_textedynamique_code') }}" title="Retour à la liste"><i class="fa fa-reply"></i></a>
+    <div onclick="$('form').submit();" class="btn btn-default" title="Enregistrer"><i class="fa fa-check"></i></div>
+    <div onclick="$('#do').val('save-close');$('form').submit();" class="btn btn-default" title="Enregistrer et Fermer"><i class="fa fa-save"></i></div>
+{% endblock %}
+
+{% block body %}
+    <div class="col-sm-12">
+        <div class="panel panel-midnightblue">
+            <div class="panel-heading">
+                <h4>Informations</h4>
+            </div>
+
+            <div class="panel-body">
+                {% form_theme form 'NodevoAdminBundle::form.html.twig' %}
+
+                {{ form_start(form) }}
+                    <div class="col-md-6 col-md-offset-3 text-muted"><i>Dans le but de garder un code cohérent, merci de respecter la forme suivante : <br />"Fonctionnalité_page_identifiant" tel que "Module_moncompte_introduction".</i></div>
+                    <div class="clearfix"></div>
+                    {{ form_row(form.code) }}
+                    {{ form_row(form.texte) }}
+                    {{ form_row(form.domaines) }}
+                {{ form_end(form) }}
+            </div>
+        </div>
+    </div>
+{% endblock %}
