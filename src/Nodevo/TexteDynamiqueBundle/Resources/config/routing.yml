@@ -1,0 +1,19 @@
+nodevo_textedynamique_code:
+    pattern: /admin/texte-dynamique
+    defaults: { _controller: NodevoTexteDynamiqueBundle:Code:index }
+
+nodevo_textedynamique_code_add:
+    pattern:  /admin/texte-dynamique/add
+    defaults: { _controller: NodevoTexteDynamiqueBundle:Code:add }
+
+nodevo_textedynamique_code_edit:
+    pattern: /admin/texte-dynamique/edit/{id}
+    defaults: { _controller: NodevoTexteDynamiqueBundle:Code:edit, id: 1}
+    requirements:
+        id: \d+
+
+nodevo_textedynamique_code_delete:
+    pattern: /admin/texte-dynamique/delete/{id}.{_format}
+    defaults: { _controller: NodevoTexteDynamiqueBundle:Code:delete, _format: json }
+    requirements:
+        id: \d+

@@ -71,6 +71,7 @@ class AppKernel extends Kernel
             new Liuggio\ExcelBundle\LiuggioExcelBundle(),
             new Nodevo\CookieBundle\NodevoCookieBundle(),
             new Nodevo\FormBundle\NodevoFormBundle(),
+            new Nodevo\TexteDynamiqueBundle\NodevoTexteDynamiqueBundle(),
             new Eko\FeedBundle\EkoFeedBundle(),
         );
 

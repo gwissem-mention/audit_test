@@ -13,7 +13,7 @@
 {% block chapo_titre %}Modules thématiques{% endblock chapo_titre %}
 
 {% block chapo_description %}
-    Vous êtes libres de vous inscrire à toute session susceptible de vous intéresser. Vous êtes engagé à participer à au moins 1 session par an. Au delà de la participation à 3 sessions, l'ANAP se réserve le droit de refuser votre demande pour des questions de prise en charge des frais.
+    {{'Module_sessioninformation_introduction'|nodevoTexteDynamique(domaineCurrent.id)|nl2br}}
 {% endblock chapo_description %}
 
 {% block contenu %}
