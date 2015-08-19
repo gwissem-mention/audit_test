@@ -13,7 +13,7 @@
 {% block chapo_titre %}Modules thématiques{% endblock chapo_titre %}
 
 {% block chapo_description %}
-    {{'Module_sessioninformation_introduction'|nodevoTexteDynamique(domaineCurrent.id)|nl2br}}
+    {{'Module_sessioninformation_introduction'|nodevoTexteDynamique(domaineCurrent.id)|raw|nl2br}}
 {% endblock chapo_description %}
 
 {% block contenu %}
