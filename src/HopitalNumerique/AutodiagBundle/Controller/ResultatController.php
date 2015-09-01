@@ -137,8 +137,10 @@ class ResultatController extends Controller
         $resultats = $this->get('hopitalnumerique_autodiag.manager.resultat')->getDatasForExport( $condition );
 
         $colonnes = array( 
-            'user'          => 'User',
+            'userId'        => 'Id utilisateur',
+            'user'          => 'Utilisateur',
             'etablissement' => 'Établissement',
+            'regionUser'    => 'Région utilisateur',
             'sharedFor'     => 'Partagé avec',
             'sharedBy'      => 'Partagé par',
             'taux'          => 'Taux',
