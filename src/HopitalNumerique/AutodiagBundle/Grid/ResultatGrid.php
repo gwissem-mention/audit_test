@@ -35,6 +35,14 @@ class ResultatGrid extends Grid implements GridInterface
         $etablissementColumn->setFilterable( false );
         $this->addColonne( $etablissementColumn );
 
+        $sharedForColumn = new Column\TextColumn('sharedFor', 'Partagé vers');
+        $sharedForColumn->setFilterable( false );
+        $this->addColonne( $sharedForColumn );
+
+        $sharedByColumn = new Column\TextColumn('sharedBy', 'Partagé par');
+        $sharedByColumn->setFilterable( false );
+        $this->addColonne( $sharedByColumn );
+
         $tauxColumn = new Column\TextColumn('taux', 'Taux de remplissage global');
         $tauxColumn->setFilterable( false );
         $tauxColumn->setSize( 180 );
@@ -67,6 +75,6 @@ class ResultatGrid extends Grid implements GridInterface
      */
     public function setMassActions()
     {
-
+        $this->addMassAction( new Action\ActionMass('Export CSV'  ,'HopitalNumeriqueAutodiagBundle:Resultat:exportCSV') );
     }
 }
