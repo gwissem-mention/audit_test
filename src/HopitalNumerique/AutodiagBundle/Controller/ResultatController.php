@@ -124,7 +124,8 @@ class ResultatController extends Controller
     public function exportCsvAction( $primaryKeys, $allPrimaryKeys )
     {
         //get all selected Users
-        if($allPrimaryKeys == 1){
+        if($allPrimaryKeys == 1)
+        {
             $rawDatas = $this->get('hopitalnumerique_autodiag.grid.resultat')->getRawData();
             foreach($rawDatas as $data)
             {

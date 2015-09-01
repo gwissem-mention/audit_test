@@ -52,12 +52,30 @@ class DefaultController extends Controller
         //Bloc Sessions
         $blocSessions['next'] = $this->get('hopitalnumerique_module.manager.session')->getNextSessions();
         $inscriptions         = $this->get('hopitalnumerique_module.manager.inscription')->findAll();
+
+        //GME 01/09/15 : Ajout du filtre du domaine pour le compteur des inscriptions
+        //Récupération des domaines de l'utilisateur courant
+        $domainesUser = $user->getDomainesId();
+
         foreach( $inscriptions as $inscription){
             if($inscription->getSession()->getModule()->getStatut()->getId() == 3)
             {
                 if($inscription->getSession()->getEtat()->getId() == 403)
                 {
-                    if( $inscription->getEtatInscription()->getId() == 406){
+                    //GME 01/09/15 : Ajout du filtre du domaine pour le compteur des inscriptions
+                    //Récupération des domaines de l'inscription
+                    $domainesInscription = $inscription->getSession()->getModule()->getDomainesId();
+                    $domaineInsriptionInDomaineUser = false;
+                    foreach ($domainesInscription as $idDomaineInscription) 
+                    {
+                        if(in_array($idDomaineInscription, $domainesUser))
+                        {
+                            $domaineInsriptionInDomaineUser = true;
+                            break;
+                        }
+                    }
+
+                    if( $inscription->getEtatInscription()->getId() == 406 && $domaineInsriptionInDomaineUser){
                         $blocSessions['inscriptions']++;
                     }
 
