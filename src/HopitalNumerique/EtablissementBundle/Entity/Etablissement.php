@@ -50,7 +50,7 @@ class Etablissement
      *      max = "9",
      *      exactMessage="Il doit y avoir {{ limit }} caractères dans le finess."
      * )
-     * @Nodevo\Javascript(class="validate[required,custom[onlyNumberSp],minSize[9],maxSize[9]]")
+     * @Nodevo\Javascript(class="validate[required]")
      * @ORM\Column(name="eta_finess", type="string", length=9, options = {"comment" = "Finesse géographique de l établissement"})
      */
     private $finess;

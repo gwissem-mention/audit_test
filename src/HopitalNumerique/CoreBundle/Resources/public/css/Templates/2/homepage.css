@@ -775,7 +775,7 @@ div.homepage  {
         margin-top: 20px;
     }
     #search-help {padding-left: 0px;}
-    #search-help #expression-du-besoin .aide-presentation{display: none;}
+    /*#search-help #expression-du-besoin .aide-presentation{display: none;}*/
     #search-help #expression-du-besoin .aide .aide-liens {height: auto; padding: 10px 15px 30px 5px !important;}
 }
 @media (max-width: 767px) {
