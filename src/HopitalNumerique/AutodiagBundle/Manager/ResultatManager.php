@@ -91,11 +91,15 @@ class ResultatManager extends BaseManager
 
             if( $user = $resultat->getUser() )
             {
+                $datas['userId']        = $user->getId();
                 $datas['user']          = $user->getPrenomNom();
+                $datas['regionUser']    = !is_null($user->getRegion()) ? $user->getRegion()->getLibelle() : '';
                 $datas['etablissement'] = $user->getEtablissementRattachementSante() ? $user->getEtablissementRattachementSante()->getNom() : $user->getAutreStructureRattachementSante();
             } else {
                 $datas['user']          = '';
+                $datas['regionUser']    = '';
                 $datas['etablissement'] = '';
+                $datas['userId']        = '';
             }
 
             $results[] = $datas;
