@@ -114,6 +114,42 @@ class ResultatController extends Controller
 
         return new Response('{"success":'.($success ? 'true' : 'false').'}', 200);
     }
+
+    /**
+     * Export CSV de la liste des etablissement sélectionnés
+     *
+     * @param array $primaryKeys    ID des lignes sélectionnées
+     * @param array $allPrimaryKeys allPrimaryKeys ???
+     */
+    public function exportCsvAction( $primaryKeys, $allPrimaryKeys )
+    {
+        //get all selected Users
+        if($allPrimaryKeys == 1){
+            $rawDatas = $this->get('hopitalnumerique_autodiag.grid.resultat')->getRawData();
+            foreach($rawDatas as $data)
+            {
+                $primaryKeys[] = $data['id'];
+            }
+        }
+        $condition = new \StdClass;
+        $condition->field = 'id';
+        $condition->value = $primaryKeys;
+        $resultats = $this->get('hopitalnumerique_autodiag.manager.resultat')->getDatasForExport( $condition );
+
+        $colonnes = array( 
+            'user'          => 'User',
+            'etablissement' => 'Établissement',
+            'sharedFor'     => 'Partagé avec',
+            'sharedBy'      => 'Partagé par',
+            'taux'          => 'Taux',
+            'lastSave'      => 'Dernière sauvegarde',
+            'validation'    => 'Date validation'
+        );
+
+        $kernelCharset = $this->container->getParameter('kernel.charset');
+
+        return $this->get('hopitalnumerique_autodiag.manager.resultat')->exportCsv( $colonnes, $resultats, 'resultat-autodiagnotic.csv', $kernelCharset );
+    }
     
     /**
      * Export CSV des chapitres/question en fonction du résultat

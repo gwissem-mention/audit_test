@@ -46,6 +46,48 @@ class ResultatManager extends BaseManager
             $datas['taux']       = $resultat->getTauxRemplissage() . '%';
             $datas['lastSave']   = $resultat->getDateLastSave();
             $datas['validation'] = $resultat->getDateValidation();
+            $datas['sharedFor']  = !is_null($resultat->getResultatSharedFor()) && !is_null($resultat->getResultatSharedFor()->getUser()) ? $resultat->getResultatSharedFor()->getUser()->getPrenomNom() : '';
+            $datas['sharedBy']   = !is_null($resultat->getResultatSharedBy()) && !is_null($resultat->getResultatSharedBy()->getUser()) ? $resultat->getResultatSharedBy()->getUser()->getPrenomNom() : '';
+
+            if( $user = $resultat->getUser() )
+            {
+                $datas['user']          = $user->getPrenomNom();
+                $datas['etablissement'] = $user->getEtablissementRattachementSante() ? $user->getEtablissementRattachementSante()->getNom() : $user->getAutreStructureRattachementSante();
+            } else {
+                $datas['user']          = '';
+                $datas['etablissement'] = '';
+            }
+
+            $results[] = $datas;
+        }
+
+        return $results;
+    }
+
+    /**
+     * Override : Récupère les données pour le grid sous forme de tableau
+     *
+     * @return array
+     */
+    public function getDatasForExport( \StdClass $condition = null )
+    {
+        $resultats = $this->findBy( array( $condition->field => $condition->value) );
+        $results   = array();
+
+        foreach($resultats as $resultat)
+        {
+            $sharedFor  = !is_null($resultat->getResultatSharedFor()) && !is_null($resultat->getResultatSharedFor()->getUser()) ? $resultat->getResultatSharedFor()->getUser()->getPrenomNom() : '';
+            $sharedFor .= !is_null($resultat->getResultatSharedFor()) && !is_null($resultat->getDatePartage()) ? (' le ' . $resultat->getDatePartage()->format('d/m/Y')) : '';
+            $sharedBy   = !is_null($resultat->getResultatSharedBy()) && !is_null($resultat->getResultatSharedBy()->getUser()) ? $resultat->getResultatSharedBy()->getUser()->getPrenomNom() : '';
+            $sharedBy  .= !is_null($resultat->getResultatSharedBy()) && !is_null($resultat->getDatePartage()) ? (' le ' . $resultat->getDatePartage()->format('d/m/Y')) : '';
+
+            $datas               = array();
+            $datas['id']         = $resultat->getId();
+            $datas['taux']       = $resultat->getTauxRemplissage() . '%';
+            $datas['lastSave']   = !is_null($resultat->getDateLastSave()) ? $resultat->getDateLastSave()->format('d/m/Y') : '';
+            $datas['validation'] = !is_null($resultat->getDateValidation()) ? $resultat->getDateValidation()->format('d/m/Y') : '';
+            $datas['sharedFor']  = $sharedFor;
+            $datas['sharedBy']   = $sharedBy;
 
             if( $user = $resultat->getUser() )
             {
