@@ -75,17 +75,54 @@
         {% endfor %}
     </div>
     
+<style type="text/css">
+    .toggleType .toggle-slide .toggle-inner .toggle-off{background: #d9534f}
+    .toggleType .toggle-slide .toggle-inner .toggle-on{background: #85c744}
+</style>
+<script type="text/javascript">
+$(document).ready(function() {
+    var type = $('#user-notification-publication').val() == 'true';
+    var url  = $("#url-notification-publication").val();
+    $('.toggleType').toggles( { on : type, width:50, text : { on : 'Oui', off : 'Non' } } ).on('toggle', function (e, active) {
+        $.ajax({
+            url  : url,
+            data : {
+                notifier : active
+            },
+            type     : 'POST',
+            dataType : 'json',
+            success  : function( data ){
+               //reorder done with success
+            }
+        });  
+    });
+});
+</script>
+
     <h2 class="requeteTitle" >Mes publications consultées</h2>
+    <div class="notif-requete col-md-12 row" style="margin: 12px 0 0;">
+        <div class="col-md-10 text-muted">
+            Je souhaite recevoir les notifications des mises à jour des publications suivantes :
+        </div>
+        <div class="col-md-2 no-padding">
+            <div class="pull-right">
+                <div class="toggleType toggle-success"></div>
+                <input type="hidden" id="user-notification-publication" value="{% if app.user.notficationRequete %}true{% else %}false{% endif %}" />
+                <input type="hidden" id="url-notification-publication" value="{{path('hopital_numerique_user_toggle_notification_requete')}}" />
+            </div>
+        </div> 
+    </div>
+    <div class="clearfix"></div>
     <div class="requetes">
         {% for consultation in consultations %}
             <div class="ligne consultation-{{consultation.id}}" >
                 {% if not consultation.contenu %}
-                    <a href="{{path('hopital_numerique_publication_publication_objet', {'id':consultation.objet.id, 'alias':consultation.objet.alias})}}" >
-                        {% if consultation.objet.getDateModification() > consultation.getDateLastConsulted() %}<i class="fa fa-refresh"></i>{% endif %}{{consultation.objet.titre|capitalize}}
+                    <a href="{{path('hopital_numerique_publication_publication_objet', {'id':consultation.objet.id, 'alias':consultation.objet.alias})}}" title="{{consultation.objet.titre|capitalize}}">
+                        {% if consultation.objet.getDateModification() > consultation.getDateLastConsulted() %}<i class="fa fa-refresh"></i>{% endif %}{{consultation.objet.titre|capitalize|truncate(120)}}
                     </a>
                 {% else %}
-                    <a href="{{path('hopital_numerique_publication_publication_contenu', {'id':consultation.objet.id, 'alias':consultation.objet.alias,'idc':consultation.contenu.id, 'aliasc':consultation.contenu.alias})}}" >
-                        {% if consultation.contenu.getDateModification() > consultation.getDateLastConsulted() %}<i class="fa fa-refresh"></i>{% endif %}{{consultation.contenu.titre|capitalize}}
+                    <a href="{{path('hopital_numerique_publication_publication_contenu', {'id':consultation.objet.id, 'alias':consultation.objet.alias,'idc':consultation.contenu.id, 'aliasc':consultation.contenu.alias})}}" title="{consultation.contenu.titre|capitalize}}">
+                        {% if consultation.contenu.getDateModification() > consultation.getDateLastConsulted() %}<i class="fa fa-refresh"></i>{% endif %}{{consultation.contenu.titre|capitalize|truncate(120)}}
                     </a>
                 {% endif %}
                 

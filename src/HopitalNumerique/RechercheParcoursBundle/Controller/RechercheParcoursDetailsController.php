@@ -212,7 +212,7 @@ class RechercheParcoursDetailsController extends Controller
         $referencesTemp[] = $referenceRechercheParcoursDetails;
 
         //Dans le cas où l'on affiche les enfants du détails, on récupère les références enfant de la référence du détail
-        if($rechercheParcoursDetails->getShowChildren())
+        if($rechercheParcoursDetails->getShowChildren() && !empty($refChilds))
         {
             if(is_null($idRefEtapeChild))
             {

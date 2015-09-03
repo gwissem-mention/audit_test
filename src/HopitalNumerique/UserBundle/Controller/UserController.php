@@ -21,6 +21,7 @@ class UserController extends Controller
     protected $_informationsPersonnelles = false;
     
     //---- Front Office ------
+
     /**
      * Affichage du formulaire d'inscription
      */
@@ -156,6 +157,21 @@ class UserController extends Controller
             'user'        => $user,
             'options'     => $this->get('hopitalnumerique_user.gestion_affichage_onglet')->getOptions($user)
         ));
+    }
+
+    /**
+     * Changement de l'état de notification des mises à jour des publications
+     */
+    public function toggleNotificationRequeteAction(Request $request)
+    {
+        $user = $this->get('security.context')->getToken()->getUser();
+
+        $notifier = $request->request->get('notifier') == 'true';
+
+        $user->setNotficationRequete($notifier);
+        $this->get('fos_user.user_manager')->updateUser( $user );
+    
+        return new Response('{"success":true"}', 200);
     }
 
     public function getUserFromEmailAction(Request $request)
