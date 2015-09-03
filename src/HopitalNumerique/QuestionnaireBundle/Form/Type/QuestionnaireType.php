@@ -338,11 +338,33 @@ class QuestionnaireType extends AbstractType
                             'disabled'    => $this->_readOnly,
                             'empty_value' => ' - ',
                             'attr'        => $attr,
-                            'query_builder' => function(EntityRepository $er) use ($question){
+                            'query_builder' => function(EntityRepository $er){
                                 return $er->createQueryBuilder('eta')
                                 ->orderBy('eta.nom', 'ASC');
                             },
                             'data'        => is_null($reponseCourante) ? null : $reponseCourante->getEtablissement()
+                    ));
+                    break;
+                //Les entity ne sont prévues que pour des entités de Référence (TODO : mettre en base la class et le property ?)
+                case 'etablissementmultiple':
+                    $attr['class'] = 'select2-multiple-entity';
+
+                    $builder->add($question->getTypeQuestion()->getLibelle() . '_' . $question->getId(). '_' . $question->getAlias(), 'genemu_jqueryselect2_entity', array(
+                            'class'       => 'HopitalNumeriqueEtablissementBundle:Etablissement',
+                            'property'    => 'appellation',
+                            'required'    => $question->getObligatoire(),
+                            'label'       => $question->getLibelle(),
+                            'mapped'      => false,
+                            'multiple'    => true,
+                            'read_only'   => $this->_readOnly,
+                            'disabled'    => $this->_readOnly,
+                            'empty_value' => ' - ',
+                            'attr'        => $attr,
+                            'query_builder' => function(EntityRepository $er){
+                                return $er->createQueryBuilder('eta')
+                                ->orderBy('eta.nom', 'ASC');
+                            },
+                            'data'        => is_null($reponseCourante) ? null : $reponseCourante->getEtablissementMulitple()
                     ));
                     break;
                 case 'commentaire':

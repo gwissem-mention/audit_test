@@ -289,3 +289,7 @@ hopital_numerique_user_get_user_from_email_forAutodiag:
     pattern:  /compte-hn/autodiagnostic/recuperation-user
     defaults: { _controller: HopitalNumeriqueUserBundle:User:getUserFromEmail }
 
+hopital_numerique_user_toggle_notification_requete:
+    pattern:  /compte-hn/notification-requetes/changement-notification
+    defaults: { _controller: HopitalNumeriqueUserBundle:User:toggleNotificationRequete }
+

@@ -431,6 +431,11 @@ class ObjetController extends Controller
                     {
                         $user = $consultation->getUser();
 
+                        if(!$user->getNotficationRequete())
+                        {
+                            continue;
+                        }
+
                         $options = array(
                             'titrepublication' => $objet->getTitre(),
                             'lienpublication'  => '<a href="'.$domaineUrl.$this->generateUrl('hopital_numerique_publication_publication_objet', array('id' => $objet->getId(), 'alias' => $objet->getAlias())).'" >Lien vers la publication</a>'

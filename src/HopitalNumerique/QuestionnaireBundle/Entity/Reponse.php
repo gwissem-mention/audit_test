@@ -50,12 +50,6 @@ class Reponse
      * @ORM\JoinColumn(name="ref_reference", referencedColumnName="ref_id")
      */
     protected $reference;
-    
-    /**
-     * @ORM\ManyToOne(targetEntity="\HopitalNumerique\EtablissementBundle\Entity\Etablissement", cascade={"persist"})
-     * @ORM\JoinColumn(name="eta_id", referencedColumnName="eta_id")
-     */
-    protected $etablissement;
 
     /**
      * @ORM\ManyToMany(targetEntity="\HopitalNumerique\ReferenceBundle\Entity\Reference")
@@ -66,6 +60,22 @@ class Reponse
      * @ORM\OrderBy({"order" = "ASC"})
      */
     protected $referenceMulitple;
+    
+    /**
+     * @ORM\ManyToOne(targetEntity="\HopitalNumerique\EtablissementBundle\Entity\Etablissement", cascade={"persist"})
+     * @ORM\JoinColumn(name="eta_id", referencedColumnName="eta_id")
+     */
+    protected $etablissement;
+
+    /**
+     * @ORM\ManyToMany(targetEntity="\HopitalNumerique\EtablissementBundle\Entity\Etablissement")
+     * @ORM\JoinTable(name="hn_questionnaire_reponse_etablissement",
+     *      joinColumns={ @ORM\JoinColumn(name="rep_id", referencedColumnName="rep_id")},
+     *      inverseJoinColumns={ @ORM\JoinColumn(name="eta_id", referencedColumnName="eta_id")}
+     * )
+     * @ORM\OrderBy({"nom" = "ASC"})
+     */
+    protected $etablissementMulitple;
 
     /**
      * @var integer
@@ -310,5 +320,51 @@ class Reponse
     public function getEtablissement()
     {
         return $this->etablissement;
+    }
+
+    /**
+     * Add etablissementMulitple
+     *
+     * @param \HopitalNumerique\EtablissementBundle\Entity\Etablissement $etablissementMulitple
+     * @return Reponse
+     */
+    public function addEtablissementMulitple(\HopitalNumerique\EtablissementBundle\Entity\Etablissement $etablissementMulitple)
+    {
+        $this->etablissementMulitple[] = $etablissementMulitple;
+
+        return $this;
+    }
+
+    /**
+     * Remove etablissementMulitple
+     *
+     * @param \HopitalNumerique\EtablissementBundle\Entity\Etablissement $etablissementMulitple
+     */
+    public function removeEtablissementMulitple(\HopitalNumerique\EtablissementBundle\Entity\Etablissement $etablissementMulitple)
+    {
+        $this->etablissementMulitple->removeElement($etablissementMulitple);
+    }
+
+    /**
+     * Get etablissementMulitple
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getEtablissementMulitple()
+    {
+        return $this->etablissementMulitple;
+    }
+
+    /**
+     * Set etablissementMulitple
+     *
+     * @param \Doctrine\Common\Collections\Collection $etablissementMulitple
+     * @return Objet
+     */
+    public function setEtablissementMulitple($etablissementMulitple)
+    {
+        $this->etablissementMulitple = $etablissementMulitple;
+    
+        return $this;
     }
 }

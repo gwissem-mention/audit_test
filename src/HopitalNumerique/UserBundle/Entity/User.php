@@ -603,6 +603,13 @@ class User extends BaseUser
     protected $alreadyBeExpert;
 
     /**
+     * @var boolean
+     *
+     * @ORM\Column(name="usr_notification_requete", type="boolean", options = {"comment" = "L utilisateur est notifie par mail des maj des publications ?"})
+     */
+    protected $notficationRequete;
+
+    /**
      * Constructor
      */
     public function __construct()
@@ -1254,6 +1261,26 @@ class User extends BaseUser
     public function setLock($lock)
     {
         $this->lock = $lock;
+    }
+    
+    /**
+     * Get notficationRequete
+     *
+     * @return boolean $notficationRequete
+     */
+    public function getNotficationRequete()
+    {
+        return $this->notficationRequete;
+    }
+    
+    /**
+     * Set notficationRequete
+     *
+     * @param boolean $notficationRequete
+     */
+    public function setNotficationRequete($notficationRequete)
+    {
+        $this->notficationRequete = $notficationRequete;
     }
 
     /**

@@ -464,6 +464,17 @@ class QuestionnaireController extends Controller
                     {
                         $reponse->setEtablissement($this->get('hopitalnumerique_etablissement.manager.etablissement')->findOneBy(array('id' => $param)));
                     }
+                    elseif('etablissementmultiple' === $typeParam)
+                    {
+                        if(is_null($reponse->getEtablissementMulitple())){
+                            $reponse->setEtablissementMulitple(array());
+                            foreach ($param as $value)
+                            {
+                                $reponse->addEtablissementMulitple($this->get('hopitalnumerique_etablissement.manager.etablissement')->findOneBy(array('id' => $value)));
+                            }
+                        }
+                        $reponse->setReponse("");
+                    }
                     elseif('entitymultiple' === $typeParam || 'entitycheckbox' === $typeParam)
                     {
                         if(is_null($reponse->getReferenceMulitple())){
