@@ -170,6 +170,14 @@ class QuestionnaireManager extends BaseManager
             	case 'checkbox':
             	    $candidature .= '<li><strong>' . $reponse->getQuestion()->getLibelle() . '</strong> : ' . ('1' == $reponse->getReponse() ? 'Oui' : 'Non' ). "</li>";
             	    break;
+                case 'etablissement':
+                    $candidature .= '<li><strong>' . $reponse->getQuestion()->getLibelle() . '</strong> : '; 
+                    if(!is_null($reponse->getEtablissement()))
+                    {
+                        $candidature .= $reponse->getEtablissement()->getAppellation();
+                    }
+                    $candidature .= "</li>";
+                    break;
                 //Gestion très sale, à revoir au moment de la construction du tableau de réponses avec des niveaux d'enfants/parents etc.
                 case 'entitymultiple':
                 case 'entitycheckbox':
@@ -179,6 +187,17 @@ class QuestionnaireManager extends BaseManager
                     {
                         $candidature .=  "<li>";
                         $candidature .= $referenceMultiple->getLibelle();
+                        $candidature .= "</li>";
+                    }
+                    $candidature .= "</ul></li>";
+                    break;
+                case 'etablissementmultiple':
+                    //Affichage pour une possibilité de plusieurs réponses à cette question
+                    $candidature .= "<li><strong>" . $reponse->getQuestion()->getLibelle() . "</strong> : <ul>";
+                    foreach ($reponse->getEtablissementMulitple() as $key => $etablissementMultiple) 
+                    {
+                        $candidature .=  "<li>";
+                        $candidature .= $etablissementMultiple->getAppellation();
                         $candidature .= "</li>";
                     }
                     $candidature .= "</ul></li>";
