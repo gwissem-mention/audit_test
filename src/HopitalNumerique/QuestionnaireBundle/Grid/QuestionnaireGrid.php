@@ -53,14 +53,6 @@ class QuestionnaireGrid extends Grid implements GridInterface
         $listQuestionsButton->setRouteParameters( array('id') );
         $listQuestionsButton->setAttributes( array('class'=>'btn btn-success fa fa-list','title' => 'Lister les questions') );
         $this->addActionButton( $listQuestionsButton );
-
-        $viderReponsesButton = new Action\ShowButton( 'hopitalnumerique_reponse_deleteAllByQuestionnaire' );
-        $viderReponsesButton->setRouteParameters( array('id') );
-        $viderReponsesButton->setAttributes( array(
-                'class'=>'btn btn-primary fa fa-trash-o',
-                'title' => 'Vider l\'ensemble des réponses du questionnaire.'
-        ));
-        $this->addActionButton( $viderReponsesButton );
     }
 
     /**
