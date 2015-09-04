@@ -154,23 +154,24 @@ class SessionRepository extends EntityRepository
      *
      * @return QueryBuilder
      */
-    public function getNextSessions()
+    public function getNextSessions($domainesUser)
     {
         $today    = new \DateTime();
-        //$in15days = new \DateTime();
-        //$in15days->add(new \DateInterval('P15D'));
 
         return $this->_em->createQueryBuilder()
                         ->select('ses.id, ses.dateSession, count(ins) as inscriptions, mod.titre')
                         ->from('HopitalNumeriqueModuleBundle:Session', 'ses')
                         ->leftJoin('ses.inscriptions', 'ins', 'WITH', 'ins.etatInscription = :etatInscription')
                         ->leftJoin('ses.module', 'mod')
-                        //->andWhere('ses.dateSession > :today', 'ses.dateSession < :in15days')
+                        ->leftJoin('mod.domaines', 'domaine')
+                            ->where('domaine.id IN (:idDomaines)')
                         ->andWhere('ses.dateSession > :today', 'ses.etat = :idActif')
+                        ->setParameters(array(
+                            'idActif'         => 403,
+                            'etatInscription' => 407,
+                            'idDomaines'      => $domainesUser
+                        ))
                         ->setParameter('today', $today, \Doctrine\DBAL\Types\Type::DATETIME)
-                        ->setParameter('idActif', 403)
-                        ->setParameter('etatInscription', 407)
-                        //->setParameter('in15days', $in15days, \Doctrine\DBAL\Types\Type::DATETIME)
                         ->setMaxResults(5)
                         ->groupBy('ses.id')
                         ->orderBy('ses.dateSession', 'ASC');

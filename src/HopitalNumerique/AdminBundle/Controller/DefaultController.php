@@ -48,14 +48,15 @@ class DefaultController extends Controller
             elseif( $etat == 309 )
                 $blocInterventions['annulees']++;
         }
-        
-        //Bloc Sessions
-        $blocSessions['next'] = $this->get('hopitalnumerique_module.manager.session')->getNextSessions();
-        $inscriptions         = $this->get('hopitalnumerique_module.manager.inscription')->findAll();
+
 
         //GME 01/09/15 : Ajout du filtre du domaine pour le compteur des inscriptions
         //Récupération des domaines de l'utilisateur courant
         $domainesUser = $user->getDomainesId();
+        
+        //Bloc Sessions
+        $blocSessions['next'] = $this->get('hopitalnumerique_module.manager.session')->getNextSessions($domainesUser);
+        $inscriptions         = $this->get('hopitalnumerique_module.manager.inscription')->findAll();
 
         foreach( $inscriptions as $inscription){
             if($inscription->getSession()->getModule()->getStatut()->getId() == 3)

@@ -22,4 +22,24 @@ $(document).ready(function() {
         $(this).parent().find('.inputUpload').show();
         $('#' + $(this).data('path') ) .val('');
     });
+
+    //Parcours l'ensemble des checkbox de type entity mulitple
+    $('.checkbox-entity-multiple').each(function(){
+        var libelle = jQuery.trim($(this).find('label').html());
+        var firstWord = libelle.split(" ")[0];
+
+        if(firstWord.indexOf(".") >= 0)
+        {
+            $(this).css({'padding-left':'50px'});
+
+            //Check si il y en a plus d'une
+            var count = firstWord.split(".").length-1;
+
+            if(count == 2)
+            {
+                $(this).css({'padding-left':'100px'});
+            }
+        }
+    });
+    
 });
