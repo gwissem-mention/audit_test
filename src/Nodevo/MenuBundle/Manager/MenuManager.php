@@ -55,26 +55,14 @@ class MenuManager extends BaseManager
      */
     public function getTree( Menu $menu, $force = false )
     {
-        $cache          = $this->getCache();
-        $cacheMenuLabel = 'menu_tree_'.$menu->getId();
-
-        //Si on force la regénération ou que le cache n'a pas d'entrée pour "tree"
-        if( (false === ($cached_data = $cache->fetch($cacheMenuLabel))) || ($force) ) {
-            //Si le cache du menu existe, il faut le vider
-            if ($cache->contains($cacheMenuLabel))
-                $cache->delete($cacheMenuLabel);
             
-            //Régénération de l'arbre
-            $itemsCollection = $menu->getItems();
+        //Régénération de l'arbre
+        $itemsCollection = $menu->getItems();
 
-            $tree = new MenuNode();
-            $tree = $this->addNodeChilds( $tree, $itemsCollection, null );
+        $tree = new MenuNode();
+        $tree = $this->addNodeChilds( $tree, $itemsCollection, null );
 
-            $cached_data = $tree;
-
-            //Sauvegarde du cache
-            $cache->save($cacheMenuLabel, $cached_data );
-        }
+        $cached_data = $tree;
 
         return $cached_data;
     }
@@ -88,7 +76,6 @@ class MenuManager extends BaseManager
     {
         return $this->getRepository()->getDatasForGrid( $condition )->getQuery()->getResult();
     }
-
 
 
 
@@ -136,15 +123,19 @@ class MenuManager extends BaseManager
      */
     private function getItemChildsFromCollection( PersistentCollection $items, Item $parent = null)
     {
-        //si le parent n'existe pas, on filtre dans la collection pour récupérer TOUS les items SANS parents
-        if (null === $parent){
+        //Si le parent n'existe pas, on filtre dans la collection pour récupérer TOUS les items SANS parents
+        if (null === $parent)
+        {
             $criteria = Criteria::create()
                                         ->where(Criteria::expr()->eq("parent", $parent))
                                         ->orderBy( array("order" => Criteria::ASC) );
             $childs = $items->matching( $criteria );
-        //si le parent existe, on récupère tous ses enfants
-        } else 
+        //Si le parent existe, on récupère tous ses enfants
+        } 
+        else
+        {
             $childs = $parent->getChildsFromCollection( $items );
+        }
 
         return $childs;
     }

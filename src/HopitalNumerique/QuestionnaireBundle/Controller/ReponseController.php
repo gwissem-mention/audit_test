@@ -70,4 +70,34 @@ class ReponseController extends Controller
 
         return new Response('{"success":true, "url" : "'.$this->generateUrl('hopitalnumerique_questionnaire_index').'"}', 200);
     }
+
+
+    /**
+     * Suppression de masse des réponses des questionnaires sélectionnés
+     *
+     * @param array $primaryKeys    ID des lignes sélectionnées
+     * @param array $allPrimaryKeys allPrimaryKeys ???
+     *
+     * @return Redirect
+     */
+    public function deleteMassAction( $primaryKeys, $allPrimaryKeys )
+    {
+        //get all selected Users
+        if($allPrimaryKeys == 1){
+            $rawDatas = $this->get('hopitalnumerique_questionnaire.manager.questionnaire')->getRawData();
+            foreach($rawDatas as $data)
+            {
+                $primaryKeys[] = $data['id'];
+            }
+        }   
+
+        foreach ($primaryKeys as $idQuestionnaire) 
+        {
+            $reponses = $this->get('hopitalnumerique_questionnaire.manager.reponse')->deleteAllByQuestionnaire($idQuestionnaire);
+        }
+
+        $this->get('session')->getFlashBag()->add('info', 'Suppression des réponses effectuée avec succès.' );
+
+        return $this->redirect( $this->generateUrl('hopitalnumerique_questionnaire_index') );
+    }
 }

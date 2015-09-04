@@ -201,9 +201,9 @@ class SessionManager extends BaseManager
      * 
      * @return array
      */
-    public function getNextSessions()
+    public function getNextSessions($domainesUser)
     {
-        return $this->getRepository()->getNextSessions()->getQuery()->getResult();
+        return $this->getRepository()->getNextSessions($domainesUser)->getQuery()->getResult();
     }
 
     /**
