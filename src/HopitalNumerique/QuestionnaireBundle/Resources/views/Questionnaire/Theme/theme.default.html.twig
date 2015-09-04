@@ -28,15 +28,10 @@
 {% spaceless %}
     <div {{ block('widget_container_attributes') }}>
     {% for child in form %}
-        {% if loop.index is divisible by(6) or loop.index == 1 %}<div class="row">{% endif %}
-        {% if loop.index == 1 and empty_value is none%}
-            <div class="col-md-2"></div>
-        {% endif %}
-        <div class="col-md-2">
+        <div class="checkbox-entity-multiple">
             {{ form_widget(child) }}
             {{ form_label(child) }}
         </div>
-        {% if loop.index % 6 == 5 or loop.index == 5  %}</div>{% endif %}
     {% endfor %}
     </div>
 {% endspaceless %}
