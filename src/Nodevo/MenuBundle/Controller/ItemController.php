@@ -115,6 +115,9 @@ class ItemController extends Controller
                 $this->get('nodevo_menu.manager.item')->save($item);
                 $this->get('nodevo_menu.manager.item')->updateOrder( $item );
 
+                // Menu
+                $this->get('nodevo_menu.manager.menu')->getTree( $item->getMenu(), true );
+
                 // On envoi une 'flash' pour indiquer à l'utilisateur que l'entité est ajoutée
                 $this->get('session')->getFlashBag()->add( ($new ? 'success' : 'info') , 'Element ' . ($new ? 'ajouté.' : 'mis à jour.') ); 
                 

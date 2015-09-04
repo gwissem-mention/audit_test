@@ -192,7 +192,7 @@ class QuestionnaireType extends AbstractType
                             'data'        => is_null($reponseCourante) ? null : $reponseCourante->getReferenceMulitple()
                     ));
                     break;
-                //Les entity ne sont prévues que pour des entités de Référence (TODO : mettre en base la class et le property ?)
+                //Les entity ne sont prévues que pour des entités de Référence (@TODO : mettre en base la class et le property ?)
                 case 'entityradio':
                         $attr['class'] = 'radio';
 
@@ -237,7 +237,7 @@ class QuestionnaireType extends AbstractType
                                 return $er->createQueryBuilder('ref')
                                 ->where('ref.code = :etat')
                                 ->setParameter('etat', $question->getReferenceParamTri())
-                                ->orderBy('ref.order', 'ASC');
+                                ->orderBy('ref.libelle', 'ASC');
                             },
                             'data'        => is_null($reponseCourante) ? null : $reponseCourante->getReferenceMulitple()
                     ));
