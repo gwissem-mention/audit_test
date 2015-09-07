@@ -237,7 +237,7 @@ class QuestionnaireType extends AbstractType
                                 return $er->createQueryBuilder('ref')
                                 ->where('ref.code = :etat')
                                 ->setParameter('etat', $question->getReferenceParamTri())
-                                ->orderBy('ref.libelle', 'ASC');
+                                ->orderBy('ref.order', 'ASC');
                             },
                             'data'        => is_null($reponseCourante) ? null : $reponseCourante->getReferenceMulitple()
                     ));

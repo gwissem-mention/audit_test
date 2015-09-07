@@ -100,10 +100,10 @@ class Reference
     protected $childs;
 
     /**
-     * @var integer
+     * @var float
      * @Assert\NotBlank(message="L'ordre ne peut pas être vide.")
-     * @Nodevo\Javascript(class="validate[required, custom[onlyNumberSp]]")
-     * @ORM\Column(name="ref_order", type="integer", options = {"comment" = "Ordre de la référence"})
+     * @Nodevo\Javascript(class="validate[required, custom[number]]")
+     * @ORM\Column(name="ref_order", type="float", options = {"comment" = "Ordre de la référence"})
      */
     protected $order;
 
@@ -300,7 +300,7 @@ class Reference
     /**
      * Get order
      *
-     * @return integer $order
+     * @return float $order
      */
     public function getOrder()
     {
@@ -310,7 +310,7 @@ class Reference
     /**
      * Set order
      *
-     * @param integer $order
+     * @param float $order
      */
     public function setOrder($order)
     {
