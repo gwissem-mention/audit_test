@@ -39,6 +39,17 @@ class ImportExcelChapitreManager extends ChapitreManagerAutodiag
     public function saveChapitreImported( $arrayChapitres, $outil )
     {
         $arrayIdsChapitres = array();
+        $arrayIdsChapitresImported = array();
+        $arrayIdsChapitresSaved    = array();
+
+        //Récupération des id de questions présent dans le fichier d'import
+        foreach ($arrayChapitres as $chapitre) 
+        {
+            if(!is_null($chapitre['id']))
+            {
+                $arrayIdsChapitresImported[] = $chapitre['id'];
+            }
+        }
         
         foreach ($arrayChapitres as $key => $chapitreDonnees) 
         {
@@ -98,7 +109,24 @@ class ImportExcelChapitreManager extends ChapitreManagerAutodiag
             $this->saveForceId( $chapitre );
 
             $arrayIdsChapitres[('' != $chapitreDonnees['id'] ? $chapitreDonnees['id'] : $chapitre->getId())] = $chapitre->getId();
+
+            $arrayIdsChapitresSaved[] = $chapitre->getId();
         }
+
+        //Récupération des chapitres à l'autodiag
+        $chapitres = $this->findBy(array('outil' => $outil));
+        $chapitresToDelete = array();
+        foreach ($chapitres as $chapitre) 
+        {
+            //Si le chapitre n'est pas dans les lignes importées et ne vient pas d'etre importé on la delete
+            if(!in_array($chapitre->getId(), $arrayIdsChapitresImported)
+                && !in_array($chapitre->getId(), $arrayIdsChapitresSaved))
+            {
+                $chapitresToDelete[] = $chapitre;
+            }
+        }
+        
+        $this->delete($chapitresToDelete);
         
         return $arrayIdsChapitres;
     }
