@@ -34,7 +34,6 @@
         <div class="clearfix" style="background-color:#FFF;"></div>
     </div>
 
-
     {% for idDomaineResultat, resultats in resultatsByDomaine %}
         <div id="autodiag-domaine-{{idDomaineResultat}}" class="autodiag-domaine" data-id="{{idDomaineResultat}}" {% if idDomaineResultat != domaineCurrentId %}style="display:none"{% endif %}>
             <h2>Mes formulaires d'autodiagnostics en cours</h2>

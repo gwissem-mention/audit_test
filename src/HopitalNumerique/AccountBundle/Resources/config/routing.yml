@@ -23,9 +23,8 @@ fos_user_resetting:
     resource: "@FOSUserBundle/Resources/config/routing/resetting.xml"
     prefix: /mot-de-passe-perdu
 
-# Inscription
-
-#Requetes de recherche
+#Inscription
+#--Requetes de recherche
 hopital_numerique_requete_homepage:
     pattern:  /requetes/{indexVue}
     defaults: { _controller: HopitalNumeriqueRechercheBundle:Requete:index, indexVue:true }
