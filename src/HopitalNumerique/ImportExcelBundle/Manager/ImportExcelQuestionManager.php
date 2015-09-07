@@ -35,7 +35,18 @@ class ImportExcelQuestionManager extends QuestManagerAutodiag
      */
     public function saveQuestionImported( $arrayQuestions, $outil, $arrayIdChapitres )
     {
-        $arrayIdsQuestions = array();
+        $arrayIdsQuestions         = array();
+        $arrayIdsQuestionsImported = array();
+        $arrayIdsQuestionsSaved    = array();
+
+        //Récupération des id de questions présent dans le fichier d'import
+        foreach ($arrayQuestions as $question) 
+        {
+            if(!is_null($question['id']))
+            {
+                $arrayIdsQuestionsImported[] = $question['id'];
+            }
+        }
 
         foreach ($arrayQuestions as $questionDonnees) 
         {
@@ -115,7 +126,25 @@ class ImportExcelQuestionManager extends QuestManagerAutodiag
             $this->saveForceId( $question );
 
             $arrayIdsQuestions[$questionDonnees['id']] = $question->getId();
+            
+            $arrayIdsQuestionsSaved[] = $question->getId();
         }
+
+
+        //Récupération des questions associées au chapitre en base
+        $questions = $this->findBy(array('chapitre' => $arrayIdChapitres));
+        $questionsToDelete = array();
+        foreach ($questions as $question) 
+        {
+            //Si la question n'est pas dans les lignes importées et ne vient pas d'etre importé on la delete
+            if(!in_array($question->getId(), $arrayIdsQuestionsImported)
+                && !in_array($question->getId(), $arrayIdsQuestionsSaved))
+            {
+                $questionsToDelete[] = $question;
+            }
+        }
+        
+        $this->delete($questionsToDelete);
 
         return $arrayIdsQuestions;
     }

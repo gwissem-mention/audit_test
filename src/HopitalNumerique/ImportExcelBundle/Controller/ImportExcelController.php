@@ -255,7 +255,6 @@ class ImportExcelController extends Controller
         $outil->setDernierImportDate(new \DateTime());
         $this->container->get('hopitalnumerique_autodiag.manager.outil')->save($outil);
         
-
         $aujourdhui = new \DateTime();
         $aujourdhui = $aujourdhui->format('d_m_Y-H_m_s');
         $directory = __ROOT_DIRECTORY__ . '/web/medias/Autodiag';
@@ -324,18 +323,6 @@ class ImportExcelController extends Controller
 
         //Récupèration de la feuille Synthese
         $sheetSynthese  = $phpExcelObject->getSheetByName('syntheses');
-
-        // //Nettoyage des données sur l'autodiag courant
-        // $categories = $this->get('hopital_numerique_import_excel.manager.categorie')->findBy(array('outil' => $outil));
-        // $this->get('hopital_numerique_import_excel.manager.categorie')->delete($categories);
-
-        // $chapitres  = $this->get('hopital_numerique_import_excel.manager.chapitre')->findBy(array('outil' => $outil));
-        // $this->get('hopital_numerique_import_excel.manager.chapitre')->delete($chapitres);
-
-        // $resultats  = $this->get('hopitalnumerique_autodiag.manager.resultat')->findBy(array('outil' => $outil));
-        // $this->get('hopitalnumerique_autodiag.manager.resultat')->delete($resultats);
-
-        // $this->get('hopitalnumerique_autodiag.manager.process')->delete($this->get('hopitalnumerique_autodiag.manager.process')->findBy(array('outil' => $outil)));
 
         //Récupération et ajouts des données importées
         //Méthode de Thomas : Si erreur générée c'est que le fichier n'est pas valide
