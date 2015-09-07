@@ -26,11 +26,14 @@
     <div class="onglets">
         <ul>
             {% for idDomaineResultat, resultats in resultatsByDomaine %}
-                <li id="onglet-{{idDomaineResultat}}" class="onglet {% if idDomaineResultat == domaineCurrentId %}active{% endif %} col-md-{{12 / resultatsByDomaine|length}}" data-id="{{idDomaineResultat}}">
+                <li id="onglet-{{idDomaineResultat}}" class="onglet {% if idDomaineResultat == domaineCurrentId %}active{% endif %} col-md-{{(12 / resultatsByDomaine|length)|round(0, 'floor')}}" data-id="{{idDomaineResultat}}">
                     <div class="domaine">{{domaines[idDomaineResultat].nom}}</div>
                 </li>
             {% endfor %}
         </ul>
+        <div class="clearfix" style="background-color:#FFF;"></div>
+    </div>
+
 
     {% for idDomaineResultat, resultats in resultatsByDomaine %}
         <div id="autodiag-domaine-{{idDomaineResultat}}" class="autodiag-domaine" data-id="{{idDomaineResultat}}" {% if idDomaineResultat != domaineCurrentId %}style="display:none"{% endif %}>

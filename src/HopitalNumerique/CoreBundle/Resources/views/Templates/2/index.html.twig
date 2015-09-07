@@ -330,7 +330,7 @@
 </div>
 
 <div class="col-md-12" id="footer">
-    {{ knp_menu_render('menu-footer-front_gen', {'currentClass': 'active', 'ancestorClass':'active','template':'HopitalNumeriqueCoreBundle::menu.html.twig'}) }}
+    {{ knp_menu_render(aliasMenuFooterTemplateCurrent, {'currentClass': 'active', 'ancestorClass':'active','template':'HopitalNumeriqueCoreBundle::menu.html.twig'}) }}
 
 {#    {% if app.user %}
         <a class="reporting btn btn-xs" href="{{path('hopitalnumerique_report_homepage', {url: app.request.uri|base64Nodevo})}}">Signaler une anomalie sur cette page</a>
