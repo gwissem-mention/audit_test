@@ -206,7 +206,7 @@ class ObjetManager extends BaseManager
             }
 
             // Cible de diffusion
-            $row['cibleDiffusion'] = $objet->getCibleDiffusion()->getLibelle();
+            $row['cibleDiffusion'] = !is_null($objet->getCibleDiffusion()) ? '' : $objet->getCibleDiffusion()->getLibelle();
 
             // Récupération des commentaires de l'objet
             $row['commentairesAssocies'] = "";
