@@ -31,6 +31,7 @@ class ItemType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $datas = $options['data'];
+        $menuId = $datas->getMenu()->getId();
 
         $builder
             ->add('name', 'text', array(
@@ -81,9 +82,12 @@ class ItemType extends AbstractType
                 'empty_value' => ' - ',
                 'required'    => false,
                 'label'       => 'Fils de l\'item',
-                'query_builder' => function(EntityRepository $er) {
+                'query_builder' => function(EntityRepository $er) use ($menuId){
                     return $er->createQueryBuilder('item')
                               ->andWhere('item.display = 1')
+                              ->leftJoin('item.menu', 'menu')
+                                ->andWhere('menu.id = :idMenu')
+                                ->setParameter('idMenu', $menuId)
                               ->orderBy('item.name');
                 }
             ))
