@@ -24,7 +24,7 @@
         <div class="col-md-3 col-sm-12">
             {% if domaineCurrentId == 1 %}
                 {% set currentPath = path(app.request.attributes.get('_route'), app.request.attributes.get('_route_params')) %}
-                {% set root = knp_menu_get('menu-main-front') %}
+                {% set root = knp_menu_get(aliasMenuTemplateCurrent) %}
                 {% set parent = null %}
 
                 {% for item in root %}
