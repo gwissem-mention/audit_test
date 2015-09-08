@@ -52,7 +52,7 @@
                     {% set mainBlockClass = "col-md-12 col-sm-12" %}
                 {% endif %}
             {% else %}
-                {{ knp_menu_render('menu-main-front_' ~ domaineCurrentId , {'currentClass': 'active','breadcrumb' : 'no', 'ancestorClass':'active','template':'HopitalNumeriqueCoreBundle::menu.html.twig'}) }}
+                {{ knp_menu_render(aliasMenuTemplateCurrent , {'currentClass': 'active','breadcrumb' : 'no', 'ancestorClass':'active','template':'HopitalNumeriqueCoreBundle::menu.html.twig'}) }}
             {% endif %}
         </div>
         
