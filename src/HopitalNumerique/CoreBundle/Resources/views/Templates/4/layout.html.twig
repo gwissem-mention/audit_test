@@ -14,19 +14,19 @@
         <link href='http://fonts.googleapis.com/css?family=Viga|Open+Sans:400,700' rel='stylesheet' type='text/css'>
         <link rel="shortcut icon" href="{% if domaineCurrent.id != 1 %}{{ asset('favicon_anap.ico') }}{% else %}{{ asset('favicon.ico') }}{% endif %}" />
         {% block stylesheets %}
-            {% stylesheets output="compiled/hopitalnumerique-core-2.css" filter="cssrewrite, ?yui_css" 
+            {% stylesheets output="compiled/hopitalnumerique-core-4.css" filter="cssrewrite, ?yui_css" 
                 "@bootstrap_css"
                 "@fancybox_css"
                 'bundles/nodevoadmin/css/custom-jquery-ui.min.css'
                 'bundles/nodevoadmin/plugins/nodevoLoader/nodevoLoader.css'
-                'bundles/hopitalnumeriquecore/css/Templates/2/layout.css'
+                'bundles/hopitalnumeriquecore/css/Templates/4/layout.css'
             %}
                 <link rel="stylesheet" href="{{ asset_url }}" />
             {% endstylesheets %}
             
             
-            {% stylesheets output="compiled/hopitalnumerique-core-ie8-2.css" filter="cssrewrite, ?yui_css"
-                'bundles/hopitalnumeriquecore/css/Templates/2/ie8.css'
+            {% stylesheets output="compiled/hopitalnumerique-core-ie8-4.css" filter="cssrewrite, ?yui_css"
+                'bundles/hopitalnumeriquecore/css/Templates/4/ie8.css'
             %}
             <!--[if IE 8]>
                 <link rel="stylesheet" href="{{ asset_url }}" />
@@ -71,7 +71,7 @@
         {% include 'NodevoCookieBundle:Cookie:index.html.twig' %}
         <div class="row" id="body">
             <div id="header" class="col-md-12">
-                <a href="/" id="logo-header">
+                <a href="http://www.anap.fr" id="logo-header">
                     <img src="/{{ domaineCurrent.getWebPath() }}" alt="{{domaineCurrent.nom}}" id="logoAnap" class="pull-left" height="77px" />
                 </a>
                 <div id="titre" class="pull-left">
@@ -99,22 +99,12 @@
                         <div class="connexion">
                             <a href="{{path('account_logout')}}">Déconnexion</a>
                         </div>
+                        <a class="btn btn-success" href="{{path('hopital_numerique_user_informations_personnelles')}}">Mon compte</a>
                         {#<a class="infos btn btn-rose" href="{{path('hopital_numerique_account_homepage')}}">Tableau de bord</a>#}
                     {% else %}
                         <a class="infos btn btn-rose" href="{{path('hopital_numerique_user_inscription')}}">Créer un compte</a>
                     {% endif %}
                 </div>
-                <div id="logoHn" class="pull-right">
-                    <a href="http://www.anap.fr/" target="_blank">
-                        <img src="{{asset('bundles/hopitalnumeriquecore/img/logo-anap-small.jpg')}}" alt="ANAP" />
-                    </a>
-                    <a href="http://www.sante.gouv.fr/le-programme-hopital-numerique.html" targt="_blank">
-                        <img src="{{asset('bundles/hopitalnumeriquecore/img/logo-hn-small.jpg')}}" alt="HOPITAL NUMERIQUE" />
-                    </a>
-                </div>
-                {# <p class="violet pull-right align-right">
-                    Ce projet s’inscrit dans le cadre du programme
-                </p>#}
 
                 <div class="common-sprite common-sprite-header"></div>
                 <div class="clearfix"></div>
