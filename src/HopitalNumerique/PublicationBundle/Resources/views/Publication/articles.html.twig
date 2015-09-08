@@ -31,7 +31,7 @@
 {% block body %}
     <div id="articles">
         {% set currentPath = path(app.request.attributes.get('_route'), app.request.attributes.get('_route_params')) %}
-        {% set root = knp_menu_get('menu-main-front') %}
+        {% set root = knp_menu_get(aliasMenuTemplateCurrent) %}
         {% set parent = null %}
 
         {% for item in root %}
