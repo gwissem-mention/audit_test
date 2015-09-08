@@ -70,7 +70,8 @@ class ExportController extends Controller
                             'noteMoyenneC'         => 'Note moyenne de l\'infra-doc',
                             'nombreNoteC'          => 'Nombre de notes de l\'infra-doc',
                             'objets'               => 'Productions liées',
-                            'commentairesAssocies' => 'Commentaires frontoffice'
+                            'commentairesAssocies' => 'Commentaires frontoffice',
+                            'cibleDiffusion'       => 'Cible de diffusion'
                         );
 
         $kernelCharset = $this->container->getParameter('kernel.charset');
