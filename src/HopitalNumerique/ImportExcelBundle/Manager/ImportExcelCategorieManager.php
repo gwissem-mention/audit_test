@@ -20,6 +20,18 @@ class ImportExcelCategorieManager extends CategManagerAutodiag
      */
     public function saveCategImported( $arrayCategories, $outil )
     {
+        $arrayIdsCategoriesImported = array();
+        $arrayIdsCategoriesSaved    = array();
+
+        //Récupération des id de questions présent dans le fichier d'import
+        foreach ($arrayCategories as $categorie) 
+        {
+            if(!is_null($categorie['id']))
+            {
+                $arrayIdsCategoriesImported[] = $categorie['id'];
+            }
+        }
+
         foreach ($arrayCategories as $categorieDonnees) 
         {
             $categorie = null;
@@ -45,6 +57,23 @@ class ImportExcelCategorieManager extends CategManagerAutodiag
             $categorie->setOutil($outil);
 
             $this->save( $categorie );
+
+            $arrayIdsCategoriesSaved[] = $categorie->getId();
         }
+
+        //Récupération des categories à l'autodiag
+        $categories = $this->findBy(array('outil' => $outil));
+        $categoriesToDelete = array();
+        foreach ($categories as $categorie) 
+        {
+            //Si la categorie n'est pas dans les lignes importées et ne vient pas d'etre importé on la delete
+            if(!in_array($categorie->getId(), $arrayIdsCategoriesImported)
+                && !in_array($categorie->getId(), $arrayIdsCategoriesSaved))
+            {
+                $categoriesToDelete[] = $categorie;
+            }
+        }
+        
+        $this->delete($categoriesToDelete);
     }
 }

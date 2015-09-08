@@ -205,6 +205,9 @@ class ObjetManager extends BaseManager
                 $row['module'] .= $module->getId() . ' - ' . $module->getTitre() . ';';
             }
 
+            // Cible de diffusion
+            $row['cibleDiffusion'] = $objet->getCibleDiffusion()->getLibelle();
+
             // Récupération des commentaires de l'objet
             $row['commentairesAssocies'] = "";
             $commentaires_associes = array();

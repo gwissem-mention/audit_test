@@ -106,7 +106,7 @@ class ImportExcelManager extends BaseManager
         $arrayQuestions = array();
 
         for ($i=2; $i <= $sheetQuestion->getHighestRow(); $i++) 
-        { 
+        {
             //Si pour la ligne courante le libellé ou le code ne sont pas remplis alors on s'arrête dans la lecture
             if( trim($sheetQuestion->getCellByColumnAndRow(5, $i)) == '' || trim($sheetQuestion->getCellByColumnAndRow(3, $i)->getValue()) === '')
             {

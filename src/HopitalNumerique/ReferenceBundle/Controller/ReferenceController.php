@@ -287,8 +287,6 @@ class ReferenceController extends Controller
 
                 //On utilise notre Manager pour gérer la sauvegarde de l'objet
                 $this->get('hopitalnumerique_reference.manager.reference')->save($reference);
-                $this->get('hopitalnumerique_reference.manager.reference')->refreshOrder($oldParent);
-                $this->get('hopitalnumerique_reference.manager.reference')->refreshOrder($reference->getParent());
                 
                 // On envoi une 'flash' pour indiquer à l'utilisateur que l'entité est ajoutée
                 $this->get('session')->getFlashBag()->add( ($new ? 'success' : 'info') , 'Reference ' . ($new ? 'ajoutée.' : 'mise à jour.') ); 

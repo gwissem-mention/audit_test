@@ -626,6 +626,7 @@ class User extends BaseUser
         $this->alreadyBeAmbassadeur = false;
         $this->alreadyBeExpert      = false;
         $this->nbVisites            = 0;
+        $this->notficationRequete   = true;
     }
 
     public function getConfirmationToken()

@@ -26,16 +26,16 @@
             <link rel="stylesheet" href="{{ asset_url }}" />
         {% endstylesheets %}
 
-        {% stylesheets output="compiled/hopitalnumerique-homepage-core-ie8-3.css" filter="cssrewrite, ?yui_css"
-            'bundles/hopitalnumeriquecore/css/Templates/1/ie8.css'
+        {% stylesheets output="compiled/hopitalnumerique-homepage-core-ie8-4.css" filter="cssrewrite, ?yui_css"
+            'bundles/hopitalnumeriquecore/css/Templates/4/ie8.css'
         %}
             <!--[if IE 8]>
             <link rel="stylesheet" href="{{ asset_url }}" />
             <![endif]-->
         {% endstylesheets %}
 
-        {% stylesheets output="compiled/hopitalnumerique-homepage-core-default-index-3.css" filter="cssrewrite, ?yui_css"
-            'bundles/hopitalnumeriquecore/css/Templates/1/homepage.css'
+        {% stylesheets output="compiled/hopitalnumerique-homepage-core-default-index-4.css" filter="cssrewrite, ?yui_css"
+            'bundles/hopitalnumeriquecore/css/Templates/4/homepage.css'
         %}
             <link rel="stylesheet" href="{{ asset_url }}" />
         {% endstylesheets %}
@@ -148,22 +148,14 @@
         </div>
     {% endif %}
     {% block block_du_body %}
-    {% block prebody %}
-        
-    {% endblock prebody %}
-    <div class="clearfix"></div>
-    {% block body %}
-        <div id="homepage" >
-            <div class="col-md-12">
-                <a class="infos btn btn-success" href="{{path('hopitalnumerique_module_module_front')}}">S'inscrire à une session de formation</a>
-                <br />
-                <br />
-                <a class="infos btn btn-success" href="{{path('hopitalnumerique_module_inscription_index_front')}}">Suivre mes inscriptions</a>
-                <br />
-                <br />
+        {% block prebody %}
+            
+        {% endblock prebody %}
+        <div class="clearfix"></div>
+        {% block body %}
+            <div id="homepage" >
             </div>
-        </div>
-    {% endblock body %}        
+        {% endblock body %}        
 <div class="clearfix"></div>
     {% endblock %}
 
