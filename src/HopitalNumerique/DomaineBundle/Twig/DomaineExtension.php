@@ -85,9 +85,9 @@ class DomaineExtension extends \Twig_Extension
             return null;
         }
 
-        $idTemplate = $this->_container->get('hopitalnumerique_domaine.manager.domaine')->findOneById($this->_container->get('request')->getSession()->get('domaineId'))->getTemplate()->getId();
+        $idDomaine = $this->_container->get('request')->getSession()->get('domaineId');
         
-        $aliasMenu = "menu-main-front_" . $idTemplate;
+        $aliasMenu = "menu-main-front_" . $idDomaine;
         $menu      = $this->_container->get('nodevo_menu.manager.menu')->findOneBy(array('alias' => $aliasMenu));
 
         return is_null($menu) ? 'menu-main-front_gen' : $menu->getAlias();
@@ -105,9 +105,9 @@ class DomaineExtension extends \Twig_Extension
             return null;
         }
 
-        $idTemplate = $this->_container->get('hopitalnumerique_domaine.manager.domaine')->findOneById($this->_container->get('request')->getSession()->get('domaineId'))->getTemplate()->getId();
+        $idDomaine = $this->_container->get('request')->getSession()->get('domaineId');
         
-        $aliasMenu = "menu-footer-front_" . $idTemplate;
+        $aliasMenu = "menu-footer-front_" . $idDomaine;
         $menu      = $this->_container->get('nodevo_menu.manager.menu')->findOneBy(array('alias' => $aliasMenu));
 
         return is_null($menu) ? 'menu-footer-front_gen' : $menu->getAlias();
