@@ -22,24 +22,14 @@ class MenuType extends AbstractType
                 'required'   => true, 
                 'label'      => 'Nom',
                 'attr'       => array('class' => $this->_constraints['name']['class'] )
-            ));
-
-        if( ! $options['data']->getId() ) {
-            $builder->add('alias', 'text', array(
+            ))
+            ->add('alias', 'text', array(
                 'max_length' => $this->_constraints['name']['maxlength'], 
                 'required'   => true, 
                 'label'      => 'Alias',
                 'attr'       => array('class' => $this->_constraints['alias']['class'] )
-            ));
-        }else{
-            $builder->add('alias', 'text', array(
-                'required'   => true, 
-                'label'      => 'Alias',
-                'attr'       => array('readonly' => 'readonly' )
-            ));
-        }
-
-        $builder
+            ))
+            
             ->add('cssClass', 'text', array(
                 'max_length' => $this->_constraints['cssClass']['maxlength'], 
                 'required'   => false, 
