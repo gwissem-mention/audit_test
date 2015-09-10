@@ -35,18 +35,21 @@ class InscriptionFrontController extends Controller
 
         if ( $form->handleRequest($request)->isValid() ) 
         {
-            $this->get('hopitalnumerique_module.manager.inscription')->save($inscription);
+            $refAccepte = $this->get('hopitalnumerique_reference.manager.reference')->findOneBy( array('id'=> 407) );
+        
+            $inscription->setEtatInscription($refAccepte);
 
-            if($session->getModule()->getMailAccuseInscription())
-            { 
-                //envoi du mail de confirmation d'inscription
-                $options = array(
-                    'module' => $session->getModule()->getTitre(),
-                    'date'   => $session->getDateSession()->format('d/m/Y')
-                );
-                $mail = $this->get('nodevo_mail.manager.mail')->sendInscriptionSession($user, $options);
+            if($inscription->getSession()->getModule()->getMailConfirmationInscription())
+            {
+                //Envoyer mail d'acceptation de l'inscription
+                $mail = $this->get('nodevo_mail.manager.mail')->sendAcceptationInscriptionMail($inscription->getUser(),array(
+                            'date'      => $inscription->getSession()->getDateSession()->format('d/m/Y'),
+                            'module'    => $inscription->getSession()->getModule()->getTitre()
+                        ));
                 $this->get('mailer')->send($mail);
             }
+            
+            $this->get('hopitalnumerique_module.manager.inscription')->save($inscription);
 
             // On envoi une 'flash' pour indiquer à l'utilisateur que le fichier n'existe pas: suppression manuelle sur le serveur
             $this->get('session')->getFlashBag()->add( ('success') , 'Votre inscription a été prise en compte.' );
