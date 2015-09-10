@@ -4,6 +4,9 @@
     {{ parent() }}
     {% javascripts output="compiled/hopitalnumerique-domaine-domaine-edit.js"
         '@validationEngine_js'
+        "@tinymce_js"
+        'bundles/nodevogestionnairemedia/js/moxiemanager/js/moxman.loader.min.js'
+        'bundles/nodevogestionnairemedia/js/MoxieManager.js'
         "bundles/hopitalnumeriquedomaine/js/script.js"
     %}
         <script type="text/javascript" src="{{ asset_url }}"></script>
@@ -77,6 +80,10 @@
 
                     {{form_row(form.adresseMailContact)}}
                     {{form_row(form.template)}}
+                    {{form_row(form.description)}}
+                    <div class="tinyMCE-homepage">
+                        {{form_row(form.homepage)}}
+                    </div>
 
                 {{ form_end(form) }}
             </div>

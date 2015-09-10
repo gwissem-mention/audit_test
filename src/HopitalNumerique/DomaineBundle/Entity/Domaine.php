@@ -118,6 +118,13 @@ class Domaine
     protected $requetes;
 
     /**
+     * @var string
+     *
+     * @ORM\Column(name="dom_homepage", type="text", nullable=true, options = {"comment" = "Texte affiché sur la homepage"})
+     */
+    protected $homepage;
+
+    /**
      * @ORM\ManyToMany(targetEntity="\HopitalNumerique\ForumBundle\Entity\Forum", cascade={"persist"})
      * @ORM\JoinTable(name="hn_domaine_gestions_forum",
      *      joinColumns={ @ORM\JoinColumn(name="dom_id", referencedColumnName="dom_id", onDelete="CASCADE")},
@@ -567,5 +574,28 @@ class Domaine
     public function getGoogleAnalytics()
     {
         return $this->googleAnalytics;
+    }
+
+    /**
+     * Set homepage
+     *
+     * @param string $homepage
+     * @return Domaine
+     */
+    public function setHomepage($homepage)
+    {
+        $this->homepage = $homepage;
+
+        return $this;
+    }
+
+    /**
+     * Get homepage
+     *
+     * @return string 
+     */
+    public function getHomepage()
+    {
+        return $this->homepage;
     }
 }
