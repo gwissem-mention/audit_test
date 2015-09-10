@@ -31,21 +31,21 @@ class OutilGrid extends Grid implements GridInterface
     {
         $this->addColonne( new Column\TextColumn('title', 'Titre') );
         
-        $nbFormColumn = new Column\TextColumn('nbForm', 'Nb formulaires en cours');
+        $nbFormColumn = new Column\NumberColumn('nbForm', 'Nb formulaires en cours');
         $nbFormColumn->setSize( 160 );
         $this->addColonne( $nbFormColumn );
 
         $this->addColonne( new Column\TextColumn('domainesNom', 'Domaine(s) associé(s)') );
 
-        $nbFormValidColumn = new Column\TextColumn('nbFormValid', 'Nb formulaires finalisés');
+        $nbFormValidColumn = new Column\NumberColumn('nbFormValid', 'Nb formulaires finalisés');
         $nbFormValidColumn->setSize( 160 );
         $this->addColonne( $nbFormValidColumn );
 
-        $nbChapColumn = new Column\TextColumn('nbChap', 'Nb chapitres');
+        $nbChapColumn = new Column\NumberColumn('nbChap', 'Nb chapitres');
         $nbChapColumn->setSize( 110 );
         $this->addColonne( $nbChapColumn );
 
-        $nbQuestColumn = new Column\TextColumn('nbQuest', 'Nb questions');
+        $nbQuestColumn = new Column\NumberColumn('nbQuest', 'Nb questions');
         $nbQuestColumn->setSize( 110 );
         $this->addColonne( $nbQuestColumn );
 

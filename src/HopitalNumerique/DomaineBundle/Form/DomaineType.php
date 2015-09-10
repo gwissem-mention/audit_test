@@ -55,6 +55,11 @@ class DomaineType extends AbstractType
                     'empty_value'   => ' - ',
                     'attr'       => array('class' => 'validate[required]')
             ))
+            ->add('homepage', 'textarea', array(
+                'required'   => false, 
+                'label'      => 'Texte affiché sur la homepage',
+                'attr'       => array('rows' => 2, 'class' => 'tinyMceDomaine')
+            ))
             ;
     }
 

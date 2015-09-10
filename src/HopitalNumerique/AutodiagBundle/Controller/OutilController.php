@@ -248,6 +248,9 @@ class OutilController extends Controller
      */
     public function exportMassAction( $primaryKeys, $allPrimaryKeys )
     {
+        ini_set("memory_limit","1024M");
+        ini_set('max_execution_time', 0);
+
         if(count($primaryKeys) > 1)
         {
             $this->get('session')->getFlashBag()->add('danger', 'Vous ne pouvez pas exporter plusieurs autodiagnostics en même temps.' );

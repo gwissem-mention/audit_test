@@ -154,6 +154,9 @@
         <div class="clearfix"></div>
         {% block body %}
             <div id="homepage" >
+                {% if domaineCurrent.homepage is not null %}
+                    {{domaineCurrent.homepage|raw}}
+                {% endif %}
             </div>
         {% endblock body %}        
 <div class="clearfix"></div>
