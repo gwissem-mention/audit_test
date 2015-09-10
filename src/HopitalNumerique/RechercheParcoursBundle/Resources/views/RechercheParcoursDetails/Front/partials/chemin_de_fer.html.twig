@@ -28,6 +28,7 @@
                         <a class="{{couleurEtape}} tooltip-etape" href="{{ path("hopital_numerique_recherche_parcours_details_index_front" , {'id':rechercheParcours.id, 'alias':rechercheParcours.reference.libelle|minifieMoi(),'idEtape':recherchesParcoursDetail.id, 'etape':recherchesParcoursDetail.reference.libelle|minifieMoi()}) }}" {% if app.user and recherchesParcoursDetail.id in notesMoyenneParEtape|keys %}title="Taux de maîtrise de l'étape : {{notesMoyenneParEtape[recherchesParcoursDetail.id]}} %"{% endif %}>
                             {{recherchesParcoursDetail.reference.libelle}}
                         </a>
+                        <div class="icone-basse"> </div>
                         {% if not loop.last %}
                             <div class="icone"></div>
                             <div class="marge-grise"></div>

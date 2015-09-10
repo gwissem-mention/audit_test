@@ -238,6 +238,8 @@ class PublicationExtension extends \Twig_Extension
         }
         
         $content = html_entity_decode($content);
+        //Remplace un caractère qui n'est pas un espace mais un 'caractère vide' en 
+        $content = strtr($content,array(" " =>" "));
 
         return $content;
     }

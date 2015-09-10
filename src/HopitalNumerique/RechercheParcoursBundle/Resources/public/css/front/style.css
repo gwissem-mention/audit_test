@@ -85,8 +85,9 @@
 
 /* -- Chemin de fer - childs -- */
 #recherche-par-parcours-details .en-tete .chemin-de-fer-childs{text-align: center; margin: 18px 0;}
-#recherche-par-parcours-details .en-tete .chemin-de-fer-childs .bloc-etape-child a{margin: 0 15px; color:#712F98; text-transform: uppercase; padding: 6px 5px 5px;display:inline-block;}
+#recherche-par-parcours-details .en-tete .chemin-de-fer-childs .bloc-etape-child a{margin: 0 15px; color:#712F98; text-transform: uppercase; padding: 6px 5px 5px;display:inline-block;position: relative;}
 #recherche-par-parcours-details .en-tete .chemin-de-fer-childs .bloc-etape-child a.selected{background-color:#712F98 ;color:#ffffff;}
+#recherche-par-parcours-details .en-tete .chemin-de-fer-childs .bloc-etape-child a.selected:after{bottom: 0;left: 50%;border: solid transparent;content: " ";height: 0;width: 0;position: absolute;pointer-events: none;border-color: rgba(136, 183, 213, 0);border-bottom-color: #FFFFFF;border-width: 7px;margin-left: -7px;}
 
 
 /* Général */

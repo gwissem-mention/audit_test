@@ -110,7 +110,7 @@ window.open ("report/showReport.action?"+request,null,"location=no,menubar=0,res
             {% if objet.notes %}
                 {# Ajout la moyenne de l'objet #}
                 <div class="col-md-12">
-                    <div id="bloc-notation-moyenne-objet pull-left">
+                    <div id="bloc-notation-moyenne-objet" class="pull-left">
                         <input type="hidden" id="note-moyenne-url" value="{{path('hopital_numerique_publication_note_moyenne_objet' ) }}">
                         <div class="bloc-star pull-left">
                             <div class="rateit" id="note-moyenne-etoile" data-rateit-max="5" data-rateit-value="0" data-rateit-ispreset="true" data-rateit-readonly="true"></div>
@@ -171,7 +171,7 @@ window.open ("report/showReport.action?"+request,null,"location=no,menubar=0,res
                         {% if objet.notes %}
                             {# Ajout la moyenne de l'objet #}
                             <div class="col-md-12">
-                                <div id="bloc-notation-moyenne-objet pull-left">
+                                <div id="bloc-notation-moyenne-objet" class="pull-left">
                                     <input type="hidden" id="note-moyenne-url" value="{{path('hopital_numerique_publication_note_moyenne_objet' ) }}">
                                     <div class="bloc-star pull-left">
                                         <div class="rateit" id="note-moyenne-etoile" data-rateit-max="5" data-rateit-value="0" data-rateit-ispreset="true" data-rateit-readonly="true"></div>
@@ -207,18 +207,22 @@ window.open ("report/showReport.action?"+request,null,"location=no,menubar=0,res
                             {{objet.resume|parsePublication(objet.glossaires)|raw}}
                         </div>
 
-                        <div id="bloc-notation-objet" class="col-md-10 pull-right">
-                            <div class="wrapper">
-                                <input type="hidden" id="note-sauvegarde-url" value="{{path('hopital_numerique_publication_note_add' ) }}">
-                                <input type="hidden" id="note-delete-url" value="{{path('hopital_numerique_publication_note_delete' ) }}">
-                                <input type="hidden" id="note-valeur" style="display: none;" value="0">
-                                <div class="pull-left" style="line-height:19px;font-size: 13px;">Cette réponse vous paraît-elle utile ?</div>
-                                <div class="rateit pull-left" id="note-etoile" data-rateit-step="1" data-rateit-value="{% if note is not null %}{{note.note}}{% else %}0{% endif %}" data-rateit-max="5"></div>
-                                <div class="clearfix"></div>
+                        {% if app.user and objet.notes %}
+
+                            <div id="bloc-notation-objet" class="col-md-10 pull-right">
+                                <div class="wrapper">
+                                    <input type="hidden" id="note-sauvegarde-url" value="{{path('hopital_numerique_publication_note_add' ) }}">
+                                    <input type="hidden" id="note-delete-url" value="{{path('hopital_numerique_publication_note_delete' ) }}">
+                                    <input type="hidden" id="note-valeur" style="display: none;" value="0">
+                                    <div class="pull-left" style="line-height:19px;font-size: 13px;">Cette réponse vous paraît-elle utile ?</div>
+                                    <div class="rateit pull-left" id="note-etoile" data-rateit-step="1" data-rateit-value="{% if note is not null %}{{note.note}}{% else %}0{% endif %}" data-rateit-max="5"></div>
+                                    <div class="clearfix"></div>
+                                </div>
+                                <input type="hidden" id="isContenu" name="isContenu" value="{{contenu is defined }}" />
                             </div>
-                            <input type="hidden" id="isContenu" name="isContenu" value="{{contenu is defined }}" />
-                        </div>
-                        <div class="clearfix"></div>
+                            <div class="clearfix"></div>
+
+                        {% endif %}
                     </div>
                     <div class="col-md-6">
                         <div class="col-md-12" id="productionsPointDur" >
@@ -271,7 +275,7 @@ window.open ("report/showReport.action?"+request,null,"location=no,menubar=0,res
                 {% if objet.notes %}
                     {# Ajout la moyenne de l'objet #}
                     <div class="col-md-12">
-                        <div id="bloc-notation-moyenne-objet pull-left">
+                        <div id="bloc-notation-moyenne-objet" class="pull-left">
                             <input type="hidden" id="note-moyenne-url" value="{{path('hopital_numerique_publication_note_moyenne_objet' ) }}">
                             <div class="bloc-star pull-left">
                                 <div class="rateit" id="note-moyenne-etoile" data-rateit-max="5" data-rateit-value="0" data-rateit-ispreset="true" data-rateit-readonly="true"></div>
