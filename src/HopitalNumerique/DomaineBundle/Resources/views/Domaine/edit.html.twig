@@ -21,10 +21,6 @@
     %}
         <link rel="stylesheet" href="{{ asset_url }}" />
     {% endstylesheets %}
-    <script type="text/javascript">
-        NodevoGestionnaireMediaBundle_MoxieManager.PARAMETRES_GLOBAUX_URL = '{{ url('nodevo_gestionnaire_media_moxiemanager_json_parametres') }}';
-        NodevoGestionnaireMediaBundle_MoxieManager.initParametresGlobaux();
-    </script>
 {% endblock %}
 
 {% block h1Title %}
@@ -84,7 +80,10 @@
 
                     {{form_row(form.adresseMailContact)}}
                     {{form_row(form.template)}}
-                    {{form_row(form.homepage)}}
+                    {{form_row(form.description)}}
+                    <div class="tinyMCE-homepage">
+                        {{form_row(form.homepage)}}
+                    </div>
 
                 {{ form_end(form) }}
             </div>

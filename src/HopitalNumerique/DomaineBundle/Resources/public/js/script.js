@@ -53,4 +53,25 @@ $(document).ready(function() {
         ],
         relative_urls:false
     });
+
+	if($(this).val() == 4)
+    {
+        $(".tinyMCE-homepage").show();
+    }
+    else
+    {
+        $(".tinyMCE-homepage").hide();
+    }
+
+	/* Trigger sur affichage du WYSIWYG */
+    $("#hopitalnumerique_domaine_domaine_template").change(function() {
+        if($(this).val() == 4)
+        {
+            $(".tinyMCE-homepage").show();
+        }
+        else
+        {
+            $(".tinyMCE-homepage").hide();
+        }
+    });
 });
