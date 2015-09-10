@@ -54,7 +54,7 @@ $(document).ready(function() {
         relative_urls:false
     });
 
-	if($(this).val() == 4)
+    if($("#hopitalnumerique_domaine_domaine_template").val() == 4)
     {
         $(".tinyMCE-homepage").show();
     }
