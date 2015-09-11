@@ -1,9 +1,14 @@
+var glossaireAll;
+
 $(document).ready(function() {
     $("#show-all-button").on('click', function(){
-        $(".glossaire").hide();
-        $("#glossaire-all").show();
+        $(".glossaire").html('');
+        $("#glossaire-all").html(glossaireAll);
         $("#show-all-button").hide();
     });
+
+    var glossaireAll = $("#glossaire-all").html();
+    $("#glossaire-all").html('');
 
     //Highlight
     $("#recherche_textuelle").on('change', function(){
@@ -13,7 +18,7 @@ $(document).ready(function() {
         $(".glossaire .liste").highlight( search, { wordsOnly: false, caseSensitive: false } );
 
         recherchePremierElementHighlight();
-    })
+    });
     
 });
 
@@ -21,9 +26,12 @@ function recherchePremierElementHighlight()
 {
     $(".glossaire .liste span.highlight:first").attr("id","recherche-glossaire");
 
-    $('html, body').animate({
-        scrollTop: $("#recherche-glossaire").offset().top
-    }, 2000);
+    if($("#recherche-glossaire").length)
+    {
+        $('html, body').animate({
+            scrollTop: $("#recherche-glossaire").offset().top
+        }, 2000);
+    }
 }
 
 //Plugin de highlight
