@@ -446,7 +446,7 @@
     <li class="dd-item dd3-item" data-id="{{contenu.id}}" id="contenu-{{contenu.id}}" >
         <div class="dd-handle dd3-handle"></div>
         <div class="dd3-content">
-            <a data-url="{{path('hopitalnumerique_objet_contenu_form', {'id':contenu.id})}}" href="javascript:selectChapitre({{contenu.id}}, '{{path('hopitalnumerique_objet_contenu_form', {'id':contenu.id})}}')">{{contenu.order ~ ' ' ~ contenu.titre}}</a>
+            <a data-url="{{path('hopitalnumerique_objet_contenu_form', {'id':contenu.id})}}" href="javascript:selectChapitre({{contenu.id}}, '{{path('hopitalnumerique_objet_contenu_form', {'id':contenu.id})}}')" title="{{contenu.titre}}">{{contenu.order ~ ' ' ~ contenu.titre|truncate(100)}}</a>
             <p class="text-muted pull-right">{{contenu.nbVue}} vues - Note référencement : <span>{{contenu.note}}</span> / 400</p>
         </div>
         <div class="dd3-actions">
