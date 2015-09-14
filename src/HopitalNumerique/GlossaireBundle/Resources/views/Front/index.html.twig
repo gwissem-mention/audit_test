@@ -3,7 +3,6 @@
 {# Référencement #}
 {% block title %}{{parent()}} - Glossaire{% endblock %}
 
-
 {% block stylesheets %}
     {{parent()}}
     {% stylesheets output="compiled/hopitalnumerique-glossaire-front-index.css" filter="cssrewrite, ?yui_css" 
@@ -48,7 +47,7 @@
             <h1 class="violet">Glossaire</h1>
 
             {% for key,datas in glossaires %}
-                <div id="glossaire-{{key}}" class="glossaire" {% if key == 'all' %}style="display:none;"{% endif %}>
+                <div id="glossaire-{{key}}" class="glossaire">
                     <div class="alphabet">
                         {% for letter in 'a'|upper..'z'|upper %}
                             {% if letter in datas|keys %}
@@ -71,8 +70,8 @@
                                         <div class="sep"></div>
                                         <div class="elements">
                                             {% for element in glossaires %}
-                                                <div class="row">
-                                                    <div class="col-md-12" id="{{element.mot|minifieMoi}}">
+                                                <div class="row" id="{{element.mot|minifieMoi}}">
+                                                    <div class="col-md-12">
                                                         <p class="titre">
                                                             {% if element.intitule %}
                                                                 {{ element.mot ~ ' : ' ~ element.intitule }}
