@@ -221,7 +221,6 @@ class SearchController extends Controller
             $contenuIds            = array();
             $allIds                = array();
             $optionsSearch         = $this->get('hopitalnumerique_recherche.manager.search')->getUrlRechercheTextuelle();
-            //$urlRechercheTextuelle = "http://fifi.mind7.fr:13010/search-api/search?q=FACTEURS%20CLES%20DE%20SUCCES";
             $urlRechercheTextuelle = $optionsSearch . urlencode($rechercheTextuelle);
             
             $xml = simplexml_load_file($urlRechercheTextuelle);
