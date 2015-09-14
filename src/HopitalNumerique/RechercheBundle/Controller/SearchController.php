@@ -176,19 +176,24 @@ class SearchController extends Controller
         $objets        = $this->get('hopitalnumerique_recherche.manager.search')->getObjetsForRecherche( $references, $role, $refsPonderees );
         $objets        = $this->get('hopitalnumerique_objet.manager.consultation')->updateObjetsWithConnectedUser( $domaineId, $objets, $user );
 
+
         //Vire les publications qui ne font pas parti du domaine
         $domaine            = $this->get('hopitalnumerique_domaine.manager.domaine')->findOneById($domaineId);
         $objetsDuDomaine    = $domaine->getObjets();
         $objetsDuDomaineIds = array();
 
-        foreach ($objetsDuDomaine as $objet) 
+        foreach ($objetsDuDomaine as $objet)
         {
             $objetsDuDomaineIds[] = $objet->getId();
         }
 
         foreach ($objets as $key => $objet) 
         {
-            if(!in_array($objet['id'], $objetsDuDomaineIds))
+            //GME 14/09/2015 : Pour que l'objet soit dans le domaine il faut que l'id de l'objet soit dans le domaine (cas objet classique)
+            //Ou que si il existe une clé "objet" (cas infradoc) qu'elle ne soit pas nulle et que l'id de l'objet parent soit dans le domaine
+            if(!(in_array($objet['id'], $objetsDuDomaineIds)
+                || (array_key_exists('objet', $objet) && !is_null($objet['objet']) && in_array($objet['objet'], $objetsDuDomaineIds))
+                ))
             {
                 unset($objets[$key]);
             }
@@ -216,7 +221,6 @@ class SearchController extends Controller
             $contenuIds            = array();
             $allIds                = array();
             $optionsSearch         = $this->get('hopitalnumerique_recherche.manager.search')->getUrlRechercheTextuelle();
-            //$urlRechercheTextuelle = "http://fifi.mind7.fr:13010/search-api/search?q=FACTEURS%20CLES%20DE%20SUCCES";
             $urlRechercheTextuelle = $optionsSearch . urlencode($rechercheTextuelle);
             
             $xml = simplexml_load_file($urlRechercheTextuelle);
@@ -341,12 +345,6 @@ class SearchController extends Controller
         //Dans le cas où une recherche textuelle est donnée
         if(trim($rechercheTextuelle) !== "")
         {
-            //Dans le cas où il n'y a pas de filtre de critère de recherche
-            // if(is_null($references))
-            // {
-
-            // }
-
             //Parcourt les objets 
             foreach ($objets as $objet) 
             {
