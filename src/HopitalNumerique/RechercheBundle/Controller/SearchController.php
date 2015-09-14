@@ -176,19 +176,22 @@ class SearchController extends Controller
         $objets        = $this->get('hopitalnumerique_recherche.manager.search')->getObjetsForRecherche( $references, $role, $refsPonderees );
         $objets        = $this->get('hopitalnumerique_objet.manager.consultation')->updateObjetsWithConnectedUser( $domaineId, $objets, $user );
 
+
         //Vire les publications qui ne font pas parti du domaine
         $domaine            = $this->get('hopitalnumerique_domaine.manager.domaine')->findOneById($domaineId);
         $objetsDuDomaine    = $domaine->getObjets();
         $objetsDuDomaineIds = array();
 
-        foreach ($objetsDuDomaine as $objet) 
+        foreach ($objetsDuDomaine as $objet)
         {
             $objetsDuDomaineIds[] = $objet->getId();
         }
-
+        
         foreach ($objets as $key => $objet) 
         {
-            if(!in_array($objet['id'], $objetsDuDomaineIds))
+            if(!in_array($objet['id'], $objetsDuDomaineIds)
+                && (array_key_exists('objet', $objet) && !is_null($objet['objet']) && !in_array($objet['objet'], $objetsDuDomaineIds))
+                )
             {
                 unset($objets[$key]);
             }
@@ -341,12 +344,6 @@ class SearchController extends Controller
         //Dans le cas où une recherche textuelle est donnée
         if(trim($rechercheTextuelle) !== "")
         {
-            //Dans le cas où il n'y a pas de filtre de critère de recherche
-            // if(is_null($references))
-            // {
-
-            // }
-
             //Parcourt les objets 
             foreach ($objets as $objet) 
             {
