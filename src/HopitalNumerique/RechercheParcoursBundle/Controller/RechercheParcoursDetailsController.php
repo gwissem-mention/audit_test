@@ -225,7 +225,7 @@ class RechercheParcoursDetailsController extends Controller
                                     ));
             } 
 
-            $referencesTemp[] = $refChildSelected;
+            $referencesTemp = array($refChildSelected);
         }
         elseif(count($refChilds) > 0)
         {
@@ -307,6 +307,7 @@ class RechercheParcoursDetailsController extends Controller
                     break;
             }
         }
+
         if($rechercheParcoursDetails->getShowChildren())
         {
             //Recherche de l'étape parent

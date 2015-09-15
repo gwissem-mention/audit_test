@@ -178,6 +178,13 @@ function sauvegardeNote()
         dataType : 'json',
         success  : function( data ){
             calculMoyenne();
+
+            $("#bloc-notation-objet .message-notation").html('<span class="label label-success">Merci d\'avoir noté.</span>');
+
+            setTimeout(function(){
+                $("#bloc-notation-objet .message-notation").html('');
+            }, 3000);
+            
             loader.finished();
         }
     });
@@ -205,6 +212,7 @@ function calculMoyenne()
             $('#note-moyenne-etoile').rateit();
             //Fin chargement
             loader.finished();
+
         }
     });
 }

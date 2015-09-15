@@ -186,7 +186,7 @@
     {% import _self as mySelf %}
     {% for element in elements  %}
         
-        {% if level == 1 and element.childs %}
+        {% if element.childs %}
             <li class="{{liClass}} childs level{{level}} element-{{element.id}}" data-id="{{element.id}}" >
         {% else %}
             <li class="{{liClass}} level{{level}} element-{{element.id}}" data-id="{{element.id}}" >
