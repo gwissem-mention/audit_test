@@ -209,7 +209,7 @@ class RechercheParcoursDetailsController extends Controller
 
         $referencesTemp = array();
         $referencesTemp[] = $referenceRechercheParcours;
-        $referencesTemp[] = $referenceRechercheParcoursDetails;
+        $referencesTemp[] = $rechercheParcoursDetails->getShowChildren() && !empty($refChilds) ? $refChildSelected : $referenceRechercheParcoursDetails;
 
         //Dans le cas où l'on affiche les enfants du détails, on récupère les références enfant de la référence du détail
         if($rechercheParcoursDetails->getShowChildren() && !empty($refChilds))
@@ -223,9 +223,7 @@ class RechercheParcoursDetailsController extends Controller
                 $refChildSelected = $this->get('hopitalnumerique_reference.manager.reference')->findOneBy( array( 
                                         'id' => intval( $idRefEtapeChild )
                                     ));
-            } 
-
-            $referencesTemp = array($refChildSelected);
+            }
         }
         elseif(count($refChilds) > 0)
         {
