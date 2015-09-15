@@ -362,6 +362,12 @@ class User extends BaseUser
      * @Gedmo\Versioned
      */
     protected $etablissementRattachementSante;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="\HopitalNumerique\ReferenceBundle\Entity\Reference", cascade={"persist"})
+     * @ORM\JoinColumn(name="ref_type_activite", referencedColumnName="ref_id")
+     */
+    protected $typeActivite;
     
     /**
      * @var string
@@ -1070,6 +1076,29 @@ class User extends BaseUser
     public function setContactAutre($contactAutre)
     {
         $this->contactAutre = $contactAutre;
+    }
+    
+    /**
+     * Set typeActivite
+     *
+     * @param \HopitalNumerique\ReferenceBundle\Entity\Reference $typeActivite
+     */
+    public function setTypeActivite($typeActivite = null)
+    {
+        if($typeActivite instanceof \HopitalNumerique\ReferenceBundle\Entity\Reference )
+            $this->typeActivite = $typeActivite;
+        else
+            $this->typeActivite = null;
+    }
+    
+    /**
+     * Get typeActivite
+     *
+     * @return \HopitalNumerique\ReferenceBundle\Entity\Reference $typeActivite
+     */
+    public function getTypeActivite()
+    {
+        return $this->typeActivite;
     }
     
     /**
