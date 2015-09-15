@@ -209,7 +209,6 @@ class RechercheParcoursDetailsController extends Controller
 
         $referencesTemp = array();
         $referencesTemp[] = $referenceRechercheParcours;
-        $referencesTemp[] = $rechercheParcoursDetails->getShowChildren() && !empty($refChilds) ? $refChildSelected : $referenceRechercheParcoursDetails;
 
         //Dans le cas où l'on affiche les enfants du détails, on récupère les références enfant de la référence du détail
         if($rechercheParcoursDetails->getShowChildren() && !empty($refChilds))
@@ -232,6 +231,8 @@ class RechercheParcoursDetailsController extends Controller
                 $referencesTemp[] = $refChild;
             }
         }
+
+        $referencesTemp[] = $rechercheParcoursDetails->getShowChildren() && !empty($refChilds) ? $refChildSelected : $referenceRechercheParcoursDetails;
 
         if($rechercheParcoursDetails->getShowChildren())
         {
