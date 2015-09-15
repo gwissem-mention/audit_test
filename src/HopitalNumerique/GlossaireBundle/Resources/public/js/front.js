@@ -31,6 +31,10 @@ function recherchePremierElementHighlight()
             scrollTop: $("#recherche-glossaire").offset().top
         }, 2000);
     }
+    else
+    {
+        alert("Le mot recherché n'a pas été trouvé");
+    }
 }
 
 //Plugin de highlight
