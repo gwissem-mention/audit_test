@@ -81,7 +81,7 @@ class ExpBesoinReponseController extends Controller
         ));  
     }
 
-    public function editAction(Request $request, ExpBesoinGestion $expBesoinGestion)
+    public function editAction(Request $request)
     {
         //Récupération des données envoyées par la requete AJAX
         $idReponse       = $request->request->get('idReponse');
