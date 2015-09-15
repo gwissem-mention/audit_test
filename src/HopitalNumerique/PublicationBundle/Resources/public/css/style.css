@@ -138,6 +138,7 @@
     #bloc-notation-objet .wrapper{ border: 1px solid #e2e2e2; margin-top: 10px; padding: 10px 20px 0;}
     #bloc-notation-objet .wrapper #note-etoile{ margin-bottom: 7px;}
     #bloc-notation-objet .wrapper #note-etoile button{ margin-right: 5px; margin-left: 10px;}
+    #bloc-notation-objet .wrapper .message-notation { margin-bottom: 10px;}
     #bloc-notation-moyenne-objet {margin-top: 0px; margin-bottom: 15px;}
     #bloc-notation-moyenne-objet #note-moyenne-etoile { margin-top: 2px;}
     #bloc-notation-moyenne-objet #info-note-moyenne { margin-left: 10px;}

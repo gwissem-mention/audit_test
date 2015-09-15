@@ -176,7 +176,6 @@ class SearchController extends Controller
         $objets        = $this->get('hopitalnumerique_recherche.manager.search')->getObjetsForRecherche( $references, $role, $refsPonderees );
         $objets        = $this->get('hopitalnumerique_objet.manager.consultation')->updateObjetsWithConnectedUser( $domaineId, $objets, $user );
 
-
         //Vire les publications qui ne font pas parti du domaine
         $domaine            = $this->get('hopitalnumerique_domaine.manager.domaine')->findOneById($domaineId);
         $objetsDuDomaine    = $domaine->getObjets();
