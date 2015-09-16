@@ -338,6 +338,21 @@ class UserType extends AbstractType
                     }
             ))
             
+            ->add('typeActivite', 'entity', array(
+                    'class'       => 'HopitalNumeriqueReferenceBundle:Reference',
+                    'property'    => 'libelle',
+                    'required'    => false,
+                    'label'       => 'Type activité',
+                    'empty_value' => ' - ',
+                    'attr'        => array('class' => 'etablissement_sante'),
+                    'query_builder' => function(EntityRepository $er) {
+                        return $er->createQueryBuilder('ref')
+                        ->where('ref.code = :etat')
+                        ->setParameter('etat', 'CONTEXTE_SPECIALITE_ES')
+                        ->orderBy('ref.libelle', 'ASC');
+                    }
+            ))
+            
             ->add('profilEtablissementSante', 'entity', array(
                     'class'       => 'HopitalNumeriqueReferenceBundle:Reference',
                     'property'    => 'libelle',
