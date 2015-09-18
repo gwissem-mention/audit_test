@@ -57,7 +57,7 @@ class RemboursementManager extends BaseManager
         $lastInscription = null;
         foreach ($formations as $formation) 
         {
-            if(is_null($prix['formations'][$formation]) && is_null($prix['formations'][$formation->getUser()]) && is_null($prix['formations'][$formation->getUser()->getRegion()]) && is_null($prix['formations'][$formation->getUser()->getRegion()->getId()]))
+            if(is_null($prix['formations'][$formation]) || is_null($prix['formations'][$formation->getUser()]) || is_null($prix['formations'][$formation->getUser()->getRegion()]) || is_null($prix['formations'][$formation->getUser()->getRegion()->getId()]))
             {
                 continue;
             }
