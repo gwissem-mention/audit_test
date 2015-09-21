@@ -349,6 +349,8 @@ window.open ("report/showReport.action?"+request,null,"location=no,menubar=0,res
                     <div class="pull-left" style="line-height:19px;font-size: 13px;">Cette réponse vous paraît-elle utile ?</div>
                     <div class="rateit pull-left" id="note-etoile" data-rateit-step="1" data-rateit-value="{% if note is not null %}{{note.note}}{% else %}0{% endif %}" data-rateit-max="5"></div>
                     <div class="clearfix"></div>
+                    <div class="message-notation text-center"></div>
+                    <div class="clearfix"></div>
                 </div>
                 <input type="hidden" id="isContenu" name="isContenu" value="{{contenu is defined }}" />
             </div>
