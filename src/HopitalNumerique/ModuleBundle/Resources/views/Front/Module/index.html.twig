@@ -80,7 +80,11 @@
                                         title="Plus de places restantes"
                                     {% endif %}
                                     >
-                                        {{session.nombrePlaceDisponible - session.getInscriptionsAccepte()|length}}
+                                        {% if session.nombrePlaceDisponible - session.getInscriptionsAccepte()|length > 0 %}
+                                            {{session.nombrePlaceDisponible - session.getInscriptionsAccepte()|length}}
+                                        {% else %}
+                                            0
+                                        {% endif %}
                                     </td>
                                     <td>
                                         {% set userInscrit = false %}
@@ -128,7 +132,9 @@
                                     <td style="min-width:86px;">
                                         <div class="btn-group">
                                             <a class="btn btn-info link fancybox.ajax" href="{{path('hopitalnumerique_module_session_description_front',{'id':session.id})}}"><i class="fa fa-info-circle"></i></a>
-                                            <a class="btn btn-success link" href="{{path('hopitalnumerique_module_session_informations_front',{'id':session.id})}}"><i class="fa fa-arrow-right"></i></a>
+                                            {% if (session.nombrePlaceDisponible - session.getInscriptionsAccepte()|length) > 0 %}
+                                                <a class="btn btn-success link" href="{{path('hopitalnumerique_module_session_informations_front',{'id':session.id})}}"><i class="fa fa-arrow-right"></i></a>
+                                            {% endif %}
                                         </div>
                                     </td>
                                 </tr>
