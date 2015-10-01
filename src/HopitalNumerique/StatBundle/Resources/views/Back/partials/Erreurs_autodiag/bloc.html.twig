@@ -26,7 +26,7 @@
                         <div class="row">
                             {# Boutton de génération du tableau #}
                             <div class="col-md-12 button-generation">
-                                {#<div id="export-csv-erreurs-autodiag-urls" onclick="exportCSVErreursUrlAutodiag();" class="finish btn btn-primary pull-right" title="Export CSV" ><i class="fa fa-download"></i></div>#}
+                                <div id="export-csv-erreurs-autodiag-urls" onclick="exportCSVErreursUrlAutodiag();" class="finish btn btn-primary pull-right" title="Export CSV" ><i class="fa fa-download"></i></div>
                                 <div id="generation-tableau-erreurs-curl-autodiag" onclick="generationErreursCurlAutodiag( '{{path('hopital_numerique_stat_erreurs_curl_generate_tableau_autodiag')}}' );" class="finish btn btn-success pull-right" title="Générer le tableau" ><i class="fa fa-bar-chart-o"></i></div>
                                 <div id="check-url-erreurs-curl-autodiag-with-base" onclick="checkAllUrl(false);" class="finish btn btn-info pull-right" title="Vérifier les url déjà vérifiées par le CRON" ><i class="fa fa-play"></i></div>
                                 {#<div id="check-url-erreurs-curl-autodiag" onclick="checkAllUrl(true);" class="finish btn btn-primary pull-right" title="Relancer la vérification des urls" ><i class="fa fa-step-forward"></i></div>#}

@@ -122,12 +122,12 @@ class ErreursAutodiagController extends Controller
 
         //Colonnes communes
         $colonnes = array(
-            'type'       => 'Type du lien',
-            'idObjet'    => 'Id de la publication',
-            'titreObjet' => 'Titre de la publication',
-            'infradoc'   => 'Infradoc ?',
-            'url'        => 'Url',
-            'valide'     => 'Valide'
+            'id'       => 'Id',
+            'titre'    => 'Titre',
+            'chapitre' => 'Chapitre',
+            'question' => 'Question',
+            'url'      => 'URL',
+            'valide'   => 'Valide',
         );
 
         $kernelCharset = $this->container->getParameter('kernel.charset');
@@ -229,7 +229,7 @@ class ErreursAutodiagController extends Controller
         $autodiags = $this->get('hopitalnumerique_autodiag.manager.outil')->getOutilsByDate($dateDebut, $dateFin);
         $chapitresArray = array();
 
-        foreach ($autodiags as $key => $autodiag) 
+        foreach ($autodiags as $autodiag) 
         {
         	foreach ($autodiag->getChapitres() as $chapitre) 
         	{
