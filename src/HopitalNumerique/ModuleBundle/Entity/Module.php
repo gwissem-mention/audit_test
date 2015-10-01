@@ -635,7 +635,8 @@ class Module
         {
             if($session->getDateOuvertureInscription() <= new \DateTime()
                 && $session->getDateFermetureInscription() >= new \DateTime()
-                && $session->getEtat()->getId() === 403)
+                && $session->getEtat()->getId() === 403
+                && !$session->getArchiver())
             {
                 $sessions[] = $session;
             }

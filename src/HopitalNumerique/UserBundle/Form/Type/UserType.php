@@ -342,6 +342,7 @@ class UserType extends AbstractType
                     'class'       => 'HopitalNumeriqueReferenceBundle:Reference',
                     'property'    => 'libelle',
                     'required'    => false,
+                    'multiple'    => true,
                     'label'       => 'Type activité',
                     'empty_value' => ' - ',
                     'attr'        => array('class' => 'etablissement_sante'),
