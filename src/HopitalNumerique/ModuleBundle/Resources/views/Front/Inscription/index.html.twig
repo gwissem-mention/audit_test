@@ -88,7 +88,9 @@
                             </td>
                         {% endif %}
                         <td>
-                            <a class="btn btn-danger btn-sm" title="Annuler mon inscription" onclick="annulationInscription('{{path('hopitalnumerique_module_inscription_annulation_inscription_front',{'id':inscription.id})}}')"><i class="fa fa-times-circle"></i></a>
+                            {% if inscription.etatParticipation.id == 410 %}
+                                <a class="btn btn-danger btn-sm" title="Annuler mon inscription" onclick="annulationInscription('{{path('hopitalnumerique_module_inscription_annulation_inscription_front',{'id':inscription.id})}}')"><i class="fa fa-times-circle"></i></a>
+                            {% endif %}
                         </td>
                     </tr>
                 {% else %}
