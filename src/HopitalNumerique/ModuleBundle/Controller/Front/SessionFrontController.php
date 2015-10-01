@@ -220,6 +220,11 @@ class SessionFrontController extends Controller
             'Module',
             'Date de la session',
             'Utilisateur',
+            'Etablissement',
+            'Région',
+            'Adresse mail',
+            'Fonction',
+            'Libellé de la fonction',
             'Date de l\'inscription',
             'Statut inscription',
             'Commentaire'
@@ -232,9 +237,14 @@ class SessionFrontController extends Controller
             $row[0] = $session->getModule()->getTitre();
             $row[1] = $session->getDateSession()->format('d/m/Y');
             $row[2] = $inscription->getUser()->getAppellation();
-            $row[3] = $inscription->getDateInscription()->format('d/m/Y');
-            $row[4] = $inscription->getEtatInscription()->getLibelle();
-            $row[5] = $inscription->getCommentaire();
+            $row[3] = !is_null($inscription->getUser()->getEtablissementRattachementSante()) ? $inscription->getUser()->getEtablissementRattachementSante()->getNom() :  ($inscription->getUser()->getAutreStructureRattachementSante());
+            $row[4] = !is_null($inscription->getUser()->getRegion()) ? $inscription->getUser()->getRegion()->getLibelle() : '-';
+            $row[5] = $inscription->getUser()->getEmail();
+            $row[6] = !is_null($inscription->getUser()->getFonctionDansEtablissementSanteReferencement()) ? $inscription->getUser()->getFonctionDansEtablissementSanteReferencement()->getLibelle() : '-';
+            $row[7] = $inscription->getUser()->getFonctionDansEtablissementSante();
+            $row[8] = $inscription->getDateInscription()->format('d/m/Y');
+            $row[9] = $inscription->getEtatInscription()->getLibelle();
+            $row[10] = $inscription->getCommentaire();
 
             $datas[] = $row;
         }
