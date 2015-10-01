@@ -109,7 +109,9 @@ class SessionFrontController extends Controller
 
                 //ajoute la question si non présente dans les colonnes
                 if( !isset($colonnes[$idQuestion]) )
+                {
                     $colonnes[$idQuestion] = $question->getLibelle();
+                }
 
                 //handle la réponse
                 switch($question->getTypeQuestion()->getLibelle())
