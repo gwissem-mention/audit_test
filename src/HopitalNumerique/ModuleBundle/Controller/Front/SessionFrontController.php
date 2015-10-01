@@ -3,8 +3,10 @@
 namespace HopitalNumerique\ModuleBundle\Controller\Front;
 
 use HopitalNumerique\ModuleBundle\Entity\Session;
+
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\Request;
 
 class SessionFrontController extends Controller
 {
@@ -161,6 +163,42 @@ class SessionFrontController extends Controller
         $kernelCharset = $this->container->getParameter('kernel.charset');
 
         return $this->get('hopitalnumerique_module.manager.session')->exportCsv( $colonnes, $datas, 'export-evaluations.csv', $kernelCharset );
+    }
+
+    /**
+     * POPIN : Partage de resultat
+     */
+    public function parametrageAction(Session $session)
+    {
+        return $this->render( 'HopitalNumeriqueModuleBundle:Front/Inscription:fancy.html.twig' , array(
+            'session' => $session
+        ));
+    }
+    
+    /**
+     * POPIN : gestion de la présence des experts
+     */
+    public function parametrageSaveAction(Session $session, Request $request)
+    {
+        //Mise à jour de la présence des experts
+        $inscriptionsId = json_decode( $this->get('request')->request->get('inscriptions') );
+
+        $inscriptions        = $this->get('hopitalnumerique_module.manager.inscription')->findBy(array('session' => $session));
+        $refParticipation    = $this->get('hopitalnumerique_reference.manager.reference')->findOneById(411);
+        $refPasParticipation = $this->get('hopitalnumerique_reference.manager.reference')->findOneById(412);
+
+        foreach ($inscriptions as &$inscription) {
+            if(in_array($inscription->getId(), $inscriptionsId)){
+                $inscription->setEtatParticipation($refParticipation);
+            }
+            else{
+                $inscription->setEtatParticipation($refPasParticipation);
+            }
+        }
+
+        $this->get('hopitalnumerique_module.manager.inscription')->save($inscriptions);
+
+        return new Response('{"success":true}', 200);
     }
 
     /**

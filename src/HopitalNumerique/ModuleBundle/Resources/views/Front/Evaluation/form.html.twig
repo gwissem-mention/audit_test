@@ -22,7 +22,9 @@
 
 {% block headerTitle %}Evaluation{% endblock %}
 {% block headerDesc %}
-    <p>Le Formulaire d'évaluation, suite à votre participation à une session, est disponible ci-dessous. Merci d'y répondre pour pouvoir générer la facture correspondante, à partir de votre <a href="{{ path("hopitalnumerique_module_inscription_index_front") }}">tableau de bord.</a></p>
+    <p>
+        {{'Module_evaluation_introduction'|nodevoTexteDynamique(domaineCurrent.id)|raw|nl2br}}
+    </p>
 {% endblock %}
 
 {% block content %}

@@ -50,3 +50,15 @@ hopitalnumerique_module_evaluation_view_front:
     requirements:
         id: \d+
 
+#-Fancy de participation
+hopitalnumerique_module_inscription_particiption:
+    pattern:  /session/participation/parametrage/{id}
+    defaults: { _controller: "HopitalNumeriqueModuleBundle:Front/SessionFront:parametrage" }
+    requirements: 
+        id : \d+ 
+
+hopitalnumerique_module_inscription_particiption_save:
+    pattern:  /session/participation/parametrage/{id}/save
+    defaults: { _controller: "HopitalNumeriqueModuleBundle:Front/SessionFront:parametrageSave" }
+    requirements:
+        id: \d+

@@ -129,6 +129,7 @@
                             <td>
                                 <div class="btn-group">
                                     <a class="btn btn-info link fancybox.ajax btn-sm" title="Description de la session" href="{{path('hopitalnumerique_module_session_description_front',{'id':session.id})}}"><i class="fa fa-info-circle"></i></a>
+                                    <a class="btn btn-info link fancybox.ajax btn-sm" title="Gestion des participations à la session" href="{{path('hopitalnumerique_module_inscription_particiption',{'id':session.id})}}"><i class="fa fa-users"></i></a>
                                     <a class="btn btn-warning btn-sm" title="Télécharger l'ensemble des inscriptions de cette session" href="{{path('hopitalnumerique_module_session_formateur_session_front',{'id':session.id})}}"><i class="fa fa-cloud-download"></i></a>
                                     {% if date(session.dateSession)  <= date() %}
                                         <a class="btn btn-success btn-sm" title="Télécharger l'ensemble des évaluations de cette session" href="{{path('hopitalnumerique_module_session_evaluation_front',{'id':session.id})}}"><i class="fa fa-external-link"></i></a>
