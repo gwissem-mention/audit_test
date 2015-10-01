@@ -37,6 +37,14 @@ hopitalnumerique_module_inscription_add_front:
     requirements:
         id: \d+
 
+#---Impression Fiche
+hopitalnumerique_module_session_impression_fiche:
+    pattern:  /session/fiche-presence/{id}
+    defaults: { _controller: "HopitalNumeriqueModuleBundle:Back/Session:impressionFichePresence", id: 1 }
+    requirements:
+        id: \d+
+        _method: GET
+
 #Front - Evaluation
 hopitalnumerique_module_evaluation_form_front:
     pattern:  /evaluation/{id}
