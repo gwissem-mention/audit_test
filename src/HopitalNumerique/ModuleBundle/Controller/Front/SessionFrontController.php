@@ -3,8 +3,10 @@
 namespace HopitalNumerique\ModuleBundle\Controller\Front;
 
 use HopitalNumerique\ModuleBundle\Entity\Session;
+
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\Request;
 
 class SessionFrontController extends Controller
 {
@@ -109,7 +111,9 @@ class SessionFrontController extends Controller
 
                 //ajoute la question si non présente dans les colonnes
                 if( !isset($colonnes[$idQuestion]) )
+                {
                     $colonnes[$idQuestion] = $question->getLibelle();
+                }
 
                 //handle la réponse
                 switch($question->getTypeQuestion()->getLibelle())
@@ -159,6 +163,42 @@ class SessionFrontController extends Controller
         $kernelCharset = $this->container->getParameter('kernel.charset');
 
         return $this->get('hopitalnumerique_module.manager.session')->exportCsv( $colonnes, $datas, 'export-evaluations.csv', $kernelCharset );
+    }
+
+    /**
+     * POPIN : Partage de resultat
+     */
+    public function parametrageAction(Session $session)
+    {
+        return $this->render( 'HopitalNumeriqueModuleBundle:Front/Inscription:fancy.html.twig' , array(
+            'session' => $session
+        ));
+    }
+    
+    /**
+     * POPIN : gestion de la présence des experts
+     */
+    public function parametrageSaveAction(Session $session, Request $request)
+    {
+        //Mise à jour de la présence des experts
+        $inscriptionsId = json_decode( $this->get('request')->request->get('inscriptions') );
+
+        $inscriptions        = $this->get('hopitalnumerique_module.manager.inscription')->findBy(array('session' => $session));
+        $refParticipation    = $this->get('hopitalnumerique_reference.manager.reference')->findOneById(411);
+        $refPasParticipation = $this->get('hopitalnumerique_reference.manager.reference')->findOneById(412);
+
+        foreach ($inscriptions as &$inscription) {
+            if(in_array($inscription->getId(), $inscriptionsId)){
+                $inscription->setEtatParticipation($refParticipation);
+            }
+            else{
+                $inscription->setEtatParticipation($refPasParticipation);
+            }
+        }
+
+        $this->get('hopitalnumerique_module.manager.inscription')->save($inscriptions);
+
+        return new Response('{"success":true}', 200);
     }
 
     /**
@@ -220,6 +260,11 @@ class SessionFrontController extends Controller
             'Module',
             'Date de la session',
             'Utilisateur',
+            'Etablissement',
+            'Région',
+            'Adresse mail',
+            'Fonction',
+            'Libellé de la fonction',
             'Date de l\'inscription',
             'Statut inscription',
             'Commentaire'
@@ -232,9 +277,14 @@ class SessionFrontController extends Controller
             $row[0] = $session->getModule()->getTitre();
             $row[1] = $session->getDateSession()->format('d/m/Y');
             $row[2] = $inscription->getUser()->getAppellation();
-            $row[3] = $inscription->getDateInscription()->format('d/m/Y');
-            $row[4] = $inscription->getEtatInscription()->getLibelle();
-            $row[5] = $inscription->getCommentaire();
+            $row[3] = !is_null($inscription->getUser()->getEtablissementRattachementSante()) ? $inscription->getUser()->getEtablissementRattachementSante()->getNom() :  ($inscription->getUser()->getAutreStructureRattachementSante());
+            $row[4] = !is_null($inscription->getUser()->getRegion()) ? $inscription->getUser()->getRegion()->getLibelle() : '-';
+            $row[5] = $inscription->getUser()->getEmail();
+            $row[6] = !is_null($inscription->getUser()->getFonctionDansEtablissementSanteReferencement()) ? $inscription->getUser()->getFonctionDansEtablissementSanteReferencement()->getLibelle() : '-';
+            $row[7] = $inscription->getUser()->getFonctionDansEtablissementSante();
+            $row[8] = $inscription->getDateInscription()->format('d/m/Y');
+            $row[9] = $inscription->getEtatInscription()->getLibelle();
+            $row[10] = $inscription->getCommentaire();
 
             $datas[] = $row;
         }

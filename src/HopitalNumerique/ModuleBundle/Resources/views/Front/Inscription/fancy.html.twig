@@ -1,0 +1,96 @@
+<div class="panel panel-midnightblue" style="margin:0" >
+    <div class="panel-heading" style="height:65px;background-color: #6f3596;">
+        <h4 style="line-height:22px; padding: 10px 0">{{session.module.titre}} ({{session.dateSession|date('d/m/Y')}}) - Gestion des participations liés à cette session</h4>
+    </div>
+
+    <div class="panel-body" id="panel-inscription" >
+        <div class="tableContent row col-md-12" style="overflow:scroll">
+            <table id="inscriptions-tab" class="table" >
+                <thead>
+                    <tr>
+                        <th width="60px" align="center"><input type="checkbox" class="checkAll" /></th>
+                        <th>Nom</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for inscription in session.getInscriptionsAccepte() %}
+                        <tr class="inscription inscription-{{inscription.id}}" data-id="{{inscription.id}}" >
+                            <td align="center">
+                                <input type="checkbox" class="checkbox" id="checkbox-{{inscription.id}}"{% if inscription.etatParticipation.id == 411 %} checked="checked"{% endif %} />
+                            </td>
+
+                            <td>
+                                <label for="checkbox-{{inscription.id}}" style="width:100%;">{{inscription.user.getAppellation()}}</label>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>    
+        </div>
+
+        <div class="clearfix"></div>
+        
+        <div class="panel-footer" >
+            <div class="row">
+                <div class="btn-toolbar pull-right">
+                    <div onclick="$.fancybox.close(true);" class="btn-danger btn">Fermer</div>
+                    <div onclick="saveInscriptions();" class="btn-primary btn">Enregistrer</div>
+                    <input type="hidden" id="save-inscription-url" value="{{path('hopitalnumerique_module_inscription_particiption_save',{'id':session.id})}}" />
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    $(document).ready(function() {
+        //click de la checkbox globale
+        $('#inscriptions-tab .checkAll').on('click', function(){
+            if( $('.checkAll').prop('checked') ){
+                $('#inscriptions-tab .checkbox').each(function(){
+                    $(this).prop('checked', 'checked');
+                })
+            }else{
+                $('#inscriptions-tab .checkbox').each(function(){
+                    $(this).prop('checked', false);
+                })
+            }
+        });
+    });
+
+    function saveInscriptions()
+    {
+        var inscriptions = [];
+        var loader  = $('.panel-body').nodevoLoader().start();
+
+        $('#inscriptions-tab .inscription').each(function() 
+        {
+            //si la référence est cochée, on l'ajoute dans les références à linker
+            if ( $(this).find('.checkbox').prop('checked') ) 
+            {
+                var inscription = {};
+
+                //inscription id
+                inscription = $(this).data('id');
+                inscriptions.push( inscription );
+            }
+        });
+
+        //JSONify IT !
+        json = JSON.stringify( inscriptions );
+
+        //save the value
+        $.ajax({
+            url  : $('#save-inscription-url').val(),
+            data : {
+                inscriptions : json
+            },
+            type     : 'POST',
+            dataType : 'json',
+            success  : function( data ){
+                loader.finished();
+                $.fancybox.close(true);
+            }
+        });
+    }
+</script>

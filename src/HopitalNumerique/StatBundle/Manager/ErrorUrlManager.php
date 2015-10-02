@@ -107,8 +107,6 @@ class ErrorUrlManager extends BaseManager
             $errorsUrlByUrl[$errorUrl->getUrl()] = $errorUrl;
         }
 
-        echo '<pre>';var_dump($donneesTab['urls']);die('die');
-
         //Boucle sur les différentes catégories
         foreach ($donneesTab['urls'] as $idChapitre => $arrayUrls) 
         {
@@ -120,28 +118,12 @@ class ErrorUrlManager extends BaseManager
                 {
                     $row = array();
 
-                    $row['type'] = ucfirst($keyURL);
-                    $row['idObjet'] = $keyObjetUrl;
-                    $row['titreObjet'] = $donneesTab['objets'][$keyObjetUrl]->getTitre();
-                    //$row['infradoc'] = ($keyObjetOrContenu != 'objet') ?  (is_null($donneesTab['objets'][$keyObjetUrl]->getContenuById($keyObjetOrContenu)) ? '' : ( $donneesTab['objets'][$keyObjetUrl]->getContenuById($keyObjetOrContenu)->getOrder() . ' ' .  $donneesTab['objets'][$keyObjetUrl]->getContenuById($keyObjetOrContenu)->getTitre() ) : '';
-                    $row['url'] = $urlObjetUrl;
-                    $row['valide'] = (array_key_exists($urlObjetUrl, $errorsUrlByUrl)) ? ($errorsUrlByUrl[$urlObjetUrl]->getOk() ? 'Valide' : 'Non valide') : 'A vérifier';
-
-                    if($keyObjetOrContenu != 'objet')
-                    {
-                        if(!is_null($donneesTab['objets'][$keyObjetUrl]->getContenuById($keyObjetOrContenu)))
-                        {
-                            $row['infradoc'] = $donneesTab['objets'][$keyObjetUrl]->getContenuById($keyObjetOrContenu)->getOrder() . ' ' .  $donneesTab['objets'][$keyObjetUrl]->getContenuById($keyObjetOrContenu)->getTitre();
-                        }
-                        else
-                        {
-                            $row['infradoc'] = '';
-                        }
-                    }
-                    else
-                    {
-                        $row['infradoc'] = '';
-                    }
+                    $row['id']       = $donneesTab['chapitres'][$idChapitre]->getOutil()->getId();
+                    $row['titre']    = $donneesTab['chapitres'][$idChapitre]->getOutil()->getTitle();
+                    $row['chapitre'] = $donneesTab['chapitres'][$idChapitre]->getTitle();
+                    $row['question'] = "questions" ===  $typeUrl ? $donneesTab['chapitres'][$idChapitre]->getQuestionsById()[$id]->getTexte() : '-';
+                    $row['url']      = $url;
+                    $row['valide']   = (array_key_exists($url, $errorsUrlByUrl)) ? ($errorsUrlByUrl[$url]->getOk() ? 'Valide' : 'Non valide') : 'A vérifier';
                     
                     //add row To Results
                     $results[] = $row;

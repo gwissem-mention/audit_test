@@ -170,7 +170,7 @@ class SessionController extends Controller
     public function exportEvaluationsMassAction( $primaryKeys, $allPrimaryKeys )
     {
         if($allPrimaryKeys == 1){
-            $rawDatas = $this->get('hopitalnumerique_module.manager.session')->getRawData();
+            $rawDatas = $this->get('hopitalnumerique_module.grid.allsession')->getRawData();
             foreach($rawDatas as $data)
             {
                 $primaryKeys[] = $data['id'];

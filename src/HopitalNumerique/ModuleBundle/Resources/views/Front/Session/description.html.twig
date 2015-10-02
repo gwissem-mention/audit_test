@@ -50,7 +50,7 @@
                 <li style="margin: 0 0 10px;"><div class="col-md-4"><strong>Pièce-jointe :</strong></div>
                     <div class="col-md-8">
                         {% if session.module.path is not null and session.module.path is not empty %}
-                            <a class="uploadedFile" href="{{path('hopitalnumerique_module_module_dowload_front', {'id': session.module.id })}}">{{session.module.path}}</a>
+                            <a class="uploadedFile" href="{{path('hopitalnumerique_module_module_dowload_front', {'id': session.module.id })}}">Téléchargez la pièce-jointe</a>
                         {% else %}
                             - Aucune pièce-jointe pour cette session -
                         {% endif %}
