@@ -154,12 +154,37 @@
                         <h4 class="violet titre">Inscrivez-vous !</h4>
 
                         <div class="description">
-                            {# Render de la vue de récupérations des différentes modules #}
-                            {{ render(controller("HopitalNumeriqueModuleBundle:Front/InscriptionFront:add", {'session' : session} )) }} 
-                            
-                            <div class="col-md-10 col-md-offset-2">
-                                <input onclick="$('form').submit();" class="btn btn-success col-md-6 pull-right submit questionnaire_submit" value="CONFIRMER MA DEMANDE" type="button"/>
-                            </div>
+                            {% if app.user.region is not null 
+                                and app.user.profilEtablissementSante is not null 
+                                and (app.user.etablissementRattachementSante is not null or app.user.autreStructureRattachementSante|trim != "") %}
+                                {# Render de la vue de récupérations des différentes modules #}
+                                {{ render(controller("HopitalNumeriqueModuleBundle:Front/InscriptionFront:add", {'session' : session} )) }}
+
+                                <div class="col-md-10 col-md-offset-2">
+                                    <input onclick="$('form').submit();" class="btn btn-success col-md-6 pull-right submit questionnaire_submit" value="CONFIRMER MA DEMANDE" type="button"/>
+                                </div>
+
+                            {% else %}
+                                <div class="informations_manquantes col-md-12"> 
+                                    <span class="legende rose">
+                                        <strong>Certaines données sont nécessaires pour l'étude de votre candidature, veuillez renseigner les <a href="{{path('hopital_numerique_user_informations_personnelles')}}">données personnelles</a> suivantes :</strong>
+                                    </span>
+                                    <ul class="rose">
+                                        {% if app.user.region is null %}
+                                            <li><span class="champ_manquant"><strong>Région</strong></span></li>
+                                        {% endif %}
+                                        {% if app.user.profilEtablissementSante is null %}
+                                            <li><span class="champ_manquant"><strong>Profil</strong></span></li>
+                                        {% endif %}
+                                        {% if app.user.etablissementRattachementSante is null and app.user.autreStructureRattachementSante|trim == "" %}
+                                            <li><span class="champ_manquant"><strong>Établissement</strong></span></li>
+                                        {% endif %}
+                                    </ul>
+                                </div> 
+                                <div class="col-md-12 text-right button_donnees_personnelles">
+                                   <a href="{{path('hopital_numerique_user_informations_personnelles')}}" class="btn btn-success" title="Données personnelles">{{ 'données personnelles'|upper }}</i></a>
+                                </div>  
+                            {% endif %}
                             <div class="clearfix"></div>
 
                         </div>
