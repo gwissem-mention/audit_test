@@ -178,6 +178,7 @@ class FrontController extends Controller
         $sansGabarit  = $request->request->get('sansGabarit');
         $newOne       = $request->request->get('newOne');
         $resultat     = $request->request->get('resultat');
+        $chapitreSelected = str_replace('wizard-head-', '', $request->request->get('chapitre-selected'));
         
         //try to get the connected user
         $user = $this->get('security.context')->getToken()->getUser();
@@ -322,7 +323,7 @@ class FrontController extends Controller
                 }
                 else
                 {
-                    return $this->redirect( $this->generateUrl('hopitalnumerique_autodiag_front_outil_resultat', array( 'outil' => $outil->getId(), 'resultat' => $resultat->getId(), 'alias' => $outil->getAlias()  ) ) );
+                    return $this->redirect( $this->generateUrl('hopitalnumerique_autodiag_front_outil_resultat', array( 'outil' => $outil->getId(), 'resultat' => $resultat->getId(), 'alias' => $outil->getAlias()  ) ). ($chapitreSelected !== '' ? ('#'. $chapitreSelected) : '') );
                 }
             }
             else
@@ -345,7 +346,7 @@ class FrontController extends Controller
             }
             else
             {
-                return $this->redirect( $this->generateUrl('hopitalnumerique_autodiag_front_outil_resultat', array( 'outil' => $outil->getId(), 'resultat' => $resultat->getId(), 'alias' => $outil->getAlias()  ) ) );
+                return $this->redirect( $this->generateUrl('hopitalnumerique_autodiag_front_outil_resultat', array( 'outil' => $outil->getId(), 'resultat' => $resultat->getId(), 'alias' => $outil->getAlias()  ) ). ($chapitreSelected !== '' ? ('#'. $chapitreSelected) : '') );
             }   
         }
         else

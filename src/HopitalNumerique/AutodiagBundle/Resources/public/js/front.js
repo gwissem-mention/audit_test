@@ -247,6 +247,8 @@ function calcAvancement()
  */
 function saveQuestionnaire( type, userConnected, resultatEnCours )
 {
+    $('#chapitre-selected').val($('ul#wizard-header li.stepy-active').attr('id'));
+    
     $('#action').val( type );
     if (type == 'valid' || type == 'save' || type == 'acces_resultats')
     {
