@@ -250,11 +250,14 @@ class ReferenceController extends Controller
 
                         foreach ($childs as $child) 
                         {
-                            foreach ($child->getDomaines() as $domaine) 
+                            if(count($child->getDomaines()) !== 0)
                             {
-                                if(!array_key_exists($domaine->getId(), $childsDomaines))
+                                foreach ($child->getDomaines() as $domaine) 
                                 {
-                                    $childsDomaines[$domaine->getId()] = $domaine;
+                                    if(!array_key_exists($domaine->getId(), $childsDomaines))
+                                    {
+                                        $childsDomaines[$domaine->getId()] = $domaine;
+                                    }
                                 }
                             }
                         }
@@ -264,12 +267,15 @@ class ReferenceController extends Controller
 
                         //Récupération des domaines du parent courant pour éviter la dupplication de domaine sur une entité
                         $daddyDomainesId = $daddy->getDomainesId();
-                        foreach ($childsDomaines as $domaine) 
+                        if(count($childsDomaines) !== 0)
                         {
-                            if(!in_array($domaine->getId(),$daddyDomainesId))
+                            foreach ($childsDomaines as $domaine) 
                             {
-                                //Si il n'a pas encore ce domaine, on lui ajoute
-                                $daddy->addDomaine($domaine);
+                                if(!in_array($domaine->getId(),$daddyDomainesId))
+                                {
+                                    //Si il n'a pas encore ce domaine, on lui ajoute
+                                    $daddy->addDomaine($domaine);
+                                }
                             }
                         }
 
