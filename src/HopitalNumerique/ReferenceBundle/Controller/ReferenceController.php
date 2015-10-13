@@ -245,8 +245,23 @@ class ReferenceController extends Controller
                         if($daddy->getId() === $parent->getId() 
                             && is_null($reference->getId()))
                         {
-                            $childs = count($childs) !== 0 ? array_merge(array($reference), $childs) : array($reference);
+                            if(count($childs) !== 0)
+                            {
+                                foreach ($childs as $child) 
+                                {
+                                    $childsTemp[] = $child;
+                                }
+
+                                $childsTemp[] = $reference;
+
+                                $childs = $childsTemp;
+                            }
+                            else
+                            {
+                                $childs = array($reference);
+                            }
                         }
+
 
                         foreach ($childs as $child) 
                         {
