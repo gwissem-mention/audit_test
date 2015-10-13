@@ -38,10 +38,14 @@ class ResultatController extends Controller
         
         $chapitres = $this->get('hopitalnumerique_autodiag.manager.resultat')->formateResultat( $resultat );
 
+        $fileName = __ROOT_DIRECTORY__ . '/files/autodiag/' . $resultat->getPdf();
+        $fileExist = file_exists($fileName);
+
         return $this->render( 'HopitalNumeriqueAutodiagBundle:Resultat:detail.html.twig' , array(
             'resultat'  => $resultat,
             'chapitres' => $chapitres,
-            'questionnairePrealableQuestions' => $questionnairePrealableQuestions
+            'fileExist' => $fileExist,
+            'questionnairePrealableQuestions' => $questionnairePrealableQuestions,
         ));
     }
 
@@ -146,7 +150,8 @@ class ResultatController extends Controller
             'sharedBy'      => 'Partagé par',
             'taux'          => 'Taux',
             'lastSave'      => 'Dernière sauvegarde',
-            'validation'    => 'Date validation'
+            'validation'    => 'Date validation',
+            'synthese'      => 'Synthèse ?',
         );
 
         $kernelCharset = $this->container->getParameter('kernel.charset');
@@ -349,6 +354,19 @@ class ResultatController extends Controller
         $user = $this->get('security.context')->getToken()->getUser();
 
         return $this->get('hopitalnumerique_autodiag.manager.resultat')->exportCsvCustom( $resultat, $user, $colonnes, $datas, 'export-analyse-resultats.csv', $kernelCharset );
+    }
+
+    public function pdfAction(Resultat $resultat)
+    {
+        $fileName = __ROOT_DIRECTORY__ . '/files/autodiag/' . $resultat->getPdf();
+
+        $options  = array(
+            'serve_filename' => 'resultat-outil-'.$resultat->getOutil()->getAlias().'.pdf',
+            'absolute_path'  => false,
+            'inline'         => false,
+        );
+
+        return $this->get('igorw_file_serve.response_factory')->create( $fileName , 'application/pdf', $options);
     }
     
     /**
