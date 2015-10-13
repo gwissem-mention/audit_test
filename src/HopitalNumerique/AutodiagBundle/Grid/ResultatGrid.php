@@ -58,6 +58,10 @@ class ResultatGrid extends Grid implements GridInterface
         $validationColumn->setSize( 130 );
         $this->addColonne( $validationColumn );
 
+        $syntheseColumn = new Column\BooleanColumn('synthese', 'Synthèse ?');
+        $syntheseColumn->setSize( 90 );
+        $this->addColonne( $syntheseColumn );
+
         //Colonnes invisible
         $this->addColonne( new Column\BlankColumn('id') );
     }

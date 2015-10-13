@@ -58,6 +58,8 @@ class ResultatManager extends BaseManager
                 $datas['etablissement'] = '';
             }
 
+            $datas['synthese'] = $resultat->getSynthese();
+
             $results[] = $datas;
         }
 
@@ -101,6 +103,8 @@ class ResultatManager extends BaseManager
                 $datas['etablissement'] = '';
                 $datas['userId']        = '';
             }
+
+            $datas['synthese'] = $resultat->getSynthese() ? 'Oui' : 'Non'; 
 
             $results[] = $datas;
         }

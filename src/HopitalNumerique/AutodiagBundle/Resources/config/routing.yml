@@ -211,6 +211,12 @@ hopitalnumerique_autodiag_resultat_share:
     requirements: 
         id : \d+ 
 
+hopitalnumerique_autodiag_resultat_pdf:
+    pattern:  /admin/outil/resultat/pdf/{id}
+    defaults: { _controller: "HopitalNumeriqueAutodiagBundle:Resultat:pdf" }
+    requirements:
+        id: \d+
+
 hopitalnumerique_autodiag_resultat_share_duplication:
     pattern:  /compte-hn/autodiagnostic/partage/duplication
     defaults: { _controller: "HopitalNumeriqueAutodiagBundle:Resultat:shareDuplication" }
