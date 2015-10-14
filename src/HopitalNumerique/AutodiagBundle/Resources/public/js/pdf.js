@@ -55,15 +55,201 @@ $(document).ready(function() {
         $('#chaptersNonConcernes').html(html);
     }
 
+    /* Manage values */
+    var datas        = $.parseJSON( $('#datas-radar').val() );
+    var categories   = [];
+    var values       = [];
+    var taux         = [];
+    var optimale     = [];
+    var nonConcernes = [];
+    var min          = [];
+    var max          = [];
+    var moyennes     = [];
+    var deciles2     = [];
+    var deciles8     = [];
+    var centPourCent = [];
+
+    $(datas).each(function(index, element ){
+        if( element.value != 'NC' || element.taux != 0 )
+        {
+            title = '<b>' + element.title + '</b><span style="display: none;">' + (element.centPourcentReponseObligatoire ? '' : ' (Taux de remplissage: ' + element.taux + '%)') + '</span>';
+            categories.push( title );
+            values.push( element.value );
+            optimale.push( element.opti );
+            min.push( element.min );
+            max.push( element.max );
+            
+            if (element.moyennePourcentage != undefined)
+                moyennes.push(element.moyennePourcentage);
+            if (element.decile2Pourcentage != undefined)
+                deciles2.push(element.decile2Pourcentage);
+            if (element.decile8Pourcentage != undefined)
+            {
+                deciles8.push(element.decile8Pourcentage);
+                centPourCent.push(100);
+            }
+
+            taux[ title ] = element.taux;
+        }
+        else
+        {
+            nonConcernes.push( element.title );
+        }
+    });
+
+    //Gestion des chapitres non concernes
+    if ( nonConcernes.length > 0 )
+    {
+        var html = '<b>Les éléments suivants n\'ont pas été diagnostiqués :</b> <ul>';
+
+        $(nonConcernes).each(function(index, element ){
+            html += '<li>' + element + '</li>';
+        });
+
+        html += '</ul>';
+        $('#chaptersNonConcernes').html(html);
+    }
+
+    var seriesRadar = [];
+
+    if(!jQuery.isEmptyObject(deciles8) && deciles8[0] != null )
+    {
+        seriesRadar.push({
+            dataLabels: {
+                enabled: true,
+                format: ' ',
+                softConnector: true,
+                align: 'left'
+            },
+            name  : 'Huitième décile',
+            marker: { symbol:'circle' },
+            data  : deciles8,
+            color : radarChartBenchmarkCouleurDecile8,
+            type  : 'line',
+            pointPlacement: 'on'
+        });
+    }
+    if(!jQuery.isEmptyObject(deciles2) && deciles2[0] != null )
+    {
+        seriesRadar.push({
+            dataLabels: {
+                enabled: true,
+                format: ' ',
+                softConnector: true,
+                align: 'left'
+            },
+            name  : 'Deuxième décile',
+            marker: { symbol:'circle' },
+            data  : deciles2,
+            color : radarChartBenchmarkCouleurDecile2,
+            type  : 'line',
+            pointPlacement: 'on'
+        });
+    }
+    if(!jQuery.isEmptyObject(moyennes) && moyennes[0] != null )
+    {
+        seriesRadar.push({
+            dataLabels: {
+                enabled: true,
+                format: ' ',
+                softConnector: true,
+                align: 'left'
+            },
+            name  : 'Moyenne du benchmark',
+            marker: { symbol:'circle' },
+            data  : moyennes,
+            color : '#777777',
+            lineWidth:1,
+            type  : 'line',
+            pointPlacement: 'on'
+        });
+    }
+    if(!jQuery.isEmptyObject(max) && max[0] != null )
+    {
+        seriesRadar.push({
+            dataLabels: {
+                enabled: true,
+                //format: '<b>{point.y:,.0f}%</b>',
+                format: ' ',
+                softConnector: true,
+                align: 'left'
+            },
+            name  : 'Valeur maximale de la synthèse',
+            marker: { symbol:'circle' },
+            data  : max,
+            color : '#00aa00',
+            type  : 'line',
+            pointPlacement: 'on'
+        });
+    }
+    
+    if(!jQuery.isEmptyObject(min) && min[0] != null )
+    {
+        seriesRadar.push({
+            dataLabels: {
+                enabled: true,
+                //format: '<b>{point.y:,.0f}%</b>',
+                format: ' ',
+                softConnector: true,
+                align: 'left'
+            },
+            name  : 'Valeur minimale de la synthèse',
+            marker: { symbol:'circle' },
+            data  : min,
+            color : '#aa0000',
+            type  : 'line',
+            pointPlacement: 'on'
+        });
+    }
+
+    var opti = false;
+    $.each(optimale, function(key, elem){
+        if( elem != null ){
+            opti = true;
+        }
+    });
+    if( opti ){
+        seriesRadar.push({
+            dataLabels: {
+                enabled: true,
+                format: '<b>{point.y:,.0f}%</b>',
+                softConnector: true,
+                align: 'left'
+            },
+            name  : 'Valeur optimale préconisée par l\'ANAP',
+            data  : optimale,
+            color : '#d60030',
+            type  : 'line',
+            pointPlacement: 'on'
+        });
+    }
+    
+    seriesRadar.push({
+        dataLabels: {
+            enabled: true,
+            formatter: function() {
+                var tau = taux[this.point.category];
+                return ( tau == 0 && this.point.series.name == (estSynthese ? 'Valeur moyenne de la synthèse' : 'Votre résultat') ) ? '' : '<b>' + number_format(this.point.y, 0) + '%</b>'
+            },
+            softConnector: true,
+            align: 'left'
+        },
+        name  : (estSynthese ? 'Valeur moyenne de la synthèse' : 'Votre résultat'),
+        color : '#6f3596',
+        marker: { symbol:'circle' },
+        type  : 'line',
+        data  : values,
+        pointPlacement: 'on'
+    });
+
     /* Créer le Spider Chart */
     if( categories.length > 0 ) {
         $('#radarChart').highcharts({
             chart : {
-                polar     : true,
-                type      : 'area',
-                width     : 750,
-                height    : 535,
-                animation : false
+                polar  : true,
+                type   : 'area',
+                height : 750,
+                width  : 900
             },
             title : {
                 text : null
@@ -72,7 +258,7 @@ $(document).ready(function() {
                 enabled : false
             },
             pane : {
-                size : '80%'
+                size : '90%'
             },
             xAxis : {
                 categories        : categories,
@@ -80,13 +266,14 @@ $(document).ready(function() {
                 lineWidth         : 0
             },
             legend:{
-                padding : 0
+                padding : 20,
+                reversed: true
             },
             yAxis : {
                 gridLineInterpolation : 'polygon',
                 lineWidth             : 0,
                 min                   : 0,
-                max                   : 110,
+                max                   : 100,
                 tickInterval          : 10,
                 gridLineDashStyle     : 'Dash',
                 labels                : {
@@ -97,55 +284,23 @@ $(document).ready(function() {
                 }
             },
             tooltip : {
-                shared    : true,
-                formatter : function() {
-                    var s   = this.x;
+                shared      : true,
+                formatter: function() {
+                    var s   = '';
                     var tau = taux[this.x]
 
                     $.each(this.points, function(i, point) {
-                        val = ( tau == 0 && point.series.name == "Score" ) ? 'NC' : number_format(point.y, 0) + '%';
-                        s += '<br/><span style="color:#333333">'+ point.series.name + ': '+ val + '</span>';
+                        if ('hideLabel' != point.series.name)
+                        {
+                            val = ( tau == 0 && point.series.name == (estSynthese ? 'Valeur moyenne de la synthèse' : 'Votre résultat') ) ? 'NC' : number_format(point.y, 0) + '%';
+                            s = '<br/><span style="color:#333333; font-size:10px">'+ point.series.name + ': '+ val + '</span>' + s;
+                        }
                     });
                     
-                    return s;
+                    return this.x + s;
                 }
             },
-            plotOptions : {
-                series : {
-                    animation : false
-                }
-            },
-            series : [
-                {
-                    dataLabels: {
-                        enabled: true,
-                        formatter: function() {
-                            var tau = taux[this.point.category];
-                            return ( tau == 0 && this.point.series.name == "Score" ) ? '' : '<b>' + number_format(this.point.y, 0) + '%</b>'
-                        },
-                        softConnector: true,
-                        align: 'left'
-                    },
-                    name  : 'Score',
-                    color : '#d9edf7',
-                    data  : values,
-                    type  : 'area',
-                    pointPlacement: 'on'
-                }, {
-                    dataLabels: {
-                        enabled: true,
-                        format: '<b>{point.y:,.0f}%</b>',
-                        softConnector: true,
-                        align: 'left'
-                    },
-                    name  : 'Valeur optimale préconisée par l\'ANAP',
-                    data  : optimale,
-                    color : '#6f3596',
-                    type  : 'area',
-                    pointPlacement: 'on'
-                }
-            ]
-
+            series : seriesRadar
         });
     }
 
