@@ -107,28 +107,6 @@ $(document).ready(function() {
 
     if(!jQuery.isEmptyObject(deciles8) && deciles8[0] != null )
     {
-        /*seriesRadar.push({
-            dataLabels: {
-                enabled: false,
-                softConnector: true,
-                align: 'left',
-                formatter:function() { return ''; }
-            },
-            name  : 'hideLabel',
-            showInLegend: false,
-            marker:
-            {
-                enabled:false,
-                radius:0,
-                states: { hover: { enabled:false } }
-            },
-            data  : centPourCent,
-            color : radarChartBenchmarkCouleurDecile8,
-            fillOpacity:0.07,
-            lineWidth:0,
-            type  : 'area',
-            pointPlacement: 'on'
-        });*/
         seriesRadar.push({
             dataLabels: {
                 enabled: true,
@@ -143,48 +121,9 @@ $(document).ready(function() {
             type  : 'line',
             pointPlacement: 'on'
         });
-        /*seriesRadar.push({
-            dataLabels: {
-                enabled: true,
-                format: ' ',
-                softConnector: true,
-                align: 'left'
-            },
-            name  : 'hideLabel',
-            showInLegend: false,
-            marker:
-            {
-                enabled:false,
-                radius:0,
-                states: { hover: { enabled:false } }
-            },
-            data  : deciles8,
-            color : '#ffffff',
-            fillOpacity:0.6,
-            lineWidth:0,
-            type  : 'area',
-            pointPlacement: 'on'
-        });*/
     }
     if(!jQuery.isEmptyObject(deciles2) && deciles2[0] != null )
     {
-        /*seriesRadar.push({
-            dataLabels: {
-                enabled: true,
-                format: ' ',
-                softConnector: true,
-                align: 'left'
-            },
-            name  : 'hideLabel',
-            showInLegend: false,
-            marker: { enabled:false, radius:0 },
-            data  : deciles2,
-            color : radarChartBenchmarkCouleurDecile2,
-            fillOpacity:0.06,
-            lineWidth:0,
-            type  : 'area',
-            pointPlacement: 'on'
-        });*/
         seriesRadar.push({
             dataLabels: {
                 enabled: true,
