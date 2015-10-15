@@ -100,7 +100,7 @@ $(document).ready(function() {
     if($.trim( window.location.hash.substring(1) ) != '')
     {
        var hashtag = parseInt(window.location.hash.substring(1));
-       hashtag--;
+       //hashtag--;
 
        $("#wizard-head-" + hashtag).click();
     }
