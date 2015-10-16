@@ -143,9 +143,8 @@ class EvaluationFrontController extends Controller
                 foreach ($connaissancesSession as $connaissanceSession)
                 {
                     $connaissance = $this->get('hopitalnumerique_user.manager.connaissance_ambassadeur_si')->findOneBy(array('user' => $user, 'domaine' => $connaissanceSession));
-                    
                     //Si il a deja cette connaissance, on ne le rajoute pas
-                    if(!is_null($connaissance->getConnaissance()))
+                    if(!is_null($connaissance) && !is_null($connaissance->getConnaissance()))
                     {
                         continue;
                     }
