@@ -288,7 +288,7 @@ abstract class Manager
             foreach($keys as $key) {
                 //cas Tableau
                 if( is_array($data) ){
-                    $val     = $data[$key];
+                    $val     = array_key_exists($key, $data) ? $data[$key] : '';
                     $ligne[] = is_null($val) ? '' : $val;
                 //Cas Objet
                 }else{
