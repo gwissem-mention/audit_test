@@ -24,6 +24,25 @@ class ImportExcelReponsesManager extends ReponseManagerAutodiag
         $this->_questionManager      = $questionManager;
     }
 
+    public function getReponsesAsArrayByResultat($resultatIds)
+    {
+        $reponsesByResultat = array();
+
+        $reponses = $this->findBy(array('id' => $resultatIds));
+
+        foreach ($reponses as $reponse) 
+        {
+            if(!array_key_exists($reponse->getResultat()->getId(), $reponsesByResultat))
+            {
+                $reponsesByResultat[$reponse->getResultat()->getId()] = array();
+            }
+
+            $reponsesByResultat[$reponse->getResultat()->getId()][$reponse->getId()] = $reponse;
+        }
+
+        return $reponsesByResultat;
+    }
+
     /**
      * Récupération des données des résultats du fichier excel d'import
      *
