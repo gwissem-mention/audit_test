@@ -171,11 +171,11 @@ class ImportExcelController extends Controller
                 if(array_key_exists($resultat->getId(), $reponses)){
                     foreach ($reponses[$resultat->getId()] as $reponse)
                     {
-                        $sheetReponses->setCellValueByColumnAndRow(0, $nbLigneReponse, $reponse->getId());
-                        $sheetReponses->setCellValueByColumnAndRow(1, $nbLigneReponse, $reponse->getValue());
-                        $sheetReponses->setCellValueByColumnAndRow(2, $nbLigneReponse, $reponse->getRemarque());
-                        $sheetReponses->setCellValueByColumnAndRow(3, (is_null($reponse->getResultat())) ? '' : $nbLigneReponse, $reponse->getResultat()->getId());
-                        $sheetReponses->setCellValueByColumnAndRow(4, (is_null($reponse->getQuestion())) ? '' : $nbLigneReponse, $reponse->getQuestion()->getId());
+                        $sheetReponses->setCellValueByColumnAndRow(0, $nbLigneReponse, $reponse['id']);
+                        $sheetReponses->setCellValueByColumnAndRow(1, $nbLigneReponse, $reponse['value']);
+                        $sheetReponses->setCellValueByColumnAndRow(2, $nbLigneReponse, $reponse['remarque']);
+                        $sheetReponses->setCellValueByColumnAndRow(3, $nbLigneReponse, $reponse['resId']);
+                        $sheetReponses->setCellValueByColumnAndRow(4, $nbLigneReponse, $reponse['queId']);
 
                         $nbLigneReponse++;
                     }

@@ -28,16 +28,16 @@ class ImportExcelReponsesManager extends ReponseManagerAutodiag
     {
         $reponsesByResultat = array();
 
-        $reponses = $this->findBy(array('id' => $resultatIds));
+        $reponses = $this->getRepository()->getReponsesByResultats($resultatIds)->getQuery()->getResult();
 
         foreach ($reponses as $reponse) 
         {
-            if(!array_key_exists($reponse->getResultat()->getId(), $reponsesByResultat))
+            if(!array_key_exists($reponse['resId'], $reponsesByResultat))
             {
-                $reponsesByResultat[$reponse->getResultat()->getId()] = array();
+                $reponsesByResultat[$reponse['resId']] = array();
             }
 
-            $reponsesByResultat[$reponse->getResultat()->getId()][$reponse->getId()] = $reponse;
+            $reponsesByResultat[$reponse['resId']][$reponse['id']] = $reponse;
         }
 
         return $reponsesByResultat;
