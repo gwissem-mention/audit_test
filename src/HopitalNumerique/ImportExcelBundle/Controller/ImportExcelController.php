@@ -140,6 +140,14 @@ class ImportExcelController extends Controller
                 }
             }
 
+            $resultatsIds = array();
+
+            foreach ($resultats as $resultat) {
+                $resultatsIds[] = $resultat->getId();
+            }
+
+            $reponses = $this->get('hopital_numerique_import_excel.manager.reponse')->getReponsesAsArrayByResultat($resultatsIds);
+
             $nbLigne = 2;
             $nbLigneReponse = 2;
             $nbLigneSynth   = 2;
@@ -160,17 +168,17 @@ class ImportExcelController extends Controller
 
                 $nbLigne++;
 
-                $reponses = $this->get('hopital_numerique_import_excel.manager.reponse')->findBy(array('resultat' => $resultat->getId()));
+                if(array_key_exists($resultat->getId(), $reponses)){
+                    foreach ($reponses[$resultat->getId()] as $reponse)
+                    {
+                        $sheetReponses->setCellValueByColumnAndRow(0, $nbLigneReponse, $reponse->getId());
+                        $sheetReponses->setCellValueByColumnAndRow(1, $nbLigneReponse, $reponse->getValue());
+                        $sheetReponses->setCellValueByColumnAndRow(2, $nbLigneReponse, $reponse->getRemarque());
+                        $sheetReponses->setCellValueByColumnAndRow(3, (is_null($reponse->getResultat())) ? '' : $nbLigneReponse, $reponse->getResultat()->getId());
+                        $sheetReponses->setCellValueByColumnAndRow(4, (is_null($reponse->getQuestion())) ? '' : $nbLigneReponse, $reponse->getQuestion()->getId());
 
-                foreach ($reponses as $reponse)
-                {
-                    $sheetReponses->setCellValueByColumnAndRow(0, $nbLigneReponse, $reponse->getId());
-                    $sheetReponses->setCellValueByColumnAndRow(1, $nbLigneReponse, $reponse->getValue());
-                    $sheetReponses->setCellValueByColumnAndRow(2, $nbLigneReponse, $reponse->getRemarque());
-                    $sheetReponses->setCellValueByColumnAndRow(3, (is_null($reponse->getResultat())) ? '' : $nbLigneReponse, $reponse->getResultat()->getId());
-                    $sheetReponses->setCellValueByColumnAndRow(4, (is_null($reponse->getQuestion())) ? '' : $nbLigneReponse, $reponse->getQuestion()->getId());
-
-                    $nbLigneReponse++;
+                        $nbLigneReponse++;
+                    }
                 }
 
                 foreach ($resultat->getResultats() as $resultSynth) 
