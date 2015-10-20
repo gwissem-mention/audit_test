@@ -31,4 +31,45 @@ class ResultatRepository extends EntityRepository
                          ->setMaxResults(1)
                          ->orderBy('res.dateValidation','DESC');
     }
+
+    public function getResultsAsArray( $idOutil )
+    {
+        return $this->_em->createQueryBuilder()
+                         ->select('res.id,
+                                   res.name,
+                                   res.dateLastSave,
+                                   res.dateCreation,
+                                   res.dateValidation,
+                                   res.tauxRemplissage,
+                                   res.pdf,
+                                   res.remarque,
+                                   st.id as stId,
+                                   out.id as outId,
+                                   usr.id as usrId,
+                                   res.synthese'
+                            )
+                         ->from('\HopitalNumerique\AutodiagBundle\Entity\Resultat', 'res')
+                         ->leftJoin('res.outil', 'out')
+                             ->andWhere('out.id = :idOutil')
+                             ->setParameter('idOutil', $idOutil )
+                         ->leftJoin('res.statut', 'st')
+                         ->leftJoin('res.user', 'usr')
+                         ->orderBy('res.id', 'ASC');
+    }
+
+
+
+    public function getResultsSynthesesAsArray( $idOutil )
+    {
+        return $this->_em->createQueryBuilder()
+                         ->select('res.id,
+                                   synth.id as synthId'
+                            )
+                         ->from('\HopitalNumerique\AutodiagBundle\Entity\Resultat', 'res')
+                         ->leftJoin('res.resultats', 'synth')
+                         ->leftJoin('res.outil', 'out')
+                             ->andWhere('out.id = :idOutil')
+                             ->setParameter('idOutil', $idOutil )
+                         ->orderBy('res.id', 'ASC');
+    }
 }
