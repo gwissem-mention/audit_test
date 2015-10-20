@@ -116,7 +116,7 @@ class SessionRepository extends EntityRepository
             ->andWhere('ses.dateOuvertureInscription <= :today')
             ->andWhere('ses.dateFermetureInscription >= :today')
             ->andWhere('ses.archiver != true')
-            ->andWhere('etat.id >= :idEtat')
+            ->andWhere('etat.id = :idEtat')
             ->setParameters( array(
                 'idDomaine' => $idDomaine,
                 'today'     => new \DateTime(),
