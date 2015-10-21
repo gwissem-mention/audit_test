@@ -9,13 +9,6 @@ use Doctrine\ORM\EntityRepository;
  */
 class ReponseRepository extends EntityRepository
 {
-    /**
-     * Retourne la liste des questions dans le bon ordre
-     *
-     * @param Chapitre $chapitre chapitre
-     *
-     * @return integer
-     */
     public function getReponsesByResultats( $resultatIds )
     {
         return $this->_em->createQueryBuilder()
