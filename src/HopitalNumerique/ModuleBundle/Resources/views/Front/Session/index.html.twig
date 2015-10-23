@@ -176,7 +176,7 @@
                                         {% if app.user.profilEtablissementSante is null %}
                                             <li><span class="champ_manquant"><strong>Profil</strong></span></li>
                                         {% endif %}
-                                        {% if app.user.etablissementRattachementSante is null and app.user.autreStructureRattachementSante|trim == "" %}
+                                        {% if app.user.etablissementRattachementSante is null and app.user.autreStructureRattachementSante|trim == "" and app.user.nomStructure|trim == "" %}
                                             <li><span class="champ_manquant"><strong>Établissement</strong></span></li>
                                         {% endif %}
                                     </ul>
