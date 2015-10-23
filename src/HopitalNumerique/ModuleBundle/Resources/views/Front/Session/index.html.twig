@@ -156,7 +156,7 @@
                         <div class="description">
                             {% if app.user.region is not null 
                                 and app.user.profilEtablissementSante is not null 
-                                and (app.user.etablissementRattachementSante is not null or app.user.autreStructureRattachementSante|trim != "") %}
+                                and (app.user.etablissementRattachementSante is not null or app.user.autreStructureRattachementSante|trim != "" or app.user.nomStructure|trim != "") %}
                                 {# Render de la vue de récupérations des différentes modules #}
                                 {{ render(controller("HopitalNumeriqueModuleBundle:Front/InscriptionFront:add", {'session' : session} )) }}
 
