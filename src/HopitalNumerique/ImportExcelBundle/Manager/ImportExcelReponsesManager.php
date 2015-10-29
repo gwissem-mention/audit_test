@@ -3,8 +3,6 @@
 namespace HopitalNumerique\ImportExcelBundle\Manager;
 
 use HopitalNumerique\AutodiagBundle\Manager\ReponseManager as ReponseManagerAutodiag;
-use Nodevo\ToolsBundle\Tools\Chaine;
-use Doctrine\ORM\EntityManager;
 use HopitalNumerique\AutodiagBundle\Manager\ResultatManager;
 use HopitalNumerique\AutodiagBundle\Manager\QuestionManager;
 
@@ -22,25 +20,6 @@ class ImportExcelReponsesManager extends ReponseManagerAutodiag
         parent::__construct($entityManager);
         $this->_resultatManager = $resultatManager;
         $this->_questionManager      = $questionManager;
-    }
-
-    public function getReponsesAsArrayByResultat($resultatIds)
-    {
-        $reponsesByResultat = array();
-
-        $reponses = $this->getRepository()->getReponsesByResultats($resultatIds)->getQuery()->getResult();
-
-        foreach ($reponses as $reponse) 
-        {
-            if(!array_key_exists($reponse['resId'], $reponsesByResultat))
-            {
-                $reponsesByResultat[$reponse['resId']] = array();
-            }
-
-            $reponsesByResultat[$reponse['resId']][$reponse['id']] = $reponse;
-        }
-
-        return $reponsesByResultat;
     }
 
     /**
