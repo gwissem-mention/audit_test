@@ -3,7 +3,6 @@
 namespace HopitalNumerique\ImportExcelBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Symfony\Component\HttpFoundation\Response;
 use HopitalNumerique\AutodiagBundle\Entity\Outil; 
 use Symfony\Component\HttpFoundation\Request;
 
@@ -72,20 +71,9 @@ class ImportExcelController extends Controller
             //Récupèration de la feuille Question
             $sheetQuestions = $phpExcelObject->getSheetByName('questions');
 
-            //Récupèration de la feuille Résultat
-            $sheetResultats = $phpExcelObject->getSheetByName('resultats');
-
-            //Récupèration de la feuille Réponse
-            $sheetReponses  = $phpExcelObject->getSheetByName('reponses');
-
-            //Récupèration de la feuille Synthese
-            $sheetSynthese  = $phpExcelObject->getSheetByName('syntheses');
-
             //Nettoyage des données sur l'autodiag courant
             $categories     = $this->get('hopital_numerique_import_excel.manager.categorie')->findBy(array('outil' => $outil));
             $chapitres      = $this->get('hopital_numerique_import_excel.manager.chapitre')->findBy(array('outil' => $outil));
-            $resultats      = $this->get('hopital_numerique_import_excel.manager.resultat')->getResultsAsArray($outil);
-            $resultatsSynth = $this->get('hopital_numerique_import_excel.manager.resultat')->getResultsSynthesesAsArray($outil);
 
             $nbLigne = 2;
             foreach ($categories as $categorie) 
@@ -141,56 +129,6 @@ class ImportExcelController extends Controller
                 }
             }
 
-            $resultatsIds = array();
-
-            foreach ($resultats as $resultat) {
-                $resultatsIds[] = $resultat['id'];
-            }
-
-            $reponses = $this->get('hopital_numerique_import_excel.manager.reponse')->getReponsesAsArrayByResultat($resultatsIds);
-
-            $nbLigne = 2;
-            $nbLigneReponse = 2;
-            $nbLigneSynth   = 2;
-            foreach ($resultats as $resultat)
-            {
-                $sheetResultats->setCellValueByColumnAndRow(0, $nbLigne, $resultat['id']);
-                $sheetResultats->setCellValueByColumnAndRow(1, $nbLigne, $resultat['name']);
-                $sheetResultats->setCellValueByColumnAndRow(2, $nbLigne, (is_null($resultat['dateLastSave'])) ? '' : $resultat['dateLastSave']->format('Y-m-d'));
-                $sheetResultats->setCellValueByColumnAndRow(4, $nbLigne, (is_null($resultat['dateCreation'])) ? '' : $resultat['dateCreation']->format('Y-m-d'));
-                $sheetResultats->setCellValueByColumnAndRow(3, $nbLigne, (is_null($resultat['dateValidation'])) ? '' : $resultat['dateValidation']->format('Y-m-d'));
-                $sheetResultats->setCellValueByColumnAndRow(5, $nbLigne, $resultat['tauxRemplissage']);
-                $sheetResultats->setCellValueByColumnAndRow(6, $nbLigne, $resultat['pdf']);
-                $sheetResultats->setCellValueByColumnAndRow(7, $nbLigne, $resultat['remarque']);
-                $sheetResultats->setCellValueByColumnAndRow(8, $nbLigne, (is_null($resultat['stId'])) ? '' : $resultat['stId']);
-                $sheetResultats->setCellValueByColumnAndRow(9, $nbLigne, (is_null($resultat['outId'])) ? '' : $resultat['outId']);
-                $sheetResultats->setCellValueByColumnAndRow(10, $nbLigne, (is_null($resultat['usrId'])) ? '' : $resultat['usrId']);
-                $sheetResultats->setCellValueByColumnAndRow(11, $nbLigne, $resultat['synthese'] ? 'Oui' : 'Non');
-
-                $nbLigne++;
-
-                if(array_key_exists($resultat['id'], $reponses)){
-                    foreach ($reponses[$resultat['id']] as $reponse)
-                    {
-                        $sheetReponses->setCellValueByColumnAndRow(0, $nbLigneReponse, $reponse['id']);
-                        $sheetReponses->setCellValueByColumnAndRow(1, $nbLigneReponse, $reponse['value']);
-                        $sheetReponses->setCellValueByColumnAndRow(2, $nbLigneReponse, $reponse['remarque']);
-                        $sheetReponses->setCellValueByColumnAndRow(3, $nbLigneReponse, $reponse['resId']);
-                        $sheetReponses->setCellValueByColumnAndRow(4, $nbLigneReponse, $reponse['queId']);
-
-                        $nbLigneReponse++;
-                    }
-                }
-
-                foreach ($resultatsSynth[$resultat['id']] as $resultSynth) 
-                {
-                    $sheetSynthese->setCellValueByColumnAndRow(0, $nbLigneSynth, $resultat['id'] );
-                    $sheetSynthese->setCellValueByColumnAndRow(1, $nbLigneSynth, $resultSynth );
-
-                    $nbLigneSynth++;
-                }
-            }
-            
             $phpExcelObject = $this->fillSheetsProcessForExport($phpExcelObject, $outil);
             
             

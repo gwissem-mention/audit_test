@@ -3,11 +3,8 @@
 namespace HopitalNumerique\ImportExcelBundle\Manager;
 
 use HopitalNumerique\AutodiagBundle\Manager\ResultatManager as ResultatManagerAutodiag;
-use Nodevo\ToolsBundle\Tools\Chaine;
-use Doctrine\ORM\EntityManager;
 use HopitalNumerique\ReferenceBundle\Manager\ReferenceManager;
 use HopitalNumerique\UserBundle\Manager\UserManager;
-use HopitalNumerique\AutodiagBundle\Entity\Outil;
 use HopitalNumerique\AutodiagBundle\Manager\OutilManager;
 
 /**
@@ -24,30 +21,6 @@ class ImportExcelResultatManager extends ResultatManagerAutodiag
         parent::__construct($entityManager, $outilManager);
         $this->_referenceManager = $referenceManager;
         $this->_userManager      = $userManager;
-    }
-
-    public function getResultsSynthesesAsArray(Outil $outil)
-    {
-        $res = array();
-
-        $resultatsSynth = $this->getRepository()->getResultsSynthesesAsArray($outil->getId())->getQuery()->getResult();
-
-        foreach ($resultatsSynth as $synth) 
-        {
-            if(!array_key_exists($synth['id'], $res))
-            {
-                $res[$synth['id']] = array();
-            }
-
-            $res[$synth['id']][] = $synth['synthId'];
-        }
-
-        return $res;
-    }
-
-    public function getResultsAsArray(Outil $outil)
-    {
-        return $this->getRepository()->getResultsAsArray($outil->getId())->getQuery()->getResult();
     }
 
     /**

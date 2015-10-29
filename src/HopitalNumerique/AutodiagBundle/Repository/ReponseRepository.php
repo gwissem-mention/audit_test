@@ -9,15 +9,5 @@ use Doctrine\ORM\EntityRepository;
  */
 class ReponseRepository extends EntityRepository
 {
-    public function getReponsesByResultats( $resultatIds )
-    {
-        return $this->_em->createQueryBuilder()
-                         ->select('rep.id, rep.value, rep.remarque, res.id as resId, que.id as queId')
-                         ->from('\HopitalNumerique\AutodiagBundle\Entity\Reponse', 'rep')
-                         ->leftJoin('rep.question', 'que')
-                         ->leftJoin('rep.resultat', 'res')
-                         ->andWhere('res.id IN (:resultatIds)')
-                         ->setParameter('resultatIds', $resultatIds )
-                         ->orderBy('res.id', 'ASC');
-    }
+    
 }

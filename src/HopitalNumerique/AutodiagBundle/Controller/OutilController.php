@@ -1,5 +1,4 @@
 <?php
-
 namespace HopitalNumerique\AutodiagBundle\Controller;
 
 use HopitalNumerique\AutodiagBundle\Entity\Outil;
