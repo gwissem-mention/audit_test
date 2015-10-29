@@ -52,7 +52,6 @@ class ImportExcelController extends Controller
      */
     public function downloadExportAction(Outil $outil)
     {
-        
         //Plantage sinon
         ini_set('memory_limit', '2048M');
         ini_set('max_execution_time', 900);
@@ -138,7 +137,7 @@ class ImportExcelController extends Controller
 
             // adding headers
             $response->headers->set('Content-Type', 'text/vnd.ms-excel; charset=utf-8');
-            $response->headers->set('Content-Disposition', 'attachment;filename=Export-Autodiag-'. $outil->getId() .'.xls');
+            $response->headers->set('Content-Disposition', 'attachment;filename=Export-Autodiag-'. $outil->getId() .'.xlsx');
             $response->headers->set('Pragma', 'public');
             $response->headers->set('Cache-Control', 'maxage=1');
 
