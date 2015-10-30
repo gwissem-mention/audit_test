@@ -247,9 +247,7 @@ $(document).ready(function() {
         $('#radarChart').highcharts({
             chart : {
                 polar  : true,
-                type   : 'area',
-                height : 750,
-                width  : 900
+                type   : 'area'
             },
             title : {
                 text : null
