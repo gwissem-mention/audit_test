@@ -370,6 +370,7 @@ class Objet implements RoutedItemInterface
         $this->nbVue         = 0;
         $this->commentaires  = true;
         $this->notes         = true;
+        $this->btnSociaux    = true;
         $this->isInfraDoc    = false;
         $this->isArticle     = false;
         $this->lock          = false;
