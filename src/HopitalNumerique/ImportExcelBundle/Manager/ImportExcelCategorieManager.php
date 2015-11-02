@@ -49,7 +49,7 @@ class ImportExcelCategorieManager extends CategManagerAutodiag
             }
             elseif($categorie->getOutil()->getId() !== $outil->getId())
             {
-                die('Erreur dans les catégories : Vous modifié une catégorie d\'un autre autodiagnostic !');
+                die('Erreur dans les catégories : Vous modifiez une catégorie d\'un autre autodiagnostic !');
             }
 
             $categorie->setTitle($categorieDonnees['libelle']);

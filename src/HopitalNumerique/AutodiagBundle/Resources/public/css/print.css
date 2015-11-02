@@ -10,7 +10,7 @@ img{ width:auto !important }
 #resultats h1{text-align: center; margin-top:20px; font-size: 22px;}
 #resultats #graphiques{width: 100%}
 #resultats #graphiques, #chapitres, #results {display: block !important}
-#resultats #graphiques #radarChart{width: 650px; height: 535px; margin: auto!important}
+#resultats #graphiques #radarChart { height: auto; margin: auto!important; max-height: none; max-width: none; min-width: initial; }
 #resultats #graphiques .panel{box-shadow: none !important; border-radius: 0}
 #resultats #graphiques .panel-default{height:90px}
 #resultats #graphiques .panel h3.toPrint{color:#d60030; display: block; margin-bottom: 10px; font-size: 14px; margin-top: 0 }

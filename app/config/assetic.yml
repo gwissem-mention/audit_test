@@ -113,6 +113,7 @@ assetic:
             inputs:
                 - "%kernel.root_dir%/Resources/components/highcharts.com/js/highcharts.src.js"
                 - "%kernel.root_dir%/Resources/components/highcharts.com/js/highcharts-more.src.js"
+                - "%kernel.root_dir%/Resources/components/highcharts.com/js/modules/exporting.src.js"
             filters : [ ?yui_js ]
         jquery_gridster_js:
             inputs:
@@ -150,6 +151,9 @@ assetic:
             inputs:
                 - "%kernel.root_dir%/Resources/components/jquery.mosaicflow/jquery.mosaicflow.min.js"
             filters : [ ?yui_js ]
+        svg_js:
+            inputs:
+                - "%kernel.root_dir%/Resources/components/canvg-gabelerner/canvg.js"
         #CSS
         bbcode_css:
             inputs:

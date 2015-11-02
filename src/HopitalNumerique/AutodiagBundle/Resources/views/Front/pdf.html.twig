@@ -34,11 +34,30 @@
         "@jquery_js"
         "@bootstrap_js"
         '@highcharts_js'
+        '@svg_js'
         'bundles/hopitalnumeriquecore/js/script.js'
         'bundles/hopitalnumeriqueautodiag/js/pdf.js'
     %}
         <script type="text/javascript" src="{{app.request.getSchemeAndHttpHost()}}{{ asset_url }}"></script>
     {% endjavascripts %}
+    <script type="text/javascript">
+        var radarChartBenchmarkCouleurDecile2 = '{{ radarChartBenchmarkCouleurDecile2 }}';
+        var radarChartBenchmarkCouleurDecile8 = '{{ radarChartBenchmarkCouleurDecile8 }}';
+        var estSynthese = {{ resultat.synthese ? 'true' : 'false' }};
+    </script>
 {% endblock %}
 
 {% include 'HopitalNumeriqueAutodiagBundle:Front:resultats-donnees.html.twig' with {'resultat':resultat, 'pdf':true, 'sansGabarit': false} %}
+
+
+<script type="text/javascript">
+    // Transformation du radar en canvas
+    $(document).ready(function() {
+        $('#radarChart').css({ width:'600px',height:'450px' });
+        var radarSvg = $('#radarChart').highcharts().getSVG();
+        $("#radarChart").html('<canvas id="radar-canvas"></cancas>');
+        canvg(document.getElementById('radar-canvas'), radarSvg);
+        
+    });
+</script>
+
