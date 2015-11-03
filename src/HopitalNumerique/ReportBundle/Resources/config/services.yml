@@ -9,7 +9,7 @@ parameters:
 services:
     hopitalnumerique_report.manager.report:
         class: %hopitalnumerique_report.manager.report.class%
-        arguments: ["@doctrine.orm.entity_manager", "%hopital_numerique_report.options%"]
+        arguments: ["@doctrine.orm.entity_manager", "@hopitalnumerique_user.manager.user", "%hopital_numerique_report.options%"]
         calls:
            - [ setCache, [ @liip_doctrine_cache.ns.main ] ]
 

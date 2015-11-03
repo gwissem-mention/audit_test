@@ -20,7 +20,7 @@ class ReportRepository extends EntityRepository
      * @author Alexis VAILLANT
      * @copyright Nodevo
      */
-    public function getDatasForGrid( \StdClass $condition = null )
+    public function getDatasForGrid($domainesIds, \StdClass $condition = null )
     {
         $qb = $this->_em->createQueryBuilder();
         $qb->select('rep.id, 
@@ -32,9 +32,16 @@ class ReportRepository extends EntityRepository
                      rep.observations,
                      rep.archive,
                      rep.url,
-                     rep.userAgent')
+                     rep.userAgent,
+                     domaine.nom as domaineNom')
             ->from('HopitalNumeriqueReportBundle:Report', 'rep')
-            ->innerJoin('rep.user','user');
+            ->innerJoin('rep.user','user')
+            ->leftJoin('rep.domaines', 'domaine')
+                ->where($qb->expr()->orX(
+                    $qb->expr()->in('domaine.id', ':domainesId'),
+                    $qb->expr()->isNull('domaine.id')
+                ))
+            ->setParameter('domainesId', $domainesIds);
     
         return $qb;
     }

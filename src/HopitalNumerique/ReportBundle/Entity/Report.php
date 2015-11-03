@@ -2,6 +2,7 @@
 
 namespace HopitalNumerique\ReportBundle\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 
 //Asserts Stuff
@@ -70,10 +71,20 @@ class Report
     */
     protected $archive;
 
+    /**
+     * @ORM\ManyToMany(targetEntity="\HopitalNumerique\DomaineBundle\Entity\Domaine", cascade={"persist"})
+     * @ORM\JoinTable(name="hn_domaine_gestions_report",
+     *      joinColumns={ @ORM\JoinColumn(name="rep_id", referencedColumnName="id", onDelete="CASCADE")},
+     *      inverseJoinColumns={ @ORM\JoinColumn(name="dom_id", referencedColumnName="dom_id", onDelete="CASCADE")}
+     * )
+     */
+    protected $domaines;
+
     public function __construct()
     {
         $this->date    = new \DateTime();
         $this->archive = false;
+        $this->domaines = new ArrayCollection();
     }
 
 
@@ -225,5 +236,52 @@ class Report
     public function getUser()
     {
         return $this->user;
+    }
+
+    /**
+     * Set one domaine and delete other
+     *
+     * @param \HopitalNumerique\DomaineBundle\Entity\Domaine $domaine
+     * @return Report
+     */
+    public function setDomaine(\HopitalNumerique\DomaineBundle\Entity\Domaine $domaine)
+    {
+        $this->domaines->clear();
+        $this->domaines->add($domaine);
+
+        return $this;
+    }
+
+    /**
+     * Add domaines
+     *
+     * @param \HopitalNumerique\DomaineBundle\Entity\Domaine $domaines
+     * @return Report
+     */
+    public function addDomaine(\HopitalNumerique\DomaineBundle\Entity\Domaine $domaines)
+    {
+        $this->domaines[] = $domaines;
+
+        return $this;
+    }
+
+    /**
+     * Remove domaines
+     *
+     * @param \HopitalNumerique\DomaineBundle\Entity\Domaine $domaines
+     */
+    public function removeDomaine(\HopitalNumerique\DomaineBundle\Entity\Domaine $domaines)
+    {
+        $this->domaines->removeElement($domaines);
+    }
+
+    /**
+     * Get domaines
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getDomaines()
+    {
+        return $this->domaines;
     }
 }

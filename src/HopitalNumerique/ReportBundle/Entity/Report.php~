@@ -70,9 +70,19 @@ class Report
     */
     protected $archive;
 
+    /**
+     * @ORM\ManyToMany(targetEntity="\HopitalNumerique\DomaineBundle\Entity\Domaine", cascade={"persist"})
+     * @ORM\JoinTable(name="hn_domaine_gestions_report",
+     *      joinColumns={ @ORM\JoinColumn(name="id", referencedColumnName="rep_id", onDelete="CASCADE")},
+     *      inverseJoinColumns={ @ORM\JoinColumn(name="dom_id", referencedColumnName="dom_id", onDelete="CASCADE")}
+     * )
+     */
+    protected $domaines;
+
     public function __construct()
     {
-        $this->date = new \DateTime();
+        $this->date    = new \DateTime();
+        $this->archive = false;
     }
 
 
@@ -87,4 +97,142 @@ class Report
     }
 
     
+
+    /**
+     * Set date
+     *
+     * @param \DateTime $date
+     * @return Report
+     */
+    public function setDate($date)
+    {
+        $this->date = $date;
+
+        return $this;
+    }
+
+    /**
+     * Get date
+     *
+     * @return \DateTime 
+     */
+    public function getDate()
+    {
+        return $this->date;
+    }
+
+    /**
+     * Set url
+     *
+     * @param string $url
+     * @return Report
+     */
+    public function setUrl($url)
+    {
+        $this->url = $url;
+
+        return $this;
+    }
+
+    /**
+     * Get url
+     *
+     * @return string 
+     */
+    public function getUrl()
+    {
+        return $this->url;
+    }
+
+    /**
+     * Set observations
+     *
+     * @param string $observations
+     * @return Report
+     */
+    public function setObservations($observations)
+    {
+        $this->observations = $observations;
+
+        return $this;
+    }
+
+    /**
+     * Get observations
+     *
+     * @return string 
+     */
+    public function getObservations()
+    {
+        return $this->observations;
+    }
+
+    /**
+     * Set userAgent
+     *
+     * @param string $userAgent
+     * @return Report
+     */
+    public function setUserAgent($userAgent)
+    {
+        $this->userAgent = $userAgent;
+
+        return $this;
+    }
+
+    /**
+     * Get userAgent
+     *
+     * @return string 
+     */
+    public function getUserAgent()
+    {
+        return $this->userAgent;
+    }
+
+    /**
+     * Set archive
+     *
+     * @param boolean $archive
+     * @return Report
+     */
+    public function setArchive($archive)
+    {
+        $this->archive = $archive;
+
+        return $this;
+    }
+
+    /**
+     * Get archive
+     *
+     * @return boolean 
+     */
+    public function getArchive()
+    {
+        return $this->archive;
+    }
+
+    /**
+     * Set user
+     *
+     * @param \HopitalNumerique\UserBundle\Entity\User $user
+     * @return Report
+     */
+    public function setUser(\HopitalNumerique\UserBundle\Entity\User $user = null)
+    {
+        $this->user = $user;
+
+        return $this;
+    }
+
+    /**
+     * Get user
+     *
+     * @return \HopitalNumerique\UserBundle\Entity\User 
+     */
+    public function getUser()
+    {
+        return $this->user;
+    }
 }
