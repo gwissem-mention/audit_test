@@ -49,6 +49,13 @@ class Questionnaire
      * @ORM\Column(name="qst_occurrence_multiple", type="boolean", nullable=false, options={"default"=false, "comment"="Indique si le questionnaire peut être répondu plusieurs fois"})
      */
     private $occurrenceMultiple;
+    
+    /**
+     * @var \Doctrine\Common\Collections\ArrayCollection
+     * 
+     * @ORM\OneToMany(targetEntity="Occurrence", mappedBy="questionnaire")
+     */
+    private $occurrences;
 
     /**
      * @ORM\OneToMany(targetEntity="Question", mappedBy="questionnaire", cascade={"persist", "remove" })
@@ -148,6 +155,62 @@ class Questionnaire
     public function setLock($lock)
     {
         $this->lock = $lock;
+    }
+
+    /**
+     * Set occurrenceMultiple
+     *
+     * @param boolean $occurrenceMultiple
+     * @return Questionnaire
+     */
+    public function setOccurrenceMultiple($occurrenceMultiple)
+    {
+        $this->occurrenceMultiple = $occurrenceMultiple;
+
+        return $this;
+    }
+
+    /**
+     * Get occurrenceMultiple
+     *
+     * @return boolean 
+     */
+    public function isOccurrenceMultiple()
+    {
+        return $this->occurrenceMultiple;
+    }
+
+    /**
+     * Add occurrences
+     *
+     * @param \HopitalNumerique\QuestionnaireBundle\Entity\Occurrence $occurrences
+     * @return Questionnaire
+     */
+    public function addOccurrence(\HopitalNumerique\QuestionnaireBundle\Entity\Occurrence $occurrences)
+    {
+        $this->occurrences[] = $occurrences;
+
+        return $this;
+    }
+
+    /**
+     * Remove occurrences
+     *
+     * @param \HopitalNumerique\QuestionnaireBundle\Entity\Occurrence $occurrences
+     */
+    public function removeOccurrence(\HopitalNumerique\QuestionnaireBundle\Entity\Occurrence $occurrences)
+    {
+        $this->occurrences->removeElement($occurrences);
+    }
+
+    /**
+     * Get occurrences
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getOccurrences()
+    {
+        return $this->occurrences;
     }
     
 
@@ -333,28 +396,5 @@ class Questionnaire
         }
 
         return $domainesId;
-    }
-
-    /**
-     * Set occurrenceMultiple
-     *
-     * @param boolean $occurrenceMultiple
-     * @return Questionnaire
-     */
-    public function setOccurrenceMultiple($occurrenceMultiple)
-    {
-        $this->occurrenceMultiple = $occurrenceMultiple;
-
-        return $this;
-    }
-
-    /**
-     * Get occurrenceMultiple
-     *
-     * @return boolean 
-     */
-    public function getOccurrenceMultiple()
-    {
-        return $this->occurrenceMultiple;
     }
 }

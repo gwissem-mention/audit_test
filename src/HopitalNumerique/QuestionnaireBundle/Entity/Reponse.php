@@ -46,7 +46,9 @@ class Reponse
     private $reponse;
     
     /**
-     * @ORM\ManyToOne(targetEntity="Occurrence")
+     * @var \HopitalNumerique\QuestionnaireBundle\Entity\Occurrence
+     * 
+     * @ORM\ManyToOne(targetEntity="Occurrence", inversedBy="reponses")
      * @ORM\JoinColumn(name="occ_id", referencedColumnName="occ_id")
      */
     private $occurence;
