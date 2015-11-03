@@ -25,7 +25,23 @@ class Occurrence
      *
      * @ORM\Column(name="occ_libelle", type="string", length=255, nullable=false)
      */
-    protected $libelle;
+    private $libelle;
+    
+    /**
+     * @var \Doctrine\Common\Collections\ArrayCollection
+     * 
+     * @ORM\OneToMany(targetEntity="Reponse", mappedBy="occurence")
+     */
+    private $reponses;
+
+
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->reponses = new \Doctrine\Common\Collections\ArrayCollection();
+    }
 
 
     /**
@@ -59,5 +75,38 @@ class Occurrence
     public function getLibelle()
     {
         return $this->libelle;
+    }
+
+    /**
+     * Add reponses
+     *
+     * @param \HopitalNumerique\QuestionnaireBundle\Entity\Reponse $reponses
+     * @return Occurrence
+     */
+    public function addReponse(\HopitalNumerique\QuestionnaireBundle\Entity\Reponse $reponses)
+    {
+        $this->reponses[] = $reponses;
+
+        return $this;
+    }
+
+    /**
+     * Remove reponses
+     *
+     * @param \HopitalNumerique\QuestionnaireBundle\Entity\Reponse $reponses
+     */
+    public function removeReponse(\HopitalNumerique\QuestionnaireBundle\Entity\Reponse $reponses)
+    {
+        $this->reponses->removeElement($reponses);
+    }
+
+    /**
+     * Get reponses
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getReponses()
+    {
+        return $this->reponses;
     }
 }

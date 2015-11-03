@@ -46,6 +46,12 @@ class Reponse
     private $reponse;
     
     /**
+     * @ORM\ManyToOne(targetEntity="Occurrence")
+     * @ORM\JoinColumn(name="occ_id", referencedColumnName="occ_id")
+     */
+    private $occurence;
+    
+    /**
      * @ORM\ManyToOne(targetEntity="\HopitalNumerique\ReferenceBundle\Entity\Reference", cascade={"persist"})
      * @ORM\JoinColumn(name="ref_reference", referencedColumnName="ref_id")
      */
@@ -127,6 +133,29 @@ class Reponse
     public function getReponse()
     {
         return $this->reponse;
+    }
+
+    /**
+     * Set occurence
+     *
+     * @param \HopitalNumerique\QuestionnaireBundle\Entity\Occurrence $occurence
+     * @return Reponse
+     */
+    public function setOccurence(\HopitalNumerique\QuestionnaireBundle\Entity\Occurrence $occurence = null)
+    {
+        $this->occurence = $occurence;
+
+        return $this;
+    }
+
+    /**
+     * Get occurence
+     *
+     * @return \HopitalNumerique\QuestionnaireBundle\Entity\Occurrence 
+     */
+    public function getOccurence()
+    {
+        return $this->occurence;
     }
 
     /**
