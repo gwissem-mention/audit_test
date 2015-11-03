@@ -42,6 +42,13 @@ class Questionnaire
      * @ORM\Column(name="qst_lien", type="string", length=255, nullable=true, options = {"comment" = "Lien de redirection après validation du questionnaire"})
      */
     protected $lien;
+    
+    /**
+     * @var boolean
+     * 
+     * @ORM\Column(name="qst_occurrence_multiple", type="boolean", nullable=false, options={"default"=false, "comment"="Indique si le questionnaire peut être répondu plusieurs fois"})
+     */
+    private $occurrenceMultiple;
 
     /**
      * @ORM\OneToMany(targetEntity="Question", mappedBy="questionnaire", cascade={"persist", "remove" })
@@ -75,6 +82,7 @@ class Questionnaire
     {
         $this->questions    = new \Doctrine\Common\Collections\ArrayCollection();
         $this->lock = false;
+        $this->occurrenceMultiple = false;
     }
 
     /**
@@ -325,5 +333,28 @@ class Questionnaire
         }
 
         return $domainesId;
+    }
+
+    /**
+     * Set occurrenceMultiple
+     *
+     * @param boolean $occurrenceMultiple
+     * @return Questionnaire
+     */
+    public function setOccurrenceMultiple($occurrenceMultiple)
+    {
+        $this->occurrenceMultiple = $occurrenceMultiple;
+
+        return $this;
+    }
+
+    /**
+     * Get occurrenceMultiple
+     *
+     * @return boolean 
+     */
+    public function getOccurrenceMultiple()
+    {
+        return $this->occurrenceMultiple;
     }
 }

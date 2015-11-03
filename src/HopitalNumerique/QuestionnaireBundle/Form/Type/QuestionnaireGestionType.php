@@ -31,9 +31,7 @@ class QuestionnaireGestionType extends AbstractType
                 'attr'       => array(
                     'class'     => 'validate[required]'
                 )
-            ));
-
-        $builder
+            ))
             ->add('lien', 'text', array(
                 'required'   => false,
                 'label'      => 'Lien de redirection'
@@ -48,6 +46,11 @@ class QuestionnaireGestionType extends AbstractType
                 'query_builder' => function(EntityRepository $er) use ($connectedUser){
                     return $er->getDomainesUserConnectedForForm($connectedUser->getId());
                 }
+            ))
+            ->add('occurrenceMultiple', 'checkbox', array(
+                'label' => 'Questionnaire à occurrences multiples',
+                'required' => false,
+                'attr' => array('class' => 'checkbox')
             ))
         ;
     }
