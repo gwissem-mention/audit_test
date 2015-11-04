@@ -4,6 +4,8 @@ namespace HopitalNumerique\ReportBundle\Manager;
 
 use Nodevo\ToolsBundle\Manager\Manager as BaseManager;
 
+use HopitalNumerique\UserBundle\Manager\UserManager;
+
 /**
  * Manager de l'entité Report.
  */
@@ -19,6 +21,12 @@ class ReportManager extends BaseManager
      * @copyright Nodevo
      */
     protected $_mailsReport;
+
+    /**
+     * @author Gaetan MELCHILSEN
+     * @copyright Nodevo
+     */
+    protected $_userManager;
     
     /**
      * Constructeur du manager, on lui passe l'entity Manager de doctrine, un booléen si on peut ajouter des mails
@@ -29,11 +37,12 @@ class ReportManager extends BaseManager
      * @author Gaetan MELCHILSEN
      * @copyright Nodevo
      */
-    public function __construct($em, $options = array())
+    public function __construct($em, UserManager $userManager, $options = array())
     {
         parent::__construct($em);
         
         $this->_mailsReport = isset($options['mailsReport']) ? $options['mailsReport'] : array();
+        $this->_userManager = $userManager;
     }
     
     /**
@@ -60,12 +69,21 @@ class ReportManager extends BaseManager
     public function getDatasForGrid( \StdClass $condition = null )
     {
         $reports = array();
+
+        $domainesIds = $this->_userManager->getUserConnected()->getDomainesId();
         
-        $results = $this->getRepository()->getDatasForGrid( $condition )->getQuery()->getResult();
+        $results = $this->getRepository()->getDatasForGrid( $domainesIds, $condition )->getQuery()->getResult();
         
         foreach ($results as $key => $result)
         {
-            $reports[ $result['id'] ] = $result;
+            if(!array_key_exists($result['id'], $reports))
+            {
+                $reports[ $result['id'] ] = $result;
+            }
+            else
+            {
+                $reports[ $result['id'] ]['domaineNom'] .= ";" . $result['domaineNom'];
+            }
             
             // ----Traitement pour transformer le prénom "Jean-luc robert" en "Jean-Luc Robert"
             //Récupération du prénom
@@ -86,13 +104,13 @@ class ReportManager extends BaseManager
             //Suppression du nom et prenom
             unset($reports[$result['id']]['userNom']);
             unset($reports[$result['id']]['userPrenom']);
+            unset($reports[$result['id']]['date']);
             
             //Ajout de la colonne "Prenom NOM"
             $reports[ $result['id'] ]['nomPrenom'] = $prenom.' '.$nom;
-
-            $reports[ $result['id'] ]['date'] = $reports[ $result['id'] ]['date']->format('Y-m-d H:i:s');
+            $reports[ $result['id'] ]['repDate'] = !is_null($result['date']) ? $result['date']->format('Y-m-d H:i:s') : '';
         }
-        
+
         return array_values($reports);
     }
 }

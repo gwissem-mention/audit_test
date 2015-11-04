@@ -20,7 +20,7 @@ class ReportGrid extends Grid implements GridInterface
         $this->setSource( 'hopitalnumerique_report.manager.report' );
         $this->setSourceType( self::SOURCE_TYPE_MANAGER );
         $this->setNoDataMessage('Aucun signalement de bug à afficher.');
-        $this->setDefaultOrder('date', 'ASC');
+        $this->setDefaultOrder('repDate', 'ASC');
         $this->setDefaultFilters( array('archive' => false) );
     }
 
@@ -30,7 +30,11 @@ class ReportGrid extends Grid implements GridInterface
     public function setColumns()
     {
         //field, titre, isSortable, size
-        $this->addColonne( new Column\TextColumn('date', 'Date / heure') );
+        $this->addColonne( new Column\TextColumn('repDate', 'Date / heure') );
+        
+        $domaineColumn = new Column\TextColumn('domaineNom', 'Domaine(s) associé(s)');
+        $this->addColonne( $domaineColumn );
+        
         $this->addColonne( new Column\TextColumn('nomPrenom', 'Nom / prénom') );   
         $this->addColonne( new Column\TextColumn('userMail', 'Mail rapporteur') );   
         $this->addColonne( new Column\TextColumn('url', 'Url') );
