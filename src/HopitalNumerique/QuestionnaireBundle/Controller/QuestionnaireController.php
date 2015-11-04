@@ -47,6 +47,16 @@ class QuestionnaireController extends Controller
     private $_envoieDeMail;
 
     /* Gestionnaire des questionnaires */
+    
+    /**
+     * Liste tous les questionnaires (avec occurrences) de l'utilisateur connecté.
+     */
+    public function listAction()
+    {
+        return $this->render('HopitalNumeriqueQuestionnaireBundle:Questionnaire:list.html.twig', array(
+            'questionnaires' => $this->container->get('hopitalnumerique_questionnaire.manager.questionnaire')->findByUser($this->getUser())
+        ));
+    }
 
     /**
      * Affiche la liste des questionnaires.

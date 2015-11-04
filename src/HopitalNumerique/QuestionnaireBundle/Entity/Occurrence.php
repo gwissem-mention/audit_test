@@ -173,4 +173,13 @@ class Occurrence
     {
         return $this->reponses;
     }
+    
+    
+    /**
+     * @return string
+     */
+    public function __toString()
+    {
+        return ($this->libelle ?: 'Sans titre');
+    }
 }

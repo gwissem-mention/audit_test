@@ -1,0 +1,13 @@
+.chapo { background-color:#f8f8f8;background-image:url('/bundles/hopitalnumeriqueintervention/img/chapo.png');background-position:19px 7px;background-repeat:no-repeat;padding:14px 18px 4px 18px; }
+    .chapo h1 { font-size:14px;font-weight:bold;margin:0px;padding:0px 0px 10px 40px;text-transform:uppercase; }
+    .chapo div.description { font-size:13px; }
+        .chapo div.description p { margin:8px 0px;padding:0px; }
+
+/* <-- Liste des questionnaires */
+.questionnaire-list {}
+    .questionnaire-list .questionnaires { background-color:#f8f8f8;margin:20px 0 0 0; }
+        .questionnaire-list .questionnaires a { display: block; }
+        .questionnaire-list .questionnaires h2 { margin: 10px;padding:10px 0px; }
+        .questionnaire-list .questionnaires ul { margin: 0 0 0 40px; }
+            .questionnaire-list .questionnaires ul li { padding: 10px 0; }
+/* --> */

@@ -6,6 +6,7 @@ use Nodevo\ToolsBundle\Manager\Manager as BaseManager;
 use Doctrine\ORM\EntityManager;
 use HopitalNumerique\UserBundle\Manager\UserManager;
 use HopitalNumerique\QuestionnaireBundle\Entity\Occurrence;
+use HopitalNumerique\UserBundle\Entity\User;
 
 /**
  * Manager de l'entité Contractualisation.
@@ -316,5 +317,16 @@ class QuestionnaireManager extends BaseManager
         }
 
         return array('colonnes' => $colonnes, 'datas' => $datas );
+    }
+    
+    /**
+     * Retourne les questionnaires (avec leurs occurrences) d'un utilisateur.
+     * 
+     * @param \HopitalNumerique\UserBundle\Entity\User $user Utilisateur
+     * @return array<\HopitalNumerique\QuestionnaireBundle\Entity\Questionnaire> Questionnaires
+     */
+    public function findByUser(User $user)
+    {
+        return $this->getRepository()->findByUser($user);
     }
 }

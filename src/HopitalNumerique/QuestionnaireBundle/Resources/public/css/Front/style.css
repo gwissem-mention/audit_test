@@ -1,6 +1,7 @@
 #questionnaire_form h3{ color:#070707; font-size: 18px; font-weight: bold; margin: 40px 0 18px;}
 #questionnaire_form .background-violet{width: 214px; height: 4px; position: absolute; top: 0; left: 0;}
 #questionnaire_form form{ background: #f4f4f4; padding:60px 35px 15px 35px; position: relative; border:1px solid #e3e3e3;}
+#questionnaire_form #nodevo_questionnaire_questionnaire_occurrence label { color: #e76c2a; }
 #questionnaire_form form .background-rose{ background:#de0d4d; width: 214px; height: 4px; position: absolute; top: 0; left: 0;}
 #questionnaire_form form label{ color:#333333; font-size: 14px }
 #questionnaire_form form .champ-obligatoire{color: #5d5d5d;width: 139px; height: 4px; position: absolute; right: 0px;font-style:italic; font-size:12px;}

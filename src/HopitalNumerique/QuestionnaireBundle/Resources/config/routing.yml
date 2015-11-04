@@ -1,5 +1,10 @@
 #Questionnaire
 
+hopitalnumerique_questionnaire_list:
+    pattern:  /questionnaire/list
+    defaults: { _controller: "HopitalNumeriqueQuestionnaireBundle:Questionnaire:list"}
+    methods: GET
+
 #---Index - grid
 hopitalnumerique_questionnaire_index:
     pattern:  /admin/questionnaire/gestion/index
@@ -123,3 +128,11 @@ hopitalnumerique_reponse_deleteAllByQuestionnaire:
     defaults: { _controller: "HopitalNumeriqueQuestionnaireBundle:Reponse:deleteAllByQuestionnaire", _format: json, id:1}
     requirements:
         id: \d+
+
+# Occurrences
+hopitalnumerique_questionnaire_occurrence_add:
+    pattern:  /questionnaire/{questionnaire}/occ/add
+    defaults: { _controller: "HopitalNumeriqueQuestionnaireBundle:Occurrence:add"}
+    methods: GET
+    requirements:
+        questionnaire: \d+

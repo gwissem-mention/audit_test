@@ -397,4 +397,13 @@ class Questionnaire
 
         return $domainesId;
     }
+    
+    
+    /**
+     * @return string
+     */
+    public function __toString()
+    {
+        return $this->nom;
+    }
 }

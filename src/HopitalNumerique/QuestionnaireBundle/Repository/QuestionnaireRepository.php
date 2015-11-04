@@ -4,6 +4,7 @@ namespace HopitalNumerique\QuestionnaireBundle\Repository;
 
 use Doctrine\ORM\EntityRepository;
 use HopitalNumerique\QuestionnaireBundle\Entity\Occurrence;
+use HopitalNumerique\UserBundle\Entity\User;
 
 /**
  * QuestionnaireRepository
@@ -81,5 +82,29 @@ class QuestionnaireRepository extends EntityRepository
         $qb->orderBy('question.ordre');
 
         return $qb->getQuery()->getResult();
+    }
+    
+    /**
+     * Retourne les questionnaires (avec leurs occurrences) d'un utilisateur.
+     * 
+     * @param \HopitalNumerique\UserBundle\Entity\User $user Utilisateur
+     * @return array<\HopitalNumerique\QuestionnaireBundle\Entity\Questionnaire> Questionnaires
+     */
+    public function findByUser(User $user)
+    {
+        $query = $this->createQueryBuilder('questionnaire');
+        
+        $query
+            ->select('questionnaire', 'occurrence')
+            ->innerJoin('questionnaire.questions', 'question')
+            ->innerJoin('question.reponses', 'reponse', \Doctrine\ORM\Query\Expr\Join::WITH, 'reponse.user = :user')
+            ->leftJoin('questionnaire.occurrences', 'occurrence', \Doctrine\ORM\Query\Expr\Join::WITH, 'occurrence.user = :user')
+            ->setParameter('user', $user)
+            ->groupBy('questionnaire.id', 'occurrence.id')
+            ->addOrderBy('questionnaire.id', 'ASC')
+            ->addOrderBy('occurrence.id', 'ASC')
+        ;
+
+        return $query->getQuery()->getResult();
     }
 }
