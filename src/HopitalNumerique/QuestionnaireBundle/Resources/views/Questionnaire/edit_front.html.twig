@@ -47,7 +47,11 @@
         <div class="champ-obligatoire"><span class="etoile">*</span> champ(s) obligatoire(s)</div>
         {% form_theme form 'HopitalNumeriqueQuestionnaireBundle:Questionnaire/Theme:theme.' ~ theme ~ '.html.twig' %}
         {{ form_javascript(form) }}
-        {{ form(form, { 'action': path('hopitalnumerique_questionnaire_edit_front', {'user' : user.id, 'questionnaire' :questionnaire.id }) } ) }}
+        {{ form_start(form, { 'action': path('hopitalnumerique_questionnaire_edit_front', {'user' : user.id, 'questionnaire' :questionnaire.id, 'occurrence':(form.occurrence is defined ? form.occurrence.vars.data.id : null) }) } ) }}
+            {% if form.occurrence is defined %}
+                {{ form_widget(form.occurrence) }}
+            {% endif %}
+        {{ form_end(form) }}
     {% endif %}
 
 </div>

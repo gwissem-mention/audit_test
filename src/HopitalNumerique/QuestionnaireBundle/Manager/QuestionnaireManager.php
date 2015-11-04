@@ -5,6 +5,7 @@ namespace HopitalNumerique\QuestionnaireBundle\Manager;
 use Nodevo\ToolsBundle\Manager\Manager as BaseManager;
 use Doctrine\ORM\EntityManager;
 use HopitalNumerique\UserBundle\Manager\UserManager;
+use HopitalNumerique\QuestionnaireBundle\Entity\Occurrence;
 
 /**
  * Manager de l'entité Contractualisation.
@@ -74,9 +75,9 @@ class QuestionnaireManager extends BaseManager
      *
      * @return [type]
      */
-    public function getQuestionsReponses( $idQuestionnaire, $idUser, $paramId = null )
+    public function getQuestionsReponses( $idQuestionnaire, $idUser, Occurrence $occurrence = null, $paramId = null )
     {
-        return $this->getRepository()->getQuestionsReponses( $idQuestionnaire , $idUser, $paramId );
+        return $this->getRepository()->getQuestionsReponses( $idQuestionnaire , $idUser, $occurrence, $paramId );
     }
     
     /**

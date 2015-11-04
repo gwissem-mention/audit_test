@@ -3,6 +3,7 @@
 namespace HopitalNumerique\QuestionnaireBundle\Repository;
 
 use Doctrine\ORM\EntityRepository;
+use HopitalNumerique\QuestionnaireBundle\Entity\Occurrence;
 
 /**
  * ReponseRepository
@@ -17,7 +18,7 @@ class ReponseRepository extends EntityRepository
      *
      * @return array
      */
-    public function reponsesByQuestionnaireByUser( $idQuestionnaire, $idUser , $paramId = null)
+    public function reponsesByQuestionnaireByUser( $idQuestionnaire, $idUser, Occurrence $occurrence = null, $paramId = null)
     {
         $qb = $this->_em->createQueryBuilder();
         $qb->select('reponse')
@@ -36,6 +37,14 @@ class ReponseRepository extends EntityRepository
             ->innerJoin('question.questionnaire', 'questionnaire', 'WITH', 'questionnaire.id = :idQuestionnaire')
             ->setParameter('idQuestionnaire', $idQuestionnaire )
             ->leftJoin('question.typeQuestion', 'typeQuestion');
+        
+        if (null !== $occurrence)
+        {
+            $qb
+                ->andWhere('reponse.occurrence = :occurrence')
+                ->setParameter('occurrence', $occurrence)
+            ;
+        }
     
         return $qb->getQuery();
     }
@@ -70,7 +79,7 @@ class ReponseRepository extends EntityRepository
      *
      * @return array
      */
-    public function reponsesByQuestionnaireByUserByFileQuestion( $idQuestionnaire, $idUser )
+    public function reponsesByQuestionnaireByUserByFileQuestion( $idQuestionnaire, $idUser, Occurrence $occurrence = null )
     {
         $qb = $this->_em->createQueryBuilder();
         $qb->select('reponse')
@@ -83,6 +92,14 @@ class ReponseRepository extends EntityRepository
             ->setParameter('idQuestionnaire', $idQuestionnaire )
             ->innerJoin('question.typeQuestion', 'typeQuestion', 'WITH', 'typeQuestion.libelle = :libTypeQuestion')
             ->setParameter('libTypeQuestion', 'file' );
+        
+        if (null !== $occurrence)
+        {
+            $qb
+                ->andWhere('reponse.occurrence = :occurrence')
+                ->setParameter('occurrence', $occurrence)
+            ;
+        }
     
         return $qb->getQuery();
     }

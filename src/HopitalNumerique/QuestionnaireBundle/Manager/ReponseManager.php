@@ -3,6 +3,7 @@
 namespace HopitalNumerique\QuestionnaireBundle\Manager;
 
 use Nodevo\ToolsBundle\Manager\Manager as BaseManager;
+use HopitalNumerique\QuestionnaireBundle\Entity\Occurrence;
 
 /**
  * Manager de l'entité Contractualisation.
@@ -16,9 +17,9 @@ class ReponseManager extends BaseManager
      *
      * @return array
      */
-    public function reponsesByQuestionnaireByUser( $idQuestionnaire, $idUser, $orderByQuestion = false, $paramId = null )
+    public function reponsesByQuestionnaireByUser( $idQuestionnaire, $idUser, $orderByQuestion = false, Occurrence $occurrence = null, $paramId = null )
     {
-        $reponses = $this->getRepository()->reponsesByQuestionnaireByUser( $idQuestionnaire , $idUser, $paramId )->getResult();
+        $reponses = $this->getRepository()->reponsesByQuestionnaireByUser( $idQuestionnaire , $idUser, $occurrence, $paramId )->getResult();
         
         //Si on le spécifie, $reponses prendra en clé l'id de la question
         if($orderByQuestion)
@@ -39,9 +40,9 @@ class ReponseManager extends BaseManager
      *
      * @return array
      */
-    public function reponsesByQuestionnaireByUserByFileQuestion( $idQuestionnaire, $idUser )
+    public function reponsesByQuestionnaireByUserByFileQuestion( $idQuestionnaire, $idUser, Occurrence $occurrence = null )
     {    
-        return $this->getRepository()->reponsesByQuestionnaireByUserByFileQuestion( $idQuestionnaire , $idUser )->getResult();
+        return $this->getRepository()->reponsesByQuestionnaireByUserByFileQuestion( $idQuestionnaire , $idUser, $occurrence )->getResult();
     }
 
     public function getReponsesForQuestionnaireOrderByUser($idQuestionnaire)

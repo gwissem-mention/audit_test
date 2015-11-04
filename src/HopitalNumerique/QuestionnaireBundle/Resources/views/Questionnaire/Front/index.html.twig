@@ -30,8 +30,8 @@
     <div class="col-md-10 col-md-offset-1" id="inscription">
         <div id="questionnaire_form">  
             <h3>Questionnaire {{questionnaire.nom}}</h3>
-                
-            {{ render(controller("HopitalNumeriqueQuestionnaireBundle:Questionnaire:editFront", {'user':app.user , 'questionnaire':questionnaire, 'optionRenderForm' : optionRenderForm} )) }}</div>
+            
+            {{ render(controller("HopitalNumeriqueQuestionnaireBundle:Questionnaire:editFront", {'user':app.user , 'questionnaire':questionnaire, 'occurrence':occurrence, 'optionRenderForm' : optionRenderForm} )) }}</div>
             <div class="clearfix"></div>
             <div class="col-md-12 no-padding button_questionnaire">
                 <input onclick="$('#do').val('save-close');$('form').submit();" class="btn btn-success col-md-4 pull-right submit questionnaire_submit" value="VALIDER LE QUESTIONNAIRE" type="button"/>

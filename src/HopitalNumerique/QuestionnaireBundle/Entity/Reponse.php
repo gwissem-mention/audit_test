@@ -7,9 +7,13 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * Reponse
  *
- * @ORM\Table("hn_questionnaire_reponse")
+ * @ORM\Table
+ * (
+ *     "hn_questionnaire_reponse",
+ *     uniqueConstraints={@ORM\UniqueConstraint(name="QUESTION_OCCURRENCE_USER", columns={"que_id", "usr_id", "occ_id"})}
+ * )
  * @ORM\Entity(repositoryClass="HopitalNumerique\QuestionnaireBundle\Repository\ReponseRepository")
- * @ORM\HasLifecycleCallbacks
+ * @ORM\HasLifecycleCallbacks()
  */
 class Reponse
 {
@@ -51,7 +55,7 @@ class Reponse
      * @ORM\ManyToOne(targetEntity="Occurrence", inversedBy="reponses")
      * @ORM\JoinColumn(name="occ_id", referencedColumnName="occ_id")
      */
-    private $occurence;
+    private $occurrence;
     
     /**
      * @ORM\ManyToOne(targetEntity="\HopitalNumerique\ReferenceBundle\Entity\Reference", cascade={"persist"})
@@ -138,26 +142,26 @@ class Reponse
     }
 
     /**
-     * Set occurence
+     * Set occurrence
      *
-     * @param \HopitalNumerique\QuestionnaireBundle\Entity\Occurrence $occurence
+     * @param \HopitalNumerique\QuestionnaireBundle\Entity\Occurrence $occurrence
      * @return Reponse
      */
-    public function setOccurence(\HopitalNumerique\QuestionnaireBundle\Entity\Occurrence $occurence = null)
+    public function setOccurrence(\HopitalNumerique\QuestionnaireBundle\Entity\Occurrence $occurrence = null)
     {
-        $this->occurence = $occurence;
+        $this->occurrence = $occurrence;
 
         return $this;
     }
 
     /**
-     * Get occurence
+     * Get occurrence
      *
      * @return \HopitalNumerique\QuestionnaireBundle\Entity\Occurrence 
      */
-    public function getOccurence()
+    public function getOccurrence()
     {
-        return $this->occurence;
+        return $this->occurrence;
     }
 
     /**

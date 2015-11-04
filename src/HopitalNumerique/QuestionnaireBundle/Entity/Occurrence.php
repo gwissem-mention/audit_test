@@ -24,7 +24,7 @@ class Occurrence
     /**
      * @var string
      *
-     * @ORM\Column(name="occ_libelle", type="string", length=255, nullable=false)
+     * @ORM\Column(name="occ_libelle", type="string", length=255, nullable=true)
      * @Assert\NotBlank()
      */
     private $libelle;

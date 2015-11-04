@@ -3,6 +3,7 @@
 namespace HopitalNumerique\QuestionnaireBundle\Repository;
 
 use Doctrine\ORM\EntityRepository;
+use HopitalNumerique\QuestionnaireBundle\Entity\Occurrence;
 
 /**
  * QuestionnaireRepository
@@ -52,25 +53,31 @@ class QuestionnaireRepository extends EntityRepository
      *
      * @return array
      */
-    public function getQuestionsReponses( $idQuestionnaire, $idUser, $paramId )
+    public function getQuestionsReponses( $idQuestionnaire, $idUser, Occurrence $occurrence = null, $paramId = null )
     {
         $qb = $this->_em->createQueryBuilder();
-        $qb->select('questionnaire, question, reponse')
+        $qb
+            ->select('questionnaire, question, reponse')
             ->from('\HopitalNumerique\QuestionnaireBundle\Entity\Question', 'question')
             ->innerJoin('question.questionnaire', 'questionnaire' ,'WITH' , 'questionnaire.id = :idQuestionnaire')
-            ->setParameter('idQuestionnaire', $idQuestionnaire );
-        
+            ->setParameter('idQuestionnaire', $idQuestionnaire )
+        ;
+
+        $qb
+            ->leftJoin('question.reponses', 'reponse', 'WITH' , 'reponse.user = :idUser'.(null !== $paramId ? ' AND reponse.paramId = :paramId' : '').(null !== $occurrence ? ' AND reponse.occurrence = :occurrence' : ''))
+            ->setParameter('idUser', $idUser )
+        ;
+
         if ($paramId != null)
         {
-            $qb->leftJoin('question.reponses', 'reponse', 'WITH' , 'reponse.user = :idUser AND reponse.paramId = :paramId')
-                ->setParameter('idUser', $idUser)
-                ->setParameter('paramId', $paramId);
+            $qb->setParameter('paramId', $paramId);
         }
-        else
+
+        if (null !== $occurrence)
         {
-            $qb->leftJoin('question.reponses', 'reponse', 'WITH' , 'reponse.user = :idUser ')
-                ->setParameter('idUser', $idUser );
+            $qb->setParameter('occurrence', $occurrence->getId());
         }
+
         $qb->orderBy('question.ordre');
 
         return $qb->getQuery()->getResult();
