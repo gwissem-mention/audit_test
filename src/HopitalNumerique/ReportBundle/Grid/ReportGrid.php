@@ -32,7 +32,7 @@ class ReportGrid extends Grid implements GridInterface
         //field, titre, isSortable, size
         $this->addColonne( new Column\TextColumn('repDate', 'Date / heure') );
         
-        $domaineColumn = new Column\TextColumn('domaineNom', 'Domaine(s) associé(s)');
+        $domaineColumn = new Column\TextColumn('domaineNom', 'Domaine associé');
         $this->addColonne( $domaineColumn );
         
         $this->addColonne( new Column\TextColumn('nomPrenom', 'Nom / prénom') );   
