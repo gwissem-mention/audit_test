@@ -93,14 +93,7 @@ $(document).ready(function() {
     //Gestion des chapitres non concernes
     if ( nonConcernes.length > 0 )
     {
-        var html = '<b>Les éléments suivants n\'ont pas été diagnostiqués :</b> <ul>';
-
-        $(nonConcernes).each(function(index, element ){
-            html += '<li>' + element + '</li>';
-        });
-
-        html += '</ul>';
-        $('#chaptersNonConcernes').html(html);
+        $('#chaptersNonConcernes').html('<b>Les éléments suivants n\'ont pas été diagnostiqués :</b> ' + nonConcernes.join(', ') + '.');
     }
 
     var seriesRadar = [];

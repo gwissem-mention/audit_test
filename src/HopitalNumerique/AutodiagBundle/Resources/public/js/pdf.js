@@ -19,41 +19,9 @@ $(document).ready(function() {
 
     if( allHidden )
         $('#chaptersToHide').parent().show();
-    
-    /* Manage values */
-    var datas      = $.parseJSON( $('#datas-radar').val() );
-    var categories = [];
-    var values     = [];
-    var taux       = [];
-    var optimale   = [];
-    var nonConcernes = [];
-    $(datas).each(function(index, element ){
-        if( element.value != 'NC' ){
-            title = '<b>' + element.title + '</b>';
-
-            categories.push( title );
-            values.push( element.value );
-            optimale.push( element.opti );
-
-            taux[ title ] = element.taux;
-        }else
-            nonConcernes.push( element.title );
-    });
 
     $("#reponses").css("display", "block");
 
-    //Gestion des chapitres non concernes
-    if( nonConcernes.length > 0 ){
-        var html = '<b>Les éléments suivants n\'ont pas été diagnostiqués :</b> <ul>';
-
-        $(nonConcernes).each(function(index, element ){
-            html += '<li>' + element + '</li>';
-        });
-
-        html += '</ul>';
-
-        $('#chaptersNonConcernes').html(html);
-    }
 
     /* Manage values */
     var datas        = $.parseJSON( $('#datas-radar').val() );
@@ -100,14 +68,7 @@ $(document).ready(function() {
     //Gestion des chapitres non concernes
     if ( nonConcernes.length > 0 )
     {
-        var html = '<b>Les éléments suivants n\'ont pas été diagnostiqués :</b> <ul>';
-
-        $(nonConcernes).each(function(index, element ){
-            html += '<li>' + element + '</li>';
-        });
-
-        html += '</ul>';
-        $('#chaptersNonConcernes').html(html);
+        $('#chaptersNonConcernes').html('<b>Les éléments suivants n\'ont pas été diagnostiqués :</b> ' + nonConcernes.join(', ') + '.');
     }
 
     var seriesRadar = [];
