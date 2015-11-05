@@ -119,6 +119,8 @@ $(document).ready(function() {
             data  : deciles8,
             color : radarChartBenchmarkCouleurDecile8,
             type  : 'line',
+            lineWidth: 2,
+            lineColor: radarChartBenchmarkCouleurDecile8,
             pointPlacement: 'on'
         });
     }
@@ -136,6 +138,8 @@ $(document).ready(function() {
             data  : deciles2,
             color : radarChartBenchmarkCouleurDecile2,
             type  : 'line',
+            lineWidth: 2,
+            lineColor: radarChartBenchmarkCouleurDecile2,
             pointPlacement: 'on'
         });
     }
@@ -152,7 +156,8 @@ $(document).ready(function() {
             marker: { symbol:'circle' },
             data  : moyennes,
             color : '#777777',
-            lineWidth:1,
+            lineWidth: 1,
+            lineColor: '#777777',
             type  : 'line',
             pointPlacement: 'on'
         });
@@ -172,6 +177,8 @@ $(document).ready(function() {
             data  : max,
             color : '#00aa00',
             type  : 'line',
+            lineColor: '#00aa00',
+            lineWidth: 2,
             pointPlacement: 'on'
         });
     }
@@ -191,6 +198,8 @@ $(document).ready(function() {
             data  : min,
             color : '#aa0000',
             type  : 'line',
+            lineWidth: 2,
+            lineColor: '#aa0000',
             pointPlacement: 'on'
         });
     }
@@ -213,6 +222,7 @@ $(document).ready(function() {
             data  : optimale,
             color : '#d60030',
             type  : 'line',
+            lineWidth: 2,
             pointPlacement: 'on'
         });
     }
@@ -231,6 +241,7 @@ $(document).ready(function() {
         color : '#6f3596',
         marker: { symbol:'circle' },
         type  : 'line',
+            lineWidth: 2,
         data  : values,
         pointPlacement: 'on'
     });
@@ -260,7 +271,8 @@ $(document).ready(function() {
             },
             legend:{
                 padding : 20,
-                reversed: true
+                reversed: true,
+                itemStyle: { "color": "#333333", "cursor": "pointer", "fontSize": "10px", "fontWeight": "bold" }
             },
             yAxis : {
                 gridLineInterpolation : 'polygon',
