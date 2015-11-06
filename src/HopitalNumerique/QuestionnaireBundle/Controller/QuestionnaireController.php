@@ -740,7 +740,7 @@ class QuestionnaireController extends Controller
     
                 //Sauvegarde / Sauvegarde + quitte
                 $do = $request->request->get('do');
-                return $this->redirect( $do == 'save-close' ? $this->generateUrl($routeRedirection['quit']['route'], $routeRedirection['quit']['arguments']) : $this->generateUrl($routeRedirection['sauvegarde']['route'], $routeRedirection['sauvegarde']['arguments']));
+                return $this->redirect( $do == 'save-close' ? $this->generateUrl($routeRedirection['quit']['route'], $routeRedirection['quit']['arguments']) : ( 'save-add' == $do ? $this->generateUrl('hopitalnumerique_questionnaire_occurrence_add', array('questionnaire' => $questionnaire->getId())) : $this->generateUrl($routeRedirection['sauvegarde']['route'], $routeRedirection['sauvegarde']['arguments']) ) );
             }
         }
     
