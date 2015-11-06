@@ -5,9 +5,9 @@
 
 /* <-- Liste des questionnaires */
 .questionnaire-list {}
-    .questionnaire-list .questionnaires { background-color:#f8f8f8;margin:20px 0 0 0; }
+    .questionnaire-list .questionnaires {}
         .questionnaire-list .questionnaires a { display: block; }
         .questionnaire-list .questionnaires h2 { margin: 10px;padding:10px 0px; }
         .questionnaire-list .questionnaires ul { margin: 0 0 0 40px; }
-            .questionnaire-list .questionnaires ul li { padding: 10px 0; }
+            .questionnaire-list .questionnaires ul li { padding: 5px 0; }
 /* --> */
