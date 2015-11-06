@@ -73,6 +73,7 @@ class AppKernel extends Kernel
             new Nodevo\FormBundle\NodevoFormBundle(),
             new Nodevo\TexteDynamiqueBundle\NodevoTexteDynamiqueBundle(),
             new Eko\FeedBundle\EkoFeedBundle(),
+            new \HopitalNumerique\CommunautePratiqueBundle\HopitalNumeriqueCommunautePratiqueBundle(),
         );
 
         if (in_array($this->getEnvironment(), array('dev', 'test'))) {

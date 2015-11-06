@@ -625,6 +625,12 @@ class User extends BaseUser
     protected $notficationRequete;
 
     /**
+     * @ORM\ManyToMany(targetEntity="HopitalNumerique\CommunautePratiqueBundle\Entity\Groupe", mappedBy="animateurs")
+     */
+    private $communautePratiqueGroupes;
+
+
+    /**
      * Constructor
      */
     public function __construct()
@@ -632,6 +638,7 @@ class User extends BaseUser
         parent::__construct();
         
         $this->objets               = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->communautePratiqueGroupes = new \Doctrine\Common\Collections\ArrayCollection();
         $this->username             = '';
         $this->pseudonymeForum      = '';
         $this->enabled              = 1;
@@ -643,6 +650,7 @@ class User extends BaseUser
         $this->nbVisites            = 0;
         $this->notficationRequete   = true;
     }
+
 
     public function getConfirmationToken()
     {
@@ -1930,5 +1938,38 @@ class User extends BaseUser
     public function setIpLastConnection($ip) {
       $this->ipLastConnection = $ip;
       return $this;
+    }
+
+    /**
+     * Add communautePratiqueGroupes
+     *
+     * @param \HopitalNumerique\CommunautePratiqueBundle\Entity\Groupe $communautePratiqueGroupes
+     * @return User
+     */
+    public function addCommunautePratiqueGroupe(\HopitalNumerique\CommunautePratiqueBundle\Entity\Groupe $communautePratiqueGroupes)
+    {
+        $this->communautePratiqueGroupes[] = $communautePratiqueGroupes;
+
+        return $this;
+    }
+
+    /**
+     * Remove communautePratiqueGroupes
+     *
+     * @param \HopitalNumerique\CommunautePratiqueBundle\Entity\Groupe $communautePratiqueGroupes
+     */
+    public function removeCommunautePratiqueGroupe(\HopitalNumerique\CommunautePratiqueBundle\Entity\Groupe $communautePratiqueGroupes)
+    {
+        $this->communautePratiqueGroupes->removeElement($communautePratiqueGroupes);
+    }
+
+    /**
+     * Get communautePratiqueGroupes
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getCommunautePratiqueGroupes()
+    {
+        return $this->communautePratiqueGroupes;
     }
 }

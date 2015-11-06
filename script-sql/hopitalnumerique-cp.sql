@@ -1,0 +1,8 @@
+/* <-- Création des tables */
+CREATE TABLE hn_communautepratique_groupe (group_id INT UNSIGNED AUTO_INCREMENT NOT NULL, dom_id INT NOT NULL, qst_id INT NOT NULL COMMENT 'ID du questionnaire', group_titre VARCHAR(255) NOT NULL, group_description_courte TEXT NOT NULL, group_description_html TEXT NOT NULL, group_nombre_participants_maximum SMALLINT UNSIGNED NOT NULL, group_date_inscription_ouverture DATE NOT NULL, group_date_demarrage DATE NOT NULL, group_date_fin DATE NOT NULL, group_vedette TINYINT(1) DEFAULT '0' NOT NULL, INDEX IDX_A34AA84569893F8F (dom_id), INDEX IDX_A34AA845B293CE31 (qst_id), PRIMARY KEY(group_id)) DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE = InnoDB;
+CREATE TABLE hn_communautepratique_groupe_animateur (group_id INT UNSIGNED NOT NULL, usr_id INT NOT NULL COMMENT 'ID de l utilisateur', INDEX IDX_840981F7FE54D947 (group_id), INDEX IDX_840981F7C69D3FB (usr_id), PRIMARY KEY(group_id, usr_id)) DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE = InnoDB;
+ALTER TABLE hn_communautepratique_groupe ADD CONSTRAINT FK_A34AA84569893F8F FOREIGN KEY (dom_id) REFERENCES hn_domaine (dom_id) ON DELETE CASCADE;
+ALTER TABLE hn_communautepratique_groupe ADD CONSTRAINT FK_A34AA845B293CE31 FOREIGN KEY (qst_id) REFERENCES hn_questionnaire_questionnaire (qst_id) ON DELETE CASCADE;
+ALTER TABLE hn_communautepratique_groupe_animateur ADD CONSTRAINT FK_840981F7FE54D947 FOREIGN KEY (group_id) REFERENCES hn_communautepratique_groupe (group_id);
+ALTER TABLE hn_communautepratique_groupe_animateur ADD CONSTRAINT FK_840981F7C69D3FB FOREIGN KEY (usr_id) REFERENCES core_user (usr_id);
+/* --> */
