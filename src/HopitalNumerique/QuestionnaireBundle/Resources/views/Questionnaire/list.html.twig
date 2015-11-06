@@ -15,7 +15,7 @@
                     {% for questionnaire in questionnaires %}
                         <li>
                             <h2 class="requeteTitle"><a href="{{ path('hopitalnumerique_questionnaire_edit_front_gestionnaire', { 'id':questionnaire.id }) }}">{{ questionnaire }}</a></h2>
-                            {% if questionnaire.occurrences|length > 0 %}
+                            {% if questionnaire.occurrences|length > 1 %}
                                 <ul class="list-unstyled">
                                     {% for occurrence in questionnaire.occurrences %}
                                         <li><a href="{{ path('hopitalnumerique_questionnaire_edit_front_gestionnaire_occurrence', { 'questionnaire':questionnaire.id, 'occurrence':occurrence.id }) }}">{{ occurrence }}</a></li>

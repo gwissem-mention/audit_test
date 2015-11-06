@@ -16,3 +16,16 @@ CREATE UNIQUE INDEX QUESTION_OCCURRENCE_USER ON hn_questionnaire_reponse (que_id
 
 
 INSERT INTO `core_menu_item` (`itm_id`, `itm_parent`, `mnu_menu`, `itm_name`, `itm_route`, `itm_route_parameters`, `itm_route_absolute`, `itm_uri`, `itm_icon`, `itm_display`, `itm_display_children`, `itm_role`, `itm_order`) VALUES (NULL, '68', '3', 'Mes questionnaires', 'hopitalnumerique_questionnaire_list', NULL, NULL, NULL, NULL, '1', '0', 'IS_AUTHENTICATED_ANONYMOUSLY', '11');
+
+
+
+
+
+
+/* <-- 2015-11-06 #3401 */
+ALTER TABLE hn_questionnaire_reponse DROP FOREIGN KEY FK_BD9792282661557E;
+ALTER TABLE hn_questionnaire_reponse ADD CONSTRAINT FK_BD9792282661557E FOREIGN KEY (occ_id) REFERENCES hn_questionnaire_occurrence (occ_id) ON DELETE CASCADE;
+/* --> */
+
+
+

@@ -246,6 +246,23 @@ class Questionnaire
     {
         return $this->questions;
     }
+    
+    /**
+     * Retourne les ID des questions du questionnaire.
+     * 
+     * @return integer[] IDs des questions
+     */
+    public function getQuestionIds()
+    {
+        $questionIds = array();
+        
+        foreach ($this->questions as $question)
+        {
+            $questionIds[] = $question->getId();
+        }
+        
+        return $questionIds;
+    }
 
     /**
      * Add refusCandidature

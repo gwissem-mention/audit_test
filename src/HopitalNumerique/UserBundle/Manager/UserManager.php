@@ -3,6 +3,7 @@
 namespace HopitalNumerique\UserBundle\Manager;
 
 use Nodevo\ToolsBundle\Manager\Manager as BaseManager;
+use HopitalNumerique\QuestionnaireBundle\Entity\Questionnaire;
 
 class UserManager extends BaseManager
 {
