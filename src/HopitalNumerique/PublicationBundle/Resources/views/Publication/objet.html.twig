@@ -498,7 +498,7 @@ window.open ("report/showReport.action?"+request,null,"location=no,menubar=0,res
         <div class="clearfix"></div>
     </div>
 
-    {% if app.user and app.user|checkAuthorization( path('hopital_numerique_registre_homepage') ) %}
+    {% if app.user and app.user|checkAuthorization( path('hopital_numerique_registre_homepage') ) and ambassadeurs|length > 0 %}
         <div id="ambassadeurs" class="closed">
             <div class="content" style="display:none">
                 <h3 class="violet">Les ambassadeurs</h3>

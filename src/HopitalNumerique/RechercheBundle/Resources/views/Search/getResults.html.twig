@@ -1,32 +1,35 @@
-<div id="pointsdurs" class="col-md-12">
-    {% set count = 0 %}
-    {% for objet in objets if objet['categ'] == "point-dur" %}
-        {% set count = count + 1 %}
-    {% endfor %}
-    <h3>Points Durs ( {{count}} Résultat{% if count > 1%}s{% endif %} )</h3>
-    <div class="wrapper-results">
-        <div class="background-violet"></div>
-        <div class="results">
-            {% set count = 0 %}
-            {% for objet in objets if objet['categ'] == "point-dur" %}
-                {% include 'HopitalNumeriqueRechercheBundle:Search:points-durs.html.twig' with {'objet': objet, 'count':count, 'showMorePointsDurs' : showMorePointsDurs } %}
-                {% set count = count + 1 %}
-            {% else %}
-                <p> - Aucun point dur trouvé - </p>
-            {% endfor %}
-            <div class="clearfix"></div>
-        </div>
-    </div>
+{% set count = 0 %}
+{% for objet in objets if objet['categ'] == "point-dur" %}
+    {% set count = count + 1 %}
+{% endfor %}
 
-    <div class="shows">
-        <span class="btn btn-default btn-xs showMore" {% if count <= showMorePointsDurs %}style="display:none"{% endif %} onclick="showMore(this, 1);" >Plus de résultats</span>
-        <span class="btn btn-default btn-xs showLess" {% if showMorePointsDurs <= 2 %}style="display:none"{% endif %} onclick="showLess(this, 1);" >Moins de résultats</span>
-    </div>    
-</div>
+{% if count != 0 %}
+    <div id="pointsdurs" class="col-md-12">
+        <h3>Points Durs ( {{count}} Résultat{% if count > 1%}s{% endif %} )</h3>
+        <div class="wrapper-results">
+            <div class="background-violet"></div>
+            <div class="results">
+                {% set count = 0 %}
+                {% for objet in objets if objet['categ'] == "point-dur" %}
+                    {% include 'HopitalNumeriqueRechercheBundle:Search:points-durs.html.twig' with {'objet': objet, 'count':count, 'showMorePointsDurs' : showMorePointsDurs } %}
+                    {% set count = count + 1 %}
+                {% else %}
+                    <p> - Aucun point dur trouvé - </p>
+                {% endfor %}
+                <div class="clearfix"></div>
+            </div>
+        </div>
+
+        <div class="shows">
+            <span class="btn btn-default btn-xs showMore" {% if count <= showMorePointsDurs %}style="display:none"{% endif %} onclick="showMore(this, 1);" >Plus de résultats</span>
+            <span class="btn btn-default btn-xs showLess" {% if showMorePointsDurs <= 2 %}style="display:none"{% endif %} onclick="showLess(this, 1);" >Moins de résultats</span>
+        </div>    
+    </div>
+{% endif %}
 
 <div id="productions" class="col-md-12">
     {% set count = 0 %}
-    {% for objet in objets if objet['categ'] == "production" %}
+    {% for objet in objets if (objet['categ'] == "production" or objet['categ'] == "ressource" or objet['categ'] == "forum") %}
         {% set count = count + 1 %}
     {% endfor %}
     <h3>Productions ( {{count}} Résultat{% if count > 1%}s{% endif %} )</h3>
@@ -34,7 +37,7 @@
         <div class="background-rose"></div>
         <div class="results">
             {% set count = 0 %}
-            {% for objet in objets if objet['categ'] == "production" %}
+            {% for objet in objets if (objet['categ'] == "production" or objet['categ'] == "ressource" or objet['categ'] == "forum") %}
                 {% include 'HopitalNumeriqueRechercheBundle:Search:productions.html.twig' with {'objet': objet, 'count':count, 'showMoreProductions' : showMoreProductions } %}
                 {% set count = count + 1 %}
             {% else %}
@@ -45,81 +48,6 @@
     <div class="shows">
         <span class="btn btn-default btn-xs showMore" {% if count <= showMoreProductions %}style="display:none"{% endif %} onclick="showMore(this, 2);" >Plus de résultats</span>
         <span class="btn btn-default btn-xs showLess" {% if showMoreProductions <= 2 %}style="display:none"{% endif %} onclick="showLess(this, 2);" >Moins de résultats</span>
-    </div>
-</div>
-
-<div class="col-md-6">
-    <div id="ressources" class="background-rose" >
-        <h3>Ressources externes</h3>
-        <div id="ressources-slides" class="results carousel slide" data-ride="carousel" >
-            <!-- Wrapper for slides -->
-            <div class="carousel-inner">
-                {% set count = 1 %}
-                {% for objet in objets if objet['categ'] == "ressource" %}
-                    {% include 'HopitalNumeriqueRechercheBundle:Search:ressources.html.twig' with {'objet': objet, 'count':count} %}
-                    {% set count = count + 1 %}
-                {% else %}
-                    <div class="item active">
-                        <p class="noresult"> - Aucune ressource externe trouvée - </p>
-                    </div>
-                {% endfor %}
-            </div>
-
-            {% if count > 1 %}
-                <!-- Indicators -->
-                <ol class="carousel-indicators">
-                    {% for i in 2..count %}
-                        <li data-target="#ressources-slides" data-slide-to="{{i}}" class="{% if i == 2 %}active{% endif %}"></li>
-                    {% endfor %}
-                </ol>
-
-                <!-- Controls -->
-                <a class="left carousel-control" href="#ressources-slides" data-slide="prev">
-                    <span class="glyphicon glyphicon-chevron-left"></span>
-                </a>
-                <a class="right carousel-control" href="#ressources-slides" data-slide="next">
-                    <span class="glyphicon glyphicon-chevron-right"></span>
-                </a>
-            {% endif %}
-        </div>
-    </div>
-</div>
-
-<div class="col-md-6">
-    <div id="forum" >
-        <h3><i class="fa fa-users"></i>Forum</h3>
-        <div id="forum-slides" class="results carousel slide" data-ride="carousel" >
-            <!-- Wrapper for slides -->
-            <div class="carousel-inner">
-                {% set count = 1 %}
-                {% for objet in objets if objet['categ'] == "forum" %}
-                    {% include 'HopitalNumeriqueRechercheBundle:Search:forum.html.twig' with {'objet': objet, 'count':count} %}
-                    {% set count = count + 1 %}
-                {% else %}
-                    <div class="item active">
-                        <h4></h4>
-                        <p class="noresult"> - Aucun fil de discussion du forum trouvé - </p>
-                    </div>
-                {% endfor %}
-            </div>
-
-            {% if count > 1 %}
-                <!-- Indicators -->
-                <ol class="carousel-indicators">
-                    {% for i in 2..count %}
-                        <li data-target="#forum-slides" data-slide-to="{{i}}" class="{% if i == 2 %}active{% endif %}"></li>
-                    {% endfor %}
-                </ol>
-
-                <!-- Controls -->
-                <a class="left carousel-control" href="#forum-slides" data-slide="prev">
-                    <span class="glyphicon glyphicon-chevron-left"></span>
-                </a>
-                <a class="right carousel-control" href="#forum-slides" data-slide="next">
-                    <span class="glyphicon glyphicon-chevron-right"></span>
-                </a>
-            {% endif %}
-        </div>
     </div>
 </div>
 
