@@ -1,0 +1,4 @@
+services:
+    hopitalnumerique_communautepratique.manager.groupe:
+        class: "HopitalNumerique\CommunautePratiqueBundle\Manager\GroupeManager"
+        arguments: ["@doctrine.orm.entity_manager"]
