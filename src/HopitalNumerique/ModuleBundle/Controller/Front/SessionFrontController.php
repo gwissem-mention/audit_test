@@ -101,7 +101,7 @@ class SessionFrontController extends Controller
         {
             $hasReponses = false;
             $user     = $inscription->getUser();
-            $reponses = $this->get('hopitalnumerique_questionnaire.manager.reponse')->reponsesByQuestionnaireByUser( 4, $user->getId() , true, $session->getId() );
+            $reponses = $this->get('hopitalnumerique_questionnaire.manager.reponse')->reponsesByQuestionnaireByUser( 4, $user->getId() , true, null, $session->getId() );
             $row      = array();
 
             foreach($reponses as $reponse)

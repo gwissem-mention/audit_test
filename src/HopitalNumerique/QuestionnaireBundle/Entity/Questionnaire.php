@@ -42,6 +42,20 @@ class Questionnaire
      * @ORM\Column(name="qst_lien", type="string", length=255, nullable=true, options = {"comment" = "Lien de redirection après validation du questionnaire"})
      */
     protected $lien;
+    
+    /**
+     * @var boolean
+     * 
+     * @ORM\Column(name="qst_occurrence_multiple", type="boolean", nullable=false, options={"default"=false, "comment"="Indique si le questionnaire peut être répondu plusieurs fois"})
+     */
+    private $occurrenceMultiple;
+    
+    /**
+     * @var \Doctrine\Common\Collections\ArrayCollection
+     * 
+     * @ORM\OneToMany(targetEntity="Occurrence", mappedBy="questionnaire")
+     */
+    private $occurrences;
 
     /**
      * @ORM\OneToMany(targetEntity="Question", mappedBy="questionnaire", cascade={"persist", "remove" })
@@ -75,6 +89,7 @@ class Questionnaire
     {
         $this->questions    = new \Doctrine\Common\Collections\ArrayCollection();
         $this->lock = false;
+        $this->occurrenceMultiple = false;
     }
 
     /**
@@ -141,6 +156,62 @@ class Questionnaire
     {
         $this->lock = $lock;
     }
+
+    /**
+     * Set occurrenceMultiple
+     *
+     * @param boolean $occurrenceMultiple
+     * @return Questionnaire
+     */
+    public function setOccurrenceMultiple($occurrenceMultiple)
+    {
+        $this->occurrenceMultiple = $occurrenceMultiple;
+
+        return $this;
+    }
+
+    /**
+     * Get occurrenceMultiple
+     *
+     * @return boolean 
+     */
+    public function isOccurrenceMultiple()
+    {
+        return $this->occurrenceMultiple;
+    }
+
+    /**
+     * Add occurrences
+     *
+     * @param \HopitalNumerique\QuestionnaireBundle\Entity\Occurrence $occurrences
+     * @return Questionnaire
+     */
+    public function addOccurrence(\HopitalNumerique\QuestionnaireBundle\Entity\Occurrence $occurrences)
+    {
+        $this->occurrences[] = $occurrences;
+
+        return $this;
+    }
+
+    /**
+     * Remove occurrences
+     *
+     * @param \HopitalNumerique\QuestionnaireBundle\Entity\Occurrence $occurrences
+     */
+    public function removeOccurrence(\HopitalNumerique\QuestionnaireBundle\Entity\Occurrence $occurrences)
+    {
+        $this->occurrences->removeElement($occurrences);
+    }
+
+    /**
+     * Get occurrences
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getOccurrences()
+    {
+        return $this->occurrences;
+    }
     
 
     /**
@@ -174,6 +245,23 @@ class Questionnaire
     public function getQuestions()
     {
         return $this->questions;
+    }
+    
+    /**
+     * Retourne les ID des questions du questionnaire.
+     * 
+     * @return integer[] IDs des questions
+     */
+    public function getQuestionIds()
+    {
+        $questionIds = array();
+        
+        foreach ($this->questions as $question)
+        {
+            $questionIds[] = $question->getId();
+        }
+        
+        return $questionIds;
     }
 
     /**
@@ -325,5 +413,14 @@ class Questionnaire
         }
 
         return $domainesId;
+    }
+    
+    
+    /**
+     * @return string
+     */
+    public function __toString()
+    {
+        return $this->nom;
     }
 }

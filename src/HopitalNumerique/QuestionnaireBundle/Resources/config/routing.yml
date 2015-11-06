@@ -1,5 +1,10 @@
 #Questionnaire
 
+hopitalnumerique_questionnaire_list:
+    pattern:  /compte-hn/questionnaires
+    defaults: { _controller: "HopitalNumeriqueQuestionnaireBundle:Questionnaire:list"}
+    methods: GET
+
 #---Index - grid
 hopitalnumerique_questionnaire_index:
     pattern:  /admin/questionnaire/gestion/index
@@ -38,6 +43,12 @@ hopitalnumerique_questionnaire_edit_front_gestionnaire:
     defaults: { _controller: "HopitalNumeriqueQuestionnaireBundle:Questionnaire:editFrontGestionnaire", id: 1 }
     requirements: 
         id: \d+
+hopitalnumerique_questionnaire_edit_front_gestionnaire_occurrence:
+    pattern:  /questionnaire/edit/{questionnaire}/occ/{occurrence}
+    defaults: { _controller: "HopitalNumeriqueQuestionnaireBundle:Questionnaire:editFrontGestionnaireOccurrence" }
+    requirements: 
+        questionnaire: \d+
+        occurrence: \d+
 
 # Back-office
 hopitalnumerique_questionnaire_edit:
@@ -49,8 +60,8 @@ hopitalnumerique_questionnaire_edit:
 
 # Front-office
 hopitalnumerique_questionnaire_edit_front:
-    pattern:  /compte-hn/questionnaire/edit/{user}/{questionnaire}
-    defaults: { _controller: "HopitalNumeriqueQuestionnaireBundle:Questionnaire:editFront", user: 1, questionnaire: 1 }
+    pattern:  /compte-hn/questionnaire/edit/{user}/{questionnaire}/{occurrence}
+    defaults: { _controller: "HopitalNumeriqueQuestionnaireBundle:Questionnaire:editFront", user: 1, questionnaire: 1, occurrence: null }
     requirements:
         user: \d+  
         questionnaire: \d+
@@ -117,3 +128,11 @@ hopitalnumerique_reponse_deleteAllByQuestionnaire:
     defaults: { _controller: "HopitalNumeriqueQuestionnaireBundle:Reponse:deleteAllByQuestionnaire", _format: json, id:1}
     requirements:
         id: \d+
+
+# Occurrences
+hopitalnumerique_questionnaire_occurrence_add:
+    pattern:  /questionnaire/{questionnaire}/occ/add
+    defaults: { _controller: "HopitalNumeriqueQuestionnaireBundle:Occurrence:add"}
+    methods: GET
+    requirements:
+        questionnaire: \d+

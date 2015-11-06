@@ -70,7 +70,7 @@ class EvaluationFrontController extends Controller
             $params = $request->get('nodevo_questionnaire_questionnaire');
             
             //Récupération des réponses pour le questionnaire et utilisateur courant, triées par idQuestion en clé pour la session courante
-            $reponses = $this->get('hopitalnumerique_questionnaire.manager.reponse')->reponsesByQuestionnaireByUser( $questionnaire->getId(), $user->getId(), true, $session->getId() );
+            $reponses = $this->get('hopitalnumerique_questionnaire.manager.reponse')->reponsesByQuestionnaireByUser( $questionnaire->getId(), $user->getId(), true, null, $session->getId() );
             
             //Gestion des réponses
             foreach ($params as $key => $param)

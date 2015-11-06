@@ -249,7 +249,7 @@ class SessionManager extends BaseManager
             {
                 $hasReponses = false;
                 $user     = $inscription->getUser();
-                $reponses = $this->reponseManager->reponsesByQuestionnaireByUser( 4, $user->getId() , true, $session->getId() );
+                $reponses = $this->reponseManager->reponsesByQuestionnaireByUser( 4, $user->getId() , true, null, $session->getId() );
                 $row      = array();
             
                 foreach($reponses as $reponse)

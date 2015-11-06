@@ -253,7 +253,7 @@ class FrontController extends Controller
         }
 
         //cas user connecté
-        if( $user )
+        if ( $user )
         {
             $resultat->setUser( $user );
         }

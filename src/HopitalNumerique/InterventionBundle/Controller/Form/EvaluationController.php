@@ -121,7 +121,7 @@ class EvaluationController extends Controller
             $params = $request->get('nodevo_questionnaire_questionnaire');
 
             //Récupération des réponses pour le questionnaire et utilisateur courant, triées par idQuestion en clé
-            $reponses = $this->get('hopitalnumerique_questionnaire.manager.reponse')->reponsesByQuestionnaireByUser($questionnaire->getId(), $user->getId(), true, $interventionDemande->getId());
+            $reponses = $this->get('hopitalnumerique_questionnaire.manager.reponse')->reponsesByQuestionnaireByUser($questionnaire->getId(), $user->getId(), true, null, $interventionDemande->getId());
 
             //Gestion des réponses
             foreach ($params as $key => $param)
