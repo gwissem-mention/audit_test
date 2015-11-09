@@ -17,4 +17,7 @@
         	<a href="{{path('ccdn_forum_user_topic_show', {'topicId':objet['id']})}}">{{objet['titre']}}</a>
         </h4>
     </div>
+    <div class="col-md-12">
+        <p>{{ objet['resume']|trim }}</p>
+    </div>
 </div>
