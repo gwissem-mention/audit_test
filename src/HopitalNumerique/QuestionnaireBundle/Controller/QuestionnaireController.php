@@ -7,6 +7,7 @@ use Symfony\Component\HttpFoundation\Response;
 
 use HopitalNumerique\UserBundle\Entity\User as HopiUser;
 use HopitalNumerique\QuestionnaireBundle\Entity\Questionnaire as HopiQuestionnaire;
+use HopitalNumerique\QuestionnaireBundle\Entity\Occurrence;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Criteria;
@@ -46,6 +47,16 @@ class QuestionnaireController extends Controller
     private $_envoieDeMail;
 
     /* Gestionnaire des questionnaires */
+    
+    /**
+     * Liste tous les questionnaires (avec occurrences) de l'utilisateur connecté.
+     */
+    public function listAction()
+    {
+        return $this->render('HopitalNumeriqueQuestionnaireBundle:Questionnaire:list.html.twig', array(
+            'questionnaires' => $this->container->get('hopitalnumerique_questionnaire.manager.questionnaire')->findByUser($this->getUser())
+        ));
+    }
 
     /**
      * Affiche la liste des questionnaires.
@@ -68,7 +79,7 @@ class QuestionnaireController extends Controller
      */
     public function editQuestionnaireAction(HopiQuestionnaire $questionnaire)
     {
-        return $this->renderGestionForm('hopitalnumerique_questionnaire_gestion_questionnaire', $questionnaire, 'HopitalNumeriqueQuestionnaireBundle:Questionnaire:Gestion/edit.html.twig' );
+        return $this->renderGestionForm('hopitalnumerique_questionnaire_gestion_questionnaire', $questionnaire );
     }
 
     /**
@@ -81,7 +92,7 @@ class QuestionnaireController extends Controller
     {
         $questionnaire = $this->get('hopitalnumerique_questionnaire.manager.questionnaire')->createEmpty();
 
-        return $this->renderGestionForm('hopitalnumerique_questionnaire_gestion_questionnaire', $questionnaire, 'HopitalNumeriqueQuestionnaireBundle:Questionnaire:Gestion/edit.html.twig' );
+        return $this->editQuestionnaireAction($questionnaire);
     }
 
     /**
@@ -154,15 +165,27 @@ class QuestionnaireController extends Controller
      * 
      * @param integer $id Identifiant de l'utilisateur
      */
-    public function editFrontGestionnaireAction(HopiQuestionnaire $questionnaire)
+    public function editFrontGestionnaireAction(HopiQuestionnaire $questionnaire, Occurrence $occurrence = null)
     {
         //On récupère l'utilisateur qui est connecté
         $user = $this->get('security.context')->getToken()->getUser();
 
         $this->_envoieDeMail = false;
+
+        if (null !== $occurrence)
+        {
+            $route = 'hopitalnumerique_questionnaire_edit_front_gestionnaire_occurrence';
+            $routeParameters = array('questionnaire' => $questionnaire->getId(), 'occurrence' => $occurrence->getId());
+        }
+        else
+        {
+            $route = 'hopitalnumerique_questionnaire_edit_front_gestionnaire';
+            $routeParameters = array('id' => $questionnaire->getId());
+        }
         
         return $this->render('HopitalNumeriqueQuestionnaireBundle:Questionnaire:Front/index.html.twig',array(
             'questionnaire'      => $questionnaire,
+            'occurrence'         => $occurrence,
             'user'               => $user,
             'optionRenderForm'   => array(
                 'showAllQuestions'   => false,
@@ -171,12 +194,23 @@ class QuestionnaireController extends Controller
                 'themeQuestionnaire' => 'vertical',
                 'routeRedirect'      => json_encode(array(
                     'quit' => array(
-                        'route'     => 'hopitalnumerique_questionnaire_edit_front_gestionnaire',
-                        'arguments' => array('id' => $questionnaire->getId())
+                        'route'     => $route,
+                        'arguments' => $routeParameters
                     )
                 ))
             )
         ));
+    }
+    
+    /**
+     * Même action que editFrontGestionnaireAction() avec la paramètre Occurrence indiqué.
+     * 
+     * @param \HopitalNumerique\QuestionnaireBundle\Entity\Questionnaire $questionnaire Questionnaire
+     * @param \HopitalNumerique\QuestionnaireBundle\Entity\Occurrence    $occurrence    Occurrence
+     */
+    public function editFrontGestionnaireOccurrenceAction(HopiQuestionnaire $questionnaire, Occurrence $occurrence)
+    {
+        return $this->editFrontGestionnaireAction($questionnaire, $occurrence);
     }
 
     /* Gestionnaire des formulaires */
@@ -191,7 +225,7 @@ class QuestionnaireController extends Controller
      *
      * @return Ambigous <\HopitalNumerique\QuestionnaireBundle\Controller\Form, \Symfony\Component\HttpFoundation\RedirectResponse, \Symfony\Component\HttpFoundation\Response>
      */
-    public function editFrontAction( HopiUser $user, HopiQuestionnaire $questionnaire, $optionRenderForm = array())
+    public function editFrontAction( HopiUser $user, HopiQuestionnaire $questionnaire, Occurrence $occurrence = null, $optionRenderForm = array() )
     {
         $readOnly            = array_key_exists('readOnly', $optionRenderForm) ? $optionRenderForm['readOnly'] : false;
         $routeRedirection    = array_key_exists('routeRedirect', $optionRenderForm) ? $optionRenderForm['routeRedirect'] : '';
@@ -202,20 +236,20 @@ class QuestionnaireController extends Controller
         //Si le tableau n'est pas vide on le récupère
         if(!is_null($routeRedirection))
             $this->_routeRedirection = $routeRedirection;
-    
+
         //Récupération du thème de formulaire
         $this->_themeQuestionnaire = $themeQuestionnaire;
 
         $options =  array(
             'questionnaire'    => $questionnaire,
+            'occurrence'       => $occurrence,
             'user'             => $user,
             'readOnly'         => $readOnly,
             'showAllQuestions' => $showAllQuestions,
             'session'          => 0
         );
     
-        return $this->renderForm('nodevo_questionnaire_questionnaire', $options, 'HopitalNumeriqueQuestionnaireBundle:Questionnaire:edit_front.html.twig'
-        );
+        return $this->renderForm('nodevo_questionnaire_questionnaire', $options, 'HopitalNumeriqueQuestionnaireBundle:Questionnaire:edit_front.html.twig');
     }
     
     /**
@@ -306,14 +340,16 @@ class QuestionnaireController extends Controller
         $user          = $options['user'];
         $readOnly      = $options['readOnly'];
         $questionnaire = $options['questionnaire'];
+        $occurrence    = $options['occurrence'];
         $idSession     = $options['session'];
 
         $label_attr = array(
-                'idUser'           => $user->getId(),
-                'idQuestionnaire'  => $questionnaire->getId(),
-                'routeRedirection' => $this->_routeRedirection,
-                'readOnly'         => $readOnly,
-                'idSession'        => $idSession
+            'idUser'           => $user->getId(),
+            'idQuestionnaire'  => $questionnaire->getId(),
+            'occurrence'       => $occurrence,
+            'routeRedirection' => $this->_routeRedirection,
+            'readOnly'         => $readOnly,
+            'idSession'        => $idSession
         );
 
         if(isset($options['showAllQuestions']) && !is_null($options['showAllQuestions']))
@@ -337,6 +373,8 @@ class QuestionnaireController extends Controller
             //si le formulaire est valide
             if ($form->isValid()) {
     
+                $occurrence = ($form->has('occurrence') ? $form->get('occurrence')->getData() : null);
+
                 //Les champs file uploadés ne sont pas dans params, params ne recupère que les inputs
                 $params = $request->get('nodevo_questionnaire_questionnaire');
                 
@@ -348,11 +386,11 @@ class QuestionnaireController extends Controller
                 $files = array();
                 
                 //get All References, and convert to ArrayCollection
-                $reponses = new ArrayCollection( $this->get('hopitalnumerique_questionnaire.manager.reponse')->reponsesByQuestionnaireByUserByFileQuestion( $questionnaire->getId(), $user->getId(), false ) );
+                $reponses = new ArrayCollection( $this->get('hopitalnumerique_questionnaire.manager.reponse')->reponsesByQuestionnaireByUserByFileQuestion( $questionnaire->getId(), $user->getId(), $occurrence ) );
 
                 //Parcourt les questions de champ file
                 foreach ($questionsFiles as $key => $questionFiles)
-                {   
+                {
                     //Récupère la réponse de la question courante
                     $criteria = Criteria::create()->where(Criteria::expr()->eq("question", $questionFiles) );
                     //Récupération d'un tableau comportant une seule réponse
@@ -374,6 +412,7 @@ class QuestionnaireController extends Controller
                         $reponse = $this->get('hopitalnumerique_questionnaire.manager.reponse')->createEmpty();
                         $reponse->setUser($user);
                         $reponse->setQuestion($questionFiles);
+                        $reponse->setOccurrence($occurrence);
                     }
                 
                     //Format du champ file
@@ -427,7 +466,7 @@ class QuestionnaireController extends Controller
                 $this->get('hopitalnumerique_questionnaire.manager.reponse')->save( $reponses );
                 
                 //Récupération des réponses pour le questionnaire et utilisateur courant, triées par idQuestion en clé
-                $reponses = $this->get('hopitalnumerique_questionnaire.manager.reponse')->reponsesByQuestionnaireByUser( $questionnaire->getId(), $user->getId(), true );
+                $reponses = $this->get('hopitalnumerique_questionnaire.manager.reponse')->reponsesByQuestionnaireByUser( $questionnaire->getId(), $user->getId(), true, $occurrence );
 
                 //Gestion des réponses
                 foreach ($params as $key => $param)
@@ -452,6 +491,7 @@ class QuestionnaireController extends Controller
                         $reponse = $this->get('hopitalnumerique_questionnaire.manager.reponse')->createEmpty();
                         $reponse->setUser($user);
                         $reponse->setQuestion($this->get('hopitalnumerique_questionnaire.manager.question')->findOneBy(array('id' => $idQuestion)));
+                        $reponse->setOccurrence($occurrence);
                     }
                     //Mode ajout + édition : set la nouvelle réponse
                     $reponse->setReponse($param);
@@ -700,7 +740,7 @@ class QuestionnaireController extends Controller
     
                 //Sauvegarde / Sauvegarde + quitte
                 $do = $request->request->get('do');
-                return $this->redirect( $do == 'save-close' ? $this->generateUrl($routeRedirection['quit']['route'], $routeRedirection['quit']['arguments']) : $this->generateUrl($routeRedirection['sauvegarde']['route'], $routeRedirection['sauvegarde']['arguments']));
+                return $this->redirect( $do == 'save-close' ? $this->generateUrl($routeRedirection['quit']['route'], $routeRedirection['quit']['arguments']) : ( 'save-add' == $do ? $this->generateUrl('hopitalnumerique_questionnaire_occurrence_add', array('questionnaire' => $questionnaire->getId())) : $this->generateUrl($routeRedirection['sauvegarde']['route'], $routeRedirection['sauvegarde']['arguments']) ) );
             }
         }
     
@@ -724,15 +764,17 @@ class QuestionnaireController extends Controller
      * @author Gaetan MELCHILSEN
      * @copyright Nodevo
      */
-    private function renderGestionForm( $formName, $questionnaire, $view )
+    private function renderGestionForm( $formName, HopiQuestionnaire $questionnaire )
     {
+        $questionnaireEstOccurrenceMultiple = $questionnaire->isOccurrenceMultiple();
+        
         //Création du formulaire via le service
         $form = $this->createForm( $formName, $questionnaire);
 
         $request = $this->get('request');
         
         // Si l'utilisateur soumet le formulaire
-        if ('POST' == $request->getMethod()) 
+        if ('POST' == $request->getMethod())
         {
             // On bind les données du form
             $form->handleRequest($request);
@@ -741,6 +783,8 @@ class QuestionnaireController extends Controller
             if ($form->isValid()) {
                 //test ajout ou edition
                 $new = is_null($questionnaire->getId());
+                
+                $this->processFormOccurrenceMultipleChange($questionnaire, $questionnaireEstOccurrenceMultiple);
                 
                 //On utilise notre Manager pour gérer la sauvegarde de l'objet
                 $this->get('hopitalnumerique_questionnaire.manager.questionnaire')->save($questionnaire);
@@ -754,10 +798,30 @@ class QuestionnaireController extends Controller
             }
         }
 
-        return $this->render( $view , array(
+        return $this->render( 'HopitalNumeriqueQuestionnaireBundle:Questionnaire:Gestion/edit.html.twig' , array(
             'form'          => $form->createView(),
             'questionnaire' => $questionnaire,
+            'isOccurrenceMultiple' => $questionnaireEstOccurrenceMultiple,
             'theme'         => 'vertical'
         ));
+    }
+    
+    /**
+     * Effectue les traitements nécessaires selon la modification de l'occurrence multiple lors de la sauvegarde.
+     * 
+     * @param \HopitalNumerique\QuestionnaireBundle\Entity\Questionnaire $questionnaire                              Questionnaire
+     * @param boolean                                                    $questionnaireEstOccurrenceMultipleOriginal Valeur de l'occurrence multiple avant soumission du formulaire
+     */
+    private function processFormOccurrenceMultipleChange(HopiQuestionnaire $questionnaire, $questionnaireEstOccurrenceMultipleOriginal)
+    {
+        // On a décoché l'occurrence multiple
+        if (!$questionnaireEstOccurrenceMultipleOriginal && $questionnaire->isOccurrenceMultiple())
+        {
+            $this->container->get('hopitalnumerique_questionnaire.manager.questionnaire')->forceOccurrenceMultiple($questionnaire);
+        }
+        elseif ($questionnaireEstOccurrenceMultipleOriginal && !$questionnaire->isOccurrenceMultiple()) // On a coché l'occurrence multiple
+        {
+            $this->container->get('hopitalnumerique_questionnaire.manager.questionnaire')->deleteOccurrencesMultiples($questionnaire);
+        }
     }
 }

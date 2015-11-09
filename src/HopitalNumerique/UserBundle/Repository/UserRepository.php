@@ -315,7 +315,6 @@ class UserRepository extends EntityRepository
     }
 
 
-    /* vvvvvvvvvvvvvvvvvvvvvvvv Code de Rémi vvvvvvvvvvvvvvvvvvvvvvvvvvv */
     /**
      * Retourne un unique CMSI.
      *
@@ -395,7 +394,6 @@ class UserRepository extends EntityRepository
         }
         else
         {
-            # Correction QSO : on fait pas de count dans une boucle FOR
             for ($i = 0, $count = count($role); $i < $count; $i++)
             {
                 $requete
@@ -430,7 +428,7 @@ class UserRepository extends EntityRepository
         
         return $requete->getQuery()->getResult();
     }
-    /* ^^^^^^^^^^^^^^^^^^^^^^ Code de Rémi ^^^^^^^^^^^^^^^^^^^^^^^^^^ */
+
 
     /**
      * Retourne une liste d'utilisateurs en fonction d'un rôle en respectant le retour d'un QB et non d'une liste d'utilisateur

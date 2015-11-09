@@ -39,7 +39,6 @@ class ReportType extends AbstractType
                             )
             ))
             ->add('userAgent', 'hidden', array())
-            
         ;
     }
     

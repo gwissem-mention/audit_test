@@ -83,6 +83,7 @@ class ReportController extends Controller
 
         //$url = base64_decode($url);
         $url = base64_decode(str_replace(array('-', '_'), array('+', '/'), $url));
+
         //Récupération de l'url
         $report->setUrl($url);
         $report->setUser($user);
@@ -121,6 +122,10 @@ class ReportController extends Controller
 
             //si le formulaire est valide
             if ($form->isValid()) {
+
+                //Set current domaine
+                $report->setDomaine($this->get('hopitalnumerique_domaine.manager.domaine')->findOneById($request->getSession()->get('domaineId')));
+                
                 //On utilise notre Manager pour gérer la sauvegarde de l'objet
                 $this->get('hopitalnumerique_report.manager.report')->save($report);
                 

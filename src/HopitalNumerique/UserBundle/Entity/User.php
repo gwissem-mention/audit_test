@@ -25,7 +25,6 @@ use \Nodevo\ToolsBundle\Tools\Chaine;
  * @UniqueEntity(fields="email", message="Cette adresse email existe déjà.")
  * @UniqueEntity(fields="username", message="Ce nom de compte existe déjà.")
  * @Gedmo\Loggable
- * 
  * @ORM\AttributeOverrides({
  *      @ORM\AttributeOverride(name="username",
  *          column=@ORM\Column(
@@ -480,6 +479,13 @@ class User extends BaseUser
      * @ORM\OneToMany(targetEntity="\HopitalNumerique\QuestionnaireBundle\Entity\Reponse", mappedBy="user", cascade={"persist", "remove" })
      */
     protected $reponses;
+    
+    /**
+     * @var \Doctrine\Common\Collections\ArrayCollection
+     * 
+     * @ORM\OneToMany(targetEntity="HopitalNumerique\QuestionnaireBundle\Entity\Occurrence", mappedBy="user")
+     */
+    private $questionnaireOccurrences;
 
     /**
      * @ORM\OneToMany(targetEntity="RefusCandidature", mappedBy="user", cascade={"persist", "remove" })
@@ -1452,6 +1458,39 @@ class User extends BaseUser
     public function getReponses()
     {
         return $this->reponses;
+    }
+
+    /**
+     * Add questionnaireOccurrences
+     *
+     * @param \HopitalNumerique\QuestionnaireBundle\Entity\Occurrence $questionnaireOccurrences
+     * @return User
+     */
+    public function addQuestionnaireOccurrence(\HopitalNumerique\QuestionnaireBundle\Entity\Occurrence $questionnaireOccurrences)
+    {
+        $this->questionnaireOccurrences[] = $questionnaireOccurrences;
+
+        return $this;
+    }
+
+    /**
+     * Remove questionnaireOccurrences
+     *
+     * @param \HopitalNumerique\QuestionnaireBundle\Entity\Occurrence $questionnaireOccurrences
+     */
+    public function removeQuestionnaireOccurrence(\HopitalNumerique\QuestionnaireBundle\Entity\Occurrence $questionnaireOccurrences)
+    {
+        $this->questionnaireOccurrences->removeElement($questionnaireOccurrences);
+    }
+
+    /**
+     * Get questionnaireOccurrences
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getQuestionnaireOccurrences()
+    {
+        return $this->questionnaireOccurrences;
     }
     
     // v -------- Gestion questionnaire  -------- v

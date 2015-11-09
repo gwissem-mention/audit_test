@@ -6,21 +6,49 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 use Doctrine\ORM\EntityRepository;
+use HopitalNumerique\QuestionnaireBundle\Manager\OccurrenceManager;
+use HopitalNumerique\UserBundle\Manager\UserManager;
+use HopitalNumerique\QuestionnaireBundle\Entity\Questionnaire;
+use HopitalNumerique\QuestionnaireBundle\Entity\Occurrence;
+use HopitalNumerique\UserBundle\Entity\User;
 
 class QuestionnaireType extends AbstractType
 {
+    /**
+     * @var \HopitalNumerique\QuestionnaireBundle\Form\Type\OccurrenceType Formulaire OccurrenceType
+     */
+    private $occurenceForm;
+    
     private $_readOnly = false;
     private $_managerReponse;
+    
+    /**
+     * @var \HopitalNumerique\QuestionnaireBundle\Manager\QuestionnaireManager QuestionnaireManager
+     */
     private $_managerQuestionnaire;
+    
+    /**
+     * @var \HopitalNumerique\QuestionnaireBundle\Manager\OccurrenceManager OccurrenceManager
+     */
+    private $occurenceManager;
+    
+    /**
+     * @var \HopitalNumerique\UserBundle\Manager\UserManager UserManager
+     */
+    private $userManager;
+    
 
     /**
      * @param HopitalNumerique\QuestionnaireBundle\Manager\ReponseManager       $managerReponse
      * @param HopitalNumerique\QuestionnaireBundle\Manager\QuestionnaireManager $managerQuestionnaire
      */
-    public function __construct($managerReponse, $managerQuestionnaire)
+    public function __construct(OccurrenceType $occurenceForm, $managerReponse, $managerQuestionnaire, OccurrenceManager $occurrenceManager, UserManager $userManager)
     {
+        $this->occurenceForm = $occurenceForm;
         $this->_managerReponse       = $managerReponse;
         $this->_managerQuestionnaire = $managerQuestionnaire;
+        $this->occurenceManager = $occurrenceManager;
+        $this->userManager = $userManager;
     }
 
     /**
@@ -35,7 +63,9 @@ class QuestionnaireType extends AbstractType
     {
         $idUser          = (isset($options['label_attr']['idUser']) && !is_null($options['label_attr']['idUser'])) ? $options['label_attr']['idUser'] : 0;
         $idQuestionnaire = (isset($options['label_attr']['idQuestionnaire']) && !is_null($options['label_attr']['idQuestionnaire'])) ? $options['label_attr']['idQuestionnaire'] : 0;
+        $occurrence = (isset($options['label_attr']['occurrence']) ? $options['label_attr']['occurrence'] : null);
         $questionnaire   = $this->_managerQuestionnaire->findOneBy(array('id' => $idQuestionnaire));
+        $user = $this->userManager->findOneById($idUser);
         
        /*
         * Tableau de la route de redirection sous la forme :
@@ -53,21 +83,34 @@ class QuestionnaireType extends AbstractType
         
         //Ajout d'un champ hidden pour récupérer les routes de redirection dans le controleur à la validation
         $builder->add('routeRedirect', 'hidden', array(
-                'data'       => $routeRedirection,
-                'mapped'     => false
+            'data'       => $routeRedirection,
+            'mapped'     => false
         ));
 
         //Ajout d'un champ hidden pour récupérer les routes de redirection dans le controleur à la validation
         $builder->add('idSession', 'hidden', array(
-                'data'       => isset($options['label_attr']['idSession']) && !is_null($options['label_attr']['idSession']) ? $options['label_attr']['idSession'] : 0,
-                'mapped'     => false
+            'data'       => isset($options['label_attr']['idSession']) && !is_null($options['label_attr']['idSession']) ? $options['label_attr']['idSession'] : 0,
+            'mapped'     => false
         ));
+
+        if ($questionnaire->isOccurrenceMultiple() && null === $occurrence)
+        {
+            $occurrence = $this->occurenceManager->getDerniereOccurenceByQuestionnaireAndUser($questionnaire, $user);
+            
+            if (null === $occurrence)
+            {
+                $occurrence = $this->occurenceManager->createEmpty();
+                $occurrence->setQuestionnaire($questionnaire);
+                $occurrence->setUser($user);
+                $this->occurenceManager->save($occurrence);
+            }
+        }
         
         //Récupération du questionnaire
-        $questions = $this->_managerQuestionnaire->getQuestionsReponses($idQuestionnaire, $idUser, (isset($options['label_attr']['paramId']) ? $options['label_attr']['paramId'] : null));
+        $questions = $this->_managerQuestionnaire->getQuestionsReponses($idQuestionnaire, $idUser, $occurrence, (isset($options['label_attr']['paramId']) ? $options['label_attr']['paramId'] : null));
 
         //Construction du formulaire en fonction des questions + chargement des réponses si il y en a
-        $builder = $this->constructBuilder($builder, $questions, $questionnaire, $options); 
+        $builder = $this->constructBuilder($builder, $questions, $questionnaire, $occurrence, $options);
     }
     
     public function setDefaultOptions(OptionsResolverInterface $resolver)
@@ -93,17 +136,25 @@ class QuestionnaireType extends AbstractType
      * 
      * @return FormBuilderInterface Le builder avec tous les champs
      */
-    private function constructBuilder(FormBuilderInterface $builder, $questions, $questionnaire, $options)
-    {        
+    private function constructBuilder(FormBuilderInterface $builder, $questions, Questionnaire $questionnaire, Occurrence $occurrence = null, $options)
+    {
+        $this->addOccurrenceType($builder, $questionnaire, $occurrence);
+        
         //Réponse de la question courante
         $reponseCourante = null;
-        
+
         //Création des questions
         foreach ($questions as $question)
-        {                    
+        {
             $reponses = $question->getReponses();
-            $reponseCourante = $reponses[0];
-            
+            $reponseCourante = null;
+
+            if (count($reponses) > 0)
+            {
+                $reponseCourante = $reponses[0];
+                $reponseCourante->setOccurrence($occurrence);
+            }
+
             //Dans le cas où le champ est obligatoire on ajoute automatiquement le contrôle JS dessus
             // il sera surchargé si le champ controle JS est rempli pour la question courante
             $attr = $question->getObligatoire() ? array('class' => 'validate[required]') : array();
@@ -283,7 +334,7 @@ class QuestionnaireType extends AbstractType
                     }
             	    
             	    $objetIdsSelectionnees = array();
-            	    $reponses = $this->_managerReponse->reponsesByQuestionnaireByUser($questionnaire->getId(), $interventionDemande->getReferent()->getId(), true, $interventionDemande->getId());
+            	    $reponses = $this->_managerReponse->reponsesByQuestionnaireByUser($questionnaire->getId(), $interventionDemande->getReferent()->getId(), true, null, $interventionDemande->getId());
             	    $reponse = $this->_managerReponse->findOneBy(array(
             	        'question' => $question,
             	        'user' => $interventionDemande->getReferent(),
@@ -387,6 +438,26 @@ class QuestionnaireType extends AbstractType
             	    ));
             	    break;
             }
+        }
+    }
+    
+    /**
+     * Ajoute le sous-formulaire de l'occurrence si nécessaire.
+     * 
+     * @param \Symfony\Component\Form\FormBuilderInterface               $builder       FormBuilder
+     * @param \HopitalNumerique\QuestionnaireBundle\Entity\Questionnaire $questionnaire Questionnaire
+     * @param \HopitalNumerique\UserBundle\Entity\User                   $user          Utilisateur
+     */
+    private function addOccurrenceType(FormBuilderInterface &$builder, Questionnaire $questionnaire, Occurrence $occurrence = null)
+    {
+        if ($questionnaire->isOccurrenceMultiple())
+        {
+            $builder
+                ->add('occurrence', $this->occurenceForm, array(
+                    'data' => $occurrence,
+                    'mapped' => false
+                ))
+            ;
         }
     }
 }

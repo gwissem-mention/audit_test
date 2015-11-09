@@ -421,7 +421,7 @@ class SearchManager extends BaseManager
 
                 foreach ($categ as $item) {
                     //objet Found here
-                    if( (is_null($item['objet']) && $item['id'] == $publication->getId()) || (!is_null($item['objet']) && $item['id'] == $publication->getId()) ) {
+                    if( (array_key_exists('objet', $item) && is_null($item['objet']) && $item['id'] == $publication->getId()) || (array_key_exists('objet', $item) && !is_null($item['objet']) && $item['id'] == $publication->getId()) ) {
 
                         //si i < 5 : on prend ceux d'avant, et on met à jour le max result
                         if( $i < 5 ){

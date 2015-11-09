@@ -27,30 +27,42 @@
 {% endblock %}
 
 {% block body %}
+    
     <div class="col-md-10 col-md-offset-1" id="inscription">
-        <div id="questionnaire_form">  
+        
+        {% if questionnaire.occurrenceMultiple %}
+            <hr>
+            <div class="row">
+                <div class="col-md-12 text-right">
+                    <a href="{{ path('hopitalnumerique_questionnaire_occurrence_add', { 'questionnaire':questionnaire.id }) }}" onclick="$('#do').val('save-add');$('form').submit();return false;" class="btn btn-success"><em class="fa fa-save"></em> &nbsp;<em class="fa fa-plus"></em> &nbsp; Enregistrer et Créer un nouveau questionnaire</a>
+                    <a href="{{ path('hopitalnumerique_questionnaire_list') }}" class="btn btn-info"><em class="fa fa-list"></em> &nbsp; Consulter tous mes questionnaires</a>
+                </div>
+            </div>
+            <hr>
+        {% endif %}
+        
+        <div id="questionnaire_form">
             <h3>Questionnaire {{questionnaire.nom}}</h3>
-                
-            {{ render(controller("HopitalNumeriqueQuestionnaireBundle:Questionnaire:editFront", {'user':app.user , 'questionnaire':questionnaire, 'optionRenderForm' : optionRenderForm} )) }}</div>
-            <div class="clearfix"></div>
-            <div class="col-md-12 no-padding button_questionnaire">
-                <input onclick="$('#do').val('save-close');$('form').submit();" class="btn btn-success col-md-4 pull-right submit questionnaire_submit" value="VALIDER LE QUESTIONNAIRE" type="button"/>
-            </div>
-
-            <div class="clearfix"></div>
-
-            <div id="footerDesc">
-                <div class="clearfix"></div>
-                <p>
-                    Dans une logique de respect de la vie privée de ses utilisateurs, L'ANAP s'engage à ce que la collecte et le traitement d'informations personnelles, réalisés au sein du présent site, soient effectués conformément à la loi n°78-17 du 6 janvier 1978 relative à l'informatique, aux fichiers et aux libertés, dite Loi « Informatique et Libertés ».
-                </p>
-                <p>
-                    Conformément à l'article 34 de la loi « Informatique et Libertés », l'ANAP garantit à l'utilisateur un droit d'opposition, d'accès et de rectification sur les données nominatives le concernant. L'utilisateur a la possibilité d'exercer ce droit en contactant l'équipe accompagnement de l'ANAP.
-                </p>
-            </div>
+            
+            {{ render(controller("HopitalNumeriqueQuestionnaireBundle:Questionnaire:editFront", {'user':app.user , 'questionnaire':questionnaire, 'occurrence':occurrence, 'optionRenderForm' : optionRenderForm} )) }}
         </div>
         <div class="clearfix"></div>
+        <div class="col-md-12 no-padding button_questionnaire">
+            <input onclick="$('#do').val('save-close');$('form').submit();" class="btn btn-success col-md-4 pull-right submit questionnaire_submit" value="VALIDER LE QUESTIONNAIRE" type="button"/>
+        </div>
+
+        <div class="clearfix"></div>
+
+        <div id="footerDesc">
+            <div class="clearfix"></div>
+            <p>
+                Dans une logique de respect de la vie privée de ses utilisateurs, L'ANAP s'engage à ce que la collecte et le traitement d'informations personnelles, réalisés au sein du présent site, soient effectués conformément à la loi n°78-17 du 6 janvier 1978 relative à l'informatique, aux fichiers et aux libertés, dite Loi « Informatique et Libertés ».
+            </p>
+            <p>
+                Conformément à l'article 34 de la loi « Informatique et Libertés », l'ANAP garantit à l'utilisateur un droit d'opposition, d'accès et de rectification sur les données nominatives le concernant. L'utilisateur a la possibilité d'exercer ce droit en contactant l'équipe accompagnement de l'ANAP.
+            </p>
+        </div>
     </div>
-    </div>
-    </div>
+    <div class="clearfix"></div>
+
 {% endblock %}

@@ -3,6 +3,8 @@
 namespace HopitalNumerique\QuestionnaireBundle\Repository;
 
 use Doctrine\ORM\EntityRepository;
+use HopitalNumerique\QuestionnaireBundle\Entity\Occurrence;
+use HopitalNumerique\UserBundle\Entity\User;
 
 /**
  * QuestionnaireRepository
@@ -52,27 +54,57 @@ class QuestionnaireRepository extends EntityRepository
      *
      * @return array
      */
-    public function getQuestionsReponses( $idQuestionnaire, $idUser, $paramId )
+    public function getQuestionsReponses( $idQuestionnaire, $idUser, Occurrence $occurrence = null, $paramId = null )
     {
         $qb = $this->_em->createQueryBuilder();
-        $qb->select('questionnaire, question, reponse')
+        $qb
+            ->select('questionnaire, question, reponse')
             ->from('\HopitalNumerique\QuestionnaireBundle\Entity\Question', 'question')
             ->innerJoin('question.questionnaire', 'questionnaire' ,'WITH' , 'questionnaire.id = :idQuestionnaire')
-            ->setParameter('idQuestionnaire', $idQuestionnaire );
-        
+            ->setParameter('idQuestionnaire', $idQuestionnaire )
+        ;
+
+        $qb
+            ->leftJoin('question.reponses', 'reponse', 'WITH' , 'reponse.user = :idUser'.(null !== $paramId ? ' AND reponse.paramId = :paramId' : '').(null !== $occurrence ? ' AND reponse.occurrence = :occurrence' : ''))
+            ->setParameter('idUser', $idUser )
+        ;
+
         if ($paramId != null)
         {
-            $qb->leftJoin('question.reponses', 'reponse', 'WITH' , 'reponse.user = :idUser AND reponse.paramId = :paramId')
-                ->setParameter('idUser', $idUser)
-                ->setParameter('paramId', $paramId);
+            $qb->setParameter('paramId', $paramId);
         }
-        else
+
+        if (null !== $occurrence)
         {
-            $qb->leftJoin('question.reponses', 'reponse', 'WITH' , 'reponse.user = :idUser ')
-                ->setParameter('idUser', $idUser );
+            $qb->setParameter('occurrence', $occurrence->getId());
         }
+
         $qb->orderBy('question.ordre');
 
         return $qb->getQuery()->getResult();
+    }
+    
+    /**
+     * Retourne les questionnaires (avec leurs occurrences) d'un utilisateur.
+     * 
+     * @param \HopitalNumerique\UserBundle\Entity\User $user Utilisateur
+     * @return array<\HopitalNumerique\QuestionnaireBundle\Entity\Questionnaire> Questionnaires
+     */
+    public function findByUser(User $user)
+    {
+        $query = $this->createQueryBuilder('questionnaire');
+        
+        $query
+            ->select('questionnaire', 'occurrence')
+            ->innerJoin('questionnaire.questions', 'question')
+            ->innerJoin('question.reponses', 'reponse', \Doctrine\ORM\Query\Expr\Join::WITH, 'reponse.user = :user')
+            ->leftJoin('questionnaire.occurrences', 'occurrence', \Doctrine\ORM\Query\Expr\Join::WITH, 'occurrence.user = :user')
+            ->setParameter('user', $user)
+            ->groupBy('questionnaire.id', 'occurrence.id')
+            ->addOrderBy('questionnaire.id', 'ASC')
+            ->addOrderBy('occurrence.id', 'ASC')
+        ;
+
+        return $query->getQuery()->getResult();
     }
 }

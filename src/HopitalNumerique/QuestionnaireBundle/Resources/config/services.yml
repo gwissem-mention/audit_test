@@ -27,13 +27,13 @@ services:
     #--Manager
     hopitalnumerique_questionnaire.manager.questionnaire:
         class: "%hopitalnumerique_questionnaire.manager.questionnaire.class%"
-        arguments: ["@doctrine.orm.entity_manager", "@hopitalnumerique_questionnaire.manager.reponse", "@hopitalnumerique_user.manager.user", "%hopitalnumerique_questionnaire.options%"]
+        arguments: ["@doctrine.orm.entity_manager", "@hopitalnumerique_questionnaire.manager.occurrence", "@hopitalnumerique_questionnaire.manager.reponse", "@hopitalnumerique_user.manager.user", "%hopitalnumerique_questionnaire.options%"]
         calls:
             - [ setCache, ["@liip_doctrine_cache.ns.main"] ]
     #--Type
     hopitalnumerique_questionnaire.form.type.questionnaire:
         class: "%hopitalnumerique_questionnaire.form.type.questionnaire%"
-        arguments: ["@hopitalnumerique_questionnaire.manager.reponse", "@hopitalnumerique_questionnaire.manager.questionnaire"]
+        arguments: ["@hopitalnumerique_questionnaire.form.type.occurrence", "@hopitalnumerique_questionnaire.manager.reponse", "@hopitalnumerique_questionnaire.manager.questionnaire", "@hopitalnumerique_questionnaire.manager.occurrence", "@hopitalnumerique_user.manager.user"]
         tags:
             - { name: form.type, alias: nodevo_questionnaire_questionnaire }
     #-Gestion des questionnaires
@@ -68,6 +68,14 @@ services:
         arguments: ["@doctrine.orm.entity_manager"]
         calls:
             - [ setCache, ["@liip_doctrine_cache.ns.main"] ]
+    #Occurrence
+    hopitalnumerique_questionnaire.form.type.occurrence:
+        class: "HopitalNumerique\QuestionnaireBundle\Form\Type\OccurrenceType"
+        tags:
+            - { name: form.type, alias: nodevo_questionnaire_occurrence }
+    hopitalnumerique_questionnaire.manager.occurrence:
+        class: "HopitalNumerique\QuestionnaireBundle\Manager\OccurrenceManager"
+        arguments: ["@doctrine.orm.entity_manager"]
     #Extension Twig        
     hopitalnumerique_questionnaire.twig.questionnaire_extension:
         class: %hopitalnumerique_questionnaire.twig.extensions.class%

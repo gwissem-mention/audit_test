@@ -5,6 +5,10 @@ namespace HopitalNumerique\QuestionnaireBundle\Manager;
 use Nodevo\ToolsBundle\Manager\Manager as BaseManager;
 use Doctrine\ORM\EntityManager;
 use HopitalNumerique\UserBundle\Manager\UserManager;
+use HopitalNumerique\QuestionnaireBundle\Entity\Occurrence;
+use HopitalNumerique\UserBundle\Entity\User;
+use HopitalNumerique\QuestionnaireBundle\Entity\Questionnaire;
+use HopitalNumerique\QuestionnaireBundle\Manager\OccurrenceManager;
 
 /**
  * Manager de l'entité Contractualisation.
@@ -12,6 +16,11 @@ use HopitalNumerique\UserBundle\Manager\UserManager;
 class QuestionnaireManager extends BaseManager
 {
     protected $_class = 'HopitalNumerique\QuestionnaireBundle\Entity\Questionnaire';
+    
+    /**
+     * @var \HopitalNumerique\QuestionnaireBundle\Manager\OccurrenceManager OccurrenceManager
+     */
+    private $occurrenceManager;
 
     protected $_questionnaireArray = array();
     protected $_mailExpertReponses = array();
@@ -24,12 +33,13 @@ class QuestionnaireManager extends BaseManager
      *
      * @param EntityManager $em Entity Manager de Doctrine
      */
-    public function __construct( EntityManager $em, $managerReponse, UserManager $userManager, $options = array() )
+    public function __construct( EntityManager $em, OccurrenceManager $occurrenceManager, $managerReponse, UserManager $userManager, $options = array() )
     {
         parent::__construct($em);
         $this->_questionnaireArray = isset($options['idRoles']) ? $options['idRoles'] : array();
         $this->_mailExpertReponses = isset($options['mailExpertReponses']) ? $options['mailExpertReponses'] : array();
         $this->_mailReponses       = isset($options['mailReponses']) ? $options['mailReponses'] : array();
+        $this->occurrenceManager   = $occurrenceManager;
         $this->_managerReponse     = $managerReponse;
         $this->_userManager        = $userManager;
     }
@@ -74,9 +84,9 @@ class QuestionnaireManager extends BaseManager
      *
      * @return [type]
      */
-    public function getQuestionsReponses( $idQuestionnaire, $idUser, $paramId = null )
+    public function getQuestionsReponses( $idQuestionnaire, $idUser, Occurrence $occurrence = null, $paramId = null )
     {
-        return $this->getRepository()->getQuestionsReponses( $idQuestionnaire , $idUser, $paramId );
+        return $this->getRepository()->getQuestionsReponses( $idQuestionnaire , $idUser, $occurrence, $paramId );
     }
     
     /**
@@ -315,5 +325,57 @@ class QuestionnaireManager extends BaseManager
         }
 
         return array('colonnes' => $colonnes, 'datas' => $datas );
+    }
+    
+    /**
+     * Retourne les questionnaires (avec leurs occurrences) d'un utilisateur.
+     * 
+     * @param \HopitalNumerique\UserBundle\Entity\User $user Utilisateur
+     * @return array<\HopitalNumerique\QuestionnaireBundle\Entity\Questionnaire> Questionnaires
+     */
+    public function findByUser(User $user)
+    {
+        return $this->getRepository()->findByUser($user);
+    }
+    
+    /**
+     * Si le questionnaire a été répondu sans que le formulaire fut en occurrence multiple, créé l'occurrence multiple pour ces réponses.
+     * 
+     * @param \HopitalNumerique\QuestionnaireBundle\Entity\Questionnaire $questionnaire Questionnaire
+     * @return void
+     */
+    public function forceOccurrenceMultiple(Questionnaire $questionnaire)
+    {
+        $repondants = $this->_userManager->getUsersByQuestionnaire($questionnaire->getId());
+        
+        foreach ($repondants as $repondant)
+        {
+            $occurrence = $this->occurrenceManager->findOneBy(array('questionnaire' => $questionnaire, 'user' => $repondant));
+
+            if (null === $occurrence)
+            {
+                $occurrence = $this->occurrenceManager->createEmpty();
+                $occurrence->setUser($repondant);
+                $occurrence->setQuestionnaire($questionnaire);
+                $this->occurrenceManager->save($occurrence);
+                $this->_managerReponse->setOccurrenceByQuestionnaireAndUser($occurrence, $questionnaire, $repondant);
+            }
+        }
+    }
+    
+    /**
+     * Supprime les occurrences multiples d'un questionnaire (ne conserve que la première créée pour conserver les réponses).
+     * 
+     * @param \HopitalNumerique\QuestionnaireBundle\Entity\Questionnaire $questionnaire Questionnaire
+     * @return void
+     */
+    public function deleteOccurrencesMultiples(Questionnaire $questionnaire)
+    {
+        $repondants = $this->_userManager->getUsersByQuestionnaire($questionnaire->getId());
+        
+        foreach ($repondants as $repondant)
+        {
+            $this->occurrenceManager->deleteOccurrencesMultiplesByQuestionnaireAndUser($questionnaire, $repondant);
+        }
     }
 }
