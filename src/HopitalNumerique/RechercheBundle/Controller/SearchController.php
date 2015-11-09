@@ -188,6 +188,9 @@ class SearchController extends Controller
 
         foreach ($objets as $key => $objet) 
         {
+            if( $objet['categ'] === 'forum' ){
+                continue;
+            }
             //GME 14/09/2015 : Pour que l'objet soit dans le domaine il faut que l'id de l'objet soit dans le domaine (cas objet classique)
             //Ou que si il existe une clé "objet" (cas infradoc) qu'elle ne soit pas nulle et que l'id de l'objet parent soit dans le domaine
             if(!(in_array($objet['id'], $objetsDuDomaineIds)
