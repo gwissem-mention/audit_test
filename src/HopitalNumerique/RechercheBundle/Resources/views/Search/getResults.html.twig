@@ -38,7 +38,11 @@
         <div class="results">
             {% set count = 0 %}
             {% for objet in objets if (objet['categ'] == "production" or objet['categ'] == "ressource" or objet['categ'] == "forum") %}
-                {% include 'HopitalNumeriqueRechercheBundle:Search:productions.html.twig' with {'objet': objet, 'count':count, 'showMoreProductions' : showMoreProductions } %}
+                {% if objet['categ'] == 'forum' %}
+                    {% include 'HopitalNumeriqueRechercheBundle:Search:forum.html.twig' with {'objet': objet, 'count':count, 'showMoreProductions' : showMoreProductions } %}
+                {% else %}
+                    {% include 'HopitalNumeriqueRechercheBundle:Search:productions.html.twig' with {'objet': objet, 'count':count, 'showMoreProductions' : showMoreProductions } %}
+                {% endif %}
                 {% set count = count + 1 %}
             {% else %}
                 <p> - Aucune production trouvée - </p>

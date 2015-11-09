@@ -1,5 +1,20 @@
-<div class="item {% if count == 1 %}active{% endif %}" >
-    <h4>
-        <a href="{{path('ccdn_forum_user_topic_show', {'topicId':objet['id']})}}">{{objet['titre']}}</a>
-    </h4>
+<div class="row" {% if showMoreProductions is defined and count >= showMoreProductions %}style="display:none"{% endif %} >
+    <div class="col-md-12">
+        <h5>Fil de forum</h5>
+    </div>
+    <div class="col-md-12">
+        <h4>
+            {% if not onlyText %}
+                {% if objet['primary'] >= 1 %}
+                    <img class="niveau" src="{{asset('bundles/hopitalnumeriquerecherche/img/niv-1-prod.png')}}" alt="Niveau 1" title="Contenus les plus pertinents" />
+                {% elseif objet['countRef'] <= 200 %}
+                    <img class="niveau" src="{{asset('bundles/hopitalnumeriquerecherche/img/niv-2-prod.png')}}" alt="Niveau 2" title="Contenus pertinents" />
+                {% elseif objet['countRef'] > 200 %}
+                    <img class="niveau" src="{{asset('bundles/hopitalnumeriquerecherche/img/niv-3-prod.png')}}" alt="Niveau 3" title="Contenus potentiellement pertinents" />
+                {% endif %}
+            {% endif %}
+        		
+        	<a href="{{path('ccdn_forum_user_topic_show', {'topicId':objet['id']})}}">{{objet['titre']}}</a>
+        </h4>
+    </div>
 </div>
