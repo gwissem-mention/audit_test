@@ -34,7 +34,7 @@
             <hr>
             <div class="row">
                 <div class="col-md-12 text-right">
-                    <a href="{{ path('hopitalnumerique_questionnaire_occurrence_add', { 'questionnaire':questionnaire.id }) }}" onclick="$('#do').val('save-add');$('form').submit();return false;" class="btn btn-success"><em class="fa fa-save"></em> &nbsp;<em class="fa fa-plus"></em> &nbsp; Enregistrer et Créer un nouveau questionnaire</a>
+                    <a style="margin-right:5px" href="{{ path('hopitalnumerique_questionnaire_occurrence_add', { 'questionnaire':questionnaire.id }) }}" onclick="$('#do').val('save-add');$('form').submit();return false;" class="btn btn-success"><em class="fa fa-save"></em> &nbsp; Enregistrer et créer un nouveau questionnaire</a>
                     <a href="{{ path('hopitalnumerique_questionnaire_list') }}" class="btn btn-info"><em class="fa fa-list"></em> &nbsp; Consulter tous mes questionnaires</a>
                 </div>
             </div>
