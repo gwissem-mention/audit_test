@@ -18,6 +18,6 @@
         </h4>
     </div>
     <div class="col-md-12">
-        <p>{{ objet['resume']|trim }}</p>
+        <p>{{ objet['resume']|trim|truncate(400) }}</p>
     </div>
 </div>
