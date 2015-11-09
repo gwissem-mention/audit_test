@@ -881,7 +881,7 @@ class SearchManager extends BaseManager
 
         $item['id']       = $topic->getId();
         $item['titre']    = $topic->getTitle();
-        $item['resume']   = $topic->getFirstPost()->getBody();
+        $item['resume']   = preg_replace("/[<\[](.*?)[>\]]/", "", $topic->getFirstPost()->getBody());
         $item['countRef'] = $this->getNoteReferencement($topic->getReferences());
         
         //get Type
