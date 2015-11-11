@@ -68,6 +68,18 @@ class Objet implements RoutedItemInterface
     /**
      * @var string
      * 
+     * @Assert\Length(
+     *      max = "255",
+     *      maxMessage = "Il doit y avoir au maximum {{ limit }} caractères dans la source."
+     * )
+     * @Nodevo\Javascript(class="validate[maxSize[255]]")
+     * @ORM\Column(name="obj_source", type="string", nullable=true, length=255, options = {"comment" = "Source si externe"})
+     */
+    private $source;
+
+    /**
+     * @var string
+     * 
      * @Gedmo\Versioned
      * @ORM\Column(name="obj_synthese", type="text", nullable=true, options = {"comment" = "Synthèse de l objet"})
      */
@@ -1900,5 +1912,28 @@ class Objet implements RoutedItemInterface
     public function getCibleDiffusion()
     {
         return $this->cibleDiffusion;
+    }
+
+    /**
+     * Set source
+     *
+     * @param string $source
+     * @return Objet
+     */
+    public function setSource($source)
+    {
+        $this->source = $source;
+
+        return $this;
+    }
+
+    /**
+     * Get source
+     *
+     * @return string 
+     */
+    public function getSource()
+    {
+        return $this->source;
     }
 }
