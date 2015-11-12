@@ -402,6 +402,7 @@ class PublicationController extends Controller
                 $production        = new \StdClass;
                 $production->id    = $objet->getId();
                 $production->alias = $objet->getAlias();
+                $production->source = $objet->getSource();
 
                 //Cas Objet
                 if( $contenu === false ) 
