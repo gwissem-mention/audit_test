@@ -9,6 +9,7 @@ use HopitalNumerique\QuestionnaireBundle\Entity\Occurrence;
 use HopitalNumerique\UserBundle\Entity\User;
 use HopitalNumerique\QuestionnaireBundle\Entity\Questionnaire;
 use HopitalNumerique\QuestionnaireBundle\Manager\OccurrenceManager;
+use HopitalNumerique\DomaineBundle\Entity\Domaine;
 
 /**
  * Manager de l'entité Contractualisation.
@@ -377,5 +378,18 @@ class QuestionnaireManager extends BaseManager
         {
             $this->occurrenceManager->deleteOccurrencesMultiplesByQuestionnaireAndUser($questionnaire, $repondant);
         }
+    }
+    
+    /**
+     * Retourne les questionnaires (avec leurs occurrences) d'un utilisateur pour un domaine.
+     * 
+     * @param \HopitalNumerique\UserBundle\Entity\User       $user    Utilisateur
+     * @param \HopitalNumerique\DomaineBundle\Entity\Domaine $domaine Domaine
+     * @param boolean                                        $isLock  (optionnel) Filtre sur questionnaire.lock
+     * @return array<\HopitalNumerique\QuestionnaireBundle\Entity\Questionnaire> Questionnaires
+     */
+    public function findByUserAndDomaine(User $user, Domaine $domaine, $isLock = null)
+    {
+        return $this->getRepository()->findByUserAndDomaine($user, $domaine, $isLock);
     }
 }

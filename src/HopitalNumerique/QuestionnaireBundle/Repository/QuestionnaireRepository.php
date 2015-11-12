@@ -5,6 +5,7 @@ namespace HopitalNumerique\QuestionnaireBundle\Repository;
 use Doctrine\ORM\EntityRepository;
 use HopitalNumerique\QuestionnaireBundle\Entity\Occurrence;
 use HopitalNumerique\UserBundle\Entity\User;
+use HopitalNumerique\DomaineBundle\Entity\Domaine;
 
 /**
  * QuestionnaireRepository
@@ -100,6 +101,43 @@ class QuestionnaireRepository extends EntityRepository
             ->innerJoin('question.reponses', 'reponse', \Doctrine\ORM\Query\Expr\Join::WITH, 'reponse.user = :user')
             ->leftJoin('questionnaire.occurrences', 'occurrence', \Doctrine\ORM\Query\Expr\Join::WITH, 'occurrence.user = :user')
             ->setParameter('user', $user)
+            ->groupBy('questionnaire.id', 'occurrence.id')
+            ->addOrderBy('questionnaire.id', 'ASC')
+            ->addOrderBy('occurrence.id', 'ASC')
+        ;
+
+        return $query->getQuery()->getResult();
+    }
+    
+    /**
+     * Retourne les questionnaires (avec leurs occurrences) d'un utilisateur pour un domaine.
+     * 
+     * @param \HopitalNumerique\UserBundle\Entity\User       $user    Utilisateur
+     * @param \HopitalNumerique\DomaineBundle\Entity\Domaine $domaine Domaine
+     * @param boolean                                        $isLock  (optionnel) Filtre sur questionnaire.lock
+     * @return array<\HopitalNumerique\QuestionnaireBundle\Entity\Questionnaire> Questionnaires
+     */
+    public function findByUserAndDomaine(User $user, Domaine $domaine, $isLock = null)
+    {
+        $query = $this->createQueryBuilder('questionnaire');
+        
+        $query
+            ->select('questionnaire', 'occurrence')
+            ->innerJoin('questionnaire.questions', 'question')
+            ->innerJoin('question.reponses', 'reponse', \Doctrine\ORM\Query\Expr\Join::WITH, 'reponse.user = :user')
+            ->leftJoin('questionnaire.occurrences', 'occurrence', \Doctrine\ORM\Query\Expr\Join::WITH, 'occurrence.user = :user')
+            ->setParameter('user', $user)
+            ->innerJoin('questionnaire.domaines', 'domaine', \Doctrine\ORM\Query\Expr\Join::WITH, 'domaine = :domaine')
+            ->setParameter('domaine', $domaine)
+        ;
+        if (null !== $isLock)
+        {
+            $query
+                ->where('questionnaire.lock = :lock')
+                ->setParameter('lock', $isLock)
+            ;
+        }
+        $query
             ->groupBy('questionnaire.id', 'occurrence.id')
             ->addOrderBy('questionnaire.id', 'ASC')
             ->addOrderBy('occurrence.id', 'ASC')
