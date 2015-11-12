@@ -40,10 +40,6 @@ parameters:
         gmelchilsen@nodevo.com: Gaëtan M.
         tdauriac@nodevo.com: Thomas D.
 
-    #HopitalNumerique_Reporting
-    confighn_hopitalnumerique_report:
-        gmelchilsen@nodevo.com: Gaëtan
-
     #HopitalNumerique_Recherche : Url exalead
     confighn_hopitalnumerique_recherche: "http://fifi.mind7.fr:13010/search-api/search?q="
     confighn_hopitalnumerique_exalead  : false

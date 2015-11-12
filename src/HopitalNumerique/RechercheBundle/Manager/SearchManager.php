@@ -751,6 +751,7 @@ class SearchManager extends BaseManager
         $item['countRef'] = $this->getNoteReferencement($contenu->getReferences());
         $item['objet']    = $objet->getId();
         $item['aliasO']   = $objet->getAlias();
+        $item['source']   = $objet->getSource();
         $item['aliasC']   = $contenu->getAlias();
         $item['synthese'] = $objet->getSynthese() != '' ? $objet->getId() : null;
 
@@ -810,6 +811,7 @@ class SearchManager extends BaseManager
         $item['countRef'] = $this->getNoteReferencement($objet->getReferences());
         $item['objet']    = null;
         $item['alias']    = $objet->getAlias();
+        $item['source']   = $objet->getSource();
         $item['synthese'] = $objet->getSynthese() != '' ? $objet->getId() : null;
 
         //clean resume (pagebreak)
