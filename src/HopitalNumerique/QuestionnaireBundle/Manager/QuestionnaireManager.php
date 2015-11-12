@@ -9,6 +9,7 @@ use HopitalNumerique\QuestionnaireBundle\Entity\Occurrence;
 use HopitalNumerique\UserBundle\Entity\User;
 use HopitalNumerique\QuestionnaireBundle\Entity\Questionnaire;
 use HopitalNumerique\QuestionnaireBundle\Manager\OccurrenceManager;
+use HopitalNumerique\DomaineBundle\Entity\Domaine;
 
 /**
  * Manager de l'entité Contractualisation.
@@ -377,5 +378,34 @@ class QuestionnaireManager extends BaseManager
         {
             $this->occurrenceManager->deleteOccurrencesMultiplesByQuestionnaireAndUser($questionnaire, $repondant);
         }
+    }
+    
+    /**
+     * Retourne les questionnaires (avec leurs occurrences) d'un utilisateur pour un domaine avec les dates de création et de dernières modifications.
+     * 
+     * @param \HopitalNumerique\UserBundle\Entity\User       $user    Utilisateur
+     * @param \HopitalNumerique\DomaineBundle\Entity\Domaine $domaine Domaine
+     * @param boolean                                        $isLock  (optionnel) Filtre sur questionnaire.lock
+     * @return array<\HopitalNumerique\QuestionnaireBundle\Entity\Questionnaire> Questionnaires
+     */
+    public function findByUserAndDomaineWithDates(User $user, Domaine $domaine, $isLock = null)
+    {
+        $questionnaires = $this->getRepository()->findByUserAndDomaineWithDates($user, $domaine, $isLock);
+        $occurrences = $this->occurrenceManager->findByUserWithDates($user);
+        
+        for ($i = 0; $i < count($questionnaires); $i++)
+        {
+            $questionnaires[$i]['occurrences'] = array();
+            
+            foreach ($occurrences as $occurrence)
+            {
+                if ($questionnaires[$i][0]->getId() == $occurrence[0]->getQuestionnaire()->getId())
+                {
+                    $questionnaires[$i]['occurrences'][] = $occurrence;
+                }
+            }
+        }
+        
+        return $questionnaires;
     }
 }

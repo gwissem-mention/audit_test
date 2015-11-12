@@ -18,11 +18,11 @@ class OccurrenceManager extends \Nodevo\ToolsBundle\Manager\Manager
      * @param \HopitalNumerique\UserBundle\Entity\User                   $user          Utilisateur
      * @return \HopitalNumerique\QuestionnaireBundle\Entity\Occurrence|NULL Dernière occurrence ou NULL si aucune occurrence
      */
-    public function getDerniereOccurenceByQuestionnaireAndUser(Questionnaire $questionnaire, User $user)
+    public function getDerniereOccurrenceByQuestionnaireAndUser(Questionnaire $questionnaire, User $user)
     {
-        $dernieresOccurences = $this->findBy(array('questionnaire' => $questionnaire, 'user' => $user), array('id' => 'DESC'), 1);
+        $dernieresOccurrences = $this->findBy(array('questionnaire' => $questionnaire, 'user' => $user), array('id' => 'DESC'), 1);
 
-        return (count($dernieresOccurences) > 0 ? $dernieresOccurences[0] : null);
+        return (count($dernieresOccurrences) > 0 ? $dernieresOccurrences[0] : null);
     }
     
     /**
@@ -32,11 +32,11 @@ class OccurrenceManager extends \Nodevo\ToolsBundle\Manager\Manager
      * @param \HopitalNumerique\UserBundle\Entity\User                   $user          Utilisateur
      * @return \HopitalNumerique\QuestionnaireBundle\Entity\Occurrence|NULL Première occurrence ou NULL si aucune occurrence
      */
-    public function getPremiereOccurenceByQuestionnaireAndUser(Questionnaire $questionnaire, User $user)
+    public function getPremiereOccurrenceByQuestionnaireAndUser(Questionnaire $questionnaire, User $user)
     {
-        $premieresOccurences = $this->findBy(array('questionnaire' => $questionnaire, 'user' => $user), array('id' => 'ASC'), 1);
+        $premieresOccurrences = $this->findBy(array('questionnaire' => $questionnaire, 'user' => $user), array('id' => 'ASC'), 1);
 
-        return (count($premieresOccurences) > 0 ? $premieresOccurences[0] : null);
+        return (count($premieresOccurrences) > 0 ? $premieresOccurrences[0] : null);
     }
     
     /**
@@ -52,7 +52,7 @@ class OccurrenceManager extends \Nodevo\ToolsBundle\Manager\Manager
             
         if (count($occurrences) > 1)
         {
-            $premiereOccurrence = $this->getPremiereOccurenceByQuestionnaireAndUser($questionnaire, $user);
+            $premiereOccurrence = $this->getPremiereOccurrenceByQuestionnaireAndUser($questionnaire, $user);
 
             foreach ($occurrences as $occurrence)
             {
@@ -62,5 +62,16 @@ class OccurrenceManager extends \Nodevo\ToolsBundle\Manager\Manager
                 }
             }
         }
+    }
+
+    /**
+     * Retourne les occurrences d'un questionnaire d'un utilisateur avec les dates de création et de dernières modifications.
+     * 
+     * @param \HopitalNumerique\UserBundle\Entity\User                   $user          Utilisateur
+     * @return array<\HopitalNumerique\QuestionnaireBundle\Entity\Occurrence> Occurrences
+     */
+    public function findByUserWithDates(User $user)
+    {
+        return $this->getRepository()->findByUserWithDates($user);
     }
 }

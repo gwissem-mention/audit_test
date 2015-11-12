@@ -213,7 +213,7 @@ class SearchController extends Controller
         // YRO 20/01/2015 : cacher l'icone de pertinence
         $onlyText = false;
         
-        // YRO 10/02/2015 : les occurences réellement trouvées dans les contenus
+        // YRO 10/02/2015 : les occurrences réellement trouvées dans les contenus
         $patternFounded = array();
         
         //vvvvv GME 21/11/2014 : Exalead
@@ -242,7 +242,7 @@ class SearchController extends Controller
                         $hitUrl      = (string)$hit->attributes()->url;
                         $hitUrlArray = explode("=", $hitUrl);
                         
-                        // YRO 10/02/2015 : les occurences réellement trouvées dans les contenus
+                        // YRO 10/02/2015 : les occurrences réellement trouvées dans les contenus
                         foreach($hit->metas->Meta as $Meta){
                             if( $Meta->attributes()->name == "text" || $Meta->attributes()->name == "title" ){
                                 foreach( $Meta->MetaText as $MetaText ){
@@ -448,7 +448,7 @@ class SearchController extends Controller
             'showMorePointsDurs'  => $showMorePointsDurs,
             'showMoreProductions' => $showMoreProductions,
             'onlyText'            => $onlyText, // YRO 20/01/2015 : cacher l'icone de pertinence
-            'patternFounded'      => json_encode($patternFounded) // YRO 10/02/2015 : les occurences réellement trouvées dans les contenus
+            'patternFounded'      => json_encode($patternFounded) // YRO 10/02/2015 : les occurrences réellement trouvées dans les contenus
         ));
     }
 
