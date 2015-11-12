@@ -1,0 +1,26 @@
+{% extends 'HopitalNumeriqueCommunautePratiqueBundle:Admin:layout.html.twig' %}
+
+{% use 'NodevoGridBundle::grid.config.html.twig' %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    {{ block('grid_stylesheets') }}
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    {{ block('grid_javascripts') }}
+{% endblock %}
+
+{% block h1Title %}
+    Les groupes
+{% endblock %}
+
+{% block toolbarButton %}
+    {#<a href="{{path('hopital_numerique_intervention_admin_demande_nouveau')}}" class="btn btn-default" title="Créer une intervention"><i class="fa fa-plus"></i></a>#}
+{% endblock %}
+
+{% block body %}
+    {{ grid(grid, _self) }}
+    {% block grid_filters %}{% endblock grid_filters%}
+{% endblock %}

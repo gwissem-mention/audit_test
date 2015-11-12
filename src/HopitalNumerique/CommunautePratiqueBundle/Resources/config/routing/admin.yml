@@ -1,0 +1,4 @@
+hopitalnumerique_communautepratique_admin_groupe_list:
+    pattern:  /groupe/liste
+    defaults: { _controller: "HopitalNumeriqueCommunautePratiqueBundle:Admin/Groupe:list" }
+    methods: GET|POST

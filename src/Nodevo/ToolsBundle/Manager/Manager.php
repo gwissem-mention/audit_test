@@ -15,6 +15,9 @@ use Symfony\Component\Validator\Validator;
 abstract class Manager
 {
     protected $_em         = null;
+    /**
+     * @var \Doctrine\ORM\EntityRepository
+     */
     protected $_repository = null;
     protected $_class      = null;
 
@@ -363,7 +366,7 @@ abstract class Manager
     /**
      * Retourne le repository associé
      *
-     * @return Repository
+     * @return \Doctrine\ORM\EntityRepository
      */
     protected function getRepository()
     {

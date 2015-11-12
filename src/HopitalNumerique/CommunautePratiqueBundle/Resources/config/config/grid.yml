@@ -1,0 +1,4 @@
+services:
+    hopitalnumerique_communautepratique.grid.groupe:
+        class: "HopitalNumerique\CommunautePratiqueBundle\Grid\GroupeGrid"
+        arguments: ["@service_container"]
