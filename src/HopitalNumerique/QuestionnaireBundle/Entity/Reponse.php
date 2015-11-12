@@ -99,6 +99,13 @@ class Reponse
     /**
      * @var \DateTime
      *
+     * @ORM\Column(name="rep_date_creation", type="datetime", nullable=true, options={"comment"="Date de création de la réponse"})
+     */
+    private $dateCreation;
+
+    /**
+     * @var \DateTime
+     *
      * @ORM\Column(name="rep_date_update", type="datetime", nullable = true, options = {"comment" = "Date de mise a jour de la reponse"})
      */
     private $dateUpdate;
@@ -299,6 +306,29 @@ class Reponse
     }
 
     /**
+     * Set dateCreation
+     *
+     * @param \DateTime $dateCreation
+     * @return Reponse
+     */
+    public function setDateCreation($dateCreation)
+    {
+        $this->dateCreation = $dateCreation;
+
+        return $this;
+    }
+
+    /**
+     * Get dateCreation
+     *
+     * @return \DateTime
+     */
+    public function getDateCreation()
+    {
+        return $this->dateCreation;
+    }
+
+    /**
      * Set dateUpdate
      *
      * @param \DateTime $dateUpdate
@@ -321,11 +351,20 @@ class Reponse
         return $this->dateUpdate;
     }
 
+
     /**
      * @ORM\PrePersist()
+     */
+    public function prePersist()
+    {
+        $this->dateCreation = new \DateTime();
+        $this->preUpdate();
+    }
+
+    /**
      * @ORM\PreUpdate()
      */
-    public function majDateUpdate()
+    public function preUpdate()
     {
         $this->dateUpdate = new \DateTime();
     }

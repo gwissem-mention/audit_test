@@ -1,6 +1,6 @@
 <div class="row" {% if showMoreProductions is defined and count >= showMoreProductions %}style="display:none"{% endif %} >
     <div class="col-md-10">
-        <h5>{{objet['type']}}{% if objet['source'] is defined and objet['source'] != '' %} ({{objet['source']}}){% endif %}</h5>
+        <h5>{{objet['type']}}{% if objet['source'] is defined and objet['source'] != '' %} <span class="text-muted">({{objet['source']}})</span>{% endif %}</h5>
     </div>
     <div class="col-md-2">
         {% if objet['synthese'] is not null %}
