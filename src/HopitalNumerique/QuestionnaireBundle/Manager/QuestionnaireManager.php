@@ -381,15 +381,31 @@ class QuestionnaireManager extends BaseManager
     }
     
     /**
-     * Retourne les questionnaires (avec leurs occurrences) d'un utilisateur pour un domaine.
+     * Retourne les questionnaires (avec leurs occurrences) d'un utilisateur pour un domaine avec les dates de création et de dernières modifications.
      * 
      * @param \HopitalNumerique\UserBundle\Entity\User       $user    Utilisateur
      * @param \HopitalNumerique\DomaineBundle\Entity\Domaine $domaine Domaine
      * @param boolean                                        $isLock  (optionnel) Filtre sur questionnaire.lock
      * @return array<\HopitalNumerique\QuestionnaireBundle\Entity\Questionnaire> Questionnaires
      */
-    public function findByUserAndDomaine(User $user, Domaine $domaine, $isLock = null)
+    public function findByUserAndDomaineWithDates(User $user, Domaine $domaine, $isLock = null)
     {
-        return $this->getRepository()->findByUserAndDomaine($user, $domaine, $isLock);
+        $questionnaires = $this->getRepository()->findByUserAndDomaineWithDates($user, $domaine, $isLock);
+        $occurrences = $this->occurrenceManager->findByUserWithDates($user);
+        
+        for ($i = 0; $i < count($questionnaires); $i++)
+        {
+            $questionnaires[$i]['occurrences'] = array();
+            
+            foreach ($occurrences as $occurrence)
+            {
+                if ($questionnaires[$i][0]->getId() == $occurrence[0]->getQuestionnaire()->getId())
+                {
+                    $questionnaires[$i]['occurrences'][] = $occurrence;
+                }
+            }
+        }
+        
+        return $questionnaires;
     }
 }

@@ -7,26 +7,43 @@
 
 {% block content %}
 
-    <div class="panel questionnaire-list">
+    <div class="questionnaire-list">
         <div class="row">
             <div class="col-md-12">
 
-                <ul class="list-unstyled questionnaires">
-                    {% for questionnaire in questionnaires %}
-                        <li>
-                            <h2 class="requeteTitle"><a href="{{ path('hopitalnumerique_questionnaire_edit_front_gestionnaire', { 'id':questionnaire.id }) }}">{{ questionnaire }}</a></h2>
-                            {% if questionnaire.occurrences|length > 1 %}
-                                <ul class="list-unstyled">
-                                    {% for occurrence in questionnaire.occurrences %}
-                                        <li><a href="{{ path('hopitalnumerique_questionnaire_edit_front_gestionnaire_occurrence', { 'questionnaire':questionnaire.id, 'occurrence':occurrence.id }) }}">{{ occurrence }}</a></li>
-                                    {% endfor %}
-                                </ul>
-                            {% endif %}
-                        </li>
-                    {% else %}
-                        <p style="margin:10px 0px 0px 20px">Vous n'avez renseigné aucun questionnaire.</p>
-                    {% endfor %}
-                </ul>
+                {% if questionnairesWithDates|length > 0 %}
+                    <table class="table table-striped table-hover default">
+                        <thead>
+                            <tr>
+                                <th>Questionnaire</th>
+                                <th>Date de création</th>
+                                <th>Dernière mise à jour</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for questionnaire in questionnairesWithDates -%}
+                                <tr>
+                                    <td>
+                                        <a href="{{ path('hopitalnumerique_questionnaire_edit_front_gestionnaire', { 'id':questionnaire[0].id }) }}"><strong>{{ questionnaire[0] }}</strong></a>
+                                    </td>
+                                    <td>{{ questionnaire['dateCreation'] is not null ? questionnaire['dateCreation']|date('d/m/Y') : '' }}</td>
+                                    <td>{{ questionnaire['dernierUpdate'] is not null ? questionnaire['dernierUpdate']|date('d/m/Y') : '' }}</td>
+                                </tr>
+                                {% for occurrence in questionnaire['occurrences'] -%}
+                                    <tr class="occurrence">
+                                        <td>
+                                            <a href="{{ path('hopitalnumerique_questionnaire_edit_front_gestionnaire_occurrence', { 'questionnaire':questionnaire[0].id, 'occurrence':occurrence[0].id }) }}">{{ occurrence[0] }}</a>
+                                        </td>
+                                        <td>{{ occurrence['dateCreation'] is not null ? occurrence['dateCreation']|date('d/m/Y') : '' }}</td>
+                                        <td>{{ occurrence['dernierUpdate'] is not null ? occurrence['dernierUpdate']|date('d/m/Y') : '' }}</td>
+                                    </tr>
+                                {%- endfor %}
+                            {%- endfor %}
+                        </tbody>
+                    </table>
+                {% else %}
+                    <p style="margin:10px 0px 0px 20px">Vous n'avez renseigné aucun questionnaire.</p>
+                {% endif %}
 
             </div>
         </div>

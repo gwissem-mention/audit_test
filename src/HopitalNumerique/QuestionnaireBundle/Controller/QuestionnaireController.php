@@ -54,9 +54,10 @@ class QuestionnaireController extends Controller
     public function listAction()
     {
         $domaine = $this->container->get('hopitalnumerique_domaine.manager.domaine')->findOneById($this->container->get('session')->get('domaineId'));
-        
+        $questionnairesWithDates = $this->container->get('hopitalnumerique_questionnaire.manager.questionnaire')->findByUserAndDomaineWithDates($this->getUser(), $domaine, false);
+
         return $this->render('HopitalNumeriqueQuestionnaireBundle:Questionnaire:list.html.twig', array(
-            'questionnaires' => $this->container->get('hopitalnumerique_questionnaire.manager.questionnaire')->findByUserAndDomaine($this->getUser(), $domaine, false)
+            'questionnairesWithDates' => $questionnairesWithDates
         ));
     }
 

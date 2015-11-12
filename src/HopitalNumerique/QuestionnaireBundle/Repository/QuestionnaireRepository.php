@@ -110,19 +110,21 @@ class QuestionnaireRepository extends EntityRepository
     }
     
     /**
-     * Retourne les questionnaires (avec leurs occurrences) d'un utilisateur pour un domaine.
+     * Retourne les questionnaires (avec leurs occurrences) d'un utilisateur pour un domaine avec les dates de création et de dernières modifications.
      * 
      * @param \HopitalNumerique\UserBundle\Entity\User       $user    Utilisateur
      * @param \HopitalNumerique\DomaineBundle\Entity\Domaine $domaine Domaine
      * @param boolean                                        $isLock  (optionnel) Filtre sur questionnaire.lock
      * @return array<\HopitalNumerique\QuestionnaireBundle\Entity\Questionnaire> Questionnaires
      */
-    public function findByUserAndDomaine(User $user, Domaine $domaine, $isLock = null)
+    public function findByUserAndDomaineWithDates(User $user, Domaine $domaine, $isLock = null)
     {
         $query = $this->createQueryBuilder('questionnaire');
-        
+
         $query
-            ->select('questionnaire', 'occurrence')
+            ->addSelect('questionnaire', 'occurrence')
+            ->addSelect('MIN(reponse.dateCreation) AS dateCreation')
+            ->addSelect('MAX(reponse.dateUpdate) AS dernierUpdate')
             ->innerJoin('questionnaire.questions', 'question')
             ->innerJoin('question.reponses', 'reponse', \Doctrine\ORM\Query\Expr\Join::WITH, 'reponse.user = :user')
             ->leftJoin('questionnaire.occurrences', 'occurrence', \Doctrine\ORM\Query\Expr\Join::WITH, 'occurrence.user = :user')
