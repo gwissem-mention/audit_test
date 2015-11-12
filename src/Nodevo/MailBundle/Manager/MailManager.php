@@ -588,8 +588,10 @@ class MailManager extends BaseManager
         //tableau de SwiftMessage a envoyé
         $mailsToSend = array();
         
-        foreach ($users as $recepteurMail => $recepteurName)
+        foreach ($users as $recepteurMail)
         {
+            $recepteurName = $recepteurMail;
+            
             $options["nomdestinataire"]  = $recepteurName;
             $options["maildestinataire"] = $recepteurMail;
             $options["u"]  = $recepteurName;
