@@ -3,6 +3,7 @@
 namespace HopitalNumerique\UserBundle\Manager;
 
 use Nodevo\ToolsBundle\Manager\Manager as BaseManager;
+use Doctrine\Common\Collections\Collection;
 
 class UserManager extends BaseManager
 {
@@ -239,6 +240,17 @@ class UserManager extends BaseManager
     public function findUsersByDomaine( $idDomaine )
     {
         return $this->getRepository()->findUsersByDomaine($idDomaine)->getQuery()->getResult();
+    }
+    
+    /**
+     * Retourne les utilisateurs liés à un de ces domaines.
+     * 
+     * @param \Doctrine\Common\Collections\Collection $domaines Domaines
+     * @return array<\HopitalNumerique\UserBundle\Entity\User> Utilisateurs
+     */
+    public function findByDomaines(Collection $domaines)
+    {
+        return $this->getRepository()->findByDomaines($domaines);
     }
 
     /**

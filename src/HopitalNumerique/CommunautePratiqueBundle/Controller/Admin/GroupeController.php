@@ -28,11 +28,18 @@ class GroupeController extends \Symfony\Bundle\FrameworkBundle\Controller\Contro
      */
     public function addAction(Request $request)
     {
-        $domaine = $this->get('hopitalnumerique_domaine.manager.domaine')->findOneById($request->getSession()->get('domaineId'));
-        
         $nouveauGroupe = $this->container->get('hopitalnumerique_communautepratique.manager.groupe')->createEmpty();
-        $nouveauGroupe->setDomaine($domaine);
-        
+
+        if ($request->query->has('domaine'))
+        {
+            $nouveauGroupe->setDomaine($this->container->get('hopitalnumerique_domaine.manager.domaine')->findOneById(intval($request->query->getInt('domaine'))));
+        }
+        elseif ($request->request->has('hopitalnumerique_communautepratiquebundle_groupe'))
+        {
+            $formPost = $request->request->get('hopitalnumerique_communautepratiquebundle_groupe');
+            return $this->redirect($this->generateUrl('hopitalnumerique_communautepratique_admin_groupe_add', array( 'domaine' => intval($formPost['domaine']) )));
+        }
+
         return $this->editAction($nouveauGroupe, $request);
     }
     

@@ -7,6 +7,7 @@ use Doctrine\ORM\EntityManager;
 use HopitalNumerique\UserBundle\Manager\UserManager;
 use HopitalNumerique\QuestionnaireBundle\Entity\Occurrence;
 use HopitalNumerique\UserBundle\Entity\User;
+use HopitalNumerique\DomaineBundle\Entity\Domaine;
 
 /**
  * Manager de l'entité Contractualisation.
@@ -328,5 +329,16 @@ class QuestionnaireManager extends BaseManager
     public function findByUser(User $user)
     {
         return $this->getRepository()->findByUser($user);
+    }
+    
+    /**
+     * Retourne les questionnaires d'un domaine.
+     * 
+     * @param \HopitalNumerique\DomaineBundle\Entity\Domaine $domaine Domaine
+     * @return \Doctrine\Common\Collections\Collection Questionnaires
+     */
+    public function findByDomaine(Domaine $domaine)
+    {
+        return $this->getRepository()->findByDomaine($domaine);
     }
 }

@@ -6,7 +6,9 @@
 {% block toolbarButton %}
     <a class="btn btn-default" href="{{ path('hopitalnumerique_communautepratique_admin_groupe_list') }}" title="Retour à la liste"><i class="fa fa-reply"></i></a>
     <div onclick="$('#do').val('save');$('form').submit();" class="btn btn-default" title="Enregistrer"><i class="fa fa-check"></i></div>
-    <div onclick="$('#do').val('save-close');$('form').submit();" class="btn btn-default" title="Enregistrer et Fermer"><i class="fa fa-save"></i></div>
+    {% if groupe.domaine is not null %}
+        <div onclick="$('#do').val('save-close');$('form').submit();" class="btn btn-default" title="Enregistrer et Fermer"><i class="fa fa-save"></i></div>
+    {% endif %}
 {% endblock %}
 
 {% block body %}
@@ -19,42 +21,45 @@
 
             <div class="panel-body">
                 {% form_theme groupeForm 'HopitalNumeriqueAccountBundle:Formulaire:theme.default.html.twig' %}
-                {{ form_start(groupeForm, { attr:{ id:'form_intervention_demande_edition', class:'form-horizontal toValidate', novalidate:'novalidate' }}) }}
+                {{ form_start(groupeForm, { attr:{ class:'form-horizontal toValidate', novalidate:'novalidate' }}) }}
                     
                     {{ form_row(groupeForm.domaine) }}
-                    {{ form_row(groupeForm.titre) }}
-                    {{ form_row(groupeForm.descriptionCourte) }}
-                    {{ form_row(groupeForm.descriptionHtml) }}
-                    {{ form_row(groupeForm.nombreParticipantsMaximum) }}
-                    {{ form_row(groupeForm.dateInscriptionOuverture) }}
-                    {{ form_row(groupeForm.dateDemarrage) }}
-                    {{ form_row(groupeForm.dateFin) }}
-                    {{ form_row(groupeForm.questionnaire) }}
-                    {{ form_row(groupeForm.animateurs) }}
                     
-                    <div class="form-group">
-                        {{ form_label(groupeForm.vedette) }}
-                        <div class="col-md-5">
-                            {{ form_widget(groupeForm.vedette) }}
-                        </div>
-                        <div class="col-md-5 col-md-offset-7">
-                            <div class="help-block">
-                                {{ form_errors(groupeForm.vedette) }}
+                    {% if groupe.id is not null %}
+                        {{ form_row(groupeForm.titre) }}
+                        {{ form_row(groupeForm.descriptionCourte) }}
+                        {{ form_row(groupeForm.descriptionHtml) }}
+                        {{ form_row(groupeForm.nombreParticipantsMaximum) }}
+                        {{ form_row(groupeForm.dateInscriptionOuverture) }}
+                        {{ form_row(groupeForm.dateDemarrage) }}
+                        {{ form_row(groupeForm.dateFin) }}
+                        {{ form_row(groupeForm.questionnaire) }}
+                        {{ form_row(groupeForm.animateurs) }}
+
+                        <div class="form-group">
+                            {{ form_label(groupeForm.vedette) }}
+                            <div class="col-md-5">
+                                {{ form_widget(groupeForm.vedette) }}
+                            </div>
+                            <div class="col-md-5 col-md-offset-7">
+                                <div class="help-block">
+                                    {{ form_errors(groupeForm.vedette) }}
+                                </div>
                             </div>
                         </div>
-                    </div>
-                    
-                    <div class="form-group">
-                        {{ form_label(groupeForm.actif) }}
-                        <div class="col-md-5">
-                            {{ form_widget(groupeForm.actif) }}
-                        </div>
-                        <div class="col-md-5 col-md-offset-7">
-                            <div class="help-block">
-                                {{ form_errors(groupeForm.actif) }}
+
+                        <div class="form-group">
+                            {{ form_label(groupeForm.actif) }}
+                            <div class="col-md-5">
+                                {{ form_widget(groupeForm.actif) }}
+                            </div>
+                            <div class="col-md-5 col-md-offset-7">
+                                <div class="help-block">
+                                    {{ form_errors(groupeForm.actif) }}
+                                </div>
                             </div>
                         </div>
-                    </div>
+                    {% endif %}
 
                     {{ form_javascript(groupeForm) }}
 

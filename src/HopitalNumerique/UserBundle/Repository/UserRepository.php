@@ -4,6 +4,8 @@ namespace HopitalNumerique\UserBundle\Repository;
 
 use Doctrine\ORM\EntityRepository;
 use Nodevo\RoleBundle\Entity\Role;
+use Doctrine\ORM\Query\Expr;
+use Doctrine\Common\Collections\Collection;
 
 /**
  * UserRepository
@@ -289,6 +291,24 @@ class UserRepository extends EntityRepository
             ->setParameter('idDomaine', $idDomaine);
 
         return $qb;
+    }
+    
+    /**
+     * Retourne les utilisateurs liés à un de ces domaines.
+     * 
+     * @param \Doctrine\Common\Collections\Collection $domaines Domaines
+     * @return array<\HopitalNumerique\UserBundle\Entity\User> Utilisateurs
+     */
+    public function findByDomaines(Collection $domaines)
+    {
+        $query = $this->createQueryBuilder('user');
+        
+        $query
+            ->innerJoin('user.domaines', 'domaine', Expr\Join::WITH, $query->expr()->in('domaine.id', ':domaines'))
+            ->setParameter('domaines', $domaines->toArray())
+        ;
+        
+        return $query->getQuery()->getResult();
     }
 
     /**

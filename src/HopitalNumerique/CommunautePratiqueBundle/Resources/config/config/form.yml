@@ -3,4 +3,4 @@ services:
         class: "HopitalNumerique\CommunautePratiqueBundle\Form\Type\GroupeType"
         tags:
             - { name: form.type, alias: hopitalnumerique_communautepratiquebundle_groupe }
-        arguments: [@hopitalnumerique_user.manager.user]
+        arguments: ["@security.context", "@hopitalnumerique_user.manager.user", "@hopitalnumerique_questionnaire.manager.questionnaire"]

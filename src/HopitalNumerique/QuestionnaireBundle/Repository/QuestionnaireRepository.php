@@ -5,6 +5,8 @@ namespace HopitalNumerique\QuestionnaireBundle\Repository;
 use Doctrine\ORM\EntityRepository;
 use HopitalNumerique\QuestionnaireBundle\Entity\Occurrence;
 use HopitalNumerique\UserBundle\Entity\User;
+use HopitalNumerique\DomaineBundle\Entity\Domaine;
+use Doctrine\ORM\Query\Expr;
 
 /**
  * QuestionnaireRepository
@@ -105,6 +107,24 @@ class QuestionnaireRepository extends EntityRepository
             ->addOrderBy('occurrence.id', 'ASC')
         ;
 
+        return $query->getQuery()->getResult();
+    }
+    
+    /**
+     * Retourne les questionnaires d'un domaine.
+     * 
+     * @param \HopitalNumerique\DomaineBundle\Entity\Domaine $domaine Domaine
+     * @return \Doctrine\Common\Collections\Collection Questionnaires
+     */
+    public function findByDomaine(Domaine $domaine)
+    {
+        $query = $this->createQueryBuilder('questionnaire');
+        
+        $query
+            ->innerJoin('questionnaire.domaines', 'domaine', Expr\Join::WITH, 'domaine.id = :domaine')
+            ->setParameter('domaine', $domaine)
+        ;
+        
         return $query->getQuery()->getResult();
     }
 }
