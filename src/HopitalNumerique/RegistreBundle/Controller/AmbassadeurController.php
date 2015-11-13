@@ -110,7 +110,7 @@ class AmbassadeurController extends Controller
         $session->set('registre-ambassadeur-region', $regionsJSON );
     
         //get liste des domaines fonctionnels
-        $domaines = $this->get('hopitalnumerique_reference.manager.reference')->findBy( array( 'code' => 'PERIMETRE_FONCTIONNEL_DOMAINES_FONCTIONNELS') );
+        $domaines = $this->get('hopitalnumerique_reference.manager.reference')->findBy( array( 'code' => 'PERIMETRE_FONCTIONNEL_DOMAINES_FONCTIONNELS', 'parent' => 221 ), array( 'libelle' => 'ASC' ) );
 
         return $this->render('HopitalNumeriqueRegistreBundle:Ambassadeur:index.html.twig', array(
                 'user'            => array(

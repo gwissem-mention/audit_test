@@ -4,6 +4,7 @@ namespace HopitalNumerique\UserBundle\Repository;
 
 use Doctrine\ORM\EntityRepository;
 use Nodevo\RoleBundle\Entity\Role;
+use Doctrine\ORM\Query\Expr\Join;
 
 /**
  * UserRepository
@@ -163,8 +164,7 @@ class UserRepository extends EntityRepository
             ->setParameter('role', '%ROLE_AMBASSADEUR_7%');
 
         if( !is_null($domaine) && $domaine != 0 ){
-            $qb->leftJoin('user.domaines','domaines')
-                ->andWhere('domaines.id = :domaine')
+            $qb->innerJoin('user.connaissancesAmbassadeurs','domaines',join::WITH, 'domaines.domaine = :domaine')
                 ->setParameter('domaine', $domaine );
         }
 

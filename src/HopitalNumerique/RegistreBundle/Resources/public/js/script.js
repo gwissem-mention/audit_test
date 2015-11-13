@@ -6,6 +6,9 @@ $(document).ready(function() {
         'width' 	: '600px',
         'height' 	: 'auto'
     });
+    $( "#domaines_liste" ).change(function() {
+	appliquerRegionsSelectionnees();
+    });
 });
 
 $(document).bind("carteReady", function(){
