@@ -165,7 +165,8 @@ class UserRepository extends EntityRepository
 
         if( !is_null($domaine) && $domaine != 0 ){
             $qb->innerJoin('user.connaissancesAmbassadeurs','domaines',join::WITH, 'domaines.domaine = :domaine')
-                ->setParameter('domaine', $domaine );
+                ->setParameter('domaine', $domaine )
+                ->andWhere('domaines.connaissance IS NOT NULL');
         }
 
         return $qb;
