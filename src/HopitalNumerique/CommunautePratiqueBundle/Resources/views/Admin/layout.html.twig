@@ -1,3 +1,27 @@
 {% extends 'NodevoAdminBundle::admin.html.twig' %}
 
+{% block stylesheets %}
+    {{parent()}}
+    {% stylesheets output="compiled/hopitalnumerique-communautepratique-admin.css" filter="cssrewrite, ?yui_css"
+        "@validationEngine_css"
+        "@select2_css"
+    %}
+        <link rel="stylesheet" href="{{ asset_url }}" />
+    {% endstylesheets %}
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    {% javascripts output="compiled/hopitalnumerique-communautepratique-admin.js"
+        "@validationEngine_js"
+        '@select2_js'
+        '@tinymce_js'
+        'bundles/nodevogestionnairemedia/js/moxiemanager/js/moxman.loader.min.js'
+        'bundles/nodevogestionnairemedia/js/MoxieManager.js'
+        'bundles/nodevotextedynamique/js/script.js'
+    %}
+        <script type="text/javascript" src="{{ asset_url }}"></script>
+    {% endjavascripts %}
+{% endblock %}
+
 {% block title %}{{ parent() }} - Communauté de pratique{% endblock %}

@@ -4,6 +4,8 @@ namespace HopitalNumerique\CommunautePratiqueBundle\Grid;
 use Nodevo\GridBundle\Grid\Column\TextColumn;
 use Nodevo\GridBundle\Grid\Column\DateColumn;
 use Nodevo\GridBundle\Grid\Column\BooleanColumn;
+use Nodevo\GridBundle\Grid\Action\EditButton;
+use Nodevo\GridBundle\Grid\Action\DeleteMass;
 
 /**
  * Grid de Groupe.
@@ -14,8 +16,8 @@ class GroupeGrid extends \Nodevo\GridBundle\Grid\Grid
      * @var \HopitalNumerique\UserBundle\Entity\User Utilisateur connecté
      */
     private $user;
-    
-    
+
+
     /**
      * {@inheritDoc}
      */
@@ -29,8 +31,8 @@ class GroupeGrid extends \Nodevo\GridBundle\Grid\Grid
             throw new \Exception('Aucun utilisateur connecté.');
         }
     }
-    
-    
+
+
     /**
      * {@inheritDoc}
      */
@@ -51,7 +53,7 @@ class GroupeGrid extends \Nodevo\GridBundle\Grid\Grid
      */
     public function setActionsButtons()
     {
-        
+        $this->addActionButton(new EditButton('hopitalnumerique_communautepratique_admin_groupe_edit'));
     }
 
     /**
@@ -59,7 +61,12 @@ class GroupeGrid extends \Nodevo\GridBundle\Grid\Grid
      */
     public function setMassActions()
     {
+        $utilisateurConnecte = $this->_container->get('security.context')->getToken()->getUser();
         
+        if ($this->_container->get('nodevo_acl.manager.acl')->checkAuthorization($this->_container->get('router')->generate('hopitalnumerique_communautepratique_admin_groupe_deletemass'), $utilisateurConnecte) != -1)
+        {
+            $this->addMassAction( new DeleteMass('HopitalNumeriqueCommunautePratiqueBundle:Admin/Groupe:deleteMass') );
+        }
     }
 
     /**

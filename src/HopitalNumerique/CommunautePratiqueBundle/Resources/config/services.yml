@@ -1,3 +1,4 @@
 imports:
     - { resource: "config/manager.yml" }
+    - { resource: "config/form.yml" }
     - { resource: "config/grid.yml" }

@@ -1,0 +1,6 @@
+services:
+    hopitalnumerique_communautepratique.form.type.groupe:
+        class: "HopitalNumerique\CommunautePratiqueBundle\Form\Type\GroupeType"
+        tags:
+            - { name: form.type, alias: hopitalnumerique_communautepratiquebundle_groupe }
+        arguments: [@hopitalnumerique_user.manager.user]

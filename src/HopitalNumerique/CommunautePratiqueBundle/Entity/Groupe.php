@@ -89,6 +89,14 @@ class Groupe
     private $vedette;
     
     /**
+     * @var boolean
+     *
+     * @ORM\Column(name="group_actif", type="boolean", nullable=false, options={"default"=false})
+     * @Assert\NotNull()
+     */
+    private $actif;
+    
+    /**
      * @var \HopitalNumerique\DomaineBundle\Entity\Domaine
      *
      * @ORM\ManyToOne(targetEntity="HopitalNumerique\DomaineBundle\Entity\Domaine", inversedBy="communautePratiqueGroupes")
@@ -316,6 +324,29 @@ class Groupe
     public function getVedette()
     {
         return $this->vedette;
+    }
+
+    /**
+     * Set actif
+     *
+     * @param boolean $actif
+     * @return Groupe
+     */
+    public function setActif($actif)
+    {
+        $this->actif = $actif;
+
+        return $this;
+    }
+
+    /**
+     * Get actif
+     *
+     * @return boolean 
+     */
+    public function getActif()
+    {
+        return $this->actif;
     }
 
     /**
