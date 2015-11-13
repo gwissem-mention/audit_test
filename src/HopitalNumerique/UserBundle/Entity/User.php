@@ -249,6 +249,14 @@ class User extends BaseUser
      * @Gedmo\Versioned
      */
     protected $prenom;
+    
+    /**
+     * @var boolean
+     * 
+     * @Assert\NotNull()
+     * @ORM\Column(name="usr_inscrit_communaute", type="boolean", options={"default"=false,"comment"="Indique si l utilisateur est inscrit à la communauté de pratiques"})
+     */
+    private $inscritCommunaute;
 
     /**
      * @var integer
@@ -649,6 +657,7 @@ class User extends BaseUser
         $this->alreadyBeExpert      = false;
         $this->nbVisites            = 0;
         $this->notficationRequete   = true;
+        $this->inscritCommunaute    = false;
     }
 
 
@@ -770,8 +779,38 @@ class User extends BaseUser
     public function getPrenom()
     {
         return $this->prenom;
-    } 
+    }
     
+    /**
+     * Set prenom
+     *
+     * @param string $prenom
+     */
+    public function setPrenom($prenom)
+    {
+        $this->prenom = $prenom;
+    }
+
+    /**
+     * Get inscritCommunaute
+     *
+     * @return boolean $inscritCommunaute
+     */
+    public function isInscritCommunaute()
+    {
+        return $this->inscritCommunaute;
+    }
+
+    /**
+     * Set inscritCommunaute
+     *
+     * @param boolean $inscritCommunaute
+     */
+    public function setInscritCommunaute($inscritCommunaute)
+    {
+        $this->inscritCommunaute = $inscritCommunaute;
+    }
+
     /**
      * Get nbVisites
      *
@@ -790,16 +829,6 @@ class User extends BaseUser
     public function addNbVisites()
     {
         $this->nbVisites++;
-    }
-    
-    /**
-     * Set prenom
-     *
-     * @param string $prenom
-     */
-    public function setPrenom($prenom)
-    {
-        $this->prenom = $prenom;
     }
 
     /**

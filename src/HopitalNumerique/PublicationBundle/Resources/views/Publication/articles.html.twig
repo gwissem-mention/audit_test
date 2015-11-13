@@ -91,6 +91,11 @@
                 <div class="row col-md-12">
                     {{objet.resume|parsePublication(objet.glossaires)|raw}}
                 </div>
+                
+                {% if 596 == objet.id %} {# Article La communauté de pratique #}
+                    {% include 'HopitalNumeriqueCommunautePratiqueBundle:include:Article.html.twig' %}
+                {% endif %}
+                
             </div>
             <div class="clearfix"></div>
         </div>
