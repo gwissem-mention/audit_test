@@ -25,7 +25,7 @@
                     
                     {{ form_row(groupeForm.domaine) }}
                     
-                    {% if groupe.id is not null %}
+                    {% if groupe.domaine is not null %}
                         {{ form_row(groupeForm.titre) }}
                         {{ form_row(groupeForm.descriptionCourte) }}
                         {{ form_row(groupeForm.descriptionHtml) }}
