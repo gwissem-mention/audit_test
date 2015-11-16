@@ -356,6 +356,10 @@ class ReferenceManager extends BaseManager
         return $results;
     }
 
+    public function getRefsByDomaineByParent($idParent, $idDomaine)
+    {
+        return $this->getRepository()->getRefsByDomaineByParent($idParent, $idDomaine)->getQuery()->getResult();
+    }
 
     public function delete( $references )
     {
