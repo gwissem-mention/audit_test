@@ -184,4 +184,3 @@ nodevo_gestionnaire_media:
 CCDNForumForumBundle:
     resource: "@CCDNForumForumBundle/Resources/config/routing.yml"
     prefix:   /
-

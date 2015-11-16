@@ -26,6 +26,12 @@ class Objet implements RoutedItemInterface
     const FICHIER_1    = 1;
     const FICHIER_2    = 2;
     const FICHIER_EDIT = 3;
+    
+    /**
+     * @var ID de l'article de la communauté de pratique.
+     */
+    const ARTICLE_COMMUNAUTE_PRATIQUE_ID = 596;
+
 
     /**
      * @var integer

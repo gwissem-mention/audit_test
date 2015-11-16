@@ -23,5 +23,5 @@ INSERT INTO `hn_objet` (`obj_id`, `obj_locked_by`, `ref_statut`, `obj_titre`, `o
 INSERT INTO `hn_objet_type` (`obj_id`, `ref_id`) VALUES (596, 185);
 INSERT INTO `core_menu_item` (`itm_id`, `itm_parent`, `mnu_menu`, `itm_name`, `itm_route`, `itm_route_parameters`, `itm_route_absolute`, `itm_uri`, `itm_icon`, `itm_display`, `itm_display_children`, `itm_role`, `itm_order`) VALUES (NULL, '65', '3', 'La communauté de pratique', 'hopital_numerique_publication_publication_article', '{"categorie":"article","id":"596","alias":"la-communaute-de-pratique"}', NULL, NULL, NULL, '1', '0', 'IS_AUTHENTICATED_ANONYMOUSLY', '6')
 
-/* User.inscritCommunaute */
-ALTER TABLE core_user ADD usr_inscrit_communaute TINYINT(1) DEFAULT '0' NOT NULL COMMENT 'Indique si l utilisateur est inscrit à la communauté de pratiques';
+/* User.inscritCommunautePratique */
+ALTER TABLE core_user ADD usr_inscrit_communaute_pratique TINYINT(1) DEFAULT '0' NOT NULL COMMENT 'Indique si l utilisateur est inscrit à la communauté de pratiques';

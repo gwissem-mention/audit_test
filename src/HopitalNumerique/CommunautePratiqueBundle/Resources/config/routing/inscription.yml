@@ -1,0 +1,9 @@
+hopitalnumerique_communautepratique_inscription_ajaxinscrit:
+    pattern:  /inscription
+    defaults: { _controller: "HopitalNumeriqueCommunautePratiqueBundle:Inscription:ajaxInscrit" }
+    methods: POST
+
+hopitalnumerique_communautepratique_inscription_ajaxdesinscrit:
+    pattern:  /desinscription
+    defaults: { _controller: "HopitalNumeriqueCommunautePratiqueBundle:Inscription:ajaxDesinscrit" }
+    methods: POST

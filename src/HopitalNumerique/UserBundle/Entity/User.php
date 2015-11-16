@@ -254,9 +254,9 @@ class User extends BaseUser
      * @var boolean
      * 
      * @Assert\NotNull()
-     * @ORM\Column(name="usr_inscrit_communaute", type="boolean", options={"default"=false,"comment"="Indique si l utilisateur est inscrit à la communauté de pratiques"})
+     * @ORM\Column(name="usr_inscrit_communaute_pratique", type="boolean", options={"default"=false,"comment"="Indique si l utilisateur est inscrit à la communauté de pratiques"})
      */
-    private $inscritCommunaute;
+    private $inscritCommunautePratique;
 
     /**
      * @var integer
@@ -657,7 +657,7 @@ class User extends BaseUser
         $this->alreadyBeExpert      = false;
         $this->nbVisites            = 0;
         $this->notficationRequete   = true;
-        $this->inscritCommunaute    = false;
+        $this->inscritCommunautePratique = false;
     }
 
 
@@ -792,23 +792,23 @@ class User extends BaseUser
     }
 
     /**
-     * Get inscritCommunaute
+     * Get inscritCommunautePratique
      *
-     * @return boolean $inscritCommunaute
+     * @return boolean $inscritCommunautePratique
      */
-    public function isInscritCommunaute()
+    public function isInscritCommunautePratique()
     {
-        return $this->inscritCommunaute;
+        return $this->inscritCommunautePratique;
     }
 
     /**
-     * Set inscritCommunaute
+     * Set inscritCommunautePratique
      *
-     * @param boolean $inscritCommunaute
+     * @param boolean $inscritCommunautePratique
      */
-    public function setInscritCommunaute($inscritCommunaute)
+    public function setInscritCommunautePratique($inscritCommunautePratique)
     {
-        $this->inscritCommunaute = $inscritCommunaute;
+        $this->inscritCommunautePratique = $inscritCommunautePratique;
     }
 
     /**

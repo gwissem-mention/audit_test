@@ -136,6 +136,8 @@
             #articles .communaute-de-pratiques-blocs .bloc-rejoindre, #articles .communaute-de-pratiques-blocs .bloc-action { min-height: 190px;padding: 14px 20px; }
             #articles .communaute-de-pratiques-blocs .bloc-rejoindre { background-color: #e5e5e5; }
             #articles .communaute-de-pratiques-blocs .bloc-action { background-color: #f6f6f6;text-align: center; }
+                #articles .communaute-de-pratiques-blocs .bloc-action .subtitle { font-weight: bold; }
+                #articles .communaute-de-pratiques-blocs .bloc-action p em { color: #d60030; }
 
 /* Productions fortement liées */
     #productions h2{display: block; margin:0 0 5px 0;background-image: url('../img/panel.png');background-repeat: no-repeat;cursor: pointer; height: 25px; width: 90%;}
