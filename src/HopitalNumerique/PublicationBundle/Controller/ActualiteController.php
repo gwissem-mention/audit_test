@@ -62,7 +62,7 @@ class ActualiteController extends Controller
     /**
      * Partial render : bloc liste des actualités colonne left
      */
-    public function actualitesAction($type)
+    public function actualitesAction($type = NULL)
     {
         if('ambassadeur' === $type)
         {

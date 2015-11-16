@@ -85,7 +85,7 @@
                 <img src="/{{ domaineCurrent.getWebPath() }}" alt="{{domaineCurrent.nom}}" id="logoAnap" class="pull-left" height="77px" />
             </a>
             <div id="titre" class="pull-left">
-                <a href="{{path('hopital_numerique_homepage')}}" class="h1">{{domaineCurrent.nom}}</a>
+                <a href={% if domaineCurrent.urlTitre %}"{{domaineCurrent.urlTitre}}" {% else %} "{{path('hopital_numerique_homepage')}}" {% endif %} class="h1">{{domaineCurrent.nom}}</a>
                 <div class="h2">{{domaineCurrent.description}}</div>
             </div>
 
