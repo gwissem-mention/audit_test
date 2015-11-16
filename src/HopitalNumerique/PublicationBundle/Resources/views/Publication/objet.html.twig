@@ -450,9 +450,6 @@ window.open ("report/showReport.action?"+request,null,"location=no,menubar=0,res
                 {% set count = count + 1 %}
             {% endfor %}
 
-            {% if showMorePointsDurs is not defined %}{% set showMorePointsDurs = 2 %}{% endif %}
-            {% if showMoreProductions is not defined %}{% set showMoreProductions = 2 %}{% endif %}
-
             {% if count != 0 %}
                 <div id="pointsdurs" class="col-md-12">
                     <h3 class="open">Points Durs ( {{count}} Résultat{% if count > 1%}s{% endif %} )</h3>
@@ -461,7 +458,7 @@ window.open ("report/showReport.action?"+request,null,"location=no,menubar=0,res
                         <div class="results">
                             {% set count = 0 %}
                             {% for objet in objets if objet['categ'] == "point-dur" %}
-                                {% include 'HopitalNumeriqueRechercheBundle:Search:points-durs.html.twig' with {'objet': objet, 'count':count, 'showMorePointsDurs' : showMorePointsDurs, 'onlyText': false } %}
+                                {% include 'HopitalNumeriqueRechercheBundle:Search:points-durs.html.twig' with {'objet': objet, 'count':count, 'showMorePointsDurs' : 5000, 'onlyText': false } %}
                                 {% set count = count + 1 %}
                             {% else %}
                                 <p> - Aucun point dur trouvé - </p>
@@ -484,9 +481,9 @@ window.open ("report/showReport.action?"+request,null,"location=no,menubar=0,res
                         {% set count = 0 %}
                         {% for objet in objets if (objet['categ'] == "production" or objet['categ'] == "ressource" or objet['categ'] == "forum") %}
                             {% if objet['categ'] == 'forum' %}
-                                {% include 'HopitalNumeriqueRechercheBundle:Search:forum.html.twig' with {'objet': objet, 'count':count, 'showMoreProductions' : showMoreProductions, 'onlyText': false  } %}
+                                {% include 'HopitalNumeriqueRechercheBundle:Search:forum.html.twig' with {'objet': objet, 'count':count, 'showMoreProductions' : 5000, 'onlyText': false  } %}
                             {% else %}
-                                {% include 'HopitalNumeriqueRechercheBundle:Search:productions.html.twig' with {'objet': objet, 'count':count, 'showMoreProductions' : showMoreProductions, 'onlyText': false  } %}
+                                {% include 'HopitalNumeriqueRechercheBundle:Search:productions.html.twig' with {'objet': objet, 'count':count, 'showMoreProductions' : 5000, 'onlyText': false  } %}
                             {% endif %}
                             {% set count = count + 1 %}
                         {% else %}
