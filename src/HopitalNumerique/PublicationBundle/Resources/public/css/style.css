@@ -31,7 +31,7 @@
 
 /* Productions */
     #productionsPointDur{ margin-top: 30px; }
-    #productionsPointDur h3{ color: #D60030; font-size: 12px; text-transform: uppercase; margin: 0 0 10px 0; font-weight: normal }
+    #productionsPointDur h3{ color: #D60030; font-size: 12px; margin: 0 0 10px 0; margin-left: 20px; font-weight: normal }
     #productionsPointDur .wrapper-results{ padding:20px 0; position: relative;}
     #productionsPointDur .wrapper-results .background-rose{width: 85px; height: 4px; position: absolute; top: 0; left: 0;}
     #productionsPointDur .wrapper-results .results h4{clear: both; margin-top: 0}
