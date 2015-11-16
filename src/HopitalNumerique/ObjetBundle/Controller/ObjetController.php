@@ -458,6 +458,12 @@ class ObjetController extends Controller
                 $cacheDriver = new ApcCache();
                 $cacheName = "_publication_objet_" . $objet->getId();
                 $cacheDriver->delete($cacheName);
+
+                foreach ($objet->getObjets() as $objLie) {
+                    $idObjetLie = explode(':', $objLie)[1];
+                    $cacheName = "_publication_objet_" . $idObjetLie;
+                    $cacheDriver->delete($cacheName);
+                }
                 
                 //reload glossaire stuff
                 $this->get('hopitalnumerique_glossaire.manager.glossaire')->parsePublications( array($objet) );
