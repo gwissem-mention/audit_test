@@ -42,12 +42,12 @@ $(document).ready(function() {
 
     $('#resultats #pointsdurs h3').click(function(){
         $(this).toggleClass('open closed');
-        $('#resultats #pointsdurs .wrapper-results').slideToggle();
+        $('#resultats #pointsdurs .results').slideToggle();
     });
 
     $('#resultats #productions h3').click(function(){
         $(this).toggleClass('open closed');
-        $('#resultats #productions .wrapper-results').slideToggle();
+        $('#resultats #productions .results').slideToggle();
     });
 
     $('#resultats #pointsdurs h3').click();
