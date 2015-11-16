@@ -35,7 +35,7 @@
     #recherche #origin li{position: relative;}
     #recherche #origin li.level0{background: #d60030 url('../img/level0.png') no-repeat 95% 15px; }
     #recherche #origin li.level0.active{background: #d60030 url('../img/level0-active.png') no-repeat 95% 15px;}
-    #recherche #origin li.level0 span{padding:15px 10px 10px 17px; width: 90%; display: block; cursor:pointer; text-transform: uppercase; color: #ffffff; font-size: 16px; font-weight: bold}
+    #recherche #origin li.level0 span{padding:15px 10px 10px 17px; width: 100%; display: block; cursor:pointer; text-transform: uppercase; color: #ffffff; font-size: 16px; font-weight: bold; padding-right: 10%;}
     #recherche #origin li.level0 ol{display: none; }
 
     /* 1er niveau de sous-catégories */

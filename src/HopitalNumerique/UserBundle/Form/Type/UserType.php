@@ -160,7 +160,7 @@ class UserType extends AbstractType
             ));
             
 
-            //Si il y a un utilisateur connecté nous sommes en BO
+            //Si il y a un utilisateur connecté nous sommes en BO ou dans informations perso
             if($this->_securityContext->isGranted('ROLE_USER'))
             {
                 $builder->add('roles', 'entity', array(
