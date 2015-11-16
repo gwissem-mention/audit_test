@@ -32,7 +32,6 @@
         'bundles/nodevoadmin/plugins/apprise/apprise.js'
         'bundles/nodevoadmin/plugins/nodevoLoader/nodevoLoader.js'
         'bundles/hopitalnumeriquepublication/js/script.js'
-        'bundles/hopitalnumeriquerecherche/js/script.js'
     %}
         <script type="text/javascript" src="{{ asset_url }}"></script>
     {% endjavascripts %}
@@ -446,7 +445,58 @@ window.open ("report/showReport.action?"+request,null,"location=no,menubar=0,res
         {% endif %}
 
         <div class="col-md-12" id="resultats">
-            {% include 'HopitalNumeriqueRechercheBundle:Search:getResults.html.twig' with { 'objets' : objets, 'onlyText' : false } %}
+            {% set count = 0 %}
+            {% for objet in objets if objet['categ'] == "point-dur" %}
+                {% set count = count + 1 %}
+            {% endfor %}
+
+            {% if showMorePointsDurs is not defined %}{% set showMorePointsDurs = 2 %}{% endif %}
+            {% if showMoreProductions is not defined %}{% set showMoreProductions = 2 %}{% endif %}
+
+            {% if count != 0 %}
+                <div id="pointsdurs" class="col-md-12">
+                    <h3 class="open">Points Durs ( {{count}} Résultat{% if count > 1%}s{% endif %} )</h3>
+                    <div class="wrapper-results">
+                        <div class="background-violet"></div>
+                        <div class="results">
+                            {% set count = 0 %}
+                            {% for objet in objets if objet['categ'] == "point-dur" %}
+                                {% include 'HopitalNumeriqueRechercheBundle:Search:points-durs.html.twig' with {'objet': objet, 'count':count, 'showMorePointsDurs' : showMorePointsDurs, 'onlyText': false } %}
+                                {% set count = count + 1 %}
+                            {% else %}
+                                <p> - Aucun point dur trouvé - </p>
+                            {% endfor %}
+                            <div class="clearfix"></div>
+                        </div>
+                    </div> 
+                </div>
+            {% endif %}
+
+            <div id="productions" class="col-md-12">
+                {% set count = 0 %}
+                {% for objet in objets if (objet['categ'] == "production" or objet['categ'] == "ressource" or objet['categ'] == "forum") %}
+                    {% set count = count + 1 %}
+                {% endfor %}
+                <h3 class="open">Productions ( {{count}} Résultat{% if count > 1%}s{% endif %} )</h3>
+                <div class="wrapper-results">
+                    <div class="background-rose"></div>
+                    <div class="results">
+                        {% set count = 0 %}
+                        {% for objet in objets if (objet['categ'] == "production" or objet['categ'] == "ressource" or objet['categ'] == "forum") %}
+                            {% if objet['categ'] == 'forum' %}
+                                {% include 'HopitalNumeriqueRechercheBundle:Search:forum.html.twig' with {'objet': objet, 'count':count, 'showMoreProductions' : showMoreProductions, 'onlyText': false  } %}
+                            {% else %}
+                                {% include 'HopitalNumeriqueRechercheBundle:Search:productions.html.twig' with {'objet': objet, 'count':count, 'showMoreProductions' : showMoreProductions, 'onlyText': false  } %}
+                            {% endif %}
+                            {% set count = count + 1 %}
+                        {% else %}
+                            <p> - Aucune production trouvée - </p>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+
+            <div class="clearfix"></div>
         </div>
 
         {# Gestion des commantaires #}

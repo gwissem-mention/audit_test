@@ -71,10 +71,13 @@
     #publication #resultats .hl{ background-color: yellow; border: 1px dotted red; padding: 0 2px; }
     
     /* Points Dur*/
-    #publication #resultats #pointsdurs{padding:0; margin-bottom: 15px;}
+    #publication #resultats #pointsdurs{padding:0;}
     /*#publication #resultats #pointsdurs h3{ color: #d60030; font-size: 12px; text-transform: uppercase; margin: 0 0 10px 0; font-weight: bold}*/
+    #publication #resultats #pointsdurs h3 {display: block; margin-bottom:5px;background-image: url('../img/panel.png');background-repeat: no-repeat;cursor: pointer; height: 25px;}
+    #publication #resultats #pointsdurs h3.open{background-position: right -38px;}
+    #publication #resultats #pointsdurs h3.closed{background-position: right -5px; }
     #publication #resultats #pointsdurs .shows{ margin-top: 15px;}
-    #publication #resultats #pointsdurs .wrapper-results{ background: #f4f4f4; padding:20px; position: relative; }
+    #publication #resultats #pointsdurs .wrapper-results{ background: #f4f4f4; padding:20px; position: relative;  display: block;}
     #publication #resultats #pointsdurs .wrapper-results .background-violet{width: 85px; height: 4px; position: absolute; top: 0; left: 0;}
     #publication #resultats #pointsdurs .wrapper-results .results h4{margin-bottom: 5px}
     #publication #resultats #pointsdurs .wrapper-results .results h4 a{color:#d60030; font-size: 18px; font-weight: bold; }
@@ -85,7 +88,10 @@
     /* Productions */
     #publication #resultats #productions{padding:0; }
     /*#publication #resultats #productions h3{ color: #d60030; font-size: 12px; text-transform: uppercase; margin: 0 0 10px 0; font-weight: bold }*/
-    #publication #resultats #productions .wrapper-results{ padding:0 0; position: relative;}
+    #publication #resultats #productions h3 {display: block; margin-bottom:5px;background-image: url('../img/panel.png');background-repeat: no-repeat;cursor: pointer; height: 25px}
+    #publication #resultats #productions h3.open{background-position: right -38px;}
+    #publication #resultats #productions h3.closed{background-position: right -5px; }
+    #publication #resultats #productions .wrapper-results{ padding:0 0; position: relative; display: block;}
     #publication #resultats #productions .wrapper-results .background-rose{width: 85px; height: 4px; position: absolute; top: 0; left: 0;}
     #publication #resultats #productions .wrapper-results .results h4{clear: both; margin-top: 0}
     #publication #resultats #productions .wrapper-results .results h4 a{color:#070005; font-size: 18px; font-weight: bold}
