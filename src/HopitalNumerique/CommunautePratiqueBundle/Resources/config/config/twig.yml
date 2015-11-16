@@ -1,0 +1,6 @@
+services:
+    hopitalnumerique_communautepratique.twig.extension.filter:
+        class: "HopitalNumerique\CommunautePratiqueBundle\Twig\Extension\FilterExtension"
+        arguments: ["@hopitalnumerique_communautepratique.dependency_injection.inscription"]
+        tags:
+            - { name: twig.extension }

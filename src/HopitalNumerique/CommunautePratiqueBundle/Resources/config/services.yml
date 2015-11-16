@@ -2,3 +2,8 @@ imports:
     - { resource: "config/manager.yml" }
     - { resource: "config/form.yml" }
     - { resource: "config/grid.yml" }
+    - { resource: "config/twig.yml" }
+
+services:
+    hopitalnumerique_communautepratique.dependency_injection.inscription:
+        class: "HopitalNumerique\CommunautePratiqueBundle\DependencyInjection\Inscription"

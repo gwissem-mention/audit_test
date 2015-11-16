@@ -1,27 +1,38 @@
-<aside class="communaute-de-pratiques">
+<aside class="communaute-de-pratiques-blocs">
     <div class="row">
-        <div class="col-md-8 bloc-rejoindre">
-            <div class="title">Rejoindre la communauté de pratiques</div>
-            {% if app.user is not null and app.user.inscritCommunaute %}
-                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed non risus. Suspendisse lectus tortor, dignissim sit amet, adipiscing nec, ultricies sed, dolor. Cras elementum ultrices diam. Maecenas ligula massa, varius a, semper congue, euismod non, mi. Proin porttitor, orci nec nonummy molestie, enim est eleifend mi, non fermentum diam nisl sit amet erat.</p>
-                <div class="text-right">
-                    <a class="btn">Rejoindre la communaute</a>
-                </div>
-            {% else %}
-                <p><strong>Si vous possédez déjà un compte</strong> utilisateur sur la plateforme Hôpital Numérique, <a>connectez-vous</a>, vous serez automatiquement redirigé vers la communauté.</p>
-                <p><strong>Si vous ne possédez pas encore de compte</strong> <a>cliquez sur ce lien</a>.</p>
-            {% endif %}
+        <div class="col-md-8 col-sm-8">
+            <div class="bloc-rejoindre">
+                <div class="title">Rejoindre la communauté de pratiques</div>
+                {% if app.user is null %}
+                    <p><strong>Si vous possédez déjà un compte</strong> utilisateur sur la plateforme Hôpital Numérique, <a href="{{ path('account_login') }}">connectez-vous</a>, vous serez automatiquement redirigé vers la communauté.</p>
+                    <p><strong>Si vous ne possédez pas encore de compte</strong> <a href="{{ path('hopital_numerique_user_inscription') }}">cliquez sur ce lien</a>.</p>
+                {% elseif app.user|communautePratiqueHasInformationManquante %}
+                    <p>
+                        Certaines informations de votre profil sont nécessaires pour rejoindre la communauté, <a href="{{ path('hopital_numerique_user_informations_personnelles') }}">cliquez sur ce lien pour accéder au profil</a> :
+                        {%- for informationManquante in app.user|communautePratiqueGetInformationsManquantes -%}
+                            <br>- {{ informationManquante }}</li>
+                        {%- endfor -%}
+                    </p>
+                {% else %}
+                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed non risus. Suspendisse lectus tortor, dignissim sit amet, adipiscing nec, ultricies sed, dolor. Cras elementum ultrices diam. Maecenas ligula massa, varius a, semper congue, euismod non, mi. Proin porttitor, orci nec nonummy molestie, enim est eleifend mi, non fermentum diam nisl sit amet erat.</p>
+                    <div class="text-right">
+                        <a class="btn">Rejoindre la communaute</a>
+                    </div>
+                {% endif %}
+            </div>
         </div>
-        <div class="col-md-4 bloc-action">
-            {% if app.user is not null and app.user.inscritCommunaute %}
-                <div class="title">Quitter</div>
-                <div class="subtitle">la communauté de pratique</div>
-                <p><em>Votre fiche sera supprimée de l'annuaire de la communauté</em></p>
-            {% else %}
-                <div class="title">Productions issues de la communauté</div>
-                <p><em>Retrouvez les productions issues du travail des groupes de la communauté</em></p>
-                <a class="btn">Voir les productions</a>
-            {% endif %}
+        <div class="col-sm-4 col-md-4">
+            <div class="bloc-action">
+                {% if app.user is not null and app.user.inscritCommunaute %}
+                    <div class="title">Quitter</div>
+                    <div class="subtitle">la communauté de pratique</div>
+                    <p><em>Votre fiche sera supprimée de l'annuaire de la communauté</em></p>
+                {% else %}
+                    <div class="title">Productions issues de la communauté</div>
+                    <p><em>Retrouvez les productions issues du travail des groupes de la communauté</em></p>
+                    <a class="btn">Voir les productions</a>
+                {% endif %}
+            </div>
         </div>
     </div>
 </aside>

@@ -128,6 +128,14 @@
         #articles .actus ul li:hover a{color:#d60030;}
 
         #articles .dateModif{color: #a2a2a2;font-size: 12px;font-style : italic; margin-bottom: 20px;border-bottom: 1px solid #d5d5d5;}
+    /* Blocs Communauté de pratiques */
+        #articles .communaute-de-pratiques-blocs { clear: both;padding:40px 0 0 0; }
+            #articles .communaute-de-pratiques-blocs .title { color: #d60030;font-size: 17px;font-weight: bold; }
+            #articles .communaute-de-pratiques-blocs .btn { background-color: #d60030;border-radius: 0;color: #fff;font-size: 12px;padding: 5px 26px; }
+            #articles .communaute-de-pratiques-blocs p { font-size: 12px;margin: 14px 0; }
+            #articles .communaute-de-pratiques-blocs .bloc-rejoindre, #articles .communaute-de-pratiques-blocs .bloc-action { min-height: 190px;padding: 14px 20px; }
+            #articles .communaute-de-pratiques-blocs .bloc-rejoindre { background-color: #e5e5e5; }
+            #articles .communaute-de-pratiques-blocs .bloc-action { background-color: #f6f6f6;text-align: center; }
 
 /* Productions fortement liées */
     #productions h2{display: block; margin:0 0 5px 0;background-image: url('../img/panel.png');background-repeat: no-repeat;cursor: pointer; height: 25px; width: 90%;}
