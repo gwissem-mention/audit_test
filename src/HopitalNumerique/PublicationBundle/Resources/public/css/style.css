@@ -50,6 +50,7 @@
     #publication .print{margin-left:5px;}
     #publication h1{font-size: 24px; font-weight: bold; margin:2px 0 20px 0; border-bottom: 1px solid #D5D5D5; padding-bottom: 5px; font-family: 'Open Sans', sans-serif; width: 90%;}
     #publication h2{font-size: 20px; color: #d60030; font-family: 'Open Sans', sans-serif;}
+    #publication #resultats h3{font-size: 20px; color: #d60030; font-family: 'Open Sans', sans-serif;}
     #publication h3{font-size: 16px; font-family: 'Open Sans', sans-serif;}
     #publication h4{font-size: 13px; font-weight: normal; margin:13px 0 0 0; font-family: 'Open Sans', sans-serif;}
     #publication h4.objetTitre{font-weight: bold}
@@ -62,6 +63,45 @@
     #publication .titre-infradoc a{font-size: 22px;}
     #publication .titre-infradoc-pdf {display: none;}
 
+
+    /* Résultats */
+    #publication #resultats{ margin-top: 20px; }
+    #publication #resultats span.label{ font-size:9px; line-height: 2; vertical-align: top }
+    #publication #resultats .niveau{ margin-bottom: 4px }
+    #publication #resultats .hl{ background-color: yellow; border: 1px dotted red; padding: 0 2px; }
+    
+    /* Points Dur*/
+    #publication #resultats #pointsdurs{padding:0;}
+    /*#publication #resultats #pointsdurs h3{ color: #d60030; font-size: 12px; text-transform: uppercase; margin: 0 0 10px 0; font-weight: bold}*/
+    #publication #resultats #pointsdurs h3 {display: block; margin-bottom:5px;background-image: url('../img/panel.png');background-repeat: no-repeat;cursor: pointer; height: 25px;}
+    #publication #resultats #pointsdurs h3.open{background-position: right -38px;}
+    #publication #resultats #pointsdurs h3.closed{background-position: right -5px; }
+    #publication #resultats #pointsdurs .shows{ margin-top: 15px;}
+    #publication #resultats #pointsdurs .wrapper-results{ padding:0; position: relative;  display: block;}
+    #publication #resultats #pointsdurs .wrapper-results .background-rose{width: 85px; height: 4px; position: absolute; top: 0; left: 0;}
+    #publication #resultats #pointsdurs .wrapper-results .results {background: #f4f4f4; padding:20px;}
+    #publication #resultats #pointsdurs .wrapper-results .results h4{margin-bottom: 5px}
+    #publication #resultats #pointsdurs .wrapper-results .results h4 a{color:#d60030; font-size: 18px; font-weight: bold; }
+    #publication #resultats #pointsdurs .wrapper-results .results a.synthese{font-size: 11px; color:#161616; background: url('../img/synthese.png') no-repeat right center; padding-right:25px; margin-top: 10px; display: block; height: 18px; text-align: right}
+    #publication #resultats #pointsdurs .wrapper-results .results p{font-size: 13px; color:#070707; }
+    #publication #resultats #pointsdurs .wrapper-results .results .fa-refresh{ color:#3da20b; }
+
+    /* Productions */
+    #publication #resultats #productions{padding:0; }
+    /*#publication #resultats #productions h3{ color: #d60030; font-size: 12px; text-transform: uppercase; margin: 0 0 10px 0; font-weight: bold }*/
+    #publication #resultats #productions h3 {display: block; margin-bottom:5px;background-image: url('../img/panel.png');background-repeat: no-repeat;cursor: pointer; height: 25px}
+    #publication #resultats #productions h3.open{background-position: right -38px;}
+    #publication #resultats #productions h3.closed{background-position: right -5px; }
+    #publication #resultats #productions .wrapper-results{ padding:0 0; position: relative; display: block;}
+    #publication #resultats #productions .wrapper-results .background-rose{width: 85px; height: 4px; position: absolute; top: 0; left: 0;}
+    #publication #resultats #productions .wrapper-results .results {padding:20px;}
+    #publication #resultats #productions .wrapper-results .results h4{clear: both; margin-top: 0}
+    #publication #resultats #productions .wrapper-results .results h4 a{color:#070005; font-size: 18px; font-weight: bold}
+    #publication #resultats #productions .wrapper-results .results h5{color:#d60030; font-size: 13px; font-weight: normal; text-transform: uppercase; margin-bottom: 5px}
+    #publication #resultats #productions .wrapper-results .results a.synthese{font-size: 11px; color:#161616; background: url('../img/synthese.png') no-repeat right center; padding-right:25px; margin-top:10px; display: block; height: 18px; text-align: right}
+    #publication #resultats #productions .wrapper-results .results p{font-size: 13px; color:#070707; }
+    #publication #resultats #productions .wrapper-results .results .fa-refresh{ color:#3da20b; }
+
     /* Bloc résumé */
     #publication #publication-resume h1{font-size: 24px; font-weight: bold; margin:2px 0 20px 0; border-bottom: 1px solid #D5D5D5; padding-bottom: 5px;}
     #publication #publication-resume h2{font-size: 18px; color: #d60030; font-weight: bold;}
@@ -71,17 +111,17 @@
     #publication #publication-resume h6{color: #d60030;font-size: 14px;font-style: italic;font-weight: normal; margin: 15px 0 10px 100px; font-weight: bold;}
 
     /* Bloc Productions associés */
-    #publication #productions{ margin-top: 30px; }
-    #publication #productions h3{ color: #595959; font-size: 12px; text-transform: uppercase; margin: 0 0 10px 0; font-weight: normal }
-    #publication #productions .wrapper-results{ padding:15px 0 10px 0; position: relative;}
-    #publication #productions .wrapper-results .background-rose{width: 85px; height: 4px; position: absolute; top: 0; left: 0;}
-    #publication #productions .wrapper-results .results h4{clear: both; margin: 0 0 5px 0; line-height:16px}
-    #publication #productions .wrapper-results .results h4 a{color:#070005; font-size: 18px; font-weight: bold}
-    #publication #productions .wrapper-results .results h4 span{vertical-align:top}
-    #publication #productions .wrapper-results .results h5{color:#b71c8b; font-size: 13px; font-weight: normal; text-transform: uppercase; margin-bottom: 5px}
-    #publication #productions .wrapper-results .results a.synthese{font-size: 11px; color:#161616; background: url('../img/synthese.png') no-repeat right center; padding-right:25px; margin-top:10px; display: block; height: 18px; text-align: right}
-    #publication #productions .wrapper-results .results p{font-size: 13px; color:#070707; }
-    #publication #productions .wrapper-results .results .fa-refresh{ color:#3da20b; }
+    #publication #productions-associes{ margin-top: 30px; }
+    #publication #productions-associes h3{ color: #595959; font-size: 12px; text-transform: uppercase; margin: 0 0 10px 0; font-weight: normal }
+    #publication #productions-associes .wrapper-results{ padding:15px 0 10px 0; position: relative;}
+    #publication #productions-associes .wrapper-results .background-rose{width: 85px; height: 4px; position: absolute; top: 0; left: 0;}
+    #publication #productions-associes .wrapper-results .results h4{clear: both; margin: 0 0 5px 0; line-height:16px}
+    #publication #productions-associes .wrapper-results .results h4 a{color:#070005; font-size: 18px; font-weight: bold}
+    #publication #productions-associes .wrapper-results .results h4 span{vertical-align:top}
+    #publication #productions-associes .wrapper-results .results h5{color:#b71c8b; font-size: 13px; font-weight: normal; text-transform: uppercase; margin-bottom: 5px}
+    #publication #productions-associes .wrapper-results .results a.synthese{font-size: 11px; color:#161616; background: url('../img/synthese.png') no-repeat right center; padding-right:25px; margin-top:10px; display: block; height: 18px; text-align: right}
+    #publication #productions-associes .wrapper-results .results p{font-size: 13px; color:#070707; }
+    #publication #productions-associes .wrapper-results .results .fa-refresh{ color:#3da20b; }
     
     /* Bloc Date de parution - source du document */
     #publication #date-source{font-weight:bold;font-size:12px;margin-top:20px;}
@@ -130,9 +170,9 @@
         #articles .dateModif{color: #a2a2a2;font-size: 12px;font-style : italic; margin-bottom: 20px;border-bottom: 1px solid #d5d5d5;}
 
 /* Productions fortement liées */
-    #productions h2{display: block; margin:0 0 5px 0;background-image: url('../img/panel.png');background-repeat: no-repeat;cursor: pointer; height: 25px; width: 90%;}
-    #productions h2.open{background-position: right -38px;}
-    #productions h2.closed{background-position: right -5px; }
+    #productions-associes h2{display: block; margin:0 0 5px 0;background-image: url('../img/panel.png');background-repeat: no-repeat;cursor: pointer; height: 25px;}
+    #productions-associes h2.open{background-position: right -38px;}
+    #productions-associes h2.closed{background-position: right -5px; }
 
 /* Notes */
     #bloc-notation-objet .wrapper{ border: 1px solid #e2e2e2; margin-top: 10px; padding: 10px 20px 0;}
