@@ -44,20 +44,20 @@ $(document).ready(function() {
 
     idDomaineCurrent = $('#domaine-current-id').val();
 
-    $('#tableau-de-bord .content .panel .onglets .onglet').each(function(){
-        var domaineSelected = $(this).data('id');
 
-        $(this).on('click', function()
-        {
+    $('#tableau-de-bord .content .panel .onglets #ongletResultatDomaineAutodiag').each(function(){
+    	var domaineSelected = $(this).data('id');
+        
+        $('#ongletResultatDomaineAutodiag').change(function(){
+        	domaineSelected = $('#ongletResultatDomaineAutodiag').val();
+        	
             $('#tableau-de-bord .content .panel .autodiag-domaine').each(function(){
                 if($(this).data('id') != domaineSelected)
                 {
-                    $("#onglet-" + $(this).data('id')).removeClass('active');
                     $(this).hide();
                 }
                 else
                 {
-                    $("#onglet-" + $(this).data('id')).removeClass('active').addClass('active');
                     $(this).show();
                 }
             });

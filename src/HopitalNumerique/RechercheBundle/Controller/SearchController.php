@@ -24,7 +24,7 @@ class SearchController extends Controller
         }
 
         $categoriesProductionActif = "";
-        $categoriesProduction    = $this->get('hopitalnumerique_reference.manager.reference')->findBy(array('parent' => '175'), array('order' => 'ASC'));
+        $categoriesProduction    = $this->get('hopitalnumerique_reference.manager.reference')->getRefsByDomaineByParent(175, $domaineId);
 
         //get connected user
         $user = $this->get('security.context')->getToken()->getUser();
