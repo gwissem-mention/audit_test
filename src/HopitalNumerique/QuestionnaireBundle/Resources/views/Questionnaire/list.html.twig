@@ -1,34 +1,51 @@
-{% extends 'HopitalNumeriqueCoreBundle:Templates:' ~ templateCurrentId ~ '/layout.html.twig' %}
+{% extends 'HopitalNumeriqueAccountBundle::layout.html.twig' %}
 
-{% block body %}
+{% block headerTitle %}Mes questionnaires{% endblock %}
+{% block headerDesc %} 
+    <p>Retrouvez ci-dessous l’ensemble de vos questionnaires.</p>
+{% endblock %}
 
-    <div class="row questionnaire-list">
-        <div class="col-md-12 module">
-            
-            <h1 class="violet">Mes questionnaires</h1>
-            
-            <div class="chapo">
-                <h1 class="violet">Mes questionnaires</h1>
-                <div class="description">
-                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed non risus. Suspendisse lectus tortor, dignissim sit amet, adipiscing nec, ultricies sed, dolor. Cras elementum ultrices diam. Maecenas ligula massa, varius a, semper congue, euismod non, mi. Proin porttitor, orci nec nonummy molestie, enim est eleifend mi, non fermentum diam nisl sit amet erat. Duis semper. Duis arcu massa, scelerisque vitae, consequat in, pretium a, enim. Pellentesque congue. Ut in risus volutpat libero pharetra tempor. Cras vestibulum bibendum augue. Praesent egestas leo in pede. Praesent blandit odio eu enim. Pellentesque sed dui ut augue blandit sodales. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Aliquam nibh. Mauris ac mauris sed pede pellentesque fermentum. Maecenas adipiscing ante non diam sodales hendrerit.</p>
-                </div>
+{% block content %}
+
+    <div class="questionnaire-list">
+        <div class="row">
+            <div class="col-md-12">
+
+                {% if questionnairesWithDates|length > 0 %}
+                    <table class="table table-striped table-hover default">
+                        <thead>
+                            <tr>
+                                <th>Questionnaire</th>
+                                <th>Date de création</th>
+                                <th>Dernière mise à jour</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for questionnaire in questionnairesWithDates -%}
+                                <tr>
+                                    <td>
+                                        <a href="{{ path('hopitalnumerique_questionnaire_edit_front_gestionnaire', { 'id':questionnaire[0].id }) }}"><strong>{{ questionnaire[0] }}</strong></a>
+                                    </td>
+                                    <td>{{ questionnaire['dateCreation'] is not null ? questionnaire['dateCreation']|date('d/m/Y') : '' }}</td>
+                                    <td>{{ questionnaire['dernierUpdate'] is not null ? questionnaire['dernierUpdate']|date('d/m/Y') : '' }}</td>
+                                </tr>
+                                {% for occurrence in questionnaire['occurrences'] -%}
+                                    <tr class="occurrence">
+                                        <td>
+                                            <a href="{{ path('hopitalnumerique_questionnaire_edit_front_gestionnaire_occurrence', { 'questionnaire':questionnaire[0].id, 'occurrence':occurrence[0].id }) }}">{{ occurrence[0] }}</a>
+                                        </td>
+                                        <td>{{ occurrence['dateCreation'] is not null ? occurrence['dateCreation']|date('d/m/Y') : '' }}</td>
+                                        <td>{{ occurrence['dernierUpdate'] is not null ? occurrence['dernierUpdate']|date('d/m/Y') : '' }}</td>
+                                    </tr>
+                                {%- endfor %}
+                            {%- endfor %}
+                        </tbody>
+                    </table>
+                {% else %}
+                    <p style="margin:10px 0px 0px 20px">Vous n'avez renseigné aucun questionnaire.</p>
+                {% endif %}
+
             </div>
-
-            <ul class="list-unstyled questionnaires">
-                {% for questionnaire in questionnaires %}
-                    <li>
-                        <h2><a href="{{ path('hopitalnumerique_questionnaire_edit_front_gestionnaire', { 'id':questionnaire.id }) }}">{{ questionnaire }}</a></h2>
-                        {% if questionnaire.occurrences|length > 0 %}
-                            <ul class="list-unstyled">
-                                {% for occurrence in questionnaire.occurrences %}
-                                    <li><a href="{{ path('hopitalnumerique_questionnaire_edit_front_gestionnaire_occurrence', { 'questionnaire':questionnaire.id, 'occurrence':occurrence.id }) }}">{{ occurrence }}</a></li>
-                                {% endfor %}
-                            </ul>
-                        {% endif %}
-                    </li>
-                {% endfor %}
-            </ul>
-            
         </div>
     </div>
 

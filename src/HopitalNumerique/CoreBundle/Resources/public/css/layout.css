@@ -1,13 +1,21 @@
+/* <-- Chapô */
 .chapo { background-color:#f8f8f8;background-image:url('/bundles/hopitalnumeriqueintervention/img/chapo.png');background-position:19px 7px;background-repeat:no-repeat;padding:14px 18px 4px 18px; }
     .chapo h1 { font-size:14px;font-weight:bold;margin:0px;padding:0px 0px 10px 40px;text-transform:uppercase; }
     .chapo div.description { font-size:13px; }
         .chapo div.description p { margin:8px 0px;padding:0px; }
+/* --> */
+
+/* <-- Tableaux */
+    /* Générique*/
+    table.default thead tr { color:#FFFFFF;text-transform:uppercase; font-size: 11px}
+    table.default thead tr a { color:#FFFFFF; font-size: 11px }
+    table.default thead th { background-color:#6F3596; vertical-align: middle }
+    table.default th, table.table td { border: 1px solid #ddd;padding:4px; }
+/* --> */
 
 /* <-- Liste des questionnaires */
-.questionnaire-list {}
-    .questionnaire-list .questionnaires { background-color:#f8f8f8;margin:20px 0 0 0; }
-        .questionnaire-list .questionnaires a { display: block; }
-        .questionnaire-list .questionnaires h2 { margin: 10px;padding:10px 0px; }
-        .questionnaire-list .questionnaires ul { margin: 0 0 0 40px; }
-            .questionnaire-list .questionnaires ul li { padding: 10px 0; }
+.questionnaire-list { background-color: #fff; }
+        .questionnaire-list a { display: block; }
+        .questionnaire-list .occurrence { font-size: 95%; }
+            .questionnaire-list .occurrence a { padding-left: 10px; }
 /* --> */

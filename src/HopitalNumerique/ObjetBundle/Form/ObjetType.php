@@ -38,6 +38,12 @@ class ObjetType extends AbstractType
                 'label'      => 'Alias',
                 'attr'       => array('class' => $this->_constraints['alias']['class'] )
             ))
+            ->add('source', 'text', array(
+                'required'   => false,
+                'max_length' => $this->_constraints['source']['maxlength'],
+                'label'      => 'Source (si externe)',
+                'attr'       => array('class' => $this->_constraints['source']['class'] )
+            ))
             ->add('etat', 'entity', array(
                 'class'         => 'HopitalNumeriqueReferenceBundle:Reference',
                 'property'      => 'libelle',

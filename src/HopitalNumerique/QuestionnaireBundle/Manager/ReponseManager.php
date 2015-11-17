@@ -3,7 +3,9 @@
 namespace HopitalNumerique\QuestionnaireBundle\Manager;
 
 use Nodevo\ToolsBundle\Manager\Manager as BaseManager;
+use HopitalNumerique\QuestionnaireBundle\Entity\Questionnaire;
 use HopitalNumerique\QuestionnaireBundle\Entity\Occurrence;
+use HopitalNumerique\UserBundle\Entity\User;
 
 /**
  * Manager de l'entité Contractualisation.
@@ -201,5 +203,19 @@ class ReponseManager extends BaseManager
     
         // le chemin absolu du répertoire où les documents uploadés doivent être sauvegardés
         return __ROOT_DIRECTORY__.'/files/'.$labelQuestionnaire;
+    }
+    
+    
+    /**
+     * Affecte une occurrence à toutes les réponses d'un questionnaire répondu par un utilisateur.
+     * 
+     * @param \HopitalNumerique\QuestionnaireBundle\Entity\Occurrence    $occurrence    Occurrence
+     * @param \HopitalNumerique\QuestionnaireBundle\Entity\Questionnaire $questionnaire Questionnaire
+     * @param \HopitalNumerique\UserBundle\Entity\User                   $user          User
+     * @return void
+     */
+    public function setOccurrenceByQuestionnaireAndUser(Occurrence $occurrence, Questionnaire $questionnaire, User $user)
+    {
+        $this->getRepository()->setOccurrenceByQuestionnaireAndUser($occurrence, $questionnaire, $user);
     }
 }

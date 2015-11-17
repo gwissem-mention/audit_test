@@ -53,8 +53,11 @@ class QuestionnaireController extends Controller
      */
     public function listAction()
     {
+        $domaine = $this->container->get('hopitalnumerique_domaine.manager.domaine')->findOneById($this->container->get('session')->get('domaineId'));
+        $questionnairesWithDates = $this->container->get('hopitalnumerique_questionnaire.manager.questionnaire')->findByUserAndDomaineWithDates($this->getUser(), $domaine, false);
+
         return $this->render('HopitalNumeriqueQuestionnaireBundle:Questionnaire:list.html.twig', array(
-            'questionnaires' => $this->container->get('hopitalnumerique_questionnaire.manager.questionnaire')->findByUser($this->getUser())
+            'questionnairesWithDates' => $questionnairesWithDates
         ));
     }
 
@@ -79,7 +82,7 @@ class QuestionnaireController extends Controller
      */
     public function editQuestionnaireAction(HopiQuestionnaire $questionnaire)
     {
-        return $this->renderGestionForm('hopitalnumerique_questionnaire_gestion_questionnaire', $questionnaire, 'HopitalNumeriqueQuestionnaireBundle:Questionnaire:Gestion/edit.html.twig' );
+        return $this->renderGestionForm('hopitalnumerique_questionnaire_gestion_questionnaire', $questionnaire );
     }
 
     /**
@@ -92,7 +95,7 @@ class QuestionnaireController extends Controller
     {
         $questionnaire = $this->get('hopitalnumerique_questionnaire.manager.questionnaire')->createEmpty();
 
-        return $this->renderGestionForm('hopitalnumerique_questionnaire_gestion_questionnaire', $questionnaire, 'HopitalNumeriqueQuestionnaireBundle:Questionnaire:Gestion/edit.html.twig' );
+        return $this->editQuestionnaireAction($questionnaire);
     }
 
     /**
@@ -740,7 +743,7 @@ class QuestionnaireController extends Controller
     
                 //Sauvegarde / Sauvegarde + quitte
                 $do = $request->request->get('do');
-                return $this->redirect( $do == 'save-close' ? $this->generateUrl($routeRedirection['quit']['route'], $routeRedirection['quit']['arguments']) : $this->generateUrl($routeRedirection['sauvegarde']['route'], $routeRedirection['sauvegarde']['arguments']));
+                return $this->redirect( $do == 'save-close' ? $this->generateUrl($routeRedirection['quit']['route'], $routeRedirection['quit']['arguments']) : ( 'save-add' == $do ? $this->generateUrl('hopitalnumerique_questionnaire_occurrence_add', array('questionnaire' => $questionnaire->getId())) : $this->generateUrl($routeRedirection['sauvegarde']['route'], $routeRedirection['sauvegarde']['arguments']) ) );
             }
         }
     
@@ -764,15 +767,17 @@ class QuestionnaireController extends Controller
      * @author Gaetan MELCHILSEN
      * @copyright Nodevo
      */
-    private function renderGestionForm( $formName, $questionnaire, $view )
+    private function renderGestionForm( $formName, HopiQuestionnaire $questionnaire )
     {
+        $questionnaireEstOccurrenceMultiple = $questionnaire->isOccurrenceMultiple();
+        
         //Création du formulaire via le service
         $form = $this->createForm( $formName, $questionnaire);
 
         $request = $this->get('request');
         
         // Si l'utilisateur soumet le formulaire
-        if ('POST' == $request->getMethod()) 
+        if ('POST' == $request->getMethod())
         {
             // On bind les données du form
             $form->handleRequest($request);
@@ -781,6 +786,8 @@ class QuestionnaireController extends Controller
             if ($form->isValid()) {
                 //test ajout ou edition
                 $new = is_null($questionnaire->getId());
+                
+                $this->processFormOccurrenceMultipleChange($questionnaire, $questionnaireEstOccurrenceMultiple);
                 
                 //On utilise notre Manager pour gérer la sauvegarde de l'objet
                 $this->get('hopitalnumerique_questionnaire.manager.questionnaire')->save($questionnaire);
@@ -794,10 +801,30 @@ class QuestionnaireController extends Controller
             }
         }
 
-        return $this->render( $view , array(
+        return $this->render( 'HopitalNumeriqueQuestionnaireBundle:Questionnaire:Gestion/edit.html.twig' , array(
             'form'          => $form->createView(),
             'questionnaire' => $questionnaire,
+            'isOccurrenceMultiple' => $questionnaireEstOccurrenceMultiple,
             'theme'         => 'vertical'
         ));
+    }
+    
+    /**
+     * Effectue les traitements nécessaires selon la modification de l'occurrence multiple lors de la sauvegarde.
+     * 
+     * @param \HopitalNumerique\QuestionnaireBundle\Entity\Questionnaire $questionnaire                              Questionnaire
+     * @param boolean                                                    $questionnaireEstOccurrenceMultipleOriginal Valeur de l'occurrence multiple avant soumission du formulaire
+     */
+    private function processFormOccurrenceMultipleChange(HopiQuestionnaire $questionnaire, $questionnaireEstOccurrenceMultipleOriginal)
+    {
+        // On a décoché l'occurrence multiple
+        if (!$questionnaireEstOccurrenceMultipleOriginal && $questionnaire->isOccurrenceMultiple())
+        {
+            $this->container->get('hopitalnumerique_questionnaire.manager.questionnaire')->forceOccurrenceMultiple($questionnaire);
+        }
+        elseif ($questionnaireEstOccurrenceMultipleOriginal && !$questionnaire->isOccurrenceMultiple()) // On a coché l'occurrence multiple
+        {
+            $this->container->get('hopitalnumerique_questionnaire.manager.questionnaire')->deleteOccurrencesMultiples($questionnaire);
+        }
     }
 }

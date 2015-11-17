@@ -60,6 +60,10 @@ class DomaineType extends AbstractType
                 'label'      => 'Texte affiché sur la homepage',
                 'attr'       => array('rows' => 2, 'class' => 'tinyMceDomaine')
             ))
+            ->add('urlTitre', 'text', array(
+            		'required'   => false,
+            		'label'      => 'Lien du titre',
+            ))
             ;
     }
 

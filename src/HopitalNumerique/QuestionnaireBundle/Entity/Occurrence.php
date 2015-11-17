@@ -8,7 +8,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  * Occurrence.
  *
  * @ORM\Table("hn_questionnaire_occurrence")
- * @ORM\Entity()
+ * @ORM\Entity(repositoryClass="HopitalNumerique\QuestionnaireBundle\Repository\OccurrenceRepository")
  */
 class Occurrence
 {
@@ -48,7 +48,7 @@ class Occurrence
     /**
      * @var \Doctrine\Common\Collections\ArrayCollection
      * 
-     * @ORM\OneToMany(targetEntity="Reponse", mappedBy="occurence")
+     * @ORM\OneToMany(targetEntity="Reponse", mappedBy="occurrence")
      */
     private $reponses;
 

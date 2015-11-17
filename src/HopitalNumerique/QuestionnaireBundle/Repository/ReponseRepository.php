@@ -4,6 +4,8 @@ namespace HopitalNumerique\QuestionnaireBundle\Repository;
 
 use Doctrine\ORM\EntityRepository;
 use HopitalNumerique\QuestionnaireBundle\Entity\Occurrence;
+use HopitalNumerique\QuestionnaireBundle\Entity\Questionnaire;
+use HopitalNumerique\UserBundle\Entity\User;
 
 /**
  * ReponseRepository
@@ -146,5 +148,30 @@ class ReponseRepository extends EntityRepository
             ->groupBy('user, questionnaire');
         
         return $qb->getQuery();
+    }
+    
+    
+    /**
+     * Affecte une occurrence à toutes les réponses d'un questionnaire répondu par un utilisateur.
+     * 
+     * @param \HopitalNumerique\QuestionnaireBundle\Entity\Occurrence    $occurrence    Occurrence
+     * @param \HopitalNumerique\QuestionnaireBundle\Entity\Questionnaire $questionnaire Questionnaire
+     * @param \HopitalNumerique\UserBundle\Entity\User                   $user          User
+     * @return void
+     */
+    public function setOccurrenceByQuestionnaireAndUser(Occurrence $occurrence, Questionnaire $questionnaire, User $user)
+    {
+        $query = $this->createQueryBuilder('reponse');
+        
+        $query
+            ->update()
+            ->set('reponse.occurrence', $occurrence->getId())
+                
+            ->where($query->expr()->in('reponse.question', $questionnaire->getQuestionIds())) // innerJoin() ne fonctionnant pas avec update() en Doctrine
+            ->andWhere('reponse.user = :user')
+            ->setParameter('user', $user)
+        ;
+
+        $query->getQuery()->execute();
     }
 }

@@ -49,14 +49,14 @@
                 </ol>
             </div>
             {% if app.user %}
-                <div class="btn btn-block background-violet text-left" id="smallMesRequetes" onclick="$('#mesrequetes').click();"><i class="fa fa-list"></i> Mes requêtes</div>
+                <div class="btn btn-block background-violet text-left" id="smallMesRequetes" onclick="$('#mesrequetes').click();"><i class="fa fa-list"></i> Mes recherches</div>
             {% endif %}
 
         </div>
 
         <div class="col-md-8">
             <div class="requete">
-                <h2 class="violet {% if refs != '[]' %}ropen{% endif %}">Requête de recherche</h2>
+                <h2 class="violet {% if refs != '[]' %}ropen{% endif %}">Ma recherche</h2>
                 <div id="blocRequeteRecherche">
     
                     <div class="placeholder" {% if refs != '[]' %}style="display:none"{% endif %}>
@@ -74,9 +74,9 @@
                         {% endif %}
 
                         {% if not app.user or app.user|checkAuthorization( path('hopital_numerique_requete_homepage') ) %}
-                            <div class="btn btn-xs btn-success" onclick="saveRequest( '{{ app.user }}' );" >Enregistrer ma requête</div>
+                            <div class="btn btn-xs btn-success" onclick="saveRequest( '{{ app.user }}' );" >Enregistrer</div>
                         {% endif %}
-                            <div class="btn btn-xs btn-danger" onclick="cleanRequest();" >Réinitialiser ma requête</div>
+                            <div class="btn btn-xs btn-danger" onclick="cleanRequest();" >Réinitialiser</div>
                         <hr />
 
                         <span><strong>Mes critères de recherche</strong></span>
@@ -102,7 +102,6 @@
                     <hr />
                         
                     <div class="row">
-                        {% if domaineCurrentId == 1 %}
                             <div id="bloc_exalead" class="col-md-6" {% if not activationExalead %}style="display:none"{% endif %}>
                                 <div id="recherche_textuelle_group">
                                     <div class="input-group">
@@ -138,9 +137,8 @@
                                     </div>
                                 </div>
                             </div>
-                        {% endif %}
 
-                        <div id="bloc_filtres" {% if domaineCurrentId == 1 %}class="col-md-6"{% else %}class="col-md-12" style="padding-left:15px;"{% endif %}>
+                        <div id="bloc_filtres" class="col-md-6" style="padding-left:15px;">
 
                             <select multiple="multiple" class="form-control" placeholder="Sélectionnez un filtre pour un point dur" name="categ_production_select" id="categ_production_select" style="height:200px;">
                                 {% for categorieProduction in categoriesProduction %}

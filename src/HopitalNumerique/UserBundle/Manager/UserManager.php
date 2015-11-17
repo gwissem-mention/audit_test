@@ -4,6 +4,7 @@ namespace HopitalNumerique\UserBundle\Manager;
 
 use Nodevo\ToolsBundle\Manager\Manager as BaseManager;
 use Doctrine\Common\Collections\Collection;
+use HopitalNumerique\QuestionnaireBundle\Entity\Questionnaire;
 
 class UserManager extends BaseManager
 {
