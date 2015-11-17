@@ -23,24 +23,17 @@
 {% endblock %}
 
 {% block content %}
-	<div class="onglets">
-		{% if resultatsByDomaine|length <= 1 %}
-	        <ul>
-	            {% for idDomaineResultat, resultats in resultatsByDomaine %}
-	                <li id="onglet-{{idDomaineResultat}}" class="onglet {% if idDomaineResultat == domaineCurrentId %}active{% endif %} col-md-{{(12 / resultatsByDomaine|length)|round(0, 'floor')}}" data-id="{{idDomaineResultat}}">
-	                    <div class="domaine">{{domaines[idDomaineResultat].nom}}</div>
-	                </li>
-	            {% endfor %}
-	        </ul>
-	        <div class="clearfix" style="background-color:#FFF;"></div>
-		{% else %}
+	{% if resultatsByDomaine|length > 1 %}
+		<div class="onglets">
+			<p> Selectionner votre domaine :
 		    <select name="resultatDomaineAutodiag" id="ongletResultatDomaineAutodiag">
 	                {% for  idDomaineResultat, resultats in resultatsByDomaine %}
 	                    <option class="domaine" value="{{idDomaineResultat}}" data-id="{{idDomaineResultat}}" >{{domaines[idDomaineResultat].nom}}</option>
 	                {% endfor %}
 	        </select>
-		{% endif %}
-   </div>
+	        </p>
+	   </div>
+	{% endif %}
     {% for idDomaineResultat, resultats in resultatsByDomaine %}
         <div id="autodiag-domaine-{{idDomaineResultat}}" class="autodiag-domaine" data-id="{{idDomaineResultat}}" {% if idDomaineResultat != domaineCurrentId %}style="display:none"{% endif %}>
             <h2>Mes formulaires d'autodiagnostics en cours</h2>

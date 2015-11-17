@@ -128,7 +128,7 @@
     .autodiagTable thead tr a { color:#FFFFFF; font-size: 12px }
     .autodiagTable thead th { background-color:#6F3596; vertical-align: middle }
     .autodiagTable th, .autodiagTable td { border: 1px solid #ddd;padding:4px; }
-    #tableau-de-bord .content .panel .onglets{height: 50px;}
+    #tableau-de-bord .content .panel .onglets{height: 50px; margin: 0 0 0 20px;}
     #tableau-de-bord .content .panel .onglets ul{list-style: none;padding-left: 0;}
     #tableau-de-bord .content .panel .onglets .onglet{height: 50px;background-color: #ffffff; cursor: pointer;}
     #tableau-de-bord .content .panel .onglets .onglet:hover{background-color: #FAFAFA;}
@@ -167,4 +167,8 @@ table.tableau-question-reponse td{border:solid #000 1px;padding:5px;}
 
 .highcharts-tooltip tspan[dx="0"] {
   display: block!important;
+}
+
+#ongletResultatDomaineAutodiag {
+	margin-top: 20px;	
 }
