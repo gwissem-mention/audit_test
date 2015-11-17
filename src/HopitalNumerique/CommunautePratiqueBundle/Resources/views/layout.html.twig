@@ -5,8 +5,19 @@
     {% stylesheets output="compiled/hopitalnumerique-communautepratique.css" filter="cssrewrite, ?yui_css"
         'bundles/hopitalnumeriquecommunautepratique/css/CommunautePratique.css'
     %}
-        <link rel="stylesheet" href="{{ asset_url }}" />
+        <link rel="stylesheet" href="{{ asset_url }}">
     {% endstylesheets %}
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    {% javascripts output="compiled/hopitalnumerique-communautepratique.js"
+        'bundles/hopitalnumeriquecommunautepratique/js/Groupe.js'
+        'bundles/hopitalnumeriquecommunautepratique/js/Groupe/DateProgression.js'
+        'bundles/hopitalnumeriquecommunautepratique/js/Groupe/PlaceProgression.js'
+    %}
+        <script type="text/javascript" src="{{ asset_url }}"></script>
+    {% endjavascripts %}
 {% endblock %}
 
 {% block title %}Communauté de pratiques - {{ parent() }}{% endblock %}

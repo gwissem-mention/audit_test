@@ -1,0 +1,49 @@
+/**
+ * Classe gérant les groupes de la communauté de pratique.
+ */
+var CommunautePratique_Groupe = function() {};
+
+$(document).ready(function() {
+    CommunautePratique_Groupe.init();
+});
+
+
+/**
+ * Initialisation.
+ */
+CommunautePratique_Groupe.init = function() {
+    CommunautePratique_Groupe.fixeHauteurBlocs();
+};
+
+/**
+ * Fixe la hauteur des blocs de la page Groupes de travail.
+ */
+CommunautePratique_Groupe.fixeHauteurBlocs = function()
+{
+    if (1 == $('#communaute-pratiques-groupes').size()) // Vérifie que l'on est sur la bonne page
+    {
+        if (parseInt($('body').width()) >= 768) // Vérifie que l'on n'est pas sur un petit écran
+        {
+            var blocGroupesCourantsContenuHeight = $('.communaute-de-pratiques-panel-groupes .tab-content').height() + parseInt($('.communaute-de-pratiques-panel-groupes .tab-content').css('marginTop')) + parseInt($('.communaute-de-pratiques-panel-groupes .tab-content').css('marginBottom')) + parseInt($('.communaute-de-pratiques-panel-groupes .tab-content').css('paddingTop')) + parseInt($('.communaute-de-pratiques-panel-groupes .tab-content').css('paddingBottom'));
+            var blocGroupesCourantsOngletsHeight = $('.communaute-de-pratiques-panel-groupes .nav-tabs').height() + parseInt($('.communaute-de-pratiques-panel-groupes .nav-tabs').css('marginTop')) + parseInt($('.communaute-de-pratiques-panel-groupes .nav-tabs').css('marginBottom')) + parseInt($('.communaute-de-pratiques-panel-groupes .nav-tabs').css('paddingTop')) + parseInt($('.communaute-de-pratiques-panel-groupes .nav-tabs').css('paddingBottom'));
+            var blocMesGroupesHeight = $('.communaute-de-pratiques-bloc-mes-groupes').height() + parseInt($('.communaute-de-pratiques-bloc-mes-groupes').css('marginTop')) + parseInt($('.communaute-de-pratiques-bloc-mes-groupes').css('marginBottom')) + parseInt($('.communaute-de-pratiques-bloc-mes-groupes').css('paddingTop')) + parseInt($('.communaute-de-pratiques-bloc-mes-groupes').css('paddingBottom'));
+            var blocGroupePublicationsHeight = $('.communaute-de-pratiques-bloc-publications').height() + parseInt($('.communaute-de-pratiques-bloc-publications').css('marginTop')) + parseInt($('.communaute-de-pratiques-bloc-publications').css('marginBottom')) + parseInt($('.communaute-de-pratiques-bloc-publications').css('paddingTop')) + parseInt($('.communaute-de-pratiques-bloc-publications').css('paddingBottom'));
+
+            var colonneGaucheHeight = blocGroupesCourantsContenuHeight + blocGroupesCourantsOngletsHeight;
+            var colonneDroiteHeight = blocMesGroupesHeight + blocGroupePublicationsHeight;
+
+            if (colonneGaucheHeight < colonneDroiteHeight)
+            {
+                $('.communaute-de-pratiques-panel-groupes .tab-content').height(colonneDroiteHeight - blocGroupesCourantsOngletsHeight);
+            }
+            else if (colonneGaucheHeight > colonneDroiteHeight)
+            {
+                $('.communaute-de-pratiques-bloc-mes-groupes').height(colonneGaucheHeight - blocGroupePublicationsHeight - parseInt($('.communaute-de-pratiques-bloc-mes-groupes').css('marginTop')) - parseInt($('.communaute-de-pratiques-bloc-mes-groupes').css('marginBottom')));
+            }
+        }
+        else
+        {
+            $('.communaute-de-pratiques-bloc-mes-groupes').css({ marginTop: '15px' });
+        }
+    }
+};

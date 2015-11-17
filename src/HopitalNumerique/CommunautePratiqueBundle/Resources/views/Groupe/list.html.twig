@@ -3,9 +3,11 @@
 {% block title %}Groupes de travail - {{ parent() }}{% endblock %}
 
 {% block body %}
+    {% import "HopitalNumeriqueCommunautePratiqueBundle:include:blocks.html.twig" as communaute_pratique %}
+    
     <h1>Groupes de travail</h1>
 
-    <div class="row">
+    <div class="row" id="communaute-pratiques-groupes">
         <div class="col-md-9">
             
             <div class="communaute-de-pratiques-panel-groupes">
@@ -16,41 +18,21 @@
                 <div class="tab-content">
                     <div role="tabpanel" class="tab-pane active" id="a-venir">
 
-                        <div class="groupe">
-                            <div class="row">
-                                <div class="col-md-9">
-                                    <h2>Nom du groupe</h2>
-                                    <p>
-                                        Lorem ipsum ipsum ipsum ipsum ipsum ipsum ipsum ipsum ipsum ipsum ipsum ipsum ipsum ipsum ipsum ipsum ipsum ipsum ipsum ipsum ipsum ipsum ipsum ipsum ipsum ipsum ipsum ipsum ipsum ipsum ipsum ipsum ipsum ipsum ipsum ipsum ipsum ipsum... <a>En savoir plus</a>
-                                    </p>
-                                    <div class="progression">
-                                        <div class="dates">
-                                            <div class="gauche">00/00/0000</div>
-                                            <div class="milieu">00/00/0000</div>
-                                            <div class="droite">00/00/0000</div>
-                                        </div>
-                                        <div class="barre"><div class="contenu"></div></div>
-                                        <div class="legende">
-                                            <div class="gauche">Inscription</div>
-                                            <div class="milieu">Démarrage</div>
-                                            <div class="droite">Fermeture</div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-md-3">
-                                    <p>
-                                        Places restantes
-                                        <br><strong>3 sur 12</strong>
-                                    </p>
-                                    <div class="places-progression"><div class="contenu"></div></div>
-                                    <a class="button">Rejoindre ce groupe</a>
-                                </div>
-                            </div>
-                        </div>
+                        {% for groupeNonDemarre in groupesNonDemarres %}
+                            {{ communaute_pratique.display_groupe(groupeNonDemarre) }}
+                        {% else %}
+                            <p class="text-center">&nbsp;<br>Aucun groupe de travail à venir.<br>&nbsp;</p>
+                        {% endfor %}
 
                     </div>
                     <div role="tabpanel" class="tab-pane" id="en-cours">
-                        
+
+                        {% for groupeEnCours in groupesEnCours %}
+                            {{ communaute_pratique.display_groupe(groupeEnCours) }}
+                        {% else %}
+                            <p class="text-center">&nbsp;<br>Aucun groupe de travail en cours.<br>&nbsp;</p>
+                        {% endfor %}
+
                     </div>
                 </div>
             </div>

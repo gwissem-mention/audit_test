@@ -427,4 +427,20 @@ class Groupe
     {
         return $this->animateurs;
     }
+    
+    
+    /**
+     * Retourne le nombre de jours qu'il reste avant l'ouverture des inscriptions.
+     * 
+     * @return integer Nombre de jours
+     */
+    public function getNombreJoursRestantsAvantInscriptionOuverture()
+    {
+        $aujourdhui = new \DateTime();
+        $aujourdhui->setTime(0, 0, 0);
+
+        $dateInterval = $aujourdhui->diff($this->dateInscriptionOuverture);
+
+        return intval($dateInterval->format('%R%a'));
+    }
 }
