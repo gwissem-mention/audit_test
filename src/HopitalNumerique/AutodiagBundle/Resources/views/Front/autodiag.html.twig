@@ -25,7 +25,7 @@
 {% block content %}
 	{% if resultatsByDomaine|length > 1 %}
 		<div class="onglets">
-			<p> Selectionner votre domaine :
+			<p> Sélectionnez votre domaine :
 		    <select name="resultatDomaineAutodiag" id="ongletResultatDomaineAutodiag">
 	                {% for  idDomaineResultat, resultats in resultatsByDomaine %}
 	                    <option class="domaine" value="{{idDomaineResultat}}" data-id="{{idDomaineResultat}}" >{{domaines[idDomaineResultat].nom}}</option>
