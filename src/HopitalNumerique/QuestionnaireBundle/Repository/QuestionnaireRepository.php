@@ -122,9 +122,47 @@ class QuestionnaireRepository extends EntityRepository
         
         $query
             ->innerJoin('questionnaire.domaines', 'domaine', Expr\Join::WITH, 'domaine.id = :domaine')
+            ->setParameter('domaine', $domaine);
+        
+        return $query->getQuery()->getResult();
+    }
+        
+    /*
+     * Retourne les questionnaires (avec leurs occurrences) d'un utilisateur pour un domaine avec les dates de création et de dernières modifications.
+     * 
+     * @param \HopitalNumerique\UserBundle\Entity\User       $user    Utilisateur
+     * @param \HopitalNumerique\DomaineBundle\Entity\Domaine $domaine Domaine
+     * @param boolean                                        $isLock  (optionnel) Filtre sur questionnaire.lock
+     * @return array<\HopitalNumerique\QuestionnaireBundle\Entity\Questionnaire> Questionnaires
+     */
+    public function findByUserAndDomaineWithDates(User $user, Domaine $domaine, $isLock = null)
+    {
+        $query = $this->createQueryBuilder('questionnaire');
+
+        $query
+            ->addSelect('questionnaire', 'occurrence')
+            ->addSelect('MIN(reponse.dateCreation) AS dateCreation')
+            ->addSelect('MAX(reponse.dateUpdate) AS dernierUpdate')
+            ->innerJoin('questionnaire.questions', 'question')
+            ->innerJoin('question.reponses', 'reponse', \Doctrine\ORM\Query\Expr\Join::WITH, 'reponse.user = :user')
+            ->leftJoin('questionnaire.occurrences', 'occurrence', \Doctrine\ORM\Query\Expr\Join::WITH, 'occurrence.user = :user')
+            ->setParameter('user', $user)
+            ->innerJoin('questionnaire.domaines', 'domaine', \Doctrine\ORM\Query\Expr\Join::WITH, 'domaine = :domaine')
             ->setParameter('domaine', $domaine)
         ;
-        
+        if (null !== $isLock)
+        {
+            $query
+                ->where('questionnaire.lock = :lock')
+                ->setParameter('lock', $isLock)
+            ;
+        }
+        $query
+            ->groupBy('questionnaire.id', 'occurrence.id')
+            ->addOrderBy('questionnaire.id', 'ASC')
+            ->addOrderBy('occurrence.id', 'ASC')
+        ;
+
         return $query->getQuery()->getResult();
     }
 }

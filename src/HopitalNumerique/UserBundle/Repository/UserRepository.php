@@ -6,6 +6,7 @@ use Doctrine\ORM\EntityRepository;
 use Nodevo\RoleBundle\Entity\Role;
 use Doctrine\ORM\Query\Expr;
 use Doctrine\Common\Collections\Collection;
+use Doctrine\ORM\Query\Expr\Join;
 
 /**
  * UserRepository
@@ -165,9 +166,9 @@ class UserRepository extends EntityRepository
             ->setParameter('role', '%ROLE_AMBASSADEUR_7%');
 
         if( !is_null($domaine) && $domaine != 0 ){
-            $qb->leftJoin('user.domaines','domaines')
-                ->andWhere('domaines.id = :domaine')
-                ->setParameter('domaine', $domaine );
+            $qb->innerJoin('user.connaissancesAmbassadeurs','domaines',join::WITH, 'domaines.domaine = :domaine')
+                ->setParameter('domaine', $domaine )
+                ->andWhere('domaines.connaissance IS NOT NULL');
         }
 
         return $qb;
@@ -335,7 +336,6 @@ class UserRepository extends EntityRepository
     }
 
 
-    /* vvvvvvvvvvvvvvvvvvvvvvvv Code de Rémi vvvvvvvvvvvvvvvvvvvvvvvvvvv */
     /**
      * Retourne un unique CMSI.
      *
@@ -415,7 +415,6 @@ class UserRepository extends EntityRepository
         }
         else
         {
-            # Correction QSO : on fait pas de count dans une boucle FOR
             for ($i = 0, $count = count($role); $i < $count; $i++)
             {
                 $requete
@@ -450,7 +449,7 @@ class UserRepository extends EntityRepository
         
         return $requete->getQuery()->getResult();
     }
-    /* ^^^^^^^^^^^^^^^^^^^^^^ Code de Rémi ^^^^^^^^^^^^^^^^^^^^^^^^^^ */
+
 
     /**
      * Retourne une liste d'utilisateurs en fonction d'un rôle en respectant le retour d'un QB et non d'une liste d'utilisateur

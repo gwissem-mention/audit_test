@@ -17,7 +17,7 @@ class QuestionnaireType extends AbstractType
     /**
      * @var \HopitalNumerique\QuestionnaireBundle\Form\Type\OccurrenceType Formulaire OccurrenceType
      */
-    private $occurenceForm;
+    private $occurrenceForm;
     
     private $_readOnly = false;
     private $_managerReponse;
@@ -30,7 +30,7 @@ class QuestionnaireType extends AbstractType
     /**
      * @var \HopitalNumerique\QuestionnaireBundle\Manager\OccurrenceManager OccurrenceManager
      */
-    private $occurenceManager;
+    private $occurrenceManager;
     
     /**
      * @var \HopitalNumerique\UserBundle\Manager\UserManager UserManager
@@ -42,12 +42,12 @@ class QuestionnaireType extends AbstractType
      * @param HopitalNumerique\QuestionnaireBundle\Manager\ReponseManager       $managerReponse
      * @param HopitalNumerique\QuestionnaireBundle\Manager\QuestionnaireManager $managerQuestionnaire
      */
-    public function __construct(OccurrenceType $occurenceForm, $managerReponse, $managerQuestionnaire, OccurrenceManager $occurrenceManager, UserManager $userManager)
+    public function __construct(OccurrenceType $occurrenceForm, $managerReponse, $managerQuestionnaire, OccurrenceManager $occurrenceManager, UserManager $userManager)
     {
-        $this->occurenceForm = $occurenceForm;
+        $this->occurrenceForm = $occurrenceForm;
         $this->_managerReponse       = $managerReponse;
         $this->_managerQuestionnaire = $managerQuestionnaire;
-        $this->occurenceManager = $occurrenceManager;
+        $this->occurrenceManager = $occurrenceManager;
         $this->userManager = $userManager;
     }
 
@@ -95,14 +95,14 @@ class QuestionnaireType extends AbstractType
 
         if ($questionnaire->isOccurrenceMultiple() && null === $occurrence)
         {
-            $occurrence = $this->occurenceManager->getDerniereOccurenceByQuestionnaireAndUser($questionnaire, $user);
+            $occurrence = $this->occurrenceManager->getDerniereOccurrenceByQuestionnaireAndUser($questionnaire, $user);
             
             if (null === $occurrence)
             {
-                $occurrence = $this->occurenceManager->createEmpty();
+                $occurrence = $this->occurrenceManager->createEmpty();
                 $occurrence->setQuestionnaire($questionnaire);
                 $occurrence->setUser($user);
-                $this->occurenceManager->save($occurrence);
+                $this->occurrenceManager->save($occurrence);
             }
         }
         
@@ -453,7 +453,7 @@ class QuestionnaireType extends AbstractType
         if ($questionnaire->isOccurrenceMultiple())
         {
             $builder
-                ->add('occurrence', $this->occurenceForm, array(
+                ->add('occurrence', $this->occurrenceForm, array(
                     'data' => $occurrence,
                     'mapped' => false
                 ))

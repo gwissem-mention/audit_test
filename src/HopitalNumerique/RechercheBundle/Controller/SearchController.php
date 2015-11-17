@@ -24,7 +24,7 @@ class SearchController extends Controller
         }
 
         $categoriesProductionActif = "";
-        $categoriesProduction    = $this->get('hopitalnumerique_reference.manager.reference')->findBy(array('parent' => '175'), array('order' => 'ASC'));
+        $categoriesProduction    = $this->get('hopitalnumerique_reference.manager.reference')->getRefsByDomaineByParent(175, $domaineId);
 
         //get connected user
         $user = $this->get('security.context')->getToken()->getUser();
@@ -188,6 +188,9 @@ class SearchController extends Controller
 
         foreach ($objets as $key => $objet) 
         {
+            if( $objet['categ'] === 'forum' ){
+                continue;
+            }
             //GME 14/09/2015 : Pour que l'objet soit dans le domaine il faut que l'id de l'objet soit dans le domaine (cas objet classique)
             //Ou que si il existe une clé "objet" (cas infradoc) qu'elle ne soit pas nulle et que l'id de l'objet parent soit dans le domaine
             if(!(in_array($objet['id'], $objetsDuDomaineIds)
@@ -210,7 +213,7 @@ class SearchController extends Controller
         // YRO 20/01/2015 : cacher l'icone de pertinence
         $onlyText = false;
         
-        // YRO 10/02/2015 : les occurences réellement trouvées dans les contenus
+        // YRO 10/02/2015 : les occurrences réellement trouvées dans les contenus
         $patternFounded = array();
         
         //vvvvv GME 21/11/2014 : Exalead
@@ -239,7 +242,7 @@ class SearchController extends Controller
                         $hitUrl      = (string)$hit->attributes()->url;
                         $hitUrlArray = explode("=", $hitUrl);
                         
-                        // YRO 10/02/2015 : les occurences réellement trouvées dans les contenus
+                        // YRO 10/02/2015 : les occurrences réellement trouvées dans les contenus
                         foreach($hit->metas->Meta as $Meta){
                             if( $Meta->attributes()->name == "text" || $Meta->attributes()->name == "title" ){
                                 foreach( $Meta->MetaText as $MetaText ){
@@ -445,7 +448,7 @@ class SearchController extends Controller
             'showMorePointsDurs'  => $showMorePointsDurs,
             'showMoreProductions' => $showMoreProductions,
             'onlyText'            => $onlyText, // YRO 20/01/2015 : cacher l'icone de pertinence
-            'patternFounded'      => json_encode($patternFounded) // YRO 10/02/2015 : les occurences réellement trouvées dans les contenus
+            'patternFounded'      => json_encode($patternFounded) // YRO 10/02/2015 : les occurrences réellement trouvées dans les contenus
         ));
     }
 

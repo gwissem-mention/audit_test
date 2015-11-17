@@ -1,7 +1,7 @@
 #Questionnaire
 
 hopitalnumerique_questionnaire_list:
-    pattern:  /questionnaire/list
+    pattern:  /compte-hn/questionnaires
     defaults: { _controller: "HopitalNumeriqueQuestionnaireBundle:Questionnaire:list"}
     methods: GET
 

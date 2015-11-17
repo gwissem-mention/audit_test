@@ -77,7 +77,7 @@
                     <img src="/{{ domaineCurrent.getWebPath() }}" alt="{{domaineCurrent.nom}}" id="logoAnap" class="pull-left" height="77px" />
                 </a>
                 <div id="titre" class="pull-left">
-                    <a href="{{path('hopital_numerique_homepage')}}" class="h1">{{domaineCurrent.nom}}</a>
+                    <a href={% if domaineCurrent.urlTitre %}"{{domaineCurrent.urlTitre}}" {% else %} "{{path('hopital_numerique_homepage')}}" {% endif %} class="h1">{{domaineCurrent.nom}}</a>
                     <div class="h2">{{domaineCurrent.description}}</div>
                 </div>
 
@@ -162,9 +162,9 @@
         {% if app.user and app.user|checkAuthorization( path('hopital_numerique_requete_homepage') ) %}
             <div id="mesrequetes" class="closed">
                 <div class="content col-md-12" style="display:none">
-                    <h3 class="violet">Mes requêtes de recherche</h3>
+                    <h3 class="violet">Mes recherches</h3>
                     {{ render(controller("HopitalNumeriqueRechercheBundle:Requete:index", {'indexVue':false} )) }}
-                    <a href="{{path('hopital_numerique_requete_homepage')}}" class="readmore"><i class="common-sprite common-sprite-arrow"></i> Gérer mes requêtes</a>
+                    <a href="{{path('hopital_numerique_requete_homepage')}}" class="readmore"><i class="common-sprite common-sprite-arrow"></i> Gérer mes recherches</a>
                 </div>
             </div>
         {% endif %}

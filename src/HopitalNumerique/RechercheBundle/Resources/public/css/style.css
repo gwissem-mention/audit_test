@@ -35,7 +35,7 @@
     #recherche #origin li{position: relative;}
     #recherche #origin li.level0{background: #d60030 url('../img/level0.png') no-repeat 95% 15px; }
     #recherche #origin li.level0.active{background: #d60030 url('../img/level0-active.png') no-repeat 95% 15px;}
-    #recherche #origin li.level0 span{padding:15px 10px 10px 17px; width: 100%; display: block; cursor:pointer; text-transform: uppercase; color: #ffffff; font-size: 16px; font-weight: bold}
+    #recherche #origin li.level0 span{padding:15px 10px 10px 17px; width: 100%; display: block; cursor:pointer; text-transform: uppercase; color: #ffffff; font-size: 16px; font-weight: bold; padding-right: 10%;}
     #recherche #origin li.level0 ol{display: none; }
 
     /* 1er niveau de sous-catégories */
@@ -118,37 +118,6 @@
         #resultats #productions .wrapper-results .results a.synthese{font-size: 11px; color:#161616; background: url('../img/synthese.png') no-repeat right center; padding-right:25px; margin-top:10px; display: block; height: 18px; text-align: right}
         #resultats #productions .wrapper-results .results p{font-size: 13px; color:#070707; }
         #resultats #productions .wrapper-results .results .fa-refresh{ color:#3da20b; }
-
-    /* Ressources externes */
-        #resultats #ressources{ margin-top:25px; padding:10px;}
-        #resultats #ressources h3{color:#ffffff; font-size: 18px; font-weight: bold; display: block; height: 19px; background: url('../img/ressources.png') no-repeat left center; padding-left : 30px; margin-left:15px; margin-top:5px;}
-        #resultats #ressources .results{padding:0 15px;height:115px;}
-        #resultats #ressources .results h4{margin-bottom: 5px; margin-top: 5px }
-        #resultats #ressources .results h4 a{color: #ffffff; font-size: 12px; }
-        #resultats #ressources .results p{color: #ffffff; font-size: 12px; font-weight: normal; height: 65px; overflow-y:auto;}
-        #resultats #ressources .results p.noresult{margin-top:29px;}
-        #resultats #ressources .results .carousel-indicators{bottom: 0; display:none;}
-        #resultats #ressources .results .carousel-inner{margin-left:25px;width:244px;}
-        #resultats #ressources .results .carousel-control{width:1%;}
-        #resultats #ressources .results .carousel-control span{font-size:18px; margin-left: 0}
-        #resultats #ressources .results .carousel-control.right {background: none}
-        #resultats #ressources .results .carousel-control.left {background: none}
-
-    /* Forum */
-        #resultats #forum{ margin-top:25px; background: #b01389; padding:10px;}
-        #resultats #forum h3{color:#ffffff; font-size: 18px; font-weight: bold; margin-left:15px; margin-top:5px;}
-        #resultats #forum h3 i{margin-right:10px;}
-        #resultats #forum .results{padding:0 15px; height: 115px}
-        #resultats #forum .results h4{margin-bottom: 5px; margin-top: 5px }
-        #resultats #forum .results h4 a{color: #ffffff; font-size: 12px; }
-        #resultats #forum .results p{color: #ffffff; font-size: 12px; font-weight: normal;height: 85px; overflow-y:auto;}
-        #resultats #forum .results p.noresult{margin-top:29px;}
-        #resultats #forum .results .carousel-indicators{bottom: 0; display:none;}
-        #resultats #forum .results .carousel-inner{padding:0 25px 25px 25px}
-        #resultats #forum .results .carousel-control{width:1%;}
-        #resultats #forum .results .carousel-control span{font-size:18px; margin-left: 0}
-        #resultats #forum .results .carousel-control.right {background: none}
-        #resultats #forum .results .carousel-control.left {background: none}
 
 @media screen and (max-width: 1270px) {
     #smallMesRequetes{display: block}

@@ -30,17 +30,28 @@ $(document).ready(function() {
         $('#autresResultats .row').slideToggle();
     });
 
-    $('#productionsPointDur h2').click(function(){});
-
-    $('#productions h2').click(function(){
+    $('#productions-associes h2').click(function(){
         $(this).toggleClass('open closed');
-        $('#productions .row').slideToggle();
+        $('#productions-associes .row').slideToggle();
     });
 
     $('#commentaires h2').click(function(){
         $(this).toggleClass('open closed');
         $('#commentaires .bloc-commentaire').slideToggle();
     });
+
+    $('#resultats #pointsdurs h3').click(function(){
+        $(this).toggleClass('open closed');
+        $('#resultats #pointsdurs .results').slideToggle();
+    });
+
+    $('#resultats #productions h3').click(function(){
+        $(this).toggleClass('open closed');
+        $('#resultats #productions .results').slideToggle();
+    });
+
+    $('#resultats #pointsdurs h3').click();
+    $('#resultats #productions h3').click();
 
     //Style WYSIWYG custom : titre pliable
     $('h2 .titre_depliable').click(function(){

@@ -421,7 +421,7 @@ class SearchManager extends BaseManager
 
                 foreach ($categ as $item) {
                     //objet Found here
-                    if( (is_null($item['objet']) && $item['id'] == $publication->getId()) || (!is_null($item['objet']) && $item['id'] == $publication->getId()) ) {
+                    if( (array_key_exists('objet', $item) && is_null($item['objet']) && $item['id'] == $publication->getId()) || (array_key_exists('objet', $item) && !is_null($item['objet']) && $item['id'] == $publication->getId()) ) {
 
                         //si i < 5 : on prend ceux d'avant, et on met à jour le max result
                         if( $i < 5 ){
@@ -751,6 +751,7 @@ class SearchManager extends BaseManager
         $item['countRef'] = $this->getNoteReferencement($contenu->getReferences());
         $item['objet']    = $objet->getId();
         $item['aliasO']   = $objet->getAlias();
+        $item['source']   = $objet->getSource();
         $item['aliasC']   = $contenu->getAlias();
         $item['synthese'] = $objet->getSynthese() != '' ? $objet->getId() : null;
 
@@ -810,6 +811,7 @@ class SearchManager extends BaseManager
         $item['countRef'] = $this->getNoteReferencement($objet->getReferences());
         $item['objet']    = null;
         $item['alias']    = $objet->getAlias();
+        $item['source']   = $objet->getSource();
         $item['synthese'] = $objet->getSynthese() != '' ? $objet->getId() : null;
 
         //clean resume (pagebreak)
@@ -881,6 +883,7 @@ class SearchManager extends BaseManager
 
         $item['id']       = $topic->getId();
         $item['titre']    = $topic->getTitle();
+        $item['resume']   = preg_replace("/[<\[](.*?)[>\]]/", "", $topic->getFirstPost()->getBody());
         $item['countRef'] = $this->getNoteReferencement($topic->getReferences());
         
         //get Type

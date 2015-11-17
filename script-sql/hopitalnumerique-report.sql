@@ -1,1 +1,0 @@
-UPDATE `HN`.`hn_domaine_gestions_report` SET `dom_id` = '2';

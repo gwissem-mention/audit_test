@@ -142,6 +142,13 @@ class Domaine
 
 
     /**
+     * @var string
+     *
+     * @ORM\Column(name="url_titre", type="text", nullable=true)
+     */
+    protected $urlTitre;
+    
+    /**
      * Constructor
      */
     public function __construct()
@@ -186,6 +193,29 @@ class Domaine
         return $this->url;
     }
 
+    /**
+     * Set url
+     *
+     * @param string $url
+     * @return Domaine
+     */
+    public function setUrlTitre($urlTitre)
+    {
+    	$this->urlTitre = $urlTitre;
+    
+    	return $this;
+    }
+    
+    /**
+     * Get url
+     *
+     * @return string
+     */
+    public function getUrlTitre()
+    {
+    	return $this->urlTitre;
+    }
+    
     /**
      * Set adresseMailContact
      *
