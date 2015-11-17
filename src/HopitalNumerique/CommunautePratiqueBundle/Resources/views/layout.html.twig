@@ -1,0 +1,12 @@
+{% extends 'HopitalNumeriqueCoreBundle:Templates:' ~ templateCurrentId ~ '/layout.html.twig' %}
+
+{% block stylesheets %}
+    {{parent()}}
+    {% stylesheets output="compiled/hopitalnumerique-communautepratique.css" filter="cssrewrite, ?yui_css"
+        'bundles/hopitalnumeriquecommunautepratique/css/CommunautePratique.css'
+    %}
+        <link rel="stylesheet" href="{{ asset_url }}" />
+    {% endstylesheets %}
+{% endblock %}
+
+{% block title %}Communauté de pratiques - {{ parent() }}{% endblock %}

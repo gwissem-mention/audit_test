@@ -1,0 +1,4 @@
+hopitalnumerique_communautepratique_publication_list:
+    pattern: /list
+    defaults: { _controller: "HopitalNumeriqueCommunautePratiqueBundle:Publication:list" }
+    methods: GET

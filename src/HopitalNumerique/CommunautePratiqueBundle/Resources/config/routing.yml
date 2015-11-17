@@ -2,6 +2,18 @@ hopitalnumerique_communautepratique_admin:
     resource: "@HopitalNumeriqueCommunautePratiqueBundle/Resources/config/routing/admin.yml"
     prefix: "/admin/communaute-de-pratiques"
 
+hopitalnumerique_communautepratique_accueil:
+    resource: "@HopitalNumeriqueCommunautePratiqueBundle/Resources/config/routing/accueil.yml"
+    prefix: "/communaute-de-pratiques"
+
 hopitalnumerique_communautepratique_inscription:
     resource: "@HopitalNumeriqueCommunautePratiqueBundle/Resources/config/routing/inscription.yml"
     prefix: "/communaute-de-pratiques"
+
+hopitalnumerique_communautepratique_groupe:
+    resource: "@HopitalNumeriqueCommunautePratiqueBundle/Resources/config/routing/groupe.yml"
+    prefix: "/communaute-de-pratiques/groupe"
+
+hopitalnumerique_communautepratique_publication:
+    resource: "@HopitalNumeriqueCommunautePratiqueBundle/Resources/config/routing/publication.yml"
+    prefix: "/communaute-de-pratiques/publication"

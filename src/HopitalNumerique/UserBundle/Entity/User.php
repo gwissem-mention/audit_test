@@ -249,14 +249,6 @@ class User extends BaseUser
      * @Gedmo\Versioned
      */
     protected $prenom;
-    
-    /**
-     * @var boolean
-     * 
-     * @Assert\NotNull()
-     * @ORM\Column(name="usr_inscrit_communaute_pratique", type="boolean", options={"default"=false,"comment"="Indique si l utilisateur est inscrit à la communauté de pratiques"})
-     */
-    private $inscritCommunautePratique;
 
     /**
      * @var integer
@@ -631,11 +623,23 @@ class User extends BaseUser
      * @ORM\Column(name="usr_notification_requete", type="boolean", options = {"comment" = "L utilisateur est notifie par mail des maj des publications ?"})
      */
     protected $notficationRequete;
+    
+    /* <-- Communauté de pratiques */
+    
+    /**
+     * @var boolean
+     * 
+     * @Assert\NotNull()
+     * @ORM\Column(name="usr_inscrit_communaute_pratique", type="boolean", options={"default"=false,"comment"="Indique si l utilisateur est inscrit à la communauté de pratiques"})
+     */
+    private $inscritCommunautePratique;
 
     /**
      * @ORM\ManyToMany(targetEntity="HopitalNumerique\CommunautePratiqueBundle\Entity\Groupe", mappedBy="animateurs")
      */
     private $communautePratiqueGroupes;
+    
+    /* --> */
 
 
     /**
@@ -789,26 +793,6 @@ class User extends BaseUser
     public function setPrenom($prenom)
     {
         $this->prenom = $prenom;
-    }
-
-    /**
-     * Get inscritCommunautePratique
-     *
-     * @return boolean $inscritCommunautePratique
-     */
-    public function isInscritCommunautePratique()
-    {
-        return $this->inscritCommunautePratique;
-    }
-
-    /**
-     * Set inscritCommunautePratique
-     *
-     * @param boolean $inscritCommunautePratique
-     */
-    public function setInscritCommunautePratique($inscritCommunautePratique)
-    {
-        $this->inscritCommunautePratique = $inscritCommunautePratique;
     }
 
     /**
@@ -1969,6 +1953,28 @@ class User extends BaseUser
       return $this;
     }
 
+    /* <-- Communauté de pratiques */
+
+    /**
+     * Get inscritCommunautePratique
+     *
+     * @return boolean $inscritCommunautePratique
+     */
+    public function isInscritCommunautePratique()
+    {
+        return $this->inscritCommunautePratique;
+    }
+
+    /**
+     * Set inscritCommunautePratique
+     *
+     * @param boolean $inscritCommunautePratique
+     */
+    public function setInscritCommunautePratique($inscritCommunautePratique)
+    {
+        $this->inscritCommunautePratique = $inscritCommunautePratique;
+    }
+    
     /**
      * Add communautePratiqueGroupes
      *
@@ -2001,4 +2007,6 @@ class User extends BaseUser
     {
         return $this->communautePratiqueGroupes;
     }
+    
+    /* --> */
 }

@@ -1,0 +1,111 @@
+{% extends 'HopitalNumeriqueCommunautePratiqueBundle::layout.html.twig' %}
+
+{% block title %}Groupes de travail - {{ parent() }}{% endblock %}
+
+{% block body %}
+    <h1>Groupes de travail</h1>
+
+    <div class="row">
+        <div class="col-md-9">
+            
+            <div class="communaute-de-pratiques-panel-groupes">
+                <ul class="nav nav-tabs" role="tablist">
+                    <li role="presentation" class="active"><a href="#a-venir" aria-controls="a-venir" role="tab" data-toggle="tab"><em class="icon-social20"></em> &nbsp; Groupes de travail</a></li>
+                    <li role="presentation"><a href="#en-cours" aria-controls="en-cours" role="tab" data-toggle="tab"><em class="icon-social20"></em> &nbsp; Groupes de travail en cours</a></li>
+                </ul>
+                <div class="tab-content">
+                    <div role="tabpanel" class="tab-pane active" id="a-venir">
+
+                        <div class="groupe">
+                            <div class="row">
+                                <div class="col-md-9">
+                                    <h2>Nom du groupe</h2>
+                                    <p>
+                                        Lorem ipsum ipsum ipsum ipsum ipsum ipsum ipsum ipsum ipsum ipsum ipsum ipsum ipsum ipsum ipsum ipsum ipsum ipsum ipsum ipsum ipsum ipsum ipsum ipsum ipsum ipsum ipsum ipsum ipsum ipsum ipsum ipsum ipsum ipsum ipsum ipsum ipsum ipsum... <a>En savoir plus</a>
+                                    </p>
+                                    <div class="progression">
+                                        <div class="dates">
+                                            <div class="gauche">00/00/0000</div>
+                                            <div class="milieu">00/00/0000</div>
+                                            <div class="droite">00/00/0000</div>
+                                        </div>
+                                        <div class="barre"><div class="contenu"></div></div>
+                                        <div class="legende">
+                                            <div class="gauche">Inscription</div>
+                                            <div class="milieu">Démarrage</div>
+                                            <div class="droite">Fermeture</div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <p>
+                                        Places restantes
+                                        <br><strong>3 sur 12</strong>
+                                    </p>
+                                    <div class="places-progression"><div class="contenu"></div></div>
+                                    <a class="button">Rejoindre ce groupe</a>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div role="tabpanel" class="tab-pane" id="en-cours">
+                        
+                    </div>
+                </div>
+            </div>
+            
+        </div>
+        <div class="col-md-3">
+            
+            <div class="communaute-de-pratiques-bloc-mes-groupes">
+                <div class="title"><em class="icon-social20"></em> Mes groupes de travail en cours</div>
+                <ul>
+                    <li>
+                        <a>Nom du groupe</a>
+                        <div>Dernière activité le 21/10/2015</div>
+                    </li>
+                    <li>
+                        <a>Nom du groupe</a>
+                        <div>Dernière activité le 21/10/2015</div>
+                    </li>
+                    <li>
+                        <a>Nom du groupe</a>
+                        <div>Dernière activité le 21/10/2015</div>
+                    </li>
+                    <li>
+                        <a>Nom du groupe</a>
+                        <div>Dernière activité le 21/10/2015</div>
+                    </li>
+                    <li>
+                        <a>Nom du groupe</a>
+                        <div>Dernière activité le 21/10/2015</div>
+                    </li>
+                </ul>
+            </div>
+            
+            <div class="communaute-de-pratiques-bloc-publications">
+                <a><em class="icon-documents7"></em> Publications issues des groupes</a>
+            </div>
+            
+        </div>
+    </div>
+    
+    <div class="communaute-de-pratiques-sommaire">
+        <div class="row">
+            <div class="col-md-3">
+                <a><em class="icon-social20"></em> Groupes de travail</a>
+            </div>
+            <div class="col-md-3">
+                <a><em class="icon-documents7"></em> Publications issues du groupe</a>
+            </div>
+            <div class="col-md-3">
+                <a><em class="icon-group2"></em> Membres de la communauté</a>
+            </div>
+            <div class="col-md-3">
+                <a><em class="icon-chat27"></em> Forum de la communauté de pratiques</a>
+            </div>
+        </div>
+    </div>
+
+{% endblock body %}

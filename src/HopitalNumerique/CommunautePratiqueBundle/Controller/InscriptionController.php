@@ -18,12 +18,14 @@ class InscriptionController extends \Symfony\Bundle\FrameworkBundle\Controller\C
         
         if (null !== $user && !$this->container->get('hopitalnumerique_communautepratique.dependency_injection.inscription')->hasInformationManquante($user))
         {
-            $user->setInscritCommunautePratique(true);
-            $this->container->get('hopitalnumerique_user.manager.user')->save($user);
-            $this->get('session')->getFlashBag()->add( 'success', 'L\'inscription à la communauté de pratiques a été confirmée.' );
+            if (!$user->isInscritCommunautePratique())
+            {
+                $user->setInscritCommunautePratique(true);
+                $this->container->get('hopitalnumerique_user.manager.user')->save($user);
+                $this->get('session')->getFlashBag()->add( 'success', 'L\'inscription à la communauté de pratiques a été confirmée.' );
+            }
             
-            $articleCommunautePratique = $this->container->get('hopitalnumerique_objet.manager.objet')->findOneById(Objet::ARTICLE_COMMUNAUTE_PRATIQUE_ID);
-            return new JsonResponse( array( 'url' => $this->generateUrl('hopital_numerique_publication_publication_article', array('categorie' => 'article', 'id' => $articleCommunautePratique->getId(), 'alias' => $articleCommunautePratique->getAlias())) ) );
+            return new JsonResponse( array( 'url' => $this->generateUrl('hopitalnumerique_communautepratique_accueil_index') ) );
         }
         else
         {

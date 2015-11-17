@@ -1,0 +1,48 @@
+.communaute-de-pratiques-sommaire { margin: 30px 0 0 0; }
+    .communaute-de-pratiques-sommaire a { background-color: #e6e6e6;color: #777777;display: block;line-height: 16px;overflow: auto;padding: 10px 28px 11px 16px; }
+    .communaute-de-pratiques-sommaire a:hover { text-decoration: none; }
+        .communaute-de-pratiques-sommaire a em { float: left;font-size: 30px;margin: 0 12px 0 0;vertical-align: middle; }
+
+.communaute-de-pratiques-panel-groupes {}
+    .communaute-de-pratiques-panel-groupes .nav-tabs {}
+        .communaute-de-pratiques-panel-groupes .nav-tabs li { background-color: #e6e6e6;border-radius:0;margin-right: 10px; }
+            .communaute-de-pratiques-panel-groupes .nav-tabs li a { border-radius:0;color: #313131;margin-right: 0; }
+                .communaute-de-pratiques-panel-groupes .nav-tabs li a em { color: #cacaca; }
+            .communaute-de-pratiques-panel-groupes .nav-tabs li.active a { color: #2e2e2e;font-weight: bold; }
+                .communaute-de-pratiques-panel-groupes .nav-tabs li.active a em { color: #777777; }
+    .communaute-de-pratiques-panel-groupes .tab-content { border-color: #e6e6e6;border-style: solid;border-width: 0 1px 1px; }
+        .communaute-de-pratiques-panel-groupes .groupe { padding: 15px; }
+            .communaute-de-pratiques-panel-groupes .groupe h2 { color: #dd3157;font-size: 15px;font-weight: bold;margin: 0 0 6px; }
+            .communaute-de-pratiques-panel-groupes .groupe p { font-size: 11px;line-height: 13px; }
+            .communaute-de-pratiques-panel-groupes .groupe .button { background-color: #dd3157;color: #fff;display: block;font-size: 10px;padding: 12px;text-align: center;text-transform: uppercase; }
+                .communaute-de-pratiques-panel-groupes .groupe .button:hover { text-decoration: none; }
+            .communaute-de-pratiques-panel-groupes .groupe .progression {}
+                .communaute-de-pratiques-panel-groupes .groupe .progression .dates, .communaute-de-pratiques-panel-groupes .groupe .progression .legende { font-size: 9px; }
+                    .communaute-de-pratiques-panel-groupes .groupe .progression .dates .gauche, .communaute-de-pratiques-panel-groupes .groupe .progression .legende .gauche { float: left;width: 33.33%; }
+                    .communaute-de-pratiques-panel-groupes .groupe .progression .dates .milieu, .communaute-de-pratiques-panel-groupes .groupe .progression .legende .milieu { float: left;text-align: center;width: 33.34%; }
+                    .communaute-de-pratiques-panel-groupes .groupe .progression .dates .droite, .communaute-de-pratiques-panel-groupes .groupe .progression .legende .droite { float: left;text-align: right;width: 33.33%; }
+                .communaute-de-pratiques-panel-groupes .groupe .progression .dates {}
+                    .communaute-de-pratiques-panel-groupes .groupe .progression .dates .gauche, .communaute-de-pratiques-panel-groupes .groupe .progression .dates .milieu, .communaute-de-pratiques-panel-groupes .groupe .progression .dates .droite { padding: 0 0 4px 0; }
+                    .communaute-de-pratiques-panel-groupes .groupe .progression .dates .gauche {}
+                    .communaute-de-pratiques-panel-groupes .groupe .progression .dates .milieu {}
+                    .communaute-de-pratiques-panel-groupes .groupe .progression .dates .droite {}
+                .communaute-de-pratiques-panel-groupes .groupe .progression .legende {}
+                    .communaute-de-pratiques-panel-groupes .groupe .progression .legende .gauche, .communaute-de-pratiques-panel-groupes .groupe .progression .legende .milieu, .communaute-de-pratiques-panel-groupes .groupe .progression .legende .droite { background-image:url("/bundles/hopitalnumeriquecommunautepratique/img/progression/fleche.png");background-repeat: no-repeat;padding: 4px 0 0 0; }
+                    .communaute-de-pratiques-panel-groupes .groupe .progression .legende .gauche { background-position: 20px top; }
+                    .communaute-de-pratiques-panel-groupes .groupe .progression .legende .milieu { background-position: center top; }
+                    .communaute-de-pratiques-panel-groupes .groupe .progression .legende .droite { background-position: calc(100% - 20px) top; }
+                .communaute-de-pratiques-panel-groupes .groupe .progression .barre { background-image:url("/bundles/hopitalnumeriquecommunautepratique/img/progression/fond.png");clear: left; }
+                    .communaute-de-pratiques-panel-groupes .groupe .progression .barre .contenu { background-image:url("/bundles/hopitalnumeriquecommunautepratique/img/progression/remplissage.png");height: 7px;width: 0%; }
+
+.communaute-de-pratiques-bloc-mes-groupes { border-color: #e6e6e6;border-style: solid;border-width: 1px;margin: 40px 0 0 0; }
+    .communaute-de-pratiques-bloc-mes-groupes .title { background-color: #e6e6e6;color: #2e2e2e;padding: 10px; }
+        .communaute-de-pratiques-bloc-mes-groupes .title em { color: #777;font-size: 16px;margin: 0 4px 0 0;vertical-align: middle; }
+    .communaute-de-pratiques-bloc-mes-groupes ul { list-style-type: none;margin: 0;padding: 10px 25px; }
+        .communaute-de-pratiques-bloc-mes-groupes ul li { margin: 15px 0px; }
+            .communaute-de-pratiques-bloc-mes-groupes ul li a { display: block;font-weight: bold; }
+            .communaute-de-pratiques-bloc-mes-groupes ul li div {}
+
+.communaute-de-pratiques-bloc-publications { background-color: #dd3157;font-weight: bold;margin: 15px 0 0 0;text-align: center; }
+    .communaute-de-pratiques-bloc-publications a { color: #fff;display: block;line-height: 17px;padding: 18px 30px; }
+    .communaute-de-pratiques-bloc-publications a:hover { text-decoration: none; }
+        .communaute-de-pratiques-bloc-publications a em { display: block;font-size: 40px;margin: 0 0 10px; }
