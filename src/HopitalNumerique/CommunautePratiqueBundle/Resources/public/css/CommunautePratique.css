@@ -1,3 +1,12 @@
+.body-communaute-pratique {}
+    .body-communaute-pratique h1 { color: #dd3157;font-size: 23px;font-weight: bold;margin-bottom: 30px; }
+
+.communaute-pratique-actions { float: right;font-size: 10px;text-align: right; }
+    .communaute-pratique-actions .contact { width: 200px; }
+        .communaute-pratique-actions .contact a { color: #2e2e2e;display: block; }
+        .communaute-pratique-actions .contact a:hover { text-decoration: none; }
+            .communaute-pratique-actions .contact em { color: #777;float: right;font-size: 26px;margin: -3px 0 0 6px; }
+
 .communaute-de-pratiques-sommaire { margin: 15px 0 0 0; }
     .communaute-de-pratiques-sommaire a { background-color: #e6e6e6;color: #777777;display: block;line-height: 16px;overflow: auto;padding: 10px 28px 11px 16px; }
     .communaute-de-pratiques-sommaire a:hover { text-decoration: none; }

@@ -12,6 +12,7 @@
 {% block javascripts %}
     {{ parent() }}
     {% javascripts output="compiled/hopitalnumerique-communautepratique.js"
+        'bundles/hopitalnumeriquecontact/js/Popup.js'
         'bundles/hopitalnumeriquecommunautepratique/js/Groupe.js'
         'bundles/hopitalnumeriquecommunautepratique/js/Groupe/DateProgression.js'
         'bundles/hopitalnumeriquecommunautepratique/js/Groupe/PlaceProgression.js'
@@ -20,4 +21,27 @@
     {% endjavascripts %}
 {% endblock %}
 
-{% block title %}Communauté de pratiques - {{ parent() }}{% endblock %}
+{% block title %}{{ block('title_communaute_pratique') }} - Communauté de pratiques - {{ parent() }}{% endblock %}
+
+{% block body %}
+    
+    <div class="body-communaute-pratique">
+    
+        {% block communaute_pratique_actions %}
+            <div class="communaute-pratique-actions">
+                <div class="contact">
+                    <a onclick="Contact_Popup.display({{ { 'ANAP': domaineCurrent.adresseMailContact }|json_encode() }});">
+                        <em class="icon-help9"></em>
+                        Un problème technique ?<br><strong>Contacter l'administrateur</strong>
+                    </a>
+                </div>
+            </div>
+        {% endblock %}
+
+        <h1>{% block title_communaute_pratique %}{% endblock %}</h1>
+
+        {% block body_communaute_pratique %}{% endblock body_communaute_pratique %}
+    
+    </div>
+
+{% endblock body %}

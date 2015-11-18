@@ -19,3 +19,7 @@ services:
         arguments: ["@hopital_numerique_contact.manager.contact", "@validator", "@security.context"]
         tags:
             - { name: form.type, alias: hopital_numerique_contact_contact }
+    hopital_numerique_contact.form.type.popup:
+        class: "HopitalNumerique\ContactBundle\Form\Type\PopupType"
+        tags:
+            - { name: form.type, alias: hopitalnumerique_contactbundle_popup }

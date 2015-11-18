@@ -1,12 +1,11 @@
 {% extends 'HopitalNumeriqueCommunautePratiqueBundle::layout.html.twig' %}
 
-{% block title %}Groupes de travail - {{ parent() }}{% endblock %}
+{% block title_communaute_pratique %}Groupes de travail{% endblock %}
 
-{% block body %}
+{% block body_communaute_pratique %}
+    
     {% import "HopitalNumeriqueCommunautePratiqueBundle:include:blocks.html.twig" as communaute_pratique %}
     
-    <h1>Groupes de travail</h1>
-
     <div class="row" id="communaute-pratiques-groupes">
         <div class="col-md-9">
             
@@ -90,4 +89,4 @@
         </div>
     </div>
 
-{% endblock body %}
+{% endblock body_communaute_pratique %}
