@@ -48,6 +48,7 @@ class ExportController extends Controller
                             'nombreNote'           => 'Nombre de note de la publication',
                             'etat'                 => 'Etat de la publication',
                             'roles'                => 'Accès interdit aux groupes',
+        					'sourceExterne'		   => 'Source Externe',
                             'types'                => 'Catégories de la publication',
                             'ambassadeurs'         => 'Ambassadeurs concernés par la publication',
                             'fichier1'             => 'Fichier 1',

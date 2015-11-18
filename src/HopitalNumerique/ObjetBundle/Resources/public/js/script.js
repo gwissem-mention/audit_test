@@ -87,7 +87,7 @@ $(document).ready(function() {
         'padding'   : 0,
         'autoSize'  : false,
         'width'     : '80%',
-        'scrolling' : 'no',
+        'scrolling' : 'auto',
         'modal'     : true
     });
 
