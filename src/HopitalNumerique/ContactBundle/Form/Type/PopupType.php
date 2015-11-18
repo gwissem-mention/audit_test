@@ -102,13 +102,13 @@ class PopupType extends AbstractType
             ->setBody($form->get('message')->getData())
         ;
 
-        foreach (json_decode($form->get('destinataires')->getData()) as $destinataireNom => $destinataireAdresseElectronique)
+        foreach (json_decode($form->get('destinataires')->getData()) as $destinataireAdresseElectronique => $destinataireNom)
         {
             $swiftMessage->addTo($destinataireAdresseElectronique, $destinataireNom);
         }
 
         $swiftMessage->setSender($this->user->getEmail(), $this->user->getUsername());
-        
+
         $this->mailer->send($swiftMessage);
     }
 

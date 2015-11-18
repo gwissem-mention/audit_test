@@ -443,4 +443,21 @@ class Groupe
 
         return intval($dateInterval->format('%R%a'));
     }
+    
+    /**
+     * Retourne le JSON avec toutes les adresses électroniques des animateurs.
+     * 
+     * @return string JSON
+     */
+    public function getAnimateurEmailsJson()
+    {
+        $animateurs = array();
+
+        foreach ($this->animateurs as $animateur)
+        {
+            $animateurs[$animateur->getEmail()] = trim($animateur->getPrenom().' '.$animateur->getNom());
+        }
+
+        return json_encode($animateurs);
+    }
 }

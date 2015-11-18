@@ -26,8 +26,10 @@
                     <br><strong>{{ groupe.animateurs|length }} sur {{ groupe.nombreParticipantsMaximum }}</strong>
                 </p>
                 <div class="places-progression hidden-xs" id="places-progression-barre-{{ groupe.id }}"><div class="contenu"></div></div>
-                {% if groupe.animateurs|length >= groupe.nombreParticipantsMaximum %}
-                    <a class="button">Groupe complet contactez l'animateur</a>
+                {% if date('now') >= groupe.dateDemarrage %}
+                    <a class="button" onclick="Contact_Popup.display({{ groupe.animateurEmailsJson }}, '{{ path(app.request.get('_route')) }}', 'Je souhaite participer au groupe {{ groupe.titre|replace({ '\'':'\\\'', '"':'' }) }}');">Groupe démarré contactez l'administrateur</a>
+                {% elseif groupe.animateurs|length >= groupe.nombreParticipantsMaximum %}
+                    <a class="button" onclick="Contact_Popup.display({{ groupe.animateurEmailsJson }}, '{{ path(app.request.get('_route')) }}', 'Je souhaite participer au groupe {{ groupe.titre|replace({ '\'':'\\\'', '"':'' }) }}');">Groupe complet contactez l'animateur</a>
                 {% elseif date('now') < groupe.dateInscriptionOuverture %}
                     <a class="button">Inscription dans <span class="jours-restants"><span>{{ groupe.nombreJoursRestantsAvantInscriptionOuverture }}</span> jour{{ groupe.nombreJoursRestantsAvantInscriptionOuverture > 1 ? 's' : '' }}</span></a>
                 {% else %}

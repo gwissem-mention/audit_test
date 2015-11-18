@@ -22,6 +22,10 @@ class PopupController extends \Symfony\Bundle\FrameworkBundle\Controller\Control
             'destinataires' => $request->request->get('destinataires'),
             'urlRedirection' => $request->request->get('urlRedirection')
         ));
+        if ($request->request->has('objet'))
+        {
+            $contactForm->get('objet')->setData($request->request->get('objet'));
+        }
 
         return $this->render(
             'HopitalNumeriqueContactBundle:Popup:index.html.twig',
