@@ -3,6 +3,7 @@
 {% block stylesheets %}
     {{parent()}}
     {% stylesheets output="compiled/hopitalnumerique-communautepratique.css" filter="cssrewrite, ?yui_css"
+        '@validationEngine_css'
         'bundles/hopitalnumeriquecommunautepratique/css/CommunautePratique.css'
     %}
         <link rel="stylesheet" href="{{ asset_url }}">
@@ -12,6 +13,7 @@
 {% block javascripts %}
     {{ parent() }}
     {% javascripts output="compiled/hopitalnumerique-communautepratique.js"
+        '@validationEngine_js'
         'bundles/hopitalnumeriquecontact/js/Popup.js'
         'bundles/hopitalnumeriquecommunautepratique/js/Groupe.js'
         'bundles/hopitalnumeriquecommunautepratique/js/Groupe/DateProgression.js'
@@ -30,7 +32,7 @@
         {% block communaute_pratique_actions %}
             <div class="communaute-pratique-actions">
                 <div class="contact">
-                    <a onclick="Contact_Popup.display({{ { 'ANAP': domaineCurrent.adresseMailContact }|json_encode() }});">
+                    <a onclick="Contact_Popup.display({{ { 'ANAP': domaineCurrent.adresseMailContact }|json_encode() }}, '{{ path(app.request.get('_route')) }}');">
                         <em class="icon-help9"></em>
                         Un problème technique ?<br><strong>Contacter l'administrateur</strong>
                     </a>

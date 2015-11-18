@@ -27,7 +27,8 @@ class PopupController extends \Symfony\Bundle\FrameworkBundle\Controller\Control
             'HopitalNumeriqueContactBundle:Popup:index.html.twig',
             array
             (
-                'contactForm' => $contactForm->createView()
+                'contactForm' => $contactForm->createView(),
+                'destinataires' => $request->request->get('destinataires')
             )
         );
     }
@@ -39,7 +40,16 @@ class PopupController extends \Symfony\Bundle\FrameworkBundle\Controller\Control
     {
         $contactForm = $this->createForm('hopitalnumerique_contactbundle_popup');
         $contactForm->handleRequest($request);
-        
-        return $this->redirect($contactForm->get('urlRedirection'));
+
+        if ($contactForm->isValid())
+        {
+            $this->get('session')->getFlashBag()->add( 'success', 'Votre message a été envoyé.' );
+        }
+        else
+        {
+            $this->get('session')->getFlashBag()->add( 'danger', 'Message non envoyé.' );
+        }
+
+        return $this->redirect($contactForm->get('urlRedirection')->getData());
     }
 }

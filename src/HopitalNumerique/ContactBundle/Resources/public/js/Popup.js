@@ -28,7 +28,11 @@ Contact_Popup.display = function(adressesElectroniques, urlRedirection)
         success: function(data)
         {
             $('body').prepend(data);
-            $('#contact-popup').modal('show');
+            $('#contact-popup').modal({
+                show: true,
+                keyboard: false
+            });
+            $('#contact-popup form').validationEngine();
         }
     });
 };

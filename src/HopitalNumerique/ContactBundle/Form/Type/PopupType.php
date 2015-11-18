@@ -8,6 +8,7 @@ use Symfony\Component\Form\FormEvents;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Security\Core\SecurityContextInterface;
+use HopitalNumerique\UserBundle\Entity\User;
 
 /**
  * Formulaire de contact de la popup.
@@ -52,7 +53,7 @@ class PopupType extends AbstractType
 
         $builder
             ->add('destinataires', 'hidden', array(
-                'data' => $destinataires
+                'data' => \json_encode($destinataires)
             ))
             ->add('objet', 'text', array(
                 'attr' => array(
@@ -63,7 +64,7 @@ class PopupType extends AbstractType
             ->add('message', 'textarea', array(
                 'attr' => array(
                     'class' => 'validate[required]',
-                    'rows' => 10
+                    'rows' => 6
                 )
             ))
             ->add('urlRedirection', 'hidden', array(
@@ -84,7 +85,7 @@ class PopupType extends AbstractType
      */
     private function postSubmit(FormEvent $event)
     {
-        $this->sendCourriel($event);
+        $this->sendCourriel($event->getForm());
     }
 
     /**
@@ -101,7 +102,14 @@ class PopupType extends AbstractType
             ->setBody($form->get('message')->getData())
         ;
 
+        foreach (json_decode($form->get('destinataires')->getData()) as $destinataireNom => $destinataireAdresseElectronique)
+        {
+            $swiftMessage->addTo($destinataireAdresseElectronique, $destinataireNom);
+        }
+
         $swiftMessage->setSender($this->user->getEmail(), $this->user->getUsername());
+        
+        $this->mailer->send($swiftMessage);
     }
 
 

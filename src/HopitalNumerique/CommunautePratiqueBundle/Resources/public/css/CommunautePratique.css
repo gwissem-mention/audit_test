@@ -3,7 +3,7 @@
 
 .communaute-pratique-actions { float: right;font-size: 10px;text-align: right; }
     .communaute-pratique-actions .contact { width: 200px; }
-        .communaute-pratique-actions .contact a { color: #2e2e2e;display: block; }
+        .communaute-pratique-actions .contact a { color: #2e2e2e;cursor: pointer;display: block; }
         .communaute-pratique-actions .contact a:hover { text-decoration: none; }
             .communaute-pratique-actions .contact em { color: #777;float: right;font-size: 26px;margin: -3px 0 0 6px; }
 
