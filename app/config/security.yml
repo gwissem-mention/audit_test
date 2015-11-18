@@ -47,6 +47,7 @@ security:
 
         # Pare-feu de la partie admin du site (on protège tout)
         admin:
+            switch_user:  { role: ROLE_ADMINISTRATEUR_1}
             pattern: ^/admin
             form_login:
                 login_path: /admin/login
@@ -68,6 +69,7 @@ security:
 
         # Pare-feu de la partie front du site
         main:
+            switch_user:  { role: ROLE_ADMINISTRATEUR_1}
             pattern: ^/
             form_login:
                 login_path: account_login

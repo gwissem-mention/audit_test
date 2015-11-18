@@ -1702,6 +1702,7 @@ class User extends BaseUser
         {
             $roles[] = 'ROLE_ADMIN';
             $roles[] = 'ROLE_SUPER_ADMIN';
+            $roles[] = 'ROLE_ALLOWED_TO_SWITCH';
         }
 
         return $roles;
