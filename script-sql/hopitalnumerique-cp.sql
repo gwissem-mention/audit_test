@@ -9,10 +9,10 @@
     ALTER TABLE hn_communautepratique_groupe ADD group_actif TINYINT(1) DEFAULT '0' NOT NULL;
 
     /* Droits */
-    INSERT INTO `core_ressource` (`res_id`, `res_nom`, `res_pattern`, `res_order`, `res_type`) VALUES (NULL, 'BackOffice - Gestion de la communauté de pratique', '/^\\/admin\\/communaute\\-de\\-pratique/', '38', '2');
+    INSERT INTO `core_ressource` (`res_id`, `res_nom`, `res_pattern`, `res_order`, `res_type`) VALUES (NULL, 'BackOffice - Gestion de la communauté de pratiques', '/^\\/admin\\/communaute\\-de\\-pratiques/', '38', '2');
 
     /* Menu */
-    INSERT INTO `core_menu_item` (`itm_id`, `itm_parent`, `mnu_menu`, `itm_name`, `itm_route`, `itm_route_parameters`, `itm_route_absolute`, `itm_uri`, `itm_icon`, `itm_display`, `itm_display_children`, `itm_role`, `itm_order`) VALUES ('253', NULL, '1', 'Communauté de pratique', 'hopitalnumerique_communautepratique_admin_groupe_list', '[]', '0', NULL, 'fa fa-users', '1', '0', 'IS_AUTHENTICATED_ANONYMOUSLY', '15');
+    INSERT INTO `core_menu_item` (`itm_id`, `itm_parent`, `mnu_menu`, `itm_name`, `itm_route`, `itm_route_parameters`, `itm_route_absolute`, `itm_uri`, `itm_icon`, `itm_display`, `itm_display_children`, `itm_role`, `itm_order`) VALUES ('253', NULL, '1', 'Communauté de pratiques', 'hopitalnumerique_communautepratique_admin_groupe_list', '[]', '0', NULL, 'fa fa-users', '1', '0', 'IS_AUTHENTICATED_ANONYMOUSLY', '15');
     INSERT INTO `core_menu_item` (`itm_id`, `itm_parent`, `mnu_menu`, `itm_name`, `itm_route`, `itm_route_parameters`, `itm_route_absolute`, `itm_uri`, `itm_icon`, `itm_display`, `itm_display_children`, `itm_role`, `itm_order`) VALUES ('254', '253', '1', 'Éditer un groupe', 'hopitalnumerique_communautepratique_admin_groupe_edit', NULL, '0', NULL, NULL, '0', '0', 'IS_AUTHENTICATED_ANONYMOUSLY', '1');
     INSERT INTO `core_menu_item` (`itm_id`, `itm_parent`, `mnu_menu`, `itm_name`, `itm_route`, `itm_route_parameters`, `itm_route_absolute`, `itm_uri`, `itm_icon`, `itm_display`, `itm_display_children`, `itm_role`, `itm_order`) VALUES ('255', '253', '1', 'Ajouter un groupe', 'hopitalnumerique_communautepratique_admin_groupe_add', NULL, '0', NULL, NULL, '0', '0', 'IS_AUTHENTICATED_ANONYMOUSLY', '1');
 /* --> */

@@ -80,6 +80,7 @@ class GroupeGrid extends \Nodevo\GridBundle\Grid\Grid
         $this->addDateDemarrageColumn();
         $this->addDateFinColumn();
         $this->addVedetteColumn();
+        $this->addActifColumn();
     }
 
     /**
@@ -175,6 +176,23 @@ class GroupeGrid extends \Nodevo\GridBundle\Grid\Grid
     private function addVedetteColumn()
     {
         $column = new BooleanColumn('vedette', 'En vedette');
+
+        $column
+            ->setFilterable(true)
+            ->setSortable(false)
+        ;
+
+        $this->addColonne($column);
+    }
+
+    /**
+     * Ajoute la colonne Actif.
+     * 
+     * @return void
+     */
+    private function addActifColumn()
+    {
+        $column = new BooleanColumn('actif', 'Actif');
 
         $column
             ->setFilterable(true)

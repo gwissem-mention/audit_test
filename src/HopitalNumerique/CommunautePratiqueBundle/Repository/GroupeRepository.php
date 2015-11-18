@@ -90,6 +90,7 @@ class GroupeRepository extends \Doctrine\ORM\EntityRepository
                 'groupe.dateDemarrage AS dateDemarrage',
                 'groupe.dateFin AS dateFin',
                 'groupe.vedette AS vedette',
+                'groupe.actif AS actif',
 
                 'domaine.nom AS domaineNom'
             )
