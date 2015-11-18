@@ -4,12 +4,38 @@ namespace HopitalNumerique\ContactBundle\Form\Type;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
+use Symfony\Component\Form\FormEvents;
+use Symfony\Component\Form\FormEvent;
+use Symfony\Component\Form\FormInterface;
+use Symfony\Component\Security\Core\SecurityContextInterface;
 
 /**
  * Formulaire de contact de la popup.
  */
 class PopupType extends AbstractType
 {
+    /**
+     * @var \Swift_Mailer Mailer
+     */
+    private $mailer;
+
+    /**
+     * @var \HopitalNumerique\UserBundle\Entity\User Utilisateur connecté
+     */
+    private $user;
+
+
+    /**
+     * Constructeur.
+     */
+    public function __construct(SecurityContextInterface $securityContext, \Swift_Mailer $mailer)
+    {
+        $this->mailer = $mailer;
+
+        $this->user = (null !== $securityContext->getToken() ? ($securityContext->getToken()->getUser() instanceof User ? $securityContext->getToken()->getUser() : null) : null);
+    }
+
+
     /**
      * {@inheritDoc}
      */
@@ -44,9 +70,41 @@ class PopupType extends AbstractType
                 'data' => $urlRedirection
             ))
         ;
+        
+        $builder->addEventListener(FormEvents::POST_SUBMIT, function(FormEvent $event)
+        {
+            $this->postSubmit($event);
+        });
     }
-    
-    
+
+    /**
+     * Événement postSubmit.
+     *
+     * @param \Symfony\Component\Form\FormEvent $event FormEvent
+     */
+    private function postSubmit(FormEvent $event)
+    {
+        $this->sendCourriel($event);
+    }
+
+    /**
+     * Envoie le courriel de la popup.
+     *
+     * @param \Symfony\Component\Form\FormEvent $event FormEvent
+     */
+    private function sendCourriel(FormInterface $form)
+    {
+        $swiftMessage = \Swift_Message::newInstance();
+        
+        $swiftMessage
+            ->setSubject($form->get('objet')->getData())
+            ->setBody($form->get('message')->getData())
+        ;
+
+        $swiftMessage->setSender($this->user->getEmail(), $this->user->getUsername());
+    }
+
+
     /**
      * {@inheritdoc}
      */

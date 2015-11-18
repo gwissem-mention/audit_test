@@ -30,7 +30,7 @@ class Objet implements RoutedItemInterface
     /**
      * @var ID de l'article de la communauté de pratique.
      */
-    const ARTICLE_COMMUNAUTE_PRATIQUE_ID = 596;
+    const ARTICLE_COMMUNAUTE_PRATIQUE_ID = 1000;
 
 
     /**
