@@ -1,0 +1,92 @@
+{% extends 'HopitalNumeriqueCommunautePratiqueBundle::layout.html.twig' %}
+
+{% block javascripts %}
+    {{ parent() }}
+    {% javascripts output="compiled/hopitalnumerique-communautepratique-user-list.js"
+        'bundles/hopitalnumeriquecommunautepratique/js/User/Recherche.js'
+    %}
+        <script type="text/javascript" src="{{ asset_url }}"></script>
+    {% endjavascripts %}
+{% endblock %}
+
+{% block title_communaute_pratique %}Annuaire des membres{% endblock %}
+
+{% block communaute_pratique_actions %}
+    {{ parent() }}
+    <div class="lien">
+        <a href="{{ path('hopital_numerique_user_informations_personnelles') }}">Mise à jour de mes données <em class="icon icon-settings48"></em></a>
+    </div>
+{% endblock %}
+
+{% block body_communaute_pratique %}
+
+    <div class="communaute-de-pratiques-annuaire">
+        
+        <div class="communaute-de-pratiques-annuaire-filtres">
+            {{ form_start(rechercheForm) }}
+                <div class="row">
+                    <div class="col-md-4">
+                        {{ form_widget(rechercheForm.nom) }}
+                    </div>
+                    <div class="col-md-4">
+                        {{ form_widget(rechercheForm.profilEtablissementSante) }}
+                    </div>
+                    <div class="col-md-4">
+                        {{ form_widget(rechercheForm.region) }}
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-4">
+                        {{ form_widget(rechercheForm.statutEtablissementSante) }}
+                    </div>
+                    <div class="col-md-4">
+                        {{ form_widget(rechercheForm.typeActivite) }}
+                    </div>
+                    <div class="col-md-4">
+                        <button type="submit" class="btn btn-success">Filtrer les membres</button>
+                    </div>
+                </div>
+            {{ form_end(rechercheForm) }}
+        </div>
+        
+        <div class="communaute-de-pratiques-annuaire-users">
+            <div class="row">
+                
+                {% for membre in pagerFantaMembres.currentPageResults %}
+                    <div class="col-md-3">
+                        <div class="user">
+                            <div class="identite">
+                                <div class="illustration"><img src="{{ asset(membre.avatarWebPath) }}"></div>
+                                <div class="nom"><em class="icon icon-email5"></em> {{ membre.prenomNom }}</div>
+                            </div>
+                            <div class="type">
+                                <em class="icon icon-hospital11"></em>
+                                {{ membre.statutEtablissementSante is not null ? membre.statutEtablissementSante.libelle~' ' : '' }}
+                                {%- if membre.typeActivite|length > 0 -%}
+                                    <br>({% for activite in membre.typeActivite -%}
+                                        {{ activite.libelle~(loop.first ? '' : ', ') }}
+                                    {%- endfor %})
+                                {%- endif -%}
+                            </div>
+                            <div class="fonction">
+                                <em class="icon icon-users149"></em>
+                                {{ membre.fonctionDansEtablissementSante }}
+                            </div>
+                            <div class="liens">
+                                <div class="groupe"><a>Participations aux groupes</a></div>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+
+            </div>
+                
+            {% if pagerFantaMembres.nbPages > 1 %}
+                <div class="text-center">{{ pagerfanta(pagerFantaMembres, 'hopitalnumerique_communautepratique') }}</div>
+            {% endif %}
+                
+        </div>
+        
+    </div>
+
+{% endblock body_communaute_pratique %}

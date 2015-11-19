@@ -565,4 +565,32 @@ class UserRepository extends EntityRepository
     
         return $qb;
   }
+
+    /**
+     * Retourne la QueryBuilder avec les membres de la communauté de pratique.
+     * 
+     * @param string                                                    $nomination                Partie du nom, prénom ou email
+     * @param array<\HopitalNumerique\ReferenceBundle\Entity\Reference> $etablissementSanteProfils Profils
+     * @param array<\HopitalNumerique\ReferenceBundle\Entity\Reference> $regions                   Régions
+     * @param array<\HopitalNumerique\ReferenceBundle\Entity\Reference> $etablissementSanteStatuts Types d'ES
+     * @param array<\HopitalNumerique\ReferenceBundle\Entity\Reference> $activiteTypes             Types d'activité
+     * @return \Doctrine\ORM\QueryBuilder QueryBuilder
+     */
+    public function getCommunautePratiqueMembresQueryBuilder($nomination = null, array $etablissementSanteProfils = array(), array $regions = array(), array $etablissementSanteStatuts = array(), array $activiteTypes = array())
+    {
+        $query = $this->createQueryBuilder('user');
+        
+        $query
+            ->select('user, esProfil, region, esStatut, activiteType')
+            ->innerJoin('user.profilEtablissementSante', 'esProfil')
+            ->innerJoin('user.region', 'region')
+            ->innerJoin('user.statutEtablissementSante', 'esStatut')
+            ->innerJoin('user.typeActivite', 'activiteType')
+            ->addOrderBy('user.nom', 'ASC')
+            ->addOrderBy('user.prenom', 'ASC')
+            ->addOrderBy('user.id', 'ASC')
+        ;
+        
+        return $query;
+    }
 }

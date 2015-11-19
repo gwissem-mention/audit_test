@@ -216,3 +216,6 @@ eko_feed:
                 route_params: {id: 1}
             encoding:    'utf-8'
             author:      'ANAP' # Only required for Atom feeds
+
+white_october_pagerfanta:
+    default_view: 'twitter_bootstrap3'

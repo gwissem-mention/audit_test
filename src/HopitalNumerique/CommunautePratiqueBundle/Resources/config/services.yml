@@ -7,3 +7,15 @@ imports:
 services:
     hopitalnumerique_communautepratique.dependency_injection.inscription:
         class: "HopitalNumerique\CommunautePratiqueBundle\DependencyInjection\Inscription"
+
+    hopitalnumerique_communautepratique.dependency_injection.annuaire:
+        class: "HopitalNumerique\CommunautePratiqueBundle\DependencyInjection\Annuaire"
+        arguments: ['@hopitalnumerique_user.manager.user']
+
+    hopitalnumerique_communautepratique.pagerfanta.view:
+        class: Pagerfanta\View\OptionableView
+        arguments:
+            - @pagerfanta.view.twitter_bootstrap3
+            - { proximity: 2, prev_message: '&laquo;', next_message: '&raquo;' }
+        public: false
+        tags: [{ name: pagerfanta.view, alias: hopitalnumerique_communautepratique }]

@@ -46,8 +46,8 @@
         "knplabs/knp-snappy-bundle"                    : "dev-master#0a30395",
         "liip/doctrine-cache-bundle"                   : "~1.0",
         "apy/datagrid-bundle"                          : "2.1.15",
-        "white-october/pagerfanta-bundle"              : "2.1.*@dev",
-        "pagerfanta/pagerfanta"                        : "1.0.*@dev",
+        "white-october/pagerfanta-bundle"              : "1.*",
+        "pagerfanta/pagerfanta"                        : "1.0.*",
         "genemu/form-bundle"                           : "2.2.*",
         "igorw/file-serve-bundle"                      : "~1.0",
         "doctrine/doctrine-fixtures-bundle"            : "~2.2",
@@ -60,7 +60,7 @@
         "codeconsortium/ccdn-component-bb-code-bundle" : "dev-master",
         "phpoffice/phpexcel"                           : "1.8.0",
         "liuggio/excelbundle"                          : "~2.0",
-        "eko/feedbundle"                               : "dev-master"
+        "eko/feedbundle"                               : "1.2.*"
     },
     "scripts": {
         "post-install-cmd": [

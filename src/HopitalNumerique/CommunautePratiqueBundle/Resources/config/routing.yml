@@ -17,3 +17,7 @@ hopitalnumerique_communautepratique_groupe:
 hopitalnumerique_communautepratique_publication:
     resource: "@HopitalNumeriqueCommunautePratiqueBundle/Resources/config/routing/publication.yml"
     prefix: "/communaute-de-pratiques/publication"
+
+hopitalnumerique_communautepratique_user:
+    resource: "@HopitalNumeriqueCommunautePratiqueBundle/Resources/config/routing/user.yml"
+    prefix: "/communaute-de-pratiques/user"

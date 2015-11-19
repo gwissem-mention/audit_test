@@ -1,0 +1,23 @@
+.communaute-de-pratiques-annuaire {}
+
+.communaute-de-pratiques-annuaire-filtres { background-color: #f6f6f6;padding:1px 0; }
+    .communaute-de-pratiques-annuaire-filtres .row { margin: 15px 0; }
+        .communaute-de-pratiques-annuaire-filtres #hopitalnumerique_communautepratiquebundle_user_recherche_nom { background-image: url('/bundles/hopitalnumeriquecommunautepratique/img/annuaire/loupe.png');background-position: 6px center;background-repeat: no-repeat;padding: 0 0 0 28px; }
+        .communaute-de-pratiques-annuaire-filtres .btn { width: 100%; }
+
+.communaute-de-pratiques-annuaire-users { margin: 8px 0; }
+    .communaute-de-pratiques-annuaire-users .user { background-color: #f6f6f6;margin: 7px 0;padding: 10px; }
+        .communaute-de-pratiques-annuaire-users .identite { height:79px;overflow: hidden; }
+            .communaute-de-pratiques-annuaire-users .user .illustration { float: left;margin: 0 6px 0 0; }
+                .communaute-de-pratiques-annuaire-users .user .illustration img { background-color: #e5e5e5;border-color: #fff;border-radius: 50%;border-style: solid;border-width: 3px;height: 60px;width: 60px; }
+            .communaute-de-pratiques-annuaire-users .user .nom { font-size: 14px;font-weight: bold; }
+                .communaute-de-pratiques-annuaire-users .user .nom .icon { color: #d60030;font-size: 15px;vertical-align: middle; }
+        .communaute-de-pratiques-annuaire-users .user .type, .communaute-de-pratiques-annuaire-users .user .fonction { clear: left;color: #777;height: 44px;line-height: 15px;overflow: hidden;padding: 0 8px; }
+            .communaute-de-pratiques-annuaire-users .user .type .icon, .communaute-de-pratiques-annuaire-users .user .fonction .icon { float: left;display: block;float: left;font-size: 34px;vertical-align: top;width: 50px; }
+        .communaute-de-pratiques-annuaire-users .user .type {  }
+        .communaute-de-pratiques-annuaire-users .user .fonction {}
+        .communaute-de-pratiques-annuaire-users .user .liens { font-size: 12px;padding: 8px;text-align: center; }
+            .communaute-de-pratiques-annuaire-users .user .liens .groupe { background-color: #e5e5e5; }
+                .communaute-de-pratiques-annuaire-users .user .liens .groupe a { color: #333;display: block;padding: 4px 0; }
+                .communaute-de-pratiques-annuaire-users .user .liens .groupe a:hover { text-decoration: none; }
+    .communaute-de-pratiques-annuaire-users .pagination { margin: 30px 0; }
