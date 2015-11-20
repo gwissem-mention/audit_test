@@ -243,6 +243,18 @@ class UserController extends Controller
     }
     
     /**
+     * Affichage du formulaire d'utilisateur
+     *
+     * @param intger $id Identifiant de l'utilisateur
+     */
+    public function switchAction( $id )
+    {
+    	//Récupération de l'utilisateur passé en param
+    	$user = $this->get('hopitalnumerique_user.manager.user')->findOneBy( array('id' => $id) );
+    	return $this->redirect( $this->generateUrl('hopital_numerique_homepage',array('_switch_user' =>  $user->getUsername())));
+    }
+    
+    /**
      * Affichage de la fiche d'un utilisateur
      * 
      * @param integer $id ID de l'utilisateur

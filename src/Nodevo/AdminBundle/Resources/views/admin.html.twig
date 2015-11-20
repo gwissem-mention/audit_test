@@ -88,7 +88,19 @@
                             <ul class="dropdown-menu">
                                 <li><a href="{{ path('hopital_numerique_homepage') }}" target="_blank">Accès au site front <i class="pull-right fa fa-external-link"></i></a></li>
                                 <li class="divider"></li>
-                                <li><a href="{{ path('fos_user_security_logout') }}" class="text-right">Déconnexion</a></li>
+                                <li>
+                        		{% set previousAdmin = false  %}
+                        		{% for role in app.security.getToken().getRoles() %}
+									{% if role.getRole() == 'ROLE_PREVIOUS_ADMIN' %}
+										{% set previousAdmin = true %}
+									{% endif %}
+								{% endfor %}
+								{% if previousAdmin %}
+									<a href="{{ path('hopital_numerique_homepage', {'_switch_user': '_exit'}) }}">Retour a l'utilisateur</a>
+			 					{% else %}
+			                 		<a href="{{path('account_logout')}}">Déconnexion</a>
+								{% endif %}
+                                </li>
                             </ul>
                         </li>
                     </ul>

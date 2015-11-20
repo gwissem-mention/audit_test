@@ -85,6 +85,12 @@ hopital_numerique_user_show:
     defaults: { _controller: HopitalNumeriqueUserBundle:User:show, id: 1}
     requirements:
         id: \d+
+        
+hopital_numerique_user_switch:
+    pattern: /admin/user/switch/{id}
+    defaults: { _controller: HopitalNumeriqueUserBundle:User:switch, id: 1 }
+    requirements:
+        id: \d+
 
 hopital_numerique_user_historique:
     pattern: /admin/user/historique/{id}
