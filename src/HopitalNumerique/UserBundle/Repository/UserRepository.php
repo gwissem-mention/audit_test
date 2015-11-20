@@ -581,6 +581,8 @@ class UserRepository extends EntityRepository
             ->innerJoin('user.region', 'region')
             ->innerJoin('user.statutEtablissementSante', 'esStatut')
             ->innerJoin('user.typeActivite', 'typeActivite')
+            ->andWhere('user.inscritCommunautePratique = :inscritCommunautePratique')
+            ->setParameter('inscritCommunautePratique', true)
             ->addOrderBy('user.nom', 'ASC')
             ->addOrderBy('user.prenom', 'ASC')
             ->addOrderBy('user.id', 'ASC')
