@@ -10,7 +10,7 @@ services:
 
     hopitalnumerique_communautepratique.dependency_injection.annuaire:
         class: "HopitalNumerique\CommunautePratiqueBundle\DependencyInjection\Annuaire"
-        arguments: ['@hopitalnumerique_user.manager.user']
+        arguments: ['@session', '@hopitalnumerique_user.manager.user', '@hopitalnumerique_reference.manager.reference']
 
     hopitalnumerique_communautepratique.pagerfanta.view:
         class: Pagerfanta\View\OptionableView

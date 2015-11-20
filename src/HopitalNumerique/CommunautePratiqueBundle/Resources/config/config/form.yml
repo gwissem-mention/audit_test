@@ -7,6 +7,6 @@ services:
 
     hopitalnumerique_communautepratique.form.type.user.recherche:
         class: 'HopitalNumerique\CommunautePratiqueBundle\Form\Type\User\RechercheType'
-        arguments: ["@hopitalnumerique_reference.manager.reference"]
+        arguments: ['@router', '@hopitalnumerique_communautepratique.dependency_injection.annuaire', '@hopitalnumerique_reference.manager.reference']
         tags:
             - { name: form.type, alias: 'hopitalnumerique_communautepratiquebundle_user_recherche' }
