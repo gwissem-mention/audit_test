@@ -109,7 +109,8 @@
     #publication #publication-resume h4{color: #d60030;font-size: 14px;font-style: italic;font-weight: normal; margin: 15px 0 10px 50px; font-weight: bold;}
     #publication #publication-resume h5{color: #d60030;font-size: 14px;font-style: italic;font-weight: normal; margin: 15px 0 10px 75px; font-weight: bold;} 
     #publication #publication-resume h6{color: #d60030;font-size: 14px;font-style: italic;font-weight: normal; margin: 15px 0 10px 100px; font-weight: bold;}
-
+	#publication #publication-resume iframe{ margin-right: 15px;}
+	
     /* Bloc Productions associés */
     #publication #productions-associes{ margin-top: 30px; }
     #publication #productions-associes h3{ color: #595959; font-size: 12px; text-transform: uppercase; margin: 0 0 10px 0; font-weight: normal }
