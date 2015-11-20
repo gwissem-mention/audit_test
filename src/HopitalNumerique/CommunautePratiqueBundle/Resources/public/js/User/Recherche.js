@@ -25,7 +25,8 @@ CommunautePratique_User_Recherche.initChamps = function()
         buttonContainer: '<div class="btn-group" />',
         numberDisplayed: 1,
         buttonWidth: '100%',
-        nSelectedText: 'profils sélectionnés'
+        nSelectedText: 'profils sélectionnés',
+        allSelectedText: 'Tous'
     });
 
     $('#hopitalnumerique_communautepratiquebundle_user_recherche_region').multiselect({
@@ -33,7 +34,8 @@ CommunautePratique_User_Recherche.initChamps = function()
         buttonContainer: '<div class="btn-group" />',
         numberDisplayed: 1,
         buttonWidth: '100%',
-        nSelectedText: 'régions sélectionnées'
+        nSelectedText: 'régions sélectionnées',
+        allSelectedText: 'Tous'
     });
 
     $('#hopitalnumerique_communautepratiquebundle_user_recherche_statutEtablissementSante').multiselect({
@@ -41,7 +43,8 @@ CommunautePratique_User_Recherche.initChamps = function()
         buttonContainer: '<div class="btn-group" />',
         numberDisplayed: 1,
         buttonWidth: '100%',
-        nSelectedText: 'types sélectionnés'
+        nSelectedText: 'types sélectionnés',
+        allSelectedText: 'Tous'
     });
 
     $('#hopitalnumerique_communautepratiquebundle_user_recherche_typeActivite').multiselect({
@@ -49,6 +52,7 @@ CommunautePratique_User_Recherche.initChamps = function()
         buttonContainer: '<div class="btn-group" />',
         numberDisplayed: 1,
         buttonWidth: '100%',
-        nSelectedText: 'types sélectionnés'
+        nSelectedText: 'types sélectionnés',
+        allSelectedText: 'Tous'
     });
 };

@@ -7,6 +7,7 @@ use HopitalNumerique\ReferenceBundle\Manager\ReferenceManager;
 use Pagerfanta\Adapter\DoctrineORMAdapter;
 use Pagerfanta\Pagerfanta;
 use Symfony\Component\HttpFoundation\Request;
+use Doctrine\ORM\QueryBuilder;
 
 /**
  * Classe gérant l'affichage des membres de la communauté de pratiques.
@@ -87,12 +88,51 @@ class Annuaire
      */
     public function getPagerfantaUsers($page)
     {
-        $adapter = new DoctrineORMAdapter($this->userManager->getCommunautePratiqueMembresQueryBuilder());
+        $usersQueryBuilder = $this->userManager->getCommunautePratiqueMembresQueryBuilder();
+        
+        $adapter = new DoctrineORMAdapter( $this->applyFiltersInQueryBuilder( $usersQueryBuilder ) );
         $pagerFanta = new Pagerfanta($adapter);
         $pagerFanta->setMaxPerPage(self::NOMBRE_ELEMENTS_PAR_PAGE);
         $pagerFanta->setCurrentPage($page);
 
         return $pagerFanta;
+    }
+
+    /**
+     * Applique les filtres sur la requête de récupération des membres.
+     * 
+     * @param \HopitalNumerique\CommunautePratiqueBundle\DependencyInjection\QueryBuilder $query QueryBuilder
+     */
+    private function applyFiltersInQueryBuilder(QueryBuilder &$queryBuilder)
+    {
+        foreach ($this->getFiltres() as $filtreLibelle => $filtreValeur)
+        {
+            if (null !== $filtreValeur)
+            {
+                switch ($filtreLibelle)
+                {
+                    case self::FILTRE_NOMINATION_LABEL:
+                        $queryBuilder
+                            ->andWhere( $queryBuilder->expr()->orX( $queryBuilder->expr()->like('user.nom', ':'.$filtreLibelle), $queryBuilder->expr()->like('user.prenom', ':'.$filtreLibelle), $queryBuilder->expr()->like('user.email', ':'.$filtreLibelle) ) )
+                            ->setParameter($filtreLibelle, '%'.$filtreValeur.'%')
+                        ;
+                        break;
+                    case self::FILTRE_ACTIVITE_TYPE_LABEL:
+                        $queryBuilder
+                            ->andWhere( $queryBuilder->expr()->in( $filtreLibelle, ':'.$filtreLibelle ) )
+                            ->setParameter($filtreLibelle, $filtreValeur)
+                        ;
+                        break;
+                    default:
+                        $queryBuilder
+                            ->andWhere( $queryBuilder->expr()->in( 'user.'.$filtreLibelle, ':'.$filtreLibelle ) )
+                            ->setParameter($filtreLibelle, $filtreValeur)
+                        ;
+                }
+            }
+        }
+
+        return $queryBuilder;
     }
 
 

@@ -347,15 +347,10 @@ class UserManager extends BaseManager
     /**
      * Retourne la QueryBuilder avec les membres de la communauté de pratique.
      * 
-     * @param string                                                    $nomination                Partie du nom, prénom ou email
-     * @param array<\HopitalNumerique\ReferenceBundle\Entity\Reference> $etablissementSanteProfils Profils
-     * @param array<\HopitalNumerique\ReferenceBundle\Entity\Reference> $regions                   Régions
-     * @param array<\HopitalNumerique\ReferenceBundle\Entity\Reference> $etablissementSanteStatuts Types d'ES
-     * @param array<\HopitalNumerique\ReferenceBundle\Entity\Reference> $activiteTypes             Types d'activité
      * @return \Doctrine\ORM\QueryBuilder QueryBuilder
      */
-    public function getCommunautePratiqueMembresQueryBuilder($nomination = null, array $etablissementSanteProfils = array(), array $regions = array(), array $etablissementSanteStatuts = array(), array $activiteTypes = array())
+    public function getCommunautePratiqueMembresQueryBuilder()
     {
-        return $this->getRepository()->getCommunautePratiqueMembresQueryBuilder($nomination, $etablissementSanteProfils, $regions, $etablissementSanteStatuts, $activiteTypes);
+        return $this->getRepository()->getCommunautePratiqueMembresQueryBuilder();
     }
 }

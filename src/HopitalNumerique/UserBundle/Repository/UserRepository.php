@@ -569,23 +569,18 @@ class UserRepository extends EntityRepository
     /**
      * Retourne la QueryBuilder avec les membres de la communauté de pratique.
      * 
-     * @param string                                                    $nomination                Partie du nom, prénom ou email
-     * @param array<\HopitalNumerique\ReferenceBundle\Entity\Reference> $etablissementSanteProfils Profils
-     * @param array<\HopitalNumerique\ReferenceBundle\Entity\Reference> $regions                   Régions
-     * @param array<\HopitalNumerique\ReferenceBundle\Entity\Reference> $etablissementSanteStatuts Types d'ES
-     * @param array<\HopitalNumerique\ReferenceBundle\Entity\Reference> $activiteTypes             Types d'activité
      * @return \Doctrine\ORM\QueryBuilder QueryBuilder
      */
-    public function getCommunautePratiqueMembresQueryBuilder($nomination = null, array $etablissementSanteProfils = array(), array $regions = array(), array $etablissementSanteStatuts = array(), array $activiteTypes = array())
+    public function getCommunautePratiqueMembresQueryBuilder()
     {
         $query = $this->createQueryBuilder('user');
         
         $query
-            ->select('user, esProfil, region, esStatut, activiteType')
+            ->select('user, esProfil, region, esStatut, typeActivite')
             ->innerJoin('user.profilEtablissementSante', 'esProfil')
             ->innerJoin('user.region', 'region')
             ->innerJoin('user.statutEtablissementSante', 'esStatut')
-            ->innerJoin('user.typeActivite', 'activiteType')
+            ->innerJoin('user.typeActivite', 'typeActivite')
             ->addOrderBy('user.nom', 'ASC')
             ->addOrderBy('user.prenom', 'ASC')
             ->addOrderBy('user.id', 'ASC')

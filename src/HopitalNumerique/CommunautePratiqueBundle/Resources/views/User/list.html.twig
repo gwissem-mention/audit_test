@@ -64,7 +64,7 @@
                                 {{ membre.statutEtablissementSante is not null ? membre.statutEtablissementSante.libelle~' ' : '' }}
                                 {%- if membre.typeActivite|length > 0 -%}
                                     <br>({% for activite in membre.typeActivite -%}
-                                        {{ activite.libelle~(loop.first ? '' : ', ') }}
+                                        {{ (loop.first ? '' : ', ')~(activite.libelle) }}
                                     {%- endfor %})
                                 {%- endif -%}
                             </div>
