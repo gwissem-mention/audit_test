@@ -5,6 +5,7 @@ namespace HopitalNumerique\UserBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 use FOS\UserBundle\Model\User as BaseUser;
 use Nodevo\RoleBundle\Entity\Role;
+use HopitalNumerique\ReferenceBundle\Entity\Reference;
 
 //Asserts Stuff
 use Symfony\Component\Validator\Constraints as Assert;
