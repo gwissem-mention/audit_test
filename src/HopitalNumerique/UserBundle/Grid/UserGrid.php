@@ -147,6 +147,7 @@ class UserGrid extends Grid implements GridInterface
      */
     public function setActionsButtons()
     {
+        $this->addActionButton( new Action\SwitchButton('hopital_numerique_user_switch') );
         $this->addActionButton( new Action\EditButton('hopital_numerique_user_edit') );
         $this->addActionButton( new Action\ShowButton('hopital_numerique_user_show') );
         // $this->addActionButton( new Action\DeleteButton('hopital_numerique_user_delete') );

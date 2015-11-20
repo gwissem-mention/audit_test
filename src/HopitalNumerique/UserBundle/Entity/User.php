@@ -12,7 +12,6 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Nodevo\ToolsBundle\Validator\Constraints as Nodevo;
 use APY\DataGridBundle\Grid\Mapping as GRID;
 use Gedmo\Mapping\Annotation as Gedmo;
-use HopitalNumerique\ReferenceBundle\Entity\Reference;
 
 //Tools
 use \Nodevo\ToolsBundle\Tools\Chaine;
@@ -663,6 +662,7 @@ class User extends BaseUser
         $this->nbVisites            = 0;
         $this->notficationRequete   = true;
         $this->inscritCommunautePratique = false;
+        $this->previousAdmin 		= false;
     }
 
 
@@ -2010,24 +2010,24 @@ class User extends BaseUser
         return $this->communautePratiqueGroupes;
     }
     
-    /* --> */
+	/* <-- Avatar */
+
+	/**
+	* Retourne l'image de l'avatar à afficher (image générique si aucun avatar).
+	*
+	* @return string Avatar
+	*/
+	public function getAvatarWebPath()
+	{
+		if (null !== $this->civilite && Reference::CIVILITE_MADAME_ID == $this->civilite->getId())
+		{
+			return '/bundles/hopitalnumeriqueuser/img/madame.png';
+		}
+
+		return '/bundles/hopitalnumeriqueuser/img/monsieur.png';
+	}
+
+/* --> */
     
-    /* <-- Avatar */
     
-    /**
-     * Retourne l'image de l'avatar à afficher (image générique si aucun avatar).
-     * 
-     * @return string Avatar
-     */
-    public function getAvatarWebPath()
-    {
-        if (null !== $this->civilite && Reference::CIVILITE_MADAME_ID == $this->civilite->getId())
-        {
-            return '/bundles/hopitalnumeriqueuser/img/madame.png';
-        }
-        
-        return '/bundles/hopitalnumeriqueuser/img/monsieur.png';
-    }
-    
-    /* --> */
 }
