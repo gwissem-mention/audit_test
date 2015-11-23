@@ -11,11 +11,11 @@
             
             <div class="communaute-de-pratiques-panel-groupes">
                 <ul class="nav nav-tabs" role="tablist">
-                    <li role="presentation" class="active"><a href="#a-venir" aria-controls="a-venir" role="tab" data-toggle="tab"><em class="icon-social20"></em> &nbsp; Groupes de travail</a></li>
-                    <li role="presentation"><a href="#en-cours" aria-controls="en-cours" role="tab" data-toggle="tab"><em class="icon-social20"></em> &nbsp; Groupes de travail en cours</a></li>
+                    <li role="presentation"{{ groupesNonDemarres|length > 0 or groupesEnCours|length == 0 ? ' class="active"' : '' }}><a href="#a-venir" aria-controls="a-venir" role="tab" data-toggle="tab"><em class="icon-social20"></em> &nbsp; Groupes de travail</a></li>
+                    <li role="presentation"{{ groupesNonDemarres|length == 0 and groupesEnCours|length > 0 ? ' class="active"' : '' }}><a href="#en-cours" aria-controls="en-cours" role="tab" data-toggle="tab"><em class="icon-social20"></em> &nbsp; Groupes de travail en cours</a></li>
                 </ul>
                 <div class="tab-content">
-                    <div role="tabpanel" class="tab-pane active" id="a-venir">
+                    <div role="tabpanel" class="tab-pane{{ groupesNonDemarres|length > 0 or groupesEnCours|length == 0 ? ' active' : '' }}" id="a-venir">
 
                         {% for groupeNonDemarre in groupesNonDemarres %}
                             {{ communaute_pratique.display_groupe(groupeNonDemarre) }}
@@ -24,7 +24,7 @@
                         {% endfor %}
 
                     </div>
-                    <div role="tabpanel" class="tab-pane" id="en-cours">
+                    <div role="tabpanel" class="tab-pane{{ groupesNonDemarres|length == 0 and groupesEnCours|length > 0 ? ' active' : '' }}" id="en-cours">
 
                         {% for groupeEnCours in groupesEnCours %}
                             {{ communaute_pratique.display_groupe(groupeEnCours) }}
@@ -45,8 +45,8 @@
                 <ul>
                     {% for groupe in userGroupesEnCours %}
                         <li>
-                            <a>Nom du groupe</a>
-                            <div>Dernière activité le 21/10/2015</div>
+                            <a href="{{ path('hopitalnumerique_communautepratique_groupe_view', { 'groupe':groupe.id }) }}">{{ groupe }}</a>
+                            <div>Dernière activité le XX/XX/20XX</div>
                         </li>
                     {% else %}
                         <li>Aucun groupe en cours</li>

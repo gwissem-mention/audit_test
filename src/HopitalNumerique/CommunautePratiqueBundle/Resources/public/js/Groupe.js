@@ -3,6 +3,7 @@
  */
 var CommunautePratique_Groupe = function() {};
 
+
 $(document).ready(function() {
     CommunautePratique_Groupe.init();
 });
