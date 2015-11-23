@@ -7,6 +7,9 @@
     ALTER TABLE hn_communautepratique_groupe_animateur ADD CONSTRAINT FK_840981F7FE54D947 FOREIGN KEY (group_id) REFERENCES hn_communautepratique_groupe (group_id);
     ALTER TABLE hn_communautepratique_groupe_animateur ADD CONSTRAINT FK_840981F7C69D3FB FOREIGN KEY (usr_id) REFERENCES core_user (usr_id);
     ALTER TABLE hn_communautepratique_groupe ADD group_actif TINYINT(1) DEFAULT '0' NOT NULL;
+    CREATE TABLE hn_communautepratique_groupe_user (group_id INT UNSIGNED NOT NULL, usr_id INT NOT NULL COMMENT 'ID de l utilisateur', INDEX IDX_305DA7BDFE54D947 (group_id), INDEX IDX_305DA7BDC69D3FB (usr_id), PRIMARY KEY(group_id, usr_id)) DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE = InnoDB;
+    ALTER TABLE hn_communautepratique_groupe_user ADD CONSTRAINT FK_305DA7BDFE54D947 FOREIGN KEY (group_id) REFERENCES hn_communautepratique_groupe (group_id);
+    ALTER TABLE hn_communautepratique_groupe_user ADD CONSTRAINT FK_305DA7BDC69D3FB FOREIGN KEY (usr_id) REFERENCES core_user (usr_id);
 
     /* Droits */
     INSERT INTO `core_ressource` (`res_id`, `res_nom`, `res_pattern`, `res_order`, `res_type`) VALUES (NULL, 'BackOffice - Gestion de la communauté de pratiques', '/^\\/admin\\/communaute\\-de\\-pratiques/', '38', '2');

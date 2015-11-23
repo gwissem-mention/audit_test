@@ -1,0 +1,15 @@
+{% extends 'HopitalNumeriqueCommunautePratiqueBundle::layout.html.twig' %}
+
+{% block title_communaute_pratique %}Inscription au groupe - {{ groupe }}{% endblock %}
+
+{% block body_communaute_pratique %}
+
+    {{ groupe.descriptionHtml|raw }}
+    
+    {{ render(controller('HopitalNumeriqueQuestionnaireBundle:Questionnaire:editFront', { 'user':app.user , 'questionnaire':groupe.questionnaire, 'optionRenderForm' :questionnaireOptions  } )) }}
+    
+    <div class="text-right">
+        <button type="button" onclick="$('#do').val('save-close');$('form').submit();" class="btn btn-success">Valider</button>
+    </div>
+
+{% endblock %}

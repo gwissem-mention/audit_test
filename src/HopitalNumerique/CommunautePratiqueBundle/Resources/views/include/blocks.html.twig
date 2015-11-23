@@ -33,7 +33,7 @@
                 {% elseif date('now') < groupe.dateInscriptionOuverture %}
                     <a class="button">Inscription dans <span class="jours-restants"><span>{{ groupe.nombreJoursRestantsAvantInscriptionOuverture }}</span> jour{{ groupe.nombreJoursRestantsAvantInscriptionOuverture > 1 ? 's' : '' }}</span></a>
                 {% else %}
-                    <a class="button">Rejoindre ce groupe</a>
+                    <a class="button" href="{{ path('hopitalnumerique_communautepratique_groupe_inscrit', { 'groupe':groupe.id }) }}">Rejoindre ce groupe</a>
                 {% endif %}
             </div>
         </div>

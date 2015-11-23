@@ -3,6 +3,21 @@
  */
 var CommunautePratique = function() {};
 
+
+$(document).ready(function() {
+    CommunautePratique.init();
+});
+
+
+/**
+ * Initialisation.
+ */
+CommunautePratique.init = function()
+{
+    $('form.toValidate').validationEngine();
+};
+
+
 /**
  * Inscrit l'utilisateur à la communauté de pratique.
  */

@@ -18,6 +18,7 @@
         '@validationEngine_js'
         '@bootstrap_multiselect_js'
         'bundles/hopitalnumeriquecontact/js/Popup.js'
+        'bundles/hopitalnumeriquecommunautepratique/js/CommunautePratique.js'
         'bundles/hopitalnumeriquecommunautepratique/js/Groupe.js'
         'bundles/hopitalnumeriquecommunautepratique/js/Groupe/DateProgression.js'
         'bundles/hopitalnumeriquecommunautepratique/js/Groupe/PlaceProgression.js'
@@ -35,7 +36,7 @@
         <div class="communaute-pratique-actions">
             {% block communaute_pratique_actions %}
                 <div class="contact">
-                    <a onclick="Contact_Popup.display({{ { (domaineCurrent.adresseMailContact): 'ANAP' }|json_encode() }}, '{{ path(app.request.get('_route')) }}');">
+                    <a onclick="Contact_Popup.display({{ { (domaineCurrent.adresseMailContact): 'ANAP' }|json_encode() }}, '{{ path( app.request.get('_route'), app.request.get('_route_params') ) }}');">
                         <em class="icon-help9"></em>
                         Un problème technique ?<br><strong>Contacter l'administrateur</strong>
                     </a>

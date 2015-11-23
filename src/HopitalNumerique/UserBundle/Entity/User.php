@@ -636,7 +636,12 @@ class User extends BaseUser
     private $inscritCommunautePratique;
 
     /**
-     * @ORM\ManyToMany(targetEntity="HopitalNumerique\CommunautePratiqueBundle\Entity\Groupe", mappedBy="animateurs")
+     * @ORM\ManyToMany(targetEntity="HopitalNumerique\CommunautePratiqueBundle\Entity\Groupe", mappedBy="animateurs", cascade={"persist"})
+     */
+    private $communautePratiqueAnimateurGroupes;
+
+    /**
+     * @ORM\ManyToMany(targetEntity="HopitalNumerique\CommunautePratiqueBundle\Entity\Groupe", mappedBy="users", cascade={"persist"})
      */
     private $communautePratiqueGroupes;
     
@@ -1979,14 +1984,49 @@ class User extends BaseUser
     }
     
     /**
-     * Add communautePratiqueGroupes
+     * Add communautePratiqueGroupe
      *
-     * @param \HopitalNumerique\CommunautePratiqueBundle\Entity\Groupe $communautePratiqueGroupes
+     * @param \HopitalNumerique\CommunautePratiqueBundle\Entity\Groupe $communautePratiqueGroupe
      * @return User
      */
-    public function addCommunautePratiqueGroupe(\HopitalNumerique\CommunautePratiqueBundle\Entity\Groupe $communautePratiqueGroupes)
+    public function addCommunautePratiqueAnimateurGroupe(\HopitalNumerique\CommunautePratiqueBundle\Entity\Groupe $communautePratiqueGroupe)
     {
-        $this->communautePratiqueGroupes[] = $communautePratiqueGroupes;
+        $communautePratiqueGroupe->addAnimateur($this);
+        $this->communautePratiqueAnimateurGroupes[] = $communautePratiqueGroupe;
+
+        return $this;
+    }
+
+    /**
+     * Remove communautePratiqueGroupes
+     *
+     * @param \HopitalNumerique\CommunautePratiqueBundle\Entity\Groupe $communautePratiqueGroupes
+     */
+    public function removeCommunautePratiqueAnimateurGroupe(\HopitalNumerique\CommunautePratiqueBundle\Entity\Groupe $communautePratiqueGroupes)
+    {
+        $this->communautePratiqueAnimateurGroupes->removeElement($communautePratiqueGroupes);
+    }
+
+    /**
+     * Get communautePratiqueGroupes
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getCommunautePratiqueAnimateurGroupes()
+    {
+        return $this->communautePratiqueAnimateurGroupes;
+    }
+
+    /**
+     * Add communautePratiqueGroupe
+     *
+     * @param \HopitalNumerique\CommunautePratiqueBundle\Entity\Groupe $communautePratiqueGroupe
+     * @return User
+     */
+    public function addCommunautePratiqueGroupe(\HopitalNumerique\CommunautePratiqueBundle\Entity\Groupe $communautePratiqueGroupe)
+    {
+        $communautePratiqueGroupe->addUser($this);
+        $this->communautePratiqueGroupes[] = $communautePratiqueGroupe;
 
         return $this;
     }
@@ -2002,6 +2042,25 @@ class User extends BaseUser
     }
 
     /**
+     * Has communautePratiqueGroupe ?
+     * 
+     * @param \HopitalNumerique\CommunautePratiqueBundle\Entity\Groupe $communautePratiqueGroupe
+     * @return boolean
+     */
+    public function hasCommunautePratiqueGroupe(\HopitalNumerique\CommunautePratiqueBundle\Entity\Groupe $communautePratiqueGroupe)
+    {
+        foreach ($this->communautePratiqueGroupes as $communautePratiqueGroupeExistant)
+        {
+            if ($communautePratiqueGroupeExistant->getId() == $communautePratiqueGroupe->getId())
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
      * Get communautePratiqueGroupes
      *
      * @return \Doctrine\Common\Collections\Collection 
@@ -2011,24 +2070,24 @@ class User extends BaseUser
         return $this->communautePratiqueGroupes;
     }
     
-	/* <-- Avatar */
+    /* --> */
 
-	/**
-	* Retourne l'image de l'avatar à afficher (image générique si aucun avatar).
-	*
-	* @return string Avatar
-	*/
-	public function getAvatarWebPath()
-	{
-		if (null !== $this->civilite && Reference::CIVILITE_MADAME_ID == $this->civilite->getId())
-		{
-			return '/bundles/hopitalnumeriqueuser/img/madame.png';
-		}
+    /* <-- Avatar */
 
-		return '/bundles/hopitalnumeriqueuser/img/monsieur.png';
-	}
+    /**
+    * Retourne l'image de l'avatar à afficher (image générique si aucun avatar).
+    *
+    * @return string Avatar
+    */
+    public function getAvatarWebPath()
+    {
+        if (null !== $this->civilite && Reference::CIVILITE_MADAME_ID == $this->civilite->getId())
+        {
+            return '/bundles/hopitalnumeriqueuser/img/madame.png';
+        }
 
-/* --> */
-    
-    
+        return '/bundles/hopitalnumeriqueuser/img/monsieur.png';
+    }
+
+    /* --> */
 }

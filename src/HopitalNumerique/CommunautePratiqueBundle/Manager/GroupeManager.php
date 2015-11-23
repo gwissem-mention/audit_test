@@ -2,6 +2,7 @@
 namespace HopitalNumerique\CommunautePratiqueBundle\Manager;
 
 use HopitalNumerique\DomaineBundle\Entity\Domaine;
+use HopitalNumerique\UserBundle\Entity\User;
 
 class GroupeManager extends \Nodevo\ToolsBundle\Manager\Manager
 {
@@ -26,9 +27,21 @@ class GroupeManager extends \Nodevo\ToolsBundle\Manager\Manager
      */
     public function findEnCours(Domaine $domaine)
     {
-        return $this->getRepository()->findEnCours($domaine, true);
+        return $this->getRepository()->findEnCours($domaine, null, true);
     }
-    
+
+    /**
+     * Retourne les groupes en cours.
+     * 
+     * @param \HopitalNumerique\DomaineBundle\Entity\Domaine $domaine Domaine
+     * @param \HopitalNumerique\UserBundle\Entity\User       $user    Utilisateur
+     * @return array<\HopitalNumerique\CommunautePratiqueBundle\Entity\Groupe> Groupes en cours
+     */
+    public function findEnCoursByUser(Domaine $domaine, User $user)
+    {
+        return $this->getRepository()->findEnCours($domaine, $user, true);
+    }
+
     /**
      * Retourne les données pour le grid.
      *

@@ -3,7 +3,7 @@
 {% block title_communaute_pratique %}Groupes de travail{% endblock %}
 
 {% block body_communaute_pratique %}
-    
+
     {% import "HopitalNumeriqueCommunautePratiqueBundle:include:blocks.html.twig" as communaute_pratique %}
     
     <div class="row" id="communaute-pratiques-groupes">
@@ -43,33 +43,21 @@
                 <div class="title"><em class="icon-social20"></em> Mes groupes de travail en cours</div>
                 
                 <ul>
-                    <li>
-                        <a>Nom du groupe</a>
-                        <div>Dernière activité le 21/10/2015</div>
-                    </li>
-                    <li>
-                        <a>Nom du groupe</a>
-                        <div>Dernière activité le 21/10/2015</div>
-                    </li>
-                    <li>
-                        <a>Nom du groupe</a>
-                        <div>Dernière activité le 21/10/2015</div>
-                    </li>
-                    <li>
-                        <a>Nom du groupe</a>
-                        <div>Dernière activité le 21/10/2015</div>
-                    </li>
-                    <li>
-                        <a>Nom du groupe</a>
-                        <div>Dernière activité le 21/10/2015</div>
-                    </li>
+                    {% for groupe in userGroupesEnCours %}
+                        <li>
+                            <a>Nom du groupe</a>
+                            <div>Dernière activité le 21/10/2015</div>
+                        </li>
+                    {% else %}
+                        <li>Aucun groupe en cours</li>
+                    {% endfor %}
                 </ul>
             </div>
-            
+
             <div class="communaute-de-pratiques-bloc-publications">
                 <a href="{{ path('hopitalnumerique_communautepratique_publication_list') }}"><em class="icon-documents7"></em> Publications issues des groupes</a>
             </div>
-            
+
         </div>
     </div>
 

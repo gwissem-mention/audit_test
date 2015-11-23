@@ -3,6 +3,8 @@ namespace HopitalNumerique\CommunautePratiqueBundle\Repository;
 
 use Doctrine\ORM\PersistentCollection;
 use HopitalNumerique\DomaineBundle\Entity\Domaine;
+use HopitalNumerique\UserBundle\Entity\User;
+use Doctrine\ORM\Query\Expr;
 
 /**
  * Repository de Groupe.
@@ -43,10 +45,11 @@ class GroupeRepository extends \Doctrine\ORM\EntityRepository
      * Retourne les groupes en cours.
      * 
      * @param \HopitalNumerique\DomaineBundle\Entity\Domaine $domaine Domaine
+     * @param \HopitalNumerique\UserBundle\Entity\User       $user    Utilisateur
      * @param boolean                                        $isActif (optionnel) Si les groupes doivent être actifs ou non actifs
      * @return array<\HopitalNumerique\CommunautePratiqueBundle\Entity\Groupe> Groupes en cours
      */
-    public function findEnCours(Domaine $domaine, $isActif = null)
+    public function findEnCours(Domaine $domaine, User $user = null, $isActif = null)
     {
         $query = $this->createQueryBuilder('groupe');
         $aujourdhui = new \DateTime();
@@ -59,6 +62,13 @@ class GroupeRepository extends \Doctrine\ORM\EntityRepository
             ->andWhere('groupe.dateFin >= :aujourdhui')
             ->setParameter('aujourdhui', $aujourdhui)
         ;
+        if (null !== $user)
+        {
+            $query
+                ->innerJoin('groupe.users', 'user', Expr\Join::WITH, 'user = :user')
+                ->setParameter('user', $user)
+            ;
+        }
         if (null !== $isActif)
         {
             $query
@@ -95,7 +105,7 @@ class GroupeRepository extends \Doctrine\ORM\EntityRepository
                 'domaine.nom AS domaineNom'
             )
             ->innerJoin('groupe.animateurs', 'animateur')
-            ->innerJoin('groupe.domaine', 'domaine', \Doctrine\ORM\Query\Expr\Join::WITH, $query->expr()->in('domaine', ':domaines'))
+            ->innerJoin('groupe.domaine', 'domaine', Expr\Join::WITH, $query->expr()->in('domaine', ':domaines'))
             ->setParameter('domaines', $domaines->toArray())
             ->groupBy('id')
         ;

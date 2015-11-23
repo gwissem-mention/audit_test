@@ -104,7 +104,7 @@ class Groupe
      * @Assert\NotNull()
      */
     private $domaine;
-    
+
     /**
      * @var \HopitalNumerique\QuestionnaireBundle\Entity\Questionnaire
      *
@@ -113,14 +113,22 @@ class Groupe
      * @Assert\NotNull()
      */
     private $questionnaire;
-    
+
+    /**
+     * @var \Doctrine\Common\Collections\Collection
+     *
+     * @ORM\ManyToMany(targetEntity="HopitalNumerique\UserBundle\Entity\User", inversedBy="communautePratiqueAnimateurGroupes")
+     * @ORM\JoinTable(name="hn_communautepratique_groupe_animateur", joinColumns={@ORM\JoinColumn(name="group_id", referencedColumnName="group_id")}, inverseJoinColumns={@ORM\JoinColumn(name="usr_id", referencedColumnName="usr_id")})
+     */
+    private $animateurs;
+
     /**
      * @var \Doctrine\Common\Collections\Collection
      *
      * @ORM\ManyToMany(targetEntity="HopitalNumerique\UserBundle\Entity\User", inversedBy="communautePratiqueGroupes")
-     * @ORM\JoinTable(name="hn_communautepratique_groupe_animateur", joinColumns={@ORM\JoinColumn(name="group_id", referencedColumnName="group_id")}, inverseJoinColumns={@ORM\JoinColumn(name="usr_id", referencedColumnName="usr_id")})
+     * @ORM\JoinTable(name="hn_communautepratique_groupe_user", joinColumns={@ORM\JoinColumn(name="group_id", referencedColumnName="group_id")}, inverseJoinColumns={@ORM\JoinColumn(name="usr_id", referencedColumnName="usr_id")})
      */
-    private $animateurs;
+    private $users;
 
 
     /**
@@ -427,8 +435,50 @@ class Groupe
     {
         return $this->animateurs;
     }
-    
-    
+
+    /**
+     * Add users
+     *
+     * @param \HopitalNumerique\UserBundle\Entity\User $users
+     * @return Groupe
+     */
+    public function addUser(\HopitalNumerique\UserBundle\Entity\User $users)
+    {
+        $this->users[] = $users;
+
+        return $this;
+    }
+
+    /**
+     * Remove users
+     *
+     * @param \HopitalNumerique\UserBundle\Entity\User $users
+     */
+    public function removeUser(\HopitalNumerique\UserBundle\Entity\User $users)
+    {
+        $this->users->removeElement($users);
+    }
+
+    /**
+     * Get users
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getUsers()
+    {
+        return $this->users;
+    }
+
+
+    /**
+     * @return string
+     */
+    public function __toString()
+    {
+        return $this->titre;
+    }
+
+
     /**
      * Retourne le nombre de jours qu'il reste avant l'ouverture des inscriptions.
      * 
