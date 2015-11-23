@@ -21,14 +21,13 @@ $(document).ready(function() {
                 $(that).parent().find('i.pull-right').toggleClass("fa-chevron-down fa-chevron-right");
                 $(that).parent().find('ol:first').slideToggle({duration: 200});
 
-                //accordeon for level 0
-                if( $(that).parent().hasClass('level0') ){
-                    $(that).parent().siblings().each(function(){
-                        $(this).removeClass("active");
-                        $(this).find('i.pull-right').addClass("fa-chevron-right").removeClass("fa-chevron-down");
-                        $(this).find('ol:first').slideUp({duration: 200});
-                    });
-                }
+                //accordeon
+                $(that).parent().siblings().each(function(){
+                    $(this).removeClass("active");
+                    $(this).find('i.pull-right').addClass("fa-chevron-right").removeClass("fa-chevron-down");
+                    $(this).find('ol:first').slideUp({duration: 200});
+                });
+            
 
                 clicks = 0; //after action performed, reset counter
             }, DELAY);
