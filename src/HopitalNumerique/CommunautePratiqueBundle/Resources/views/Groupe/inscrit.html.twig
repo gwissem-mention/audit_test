@@ -2,6 +2,11 @@
 
 {% block title_communaute_pratique %}Inscription au groupe - {{ groupe }}{% endblock %}
 
+{% block communaute_pratique_actions %}
+    {{ parent() }}
+    {{ communaute_pratique.display_action_contact_animateur(groupe) }}
+{% endblock %}
+
 {% block body_communaute_pratique %}
 
     {{ groupe.descriptionHtml|raw }}

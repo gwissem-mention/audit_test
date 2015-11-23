@@ -1,5 +1,7 @@
 {% extends 'HopitalNumeriqueCoreBundle:Templates:' ~ templateCurrentId ~ '/layout.html.twig' %}
 
+{% import "HopitalNumeriqueCommunautePratiqueBundle:include:blocks.html.twig" as communaute_pratique %}
+
 {% block stylesheets %}
     {{parent()}}
     {% stylesheets output="compiled/hopitalnumerique-communautepratique.css" filter="cssrewrite, ?yui_css"

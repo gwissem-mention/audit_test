@@ -45,3 +45,12 @@
         });
     </script>
 {% endmacro %}
+
+{% macro display_action_contact_animateur(groupe) %}
+    <div class="contact">
+        <a onclick="Contact_Popup.display({{ groupe.animateurEmailsJson }}, '{{ path( app.request.get('_route'), app.request.get('_route_params') ) }}');">
+            <em class="icon-help9"></em>
+            Envoyer un message<br>à l'animateur du groupe
+        </a>
+    </div>
+{% endmacro %}
