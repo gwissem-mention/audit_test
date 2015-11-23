@@ -32,8 +32,13 @@ class GroupeController extends \Symfony\Bundle\FrameworkBundle\Controller\Contro
      */
     public function viewAction(Groupe $groupe)
     {
-        echo '@todo';
-        die();
+        return $this->render(
+            'HopitalNumeriqueCommunautePratiqueBundle:Groupe:view.html.twig',
+            array
+            (
+                'groupe' => $groupe
+            )
+        );
     }
 
     /**
@@ -49,7 +54,10 @@ class GroupeController extends \Symfony\Bundle\FrameworkBundle\Controller\Contro
         return $this->render('HopitalNumeriqueCommunautePratiqueBundle:Groupe:inscrit.html.twig', array(
             'groupe' => $groupe,
             'questionnaireOptions' => array(
-                'routeRedirect' => json_encode( array( 'quit' => array( 'route' => 'hopitalnumerique_communautepratique_groupe_validinscription', 'arguments' => array( 'groupe' => $groupe->getId() ) ) ) )
+                'routeRedirect' => json_encode( array(
+                    'quit' => array( 'route' => 'hopitalnumerique_communautepratique_groupe_validinscription', 'arguments' => array( 'groupe' => $groupe->getId() ) ),
+                    'sauvegarde' => array( 'route' => 'hopitalnumerique_communautepratique_groupe_validinscription', 'arguments' => array( 'groupe' => $groupe->getId() ) )
+                ) )
             )
         ));
     }
