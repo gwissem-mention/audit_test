@@ -14,15 +14,6 @@ class ReportManager extends BaseManager
     protected $_class = 'HopitalNumerique\ReportBundle\Entity\Report';
 
     /**
-     * Adresses mails en Copie Caché de l'anap
-     * @var array() Tableau clé: Nom affiché => valeur : Adresse mail
-     * 
-     * @author Gaetan MELCHILSEN
-     * @copyright Nodevo
-     */
-    protected $_mailsReport;
-
-    /**
      * @author Gaetan MELCHILSEN
      * @copyright Nodevo
      */
@@ -37,11 +28,10 @@ class ReportManager extends BaseManager
      * @author Gaetan MELCHILSEN
      * @copyright Nodevo
      */
-    public function __construct($em, UserManager $userManager, $options = array())
+    public function __construct($em, UserManager $userManager)
     {
         parent::__construct($em);
         
-        $this->_mailsReport = isset($options['mailsReport']) ? $options['mailsReport'] : array();
         $this->_userManager = $userManager;
     }
     
