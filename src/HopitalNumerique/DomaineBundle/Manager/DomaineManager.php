@@ -20,6 +20,10 @@ class DomaineManager extends BaseManager
     {
         return $this->getRepository()->getDatasForGrid( $condition )->getQuery()->getResult();
     }
+    
+    public function getDomainesUserConnected($idUser) {
+    	return $this->getRepository()->getDomainesUserConnectedForForm($idUser)->getQuery()->getResult();
+    }
 
     public function getDomaineFromHttpHost($httpHost)
     {

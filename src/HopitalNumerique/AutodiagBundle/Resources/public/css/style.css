@@ -11,7 +11,7 @@ div.sous_options {text-align: right; margin: 0px 10px 10px 0px;}
 
 /* fancybox References */
 #panel-references{padding:0;}
-#panel-references .tableContent{overflow-y:scroll; height:470px}
+#panel-references .tableContent{overflow-y:scroll; height:auto;}
 #panel-references .tableContent thead .checkAll{display: block; margin: 0 auto}
 #panel-references .tableContent .level1{background: #34495e}
 #panel-references .tableContent .level1 td{color: #ffffff; font-size: 16px; font-weight: bold}

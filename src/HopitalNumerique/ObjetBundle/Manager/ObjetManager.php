@@ -153,6 +153,9 @@ class ObjetManager extends BaseManager
             }
             $row['roles'] = implode(', ', $row['roles']);
 
+            //handle source
+            $row['sourceExterne'] = $objet->getSource();
+            
             //handle domaines
             $domaines = $objet->getDomaines();
             $row['domaines'] = array();
