@@ -59,7 +59,13 @@ class ResultatManager extends BaseManager
             }
 
             $datas['synthese'] = $resultat->getSynthese();
-			$datas['pdfExist'] = file_exists(__ROOT_DIRECTORY__ . '/files/autodiag/' . $resultat->getPdf());
+            
+            if (NULL !== $resultat->getPdf()) {
+                $datas['pdfExist'] = file_exists(__ROOT_DIRECTORY__ . '/files/autodiag/' . $resultat->getPdf());
+            } else {
+                $datas['pdfExist'] = false;
+            }
+            
             $results[] = $datas;
         }
 
