@@ -72,6 +72,13 @@ class ResultatGrid extends Grid implements GridInterface
     public function setActionsButtons()
     {
         $this->addActionButton( new Action\ShowButton( 'hopitalnumerique_autodiag_resultat_detail' ) );
+
+        //Custom Download button : Affiche le bouton si le fichier PDF exist
+        $dlPdfButton = new Action\DownloadPdfButton( 'hopitalnumerique_autodiag_resultat_pdf' );
+        $dlPdfButton->manipulateRender(function($action, \APY\DataGridBundle\Grid\Row  $row) {
+        	return $row->getField('pdfExist') ? $action : null;
+        });
+        $this->addActionButton( $dlPdfButton );
     }
 
     /**
