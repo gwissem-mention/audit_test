@@ -3,7 +3,7 @@
 
 /* Autodiag : partie questionnaire */
     #autodiag{margin-top: 20px; position: relative}
-    #autodiag h1{ margin:0 0 50px 0; float:left; font-size:30px;}
+    #autodiag h1{ margin: 0px; float:left; font-size:30px;}
     #autodiag .options{display: inline;float: right;position: relative;top: 0px;right: 0; margin-bottom: 10px;}
     #autodiag #remarque{width: 100%; margin: 20px 0;}
     #autodiag #instructions{ margin: 5px 0 20px 0;}
@@ -171,4 +171,8 @@ table.tableau-question-reponse td{border:solid #000 1px;padding:5px;}
 
 #ongletResultatDomaineAutodiag {
 	margin-top: 20px;	
+}
+
+.span-title {
+	margin: 0px 0px 20px; 
 }
