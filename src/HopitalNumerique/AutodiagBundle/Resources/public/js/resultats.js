@@ -14,7 +14,7 @@ $(document).ready(function() {
         'padding'   : 0,
         'autoSize'  : false,
         'width'     : '50%',
-        'scrolling' : 'no',
+        'scrolling' : 'visible',
         'showCloseButton' : true,
         'height' : '432px'
     });

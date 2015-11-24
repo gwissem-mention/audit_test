@@ -775,9 +775,14 @@ class MailManager extends BaseManager
         $this->_mailExpediteur = ($this->_mailExpediteur == '') ? $mail->getExpediteurMail() : $this->_mailExpediteur;
         $this->_nomExpediteur  = ($this->_nomExpediteur == '')  ? $mail->getExpediteurName() : $this->_nomExpediteur;
         $this->_destinataire   = ($this->_destinataire == '')   ? $user->getEmail()          : $this->_destinataire;
-        
-        $from = array($this->_mailExpediteur => $this->_nomExpediteur );
-        
+
+        $options = $this->getAllOptions(array($this->_mailExpediteur => $this->_nomExpediteur));
+
+        $expediteurMail = $this->replaceContent($this->_mailExpediteur, NULL, $options);
+        $expediteurName = $this->replaceContent($this->_nomExpediteur, NULL, $options);
+
+        $from = array($expediteurMail => $expediteurName );
+
         //return test email
         return $this->sendMail( $mail->getObjet(), $from, $this->_destinataire, $mail->getBody() );
     }
