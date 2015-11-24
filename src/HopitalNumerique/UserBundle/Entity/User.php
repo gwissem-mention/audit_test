@@ -155,14 +155,14 @@ use \Nodevo\ToolsBundle\Tools\Chaine;
 class User extends BaseUser
 {
     private static $ETAT_ACTIF_ID = 3;
-    
+
     /**
      * @ORM\Column(name="usr_id", type="integer", options = {"comment" = "ID de l utilisateur"})
      * @ORM\Id()
      * @ORM\GeneratedValue(strategy="AUTO")
      */
     protected $id;
-    
+
     /**
      * @var \DateTime
      *
@@ -624,9 +624,9 @@ class User extends BaseUser
      * @ORM\Column(name="usr_notification_requete", type="boolean", options = {"comment" = "L utilisateur est notifie par mail des maj des publications ?"})
      */
     protected $notficationRequete;
-    
+
     /* <-- Communauté de pratiques */
-    
+
     /**
      * @var boolean
      * 
@@ -644,7 +644,12 @@ class User extends BaseUser
      * @ORM\ManyToMany(targetEntity="HopitalNumerique\CommunautePratiqueBundle\Entity\Groupe", mappedBy="users", cascade={"persist"})
      */
     private $communautePratiqueGroupes;
-    
+
+    /**
+     * @ORM\OneToMany(targetEntity="HopitalNumerique\CommunautePratiqueBundle\Entity\Document", mappedBy="user")
+     */
+    private $communautePratiqueDocuments;
+
     /* --> */
 
 
@@ -2069,7 +2074,40 @@ class User extends BaseUser
     {
         return $this->communautePratiqueGroupes;
     }
-    
+
+    /**
+     * Add communautePratiqueDocument
+     *
+     * @param \HopitalNumerique\CommunautePratiqueBundle\Entity\Document $communautePratiqueDocument
+     * @return User
+     */
+    public function addCommunautePratiqueDocument(\HopitalNumerique\CommunautePratiqueBundle\Entity\Document $communautePratiqueDocument)
+    {
+        $this->communautePratiqueDocuments[] = $communautePratiqueDocument;
+
+        return $this;
+    }
+
+    /**
+     * Remove communautePratiqueDocuments
+     *
+     * @param \HopitalNumerique\CommunautePratiqueBundle\Entity\Document $communautePratiqueDocument
+     */
+    public function removeCommunautePratiqueDocument(\HopitalNumerique\CommunautePratiqueBundle\Entity\Document $communautePratiqueDocument)
+    {
+        $this->communautePratiqueDocuments->removeElement($communautePratiqueDocument);
+    }
+
+    /**
+     * Get communautePratiqueDocuments
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getCommunautePratiqueDocuments()
+    {
+        return $this->communautePratiqueDocuments;
+    }
+
     /* --> */
 
     /* <-- Avatar */

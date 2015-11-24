@@ -34,6 +34,16 @@ class Chaine
     }
     
     /**
+     * Récupération de la chaine traitée
+     * 
+     * @return string La chaîne de caractères traitée
+     */
+    public function getTexte()
+    {
+        return $this->chaine;
+    }
+    
+    /**
      * Set chaine traitée
      */
     public function setChaine($nouvelleChaine)

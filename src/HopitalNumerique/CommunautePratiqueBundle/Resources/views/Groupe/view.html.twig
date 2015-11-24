@@ -2,8 +2,10 @@
 
 {% block title_communaute_pratique %}Groupe de travail : {{ groupe }}{% endblock %}
 
+{% block communaute_pratique_sommaire %}{% endblock %}
+
 {% block body_communaute_pratique %}
 
-    
+    {{ communaute_pratique.display_groupe_sommaire(groupe) }}
 
 {% endblock body_communaute_pratique %}

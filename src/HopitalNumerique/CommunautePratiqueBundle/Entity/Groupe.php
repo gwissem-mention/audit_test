@@ -130,6 +130,11 @@ class Groupe
      */
     private $users;
 
+    /**
+     * @ORM\OneToMany(targetEntity="Document", mappedBy="groupe")
+     */
+    private $documents;
+
 
     /**
      * Constructor
@@ -467,6 +472,39 @@ class Groupe
     public function getUsers()
     {
         return $this->users;
+    }
+
+    /**
+     * Add documents
+     *
+     * @param \HopitalNumerique\CommunautePratiqueBundle\Entity\Document $documents
+     * @return Groupe
+     */
+    public function addDocument(\HopitalNumerique\CommunautePratiqueBundle\Entity\Document $documents)
+    {
+        $this->documents[] = $documents;
+
+        return $this;
+    }
+
+    /**
+     * Remove documents
+     *
+     * @param \HopitalNumerique\CommunautePratiqueBundle\Entity\Document $documents
+     */
+    public function removeDocument(\HopitalNumerique\CommunautePratiqueBundle\Entity\Document $documents)
+    {
+        $this->documents->removeElement($documents);
+    }
+
+    /**
+     * Get documents
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getDocuments()
+    {
+        return $this->documents;
     }
 
 

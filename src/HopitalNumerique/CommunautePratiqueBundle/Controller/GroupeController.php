@@ -50,7 +50,7 @@ class GroupeController extends \Symfony\Bundle\FrameworkBundle\Controller\Contro
         {
             return $this->redirect( $this->generateUrl( 'hopitalnumerique_communautepratique_groupe_view', array( 'groupe' => $groupe->getId() ) ) );
         }
-        
+
         return $this->render('HopitalNumeriqueCommunautePratiqueBundle:Groupe:inscrit.html.twig', array(
             'groupe' => $groupe,
             'questionnaireOptions' => array(
@@ -75,7 +75,6 @@ class GroupeController extends \Symfony\Bundle\FrameworkBundle\Controller\Contro
             {
                 $user->addCommunautePratiqueGroupe($groupe);
                 $this->container->get('hopitalnumerique_user.manager.user')->save($user);
-                return $this->redirect( $this->generateUrl( 'hopitalnumerique_communautepratique_groupe_view', array( 'groupe' => $groupe->getId() ) ) );
             }
         }
 

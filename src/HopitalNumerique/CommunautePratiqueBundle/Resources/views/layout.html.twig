@@ -29,7 +29,7 @@
     {% endjavascripts %}
 {% endblock %}
 
-{% block title %}{{ block('title_communaute_pratique') }} - Communauté de pratiques - {{ parent() }}{% endblock %}
+{% block title %}{{ block('title_communaute_pratique')|striptags }} - Communauté de pratiques - {{ parent() }}{% endblock %}
 
 {% block body %}
 
@@ -50,7 +50,7 @@
 
         {% block body_communaute_pratique %}{% endblock body_communaute_pratique %}
 
-        {% include 'HopitalNumeriqueCommunautePratiqueBundle:include:sommaire.html.twig' %}
+        {% block communaute_pratique_sommaire %}{% include 'HopitalNumeriqueCommunautePratiqueBundle:include:sommaire.html.twig' %}{% endblock %}
 
     </div>
 

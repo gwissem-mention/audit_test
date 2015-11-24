@@ -32,8 +32,10 @@
                     <a class="button" onclick="Contact_Popup.display({{ groupe.animateurEmailsJson }}, '{{ path(app.request.get('_route')) }}', 'Je souhaite participer au groupe {{ groupe.titre|replace({ '\'':'\\\'', '"':'' }) }}');">Groupe complet contactez l'animateur</a>
                 {% elseif date('now') < groupe.dateInscriptionOuverture %}
                     <a class="button">Inscription dans <span class="jours-restants"><span>{{ groupe.nombreJoursRestantsAvantInscriptionOuverture }}</span> jour{{ groupe.nombreJoursRestantsAvantInscriptionOuverture > 1 ? 's' : '' }}</span></a>
-                {% else %}
+                {% elseif (app.user.hasCommunautePratiqueGroupe(groupe) == false) %}
                     <a class="button" href="{{ path('hopitalnumerique_communautepratique_groupe_inscrit', { 'groupe':groupe.id }) }}">Rejoindre ce groupe</a>
+                {% else %}
+                    <span class="button inactive">Vous êtes inscrit</span>
                 {% endif %}
             </div>
         </div>
@@ -52,5 +54,21 @@
             <em class="icon-help9"></em>
             Envoyer un message<br>à l'animateur du groupe
         </a>
+    </div>
+{% endmacro %}
+
+{% macro display_groupe_sommaire(groupe) %}
+    <div class="communaute-de-pratiques-sommaire">
+        <div class="row">
+            <div class="col-md-4">
+                <a href="{{ path('hopitalnumerique_communautepratique_document_listbygroupe', { 'groupe':groupe.id }) }}"><em class="icon icon-documents7"></em> Mes documents pour ce groupe</a>
+            </div>
+            <div class="col-md-4">
+                <a><em class="icon icon-social20"></em> Fiches des membres du groupe</a>
+            </div>
+            <div class="col-md-4">
+                <a href="{{ path('hopitalnumerique_communautepratique_accueil_index') }}"><em class="fa fa-arrow-left"></em> Retour à la communauté</a>
+            </div>
+        </div>
     </div>
 {% endmacro %}

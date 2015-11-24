@@ -10,6 +10,10 @@
     CREATE TABLE hn_communautepratique_groupe_user (group_id INT UNSIGNED NOT NULL, usr_id INT NOT NULL COMMENT 'ID de l utilisateur', INDEX IDX_305DA7BDFE54D947 (group_id), INDEX IDX_305DA7BDC69D3FB (usr_id), PRIMARY KEY(group_id, usr_id)) DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE = InnoDB;
     ALTER TABLE hn_communautepratique_groupe_user ADD CONSTRAINT FK_305DA7BDFE54D947 FOREIGN KEY (group_id) REFERENCES hn_communautepratique_groupe (group_id);
     ALTER TABLE hn_communautepratique_groupe_user ADD CONSTRAINT FK_305DA7BDC69D3FB FOREIGN KEY (usr_id) REFERENCES core_user (usr_id);
+    CREATE TABLE hn_communautepratique_document (doc_id INT UNSIGNED AUTO_INCREMENT NOT NULL, group_id INT UNSIGNED NOT NULL, usr_id INT NOT NULL COMMENT 'ID de l utilisateur', doc_nom VARCHAR(255) NOT NULL, doc_libelle VARCHAR(255) NOT NULL, doc_size INT NOT NULL COMMENT 'Taille du fichier en octet', INDEX IDX_E5FB67F7FE54D947 (group_id), INDEX IDX_E5FB67F7C69D3FB (usr_id), PRIMARY KEY(doc_id)) DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE = InnoDB;
+    ALTER TABLE hn_communautepratique_document ADD CONSTRAINT FK_E5FB67F7FE54D947 FOREIGN KEY (group_id) REFERENCES hn_communautepratique_groupe (group_id) ON DELETE CASCADE;
+    ALTER TABLE hn_communautepratique_document ADD CONSTRAINT FK_E5FB67F7C69D3FB FOREIGN KEY (usr_id) REFERENCES core_user (usr_id) ON DELETE CASCADE;
+    ALTER TABLE hn_communautepratique_document ADD doc_date_creation DATETIME NOT NULL;
 
     /* Droits */
     INSERT INTO `core_ressource` (`res_id`, `res_nom`, `res_pattern`, `res_order`, `res_type`) VALUES (NULL, 'BackOffice - Gestion de la communauté de pratiques', '/^\\/admin\\/communaute\\-de\\-pratiques/', '38', '2');
