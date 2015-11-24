@@ -90,6 +90,9 @@ security:
             anonymous: true
             context: application
 
+    access_decision_manager:
+         strategy: unanimous
+
     # On Gère rien ici, tout est authorisé en anonymous car les ACLs sont gérés depuis le NodevoAclBundle
     access_control:
         - { path: ^/contact, role: IS_AUTHENTICATED_ANONYMOUSLY }
