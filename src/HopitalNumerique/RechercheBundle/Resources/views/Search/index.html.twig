@@ -79,9 +79,8 @@
                             <div class="btn btn-xs btn-danger" onclick="cleanRequest();" >Réinitialiser</div>
                         <hr />
 
-                        <span><strong>Mes critères de recherche</strong></span>
                         <ol class="arbo-requete">
-                            {{ mySelf.buildTree(elements, 0, 'hide') }}
+                            {{ mySelf.buildTreeDest(elements, 0, 'hide') }}
                         </ol>
 
                         {# GME 05/01/15 : Les résultats du filtre ET la recherche textuelle doivent être cachés #}
@@ -96,6 +95,7 @@
 
                             <ol id="arbo-type-prod">
                             </ol>
+                            <div class="clearfix"></div>
                         </div>    
                     </div> 
 
@@ -202,6 +202,39 @@
                 <ol>
                     {% for child in element.childs %}
                         {{ mySelf.buildTree(child, level+1, class ) }}
+                    {% endfor %}
+                </ol>
+            {% endif %}
+        </li>
+    {% endfor %}
+{% endmacro %}
+
+{# Construit le système de parents > enfants des catégories #}
+{% macro buildTreeDest(elements, level, class) %}
+    {% if level == 0 and class == 'cliquable' %}
+        {% set liClass = '' %}
+    {% else %}
+        {% set liClass = class %}
+    {% endif %}
+
+    {% import _self as mySelf %}
+    {% for element in elements  %}
+        
+        {% if element.childs %}
+            <li class="{{liClass}} childs level{{level}} element-{{element.id}}" data-id="{{element.id}}" >
+        {% else %}
+            <li class="{{liClass}} level{{level}} element-{{element.id}}" data-id="{{element.id}}" >
+                <span>
+                    {{element.libelle}}
+                </span>
+        {% endif %}
+            {% if element.childs %}
+                {% if level == 2 and class == 'cliquable' %}
+                    <i class="fa fa-chevron-right pull-right"></i>
+                {% endif %}
+                <ol>
+                    {% for child in element.childs %}
+                        {{ mySelf.buildTreeDest(child, level+1, class ) }}
                     {% endfor %}
                 </ol>
             {% endif %}
