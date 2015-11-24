@@ -91,7 +91,7 @@ security:
             context: application
 
     access_decision_manager:
-        strategy: unanimous
+         strategy: unanimous
 
     # On Gère rien ici, tout est authorisé en anonymous car les ACLs sont gérés depuis le NodevoAclBundle
     access_control:

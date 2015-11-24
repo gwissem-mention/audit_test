@@ -1,5 +1,19 @@
-/**
- * Gestion du formulaire dans l'admin.
+$(document).ready(function() {
+	if ($('#hopitalnumerique_questionnaire_gestion_questionnaire_occurrenceMultiple').is(':checked')) {
+		$('#hopitalnumerique_questionnaire_gestion_questionnaire_lien').val("");
+		$('#hopitalnumerique_questionnaire_gestion_questionnaire_lien').prop('disabled', true);
+	} 
+	$("#hopitalnumerique_questionnaire_gestion_questionnaire_occurrenceMultiple").on( "click", function() {
+		if ($('#hopitalnumerique_questionnaire_gestion_questionnaire_occurrenceMultiple').is(':checked')) {
+			$('#hopitalnumerique_questionnaire_gestion_questionnaire_lien').val("");
+			$('#hopitalnumerique_questionnaire_gestion_questionnaire_lien').prop('disabled', true);
+		} else {
+			$('#hopitalnumerique_questionnaire_gestion_questionnaire_lien').prop('disabled', false);
+		} 
+	});
+});
+/** 
+* Gestion du formulaire dans l'admin.
  */
 var HopitalNumerique_QuestionnaireBundle_Form = function() {};
 
@@ -32,6 +46,7 @@ HopitalNumerique_QuestionnaireBundle_Form.checkOccurrenceMultipleForSubmit = fun
     {
         return confirm('Attention, seules les réponses de la première occurrence seront conservées.' + "\n" + 'Confirmez-vous l\'enregistrement ?')
     }
+    
     
     return true;
 };
