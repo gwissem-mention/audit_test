@@ -39,7 +39,7 @@ class ResultatController extends Controller
         $chapitres = $this->get('hopitalnumerique_autodiag.manager.resultat')->formateResultat( $resultat );
 
         $fileName = __ROOT_DIRECTORY__ . '/files/autodiag/' . $resultat->getPdf();
-        $fileExist = file_exists($fileName);
+        $fileExist = (null !== $resultat->getPdf()) ? file_exists($fileName) : false;
 
         return $this->render( 'HopitalNumeriqueAutodiagBundle:Resultat:detail.html.twig' , array(
             'resultat'  => $resultat,
