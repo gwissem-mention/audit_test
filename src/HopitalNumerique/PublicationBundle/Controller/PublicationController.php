@@ -562,11 +562,11 @@ class PublicationController extends Controller
             if( !is_null($one->getParent()) ) {
                 $parentId = $one->getParent()->getId();
                 //get Grand Parent if needed
-                if ( !in_array($parentId, array_keys($categs)) ){
+                if ( !in_array($parentId, array_keys($categs)) && !is_null($one->getParent()->getParent())){
                     $parentId = $one->getParent()->getParent()->getId();
 
                     //get Arrière Grand Parent if needed
-                    if ( !in_array($parentId, array_keys($categs)) )
+                    if ( !in_array($parentId, array_keys($categs)) && !is_null($one->getParent()->getParent()->getParent()))
                         $parentId = $one->getParent()->getParent()->getParent()->getId();
                 }
 
