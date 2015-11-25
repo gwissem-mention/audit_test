@@ -15,6 +15,21 @@ use Gedmo\Mapping\Annotation as Gedmo;
 class Document
 {
     /**
+     * @var array<string, string> Icones des documents par extension de fichier
+     */
+    public static $ICONES_BY_EXTENSION = array
+    (
+        'doc' => '<em class="icon-file-doc"></em>',
+        'docx' => '<em class="icon-file-docx"></em>',
+        'jpg' => '<em class="icon-file-jpg"></em>',
+        'jpeg' => '<em class="icon-file-jpg"></em>',
+        'pdf' => '<em class="icon-file-pdf"></em>',
+        'xls' => '<em class="icon-file-xls"></em>',
+        'xlsx' => '<em class="icon-file-xlsx"></em>'
+    );
+
+
+    /**
      * @var integer
      *
      * @ORM\Column(name="doc_id", type="integer", nullable=false, options={"unsigned":true})
@@ -274,15 +289,36 @@ class Document
 
 
     /**
+     * Retourne l'extension du document.
+     * 
+     * @return string|NULL Extension
+     */
+    private function getExtension()
+    {
+        if (false !== strpos($this->nom, '.'))
+        {
+            return substr( $this->nom, strrpos($this->nom, '.') + 1 );
+        }
+
+        return null;
+    }
+
+
+    /**
      * Retourne l'icône du document en HTML.
      * 
      * @return string Icône
      */
     public function getIconeHtml()
     {
+        if ( isset( self::$ICONES_BY_EXTENSION[ $this->getExtension() ] ) )
+        {
+            return self::$ICONES_BY_EXTENSION[$this->getExtension()];
+        }
+
         return '<em class="fa fa-file-o"></em>';
     }
-    
+
     /**
      * Retourne le libellé de la taille.
      * 

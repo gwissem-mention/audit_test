@@ -25,7 +25,8 @@ class DocumentController extends \Symfony\Bundle\FrameworkBundle\Controller\Cont
 
         return $this->render('HopitalNumeriqueCommunautePratiqueBundle:Document:listByGroupe.html.twig', array(
             'groupe' => $groupe,
-            'documents' => $this->container->get('hopitalnumerique_communautepratique.manager.document')->findBy(array('groupe' => $groupe, 'user' => $this->getUser()))
+            'documents' => $this->container->get('hopitalnumerique_communautepratique.manager.document')->findBy(array('groupe' => $groupe, 'user' => $this->getUser())),
+            'iconesByExtension' => Document::$ICONES_BY_EXTENSION
         ));
     }
 

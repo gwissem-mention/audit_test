@@ -39,9 +39,9 @@
 .icon-settings48:before{content:'\0055';}
 .icon-speaker15:before{content:'\0056';}
 .icon-upload119:before{content:'\0057';}
-.icon-file.doc:before{content:'\0058';}
-.icon-file.docx:before{content:'\0059';}
-.icon-file.jpg:before{content:'\005A';}
-.icon-file.pdf:before{content:'\0061';}
-.icon-file.xls:before{content:'\0062';}
-.icon-file.xlsx:before{content:'\0063';}
+.icon-file-doc:before{content:'\0058';}
+.icon-file-docx:before{content:'\0059';}
+.icon-file-jpg:before{content:'\005A';}
+.icon-file-pdf:before{content:'\0061';}
+.icon-file-xls:before{content:'\0062';}
+.icon-file-xlsx:before{content:'\0063';}

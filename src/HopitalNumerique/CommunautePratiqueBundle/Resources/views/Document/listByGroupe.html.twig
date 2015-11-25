@@ -19,6 +19,9 @@
         <script type="text/javascript" src="{{ asset_url }}"></script>
     {% endjavascripts %}
     <script type="text/javascript">
+        {%- for extension, icone in iconesByExtension -%}
+            CommunautePratique_Document.ICONES_BY_EXTENSION['{{ extension }}'] = '{{ icone|raw }}';
+        {%- endfor -%}
         $(document).ready(function() {
             CommunautePratique_Document.initFormulaireEnvoi({{ groupe.id }});
         });
@@ -52,23 +55,28 @@
                 Lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum.
                 <br><strong>La taille maximale des fichiers est de 5 Mo.</strong>
             </p>
-            <h2>Documents à envoyer</h2>
-            <div class="row files"></div>
 
-            <div class="fileupload-buttonbar">
+            <div class="bloc-envoi-documents">
+                <h2>Documents à envoyer</h2>
+                <div class="row files"></div>
 
-                <button type="submit" class="btn btn-primary start">Envoyer les fichiers choisis &nbsp; <i class="fa fa-upload"></i></button>
-                <button type="reset" class="btn btn-warning cancel">Annuler &nbsp; <i class="fa fa-times"></i></button>
-                <button type="button" class="btn btn-danger delete"><i class="glyphicon glyphicon-trash"></i> Delete</button>
-                <input class="toggle" type="checkbox">
+                <div class="fileupload-buttonbar">
 
-                <div class="fileupload-progress fade">
-                    <div class="progress progress-striped active" role="progressbar" aria-valuemin="0" aria-valuemax="100">
-                        <div class="progress-bar progress-bar-success" style="width:0%;"></div>
+                    <button type="submit" class="btn btn-primary start">Envoyer les fichiers choisis &nbsp; <i class="fa fa-upload"></i></button>
+                    <button type="reset" class="btn btn-warning cancel">Annuler &nbsp; <i class="fa fa-times"></i></button>
+                    <button type="button" class="btn btn-danger delete"><i class="glyphicon glyphicon-trash"></i> Delete</button>
+                    <input class="toggle" type="checkbox">
+
+                    <div class="fileupload-progress fade">
+                        <div class="progress progress-striped active" role="progressbar" aria-valuemin="0" aria-valuemax="100">
+                            <div class="progress-bar progress-bar-success" style="width:0%;"></div>
+                        </div>
+                        <div class="progress-extended">&nbsp;</div>
                     </div>
-                    <div class="progress-extended">&nbsp;</div>
+
                 </div>
             </div>
+
         </form>
 
         <script id="template-upload" type="text/x-tmpl">{{ '

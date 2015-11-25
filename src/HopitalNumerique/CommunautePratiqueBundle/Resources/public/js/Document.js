@@ -4,6 +4,12 @@
 var CommunautePratique_Document = function() {};
 
 
+/**
+ * @var array<string, string> Icones des documents par extension de fichier
+ */
+CommunautePratique_Document.ICONES_BY_EXTENSION = {};
+
+
 $(document).ready(function() {
     CommunautePratique_Document.init();
 });
@@ -27,6 +33,29 @@ CommunautePratique_Document.initFormulaireEnvoi = function(groupeId)
         url: Routing.generate('hopitalnumerique_communautepratique_document_upload', { groupe:groupeId }),
         singleFileUploads: false,
         maxFileSize: 5 * 1024 * 1024, // 5 Mo
+        added: function(e, data) {
+            
+            //<-- Affichage de l'icône personnalisé si existant
+            $.each($('.template-upload'), function(i, element) {
+                var nomDocument = $(element).find('.name').html().trim();
+
+                if (nomDocument.indexOf('.') > -1)
+                {
+                    var extension = nomDocument.substr(nomDocument.lastIndexOf('.') + 1);
+
+                    if (CommunautePratique_Document.ICONES_BY_EXTENSION[extension] !== undefined)
+                    {
+                        $(element).find('.icone').html(CommunautePratique_Document.ICONES_BY_EXTENSION[extension]);
+                    }
+                }
+            });
+            //-->
+
+            if ('none' == $('.bloc-envoi-documents').css('display'))
+            {
+                $('.bloc-envoi-documents').show('blind', {}, 100);
+            }
+        },
         done: function () {
             window.location = Routing.generate('hopitalnumerique_communautepratique_document_listbygroupe', { groupe:groupeId });
         }
