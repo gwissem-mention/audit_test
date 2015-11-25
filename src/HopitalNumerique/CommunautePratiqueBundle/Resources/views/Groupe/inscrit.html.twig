@@ -10,11 +10,12 @@
 {% block body_communaute_pratique %}
 
     {{ groupe.descriptionHtml|raw }}
+    <br><br>
     
     {{ render(controller('HopitalNumeriqueQuestionnaireBundle:Questionnaire:editFront', { 'user':app.user , 'questionnaire':groupe.questionnaire, 'optionRenderForm' :questionnaireOptions  } )) }}
     
     <div class="text-right">
-        <button type="button" onclick="$('#do').val('save-close');$('form').submit();" class="btn btn-success">Valider</button>
+        <button type="button" onclick="$('#do').val('save-close');$('form').submit();" class="btn btn-success">Rejoindre le groupe</button>
     </div>
 
 {% endblock %}
