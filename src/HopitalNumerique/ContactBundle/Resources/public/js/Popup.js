@@ -13,11 +13,6 @@ var Contact_Popup = function() {};
  */
 Contact_Popup.display = function(adressesElectroniques, urlRedirection, objet)
 {
-    if ($('#contact-popup').size() > 0)
-    {
-        $('#contact-popup').remove();
-    }
-
     $.ajax({
         url: '/contact/popup',
         data: {
@@ -29,12 +24,17 @@ Contact_Popup.display = function(adressesElectroniques, urlRedirection, objet)
         dataType: 'html',
         success: function(data)
         {
-            $('body').prepend(data);
-            $('#contact-popup').modal({
-                show: true,
-                keyboard: false
+            $.fancybox({
+                content: data,
+                autoSize: false,
+                autoHeight: true,
+                width: 600,
+                afterShow:function() {
+                    $('#contact-popup form').validationEngine({
+                        promptPosition: 'bottomLeft'
+                    });
+                }
             });
-            $('#contact-popup form').validationEngine();
         }
     });
 };

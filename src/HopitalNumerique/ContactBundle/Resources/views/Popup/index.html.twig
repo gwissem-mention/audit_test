@@ -1,36 +1,29 @@
-<div class="modal fade" id="contact-popup" tabindex="-1" role="dialog" aria-labelledby="contact-popup-label">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title" id="contact-popup-label">Envoi d'un message</h4>
+<div id="contact-popup">
+
+    <h4 class="violet" id="contact-popup-label">Envoi d'un message</h4>
+
+    {{ form_start(contactForm, { 'action':path('hopitalnumerique_contact_popup_submit'), 'attr':{ 'novalidate':'novalidate' } }) }}
+
+        <div class="form_vertical_row">
+            <div class="form-group">
+                <div class="col-md-12">
+                    <label>Destinataire{{ destinataires|length > 1 ? 's' : '' }}</label>
+                </div>
+                <div class="col-md-12">
+                    {%- for destinataireAdresse, destinataireNom in destinataires -%}
+                        <div>{{ destinataireNom }}</div>
+                    {%- endfor -%}
+                </div>
             </div>
-            {{ form_start(contactForm, { 'action':path('hopitalnumerique_contact_popup_submit'), 'attr':{ 'novalidate':'novalidate' } }) }}
-                <div class="modal-body">
-
-                    <div class="form_vertical_row">
-                        <div class="form-group">
-                            <div class="col-md-12">
-                                <label>Destinataire{{ destinataires|length > 1 ? 's' : '' }}</label>
-                            </div>
-                            <div class="col-md-12">
-                                {%- for destinataireAdresse, destinataireNom in destinataires -%}
-                                    <div>{{ destinataireNom }}</div>
-                                {%- endfor -%}
-                            </div>
-                        </div>
-                        <div class="clearfix"></div>
-                    </div>
-                    
-                    {{ form_row(contactForm.objet) }}
-                    {{ form_row(contactForm.message) }}
-
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-dismiss="modal"><em class="fa fa-times"></em> &nbsp; Annuler</button>
-                    <button type="submit" class="btn btn-primary"><em class="fa fa-envelope"></em> &nbsp; Envoyer</button>
-                </div>
-            {{ form_end(contactForm) }}
+            <div class="clearfix"></div>
         </div>
-    </div>
+
+        {{ form_row(contactForm.objet) }}
+        {{ form_row(contactForm.message) }}
+
+        <div class="pull-right">
+            <button type="submit" class="btn btn-primary"><em class="fa fa-envelope"></em> &nbsp; Envoyer</button>
+        </div>
+    {{ form_end(contactForm) }}
+
 </div>
