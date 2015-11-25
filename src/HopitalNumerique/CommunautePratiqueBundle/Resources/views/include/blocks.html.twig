@@ -23,7 +23,7 @@
             <div class="col-sm-3">
                 <p>
                     Places restantes
-                    <br><strong>{{ groupe.animateurs|length }} sur {{ groupe.nombreParticipantsMaximum }}</strong>
+                    <br><strong>{{ groupe.nombrePlacesRestantes }} sur {{ groupe.nombreParticipantsMaximum }}</strong>
                 </p>
                 <div class="places-progression hidden-xs" id="places-progression-barre-{{ groupe.id }}"><div class="contenu"></div></div>
                 {% if date('now') >= groupe.dateDemarrage %} {# Groupes en cours #}
@@ -32,7 +32,7 @@
                     {% else %}
                         <a class="button" onclick="Contact_Popup.display({{ groupe.animateurEmailsJson }}, '{{ path(app.request.get('_route')) }}', 'Je souhaite participer au groupe {{ groupe.titre|replace({ '\'':'\\\'', '"':'' }) }}');">Groupe démarré contactez l'administrateur</a>
                     {% endif %}
-                {% elseif groupe.animateurs|length >= groupe.nombreParticipantsMaximum %}
+                {% elseif groupe.users|length >= groupe.nombreParticipantsMaximum %}
                     <a class="button" onclick="Contact_Popup.display({{ groupe.animateurEmailsJson }}, '{{ path(app.request.get('_route')) }}', 'Je souhaite participer au groupe {{ groupe.titre|replace({ '\'':'\\\'', '"':'' }) }}');">Groupe complet contactez l'animateur</a>
                 {% elseif date('now') < groupe.dateInscriptionOuverture %}
                     <a class="button">Inscription dans <span class="jours-restants"><span>{{ groupe.nombreJoursRestantsAvantInscriptionOuverture }}</span> jour{{ groupe.nombreJoursRestantsAvantInscriptionOuverture > 1 ? 's' : '' }}</span></a>
@@ -47,7 +47,7 @@
     <script type="text/javascript">
         $(document).ready(function() {
             CommunautePratique_Groupe_DateProgression.displayProgression({{ groupe.id }}, {{ groupe.dateInscriptionOuverture|date('U') }}, {{ groupe.dateDemarrage|date('U') }}, {{ groupe.dateFin|date('U') }});
-            CommunautePratique_Groupe_PlaceProgression.displayProgression({{ groupe.id }}, {{ groupe.nombreParticipantsMaximum }}, {{ groupe.animateurs|length }});
+            CommunautePratique_Groupe_PlaceProgression.displayProgression({{ groupe.id }}, {{ groupe.nombreParticipantsMaximum }}, {{ groupe.users|length }});
         });
     </script>
 {% endmacro %}

@@ -518,6 +518,18 @@ class Groupe
 
 
     /**
+     * Retourne le nombre de places restantes.
+     * 
+     * @return integer Nombre de places restantes
+     */
+    public function getNombrePlacesRestantes()
+    {
+        $nombrePlacesRestantes = $this->nombreParticipantsMaximum - count($this->users);
+        
+        return ($nombrePlacesRestantes > 0 ? $nombrePlacesRestantes : 0);
+    }
+
+    /**
      * Retourne le nombre de jours qu'il reste avant l'ouverture des inscriptions.
      * 
      * @return integer Nombre de jours
