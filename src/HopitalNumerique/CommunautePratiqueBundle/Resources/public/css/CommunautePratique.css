@@ -1,4 +1,4 @@
-.body-communaute-pratique {}
+.body-communaute-pratique { padding: 0 15px; }
     .body-communaute-pratique h1 { color: #dd3157;font-size: 23px;font-weight: bold;margin-bottom: 30px; }
         .body-communaute-pratique h1 .subtitle { color: #000;font-size: 20px;font-weight: normal; }
 

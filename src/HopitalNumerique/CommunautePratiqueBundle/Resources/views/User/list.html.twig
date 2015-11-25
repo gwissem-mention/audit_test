@@ -25,24 +25,22 @@
         <div class="communaute-de-pratiques-annuaire-filtres">
             {{ form_start(rechercheForm) }}
                 <div class="row">
-                    <div class="col-md-4">
+                    <div class="col-md-4 col-sm-6 filtre">
                         {{ form_widget(rechercheForm.nom) }}
                     </div>
-                    <div class="col-md-4">
+                    <div class="col-md-4 col-sm-6 filtre">
                         {{ form_widget(rechercheForm.profilEtablissementSante) }}
                     </div>
-                    <div class="col-md-4">
+                    <div class="col-md-4 col-sm-6 filtre">
                         {{ form_widget(rechercheForm.region) }}
                     </div>
-                </div>
-                <div class="row">
-                    <div class="col-md-4">
+                    <div class="col-md-4 col-sm-6 filtre">
                         {{ form_widget(rechercheForm.statutEtablissementSante) }}
                     </div>
-                    <div class="col-md-4">
+                    <div class="col-md-4 col-sm-6 filtre">
                         {{ form_widget(rechercheForm.typeActivite) }}
                     </div>
-                    <div class="col-md-4">
+                    <div class="col-md-4 col-sm-6 filtre">
                         <button type="submit" class="btn btn-success">Filtrer les membres</button>
                     </div>
                 </div>
@@ -53,7 +51,7 @@
             <div class="row">
                 
                 {% for membre in pagerFantaMembres.currentPageResults %}
-                    <div class="col-md-3">
+                    <div class="col-md-3 col-sm-6">
                         <div class="user">
                             <div class="identite">
                                 <div class="illustration"><img src="{{ asset(membre.avatarWebPath) }}"></div>
