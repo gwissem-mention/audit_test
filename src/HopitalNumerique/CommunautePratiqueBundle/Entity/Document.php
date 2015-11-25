@@ -262,7 +262,7 @@ class Document
      * 
      * @return string Pathname
      */
-    private function getPathname()
+    public function getPathname()
     {
         return $this->getPath().DIRECTORY_SEPARATOR.$this->nom;
     }

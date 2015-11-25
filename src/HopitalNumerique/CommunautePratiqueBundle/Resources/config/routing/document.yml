@@ -5,6 +5,13 @@ hopitalnumerique_communautepratique_document_listbygroupe:
     requirements:
         groupe: \d+
 
+hopitalnumerique_communautepratique_document_download:
+    pattern: /document/{document}/download
+    defaults: { _controller: "HopitalNumeriqueCommunautePratiqueBundle:Document:download" }
+    methods: GET
+    requirements:
+        document: \d+
+
 hopitalnumerique_communautepratique_document_upload:
     pattern: /groupe/{groupe}/upload
     defaults: { _controller: "HopitalNumeriqueCommunautePratiqueBundle:Document:upload" }

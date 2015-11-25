@@ -49,7 +49,7 @@ class DocumentController extends \Symfony\Bundle\FrameworkBundle\Controller\Cont
 
         return new JsonResponse($response);
     }
-    
+
     /**
      * Enregistre le document chargé par l'utilisateur.
      * 
@@ -83,6 +83,25 @@ class DocumentController extends \Symfony\Bundle\FrameworkBundle\Controller\Cont
 
         $this->container->get('session')->getFlashBag()->add('danger', 'Document "'.$uploadedFile->getClientOriginalName().'" non enregistré.');
         return array($uploadedFile->getClientOriginalName() => false); // Échec
+    }
+
+    /**
+     * Télécharge le document.
+     */
+    public function downloadAction(Document $document)
+    {
+        $options = array(
+            'serve_filename' => $document->getNom(),
+            'absolute_path'  => true,
+            'inline'         => false
+        );
+    
+        if (file_exists('../'.$document->getPathname()))
+        {
+            return $this->container->get('igorw_file_serve.response_factory')->create('../'.$document->getPathname(), 'application/force-download', $options);
+        }
+        
+        return $this->redirect($this->generateUrl('hopital_numerique_homepage'));
     }
 
     /**
