@@ -7,11 +7,9 @@
         <div class="form_vertical_row">
             <div class="form-group">
                 <div class="col-md-12">
-                    <label>Destinataire{{ destinataires|length > 1 ? 's' : '' }}</label>
-                </div>
-                <div class="col-md-12">
+                    <label>Destinataire{{ destinataires|length > 1 ? 's' : '' }}</label> :
                     {%- for destinataireAdresse, destinataireNom in destinataires -%}
-                        <div>{{ destinataireNom }}</div>
+                        {{ destinataireNom }}{{ loop.last ? '' : ', ' }}
                     {%- endfor -%}
                 </div>
             </div>

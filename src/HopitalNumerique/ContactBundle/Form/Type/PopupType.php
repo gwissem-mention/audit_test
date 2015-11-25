@@ -21,6 +21,11 @@ class PopupType extends AbstractType
     private $mailer;
 
     /**
+     * @var \Twig_Environment 
+     */
+    private $twig;
+
+    /**
      * @var \HopitalNumerique\UserBundle\Entity\User Utilisateur connecté
      */
     private $user;
@@ -29,9 +34,10 @@ class PopupType extends AbstractType
     /**
      * Constructeur.
      */
-    public function __construct(SecurityContextInterface $securityContext, \Swift_Mailer $mailer)
+    public function __construct(SecurityContextInterface $securityContext, \Swift_Mailer $mailer, \Twig_Environment $twig)
     {
         $this->mailer = $mailer;
+        $this->twig = $twig;
 
         $this->user = (null !== $securityContext->getToken() ? ($securityContext->getToken()->getUser() instanceof User ? $securityContext->getToken()->getUser() : null) : null);
     }
@@ -96,18 +102,26 @@ class PopupType extends AbstractType
     private function sendCourriel(FormInterface $form)
     {
         $swiftMessage = \Swift_Message::newInstance();
-        
+        $bodyHtml = $this->twig->loadTemplate('NodevoMailBundle::template.mail.html.twig')->render(array('content' => $form->get('message')->getData()));
+        $bodyTxt = $this->twig->loadTemplate('NodevoMailBundle::template.mail.txt.twig')->render(array('content' => $form->get('message')->getData()));
+
         $swiftMessage
             ->setSubject($form->get('objet')->getData())
-            ->setBody($form->get('message')->getData())
+            ->setBody($bodyTxt)
+            ->addPart( $bodyHtml, 'text/html' )
         ;
+
+        if (null !== $this->user)
+        {
+            $swiftMessage->addFrom($this->user->getEmail(), $this->user->getAppellation());
+        }
 
         foreach (json_decode($form->get('destinataires')->getData()) as $destinataireAdresseElectronique => $destinataireNom)
         {
             $swiftMessage->addTo($destinataireAdresseElectronique, $destinataireNom);
         }
 
-        $swiftMessage->setSender($this->user->getEmail(), $this->user->getUsername());
+        $swiftMessage->setSender( $this->user->getEmail(), $this->user->getUsername() );
 
         $this->mailer->send($swiftMessage);
     }

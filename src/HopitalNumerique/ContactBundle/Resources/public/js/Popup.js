@@ -13,6 +13,9 @@ var Contact_Popup = function() {};
  */
 Contact_Popup.display = function(adressesElectroniques, urlRedirection, objet)
 {
+    var loader = $('body').nodevoLoader();
+    loader.start();
+    
     $.ajax({
         url: '/contact/popup',
         data: {
@@ -29,6 +32,9 @@ Contact_Popup.display = function(adressesElectroniques, urlRedirection, objet)
                 autoSize: false,
                 autoHeight: true,
                 width: 600,
+                afterLoad:function() {
+                    loader.finished();
+                },
                 afterShow:function() {
                     $('#contact-popup form').validationEngine({
                         promptPosition: 'bottomLeft'

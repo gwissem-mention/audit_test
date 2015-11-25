@@ -21,6 +21,6 @@ services:
             - { name: form.type, alias: hopital_numerique_contact_contact }
     hopital_numerique_contact.form.type.popup:
         class: HopitalNumerique\ContactBundle\Form\Type\PopupType
-        arguments: ["@security.context", "@mailer"]
+        arguments: ['@security.context', '@mailer', '@twig']
         tags:
             - { name: form.type, alias: hopitalnumerique_contactbundle_popup }
