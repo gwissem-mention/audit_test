@@ -12,11 +12,17 @@
 {% block javascripts %}
     {{ parent() }}
     {% javascripts output="compiled/hopitalnumerique-communautepratique-document-listbygroupe.js"
+        'bundles/hopitalnumeriquecommunautepratique/js/Document.js'
         '%kernel.root_dir%/Resources/components/blueimp-tmpl/js/tmpl.min.js'
         '@jquery_file_upload_js'
     %}
         <script type="text/javascript" src="{{ asset_url }}"></script>
     {% endjavascripts %}
+    <script type="text/javascript">
+        $(document).ready(function() {
+            CommunautePratique_Document.initFormulaireEnvoi({{ groupe.id }});
+        });
+    </script>
 {% endblock %}
 
 {% block title_communaute_pratique %}Groupe de travail <span class="subtitle">{{ groupe }} - Porte-documents</span>{% endblock %}
@@ -138,68 +144,13 @@
             {% } %}
         '}}</script>
 
-
-        <script type="text/javascript">
-            $(function () {
-        'use strict';
-
-        // Initialize the jQuery File Upload widget:
-        $('#fileupload').fileupload({
-            // Uncomment the following to send cross-domain cookies:
-            //xhrFields: {withCredentials: true},
-            url: '{{ path('hopitalnumerique_communautepratique_document_upload', { 'groupe':groupe.id }) }}',
-            maxFileSize: 5 * 1024 * 1024, // 5 Mo
-            done: function (e, data) {
-                alert(1)
-            }
-        });
-
-        // Enable iframe cross-domain access via redirect option:
-        /*$('#fileupload').fileupload(
-            'option',
-            'redirect',
-            window.location.href.replace(
-                /\/[^\/]*$/,
-                '/cors/result.html?%s'
-            )
-        );*/
-
-            // Load existing files:
-            /*$('#fileupload').addClass('fileupload-processing');
-            $.ajax({
-                // Uncomment the following to send cross-domain cookies:
-                //xhrFields: {withCredentials: true},
-                url: $('#fileupload').fileupload('option', 'url'),
-                dataType: 'json',
-                context: $('#fileupload')[0]
-            }).always(function () {
-                $(this).removeClass('fileupload-processing');
-            }).done(function (result) {
-                $(this).fileupload('option', 'done')
-                    .call(this, $.Event('done'), {result: result});
-            });*/
-
-
-    });
-        </script>
-
         <h2>Porte-documents</h2>
         
-        <!--<div class="row">
+        <div class="row">
             {% for document in documents %}
-                <div class="col-md-3">
-                    <div class="communaute-de-pratiques-document">
-                        <div class="icone">
-                            {{ document.iconeHtml|raw }}
-                        </div>
-                        <div class="contenu">
-                            <div class="nom">{{ document }} <span class="size">{{ document.sizeLibelle }}</span></div>
-                            <div class="date">Déposé le <span>{{ date|date('d/m/Y') }}</span></div>
-                        </div>
-                    </div>
-                </div>
+                {{ communaute_pratique.display_bloc_document(document) }}
             {% endfor %}
-        </div>-->
+        </div>
 
     </div>
 

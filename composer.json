@@ -60,7 +60,8 @@
         "codeconsortium/ccdn-component-bb-code-bundle" : "dev-master",
         "phpoffice/phpexcel"                           : "1.8.0",
         "liuggio/excelbundle"                          : "~2.0",
-        "eko/feedbundle"                               : "1.2.*"
+        "eko/feedbundle"                               : "1.2.*",
+        "friendsofsymfony/jsrouting-bundle"            : "1.5.*"
     },
     "scripts": {
         "post-install-cmd": [

@@ -44,12 +44,14 @@
                 "@enquire_js"
                 "@fancybox_js"  
                 "@json_js"
+                'bundles/fosjsrouting/js/router.js'
                 'bundles/hopitalnumeriquecore/js/script.js'
                 'bundles/hopitalnumeriquecore/js/recherche.js'
                 'bundles/nodevoadmin/plugins/nodevoLoader/nodevoLoader.js'
             %}
                 <script type="text/javascript" src="{{ asset_url }}"></script>
             {% endjavascripts %}
+            <script src="{{ path('fos_js_routing_js', {"callback": "fos.Router.setData"}) }}"></script>
             {% if app.debug %}
                 {% javascripts output="compiled/nodevo-debogage.js"
                     'bundles/nodevotools/js/Debogage.js'

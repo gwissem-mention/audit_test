@@ -65,6 +65,7 @@
     .communaute-de-pratiques-bloc-publications a:hover { text-decoration: none; }
         .communaute-de-pratiques-bloc-publications a em { display: block;font-size: 40px;margin: 0 0 10px; }
 
+/* Porte-documents (formulaire) */
 .communaute-de-pratiques-documents {}
     .communaute-de-pratiques-documents h2 { color: #777;font-size: 13px;font-weight: bold;text-align: right;text-transform: uppercase; }
     .communaute-de-pratiques-documents .description { font-size: 12px; }
@@ -81,3 +82,15 @@
         .communaute-de-pratiques-documents .fileupload-buttonbar .delete { display: none; }
         .communaute-de-pratiques-documents .fileupload-buttonbar .toggle { display: none; }
         .communaute-de-pratiques-documents .fileupload-buttonbar .fileupload-progress { display: none; }
+
+/* Petit bloc d'un document' */
+.communaute-de-pratiques-document { border-color: #e6e6e6;border-style: solid;border-width: 1px;height: 72px;margin: 10px 0; }
+    .communaute-de-pratiques-document .icone { float: left;font-size: 50px;text-align: center;width: 68px; }
+    .communaute-de-pratiques-document .contenu { margin: 0 0 0 68px;padding: 16px 0 0; }
+        .communaute-de-pratiques-document .contenu .nom { font-weight: bold;height: 19px;overflow: hidden; }
+            .communaute-de-pratiques-document .contenu .nom .size { color: #de0035;font-weight: normal; }
+        .communaute-de-pratiques-document .contenu .date {}
+            .communaute-de-pratiques-document .contenu .date span { color: #de0035; }
+    .communaute-de-pratiques-document .delete { bottom: 16px;position: absolute;right: 21px; }
+        .communaute-de-pratiques-document .delete a { border-color: #e6e6e6;border-style: solid;border-width: 1px;color: #777;cursor: pointer;display: block;padding: 0 5px; }
+

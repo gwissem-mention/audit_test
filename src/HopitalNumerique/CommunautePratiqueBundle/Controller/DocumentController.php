@@ -1,6 +1,7 @@
 <?php
 namespace HopitalNumerique\CommunautePratiqueBundle\Controller;
 
+use HopitalNumerique\CommunautePratiqueBundle\Entity\Document;
 use HopitalNumerique\CommunautePratiqueBundle\Entity\Groupe;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -68,8 +69,9 @@ class DocumentController extends \Symfony\Bundle\FrameworkBundle\Controller\Cont
             $nouveauDocument->setSize($documentFichier->getSize());
             $nouveauDocument->setGroupe($groupe);
             $nouveauDocument->setUser($this->getUser());
-
             $this->container->get('hopitalnumerique_communautepratique.manager.document')->save($nouveauDocument);
+            
+            $this->container->get('session')->getFlashBag()->add('success', 'Document "'.$uploadedFile->getClientOriginalName().'" enregistré.');
             return array
             (
                 $uploadedFile->getClientOriginalName() => true,
@@ -78,6 +80,21 @@ class DocumentController extends \Symfony\Bundle\FrameworkBundle\Controller\Cont
             );
         }
 
+        $this->container->get('session')->getFlashBag()->add('danger', 'Document "'.$uploadedFile->getClientOriginalName().'" non enregistré.');
         return array($uploadedFile->getClientOriginalName() => false); // Échec
+    }
+
+    /**
+     * Supprime un document.
+     */
+    public function deleteAction(Document $document)
+    {
+        if ($this->container->get('hopitalnumerique_communautepratique.dependency_injection.security')->canDeleteDocument($document))
+        {
+            $this->container->get('hopitalnumerique_communautepratique.manager.document')->delete($document);
+            return new JsonResponse(array('success' => true));
+        }
+        
+        return new JsonResponse(array('success' => false));
     }
 }

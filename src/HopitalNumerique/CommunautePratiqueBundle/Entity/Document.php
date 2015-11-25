@@ -10,6 +10,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
  * 
  * @ORM\Entity()
  * @ORM\Table(name="hn_communautepratique_document")
+ * @ORM\HasLifecycleCallbacks()
  */
 class Document
 {
@@ -228,6 +229,47 @@ class Document
     public function __toString()
     {
         return $this->libelle;
+    }
+
+
+    /**
+     * Retourne le chemin du dossier.
+     * 
+     * @return string Path
+     */
+    private function getPath()
+    {
+        return 'files'.DIRECTORY_SEPARATOR.'communaute-de-pratiques'.DIRECTORY_SEPARATOR.'documents';
+    }
+
+    /**
+     * Retourne le chemin du fichier.
+     * 
+     * @return string Pathname
+     */
+    private function getPathname()
+    {
+        return $this->getPath().DIRECTORY_SEPARATOR.$this->nom;
+    }
+
+
+    /**
+     * @ORM\PreRemove()
+     */
+    public function preRemove()
+    {
+        $this->deleteFichier();
+    }
+
+    /**
+     * Supprime le fichier du serveur.
+     */
+    private function deleteFichier()
+    {
+        if ( file_exists( '..'.DIRECTORY_SEPARATOR.$this->getPathname() ) )
+        {
+            unlink('..'.DIRECTORY_SEPARATOR.$this->getPathname());
+        }
     }
 
 

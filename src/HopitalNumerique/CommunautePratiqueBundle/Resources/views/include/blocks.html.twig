@@ -72,3 +72,18 @@
         </div>
     </div>
 {% endmacro %}
+
+{% macro display_bloc_document(document) %}
+    <div class="col-md-3" data-communaute-pratique-document-id="{{ document.id }}">
+        <div class="communaute-de-pratiques-document">
+            <div class="delete"><a onclick="CommunautePratique_Document.delete({{ document.id }});"><em class="fa fa-trash-o"></em></a></div>
+            <div class="icone">
+                {{ document.iconeHtml|raw }}
+            </div>
+            <div class="contenu">
+                <div class="nom"><span title="{{ document }}">{{ document|truncate(15) }}</span> <span class="size">{{ document.sizeLibelle }}</span></div>
+                <div class="date">Déposé le <span>{{ document.dateCreation|date('d/m/Y') }}</span></div>
+            </div>
+        </div>
+    </div>
+{% endmacro %}
