@@ -26,8 +26,12 @@
                     <br><strong>{{ groupe.animateurs|length }} sur {{ groupe.nombreParticipantsMaximum }}</strong>
                 </p>
                 <div class="places-progression hidden-xs" id="places-progression-barre-{{ groupe.id }}"><div class="contenu"></div></div>
-                {% if date('now') >= groupe.dateDemarrage %}
-                    <a class="button" onclick="Contact_Popup.display({{ groupe.animateurEmailsJson }}, '{{ path(app.request.get('_route')) }}', 'Je souhaite participer au groupe {{ groupe.titre|replace({ '\'':'\\\'', '"':'' }) }}');">Groupe démarré contactez l'administrateur</a>
+                {% if date('now') >= groupe.dateDemarrage %} {# Groupes en cours #}
+                    {% if (app.user.hasCommunautePratiqueGroupe(groupe)) %}
+                        <a class="button" href="{{ path('hopitalnumerique_communautepratique_groupe_view', { groupe: groupe.id }) }}">Travailler dans ce groupe</a>
+                    {% else %}
+                        <a class="button" onclick="Contact_Popup.display({{ groupe.animateurEmailsJson }}, '{{ path(app.request.get('_route')) }}', 'Je souhaite participer au groupe {{ groupe.titre|replace({ '\'':'\\\'', '"':'' }) }}');">Groupe démarré contactez l'administrateur</a>
+                    {% endif %}
                 {% elseif groupe.animateurs|length >= groupe.nombreParticipantsMaximum %}
                     <a class="button" onclick="Contact_Popup.display({{ groupe.animateurEmailsJson }}, '{{ path(app.request.get('_route')) }}', 'Je souhaite participer au groupe {{ groupe.titre|replace({ '\'':'\\\'', '"':'' }) }}');">Groupe complet contactez l'animateur</a>
                 {% elseif date('now') < groupe.dateInscriptionOuverture %}
