@@ -15,6 +15,11 @@ $(document).ready(function() {
 CommunautePratique.init = function()
 {
     $('form.toValidate').validationEngine();
+    $('.fancybox').fancybox({
+        autoSize: false,
+        autoDimensions: false,
+        width : 600
+    });
 };
 
 

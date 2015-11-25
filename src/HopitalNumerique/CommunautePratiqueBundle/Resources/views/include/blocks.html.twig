@@ -4,7 +4,7 @@
             <div class="col-sm-9">
                 <h2>{{ groupe.titre }}</h2>
                 <p>
-                    {{ groupe.descriptionCourte }}.. <a>En savoir plus</a>
+                    {{ groupe.descriptionCourte }} <a class="fancybox fancybox.ajax" href="{{ path('hopitalnumerique_communautepratique_groupe_panelinformations', { 'groupe':groupe.id }) }}">En savoir plus</a>
                 </p>
                 <div class="progression hidden-xs">
                     <div class="dates">

@@ -80,4 +80,18 @@ class GroupeController extends \Symfony\Bundle\FrameworkBundle\Controller\Contro
 
         return $this->redirect($this->generateUrl('hopitalnumerique_communautepratique_groupe_list'));
     }
+
+    /**
+     * Contenu de la fenêtre "En savoir plus sur un groupe".
+     */
+    public function panelInformationsAction(Groupe $groupe)
+    {
+        return $this->render(
+            'HopitalNumeriqueCommunautePratiqueBundle:Groupe:panelInformations.html.twig',
+            array
+            (
+                'groupe' => $groupe
+            )
+        );
+    }
 }

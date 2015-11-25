@@ -23,3 +23,10 @@ hopitalnumerique_communautepratique_groupe_validinscription:
     methods: GET
     requirements:
         groupe: \d+
+
+hopitalnumerique_communautepratique_groupe_panelinformations:
+    pattern: /{groupe}/panel-informations
+    defaults: { _controller: 'HopitalNumeriqueCommunautePratiqueBundle:Groupe:panelInformations' }
+    methods: GET
+    requirements:
+        groupe: \d+
