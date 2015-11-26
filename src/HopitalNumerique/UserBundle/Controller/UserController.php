@@ -852,7 +852,6 @@ class UserController extends Controller
             $form->remove('biographie');
             $form->remove('domaines');
             $form->remove('raisonDesinscription');
-            $form->remove('file');
             $form->remove('roles');
         }
         

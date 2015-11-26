@@ -2119,6 +2119,11 @@ class User extends BaseUser
     */
     public function getAvatarWebPath()
     {
+        if (null !== $this->path)
+        {
+            return '/'.$this->getWebPath();
+        }
+        
         if (null !== $this->civilite && Reference::CIVILITE_MADAME_ID == $this->civilite->getId())
         {
             return '/bundles/hopitalnumeriqueuser/img/madame.png';
