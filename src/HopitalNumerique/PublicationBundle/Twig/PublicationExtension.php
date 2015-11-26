@@ -24,26 +24,18 @@ class PublicationExtension extends \Twig_Extension
     public function getFilters()
     {
         return array(
-            'parsePublication' => new \Twig_Filter_Method($this, 'parsePublication')
+            'parsePublication' => new \Twig_Filter_Method($this, 'parsePublication'),
+            'alignBreadcrumbs' => new \Twig_Filter_Method($this, 'alignBreadcrumbs'),
         );
     }
 
-    /**
-     * to assci
-     */
-    private function toascii($string)
+    public function alignBreadcrumbs($breadcrumbs)
     {
-        if(!empty($string)){
-            $string = str_replace('œ', 'oe', $string);
-            $string = str_replace("’", "'", $string);
-            $tempo = utf8_decode($string);
-            $string = '';
-            foreach (str_split($tempo) as $obj)
-            {
-                $string .= '&#' . ord($obj) . ';';
-            }
-         }
-         return $string;
+        $indexBreadcrumbs = explode(' ', $breadcrumbs);
+
+        $margin = 15 * (substr_count($indexBreadcrumbs[0], '.') - 1);
+
+        return $margin;
     }
 
     /**
@@ -242,6 +234,24 @@ class PublicationExtension extends \Twig_Extension
         $content = strtr($content,array(" " =>" "));
 
         return $content;
+    }
+
+    /**
+     * to assci
+     */
+    private function toascii($string)
+    {
+        if(!empty($string)){
+            $string = str_replace('œ', 'oe', $string);
+            $string = str_replace("’", "'", $string);
+            $tempo = utf8_decode($string);
+            $string = '';
+            foreach (str_split($tempo) as $obj)
+            {
+                $string .= '&#' . ord($obj) . ';';
+            }
+         }
+         return $string;
     }
 
     /**
