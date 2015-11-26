@@ -31,8 +31,6 @@
         <script type="text/javascript" src="{{ asset_url }}"></script>
     {% endjavascripts %}
     <script type="text/javascript">
-        {% if refs == '[]' %} hasResultat = true;{% else %} hasResultat = false;{% endif %};
-
         $(document).ready(function() {
             resetRequete();
         });

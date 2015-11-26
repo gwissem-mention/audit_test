@@ -346,11 +346,8 @@ function selectElement( item )
         //affiche l'élément dans la liste de droite
         showItemDestRecursive( $(item) );
 
-        console.log($(item));
-
         //For parent
         $(item).find('li').each(function(){
-            console.log($(this).data('id'));
             $('#dest li.hide.element-' + $(this).data('id') ).removeClass('hide');
         })
 
@@ -507,7 +504,7 @@ function updateResultats( cleanSession )
         success : function( data ){
             $('#resultats').html( data );
 
-            hasResultat = isEmpty($('#resultats')) ? false : true;
+            hasResultat = $('#resultats').html().trim() !== "";
 
             if( $('#dest li:not(.hide)').length == 0 && $("#recherche_textuelle").val() == '')
             {
@@ -854,7 +851,7 @@ function affichagePlaceholder()
         $("#dest").removeClass('hide');
         $(".requete h2").addClass('ropen');
     }
-    else if(isEmpty($('#resultats')))
+    else if($('#resultats').html().trim() === "")
     {
         $(".arbo-requete").find('li').addClass('hide');
         $(".placeholder").show();
