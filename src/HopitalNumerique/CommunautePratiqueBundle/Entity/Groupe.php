@@ -558,6 +558,6 @@ class Groupe
             $animateurs[$animateur->getEmail()] = trim($animateur->getPrenom().' '.$animateur->getNom());
         }
 
-        return json_encode($animateurs);
+        return str_replace( '"', '\'', json_encode($animateurs) );
     }
 }

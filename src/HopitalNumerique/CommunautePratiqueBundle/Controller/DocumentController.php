@@ -18,7 +18,7 @@ class DocumentController extends \Symfony\Bundle\FrameworkBundle\Controller\Cont
      */
     public function listByGroupeAction(Groupe $groupe)
     {
-        if (null === $this->getUser())
+        if (!$this->container->get('hopitalnumerique_communautepratique.dependency_injection.security')->canAccessCommunautePratique())
         {
             return $this->redirect($this->generateUrl('hopital_numerique_homepage'));
         }

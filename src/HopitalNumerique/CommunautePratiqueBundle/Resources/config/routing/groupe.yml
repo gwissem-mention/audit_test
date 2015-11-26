@@ -30,3 +30,10 @@ hopitalnumerique_communautepratique_groupe_panelinformations:
     methods: GET
     requirements:
         groupe: \d+
+
+hopitalnumerique_communautepratique_groupe_panelusergroupes:
+    pattern: /panel-user-groupes/{user}
+    defaults: { _controller: 'HopitalNumeriqueCommunautePratiqueBundle:Groupe:panelUserGroupes' }
+    methods: GET
+    requirements:
+        user: \d+

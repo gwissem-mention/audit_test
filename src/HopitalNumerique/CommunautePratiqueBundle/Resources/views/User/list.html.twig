@@ -49,29 +49,36 @@
         
         <div class="communaute-de-pratiques-annuaire-users">
             <div class="row">
-                
+
                 {% for membre in pagerFantaMembres.currentPageResults %}
                     <div class="col-md-3 col-sm-6">
                         <div class="user">
                             <div class="identite">
                                 <div class="illustration"><div class="avatar" style="background-image: url('{{ asset(membre.avatarWebPath) }}');"></div></div>
-                                <div class="nom"><em class="icon icon-email5"></em> {{ membre.prenomNom }}</div>
+                                <div class="nom">
+                                    <a onclick="Contact_Popup.display({'{{ membre.email }}':'{{ membre.appellation }}'}, '{{ path(app.request.get('_route')) }}');"><em class="icon icon-email5"></em></a>
+                                    {{ membre.prenomNom }}
+                                </div>
                             </div>
                             <div class="type">
                                 <em class="icon icon-hospital11"></em>
-                                {{ membre.statutEtablissementSante is not null ? membre.statutEtablissementSante.libelle~' ' : '' }}
-                                {%- if membre.typeActivite|length > 0 -%}
-                                    <br>({% for activite in membre.typeActivite -%}
-                                        {{ (loop.first ? '' : ', ')~(activite.libelle) }}
-                                    {%- endfor %})
-                                {%- endif -%}
+                                <div class="contenu">
+                                    {{ membre.statutEtablissementSante is not null ? membre.statutEtablissementSante.libelle~' ' : '' }}
+                                    {%- if membre.typeActivite|length > 0 -%}
+                                        <br>({% for activite in membre.typeActivite -%}
+                                            {{ (loop.first ? '' : ', ')~(activite.libelle) }}
+                                        {%- endfor %})
+                                    {%- endif -%}
+                                </div>
                             </div>
                             <div class="fonction">
                                 <em class="icon icon-users149"></em>
-                                {{ membre.fonctionDansEtablissementSante }}
+                                <div class="contenu">
+                                    {{ membre.fonctionDansEtablissementSante }}
+                                </div>
                             </div>
                             <div class="liens">
-                                <div class="groupe"><a>Participations aux groupes</a></div>
+                                <div class="groupe"><a class="fancybox fancybox.ajax" href="{{ path('hopitalnumerique_communautepratique_groupe_panelusergroupes', { user:membre.id }) }}">Participations aux groupes</a></div>
                             </div>
                         </div>
                     </div>

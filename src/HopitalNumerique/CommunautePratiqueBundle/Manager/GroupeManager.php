@@ -12,13 +12,25 @@ class GroupeManager extends \Nodevo\ToolsBundle\Manager\Manager
      * Retourne les groupes n'ayant pas encore démarrés.
      * 
      * @param \HopitalNumerique\DomaineBundle\Entity\Domaine $domaine Domaine
+     * @param \HopitalNumerique\UserBundle\Entity\User       $user    Utilisateur
+     * @return array<\HopitalNumerique\CommunautePratiqueBundle\Entity\Groupe> Groupes non démarrés
+     */
+    public function findNonDemarresByUser(Domaine $domaine, User $user)
+    {
+        return $this->getRepository()->findNonDemarres($domaine, $user, true);
+    }
+
+    /**
+     * Retourne les groupes n'ayant pas encore démarrés.
+     * 
+     * @param \HopitalNumerique\DomaineBundle\Entity\Domaine $domaine Domaine
      * @return array<\HopitalNumerique\CommunautePratiqueBundle\Entity\Groupe> Groupes non démarrés
      */
     public function findNonDemarres(Domaine $domaine)
     {
-        return $this->getRepository()->findNonDemarres($domaine, true);
+        return $this->getRepository()->findNonDemarres($domaine, null, true);
     }
-    
+
     /**
      * Retourne les groupes en cours.
      * 
@@ -41,6 +53,19 @@ class GroupeManager extends \Nodevo\ToolsBundle\Manager\Manager
     {
         return $this->getRepository()->findEnCours($domaine, $user, true);
     }
+
+    /**
+     * Retourne les groupes terminés.
+     * 
+     * @param \HopitalNumerique\DomaineBundle\Entity\Domaine $domaine Domaine
+     * @param \HopitalNumerique\UserBundle\Entity\User       $user    Utilisateur
+     * @return array<\HopitalNumerique\CommunautePratiqueBundle\Entity\Groupe> Groupes en cours
+     */
+    public function findTerminesByUser(Domaine $domaine, User $user)
+    {
+        return $this->getRepository()->findTermines($domaine, $user, true);
+    }
+
 
     /**
      * Retourne les données pour le grid.

@@ -13,6 +13,11 @@ class UserController extends \Symfony\Bundle\FrameworkBundle\Controller\Controll
      */
     public function listAction($page = 1, Request $request)
     {
+        if (!$this->container->get('hopitalnumerique_communautepratique.dependency_injection.security')->canAccessCommunautePratique())
+        {
+            return $this->redirect($this->generateUrl('hopital_numerique_homepage'));
+        }
+
         $this->container->get('hopitalnumerique_communautepratique.dependency_injection.annuaire')->setFiltres($request);
         $rechercheForm = $this->createForm('hopitalnumerique_communautepratiquebundle_user_recherche');
         $rechercheForm->handleRequest($request);

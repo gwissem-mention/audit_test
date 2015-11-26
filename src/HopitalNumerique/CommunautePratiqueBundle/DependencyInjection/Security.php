@@ -26,6 +26,16 @@ class Security
 
 
     /**
+     * Retourne si l'utilisateur peut accéder à la communauté.
+     * 
+     * @return boolean VRAI si accès autorisé
+     */
+    public function canAccessCommunautePratique()
+    {
+        return (null !== $this->user && $this->user->isInscritCommunautePratique());
+    }
+
+    /**
      * Retourne si l'utilisateur courant peut supprimer le document.
      * 
      * @param \HopitalNumerique\CommunautePratiqueBundle\Entity\Document $document Document

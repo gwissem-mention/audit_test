@@ -13,10 +13,9 @@
                 .communaute-de-pratiques-annuaire-users .user .illustration .avatar { background-color: #e5e5e5;background-size: cover;background-position: center center;border-color: #fff;border-radius: 50%;border-style: solid;border-width: 3px;height: 60px;width: 60px; }
             .communaute-de-pratiques-annuaire-users .user .nom { font-size: 14px;font-weight: bold; }
                 .communaute-de-pratiques-annuaire-users .user .nom .icon { color: #d60030;font-size: 15px;vertical-align: middle; }
-        .communaute-de-pratiques-annuaire-users .user .type, .communaute-de-pratiques-annuaire-users .user .fonction { clear: left;color: #777;height: 44px;line-height: 15px;overflow: hidden;padding: 0 8px; }
-            .communaute-de-pratiques-annuaire-users .user .type .icon, .communaute-de-pratiques-annuaire-users .user .fonction .icon { float: left;display: block;float: left;font-size: 34px;vertical-align: top;width: 50px; }
-        .communaute-de-pratiques-annuaire-users .user .type {  }
-        .communaute-de-pratiques-annuaire-users .user .fonction {}
+        .communaute-de-pratiques-annuaire-users .user .type, .communaute-de-pratiques-annuaire-users .user .fonction { clear: left;color: #777;line-height: 15px;overflow: hidden;padding: 0 8px; }
+            .communaute-de-pratiques-annuaire-users .user .type .icon, .communaute-de-pratiques-annuaire-users .user .fonction .icon { float: left;display: block;float: left;font-size: 34px;padding: 12px 0 0;width: 48px; }
+            .communaute-de-pratiques-annuaire-users .user .type .contenu, .communaute-de-pratiques-annuaire-users .user .fonction .contenu { align-items: center;-webkit-align-items: center;display: flex;height: 55px;margin: 0 0 0 48px; }
         .communaute-de-pratiques-annuaire-users .user .liens { font-size: 12px;padding: 8px;text-align: center; }
             .communaute-de-pratiques-annuaire-users .user .liens .groupe { background-color: #e5e5e5; }
                 .communaute-de-pratiques-annuaire-users .user .liens .groupe a { color: #333;display: block;padding: 4px 0; }

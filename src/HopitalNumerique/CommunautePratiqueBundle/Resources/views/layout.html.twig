@@ -38,7 +38,7 @@
         <div class="communaute-pratique-actions">
             {% block communaute_pratique_actions %}
                 <div class="contact">
-                    <a onclick="Contact_Popup.display({{ { (domaineCurrent.adresseMailContact): 'ANAP' }|json_encode() }}, '{{ path( app.request.get('_route'), app.request.get('_route_params') ) }}');">
+                    <a onclick="Contact_Popup.display({ '{{ domaineCurrent.adresseMailContact }}':'ANAP' }, '{{ path( app.request.get('_route'), app.request.get('_route_params') ) }}');">
                         <em class="icon-help9"></em>
                         Un problème technique ?<br><strong>Contacter l'administrateur</strong>
                     </a>

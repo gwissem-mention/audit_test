@@ -3,6 +3,7 @@ namespace HopitalNumerique\CommunautePratiqueBundle\Controller;
 
 use Symfony\Component\HttpFoundation\Request;
 use HopitalNumerique\CommunautePratiqueBundle\Entity\Groupe;
+use HopitalNumerique\UserBundle\Entity\User;
 
 /**
  * Contrôleur concernant les groupes de la communauté de pratique.
@@ -14,6 +15,11 @@ class GroupeController extends \Symfony\Bundle\FrameworkBundle\Controller\Contro
      */
     public function listAction(Request $request)
     {
+        if (!$this->container->get('hopitalnumerique_communautepratique.dependency_injection.security')->canAccessCommunautePratique())
+        {
+            return $this->redirect($this->generateUrl('hopital_numerique_homepage'));
+        }
+        
         $domaine = $this->container->get('hopitalnumerique_domaine.manager.domaine')->findOneById($request->getSession()->get('domaineId'));
 
         return $this->render(
@@ -87,10 +93,28 @@ class GroupeController extends \Symfony\Bundle\FrameworkBundle\Controller\Contro
     public function panelInformationsAction(Groupe $groupe)
     {
         return $this->render(
-            'HopitalNumeriqueCommunautePratiqueBundle:Groupe:panelInformations.html.twig',
+            'HopitalNumeriqueCommunautePratiqueBundle:Groupe:panel_informations.html.twig',
             array
             (
                 'groupe' => $groupe
+            )
+        );
+    }
+
+    /**
+     * Affiche le contenu de la fenêtre de participation aux groupes d'un utilisateur.
+     */
+    public function panelUserGroupesAction(User $user, Request $request)
+    {
+        $domaine = $this->container->get('hopitalnumerique_domaine.manager.domaine')->findOneById($request->getSession()->get('domaineId'));
+
+        return $this->render(
+            'HopitalNumeriqueCommunautePratiqueBundle:Groupe:panel_user_groupes.html.twig',
+            array
+            (
+                'groupesTermines' => $this->container->get('hopitalnumerique_communautepratique.manager.groupe')->findTerminesByUser( $domaine, $user ),
+                'groupesNonDemarres' => $this->container->get('hopitalnumerique_communautepratique.manager.groupe')->findNonDemarresByUser( $domaine, $user ),
+                'groupesEnCours' => $this->container->get('hopitalnumerique_communautepratique.manager.groupe')->findEnCoursByUser( $domaine, $user )
             )
         );
     }

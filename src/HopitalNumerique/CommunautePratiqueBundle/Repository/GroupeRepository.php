@@ -15,10 +15,11 @@ class GroupeRepository extends \Doctrine\ORM\EntityRepository
      * Retourne les groupes n'ayant pas encore démarrés.
      * 
      * @param \HopitalNumerique\DomaineBundle\Entity\Domaine $domaine Domaine
+     * @param \HopitalNumerique\UserBundle\Entity\User       $user    Utilisateur
      * @param boolean                                        $isActif (optionnel) Si les groupes doivent être actifs ou non actifs
      * @return array<\HopitalNumerique\CommunautePratiqueBundle\Entity\Groupe> Groupes non démarrés
      */
-    public function findNonDemarres(Domaine $domaine, $isActif = null)
+    public function findNonDemarres(Domaine $domaine, User $user = null, $isActif = null)
     {
         $query = $this->createQueryBuilder('groupe');
         $aujourdhui = new \DateTime();
@@ -30,6 +31,13 @@ class GroupeRepository extends \Doctrine\ORM\EntityRepository
             ->andWhere('groupe.dateDemarrage > :aujourdhui')
             ->setParameter('aujourdhui', $aujourdhui)
         ;
+        if (null !== $user)
+        {
+            $query
+                ->innerJoin('groupe.users', 'user', Expr\Join::WITH, 'user = :user')
+                ->setParameter('user', $user)
+            ;
+        }
         if (null !== $isActif)
         {
             $query
@@ -38,9 +46,14 @@ class GroupeRepository extends \Doctrine\ORM\EntityRepository
             ;
         }
 
+        $query
+            ->orderBy('groupe.dateDemarrage')
+            ->orderBy('groupe.dateFin')
+        ;
+
         return $query->getQuery()->getResult();
     }
-    
+
     /**
      * Retourne les groupes en cours.
      * 
@@ -77,10 +90,57 @@ class GroupeRepository extends \Doctrine\ORM\EntityRepository
             ;
         }
 
+        $query
+            ->orderBy('groupe.dateDemarrage')
+            ->orderBy('groupe.dateFin')
+        ;
+
         return $query->getQuery()->getResult();
     }
-    
-    
+
+    /**
+     * Retourne les groupes terminés.
+     * 
+     * @param \HopitalNumerique\DomaineBundle\Entity\Domaine $domaine Domaine
+     * @param \HopitalNumerique\UserBundle\Entity\User       $user    Utilisateur
+     * @param boolean                                        $isActif (optionnel) Si les groupes doivent être actifs ou non actifs
+     * @return array<\HopitalNumerique\CommunautePratiqueBundle\Entity\Groupe> Groupes en cours
+     */
+    public function findTermines(Domaine $domaine, User $user, $isActif = null)
+    {
+        $query = $this->createQueryBuilder('groupe');
+        $aujourdhui = new \DateTime();
+        $aujourdhui->setTime(0, 0, 0);
+
+        $query
+            ->andWhere('groupe.domaine = :domaine')
+            ->setParameter('domaine', $domaine)
+            ->andWhere('groupe.dateFin < :aujourdhui')
+            ->setParameter('aujourdhui', $aujourdhui)
+        ;
+        if (null !== $user)
+        {
+            $query
+                ->innerJoin('groupe.users', 'user', Expr\Join::WITH, 'user = :user')
+                ->setParameter('user', $user)
+            ;
+        }
+        if (null !== $isActif)
+        {
+            $query
+                ->andWhere('groupe.actif = :actif')
+                ->setParameter('actif', $isActif)
+            ;
+        }
+
+        $query
+            ->orderBy('groupe.dateDemarrage')
+            ->orderBy('groupe.dateFin')
+        ;
+
+        return $query->getQuery()->getResult();
+    }
+
     /**
      * Retourne les données pour le grid.
      *
