@@ -89,7 +89,7 @@ class Document
     private $user;
 
     /**
-     * @ORM\ManyToMany(targetEntity="Fiche", mappedBy="groupes")
+     * @ORM\ManyToMany(targetEntity="Fiche", mappedBy="documents")
      */
     private $fiches;
 

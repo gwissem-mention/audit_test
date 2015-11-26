@@ -7,5 +7,14 @@
 {% block body_communaute_pratique %}
 
     {{ communaute_pratique.display_groupe_sommaire(groupe) }}
+    
+    <a href="{{ path('hopitalnumerique_communautepratique_fiche_add', { groupe:groupe.id }) }}">Créer une fiche</a>
+    
+    <p>Mes fiches :</p>
+    <ul>
+        {% for fiche in userFiches %}
+            <li><a href="{{ path('hopitalnumerique_communautepratique_fiche_edit', { fiche:fiche.id }) }}">{{ fiche }}</a></li>
+        {% endfor %}
+    </ul>
 
 {% endblock body_communaute_pratique %}

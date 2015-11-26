@@ -650,6 +650,11 @@ class User extends BaseUser
      */
     private $communautePratiqueDocuments;
 
+    /**
+     * @ORM\OneToMany(targetEntity="HopitalNumerique\CommunautePratiqueBundle\Entity\Fiche", mappedBy="user")
+     */
+    private $communautePratiqueFiches;
+
     /* --> */
 
 
@@ -662,6 +667,8 @@ class User extends BaseUser
         
         $this->objets               = new \Doctrine\Common\Collections\ArrayCollection();
         $this->communautePratiqueGroupes = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->communautePratiqueDocuments = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->communautePratiqueFiches = new \Doctrine\Common\Collections\ArrayCollection();
         $this->username             = '';
         $this->pseudonymeForum      = '';
         $this->enabled              = 1;
@@ -2106,6 +2113,39 @@ class User extends BaseUser
     public function getCommunautePratiqueDocuments()
     {
         return $this->communautePratiqueDocuments;
+    }
+
+    /**
+     * Add communautePratiqueFiche
+     *
+     * @param \HopitalNumerique\CommunautePratiqueBundle\Entity\Fiche $communautePratiqueFiche
+     * @return User
+     */
+    public function addCommunautePratiqueFiche(\HopitalNumerique\CommunautePratiqueBundle\Entity\Fiche $communautePratiqueFiche)
+    {
+        $this->communautePratiqueFiches[] = $communautePratiqueFiche;
+
+        return $this;
+    }
+
+    /**
+     * Remove communautePratiqueFiches
+     *
+     * @param \HopitalNumerique\CommunautePratiqueBundle\Entity\Fiche $communautePratiqueFiche
+     */
+    public function removeCommunautePratiqueFiche(\HopitalNumerique\CommunautePratiqueBundle\Entity\Fiche $communautePratiqueFiche)
+    {
+        $this->communautePratiqueFiches->removeElement($communautePratiqueFiche);
+    }
+
+    /**
+     * Get communautePratiqueFiches
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getCommunautePratiqueFiches()
+    {
+        return $this->communautePratiqueFiches;
     }
 
     /* --> */

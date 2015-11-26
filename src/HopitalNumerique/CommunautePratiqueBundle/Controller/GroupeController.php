@@ -19,7 +19,7 @@ class GroupeController extends \Symfony\Bundle\FrameworkBundle\Controller\Contro
         {
             return $this->redirect($this->generateUrl('hopital_numerique_homepage'));
         }
-        
+
         $domaine = $this->container->get('hopitalnumerique_domaine.manager.domaine')->findOneById($request->getSession()->get('domaineId'));
 
         return $this->render(
@@ -38,11 +38,17 @@ class GroupeController extends \Symfony\Bundle\FrameworkBundle\Controller\Contro
      */
     public function viewAction(Groupe $groupe)
     {
+        if (!$this->container->get('hopitalnumerique_communautepratique.dependency_injection.security')->canAccessCommunautePratique())
+        {
+            return $this->redirect($this->generateUrl('hopital_numerique_homepage'));
+        }
+
         return $this->render(
             'HopitalNumeriqueCommunautePratiqueBundle:Groupe:view.html.twig',
             array
             (
-                'groupe' => $groupe
+                'groupe' => $groupe,
+                'userFiches' => $this->container->get('hopitalnumerique_communautepratique.manager.fiche')->findBy(array( 'groupe' => $groupe, 'user' => $this->getUser() ))
             )
         );
     }

@@ -36,6 +36,7 @@ class FicheController extends Controller
             {
                 $this->container->get('hopitalnumerique_communautepratique.manager.fiche')->save($fiche);
                 $this->container->get('session')->getFlashBag()->add( 'success', 'Fiche enregistrée avec succès.' );
+                return $this->redirect($this->generateUrl('hopitalnumerique_communautepratique_groupe_view', array( 'groupe' => $fiche->getGroupe()->getId() )));
             }
             else
             {

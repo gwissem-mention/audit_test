@@ -14,6 +14,14 @@
     ALTER TABLE hn_communautepratique_document ADD CONSTRAINT FK_E5FB67F7FE54D947 FOREIGN KEY (group_id) REFERENCES hn_communautepratique_groupe (group_id) ON DELETE CASCADE;
     ALTER TABLE hn_communautepratique_document ADD CONSTRAINT FK_E5FB67F7C69D3FB FOREIGN KEY (usr_id) REFERENCES core_user (usr_id) ON DELETE CASCADE;
     ALTER TABLE hn_communautepratique_document ADD doc_date_creation DATETIME NOT NULL;
+    CREATE TABLE hn_communautepratique_fiche (fic_id INT UNSIGNED AUTO_INCREMENT NOT NULL, group_id INT UNSIGNED NOT NULL, fic_question_posee VARCHAR(255) NOT NULL, fic_contexte TEXT NOT NULL COMMENT 'Éléments de contexte à prendre en compte', fic_description TEXT NOT NULL, fic_aide_attendue TEXT NOT NULL, fic_resume TEXT NOT NULL, INDEX IDX_D811C99CFE54D947 (group_id), PRIMARY KEY(fic_id)) DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE = InnoDB;
+    CREATE TABLE hn_communautepratique_fiche_document (fic_id INT UNSIGNED NOT NULL, doc_id INT UNSIGNED NOT NULL, INDEX IDX_80252B184BDE1C17 (fic_id), INDEX IDX_80252B18895648BC (doc_id), PRIMARY KEY(fic_id, doc_id)) DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE = InnoDB;
+    ALTER TABLE hn_communautepratique_fiche ADD CONSTRAINT FK_D811C99CFE54D947 FOREIGN KEY (group_id) REFERENCES hn_communautepratique_groupe (group_id) ON DELETE CASCADE;
+    ALTER TABLE hn_communautepratique_fiche_document ADD CONSTRAINT FK_80252B184BDE1C17 FOREIGN KEY (fic_id) REFERENCES hn_communautepratique_fiche (fic_id);
+    ALTER TABLE hn_communautepratique_fiche_document ADD CONSTRAINT FK_80252B18895648BC FOREIGN KEY (doc_id) REFERENCES hn_communautepratique_document (doc_id);
+    ALTER TABLE hn_communautepratique_fiche ADD usr_id INT NOT NULL COMMENT 'ID de l utilisateur';
+    ALTER TABLE hn_communautepratique_fiche ADD CONSTRAINT FK_D811C99CC69D3FB FOREIGN KEY (usr_id) REFERENCES core_user (usr_id) ON DELETE CASCADE;
+    CREATE INDEX IDX_D811C99CC69D3FB ON hn_communautepratique_fiche (usr_id);
 
     /* Droits */
     INSERT INTO `core_ressource` (`res_id`, `res_nom`, `res_pattern`, `res_order`, `res_type`) VALUES (NULL, 'BackOffice - Gestion de la communauté de pratiques', '/^\\/admin\\/communaute\\-de\\-pratiques/', '38', '2');

@@ -31,6 +31,15 @@ class Fiche
     private $groupe;
 
     /**
+     * @var \HopitalNumerique\UserBundle\Entity\User
+     *
+     * @ORM\ManyToOne(targetEntity="HopitalNumerique\UserBundle\Entity\User", inversedBy="communautePratiqueFiches")
+     * @ORM\JoinColumn(name="usr_id", referencedColumnName="usr_id", nullable=false, onDelete="CASCADE")
+     * @Assert\NotNull()
+     */
+    private $user;
+
+    /**
      * @var string
      *
      * @ORM\Column(name="fic_question_posee", type="string", nullable=false, length=255)
@@ -74,7 +83,12 @@ class Fiche
      * @var \Doctrine\Common\Collections\Collection
      *
      * @ORM\ManyToMany(targetEntity="Document", inversedBy="fiches")
-     * @ORM\JoinTable(name="hn_communautepratique_fiche_document", joinColumns={@ORM\JoinColumn(name="fic_id", referencedColumnName="fic_id")}, inverseJoinColumns={@ORM\JoinColumn(name="doc_id", referencedColumnName="doc_id")})
+     * @ORM\JoinTable
+     * (
+     *     name="hn_communautepratique_fiche_document",
+     *     joinColumns={@ORM\JoinColumn(name="fic_id", referencedColumnName="fic_id", onDelete="CASCADE")},
+     *     inverseJoinColumns={@ORM\JoinColumn(name="doc_id", referencedColumnName="doc_id", onDelete="CASCADE")}
+     * )
      */
     private $documents;
 
@@ -96,6 +110,52 @@ class Fiche
     public function getId()
     {
         return $this->id;
+    }
+
+    /**
+     * Set groupe
+     *
+     * @param \HopitalNumerique\CommunautePratiqueBundle\Entity\Groupe $groupe
+     * @return Fiche
+     */
+    public function setGroupe(\HopitalNumerique\CommunautePratiqueBundle\Entity\Groupe $groupe)
+    {
+        $this->groupe = $groupe;
+
+        return $this;
+    }
+
+    /**
+     * Get groupe
+     *
+     * @return \HopitalNumerique\CommunautePratiqueBundle\Entity\Groupe 
+     */
+    public function getGroupe()
+    {
+        return $this->groupe;
+    }
+
+    /**
+     * Set user
+     *
+     * @param \HopitalNumerique\UserBundle\Entity\User $user
+     * @return Fiche
+     */
+    public function setUser(\HopitalNumerique\UserBundle\Entity\User $user)
+    {
+        $this->user = $user;
+
+        return $this;
+    }
+
+    /**
+     * Get user
+     *
+     * @return \HopitalNumerique\UserBundle\Entity\User 
+     */
+    public function getUser()
+    {
+        return $this->user;
     }
 
     /**
@@ -214,29 +274,6 @@ class Fiche
     }
 
     /**
-     * Set groupe
-     *
-     * @param \HopitalNumerique\CommunautePratiqueBundle\Entity\Groupe $groupe
-     * @return Fiche
-     */
-    public function setGroupe(\HopitalNumerique\CommunautePratiqueBundle\Entity\Groupe $groupe)
-    {
-        $this->groupe = $groupe;
-
-        return $this;
-    }
-
-    /**
-     * Get groupe
-     *
-     * @return \HopitalNumerique\CommunautePratiqueBundle\Entity\Groupe 
-     */
-    public function getGroupe()
-    {
-        return $this->groupe;
-    }
-
-    /**
      * Add documents
      *
      * @param \HopitalNumerique\CommunautePratiqueBundle\Entity\Document $documents
@@ -267,5 +304,14 @@ class Fiche
     public function getDocuments()
     {
         return $this->documents;
+    }
+
+
+    /**
+     * @return string
+     */
+    public function __toString()
+    {
+        return $this->questionPosee;
     }
 }
