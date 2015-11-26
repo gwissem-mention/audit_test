@@ -21,14 +21,13 @@ $(document).ready(function() {
                 $(that).parent().find('i.pull-right').toggleClass("fa-chevron-down fa-chevron-right");
                 $(that).parent().find('ol:first').slideToggle({duration: 200});
 
-                //accordeon for level 0
-                if( $(that).parent().hasClass('level0') ){
-                    $(that).parent().siblings().each(function(){
-                        $(this).removeClass("active");
-                        $(this).find('i.pull-right').addClass("fa-chevron-right").removeClass("fa-chevron-down");
-                        $(this).find('ol:first').slideUp({duration: 200});
-                    });
-                }
+                //accordeon
+                $(that).parent().siblings().each(function(){
+                    $(this).removeClass("active");
+                    $(this).find('i.pull-right').addClass("fa-chevron-right").removeClass("fa-chevron-down");
+                    $(this).find('ol:first').slideUp({duration: 200});
+                });
+            
 
                 clicks = 0; //after action performed, reset counter
             }, DELAY);
@@ -337,24 +336,20 @@ function handleRequestForRecherche()
 function selectElement( item )
 {
     if( $(item).hasClass('cliquable') ) {
-        //cache l'élément de l'origine
-        $(item).slideUp().removeClass('cliquable');
-        $(item).find('li').slideUp().removeClass('cliquable active'); //pour éviter les bugs, on retire la class cliquable|active à tous les enfants de l'élément
+        //Raye l'élement
+        $(item).addClass('selected');
+        $(item).find('li').addClass('selected');
 
         //cache le parent de l'élément d'origine (si c'est le dernier enfant que l'on viens de cacher)
         handleParentsOrigin( $(item) );
-        
-        //vérification et ajoute de l'item empty pour le premier level
-        $('#origin li.level0').each(function(){
-            if ( $(this).find('ol > li.cliquable').length == 0 && $(this).find('ol > li.empty').length == 0 )
-                $(this).find('ol').prepend('<li class="empty level1" ><span>Tous les éléments sont selectionnés</span></li>');
-        })
 
         //affiche l'élément dans la liste de droite
         showItemDestRecursive( $(item) );
 
-        //si c'est un parent, on show ces enfants (NON recursif)
-        $('#dest .element-' + $(item).data('id') + ' li.hide').removeClass('hide');
+        //For parent
+        $(item).find('li').each(function(){
+            $('#dest li.hide.element-' + $(this).data('id') ).removeClass('hide');
+        })
 
         $(".placeholder-aucunCritere").remove();
 
@@ -369,14 +364,13 @@ function selectElement( item )
  */
 function handleParentsOrigin( item )
 {
-    //si le parent de l'élément n'a plus d'enfants cliquables
-    if( $(item).parent().find('li.cliquable').length == 0 ) {
+    //alors on check si le LI de la liste parente n'est pas le level0
+    if( $(item).parent().parent().hasClass('cliquable') ){
+        //si le parent de l'élément n'a plus d'enfants cliquables
+        if ($(item).parent().find('li.selected').length == $(item).parent().find('li').length) {
 
-        //alors on check si le LI de la liste parente n'est pas le level0
-        if( $(item).parent().parent().hasClass('cliquable') ){
-
-            //on remove le LI qui contient la liste des enfants
-            $(item).parent().parent().slideUp().removeClass('cliquable');
+            //on strip le LI qui contient la liste des enfants
+            $(item).parent().parent().addClass('selected');
 
             //on check de manière récursive
             handleParentsOrigin( $(item).parent().parent() );
@@ -392,8 +386,9 @@ function showItemDestRecursive( item )
     destItem = $('#dest .element-' + $(item).data('id') );
     $(destItem).removeClass('hide');
 
-    if ( $(destItem).parent().parent().hasClass('hide') )
+    if ($(destItem).parent().parent().hasClass('hide')){
         showItemDestRecursive( $(destItem).parent().parent() );
+    }
 }
 
 /**
@@ -417,14 +412,14 @@ function removeElement ( item )
         if( !$(item).hasClass('level0') )
             showItemOriginRecursive( $(item) ); //=> jaffiche en récursif ma propre arbo
 
-        $('#origin .element-' + $(item).data('id') + ' li').slideDown().addClass('cliquable');  //=> jaffiche tous mes enfants
+        $('#origin .element-' + $(item).data('id') + ' li').slideDown().removeClass('selected');
     }
     
     //vérification et retrait de l'item empty pour le premier level
-    $('#origin li.level0').each(function(){
-        if ( $(this).find('li.cliquable.level1').length > 0)
-            $(this).find('li.empty').remove();
-    });
+    // $('#origin li.level0').each(function(){
+    //     if ( $(this).find('li.cliquable.level1').length > 0)
+    //         $(this).find('li.empty').remove();
+    // });
 }
 
 /**
@@ -477,10 +472,10 @@ function handleParentsDestination( item )
 function showItemOriginRecursive( item )
 {
     originItem = $('#origin .element-' + $(item).data('id') );
-    $(originItem).slideDown().addClass('cliquable');
+    $(originItem).slideDown().removeClass('selected');
     
     //si mon parent n'est pas affiché, on l'affiche en mode récursif
-    if ( !$(originItem).parent().parent().hasClass('cliquable') && !$(originItem).parent().parent().hasClass("level0") )
+    if ( $(originItem).parent().parent().hasClass('selected') && !$(originItem).parent().parent().hasClass("level0") )
         showItemOriginRecursive( $(originItem).parent().parent() );
 }
 
@@ -509,7 +504,7 @@ function updateResultats( cleanSession )
         success : function( data ){
             $('#resultats').html( data );
 
-            hasResultat = isEmpty($('#resultats')) ? false : true;
+            hasResultat = $('#resultats').html().trim() !== "";
 
             if( $('#dest li:not(.hide)').length == 0 && $("#recherche_textuelle").val() == '')
             {
@@ -753,7 +748,7 @@ function cleanRequest()
 
 function resetRequete()
 {
-    if( $(".arbo-requete").find('li:not(.hide)').length == 0 
+    if( $(".arbo-requete").find('li:not(.selected)').length == 0 
         && ($("#recherche_textuelle").val() == '') ) 
     {
         var loader = $('#resultats').nodevoLoader().start();
@@ -796,7 +791,7 @@ function resetRequete()
 
 function resetRequeteOnLoad()
 {
-    if( $(".arbo-requete").find('li:not(.hide)').length == 0 
+    if( $(".arbo-requete").find('li:not(.selected)').length == 0 
         && ($("#recherche_textuelle").val() == '') ) 
     {
         var loader = $('#resultats').nodevoLoader().start();
@@ -856,7 +851,7 @@ function affichagePlaceholder()
         $("#dest").removeClass('hide');
         $(".requete h2").addClass('ropen');
     }
-    else if(isEmpty($('#resultats')))
+    else if($('#resultats').html().trim() === "")
     {
         $(".arbo-requete").find('li').addClass('hide');
         $(".placeholder").show();
@@ -924,9 +919,7 @@ function isEmpty( el )
     return !$.trim(el.html())
 }
 
-
 //Plugin de highlight
-
 jQuery.extend({
     highlight: function (node, re, nodeName, className) {
         if (node.nodeType === 3) {
@@ -989,4 +982,3 @@ jQuery.fn.highlight = function (words, options) {
         jQuery.highlight(this, re, settings.element, settings.className);
     });
 };
-
