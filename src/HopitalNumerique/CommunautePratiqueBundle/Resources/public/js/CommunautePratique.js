@@ -17,7 +17,7 @@ CommunautePratique.init = function()
     $('form.toValidate').validationEngine();
     $('.fancybox').fancybox({
         autoSize: false,
-        autoDimensions: false,
+        autoHeight: true,
         width : 600
     });
 };
