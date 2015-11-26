@@ -3,6 +3,10 @@ services:
         class: "HopitalNumerique\CommunautePratiqueBundle\Manager\DocumentManager"
         arguments: ["@doctrine.orm.entity_manager"]
 
+    hopitalnumerique_communautepratique.manager.fiche:
+        class: "HopitalNumerique\CommunautePratiqueBundle\Manager\FicheManager"
+        arguments: ['@doctrine.orm.entity_manager']
+
     hopitalnumerique_communautepratique.manager.groupe:
         class: "HopitalNumerique\CommunautePratiqueBundle\Manager\GroupeManager"
         arguments: ["@doctrine.orm.entity_manager"]

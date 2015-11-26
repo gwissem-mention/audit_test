@@ -88,6 +88,20 @@ class Document
      */
     private $user;
 
+    /**
+     * @ORM\ManyToMany(targetEntity="Fiche", mappedBy="groupes")
+     */
+    private $fiches;
+
+
+    /**
+     * Constructor.
+     */
+    public function __construct()
+    {
+        $this->fiches = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+
 
     /**
      * Get id
@@ -235,6 +249,39 @@ class Document
     public function getUser()
     {
         return $this->user;
+    }
+
+    /**
+     * Add fiches
+     *
+     * @param \HopitalNumerique\CommunautePratiqueBundle\Entity\Fiche $fiches
+     * @return Document
+     */
+    public function addFiche(\HopitalNumerique\CommunautePratiqueBundle\Entity\Fiche $fiches)
+    {
+        $this->fiches[] = $fiches;
+
+        return $this;
+    }
+
+    /**
+     * Remove fiches
+     *
+     * @param \HopitalNumerique\CommunautePratiqueBundle\Entity\Fiche $fiches
+     */
+    public function removeFiche(\HopitalNumerique\CommunautePratiqueBundle\Entity\Fiche $fiches)
+    {
+        $this->fiches->removeElement($fiches);
+    }
+
+    /**
+     * Get fiches
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getFiches()
+    {
+        return $this->fiches;
     }
 
 

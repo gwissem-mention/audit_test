@@ -1,0 +1,52 @@
+{% extends 'HopitalNumeriqueCommunautePratiqueBundle::layout.html.twig' %}
+
+{% block title_communaute_pratique %}Groupe de travail <span class="subtitle">Fiche</span>{% endblock %}
+
+{% block communaute_pratique_actions %}
+    {{ parent() }}
+    {{ communaute_pratique.display_action_contact_animateur(fiche.groupe) }}
+{% endblock %}
+
+{% block communaute_pratique_sommaire %}{% endblock %}
+
+{% block body_communaute_pratique %}
+
+    {{ communaute_pratique.display_groupe_sommaire(fiche.groupe) }}
+    
+    <div class="panel panel-communaute-de-pratiques">
+        <div class="panel-heading">
+            <h2><em class="icon icon-stats2"></em>Fiche de problématique</h2>
+        </div>
+        <div class="panel-body">
+            
+            <div class="row">
+                <div class="col-md-6">
+
+                    {{ form_start(ficheFormulaire) }}
+    
+                    {{ form_row(ficheFormulaire.questionPosee) }}
+                    {{ form_row(ficheFormulaire.contexte) }}
+                    {{ form_row(ficheFormulaire.description) }}
+                    {{ form_row(ficheFormulaire.aideAttendue) }}
+                    {{ form_row(ficheFormulaire.resume) }}
+
+                    <div class="row text-right">
+                        <div class="col-md-12">
+                            <button type="submit" class="btn btn-success">Enregistrer</button>
+                        </div>
+                    </div>
+
+                {{ form_end(ficheFormulaire) }}
+
+                </div>
+                <div class="col-md-6">
+
+                    
+
+                </div>
+            </div>
+            
+        </div>
+    </div>
+
+{% endblock body_communaute_pratique %}

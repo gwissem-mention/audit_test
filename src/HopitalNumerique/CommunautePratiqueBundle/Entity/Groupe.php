@@ -115,6 +115,11 @@ class Groupe
     private $questionnaire;
 
     /**
+     * @ORM\OneToMany(targetEntity="Fiche", mappedBy="groupe")
+     */
+    private $fiches;
+
+    /**
      * @var \Doctrine\Common\Collections\Collection
      *
      * @ORM\ManyToMany(targetEntity="HopitalNumerique\UserBundle\Entity\User", inversedBy="communautePratiqueAnimateurGroupes")
@@ -141,6 +146,7 @@ class Groupe
      */
     public function __construct()
     {
+        $this->fiches = new \Doctrine\Common\Collections\ArrayCollection();
         $this->animateurs = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
@@ -406,6 +412,39 @@ class Groupe
     public function getQuestionnaire()
     {
         return $this->questionnaire;
+    }
+
+    /**
+     * Add fiches
+     *
+     * @param \HopitalNumerique\CommunautePratiqueBundle\Entity\Fiche $fiches
+     * @return Groupe
+     */
+    public function addFiche(\HopitalNumerique\CommunautePratiqueBundle\Entity\Fiche $fiches)
+    {
+        $this->fiches[] = $fiches;
+
+        return $this;
+    }
+
+    /**
+     * Remove fiches
+     *
+     * @param \HopitalNumerique\CommunautePratiqueBundle\Entity\Fiche $fiches
+     */
+    public function removeFiche(\HopitalNumerique\CommunautePratiqueBundle\Entity\Fiche $fiches)
+    {
+        $this->fiches->removeElement($fiches);
+    }
+
+    /**
+     * Get fiches
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getFiches()
+    {
+        return $this->fiches;
     }
 
     /**

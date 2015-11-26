@@ -4,6 +4,9 @@ namespace HopitalNumerique\CommunautePratiqueBundle\Manager;
 use HopitalNumerique\DomaineBundle\Entity\Domaine;
 use HopitalNumerique\UserBundle\Entity\User;
 
+/**
+ * Manager de Document.
+ */
 class GroupeManager extends \Nodevo\ToolsBundle\Manager\Manager
 {
     protected $_class = 'HopitalNumerique\CommunautePratiqueBundle\Entity\Groupe';

@@ -1,0 +1,13 @@
+hopitalnumerique_communautepratique_fiche_add:
+    pattern: '/add/groupe/{groupe}'
+    defaults: { _controller: 'HopitalNumeriqueCommunautePratiqueBundle:Fiche:add' }
+    methods: 'GET|POST'
+    requirements:
+        groupe: '\d+'
+
+hopitalnumerique_communautepratique_fiche_edit:
+    pattern: '{fiche}/edit'
+    defaults: { _controller: 'HopitalNumeriqueCommunautePratiqueBundle:Fiche:edit' }
+    methods: 'GET|POST'
+    requirements:
+        fiche: '\d+'
