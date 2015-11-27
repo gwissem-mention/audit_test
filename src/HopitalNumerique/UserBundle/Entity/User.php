@@ -518,7 +518,7 @@ class User extends BaseUser
     // ------- Ambassadeurs  -------
     /**
      * @Assert\File(
-     *     maxSize = "10M",
+     *     maxSize = "200k",
      *     mimeTypes = { 
      *         "image/gif", 
      *         "image/jpeg", 
@@ -533,6 +533,7 @@ class User extends BaseUser
      * @var string
      *
      * @ORM\Column(name="usr_photo", type="string", length=255, nullable=true, options = {"comment" = "Nom du fichier stocké"})
+     * 
      * @Gedmo\Versioned
      */
     protected $path;
