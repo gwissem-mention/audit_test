@@ -39,7 +39,7 @@ hopitalnumerique_module_module_delete:
 
 #---Download du fichier lié
 hopitalnumerique_module_module_dowload:
-    pattern:  /module/dowload/{id}
+    pattern:  /module/download/{id}
     defaults: { _controller: "HopitalNumeriqueModuleBundle:Back/Module:downloadModule", id: 1 }
     requirements:
         id: \d+
