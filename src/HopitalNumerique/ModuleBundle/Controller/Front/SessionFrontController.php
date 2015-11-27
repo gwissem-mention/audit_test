@@ -186,13 +186,17 @@ class SessionFrontController extends Controller
         $inscriptions        = $this->get('hopitalnumerique_module.manager.inscription')->findBy(array('session' => $session));
         $refParticipation    = $this->get('hopitalnumerique_reference.manager.reference')->findOneById(411);
         $refPasParticipation = $this->get('hopitalnumerique_reference.manager.reference')->findOneById(412);
+        $refEval             = $this->get('hopitalnumerique_reference.manager.reference')->findOneById(28);
+        $refEvalCanceled     = $this->get('hopitalnumerique_reference.manager.reference')->findOneById(27);
 
         foreach ($inscriptions as &$inscription) {
             if(in_array($inscription->getId(), $inscriptionsId)){
                 $inscription->setEtatParticipation($refParticipation);
+                $inscription->setEtatEvaluation($refEval);
             }
             else{
                 $inscription->setEtatParticipation($refPasParticipation);
+                $inscription->setEtatEvaluation($refEval);
             }
         }
 
