@@ -21,7 +21,7 @@ class PopupType extends AbstractType
     private $mailer;
 
     /**
-     * @var \Twig_Environment 
+     * @var \Twig_Environment
      */
     private $twig;
 
@@ -102,26 +102,24 @@ class PopupType extends AbstractType
     private function sendCourriel(FormInterface $form)
     {
         $swiftMessage = \Swift_Message::newInstance();
-        $bodyHtml = $this->twig->loadTemplate('NodevoMailBundle::template.mail.html.twig')->render(array('content' => $form->get('message')->getData()));
+        $bodyHtml = $this->twig->loadTemplate('NodevoMailBundle::template.mail.html.twig')->render(array('content' => nl2br($form->get('message')->getData())));
         $bodyTxt = $this->twig->loadTemplate('NodevoMailBundle::template.mail.txt.twig')->render(array('content' => $form->get('message')->getData()));
 
         $swiftMessage
             ->setSubject($form->get('objet')->getData())
             ->setBody($bodyTxt)
-            ->addPart( $bodyHtml, 'text/html' )
+            ->addPart($bodyHtml, 'text/html')
         ;
 
-        if (null !== $this->user)
-        {
+        if (null !== $this->user) {
             $swiftMessage->addFrom($this->user->getEmail(), $this->user->getAppellation());
         }
 
-        foreach (json_decode($form->get('destinataires')->getData()) as $destinataireAdresseElectronique => $destinataireNom)
-        {
+        foreach (json_decode($form->get('destinataires')->getData()) as $destinataireAdresseElectronique => $destinataireNom) {
             $swiftMessage->addTo($destinataireAdresseElectronique, $destinataireNom);
         }
 
-        $swiftMessage->setSender( $this->user->getEmail(), $this->user->getUsername() );
+        $swiftMessage->setSender($this->user->getEmail(), $this->user->getUsername());
 
         $this->mailer->send($swiftMessage);
     }

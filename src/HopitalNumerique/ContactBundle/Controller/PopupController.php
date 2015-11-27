@@ -13,30 +13,27 @@ class PopupController extends \Symfony\Bundle\FrameworkBundle\Controller\Control
      */
     public function indexAction(Request $request)
     {
-        if (!$request->request->has('destinataires') || !$request->request->has('urlRedirection'))
-        {
+        if (!$request->request->has('destinataires') || !$request->request->has('urlRedirection')) {
             throw new \Exception('Les destinataires et l\'URL de redirection doivent être précisés.');
         }
-        
+
         $contactForm = $this->createForm('hopitalnumerique_contactbundle_popup', null, array(
             'destinataires' => $request->request->get('destinataires'),
             'urlRedirection' => $request->request->get('urlRedirection')
         ));
-        if ($request->request->has('objet'))
-        {
+        if ($request->request->has('objet')) {
             $contactForm->get('objet')->setData($request->request->get('objet'));
         }
 
         return $this->render(
             'HopitalNumeriqueContactBundle:Popup:index.html.twig',
-            array
-            (
+            array(
                 'contactForm' => $contactForm->createView(),
                 'destinataires' => $request->request->get('destinataires')
             )
         );
     }
-    
+
     /**
      * Lorsque le formulaire de la popup de contact est soumis.
      */
@@ -45,13 +42,10 @@ class PopupController extends \Symfony\Bundle\FrameworkBundle\Controller\Control
         $contactForm = $this->createForm('hopitalnumerique_contactbundle_popup');
         $contactForm->handleRequest($request);
 
-        if ($contactForm->isValid())
-        {
-            $this->get('session')->getFlashBag()->add( 'success', 'Votre message a été envoyé.' );
-        }
-        else
-        {
-            $this->get('session')->getFlashBag()->add( 'danger', 'Message non envoyé.' );
+        if ($contactForm->isValid()) {
+            $this->get('session')->getFlashBag()->add('success', 'Votre message a été envoyé.');
+        } else {
+            $this->get('session')->getFlashBag()->add('danger', 'Message non envoyé.');
         }
 
         return $this->redirect($contactForm->get('urlRedirection')->getData());
