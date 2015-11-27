@@ -57,7 +57,10 @@ class ModuleFrontController extends Controller
     
         if(file_exists($module->getUploadRootDir() . '/'. $module->getPath()))
         {
-            return $this->get('igorw_file_serve.response_factory')->create( $module->getUploadRootDir() . '/'. $module->getPath(), 'application/pdf', $options);
+            $finfo = finfo_open(FILEINFO_MIME_TYPE);
+            $mime = finfo_file($finfo, $module->getUploadRootDir() . '/'. $module->getPath());
+
+            return $this->get('igorw_file_serve.response_factory')->create( $module->getUploadRootDir() . '/'. $module->getPath(), $mime, $options);
         }
         else
         {
