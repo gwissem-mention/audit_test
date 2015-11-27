@@ -452,16 +452,19 @@ class MailManager extends BaseManager
         $mail = $this->findOneById(33);
 
         $toSend = array();
+        $domaine = $this->_domaineManager->findOneById($this->_session->get('domaineId'));
+
         foreach ($inscriptions as $key => $inscription) 
         {
             if($inscription->getSession()->getModule()->getMailAlerteEvaluation())
             {
+
                 $toSend[] = $this->generationMail($inscription->getUser(), $mail, array(
                                 'date'    => $inscription->getSession()->getDateSession()->format('d/m/Y'),
                                 'module'  => $inscription->getSession()->getModule()->getTitre(),
                                 'url'     => '<a href="'. $this->_requestStack->getCurrentRequest()->getUriForPath( $this->_router->generate( 'hopitalnumerique_module_evaluation_form_front', array(
                                                 'id' => $inscription->getSession()->getId() 
-                                            ))) .'" target="_blank" >Hopital Numérique</a>'
+                                            ))) .'" target="_blank" >'. $domaine->getNom() .'</a>'
 
                 ));
             }
