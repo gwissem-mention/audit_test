@@ -15,6 +15,12 @@ use Gedmo\Mapping\Annotation as Gedmo;
 class Document
 {
     /**
+     * @var integer Taille maximale du fichier en Mo
+     */
+    const MAX_SIZE = 5;
+
+
+    /**
      * @var array<string, string> Icones des documents par extension de fichier
      */
     public static $ICONES_BY_EXTENSION = array

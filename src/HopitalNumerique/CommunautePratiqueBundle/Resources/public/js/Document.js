@@ -29,12 +29,15 @@ CommunautePratique_Document.init = function() {
  */
 CommunautePratique_Document.initFormulaireEnvoi = function(groupeId)
 {
+    // Ordre lors du choix : added
+    // Ordre à l'envoi :     submit started send sent done
     $('#fileupload').fileupload({
         url: Routing.generate('hopitalnumerique_communautepratique_document_upload', { groupe:groupeId }),
         singleFileUploads: false,
-        maxFileSize: 5 * 1024 * 1024, // 5 Mo
+        //maxFileSize: 5 * 1024 * 1024, // 5 Mo
+        // N'est appelé que si tous les fichiers sont valides (non appelée si par exemple un fichier est trop gros)
+        // Même si un seul fichier n'est pas valide parmi d'autres, on ne peut pas envoyer les fichiers (dans ce cas, il faut rechoisir un fichier valide)
         added: function(e, data) {
-            
             //<-- Affichage de l'icône personnalisé si existant
             $.each($('.template-upload'), function(i, element) {
                 var nomDocument = $(element).find('.name').html().trim();

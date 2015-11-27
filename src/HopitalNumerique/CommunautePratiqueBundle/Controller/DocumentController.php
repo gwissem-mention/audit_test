@@ -61,28 +61,35 @@ class DocumentController extends \Symfony\Bundle\FrameworkBundle\Controller\Cont
     {
         $documentFichier = new Fichier($uploadedFile->getPathname());
 
-        if ($documentFichier->move($this->container->get('kernel')->getRootDir().DIRECTORY_SEPARATOR.'..'.DIRECTORY_SEPARATOR.'files'.DIRECTORY_SEPARATOR.'communaute-de-pratiques'.DIRECTORY_SEPARATOR.'documents'.DIRECTORY_SEPARATOR.$uploadedFile->getClientOriginalName(), false))
+        if ($documentFichier->getSize() > Document::MAX_SIZE * 1024 * 1024)
         {
-            $documentFichier->setNomMinifie($documentFichier->getFilenameWithoutExtension(), '-', false, 255, false);
-            $nouveauDocument = $this->container->get('hopitalnumerique_communautepratique.manager.document')->createEmpty();
-            $nouveauDocument->setNom($documentFichier->getFilename());
-            $nouveauDocument->setLibelle($uploadedFile->getClientOriginalName());
-            $nouveauDocument->setSize($documentFichier->getSize());
-            $nouveauDocument->setGroupe($groupe);
-            $nouveauDocument->setUser($this->getUser());
-            $this->container->get('hopitalnumerique_communautepratique.manager.document')->save($nouveauDocument);
-            
-            $this->container->get('session')->getFlashBag()->add('success', 'Document "'.$uploadedFile->getClientOriginalName().'" enregistré.');
-            return array
-            (
-                $uploadedFile->getClientOriginalName() => true,
-                'name' => $uploadedFile->getClientOriginalName(),
-                'size' => $documentFichier->getSize()
-            );
+            $this->container->get('session')->getFlashBag()->add('danger', 'Document "'.$uploadedFile->getClientOriginalName().'" non enregistré car trop volumineux.');
         }
+        else
+        {
+            if ($documentFichier->move($this->container->get('kernel')->getRootDir().DIRECTORY_SEPARATOR.'..'.DIRECTORY_SEPARATOR.'files'.DIRECTORY_SEPARATOR.'communaute-de-pratiques'.DIRECTORY_SEPARATOR.'documents'.DIRECTORY_SEPARATOR.$uploadedFile->getClientOriginalName(), false))
+            {
+                $documentFichier->setNomMinifie($documentFichier->getFilenameWithoutExtension(), '-', false, 255, false);
+                $nouveauDocument = $this->container->get('hopitalnumerique_communautepratique.manager.document')->createEmpty();
+                $nouveauDocument->setNom($documentFichier->getFilename());
+                $nouveauDocument->setLibelle($uploadedFile->getClientOriginalName());
+                $nouveauDocument->setSize($documentFichier->getSize());
+                $nouveauDocument->setGroupe($groupe);
+                $nouveauDocument->setUser($this->getUser());
+                $this->container->get('hopitalnumerique_communautepratique.manager.document')->save($nouveauDocument);
 
-        $this->container->get('session')->getFlashBag()->add('danger', 'Document "'.$uploadedFile->getClientOriginalName().'" non enregistré.');
-        return array($uploadedFile->getClientOriginalName() => false); // Échec
+                $this->container->get('session')->getFlashBag()->add('success', 'Document "'.$uploadedFile->getClientOriginalName().'" enregistré.');
+                return array
+                (
+                    $uploadedFile->getClientOriginalName() => true,
+                    'name' => $uploadedFile->getClientOriginalName(),
+                    'size' => $documentFichier->getSize()
+                );
+            }
+
+            $this->container->get('session')->getFlashBag()->add('danger', 'Document "'.$uploadedFile->getClientOriginalName().'" non enregistré.');
+            return array($uploadedFile->getClientOriginalName() => false); // Échec
+        }
     }
 
     /**

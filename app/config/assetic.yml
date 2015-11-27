@@ -161,7 +161,7 @@ assetic:
                 - '%kernel.root_dir%/Resources/components/jquery-file-upload/js/jquery.fileupload.js'
                 - '%kernel.root_dir%/Resources/components/jquery-file-upload/js/jquery.fileupload-process.js'
                 - '%kernel.root_dir%/Resources/components/jquery-file-upload/js/jquery.fileupload-ui.js'
-                - '%kernel.root_dir%/Resources/components/jquery-file-upload/js/jquery.fileupload-validate.js'
+                #- '%kernel.root_dir%/Resources/components/jquery-file-upload/js/jquery.fileupload-validate.js'
         #CSS
         bbcode_css:
             inputs:
