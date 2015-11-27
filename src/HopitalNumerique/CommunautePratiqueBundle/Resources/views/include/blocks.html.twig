@@ -32,14 +32,14 @@
                     {% else %}
                         <a class="button" onclick="Contact_Popup.display({{ groupe.animateurEmailsJson }}, '{{ path(app.request.get('_route')) }}', 'Je souhaite participer au groupe {{ groupe.titre|replace({ '\'':'\\\'', '"':'' }) }}');">Groupe démarré contactez l'administrateur</a>
                     {% endif %}
+                {% elseif (app.user.hasCommunautePratiqueGroupe(groupe)) %}
+                    <span class="button inactive">Vous êtes inscrit</span>
                 {% elseif groupe.users|length >= groupe.nombreParticipantsMaximum %}
                     <a class="button" onclick="Contact_Popup.display({{ groupe.animateurEmailsJson }}, '{{ path(app.request.get('_route')) }}', 'Je souhaite participer au groupe {{ groupe.titre|replace({ '\'':'\\\'', '"':'' }) }}');">Groupe complet contactez l'animateur</a>
                 {% elseif date('now') < groupe.dateInscriptionOuverture %}
                     <a class="button">Inscription dans <span class="jours-restants"><span>{{ groupe.nombreJoursRestantsAvantInscriptionOuverture }}</span> jour{{ groupe.nombreJoursRestantsAvantInscriptionOuverture > 1 ? 's' : '' }}</span></a>
-                {% elseif (app.user.hasCommunautePratiqueGroupe(groupe) == false) %}
-                    <a class="button" href="{{ path('hopitalnumerique_communautepratique_groupe_inscrit', { 'groupe':groupe.id }) }}">Rejoindre ce groupe</a>
                 {% else %}
-                    <span class="button inactive">Vous êtes inscrit</span>
+                    <a class="button" href="{{ path('hopitalnumerique_communautepratique_groupe_inscrit', { 'groupe':groupe.id }) }}">Rejoindre ce groupe</a>
                 {% endif %}
             </div>
         </div>
