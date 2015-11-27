@@ -165,6 +165,11 @@ class Fichier
      */
     public function move($nouveauChemin, $remplaceSiExistant = false)
     {
+        if ('' == $nouveauChemin)
+        {
+            throw new \Exception('Impossible de déplacer car chemin vide.');
+        }
+
         if (false === $remplaceSiExistant)
             $nouveauChemin = self::getCheminLibre($nouveauChemin, '-');
     

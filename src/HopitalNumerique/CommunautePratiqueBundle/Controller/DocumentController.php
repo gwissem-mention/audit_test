@@ -65,7 +65,7 @@ class DocumentController extends \Symfony\Bundle\FrameworkBundle\Controller\Cont
         {
             $this->container->get('session')->getFlashBag()->add('danger', 'Document "'.$uploadedFile->getClientOriginalName().'" non enregistré car trop volumineux.');
         }
-        else
+        elseif ($uploadedFile->getSize() > 0 && '' != $uploadedFile->getFilename() && $uploadedFile->getError() == UPLOAD_ERR_OK)
         {
             if ($documentFichier->move($this->container->get('kernel')->getRootDir().DIRECTORY_SEPARATOR.'..'.DIRECTORY_SEPARATOR.'files'.DIRECTORY_SEPARATOR.'communaute-de-pratiques'.DIRECTORY_SEPARATOR.'documents'.DIRECTORY_SEPARATOR.$uploadedFile->getClientOriginalName(), false))
             {
