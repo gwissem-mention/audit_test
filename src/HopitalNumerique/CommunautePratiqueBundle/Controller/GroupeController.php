@@ -112,15 +112,18 @@ class GroupeController extends \Symfony\Bundle\FrameworkBundle\Controller\Contro
      */
     public function panelUserGroupesAction(User $user, Request $request)
     {
-        $domaine = $this->container->get('hopitalnumerique_domaine.manager.domaine')->findOneById($request->getSession()->get('domaineId'));
+        $domaine = $this->container->get('hopitalnumerique_domaine.manager.domaine')
+            ->findOneById($request->getSession()->get('domaineId'));
 
         return $this->render(
             'HopitalNumeriqueCommunautePratiqueBundle:Groupe:panel_user_groupes.html.twig',
-            array
-            (
-                'groupesTermines' => $this->container->get('hopitalnumerique_communautepratique.manager.groupe')->findTerminesByUser( $domaine, $user ),
-                'groupesNonDemarres' => $this->container->get('hopitalnumerique_communautepratique.manager.groupe')->findNonDemarresByUser( $domaine, $user ),
-                'groupesEnCours' => $this->container->get('hopitalnumerique_communautepratique.manager.groupe')->findEnCoursByUser( $domaine, $user )
+            array(
+                'groupesTermines' => $this->container->get('hopitalnumerique_communautepratique.manager.groupe')
+                    ->findTerminesByUser($domaine, $user),
+                'groupesNonDemarres' => $this->container->get('hopitalnumerique_communautepratique.manager.groupe')
+                    ->findNonDemarresByUser($domaine, $user),
+                'groupesEnCours' => $this->container->get('hopitalnumerique_communautepratique.manager.groupe')
+                    ->findEnCoursByUser($domaine, $user)
             )
         );
     }

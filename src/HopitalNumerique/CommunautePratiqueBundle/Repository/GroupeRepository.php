@@ -31,15 +31,13 @@ class GroupeRepository extends \Doctrine\ORM\EntityRepository
             ->andWhere('groupe.dateDemarrage > :aujourdhui')
             ->setParameter('aujourdhui', $aujourdhui)
         ;
-        if (null !== $user)
-        {
+        if (null !== $user) {
             $query
                 ->innerJoin('groupe.users', 'user', Expr\Join::WITH, 'user = :user')
                 ->setParameter('user', $user)
             ;
         }
-        if (null !== $isActif)
-        {
+        if (null !== $isActif) {
             $query
                 ->andWhere('groupe.actif = :actif')
                 ->setParameter('actif', $isActif)
@@ -75,15 +73,13 @@ class GroupeRepository extends \Doctrine\ORM\EntityRepository
             ->andWhere('groupe.dateFin >= :aujourdhui')
             ->setParameter('aujourdhui', $aujourdhui)
         ;
-        if (null !== $user)
-        {
+        if (null !== $user) {
             $query
                 ->innerJoin('groupe.users', 'user', Expr\Join::WITH, 'user = :user')
                 ->setParameter('user', $user)
             ;
         }
-        if (null !== $isActif)
-        {
+        if (null !== $isActif) {
             $query
                 ->andWhere('groupe.actif = :actif')
                 ->setParameter('actif', $isActif)
@@ -118,15 +114,13 @@ class GroupeRepository extends \Doctrine\ORM\EntityRepository
             ->andWhere('groupe.dateFin < :aujourdhui')
             ->setParameter('aujourdhui', $aujourdhui)
         ;
-        if (null !== $user)
-        {
+        if (null !== $user) {
             $query
                 ->innerJoin('groupe.users', 'user', Expr\Join::WITH, 'user = :user')
                 ->setParameter('user', $user)
             ;
         }
-        if (null !== $isActif)
-        {
+        if (null !== $isActif) {
             $query
                 ->andWhere('groupe.actif = :actif')
                 ->setParameter('actif', $isActif)
