@@ -78,7 +78,13 @@
                                 </div>
                             </div>
                             <div class="liens">
-                                <div class="groupe"><a class="fancybox fancybox.ajax" href="{{ path('hopitalnumerique_communautepratique_groupe_panelusergroupes', { user:membre.id }) }}">Participations aux groupes</a></div>
+                                <div class="groupe">
+                                    {% if membre.communautePratiqueGroupes|length > 0 %}
+                                        <a class="fancybox fancybox.ajax" href="{{ path('hopitalnumerique_communautepratique_groupe_panelusergroupes', { user:membre.id }) }}">Participations aux groupes</a>
+                                    {% else %}
+                                        <span>Participations aux groupes</span>
+                                    {% endif %}
+                                </div>
                             </div>
                         </div>
                     </div>

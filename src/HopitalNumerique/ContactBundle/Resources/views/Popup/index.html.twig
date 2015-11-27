@@ -8,7 +8,7 @@
             <div class="form-group">
                 <div class="col-md-12">
                     <label>Destinataire{{ destinataires|length > 1 ? 's' : '' }}</label> :
-                    {%- for destinataireAdresse, destinataireNom in destinataires -%}
+                    {% for destinataireAdresse, destinataireNom in destinataires -%}
                         {{ destinataireNom }}{{ loop.last ? '' : ', ' }}
                     {%- endfor -%}
                 </div>
@@ -19,8 +19,12 @@
         {{ form_row(contactForm.objet) }}
         {{ form_row(contactForm.message) }}
 
-        <div class="pull-right">
-            <button type="submit" class="btn btn-primary"><em class="fa fa-envelope"></em> &nbsp; Envoyer</button>
+        <div class="form_vertical_row">
+            <div class="col-md-12">
+                <div class="pull-right">
+                    <button type="submit" class="btn btn-success"><em class="fa fa-envelope"></em> &nbsp; Envoyer</button>
+                </div>
+            </div>
         </div>
     {{ form_end(contactForm) }}
 
