@@ -22,7 +22,7 @@ class Chaine
     {
         $this->chaine = $chaine;
     }
-    
+
     /**
      * Récupération de la chaine traitée
      * 
@@ -32,7 +32,7 @@ class Chaine
     {
         return $this->chaine;
     }
-    
+
     /**
      * Récupération de la chaine traitée
      * 

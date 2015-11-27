@@ -82,7 +82,7 @@
     .communaute-de-pratiques-documents h2 { color: #777;font-size: 13px;font-weight: bold;text-align: right;text-transform: uppercase; }
     .communaute-de-pratiques-documents .description { font-size: 12px; }
     .communaute-de-pratiques-documents .fileinput-button { margin: 15px 0; }
-    .communaute-de-pratiques-documents .bloc-envoi-documents {}
+    .communaute-de-pratiques-documents .bloc-envoi-documents { display: none; }
         .communaute-de-pratiques-documents .files { background-color: #f0f7ef;border-color: #e6e6e6;border-style: solid;border-width: 1px;margin: 10px 0;padding: 6px 0; }
             .communaute-de-pratiques-documents .files .upload, .communaute-de-pratiques-documents .files .download { background-color: #fff;border-color: #e6e6e6;border-style: solid;border-width: 1px;margin: 6px 0; }
                 .communaute-de-pratiques-documents .files .upload .icone, .communaute-de-pratiques-documents .files .download .icone { float: left;font-size: 50px;text-align: center;width: 68px; }

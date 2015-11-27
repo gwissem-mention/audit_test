@@ -18,8 +18,7 @@ class DocumentController extends \Symfony\Bundle\FrameworkBundle\Controller\Cont
      */
     public function listByGroupeAction(Groupe $groupe)
     {
-        if (!$this->container->get('hopitalnumerique_communautepratique.dependency_injection.security')->canAccessCommunautePratique())
-        {
+        if (!$this->container->get('hopitalnumerique_communautepratique.dependency_injection.security')->canAccessCommunautePratique()) {
             return $this->redirect($this->generateUrl('hopital_numerique_homepage'));
         }
 
@@ -37,17 +36,48 @@ class DocumentController extends \Symfony\Bundle\FrameworkBundle\Controller\Cont
     {
         $response = array('files' => array());
 
-        if (null !== $this->getUser())
-        {
+        if (null !== $this->getUser()) {
             $fileRequest = $request->files->all();
+            
+            if (count($fileRequest) == 0) {
+                $this->container->get('session')->getFlashBag()->add('danger', 'Aucun fichier n\'a été envoyé ou le poids total des fichiers est supérieur au maximum autorisé.');
+            } else {
+                $fichiersEnregistres = 0;
+                $fichiersNonEnregistres = 0;
 
-            foreach ($fileRequest['files'] as $fichierCharge)
-            {
-                $response['files'][] = $this->saveUploadedDocument($fichierCharge, $groupe);
+                foreach ($fileRequest['files'] as $fichierCharge) {
+                    $uploadDocumentResponses = $this->saveUploadedDocument($fichierCharge, $groupe);
+                    if ($uploadDocumentResponses[$fichierCharge->getClientOriginalName()]) {
+                        $fichiersEnregistres++;
+                    } else {
+                        $fichiersNonEnregistres++;
+                    }
+                    $response['files'][] = $uploadDocumentResponses;
+                }
+                if ($fichiersEnregistres > 0) {
+                    $this->container->get('session')->getFlashBag()->add('success', $fichiersEnregistres.' document'.($fichiersEnregistres > 1 ? 's ont été enregistrés' : ' a été enregistré').'.');
+                }
             }
         }
 
         return new JsonResponse($response);
+    }
+
+    /**
+     * Retourne la taille en octets de l'ensemble des documents.
+     *
+     * @param array<\Symfony\Component\HttpFoundation\File\UploadedFile> $uploadedDocuments Réponses $_FILES
+     * @return integer Taille de tous les documents
+     */
+    private function getUploadedDocumentsSize(array $uploadedDocuments)
+    {
+        $uploadedDocumentsSize = 0;
+
+        foreach ($uploadedDocuments as $uploadedDocument) {
+            $uploadedDocumentsSize += $uploadedDocument->getSize();
+        }
+
+        return $uploadedDocumentsSize;
     }
 
     /**
@@ -61,14 +91,10 @@ class DocumentController extends \Symfony\Bundle\FrameworkBundle\Controller\Cont
     {
         $documentFichier = new Fichier($uploadedFile->getPathname());
 
-        if ($documentFichier->getSize() > Document::MAX_SIZE * 1024 * 1024)
-        {
+        if ($documentFichier->getSize() > Document::MAX_SIZE * 1024 * 1024) {
             $this->container->get('session')->getFlashBag()->add('danger', 'Document "'.$uploadedFile->getClientOriginalName().'" non enregistré car trop volumineux.');
-        }
-        elseif ($uploadedFile->getSize() > 0 && '' != $uploadedFile->getFilename() && $uploadedFile->getError() == UPLOAD_ERR_OK)
-        {
-            if ($documentFichier->move($this->container->get('kernel')->getRootDir().DIRECTORY_SEPARATOR.'..'.DIRECTORY_SEPARATOR.'files'.DIRECTORY_SEPARATOR.'communaute-de-pratiques'.DIRECTORY_SEPARATOR.'documents'.DIRECTORY_SEPARATOR.$uploadedFile->getClientOriginalName(), false))
-            {
+        } elseif ($uploadedFile->getSize() > 0 && '' != $uploadedFile->getFilename() && $uploadedFile->getError() == UPLOAD_ERR_OK) {
+            if ($documentFichier->move($this->container->get('kernel')->getRootDir().DIRECTORY_SEPARATOR.'..'.DIRECTORY_SEPARATOR.'files'.DIRECTORY_SEPARATOR.'communaute-de-pratiques'.DIRECTORY_SEPARATOR.'documents'.DIRECTORY_SEPARATOR.$uploadedFile->getClientOriginalName(), false)) {
                 $documentFichier->setNomMinifie($documentFichier->getFilenameWithoutExtension(), '-', false, 255, false);
                 $nouveauDocument = $this->container->get('hopitalnumerique_communautepratique.manager.document')->createEmpty();
                 $nouveauDocument->setNom($documentFichier->getFilename());
@@ -78,7 +104,6 @@ class DocumentController extends \Symfony\Bundle\FrameworkBundle\Controller\Cont
                 $nouveauDocument->setUser($this->getUser());
                 $this->container->get('hopitalnumerique_communautepratique.manager.document')->save($nouveauDocument);
 
-                $this->container->get('session')->getFlashBag()->add('success', 'Document "'.$uploadedFile->getClientOriginalName().'" enregistré.');
                 return array
                 (
                     $uploadedFile->getClientOriginalName() => true,
