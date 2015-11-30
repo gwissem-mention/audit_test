@@ -9,6 +9,21 @@
 
 {% block communaute_pratique_sommaire %}{% endblock %}
 
+{# Bloc d'un document avec checkbox utilisé dans le formulaire à la place d'une simple checkbox #}
+{% block _hopitalnumerique_communautepratiquebundle_fiche_documents_row %}
+
+    {% import "HopitalNumeriqueCommunautePratiqueBundle:include:blocks.html.twig" as communaute_pratique %}
+
+    <div {{ block('widget_container_attributes') }}>
+        {% for i,child in form %}
+            <div class="col-md-6">
+                {{ communaute_pratique.display_bloc_document(form.vars.choices[i].data, false, child) }}
+            </div>
+        {% endfor %}
+    </div>
+
+{% endblock %}
+
 {% block body_communaute_pratique %}
 
     {{ communaute_pratique.display_groupe_sommaire(fiche.groupe) }}
@@ -18,34 +33,44 @@
             <h2><em class="icon icon-stats2"></em>Fiche de problématique</h2>
         </div>
         <div class="panel-body">
-            
-            <div class="row">
-                <div class="col-md-6">
 
-                    {{ form_start(ficheFormulaire) }}
-    
-                    {{ form_row(ficheFormulaire.questionPosee) }}
-                    {{ form_row(ficheFormulaire.contexte) }}
-                    {{ form_row(ficheFormulaire.description) }}
-                    {{ form_row(ficheFormulaire.aideAttendue) }}
-                    {{ form_row(ficheFormulaire.resume) }}
+            {% form_theme ficheFormulaire _self %}
+            {{ form_start(ficheFormulaire) }}
 
-                    <div class="row text-right">
-                        <div class="col-md-12">
-                            <button type="submit" class="btn btn-success">Enregistrer</button>
-                        </div>
+                <div class="row">
+                    <div class="col-md-6">
+
+                        {{ form_row(ficheFormulaire.questionPosee) }}
+                        {{ form_row(ficheFormulaire.contexte) }}
+                        {{ form_row(ficheFormulaire.description) }}
+                        {{ form_row(ficheFormulaire.aideAttendue) }}
+                        {{ form_row(ficheFormulaire.resume) }}
+
                     </div>
+                    <div class="col-md-6">
 
-                {{ form_end(ficheFormulaire) }}
+                        <div class="row">
+                            <div class="col-md-12">
+                                <h3 class="mini-title">Mon porte-documents</h3>
+                            </div>
+                        </div>
+                        <div class="row">
+                            {{ form_row(ficheFormulaire.documents) }}
+                        </div>
 
+                        <div class="clearfix"></div>
+                        <div class="row">
+                            <div class="col-md-6"></div>
+                            <div class="col-md-6">
+                                <button type="submit" class="btn btn-success btn-block">Enregistrer la fiche</button>
+                            </div>
+                        </div>
+
+                    </div>
                 </div>
-                <div class="col-md-6">
 
-                    
+            {{ form_end(ficheFormulaire) }}
 
-                </div>
-            </div>
-            
         </div>
     </div>
 

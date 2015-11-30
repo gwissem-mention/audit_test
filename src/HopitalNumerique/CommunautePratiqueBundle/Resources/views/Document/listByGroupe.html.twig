@@ -40,7 +40,7 @@
 {% block body_communaute_pratique %}
 
     {{ communaute_pratique.display_groupe_sommaire(groupe) }}
-    
+
     <div class="communaute-de-pratiques-documents">
 
         <form id="fileupload" method="post" enctype="multipart/form-data">
@@ -52,12 +52,11 @@
                 <input name="files[]" multiple="multiple" type="file">
             </div>
             <p class="description">
-                Lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum.
-                <br><strong>La taille maximale des fichiers est de 5 Mo.</strong>
+                <strong>La taille maximale des fichiers est de 5 Mo.<br>La taille maximale du lot de fichiers est de {{ uploadMaxSize }} Mo.</strong>
             </p>
 
             <div class="bloc-envoi-documents">
-                <h2>Documents à envoyer</h2>
+                <h2 class="mini-title text-right">Documents à envoyer</h2>
                 <div class="row files"></div>
 
                 <div class="fileupload-buttonbar">
@@ -81,7 +80,7 @@
 
         <script id="template-upload" type="text/x-tmpl">{{ '
             {% for (var i=0, file; file=o.files[i]; i++) { %}
-                <div class="template-upload fade col-md-3">
+                <div class="template-upload fade col-md-6">
                     <div class="upload">
                         <div class="icone">
                             <em class="fa fa-file-o"></em>
@@ -111,7 +110,7 @@
         ' }}</script>
         <script id="template-download" type="text/x-tmpl">{{ '
             {% for (var i=0, file; file=o.files[i]; i++) { %}
-                <div class="template-download fade col-md-3">
+                <div class="template-download fade col-md-6">
                     <div class="download">
                         <div class="icone">
                             <em class="fa fa-file-o"></em>
@@ -152,13 +151,16 @@
             {% } %}
         '}}</script>
 
-        <h2>Porte-documents</h2>
-        
-        <div class="row">
-            {% for document in documents %}
-                {{ communaute_pratique.display_bloc_document(document) }}
-            {% endfor %}
-        </div>
+        {% if documents|length > 0 %}
+            <h2 class="mini-title text-right">Porte-documents</h2>
+            <div class="row">
+                {% for document in documents %}
+                    <div class="col-md-3">
+                        {{ communaute_pratique.display_bloc_document(document, true) }}
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
 
     </div>
 

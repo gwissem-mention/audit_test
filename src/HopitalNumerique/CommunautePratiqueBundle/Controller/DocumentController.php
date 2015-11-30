@@ -7,6 +7,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Nodevo\ToolsBundle\Tools\Fichier;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
+use Nodevo\ToolsBundle\Tools\Systeme;
 
 /**
  * Contrôleur concernant les documents.
@@ -25,7 +26,8 @@ class DocumentController extends \Symfony\Bundle\FrameworkBundle\Controller\Cont
         return $this->render('HopitalNumeriqueCommunautePratiqueBundle:Document:listByGroupe.html.twig', array(
             'groupe' => $groupe,
             'documents' => $this->container->get('hopitalnumerique_communautepratique.manager.document')->findBy(array('groupe' => $groupe, 'user' => $this->getUser())),
-            'iconesByExtension' => Document::$ICONES_BY_EXTENSION
+            'iconesByExtension' => Document::$ICONES_BY_EXTENSION,
+            'uploadMaxSize' => intval(Systeme::getFileUploadMaxSize() / 1024 / 1024)
         ));
     }
 

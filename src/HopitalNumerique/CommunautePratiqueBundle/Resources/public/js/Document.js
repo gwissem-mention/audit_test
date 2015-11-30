@@ -59,9 +59,16 @@ CommunautePratique_Document.initFormulaireEnvoi = function(groupeId)
                 $('.bloc-envoi-documents').show('blind', {}, 100);
             }
         },
+        submit: function() {
+            $('.fileupload-progress').show('blind', {}, 100);
+        },
         done: function () {
             window.location = Routing.generate('hopitalnumerique_communautepratique_document_listbygroupe', { groupe:groupeId });
         }
+    });
+    
+    $('.fileupload-buttonbar button.cancel').click(function() {
+        window.location = Routing.generate('hopitalnumerique_communautepratique_document_listbygroupe', { groupe:groupeId });
     });
 };
 
@@ -79,12 +86,9 @@ CommunautePratique_Document.delete = function(documentId)
             method: 'post',
             dataType: 'json'
         }).done(function(data) {
-            if (data.success)
-            {
-                $('[data-communaute-pratique-document-id=' + documentId + ']').hide('drop');
-            }
-            else
-            {
+            if (data.success) {
+                $('[data-communaute-pratique-document-id=' + documentId + ']').parent().hide();
+            } else {
                 alert('Le document n\'a pu être supprimé.');
             }
         });

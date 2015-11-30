@@ -27,26 +27,32 @@ class FicheController extends Controller
      */
     public function editAction(Fiche $fiche, Request $request)
     {
+        if (!$this->container->get('hopitalnumerique_communautepratique.dependency_injection.security')
+            ->canAccessGroupe($fiche->getGroupe())) {
+            return $this->redirect($this->generateUrl('hopital_numerique_homepage'));
+        }
+
         $ficheFormulaire = $this->createForm('hopitalnumerique_communautepratiquebundle_fiche', $fiche);
         $ficheFormulaire->handleRequest($request);
 
-        if ($ficheFormulaire->isSubmitted())
-        {
-            if ($ficheFormulaire->isValid())
-            {
+        if ($ficheFormulaire->isSubmitted()) {
+            if ($ficheFormulaire->isValid()) {
                 $this->container->get('hopitalnumerique_communautepratique.manager.fiche')->save($fiche);
-                $this->container->get('session')->getFlashBag()->add( 'success', 'Fiche enregistrée avec succès.' );
-                return $this->redirect($this->generateUrl('hopitalnumerique_communautepratique_groupe_view', array( 'groupe' => $fiche->getGroupe()->getId() )));
-            }
-            else
-            {
-                $this->container->get('session')->getFlashBag()->add( 'danger', 'Fiche non enregistrée.' );
+                $this->container->get('session')->getFlashBag()->add('success', 'Fiche enregistrée avec succès.');
+                return $this->redirect($this->generateUrl(
+                    'hopitalnumerique_communautepratique_groupe_view',
+                    array('groupe' => $fiche->getGroupe()->getId())
+                ));
+            } else {
+                $this->container->get('session')->getFlashBag()->add('danger', 'Fiche non enregistrée.');
             }
         }
 
         return $this->render('HopitalNumeriqueCommunautePratiqueBundle:Fiche:edit.html.twig', array(
             'ficheFormulaire' => $ficheFormulaire->createView(),
-            'fiche' => $fiche
+            'fiche' => $fiche,
+            'documents' => $this->container->get('hopitalnumerique_communautepratique.manager.document')
+                ->findByIndexedById(array('groupe' => $fiche->getGroupe(), 'user' => $this->getUser()))
         ));
     }
 }

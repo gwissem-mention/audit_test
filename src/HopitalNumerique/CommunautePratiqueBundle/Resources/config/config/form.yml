@@ -1,6 +1,7 @@
 services:
     hopitalnumerique_communautepratique.form.type.fiche:
         class: 'HopitalNumerique\CommunautePratiqueBundle\Form\Type\FicheType'
+        arguments: ['@security.context', '@hopitalnumerique_communautepratique.manager.document']
         tags:
             - { name: form.type, alias: 'hopitalnumerique_communautepratiquebundle_fiche' }
 

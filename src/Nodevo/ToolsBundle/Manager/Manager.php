@@ -148,6 +148,26 @@ abstract class Manager
     }
 
     /**
+     * Retourne la liste des éléments filtrés par le tableau de critères et indexés par leur ID.
+     *
+     * @param array $criteria Le tableau de critères array('field' => value)
+     * @param array $orderBy Order by
+     * @param integer $limit Limit
+     * @param integer $offset Offset
+     * @return array
+     */
+    public function findByIndexedById(array $criteria, array $orderBy = null, $limit = null, $offset = null)
+    {
+        $entitiesById = array();
+
+        foreach ($this->findBy($criteria, $orderBy, $limit, $offset) as $entity) {
+            $entitiesById[$entity->getId()] = $entity;
+        }
+
+        return $entitiesById;
+    }
+
+    /**
     * Retourne les objets rôles présents dans le tableau de chaînes $roles
     *
     * @param array $roles Tableau de chaînes contenant les noms des roles

@@ -1,3 +1,8 @@
+{##
+ # Affiche un groupe.
+ #
+ # @param \HopitalNumerique\CommunautePratiqueBundle\Entity\Groupe groupe Groupe
+ #}
 {% macro display_groupe(groupe) %}
     <div class="groupe">
         <div class="row">
@@ -52,6 +57,11 @@
     </script>
 {% endmacro %}
 
+{##
+ # Affiche le lien de contact des animateurs du groupe.
+ #
+ # @param \HopitalNumerique\CommunautePratiqueBundle\Entity\Groupe groupe Groupe
+ #}
 {% macro display_action_contact_animateur(groupe) %}
     <div class="contact">
         <a onclick="Contact_Popup.display({{ groupe.animateurEmailsJson }}, '{{ path( app.request.get('_route'), app.request.get('_route_params') ) }}');">
@@ -61,6 +71,11 @@
     </div>
 {% endmacro %}
 
+{##
+ # Affiche des boutons de liens en rapport avec le groupe.
+ #
+ # @param \HopitalNumerique\CommunautePratiqueBundle\Entity\Groupe groupe Groupe
+ #}
 {% macro display_groupe_sommaire(groupe) %}
     <div class="communaute-de-pratiques-sommaire">
         <div class="row">
@@ -77,10 +92,22 @@
     </div>
 {% endmacro %}
 
-{% macro display_bloc_document(document) %}
-    <div class="col-md-3" data-communaute-pratique-document-id="{{ document.id }}">
+{##
+ # Affiche un petit bloc d'un document.
+ #
+ # @param \HopitalNumerique\CommunautePratiqueBundle\Entity\Document document  Document
+ # @param boolean                                                    canDelete Faux par défaut, si VRAI, affiche un bouton de suppression
+ # @param \Symfony\Component\Form\FormView                           checkbox  (optionnel) Affiche la checkbox du document dans le formulaire
+ #}
+{% macro display_bloc_document(document, canDelete = false, checkbox = null) %}
+    <div data-communaute-pratique-document-id="{{ document.id }}">
         <div class="communaute-de-pratiques-document">
-            <div class="delete"><a onclick="CommunautePratique_Document.delete({{ document.id }});"><em class="fa fa-trash-o"></em></a></div>
+            {% if canDelete %}
+                <div class="delete"><a onclick="CommunautePratique_Document.delete({{ document.id }});"><em class="fa fa-trash-o"></em></a></div>
+            {% endif %}
+            {% if checkbox is not null %}
+                <div class="checkbox">{{ form_widget(checkbox) }}</div>
+            {% endif %}
             <div class="icone">
                 {{ document.iconeHtml|raw }}
             </div>

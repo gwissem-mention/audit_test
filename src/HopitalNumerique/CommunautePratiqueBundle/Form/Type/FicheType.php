@@ -3,6 +3,9 @@ namespace HopitalNumerique\CommunautePratiqueBundle\Form\Type;
 
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
+use Symfony\Component\Security\Core\SecurityContextInterface;
+use HopitalNumerique\CommunautePratiqueBundle\Manager\DocumentManager;
+use HopitalNumerique\UserBundle\Entity\User;
 
 /**
  * Formulaire d'édition d'une fiche de la communauté de pratique.
@@ -10,10 +13,41 @@ use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 class FicheType extends \Symfony\Component\Form\AbstractType
 {
     /**
+     * @var \HopitalNumerique\CommunautePratiqueBundle\Manager\DocumentManager DocumentManager
+     */
+    private $documentManager;
+
+
+    /**
+     * @var \HopitalNumerique\UserBundle\Entity\User Utilisateur connecté
+     */
+    private $user;
+
+
+    /**
+     * Constructeur.
+     */
+    public function __construct(SecurityContextInterface $securityContext, DocumentManager $documentManager)
+    {
+        $this->user = (null !== $securityContext->getToken() ? $securityContext->getToken()->getUser() : null);
+        if (!($this->user instanceof User)) {
+            throw new \Exception('Utilisateur non connecté');
+        }
+
+        $this->documentManager = $documentManager;
+    }
+
+
+    /**
      * {@inheritDoc}
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
+        /**
+         * @var \HopitalNumerique\CommunautePratiqueBundle\Entity\Groupe
+         */
+        $groupe = $builder->getData()->getGroupe();
+
         $builder
             ->add('questionPosee', 'text', array(
                 'label' => 'Question posée',
@@ -54,6 +88,12 @@ class FicheType extends \Symfony\Component\Form\AbstractType
                     'class' => 'validate[required]',
                     'rows' => 4
                 )
+            ))
+            ->add('documents', 'entity', array(
+                'class' => 'HopitalNumeriqueCommunautePratiqueBundle:Document',
+                'choices' => $this->documentManager->findBy(array('groupe' => $groupe, 'user' => $this->user)),
+                'multiple' => true,
+                'expanded' => true
             ))
         ;
     }
