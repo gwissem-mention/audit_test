@@ -73,7 +73,14 @@ class PublicationController extends Controller
 
             foreach ($objets as $key => $objetTemp) 
             {
-                $objetsOrder[$objetTemp["id"]] = $objetTemp;
+                if(array_key_exists('objet', $objetTemp) && !is_null($objetTemp["objet"]))
+                {
+                    $objetsOrder['-' . $objetTemp["id"]] = $objetTemp;
+                }
+                else
+                {
+                    $objetsOrder[$objetTemp["id"]] = $objetTemp;
+                }
             }
 
             foreach ($objetsOrder as $key => $objetCurrent) 

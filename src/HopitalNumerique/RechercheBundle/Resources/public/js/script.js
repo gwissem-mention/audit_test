@@ -508,16 +508,16 @@ function updateResultats( cleanSession )
 
             if( $('#dest li:not(.hide)').length == 0 && $("#recherche_textuelle").val() == '')
             {
-                $('.requete h2').html( 'Requête de recherche' );
+                $('.requete h2').html( 'Ma recherche' );
                 $('#resultats').html('');
             }
             else if( $('#nbResults').val() == 1 || $('#nbResults').val() == 0 )
             {
-                $('.requete h2').html( 'Requête de recherche ('+$('#nbResults').val()+' Résultat)' );
+                $('.requete h2').html( 'Ma recherche ('+$('#nbResults').val()+' Résultat)' );
             }
             else
             {
-                $('.requete h2').html( 'Requête de recherche ('+$('#nbResults').val()+' Résultats)' );
+                $('.requete h2').html( 'Ma recherche ('+$('#nbResults').val()+' Résultats)' );
             }
 
             loader.finished();
@@ -626,7 +626,7 @@ function getReferences()
 }
 
 /**
- * Sauvegarde de la requête de recherche
+ * Sauvegarde de la Ma recherche
  */
 function saveRequest( user )
 {
@@ -730,7 +730,7 @@ function cleanRequest()
                 },
                 type    : 'POST',
                 success : function( data ){
-                    $('.requete h2').html( 'Requête de recherche' );
+                    $('.requete h2').html( 'Ma recherche' );
                     $('#resultats').html('');
 
                     hasResultat = false;
@@ -776,7 +776,7 @@ function resetRequete()
             },
             type    : 'POST',
             success : function( data ){
-                $('.requete h2').html( 'Requête de recherche' );
+                $('.requete h2').html( 'Ma recherche' );
                 $('#resultats').html('');
 
                 hasResultat = false;
@@ -819,7 +819,7 @@ function resetRequeteOnLoad()
             },
             type    : 'POST',
             success : function( data ){
-                $('.requete h2').html( 'Requête de recherche' );
+                $('.requete h2').html( 'Ma recherche' );
                 $('#resultats').html('');
 
                 hasResultat = false;
