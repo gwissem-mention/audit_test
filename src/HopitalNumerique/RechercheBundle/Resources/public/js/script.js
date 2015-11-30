@@ -337,8 +337,8 @@ function selectElement( item )
 {
     if( $(item).hasClass('cliquable') ) {
         //Raye l'élement
-        $(item).addClass('selected');
-        $(item).find('li').addClass('selected');
+        $(item).addClass('selected').attr('title', 'Ce critère a été sélectionné dans votre recherche en cours');
+        $(item).find('li').addClass('selected').attr('title', 'Ce critère a été sélectionné dans votre recherche en cours');
 
         //cache le parent de l'élément d'origine (si c'est le dernier enfant que l'on viens de cacher)
         handleParentsOrigin( $(item) );
@@ -370,7 +370,7 @@ function handleParentsOrigin( item )
         if ($(item).parent().find('li.selected').length == $(item).parent().find('li').length) {
 
             //on strip le LI qui contient la liste des enfants
-            $(item).parent().parent().addClass('selected');
+            $(item).parent().parent().addClass('selected').attr('title', 'Ce critère a été sélectionné dans votre recherche en cours');
 
             //on check de manière récursive
             handleParentsOrigin( $(item).parent().parent() );
@@ -412,14 +412,8 @@ function removeElement ( item )
         if( !$(item).hasClass('level0') )
             showItemOriginRecursive( $(item) ); //=> jaffiche en récursif ma propre arbo
 
-        $('#origin .element-' + $(item).data('id') + ' li').slideDown().removeClass('selected');
+        $('#origin .element-' + $(item).data('id') + ' li').slideDown().removeClass('selected').removeAttr('title');
     }
-    
-    //vérification et retrait de l'item empty pour le premier level
-    // $('#origin li.level0').each(function(){
-    //     if ( $(this).find('li.cliquable.level1').length > 0)
-    //         $(this).find('li.empty').remove();
-    // });
 }
 
 /**
@@ -472,7 +466,7 @@ function handleParentsDestination( item )
 function showItemOriginRecursive( item )
 {
     originItem = $('#origin .element-' + $(item).data('id') );
-    $(originItem).slideDown().removeClass('selected');
+    $(originItem).slideDown().removeClass('selected').removeAttr('title');
     
     //si mon parent n'est pas affiché, on l'affiche en mode récursif
     if ( $(originItem).parent().parent().hasClass('selected') && !$(originItem).parent().parent().hasClass("level0") )
@@ -508,16 +502,16 @@ function updateResultats( cleanSession )
 
             if( $('#dest li:not(.hide)').length == 0 && $("#recherche_textuelle").val() == '')
             {
-                $('.requete h2').html( 'Requête de recherche' );
+                $('.requete h2').html( 'Ma recherche' );
                 $('#resultats').html('');
             }
             else if( $('#nbResults').val() == 1 || $('#nbResults').val() == 0 )
             {
-                $('.requete h2').html( 'Requête de recherche ('+$('#nbResults').val()+' Résultat)' );
+                $('.requete h2').html( 'Ma recherche ('+$('#nbResults').val()+' Résultat)' );
             }
             else
             {
-                $('.requete h2').html( 'Requête de recherche ('+$('#nbResults').val()+' Résultats)' );
+                $('.requete h2').html( 'Ma recherche ('+$('#nbResults').val()+' Résultats)' );
             }
 
             loader.finished();
@@ -626,7 +620,7 @@ function getReferences()
 }
 
 /**
- * Sauvegarde de la requête de recherche
+ * Sauvegarde de la Ma recherche
  */
 function saveRequest( user )
 {
@@ -730,7 +724,7 @@ function cleanRequest()
                 },
                 type    : 'POST',
                 success : function( data ){
-                    $('.requete h2').html( 'Requête de recherche' );
+                    $('.requete h2').html( 'Ma recherche' );
                     $('#resultats').html('');
 
                     hasResultat = false;
@@ -776,7 +770,7 @@ function resetRequete()
             },
             type    : 'POST',
             success : function( data ){
-                $('.requete h2').html( 'Requête de recherche' );
+                $('.requete h2').html( 'Ma recherche' );
                 $('#resultats').html('');
 
                 hasResultat = false;
@@ -819,7 +813,7 @@ function resetRequeteOnLoad()
             },
             type    : 'POST',
             success : function( data ){
-                $('.requete h2').html( 'Requête de recherche' );
+                $('.requete h2').html( 'Ma recherche' );
                 $('#resultats').html('');
 
                 hasResultat = false;
