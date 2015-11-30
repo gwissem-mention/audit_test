@@ -1,6 +1,7 @@
 /* Toutes les pages de la communauté de pratiques */
 .body-communaute-pratique { padding: 0 15px; }
     .body-communaute-pratique a { cursor: pointer; }
+        .body-communaute-pratique a span.no-link { color: #333; }
     .body-communaute-pratique a:hover, .body-communaute-pratique a:focus, .body-communaute-pratique a:active { text-decoration: none; }
     .body-communaute-pratique h1 { color: #dd3157;float: left;font-size: 23px;font-weight: bold;margin-bottom: 30px; }
         .body-communaute-pratique h1 .subtitle { color: #000;font-size: 20px;font-weight: normal; }
@@ -66,9 +67,9 @@
             .communaute-de-pratiques-groupe .button .jours-restants span { background-color: #fff;border-color: #e6e6e6;border-style: solid;border-width: 2px 1px 1px 1px;color: #000;font-size: 14px;font-weight: bold;line-height: 17px;margin: 0 3px;padding: 0 3px; }
     .communaute-de-pratiques-groupe .progression {}
         .communaute-de-pratiques-groupe .progression .dates, .communaute-de-pratiques-groupe .progression .legende { font-size: 9px; }
-            .communaute-de-pratiques-groupe .progression .dates .gauche, .communaute-de-pratiques-groupe .progression .legende .gauche { float: left;width: 33.33%; }
-            .communaute-de-pratiques-groupe .progression .dates .milieu, .communaute-de-pratiques-groupe .progression .legende .milieu { float: left;text-align: center;width: 33.34%; }
-            .communaute-de-pratiques-groupe .progression .dates .droite, .communaute-de-pratiques-groupe .progression .legende .droite { float: left;text-align: right;width: 33.33%; }
+            .communaute-de-pratiques-groupe .progression .dates .gauche, .communaute-de-pratiques-groupe .progression .legende .gauche { float: left;width: 25%; }
+            .communaute-de-pratiques-groupe .progression .dates .milieu, .communaute-de-pratiques-groupe .progression .legende .milieu { float: left;text-align: center;width: 25%; }
+            .communaute-de-pratiques-groupe .progression .dates .droite, .communaute-de-pratiques-groupe .progression .legende .droite { float: left;text-align: right;width: 50%; }
         .communaute-de-pratiques-groupe .progression .dates {}
             .communaute-de-pratiques-groupe .progression .dates .gauche, .communaute-de-pratiques-groupe .progression .dates .milieu, .communaute-de-pratiques-groupe .progression .dates .droite { padding: 0 0 4px 0; }
             .communaute-de-pratiques-groupe .progression .dates .gauche {}

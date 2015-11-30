@@ -40,7 +40,7 @@ CommunautePratique_Groupe_DateProgression.displayProgression = function(groupeId
     
     if (aujourdhui < dateInscriptionOuverture)
     {
-        CommunautePratique_Groupe_DateProgression.setProgressionWidth(groupeId, CommunautePratique_Groupe_DateProgression.DATE_PROGRESSION_CURSEUR_MARGE / 2);
+        CommunautePratique_Groupe_DateProgression.setProgressionWidth(groupeId, CommunautePratique_Groupe_DateProgression.DATE_PROGRESSION_CURSEUR_MARGE / 2.75);
     }
     else if (aujourdhui < dateDemarrage)
     {
@@ -65,7 +65,7 @@ CommunautePratique_Groupe_DateProgression.displayProgression = function(groupeId
  */
 CommunautePratique_Groupe_DateProgression.setProgressionEntreInscriptionEtDemarrage = function(groupeId, dateInscriptionOuverture, dateDemarrage)
 {
-    var dateEcartWidth = parseInt( (CommunautePratique_Groupe_DateProgression.PROGRESSION_WIDTH_MAX - 2 * CommunautePratique_Groupe_DateProgression.DATE_PROGRESSION_CURSEUR_MARGE) / 2 );
+    var dateEcartWidth = parseInt( (CommunautePratique_Groupe_DateProgression.PROGRESSION_WIDTH_MAX - 2 * CommunautePratique_Groupe_DateProgression.DATE_PROGRESSION_CURSEUR_MARGE) / 2.75 );
     var aujourdhui = CommunautePratique_Groupe_DateProgression.getAujourdhuiTimestamp();
 
     CommunautePratique_Groupe_DateProgression.setProgressionWidth( groupeId, parseInt( ( aujourdhui - dateInscriptionOuverture ) / ( dateDemarrage - dateInscriptionOuverture ) * dateEcartWidth + CommunautePratique_Groupe_DateProgression.DATE_PROGRESSION_CURSEUR_MARGE ) );

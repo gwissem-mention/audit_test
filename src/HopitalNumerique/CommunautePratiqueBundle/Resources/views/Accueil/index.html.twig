@@ -70,8 +70,11 @@
                                                             <div class="identite">
                                                                 <div class="communaute-de-pratiques-avatar" style="background-image: url('{{ asset(user.avatarWebPath) }}');"></div>
                                                                 <div class="nom">
-                                                                    <a onclick="Contact_Popup.display({'{{ user.email }}':'{{ user.prenomNom }}'}, '{{ path(app.request.get('_route'), app.request.get('_route_params')) }}');"><em class="icon icon-email5"></em></a>
-                                                                    {{ user.prenomNom }}
+                                                                    {% if app.user.id == user.id %}
+                                                                        <a href="{{ path('hopital_numerique_user_informations_personnelles') }}"><em class="icon icon-settings48"></em> <span class="no-link">{{ user.prenomNom }}</span></a>
+                                                                    {% else %}
+                                                                        <a onclick="Contact_Popup.display({'{{ user.email }}':'{{ user.prenomNom }}'}, '{{ path(app.request.get('_route'), app.request.get('_route_params')) }}');"><em class="icon icon-email5"></em> {{ user.prenomNom }}</a>
+                                                                    {% endif %}
                                                                 </div>
                                                                 {% if groupe.hasAnimateur(user) %}
                                                                     <div class="animateur">
