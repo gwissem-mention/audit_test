@@ -122,3 +122,21 @@
         </div>
     </div>
 {% endmacro %}
+
+{##
+ # Affiche un commentaire.
+ #
+ # @param \HopitalNumerique\CommunautePratiqueBundle\Entity\Commentaire commentaire Commentaire
+ #}
+{% macro display_commentaire(commentaire) %}
+    <div class="commentaire">
+        <div class="illustration">
+            <div class="communaute-de-pratiques-avatar" style="background-image: url('{{ asset(commentaire.user.avatarWebPath) }}');"></div>
+        </div>
+        <div class="message">
+            <div class="nom">Par <strong>{{ commentaire.user.prenomNom }}</strong> <span class="date">le {{ commentaire.dateCreation|date('d/m/Y') }}</span></div>
+            <p>{{ commentaire.message|raw }}</p>
+        </div>
+        <div class="clearfix"></div>
+    </div>
+{% endmacro %}

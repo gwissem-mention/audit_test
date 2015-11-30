@@ -1,7 +1,7 @@
 <?php
 namespace HopitalNumerique\CommunautePratiqueBundle\Controller\Commentaire;
 
-use HopitalNumerique\ObjetBundle\Controller\CommentaireController;
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use HopitalNumerique\CommunautePratiqueBundle\Entity\Fiche;
 use HopitalNumerique\CommunautePratiqueBundle\Entity\Commentaire;
@@ -9,7 +9,7 @@ use HopitalNumerique\CommunautePratiqueBundle\Entity\Commentaire;
 /**
  * Contrôleur concernant les commentaires de fiche.
  */
-class FicheCommentaireController extends CommentaireController
+class FicheCommentaireController extends Controller
 {
     /**
      * Formulaire d'ajout d'un commentaire.
@@ -39,10 +39,32 @@ class FicheCommentaireController extends CommentaireController
             return $this->redirect($this->generateUrl('hopital_numerique_homepage'));
         }
 
-        $commentaireForm = $this->createForm('hopitalnumerique_communautepratiquebundle_commentaire', $commentaire);
+        $commentaireForm = $this->createForm(
+            'hopitalnumerique_communautepratiquebundle_commentaire',
+            $commentaire,
+            array(
+                'redirectionRoute' => (null !== $commentaire->getId()
+                    ? 'hopitalnumerique_communautepratique_commentaire_fichecommentaire_edit'
+                    : 'hopitalnumerique_communautepratique_commentaire_fichecommentaire_add'),
+                'redirectionRouteParams' => (null !== $commentaire->getId()
+                    ? array('commentaire' => $commentaire->getId())
+                    : array('fiche' => $commentaire->getFiche()->getId()))
+            )
+        );
         $commentaireForm->handleRequest($request);
-        
-        return $this->render('HopitalNumeriqueCommunautePratiqueBundle:Commentaire/FicheCommentaire:edit.html.twig', array(
+
+        if ($commentaireForm->isSubmitted()) {
+            if ($commentaireForm->isValid()) {
+                $this->container->get('session')->getFlashBag()->add('success', 'Commentaire enregistré.');
+                $this->container->get('hopitalnumerique_communautepratique.manager.commentaire')->save($commentaire);
+            } else {
+                $this->container->get('session')->getFlashBag()->add('danger', 'Commentaire non enregistré.');
+            }
+
+            return $this->redirect($this->generateUrl('hopitalnumerique_communautepratique_fiche_view', array('fiche' => $commentaire->getFiche()->getId())));
+        }
+
+        return $this->render('HopitalNumeriqueCommunautePratiqueBundle:Commentaire:edit.html.twig', array(
             'commentaire' => $commentaire,
             'commentaireForm' => $commentaireForm->createView()
         ));

@@ -1,0 +1,18 @@
+hopitalnumerique_communautepratique_commentaire_save:
+    pattern: '/commentaire/save'
+    defaults: { _controller: 'HopitalNumeriqueCommunautePratiqueBundle:Commentaire:save' }
+    methods: 'POST'
+
+hopitalnumerique_communautepratique_commentaire_fichecommentaire_add:
+    pattern: '/commentaire/fiche/{fiche}/add'
+    defaults: { _controller: 'HopitalNumeriqueCommunautePratiqueBundle:Commentaire/FicheCommentaire:add' }
+    methods: 'GET|POST'
+    requirements:
+        fiche: \d+
+
+hopitalnumerique_communautepratique_commentaire_fichecommentaire_edit:
+    pattern: '/commentaire/{commentaire}/edit'
+    defaults: { _controller: 'HopitalNumeriqueCommunautePratiqueBundle:Commentaire/FicheCommentaire:edit' }
+    methods: 'GET|POST'
+    requirements:
+        commentaire: \d+

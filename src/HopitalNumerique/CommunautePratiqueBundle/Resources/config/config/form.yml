@@ -1,6 +1,7 @@
 services:
     hopitalnumerique_communautepratique.form.type.commentaire:
         class: 'HopitalNumerique\CommunautePratiqueBundle\Form\Type\CommentaireType'
+        arguments: ['@router']
         tags:
             - { name: 'form.type', alias: 'hopitalnumerique_communautepratiquebundle_commentaire' }
 

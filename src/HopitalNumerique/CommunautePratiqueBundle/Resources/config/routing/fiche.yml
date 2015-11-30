@@ -1,7 +1,7 @@
 hopitalnumerique_communautepratique_fiche_view:
     pattern: '/{fiche}/view'
     defaults: { _controller: 'HopitalNumeriqueCommunautePratiqueBundle:Fiche:view' }
-    methods: 'GET'
+    methods: 'GET|POST'
     requirements:
         fiche: '\d+'
 

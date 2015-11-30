@@ -23,7 +23,7 @@ class RechercheType extends AbstractType
     private $annuaireService;
 
     /**
-     * @var \HopitalNumerique\ReferenceBundle\Manager\ReferenceManager 
+     * @var \HopitalNumerique\ReferenceBundle\Manager\ReferenceManager ReferenceManager
      */
     private $referenceManager;
 

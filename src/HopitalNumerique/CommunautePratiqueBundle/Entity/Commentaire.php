@@ -62,7 +62,7 @@ class Commentaire
      * @var \HopitalNumerique\CommunautePratiqueBundle\Entity\Groupe
      *
      * @ORM\ManyToOne(targetEntity="Groupe", inversedBy="commentaires")
-     * @ORM\JoinColumn(name="group_id", referencedColumnName="group_id", nullable=false, onDelete="CASCADE")
+     * @ORM\JoinColumn(name="group_id", referencedColumnName="group_id", nullable=true, onDelete="CASCADE")
      */
     private $groupe;
 
@@ -70,7 +70,7 @@ class Commentaire
      * @var \HopitalNumerique\CommunautePratiqueBundle\Entity\Fiche
      *
      * @ORM\ManyToOne(targetEntity="Fiche", inversedBy="commentaires")
-     * @ORM\JoinColumn(name="fic_id", referencedColumnName="fic_id", nullable=false, onDelete="CASCADE")
+     * @ORM\JoinColumn(name="fic_id", referencedColumnName="fic_id", nullable=true, onDelete="CASCADE")
      */
     private $fiche;
 
