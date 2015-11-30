@@ -27,10 +27,14 @@
             </div>
             <div class="col-sm-3">
                 <p>
-                    Places restantes
-                    <br><strong>{{ groupe.nombrePlacesRestantes }} sur {{ groupe.nombreParticipantsMaximum }}</strong>
+                    {% if date('now') >= groupe.dateDemarrage %}
+                        Nombre de contributeurs : {{ groupe.users|length }}
+                    {% else %}
+                        Places restantes
+                        <br><strong>{{ groupe.nombrePlacesRestantes }} sur {{ groupe.nombreParticipantsMaximum }}</strong>
+                    {% endif %}
                 </p>
-                <div class="places-progression hidden-xs" id="places-progression-barre-{{ groupe.id }}"><div class="contenu"></div></div>
+                <div class="places-progression hidden-xs" id="places-progression-barre-{{ groupe.id }}"{% if date('now') >= groupe.dateDemarrage %} style="visibility: hidden;"{% endif %}><div class="contenu"></div></div>
                 {% if date('now') >= groupe.dateDemarrage %} {# Groupes en cours #}
                     {% if (app.user.hasCommunautePratiqueGroupe(groupe)) %}
                         <a class="button" href="{{ path('hopitalnumerique_communautepratique_groupe_view', { groupe: groupe.id }) }}">Travailler dans ce groupe</a>
