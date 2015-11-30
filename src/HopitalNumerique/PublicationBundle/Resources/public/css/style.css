@@ -81,7 +81,7 @@
     #publication #resultats #pointsdurs .wrapper-results .background-rose{width: 85px; height: 4px; position: absolute; top: 0; left: 0;}
     #publication #resultats #pointsdurs .wrapper-results .results {background: #f4f4f4; padding:20px;}
     #publication #resultats #pointsdurs .wrapper-results .results h4{margin-bottom: 5px}
-    #publication #resultats #pointsdurs .wrapper-results .results h4 a{color:#d60030; font-size: 18px; font-weight: bold; }
+    #publication #resultats #pointsdurs .wrapper-results .results h4 a{color:#d60030; font-size: 14px; font-weight: bold; }
     #publication #resultats #pointsdurs .wrapper-results .results a.synthese{font-size: 11px; color:#161616; background: url('../img/synthese.png') no-repeat right center; padding-right:25px; margin-top: 10px; display: block; height: 18px; text-align: right}
     #publication #resultats #pointsdurs .wrapper-results .results p{font-size: 13px; color:#070707; }
     #publication #resultats #pointsdurs .wrapper-results .results .fa-refresh{ color:#3da20b; }
