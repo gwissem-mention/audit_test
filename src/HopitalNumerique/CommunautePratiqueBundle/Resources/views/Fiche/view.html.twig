@@ -1,0 +1,90 @@
+{% extends 'HopitalNumeriqueCommunautePratiqueBundle::layout.html.twig' %}
+
+{% block title_communaute_pratique %}Groupe de travail <span class="subtitle">{{ fiche.groupe }} - {{ fiche }}</span>{% endblock %}
+
+{% block communaute_pratique_actions %}
+    {{ parent() }}
+    {{ communaute_pratique.display_action_contact_animateur(fiche.groupe) }}
+{% endblock %}
+
+{% block communaute_pratique_sommaire %}{% endblock %}
+
+{% block body_communaute_pratique %}
+
+    {{ communaute_pratique.display_groupe_sommaire(fiche.groupe) }}
+
+    <div class="communaute-pratique-bandeau-membre">
+        <div class="row">
+            <div class="col-md-4">
+                <div class="illustration">
+                    <div class="communaute-de-pratiques-avatar" style="background-image: url('{{ asset(fiche.user.avatarWebPath) }}');"></div>
+                </div>
+                <div class="nom">
+                    <a onclick="Contact_Popup.display({'{{ fiche.user.email }}':'{{ fiche.user.appellation }}'}, '{{ path(app.request.get('_route'), app.request.get('_route_params')) }}');"><em class="icon icon-email5"></em></a>
+                    {{ fiche.user.prenomNom }}
+                </div>
+                {% if fiche.groupe.hasAnimateur(fiche.user) %}
+                    <div class="animateur">
+                        <em class="icon icon-speaker15"></em>
+                        Animateur du groupe
+                    </div>
+                {% endif %}
+            </div>
+            <div class="col-md-4">
+                <div class="type">
+                    <em class="icon icon-hospital11"></em>
+                    <div class="contenu">
+                        {{ fiche.user.statutEtablissementSante is not null ? fiche.user.statutEtablissementSante.libelle~' ' : '' }}
+                        {%- if fiche.user.typeActivite|length > 0 -%}
+                            &nbsp;({% for activite in fiche.user.typeActivite -%}
+                                {{ (loop.first ? '' : ', ')~(activite.libelle) }}
+                            {%- endfor %})
+                        {%- endif -%}
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="fonction">
+                    <em class="icon icon-users149"></em>
+                    <div class="contenu">
+                        {{ fiche.user.fonctionDansEtablissementSante }}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="panel panel-communaute-de-pratiques communaute-de-pratiques-fiche">
+        <div class="panel-heading">
+            <h2><em class="icon icon-stats2"></em>Fiche de problématique</h2>
+        </div>
+        <div class="panel-body">
+
+            <p>
+                <strong class="violet">Question posée :</strong><br>{{ fiche.questionPosee }}
+            </p>
+            <p>
+                <strong class="violet">Éléments de contexte à prendre en compte :</strong><br>{{ fiche.contexte }}
+            </p>
+            <p>
+                <strong class="violet">Description complète du problème :</strong><br>{{ fiche.description }}
+            </p>
+            <p>
+                <strong class="violet">Aide attendue :</strong><br>{{ fiche.aideAttendue }}
+            </p>
+            <p>
+                <strong class="violet">En résumé...</strong><br>{{ fiche.resume }}
+            </p>
+
+        </div>
+    </div>
+
+    <div class="row">
+        {% for document in fiche.documents %}
+            <div class="col-md-3">
+                {{ communaute_pratique.display_bloc_document(document) }}
+            </div>
+        {% endfor %}
+    </div>
+
+{% endblock body_communaute_pratique %}

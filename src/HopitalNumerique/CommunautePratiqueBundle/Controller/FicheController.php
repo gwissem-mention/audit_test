@@ -12,6 +12,16 @@ use HopitalNumerique\CommunautePratiqueBundle\Entity\Fiche;
 class FicheController extends Controller
 {
     /**
+     * Visualisation d'une fiche.
+     */
+    public function viewAction(Fiche $fiche)
+    {
+        return $this->render('HopitalNumeriqueCommunautePratiqueBundle:Fiche:view.html.twig', array(
+            'fiche' => $fiche
+        ));
+    }
+
+    /**
      * Ajout d'une fiche
      */
     public function addAction(Groupe $groupe, Request $request)

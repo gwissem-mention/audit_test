@@ -6,7 +6,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * Entité Groupe.
- * 
+ *
  * @ORM\Entity(repositoryClass="HopitalNumerique\CommunautePratiqueBundle\Repository\GroupeRepository")
  * @ORM\Table(name="hn_communautepratique_groupe")
  */
@@ -555,6 +555,23 @@ class Groupe
         return $this->titre;
     }
 
+
+    /**
+     * Retourne si l'utilisateur est animateur du groupe.
+     *
+     * @param \HopitalNumerique\UserBundle\Entity\User $user Utilisateur
+     * @return boolean VRAI si animateur
+     */
+    public function hasAnimateur(\HopitalNumerique\UserBundle\Entity\User $user)
+    {
+        foreach ($this->animateurs as $animateur) {
+            if ($animateur->getId() == $user->getId()) {
+                return true;
+            }
+        }
+        
+        return false;
+    }
 
     /**
      * Retourne le nombre de places restantes.

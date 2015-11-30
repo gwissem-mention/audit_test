@@ -7,7 +7,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
 
 /**
  * Entité Document.
- * 
+ *
  * @ORM\Entity()
  * @ORM\Table(name="hn_communautepratique_document")
  * @ORM\HasLifecycleCallbacks()
@@ -348,9 +348,8 @@ class Document
      */
     private function getExtension()
     {
-        if (false !== strpos($this->nom, '.'))
-        {
-            return substr( $this->nom, strrpos($this->nom, '.') + 1 );
+        if (false !== strpos($this->nom, '.')) {
+            return substr($this->nom, strrpos($this->nom, '.') + 1);
         }
 
         return null;

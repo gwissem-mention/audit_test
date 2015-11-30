@@ -1,3 +1,10 @@
+hopitalnumerique_communautepratique_fiche_view:
+    pattern: '/{fiche}/view'
+    defaults: { _controller: 'HopitalNumeriqueCommunautePratiqueBundle:Fiche:view' }
+    methods: 'GET'
+    requirements:
+        fiche: '\d+'
+
 hopitalnumerique_communautepratique_fiche_add:
     pattern: '/add/groupe/{groupe}'
     defaults: { _controller: 'HopitalNumeriqueCommunautePratiqueBundle:Fiche:add' }

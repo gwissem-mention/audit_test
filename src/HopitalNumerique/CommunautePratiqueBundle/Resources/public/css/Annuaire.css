@@ -10,7 +10,6 @@
     .communaute-de-pratiques-annuaire-users .user { background-color: #f6f6f6;margin: 15px 0;padding: 10px; }
         .communaute-de-pratiques-annuaire-users .identite { height:79px;overflow: hidden; }
             .communaute-de-pratiques-annuaire-users .user .illustration { float: left;margin: 0 6px 0 0; }
-                .communaute-de-pratiques-annuaire-users .user .illustration .avatar { background-color: #e5e5e5;background-size: cover;background-position: center center;border-color: #fff;border-radius: 50%;border-style: solid;border-width: 3px;height: 60px;width: 60px; }
             .communaute-de-pratiques-annuaire-users .user .nom { font-size: 14px;font-weight: bold; }
                 .communaute-de-pratiques-annuaire-users .user .nom .icon { color: #d60030;font-size: 15px;vertical-align: middle; }
         .communaute-de-pratiques-annuaire-users .user .type, .communaute-de-pratiques-annuaire-users .user .fonction { clear: left;color: #777;line-height: 15px;overflow: hidden;padding: 0 8px; }

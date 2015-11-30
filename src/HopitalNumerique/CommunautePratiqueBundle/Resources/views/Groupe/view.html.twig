@@ -13,7 +13,7 @@
     <p>Mes fiches :</p>
     <ul>
         {% for fiche in userFiches %}
-            <li><a href="{{ path('hopitalnumerique_communautepratique_fiche_edit', { fiche:fiche.id }) }}">{{ fiche }}</a></li>
+            <li><a href="{{ path('hopitalnumerique_communautepratique_fiche_view', { fiche:fiche.id }) }}">{{ fiche }}</a> (<a href="{{ path('hopitalnumerique_communautepratique_fiche_edit', { fiche:fiche.id }) }}">edit</a>)</li>
         {% endfor %}
     </ul>
 

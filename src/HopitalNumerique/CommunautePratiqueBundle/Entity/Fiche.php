@@ -6,7 +6,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * Entité Fiche.
- * 
+ *
  * @ORM\Entity()
  * @ORM\Table(name="hn_communautepratique_fiche")
  */
@@ -80,6 +80,14 @@ class Fiche
     private $resume;
 
     /**
+     * @var boolean
+     *
+     * @ORM\Column(name="fic_resolu", type="boolean", nullable=false, options={"default"=false})
+     * @Assert\NotNull()
+     */
+    private $resolu;
+
+    /**
      * @var \Doctrine\Common\Collections\Collection
      *
      * @ORM\ManyToMany(targetEntity="Document", inversedBy="fiches")
@@ -98,6 +106,7 @@ class Fiche
      */
     public function __construct()
     {
+        $this->resolu = false;
         $this->documents = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
@@ -271,6 +280,29 @@ class Fiche
     public function getResume()
     {
         return $this->resume;
+    }
+
+    /**
+     * Set resolu
+     *
+     * @param boolean $resolu
+     * @return Fiche
+     */
+    public function setResolu($resolu)
+    {
+        $this->resolu = $resolu;
+
+        return $this;
+    }
+
+    /**
+     * Get resolu
+     *
+     * @return boolean 
+     */
+    public function isResolu()
+    {
+        return $this->resolu;
     }
 
     /**

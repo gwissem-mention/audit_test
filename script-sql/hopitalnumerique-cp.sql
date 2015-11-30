@@ -22,6 +22,11 @@
     ALTER TABLE hn_communautepratique_fiche ADD usr_id INT NOT NULL COMMENT 'ID de l utilisateur';
     ALTER TABLE hn_communautepratique_fiche ADD CONSTRAINT FK_D811C99CC69D3FB FOREIGN KEY (usr_id) REFERENCES core_user (usr_id) ON DELETE CASCADE;
     CREATE INDEX IDX_D811C99CC69D3FB ON hn_communautepratique_fiche (usr_id);
+    ALTER TABLE hn_communautepratique_fiche ADD fic_resolu TINYINT(1) DEFAULT '0' NOT NULL;
+    ALTER TABLE hn_communautepratique_fiche_document DROP FOREIGN KEY FK_80252B184BDE1C17;
+    ALTER TABLE hn_communautepratique_fiche_document DROP FOREIGN KEY FK_80252B18895648BC;
+    ALTER TABLE hn_communautepratique_fiche_document ADD CONSTRAINT FK_80252B184BDE1C17 FOREIGN KEY (fic_id) REFERENCES hn_communautepratique_fiche (fic_id) ON DELETE CASCADE;
+    ALTER TABLE hn_communautepratique_fiche_document ADD CONSTRAINT FK_80252B18895648BC FOREIGN KEY (doc_id) REFERENCES hn_communautepratique_document (doc_id) ON DELETE CASCADE;
 
     /* Droits */
     INSERT INTO `core_ressource` (`res_id`, `res_nom`, `res_pattern`, `res_order`, `res_type`) VALUES (NULL, 'BackOffice - Gestion de la communauté de pratiques', '/^\\/admin\\/communaute\\-de\\-pratiques/', '38', '2');
