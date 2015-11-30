@@ -16,6 +16,11 @@ class FicheController extends Controller
      */
     public function viewAction(Fiche $fiche)
     {
+        if (!$this->container->get('hopitalnumerique_communautepratique.dependency_injection.security')
+            ->canAccessFiche($fiche)) {
+            return $this->redirect($this->generateUrl('hopital_numerique_homepage'));
+        }
+
         return $this->render('HopitalNumeriqueCommunautePratiqueBundle:Fiche:view.html.twig', array(
             'fiche' => $fiche
         ));

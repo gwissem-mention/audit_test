@@ -656,6 +656,11 @@ class User extends BaseUser
      */
     private $communautePratiqueFiches;
 
+    /**
+     * @ORM\OneToMany(targetEntity="HopitalNumerique\CommunautePratiqueBundle\Entity\Commentaire", mappedBy="user")
+     */
+    private $communautePratiqueCommentaires;
+
     /* --> */
 
 
@@ -1693,8 +1698,8 @@ class User extends BaseUser
     {
         return ($this->etat != null && $this->etat->getId() == self::$ETAT_ACTIF_ID);
     }
-	
-	/**
+
+    /**
      * Get email
      *
      * @return string $email
@@ -2147,6 +2152,39 @@ class User extends BaseUser
     public function getCommunautePratiqueFiches()
     {
         return $this->communautePratiqueFiches;
+    }
+
+    /**
+     * Add communautePratiqueCommentaire
+     *
+     * @param \HopitalNumerique\CommunautePratiqueBundle\Entity\Commentaire $communautePratiqueCommentaire
+     * @return User
+     */
+    public function addCommunautePratiqueCommentaire(\HopitalNumerique\CommunautePratiqueBundle\Entity\Commentaire $communautePratiqueCommentaire)
+    {
+        $this->communautePratiqueCommentaires[] = $communautePratiqueCommentaire;
+
+        return $this;
+    }
+
+    /**
+     * Remove communautePratiqueCommentaires
+     *
+     * @param \HopitalNumerique\CommunautePratiqueBundle\Entity\Commentaire $communautePratiqueCommentaire
+     */
+    public function removeCommunautePratiqueCommentaire(\HopitalNumerique\CommunautePratiqueBundle\Entity\Commentaire $communautePratiqueCommentaire)
+    {
+        $this->communautePratiqueCommentaires->removeElement($communautePratiqueCommentaire);
+    }
+
+    /**
+     * Get communautePratiqueCommentaires
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getCommunautePratiqueCommentaires()
+    {
+        return $this->communautePratiqueCommentaires;
     }
 
     /* --> */

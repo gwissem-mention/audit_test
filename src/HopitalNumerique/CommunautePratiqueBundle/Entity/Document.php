@@ -70,11 +70,11 @@ class Document
 
     /**
      * @var \DateTime
-     * 
+     *
      * @Gedmo\Timestampable(on="create")
      * @ORM\Column(name="doc_date_creation", type="datetime", nullable=false)
      */
-    protected $dateCreation;
+    private $dateCreation;
 
     /**
      * @var \HopitalNumerique\CommunautePratiqueBundle\Entity\Groupe

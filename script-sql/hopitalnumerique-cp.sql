@@ -27,6 +27,10 @@
     ALTER TABLE hn_communautepratique_fiche_document DROP FOREIGN KEY FK_80252B18895648BC;
     ALTER TABLE hn_communautepratique_fiche_document ADD CONSTRAINT FK_80252B184BDE1C17 FOREIGN KEY (fic_id) REFERENCES hn_communautepratique_fiche (fic_id) ON DELETE CASCADE;
     ALTER TABLE hn_communautepratique_fiche_document ADD CONSTRAINT FK_80252B18895648BC FOREIGN KEY (doc_id) REFERENCES hn_communautepratique_document (doc_id) ON DELETE CASCADE;
+    CREATE TABLE hn_communautepratique_commentaire (com_id INT UNSIGNED AUTO_INCREMENT NOT NULL, usr_id INT NOT NULL COMMENT 'ID de l utilisateur', group_id INT UNSIGNED NOT NULL, fic_id INT UNSIGNED NOT NULL, com_message TEXT NOT NULL, com_date_creation DATETIME NOT NULL, com_date_derniere_modification DATETIME DEFAULT NULL, INDEX IDX_72D666FFC69D3FB (usr_id), INDEX IDX_72D666FFFE54D947 (group_id), INDEX IDX_72D666FF4BDE1C17 (fic_id), PRIMARY KEY(com_id)) DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE = InnoDB;
+    ALTER TABLE hn_communautepratique_commentaire ADD CONSTRAINT FK_72D666FFC69D3FB FOREIGN KEY (usr_id) REFERENCES core_user (usr_id) ON DELETE CASCADE;
+    ALTER TABLE hn_communautepratique_commentaire ADD CONSTRAINT FK_72D666FFFE54D947 FOREIGN KEY (group_id) REFERENCES hn_communautepratique_groupe (group_id) ON DELETE CASCADE;
+    ALTER TABLE hn_communautepratique_commentaire ADD CONSTRAINT FK_72D666FF4BDE1C17 FOREIGN KEY (fic_id) REFERENCES hn_communautepratique_fiche (fic_id) ON DELETE CASCADE;
 
     /* Droits */
     INSERT INTO `core_ressource` (`res_id`, `res_nom`, `res_pattern`, `res_order`, `res_type`) VALUES (NULL, 'BackOffice - Gestion de la communauté de pratiques', '/^\\/admin\\/communaute\\-de\\-pratiques/', '38', '2');

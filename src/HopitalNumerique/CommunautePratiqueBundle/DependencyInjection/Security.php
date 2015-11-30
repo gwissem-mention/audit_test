@@ -5,6 +5,8 @@ use Symfony\Component\Security\Core\SecurityContextInterface;
 use HopitalNumerique\UserBundle\Entity\User;
 use HopitalNumerique\CommunautePratiqueBundle\Entity\Groupe;
 use HopitalNumerique\CommunautePratiqueBundle\Entity\Document;
+use HopitalNumerique\CommunautePratiqueBundle\Entity\Fiche;
+use HopitalNumerique\CommunautePratiqueBundle\Entity\Commentaire;
 
 /**
  * Classe qui gère les accès / droits de la communauté de pratiques.
@@ -28,7 +30,7 @@ class Security
 
     /**
      * Retourne si l'utilisateur peut accéder à la communauté.
-     * 
+     *
      * @return boolean VRAI si accès autorisé
      */
     public function canAccessCommunautePratique()
@@ -49,12 +51,38 @@ class Security
 
     /**
      * Retourne si l'utilisateur courant peut supprimer le document.
-     * 
+     *
      * @param \HopitalNumerique\CommunautePratiqueBundle\Entity\Document $document Document
      * @return boolean VRAI si document supprimable
      */
     public function canDeleteDocument(Document $document)
     {
         return (null !== $this->user && $document->getUser()->getId() == $this->user->getId());
+    }
+
+    /**
+     * Retourne si l'utilisateur courant peut accéder à telle fiche.
+     *
+     * @param \HopitalNumerique\CommunautePratiqueBundle\Entity\Fiche $fiche Fiche
+     * @return boolean VRAI si fiche accessible
+     */
+    public function canAccessFiche(Fiche $fiche)
+    {
+        return $this->canAccessGroupe($fiche->getGroupe());
+    }
+
+    /**
+     * Retourne si l'utilisateur courant peut éditer tel commentaire.
+     *
+     * @param \HopitalNumerique\CommunautePratiqueBundle\Entity\Commentaire $commentaire Commentaire
+     * @return boolean VRAI si commentaire éditable
+     */
+    public function canEditCommentaire(Commentaire $commentaire)
+    {
+        if (null === $this->user) {
+            return false;
+        }
+
+        return ($commentaire->getUser()->getId() == $this->user->getId());
     }
 }
