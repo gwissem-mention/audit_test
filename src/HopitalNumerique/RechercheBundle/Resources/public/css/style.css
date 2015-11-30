@@ -16,7 +16,7 @@
     #recherche .requete #dest ol.arbo-requete{padding:0;display: inline-block; margin: 5px 0 10px;}
     #recherche .requete #dest ol.arbo-requete li{display: inline-block; float: left}
     #recherche .requete #dest ol.arbo-requete ol{padding-left:0; float: left;}
-    #recherche .requete #dest ol.arbo-requete li span{display: inline-block; border-radius:5px; padding:2px 15px 2px 0; margin-right:3px;}
+    #recherche .requete #dest ol.arbo-requete li span{display: inline-block; border-radius:5px; padding:2px 15px 2px 0; margin-right:7px;}
     #recherche .requete #dest ol.arbo-requete li span:hover, #recherche .requete #dest ol.arbo-requete li span.on {background: url('../img/resultats-delete.png') no-repeat right center #ffffff; cursor : pointer; -webkit-box-shadow: 3px 3px 5px 0px rgba(50, 50, 50, 0.75); -moz-box-shadow: 3px 3px 5px 0px rgba(50, 50, 50, 0.75); box-shadow: 3px 3px 5px 0px rgba(50, 50, 50, 0.75);}
     #recherche .requete #dest hr{border-bottom: 1px solid #d5d5d5; border-top:1px solid #ffffff;margin-top: 15px; margin-bottom: 10px}
     #recherche .requete #dest .btn{margin-top:5px;}
