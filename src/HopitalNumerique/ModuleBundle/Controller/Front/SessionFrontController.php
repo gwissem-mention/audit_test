@@ -192,14 +192,16 @@ class SessionFrontController extends Controller
         $mails = array();
         foreach ($inscriptions as &$inscription) {
             if(in_array($inscription->getId(), $inscriptionsId)){
+                $etatparticip = $inscription->getEtatParticipation()->getId();
                 $inscription->setEtatParticipation($refParticipation);
                 $inscription->setEtatEvaluation($refEval);
                 //Envoyer mail du formulaire d'évluation de la session
-                $mails = array_merge($mails, $this->get('nodevo_mail.manager.mail')->sendFormulaireEvaluationsMassMail(array($inscription),array()));
+                if(411 != $etatparticip)
+                   $mails = array_merge($mails, $this->get('nodevo_mail.manager.mail')->sendFormulaireEvaluationsMassMail(array($inscription),array()));
             }
             else{
                 $inscription->setEtatParticipation($refPasParticipation);
-                $inscription->setEtatEvaluation($refEval);
+                $inscription->setEtatEvaluation($refEvalCanceled);
             }
         }
 
