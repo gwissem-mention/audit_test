@@ -7,6 +7,15 @@
     {{ communaute_pratique.display_action_contact_animateur(fiche.groupe) }}
 {% endblock %}
 
+{% block javascripts %}
+    {{ parent() }}
+    <script type="text/javascript">
+        $(document).ready(function() {
+            CommunautePratique_Commentaire.initTinyMce({{ fiche.groupe.id }});
+        });
+    </script>
+{% endblock %}
+
 {% block communaute_pratique_sommaire %}{% endblock %}
 
 {% block body_communaute_pratique %}

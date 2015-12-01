@@ -1,6 +1,10 @@
 {{ form_start(commentaireForm) }}
-    {{ form_widget(commentaireForm.message) }}
+    {{ form_widget(commentaireForm.message, { id:'commentaire-'~commentaireForm.vars.data.id }) }}
     <div class="text-right">
         <button type="submit" class="btn btn-success">Envoyer</button>
     </div>
 {{ form_end(commentaireForm) }}
+
+<script type="text/javascript">
+    CommunautePratique_Commentaire.callTinyMce('#commentaire-{{ commentaireForm.vars.data.id }}');
+</script>

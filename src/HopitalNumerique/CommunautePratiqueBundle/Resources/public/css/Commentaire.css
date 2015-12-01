@@ -12,5 +12,7 @@
                 .communaute-de-pratiques-commentaires .commentaire .contenu { margin: 0 0 0 84px; }
                     .communaute-de-pratiques-commentaires .commentaire .contenu .nom { font-size: 14px; }
                         .communaute-de-pratiques-commentaires .commentaire .contenu .nom .date { font-size: 90%; }
+                    .communaute-de-pratiques-commentaires .commentaire .contenu .animateur { font-size: 11px; }
+                        .communaute-de-pratiques-commentaires .commentaire .contenu .animateur .icon { color: #d60030;font-size: 16px;vertical-align: middle; }
                     .communaute-de-pratiques-commentaires .commentaire .contenu .message { margin: 8px 0; }
                         .communaute-de-pratiques-commentaires .commentaire .contenu .message .btn { margin: 8px 0;padding-left: 50px;padding-right: 50px; }

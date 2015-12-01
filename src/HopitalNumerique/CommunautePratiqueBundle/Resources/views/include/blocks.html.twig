@@ -143,6 +143,9 @@
         </div>
         <div class="contenu">
             <div class="nom">Par <strong>{{ commentaire.user.prenomNom }}</strong> <span class="date">le {{ commentaire.dateCreation|date('d/m/Y') }}</span></div>
+            {% if (commentaire.fiche is not null and commentaire.fiche.groupe.hasAnimateur(commentaire.user)) or (commentaire.groupe is not null and commentaire.groupe.hasAnimateur(commentaire.user)) %}
+                <div class="animateur"><em class="icon icon-speaker15"></em> Animateur du groupe</div>
+            {% endif %}
             <div class="message">
                 <p>{{ commentaire.message|raw }}</p>
             </div>

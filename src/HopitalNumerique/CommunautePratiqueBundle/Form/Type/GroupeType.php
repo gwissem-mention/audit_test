@@ -60,8 +60,7 @@ class GroupeType extends \Symfony\Component\Form\AbstractType
                 'disabled' => (!$isCreation)
             ))
         ;
-        if ($hasDomaine)
-        {
+        if ($hasDomaine) {
             $builder
                 ->add('titre', 'text', array(
                     'required' => true,

@@ -4,6 +4,77 @@
 var CommunautePratique_Commentaire = function() {};
 
 /**
+ * Initialise TinyMce.
+ *
+ * @param integer groupeId ID du groupe
+ */
+CommunautePratique_Commentaire.initTinyMce = function(groupeId)
+{
+    CommunautePratique_Commentaire.initTinyMcePluginDocuments(groupeId);
+    tinymce.PluginManager.load('publication', '/bundles/hopitalnumeriqueobjet/js/publication/plugin.min.js');
+};
+/**
+ * Initialise le plugin TinyMce permetant de créer un lien vers un document.
+ *
+ * @param integer groupeId ID du groupe
+ */
+CommunautePratique_Commentaire.initTinyMcePluginDocuments = function(groupeId)
+{
+    tinymce.PluginManager.add('communautePratiqueDocument', function(editor, url) {
+        editor.addButton('communautePratiqueDocument', {
+            text: 'Document',
+            icon: false,
+            onclick: function() {
+                $.fancybox.open(Routing.generate('hopitalnumerique_communautepratique_tinymce_documents', { groupe:groupeId }), {
+                    type     : 'ajax',
+                    autoSize : false,
+                    width    : 800,
+                    height   : 250,
+                    ajax     : {
+                        data : {
+                            texteSelectionne: editor.selection.getContent({format: 'text'})
+                        },
+                        type : "POST"
+                    },
+                    beforeClose : function() {
+                        if ( $('#choix').val() == 'submit') {
+                            var documentId = $('#document').val();
+                            var texte = $('#texte').val();
+                            if (documentId != '' && texte != '') {
+                                editor.insertContent('<a href="' + Routing.generate('hopitalnumerique_communautepratique_document_download', { document:documentId }) + '">' + texte + '</a>');
+                            }
+                        }
+                    }
+                });
+            }
+        });
+    });
+};
+
+/**
+ * Appelle TinyMce pour les champs de formulaire.
+ *
+ * @param Element element Sélecteur
+ */
+CommunautePratique_Commentaire.callTinyMce = function(element)
+{
+    tinyMCE.init({
+        entity_encoding : 'raw',
+        selector     : element,
+        //selector     : 'textarea.tinyMceCode',
+        theme        : "modern",
+        theme_url    : '/bundles/nodevotools/js/tinymce/themes/modern/theme.min.js',
+        skin_url     : '/bundles/nodevotools/js/tinymce/skins/lightgray',
+        plugins      : 'link communautePratiqueDocument publication',
+        height       : 150,
+        menubar      : false,
+        content_css  : '/bundles/nodevotools/css/wysiwyg.css',
+        toolbar1     : 'communautePratiqueDocument | link | publication',
+        relative_urls: false
+    });
+};
+
+/**
  * Permet d'éditer le commentaire.
  *
  * @param integer commentaireId ID du commentaire

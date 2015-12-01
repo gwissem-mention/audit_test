@@ -219,8 +219,12 @@ white_october_pagerfanta:
 
 fos_js_routing:
     routes_to_expose:
+        - hopitalnumerique_communautepratique_commentaire_blockview
         - hopitalnumerique_communautepratique_commentaire_delete
         - hopitalnumerique_communautepratique_commentaire_edit
         - hopitalnumerique_communautepratique_document_delete
+        - hopitalnumerique_communautepratique_document_download
         - hopitalnumerique_communautepratique_document_listbygroupe
         - hopitalnumerique_communautepratique_document_upload
+        - hopitalnumerique_communautepratique_tinymce_documents
+        - hopitalnumerique_objet_objet_getObjets

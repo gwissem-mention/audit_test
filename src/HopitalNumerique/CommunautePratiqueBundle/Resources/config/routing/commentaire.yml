@@ -1,3 +1,10 @@
+hopitalnumerique_communautepratique_commentaire_blockview:
+    pattern: '/commentaire/{commentaire}/block-view'
+    defaults: { _controller: 'HopitalNumeriqueCommunautePratiqueBundle:Commentaire:blockView' }
+    methods: 'GET'
+    requirements:
+        commentaire: \d+
+
 hopitalnumerique_communautepratique_commentaire_edit:
     pattern: '/commentaire/{commentaire}/edit'
     defaults: { _controller: 'HopitalNumeriqueCommunautePratiqueBundle:Commentaire:edit' }

@@ -36,7 +36,7 @@ class CommentaireType extends \Symfony\Component\Form\AbstractType
             ->add('message', 'textarea', array(
                 'required' => true,
                 'attr' => array(
-                    'class' => 'validate[required]',
+                    'class' => 'validate[required] tinyMceCode',
                     'rows' => 4
                 )
             ))

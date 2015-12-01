@@ -12,6 +12,34 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 class CommentaireController extends Controller
 {
     /**
+     * Affiche du bloc de commentaire.
+     */
+    public function blockViewAction(Commentaire $commentaire)
+    {
+        if (!$this->container->get('hopitalnumerique_communautepratique.dependency_injection.security')
+            ->canAccessCommunautePratique()) {
+            throw new \Exception('Commentaire non visible.');
+        }
+
+        return $this->render('HopitalNumeriqueCommunautePratiqueBundle:Commentaire:block_view.html.twig', array(
+            'commentaire' => $commentaire
+        ));
+    }
+
+    /**
+     * Sauvegarde un commentaire.
+     */
+    public function saveAction(Request $request)
+    {
+        if (!$this->container->get('hopitalnumerique_communautepratique.dependency_injection.security')
+            ->canAccessCommunautePratique()) {
+            throw new \Exception('Commentaire non enregistrable.');
+        }
+
+        
+    }
+
+    /**
      * Formulaire d'ajout d'un commentaire (sans template).
      */
     public function editAction(Commentaire $commentaire, Request $request)

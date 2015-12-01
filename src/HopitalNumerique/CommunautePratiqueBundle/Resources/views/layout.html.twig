@@ -6,6 +6,7 @@
     {{parent()}}
     {% stylesheets output="compiled/hopitalnumerique-communautepratique.css" filter="cssrewrite, ?yui_css"
         '@validationEngine_css'
+        '@select2_css'
         '@bootstrap_multiselect_css'
         'bundles/hopitalnumeriquecommunautepratique/css/CommunautePratique.css'
         'bundles/hopitalnumeriquecommunautepratique/css/Commentaire.css'
@@ -20,7 +21,11 @@
     {{ parent() }}
     {% javascripts output="compiled/hopitalnumerique-communautepratique.js"
         '@validationEngine_js'
+        '@select2_js'
         '@bootstrap_multiselect_js'
+        '@tinymce_js'
+        'bundles/nodevogestionnairemedia/js/moxiemanager/js/moxman.loader.min.js'
+        'bundles/nodevogestionnairemedia/js/MoxieManager.js'
         'bundles/hopitalnumeriquecontact/js/Popup.js'
         'bundles/hopitalnumeriquecommunautepratique/js/CommunautePratique.js'
         'bundles/hopitalnumeriquecommunautepratique/js/Commentaire.js'
