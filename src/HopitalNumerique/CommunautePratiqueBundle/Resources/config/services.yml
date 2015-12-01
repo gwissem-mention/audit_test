@@ -9,6 +9,10 @@ services:
         class: "HopitalNumerique\CommunautePratiqueBundle\DependencyInjection\Annuaire"
         arguments: ['@session', '@hopitalnumerique_user.manager.user', '@hopitalnumerique_reference.manager.reference']
 
+    hopitalnumerique_communautepratique.dependency_injection.commentaire:
+        class: 'HopitalNumerique\CommunautePratiqueBundle\DependencyInjection\Commentaire'
+        arguments: ['@router', '@form.factory']
+
     hopitalnumerique_communautepratique.dependency_injection.inscription:
         class: "HopitalNumerique\CommunautePratiqueBundle\DependencyInjection\Inscription"
 

@@ -14,9 +14,14 @@ use HopitalNumerique\CommunautePratiqueBundle\Entity\Commentaire;
 class Security
 {
     /**
+     * @var \Symfony\Component\Security\Core\SecurityContextInterface SecurityContext
+     */
+    private $securityContext;
+
+    /**
      * @var \HopitalNumerique\UserBundle\Entity\User|NULL Utilisateur connecté
      */
-    private $user;
+    private $user = null;
 
 
     /**
@@ -24,7 +29,28 @@ class Security
      */
     public function __construct(SecurityContextInterface $securityContext)
     {
-        $this->user = (null !== $securityContext->getToken() ? ($securityContext->getToken()->getUser() instanceof User ? $securityContext->getToken()->getUser() : null) : null);
+        $this->securityContext = $securityContext;
+    }
+
+
+    /**
+     * Retourne l'utilisateur courant.
+     * Note : On utilise cette fonction car $user ne peut être créée dans le contrôleur car ce service est utilisé pour
+     *     une extension Twig.
+     *
+     * @return \HopitalNumerique\UserBundle\Entity\User Utilisateur
+     */
+    private function getUser()
+    {
+        if (null === $this->user) {
+            $this->user = (null !== $this->securityContext->getToken()
+                ? ($this->securityContext->getToken()->getUser() instanceof User
+                    ? $this->securityContext->getToken()->getUser()
+                    : null)
+                : null);
+        }
+
+        return $this->user;
     }
 
 
@@ -35,7 +61,7 @@ class Security
      */
     public function canAccessCommunautePratique()
     {
-        return (null !== $this->user && $this->user->isInscritCommunautePratique());
+        return (null !== $this->getUser() && $this->getUser()->isInscritCommunautePratique());
     }
 
     /**
@@ -46,7 +72,7 @@ class Security
      */
     public function canAccessGroupe(Groupe $groupe)
     {
-        return (null !== $this->user && $this->user->hasCommunautePratiqueGroupe($groupe));
+        return (null !== $this->getUser() && $this->getUser()->hasCommunautePratiqueGroupe($groupe));
     }
 
     /**
@@ -57,7 +83,7 @@ class Security
      */
     public function canDeleteDocument(Document $document)
     {
-        return (null !== $this->user && $document->getUser()->getId() == $this->user->getId());
+        return (null !== $this->getUser() && $document->getUser()->getId() == $this->getUser()->getId());
     }
 
     /**
@@ -79,10 +105,21 @@ class Security
      */
     public function canEditCommentaire(Commentaire $commentaire)
     {
-        if (null === $this->user) {
+        if (null === $this->getUser()) {
             return false;
         }
 
-        return ($commentaire->getUser()->getId() == $this->user->getId());
+        return ($commentaire->getUser()->getId() == $this->getUser()->getId());
+    }
+
+    /**
+     * Retourne si l'utilisateur courant peut supprimer tel commentaire.
+     *
+     * @param \HopitalNumerique\CommunautePratiqueBundle\Entity\Commentaire $commentaire Commentaire
+     * @return boolean VRAI si commentaire supprimable
+     */
+    public function canDeleteCommentaire(Commentaire $commentaire)
+    {
+        return $this->canEditCommentaire($commentaire);
     }
 }

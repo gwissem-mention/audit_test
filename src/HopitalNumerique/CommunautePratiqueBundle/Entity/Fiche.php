@@ -102,6 +102,7 @@ class Fiche
 
     /**
      * @ORM\OneToMany(targetEntity="Commentaire", mappedBy="fiche")
+     * @ORM\OrderBy({"dateCreation":"DESC"})
      */
     private $commentaires;
 

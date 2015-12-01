@@ -15,8 +15,7 @@ class GroupeController extends \Symfony\Bundle\FrameworkBundle\Controller\Contro
      */
     public function listAction(Request $request)
     {
-        if (!$this->container->get('hopitalnumerique_communautepratique.dependency_injection.security')->canAccessCommunautePratique())
-        {
+        if (!$this->container->get('hopitalnumerique_communautepratique.dependency_injection.security')->canAccessCommunautePratique()) {
             return $this->redirect($this->generateUrl('hopital_numerique_homepage'));
         }
 

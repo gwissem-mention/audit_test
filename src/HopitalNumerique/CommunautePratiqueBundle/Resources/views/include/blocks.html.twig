@@ -129,13 +129,23 @@
  # @param \HopitalNumerique\CommunautePratiqueBundle\Entity\Commentaire commentaire Commentaire
  #}
 {% macro display_commentaire(commentaire) %}
-    <div class="commentaire">
+    <div class="commentaire" data-communaute-pratique-commentaire-id="{{ commentaire.id }}">
+        <div class="actions">
+            {% if commentaire|communautePratiqueCanEdit %}
+                <a onclick="CommunautePratique_Commentaire.edit({{ commentaire.id }});"><em class="fa fa-edit"></em></a>
+            {% endif %}
+            {% if commentaire|communautePratiqueCanDelete %}
+                <a onclick="CommunautePratique_Commentaire.delete({{ commentaire.id }});"><em class="fa fa-trash-o"></em></a>
+            {% endif %}
+        </div>
         <div class="illustration">
             <div class="communaute-de-pratiques-avatar" style="background-image: url('{{ asset(commentaire.user.avatarWebPath) }}');"></div>
         </div>
-        <div class="message">
+        <div class="contenu">
             <div class="nom">Par <strong>{{ commentaire.user.prenomNom }}</strong> <span class="date">le {{ commentaire.dateCreation|date('d/m/Y') }}</span></div>
-            <p>{{ commentaire.message|raw }}</p>
+            <div class="message">
+                <p>{{ commentaire.message|raw }}</p>
+            </div>
         </div>
         <div class="clearfix"></div>
     </div>

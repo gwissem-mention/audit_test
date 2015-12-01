@@ -100,10 +100,12 @@
                     <div class="illustration">
                         <div class="communaute-de-pratiques-avatar" style="background-image: url('{{ asset(app.user.avatarWebPath) }}');"></div>
                     </div>
-                    <div class="message">
+                    <div class="contenu">
                         <div class="nom"><strong>{{ app.user.prenomNom }}</strong></div>
 
-                        {{ render(controller('HopitalNumeriqueCommunautePratiqueBundle:Commentaire/FicheCommentaire:add', { fiche:fiche.id })) }}
+                        <div class="message">
+                            {{ render(controller('HopitalNumeriqueCommunautePratiqueBundle:Commentaire/FicheCommentaire:add', { fiche:fiche.id })) }}
+                        </div>
 
                     </div>
                     <div class="clearfix"></div><br>

@@ -4,9 +4,13 @@
         .communaute-de-pratiques-commentaires .panel-communaute-de-pratiques .panel-heading { background-color: #f2f2f2; }
             .communaute-de-pratiques-commentaires .panel-communaute-de-pratiques .panel-heading h2 { font-size: 16px; }
         .communaute-de-pratiques-commentaires .panel-communaute-de-pratiques .panel-body { padding: 0; }
-            .communaute-de-pratiques-commentaires .commentaire { border-color: #f2f2f2;border-style: solid;border-width: 1px 0 0 0;font-size: 12px;padding: 15px; }
+            .communaute-de-pratiques-commentaires .commentaire { border-color: #f2f2f2;border-style: solid;border-width: 1px 0 0 0;font-size: 12px;padding: 15px;position: relative; }
+                .communaute-de-pratiques-commentaires .commentaire .actions { font-size: 17px;position: absolute;right: 7px;top: 8px; }
+                    .communaute-de-pratiques-commentaires .commentaire .actions a { border-color: #f2f2f2;border-style: solid;border-width: 1px;color: #a8a8a8;display: block;float: left;margin: 0 0 0 4px;text-align: center;width: 26px; }
                 .communaute-de-pratiques-commentaires .commentaire .illustration { float: left;width: 84px; }
                     .communaute-de-pratiques-commentaires .commentaire .illustration .communaute-de-pratiques-avatar { height: 66px;width: 66px; }
-                .communaute-de-pratiques-commentaires .commentaire .message { margin: 0 0 0 84px; }
-                    .communaute-de-pratiques-commentaires .commentaire .message .nom { font-size: 14px; }
-                        .communaute-de-pratiques-commentaires .commentaire .message .nom .date { font-size: 90%; }
+                .communaute-de-pratiques-commentaires .commentaire .contenu { margin: 0 0 0 84px; }
+                    .communaute-de-pratiques-commentaires .commentaire .contenu .nom { font-size: 14px; }
+                        .communaute-de-pratiques-commentaires .commentaire .contenu .nom .date { font-size: 90%; }
+                    .communaute-de-pratiques-commentaires .commentaire .contenu .message { margin: 8px 0; }
+                        .communaute-de-pratiques-commentaires .commentaire .contenu .message .btn { margin: 8px 0;padding-left: 50px;padding-right: 50px; }
