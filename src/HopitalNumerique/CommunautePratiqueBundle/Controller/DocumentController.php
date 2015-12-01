@@ -66,23 +66,6 @@ class DocumentController extends \Symfony\Bundle\FrameworkBundle\Controller\Cont
     }
 
     /**
-     * Retourne la taille en octets de l'ensemble des documents.
-     *
-     * @param array<\Symfony\Component\HttpFoundation\File\UploadedFile> $uploadedDocuments Réponses $_FILES
-     * @return integer Taille de tous les documents
-     */
-    private function getUploadedDocumentsSize(array $uploadedDocuments)
-    {
-        $uploadedDocumentsSize = 0;
-
-        foreach ($uploadedDocuments as $uploadedDocument) {
-            $uploadedDocumentsSize += $uploadedDocument->getSize();
-        }
-
-        return $uploadedDocumentsSize;
-    }
-
-    /**
      * Enregistre le document chargé par l'utilisateur.
      * 
      * @param \Symfony\Component\HttpFoundation\File\UploadedFile      $uploadedFile Fichier chargé
@@ -92,9 +75,16 @@ class DocumentController extends \Symfony\Bundle\FrameworkBundle\Controller\Cont
     private function saveUploadedDocument(UploadedFile $uploadedFile, Groupe $groupe)
     {
         $documentFichier = new Fichier($uploadedFile->getPathname());
+        $extensionsAutorisees = explode(',', $this->container->getParameter('nodevo_gestionnaire_media.moxie_manager.extensions_autorisees'));
 
         if ($documentFichier->getSize() > Document::MAX_SIZE * 1024 * 1024) {
             $this->container->get('session')->getFlashBag()->add('danger', 'Document "'.$uploadedFile->getClientOriginalName().'" non enregistré car trop volumineux.');
+        } elseif (!in_array(Fichier::getExtensionFromFile($uploadedFile->getClientOriginalName()), $extensionsAutorisees)) {
+            $this->container->get('session')->getFlashBag()->add(
+                'danger',
+                'Document "'.$uploadedFile->getClientOriginalName().'" non enregistré car extension "'.
+                Fichier::getExtensionFromFile($uploadedFile->getClientOriginalName()).'" non autorisée.'
+            );
         } elseif ($uploadedFile->getSize() > 0 && '' != $uploadedFile->getFilename() && $uploadedFile->getError() == UPLOAD_ERR_OK) {
             if ($documentFichier->move($this->container->get('kernel')->getRootDir().DIRECTORY_SEPARATOR.'..'.DIRECTORY_SEPARATOR.'files'.DIRECTORY_SEPARATOR.'communaute-de-pratiques'.DIRECTORY_SEPARATOR.'documents'.DIRECTORY_SEPARATOR.$uploadedFile->getClientOriginalName(), false)) {
                 $documentFichier->setNomMinifie($documentFichier->getFilenameWithoutExtension(), '-', false, 255, false);

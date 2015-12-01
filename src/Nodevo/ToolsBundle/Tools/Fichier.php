@@ -287,4 +287,20 @@ class Fichier
 
         return $encodage;
     }
+
+
+    /**
+     * Retourne l'extension d'un fichier.
+     *
+     * @param string $filename Nom du fichier
+     * @return string|NULL Extension
+     */
+    public static function getExtensionFromFile($filename)
+    {
+        if (false !== strpos($filename, '.')) {
+            return substr($filename, strrpos($filename, '.') + 1);
+        }
+
+        return null;
+    }
 }
