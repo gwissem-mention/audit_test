@@ -2,6 +2,7 @@
 namespace HopitalNumerique\CommunautePratiqueBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use HopitalNumerique\CommunautePratiqueBundle\Entity\Groupe;
 use HopitalNumerique\CommunautePratiqueBundle\Entity\Fiche;
@@ -22,7 +23,11 @@ class FicheController extends Controller
         }
 
         return $this->render('HopitalNumeriqueCommunautePratiqueBundle:Fiche:view.html.twig', array(
-            'fiche' => $fiche
+            'fiche' => $fiche,
+            'canClose' => $this->container->get('hopitalnumerique_communautepratique.dependency_injection.security')
+                ->canCloseFiche($fiche),
+            'canOpen' => $this->container->get('hopitalnumerique_communautepratique.dependency_injection.security')
+                ->canOpenFiche($fiche)
         ));
     }
 
@@ -69,5 +74,37 @@ class FicheController extends Controller
             'documents' => $this->container->get('hopitalnumerique_communautepratique.manager.document')
                 ->findByIndexedById(array('groupe' => $fiche->getGroupe(), 'user' => $this->getUser()))
         ));
+    }
+
+    /**
+     * Résout la fiche.
+     */
+    public function closeAction(Fiche $fiche)
+    {
+        if (!$this->container->get('hopitalnumerique_communautepratique.dependency_injection.security')
+            ->canCloseFiche($fiche)) {
+            return new JsonResponse(array('success' => false));
+        }
+
+        $fiche->setResolu(true);
+        $this->container->get('hopitalnumerique_communautepratique.manager.fiche')->save($fiche);
+
+        return new JsonResponse(array('success' => true));
+    }
+
+    /**
+     * Rouvre la fiche.
+     */
+    public function openAction(Fiche $fiche)
+    {
+        if (!$this->container->get('hopitalnumerique_communautepratique.dependency_injection.security')
+            ->canOpenFiche($fiche)) {
+            return new JsonResponse(array('success' => false));
+        }
+
+        $fiche->setResolu(false);
+        $this->container->get('hopitalnumerique_communautepratique.manager.fiche')->save($fiche);
+
+        return new JsonResponse(array('success' => true));
     }
 }

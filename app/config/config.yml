@@ -226,6 +226,9 @@ fos_js_routing:
         - hopitalnumerique_communautepratique_document_download
         - hopitalnumerique_communautepratique_document_listbygroupe
         - hopitalnumerique_communautepratique_document_upload
+        - hopitalnumerique_communautepratique_fiche_close
+        - hopitalnumerique_communautepratique_fiche_open
+        - hopitalnumerique_communautepratique_fiche_view
         - hopitalnumerique_communautepratique_tinymce_documents
         - hopitalnumerique_objet_objet_getObjets
 

@@ -3,12 +3,22 @@
 {% block title_communaute_pratique %}Groupe de travail <span class="subtitle">{{ fiche.groupe }} - {{ fiche }}</span>{% endblock %}
 
 {% block communaute_pratique_actions %}
+    {% if canClose %}
+        <button class="btn btn-sm btn-success" onclick="CommunautePratique_Fiche.close({{ fiche.id }});">Problématique résolue</button>
+    {% elseif canOpen %}
+        <button class="btn btn-sm btn-success" onclick="CommunautePratique_Fiche.open({{ fiche.id }});">Réouvrir la fiche</button>
+    {% endif %}
     {{ parent() }}
     {{ communaute_pratique.display_action_contact_animateur(fiche.groupe) }}
 {% endblock %}
 
 {% block javascripts %}
     {{ parent() }}
+    {% javascripts output="compiled/hopitalnumerique-communautepratique-fiche-view.js"
+        'bundles/hopitalnumeriquecommunautepratique/js/Fiche.js'
+    %}
+        <script type="text/javascript" src="{{ asset_url }}"></script>
+    {% endjavascripts %}
     <script type="text/javascript">
         $(document).ready(function() {
             CommunautePratique_Commentaire.initTinyMce({{ fiche.groupe.id }});
@@ -104,24 +114,26 @@
             </div>
             <div class="panel-body">
 
-                <div class="commentaire">
-                    <p>Écrire un commentaire :</p>
-                    <div class="illustration">
-                        <div class="communaute-de-pratiques-avatar" style="background-image: url('{{ asset(app.user.avatarWebPath) }}');"></div>
-                    </div>
-                    <div class="contenu">
-                        <div class="nom"><strong>{{ app.user.prenomNom }}</strong></div>
-
-                        <div class="message">
-                            {{ render(controller('HopitalNumeriqueCommunautePratiqueBundle:Commentaire/FicheCommentaire:add', { fiche:fiche.id })) }}
+                {% if fiche.resolu == false %}
+                    <div class="commentaire">
+                        <p>Écrire un commentaire :</p>
+                        <div class="illustration">
+                            <div class="communaute-de-pratiques-avatar" style="background-image: url('{{ asset(app.user.avatarWebPath) }}');"></div>
                         </div>
+                        <div class="contenu">
+                            <div class="nom"><strong>{{ app.user.prenomNom }}</strong></div>
 
+                            <div class="message">
+                                {{ render(controller('HopitalNumeriqueCommunautePratiqueBundle:Commentaire/FicheCommentaire:add', { fiche:fiche.id })) }}
+                            </div>
+
+                        </div>
+                        <div class="clearfix"></div><br>
+                        {% if fiche.commentaires|length > 0 %}
+                            <p><strong>Commentaires des membres du groupe</strong></p>
+                        {% endif %}
                     </div>
-                    <div class="clearfix"></div><br>
-                    {% if fiche.commentaires|length > 0 %}
-                        <p><strong>Commentaires des membres du groupe</strong></p>
-                    {% endif %}
-                </div>
+                {% endif %}
 
                 {% if fiche.commentaires|length > 0 %}
                     {% for commentaire in fiche.commentaires %}

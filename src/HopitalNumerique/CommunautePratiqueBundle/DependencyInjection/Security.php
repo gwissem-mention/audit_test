@@ -98,6 +98,42 @@ class Security
     }
 
     /**
+     * Retourne si l'utilisateur courant peut éditer telle fiche.
+     *
+     * @param \HopitalNumerique\CommunautePratiqueBundle\Entity\Fiche $fiche Fiche
+     * @return boolean VRAI si fiche éditable
+     */
+    public function canEditFiche(Fiche $fiche)
+    {
+        return ( $this->canAccessFiche($fiche)
+            && ($fiche->getUser()->getId() == $this->getUser()->getId()
+                || $fiche->getGroupe()->hasAnimateur($this->getUser()))
+        );
+    }
+
+    /**
+     * Retourne si l'utilisateur courant peut résoudre telle fiche.
+     *
+     * @param \HopitalNumerique\CommunautePratiqueBundle\Entity\Fiche $fiche Fiche
+     * @return boolean VRAI si fiche résolvable
+     */
+    public function canCloseFiche(Fiche $fiche)
+    {
+        return ($this->canEditFiche($fiche) && !$fiche->isResolu());
+    }
+
+    /**
+     * Retourne si l'utilisateur courant peut rouvrir telle fiche.
+     *
+     * @param \HopitalNumerique\CommunautePratiqueBundle\Entity\Fiche $fiche Fiche
+     * @return boolean VRAI si fiche rouvrable
+     */
+    public function canOpenFiche(Fiche $fiche)
+    {
+        return ($this->canEditFiche($fiche) && $fiche->isResolu());
+    }
+
+    /**
      * Retourne si l'utilisateur courant peut éditer tel commentaire.
      *
      * @param \HopitalNumerique\CommunautePratiqueBundle\Entity\Commentaire $commentaire Commentaire
