@@ -2,6 +2,7 @@
 namespace HopitalNumerique\CommunautePratiqueBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Nodevo\ToolsBundle\Tools\Fichier;
 use Symfony\Component\Validator\Constraints as Assert;
 use Gedmo\Mapping\Annotation as Gedmo;
 
@@ -355,6 +356,16 @@ class Document
         return null;
     }
 
+
+    /**
+     * Retourne si le document est une image.
+     *
+     * @return boolean VRAI si image
+     */
+    public function isImage()
+    {
+        return (in_array(Fichier::getExtensionFromFile($this->nom), array('jpg', 'jpeg', 'png', 'gif')));
+    }
 
     /**
      * Retourne l'icône du document en HTML.

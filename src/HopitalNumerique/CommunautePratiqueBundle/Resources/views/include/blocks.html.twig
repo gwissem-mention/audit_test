@@ -113,7 +113,11 @@
                 <div class="checkbox">{{ form_widget(checkbox) }}</div>
             {% endif %}
             <div class="icone">
-                {{ document.iconeHtml|raw }}
+                {% if document.isImage %}
+                    <div class="image" style="background-image:url('{{ document.pathname|imagine_filter('communaute_pratique_document') }}');"></div>
+                {% else %}
+                    {{ document.iconeHtml|raw }}
+                {% endif %}
             </div>
             <div class="contenu">
                 <div class="nom"><a href="{{ path('hopitalnumerique_communautepratique_document_download', { 'document':document.id }) }}"><span title="{{ document }}">{{ document|truncate(15) }}</span> <span class="size">{{ document.sizeLibelle }}</span></a></div>

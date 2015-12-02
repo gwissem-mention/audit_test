@@ -117,6 +117,7 @@
 /* Petit bloc d'un document */
 .communaute-de-pratiques-document { border-color: #e6e6e6;border-style: solid;border-width: 1px;font-size: 13px;height: 72px;margin: 10px 0;position: relative; }
     .communaute-de-pratiques-document .icone { float: left;font-size: 50px;text-align: center;width: 68px; }
+        .communaute-de-pratiques-document .icone .image { background-position: center center;background-repeat: no-repeat;background-size: contain;height: 62px;margin: 4px 4px 0; }
     .communaute-de-pratiques-document .contenu { margin: 0 0 0 68px;padding: 16px 0 0; }
         .communaute-de-pratiques-document .contenu .nom { font-weight: bold;height: 19px;overflow: hidden; }
             .communaute-de-pratiques-document .contenu .nom a { color: #333; }

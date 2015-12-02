@@ -228,3 +228,15 @@ fos_js_routing:
         - hopitalnumerique_communautepratique_document_upload
         - hopitalnumerique_communautepratique_tinymce_documents
         - hopitalnumerique_objet_objet_getObjets
+
+# Miniatures
+liip_imagine:
+    loaders:
+        default:
+            filesystem:
+                data_root: '%kernel.root_dir%/..'
+    filter_sets:
+        communaute_pratique_document:
+            quality: 75
+            filters:
+                thumbnail: { size: [100, 100], mode: inset, allow_upscale: true }
