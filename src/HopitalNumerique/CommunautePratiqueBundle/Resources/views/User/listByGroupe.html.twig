@@ -44,9 +44,11 @@
                 {% for membre in pagerFantaMembres.currentPageResults %}
                     <div class="col-md-3 col-sm-6">
                         <div class="user">
-                            <div class="delete">
-                                <a onclick="CommunautePratique_User.desinscritGroupe({{ groupe.id }}, {{ membre.id }});"><em class="fa fa-times-circle"></em></a>
-                            </div>
+                            {% if canDeleteMembre %}
+                                <div class="delete">
+                                    <a onclick="CommunautePratique_User.desinscritGroupe({{ groupe.id }}, {{ membre.id }});"><em class="fa fa-times-circle"></em></a>
+                                </div>
+                            {% endif %}
                             <div class="identite">
                                 <div class="illustration"><div class="communaute-de-pratiques-avatar" style="background-image: url('{{ asset(membre.avatarWebPath) }}');"></div></div>
                                 <div class="nom">
@@ -72,6 +74,9 @@
                                 </div>
                             </div>
                             <div class="liens">
+                                <div class="informations">
+                                    <a href="{{ path('hopitalnumerique_communautepratique_user_viewforgroupe', { user:membre.id, groupe:groupe.id }) }}">Voir ses informations</a>
+                                </div>
                                 <div class="groupe">
                                     {% if membre.communautePratiqueGroupes|length > 0 %}
                                         <a class="fancybox fancybox.ajax" href="{{ path('hopitalnumerique_communautepratique_groupe_panelusergroupes', { user:membre.id }) }}">Participations aux groupes</a>

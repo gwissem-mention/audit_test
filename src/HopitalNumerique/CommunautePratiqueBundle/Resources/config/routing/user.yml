@@ -13,6 +13,14 @@ hopitalnumerique_communautepratique_user_listbygroupe:
         groupe: '\d+'
         page: '\d+'
 
+hopitalnumerique_communautepratique_user_viewforgroupe:
+    pattern: '/view/{user}/groupe{groupe}'
+    defaults: { _controller: 'HopitalNumeriqueCommunautePratiqueBundle:User:viewForGroupe' }
+    methods: 'GET'
+    requirements:
+        user: '\d+'
+        groupe: '\d+'
+
 hopitalnumerique_communautepratique_user_desinscritgroupe:
     pattern: '/groupe/{groupe}/desinscrit/{user}'
     defaults: { _controller: 'HopitalNumeriqueCommunautePratiqueBundle:User:desinscritGroupe' }

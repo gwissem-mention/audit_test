@@ -65,10 +65,31 @@ class UserController extends \Symfony\Bundle\FrameworkBundle\Controller\Controll
 
         return $this->render('HopitalNumeriqueCommunautePratiqueBundle:User:listByGroupe.html.twig', array(
             'groupe' => $groupe,
+            'canDeleteMembre' => $this->container
+                ->get('hopitalnumerique_communautepratique.dependency_injection.security')->canDeleteMembre($groupe),
             'ajoutMembreForm' => (null !== $ajoutMembreForm ? $ajoutMembreForm->createView() : null),
             'pagerFantaMembres' => $this->container
                 ->get('hopitalnumerique_communautepratique.dependency_injection.annuaire')
                 ->getPagerfantaUsersByGroupe($groupe, $page)
+        ));
+    }
+
+    /**
+     * Affiche les informations d'un membre.
+     */
+    public function viewForGroupeAction(User $user, Groupe $groupe)
+    {
+        if (!$user->isInscritCommunautePratique() || !$this->container
+            ->get('hopitalnumerique_communautepratique.dependency_injection.security')->canAccessCommunautePratique()
+        ) {
+            return $this->redirect($this->generateUrl('hopital_numerique_homepage'));
+        }
+
+        return $this->render('HopitalNumeriqueCommunautePratiqueBundle:User:viewForGroupe.html.twig', array(
+            'membre' => $user,
+            'groupe' => $groupe,
+            'questionnaireReponses' => $this->container->get('hopitalnumerique_questionnaire.manager.reponse')
+                ->reponsesByQuestionnaireByUser($groupe->getQuestionnaire()->getId(), $user->getId())
         ));
     }
 

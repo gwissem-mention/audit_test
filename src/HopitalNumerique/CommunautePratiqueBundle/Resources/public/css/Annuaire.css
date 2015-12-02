@@ -17,8 +17,11 @@
             .communaute-de-pratiques-annuaire-users .user .type .icon, .communaute-de-pratiques-annuaire-users .user .fonction .icon { float: left;display: block;float: left;font-size: 34px;padding: 12px 0 0;width: 48px; }
             .communaute-de-pratiques-annuaire-users .user .type .contenu, .communaute-de-pratiques-annuaire-users .user .fonction .contenu { align-items: center;-webkit-align-items: center;display: flex;height: 55px;margin: 0 0 0 48px; }
         .communaute-de-pratiques-annuaire-users .user .liens { font-size: 12px;padding: 8px;text-align: center; }
+            .communaute-de-pratiques-annuaire-users .user .liens a, .communaute-de-pratiques-annuaire-users .user .liens span { display: block;margin: 2px 0 0 0;padding: 4px 0; }
+            .communaute-de-pratiques-annuaire-users .user .liens .informations { background-color: #d60030; }
+                .communaute-de-pratiques-annuaire-users .user .liens .informations a { color: #fff; }
             .communaute-de-pratiques-annuaire-users .user .liens .groupe { background-color: #e5e5e5; }
-                .communaute-de-pratiques-annuaire-users .user .liens .groupe a, .communaute-de-pratiques-annuaire-users .user .liens .groupe span { color: #333;display: block;padding: 4px 0; }
+                .communaute-de-pratiques-annuaire-users .user .liens .groupe a, .communaute-de-pratiques-annuaire-users .user .liens .groupe span { color: #333; }
                 .communaute-de-pratiques-annuaire-users .user .liens .groupe span { color: #a2a2a2;cursor: default; }
                 .communaute-de-pratiques-annuaire-users .user .liens .groupe a:hover { text-decoration: none; }
     .communaute-de-pratiques-annuaire-users .pagination { margin: 15px 0 30px 0; }

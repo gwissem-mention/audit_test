@@ -1,0 +1,43 @@
+{% extends 'HopitalNumeriqueCommunautePratiqueBundle::layout.html.twig' %}
+
+{% block title_communaute_pratique %}Fiche de {{ membre.prenomNom }} pour le groupe <span>{{ groupe }}</span>{% endblock %}
+
+{% block communaute_pratique_actions %}
+    {{ parent() }}
+    {{ communaute_pratique.display_action_contact_animateur(groupe) }}
+{% endblock %}
+
+{% block body_communaute_pratique %}
+
+    {{ communaute_pratique.display_bandeau_membre(membre, groupe) }}
+
+    <div class="communaute-de-pratiques-user-fiche">
+        <ul class="nav nav-tabs" role="tablist">
+            <li role="presentation" class="active"><a href="#formulaire-prealable" aria-controls="formulaire-prealable" role="tab" data-toggle="tab"><em class="icon-test1"></em> &nbsp; Formulaire préalable</a></li>
+            <li role="presentation"><a href="#documents" aria-controls="documents" role="tab" data-toggle="tab"><em class="icon-file148"></em> &nbsp; Documents de l'utilisateur</a></li>
+            <li role="presentation"><a href="#fiches" aria-controls="fiches" role="tab" data-toggle="tab"><em class="icon-contract11"></em> &nbsp; Fiches de problématiques</a></li>
+        </ul>
+        <div class="tab-content">
+            <div role="tabpanel" class="tab-pane active" id="formulaire-prealable">
+                {%- for reponse in questionnaireReponses -%}
+                    
+                    <div class="row">
+                        <div class="question col-md-4">
+                            {{ reponse.question.libelle }}
+                        </div>
+                        <div class="reponse col-md-8">
+                            {{ reponse.reponse }}
+                        </div>
+                    </div>
+                {%- endfor -%}
+            </div>
+            <div role="tabpanel" class="tab-pane" id="documents">
+                
+            </div>
+            <div role="tabpanel" class="tab-pane" id="fiches">
+                
+            </div>
+        </div>
+    </div>
+
+{% endblock body_communaute_pratique %}

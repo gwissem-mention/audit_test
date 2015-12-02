@@ -128,6 +128,55 @@
 {% endmacro %}
 
 {##
+ # Affiche le bandeau avec les informations du membre.
+ #
+ # @param \HopitalNumerique\UserBundle\Entity\User                 user   Membre
+ # @param \HopitalNumerique\CommunautePratiqueBundle\Entity\Groupe groupe Groupe associé
+ #}
+{% macro display_bandeau_membre(user, groupe) %}
+    <div class="communaute-pratique-bandeau-membre">
+        <div class="row">
+            <div class="col-md-4">
+                <div class="illustration">
+                    <div class="communaute-de-pratiques-avatar" style="background-image: url('{{ asset(user.avatarWebPath) }}');"></div>
+                </div>
+                <div class="nom">
+                    <a onclick="Contact_Popup.display({'{{ user.email }}':'{{ user.appellation }}'}, '{{ path(app.request.get('_route'), app.request.get('_route_params')) }}');"><em class="icon icon-email5"></em></a>
+                    {{ user.prenomNom }}
+                </div>
+                {% if groupe.hasAnimateur(user) %}
+                    <div class="animateur">
+                        <em class="icon icon-speaker15"></em>
+                        Animateur du groupe
+                    </div>
+                {% endif %}
+            </div>
+            <div class="col-md-4">
+                <div class="type">
+                    <em class="icon icon-hospital11"></em>
+                    <div class="contenu">
+                        {{ user.statutEtablissementSante is not null ? user.statutEtablissementSante.libelle~' ' : '' }}
+                        {%- if user.typeActivite|length > 0 -%}
+                            &nbsp;({% for activite in user.typeActivite -%}
+                                {{ (loop.first ? '' : ', ')~(activite.libelle) }}
+                            {%- endfor %})
+                        {%- endif -%}
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="fonction">
+                    <em class="icon icon-users149"></em>
+                    <div class="contenu">
+                        {{ user.fonctionDansEtablissementSante }}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endmacro %}
+
+{##
  # Affiche un commentaire.
  #
  # @param \HopitalNumerique\CommunautePratiqueBundle\Entity\Commentaire commentaire Commentaire
