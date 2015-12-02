@@ -4,3 +4,11 @@ hopitalnumerique_communautepratique_user_list:
     methods: GET|POST
     requirements:
         page: \d+
+
+hopitalnumerique_communautepratique_user_listbygroupe:
+    pattern: '/list/groupe/{groupe}/{page}'
+    defaults: { _controller: 'HopitalNumeriqueCommunautePratiqueBundle:User:listByGroupe', page:1 }
+    methods: 'GET|POST'
+    requirements:
+        groupe: '\d+'
+        page: '\d+'

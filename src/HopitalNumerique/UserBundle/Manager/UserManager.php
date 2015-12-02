@@ -4,7 +4,6 @@ namespace HopitalNumerique\UserBundle\Manager;
 
 use Nodevo\ToolsBundle\Manager\Manager as BaseManager;
 use Doctrine\Common\Collections\Collection;
-use HopitalNumerique\QuestionnaireBundle\Entity\Questionnaire;
 
 class UserManager extends BaseManager
 {
@@ -346,11 +345,23 @@ class UserManager extends BaseManager
 
     /**
      * Retourne la QueryBuilder avec les membres de la communauté de pratique.
-     * 
+     *
+     * @param \HopitalNumerique\CommunautePratiqueBundle\Entity\Groupe $groupe (optionnel) Groupe des membres
      * @return \Doctrine\ORM\QueryBuilder QueryBuilder
      */
-    public function getCommunautePratiqueMembresQueryBuilder()
+    public function getCommunautePratiqueMembresQueryBuilder(\HopitalNumerique\CommunautePratiqueBundle\Entity\Groupe $groupe = null)
     {
-        return $this->getRepository()->getCommunautePratiqueMembresQueryBuilder();
+        return $this->getRepository()->getCommunautePratiqueMembresQueryBuilder($groupe);
+    }
+
+    /**
+     * Retourne les membres de la communauté de pratique n'appartenant pas à tel groupe.
+     *
+     * @param \HopitalNumerique\CommunautePratiqueBundle\Entity\Groupe $groupe Groupe
+     * @return array<\HopitalNumerique\UserBundle\Entity\User> Utilisateurs
+     */
+    public function findCommunautePratiqueMembresNotInGroupe(\HopitalNumerique\CommunautePratiqueBundle\Entity\Groupe $groupe)
+    {
+        return $this->getRepository()->findCommunautePratiqueMembresNotInGroupe($groupe);
     }
 }

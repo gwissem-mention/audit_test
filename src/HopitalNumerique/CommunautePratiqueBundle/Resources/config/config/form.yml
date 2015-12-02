@@ -17,6 +17,12 @@ services:
         tags:
             - { name: form.type, alias: 'hopitalnumerique_communautepratiquebundle_groupe' }
 
+    hopitalnumerique_communautepratique.form.type.user.ajout:
+        class: 'HopitalNumerique\CommunautePratiqueBundle\Form\Type\User\AjoutType'
+        arguments: ['@hopitalnumerique_user.manager.user']
+        tags:
+            - { name: 'form.type', alias: 'hopitalnumerique_communautepratiquebundle_user_ajout' }
+
     hopitalnumerique_communautepratique.form.type.user.recherche:
         class: 'HopitalNumerique\CommunautePratiqueBundle\Form\Type\User\RechercheType'
         arguments: ['@router', '@hopitalnumerique_communautepratique.dependency_injection.annuaire', '@hopitalnumerique_reference.manager.reference']

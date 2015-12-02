@@ -568,26 +568,78 @@ class UserRepository extends EntityRepository
 
     /**
      * Retourne la QueryBuilder avec les membres de la communauté de pratique.
-     * 
+     *
+     * @param \HopitalNumerique\CommunautePratiqueBundle\Entity\Groupe $groupe (optionnel) Groupe des membres
      * @return \Doctrine\ORM\QueryBuilder QueryBuilder
      */
-    public function getCommunautePratiqueMembresQueryBuilder()
+    public function getCommunautePratiqueMembresQueryBuilder(\HopitalNumerique\CommunautePratiqueBundle\Entity\Groupe $groupe = null)
     {
         $query = $this->createQueryBuilder('user');
         
         $query
             ->select('user, esProfil, region, esStatut, typeActivite')
-            ->innerJoin('user.profilEtablissementSante', 'esProfil')
-            ->innerJoin('user.region', 'region')
-            ->innerJoin('user.statutEtablissementSante', 'esStatut')
-            ->innerJoin('user.typeActivite', 'typeActivite')
+            ->leftJoin('user.profilEtablissementSante', 'esProfil')
+            ->leftJoin('user.region', 'region')
+            ->leftJoin('user.statutEtablissementSante', 'esStatut')
+            ->leftJoin('user.typeActivite', 'typeActivite')
             ->andWhere('user.inscritCommunautePratique = :inscritCommunautePratique')
             ->setParameter('inscritCommunautePratique', true)
             ->addOrderBy('user.nom', 'ASC')
             ->addOrderBy('user.prenom', 'ASC')
             ->addOrderBy('user.id', 'ASC')
         ;
+
+        if (null !== $groupe) {
+            $query
+                ->innerJoin('user.communautePratiqueGroupes', 'groupe', Join::WITH, 'groupe = :groupe')
+                ->setParameter('groupe', $groupe)
+            ;
+        }
         
         return $query;
+    }
+
+    /**
+     * Retourne la QueryBuilder avec les membres d'un groupe de la communauté de pratique.
+     *
+     * @param \HopitalNumerique\CommunautePratiqueBundle\Entity\Groupe $groupe Groupe des membres
+     * @return \Doctrine\ORM\QueryBuilder QueryBuilder
+     */
+    public function getCommunautePratiqueUsersByGroupeQueryBuilder(\HopitalNumerique\CommunautePratiqueBundle\Entity\Groupe $groupe)
+    {
+        $query = $this->createQueryBuilder('groupeUser');
+
+        $query
+            ->innerJoin('groupeUser.communautePratiqueGroupes', 'groupeUserGroupe', Join::WITH, 'groupeUserGroupe = :groupeUserGroupe')
+            ->setParameter('groupeUserGroupe', $groupe)
+        ;
+
+        return $query;
+    }
+
+    /**
+     * Retourne les membres de la communauté de pratique n'appartenant pas à tel groupe.
+     *
+     * @param \HopitalNumerique\CommunautePratiqueBundle\Entity\Groupe $groupe Groupe
+     * @return array<\HopitalNumerique\UserBundle\Entity\User> Utilisateurs
+     */
+    public function findCommunautePratiqueMembresNotInGroupe(\HopitalNumerique\CommunautePratiqueBundle\Entity\Groupe $groupe = null)
+    {
+        $query = $this->createQueryBuilder('user');
+
+        $query
+            ->leftJoin('user.communautePratiqueGroupes', 'groupe')
+            ->andWhere('user.inscritCommunautePratique = :inscritCommunautePratique')
+            ->setParameter('inscritCommunautePratique', true)
+            ->andWhere($query->expr()->notIn('user', ':groupeUsers'))
+            ->setParameter('groupeUsers', $this->getCommunautePratiqueUsersByGroupeQueryBuilder($groupe)->getQuery()->getResult())
+            ->addOrderBy('user.nom', 'ASC')
+            ->addOrderBy('user.prenom', 'ASC')
+            ->addOrderBy('user.id', 'ASC')
+        ;
+        
+        
+
+        return $query->getQuery()->getResult();
     }
 }

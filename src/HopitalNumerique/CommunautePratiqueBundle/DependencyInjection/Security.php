@@ -65,6 +65,17 @@ class Security
     }
 
     /**
+     * Retourne si un membre peut être ajouté au groupe.
+     *
+     * @param \HopitalNumerique\CommunautePratiqueBundle\Entity\Groupe $groupe Groupe
+     * @return boolean VRAI si membreajoutable
+     */
+    public function canAddMembre(Groupe $groupe)
+    {
+        return ($this->canAccessCommunautePratique() && $groupe->hasAnimateur($this->getUser()));
+    }
+
+    /**
      * Retourne si l'utilisateur courant peut accéder à tel groupe.
      *
      * @param \HopitalNumerique\CommunautePratiqueBundle\Entity\Groupe $groupe Groupe

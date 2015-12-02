@@ -14,6 +14,7 @@ $(document).ready(function() {
  */
 CommunautePratique.init = function()
 {
+    $('.select2').select2();
     $('form.toValidate').validationEngine();
     $('.fancybox').fancybox({
         autoSize: false,

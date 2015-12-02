@@ -8,6 +8,7 @@ use Pagerfanta\Adapter\DoctrineORMAdapter;
 use Pagerfanta\Pagerfanta;
 use Symfony\Component\HttpFoundation\Request;
 use Doctrine\ORM\QueryBuilder;
+use HopitalNumerique\CommunautePratiqueBundle\Entity\Groupe;
 
 /**
  * Classe gérant l'affichage des membres de la communauté de pratiques.
@@ -90,7 +91,26 @@ class Annuaire
     {
         $usersQueryBuilder = $this->userManager->getCommunautePratiqueMembresQueryBuilder();
         
-        $adapter = new DoctrineORMAdapter( $this->applyFiltersInQueryBuilder( $usersQueryBuilder ) );
+        $adapter = new DoctrineORMAdapter($this->applyFiltersInQueryBuilder($usersQueryBuilder));
+        $pagerFanta = new Pagerfanta($adapter);
+        $pagerFanta->setMaxPerPage(self::NOMBRE_ELEMENTS_PAR_PAGE);
+        $pagerFanta->setCurrentPage($page);
+
+        return $pagerFanta;
+    }
+
+    /**
+     * Retourne les membres d'un groupe à afficher.
+     *
+     * @param \HopitalNumerique\CommunautePratiqueBundle\Entity\Groupe $groupe Groupe
+     * @param integer                                                  $page   Numéro de page
+     * @return array<\HopitalNumerique\UserBundle\Entity\User> Membres
+     */
+    public function getPagerfantaUsersByGroupe(Groupe $groupe, $page)
+    {
+        $usersQueryBuilder = $this->userManager->getCommunautePratiqueMembresQueryBuilder($groupe);
+
+        $adapter = new DoctrineORMAdapter($usersQueryBuilder);
         $pagerFanta = new Pagerfanta($adapter);
         $pagerFanta->setMaxPerPage(self::NOMBRE_ELEMENTS_PAR_PAGE);
         $pagerFanta->setCurrentPage($page);

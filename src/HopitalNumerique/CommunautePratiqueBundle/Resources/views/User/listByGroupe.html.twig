@@ -1,15 +1,6 @@
 {% extends 'HopitalNumeriqueCommunautePratiqueBundle::layout.html.twig' %}
 
-{% block javascripts %}
-    {{ parent() }}
-    {% javascripts output="compiled/hopitalnumerique-communautepratique-user-list.js"
-        'bundles/hopitalnumeriquecommunautepratique/js/User/Recherche.js'
-    %}
-        <script type="text/javascript" src="{{ asset_url }}"></script>
-    {% endjavascripts %}
-{% endblock %}
-
-{% block title_communaute_pratique %}Annuaire des membres{% endblock %}
+{% block title_communaute_pratique %}Annuaire des membres du groupe {{ groupe }}{% endblock %}
 
 {% block communaute_pratique_actions %}
     {{ parent() }}
@@ -22,30 +13,21 @@
 
     <div class="communaute-de-pratiques-annuaire">
 
-        <div class="communaute-de-pratiques-annuaire-filtres">
-            {{ form_start(rechercheForm) }}
-                <div class="row">
-                    <div class="col-md-4 col-sm-6 filtre">
-                        {{ form_widget(rechercheForm.nom) }}
+        {% if ajoutMembreForm is not null %}
+            <div class="row">
+                {{ form_start(ajoutMembreForm) }}
+                    <div class="col-md-5 text-right">
+                        Ajouter un membre de la communauté au groupe de travail :
                     </div>
-                    <div class="col-md-4 col-sm-6 filtre">
-                        {{ form_widget(rechercheForm.profilEtablissementSante) }}
+                    <div class="col-md-5">
+                        {{ form_widget(ajoutMembreForm.user) }}
                     </div>
-                    <div class="col-md-4 col-sm-6 filtre">
-                        {{ form_widget(rechercheForm.region) }}
+                    <div class="col-md-2">
+                        <button type="submit" class="btn btn-sm btn-success">Ajouter l'utilisateur</button>
                     </div>
-                    <div class="col-md-4 col-sm-6 filtre">
-                        {{ form_widget(rechercheForm.statutEtablissementSante) }}
-                    </div>
-                    <div class="col-md-4 col-sm-6 filtre">
-                        {{ form_widget(rechercheForm.typeActivite) }}
-                    </div>
-                    <div class="col-md-4 col-sm-6 filtre">
-                        <button type="submit" class="btn btn-success">Filtrer les membres</button>
-                    </div>
-                </div>
-            {{ form_end(rechercheForm) }}
-        </div>
+                {{ form_end(ajoutMembreForm) }}
+            </div>
+        {% endif %}
 
         <div class="communaute-de-pratiques-annuaire-users">
             <div class="row">
@@ -56,7 +38,7 @@
                             <div class="identite">
                                 <div class="illustration"><div class="communaute-de-pratiques-avatar" style="background-image: url('{{ asset(membre.avatarWebPath) }}');"></div></div>
                                 <div class="nom">
-                                    <a onclick="Contact_Popup.display({'{{ membre.email }}':'{{ membre.appellation }}'}, '{{ path(app.request.get('_route')) }}');"><em class="icon icon-email5"></em></a>
+                                    <a onclick="Contact_Popup.display({'{{ membre.email }}':'{{ membre.appellation }}'}, '{{ path(app.request.get('_route'), app.request.get('_route_params')) }}');"><em class="icon icon-email5"></em></a>
                                     {{ membre.prenomNom }}
                                 </div>
                             </div>
