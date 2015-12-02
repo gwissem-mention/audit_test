@@ -1,5 +1,14 @@
 {% extends 'HopitalNumeriqueCommunautePratiqueBundle::layout.html.twig' %}
 
+{% block javascripts %}
+    {{ parent() }}
+    {% javascripts output="compiled/hopitalnumerique-communautepratique-user-listbygroupe.js"
+        'bundles/hopitalnumeriquecommunautepratique/js/User.js'
+    %}
+        <script type="text/javascript" src="{{ asset_url }}"></script>
+    {% endjavascripts %}
+{% endblock %}
+
 {% block title_communaute_pratique %}Annuaire des membres du groupe {{ groupe }}{% endblock %}
 
 {% block communaute_pratique_actions %}
@@ -35,6 +44,9 @@
                 {% for membre in pagerFantaMembres.currentPageResults %}
                     <div class="col-md-3 col-sm-6">
                         <div class="user">
+                            <div class="delete">
+                                <a onclick="CommunautePratique_User.desinscritGroupe({{ groupe.id }}, {{ membre.id }});"><em class="fa fa-times-circle"></em></a>
+                            </div>
                             <div class="identite">
                                 <div class="illustration"><div class="communaute-de-pratiques-avatar" style="background-image: url('{{ asset(membre.avatarWebPath) }}');"></div></div>
                                 <div class="nom">

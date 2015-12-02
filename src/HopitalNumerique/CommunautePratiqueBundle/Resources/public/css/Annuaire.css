@@ -8,6 +8,7 @@
 
 .communaute-de-pratiques-annuaire-users { margin: 8px 0; }
     .communaute-de-pratiques-annuaire-users .user { background-color: #f6f6f6;margin: 15px 0;padding: 10px; }
+        .communaute-de-pratiques-annuaire-users .delete { float: right; }
         .communaute-de-pratiques-annuaire-users .identite { height:79px;overflow: hidden; }
             .communaute-de-pratiques-annuaire-users .user .illustration { float: left;margin: 0 6px 0 0; }
             .communaute-de-pratiques-annuaire-users .user .nom { font-size: 14px;font-weight: bold; }

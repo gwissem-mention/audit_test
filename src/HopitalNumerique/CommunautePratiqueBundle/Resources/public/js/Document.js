@@ -73,9 +73,9 @@ CommunautePratique_Document.initFormulaireEnvoi = function(groupeId)
 };
 
 /**
- * Initialise jQuery File Upload.
- * 
- * @param integer groupeId ID du groupe des formulaire.
+ * Supprime un document.
+ *
+ * @param integer documentId ID du document
  */
 CommunautePratique_Document.delete = function(documentId)
 {

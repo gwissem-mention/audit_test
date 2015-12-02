@@ -12,3 +12,11 @@ hopitalnumerique_communautepratique_user_listbygroupe:
     requirements:
         groupe: '\d+'
         page: '\d+'
+
+hopitalnumerique_communautepratique_user_desinscritgroupe:
+    pattern: '/groupe/{groupe}/desinscrit/{user}'
+    defaults: { _controller: 'HopitalNumeriqueCommunautePratiqueBundle:User:desinscritGroupe' }
+    methods: 'POST'
+    requirements:
+        groupe: '\d+'
+        user: '\d+'

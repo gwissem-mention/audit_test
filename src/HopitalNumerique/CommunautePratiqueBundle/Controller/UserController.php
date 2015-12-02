@@ -1,8 +1,10 @@
 <?php
 namespace HopitalNumerique\CommunautePratiqueBundle\Controller;
 
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use HopitalNumerique\CommunautePratiqueBundle\Entity\Groupe;
+use HopitalNumerique\UserBundle\Entity\User;
 
 /**
  * Contrôleur des utilisateurs.
@@ -68,5 +70,23 @@ class UserController extends \Symfony\Bundle\FrameworkBundle\Controller\Controll
                 ->get('hopitalnumerique_communautepratique.dependency_injection.annuaire')
                 ->getPagerfantaUsersByGroupe($groupe, $page)
         ));
+    }
+
+    /**
+     * Désinscrit un membre d'un groupe.
+     */
+    public function desinscritGroupeAction(Groupe $groupe, User $user)
+    {
+        if (!$this->container
+            ->get('hopitalnumerique_communautepratique.dependency_injection.security')->canDeleteMembre($groupe)
+        ) {
+            return new JsonResponse(array('success' => false));
+        }
+
+        $groupe->removeUser($user);
+        $this->container->get('hopitalnumerique_communautepratique.manager.groupe')->save($groupe);
+        $this->container->get('session')->getFlashBag()->add('success', 'Membre désinscrit.');
+
+        return new JsonResponse(array('success' => true));
     }
 }

@@ -65,10 +65,21 @@ class Security
     }
 
     /**
+     * Retourne si un membre peut être désinscrit d'un groupe.
+     *
+     * @param \HopitalNumerique\CommunautePratiqueBundle\Entity\Groupe $groupe Groupe
+     * @return boolean VRAI si membre peut être désinscrit
+     */
+    public function canDeleteMembre(Groupe $groupe)
+    {
+        return ($this->canAddMembre($groupe));
+    }
+
+    /**
      * Retourne si un membre peut être ajouté au groupe.
      *
      * @param \HopitalNumerique\CommunautePratiqueBundle\Entity\Groupe $groupe Groupe
-     * @return boolean VRAI si membreajoutable
+     * @return boolean VRAI si membre ajoutable
      */
     public function canAddMembre(Groupe $groupe)
     {

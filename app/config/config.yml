@@ -230,6 +230,8 @@ fos_js_routing:
         - hopitalnumerique_communautepratique_fiche_open
         - hopitalnumerique_communautepratique_fiche_view
         - hopitalnumerique_communautepratique_tinymce_documents
+        - hopitalnumerique_communautepratique_user_desinscritgroupe
+        - hopitalnumerique_communautepratique_user_listbygroupe
         - hopitalnumerique_objet_objet_getObjets
 
 # Miniatures
