@@ -36,8 +36,14 @@ class FicheController extends Controller
      */
     public function addAction(Groupe $groupe, Request $request)
     {
+        if (!$this->container->get('hopitalnumerique_communautepratique.dependency_injection.security')
+            ->canAccessGroupe($groupe)) {
+            return $this->redirect($this->generateUrl('hopital_numerique_homepage'));
+        }
+
         $nouvelleFiche = $this->container->get('hopitalnumerique_communautepratique.manager.fiche')->createEmpty();
         $nouvelleFiche->setGroupe($groupe);
+        $nouvelleFiche->setUser($this->getUser());
 
         return $this->editAction($nouvelleFiche, $request);
     }
@@ -48,7 +54,7 @@ class FicheController extends Controller
     public function editAction(Fiche $fiche, Request $request)
     {
         if (!$this->container->get('hopitalnumerique_communautepratique.dependency_injection.security')
-            ->canAccessGroupe($fiche->getGroupe())) {
+            ->canEditFiche($fiche)) {
             return $this->redirect($this->generateUrl('hopital_numerique_homepage'));
         }
 
