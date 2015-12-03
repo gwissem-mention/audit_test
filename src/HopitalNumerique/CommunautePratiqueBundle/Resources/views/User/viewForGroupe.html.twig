@@ -35,17 +35,13 @@
                 {%- if documents|length > 0 -%}
 
                     <div class="pull-right">
-                        <div class="dropdown">
-                            <button class="btn dropdown-toggle" type="button" id="dropdown-fichier-types" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                Filtrer par type de fichier
-                                <span class="caret"></span>
-                            </button>
-                            <ul class="dropdown-menu" aria-labelledby="dropdown-fichier-types">
-                                {%- for fichierType in fichierTypes -%}
-                                    <li><a onclick="CommunautePratique_Document.filtreByExtensions('{{ fichierType.extensionValeurs|join(',') }}');">{{ fichierType }}</a></li>
-                                {%- endfor -%}
-                            </ul>
-                        </div>
+                        
+                        <select class="form-control" onchange="CommunautePratique_Document.filtreByExtensions($(this).val());">
+                            <option selected="selected" value="">Filtrer par type de fichier</option>
+                            {%- for fichierType in fichierTypes -%}
+                                <option value="{{ fichierType.extensionValeurs|join(',') }}">{{ fichierType }}</option>
+                            {%- endfor -%}
+                        </select>
                     </div>
 
                     <p>
@@ -64,6 +60,11 @@
                         <strong><span class="violet">{{ user.prenomNom }} n'a pas encore déposé de documents sur le groupe </span> {{ groupe }}.</strong>
                     </p>
                 {%- endif -%}
+
+                {%- if app.user.id == user.id -%}
+                    <p class="documents-lien"><a href="{{ path('hopitalnumerique_communautepratique_document_listbygroupe', { groupe:groupe.id }) }}"><em class="fa fa-angle-double-right"></em> &nbsp; Voir mon porte-documents</a></p>
+                {%- endif -%}
+
             </div>
             <div role="tabpanel" class="tab-pane" id="fiches">
                 

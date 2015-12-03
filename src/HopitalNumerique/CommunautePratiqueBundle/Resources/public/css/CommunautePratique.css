@@ -142,3 +142,6 @@
         .communaute-de-pratiques-user-fiche #formulaire-prealable .row { border-color: #777;border-style: solid;border-width: 1px 0 0 0;margin: 0px;padding: 3px 0 25px; }
             .communaute-de-pratiques-user-fiche #formulaire-prealable .question { color: #dd3157;font-weight: bold; }
             .communaute-de-pratiques-user-fiche #formulaire-prealable .reponse {}
+    .communaute-de-pratiques-user-fiche .documents-lien { font-size: 11px;text-align: right;text-transform: uppercase; }
+        .communaute-de-pratiques-user-fiche .documents-lien a { color: #777; }
+            .communaute-de-pratiques-user-fiche .documents-lien a .fa { color: #dd3157;font-weight: bold; }

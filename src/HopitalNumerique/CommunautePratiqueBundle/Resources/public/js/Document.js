@@ -98,11 +98,11 @@ CommunautePratique_Document.delete = function(documentId)
 /**
  * Filtre la liste des documents selon des extensions.
  *
- * @param string|NULL extensions Extensions (séparées par une virgule). Si NULL, aucun filtre
+ * @param string extensions Extensions (séparées par une virgule). Si NULL, aucun filtre
  */
 CommunautePratique_Document.filtreByExtensions = function(extensions)
 {
-    if (null !== extensions) {
+    if ('' != extensions) {
         $('[data-communaute-pratique-document-extension]').parent().css({ display: 'none' });
         var extensionsAutorisees = extensions.split(',');
 
