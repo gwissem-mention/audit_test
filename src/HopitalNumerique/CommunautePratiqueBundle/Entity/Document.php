@@ -344,16 +344,12 @@ class Document
 
     /**
      * Retourne l'extension du document.
-     * 
+     *
      * @return string|NULL Extension
      */
-    private function getExtension()
+    public function getExtension()
     {
-        if (false !== strpos($this->nom, '.')) {
-            return substr($this->nom, strrpos($this->nom, '.') + 1);
-        }
-
-        return null;
+        return Fichier::getExtensionFromFile($this->nom);
     }
 
 

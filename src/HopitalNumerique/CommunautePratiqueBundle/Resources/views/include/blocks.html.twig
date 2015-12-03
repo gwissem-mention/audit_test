@@ -104,7 +104,7 @@
  # @param \Symfony\Component\Form\FormView                           checkbox  (optionnel) Affiche la checkbox du document dans le formulaire
  #}
 {% macro display_bloc_document(document, canDelete = false, checkbox = null) %}
-    <div data-communaute-pratique-document-id="{{ document.id }}">
+    <div data-communaute-pratique-document-id="{{ document.id }}" data-communaute-pratique-document-extension="{{ document.extension }}">
         <div class="communaute-de-pratiques-document">
             {% if canDelete %}
                 <div class="delete"><a onclick="CommunautePratique_Document.delete({{ document.id }});"><em class="fa fa-trash-o"></em></a></div>

@@ -12,7 +12,6 @@
 {% block javascripts %}
     {{ parent() }}
     {% javascripts output="compiled/hopitalnumerique-communautepratique-document-listbygroupe.js"
-        'bundles/hopitalnumeriquecommunautepratique/js/Document.js'
         '%kernel.root_dir%/Resources/components/blueimp-tmpl/js/tmpl.min.js'
         '@jquery_file_upload_js'
     %}

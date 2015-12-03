@@ -1,6 +1,6 @@
 {% extends 'HopitalNumeriqueCommunautePratiqueBundle::layout.html.twig' %}
 
-{% block title_communaute_pratique %}Fiche de {{ membre.prenomNom }} pour le groupe <span>{{ groupe }}</span>{% endblock %}
+{% block title_communaute_pratique %}Fiche de {{ user.prenomNom }} pour le groupe <span>{{ groupe }}</span>{% endblock %}
 
 {% block communaute_pratique_actions %}
     {{ parent() }}
@@ -9,7 +9,7 @@
 
 {% block body_communaute_pratique %}
 
-    {{ communaute_pratique.display_bandeau_membre(membre, groupe) }}
+    {{ communaute_pratique.display_bandeau_membre(user, groupe) }}
 
     <div class="communaute-de-pratiques-user-fiche">
         <ul class="nav nav-tabs" role="tablist">
@@ -32,7 +32,38 @@
                 {%- endfor -%}
             </div>
             <div role="tabpanel" class="tab-pane" id="documents">
-                
+                {%- if documents|length > 0 -%}
+
+                    <div class="pull-right">
+                        <div class="dropdown">
+                            <button class="btn dropdown-toggle" type="button" id="dropdown-fichier-types" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                Filtrer par type de fichier
+                                <span class="caret"></span>
+                            </button>
+                            <ul class="dropdown-menu" aria-labelledby="dropdown-fichier-types">
+                                {%- for fichierType in fichierTypes -%}
+                                    <li><a onclick="CommunautePratique_Document.filtreByExtensions('{{ fichierType.extensionValeurs|join(',') }}');">{{ fichierType }}</a></li>
+                                {%- endfor -%}
+                            </ul>
+                        </div>
+                    </div>
+
+                    <p>
+                        <strong><span class="violet">{{ user.prenomNom }} a déposé les documents suivants sur le groupe </span> {{ groupe }}.</strong>
+                        <br>Vous pouvez cliquer sur le nom du fichier pour le télécharger.
+                    </p>
+                    <div class="row">
+                        {%- for document in documents -%}
+                            <div class="col-md-4">
+                                {{ communaute_pratique.display_bloc_document(document) }}
+                            </div>
+                        {%- endfor -%}
+                    </div>
+                {%- else -%}
+                    <p>
+                        <strong><span class="violet">{{ user.prenomNom }} n'a pas encore déposé de documents sur le groupe </span> {{ groupe }}.</strong>
+                    </p>
+                {%- endif -%}
             </div>
             <div role="tabpanel" class="tab-pane" id="fiches">
                 

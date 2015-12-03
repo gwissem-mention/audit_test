@@ -1,8 +1,8 @@
 imports:
-    - { resource: "config/manager.yml" }
-    - { resource: "config/form.yml" }
-    - { resource: "config/grid.yml" }
-    - { resource: "config/twig.yml" }
+    - { resource: "services/manager.yml" }
+    - { resource: "services/form.yml" }
+    - { resource: "services/grid.yml" }
+    - { resource: "services/twig.yml" }
 
 services:
     hopitalnumerique_communautepratique.dependency_injection.annuaire:

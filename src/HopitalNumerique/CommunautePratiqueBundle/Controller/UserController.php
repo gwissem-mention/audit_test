@@ -86,10 +86,13 @@ class UserController extends \Symfony\Bundle\FrameworkBundle\Controller\Controll
         }
 
         return $this->render('HopitalNumeriqueCommunautePratiqueBundle:User:viewForGroupe.html.twig', array(
-            'membre' => $user,
+            'user' => $user,
             'groupe' => $groupe,
             'questionnaireReponses' => $this->container->get('hopitalnumerique_questionnaire.manager.reponse')
-                ->reponsesByQuestionnaireByUser($groupe->getQuestionnaire()->getId(), $user->getId())
+                ->reponsesByQuestionnaireByUser($groupe->getQuestionnaire()->getId(), $user->getId()),
+            'documents' => $this->container->get('hopitalnumerique_communautepratique.manager.document')
+                ->findBy(array('user' => $user, 'groupe' => $groupe)),
+            'fichierTypes' => $this->container->get('hopitalnumerique_fichier.manager.fichier_type')->findAll()
         ));
     }
 

@@ -75,6 +75,7 @@ class AppKernel extends Kernel
             new Nodevo\TexteDynamiqueBundle\NodevoTexteDynamiqueBundle(),
             new Eko\FeedBundle\EkoFeedBundle(),
             new Liip\ImagineBundle\LiipImagineBundle(),
+            new \HopitalNumerique\FichierBundle\HopitalNumeriqueFichierBundle(),
             new \HopitalNumerique\CommunautePratiqueBundle\HopitalNumeriqueCommunautePratiqueBundle(),
         );
 

@@ -94,3 +94,22 @@ CommunautePratique_Document.delete = function(documentId)
         });
     }
 };
+
+/**
+ * Filtre la liste des documents selon des extensions.
+ *
+ * @param string|NULL extensions Extensions (séparées par une virgule). Si NULL, aucun filtre
+ */
+CommunautePratique_Document.filtreByExtensions = function(extensions)
+{
+    if (null !== extensions) {
+        $('[data-communaute-pratique-document-extension]').parent().css({ display: 'none' });
+        var extensionsAutorisees = extensions.split(',');
+
+        for (var i in extensionsAutorisees) {
+            $('[data-communaute-pratique-document-extension=' + extensionsAutorisees[i] + ']').parent().css({ display: 'block' });
+        }
+    } else {
+        $('[data-communaute-pratique-document-extension]').parent().css({ display: 'block' });
+    }
+};
