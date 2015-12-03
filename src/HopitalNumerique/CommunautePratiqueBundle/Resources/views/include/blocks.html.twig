@@ -200,7 +200,7 @@
                 <div class="animateur"><em class="icon icon-speaker15"></em> Animateur du groupe</div>
             {% endif %}
             <div class="message">
-                <p>{{ commentaire.message|raw }}</p>
+                <p>{{ commentaire.message|parsePublication|raw }}</p>
             </div>
         </div>
         <div class="clearfix"></div>
