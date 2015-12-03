@@ -92,7 +92,9 @@ class UserController extends \Symfony\Bundle\FrameworkBundle\Controller\Controll
                 ->reponsesByQuestionnaireByUser($groupe->getQuestionnaire()->getId(), $user->getId()),
             'documents' => $this->container->get('hopitalnumerique_communautepratique.manager.document')
                 ->findBy(array('user' => $user, 'groupe' => $groupe)),
-            'fichierTypes' => $this->container->get('hopitalnumerique_fichier.manager.fichier_type')->findAll()
+            'fichierTypes' => $this->container->get('hopitalnumerique_fichier.manager.fichier_type')->findAll(),
+            'fiches' => $this->container->get('hopitalnumerique_communautepratique.manager.fiche')
+                ->findBy(array('user' => $user, 'groupe' => $groupe))
         ));
     }
 

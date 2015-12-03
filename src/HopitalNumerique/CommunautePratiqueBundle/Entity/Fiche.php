@@ -3,6 +3,7 @@ namespace HopitalNumerique\CommunautePratiqueBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
+use Gedmo\Mapping\Annotation as Gedmo;
 
 /**
  * Entité Fiche.
@@ -86,6 +87,14 @@ class Fiche
      * @Assert\NotNull()
      */
     private $resolu;
+
+    /**
+     * @var \DateTime
+     *
+     * @Gedmo\Timestampable(on="create")
+     * @ORM\Column(name="fic_date_creation", type="datetime", nullable=false)
+     */
+    private $dateCreation;
 
     /**
      * @var \Doctrine\Common\Collections\Collection
@@ -309,6 +318,29 @@ class Fiche
     public function isResolu()
     {
         return $this->resolu;
+    }
+
+    /**
+     * Set dateCreation
+     *
+     * @param \DateTime $dateCreation
+     * @return Fiche
+     */
+    public function setDateCreation($dateCreation)
+    {
+        $this->dateCreation = $dateCreation;
+
+        return $this;
+    }
+
+    /**
+     * Get dateCreation
+     *
+     * @return \DateTime 
+     */
+    public function getDateCreation()
+    {
+        return $this->dateCreation;
     }
 
     /**

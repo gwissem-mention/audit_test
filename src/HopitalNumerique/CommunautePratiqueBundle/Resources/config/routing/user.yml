@@ -14,7 +14,7 @@ hopitalnumerique_communautepratique_user_listbygroupe:
         page: '\d+'
 
 hopitalnumerique_communautepratique_user_viewforgroupe:
-    pattern: '/view/{user}/groupe{groupe}'
+    pattern: '/view/{user}/groupe/{groupe}'
     defaults: { _controller: 'HopitalNumeriqueCommunautePratiqueBundle:User:viewForGroupe' }
     methods: 'GET'
     requirements:

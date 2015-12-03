@@ -132,6 +132,7 @@
         .communaute-de-pratiques-document .delete a { border-color: #e6e6e6;border-style: solid;border-width: 1px;color: #777;cursor: pointer;display: block;padding: 0 5px; }
     .communaute-de-pratiques-document .checkbox { bottom: 3px;margin: 0;min-height: initial;padding: 0;position: absolute;right: 3px; }
 
+/* Fiche de problématique */
 .communaute-de-pratiques-fiche {}
     .communaute-de-pratiques-fiche p { font-size: 14px;margin: 15px 0; }
 
@@ -145,3 +146,16 @@
     .communaute-de-pratiques-user-fiche .documents-lien { font-size: 11px;text-align: right;text-transform: uppercase; }
         .communaute-de-pratiques-user-fiche .documents-lien a { color: #777; }
             .communaute-de-pratiques-user-fiche .documents-lien a .fa { color: #dd3157;font-weight: bold; }
+
+/* Bloc d'une fiche */
+.communaute-de-pratiques-bloc-fiche { background-color: #f2f2f2;border-color: #f2f2f2;border-style: solid;border-width: 1px;margin: 10px 0;padding: 15px; }
+    .communaute-de-pratiques-bloc-fiche .icone { float: left;font-size: 30px;margin: 0 15px 0 0; }
+        .communaute-de-pratiques-bloc-fiche[data-communaute-pratique-fiche-resolu="1"] .icone { color: #419c3f; }
+    .communaute-de-pratiques-bloc-fiche .header {}
+        .communaute-de-pratiques-bloc-fiche .header .date {}
+            .communaute-de-pratiques-bloc-fiche .header .date strong { color: #dd3157; }
+        .communaute-de-pratiques-bloc-fiche .header .commentaires { font-size: 11px; }
+            .communaute-de-pratiques-bloc-fiche .header .commentaires .count { background-image:url("/bundles/hopitalnumeriquecommunautepratique/img/commentaire/bulle-big.png");background-position: center center;background-repeat: no-repeat;color: #fff;padding: 0 8px 2px 8px; }
+    .communaute-de-pratiques-bloc-fiche .contenu { clear: both;font-size: 11px;height: 60px;overflow: hidden; }
+        .communaute-de-pratiques-bloc-fiche .contenu strong { color: #dd3157;font-size: 14px; }
+.communaute-de-pratiques-bloc-fiche[data-communaute-pratique-fiche-resolu="1"] { background-color: #fff; }
