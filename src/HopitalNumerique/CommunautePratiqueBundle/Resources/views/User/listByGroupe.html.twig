@@ -23,18 +23,20 @@
     <div class="communaute-de-pratiques-annuaire">
 
         {% if ajoutMembreForm is not null %}
-            <div class="row">
-                {{ form_start(ajoutMembreForm) }}
-                    <div class="col-md-5 text-right">
-                        Ajouter un membre de la communauté au groupe de travail :
-                    </div>
-                    <div class="col-md-5">
-                        {{ form_widget(ajoutMembreForm.user) }}
-                    </div>
-                    <div class="col-md-2">
-                        <button type="submit" class="btn btn-sm btn-success">Ajouter l'utilisateur</button>
-                    </div>
-                {{ form_end(ajoutMembreForm) }}
+            <div class="communaute-de-pratiques-user-add">
+                <div class="row">
+                    {{ form_start(ajoutMembreForm) }}
+                        <div class="col-md-5 text-right">
+                            Ajouter un membre de la communauté au groupe de travail :
+                        </div>
+                        <div class="col-md-5">
+                            {{ form_widget(ajoutMembreForm.user) }}
+                        </div>
+                        <div class="col-md-2">
+                            <button type="submit" class="btn btn-sm btn-success">Ajouter l'utilisateur</button>
+                        </div>
+                    {{ form_end(ajoutMembreForm) }}
+                </div>
             </div>
         {% endif %}
 
@@ -43,49 +45,7 @@
 
                 {% for membre in pagerFantaMembres.currentPageResults %}
                     <div class="col-md-3 col-sm-6">
-                        <div class="user">
-                            {% if canDeleteMembre %}
-                                <div class="delete">
-                                    <a onclick="CommunautePratique_User.desinscritGroupe({{ groupe.id }}, {{ membre.id }});"><em class="fa fa-times-circle"></em></a>
-                                </div>
-                            {% endif %}
-                            <div class="identite">
-                                <div class="illustration"><div class="communaute-de-pratiques-avatar" style="background-image: url('{{ asset(membre.avatarWebPath) }}');"></div></div>
-                                <div class="nom">
-                                    <a onclick="Contact_Popup.display({'{{ membre.email }}':'{{ membre.appellation }}'}, '{{ path(app.request.get('_route'), app.request.get('_route_params')) }}');"><em class="icon icon-email5"></em></a>
-                                    {{ membre.prenomNom }}
-                                </div>
-                            </div>
-                            <div class="type">
-                                <em class="icon icon-hospital11"></em>
-                                <div class="contenu">
-                                    {{ membre.statutEtablissementSante is not null ? membre.statutEtablissementSante.libelle~' ' : '' }}
-                                    {%- if membre.typeActivite|length > 0 -%}
-                                        <br>({% for activite in membre.typeActivite -%}
-                                            {{ (loop.first ? '' : ', ')~(activite.libelle) }}
-                                        {%- endfor %})
-                                    {%- endif -%}
-                                </div>
-                            </div>
-                            <div class="fonction">
-                                <em class="icon icon-users149"></em>
-                                <div class="contenu">
-                                    {{ membre.fonctionDansEtablissementSante }}
-                                </div>
-                            </div>
-                            <div class="liens">
-                                <div class="informations">
-                                    <a href="{{ path('hopitalnumerique_communautepratique_user_viewforgroupe', { user:membre.id, groupe:groupe.id }) }}">Voir ses informations</a>
-                                </div>
-                                <div class="groupe">
-                                    {% if membre.communautePratiqueGroupes|length > 0 %}
-                                        <a class="fancybox fancybox.ajax" href="{{ path('hopitalnumerique_communautepratique_groupe_panelusergroupes', { user:membre.id }) }}">Participations aux groupes</a>
-                                    {% else %}
-                                        <span>Participations aux groupes</span>
-                                    {% endif %}
-                                </div>
-                            </div>
-                        </div>
+                        {{ communaute_pratique.display_bloc_membre(membre, groupe, canDeleteMembre) }}
                     </div>
                 {% endfor %}
 

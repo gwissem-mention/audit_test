@@ -1572,6 +1572,16 @@ class User extends BaseUser
     }
 
     /**
+     * Retourne si l'utilisateur a le rôle Admin ou pas.
+     *
+     * @return boolean VRAI si admin
+     */
+    public function hasRoleAdmin()
+    {
+        return $this->hasRole(Role::$ROLE_ADMIN_LABEL);
+    }
+
+    /**
      * Retourne si l'utilisateur a le rôle CMSI ou pas.
      *
      * @return boolean VRAI ssi l'utilisateur a le rôle CMSI
@@ -1580,6 +1590,7 @@ class User extends BaseUser
     {
         return $this->hasRole(Role::$ROLE_CMSI_LABEL);
     }
+
     /**
      * Retourne si l'utilisateur a le rôle ES - Direction générale ou pas.
      *

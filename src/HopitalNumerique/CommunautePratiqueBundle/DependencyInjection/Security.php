@@ -83,7 +83,8 @@ class Security
      */
     public function canAddMembre(Groupe $groupe)
     {
-        return ($this->canAccessCommunautePratique() && $groupe->hasAnimateur($this->getUser()));
+        return ($this->canAccessCommunautePratique()
+            && ( $groupe->hasAnimateur($this->getUser()) || $this->getUser()->hasRoleAdmin() ));
     }
 
     /**

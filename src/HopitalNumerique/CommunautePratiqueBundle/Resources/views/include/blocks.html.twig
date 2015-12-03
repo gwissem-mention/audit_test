@@ -206,3 +206,64 @@
         <div class="clearfix"></div>
     </div>
 {% endmacro %}
+
+{##
+ # Affiche le bloc d'un utilisateur.
+ #
+ # @param \HopitalNumerique\UserBundle\Entity\User                 user            Membre
+ # @param \HopitalNumerique\CommunautePratiqueBundle\Entity\Groupe groupe          Groupe
+ # @param boolean                                                  canDeleteMembre VRAI si le membre peut être désinscrit (dans ce cas, le groupe doit être précisé)
+ #}
+{% macro display_bloc_membre(user, groupe, canDeleteMembre) %}
+    <div class="communaute-de-pratiques-bloc-user">
+        {% if canDeleteMembre %}
+            <div class="delete">
+                <a onclick="CommunautePratique_User.desinscritGroupe({{ groupe.id }}, {{ user.id }});"><em class="fa fa-times-circle"></em></a>
+            </div>
+        {% endif %}
+        <div class="identite">
+            <div class="illustration"><div class="communaute-de-pratiques-avatar" style="background-image: url('{{ asset(user.avatarWebPath) }}');"></div></div>
+            <div class="nom">
+                <a onclick="Contact_Popup.display({'{{ user.email }}':'{{ user.prenomNom }}'}, '{{ path(app.request.get('_route'), app.request.get('_route_params')) }}');"><em class="icon icon-email5"></em></a>
+                {{ user.prenomNom }}
+            </div>
+            {% if groupe is not null and groupe.hasAnimateur(user) %}
+                <div class="animateur">
+                    <em class="icon icon-speaker15"></em>
+                    Animateur du groupe
+                </div>
+            {% endif %}
+        </div>
+        <div class="type">
+            <em class="icon icon-hospital11"></em>
+            <div class="contenu">
+                {{ user.statutEtablissementSante is not null ? user.statutEtablissementSante.libelle~' ' : '' }}
+                {%- if user.typeActivite|length > 0 -%}
+                    <br>({% for activite in user.typeActivite -%}
+                        {{ (loop.first ? '' : ', ')~(activite.libelle) }}
+                    {%- endfor %})
+                {%- endif -%}
+            </div>
+        </div>
+        <div class="fonction">
+            <em class="icon icon-users149"></em>
+            <div class="contenu">
+                {{ user.fonctionDansEtablissementSante }}
+            </div>
+        </div>
+        <div class="liens">
+            {% if groupe is not null %}
+                <div class="informations">
+                    <a href="{{ path('hopitalnumerique_communautepratique_user_viewforgroupe', { user:user.id, groupe:groupe.id }) }}">Voir ses informations</a>
+                </div>
+            {% endif %}
+            <div class="groupe">
+                {% if user.communautePratiqueGroupes|length > 0 %}
+                    <a class="fancybox fancybox.ajax" href="{{ path('hopitalnumerique_communautepratique_groupe_panelusergroupes', { user:user.id }) }}">Participations aux groupes</a>
+                {% else %}
+                    <span>Participations aux groupes</span>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+{% endmacro %}

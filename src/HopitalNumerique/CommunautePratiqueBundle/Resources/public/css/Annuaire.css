@@ -1,27 +1,36 @@
 .communaute-de-pratiques-annuaire {}
 
+/* Filtres de l'annuaire '*/
 .communaute-de-pratiques-annuaire-filtres { background-color: #f6f6f6;margin: 0 0 15px; }
     .communaute-de-pratiques-annuaire-filtres .row { margin: 15px 0; }
         .communaute-de-pratiques-annuaire-filtres .filtre { margin: 15px 0; }
             .communaute-de-pratiques-annuaire-filtres #hopitalnumerique_communautepratiquebundle_user_recherche_nom { background-image: url('/bundles/hopitalnumeriquecommunautepratique/img/annuaire/loupe.png');background-position: 6px center;background-repeat: no-repeat;padding: 0 0 0 28px; }
             .communaute-de-pratiques-annuaire-filtres .btn { width: 100%; }
 
-.communaute-de-pratiques-annuaire-users { margin: 8px 0; }
-    .communaute-de-pratiques-annuaire-users .user { background-color: #f6f6f6;margin: 15px 0;padding: 10px; }
-        .communaute-de-pratiques-annuaire-users .delete { float: right; }
-        .communaute-de-pratiques-annuaire-users .identite { height:79px;overflow: hidden; }
-            .communaute-de-pratiques-annuaire-users .user .illustration { float: left;margin: 0 6px 0 0; }
-            .communaute-de-pratiques-annuaire-users .user .nom { font-size: 14px;font-weight: bold; }
-                .communaute-de-pratiques-annuaire-users .user .nom .icon { color: #d60030;font-size: 15px;vertical-align: middle; }
-        .communaute-de-pratiques-annuaire-users .user .type, .communaute-de-pratiques-annuaire-users .user .fonction { clear: left;color: #777;line-height: 15px;overflow: hidden;padding: 0 8px; }
-            .communaute-de-pratiques-annuaire-users .user .type .icon, .communaute-de-pratiques-annuaire-users .user .fonction .icon { float: left;display: block;float: left;font-size: 34px;padding: 12px 0 0;width: 48px; }
-            .communaute-de-pratiques-annuaire-users .user .type .contenu, .communaute-de-pratiques-annuaire-users .user .fonction .contenu { align-items: center;-webkit-align-items: center;display: flex;height: 55px;margin: 0 0 0 48px; }
-        .communaute-de-pratiques-annuaire-users .user .liens { font-size: 12px;padding: 8px;text-align: center; }
-            .communaute-de-pratiques-annuaire-users .user .liens a, .communaute-de-pratiques-annuaire-users .user .liens span { display: block;margin: 2px 0 0 0;padding: 4px 0; }
-            .communaute-de-pratiques-annuaire-users .user .liens .informations { background-color: #d60030; }
-                .communaute-de-pratiques-annuaire-users .user .liens .informations a { color: #fff; }
-            .communaute-de-pratiques-annuaire-users .user .liens .groupe { background-color: #e5e5e5; }
-                .communaute-de-pratiques-annuaire-users .user .liens .groupe a, .communaute-de-pratiques-annuaire-users .user .liens .groupe span { color: #333; }
-                .communaute-de-pratiques-annuaire-users .user .liens .groupe span { color: #a2a2a2;cursor: default; }
-                .communaute-de-pratiques-annuaire-users .user .liens .groupe a:hover { text-decoration: none; }
+/* Liste des utilisateurs */
+.communaute-de-pratiques-annuaire-users {}
     .communaute-de-pratiques-annuaire-users .pagination { margin: 15px 0 30px 0; }
+
+/* Bloc d'un utilisateur */
+.communaute-de-pratiques-bloc-user { background-color: #f6f6f6;margin: 15px 0;padding: 15px; }
+    .communaute-de-pratiques-bloc-user .delete { float: right; }
+    .communaute-de-pratiques-bloc-user .identite { height:79px;overflow: hidden; }
+        .communaute-de-pratiques-bloc-user .illustration { float: left;margin: 0 6px 0 0; }
+        .communaute-de-pratiques-bloc-user .nom { font-size: 14px;font-weight: bold; }
+            .communaute-de-pratiques-bloc-user .nom .icon { color: #d60030;font-size: 15px;vertical-align: middle; }
+        .communaute-de-pratiques-bloc-user .animateur { font-size: 12px; }
+            .communaute-de-pratiques-bloc-user .animateur .icon { color: #d60030;vertical-align: middle; }
+    .communaute-de-pratiques-bloc-user .type, .communaute-de-pratiques-bloc-user .fonction { clear: left;color: #777;line-height: 15px;overflow: hidden;padding: 0 8px; }
+        .communaute-de-pratiques-bloc-user .type .icon, .communaute-de-pratiques-bloc-user .fonction .icon { float: left;display: block;float: left;font-size: 34px;padding: 12px 0 0;width: 48px; }
+        .communaute-de-pratiques-bloc-user .type .contenu, .communaute-de-pratiques-bloc-user .fonction .contenu { align-items: center;-webkit-align-items: center;display: flex;height: 55px;margin: 0 0 0 48px; }
+    .communaute-de-pratiques-bloc-user .liens { font-size: 12px;padding: 8px;text-align: center; }
+        .communaute-de-pratiques-bloc-user .liens a, .communaute-de-pratiques-bloc-user .liens span { display: block;margin: 2px 0 0 0;padding: 4px 0; }
+        .communaute-de-pratiques-bloc-user .liens .informations { background-color: #d60030; }
+            .communaute-de-pratiques-bloc-user .liens .informations a { color: #fff; }
+        .communaute-de-pratiques-bloc-user .liens .groupe { background-color: #e5e5e5; }
+            .communaute-de-pratiques-bloc-user .liens .groupe a, .communaute-de-pratiques-bloc-user .liens .groupe span { color: #333; }
+            .communaute-de-pratiques-bloc-user .liens .groupe span { color: #a2a2a2;cursor: default; }
+            .communaute-de-pratiques-bloc-user .liens .groupe a:hover { text-decoration: none; }
+
+/* Formulaire d'ajout d'un utilisateur à un groupe */
+.communaute-de-pratiques-user-add { margin: 15px 0; }

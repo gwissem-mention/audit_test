@@ -53,7 +53,10 @@ class AjoutType extends AbstractType
      */
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
-         $resolver
+        $resolver
+            ->setDefaults(array(
+                'validation_groups' => array('form_validation_only')
+            ))
             ->setRequired(array('groupe'))
             ->setAllowedTypes(array('groupe' => 'HopitalNumerique\CommunautePratiqueBundle\Entity\Groupe'))
         ;

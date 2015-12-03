@@ -57,8 +57,7 @@ class GroupeController extends \Symfony\Bundle\FrameworkBundle\Controller\Contro
      */
     public function inscritAction(Groupe $groupe)
     {
-        if ($this->getUser()->hasCommunautePratiqueGroupe($groupe))
-        {
+        if ($this->getUser()->hasCommunautePratiqueGroupe($groupe)) {
             return $this->redirect( $this->generateUrl( 'hopitalnumerique_communautepratique_groupe_view', array( 'groupe' => $groupe->getId() ) ) );
         }
 
