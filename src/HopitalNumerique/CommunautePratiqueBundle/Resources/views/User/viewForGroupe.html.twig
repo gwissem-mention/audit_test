@@ -84,25 +84,7 @@
                     <div class="row">
                         {%- for fiche in fiches -%}
                             <div class="col-md-6">
-                                <div class="communaute-de-pratiques-bloc-fiche" data-communaute-pratique-fiche-resolu="{{ fiche.resolu ? '1' : '0' }}">
-                                    <div class="icone">
-                                        {%- if fiche.resolu -%}
-                                            <em class="icon icon-form-check"></em>
-                                        {%- else -%}
-                                            <em class="icon icon-stats2"></em>
-                                        {%- endif -%}
-                                    </div>
-                                    <div class="header">
-                                        <div class="date">Créée le <strong>{{ fiche.dateCreation|date('d/m/Y') }}</strong></div>
-                                        <div class="commentaires">
-                                            <span class="count">{{ fiche.commentaires|length }}</span> commentaire{{ fiche.commentaires|length > 1 ? 's' : '' }} sur cette fiche
-                                        </div>
-                                    </div>
-                                    <div class="contenu">
-                                        <strong>Question posée :</strong>
-                                        {{ fiche.questionPosee }}
-                                    </div>
-                                </div>
+                                {{ communaute_pratique.display_bloc_fiche(fiche) }}
                             </div>
                         {%- endfor -%}
                     </div>

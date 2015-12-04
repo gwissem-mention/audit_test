@@ -37,8 +37,7 @@ class GroupeController extends \Symfony\Bundle\FrameworkBundle\Controller\Contro
      */
     public function viewAction(Groupe $groupe)
     {
-        if (!$this->container->get('hopitalnumerique_communautepratique.dependency_injection.security')->canAccessCommunautePratique())
-        {
+        if (!$this->container->get('hopitalnumerique_communautepratique.dependency_injection.security')->canAccessGroupe($groupe)) {
             return $this->redirect($this->generateUrl('hopital_numerique_homepage'));
         }
 
@@ -46,8 +45,7 @@ class GroupeController extends \Symfony\Bundle\FrameworkBundle\Controller\Contro
             'HopitalNumeriqueCommunautePratiqueBundle:Groupe:view.html.twig',
             array
             (
-                'groupe' => $groupe,
-                'userFiches' => $this->container->get('hopitalnumerique_communautepratique.manager.fiche')->findBy(array( 'groupe' => $groupe, 'user' => $this->getUser() ))
+                'groupe' => $groupe
             )
         );
     }

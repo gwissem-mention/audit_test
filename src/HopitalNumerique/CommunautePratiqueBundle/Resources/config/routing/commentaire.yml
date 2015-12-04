@@ -25,3 +25,10 @@ hopitalnumerique_communautepratique_commentaire_fichecommentaire_add:
     methods: 'GET|POST'
     requirements:
         fiche: \d+
+
+hopitalnumerique_communautepratique_commentaire_groupecommentaire_add:
+    pattern: '/commentaire/groupe/{groupe}/add'
+    defaults: { _controller: 'HopitalNumeriqueCommunautePratiqueBundle:Commentaire/GroupeCommentaire:add' }
+    methods: 'GET|POST'
+    requirements:
+        groupe: \d+

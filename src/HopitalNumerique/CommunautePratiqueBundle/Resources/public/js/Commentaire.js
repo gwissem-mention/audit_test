@@ -61,7 +61,6 @@ CommunautePratique_Commentaire.callTinyMce = function(element)
     tinyMCE.init({
         entity_encoding : 'raw',
         selector     : element,
-        //selector     : 'textarea.tinyMceCode',
         theme        : "modern",
         theme_url    : '/bundles/nodevotools/js/tinymce/themes/modern/theme.min.js',
         skin_url     : '/bundles/nodevotools/js/tinymce/skins/lightgray',
@@ -70,7 +69,8 @@ CommunautePratique_Commentaire.callTinyMce = function(element)
         menubar      : false,
         content_css  : '/bundles/nodevotools/css/wysiwyg.css',
         toolbar1     : 'communautePratiqueDocument | link | publication',
-        relative_urls: false
+        relative_urls: false,
+        statusbar    : false
     });
 };
 

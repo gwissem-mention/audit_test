@@ -1,5 +1,14 @@
 {% extends 'HopitalNumeriqueCommunautePratiqueBundle::layout.html.twig' %}
 
+{% block javascripts %}
+    {{ parent() }}
+    <script type="text/javascript">
+        $(document).ready(function() {
+            CommunautePratique_Commentaire.initTinyMce({{ groupe.id }});
+        });
+    </script>
+{% endblock %}
+
 {% block title_communaute_pratique %}Groupe de travail : {{ groupe }}{% endblock %}
 
 {% block communaute_pratique_sommaire %}{% endblock %}
@@ -7,14 +16,67 @@
 {% block body_communaute_pratique %}
 
     {{ communaute_pratique.display_groupe_sommaire(groupe) }}
-    
-    <a href="{{ path('hopitalnumerique_communautepratique_fiche_add', { groupe:groupe.id }) }}">Créer une fiche</a>
-    
-    <p>Mes fiches :</p>
-    <ul>
-        {% for fiche in userFiches %}
-            <li><a href="{{ path('hopitalnumerique_communautepratique_fiche_view', { fiche:fiche.id }) }}">{{ fiche }}</a> (<a href="{{ path('hopitalnumerique_communautepratique_fiche_edit', { fiche:fiche.id }) }}">edit</a>)</li>
-        {% endfor %}
-    </ul>
+
+    {%- if groupe.animateurs|length > 0 -%}
+        <p>
+            <strong>Animateur{{ groupe.animateurs|length > 1 ? 's' : '' }} du groupe</strong> :
+            {% for animateur in groupe.animateurs %}
+                {{ animateur.prenom }} {{ animateur.nom }}{{ loop.last ? '' : ', ' }}
+            {% endfor -%}
+        </p>
+    {%- endif -%}
+    {{ groupe.descriptionHtml|raw }}
+
+    <div class="text-right">
+        <a class="btn btn-success" href="{{ path('hopitalnumerique_communautepratique_fiche_add', { groupe:groupe.id }) }}">Ajouter une fiche &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <em class="fa fa-plus"></em></a>
+    </div>
+
+    {%- if groupe.fiches|length > 0 -%}
+        <p><strong>Fiches de problématique du groupe</strong></p>
+        <div class="row">
+            {%- for fiche in groupe.fiches -%}
+                <div class="col-md-6">
+                    {{ communaute_pratique.display_bloc_fiche(fiche) }}
+                </div>
+            {%- endfor -%}
+        </div>
+    {%- endif -%}
+
+    <div class="communaute-de-pratiques-commentaires">
+        <div class="panel-header"></div>
+        <div class="panel panel-communaute-de-pratiques">
+            <div class="panel-heading">
+                <h2>Commentaires</h2>
+            </div>
+            <div class="panel-body">
+
+                <div class="commentaire">
+                    <p>Écrire un commentaire :</p>
+                    <div class="illustration">
+                        <div class="communaute-de-pratiques-avatar" style="background-image: url('{{ asset(app.user.avatarWebPath) }}');"></div>
+                    </div>
+                    <div class="contenu">
+                        <div class="nom"><strong>{{ app.user.prenomNom }}</strong></div>
+
+                        <div class="message">
+                            {{ render(controller('HopitalNumeriqueCommunautePratiqueBundle:Commentaire/GroupeCommentaire:add', { groupe:groupe.id })) }}
+                        </div>
+
+                    </div>
+                    <div class="clearfix"></div><br>
+                    {% if groupe.commentaires|length > 0 %}
+                        <p><strong>Commentaires des membres du groupe</strong></p>
+                    {% endif %}
+                </div>
+
+                {% if groupe.commentaires|length > 0 %}
+                    {% for commentaire in groupe.commentaires %}
+                        {{ communaute_pratique.display_commentaire(commentaire) }}
+                    {% endfor %}
+                {% endif %}
+
+            </div>
+        </div>
+    </div>
 
 {% endblock body_communaute_pratique %}
