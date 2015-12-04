@@ -19,18 +19,12 @@ class FicheType extends \Symfony\Component\Form\AbstractType
 
 
     /**
-     * @var \HopitalNumerique\UserBundle\Entity\User Utilisateur connecté
-     */
-    private $user;
-
-
-    /**
      * Constructeur.
      */
     public function __construct(SecurityContextInterface $securityContext, DocumentManager $documentManager)
     {
-        $this->user = (null !== $securityContext->getToken() ? $securityContext->getToken()->getUser() : null);
-        if (!($this->user instanceof User)) {
+        $user = (null !== $securityContext->getToken() ? $securityContext->getToken()->getUser() : null);
+        if (!($user instanceof User)) {
             throw new \Exception('Utilisateur non connecté');
         }
 
@@ -91,7 +85,7 @@ class FicheType extends \Symfony\Component\Form\AbstractType
             ))
             ->add('documents', 'entity', array(
                 'class' => 'HopitalNumeriqueCommunautePratiqueBundle:Document',
-                'choices' => $this->documentManager->findBy(array('groupe' => $groupe, 'user' => $this->user)),
+                'choices' => $this->documentManager->findBy(array('groupe' => $groupe, 'user' => $builder->getData()->getUser())),
                 'multiple' => true,
                 'expanded' => true
             ))

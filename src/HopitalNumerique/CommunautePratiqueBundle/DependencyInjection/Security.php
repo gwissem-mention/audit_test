@@ -128,9 +128,14 @@ class Security
      */
     public function canEditFiche(Fiche $fiche)
     {
-        return ( $this->canAccessFiche($fiche)
-            && ($fiche->getUser()->getId() == $this->getUser()->getId()
-                || $fiche->getGroupe()->hasAnimateur($this->getUser()))
+        return (
+            (
+                $this->canAccessFiche($fiche)
+                && ($fiche->getUser()->getId() == $this->getUser()->getId()
+                    || $fiche->getGroupe()->hasAnimateur($this->getUser())
+                )
+            )
+            || $this->getUser()->hasRoleAdmin()
         );
     }
 
