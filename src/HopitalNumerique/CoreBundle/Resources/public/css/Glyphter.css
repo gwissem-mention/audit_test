@@ -18,6 +18,7 @@
    -webkit-font-smoothing: antialiased;
    -moz-osx-font-smoothing: grayscale
 }
+.icon-message32:before{content:'\0041';}
 .icon-download105:before{content:'\0042';}
 .icon-social20:before{content:'\0043';}
 .icon-stats2:before{content:'\0044';}
@@ -25,6 +26,7 @@
 .icon-woman105:before{content:'\0046';}
 .icon-contract11:before{content:'\0047';}
 .icon-chat27:before{content:'\0048';}
+.icon-formulaire:before{content:'\0049';}
 .icon-test1:before{content:'\004A';}
 .icon-documents7:before{content:'\004B';}
 .icon-email5:before{content:'\004C';}
@@ -45,3 +47,13 @@
 .icon-file-pdf:before{content:'\0061';}
 .icon-file-xls:before{content:'\0062';}
 .icon-file-xlsx:before{content:'\0063';}
+.icon-ppt:before{content:'\0064';}
+.icon-pptx:before{content:'\0065';}
+.icon-odt:before{content:'\0066';}
+.icon-opd:before{content:'\0067';}
+.icon-ods:before{content:'\0068';}
+.icon-arrow:before{content:'\0069';}
+.icon-form-check:before{content:'\006A';}
+.icon-formulaire:before{content:'\006B';}
+.icon-message32:before{content:'\006C';}
+.icon-news:before{content:'\006D';}

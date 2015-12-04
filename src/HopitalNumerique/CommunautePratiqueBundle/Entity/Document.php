@@ -32,7 +32,12 @@ class Document
         'jpeg' => '<em class="icon-file-jpg"></em>',
         'pdf' => '<em class="icon-file-pdf"></em>',
         'xls' => '<em class="icon-file-xls"></em>',
-        'xlsx' => '<em class="icon-file-xlsx"></em>'
+        'xlsx' => '<em class="icon-file-xlsx"></em>',
+        'ppt' => '<em class="icon-ppt"></em>',
+        'pptx' => '<em class="icon-pptx"></em>',
+        'odt' => '<em class="icon-odt"></em>',
+        'odp' => '<em class="icon-odp"></em>',
+        'ods' => '<em class="icon-ods"></em>'
     );
 
 
