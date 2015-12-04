@@ -3,11 +3,6 @@
 {% block title_communaute_pratique %}Groupe de travail <span class="subtitle">{{ fiche.groupe }} - {{ fiche }}</span>{% endblock %}
 
 {% block communaute_pratique_actions %}
-    {% if canClose %}
-        <button class="btn btn-sm btn-success" onclick="CommunautePratique_Fiche.close({{ fiche.id }});">Problématique résolue</button>
-    {% elseif canOpen %}
-        <button class="btn btn-sm btn-success" onclick="CommunautePratique_Fiche.open({{ fiche.id }});">Réouvrir la fiche</button>
-    {% endif %}
     {{ parent() }}
     {{ communaute_pratique.display_action_contact_animateur(fiche.groupe) }}
 {% endblock %}
@@ -35,24 +30,29 @@
 
     <div class="panel panel-communaute-de-pratiques communaute-de-pratiques-fiche">
         <div class="panel-heading">
+            {% if canClose %}
+                <button class="pull-right btn btn-sm btn-success" onclick="CommunautePratique_Fiche.close({{ fiche.id }});">Problématique résolue</button>
+            {% elseif canOpen %}
+                <button class="pull-right btn btn-sm btn-success" onclick="CommunautePratique_Fiche.open({{ fiche.id }});">Réouvrir la fiche</button>
+            {% endif %}
             <h2><em class="icon icon-file148"></em>Fiche de problématique</h2>
         </div>
         <div class="panel-body">
 
             <p>
-                <strong class="violet">Question posée :</strong><br>{{ fiche.questionPosee }}
+                <strong class="violet">Question posée :</strong><br>{{ fiche.questionPosee|nl2br }}
             </p>
             <p>
-                <strong class="violet">Éléments de contexte à prendre en compte :</strong><br>{{ fiche.contexte }}
+                <strong class="violet">Éléments de contexte à prendre en compte :</strong><br>{{ fiche.contexte|nl2br }}
             </p>
             <p>
-                <strong class="violet">Description complète du problème :</strong><br>{{ fiche.description }}
+                <strong class="violet">Description complète du problème :</strong><br>{{ fiche.description|nl2br }}
             </p>
             <p>
-                <strong class="violet">Aide attendue :</strong><br>{{ fiche.aideAttendue }}
+                <strong class="violet">Aide attendue :</strong><br>{{ fiche.aideAttendue|nl2br }}
             </p>
             <p>
-                <strong class="violet">En résumé...</strong><br>{{ fiche.resume }}
+                <strong class="violet">En résumé...</strong><br>{{ fiche.resume|nl2br }}
             </p>
 
         </div>

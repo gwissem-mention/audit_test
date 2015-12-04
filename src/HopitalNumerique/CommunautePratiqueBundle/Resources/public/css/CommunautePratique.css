@@ -11,7 +11,7 @@
 /* Panel */
 .panel-communaute-de-pratiques { border-color: #e6e6e6;border-radius: 0;border-style: solid;border-width: 1px;margin: 15px 0; }
     .panel-communaute-de-pratiques .panel-heading { background-color: #e6e6e6; }
-        .panel-communaute-de-pratiques .panel-heading h2 { font-size: 20px;font-weight: bold;margin: 0; }
+        .panel-communaute-de-pratiques .panel-heading h2 { font-size: 20px;font-weight: bold;margin: 0;padding: 2px 0 1px; }
             .panel-communaute-de-pratiques .panel-heading .icon { font-size: 24px;margin: 0 8px 0 0;vertical-align: middle; }
 
 /* Onglets */
@@ -32,7 +32,6 @@
     .communaute-pratique-actions .lien { float: right; }
         .communaute-pratique-actions .lien a { color: #2e2e2e; }
             .communaute-pratique-actions .lien a .icon { color: #777;font-size: 26px;margin: 0 0 0 2px;vertical-align: middle; }
-    .communaute-pratique-actions > .btn { float: right;font-weight: bold;margin: 0 0 0 30px; }
 
 /* Liens généraux */
 .communaute-de-pratiques-sommaire { margin: 15px 0; }
