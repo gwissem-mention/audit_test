@@ -86,19 +86,20 @@
         .communaute-de-pratiques-bloc-publications a em { display: block;font-size: 40px;margin: 0 0 10px; }
 
 /* Bandeau d'un membre */
-.communaute-pratique-bandeau-membre { background-color: #f2f2f2;margin: 30px 0;padding: 15px; }
-    .communaute-pratique-bandeau-membre .illustration { float: left;margin: 0 6px 0 0; }
-    .communaute-pratique-bandeau-membre .nom, .communaute-pratique-bandeau-membre .animateur {}
-        .communaute-pratique-bandeau-membre .nom .icon, .communaute-pratique-bandeau-membre .animateur .icon { color: #d60030;font-size: 16px;vertical-align: middle; }
-    .communaute-pratique-bandeau-membre .nom { font-size: 17px;font-weight: bold;padding: 7px 0 0 0; }
-    .communaute-pratique-bandeau-membre .animateur { font-size: 11px; }
-    .communaute-pratique-bandeau-membre .type, .communaute-pratique-bandeau-membre .fonction { color: #777; }
-        .communaute-pratique-bandeau-membre .type .icon, .communaute-pratique-bandeau-membre .fonction .icon { align-items: center;-webkit-align-items: center;display: flex;float: left;font-size: 30px;height: 55px;width: 48px; }
-        .communaute-pratique-bandeau-membre .type .contenu, .communaute-pratique-bandeau-membre .fonction .contenu { align-items: center;-webkit-align-items: center;display: flex;height: 55px;margin: 0 0 0 48px; }
-    .communaute-pratique-bandeau-membre .type {}
-        .communaute-pratique-bandeau-membre .type .icon {}
-    .communaute-pratique-bandeau-membre .fonction {}
-        .communaute-pratique-bandeau-membre .fonction .icon {}
+.communaute-pratique-bandeau-membre { padding: 15px 0; }
+    .communaute-pratique-bandeau-membre-body { background-color: #f2f2f2;padding: 15px; }
+        .communaute-pratique-bandeau-membre .illustration { float: left;margin: 0 6px 0 0; }
+        .communaute-pratique-bandeau-membre .nom, .communaute-pratique-bandeau-membre .animateur {}
+            .communaute-pratique-bandeau-membre .nom .icon, .communaute-pratique-bandeau-membre .animateur .icon { color: #d60030;font-size: 16px;vertical-align: middle; }
+        .communaute-pratique-bandeau-membre .nom { font-size: 17px;font-weight: bold;padding: 7px 0 0 0; }
+        .communaute-pratique-bandeau-membre .animateur { font-size: 11px; }
+        .communaute-pratique-bandeau-membre .type, .communaute-pratique-bandeau-membre .fonction { color: #777; }
+            .communaute-pratique-bandeau-membre .type .icon, .communaute-pratique-bandeau-membre .fonction .icon { align-items: center;-webkit-align-items: center;display: flex;float: left;font-size: 30px;height: 55px;width: 48px; }
+            .communaute-pratique-bandeau-membre .type .contenu, .communaute-pratique-bandeau-membre .fonction .contenu { align-items: center;-webkit-align-items: center;display: flex;height: 55px;margin: 0 0 0 48px; }
+        .communaute-pratique-bandeau-membre .type {}
+            .communaute-pratique-bandeau-membre .type .icon {}
+        .communaute-pratique-bandeau-membre .fonction {}
+            .communaute-pratique-bandeau-membre .fonction .icon {}
 
 /* Porte-documents (formulaire) */
 .communaute-de-pratiques-documents {}
@@ -138,7 +139,7 @@
     .communaute-de-pratiques-fiche p { font-size: 14px;margin: 15px 0; }
 
 /* Fiche d'un utilisateur' */
-.communaute-de-pratiques-user-fiche {}
+.communaute-de-pratiques-user-fiche { padding: 15px 0; }
     .communaute-de-pratiques-user-fiche #formulaire-prealable, .communaute-de-pratiques-user-fiche #documents, .communaute-de-pratiques-user-fiche #fiches { padding: 15px; }
     .communaute-de-pratiques-user-fiche #formulaire-prealable { padding-top: 25px; }
         .communaute-de-pratiques-user-fiche #formulaire-prealable .row { border-color: #777;border-style: solid;border-width: 1px 0 0 0;margin: 0px;padding: 3px 0 25px; }

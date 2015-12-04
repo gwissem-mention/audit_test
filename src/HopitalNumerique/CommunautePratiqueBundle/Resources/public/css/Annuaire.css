@@ -13,7 +13,7 @@
 
 /* Bloc d'un utilisateur */
 .communaute-de-pratiques-bloc-user { background-color: #f6f6f6;margin: 15px 0;padding: 15px; }
-    .communaute-de-pratiques-bloc-user .delete { float: right; }
+    .communaute-de-pratiques-bloc-user .delete { float: right;margin: 0 0 0 2px; }
     .communaute-de-pratiques-bloc-user .identite { height:79px;overflow: hidden; }
         .communaute-de-pratiques-bloc-user .illustration { float: left;margin: 0 6px 0 0; }
         .communaute-de-pratiques-bloc-user .nom { font-size: 14px;font-weight: bold; }
@@ -33,4 +33,4 @@
             .communaute-de-pratiques-bloc-user .liens .groupe a:hover { text-decoration: none; }
 
 /* Formulaire d'ajout d'un utilisateur à un groupe */
-.communaute-de-pratiques-user-add { margin: 15px 0; }
+.communaute-de-pratiques-user-add { padding: 15px 0; }

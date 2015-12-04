@@ -20,42 +20,39 @@
 
 {% block body_communaute_pratique %}
 
+    {{ communaute_pratique.display_groupe_sommaire(groupe) }}
+
+    {% if ajoutMembreForm is not null %}
+        <div class="communaute-de-pratiques-user-add">
+            <div class="row">
+                {{ form_start(ajoutMembreForm) }}
+                    <div class="col-md-5 text-right">
+                        Ajouter un membre de la communauté au groupe de travail :
+                    </div>
+                    <div class="col-md-5">
+                        {{ form_widget(ajoutMembreForm.user) }}
+                    </div>
+                    <div class="col-md-2">
+                        <button type="submit" class="btn btn-sm btn-success">Ajouter l'utilisateur</button>
+                    </div>
+                {{ form_end(ajoutMembreForm) }}
+            </div>
+        </div>
+    {% endif %}
+
     <div class="communaute-de-pratiques-annuaire">
 
-        {% if ajoutMembreForm is not null %}
-            <div class="communaute-de-pratiques-user-add">
-                <div class="row">
-                    {{ form_start(ajoutMembreForm) }}
-                        <div class="col-md-5 text-right">
-                            Ajouter un membre de la communauté au groupe de travail :
-                        </div>
-                        <div class="col-md-5">
-                            {{ form_widget(ajoutMembreForm.user) }}
-                        </div>
-                        <div class="col-md-2">
-                            <button type="submit" class="btn btn-sm btn-success">Ajouter l'utilisateur</button>
-                        </div>
-                    {{ form_end(ajoutMembreForm) }}
+        <div class="row">
+            {% for membre in pagerFantaMembres.currentPageResults %}
+                <div class="col-md-3 col-sm-6">
+                    {{ communaute_pratique.display_bloc_membre(membre, groupe, canDeleteMembre) }}
                 </div>
-            </div>
-        {% endif %}
-
-        <div class="communaute-de-pratiques-annuaire-users">
-            <div class="row">
-
-                {% for membre in pagerFantaMembres.currentPageResults %}
-                    <div class="col-md-3 col-sm-6">
-                        {{ communaute_pratique.display_bloc_membre(membre, groupe, canDeleteMembre) }}
-                    </div>
-                {% endfor %}
-
-            </div>
-
-            {% if pagerFantaMembres.nbPages > 1 %}
-                <div class="text-center">{{ pagerfanta(pagerFantaMembres, 'hopitalnumerique_communautepratique') }}</div>
-            {% endif %}
-
+            {% endfor %}
         </div>
+
+        {% if pagerFantaMembres.nbPages > 1 %}
+            <div class="text-center">{{ pagerfanta(pagerFantaMembres, 'hopitalnumerique_communautepratique') }}</div>
+        {% endif %}
 
     </div>
 
