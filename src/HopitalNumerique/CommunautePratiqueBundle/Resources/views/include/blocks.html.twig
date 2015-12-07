@@ -124,7 +124,7 @@
             </div>
             <div class="contenu">
                 <div class="nom"><a href="{{ path('hopitalnumerique_communautepratique_document_download', { 'document':document.id }) }}" target="_blank"><span title="{{ document }}">{{ document|truncate(15) }}</span> <span class="size">{{ document.sizeLibelle }}</span></a></div>
-                <div class="date">Déposé le <span>{{ document.dateCreation|date('d/m/Y') }}</span></div>
+                <div class="date">Déposé le <span>{{ document.dateCreation|date('d/m/y') }}</span></div>
             </div>
         </div>
     </div>
