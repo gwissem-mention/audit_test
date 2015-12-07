@@ -5,6 +5,11 @@
         .body-communaute-pratique h1 .subtitle { color: #000;font-size: 20px;font-weight: normal; }
     .mini-title { color: #777;font-size: 13px;font-weight: bold;text-transform: uppercase; }
 
+/* Fil d'Ariane */
+.body-communaute-pratique .breadcrumb { background-color: transparent;font-size: 12px; }
+    .body-communaute-pratique .breadcrumb a { color: #777; }
+    .body-communaute-pratique .breadcrumb > li + li::before { content: '> '; }
+
 /* Avatar */
 .communaute-de-pratiques-avatar { background-color: #e5e5e5;background-size: cover;background-position: center center;border-color: #fff;border-radius: 50%;border-style: solid;border-width: 3px;height: 60px;margin: auto;width: 60px; }
 

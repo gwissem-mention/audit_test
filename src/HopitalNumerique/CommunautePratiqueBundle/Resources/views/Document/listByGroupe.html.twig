@@ -29,6 +29,8 @@
 
 {% block title_communaute_pratique %}Groupe de travail <span class="subtitle">{{ groupe }} - Porte-documents</span>{% endblock %}
 
+{% block communaute_pratique_breadcrumbs_parent %}<li><a href="{{ path('hopitalnumerique_communautepratique_groupe_view', { groupe:groupe.id }) }}">Groupe {{ groupe }}</a></li>{% endblock %}
+
 {% block communaute_pratique_actions %}
     {{ parent() }}
     {{ communaute_pratique.display_action_contact_animateur(groupe) }}

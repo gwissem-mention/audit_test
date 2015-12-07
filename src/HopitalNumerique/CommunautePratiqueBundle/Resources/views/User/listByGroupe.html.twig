@@ -18,6 +18,8 @@
     </div>
 {% endblock %}
 
+{% block communaute_pratique_breadcrumbs_parent %}<li><a href="{{ path('hopitalnumerique_communautepratique_groupe_view', { groupe:groupe.id }) }}">Groupe {{ groupe }}</a></li>{% endblock %}
+
 {% block communaute_pratique_sommaire %}{% endblock %}
 
 {% block body_communaute_pratique %}
