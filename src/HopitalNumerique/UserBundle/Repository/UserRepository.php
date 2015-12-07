@@ -642,4 +642,43 @@ class UserRepository extends EntityRepository
 
         return $query->getQuery()->getResult();
     }
+
+    /**
+     * Retourne des membres de la communauté de pratique au hasard.
+     *
+     * @param integer $nombreMembres Nombre de membres à retourner
+     * @return array<\HopitalNumerique\UserBundle\Entity\User> Utilisateurs
+     */
+    public function findCommunautePratiqueRandomMembres($nombreMembres)
+    {
+        $query = $this->createQueryBuilder('user');
+
+        $query
+            ->select('user', 'RAND() AS HIDDEN rand')
+            ->where('user.inscritCommunautePratique = :inscritCommunautePratique')
+            ->setParameter('inscritCommunautePratique', true)
+            ->setMaxResults($nombreMembres)
+            ->orderBy('rand')
+        ;
+
+        return $query->getQuery()->getResult();
+    }
+
+    /**
+     * Retourne de nombre de membres de la communauté de pratique.
+     *
+     * @return integer Total
+     */
+    public function findCommunautePratiqueMembresCount()
+    {
+        $query = $this->createQueryBuilder('user');
+
+        $query
+            ->select('COUNT(user)')
+            ->where('user.inscritCommunautePratique = :inscritCommunautePratique')
+            ->setParameter('inscritCommunautePratique', true)
+        ;
+
+        return $query->getQuery()->getSingleScalarResult();
+    }
 }

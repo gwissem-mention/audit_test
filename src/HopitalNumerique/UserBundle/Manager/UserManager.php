@@ -364,4 +364,25 @@ class UserManager extends BaseManager
     {
         return $this->getRepository()->findCommunautePratiqueMembresNotInGroupe($groupe);
     }
+
+    /**
+     * Retourne des membres de la communauté de pratique au hasard.
+     *
+     * @param integer $nombreMembres Nombre de membres à retourner
+     * @return array<\HopitalNumerique\UserBundle\Entity\User> Utilisateurs
+     */
+    public function findCommunautePratiqueRandomMembres($nombreMembres)
+    {
+        return $this->getRepository()->findCommunautePratiqueRandomMembres($nombreMembres);
+    }
+
+    /**
+     * Retourne de nombre de membres de la communauté de pratique.
+     *
+     * @return integer Total
+     */
+    public function findCommunautePratiqueMembresCount()
+    {
+        return $this->getRepository()->findCommunautePratiqueMembresCount();
+    }
 }

@@ -1,5 +1,88 @@
 {% extends 'HopitalNumeriqueCommunautePratiqueBundle::layout.html.twig' %}
 
-{% block body %}
-    <a href="{{ path('hopitalnumerique_communautepratique_groupe_list') }}">Groupes de travail</a>
-{% endblock body %}
+{% block title_communaute_pratique %}Tableau de bord{% endblock %}
+
+{% block communaute_pratique_sommaire %}{% endblock %}
+
+{% block body_communaute_pratique %}
+
+    <div class="communaute-de-pratiques-tableau-de-bord">
+        <div class="row">
+            <div class="col-md-8">
+
+                <div class="panel panel-communaute-de-pratiques">
+                    <div class="panel-heading">
+                        <h2><em class="icon icon-news"></em> Actualités de la communauté</h2>
+                    </div>
+                    <div class="panel-body">
+
+
+
+                    </div>
+                </div>
+
+            </div>
+            <div class="col-md-4">
+
+                <div class="panel panel-communaute-de-pratiques communaute-de-pratiques-bloc-membres">
+                    <div class="panel-heading">
+                        <h2><em class="icon icon-social20"></em> Membres de la communauté</h2>
+                    </div>
+                    <div class="panel-body">
+
+                        <div class="total">{{ totalMembres }} membres</div>
+
+                        <div class="row">
+
+                            {%- for membre in membres -%}
+                                <div class="col-xs-4">
+                                    <div class="membre">
+                                        <div class="communaute-de-pratiques-avatar" style="background-image: url('{{ asset(membre.avatarWebPath) }}');"></div>
+                                        {{ membre.prenomNom }}
+                                    </div>
+                                </div>
+                            {%- endfor -%}
+
+                        </div>
+
+                        <nav class="lien"><a href="{{ path('hopitalnumerique_communautepratique_user_list') }}"><em class="fa fa-angle-double-right"></em> &nbsp; Voir tous les membres</a></nav>
+
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-9">
+
+                <div class="panel panel-communaute-de-pratiques">
+                    <div class="panel-heading">
+                        <h2><em class="icon icon-social20"></em> Groupes de travail</h2>
+                    </div>
+                    <div class="panel-body">
+
+
+
+                    </div>
+                </div>
+
+            </div>
+            <div class="col-md-3">
+
+                <div class="panel panel-communaute-de-pratiques">
+                    <div class="panel-heading">
+                        <h2><em class="icon icon-social20"></em> Mes groupes de travail en cours</h2>
+                    </div>
+                    <div class="panel-body">
+
+
+
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

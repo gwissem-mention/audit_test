@@ -13,7 +13,12 @@ class AccueilController extends \Symfony\Bundle\FrameworkBundle\Controller\Contr
     {
         return $this->render(
             'HopitalNumeriqueCommunautePratiqueBundle:Accueil:index.html.twig',
-            array()
+            array(
+                'totalMembres' => $this->container->get('hopitalnumerique_user.manager.user')
+                    ->findCommunautePratiqueMembresCount(),
+                'membres' => $this->container->get('hopitalnumerique_user.manager.user')
+                    ->findCommunautePratiqueRandomMembres(9)
+            )
         );
     }
 }

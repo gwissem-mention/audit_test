@@ -74,6 +74,7 @@ doctrine:
                 dql:
                     string_functions:
                         GROUP_CONCAT: DoctrineExtensions\Query\Mysql\GroupConcat
+                        RAND: DoctrineExtensions\Query\Mysql\Rand
                 mappings:
                     CCDNForumForumBundle:
                         mapping:              true
