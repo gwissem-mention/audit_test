@@ -21,6 +21,11 @@ use Nodevo\ToolsBundle\Validator\Constraints as Nodevo;
 class Reference
 {
     /**
+     * @var integer ID de Monsieur
+     */
+    const CIVILITE_MONSIEUR_ID = 8;
+
+    /**
      * @var integer ID de Madame
      */
     const CIVILITE_MADAME_ID = 9;

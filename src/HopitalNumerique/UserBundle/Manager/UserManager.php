@@ -4,6 +4,7 @@ namespace HopitalNumerique\UserBundle\Manager;
 
 use Nodevo\ToolsBundle\Manager\Manager as BaseManager;
 use Doctrine\Common\Collections\Collection;
+use HopitalNumerique\ReferenceBundle\Entity\Reference;
 
 class UserManager extends BaseManager
 {
@@ -368,12 +369,14 @@ class UserManager extends BaseManager
     /**
      * Retourne des membres de la communauté de pratique au hasard.
      *
-     * @param integer $nombreMembres Nombre de membres à retourner
+     * @param integer                                            $nombreMembres Nombre de membres à retourner
+     * @param \HopitalNumerique\ReferenceBundle\Entity\Reference $civilite      (optionnel) Civilité
+     * @param array<\HopitalNumerique\UserBundle\Entity\User>    $ignores       (optionnel) Liste d'utilisateurs à ignorer
      * @return array<\HopitalNumerique\UserBundle\Entity\User> Utilisateurs
      */
-    public function findCommunautePratiqueRandomMembres($nombreMembres)
+    public function findCommunautePratiqueRandomMembres($nombreMembres, Reference $civilite = null, array $ignores = null)
     {
-        return $this->getRepository()->findCommunautePratiqueRandomMembres($nombreMembres);
+        return $this->getRepository()->findCommunautePratiqueRandomMembres($nombreMembres, $civilite, $ignores);
     }
 
     /**

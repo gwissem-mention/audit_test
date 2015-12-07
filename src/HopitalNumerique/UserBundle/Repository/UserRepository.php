@@ -4,6 +4,7 @@ namespace HopitalNumerique\UserBundle\Repository;
 
 use Doctrine\ORM\EntityRepository;
 use Nodevo\RoleBundle\Entity\Role;
+use HopitalNumerique\ReferenceBundle\Entity\Reference;
 use Doctrine\ORM\Query\Expr;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Query\Expr\Join;
@@ -646,20 +647,36 @@ class UserRepository extends EntityRepository
     /**
      * Retourne des membres de la communauté de pratique au hasard.
      *
-     * @param integer $nombreMembres Nombre de membres à retourner
+     * @param integer                                            $nombreMembres Nombre de membres à retourner
+     * @param \HopitalNumerique\ReferenceBundle\Entity\Reference $civilite      (optionnel) Civilité
+     * @param array<\HopitalNumerique\UserBundle\Entity\User>    $ignores       (optionnel) Liste d'utilisateurs à ignorer
      * @return array<\HopitalNumerique\UserBundle\Entity\User> Utilisateurs
      */
-    public function findCommunautePratiqueRandomMembres($nombreMembres)
+    public function findCommunautePratiqueRandomMembres($nombreMembres, Reference $civilite = null, array $ignores = null)
     {
         $query = $this->createQueryBuilder('user');
 
         $query
             ->select('user', 'RAND() AS HIDDEN rand')
-            ->where('user.inscritCommunautePratique = :inscritCommunautePratique')
+            ->andWhere('user.inscritCommunautePratique = :inscritCommunautePratique')
             ->setParameter('inscritCommunautePratique', true)
             ->setMaxResults($nombreMembres)
             ->orderBy('rand')
         ;
+
+        if (null !== $civilite) {
+            $query
+                ->andWhere('user.civilite = :civilite')
+                ->setParameter('civilite', $civilite)
+            ;
+        }
+
+        if (null !== $ignores) {
+            $query
+                ->andWhere($query->expr()->notIn('user', ':ignores'))
+                ->setParameter('ignores', $ignores)
+            ;
+        }
 
         return $query->getQuery()->getResult();
     }
