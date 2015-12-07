@@ -5,6 +5,7 @@ use HopitalNumerique\CommunautePratiqueBundle\DependencyInjection\Inscription;
 use HopitalNumerique\CommunautePratiqueBundle\DependencyInjection\Security;
 use HopitalNumerique\UserBundle\Entity\User;
 use HopitalNumerique\CommunautePratiqueBundle\Entity\Commentaire;
+use HopitalNumerique\CommunautePratiqueBundle\Entity\Fiche;
 
 /**
  * Ajout de filtres Twig.
@@ -80,6 +81,10 @@ class FilterExtension extends \Twig_Extension
     {
         if ($object instanceof Commentaire) {
             return $this->securityService->canEditCommentaire($object);
+        }
+
+        if ($object instanceof Fiche) {
+            return $this->securityService->canEditFiche($object);
         }
 
         throw new \Exception('Méthode "communautePratiqueCanEdit" non implémentée pour ce type d\'objet');
