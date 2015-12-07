@@ -30,11 +30,16 @@
 
     <div class="panel panel-communaute-de-pratiques communaute-de-pratiques-fiche">
         <div class="panel-heading">
-            {% if canClose %}
-                <button class="pull-right btn btn-sm btn-success" onclick="CommunautePratique_Fiche.close({{ fiche.id }});">Problématique résolue</button>
-            {% elseif canOpen %}
-                <button class="pull-right btn btn-sm btn-success" onclick="CommunautePratique_Fiche.open({{ fiche.id }});">Réouvrir la fiche</button>
-            {% endif %}
+            <nav class="pull-right">
+                {% if fiche|communautePratiqueCanEdit %}
+                    <a href="{{ path('hopitalnumerique_communautepratique_fiche_edit', { fiche:fiche.id }) }}">Éditer cette fiche</a> &nbsp;
+                {% endif %}
+                {% if canClose %}
+                    <button class="btn btn-sm btn-success" onclick="CommunautePratique_Fiche.close({{ fiche.id }});">Problématique résolue</button>
+                {% elseif canOpen %}
+                    <button class="btn btn-sm btn-success" onclick="CommunautePratique_Fiche.open({{ fiche.id }});">Réouvrir la fiche</button>
+                {% endif %}
+            </nav>
             <h2><em class="icon icon-file148"></em>Fiche de problématique</h2>
         </div>
         <div class="panel-body">
@@ -66,43 +71,45 @@
         {% endfor %}
     </div>
 
-    <div class="communaute-de-pratiques-commentaires">
-        <div class="panel-header"></div>
-        <div class="panel panel-communaute-de-pratiques">
-            <div class="panel-heading">
-                <h2>Commentaires</h2>
-            </div>
-            <div class="panel-body">
+    {% if fiche.resolu == false or fiche.commentaires|length > 0 %}
+        <div class="communaute-de-pratiques-commentaires">
+            <div class="panel-header"></div>
+            <div class="panel panel-communaute-de-pratiques">
+                <div class="panel-heading">
+                    <h2>Commentaires</h2>
+                </div>
+                <div class="panel-body">
 
-                {% if fiche.resolu == false %}
-                    <div class="commentaire">
-                        <p>Écrire un commentaire :</p>
-                        <div class="illustration">
-                            <div class="communaute-de-pratiques-avatar" style="background-image: url('{{ asset(app.user.avatarWebPath) }}');"></div>
-                        </div>
-                        <div class="contenu">
-                            <div class="nom"><strong>{{ app.user.prenomNom }}</strong></div>
-
-                            <div class="message">
-                                {{ render(controller('HopitalNumeriqueCommunautePratiqueBundle:Commentaire/FicheCommentaire:add', { fiche:fiche.id })) }}
+                    {% if fiche.resolu == false %}
+                        <div class="commentaire">
+                            <p>Écrire un commentaire :</p>
+                            <div class="illustration">
+                                <div class="communaute-de-pratiques-avatar" style="background-image: url('{{ asset(app.user.avatarWebPath) }}');"></div>
                             </div>
+                            <div class="contenu">
+                                <div class="nom"><strong>{{ app.user.prenomNom }}</strong></div>
 
+                                <div class="message">
+                                    {{ render(controller('HopitalNumeriqueCommunautePratiqueBundle:Commentaire/FicheCommentaire:add', { fiche:fiche.id })) }}
+                                </div>
+
+                            </div>
+                            <div class="clearfix"></div>
+                            {% if fiche.commentaires|length > 0 %}
+                                <p><strong>Commentaires des membres du groupe</strong></p>
+                            {% endif %}
                         </div>
-                        <div class="clearfix"></div><br>
-                        {% if fiche.commentaires|length > 0 %}
-                            <p><strong>Commentaires des membres du groupe</strong></p>
-                        {% endif %}
-                    </div>
-                {% endif %}
+                    {% endif %}
 
-                {% if fiche.commentaires|length > 0 %}
-                    {% for commentaire in fiche.commentaires %}
-                        {{ communaute_pratique.display_commentaire(commentaire) }}
-                    {% endfor %}
-                {% endif %}
+                    {% if fiche.commentaires|length > 0 %}
+                        {% for commentaire in fiche.commentaires %}
+                            {{ communaute_pratique.display_commentaire(commentaire) }}
+                        {% endfor %}
+                    {% endif %}
 
+                </div>
             </div>
         </div>
-    </div>
+    {% endif %}
 
 {% endblock body_communaute_pratique %}

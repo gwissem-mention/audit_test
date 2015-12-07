@@ -33,4 +33,5 @@
             .communaute-de-pratiques-bloc-user .liens .groupe a:hover { text-decoration: none; }
 
 /* Formulaire d'ajout d'un utilisateur à un groupe */
-.communaute-de-pratiques-user-add { padding: 15px 0; }
+.communaute-de-pratiques-user-add {}
+    .communaute-de-pratiques-user-add .column { padding: 7px 0; }

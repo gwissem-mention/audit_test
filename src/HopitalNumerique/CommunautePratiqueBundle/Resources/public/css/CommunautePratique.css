@@ -159,6 +159,7 @@
             .communaute-de-pratiques-bloc-fiche .header .commentaires .count { background-image:url("/bundles/hopitalnumeriquecommunautepratique/img/commentaire/bulle-big.png");background-position: center center;background-repeat: no-repeat;color: #fff;padding: 0 8px 2px 8px; }
     .communaute-de-pratiques-bloc-fiche .contenu { clear: both;font-size: 11px;height: 60px;overflow: hidden; }
         .communaute-de-pratiques-bloc-fiche .contenu strong { color: #dd3157;font-size: 14px; }
+    .communaute-de-pratiques-bloc-fiche nav { font-size: 12px;text-align: right; }
 .communaute-de-pratiques-bloc-fiche[data-communaute-pratique-fiche-resolu="1"] { background-color: #fff; }
 
 /* Tableau de bord (accueil général) */

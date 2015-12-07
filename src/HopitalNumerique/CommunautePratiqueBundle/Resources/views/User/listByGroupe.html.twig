@@ -28,14 +28,14 @@
         <div class="communaute-de-pratiques-user-add">
             <div class="row">
                 {{ form_start(ajoutMembreForm) }}
-                    <div class="col-md-5 text-right">
-                        Ajouter un membre de la communauté au groupe de travail :
+                    <div class="column col-md-5 text-xs-center text-md-right">
+                        Ajouter un membre au groupe de travail : &nbsp;
                     </div>
-                    <div class="col-md-5">
+                    <div class="column col-md-5">
                         {{ form_widget(ajoutMembreForm.user) }}
                     </div>
-                    <div class="col-md-2">
-                        <button type="submit" class="btn btn-sm btn-success">Ajouter l'utilisateur</button>
+                    <div class="column col-md-2 text-xs-center text-md-left">
+                        &nbsp; <button type="submit" class="btn btn-sm btn-success">Ajouter l'utilisateur</button>
                     </div>
                 {{ form_end(ajoutMembreForm) }}
             </div>

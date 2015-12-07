@@ -300,5 +300,8 @@
             {% if fiche|communautePratiqueCanEdit %}</a>{% endif %}
             {{ fiche.questionPosee }}
         </div>
+        <nav>
+            <a href="{{ path('hopitalnumerique_communautepratique_fiche_view', { fiche:fiche.id }) }}">Consulter cette fiche</a>
+        </nav>
     </div>
 {% endmacro %}
