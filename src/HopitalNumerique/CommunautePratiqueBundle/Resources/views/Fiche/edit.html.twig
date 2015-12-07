@@ -51,7 +51,7 @@
 
                         <div class="row">
                             <div class="col-md-12">
-                                <h3 class="mini-title">Mon porte-documents</h3>
+                                <h3 class="mini-title">{{ fiche.user.id == app.user.id ? 'Mon porte-documents' : 'Documents de '~(fiche.user.prenomNom) }}</h3>
                             </div>
                         </div>
                         <div class="row">
