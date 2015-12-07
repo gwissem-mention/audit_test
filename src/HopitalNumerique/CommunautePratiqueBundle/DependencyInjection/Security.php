@@ -169,11 +169,16 @@ class Security
      */
     public function canEditCommentaire(Commentaire $commentaire)
     {
-        if (null === $this->getUser()) {
+        if (!$this->canAccessCommunautePratique()) {
             return false;
         }
 
-        return ($commentaire->getUser()->getId() == $this->getUser()->getId());
+        $groupe = (null !== $commentaire->getFiche() ? $commentaire->getFiche()->getGroupe() : $commentaire->getGroupe());
+
+        return ($commentaire->getUser()->getId() == $this->getUser()->getId()
+            || $groupe->hasAnimateur($this->getUser())
+            || $this->getUser()->hasRoleAdmin()
+        );
     }
 
     /**
