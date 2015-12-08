@@ -154,7 +154,16 @@ use \Nodevo\ToolsBundle\Tools\Chaine;
  */
 class User extends BaseUser
 {
-    private static $ETAT_ACTIF_ID = 3;
+    /**
+     * @var integer ID de l'état Actif
+     */
+    const ETAT_ACTIF_ID = 3;
+
+    /**
+     * @var integer ID de l'état Inactif
+     */
+    const ETAT_INACTIF_ID = 4;
+
 
     /**
      * @ORM\Column(name="usr_id", type="integer", options = {"comment" = "ID de l utilisateur"})
@@ -1707,7 +1716,7 @@ class User extends BaseUser
      */
     public function isActif()
     {
-        return ($this->etat != null && $this->etat->getId() == self::$ETAT_ACTIF_ID);
+        return ($this->etat != null && $this->etat->getId() == self::ETAT_ACTIF_ID);
     }
 
     /**

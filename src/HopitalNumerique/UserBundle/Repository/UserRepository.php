@@ -5,6 +5,7 @@ namespace HopitalNumerique\UserBundle\Repository;
 use Doctrine\ORM\EntityRepository;
 use Nodevo\RoleBundle\Entity\Role;
 use HopitalNumerique\ReferenceBundle\Entity\Reference;
+use HopitalNumerique\UserBundle\Entity\User;
 use Doctrine\ORM\Query\Expr;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Query\Expr\Join;
@@ -585,6 +586,8 @@ class UserRepository extends EntityRepository
             ->leftJoin('user.typeActivite', 'typeActivite')
             ->andWhere('user.inscritCommunautePratique = :inscritCommunautePratique')
             ->setParameter('inscritCommunautePratique', true)
+            ->andWhere('user.etat = :etat')
+            ->setParameter('etat', User::ETAT_ACTIF_ID)
             ->addOrderBy('user.nom', 'ASC')
             ->addOrderBy('user.prenom', 'ASC')
             ->addOrderBy('user.id', 'ASC')
@@ -634,6 +637,8 @@ class UserRepository extends EntityRepository
             ->setParameter('inscritCommunautePratique', true)
             ->andWhere($query->expr()->notIn('user', ':groupeUsers'))
             ->setParameter('groupeUsers', $this->getCommunautePratiqueUsersByGroupeQueryBuilder($groupe)->getQuery()->getResult())
+            ->andWhere('user.etat = :etat')
+            ->setParameter('etat', User::ETAT_ACTIF_ID)
             ->addOrderBy('user.nom', 'ASC')
             ->addOrderBy('user.prenom', 'ASC')
             ->addOrderBy('user.id', 'ASC')
@@ -660,6 +665,8 @@ class UserRepository extends EntityRepository
             ->select('user', 'RAND() AS HIDDEN rand')
             ->andWhere('user.inscritCommunautePratique = :inscritCommunautePratique')
             ->setParameter('inscritCommunautePratique', true)
+            ->andWhere('user.etat = :etat')
+            ->setParameter('etat', User::ETAT_ACTIF_ID)
             ->setMaxResults($nombreMembres)
             ->orderBy('rand')
         ;
@@ -694,6 +701,8 @@ class UserRepository extends EntityRepository
             ->select('COUNT(user)')
             ->where('user.inscritCommunautePratique = :inscritCommunautePratique')
             ->setParameter('inscritCommunautePratique', true)
+            ->andWhere('user.etat = :etat')
+            ->setParameter('etat', User::ETAT_ACTIF_ID)
         ;
 
         return $query->getQuery()->getSingleScalarResult();
