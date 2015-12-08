@@ -11,6 +11,11 @@
 
 {% block title_communaute_pratique %}Groupe de travail {{ groupe }}{% endblock %}
 
+{% block communaute_pratique_actions %}
+    {{ parent() }}
+    {{ communaute_pratique.display_action_contact_animateur(groupe) }}
+{% endblock %}
+
 {% block communaute_pratique_sommaire %}{% endblock %}
 
 {% block body_communaute_pratique %}

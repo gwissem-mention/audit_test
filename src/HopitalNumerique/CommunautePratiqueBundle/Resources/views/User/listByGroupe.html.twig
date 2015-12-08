@@ -13,6 +13,7 @@
 
 {% block communaute_pratique_actions %}
     {{ parent() }}
+    {{ communaute_pratique.display_action_contact_animateur(groupe) }}
     <div class="lien">
         <a href="{{ path('hopital_numerique_user_informations_personnelles') }}">Mise à jour de mes données <em class="icon icon-settings48"></em></a>
     </div>
