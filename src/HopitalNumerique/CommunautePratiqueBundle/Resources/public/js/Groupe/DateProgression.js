@@ -111,7 +111,7 @@ CommunautePratique_Groupe_DateProgression.initProgressionWidthMax = function()
 {
     if (null === CommunautePratique_Groupe_DateProgression.PROGRESSION_WIDTH_MAX)
     {
-        $.each($('.communaute-de-pratiques-panel-groupes .groupe .progression .barre'), function(i, element) {
+        $.each($('.communaute-de-pratiques-groupe .progression .barre'), function(i, element) {
             if (0 != $(element).width())
             {
                 CommunautePratique_Groupe_DateProgression.PROGRESSION_WIDTH_MAX = parseInt($(element).width());

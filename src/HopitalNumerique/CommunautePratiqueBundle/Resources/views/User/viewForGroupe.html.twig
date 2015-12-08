@@ -1,9 +1,9 @@
 {% extends 'HopitalNumeriqueCommunautePratiqueBundle::layout.html.twig' %}
 
-{% block title_communaute_pratique %}Fiche de {{ user.prenomNom }} pour le groupe <span>{{ groupe }}</span>{% endblock %}
+{% block title_communaute_pratique %}Fiche de {{ user.prenomNom }}{% endblock %}
 
 {% block communaute_pratique_breadcrumbs_parent %}
-    <li><a href="{{ path('hopitalnumerique_communautepratique_groupe_view', { groupe:groupe.id }) }}">Groupe {{ groupe }}</a></li>
+    <li><a href="{{ path('hopitalnumerique_communautepratique_groupe_view', { groupe:groupe.id }) }}">Groupe de travail {{ groupe }}</a></li>
     <li><a href="{{ path('hopitalnumerique_communautepratique_user_listbygroupe', { groupe:groupe.id }) }}">Annuaire des membres</a></li>
 {% endblock %}
 

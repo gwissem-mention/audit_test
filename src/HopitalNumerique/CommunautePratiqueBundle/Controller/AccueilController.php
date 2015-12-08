@@ -1,6 +1,7 @@
 <?php
 namespace HopitalNumerique\CommunautePratiqueBundle\Controller;
 
+use Symfony\Component\HttpFoundation\Request;
 use HopitalNumerique\ReferenceBundle\Entity\Reference;
 
 /**
@@ -11,7 +12,28 @@ class AccueilController extends \Symfony\Bundle\FrameworkBundle\Controller\Contr
     /**
      * Accueil de la communauté de pratiques.
      */
-    public function indexAction()
+    public function indexAction(Request $request)
+    {
+        $domaine = $this->container->get('hopitalnumerique_domaine.manager.domaine')->findOneById($request->getSession()->get('domaineId'));
+
+        return $this->render(
+            'HopitalNumeriqueCommunautePratiqueBundle:Accueil:index.html.twig',
+            array(
+                'groupesEnVedette' => $this->container->get('hopitalnumerique_communautepratique.manager.groupe')->findNonFermes($domaine, true),
+                'userGroupesEnCours' => $this->container->get('hopitalnumerique_communautepratique.manager.groupe')->findEnCoursByUser($domaine, $this->getUser()),
+                'totalMembres' => $this->container->get('hopitalnumerique_user.manager.user')
+                    ->findCommunautePratiqueMembresCount(),
+                'membres' => $this->getMembresAuHasard()
+            )
+        );
+    }
+
+    /**
+     * Retourne 9 membres au hasard pour le tableau de bord.
+     *
+     * @return array<\HopitalNumerique\UserBundle\Entity\User> Membres
+     */
+    private function getMembresAuHasard()
     {
         $messieursAuHasard = $this->container->get('hopitalnumerique_user.manager.user')
             ->findCommunautePratiqueRandomMembres(3, $this->container->get('hopitalnumerique_reference.manager.reference')->findOneById(Reference::CIVILITE_MONSIEUR_ID))
@@ -19,21 +41,16 @@ class AccueilController extends \Symfony\Bundle\FrameworkBundle\Controller\Contr
         $mesdamesAuHasard = $this->container->get('hopitalnumerique_user.manager.user')
             ->findCommunautePratiqueRandomMembres(3, $this->container->get('hopitalnumerique_reference.manager.reference')->findOneById(Reference::CIVILITE_MADAME_ID))
         ;
+
         $membresAuHasard = array_merge(
             $messieursAuHasard,
             $mesdamesAuHasard,
             $this->container->get('hopitalnumerique_user.manager.user')
                 ->findCommunautePratiqueRandomMembres(3, null, array_merge($messieursAuHasard, $mesdamesAuHasard))
         );
+
         shuffle($membresAuHasard);
-        
-        return $this->render(
-            'HopitalNumeriqueCommunautePratiqueBundle:Accueil:index.html.twig',
-            array(
-                'totalMembres' => $this->container->get('hopitalnumerique_user.manager.user')
-                    ->findCommunautePratiqueMembresCount(),
-                'membres' => $membresAuHasard
-            )
-        );
+
+        return $membresAuHasard;
     }
 }

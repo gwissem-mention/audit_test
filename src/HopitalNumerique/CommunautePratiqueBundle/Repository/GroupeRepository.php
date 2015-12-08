@@ -13,7 +13,7 @@ class GroupeRepository extends \Doctrine\ORM\EntityRepository
 {
     /**
      * Retourne les groupes n'ayant pas encore démarrés.
-     * 
+     *
      * @param \HopitalNumerique\DomaineBundle\Entity\Domaine $domaine Domaine
      * @param \HopitalNumerique\UserBundle\Entity\User       $user    Utilisateur
      * @param boolean                                        $isActif (optionnel) Si les groupes doivent être actifs ou non actifs
@@ -54,7 +54,7 @@ class GroupeRepository extends \Doctrine\ORM\EntityRepository
 
     /**
      * Retourne les groupes en cours.
-     * 
+     *
      * @param \HopitalNumerique\DomaineBundle\Entity\Domaine $domaine Domaine
      * @param \HopitalNumerique\UserBundle\Entity\User       $user    Utilisateur
      * @param boolean                                        $isActif (optionnel) Si les groupes doivent être actifs ou non actifs
@@ -96,7 +96,7 @@ class GroupeRepository extends \Doctrine\ORM\EntityRepository
 
     /**
      * Retourne les groupes terminés.
-     * 
+     *
      * @param \HopitalNumerique\DomaineBundle\Entity\Domaine $domaine Domaine
      * @param \HopitalNumerique\UserBundle\Entity\User       $user    Utilisateur
      * @param boolean                                        $isActif (optionnel) Si les groupes doivent être actifs ou non actifs
@@ -118,6 +118,47 @@ class GroupeRepository extends \Doctrine\ORM\EntityRepository
             $query
                 ->innerJoin('groupe.users', 'user', Expr\Join::WITH, 'user = :user')
                 ->setParameter('user', $user)
+            ;
+        }
+        if (null !== $isActif) {
+            $query
+                ->andWhere('groupe.actif = :actif')
+                ->setParameter('actif', $isActif)
+            ;
+        }
+
+        $query
+            ->orderBy('groupe.dateDemarrage')
+            ->orderBy('groupe.dateFin')
+        ;
+
+        return $query->getQuery()->getResult();
+    }
+
+    /**
+     * Retourne les groupes non fermés.
+     *
+     * @param \HopitalNumerique\DomaineBundle\Entity\Domaine $domaine   Domaine
+     * @param boolean                                        $enVedette (optionnel) En vedette
+     * @param boolean                                        $isActif   (optionnel) Si les groupes doivent être actifs ou non actifs
+     * @return array<\HopitalNumerique\CommunautePratiqueBundle\Entity\Groupe> Groupes non fermés
+     */
+    public function findNonFermes(Domaine $domaine, $enVedette = null, $isActif = null)
+    {
+        $query = $this->createQueryBuilder('groupe');
+        $aujourdhui = new \DateTime();
+        $aujourdhui->setTime(0, 0, 0);
+
+        $query
+            ->andWhere('groupe.domaine = :domaine')
+            ->setParameter('domaine', $domaine)
+            ->andWhere('groupe.dateFin > :aujourdhui')
+            ->setParameter('aujourdhui', $aujourdhui)
+        ;
+        if (null !== $enVedette) {
+            $query
+                ->andWhere('groupe.vedette = :vedette')
+                ->setParameter('vedette', $enVedette)
             ;
         }
         if (null !== $isActif) {

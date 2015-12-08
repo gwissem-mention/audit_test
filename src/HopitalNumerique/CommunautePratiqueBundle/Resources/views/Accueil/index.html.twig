@@ -7,6 +7,22 @@
 {% block body_communaute_pratique %}
 
     <div class="communaute-de-pratiques-tableau-de-bord">
+
+        <div class="row">
+            <div class="col-md-12">
+                <div class="panel panel-communaute-de-pratiques">
+                    <div class="panel-heading">
+                        <h2><em class="icon icon-download105"></em> Tableau de bord</h2>
+                    </div>
+                    <div class="panel-body">
+
+
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <div class="row">
             <div class="col-md-8">
 
@@ -62,7 +78,9 @@
                     </div>
                     <div class="panel-body">
 
-
+                        {% for groupe in groupesEnVedette %}
+                            {{ communaute_pratique.display_groupe(groupe) }}
+                        {% endfor %}
 
                     </div>
                 </div>
@@ -72,7 +90,35 @@
 
                 <div class="panel panel-communaute-de-pratiques">
                     <div class="panel-heading">
-                        <h2><em class="icon icon-social20"></em> Mes groupes de travail en cours</h2>
+                        <h2><em class="icon icon-social20"></em> Mes groupes de travail</h2>
+                    </div>
+                    <div class="panel-body">
+
+                        <ul class="communaute-de-pratiques-mes-groupes">
+                            {% for groupe in userGroupesEnCours %}
+                                <li>
+                                    <a href="{{ path('hopitalnumerique_communautepratique_groupe_view', { 'groupe':groupe.id }) }}">{{ groupe }}</a>
+                                </li>
+                            {% else %}
+                                <li>Aucun groupe en cours</li>
+                            {% endfor %}
+                        </ul>
+
+                    </div>
+                </div>
+
+                <div class="communaute-de-pratiques-bloc-publications">
+                    <a href="{{ path('hopitalnumerique_communautepratique_publication_list') }}"><em class="icon-documents7"></em> Publications issues des groupes</a>
+                </div>
+
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-12">
+                <div class="panel panel-communaute-de-pratiques">
+                    <div class="panel-heading">
+                        <h2><em class="icon icon-chat27"></em> Échanger avec toute la communauté</h2>
                     </div>
                     <div class="panel-body">
 
@@ -80,9 +126,9 @@
 
                     </div>
                 </div>
-
             </div>
         </div>
+
     </div>
 
 {% endblock %}

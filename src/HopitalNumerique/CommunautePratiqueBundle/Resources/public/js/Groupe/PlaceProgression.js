@@ -65,7 +65,7 @@ CommunautePratique_Groupe_PlaceProgression.initProgressionWidthMax = function()
 {
     if (null === CommunautePratique_Groupe_PlaceProgression.PROGRESSION_WIDTH_MAX)
     {
-        $.each($('.communaute-de-pratiques-panel-groupes .groupe .places-progression'), function(i, element) {
+        $.each($('.communaute-de-pratiques-groupe .places-progression'), function(i, element) {
             if (0 != $(element).width())
             {
                 CommunautePratique_Groupe_PlaceProgression.PROGRESSION_WIDTH_MAX = parseInt($(element).width());

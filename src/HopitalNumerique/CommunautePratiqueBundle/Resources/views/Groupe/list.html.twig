@@ -9,7 +9,7 @@
     <div class="row" id="communaute-pratiques-groupes">
         <div class="col-md-9">
             
-            <div class="communaute-de-pratiques-panel-groupes">
+            <div>
                 <ul class="nav nav-tabs" role="tablist">
                     <li role="presentation"{{ groupesNonDemarres|length > 0 or groupesEnCours|length == 0 ? ' class="active"' : '' }}><a href="#a-venir" aria-controls="a-venir" role="tab" data-toggle="tab"><em class="icon-social20"></em> &nbsp; Groupes de travail</a></li>
                     <li role="presentation"{{ groupesNonDemarres|length == 0 and groupesEnCours|length > 0 ? ' class="active"' : '' }}><a href="#en-cours" aria-controls="en-cours" role="tab" data-toggle="tab"><em class="icon-social20"></em> &nbsp; Groupes de travail en cours</a></li>
@@ -42,7 +42,7 @@
             <div class="communaute-de-pratiques-bloc-mes-groupes">
                 <div class="title"><em class="icon-social20"></em> Mes groupes de travail en cours</div>
 
-                <ul>
+                <ul class="communaute-de-pratiques-mes-groupes">
                     {% for groupe in userGroupesEnCours %}
                         <li>
                             <a href="{{ path('hopitalnumerique_communautepratique_groupe_view', { 'groupe':groupe.id }) }}">{{ groupe }}</a>

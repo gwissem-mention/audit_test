@@ -52,6 +52,10 @@
                 <li class="active">{{ block('title_communaute_pratique')|striptags }}</li>
             </ol>
         {% endblock %}
+        
+        <div class="clearfix"></div>
+
+        <h1>{% block title_communaute_pratique %}{% endblock %}</h1>
 
         <div class="communaute-pratique-actions">
             {% block communaute_pratique_actions %}
@@ -63,8 +67,7 @@
                 </div>
             {% endblock %}
         </div>
-
-        <h1>{% block title_communaute_pratique %}{% endblock %}</h1>
+        <div class="clearfix"></div>
 
         {% block body_communaute_pratique %}{% endblock body_communaute_pratique %}
 
