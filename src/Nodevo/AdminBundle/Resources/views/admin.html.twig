@@ -37,6 +37,7 @@
                 "@enquire_js"
                 "@jquery_cookie_js"
                 "@jquery_nicescroll_js"
+                'bundles/fosjsrouting/js/router.js'
                 'bundles/nodevoadmin/plugins/apprise/apprise.js'
                 'bundles/nodevoadmin/plugins/nodevoLoader/nodevoLoader.js'
                 'bundles/nodevoadmin/js/placeholdr.js'
@@ -44,6 +45,7 @@
             %}
                 <script type="text/javascript" src="{{ asset_url }}"></script>
             {% endjavascripts %}
+            <script src="{{ path('fos_js_routing_js', {"callback": "fos.Router.setData"}) }}"></script>
         {% endblock %}
     </head>
 
