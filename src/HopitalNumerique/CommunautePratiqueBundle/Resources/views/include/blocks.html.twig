@@ -160,8 +160,8 @@
                     <div class="type">
                         <em class="icon icon-hospital11"></em>
                         <div class="contenu">
-                            {{ user.statutEtablissementSante is not null ? user.statutEtablissementSante.libelle~' ' : '' }}
-                            {%- if user.typeActivite|length > 0 -%}
+                            {{ user.statutEtablissementSante is not null ? user.statutEtablissementSante.libelle : 'Type d\'établissement non renseigné' }}
+                            {% if user.typeActivite|length > 0 -%}
                                 &nbsp;({% for activite in user.typeActivite -%}
                                     {{ (loop.first ? '' : ', ')~(activite.libelle) }}
                                 {%- endfor %})
@@ -173,7 +173,7 @@
                     <div class="fonction">
                         <em class="icon icon-users149"></em>
                         <div class="contenu">
-                            {{ user.fonctionDansEtablissementSante }}
+                            {{ user.fonctionDansEtablissementSante != '' ? user.fonctionDansEtablissementSante : 'Fonction non renseignée' }}
                         </div>
                     </div>
                 </div>
@@ -243,8 +243,8 @@
         <div class="type">
             <em class="icon icon-hospital11"></em>
             <div class="contenu">
-                {{ user.statutEtablissementSante is not null ? user.statutEtablissementSante.libelle~' ' : '' }}
-                {%- if user.typeActivite|length > 0 -%}
+                {{ user.statutEtablissementSante is not null ? user.statutEtablissementSante.libelle : 'Type d\'établissement non renseigné' }}
+                {% if user.typeActivite|length > 0 -%}
                     <br>({% for activite in user.typeActivite -%}
                         {{ (loop.first ? '' : ', ')~(activite.libelle) }}
                     {%- endfor %})
@@ -254,7 +254,7 @@
         <div class="fonction">
             <em class="icon icon-users149"></em>
             <div class="contenu">
-                {{ user.fonctionDansEtablissementSante }}
+                {{ user.fonctionDansEtablissementSante != '' ? user.fonctionDansEtablissementSante : 'Fonction non renseignée' }}
             </div>
         </div>
         <div class="liens">
