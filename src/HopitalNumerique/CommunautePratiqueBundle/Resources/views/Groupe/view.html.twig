@@ -28,7 +28,7 @@
     {{ groupe.descriptionHtml|raw }}
 
     <div class="text-right">
-        <a class="btn btn-success" href="{{ path('hopitalnumerique_communautepratique_fiche_add', { groupe:groupe.id }) }}">Ajouter une fiche &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <em class="fa fa-plus"></em></a>
+        <a class="btn btn-success" href="{{ path('hopitalnumerique_communautepratique_fiche_add', { groupe:groupe.id }) }}">Ajouter une fiche de problématique &nbsp; &nbsp; &nbsp; &nbsp; <em class="fa fa-plus"></em></a>
     </div>
 
     {%- if groupe.fiches|length > 0 -%}
