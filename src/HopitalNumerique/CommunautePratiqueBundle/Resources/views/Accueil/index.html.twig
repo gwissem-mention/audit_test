@@ -61,7 +61,9 @@
 
                         </div>
 
-                        <nav class="lien"><a href="{{ path('hopitalnumerique_communautepratique_user_list') }}"><em class="fa fa-angle-double-right"></em> &nbsp; Voir tous les membres</a></nav>
+                        <nav class="lien">
+                            <a href="{{ path('hopitalnumerique_communautepratique_user_list') }}"><em class="fa fa-angle-double-right"></em> &nbsp; Voir tous les membres</a>
+                        </nav>
 
                     </div>
                 </div>
@@ -81,6 +83,10 @@
                         {% for groupe in groupesEnVedette %}
                             {{ communaute_pratique.display_groupe(groupe) }}
                         {% endfor %}
+
+                        <nav class="lien">
+                            <a href="{{ path('hopitalnumerique_communautepratique_groupe_list') }}"><em class="fa fa-angle-double-right"></em> &nbsp; Voir tous les groupes de travail</a>
+                        </nav>
 
                     </div>
                 </div>
@@ -122,7 +128,20 @@
                     </div>
                     <div class="panel-body">
 
+                        <div class="row">
+                            {%- for topic in forumLastTopics -%}
+                                <div class="col-md-4">
+                                    <div class="forum">
+                                        <h3><a href="{{ path('ccdn_forum_user_topic_show', { forumName:topic.board.category.forum.name, topicId:topic.lastPost.topic.id }) }}"><strong>{{ topic.lastPost.topic.title }}</strong></a></h3>
+                                        {{ topic.lastPost.body|truncate(240) }} <a href="{{ path('ccdn_forum_user_topic_show', { forumName:topic.board.category.forum.name, topicId:topic.lastPost.topic.id }) }}">En savoir plus</a>
+                                    </div>
+                                </div>
+                            {%- endfor -%}
+                        </div>
 
+                        <nav class="lien">
+                            <a href="{{ path('ccdn_forum_user_category_index', { forumName:forum.name }) }}"><em class="fa fa-angle-double-right"></em> &nbsp; Accéder au forum</a>
+                        </nav>
 
                     </div>
                 </div>

@@ -31,6 +31,10 @@ services:
         scope: "request"
         arguments: ["@request", "@session", "@hopitalnumerique_forum.manager.post", "%nodevo_gestionnaire_media.moxie_manager.extensions_autorisees%"]
     #Manager
+    #--Forum
+    hopitalnumerique_forum.manager.forum:
+        class: 'HopitalNumerique\ForumBundle\Manager\ForumManager'
+        arguments: ['@doctrine.orm.entity_manager']
     #--Board
     hopitalnumerique_forum.manager.board:
         class: %hopitalnumerique_forum.manager.board.class%

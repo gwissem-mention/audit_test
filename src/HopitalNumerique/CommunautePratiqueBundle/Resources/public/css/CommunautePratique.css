@@ -179,3 +179,5 @@ ul.communaute-de-pratiques-mes-groupes { list-style-type: none;margin: 0;padding
     .communaute-de-pratiques-bloc-membres {}
         .communaute-de-pratiques-bloc-membres .total { color: #dd3157;font-size: 15px;font-weight: bold;padding: 0 0 15px 0;text-align: center; }
         .communaute-de-pratiques-bloc-membres .membre { font-size: 11px;height: 100px;line-height: 12px;text-align: center; }
+    .communaute-de-pratiques-tableau-de-bord .forum { font-size: 11px; }
+        .communaute-de-pratiques-tableau-de-bord .forum h3 { font-size: 14px;margin: 0 0 4px; }
