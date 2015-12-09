@@ -27,7 +27,7 @@ CommunautePratique_Groupe.fixeHauteurBlocs = function()
         {
             var blocGroupesCourantsContenuHeight = 0;
             $.each($('.tab-pane'), function(i, element) {
-                var height = $(element).height() + parseInt($(element).css('marginTop')) + parseInt($(element).css('marginBottom')) + parseInt($(element).css('paddingTop')) + parseInt($(element).css('paddingBottom'));;
+                var height = $(element).height() + parseInt($(element).css('marginTop')) + parseInt($(element).css('marginBottom')) + parseInt($(element).css('paddingTop')) + parseInt($(element).css('paddingBottom'));
                 if (height > blocGroupesCourantsContenuHeight)
                 {
                     blocGroupesCourantsContenuHeight = height;
