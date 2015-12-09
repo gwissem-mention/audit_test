@@ -302,12 +302,25 @@ class ObjetRepository extends EntityRepository
   }
 
     /**
-     * Retourne le dernier article d'une catégorie.
+     * Retourne les articles d'une catégorie.
      *
      * @param \HopitalNumerique\ObjetBundle\Manager\Reference $categorie Catégorie
-     * @return \HopitalNumerique\ObjetBundle\Entity\Objet Dernier article
+     * @param \HopitalNumerique\DomaineBundle\Entity\Domaine  $domaine   Domaine
+     * @return array<\HopitalNumerique\ObjetBundle\Entity\Objet> Articles
      */
-    public function getLastArticleForCategorie(Reference $categorie, Domaine $domaine)
+    public function getArticlesForCategorie(Reference $categorie, Domaine $domaine)
+    {
+        return $this->getArticlesForCategorieQueryBuilder($categorie, $domaine)->getQuery()->getResult();
+    }
+
+    /**
+     * Retourne les articles d'une catégorie.
+     *
+     * @param \HopitalNumerique\ObjetBundle\Manager\Reference $categorie Catégorie
+     * @param \HopitalNumerique\DomaineBundle\Entity\Domaine  $domaine   Domaine
+     * @return array<\HopitalNumerique\ObjetBundle\Entity\Objet> Articles
+     */
+    public function getArticlesForCategorieQueryBuilder(Reference $categorie, Domaine $domaine)
     {
         $aujourdhui = new \DateTime();
         $aujourdhui->setTime(0, 0, 0);
@@ -329,6 +342,21 @@ class ObjetRepository extends EntityRepository
             ->addOrderBy('article.dateCreation', 'DESC')
         ;
 
-        return $query->getQuery()->getOneOrNullResult();
+        return $query;
+    }
+
+    /**
+     * Retourne le dernier article d'une catégorie.
+     *
+     * @param \HopitalNumerique\ObjetBundle\Manager\Reference $categorie Catégorie
+     * @return \HopitalNumerique\ObjetBundle\Entity\Objet Dernier article
+     */
+    public function getLastArticleForCategorie(Reference $categorie, Domaine $domaine)
+    {
+        return $this->getArticlesForCategorieQueryBuilder($categorie, $domaine)
+            ->setMaxResults(1)
+            ->getQuery()
+            ->getOneOrNullResult()
+        ;
     }
 }

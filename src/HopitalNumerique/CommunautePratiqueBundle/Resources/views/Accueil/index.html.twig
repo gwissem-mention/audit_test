@@ -33,12 +33,12 @@
                     <div class="panel-body">
 
                         {% if derniereActualite is not null %}
-                            <div class="communaute-de-pratiques-actualite">
-                                <h3>{{ derniereActualite.titre }}</h3>
-                                <div class="date">Édito du {{ derniereActualite.dateCreation|date('d/m/Y') }}</div>
-                                <div class="body">{{ derniereActualite.resume|unescape }}</div>
-                            </div>
+                            {{ communaute_pratique.display_article(derniereActualite) }}
                         {% endif %}
+
+                        <nav class="lien">
+                            <a href="{{ path('hopitalnumerique_communautepratique_actualite_list') }}"><em class="fa fa-angle-double-right"></em> &nbsp; Voir toute l'actualité</a>
+                        </nav>
 
                     </div>
                 </div>

@@ -177,6 +177,14 @@ ul.communaute-de-pratiques-mes-groupes { list-style-type: none;margin: 0;padding
     .communaute-de-pratiques-actualite .date { color: #dd3157;margin: 0 0 12px; }
     .communaute-de-pratiques-actualite .body { color: #777; }
 
+/* Menu actualités */
+.communaute-de-pratiques-menu-actualites { background-color: #f6f6f6;border-radius: 5px;padding: 10px; }
+    .communaute-de-pratiques-menu-actualites ul { list-style-type: none;padding: 0; }
+        .communaute-de-pratiques-menu-actualites ul li { background-image: url("/bundles/hopitalnumeriquepublication/img/puce.png");background-repeat: no-repeat;background-position: left center;padding-left: 15px; }
+            .communaute-de-pratiques-menu-actualites ul li a { color: #777777;display: block; }
+        .communaute-de-pratiques-menu-actualites ul li:first-child { padding-bottom: 6px;padding-top: 6px; }
+            .communaute-de-pratiques-menu-actualites ul li:first-child a { font-weight: bold; }
+
 /* Tableau de bord (accueil général) */
 .communaute-de-pratiques-tableau-de-bord {}
     .communaute-de-pratiques-tableau-de-bord .lien { font-size: 10px;margin: 15px 0 0 0;text-align: right;text-transform: uppercase; }

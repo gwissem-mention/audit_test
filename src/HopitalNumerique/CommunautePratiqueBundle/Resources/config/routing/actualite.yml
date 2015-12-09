@@ -1,0 +1,11 @@
+hopitalnumerique_communautepratique_actualite_list:
+    pattern: '/list'
+    defaults: { _controller: 'HopitalNumeriqueCommunautePratiqueBundle:Actualite:list' }
+    methods: 'GET'
+
+hopitalnumerique_communautepratique_actualite_listbycategorie:
+    pattern: '/list/categorie/{categorie}'
+    defaults: { _controller: 'HopitalNumeriqueCommunautePratiqueBundle:Actualite:listByCategorie' }
+    methods: 'GET'
+    requirements:
+        categorie: '\d+'

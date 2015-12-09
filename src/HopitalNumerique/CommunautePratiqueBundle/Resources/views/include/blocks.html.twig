@@ -214,6 +214,19 @@
 {% endmacro %}
 
 {##
+ # Affiche un commentaire.
+ #
+ # @param \HopitalNumerique\ObjetBundle\Entity\Objet objet Article
+ #}
+{% macro display_article(article) %}
+    <div class="communaute-de-pratiques-actualite">
+        <h3>{{ article.titre }}</h3>
+        <div class="date">Édito du {{ article.dateCreation|date('d/m/Y') }}</div>
+        <div class="body">{{ article.resume|parsePublication|unescape }}</div>
+    </div>
+{% endmacro %}
+
+{##
  # Affiche le bloc d'un utilisateur.
  #
  # @param \HopitalNumerique\UserBundle\Entity\User                 user            Membre

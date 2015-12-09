@@ -782,9 +782,22 @@ class ObjetManager extends BaseManager
     }
 
     /**
+     * Retourne les articles d'une catégorie.
+     *
+     * @param \HopitalNumerique\ObjetBundle\Manager\Reference $categorie Catégorie
+     * @param \HopitalNumerique\DomaineBundle\Entity\Domaine  $domaine   Domaine
+     * @return array<\HopitalNumerique\ObjetBundle\Entity\Objet> Articles
+     */
+    public function getArticlesForCategorie(Reference $categorie, Domaine $domaine)
+    {
+        return $this->getRepository()->getArticlesForCategorie($categorie, $domaine);
+    }
+
+    /**
      * Retourne le dernier article d'une catégorie.
      *
      * @param \HopitalNumerique\ObjetBundle\Manager\Reference $categorie Catégorie
+     * @param \HopitalNumerique\DomaineBundle\Entity\Domaine  $domaine   Domaine
      * @return \HopitalNumerique\ObjetBundle\Entity\Objet Dernier article
      */
     public function getLastArticleForCategorie(Reference $categorie, Domaine $domaine)
