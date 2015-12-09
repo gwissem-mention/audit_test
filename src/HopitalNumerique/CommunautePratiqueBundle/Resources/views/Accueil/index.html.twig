@@ -138,8 +138,8 @@
                             {%- for topic in forumLastTopics -%}
                                 <div class="col-md-4">
                                     <div class="forum">
-                                        <h3><a href="{{ path('ccdn_forum_user_topic_show', { forumName:topic.board.category.forum.name, topicId:topic.lastPost.topic.id }) }}"><strong>{{ topic.lastPost.topic.title }}</strong></a></h3>
-                                        {{ topic.lastPost.body|truncate(240) }} <a href="{{ path('ccdn_forum_user_topic_show', { forumName:topic.board.category.forum.name, topicId:topic.lastPost.topic.id }) }}">En savoir plus</a>
+                                        <h3><a href="{{ path('ccdn_forum_user_topic_show', { forumName:topic.board.category.forum.name, topicId:topic.firstPost.topic.id }) }}"><strong>{{ topic.firstPost.topic.title }}</strong></a></h3>
+                                        {{ topic.firstPost.body|truncate(240) }} <a href="{{ path('ccdn_forum_user_topic_show', { forumName:topic.board.category.forum.name, topicId:topic.firstPost.topic.id }) }}">En savoir plus</a>
                                     </div>
                                 </div>
                             {%- endfor -%}
