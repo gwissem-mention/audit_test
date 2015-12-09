@@ -25,14 +25,13 @@ class AccueilController extends \Symfony\Bundle\FrameworkBundle\Controller\Contr
 
         $forum = $this->container->get('hopitalnumerique_forum.manager.forum')
             ->findOneById(Forum::FORUM_COMMUNAUTE_DE_PRATIQUES_ID);
-        $forumLastTopics = $this->container->get('hopitalnumerique_forum.manager.topic')
-            ->getLastTopicsForum($forum->getId(), 3);
 
         return $this->render(
             'HopitalNumeriqueCommunautePratiqueBundle:Accueil:index.html.twig',
             array(
                 'derniereActualite' => $this->container->get('hopitalnumerique_objet.manager.objet')
-                    ->getLastArticleForCategorie($this->container->get('hopitalnumerique_reference.manager.reference')->findOneById(Reference::ARTICLE_CATEGORIE_COMMUNAUTE_DE_PRATIQUES_ID), $domaine),
+                    ->getLastArticleForCategorie($this->container->get('hopitalnumerique_reference.manager.reference')
+                        ->findOneById(Reference::ARTICLE_CATEGORIE_COMMUNAUTE_DE_PRATIQUES_ID), $domaine),
                 'groupesEnVedette' => $this->container->get('hopitalnumerique_communautepratique.manager.groupe')
                     ->findNonFermes($domaine, true),
                 'userGroupesEnCours' => $this->container->get('hopitalnumerique_communautepratique.manager.groupe')
@@ -41,7 +40,8 @@ class AccueilController extends \Symfony\Bundle\FrameworkBundle\Controller\Contr
                     ->findCommunautePratiqueMembresCount(),
                 'membres' => $this->getMembresAuHasard(),
                 'forum' => $forum,
-                'forumLastTopics' => $forumLastTopics
+                'forumLastTopics' => $this->container->get('hopitalnumerique_forum.manager.topic')
+                    ->getLastTopicsForum($forum->getId(), 3)
             )
         );
     }

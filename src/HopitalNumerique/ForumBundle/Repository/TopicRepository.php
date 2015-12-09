@@ -20,12 +20,12 @@ class TopicRepository extends EntityRepository
 
     $qb->select('topic')
        ->from('\HopitalNumerique\ForumBundle\Entity\Topic', 'topic')
-       ->innerJoin('topic.posts', 'post')
+       ->innerJoin('topic.lastPost', 'post')
        ->innerJoin('topic.board', 'board')
        ->innerJoin('board.category', 'cat')
        ->innerJoin('cat.forum', 'forum', Join::WITH, 'forum.id = :idForum')
        ->setParameter('idForum', $id)
-       ->distinct(true)
+       ->groupBy('topic.id')
        ->orderBy('post.createdDate', 'DESC');
 
     if($limit != null) {
