@@ -3,6 +3,9 @@
 namespace HopitalNumerique\ObjetBundle\Repository;
 
 use Doctrine\ORM\EntityRepository;
+use HopitalNumerique\DomaineBundle\Entity\Domaine;
+use HopitalNumerique\ReferenceBundle\Entity\Reference;
+use Doctrine\ORM\Query\Expr;
 
 /**
  * ObjetRepository
@@ -297,4 +300,35 @@ class ObjetRepository extends EntityRepository
       ->where('obj.alaune = 1');
     return $qb;
   }
+
+    /**
+     * Retourne le dernier article d'une catégorie.
+     *
+     * @param \HopitalNumerique\ObjetBundle\Manager\Reference $categorie Catégorie
+     * @return \HopitalNumerique\ObjetBundle\Entity\Objet Dernier article
+     */
+    public function getLastArticleForCategorie(Reference $categorie, Domaine $domaine)
+    {
+        $aujourdhui = new \DateTime();
+        $aujourdhui->setTime(0, 0, 0);
+
+        $query = $this->createQueryBuilder('article');
+
+        $query
+            ->andWhere('article.isArticle = :isArticle')
+            ->setParameter('isArticle', true)
+            ->andWhere($query->expr()->orX('article.dateDebutPublication < :aujourdhui', $query->expr()->isNull('article.dateDebutPublication')))
+            ->andWhere($query->expr()->orX('article.dateFinPublication > :aujourdhui', $query->expr()->isNull('article.dateFinPublication')))
+            ->setParameter('aujourdhui', $aujourdhui)
+            ->innerJoin('article.domaines', 'domaine', Expr\Join::WITH, 'domaine = :domaine')
+            ->setParameter('domaine', $domaine)
+            ->innerJoin('article.types', 'categorie')
+            ->innerJoin('categorie.parent', 'categorieParent')
+            ->andWhere($query->expr()->orX('categorie = :categorie', 'categorieParent = :categorie'))
+            ->setParameter('categorie', $categorie)
+            ->addOrderBy('article.dateCreation', 'DESC')
+        ;
+
+        return $query->getQuery()->getOneOrNullResult();
+    }
 }

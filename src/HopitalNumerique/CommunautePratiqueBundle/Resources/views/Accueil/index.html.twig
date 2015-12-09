@@ -32,7 +32,13 @@
                     </div>
                     <div class="panel-body">
 
-
+                        {% if derniereActualite is not null %}
+                            <div class="communaute-de-pratiques-actualite">
+                                <h3>{{ derniereActualite.titre }}</h3>
+                                <div class="date">Édito du {{ derniereActualite.dateCreation|date('d/m/Y') }}</div>
+                                <div class="body">{{ derniereActualite.resume|unescape }}</div>
+                            </div>
+                        {% endif %}
 
                     </div>
                 </div>

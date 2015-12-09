@@ -5,6 +5,8 @@ namespace HopitalNumerique\ObjetBundle\Manager;
 use Nodevo\ToolsBundle\Manager\Manager as BaseManager;
 use Doctrine\ORM\EntityManager;
 use \Nodevo\ToolsBundle\Tools\Chaine;
+use HopitalNumerique\DomaineBundle\Entity\Domaine;
+use HopitalNumerique\ReferenceBundle\Entity\Reference;
 use HopitalNumerique\UserBundle\Manager\UserManager;
 use HopitalNumerique\ReferenceBundle\Manager\ReferenceManager;
 
@@ -779,8 +781,16 @@ class ObjetManager extends BaseManager
         return $productions;
     }
 
-
-
+    /**
+     * Retourne le dernier article d'une catégorie.
+     *
+     * @param \HopitalNumerique\ObjetBundle\Manager\Reference $categorie Catégorie
+     * @return \HopitalNumerique\ObjetBundle\Entity\Objet Dernier article
+     */
+    public function getLastArticleForCategorie(Reference $categorie, Domaine $domaine)
+    {
+        return $this->getRepository()->getLastArticleForCategorie($categorie, $domaine);
+    }
 
 
 

@@ -45,6 +45,12 @@
             {% for child in item.children %}
                 {% if currentPath == child.uri %}
                     {% set parent = item.name %}
+                {% else %}
+                    {% for child2 in child.children %}
+                        {% if currentPath == child2.uri %}
+                            {% set parent = item.name %}
+                        {% endif %}
+                    {% endfor %}
                 {% endif %}
             {% endfor %}
         {% endfor %}
