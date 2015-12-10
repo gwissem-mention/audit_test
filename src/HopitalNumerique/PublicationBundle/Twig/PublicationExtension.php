@@ -167,12 +167,10 @@ class PublicationExtension extends \Twig_Extension
 
                         if ($rechercheAidee) {
                             $url = $this->container->get('router')->generate('hopital_numerique_expbesoin_recherche_tinyMCE', array('id' => $rechercheAidee->getId()));
-                            $replacement = '<iframe frameborder=0 src="'.$url.'" width="100%" height="340px"><p>Votre navigateur ne supporte pas l\'élément iframe</p></iframe>';
+                            $replacement = '<iframe onLoad="calcHeightIframe();" id="iframe-recherche-tinymce" frameborder=0 src="'.$url.'" width="100%" scrolling="no" height="100%"><p>Votre navigateur ne supporte pas l\'élément iframe</p></iframe>';
                         } else {
                             $replacement = '<span class="label label-danger">Un problème dans l\'affichage de la recherche aidée est survenue.</span>';
                         }
-
-
 
                         $pattern = $matches[0][$key];
                         $content = str_replace($pattern, $replacement, $content);
