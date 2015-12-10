@@ -3,6 +3,7 @@ namespace HopitalNumerique\CommunautePratiqueBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
+use HopitalNumerique\UserBundle\Entity\User;
 
 /**
  * Entité Groupe.
@@ -658,7 +659,116 @@ class Groupe
 
         return intval($dateInterval->format('%R%a'));
     }
-    
+
+    /**
+     * Retourne la date de dernière activité du groupe.
+     *
+     * @return \DateTime|NULL Dernière activité
+     */
+    public function getDateDerniereActivite()
+    {
+        $dateDerniereActivite = null;
+
+        foreach ($this->commentaires as $commentaire) {
+            if (null === $dateDerniereActivite || $commentaire->getDateCreation() > $dateDerniereActivite) {
+                $dateDerniereActivite = $commentaire->getDateCreation();
+            }
+        }
+
+        foreach ($this->fiches as $fiche) {
+            if (null === $dateDerniereActivite || $fiche->getDateCreation() > $dateDerniereActivite) {
+                $dateDerniereActivite = $fiche->getDateCreation();
+            }
+            if (null !== $fiche->getDateDerniereActivite()
+                    && $fiche->getDateDerniereActivite() > $dateDerniereActivite) {
+                $dateDerniereActivite = $fiche->getDateDerniereActivite();
+            }
+        }
+
+        return $dateDerniereActivite;
+    }
+
+    /**
+     * Retourne le total de tous les commentaires, fiches comprises.
+     *
+     * @return integer Total des commentaires
+     */
+    public function getTotalCommentaires()
+    {
+        $totalCommentaires = count($this->getCommentaires());
+
+        foreach ($this->fiches as $fiche) {
+            $totalCommentaires += count($fiche->getCommentaires());
+        }
+
+        return $totalCommentaires;
+    }
+
+    /**
+     * Retourne le total de tous les commentaires d'un utilisateur, fiches comprises.
+     *
+     * @param \HopitalNumerique\UserBundle\Entity\User $user Utilisateur
+     * @return integer Total des commentaires
+     */
+    public function getTotalUserCommentaires(User $user)
+    {
+        $totalCommentaires = 0;
+
+        foreach ($this->getCommentaires() as $commentaire) {
+            if ($commentaire->getUser()->getId() == $user->getId()) {
+                $totalCommentaires++;
+            }
+        }
+
+        foreach ($this->fiches as $fiche) {
+            foreach ($fiche->getCommentaires() as $commentaire) {
+                if ($commentaire->getUser()->getId() == $user->getId()) {
+                    $totalCommentaires++;
+                }
+            }
+        }
+
+        return $totalCommentaires;
+    }
+
+    /**
+     * Retourne les fiches d'un utilisateur.
+     *
+     * @param \HopitalNumerique\UserBundle\Entity\User $user Utilisateur
+     * @return array<\HopitalNumerique\CommunautePratiqueBundle\Entity\Fiche> Fiches de l'utilisateur
+     */
+    public function getUserFiches(User $user)
+    {
+        $userFiches = array();
+
+        foreach ($this->fiches as $fiche) {
+            if ($fiche->getUser()->getId() == $user->getId()) {
+                $userFiches[] = $fiche;
+            }
+        }
+
+        return $userFiches;
+    }
+
+    /**
+     * Retourne les documents d'un utilisateur.
+     *
+     * @param \HopitalNumerique\UserBundle\Entity\User $user Utilisateur
+     * @return array<\HopitalNumerique\CommunautePratiqueBundle\Entity\Document> Documents de l'utilisateur
+     */
+    public function getUserDocuments(User $user)
+    {
+        $userDocuments = array();
+
+        foreach ($this->documents as $document) {
+            if ($document->getUser()->getId() == $user->getId()) {
+                $userDocuments[] = $document;
+            }
+        }
+
+        return $userDocuments;
+    }
+
     /**
      * Retourne le JSON avec toutes les adresses électroniques des animateurs.
      * 

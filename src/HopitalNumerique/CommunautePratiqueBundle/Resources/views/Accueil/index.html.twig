@@ -17,20 +17,92 @@
 
     <div class="communaute-de-pratiques-tableau-de-bord">
 
-        <div class="row">
-            <div class="col-md-12">
-                <div class="panel panel-communaute-de-pratiques">
-                    <div class="panel-heading">
-                        <h2><em class="icon icon-download105"></em> Tableau de bord</h2>
-                    </div>
-                    <div class="panel-body">
+        {%- if groupes|length > 0 -%}
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="panel panel-communaute-de-pratiques panel-communaute-de-pratiques-tableau-de-bord">
+                        <div class="panel-heading">
+                            <h2><em class="icon icon-download105"></em> Tableau de bord</h2>
+                        </div>
+                        <div class="panel-body">
 
+                            {%- for groupe in groupes -%}
+                                <div class="groupe">
+                                    <div class="header">
+                                        <span class="nom">
+                                            <em class="icon icon-social20"></em>
+                                            <a href="{{ path('hopitalnumerique_communautepratique_groupe_view', { groupe:groupe.id }) }}"><strong>{{ groupe }}</strong></a>
+                                        </span>
+                                        | {{ groupe.dateDemarrage|date('d/m/Y') }} au {{ groupe.dateFin|date('d/m/Y') }}
+                                        &nbsp; &nbsp; <span class="derniere-activite">Dernière activité <strong>{{ groupe.dateDerniereActivite|date('d/m/Y') }}</strong></span>
+                                        &nbsp; &nbsp; <span class="communaute-de-pratiques-total-commentaires"><span class="count">{{ groupe.totalCommentaires }}</span> commentaires</span>
+                                        &nbsp; &nbsp; <strong>{{ groupe.documents|length }}</strong> documents
+                                    </div>
+                                    <div class="body">
+                                        <div class="row">
+                                            {%- for user in groupe.users -%}
+                                                <div class="col-md-4">
+                                                    <div class="membre">
+                                                        
+                                                                <div class="membre-chiffres">
+                                                                    <div class="total">
+                                                                        {% set totalUserDocuments = groupe.userDocuments(user)|length %}
+                                                                        <strong>{{ totalUserDocuments }}</strong>
+                                                                        Document{{ totalUserDocuments > 1 ? 's' : '' }} déposé{{ totalUserDocuments > 1 ? 's' : '' }}
+                                                                    </div>
+                                                                    <div class="total">
+                                                                        {% set totalUserCommentaires = groupe.totalUserCommentaires(user) %}
+                                                                        <strong>{{ totalUserCommentaires }}</strong>
+                                                                        Document{{ totalUserCommentaires > 1 ? 's' : '' }} déposé{{ totalUserCommentaires > 1 ? 's' : '' }}
+                                                                    </div>
+                                                                    <div class="connexion">
+                                                                        Dernière connexion
+                                                                        <div class="violet">{{ user.lastLogin is not null ? user.lastLogin|date('d/m/Y') : '' }}</div>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="membre-principal">
+                                                                    <div class="identite">
+                                                                        <div class="communaute-de-pratiques-avatar" style="background-image: url('{{ asset(user.avatarWebPath) }}');"></div>
+                                                                        <div class="nom">
+                                                                            <a onclick="Contact_Popup.display({'{{ user.email }}':'{{ user.prenomNom }}'}, '{{ path(app.request.get('_route'), app.request.get('_route_params')) }}');"><em class="icon icon-email5"></em></a>
+                                                                            {{ user.prenomNom }}
+                                                                        </div>
+                                                                        {% if groupe.hasAnimateur(user) %}
+                                                                            <div class="animateur">
+                                                                                <em class="icon icon-speaker15"></em>
+                                                                                Animateur du groupe
+                                                                            </div>
+                                                                        {% endif %}
+                                                                    </div>
+                                                                    <div class="contenu">
+                                                                        {%- if user.reponses|hadReponseForQuestionnaire(groupe.questionnaire.id) -%}
+                                                                            <div class="questionnaire">
+                                                                                <a href="{{ path('hopitalnumerique_questionnaire_edit_front', { user:user.id, questionnaire:groupe.questionnaire.id }) }}"><em class="icon icon-test1"></em> Questionnaire d'inscription</a>
+                                                                            </div>
+                                                                        {%- endif -%}
+                                                                        <ul>
+                                                                            {%- for fiche in groupe.userFiches(user) -%}
+                                                                                <li>
+                                                                                    {{ fiche }}
+                                                                                    <span class="violet">({{ fiche.commentaires|length }} commentaire{{ fiche.commentaires|length > 1 ? 's' : '' }})</span>
+                                                                                </li>
+                                                                            {%- endfor -%}
+                                                                        </ul>
+                                                                    </div>
+                                                                </div>
+                                                    </div>
+                                                </div>
+                                            {%- endfor -%}
+                                        </div>
+                                    </div>
+                                </div>
+                            {%- endfor -%}
 
-
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
+        {%- endif -%}
 
         <div class="row">
             <div class="col-md-8">

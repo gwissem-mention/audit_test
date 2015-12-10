@@ -417,4 +417,23 @@ class Fiche
     {
         return $this->questionPosee;
     }
+
+
+    /**
+     * Retourne la date de dernière activité de la fiche.
+     *
+     * @return \DateTime|NULL Dernière activité
+     */
+    public function getDateDerniereActivite()
+    {
+        $dateDerniereActivite = null;
+
+        foreach ($this->commentaires as $commentaire) {
+            if (null === $dateDerniereActivite || $commentaire->getDateCreation() > $dateDerniereActivite) {
+                $dateDerniereActivite = $commentaire->getDateCreation();
+            }
+        }
+
+        return $dateDerniereActivite;
+    }
 }

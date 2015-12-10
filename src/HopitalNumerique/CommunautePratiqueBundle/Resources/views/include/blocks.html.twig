@@ -306,7 +306,7 @@
                 Créée le <strong>{{ fiche.dateCreation|date('d/m/Y') }}</strong>
                 par <a href="{{ path('hopitalnumerique_communautepratique_user_viewforgroupe', { user:fiche.user.id, groupe:fiche.groupe.id }) }}">{{ fiche.user.prenomNom }}</a>
             </div>
-            <div class="commentaires">
+            <div class="communaute-de-pratiques-total-commentaires">
                 <span class="count">{{ fiche.commentaires|length }}</span> commentaire{{ fiche.commentaires|length > 1 ? 's' : '' }} sur cette fiche
             </div>
         </div>

@@ -73,12 +73,13 @@ class GroupeManager extends \Nodevo\ToolsBundle\Manager\Manager
      * Retourne les groupes non fermés.
      *
      * @param \HopitalNumerique\DomaineBundle\Entity\Domaine $domaine   Domaine
+     * @param \HopitalNumerique\UserBundle\Entity\User       $user      Utilisateur
      * @param boolean                                        $enVedette (optionnel) En vedette
      * @return array<\HopitalNumerique\CommunautePratiqueBundle\Entity\Groupe> Groupes non fermés
      */
-    public function findNonFermes(Domaine $domaine, $enVedette = null)
+    public function findNonFermes(Domaine $domaine, User $user = null, $enVedette = null)
     {
-        return $this->getRepository()->findNonFermes($domaine, $enVedette, true);
+        return $this->getRepository()->findNonFermes($domaine, $user, $enVedette, true);
     }
 
 

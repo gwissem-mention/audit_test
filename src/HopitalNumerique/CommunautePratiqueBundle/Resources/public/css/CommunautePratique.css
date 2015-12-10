@@ -1,3 +1,4 @@
+/* Toutes les pages de la communauté de pratiques */
 .body-communaute-pratique { padding: 0 15px; }
     .body-communaute-pratique a { cursor: pointer; }
     .body-communaute-pratique a:hover, .body-communaute-pratique a:focus, .body-communaute-pratique a:active { text-decoration: none; }
@@ -31,6 +32,10 @@
 @media (max-width: 768px) {
     .body-communaute-pratique .nav-tabs li { float: none;margin-right: 0; }
 }
+
+/* Total des commentaires */
+.communaute-de-pratiques-total-commentaires { font-size: 11px; }
+    .communaute-de-pratiques-total-commentaires .count { background-image:url("/bundles/hopitalnumeriquecommunautepratique/img/commentaire/bulle-small.png");background-position: center center;background-repeat: no-repeat;color: #fff;padding: 0 6px 3px 6px; }
 
 /* Liens en haut de page */
 .communaute-pratique-actions { font-size: 10px;margin: 20px 0 0;text-align: right; }
@@ -164,8 +169,6 @@ ul.communaute-de-pratiques-mes-groupes { list-style-type: none;margin: 0;padding
     .communaute-de-pratiques-bloc-fiche .header {}
         .communaute-de-pratiques-bloc-fiche .header .date {}
             .communaute-de-pratiques-bloc-fiche .header .date strong { color: #dd3157; }
-        .communaute-de-pratiques-bloc-fiche .header .commentaires { font-size: 11px; }
-            .communaute-de-pratiques-bloc-fiche .header .commentaires .count { background-image:url("/bundles/hopitalnumeriquecommunautepratique/img/commentaire/bulle-small.png");background-position: center center;background-repeat: no-repeat;color: #fff;padding: 0 6px 3px 6px; }
     .communaute-de-pratiques-bloc-fiche .contenu { clear: both;font-size: 11px;height: 70px;overflow: hidden; }
         .communaute-de-pratiques-bloc-fiche .contenu strong { color: #dd3157;font-size: 14px; }
     .communaute-de-pratiques-bloc-fiche nav { font-size: 12px;text-align: right; }
@@ -195,4 +198,29 @@ ul.communaute-de-pratiques-mes-groupes { list-style-type: none;margin: 0;padding
         .communaute-de-pratiques-bloc-membres .membre { font-size: 11px;height: 100px;line-height: 12px;text-align: center; }
     .communaute-de-pratiques-tableau-de-bord .forum { font-size: 11px; }
         .communaute-de-pratiques-tableau-de-bord .forum h3 { font-size: 14px;margin: 0 0 4px; }
-
+    /* Panel du tableau de bord (en haut de page) */
+    .panel-communaute-de-pratiques-tableau-de-bord {}
+        .panel-communaute-de-pratiques-tableau-de-bord .panel-body { padding: 0; }
+            .panel-communaute-de-pratiques-tableau-de-bord .groupe {}
+                .panel-communaute-de-pratiques-tableau-de-bord .groupe .header { border-color: #e6e6e6;border-style: solid;border-width: 1px 0 0 0;font-size: 11px;padding: 15px; }
+                    .panel-communaute-de-pratiques-tableau-de-bord .groupe .header .nom { font-size: 14px; }
+                        .panel-communaute-de-pratiques-tableau-de-bord .groupe .header .nom .icon { color: #777;font-size: 16px; }
+                    .panel-communaute-de-pratiques-tableau-de-bord .groupe .header .derniere-activite { font-size: 10px; }
+                        .panel-communaute-de-pratiques-tableau-de-bord .groupe .header .derniere-activite strong { color: #dd3157; }
+                .panel-communaute-de-pratiques-tableau-de-bord .groupe .body { font-size: 11px;padding: 0 15px; }
+                    .panel-communaute-de-pratiques-tableau-de-bord .groupe .body .membre { background-color: #e6e6e6;margin: 0 0 15px 0; }
+                        .panel-communaute-de-pratiques-tableau-de-bord .groupe .body .membre .membre-chiffres { float: right;font-size: 10px;line-height: 12px;padding: 15px 0 0 0;text-align: center;width: 86px; }
+                            .panel-communaute-de-pratiques-tableau-de-bord .groupe .body .membre .membre-chiffres .total { margin: 0 0 30px 0; }
+                                .panel-communaute-de-pratiques-tableau-de-bord .groupe .body .membre .membre-chiffres .total strong { color: #dd3157;display: block;font-size: 32px;font-weight: normal;line-height: 32px; }
+                        .panel-communaute-de-pratiques-tableau-de-bord .groupe .body .membre .membre-principal { background-color: #f9f7f8;margin: 0 86px 0 0;padding: 15px; }
+                            .panel-communaute-de-pratiques-tableau-de-bord .groupe .body .membre .membre-principal .identite { height: 67px;overflow: hidden; }
+                                .panel-communaute-de-pratiques-tableau-de-bord .groupe .body .membre .communaute-de-pratiques-avatar { float: left;margin: 0 15px 0 0; }
+                                .panel-communaute-de-pratiques-tableau-de-bord .groupe .body .membre .nom { font-size: 14px;font-weight: bold;line-height: 13px;padding: 10px 0 0 0; }
+                                    .panel-communaute-de-pratiques-tableau-de-bord .groupe .body .membre .nom .icon,
+                                    .panel-communaute-de-pratiques-tableau-de-bord .groupe .body .membre .animateur .icon { color: #dd3157;font-size: 14px;vertical-align: middle; }
+                            .panel-communaute-de-pratiques-tableau-de-bord .groupe .body .membre .contenu { height: 150px;overflow-y: auto; }
+                                .panel-communaute-de-pratiques-tableau-de-bord .groupe .body .membre .questionnaire { border-color: #e6e6e6;border-style: solid;border-width: 1px 0;font-weight: bold;padding: 4px 0; }
+                                    .panel-communaute-de-pratiques-tableau-de-bord .groupe .body .membre .questionnaire a { color: #333; }
+                                    .panel-communaute-de-pratiques-tableau-de-bord .groupe .body .membre .questionnaire .icon { font-size: 17px;vertical-align: middle; }
+                                .panel-communaute-de-pratiques-tableau-de-bord .groupe .body .membre ul { list-style-type: none;margin: 0;padding: 0; }
+                                    .panel-communaute-de-pratiques-tableau-de-bord .groupe .body .membre ul li { margin: 8px 0; }
