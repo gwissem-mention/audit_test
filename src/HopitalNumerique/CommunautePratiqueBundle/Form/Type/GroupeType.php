@@ -120,7 +120,8 @@ class GroupeType extends \Symfony\Component\Form\AbstractType
                 ->add('animateurs', 'genemu_jqueryselect2_entity', array(
                     'class' => 'HopitalNumeriqueUserBundle:User',
                     'choices' => $this->userManager->findUsersByDomaine($builder->getData()->getDomaine()->getId()),
-                    'property' => 'appellation',
+                    'by_reference' => false,
+                    'property' => 'prenomNom',
                     'multiple' => true
                 ))
                 ->add('vedette', 'checkbox', array(

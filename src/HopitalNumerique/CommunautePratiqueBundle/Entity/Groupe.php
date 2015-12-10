@@ -453,14 +453,18 @@ class Groupe
     }
 
     /**
-     * Add animateurs
+     * Add animateur
      *
-     * @param \HopitalNumerique\UserBundle\Entity\User $animateurs
+     * @param \HopitalNumerique\UserBundle\Entity\User $animateur
      * @return Groupe
      */
-    public function addAnimateur(\HopitalNumerique\UserBundle\Entity\User $animateurs)
+    public function addAnimateur(\HopitalNumerique\UserBundle\Entity\User $animateur)
     {
-        $this->animateurs[] = $animateurs;
+        $this->animateurs[] = $animateur;
+
+        if (!$this->hasUser($animateur)) {
+            $this->addUser($animateur);
+        }
 
         return $this;
     }
@@ -607,7 +611,24 @@ class Groupe
                 return true;
             }
         }
-        
+
+        return false;
+    }
+
+    /**
+     * Retourne si l'utilisateur est membre du groupe.
+     *
+     * @param \HopitalNumerique\UserBundle\Entity\User $user Utilisateur
+     * @return boolean VRAI si membre
+     */
+    public function hasUser(\HopitalNumerique\UserBundle\Entity\User $user)
+    {
+        foreach ($this->users as $membre) {
+            if ($membre->getId() == $user->getId()) {
+                return true;
+            }
+        }
+
         return false;
     }
 

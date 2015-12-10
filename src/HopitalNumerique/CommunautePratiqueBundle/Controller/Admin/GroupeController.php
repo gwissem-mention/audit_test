@@ -30,12 +30,9 @@ class GroupeController extends \Symfony\Bundle\FrameworkBundle\Controller\Contro
     {
         $nouveauGroupe = $this->container->get('hopitalnumerique_communautepratique.manager.groupe')->createEmpty();
 
-        if ($request->query->has('domaine'))
-        {
+        if ($request->query->has('domaine')) {
             $nouveauGroupe->setDomaine($this->container->get('hopitalnumerique_domaine.manager.domaine')->findOneById(intval($request->query->getInt('domaine'))));
-        }
-        elseif ($request->request->has('hopitalnumerique_communautepratiquebundle_groupe'))
-        {
+        } elseif ($request->request->has('hopitalnumerique_communautepratiquebundle_groupe')) {
             $formPost = $request->request->get('hopitalnumerique_communautepratiquebundle_groupe');
             return $this->redirect($this->generateUrl('hopitalnumerique_communautepratique_admin_groupe_add', array( 'domaine' => intval($formPost['domaine']) )));
         }
@@ -53,17 +50,13 @@ class GroupeController extends \Symfony\Bundle\FrameworkBundle\Controller\Contro
         $groupeForm = $this->createForm('hopitalnumerique_communautepratiquebundle_groupe', $groupe);
         $groupeForm->handleRequest($request);
 
-        if ($groupeForm->isSubmitted())
-        {
-            if ($groupeForm->isValid())
-            {
+        if ($groupeForm->isSubmitted()) {
+            if ($groupeForm->isValid()) {
                 $this->container->get('hopitalnumerique_communautepratique.manager.groupe')->save($groupe);
                 $this->get('session')->getFlashBag()->add('success', 'Groupe enregistré.');
                 $do = $this->container->get('request')->request->get('do');
                 return $this->redirect($do == 'save-close' ? $this->generateUrl('hopitalnumerique_communautepratique_admin_groupe_list') : $this->generateUrl('hopitalnumerique_communautepratique_admin_groupe_edit', array('id' => $groupe->getId())));
-            }
-            else
-            {
+            } else {
                 $this->get('session')->getFlashBag()->add('danger', 'Groupe non enregistré.');
             }
         }

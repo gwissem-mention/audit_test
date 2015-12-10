@@ -54,10 +54,18 @@ class AccueilController extends \Symfony\Bundle\FrameworkBundle\Controller\Contr
     private function getMembresAuHasard()
     {
         $messieursAuHasard = $this->container->get('hopitalnumerique_user.manager.user')
-            ->findCommunautePratiqueRandomMembres(3, $this->container->get('hopitalnumerique_reference.manager.reference')->findOneById(Reference::CIVILITE_MONSIEUR_ID))
+            ->findCommunautePratiqueRandomMembres(
+                3,
+                $this->container->get('hopitalnumerique_reference.manager.reference')
+                    ->findOneById(Reference::CIVILITE_MONSIEUR_ID)
+            )
         ;
         $mesdamesAuHasard = $this->container->get('hopitalnumerique_user.manager.user')
-            ->findCommunautePratiqueRandomMembres(3, $this->container->get('hopitalnumerique_reference.manager.reference')->findOneById(Reference::CIVILITE_MADAME_ID))
+            ->findCommunautePratiqueRandomMembres(
+                3,
+                $this->container->get('hopitalnumerique_reference.manager.reference')
+                    ->findOneById(Reference::CIVILITE_MADAME_ID)
+            )
         ;
 
         $membresAuHasard = array_merge(
