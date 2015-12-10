@@ -340,6 +340,7 @@ class ObjetRepository extends EntityRepository
             ->andWhere($query->expr()->orX('categorie = :categorie', 'categorieParent = :categorie'))
             ->setParameter('categorie', $categorie)
             ->addOrderBy('article.dateCreation', 'DESC')
+            ->addOrderBy('article.id', 'DESC')
         ;
 
         return $query;
