@@ -207,5 +207,4 @@ class ExpBesoinController extends Controller
             'reponses'   => $reponses
         ));
     }
-
 }

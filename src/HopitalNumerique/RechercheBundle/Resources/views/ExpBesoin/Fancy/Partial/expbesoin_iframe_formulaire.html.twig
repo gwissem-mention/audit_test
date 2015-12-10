@@ -1,0 +1,22 @@
+<div class="aide row">
+    {# Bloc de la liste des étapes #}
+    <div class="col-md-12 col-sm-12 aide-liens">
+        <div class="col-md-4 col-sm-4 col-xm-4 no-padding question-description">
+            <label style="margin-top:5px;">
+                {{expBesoin.libelle}}
+            </label>
+            <div class="description_perso">
+                {{expBesoin.description|parsePublication|raw}}
+            </div>
+        </div>
+        <div class="col-md-8 col-sm-8 col-xm-8 no-padding">
+            {% for reponse in expBesoin.reponses %}
+                {# Include vue de l'étape #}
+                {% include 'HopitalNumeriqueRechercheBundle:ExpBesoin:Fancy/Partial/expbesoin_nopopin_formulaire_reponse.html.twig' with { 'reponse' : reponse, 'question' : expBesoin } %}
+            {% endfor %}
+        </div>
+    </div>
+    <div class="clearfix"></div>
+</div>
+
+<div class="clearfix"></div>

@@ -47,7 +47,7 @@ class PublicationExtension extends \Twig_Extension
      */
     public function parsePublication($content, $glossaires = false )
     {
-        $pattern = '/\[([a-zA-Z]+)\:(\d+)\;(([a-zA-Z0-9àáâãäåçèéêëìíîïðòóôõöùúûüýÿ\&\'\`\"\<\>\!\:\?\,\;\.\%\#\@\_\-\+]| )*)\;([a-zA-Z0-9]+)\]/';
+        $pattern = '/\[([a-zA-Z]+)\:(\d+)\;(([a-zA-Z0-9àáâãäåçèéêëìíîïðòóôõöùúûüýÿ\&\'\`\"\<\>\!\:\?\,\;\.\%\#\@\_\-\+]| )*)\;([a-zA-Z0-9]*)\]/';
         preg_match_all($pattern, $content, $matches);
         
         // matches[0] tableau des chaines completes trouvée
@@ -150,14 +150,26 @@ class PublicationExtension extends \Twig_Extension
                         else
                             $target = "";
 
-                        if($questionnaire)
-                        {
+                        if ($questionnaire) {
                             $label       = $matches[3][$key] ? $matches[3][$key] : $this->toascii($questionnaire->getNom());
                             $replacement = '<a href="/questionnaire/edit/'. $questionnaire->getId() . '" '.$target.'>' . $label . '</a>';
-                        }
-                        else
-                        {
+                        } else {
                             $replacement = "<a href=\"javascript:alert('Ce questionnaire n\'existe pas')\" ".$target.">" . $matches[3][$key] . ' </a>';
+                        }
+
+                        $pattern = $matches[0][$key];
+                        $content = str_replace($pattern, $replacement, $content);
+                                
+                        break;
+                    case 'RECHERCHEAIDEE':
+                        //cas Recherche aidée
+                        $rechercheAidee  = $this->getManagerGestionnaireRechercheAidee()->findOneBy( array( 'id' => $matches[2][$key] ) );
+
+                        if ($rechercheAidee) {
+                            $url = $this->container->get('router')->generate('hopital_numerique_expbesoin_recherche_tinyMCE', array('id' => $rechercheAidee->getId()));
+                            $replacement = '<iframe onLoad="calcHeightIframe();" id="iframe-recherche-tinymce" frameborder=0 src="'.$url.'" width="100%" scrolling="no" height="100%"><p>Votre navigateur ne supporte pas l\'élément iframe</p></iframe>';
+                        } else {
+                            $replacement = '<span class="label label-danger">Un problème dans l\'affichage de la recherche aidée est survenue.</span>';
                         }
 
                         $pattern = $matches[0][$key];
@@ -170,13 +182,11 @@ class PublicationExtension extends \Twig_Extension
         
         //Glossaire stuff
         if( $glossaires ){
-            
             // Ontransforme en ASCII les texte à ne pas parser
             $noPattern = '/(<a(.*)<\/a>)|(<img.*\/>)/iU';
             preg_match_all($noPattern, $content, $noMatches);
-            if( $noMatches[0] ){
-                foreach($noMatches[0] as $match)
-                {
+            if ($noMatches[0]) {
+                foreach ($noMatches[0] as $match) {
                     $content = str_replace($match, $this->toascii($match), $content);
                 }
             }
@@ -302,6 +312,16 @@ class PublicationExtension extends \Twig_Extension
     private function getManagerQuestionnaire()
     {
         return $this->container->get('hopitalnumerique_questionnaire.manager.questionnaire');
+    }
+
+    /**
+     * Retourne le manager gestionnaire recherche aidee
+     *
+     * @return ExpBesoinGestionManager
+     */
+    private function getManagerGestionnaireRechercheAidee()
+    {
+        return $this->container->get('hopitalnumerique_recherche.manager.expbesoingestion');
     }
 
     /**

@@ -99,6 +99,11 @@ hopitalnumerique_recherche_admin_aide-expression-besoin_gestion_delete:
         id: \d+
         _method: POST|DELETE
 
+#---Plugin pour les WYSIWYG
+hopitalnumerique_recherche_admin_aide-expression-besoin_gestion_get_recherche_aidee:
+    pattern:  /admin/aide-expression-besoin/gestion/getQuestionnaires
+    defaults: { _controller: "HopitalNumeriqueRechercheBundle:ExpBesoinGestion:getRechercheAideeGestionnaire" }
+
 #Aide expression besoin
 hopital_numerique_expbesoin_index:
     pattern:  /admin/aide-expression-besoin/{id}                #l'id correspond à l'id du gestionnaire
@@ -194,6 +199,10 @@ hopitalnumerique_expbesoin_reponse_reference_save:
 hopital_numerique_expbesoin_rechercheFancy:
     pattern:  /recherche-par-referencement/aide-expression-besoin/{id}/fancy
     defaults: { _controller: "HopitalNumeriqueRechercheBundle:ExpBesoin:recherche" }
+
+hopital_numerique_expbesoin_recherche_tinyMCE:
+    pattern:  /recherche-par-referencement/aide-expression-besoin-iframe/{id}
+    defaults: { _controller: "HopitalNumeriqueRechercheBundle:ExpBesoinGestion:pluginTinyMCE" }
 
 #Expression du besoin - Modification de la requete
 hopital_numerique_expbesoin_modification_session_recherche:
