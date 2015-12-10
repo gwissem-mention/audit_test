@@ -224,7 +224,8 @@ class SearchController extends Controller
             $allIds                = array();
             $optionsSearch         = $this->get('hopitalnumerique_recherche.manager.search')->getUrlRechercheTextuelle();
             $urlRechercheTextuelle = $optionsSearch . urlencode($rechercheTextuelle);
-            
+            $urlRechercheTextuelle .= "&id_domaine=" . $domaineId;
+
             $xml = simplexml_load_file($urlRechercheTextuelle);
 
             //Lien mort
