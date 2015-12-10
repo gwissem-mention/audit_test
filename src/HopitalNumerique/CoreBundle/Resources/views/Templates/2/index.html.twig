@@ -82,7 +82,7 @@
     <div class="col-md-12 no-padding" id="header-container">
         <div id="header" class="col-md-12">
             <a href="/" id="logo-header">
-                <img src="/{{ domaineCurrent.getWebPath() }}" alt="{{domaineCurrent.nom}}" id="logoAnap" class="pull-left" height="77px" />
+                <img src="/{{ domaineCurrent.getWebPath() }}" alt="{{domaineCurrent.nom}}" id="logoAnap" class="pull-left" />
             </a>
             <div id="titre" class="pull-left">
                 <a href={% if domaineCurrent.urlTitre %}"{{domaineCurrent.urlTitre}}" {% else %} "{{path('hopital_numerique_homepage')}}" {% endif %} class="h1">{{domaineCurrent.nom}}</a>
