@@ -155,7 +155,7 @@
         {% block body %}
             <div id="homepage" >
                 {% if domaineCurrent.homepage is not null %}
-                    {{domaineCurrent.homepage|raw}}
+                    {{domaineCurrent.homepage|parsePublication|raw}}
                 {% endif %}
             </div>
         {% endblock body %}        

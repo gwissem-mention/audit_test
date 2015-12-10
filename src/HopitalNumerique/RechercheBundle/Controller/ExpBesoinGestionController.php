@@ -77,6 +77,33 @@ class ExpBesoinGestionController extends Controller
     }
 
     /**
+     * Action appelée dans le plugin "RechercheAidee" pour tinymce
+     */
+    public function getRechercheAideeGestionnaireAction()
+    {
+        // $this->get('security.context')->getToken()->getUser()->getDomainesId()
+        $expbesoingestion = $this->get('hopitalnumerique_recherche.manager.expbesoingestion')->findBy( array() );
+
+        return $this->render('HopitalNumeriqueRechercheBundle:ExpBesoinGestion:Fancy/getRechercheAidee.html.twig', array(
+            'rechercheAidees' => $expbesoingestion,
+            'texte' => $this->get('request')->request->get('texte')
+        ));
+    }
+    /**
+     * Vue via le template TinyMCE
+     */
+    public function pluginTinyMCEAction($id)
+    {
+        $expBesoins = $this->get('hopitalnumerique_recherche.manager.expbesoin')->findBy(array('expBesoinGestion' => $id), array('order' => 'ASC'));
+        $reponses = $this->get('hopitalnumerique_recherche.manager.expbesoinreponses')->getAllReponsesInArrayById();
+
+        return $this->render( 'HopitalNumeriqueRechercheBundle:ExpBesoin:Fancy/tinyMCE_front.html.twig' , array(
+            'expBesoins' => $expBesoins,
+            'reponses'   => $reponses
+        ));
+    }
+
+    /**
      * action de masse de suppression
      *
      * @param [type] $primaryKeys    [description]
