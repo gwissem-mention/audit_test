@@ -13,7 +13,10 @@ class PublicationController extends \Symfony\Bundle\FrameworkBundle\Controller\C
     {
         return $this->render(
             'HopitalNumeriqueCommunautePratiqueBundle:Publication:list.html.twig',
-            array()
+            array(
+                'groupes' => $this->container->get('hopitalnumerique_communautepratique.manager.groupe')
+                    ->findAll()
+            )
         );
     }
 }

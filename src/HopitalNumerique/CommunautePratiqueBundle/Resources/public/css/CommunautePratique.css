@@ -230,3 +230,11 @@ ul.communaute-de-pratiques-mes-groupes { list-style-type: none;margin: 0;padding
                                     .panel-communaute-de-pratiques-tableau-de-bord .groupe .body .membre .questionnaire .icon { font-size: 17px;vertical-align: middle; }
                                 .panel-communaute-de-pratiques-tableau-de-bord .groupe .body .membre ul { list-style-type: none;margin: 0;padding: 0; }
                                     .panel-communaute-de-pratiques-tableau-de-bord .groupe .body .membre ul li { margin: 8px 0; }
+
+/* Page des publications */
+.communaute-de-pratiques-publications {}
+    .communaute-de-pratiques-publications .panel-communaute-de-pratiques { margin-bottom: 30px; }
+    .communaute-de-pratiques-publications .publication { font-size: 13px; }
+        .communaute-de-pratiques-publications .publication .categorie { color: #d60030;font-size: 13px;margin-bottom: 5px;text-transform: uppercase; }
+        .communaute-de-pratiques-publications .publication h2 { color: #070005;font-size: 18px;margin: 0 0 10px 0; }
+            .communaute-de-pratiques-publications .publication h2 a { color: inherit; }

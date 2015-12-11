@@ -818,7 +818,6 @@ class ObjetManager extends BaseManager
 
 
 
-
     private function triArrayObjetDateAntichronologique($a, $b)
     {
         return $a->date > $b->date ? 0 : 1;
