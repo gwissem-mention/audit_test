@@ -26,6 +26,8 @@
         <div class="col-md-9">
             {%- for article in actualites -%}
                 {{ communaute_pratique.display_article(article) }}
+            {%- else -%}
+                <p>Aucune actualité.</p>
             {%- endfor -%}
         </div>
     </div>
