@@ -24,8 +24,13 @@
             </div>
         </div>
         <div class="col-md-9">
-            {%- for article in actualites -%}
+            {%- for article in actualitesPager.currentPageResults -%}
                 {{ communaute_pratique.display_article(article) }}
+
+                {% if actualitesPager.nbPages > 1 %}
+                    <div class="text-center">{{ pagerfanta(actualitesPager, 'hopitalnumerique_communautepratique') }}</div>
+                {% endif %}
+
             {%- else -%}
                 <p>Aucune actualité.</p>
             {%- endfor -%}

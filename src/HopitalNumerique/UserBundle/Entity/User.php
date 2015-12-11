@@ -646,12 +646,12 @@ class User extends BaseUser
     private $inscritCommunautePratique;
 
     /**
-     * @ORM\ManyToMany(targetEntity="HopitalNumerique\CommunautePratiqueBundle\Entity\Groupe", mappedBy="animateurs", cascade={"persist"})
+     * @ORM\ManyToMany(targetEntity="HopitalNumerique\CommunautePratiqueBundle\Entity\Groupe", mappedBy="animateurs", cascade={"persist", "remove"})
      */
     private $communautePratiqueAnimateurGroupes;
 
     /**
-     * @ORM\ManyToMany(targetEntity="HopitalNumerique\CommunautePratiqueBundle\Entity\Groupe", mappedBy="users", cascade={"persist"})
+     * @ORM\ManyToMany(targetEntity="HopitalNumerique\CommunautePratiqueBundle\Entity\Groupe", mappedBy="users", cascade={"persist", "remove"})
      */
     private $communautePratiqueGroupes;
 
@@ -2043,6 +2043,7 @@ class User extends BaseUser
     public function removeCommunautePratiqueAnimateurGroupe(\HopitalNumerique\CommunautePratiqueBundle\Entity\Groupe $communautePratiqueGroupes)
     {
         $this->communautePratiqueAnimateurGroupes->removeElement($communautePratiqueGroupes);
+        $communautePratiqueGroupes->removeAnimateur($this);
     }
 
     /**
@@ -2077,6 +2078,7 @@ class User extends BaseUser
     public function removeCommunautePratiqueGroupe(\HopitalNumerique\CommunautePratiqueBundle\Entity\Groupe $communautePratiqueGroupes)
     {
         $this->communautePratiqueGroupes->removeElement($communautePratiqueGroupes);
+        $communautePratiqueGroupes->removeUser($this);
     }
 
     /**
