@@ -31,16 +31,22 @@ hopital_numerique_publication_publication_article:
 
 #Actualités
 hopital_numerique_publication_actualite:
-    pattern:  /actualites
-    defaults: { _controller: "HopitalNumeriquePublicationBundle:Actualite:index"}
+    pattern:  /actualites/{page}
+    defaults: { _controller: "HopitalNumeriquePublicationBundle:Actualite:index", page:1 }
+    requirements:
+        page: \d+
 
 hopital_numerique_publication_actualite_ambassadeur:
-    pattern:  /Ambassadeur-actualites
-    defaults: { _controller: "HopitalNumeriquePublicationBundle:Actualite:ambassadeur"}
+    pattern:  /Ambassadeur-actualites/{page}
+    defaults: { _controller: "HopitalNumeriquePublicationBundle:Actualite:ambassadeur", page:1 }
+    requirements:
+        page: \d+
 
 hopital_numerique_publication_actualite_categorie:
-    pattern:  /actualites/{id}-{libelle}
-    defaults: { _controller: "HopitalNumeriquePublicationBundle:Actualite:categorie", id:1, libelle:libelle, type: normal}
+    pattern:  /actualites/{id}-{libelle}/{page}
+    defaults: { _controller: "HopitalNumeriquePublicationBundle:Actualite:categorie", id:1, libelle:libelle, type: normal, page:1 }
+    requirements:
+        page: \d+
 
 hopital_numerique_publication_actualite_categorie_ambassadeur:
     pattern:  /Ambassadeur-actualites/{id}-{libelle}
