@@ -26,7 +26,7 @@ class AppKernel extends Kernel
             new WhiteOctober\PagerfantaBundle\WhiteOctoberPagerfantaBundle(),
             new Igorw\FileServeBundle\IgorwFileServeBundle(),
             new Stof\DoctrineExtensionsBundle\StofDoctrineExtensionsBundle(),
-            new \FOS\JsRoutingBundle\FOSJsRoutingBundle(),
+            new FOS\JsRoutingBundle\FOSJsRoutingBundle(),
             new Nodevo\AdminBundle\NodevoAdminBundle(),
             new Nodevo\MenuBundle\NodevoMenuBundle(),
             new Nodevo\RoleBundle\NodevoRoleBundle(),
@@ -75,8 +75,8 @@ class AppKernel extends Kernel
             new Nodevo\TexteDynamiqueBundle\NodevoTexteDynamiqueBundle(),
             new Eko\FeedBundle\EkoFeedBundle(),
             new Liip\ImagineBundle\LiipImagineBundle(),
-            new \HopitalNumerique\FichierBundle\HopitalNumeriqueFichierBundle(),
-            new \HopitalNumerique\CommunautePratiqueBundle\HopitalNumeriqueCommunautePratiqueBundle(),
+            new HopitalNumerique\FichierBundle\HopitalNumeriqueFichierBundle(),
+            new HopitalNumerique\CommunautePratiqueBundle\HopitalNumeriqueCommunautePratiqueBundle(),
         );
 
         if (in_array($this->getEnvironment(), array('dev', 'test'))) {
