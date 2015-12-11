@@ -338,7 +338,7 @@ class Objet implements RoutedItemInterface
     /**
      * @ORM\ManyToMany(targetEntity="\HopitalNumerique\ModuleBundle\Entity\Module", mappedBy="productions")
      */
-    protected $modules; 
+    protected $modules;
 
     /**
      * Ensemble des notes de maitrise liées à cette publication
@@ -377,6 +377,13 @@ class Objet implements RoutedItemInterface
      * )
      */
     protected $domaines;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="HopitalNumerique\CommunautePratiqueBundle\Entity\Groupe", inversedBy="publications")
+     * @ORM\JoinColumn(name="cp_group_id", referencedColumnName="group_id", nullable=true)
+     */
+    private $communautePratiqueGroupe;
+
 
     /**
      * Initialisation de l'entitée (valeurs par défaut)
@@ -1789,6 +1796,29 @@ class Objet implements RoutedItemInterface
         }
 
         return $domainesId;
+    }
+
+    /**
+     * Set communautePratiqueGroupe
+     *
+     * @param \HopitalNumerique\CommunautePratiqueBundle\Entity\Groupe $communautePratiqueGroupe
+     * @return Objet
+     */
+    public function setCommunautePratiqueGroupe(\HopitalNumerique\CommunautePratiqueBundle\Entity\Groupe $communautePratiqueGroupe = null)
+    {
+        $this->communautePratiqueGroupe = $communautePratiqueGroupe;
+
+        return $this;
+    }
+
+    /**
+     * Get communautePratiqueGroupe
+     *
+     * @return \HopitalNumerique\CommunautePratiqueBundle\Entity\Groupe 
+     */
+    public function getCommunautePratiqueGroupe()
+    {
+        return $this->communautePratiqueGroupe;
     }
 
     /**

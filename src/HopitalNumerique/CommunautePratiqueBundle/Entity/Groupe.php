@@ -142,6 +142,11 @@ class Groupe
     private $documents;
 
     /**
+     * @ORM\OneToMany(targetEntity="HopitalNumerique\ObjetBundle\Entity\Objet", mappedBy="communautePratiqueGroupe")
+     */
+    private $publications;
+
+    /**
      * @ORM\OneToMany(targetEntity="Commentaire", mappedBy="groupe")
      */
     private $commentaires;
@@ -784,5 +789,38 @@ class Groupe
         }
 
         return str_replace( '"', '\'', json_encode($animateurs) );
+    }
+
+    /**
+     * Add publications
+     *
+     * @param \HopitalNumerique\ObjetBundle\Entity\Objet $publications
+     * @return Groupe
+     */
+    public function addPublication(\HopitalNumerique\ObjetBundle\Entity\Objet $publications)
+    {
+        $this->publications[] = $publications;
+
+        return $this;
+    }
+
+    /**
+     * Remove publications
+     *
+     * @param \HopitalNumerique\ObjetBundle\Entity\Objet $publications
+     */
+    public function removePublication(\HopitalNumerique\ObjetBundle\Entity\Objet $publications)
+    {
+        $this->publications->removeElement($publications);
+    }
+
+    /**
+     * Get publications
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getPublications()
+    {
+        return $this->publications;
     }
 }
