@@ -16,21 +16,21 @@ class InscriptionController extends \Symfony\Bundle\FrameworkBundle\Controller\C
     {
         $user = $this->getUser();
         
-        if (null !== $user && !$this->container->get('hopitalnumerique_communautepratique.dependency_injection.inscription')->hasInformationManquante($user))
-        {
-            if (!$user->isInscritCommunautePratique())
-            {
+        if (null !== $user && !$this->container
+            ->get('hopitalnumerique_communautepratique.dependency_injection.inscription')
+            ->hasInformationManquante($user)) {
+            if (!$user->isInscritCommunautePratique()) {
                 $user->setInscritCommunautePratique(true);
                 $this->container->get('hopitalnumerique_user.manager.user')->save($user);
-                $this->get('session')->getFlashBag()->add( 'success', 'L\'inscription à la communauté de pratiques a été confirmée.' );
+                $this->get('session')->getFlashBag()->add('success', 'L\'inscription à la communauté de pratiques a été confirmée.');
             }
             
-            return new JsonResponse( array( 'url' => $this->generateUrl('hopitalnumerique_communautepratique_accueil_index') ) );
-        }
-        else
-        {
-            $this->get('session')->getFlashBag()->add( 'danger', 'L\'inscription à la communauté de pratiques a échouée.' );
-            return new JsonResponse( array( 'url' => $this->generateUrl('hopital_numerique_homepage') ) );
+            return new JsonResponse(array(
+                'url' => $this->generateUrl('hopitalnumerique_communautepratique_accueil_index')
+            ));
+        } else {
+            $this->get('session')->getFlashBag()->add('danger', 'L\'inscription à la communauté de pratiques a échouée.');
+            return new JsonResponse(array( 'url' => $this->generateUrl('hopital_numerique_homepage') ));
         }
     }
     
@@ -41,19 +41,25 @@ class InscriptionController extends \Symfony\Bundle\FrameworkBundle\Controller\C
     {
         $user = $this->getUser();
         
-        if (null !== $user)
-        {
-            $user->setInscritCommunautePratique(false);
-            $this->container->get('hopitalnumerique_user.manager.user')->save($user);
-            $this->get('session')->getFlashBag()->add( 'success', 'Vous avez bien quitté la communauté. Vous pouvez vous y ré-inscrire à tout moment, merci de votre participation !' );
+        if (null !== $user) {
+            $this->container->get('hopitalnumerique_user.manager.user')->desinscritCommunautePratique($user);
+            $this->get('session')->getFlashBag()->add('success', 'Vous avez bien quitté la communauté. Vous pouvez vous y ré-inscrire à tout moment, merci de votre participation !');
             
-            $articleCommunautePratique = $this->container->get('hopitalnumerique_objet.manager.objet')->findOneById(Objet::ARTICLE_COMMUNAUTE_PRATIQUE_ID);
-            return new JsonResponse( array( 'url' => $this->generateUrl('hopital_numerique_publication_publication_article', array('categorie' => 'article', 'id' => $articleCommunautePratique->getId(), 'alias' => $articleCommunautePratique->getAlias())) ) );
-        }
-        else
-        {
-            $this->get('session')->getFlashBag()->add( 'danger', 'La désinscription de la communauté de pratiques a échouée.' );
-            return new JsonResponse( array( 'url' => $this->generateUrl('hopital_numerique_homepage') ) );
+            $articleCommunautePratique = $this->container->get('hopitalnumerique_objet.manager.objet')
+                ->findOneById(Objet::ARTICLE_COMMUNAUTE_PRATIQUE_ID);
+            return new JsonResponse(array(
+                'url' => $this->generateUrl(
+                    'hopital_numerique_publication_publication_article',
+                    array(
+                        'categorie' => 'article', 'id' => $articleCommunautePratique->getId(),
+                        'alias' => $articleCommunautePratique->getAlias()
+                    )
+                )
+            ));
+        } else {
+            $this->get('session')->getFlashBag()
+                ->add('danger', 'La désinscription de la communauté de pratiques a échouée.');
+            return new JsonResponse(array( 'url' => $this->generateUrl('hopital_numerique_homepage') ));
         }
     }
 }

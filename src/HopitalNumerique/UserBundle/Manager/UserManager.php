@@ -4,6 +4,7 @@ namespace HopitalNumerique\UserBundle\Manager;
 
 use Nodevo\ToolsBundle\Manager\Manager as BaseManager;
 use Doctrine\Common\Collections\Collection;
+use HopitalNumerique\UserBundle\Entity\User;
 use HopitalNumerique\ReferenceBundle\Entity\Reference;
 
 class UserManager extends BaseManager
@@ -387,5 +388,25 @@ class UserManager extends BaseManager
     public function findCommunautePratiqueMembresCount()
     {
         return $this->getRepository()->findCommunautePratiqueMembresCount();
+    }
+
+    /**
+     * Désinscrit un utilisateur de la communauté de partique.
+     *
+     * @param \HopitalNumerique\UserBundle\Manager\User $user Membre à désinscrire
+     */
+    public function desinscritCommunautePratique(User $user)
+    {
+        $user->setInscritCommunautePratique(false);
+
+        // On supprime les liens entre le membre et les groupes
+        foreach ($user->getCommunautePratiqueGroupes() as $groupe) {
+            $user->removeCommunautePratiqueGroupe($groupe);
+        }
+        foreach ($user->getCommunautePratiqueAnimateurGroupes() as $groupe) {
+            $user->removeCommunautePratiqueAnimateurGroupe($groupe);
+        }
+
+        $this->save($user);
     }
 }
