@@ -266,11 +266,11 @@
             </div>
             <div class="block-home-menu forum col-md-3 col-sm-6 col-xs-12">
                 <div class="col-md-12 no-padding" style="background:url({{asset('bundles/hopitalnumeriquecore/img/03-bloc-FORUM.jpg')}}) no-repeat top center;-webkit-background-size:cover;-moz-background-size:cover;-o-background-size:cover;background-size:cover;">
-                    <a href="{{ path('ccdn_forum_user_category_index', {'forumName' : forumName}) }}" class="img-link"></a>
+                    <a href="{{ app.user is not null and app.user.inscritCommunautePratique ? path('hopitalnumerique_communautepratique_accueil_index') : path('hopital_numerique_publication_publication_article', { categorie:'article', id:1000, alias:'la-communaute-de-pratiques' }) }}" class="img-link"></a>
                     <div class="block-bottom">
-                        <a href="{{ path('ccdn_forum_user_category_index', {'forumName' : forumName}) }}"></a>
-                        <h2>FORUM</h2>
-                        <p><img src="{{asset('bundles/hopitalnumeriquecore/img/picto-forum.png')}}" alt="Forum"/></p>
+                        <a href="{{ app.user is not null and app.user.inscritCommunautePratique ? path('hopitalnumerique_communautepratique_accueil_index') : path('hopital_numerique_publication_publication_article', { categorie:'article', id:1000, alias:'la-communaute-de-pratiques' }) }}"></a>
+                        <h2>COMMUNAUTÉ DE PRATIQUES</h2>
+                        <p><img src="{{asset('bundles/hopitalnumeriquecore/img/picto-communaute-de-pratiques.png')}}" alt="Communauté de pratiques"/></p>
                     </div>
                 </div>
             </div>
