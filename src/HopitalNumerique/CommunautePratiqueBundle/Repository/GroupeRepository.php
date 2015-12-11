@@ -151,15 +151,29 @@ class GroupeRepository extends \Doctrine\ORM\EntityRepository
         $aujourdhui->setTime(0, 0, 0);
 
         $query
+            ->leftJoin('groupe.fiches', 'fiche')
+            ->addSelect('fiche')
+            ->leftJoin('groupe.users', 'groupeUser')
+            ->addSelect('groupeUser')
+            ->leftJoin('groupe.documents', 'document')
+            ->addSelect('document')
+            ->leftJoin('fiche.commentaires', 'ficheCommentaire')
+            ->addSelect('ficheCommentaire')
+            ->leftJoin('groupe.commentaires', 'groupeCommentaire')
+            ->addSelect('groupeCommentaire')
             ->andWhere('groupe.domaine = :domaine')
             ->setParameter('domaine', $domaine)
             ->andWhere('groupe.dateFin > :aujourdhui')
             ->setParameter('aujourdhui', $aujourdhui)
+            ->addOrderBy('groupe.dateDemarrage')
+            ->addOrderBy('groupe.dateFin')
         ;
         if (null !== $user) {
             $query
                 ->innerJoin('groupe.users', 'user', Expr\Join::WITH, 'user = :user')
                 ->setParameter('user', $user)
+                ->addOrderBy('user.nom')
+                ->addOrderBy('user.prenom')
             ;
         }
         if (null !== $enVedette) {
@@ -174,11 +188,6 @@ class GroupeRepository extends \Doctrine\ORM\EntityRepository
                 ->setParameter('actif', $isActif)
             ;
         }
-
-        $query
-            ->orderBy('groupe.dateDemarrage')
-            ->orderBy('groupe.dateFin')
-        ;
 
         return $query->getQuery()->getResult();
     }

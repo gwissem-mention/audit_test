@@ -60,3 +60,24 @@ CommunautePratique_TableauDeBord.fixeHauteurBlocs = function()
         $('#panel-communaute-de-pratiques-actualites').height($('#panel-communaute-de-pratiques-actualites').height() + panelMembresHeight - panelActualitesHeight);
     }
 };
+
+/**
+ * Ouvre / ferme le bloc d'un groupe.
+ * 
+ * @param integer groupeId ID du groupe
+ */
+CommunautePratique_TableauDeBord.toggleOuvertureGroupe = function(groupeId)
+{
+    $('[data-groupe-id=' + groupeId + '] .body').toggle({
+        done: function() {
+            if ($('[data-groupe-id=' + groupeId + '] .body').css('display') != 'block') {
+                $('[data-groupe-id=' + groupeId + '] .interrupteur').removeClass('on');
+                $('[data-groupe-id=' + groupeId + '] .interrupteur').addClass('off');
+            } else {
+                $('[data-groupe-id=' + groupeId + '] .interrupteur').addClass('on');
+                $('[data-groupe-id=' + groupeId + '] .interrupteur').removeClass('off');
+            }
+            
+        }
+    });
+};
