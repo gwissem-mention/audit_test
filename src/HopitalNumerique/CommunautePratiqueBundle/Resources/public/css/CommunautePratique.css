@@ -175,7 +175,7 @@ ul.communaute-de-pratiques-mes-groupes { list-style-type: none;margin: 0;padding
 .communaute-de-pratiques-bloc-fiche[data-communaute-pratique-fiche-resolu="1"] { background-color: #fff; }
 
 /* Actualité */
-.communaute-de-pratiques-actualite {}
+.communaute-de-pratiques-actualite { margin: 0 0 30px 0; }
     .communaute-de-pratiques-actualite h3 { font-weight: bold;margin: 0; }
     .communaute-de-pratiques-actualite .date { color: #dd3157;margin: 0 0 12px; }
     .communaute-de-pratiques-actualite .body { color: #777; }
@@ -203,11 +203,17 @@ ul.communaute-de-pratiques-mes-groupes { list-style-type: none;margin: 0;padding
         .panel-communaute-de-pratiques-tableau-de-bord .panel-body { padding: 0; }
             .panel-communaute-de-pratiques-tableau-de-bord .groupe {}
                 .panel-communaute-de-pratiques-tableau-de-bord .groupe .header { border-color: #e6e6e6;border-style: solid;border-width: 1px 0 0 0;font-size: 11px;padding: 15px; }
+                    .panel-communaute-de-pratiques-tableau-de-bord .groupe .header .interrupteur { background-color: #e6e6e6;border-radius: 50%;display: block;float: right;font-size: 26px;height: 32px;line-height: 28px;margin: -3px 0 0 0;text-align: center;width: 32px; }
+                        .panel-communaute-de-pratiques-tableau-de-bord .groupe .header .interrupteur.on { color: #333;font-size: 21px; }
+                            .panel-communaute-de-pratiques-tableau-de-bord .groupe .header .interrupteur.on:after { content: 'x'; }
+                        .panel-communaute-de-pratiques-tableau-de-bord .groupe .header .interrupteur.off { line-height: 30px; }
+                            .panel-communaute-de-pratiques-tableau-de-bord .groupe .header .interrupteur.off:after { content: '+'; }
                     .panel-communaute-de-pratiques-tableau-de-bord .groupe .header .nom { font-size: 14px; }
                         .panel-communaute-de-pratiques-tableau-de-bord .groupe .header .nom .icon { color: #777;font-size: 16px; }
                     .panel-communaute-de-pratiques-tableau-de-bord .groupe .header .derniere-activite { font-size: 10px; }
                         .panel-communaute-de-pratiques-tableau-de-bord .groupe .header .derniere-activite strong { color: #dd3157; }
-                .panel-communaute-de-pratiques-tableau-de-bord .groupe .body { font-size: 11px;padding: 0 15px; }
+                .panel-communaute-de-pratiques-tableau-de-bord .groupe .body { display: none;font-size: 11px;padding: 0 15px; }
+                .panel-communaute-de-pratiques-tableau-de-bord .groupe .body.active { display: block; }
                     .panel-communaute-de-pratiques-tableau-de-bord .groupe .body .membre { background-color: #e6e6e6;margin: 0 0 15px 0; }
                         .panel-communaute-de-pratiques-tableau-de-bord .groupe .body .membre .membre-chiffres { float: right;font-size: 10px;line-height: 12px;padding: 15px 0 0 0;text-align: center;width: 86px; }
                             .panel-communaute-de-pratiques-tableau-de-bord .groupe .body .membre .membre-chiffres .total { margin: 0 0 30px 0; }
