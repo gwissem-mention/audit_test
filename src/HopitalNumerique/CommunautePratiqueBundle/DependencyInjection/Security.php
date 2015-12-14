@@ -84,7 +84,7 @@ class Security
     public function canAddMembre(Groupe $groupe)
     {
         return ($this->canAccessCommunautePratique()
-            && ( $groupe->hasAnimateur($this->getUser()) || $this->getUser()->hasRoleAdmin() ));
+            && ( $groupe->hasAnimateur($this->getUser()) || $this->isAdmin() ));
     }
 
     /**
@@ -95,7 +95,10 @@ class Security
      */
     public function canAccessGroupe(Groupe $groupe)
     {
-        return (null !== $this->getUser() && $this->getUser()->hasCommunautePratiqueGroupe($groupe));
+        return (
+            (null !== $this->getUser() && $this->getUser()->hasCommunautePratiqueGroupe($groupe))
+            || $this->isAdmin()
+        );
     }
 
     /**
@@ -135,7 +138,7 @@ class Security
                     || $fiche->getGroupe()->hasAnimateur($this->getUser())
                 )
             )
-            || $this->getUser()->hasRoleAdmin()
+            || $this->isAdmin()
         );
     }
 
@@ -177,7 +180,7 @@ class Security
 
         return ($commentaire->getUser()->getId() == $this->getUser()->getId()
             || $groupe->hasAnimateur($this->getUser())
-            || $this->getUser()->hasRoleAdmin()
+            || $this->isAdmin()
         );
     }
 
@@ -190,5 +193,16 @@ class Security
     public function canDeleteCommentaire(Commentaire $commentaire)
     {
         return $this->canEditCommentaire($commentaire);
+    }
+
+
+    /**
+     * Retourne si l'utilisateur connecté est admin.
+     *
+     * @return boolean VRAI si admin
+     */
+    private function isAdmin()
+    {
+        return (null !== $this->getUser() && $this->getUser()->hasRoleAdmin());
     }
 }
