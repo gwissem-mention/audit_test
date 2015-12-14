@@ -89,7 +89,7 @@
                                                                 <ul>
                                                                     {%- for fiche in groupe.userFiches(user) -%}
                                                                         <li>
-                                                                            {{ fiche }}
+                                                                            <a href="{{ path('hopitalnumerique_communautepratique_fiche_view', { fiche:fiche.id }) }}">{{ fiche }}</a>
                                                                             <span class="violet">({{ fiche.commentaires|length }} commentaire{{ fiche.commentaires|length > 1 ? 's' : '' }})</span>
                                                                         </li>
                                                                     {%- else -%}
