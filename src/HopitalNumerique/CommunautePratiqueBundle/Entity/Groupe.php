@@ -3,6 +3,7 @@ namespace HopitalNumerique\CommunautePratiqueBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
+use Gedmo\Mapping\Annotation as Gedmo;
 use HopitalNumerique\UserBundle\Entity\User;
 
 /**
@@ -116,6 +117,14 @@ class Groupe
     private $questionnaire;
 
     /**
+     * @var \DateTime
+     *
+     * @Gedmo\Timestampable(on="create")
+     * @ORM\Column(name="group_date_creation", type="datetime", nullable=false)
+     */
+    private $dateCreation;
+
+    /**
      * @ORM\OneToMany(targetEntity="Fiche", mappedBy="groupe")
      */
     private $fiches;
@@ -160,6 +169,10 @@ class Groupe
     {
         $this->fiches = new \Doctrine\Common\Collections\ArrayCollection();
         $this->animateurs = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->users = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->documents = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->publications = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->commentaires = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
 
@@ -427,6 +440,29 @@ class Groupe
     }
 
     /**
+     * Set dateCreation
+     *
+     * @param \DateTime $dateCreation
+     * @return Groupe
+     */
+    public function setDateCreation($dateCreation)
+    {
+        $this->dateCreation = $dateCreation;
+
+        return $this;
+    }
+
+    /**
+     * Get dateCreation
+     *
+     * @return \DateTime
+     */
+    public function getDateCreation()
+    {
+        return $this->dateCreation;
+    }
+
+    /**
      * Add fiches
      *
      * @param \HopitalNumerique\CommunautePratiqueBundle\Entity\Fiche $fiches
@@ -639,6 +675,19 @@ class Groupe
 
 
     /**
+     * Retourne si le groupe est entre la date de démarrage et la date de fin.
+     *
+     * @return boolean VRAI si en cours
+     */
+    public function isEnCours()
+    {
+        $aujourdhui = new \DateTime();
+        $aujourdhui->setTime(0, 0, 0);
+
+        return ($aujourdhui >= $this->dateDemarrage && $aujourdhui <= $this->dateFin);
+    }
+
+    /**
      * Retourne si l'utilisateur est animateur du groupe.
      *
      * @param \HopitalNumerique\UserBundle\Entity\User $user Utilisateur
@@ -702,11 +751,11 @@ class Groupe
     /**
      * Retourne la date de dernière activité du groupe.
      *
-     * @return \DateTime|NULL Dernière activité
+     * @return \DateTime Dernière activité
      */
     public function getDateDerniereActivite()
     {
-        $dateDerniereActivite = null;
+        $dateDerniereActivite = $this->dateCreation;
 
         foreach ($this->commentaires as $commentaire) {
             if (null === $dateDerniereActivite || $commentaire->getDateCreation() > $dateDerniereActivite) {

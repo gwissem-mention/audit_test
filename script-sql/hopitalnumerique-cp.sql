@@ -33,6 +33,7 @@
     ALTER TABLE hn_communautepratique_commentaire ADD CONSTRAINT FK_72D666FF4BDE1C17 FOREIGN KEY (fic_id) REFERENCES hn_communautepratique_fiche (fic_id) ON DELETE CASCADE;
     ALTER TABLE hn_communautepratique_commentaire CHANGE fic_id fic_id INT UNSIGNED DEFAULT NULL, CHANGE group_id group_id INT UNSIGNED DEFAULT NULL;
     ALTER TABLE hn_communautepratique_fiche ADD fic_date_creation DATETIME NOT NULL;
+    ALTER TABLE hn_communautepratique_groupe ADD group_date_creation DATETIME NOT NULL;
 
     /* Droits */
     INSERT INTO `core_ressource` (`res_id`, `res_nom`, `res_pattern`, `res_order`, `res_type`) VALUES (NULL, 'BackOffice - Gestion de la communauté de pratiques', '/^\\/admin\\/communaute\\-de\\-pratiques/', '38', '2');

@@ -96,8 +96,11 @@ class Security
     public function canAccessGroupe(Groupe $groupe)
     {
         return (
-            (null !== $this->getUser() && $this->getUser()->hasCommunautePratiqueGroupe($groupe))
-            || $this->isAdmin()
+            $groupe->isEnCours()
+            && (
+                (null !== $this->getUser() && $this->getUser()->hasCommunautePratiqueGroupe($groupe))
+                || $this->isAdmin()
+            )
         );
     }
 
