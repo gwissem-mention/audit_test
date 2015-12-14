@@ -42,18 +42,18 @@
                                     <div class="body">
                                         <div class="row">
                                             {%- for user in groupe.users -%}
-                                                <div class="col-md-4">
+                                                <div class="col-md-4 col-sm-6">
                                                     <div class="membre">
                                                         <div class="membre-chiffres">
                                                             <div class="total">
                                                                 {% set totalUserDocuments = groupe.userDocuments(user)|length %}
                                                                 <strong>{{ totalUserDocuments }}</strong>
-                                                                Document{{ totalUserDocuments > 1 ? 's' : '' }} déposé{{ totalUserDocuments > 1 ? 's' : '' }}
+                                                                Document{{ totalUserDocuments > 1 ? 's' : '' }}<br>déposé{{ totalUserDocuments > 1 ? 's' : '' }}
                                                             </div>
                                                             <div class="total">
                                                                 {% set totalUserCommentaires = groupe.totalUserCommentaires(user) %}
                                                                 <strong>{{ totalUserCommentaires }}</strong>
-                                                                Commentaire{{ totalUserCommentaires > 1 ? 's' : '' }} rédigé{{ totalUserCommentaires > 1 ? 's' : '' }}
+                                                                Commentaire{{ totalUserCommentaires > 1 ? 's' : '' }}<br>rédigé{{ totalUserCommentaires > 1 ? 's' : '' }}
                                                             </div>
                                                             <div class="connexion">
                                                                 Dernière connexion

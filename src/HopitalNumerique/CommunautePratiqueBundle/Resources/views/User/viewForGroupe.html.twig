@@ -26,17 +26,22 @@
         </ul>
         <div class="tab-content">
             <div role="tabpanel" class="tab-pane active" id="formulaire-prealable">
-                {%- for reponse in questionnaireReponses -%}
-                    
-                    <div class="row">
-                        <div class="question col-md-4">
-                            {{ reponse.question.libelle }}
-                        </div>
-                        <div class="reponse col-md-8">
-                            {{ reponse.reponse }}
-                        </div>
+                {%- if questionnaireReponses|length > 0 -%}
+                    <div>
+                        {%- for reponse in questionnaireReponses -%}
+                            <div class="row">
+                                <div class="question col-md-4">
+                                    {{ reponse.question.libelle }}
+                                </div>
+                                <div class="reponse col-md-8">
+                                    {{ reponse.reponse }}
+                                </div>
+                            </div>
+                        {%- endfor -%}
                     </div>
-                {%- endfor -%}
+                {%- else -%}
+                    <p><strong><span class="violet">{{ user.prenomNom }} n'a pas renseigné son questionnaire sur le groupe</span> {{ groupe }}.</strong></p>
+                {%- endif -%}
             </div>
             <div role="tabpanel" class="tab-pane" id="documents">
                 {%- if documents|length > 0 -%}
@@ -95,7 +100,7 @@
                     </div>
 
                 {%- else -%}
-                    <p>Aucune fiche pour l'instant.</p>
+                    <p><strong><span class="violet">{{ user.prenomNom }} n'a pas encore déposé de fiches de problématique sur le groupe</span> {{ groupe }}.</strong></p>
                 {%- endif -%}
 
             </div>
