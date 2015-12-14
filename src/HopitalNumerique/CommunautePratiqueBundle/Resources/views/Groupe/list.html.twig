@@ -46,7 +46,7 @@
                     {% for groupe in userGroupesEnCours %}
                         <li>
                             <a href="{{ path('hopitalnumerique_communautepratique_groupe_view', { 'groupe':groupe.id }) }}">{{ groupe }}</a>
-                            <!--<div>Dernière activité le XX/XX/20XX</div>-->
+                            <div>Dernière activité le {{ groupe.dateDerniereActivite|date('d/m/Y') }}</div>
                         </li>
                     {% else %}
                         <li>Aucun groupe en cours</li>
