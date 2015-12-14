@@ -901,7 +901,9 @@ class MailManager extends BaseManager
      * @return string
      */
     private function replaceContent( $content, $user, $options)
-    {
+    {        
+        $options = $this->getAllOptions($options);
+
         //Si il y a des variables spécifique dans le template courant
         if(!empty($options))
         {
