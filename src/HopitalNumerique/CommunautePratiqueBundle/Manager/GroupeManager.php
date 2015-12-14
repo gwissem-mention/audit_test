@@ -86,12 +86,11 @@ class GroupeManager extends \Nodevo\ToolsBundle\Manager\Manager
     /**
      * Retourne la QueryBuilder des groupes ayant des publications.
      *
-     * @param boolean $isActif (optionnel) Si les groupes doivent être actifs ou non actifs
      * @return \Doctrine\ORM\QueryBuilder QueryBuilder
      */
-    public function findWithPublicationsQueryBuilder($isActif = null)
+    public function findWithPublications()
     {
-        return $this->getRepository()->findWithPublicationsQueryBuilder(true);
+        return $this->getRepository()->findWithPublicationsQueryBuilder(true)->getQuery()->getResult();
     }
 
 

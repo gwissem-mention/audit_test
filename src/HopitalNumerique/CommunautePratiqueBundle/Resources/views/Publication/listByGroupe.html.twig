@@ -1,0 +1,16 @@
+{% extends 'HopitalNumeriqueCommunautePratiqueBundle::layout.html.twig' %}
+
+{% block title_communaute_pratique %}Publications issues du groupe {{ groupe }}{% endblock %}
+
+{% block communaute_pratique_actions %}
+    {{ parent() }}
+    {{ communaute_pratique.display_action_groupes_with_publications(groupes) }}
+{% endblock %}
+
+{% block body_communaute_pratique %}
+
+    <div class="communaute-de-pratiques-publications">
+        {{ communaute_pratique.display_panel_publications(groupe) }}
+    </div>
+
+{% endblock body_communaute_pratique %}

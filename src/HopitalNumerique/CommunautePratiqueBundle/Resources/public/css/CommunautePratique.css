@@ -45,6 +45,9 @@
     .communaute-pratique-actions .lien { float: right; }
         .communaute-pratique-actions .lien a { color: #2e2e2e; }
             .communaute-pratique-actions .lien a .icon { color: #777;font-size: 26px;margin: 0 0 0 2px;vertical-align: middle; }
+    .communaute-pratique-actions .dropdown {}
+        .communaute-pratique-actions .dropdown .dropdown-toggle { background-image: none;border-radius: 0; }
+        .communaute-pratique-actions .dropdown ul { text-align: left; }
 
 /* Liens généraux */
 .communaute-de-pratiques-sommaire { margin: 15px 0; }

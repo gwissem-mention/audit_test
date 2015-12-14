@@ -1,7 +1,8 @@
 <?php
 namespace HopitalNumerique\CommunautePratiqueBundle\Controller;
 
-use Pagerfanta\Adapter\DoctrineORMAdapter;
+use HopitalNumerique\CommunautePratiqueBundle\Entity\Groupe;
+use Pagerfanta\Adapter\ArrayAdapter;
 use Pagerfanta\Pagerfanta;
 
 /**
@@ -14,9 +15,9 @@ class PublicationController extends \Symfony\Bundle\FrameworkBundle\Controller\C
      */
     public function listAction($page)
     {
-        $groupesQueryBuilder = $this->container->get('hopitalnumerique_communautepratique.manager.groupe')
-            ->findWithPublicationsQueryBuilder();
-        $groupesAdapter = new DoctrineORMAdapter($groupesQueryBuilder);
+        $groupes = $this->container->get('hopitalnumerique_communautepratique.manager.groupe')
+            ->findWithPublications();
+        $groupesAdapter = new ArrayAdapter($groupes);
         $groupesPager = new Pagerfanta($groupesAdapter);
         $groupesPager->setMaxPerPage(2);
         $groupesPager->setCurrentPage($page);
@@ -24,7 +25,23 @@ class PublicationController extends \Symfony\Bundle\FrameworkBundle\Controller\C
         return $this->render(
             'HopitalNumeriqueCommunautePratiqueBundle:Publication:list.html.twig',
             array(
-                'groupesPager' => $groupesPager
+                'groupesPager' => $groupesPager,
+                'groupes' => $groupes
+            )
+        );
+    }
+
+    /**
+     * Affiche toutes les publications d'un groupe.
+     */
+    public function listByGroupeAction(Groupe $groupe)
+    {
+        return $this->render(
+            'HopitalNumeriqueCommunautePratiqueBundle:Publication:listByGroupe.html.twig',
+            array(
+                'groupe' => $groupe,
+                'groupes' => $this->container->get('hopitalnumerique_communautepratique.manager.groupe')
+                    ->findWithPublications()
             )
         );
     }

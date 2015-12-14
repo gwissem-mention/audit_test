@@ -4,3 +4,10 @@ hopitalnumerique_communautepratique_publication_list:
     methods: GET
     requirements:
         page: \d+
+
+hopitalnumerique_communautepratique_publication_listbygroupe:
+    pattern: /groupe/{groupe}
+    defaults: { _controller: "HopitalNumeriqueCommunautePratiqueBundle:Publication:listByGroupe" }
+    methods: GET
+    requirements:
+        groupe: \d+
