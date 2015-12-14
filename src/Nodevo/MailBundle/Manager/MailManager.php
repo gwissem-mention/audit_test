@@ -44,7 +44,7 @@ class MailManager extends BaseManager
      * Adresses mails en Copie Caché de l'anap
      * @var array() Tableau clé: Nom affiché => valeur : Adresse mail
      */
-    private $_mailAnap;
+    private $_mailAnap = '';
     private $_router;
     private $_requestStack;
 
@@ -73,7 +73,6 @@ class MailManager extends BaseManager
         $this->_nomExpediteur      = isset($options['nomExpediteur'])     ? $options['nomExpediteur']     : '';
         $this->_mailExpediteur     = isset($options['mailExpediteur'])    ? $options['mailExpediteur']    : '';
         $this->_destinataire       = isset($options['destinataire'])      ? $options['destinataire']      : '';
-        $this->_mailAnap           = isset($options['mailAnap'])          ? $options['mailAnap']          : array();
 
         $this->_session        = $session;
         $this->_domaineManager = $domaineManager;
@@ -207,7 +206,7 @@ class MailManager extends BaseManager
             $from           = array($expediteurMail => $expediteurName );
             $subject        = $this->replaceContent($mail->getObjet(), null, $options);
             
-            $mailsToSend[] = $this->sendMail( $subject, $from, array($recepteurMail => $recepteurName), $content, $this->_mailAnap );
+            $mailsToSend[] = $this->sendMail( $subject, $from, array($recepteurMail => $recepteurName), $content, $this->getMailDomaine() );
         }
 
         return $mailsToSend;
@@ -557,8 +556,8 @@ class MailManager extends BaseManager
                                         ))) .'" target="_blank" >Nouveau message</a>';
  
         $domaine = $this->_domaineManager->findOneById($this->_session->get('domaineId'));
-        $destinataire              = $domaine->getAdresseMailContact();
-        $options                   = $this->getAllOptions($options);
+        $destinataire = $domaine->getAdresseMailContact();
+        $options = $this->getAllOptions($options);
 
         $mailExpediteur = $this->replaceContent($mail->getExpediteurMail(), NULL, $options);
         $nameExpediteur = $this->replaceContent($mail->getExpediteurName(), NULL, $options);
@@ -566,11 +565,11 @@ class MailManager extends BaseManager
         //prepare content
         $content = $this->replaceContent($mail->getBody(), NULL , $options);
         $from    = array($mailExpediteur => $nameExpediteur );
-        $cci     = $this->_expediteurEnCopie ? array_merge( $this->_mailAnap, $from ) : $this->_mailAnap;
+        $cci     = $this->_expediteurEnCopie ? array_merge( $this->getMailDomaine(), $from ) : $this->getMailDomaine();
         $cci     = ($mail->getId() === 1 || $mail->getId() === 2) ? false : $cci;
         $subject = $this->replaceContent($mail->getObjet(), NULL, $options);
         
-        $mailToSend = $this->sendMail( $subject, $from, array($destinataire), $content, $this->_mailAnap );
+        $mailToSend = $this->sendMail( $subject, $from, array($destinataire), $content, $this->getMailDomaine() );
 
         return $mailToSend;
     }
@@ -608,7 +607,7 @@ class MailManager extends BaseManager
             $from           = array($expediteurMail => $expediteurName );
             $subject        = $this->replaceContent($mail->getObjet(), NULL, $options);
             
-            $mailsToSend[] = $this->sendMail( $subject, $from, array($recepteurMail => $recepteurName), $content, $this->_mailAnap );
+            $mailsToSend[] = $this->sendMail( $subject, $from, array($recepteurMail => $recepteurName), $content, $this->getMailDomaine() );
         }
 
         return $mailsToSend;
@@ -643,7 +642,7 @@ class MailManager extends BaseManager
             $from           = array($expediteurMail => $expediteurName );
             $subject        = $this->replaceContent($mail->getObjet(), NULL, $options);
             
-            $mailsToSend[] = $this->sendMail( $subject, $from, array($recepteurMail => $recepteurName), $content, $this->_mailAnap );
+            $mailsToSend[] = $this->sendMail( $subject, $from, array($recepteurMail => $recepteurName), $content, $this->getMailDomaine() );
         }
 
         return $mailsToSend;
@@ -681,7 +680,7 @@ class MailManager extends BaseManager
         $from           = array($expediteurMail => $expediteurName );
         $subject        = $this->replaceContent($mail->getObjet(), $resultat->getUser(), $options);
         
-        $mail = $this->sendMail( $subject, $from, array($destinataire), $content, $this->_mailAnap );
+        $mail = $this->sendMail( $subject, $from, array($destinataire), $content, $this->getMailDomaine() );
 
         $fileName = __ROOT_DIRECTORY__ . '/files/autodiag/' . $resultat->getPdf();
 
@@ -722,7 +721,7 @@ class MailManager extends BaseManager
             $from           = array($expediteurMail => $expediteurName );
             $subject        = $this->replaceContent($mail->getObjet(), NULL, $options);
             
-            $mailsToSend[] = $this->sendMail( $subject, $from, array($recepteurMail => $recepteurName), $content, $this->_mailAnap );
+            $mailsToSend[] = $this->sendMail( $subject, $from, array($recepteurMail => $recepteurName), $content, $this->getMailDomaine() );
         }
 
         return $mailsToSend;
@@ -756,7 +755,7 @@ class MailManager extends BaseManager
             $from           = array($expediteurMail => $expediteurName );
             $subject        = $this->replaceContent($mail->getObjet(), NULL, $options);
             
-            $mailsToSend[] = $this->sendMail( $subject, $from, array($recepteurMail => $recepteurName), $content, $this->_mailAnap );
+            $mailsToSend[] = $this->sendMail( $subject, $from, array($recepteurMail => $recepteurName), $content, $this->getMailDomaine() );
         }
 
         return $mailsToSend;
@@ -823,17 +822,21 @@ class MailManager extends BaseManager
                     $partageur->getEmail(),
                     $courrielDestinataire,
                     $this->replaceContent($mail->getBody(), $partageur, $options),
-                    $this->_mailAnap
+                    $this->getMailDomaine()
                 )
             );
         }
     }
 
+    private function getMailDomaine()
+    {
+        if (null !== $this->_mailAnap && $this->_mailAnap === "") {
+            $domaine = $this->_domaineManager->findOneById($this->_session->get('domaineId'));
+            $this->_mailAnap = $domaine->getAdresseMailContact();
+        }
 
-
-
-
-
+        return $this->_mailAnap;
+    }
 
     private function getAllOptions(array $options)
     {
@@ -884,7 +887,7 @@ class MailManager extends BaseManager
         //prepare content
         $body    = $this->replaceContent($mail->getBody(), $user, $options);
         $from    = array($mailExpediteur => $nameExpediteur );
-        $cci     = $this->_expediteurEnCopie ? array_merge( $this->_mailAnap, $from ) : $this->_mailAnap;
+        $cci     = $this->_expediteurEnCopie ? array_merge( $this->getMailDomaine(), $from ) : $this->getMailDomaine();
         $cci     = ($mail->getId() === 1 || $mail->getId() === 2) ? false : $cci;
         $subject = $this->replaceContent($mail->getObjet(), $user, $options);
 
