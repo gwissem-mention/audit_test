@@ -234,7 +234,10 @@ ul.communaute-de-pratiques-mes-groupes { list-style-type: none;margin: 0;padding
 /* Page des publications */
 .communaute-de-pratiques-publications {}
     .communaute-de-pratiques-publications .panel-communaute-de-pratiques { margin-bottom: 30px; }
-    .communaute-de-pratiques-publications .publication { font-size: 13px; }
-        .communaute-de-pratiques-publications .publication .categorie { color: #d60030;font-size: 13px;margin-bottom: 5px;text-transform: uppercase; }
-        .communaute-de-pratiques-publications .publication h2 { color: #070005;font-size: 18px;margin: 0 0 10px 0; }
-            .communaute-de-pratiques-publications .publication h2 a { color: inherit; }
+        .communaute-de-pratiques-publications .panel-communaute-de-pratiques .panel-heading {}
+            .communaute-de-pratiques-publications .panel-communaute-de-pratiques .panel-heading .pull-right { font-size: 12px;padding: 2px 0 0 0; }
+        .communaute-de-pratiques-publications .panel-communaute-de-pratiques .panel-body {}
+            .communaute-de-pratiques-publications .publication { font-size: 13px;height: 200px; }
+                .communaute-de-pratiques-publications .publication .categorie { color: #d60030;font-size: 13px;margin-bottom: 5px;text-transform: uppercase; }
+                .communaute-de-pratiques-publications .publication h2 { color: #070005;font-size: 18px;margin: 0 0 10px 0; }
+                    .communaute-de-pratiques-publications .publication h2 a { color: inherit; }

@@ -4,7 +4,7 @@
 
 {% block body_communaute_pratique %}
     <div class="communaute-de-pratiques-publications">
-        {%- for groupe in groupes -%}
+        {%- for groupe in groupesPager.currentPageResults -%}
             {%- if groupe.publications|length > 0 -%}
                 <div class="panel panel-communaute-de-pratiques">
                     <div class="panel-heading">
@@ -51,4 +51,9 @@
             {%- endif -%}
         {%- endfor -%}
     </div>
+
+    {% if groupesPager.nbPages > 1 %}
+        <div class="text-center">{{ pagerfanta(groupesPager, 'hopitalnumerique_communautepratique') }}</div>
+    {% endif %}
+
 {% endblock body_communaute_pratique %}

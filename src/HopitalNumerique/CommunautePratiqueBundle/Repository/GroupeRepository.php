@@ -192,6 +192,32 @@ class GroupeRepository extends \Doctrine\ORM\EntityRepository
         return $query->getQuery()->getResult();
     }
 
+
+    /**
+     * Retourne la QueryBuilder des groupes ayant des publications.
+     *
+     * @param boolean $isActif (optionnel) Si les groupes doivent être actifs ou non actifs
+     * @return \Doctrine\ORM\QueryBuilder QueryBuilder
+     */
+    public function findWithPublicationsQueryBuilder($isActif = null)
+    {
+        $query = $this->createQueryBuilder('groupe');
+
+        $query
+            ->innerJoin('groupe.publications', 'publication')
+            ->addSelect('publication')
+        ;
+        if (null !== $isActif) {
+            $query
+                ->andWhere('groupe.actif = :actif')
+                ->setParameter('actif', $isActif)
+            ;
+        }
+
+        return $query;
+    }
+
+
     /**
      * Retourne les données pour le grid.
      *

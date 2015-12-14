@@ -1,4 +1,6 @@
 hopitalnumerique_communautepratique_publication_list:
-    pattern: /list
-    defaults: { _controller: "HopitalNumeriqueCommunautePratiqueBundle:Publication:list" }
+    pattern: /list/{page}
+    defaults: { _controller: "HopitalNumeriqueCommunautePratiqueBundle:Publication:list", page:1 }
     methods: GET
+    requirements:
+        page: \d+
