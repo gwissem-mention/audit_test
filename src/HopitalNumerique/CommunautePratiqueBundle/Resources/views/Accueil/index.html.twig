@@ -86,12 +86,16 @@
                                                                             {{ fiche }}
                                                                             <span class="violet">({{ fiche.commentaires|length }} commentaire{{ fiche.commentaires|length > 1 ? 's' : '' }})</span>
                                                                         </li>
+                                                                    {%- else -%}
+                                                                        <p class="text-center"><em>Aucune fiche de problématique renseignée.</em></p>
                                                                     {%- endfor -%}
                                                                 </ul>
                                                             </div>
                                                         </div>
                                                     </div>
                                                 </div>
+                                            {%- else -%}
+                                                <p class="text-center">Aucun membre dans ce groupe pour le moment.</p>
                                             {%- endfor -%}
                                         </div>
                                     </div>
