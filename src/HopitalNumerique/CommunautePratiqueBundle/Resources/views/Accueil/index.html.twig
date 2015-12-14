@@ -29,7 +29,7 @@
                             {%- for groupe in groupes -%}
                                 <div class="groupe" data-groupe-id="{{ groupe.id }}">
                                     <div class="header">
-                                        <a class="interrupteur {% if loop.first %}on{% else %}off{% endif %}" onclick="CommunautePratique_TableauDeBord.toggleOuvertureGroupe({{ groupe.id }});"></a>
+                                        <a class="interrupteur off" onclick="CommunautePratique_TableauDeBord.toggleOuvertureGroupe({{ groupe.id }});"></a>
                                         <span class="nom">
                                             <em class="icon icon-social20"></em>
                                             <a href="{{ path('hopitalnumerique_communautepratique_groupe_view', { groupe:groupe.id }) }}"><strong>{{ groupe }}</strong></a>
@@ -39,7 +39,7 @@
                                         &nbsp; &nbsp; <span class="communaute-de-pratiques-total-commentaires"><span class="count">{{ groupe.totalCommentaires }}</span> commentaires</span>
                                         &nbsp; &nbsp; <strong>{{ groupe.documents|length }}</strong> documents
                                     </div>
-                                    <div class="body{% if loop.first %} active{% endif %}">
+                                    <div class="body">
                                         <div class="row">
                                             {%- for user in groupe.users -%}
                                                 <div class="col-md-4">
