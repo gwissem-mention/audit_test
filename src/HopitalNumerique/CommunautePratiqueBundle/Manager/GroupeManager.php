@@ -79,7 +79,7 @@ class GroupeManager extends \Nodevo\ToolsBundle\Manager\Manager
      */
     public function findNonFermes(Domaine $domaine, User $user = null, $enVedette = null)
     {
-        return $this->getRepository()->findNonFermes($domaine, $user, $enVedette, true);
+        return $this->getRepository()->findNonFermes($domaine, $user, $enVedette, true, true);
     }
 
 

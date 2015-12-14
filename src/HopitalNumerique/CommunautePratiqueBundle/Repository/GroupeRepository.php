@@ -138,13 +138,14 @@ class GroupeRepository extends \Doctrine\ORM\EntityRepository
     /**
      * Retourne les groupes non fermés.
      *
-     * @param \HopitalNumerique\DomaineBundle\Entity\Domaine $domaine   Domaine
-     * @param \HopitalNumerique\UserBundle\Entity\User       $user      Utilisateur
-     * @param boolean                                        $enVedette (optionnel) En vedette
-     * @param boolean                                        $isActif   (optionnel) Si les groupes doivent être actifs ou non actifs
+     * @param \HopitalNumerique\DomaineBundle\Entity\Domaine $domaine               Domaine
+     * @param \HopitalNumerique\UserBundle\Entity\User       $user                  Utilisateur
+     * @param boolean                                        $enVedette             (optionnel) En vedette
+     * @param boolean                                        $isActif               (optionnel) Si les groupes doivent être actifs ou non actifs
+     * @param boolean                                        $dateInscriptionPassee (optionnel) Si la date d'inscription doit être passée ou pas
      * @return array<\HopitalNumerique\CommunautePratiqueBundle\Entity\Groupe> Groupes non fermés
      */
-    public function findNonFermes(Domaine $domaine, User $user = null, $enVedette = null, $isActif = null)
+    public function findNonFermes(Domaine $domaine, User $user = null, $enVedette = null, $isActif = null, $dateInscriptionPassee = null)
     {
         $query = $this->createQueryBuilder('groupe');
         $aujourdhui = new \DateTime();
@@ -187,6 +188,9 @@ class GroupeRepository extends \Doctrine\ORM\EntityRepository
                 ->andWhere('groupe.actif = :actif')
                 ->setParameter('actif', $isActif)
             ;
+        }
+        if (null !== $dateInscriptionPassee) {
+            $query->andWhere('groupe.dateInscriptionOuverture '.($dateInscriptionPassee ? '<=' : '>').' :aujourdhui');
         }
 
         return $query->getQuery()->getResult();
