@@ -47,7 +47,7 @@
         {% block communaute_pratique_breadcrumbs %}
             <ol class="breadcrumb">
                 <li><a href="{{ path('hopital_numerique_homepage') }}">Accueil</a></li>
-                <li><a href="{{ path('hopitalnumerique_communautepratique_accueil_index') }}">Communauté de pratiques</a></li>
+                {% block communaute_pratique_breadcrumbs_communautedepratiques %}<li><a href="{{ path('hopitalnumerique_communautepratique_accueil_index') }}">Communauté de pratiques</a></li>{% endblock %}
                 {% block communaute_pratique_breadcrumbs_parent %}{% endblock %}
                 <li class="active">{{ block('title_communaute_pratique')|striptags }}</li>
             </ol>

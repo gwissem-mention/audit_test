@@ -206,6 +206,7 @@ class GroupeRepository extends \Doctrine\ORM\EntityRepository
         $query
             ->innerJoin('groupe.publications', 'publication')
             ->addSelect('publication')
+            ->orderBy('groupe.dateDemarrage')
         ;
         if (null !== $isActif) {
             $query

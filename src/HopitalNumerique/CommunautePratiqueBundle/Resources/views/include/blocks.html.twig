@@ -78,22 +78,24 @@
 {##
  # Affiche la liste des groupes avec publications.
  #
- # @param array<\HopitalNumerique\CommunautePratiqueBundle\Entity\Groupe> groupes Groupes
+ # @param array<\HopitalNumerique\CommunautePratiqueBundle\Entity\Groupe> groupes Groupes avec publications
  #}
 {% macro display_action_groupes_with_publications(groupes) %}
-    <div class="contact">
-        <div class="dropdown">
-            <button class="btn btn-default dropdown-toggle" type="button" id="dropdown-groupes-avec-publications" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-                Filtrer les groupes
-                <span class="caret"></span>
-            </button>
-            <ul class="dropdown-menu" aria-labelledby="dropdown-groupes-avec-publications">
-                {%- for groupe in groupes -%}
-                    <li><a href="{{ path('hopitalnumerique_communautepratique_publication_listbygroupe', { groupe:groupe.id }) }}">{{ groupe }}</a></li>
-                {%- endfor -%}
-            </ul>
+    {%- if groupes|length > 2 -%}
+        <div class="contact">
+            <div class="dropdown">
+                <button class="btn btn-default dropdown-toggle" type="button" id="dropdown-groupes-avec-publications" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                    Filtrer les groupes
+                    <span class="caret"></span>
+                </button>
+                <ul class="dropdown-menu" aria-labelledby="dropdown-groupes-avec-publications">
+                    {%- for groupe in groupes -%}
+                        <li><a href="{{ path('hopitalnumerique_communautepratique_publication_listbygroupe', { groupe:groupe.id }) }}">{{ groupe }}</a></li>
+                    {%- endfor -%}
+                </ul>
+            </div>
         </div>
-    </div>
+    {%- endif -%}
 {% endmacro %}
 
 {##
