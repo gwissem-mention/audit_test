@@ -241,7 +241,7 @@ class GroupeRepository extends \Doctrine\ORM\EntityRepository
 
                 'domaine.nom AS domaineNom'
             )
-            ->innerJoin('groupe.animateurs', 'animateur')
+            ->leftJoin('groupe.animateurs', 'animateur')
             ->innerJoin('groupe.domaine', 'domaine', Expr\Join::WITH, $query->expr()->in('domaine', ':domaines'))
             ->setParameter('domaines', $domaines->toArray())
             ->groupBy('id')

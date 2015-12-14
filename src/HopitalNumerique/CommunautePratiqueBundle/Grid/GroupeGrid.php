@@ -26,8 +26,7 @@ class GroupeGrid extends \Nodevo\GridBundle\Grid\Grid
         parent::__construct($container);
         
         $this->user = $container->get('security.context')->getToken()->getUser();
-        if (!($this->user instanceof \HopitalNumerique\UserBundle\Entity\User))
-        {
+        if (!($this->user instanceof \HopitalNumerique\UserBundle\Entity\User)) {
             throw new \Exception('Aucun utilisateur connecté.');
         }
     }

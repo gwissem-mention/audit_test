@@ -125,6 +125,7 @@ class Groupe
      *
      * @ORM\ManyToMany(targetEntity="HopitalNumerique\UserBundle\Entity\User", inversedBy="communautePratiqueAnimateurGroupes")
      * @ORM\JoinTable(name="hn_communautepratique_groupe_animateur", joinColumns={@ORM\JoinColumn(name="group_id", referencedColumnName="group_id")}, inverseJoinColumns={@ORM\JoinColumn(name="usr_id", referencedColumnName="usr_id")})
+     * @Assert\Count(min=1, minMessage="Veuillez choisir au moins un animateur")
      */
     private $animateurs;
 
