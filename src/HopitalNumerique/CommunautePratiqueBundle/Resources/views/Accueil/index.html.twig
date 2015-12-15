@@ -191,25 +191,7 @@
             </div>
             <div class="col-md-3">
 
-                <div class="panel panel-communaute-de-pratiques" id="panel-communaute-de-pratiques-mes-groupes">
-                    <div class="panel-heading">
-                        <h2><em class="icon icon-social20"></em> Mes groupes de travail</h2>
-                    </div>
-                    <div class="panel-body">
-
-                        <ul class="communaute-de-pratiques-mes-groupes">
-                            {% for groupe in userGroupesEnCours %}
-                                <li>
-                                    <a href="{{ path('hopitalnumerique_communautepratique_groupe_view', { 'groupe':groupe.id }) }}">{{ groupe }}</a>
-                                    <div>Dernière activité le {{ groupe.dateDerniereActivite|date('d/m/Y') }}</div>
-                                </li>
-                            {% else %}
-                                <li>Aucun groupe en cours</li>
-                            {% endfor %}
-                        </ul>
-
-                    </div>
-                </div>
+                {{ communaute_pratique.display_bloc_mes_groupes(userGroupesEnCours) }}
 
                 <div class="communaute-de-pratiques-bloc-publications">
                     <a href="{{ path('hopitalnumerique_communautepratique_publication_list') }}"><em class="icon-documents7"></em> Publications issues des groupes</a>
