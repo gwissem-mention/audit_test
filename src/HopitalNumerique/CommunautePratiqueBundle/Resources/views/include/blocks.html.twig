@@ -334,7 +334,7 @@
             </div>
         </div>
         <div class="contenu">
-            {% if fiche|communautePratiqueCanEdit %}<a href="{{ path('hopitalnumerique_communautepratique_fiche_edit', { fiche:fiche.id }) }}">{% endif %}
+            {% if fiche|communautePratiqueCanEdit %}<a href="{{ path('hopitalnumerique_communautepratique_fiche_view', { fiche:fiche.id }) }}">{% endif %}
                 <strong>Question posée :</strong>
             {% if fiche|communautePratiqueCanEdit %}</a>{% endif %}
             {{ fiche.questionPosee }}
