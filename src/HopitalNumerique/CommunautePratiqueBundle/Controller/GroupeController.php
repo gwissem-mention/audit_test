@@ -55,17 +55,26 @@ class GroupeController extends \Symfony\Bundle\FrameworkBundle\Controller\Contro
      */
     public function inscritAction(Groupe $groupe)
     {
-        if ($this->getUser()->hasCommunautePratiqueGroupe($groupe)) {
-            return $this->redirect( $this->generateUrl( 'hopitalnumerique_communautepratique_groupe_view', array( 'groupe' => $groupe->getId() ) ) );
+        if (null === $this->getUser()) {
+            return $this->redirect($this->generateUrl(
+                'hopitalnumerique_communautepratique_groupe_view',
+                array('groupe' => $groupe->getId())
+            ));
         }
 
         return $this->render('HopitalNumeriqueCommunautePratiqueBundle:Groupe:inscrit.html.twig', array(
             'groupe' => $groupe,
             'questionnaireOptions' => array(
-                'routeRedirect' => json_encode( array(
-                    'quit' => array( 'route' => 'hopitalnumerique_communautepratique_groupe_validinscription', 'arguments' => array( 'groupe' => $groupe->getId() ) ),
-                    'sauvegarde' => array( 'route' => 'hopitalnumerique_communautepratique_groupe_validinscription', 'arguments' => array( 'groupe' => $groupe->getId() ) )
-                ) )
+                'routeRedirect' => json_encode(array(
+                    'quit' => array(
+                        'route' => 'hopitalnumerique_communautepratique_groupe_validinscription',
+                        'arguments' => array('groupe' => $groupe->getId())
+                    ),
+                    'sauvegarde' => array(
+                        'route' => 'hopitalnumerique_communautepratique_groupe_validinscription',
+                        'arguments' => array('groupe' => $groupe->getId())
+                    )
+                ))
             )
         ));
     }
@@ -77,10 +86,9 @@ class GroupeController extends \Symfony\Bundle\FrameworkBundle\Controller\Contro
     {
         $user = $this->getUser();
 
-        if (null !== $user && !$user->hasCommunautePratiqueGroupe($groupe))
-        {
-            if (count($this->container->get('hopitalnumerique_questionnaire.manager.reponse')->reponsesByQuestionnaireByUser( $groupe->getQuestionnaire()->getId(), $user->getId() )) > 0)
-            {
+        if (null !== $user && !$user->hasCommunautePratiqueGroupe($groupe)) {
+            if (count($this->container->get('hopitalnumerique_questionnaire.manager.reponse')
+                ->reponsesByQuestionnaireByUser($groupe->getQuestionnaire()->getId(), $user->getId())) > 0) {
                 $user->addCommunautePratiqueGroupe($groupe);
                 $this->container->get('hopitalnumerique_user.manager.user')->save($user);
             }
