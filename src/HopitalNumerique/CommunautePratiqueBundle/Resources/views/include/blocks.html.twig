@@ -70,7 +70,7 @@
     <div class="contact">
         <a onclick="Contact_Popup.display({{ groupe.animateurEmailsJson }}, '{{ path( app.request.get('_route'), app.request.get('_route_params') ) }}');">
             <em class="icon-help9"></em>
-            Envoyer un message<br>à l'animateur du groupe
+            Envoyer un message<br>{{ groupe.animateurs|length > 1 ? 'aux ' : 'à l\'' }}animateur{{ groupe.animateurs|length > 1 ? 's' : '' }} du groupe
         </a>
     </div>
 {% endmacro %}
