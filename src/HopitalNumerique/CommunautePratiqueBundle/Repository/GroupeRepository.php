@@ -168,6 +168,8 @@ class GroupeRepository extends \Doctrine\ORM\EntityRepository
             ->setParameter('aujourdhui', $aujourdhui)
             ->addOrderBy('groupe.dateDemarrage')
             ->addOrderBy('groupe.dateFin')
+            ->addOrderBy('groupeUser.nom')
+            ->addOrderBy('groupeUser.prenom')
         ;
         if (null !== $user) {
             $query
