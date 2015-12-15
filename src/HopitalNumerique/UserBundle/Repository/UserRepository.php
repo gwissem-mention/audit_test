@@ -575,7 +575,7 @@ class UserRepository extends EntityRepository
      * @param \HopitalNumerique\CommunautePratiqueBundle\Entity\Groupe $groupe (optionnel) Groupe des membres
      * @return \Doctrine\ORM\QueryBuilder QueryBuilder
      */
-    public function getCommunautePratiqueMembresQueryBuilder(\HopitalNumerique\CommunautePratiqueBundle\Entity\Groupe $groupe = null, Domaine $domaine)
+    public function getCommunautePratiqueMembresQueryBuilder(\HopitalNumerique\CommunautePratiqueBundle\Entity\Groupe $groupe = null, Domaine $domaine = null)
     {
         $query = $this->createQueryBuilder('user');
         
@@ -639,20 +639,25 @@ class UserRepository extends EntityRepository
     {
         $query = $this->createQueryBuilder('user');
 
+        $groupeUsers = $this->getCommunautePratiqueUsersByGroupeQueryBuilder($groupe)->getQuery()->getResult();
+
         $query
             ->leftJoin('user.communautePratiqueGroupes', 'groupe')
             ->andWhere('user.inscritCommunautePratique = :inscritCommunautePratique')
             ->setParameter('inscritCommunautePratique', true)
-            ->andWhere($query->expr()->notIn('user', ':groupeUsers'))
-            ->setParameter('groupeUsers', $this->getCommunautePratiqueUsersByGroupeQueryBuilder($groupe)->getQuery()->getResult())
             ->andWhere('user.etat = :etat')
             ->setParameter('etat', User::ETAT_ACTIF_ID)
             ->addOrderBy('user.nom', 'ASC')
             ->addOrderBy('user.prenom', 'ASC')
             ->addOrderBy('user.id', 'ASC')
         ;
-        
-        
+
+        if (count($groupeUsers) > 0) {
+            $query
+                ->andWhere($query->expr()->notIn('user', ':groupeUsers'))
+                ->setParameter('groupeUsers', $groupeUsers)
+            ;
+        }
 
         return $query->getQuery()->getResult();
     }
