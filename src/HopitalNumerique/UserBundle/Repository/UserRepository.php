@@ -6,6 +6,7 @@ use Doctrine\ORM\EntityRepository;
 use Nodevo\RoleBundle\Entity\Role;
 use HopitalNumerique\ReferenceBundle\Entity\Reference;
 use HopitalNumerique\UserBundle\Entity\User;
+use HopitalNumerique\DomaineBundle\Entity\Domaine;
 use Doctrine\ORM\Query\Expr;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Query\Expr\Join;
@@ -574,7 +575,7 @@ class UserRepository extends EntityRepository
      * @param \HopitalNumerique\CommunautePratiqueBundle\Entity\Groupe $groupe (optionnel) Groupe des membres
      * @return \Doctrine\ORM\QueryBuilder QueryBuilder
      */
-    public function getCommunautePratiqueMembresQueryBuilder(\HopitalNumerique\CommunautePratiqueBundle\Entity\Groupe $groupe = null)
+    public function getCommunautePratiqueMembresQueryBuilder(\HopitalNumerique\CommunautePratiqueBundle\Entity\Groupe $groupe = null, Domaine $domaine)
     {
         $query = $this->createQueryBuilder('user');
         
@@ -599,7 +600,14 @@ class UserRepository extends EntityRepository
                 ->setParameter('groupe', $groupe)
             ;
         }
-        
+
+        if (null !== $domaine) {
+            $query
+                ->innerJoin('user.domaines', 'domaine', Join::WITH, 'domaine = :domaine')
+                ->setParameter('domaine', $domaine)
+            ;
+        }
+
         return $query;
     }
 

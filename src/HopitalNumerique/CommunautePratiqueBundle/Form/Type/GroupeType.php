@@ -38,8 +38,7 @@ class GroupeType extends \Symfony\Component\Form\AbstractType
         $this->questionnaireManager = $questionnaireManager;
         
         $this->user = (null !== $securityContext->getToken() ? $securityContext->getToken()->getUser() : null);
-        if (!($this->user instanceof User))
-        {
+        if (!($this->user instanceof User)) {
             throw new \Exception('Utilisateur non connecté');
         }
     }
@@ -119,7 +118,7 @@ class GroupeType extends \Symfony\Component\Form\AbstractType
                 ))
                 ->add('animateurs', 'genemu_jqueryselect2_entity', array(
                     'class' => 'HopitalNumeriqueUserBundle:User',
-                    'choices' => $this->userManager->findUsersByDomaine($builder->getData()->getDomaine()->getId()),
+                    'choices' => $this->userManager->findCommunautePratiqueMembres($builder->getData()->getDomaine()),
                     'by_reference' => false,
                     'property' => 'prenomNom',
                     'multiple' => true

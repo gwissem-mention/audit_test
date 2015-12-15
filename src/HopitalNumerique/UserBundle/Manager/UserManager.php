@@ -6,6 +6,7 @@ use Nodevo\ToolsBundle\Manager\Manager as BaseManager;
 use Doctrine\Common\Collections\Collection;
 use HopitalNumerique\UserBundle\Entity\User;
 use HopitalNumerique\ReferenceBundle\Entity\Reference;
+use HopitalNumerique\DomaineBundle\Entity\Domaine;
 
 class UserManager extends BaseManager
 {
@@ -346,14 +347,25 @@ class UserManager extends BaseManager
   }
 
     /**
+     * Retourne des membres de la communauté de pratiques.
+     *
+     * @param \HopitalNumerique\UserBundle\Manager\Domaine $domaine Domaine
+     * @return array<\HopitalNumerique\UserBundle\Entity\User> Utilisateurs
+     */
+    public function findCommunautePratiqueMembres(Domaine $domaine)
+    {
+        return $this->getCommunautePratiqueMembresQueryBuilder(null, $domaine)->getQuery()->getResult();
+    }
+
+    /**
      * Retourne la QueryBuilder avec les membres de la communauté de pratique.
      *
      * @param \HopitalNumerique\CommunautePratiqueBundle\Entity\Groupe $groupe (optionnel) Groupe des membres
      * @return \Doctrine\ORM\QueryBuilder QueryBuilder
      */
-    public function getCommunautePratiqueMembresQueryBuilder(\HopitalNumerique\CommunautePratiqueBundle\Entity\Groupe $groupe = null)
+    public function getCommunautePratiqueMembresQueryBuilder(\HopitalNumerique\CommunautePratiqueBundle\Entity\Groupe $groupe = null, Domaine $domaine = null)
     {
-        return $this->getRepository()->getCommunautePratiqueMembresQueryBuilder($groupe);
+        return $this->getRepository()->getCommunautePratiqueMembresQueryBuilder($groupe, $domaine);
     }
 
     /**
