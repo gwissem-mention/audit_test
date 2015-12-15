@@ -37,6 +37,7 @@
 
     /* Droits */
     INSERT INTO `core_ressource` (`res_id`, `res_nom`, `res_pattern`, `res_order`, `res_type`) VALUES (NULL, 'BackOffice - Gestion de la communauté de pratiques', '/^\\/admin\\/communaute\\-de\\-pratiques/', '38', '2');
+    INSERT INTO `core_ressource` (`res_id`, `res_nom`, `res_pattern`, `res_order`, `res_type`) VALUES (NULL, 'FrontOffice - Communauté de pratiques', '/^\\/communaute\-de\-pratiques/', '20', '2');
 
     /* Menu */
     INSERT INTO `core_menu_item` (`itm_id`, `itm_parent`, `mnu_menu`, `itm_name`, `itm_route`, `itm_route_parameters`, `itm_route_absolute`, `itm_uri`, `itm_icon`, `itm_display`, `itm_display_children`, `itm_role`, `itm_order`) VALUES ('253', NULL, '1', 'Communauté de pratiques', 'hopitalnumerique_communautepratique_admin_groupe_list', '[]', '0', NULL, 'fa fa-users', '1', '0', 'IS_AUTHENTICATED_ANONYMOUSLY', '15');
