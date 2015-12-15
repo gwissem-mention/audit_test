@@ -40,12 +40,12 @@
                         {%- endfor -%}
                     </div>
                     {%- if app.user.id == user.id -%}
-                        <div class="text-right"><a href="{{ path('hopitalnumerique_communautepratique_groupe_inscrit', { 'groupe':groupe.id }) }}">&gt; Modifier mes réponses</a></div>
+                        <p class="documents-lien"><a href="{{ path('hopitalnumerique_communautepratique_groupe_inscrit', { 'groupe':groupe.id }) }}"><em class="fa fa-angle-double-right"></em> &nbsp; Modifier mes réponses</a></p>
                     {%- endif -%}
                 {%- else -%}
                     <p><strong><span class="violet">{{ user.prenomNom }} n'a pas renseigné son questionnaire sur le groupe</span> {{ groupe }}.</strong></p>
                     {%- if app.user.id == user.id -%}
-                        <div class="text-right"><a href="{{ path('hopitalnumerique_communautepratique_groupe_inscrit', { 'groupe':groupe.id }) }}">&gt; Remplir le formulaire</a></div>
+                        <p class="documents-lien"><a href="{{ path('hopitalnumerique_communautepratique_groupe_inscrit', { 'groupe':groupe.id }) }}"><em class="fa fa-angle-double-right"></em> &nbsp; Remplir le formulaire</a></p>
                     {%- endif -%}
                 {%- endif -%}
             </div>
