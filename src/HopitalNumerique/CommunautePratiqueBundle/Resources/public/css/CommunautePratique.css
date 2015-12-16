@@ -50,7 +50,7 @@
         .communaute-pratique-actions .dropdown ul { text-align: left; }
 
 /* Liens généraux */
-.communaute-de-pratiques-sommaire {}
+.communaute-de-pratiques-sommaire { margin: 0 0 30px 0; }
     .communaute-de-pratiques-sommaire a { align-items: center;-webkit-align-items: center;background-color: #e6e6e6;color: #777777;display: flex;flex-direction: row;-webkit-flex-direction: row;line-height: 16px;overflow: auto;padding: 10px 28px 11px 16px;vertical-align: middle; }
     .communaute-de-pratiques-sommaire a:hover { text-decoration: none; }
         .communaute-de-pratiques-sommaire a em { font-size: 30px;margin: 0 12px 0 0;vertical-align: middle; }
@@ -101,7 +101,7 @@ ul.communaute-de-pratiques-mes-groupes { list-style-type: none;margin: 0;padding
         .communaute-de-pratiques-bloc-publications a em { display: block;font-size: 40px;margin: 0 0 10px; }
 
 /* Bandeau d'un membre */
-.communaute-pratique-bandeau-membre { padding: 15px 0; }
+.communaute-pratique-bandeau-membre { margin: 0 0 30px 0; }
     .communaute-pratique-bandeau-membre-body { background-color: #f2f2f2;padding: 15px; }
         .communaute-pratique-bandeau-membre .illustration { float: left;margin: 0 6px 0 0; }
         .communaute-pratique-bandeau-membre .nom, .communaute-pratique-bandeau-membre .animateur {}
@@ -119,7 +119,7 @@ ul.communaute-de-pratiques-mes-groupes { list-style-type: none;margin: 0;padding
 /* Porte-documents (formulaire) */
 .communaute-de-pratiques-documents {}
     .communaute-de-pratiques-documents .description { font-size: 12px; }
-    .communaute-de-pratiques-documents .fileinput-button { margin: 15px 0; }
+    .communaute-de-pratiques-documents .fileinput-button { margin: 0 0 15px 0; }
     .communaute-de-pratiques-documents .bloc-envoi-documents { display: none; }
         .communaute-de-pratiques-documents .files { background-color: #f0f7ef;border-color: #e6e6e6;border-style: solid;border-width: 1px;margin: 10px 0;padding: 6px 0; }
             .communaute-de-pratiques-documents .files .upload, .communaute-de-pratiques-documents .files .download { background-color: #fff;border-color: #e6e6e6;border-style: solid;border-width: 1px;margin: 6px 0; }
@@ -135,7 +135,7 @@ ul.communaute-de-pratiques-mes-groupes { list-style-type: none;margin: 0;padding
             .communaute-de-pratiques-documents .fileupload-buttonbar .fileupload-progress { display: none;margin: 15px 0; }
 
 /* Petit bloc d'un document */
-.communaute-de-pratiques-document { border-color: #e6e6e6;border-style: solid;border-width: 1px;font-size: 13px;height: 70px;margin: 10px 0;padding: 15px;position: relative; }
+.communaute-de-pratiques-document { border-color: #e6e6e6;border-style: solid;border-width: 1px;font-size: 13px;height: 70px;margin: 0 0 30px 0;padding: 15px;position: relative; }
     .communaute-de-pratiques-document .icone { float: left;font-size: 39px;line-height: 1px;margin: 0 15px 0 0;text-align: center;width: 68px; }
         .communaute-de-pratiques-document .icone .image { background-position: center center;background-repeat: no-repeat;background-size: contain;height: 38px; }
     .communaute-de-pratiques-document .contenu { margin: 0 0 0 68px; }
@@ -150,23 +150,25 @@ ul.communaute-de-pratiques-mes-groupes { list-style-type: none;margin: 0;padding
         .communaute-de-pratiques-document .checkbox input[type=checkbox] { width: 15px; } /* Fix certains navigateurs où la checkbox est toute petite */
 
 /* Fiche de problématique */
-.communaute-de-pratiques-fiche {}
+.communaute-de-pratiques-fiche { margin-bottom: 15px; }
+    .communaute-de-pratiques-fiche .actions { float: right;margin-top: -4px; }
     .communaute-de-pratiques-fiche p { font-size: 14px;margin: 15px 0; }
 
 /* Fiche d'un utilisateur' */
-.communaute-de-pratiques-user-fiche { padding: 15px 0; }
-    .communaute-de-pratiques-user-fiche #formulaire-prealable, .communaute-de-pratiques-user-fiche #documents, .communaute-de-pratiques-user-fiche #fiches { padding: 15px; }
+.communaute-de-pratiques-user-fiche {}
+    .communaute-de-pratiques-user-fiche .tab-pane {}
+    .communaute-de-pratiques-user-fiche #formulaire-prealable, .communaute-de-pratiques-user-fiche #documents, .communaute-de-pratiques-user-fiche #fiches { padding: 30px; }
     .communaute-de-pratiques-user-fiche #formulaire-prealable {}
         .communaute-de-pratiques-user-fiche #formulaire-prealable .row { border-color: #f2f2f2;border-style: solid;border-width: 1px 0 0 0;margin: 0px;padding: 20px 0; }
         .communaute-de-pratiques-user-fiche #formulaire-prealable .row:first-child { border-width: 0px; }
             .communaute-de-pratiques-user-fiche #formulaire-prealable .question { color: #dd3157;font-weight: bold; }
             .communaute-de-pratiques-user-fiche #formulaire-prealable .reponse {}
-    .communaute-de-pratiques-user-fiche .documents-lien { font-size: 11px;text-align: right;text-transform: uppercase; }
+    .communaute-de-pratiques-user-fiche .documents-lien { font-size: 11px;margin: 0;text-align: right;text-transform: uppercase; }
         .communaute-de-pratiques-user-fiche .documents-lien a { color: #777; }
             .communaute-de-pratiques-user-fiche .documents-lien a .fa { color: #dd3157;font-weight: bold; }
 
 /* Bloc d'une fiche */
-.communaute-de-pratiques-bloc-fiche { background-color: #f2f2f2;border-color: #f2f2f2;border-style: solid;border-width: 1px;margin: 15px 0;padding: 15px 15px 10px 15px; }
+.communaute-de-pratiques-bloc-fiche { background-color: #f2f2f2;border-color: #f2f2f2;border-style: solid;border-width: 1px;margin: 15px 0;padding: 20px 20px 15px 20px; }
     .communaute-de-pratiques-bloc-fiche .icone { float: left;font-size: 30px;margin: 0 15px 0 0; }
         .communaute-de-pratiques-bloc-fiche[data-communaute-pratique-fiche-resolu="1"] .icone { color: #419c3f; }
     .communaute-de-pratiques-bloc-fiche .header {}
@@ -256,6 +258,9 @@ ul.communaute-de-pratiques-mes-groupes { list-style-type: none;margin: 0;padding
     #communaute-pratiques-groupes .tab-content { padding: 15px; }
     #communaute-pratiques-groupes .communaute-de-pratiques-bloc-mes-groupes { margin-top: 40px; }
     #communaute-pratiques-groupes .communaute-de-pratiques-bloc-publications { margin-bottom: 0; }
+    @media (max-width: 768px) {
+        #communaute-pratiques-groupes .communaute-de-pratiques-bloc-publications { margin-bottom: 30px; }
+    }
 
 /* Page des publications */
 .communaute-de-pratiques-publications {}
@@ -269,3 +274,16 @@ ul.communaute-de-pratiques-mes-groupes { list-style-type: none;margin: 0;padding
     @media (max-width: 768px) {
         .communaute-de-pratiques-publications .date { float: none; }
     }
+
+/* Page inscription à un groupe */
+.communaute-de-pratiques-groupe-inscription { margin: 0 0 30px 0; }
+
+/* Fiches dans la page d'un groupe */
+.communaute-de-pratiques-groupe-fiches {}
+@media (max-width: 768px) {
+    .communaute-de-pratiques-groupe-fiches { margin-top: 30px; }
+}
+
+/* Panel d'édition d'une fiche' */
+.panel-communaute-de-pratiques-fiche-edit { margin-bottom: 0; }
+    .panel-communaute-de-pratiques-fiche-edit .panel-body { padding-bottom: 30px;padding-right: 30px; }

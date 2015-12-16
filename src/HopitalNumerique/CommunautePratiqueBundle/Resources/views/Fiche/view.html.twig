@@ -32,7 +32,7 @@
 
     <div class="panel panel-communaute-de-pratiques communaute-de-pratiques-fiche">
         <div class="panel-heading">
-            <nav class="pull-right">
+            <nav class="actions">
                 {% if fiche|communautePratiqueCanEdit %}
                     <a href="{{ path('hopitalnumerique_communautepratique_fiche_edit', { fiche:fiche.id }) }}">Éditer cette fiche</a> &nbsp;
                 {% endif %}

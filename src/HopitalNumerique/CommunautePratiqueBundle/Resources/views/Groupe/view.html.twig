@@ -37,13 +37,15 @@
     </div>
 
     {%- if groupe.fiches|length > 0 -%}
-        <p><strong>Fiches de problématique du groupe</strong></p>
-        <div class="row">
-            {%- for fiche in groupe.fiches -%}
-                <div class="col-md-6">
-                    {{ communaute_pratique.display_bloc_fiche(fiche) }}
-                </div>
-            {%- endfor -%}
+        <div class="communaute-de-pratiques-groupe-fiches">
+            <p><strong>Fiches de problématique du groupe</strong></p>
+            <div class="row">
+                {%- for fiche in groupe.fiches -%}
+                    <div class="col-md-6">
+                        {{ communaute_pratique.display_bloc_fiche(fiche) }}
+                    </div>
+                {%- endfor -%}
+            </div>
         </div>
     {%- endif -%}
 
