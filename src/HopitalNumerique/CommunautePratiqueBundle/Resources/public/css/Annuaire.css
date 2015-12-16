@@ -1,18 +1,17 @@
 .communaute-de-pratiques-annuaire {}
 
 /* Filtres de l'annuaire '*/
-.communaute-de-pratiques-annuaire-filtres { background-color: #f6f6f6;margin: 0 0 15px; }
-    .communaute-de-pratiques-annuaire-filtres .row { margin: 15px 0; }
-        .communaute-de-pratiques-annuaire-filtres .filtre { margin: 15px 0; }
+.communaute-de-pratiques-annuaire-filtres { background-color: #f6f6f6;margin: 0 0 30px;padding: 15px 30px; }
+        .communaute-de-pratiques-annuaire-filtres .filtre { margin: 10px 0; }
             .communaute-de-pratiques-annuaire-filtres #hopitalnumerique_communautepratiquebundle_user_recherche_nom { background-image: url('/bundles/hopitalnumeriquecommunautepratique/img/annuaire/loupe.png');background-position: 6px center;background-repeat: no-repeat;padding: 0 0 0 28px; }
             .communaute-de-pratiques-annuaire-filtres .btn { width: 100%; }
 
 /* Liste des utilisateurs */
 .communaute-de-pratiques-annuaire-users {}
-    .communaute-de-pratiques-annuaire-users .pagination { margin: 15px 0 30px 0; }
+    .communaute-de-pratiques-annuaire-users .pagination { margin: 0 0 30px 0; }
 
 /* Bloc d'un utilisateur */
-.communaute-de-pratiques-bloc-user { background-color: #f6f6f6;margin: 15px 0;padding: 15px; }
+.communaute-de-pratiques-bloc-user { background-color: #f6f6f6;margin: 0 0 30px 0;padding: 15px; }
     .communaute-de-pratiques-bloc-user .delete { float: right;margin: 0 0 0 2px; }
     .communaute-de-pratiques-bloc-user .identite { height:79px;overflow: hidden; }
         .communaute-de-pratiques-bloc-user .illustration { float: left;margin: 0 6px 0 0; }

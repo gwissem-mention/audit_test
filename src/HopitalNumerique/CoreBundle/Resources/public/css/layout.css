@@ -49,7 +49,7 @@
 /* --> */
 
 /* <-- Pagination Bootstrap 3 */
-.pagination { font-size: 11px; }
+.pagination { font-size: 11px;margin: 0;padding: 0; }
     .pagination > li > a, .pagination > li > span { color: #333; }
     .pagination > .active > a, .pagination > .active > span, .pagination > .active > a:hover, .pagination > .active > span:hover, .pagination > .active > a:focus, .pagination > .active > span:focus { background-color: #d60030;border-color: #d60030; }
 /* --> */

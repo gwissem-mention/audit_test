@@ -39,10 +39,10 @@
 
 /* Liens en haut de page */
 .communaute-pratique-actions { font-size: 10px;margin: 20px 0 0;text-align: right; }
-    .communaute-pratique-actions .contact { float: right;width: 200px; margin-bottom:15px}
+    .communaute-pratique-actions .contact { float: right;margin-bottom: 15px;width: 200px; }
         .communaute-pratique-actions .contact a { color: #2e2e2e;cursor: pointer;display: block; }
             .communaute-pratique-actions .contact em { color: #777;float: right;font-size: 26px;margin: -3px 0 0 6px; }
-    .communaute-pratique-actions .lien { float: right; }
+    .communaute-pratique-actions .lien { float: right;margin-bottom: 15px; }
         .communaute-pratique-actions .lien a { color: #2e2e2e; }
             .communaute-pratique-actions .lien a .icon { color: #777;font-size: 26px;margin: 0 0 0 2px;vertical-align: middle; }
     .communaute-pratique-actions .dropdown {}
@@ -184,7 +184,7 @@ ul.communaute-de-pratiques-mes-groupes { list-style-type: none;margin: 0;padding
     .communaute-de-pratiques-actualite .body { color: #777; }
 
 /* Menu actualités */
-.communaute-de-pratiques-menu-actualites { background-color: #f6f6f6;border-radius: 5px;padding: 10px; }
+.communaute-de-pratiques-menu-actualites { background-color: #f6f6f6;border-radius: 5px;margin: 0 0 30px 0;padding: 10px; }
     .communaute-de-pratiques-menu-actualites ul { list-style-type: none;padding: 0; }
         .communaute-de-pratiques-menu-actualites ul li { background-image: url("/bundles/hopitalnumeriquepublication/img/puce.png");background-repeat: no-repeat;background-position: left center;padding-left: 15px; }
             .communaute-de-pratiques-menu-actualites ul li a { color: #777777;display: block; }
@@ -253,16 +253,19 @@ ul.communaute-de-pratiques-mes-groupes { list-style-type: none;margin: 0;padding
 
 /* Page des groupes */
 #communaute-pratiques-groupes {}
+    #communaute-pratiques-groupes .tab-content { padding: 15px; }
     #communaute-pratiques-groupes .communaute-de-pratiques-bloc-mes-groupes { margin-top: 40px; }
     #communaute-pratiques-groupes .communaute-de-pratiques-bloc-publications { margin-bottom: 0; }
 
 /* Page des publications */
 .communaute-de-pratiques-publications {}
     .communaute-de-pratiques-publications .panel-communaute-de-pratiques { margin-bottom: 30px; }
-        .communaute-de-pratiques-publications .panel-communaute-de-pratiques .panel-heading {}
-            .communaute-de-pratiques-publications .panel-communaute-de-pratiques .panel-heading .pull-right { font-size: 12px;padding: 2px 0 0 0; }
-        .communaute-de-pratiques-publications .panel-communaute-de-pratiques .panel-body {}
-            .communaute-de-pratiques-publications .publication { font-size: 13px;height: 200px; }
+        .communaute-de-pratiques-publications .panel-communaute-de-pratiques .panel-body { padding: 30px; }
+            .communaute-de-pratiques-publications .date { float: right;font-size: 12px;padding: 2px 0 0 0; }
+            .communaute-de-pratiques-publications .publication { font-size: 13px; }
                 .communaute-de-pratiques-publications .publication .categorie { color: #d60030;font-size: 13px;margin-bottom: 5px;text-transform: uppercase; }
                 .communaute-de-pratiques-publications .publication h2 { color: #070005;font-size: 18px;margin: 0 0 10px 0; }
                     .communaute-de-pratiques-publications .publication h2 a { color: inherit; }
+    @media (max-width: 768px) {
+        .communaute-de-pratiques-publications .date { float: none; }
+    }
