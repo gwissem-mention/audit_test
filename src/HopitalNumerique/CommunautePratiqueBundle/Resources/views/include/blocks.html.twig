@@ -62,13 +62,13 @@
 {% endmacro %}
 
 {##
- # Affiche un groupe.
+ # Affiche mes groupes en cours.
  #
  # @param array<\HopitalNumerique\CommunautePratiqueBundle\Entity\Groupe> userGroupesEnCours Groupes à afficher
  #}
 {% macro display_bloc_mes_groupes(userGroupesEnCours) %}
     <div class="communaute-de-pratiques-bloc-mes-groupes" id="panel-communaute-de-pratiques-mes-groupes">
-        <div class="title"><em class="icon-social20"></em> Mes groupes de travail en cours</div>
+        <div class="title"><em class="icon-social20"></em> Mes groupes en cours</div>
 
         <ul class="communaute-de-pratiques-mes-groupes">
             {%- for groupe in userGroupesEnCours -%}

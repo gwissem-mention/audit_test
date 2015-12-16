@@ -15,9 +15,9 @@
 .communaute-de-pratiques-avatar { background-color: #e5e5e5;background-size: cover;background-position: center center;border-color: #fff;border-radius: 50%;border-style: solid;border-width: 3px;height: 60px;margin: auto;width: 60px; }
 
 /* Panel */
-.panel-communaute-de-pratiques { border-color: #e6e6e6;border-radius: 0;border-style: solid;border-width: 1px;margin: 15px 0; }
-    .panel-communaute-de-pratiques .panel-heading { background-color: #e6e6e6; }
-        .panel-communaute-de-pratiques .panel-heading h2 { align-items: center;-webkit-align-items: center;color: #2e2e2e;display: flex;font-size: 17px;font-weight: bold;margin: 0;padding: 0 0 1px; }
+.panel-communaute-de-pratiques { border-color: #e6e6e6;border-radius: 0;border-style: solid;border-width: 1px;margin: 0 0 30px 0; }
+    .panel-communaute-de-pratiques .panel-heading { background-color: #e6e6e6;border-radius: 0; }
+        .panel-communaute-de-pratiques .panel-heading h2 { align-items: center;-webkit-align-items: center;color: #2e2e2e;display: flex;font-size: 17px;font-weight: bold;margin: 0;padding: 0; }
             .panel-communaute-de-pratiques .panel-heading .icon { color: #777;font-size: 20px;margin: 0 8px 0 0;vertical-align: middle; }
 
 /* Onglets */
@@ -28,7 +28,7 @@
                 .body-communaute-pratique .nav-tabs li a em { color: #cacaca; }
             .body-communaute-pratique .nav-tabs li.active a { color: #2e2e2e;font-weight: bold; }
                 .body-communaute-pratique .nav-tabs li.active a em { color: #777777; }
-    .body-communaute-pratique .tab-content { border-color: #e6e6e6;border-style: solid;border-width: 0 1px 1px; }
+    .body-communaute-pratique .tab-content { border-color: #e6e6e6;border-style: solid;border-width: 0 1px 1px;margin: 0 0 30px 0; }
 @media (max-width: 768px) {
     .body-communaute-pratique .nav-tabs li { float: none;margin-right: 0; }
 }
@@ -39,7 +39,7 @@
 
 /* Liens en haut de page */
 .communaute-pratique-actions { font-size: 10px;margin: 20px 0 0;text-align: right; }
-    .communaute-pratique-actions .contact { float: right;width: 200px; margin-bottom:20px}
+    .communaute-pratique-actions .contact { float: right;width: 200px; margin-bottom:15px}
         .communaute-pratique-actions .contact a { color: #2e2e2e;cursor: pointer;display: block; }
             .communaute-pratique-actions .contact em { color: #777;float: right;font-size: 26px;margin: -3px 0 0 6px; }
     .communaute-pratique-actions .lien { float: right; }
@@ -50,7 +50,7 @@
         .communaute-pratique-actions .dropdown ul { text-align: left; }
 
 /* Liens généraux */
-.communaute-de-pratiques-sommaire { margin: 15px 0; }
+.communaute-de-pratiques-sommaire {}
     .communaute-de-pratiques-sommaire a { align-items: center;-webkit-align-items: center;background-color: #e6e6e6;color: #777777;display: flex;flex-direction: row;-webkit-flex-direction: row;line-height: 16px;overflow: auto;padding: 10px 28px 11px 16px;vertical-align: middle; }
     .communaute-de-pratiques-sommaire a:hover { text-decoration: none; }
         .communaute-de-pratiques-sommaire a em { font-size: 30px;margin: 0 12px 0 0;vertical-align: middle; }
@@ -85,9 +85,9 @@
         .communaute-de-pratiques-groupe .places-progression .contenu { background-image:url("/bundles/hopitalnumeriquecommunautepratique/img/progression/remplissage.png");height: 7px;width: 0%; }
 
 /* Bloc des groupes */
-.communaute-de-pratiques-bloc-mes-groupes { border-color: #e6e6e6;border-style: solid;border-width: 1px;margin: 40px 0 0 0; }
-    .communaute-de-pratiques-bloc-mes-groupes .title { align-items: center;-webkit-align-items: center;background-color: #e6e6e6;color: #2e2e2e;display: flex;flex-direction: row;-webkit-flex-direction: row;padding: 10px; }
-        .communaute-de-pratiques-bloc-mes-groupes .title em { color: #777;font-size: 16px;margin: 0 4px 0 0;vertical-align: middle; }
+.communaute-de-pratiques-bloc-mes-groupes { border-color: #e6e6e6;border-style: solid;border-width: 1px;margin: 0 0 30px 0; }
+    .communaute-de-pratiques-bloc-mes-groupes .title { align-items: center;-webkit-align-items: center;background-color: #e6e6e6;color: #2e2e2e;display: flex;flex-direction: row;-webkit-flex-direction: row;font-size: 17px;font-weight: bold;line-height: 1.1;padding: 10px; }
+        .communaute-de-pratiques-bloc-mes-groupes .title em { color: #777;font-size: 20px;margin: 0 8px 0 0;vertical-align: middle; }
     .communaute-de-pratiques-bloc-mes-groupes ul.communaute-de-pratiques-mes-groupes { padding: 10px 25px; }
 ul.communaute-de-pratiques-mes-groupes { list-style-type: none;margin: 0;padding: 0 15px; }
     ul.communaute-de-pratiques-mes-groupes li { margin: 15px 0px; }
@@ -95,7 +95,7 @@ ul.communaute-de-pratiques-mes-groupes { list-style-type: none;margin: 0;padding
         ul.communaute-de-pratiques-mes-groupes li div {}
 
 /* Bloc des publications */
-.communaute-de-pratiques-bloc-publications { background-color: #dd3157;font-weight: bold;margin: 15px 0 0 0;text-align: center; }
+.communaute-de-pratiques-bloc-publications { background-color: #dd3157;font-weight: bold;margin: 0 0 30px 0;text-align: center; }
     .communaute-de-pratiques-bloc-publications a { color: #fff;display: block;line-height: 17px;padding: 18px 30px; }
     .communaute-de-pratiques-bloc-publications a:hover { text-decoration: none; }
         .communaute-de-pratiques-bloc-publications a em { display: block;font-size: 40px;margin: 0 0 10px; }
@@ -196,16 +196,17 @@ ul.communaute-de-pratiques-mes-groupes { list-style-type: none;margin: 0;padding
     .communaute-de-pratiques-tableau-de-bord .lien { font-size: 10px;margin: 15px 0 0 0;text-align: right;text-transform: uppercase; }
         .communaute-de-pratiques-tableau-de-bord .lien a { color: #2e2e2e; }
             .communaute-de-pratiques-tableau-de-bord .lien .fa { color: #dd3157; }
+    /* Bloc Membres */
     .communaute-de-pratiques-bloc-membres {}
+        .communaute-de-pratiques-bloc-membres .panel-body { padding: 30px; }
         .communaute-de-pratiques-bloc-membres .total { color: #dd3157;font-size: 15px;font-weight: bold;padding: 0 0 15px 0;text-align: center; }
         .communaute-de-pratiques-bloc-membres .membre { font-size: 11px;height: 100px;line-height: 12px;text-align: center; }
-    .communaute-de-pratiques-tableau-de-bord .forum { font-size: 11px; }
-        .communaute-de-pratiques-tableau-de-bord .forum h3 { font-size: 14px;margin: 0 0 4px; }
     /* Panel du tableau de bord (en haut de page) */
-    .panel-communaute-de-pratiques-tableau-de-bord {}
-        .panel-communaute-de-pratiques-tableau-de-bord .panel-body { padding: 0; }
+    .communaute-de-pratiques-tableau-de-bord .panel-communaute-de-pratiques-tableau-de-bord { margin-top: 0; }
+        .communaute-de-pratiques-tableau-de-bord .panel-communaute-de-pratiques-tableau-de-bord .panel-body { padding: 15px; }
             .panel-communaute-de-pratiques-tableau-de-bord .groupe {}
                 .panel-communaute-de-pratiques-tableau-de-bord .groupe .header { border-color: #e6e6e6;border-style: solid;border-width: 1px 0 0 0;font-size: 11px;padding: 15px; }
+                .panel-communaute-de-pratiques-tableau-de-bord .groupe:first-child .header { border-top-width: 0; }
                     .panel-communaute-de-pratiques-tableau-de-bord .groupe .header .interrupteur { background-color: #e6e6e6;border-radius: 50%;display: block;float: right;font-size: 26px;height: 32px;line-height: 28px;margin: -3px 0 0 0;text-align: center;width: 32px; }
                         .panel-communaute-de-pratiques-tableau-de-bord .groupe .header .interrupteur.on { color: #333;font-size: 21px; }
                             .panel-communaute-de-pratiques-tableau-de-bord .groupe .header .interrupteur.on:after { content: 'x'; }
@@ -234,7 +235,26 @@ ul.communaute-de-pratiques-mes-groupes { list-style-type: none;margin: 0;padding
                                     .panel-communaute-de-pratiques-tableau-de-bord .groupe .body .membre .questionnaire .icon { font-size: 17px;vertical-align: middle; }
                                 .panel-communaute-de-pratiques-tableau-de-bord .groupe .body .membre ul { list-style-type: none;margin: 0;padding: 0; }
                                     .panel-communaute-de-pratiques-tableau-de-bord .groupe .body .membre ul li { margin: 8px 0; }
-    .communaute-de-pratiques-tableau-de-bord .communaute-de-pratiques-bloc-mes-groupes { margin: 15px 0; }
+    /* Bloc Actualité */
+    .communaute-de-pratiques-tableau-de-bord #panel-communaute-de-pratiques-actualites {}
+        .communaute-de-pratiques-tableau-de-bord #panel-communaute-de-pratiques-actualites .panel-body { padding: 30px; }
+    /* Bloc Groupes de travail */
+    .communaute-de-pratiques-tableau-de-bord #panel-communaute-de-pratiques-groupes {}
+        .communaute-de-pratiques-tableau-de-bord #panel-communaute-de-pratiques-groupes {}
+            .communaute-de-pratiques-tableau-de-bord #panel-communaute-de-pratiques-groupes .panel-body { padding: 15px; }
+            .communaute-de-pratiques-tableau-de-bord #panel-communaute-de-pratiques-groupes .lien { padding-bottom: 15px;padding-right: 15px; }
+    /* Bloc Mes groupes */
+    .communaute-de-pratiques-tableau-de-bord .communaute-de-pratiques-bloc-mes-groupes {}
+    /* Bloc Forum */
+    .communaute-de-pratiques-tableau-de-bord #panel-communaute-de-pratiques-forums { margin-bottom: 0; }
+        .communaute-de-pratiques-tableau-de-bord .forum { font-size: 11px; }
+            .communaute-de-pratiques-tableau-de-bord .panel-body { padding: 30px; }
+            .communaute-de-pratiques-tableau-de-bord .forum h3 { font-size: 14px;margin: 0 0 4px; }
+
+/* Page des groupes */
+#communaute-pratiques-groupes {}
+    #communaute-pratiques-groupes .communaute-de-pratiques-bloc-mes-groupes { margin-top: 40px; }
+    #communaute-pratiques-groupes .communaute-de-pratiques-bloc-publications { margin-bottom: 0; }
 
 /* Page des publications */
 .communaute-de-pratiques-publications {}
