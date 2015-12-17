@@ -50,15 +50,14 @@ class OccurrenceManager extends \Nodevo\ToolsBundle\Manager\Manager
     {
         $occurrences = $user->getQuestionnaireOccurrences();
             
-        if (count($occurrences) > 1)
-        {
+        if (count($occurrences) > 1) {
             $premiereOccurrence = $this->getPremiereOccurrenceByQuestionnaireAndUser($questionnaire, $user);
 
-            foreach ($occurrences as $occurrence)
-            {
-                if ($occurrence->getId() != $premiereOccurrence->getId())
-                {
-                    $this->delete($occurrence);
+            if (null !== $premiereOccurrence) {
+                foreach ($occurrences as $occurrence) {
+                    if ($occurrence->getId() != $premiereOccurrence->getId()) {
+                        $this->delete($occurrence);
+                    }
                 }
             }
         }
