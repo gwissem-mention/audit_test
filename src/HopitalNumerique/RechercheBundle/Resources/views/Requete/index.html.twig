@@ -25,7 +25,7 @@
     {% endjavascripts %}
 {% endblock %}
 
-{% block headerTitle %}requêtes de recherche{% endblock %}
+{% block headerTitle %}recherches{% endblock %}
 {% block headerDesc %} 
     <p>
         A partir des menus déroulants situés à gauche de l'écran, vous pourrez :
@@ -40,7 +40,7 @@
 {% endblock %}
 
 {% block content %}
-    <h2 class="requeteTitle" >Gérer mes Requêtes de recherches</h2>
+    <h2 class="requeteTitle" >Gérer mes recherches</h2>
     <div class="requetes">
         {% for requete in requetes %}
             <div class="ligne requete-{{requete.id}}" data-target="{{path('hopital_numerique_recherche_homepage_requete',{ id : requete.id } ) }}">
@@ -69,7 +69,7 @@
             </div>
         {% else %}
             <div class="ligne">
-                <p> - Aucune requête de recherche enregistrée - </p>
+                <p> - Aucune Ma recherche enregistrée - </p>
                 <div class="clearfix"></div>
             </div>
         {% endfor %}

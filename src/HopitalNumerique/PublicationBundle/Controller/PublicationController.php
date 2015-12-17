@@ -73,7 +73,14 @@ class PublicationController extends Controller
 
             foreach ($objets as $key => $objetTemp) 
             {
-                $objetsOrder[$objetTemp["id"]] = $objetTemp;
+                if(array_key_exists('objet', $objetTemp) && !is_null($objetTemp["objet"]))
+                {
+                    $objetsOrder['-' . $objetTemp["id"]] = $objetTemp;
+                }
+                else
+                {
+                    $objetsOrder[$objetTemp["id"]] = $objetTemp;
+                }
             }
 
             foreach ($objetsOrder as $key => $objetCurrent) 
@@ -402,6 +409,7 @@ class PublicationController extends Controller
                 $production        = new \StdClass;
                 $production->id    = $objet->getId();
                 $production->alias = $objet->getAlias();
+                $production->source = $objet->getSource();
 
                 //Cas Objet
                 if( $contenu === false ) 
@@ -561,11 +569,11 @@ class PublicationController extends Controller
             if( !is_null($one->getParent()) ) {
                 $parentId = $one->getParent()->getId();
                 //get Grand Parent if needed
-                if ( !in_array($parentId, array_keys($categs)) ){
+                if ( !in_array($parentId, array_keys($categs)) && !is_null($one->getParent()->getParent())){
                     $parentId = $one->getParent()->getParent()->getId();
 
                     //get Arrière Grand Parent if needed
-                    if ( !in_array($parentId, array_keys($categs)) )
+                    if ( !in_array($parentId, array_keys($categs)) && !is_null($one->getParent()->getParent()->getParent()))
                         $parentId = $one->getParent()->getParent()->getParent()->getId();
                 }
 

@@ -39,6 +39,7 @@ class ObjetType extends AbstractType
                 'attr'       => array('class' => $this->_constraints['alias']['class'] )
             ))
             ->add('source', 'text', array(
+                'required'   => false,
                 'max_length' => $this->_constraints['source']['maxlength'],
                 'label'      => 'Source (si externe)',
                 'attr'       => array('class' => $this->_constraints['source']['class'] )

@@ -46,3 +46,9 @@ enquire.register("screen and (max-width: 991px)", {
         });
     }
 });
+
+function calcHeightIframe()
+{
+  //change la hauteur de l'iframe
+  document.getElementById('iframe-recherche-tinymce').height = document.getElementById('iframe-recherche-tinymce').contentWindow.document.body.scrollHeight;
+}

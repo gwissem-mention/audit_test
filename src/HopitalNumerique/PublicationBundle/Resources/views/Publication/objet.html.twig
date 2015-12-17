@@ -67,7 +67,7 @@ window.open ("report/showReport.action?"+request,null,"location=no,menubar=0,res
         <div id="publication">
     {% endif %}
         <div class="col-md-10">
-            <h4 class="gris" >{{types}}</h4>
+            <h4 class="gris" >{{types}}{% if objet.source is not null and objet.source != '' %} <span class="text-muted">({{objet.source}})</span>{% endif %}</h4>
         </div>
         <div class="col-md-2">
             <div class="btn btn-sm btn-default print btnprint" onclick="print();"><i class="fa fa-print"></i></div>
@@ -81,12 +81,12 @@ window.open ("report/showReport.action?"+request,null,"location=no,menubar=0,res
                 {% if breadCrumbsArray is defined and breadCrumbsArray is not null %}
                     <div class="titre-infradoc violet" style="margin-top: -15px;margin-bottom:5px;padding-top:5px;">
                         {% for breadcrumb in breadCrumbsArray %}
-                            <i class="fa fa-share fa-flip-vertical" style="margin-right:5px;height:13px"></i><a href="{{path('hopital_numerique_publication_publication_contenu',{'id':objet.id, 'idc':breadcrumb.contenu.id, 'alias':objet.alias, 'aliasc':breadcrumb.contenu.alias})}}" style="color:#672F9E">{{breadcrumb.label}}</a>{% if loop.index != breadCrumbsArray|length %} <span style="margin-right:5px; margin-left:5px;" > > </span> {% endif %}
+                            <i class="fa fa-share fa-flip-vertical" style="margin-right:5px;margin-left:{{breadcrumb.label|alignBreadcrumbs}}px;height:13px"></i><a href="{{path('hopital_numerique_publication_publication_contenu',{'id':objet.id, 'idc':breadcrumb.contenu.id, 'alias':objet.alias, 'aliasc':breadcrumb.contenu.alias})}}" style="color:#672F9E;{% if not loop.first %}font-size:14px;{% endif %}">{{breadcrumb.label}}</a>{% if loop.index != breadCrumbsArray|length %} <span style="margin-right:5px; margin-left:5px;"></span><br /> {% endif %}
                         {% endfor %}
                     </div>
                     <div class="titre-infradoc-pdf violet" style="margin-top: -15px;margin-bottom:5px;padding-top:5px;">
                         {% for breadcrumb in breadCrumbsArray %}
-                            <i class="fa fa-share fa-flip-vertical" style="margin-right:5px;height:13px;"></i><a href="{{path('hopital_numerique_publication_publication_contenu',{'id':objet.id, 'idc':breadcrumb.contenu.id, 'alias':objet.alias, 'aliasc':breadcrumb.contenu.alias})}}" style="color:#672F9E;">{{breadcrumb.label}}</a>{% if loop.index != breadCrumbsArray|length %} <span style="margin-right:5px; margin-left:5px;" > > </span> {% endif %}
+                            <i class="fa fa-share fa-flip-vertical" style="margin-right:5px;margin-left:{{breadcrumb.label|alignBreadcrumbs}}px;height:13px;"></i><a href="{{path('hopital_numerique_publication_publication_contenu',{'id':objet.id, 'idc':breadcrumb.contenu.id, 'alias':objet.alias, 'aliasc':breadcrumb.contenu.alias})}}" style="color:#672F9E;">{{breadcrumb.label}}</a>{% if loop.index != breadCrumbsArray|length %} <span style="margin-right:5px; margin-left:5px;" ></span><br /> {% endif %}
                         {% endfor %}
                     </div>
                 {% endif %}
@@ -236,7 +236,7 @@ window.open ("report/showReport.action?"+request,null,"location=no,menubar=0,res
                                     {% for one in productions %}
                                         <div class="row" >
                                             <div class="col-md-10">
-                                                <h5 style="font-size:13px;">{{one.type}}</h5>
+                                                <h5 style="font-size:13px;">{{one.type}}{% if one.source is not null and one.source != "" %}<span class="text-muted"> ({{one.source}})</span>{% endif %}</h5>
                                             </div>
                                             <div class="col-md-2">
                                                 {% if one.synthese is not null %}
@@ -245,11 +245,11 @@ window.open ("report/showReport.action?"+request,null,"location=no,menubar=0,res
                                             </div>
 
                                             <div class="col-md-12">
-                                                <h4 style="font-size:14px;margin:0px 0 5px 0">
+                                                <h4 style="font-size:14px;line-height:24px;margin:0px 0 5px 0">
                                                     {% if one.updated %}
-                                                        <span class="label label-success" style="line-height: 1.1;vertical-align: top;">MaJ</span>
+                                                        <span class="label label-success" style="line-height: 2;vertical-align: top;">MaJ</span>
                                                     {% elseif one.new %}
-                                                        <span class="label label-danger" style="line-height: 1.1;vertical-align: top;">Nouveau</span>
+                                                        <span class="label label-danger" style="line-height: 2;vertical-align: top;">Nouveau</span>
                                                     {% endif %}
 
                                                     {% if one.objet %}
@@ -378,15 +378,15 @@ window.open ("report/showReport.action?"+request,null,"location=no,menubar=0,res
 
         {# Productions fortement liées #}
         {% if productions|length > 0 and types != "Point dur" %}
-            <div class="col-md-12" id="productions" >
-                <h2 class="open">Productions associées</h2>
+            <div class="col-md-12" id="productions-associes" >
+                <h2 class="open">Productions associées ({{productions|length}} Résultat{% if productions|length > 1 %}s{% endif %})</h2>
                 <div class="wrapper-results">
                     <div class="background-rose"></div>
                     <div class="results">
                         {% for one in productions %}
                             <div class="row" >
                                 <div class="col-md-10">
-                                    <h5>{{one.type}}</h5>
+                                    <h5>{{one.type}}{% if one.source is not null and one.source != "" %}<span class="text-muted"> ({{one.source}})</span>{% endif %}</h5>
                                 </div>
                                 <div class="col-md-2">
                                     {% if one.synthese is not null %}
@@ -411,7 +411,7 @@ window.open ("report/showReport.action?"+request,null,"location=no,menubar=0,res
                                 </div>
                                 
                                 <div class="col-md-12">
-                                    <p>{{ one.resume }}</p>
+                                    <p>{{ one.resume|parsePublication|raw }}</p>
                                 </div>
                             </div>
                         {% endfor %}
@@ -444,42 +444,56 @@ window.open ("report/showReport.action?"+request,null,"location=no,menubar=0,res
             {% endif %}
         {% endif %}
 
-        {# Autres résultats de recherche - "Résultats annexes à cette publication" #}
-        {% if contenu is not defined %}
-            {% set contenu = false %}
-        {% endif %}
-        <div class="col-md-12" id="autresResultats" >
-            <h2 class="open">Résultats annexes à cette publication<span class="h2-arrow"></span></h2>
-            <div class="mysep background-rose"></div>
-            <div class="row">
-                <div class="col-md-6">
-                    <div id="points-durs" class="top" >
-                        <h3>Points durs</h3>
-                        {{ mySelf.buildCarousel(objet, objets, contenu, '- Aucun point dur trouvé -', 'point-dur', objetsOrder) }}
-                    </div>
+        <div class="col-md-12" id="resultats">
+            {% set count = 0 %}
+            {% for objet in objets if objet['categ'] == "point-dur" %}
+                {% set count = count + 1 %}
+            {% endfor %}
+
+            {% if count != 0 %}
+                <div id="pointsdurs" class="col-md-12">
+                    <h3 class="open">Points Durs ( {{count}} Résultat{% if count > 1%}s{% endif %} )</h3>
+                    <div class="wrapper-results">
+                        <div class="background-rose"></div>
+                        <div class="results">
+                            {% set count = 0 %}
+                            {% for objet in objets if objet['categ'] == "point-dur" %}
+                                {% include 'HopitalNumeriqueRechercheBundle:Search:points-durs.html.twig' with {'objet': objet, 'count':count, 'showMorePointsDurs' : 5000, 'onlyText': false } %}
+                                {% set count = count + 1 %}
+                            {% else %}
+                                <p> - Aucun point dur trouvé - </p>
+                            {% endfor %}
+                            <div class="clearfix"></div>
+                        </div>
+                    </div> 
                 </div>
-                <div class="col-md-6">
-                    <div id="production" class="top" >
-                        <h3>Productions</h3>
-                        {{ mySelf.buildCarousel(objet, objets, contenu, '- Aucune production trouvée -', 'production', objetsOrder) }}
+            {% endif %}
+
+            <div id="productions" class="col-md-12">
+                {% set count = 0 %}
+                {% for objet in objets if (objet['categ'] == "production" or objet['categ'] == "ressource" or objet['categ'] == "forum") %}
+                    {% set count = count + 1 %}
+                {% endfor %}
+                <h3 class="open">Productions ( {{count}} Résultat{% if count > 1%}s{% endif %} )</h3>
+                <div class="wrapper-results">
+                    <div class="background-rose"></div>
+                    <div class="results">
+                        {% set count = 0 %}
+                        {% for objet in objets if (objet['categ'] == "production" or objet['categ'] == "ressource" or objet['categ'] == "forum") %}
+                            {% if objet['categ'] == 'forum' %}
+                                {% include 'HopitalNumeriqueRechercheBundle:Search:forum.html.twig' with {'objet': objet, 'count':count, 'showMoreProductions' : 5000, 'onlyText': false  } %}
+                            {% else %}
+                                {% include 'HopitalNumeriqueRechercheBundle:Search:productions.html.twig' with {'objet': objet, 'count':count, 'showMoreProductions' : 5000, 'onlyText': false  } %}
+                            {% endif %}
+                            {% set count = count + 1 %}
+                        {% else %}
+                            <p> Il n'y a pas encore de ressource correspondant à cette recherche. Pour être informé de la publication d'une nouvelle publication sur ce sujet, enregistrez votre recherche. </p>
+                        {% endfor %}
                     </div>
                 </div>
             </div>
-            <div class="separator"></div>
-            <div class="row">
-                <div class="col-md-6">
-                    <div id="ressources" class="bottom background-rose" >
-                        <h3>Ressources externes</h3>
-                        {{ mySelf.buildCarousel(objet, objets, contenu, '- Aucune ressource externe trouvée -', 'ressource', objetsOrder) }}
-                    </div>
-                </div>
-                <div class="col-md-6">
-                    <div id="forum" class="bottom background-violet" >
-                        <h3>Forum</h3>
-                        {{ mySelf.buildCarousel(objet, objets, contenu, '- Aucun fil de discussion du forum trouvé -', 'forum', objetsOrder) }}
-                    </div>
-                </div>
-            </div>
+
+            <div class="clearfix"></div>
         </div>
 
         {# Gestion des commantaires #}

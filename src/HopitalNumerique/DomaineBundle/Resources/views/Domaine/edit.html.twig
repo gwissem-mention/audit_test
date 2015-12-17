@@ -5,6 +5,8 @@
     {% javascripts output="compiled/hopitalnumerique-domaine-domaine-edit.js"
         '@validationEngine_js'
         "@tinymce_js"
+        "@fancybox_js" 
+        "@select2_js"
         'bundles/nodevogestionnairemedia/js/moxiemanager/js/moxman.loader.min.js'
         'bundles/nodevogestionnairemedia/js/MoxieManager.js'
         "bundles/hopitalnumeriquedomaine/js/script.js"
@@ -18,6 +20,8 @@
     {{parent()}}
     {% stylesheets output="compiled/hopitalnumerique-domaine-domaine-edit.css" filter="cssrewrite, ?yui_css"
         '@validationEngine_css'
+        "@fancybox_css"
+        "@select2_css"
     %}
         <link rel="stylesheet" href="{{ asset_url }}" />
     {% endstylesheets %}
@@ -88,5 +92,13 @@
                 {{ form_end(form) }}
             </div>
         </div>
+        
+        <input type="hidden" id="getObjets" value="{{path('hopitalnumerique_objet_objet_getObjets')}}" />
+        <input type="hidden" id="getOutils" value="{{path('hopitalnumerique_autodiag_get_outils')}}" />
+        <input type="hidden" id="getQuestionnaires" value="{{path('hopitalnumerique_questionnaire_get_questionnaires')}}" />
+        <input type="hidden" id="getRechercheAidee" value="{{path('hopitalnumerique_recherche_admin_aide-expression-besoin_gestion_get_recherche_aidee')}}" />
+        <input type="hidden" id="objet-file-url" value="{{path('hopitalnumerique_objet_objet_isFileExist')}}" />
+        <input type="hidden" id="objet-addobjet-url" value="{{path('hopitalnumerique_objet_objet_add')}}" />
+        <input type="hidden" id="objet-addarticle-url" value="{{path('hopitalnumerique_objet_objet_add', {'type':2})}}" />
     </div>
 {% endblock %}

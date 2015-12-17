@@ -3,7 +3,7 @@
 
 /* Autodiag : partie questionnaire */
     #autodiag{margin-top: 20px; position: relative}
-    #autodiag h1{ margin:0 0 50px 0; float:left; font-size:30px;}
+    #autodiag h1{ margin: 0px; float:left; font-size:30px;}
     #autodiag .options{display: inline;float: right;position: relative;top: 0px;right: 0; margin-bottom: 10px;}
     #autodiag #remarque{width: 100%; margin: 20px 0;}
     #autodiag #instructions{ margin: 5px 0 20px 0;}
@@ -128,7 +128,7 @@
     .autodiagTable thead tr a { color:#FFFFFF; font-size: 12px }
     .autodiagTable thead th { background-color:#6F3596; vertical-align: middle }
     .autodiagTable th, .autodiagTable td { border: 1px solid #ddd;padding:4px; }
-    #tableau-de-bord .content .panel .onglets{height: 50px;}
+    #tableau-de-bord .content .panel .onglets{height: 50px; margin: 0 0 0 20px;}
     #tableau-de-bord .content .panel .onglets ul{list-style: none;padding-left: 0;}
     #tableau-de-bord .content .panel .onglets .onglet{height: 50px;background-color: #ffffff; cursor: pointer;}
     #tableau-de-bord .content .panel .onglets .onglet:hover{background-color: #FAFAFA;}
@@ -167,4 +167,12 @@ table.tableau-question-reponse td{border:solid #000 1px;padding:5px;}
 
 .highcharts-tooltip tspan[dx="0"] {
   display: block!important;
+}
+
+#ongletResultatDomaineAutodiag {
+	margin-top: 20px;	
+}
+
+.span-title {
+	margin: 0px 0px 20px; 
 }

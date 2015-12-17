@@ -134,6 +134,9 @@ class RechercheParcoursDetailsController extends Controller
      */
     public function indexFrontAction($id, $alias, $idEtape, $etape,$idRefEtapeChild = null, $libRefEtapeChild = null )
     {
+        $request   = $this->get('request');
+        $domaineId = $request->getSession()->get('domaineId');
+
         //Récup!ère la recherche par parcours passé en param
         $rechercheParcours   = $this->get('hopitalnumerique_recherche_parcours.manager.recherche_parcours')->findOneBy( array( 'id' => $id ) );
 
@@ -202,9 +205,14 @@ class RechercheParcoursDetailsController extends Controller
         //Récupération des références + Tri pour l'affichage des points dur
         $referenceRechercheParcours        = $this->get('hopitalnumerique_reference.manager.reference')->findOneBy( array( 'id' => intval($rechercheParcours->getReference()->getId()) ) );
         $referenceRechercheParcoursDetails = $this->get('hopitalnumerique_reference.manager.reference')->findOneBy( array( 'id' => intval($rechercheParcoursDetails->getReference()->getId()) ) );
-        $refChilds = $this->get('hopitalnumerique_reference.manager.reference')->findBy( array( 
-                        'parent' => intval( $rechercheParcoursDetails->getReference()->getId() )
-                    ));
+        // $refChilds = $this->get('hopitalnumerique_reference.manager.reference')->findBy( array( 
+        //                 'parent' => intval( $rechercheParcoursDetails->getReference()->getId() ),
+        //                 'domaine' => 
+        //             ));
+        $refChilds = $this->get('hopitalnumerique_reference.manager.reference')->getRefsByDomaineByParent(
+                intval( $rechercheParcoursDetails->getReference()->getId() ), 
+                $domaineId
+        );
         $refChildSelected = null;
 
         $referencesTemp = array();
@@ -341,9 +349,6 @@ class RechercheParcoursDetailsController extends Controller
             }
         }
 
-        $request       = $this->get('request');
-        $domaineId     = $request->getSession()->get('domaineId');
-
         //Récupérations
         $refsPonderees = $this->get('hopitalnumerique_reference.manager.reference')->getReferencesPonderees();
         $objets        = $this->get('hopitalnumerique_recherche.manager.search')->getObjetsForRecherche( $references, $role, $refsPonderees );
@@ -370,8 +375,8 @@ class RechercheParcoursDetailsController extends Controller
         if($rechercheParcoursDetails->getShowChildren())
         {
             //Récupérations
-            $objetsParents         = $this->get('hopitalnumerique_recherche.manager.search')->getObjetsForRecherche( $referencesParent, $role, $refsPonderees );
-            $objetsParents         = $this->get('hopitalnumerique_objet.manager.consultation')->updateObjetsWithConnectedUser( $domaineId, $objetsParents, $user );
+            $objetsParents = $this->get('hopitalnumerique_recherche.manager.search')->getObjetsForRecherche( $referencesParent, $role, $refsPonderees );
+            $objetsParents = $this->get('hopitalnumerique_objet.manager.consultation')->updateObjetsWithConnectedUser( $domaineId, $objetsParents, $user );
 
             foreach ($objetsParents as $key => $objet) 
             {

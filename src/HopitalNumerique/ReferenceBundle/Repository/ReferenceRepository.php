@@ -129,7 +129,21 @@ class ReferenceRepository extends EntityRepository
         return $qb;
     }
 
-
+    public function getRefsByDomaineByParent($idParent, $idDomaine)
+    {
+        $qb = $this->_em->createQueryBuilder();
+        $qb->select('ref')
+            ->from('HopitalNumeriqueReferenceBundle:Reference', 'ref')
+            ->innerJoin('ref.domaines', 'domaine', Join::WITH, 'domaine.id = :idDomaine')
+            ->innerJoin('ref.parent', 'par', Join::WITH, 'par.id = :idParent')
+            ->setParameters(array(
+                'idDomaine' => $idDomaine,
+                'idParent'  => $idParent,
+            ))
+            ->orderBy('ref.order');
+            
+        return $qb;
+    }
 
     /**
      * Récupère les différents ref_code des références

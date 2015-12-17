@@ -8,10 +8,6 @@
                 'etape':etapesSelected.reference.libelle|minifieMoi(),
                 'idRefEtapeChild':referenceChild.id,
                 'libRefEtapeChild':referenceChild.libelle|minifieMoi()}) }}" 
-                {#% if app.user and etapesSelected.id in notesMoyenneParEtape|keys %}
-                    title="Taux de maîtrise de l'étape : {{notesMoyenneParEtape[etapesSelected.id]}} %"
-                {% endif %#}
-
             >
                 {{referenceChild.libelle}}
             </a>

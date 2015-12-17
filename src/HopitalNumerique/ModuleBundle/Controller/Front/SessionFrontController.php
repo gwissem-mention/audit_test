@@ -186,14 +186,28 @@ class SessionFrontController extends Controller
         $inscriptions        = $this->get('hopitalnumerique_module.manager.inscription')->findBy(array('session' => $session));
         $refParticipation    = $this->get('hopitalnumerique_reference.manager.reference')->findOneById(411);
         $refPasParticipation = $this->get('hopitalnumerique_reference.manager.reference')->findOneById(412);
+        $refEval             = $this->get('hopitalnumerique_reference.manager.reference')->findOneById(28);
+        $refEvalCanceled     = $this->get('hopitalnumerique_reference.manager.reference')->findOneById(27);
 
+        $mails = array();
         foreach ($inscriptions as &$inscription) {
             if(in_array($inscription->getId(), $inscriptionsId)){
+                $etatparticip = $inscription->getEtatParticipation()->getId();
                 $inscription->setEtatParticipation($refParticipation);
+                $inscription->setEtatEvaluation($refEval);
+                //Envoyer mail du formulaire d'évluation de la session
+                if(411 != $etatparticip)
+                   $mails = array_merge($mails, $this->get('nodevo_mail.manager.mail')->sendFormulaireEvaluationsMassMail(array($inscription),array()));
             }
             else{
                 $inscription->setEtatParticipation($refPasParticipation);
+                $inscription->setEtatEvaluation($refEvalCanceled);
             }
+        }
+
+        foreach ($mails as $mail)
+        {
+            $this->get('mailer')->send($mail);
         }
 
         $this->get('hopitalnumerique_module.manager.inscription')->save($inscriptions);
