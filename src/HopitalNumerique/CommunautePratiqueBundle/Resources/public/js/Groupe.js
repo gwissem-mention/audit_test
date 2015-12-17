@@ -13,7 +13,8 @@ $(document).ready(function() {
  * Initialisation.
  */
 CommunautePratique_Groupe.init = function() {
-    CommunautePratique_Groupe.fixeHauteurBlocs();
+    // Timeout car parfois, la hauteur du bloc "Mes groupes en cours" n'est pas la bonne au chargement
+    setTimeout(function() { CommunautePratique_Groupe.fixeHauteurBlocs(); }, 500);
 };
 
 /**
@@ -44,12 +45,12 @@ CommunautePratique_Groupe.fixeHauteurBlocs = function()
 
             if (colonneGaucheHeight < colonneDroiteHeight)
             {
-                $('.tab-content').height(colonneDroiteHeight - blocGroupesCourantsOngletsHeight);
+                $('.tab-content').height(colonneDroiteHeight - blocGroupesCourantsOngletsHeight - parseInt($('.tab-content').css('paddingTop')) - parseInt($('.tab-content').css('paddingBottom')));
             }
             else if (colonneGaucheHeight > colonneDroiteHeight)
             {
-                $('.tab-content').height(blocGroupesCourantsContenuHeight - parseInt($('.tab-content').css('paddingTop')) - parseInt($('.tab-content').css('paddingBottom')) - 105);
-                $('.communaute-de-pratiques-bloc-mes-groupes').height(colonneGaucheHeight - blocGroupePublicationsHeight - parseInt($('.communaute-de-pratiques-bloc-mes-groupes').css('marginTop')) - parseInt($('.communaute-de-pratiques-bloc-mes-groupes').css('marginBottom')) - 105);
+                $('.tab-content').height(blocGroupesCourantsContenuHeight - parseInt($('.tab-content').css('paddingTop')) - parseInt($('.tab-content').css('paddingBottom')));
+                $('.communaute-de-pratiques-bloc-mes-groupes').height(colonneGaucheHeight - blocGroupePublicationsHeight - parseInt($('.communaute-de-pratiques-bloc-mes-groupes').css('marginTop')) - parseInt($('.communaute-de-pratiques-bloc-mes-groupes').css('marginBottom')));
             }
         }
         else
