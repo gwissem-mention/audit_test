@@ -170,17 +170,17 @@ class QuestionnaireManager extends BaseManager
             switch($reponse->getQuestion()->getTypeQuestion()->getLibelle())
             {
                 case 'entityradio':
-            	case 'entity':
+                case 'entity':
                     $candidature .= '<li><strong>' . $reponse->getQuestion()->getLibelle() . '</strong> : '; 
                     if(!is_null($reponse->getReference()))
                     {
                         $candidature .= $reponse->getReference()->getLibelle();
                     }
-            	    $candidature .= "</li>";
-            	    break;
-            	case 'checkbox':
-            	    $candidature .= '<li><strong>' . $reponse->getQuestion()->getLibelle() . '</strong> : ' . ('1' == $reponse->getReponse() ? 'Oui' : 'Non' ). "</li>";
-            	    break;
+                    $candidature .= "</li>";
+                    break;
+                case 'checkbox':
+                    $candidature .= '<li><strong>' . $reponse->getQuestion()->getLibelle() . '</strong> : ' . ('1' == $reponse->getReponse() ? 'Oui' : 'Non' ). "</li>";
+                    break;
                 case 'etablissement':
                     $candidature .= '<li><strong>' . $reponse->getQuestion()->getLibelle() . '</strong> : '; 
                     if(!is_null($reponse->getEtablissement()))
@@ -213,9 +213,9 @@ class QuestionnaireManager extends BaseManager
                     }
                     $candidature .= "</ul></li>";
                     break;
-            	default:
-            	    $candidature .= '<li><strong>' . $reponse->getQuestion()->getLibelle() . '</strong> : ' . $reponse->getReponse() . "</li>";
-            	    break;
+                default:
+                    $candidature .= '<li><strong>' . $reponse->getQuestion()->getLibelle() . '</strong> : ' . $reponse->getReponse() . "</li>";
+                    break;
             }
         }
         $candidature .= '</ul>';
@@ -236,7 +236,7 @@ class QuestionnaireManager extends BaseManager
         $questionnaire = $this->findOneBy( array('id' => $idQuestionnaire) );
 
         //prepare colonnes
-        $colonnes = array( 'id' => 'id_utilisateur', 'user' => 'Prénom et Nom de l\'utilisateur' );
+        $colonnes = array( 'id' => 'id_utilisateur', 'occurrence' => 'Titre de l\'occurrence', 'user' => 'Prénom et Nom de l\'utilisateur' );
         $emptyRow = array( 'id' => '' );
         $questions = $questionnaire->getQuestions();
         foreach($questions as $question){
@@ -249,80 +249,110 @@ class QuestionnaireManager extends BaseManager
         $datas = array();
         foreach($users as $user)
         {
-            //prepare user infos
-            $row         = array_merge(array(), $emptyRow); //use this to clone the empty table $emptyRow => make sure we have at least an empty data
-            $row['id']   = $user->getId();
-            $row['user'] = $user->getPrenomNom();
-
-            //get reponses
-            $reponses = $this->_managerReponse->reponsesByQuestionnaireByUser( $idQuestionnaire, $user->getId(), true );
-            foreach($reponses as $reponse)
-            {
-                $question = $reponse->getQuestion();
-
-                //on récupère toutes les question sauf les types fichiers
-                if( $question->getTypeQuestion()->getLibelle() != 'file')
-                {
-                    //identifiant de la question
-                    $field = 'question'.$question->getId();
-
-                    switch ($question->getTypeQuestion()->getLibelle())
-                    {
-                        case 'entity':
-                            $row[$field] = is_null($reponse->getReference()) ? '-' : $reponse->getReference()->getLibelle();
-                            break;
-                        case 'entityradio':
-                            $row[$field] = is_null($reponse->getReference()) ? '-' : $reponse->getReference()->getLibelle();
-                            break;
-                        case 'entitymultiple':
-                            //Si il y a des réponses à exporter on exporte les libellés des références concaténés
-                            if(is_null($reponse->getReferenceMulitple()))
-                            {
-                                $row[$field] = '-';
-                            }
-                            else
-                            {
-                                $lib = '';
-                                $compteur = 0;
-                                foreach ($reponse->getReferenceMulitple() as $reference) 
-                                {
-                                    $compteur++;
-                                    //Récupération du libellé de la référence + ajout d'un tiret si on est pas à la fin
-                                    $lib .= $reference->getLibelle() . ($compteur == count($reponse->getReferenceMulitple()) ? '' : ' - ');
-                                }
-                                $row[$field] = $lib;
-                            }
-                            break;
-                        case 'entitycheckbox':
-                            //Si il y a des réponses à exporter on exporte les libellés des références concaténés
-                            if(is_null($reponse->getReferenceMulitple()))
-                            {
-                                $row[$field] = '-';
-                            }
-                            else
-                            {
-                                $lib = '';
-                                $compteur = 0;
-                                foreach ($reponse->getReferenceMulitple() as $reference) 
-                                {
-                                    $compteur++;
-                                    //Récupération du libellé de la référence + ajout d'un tiret si on est pas à la fin
-                                    $lib .= $reference->getLibelle() . ($compteur == count($reponse->getReferenceMulitple()) ? '' : ' - ');
-                                }
-                                $row[$field] = $lib;
-                            }
-                            break;
-                        case 'checkbox':
-                            $row[$field] = ('1' == $reponse->getReponse() ? 'Oui' : 'Non' );
-                            break;
-                        default:
-                            $row[$field] = $reponse->getReponse();
-                            break;
-                    }
+            $occurrenceReponses = array();
+            if ($questionnaire->isOccurrenceMultiple()) {
+                foreach ($this->occurrenceManager->findBy(array('questionnaire' => $questionnaire, 'user' => $user)) as $occurrence) {
+                    $occurrenceReponses[] = $this->_managerReponse->reponsesByQuestionnaireByUser($idQuestionnaire, $user->getId(), true, $occurrence);
                 }
+            } else {
+                $occurrenceReponses[] = $this->_managerReponse->reponsesByQuestionnaireByUser( $idQuestionnaire, $user->getId(), true );
             }
 
-            $datas[] = $row;
+            foreach ($occurrenceReponses as $reponses) {
+                //prepare user infos
+                $row         = array_merge(array(), $emptyRow); //use this to clone the empty table $emptyRow => make sure we have at least an empty data
+                $row['id']   = $user->getId();
+
+                $reponsesIndexes = array_keys($reponses);
+                $row['occurrence']   = (count($reponses) > 0 ? (null !== $reponses[$reponsesIndexes[0]]->getOccurrence() ? $reponses[$reponsesIndexes[0]]->getOccurrence()->getLibelle() : '') : '');
+                $row['user'] = $user->getPrenomNom();
+
+                foreach($reponses as $reponse)
+                {
+                    $question = $reponse->getQuestion();
+
+                    //on récupère toutes les question sauf les types fichiers
+                    if( $question->getTypeQuestion()->getLibelle() != 'file')
+                    {
+                        //identifiant de la question
+                        $field = 'question'.$question->getId();
+
+                        switch ($question->getTypeQuestion()->getLibelle())
+                        {
+                            case 'entity':
+                                $row[$field] = is_null($reponse->getReference()) ? '-' : $reponse->getReference()->getLibelle();
+                                break;
+                            case 'entityradio':
+                                $row[$field] = is_null($reponse->getReference()) ? '-' : $reponse->getReference()->getLibelle();
+                                break;
+                            case 'entitymultiple':
+                                //Si il y a des réponses à exporter on exporte les libellés des références concaténés
+                                if(is_null($reponse->getReferenceMulitple()))
+                                {
+                                    $row[$field] = '-';
+                                }
+                                else
+                                {
+                                    $lib = '';
+                                    $compteur = 0;
+                                    foreach ($reponse->getReferenceMulitple() as $reference) 
+                                    {
+                                        $compteur++;
+                                        //Récupération du libellé de la référence + ajout d'un tiret si on est pas à la fin
+                                        $lib .= $reference->getLibelle() . ($compteur == count($reponse->getReferenceMulitple()) ? '' : ' - ');
+                                    }
+                                    $row[$field] = $lib;
+                                }
+                                break;
+                            case 'etablissementmultiple':
+                                //Si il y a des réponses à exporter on exporte les libellés des références concaténés
+                                if(is_null($reponse->getEtablissementMulitple()))
+                                {
+                                    $row[$field] = '-';
+                                }
+                                else
+                                {
+                                    $lib = '';
+                                    $compteur = 0;
+                                    foreach ($reponse->getEtablissementMulitple() as $etablissement) 
+                                    {
+                                        $compteur++;
+                                        $lib .= $etablissement->getNom() . ($compteur == count($reponse->getEtablissementMulitple()) ? '' : ' - ');
+                                    }
+                                    $row[$field] = $lib;
+                                }
+                                break;
+                            case 'entitycheckbox':
+                                //Si il y a des réponses à exporter on exporte les libellés des références concaténés
+                                if(is_null($reponse->getReferenceMulitple()))
+                                {
+                                    $row[$field] = '-';
+                                }
+                                else
+                                {
+                                    $lib = '';
+                                    $compteur = 0;
+                                    foreach ($reponse->getReferenceMulitple() as $reference) 
+                                    {
+                                        $compteur++;
+                                        //Récupération du libellé de la référence + ajout d'un tiret si on est pas à la fin
+                                        $lib .= $reference->getLibelle() . ($compteur == count($reponse->getReferenceMulitple()) ? '' : ' - ');
+                                    }
+                                    $row[$field] = $lib;
+                                }
+                                break;
+                            case 'checkbox':
+                                $row[$field] = ('1' == $reponse->getReponse() ? 'Oui' : 'Non' );
+                                break;
+                            default:
+                                $row[$field] = $reponse->getReponse();
+                                break;
+                        }
+                    }
+                }
+
+                $datas[] = $row;
+            }
         }
 
         return array('colonnes' => $colonnes, 'datas' => $datas );
@@ -340,6 +370,17 @@ class QuestionnaireManager extends BaseManager
     }
     
     /**
+     * Retourne les questionnaires d'un domaine.
+     * 
+     * @param \HopitalNumerique\DomaineBundle\Entity\Domaine $domaine Domaine
+     * @return \Doctrine\Common\Collections\Collection Questionnaires
+     */
+    public function findByDomaine(Domaine $domaine)
+    {
+        return $this->getRepository()->findByDomaine($domaine);
+    }
+
+    /*
      * Si le questionnaire a été répondu sans que le formulaire fut en occurrence multiple, créé l'occurrence multiple pour ces réponses.
      * 
      * @param \HopitalNumerique\QuestionnaireBundle\Entity\Questionnaire $questionnaire Questionnaire
