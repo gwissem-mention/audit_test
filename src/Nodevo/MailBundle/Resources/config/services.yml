@@ -9,7 +9,7 @@ parameters:
 services:
     nodevo_mail.manager.mail:
         class: "%nodevo_mail.manager.mail.class%"
-        arguments: ["@doctrine.orm.entity_manager", "@mailer", "@twig", "@router", "@request_stack", "@session", "@hopitalnumerique_domaine.manager.domaine", "%nodevo_mail.options%"]
+        arguments: ["@doctrine.orm.entity_manager", "@mailer", "@twig", "@router", "@request_stack", "@session", "@hopitalnumerique_domaine.manager.domaine", "@hopitalnumerique_user.manager.user", "%nodevo_mail.options%"]
         calls:
            - [ setCache, [ "@liip_doctrine_cache.ns.main" ] ]
 
