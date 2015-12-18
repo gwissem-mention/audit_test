@@ -21,6 +21,14 @@ table.table th, table.table td { border: 1px solid #ddd;padding:4px; }
     border-color: #16A085;
 }
 
+.panel-footer.session-inscription .row{
+    margin: 0;
+}
+
+#panel-inscription .tableContent {
+    padding:25px 0;
+}
+
 @media screen and (max-width: 991px) {
     #registre-ambassadeur .lienTableauDeBord{display:none;}
 }
