@@ -16,7 +16,12 @@ class PublicationController extends Controller
     public function objetAction(Request $request, Objet $objet)
     {
         $domaineId = $request->getSession()->get('domaineId');
-        $domaine   = $this->get('hopitalnumerique_domaine.manager.domaine')->findOneById($domaineId);
+
+        if (!in_array($domaineId, $objet->getDomainesId())) {
+            throw $this->createNotFoundException("La publication n'appartient pas au domaine courant.");
+        }
+
+        $domaine = $this->get('hopitalnumerique_domaine.manager.domaine')->findOneById($domaineId);
 
         //objet visualisation
         if(!$this->get('security.context')->isGranted('ROLE_ADMINISTRATEUR_1'))
@@ -30,7 +35,6 @@ class PublicationController extends Controller
             $urlPublication = $this->generateUrl('hopital_numerique_publication_publication_objet', array('id' => $objet->getId()));
             $urlPublication = rtrim(strtr(base64_encode($urlPublication), '+/', '-_'), '=');
             return $this->redirect( $this->generateUrl('account_login', array('urlToRedirect' => $urlPublication) ) );
-            // return $this->redirect( $this->generateUrl('hopital_numerique_homepage') );
         }
         
         //Types objet
@@ -140,6 +144,10 @@ class PublicationController extends Controller
         $domaine   = $this->get('hopitalnumerique_domaine.manager.domaine')->findOneById($domaineId);
 
         $objet = $this->get('hopitalnumerique_objet.manager.objet')->findOneBy( array( 'id' => $id ) );
+
+        if (!in_array($domaineId, $objet->getDomainesId())) {
+            throw $this->createNotFoundException("La publication n'appartient pas au domaine courant.");
+        }
 
         //Si l'user connecté à le rôle requis pour voir l'objet
         if( $this->checkAuthorization( $objet ) === false )
@@ -300,9 +308,14 @@ class PublicationController extends Controller
     /**
      * Article Action
      */
-    public function articleAction($categorie, $id, $alias)
+    public function articleAction(Request $request, $categorie, $id, $alias)
     {
+        $domaineId = $request->getSession()->get('domaineId');
         $objet = $this->get('hopitalnumerique_objet.manager.objet')->findOneBy( array( 'id' => $id ) );
+
+        if (!in_array($domaineId, $objet->getDomainesId())) {
+            throw $this->createNotFoundException("La publication n'appartient pas au domaine courant.");
+        }
 
         //Si l'user connecté à le rôle requis pour voir l'objet
         if( $this->checkAuthorization( $objet ) === false )
@@ -314,7 +327,6 @@ class PublicationController extends Controller
         }
 
         //on récupère l'item de menu courant
-        $request     = $this->get('request');
         $routeName   = $request->get('_route');
         $routeParams = json_encode($request->get('_route_params'));
         $item        = $this->get('nodevo_menu.manager.item')->findOneBy( array('route'=>$routeName, 'routeParameters'=>$routeParams) );
