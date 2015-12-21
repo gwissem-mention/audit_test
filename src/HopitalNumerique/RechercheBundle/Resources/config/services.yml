@@ -22,31 +22,31 @@ services:
         class: %hopitalnumerique_recherche.manager.requete.class%
         arguments: ["@doctrine.orm.entity_manager"]
         calls:
-           - [ setCache, [ @liip_doctrine_cache.ns.main ] ]
+           - [ setCache, ["@liip_doctrine_cache.ns.main"] ]
 
     hopitalnumerique_recherche.manager.expbesoin:
         class: %hopitalnumerique_recherche.manager.expbesoin.class%
         arguments: ["@doctrine.orm.entity_manager"]
         calls:
-           - [ setCache, [ @liip_doctrine_cache.ns.main ] ]
+           - [ setCache, ["@liip_doctrine_cache.ns.main"] ]
 
     hopitalnumerique_recherche.manager.expbesoinreponses:
         class: %hopitalnumerique_recherche.manager.expbesoinreponses.class%
         arguments: ["@doctrine.orm.entity_manager", "@hopitalnumerique_user.manager.user", "@hopitalnumerique_reference.manager.reference"]
         calls:
-           - [ setCache, [ @liip_doctrine_cache.ns.main ] ]
+           - [ setCache, ["@liip_doctrine_cache.ns.main"] ]
 
     hopitalnumerique_recherche.manager.refexpbesoinreponses:
         class: %hopitalnumerique_recherche.manager.refexpbesoinreponses.class%
         arguments: ["@doctrine.orm.entity_manager"]
         calls:
-           - [ setCache, [ @liip_doctrine_cache.ns.main ] ]
+           - [ setCache, ["@liip_doctrine_cache.ns.main"] ]
 
     hopitalnumerique_recherche.manager.statClic:
         class: %hopitalnumerique_recherche.manager.statClic.class%
         arguments: ["@doctrine.orm.entity_manager"]
         calls:
-           - [ setCache, [ @liip_doctrine_cache.ns.main ] ]
+           - [ setCache, ["@liip_doctrine_cache.ns.main"] ]
 
     hopitalnumerique_recherche.service.logger.cronlogger:
         class: "%hopitalnumerique_recherche.service.logger.cronlogger.class%"
@@ -57,7 +57,7 @@ services:
         class: %hopitalnumerique_recherche.manager.expbesoingestion.class%
         arguments: ["@doctrine.orm.entity_manager", "@hopitalnumerique_user.manager.user"]
         calls:
-           - [ setCache, [ @liip_doctrine_cache.ns.main ] ]
+           - [ setCache, ["@liip_doctrine_cache.ns.main"] ]
 
     hopitalnumerique_recherche.grid.expbesoingestion:
         class: %hopitalnumerique_recherche.grid.expbesoingestion.class%

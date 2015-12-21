@@ -20,37 +20,37 @@ services:
         class: %hopitalnumerique_objet.manager.objet.class%
         arguments: ["@doctrine.orm.entity_manager", "@hopitalnumerique_objet.manager.contenu", "@hopitalnumerique_objet.manager.note", "@session", "@hopitalnumerique_user.manager.user", "@hopitalnumerique_reference.manager.reference"]
         calls:
-           - [ setCache, [ @liip_doctrine_cache.ns.main ] ]
+           - [ setCache, ["@liip_doctrine_cache.ns.main"] ]
 
     hopitalnumerique_objet.manager.contenu:
         class: %hopitalnumerique_objet.manager.contenu.class%
         arguments: ["@doctrine.orm.entity_manager", "@hopitalnumerique_user.manager.user", "@hopitalnumerique_reference.manager.reference"]
         calls:
-           - [ setCache, [ @liip_doctrine_cache.ns.main ] ]
+           - [ setCache, ["@liip_doctrine_cache.ns.main"] ]
 
     hopitalnumerique_objet.manager.refobjet:
         class: %hopitalnumerique_objet.manager.refobjet.class%
         arguments: ["@doctrine.orm.entity_manager"]
         calls:
-           - [ setCache, [ @liip_doctrine_cache.ns.main ] ]
+           - [ setCache, ["@liip_doctrine_cache.ns.main"] ]
 
     hopitalnumerique_objet.manager.refcontenu:
         class: %hopitalnumerique_objet.manager.refcontenu.class%
         arguments: ["@doctrine.orm.entity_manager"]
         calls:
-           - [ setCache, [ @liip_doctrine_cache.ns.main ] ]
+           - [ setCache, ["@liip_doctrine_cache.ns.main"] ]
 
     hopitalnumerique_objet.manager.consultation:
         class: %hopitalnumerique_objet.manager.consultation.class%
         arguments: ["@doctrine.orm.entity_manager","@security.context"]
         calls:
-           - [ setCache, [ @liip_doctrine_cache.ns.main ] ]
+           - [ setCache, ["@liip_doctrine_cache.ns.main"] ]
 
     hopitalnumerique_objet.manager.fichiermodifiable:
         class: %hopitalnumerique_objet.manager.fichiermodifiable.class%
         arguments: ["@doctrine.orm.entity_manager","@security.context"]
         calls:
-           - [ setCache, [ @liip_doctrine_cache.ns.main ] ]
+           - [ setCache, ["@liip_doctrine_cache.ns.main"] ]
 
     #forms
     hopitalnumerique_objet.form.objet:
@@ -89,7 +89,7 @@ services:
         class: %hopitalnumerique_objet.manager.commentaire.class%
         arguments: ["@doctrine.orm.entity_manager"]
         calls:
-           - [ setCache, [ @liip_doctrine_cache.ns.main ] ]
+           - [ setCache, ["@liip_doctrine_cache.ns.main"] ]
     #--Grid
     hopitalnumerique_objet.grid.commentaire:
         class: %hopitalnumerique_objet.grid.commentaire.class%
@@ -107,4 +107,4 @@ services:
         class: %hopitalnumerique_objet.manager.note.class%
         arguments: ["@doctrine.orm.entity_manager"]
         calls:
-           - [ setCache, [ @liip_doctrine_cache.ns.main ] ]
+           - [ setCache, ["@liip_doctrine_cache.ns.main"] ]

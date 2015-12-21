@@ -8,7 +8,7 @@ services:
         class: %hopitalnumerique_report.manager.report.class%
         arguments: ["@doctrine.orm.entity_manager", "@hopitalnumerique_user.manager.user"]
         calls:
-           - [ setCache, [ @liip_doctrine_cache.ns.main ] ]
+           - [ setCache, ["@liip_doctrine_cache.ns.main"] ]
 
     hopitalnumerique_report.grid.report:
         class: %hopitalnumerique_report.grid.report.class%

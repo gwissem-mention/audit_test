@@ -14,7 +14,7 @@ services:
             - "@doctrine.orm.entity_manager"
             - [ "@hopitalnumerique_intervention.manager.intervention_demande", "@hopitalnumerique_reference.manager.reference", "@hopitalnumerique_module.manager.inscription"]
         calls:
-           - [ setCache, [ @liip_doctrine_cache.ns.main ] ]
+           - [ setCache, ["@liip_doctrine_cache.ns.main"] ]
 
     hopitalnumerique_paiement.grid.facture:
         class: %hopitalnumerique_paiement.grid.facture.class%
@@ -25,4 +25,4 @@ services:
         class: %hopitalnumerique_paiement.manager.remboursement.class%
         arguments: ["@doctrine.orm.entity_manager"]
         calls:
-           - [ setCache, [ @liip_doctrine_cache.ns.main ] ]
+           - [ setCache, ["@liip_doctrine_cache.ns.main"] ]
