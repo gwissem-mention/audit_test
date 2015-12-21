@@ -236,7 +236,7 @@ class QuestionnaireManager extends BaseManager
         $questionnaire = $this->findOneBy( array('id' => $idQuestionnaire) );
 
         //prepare colonnes
-        $colonnes = array( 'id' => 'id_utilisateur', 'occurrence' => 'Titre de l\'occurrence', 'user' => 'Prénom et Nom de l\'utilisateur' );
+        $colonnes = array( 'id' => 'id_utilisateur', 'occurrence' => 'Titre de l\'occurrence', 'user' => 'Prénom et Nom de l\'utilisateur', 'date_saisie' => 'Date de saisie' );
         $emptyRow = array( 'id' => '' );
         $questions = $questionnaire->getQuestions();
         foreach($questions as $question){
@@ -266,6 +266,13 @@ class QuestionnaireManager extends BaseManager
                 $reponsesIndexes = array_keys($reponses);
                 $row['occurrence']   = (count($reponses) > 0 ? (null !== $reponses[$reponsesIndexes[0]]->getOccurrence() ? $reponses[$reponsesIndexes[0]]->getOccurrence()->getLibelle() : '') : '');
                 $row['user'] = $user->getPrenomNom();
+
+
+                if($reponses[$reponsesIndexes[0]]->getDateCreation() !== null) {
+                    $row['date_saisie'] = $reponses[$reponsesIndexes[0]]->getDateCreation()->format('Y-m-d H:i:s');
+                } else {
+                    $row['date_saisie'] = '';
+                }
 
                 foreach($reponses as $reponse)
                 {
