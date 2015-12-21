@@ -10,6 +10,7 @@
             </div>
         </div>
         <div class="col-md-8 col-sm-8 col-xm-8 no-padding">
+            <div id="question-precedente" onclick="retourDerniereQuestion({{expBesoin.id}});" class="btn btn-link pull-left" title="Question précédente" style="margin-right:5px;"><i class="fa fa-reply"></i></div>
             {% for reponse in expBesoin.reponses %}
                 {# Include vue de l'étape #}
                 {% include 'HopitalNumeriqueRechercheBundle:ExpBesoin:Fancy/Partial/expbesoin_nopopin_formulaire_reponse.html.twig' with { 'reponse' : reponse, 'question' : expBesoin } %}
