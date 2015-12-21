@@ -26,6 +26,35 @@ class ResultatController extends Controller
     }
 
     /**
+     * Suppression de masse des résultats
+     *
+     * @param array $primaryKeys    ID des lignes sélectionnées
+     * @param array $allPrimaryKeys allPrimaryKeys ???
+     *
+     * @return Redirect
+     */
+    public function deleteMassAction( $primaryKeys, $allPrimaryKeys )
+    {
+        if($allPrimaryKeys == 1){
+            $rawDatas = $this->get('hopitalnumerique_autodiag.grid.resultat')->getRawData();
+            foreach($rawDatas as $data)
+                $primaryKeys[] = $data['id'];
+        }
+
+        //get all selected resultats
+        $resultats = $this->get('hopitalnumerique_autodiag.manager.resultat')->findBy( array('id' => $primaryKeys) );
+
+        $idOutil = count($resultats) > 0 ? $resultats[0]->getOutil()->getId() : null;
+
+        $this->get('hopitalnumerique_autodiag.manager.resultat')->delete( $resultats );
+
+        //inform user connected
+        $this->get('session')->getFlashBag()->add('info', 'Supression effectuée avec succès.' );
+
+        return $this->redirect( $this->generateUrl('hopitalnumerique_autodiag_resultat', array('id' => $idOutil)) );
+    }
+
+    /**
      * Affiche le détail d'un résultat
      */
     public function detailAction( Resultat $resultat )
