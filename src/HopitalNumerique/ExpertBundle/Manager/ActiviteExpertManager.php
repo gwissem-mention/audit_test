@@ -100,8 +100,10 @@ class ActiviteExpertManager extends BaseManager
                 }
                 else
                 {
-                    for ($i=0; $i <= $evenement->getNbVacation(); $i++) 
-                    { 
+                    for ($i=0; $i <= $evenement->getNbVacation(); $i++) { 
+                        if (!array_key_exists($compteurDateFictive, $activiteExpert->getDateFictives())) {
+                            break;
+                        }
                         $experts[$expertPresence->getExpertConcerne()->getId()][$activiteExpert->getDateFictives()[$compteurDateFictive]->getDate()->format('d/m/y')] = array(
                             'fictive'     => 'true',
                             'nbVacations' => 1
