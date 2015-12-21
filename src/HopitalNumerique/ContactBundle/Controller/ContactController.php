@@ -76,16 +76,20 @@ class ContactController extends NodevoController
                 );
                 $mailsAEnvoyer = $this->get('nodevo_mail.manager.mail')->sendContactMail($mailsContact, $variablesTemplate);
 
-                foreach($mailsAEnvoyer as $mailAEnvoyer)
-                {
-                    $this->get('mailer')->send($mailAEnvoyer);
-                }
-                
-                //On utilise notre Manager pour gérer la sauvegarde de l'objet
-                $this->get('hopital_numerique_contact.manager.contact')->save($contact);
+                if($mailsAEnvoyer[0] == null) {
+                    $this->get('session')->getFlashBag()->add( 'danger' , 'Votre message n\'a pas été envoyé, le destinataire est inactif.' );
+                } else {
+                    foreach($mailsAEnvoyer as $mailAEnvoyer)
+                    {
+                        $this->get('mailer')->send($mailAEnvoyer);
+                    }
 
-                // On envoi une 'flash' pour indiquer à l'utilisateur que l'entité est ajoutée
-                $this->get('session')->getFlashBag()->add( 'success' , 'Votre message a bien été envoyé, nous vous recontacterons prochainement.' );
+                    //On utilise notre Manager pour gérer la sauvegarde de l'objet
+                    $this->get('hopital_numerique_contact.manager.contact')->save($contact);
+
+                    // On envoi une 'flash' pour indiquer à l'utilisateur que l'entité est ajoutée
+                    $this->get('session')->getFlashBag()->add( 'success' , 'Votre message a bien été envoyé, nous vous recontacterons prochainement.' );
+                }
 
                 return $this->redirect( $this->generateUrl($routeRedirection) );
             }

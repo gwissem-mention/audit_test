@@ -75,13 +75,21 @@ class SessionFrontController extends Controller
 
         //Envoyer mail de refus de l'inscription
         $mails = $this->get('nodevo_mail.manager.mail')->sendRappelInscriptionMail($inscriptions,array());
+        $i = 0;
         foreach ($mails as $mail)
         {
-            $this->get('mailer')->send($mail);
+            $mail_send = $this->get('mailer')->send($mail);
+            if($mail_send[0] == null) {
+                $i++;
+            }
         }
         
         // On envoi une 'flash' pour indiquer à l'utilisateur que le fichier n'existe pas: suppression manuelle sur le serveur
         $this->get('session')->getFlashBag()->add( ('success') , 'Mails de rappel envoyé aux utilisateurs acceptés à cette session.' );
+
+        if($i != 0) {
+            $this->get('session')->getFlashBag()->add( ('danger') , "Le mail n'a pas été envoyé à " . $i . " utilisateur(s) inactif(s)." );
+        }
 
         return new Response('Mails de rappel envoyés.');
     }

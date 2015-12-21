@@ -2,6 +2,7 @@
 
 namespace Nodevo\MailBundle\Manager;
 
+
 use Nodevo\ToolsBundle\Manager\Manager as BaseManager;
 use Doctrine\ORM\EntityManager;
 use Symfony\Component\HttpFoundation\RequestStack;
@@ -13,7 +14,7 @@ use Symfony\Component\HttpFoundation\Request;
 use HopitalNumerique\DomaineBundle\Manager\DomaineManager;
 use HopitalNumerique\UserBundle\Entity\User;
 use HopitalNumerique\AutodiagBundle\Entity\Outil;
-
+use HopitalNumerique\UserBundle\Manager\UserManager;
 /**
  * Manager de l'entité Mail.
  */
@@ -50,6 +51,7 @@ class MailManager extends BaseManager
 
     private $_session;
     private $_domaineManager;
+    private $_userManager;
     private $_optionsMail = array();
 
     /**
@@ -58,7 +60,7 @@ class MailManager extends BaseManager
      * @param EntityManager $em Entity      Manager de Doctrine
      * @param Array         $options        Tableau d'options
      */
-    public function __construct(EntityManager $em, \Swift_Mailer $mailer, \Twig_Environment $twig, $router, RequestStack $requestStack, $session, DomaineManager $domaineManager, $options = array())
+    public function __construct(EntityManager $em, \Swift_Mailer $mailer, \Twig_Environment $twig, $router, RequestStack $requestStack, $session, DomaineManager $domaineManager, UserManager $userManager,$options = array())
     {        
         parent::__construct($em);
         
@@ -76,6 +78,7 @@ class MailManager extends BaseManager
 
         $this->_session        = $session;
         $this->_domaineManager = $domaineManager;
+        $this->_userManager    = $userManager;
 
         $this->setOptions();
     }
@@ -131,8 +134,8 @@ class MailManager extends BaseManager
         $mail = $this->findOneById(2);
         $url = $this->_router->generate('fos_user_registration_confirm', array('token' => $user->getConfirmationToken()), true);
         $options['url'] = $url;
-
-        return $this->generationMail($user, $mail, $options);
+        $check = 1;
+        return $this->generationMail($user, $mail, $options, $check);
     }
     
     /**
@@ -325,7 +328,6 @@ class MailManager extends BaseManager
     public function sendAcceptationInscriptionMail( $user, $options )
     {
         $mail = $this->findOneById(31);
-    
         return $this->generationMail($user, $mail, $options);
     }
 
@@ -877,7 +879,7 @@ class MailManager extends BaseManager
      * 
      * @return Swift_Message objet \Swift pour l'envoie du mail
      */
-    private function generationMail( $user, $mail, $options = array() )
+    private function generationMail( $user, $mail, $options = array(), $check=0 )
     {
         $options = $this->getAllOptions($options);
 
@@ -891,7 +893,7 @@ class MailManager extends BaseManager
         $cci     = ($mail->getId() === 1 || $mail->getId() === 2) ? false : $cci;
         $subject = $this->replaceContent($mail->getObjet(), $user, $options);
 
-        return $this->sendMail( $subject, $from, $user->getEmail(), $body, $cci );
+        return $this->sendMail( $subject, $from, $user->getEmail(), $body, $cci, $check );
     }
 
     /**
@@ -942,9 +944,15 @@ class MailManager extends BaseManager
      *
      * @return \Swift_Message
      */
-    private function sendMail( $subject, $from, $destinataire, $body, $bcc = false )
+    private function sendMail( $subject, $from, $destinataire, $body, $bcc = false, $check = 0 )
     {
         $body = quoted_printable_decode($body);
+
+        $user_mail = $this->_userManager->findOneBy(array("email" => $destinataire));
+        
+        if(($user_mail != null && !$user_mail->isActif()) || $check != 0) {
+            return \Swift_Message::newInstance();
+        }
 
         //prepare content HTML
         $bodyHtml = str_replace( array("\r\n","\n"), '<br />', $body );
