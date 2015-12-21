@@ -22,7 +22,7 @@
                     {% for inscription in session.getInscriptionsAccepte() %}
                         <tr class="inscription inscription-{{inscription.id}}" data-id="{{inscription.id}}" >
                             <td align="center">
-                                <input type="checkbox" class="checkbox" id="checkbox-{{inscription.id}}"{% if inscription.etatParticipation.id == 411 %} checked="checked"{% endif %} />
+                                <input type="checkbox" class="checkbox" id="checkbox-{{inscription.id}}"{% if inscription.etatParticipation.id in [411, 410] %} checked="checked"{% endif %} />
                             </td>
 
                             <td>
