@@ -879,7 +879,7 @@ class MailManager extends BaseManager
      * 
      * @return Swift_Message objet \Swift pour l'envoie du mail
      */
-    private function generationMail( $user, $mail, $options = array(), $check )
+    private function generationMail( $user, $mail, $options = array(), $check=0 )
     {
         $options = $this->getAllOptions($options);
 
@@ -949,9 +949,9 @@ class MailManager extends BaseManager
         $body = quoted_printable_decode($body);
 
         $user_mail = $this->_userManager->findOneBy(array("email" => $destinataire));
-
-        if($user_mail != null || !$user_mail->isActif() || !$check) {
-            return null;
+        
+        if(($user_mail != null && !$user_mail->isActif()) || $check != 0) {
+            return \Swift_Message::newInstance();
         }
 
         //prepare content HTML
