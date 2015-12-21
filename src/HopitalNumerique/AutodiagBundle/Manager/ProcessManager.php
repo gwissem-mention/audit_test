@@ -134,6 +134,7 @@ class ProcessManager extends BaseManager
                     
                     $chapitreEnfantArray = array
                     (
+                        'code' => $chapitreEnfant->getCode(),
                         'titre' => $chapitreEnfant->getTitle(),
                         'moyenne' => ceil($chapitreEnfant->getResultatsMoyenne()),
                         'nombreQuestionsRepondues' => $chapitreEnfant->getNombreQuestionsRepondues(),
@@ -158,6 +159,7 @@ class ProcessManager extends BaseManager
                 //-->
             
                 $donneesProcessChapitres[] = array(
+                    'code' => $chapitre->getCode(),
                     'titre' => $chapitre->getTitle(),
                     'enfants' => $donneesProcessChapitresEnfants
                 );

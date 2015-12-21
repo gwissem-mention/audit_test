@@ -171,12 +171,12 @@
                                 <div class="row">
                                     {% for chapitre in process.chapitres %}
                                         <div class="col-md-4">
-                                            <h4 class="text-center">{{ chapitre.titre }}</h4>
+                                            <h4 class="text-center">{{ chapitre.code }}. {{ chapitre.titre }}</h4>
                                             <div class="chapitres">
                                                 {% for chapitreEnfant in chapitre.enfants %}
                                                     <div class="resultat{% if chapitreEnfant.nombreQuestionsRepondues > 0 %} {% if chapitreEnfant.moyenne|number_format(0) >= 66 %} resultat_fort{% elseif chapitreEnfant.moyenne|number_format(0) > 33 %}resultat_moyen{% else %}resultat_faible{% endif %}{% endif %}"{% if chapitreEnfant.nombreQuestionsRepondues > 0 %}
                                                     title="Score : {{ chapitreEnfant.moyenne }}% {% if resultat.synthese %}{# <br />Valeur minimale : {{chapitreEnfant.min}}%<br />Valeur maximale : {{chapitreEnfant.max}}% #}{% endif %}"{% endif %}>
-                                                        {{ chapitreEnfant.titre }}
+                                                        {{ chapitreEnfant.code }}. {{ chapitreEnfant.titre }}
                                                     </div>
                                                 {% endfor %}
                                             </div>
