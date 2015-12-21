@@ -266,7 +266,7 @@ class QuestionnaireManager extends BaseManager
                 $reponsesIndexes = array_keys($reponses);
                 $row['occurrence']   = (count($reponses) > 0 ? (null !== $reponses[$reponsesIndexes[0]]->getOccurrence() ? $reponses[$reponsesIndexes[0]]->getOccurrence()->getLibelle() : '') : '');
                 $row['user'] = $user->getPrenomNom();
-                $row['date_saisie'] = count($reponses) > 0 ? (null !== $reponses[$reponsesIndexes[0]]->getDateCreation() ? $reponses[$reponsesIndexes[0]]->getDateCreation()->format('Y-m-d H:i:s') : '') : '';
+                $row['date_saisie'] = count($reponses) > 0 ? (null !== $reponses[$reponsesIndexes[0]]->getDateCreation() ? $reponses[$reponsesIndexes[0]]->getDateCreation()->format('d-m-Y H:i:s') : '') : '';
 
                 foreach($reponses as $reponse)
                 {
