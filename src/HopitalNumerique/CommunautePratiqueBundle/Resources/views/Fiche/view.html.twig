@@ -33,6 +33,9 @@
     <div class="panel panel-communaute-de-pratiques communaute-de-pratiques-fiche">
         <div class="panel-heading">
             <nav class="actions">
+                {% if fiche|communautePratiqueCanDelete %}
+                    <a onclick="deleteFiche('{{ path('hopitalnumerique_communautepratique_fiche_delete', { fiche:fiche.id }) }}')">Supprimer cette fiche</a> &nbsp;
+                {% endif %}
                 {% if fiche|communautePratiqueCanEdit %}
                     <a href="{{ path('hopitalnumerique_communautepratique_fiche_edit', { fiche:fiche.id }) }}">Éditer cette fiche</a> &nbsp;
                 {% endif %}

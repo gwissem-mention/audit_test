@@ -146,6 +146,18 @@ class Security
     }
 
     /**
+     * Retourne si l'utilisateur courant peut supprimer tel fiche.
+     *
+     * @param \HopitalNumerique\CommunautePratiqueBundle\Entity\Fiche $fiche Fiche
+     * @return boolean VRAI si fiche supprimable
+     */
+    public function canDeleteFiche(Fiche $fiche)
+    {
+        return $this->canEditFiche($fiche);
+    }
+
+
+    /**
      * Retourne si l'utilisateur courant peut résoudre telle fiche.
      *
      * @param \HopitalNumerique\CommunautePratiqueBundle\Entity\Fiche $fiche Fiche

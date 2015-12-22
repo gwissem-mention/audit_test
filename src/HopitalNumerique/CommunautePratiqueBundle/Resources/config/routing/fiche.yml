@@ -19,6 +19,13 @@ hopitalnumerique_communautepratique_fiche_edit:
     requirements:
         fiche: '\d+'
 
+hopitalnumerique_communautepratique_fiche_delete:
+    pattern: '{fiche}/delete'
+    defaults: { _controller: 'HopitalNumeriqueCommunautePratiqueBundle:Fiche:delete' }
+    methods: 'GET|POST'
+    requirements:
+        fiche: '\d+'
+
 hopitalnumerique_communautepratique_fiche_close:
     pattern: '{fiche}/ferme'
     defaults: { _controller: 'HopitalNumeriqueCommunautePratiqueBundle:Fiche:close' }

@@ -102,6 +102,10 @@ class FilterExtension extends \Twig_Extension
             return $this->securityService->canDeleteCommentaire($object);
         }
 
+        if ($object instanceof Fiche) {
+            return $this->securityService->canDeleteFiche($object);
+        }
+
         throw new \Exception('Méthode "communautePratiqueCanDelete" non implémentée pour ce type d\'objet');
     }
 

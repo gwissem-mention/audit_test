@@ -43,3 +43,15 @@ CommunautePratique_Fiche.changeResolution = function(ficheId, resolu)
         }
     });
 };
+
+
+/**
+ * Confirmation suppression fiche
+ */
+
+function deleteFiche(path)
+{
+    if (confirm('Confirmez-vous la suppression définitive de ce commentaire ?')) {
+        window.location = path;
+    }
+}

@@ -81,6 +81,24 @@ class FicheController extends Controller
     }
 
     /**
+     * Suppression d'une fiche
+     */
+    function deleteAction(Fiche $fiche) {
+
+        $groupe = $fiche->getGroupe();
+
+        if (!$this->container->get('hopitalnumerique_communautepratique.dependency_injection.security')
+            ->canDeleteFiche($fiche)) {
+            $this->container->get('session')->getFlashBag()->add('danger', 'Vous n\'avez pas les droits pour supprimer cette fiche.');
+        }
+
+        $this->container->get('hopitalnumerique_communautepratique.manager.fiche')->delete($fiche);
+        $this->container->get('session')->getFlashBag()->add('success', 'Fiche supprimée.');
+
+        return $this->redirect($this->generateUrl('hopitalnumerique_communautepratique_groupe_view', array('groupe' => $groupe->getId())));
+    }
+
+    /**
      * Résout la fiche.
      */
     public function closeAction(Fiche $fiche)
