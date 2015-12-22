@@ -9,7 +9,7 @@ services:
         class: %hopitalnumerique_stat.manager.statrecherche.class%
         arguments: ["@doctrine.orm.entity_manager", "@hopitalnumerique_reference.manager.reference", "@security.context"]
         calls:
-           - [ setCache, [ @liip_doctrine_cache.ns.main ] ]
+           - [ setCache, ["@liip_doctrine_cache.ns.main"] ]
     #Cronlogger
     hopitalnumerique_stat.logger.cronlogger:
         class: "%hopitalnumerique_stat.logger.cronlogger.class%"
@@ -18,4 +18,4 @@ services:
         class: %hopitalnumerique_stat.manager.errorurl.class%
         arguments: ["@doctrine.orm.entity_manager"]
         calls:
-           - [ setCache, [ @liip_doctrine_cache.ns.main ] ]
+           - [ setCache, ["@liip_doctrine_cache.ns.main"] ]

@@ -19,13 +19,13 @@ services:
         class: %nodevo_menu.manager.menu.class%
         arguments: ["@doctrine.orm.entity_manager"]
         calls:
-            - [ setCache, [ @liip_doctrine_cache.ns.main ] ]
+            - [ setCache, ["@liip_doctrine_cache.ns.main"] ]
 
     nodevo_menu.manager.item:
         class: %nodevo_menu.manager.item.class%
         arguments: ["@doctrine.orm.entity_manager", "@nodevo_menu.manager.menu"]
         calls:
-            - [ setCache, [ @liip_doctrine_cache.ns.main ] ]
+            - [ setCache, ["@liip_doctrine_cache.ns.main"] ]
 
     nodevo_menu.form.menu:
         class: %nodevo_menu.form.menu.class%
@@ -50,9 +50,9 @@ services:
     nodevo_menu.provider:
         class: Nodevo\MenuBundle\Provider\MenuProvider
         arguments:
-            - @nodevo_menu.loader.node
-            - @nodevo_menu.loader.breadcrumb.node
-            - @nodevo_menu.manager.menu
+            - "@nodevo_menu.loader.node"
+            - "@nodevo_menu.loader.breadcrumb.node"
+            - "@nodevo_menu.manager.menu"
         tags:
           - { name: knp_menu.provider }
 

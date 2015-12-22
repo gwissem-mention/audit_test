@@ -435,14 +435,11 @@ class QuestionnaireManager extends BaseManager
         $questionnaires = $this->getRepository()->findByUserAndDomaineWithDates($user, $domaine, $isLock);
         $occurrences = $this->occurrenceManager->findByUserWithDates($user);
         
-        for ($i = 0; $i < count($questionnaires); $i++)
-        {
+        for ($i = 0; $i < count($questionnaires); $i++) {
             $questionnaires[$i]['occurrences'] = array();
             
-            foreach ($occurrences as $occurrence)
-            {
-                if ($questionnaires[$i][0]->getId() == $occurrence[0]->getQuestionnaire()->getId())
-                {
+            foreach ($occurrences as $occurrence) {
+                if ($questionnaires[$i][0]->getId() == $occurrence[0]->getQuestionnaire()->getId()) {
                     $questionnaires[$i]['occurrences'][] = $occurrence;
                 }
             }

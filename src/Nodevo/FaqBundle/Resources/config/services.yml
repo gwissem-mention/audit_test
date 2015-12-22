@@ -10,7 +10,7 @@ services:
         class: %nodevo_faq.manager.faq.class%
         arguments: ["@doctrine.orm.entity_manager", "@hopitalnumerique_user.manager.user"]
         calls:
-           - [ setCache, [ @liip_doctrine_cache.ns.main ] ]
+           - [ setCache, ["@liip_doctrine_cache.ns.main"] ]
 
     nodevo_faq.grid.faq:
         class: %nodevo_faq.grid.faq.class%

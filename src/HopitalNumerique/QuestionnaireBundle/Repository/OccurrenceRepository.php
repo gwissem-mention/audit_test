@@ -20,7 +20,7 @@ class OccurrenceRepository extends \Doctrine\ORM\EntityRepository
 
         $query
             ->select('occurrence', 'MIN(reponse.dateCreation) AS dateCreation', 'MAX(reponse.dateUpdate) AS dernierUpdate')
-            ->innerJoin('occurrence.reponses', 'reponse')
+            ->leftJoin('occurrence.reponses', 'reponse')
             ->andWhere('occurrence.user = :user')
             ->setParameter('user', $user)
         ;

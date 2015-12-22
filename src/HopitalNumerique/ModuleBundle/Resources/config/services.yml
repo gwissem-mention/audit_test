@@ -26,7 +26,7 @@ services:
         class: %hopitalnumerique_module.manager.module.class%
         arguments: ["@doctrine.orm.entity_manager", "@hopitalnumerique_user.manager.user"]
         calls:
-           - [ setCache, [ @liip_doctrine_cache.ns.main ] ]
+           - [ setCache, ["@liip_doctrine_cache.ns.main"] ]
 
     #--Grid
     hopitalnumerique_module.grid.module:
@@ -46,7 +46,7 @@ services:
         class: %hopitalnumerique_module.manager.session.class%
         arguments: ["@doctrine.orm.entity_manager", "@hopitalnumerique_questionnaire.manager.reponse", "@hopitalnumerique_reference.manager.reference", "@hopitalnumerique_user.manager.user"]
         calls:
-           - [ setCache, [ @liip_doctrine_cache.ns.main ] ]
+           - [ setCache, ["@liip_doctrine_cache.ns.main"] ]
 
     #--Grid
     #Sessions
@@ -71,7 +71,7 @@ services:
         class: %hopitalnumerique_module.manager.inscription.class%
         arguments: ["@doctrine.orm.entity_manager", "@hopitalnumerique_user.manager.user"]
         calls:
-           - [ setCache, [ @liip_doctrine_cache.ns.main ] ]
+           - [ setCache, ["@liip_doctrine_cache.ns.main"] ]
 
     #--Grid
     #Inscription

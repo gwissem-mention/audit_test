@@ -17,6 +17,9 @@ parameters:
     hopitalnumerique_questionnaire.manager.typequestion.class: HopitalNumerique\QuestionnaireBundle\Manager\TypeQuestionManager
     #Extensions twig
     hopitalnumerique_questionnaire.twig.extensions.class: HopitalNumerique\QuestionnaireBundle\Twig\QuestionnaireExtension
+    #Occurrence : 
+    hopitalnumerique_questionnaire.form.type.occurrence.class: HopitalNumerique\QuestionnaireBundle\Form\Type\OccurrenceType
+    hopitalnumerique_questionnaire.manager.occurrence.class : HopitalNumerique\QuestionnaireBundle\Manager\OccurrenceManager
 
 services:
     #--OptionsConfig
@@ -70,11 +73,11 @@ services:
             - [ setCache, ["@liip_doctrine_cache.ns.main"] ]
     #Occurrence
     hopitalnumerique_questionnaire.form.type.occurrence:
-        class: "HopitalNumerique\QuestionnaireBundle\Form\Type\OccurrenceType"
+        class: "%hopitalnumerique_questionnaire.form.type.occurrence.class%"
         tags:
             - { name: form.type, alias: nodevo_questionnaire_occurrence }
     hopitalnumerique_questionnaire.manager.occurrence:
-        class: "HopitalNumerique\QuestionnaireBundle\Manager\OccurrenceManager"
+        class: "%hopitalnumerique_questionnaire.manager.occurrence.class%"
         arguments: ["@doctrine.orm.entity_manager"]
     #Extension Twig        
     hopitalnumerique_questionnaire.twig.questionnaire_extension:

@@ -13,7 +13,7 @@ services:
         class: %hopitalnumerique_expert.manager.activiteexpert.class%
         arguments: ["@doctrine.orm.entity_manager"]
         calls:
-           - [ setCache, [ @liip_doctrine_cache.ns.main ] ]
+           - [ setCache, ["@liip_doctrine_cache.ns.main"] ]
 
     hopitalnumerique_expert.grid.activiteexpert:
         class: %hopitalnumerique_expert.grid.activiteexpert.class%
@@ -29,7 +29,7 @@ services:
         class: %hopitalnumerique_expert.manager.evenementexpert.class%
         arguments: ["@doctrine.orm.entity_manager"]
         calls:
-           - [ setCache, [ @liip_doctrine_cache.ns.main ] ]
+           - [ setCache, ["@liip_doctrine_cache.ns.main"] ]
 
     hopitalnumerique_expert.grid.evenementexpert:
         class: %hopitalnumerique_expert.grid.evenementexpert.class%
@@ -45,10 +45,10 @@ services:
         class: %hopitalnumerique_expert.manager.evenementpresenceexpert.class%
         arguments: ["@doctrine.orm.entity_manager"]
         calls:
-           - [ setCache, [ @liip_doctrine_cache.ns.main ] ]
+           - [ setCache, ["@liip_doctrine_cache.ns.main"] ]
 
     hopitalnumerique_expert.manager.datefictive:
         class: %hopitalnumerique_expert.manager.datefictive.class%
         arguments: ["@doctrine.orm.entity_manager"]
         calls:
-           - [ setCache, [ @liip_doctrine_cache.ns.main ] ]
+           - [ setCache, ["@liip_doctrine_cache.ns.main"] ]

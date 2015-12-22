@@ -125,17 +125,18 @@ class QuestionnaireRepository extends EntityRepository
             ->addSelect('questionnaire', 'occurrence')
             ->addSelect('MIN(reponse.dateCreation) AS dateCreation')
             ->addSelect('MAX(reponse.dateUpdate) AS dernierUpdate')
-            ->innerJoin('questionnaire.questions', 'question')
-            ->innerJoin('question.reponses', 'reponse', \Doctrine\ORM\Query\Expr\Join::WITH, 'reponse.user = :user')
+            ->leftJoin('questionnaire.questions', 'question')
+            ->leftJoin('question.reponses', 'reponse', \Doctrine\ORM\Query\Expr\Join::WITH, 'reponse.user = :user')
             ->leftJoin('questionnaire.occurrences', 'occurrence', \Doctrine\ORM\Query\Expr\Join::WITH, 'occurrence.user = :user')
             ->setParameter('user', $user)
             ->innerJoin('questionnaire.domaines', 'domaine', \Doctrine\ORM\Query\Expr\Join::WITH, 'domaine = :domaine')
             ->setParameter('domaine', $domaine)
+            ->having($query->expr()->orX('COUNT(reponse) > :zero', $query->expr()->isNotNull('occurrence')))
+            ->setParameter('zero', 0)
         ;
-        if (null !== $isLock)
-        {
+        if (null !== $isLock) {
             $query
-                ->where('questionnaire.lock = :lock')
+                ->andWhere('questionnaire.lock = :lock')
                 ->setParameter('lock', $isLock)
             ;
         }
