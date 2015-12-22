@@ -51,7 +51,7 @@
 
         <div class="col-md-12">
             <h3 class="violet">Forum
-                {% if is_granted("ROLE_ADMINISTRATEUR_1") %}<a href="{{path('ccdn_forum_admin_index')}}" target="_blank" class="pull-right lienAdmin"><i style="margin:0 5px 0 0;" class="fa fa-cog"></i>Accès à l'administration</a> {% endif %} 
+                {% if is_granted("ROLE_ADMINISTRATEUR_1") or is_granted("ROLE_ADMINISTRATEUR_DU_DOMAINE_HN_107") %}<a href="{{path('ccdn_forum_admin_index')}}" target="_blank" class="pull-right lienAdmin"><i style="margin:0 5px 0 0;" class="fa fa-cog"></i>Accès à l'administration</a> {% endif %}
             </h3>
         </div>
 
