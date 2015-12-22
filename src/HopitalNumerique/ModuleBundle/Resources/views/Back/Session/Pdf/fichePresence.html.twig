@@ -34,11 +34,12 @@
     <thead>
         <tr class="grid-row-titles">
             <th style="font-size:12px;vertical-align:middle;border:1px solid #e3e3e3;margin: 0; padding: 0;" height="25px"><strong>#</strong></th>
-            <th style="font-size:12px;vertical-align:middle;border:1px solid #e3e3e3;margin: 0; padding: 0;" height="25px"><strong>REGION</strong></th>
-            <th style="font-size:12px;vertical-align:middle;border:1px solid #e3e3e3;margin: 0; padding: 0;" height="25px"><strong>ETABLISSEMENT</strong></th>
             <th style="width:72px;font-size:12px;vertical-align:middle;border:1px solid #e3e3e3;margin: 0; padding: 0;" height="25px"><strong>PRENOM</strong></th>
             <th style="width:70px;font-size:12px;vertical-align:middle;border:1px solid #e3e3e3;margin: 0; padding: 0;" height="25px"><strong>NOM</strong></th>
-            <th style="width:300px;font-size:12px;vertical-align:middle;border:1px solid #e3e3e3;margin: 0; padding: 0;" height="25px"><strong>SIGNATURE</strong></th>
+            <th style="font-size:12px;vertical-align:middle;border:1px solid #e3e3e3;margin: 0; padding: 0;" height="25px"><strong>ETABLISSEMENT</strong></th>
+            <th style="width:190px;font-size:12px;vertical-align:middle;border:1px solid #e3e3e3;margin: 0; padding: 0;" height="25px"><strong>FONCTION</strong></th>
+            <th style="font-size:12px;vertical-align:middle;border:1px solid #e3e3e3;margin: 0; padding: 0;" height="25px"><strong>REGION</strong></th>
+            <th style="width:250px;font-size:12px;vertical-align:middle;border:1px solid #e3e3e3;margin: 0; padding: 0;" height="25px"><strong>SIGNATURE</strong></th>
             <th style="width:300px;font-size:12px;vertical-align:middle;border:1px solid #e3e3e3;"><strong>OBSERVATIONS</strong></th>
         </tr>
     </thead>
@@ -46,12 +47,11 @@
         {% for inscription in inscriptions %}
             <tr>
                 <td style="border:1px solid #e3e3e3;font-size:11px;text-align:center;" height="50px">{{ loop.index }}</td>
-                <td style="border:1px solid #e3e3e3;font-size:11px;text-align:center;" height="50px">
-                    {% if inscription.user.region is not null and inscription.user.region is not empty %}
-                        {{ inscription.user.region.libelle }}
-                    {% else %}
-                        - Région renseignée -
-                    {% endif %}
+                <td style="border:1px solid #e3e3e3;font-size:11px;text-align:center;">
+                    {{ inscription.user.prenom }}
+                </td>
+                <td style="border:1px solid #e3e3e3;font-size:11px;text-align:center;">
+                    {{ inscription.user.nom }}
                 </td>
                 <td style="border:1px solid #e3e3e3;font-size:11px;text-align:center;">
                     {% if inscription.user.etablissementRattachementSante is not null %}
@@ -61,13 +61,19 @@
                     {% endif %}
                 </td>
                 <td style="border:1px solid #e3e3e3;font-size:11px;text-align:center;">
-                    {{ inscription.user.prenom }}
+                    {% if inscription.user.fonctionDansEtablissementSante is not null %}
+                        {{ inscription.user.fonctionDansEtablissementSante }}
+                    {% endif %}
                 </td>
-                <td style="border:1px solid #e3e3e3;font-size:11px;text-align:center;">
-                    {{ inscription.user.nom }}
+                <td style="border:1px solid #e3e3e3;font-size:11px;text-align:center;" height="50px">
+                    {% if inscription.user.region is not null and inscription.user.region is not empty %}
+                        {{ inscription.user.region.libelle }}
+                    {% else %}
+                        - Région renseignée -
+                    {% endif %}
                 </td>
                 <td style="border:1px solid #e3e3e3;font-size:11px;">
-                    
+
                 </td>
                 <td style="border:1px solid #e3e3e3;font-size:11px;">
                     

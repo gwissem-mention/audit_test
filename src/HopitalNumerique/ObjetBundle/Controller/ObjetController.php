@@ -46,20 +46,13 @@ class ObjetController extends Controller
         //On récupère l'user connecté et son role
         $user  = $this->get('security.context')->getToken()->getUser();
         
-        //si l'user connecté est propriétaire de l'objet ou si l'user est admin : unlock autorisé
-        if( $user->hasRole('ROLE_ADMINISTRATEUR_1') || $objet->getLockedBy() == $user ) 
-        {
-            $this->get('hopitalnumerique_objet.manager.objet')->unlock($objet);
 
-            //si on à appellé l'action depuis le button du grid, on met un message à l'user, sinon pas besoin de message
-            if( !is_null($message ) )
-            {
-                $this->get('session')->getFlashBag()->add( 'info' , 'Objet dévérouillé.' );
-            }
-        }
-        else
+        $this->get('hopitalnumerique_objet.manager.objet')->unlock($objet);
+
+        //si on à appellé l'action depuis le button du grid, on met un message à l'user, sinon pas besoin de message
+        if( !is_null($message ) )
         {
-            $this->get('session')->getFlashBag()->add( 'danger' , 'Vous n\'avez pas l\'autorisation de déverrouiller cet objet.' );
+            $this->get('session')->getFlashBag()->add( 'info' , 'Objet dévérouillé.' );
         }
         
         return $this->redirect( $this->generateUrl('hopitalnumerique_objet_objet') );

@@ -11,13 +11,13 @@ services:
         class: %nodevo_acl.manager.acl.class%
         arguments: ["@doctrine.orm.entity_manager", "@nodevo_acl.manager.ressource", "@nodevo_role.manager.role", "%nodevo_acl.options%"]
         calls:
-            - [ setCache, [ @liip_doctrine_cache.ns.main ] ]
+            - [ setCache, ["@liip_doctrine_cache.ns.main"] ]
 
     nodevo_acl.manager.ressource:
         class: %nodevo_acl.manager.ressource.class%
         arguments: ["@doctrine.orm.entity_manager"]
         calls:
-            - [ setCache, [ @liip_doctrine_cache.ns.main ] ]
+            - [ setCache, ["@liip_doctrine_cache.ns.main"] ]
 
     #AclVoter
     security.access.acl_voter:

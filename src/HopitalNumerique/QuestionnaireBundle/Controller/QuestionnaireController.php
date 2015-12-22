@@ -168,25 +168,33 @@ class QuestionnaireController extends Controller
      * 
      * @param integer $id Identifiant de l'utilisateur
      */
-    public function editFrontGestionnaireAction(HopiQuestionnaire $questionnaire, Occurrence $occurrence = null)
+    public function editFrontGestionnaireAction(HopiQuestionnaire $questionnaire)
+    {
+        return $this->editFrontGestionnaireOccurrenceAction($questionnaire);
+    }
+    
+    /**
+     * Même action que editFrontGestionnaireAction() avec la paramètre Occurrence indiqué.
+     * 
+     * @param \HopitalNumerique\QuestionnaireBundle\Entity\Questionnaire $questionnaire Questionnaire
+     * @param \HopitalNumerique\QuestionnaireBundle\Entity\Occurrence    $occurrence    Occurrence
+     */
+    public function editFrontGestionnaireOccurrenceAction(HopiQuestionnaire $questionnaire, Occurrence $occurrence = null)
     {
         //On récupère l'utilisateur qui est connecté
         $user = $this->get('security.context')->getToken()->getUser();
 
         $this->_envoieDeMail = false;
 
-        if (null !== $occurrence)
-        {
+        if (null !== $occurrence) {
             $route = 'hopitalnumerique_questionnaire_edit_front_gestionnaire_occurrence';
             $routeParameters = array('questionnaire' => $questionnaire->getId(), 'occurrence' => $occurrence->getId());
-        }
-        else
-        {
+        } else {
             $route = 'hopitalnumerique_questionnaire_edit_front_gestionnaire';
             $routeParameters = array('id' => $questionnaire->getId());
         }
         
-        return $this->render('HopitalNumeriqueQuestionnaireBundle:Questionnaire:Front/index.html.twig',array(
+        return $this->render('HopitalNumeriqueQuestionnaireBundle:Questionnaire:Front/index.html.twig', array(
             'questionnaire'      => $questionnaire,
             'occurrence'         => $occurrence,
             'user'               => $user,
@@ -203,17 +211,6 @@ class QuestionnaireController extends Controller
                 ))
             )
         ));
-    }
-    
-    /**
-     * Même action que editFrontGestionnaireAction() avec la paramètre Occurrence indiqué.
-     * 
-     * @param \HopitalNumerique\QuestionnaireBundle\Entity\Questionnaire $questionnaire Questionnaire
-     * @param \HopitalNumerique\QuestionnaireBundle\Entity\Occurrence    $occurrence    Occurrence
-     */
-    public function editFrontGestionnaireOccurrenceAction(HopiQuestionnaire $questionnaire, Occurrence $occurrence)
-    {
-        return $this->editFrontGestionnaireAction($questionnaire, $occurrence);
     }
 
     /* Gestionnaire des formulaires */

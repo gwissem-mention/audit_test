@@ -14,7 +14,7 @@ services:
         class: %hopitalnumerique_domaine.manager.domaine.class%
         arguments: ["@doctrine.orm.entity_manager"]
         calls:
-           - [ setCache, [ @liip_doctrine_cache.ns.main ] ]
+           - [ setCache, ["@liip_doctrine_cache.ns.main"] ]
 
     hopitalnumerique_domaine.grid.domaine:
         class: %hopitalnumerique_domaine.grid.domaine.class%

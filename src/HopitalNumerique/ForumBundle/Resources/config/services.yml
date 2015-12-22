@@ -36,31 +36,31 @@ services:
         class: %hopitalnumerique_forum.manager.board.class%
         arguments: ["@doctrine.orm.entity_manager", "@ccdn_forum_forum.model.topic", "@ccdn_forum_forum.model.post"]
         calls:
-           - [ setCache, [ @liip_doctrine_cache.ns.main ] ]
+           - [ setCache, ["@liip_doctrine_cache.ns.main"] ]
     #--Topic
     hopitalnumerique_forum.manager.topic:
         class: %hopitalnumerique_forum.manager.topic.class%
         arguments: ["@doctrine.orm.entity_manager", "@hopitalnumerique_user.manager.user", "@hopitalnumerique_domaine.manager.domaine", "@hopitalnumerique_reference.manager.reference"]
         calls:
-           - [ setCache, [ @liip_doctrine_cache.ns.main ] ]
+           - [ setCache, ["@liip_doctrine_cache.ns.main"] ]
     #--RefTopic
     hopitalnumerique_forum.manager.reftopic:
         class: %hopitalnumerique_forum.manager.reftopic.class%
         arguments: ["@doctrine.orm.entity_manager"]
         calls:
-           - [ setCache, [ @liip_doctrine_cache.ns.main ] ]
+           - [ setCache, ["@liip_doctrine_cache.ns.main"] ]
     #--Post
     hopitalnumerique_forum.manager.post:
         class: %hopitalnumerique_forum.manager.post.class%
         arguments: ["@doctrine.orm.entity_manager", "@hopitalnumerique_forum.manager.topic", "@hopitalnumerique_forum.manager.board"]
         calls:
-           - [ setCache, [ @liip_doctrine_cache.ns.main ] ]
+           - [ setCache, ["@liip_doctrine_cache.ns.main"] ]
     #--Subscription
     hopitalnumerique_forum.manager.subscription:
         class: %hopitalnumerique_forum.manager.subscription.class%
         arguments: ["@doctrine.orm.entity_manager"]
         calls:
-           - [ setCache, [ @liip_doctrine_cache.ns.main ] ]
+           - [ setCache, ["@liip_doctrine_cache.ns.main"] ]
     #Cronlogger
     hopitalnumerique_forum.service.logger.cronlogger:
         class: "%hopitalnumerique_forum.service.logger.cronlogger.class%"

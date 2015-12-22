@@ -9,7 +9,7 @@ services:
         class: %hopitalnumerique_glossaire.manager.glossaire.class%
         arguments: ["@doctrine.orm.entity_manager", "@hopitalnumerique_user.manager.user"]
         calls:
-           - [ setCache, [ @liip_doctrine_cache.ns.main ] ]
+           - [ setCache, ["@liip_doctrine_cache.ns.main"] ]
 
     hopitalnumerique_glossaire.grid.glossaire:
         class: %hopitalnumerique_glossaire.grid.glossaire.class%
