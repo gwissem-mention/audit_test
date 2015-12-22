@@ -158,6 +158,7 @@ class Groupe
 
     /**
      * @ORM\OneToMany(targetEntity="Commentaire", mappedBy="groupe")
+     * @ORM\OrderBy({"dateCreation":"DESC"})
      */
     private $commentaires;
 
