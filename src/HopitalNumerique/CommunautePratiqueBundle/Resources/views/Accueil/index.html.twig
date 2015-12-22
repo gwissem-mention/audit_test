@@ -44,6 +44,7 @@
                                         &nbsp; &nbsp; <span class="derniere-activite">Dernière activité <strong>{{ groupe.dateDerniereActivite|date('d/m/Y') }}</strong></span>
                                         &nbsp; &nbsp; <span class="communaute-de-pratiques-total-commentaires"><span class="count">{{ groupe.totalCommentaires }}</span> commentaire{{ groupe.totalCommentaires > 1 ? 's' : '' }}</span>
                                         &nbsp; &nbsp; <strong>{{ groupe.documents|length }}</strong> document{{ groupe.documents|length > 1 ? 's' : '' }}
+                                        &nbsp; &nbsp; <strong>{{ groupe.users|length }}</strong> membre{{ groupe.users|length > 1 ? 's' : '' }}
                                     </div>
                                     <div class="body">
                                         <div class="row">
