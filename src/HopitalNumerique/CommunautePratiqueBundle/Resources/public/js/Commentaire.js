@@ -11,6 +11,7 @@ var CommunautePratique_Commentaire = function() {};
 CommunautePratique_Commentaire.initTinyMce = function(groupeId)
 {
     CommunautePratique_Commentaire.initTinyMcePluginDocuments(groupeId);
+    CommunautePratique_Commentaire.initTinyMcePluginPorteDocuments(groupeId);
     tinymce.PluginManager.load('publication', '/bundles/hopitalnumeriqueobjet/js/publication/plugin.min.js');
 };
 /**
@@ -22,7 +23,7 @@ CommunautePratique_Commentaire.initTinyMcePluginDocuments = function(groupeId)
 {
     tinymce.PluginManager.add('communautePratiqueDocument', function(editor, url) {
         editor.addButton('communautePratiqueDocument', {
-            text: 'Document',
+            text: 'Publier un élément de mon porte document',
             icon: false,
             onclick: function() {
                 $.fancybox.open(Routing.generate('hopitalnumerique_communautepratique_tinymce_documents', { groupe:groupeId }), {
@@ -51,6 +52,24 @@ CommunautePratique_Commentaire.initTinyMcePluginDocuments = function(groupeId)
     });
 };
 
+
+/**
+ * Initialise le plugin TinyMce permetant de créer un lien vers la page Mes documents.
+ *
+ * @param integer groupeId ID du groupe
+ */
+CommunautePratique_Commentaire.initTinyMcePluginPorteDocuments = function(groupeId) {
+    tinymce.PluginManager.add('communautePratiquePorteDocument', function(editor, url) {
+        editor.addButton('communautePratiquePorteDocument', {
+            text: 'Mes documents',
+            icon: false,
+            onclick: function() {
+                window.open(Routing.generate('hopitalnumerique_communautepratique_document_listbygroupe', { groupe:groupeId }));
+            }
+        });
+    });
+};
+
 /**
  * Appelle TinyMce pour les champs de formulaire.
  *
@@ -64,11 +83,11 @@ CommunautePratique_Commentaire.callTinyMce = function(element)
         theme        : "modern",
         theme_url    : '/bundles/nodevotools/js/tinymce/themes/modern/theme.min.js',
         skin_url     : '/bundles/nodevotools/js/tinymce/skins/lightgray',
-        plugins      : 'link communautePratiqueDocument publication',
+        plugins      : 'link communautePratiqueDocument publication communautePratiquePorteDocument',
         height       : 150,
         menubar      : false,
         content_css  : '/bundles/nodevotools/css/wysiwyg.css',
-        toolbar1     : 'communautePratiqueDocument | link | publication',
+        toolbar1     : 'communautePratiquePorteDocument | communautePratiqueDocument | link | publication',
         relative_urls: false,
         statusbar    : false
     });

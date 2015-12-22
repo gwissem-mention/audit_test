@@ -18,7 +18,7 @@ class Document
     /**
      * @var integer Taille maximale du fichier en Mo
      */
-    const MAX_SIZE = 5;
+    const MAX_SIZE = 10;
 
 
     /**
