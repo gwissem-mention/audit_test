@@ -10,6 +10,7 @@ use HopitalNumerique\DomaineBundle\Entity\Domaine;
 use Doctrine\ORM\Query\Expr;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Query\Expr\Join;
+use Symfony\Component\HttpFoundation\Request;
 
 /**
  * UserRepository
@@ -641,12 +642,17 @@ class UserRepository extends EntityRepository
 
         $groupeUsers = $this->getCommunautePratiqueUsersByGroupeQueryBuilder($groupe)->getQuery()->getResult();
 
+        $domaine = $this->getEntityManager()->getRepository('HopitalNumeriqueDomaineBundle:Domaine')->getDomaineFromHttpHost($_SERVER["SERVER_NAME"])->getQuery()->getOneOrNullResult();
+
         $query
             ->leftJoin('user.communautePratiqueGroupes', 'groupe')
             ->andWhere('user.inscritCommunautePratique = :inscritCommunautePratique')
             ->setParameter('inscritCommunautePratique', true)
             ->andWhere('user.etat = :etat')
             ->setParameter('etat', User::ETAT_ACTIF_ID)
+            ->leftJoin('user.domaines', 'domaine')
+            ->andWhere('domaine.url = :domaine')
+            ->setParameter(':domaine', $domaine->getUrl())
             ->addOrderBy('user.nom', 'ASC')
             ->addOrderBy('user.prenom', 'ASC')
             ->addOrderBy('user.id', 'ASC')
