@@ -44,66 +44,74 @@
                                         &nbsp; &nbsp; <span class="derniere-activite">Dernière activité <strong>{{ groupe.dateDerniereActivite|date('d/m/Y') }}</strong></span>
                                         &nbsp; &nbsp; <span class="communaute-de-pratiques-total-commentaires"><span class="count">{{ groupe.totalCommentaires }}</span> commentaire{{ groupe.totalCommentaires > 1 ? 's' : '' }}</span>
                                         &nbsp; &nbsp; <strong>{{ groupe.documents|length }}</strong> document{{ groupe.documents|length > 1 ? 's' : '' }}
-                                        &nbsp; &nbsp; <strong>{{ groupe.users|length }}</strong> membre{{ groupe.users|length > 1 ? 's' : '' }}
+                                        {% set nbusers = 0 %}
+                                        {%- for user in groupe.users -%}
+                                            {% if user.inscritCommunautePratique %}
+                                                {% set nbusers = nbusers + 1 %}
+                                            {% endif %}
+                                        {% endfor %}
+                                        &nbsp; &nbsp; <strong>{{ nbusers }}</strong> membre{{ nbusers > 1 ? 's' : '' }}
                                     </div>
                                     <div class="body">
                                         <div class="row">
                                             {%- for user in groupe.users -%}
-                                                <div class="col-md-4 col-sm-6">
-                                                    <div class="membre">
-                                                        <div class="membre-chiffres">
-                                                            <div class="total">
-                                                                {% set totalUserDocuments = groupe.userDocuments(user)|length %}
-                                                                <strong>{{ totalUserDocuments }}</strong>
-                                                                Document{{ totalUserDocuments > 1 ? 's' : '' }}<br>déposé{{ totalUserDocuments > 1 ? 's' : '' }}
+                                                {% if user.inscritCommunautePratique %}
+                                                    <div class="col-md-4 col-sm-6">
+                                                        <div class="membre">
+                                                            <div class="membre-chiffres">
+                                                                <div class="total">
+                                                                    {% set totalUserDocuments = groupe.userDocuments(user)|length %}
+                                                                    <strong>{{ totalUserDocuments }}</strong>
+                                                                    Document{{ totalUserDocuments > 1 ? 's' : '' }}<br>déposé{{ totalUserDocuments > 1 ? 's' : '' }}
+                                                                </div>
+                                                                <div class="total">
+                                                                    {% set totalUserCommentaires = groupe.totalUserCommentaires(user) %}
+                                                                    <strong>{{ totalUserCommentaires }}</strong>
+                                                                    Commentaire{{ totalUserCommentaires > 1 ? 's' : '' }}<br>rédigé{{ totalUserCommentaires > 1 ? 's' : '' }}
+                                                                </div>
+                                                                <div class="connexion">
+                                                                    Dernière connexion
+                                                                    <div class="violet">{{ user.lastLogin is not null ? user.lastLogin|date('d/m/Y') : '' }}</div>
+                                                                </div>
                                                             </div>
-                                                            <div class="total">
-                                                                {% set totalUserCommentaires = groupe.totalUserCommentaires(user) %}
-                                                                <strong>{{ totalUserCommentaires }}</strong>
-                                                                Commentaire{{ totalUserCommentaires > 1 ? 's' : '' }}<br>rédigé{{ totalUserCommentaires > 1 ? 's' : '' }}
-                                                            </div>
-                                                            <div class="connexion">
-                                                                Dernière connexion
-                                                                <div class="violet">{{ user.lastLogin is not null ? user.lastLogin|date('d/m/Y') : '' }}</div>
-                                                            </div>
-                                                        </div>
-                                                        <div class="membre-principal">
-                                                            <div class="identite">
-                                                                <div class="communaute-de-pratiques-avatar" style="background-image: url('{{ asset(user.avatarWebPath) }}');"></div>
-                                                                <div class="nom">
-                                                                    {% if app.user.id == user.id %}
-                                                                        <a href="{{ path('hopital_numerique_user_informations_personnelles') }}"><em class="icon icon-settings48"></em> <span class="no-link">{{ user.prenomNom }}</span></a>
-                                                                    {% else %}
-                                                                        <a onclick="Contact_Popup.display({'{{ user.email }}':'{{ user.prenomNom }}'}, '{{ path(app.request.get('_route'), app.request.get('_route_params')) }}');"><em class="icon icon-email5"></em> {{ user.prenomNom }}</a>
+                                                            <div class="membre-principal">
+                                                                <div class="identite">
+                                                                    <div class="communaute-de-pratiques-avatar" style="background-image: url('{{ asset(user.avatarWebPath) }}');"></div>
+                                                                    <div class="nom">
+                                                                        {% if app.user.id == user.id %}
+                                                                            <a href="{{ path('hopital_numerique_user_informations_personnelles') }}"><em class="icon icon-settings48"></em> <span class="no-link">{{ user.prenomNom }}</span></a>
+                                                                        {% else %}
+                                                                            <a onclick="Contact_Popup.display({'{{ user.email }}':'{{ user.prenomNom }}'}, '{{ path(app.request.get('_route'), app.request.get('_route_params')) }}');"><em class="icon icon-email5"></em> <span class="no-link">{{ user.prenomNom }}</span></a>
+                                                                        {% endif %}
+                                                                    </div>
+                                                                    {% if groupe.hasAnimateur(user) %}
+                                                                        <div class="animateur">
+                                                                            <em class="icon icon-speaker15"></em>
+                                                                            Animateur du groupe
+                                                                        </div>
                                                                     {% endif %}
                                                                 </div>
-                                                                {% if groupe.hasAnimateur(user) %}
-                                                                    <div class="animateur">
-                                                                        <em class="icon icon-speaker15"></em>
-                                                                        Animateur du groupe
-                                                                    </div>
-                                                                {% endif %}
-                                                            </div>
-                                                            <div class="contenu">
-                                                                {%- if user.reponses|hadReponseForQuestionnaire(groupe.questionnaire.id) -%}
-                                                                    <div class="questionnaire">
-                                                                        <a href="{{ path('hopitalnumerique_questionnaire_edit_front', { user:user.id, questionnaire:groupe.questionnaire.id }) }}"><em class="icon icon-test1"></em> Questionnaire d'inscription</a>
-                                                                    </div>
-                                                                {%- endif -%}
-                                                                <ul>
-                                                                    {%- for fiche in groupe.userFiches(user) -%}
-                                                                        <li>
-                                                                            <a href="{{ path('hopitalnumerique_communautepratique_fiche_view', { fiche:fiche.id }) }}">{{ fiche }}</a>
-                                                                            <span class="violet">({{ fiche.commentaires|length }} commentaire{{ fiche.commentaires|length > 1 ? 's' : '' }})</span>
-                                                                        </li>
-                                                                    {%- else -%}
-                                                                        <p class="text-center"><em>Aucune fiche de problématique renseignée.</em></p>
-                                                                    {%- endfor -%}
-                                                                </ul>
+                                                                <div class="contenu">
+                                                                    {%- if user.reponses|hadReponseForQuestionnaire(groupe.questionnaire.id) -%}
+                                                                        <div class="questionnaire">
+                                                                            <a href="{{ path('hopitalnumerique_questionnaire_edit_front', { user:user.id, questionnaire:groupe.questionnaire.id }) }}"><em class="icon icon-test1"></em> Questionnaire d'inscription</a>
+                                                                        </div>
+                                                                    {%- endif -%}
+                                                                    <ul>
+                                                                        {%- for fiche in groupe.userFiches(user) -%}
+                                                                            <li>
+                                                                                <a href="{{ path('hopitalnumerique_communautepratique_fiche_view', { fiche:fiche.id }) }}">{{ fiche }}</a>
+                                                                                <span class="violet">({{ fiche.commentaires|length }} commentaire{{ fiche.commentaires|length > 1 ? 's' : '' }})</span>
+                                                                            </li>
+                                                                        {%- else -%}
+                                                                            <p class="text-center"><em>Aucune fiche de problématique renseignée.</em></p>
+                                                                        {%- endfor -%}
+                                                                    </ul>
+                                                                </div>
                                                             </div>
                                                         </div>
                                                     </div>
-                                                </div>
+                                                {% endif %}
                                             {%- else -%}
                                                 <p class="text-center">Aucun membre dans ce groupe pour le moment.</p>
                                             {%- endfor -%}

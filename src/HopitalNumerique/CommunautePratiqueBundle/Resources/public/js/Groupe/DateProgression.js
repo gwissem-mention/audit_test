@@ -42,15 +42,15 @@ CommunautePratique_Groupe_DateProgression.displayProgression = function(groupeId
     {
         CommunautePratique_Groupe_DateProgression.setProgressionWidth(groupeId, CommunautePratique_Groupe_DateProgression.DATE_PROGRESSION_CURSEUR_MARGE / 2.75);
     }
-    else if (aujourdhui < dateDemarrage)
+    else if (aujourdhui <= dateDemarrage)
     {
         CommunautePratique_Groupe_DateProgression.setProgressionEntreInscriptionEtDemarrage(groupeId, dateInscriptionOuverture, dateDemarrage);
     }
-    else if (aujourdhui <= dateFin)
+    else if (aujourdhui < dateFin)
     {
         CommunautePratique_Groupe_DateProgression.setProgressionEntreDemarrageEtFin(groupeId, dateDemarrage, dateFin);
     }
-    else if (aujourdhui > dateFin)
+    else if (aujourdhui >= dateFin)
     {
         CommunautePratique_Groupe_DateProgression.setProgressionWidth(groupeId, CommunautePratique_Groupe_DateProgression.PROGRESSION_WIDTH_MAX - CommunautePratique_Groupe_DateProgression.DATE_PROGRESSION_CURSEUR_MARGE / 2);
     }
@@ -80,10 +80,10 @@ CommunautePratique_Groupe_DateProgression.setProgressionEntreInscriptionEtDemarr
  */
 CommunautePratique_Groupe_DateProgression.setProgressionEntreDemarrageEtFin = function(groupeId, dateDemarrage, dateFin)
 {
-    var dateEcartWidth = parseInt( (CommunautePratique_Groupe_DateProgression.PROGRESSION_WIDTH_MAX - 2 * CommunautePratique_Groupe_DateProgression.DATE_PROGRESSION_CURSEUR_MARGE) / 2 );
+    var dateEcartWidth = parseInt( (CommunautePratique_Groupe_DateProgression.PROGRESSION_WIDTH_MAX - 2 * CommunautePratique_Groupe_DateProgression.DATE_PROGRESSION_CURSEUR_MARGE) / 1.75 );
     var aujourdhui = CommunautePratique_Groupe_DateProgression.getAujourdhuiTimestamp();
 
-    CommunautePratique_Groupe_DateProgression.setProgressionWidth( groupeId, parseInt( ( 1 + ( aujourdhui - dateDemarrage ) / ( dateFin - dateDemarrage ) ) * dateEcartWidth + CommunautePratique_Groupe_DateProgression.DATE_PROGRESSION_CURSEUR_MARGE ) );
+    CommunautePratique_Groupe_DateProgression.setProgressionWidth( groupeId, parseInt( ( 0.75 + ( aujourdhui - dateDemarrage ) / ( dateFin - dateDemarrage ) ) * dateEcartWidth + CommunautePratique_Groupe_DateProgression.DATE_PROGRESSION_CURSEUR_MARGE ) );
 };
 
 /**

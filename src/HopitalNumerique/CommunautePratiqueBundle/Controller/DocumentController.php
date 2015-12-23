@@ -133,12 +133,16 @@ class DocumentController extends \Symfony\Bundle\FrameworkBundle\Controller\Cont
      */
     public function deleteAction(Document $document)
     {
-        if ($this->container->get('hopitalnumerique_communautepratique.dependency_injection.security')->canDeleteDocument($document))
-        {
-            $this->container->get('hopitalnumerique_communautepratique.manager.document')->delete($document);
-            return new JsonResponse(array('success' => true));
+        $safeDelete = $this->container->get('hopitalnumerique_communautepratique.manager.commentaire')->safeDelete($document->getId());
+
+        if($safeDelete == false) {
+            return new JsonResponse(array('success' => false));
+        } else {
+            if ($this->container->get('hopitalnumerique_communautepratique.dependency_injection.security')->canDeleteDocument($document))
+            {
+                $this->container->get('hopitalnumerique_communautepratique.manager.document')->delete($document);
+                return new JsonResponse(array('success' => true));
+            }
         }
-        
-        return new JsonResponse(array('success' => false));
     }
 }

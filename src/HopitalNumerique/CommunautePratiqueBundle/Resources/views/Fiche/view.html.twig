@@ -34,10 +34,10 @@
         <div class="panel-heading">
             <nav class="actions">
                 {% if fiche|communautePratiqueCanDelete %}
-                    <a onclick="deleteFiche('{{ path('hopitalnumerique_communautepratique_fiche_delete', { fiche:fiche.id }) }}')">Supprimer cette fiche</a> &nbsp;
+                    <a onclick="deleteFiche('{{ path('hopitalnumerique_communautepratique_fiche_delete', { fiche:fiche.id }) }}')">> Supprimer cette fiche</a> &nbsp;
                 {% endif %}
                 {% if fiche|communautePratiqueCanEdit %}
-                    <a href="{{ path('hopitalnumerique_communautepratique_fiche_edit', { fiche:fiche.id }) }}">Éditer cette fiche</a> &nbsp;
+                    <a href="{{ path('hopitalnumerique_communautepratique_fiche_edit', { fiche:fiche.id }) }}">> Éditer cette fiche</a> &nbsp;
                 {% endif %}
                 {% if canClose %}
                     <button class="btn btn-sm btn-success" onclick="CommunautePratique_Fiche.close({{ fiche.id }});">Problématique résolue</button>

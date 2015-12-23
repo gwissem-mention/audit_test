@@ -171,6 +171,7 @@ class GroupeRepository extends \Doctrine\ORM\EntityRepository
             ->addOrderBy('groupeUser.nom')
             ->addOrderBy('groupeUser.prenom')
         ;
+
         if (null !== $user) {
             $query
                 ->innerJoin('groupe.users', 'user', Expr\Join::WITH, 'user = :user')

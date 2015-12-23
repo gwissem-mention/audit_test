@@ -89,7 +89,7 @@ CommunautePratique_Document.delete = function(documentId)
             if (data.success) {
                 $('[data-communaute-pratique-document-id=' + documentId + ']').parent().hide();
             } else {
-                alert('Le document n\'a pu être supprimé.');
+                alert('Le document n\'a pu être supprimé, il doit être utilisé dans un de vos commentaires.');
             }
         });
     }
