@@ -1,7 +1,7 @@
 
 ccdn_forum_admin_forum_list:
     pattern: /
-    defaults: { _controller: CCDNForumForumBundle:AdminForum:list, _locale: fr }
+    defaults: { _controller: HopitalNumeriqueForumBundle:AdminForum:list, _locale: fr }
 
 ccdn_forum_admin_forum_create:
     pattern: /create
