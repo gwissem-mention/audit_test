@@ -1,2 +1,2 @@
-#registre-ambassadeur .annuaire_ambassadeur .fiche .content{height: auto;}
-#registre-ambassadeur .annuaire_ambassadeur .fiche .content a.btn{width: 250px;}
+#registre-ambassadeur .annuaire_ambassadeur .fiche .content{height: auto !important;}
+#registre-ambassadeur .annuaire_ambassadeur .fiche .content a.btn{width: 250px !important;}
