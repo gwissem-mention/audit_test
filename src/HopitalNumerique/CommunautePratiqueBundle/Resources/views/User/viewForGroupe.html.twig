@@ -21,8 +21,8 @@
     <div class="communaute-de-pratiques-user-fiche">
         <ul class="nav nav-tabs" role="tablist">
             <li role="presentation" class="active"><a href="#formulaire-prealable" aria-controls="formulaire-prealable" role="tab" data-toggle="tab"><em class="icon-formulaire"></em> &nbsp; Formulaire préalable</a></li>
-            <li role="presentation"><a href="#documents" aria-controls="documents" role="tab" data-toggle="tab"><em class="icon-file148"></em> &nbsp; Documents de l'utilisateur</a></li>
             <li role="presentation"><a href="#fiches" aria-controls="fiches" role="tab" data-toggle="tab"><em class="icon-stats2"></em> &nbsp; Fiches de problématiques</a></li>
+            <li role="presentation"><a href="#documents" aria-controls="documents" role="tab" data-toggle="tab"><em class="icon-file148"></em> &nbsp; Documents associés</a></li>
         </ul>
         <div class="tab-content">
             <div role="tabpanel" class="tab-pane active" id="formulaire-prealable">
@@ -81,7 +81,7 @@
                 {%- endif -%}
 
                 {%- if app.user.id == user.id -%}
-                    <p class="documents-lien"><a href="{{ path('hopitalnumerique_communautepratique_document_listbygroupe', { groupe:groupe.id }) }}"><em class="fa fa-angle-double-right"></em> &nbsp; Voir mon porte-documents</a></p>
+                    <p class="documents-lien"><a href="{{ path('hopitalnumerique_communautepratique_document_listbygroupe', { groupe:groupe.id }) }}"><em class="fa fa-angle-double-right"></em> &nbsp; Gérer mes documents</a></p>
                 {%- endif -%}
 
             </div>
@@ -91,7 +91,7 @@
 
                     <div class="row">
                         <div class="col-md-6">
-                            <p>Fiches de problématiques renseignées par <strong class="violet">{{ user.prenomNom }}</strong></p>
+                            <p>Fiches de problématiques soumises par <strong class="violet">{{ user.prenomNom }}</strong></p>
                         </div>
                         <div class="col-md-6 text-right">
                             <a class="btn btn-success" href="{{ path('hopitalnumerique_communautepratique_fiche_add', { groupe:groupe.id }) }}">Ajouter une fiche &nbsp; &nbsp; <em class="fa fa-plus"></em></a>

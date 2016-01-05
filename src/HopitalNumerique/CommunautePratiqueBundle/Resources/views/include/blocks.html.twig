@@ -39,16 +39,16 @@
                     {% if (app.user.hasCommunautePratiqueGroupe(groupe)) %}
                         <a class="button" href="{{ path('hopitalnumerique_communautepratique_groupe_view', { groupe: groupe.id }) }}">Travailler dans ce groupe</a>
                     {% else %}
-                        <a class="button" onclick="Contact_Popup.display({{ groupe.animateurEmailsJson }}, '{{ path(app.request.get('_route')) }}', 'Je souhaite participer au groupe {{ groupe.titre|replace({ '\'':'\\\'', '"':'' }) }}');">Groupe démarré contactez l'administrateur</a>
+                        <a class="button" onclick="Contact_Popup.display({{ groupe.animateurEmailsJson }}, '{{ path(app.request.get('_route')) }}', 'Je souhaite participer au groupe {{ groupe.titre|replace({ '\'':'\\\'', '"':'' }) }}');" title="Contactez l’administrateur pour le rejoindre" >Démarré</a>
                     {% endif %}
                 {% elseif (app.user.hasCommunautePratiqueGroupe(groupe)) %}
                     <span class="button inactive">Vous êtes inscrit</span>
                 {% elseif groupe.users|length >= groupe.nombreParticipantsMaximum %}
                     <a class="button" onclick="Contact_Popup.display({{ groupe.animateurEmailsJson }}, '{{ path(app.request.get('_route')) }}', 'Je souhaite participer au groupe {{ groupe.titre|replace({ '\'':'\\\'', '"':'' }) }}');">Groupe complet contactez l'animateur</a>
                 {% elseif date('now') < groupe.dateInscriptionOuverture %}
-                    <a class="button">Inscription dans <span class="jours-restants"><span>{{ groupe.nombreJoursRestantsAvantInscriptionOuverture }}</span> jour{{ groupe.nombreJoursRestantsAvantInscriptionOuverture > 1 ? 's' : '' }}</span></a>
+                    <a class="button">Inscription dans <span class="jours-restants"><span>{{ groupe.nombreJoursRestantsAvantInscriptionOuverture }}</span></span> jour{{ groupe.nombreJoursRestantsAvantInscriptionOuverture > 1 ? 's' : '' }}</a>
                 {% else %}
-                    <a class="button" href="{{ path('hopitalnumerique_communautepratique_groupe_inscrit', { 'groupe':groupe.id }) }}">Rejoindre ce groupe</a>
+                    <a class="button" href="{{ path('hopitalnumerique_communautepratique_groupe_inscrit', { 'groupe':groupe.id }) }}">Rejoindre</a>
                 {% endif %}
             </div>
         </div>
@@ -77,7 +77,7 @@
                     <div>Dernière activité le {{ groupe.dateDerniereActivite|date('d/m/Y') }}</div>
                 </li>
             {%- else -%}
-                <li>Aucun groupe en cours</li>
+                <li>Aucun groupe en cours. Choisissez un groupe et cliquez sur "Rejoindre" pour y participer</li>
             {%- endfor -%}
         </ul>
     </div>
@@ -249,10 +249,11 @@
             <div class="communaute-de-pratiques-avatar" style="background-image: url('{{ asset(commentaire.user.avatarWebPath) }}');"></div>
         </div>
         <div class="contenu">
-            <div class="nom">Par <strong>{{ commentaire.user.prenomNom }}</strong> <span class="date">le {{ commentaire.dateCreation|date('d/m/Y') }}</span></div>
-            {% if (commentaire.fiche is not null and commentaire.fiche.groupe.hasAnimateur(commentaire.user)) or (commentaire.groupe is not null and commentaire.groupe.hasAnimateur(commentaire.user)) %}
-                <div class="animateur"><em class="icon icon-speaker15"></em> Animateur du groupe</div>
-            {% endif %}
+            <div class="nom">Par <strong>{{ commentaire.user.prenomNom }}</strong> <span class="date">le {{ commentaire.dateCreation|date('d/m/Y') }}</span>
+                {% if (commentaire.fiche is not null and commentaire.fiche.groupe.hasAnimateur(commentaire.user)) or (commentaire.groupe is not null and commentaire.groupe.hasAnimateur(commentaire.user)) %}
+                    <span class="animateur"><em class="icon icon-speaker15"></em> Animateur du groupe</span>
+                {% endif %}
+            </div>
             <div class="message">
                 <p>{{ commentaire.message|parsePublication|unescape }}</p>
             </div>
@@ -268,8 +269,7 @@
  #}
 {% macro display_article(article) %}
     <div class="communaute-de-pratiques-actualite">
-        <h3>{{ article.titre }}</h3>
-        <div class="date">Édito du {{ article.dateCreation|date('d/m/Y') }}</div>
+        <h3>{{ article.titre }} <span class="date">{{ article.dateCreation|date('d/m/Y') }}</span> </h3>
         <div class="body">{{ article.resume|parsePublication|unescape }}</div>
     </div>
 {% endmacro %}
@@ -347,28 +347,27 @@
     <div class="communaute-de-pratiques-bloc-fiche" data-communaute-pratique-fiche-resolu="{{ fiche.resolu ? '1' : '0' }}">
         <div class="icone">
             {%- if fiche.resolu -%}
-                <em class="icon icon-form-check"></em>
-            {%- else -%}
                 <em class="icon icon-stats2"></em>
+            {%- else -%}
+                <em class="icon icon-form-check"></em>
             {%- endif -%}
         </div>
         <div class="header">
-            <div class="date">
-                Créée le <strong>{{ fiche.dateCreation|date('d/m/Y') }}</strong>
-                par <a href="{{ path('hopitalnumerique_communautepratique_user_viewforgroupe', { user:fiche.user.id, groupe:fiche.groupe.id }) }}">{{ fiche.user.prenomNom }}</a>
-            </div>
+            {% if fiche|communautePratiqueCanEdit %}<a href="{{ path('hopitalnumerique_communautepratique_fiche_view', { fiche:fiche.id }) }}">{% endif %}
+                <strong>{{ fiche.questionPosee }}</strong>
+            {% if fiche|communautePratiqueCanEdit %}</a>{% endif %}
             <div class="communaute-de-pratiques-total-commentaires">
                 <span class="count">{{ fiche.commentaires|length }}</span> commentaire{{ fiche.commentaires|length > 1 ? 's' : '' }} sur cette fiche
             </div>
         </div>
         <div class="contenu">
-            {% if fiche|communautePratiqueCanEdit %}<a href="{{ path('hopitalnumerique_communautepratique_fiche_view', { fiche:fiche.id }) }}">{% endif %}
-                <strong>Question posée :</strong>
-            {% if fiche|communautePratiqueCanEdit %}</a>{% endif %}
-            {{ fiche.questionPosee }}
+            <div class="date">
+                Créée le <strong>{{ fiche.dateCreation|date('d/m/Y') }}</strong>
+                par <a href="{{ path('hopitalnumerique_communautepratique_user_viewforgroupe', { user:fiche.user.id, groupe:fiche.groupe.id }) }}">{{ fiche.user.prenomNom }}</a>
+            </div>
         </div>
         <nav>
-            <a href="{{ path('hopitalnumerique_communautepratique_fiche_view', { fiche:fiche.id }) }}">Consulter cette fiche</a>
+            <a href="{{ path('hopitalnumerique_communautepratique_fiche_view', { fiche:fiche.id }) }}">Contribuer à cette problématique</a>
         </nav>
     </div>
 {% endmacro %}

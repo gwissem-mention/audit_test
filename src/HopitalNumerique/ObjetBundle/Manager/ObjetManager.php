@@ -1038,4 +1038,58 @@ class ObjetManager extends BaseManager
     public function getArticleAlaUne() {
       return $this->getRepository()->getArticleAlaUne()->getQuery()->getResult();
     }
+    
+    /**
+     * Retourne les articles du domaine 
+     * @return \HopitalNumerique\ObjetBundle\Entity\Objet[]
+     */
+    public function getObjetByDomaine() {
+    	$objets = $this->getRepository()->getObjetByDomaine()->getQuery()->getResult();
+    	$ids    = array();
+    	foreach( $objets as $one )
+    		$ids[] = $one->getId();
+    	
+    		//get Contenus
+    		$datas    = $this->_contenuManager->getArboForObjet($ids);
+    		$contenus = array();
+    		foreach( $datas as $one ) {
+    			if( $one->objet != null )
+    				$contenus[ $one->objet ][] = $one;
+    		}
+    	
+    		//formate datas
+    		foreach( $objets as $one )
+    		{
+    			//Traitement pour Article
+    			if($one->isArticle())
+    			{
+    				$results[] = array(
+    						"text"  => $one->getTitre(),
+    						"value" => "ARTICLE:" . $one->getId()
+    				);
+    			}
+    			//Traitement pour Publication et Infradoc
+    			else
+    			{
+    				$results[] = array(
+    						"text"  => $one->getTitre(),
+    						"value" => "PUBLICATION:" . $one->getId()
+    				);
+    	
+    				if( !isset($contenus[ $one->getId() ]) || count( $contenus[ $one->getId() ] ) <= 0 )
+    					continue;
+    	
+    					foreach( $contenus[ $one->getId() ] as $content ){
+    						$results[] = array(
+    								"text"  => "|--" . $content->titre,
+    								"value" => "INFRADOC:" . $content->id
+    						);
+    						$this->getObjetsChilds($results, $content, 2);
+    					}
+    			}
+    	
+    		}
+    	
+    		return $results;
+    }
 }
