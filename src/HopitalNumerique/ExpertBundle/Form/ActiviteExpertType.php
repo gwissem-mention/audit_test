@@ -101,7 +101,7 @@ class ActiviteExpertType extends AbstractType
                     'empty_value'   => ' - ',
                     'attr'       => array('class' => 'select2'),
                     'query_builder' => function(EntityRepository $er) {
-                        return $er->findUsersByRoles(array('ROLE_ADMINISTRATEUR_1', 'ROLE_ANAP_MEMBRES_2' ));
+                        return $er->findUsersByDomaine(1);
                     }
             ))
             ->add('etat', 'entity', array(
