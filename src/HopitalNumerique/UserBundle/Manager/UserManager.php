@@ -109,6 +109,7 @@ class UserManager extends BaseManager
 
             unset($user["alreadyBeExpert"]);
             unset($user["alreadyBeAmbassadeur"]);
+            $user['idUser'] = $user['id'];
 
             $usersForGrid[] = $user;
         }
