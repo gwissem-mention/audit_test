@@ -82,7 +82,7 @@ window.open ("report/showReport.action?"+request,null,"location=no,menubar=0,res
 
                     <div class="titre-infradoc violet" style="margin-top: -15px;margin-bottom:5px;padding-top:5px;">
                         {% for breadcrumb in breadCrumbsArray %}
-                            <i class="fa fa-share fa-flip-vertical" style="margin-right:5px;margin-left:{{breadcrumb.label|alignBreadcrumbs}}px;height:13px"></i><a href="{{path('hopital_numerique_publication_publication_contenu',{'id':objet.id, 'idc':breadcrumb.contenu.id, 'alias':objet.alias, 'aliasc':breadcrumb.contenu.alias})}}" style="color:#672F9E;{% if not loop.first %}font-size:16px;{% endif %}">{{breadcrumb.label}}</a>{% if loop.index != breadCrumbsArray|length %} <span style="margin-right:5px; margin-left:5px;"></span><br /> {% endif %}
+                            <i class="fa fa-share fa-flip-vertical" style="margin-right:5px;margin-left:{{breadcrumb.label|alignBreadcrumbs}}px;height:13px"></i><a href="{{path('hopital_numerique_publication_publication_contenu',{'id':objet.id, 'idc':breadcrumb.contenu.id, 'alias':objet.alias, 'aliasc':breadcrumb.contenu.alias})}}" style="color:#672F9E;{% if not loop.first %}font-size:16px;{% endif %}{% if loop.index > 2 %}font-size:14px;{% endif %}">{{breadcrumb.label}}</a>{% if loop.index != breadCrumbsArray|length %} <span style="margin-right:5px; margin-left:5px;"></span><br /> {% endif %}
                         {% endfor %}
                     </div>
                     <div class="titre-infradoc-pdf violet" style="margin-top: -15px;margin-bottom:5px;padding-top:5px;">
