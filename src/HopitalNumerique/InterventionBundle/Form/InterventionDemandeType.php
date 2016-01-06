@@ -151,7 +151,7 @@ abstract class InterventionDemandeType extends AbstractType
                 'class'    => 'HopitalNumeriqueReferenceBundle:Reference',
                 'property' => 'libelle',
                 'multiple' => true,
-                'required' => true,
+                'required' => false,
                 'group_by' => 'parentName',
                 'query_builder' => function(EntityRepository $er) {
                     return $er->createQueryBuilder('ref')
@@ -172,7 +172,7 @@ abstract class InterventionDemandeType extends AbstractType
                 'class'    => 'HopitalNumeriqueReferenceBundle:Reference',
                 'property' => 'libelle',
                 'multiple' => true,
-                'required' => true,
+                'required' => false,
                 'group_by' => 'parentName',
                 'query_builder' => function(EntityRepository $er) {
                     return $er->createQueryBuilder('ref')

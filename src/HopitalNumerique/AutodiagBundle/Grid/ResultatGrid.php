@@ -27,6 +27,11 @@ class ResultatGrid extends Grid implements GridInterface
      */
     public function setColumns()
     {
+
+        $autodiagColumn = new Column\TextColumn('outil', 'Nom de l\'autodiagnostic');
+        $autodiagColumn->setFilterable( false );
+        $this->addColonne( $autodiagColumn );
+
         $userColumn = new Column\TextColumn('user', 'Prénom et Nom de l\'utilisateur');
         $userColumn->setFilterable( false );
         $this->addColonne( $userColumn );

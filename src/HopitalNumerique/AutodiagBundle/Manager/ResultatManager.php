@@ -46,6 +46,7 @@ class ResultatManager extends BaseManager
             $datas['taux']       = $resultat->getTauxRemplissage() . '%';
             $datas['lastSave']   = $resultat->getDateLastSave();
             $datas['validation'] = $resultat->getDateValidation();
+            $datas['outil']      = (null !== $resultat->getOutil() ? $resultat->getOutil()->GetTitle() : '');
             $datas['sharedFor']  = !is_null($resultat->getResultatSharedFor()) && !is_null($resultat->getResultatSharedFor()->getUser()) ? $resultat->getResultatSharedFor()->getUser()->getPrenomNom() : '';
             $datas['sharedBy']   = !is_null($resultat->getResultatSharedBy()) && !is_null($resultat->getResultatSharedBy()->getUser()) ? $resultat->getResultatSharedBy()->getUser()->getPrenomNom() : '';
 
@@ -94,6 +95,7 @@ class ResultatManager extends BaseManager
             $datas['taux']       = $resultat->getTauxRemplissage() . '%';
             $datas['lastSave']   = !is_null($resultat->getDateLastSave()) ? $resultat->getDateLastSave()->format('d/m/Y') : '';
             $datas['validation'] = !is_null($resultat->getDateValidation()) ? $resultat->getDateValidation()->format('d/m/Y') : '';
+            $datas['outil']      = (null !== $resultat->getOutil() ? $resultat->getOutil()->GetTitle() : '');
             $datas['sharedFor']  = $sharedFor;
             $datas['sharedBy']   = $sharedBy;
 
