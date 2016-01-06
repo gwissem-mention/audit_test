@@ -48,7 +48,7 @@
                 </thead>
                 <tbody>
                     {% set total = 0 %}
-                    {% for data in datas %}
+                    {% for data in datas if data.total.prix is not null %}
                         <tr>
                             <td class="hide" align="center hide"><input type="checkbox" class="checkbox" name="{{data.discr}}[{{data.id}}]" checked="checked" value="{{data.total.prix}}{% if data.total.hasSupplement is defined and data.total.hasSupplement is not null and data.total.hasSupplement %}_supp{% elseif data.total.hasSupplement is defined and data.total.hasSupplement is not null and not data.total.hasSupplement %}_noSupp{% endif %}" /></td>
                             <td>{{data.date|date('d/m/Y')}}</td>
@@ -84,6 +84,7 @@
                 <tr>
                     <th width="100px">N°</th>
                     <th>Date</th>
+                    <th>Montant</th>
                     <th>Etat facture</th>
                     <th width="50px">Actions</th>
                 </tr>
@@ -93,6 +94,7 @@
                     <tr>
                         <td>{{facture.user.id ~ facture.id}}</td>
                         <td>{{facture.dateCreation|date('d/m/Y')}}</td>
+                        <td>{{facture.total}}
                         <td>
                             {% if facture.payee %}Payée{% else %}Non payée{% endif %}
                         </td>

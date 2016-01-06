@@ -170,7 +170,8 @@ class ResultatController extends Controller
         $condition->value = $primaryKeys;
         $resultats = $this->get('hopitalnumerique_autodiag.manager.resultat')->getDatasForExport( $condition );
 
-        $colonnes = array( 
+        $colonnes = array(
+            'outil'         => 'Nom de l\'autodiagnostic', 
             'userId'        => 'Id utilisateur',
             'user'          => 'Utilisateur',
             'etablissement' => 'Établissement',
