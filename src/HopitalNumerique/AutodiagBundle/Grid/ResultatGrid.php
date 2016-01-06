@@ -32,6 +32,10 @@ class ResultatGrid extends Grid implements GridInterface
         $autodiagColumn->setFilterable( false );
         $this->addColonne( $autodiagColumn );
 
+        $autodiagColumn = new Column\TextColumn('occurrence', 'Nom donné par l\'utilisateur');
+        $autodiagColumn->setFilterable( false );
+        $this->addColonne( $autodiagColumn );
+
         $userColumn = new Column\TextColumn('user', 'Prénom et Nom de l\'utilisateur');
         $userColumn->setFilterable( false );
         $this->addColonne( $userColumn );
