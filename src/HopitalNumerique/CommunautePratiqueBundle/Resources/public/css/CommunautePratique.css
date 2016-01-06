@@ -56,7 +56,7 @@
     .communaute-de-pratiques-sommaire a:hover { text-decoration: none; }
         .communaute-de-pratiques-sommaire a em { font-size: 30px;margin: 0 12px 0 0;vertical-align: middle; }
     .communaute-de-pratiques-sommaire .btn-sommaire { color:#fff;}
-    .communaute-de-pratiques-sommaire .groupe { background-color: ##d60030;color: #fff;}
+    .communaute-de-pratiques-sommaire .groupe { background-color: #d60030;color: #fff;}
 /* Bloc d'un' groupe */
 .communaute-de-pratiques-groupe { padding: 15px; }
     .communaute-de-pratiques-groupe h2 { color: #dd3157;font-size: 15px;font-weight: bold;margin: 0 0 6px; }
