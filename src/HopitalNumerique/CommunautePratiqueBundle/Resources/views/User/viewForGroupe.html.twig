@@ -93,9 +93,11 @@
                         <div class="col-md-6">
                             <p>Fiches de problématiques soumises par <strong class="violet">{{ user.prenomNom }}</strong></p>
                         </div>
-                        <div class="col-md-6 text-right">
-                            <a class="btn btn-success" href="{{ path('hopitalnumerique_communautepratique_fiche_add', { groupe:groupe.id }) }}">Ajouter une fiche &nbsp; &nbsp; <em class="fa fa-plus"></em></a>
-                        </div>
+                        {%- if app.user.id == user.id -%}
+                            <div class="col-md-6 text-right">
+                                <a class="btn btn-success" href="{{ path('hopitalnumerique_communautepratique_fiche_add', { groupe:groupe.id }) }}">Ajouter une problématique &nbsp; &nbsp; <em class="fa fa-plus"></em></a>
+                            </div>
+                        {%- endif -%}
                     </div><br>
 
                     <div class="row">
@@ -106,6 +108,15 @@
                         {%- endfor -%}
                     </div>
 
+                {%- elseif app.user.id == user.id -%}
+                    <div class="row">
+                        <div class="col-md-6">
+                           <p><strong><span class="violet">{{ user.prenomNom }} n'a pas encore déposé de fiches de problématique sur le groupe</span> {{ groupe }}.</strong></p>
+                        </div>
+                        <div class="col-md-6 text-right">
+                            <a class="btn btn-success" href="{{ path('hopitalnumerique_communautepratique_fiche_add', { groupe:groupe.id }) }}">Ajouter une problématique &nbsp; &nbsp; <em class="fa fa-plus"></em></a>
+                        </div>
+                    </div><br>
                 {%- else -%}
                     <p><strong><span class="violet">{{ user.prenomNom }} n'a pas encore déposé de fiches de problématique sur le groupe</span> {{ groupe }}.</strong></p>
                 {%- endif -%}

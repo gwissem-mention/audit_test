@@ -68,7 +68,7 @@ CommunautePratique_Commentaire.callTinyMce = function(element)
         height       : 120,
         menubar      : false,
         content_css  : '/bundles/nodevotools/css/wysiwyg.css',
-        toolbar1     : 'bold | underline | italic | communautePratiqueDocument | link | publicationDomaine',
+        toolbar1     : 'bold | underline | italic | link | communautePratiqueDocument | publicationDomaine',
         relative_urls: false,
         statusbar    : false
     });

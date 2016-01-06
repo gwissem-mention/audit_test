@@ -127,7 +127,7 @@
         {%- endif -%}
 
         <div class="row">
-            <div class="col-md-8">
+            <div class="col-md-6">
 
                 <div class="panel panel-communaute-de-pratiques" id="panel-communaute-de-pratiques-actualites">
                     <div class="panel-heading">
@@ -149,7 +149,7 @@
                 </div>
 
             </div>
-            <div class="col-md-4">
+            <div class="col-md-6">
 
                 <div class="panel panel-communaute-de-pratiques communaute-de-pratiques-bloc-membres" id="panel-communaute-de-pratiques-membres">
                     <div class="panel-heading">
@@ -162,7 +162,7 @@
                         <div class="row">
 
                             {%- for membre in membres -%}
-                                <div class="col-xs-4">
+                                <div class="col-xs-3">
                                     <div class="membre">
                                         <div class="communaute-de-pratiques-avatar" style="background-image: url('{{ asset(membre.avatarWebPath) }}');"></div>
                                         {{ membre.prenomNom }}
