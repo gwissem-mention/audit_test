@@ -1,6 +1,6 @@
 {% extends 'HopitalNumeriqueCommunautePratiqueBundle::layout.html.twig' %}
 
-{% block title_communaute_pratique %}Actualités {{ categorie.libelle }}{% endblock %}
+{% block title_communaute_pratique %}Actualités{% endblock %}
 
 {% block communaute_pratique_breadcrumbs_parent %}
     {%- if categorie.parent is not null -%}
@@ -36,5 +36,26 @@
             {%- endfor -%}
         </div>
     </div>
-
 {% endblock body_communaute_pratique %}
+
+{% block communaute_pratique_sommaire %}
+<div class="communaute-de-pratiques-sommaire">
+    <div class="row">
+        <div class="col-md-3">
+            <a href="{{ path('hopitalnumerique_communautepratique_user_list') }}"><em class="icon-group2"></em> Membres de la communauté</a>
+        </div>
+        <div class="col-md-3">
+            <a href="{{ path('hopitalnumerique_communautepratique_groupe_list') }}"><em class="icon-social20"></em> Groupes de travail</a>
+        </div>
+        <div class="col-md-3">
+            <a href="{{ path('hopitalnumerique_communautepratique_publication_list') }}"><em class="icon-documents7"></em> Publications issues des groupes</a>
+        </div>
+        <div class="col-md-3">
+            <a href="{{ path('ccdn_forum_user_category_index', { forumName:'Communaute_de_pratiques' }) }}"><em class="icon-chat27"></em> Forum de la communauté de pratiques</a>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+
+

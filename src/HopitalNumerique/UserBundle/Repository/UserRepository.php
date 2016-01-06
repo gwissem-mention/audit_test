@@ -652,7 +652,7 @@ class UserRepository extends EntityRepository
             ->setParameter('etat', User::ETAT_ACTIF_ID)
             ->leftJoin('user.domaines', 'domaine')
             ->andWhere('domaine.url = :domaine')
-            ->setParameter(':domaine', $domaine->getUrl())
+            ->setParameter(':domaine', ($domaine)? $domaine->geturl(): null)
             ->addOrderBy('user.nom', 'ASC')
             ->addOrderBy('user.prenom', 'ASC')
             ->addOrderBy('user.id', 'ASC')

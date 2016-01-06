@@ -135,8 +135,10 @@
                     </div>
                     <div class="panel-body">
 
-                        {% if derniereActualite is not null %}
-                            {{ communaute_pratique.display_article(derniereActualite) }}
+                        {% if actualites is not null %}
+                            {% for derniereActualite in actualites|slice(0, 2) %}
+                                {{ communaute_pratique.display_article(derniereActualite) }}
+                            {% endfor %}
                         {% endif %}
 
                         <nav class="lien">

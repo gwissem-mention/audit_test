@@ -27,7 +27,7 @@
     </script>
 {% endblock %}
 
-{% block title_communaute_pratique %}Porte-documents{% endblock %}
+{% block title_communaute_pratique %}Mes documents{% endblock %}
 
 {% block communaute_pratique_breadcrumbs_parent %}<li><a href="{{ path('hopitalnumerique_communautepratique_groupe_view', { groupe:groupe.id }) }}">Groupe de travail {{ groupe }}</a></li>{% endblock %}
 
@@ -153,7 +153,6 @@
         '}}</script>
 
         {% if documents|length > 0 %}
-            <h2 class="mini-title text-right">Porte-documents</h2>
             <div class="row">
                 {% for document in documents %}
                     <div class="col-md-3">

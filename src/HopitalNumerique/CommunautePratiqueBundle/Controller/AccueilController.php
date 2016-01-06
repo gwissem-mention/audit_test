@@ -33,8 +33,8 @@ class AccueilController extends \Symfony\Bundle\FrameworkBundle\Controller\Contr
                     ? ($this->container->get('hopitalnumerique_communautepratique.manager.groupe')
                         ->findNonFermes($domaine, ($this->getUser()->hasRoleAdmin() ? null : $this->getUser())))
                     : array()),
-                'derniereActualite' => $this->container->get('hopitalnumerique_objet.manager.objet')
-                    ->getLastArticleForCategorie($this->container->get('hopitalnumerique_reference.manager.reference')
+                'actualites' => $this->container->get('hopitalnumerique_objet.manager.objet')
+                    ->getArticlesForCategorie($this->container->get('hopitalnumerique_reference.manager.reference')
                         ->findOneById(Reference::ARTICLE_CATEGORIE_COMMUNAUTE_DE_PRATIQUES_ID), $domaine),
                 'groupesEnVedette' => $this->container->get('hopitalnumerique_communautepratique.manager.groupe')
                     ->findNonFermes($domaine, null, true),

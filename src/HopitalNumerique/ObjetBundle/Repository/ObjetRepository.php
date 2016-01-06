@@ -360,4 +360,27 @@ class ObjetRepository extends EntityRepository
             ->getOneOrNullResult()
         ;
     }
+    
+    /**
+     * Retourne les objets du domaine.
+     *
+     * @return query
+     */
+    public function getObjetByDomaine() {
+    	
+		$domaine = $this->getEntityManager()->getRepository('HopitalNumeriqueDomaineBundle:Domaine')->getDomaineFromHttpHost($_SERVER["SERVER_NAME"])->getQuery()->getOneOrNullResult();
+    	
+        $qb = $this->_em->createQueryBuilder();
+        $qb->select('obj')
+            ->from('HopitalNumeriqueObjetBundle:Objet', 'obj')
+            ->innerJoin('obj.types','refType')
+            ->leftJoin('obj.etat','refEtat')
+            ->leftJoin('refType.parent','parentType')
+            ->leftJoin('obj.domaines','domaine')
+                ->where('domaine.id = :idDomaine')
+                ->setParameter('idDomaine', ($domaine) ? $domaine->getId() : 1)
+            ;
+        
+        return $qb;
+    }
 }

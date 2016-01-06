@@ -183,7 +183,7 @@ ul.communaute-de-pratiques-mes-groupes { list-style-type: none;margin: 0;padding
 /* Actualité */
 .communaute-de-pratiques-actualite { margin: 0 0 30px 0; }
     .communaute-de-pratiques-actualite h3 { font-weight: bold;margin: 0; }
-    .communaute-de-pratiques-actualite .date { color: #dd3157;margin: 0 0 12px; }
+    .communaute-de-pratiques-actualite .date { color: #dd3157;margin: 0 0 12px; font-size: 13px; }
     .communaute-de-pratiques-actualite .body { color: #777; }
 
 /* Menu actualités */

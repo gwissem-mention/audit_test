@@ -6,6 +6,13 @@ var CommunautePratique_Groupe = function() {};
 
 $(document).ready(function() {
     CommunautePratique_Groupe.init();
+    
+    var url= window.location.pathname;
+    $("div.row > div.col-md-3 > a").each(function(i){
+    	if ($(this).attr("href") == url ) {
+    		$(this).css("color","#DD3157");
+    	}
+    });
 });
 
 

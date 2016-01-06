@@ -11,8 +11,7 @@ var CommunautePratique_Commentaire = function() {};
 CommunautePratique_Commentaire.initTinyMce = function(groupeId)
 {
     CommunautePratique_Commentaire.initTinyMcePluginDocuments(groupeId);
-    CommunautePratique_Commentaire.initTinyMcePluginPorteDocuments(groupeId);
-    tinymce.PluginManager.load('publication', '/bundles/hopitalnumeriqueobjet/js/publication/plugin.min.js');
+    tinymce.PluginManager.load('publicationDomaine', '/bundles/hopitalnumeriqueobjet/js/publication/plugin.minByDomaine.js');
 };
 /**
  * Initialise le plugin TinyMce permetant de créer un lien vers un document.
@@ -42,29 +41,11 @@ CommunautePratique_Commentaire.initTinyMcePluginDocuments = function(groupeId)
                             var documentId = $('#document').val();
                             var texte = $('#texte').val();
                             if (documentId != '' && texte != '') {
-                                editor.insertContent('<a href="' + Routing.generate('hopitalnumerique_communautepratique_document_download', { document:documentId }) + '">' + texte + '</a>');
+                                editor.insertContent('<a class="fa fa-file-o" href="' + Routing.generate('hopitalnumerique_communautepratique_document_download', { document:documentId }) + '"> ' + texte + ' </a>');
                             }
                         }
                     }
                 });
-            }
-        });
-    });
-};
-
-
-/**
- * Initialise le plugin TinyMce permetant de créer un lien vers la page Mes documents.
- *
- * @param integer groupeId ID du groupe
- */
-CommunautePratique_Commentaire.initTinyMcePluginPorteDocuments = function(groupeId) {
-    tinymce.PluginManager.add('communautePratiquePorteDocument', function(editor, url) {
-        editor.addButton('communautePratiquePorteDocument', {
-            text: 'Mes documents',
-            icon: false,
-            onclick: function() {
-                window.open(Routing.generate('hopitalnumerique_communautepratique_document_listbygroupe', { groupe:groupeId }));
             }
         });
     });
@@ -83,11 +64,11 @@ CommunautePratique_Commentaire.callTinyMce = function(element)
         theme        : "modern",
         theme_url    : '/bundles/nodevotools/js/tinymce/themes/modern/theme.min.js',
         skin_url     : '/bundles/nodevotools/js/tinymce/skins/lightgray',
-        plugins      : 'link communautePratiqueDocument publication communautePratiquePorteDocument',
-        height       : 150,
+        plugins      : 'link communautePratiqueDocument publicationDomaine',
+        height       : 120,
         menubar      : false,
         content_css  : '/bundles/nodevotools/css/wysiwyg.css',
-        toolbar1     : 'communautePratiquePorteDocument | communautePratiqueDocument | link | publication',
+        toolbar1     : 'bold | underline | italic | communautePratiqueDocument | link | publicationDomaine',
         relative_urls: false,
         statusbar    : false
     });
