@@ -10,7 +10,7 @@ $(document).ready(function() {
     var url= window.location.pathname;
     $("div.row > div.col-md-3 > a").each(function(i){
     	if ($(this).attr("href") == url ) {
-    		$(this).css("color","#DD3157");
+    		$(this).addClass("btn-sommaire");
     	}
     });
 });
