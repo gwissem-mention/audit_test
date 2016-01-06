@@ -29,12 +29,12 @@
     <div class="panel panel-communaute-de-pratiques panel-communaute-de-pratiques-tableau-de-bord">
         <div class="groupe" data-groupe-id="{{ groupe.id }}" >
             <div class="header">
-                <strong>Description du groupe</strong>
-                <a class="interrupteur off" onclick="CommunautePratique_TableauDeBord.toggleOuvertureGroupe({{ groupe.id }});"></a>
+                <strong style="font-size:14px">Description du groupe</strong>
+                <a style="margin:-6px;" class="interrupteur off" onclick="CommunautePratique_TableauDeBord.toggleOuvertureGroupe({{ groupe.id }});"></a>
             </div>
             <div class="body">    
             {%- if groupe.animateurs|length > 0 -%}
-                <p>
+                <p style="font-size:13px;">
                     <strong>Animateur{{ groupe.animateurs|length > 1 ? 's' : '' }} du groupe</strong> :
                     {% for animateur in groupe.animateurs %}
                         {{ animateur.prenom }} {{ animateur.nom }}{{ loop.last ? '' : ', ' }}

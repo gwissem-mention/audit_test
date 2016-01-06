@@ -59,14 +59,14 @@ class AccueilController extends \Symfony\Bundle\FrameworkBundle\Controller\Contr
     {
         $messieursAuHasard = $this->container->get('hopitalnumerique_user.manager.user')
             ->findCommunautePratiqueRandomMembres(
-                3,
+                4,
                 $this->container->get('hopitalnumerique_reference.manager.reference')
                     ->findOneById(Reference::CIVILITE_MONSIEUR_ID)
             )
         ;
         $mesdamesAuHasard = $this->container->get('hopitalnumerique_user.manager.user')
             ->findCommunautePratiqueRandomMembres(
-                3,
+                4,
                 $this->container->get('hopitalnumerique_reference.manager.reference')
                     ->findOneById(Reference::CIVILITE_MADAME_ID)
             )
@@ -74,9 +74,9 @@ class AccueilController extends \Symfony\Bundle\FrameworkBundle\Controller\Contr
 
         $membresAuHasard = array_merge(
             $messieursAuHasard,
-            $mesdamesAuHasard,
-            $this->container->get('hopitalnumerique_user.manager.user')
-                ->findCommunautePratiqueRandomMembres(3, null, array_merge($messieursAuHasard, $mesdamesAuHasard))
+            $mesdamesAuHasard
+//             $this->container->get('hopitalnumerique_user.manager.user')
+//                 ->findCommunautePratiqueRandomMembres(3, null, array_merge($messieursAuHasard, $mesdamesAuHasard))
         );
 
         shuffle($membresAuHasard);

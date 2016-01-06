@@ -198,8 +198,9 @@ ul.communaute-de-pratiques-mes-groupes { list-style-type: none;margin: 0;padding
 /* Tableau de bord (accueil général) */
 .communaute-de-pratiques-tableau-de-bord {}
     .communaute-de-pratiques-tableau-de-bord .lien { font-size: 10px;margin: 15px 0 0 0;text-align: right;text-transform: uppercase; }
-        .communaute-de-pratiques-tableau-de-bord .lien a { color: #2e2e2e; }
-            .communaute-de-pratiques-tableau-de-bord .lien .fa { color: #dd3157; }
+        .communaute-de-pratiques-tableau-de-bord .lien a { font-weight: bold;  }
+            .communaute-de-pratiques-tableau-de-bord .lien .fa { font-weight: bold; color: #dd3157; }
+    .communaute-de-pratiques-tableau-de-bord .lien-titre a {color:#2e2e2e;}
     /* Bloc Membres */
     .communaute-de-pratiques-bloc-membres {}
         .communaute-de-pratiques-bloc-membres .panel-body { padding: 30px; }

@@ -70,7 +70,7 @@
                                                                     Commentaire{{ totalUserCommentaires > 1 ? 's' : '' }}<br>rédigé{{ totalUserCommentaires > 1 ? 's' : '' }}
                                                                 </div>
                                                                 <div class="connexion">
-                                                                    Dernière connexion
+                                                                    Dernière activité
                                                                     <div class="violet">{{ user.lastLogin is not null ? user.lastLogin|date('d/m/Y') : '' }}</div>
                                                                 </div>
                                                             </div>
@@ -94,7 +94,7 @@
                                                                 <div class="contenu">
                                                                     {%- if user.reponses|hadReponseForQuestionnaire(groupe.questionnaire.id) -%}
                                                                         <div class="questionnaire">
-                                                                            <a href="{{ path('hopitalnumerique_questionnaire_edit_front', { user:user.id, questionnaire:groupe.questionnaire.id }) }}"><em class="icon icon-test1"></em> Questionnaire d'inscription</a>
+                                                                            <a href="{{ path('hopitalnumerique_communautepratique_user_viewforgroupe', { user:user.id, groupe:groupe.id }) }}"><em class="icon icon-test1"></em> Retour d'expérience</a>
                                                                         </div>
                                                                     {%- endif -%}
                                                                     <ul>
@@ -131,7 +131,7 @@
 
                 <div class="panel panel-communaute-de-pratiques" id="panel-communaute-de-pratiques-actualites">
                     <div class="panel-heading">
-                        <h2><em class="icon icon-news"></em> Actualités de la communauté</h2>
+                        <h2 class="lien-titre" ><a href="{{ path('hopitalnumerique_communautepratique_actualite_list') }}"><em class="icon icon-news"></em> Actualités de la communauté</a></h2>
                     </div>
                     <div class="panel-body">
 
@@ -153,7 +153,7 @@
 
                 <div class="panel panel-communaute-de-pratiques communaute-de-pratiques-bloc-membres" id="panel-communaute-de-pratiques-membres">
                     <div class="panel-heading">
-                        <h2><em class="icon icon-social20"></em> Membres de la communauté</h2>
+                        <h2 class="lien-titre" ><a href="{{ path('hopitalnumerique_communautepratique_user_list') }}"><em class="icon icon-social20"></em> Membres de la communauté</a></h2>
                     </div>
                     <div class="panel-body">
 
@@ -187,7 +187,7 @@
 
                 <div class="panel panel-communaute-de-pratiques" id="panel-communaute-de-pratiques-groupes">
                     <div class="panel-heading">
-                        <h2><em class="icon icon-social20"></em> Groupes de travail</h2>
+                        <h2 class="lien-titre"><a href="{{ path('hopitalnumerique_communautepratique_groupe_list') }}"><em class="icon icon-social20"></em> Groupes de travail</a></h2>
                     </div>
                     <div class="panel-body">
 
@@ -221,7 +221,7 @@
             <div class="col-md-12">
                 <div class="panel panel-communaute-de-pratiques" id="panel-communaute-de-pratiques-forums">
                     <div class="panel-heading">
-                        <h2><em class="icon icon-chat27"></em> Échanger avec toute la communauté</h2>
+                        <h2 class="lien-titre"><a href="{{ path('ccdn_forum_user_category_index', { forumName:forum.name }) }}"><em class="icon icon-chat27"></em> Échanger avec toute la communauté</a></h2>
                     </div>
                     <div class="panel-body">
 

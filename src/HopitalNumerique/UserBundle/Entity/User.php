@@ -527,7 +527,7 @@ class User extends BaseUser
     // ------- Ambassadeurs  -------
     /**
      * @Assert\File(
-     *     maxSize = "200k",
+     *     maxSize = "1000k",
      *     mimeTypes = { 
      *         "image/gif", 
      *         "image/jpeg", 
