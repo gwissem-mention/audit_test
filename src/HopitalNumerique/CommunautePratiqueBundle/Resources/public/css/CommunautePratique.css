@@ -55,8 +55,8 @@
     .communaute-de-pratiques-sommaire a { align-items: center;-webkit-align-items: center;background-color: #E5E5E5;color: #777777;display: flex;flex-direction: row;-webkit-flex-direction: row;line-height: 16px;overflow: auto;padding: 10px 28px 11px 16px;vertical-align: middle; }
     .communaute-de-pratiques-sommaire a:hover { text-decoration: none; }
         .communaute-de-pratiques-sommaire a em { font-size: 30px;margin: 0 12px 0 0;vertical-align: middle; }
-    .communaute-de-pratiques-sommaire .btn-sommaire { color:#DD3157;}
-    .communaute-de-pratiques-sommaire .groupe { background-color: #FBD59A;}
+    .communaute-de-pratiques-sommaire .btn-sommaire { color:#fff;}
+    .communaute-de-pratiques-sommaire .groupe { background-color: #fff;color: #fff;}
 /* Bloc d'un' groupe */
 .communaute-de-pratiques-groupe { padding: 15px; }
     .communaute-de-pratiques-groupe h2 { color: #dd3157;font-size: 15px;font-weight: bold;margin: 0 0 6px; }
