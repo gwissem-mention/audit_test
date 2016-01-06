@@ -1,3 +1,15 @@
+<script type="text/javascript">
+$("#publication").change(function (){
+    var title = $("#publication option:selected").text() + "";
+    if(title.length != 0) {
+       $("#texte").val(title);    
+    } else {
+        $("#texte").val("");
+    }
+});
+
+</script>
+
 <form class="form-horizontal">
     <div style="width:765px;">
         <h2>Ajouter un lien interne</h2>

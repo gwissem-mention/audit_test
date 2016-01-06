@@ -61,7 +61,7 @@
 .communaute-de-pratiques-groupe { padding: 15px; }
     .communaute-de-pratiques-groupe h2 { color: #dd3157;font-size: 15px;font-weight: bold;margin: 0 0 6px; }
     .communaute-de-pratiques-groupe p { font-size: 11px;line-height: 13px; }
-    .communaute-de-pratiques-groupe .button { background-color: #dd3157;color: #fff;cursor: pointer;display: block;font-size: 10px;padding: 12px;text-align: center;text-transform: uppercase; }
+    .communaute-de-pratiques-groupe .button { background-color: #dd3157;color: #fff;cursor: pointer;display: block;font-size: 12px;padding: 10px;text-align: center;text-transform: uppercase; }
     .communaute-de-pratiques-groupe .button:hover { text-decoration: none; }
     .communaute-de-pratiques-groupe .button.inactive { background-color: #777;cursor: default; }
         .communaute-de-pratiques-groupe .button .jours-restants { font-size: 12px; }
@@ -176,7 +176,7 @@ ul.communaute-de-pratiques-mes-groupes { list-style-type: none;margin: 0;padding
     .communaute-de-pratiques-bloc-fiche .header {}
         .communaute-de-pratiques-bloc-fiche .header .date {}
             .communaute-de-pratiques-bloc-fiche .header .date strong { color: #dd3157; }
-    .communaute-de-pratiques-bloc-fiche .contenu { clear: both;font-size: 11px;height: 70px;overflow: hidden; }
+    .communaute-de-pratiques-bloc-fiche .contenu { clear: both;font-size: 11px;height: 20px;overflow: hidden; }
         .communaute-de-pratiques-bloc-fiche .contenu strong { color: #dd3157;font-size: 14px; }
     .communaute-de-pratiques-bloc-fiche nav { font-size: 12px;text-align: right; }
 .communaute-de-pratiques-bloc-fiche[data-communaute-pratique-fiche-resolu="1"] { background-color: #fff; }
@@ -184,7 +184,7 @@ ul.communaute-de-pratiques-mes-groupes { list-style-type: none;margin: 0;padding
 /* Actualité */
 .communaute-de-pratiques-actualite { margin: 0 0 30px 0; }
     .communaute-de-pratiques-actualite h3 { font-weight: bold;margin: 0; }
-    .communaute-de-pratiques-actualite .date { color: #dd3157;margin: 0 0 12px; font-size: 13px; }
+    .communaute-de-pratiques-actualite .date { color: #dd3157;margin: 0 0 12px; font-size: 13px;font-weight: normal; }
     .communaute-de-pratiques-actualite .body { color: #777; }
 
 /* Menu actualités */
@@ -269,7 +269,7 @@ ul.communaute-de-pratiques-mes-groupes { list-style-type: none;margin: 0;padding
     .communaute-de-pratiques-publications .panel-communaute-de-pratiques { margin-bottom: 30px; }
         .communaute-de-pratiques-publications .panel-communaute-de-pratiques .panel-body { padding: 30px; }
             .communaute-de-pratiques-publications .date { float: right;font-size: 12px;padding: 2px 0 0 0; }
-            .communaute-de-pratiques-publications .publication { font-size: 13px; }
+            .communaute-de-pratiques-publications .publication { font-size: 13px; margin-top:20px;  }
                 .communaute-de-pratiques-publications .publication .categorie { color: #d60030;font-size: 13px;margin-bottom: 5px;text-transform: uppercase; }
                 .communaute-de-pratiques-publications .publication h2 { color: #070005;font-size: 18px;margin: 0 0 10px 0; }
                     .communaute-de-pratiques-publications .publication h2 a { color: inherit; }
