@@ -73,20 +73,18 @@ class UserGrid extends Grid implements GridInterface
 
         //Récupération des roles
         $arrayRolesDateContractualisation = $this->_arrayRolesDateContractualisation;
-        
-        $this-> showIdColumn(true);
 
         //Retirer username et pseudonymeForum des filtres
         $usernameColonne = new Column\DateColumn('username', 'Username');
         $usernameColonne->setVisible(false);
         $usernameColonne->setFilterable(false);
         $this->addColonne($usernameColonne);
-
         $pseudonymeColonne = new Column\DateColumn('pseudonymeForum', 'Pseudonyme forum');
         $pseudonymeColonne->setVisible(false);
         $pseudonymeColonne->setFilterable(false);
         $this->addColonne($pseudonymeColonne);
 
+        $this->addColonne( new Column\NumberColumn('idUser', 'ID') );
         $this->addColonne( new Column\DateColumn('dateInscription', 'Date d\'inscription') );                      
         $this->addColonne( new Column\NumberColumn('nbVisites', 'Visites') );
         $this->addColonne( new Column\TextColumn('nom', 'Nom') );
