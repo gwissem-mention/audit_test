@@ -102,7 +102,7 @@ class GroupeRepository extends \Doctrine\ORM\EntityRepository
      * @param boolean                                        $isActif (optionnel) Si les groupes doivent être actifs ou non actifs
      * @return array<\HopitalNumerique\CommunautePratiqueBundle\Entity\Groupe> Groupes en cours
      */
-    public function findTermines(Domaine $domaine, User $user, $isActif = null)
+    public function findTermines(Domaine $domaine, User $user = null, $isActif = null)
     {
         $query = $this->createQueryBuilder('groupe');
         $aujourdhui = new \DateTime();

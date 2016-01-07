@@ -46,6 +46,17 @@ class GroupeManager extends \Nodevo\ToolsBundle\Manager\Manager
     }
 
     /**
+     * Retourne les groupes terminés.
+     *
+     * @param \HopitalNumerique\DomaineBundle\Entity\Domaine $domaine Domaine
+     * @return array<\HopitalNumerique\CommunautePratiqueBundle\Entity\Groupe> Groupes en cours
+     */
+    public function findTermines(Domaine $domaine)
+    {
+    	return $this->getRepository()->findTermines($domaine, null, true);
+    }
+
+    /**
      * Retourne les groupes en cours.
      * 
      * @param \HopitalNumerique\DomaineBundle\Entity\Domaine $domaine Domaine

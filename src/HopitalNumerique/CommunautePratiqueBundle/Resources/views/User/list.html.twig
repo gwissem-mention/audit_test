@@ -14,7 +14,7 @@
 {% block communaute_pratique_actions %}
     {{ parent() }}
     <div class="lien">
-        <a href="{{ path('hopital_numerique_user_informations_personnelles') }}">Mise à jour de mes données <em class="icon icon-settings48"></em></a>
+        <a target="_blank" href="{{ path('hopital_numerique_user_informations_personnelles') }}">Mise à jour de mes informations personnelles <em class="icon icon-settings48"></em></a>
     </div>
 {% endblock %}
 
@@ -40,8 +40,11 @@
                     <div class="col-md-4 col-sm-6 filtre">
                         {{ form_widget(rechercheForm.typeActivite) }}
                     </div>
-                    <div class="col-md-4 col-sm-6 filtre">
-                        <button type="submit" class="btn btn-success">Filtrer les membres</button>
+                    <div class="col-md-2 col-sm-3 filtre">
+                        <input name="rechercher" type="submit" class="btn btn-success" value='Rechercher'/>
+                    </div>
+                    <div class="col-md-2 col-sm-3 filtre">
+                        <input name="resetFiltres" type="submit" class="btn btn-danger" value="Réinitialiser"/>
                     </div>
                 </div>
             {{ form_end(rechercheForm) }}
@@ -52,7 +55,7 @@
 
                 {% for membre in pagerFantaMembres.currentPageResults %}
                     <div class="col-md-3 col-sm-6">
-                        {{ communaute_pratique.display_bloc_membre(membre, null, false) }}
+                        {{ communaute_pratique.display_bloc_membre(membre, null, false, groupesTermines, groupesNonDemarres, groupesEnCours) }}
                     </div>
                 {% endfor %}
 
@@ -67,3 +70,22 @@
     </div>
 
 {% endblock body_communaute_pratique %}
+
+{% block communaute_pratique_sommaire %}
+<div class="communaute-de-pratiques-sommaire">
+    <div class="row">
+        <div class="col-md-3">
+            <a href="{{ path('hopitalnumerique_communautepratique_accueil_index') }}"><em class="icon icon-download105"></em> Tableau de bord</a>
+        </div>
+        <div class="col-md-3">
+            <a href="{{ path('hopitalnumerique_communautepratique_groupe_list') }}"><em class="icon-social20"></em> Groupes de travail</a>
+        </div>
+        <div class="col-md-3">
+            <a href="{{ path('hopitalnumerique_communautepratique_publication_list') }}"><em class="icon-documents7"></em> Publications issues des groupes</a>
+        </div>
+        <div class="col-md-3">
+            <a href="{{ path('ccdn_forum_user_category_index', { forumName:'Communaute_de_pratiques' }) }}"><em class="icon-chat27"></em> Forum de la communauté de pratiques</a>
+        </div>
+    </div>
+</div>
+{% endblock %}
