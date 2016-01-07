@@ -16,7 +16,8 @@ class ToolsExtension extends \Twig_Extension
             'minifieMoi'   => new \Twig_Filter_Method($this, 'minifie'),
             'base64Nodevo' => new \Twig_Filter_Method($this, 'base64Nodevo'),
             'tinyUrl'      => new \Twig_Filter_Method($this, 'tinyUrl'),
-            'bitly'        => new \Twig_Filter_Method($this, 'bitly')
+            'bitly'        => new \Twig_Filter_Method($this, 'bitly'),
+            'unescape' => new \Twig_Filter_Method($this, 'unescape', array('is_safe' => array('html')))
         );
     }
 
@@ -55,6 +56,29 @@ class ToolsExtension extends \Twig_Extension
         $bitly_response = json_decode(file_get_contents("http://api.bit.ly/v3/shorten?login={$bitly_login}&apiKey={$bitly_apikey}&longUrl={$long_url}&format=json"));
 
         return $bitly_response->data->url;
+    }
+
+    public function unescape($html)
+    {
+        $html = preg_replace(
+            array(
+                '@<head[^>]*?>.*?</head>@siu',
+                '@<style[^>]*?>.*?</style>@siu',
+                '@<script[^>]*?.*?</script>@siu',
+                '@<object[^>]*?.*?</object>@siu',
+                '@<embed[^>]*?.*?</embed>@siu',
+                '@<applet[^>]*?.*?</applet>@siu',
+                '@<noframes[^>]*?.*?</noframes>@siu',
+                '@<noscript[^>]*?.*?</noscript>@siu',
+                '@<noembed[^>]*?.*?</noembed>@siu'
+            ),
+            array(
+                ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '
+            ),
+            $html
+        );
+            
+        return $html;
     }
 
     /**

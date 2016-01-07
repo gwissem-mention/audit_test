@@ -1,0 +1,26 @@
+{% extends 'HopitalNumeriqueCommunautePratiqueBundle::layout.html.twig' %}
+
+{% block title_communaute_pratique %}Publications issues des groupes de travail{% endblock %}
+
+{% block communaute_pratique_breadcrumbs_communautedepratiques %}<li><a href="{{ path('hopital_numerique_publication_publication_article', { categorie:'article', id:1000, alias:'la-communaute-de-pratiques' }) }}">Communauté de pratiques</a></li>{% endblock %}
+
+{% block communaute_pratique_actions %}
+    {{ communaute_pratique.display_action_groupes_with_publications(groupes) }}
+{% endblock %}
+
+{% block communaute_pratique_sommaire %}{% endblock %}
+
+{% block body_communaute_pratique %}
+    <div class="communaute-de-pratiques-publications">
+        {%- for groupe in groupesPager.currentPageResults -%}
+            {{ communaute_pratique.display_panel_publications(groupe) }}
+        {%- else -%}
+            <p class="text-center">Aucune production référencée.</br></br></p>
+        {%- endfor -%}
+    </div>
+
+    {% if groupesPager.nbPages > 1 %}
+        <div class="text-center">{{ pagerfanta(groupesPager, 'hopitalnumerique_communautepratique') }}</div>
+    {% endif %}
+
+{% endblock body_communaute_pratique %}

@@ -1,0 +1,27 @@
+hopitalnumerique_communautepratique_document_listbygroupe:
+    pattern: /groupe/{groupe}
+    defaults: { _controller: "HopitalNumeriqueCommunautePratiqueBundle:Document:listByGroupe" }
+    methods: GET
+    requirements:
+        groupe: \d+
+
+hopitalnumerique_communautepratique_document_download:
+    pattern: /document/{document}/download
+    defaults: { _controller: "HopitalNumeriqueCommunautePratiqueBundle:Document:download" }
+    methods: GET
+    requirements:
+        document: \d+
+
+hopitalnumerique_communautepratique_document_upload:
+    pattern: /groupe/{groupe}/upload
+    defaults: { _controller: "HopitalNumeriqueCommunautePratiqueBundle:Document:upload" }
+    methods: POST
+    requirements:
+        groupe: \d+
+
+hopitalnumerique_communautepratique_document_delete:
+    pattern: /document/{document}/delete
+    defaults: { _controller: "HopitalNumeriqueCommunautePratiqueBundle:Document:delete" }
+    methods: POST
+    requirements:
+        document: \d+

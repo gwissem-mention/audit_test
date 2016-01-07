@@ -39,6 +39,7 @@ assetic:
         - HopitalNumeriqueGlossaireBundle
         - HopitalNumeriqueReportBundle
         - HopitalNumeriqueDomaineBundle
+        - HopitalNumeriqueCommunautePratiqueBundle
         - CCDNForumForumBundle
         - FOSUserBundle
     filters:
@@ -154,6 +155,13 @@ assetic:
         svg_js:
             inputs:
                 - "%kernel.root_dir%/Resources/components/canvg-gabelerner/canvg.js"
+        jquery_file_upload_js:
+            inputs:
+                - '%kernel.root_dir%/Resources/components/jquery-file-upload/js/vendor/jquery.ui.widget.js'
+                - '%kernel.root_dir%/Resources/components/jquery-file-upload/js/jquery.fileupload.js'
+                - '%kernel.root_dir%/Resources/components/jquery-file-upload/js/jquery.fileupload-process.js'
+                - '%kernel.root_dir%/Resources/components/jquery-file-upload/js/jquery.fileupload-ui.js'
+                #- '%kernel.root_dir%/Resources/components/jquery-file-upload/js/jquery.fileupload-validate.js'
         #CSS
         bbcode_css:
             inputs:
@@ -207,3 +215,6 @@ assetic:
             inputs:
                 - "%kernel.root_dir%/Resources/components/slick.js/slick/slick-theme.css"
             filters : [ cssembed, ?yui_css ]
+        jquery_file_upload_css:
+            inputs:
+                - '%kernel.root_dir%/Resources/components/jquery-file-upload/css/jquery.fileupload.css'

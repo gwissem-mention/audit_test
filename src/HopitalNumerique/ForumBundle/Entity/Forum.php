@@ -11,6 +11,8 @@ use Symfony\Component\Security\Core\SecurityContextInterface;
  */
 class Forum extends BaseForum
 {
+    const FORUM_COMMUNAUTE_DE_PRATIQUES_ID = 5;
+
     public function getId()
     {
         return $this->id;

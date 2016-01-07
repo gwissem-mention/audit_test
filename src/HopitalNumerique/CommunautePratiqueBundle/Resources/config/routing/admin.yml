@@ -1,0 +1,21 @@
+hopitalnumerique_communautepratique_admin_groupe_list:
+    pattern:  /groupe/liste
+    defaults: { _controller: "HopitalNumeriqueCommunautePratiqueBundle:Admin/Groupe:list" }
+    methods: GET|POST
+
+hopitalnumerique_communautepratique_admin_groupe_add:
+    pattern:  /groupe/add
+    defaults: { _controller: "HopitalNumeriqueCommunautePratiqueBundle:Admin/Groupe:add" }
+    methods: GET|POST
+
+hopitalnumerique_communautepratique_admin_groupe_edit:
+    pattern:  /groupe/edit/{id}
+    defaults: { _controller: "HopitalNumeriqueCommunautePratiqueBundle:Admin/Groupe:edit", id: null }
+    methods: GET|POST
+    requirements:
+        id: \d+
+
+hopitalnumerique_communautepratique_admin_groupe_deletemass:
+    pattern:  /groupe/deletemass
+    defaults: { _controller: "HopitalNumeriqueCommunautePratiqueBundle:Admin/Groupe:deleteMass" }
+    methods: GET|POST

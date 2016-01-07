@@ -1,3 +1,9 @@
+fos_js_routing:
+    resource: "@FOSJsRoutingBundle/Resources/config/routing/routing.xml"
+
+_liip_imagine:
+    resource: '@LiipImagineBundle/Resources/config/routing.xml'
+
 hopital_numerique_import_excel:
     resource: "@HopitalNumeriqueImportExcelBundle/Resources/config/routing.yml"
     prefix:   /
@@ -139,6 +145,10 @@ hopital_numerique_glossaire:
     resource: "@HopitalNumeriqueGlossaireBundle/Resources/config/routing.yml"
     prefix:   /
 
+hopital_numerique_communautepratique:
+    resource: "@HopitalNumeriqueCommunautePratiqueBundle/Resources/config/routing.yml"
+    prefix: /
+
 # Bundles Nodevo
 nodevo_acl:
     resource: "@NodevoAclBundle/Resources/config/routing.yml"
@@ -180,4 +190,3 @@ nodevo_gestionnaire_media:
 CCDNForumForumBundle:
     resource: "@CCDNForumForumBundle/Resources/config/routing.yml"
     prefix:   /
-

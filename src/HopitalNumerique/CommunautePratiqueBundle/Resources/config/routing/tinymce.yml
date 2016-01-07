@@ -1,0 +1,6 @@
+hopitalnumerique_communautepratique_tinymce_documents:
+    pattern: '/documents/groupe/{groupe}'
+    defaults: { _controller: 'HopitalNumeriqueCommunautePratiqueBundle:TinyMce:documents' }
+    methods: 'POST'
+    requirements:
+        groupe: '\d+'

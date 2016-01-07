@@ -1,0 +1,30 @@
+hopitalnumerique_communautepratique_user_list:
+    pattern: /list/{page}
+    defaults: { _controller: "HopitalNumeriqueCommunautePratiqueBundle:User:list", page:1 }
+    methods: GET|POST
+    requirements:
+        page: \d+
+
+hopitalnumerique_communautepratique_user_listbygroupe:
+    pattern: '/list/groupe/{groupe}/{page}'
+    defaults: { _controller: 'HopitalNumeriqueCommunautePratiqueBundle:User:listByGroupe', page:1 }
+    methods: 'GET|POST'
+    requirements:
+        groupe: '\d+'
+        page: '\d+'
+
+hopitalnumerique_communautepratique_user_viewforgroupe:
+    pattern: '/view/{user}/groupe/{groupe}'
+    defaults: { _controller: 'HopitalNumeriqueCommunautePratiqueBundle:User:viewForGroupe' }
+    methods: 'GET'
+    requirements:
+        user: '\d+'
+        groupe: '\d+'
+
+hopitalnumerique_communautepratique_user_desinscritgroupe:
+    pattern: '/groupe/{groupe}/desinscrit/{user}'
+    defaults: { _controller: 'HopitalNumeriqueCommunautePratiqueBundle:User:desinscritGroupe' }
+    methods: 'POST'
+    requirements:
+        groupe: '\d+'
+        user: '\d+'

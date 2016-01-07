@@ -19,7 +19,6 @@
         <link rel="stylesheet" href="{{ asset_url }}" />
     {% endstylesheets %}
 {% endblock %}
-
 {% block javascripts %}
     {{parent()}}
     {% javascripts output="compiled/hopitalnumerique-user-user-edit.js" 
@@ -40,7 +39,6 @@
         <div onclick='deleteWithConfirm("{{path('hopital_numerique_user_delete', {'id':user.id})}}" );' class="btn btn-default" title="Supprimer"><i class="fa fa-trash-o"></i></div>
     {% endif %}
 {% endblock %}
-
 {% block body %}
     <div class="col-sm-12">
         <div id="form_edit_user" class="panel panel-midnightblue">
@@ -123,6 +121,9 @@
                             {{ form_row(form.etat) }}
                         </div>
                     {% endif %}
+
+                    {{ form_row(form.inscritCommunautePratique, {'attr' : {'class' : 'checkbox'}}) }}
+
                     {# Gestion de l'upload #}
                     <div class="form-group">
                         {{ form_label(form.file) }}

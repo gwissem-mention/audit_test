@@ -1,0 +1,41 @@
+hopitalnumerique_communautepratique_fiche_view:
+    pattern: '/{fiche}/view'
+    defaults: { _controller: 'HopitalNumeriqueCommunautePratiqueBundle:Fiche:view' }
+    methods: 'GET|POST'
+    requirements:
+        fiche: '\d+'
+
+hopitalnumerique_communautepratique_fiche_add:
+    pattern: '/add/groupe/{groupe}'
+    defaults: { _controller: 'HopitalNumeriqueCommunautePratiqueBundle:Fiche:add' }
+    methods: 'GET|POST'
+    requirements:
+        groupe: '\d+'
+
+hopitalnumerique_communautepratique_fiche_edit:
+    pattern: '{fiche}/edit'
+    defaults: { _controller: 'HopitalNumeriqueCommunautePratiqueBundle:Fiche:edit' }
+    methods: 'GET|POST'
+    requirements:
+        fiche: '\d+'
+
+hopitalnumerique_communautepratique_fiche_delete:
+    pattern: '{fiche}/delete'
+    defaults: { _controller: 'HopitalNumeriqueCommunautePratiqueBundle:Fiche:delete' }
+    methods: 'GET|POST'
+    requirements:
+        fiche: '\d+'
+
+hopitalnumerique_communautepratique_fiche_close:
+    pattern: '{fiche}/ferme'
+    defaults: { _controller: 'HopitalNumeriqueCommunautePratiqueBundle:Fiche:close' }
+    methods: 'POST'
+    requirements:
+        fiche: '\d+'
+
+hopitalnumerique_communautepratique_fiche_open:
+    pattern: '{fiche}/ouvre'
+    defaults: { _controller: 'HopitalNumeriqueCommunautePratiqueBundle:Fiche:open' }
+    methods: 'POST'
+    requirements:
+        fiche: '\d+'

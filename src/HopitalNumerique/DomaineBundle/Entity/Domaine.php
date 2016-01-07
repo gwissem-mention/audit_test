@@ -132,6 +132,14 @@ class Domaine
      * )
      */
     protected $forums;
+    
+    /**
+     * @var \Doctrine\Common\Collections\Collection
+     * 
+     * @ORM\OneToMany(targetEntity="HopitalNumerique\CommunautePratiqueBundle\Entity\Groupe", mappedBy="domaine")
+     */
+    protected $communautePratiqueGroupes;
+
 
     /**
      * @var string
@@ -148,7 +156,9 @@ class Domaine
         $this->users      = new \Doctrine\Common\Collections\ArrayCollection();
         $this->references = new \Doctrine\Common\Collections\ArrayCollection();
         $this->objets     = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->communautePratiqueGroupes = new \Doctrine\Common\Collections\ArrayCollection();
     }
+
 
     /**
      * Get id
@@ -627,5 +637,47 @@ class Domaine
     public function getHomepage()
     {
         return $this->homepage;
+    }
+
+    /**
+     * Add communautePratiqueGroupes
+     *
+     * @param \HopitalNumerique\CommunautePratiqueBundle\Entity\Groupe $communautePratiqueGroupes
+     * @return Domaine
+     */
+    public function addCommunautePratiqueGroupe(\HopitalNumerique\CommunautePratiqueBundle\Entity\Groupe $communautePratiqueGroupes)
+    {
+        $this->communautePratiqueGroupes[] = $communautePratiqueGroupes;
+
+        return $this;
+    }
+
+    /**
+     * Remove communautePratiqueGroupes
+     *
+     * @param \HopitalNumerique\CommunautePratiqueBundle\Entity\Groupe $communautePratiqueGroupes
+     */
+    public function removeCommunautePratiqueGroupe(\HopitalNumerique\CommunautePratiqueBundle\Entity\Groupe $communautePratiqueGroupes)
+    {
+        $this->communautePratiqueGroupes->removeElement($communautePratiqueGroupes);
+    }
+
+    /**
+     * Get communautePratiqueGroupes
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getCommunautePratiqueGroupes()
+    {
+        return $this->communautePratiqueGroupes;
+    }
+    
+    
+    /**
+     * @return string
+     */
+    public function __toString()
+    {
+        return $this->nom;
     }
 }

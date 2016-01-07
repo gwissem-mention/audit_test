@@ -1,3 +1,10 @@
 parameters:
 
 services:
+    hopitalnumerique_core.pagerfanta.view:
+        class: Pagerfanta\View\OptionableView
+        arguments:
+            - @pagerfanta.view.twitter_bootstrap3
+            - { proximity: 2, prev_message: '&laquo;', next_message: '&raquo;' }
+        public: false
+        tags: [{ name: pagerfanta.view, alias: hopitalnumerique }]

@@ -15,6 +15,9 @@ use Symfony\Component\Validator\Validator;
 abstract class Manager
 {
     protected $_em         = null;
+    /**
+     * @var \Doctrine\ORM\EntityRepository
+     */
     protected $_repository = null;
     protected $_class      = null;
 
@@ -142,6 +145,26 @@ abstract class Manager
     public function findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
     {
         return $this->getRepository()->findBy($criteria, $orderBy, $limit, $offset);
+    }
+
+    /**
+     * Retourne la liste des éléments filtrés par le tableau de critères et indexés par leur ID.
+     *
+     * @param array $criteria Le tableau de critères array('field' => value)
+     * @param array $orderBy Order by
+     * @param integer $limit Limit
+     * @param integer $offset Offset
+     * @return array
+     */
+    public function findByIndexedById(array $criteria, array $orderBy = null, $limit = null, $offset = null)
+    {
+        $entitiesById = array();
+
+        foreach ($this->findBy($criteria, $orderBy, $limit, $offset) as $entity) {
+            $entitiesById[$entity->getId()] = $entity;
+        }
+
+        return $entitiesById;
     }
 
     /**
@@ -363,7 +386,7 @@ abstract class Manager
     /**
      * Retourne le repository associé
      *
-     * @return Repository
+     * @return \Doctrine\ORM\EntityRepository
      */
     protected function getRepository()
     {

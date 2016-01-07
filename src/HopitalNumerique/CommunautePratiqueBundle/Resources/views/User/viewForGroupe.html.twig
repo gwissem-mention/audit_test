@@ -1,0 +1,128 @@
+{% extends 'HopitalNumeriqueCommunautePratiqueBundle::layout.html.twig' %}
+
+{% block title_communaute_pratique %}Fiche de {{ user.prenomNom }}{% endblock %}
+
+{% block communaute_pratique_breadcrumbs_parent %}
+    <li><a href="{{ path('hopitalnumerique_communautepratique_groupe_view', { groupe:groupe.id }) }}">Groupe de travail {{ groupe }}</a></li>
+    <li><a href="{{ path('hopitalnumerique_communautepratique_user_listbygroupe', { groupe:groupe.id }) }}">Annuaire des membres</a></li>
+{% endblock %}
+
+{% block communaute_pratique_actions %}
+    {{ parent() }}
+    {{ communaute_pratique.display_action_contact_animateur(groupe) }}
+{% endblock %}
+
+{% block body_communaute_pratique %}
+
+    {{ communaute_pratique.display_groupe_sommaire(groupe) }}
+
+    {{ communaute_pratique.display_bandeau_membre(user, groupe) }}
+
+    <div class="communaute-de-pratiques-user-fiche">
+        <ul class="nav nav-tabs" role="tablist">
+            <li role="presentation" class="active"><a href="#formulaire-prealable" aria-controls="formulaire-prealable" role="tab" data-toggle="tab"><em class="icon-formulaire"></em> &nbsp; Retour d'expérience</a></li>
+            <li role="presentation"><a href="#fiches" aria-controls="fiches" role="tab" data-toggle="tab"><em class="icon-stats2"></em> &nbsp; Fiches de problématiques</a></li>
+            <li role="presentation"><a href="#documents" aria-controls="documents" role="tab" data-toggle="tab"><em class="icon-file148"></em> &nbsp; Documents associés</a></li>
+        </ul>
+        <div class="tab-content">
+            <div role="tabpanel" class="tab-pane active" id="formulaire-prealable">
+                {%- if questionnaireReponses|length > 0 -%}
+                    <div>
+                        {%- for reponse in questionnaireReponses -%}
+                            <div class="row">
+                                <div class="question col-md-4">
+                                    {{ reponse.question.libelle }}
+                                </div>
+                                <div class="reponse col-md-8">
+                                    {{ reponse.reponse }}
+                                </div>
+                            </div>
+                        {%- endfor -%}
+                    </div>
+                    {%- if app.user.id == user.id -%}
+                        <p class="documents-lien"><a href="{{ path('hopitalnumerique_communautepratique_groupe_inscrit', { 'groupe':groupe.id }) }}"><em class="fa fa-angle-double-right"></em> &nbsp; Modifier mes réponses</a></p>
+                    {%- endif -%}
+                {%- else -%}
+                    <p><strong><span class="violet">{{ user.prenomNom }} n'a pas renseigné son questionnaire sur le groupe</span> {{ groupe }}.</strong></p>
+                    {%- if app.user.id == user.id -%}
+                        <p class="documents-lien"><a href="{{ path('hopitalnumerique_communautepratique_groupe_inscrit', { 'groupe':groupe.id }) }}"><em class="fa fa-angle-double-right"></em> &nbsp; Remplir le formulaire</a></p>
+                    {%- endif -%}
+                {%- endif -%}
+            </div>
+            <div role="tabpanel" class="tab-pane" id="documents">
+                {%- if documents|length > 0 -%}
+
+                    <div class="pull-right">
+                        
+                        <select class="form-control" onchange="CommunautePratique_Document.filtreByExtensions($(this).val());">
+                            <option selected="selected" value="">Filtrer par type de fichier</option>
+                            {%- for fichierType in fichierTypes -%}
+                                <option value="{{ fichierType.extensionValeurs|join(',') }}">{{ fichierType }}</option>
+                            {%- endfor -%}
+                        </select>
+                    </div>
+
+                    <p>
+                        <strong><span class="violet">{{ user.prenomNom }} a déposé les documents suivants sur le groupe </span> {{ groupe }}.</strong>
+                        <br>Vous pouvez cliquer sur le nom du fichier pour le télécharger.
+                        <br>&nbsp;
+                    </p>
+                    <div class="row">
+                        {%- for document in documents -%}
+                            <div class="col-md-4">
+                                {{ communaute_pratique.display_bloc_document(document) }}
+                            </div>
+                        {%- endfor -%}
+                    </div>
+                {%- else -%}
+                    <p>
+                        <strong><span class="violet">{{ user.prenomNom }} n'a pas encore déposé de documents sur le groupe </span> {{ groupe }}.</strong>
+                    </p>
+                {%- endif -%}
+
+                {%- if app.user.id == user.id -%}
+                    <p class="documents-lien"><a href="{{ path('hopitalnumerique_communautepratique_document_listbygroupe', { groupe:groupe.id }) }}"><em class="fa fa-angle-double-right"></em> &nbsp; Gérer mes documents</a></p>
+                {%- endif -%}
+
+            </div>
+            <div role="tabpanel" class="tab-pane" id="fiches">
+
+                {%- if fiches|length > 0 -%}
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <p>Fiches de problématiques soumises par <strong class="violet">{{ user.prenomNom }}</strong></p>
+                        </div>
+                        {%- if app.user.id == user.id -%}
+                            <div class="col-md-6 text-right">
+                                <a class="btn btn-success" href="{{ path('hopitalnumerique_communautepratique_fiche_add', { groupe:groupe.id }) }}">Ajouter une problématique &nbsp; &nbsp; <em class="fa fa-plus"></em></a>
+                            </div>
+                        {%- endif -%}
+                    </div><br>
+
+                    <div class="row">
+                        {%- for fiche in fiches -%}
+                            <div class="col-md-6">
+                                {{ communaute_pratique.display_bloc_fiche(fiche) }}
+                            </div>
+                        {%- endfor -%}
+                    </div>
+
+                {%- elseif app.user.id == user.id -%}
+                    <div class="row">
+                        <div class="col-md-6">
+                           <p><strong><span class="violet">{{ user.prenomNom }} n'a pas encore déposé de fiches de problématique sur le groupe</span> {{ groupe }}.</strong></p>
+                        </div>
+                        <div class="col-md-6 text-right">
+                            <a class="btn btn-success" href="{{ path('hopitalnumerique_communautepratique_fiche_add', { groupe:groupe.id }) }}">Ajouter une problématique &nbsp; &nbsp; <em class="fa fa-plus"></em></a>
+                        </div>
+                    </div><br>
+                {%- else -%}
+                    <p><strong><span class="violet">{{ user.prenomNom }} n'a pas encore déposé de fiches de problématique sur le groupe</span> {{ groupe }}.</strong></p>
+                {%- endif -%}
+
+            </div>
+        </div>
+    </div>
+
+{% endblock body_communaute_pratique %}

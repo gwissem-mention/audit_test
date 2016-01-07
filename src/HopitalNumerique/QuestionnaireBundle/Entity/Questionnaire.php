@@ -81,7 +81,15 @@ class Questionnaire
      * )
      */
     protected $domaines;
-    
+
+    /**
+     * @var \Doctrine\Common\Collections\Collection
+     * 
+     * @ORM\OneToMany(targetEntity="HopitalNumerique\CommunautePratiqueBundle\Entity\Groupe", mappedBy="questionnaire")
+     */
+    protected $communautePratiqueGroupes;
+
+
     /**
      * Constructor
      */
@@ -90,7 +98,9 @@ class Questionnaire
         $this->questions    = new \Doctrine\Common\Collections\ArrayCollection();
         $this->lock = false;
         $this->occurrenceMultiple = false;
+        $this->communautePratiqueGroupes = new \Doctrine\Common\Collections\ArrayCollection();
     }
+
 
     /**
      * Get id
@@ -413,6 +423,39 @@ class Questionnaire
         }
 
         return $domainesId;
+    }
+
+    /**
+     * Add communautePratiqueGroupes
+     *
+     * @param \HopitalNumerique\CommunautePratiqueBundle\Entity\Groupe $communautePratiqueGroupes
+     * @return Questionnaire
+     */
+    public function addCommunautePratiqueGroupe(\HopitalNumerique\CommunautePratiqueBundle\Entity\Groupe $communautePratiqueGroupes)
+    {
+        $this->communautePratiqueGroupes[] = $communautePratiqueGroupes;
+
+        return $this;
+    }
+
+    /**
+     * Remove communautePratiqueGroupes
+     *
+     * @param \HopitalNumerique\CommunautePratiqueBundle\Entity\Groupe $communautePratiqueGroupes
+     */
+    public function removeCommunautePratiqueGroupe(\HopitalNumerique\CommunautePratiqueBundle\Entity\Groupe $communautePratiqueGroupes)
+    {
+        $this->communautePratiqueGroupes->removeElement($communautePratiqueGroupes);
+    }
+
+    /**
+     * Get communautePratiqueGroupes
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getCommunautePratiqueGroupes()
+    {
+        return $this->communautePratiqueGroupes;
     }
     
     

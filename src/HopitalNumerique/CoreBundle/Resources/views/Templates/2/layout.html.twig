@@ -20,6 +20,7 @@
                 'bundles/nodevoadmin/css/custom-jquery-ui.min.css'
                 'bundles/nodevoadmin/plugins/nodevoLoader/nodevoLoader.css'
                 'bundles/hopitalnumeriquecore/css/layout.css'
+                'bundles/hopitalnumeriquecore/css/Glyphter.css'
                 'bundles/hopitalnumeriquecore/css/Templates/2/layout.css'
             %}
                 <link rel="stylesheet" href="{{ asset_url }}" />
@@ -43,12 +44,14 @@
                 "@enquire_js"
                 "@fancybox_js"  
                 "@json_js"
+                'bundles/fosjsrouting/js/router.js'
                 'bundles/hopitalnumeriquecore/js/script.js'
                 'bundles/hopitalnumeriquecore/js/recherche.js'
                 'bundles/nodevoadmin/plugins/nodevoLoader/nodevoLoader.js'
             %}
                 <script type="text/javascript" src="{{ asset_url }}"></script>
             {% endjavascripts %}
+            <script src="{{ path('fos_js_routing_js', {"callback": "fos.Router.setData"}) }}"></script>
             {% if app.debug %}
                 {% javascripts output="compiled/nodevo-debogage.js"
                     'bundles/nodevotools/js/Debogage.js'
@@ -98,7 +101,7 @@
                             </p>
                         {% endif %}
                         <div class="connexion">
-                            <a href="{{path('account_logout')}}">Déconnexion</a>
+			                 <a href="{{path('account_logout')}}">Déconnexion</a>
                         </div>
                         {#<a class="infos btn btn-rose" href="{{path('hopital_numerique_account_homepage')}}">Tableau de bord</a>#}
                     {% else %}

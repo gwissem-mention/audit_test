@@ -18,5 +18,5 @@ a.fancybox-close{background-position: 0px 0px}
 .affnbreelement .form-control { width: auto; display: inline-block; color: #4f8edc; }
 
 /* formulaire */
-input.checkbox {width:16px; height:16px;}
+input.checkbox {width:16px; height:16px; margin-top: 8px!important;}
 input.radio    {width:16px; height:16px;} .radio input {width: 16px; height: 16px;}

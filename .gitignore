@@ -1,6 +1,7 @@
 #Symfony2
 /web/bundles/
 /web/compiled/
+/web/media/cache/
 /web/assetic/
 /web/fonts
 /app/bootstrap.php.cache
