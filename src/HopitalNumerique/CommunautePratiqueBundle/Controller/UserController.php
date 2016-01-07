@@ -36,7 +36,7 @@ class UserController extends \Symfony\Bundle\FrameworkBundle\Controller\Controll
 		
 		$domaine = $this->container->get('hopitalnumerique_domaine.manager.domaine')
 		->findOneById($request->getSession()->get('domaineId'));
-
+		
         return $this->render('HopitalNumeriqueCommunautePratiqueBundle:User:list.html.twig', array(
             'rechercheForm' => $rechercheForm->createView(),
             'pagerFantaMembres' => $this->container

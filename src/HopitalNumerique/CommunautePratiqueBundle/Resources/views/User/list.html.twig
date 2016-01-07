@@ -62,7 +62,7 @@
             </div>
 
             {% if pagerFantaMembres.nbPages > 1 %}
-                <div class="text-center">{{ pagerfanta(pagerFantaMembres, 'hopitalnumerique_communautepratique') }}</div>
+                <div class="text-center">{{ pagerfanta(pagerFantaMembres, 'hopitalnumerique_communautepratique') }}<span class="resultats-nombre"> {{ pagerFantaMembres.count }} menbres</span></div>
             {% endif %}
 
         </div>
