@@ -218,3 +218,6 @@ assetic:
         jquery_file_upload_css:
             inputs:
                 - '%kernel.root_dir%/Resources/components/jquery-file-upload/css/jquery.fileupload.css'
+        glyphicons_css:
+            inputs:
+                - 'bundles/nodevoadmin/fonts/glyphicons/css/glyphicons.min.css'
