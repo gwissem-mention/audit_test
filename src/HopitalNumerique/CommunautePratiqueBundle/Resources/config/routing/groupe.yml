@@ -1,0 +1,39 @@
+hopitalnumerique_communautepratique_groupe_list:
+    pattern: /list
+    defaults: { _controller: "HopitalNumeriqueCommunautePratiqueBundle:Groupe:list" }
+    methods: GET
+
+hopitalnumerique_communautepratique_groupe_view:
+    pattern: /{groupe}
+    defaults: { _controller: 'HopitalNumeriqueCommunautePratiqueBundle:Groupe:view' }
+    methods: GET
+    requirements:
+        groupe: \d+
+
+hopitalnumerique_communautepratique_groupe_inscrit:
+    pattern: /{groupe}/inscription
+    defaults: { _controller: 'HopitalNumeriqueCommunautePratiqueBundle:Groupe:inscrit' }
+    methods: GET|POST
+    requirements:
+        groupe: \d+
+
+hopitalnumerique_communautepratique_groupe_validinscription:
+    pattern: /{groupe}/valid-inscription
+    defaults: { _controller: 'HopitalNumeriqueCommunautePratiqueBundle:Groupe:validInscription' }
+    methods: GET
+    requirements:
+        groupe: \d+
+
+hopitalnumerique_communautepratique_groupe_panelinformations:
+    pattern: /{groupe}/panel-informations
+    defaults: { _controller: 'HopitalNumeriqueCommunautePratiqueBundle:Groupe:panelInformations' }
+    methods: GET
+    requirements:
+        groupe: \d+
+
+hopitalnumerique_communautepratique_groupe_panelusergroupes:
+    pattern: /panel-user-groupes/{user}
+    defaults: { _controller: 'HopitalNumeriqueCommunautePratiqueBundle:Groupe:panelUserGroupes' }
+    methods: GET
+    requirements:
+        user: \d+

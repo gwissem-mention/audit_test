@@ -5,6 +5,7 @@ namespace HopitalNumerique\UserBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 use FOS\UserBundle\Model\User as BaseUser;
 use Nodevo\RoleBundle\Entity\Role;
+use HopitalNumerique\ReferenceBundle\Entity\Reference;
 
 //Asserts Stuff
 use Symfony\Component\Validator\Constraints as Assert;
@@ -153,15 +154,24 @@ use \Nodevo\ToolsBundle\Tools\Chaine;
  */
 class User extends BaseUser
 {
-    private static $ETAT_ACTIF_ID = 3;
-    
+    /**
+     * @var integer ID de l'état Actif
+     */
+    const ETAT_ACTIF_ID = 3;
+
+    /**
+     * @var integer ID de l'état Inactif
+     */
+    const ETAT_INACTIF_ID = 4;
+
+
     /**
      * @ORM\Column(name="usr_id", type="integer", options = {"comment" = "ID de l utilisateur"})
      * @ORM\Id()
      * @ORM\GeneratedValue(strategy="AUTO")
      */
     protected $id;
-    
+
     /**
      * @var \DateTime
      *
@@ -517,7 +527,7 @@ class User extends BaseUser
     // ------- Ambassadeurs  -------
     /**
      * @Assert\File(
-     *     maxSize = "10M",
+     *     maxSize = "1000k",
      *     mimeTypes = { 
      *         "image/gif", 
      *         "image/jpeg", 
@@ -532,6 +542,7 @@ class User extends BaseUser
      * @var string
      *
      * @ORM\Column(name="usr_photo", type="string", length=255, nullable=true, options = {"comment" = "Nom du fichier stocké"})
+     * 
      * @Gedmo\Versioned
      */
     protected $path;
@@ -624,6 +635,44 @@ class User extends BaseUser
      */
     protected $notficationRequete;
 
+    /* <-- Communauté de pratiques */
+
+    /**
+     * @var boolean
+     * 
+     * @Assert\NotNull()
+     * @ORM\Column(name="usr_inscrit_communaute_pratique", type="boolean", options={"default"=false,"comment"="Indique si l utilisateur est inscrit à la communauté de pratiques"})
+     */
+    private $inscritCommunautePratique;
+
+    /**
+     * @ORM\ManyToMany(targetEntity="HopitalNumerique\CommunautePratiqueBundle\Entity\Groupe", mappedBy="animateurs", cascade={"persist", "remove"})
+     */
+    private $communautePratiqueAnimateurGroupes;
+
+    /**
+     * @ORM\ManyToMany(targetEntity="HopitalNumerique\CommunautePratiqueBundle\Entity\Groupe", mappedBy="users", cascade={"persist", "remove"})
+     */
+    private $communautePratiqueGroupes;
+
+    /**
+     * @ORM\OneToMany(targetEntity="HopitalNumerique\CommunautePratiqueBundle\Entity\Document", mappedBy="user")
+     */
+    private $communautePratiqueDocuments;
+
+    /**
+     * @ORM\OneToMany(targetEntity="HopitalNumerique\CommunautePratiqueBundle\Entity\Fiche", mappedBy="user")
+     */
+    private $communautePratiqueFiches;
+
+    /**
+     * @ORM\OneToMany(targetEntity="HopitalNumerique\CommunautePratiqueBundle\Entity\Commentaire", mappedBy="user")
+     */
+    private $communautePratiqueCommentaires;
+
+    /* --> */
+
+
     /**
      * Constructor
      */
@@ -632,6 +681,9 @@ class User extends BaseUser
         parent::__construct();
         
         $this->objets               = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->communautePratiqueGroupes = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->communautePratiqueDocuments = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->communautePratiqueFiches = new \Doctrine\Common\Collections\ArrayCollection();
         $this->username             = '';
         $this->pseudonymeForum      = '';
         $this->enabled              = 1;
@@ -642,7 +694,10 @@ class User extends BaseUser
         $this->alreadyBeExpert      = false;
         $this->nbVisites            = 0;
         $this->notficationRequete   = true;
+        $this->inscritCommunautePratique = false;
+        $this->previousAdmin 		= false;
     }
+
 
     public function getConfirmationToken()
     {
@@ -762,8 +817,18 @@ class User extends BaseUser
     public function getPrenom()
     {
         return $this->prenom;
-    } 
+    }
     
+    /**
+     * Set prenom
+     *
+     * @param string $prenom
+     */
+    public function setPrenom($prenom)
+    {
+        $this->prenom = $prenom;
+    }
+
     /**
      * Get nbVisites
      *
@@ -782,16 +847,6 @@ class User extends BaseUser
     public function addNbVisites()
     {
         $this->nbVisites++;
-    }
-    
-    /**
-     * Set prenom
-     *
-     * @param string $prenom
-     */
-    public function setPrenom($prenom)
-    {
-        $this->prenom = $prenom;
     }
 
     /**
@@ -1526,6 +1581,16 @@ class User extends BaseUser
     }
 
     /**
+     * Retourne si l'utilisateur a le rôle Admin ou pas.
+     *
+     * @return boolean VRAI si admin
+     */
+    public function hasRoleAdmin()
+    {
+        return $this->hasRole(Role::$ROLE_ADMIN_LABEL);
+    }
+
+    /**
      * Retourne si l'utilisateur a le rôle CMSI ou pas.
      *
      * @return boolean VRAI ssi l'utilisateur a le rôle CMSI
@@ -1534,6 +1599,7 @@ class User extends BaseUser
     {
         return $this->hasRole(Role::$ROLE_CMSI_LABEL);
     }
+
     /**
      * Retourne si l'utilisateur a le rôle ES - Direction générale ou pas.
      *
@@ -1650,10 +1716,10 @@ class User extends BaseUser
      */
     public function isActif()
     {
-        return ($this->etat != null && $this->etat->getId() == self::$ETAT_ACTIF_ID);
+        return ($this->etat != null && $this->etat->getId() == self::ETAT_ACTIF_ID);
     }
-	
-	/**
+
+    /**
      * Get email
      *
      * @return string $email
@@ -1681,6 +1747,7 @@ class User extends BaseUser
         {
             $roles[] = 'ROLE_ADMIN';
             $roles[] = 'ROLE_SUPER_ADMIN';
+            $roles[] = 'ROLE_ALLOWED_TO_SWITCH';
         }
 
         return $roles;
@@ -1931,4 +1998,240 @@ class User extends BaseUser
       $this->ipLastConnection = $ip;
       return $this;
     }
+
+    /* <-- Communauté de pratiques */
+
+    /**
+     * Get inscritCommunautePratique
+     *
+     * @return boolean $inscritCommunautePratique
+     */
+    public function isInscritCommunautePratique()
+    {
+        return $this->inscritCommunautePratique;
+    }
+
+    /**
+     * Set inscritCommunautePratique
+     *
+     * @param boolean $inscritCommunautePratique
+     */
+    public function setInscritCommunautePratique($inscritCommunautePratique)
+    {
+        $this->inscritCommunautePratique = $inscritCommunautePratique;
+    }
+    
+    /**
+     * Add communautePratiqueGroupe
+     *
+     * @param \HopitalNumerique\CommunautePratiqueBundle\Entity\Groupe $communautePratiqueGroupe
+     * @return User
+     */
+    public function addCommunautePratiqueAnimateurGroupe(\HopitalNumerique\CommunautePratiqueBundle\Entity\Groupe $communautePratiqueGroupe)
+    {
+        $communautePratiqueGroupe->addAnimateur($this);
+        $this->communautePratiqueAnimateurGroupes[] = $communautePratiqueGroupe;
+
+        return $this;
+    }
+
+    /**
+     * Remove communautePratiqueGroupes
+     *
+     * @param \HopitalNumerique\CommunautePratiqueBundle\Entity\Groupe $communautePratiqueGroupes
+     */
+    public function removeCommunautePratiqueAnimateurGroupe(\HopitalNumerique\CommunautePratiqueBundle\Entity\Groupe $communautePratiqueGroupes)
+    {
+        $this->communautePratiqueAnimateurGroupes->removeElement($communautePratiqueGroupes);
+        $communautePratiqueGroupes->removeAnimateur($this);
+    }
+
+    /**
+     * Get communautePratiqueGroupes
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getCommunautePratiqueAnimateurGroupes()
+    {
+        return $this->communautePratiqueAnimateurGroupes;
+    }
+
+    /**
+     * Add communautePratiqueGroupe
+     *
+     * @param \HopitalNumerique\CommunautePratiqueBundle\Entity\Groupe $communautePratiqueGroupe
+     * @return User
+     */
+    public function addCommunautePratiqueGroupe(\HopitalNumerique\CommunautePratiqueBundle\Entity\Groupe $communautePratiqueGroupe)
+    {
+        $communautePratiqueGroupe->addUser($this);
+        $this->communautePratiqueGroupes[] = $communautePratiqueGroupe;
+
+        return $this;
+    }
+
+    /**
+     * Remove communautePratiqueGroupes
+     *
+     * @param \HopitalNumerique\CommunautePratiqueBundle\Entity\Groupe $communautePratiqueGroupes
+     */
+    public function removeCommunautePratiqueGroupe(\HopitalNumerique\CommunautePratiqueBundle\Entity\Groupe $communautePratiqueGroupes)
+    {
+        $this->communautePratiqueGroupes->removeElement($communautePratiqueGroupes);
+        $communautePratiqueGroupes->removeUser($this);
+    }
+
+    /**
+     * Has communautePratiqueGroupe ?
+     * 
+     * @param \HopitalNumerique\CommunautePratiqueBundle\Entity\Groupe $communautePratiqueGroupe
+     * @return boolean
+     */
+    public function hasCommunautePratiqueGroupe(\HopitalNumerique\CommunautePratiqueBundle\Entity\Groupe $communautePratiqueGroupe)
+    {
+        foreach ($this->communautePratiqueGroupes as $communautePratiqueGroupeExistant)
+        {
+            if ($communautePratiqueGroupeExistant->getId() == $communautePratiqueGroupe->getId())
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * Get communautePratiqueGroupes
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getCommunautePratiqueGroupes()
+    {
+        return $this->communautePratiqueGroupes;
+    }
+
+    /**
+     * Add communautePratiqueDocument
+     *
+     * @param \HopitalNumerique\CommunautePratiqueBundle\Entity\Document $communautePratiqueDocument
+     * @return User
+     */
+    public function addCommunautePratiqueDocument(\HopitalNumerique\CommunautePratiqueBundle\Entity\Document $communautePratiqueDocument)
+    {
+        $this->communautePratiqueDocuments[] = $communautePratiqueDocument;
+
+        return $this;
+    }
+
+    /**
+     * Remove communautePratiqueDocuments
+     *
+     * @param \HopitalNumerique\CommunautePratiqueBundle\Entity\Document $communautePratiqueDocument
+     */
+    public function removeCommunautePratiqueDocument(\HopitalNumerique\CommunautePratiqueBundle\Entity\Document $communautePratiqueDocument)
+    {
+        $this->communautePratiqueDocuments->removeElement($communautePratiqueDocument);
+    }
+
+    /**
+     * Get communautePratiqueDocuments
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getCommunautePratiqueDocuments()
+    {
+        return $this->communautePratiqueDocuments;
+    }
+
+    /**
+     * Add communautePratiqueFiche
+     *
+     * @param \HopitalNumerique\CommunautePratiqueBundle\Entity\Fiche $communautePratiqueFiche
+     * @return User
+     */
+    public function addCommunautePratiqueFiche(\HopitalNumerique\CommunautePratiqueBundle\Entity\Fiche $communautePratiqueFiche)
+    {
+        $this->communautePratiqueFiches[] = $communautePratiqueFiche;
+
+        return $this;
+    }
+
+    /**
+     * Remove communautePratiqueFiches
+     *
+     * @param \HopitalNumerique\CommunautePratiqueBundle\Entity\Fiche $communautePratiqueFiche
+     */
+    public function removeCommunautePratiqueFiche(\HopitalNumerique\CommunautePratiqueBundle\Entity\Fiche $communautePratiqueFiche)
+    {
+        $this->communautePratiqueFiches->removeElement($communautePratiqueFiche);
+    }
+
+    /**
+     * Get communautePratiqueFiches
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getCommunautePratiqueFiches()
+    {
+        return $this->communautePratiqueFiches;
+    }
+
+    /**
+     * Add communautePratiqueCommentaire
+     *
+     * @param \HopitalNumerique\CommunautePratiqueBundle\Entity\Commentaire $communautePratiqueCommentaire
+     * @return User
+     */
+    public function addCommunautePratiqueCommentaire(\HopitalNumerique\CommunautePratiqueBundle\Entity\Commentaire $communautePratiqueCommentaire)
+    {
+        $this->communautePratiqueCommentaires[] = $communautePratiqueCommentaire;
+
+        return $this;
+    }
+
+    /**
+     * Remove communautePratiqueCommentaires
+     *
+     * @param \HopitalNumerique\CommunautePratiqueBundle\Entity\Commentaire $communautePratiqueCommentaire
+     */
+    public function removeCommunautePratiqueCommentaire(\HopitalNumerique\CommunautePratiqueBundle\Entity\Commentaire $communautePratiqueCommentaire)
+    {
+        $this->communautePratiqueCommentaires->removeElement($communautePratiqueCommentaire);
+    }
+
+    /**
+     * Get communautePratiqueCommentaires
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getCommunautePratiqueCommentaires()
+    {
+        return $this->communautePratiqueCommentaires;
+    }
+
+    /* --> */
+
+    /* <-- Avatar */
+
+    /**
+    * Retourne l'image de l'avatar à afficher (image générique si aucun avatar).
+    *
+    * @return string Avatar
+    */
+    public function getAvatarWebPath()
+    {
+        if (null !== $this->path)
+        {
+            return '/'.$this->getWebPath();
+        }
+        
+        if (null !== $this->civilite && Reference::CIVILITE_MADAME_ID == $this->civilite->getId())
+        {
+            return '/bundles/hopitalnumeriqueuser/img/madame.png';
+        }
+
+        return '/bundles/hopitalnumeriqueuser/img/monsieur.png';
+    }
+
+    /* --> */
 }

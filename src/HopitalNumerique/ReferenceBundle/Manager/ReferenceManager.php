@@ -374,7 +374,45 @@ class ReferenceManager extends BaseManager
         }
     }
 
+    /**
+     * Retourne les régions.
+     * 
+     * @return array<\HopitalNumerique\ReferenceBundle\Entity\Reference> Régions
+     */
+    public function findRegions()
+    {
+        return $this->findBy(array('code' => 'REGION'), array('order' => 'ASC'));
+    }
 
+    /**
+     * Retourne les types d'ES.
+     * 
+     * @return array<\HopitalNumerique\ReferenceBundle\Entity\Reference> Types
+     */
+    public function findEtablissementSanteTypes()
+    {
+        return $this->findBy(array('code' => 'CONTEXTE_TYPE_ES'), array('order' => 'ASC'));
+    }
+
+    /**
+     * Retourne les profils des ES.
+     * 
+     * @return array<\HopitalNumerique\ReferenceBundle\Entity\Reference> Profils
+     */
+    public function findEtablissementSanteProfils()
+    {
+        return $this->findBy(array('code' => 'CONTEXTE_METIER_INTERNAUTE'), array('order' => 'ASC'));
+    }
+
+    /**
+     * Retourne les types d'activité.
+     * 
+     * @return array<\HopitalNumerique\ReferenceBundle\Entity\Reference> Types
+     */
+    public function findActiviteTypes()
+    {
+        return $this->findBy(array('code' => 'CONTEXTE_SPECIALITE_ES'), array('order' => 'ASC'));
+    }
 
 
 

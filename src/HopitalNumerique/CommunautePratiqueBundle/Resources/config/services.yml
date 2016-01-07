@@ -1,0 +1,29 @@
+imports:
+    - { resource: "services/manager.yml" }
+    - { resource: "services/form.yml" }
+    - { resource: "services/grid.yml" }
+    - { resource: "services/twig.yml" }
+
+services:
+    hopitalnumerique_communautepratique.dependency_injection.annuaire:
+        class: "HopitalNumerique\CommunautePratiqueBundle\DependencyInjection\Annuaire"
+        arguments: ['@session', '@hopitalnumerique_user.manager.user', '@hopitalnumerique_reference.manager.reference']
+
+    hopitalnumerique_communautepratique.dependency_injection.commentaire:
+        class: 'HopitalNumerique\CommunautePratiqueBundle\DependencyInjection\Commentaire'
+        arguments: ['@router', '@form.factory']
+
+    hopitalnumerique_communautepratique.dependency_injection.inscription:
+        class: "HopitalNumerique\CommunautePratiqueBundle\DependencyInjection\Inscription"
+
+    hopitalnumerique_communautepratique.dependency_injection.security:
+        class: "HopitalNumerique\CommunautePratiqueBundle\DependencyInjection\Security"
+        arguments: ['@security.context']
+
+    hopitalnumerique_communautepratique.pagerfanta.view:
+        class: Pagerfanta\View\OptionableView
+        arguments:
+            - @pagerfanta.view.twitter_bootstrap3
+            - { proximity: 2, prev_message: '&laquo;', next_message: '&raquo;' }
+        public: false
+        tags: [{ name: pagerfanta.view, alias: hopitalnumerique_communautepratique }]

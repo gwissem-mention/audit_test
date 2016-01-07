@@ -1,0 +1,61 @@
+{% extends 'HopitalNumeriqueCommunautePratiqueBundle::layout.html.twig' %}
+
+{% block title_communaute_pratique %}Actualités{% endblock %}
+
+{% block communaute_pratique_breadcrumbs_parent %}
+    {%- if categorie.parent is not null -%}
+        <li><a href="{{ path('hopitalnumerique_communautepratique_actualite_list') }}">Actualités</a></li>
+    {%- endif -%}
+{% endblock %}
+
+{% block body_communaute_pratique %}
+
+    {% import "HopitalNumeriqueCommunautePratiqueBundle:include:blocks.html.twig" as communaute_pratique %}
+
+    <div class="row">
+        <div class="col-md-3">
+            <div class="communaute-de-pratiques-menu-actualites">
+                <ul>
+                    <li><a href="{{ path('hopitalnumerique_communautepratique_actualite_list') }}">Actualités</a></li>
+                    {%- for sousCategorie in categorieActualites.childs -%}
+                        <li><a href="{{ path('hopitalnumerique_communautepratique_actualite_listbycategorie', { categorie:sousCategorie.id }) }}">{{ sousCategorie.libelle }}</a></li>
+                    {%- endfor -%}
+                </ul>
+            </div>
+        </div>
+        <div class="col-md-9">
+            {%- for article in actualitesPager.currentPageResults -%}
+                {{ communaute_pratique.display_article(article) }}
+
+                {% if actualitesPager.nbPages > 1 %}
+                    <div class="text-center">{{ pagerfanta(actualitesPager, 'hopitalnumerique_communautepratique') }}</div>
+                {% endif %}
+
+            {%- else -%}
+                <p>Aucune actualité.</p>
+            {%- endfor -%}
+        </div>
+    </div>
+{% endblock body_communaute_pratique %}
+
+{% block communaute_pratique_sommaire %}
+<div class="communaute-de-pratiques-sommaire">
+    <div class="row">
+        <div class="col-md-3">
+            <a class="groupe" href="{{ path('hopitalnumerique_communautepratique_user_list') }}"><em class="icon-group2"></em> Membres de la communauté</a>
+        </div>
+        <div class="col-md-3">
+            <a class="groupe" href="{{ path('hopitalnumerique_communautepratique_groupe_list') }}"><em class="icon-social20"></em> Groupes de travail</a>
+        </div>
+        <div class="col-md-3">
+            <a class="groupe" href="{{ path('hopitalnumerique_communautepratique_publication_list') }}"><em class="icon-documents7"></em> Publications issues des groupes</a>
+        </div>
+        <div class="col-md-3">
+            <a class="groupe" href="{{ path('ccdn_forum_user_category_index', { forumName:'Communaute_de_pratiques' }) }}"><em class="icon-chat27"></em> Forum de la communauté de pratiques</a>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+
+

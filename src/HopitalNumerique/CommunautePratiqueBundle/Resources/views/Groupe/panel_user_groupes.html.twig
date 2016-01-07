@@ -1,0 +1,30 @@
+<div>
+    {% if groupesTermines|length == 0 and groupesNonDemarres|length == 0 and groupesEnCours|length == 0 %}
+
+        <p>Aucune participation à un groupe pour l'instant.</p>
+
+    {% else %}
+
+        {% if groupesTermines|length > 0 %}
+            <p><strong>{{ app.user.appellation }} a participé aux groupes de travail suivants :</strong></p>
+            <ul>
+                {%- for groupe in groupesTermines -%}
+                    <li>{{ groupe }}, du {{ groupe.dateDemarrage|date('d/m/Y') }} au {{ groupe.dateFin|date('d/m/Y') }}</li>
+                {%- endfor -%}
+            </ul>
+        {% endif %}
+
+        {% if groupesNonDemarres|length > 0 or groupesEnCours|length > 0 %}
+            <p><strong>{{ app.user.appellation }} contribue actuellement aux groupes :</strong></p>
+            <ul>
+                {%- for groupe in groupesNonDemarres -%}
+                    <li>{{ groupe }}, du {{ groupe.dateDemarrage|date('d/m/Y') }} au {{ groupe.dateFin|date('d/m/Y') }}</li>
+                {%- endfor -%}
+                {%- for groupe in groupesEnCours -%}
+                    <li>{{ groupe }}, du {{ groupe.dateDemarrage|date('d/m/Y') }} au {{ groupe.dateFin|date('d/m/Y') }}</li>
+                {%- endfor -%}
+            </ul>
+        {% endif %}
+    
+    {% endif %}
+</div>

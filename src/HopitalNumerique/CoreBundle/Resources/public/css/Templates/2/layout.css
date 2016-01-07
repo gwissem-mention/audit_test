@@ -3,7 +3,7 @@ body{ background: #E5E5E5;}
 #body{margin:0 auto; background: white; max-width: 1196px}
 #content{background: white;padding-bottom: 30px;position: relative; }
 .common-sprite { background-image: url('../../../img/common-sprite.png'); background-repeat: no-repeat; display: block; }
-a, a:hover, a:active {color:#d60030}
+a, a:hover, a:active, a:focus {color:#d60030}
 a.readmore{display: block; color:#000000; font-family: Arial; font-weight: bold}
 a.readmore .common-sprite-arrow { width: 9px; height: 9px; background-position: 0 0; float: left; margin: 6px 6px 0 0}
 a.fancybox-close{background-position: 0 0}

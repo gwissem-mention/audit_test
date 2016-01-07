@@ -3,7 +3,10 @@
 namespace HopitalNumerique\UserBundle\Manager;
 
 use Nodevo\ToolsBundle\Manager\Manager as BaseManager;
-use HopitalNumerique\QuestionnaireBundle\Entity\Questionnaire;
+use Doctrine\Common\Collections\Collection;
+use HopitalNumerique\UserBundle\Entity\User;
+use HopitalNumerique\ReferenceBundle\Entity\Reference;
+use HopitalNumerique\DomaineBundle\Entity\Domaine;
 
 class UserManager extends BaseManager
 {
@@ -242,6 +245,17 @@ class UserManager extends BaseManager
     {
         return $this->getRepository()->findUsersByDomaine($idDomaine)->getQuery()->getResult();
     }
+    
+    /**
+     * Retourne les utilisateurs liés à un de ces domaines.
+     * 
+     * @param \Doctrine\Common\Collections\Collection $domaines Domaines
+     * @return array<\HopitalNumerique\UserBundle\Entity\User> Utilisateurs
+     */
+    public function findByDomaines(Collection $domaines)
+    {
+        return $this->getRepository()->findByDomaines($domaines);
+    }
 
     /**
      * Retourne le premier utilisateur correspondant au role et à la région demandés
@@ -332,4 +346,80 @@ class UserManager extends BaseManager
   public function getNbEtablissements() {
     return count($this->getRepository()->getNbEtablissements()->getQuery()->getResult());
   }
+
+    /**
+     * Retourne des membres de la communauté de pratiques.
+     *
+     * @param \HopitalNumerique\UserBundle\Manager\Domaine $domaine Domaine
+     * @return array<\HopitalNumerique\UserBundle\Entity\User> Utilisateurs
+     */
+    public function findCommunautePratiqueMembres(Domaine $domaine)
+    {
+        return $this->getCommunautePratiqueMembresQueryBuilder(null, $domaine)->getQuery()->getResult();
+    }
+
+    /**
+     * Retourne la QueryBuilder avec les membres de la communauté de pratique.
+     *
+     * @param \HopitalNumerique\CommunautePratiqueBundle\Entity\Groupe $groupe (optionnel) Groupe des membres
+     * @return \Doctrine\ORM\QueryBuilder QueryBuilder
+     */
+    public function getCommunautePratiqueMembresQueryBuilder(\HopitalNumerique\CommunautePratiqueBundle\Entity\Groupe $groupe = null, Domaine $domaine = null)
+    {
+        return $this->getRepository()->getCommunautePratiqueMembresQueryBuilder($groupe, $domaine);
+    }
+
+    /**
+     * Retourne les membres de la communauté de pratique n'appartenant pas à tel groupe.
+     *
+     * @param \HopitalNumerique\CommunautePratiqueBundle\Entity\Groupe $groupe Groupe
+     * @return array<\HopitalNumerique\UserBundle\Entity\User> Utilisateurs
+     */
+    public function findCommunautePratiqueMembresNotInGroupe(\HopitalNumerique\CommunautePratiqueBundle\Entity\Groupe $groupe)
+    {
+        return $this->getRepository()->findCommunautePratiqueMembresNotInGroupe($groupe);
+    }
+
+    /**
+     * Retourne des membres de la communauté de pratique au hasard.
+     *
+     * @param integer                                            $nombreMembres Nombre de membres à retourner
+     * @param \HopitalNumerique\ReferenceBundle\Entity\Reference $civilite      (optionnel) Civilité
+     * @param array<\HopitalNumerique\UserBundle\Entity\User>    $ignores       (optionnel) Liste d'utilisateurs à ignorer
+     * @return array<\HopitalNumerique\UserBundle\Entity\User> Utilisateurs
+     */
+    public function findCommunautePratiqueRandomMembres($nombreMembres, Reference $civilite = null, array $ignores = null)
+    {
+        return $this->getRepository()->findCommunautePratiqueRandomMembres($nombreMembres, $civilite, $ignores);
+    }
+
+    /**
+     * Retourne de nombre de membres de la communauté de pratique.
+     *
+     * @return integer Total
+     */
+    public function findCommunautePratiqueMembresCount()
+    {
+        return $this->getRepository()->findCommunautePratiqueMembresCount();
+    }
+
+    /**
+     * Désinscrit un utilisateur de la communauté de partique.
+     *
+     * @param \HopitalNumerique\UserBundle\Manager\User $user Membre à désinscrire
+     */
+    public function desinscritCommunautePratique(User $user)
+    {
+        $user->setInscritCommunautePratique(false);
+
+        // On supprime les liens entre le membre et les groupes
+        foreach ($user->getCommunautePratiqueGroupes() as $groupe) {
+            $user->removeCommunautePratiqueGroupe($groupe);
+        }
+        foreach ($user->getCommunautePratiqueAnimateurGroupes() as $groupe) {
+            $user->removeCommunautePratiqueAnimateurGroupe($groupe);
+        }
+
+        $this->save($user);
+    }
 }

@@ -1,0 +1,30 @@
+services:
+    hopitalnumerique_communautepratique.form.type.commentaire:
+        class: 'HopitalNumerique\CommunautePratiqueBundle\Form\Type\CommentaireType'
+        arguments: ['@router']
+        tags:
+            - { name: 'form.type', alias: 'hopitalnumerique_communautepratiquebundle_commentaire' }
+
+    hopitalnumerique_communautepratique.form.type.fiche:
+        class: 'HopitalNumerique\CommunautePratiqueBundle\Form\Type\FicheType'
+        arguments: ['@security.context', '@hopitalnumerique_communautepratique.manager.document']
+        tags:
+            - { name: form.type, alias: 'hopitalnumerique_communautepratiquebundle_fiche' }
+
+    hopitalnumerique_communautepratique.form.type.groupe:
+        class: 'HopitalNumerique\CommunautePratiqueBundle\Form\Type\GroupeType'
+        arguments: ["@security.context", "@hopitalnumerique_user.manager.user", "@hopitalnumerique_questionnaire.manager.questionnaire"]
+        tags:
+            - { name: form.type, alias: 'hopitalnumerique_communautepratiquebundle_groupe' }
+
+    hopitalnumerique_communautepratique.form.type.user.ajout:
+        class: 'HopitalNumerique\CommunautePratiqueBundle\Form\Type\User\AjoutType'
+        arguments: ['@hopitalnumerique_user.manager.user']
+        tags:
+            - { name: 'form.type', alias: 'hopitalnumerique_communautepratiquebundle_user_ajout' }
+
+    hopitalnumerique_communautepratique.form.type.user.recherche:
+        class: 'HopitalNumerique\CommunautePratiqueBundle\Form\Type\User\RechercheType'
+        arguments: ['@router', '@hopitalnumerique_communautepratique.dependency_injection.annuaire', '@hopitalnumerique_reference.manager.reference']
+        tags:
+            - { name: form.type, alias: 'hopitalnumerique_communautepratiquebundle_user_recherche' }

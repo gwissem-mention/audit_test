@@ -274,6 +274,10 @@ class UserType extends AbstractType
                               ->orderBy('ref.order', 'ASC');
                 }
             ));
+
+            $builder->add('inscritCommunautePratique', 'checkbox', array(
+                'label' => 'Membre de la communauté de pratiques'
+            ));
             
             $builder->add('contactAutre', 'textarea', array(
                     'required'   => false,

@@ -1,0 +1,167 @@
+{% extends 'HopitalNumeriqueCommunautePratiqueBundle::layout.html.twig' %}
+
+{% block stylesheets %}
+    {{parent()}}
+    {% stylesheets output="compiled/hopitalnumerique-communautepratique-document-listbygroupe.css" filter="cssrewrite, ?yui_css"
+        '@jquery_file_upload_css'
+    %}
+        <link rel="stylesheet" href="{{ asset_url }}">
+    {% endstylesheets %}
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    {% javascripts output="compiled/hopitalnumerique-communautepratique-document-listbygroupe.js"
+        '%kernel.root_dir%/Resources/components/blueimp-tmpl/js/tmpl.min.js'
+        '@jquery_file_upload_js'
+    %}
+        <script type="text/javascript" src="{{ asset_url }}"></script>
+    {% endjavascripts %}
+    <script type="text/javascript">
+        {%- for extension, icone in iconesByExtension -%}
+            CommunautePratique_Document.ICONES_BY_EXTENSION['{{ extension }}'] = '{{ icone|raw }}';
+        {%- endfor -%}
+        $(document).ready(function() {
+            CommunautePratique_Document.initFormulaireEnvoi({{ groupe.id }});
+        });
+    </script>
+{% endblock %}
+
+{% block title_communaute_pratique %}Mes documents{% endblock %}
+
+{% block communaute_pratique_breadcrumbs_parent %}<li><a href="{{ path('hopitalnumerique_communautepratique_groupe_view', { groupe:groupe.id }) }}">Groupe de travail {{ groupe }}</a></li>{% endblock %}
+
+{% block communaute_pratique_actions %}
+    {{ parent() }}
+    {{ communaute_pratique.display_action_contact_animateur(groupe) }}
+{% endblock %}
+
+{% block communaute_pratique_sommaire %}{% endblock %}
+
+{% block body_communaute_pratique %}
+
+    {{ communaute_pratique.display_groupe_sommaire(groupe) }}
+
+    <div class="communaute-de-pratiques-documents">
+
+        <form id="fileupload" method="post" enctype="multipart/form-data">
+
+            <div class="fileinput-button">
+                <button class="btn btn-success">
+                    Choisir les fichiers à envoyer &nbsp; <i class="fa fa-plus"></i>
+                </button>
+                <input name="files[]" multiple="multiple" type="file">
+            </div>
+            <p class="description">
+                <strong>La taille maximale des fichiers est de 10 Mo.<br>La taille maximale du lot de fichiers est de {{ uploadMaxSize }} Mo.</strong>
+            </p>
+
+            <div class="bloc-envoi-documents">
+                <h2 class="mini-title text-right">Documents à envoyer</h2>
+                <div class="row files"></div>
+
+                <div class="fileupload-buttonbar">
+
+                    <button type="submit" class="btn btn-primary start">Envoyer les fichiers choisis &nbsp; <i class="fa fa-upload"></i></button>
+                    <button type="reset" class="btn btn-warning cancel">Annuler &nbsp; <i class="fa fa-times"></i></button>
+                    <button type="button" class="btn btn-danger delete"><i class="glyphicon glyphicon-trash"></i> Delete</button>
+                    <input class="toggle" type="checkbox">
+
+                    <div class="fileupload-progress fade">
+                        <div class="progress progress-striped active" role="progressbar" aria-valuemin="0" aria-valuemax="100">
+                            <div class="progress-bar progress-bar-success" style="width:0%;"></div>
+                        </div>
+                        <div class="progress-extended">&nbsp;</div>
+                    </div>
+
+                </div>
+            </div>
+
+        </form>
+
+        <script id="template-upload" type="text/x-tmpl">{{ '
+            {% for (var i=0, file; file=o.files[i]; i++) { %}
+                <div class="template-upload fade col-md-6">
+                    <div class="upload">
+                        <div class="icone">
+                            <em class="fa fa-file-o"></em>
+                        </div>
+                        <div class="contenu">
+                            <div class="libelle">
+                                <span class="name">{%=file.name%}</span>
+                            </div>
+                            <div class="taille">
+                                <strong class="error text-danger"></strong>
+                                <span class="size">En cours...</span>
+                                <div class="progress progress-striped active" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><div class="progress-bar progress-bar-success" style="width:0%;"></div></div>
+                            </div>
+                            <div class="actions">
+                                {% if (!i && !o.options.autoUpload) { %}
+                                    <button class="btn btn-primary start" disabled><i class="fa fa-upload"></i></button>
+                                {% } %}
+                                {% if (!i) { %}
+                                    <button class="btn btn-warning cancel"><i class="fa fa-times"></i></button>
+                                {% } %}
+                            </div>
+                        </div>
+                        <div class="clearfix"></div>
+                    </div>
+                </div>
+            {% } %}
+        ' }}</script>
+        <script id="template-download" type="text/x-tmpl">{{ '
+            {% for (var i=0, file; file=o.files[i]; i++) { %}
+                <div class="template-download fade col-md-6">
+                    <div class="download">
+                        <div class="icone">
+                            <em class="fa fa-file-o"></em>
+                        </div>
+                        <div class="contenu">
+                            <div class="libelle">
+                                <span class="name">
+                                    {% if (file.url) { %}
+                                        <a href="{%=file.url%}" title="{%=file.name%}" download="{%=file.name%}">{%=file.name%}</a>
+                                    {% } else { %}
+                                        {%=file.name%}
+                                    {% } %}
+                                </span>
+                                {% if (file.error) { %}
+                                    <div><span class="label label-danger">Erreur</span> {%=file.error%}</div>
+                                {% } %}
+                            </div>
+                            <div class="taille">
+                                <span class="size">{%=o.formatFileSize(file.size)%}</span>
+                                <div class="progress progress-striped active" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><div class="progress-bar progress-bar-success" style="width:0%;"></div></div>
+                            </div>
+                            <div class="actions">
+                                {% if (file.deleteUrl) { %}
+                                    <button class="btn btn-danger delete" data-type="{%=file.deleteType%}" data-url="{%=file.deleteUrl%}"{% if (file.deleteWithCredentials) { %} data-xhr-fields=\'{"withCredentials":true}\'{% } %}>
+                                        <i class="glyphicon glyphicon-trash"></i>
+                                    </button>
+                                    <input type="checkbox" name="delete" value="1" class="toggle">
+                                {% } else { %}
+                                    <button class="btn btn-warning cancel">
+                                        <i class="glyphicon glyphicon-ban-circle"></i>
+                                    </button>
+                                {% } %}
+                            </div>
+                        </div>
+                        <div class="clearfix"></div>
+                    </div>
+                </div>
+            {% } %}
+        '}}</script>
+
+        {% if documents|length > 0 %}
+            <div class="row">
+                {% for document in documents %}
+                    <div class="col-md-3">
+                        {{ communaute_pratique.display_bloc_document(document, true) }}
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+
+    </div>
+
+{% endblock body_communaute_pratique %}

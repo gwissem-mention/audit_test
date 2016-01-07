@@ -240,6 +240,11 @@ class ObjetType extends AbstractType
                     return $er->getDomainesUserConnectedForForm($connectedUser->getId());
                 }
             ))
+            ->add('communautePratiqueGroupe', 'entity', array(
+                'class' => 'HopitalNumeriqueCommunautePratiqueBundle:Groupe',
+                'label' => 'Groupe de la communauté de partique associé',
+                'required' => false
+            ))
             ->add('modified', 'hidden', array(
                 'mapped'   => false
             ))
