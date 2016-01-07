@@ -79,9 +79,9 @@
                                                                     <div class="communaute-de-pratiques-avatar" style="background-image: url('{{ asset(user.avatarWebPath) }}');"></div>
                                                                     <div class="nom">
                                                                         {% if app.user.id == user.id %}
-                                                                            <a href="{{ path('hopital_numerique_user_informations_personnelles') }}"><em class="icon icon-settings48"></em> <span class="no-link">{{ user.prenomNom }}</span></a>
+                                                                            <a target="_blank" href="{{ path('hopital_numerique_user_informations_personnelles') }}"><em class="icon icon-settings48"></em> <span class="no-link">{{ user.prenomNom }}</span></a>
                                                                         {% else %}
-                                                                            <a onclick="Contact_Popup.display({'{{ user.email }}':'{{ user.prenomNom }}'}, '{{ path(app.request.get('_route'), app.request.get('_route_params')) }}');"><em class="icon icon-email5"></em> <span class="no-link">{{ user.prenomNom }}</span></a>
+                                                                            <a onclick="Contact_Popup.display({'{{ user.email }}':'{{ user.prenomNom }}'}, '{{ path(app.request.get('_route'), app.request.get('_route_params')) }}');" title="Entrer en contact avec {{ user.appellation }}"><em class="icon icon-email5"></em> <span class="no-link">{{ user.prenomNom }}</span></a>
                                                                         {% endif %}
                                                                     </div>
                                                                     {% if groupe.hasAnimateur(user) %}

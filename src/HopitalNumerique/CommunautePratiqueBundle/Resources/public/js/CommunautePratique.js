@@ -21,6 +21,14 @@ CommunautePratique.init = function()
         autoHeight: true,
         width : 600
     });
+    $(".infobulle").mouseenter(function(e){
+        e.preventDefault();
+        $(this).children(".groupeContent").fadeIn("slow");
+    });
+    $(".infobulle").mouseleave(function(e){
+        e.preventDefault();
+        $(this).children(".groupeContent").fadeOut("fast");
+    });
 };
 
 

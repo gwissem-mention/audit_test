@@ -15,7 +15,7 @@
     {{ parent() }}
     {{ communaute_pratique.display_action_contact_animateur(groupe) }}
     <div class="lien">
-        <a href="{{ path('hopital_numerique_user_informations_personnelles') }}">Mise à jour de mes données <em class="icon icon-settings48"></em></a>
+        <a target="_blank" href="{{ path('hopital_numerique_user_informations_personnelles') }}">Mise à jour de mes informations personnelles <em class="icon icon-settings48"></em></a>
     </div>
 {% endblock %}
 
@@ -50,13 +50,13 @@
         <div class="row">
             {% for membre in pagerFantaMembres.currentPageResults %}
                 <div class="col-md-3 col-sm-6">
-                    {{ communaute_pratique.display_bloc_membre(membre, groupe, canDeleteMembre) }}
+                    {{ communaute_pratique.display_bloc_membre(membre, groupe, canDeleteMembre, groupesTermines, groupesNonDemarres, groupesEnCours) }}
                 </div>
             {% endfor %}
         </div>
 
         {% if pagerFantaMembres.nbPages > 1 %}
-            <div class="text-center">{{ pagerfanta(pagerFantaMembres, 'hopitalnumerique_communautepratique') }}</div>
+            <div class="text-center">{{ pagerfanta(pagerFantaMembres, 'hopitalnumerique_communautepratique') }}<span class="resultats-nombre"> {{ pagerFantaMembres.count }} menbres</span></div>
         {% endif %}
 
     </div>

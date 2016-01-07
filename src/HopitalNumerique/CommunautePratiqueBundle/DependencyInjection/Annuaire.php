@@ -247,6 +247,16 @@ class Annuaire
             }
         }
     }
+	/**
+ 	* Supprime les filtres en session 
+ 	*/
+	public function removeFiltres()
+	{
+		foreach ($this->getFiltreLibelles() as $filtreLibelle)
+		{
+			$this->session->remove('cp-annuaire-'.$filtreLibelle);
+		}
+	}
 
     /**
      * Initialise un filtre.
@@ -281,4 +291,6 @@ class Annuaire
     {
         $this->session->set('cp-annuaire-'.$filtreLibelle, self::$FILTRES[$filtreLibelle]);
     }
+    
+    
 }

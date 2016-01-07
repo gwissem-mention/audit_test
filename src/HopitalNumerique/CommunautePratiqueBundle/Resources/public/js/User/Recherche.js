@@ -21,7 +21,7 @@ CommunautePratique_User_Recherche.init = function()
 CommunautePratique_User_Recherche.initChamps = function()
 {
     $('#hopitalnumerique_communautepratiquebundle_user_recherche_profilEtablissementSante').multiselect({
-        nonSelectedText: 'Filtrer par profils',
+        nonSelectedText: 'Profils',
         buttonContainer: '<div class="btn-group" />',
         numberDisplayed: 1,
         buttonWidth: '100%',
@@ -30,7 +30,7 @@ CommunautePratique_User_Recherche.initChamps = function()
     });
 
     $('#hopitalnumerique_communautepratiquebundle_user_recherche_region').multiselect({
-        nonSelectedText: 'Filtrer par régions',
+        nonSelectedText: 'Régions',
         buttonContainer: '<div class="btn-group" />',
         numberDisplayed: 1,
         buttonWidth: '100%',
@@ -39,7 +39,7 @@ CommunautePratique_User_Recherche.initChamps = function()
     });
 
     $('#hopitalnumerique_communautepratiquebundle_user_recherche_statutEtablissementSante').multiselect({
-        nonSelectedText: 'Filtrer par types d\'établissement',
+        nonSelectedText: 'Types d\'établissement',
         buttonContainer: '<div class="btn-group" />',
         numberDisplayed: 1,
         buttonWidth: '100%',
@@ -48,7 +48,7 @@ CommunautePratique_User_Recherche.initChamps = function()
     });
 
     $('#hopitalnumerique_communautepratiquebundle_user_recherche_typeActivite').multiselect({
-        nonSelectedText: 'Filtrer par types d\'activité',
+        nonSelectedText: 'Types d\'activité',
         buttonContainer: '<div class="btn-group" />',
         numberDisplayed: 1,
         buttonWidth: '100%',
