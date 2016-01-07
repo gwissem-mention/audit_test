@@ -1,6 +1,8 @@
 <?php
 namespace HopitalNumerique\ForumBundle\Controller;
 
+use Symfony\Component\Security\Core\Exception\AccessDeniedException;
+
 /**
  *
  * @category CCDNForum
