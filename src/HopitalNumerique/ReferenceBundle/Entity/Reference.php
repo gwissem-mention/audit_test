@@ -33,7 +33,7 @@ class Reference
     /**
      * @var integer ID de la catégorie d'article de la communauté de partiques
      */
-    const ARTICLE_CATEGORIE_COMMUNAUTE_DE_PRATIQUES_ID = 800;
+    const ARTICLE_CATEGORIE_COMMUNAUTE_DE_PRATIQUES_ID = 1000;
 
 
     private static $STATUT_ACTIF_ID = 3;
