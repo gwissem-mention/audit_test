@@ -1,6 +1,9 @@
 <?php
 namespace HopitalNumerique\ForumBundle\Controller;
 
+use CCDNForum\ForumBundle\Component\Dispatcher\Event\AdminForumResponseEvent;
+use CCDNForum\ForumBundle\Component\Dispatcher\ForumEvents;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
 /**
