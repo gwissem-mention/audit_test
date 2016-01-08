@@ -5,6 +5,8 @@ namespace HopitalNumerique\ObjetBundle\Manager;
 use Nodevo\ToolsBundle\Manager\Manager as BaseManager;
 use Doctrine\ORM\EntityManager;
 use \Nodevo\ToolsBundle\Tools\Chaine;
+use HopitalNumerique\DomaineBundle\Entity\Domaine;
+use HopitalNumerique\ReferenceBundle\Entity\Reference;
 use HopitalNumerique\UserBundle\Manager\UserManager;
 use HopitalNumerique\ReferenceBundle\Manager\ReferenceManager;
 
@@ -779,9 +781,29 @@ class ObjetManager extends BaseManager
         return $productions;
     }
 
+    /**
+     * Retourne les articles d'une catégorie.
+     *
+     * @param \HopitalNumerique\ObjetBundle\Manager\Reference $categorie Catégorie
+     * @param \HopitalNumerique\DomaineBundle\Entity\Domaine  $domaine   Domaine
+     * @return array<\HopitalNumerique\ObjetBundle\Entity\Objet> Articles
+     */
+    public function getArticlesForCategorie(Reference $categorie, Domaine $domaine)
+    {
+        return $this->getRepository()->getArticlesForCategorie($categorie, $domaine);
+    }
 
-
-
+    /**
+     * Retourne le dernier article d'une catégorie.
+     *
+     * @param \HopitalNumerique\ObjetBundle\Manager\Reference $categorie Catégorie
+     * @param \HopitalNumerique\DomaineBundle\Entity\Domaine  $domaine   Domaine
+     * @return \HopitalNumerique\ObjetBundle\Entity\Objet Dernier article
+     */
+    public function getLastArticleForCategorie(Reference $categorie, Domaine $domaine)
+    {
+        return $this->getRepository()->getLastArticleForCategorie($categorie, $domaine);
+    }
 
 
 
@@ -1015,5 +1037,59 @@ class ObjetManager extends BaseManager
      */
     public function getArticleAlaUne() {
       return $this->getRepository()->getArticleAlaUne()->getQuery()->getResult();
+    }
+    
+    /**
+     * Retourne les articles du domaine 
+     * @return \HopitalNumerique\ObjetBundle\Entity\Objet[]
+     */
+    public function getObjetByDomaine() {
+    	$objets = $this->getRepository()->getObjetByDomaine()->getQuery()->getResult();
+    	$ids    = array();
+    	foreach( $objets as $one )
+    		$ids[] = $one->getId();
+    	
+    		//get Contenus
+    		$datas    = $this->_contenuManager->getArboForObjet($ids);
+    		$contenus = array();
+    		foreach( $datas as $one ) {
+    			if( $one->objet != null )
+    				$contenus[ $one->objet ][] = $one;
+    		}
+    	
+    		//formate datas
+    		foreach( $objets as $one )
+    		{
+    			//Traitement pour Article
+    			if($one->isArticle())
+    			{
+    				$results[] = array(
+    						"text"  => $one->getTitre(),
+    						"value" => "ARTICLE:" . $one->getId()
+    				);
+    			}
+    			//Traitement pour Publication et Infradoc
+    			else
+    			{
+    				$results[] = array(
+    						"text"  => $one->getTitre(),
+    						"value" => "PUBLICATION:" . $one->getId()
+    				);
+    	
+    				if( !isset($contenus[ $one->getId() ]) || count( $contenus[ $one->getId() ] ) <= 0 )
+    					continue;
+    	
+    					foreach( $contenus[ $one->getId() ] as $content ){
+    						$results[] = array(
+    								"text"  => "|--" . $content->titre,
+    								"value" => "INFRADOC:" . $content->id
+    						);
+    						$this->getObjetsChilds($results, $content, 2);
+    					}
+    			}
+    	
+    		}
+    	
+    		return $results;
     }
 }

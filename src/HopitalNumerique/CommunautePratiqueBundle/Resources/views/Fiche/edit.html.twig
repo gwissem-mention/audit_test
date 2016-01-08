@@ -1,0 +1,82 @@
+{% extends 'HopitalNumeriqueCommunautePratiqueBundle::layout.html.twig' %}
+
+{% block title_communaute_pratique %}{{ fiche.id is not null ? 'Édition' : 'Ajout' }} d'une fiche{% endblock %}
+
+{% block communaute_pratique_actions %}
+    {{ parent() }}
+    {{ communaute_pratique.display_action_contact_animateur(fiche.groupe) }}
+{% endblock %}
+
+{% block communaute_pratique_sommaire %}{% endblock %}
+
+{# Bloc d'un document avec checkbox utilisé dans le formulaire à la place d'une simple checkbox #}
+{% block _hopitalnumerique_communautepratiquebundle_fiche_documents_row %}
+
+    {% import "HopitalNumeriqueCommunautePratiqueBundle:include:blocks.html.twig" as communaute_pratique %}
+
+    <div {{ block('widget_container_attributes') }}>
+        {% for i,child in form %}
+            <div class="col-md-6">
+                {{ communaute_pratique.display_bloc_document(form.vars.choices[i].data, false, child) }}
+            </div>
+        {% endfor %}
+    </div>
+
+{% endblock %}
+
+{% block communaute_pratique_breadcrumbs_parent %}<li><a href="{{ path('hopitalnumerique_communautepratique_groupe_view', { groupe:fiche.groupe.id }) }}">Groupe de travail {{ fiche.groupe }}</a></li>{% endblock %}
+
+{% block body_communaute_pratique %}
+
+    {{ communaute_pratique.display_groupe_sommaire(fiche.groupe) }}
+    
+    <div class="panel panel-communaute-de-pratiques panel-communaute-de-pratiques-fiche-edit">
+        <div class="panel-heading">
+            <h2><em class="icon icon-file148"></em>Fiche de problématique</h2>
+        </div>
+        <div class="panel-body">
+
+            {% form_theme ficheFormulaire _self %}
+            {{ form_start(ficheFormulaire) }}
+
+                <div class="row">
+                    <div class="col-md-6">
+
+                        {{ form_row(ficheFormulaire.questionPosee) }}
+                        {{ form_row(ficheFormulaire.contexte) }}
+                        {{ form_row(ficheFormulaire.description) }}
+                        {{ form_row(ficheFormulaire.aideAttendue) }}
+                        {{ form_row(ficheFormulaire.resume) }}
+
+                    </div>
+                    <div class="col-md-6">
+
+                        <div class="row">
+                            <div class="col-md-12">
+                                <h3 class="mini-title">{{ fiche.user.id == app.user.id ? 'Mes documents' : 'Documents de '~(fiche.user.prenomNom) }}</h3>
+                                {%- if ficheFormulaire.documents.vars.choices|length == 0 -%}
+                                    <p>Aucun document</p>
+                                {%- endif -%}
+                            </div>
+                        </div>
+                        <div class="row">
+                            {{ form_row(ficheFormulaire.documents) }}
+                        </div>
+
+                        <div class="clearfix"></div>
+                        <div class="row">
+                            <div class="col-md-6"></div>
+                            <div class="col-md-6">
+                                <button type="submit" class="btn btn-success btn-block">Enregistrer la fiche</button>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+            {{ form_end(ficheFormulaire) }}
+
+        </div>
+    </div>
+
+{% endblock body_communaute_pratique %}

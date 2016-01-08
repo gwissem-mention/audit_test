@@ -1,0 +1,463 @@
+{##
+ # Affiche un groupe.
+ #
+ # @param \HopitalNumerique\CommunautePratiqueBundle\Entity\Groupe groupe Groupe
+ #}
+{% macro display_groupe(groupe) %}
+    <div class="communaute-de-pratiques-groupe">
+        <div class="row">
+            <div class="col-sm-9">
+                <h2>{{ groupe.titre }}</h2>
+                <p>
+                    {{ groupe.descriptionCourte }} <a class="fancybox fancybox.ajax" href="{{ path('hopitalnumerique_communautepratique_groupe_panelinformations', { 'groupe':groupe.id }) }}">En savoir plus</a>
+                </p>
+                <div class="progression hidden-xs">
+                    <div class="dates">
+                        <div class="gauche">{{ groupe.dateInscriptionOuverture|date('d/m/Y') }}</div>
+                        <div class="milieu">{{ groupe.dateDemarrage|date('d/m/Y') }}</div>
+                        <div class="droite">{{ groupe.dateFin|date('d/m/Y') }}</div>
+                    </div>
+                    <div class="barre" id="date-progression-barre-{{ groupe.id }}"><div class="contenu"></div></div>
+                    <div class="legende">
+                        <div class="gauche">Inscription</div>
+                        <div class="milieu">Démarrage</div>
+                        <div class="droite">Fermeture</div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-3">
+                <p>
+                    {% if date('now') >= groupe.dateDemarrage %}
+                        Nombre de contributeurs : {{ groupe.users|length }}
+                    {% else %}
+                        Places restantes
+                        <br><strong>{{ groupe.nombrePlacesRestantes }} sur {{ groupe.nombreParticipantsMaximum }}</strong>
+                    {% endif %}
+                </p>
+                <div class="places-progression hidden-xs" id="places-progression-barre-{{ groupe.id }}"{% if date('now') >= groupe.dateDemarrage %} style="visibility: hidden;"{% endif %}><div class="contenu"></div></div>
+                {% if date('now') >= groupe.dateDemarrage %} {# Groupes en cours #}
+                    {% if (app.user.hasCommunautePratiqueGroupe(groupe)) %}
+                        <a class="button" href="{{ path('hopitalnumerique_communautepratique_groupe_view', { groupe: groupe.id }) }}">Travailler dans ce groupe</a>
+                    {% else %}
+                        <a class="button" onclick="Contact_Popup.display({{ groupe.animateurEmailsJson }}, '{{ path(app.request.get('_route')) }}', 'Je souhaite participer au groupe {{ groupe.titre|replace({ '\'':'\\\'', '"':'' }) }}');" title="Contactez l’administrateur pour le rejoindre" >Démarré</a>
+                    {% endif %}
+                {% elseif (app.user.hasCommunautePratiqueGroupe(groupe)) %}
+                    <span class="button inactive">Vous êtes inscrit</span>
+                {% elseif groupe.users|length >= groupe.nombreParticipantsMaximum %}
+                    <a class="button" onclick="Contact_Popup.display({{ groupe.animateurEmailsJson }}, '{{ path(app.request.get('_route')) }}', 'Je souhaite participer au groupe {{ groupe.titre|replace({ '\'':'\\\'', '"':'' }) }}');">Groupe complet contactez l'animateur</a>
+                {% elseif date('now') < groupe.dateInscriptionOuverture %}
+                    <a class="button">Inscription dans <span class="jours-restants"><span>{{ groupe.nombreJoursRestantsAvantInscriptionOuverture }}</span></span> jour{{ groupe.nombreJoursRestantsAvantInscriptionOuverture > 1 ? 's' : '' }}</a>
+                {% else %}
+                    <a class="button" href="{{ path('hopitalnumerique_communautepratique_groupe_inscrit', { 'groupe':groupe.id }) }}">Rejoindre</a>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    <script type="text/javascript">
+        $(document).ready(function() {
+            CommunautePratique_Groupe_DateProgression.displayProgression({{ groupe.id }}, {{ groupe.dateInscriptionOuverture|date('U') }}, {{ groupe.dateDemarrage|date('U') }}, {{ groupe.dateFin|date('U') }});
+            CommunautePratique_Groupe_PlaceProgression.displayProgression({{ groupe.id }}, {{ groupe.nombreParticipantsMaximum }}, {{ groupe.users|length }});
+        });
+    </script>
+{% endmacro %}
+
+{##
+ # Affiche mes groupes en cours.
+ #
+ # @param array<\HopitalNumerique\CommunautePratiqueBundle\Entity\Groupe> userGroupesEnCours Groupes à afficher
+ #}
+{% macro display_bloc_mes_groupes(userGroupesEnCours) %}
+    <div class="communaute-de-pratiques-bloc-mes-groupes" id="panel-communaute-de-pratiques-mes-groupes">
+        <div class="title"><em class="icon-social20"></em> Mes groupes en cours</div>
+
+        <ul class="communaute-de-pratiques-mes-groupes">
+            {%- for groupe in userGroupesEnCours -%}
+                <li>
+                    <a href="{{ path('hopitalnumerique_communautepratique_groupe_view', { 'groupe':groupe.id }) }}">{{ groupe }}</a>
+                    <div>Dernière activité le {{ groupe.dateDerniereActivite|date('d/m/Y') }}</div>
+                </li>
+            {%- else -%}
+                <li>Aucun groupe en cours. Choisissez un groupe et cliquez sur "Rejoindre" pour y participer</li>
+            {%- endfor -%}
+        </ul>
+    </div>
+{% endmacro %}
+
+{##
+ # Affiche le lien de contact des animateurs du groupe.
+ #
+ # @param \HopitalNumerique\CommunautePratiqueBundle\Entity\Groupe groupe Groupe
+ #}
+{% macro display_action_contact_animateur(groupe) %}
+    <div class="contact">
+        <a onclick="Contact_Popup.display({{ groupe.animateurEmailsJson }}, '{{ path( app.request.get('_route'), app.request.get('_route_params') ) }}');">
+            <em class="icon-help9"></em>
+            Envoyer un message<br>{{ groupe.animateurs|length > 1 ? 'aux ' : 'à l\'' }}animateur{{ groupe.animateurs|length > 1 ? 's' : '' }} du groupe
+        </a>
+    </div>
+{% endmacro %}
+
+{##
+ # Affiche la liste des groupes avec publications.
+ #
+ # @param array<\HopitalNumerique\CommunautePratiqueBundle\Entity\Groupe> groupes Groupes avec publications
+ #}
+{% macro display_action_groupes_with_publications(groupes) %}
+    {%- if groupes|length > 2 -%}
+        <div class="contact">
+            <div class="dropdown">
+                <button class="btn btn-default dropdown-toggle" type="button" id="dropdown-groupes-avec-publications" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                    Filtrer les groupes
+                    <span class="caret"></span>
+                </button>
+                <ul class="dropdown-menu" aria-labelledby="dropdown-groupes-avec-publications">
+                    {%- for groupe in groupes -%}
+                        <li><a href="{{ path('hopitalnumerique_communautepratique_publication_listbygroupe', { groupe:groupe.id }) }}">{{ groupe }}</a></li>
+                    {%- endfor -%}
+                </ul>
+            </div>
+        </div>
+    {%- endif -%}
+{% endmacro %}
+
+{##
+ # Affiche des boutons de liens en rapport avec le groupe.
+ #
+ # @param \HopitalNumerique\CommunautePratiqueBundle\Entity\Groupe groupe Groupe
+ #}
+{% macro display_groupe_sommaire(groupe) %}
+    <div class="communaute-de-pratiques-sommaire">
+        <div class="row">
+            <div class="col-md-3">
+                <a class="groupe" href="{{ path('hopitalnumerique_communautepratique_groupe_view', { 'groupe':groupe.id }) }}"><em class="fa fa-home"></em> Accueil du groupe</a>
+            </div>
+            <div class="col-md-3">
+                <a class="groupe" href="{{ path('hopitalnumerique_communautepratique_document_listbygroupe', { 'groupe':groupe.id }) }}"><em class="icon icon-documents7"></em> Mes documents</a>
+            </div>
+            <div class="col-md-3">
+                <a class="groupe" href="{{ path('hopitalnumerique_communautepratique_user_listbygroupe', { 'groupe':groupe.id }) }}"><em class="icon icon-social20"></em> Annuaire du groupe</a>
+            </div>
+            <div class="col-md-3">
+                <a class="groupe" href="{{ path('hopitalnumerique_communautepratique_accueil_index') }}"><em class="icon icon-arrow"></em> Retour à la communauté</a>
+            </div>
+        </div>
+    </div>
+{% endmacro %}
+
+{##
+ # Affiche un petit bloc d'un document.
+ #
+ # @param \HopitalNumerique\CommunautePratiqueBundle\Entity\Document document  Document
+ # @param boolean                                                    canDelete Faux par défaut, si VRAI, affiche un bouton de suppression
+ # @param \Symfony\Component\Form\FormView                           checkbox  (optionnel) Affiche la checkbox du document dans le formulaire
+ #}
+{% macro display_bloc_document(document, canDelete = false, checkbox = null) %}
+    <div data-communaute-pratique-document-id="{{ document.id }}" data-communaute-pratique-document-extension="{{ document.extension }}">
+        <div class="communaute-de-pratiques-document">
+            {% if canDelete %}
+                <div class="delete"><a onclick="CommunautePratique_Document.delete({{ document.id }});"><em class="fa fa-trash-o"></em></a></div>
+            {% endif %}
+            {% if checkbox is not null %}
+                <div class="checkbox">{{ form_widget(checkbox) }}</div>
+            {% endif %}
+            <div class="icone">
+                {% if document.isImage %}
+                    <div class="image" style="background-image:url('{{ document.pathname|imagine_filter('communaute_pratique_document') }}');"></div>
+                {% else %}
+                    {{ document.iconeHtml|raw }}
+                {% endif %}
+            </div>
+            <div class="contenu">
+                <div class="nom"><a href="{{ path('hopitalnumerique_communautepratique_document_download', { 'document':document.id }) }}" target="_blank"><span title="{{ document }}">{{ document|truncate(15) }}</span> <span class="size">{{ document.sizeLibelle }}</span></a></div>
+                <div class="date">Déposé le <span>{{ document.dateCreation|date('d/m/y') }}</span></div>
+            </div>
+        </div>
+    </div>
+{% endmacro %}
+
+{##
+ # Affiche le bandeau avec les informations du membre.
+ #
+ # @param \HopitalNumerique\UserBundle\Entity\User                 user   Membre
+ # @param \HopitalNumerique\CommunautePratiqueBundle\Entity\Groupe groupe Groupe associé
+ #}
+{% macro display_bandeau_membre(user, groupe) %}
+    <div class="communaute-pratique-bandeau-membre">
+        <div class="communaute-pratique-bandeau-membre-body">
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="illustration">
+                        <div class="communaute-de-pratiques-avatar" style="background-image: url('{{ asset(user.avatarWebPath) }}');"></div>
+                    </div>
+                    <div class="nom">
+                        {% if app.user.id == user.id %}
+                            <a target="_blank" href="{{ path('hopital_numerique_user_informations_personnelles') }}"><em class="icon icon-settings48"></em> <span class="no-link">{{ user.prenomNom }}</span></a>
+                        {% else %}
+                            <a onclick="Contact_Popup.display({'{{ user.email }}':'{{ user.appellation }}'}, '{{ path(app.request.get('_route'), app.request.get('_route_params')) }}');"  title="Entrer en contact avec {{ user.appellation }}"><em class="icon icon-email5"></em> <span class="no-link">{{ user.prenomNom }}</span></a>
+                        {% endif %}
+                    </div>
+                    {% if groupe.hasAnimateur(user) %}
+                        <div class="animateur">
+                            <em class="icon icon-speaker15"></em>
+                            Animateur du groupe
+                        </div>
+                    {% endif %}
+                </div>
+                <div class="col-md-4">
+                    <div class="clearfix"></div>
+                    <div class="type">
+                        <em class="icon icon-hospital11"></em>
+                        <div class="contenu">
+                            {{ user.statutEtablissementSante is not null ? user.statutEtablissementSante.libelle : 'Type d\'établissement non renseigné' }}
+                            {% if user.typeActivite|length > 0 -%}
+                                &nbsp;({% for activite in user.typeActivite -%}
+                                    {{ (loop.first ? '' : ', ')~(activite.libelle) }}
+                                {%- endfor %})
+                            {%- endif -%}
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="fonction">
+                        <em class="icon icon-users149"></em>
+                        <div class="contenu">
+                            {{ user.fonctionDansEtablissementSante != '' ? user.fonctionDansEtablissementSante : 'Fonction non renseignée' }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endmacro %}
+
+{##
+ # Affiche un commentaire.
+ #
+ # @param \HopitalNumerique\CommunautePratiqueBundle\Entity\Commentaire commentaire Commentaire
+ #}
+{% macro display_commentaire(commentaire) %}
+    <div class="commentaire" data-communaute-pratique-commentaire-id="{{ commentaire.id }}">
+        <div class="actions">
+            {% if commentaire|communautePratiqueCanEdit %}
+                <a onclick="CommunautePratique_Commentaire.edit({{ commentaire.id }});"><em class="fa fa-edit"></em></a>
+            {% endif %}
+            {% if commentaire|communautePratiqueCanDelete %}
+                <a onclick="CommunautePratique_Commentaire.delete({{ commentaire.id }});"><em class="fa fa-trash-o"></em></a>
+            {% endif %}
+        </div>
+        <div class="illustration">
+            <div class="communaute-de-pratiques-avatar" style="background-image: url('{{ asset(commentaire.user.avatarWebPath) }}');"></div>
+        </div>
+        <div class="contenu">
+            <div class="nom">Par <strong>{{ commentaire.user.prenomNom }}</strong> <span class="date">le {{ commentaire.dateCreation|date('d/m/Y') }}</span>
+                {% if (commentaire.fiche is not null and commentaire.fiche.groupe.hasAnimateur(commentaire.user)) or (commentaire.groupe is not null and commentaire.groupe.hasAnimateur(commentaire.user)) %}
+                    <span class="animateur"><em class="icon icon-speaker15"></em> Animateur du groupe</span>
+                {% endif %}
+            </div>
+            <div class="message">
+                <p>{{ commentaire.message|parsePublication|unescape }}</p>
+            </div>
+        </div>
+        <div class="clearfix"></div>
+    </div>
+{% endmacro %}
+
+{##
+ # Affiche un commentaire.
+ #
+ # @param \HopitalNumerique\ObjetBundle\Entity\Objet objet Article
+ #}
+{% macro display_article(article) %}
+    <div class="communaute-de-pratiques-actualite">
+        <h3>{{ article.titre }} <span class="date">{{ article.dateCreation|date('d/m/Y') }}</span> </h3>
+        <div class="body">{{ article.resume|parsePublication|unescape }}</div>
+    </div>
+{% endmacro %}
+
+{##
+ # Affiche le bloc d'un utilisateur.
+ #
+ # @param \HopitalNumerique\UserBundle\Entity\User                 user            Membre
+ # @param \HopitalNumerique\CommunautePratiqueBundle\Entity\Groupe groupe          Groupe
+ # @param boolean                                                  canDeleteMembre VRAI si le membre peut être désinscrit (dans ce cas, le groupe doit être précisé)
+ #}
+{% macro display_bloc_membre(user, groupe, canDeleteMembre, groupesTermines, groupesNonDemarres, groupesEnCours) %}
+    <div class="communaute-de-pratiques-bloc-user">
+        {% if canDeleteMembre %}
+            <div class="delete">
+                <a onclick="CommunautePratique_User.desinscritGroupe({{ groupe.id }}, {{ user.id }});"><em class="fa fa-times-circle"></em></a>
+            </div>
+        {% endif %}
+        <div class="identite">
+            <div class="illustration"><div class="communaute-de-pratiques-avatar" style="background-image: url('{{ asset(user.avatarWebPath) }}');"></div></div>
+            <div class="nom">
+                {% if app.user.id == user.id %}
+                    <a target="_blank" href="{{ path('hopital_numerique_user_informations_personnelles') }}"><em class="icon icon-settings48"></em> <span class="no-link">{{ user.prenomNom }}</span></a>
+                {% else %}
+                    <a onclick="Contact_Popup.display({'{{ user.email }}':'{{ user.prenomNom }}'}, '{{ path(app.request.get('_route'), app.request.get('_route_params')) }}');"  title="Entrer en contact avec {{ user.appellation }}"><em class="icon icon-email5"></em> <span class="no-link">{{ user.prenomNom }}</span></a>
+                {% endif %}
+            </div>
+            {% if groupe is not null and groupe.hasAnimateur(user) %}
+                <div class="animateur">
+                    <em class="icon icon-speaker15"></em>
+                    Animateur du groupe
+                </div>
+            {% endif %}
+        </div>
+        <div class="type">
+            <em class="icon icon-hospital11"></em>
+            <div class="contenu">
+                {{ user.statutEtablissementSante is not null ? user.statutEtablissementSante.libelle : 'Type d\'établissement non renseigné' }}
+                {% if user.typeActivite|length > 0 -%}
+                    <br>({% for activite in user.typeActivite -%}
+                        {{ (loop.first ? '' : ', ')~(activite.libelle) }}
+                    {%- endfor %})
+                {%- endif -%}
+            </div>
+        </div>
+        <div class="fonction">
+            <em class="icon icon-users149"></em>
+            <div class="contenu">
+                {{ user.fonctionDansEtablissementSante != '' ? user.fonctionDansEtablissementSante : 'Fonction non renseignée' }}
+            </div>
+        </div>
+        <div class="liens">
+            {% if groupe is not null %}
+                <div class="informations">
+                    <a href="{{ path('hopitalnumerique_communautepratique_user_viewforgroupe', { user:user.id, groupe:groupe.id }) }}">Retour d'expérience</a>
+                </div>
+            {% endif %}
+            <div class="groupe">
+                {% if user.communautePratiqueGroupes|length > 0 %}
+                     <div class="infobulle" >Participations aux groupes
+                        <div class="groupeContent">
+                            {% if groupesTermines|length == 0 and groupesNonDemarres|length == 0 and groupesEnCours|length == 0 %}
+                        
+                                <p>Aucune participation à un groupe pour l'instant.</p>
+                        
+                            {% else %}
+                                <p><strong>{{ user.appellation }} a participé aux groupes de travail suivants :</strong></p>
+                                {% if groupesTermines|length > 0 %}
+                                    <ul>
+                                        {%- for groupe in groupesTermines -%}
+                                            {%- for userGroupe in groupe.users -%}
+                                                {%- if userGroupe.id == user.id  -%}
+                                                    <li>{{ groupe }}, du {{ groupe.dateDemarrage|date('d/m/Y') }} au {{ groupe.dateFin|date('d/m/Y') }}</li>
+                                                {%- endif -%}
+                                            {%- endfor -%}
+                                        {%- endfor -%}
+                                    </ul>
+                                {% endif %}
+                        
+                                {% if groupesNonDemarres|length > 0 or groupesEnCours|length > 0 %}
+                                    <ul>
+                                        {%- for groupe in groupesNonDemarres -%}
+                                            {%- for userGroupe in groupe.users -%}
+                                                {%- if userGroupe.id == user.id  -%}
+                                                    <li>{{ groupe }}, du {{ groupe.dateDemarrage|date('d/m/Y') }} au {{ groupe.dateFin|date('d/m/Y') }}</li>
+                                                {%- endif -%}
+                                            {%- endfor -%}
+                                        {%- endfor -%}
+                                        {%- for groupe in groupesEnCours -%}
+                                            {%- for userGroupe in groupe.users -%}
+                                                {%- if userGroupe.id == user.id  -%}
+                                                    <li>{{ groupe }}, du {{ groupe.dateDemarrage|date('d/m/Y') }} au {{ groupe.dateFin|date('d/m/Y') }}</li>
+                                                {%- endif -%}
+                                            {%- endfor -%}
+                                        {%- endfor -%}
+                                    </ul>
+                                {% endif %}
+                            {% endif %}
+                        </div>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+{% endmacro %}
+
+{##
+ # Affiche le bloc d'une fiche
+ #
+ # @param \HopitalNumerique\CommunautePratiqueBundle\Entity\Fiche fiche Fiche
+ #}
+{% macro display_bloc_fiche(fiche) %}
+    <div class="communaute-de-pratiques-bloc-fiche" data-communaute-pratique-fiche-resolu="{{ fiche.resolu ? '1' : '0' }}">
+        <div class="icone">
+            {%- if fiche.resolu -%}
+                <em class="icon icon-stats2"></em>
+            {%- else -%}
+                <em class="icon icon-form-check"></em>
+            {%- endif -%}
+        </div>
+        <div class="header">
+            {% if fiche|communautePratiqueCanEdit %}<a href="{{ path('hopitalnumerique_communautepratique_fiche_view', { fiche:fiche.id }) }}">{% endif %}
+                <strong>{{ fiche.questionPosee }}</strong>
+            {% if fiche|communautePratiqueCanEdit %}</a>{% endif %}
+            <div class="communaute-de-pratiques-total-commentaires">
+                <span class="count">{{ fiche.commentaires|length }}</span> commentaire{{ fiche.commentaires|length > 1 ? 's' : '' }} sur cette fiche
+            </div>
+        </div>
+        <div class="contenu">
+            <div class="date">
+                Créée le <strong>{{ fiche.dateCreation|date('d/m/Y') }}</strong>
+                par <a href="{{ path('hopitalnumerique_communautepratique_user_viewforgroupe', { user:fiche.user.id, groupe:fiche.groupe.id }) }}">{{ fiche.user.prenomNom }}</a>
+            </div>
+        </div>
+        <nav>
+            <a href="{{ path('hopitalnumerique_communautepratique_fiche_view', { fiche:fiche.id }) }}">Contribuer à cette problématique</a>
+        </nav>
+    </div>
+{% endmacro %}
+
+{##
+ # Affiche le panel des publications d'un groupe
+ #
+ # @param \HopitalNumerique\CommunautePratiqueBundle\Entity\Groupe groupe Groupe
+ #}
+{% macro display_panel_publications(groupe) %}
+    {%- if groupe.publications|length > 0 -%}
+        <div class="panel panel-communaute-de-pratiques">
+            <div class="panel-heading">
+                <div class="date">
+                    {{ groupe.dateDemarrage|date('d/m/Y') }} au {{ groupe.dateFin|date('d/m/Y') }}
+                </div>
+                <h2><em class="icon icon-social20"></em> Groupe de travail {{ groupe }}</h2>
+            </div>
+            <div class="panel-body">
+
+                {%- if groupe.animateurs|length > 0 -%}
+                    <p>
+                        <strong>Animateur{{ groupe.animateurs|length > 1 ? 's' : '' }} du groupe</strong> :
+                        {% for animateur in groupe.animateurs %}
+                            {{ animateur.prenom }} {{ animateur.nom }}{{ loop.last ? '' : ', ' }}
+                        {% endfor -%}
+                    </p>
+                {%- endif -%}
+                {{ groupe.descriptionHtml|unescape }}
+
+                <div class="row">
+                    {%- for publication in groupe.publications -%}
+                        <div class="col-md-6">
+                            <div class="publication">
+                                <div class="categorie">
+                                    {% for categorie in publication.types %}
+                                        {{ categorie.libelle }}{{ loop.last ? '' : ', ' }}
+                                    {% endfor -%}
+                                    {% if publication.source is not null %}
+                                        <span class="text-muted">({{ publication.source }})</span>
+                                    {% endif -%}
+                                </div>
+
+                                <h2><a href="{{ path('hopital_numerique_publication_publication_objet', { id:publication.id, alias:publication.alias }) }}" >{{ publication.titre }}</a></h2>
+
+                                {{ publication.resume|parsePublication|striptags|truncate(400) }}
+                            </div>
+                        </div>
+                    {%- endfor -%}
+                </div>
+
+            </div>
+        </div>
+    {%- endif -%}
+{% endmacro %}

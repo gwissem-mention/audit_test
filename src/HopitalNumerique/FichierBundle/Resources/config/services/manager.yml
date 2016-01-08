@@ -1,0 +1,8 @@
+services:
+    hopitalnumerique_fichier.manager.extension:
+        class: 'HopitalNumerique\FichierBundle\Manager\ExtensionManager'
+        arguments: ['@doctrine.orm.entity_manager']
+
+    hopitalnumerique_fichier.manager.fichier_type:
+        class: 'HopitalNumerique\FichierBundle\Manager\FichierTypeManager'
+        arguments: ['@doctrine.orm.entity_manager']

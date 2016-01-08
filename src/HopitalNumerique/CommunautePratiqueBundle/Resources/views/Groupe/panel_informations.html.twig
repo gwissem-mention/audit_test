@@ -1,0 +1,10 @@
+<div>
+    <strong>Animateur{{ groupe.animateurs|length > 1 ? 's' : '' }} du groupe</strong> :
+    <ul class="list-unstyled">
+        {% for animateur in groupe.animateurs %}
+            <li>{{ animateur.prenom }} {{ animateur.nom }}</li>
+        {% endfor %}
+    </ul>
+    <hr>
+    {{ groupe.descriptionHtml|raw }}
+</div>

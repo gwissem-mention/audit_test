@@ -1,0 +1,43 @@
+hopitalnumerique_communautepratique_admin:
+    resource: "@HopitalNumeriqueCommunautePratiqueBundle/Resources/config/routing/admin.yml"
+    prefix: "/admin/communaute-de-pratiques"
+
+hopitalnumerique_communautepratique_accueil:
+    resource: "@HopitalNumeriqueCommunautePratiqueBundle/Resources/config/routing/accueil.yml"
+    prefix: "/communaute-de-pratiques"
+
+hopitalnumerique_communautepratique_inscription:
+    resource: "@HopitalNumeriqueCommunautePratiqueBundle/Resources/config/routing/inscription.yml"
+    prefix: "/communaute-de-pratiques"
+
+hopitalnumerique_communautepratique_groupe:
+    resource: "@HopitalNumeriqueCommunautePratiqueBundle/Resources/config/routing/groupe.yml"
+    prefix: "/communaute-de-pratiques/groupe"
+
+hopitalnumerique_communautepratique_document:
+    resource: "@HopitalNumeriqueCommunautePratiqueBundle/Resources/config/routing/document.yml"
+    prefix: "/communaute-de-pratiques/document"
+
+hopitalnumerique_communautepratique_fiche:
+    resource: "@HopitalNumeriqueCommunautePratiqueBundle/Resources/config/routing/fiche.yml"
+    prefix: "/communaute-de-pratiques/fiche"
+
+hopitalnumerique_communautepratique_commentaire:
+    resource: '@HopitalNumeriqueCommunautePratiqueBundle/Resources/config/routing/commentaire.yml'
+    prefix: '/communaute-de-pratiques/commentaire'
+
+hopitalnumerique_communautepratique_publication:
+    resource: "@HopitalNumeriqueCommunautePratiqueBundle/Resources/config/routing/publication.yml"
+    prefix: "/communaute-de-pratiques/publication"
+
+hopitalnumerique_communautepratique_user:
+    resource: "@HopitalNumeriqueCommunautePratiqueBundle/Resources/config/routing/user.yml"
+    prefix: "/communaute-de-pratiques/user"
+
+hopitalnumerique_communautepratique_actualite:
+    resource: "@HopitalNumeriqueCommunautePratiqueBundle/Resources/config/routing/actualite.yml"
+    prefix: "/communaute-de-pratiques/actualite"
+
+hopitalnumerique_communautepratique_tinymce:
+    resource: '@HopitalNumeriqueCommunautePratiqueBundle/Resources/config/routing/tinymce.yml'
+    prefix: '/communaute-de-pratiques/tinymce'

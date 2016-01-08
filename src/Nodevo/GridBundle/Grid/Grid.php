@@ -21,6 +21,9 @@ abstract class Grid implements GridInterface
 
     //config
     protected $_grid                 = null;
+    /**
+     * @var \Symfony\Component\DependencyInjection\ContainerInterface Container
+     */
     protected $_container            = null;
     protected $_source               = null;
     protected $_sourceType           = self::SOURCE_TYPE_ENTITY;

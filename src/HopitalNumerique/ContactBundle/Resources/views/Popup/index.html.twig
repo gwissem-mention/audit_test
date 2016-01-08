@@ -1,0 +1,31 @@
+<div id="contact-popup">
+
+    <h4 class="violet" id="contact-popup-label">Envoi d'un message</h4>
+
+    {{ form_start(contactForm, { 'action':path('hopitalnumerique_contact_popup_submit'), 'attr':{ 'novalidate':'novalidate' } }) }}
+
+        <div class="form_vertical_row">
+            <div class="form-group">
+                <div class="col-md-12">
+                    <label>Destinataire{{ destinataires|length > 1 ? 's' : '' }}</label> :
+                    {% for destinataireAdresse, destinataireNom in destinataires -%}
+                        {{ destinataireNom }}{{ loop.last ? '' : ', ' }}
+                    {%- endfor -%}
+                </div>
+            </div>
+            <div class="clearfix"></div>
+        </div>
+
+        {{ form_row(contactForm.objet) }}
+        {{ form_row(contactForm.message) }}
+
+        <div class="form_vertical_row">
+            <div class="col-md-12">
+                <div class="pull-right">
+                    <button type="submit" class="btn btn-success"><em class="fa fa-envelope"></em> &nbsp; Envoyer</button>
+                </div>
+            </div>
+        </div>
+    {{ form_end(contactForm) }}
+
+</div>

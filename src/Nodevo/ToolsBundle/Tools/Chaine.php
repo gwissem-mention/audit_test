@@ -22,13 +22,23 @@ class Chaine
     {
         $this->chaine = $chaine;
     }
-    
+
     /**
      * Récupération de la chaine traitée
      * 
      * @return string La chaîne de caractères traitée
      */
     public function getChaine()
+    {
+        return $this->chaine;
+    }
+
+    /**
+     * Récupération de la chaine traitée
+     * 
+     * @return string La chaîne de caractères traitée
+     */
+    public function getTexte()
     {
         return $this->chaine;
     }

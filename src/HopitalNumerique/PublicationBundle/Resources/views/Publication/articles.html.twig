@@ -10,6 +10,7 @@
     {% stylesheets output="compiled/hopitalnumerique-publication-publication-articles.css" filter="cssrewrite, ?yui_css"
         "@fancybox_css" 
         'bundles/nodevotools/css/wysiwyg.css'
+        'bundles/nodevoadmin/plugins/apprise/apprise.css'
         'bundles/hopitalnumeriquepublication/css/style.css'
     %}
         <link rel="stylesheet" href="{{ asset_url }}" />
@@ -23,6 +24,8 @@
     {% javascripts output="compiled/hopitalnumerique-publication-publication-articles.js"
         "@fancybox_js" 
         'bundles/hopitalnumeriquepublication/js/script.js'
+        'bundles/nodevoadmin/plugins/apprise/apprise.js'
+        'bundles/hopitalnumeriquecommunautepratique/js/CommunautePratique.js'
     %}
         <script type="text/javascript" src="{{ asset_url }}"></script>
     {% endjavascripts %}
@@ -42,6 +45,12 @@
             {% for child in item.children %}
                 {% if currentPath == child.uri %}
                     {% set parent = item.name %}
+                {% else %}
+                    {% for child2 in child.children %}
+                        {% if currentPath == child2.uri %}
+                            {% set parent = item.name %}
+                        {% endif %}
+                    {% endfor %}
                 {% endif %}
             {% endfor %}
         {% endfor %}
@@ -91,6 +100,11 @@
                 <div class="row col-md-12">
                     {{objet.resume|parsePublication(objet.glossaires)|raw}}
                 </div>
+                
+                {% if 1000 == objet.id %} {# Article La communauté de pratique #}
+                    {% include 'HopitalNumeriqueCommunautePratiqueBundle:include:Article.html.twig' %}
+                {% endif %}
+                
             </div>
             <div class="clearfix"></div>
         </div>

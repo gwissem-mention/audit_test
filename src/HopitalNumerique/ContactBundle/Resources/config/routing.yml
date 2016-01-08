@@ -1,3 +1,13 @@
 hopital_numerique_contact_homepage:
     pattern:  /contact
     defaults: { _controller: "HopitalNumeriqueContactBundle:Contact:index" }
+
+hopitalnumerique_contact_popup_index:
+    pattern:  /contact/popup
+    defaults: { _controller: "HopitalNumeriqueContactBundle:Popup:index" }
+    methods: 'POST'
+
+hopitalnumerique_contact_popup_submit:
+    pattern:  /contact/popup/submit
+    defaults: { _controller: "HopitalNumeriqueContactBundle:Popup:submit" }
+    methods: 'POST'

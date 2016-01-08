@@ -229,7 +229,20 @@ class ObjetController extends Controller
             'texte' => $this->get('request')->request->get('texte')
         ));
     }
-
+    
+    /**
+     * Action appelée dans le plugin "Publication" pour tinymce
+     */
+    public function getObjetsByDomaineAction()
+    {
+    	$arbo = $this->get('hopitalnumerique_objet.manager.objet')->getObjetByDomaine();
+    	
+    	return $this->render('HopitalNumeriqueObjetBundle:Objet:getObjets.html.twig', array(
+    			'objet' => $arbo,
+    			'texte' => $this->get('request')->request->get('texte')
+    	));
+    }
+    
     /**
      * POPIN : liste des publication (utilisé dans le menu item)
      */
