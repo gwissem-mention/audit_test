@@ -1090,24 +1090,12 @@ class FrontController extends Controller
         $synthese = $this->get('hopitalnumerique_autodiag.manager.resultat')->buildSynthese( $user, $outil, $statut, $request->request->get('nom') );
         
         //generate Reponses
-        $this->buildNewReponses( $request->request->get('resultats'), $synthese );
+        $this->get('hopitalnumerique_autodiag.manager.reponse')->buildNewReponses( $request->request->get('resultats'), $synthese );
 
         $this->get('session')->getFlashBag()->add( 'success', 'Synthèse créée.' );
 
-        return new Response('{"success":true, "url" : "'.$this->generateUrl('hopitalnumerique_autodiag_front_resultat', array('id' => $synthese->getId(), 'back' => 1 )).'"}', 200);
+        return new Response('{"success":true, "url" : "'.$this->generateUrl('hopitalnumerique_autodiag_front_resultat', array('id' => $synthese->getId, 'back' => 1 )).'"}', 200);
     }
-
-
-
-
-
-
-
-
-
-
-
-
 
 
     /**
@@ -1164,77 +1152,7 @@ class FrontController extends Controller
             return 1;
     }
 
-    /**
-     * Prépare le tableau de réponse, effectue les calculs de moyenne et ajoute les réponses
-     *
-     * @param array    $resultats Liste des Résultats
-     * @param Resultat $synthese  Objet Synthese
-     *
-     * @return empty
-     */
-    private function buildNewReponses( $resultats, $synthese )
-    {
-        $resultats = $this->get('hopitalnumerique_autodiag.manager.resultat')->findBy( array( 'id' => $resultats ) );
-        $syntheseReponses = array();
-
-        foreach( $resultats as $resultat ) {
-            $reponses = $resultat->getReponses();
-            foreach( $reponses as $reponse) {
-                //prepare entry
-                if( !isset( $syntheseReponses[ $reponse->getQuestion()->getId() ] ) )
-                    $syntheseReponses[ $reponse->getQuestion()->getId() ] = array();
-                //add entry
-                $syntheseReponses[ $reponse->getQuestion()->getId() ][] = $reponse;
-            }
-
-            //link Resultat object
-            $synthese->addResultat( $resultat );
-        }
-
-        $moyennes = array();
-        foreach($syntheseReponses as $idQuestion => $reponses ){
-            //get entity Question
-            $question = $this->get('hopitalnumerique_autodiag.manager.question')->findOneBy( array('id' => $idQuestion ) );
-
-            $nbVal = 0;
-            $val   = 0;
-            $exist = false;
-            $isNC  = true;
-
-            //calc moyenne
-            foreach($reponses as $reponse)
-            {
-                if ( $reponse->getValue() != -1 && $reponse->getValue() != '' )
-                {
-                    $val += $reponse->getValue() != '' ? $reponse->getValue() : 0;
-                    $nbVal++;
-                    $exist = true;
-                }
-
-                if($reponse->getValue() != -1)
-                {
-                    $isNC = false;
-                }
-            }
-            if ($exist)
-            	$val = $nbVal != 0 ? ( $val / $nbVal ) : -1;
-            elseif($isNC)
-                $val = -1;
-            else
-                $val = '';
-
-            //create entity Reponse
-            $rep = $this->get('hopitalnumerique_autodiag.manager.reponse')->createEmpty();
-            $rep->setQuestion( $question );
-            $rep->setResultat( $synthese );
-            $rep->setRemarque( '' );
-            $rep->setValue( $val );
-
-            $moyennes[] = $rep;
-        }
-
-        $this->get('hopitalnumerique_autodiag.manager.reponse')->save( $moyennes );
-    }
+    
 
     /**
      * Génère un pdf pour le résultat

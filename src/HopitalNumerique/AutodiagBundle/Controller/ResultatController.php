@@ -54,6 +54,72 @@ class ResultatController extends Controller
         return $this->redirect( $this->generateUrl('hopitalnumerique_autodiag_resultat', array('id' => $idOutil)) );
     }
 
+    public function syntheseMassAction($primaryKeys, $allPrimaryKeys)
+    {
+        if($allPrimaryKeys == 1)
+        {
+            $rawDatas = $this->get('hopitalnumerique_autodiag.grid.resultat')->getRawData();
+            foreach($rawDatas as $data)
+            {
+                $primaryKeys[] = $data['id'];
+            }
+        }
+    }
+
+    /**
+     * Génère la synthèse d'un groupe de résultat
+     *
+     * @return empty
+     */
+    public function syntheseAction( $primaryKeys, $allPrimaryKeys )
+    {
+        if($allPrimaryKeys == 1)
+        {
+            $rawDatas = $this->get('hopitalnumerique_autodiag.grid.resultat')->getRawData();
+            foreach($rawDatas as $data)
+            {
+                $primaryKeys[] = $data['id'];
+            }
+        }
+
+        $resultats = $this->container->get('hopitalnumerique_autodiag.manager.resultat')->findBy(array ('id' => $primaryKeys));
+
+        foreach($resultats as $resultat)
+        {
+            if ($resultat->getSynthese())
+            {
+                $this->get('session')->getFlashBag()->add( 'danger', 'Certains éléments sélectionnés sont déjà des synthèses.' );
+                return $this->redirect( $this->generateUrl('hopitalnumerique_autodiag_resultat', array('id' => $resultats[0]->getOutil()->getId())));
+            }
+        }
+
+        if(count($resultats) == 0)
+        {
+            $this->get('session')->getFlashBag()->add( 'danger', 'Erreur, merci de sélectionner au moins 2 résultats.' );
+            return $this->redirect( $this->generateUrl('hopitalnumerique_autodiag_outil'));
+        }
+        if(count($resultats) == 1)
+        {
+            $this->get('session')->getFlashBag()->add( 'danger', 'Erreur, merci de sélectionner au moins 2 résultats.' );
+            return $this->redirect( $this->generateUrl('hopitalnumerique_autodiag_resultat', array('id' => $resultats[0]->getOutil()->getId())));
+        }
+        elseif(count($resultats) > 1)
+        {
+            //create Synthese Object
+            $user     = $this->getUser();
+            $outil = $resultats[0]->getOutil();
+            $statut   = $this->get('hopitalnumerique_reference.manager.reference')->findOneBy( array( 'id' => 419 ) );
+            $synthese = $this->get('hopitalnumerique_autodiag.manager.resultat')->buildSynthese( $user, $outil, $statut, "Synthèse du " . date("d/m/Y") );
+            //generate Reponses
+            $this->get('hopitalnumerique_autodiag.manager.reponse')->buildNewReponses( $primaryKeys, $synthese );
+
+            $this->get('session')->getFlashBag()->add( 'success', 'Synthèse créée.' );
+
+        }
+
+        return $this->redirect( $this->generateUrl('hopitalnumerique_autodiag_resultat', array('id' => $outil->getId())) );
+    }
+
     /**
      * Affiche le détail d'un résultat
      */
