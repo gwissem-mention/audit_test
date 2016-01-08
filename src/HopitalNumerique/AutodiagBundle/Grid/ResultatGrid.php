@@ -12,6 +12,9 @@ use Nodevo\GridBundle\Grid\Action;
  */
 class ResultatGrid extends Grid implements GridInterface
 {
+    protected $_limits = array(10, 20, 50, 100, 1000);
+
+
     /**
      * Définie la config spécifique au grid Resultat.
      */
