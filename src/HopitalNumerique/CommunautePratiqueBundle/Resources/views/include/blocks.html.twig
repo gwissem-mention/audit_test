@@ -385,9 +385,9 @@
     <div class="communaute-de-pratiques-bloc-fiche" data-communaute-pratique-fiche-resolu="{{ fiche.resolu ? '1' : '0' }}">
         <div class="icone">
             {%- if fiche.resolu -%}
-                <em class="icon icon-stats2"></em>
+                <em title="STATUE : résolu" class="icon icon-stats2"></em>
             {%- else -%}
-                <em class="icon icon-form-check"></em>
+                <em title="STATUE : en cours" class="icon icon-form-check"></em>
             {%- endif -%}
         </div>
         <div class="header">
@@ -450,8 +450,11 @@
                                 </div>
 
                                 <h2><a href="{{ path('hopital_numerique_publication_publication_objet', { id:publication.id, alias:publication.alias }) }}" >{{ publication.titre }}</a></h2>
-
-                                {{ publication.resume|parsePublication|striptags|truncate(400) }}
+                                    {{ publication.resume|parsePublication|striptags|truncate(400) }}
+                               
+                                {% if publication.resume|parsePublication|striptags|length > 399 %}
+                                    <a href="{{ path('hopital_numerique_publication_publication_objet', { id:publication.id, alias:publication.alias }) }}">Lire la suite</a>
+                               {% endif %}
                             </div>
                         </div>
                     {%- endfor -%}

@@ -40,9 +40,9 @@
                     <a href="{{ path('hopitalnumerique_communautepratique_fiche_edit', { fiche:fiche.id }) }}">> Éditer cette fiche</a> &nbsp;
                 {% endif %}
                 {% if canClose %}
-                    <button class="btn btn-sm btn-success" onclick="CommunautePratique_Fiche.close({{ fiche.id }});">Problématique résolue</button>
+                    <button class="btn btn-sm btn-success" onclick="CommunautePratique_Fiche.close({{ fiche.id }});">Clore</button>
                 {% elseif canOpen %}
-                    <button class="btn btn-sm btn-success" onclick="CommunautePratique_Fiche.open({{ fiche.id }});">Réouvrir la fiche</button>
+                    <button class="btn btn-sm btn-success" onclick="CommunautePratique_Fiche.open({{ fiche.id }});">Réouvrir</button>
                 {% endif %}
             </nav>
             <h2><em class="icon icon-file148"></em>Fiche de problématique</h2>
@@ -81,13 +81,14 @@
             <div class="panel-header"></div>
             <div class="panel panel-communaute-de-pratiques">
                 <div class="panel-heading">
-                    <h2>Commentaires</h2>
+                    <h2>Discussion autour de cette fiche</h2>
                 </div>
                 <div class="panel-body">
 
                     {% if fiche.resolu == false %}
                         <div class="commentaire">
                             <p>Écrire un commentaire :</p>
+                            <p>Pour pouvoir joindre un document à votre commentaire, ajoutez-le préalablement dans "<a target="_blank" href="{{ path('hopitalnumerique_communautepratique_document_listbygroupe', { 'groupe':fiche.groupe.id }) }}">Mes documents</a>".</p>
                             <div class="illustration">
                                 <div class="communaute-de-pratiques-avatar" style="background-image: url('{{ asset(app.user.avatarWebPath) }}');"></div>
                             </div>
