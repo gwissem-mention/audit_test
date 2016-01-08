@@ -40,6 +40,8 @@ class GroupeGrid extends \Nodevo\GridBundle\Grid\Grid
         $this->setSource('hopitalnumerique_communautepratique.manager.groupe');
         $this->setSourceType(self::SOURCE_TYPE_MANAGER);
         $this->setFunctionName('getGridData');
+        $this->showIdColumn( true  ); //Affiche la colonne ID; default
+		$this->setFilterIdColumn( true ); //Active la possibilité de filtrer sur la colonne ID
 
         $filtre = array(
             'domaines' => $this->user->getDomaines()
