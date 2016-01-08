@@ -449,7 +449,12 @@
                                     {% endif -%}
                                 </div>
 
-                                <h2><a href="{{ path('hopital_numerique_publication_publication_objet', { id:publication.id, alias:publication.alias }) }}" >{{ publication.titre }}</a></h2>
+                                <h2>
+                                    <a href="{{ path('hopital_numerique_publication_publication_objet', { id:publication.id, alias:publication.alias }) }}" >{{ publication.titre }}</a>
+                                    {% if publication.synthese is not null %}
+                                        <a class="synthese fancybox.iframe" href="{{path('hopital_numerique_publication_synthese',{'id':publication.id})}}">synthèse</a>
+                                    {% endif %}
+                               </h2>
                                     {{ publication.resume|parsePublication|striptags|truncate(400) }}
                                
                                 {% if publication.resume|parsePublication|striptags|length > 399 %}

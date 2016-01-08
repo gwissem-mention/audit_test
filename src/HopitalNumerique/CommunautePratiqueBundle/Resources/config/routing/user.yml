@@ -1,9 +1,10 @@
 hopitalnumerique_communautepratique_user_list:
-    pattern: /list/{page}
-    defaults: { _controller: "HopitalNumeriqueCommunautePratiqueBundle:User:list", page:1 }
+    pattern: /list/{page}/{membreId}
+    defaults: { _controller: "HopitalNumeriqueCommunautePratiqueBundle:User:list", page:1, membreId:null}
     methods: GET|POST
     requirements:
         page: \d+
+        membreId: \d+
 
 hopitalnumerique_communautepratique_user_listbygroupe:
     pattern: '/list/groupe/{groupe}/{page}'

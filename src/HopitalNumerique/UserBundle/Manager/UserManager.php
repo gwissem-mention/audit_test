@@ -347,7 +347,7 @@ class UserManager extends BaseManager
     return count($this->getRepository()->getNbEtablissements()->getQuery()->getResult());
   }
 
-    /**
+  	/**
      * Retourne des membres de la communauté de pratiques.
      *
      * @param \HopitalNumerique\UserBundle\Manager\Domaine $domaine Domaine
@@ -355,7 +355,7 @@ class UserManager extends BaseManager
      */
     public function findCommunautePratiqueMembres(Domaine $domaine)
     {
-        return $this->getCommunautePratiqueMembresQueryBuilder(null, $domaine)->getQuery()->getResult();
+        return $this->getCommunautePratiqueMembresQueryBuilder(null, $domaine, null)->getQuery()->getResult();
     }
 
     /**
@@ -364,9 +364,9 @@ class UserManager extends BaseManager
      * @param \HopitalNumerique\CommunautePratiqueBundle\Entity\Groupe $groupe (optionnel) Groupe des membres
      * @return \Doctrine\ORM\QueryBuilder QueryBuilder
      */
-    public function getCommunautePratiqueMembresQueryBuilder(\HopitalNumerique\CommunautePratiqueBundle\Entity\Groupe $groupe = null, Domaine $domaine = null)
+    public function getCommunautePratiqueMembresQueryBuilder(\HopitalNumerique\CommunautePratiqueBundle\Entity\Groupe $groupe = null, Domaine $domaine = null, $membreId = null)
     {
-        return $this->getRepository()->getCommunautePratiqueMembresQueryBuilder($groupe, $domaine);
+        return $this->getRepository()->getCommunautePratiqueMembresQueryBuilder($groupe, $domaine, $membreId);
     }
 
     /**
