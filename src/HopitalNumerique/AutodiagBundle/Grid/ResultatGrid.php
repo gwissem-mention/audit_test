@@ -101,5 +101,6 @@ class ResultatGrid extends Grid implements GridInterface
     {
         $this->addMassAction( new Action\ActionMass('Export CSV'  ,'HopitalNumeriqueAutodiagBundle:Resultat:exportCSV') );
         $this->addMassAction( new Action\DeleteMass('HopitalNumeriqueAutodiagBundle:Resultat:deleteMass') );
+        $this->addMassAction( new Action\ActionMass('Générer la synthèse', 'HopitalNumeriqueAutodiagBundle:Resultat:synthese') );
     }
 }

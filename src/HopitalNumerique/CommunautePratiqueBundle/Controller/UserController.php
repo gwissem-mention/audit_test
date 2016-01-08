@@ -14,7 +14,7 @@ class UserController extends \Symfony\Bundle\FrameworkBundle\Controller\Controll
     /**
      * Affiche tous les membres de la communauté.
      */
-    public function listAction(Request $request, $page = 1)
+    public function listAction(Request $request, $page = 1, $membreId = null)
     {
         if (!$this->container
             ->get('hopitalnumerique_communautepratique.dependency_injection.security')->canAccessCommunautePratique()
@@ -40,7 +40,7 @@ class UserController extends \Symfony\Bundle\FrameworkBundle\Controller\Controll
         return $this->render('HopitalNumeriqueCommunautePratiqueBundle:User:list.html.twig', array(
             'rechercheForm' => $rechercheForm->createView(),
             'pagerFantaMembres' => $this->container
-                ->get('hopitalnumerique_communautepratique.dependency_injection.annuaire')->getPagerfantaUsers($page),
+                ->get('hopitalnumerique_communautepratique.dependency_injection.annuaire')->getPagerfantaUsers($page, ($membreId) ? $membreId : null),
 			'groupesTermines' => $this->container->get('hopitalnumerique_communautepratique.manager.groupe')
         		->findTermines($domaine),
 			'groupesNonDemarres' => $this->container->get('hopitalnumerique_communautepratique.manager.groupe')

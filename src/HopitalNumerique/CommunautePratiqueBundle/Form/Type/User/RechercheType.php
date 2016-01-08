@@ -46,6 +46,11 @@ class RechercheType extends AbstractType
     {
         $builder
             ->setAction($this->router->generate('hopitalnumerique_communautepratique_user_list'))
+            ->add('id', 'hidden', array(
+            		'attr' => array(
+            				'placeholder' => 'Rechercher un id'
+            		)
+            ))
             ->add('nom', 'text', array(
                 'data' => $this->annuaireService->getFiltre(Annuaire::FILTRE_NOMINATION_LABEL),
                 'attr' => array(

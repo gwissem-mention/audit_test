@@ -290,3 +290,8 @@ ul.communaute-de-pratiques-mes-groupes { list-style-type: none;margin: 0;padding
 /* Panel d'édition d'une fiche' */
 .panel-communaute-de-pratiques-fiche-edit { margin-bottom: 0; }
     .panel-communaute-de-pratiques-fiche-edit .panel-body { padding-bottom: 30px;padding-right: 30px; }
+
+/* Lien synthèse */
+a.synthese{font-size: 11px; color:#161616; background: url('../../hopitalnumeriquepublication/img/synthese.png') no-repeat right center; padding-right:25px; margin-top:5px; display: block; height: 18px; float: right}
+
+ 

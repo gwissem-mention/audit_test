@@ -119,7 +119,7 @@ services:
     #Reponse
     hopitalnumerique_autodiag.manager.reponse:
         class: %hopitalnumerique_autodiag.manager.reponse.class%
-        arguments: ["@doctrine.orm.entity_manager"]
+        arguments: ["@doctrine.orm.entity_manager", "@hopitalnumerique_autodiag.manager.resultat", "@hopitalnumerique_autodiag.manager.question"]
         calls:
            - [ setCache, ["@liip_doctrine_cache.ns.main"] ]
 

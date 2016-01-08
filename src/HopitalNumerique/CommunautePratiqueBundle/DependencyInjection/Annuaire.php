@@ -19,7 +19,7 @@ class Annuaire
      * @var integer Nombre d'éléments à afficher par page
      */
     const NOMBRE_ELEMENTS_PAR_PAGE = 12;
-
+ 
     /**
      * @var string Libellé du filtre Nomination
      */
@@ -87,10 +87,9 @@ class Annuaire
      * @param integer $page Numéro de page
      * @return array<\HopitalNumerique\UserBundle\Entity\User> Membres
      */
-    public function getPagerfantaUsers($page)
+    public function getPagerfantaUsers($page, $membreId = null)
     {
-        $usersQueryBuilder = $this->userManager->getCommunautePratiqueMembresQueryBuilder();
-        
+        $usersQueryBuilder = $this->userManager->getCommunautePratiqueMembresQueryBuilder(null,null,$membreId);
         $adapter = new DoctrineORMAdapter($this->applyFiltersInQueryBuilder($usersQueryBuilder));
         $pagerFanta = new Pagerfanta($adapter);
         $pagerFanta->setMaxPerPage(self::NOMBRE_ELEMENTS_PAR_PAGE);

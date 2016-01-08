@@ -163,9 +163,11 @@
 
                             {%- for membre in membres -%}
                                 <div class="col-xs-3">
-                                    <div class="membre">
-                                        <div class="communaute-de-pratiques-avatar" style="background-image: url('{{ asset(membre.avatarWebPath) }}');"></div>
-                                        {{ membre.prenomNom }}
+                                    <div class="membre lien-titre">
+                                        <a href="{{ path('hopitalnumerique_communautepratique_user_list', { page:1, membreId:membre.id }) }}" >
+                                            <div class="communaute-de-pratiques-avatar" style="background-image: url('{{ asset(membre.avatarWebPath) }}');"></div>
+                                            {{ membre.prenomNom }}
+                                        </a>
                                     </div>
                                 </div>
                             {%- endfor -%}

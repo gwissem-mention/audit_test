@@ -576,7 +576,7 @@ class UserRepository extends EntityRepository
      * @param \HopitalNumerique\CommunautePratiqueBundle\Entity\Groupe $groupe (optionnel) Groupe des membres
      * @return \Doctrine\ORM\QueryBuilder QueryBuilder
      */
-    public function getCommunautePratiqueMembresQueryBuilder(\HopitalNumerique\CommunautePratiqueBundle\Entity\Groupe $groupe = null, Domaine $domaine = null)
+    public function getCommunautePratiqueMembresQueryBuilder(\HopitalNumerique\CommunautePratiqueBundle\Entity\Groupe $groupe = null, Domaine $domaine = null, $membreId = null)
     {
         $query = $this->createQueryBuilder('user');
         
@@ -607,6 +607,13 @@ class UserRepository extends EntityRepository
                 ->innerJoin('user.domaines', 'domaine', Join::WITH, 'domaine = :domaine')
                 ->setParameter('domaine', $domaine)
             ;
+        }
+
+        if (null !== $membreId) {
+        	$query
+            ->andWhere('user.id = :membreId')
+            ->setParameter('membreId', $membreId)
+        	;
         }
 
         return $query;
