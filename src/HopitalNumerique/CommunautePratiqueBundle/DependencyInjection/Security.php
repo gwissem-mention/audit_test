@@ -218,6 +218,6 @@ class Security
      */
     private function isAdmin()
     {
-        return (null !== $this->getUser() && $this->getUser()->hasRoleAdmin());
+        return (null !== $this->getUser() && ($this->getUser()->hasRoleAdmin() || $this->getUser()->hasRoleAdminHn()));
     }
 }

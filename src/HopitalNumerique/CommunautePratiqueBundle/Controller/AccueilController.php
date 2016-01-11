@@ -29,9 +29,9 @@ class AccueilController extends \Symfony\Bundle\FrameworkBundle\Controller\Contr
             'HopitalNumeriqueCommunautePratiqueBundle:Accueil:index.html.twig',
             array(
                 'groupes' => (count($this->getUser()->getCommunautePratiqueAnimateurGroupes()) > 0
-                    || $this->getUser()->hasRoleAdmin()
+                    || $this->getUser()->hasRoleAdmin() || $this->getUser()->hasRoleAdminHn()
                     ? ($this->container->get('hopitalnumerique_communautepratique.manager.groupe')
-                        ->findNonFermes($domaine, ($this->getUser()->hasRoleAdmin() ? null : $this->getUser())))
+                        ->findNonFermes($domaine, ($this->getUser()->hasRoleAdmin() || $this->getUser()->hasRoleAdminHn() ? null : $this->getUser())))
                     : array()),
                 'actualites' => $this->container->get('hopitalnumerique_objet.manager.objet')
                     ->getArticlesForCategorie($this->container->get('hopitalnumerique_reference.manager.reference')
