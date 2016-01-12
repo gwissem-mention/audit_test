@@ -1590,6 +1590,11 @@ class User extends BaseUser
         return $this->hasRole(Role::$ROLE_ADMIN_LABEL);
     }
 
+	public function hasRoleAdminHn()
+	{
+		return $this->hasRole(Role::$ROLE_ADMIN_HN_LABEL);
+	}
+
     /**
      * Retourne si l'utilisateur a le rôle CMSI ou pas.
      *

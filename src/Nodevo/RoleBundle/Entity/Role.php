@@ -27,7 +27,8 @@ class Role implements RoleInterface
     public static $ROLE_ES_LABEL          = 'ROLE_ES_8';
     public static $ROLE_EXPERT_LABEL      = 'ROLE_EXPERT_6';
     public static $ROLE_ENREGISTRE_LABEL  = 'ROLE_ENREGISTRE_9';
-    
+    public static $ROLE_ADMIN_HN_LABEL  = 'ROLE_ADMINISTRATEUR_DU_DOMAINE_HN_107';
+
     /**
      * @var integer
      *
