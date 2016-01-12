@@ -40,7 +40,7 @@
                 -->
             {% endif %}
 
-            {%- if is_granted('ROLE_USER') and post.id and (is_granted('ROLE_ADMINISTRATEUR_1') or not post.isDeleted) -%}
+            {%- if is_granted('ROLE_USER') and post.id and ((is_granted('ROLE_ADMINISTRATEUR_1') or is_granted("ROLE_ADMINISTRATEUR_DU_DOMAINE_HN_107")) or not post.isDeleted) -%}
                  
                 <div class="dropdown btn-group text-left">
                     
