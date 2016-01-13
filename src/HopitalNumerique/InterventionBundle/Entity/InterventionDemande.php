@@ -1109,7 +1109,14 @@ class InterventionDemande
      */
     public function interventionEtatEstAcceptationCmsi()
     {
-        return ($this->interventionEtat->getId() == InterventionEtat::getInterventionEtatAcceptationCmsiId());
+    	$etat = $this->getInterventionEtat()->getId();
+		if ($etat == InterventionEtat::getInterventionEtatAcceptationCmsiRelance2Id()) {
+	    	return ($this->interventionEtat->getId() == InterventionEtat::getInterventionEtatAcceptationCmsiRelance2Id());
+		} elseif ($etat == InterventionEtat::getInterventionEtatAcceptationCmsiRelance1Id()) {
+			return ($this->interventionEtat->getId() == InterventionEtat::getInterventionEtatAcceptationCmsiRelance1Id());
+		} else {
+			return ($this->interventionEtat->getId() == InterventionEtat::getInterventionEtatAcceptationCmsiId());
+		}
     }
     /**
      * Retourne si l'état de l'intervention est Validé par l'ambassadeur.

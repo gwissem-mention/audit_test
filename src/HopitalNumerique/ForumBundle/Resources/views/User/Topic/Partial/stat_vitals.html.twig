@@ -31,7 +31,7 @@
             {%- endif -%}
 
 
-            {%- if is_granted('ROLE_ADMINISTRATEUR_1') -%}
+            {%- if is_granted('ROLE_ADMINISTRATEUR_1') or is_granted("ROLE_ADMINISTRATEUR_DU_DOMAINE_HN_107") -%}
                 <div class="btn-group">
                     <ul class="dropdown-menu">
 
@@ -122,7 +122,7 @@
                         {{- subscription_count -}}
                     </span>
                 {%- endif -%}
-                {% if is_granted("ROLE_ADMINISTRATEUR_1") %}
+                {% if is_granted("ROLE_ADMINISTRATEUR_1") or is_granted("ROLE_ADMINISTRATEUR_DU_DOMAINE_HN_107") %}
                     <span class="pull-left">|</span>
                     <input type="hidden" id="save-references-topic-url" value="{{path('hopitalnumerique_forum_reference_topic_save',{'id':topic.id})}}" />
                     <input type="hidden" id="save-references-contenu-url" value="{{path('hopitalnumerique_forum_reference_contenu')}}" />
@@ -133,7 +133,7 @@
             </div>
         </div>
 
-        {%- if is_granted('ROLE_ADMINISTRATEUR_1') -%}
+        {%- if is_granted('ROLE_ADMINISTRATEUR_1') or is_granted("ROLE_ADMINISTRATEUR_DU_DOMAINE_HN_107") -%}
             <div class="col-md-12" id="transfertDuTopic">
 
                 <div class="row" style="margin-top:15px;margin-bottom:15px;">

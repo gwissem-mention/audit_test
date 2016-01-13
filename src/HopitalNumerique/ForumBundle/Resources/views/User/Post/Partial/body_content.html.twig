@@ -4,7 +4,7 @@
 
         <div class="label label-danger center-block">Ce message est en attente de modération par administrateur.</div>
 
-        {%- if is_granted('ROLE_ADMINISTRATEUR_1') -%}
+        {%- if is_granted('ROLE_ADMINISTRATEUR_1') or is_granted("ROLE_ADMINISTRATEUR_DU_DOMAINE_HN_107") -%}
 
                 <div class="bg-danger">{{- BBCode_Parse(post.getBody)|raw -}}</div>
 

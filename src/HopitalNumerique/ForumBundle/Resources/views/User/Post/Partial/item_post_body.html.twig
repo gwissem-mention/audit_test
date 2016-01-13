@@ -23,7 +23,7 @@
                 </abbr>
             </div>
 
-            {%- if is_granted('ROLE_ADMINISTRATEUR_1') -%}
+            {%- if is_granted('ROLE_ADMINISTRATEUR_1') or is_granted("ROLE_ADMINISTRATEUR_DU_DOMAINE_HN_107") -%}
                 <div class="pull-right">
                     <a class="accordion-toggle" data-toggle="collapse" data-parent="#post_{{- post.getId() -}}" href="#post_{{- post.getId() -}}_body">
                         {{- 'post.show' |trans({}, ForumBundle.translation ) -}}
@@ -32,7 +32,7 @@
             {%- endif -%}
         </div>
 
-        {%- if is_granted('ROLE_ADMINISTRATEUR_1') -%}
+        {%- if is_granted('ROLE_ADMINISTRATEUR_1') or is_granted("ROLE_ADMINISTRATEUR_DU_DOMAINE_HN_107") -%}
             <section class="accordion-body collapse" id="post_{{- post.getId() -}}_body">
                 {%- include 'CCDNForumForumBundle:User:Post/Partial/body_content.html.twig' with {'post': post } -%}
             </section>
