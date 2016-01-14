@@ -38,7 +38,7 @@ class AdminCategoryController extends \CCDNForum\ForumBundle\Controller\AdminCat
     public function listAction()
     {
         // TODO : Utiliser la gestion des droits du backoffice
-        if(!$this->getSecurityContext()->isGranted('ROLE_ADMINISTRATEUR_DU_DOMAINE_HN_107') && !$this->getSecurityContext()->isGranted('ROLE_SUPER_ADMIN')) {
+        if(!$this->getSecurityContext()->getToken()->getUser()->isGranted('ROLE_ADMINISTRATEUR_DU_DOMAINE_HN_107') && !$this->getSecurityContext()->isGranted('ROLE_SUPER_ADMIN')) {
             throw new AccessDeniedException('You do not have permission to use this resource.');
         }
         //$this->isAuthorised('ROLE_SUPER_ADMIN');
@@ -63,7 +63,7 @@ class AdminCategoryController extends \CCDNForum\ForumBundle\Controller\AdminCat
     public function createAction()
     {
         // TODO : Utiliser la gestion des droits du backoffice
-        if(!$this->getSecurityContext()->isGranted('ROLE_ADMINISTRATEUR_DU_DOMAINE_HN_107') && !$this->getSecurityContext()->isGranted('ROLE_SUPER_ADMIN')) {
+        if(!$this->getSecurityContext()->getToken()->getUser()->isGranted('ROLE_ADMINISTRATEUR_DU_DOMAINE_HN_107') && !$this->getSecurityContext()->isGranted('ROLE_SUPER_ADMIN')) {
             throw new AccessDeniedException('You do not have permission to use this resource.');
         }
         //$this->isAuthorised('ROLE_SUPER_ADMIN');
@@ -88,7 +88,7 @@ class AdminCategoryController extends \CCDNForum\ForumBundle\Controller\AdminCat
     public function createProcessAction()
     {
         // TODO : Utiliser la gestion des droits du backoffice
-        if(!$this->getSecurityContext()->isGranted('ROLE_ADMINISTRATEUR_DU_DOMAINE_HN_107') && !$this->getSecurityContext()->isGranted('ROLE_SUPER_ADMIN')) {
+        if(!$this->getSecurityContext()->getToken()->getUser()->isGranted('ROLE_ADMINISTRATEUR_DU_DOMAINE_HN_107') && !$this->getSecurityContext()->isGranted('ROLE_SUPER_ADMIN')) {
             throw new AccessDeniedException('You do not have permission to use this resource.');
         }
         //$this->isAuthorised('ROLE_SUPER_ADMIN');
@@ -118,7 +118,7 @@ class AdminCategoryController extends \CCDNForum\ForumBundle\Controller\AdminCat
     public function editAction($categoryId)
     {
         // TODO : Utiliser la gestion des droits du backoffice
-        if(!$this->getSecurityContext()->isGranted('ROLE_ADMINISTRATEUR_DU_DOMAINE_HN_107') && !$this->getSecurityContext()->isGranted('ROLE_SUPER_ADMIN')) {
+        if(!$this->getSecurityContext()->getToken()->getUser()->isGranted('ROLE_ADMINISTRATEUR_DU_DOMAINE_HN_107') && !$this->getSecurityContext()->isGranted('ROLE_SUPER_ADMIN')) {
             throw new AccessDeniedException('You do not have permission to use this resource.');
         }
         //$this->isAuthorised('ROLE_SUPER_ADMIN');
@@ -144,7 +144,7 @@ class AdminCategoryController extends \CCDNForum\ForumBundle\Controller\AdminCat
     public function editProcessAction($categoryId)
     {
         // TODO : Utiliser la gestion des droits du backoffice
-        if(!$this->getSecurityContext()->isGranted('ROLE_ADMINISTRATEUR_DU_DOMAINE_HN_107') && !$this->getSecurityContext()->isGranted('ROLE_SUPER_ADMIN')) {
+        if(!$this->getSecurityContext()->getToken()->getUser()->isGranted('ROLE_ADMINISTRATEUR_DU_DOMAINE_HN_107') && !$this->getSecurityContext()->isGranted('ROLE_SUPER_ADMIN')) {
             throw new AccessDeniedException('You do not have permission to use this resource.');
         }
         //$this->isAuthorised('ROLE_SUPER_ADMIN');
@@ -224,7 +224,7 @@ class AdminCategoryController extends \CCDNForum\ForumBundle\Controller\AdminCat
     public function reorderAction($categoryId, $direction)
     {
         // TODO : Utiliser la gestion des droits du backoffice
-        if(!$this->getSecurityContext()->isGranted('ROLE_ADMINISTRATEUR_DU_DOMAINE_HN_107') && !$this->getSecurityContext()->isGranted('ROLE_SUPER_ADMIN')) {
+        if(!$this->getSecurityContext()->getToken()->getUser()->isGranted('ROLE_ADMINISTRATEUR_DU_DOMAINE_HN_107') && !$this->getSecurityContext()->isGranted('ROLE_SUPER_ADMIN')) {
             throw new AccessDeniedException('You do not have permission to use this resource.');
         }
         //$this->isAuthorised('ROLE_SUPER_ADMIN');

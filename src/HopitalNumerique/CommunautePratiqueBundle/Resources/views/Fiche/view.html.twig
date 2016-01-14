@@ -85,7 +85,7 @@
                 </div>
                 <div class="panel-body">
 
-                    {% if fiche.resolu == false %}
+                    {% if fiche.resolu == false and (fiche.groupe.enCours or (app.user.hasRoleAdmin or app.user.hasRoleAdminHn or fiche.groupe.hasAnimateur(app.user))) %}
                         <div class="commentaire">
                             <p>Écrire un commentaire :</p>
                             <p>Pour pouvoir joindre un document à votre commentaire, ajoutez-le préalablement dans "<a target="_blank" href="{{ path('hopitalnumerique_communautepratique_document_listbygroupe', { 'groupe':fiche.groupe.id }) }}">Mes documents</a>".</p>
@@ -104,6 +104,10 @@
                             {% if fiche.commentaires|length > 0 %}
                                 <p><strong>Commentaires des membres du groupe</strong></p>
                             {% endif %}
+                        </div>
+                    {%- else -%}
+                        <div class="message-avert">
+                            <h2>Vous pourrez discuter à partir du {{ fiche.groupe.dateDemarrage|date('d/m/Y') }} </h2>
                         </div>
                     {% endif %}
 
