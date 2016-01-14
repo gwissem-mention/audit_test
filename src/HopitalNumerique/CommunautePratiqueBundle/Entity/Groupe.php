@@ -689,6 +689,19 @@ class Groupe
     }
 
     /**
+     * Retourne si le groupe est entre la date de démarrage et la date de fin.
+     *
+     * @return boolean VRAI si en cours
+     */
+    public function isPeriodeInscription()
+    {
+    	$aujourdhui = new \DateTime();
+    	$aujourdhui->setTime(0, 0, 0);
+    
+    	return ($aujourdhui >= $this->dateInscriptionOuverture && $aujourdhui <= $this->dateDemarrage);
+    }
+
+    /**
      * Retourne si l'utilisateur est animateur du groupe.
      *
      * @param \HopitalNumerique\UserBundle\Entity\User $user Utilisateur

@@ -23,7 +23,7 @@
 
         <ul class="dropdown-menu section-indicator" role="menu">
 
-            {%- if is_granted('ROLE_ADMIN') -%}
+            {%- if is_granted('ROLE_ADMIN') or is_granted("ROLE_ADMINISTRATEUR_DU_DOMAINE_HN_107") -%}
                 <li
                     {%- if route|slice(0,16) == 'ccdn_forum_admin' %} class="selected"{%- endif -%}>
                         <a href="{{- path('ccdn_forum_admin_index') -}}" rel="nofollow">

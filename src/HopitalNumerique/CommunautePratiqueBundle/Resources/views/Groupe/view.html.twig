@@ -45,11 +45,11 @@
             </div>
         </div>
      </div>
-    
-    <div class="text-right">
-        <a class="btn btn-success" href="{{ path('hopitalnumerique_communautepratique_fiche_add', { groupe:groupe.id }) }}">Ajouter une problématique &nbsp; &nbsp; &nbsp; &nbsp; <em class="fa fa-plus"></em></a>
-    </div>
-
+    {%- if groupe.enCours or (app.user.hasRoleAdmin or app.user.hasRoleAdminHn or groupe.hasAnimateur(app.user)) -%}
+        <div class="text-right">
+            <a class="btn btn-success" href="{{ path('hopitalnumerique_communautepratique_fiche_add', { groupe:groupe.id }) }}">Ajouter une problématique &nbsp; &nbsp; &nbsp; &nbsp; <em class="fa fa-plus"></em></a>
+        </div>
+    {%- endif -%}
     {%- if groupe.fiches|length > 0 -%}
         <div class="communaute-de-pratiques-groupe-fiches">
             <p><strong>Fiches de problématique du groupe</strong></p>
@@ -62,38 +62,42 @@
             </div>
         </div>
     {%- endif -%}
-
-    <div class="communaute-de-pratiques-commentaires">
-        <div class="panel-header"></div>
-        <div class="panel panel-communaute-de-pratiques">
-            <div class="panel-heading">
-                <h2>Discussion entre les menbres du groupe</h2>
-            </div>
-            <div class="panel-body">
-
-                <div class="commentaire">
-                    <p>Ajouter un commentaire :</p>
-                    <p>Pour pouvoir joindre un document à votre commentaire, ajoutez-le préalablement dans "<a target="_blank" href="{{ path('hopitalnumerique_communautepratique_document_listbygroupe', { 'groupe':groupe.id }) }}">Mes documents</a>".</p>
-                    <div class="illustration">
-                        <div class="communaute-de-pratiques-avatar" style="background-image: url('{{ asset(app.user.avatarWebPath) }}');"></div>
-                    </div>
-                    <div class="contenu">
-                        <div class="nom"><strong>{{ app.user.prenomNom }}</strong></div>
-
-                        <div class="message">
-                            {{ render(controller('HopitalNumeriqueCommunautePratiqueBundle:Commentaire/GroupeCommentaire:add', { groupe:groupe.id })) }}
+        <div class="communaute-de-pratiques-commentaires">
+            <div class="panel-header"></div>
+            <div class="panel panel-communaute-de-pratiques">
+                <div class="panel-heading">
+                    <h2>Discussion entre les menbres du groupe</h2>
+                </div>
+                <div class="panel-body">
+    
+                 {%- if groupe.enCours or (app.user.hasRoleAdmin or app.user.hasRoleAdminHn or groupe.hasAnimateur(app.user)) -%}
+                    <div class="commentaire">
+                        <p>Ajouter un commentaire :</p>
+                        <p>Pour pouvoir joindre un document à votre commentaire, ajoutez-le préalablement dans "<a target="_blank" href="{{ path('hopitalnumerique_communautepratique_document_listbygroupe', { 'groupe':groupe.id }) }}">Mes documents</a>".</p>
+                        <div class="illustration">
+                            <div class="communaute-de-pratiques-avatar" style="background-image: url('{{ asset(app.user.avatarWebPath) }}');"></div>
+                        </div>
+                        <div class="contenu">
+                            <div class="nom"><strong>{{ app.user.prenomNom }}</strong></div>
+    
+                            <div class="message">
+                                {{ render(controller('HopitalNumeriqueCommunautePratiqueBundle:Commentaire/GroupeCommentaire:add', { groupe:groupe.id })) }}
+                            </div>
                         </div>
                     </div>
+               {%- else -%}
+                    <div class="message-avert">
+                        <h2>Vous pourrez discuter à partir du {{ groupe.dateDemarrage|date('d/m/Y') }} </h2>
+                    </div>
+               {%- endif -%}
+                
+                    {% if groupe.commentaires|length > 0 %}
+                        {% for commentaire in groupe.commentaires %}
+                            {{ communaute_pratique.display_commentaire(commentaire) }}
+                        {% endfor %}
+                    {% endif %}
+    
                 </div>
-
-                {% if groupe.commentaires|length > 0 %}
-                    {% for commentaire in groupe.commentaires %}
-                        {{ communaute_pratique.display_commentaire(commentaire) }}
-                    {% endfor %}
-                {% endif %}
-
             </div>
         </div>
-    </div>
-
 {% endblock body_communaute_pratique %}

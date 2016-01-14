@@ -21,13 +21,19 @@ class GroupeController extends \Symfony\Bundle\FrameworkBundle\Controller\Contro
 
         $domaine = $this->container->get('hopitalnumerique_domaine.manager.domaine')->findOneById($request->getSession()->get('domaineId'));
 
+        $groupeUserEnCour = $this->container->get('hopitalnumerique_communautepratique.manager.groupe')
+        ->findEnCoursByUser($domaine, $this->getUser());
+        $groupeUserAVenir = $this->container->get('hopitalnumerique_communautepratique.manager.groupe')
+        ->findNonDemarresByUser($domaine, $this->getUser());
+        $groupeUser = array_merge($groupeUserEnCour,$groupeUserAVenir);
+
         return $this->render(
             'HopitalNumeriqueCommunautePratiqueBundle:Groupe:list.html.twig',
             array
             (
                 'groupesNonDemarres' => $this->container->get('hopitalnumerique_communautepratique.manager.groupe')->findNonDemarres($domaine),
                 'groupesEnCours' => $this->container->get('hopitalnumerique_communautepratique.manager.groupe')->findEnCours($domaine),
-                'userGroupesEnCours' => $this->container->get('hopitalnumerique_communautepratique.manager.groupe')->findEnCoursByUser($domaine, $this->getUser())
+                'userGroupesEnCours' => $groupeUser,
             )
         );
     }
