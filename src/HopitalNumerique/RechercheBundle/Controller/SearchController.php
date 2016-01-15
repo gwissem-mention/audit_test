@@ -172,8 +172,20 @@ class SearchController extends Controller
         $domaineId     = $request->getSession()->get('domaineId');
         $references    = $request->request->get('references');
 
+        //GME 19/09/2014 : Ajout du filtre des categ point dur (liste à choix multiples)
+        $categPointDur = $request->request->get('categPointDur');
+
+        if ($categPointDur === "") {
+            $filterForum = null;
+        } else {
+            $categPointDurArray = explode(',', $categPointDur);
+            $filterForum = array();
+            $filterForum['forum'] = in_array('forum', $categPointDurArray);
+            $filterForum['objet'] = count($categPointDurArray) === 1 ? !in_array('forum', $categPointDurArray) : true;
+        }
+
         $refsPonderees = $this->get('hopitalnumerique_reference.manager.reference')->getReferencesPonderees();
-        $objets        = $this->get('hopitalnumerique_recherche.manager.search')->getObjetsForRecherche( $references, $role, $refsPonderees );
+        $objets        = $this->get('hopitalnumerique_recherche.manager.search')->getObjetsForRecherche( $references, $role, $refsPonderees, $filterForum );
         $objets        = $this->get('hopitalnumerique_objet.manager.consultation')->updateObjetsWithConnectedUser( $domaineId, $objets, $user );
 
         //Vire les publications qui ne font pas parti du domaine
@@ -201,8 +213,6 @@ class SearchController extends Controller
             }
         }
 
-        //GME 19/09/2014 : Ajout du filtre des categ point dur (liste à choix multiples)
-        $categPointDur = $request->request->get('categPointDur');
         $objetsOrder   = array();
 
         //vvvvv GME 17/11/2014 : Ajout de la zone textuelle
@@ -297,7 +307,9 @@ class SearchController extends Controller
 
             foreach ($categPointDurIdsArray as $categPointDurId) 
             {
-                $categPointDurArray[] = $this->get('hopitalnumerique_reference.manager.reference')->findOneBy(array('id' => $categPointDurId))->getLibelle();
+                if ($categPointDurId != 'forum'){
+                    $categPointDurArray[] = $this->get('hopitalnumerique_reference.manager.reference')->findOneBy(array('id' => $categPointDurId))->getLibelle();
+                }
             }
 
             foreach ($objets as $key => $objet) 
@@ -468,8 +480,10 @@ class SearchController extends Controller
         {
             foreach ($categPointDur as $idCateg)
             {
-                $categ = $this->get('hopitalnumerique_reference.manager.reference')->findOneBy(array('id' => $idCateg));
-                $categoriesProduction[$categ->getId()] = $categ;
+                if ($idCateg != 'forum'){
+                    $categ = $this->get('hopitalnumerique_reference.manager.reference')->findOneBy(array('id' => $idCateg));
+                    $categoriesProduction[$categ->getId()] = $categ;
+                }
             }
         }
 
