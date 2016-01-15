@@ -31,12 +31,12 @@
                                     <div class="header">
                                         <a class="interrupteur off" onclick="CommunautePratique_TableauDeBord.toggleOuvertureGroupe({{ groupe.id }});"></a>
                                         <span class="nom">
-                                            <em class="icon icon-social20"></em>
-                                            {% if groupe.enCours -%}
+                                            <em class="icon icon-social20"> </em>
+                                            {%- if groupe.enCours or groupe.isPeriodeInscription -%}
                                                 <a href="{{ path('hopitalnumerique_communautepratique_groupe_view', { groupe:groupe.id }) }}">
                                             {%- endif -%}
                                             <strong class="violet">{{ groupe }}</strong>
-                                            {%- if groupe.enCours -%}
+                                            {%- if groupe.enCours or groupe.isPeriodeInscription -%}
                                                 </a>
                                             {%- endif -%}
                                         </span>

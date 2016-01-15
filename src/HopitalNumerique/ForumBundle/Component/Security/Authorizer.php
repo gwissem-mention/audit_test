@@ -23,7 +23,7 @@ class Authorizer extends CCDNAuthorizer
             return false;
         }
 
-        if (! $this->canShowTopic($topic, $forum) && ! $this->securityContext->isGranted('ROLE_ADMIN') ) {
+        if (! $this->canShowTopic($topic, $forum) && (! $this->securityContext->isGranted('ROLE_ADMIN') && ! $this->securityContext->getToken()->getUser()->isGranted('ROLE_ADMINISTRATEUR_DU_DOMAINE_HN_107'))) {
             return false;
         }
 
@@ -38,11 +38,11 @@ class Authorizer extends CCDNAuthorizer
             return false;
         }
 
-        if (! $this->canShowPost($post, $forum) && ! $this->securityContext->isGranted('ROLE_ADMIN')) {
+        if (! $this->canShowPost($post, $forum) && (!$this->securityContext->isGranted('ROLE_ADMIN') && !$this->securityContext->getToken()->getUser()->isGranted('ROLE_ADMINISTRATEUR_DU_DOMAINE_HN_107'))) {
             return false;
         }
 
-        if (! $this->securityContext->isGranted('ROLE_ADMIN') && ! $this->securityContext->isGranted('ROLE_ADMINISTRATEUR_DU_DOMAINE_HN_107')) {
+        if (!$this->securityContext->isGranted('ROLE_ADMIN') && ! $this->securityContext->getToken()->getUser()->isGranted('ROLE_ADMINISTRATEUR_DU_DOMAINE_HN_107')) {
             if (! $post->getCreatedBy()) {
                 return false;
             } else {
@@ -68,8 +68,7 @@ class Authorizer extends CCDNAuthorizer
         if (! $this->canShowPost($post, $forum) && ! $this->securityContext->isGranted('ROLE_MODERATOR')) {
             return false;
         }
-
-        if (! $this->securityContext->isGranted('ROLE_ADMIN') && ! $this->securityContext->isGranted('ROLE_ADMINISTRATEUR_DU_DOMAINE_HN_107')) {
+        if (!$this->securityContext->isGranted('ROLE_ADMIN') && !$this->securityContext->getToken()->getUser()->isGranted('ROLE_ADMINISTRATEUR_DU_DOMAINE_HN_107')) {
             if (! $post->getCreatedBy()) {
                 return false;
             } else {

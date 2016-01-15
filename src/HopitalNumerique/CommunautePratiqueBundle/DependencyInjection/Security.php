@@ -96,7 +96,7 @@ class Security
     public function canAccessGroupe(Groupe $groupe)
     {
         return (
-            $groupe->isEnCours()
+            ( $groupe->isEnCours() || $groupe->isPeriodeInscription())
             && (
                 (null !== $this->getUser() && $this->getUser()->hasCommunautePratiqueGroupe($groupe))
                 || $this->isAdmin()

@@ -24,7 +24,11 @@ class AccueilController extends \Symfony\Bundle\FrameworkBundle\Controller\Contr
             ->findOneById($request->getSession()->get('domaineId'));
         $forum = $this->container->get('hopitalnumerique_forum.manager.forum')
             ->findOneById(Forum::FORUM_COMMUNAUTE_DE_PRATIQUES_ID);
-
+		$groupeUserEnCour = $this->container->get('hopitalnumerique_communautepratique.manager.groupe')
+                    ->findEnCoursByUser($domaine, $this->getUser());
+		$groupeUserAVenir = $this->container->get('hopitalnumerique_communautepratique.manager.groupe')
+                    ->findNonDemarresByUser($domaine, $this->getUser());
+		$groupeUser = array_merge($groupeUserEnCour,$groupeUserAVenir);
         return $this->render(
             'HopitalNumeriqueCommunautePratiqueBundle:Accueil:index.html.twig',
             array(
@@ -38,8 +42,7 @@ class AccueilController extends \Symfony\Bundle\FrameworkBundle\Controller\Contr
                         ->findOneById(Reference::ARTICLE_CATEGORIE_COMMUNAUTE_DE_PRATIQUES_ID), $domaine),
                 'groupesEnVedette' => $this->container->get('hopitalnumerique_communautepratique.manager.groupe')
                     ->findNonFermes($domaine, null, true),
-                'userGroupesEnCours' => $this->container->get('hopitalnumerique_communautepratique.manager.groupe')
-                    ->findEnCoursByUser($domaine, $this->getUser()),
+                'userGroupesEnCours' => $groupeUser,
                 'totalMembres' => $this->container->get('hopitalnumerique_user.manager.user')
                     ->findCommunautePratiqueMembresCount(),
                 'membres' => $this->getMembresAuHasard(),
@@ -75,8 +78,6 @@ class AccueilController extends \Symfony\Bundle\FrameworkBundle\Controller\Contr
         $membresAuHasard = array_merge(
             $messieursAuHasard,
             $mesdamesAuHasard
-//             $this->container->get('hopitalnumerique_user.manager.user')
-//                 ->findCommunautePratiqueRandomMembres(3, null, array_merge($messieursAuHasard, $mesdamesAuHasard))
         );
 
         shuffle($membresAuHasard);
