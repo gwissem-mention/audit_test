@@ -46,12 +46,12 @@
                     
                     {% if post.pieceJointe is not null %}
                         <a class="btn btn-xs btn-icon-only" href="{{ path('ccdn_forum_user_post_download', { forumName:forumName, post:post.id }) }}">
-                            <i class="glyphicon glyphicon-paperclip"></i> &nbsp; Pièce jointe
+                            <i class="fa fa-paperclip"></i> &nbsp; Pièce jointe
                         </a>
                     {% endif %}
                     
                     <a class="dropdown-toggle btn btn-xs btn-icon-only" data-toggle="dropdown" href="#">
-                        <i class="glyphicon glyphicon-cog"></i>
+                        <i class="fa fa-cog"></i>
                     </a>
                     <ul class="dropdown-menu pull-right content-left" style="z-index:15;">
 
@@ -59,7 +59,7 @@
                             <li>
                                 <a rel="nofollow"
                                  href="{{- path('ccdn_forum_user_topic_reply', {'forumName': forumName, 'topicId': post.getTopic.getId }) -}}">
-                                    <i class="glyphicon glyphicon-pencil"></i>
+                                    <i class="fa fa-pencil"></i>
                                     {{- 'link.topic.reply' | trans({}, ForumBundle.translation ) -}}
                                 </a>
                             </li>
@@ -69,7 +69,7 @@
                             <li>
                                 <a rel="nofollow" id="post_edit[{{- post.getBody |slice(0,24) -}}]"
                                  href="{{- path('ccdn_forum_user_post_edit', {'forumName': forumName, 'postId': post.getId }) -}}">
-                                    <i class="glyphicon glyphicon-pencil"></i>
+                                    <i class="fa fa-pencil"></i>
                                     {{- 'link.edit' | trans({}, ForumBundle.translation ) -}}
                                 </a>
                             </li>
@@ -79,7 +79,7 @@
                             <li>
                                 <a rel="nofollow"
                                  href="{{- path('ccdn_forum_user_post_delete', {'forumName': forumName, 'postId': post.getId }) -}}">
-                                    <i class="glyphicon glyphicon-trash"></i>
+                                    <i class="fa fa-trash-o"></i>
                                     {{- 'link.post.delete' | trans({}, ForumBundle.translation ) -}}
                                 </a>
                             </li>
@@ -88,7 +88,7 @@
                         {%- if canRestorePost(post) -%}
                             <li>
                                 <a rel="nofollow" href="{{- path('ccdn_forum_moderator_post_restore', {'forumName': forumName, 'postId': post.getId }) -}}">
-                                    <i class="glyphicon glyphicon-trash"></i>
+                                    <i class="fa fa-trash-o"></i>
                                     {{- 'link.post.restore' | trans({}, ForumBundle.translation ) -}}
                                 </a>
                             </li>
@@ -97,7 +97,7 @@
                         {%- if canLockPost(post) -%}
                             <li>
                                 <a rel="nofollow" href="{{- path('ccdn_forum_moderator_post_lock', {'forumName': forumName, 'postId': post.getId }) -}}">
-                                    <i class="glyphicon glyphicon-lock"></i>
+                                    <i class="fa fa-lock"></i>
                                     {{- 'link.post.lock' | trans({}, ForumBundle.translation ) -}}
                                 </a>
                             </li>
@@ -106,7 +106,7 @@
                         {%- if canUnlockPost(post) -%}
                             <li>
                                 <a rel="nofollow" href="{{- path('ccdn_forum_moderator_post_unlock', {'forumName': forumName, 'postId': post.getId }) -}}">
-                                    <i class="glyphicon glyphicon-lock"></i>
+                                    <i class="fa fa-lock"></i>
                                     {{- 'link.post.unlock' | trans({}, ForumBundle.translation ) -}}
                                 </a>
                             </li>
