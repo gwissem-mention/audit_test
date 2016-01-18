@@ -30,16 +30,7 @@ function selectionnerToutesRegions()
 {
 	//Récupération de l'ensemble des régions
 
-    // Anciennes
-    // var regions = ['alsace','aquitaine','auvergne','bassenormandie',
-    //                'bourgogne','bretagne','centre','corse',
-    //                'champagneardenne','franchecomte','hautenormandie','iledefrance'
-    //                ,'languedocroussillon','limousin','lorraine','midipyrenees',
-    //                'nordpasdecalais','provencealpescotedazur','paysdelaloire','picardie',
-    //                'poitoucharentes','rhonealpes','guadeloupe','martinique',
-    //                'martinique','reunion','guyane','mayotte'];
-
-    // Nouvelles
+    // Nouvelles régions
     var regions = ['bretagne', 'paysdelaloire', 'centrevaldeloire', 'iledefrance',
                     'provencealpescotedazur', 'corse', 'normandie', 'poitoucharenteslimousinaquitaine',
                     'midipyreneeslanguedocroussillon', 'picardienordpasdecalais', 'auvergnerhonealpes',
