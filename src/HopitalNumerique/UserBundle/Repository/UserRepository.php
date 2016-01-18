@@ -113,30 +113,6 @@ class UserRepository extends EntityRepository
      *
      * @return QueryBuilder
      */
-    public function userExistForRoleArs( $user )
-    {
-        $qb = $this->_em->createQueryBuilder();
-        $qb->select('user')
-            ->from('HopitalNumeriqueUserBundle:User', 'user')
-            ->andWhere('user.region = :region', 'user.roles LIKE :role')
-            ->setParameter('role', '%ROLE_ARS_CMSI_4%')
-            ->setParameter('region', $user->getRegion() );
-        
-        if( !is_null($user->getId()) ){
-            $qb->andWhere('user.id != :id')
-               ->setParameter('id', $user->getId() );
-        }
-
-        return $qb;
-    }
-
-    /**
-     * On cherche a savoir si un user existe avec le role et la région de l'user modifié
-     *
-     * @param User $user L'utilisateur modifié
-     *
-     * @return QueryBuilder
-     */
     public function userExistForRoleDirection( $user )
     {
         $qb = $this->_em->createQueryBuilder();

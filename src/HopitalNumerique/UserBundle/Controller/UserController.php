@@ -982,20 +982,7 @@ class UserController extends Controller
                     $user->setRoles( array( $role->getRole() ) );
                 }
 
-                //Cas particulier: 1 utilisateur par groupe ARS-CMSI par région 
-                //Dans le cas où la région est à nulle il n'y a pas besoin de vérifier si il existe déjà un ARS pour cette région.
-                if(null != $user->getRegion() && $role->getRole() == 'ROLE_ARS_CMSI_4' )
-                {
-                    //On vérifie que l'utilisateur ayant le rôle ROLE_ARS_CMSI_4 n'a pas non plus la même région sinon on return et pas de sauvegarde
-                    $result = $this->get('hopitalnumerique_user.manager.user')->userExistForRoleArs( $user );
-
-                    if( ! is_null($result) ) {
-                        $this->get('session')->getFlashBag()->add('danger', 'Il existe déjà un utilisateur associé au groupe ARS-CMSI pour cette région.' );
-                
-                        return $this->customRenderView( $view , $form, $user , $options);
-                    }
-                }
-                else if ( null == $user->getRegion() )
+                if ( null == $user->getRegion() )
                 {
                     //Cas particuliers : La région est obligatoire pour les roles ARS-CMSI et Ambassadeur
                     if( $role->getRole() == 'ROLE_ARS_CMSI_4' || $role->getRole() == 'ROLE_AMBASSADEUR_7') {
