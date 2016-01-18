@@ -258,7 +258,7 @@ class SearchManager extends BaseManager
      *
      * @return array
      */
-    public function getObjetsForRecherche( $references, $role, $refsPonderees )
+    public function getObjetsForRecherche( $references, $role, $refsPonderees, $filterForum = null )
     {
         //prepare some vars
         $nbCateg              = 4;
@@ -275,7 +275,7 @@ class SearchManager extends BaseManager
             {
                 //on récupères tous les objets, on les formate et on les ajoute à nos catégories
                 $results = $this->_refObjetManager->getObjetsForRecherche( $references['categ'.$i] );
-                if( $results )
+                if( $results)
                 {
                     $tmp = array();
                     foreach( $results as $one) 
@@ -337,7 +337,7 @@ class SearchManager extends BaseManager
 
                 //on récupères tous les objets, on les formate et on les ajoute à nos catégories
                 $results = $this->_refTopicManager->getTopicForRecherche( $references['categ'.$i] );                
-                if( $results ){
+                if( $results && $filterForum['forum'] == true || $filterForum['objet'] == false || $filterForum == null){
                     $tmp = array();
                     foreach( $results as $one) {
                         $topic = $this->formateTopic( $one, $role );
@@ -358,13 +358,14 @@ class SearchManager extends BaseManager
                         }
                     }
 
-                    //il y'a eu des résultats pour cette catégorie, on place donc ces résultats dans le tableau d'intersection (analyse multi categ)
-                    $filsForumToIntersect[] = $tmp;
-                }
-                else
-                {
-                    $filsForumToIntersect[] = array();
-                }
+                        //il y'a eu des résultats pour cette catégorie, on place donc ces résultats dans le tableau d'intersection (analyse multi categ)
+                        $filsForumToIntersect[] = $tmp;
+                    }
+                    else
+                    {
+                        $filsForumToIntersect[] = array();
+                    }
+                //}
             }
         }
 
