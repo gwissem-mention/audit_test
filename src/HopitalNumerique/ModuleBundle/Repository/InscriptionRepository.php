@@ -96,6 +96,7 @@ class InscriptionRepository extends EntityRepository
                          ->leftJoin('insc.session', 'session')
                          ->andWhere('refParticipation.id = 411','insc.facture IS NULL')
                          ->andWhere('refEvaluation.id = 29')
+                         ->andWhere('refRemboursement != 6')
                          ->orderBy('session.dateSession');
 
         if( !is_null($user) ) {
