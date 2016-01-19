@@ -277,6 +277,15 @@ class User extends BaseUser
     protected $region;
 
     /**
+     * @ORM\ManyToMany(targetEntity="\HopitalNumerique\ReferenceBundle\Entity\Reference")
+     * @ORM\JoinTable(name="hn_user_region",
+     *      joinColumns={ @ORM\JoinColumn(name="usr_id", referencedColumnName="usr_id", onDelete="CASCADE")},
+     *      inverseJoinColumns={ @ORM\JoinColumn(name="ref_id", referencedColumnName="ref_id", onDelete="CASCADE")}
+     * )
+     */
+    private $rattachementRegions;
+
+    /**
      * @ORM\ManyToOne(targetEntity="\HopitalNumerique\ReferenceBundle\Entity\Reference", cascade={"persist"})
      * @ORM\JoinColumn(name="ref_departement", referencedColumnName="ref_id")
      * @Gedmo\Versioned
@@ -884,6 +893,55 @@ class User extends BaseUser
             $this->region = $region;
         else
             $this->region = null;
+    }
+
+    /**
+     * Add rattachementRegions
+     *
+     * @param \HopitalNumerique\ReferenceBundle\Entity\Reference $rattachementRegions
+     * @return User
+     */
+    public function addRattachementRegion(\HopitalNumerique\ReferenceBundle\Entity\Reference $rattachementRegions)
+    {
+        $this->rattachementRegions[] = $rattachementRegions;
+
+        return $this;
+    }
+
+    /**
+     * Remove rattachementRegions
+     *
+     * @param \HopitalNumerique\ReferenceBundle\Entity\Reference $rattachementRegions
+     */
+    public function removeRattachementRegion(\HopitalNumerique\ReferenceBundle\Entity\Reference $rattachementRegions)
+    {
+        $this->rattachementRegions->removeElement($rattachementRegions);
+    }
+
+    /**
+     * Get rattachementRegions
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getRattachementRegions()
+    {
+        return $this->rattachementRegions;
+    }
+
+    /**
+     * Has rattachementRegions ?
+     *
+     * @param \HopitalNumerique\ReferenceBundle\Entity\Reference $rattachementRegion
+     */
+    public function hasRattachementRegion(\HopitalNumerique\ReferenceBundle\Entity\Reference $rattachementRegion)
+    {
+        foreach ($this->rattachementRegions as $region) {
+            if ($region->getId() === $rattachementRegion->getId()) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     /*--- Gestion domaine ---*/

@@ -140,10 +140,13 @@ class UserRepository extends EntityRepository
         $qb = $this->_em->createQueryBuilder();
         $qb->select('user')
             ->from('HopitalNumeriqueUserBundle:User', 'user')
-            ->andWhere('user.roles LIKE :role','user.region = :region')
+            ->leftJoin('user.rattachementRegions', 'rattachementRegion')
+            ->andWhere('user.roles LIKE :role')
+            ->setParameter('role', '%ROLE_AMBASSADEUR_7%')
             ->andWhere('user.enabled = 1')
+            ->andWhere($qb->expr()->orX('user.region = :region', 'rattachementRegion.id = :region'))
             ->setParameter('region', $region)
-            ->setParameter('role', '%ROLE_AMBASSADEUR_7%');
+        ;
 
         if( !is_null($domaine) && $domaine != 0 ){
             $qb->innerJoin('user.connaissancesAmbassadeurs','domaines',join::WITH, 'domaines.domaine = :domaine')

@@ -294,6 +294,23 @@ class UserType extends AbstractType
                     ->add('codePostal', 'text', array(
                         'required' => false
                     ))
+                    ->add('rattachementRegions', 'entity', array(
+                        'class' => 'HopitalNumeriqueReferenceBundle:Reference',
+                        'label' => 'Régions de rattachement',
+                        'multiple' => true,
+                        'expanded' => false,
+                        'query_builder' => function (EntityRepository $er) {
+                            return $er->createQueryBuilder('ref')
+                                ->where('ref.code = :etat')
+                                ->setParameter('etat', 'REGION')
+                                ->orderBy('ref.order', 'ASC')
+                            ;
+                        },
+                        'property' => 'libelle',
+                        'attr' => array(
+                            'size' => 8
+                        )
+                    ))
                 ;
             }
 

@@ -56,7 +56,7 @@ class AmbassadeurController extends Controller
             {
                 //Récupère le nom de la région pour le minifier
                 $libelleRegion = new NodevoChaine($region->getLibelle());
-                
+
                 //Si la région fait parti des régions passées en session
                 if(in_array($libelleRegion->minifie(''), $libellesRegion))
                 {
