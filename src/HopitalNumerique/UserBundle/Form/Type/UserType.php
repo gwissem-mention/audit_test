@@ -51,6 +51,7 @@ class UserType extends AbstractType
         $roles = $datas->getRoles();
         $connectedUser = $this->_userManager->getUserConnected();
 
+
         $builder->add('username', 'text', array(
                 'max_length' => $this->_constraints['username']['maxlength'],
                 'required'   => true, 
@@ -284,6 +285,17 @@ class UserType extends AbstractType
                     'label'      => 'Contact autre',
                     'attr'       => array()
             ));
+
+            if ($builder->getData()->hasRoleAmbassadeur()) {
+                $builder
+                    ->add('ville', 'text', array(
+                        'required' => false
+                    ))
+                    ->add('codePostal', 'text', array(
+                        'required' => false
+                    ))
+                ;
+            }
 
             // ^ -------- Onglet : Vous êtes un établissement de santé -------- ^
             $builder->add('statutEtablissementSante', 'entity', array(
