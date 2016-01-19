@@ -3,15 +3,15 @@
         <td class="center">
             {%- if canCreateTopicOnBoard(board, forum) -%}
                 {%- if canReplyToTopicOnBoard(board, forum) -%}
-                    <i class="glyphicon glyphicon-folder-close" style="margin-top:10px;"></i>
+                    <i class="fa fa-folder" style="margin-top:10px;"></i>
                 {%- else -%}
-                    <i class="glyphicon glyphicon-lock" style="margin-top:10px;"></i>
+                    <i class="fa fa-lock" style="margin-top:10px;"></i>
                 {%- endif -%}
             {%- else -%}
                 {%- if canReplyToTopicOnBoard(board, forum) -%}
-                    <i class="glyphicon glyphicon-eye-open" style="margin-top:10px;"></i>
+                    <i class="fa fa-eye" style="margin-top:10px;"></i>
                 {%- else -%}
-                    <i class="glyphicon glyphicon-lock" style="margin-top:10px;"></i>
+                    <i class="fa fa-lock" style="margin-top:10px;"></i>
                 {%- endif -%}
             {%- endif -%}
         </td>    
@@ -55,7 +55,7 @@
                         </a>
                     {%- else -%}
                         <a href="{{- path('ccdn_forum_user_topic_show_paginated', {'forumName': forumName, 'topicId': board.getLastPost.getTopic.getId, 'page':page }) -}}#{{- board.getLastPost.getId -}}">
-                            <i class="glyphicon glyphicon-arrow-right"></i>
+                            <i class="fa fa-arrow-right"></i>
                             <abbr class="timestamper" title="{{- board.getLastPost.getCreatedDate |date(ccdn_forum_forum.category.user.last_post_datetime_format) -}}">
                                 {{- board.getLastPost.getCreatedDate |date(ccdn_forum_forum.category.user.last_post_datetime_format) -}}
                             </abbr>

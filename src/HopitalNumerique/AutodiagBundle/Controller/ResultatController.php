@@ -103,6 +103,10 @@ class ResultatController extends Controller
             $this->get('session')->getFlashBag()->add( 'danger', 'Erreur, merci de sélectionner au moins 2 résultats.' );
             return $this->redirect( $this->generateUrl('hopitalnumerique_autodiag_resultat', array('id' => $resultats[0]->getOutil()->getId())));
         }
+        elseif (count($resultats) > 5) {
+            $this->get('session')->getFlashBag()->add( 'danger', 'Erreur, merci de ne pas sélectionner plus de 5 résultats.' );
+            return $this->redirect( $this->generateUrl('hopitalnumerique_autodiag_resultat', array('id' => $resultats[0]->getOutil()->getId())));
+        }
         elseif(count($resultats) > 1)
         {
             //create Synthese Object

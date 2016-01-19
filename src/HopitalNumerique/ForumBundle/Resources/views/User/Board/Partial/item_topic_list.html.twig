@@ -2,14 +2,14 @@
     <tr>
         <td class="center">
             {%- if topic.isDeleted -%}
-                <i class="glyphicon glyphicon-trash"></i>
+                <i class="fa fa-trash-o"></i>
             {%- else -%}
                 {%- if topic.isClosed -%}
-                    <i class="glyphicon glyph-icon-lock"></i>
+                    <i class="fa fa-lock"></i>
                 {%- else -%}
                     {# else if not closed, then if new posts add special icon here #}
                     {%- if topic.cachedReplyCount > 100 -%}
-                        <i class="glyphicon glyphicon-fire"></i>
+                        <i class="fa fa-fire"></i>
                     {%- endif -%}
                 {%- endif -%}
             {%- endif -%}
@@ -18,9 +18,9 @@
             {# use custom icons below, will be later specified in the create topic form #}
             <a href="{{- path('ccdn_forum_user_topic_show', {'forumName': forumName, 'topicId': topic.getId }) -}}">
                 {%- if topic.isSticky -%}
-                    <i class="glyphicon glyphicon-bullhorn"></i>
+                    <i class="fa fa-bullhorn"></i>
                 {%- else -%}
-                    <i class="glyphicon glyphicon-comment"></i>
+                    <i class="fa fa-comment"></i>
                 {%- endif -%}
             </a>
         </td>
@@ -79,7 +79,7 @@
                     </a>
                 {%- else -%}
                     <a href="{{- path('ccdn_forum_user_topic_show', {'forumName': forumName, 'topicId': topic.getId, 'page':page }) -}}#{{- topic.getLastPost.getId -}}">
-                        <i class="glyphicon glyphicon-arrow-right"></i>
+                        <i class="fa fa-arrow-right"></i>
                         <abbr class="timestamper" title="{{- topic.getLastPost.getCreatedDate |date(ccdn_forum_forum.board.user.show.last_post_datetime_format) -}}">
                             {{- topic.getLastPost.getCreatedDate |date(ccdn_forum_forum.board.user.show.last_post_datetime_format) -}}
                         </abbr>
