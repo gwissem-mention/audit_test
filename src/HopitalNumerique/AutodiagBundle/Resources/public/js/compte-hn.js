@@ -17,7 +17,7 @@ $(document).ready(function() {
         });
 
         //Do stuff for min 2 results and only if from same autodiag
-        if( resultats.length >= 2 && sameAutodiag ) {
+        if( resultats.length >= 2 && resultats.length <= 5 && sameAutodiag ) {
             apprise('Merci de saisir un nom pour cette synthèse', {'input':true,'textOk':'Valider','textCancel':'Annuler'}, function(r) {
                 if(r) { 
                     $.ajax({
@@ -38,6 +38,8 @@ $(document).ready(function() {
             });            
         }else if( resultats.length < 2 )
             apprise('Merci de sélectionner au moins 2 résultats.');
+        else if( resultats.length > 5 )
+            apprise('Merci de ne pas sélectionner plus de 5 résultats.');
         else
             apprise('Les résultats sélectionnés ne proviennent pas du même résultat d\'autodiagnostic.');
     });
