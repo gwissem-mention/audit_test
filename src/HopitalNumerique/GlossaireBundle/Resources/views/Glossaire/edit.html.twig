@@ -13,6 +13,9 @@
     {{parent()}}
     {% javascripts output="compiled/hopitalnumerique-glossaire-glossaire-edit.js" 
         "@validationEngine_js"
+        "@tinymce_js"
+        'bundles/nodevogestionnairemedia/js/moxiemanager/js/moxman.loader.min.js'
+        'bundles/nodevogestionnairemedia/js/MoxieManager.js'
         "bundles/hopitalnumeriqueglossaire/js/script.js"
     %}
         <script type="text/javascript" src="{{ asset_url }}"></script>
@@ -45,7 +48,9 @@
 
             <div class="panel-body">
                 {% form_theme form 'NodevoAdminBundle::form.html.twig' %}
-                {{ form(form) }}
+                {{ form_start(form) }}
+                    
+                {{ form_end(form) }}
             </div>
         </div>
     </div>

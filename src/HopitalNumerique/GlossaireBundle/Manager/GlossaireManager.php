@@ -186,21 +186,6 @@ class GlossaireManager extends BaseManager
     }
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     /**
      * [searchWords description]
      *

@@ -22,7 +22,6 @@ class ReferenceGrid extends Grid implements GridInterface
         $this->setSource( 'hopitalnumerique_reference.manager.reference' );
         $this->setSourceType( self::SOURCE_TYPE_MANAGER );
         $this->setAffichageRecursif( 'idParent', 'libelle' );
-        $this->showIDColumn( true );
         $this->setFilterIdColumn( false );
     }
 
@@ -31,6 +30,8 @@ class ReferenceGrid extends Grid implements GridInterface
      */
     public function setColumns()
     {
+
+        $this->addColonne( new Column\TextColumn('idReference', 'ID') );
         $this->addColonne( new Column\TextColumn('code', 'Code') );
         $this->addColonne( new Column\TextColumn('libelle', 'Libellé') );
 

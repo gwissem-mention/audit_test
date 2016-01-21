@@ -39,7 +39,7 @@ class GlossaireType extends AbstractType
             ->add('description', 'textarea', array(
                 'required'   => false, 
                 'label'      => 'Description complète',
-                'attr'     => array('rows' => 10)
+                'attr'     => array('class' => 'tinyMce')
             ))
             ->add('sensitive', 'checkbox', array(
                 'required'   => false,
