@@ -18,7 +18,14 @@ class DomaineManager extends BaseManager
      */
     public function getDatasForGrid( \StdClass $condition = null )
     {
-        return $this->getRepository()->getDatasForGrid( $condition )->getQuery()->getResult();
+        $domainesForGrid = array();
+        $domaines = $this->getRepository()->getDatasForGrid( $condition )->getQuery()->getResult();
+
+        foreach ($domaines as $domaine) {
+            $domaine['idDomaine'] = $domaine['id'];
+            $domainesForGrid[] = $domaine;
+        }
+        return $domainesForGrid;
     }
     
     public function getDomainesUserConnected($idUser) {

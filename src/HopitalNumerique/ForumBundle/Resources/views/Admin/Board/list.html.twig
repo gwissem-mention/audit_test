@@ -120,19 +120,19 @@
                                                     <div class="btn-group">
                                                         {%- if loop.first -%}
                                                             <a class="btn btn-warning" href="{{- path('ccdn_forum_admin_board_reorder_up', {'boardId': board.id, 'forum_filter': forum_filter, 'category_filter': category_filter}) -}}" id="reorder_up_board[{{- board.name -}}]">
-                                                                <i class="glyphicon glyphicon-retweet"></i>
+                                                                <i class="fa fa-retweet"></i>
                                                         {%- else -%}
                                                             <a class="btn btn-success" href="{{- path('ccdn_forum_admin_board_reorder_up', {'boardId': board.id, 'forum_filter': forum_filter, 'category_filter': category_filter}) -}}" id="reorder_up_board[{{- board.name -}}]">
-                                                                <i class="glyphicon glyphicon-chevron-up"></i>
+                                                                <i class="fa fa-chevron-up"></i>
                                                         {%- endif -%}
                                                         </a>
 
                                                         {%- if loop.last -%}
                                                             <a class="btn btn-warning" href="{{- path('ccdn_forum_admin_board_reorder_down', {'boardId': board.id, 'forum_filter': forum_filter, 'category_filter': category_filter}) -}}" id="reorder_down_board[{{- board.name -}}]">
-                                                                <i class="glyphicon glyphicon-retweet"></i>
+                                                                <i class="fa fa-retweet"></i>
                                                         {%- else -%}
                                                             <a class="btn btn-success" href="{{- path('ccdn_forum_admin_board_reorder_down', {'boardId': board.id, 'forum_filter': forum_filter, 'category_filter': category_filter}) -}}" id="reorder_down_board[{{- board.name -}}]">
-                                                                <i class="glyphicon glyphicon-chevron-down"></i>
+                                                                <i class="fa fa-chevron-down"></i>
                                                         {%- endif -%}
                                                         </a>
                                                     </div>

@@ -30,6 +30,7 @@ class DomaineGrid extends Grid implements GridInterface
     public function setColumns()
     {
         //field, titre, isSortable, size
+        $this->addColonne( new Column\NumberColumn('idDomaine', 'ID') );
         $this->addColonne( new Column\TextColumn('nom', 'Nom') );
         $this->addColonne( new Column\TextColumn('url', 'Url') );
         $this->addColonne( new Column\TextColumn('adresseMailContact', 'Adresse mail de contact') );

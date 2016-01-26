@@ -108,13 +108,15 @@ class ReferenceManager extends BaseManager
 
         foreach ($references as $reference) 
         {
-            if(!array_key_exists($reference['id'], $referencesForGrid))
+            $reference['idReference'] = $reference['id'];
+            if(!array_key_exists($reference['idReference'], $referencesForGrid))
             {
-                $referencesForGrid[$reference['id']] = $reference;
+                $referencesForGrid[$reference['idReference']] = $reference;
+
             }
             else
             {
-                $referencesForGrid[$reference['id']]['domaineNom'] .= ";" . $reference['domaineNom'];
+                $referencesForGrid[$reference['idReference']]['domaineNom'] .= ";" . $reference['domaineNom'];
             }
         }
 
