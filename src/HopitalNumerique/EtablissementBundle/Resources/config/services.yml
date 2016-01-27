@@ -16,6 +16,6 @@ services:
 
     hopitalnumerique_etablissement.form.etablissement:
         class: %hopitalnumerique_etablissement.form.etablissement.class%
-        arguments: ["@hopitalnumerique_etablissement.manager.etablissement", "@validator"]
+        arguments: ["@hopitalnumerique_etablissement.manager.etablissement", "@validator", "@hopitalnumerique_reference.manager.reference"]
         tags:
             - { name: form.type, alias: hopitalnumerique_etablissement_etablissement }

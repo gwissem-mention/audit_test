@@ -36,7 +36,8 @@ class Reference
     const ARTICLE_CATEGORIE_COMMUNAUTE_DE_PRATIQUES_ID = 800;
 
 
-    private static $STATUT_ACTIF_ID = 3;
+    const STATUT_ACTIF_ID = 3;
+    const STATUT_INACTIF_ID = 4;
     
     /**
      * @var integer
@@ -405,7 +406,7 @@ class Reference
      */
     public static function getStatutActifId()
     {
-        return self::$STATUT_ACTIF_ID;
+        return self::STATUT_ACTIF_ID;
     }
 
     /**

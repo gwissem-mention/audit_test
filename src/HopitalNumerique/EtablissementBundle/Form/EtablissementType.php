@@ -5,16 +5,22 @@ namespace HopitalNumerique\EtablissementBundle\Form;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
+use HopitalNumerique\ReferenceBundle\Manager\ReferenceManager;
 
 use Doctrine\ORM\EntityRepository;
 
 class EtablissementType extends AbstractType
 {
     private $_constraints = array();
+    /**
+     * @var \HopitalNumerique\ReferenceBundle\Manager\ReferenceManager
+     */
+    private $referenceManager;
 
-    public function __construct($manager, $validator)
+    public function __construct($manager, $validator, ReferenceManager $referenceManager)
     {
         $this->_constraints = $manager->getConstraints( $validator );
+        $this->referenceManager = $referenceManager;
     }
 
     public function buildForm(FormBuilderInterface $builder, array $options)
@@ -34,45 +40,30 @@ class EtablissementType extends AbstractType
             ))
             ->add('typeOrganisme', 'entity', array(
                 'class'         => 'HopitalNumeriqueReferenceBundle:Reference',
+                'choices'       => $this->referenceManager->findByCode('CONTEXTE_TYPE_ES'),
                 'property'      => 'libelle',
                 'required'      => true,
                 'label'         => 'Type d\'établissement',
                 'empty_value'   => ' - ',
                 'attr'        => array('class' => $this->_constraints['typeOrganisme']['class'] ),                
-                'query_builder' => function(EntityRepository $er) {
-                    return $er->createQueryBuilder('ref')
-                              ->where('ref.code = :etat')
-                              ->setParameter('etat', 'CONTEXTE_TYPE_ES')
-                              ->orderBy('ref.order', 'ASC');
-                }
             ))
             ->add('region', 'entity', array(
                 'class'         => 'HopitalNumeriqueReferenceBundle:Reference',
+                'choices'       => $this->referenceManager->findByCode('REGION'),
                 'property'      => 'libelle',
                 'required'      => true,
                 'label'         => 'Région',
                 'empty_value'   => ' - ',
                 'attr'          => array('class' => $this->_constraints['region']['class'] ),
-                'query_builder' => function(EntityRepository $er) {
-                    return $er->createQueryBuilder('ref')
-                              ->where('ref.code = :etat')
-                              ->setParameter('etat', 'REGION')
-                              ->orderBy('ref.order', 'ASC');
-                }
             ))
             ->add('departement', 'entity', array(
                 'class'         => 'HopitalNumeriqueReferenceBundle:Reference',
+                'choices'       => $this->referenceManager->findByCode('DEPARTEMENT'),
                 'property'      => 'libelle',
                 'required'      => true,
                 'label'         => 'Département',
                 'empty_value'   => ' Sélectionnez une région avant le département ',
                 'attr'          => array('class' => $this->_constraints['departement']['class'] ),
-                'query_builder' => function(EntityRepository $er){
-                    return $er->createQueryBuilder('ref')
-                        ->where('ref.code = :etat')
-                        ->setParameter('etat', 'DEPARTEMENT')
-                        ->orderBy('ref.libelle', 'ASC');                        
-                }
             ))
             ->add('adresse', 'textarea', array(
                 'max_length' => $this->_constraints['adresse']['maxlength'],

@@ -11,6 +11,8 @@ use HopitalNumerique\UserBundle\Manager\UserManager;
 use HopitalNumerique\QuestionnaireBundle\Entity\Questionnaire;
 use HopitalNumerique\QuestionnaireBundle\Entity\Occurrence;
 use HopitalNumerique\UserBundle\Entity\User;
+use Doctrine\ORM\Query\Expr;
+use HopitalNumerique\ReferenceBundle\Entity\Reference;
 
 class QuestionnaireType extends AbstractType
 {
@@ -214,6 +216,8 @@ class QuestionnaireType extends AbstractType
             	                return $er->createQueryBuilder('ref')
             	                ->where('ref.code = :etat')
             	                ->setParameter('etat', $question->getReferenceParamTri())
+                                    ->innerJoin('ref.etat', 'etat', Expr\Join::WITH, 'ref.etat = :actif')
+                                    ->setParameter('actif', Reference::STATUT_ACTIF_ID )
             	                ->orderBy('ref.order', 'ASC');
             	            },
             	            'data'        => is_null($reponseCourante) ? null : $reponseCourante->getReference()
@@ -237,6 +241,8 @@ class QuestionnaireType extends AbstractType
                             'query_builder' => function(EntityRepository $er) use ($question){
                                 return $er->createQueryBuilder('ref')
                                 ->where('ref.code = :etat')
+                                    ->innerJoin('ref.etat', 'etat', Expr\Join::WITH, 'ref.etat = :actif')
+                                    ->setParameter('actif', Reference::STATUT_ACTIF_ID )
                                 ->setParameter('etat', $question->getReferenceParamTri())
                                 ->orderBy('ref.order', 'ASC');
                             },
@@ -262,6 +268,8 @@ class QuestionnaireType extends AbstractType
                             'query_builder' => function(EntityRepository $er) use ($question){
                                 return $er->createQueryBuilder('ref')
                                 ->where('ref.code = :etat')
+                                    ->innerJoin('ref.etat', 'etat', Expr\Join::WITH, 'ref.etat = :actif')
+                                    ->setParameter('actif', Reference::STATUT_ACTIF_ID )
                                 ->setParameter('etat', $question->getReferenceParamTri())
                                 ->orderBy('ref.order', 'ASC');
                             },
@@ -287,6 +295,8 @@ class QuestionnaireType extends AbstractType
                             'query_builder' => function(EntityRepository $er) use ($question){
                                 return $er->createQueryBuilder('ref')
                                 ->where('ref.code = :etat')
+                                    ->innerJoin('ref.etat', 'etat', Expr\Join::WITH, 'ref.etat = :actif')
+                                    ->setParameter('actif', Reference::STATUT_ACTIF_ID )
                                 ->setParameter('etat', $question->getReferenceParamTri())
                                 ->orderBy('ref.order', 'ASC');
                             },

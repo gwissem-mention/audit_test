@@ -7,6 +7,7 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 use Doctrine\ORM\EntityRepository;
 
+use HopitalNumerique\ReferenceBundle\Manager\ReferenceManager;
 use HopitalNumerique\UserBundle\Manager\UserManager;
 
 /**
@@ -18,12 +19,17 @@ class ModuleType extends AbstractType
 {
     private $_constraints = array();
     private $_userManager;
+    /**
+     * @var \HopitalNumerique\ReferenceBundle\Manager\ReferenceManager
+     */
+    private $referenceManager;
     
-    public function __construct($manager, $validator, UserManager $userManager)
+    public function __construct($manager, $validator, UserManager $userManager, ReferenceManager $referenceManager)
     {
         $this->_constraints = $manager->getConstraints( $validator );
 
         $this->_userManager = $userManager;
+        $this->referenceManager = $referenceManager;
     }
     
     public function buildForm(FormBuilderInterface $builder, array $options)
@@ -82,17 +88,12 @@ class ModuleType extends AbstractType
             ))
             ->add('duree', 'entity', array(
                     'class'         => 'HopitalNumeriqueReferenceBundle:Reference',
+                    'choices'       => $this->referenceManager->findByCode('DUREE_FORMATION'),
                     'property'      => 'libelle',
                     'required'      => false,
                     'label'         => 'Durée',
                     'empty_value'   => ' - ',
                     'attr'          => array(),
-                    'query_builder' => function(EntityRepository $er) {
-                        return $er->createQueryBuilder('ref')
-                        ->where('ref.code = :etat')
-                        ->setParameter('etat', 'DUREE_FORMATION')
-                        ->orderBy('ref.order', 'ASC');
-                    }
             ))
             ->add('horairesType', 'text', array(
                     'max_length' => $this->_constraints['horairesType']['maxlength'],
@@ -186,17 +187,12 @@ class ModuleType extends AbstractType
             ->add('path', 'hidden')
             ->add('statut', 'entity', array(
                     'class'         => 'HopitalNumeriqueReferenceBundle:Reference',
+                    'choices'       => $this->referenceManager->findByCode('ETAT'),
                     'property'      => 'libelle',
                     'required'      => true,
                     'label'         => 'Statut',
                     'empty_value'   => ' - ',
                     'attr'          => array('class' => $this->_constraints['statut']['class'] ),
-                    'query_builder' => function(EntityRepository $er) {
-                        return $er->createQueryBuilder('ref')
-                        ->where('ref.code = :etat')
-                        ->setParameter('etat', 'ETAT')
-                        ->orderBy('ref.order', 'ASC');
-                    }
             ));
     }
 

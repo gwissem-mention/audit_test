@@ -10,6 +10,7 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 use HopitalNumerique\UserBundle\Manager\UserManager;
+use HopitalNumerique\ReferenceBundle\Manager\ReferenceManager;
 
 class UserType extends AbstractType
 {
@@ -17,13 +18,18 @@ class UserType extends AbstractType
     private $_managerRole;
     private $_securityContext;
     private $_userManager;
+    /**
+     * @var \HopitalNumerique\ReferenceBundle\Manager\ReferenceManager
+     */
+    private $referenceManager;
 
-    public function __construct($manager, $validator, $managerRole, $securityContext, UserManager $userManager)
+    public function __construct($manager, $validator, $managerRole, $securityContext, UserManager $userManager, ReferenceManager $referenceManager)
     {
         $this->_constraints = $manager->getConstraints( $validator );
         $this->_managerRole = $managerRole;
         $this->_securityContext = $securityContext;
         $this->_userManager = $userManager;
+        $this->referenceManager = $referenceManager;
     }
 
     public function setDefaultOptions(OptionsResolverInterface $resolver)
@@ -111,32 +117,22 @@ class UserType extends AbstractType
             
             ->add('civilite', 'entity', array(
                     'class'         => 'HopitalNumeriqueReferenceBundle:Reference',
+                    'choices'       => $this->referenceManager->findByCode('CIVILITE'),
                     'property'      => 'libelle',
                     'required'      => true,
                     'label'         => 'Civilite',
                     'empty_value'   => ' - ',
                     'attr'          => array('class' => $this->_constraints['civilite']['class'] ),
-                    'query_builder' => function(EntityRepository $er) {
-                        return $er->createQueryBuilder('ref')
-                            ->where('ref.code = :etat')
-                            ->setParameter('etat', 'CIVILITE')
-                            ->orderBy('ref.order', 'ASC');
-                    }
             ))
 
             ->add('titre', 'entity', array(
                     'class'         => 'HopitalNumeriqueReferenceBundle:Reference',
+                    'choices'       => $this->referenceManager->findByCode('TITRE'),
                     'property'      => 'libelle',
                     'required'      => false,
                     'label'         => 'Titre',
                     'empty_value'   => ' - ',
                     'attr'          => array(),
-                    'query_builder' => function(EntityRepository $er) {
-                        return $er->createQueryBuilder('ref')
-                            ->where('ref.code = :etat')
-                            ->setParameter('etat', 'TITRE')
-                            ->orderBy('ref.order', 'ASC');
-                    }
             ))
             
             ->add('telephoneDirect', 'text', array(
@@ -233,46 +229,31 @@ class UserType extends AbstractType
             {
                 $builder->add('region', 'entity', array(
                         'class'       => 'HopitalNumeriqueReferenceBundle:Reference',
+                        'choices'       => $this->referenceManager->findByCode('REGION'),
                         'property'    => 'libelle',
                         'required'    => false,
                         'label'       => 'Région',
                         'empty_value' => ' - ',
-                        'query_builder' => function(EntityRepository $er) {
-                            return $er->createQueryBuilder('ref')
-                            ->where('ref.code = :etat')
-                            ->setParameter('etat', 'REGION')
-                            ->orderBy('ref.order', 'ASC');
-                        }
                 ))
                 
                 ->add('departement', 'entity', array(
                         'class'       => 'HopitalNumeriqueReferenceBundle:Reference',
+                        'choices'       => $this->referenceManager->findByCode('DEPARTEMENT'),
                         'property'    => 'libelle',
                         'required'    => false,
                         'label'       => 'Département',
                         'empty_value' => ' - ',
                         'attr'        => array(),
-                        'query_builder' => function(EntityRepository $er) {
-                            return $er->createQueryBuilder('ref')
-                                ->where('ref.code = :etat')
-                                ->setParameter('etat', 'DEPARTEMENT')
-                                ->orderBy('ref.libelle', 'ASC');
-                        }
                 ));
             }
             
             $builder->add('etat', 'entity', array(
                 'class'       => 'HopitalNumeriqueReferenceBundle:Reference',
+                'choices'       => $this->referenceManager->findByCode('ETAT'),
                 'property'    => 'libelle',
                 'required'    => true,
                 'label'       => 'Etat',
                 'attr'        => array('class' => $this->_constraints['etat']['class'] ),
-                'query_builder' => function(EntityRepository $er) {
-                    return $er->createQueryBuilder('ref')
-                              ->where('ref.code = :etat')
-                              ->setParameter('etat', 'ETAT')
-                              ->orderBy('ref.order', 'ASC');
-                }
             ));
 
             $builder->add('inscritCommunautePratique', 'checkbox', array(
@@ -288,17 +269,12 @@ class UserType extends AbstractType
             // ^ -------- Onglet : Vous êtes un établissement de santé -------- ^
             $builder->add('statutEtablissementSante', 'entity', array(
                     'class'       => 'HopitalNumeriqueReferenceBundle:Reference',
+                    'choices'       => $this->referenceManager->findByCode('CONTEXTE_TYPE_ES'),
                     'property'    => 'libelle',
                     'required'    => false,
                     'label'       => 'Type d\'établissement',
                     'empty_value' => ' - ',
                     'attr'        => array('class' => 'etablissement_sante'),
-                    'query_builder' => function(EntityRepository $er) {
-                        return $er->createQueryBuilder('ref')
-                        ->where('ref.code = :etat')
-                        ->setParameter('etat', 'CONTEXTE_TYPE_ES')
-                        ->orderBy('ref.libelle', 'ASC');
-                    }
             ))
             
             ->add('etablissementRattachementSante', 'genemu_jqueryselect2_entity', array(
@@ -329,48 +305,33 @@ class UserType extends AbstractType
             
             ->add('fonctionDansEtablissementSanteReferencement', 'entity', array(
                     'class'       => 'HopitalNumeriqueReferenceBundle:Reference',
+                    'choices'       => $this->referenceManager->findByCode('CONTEXTE_FONCTION_INTERNAUTE'),
                     'property'    => 'libelle',
                     'required'    => false,
                     'label'       => 'Fonction',
                     'empty_value' => ' - ',
                     'attr'        => array('class' => 'etablissement_sante'),
-                    'query_builder' => function(EntityRepository $er) {
-                        return $er->createQueryBuilder('ref')
-                        ->where('ref.code = :etat')
-                        ->setParameter('etat', 'CONTEXTE_FONCTION_INTERNAUTE')
-                        ->orderBy('ref.libelle', 'ASC');
-                    }
             ))
             
             ->add('typeActivite', 'entity', array(
                     'class'       => 'HopitalNumeriqueReferenceBundle:Reference',
+                    'choices'       => $this->referenceManager->findByCode('CONTEXTE_SPECIALITE_ES'),
                     'property'    => 'libelle',
                     'required'    => false,
                     'multiple'    => true,
                     'label'       => 'Type activité',
                     'empty_value' => ' - ',
                     'attr'        => array('class' => 'etablissement_sante'),
-                    'query_builder' => function(EntityRepository $er) {
-                        return $er->createQueryBuilder('ref')
-                        ->where('ref.code = :etat')
-                        ->setParameter('etat', 'CONTEXTE_SPECIALITE_ES')
-                        ->orderBy('ref.libelle', 'ASC');
-                    }
             ))
             
             ->add('profilEtablissementSante', 'entity', array(
                     'class'       => 'HopitalNumeriqueReferenceBundle:Reference',
+                    'choices'       => $this->referenceManager->findByCode('CONTEXTE_METIER_INTERNAUTE'),
                     'property'    => 'libelle',
                     'required'    => false,
                     'label'       => 'Profil',
                     'empty_value' => ' - ',
                     'attr'        => array('class' => 'etablissement_sante'),
-                    'query_builder' => function(EntityRepository $er) {
-                        return $er->createQueryBuilder('ref')
-                        ->where('ref.code = :etat')
-                        ->setParameter('etat', 'CONTEXTE_METIER_INTERNAUTE')
-                        ->orderBy('ref.libelle', 'ASC');
-                    }
             ))
             ;
 

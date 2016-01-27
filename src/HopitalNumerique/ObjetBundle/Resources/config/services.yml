@@ -55,7 +55,7 @@ services:
     #forms
     hopitalnumerique_objet.form.objet:
         class: %hopitalnumerique_objet.form.objet.class%
-        arguments: ["@hopitalnumerique_objet.manager.objet", "@validator", "@hopitalnumerique_user.manager.user"]
+        arguments: ["@hopitalnumerique_objet.manager.objet", "@validator", "@hopitalnumerique_user.manager.user", "@hopitalnumerique_reference.manager.reference"]
         tags:
             - { name: form.type, alias: hopitalnumerique_objet_objet }
 

@@ -147,9 +147,9 @@
                                             <div class="form-group">
                                                 <div><strong>Type d'activité</strong></div>
                                                 <div>
-                                                    {% if user.typeActivite is defined and user.typeActivite is not null  %}
-                                                        {{user.typeActivite.libelle}}
-                                                    {% endif %}
+                                                    {% for typeActivite in user.typeActivite %}
+                                                        {{typeActivite.libelle}}
+                                                    {% endfor %}
                                                 </div>
                                             </div>
                                             <div class="form-group">

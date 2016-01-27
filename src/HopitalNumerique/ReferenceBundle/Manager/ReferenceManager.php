@@ -269,7 +269,7 @@ class ReferenceManager extends BaseManager
      */
     public function getDomainesForUser ( $user )
     {
-        $results = $this->findBy( array( 'code' => 'PERIMETRE_FONCTIONNEL_DOMAINES_FONCTIONNELS') );
+        $results = $this->findByCode('PERIMETRE_FONCTIONNEL_DOMAINES_FONCTIONNELS');
 
         $domaines = array(
             'ids'      => array(),
@@ -383,7 +383,7 @@ class ReferenceManager extends BaseManager
      */
     public function findRegions()
     {
-        return $this->findBy(array('code' => 'REGION'), array('order' => 'ASC'));
+        return $this->findByCode('REGION');
     }
 
     /**
@@ -393,7 +393,7 @@ class ReferenceManager extends BaseManager
      */
     public function findEtablissementSanteTypes()
     {
-        return $this->findBy(array('code' => 'CONTEXTE_TYPE_ES'), array('order' => 'ASC'));
+        return $this->findByCode('CONTEXTE_TYPE_ES');
     }
 
     /**
@@ -403,7 +403,7 @@ class ReferenceManager extends BaseManager
      */
     public function findEtablissementSanteProfils()
     {
-        return $this->findBy(array('code' => 'CONTEXTE_METIER_INTERNAUTE'), array('order' => 'ASC'));
+        return $this->findByCode('CONTEXTE_METIER_INTERNAUTE');
     }
 
     /**
@@ -413,10 +413,18 @@ class ReferenceManager extends BaseManager
      */
     public function findActiviteTypes()
     {
-        return $this->findBy(array('code' => 'CONTEXTE_SPECIALITE_ES'), array('order' => 'ASC'));
+        return $this->findByCode('CONTEXT_SPECIALITE_ES');
     }
 
+    public function findByCode($code, $isActif = true)
+    {
+        return $this->getRepository()->findByCode($code, $isActif);
+    }
 
+    public function findByCodeParent($code, $idParent, $isActif = true)
+    {
+        return $this->getRepository()->findByCodeParent($code, $idParent, $isActif);
+    }
 
 
 

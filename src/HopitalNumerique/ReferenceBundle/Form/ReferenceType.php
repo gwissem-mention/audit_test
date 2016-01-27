@@ -5,6 +5,7 @@ namespace HopitalNumerique\ReferenceBundle\Form;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
+use HopitalNumerique\ReferenceBundle\Manager\ReferenceManager;
 
 use Doctrine\ORM\EntityRepository;
 
@@ -12,11 +13,16 @@ class ReferenceType extends AbstractType
 {
     private $_constraints = array();
     private $_userManager;
+    /**
+     * @var \HopitalNumerique\ReferenceBundle\Manager\ReferenceManager
+     */
+    private $referenceManager;
 
-    public function __construct($manager, $validator, $userManager)
+    public function __construct($manager, $validator, $userManager, ReferenceManager $referenceManager)
     {
         $this->_constraints = $manager->getConstraints( $validator );
         $this->_userManager = $userManager;
+        $this->referenceManager = $referenceManager;
     }
 
     public function buildForm(FormBuilderInterface $builder, array $options)
@@ -52,16 +58,11 @@ class ReferenceType extends AbstractType
             ))
             ->add('etat', 'entity', array(
                 'class'       => 'HopitalNumeriqueReferenceBundle:Reference',
+                'choices'     => $this->referenceManager->findByCode('ETAT'),
                 'property'    => 'libelle',
                 'required'    => true,
                 'label'       => 'Etat',
                 'attr'        => array('class' => $this->_constraints['etat']['class'] ),
-                'query_builder' => function(EntityRepository $er) {
-                    return $er->createQueryBuilder('ref')
-                              ->where('ref.code = :etat')
-                              ->setParameter('etat', 'ETAT')
-                              ->orderBy('ref.order', 'ASC');
-                }
             ))
             ->add('dictionnaire', 'checkbox', array(
                 'required' => false,
@@ -84,12 +85,12 @@ class ReferenceType extends AbstractType
                     $qb = $er->createQueryBuilder('ref')
                               ->andWhere('ref.lock = 0')
                               ->orderBy('ref.parent, ref.code, ref.order', 'ASC');
-                    
+
                     if( $id )
                     {
                         $qb->andWhere("ref.id != $id");
                     }
-                    
+
                     return $qb;
                 }
             ))

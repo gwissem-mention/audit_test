@@ -696,6 +696,7 @@ class User extends BaseUser
         $this->notficationRequete   = true;
         $this->inscritCommunautePratique = false;
         $this->previousAdmin 		= false;
+        $this->typeActivite         = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
 

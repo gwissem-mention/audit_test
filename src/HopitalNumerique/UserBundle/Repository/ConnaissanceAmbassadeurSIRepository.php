@@ -11,7 +11,7 @@ use HopitalNumerique\UserBundle\Entity\User;
 /**
  * ConnaissanceAmbassadeurRepository
  */
-class ConnaissanceAmbassadeurRepository extends EntityRepository
+class ConnaissanceAmbassadeurSIRepository extends EntityRepository
 {
     public function findByAmbassadeur(User $ambassadeur)
     {
@@ -19,7 +19,7 @@ class ConnaissanceAmbassadeurRepository extends EntityRepository
 
         $qb
             ->select('connaissanceAmbassadeur, connaissance, domaine')
-            ->from('HopitalNumeriqueUserBundle:ConnaissanceAmbassadeur', 'connaissanceAmbassadeur')
+            ->from('HopitalNumeriqueUserBundle:ConnaissanceAmbassadeurSi', 'connaissanceAmbassadeur')
             ->leftJoin('connaissanceAmbassadeur.connaissance', 'connaissance' , Expr\Join::WITH, 'connaissance.etat = :actif')
             ->innerJoin('connaissanceAmbassadeur.domaine', 'domaine' , Expr\Join::WITH, 'domaine.etat = :actif')
             ->setParameter('actif', Reference::STATUT_ACTIF_ID)

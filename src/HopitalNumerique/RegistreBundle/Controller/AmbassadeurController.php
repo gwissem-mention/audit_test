@@ -5,6 +5,8 @@ namespace HopitalNumerique\RegistreBundle\Controller;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Nodevo\ToolsBundle\Tools\Chaine as NodevoChaine;
+use HopitalNumerique\RegistreBundle\Manager\ConnaissanceAmbassadeurManager;
+use HopitalNumerique\RegistreBundle\Manager\ConnaissanceAmbassadeurSIManager;
 
 class AmbassadeurController extends Controller
 {    
@@ -50,7 +52,7 @@ class AmbassadeurController extends Controller
             $libellesRegion = json_decode($regionsJSON);
                         
             //Récupération de l'ensemble des régions car dans les sessions sont stockés les libellés, il nous faut les entités
-            $allRegions = $this->get('hopitalnumerique_reference.manager.reference')->findBy( array('code' => 'REGION'), array('libelle' => 'ASC'));
+            $allRegions = $this->get('hopitalnumerique_reference.manager.reference')->findByCode('REGION');
             
             foreach ($allRegions as $region)
             {
@@ -110,7 +112,7 @@ class AmbassadeurController extends Controller
         $session->set('registre-ambassadeur-region', $regionsJSON );
     
         //get liste des domaines fonctionnels
-        $domaines = $this->get('hopitalnumerique_reference.manager.reference')->findBy( array( 'code' => 'PERIMETRE_FONCTIONNEL_DOMAINES_FONCTIONNELS', 'parent' => 221 ), array( 'libelle' => 'ASC' ) );
+        $domaines = $this->get('hopitalnumerique_reference.manager.reference')->findByCodeParent('PERIMETRE_FONCTIONNEL_DOMAINES_FONCTIONNELS', 221 );
 
         return $this->render('HopitalNumeriqueRegistreBundle:Ambassadeur:index.html.twig', array(
                 'user'            => array(
@@ -171,7 +173,8 @@ class AmbassadeurController extends Controller
     public function domainesAction( $id )
     {        
         $ambassadeur   = $this->get('hopitalnumerique_user.manager.user')->findOneBy(array('id' => $id));
-        $connaissances = $ambassadeur->getConnaissancesAmbassadeurs();
+        $connaissances = $this->get('hopitalnumerique_user.manager.connaissance_ambassadeur')->findByAmbassadeur($ambassadeur);
+
 
         $domainesWithParent = array();
 
@@ -216,7 +219,7 @@ class AmbassadeurController extends Controller
     public function connaissanceSIAction( $id )
     {        
         $ambassadeur = $this->get('hopitalnumerique_user.manager.user')->findOneBy(array('id' => $id));
-        $connaissances = $ambassadeur->getConnaissancesAmbassadeursSI();
+        $connaissances = $this->get('hopitalnumerique_user.manager.connaissance_ambassadeur_si')->findByAmbassadeur($ambassadeur);
         $connaissancesOrderedForFront = array();
 
         foreach ($connaissances as $connaissance)
