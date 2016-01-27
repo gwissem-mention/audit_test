@@ -2,7 +2,7 @@
 
 {% block title_communaute_pratique %}Publications issues des groupes de travail{% endblock %}
 
-{% block communaute_pratique_breadcrumbs_communautedepratiques %}<li><a href="{{ path('hopital_numerique_publication_publication_article', { categorie:'article', id:1000, alias:'la-communaute-de-pratiques' }) }}">Communauté de pratiques</a></li>{% endblock %}
+{% block communaute_pratique_breadcrumbs_communautedepratiques %}<li><a href="{{ path('hopitalnumerique_communautepratique_accueil_index') }}">Communauté de pratiques</a></li>{% endblock %}
 
 {% block communaute_pratique_actions %}
     {{ communaute_pratique.display_action_groupes_with_publications(groupes) }}

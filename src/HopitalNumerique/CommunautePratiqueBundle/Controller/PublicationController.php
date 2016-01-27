@@ -15,6 +15,11 @@ class PublicationController extends \Symfony\Bundle\FrameworkBundle\Controller\C
      */
     public function listAction($page)
     {
+    	if (!$this->container->get('hopitalnumerique_communautepratique.dependency_injection.security')
+    			->canAccessCommunautePratique()) {
+    				return $this->redirect($this->generateUrl('hopital_numerique_homepage'));
+    	}
+    	
         $groupes = $this->container->get('hopitalnumerique_communautepratique.manager.groupe')
             ->findWithPublications();
         $groupesAdapter = new ArrayAdapter($groupes);
