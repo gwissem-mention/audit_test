@@ -430,22 +430,24 @@
                     <p>
                         <strong>Animateur{{ groupe.animateurs|length > 1 ? 's' : '' }} du groupe</strong> :
                         {% for animateur in groupe.animateurs %}
-                           <a target="_blank" href="{{ path('hopitalnumerique_communautepratique_user_viewforgroupe', { user:animateur.id, groupe:groupe.id }) }}"> {{ animateur.prenom }} {{ animateur.nom }}</a>{{ loop.last ? '' : ', ' }}
+                            {%- if groupe.enCours -%}
+                                <a target="_blank" href="{{ path('hopitalnumerique_communautepratique_user_viewforgroupe', { user:animateur.id, groupe:groupe.id }) }}"> {{ animateur.prenom }} {{ animateur.nom }}</a>{{ loop.last ? '' : ', ' }}
+                            {%- else -%}
+                                {{ animateur.prenom }} {{ animateur.nom }}{{ loop.last ? '' : ', ' }}
+                            {%- endif -%}
                         {% endfor -%}
                     </p>
                 {%- endif -%}
-                {% set tailleGroupe = 0 %}
-                {%- if groupe.animateurs is not empty -%}
-                    {% set tailleGroupe = 1 %}                    
-                {%- endif -%}
-                {%- if groupe.users|length > tailleGroupe -%}
+
+                {%- if groupe.usersWithoutAnimateurs|length > 0 -%}
                     <p>
-                        <strong>Membre{{ groupe.users|length > (tailleGroupe + 1) ? 's' : '' }} du groupe</strong> :
-                        {% for membre in groupe.users %}
-                            {{ loop.first or membre in groupe.animateurs ? '' : ', ' }}
-                            {% if membre not in groupe.animateurs %}
-                                <a target="_blank" href="{{ path('hopitalnumerique_communautepratique_user_viewforgroupe', { user:membre.id, groupe:groupe.id }) }}"> {{ membre.prenom }} {{ membre.nom }}</a>
-                            {% endif %}
+                        <strong>Membre{{ groupe.usersWithoutAnimateurs|length > 1 ? 's' : '' }} du groupe</strong> :
+                        {% for membre in groupe.usersWithoutAnimateurs %}
+                            {%- if groupe.enCours -%}
+                                <a target="_blank" href="{{ path('hopitalnumerique_communautepratique_user_viewforgroupe', { user:membre.id, groupe:groupe.id }) }}"> {{ membre.prenom }} {{ membre.nom }}</a>{{ loop.last ? '' : ', ' }}
+                            {%- else -%}
+                                {{ membre.prenom }} {{ membre.nom }}{{ loop.last ? '' : ', ' }}
+                            {%- endif -%}
                         {% endfor -%}
                     </p>
                 {%- endif -%}

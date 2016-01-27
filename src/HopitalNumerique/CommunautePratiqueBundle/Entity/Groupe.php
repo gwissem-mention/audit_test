@@ -5,6 +5,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 use Gedmo\Mapping\Annotation as Gedmo;
 use HopitalNumerique\UserBundle\Entity\User;
+use Symfony\Component\Validator\Constraints\Collection;
 
 /**
  * Entité Groupe.
@@ -716,6 +717,22 @@ class Groupe
         }
 
         return false;
+    }
+    
+    /**
+     * Retourne les utilisateurs qui ne sont pas animateurs.
+     *
+     * @return array $user
+     */
+    public function getUsersWithoutAnimateurs()
+    {
+    	$collection = array();
+    	foreach ($this->users as $user) {
+    		if (!$this->hasAnimateur($user)) {
+    			$collection[$user->getId()] = $user;
+    		}
+    	}
+    	return $collection;
     }
 
     /**
