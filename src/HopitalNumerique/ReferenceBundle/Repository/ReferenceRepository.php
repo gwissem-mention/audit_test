@@ -16,7 +16,7 @@ class ReferenceRepository extends EntityRepository
      *
      * @return array
      */
-    public function getArbo( $unlockedOnly = false, $fromDictionnaire = false, $fromRecherche = false, $domaineIds = array() )
+    public function getArbo( $unlockedOnly = false, $fromDictionnaire = false, $fromRecherche = false, $domaineIds = array(), $actif = Reference::STATUT_ACTIF_ID )
     {
         $qb = $this->_em->createQueryBuilder();
         $qb->select('ref.id, ref.libelle, ref.code, par.id as parent, ref.order')
@@ -28,6 +28,13 @@ class ReferenceRepository extends EntityRepository
             $qb->leftJoin('ref.domaines', 'domaine')
                 ->andWhere('domaine.id IN (:domainesId)')
                 ->setParameter('domainesId', $domaineIds);
+        }
+
+        if (null !== $actif) {
+            $qb
+                ->andWHere('ref.etat = :etat')
+                ->setParameter('etat', $actif)
+            ;
         }
             
         if( $unlockedOnly )
