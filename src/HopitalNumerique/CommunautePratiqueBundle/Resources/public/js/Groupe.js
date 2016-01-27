@@ -13,6 +13,12 @@ $(document).ready(function() {
     		$(this).addClass("btn-sommaire");
     	}
     });
+    if(window.location.href.contains('#')) {
+    	$(".nav-tabs li").removeClass('active');
+    	$(".nav-tabs li").last().addClass('active');
+    	$(".tab-content div").removeClass('active');
+    	$("#documents").addClass('active');
+    }
 });
 
 
@@ -66,3 +72,5 @@ CommunautePratique_Groupe.fixeHauteurBlocs = function()
         }
     }
 };
+
+

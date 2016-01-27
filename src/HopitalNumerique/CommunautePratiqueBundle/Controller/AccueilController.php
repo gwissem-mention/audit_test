@@ -23,7 +23,7 @@ class AccueilController extends \Symfony\Bundle\FrameworkBundle\Controller\Contr
         $domaine = $this->container->get('hopitalnumerique_domaine.manager.domaine')
             ->findOneById($request->getSession()->get('domaineId'));
         $forum = $this->container->get('hopitalnumerique_forum.manager.forum')
-            ->findOneById(Forum::FORUM_COMMUNAUTE_DE_PRATIQUES_ID);
+            ->findOneById(Forum::FORUM_PUBLIC_ID);
 		$groupeUserEnCour = $this->container->get('hopitalnumerique_communautepratique.manager.groupe')
                     ->findEnCoursByUser($domaine, $this->getUser());
 		$groupeUserAVenir = $this->container->get('hopitalnumerique_communautepratique.manager.groupe')
