@@ -44,7 +44,7 @@ class InterventionDemandeManager
      */
     public function getInterventionTypesChoices()
     {
-        return $this->referenceManager->findBy(array('code' => 'TYPE_INTERVENTION'));
+        return $this->referenceManager->findByCode('TYPE_INTERVENTION', true);
     }
     /**
      * Retourne la liste des états d'intervention pour les listes de formulaire.
@@ -53,7 +53,7 @@ class InterventionDemandeManager
      */
     public function getInterventionEtatsChoices()
     {
-        return $this->referenceManager->findBy(array('code' => 'ETAT_DEMANDE_INTERVENTION'));
+        return $this->referenceManager->findByCode('ETAT_DEMANDE_INTERVENTION');
     }
     /**
      * Retourne la liste des états des évaluations d'intervention pour les listes de formulaire.
@@ -62,7 +62,7 @@ class InterventionDemandeManager
      */
     public function getEvaluationEtatsChoices()
     {
-        return $this->referenceManager->findBy(array('code' => 'ETAT_EVALUATION'));
+        return $this->referenceManager->findByCode('ETAT_EVALUATION');
     }
     /**
      * Retourne la liste des états des remboursements d'intervention pour les listes de formulaire.
@@ -71,7 +71,7 @@ class InterventionDemandeManager
      */
     public function getRemboursementEtatsChoices()
     {
-        return $this->referenceManager->findBy(array('code' => 'ETAT_REMBOURSEMENT'));
+        return $this->referenceManager->findByCode('ETAT_REMBOURSEMENT');
     }
     /**
      * Retourne la liste des objets pour les listes de formulaire.
@@ -95,7 +95,7 @@ class InterventionDemandeManager
     {
         if(is_null($ambassadeur))
         {
-            return $this->referenceManager->findBy(array('code' => 'PERIMETRE_FONCTIONNEL_DOMAINES_FONCTIONNELS'), array('order' => 'ASC'));
+            return $this->referenceManager->findByCode('PERIMETRE_FONCTIONNEL_DOMAINES_FONCTIONNELS');
         }
         else
         {

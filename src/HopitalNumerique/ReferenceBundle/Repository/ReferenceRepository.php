@@ -4,6 +4,7 @@ namespace HopitalNumerique\ReferenceBundle\Repository;
 
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\Query\Expr\Join;
+use HopitalNumerique\ReferenceBundle\Entity\Reference;
 
 /**
  * ReferenceRepository
@@ -15,7 +16,7 @@ class ReferenceRepository extends EntityRepository
      *
      * @return array
      */
-    public function getArbo( $unlockedOnly = false, $fromDictionnaire = false, $fromRecherche = false, $domaineIds = array() )
+    public function getArbo( $unlockedOnly = false, $fromDictionnaire = false, $fromRecherche = false, $domaineIds = array(), $actif = Reference::STATUT_ACTIF_ID )
     {
         $qb = $this->_em->createQueryBuilder();
         $qb->select('ref.id, ref.libelle, ref.code, par.id as parent, ref.order')
@@ -27,6 +28,13 @@ class ReferenceRepository extends EntityRepository
             $qb->leftJoin('ref.domaines', 'domaine')
                 ->andWhere('domaine.id IN (:domainesId)')
                 ->setParameter('domainesId', $domaineIds);
+        }
+
+        if (null !== $actif) {
+            $qb
+                ->andWHere('ref.etat = :etat')
+                ->setParameter('etat', $actif)
+            ;
         }
             
         if( $unlockedOnly )
@@ -166,5 +174,50 @@ class ReferenceRepository extends EntityRepository
             ->orderBy('ref.code');
             
         return $qb;
+    }
+
+    /**
+     * Récupère les références en fonction de leur code
+     *
+     * @return array
+     */
+    public function findByCode($code, $actif = null)
+    {
+        return $this->findByCodeParent($code, null, $actif);
+    }
+
+    /**
+     * Récupère références en fonction du code et de l'id du parent
+     *
+     * @return array
+     */
+    public function findByCodeParent($code, $parent = null, $actif = null)
+    {
+        $qb = $this->_em->createQueryBuilder();
+
+        $qb
+            ->select('ref')
+            ->from('HopitalNumeriqueReferenceBundle:Reference', 'ref')
+            ->andWhere('ref.code = :code')
+            ->setParameter('code', $code)
+            ->orderBy('ref.order','ASC')
+        ;
+
+        if (null !== $actif) {
+            $qb
+                ->andWHere('ref.etat = :etat')
+                ->setParameter('etat', ($actif ? Reference::STATUT_ACTIF_ID : Reference::STATUT_INACTIF_ID))
+            ;
+        }
+
+        if (null !== $parent) {
+            $qb
+                ->andWhere('ref.parent = :parent')
+                ->setParameter('parent', $parent)
+            ;
+
+        }
+
+        return $qb->getQuery()->getResult();
     }
 }

@@ -36,7 +36,7 @@ services:
     #--Formulaire
     hopitalnumerique_module.form.module:
         class: %hopitalnumerique_module.form.module.class%
-        arguments: ["@hopitalnumerique_module.manager.module", "@validator", "@hopitalnumerique_user.manager.user"]
+        arguments: ["@hopitalnumerique_module.manager.module", "@validator", "@hopitalnumerique_user.manager.user", "@hopitalnumerique_reference.manager.reference"]
         tags:
             - { name: form.type, alias: hopitalnumerique_module_module }
 
@@ -61,7 +61,7 @@ services:
     #--Formulaire
     hopitalnumerique_module.form.session:
         class: %hopitalnumerique_module.form.session.class%
-        arguments: ["@hopitalnumerique_module.manager.session", "@validator"]
+        arguments: ["@hopitalnumerique_module.manager.session", "@validator", "@hopitalnumerique_reference.manager.reference"]
         tags:
             - { name: form.type, alias: hopitalnumerique_module_session }
 

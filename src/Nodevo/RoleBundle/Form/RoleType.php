@@ -8,13 +8,20 @@ use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
 use Doctrine\ORM\EntityRepository;
 
+use HopitalNumerique\ReferenceBundle\Manager\ReferenceManager;
+
 class RoleType extends AbstractType
 {
     private $_constraints = array();
+    /**
+     * @var \HopitalNumerique\ReferenceBundle\Manager\ReferenceManager
+     */
+    private $referenceManager;
 
-    public function __construct($manager, $validator)
+    public function __construct($manager, $validator, ReferenceManager $referenceManager)
     {
         $this->_constraints = $manager->getConstraints( $validator );
+        $this->referenceManager = $referenceManager;
     }
     
     public function buildForm(FormBuilderInterface $builder, array $options)
@@ -32,15 +39,10 @@ class RoleType extends AbstractType
             $builder
                 ->add('etat', 'entity', array(
                     'class'       => 'HopitalNumeriqueReferenceBundle:Reference',
+                    'choices'       => $this->referenceManager->findByCode('ETAT'),
                     'property'    => 'libelle',
                     'required'    => true,
                     'label'       => 'Etat',
-                    'query_builder' => function(EntityRepository $er) {
-                        return $er->createQueryBuilder('ref')
-                                  ->where('ref.code = :etat')
-                                  ->setParameter('etat', 'ETAT')
-                                  ->orderBy('ref.order', 'ASC');
-                    }
                 ));
         }
     }

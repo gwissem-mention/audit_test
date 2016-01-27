@@ -47,7 +47,7 @@ services:
     #--Type
     hopitalnumerique_user.form.type.user:
         class: %hopitalnumerique_user.form.type.user%
-        arguments: ["@hopitalnumerique_user.manager.user", "@validator", "@nodevo_role.manager.role", "@security.context", "@hopitalnumerique_user.manager.user"]
+        arguments: ["@hopitalnumerique_user.manager.user", "@validator", "@nodevo_role.manager.role", "@security.context", "@hopitalnumerique_user.manager.user", "@hopitalnumerique_reference.manager.reference"]
         tags:
             - { name: form.type, alias: nodevo_user_user }
     #--Grid

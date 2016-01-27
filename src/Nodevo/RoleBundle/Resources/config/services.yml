@@ -21,6 +21,6 @@ services:
 
     nodevo_role.form.role:
         class: %nodevo_role.form.role.class%
-        arguments: ["@nodevo_role.manager.role", "@validator"]
+        arguments: ["@nodevo_role.manager.role", "@validator", "@hopitalnumerique_reference.manager.reference"]
         tags:
             - { name: form.type, alias: nodevo_role_role }

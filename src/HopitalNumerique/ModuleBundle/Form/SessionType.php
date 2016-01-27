@@ -8,6 +8,8 @@ use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
 use Doctrine\ORM\EntityRepository;
 
+use HopitalNumerique\ReferenceBundle\Manager\ReferenceManager;
+
 /**
  * 
  * @author Gaetan MELCHILSEN
@@ -16,10 +18,15 @@ use Doctrine\ORM\EntityRepository;
 class SessionType extends AbstractType
 {
     private $_constraints = array();
+    /**
+     * @var \HopitalNumerique\ReferenceBundle\Manager\ReferenceManager
+     */
+    private $referenceManager;
     
-    public function __construct($manager, $validator)
+    public function __construct($manager, $validator, ReferenceManager $referenceManager)
     {
         $this->_constraints = $manager->getConstraints( $validator );
+        $this->referenceManager = $referenceManager;
     }
     
     public function buildForm(FormBuilderInterface $builder, array $options)
@@ -45,17 +52,12 @@ class SessionType extends AbstractType
             ))
             ->add('duree', 'entity', array(
                     'class'         => 'HopitalNumeriqueReferenceBundle:Reference',
+                    'choices'       => $this->referenceManager->findByCode('DUREE_FORMATION'),
                     'property'      => 'libelle',
                     'required'      => true,
                     'label'         => 'Durée',
                     'empty_value'   => ' - ',
                     'attr'          => array('class' => $this->_constraints['duree']['class'] ),
-                    'query_builder' => function(EntityRepository $er) {
-                        return $er->createQueryBuilder('ref')
-                        ->where('ref.code = :etat')
-                        ->setParameter('etat', 'DUREE_FORMATION')
-                        ->orderBy('ref.order', 'ASC');
-                    }
             ))
             ->add('horaires', 'textarea', array(
                     'required' => true,
@@ -117,6 +119,7 @@ class SessionType extends AbstractType
             ))
             ->add('connaissances', 'genemu_jqueryselect2_entity', array(
                     'class'         => 'HopitalNumeriqueReferenceBundle:Reference',
+                    'choices'       => $this->referenceManager->findByCode('CONNAISSANCES_AMBASSADEUR_SI'),
                     'property'      => 'libelle',
                     'multiple'      => true,
                     'required'      => false,
@@ -124,14 +127,6 @@ class SessionType extends AbstractType
                     'label'         => 'Connaissances concernées',
                     'empty_value'   => ' - ',
                     'attr'          => array('class' => 'connaissances'),
-                    'query_builder' => function(EntityRepository $er) {
-                        return $er->createQueryBuilder('ref')
-                            ->where('ref.code = :etat')
-                            ->setParameter('etat', 'CONNAISSANCES_AMBASSADEUR_SI')
-                            ->leftJoin('ref.parent', 'parent')
-                            ->orderBy('parent.libelle', 'ASC')
-                            ->addOrderBy('ref.order', 'ASC');
-                    }
             ))
             ->add('textMailRappel', 'textarea', array(
                     'required' => false,
@@ -147,17 +142,12 @@ class SessionType extends AbstractType
             ->add('path', 'hidden')
             ->add('etat', 'entity', array(
                     'class'         => 'HopitalNumeriqueReferenceBundle:Reference',
+                    'choices'       => $this->referenceManager->findByCode('STATUT_SESSION_FORMATION'),
                     'property'      => 'libelle',
                     'required'      => true,
                     'label'         => 'Etat',
                     'empty_value'   => ' - ',
                     'attr'          => array('class' => $this->_constraints['etat']['class'] ),
-                    'query_builder' => function(EntityRepository $er) {
-                        return $er->createQueryBuilder('ref')
-                        ->where('ref.code = :etat')
-                        ->setParameter('etat', 'STATUT_SESSION_FORMATION')
-                        ->orderBy('ref.order', 'ASC');
-                    }
             ))
             ->add('archiver', 'checkbox', array(
                 'required' => false, 

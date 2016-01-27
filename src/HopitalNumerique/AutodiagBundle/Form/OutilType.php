@@ -11,6 +11,7 @@ use HopitalNumerique\AutodiagBundle\Manager\ProcessManager;
 use HopitalNumerique\AutodiagBundle\Manager\ChapitreManager;
 use HopitalNumerique\QuestionnaireBundle\Manager\QuestionnaireManager;
 use HopitalNumerique\UserBundle\Manager\UserManager;
+use HopitalNumerique\ReferenceBundle\Manager\ReferenceManager;
 
 class OutilType extends AbstractType
 {
@@ -20,8 +21,12 @@ class OutilType extends AbstractType
     private $processManager;
     private $chapitreManager;
     private $questionnaireManager;
+    /**
+     * @var \HopitalNumerique\ReferenceBundle\Manager\ReferenceManager
+     */
+    private $referenceManager;
 
-    public function __construct($manager, $validator, ProcessManager $processManager, ChapitreManager $chapitreManager, QuestionnaireManager $questionnaireManager, UserManager $userManager)
+    public function __construct($manager, $validator, ProcessManager $processManager, ChapitreManager $chapitreManager, QuestionnaireManager $questionnaireManager, UserManager $userManager, ReferenceManager $referenceManager)
     {
         $this->validator = $validator;
         $this->_constraints = $manager->getConstraints( $validator );
@@ -31,6 +36,7 @@ class OutilType extends AbstractType
         $this->questionnaireManager = $questionnaireManager;
 
         $this->_userManager = $userManager;
+        $this->referenceManager = $referenceManager;
     }
 
     public function buildForm(FormBuilderInterface $builder, array $options)
@@ -227,15 +233,10 @@ class OutilType extends AbstractType
             ))
             ->add('statut', 'entity', array(
                 'class'         => 'HopitalNumeriqueReferenceBundle:Reference',
+                'choices'       => $this->referenceManager->findByCode('ETAT'),
                 'property'      => 'libelle',
                 'required'      => true,
                 'label'         => 'Statut',
-                'query_builder' => function(EntityRepository $er) {
-                    return $er->createQueryBuilder('ref')
-                              ->where('ref.code = :etat')
-                              ->setParameter('etat', 'ETAT')
-                              ->orderBy('ref.order', 'ASC');
-                }
             ))
         ;
     }

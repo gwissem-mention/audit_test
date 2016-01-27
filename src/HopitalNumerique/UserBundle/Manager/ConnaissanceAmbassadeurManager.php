@@ -24,4 +24,9 @@ class ConnaissanceAmbassadeurManager extends BaseManager
 
         return $connaissanceAmbassadeursOrdered;
     }
+
+    public function findByAmbassadeur($ambassadeur)
+    {
+        return $this->getRepository()->findByAmbassadeur($ambassadeur);
+    }
 }

@@ -6,10 +6,21 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
+use HopitalNumerique\ReferenceBundle\Manager\ReferenceManager;
 use Doctrine\ORM\EntityRepository;
 
 class ActiviteExpertType extends AbstractType
 {
+    /**
+     * @var \HopitalNumerique\ReferenceBundle\Manager\ReferenceManager
+     */
+    private $referenceManager;
+
+    public function __construct(ReferenceManager $referenceManager)
+    {
+        $this->referenceManager = $referenceManager;
+    }
+
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
@@ -21,16 +32,11 @@ class ActiviteExpertType extends AbstractType
             ))
             ->add('typeActivite', 'entity', array(
                 'class'         => 'HopitalNumeriqueReferenceBundle:Reference',
+                'choices'       => $this->referenceManager->findByCode('ACTIVITE_TYPE'),
                 'property'      => 'libelle',
                 'required'      => true,
                 'label'         => 'Type d\'activité',
                 'empty_value'   => ' - ',
-                'query_builder' => function(EntityRepository $er) {
-                    return $er->createQueryBuilder('ref')
-                              ->where('ref.code = :etat')
-                              ->setParameter('etat', 'ACTIVITE_TYPE')
-                              ->orderBy('ref.libelle', 'ASC');
-                },
                 'attr'         => array('class' => 'validate[required]')
             ))
             ->add('dateDebut', 'genemu_jquerydate', array(
@@ -70,26 +76,16 @@ class ActiviteExpertType extends AbstractType
                 'required'      => true,
                 'label'         => 'Prestataire affecté',
                 'empty_value'   => ' - ',
-                'query_builder' => function(EntityRepository $er) {
-                    return $er->createQueryBuilder('ref')
-                              ->where('ref.code = :etat')
-                              ->setParameter('etat', 'PRESTATAIRE')
-                              ->orderBy('ref.libelle', 'ASC');
-                },
+                'choices'       => $this->referenceManager->findByCode('PRESTATAIRE'),
                 'attr'         => array('class' => 'validate[required]')
             ))
             ->add('uniteOeuvreConcerne', 'entity', array(
                 'class'         => 'HopitalNumeriqueReferenceBundle:Reference',
+                'choices'       => $this->referenceManager->findByCode('UO_PRESTATAIRE'),
                 'property'      => 'libelle',
                 'required'      => true,
                 'label'         => 'Unité d\'oeuvre concernée',
                 'empty_value'   => ' - ',
-                'query_builder' => function(EntityRepository $er) {
-                    return $er->createQueryBuilder('ref')
-                              ->where('ref.code = :etat')
-                              ->setParameter('etat', 'UO_PRESTATAIRE')
-                              ->orderBy('ref.libelle', 'ASC');
-                },
                 'attr'         => array('class' => 'validate[required]')
             ))
             ->add('anapiens', 'genemu_jqueryselect2_entity', array(
@@ -106,16 +102,11 @@ class ActiviteExpertType extends AbstractType
             ))
             ->add('etat', 'entity', array(
                 'class'         => 'HopitalNumeriqueReferenceBundle:Reference',
+                'choices'       => $this->referenceManager->findByCode('ACTIVITE_EXPERT_ETAT'),
                 'property'      => 'libelle',
                 'required'      => true,
                 'label'         => 'Etat',
                 'empty_value'   => ' - ',
-                'query_builder' => function(EntityRepository $er) {
-                    return $er->createQueryBuilder('ref')
-                              ->where('ref.code = :etat')
-                              ->setParameter('etat', 'ACTIVITE_EXPERT_ETAT')
-                              ->orderBy('ref.libelle', 'ASC');
-                },
                 'attr'         => array('class' => 'validate[required]')
             )) 
             // ->add('etatValidation', 'checkbox', array(

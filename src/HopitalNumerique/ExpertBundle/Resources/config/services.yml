@@ -21,7 +21,7 @@ services:
 
     hopitalnumerique_expert.form.activiteexpert:
         class: %hopitalnumerique_expert.form.activiteexpert.class%
-        arguments: ["@hopitalnumerique_expert.manager.activiteexpert", "@validator"]
+        arguments: ["@hopitalnumerique_reference.manager.reference"]
         tags:
             - { name: form.type, alias: hopitalnumerique_expert_activiteexpert }
 

@@ -72,7 +72,7 @@ class UserManager
      */
     public function getCivilitesChoices()
     {
-        return $this->referenceManager->findBy(array('code' => 'CIVILITE'));
+        return $this->referenceManager->findByCode('CIVILITE');
     }
     /**
      * Retourne la liste des titres pour les listes de formulaire.
@@ -81,7 +81,7 @@ class UserManager
      */
     public function getTitresChoices()
     {
-        return $this->referenceManager->findBy(array('code' => 'TITRE'));
+        return $this->referenceManager->findByCode('TITRE');
     }
     /**
      * Retourne la liste des régions pour les listes de formulaire.
@@ -90,7 +90,7 @@ class UserManager
      */
     public function getRegionsChoices()
     {
-        return $this->referenceManager->findBy(array('code' => 'REGION'), array('libelle' => 'ASC'));
+        return $this->referenceManager->findByCode('REGION');
     }
     /**
      * Retourne la liste des départements pour les listes de formulaire.
@@ -99,7 +99,7 @@ class UserManager
      */
     public function getDepartementsChoices()
     {
-        return $this->referenceManager->findBy(array('code' => 'DEPARTEMENT'), array('libelle' => 'ASC'));
+        return $this->referenceManager->findByCode('DEPARTEMENT');
     }
     /**
      * Retourne la liste des établissements pour les listes de formulaire.
@@ -117,7 +117,7 @@ class UserManager
      */
     public function getFonctionsEtablissementSanteChoices()
     {
-        return $this->referenceManager->findBy(array('code' => 'FONCTION_ES'), array('libelle' => 'ASC'));
+        return $this->referenceManager->findByCode('FONCTION_ES');
     }
     /**
      * Retourne la liste des utilisateurs pour les listes de formulaire.
