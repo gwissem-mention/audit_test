@@ -62,7 +62,11 @@
                                                                 <div class="total">
                                                                     {% set totalUserDocuments = groupe.userDocuments(user)|length %}
                                                                     <strong>{{ totalUserDocuments }}</strong>
-                                                                    Document{{ totalUserDocuments > 1 ? 's' : '' }}<br>déposé{{ totalUserDocuments > 1 ? 's' : '' }}
+                                                                    {% if totalUserDocuments >= 1 %}
+                                                                        <a href="{{ path('hopitalnumerique_communautepratique_user_viewforgroupe', { user:user.id, groupe:groupe.id }) }}#documents">Document{{ totalUserDocuments > 1 ? 's' : '' }}<br>déposé{{ totalUserDocuments > 1 ? 's' : '' }}</a>
+                                                                    {% else %}
+                                                                        Document<br>déposé
+                                                                    {% endif %}
                                                                 </div>
                                                                 <div class="total">
                                                                     {% set totalUserCommentaires = groupe.totalUserCommentaires(user) %}
@@ -223,7 +227,7 @@
             <div class="col-md-12">
                 <div class="panel panel-communaute-de-pratiques" id="panel-communaute-de-pratiques-forums">
                     <div class="panel-heading">
-                        <h2 class="lien-titre"><a href="{{ path('ccdn_forum_user_category_index', { forumName:forum.name }) }}"><em class="icon icon-chat27"></em> Échanger avec toute la communauté</a></h2>
+                        <h2 class="lien-titre"><a href="{{ path('ccdn_forum_user_category_index') }}"><em class="icon icon-chat27"></em> Échanger avec toute la communauté</a></h2>
                     </div>
                     <div class="panel-body">
 
