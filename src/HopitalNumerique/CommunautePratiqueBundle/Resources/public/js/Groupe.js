@@ -10,7 +10,7 @@ $(document).ready(function() {
     var url= window.location.pathname;
     $("div.row > div.col-md-3 > a").each(function(i){
     	if ($(this).attr("href") == url ) {
-    		$(this).addClass("btn-sommaire");
+    		$(this).find('span').addClass("btn-sommaire");
     	}
     });
     if(window.location.href.contains('#')) {
