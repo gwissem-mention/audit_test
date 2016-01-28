@@ -19,7 +19,7 @@
     </div>
 {% endblock %}
 
-{% block communaute_pratique_breadcrumbs_parent %}<li><a href="{{ path('hopitalnumerique_communautepratique_groupe_view', { groupe:groupe.id }) }}">Groupe de travail {{ groupe }}</a></li>{% endblock %}
+{% block communaute_pratique_breadcrumbs_parent %}<li><a href="{{ path('hopitalnumerique_communautepratique_groupe_view', { groupe:groupe.id }) }}">Groupe thématique {{ groupe }}</a></li>{% endblock %}
 
 {% block communaute_pratique_sommaire %}{% endblock %}
 
@@ -56,7 +56,7 @@
         </div>
 
         {% if pagerFantaMembres.nbPages > 1 %}
-            <div class="text-center">{{ pagerfanta(pagerFantaMembres, 'hopitalnumerique_communautepratique') }}<span class="resultats-nombre"> {{ pagerFantaMembres.count }} menbres</span></div>
+            <div class="text-center">{{ pagerfanta(pagerFantaMembres, 'hopitalnumerique_communautepratique') }}<span class="resultats-nombre"> {{ pagerFantaMembres.count }} membres</span></div>
         {% endif %}
 
     </div>

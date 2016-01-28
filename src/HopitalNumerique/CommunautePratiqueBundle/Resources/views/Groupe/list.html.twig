@@ -1,6 +1,6 @@
 {% extends 'HopitalNumeriqueCommunautePratiqueBundle::layout.html.twig' %}
 
-{% block title_communaute_pratique %}Groupes de travail{% endblock %}
+{% block title_communaute_pratique %}Groupes thématique{% endblock %}
 
 {% block body_communaute_pratique %}
 
@@ -11,8 +11,8 @@
             
             <div>
                 <ul class="nav nav-tabs" role="tablist">
-                    <li role="presentation"{{ groupesNonDemarres|length > 0 or groupesEnCours|length == 0 ? ' class="active"' : '' }}><a href="#a-venir" aria-controls="a-venir" role="tab" data-toggle="tab"><em class="icon-social20"></em> &nbsp; Groupes de travail à venir</a></li>
-                    <li role="presentation"{{ groupesNonDemarres|length == 0 and groupesEnCours|length > 0 ? ' class="active"' : '' }}><a href="#en-cours" aria-controls="en-cours" role="tab" data-toggle="tab"><em class="icon-social20"></em> &nbsp; Groupes de travail en cours</a></li>
+                    <li role="presentation"{{ groupesNonDemarres|length > 0 or groupesEnCours|length == 0 ? ' class="active"' : '' }}><a href="#a-venir" aria-controls="a-venir" role="tab" data-toggle="tab"><em class="icon-social20"></em> &nbsp; Groupes thématique à venir</a></li>
+                    <li role="presentation"{{ groupesNonDemarres|length == 0 and groupesEnCours|length > 0 ? ' class="active"' : '' }}><a href="#en-cours" aria-controls="en-cours" role="tab" data-toggle="tab"><em class="icon-social20"></em> &nbsp; Groupes thématique en cours</a></li>
                     <li role="presentation"{{ groupesNonDemarres|length == 0 and groupesEnCours|length > 0 ? ' class="active"' : '' }}><a href="{{ path('hopitalnumerique_communautepratique_publication_list') }}"><em class="icon-social20"></em> &nbsp; Groupes terminés</a></li>
                 </ul>
                 <div class="tab-content">
@@ -21,7 +21,7 @@
                         {% for groupeNonDemarre in groupesNonDemarres %}
                             {{ communaute_pratique.display_groupe(groupeNonDemarre) }}
                         {% else %}
-                            <p class="text-center">&nbsp;<br>Aucun groupe de travail à venir<br>&nbsp;</p>
+                            <p class="text-center">&nbsp;<br>Aucun groupe thématique à venir<br>&nbsp;</p>
                         {% endfor %}
 
                     </div>
@@ -30,7 +30,7 @@
                         {% for groupeEnCours in groupesEnCours %}
                             {{ communaute_pratique.display_groupe(groupeEnCours) }}
                         {% else %}
-                            <p class="text-center">&nbsp;<br>Aucun groupe de travail en cours<br>&nbsp;</p>
+                            <p class="text-center">&nbsp;<br>Aucun groupe thématique en cours<br>&nbsp;</p>
                         {% endfor %}
 
                     </div>

@@ -193,7 +193,7 @@
 
                 <div class="panel panel-communaute-de-pratiques" id="panel-communaute-de-pratiques-groupes">
                     <div class="panel-heading">
-                        <h2 class="lien-titre"><a href="{{ path('hopitalnumerique_communautepratique_groupe_list') }}"><em class="icon icon-social20"></em> Groupes de travail</a></h2>
+                        <h2 class="lien-titre"><a href="{{ path('hopitalnumerique_communautepratique_groupe_list') }}"><em class="icon icon-social20"></em> Groupes thématique</a></h2>
                     </div>
                     <div class="panel-body">
 
@@ -202,10 +202,10 @@
                                 {{ communaute_pratique.display_groupe(groupe) }}
                             {%- endfor -%}
                             <nav class="lien">
-                                <a href="{{ path('hopitalnumerique_communautepratique_groupe_list') }}"><em class="fa fa-angle-double-right"></em> &nbsp; Voir tous les groupes de travail</a>
+                                <a href="{{ path('hopitalnumerique_communautepratique_groupe_list') }}"><em class="fa fa-angle-double-right"></em> &nbsp; Voir tous les groupes thématique</a>
                             </nav>
                         {%- else -%}
-                            <p>Aucun groupe de travail</p>
+                            <p>Aucun groupe thématique</p>
                         {%- endif -%}
 
                     </div>

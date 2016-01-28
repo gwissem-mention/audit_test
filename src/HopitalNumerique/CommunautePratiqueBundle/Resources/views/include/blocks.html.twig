@@ -336,7 +336,7 @@
                                 <p>Aucune participation à un groupe pour l'instant.</p>
                         
                             {% else %}
-                                <p><strong>{{ user.appellation }} a participé aux groupes de travail suivants :</strong></p>
+                                <p><strong>{{ user.appellation }} a participé aux groupes thématique suivants :</strong></p>
                                 {% if groupesTermines|length > 0 %}
                                     <ul>
                                         {%- for groupe in groupesTermines -%}
@@ -422,7 +422,7 @@
                 <div class="date">
                     {{ groupe.dateDemarrage|date('d/m/Y') }} au {{ groupe.dateFin|date('d/m/Y') }}
                 </div>
-                <h2><em class="icon icon-social20"></em> Groupe de travail {{ groupe }}</h2>
+                <h2><em class="icon icon-social20"></em> Groupe thématique {{ groupe }}</h2>
             </div>
             <div class="panel-body">
 
