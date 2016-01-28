@@ -129,7 +129,7 @@
     <div class="communaute-de-pratiques-sommaire">
         <div class="row">
             <div class="col-md-3">
-                <a class="groupe" href="{{ path('hopitalnumerique_communautepratique_groupe_view', { 'groupe':groupe.id }) }}"><em class="fa fa-home"></em><span> Accueil du groupe</span></a>
+                <a class="groupe" href="{{ path('hopitalnumerique_communautepratique_groupe_view', { 'groupe':groupe.id }) }}"><em class="fa fa-home"></em><span> Groupe thématique</span></a>
             </div>
             <div class="col-md-3">
                 <a class="groupe" href="{{ path('hopitalnumerique_communautepratique_document_listbygroupe', { 'groupe':groupe.id }) }}"><em class="icon icon-documents7"></em><span> Mes documents</span></a>
@@ -336,7 +336,7 @@
                                 <p>Aucune participation à un groupe pour l'instant.</p>
                         
                             {% else %}
-                                <p><strong>{{ user.appellation }} a participé aux groupes thématique suivants :</strong></p>
+                                <p><strong>{{ user.appellation }} a participé aux groupes thématiques suivants :</strong></p>
                                 {% if groupesTermines|length > 0 %}
                                     <ul>
                                         {%- for groupe in groupesTermines -%}
@@ -430,11 +430,7 @@
                     <p>
                         <strong>Animateur{{ groupe.animateurs|length > 1 ? 's' : '' }} du groupe</strong> :
                         {% for animateur in groupe.animateurs %}
-                            {%- if groupe.enCours -%}
-                                <a target="_blank" href="{{ path('hopitalnumerique_communautepratique_user_viewforgroupe', { user:animateur.id, groupe:groupe.id }) }}"> {{ animateur.prenom }} {{ animateur.nom }}</a>{{ loop.last ? '' : ', ' }}
-                            {%- else -%}
-                                {{ animateur.prenom }} {{ animateur.nom }}{{ loop.last ? '' : ', ' }}
-                            {%- endif -%}
+                                <a target="_blank" href="{{ path('hopitalnumerique_communautepratique_user_list', { page:1, membreId:animateur.id }) }}"> {{ animateur.prenom }} {{ animateur.nom }}</a>{{ loop.last ? '' : ', ' }}
                         {% endfor -%}
                     </p>
                 {%- endif -%}
@@ -443,11 +439,7 @@
                     <p>
                         <strong>Membre{{ groupe.usersWithoutAnimateurs|length > 1 ? 's' : '' }} du groupe</strong> :
                         {% for membre in groupe.usersWithoutAnimateurs %}
-                            {%- if groupe.enCours -%}
-                                <a target="_blank" href="{{ path('hopitalnumerique_communautepratique_user_viewforgroupe', { user:membre.id, groupe:groupe.id }) }}"> {{ membre.prenom }} {{ membre.nom }}</a>{{ loop.last ? '' : ', ' }}
-                            {%- else -%}
-                                {{ membre.prenom }} {{ membre.nom }}{{ loop.last ? '' : ', ' }}
-                            {%- endif -%}
+                                <a target="_blank" href="{{ path('hopitalnumerique_communautepratique_user_list', { page:1, membreId:membre.id }) }}"> {{ membre.prenom }} {{ membre.nom }}</a>{{ loop.last ? '' : ', ' }}
                         {% endfor -%}
                     </p>
                 {%- endif -%}

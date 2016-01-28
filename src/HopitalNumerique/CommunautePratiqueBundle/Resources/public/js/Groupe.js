@@ -11,7 +11,11 @@ $(document).ready(function() {
     $("div.row > div.col-md-3 > a").each(function(i){
     	if ($(this).attr("href") == url ) {
     		$(this).find('span').addClass("btn-sommaire");
-    	}
+    	} else if (url.contains('fiche') &&  $(this).find('span').text().contains('thématique')) {
+    		$(this).find('span').addClass("btn-sommaire");
+    	} else if (url.contains('user') &&  $(this).find('span').text().contains('Annuaire')) {
+    		$(this).find('span').addClass("btn-sommaire");
+    	}  
     });
     if(window.location.href.contains('#')) {
     	$(".nav-tabs li").removeClass('active');
