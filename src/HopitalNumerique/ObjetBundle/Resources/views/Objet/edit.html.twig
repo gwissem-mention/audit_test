@@ -12,8 +12,8 @@
 
 {% block stylesheets %}
     {{parent()}}
-    {% stylesheets output="compiled/hopitalnumerique-objet-objet-edit.css" filter="cssrewrite, ?yui_css" 
-        "@select2_css" 
+    {% stylesheets output="compiled/hopitalnumerique-objet-objet-edit.css" filter="cssrewrite, ?yui_css"
+        "@select2_css"
         "@fancybox_css"
         "@validationEngine_css"
         "@jquery_toggles_css"
@@ -31,7 +31,7 @@
     {{parent()}}
     {% javascripts output="compiled/hopitalnumerique-objet-objet-edit.js"
         "@nestable_js"
-        "@fancybox_js" 
+        "@fancybox_js"
         "@validationEngine_js"
         "@json_js"
         "@jquery_toggles_js"
@@ -45,7 +45,7 @@
     %}
         <script type="text/javascript" src="{{ asset_url }}"></script>
     {% endjavascripts %}
-    
+
     <script type="text/javascript">
         NodevoGestionnaireMediaBundle_MoxieManager.PARAMETRES_GLOBAUX_URL = '{{ url('nodevo_gestionnaire_media_moxiemanager_json_parametres') }}';
         NodevoGestionnaireMediaBundle_MoxieManager.initParametresGlobaux();
@@ -54,9 +54,6 @@
 
 {% block toolbarButton %}
     {% if objet.id %}
-        {%- if is_granted('ROLE_SUPER_ADMIN') -%}
-            <a class="btn btn-primary" href="{{ path('hopitalnumerique_objet_administration_fichierModifiable', {'id': objet.id}) }}" title="Page d'administration" style="margin-right:30px"><i class="fa fa-cogs"></i></a>
-        {%- endif -%}
         <a class="btn btn-default" href="{{ path('hopitalnumerique_objet_objet_cancel', { 'id': objet.id }) }}" title="Retour à la liste"><i class="fa fa-reply"></i></a>
         <a class="btn btn-default" href="{{ path('hopital_numerique_publication_publication_objet', { 'id': objet.id }) }}" target="_blank" title="Prévisualiser"><i class="fa fa-eye"></i></a>
     {% else %}
@@ -81,13 +78,16 @@
                             <li class="{% if infra %}active{% endif %}"><a href="#infra" data-toggle="tab">Infra-documentaire</a></li>
                             <li><a href="#productions" data-toggle="tab">Productions liées</a></li>
                         {% endif %}
+                        {%- if is_granted('ROLE_SUPER_ADMIN') or is_granted('ROLE_ADMINISTRATEUR_DE_DOMAINE_106' or is_granted('ROLE_ADMINISTRATEUR_DU_DOMAINE_HN_107')) -%}
+                            <li><a href="{{ path('hopitalnumerique_objet_administration_fichierModifiable', {'id': objet.id}) }}">Administration</a></li>
+                        {%- endif -%}
                     </ul>
                 </div>
             </div>
 
             <div class="panel-body">
                 {% form_theme form 'HopitalNumeriqueObjetBundle::formObjet.html.twig' %}
-                
+
                 {{ form_start(form) }}
                     {{ form_javascript(form) }}
 
@@ -108,7 +108,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                
+
                                 {{ form_row(form.etat) }}
                                 {{ form_row(form.cibleDiffusion) }}
                                 {{ form_row(form.roles) }}
@@ -124,13 +124,13 @@
                                         </div>
                                     </div>
                                 </div>
-                                
+
                                 <div class="form-group {% if objet.isArticle() %}hide{% endif %}" style="margin-bottom:0">
                                     {{ form_label(form.file) }}
                                     <div class="col-md-9">
                                         {% if objet.getAbsolutePath(1) is not null %}{% set visibility = 'none' %}{% else %}{% set visibility = 'block' %}{% endif %}
                                         <div class="inputUpload" style="display:{{visibility}}">
-                                            {{ form_widget(form.file) }}    
+                                            {{ form_widget(form.file) }}
                                         </div>
 
                                         {% if objet.getAbsolutePath(1) is not null %}
@@ -155,7 +155,7 @@
                                     <div class="col-md-9">
                                         {% if objet.getAbsolutePath(2) is not null %}{% set visibility = 'none' %}{% else %}{% set visibility = 'block' %}{% endif %}
                                         <div class="inputUpload" style="display:{{visibility}}">
-                                            {{ form_widget(form.file2) }}    
+                                            {{ form_widget(form.file2) }}
                                         </div>
 
                                         {% if objet.getAbsolutePath(2) is not null %}
@@ -174,7 +174,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                
+
                                 <div class="vignetteBlock form-group {% if not objet.isArticle() %}hide{% endif %}">
                                     {{ form_label(form.vignette) }}
                                     <div class="col-md-9">
@@ -182,7 +182,7 @@
                                             {{ form_widget(form.vignette) }}
                                             <div class="input-group-btn">
                                                 <button type="button" class="btn btn-info" onclick="moxman.browse({fields: 'hopitalnumerique_objet_objet_vignette', no_host: true});">Parcourir</button>
-                                            </div>    
+                                            </div>
                                         </div>
                                     </div>
                                     <div class="col-md-9 col-md-offset-3">
@@ -231,7 +231,7 @@
                                         {{ form_widget(form.publicationPlusConsulte) }}
                                     </div>
                                 </div>
-    
+
                                 <div class="form-group">
                                     {{ form_label(form.btnSociaux) }}
                                     <div class="col-md-5">
@@ -243,7 +243,7 @@
                                         </div>
                                     </div>
                                 </div>
-    
+
                                 <div class="form-group">
                                     {{ form_label(form.commentaires) }}
                                     <div class="col-md-5">
@@ -303,7 +303,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                
+
                                 <div class="form-group">
                                     {{ form_label(form.dateFinPublication) }}
                                     <div class="col-md-5">
@@ -315,7 +315,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                
+
                                 <div class="form-group">
                                     {{ form_label(form.dateModification) }}
                                     <div class="col-md-5">
@@ -434,7 +434,7 @@
                     </div>
                 {{ form_end(form) }}
             </div>
-            
+
             {% if objet.id %}
                 <input type="hidden" id="add-contenu-url" value="{{path('hopitalnumerique_objet_contenu_add', {'id':objet.id})}}" />
                 <input type="hidden" id="reorder-objet-url" value="{{path('hopitalnumerique_objet_contenu_reorder')}}" />
@@ -468,7 +468,7 @@
             <a href="{{path('hopitalnumerique_objet_reference_contenu_own', {'id':contenu.id})}}" class="pull-right dd3-eye manageReferences fancybox.ajax"><i class="fa fa-eye"></i></a>
             <a href="{{path('hopitalnumerique_objet_reference_contenu', {'id':contenu.id})}}" class="pull-right dd3-cog manageReferences fancybox.ajax"><i class="fa fa-cog"></i></a>
         </div>
-        
+
         {% if contenu.childs %}
             <ol class="dd-list">
                 {% import _self as mySelf %}

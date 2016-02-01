@@ -7,7 +7,11 @@
     <div class="communaute-de-pratiques-groupe">
         <div class="row">
             <div class="col-sm-9">
-                <h2>{{ groupe.titre }}</h2>
+                {% if (app.user.hasCommunautePratiqueGroupe(groupe)) %}
+                    <h2><a href="{{ path('hopitalnumerique_communautepratique_groupe_view', { 'groupe':groupe.id }) }}">{{ groupe }}</a></h2>
+                {% else %}
+                    <h2>{{ groupe.titre }}</h2>
+                {% endif %}
                 <p>
                     {{ groupe.descriptionCourte }} <a class="fancybox fancybox.ajax" href="{{ path('hopitalnumerique_communautepratique_groupe_panelinformations', { 'groupe':groupe.id }) }}">En savoir plus</a>
                 </p>
@@ -42,7 +46,7 @@
                         <a class="button" onclick="Contact_Popup.display({{ groupe.animateurEmailsJson }}, '{{ path(app.request.get('_route')) }}', 'Je souhaite participer au groupe {{ groupe.titre|replace({ '\'':'\\\'', '"':'' }) }}');" title="Contactez l’administrateur pour le rejoindre" >Démarré</a>
                     {% endif %}
                 {% elseif (app.user.hasCommunautePratiqueGroupe(groupe)) %}
-                    <span class="button inactive">Vous êtes inscrit</span>
+                    <a class="button" href="{{ path('hopitalnumerique_communautepratique_groupe_view', { groupe: groupe.id }) }}">Vous êtes inscrit</a>
                 {% elseif groupe.users|length >= groupe.nombreParticipantsMaximum %}
                     <a class="button" onclick="Contact_Popup.display({{ groupe.animateurEmailsJson }}, '{{ path(app.request.get('_route')) }}', 'Je souhaite participer au groupe {{ groupe.titre|replace({ '\'':'\\\'', '"':'' }) }}');">Groupe complet contactez l'animateur</a>
                 {% elseif date('now') < groupe.dateInscriptionOuverture %}

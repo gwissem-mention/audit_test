@@ -11,13 +11,13 @@ $(document).ready(function() {
     $("div.row > div.col-md-3 > a").each(function(i){
     	if ($(this).attr("href") == url ) {
     		$(this).find('span').addClass("btn-sommaire");
-    	} else if (url.contains('fiche') &&  $(this).find('span').text().contains('thématique')) {
+    	} else if (url.indexOf('fiche') > -1 &&  $(this).find('span').text().indexOf('thématique') > -1 ) {
     		$(this).find('span').addClass("btn-sommaire");
-    	} else if (url.contains('user') &&  $(this).find('span').text().contains('Annuaire')) {
+    	} else if (url.indexOf('user') > -1 &&  $(this).find('span').text().indexOf('Annuaire') > -1 ) {
     		$(this).find('span').addClass("btn-sommaire");
     	}  
     });
-    if(window.location.href.contains('#')) {
+    if(window.location.href.indexOf('#') > -1) {
     	$(".nav-tabs li").removeClass('active');
     	$(".nav-tabs li").last().addClass('active');
     	$(".tab-content div").removeClass('active');
