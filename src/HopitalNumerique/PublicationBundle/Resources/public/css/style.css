@@ -62,7 +62,8 @@
     #publication .col-md-4 div.wrapper .fa-download{margin:3px 0 0 7px;}
     #publication .titre-infradoc a{font-size: 22px;}
     #publication .titre-infradoc-pdf {display: none;}
-
+    #publication table {margin: 0 20px 20px 0;}
+    #publication table td {padding: 5px;}
 
     /* Résultats */
     #publication #resultats{ margin-top: 20px; }
@@ -125,6 +126,7 @@
     #publication #productions-associes .wrapper-results .results a.synthese{font-size: 11px; color:#161616; background: url('../img/synthese.png') no-repeat right center; padding-right:25px; margin-top:10px; display: block; height: 18px; text-align: right}
     #publication #productions-associes .wrapper-results .results p{font-size: 13px; color:#070707; }
     #publication #productions-associes .wrapper-results .results .fa-refresh{ color:#3da20b; }
+    #publication #productions-associes ul li {font-size: 13px;}
     
     /* Bloc Date de parution - source du document */
     #publication #date-source{font-weight:bold;font-size:12px;margin-top:20px;}
