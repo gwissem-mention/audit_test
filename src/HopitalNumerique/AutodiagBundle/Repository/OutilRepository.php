@@ -112,7 +112,7 @@ class OutilRepository extends EntityRepository
             ->select('outilResultat.id AS resultatId, outilChapitre.id AS chapitreId')
             ->from('HopitalNumeriqueAutodiagBundle:Chapitre', 'outilChapitre')
             ->where('outilChapitre.parent IS NULL')
-            ->andWhere('outilReponse IS NOT NULL')
+            ->andWhere('outilReponse.id IS NOT NULL')
             ->leftJoin('outilChapitre.enfants', 'outilChapitreEnfant')
             ->innerJoin('outilChapitre.outil', 'outil', 'WITH', 'outil = :outil')
             ->setParameter('outil', $outil)
