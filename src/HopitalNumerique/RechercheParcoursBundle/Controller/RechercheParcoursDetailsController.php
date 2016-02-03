@@ -11,6 +11,8 @@ use HopitalNumerique\ReferenceBundle\Entity\Reference;
 use HopitalNumerique\RechercheParcoursBundle\Entity\RechercheParcours;
 use HopitalNumerique\RechercheParcoursBundle\Entity\RechercheParcoursDetails;
 
+use Doctrine\Common\Cache\ApcCache;
+
 use Nodevo\ToolsBundle\Tools\Chaine;
 
 class RechercheParcoursDetailsController extends Controller
@@ -132,7 +134,7 @@ class RechercheParcoursDetailsController extends Controller
      *
      * @return [type]
      */
-    public function indexFrontAction($id, $alias, $idEtape, $etape,$idRefEtapeChild = null, $libRefEtapeChild = null )
+    public function indexFrontAction($id, $alias, $idEtape, $etape, $idRefEtapeChild = null, $libRefEtapeChild = null )
     {
         $request   = $this->get('request');
         $domaineId = $request->getSession()->get('domaineId');
@@ -202,241 +204,234 @@ class RechercheParcoursDetailsController extends Controller
             }
         }
 
-        //Récupération des références + Tri pour l'affichage des points dur
-        $referenceRechercheParcours        = $this->get('hopitalnumerique_reference.manager.reference')->findOneBy( array( 'id' => intval($rechercheParcours->getReference()->getId()) ) );
-        $referenceRechercheParcoursDetails = $this->get('hopitalnumerique_reference.manager.reference')->findOneBy( array( 'id' => intval($rechercheParcoursDetails->getReference()->getId()) ) );
-        // $refChilds = $this->get('hopitalnumerique_reference.manager.reference')->findBy( array( 
-        //                 'parent' => intval( $rechercheParcoursDetails->getReference()->getId() ),
-        //                 'domaine' => 
-        //             ));
-        $refChilds = $this->get('hopitalnumerique_reference.manager.reference')->getRefsByDomaineByParent(
-                intval( $rechercheParcoursDetails->getReference()->getId() ), 
+        $cacheDriver = new ApcCache();
+        $cacheName = "54_pointDur_objet_" . $idEtape;
+        if ($cacheDriver->contains($cacheName))
+        {
+            $cache = $cacheDriver->fetch($cacheName);
+
+            $rechercheParcoursDetails = $cache['rechercheParcoursDetails'];
+            $objets               = $cache['objets'];
+            $notes                = $cache['notes'];
+            $notesMoyenneParEtape = $cache['notesMoyenneParEtape'];
+            $notesJSON            = $cache['notesJSON'];
+            $refChilds            = $cache['refChilds'];
+            $refChildSelected     = $cache['refChildSelected'];
+        }
+        else {
+            //Récupération des références + Tri pour l'affichage des points dur
+            $referenceRechercheParcours = $this->get('hopitalnumerique_reference.manager.reference')->findOneBy(array('id' => intval($rechercheParcours->getReference()->getId())));
+            $referenceRechercheParcoursDetails = $this->get('hopitalnumerique_reference.manager.reference')->findOneBy(array('id' => intval($rechercheParcoursDetails->getReference()->getId())));
+            // $refChilds = $this->get('hopitalnumerique_reference.manager.reference')->findBy( array(
+            //                 'parent' => intval( $rechercheParcoursDetails->getReference()->getId() ),
+            //                 'domaine' =>
+            //             ));
+            $refChilds = $this->get('hopitalnumerique_reference.manager.reference')->getRefsByDomaineByParent(
+                intval($rechercheParcoursDetails->getReference()->getId()),
                 $domaineId
-        );
-        $refChildSelected = null;
+            );
+            $refChildSelected = null;
 
-        $referencesTemp = array();
-        $referencesTemp[] = $referenceRechercheParcours;
+            $referencesTemp = array();
+            $referencesTemp[] = $referenceRechercheParcours;
 
-        //Dans le cas où l'on affiche les enfants du détails, on récupère les références enfant de la référence du détail
-        if($rechercheParcoursDetails->getShowChildren() && !empty($refChilds))
-        {
-            if(is_null($idRefEtapeChild))
-            {
-                $refChildSelected = $refChilds[0];
-            }
-            else
-            {
-                $refChildSelected = $this->get('hopitalnumerique_reference.manager.reference')->findOneBy( array( 
-                                        'id' => intval( $idRefEtapeChild )
-                                    ));
-            }
-        }
-        elseif(count($refChilds) > 0)
-        {
-            foreach ( $refChilds as $refChild)
-            {
-                $referencesTemp[] = $refChild;
-            }
-        }
-
-        $referencesTemp[] = $rechercheParcoursDetails->getShowChildren() && !empty($refChilds) ? $refChildSelected : $referenceRechercheParcoursDetails;
-
-        if($rechercheParcoursDetails->getShowChildren())
-        {
-            //GME 11/08/2015 : Ajout d'un tableau des ref parents lors de l'affichage des enfants pour la récup des notes 
-            //Correspondant à la recherche du parent
-            $referencesTempParent = array();
-            foreach ($referencesTemp as $ref) 
-            {
-                $referencesTempParent[] = $ref;
-            }
-            foreach ( $refChilds as $refChild)
-            {
-                $referencesTempParent[] = $refChild;
-            }
-        }
-
-        //Récupération des infos de l'utilisateur, si il y en a un connecté, pour ajouter les filtres "Etablissement" et "Métier"
-        if('anon.' !== $user)
-        {
-            //Type d'établissement
-            if(!is_null($user->getStatutEtablissementSante()))
-            {
-                $referencesTemp[] =  $user->getStatutEtablissementSante();
-
-                if($rechercheParcoursDetails->getShowChildren())
-                {
-                    $referencesTempParent[] =  $user->getStatutEtablissementSante();
+            //Dans le cas où l'on affiche les enfants du détails, on récupère les références enfant de la référence du détail
+            if ($rechercheParcoursDetails->getShowChildren() && !empty($refChilds)) {
+                if (is_null($idRefEtapeChild)) {
+                    $refChildSelected = $refChilds[0];
+                } else {
+                    $refChildSelected = $this->get('hopitalnumerique_reference.manager.reference')->findOneBy(array(
+                        'id' => intval($idRefEtapeChild)
+                    ));
+                }
+            } elseif (count($refChilds) > 0) {
+                foreach ($refChilds as $refChild) {
+                    $referencesTemp[] = $refChild;
                 }
             }
 
-            //Métier internaute
-            if(!is_null($user->getProfilEtablissementSante()))
-            {
-                $referencesTemp[] =  $user->getProfilEtablissementSante();
-                
-                if($rechercheParcoursDetails->getShowChildren())
-                {
-                    $referencesTempParent[] =  $user->getProfilEtablissementSante();
+            $referencesTemp[] = $rechercheParcoursDetails->getShowChildren() && !empty($refChilds) ? $refChildSelected : $referenceRechercheParcoursDetails;
+
+            if ($rechercheParcoursDetails->getShowChildren()) {
+                //GME 11/08/2015 : Ajout d'un tableau des ref parents lors de l'affichage des enfants pour la récup des notes
+                //Correspondant à la recherche du parent
+                $referencesTempParent = array();
+                foreach ($referencesTemp as $ref) {
+                    $referencesTempParent[] = $ref;
+                }
+                foreach ($refChilds as $refChild) {
+                    $referencesTempParent[] = $refChild;
                 }
             }
-                
-        }
 
-        //Parcourt les références de la réponse, puis les tris pour l'affichage de la recherche
-        foreach ($referencesTemp as $reference) 
-        {
-            //Récupère la référence courante
-            $referenceTemp = $reference;
+            //Récupération des infos de l'utilisateur, si il y en a un connecté, pour ajouter les filtres "Etablissement" et "Métier"
+            if ('anon.' !== $user) {
+                //Type d'établissement
+                if (!is_null($user->getStatutEtablissementSante())) {
+                    $referencesTemp[] = $user->getStatutEtablissementSante();
 
-            //Récupère le premier parent
-            while(!is_null($referenceTemp->getParent())
-                    && $referenceTemp->getParent()->getId() != null)
-            {
-                $referenceTemp = $referenceTemp->getParent();
+                    if ($rechercheParcoursDetails->getShowChildren()) {
+                        $referencesTempParent[] = $user->getStatutEtablissementSante();
+                    }
+                }
+
+                //Métier internaute
+                if (!is_null($user->getProfilEtablissementSante())) {
+                    $referencesTemp[] = $user->getProfilEtablissementSante();
+
+                    if ($rechercheParcoursDetails->getShowChildren()) {
+                        $referencesTempParent[] = $user->getProfilEtablissementSante();
+                    }
+                }
+
             }
 
-            //Trie la référence dans la bonne catégorie
-            switch ($referenceTemp->getId()) 
-            {
-                case 220:
-                    $references['categ1'][] = $reference->getId();
-                    break;
-                case 221:
-                    $references['categ2'][] = $reference->getId();
-                    break;
-                case 223:
-                    $references['categ3'][] = $reference->getId();
-                    break;
-                case 222:
-                    $references['categ4'][] = $reference->getId();
-                    break;
-            }
-        }
-
-        if($rechercheParcoursDetails->getShowChildren())
-        {
-            //Recherche de l'étape parent
-            foreach ($referencesTempParent as $reference) 
-            {
+            //Parcourt les références de la réponse, puis les tris pour l'affichage de la recherche
+            foreach ($referencesTemp as $reference) {
                 //Récupère la référence courante
                 $referenceTemp = $reference;
 
                 //Récupère le premier parent
-                while(!is_null($referenceTemp->getParent())
-                        && $referenceTemp->getParent()->getId() != null)
-                {
+                while (!is_null($referenceTemp->getParent())
+                    && $referenceTemp->getParent()->getId() != null) {
                     $referenceTemp = $referenceTemp->getParent();
                 }
 
                 //Trie la référence dans la bonne catégorie
-                switch ($referenceTemp->getId()) 
-                {
+                switch ($referenceTemp->getId()) {
                     case 220:
-                        $referencesParent['categ1'][] = $reference->getId();
+                        $references['categ1'][] = $reference->getId();
                         break;
                     case 221:
-                        $referencesParent['categ2'][] = $reference->getId();
+                        $references['categ2'][] = $reference->getId();
                         break;
                     case 223:
-                        $referencesParent['categ3'][] = $reference->getId();
+                        $references['categ3'][] = $reference->getId();
                         break;
                     case 222:
-                        $referencesParent['categ4'][] = $reference->getId();
+                        $references['categ4'][] = $reference->getId();
                         break;
                 }
             }
-        }
 
-        //Récupérations
-        $refsPonderees = $this->get('hopitalnumerique_reference.manager.reference')->getReferencesPonderees();
-        $objets        = $this->get('hopitalnumerique_recherche.manager.search')->getObjetsForRecherche( $references, $role, $refsPonderees );
-        $objets        = $this->get('hopitalnumerique_objet.manager.consultation')->updateObjetsWithConnectedUser( $domaineId, $objets, $user );
+            if ($rechercheParcoursDetails->getShowChildren()) {
+                //Recherche de l'étape parent
+                foreach ($referencesTempParent as $reference) {
+                    //Récupère la référence courante
+                    $referenceTemp = $reference;
 
-        //Vire les publications qui ne font pas parti du domaine
-        $domaine            = $this->get('hopitalnumerique_domaine.manager.domaine')->findOneById($domaineId);
-        $objetsDuDomaine    = $domaine->getObjets();
-        $objetsDuDomaineIds = array();
+                    //Récupère le premier parent
+                    while (!is_null($referenceTemp->getParent())
+                        && $referenceTemp->getParent()->getId() != null) {
+                        $referenceTemp = $referenceTemp->getParent();
+                    }
 
-        foreach ($objetsDuDomaine as $objet) 
-        {
-            $objetsDuDomaineIds[] = $objet->getId();
-        }
-
-        foreach ($objets as $key => $objet) 
-        {
-            if(!in_array($objet['id'], $objetsDuDomaineIds))
-            {
-                unset($objets[$key]);
+                    //Trie la référence dans la bonne catégorie
+                    switch ($referenceTemp->getId()) {
+                        case 220:
+                            $referencesParent['categ1'][] = $reference->getId();
+                            break;
+                        case 221:
+                            $referencesParent['categ2'][] = $reference->getId();
+                            break;
+                        case 223:
+                            $referencesParent['categ3'][] = $reference->getId();
+                            break;
+                        case 222:
+                            $referencesParent['categ4'][] = $reference->getId();
+                            break;
+                    }
+                }
             }
-        }
 
-        if($rechercheParcoursDetails->getShowChildren())
-        {
             //Récupérations
-            $objetsParents = $this->get('hopitalnumerique_recherche.manager.search')->getObjetsForRecherche( $referencesParent, $role, $refsPonderees );
-            $objetsParents = $this->get('hopitalnumerique_objet.manager.consultation')->updateObjetsWithConnectedUser( $domaineId, $objetsParents, $user );
+            $refsPonderees = $this->get('hopitalnumerique_reference.manager.reference')->getReferencesPonderees();
+            $objets = $this->get('hopitalnumerique_recherche.manager.search')->getObjetsForRecherche($references, $role, $refsPonderees);
+            $objets = $this->get('hopitalnumerique_objet.manager.consultation')->updateObjetsWithConnectedUser($domaineId, $objets, $user);
 
-            foreach ($objetsParents as $key => $objet) 
-            {
-                if(!in_array($objet['id'], $objetsDuDomaineIds))
-                {
-                    unset($objetsParents[$key]);
-                }
+            //Vire les publications qui ne font pas parti du domaine
+            $domaine = $this->get('hopitalnumerique_domaine.manager.domaine')->findOneById($domaineId);
+            $objetsDuDomaine = $domaine->getObjets();
+            $objetsDuDomaineIds = array();
+
+            foreach ($objetsDuDomaine as $objet) {
+                $objetsDuDomaineIds[] = $objet->getId();
             }
-        }
 
-        //En mode connecté
-        if('anon.' !== $user)
-        {
-            //Récupération des notes existante sur les points dur pour l'utilisateur courant 
-            $notes = $this->get('hopitalnumerique_recherche_parcours.manager.matrise_user')->getAllOrderedByPointDurForParcoursEtape( $user, $rechercheParcoursDetails->getId() );
-
-            $objetsForNote = $rechercheParcoursDetails->getShowChildren() ? $objetsParents : $objets;
-            
-            foreach ($objetsForNote as $objet) 
-            {
-                if( in_array($objet["categ"], $rechercheParcours->getRecherchesParcoursGestion()->getPublicationString())
-                    && ($objet['primary'] >= 1)
-                    && !array_key_exists($objet['id'], $notes))
-                {
-                    //Si il n'y a pas encore de note pour ce point dur, dans cette étape associé à l'utilisateur courant alors on le créé.
-                    $note = $this->get('hopitalnumerique_recherche_parcours.manager.matrise_user')->createEmpty();
-                    $note->setRechercheParcoursDetails($rechercheParcoursDetails);
-                    $note->setPourcentageMaitrise(0);
-                    $note->setObjet( $this->get('hopitalnumerique_objet.manager.objet')->findOneBy( array('id' => $objet['id']) ) );
-                    $note->setUser($user);
-
-                    $this->get('hopitalnumerique_recherche_parcours.manager.matrise_user')->save( $note );
-
-                    //Puis on l'ajoute aux notes
-                    $notes[$objet['id']] = $note;
+            foreach ($objets as $key => $objet) {
+                if (!in_array($objet['id'], $objetsDuDomaineIds)) {
+                    unset($objets[$key]);
                 }
             }
 
-            //Dans le cas où des points-dur ont une date dépassée, changement de groupe de restriction ou passé inactif
-            $notes = $this->get('hopitalnumerique_recherche_parcours.manager.matrise_user')->cleanNotesByObjet( $notes, $objetsForNote );
+            if ($rechercheParcoursDetails->getShowChildren()) {
+                //Récupérations
+                $objetsParents = $this->get('hopitalnumerique_recherche.manager.search')->getObjetsForRecherche($referencesParent, $role, $refsPonderees);
+                $objetsParents = $this->get('hopitalnumerique_objet.manager.consultation')->updateObjetsWithConnectedUser($domaineId, $objetsParents, $user);
 
-            $notesJSON = array();
-            //Set d'un tableau de note en JSOn pour le chargement des slides
-            foreach ($notes as $key => $note) 
-            {
-                $notesJSON[$key] = $note->getPourcentageMaitrise();
+                foreach ($objetsParents as $key => $objet) {
+                    if (!in_array($objet['id'], $objetsDuDomaineIds)) {
+                        unset($objetsParents[$key]);
+                    }
+                }
             }
 
-            //Récupération de la note moyenne par étapes dans un tableau (étapeId => moyenne arrondie à l'entier)
-            $notesMoyenneParEtape = $this->get('hopitalnumerique_recherche_parcours.manager.matrise_user')->getAverage( $rechercheParcours, $user );
-        }
-        //Mode non connecté : pas de notes
-        else
-        {
-            $notes                = array();
-            $notesJSON            = json_encode(array('id' => 0));
-            $notesMoyenneParEtape = array();
-        }
+            //En mode connecté
+            if ('anon.' !== $user) {
+                //Récupération des notes existante sur les points dur pour l'utilisateur courant
+                $notes = $this->get('hopitalnumerique_recherche_parcours.manager.matrise_user')->getAllOrderedByPointDurForParcoursEtape($user, $rechercheParcoursDetails->getId());
 
-        // echo '<pre>';var_dump($notesMoyenneParEtape);die('die');
+                $objetsForNote = $rechercheParcoursDetails->getShowChildren() ? $objetsParents : $objets;
+
+                foreach ($objetsForNote as $objet) {
+                    if (in_array($objet["categ"], $rechercheParcours->getRecherchesParcoursGestion()->getPublicationString())
+                        && ($objet['primary'] >= 1)
+                        && !array_key_exists($objet['id'], $notes)
+                    ) {
+                        //Si il n'y a pas encore de note pour ce point dur, dans cette étape associé à l'utilisateur courant alors on le créé.
+                        $note = $this->get('hopitalnumerique_recherche_parcours.manager.matrise_user')->createEmpty();
+                        $note->setRechercheParcoursDetails($rechercheParcoursDetails);
+                        $note->setPourcentageMaitrise(0);
+                        $note->setObjet($this->get('hopitalnumerique_objet.manager.objet')->findOneBy(array('id' => $objet['id'])));
+                        $note->setUser($user);
+
+                        $this->get('hopitalnumerique_recherche_parcours.manager.matrise_user')->save($note);
+
+                        //Puis on l'ajoute aux notes
+                        $notes[$objet['id']] = $note;
+                    }
+                }
+
+                //Dans le cas où des points-dur ont une date dépassée, changement de groupe de restriction ou passé inactif
+                $notes = $this->get('hopitalnumerique_recherche_parcours.manager.matrise_user')->cleanNotesByObjet($notes, $objetsForNote);
+
+                $notesJSON = array();
+                //Set d'un tableau de note en JSOn pour le chargement des slides
+                foreach ($notes as $key => $note) {
+                    $notesJSON[$key] = $note->getPourcentageMaitrise();
+                }
+
+                //Récupération de la note moyenne par étapes dans un tableau (étapeId => moyenne arrondie à l'entier)
+                $notesMoyenneParEtape = $this->get('hopitalnumerique_recherche_parcours.manager.matrise_user')->getAverage($rechercheParcours, $user);
+            } //Mode non connecté : pas de notes
+            else {
+                $notes = array();
+                $notesJSON = json_encode(array('id' => 0));
+                $notesMoyenneParEtape = array();
+            }
+
+            $cache = array(
+                'objets'      => $objets,
+                'notes' => $notes,
+                'notesMoyenneParEtape'    => $notesMoyenneParEtape,
+                'notesJSON' =>  $notesJSON,
+                'rechercheParcoursDetails' => $rechercheParcoursDetails,
+                'refChilds' => $refChilds,
+                'refChildSelected' => $refChildSelected
+            );
+
+            $cacheDriver->save($cacheName, $cache, null);
+        }
 
         return $this->render('HopitalNumeriqueRechercheParcoursBundle:RechercheParcoursDetails:Front/index.html.twig', array(
             'rechercheParcours'    => $rechercheParcours,
