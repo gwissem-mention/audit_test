@@ -70,7 +70,7 @@ class ObjetType extends AbstractType
                 'property' => 'name',
                 'multiple' => true,
                 'required' => false,
-                'label'    => 'Interdire l\'accès au groupes',
+                'label'    => 'Interdire l\'accès au(x) groupe(s)',
                 'attr'     => array( 'placeholder' => 'Selectionnez le ou les rôles qui n\'auront pas accès à cette publication' )
             ))
             ->add('types', 'genemu_jqueryselect2_entity', array(
@@ -179,7 +179,7 @@ class ObjetType extends AbstractType
             ))
             ->add('notes', 'checkbox', array(
                 'required'   => false,
-                'label'      => 'Notes autorisés',
+                'label'      => 'Notes autorisées',
                 'label_attr' => array(
                     'class' => 'col-md-7 control-label'
                 ),

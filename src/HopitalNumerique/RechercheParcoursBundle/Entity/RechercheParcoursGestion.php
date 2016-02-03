@@ -89,6 +89,7 @@ class RechercheParcoursGestion
     public function __construct()
     {
         $this->domaines = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->typePublication = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
@@ -315,7 +316,7 @@ class RechercheParcoursGestion
     {
         $name = array();
 
-        foreach ($this->typePublication as $typePublication) 
+        foreach ($this->typePublication as $typePublication)
         {
             switch ($typePublication->getId()) 
             {
@@ -333,6 +334,7 @@ class RechercheParcoursGestion
                     break;
             }
         }
+
 
         return $name;
     }

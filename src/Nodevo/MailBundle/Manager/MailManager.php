@@ -820,7 +820,7 @@ class MailManager extends BaseManager
             (
                 $this->sendMail
                 (
-                    $this->replaceContent($mail->getObjet(), $user, $options),
+                    $this->replaceContent($mail->getObjet(), $destinataire, $options),
                     $partageur->getEmail(),
                     $courrielDestinataire,
                     $this->replaceContent($mail->getBody(), $partageur, $options),

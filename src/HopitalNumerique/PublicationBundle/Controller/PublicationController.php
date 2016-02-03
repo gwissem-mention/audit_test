@@ -248,14 +248,14 @@ class PublicationController extends Controller
             }
 
             //ObjetsOrder
-            foreach ($this->getObjetsFromRecherche( $contenu ) as $key => $objetTemp) 
+            foreach ($this->getObjetsFromRecherche( $contenu ) as $key => $objetTemp)
             {
                 $objetsOrder[$objetTemp["id"]] = $objetTemp;
             }
 
-            foreach ($objetsOrder as $key => $objetCurrent) 
+            foreach ($objetsOrder as $key => $objetCurrent)
             {
-                if (array_key_exists('objet', $objetCurrent) && !is_null($objetCurrent['objet']) ) 
+                if (array_key_exists('objet', $objetCurrent) && !is_null($objetCurrent['objet']) )
                 {
                     $libContenu = $this->get('hopitalnumerique_objet.manager.contenu')->getPrefix($this->get('hopitalnumerique_objet.manager.contenu')->findOneBy(array('id' => $objetCurrent['id'])));
                     $objetsOrder[$key]['prefixe'] = $libContenu;
@@ -360,7 +360,7 @@ class PublicationController extends Controller
         $params = array();
         if( $this->get('hopitalnumerique_objet.manager.objet')->checkAccessToObjet($role, $objet) )
             $params['objet'] = $objet;
-        
+
         return $this->render('HopitalNumeriquePublicationBundle:Publication:synthese.html.twig', $params);
     }
 
@@ -376,7 +376,7 @@ class PublicationController extends Controller
      *
      * @return [type]
      */
-    private function getType( $objet ) 
+    private function getType( $objet )
     {
         $type  = array();
         $types = $objet->getTypes();
@@ -416,7 +416,7 @@ class PublicationController extends Controller
                 $objet   = $this->get('hopitalnumerique_objet.manager.objet')->findOneBy( array('id' => $tab[1] ) );
                 $contenu = false;
             }
-            
+
             if( $this->checkAuthorization( $objet ) === true ){
                 $production        = new \StdClass;
                 $production->id    = $objet->getId();
@@ -424,7 +424,7 @@ class PublicationController extends Controller
                 $production->source = $objet->getSource();
 
                 //Cas Objet
-                if( $contenu === false ) 
+                if( $contenu === false )
                 {
                     //formate datas
                     $production->titre    = $objet->getTitre();
@@ -477,7 +477,7 @@ class PublicationController extends Controller
         //get Recherche results
         $refs       = array();
         $refs       = $this->getMoreRefs( $refs, $publication->getReferences() );
-        
+
         //On récupère le role de l'user connecté
         $user = $this->get('security.context')->getToken()->getUser();
         $role = $this->get('nodevo_role.manager.role')->getUserRole($user);
@@ -488,7 +488,7 @@ class PublicationController extends Controller
         $refsPonderees = $this->get('hopitalnumerique_reference.manager.reference')->getReferencesPonderees();
         $objets = $this->get('hopitalnumerique_recherche.manager.search')->getObjetsForRecherche( $refs, $role, $refsPonderees );
         $objets = $this->get('hopitalnumerique_objet.manager.consultation')->updateObjetsWithConnectedUser( $domaineId, $objets, $user );
-    
+
         //make array unique
         $ids = array();
         foreach($objets as $objet) {
@@ -591,7 +591,7 @@ class PublicationController extends Controller
 
                 if( !isset($refs[ $categs[$parentId] ]) )
                     $refs[ $categs[$parentId] ] = array();
-                
+
                 $refs[ $categs[$parentId] ][] = $one->getId();
             }
         }
