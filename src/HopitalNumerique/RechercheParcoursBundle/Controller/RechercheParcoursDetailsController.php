@@ -250,7 +250,7 @@ class RechercheParcoursDetailsController extends Controller
         }
 
         $cacheDriver = new ApcCache();
-        $cacheName = "_pointDurs_etape_" . $idEtape;
+        $cacheName = "_pointDurs_etape_" . $idEtape . $idRefEtapeChild;
         if ($cacheDriver->contains($cacheName)) {
             $cache = $cacheDriver->fetch($cacheName);
 
