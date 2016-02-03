@@ -103,7 +103,9 @@ class UserExtension extends \Twig_Extension
                     $return = $etab->getNom();
                 }else{
                     $ref    = $this->_refManager->findOneBy( array('id' => $data['id']) );
-                    $return = $ref->getLibelle();
+                    if (null !== $ref) {
+                        $return = $ref->getLibelle();
+                    }
                 }
             }else
                 $return = implode('; ', $data);
