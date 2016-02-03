@@ -805,7 +805,6 @@ class MailManager extends BaseManager
         
         $courrielDestinataires = array
         (
-            array($partageur->getEmail() => $partageur->getAppellation()),
             array($destinataire->getEmail() => $destinataire->getAppellation())
         );
         $options = array
