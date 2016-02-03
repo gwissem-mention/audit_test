@@ -204,10 +204,54 @@ class RechercheParcoursDetailsController extends Controller
             }
         }
 
+        //Récupération des références + Tri pour l'affichage des points dur
+        $referenceRechercheParcours = $this->get('hopitalnumerique_reference.manager.reference')->findOneBy(array('id' => intval($rechercheParcours->getReference()->getId())));
+        $referenceRechercheParcoursDetails = $this->get('hopitalnumerique_reference.manager.reference')->findOneBy(array('id' => intval($rechercheParcoursDetails->getReference()->getId())));
+        // $refChilds = $this->get('hopitalnumerique_reference.manager.reference')->findBy( array(
+        //                 'parent' => intval( $rechercheParcoursDetails->getReference()->getId() ),
+        //                 'domaine' =>
+        //             ));
+        $refChilds = $this->get('hopitalnumerique_reference.manager.reference')->getRefsByDomaineByParent(
+            intval($rechercheParcoursDetails->getReference()->getId()),
+            $domaineId
+        );
+        $refChildSelected = null;
+
+        $referencesTemp = array();
+        $referencesTemp[] = $referenceRechercheParcours;
+
+        //Dans le cas où l'on affiche les enfants du détails, on récupère les références enfant de la référence du détail
+        if ($rechercheParcoursDetails->getShowChildren() && !empty($refChilds)) {
+            if (is_null($idRefEtapeChild)) {
+                $refChildSelected = $refChilds[0];
+            } else {
+                $refChildSelected = $this->get('hopitalnumerique_reference.manager.reference')->findOneBy(array(
+                    'id' => intval($idRefEtapeChild)
+                ));
+            }
+        } elseif (count($refChilds) > 0) {
+            foreach ($refChilds as $refChild) {
+                $referencesTemp[] = $refChild;
+            }
+        }
+
+        $referencesTemp[] = $rechercheParcoursDetails->getShowChildren() && !empty($refChilds) ? $refChildSelected : $referenceRechercheParcoursDetails;
+
+        if ($rechercheParcoursDetails->getShowChildren()) {
+            //GME 11/08/2015 : Ajout d'un tableau des ref parents lors de l'affichage des enfants pour la récup des notes
+            //Correspondant à la recherche du parent
+            $referencesTempParent = array();
+            foreach ($referencesTemp as $ref) {
+                $referencesTempParent[] = $ref;
+            }
+            foreach ($refChilds as $refChild) {
+                $referencesTempParent[] = $refChild;
+            }
+        }
+
         $cacheDriver = new ApcCache();
-        $cacheName = "54_pointDur_objet_" . $idEtape;
-        if ($cacheDriver->contains($cacheName))
-        {
+        $cacheName = "_pointDurs_etape_" . $idEtape;
+        if ($cacheDriver->contains($cacheName)) {
             $cache = $cacheDriver->fetch($cacheName);
 
             $rechercheParcoursDetails = $cache['rechercheParcoursDetails'];
@@ -215,55 +259,7 @@ class RechercheParcoursDetailsController extends Controller
             $notes                = $cache['notes'];
             $notesMoyenneParEtape = $cache['notesMoyenneParEtape'];
             $notesJSON            = $cache['notesJSON'];
-            $refChilds            = $cache['refChilds'];
-            $refChildSelected     = $cache['refChildSelected'];
-        }
-        else {
-            //Récupération des références + Tri pour l'affichage des points dur
-            $referenceRechercheParcours = $this->get('hopitalnumerique_reference.manager.reference')->findOneBy(array('id' => intval($rechercheParcours->getReference()->getId())));
-            $referenceRechercheParcoursDetails = $this->get('hopitalnumerique_reference.manager.reference')->findOneBy(array('id' => intval($rechercheParcoursDetails->getReference()->getId())));
-            // $refChilds = $this->get('hopitalnumerique_reference.manager.reference')->findBy( array(
-            //                 'parent' => intval( $rechercheParcoursDetails->getReference()->getId() ),
-            //                 'domaine' =>
-            //             ));
-            $refChilds = $this->get('hopitalnumerique_reference.manager.reference')->getRefsByDomaineByParent(
-                intval($rechercheParcoursDetails->getReference()->getId()),
-                $domaineId
-            );
-            $refChildSelected = null;
-
-            $referencesTemp = array();
-            $referencesTemp[] = $referenceRechercheParcours;
-
-            //Dans le cas où l'on affiche les enfants du détails, on récupère les références enfant de la référence du détail
-            if ($rechercheParcoursDetails->getShowChildren() && !empty($refChilds)) {
-                if (is_null($idRefEtapeChild)) {
-                    $refChildSelected = $refChilds[0];
-                } else {
-                    $refChildSelected = $this->get('hopitalnumerique_reference.manager.reference')->findOneBy(array(
-                        'id' => intval($idRefEtapeChild)
-                    ));
-                }
-            } elseif (count($refChilds) > 0) {
-                foreach ($refChilds as $refChild) {
-                    $referencesTemp[] = $refChild;
-                }
-            }
-
-            $referencesTemp[] = $rechercheParcoursDetails->getShowChildren() && !empty($refChilds) ? $refChildSelected : $referenceRechercheParcoursDetails;
-
-            if ($rechercheParcoursDetails->getShowChildren()) {
-                //GME 11/08/2015 : Ajout d'un tableau des ref parents lors de l'affichage des enfants pour la récup des notes
-                //Correspondant à la recherche du parent
-                $referencesTempParent = array();
-                foreach ($referencesTemp as $ref) {
-                    $referencesTempParent[] = $ref;
-                }
-                foreach ($refChilds as $refChild) {
-                    $referencesTempParent[] = $refChild;
-                }
-            }
-
+        } else {
             //Récupération des infos de l'utilisateur, si il y en a un connecté, pour ajouter les filtres "Etablissement" et "Métier"
             if ('anon.' !== $user) {
                 //Type d'établissement
@@ -426,8 +422,6 @@ class RechercheParcoursDetailsController extends Controller
                 'notesMoyenneParEtape'    => $notesMoyenneParEtape,
                 'notesJSON' =>  $notesJSON,
                 'rechercheParcoursDetails' => $rechercheParcoursDetails,
-                'refChilds' => $refChilds,
-                'refChildSelected' => $refChildSelected
             );
 
             $cacheDriver->save($cacheName, $cache, null);
