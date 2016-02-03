@@ -249,16 +249,23 @@ class RechercheParcoursDetailsController extends Controller
             }
         }
 
+        if ($user != 'anon.') {
+            $idUser = $user->getId();
+        } else {
+            $idUser = null;
+        }
+        $cache = array();
         $cacheDriver = new ApcCache();
-        $cacheName = "_pointDurs_etape_" . $idEtape . $idRefEtapeChild;
+        $cacheName = "_pointDurs_etape_" . $idEtape .'_'. $idRefEtapeChild . '_' . $idUser;
         if ($cacheDriver->contains($cacheName)) {
             $cache = $cacheDriver->fetch($cacheName);
 
             $rechercheParcoursDetails = $cache['rechercheParcoursDetails'];
             $objets               = $cache['objets'];
-            $notes                = $cache['notes'];
-            $notesMoyenneParEtape = $cache['notesMoyenneParEtape'];
-            $notesJSON            = $cache['notesJSON'];
+            if (isset($cache['objetsParents'])) {
+                $objetsParents            = $cache['objetsParents'];
+            }
+
         } else {
             //Récupération des infos de l'utilisateur, si il y en a un connecté, pour ajouter les filtres "Etablissement" et "Métier"
             if ('anon.' !== $user) {
@@ -370,61 +377,58 @@ class RechercheParcoursDetailsController extends Controller
                         unset($objetsParents[$key]);
                     }
                 }
+                $cache['objetsParents'] = $objetsParents;
+
             }
 
-            //En mode connecté
-            if ('anon.' !== $user) {
-                //Récupération des notes existante sur les points dur pour l'utilisateur courant
-                $notes = $this->get('hopitalnumerique_recherche_parcours.manager.matrise_user')->getAllOrderedByPointDurForParcoursEtape($user, $rechercheParcoursDetails->getId());
-
-                $objetsForNote = $rechercheParcoursDetails->getShowChildren() ? $objetsParents : $objets;
-
-                foreach ($objetsForNote as $objet) {
-                    if (in_array($objet["categ"], $rechercheParcours->getRecherchesParcoursGestion()->getPublicationString())
-                        && ($objet['primary'] >= 1)
-                        && !array_key_exists($objet['id'], $notes)
-                    ) {
-                        //Si il n'y a pas encore de note pour ce point dur, dans cette étape associé à l'utilisateur courant alors on le créé.
-                        $note = $this->get('hopitalnumerique_recherche_parcours.manager.matrise_user')->createEmpty();
-                        $note->setRechercheParcoursDetails($rechercheParcoursDetails);
-                        $note->setPourcentageMaitrise(0);
-                        $note->setObjet($this->get('hopitalnumerique_objet.manager.objet')->findOneBy(array('id' => $objet['id'])));
-                        $note->setUser($user);
-
-                        $this->get('hopitalnumerique_recherche_parcours.manager.matrise_user')->save($note);
-
-                        //Puis on l'ajoute aux notes
-                        $notes[$objet['id']] = $note;
-                    }
-                }
-
-                //Dans le cas où des points-dur ont une date dépassée, changement de groupe de restriction ou passé inactif
-                $notes = $this->get('hopitalnumerique_recherche_parcours.manager.matrise_user')->cleanNotesByObjet($notes, $objetsForNote);
-
-                $notesJSON = array();
-                //Set d'un tableau de note en JSOn pour le chargement des slides
-                foreach ($notes as $key => $note) {
-                    $notesJSON[$key] = $note->getPourcentageMaitrise();
-                }
-
-                //Récupération de la note moyenne par étapes dans un tableau (étapeId => moyenne arrondie à l'entier)
-                $notesMoyenneParEtape = $this->get('hopitalnumerique_recherche_parcours.manager.matrise_user')->getAverage($rechercheParcours, $user);
-            } //Mode non connecté : pas de notes
-            else {
-                $notes = array();
-                $notesJSON = json_encode(array('id' => 0));
-                $notesMoyenneParEtape = array();
-            }
-
-            $cache = array(
-                'objets'      => $objets,
-                'notes' => $notes,
-                'notesMoyenneParEtape'    => $notesMoyenneParEtape,
-                'notesJSON' =>  $notesJSON,
-                'rechercheParcoursDetails' => $rechercheParcoursDetails,
-            );
+            $cache['objets'] = $objets;
+            $cache['rechercheParcoursDetails'] = $rechercheParcoursDetails;
 
             $cacheDriver->save($cacheName, $cache, null);
+        }
+
+        //En mode connecté
+        if ('anon.' !== $user) {
+            //Récupération des notes existante sur les points dur pour l'utilisateur courant
+            $notes = $this->get('hopitalnumerique_recherche_parcours.manager.matrise_user')->getAllOrderedByPointDurForParcoursEtape($user, $rechercheParcoursDetails->getId());
+
+            $objetsForNote = $rechercheParcoursDetails->getShowChildren() ? $cache['objetsParents'] : $objets;
+
+            foreach ($objetsForNote as $objet) {
+                if (in_array($objet["categ"], $rechercheParcours->getRecherchesParcoursGestion()->getPublicationString())
+                    && ($objet['primary'] >= 1)
+                    && !array_key_exists($objet['id'], $notes)
+                ) {
+                    //Si il n'y a pas encore de note pour ce point dur, dans cette étape associé à l'utilisateur courant alors on le créé.
+                    $note = $this->get('hopitalnumerique_recherche_parcours.manager.matrise_user')->createEmpty();
+                    $note->setRechercheParcoursDetails($rechercheParcoursDetails);
+                    $note->setPourcentageMaitrise(0);
+                    $note->setObjet($this->get('hopitalnumerique_objet.manager.objet')->findOneBy(array('id' => $objet['id'])));
+                    $note->setUser($user);
+
+                    $this->get('hopitalnumerique_recherche_parcours.manager.matrise_user')->save($note);
+
+                    //Puis on l'ajoute aux notes
+                    $notes[$objet['id']] = $note;
+                }
+            }
+
+            //Dans le cas où des points-dur ont une date dépassée, changement de groupe de restriction ou passé inactif
+            $notes = $this->get('hopitalnumerique_recherche_parcours.manager.matrise_user')->cleanNotesByObjet($notes, $objetsForNote);
+
+            $notesJSON = array();
+            //Set d'un tableau de note en JSOn pour le chargement des slides
+            foreach ($notes as $key => $note) {
+                $notesJSON[$key] = $note->getPourcentageMaitrise();
+            }
+
+            //Récupération de la note moyenne par étapes dans un tableau (étapeId => moyenne arrondie à l'entier)
+            $notesMoyenneParEtape = $this->get('hopitalnumerique_recherche_parcours.manager.matrise_user')->getAverage($rechercheParcours, $user);
+        } //Mode non connecté : pas de notes
+        else {
+            $notes = array();
+            $notesJSON = json_encode(array('id' => 0));
+            $notesMoyenneParEtape = array();
         }
 
         return $this->render('HopitalNumeriqueRechercheParcoursBundle:RechercheParcoursDetails:Front/index.html.twig', array(
