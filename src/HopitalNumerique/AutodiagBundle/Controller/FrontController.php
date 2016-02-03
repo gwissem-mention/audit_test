@@ -1094,7 +1094,7 @@ class FrontController extends Controller
 
         $this->get('session')->getFlashBag()->add( 'success', 'Synthèse créée.' );
 
-        return new Response('{"success":true, "url" : "'.$this->generateUrl('hopitalnumerique_autodiag_front_resultat', array('id' => $synthese->getId, 'back' => 1 )).'"}', 200);
+        return new Response('{"success":true, "url" : "'.$this->generateUrl('hopitalnumerique_autodiag_front_resultat', array('id' => $synthese->getId(), 'back' => 1 )).'"}', 200);
     }
 
 
