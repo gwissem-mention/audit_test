@@ -90,13 +90,12 @@ class InscriptionRepository extends EntityRepository
         $qb = $this->_em->createQueryBuilder()
                          ->select('insc')
                          ->from('HopitalNumeriqueModuleBundle:Inscription', 'insc')
-                         ->leftJoin('insc.etatRemboursement', 'refRemboursement')
                          ->leftJoin('insc.etatEvaluation', 'refEvaluation')
                          ->leftJoin('insc.etatParticipation', 'refParticipation')
                          ->leftJoin('insc.session', 'session')
+                         ->andWhere($qb->expr()->orX('insc.etatRemboursement != 6', $qb->expr()->isNull('insc.etatRemboursement')))
                          ->andWhere('refParticipation.id = 411','insc.facture IS NULL')
                          ->andWhere('refEvaluation.id = 29')
-                         ->andWhere('refRemboursement != 6')
                          ->orderBy('session.dateSession');
 
         if( !is_null($user) ) {
