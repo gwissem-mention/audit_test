@@ -50,7 +50,7 @@ class FrontController extends Controller
         $chapitres      = $outil->getChapitres();
         $parents        = array();
         $enfants        = array();
-        
+
         //build chapitres
         foreach($chapitres as $chapitre)
         {

@@ -87,17 +87,19 @@ class InscriptionRepository extends EntityRepository
      */
     public function getForFactures( $user = null )
     {
-        $qb = $this->_em->createQueryBuilder()
-                         ->select('insc')
-                         ->from('HopitalNumeriqueModuleBundle:Inscription', 'insc')
-                         ->leftJoin('insc.etatRemboursement', 'refRemboursement')
-                         ->leftJoin('insc.etatEvaluation', 'refEvaluation')
-                         ->leftJoin('insc.etatParticipation', 'refParticipation')
-                         ->leftJoin('insc.session', 'session')
-                         ->andWhere('refParticipation.id = 411','insc.facture IS NULL')
-                         ->andWhere('refEvaluation.id = 29')
-                         ->andWhere('refRemboursement != 6')
-                         ->orderBy('session.dateSession');
+        $qb = $this->_em->createQueryBuilder();
+
+        $qb
+            ->select('insc')
+            ->from('HopitalNumeriqueModuleBundle:Inscription', 'insc')
+            ->leftJoin('insc.etatEvaluation', 'refEvaluation')
+            ->leftJoin('insc.etatParticipation', 'refParticipation')
+            ->leftJoin('insc.session', 'session')
+            ->andWhere($qb->expr()->orX('insc.etatRemboursement != 6', $qb->expr()->isNull('insc.etatRemboursement')))
+            ->andWhere('refParticipation.id = 411','insc.facture IS NULL')
+            ->andWhere('refEvaluation.id = 29')
+            ->orderBy('session.dateSession')
+        ;
 
         if( !is_null($user) ) {
             $qb->andWhere('insc.user = :user')
