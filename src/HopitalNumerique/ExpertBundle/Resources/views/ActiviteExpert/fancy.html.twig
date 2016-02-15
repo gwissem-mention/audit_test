@@ -19,7 +19,7 @@
                 <div class="tableContent" id="parametrage">
                     <div class="content">
                         <div class="col-md-12 title">
-                            <div class="col-md-12 violet title-autodiag">Parametrage du montant de la vacation</div>
+                            <div class="col-md-12 violet title-autodiag">Paramétrage du montant de la vacation</div>
                         </div>
                         <div class="col-md-12 body">
                             <div class="form-label">Montant d'une vacation</div>
@@ -31,6 +31,13 @@
                                 <span class="input-group-addon no-value"><i class="fa fa-question-circle"></i></span>
                                 <span class="input-group-addon value-ko"><i class="fa fa-ban"></i></span>
                             </div>
+
+                            <div class="form-label">Modèle de contrat</div>
+                            <input type="text" class="form-control" id="contrat-modele" value="{{ contratModele.libelle }}">
+
+                            <div class="form-label">Modèle de PV de recettes</div>
+                            <input type="text" class="form-control" id="pv-recettes-modele" value="{{ pvRecettesModele.libelle }}">
+
                             <div class="toolbar">
                                 <div onclick="rechercheEtValidationPartage();" class="btn btn-success pull-right" title="Rechercher & Partager"><i class="fa fa-floppy-o"> </i>Sauvegarder</div>
                             </div>
@@ -90,7 +97,9 @@
             requestAjaxRecherche = $.ajax({
                 url      : path,
                 data : {
-                    montant : $('#montant-vacation').val()
+                    montant : $('#montant-vacation').val(),
+                    contratModele : $('#contrat-modele').val(),
+                    pvRecettesModele : $('#pv-recettes-modele').val()
                 },
                 type     : 'post',
                 dataType : 'json',

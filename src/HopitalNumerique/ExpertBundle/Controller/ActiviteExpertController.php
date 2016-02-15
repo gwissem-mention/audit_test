@@ -63,9 +63,13 @@ class ActiviteExpertController extends Controller
     public function parametrageAction()
     {
         $montantVacation = $this->get('hopitalnumerique_reference.manager.reference')->findOneById(560);
+        $contratModele = $this->container->get('hopitalnumerique_reference.manager.reference')->findOneByCode('ACTIVITE_EXPERT_CONTRAT_MODELE');
+        $pvRecettesModele = $this->container->get('hopitalnumerique_reference.manager.reference')->findOneByCode('ACTIVITE_EXPERT_PV_RECETTES_MODELE');
 
-        return $this->render( 'HopitalNumeriqueExpertBundle:ActiviteExpert:fancy.html.twig' , array(
-            'montantVacation' => $montantVacation
+        return $this->render('HopitalNumeriqueExpertBundle:ActiviteExpert:fancy.html.twig', array(
+            'montantVacation' => $montantVacation,
+            'contratModele' => $contratModele,
+            'pvRecettesModele' => $pvRecettesModele
         ));
     }
 

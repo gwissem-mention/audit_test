@@ -153,3 +153,8 @@ DELETE FROM hn_facture_remboursement WHERE ref_region = 1014 AND rem_id = 11;
 
 /* Suppression des anciennes régions */
 DELETE FROM `hn_reference` WHERE ref_code = 'REGION' AND ref_id < 1000;
+
+
+
+/* #3951 */
+INSERT INTO `hn_reference` (`ref_id`, `parent_id`, `ref_libelle`, `ref_code`, `ref_etat`, `ref_dictionnaire`, `ref_recherche`, `ref_lock`, `ref_order`) VALUES ('1020', NULL, 'Modele_contrat.pdf', 'ACTIVITE_EXPERT_CONTRAT_MODELE', '3', '0', '0', '0', '17'), ('1021', NULL, 'Modele_PV_de_recettes.pdf', 'ACTIVITE_EXPERT_PV_RECETTES_MODELE', '3', '0', '0', '0', '18');
