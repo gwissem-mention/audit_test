@@ -9,7 +9,6 @@
 {% block javascripts %}
     {{parent()}}
     {% javascripts output="compiled/hopitalnumerique-stats-show.js"
-        "@validationEngine_js"
         'bundles/nodevoadmin/plugins/nodevoLoader/nodevoLoader.js'
         'bundles/hopitalnumeriquestat/js/script.js'
     %}
@@ -20,7 +19,6 @@
 {% block stylesheets %}
     {{parent()}}
     {% stylesheets output="compiled/hopitalnumerique-stats-show.css" filter="cssrewrite, ?yui_css"
-        "@validationEngine_css"
         'bundles/nodevoadmin/plugins/nodevoLoader/nodevoLoader.css'
         'bundles/hopitalnumeriquestat/css/style.css'
     %}

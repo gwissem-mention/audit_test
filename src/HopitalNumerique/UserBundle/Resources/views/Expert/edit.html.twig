@@ -9,8 +9,7 @@
 {% block stylesheets %}
     {{parent()}}
     {% stylesheets output="compiled/hopitalnumerique-user-expert-edit.css" filter="cssrewrite, ?yui_css"
-        "@fancybox_css" 
-        "@validationEngine_css"
+        "@fancybox_css"
         'bundles/hopitalnumeriqueuser/css/specificationUser.css'
     %}
         <link rel="stylesheet" href="{{ asset_url }}" />
@@ -20,8 +19,7 @@
 {% block javascripts %}
     {{parent()}}
     {% javascripts output="compiled/hopitalnumerique-user-expert-edit.js"
-        "@fancybox_js" 
-        "@validationEngine_js"
+        "@fancybox_js"
         'bundles/hopitalnumeriqueuser/js/Expert/script.js'
     %}
         <script type="text/javascript" src="{{ asset_url }}"></script>

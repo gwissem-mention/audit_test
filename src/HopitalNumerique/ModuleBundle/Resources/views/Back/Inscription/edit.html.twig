@@ -16,7 +16,6 @@
     {{parent()}}
     {% stylesheets output="compiled/hopitalnumerique-module-inscription-edit.css" filter="cssrewrite, ?yui_css"
         '@select2_css'
-        '@validationEngine_css'
     %}
         <link rel="stylesheet" href="{{ asset_url }}" />
     {% endstylesheets %}
@@ -26,7 +25,6 @@
     {{parent()}}
     {% javascripts output="compiled/hopitalnumerique-module-inscription-edit.js"
         '@select2_js'
-        '@validationEngine_js'
         'bundles/hopitalnumeriquemodule/js/inscription/script.js'
         'bundles/hopitalnumeriquemodule/js/inscription/edit.js'
     %}

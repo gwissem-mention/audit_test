@@ -17,7 +17,6 @@
 {% block javascripts %}
     {{parent()}}
     {% javascripts output="compiled/hopitalnumerique-user-contractualisation-edit.js"
-        "@validationEngine_js"
         'bundles/hopitalnumeriqueuser/js/Contractualisation/script.js'
     %}
         <script type="text/javascript" src="{{ asset_url }}"></script>
@@ -27,7 +26,6 @@
 {% block stylesheets %}
     {{parent()}}
     {% stylesheets output="compiled/hopitalnumerique-user-contractualisation-edit.css" filter="cssrewrite, ?yui_css"
-        "@validationEngine_css"
         'bundles/hopitalnumeriqueuser/css/specificationUser.css'
     %}
         <link rel="stylesheet" href="{{ asset_url }}" />

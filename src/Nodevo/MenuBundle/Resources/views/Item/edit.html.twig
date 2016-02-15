@@ -5,7 +5,6 @@
 {% block javascripts %}
     {{parent()}}
     {% javascripts output="compiled/nodevo-menu-item-edit.js"
-        "@validationEngine_js"
         "@bootstrap_iconpicker_js"
         'bundles/nodevomenu/js/itemForm.js'
     %}
@@ -16,7 +15,6 @@
 {% block stylesheets %}
     {{parent()}}
     {% stylesheets output="compiled/nodevo-menu-item-edit.css" filter="cssrewrite, ?yui_css"
-        "@validationEngine_css"
         "@bootstrap_iconpicker_css"
     %}
         <link rel="stylesheet" href="{{ asset_url }}" />
