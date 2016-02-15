@@ -55,10 +55,10 @@ class ActiviteExpertGrid extends Grid implements GridInterface
         $this->addActionButton( $evenementButton );
 
         //générer la facture pour l'activité
-        $genererFactureButton = new \APY\DataGridBundle\Grid\Action\RowAction('', 'hopitalnumerique_expert_expert_generer_facture');
-        $genererFactureButton->setRouteParameters( array('id') );
-        $genererFactureButton->setAttributes( array('class'=>'btn btn-primary fa fa-external-link','title' => 'Générer les factures') );
-        $this->addActionButton( $genererFactureButton );
+        $contratButton = new \APY\DataGridBundle\Grid\Action\RowAction('', 'hopitalnumerique_expert_expert_contrat');
+        $contratButton->setRouteParameters(array('id'));
+        $contratButton->setAttributes(array('class'=>'btn btn-primary fancy fancybox.ajax fa fa-file-text','title' => 'Contrat'));
+        $this->addActionButton($contratButton);
 
         $payerButton = new \APY\DataGridBundle\Grid\Action\RowAction('', 'hopitalnumerique_expert_expert_payer_facture');
         $payerButton->setRouteParameters( array('id') );

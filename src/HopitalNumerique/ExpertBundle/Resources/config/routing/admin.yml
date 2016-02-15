@@ -63,12 +63,19 @@ hopitalnumerique_expert_expert_payer_facture:
         id: \d+
         _method: GET|POST
 
-hopitalnumerique_expert_expert_generer_facture:
-    pattern:  /expert/activite/facture/generer/{id}
-    defaults: { _controller: "HopitalNumeriqueExpertBundle:ActiviteExpert:genererFacture" }
+hopitalnumerique_expert_expert_contrat:
+    pattern:  /expert/activite/contrat/{id}
+    defaults: { _controller: "HopitalNumeriqueExpertBundle:ActiviteExpert:contrat" }
     requirements:
         id: \d+
         _method: GET|POST
+
+hopitalnumerique_expert_expert_sendcontrat:
+    pattern:  /expert/activite/send-contrat/{id}
+    defaults: { _controller: "HopitalNumeriqueExpertBundle:ActiviteExpert:sendContrat" }
+    requirements:
+        id: \d+
+        _method: POST
 
 #-Suppression de masse du grid
 delete_mass:

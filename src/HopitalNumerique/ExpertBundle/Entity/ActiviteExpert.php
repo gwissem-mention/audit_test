@@ -527,4 +527,13 @@ class ActiviteExpert
     {
         return $this->dateFictives;
     }
+
+
+    /**
+     * @return string
+     */
+    public function __toString()
+    {
+        return $this->titre;
+    }
 }

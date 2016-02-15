@@ -1,0 +1,45 @@
+{% extends 'HopitalNumeriqueCoreBundle::popup.html.twig' %}
+
+{% block title %}Contrat {{ activiteExpert }}{% endblock %}
+
+{% block javascripts -%}
+    <script type="text/javascript">
+        $(document).ready(function() {
+            $('#form-contrat').validationEngine();
+        });
+
+        function expert_sendContrat()
+        {
+            if ($('#contrat-email').val() != '')
+            {
+                $.fancybox.close();
+
+                $.ajax({
+                    url: '{{ path('hopitalnumerique_expert_expert_sendcontrat', { 'id':activiteExpert.id }) }}',
+                    data: {
+                        email: $('#contrat-email').val()
+                    },
+                    type: 'post',
+                    dataType: 'json',
+                    success : function(data) {
+                        if (data.success) {
+                            window.location = data.redirection;
+                        }
+                    }
+                });
+            }
+        }
+    </script>
+{%- endblock %}
+
+{% block body %}
+    <form id="form-contrat">
+        <div class="form-group">
+            <label>Votre adresse élecronique :</label>
+            <input type="email" id="contrat-email" class="form-control validate[required,custom[email]]" required>
+        </div>
+        <div class="form-group text-right">
+            <button type="button" class="btn btn-success" onclick="expert_sendContrat();"><em class="fa fa-send"></em> &nbsp; Envoyer</button>
+        </div>
+    </form>
+{% endblock %}
