@@ -4,7 +4,7 @@ namespace Nodevo\ToolsBundle\Manager;
 use Doctrine\Common\Cache\Cache;
 use Doctrine\ORM\EntityManager;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Validator\Validator;
+use Symfony\Component\Validator\ValidatorInterface;
 
 /**
  * Classe de base des Managers de la librairie
@@ -92,7 +92,7 @@ abstract class Manager
      *
      * @return array
      */
-    public function getConstraints( Validator $validator )
+    public function getConstraints( ValidatorInterface $validator )
     {
         $metadata    = $validator->getMetadataFactory()->getMetadataFor( $this->_class );
         $constraints = array();

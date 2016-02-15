@@ -39,6 +39,8 @@ services:
         arguments: ["%genemu.form.date.options%"]
         tags:
             - { name: form.type, alias: genemu_jquerydate }
+    fos_user.doctrine_registry:
+        alias: doctrine
 
 # Twig Configuration
 twig:

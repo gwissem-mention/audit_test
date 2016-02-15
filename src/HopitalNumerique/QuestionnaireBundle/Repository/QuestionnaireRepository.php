@@ -149,7 +149,7 @@ class QuestionnaireRepository extends EntityRepository
             ->setParameter('user', $user)
             ->innerJoin('questionnaire.domaines', 'domaine', \Doctrine\ORM\Query\Expr\Join::WITH, 'domaine = :domaine')
             ->setParameter('domaine', $domaine)
-            ->having($query->expr()->orX('COUNT(reponse) > :zero', $query->expr()->isNotNull('occurrence')))
+            ->having($query->expr()->orX('COUNT(reponse) > :zero', $query->expr()->isNotNull('occurrence.id')))
             ->setParameter('zero', 0)
         ;
         if (null !== $isLock) {
