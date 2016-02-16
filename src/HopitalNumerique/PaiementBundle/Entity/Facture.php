@@ -25,6 +25,8 @@ class Facture
     /**
      * @var string
      *
+     * @GRID\Column(visible=false)
+     *
      * @ORM\Column(name="fac_name", type="string", options = {"comment" = "Nom de la facture"}, nullable=true)
      */
     private $name;
@@ -38,6 +40,8 @@ class Facture
 
     /**
      * @var \DateTime
+     *
+     * @GRID\Column(visible=false)
      *
      * @ORM\Column(name="fac_date_paiement", type="datetime", options = {"comment" = "Date de paiement de la facture"}, nullable=true)
      */

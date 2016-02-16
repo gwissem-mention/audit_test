@@ -33,6 +33,13 @@ class AllInscriptionGrid extends BaseInscriptionGrid
     {
         $roles = $this->_container->get('nodevo_role.manager.role')->getRolesAsArray();
 
+        $idColumn = new Column\NumberColumn('userId', '');
+        $idColumn->setVisible(false)->setFilterable(false);
+        $this->addColonne($idColumn);
+
+        $sessionIdColumn = new Column\NumberColumn('sessionId', '');
+        $sessionIdColumn->setVisible(false)->setFilterable(false);
+        $this->addColonne($sessionIdColumn);
 
         $moduleColumn = new Column\TextColumn('moduleTitre', 'Module');
         $this->addColonne( $moduleColumn );

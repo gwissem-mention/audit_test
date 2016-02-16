@@ -55,11 +55,15 @@ class DemandesGrid extends DemandesAbstractGrid
     {
         $utilisateurConnecte = $this->utilisateurConnecte;
         
-        parent::setColumns();
-        
+        //parent::setColumns();
+
         $colonneId = new Column\NumberColumn('idIntervention', 'ID');
         $this->addColonne($colonneId);
-        
+
+        $colonneTypeIntervention = new Column\TextColumn('interventionTypeLibelle', '');
+        $colonneTypeIntervention->setFilterable(false)->setVisible(false);
+        $this->addColonne($colonneTypeIntervention);
+
         $colonneInterventionInitiateurType = new Column\TextColumn('interventionInitiateurType', '');
         $colonneInterventionInitiateurType->setAlign('center');
         $colonneInterventionInitiateurType->setFilterable(false);
@@ -69,13 +73,13 @@ class DemandesGrid extends DemandesAbstractGrid
             }
         );
         $this->addColonne($colonneInterventionInitiateurType);
-        
+
         $colonneDateCreationLibelle = new Column\DateColumn('dateCreationLibelle', 'Création');
         $this->addColonne($colonneDateCreationLibelle);
-        
+
         $colonneInterventionEtatLibelle = new Column\TextColumn('interventionEtatLibelle', 'État');
         $this->addColonne($colonneInterventionEtatLibelle);
-        
+
         $colonneCmsiInformations = new Column\TextColumn('cmsi_nom', 'CMSI');
         $colonneCmsiInformations->manipulateRenderCell(
             function($value, \APY\DataGridBundle\Grid\Row $row) {
@@ -83,7 +87,7 @@ class DemandesGrid extends DemandesAbstractGrid
             }
         );
         $this->addColonne($colonneCmsiInformations);
-        
+
         $colonneAmbassadeurInformations = new Column\TextColumn('ambassadeur_nom', 'Ambassadeur');
         $colonneAmbassadeurInformations->manipulateRenderCell(
             function($value, \APY\DataGridBundle\Grid\Row $row) {
@@ -91,7 +95,11 @@ class DemandesGrid extends DemandesAbstractGrid
             }
         );
         $this->addColonne($colonneAmbassadeurInformations);
-        
+
+        $colonneIdDemandeur = new Column\TextColumn('referentId', '');
+        $colonneIdDemandeur->setFilterable(false)->setVisible(false);
+        $this->addColonne($colonneIdDemandeur);
+
         $colonneDemandeurInformations = new Column\TextColumn('referent_nom', 'Demandeur');
         $colonneDemandeurInformations->manipulateRenderCell(
             function($value, \APY\DataGridBundle\Grid\Row $row) {
@@ -99,14 +107,11 @@ class DemandesGrid extends DemandesAbstractGrid
             }
         );
         $this->addColonne($colonneDemandeurInformations);
-        
+
         $colonneObjetsInformations = new Column\TextColumn('objetsInformations', 'Objets');
         $colonneObjetsInformations->setFilterable(false)->setSortable(false);
         $this->addColonne($colonneObjetsInformations);
 
-        $colonneInterventionTypeLibelle = new Column\TextColumn('interventionTypeLibelle', 'État');
-        $this->addColonne($colonneInterventionTypeLibelle);
-       
         $colonneDateChoix = new Column\TextColumn('dateChoix', 'Date choix');
         $colonneDateChoix->manipulateRenderCell(
             function($value, \APY\DataGridBundle\Grid\Row $row) {
@@ -135,7 +140,11 @@ class DemandesGrid extends DemandesAbstractGrid
             }
         );
         $this->addColonne($colonneEvaluation);
-        
+
+        $colonneEvalDate = new Column\TextColumn('evaluationDateLibelle', '');
+        $colonneEvalDate->setFilterable(false)->setVisible(false);
+        $this->addColonne($colonneEvalDate);
+
         $colonneRemboursementEtatLibelle = new Column\TextColumn('remboursementEtatLibelle', 'Remboursement');
         $this->addColonne($colonneRemboursementEtatLibelle);
     }
