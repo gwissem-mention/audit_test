@@ -10,7 +10,6 @@
     {{ block('grid_stylesheets')}}
     {% stylesheets output="compiled/hopitalnumerique-user-ambassadeur-objets.css" filter="cssrewrite, ?yui_css" 
         "@select2_css" 
-        "@fancybox_css" 
         'bundles/hopitalnumeriqueuser/js/nSelect/style.css'
         'bundles/hopitalnumeriqueuser/css/specificationUser.css'
     %}
@@ -23,7 +22,6 @@
     {{ block('grid_javascripts')}}
     {% javascripts output="compiled/hopitalnumerique-user-ambassadeur-objets.js" 
         "@select2_js" 
-        "@fancybox_js" 
         'bundles/hopitalnumeriqueuser/js/nSelect/nSelect.min.js'
         'bundles/hopitalnumeriqueuser/js/Ambassadeur/objets.js'
     %}

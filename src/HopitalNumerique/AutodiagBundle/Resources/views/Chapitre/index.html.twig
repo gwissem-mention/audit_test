@@ -3,7 +3,6 @@
 {% block stylesheets %}
     {{ parent() }}
     {% stylesheets output="compiled/hopitalnumerique-autodiag-chapitre-index.css" filter="cssrewrite, ?yui_css" 
-        "@fancybox_css"
         "@validationEngine_css"
         "@jquery_toggles_css"
         'bundles/nodevoadmin/css/jquery.nestable.css'
@@ -17,7 +16,6 @@
 {% block javascripts %}
     {{parent()}}
     {% javascripts output="compiled/hopitalnumerique-autodiag-chapitre-index.js" 
-        "@fancybox_js" 
         "@nestable_js"
         "@jquery_toggles_js"
         "@validationEngine_js"

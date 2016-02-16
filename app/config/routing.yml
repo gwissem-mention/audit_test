@@ -149,6 +149,10 @@ hopital_numerique_communautepratique:
     resource: "@HopitalNumeriqueCommunautePratiqueBundle/Resources/config/routing.yml"
     prefix: /
 
+hopital_aide_aide:
+    resource: "@HopitalNumeriqueAideBundle/Resources/config/routing.yml"
+    prefix: /admin
+
 # Bundles Nodevo
 nodevo_acl:
     resource: "@NodevoAclBundle/Resources/config/routing.yml"

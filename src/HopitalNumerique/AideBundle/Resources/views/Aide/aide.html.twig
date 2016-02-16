@@ -1,0 +1,20 @@
+{% block body %}
+    <div class="col-sm-12">
+        <div class="panel panel-midnightblue">
+            <div class="panel-heading">
+                <h4>{{ aide is not null ? aide.route : route}}</h4>
+
+            </div>
+
+            <div class="panel-body" >
+                {% if aide is not null %}
+                    <p>
+                        {{ aide.libelle|raw }}
+                    </p>
+                {% else %}
+                    <p>Il n'y a pas encore d'aide pour cette page, vous pouvez en ajouter une avec la route <strong>{{ route }}</strong></p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+{% endblock %}

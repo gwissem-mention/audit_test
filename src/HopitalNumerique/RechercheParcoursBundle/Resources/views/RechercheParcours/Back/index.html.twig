@@ -4,7 +4,6 @@
     {{ parent() }}
     {% stylesheets output="compiled/hopitalnumerique-recherche-parcours-index.css" filter="cssrewrite, ?yui_css" 
         "@select2_css" 
-        "@fancybox_css"
         "@validationEngine_css"
         "@jquery_toggles_css"
         'bundles/nodevoadmin/css/jquery.nestable.css'
@@ -20,7 +19,6 @@
     {{parent()}}
     {% javascripts output="compiled/hopitalnumerique-recherche-parcours-index.js" 
         "@select2_js" 
-        "@fancybox_js" 
         "@nestable_js"
         "@tinymce_js"
         "@jquery_toggles_js"

@@ -1,0 +1,35 @@
+{% extends 'NodevoAdminBundle::admin.html.twig' %}
+
+{% block title %}{{parent()}} - Aide plateforme{% endblock %}
+
+{% block h1Title %}
+    Fiche de l'aide {{aide.route}}
+{% endblock %}
+
+{% block toolbarButton %}
+    <a class="btn btn-default" href="{{ path('hopitalnumerique_aide_aide') }}" title="Retour à la liste"><i class="fa fa-reply"></i></a>
+    {% if aide.id and app.user|checkAuthorization( path('hopitalnumerique_aide_aide_add') ) %}
+        <a href="{{ path('hopitalnumerique_aide_aide_edit', { 'id': aide.id }) }}" class="btn btn-default" title="Editer"><i class="fa fa-edit"></i></a>
+    {% endif %}
+{% endblock %}
+
+{% block body %}
+    <div class="col-sm-12">
+        <div class="panel panel-midnightblue">
+            <div class="panel-heading">
+                <h4>Informations</h4>
+            </div>
+
+            <div class="panel-body" >
+                <p>
+                    <strong>Route : </strong>
+                    {{ aide.route }}
+                </p>
+                <p>
+                    <strong>Libellé : </strong>
+                    {{ aide.libelle|raw }}
+                </p>
+            </div>
+        </div>
+    </div>
+{% endblock %}
