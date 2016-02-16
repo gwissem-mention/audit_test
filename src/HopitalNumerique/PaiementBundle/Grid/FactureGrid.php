@@ -18,7 +18,7 @@ class FactureGrid extends Grid implements GridInterface
     public function setConfig()
     {
         $this->setSource( 'HopitalNumeriquePaiementBundle:Facture' );
-        $this->setNoDataMessage('Aucun Facture à afficher.');
+        $this->setNoDataMessage('Aucune facture à afficher.');
         $this->setButtonSize( 43 );
         $this->setDefaultOrder( 'dateCreation', 'desc' );
     }
