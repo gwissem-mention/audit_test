@@ -12,6 +12,9 @@ use FOS\UserBundle\Model\UserInterface;
 
 use Symfony\Component\HttpFoundation\Request;
 
+use HopitalNumerique\ExpertBundle\Entity\ActiviteExpert;
+use HopitalNumerique\ExpertBundle\Entity\CourrielRegistre;
+use HopitalNumerique\ExpertBundle\Manager\ActiviteExpertManager;
 use HopitalNumerique\ExpertBundle\Manager\CourrielRegistreManager;
 use HopitalNumerique\ReferenceBundle\Manager\ReferenceManager;
 use HopitalNumerique\DomaineBundle\Manager\DomaineManager;
@@ -63,6 +66,11 @@ class MailManager extends BaseManager
     private $referenceManager;
 
     /**
+     * @var \HopitalNumerique\ExpertBundle\Manager\ActiviteExpertManager ActiviteExpertManager
+     */
+    private $activiteExpertManager;
+
+    /**
      * @var \HopitalNumerique\ExpertBundle\Manager\CourrielRegistreManager CourrielRegistreManager
      */
     private $courrielRegistreManager;
@@ -80,8 +88,8 @@ class MailManager extends BaseManager
      * @param EntityManager $em Entity      Manager de Doctrine
      * @param Array         $options        Tableau d'options
      */
-    public function __construct(EntityManager $em, \Swift_Mailer $mailer, \Twig_Environment $twig, $router, SecurityContextInterface $securityContext ,RequestStack $requestStack, $session, DomaineManager $domaineManager, UserManager $userManager, ReferenceManager $referenceManager, CourrielRegistreManager $courrielRegistreManager, $options = array())
-    {        
+    public function __construct(EntityManager $em, \Swift_Mailer $mailer, \Twig_Environment $twig, $router, SecurityContextInterface $securityContext ,RequestStack $requestStack, $session, DomaineManager $domaineManager, UserManager $userManager, ReferenceManager $referenceManager, ActiviteExpertManager $activiteExpertManager, CourrielRegistreManager $courrielRegistreManager, $options = array())
+    {
         parent::__construct($em);
         
         $this->mailer = $mailer;
@@ -100,6 +108,7 @@ class MailManager extends BaseManager
         $this->_domaineManager = $domaineManager;
         $this->_userManager    = $userManager;
         $this->referenceManager = $referenceManager;
+        $this->activiteExpertManager = $activiteExpertManager;
         $this->courrielRegistreManager = $courrielRegistreManager;
 
         $this->setOptions();
@@ -858,7 +867,7 @@ class MailManager extends BaseManager
      *
      * @param string $destinataireAdresseElectronique Adresse du destinataire
      */
-    public function sendExpertActiviteContratMail($destinataireAdresseElectronique)
+    public function sendExpertActiviteContratMail(ActiviteExpert $activiteExpert, $destinataireAdresseElectronique)
     {
         $courriel = $this->findOneById(60);
         $contratModele = $this->referenceManager->findOneByCode('ACTIVITE_EXPERT_CONTRAT_MODELE');
@@ -867,6 +876,7 @@ class MailManager extends BaseManager
             $this->generationMail(null, $courriel)
             ->setTo($destinataireAdresseElectronique)
             ->attach(\Swift_Attachment::fromPath('medias'.DIRECTORY_SEPARATOR.'ActiviteExperts'.DIRECTORY_SEPARATOR.$contratModele->getLibelle()))
+            ->attach(\Swift_Attachment::fromPath($this->activiteExpertManager->getContratCsv($activiteExpert)))
         ;
 
         $this->mailer->send($message);
@@ -875,6 +885,7 @@ class MailManager extends BaseManager
             $courrielRegistre = $this->courrielRegistreManager->createEmpty();
             $courrielRegistre->setDestinataire($destinataireAdresseElectronique);
             $courrielRegistre->setUser($this->user);
+            $courrielRegistre->setType(CourrielRegistre::TYPE_CONTRAT);
             $this->courrielRegistreManager->save($courrielRegistre);
         }
     }

@@ -1,0 +1,232 @@
+[1mdiff --git a/src/HopitalNumerique/ExpertBundle/Controller/ActiviteExpertController.php b/src/HopitalNumerique/ExpertBundle/Controller/ActiviteExpertController.php[m
+[1mindex f216566..4c2947b 100644[m
+[1m--- a/src/HopitalNumerique/ExpertBundle/Controller/ActiviteExpertController.php[m
+[1m+++ b/src/HopitalNumerique/ExpertBundle/Controller/ActiviteExpertController.php[m
+[36m@@ -110,9 +110,9 @@[m [mclass ActiviteExpertController extends Controller[m
+     {[m
+         $adresseElectronique = $request->request->get('email');[m
+ [m
+[31m-        $this->container->get('nodevo_mail.manager.mail')->sendExpertActiviteContratMail($adresseElectronique);[m
+[32m+[m[32m        $this->container->get('nodevo_mail.manager.mail')->sendExpertActiviteContratMail($activiteExpert, $adresseElectronique);[m
+         $this->addFlash('success', 'Courriel envoyé');[m
+[31m-        [m
+[32m+[m
+         return new JsonResponse(array([m
+             'success' => true,[m
+             'redirection' => $this->generateUrl('hopitalnumerique_expert_expert_activite')[m
+[1mdiff --git a/src/HopitalNumerique/ExpertBundle/Entity/CourrielRegistre.php b/src/HopitalNumerique/ExpertBundle/Entity/CourrielRegistre.php[m
+[1mindex 9b3a243..7093228 100644[m
+[1m--- a/src/HopitalNumerique/ExpertBundle/Entity/CourrielRegistre.php[m
+[1m+++ b/src/HopitalNumerique/ExpertBundle/Entity/CourrielRegistre.php[m
+[36m@@ -13,6 +13,17 @@[m [muse Gedmo\Mapping\Annotation as Gedmo;[m
+ class CourrielRegistre[m
+ {[m
+     /**[m
+[32m+[m[32m     * Numéro du type contrat[m
+[32m+[m[32m     */[m
+[32m+[m[32m    const TYPE_CONTRAT = 1;[m
+[32m+[m
+[32m+[m[32m    /**[m
+[32m+[m[32m     * Numéro du type paiement[m
+[32m+[m[32m     */[m
+[32m+[m[32m    const TYPE_PAIEMENT = 2;[m
+[32m+[m
+[32m+[m
+[32m+[m[32m    /**[m
+      * @var integer[m
+      *[m
+      * @ORM\Column(name="coreg_id", type="integer", options={"unsigned"=true})[m
+[36m@@ -37,6 +48,13 @@[m [mclass CourrielRegistre[m
+     private $user;[m
+ [m
+     /**[m
+[32m+[m[32m     * @var integer[m
+[32m+[m[32m     *[m
+[32m+[m[32m     * @ORM\Column(name="coreg_type_id", type="smallint", nullable=false, options={"unsigned"=true, "comment"="1=contrat,2=paiement"})[m
+[32m+[m[32m     */[m
+[32m+[m[32m    private $type;[m
+[32m+[m
+[32m+[m[32m    /**[m
+      * @var \DateTime[m
+      *[m
+      * @Gedmo\Timestampable(on="create")[m
+[36m@@ -104,6 +122,30 @@[m [mclass CourrielRegistre[m
+     }[m
+ [m
+     /**[m
+[32m+[m[32m     * Set type[m
+[32m+[m[32m     *[m
+[32m+[m[32m     * @param integer $type[m
+[32m+[m[32m     *[m
+[32m+[m[32m     * @return CourrielRegistre[m
+[32m+[m[32m     */[m
+[32m+[m[32m    public function setType($type)[m
+[32m+[m[32m    {[m
+[32m+[m[32m        $this->type = $type;[m
+[32m+[m
+[32m+[m[32m        return $this;[m
+[32m+[m[32m    }[m
+[32m+[m
+[32m+[m[32m    /**[m
+[32m+[m[32m     * Get type[m
+[32m+[m[32m     *[m
+[32m+[m[32m     * @return integer[m
+[32m+[m[32m     */[m
+[32m+[m[32m    public function getType()[m
+[32m+[m[32m    {[m
+[32m+[m[32m        return $this->type;[m
+[32m+[m[32m    }[m
+[32m+[m
+[32m+[m[32m    /**[m
+      * Set dateCreation[m
+      *[m
+      * @param \DateTime $dateCreation[m
+[1mdiff --git a/src/HopitalNumerique/ExpertBundle/Manager/ActiviteExpertManager.php b/src/HopitalNumerique/ExpertBundle/Manager/ActiviteExpertManager.php[m
+[1mindex cebb65f..3a0d21c 100644[m
+[1m--- a/src/HopitalNumerique/ExpertBundle/Manager/ActiviteExpertManager.php[m
+[1m+++ b/src/HopitalNumerique/ExpertBundle/Manager/ActiviteExpertManager.php[m
+[36m@@ -143,4 +143,59 @@[m [mclass ActiviteExpertManager extends BaseManager[m
+         return $this->getRepository()->getActivitesForAnapien($idAnapien)->getQuery()->getResult();[m
+     }[m
+ [m
+[31m-}[m
+\ No newline at end of file[m
+[32m+[m[32m    /**[m
+[32m+[m[32m     * Retourne le CSV (fichier temporaire) du contrat.[m
+[32m+[m[32m     *[m
+[32m+[m[32m     * @param \HopitalNumerique\ExpertBundle\Entity\ActiviteExpert $activiteExpert Expert[m
+[32m+[m[32m     * @return string Chemin du fichier CSV[m
+[32m+[m[32m     */[m
+[32m+[m[32m    public function getContratCsv(ActiviteExpert $activiteExpert)[m
+[32m+[m[32m    {[m
+[32m+[m[32m        $csvFile = tmpfile();[m
+[32m+[m[32m        $csvPath = stream_get_meta_data(tmpfile())['uri'];[m
+[32m+[m
+[32m+[m[32m        $anapienNoms = array();[m
+[32m+[m[32m        foreach ($activiteExpert->getAnapiens() as $anapien) {[m
+[32m+[m[32m            $anapienNoms[] = $anapien->getPrenomNom();[m
+[32m+[m[32m        }[m
+[32m+[m
+[32m+[m[32m        $csvColumns = array([m
+[32m+[m[32m            'Titre',[m
+[32m+[m[32m            'Type d\'activité',[m
+[32m+[m[32m            'Date de début',[m
+[32m+[m[32m            'Date de fin',[m
+[32m+[m[32m            'Nombre de vacations par expert',[m
+[32m+[m[32m            'Prestataire affecté',[m
+[32m+[m[32m            'Unité d\'oeuvre concernée',[m
+[32m+[m[32m            'Anapiens référents',[m
+[32m+[m[32m            'État',[m
+[32m+[m[32m            'Expert concerné - Prénom',[m
+[32m+[m[32m            'Expert concerné - Nom',[m
+[32m+[m[32m            'Expert concerné - Adresse électronique'[m
+[32m+[m[32m        );[m
+[32m+[m
+[32m+[m[32m        $csvData = array();[m
+[32m+[m[32m        foreach ($activiteExpert->getExpertConcernes() as $expertConcerne) {[m
+[32m+[m[32m            $csvData[] = array([m
+[32m+[m[32m                $activiteExpert->getTitre(),[m
+[32m+[m[32m                $activiteExpert->getTypeActivite(),[m
+[32m+[m[32m                (null !== $activiteExpert->getDateDebut() ? $activiteExpert->getDateDebut()->format('d/m/Y') : ''),[m
+[32m+[m[32m                (null !== $activiteExpert->getDateFin() ? $activiteExpert->getDateFin()->format('d/m/Y') : ''),[m
+[32m+[m[32m                $activiteExpert->getNbVacationParExpert(),[m
+[32m+[m[32m                $activiteExpert->getPrestataire(),[m
+[32m+[m[32m                $activiteExpert->getUniteOeuvreConcerne(),[m
+[32m+[m[32m                implode(', ', $anapienNoms),[m
+[32m+[m[32m                $activiteExpert->getEtat(),[m
+[32m+[m[32m                $expertConcerne->getPrenom(),[m
+[32m+[m[32m                $expertConcerne->getNom(),[m
+[32m+[m[32m                $expertConcerne->getEmail()[m
+[32m+[m[32m            );[m
+[32m+[m[32m        }[m
+[32m+[m
+[32m+[m[32m        $csvResponse = $this->exportCsv($csvColumns, $csvData, 'activite.csv', 'ISO-8859-1');[m
+[32m+[m[32m        $csvContent = $csvResponse->getContent();[m
+[32m+[m[32m        fwrite($csvFile, $csvContent);[m
+[32m+[m
+[32m+[m[32m        return $csvPath;[m
+[32m+[m[32m    }[m
+[32m+[m[32m}[m
+[1mdiff --git a/src/Nodevo/MailBundle/Manager/MailManager.php b/src/Nodevo/MailBundle/Manager/MailManager.php[m
+[1mindex d2115b4..830749b 100755[m
+[1m--- a/src/Nodevo/MailBundle/Manager/MailManager.php[m
+[1m+++ b/src/Nodevo/MailBundle/Manager/MailManager.php[m
+[36m@@ -12,6 +12,9 @@[m [muse FOS\UserBundle\Model\UserInterface;[m
+ [m
+ use Symfony\Component\HttpFoundation\Request;[m
+ [m
+[32m+[m[32muse HopitalNumerique\ExpertBundle\Entity\ActiviteExpert;[m
+[32m+[m[32muse HopitalNumerique\ExpertBundle\Entity\CourrielRegistre;[m
+[32m+[m[32muse HopitalNumerique\ExpertBundle\Manager\ActiviteExpertManager;[m
+ use HopitalNumerique\ExpertBundle\Manager\CourrielRegistreManager;[m
+ use HopitalNumerique\ReferenceBundle\Manager\ReferenceManager;[m
+ use HopitalNumerique\DomaineBundle\Manager\DomaineManager;[m
+[36m@@ -63,6 +66,11 @@[m [mclass MailManager extends BaseManager[m
+     private $referenceManager;[m
+ [m
+     /**[m
+[32m+[m[32m     * @var \HopitalNumerique\ExpertBundle\Manager\ActiviteExpertManager ActiviteExpertManager[m
+[32m+[m[32m     */[m
+[32m+[m[32m    private $activiteExpertManager;[m
+[32m+[m
+[32m+[m[32m    /**[m
+      * @var \HopitalNumerique\ExpertBundle\Manager\CourrielRegistreManager CourrielRegistreManager[m
+      */[m
+     private $courrielRegistreManager;[m
+[36m@@ -80,8 +88,8 @@[m [mclass MailManager extends BaseManager[m
+      * @param EntityManager $em Entity      Manager de Doctrine[m
+      * @param Array         $options        Tableau d'options[m
+      */[m
+[31m-    public function __construct(EntityManager $em, \Swift_Mailer $mailer, \Twig_Environment $twig, $router, SecurityContextInterface $securityContext ,RequestStack $requestStack, $session, DomaineManager $domaineManager, UserManager $userManager, ReferenceManager $referenceManager, CourrielRegistreManager $courrielRegistreManager, $options = array())[m
+[31m-    {        [m
+[32m+[m[32m    public function __construct(EntityManager $em, \Swift_Mailer $mailer, \Twig_Environment $twig, $router, SecurityContextInterface $securityContext ,RequestStack $requestStack, $session, DomaineManager $domaineManager, UserManager $userManager, ReferenceManager $referenceManager, ActiviteExpertManager $activiteExpertManager, CourrielRegistreManager $courrielRegistreManager, $options = array())[m
+[32m+[m[32m    {[m
+         parent::__construct($em);[m
+         [m
+         $this->mailer = $mailer;[m
+[36m@@ -100,6 +108,7 @@[m [mclass MailManager extends BaseManager[m
+         $this->_domaineManager = $domaineManager;[m
+         $this->_userManager    = $userManager;[m
+         $this->referenceManager = $referenceManager;[m
+[32m+[m[32m        $this->activiteExpertManager = $activiteExpertManager;[m
+         $this->courrielRegistreManager = $courrielRegistreManager;[m
+ [m
+         $this->setOptions();[m
+[36m@@ -858,7 +867,7 @@[m [mclass MailManager extends BaseManager[m
+      *[m
+      * @param string $destinataireAdresseElectronique Adresse du destinataire[m
+      */[m
+[31m-    public function sendExpertActiviteContratMail($destinataireAdresseElectronique)[m
+[32m+[m[32m    public function sendExpertActiviteContratMail(ActiviteExpert $activiteExpert, $destinataireAdresseElectronique)[m
+     {[m
+         $courriel = $this->findOneById(60);[m
+         $contratModele = $this->referenceManager->findOneByCode('ACTIVITE_EXPERT_CONTRAT_MODELE');[m
+[36m@@ -867,6 +876,7 @@[m [mclass MailManager extends BaseManager[m
+             $this->generationMail(null, $courriel)[m
+             ->setTo($destinataireAdresseElectronique)[m
+             ->attach(\Swift_Attachment::fromPath('medias'.DIRECTORY_SEPARATOR.'ActiviteExperts'.DIRECTORY_SEPARATOR.$contratModele->getLibelle()))[m
+[32m+[m[32m            ->attach(\Swift_Attachment::fromPath($this->activiteExpertManager->getContratCsv($activiteExpert)))[m
+         ;[m
+ [m
+         $this->mailer->send($message);[m
+[36m@@ -875,6 +885,7 @@[m [mclass MailManager extends BaseManager[m
+             $courrielRegistre = $this->courrielRegistreManager->createEmpty();[m
+             $courrielRegistre->setDestinataire($destinataireAdresseElectronique);[m
+             $courrielRegistre->setUser($this->user);[m
+[32m+[m[32m            $courrielRegistre->setType(CourrielRegistre::TYPE_CONTRAT);[m
+             $this->courrielRegistreManager->save($courrielRegistre);[m
+         }[m
+     }[m
+[1mdiff --git a/src/Nodevo/MailBundle/Resources/config/services.yml b/src/Nodevo/MailBundle/Resources/config/services.yml[m
+[1mindex 4214b45..2a4b227 100644[m
+[1m--- a/src/Nodevo/MailBundle/Resources/config/services.yml[m
+[1m+++ b/src/Nodevo/MailBundle/Resources/config/services.yml[m
+[36m@@ -9,7 +9,7 @@[m [mparameters:[m
+ services:[m
+     nodevo_mail.manager.mail:[m
+         class: "%nodevo_mail.manager.mail.class%"[m
+[31m-        arguments: ["@doctrine.orm.entity_manager", "@mailer", "@twig", "@router", '@security.context', "@request_stack", "@session", "@hopitalnumerique_domaine.manager.domaine", "@hopitalnumerique_user.manager.user", '@hopitalnumerique_reference.manager.reference', '@hopitalnumerique_expert.manager.courriel_registre', "%nodevo_mail.options%"][m
+[32m+[m[32m        arguments: ["@doctrine.orm.entity_manager", "@mailer", "@twig", "@router", '@security.context', "@request_stack", "@session", "@hopitalnumerique_domaine.manager.domaine", "@hopitalnumerique_user.manager.user", '@hopitalnumerique_reference.manager.reference', '@hopitalnumerique_expert.manager.activiteexpert', '@hopitalnumerique_expert.manager.courriel_registre', "%nodevo_mail.options%"][m
+         calls:[m
+            - [ setCache, [ "@liip_doctrine_cache.ns.main" ] ][m
+ [m

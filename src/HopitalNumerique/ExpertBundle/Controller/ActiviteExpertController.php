@@ -110,9 +110,9 @@ class ActiviteExpertController extends Controller
     {
         $adresseElectronique = $request->request->get('email');
 
-        $this->container->get('nodevo_mail.manager.mail')->sendExpertActiviteContratMail($adresseElectronique);
+        $this->container->get('nodevo_mail.manager.mail')->sendExpertActiviteContratMail($activiteExpert, $adresseElectronique);
         $this->addFlash('success', 'Courriel envoyé');
-        
+
         return new JsonResponse(array(
             'success' => true,
             'redirection' => $this->generateUrl('hopitalnumerique_expert_expert_activite')

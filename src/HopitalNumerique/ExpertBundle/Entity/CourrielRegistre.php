@@ -13,6 +13,17 @@ use Gedmo\Mapping\Annotation as Gedmo;
 class CourrielRegistre
 {
     /**
+     * Numéro du type contrat
+     */
+    const TYPE_CONTRAT = 1;
+
+    /**
+     * Numéro du type paiement
+     */
+    const TYPE_PAIEMENT = 2;
+
+
+    /**
      * @var integer
      *
      * @ORM\Column(name="coreg_id", type="integer", options={"unsigned"=true})
@@ -35,6 +46,13 @@ class CourrielRegistre
      * @ORM\JoinColumn(name="usr_id", referencedColumnName="usr_id", onDelete="CASCADE", nullable=false)
      */
     private $user;
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="coreg_type_id", type="smallint", nullable=false, options={"unsigned"=true, "comment"="1=contrat,2=paiement"})
+     */
+    private $type;
 
     /**
      * @var \DateTime
@@ -101,6 +119,30 @@ class CourrielRegistre
     public function getUser()
     {
         return $this->user;
+    }
+
+    /**
+     * Set type
+     *
+     * @param integer $type
+     *
+     * @return CourrielRegistre
+     */
+    public function setType($type)
+    {
+        $this->type = $type;
+
+        return $this;
+    }
+
+    /**
+     * Get type
+     *
+     * @return integer
+     */
+    public function getType()
+    {
+        return $this->type;
     }
 
     /**
