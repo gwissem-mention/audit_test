@@ -80,12 +80,12 @@
 				                {# Permet de vérifier si un ambassadeur est présent pour la région #}
 				                {% set ambassadeurExisteRegion = false %}
 				                {% for ambassadeur in ambassadeurs[region.id] %}
-				                    {% if ambassadeur.region.id == region.id %}
+				                    {% if ambassadeur.region.id == region.id or ambassadeur.hasRattachementRegion(region) %}
 				                        {% set ambassadeurExisteRegion = true %}
 					                    <div class="fiche col-md-6">
 					                        <div class="content">
                                                     
-                                                <h5>{{ambassadeur.prenom|title ~ ' ' ~ ambassadeur.nom|title}}</h5>
+                                                <h5>{{ambassadeur.prenom|title ~ ' ' ~ ambassadeur.nom|title}}{{ ambassadeur.ville is not null or ambassadeur.codePostal is not null ? ' - '~ambassadeur.codePostal~' '~ambassadeur.ville : '' }}</h5>
 
                                                 <div class="col-md-3">
                                                     {% if ambassadeur.getPath() is not null and ambassadeur.getPath() is not empty %}

@@ -3,19 +3,9 @@
 {# Grid mandatory Stuff #}
 {% use 'NodevoGridBundle::grid.config.html.twig' %}
 
-{% block stylesheets %}
-    {{ parent() }}
-    {% stylesheets output="compiled/hopitalnumerique-questionnaire-gestion-edit.css" filter="cssrewrite, ?yui_css" 
-        "@validationEngine_css"
-    %}
-        <link rel="stylesheet" href="{{ asset_url }}" />
-    {% endstylesheets %}
-{% endblock %}
-
 {% block javascripts %}
     {{ parent() }}
-    {% javascripts output="compiled/hopitalnumerique-questionnaire-gestion-edit.js" 
-        "@validationEngine_js"
+    {% javascripts output="compiled/hopitalnumerique-questionnaire-gestion-edit.js"
         "bundles/hopitalnumeriquequestionnaire/js/Back_gestion/Form.js"
     %}
         <script type="text/javascript" src="{{ asset_url }}"></script>

@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="fr">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        {%- block stylesheets -%}
+            <style type="text/css">
+                #parametrage {padding:15px;height: 273px;}
+                #parametrage .content .title {padding:15px;background-color:#F4F4F4;font-size: 16px; font-weight: bold;}
+                #parametrage .content .title i{color:#1C1C1C;}
+                #parametrage .content .body {padding:15px;background-color:#F4F4F4; margin-top: 10px}
+                #parametrage .content .body .input-group .value-ok{color:#4BA24B;}
+                #parametrage .content .body .input-group .value-ko{color:#C3302C;}
+                #parametrage .content .body .input-group .value-search{color:#1C1C1C;}
+                #parametrage .content .body .input-group .no-value{color:#1C1C1C;}
+                #parametrage .content .body .gestion-label {text-align: center;margin-top: 10px;height: 20px;}
+                #parametrage .content .body .toolbar{margin-top: 10px;}
+                #parametrage .content .body .toolbar .btn i{margin-right: 5px;}
+            </style>
+        {%- endblock -%}
+        {%- block javascripts %}{% endblock -%}
+    </head>
+    <body>
+        <div class="panel panel-midnightblue" style="margin:0">
+            <div class="panel-heading" style="height:5px"></div>
+            <div class="clearfix"></div>
+            <div id="panel-partage">
+                <div class="tableContent" id="parametrage">
+                    <div class="content">
+                        <div class="col-md-12 title">
+                            <div class="col-md-12 violet title-autodiag">{% block title %}{% endblock %}</div>
+                        </div>
+                        <div class="col-md-12 body">
+                            {% block body %}{% endblock %}
+                            <div class="clearfix"></div>
+                        </div>
+                        <div class="clearfix"></div>
+                    </div>
+                </div>
+                <div class="clearfix"></div>
+
+            </div>
+            <div class="clearfix"></div>
+        </div>
+    </body>
+</html>

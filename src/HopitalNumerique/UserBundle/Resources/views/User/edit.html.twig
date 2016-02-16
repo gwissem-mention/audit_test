@@ -13,8 +13,7 @@
 {% block stylesheets %}
     {{parent()}}
     {% stylesheets output="compiled/hopitalnumerique-user-user-edit.css" filter="cssrewrite, ?yui_css" 
-        "@select2_css" 
-        "@validationEngine_css"
+        "@select2_css"
     %}
         <link rel="stylesheet" href="{{ asset_url }}" />
     {% endstylesheets %}
@@ -22,8 +21,7 @@
 {% block javascripts %}
     {{parent()}}
     {% javascripts output="compiled/hopitalnumerique-user-user-edit.js" 
-        "@select2_js" 
-        "@validationEngine_js"
+        "@select2_js"
         "@jquery_maskedinput_js"
         'bundles/hopitalnumeriqueuser/js/User/script.js'
     %}
@@ -105,7 +103,16 @@
                     {{ form_row(form.telephoneDirect) }}
                     {{ form_row(form.telephonePortable) }}
                     {{ form_row(form.contactAutre) }}
+                    {%- if form.ville is defined -%}
+                        {{ form_row(form.ville) }}
+                    {%- endif -%}
+                    {%- if form.codePostal is defined -%}
+                        {{ form_row(form.codePostal) }}
+                    {%- endif -%}
                     {{ form_row(form.region) }}
+                    {%- if form.rattachementRegions is defined -%}
+                        {{ form_row(form.rattachementRegions) }}
+                    {%- endif -%}
                     {{ form_row(form.departement) }} 
                     {{ form_row(form.profilEtablissementSante) }}
 

@@ -7,14 +7,18 @@ use Nodevo\ToolsBundle\Manager\Manager as BaseManager;
 use Doctrine\ORM\EntityManager;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
+use Symfony\Component\Security\Core\SecurityContextInterface;
 use FOS\UserBundle\Model\UserInterface;
 
 use Symfony\Component\HttpFoundation\Request;
 
+use HopitalNumerique\ExpertBundle\Manager\CourrielRegistreManager;
+use HopitalNumerique\ReferenceBundle\Manager\ReferenceManager;
 use HopitalNumerique\DomaineBundle\Manager\DomaineManager;
 use HopitalNumerique\UserBundle\Entity\User;
 use HopitalNumerique\AutodiagBundle\Entity\Outil;
 use HopitalNumerique\UserBundle\Manager\UserManager;
+
 /**
  * Manager de l'entité Mail.
  */
@@ -52,7 +56,23 @@ class MailManager extends BaseManager
     private $_session;
     private $_domaineManager;
     private $_userManager;
+
+    /**
+     * @var \HopitalNumerique\ReferenceBundle\Manager\ReferenceManager ReferenceManager
+     */
+    private $referenceManager;
+
+    /**
+     * @var \HopitalNumerique\ExpertBundle\Manager\CourrielRegistreManager CourrielRegistreManager
+     */
+    private $courrielRegistreManager;
+
     private $_optionsMail = array();
+
+    /**
+     * @var \HopitalNumerique\UserBundle\Entity\User|null Utilisateur connecté
+     */
+    private $user;
 
     /**
      * Constructeur du manager, on lui passe l'entity Manager de doctrine, un booléen si on peut ajouter des mails
@@ -60,7 +80,7 @@ class MailManager extends BaseManager
      * @param EntityManager $em Entity      Manager de Doctrine
      * @param Array         $options        Tableau d'options
      */
-    public function __construct(EntityManager $em, \Swift_Mailer $mailer, \Twig_Environment $twig, $router, RequestStack $requestStack, $session, DomaineManager $domaineManager, UserManager $userManager,$options = array())
+    public function __construct(EntityManager $em, \Swift_Mailer $mailer, \Twig_Environment $twig, $router, SecurityContextInterface $securityContext ,RequestStack $requestStack, $session, DomaineManager $domaineManager, UserManager $userManager, ReferenceManager $referenceManager, CourrielRegistreManager $courrielRegistreManager, $options = array())
     {        
         parent::__construct($em);
         
@@ -79,8 +99,12 @@ class MailManager extends BaseManager
         $this->_session        = $session;
         $this->_domaineManager = $domaineManager;
         $this->_userManager    = $userManager;
+        $this->referenceManager = $referenceManager;
+        $this->courrielRegistreManager = $courrielRegistreManager;
 
         $this->setOptions();
+
+        $this->user = (null !== $securityContext->getToken() ? ($securityContext->getToken()->getUser() instanceof User ? $securityContext->getToken()->getUser() : null) : null);
     }
 
     public function getDestinataire()
@@ -829,6 +853,32 @@ class MailManager extends BaseManager
         }
     }
 
+    /**
+     * Envoi le courriel avec le modèle de contrat.
+     *
+     * @param string $destinataireAdresseElectronique Adresse du destinataire
+     */
+    public function sendExpertActiviteContratMail($destinataireAdresseElectronique)
+    {
+        $courriel = $this->findOneById(60);
+        $contratModele = $this->referenceManager->findOneByCode('ACTIVITE_EXPERT_CONTRAT_MODELE');
+
+        $message =
+            $this->generationMail(null, $courriel)
+            ->setTo($destinataireAdresseElectronique)
+            ->attach(\Swift_Attachment::fromPath('medias'.DIRECTORY_SEPARATOR.'ActiviteExperts'.DIRECTORY_SEPARATOR.$contratModele->getLibelle()))
+        ;
+
+        $this->mailer->send($message);
+
+        if (null !== $this->user) {
+            $courrielRegistre = $this->courrielRegistreManager->createEmpty();
+            $courrielRegistre->setDestinataire($destinataireAdresseElectronique);
+            $courrielRegistre->setUser($this->user);
+            $this->courrielRegistreManager->save($courrielRegistre);
+        }
+    }
+
     private function getMailDomaine()
     {
         if (null !== $this->_mailAnap && $this->_mailAnap === "") {
@@ -892,7 +942,7 @@ class MailManager extends BaseManager
         $cci     = ($mail->getId() === 1 || $mail->getId() === 2) ? false : $cci;
         $subject = $this->replaceContent($mail->getObjet(), $user, $options);
 
-        return $this->sendMail( $subject, $from, $user->getEmail(), $body, $cci, $check );
+        return $this->sendMail( $subject, $from, (null !== $user ? $user->getEmail() : null), $body, $cci, $check );
     }
 
     /**
@@ -943,14 +993,15 @@ class MailManager extends BaseManager
      *
      * @return \Swift_Message
      */
-    private function sendMail( $subject, $from, $destinataire, $body, $bcc = false, $check = 0 )
+    private function sendMail( $subject, $from, $destinataire = null, $body, $bcc = false, $check = 0 )
     {
         $body = quoted_printable_decode($body);
 
-        $user_mail = $this->_userManager->findOneBy(array("email" => $destinataire));
-        
-        if(($user_mail != null && !$user_mail->isActif()) || $check != 0) {
-            return \Swift_Message::newInstance();
+        if (null !== $destinataire) {
+            $user_mail = $this->_userManager->findOneBy(array("email" => $destinataire));
+            if(($user_mail != null && !$user_mail->isActif()) || $check != 0) {
+                return \Swift_Message::newInstance();
+            }
         }
 
         //prepare content HTML
@@ -969,11 +1020,15 @@ class MailManager extends BaseManager
 
         //prepare Mail
         $mail = \Swift_Message::newInstance()
-                        ->setSubject( $this->replaceContent($subject, NULL, array() ) )
-                        ->setFrom( $from )
-                        ->setTo( $destinataire )
-                        ->setBody( $bodyTxt )
-                        ->addPart( $bodyHtml, 'text/html' );
+            ->setSubject( $this->replaceContent($subject, NULL, array() ) )
+            ->setFrom( $from )
+            ->setTo( $destinataire )
+            ->setBody( $bodyTxt )
+            ->addPart( $bodyHtml, 'text/html' )
+        ;
+        if (null !== $destinataire) {
+            $mail = \Swift_Message::newInstance()->setTo($destinataire);
+        }
 
         if( $bcc )
             $mail->setBcc( $bcc );

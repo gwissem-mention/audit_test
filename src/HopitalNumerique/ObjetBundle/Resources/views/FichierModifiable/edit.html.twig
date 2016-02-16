@@ -8,19 +8,9 @@
     Editer une publication 
 {% endblock %}
 
-{% block stylesheets %}
-    {{parent()}}
-    {% stylesheets output="compiled/hopitalnumerique-objet-fichiermodifiable-edit.css" filter="cssrewrite, ?yui_css"
-        '@validationEngine_css'
-    %}
-        <link rel="stylesheet" href="{{ asset_url }}" />
-    {% endstylesheets %}
-{% endblock %}
-
 {% block javascripts %}
     {{parent()}}
     {% javascripts output="compiled/hopitalnumerique-objet-fichiermodifiable-edit.js"
-        '@validationEngine_js'
         'bundles/hopitalnumeriqueobjet/js/fichierModifiable/script.js'
     %}
         <script type="text/javascript" src="{{ asset_url }}"></script>

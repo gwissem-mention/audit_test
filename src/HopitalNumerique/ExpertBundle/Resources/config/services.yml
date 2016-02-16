@@ -25,6 +25,10 @@ services:
         tags:
             - { name: form.type, alias: hopitalnumerique_expert_activiteexpert }
 
+    hopitalnumerique_expert.manager.courriel_registre:
+        class: 'HopitalNumerique\ExpertBundle\Manager\CourrielRegistreManager'
+        arguments: ['@doctrine.orm.entity_manager']
+
     hopitalnumerique_expert.manager.evenementexpert:
         class: %hopitalnumerique_expert.manager.evenementexpert.class%
         arguments: ["@doctrine.orm.entity_manager"]

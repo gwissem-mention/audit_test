@@ -136,7 +136,6 @@ class Reference
     public function __construct()
     {
         $this->lock  = false;
-        $this->etat  = 1;
         $this->order = 1;
     }
 

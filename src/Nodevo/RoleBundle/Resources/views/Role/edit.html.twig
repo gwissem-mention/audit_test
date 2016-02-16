@@ -13,20 +13,10 @@
 {% block javascripts %}
     {{parent()}}
     {% javascripts output="compiled/nodevo-role-role-edit.js"
-        "@validationEngine_js"
         'bundles/nodevorole/js/script.js'
     %}
         <script type="text/javascript" src="{{ asset_url }}"></script>
     {% endjavascripts %}
-{% endblock %}
-
-{% block stylesheets %}
-    {{parent()}}
-    {% stylesheets output="compiled/nodevo-role-role-edit.css" filter="cssrewrite, ?yui_css"
-        "@validationEngine_css"
-    %}
-        <link rel="stylesheet" href="{{ asset_url }}" />
-    {% endstylesheets %}
 {% endblock %}
 
 {% block toolbarButton %}

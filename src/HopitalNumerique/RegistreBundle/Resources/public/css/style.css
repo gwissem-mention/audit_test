@@ -42,8 +42,17 @@
 .fancybox-popin {width:auto;}
 .fancybox-inner {width:550px; overflow:auto;}
 
+#registre-ambassadeur .map #canvas_france{height: 225px;}
+#registre-ambassadeur .map #canvas_france svg {width: 100%; height: 350px; margin-left: 20px; margin-top: 10px;}
+
+@media screen and (max-width: 1200px) {
+    #registre-ambassadeur .map #canvas_france{height: 205px;}
+    #registre-ambassadeur .map #canvas_france svg {width:100%; height: auto;}
+}
+
 @media screen and (max-width: 991px) {
-    #registre-ambassadeur .map #canvas_france{width:242px; height:355px; margin:auto;}
+    #registre-ambassadeur .map #canvas_france{width: 242px; height: 250px; margin: auto;}
+    #registre-ambassadeur .map #canvas_france svg {width: 300px; height: 400px; margin-top: 10px; margin-left: 0px;}
     #registre-ambassadeur .annuaire_ambassadeur .fiche .content{height: auto}
     #registre-ambassadeur .map span{display: block;}
     #registre-ambassadeur .domainesFonctionnels{display: block;}

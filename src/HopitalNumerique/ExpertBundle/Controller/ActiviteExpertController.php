@@ -2,6 +2,8 @@
 
 namespace HopitalNumerique\ExpertBundle\Controller;
 
+use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use HopitalNumerique\ExpertBundle\Entity\ActiviteExpert;
@@ -63,9 +65,13 @@ class ActiviteExpertController extends Controller
     public function parametrageAction()
     {
         $montantVacation = $this->get('hopitalnumerique_reference.manager.reference')->findOneById(560);
+        $contratModele = $this->container->get('hopitalnumerique_reference.manager.reference')->findOneByCode('ACTIVITE_EXPERT_CONTRAT_MODELE');
+        $pvRecettesModele = $this->container->get('hopitalnumerique_reference.manager.reference')->findOneByCode('ACTIVITE_EXPERT_PV_RECETTES_MODELE');
 
-        return $this->render( 'HopitalNumeriqueExpertBundle:ActiviteExpert:fancy.html.twig' , array(
-            'montantVacation' => $montantVacation
+        return $this->render('HopitalNumeriqueExpertBundle:ActiviteExpert:fancy.html.twig', array(
+            'montantVacation' => $montantVacation,
+            'contratModele' => $contratModele,
+            'pvRecettesModele' => $pvRecettesModele
         ));
     }
 
@@ -88,52 +94,29 @@ class ActiviteExpertController extends Controller
     }
 
     /**
-     * [payerFactureAction description]
-     *
-     * @param ActiviteExpert $activiteExpert [description]
-     *
-     * @return [type]
+     * Clic sur le bouton Contrat de la grid, affiche la fenêtre pour envoyer le modèle de contrat.
      */
-    public function genererFactureAction(ActiviteExpert $activiteExpert)
+    public function contratAction(ActiviteExpert $activiteExpert)
     {
-        $nbDateNecessaire = $activiteExpert->getNbVacationParExpert() - $activiteExpert->getMiniNbPresenceEvenements();
-
-        if($nbDateNecessaire > count($activiteExpert->getDateFictives()))
-        {
-            $nbDateAAjouter = $nbDateNecessaire - count($activiteExpert->getDateFictives());
-
-            // On envoi une 'flash' pour indiquer à l'utilisateur que l'entité est ajoutée
-            $this->get('session')->getFlashBag()->add( 'danger', 'Il manque '. $nbDateAAjouter .' date(s) fictive(s) pour l\'activité "' . $activiteExpert->getTitre() . '".' );
-            
-            return $this->redirect( $this->generateUrl('hopitalnumerique_expert_expert_activite' ) );
-        }
-
-        $experts     = $this->get('hopitalnumerique_expert.manager.activiteexpert')->getExpertsAndVacationForActivite($activiteExpert);
-        $expertsById = $this->get('hopitalnumerique_expert.manager.activiteexpert')->getExperts($activiteExpert);
-
-        $html = $this->renderView('HopitalNumeriqueExpertBundle:ActiviteExpert/pdf:facture.html.twig', array(
-            'activiteExpert' => $activiteExpert,
-            'experts'        => $experts,
-            'expertsById'    => $expertsById
+        return $this->render('HopitalNumeriqueExpertBundle:ActiviteExpert:contrat.html.twig', array(
+            'activiteExpert' => $activiteExpert
         ));
+    }
 
-        $options = array(
-            'margin-bottom' => 10,
-            'margin-left'   => 4,
-            'margin-right'  => 4,
-            'margin-top'    => 10,
-            'encoding'      => 'UTF-8',
-            'orientation'   => 'Landscape'
-        );
+    /**
+     * Envoie le modèle de contrat.
+     */
+    public function sendContratAction(Request $request, ActiviteExpert $activiteExpert)
+    {
+        $adresseElectronique = $request->request->get('email');
 
-        return new Response(
-            $this->get('knp_snappy.pdf')->getOutputFromHtml($html, $options, true),
-            200,
-            array(
-                'Content-Type'          => 'application/pdf',
-                'Content-Disposition'   => 'attachment; filename="Attestation_'.$activiteExpert->getTitre().'.pdf"'
-            )
-        );
+        $this->container->get('nodevo_mail.manager.mail')->sendExpertActiviteContratMail($adresseElectronique);
+        $this->addFlash('success', 'Courriel envoyé');
+        
+        return new JsonResponse(array(
+            'success' => true,
+            'redirection' => $this->generateUrl('hopitalnumerique_expert_expert_activite')
+        ));
     }
 
 
