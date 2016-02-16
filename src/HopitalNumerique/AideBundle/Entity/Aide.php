@@ -47,14 +47,9 @@ class Aide
     /**
      * @var string
      * @Assert\NotBlank(message="Le libellé ne peut pas être vide.")
-     * @Assert\Length(
-     *      min = "1",
-     *      max = "255",
-     *      minMessage="Il doit y avoir au moins {{ limit }} caractères dans le libellé.",
-     *      maxMessage="Il doit y avoir au maximum {{ limit }} caractères dans le libellé."
-     * )
-     * @Nodevo\Javascript(class="validate[required,minSize[1],maxSize[255]]")
-     * @ORM\Column(name="aide_libelle", type="string", length=255, options = {"comment" = "Libellé de l'aide"})
+     *
+     * @Nodevo\Javascript(class="validate[required,minSize[1]]")
+     * @ORM\Column(name="aide_libelle", type="string", options = {"comment" = "Libellé de l'aide"})
      */
     protected $libelle;
 

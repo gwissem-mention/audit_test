@@ -27,7 +27,6 @@ class AideType extends AbstractType
                 'attr'       => array('class' => $this->_constraints['route']['class'])
             ))
             ->add('libelle', 'textarea', array(
-                'max_length' => $this->_constraints['libelle']['maxlength'],
                 'required'   => true,
                 'label'      => 'Libellé',
                 'attr'     => array('class' => 'tinyMce')
