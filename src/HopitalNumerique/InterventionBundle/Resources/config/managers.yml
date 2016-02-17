@@ -15,7 +15,7 @@ parameters:
 services:
     hopitalnumerique_intervention.manager.intervention_courriel:
         class: "%hopitalnumerique_intervention.manager.intervention_courriel.class%"
-        arguments: ["@nodevo_mail.manager.mail", "@mailer", "@router", "@hopitalnumerique_intervention.service.demande.envoi_courriels_affichage_logs"]
+        arguments: ["@nodevo_mail.manager.mail", "@mailer", "@router", "@hopitalnumerique_intervention.service.demande.envoi_courriels_affichage_logs", '%confighn_hopitalnumerique_contact%']
     hopitalnumerique_intervention.manager.intervention_demande:
         class: "%hopitalnumerique_intervention.manager.intervention_demande.class%"
         arguments: ["@doctrine.orm.entity_manager", "@security.context", "@router", "@hopitalnumerique_intervention.manager.intervention_etat", "@hopitalnumerique_intervention.manager.intervention_evaluation_etat", "@hopitalnumerique_intervention.manager.intervention_regroupement", "@hopitalnumerique_intervention.manager.intervention_courriel", "@hopitalnumerique_questionnaire.manager.questionnaire", "@hopitalnumerique_questionnaire.manager.reponse", "@hopitalnumerique_objet.manager.objet"]
