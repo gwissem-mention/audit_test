@@ -28,6 +28,9 @@ class RefusCandidatureGrid extends Grid implements GridInterface
      */
     public function setColumns()
     {
+        $idColumn = new Column\NumberColumn('userId', '');
+        $idColumn->setVisible(false)->setFilterable(false);
+        $this->addColonne($idColumn);
 
         $prenomNomParticipantColumn = new Column\TextColumn('nomPrenom', 'Candidat');
         $prenomNomParticipantColumn->setSize( 150 );

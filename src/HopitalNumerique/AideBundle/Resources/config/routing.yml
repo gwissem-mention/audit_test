@@ -1,0 +1,29 @@
+hopitalnumerique_aide_aide:
+    pattern:  /aide/
+    defaults: { _controller: "HopitalNumeriqueAideBundle:Aide:index" }
+
+hopitalnumerique_aide_aide_add:
+    pattern:  /aide/add/{id}/{mod}
+    defaults: { _controller: "HopitalNumeriqueAideBundle:Aide:add", id: null, mod: null }
+
+hopitalnumerique_aide_aide_edit:
+    pattern:  /aide/edit/{id}
+    defaults: { _controller: "HopitalNumeriqueAideBundle:Aide:edit", id:1 }
+    requirements:
+        id: \d+
+
+hopitalnumerique_aide_aide_show:
+    pattern:  /aide/show/{id}
+    defaults: { _controller: "HopitalNumeriqueAideBundle:Aide:show", id:1 }
+    requirements:
+        id: \d+
+
+hopitalnumerique_aide_aide_delete:
+    pattern:  /aide/delete/{id}.{_format}
+    defaults: { _controller: "HopitalNumeriqueAideBundle:Aide:delete", _format: json }
+    requirements:
+        id: \d+
+
+hopitalnumerique_aide_aide_aide:
+    pattern:  /aide/popin/
+    defaults: { _controller: "HopitalNumeriqueAideBundle:Aide:aide" }

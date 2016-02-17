@@ -40,6 +40,7 @@ assetic:
         - HopitalNumeriqueReportBundle
         - HopitalNumeriqueDomaineBundle
         - HopitalNumeriqueCommunautePratiqueBundle
+        - HopitalNumeriqueAideBundle
         - CCDNForumForumBundle
         - FOSUserBundle
     filters:

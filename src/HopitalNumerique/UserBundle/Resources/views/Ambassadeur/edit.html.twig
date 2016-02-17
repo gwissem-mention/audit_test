@@ -9,7 +9,6 @@
 {% block stylesheets %}
     {{parent()}}
     {% stylesheets output="compiled/hopitalnumerique-user-ambassadeur-edit.css" filter="cssrewrite, ?yui_css"
-        "@fancybox_css"
         "@select2_css"
         'bundles/hopitalnumeriqueuser/css/specificationUser.css'
     %}
@@ -20,7 +19,6 @@
 {% block javascripts %}
     {{parent()}}
     {% javascripts output="compiled/hopitalnumerique-user-ambassadeur-edit.js"
-        "@fancybox_js"
         "@select2_js"
         'bundles/hopitalnumeriqueuser/js/Ambassadeur/script.js'
     %}

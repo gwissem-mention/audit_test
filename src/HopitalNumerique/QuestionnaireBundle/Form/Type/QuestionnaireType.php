@@ -20,25 +20,25 @@ class QuestionnaireType extends AbstractType
      * @var \HopitalNumerique\QuestionnaireBundle\Form\Type\OccurrenceType Formulaire OccurrenceType
      */
     private $occurrenceForm;
-    
+
     private $_readOnly = false;
     private $_managerReponse;
-    
+
     /**
      * @var \HopitalNumerique\QuestionnaireBundle\Manager\QuestionnaireManager QuestionnaireManager
      */
     private $_managerQuestionnaire;
-    
+
     /**
      * @var \HopitalNumerique\QuestionnaireBundle\Manager\OccurrenceManager OccurrenceManager
      */
     private $occurrenceManager;
-    
+
     /**
      * @var \HopitalNumerique\UserBundle\Manager\UserManager UserManager
      */
     private $userManager;
-    
+
 
     /**
      * @param HopitalNumerique\QuestionnaireBundle\Manager\ReponseManager       $managerReponse
@@ -55,11 +55,11 @@ class QuestionnaireType extends AbstractType
 
     /**
      * Ajout des éléments dans le formulaire, spécifie les labels, les widgets utilisés ainsi que l'obligation
-     * 
+     *
      * @param  FormBuilderInterface $builder Le builder contient les champs du formulaire
      * @param  array                $options Data passée au formulaire
-     * 
-     * @return void                 
+     *
+     * @return void
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
@@ -68,7 +68,7 @@ class QuestionnaireType extends AbstractType
         $occurrence = (isset($options['label_attr']['occurrence']) ? $options['label_attr']['occurrence'] : null);
         $questionnaire   = $this->_managerQuestionnaire->findOneBy(array('id' => $idQuestionnaire));
         $user = $this->userManager->findOneById($idUser);
-        
+
        /*
         * Tableau de la route de redirection sous la forme :
         * array(
@@ -82,7 +82,7 @@ class QuestionnaireType extends AbstractType
         //Si le showAllQuestions n'est pas reinseigné, par défaut on les affiches toutes
         if((!isset($options['label_attr']['showAllQuestions']) || is_null($options['label_attr']['showAllQuestions'])))
             $options['label_attr']['showAllQuestions'] = true;
-        
+
         //Ajout d'un champ hidden pour récupérer les routes de redirection dans le controleur à la validation
         $builder->add('routeRedirect', 'hidden', array(
             'data'       => $routeRedirection,
@@ -98,7 +98,7 @@ class QuestionnaireType extends AbstractType
         if ($questionnaire->isOccurrenceMultiple() && null === $occurrence)
         {
             $occurrence = $this->occurrenceManager->getDerniereOccurrenceByQuestionnaireAndUser($questionnaire, $user);
-            
+
             if (null === $occurrence)
             {
                 $occurrence = $this->occurrenceManager->createEmpty();
@@ -107,14 +107,14 @@ class QuestionnaireType extends AbstractType
                 $this->occurrenceManager->save($occurrence);
             }
         }
-        
+
         //Récupération du questionnaire
         $questions = $this->_managerQuestionnaire->getQuestionsReponses($idQuestionnaire, $idUser, $occurrence, (isset($options['label_attr']['paramId']) ? $options['label_attr']['paramId'] : null));
 
         //Construction du formulaire en fonction des questions + chargement des réponses si il y en a
         $builder = $this->constructBuilder($builder, $questions, $questionnaire, $occurrence, $options);
     }
-    
+
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
         $resolver->setDefaults(array(
@@ -126,22 +126,22 @@ class QuestionnaireType extends AbstractType
     {
         return 'nodevo_questionnaire_questionnaire';
     }
-    
+
 
     /**
      * Fonction permettant de créer les champs du formulaire en fonction des questions / réponses passé en param
-     * 
+     *
      * @param FormBuilderInterface $builder Le builder contient les champs du formulaire
      * @param HopitalNumerique\QuestionnaireBundle\Entity\Question[] $questions
      * @param HopitalNumerique\QuestionnaireBundle\Entity\Questionnaire $questionnaire
      * @param  array                $options Data passée au formulaire
-     * 
+     *
      * @return FormBuilderInterface Le builder avec tous les champs
      */
     private function constructBuilder(FormBuilderInterface $builder, $questions, Questionnaire $questionnaire, Occurrence $occurrence = null, $options)
     {
         $this->addOccurrenceType($builder, $questionnaire, $occurrence);
-        
+
         //Réponse de la question courante
         $reponseCourante = null;
 
@@ -172,7 +172,7 @@ class QuestionnaireType extends AbstractType
                 if($hide)
                     break;
             }
-        
+
             switch ($question->getTypeQuestion()->getLibelle())
             {
             	case 'text':
@@ -303,8 +303,8 @@ class QuestionnaireType extends AbstractType
                             'data'        => is_null($reponseCourante) ? null : $reponseCourante->getReferenceMulitple()
                     ));
                     break;
-            	case 'file':  
-                    $attr = $question->getObligatoire() ? array('class' => 'inputUpload validate[required]') : array();          	    
+            	case 'file':
+                    $attr = $question->getObligatoire() ? array('class' => 'inputUpload validate[required]') : array();
             	    $builder->add($question->getTypeQuestion()->getLibelle() . '_' . $question->getId(). '_' . $question->getAlias(), 'file', array(
             	            'required'   => $question->getObligatoire(),
             	            'label'      => $question->getLibelle(),
@@ -334,7 +334,7 @@ class QuestionnaireType extends AbstractType
             	    ));
             	    break;
             	case 'interventionobjets':
-            	    
+
             	    $interventionDemande = $options['label_attr']['interventionDemande'];
 
             	    $objetsOptions = array();
@@ -342,7 +342,7 @@ class QuestionnaireType extends AbstractType
                     {
             	        $objetsOptions[$objet->getId()] = $objet->getTitre();
                     }
-            	    
+
             	    $objetIdsSelectionnees = array();
             	    $reponses = $this->_managerReponse->reponsesByQuestionnaireByUser($questionnaire->getId(), $interventionDemande->getReferent()->getId(), true, null, $interventionDemande->getId());
             	    $reponse = $this->_managerReponse->findOneBy(array(
@@ -361,7 +361,7 @@ class QuestionnaireType extends AbstractType
             	            $objetIdsSelectionnees[] = $objet->getId();
                         }
             	    }
-            	    
+
             	    $builder->add($question->getTypeQuestion()->getLibelle() . '_' . $question->getId(). '_' . $question->getAlias(), 'choice', array(
         	            'required'   => $question->getObligatoire(),
         	            'label'      => $question->getLibelle(),
@@ -377,7 +377,7 @@ class QuestionnaireType extends AbstractType
             	    break;
             	case 'textarea':
             	    $attr['rows'] = 9;
-            	    
+
             	    $builder->add($question->getTypeQuestion()->getLibelle() . '_' . $question->getId(). '_' . $question->getAlias(), $question->getTypeQuestion()->getLibelle(), array(
         	            'required'   => $question->getObligatoire(),
         	            'label'      => $question->getLibelle(),
@@ -450,10 +450,10 @@ class QuestionnaireType extends AbstractType
             }
         }
     }
-    
+
     /**
      * Ajoute le sous-formulaire de l'occurrence si nécessaire.
-     * 
+     *
      * @param \Symfony\Component\Form\FormBuilderInterface               $builder       FormBuilder
      * @param \HopitalNumerique\QuestionnaireBundle\Entity\Questionnaire $questionnaire Questionnaire
      * @param \HopitalNumerique\UserBundle\Entity\User                   $user          Utilisateur
