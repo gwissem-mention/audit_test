@@ -1,0 +1,65 @@
+parameters:
+
+    # Service Parameters defined in app/config
+
+services:
+
+    ccdn_component_bb_code.component.chain.tag:
+        class: %ccdn_component_bb_code.component.chain.tag.class%
+
+    ccdn_component_bb_code.component.chain.acl:
+        class: %ccdn_component_bb_code.component.chain.acl.class%
+
+    #
+    # BB Code Engine Components.
+    #
+    ccdn_component_bb_code.component.engine.table_container:
+        class: %ccdn_component_bb_code.component.engine.table_container.class%
+
+    ccdn_component_bb_code.component.engine.scanner:
+        class: %ccdn_component_bb_code.component.engine.scanner.class%
+
+    ccdn_component_bb_code.component.engine.lexer:
+        class: %ccdn_component_bb_code.component.engine.lexer.class%
+
+    ccdn_component_bb_code.component.engine.parser:
+        class: %ccdn_component_bb_code.component.engine.parser.class%
+
+    #
+    # Bootstrap the engine.
+    #
+    ccdn_component_bb_code.component.engine.bootstrap:
+        class: %ccdn_component_bb_code.component.engine.bootstrap.class%
+        arguments:
+            - @ccdn_component_bb_code.component.engine.table_container
+            - @ccdn_component_bb_code.component.engine.scanner
+            - @ccdn_component_bb_code.component.engine.lexer
+            - @ccdn_component_bb_code.component.engine.parser
+
+    #
+    # Engine as a Service. (Contains best point of reference for using the ACL Chain).
+    #
+    ccdn_component_bb_code.component.bootstrap:
+        class: %ccdn_component_bb_code.component.bootstrap.class%
+        arguments:
+            - @ccdn_component_bb_code.component.engine.bootstrap
+            - %ccdn_component_bb_code.parser.enable%
+            - @ccdn_component_bb_code.component.engine.table_container
+            - @ccdn_component_bb_code.component.chain.tag
+            - @ccdn_component_bb_code.component.chain.acl
+
+    ccdn_component_bb_code.component.twig_extension.parse_bb:
+        class: %ccdn_component_bb_code.component.twig_extension.parse_bb.class%
+        arguments:
+            - @ccdn_component_bb_code.component.bootstrap
+        tags:
+            - { name: twig.extension }
+
+    #
+    # Form Types.
+    #
+    ccdn_component_bb_code.form.type.bb_editor:
+        class: %ccdn_component_bb_code.form.type.bb_editor.class%
+        arguments: []
+        tags:
+            - { name: "form.type", alias: "bb_editor" }
