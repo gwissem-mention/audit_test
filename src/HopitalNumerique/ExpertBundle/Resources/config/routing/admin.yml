@@ -56,9 +56,9 @@ hopitalnumerique_expert_expert_activite_parametrage:
         id : \d+ 
 
 #-Action du grid
-hopitalnumerique_expert_expert_payer_facture:
+hopitalnumerique_expert_expert_paiement:
     pattern:  /expert/activite/facture/payer/{id}
-    defaults: { _controller: "HopitalNumeriqueExpertBundle:ActiviteExpert:payerFacture" }
+    defaults: { _controller: "HopitalNumeriqueExpertBundle:ActiviteExpert:paiement", id: 1 }
     requirements:
         id: \d+
         _method: GET|POST
