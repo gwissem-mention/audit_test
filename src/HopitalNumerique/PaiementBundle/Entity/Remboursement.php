@@ -24,13 +24,6 @@ class Remboursement
     /**
      * @var integer
      *
-     * @ORM\Column(name="rem_intervention", type="integer", options = {"comment" = "Forfait intervention du remboursement"})
-     */
-    private $intervention;
-
-    /**
-     * @var integer
-     *
      * @ORM\Column(name="rem_supplement", type="integer", nullable = true, options = {"comment" = "Supplément formation du remboursement"})
      */
     private $supplement;
@@ -55,13 +48,6 @@ class Remboursement
      */
     protected $region;
 
-    /**
-     * Initialisation de l'entitée (valeurs par défaut)
-     */
-    public function __construct()
-    {
-
-    }
 
     /**
      * Get id
@@ -71,29 +57,6 @@ class Remboursement
     public function getId()
     {
         return $this->id;
-    }
-
-    /**
-     * Set intervention
-     *
-     * @param integer $intervention
-     * @return Remboursement
-     */
-    public function setIntervention($intervention)
-    {
-        $this->intervention = $intervention;
-
-        return $this;
-    }
-
-    /**
-     * Get intervention
-     *
-     * @return integer 
-     */
-    public function getIntervention()
-    {
-        return $this->intervention;
     }
 
     /**
