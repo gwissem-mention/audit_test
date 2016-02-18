@@ -144,7 +144,7 @@ class MailManager extends BaseManager
     /**
      * Envoi un mail du type AjoutUser
      *
-     * @param User $user Utilisateur qui recevras l'email
+     * @param User $user Utilisateur qui recevra l'email
      *
      * @return Swift_Message
      */
@@ -474,7 +474,7 @@ class MailManager extends BaseManager
     }
 
     /**
-     * Envoi un mail pour acceder au formulaire d'évaluation à une session d'un module
+     * Envoie un mail pour acceder au formulaire d'évaluation à une session d'un module
      *
      * @param Inscriptions $inscriptions  
      * @param array        $options      Variables à remplacer dans le template : '%nomDansLeTemplate' => valeurDeRemplacement
@@ -486,14 +486,16 @@ class MailManager extends BaseManager
         $mail = $this->findOneById(33);
 
         $toSend = array();
-        $domaine = $this->_domaineManager->findOneById($this->_session->get('domaineId'));
+
+        // Récupération du domaine de la session
+        $domaines = $inscriptions[0]->getSession()->getModule()->getDomaines();
+        $domaine = $domaines[0];
 
         foreach ($inscriptions as $key => $inscription) 
         {
             if($inscription->getSession()->getModule()->getMailAlerteEvaluation())
             {
-
-                $toSend[] = $this->generationMail($inscription->getUser(), $mail, array(
+                $mailGenere = $this->generationMail($inscription->getUser(), $mail, array(
                                 'date'    => $inscription->getSession()->getDateSession()->format('d/m/Y'),
                                 'module'  => $inscription->getSession()->getModule()->getTitre(),
                                 'url'     => '<a href="'. $this->_requestStack->getCurrentRequest()->getUriForPath( $this->_router->generate( 'hopitalnumerique_module_evaluation_form_front', array(
@@ -501,6 +503,10 @@ class MailManager extends BaseManager
                                             ))) .'" target="_blank" >'. $domaine->getNom() .'</a>'
 
                 ));
+                $mailGenere->setFrom($domaine->getAdresseMailContact());
+                $objet = str_replace('%subjectDomaine', $domaine->getNom(),$mail->getObjet());
+                $mailGenere->SetSubject($objet);
+                $toSend[] = $mailGenere;
             }
         }
     
@@ -513,7 +519,7 @@ class MailManager extends BaseManager
      * @param \Nodevo\MailBundle\Entity\Mail $mail Le courriel à envoyer
      * @param \HopitalNumerique\UserBundle\Entity\User $destinataire Le destinataire du message
      * @param array $options Les paramètres à remplacer
-     * @return \Swift_Message Le message près à être envoyer
+     * @return \Swift_Message Le message prêt à être envoyé
      */
     public function sendInterventionMail(\Nodevo\MailBundle\Entity\Mail $mail, \HopitalNumerique\UserBundle\Entity\User $destinataire, $options)
     {
@@ -531,12 +537,11 @@ class MailManager extends BaseManager
     public function sendInscriptionSession( $user, $options )
     {
         $mail = $this->findOneById(34);
-    
         return $this->generationMail($user, $mail, $options);
     }
     
     /**
-     * Envoi un mail pour notifier le changement de domaine
+     * Envoie un mail pour notifier le changement de domaine
      *
      * @param User  $user    Utilisateur qui recevras l'email
      * @param array $options Variables à remplacer dans le template : 'nomDansLeTemplate' => valeurDeRemplacement
@@ -649,9 +654,9 @@ class MailManager extends BaseManager
     }
 
     /**
-     * Envoi un mail de contact (différent des autres envoie de mail)
+     * Envoie un mail de contact (différent des autres envois de mail)
      *
-     * @param array $user    Utilisateurs qui recevras l'email (tableau configuré en config.yml)
+     * @param array $user    Utilisateurs qui recevront l'email (tableau configuré en config.yml)
      * @param array $options Variables à remplacer dans le template : '%nomDansLeTemplate' => valeurDeRemplacement
      *
      * @return Swift_Message[]
@@ -684,7 +689,7 @@ class MailManager extends BaseManager
     }
 
     /**
-     * Envoi un mail de partage de résultat d'autodiag (différent des autres envoie de mail)
+     * Envoie un mail de partage de résultat d'autodiag (différent des autres envois de mail)
      *
      * @param array                                            $options  Variables à remplacer dans le template : '%nomDansLeTemplate' => valeurDeRemplacement
      * @param \HopitalNumerique\AutodiagBundle\Entity\Resultat $resultat Résultat à partager
@@ -728,7 +733,7 @@ class MailManager extends BaseManager
     }
 
     /**
-     * Envoi un mail de contact (différent des autres envoie de mail)
+     * Envoie un mail de contact (différent des autres envois de mail)
      *
      * @param array $user    Utilisateurs qui recevras l'email (tableau configuré en config.yml)
      * @param array $options Variables à remplacer dans le template : '%nomDansLeTemplate' => valeurDeRemplacement
@@ -763,7 +768,7 @@ class MailManager extends BaseManager
     }
 
     /**
-     * Envoi un mail des réponses+question d'un questionnaire rempli par un utilisateur (différent des autres envoie de mail)
+     * Envoie un mail des réponses+questions d'un questionnaire rempli par un utilisateur (différent des autres envois de mail)
      *
      * @param array $user    Utilisateurs qui recevras l'email (tableau configuré en config.yml/parameters.yml)
      * @param array $options Variables à remplacer dans le template : '%nomDansLeTemplate' => valeurDeRemplacement
@@ -825,7 +830,7 @@ class MailManager extends BaseManager
     }
 
     /**
-     * Envoi le courriel de partage d'un autodiagnostic.
+     * Envoie le courriel de partage d'un autodiagnostic.
      *
      * @param array $user    Utilisateurs qui recevras l'email (tableau configuré en config.yml)
      * @param array $options Variables à remplacer dans le template : '%nomDansLeTemplate' => valeurDeRemplacement
@@ -863,7 +868,7 @@ class MailManager extends BaseManager
     }
 
     /**
-     * Envoi le courriel avec le modèle de contrat.
+     * Envoie le courriel avec le modèle de contrat.
      *
      * @param string $destinataireAdresseElectronique Adresse du destinataire
      */
@@ -931,7 +936,7 @@ class MailManager extends BaseManager
     }
 
     /**
-     * Génération du mail avec le template NodevoMailBundle::template.mail.html.twig + envoi à l'user
+     * Génération du mail avec le template NodevoMailBundle::template.mail.html.twig + envoie à l'user
      * 
      * @param \HopitalNumerique\UserBundle\Entity\User $user
      * @param \Nodevo\MailBundle\Entity\Mail           $mail
@@ -1033,12 +1038,11 @@ class MailManager extends BaseManager
         $mail = \Swift_Message::newInstance()
             ->setSubject( $this->replaceContent($subject, NULL, array() ) )
             ->setFrom( $from )
-            ->setTo( $destinataire )
             ->setBody( $bodyTxt )
             ->addPart( $bodyHtml, 'text/html' )
         ;
         if (null !== $destinataire) {
-            $mail = \Swift_Message::newInstance()->setTo($destinataire);
+            $mail->setTo($destinataire);
         }
 
         if( $bcc )
