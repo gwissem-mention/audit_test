@@ -36,10 +36,13 @@ class Paiement
     private $expert;
 
     /**
-     * @var float
+     * @var integer
      *
-     * @ORM\Column(name="eap_vacations_count", type="decimal", nullable=false, precision=10, scale=2)
-     * @Assert\Valid()
+     * @ORM\Column(name="eap_vacations_count", type="smallint", nullable=false, options={"unsigned"=true})
+     * @Assert\Range(
+     *      min = 0,
+     *      minMessage = "Veuillez choisir un nombre positif"
+     * )
      */
     private $vacationsCount;
 

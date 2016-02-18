@@ -19,8 +19,8 @@
             </div>
 
             <div class="panel-body">
+                {{ form_errors(paiementsForm.paiements) }}
                 {% for paiement in paiementsForm.paiements %}
-                    
                     <div class="form-group">
                         <label class="col-md-3 control-label required">
                             {{ paiement.vars.data.expert.prenomNom }}
@@ -30,6 +30,7 @@
                             {{ form_widget(paiement.vacationsCount) }}
                         </div>
                         <div class="col-md-3">
+                            {{ form_errors(paiement) }}
                             {{ form_errors(paiement.vacationsCount) }}
                         </div>
                     </div>

@@ -86,6 +86,7 @@ class ActiviteExpertController extends Controller
     {
         $paiementsForm = $this->createForm('hopitalnumerique_expert_activiteexpert_paiements', $activiteExpert);
         $paiementsForm->handleRequest($request);
+
         if ($paiementsForm->isSubmitted()) {
             if ($paiementsForm->isValid()) {
                 $this->container->get('hopitalnumerique_expert.manager.activiteexpert')->save($activiteExpert);

@@ -52,7 +52,7 @@ class PaiementsType extends AbstractType
             })
             ->addEventListener(FormEvents::POST_SUBMIT, function (FormEvent $event) {
                 $this->processMailing($event);
-            });
+            })
         ;
     }
 
@@ -81,6 +81,7 @@ class PaiementsType extends AbstractType
                 $paiement = new Paiement();
                 $paiement->setActiviteExpert($activiteExpert);
                 $paiement->setExpert($expertConcerne);
+                $paiement->setVacationsCount($activiteExpert->getNbVacationParExpert());
                 $activiteExpert->addPaiement($paiement);
             }
         }
