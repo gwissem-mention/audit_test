@@ -38,7 +38,7 @@ class Paiement
     /**
      * @var float
      *
-     * @ORM\Column(name="eap_vacations_count", type="decimal", nullable=false, scale=2, options={"unsigned"=true})
+     * @ORM\Column(name="eap_vacations_count", type="decimal", nullable=false, precision=10, scale=2)
      * @Assert\Valid()
      */
     private $vacationsCount;

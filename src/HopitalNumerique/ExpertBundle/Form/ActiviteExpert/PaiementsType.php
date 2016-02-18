@@ -68,20 +68,20 @@ class PaiementsType extends AbstractType
          */
         $activiteExpert = $event->getData();
 
-        // Ajoute les paiements manquants
+        // Supprime les paiements en trop (dans le cas où un expert aurait été enlevé, on ne l'affiche plus)
+        foreach ($activiteExpert->getPaiements() as $paiement) {
+            if (!$activiteExpert->hasExpertConcerne($paiement->getExpert())) {
+                $activiteExpert->removePaiementForExpert($paiement->getExpert());
+            }
+        }
+
+        // Ajoute les paiements manquants (dans le cas où un expert a été ajouté ou si les paiements n'ont pas encore été enregistrés)
         foreach ($activiteExpert->getExpertConcernes() as $expertConcerne) {
             if (!$activiteExpert->hasPaiementForExpert($expertConcerne)) {
                 $paiement = new Paiement();
                 $paiement->setActiviteExpert($activiteExpert);
                 $paiement->setExpert($expertConcerne);
                 $activiteExpert->addPaiement($paiement);
-            }
-        }
-
-        // Supprime les paiements en trop
-        foreach ($activiteExpert->getPaiements() as $paiement) {
-            if (!$activiteExpert->hasExpertConcerne($paiement->getExpert())) {
-                $activiteExpert->removePaiementForExpert($paiement->getExpert());
             }
         }
     }

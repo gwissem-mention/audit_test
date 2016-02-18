@@ -48,3 +48,6 @@ services:
     hopitalnumerique_intervention.manager.form_etablissement:
         class: "%hopitalnumerique_intervention.manager.form_etablissement.class%"
         arguments: ["@hopitalnumerique_etablissement.manager.etablissement"]
+    hopitalnumerique_intervention.manager.intervention.forfait_transport:
+        class: 'HopitalNumerique\InterventionBundle\Manager\Intervention\ForfaitTransportManager'
+        arguments: ['@doctrine.orm.entity_manager']

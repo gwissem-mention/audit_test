@@ -248,3 +248,11 @@ liip_imagine:
             quality: 75
             filters:
                 thumbnail: { size: [100, 100], mode: inset, allow_upscale: true }
+
+ivory_google_map:
+    distance_matrix:
+        enabled: true
+        url: "https://maps.googleapis.com/maps/api/distancematrix"
+        adapter: "widop_http_adapter.curl"
+        https: true
+        format: "json"
