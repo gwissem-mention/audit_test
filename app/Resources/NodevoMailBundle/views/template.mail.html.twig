@@ -5,7 +5,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
         <style type="text/css">
             * { font-family: Arial; font-weight: normal; }
-            span { color: #868686;font-size: 12px; text-decoration: none; }
+            span { font-size: 12px; text-decoration: none; }
             a { color: #6C3694; text-decoration: none; }
             a:hover { color: #6C3694; text-decoration: underline; }
         </style>
@@ -27,13 +27,8 @@
             </tr>
             <tr>
                 {{ content|raw }}
-            </tr>
-            <tr>
                 <br />
-                <p style="font-weight: bold;">
-                    <img alt="L'équipe" src="{{app.request.getSchemeAndHttpHost() ~ asset('bundles/hopitalnumeriquecore/img/common-sprite/users.jpg')}}"></img> 
-                    <span>L'équipe {{domaineCurrent.nom}}</span>
-                </p>
+                <span>L'équipe ANAP</span>
             </tr>
         </table>
     </body>

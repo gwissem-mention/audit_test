@@ -8,7 +8,7 @@
 {% block stylesheets %}
     {{parent()}}
     {% stylesheets output="compiled/hopitalnumerique-publication-publication-objet.css" filter="cssrewrite, ?yui_css"
-        "@fancybox_css" 
+        "@fancybox_css"
         "@validationEngine_css"
         'bundles/nodevotools/js/plugins/rateIt/rateit.css'
         'bundles/nodevoadmin/plugins/apprise/apprise.css'
@@ -18,7 +18,7 @@
     %}
         <link rel="stylesheet" href="{{ asset_url }}" />
     {% endstylesheets %}
-    
+
     <link rel="stylesheet" href="{{ asset('bundles/hopitalnumeriquepublication/css/style-print.css') }}" type="text/css" media="print" />
     <style type="text/css">#publication a[href]:after {content: none !important; font-size: 12px; display: none;}</style>
 {% endblock %}
@@ -26,7 +26,7 @@
 {% block javascripts %}
     {{parent()}}
     {% javascripts output="compiled/hopitalnumerique-publication-publication-objet.js"
-        "@fancybox_js" 
+        "@fancybox_js"
         "@validationEngine_js"
         'bundles/nodevotools/js/plugins/rateIt/jquery.rateit.min.js'
         'bundles/nodevoadmin/plugins/apprise/apprise.js'
@@ -104,8 +104,8 @@ window.open ("report/showReport.action?"+request,null,"location=no,menubar=0,res
                     <div class="clearfix"></div>
                 </div>
             </div>
-            
-            <input type="hidden" id="isContenu" name="isContenu" value="{{contenu is defined }}" /> 
+
+            <input type="hidden" id="isContenu" name="isContenu" value="{{contenu is defined }}" />
             <input type="hidden" id="objetId" style="display: none;" value="{% if contenu is defined %}{{contenu.id}}{% else %}{{objet.id}}{% endif %}">
             <input type="hidden" id="notesAutorisees" style="display: none;" value="{{objet.notes}}">
             {% if objet.notes %}
@@ -121,6 +121,9 @@ window.open ("report/showReport.action?"+request,null,"location=no,menubar=0,res
             {% else %}
                 <div class="col-md-12">
             {% endif %}
+
+            <div style="float: left;">&nbsp;{{ contenu.nbVue }} <em class="fa fa-eye"></em></div>
+
             {% if ActivateRsxSociaux and objet.btnSociaux %}
                     <div class="reseaux-sociaux pull-right">
                         <div class="tweet pull-left">
@@ -161,7 +164,7 @@ window.open ("report/showReport.action?"+request,null,"location=no,menubar=0,res
                     <div class="clearfix"></div>
                 </div>
             </div>
-            
+
             <input type="hidden" id="objetId" style="display: none;" value="{% if contenu is defined %}{{contenu.id}}{% else %}{{objet.id}}{% endif %}">
             <input type="hidden" id="notesAutorisees" style="display: none;" value="{{objet.notes}}">
 
@@ -182,6 +185,9 @@ window.open ("report/showReport.action?"+request,null,"location=no,menubar=0,res
                         {% else %}
                             <div class="col-md-12">
                         {% endif %}
+
+                        <div style="float: left;">&nbsp;{{ objet.nbVue }} <em class="fa fa-eye"></em></div>
+
                         {% if ActivateRsxSociaux and objet.btnSociaux %}
                                 <div class="reseaux-sociaux pull-right">
                                     <div class="tweet pull-left">
@@ -263,7 +269,7 @@ window.open ("report/showReport.action?"+request,null,"location=no,menubar=0,res
                                                     </a>
                                                 </h4>
                                             </div>
-                                            
+
                                             <div class="col-md-12">
                                                 <p>{{ one.resume|parsePublication|raw }}</p>
                                             </div>
@@ -285,10 +291,15 @@ window.open ("report/showReport.action?"+request,null,"location=no,menubar=0,res
                                 <div class="rateit" id="note-moyenne-etoile" data-rateit-max="5" data-rateit-value="0" data-rateit-ispreset="true" data-rateit-readonly="true"></div>
                             </div>
                             <div class="pull-left" id="info-note-moyenne"></div>
+
                         </div>
+
                 {% else %}
                     <div class="col-md-12">
                 {% endif %}
+
+                <div style="float: left;">&nbsp;{{ objet.nbVue }} <em class="fa fa-eye"></em></div>
+
                 {% if ActivateRsxSociaux and objet.btnSociaux %}
                         <div class="reseaux-sociaux pull-right">
                             <div class="tweet pull-left">
@@ -311,6 +322,7 @@ window.open ("report/showReport.action?"+request,null,"location=no,menubar=0,res
                     </div>
                     <div class="clearfix"></div>
                 {% endif %}
+
                 <div class="col-md-12" id="publication-resume">
                     {{objet.resume|parsePublication(objet.glossaires)|raw}}
                 </div>
@@ -329,7 +341,7 @@ window.open ("report/showReport.action?"+request,null,"location=no,menubar=0,res
                     {% if objet.getAbsolutePath(2) is not null %}
                         <a class="pull-left downloadLink readmore" href="/{{objet.getWebPath(2)}}" target="_blank" onclick="ga('send', 'event', 'Traking', 'Téléchargement', '{{objet.getWebPath(2)}}');"><i class="common-sprite common-sprite-arrow"></i><span class="violet">Télécharger</span> la production complète ( {{objet.getTypeMime(2)|upper}} )<i class="fa fa-download violet"></i></a>
                     {% endif %}
-                    
+
                     <div class="clearfix"></div>
                     {% if objet.synthese is not null %}
                         <a class="downloadLink readmore synthese fancybox.iframe" href="{{path('hopital_numerique_publication_synthese',{'id':objet.id})}}" ><i class="common-sprite common-sprite-arrow"></i>Synthèse</a>
@@ -349,7 +361,6 @@ window.open ("report/showReport.action?"+request,null,"location=no,menubar=0,res
                     <input type="hidden" id="note-valeur" style="display: none;" value="0">
                     <div class="pull-left" style="line-height:19px;font-size: 13px;">Cette réponse vous paraît-elle utile ?</div>
                     <div class="rateit pull-left" id="note-etoile" data-rateit-step="1" data-rateit-value="{% if note is not null %}{{note.note}}{% else %}0{% endif %}" data-rateit-max="5"></div>
-                    <div class="clearfix"></div>
                     <div class="message-notation text-center"></div>
                     <div class="clearfix"></div>
                 </div>
@@ -360,7 +371,7 @@ window.open ("report/showReport.action?"+request,null,"location=no,menubar=0,res
         <div class="clearfix"></div>
 
         {% if contenu is defined %}
-            <div id="precedent-suivant" style="margin-top:10px">                
+            <div id="precedent-suivant" style="margin-top:10px">
                 <div class="col-md-5">
                     {% if precedent is defined and precedent is not null %}
                         <a href="{{path('hopital_numerique_publication_publication_contenu',{'id':objet.id, 'idc':precedent.id, 'alias':objet.alias, 'aliasc':precedent.alias})}}" class="btn btn-default"><i class="fa fa-arrow-left" style="margin-right:10px;"></i>{{ precedentOrder ~ '. ' ~ precedent.titre|truncate(40, true, '...')}}</a>
@@ -410,7 +421,7 @@ window.open ("report/showReport.action?"+request,null,"location=no,menubar=0,res
                                         {% endif %}
                                     </h4>
                                 </div>
-                                
+
                                 <div class="col-md-12">
                                     <p>{{ one.resume|parsePublication|raw }}</p>
                                 </div>
@@ -466,7 +477,7 @@ window.open ("report/showReport.action?"+request,null,"location=no,menubar=0,res
                             {% endfor %}
                             <div class="clearfix"></div>
                         </div>
-                    </div> 
+                    </div>
                 </div>
             {% endif %}
 
