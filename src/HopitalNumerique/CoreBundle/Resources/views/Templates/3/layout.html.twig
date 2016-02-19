@@ -102,7 +102,17 @@
                             </p>
                         {% endif %}
                         <div class="connexion">
-			                 <a href="{{path('account_logout')}}">Déconnexion</a>
+                            {% set previousAdmin = false  %}
+                            {% for role in app.security.getToken().getRoles() %}
+                                {% if role.getRole() == 'ROLE_PREVIOUS_ADMIN' %}
+                                    {% set previousAdmin = true %}
+                                {% endif %}
+                            {% endfor %}
+                            {% if previousAdmin %}
+                                <a href="{{ path('hopital_numerique_homepage', {'_switch_user': '_exit'}) }}">Quitter cet utilisateur</a>
+                            {% else %}
+                                <a href="{{path('account_logout')}}">Déconnexion</a>
+                            {% endif %}
                         </div>
                         <a class="btn btn-success" href="{{path('hopital_numerique_user_informations_personnelles')}}">Mon compte</a>
                         {#<a class="infos btn btn-rose" href="{{path('hopital_numerique_account_homepage')}}">Tableau de bord</a>#}
