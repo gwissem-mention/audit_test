@@ -54,13 +54,13 @@ class RemboursementManager extends BaseManager
             $etablissement = $referent->getEtablissementRattachementSante() ? $referent->getEtablissementRattachementSante()->getNom() : $referent->getAutreStructureRattachementSante();
 
             if (null === $intervention->getReferent()->getEtablissementRattachementSante() || null === $intervention->getAmbassadeur()->getEtablissementRattachementSante()) {
-                throw new \Exception('Établissement de rattachement manquant.');
+                $forfaitTransport = 0;
+            } else {
+                $forfaitTransport = $this->forfaitTransportService->getCoutForDistanceBetweenEtablissements(
+                    $intervention->getReferent()->getEtablissementRattachementSante(),
+                    $intervention->getAmbassadeur()->getEtablissementRattachementSante()
+                );
             }
-
-            $forfaitTransport = $this->forfaitTransportService->getCoutForDistanceBetweenEtablissements(
-                $intervention->getReferent()->getEtablissementRattachementSante(),
-                $intervention->getAmbassadeur()->getEtablissementRattachementSante()
-            );
 
             //build objet
             $row->id       = $intervention->getId();
