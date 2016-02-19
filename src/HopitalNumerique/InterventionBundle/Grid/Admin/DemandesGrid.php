@@ -117,7 +117,7 @@ class DemandesGrid extends DemandesAbstractGrid
             function($value, \APY\DataGridBundle\Grid\Row $row) {
                 return DemandesAbstractGrid::renderCellDateChoix($value, $row);
             }
-        );
+        )->setFilterable(false)->setSortable(false);
         $this->addColonne($colonneDateChoix);
 
         $colonneEvaluation = new Column\TextColumn('evaluationEtatId', 'Éval.');
