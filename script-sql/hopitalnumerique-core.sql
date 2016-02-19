@@ -9,4 +9,4 @@ VALUES (NULL, '220', '1', 'Paiement', 'hopitalnumerique_expert_expert_paiement',
 
 /* Nouvelles régions : Application des nouveaux forfaits */
 INSERT INTO `core_mail` (`mail_id`, `mail_objet`, `mail_description`, `mail_expediteur_mail`, `mail_expediteur_name`, `mail_body`, `mail_params`)
-VALUES ('62', '[%subjectDomaine] - Demande d''intervention - Sollicitation sans établissement', 'Demande d''intervention - Sollicitation sans établissement', '%mailContactDomaineCurrent', 'ANAP - %nomContactDomaineCurrent', 'Bonjour, Un utilisateur a effectué une sollicitation d''ambassadeur sans renseigner son établissement. Merci de mettre à jour sa fiche : %l', '');
+VALUES ('62', '[%subjectDomaine] - Demande d''intervention - Sollicitation sans établissement', 'Demande d''intervention - Sollicitation sans établissement', '%mailContactDomaineCurrent', 'ANAP - %nomContactDomaineCurrent', 'Bonjour, Un utilisateur a effectué une sollicitation d''ambassadeur sans renseigner son établissement.', '');

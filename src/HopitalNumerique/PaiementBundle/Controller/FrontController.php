@@ -34,7 +34,7 @@ class FrontController extends Controller
 
         $canGenererFacture = $this->container->get('hopitalnumerique_paiement.manager.facture')->canGenererFacture($interventions);
         if (!$canGenererFacture) {
-            $this->addFlash('warning', 'L\'édition de facture n\'est pas possible. L\'ANAP a été prévenue. Répétez l\'opération d\'ici quelques jours.');
+            $this->addFlash('warning', 'L\'édition de facture n\'est pas possible (les montants affichés sont incorrects). L\'ANAP a été prévenue. Répétez l\'opération d\'ici quelques jours.');
         }
 
         //get Factures
