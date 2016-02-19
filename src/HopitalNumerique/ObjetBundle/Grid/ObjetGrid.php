@@ -68,7 +68,7 @@ class ObjetGrid extends Grid implements GridInterface
 
         $this->addColonne( new Column\DateColumn('dateCreation', 'Date de création') );
 
-        $this->addColonne( new Column\NumberColumn('nbVue', 'Nombre de vue') );
+        $this->addColonne( new Column\NumberColumn('nbVue', 'Nombre de vues') );
         
         $this->addColonne( new Column\NumberColumn('moyenne', 'Note moyenne') );
 

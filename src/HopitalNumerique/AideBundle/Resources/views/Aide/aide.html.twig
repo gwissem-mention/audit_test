@@ -12,7 +12,7 @@
                         {{ aide.libelle|raw }}
                     </p>
                 {% else %}
-                    <p>Il n'y a pas encore d'aide pour cette page, vous pouvez en ajouter une avec la route <strong>{{ route }}</strong></p>
+                    <p>Il n'y a pas encore d'aide pour cette page, vous pouvez en ajouter une avec la route : <strong><a href="{{ path('hopitalnumerique_aide_aide_add', {'route': route}) }}" title="Ajouter une aide">{{ route }}</a></strong></p>
                 {% endif %}
             </div>
         </div>
