@@ -877,11 +877,13 @@ class MailManager extends BaseManager
         $courriel = $this->findOneById(60);
         $contratModele = $this->referenceManager->findOneByCode('ACTIVITE_EXPERT_CONTRAT_MODELE');
 
+        $csvFile = \Swift_Attachment::fromPath($this->activiteExpertManager->getContratCsv($activiteExpert));
+        $csvFile->setFilename('activite.csv');
         $message =
             $this->generationMail(null, $courriel)
             ->setTo($destinataireAdresseElectronique)
             ->attach(\Swift_Attachment::fromPath('medias'.DIRECTORY_SEPARATOR.'ActiviteExperts'.DIRECTORY_SEPARATOR.$contratModele->getLibelle()))
-            ->attach(\Swift_Attachment::fromPath($this->activiteExpertManager->getContratCsv($activiteExpert)))
+            ->attach($csvFile)
         ;
 
         $this->mailer->send($message);
@@ -905,11 +907,13 @@ class MailManager extends BaseManager
         $courriel = $this->findOneById(61);
         $paiementModele = $this->referenceManager->findOneByCode('ACTIVITE_EXPERT_PV_RECETTES_MODELE');
 
+        $csvFile = \Swift_Attachment::fromPath($this->activiteExpertManager->getContratCsv($activiteExpert));
+        $csvFile->setFilename('activite.csv');
         $message =
             $this->generationMail(null, $courriel)
             ->setTo($destinataireAdresseElectronique)
             ->attach(\Swift_Attachment::fromPath('medias'.DIRECTORY_SEPARATOR.'ActiviteExperts'.DIRECTORY_SEPARATOR.$paiementModele->getLibelle()))
-            ->attach(\Swift_Attachment::fromPath($this->activiteExpertManager->getContratCsv($activiteExpert)))
+            ->attach($csvFile)
         ;
 
         $this->mailer->send($message);

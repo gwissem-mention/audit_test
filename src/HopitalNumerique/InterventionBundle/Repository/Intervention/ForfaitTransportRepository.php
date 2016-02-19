@@ -19,7 +19,7 @@ class ForfaitTransportRepository extends EntityRepository
         $queryBuilder = $this->createQueryBuilder('forfaitTransport');
 
         $queryBuilder
-            ->where($queryBuilder->expr()->gt('forfaitTransport.cout', $distance))
+            ->where($queryBuilder->expr()->gt('forfaitTransport.distanceMaximum', $distance))
             ->orderBy('forfaitTransport.cout', 'ASC')
             ->setMaxResults(1)
         ;
