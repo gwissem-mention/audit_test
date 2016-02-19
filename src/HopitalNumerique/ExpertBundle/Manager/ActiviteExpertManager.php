@@ -151,8 +151,8 @@ class ActiviteExpertManager extends BaseManager
      */
     public function getContratCsv(ActiviteExpert $activiteExpert)
     {
-        $csvFile = tmpfile();
         $csvPath = stream_get_meta_data(tmpfile())['uri'];
+        $csvFile = fopen($csvPath, 'w+');
 
         $anapienNoms = array();
         foreach ($activiteExpert->getAnapiens() as $anapien) {
@@ -195,6 +195,7 @@ class ActiviteExpertManager extends BaseManager
         $csvResponse = $this->exportCsv($csvColumns, $csvData, 'activite.csv', 'ISO-8859-1');
         $csvContent = $csvResponse->getContent();
         fwrite($csvFile, $csvContent);
+        fclose($csvFile);
 
         return $csvPath;
     }
