@@ -156,4 +156,21 @@ class FactureManager extends BaseManager
     {
         return $this->getRepository()->getFacturesOrdered( $user )->getQuery()->getResult();
     }
+
+    /**
+     * Retourne si la facture peut être générée.
+     *
+     * @param array<\HopitalNumerique\InterventionBundle\Entity\InterventionDemande> $interventionDemandes Demandes d'intervention
+     * @return boolean Vrai si la facture peut être générée
+     */
+    public function canGenererFacture(array $interventionDemandes)
+    {
+        foreach ($interventionDemandes as $interventionDemande) {
+            if (null !== $interventionDemande->getReferent() && null === $interventionDemande->getReferent()->getEtablissementRattachementSante()) {
+                return false;
+            }
+        }
+
+        return true;
+    }
 }

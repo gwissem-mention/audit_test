@@ -141,6 +141,11 @@ class DemandeController extends \HopitalNumerique\InterventionBundle\Controller\
             $this->get('hopitalnumerique_intervention.manager.intervention_courriel')->envoiCourrielCreation($this->utilisateurConnecte);
             $this->get('hopitalnumerique_intervention.manager.intervention_courriel')->envoiCourrielDemandeAcceptationCmsi($this->interventionDemande->getCmsi(), $this->generateUrl('hopital_numerique_intervention_demande_voir', array('id' => $this->interventionDemande->getId()), true));
         }
+
+        // Envoyer le courriel si le référent n'a pas d'ES
+        if (null !== $this->interventionDemande->getReferent() && null === $this->interventionDemande->getReferent()->getEtablissementRattachementSante()) {
+            $this->get('hopitalnumerique_intervention.manager.intervention_courriel')->envoiCourrielSollicitationSansEtablissement($this->interventionDemande->getReferent());
+        }
     }
 
 

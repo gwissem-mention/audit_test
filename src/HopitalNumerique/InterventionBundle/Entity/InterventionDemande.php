@@ -7,7 +7,6 @@ use HopitalNumerique\InterventionBundle\Entity\InterventionEtat;
 use Symfony\Component\Validator\Constraints as Assert;
 use Nodevo\ToolsBundle\Validator\Constraints as Nodevo;
 use HopitalNumerique\UserBundle\Entity\User;
-use HopitalNumerique\ReferenceBundle\Entity\Reference;
 
 /**
  * Entité d'une demande d'intervention.

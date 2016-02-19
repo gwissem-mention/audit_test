@@ -12,6 +12,9 @@ use Nodevo\MailBundle\Entity\Mail;
  */
 class InterventionCourriel extends Mail
 {
+    const COURRIEL_SOLLICITATION_SANS_ETABLISSEMENT_ID = 62;
+
+
     /**
      * @var integer ID du courriel de création d'une demande d'intervention
      */

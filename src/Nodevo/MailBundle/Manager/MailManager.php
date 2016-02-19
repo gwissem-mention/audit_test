@@ -517,11 +517,11 @@ class MailManager extends BaseManager
      * Envoie un courriel concernant les demandes d'intervention.
      *
      * @param \Nodevo\MailBundle\Entity\Mail $mail Le courriel à envoyer
-     * @param \HopitalNumerique\UserBundle\Entity\User $destinataire Le destinataire du message
+     * @param \HopitalNumerique\UserBundle\Entity\User|array $destinataire Le destinataire du message
      * @param array $options Les paramètres à remplacer
      * @return \Swift_Message Le message prêt à être envoyé
      */
-    public function sendInterventionMail(\Nodevo\MailBundle\Entity\Mail $mail, \HopitalNumerique\UserBundle\Entity\User $destinataire, $options)
+    public function sendInterventionMail(\Nodevo\MailBundle\Entity\Mail $mail, $destinataire, $options)
     {
         return $this->generationMail($destinataire, $mail, $options);
     }
@@ -891,6 +891,34 @@ class MailManager extends BaseManager
             $courrielRegistre->setDestinataire($destinataireAdresseElectronique);
             $courrielRegistre->setUser($this->user);
             $courrielRegistre->setType(CourrielRegistre::TYPE_CONTRAT);
+            $this->courrielRegistreManager->save($courrielRegistre);
+        }
+    }
+
+    /**
+     * Envoie le courriel avec le modèle de paiement.
+     *
+     * @param string $destinataireAdresseElectronique Adresse du destinataire
+     */
+    public function sendExpertActivitePaimentMail(ActiviteExpert $activiteExpert, $destinataireAdresseElectronique)
+    {
+        $courriel = $this->findOneById(61);
+        $paiementModele = $this->referenceManager->findOneByCode('ACTIVITE_EXPERT_PV_RECETTES_MODELE');
+
+        $message =
+            $this->generationMail(null, $courriel)
+            ->setTo($destinataireAdresseElectronique)
+            ->attach(\Swift_Attachment::fromPath('medias'.DIRECTORY_SEPARATOR.'ActiviteExperts'.DIRECTORY_SEPARATOR.$paiementModele->getLibelle()))
+            ->attach(\Swift_Attachment::fromPath($this->activiteExpertManager->getContratCsv($activiteExpert)))
+        ;
+
+        $this->mailer->send($message);
+
+        if (null !== $this->user) {
+            $courrielRegistre = $this->courrielRegistreManager->createEmpty();
+            $courrielRegistre->setDestinataire($destinataireAdresseElectronique);
+            $courrielRegistre->setUser($this->user);
+            $courrielRegistre->setType(CourrielRegistre::TYPE_PAIEMENT);
             $this->courrielRegistreManager->save($courrielRegistre);
         }
     }

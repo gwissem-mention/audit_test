@@ -78,6 +78,8 @@ class AppKernel extends Kernel
             new Liip\ImagineBundle\LiipImagineBundle(),
             new HopitalNumerique\FichierBundle\HopitalNumeriqueFichierBundle(),
             new HopitalNumerique\CommunautePratiqueBundle\HopitalNumeriqueCommunautePratiqueBundle(),
+            new Widop\HttpAdapterBundle\WidopHttpAdapterBundle(),
+            new Ivory\GoogleMapBundle\IvoryGoogleMapBundle()
         );
 
         if (in_array($this->getEnvironment(), array('dev', 'test'))) {

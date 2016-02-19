@@ -1,3 +1,5 @@
-$(document).ready(function() {
+$(document).ready(function() {    
+    $('form.toValidate').validationEngine();
+
     $('.fancy-aide').fancybox();
 });

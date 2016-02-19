@@ -1,0 +1,46 @@
+{% extends 'NodevoAdminBundle::admin.html.twig' %}
+
+{% block h1Title %}Paiement {{ activiteExpert }}{% endblock %}
+
+{% block toolbarButton %}
+    <a class="btn btn-default" href="{{ path('hopitalnumerique_expert_expert_activite') }}" title="Retour à la liste"><i class="fa fa-reply"></i></a>
+    <div onclick="$('form').submit();" class="btn btn-default" title="Enregistrer"><i class="fa fa-check"></i></div>
+    <div onclick="$('#do').val('save-close');$('form').submit();" class="btn btn-default" title="Enregistrer et Fermer"><i class="fa fa-save"></i></div>
+{% endblock %}
+
+{% block body %}
+    
+    {% form_theme paiementsForm 'NodevoAdminBundle::form.html.twig' %}
+    {{ form_start(paiementsForm) }}
+
+        <div class="panel panel-midnightblue">
+            <div class="panel-heading">
+                <h4>Paiements</h4>
+            </div>
+
+            <div class="panel-body">
+                {{ form_errors(paiementsForm.paiements) }}
+                {% for paiement in paiementsForm.paiements %}
+                    <div class="form-group">
+                        <label class="col-md-3 control-label required">
+                            {{ paiement.vars.data.expert.prenomNom }}
+                            <span title="Ce champ est requis" style="color:red;font-size:10px">*</span>
+                        </label>
+                        <div class="col-md-6">
+                            {{ form_widget(paiement.vacationsCount) }}
+                        </div>
+                        <div class="col-md-3">
+                            {{ form_errors(paiement) }}
+                            {{ form_errors(paiement.vacationsCount) }}
+                        </div>
+                    </div>
+                    
+                    
+                {% endfor %}
+                {{ form_row(paiementsForm.adresseElectronique) }}
+            </div>
+        </div>
+
+    {{ form_end(paiementsForm) }}
+
+{% endblock %}

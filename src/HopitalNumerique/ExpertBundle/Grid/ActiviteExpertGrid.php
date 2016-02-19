@@ -60,12 +60,9 @@ class ActiviteExpertGrid extends Grid implements GridInterface
         $contratButton->setAttributes(array('class'=>'btn btn-primary fancy fancybox.ajax fa fa-file-text','title' => 'Contrat'));
         $this->addActionButton($contratButton);
 
-        $payerButton = new \APY\DataGridBundle\Grid\Action\RowAction('', 'hopitalnumerique_expert_expert_payer_facture');
+        $payerButton = new \APY\DataGridBundle\Grid\Action\RowAction('', 'hopitalnumerique_expert_expert_paiement');
         $payerButton->setRouteParameters( array('id') );
-        $payerButton->setAttributes( array('class'=>'btn btn-warning fa fa-money','title' => 'Payer les factures') );
-        $payerButton->manipulateRender(function($action, \APY\DataGridBundle\Grid\Row $row) {
-            return $row->getField('etatValidation') ? null : $action;
-        });
+        $payerButton->setAttributes( array('class'=>'btn btn-warning fa fa-money','title' => 'Paiement') );
         $this->addActionButton( $payerButton );
     }
 

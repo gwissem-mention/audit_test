@@ -82,15 +82,32 @@ class ActiviteExpertController extends Controller
      *
      * @return [type]
      */
-    public function payerFactureAction(ActiviteExpert $activiteExpert)
+    public function paiementAction(Request $request, ActiviteExpert $activiteExpert)
     {
-        $activiteExpert->setEtatValidation(true);
+        $paiementsForm = $this->createForm('hopitalnumerique_expert_activiteexpert_paiements', $activiteExpert);
+        $paiementsForm->handleRequest($request);
 
-        $this->get('hopitalnumerique_expert.manager.activiteexpert')->save($activiteExpert);
+        if ($paiementsForm->isSubmitted()) {
+            if ($paiementsForm->isValid()) {
+                $this->container->get('hopitalnumerique_expert.manager.activiteexpert')->save($activiteExpert);
+                $this->addFlash('success', 'Formulaire enregistré.');
+                
+                $do = $request->request->get('do');
+                return $this->redirect(
+                    $request->request->get('do') == 'save-close'
+                    ? $this->generateUrl('hopitalnumerique_expert_expert_activite')
+                    : $this->generateUrl('hopitalnumerique_expert_expert_paiement', array('id' => $activiteExpert->getId()))
+                );
+                
+            } else {
+                $this->addFlash('danger', 'Formulaire non enregistré.');
+            }
+        }
 
-        $this->get('session')->getFlashBag()->add( 'info' , 'Facture payées.' );
-
-        return $this->redirect( $this->generateUrl('hopitalnumerique_expert_expert_activite') );
+        return $this->render('HopitalNumeriqueExpertBundle:ActiviteExpert:paiement.html.twig', array(
+            'activiteExpert' => $activiteExpert,
+            'paiementsForm' => $paiementsForm->createView()
+        ));
     }
 
     /**

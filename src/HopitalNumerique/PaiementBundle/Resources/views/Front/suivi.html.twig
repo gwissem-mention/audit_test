@@ -71,7 +71,7 @@
                     {% endif %}
                 </tbody>
             </table>
-            {% if total != 0 %}
+            {% if total != 0 and canGenererFacture %}
                 <input type="submit" class="btn btn-success submit" value="Générer ma facture" />
             {% endif %}
         </div>
