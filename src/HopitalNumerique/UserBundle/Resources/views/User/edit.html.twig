@@ -103,12 +103,7 @@
                     {{ form_row(form.telephoneDirect) }}
                     {{ form_row(form.telephonePortable) }}
                     {{ form_row(form.contactAutre) }}
-                    {%- if form.ville is defined -%}
-                        {{ form_row(form.ville) }}
-                    {%- endif -%}
-                    {%- if form.codePostal is defined -%}
-                        {{ form_row(form.codePostal) }}
-                    {%- endif -%}
+
                     {{ form_row(form.region) }}
                     {%- if form.rattachementRegions is defined -%}
                         {{ form_row(form.rattachementRegions) }}

@@ -147,6 +147,7 @@ class UserRepository extends EntityRepository
             ->andWhere('user.enabled = 1')
             ->andWhere($qb->expr()->orX('user.region = :region', 'rattachementRegion.id = :region'))
             ->setParameter('region', $region)
+            ->orderBy('user.nom', 'ASC')
         ;
 
         if( !is_null($domaine) && $domaine != 0 ){

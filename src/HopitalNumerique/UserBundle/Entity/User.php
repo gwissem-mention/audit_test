@@ -293,20 +293,6 @@ class User extends BaseUser
     protected $departement;
 
     /**
-     * @var string
-     *
-     * @ORM\Column(name="usr_code_postal", type="string", length=8, nullable=true)
-     */
-    private $codePostal;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="usr_ville", type="string", length=255, nullable=true)
-     */
-    private $ville;
-
-    /**
      * @ORM\ManyToOne(targetEntity="\HopitalNumerique\ReferenceBundle\Entity\Reference", cascade={"persist"})
      * @ORM\JoinColumn(name="ref_etat", referencedColumnName="ref_id")
      * @Assert\NotBlank(message="L'état ne peut pas être vide.")
@@ -1060,52 +1046,6 @@ class User extends BaseUser
             $this->departement = $departement;
         else
             $this->departement = null;
-    }
-
-    /**
-     * Set codePostal
-     *
-     * @param string $codePostal
-     * @return User
-     */
-    public function setCodePostal($codePostal)
-    {
-        $this->codePostal = $codePostal;
-
-        return $this;
-    }
-
-    /**
-     * Get codePostal
-     *
-     * @return string 
-     */
-    public function getCodePostal()
-    {
-        return $this->codePostal;
-    }
-
-    /**
-     * Set ville
-     *
-     * @param string $ville
-     * @return User
-     */
-    public function setVille($ville)
-    {
-        $this->ville = $ville;
-
-        return $this;
-    }
-
-    /**
-     * Get ville
-     *
-     * @return string 
-     */
-    public function getVille()
-    {
-        return $this->ville;
     }
 
     /**
