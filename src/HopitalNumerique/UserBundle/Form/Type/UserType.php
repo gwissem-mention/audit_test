@@ -269,12 +269,6 @@ class UserType extends AbstractType
 
             if ($builder->getData()->hasRoleAmbassadeur()) {
                 $builder
-                    ->add('ville', 'text', array(
-                        'required' => false
-                    ))
-                    ->add('codePostal', 'text', array(
-                        'required' => false
-                    ))
                     ->add('rattachementRegions', 'entity', array(
                         'class' => 'HopitalNumeriqueReferenceBundle:Reference',
                         'label' => 'Régions de rattachement',
