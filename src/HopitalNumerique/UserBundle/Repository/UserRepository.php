@@ -28,6 +28,7 @@ class UserRepository extends EntityRepository
         $qb->select('user.id, 
                         user.dateInscription, 
                         user.username,
+                        CONCAT(CONCAT(\'<a href="/?_switch_user=\', user.username), \'" class="btn btn-magenta fa fa-user" title="Simuler"></a>\') AS usernameSimulated,
                         user.pseudonymeForum,
                         user.email, 
                         user.nom, 
@@ -146,6 +147,7 @@ class UserRepository extends EntityRepository
             ->andWhere('user.enabled = 1')
             ->andWhere($qb->expr()->orX('user.region = :region', 'rattachementRegion.id = :region'))
             ->setParameter('region', $region)
+            ->orderBy('user.nom', 'ASC')
         ;
 
         if( !is_null($domaine) && $domaine != 0 ){

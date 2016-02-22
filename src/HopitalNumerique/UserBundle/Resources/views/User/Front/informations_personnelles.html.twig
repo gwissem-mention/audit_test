@@ -72,13 +72,6 @@
                     {{ form_row(form.telephonePortable) }}
                     {{ form_row(form.contactAutre) }}
 
-                    {%- if form.ville is defined -%}
-                        {{ form_row(form.ville) }}
-                    {%- endif -%}
-                    {%- if form.codePostal is defined -%}
-                        {{ form_row(form.codePostal) }}
-                    {%- endif -%}
-                    
                     {% if 'ROLE_ARS_CMSI_4' in user.getRoles() %}
                         <div class="form-group">
                             <label class="control-label col-md-4">Région</label>

@@ -26,9 +26,10 @@ class AideController extends Controller
     /**
      * Affiche le formulaire d'ajout d'Aide.
      */
-    public function addAction()
+    public function addAction(Request $request)
     {
-        $aide = $this->get('hopitalnumerique_aide.manager.aide')->createEmpty();
+        $route = $request->query->get('route');
+        $aide = $this->get('hopitalnumerique_aide.manager.aide')->createEmpty()->setRoute($route);
 
         return $this->renderForm('hopitalnumerique_aide_aide', $aide, 'HopitalNumeriqueAideBundle:Aide:edit.html.twig' );
     }

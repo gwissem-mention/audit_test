@@ -78,10 +78,6 @@ class ContactManager extends NodevoContactManager
         $candidature .= is_null($contact->getRegion()) ? '' : '<li><strong>Région :</strong> '. $contact->getRegion()->getLibelle() .'</li>';
         //Département
         $candidature .= is_null($contact->getDepartement()) ? '' : '<li><strong>Département :</strong> '. $contact->getDepartement()->getLibelle() .'</li>';
-        //Code postal
-        $candidature .= is_null($contact->getCodepostal()) ? '' : '<li><strong>Code postal :</strong> '. $contact->getCodepostal() .'</li>';
-        //Ville
-        $candidature .= is_null($contact->getVille()) ? '' : '<li><strong>Ville :</strong> '. $contact->getVille() .'</li>';
         //Type établissement
         $candidature .= is_null($contact->getStatutEtablissementSante()) ? '' : '<li><strong>Type d\'établissement :</strong> '. $contact->getStatutEtablissementSante()->getLibelle() .'</li>';
         //Etablissement de rattachement ou Autre structure si établissement est null

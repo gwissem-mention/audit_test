@@ -164,6 +164,8 @@ function afficheCarteFrance(donneesParRegionJSON, remplissage)
          })(region[state], state);
         
     }
-    
+
+
+    $('#canvas_france a').tooltip({container: 'body'});
     $(document).trigger('carteReady');
 }
