@@ -70,7 +70,7 @@
                 </div>
                 <div class="panel-body">
     
-                 {%- if groupe.enCours or (app.user.hasRoleAdmin or app.user.hasRoleAdminHn or groupe.hasAnimateur(app.user)) -%}
+                 {%- if app.user.hasRoleAdmin or app.user.hasRoleAdminHn or groupe.hasAnimateur(app.user) -%}
                     <div class="commentaire">
                         <p>Ajouter un commentaire :</p>
                         <p>Pour pouvoir joindre un document à votre commentaire, ajoutez-le préalablement dans "<a target="_blank" href="{{ path('hopitalnumerique_communautepratique_document_listbygroupe', { 'groupe':groupe.id }) }}">Mes documents</a>".</p>
@@ -90,13 +90,13 @@
                         <h2>Vous pourrez discuter à partir du {{ groupe.dateDemarrage|date('d/m/Y') }} </h2>
                     </div>
                {%- endif -%}
-                
-                    {% if groupe.commentaires|length > 0 %}
-                        {% for commentaire in groupe.commentaires %}
-                            {{ communaute_pratique.display_commentaire(commentaire) }}
-                        {% endfor %}
-                    {% endif %}
-    
+
+                {% if groupe.commentaires|length > 0 %}
+                    {% for commentaire in groupe.commentaires %}
+                        {{ communaute_pratique.display_commentaire(commentaire) }}
+                    {% endfor %}
+                {% endif %}
+
                 </div>
             </div>
         </div>
