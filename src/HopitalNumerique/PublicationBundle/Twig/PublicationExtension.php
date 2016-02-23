@@ -25,6 +25,7 @@ class PublicationExtension extends \Twig_Extension
     {
         return array(
             'parsePublication' => new \Twig_Filter_Method($this, 'parsePublication'),
+            'parseResumeRecherche' => new \Twig_Filter_Method($this, 'parseResumeRecherche'),
             'alignBreadcrumbs' => new \Twig_Filter_Method($this, 'alignBreadcrumbs'),
         );
     }
@@ -49,7 +50,7 @@ class PublicationExtension extends \Twig_Extension
     {
         $pattern = '/\[([a-zA-Z]+)\:(\d+)\;(([a-zA-Z0-9àáâãäåçèéêëìíîïðòóôõöùúûüýÿ\&\'\`\"\<\>\!\:\?\,\;\.\%\#\@\_\-\+]| )*)\;([a-zA-Z0-9]*)\]/';
         preg_match_all($pattern, $content, $matches);
-        
+
         // matches[0] tableau des chaines completes trouvée
         // matches[1] tableau des chaines avant les : trouvé
         // matches[2] tableau des ID après les : trouvé
@@ -57,7 +58,7 @@ class PublicationExtension extends \Twig_Extension
         {
             foreach($matches[1] as $key => $value)
             {
-                
+
                 // Pour éviter les liens dans les liens 
                 $matches[3][$key] = $this->toascii($matches[3][$key]);
 
@@ -77,10 +78,10 @@ class PublicationExtension extends \Twig_Extension
                         } else {
                             $replacement = "<a href=\"javascript:alert('Cette publication n\'existe pas')\" ".$target.">" . $matches[3][$key] . ' </a>';
                         }
-                        
+
                         $pattern = $matches[0][$key];
                         $content = str_replace($pattern, $replacement, $content);
-                                
+
                         break;
                     case 'INFRADOC':
                         //cas contenu
@@ -98,7 +99,7 @@ class PublicationExtension extends \Twig_Extension
                         } else {
                             $replacement = "<a href=\"javascript:alert('Cet infra-doc n\'existe pas')\" ".$target.">" . $matches[3][$key].'</a>';
                         }
-                        
+
                         $pattern = $matches[0][$key];
                         $content = str_replace($pattern, $replacement, $content);
                         break;
@@ -117,10 +118,10 @@ class PublicationExtension extends \Twig_Extension
                         } else {
                             $replacement = "<a href=\"javascript:alert('Cet article n\'existe pas')\" ".$target.">" . $matches[3][$key] . ' </a>';
                         }
-                        
+
                         $pattern = $matches[0][$key];
                         $content = str_replace($pattern, $replacement, $content);
-                                
+
                         break;
                     case 'AUTODIAG':
                         //cas Outil
@@ -138,7 +139,7 @@ class PublicationExtension extends \Twig_Extension
 
                         $pattern = $matches[0][$key];
                         $content = str_replace($pattern, $replacement, $content);
-                                
+
                         break;
                     case 'QUESTIONNAIRE':
                         //cas Questionnaire
@@ -159,7 +160,7 @@ class PublicationExtension extends \Twig_Extension
 
                         $pattern = $matches[0][$key];
                         $content = str_replace($pattern, $replacement, $content);
-                                
+
                         break;
                     case 'RECHERCHEAIDEE':
                         //cas Recherche aidée
@@ -174,12 +175,12 @@ class PublicationExtension extends \Twig_Extension
 
                         $pattern = $matches[0][$key];
                         $content = str_replace($pattern, $replacement, $content);
-                                
+
                         break;
                 }
             }
         }
-        
+
         //Glossaire stuff
         if( $glossaires ){
             // Ontransforme en ASCII les texte à ne pas parser
@@ -200,12 +201,12 @@ class PublicationExtension extends \Twig_Extension
 
             //tri des éléments les plus longs aux plus petits
             array_multisort(
-                array_map(create_function('$v', 'return strlen($v);'), array_keys($motsFounds)), SORT_DESC, 
+                array_map(create_function('$v', 'return strlen($v);'), array_keys($motsFounds)), SORT_DESC,
                 $motsFounds
             );
-            
+
             foreach($motsFounds as $mot => $data ){
-                
+
                 // On converti la description en ASCII pour ne pas trouver un des mots du glossaire dans la description
                 $description = $this->toascii($data['description']);
 
@@ -215,7 +216,7 @@ class PublicationExtension extends \Twig_Extension
                     $pattern .= 'i';
 
                 preg_match_all($pattern, $content, $matches);
-                
+
                 //when founded
                 if( $matches[0] ){
                     //prepare Replacement stuff
@@ -238,9 +239,121 @@ class PublicationExtension extends \Twig_Extension
 
             $content = str_replace('¬', '', $content);
         }
-        
+
         $content = html_entity_decode($content);
-        //Remplace un caractère qui n'est pas un espace mais un 'caractère vide' en 
+        //Remplace un caractère qui n'est pas un espace mais un 'caractère vide' en
+        $content = strtr($content,array(" " =>" "));
+
+        return $content;
+    }
+
+    /**
+     * Parse le contenu des publications affiché lors d'une recherche pour afficher proprement les liens
+     *
+     * @param string $content Contenu
+     *
+     * @return string
+     */
+    public function parseResumeRecherche($content)
+    {
+        $pattern = '/\[([a-zA-Z]+)\:(\d+)\;(([a-zA-Z0-9àáâãäåçèéêëìíîïðòóôõöùúûüýÿ\&\'\`\"\<\>\!\:\?\,\;\.\%\#\@\_\-\+]| )*)\;([a-zA-Z0-9]*)\]/';
+        preg_match_all($pattern, $content, $matches);
+
+        // matches[0] tableau des chaines completes trouvée
+        // matches[1] tableau des chaines avant les : trouvé
+        // matches[2] tableau des ID après les : trouvé
+        if(is_array($matches[1]))
+        {
+            foreach($matches[1] as $key => $value)
+            {
+
+                // Pour éviter les liens dans les liens
+                $matches[3][$key] = $this->toascii($matches[3][$key]);
+
+                switch($value){
+                    case 'PUBLICATION':
+                        //cas Objet
+                        $objet  = $this->getManagerObjet()->findOneBy( array( 'id' => $matches[2][$key] ) );
+                        if($objet){
+                            $replacement = $objet->getTitre();
+                        } else {
+                            $replacement = "Cette publication n'existe pas.";
+                        }
+
+                        $pattern = $matches[0][$key];
+                        $content = str_replace($pattern, $replacement, $content);
+
+                        break;
+                    case 'INFRADOC':
+                        //cas contenu
+                        $contenu = $this->getManagerContenu()->findOneBy( array( 'id' => $matches[2][$key] ) );
+                        if( $contenu ){
+                            $replacement = $contenu->getTitre();
+                        } else {
+                            $replacement = "Cet infra-doc n'existe pas.";
+                        }
+
+                        $pattern = $matches[0][$key];
+                        $content = str_replace($pattern, $replacement, $content);
+                        break;
+                    case 'ARTICLE':
+                        //cas Objet
+                        $objet  = $this->getManagerObjet()->findOneBy( array( 'id' => $matches[2][$key] ) );
+                        if($objet){
+                            $replacement = $objet->getTitre();
+                        } else {
+                            $replacement = "Cet article n'existe pas.";
+                        }
+
+                        $pattern = $matches[0][$key];
+                        $content = str_replace($pattern, $replacement, $content);
+
+                        break;
+                    case 'AUTODIAG':
+                        //cas Outil
+                        $outil  = $this->getManagerOutil()->findOneBy( array( 'id' => $matches[2][$key] ) );
+                        if($outil)
+                            $replacement = $outil->getTitle();
+                        else
+                            $replacement = "Cet outil n'existe pas.";
+
+                        $pattern = $matches[0][$key];
+                        $content = str_replace($pattern, $replacement, $content);
+
+                        break;
+                    case 'QUESTIONNAIRE':
+                        //cas Questionnaire
+                        $questionnaire  = $this->getManagerQuestionnaire()->findOneBy( array( 'id' => $matches[2][$key] ) );
+                        if ($questionnaire) {
+                            $replacement = $questionnaire->getNom();
+                        } else {
+                            $replacement = "Ce questionnaire n'existe pas.";
+                        }
+
+                        $pattern = $matches[0][$key];
+                        $content = str_replace($pattern, $replacement, $content);
+
+                        break;
+                    case 'RECHERCHEAIDEE':
+                        //cas Recherche aidée
+                        $rechercheAidee  = $this->getManagerGestionnaireRechercheAidee()->findOneBy( array( 'id' => $matches[2][$key] ) );
+
+                        if ($rechercheAidee) {
+                            $replacement = $rechercheAidee->getNom();
+                        } else {
+                            $replacement = "Un problème est survenu.";
+                        }
+
+                        $pattern = $matches[0][$key];
+                        $content = str_replace($pattern, $replacement, $content);
+
+                        break;
+                }
+            }
+        }
+
+        $content = html_entity_decode($content);
+        //Remplace un caractère qui n'est pas un espace mais un 'caractère vide' en
         $content = strtr($content,array(" " =>" "));
 
         return $content;
@@ -271,9 +384,9 @@ class PublicationExtension extends \Twig_Extension
      */
     private function getManagerGlossaire()
     {
-        return $this->container->get('hopitalnumerique_glossaire.manager.glossaire'); 
+        return $this->container->get('hopitalnumerique_glossaire.manager.glossaire');
     }
-    
+
     /**
      * Retourne le manager contenu
      *
@@ -281,7 +394,7 @@ class PublicationExtension extends \Twig_Extension
      */
     private function getManagerContenu()
     {
-        return $this->container->get('hopitalnumerique_objet.manager.contenu'); 
+        return $this->container->get('hopitalnumerique_objet.manager.contenu');
     }
 
     /**

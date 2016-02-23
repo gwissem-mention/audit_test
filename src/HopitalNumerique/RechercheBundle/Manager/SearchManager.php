@@ -792,8 +792,8 @@ class SearchManager extends BaseManager
 
         //objet
         $objet = $one->getObjet();
-        
-        if( !is_null($role) ) 
+
+        if( !is_null($role) )
         {
             //on teste si le rôle de l'user connecté ne fait pas parti de la liste des restriction de l'objet
             $roles = $objet->getRoles();
@@ -804,9 +804,9 @@ class SearchManager extends BaseManager
                 {
                     return null;
                 }
-            }    
+            }
         }
-        
+
         $item['id']       = $objet->getId();
         $item['titre']    = $objet->getTitre();
         $item['countRef'] = $this->getNoteReferencement($objet->getReferences());
@@ -819,12 +819,12 @@ class SearchManager extends BaseManager
         $tab                  = explode('<!-- pagebreak -->', $objet->getResume() );
         $item['resume']       = html_entity_decode(strip_tags($tab[0]), 2 | 0, 'UTF-8');
         $item['hasPageBreak'] = strpos($objet->getResume(),'<!-- pagebreak -->') !== false;
-        
+
         //get Categ and Type
         $tmp = $this->getTypeAndCateg( $objet );
         $item['type']  = $tmp['type'];
         $item['categ'] = $tmp['categ'];
-        
+
         //status (new/updated/datecreation)
         $item['new']      = false;
         $item['updated']  = false;
@@ -886,7 +886,7 @@ class SearchManager extends BaseManager
         $item['titre']    = $topic->getTitle();
         $item['resume']   = preg_replace("/[<\[](.*?)[>\]]/", "", $topic->getFirstPost()->getBody());
         $item['countRef'] = $this->getNoteReferencement($topic->getReferences());
-        
+
         //get Type
         $item['categ'] = 'forum';
 
