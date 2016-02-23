@@ -28,7 +28,7 @@ class UserRepository extends EntityRepository
         $qb->select('user.id, 
                         user.dateInscription, 
                         user.username,
-                        CONCAT(CONCAT(\'<a href="/?_switch_user=\', user.username), \'" class="btn btn-magenta fa fa-user" title="Simuler"></a>\') AS usernameSimulated,
+                        CONCAT(CONCAT(\'<a href="/?_switch_user=\', user.username), \'" target="_blank" class="btn btn-magenta fa fa-user" title="Simuler"></a>\') AS usernameSimulated,
                         user.pseudonymeForum,
                         user.email, 
                         user.nom, 
