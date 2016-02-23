@@ -2,6 +2,8 @@
 
 namespace HopitalNumerique\ExpertBundle\Controller;
 
+use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use HopitalNumerique\ExpertBundle\Entity\ActiviteExpert;
@@ -63,9 +65,13 @@ class ActiviteExpertController extends Controller
     public function parametrageAction()
     {
         $montantVacation = $this->get('hopitalnumerique_reference.manager.reference')->findOneById(560);
+        $contratModele = $this->container->get('hopitalnumerique_reference.manager.reference')->findOneByCode('ACTIVITE_EXPERT_CONTRAT_MODELE');
+        $pvRecettesModele = $this->container->get('hopitalnumerique_reference.manager.reference')->findOneByCode('ACTIVITE_EXPERT_PV_RECETTES_MODELE');
 
-        return $this->render( 'HopitalNumeriqueExpertBundle:ActiviteExpert:fancy.html.twig' , array(
-            'montantVacation' => $montantVacation
+        return $this->render('HopitalNumeriqueExpertBundle:ActiviteExpert:fancy.html.twig', array(
+            'montantVacation' => $montantVacation,
+            'contratModele' => $contratModele,
+            'pvRecettesModele' => $pvRecettesModele
         ));
     }
 
@@ -76,64 +82,58 @@ class ActiviteExpertController extends Controller
      *
      * @return [type]
      */
-    public function payerFactureAction(ActiviteExpert $activiteExpert)
+    public function paiementAction(Request $request, ActiviteExpert $activiteExpert)
     {
-        $activiteExpert->setEtatValidation(true);
+        $paiementsForm = $this->createForm('hopitalnumerique_expert_activiteexpert_paiements', $activiteExpert);
+        $paiementsForm->handleRequest($request);
 
-        $this->get('hopitalnumerique_expert.manager.activiteexpert')->save($activiteExpert);
-
-        $this->get('session')->getFlashBag()->add( 'info' , 'Facture payées.' );
-
-        return $this->redirect( $this->generateUrl('hopitalnumerique_expert_expert_activite') );
-    }
-
-    /**
-     * [payerFactureAction description]
-     *
-     * @param ActiviteExpert $activiteExpert [description]
-     *
-     * @return [type]
-     */
-    public function genererFactureAction(ActiviteExpert $activiteExpert)
-    {
-        $nbDateNecessaire = $activiteExpert->getNbVacationParExpert() - $activiteExpert->getMiniNbPresenceEvenements();
-
-        if($nbDateNecessaire > count($activiteExpert->getDateFictives()))
-        {
-            $nbDateAAjouter = $nbDateNecessaire - count($activiteExpert->getDateFictives());
-
-            // On envoi une 'flash' pour indiquer à l'utilisateur que l'entité est ajoutée
-            $this->get('session')->getFlashBag()->add( 'danger', 'Il manque '. $nbDateAAjouter .' date(s) fictive(s) pour l\'activité "' . $activiteExpert->getTitre() . '".' );
-            
-            return $this->redirect( $this->generateUrl('hopitalnumerique_expert_expert_activite' ) );
+        if ($paiementsForm->isSubmitted()) {
+            if ($paiementsForm->isValid()) {
+                $this->container->get('hopitalnumerique_expert.manager.activiteexpert')->save($activiteExpert);
+                $this->addFlash('success', 'Formulaire enregistré.');
+                
+                $do = $request->request->get('do');
+                return $this->redirect(
+                    $request->request->get('do') == 'save-close'
+                    ? $this->generateUrl('hopitalnumerique_expert_expert_activite')
+                    : $this->generateUrl('hopitalnumerique_expert_expert_paiement', array('id' => $activiteExpert->getId()))
+                );
+                
+            } else {
+                $this->addFlash('danger', 'Formulaire non enregistré.');
+            }
         }
 
-        $experts     = $this->get('hopitalnumerique_expert.manager.activiteexpert')->getExpertsAndVacationForActivite($activiteExpert);
-        $expertsById = $this->get('hopitalnumerique_expert.manager.activiteexpert')->getExperts($activiteExpert);
-
-        $html = $this->renderView('HopitalNumeriqueExpertBundle:ActiviteExpert/pdf:facture.html.twig', array(
+        return $this->render('HopitalNumeriqueExpertBundle:ActiviteExpert:paiement.html.twig', array(
             'activiteExpert' => $activiteExpert,
-            'experts'        => $experts,
-            'expertsById'    => $expertsById
+            'paiementsForm' => $paiementsForm->createView()
         ));
+    }
 
-        $options = array(
-            'margin-bottom' => 10,
-            'margin-left'   => 4,
-            'margin-right'  => 4,
-            'margin-top'    => 10,
-            'encoding'      => 'UTF-8',
-            'orientation'   => 'Landscape'
-        );
+    /**
+     * Clic sur le bouton Contrat de la grid, affiche la fenêtre pour envoyer le modèle de contrat.
+     */
+    public function contratAction(ActiviteExpert $activiteExpert)
+    {
+        return $this->render('HopitalNumeriqueExpertBundle:ActiviteExpert:contrat.html.twig', array(
+            'activiteExpert' => $activiteExpert
+        ));
+    }
 
-        return new Response(
-            $this->get('knp_snappy.pdf')->getOutputFromHtml($html, $options, true),
-            200,
-            array(
-                'Content-Type'          => 'application/pdf',
-                'Content-Disposition'   => 'attachment; filename="Attestation_'.$activiteExpert->getTitre().'.pdf"'
-            )
-        );
+    /**
+     * Envoie le modèle de contrat.
+     */
+    public function sendContratAction(Request $request, ActiviteExpert $activiteExpert)
+    {
+        $adresseElectronique = $request->request->get('email');
+
+        $this->container->get('nodevo_mail.manager.mail')->sendExpertActiviteContratMail($activiteExpert, $adresseElectronique);
+        $this->addFlash('success', 'Courriel envoyé');
+
+        return new JsonResponse(array(
+            'success' => true,
+            'redirection' => $this->generateUrl('hopitalnumerique_expert_expert_activite')
+        ));
     }
 
 

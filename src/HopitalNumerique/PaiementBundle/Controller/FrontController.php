@@ -32,12 +32,18 @@ class FrontController extends Controller
 
         $datas         = $this->get('hopitalnumerique_paiement.manager.remboursement')->calculPrice( $interventions, $formations );
 
+        $canGenererFacture = $this->container->get('hopitalnumerique_paiement.manager.facture')->canGenererFacture($interventions);
+        if (!$canGenererFacture) {
+            $this->addFlash('warning', 'L\'édition de facture n\'est pas possible (les montants affichés sont incorrects). L\'ANAP a été prévenue. Répétez l\'opération d\'ici quelques jours.');
+        }
+
         //get Factures
         $factures = $this->get('hopitalnumerique_paiement.manager.facture')->getFacturesOrdered( $user );
 
         return $this->render('HopitalNumeriquePaiementBundle:Front:suivi.html.twig', array(
             'datas'    => $datas,
-            'factures' => $factures
+            'factures' => $factures,
+            'canGenererFacture' => $canGenererFacture
         ));
     }
 

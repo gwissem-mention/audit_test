@@ -16,7 +16,6 @@
     {{parent()}}
     {% stylesheets output="compiled/hopitalnumerique-module-edit.css" filter="cssrewrite, ?yui_css"
         '@select2_css'
-        '@validationEngine_css'
     %}
         <link rel="stylesheet" href="{{ asset_url }}" />
     {% endstylesheets %}
@@ -25,7 +24,6 @@
 {% block javascripts %}
     {{parent()}}
     {% javascripts output="compiled/hopitalnumerique-module-edit.js"
-        '@select2_js'
         '@validationEngine_js'
         'bundles/hopitalnumeriquemodule/js/module/script.js'
     %}

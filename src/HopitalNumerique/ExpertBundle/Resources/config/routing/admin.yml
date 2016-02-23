@@ -27,27 +27,6 @@ hopitalnumerique_expert_expert_activite_delete:
         id: \d+
         _method: POST|DELETE
 
-hopitalnumerique_expert_expert_ajout_date_fictive:
-    pattern:  /expert/activite/ajout-date-fictive/{id}
-    defaults: { _controller: "HopitalNumeriqueExpertBundle:DateFictive:add" }
-    requirements:
-        id: \d+
-        _method: GET|POST
-
-hopitalnumerique_expert_expert_liste_date_fictive:
-    pattern:  /expert/activite/liste-date-fictive/{id}
-    defaults: { _controller: "HopitalNumeriqueExpertBundle:DateFictive:list" }
-    requirements:
-        id: \d+
-        _method: GET
-
-hopitalnumerique_expert_expert_delete_date_fictive:
-    pattern:  /expert/activite/delete-date-fictive/{id}
-    defaults: { _controller: "HopitalNumeriqueExpertBundle:DateFictive:delete"}
-    requirements: 
-        id: \d+
-        _method: POST|GET
-
 #-Fancy de modif de la vacation
 hopitalnumerique_expert_expert_activite_parametrage:
     pattern:  /expert/activite/parametrage
@@ -56,19 +35,26 @@ hopitalnumerique_expert_expert_activite_parametrage:
         id : \d+ 
 
 #-Action du grid
-hopitalnumerique_expert_expert_payer_facture:
+hopitalnumerique_expert_expert_paiement:
     pattern:  /expert/activite/facture/payer/{id}
-    defaults: { _controller: "HopitalNumeriqueExpertBundle:ActiviteExpert:payerFacture" }
+    defaults: { _controller: "HopitalNumeriqueExpertBundle:ActiviteExpert:paiement", id: 1 }
     requirements:
         id: \d+
         _method: GET|POST
 
-hopitalnumerique_expert_expert_generer_facture:
-    pattern:  /expert/activite/facture/generer/{id}
-    defaults: { _controller: "HopitalNumeriqueExpertBundle:ActiviteExpert:genererFacture" }
+hopitalnumerique_expert_expert_contrat:
+    pattern:  /expert/activite/contrat/{id}
+    defaults: { _controller: "HopitalNumeriqueExpertBundle:ActiviteExpert:contrat" }
     requirements:
         id: \d+
         _method: GET|POST
+
+hopitalnumerique_expert_expert_sendcontrat:
+    pattern:  /expert/activite/send-contrat/{id}
+    defaults: { _controller: "HopitalNumeriqueExpertBundle:ActiviteExpert:sendContrat" }
+    requirements:
+        id: \d+
+        _method: POST
 
 #-Suppression de masse du grid
 delete_mass:

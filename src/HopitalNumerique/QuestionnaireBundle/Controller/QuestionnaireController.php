@@ -340,7 +340,7 @@ class QuestionnaireController extends Controller
         $user          = $options['user'];
         $readOnly      = $options['readOnly'];
         $questionnaire = $options['questionnaire'];
-        $occurrence    = $options['occurrence'];
+        $occurrence    = (array_key_exists('occurrence', $options) ? $options['occurrence'] : null);
         $idSession     = $options['session'];
 
         $label_attr = array(

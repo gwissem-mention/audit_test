@@ -2,6 +2,8 @@
 
 namespace HopitalNumerique\PaiementBundle\Manager;
 
+use Doctrine\ORM\EntityManager;
+use HopitalNumerique\InterventionBundle\DependencyInjection\Intervention\ForfaitTransport as ForfaitTransportService;
 use Nodevo\ToolsBundle\Manager\Manager as BaseManager;
 
 /**
@@ -10,6 +12,22 @@ use Nodevo\ToolsBundle\Manager\Manager as BaseManager;
 class RemboursementManager extends BaseManager
 {
     protected $_class = 'HopitalNumerique\PaiementBundle\Entity\Remboursement';
+
+    /**
+     * @var \HopitalNumerique\InterventionBundle\DependencyInjection\Intervention\ForfaitTransport ForfaitTransportService
+     */
+    private $forfaitTransportService;
+
+
+    /**
+     * Constructeur.
+     */
+    public function __construct(EntityManager $em, ForfaitTransportService $forfaitTransportService)
+    {
+        parent::__construct($em);
+        $this->forfaitTransportService = $forfaitTransportService;
+    }
+
 
     /**
      * Remet en forme les données pour le tableau de suivi des paiements
@@ -35,6 +53,15 @@ class RemboursementManager extends BaseManager
             $referent      = $intervention->getReferent();
             $etablissement = $referent->getEtablissementRattachementSante() ? $referent->getEtablissementRattachementSante()->getNom() : $referent->getAutreStructureRattachementSante();
 
+            if (null === $intervention->getReferent()->getEtablissementRattachementSante() || null === $intervention->getAmbassadeur()->getEtablissementRattachementSante()) {
+                $forfaitTransport = 0;
+            } else {
+                $forfaitTransport = $this->forfaitTransportService->getCoutForDistanceBetweenEtablissements(
+                    $intervention->getReferent()->getEtablissementRattachementSante(),
+                    $intervention->getAmbassadeur()->getEtablissementRattachementSante()
+                );
+            }
+
             //build objet
             $row->id       = $intervention->getId();
             $row->date     = $intervention->getDateCreation();
@@ -46,9 +73,7 @@ class RemboursementManager extends BaseManager
             //calcul total
             $ambassadeurRegion = $intervention->getAmbassadeur()->getRegion()->getId();
             $referentRegion    = $referent->getRegion()->getId();
-            $row->total        = array('prix' => $prix['interventions'][$ambassadeurRegion]['total']);
-            if( $ambassadeurRegion != $referentRegion )
-                $row->total['prix'] = intval($row->total['prix'] + $prix['interventions'][$referentRegion]['intervention']);
+            $row->total        = array('prix' => $prix['interventions'][$ambassadeurRegion]['total'] + $forfaitTransport);
             
             $results[] = $row;
         }
@@ -115,15 +140,14 @@ class RemboursementManager extends BaseManager
      *
      * @return array
      */
-    public function getPrixRemboursements()
+    private function getPrixRemboursements()
     {
         $remboursements = $this->findAll();
         $prix           = array();
         foreach($remboursements as $remboursement) {
-            $total = intval($remboursement->getIntervention() + $remboursement->getRepas() + $remboursement->getGestion());
+            $total = intval($remboursement->getRepas() + $remboursement->getGestion());
 
             $prix['interventions'][ $remboursement->getRegion()->getId() ]['total']        = $total;
-            $prix['interventions'][ $remboursement->getRegion()->getId() ]['intervention'] = $remboursement->getIntervention();
             $prix['formations'][ $remboursement->getRegion()->getId() ]                    = is_null($remboursement->getSupplement()) ? null : intval($total + $remboursement->getSupplement());
         }
 

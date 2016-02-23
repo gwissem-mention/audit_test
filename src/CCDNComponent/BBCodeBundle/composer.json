@@ -1,0 +1,25 @@
+{
+    "name": "codeconsortium/ccdn-component-bb-code-bundle",
+    "description": "CCDN Component BBCode Bundle",
+    "keywords": ["ccdn", "codeconsortium", "bulletin code", "BB code", "markup", "parser"],
+    "homepage": "http://github.com/codeconsortium/CCDNComponentBBCodeBundle",
+    "type": "symfony-bundle",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Reece Fowell",
+            "email": "reece@codeconsortium.com",
+            "homepage": "http://www.reecefowell.com"
+        }
+    ],
+    "minimum-stability": "dev",
+    "require": {
+        "php": ">=5.3.3",
+        "symfony/symfony": "2.4.*",
+        "codeconsortium/ccdn-component-bb-code": "dev-master"
+    },
+    "autoload": {
+        "psr-0": { "CCDNComponent\\BBCodeBundle": "" }
+    },
+    "target-dir": "CCDNComponent/BBCodeBundle"
+}

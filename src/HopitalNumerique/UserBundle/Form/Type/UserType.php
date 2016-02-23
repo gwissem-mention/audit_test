@@ -57,6 +57,7 @@ class UserType extends AbstractType
         $roles = $datas->getRoles();
         $connectedUser = $this->_userManager->getUserConnected();
 
+
         $builder->add('username', 'text', array(
                 'max_length' => $this->_constraints['username']['maxlength'],
                 'required'   => true, 
@@ -265,6 +266,28 @@ class UserType extends AbstractType
                     'label'      => 'Contact autre',
                     'attr'       => array()
             ));
+
+            if ($builder->getData()->hasRoleAmbassadeur()) {
+                $builder
+                    ->add('rattachementRegions', 'entity', array(
+                        'class' => 'HopitalNumeriqueReferenceBundle:Reference',
+                        'label' => 'Régions de rattachement',
+                        'multiple' => true,
+                        'expanded' => false,
+                        'query_builder' => function (EntityRepository $er) {
+                            return $er->createQueryBuilder('ref')
+                                ->where('ref.code = :etat')
+                                ->setParameter('etat', 'REGION')
+                                ->orderBy('ref.order', 'ASC')
+                            ;
+                        },
+                        'property' => 'libelle',
+                        'attr' => array(
+                            'size' => 8
+                        )
+                    ))
+                ;
+            }
 
             // ^ -------- Onglet : Vous êtes un établissement de santé -------- ^
             $builder->add('statutEtablissementSante', 'entity', array(

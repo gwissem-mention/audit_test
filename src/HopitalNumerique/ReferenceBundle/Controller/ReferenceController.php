@@ -75,12 +75,28 @@ class ReferenceController extends Controller
         return $this->renderForm('hopitalnumerique_reference_reference', $reference, 'HopitalNumeriqueReferenceBundle:Reference:edit.html.twig' );
     }
 
+    /**
+     * Sauvegarde les paramètres des activités d'expert
+     */
     public function saveReferenceAjaxAction(Request $request, Reference $reference)
     {
         $montant = $request->request->get('montant');
         $reference->setLibelle($montant);
-
         $this->get('hopitalnumerique_reference.manager.reference')->save($reference);
+
+        $contratModele = $this->container->get('hopitalnumerique_reference.manager.reference')->findOneByCode('ACTIVITE_EXPERT_CONTRAT_MODELE');
+        if (null === $contratModele) {
+            throw new \Exception('Référence "ACTIVITE_EXPERT_CONTRAT_MODELE" introuvable');
+        }
+        $contratModele->setLibelle($request->request->get('contratModele'));
+        $this->get('hopitalnumerique_reference.manager.reference')->save($contratModele);
+
+        $pvRecettesModele = $this->container->get('hopitalnumerique_reference.manager.reference')->findOneByCode('ACTIVITE_EXPERT_PV_RECETTES_MODELE');
+        if (null === $pvRecettesModele) {
+            throw new \Exception('Référence "ACTIVITE_EXPERT_PV_RECETTES_MODELE" introuvable');
+        }
+        $pvRecettesModele->setLibelle($request->request->get('pvRecettesModele'));
+        $this->get('hopitalnumerique_reference.manager.reference')->save($pvRecettesModele);
 
         $response = json_encode(array('success' => true));
 

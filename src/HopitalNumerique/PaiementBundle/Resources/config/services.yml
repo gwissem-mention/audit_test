@@ -23,6 +23,6 @@ services:
     #Remboursement
     hopitalnumerique_paiement.manager.remboursement:
         class: %hopitalnumerique_paiement.manager.remboursement.class%
-        arguments: ["@doctrine.orm.entity_manager"]
+        arguments: ["@doctrine.orm.entity_manager", '@hopitalnumerique_intervention.dependency_injection.intervention.forfait_transport']
         calls:
            - [ setCache, ["@liip_doctrine_cache.ns.main"] ]

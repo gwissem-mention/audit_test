@@ -7,7 +7,6 @@
 {% block stylesheets %}
     {{parent()}}
     {% stylesheets output="compiled/hopitalnumerique-registre-ambassadeur-index.css" filter="cssrewrite, ?yui_css"
-        "@fancybox_css" 
         'bundles/hopitalnumeriqueregistre/css/style.css'
     %}
         <link rel="stylesheet" href="{{ asset_url }}" />
@@ -17,7 +16,6 @@
 {% block javascripts %}
     {{parent()}}
     {% javascripts output="compiled/hopitalnumerique-registre-ambassadeur-index.js"
-        "@fancybox_js" 
         "@json_js"
         'bundles/hopitalnumeriqueregistre/js/raphael.js'
         'bundles/hopitalnumeriqueregistre/js/carte_departement.js'
@@ -66,7 +64,7 @@
 		                <div class="col-md-12">
 				            <div class="chapo">
 				                <h1 class="violet">Annuaire des ambassadeurs</h1>
-				                <div class="description"><p>Vous êtes à la recherche d'un ambassadeur dans votre région ? Sélectionnez votre région (et éventuellement les régions voisines) et cliquez sur "Activer la recherche". Affinez votre recherche par domaine fonctionnel. Consultez la ville de l'ambassadeur en plaçant votre souris sur le nom de son établissement (le code postal apparaîtra).</p></div>
+				                <div class="description">{{'Module_annuaire_ambassadeur'|nodevoTexteDynamique(domaineCurrent.id)|raw|nl2br}}</p></div>
 				            </div>
 			            </div>
                         <div class="clearfix"></div>
@@ -82,7 +80,7 @@
 				                {# Permet de vérifier si un ambassadeur est présent pour la région #}
 				                {% set ambassadeurExisteRegion = false %}
 				                {% for ambassadeur in ambassadeurs[region.id] %}
-				                    {% if ambassadeur.region.id == region.id %}
+				                    {% if ambassadeur.region.id == region.id or ambassadeur.hasRattachementRegion(region) %}
 				                        {% set ambassadeurExisteRegion = true %}
 					                    <div class="fiche col-md-6">
 					                        <div class="content">
@@ -104,18 +102,23 @@
                                                 <div class="col-md-9">
                                                     <div class="description">
     					                                {% if ambassadeur.etablissementRattachementSante %}
-    					                                   <div class="etab" title="{{ambassadeur.etablissementRattachementSante.nom}} - {% if ambassadeur.etablissementRattachementSante.ville is not null %}{{ ambassadeur.etablissementRattachementSante.ville }}{% if ambassadeur.etablissementRattachementSante.codepostal is not null %} ({{ ambassadeur.etablissementRattachementSante.codepostal }}){% endif %}{% endif %}">    
+    					                                   <div class="etab">
     					                                       {{ambassadeur.etablissementRattachementSante.nom}}
     				                                       </div>
     					                                {% elseif ambassadeur.autreStructureRattachementSante is not empty %}
-    					                                   <div class="etab" title="{{ambassadeur.autreStructureRattachementSante}}">
+    					                                   <div class="etab">
     					                                       {{ambassadeur.autreStructureRattachementSante}}
     				                                       </div>
                                                         {% else %}
-                                                           <div class="etab" title="{{ambassadeur.nomStructure}}">
+                                                           <div class="etab">
                                                                {{ambassadeur.nomStructure}}
                                                            </div>
     					                                {% endif %}
+                                                        <div class="etab">
+                                                            {% if ambassadeur.etablissementRattachementSante %}
+                                                                {% if ambassadeur.etablissementRattachementSante.ville is not null %}{{ ambassadeur.etablissementRattachementSante.ville }}{% if ambassadeur.etablissementRattachementSante.codepostal is not null %} - {{ ambassadeur.etablissementRattachementSante.codepostal }}{% endif %}{% endif %}
+                                                            {% endif %}
+                                                        </div>
         					                            <div class="fonction" title="{% if ambassadeur.fonctionDansEtablissementSante is not empty %}{{ambassadeur.fonctionDansEtablissementSante}}{% else %}{{ambassadeur.fonctionStructure}}{% endif %}">
         					                                {% if ambassadeur.fonctionDansEtablissementSante is not empty %}
         					                                    {{ambassadeur.fonctionDansEtablissementSante}}
@@ -128,7 +131,7 @@
                                                             <a class="link violet fancybox.ajax domainesFonctionnels" href="{{path('hopital_numerique_registre_ambassadeur_domaines',{'id':ambassadeur.id})}}">> Connaissances métiers</a>
                                                         </div>
                                                 
-                                                        <div class="col-md-12">
+                                                        <div class="col-md-12" style="margin-top: -5px;">
                                                             <a class="link violet fancybox.ajax domainesFonctionnels" href="{{path('hopital_numerique_registre_ambassadeur_connaissance_si',{'id':ambassadeur.id})}}">> Connaissances SI</a>
                                                         </div>
         					

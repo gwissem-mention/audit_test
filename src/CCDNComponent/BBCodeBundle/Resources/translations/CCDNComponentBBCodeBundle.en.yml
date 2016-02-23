@@ -1,0 +1,15 @@
+ccdn_component_bb_code.parser.quote_said: said
+ccdn_component_bb_code.parser.code: Code
+
+ccdn_component_bb_code.editor.button.style: 'Styles'
+ccdn_component_bb_code.editor.button.bold: 'Bold'
+ccdn_component_bb_code.editor.button.underline: 'Underline'
+ccdn_component_bb_code.editor.button.italic: 'Italics'
+ccdn_component_bb_code.editor.button.strike: 'Strike through text.'
+ccdn_component_bb_code.editor.button.sub: 'Subscript'
+ccdn_component_bb_code.editor.button.sup: 'Superscript'
+ccdn_component_bb_code.editor.button.code: 'Add a block of code'
+ccdn_component_bb_code.editor.button.quote: 'Add a quotation'
+ccdn_component_bb_code.editor.button.url: 'Add a url'
+ccdn_component_bb_code.editor.button.image: 'Add an image'
+ccdn_component_bb_code.editor.button.smileys: 'Add emoticons'

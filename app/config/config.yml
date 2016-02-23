@@ -39,6 +39,8 @@ services:
         arguments: ["%genemu.form.date.options%"]
         tags:
             - { name: form.type, alias: genemu_jquerydate }
+    fos_user.doctrine_registry:
+        alias: doctrine
 
 # Twig Configuration
 twig:
@@ -65,7 +67,7 @@ doctrine:
         charset:  UTF8
 
     orm:
-        auto_generate_proxy_classes: "%kernel.debug%"
+        auto_generate_proxy_classes: true
         resolve_target_entities:
             Symfony\Component\Security\Core\User\UserInterface: HopitalNumerique\UserBundle\Entity\User
         entity_managers:
@@ -246,3 +248,11 @@ liip_imagine:
             quality: 75
             filters:
                 thumbnail: { size: [100, 100], mode: inset, allow_upscale: true }
+
+ivory_google_map:
+    distance_matrix:
+        enabled: true
+        url: "https://maps.googleapis.com/maps/api/distancematrix"
+        adapter: "widop_http_adapter.curl"
+        https: true
+        format: "json"

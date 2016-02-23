@@ -5,6 +5,7 @@ use Nodevo\GridBundle\Grid\Grid;
 use Nodevo\GridBundle\Grid\GridInterface;
 use Nodevo\GridBundle\Grid\Column;
 use Nodevo\GridBundle\Grid\Action;
+use APY\DataGridBundle\Grid\Row;
 
 /**
  * Configuration du Grid User
@@ -147,6 +148,12 @@ class UserGrid extends Grid implements GridInterface
         $etatColonne->setDefaultOperator( \APY\DataGridBundle\Grid\Column\Column::OPERATOR_EQ );
 
         $this->addColonne( $etatColonne );
+
+        if ($this->_container->get('security.authorization_checker')->isGranted('ROLE_SUPER_ADMIN')) {
+            $simulationColonne = new Column\TextColumn('usernameSimulated', 'Simuler');
+            $simulationColonne->setFilterable(false)->setSortable(false);
+            $this->addColonne($simulationColonne);
+        }
 
         $this->addColonne( new Column\BlankColumn('lock') );
     }

@@ -1,7 +1,0 @@
-<ul>
-    {% for dateFictive in dateFictives %}
-        <li>
-            {{dateFictive.date|date('d/m/Y')}} <a href="{{path('hopitalnumerique_expert_expert_delete_date_fictive', {'id' : dateFictive.id })}}"><i class="fa fa-trash-o"></i></a>
-        </li>
-    {% endfor %}
-</ul>

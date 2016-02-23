@@ -16,7 +16,6 @@
                 <thead>
                     <tr>
                         <th>Régions</th>
-                        <th width="200px" >Forfait intervention</th>
                         <th width="200px" >Supplément formation</th>
                         <th width="200px" >Forfait repas</th>
                         <th width="300px" >Forfait de gestion administrative</th>
@@ -26,12 +25,6 @@
                     {% for remboursement in remboursements %}
                         <tr>
                             <td>{{remboursement.region.libelle}}</td>
-                            <td>
-                                <div class="input-group">
-                                    <input type="text" class="form-control" name="remboursement[{{remboursement.id}}][intervention]" value="{{remboursement.intervention}}" />
-                                    <span class="input-group-addon">€</span>
-                                </div>
-                            </td>
                             <td>
                                 <div class="input-group">
                                     <input type="text" class="form-control" name="remboursement[{{remboursement.id}}][supplement]" value="{{remboursement.supplement}}" />

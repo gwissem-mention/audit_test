@@ -116,11 +116,13 @@
                     
                     {% for option in options %}
                         {% set tab = option|split(';') %}
-                        {% if tab[0] == question.initialValue %}
-                            <span><b>{{tab[1]|trim}}</b></span><br />
-                        {% else %}
-                            <span>{{tab[1]|trim}}</span><br />
-                        {% endif %}
+                        {%- if tab|length > 1 -%}
+                            {% if tab[0] == question.initialValue %}
+                                <span><b>{{tab[1]|trim}}</b></span><br />
+                            {% else %}
+                                <span>{{tab[1]|trim}}</span><br />
+                            {% endif %}
+                        {%- endif -%}
                     {% endfor %}
                 </p>
                 {% if question.colored and question.initialValue != -1 %}

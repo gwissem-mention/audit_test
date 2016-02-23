@@ -18,7 +18,7 @@ class FactureGrid extends Grid implements GridInterface
     public function setConfig()
     {
         $this->setSource( 'HopitalNumeriquePaiementBundle:Facture' );
-        $this->setNoDataMessage('Aucun Facture à afficher.');
+        $this->setNoDataMessage('Aucune facture à afficher.');
         $this->setButtonSize( 43 );
         $this->setDefaultOrder( 'dateCreation', 'desc' );
     }
@@ -28,6 +28,14 @@ class FactureGrid extends Grid implements GridInterface
      */
     public function setColumns()
     {
+        $nameColumn = new Column\TextColumn('name', 'NAME');
+        $nameColumn->setFilterable(false)->setVisible(false);
+        $this->addColonne($nameColumn);
+
+        $datePaiementColumn = new Column\TextColumn('datePaiement', 'DATE PAIEMENT');
+        $datePaiementColumn->setFilterable(false)->setVisible(false);
+        $this->addColonne($datePaiementColumn);
+
         $this->addColonne( new Column\AssocColumn('user.nom', 'Nom') );
         $this->addColonne( new Column\AssocColumn('user.prenom', 'Prénom') );
         $this->addColonne( new Column\AssocColumn('user.email', 'Adresse e-mail') );

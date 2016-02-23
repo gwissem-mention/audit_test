@@ -4,7 +4,6 @@
     {{ parent() }}
     {% stylesheets output="compiled/hopitalnumerique-recherche-chapitre-index.css" filter="cssrewrite, ?yui_css" 
         "@select2_css" 
-        "@fancybox_css"
         "@validationEngine_css"
         "@jquery_toggles_css"
         'bundles/nodevoadmin/css/jquery.nestable.css'
@@ -18,12 +17,10 @@
 {% block javascripts %}
     {{parent()}}
     {% javascripts output="compiled/hopitalnumerique-recherche-chapitre-index.js" 
-        "@select2_js" 
-        "@fancybox_js" 
+        "@select2_js"
         "@nestable_js"
         "@tinymce_js"
         "@jquery_toggles_js"
-        "@validationEngine_js"
         "@json_js"
         'bundles/hopitalnumeriquerecherche/js/ExpBesoin/script.js'
         'bundles/nodevogestionnairemedia/js/moxiemanager/js/moxman.loader.min.js'

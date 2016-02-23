@@ -31,33 +31,4 @@ $(document).ready(function() {
     {
         $('form.toValidate').validationEngine();
     }
-
-    //Date fictive
-    $( "#date_fictive" ).datepicker({
-        defaultDate: "now",
-        changeMonth: true,
-        numberOfMonths: 1,
-        dateFormat: "yy-mm-dd"
-    });
-
 });
-
-//Selectionne un chapitre et charge l'ensemble des questions liés
-function addDateFictive( url )
-{
-    if ( $('#form_date_fictive form').validationEngine('validate') ) {
-
-        var loader = $('.options').nodevoLoader().start();
-
-        $.ajax({
-            url     : url,
-            data    :  $('#form_date_fictive form').serialize(),
-            type    : 'POST',
-            success : function( data ){
-                // Refresh de la liste
-                $('#dates-fictives').html( data );
-                loader.finished();
-            }
-        });
-    }
-}

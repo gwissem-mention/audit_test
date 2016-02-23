@@ -58,8 +58,7 @@
                 <div id="blocRequeteRecherche">
     
                     <div class="placeholder" {% if refs != '[]' %}style="display:none"{% endif %}>
-                        <p class="text-muted">Ici seront placés les critères de recherche que vous aurez choisis dans le référentiel à gauche. Pour voir le détail d'un critère, cliquer sur le texte ou le chevron. Pour choisir un critère, cliquer sur le signe + ou double cliquer sur le texte.</p>
-                        <p class="text-muted">Les résultats correspondant aux critères sont répartis en 4 catégories : les points durs (les questions communes aux établissements de santé), les productions ANAP, les productions externes à l'ANAP, et les fils de discussion au forum.</p>
+                        <p class="text-muted">{{'Module_recherche_introduction'|nodevoTexteDynamique(domaineCurrent.id)|raw|nl2br}}</p>
                     </div>
 
                     <div id="dest" {% if refs == '[]' %}class="hide"{% endif %} >

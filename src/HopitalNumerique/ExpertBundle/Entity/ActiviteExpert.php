@@ -3,6 +3,7 @@
 namespace HopitalNumerique\ExpertBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use HopitalNumerique\UserBundle\Entity\User;
 
 //Asserts Stuff
 use Symfony\Component\Validator\Constraints as Assert;
@@ -132,6 +133,14 @@ class ActiviteExpert
     protected $etat;
 
     /**
+     * @var array</HopitalNumerique/ExpertBundle/Entity/ActiviteExpert/Paiement>
+     *
+     * @ORM\OneToMany(targetEntity="HopitalNumerique\ExpertBundle\Entity\ActiviteExpert\Paiement", mappedBy="activiteExpert", cascade={"persist"}, orphanRemoval=true)
+     */
+    private $paiements;
+
+
+    /**
      * Constructor
      */
     public function __construct()
@@ -139,7 +148,9 @@ class ActiviteExpert
         $this->expertConcernes = new \Doctrine\Common\Collections\ArrayCollection();
         $this->anapiens = new \Doctrine\Common\Collections\ArrayCollection();
         $this->etatValidation = false;
+        $this->paiements = new \Doctrine\Common\Collections\ArrayCollection();
     }
+
 
     /**
      * Get id
@@ -526,5 +537,98 @@ class ActiviteExpert
     public function getDateFictives()
     {
         return $this->dateFictives;
+    }
+
+    /**
+     * Add paiement
+     *
+     * @param \HopitalNumerique\ExpertBundle\Entity\ActiviteExpert\Paiement $paiement
+     *
+     * @return ActiviteExpert
+     */
+    public function addPaiement(\HopitalNumerique\ExpertBundle\Entity\ActiviteExpert\Paiement $paiement)
+    {
+        $this->paiements[] = $paiement;
+
+        return $this;
+    }
+
+    /**
+     * Remove paiement
+     *
+     * @param \HopitalNumerique\ExpertBundle\Entity\ActiviteExpert\Paiement $paiement
+     */
+    public function removePaiement(\HopitalNumerique\ExpertBundle\Entity\ActiviteExpert\Paiement $paiement)
+    {
+        $this->paiements->removeElement($paiement);
+    }
+
+    /**
+     * Get paiements
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getPaiements()
+    {
+        return $this->paiements;
+    }
+
+
+    /**
+     * @return string
+     */
+    public function __toString()
+    {
+        return $this->titre;
+    }
+
+
+    /**
+     * Retourne si l'expert est présent.
+     *
+     * @param \HopitalNumerique\UserBundle\Entity\User $expert Expert
+     * @return boolean Vrai présent
+     */
+    public function hasExpertConcerne(User $expert)
+    {
+        foreach ($this->expertConcernes as $expertConcerne) {
+            if ($expertConcerne->getId() === $expert->getId()) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * Retourne si le paiement d'un expert existe.
+     *
+     * @param \HopitalNumerique\UserBundle\Entity\User $expert Expert
+     * @return boolean Vrai s'il existe
+     */
+    public function hasPaiementForExpert(User $expert)
+    {
+        foreach ($this->paiements as $paiement) {
+            if ($paiement->getExpert()->getId() === $expert->getId()) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * Supprime le paiement d'un expert.
+     *
+     * @param \HopitalNumerique\UserBundle\Entity\User $expert Expert
+     */
+    public function removePaiementForExpert(User $expert)
+    {
+        foreach ($this->paiements as $paiement) {
+            if ($paiement->getExpert()->getId() === $expert->getId()) {
+                $this->removePaiement($paiement);
+                break;
+            }
+        }
     }
 }

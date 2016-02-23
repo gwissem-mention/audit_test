@@ -1,0 +1,21 @@
+parameters:
+    hopitalnumerique_aide.manager.aide.class: HopitalNumerique\AideBundle\Manager\AideManager
+    hopitalnumerique_aide.grid.aide.class: HopitalNumerique\AideBundle\Grid\AideGrid
+    hopitalnumerique_aide.form.aide.class: HopitalNumerique\AideBundle\Form\AideType
+
+services:
+    hopitalnumerique_aide.manager.aide:
+        class: "%hopitalnumerique_aide.manager.aide.class%"
+        arguments: ["@doctrine.orm.entity_manager", "@session", "@hopitalnumerique_user.manager.user"]
+        calls:
+           - [ setCache, [ "@liip_doctrine_cache.ns.main" ] ]
+
+    hopitalnumerique_aide.grid.aide:
+        class: "%hopitalnumerique_aide.grid.aide.class%"
+        arguments: ["@service_container"]
+
+    hopitalnumerique_aide.form.aide:
+        class: "%hopitalnumerique_aide.form.aide.class%"
+        arguments: ["@hopitalnumerique_aide.manager.aide", "@validator", "@hopitalnumerique_user.manager.user", "@hopitalnumerique_aide.manager.aide"]
+        tags:
+            - { name: form.type, alias: hopitalnumerique_aide_aide }

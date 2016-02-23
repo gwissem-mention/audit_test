@@ -3,7 +3,6 @@
 /web/compiled/
 /web/media/cache/
 /web/assetic/
-/web/fonts
 /app/bootstrap.php.cache
 /app/cache/*
 /app/config/parameters.yml

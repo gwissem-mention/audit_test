@@ -55,17 +55,14 @@ class ActiviteExpertGrid extends Grid implements GridInterface
         $this->addActionButton( $evenementButton );
 
         //générer la facture pour l'activité
-        $genererFactureButton = new \APY\DataGridBundle\Grid\Action\RowAction('', 'hopitalnumerique_expert_expert_generer_facture');
-        $genererFactureButton->setRouteParameters( array('id') );
-        $genererFactureButton->setAttributes( array('class'=>'btn btn-primary fa fa-external-link','title' => 'Générer les factures') );
-        $this->addActionButton( $genererFactureButton );
+        $contratButton = new \APY\DataGridBundle\Grid\Action\RowAction('', 'hopitalnumerique_expert_expert_contrat');
+        $contratButton->setRouteParameters(array('id'));
+        $contratButton->setAttributes(array('class'=>'btn btn-primary fancy fancybox.ajax fa fa-file-text','title' => 'Contrat'));
+        $this->addActionButton($contratButton);
 
-        $payerButton = new \APY\DataGridBundle\Grid\Action\RowAction('', 'hopitalnumerique_expert_expert_payer_facture');
+        $payerButton = new \APY\DataGridBundle\Grid\Action\RowAction('', 'hopitalnumerique_expert_expert_paiement');
         $payerButton->setRouteParameters( array('id') );
-        $payerButton->setAttributes( array('class'=>'btn btn-warning fa fa-money','title' => 'Payer les factures') );
-        $payerButton->manipulateRender(function($action, \APY\DataGridBundle\Grid\Row $row) {
-            return $row->getField('etatValidation') ? null : $action;
-        });
+        $payerButton->setAttributes( array('class'=>'btn btn-warning fa fa-money','title' => 'Paiement') );
         $this->addActionButton( $payerButton );
     }
 

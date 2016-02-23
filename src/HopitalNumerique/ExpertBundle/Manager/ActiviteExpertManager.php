@@ -143,4 +143,60 @@ class ActiviteExpertManager extends BaseManager
         return $this->getRepository()->getActivitesForAnapien($idAnapien)->getQuery()->getResult();
     }
 
+    /**
+     * Retourne le CSV (fichier temporaire) du contrat.
+     *
+     * @param \HopitalNumerique\ExpertBundle\Entity\ActiviteExpert $activiteExpert Expert
+     * @return string Chemin du fichier CSV
+     */
+    public function getContratCsv(ActiviteExpert $activiteExpert)
+    {
+        $csvPath = stream_get_meta_data(tmpfile())['uri'];
+        $csvFile = fopen($csvPath, 'w+');
+
+        $anapienNoms = array();
+        foreach ($activiteExpert->getAnapiens() as $anapien) {
+            $anapienNoms[] = $anapien->getPrenomNom();
+        }
+
+        $csvColumns = array(
+            'Titre',
+            'Type d\'activité',
+            'Date de début',
+            'Date de fin',
+            'Nombre de vacations par expert',
+            'Prestataire affecté',
+            'Unité d\'oeuvre concernée',
+            'Anapiens référents',
+            'État',
+            'Expert concerné - Prénom',
+            'Expert concerné - Nom',
+            'Expert concerné - Adresse électronique'
+        );
+
+        $csvData = array();
+        foreach ($activiteExpert->getExpertConcernes() as $expertConcerne) {
+            $csvData[] = array(
+                $activiteExpert->getTitre(),
+                $activiteExpert->getTypeActivite(),
+                (null !== $activiteExpert->getDateDebut() ? $activiteExpert->getDateDebut()->format('d/m/Y') : ''),
+                (null !== $activiteExpert->getDateFin() ? $activiteExpert->getDateFin()->format('d/m/Y') : ''),
+                $activiteExpert->getNbVacationParExpert(),
+                $activiteExpert->getPrestataire(),
+                $activiteExpert->getUniteOeuvreConcerne(),
+                implode(', ', $anapienNoms),
+                $activiteExpert->getEtat(),
+                $expertConcerne->getPrenom(),
+                $expertConcerne->getNom(),
+                $expertConcerne->getEmail()
+            );
+        }
+
+        $csvResponse = $this->exportCsv($csvColumns, $csvData, 'activite.csv', 'ISO-8859-1');
+        $csvContent = $csvResponse->getContent();
+        fwrite($csvFile, $csvContent);
+        fclose($csvFile);
+
+        return $csvPath;
+    }
 }

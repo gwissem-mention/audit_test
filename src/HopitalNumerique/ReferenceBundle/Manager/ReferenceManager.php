@@ -426,6 +426,19 @@ class ReferenceManager extends BaseManager
         return $this->getRepository()->findByCodeParent($code, $idParent, $isActif);
     }
 
+    /**
+     * Retourne un code selon son code.
+     *
+     * @param string  $code    Code
+     * @param boolean $isActif Actif
+     * @return \HopitalNumerique\ReferenceBundle\Entity\Reference Référence
+     */
+    public function findOneByCode($code, $isActif = true)
+    {
+        $byCode = $this->findByCode($code, $isActif);
+
+        return (count($byCode) > 0 ? $byCode[0] : null);
+    }
 
 
 

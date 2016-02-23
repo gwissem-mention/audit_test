@@ -7,14 +7,21 @@ use Nodevo\ToolsBundle\Manager\Manager as BaseManager;
 use Doctrine\ORM\EntityManager;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
+use Symfony\Component\Security\Core\SecurityContextInterface;
 use FOS\UserBundle\Model\UserInterface;
 
 use Symfony\Component\HttpFoundation\Request;
 
+use HopitalNumerique\ExpertBundle\Entity\ActiviteExpert;
+use HopitalNumerique\ExpertBundle\Entity\CourrielRegistre;
+use HopitalNumerique\ExpertBundle\Manager\ActiviteExpertManager;
+use HopitalNumerique\ExpertBundle\Manager\CourrielRegistreManager;
+use HopitalNumerique\ReferenceBundle\Manager\ReferenceManager;
 use HopitalNumerique\DomaineBundle\Manager\DomaineManager;
 use HopitalNumerique\UserBundle\Entity\User;
 use HopitalNumerique\AutodiagBundle\Entity\Outil;
 use HopitalNumerique\UserBundle\Manager\UserManager;
+
 /**
  * Manager de l'entité Mail.
  */
@@ -52,7 +59,28 @@ class MailManager extends BaseManager
     private $_session;
     private $_domaineManager;
     private $_userManager;
+
+    /**
+     * @var \HopitalNumerique\ReferenceBundle\Manager\ReferenceManager ReferenceManager
+     */
+    private $referenceManager;
+
+    /**
+     * @var \HopitalNumerique\ExpertBundle\Manager\ActiviteExpertManager ActiviteExpertManager
+     */
+    private $activiteExpertManager;
+
+    /**
+     * @var \HopitalNumerique\ExpertBundle\Manager\CourrielRegistreManager CourrielRegistreManager
+     */
+    private $courrielRegistreManager;
+
     private $_optionsMail = array();
+
+    /**
+     * @var \HopitalNumerique\UserBundle\Entity\User|null Utilisateur connecté
+     */
+    private $user;
 
     /**
      * Constructeur du manager, on lui passe l'entity Manager de doctrine, un booléen si on peut ajouter des mails
@@ -60,8 +88,8 @@ class MailManager extends BaseManager
      * @param EntityManager $em Entity      Manager de Doctrine
      * @param Array         $options        Tableau d'options
      */
-    public function __construct(EntityManager $em, \Swift_Mailer $mailer, \Twig_Environment $twig, $router, RequestStack $requestStack, $session, DomaineManager $domaineManager, UserManager $userManager,$options = array())
-    {        
+    public function __construct(EntityManager $em, \Swift_Mailer $mailer, \Twig_Environment $twig, $router, SecurityContextInterface $securityContext ,RequestStack $requestStack, $session, DomaineManager $domaineManager, UserManager $userManager, ReferenceManager $referenceManager, ActiviteExpertManager $activiteExpertManager, CourrielRegistreManager $courrielRegistreManager, $options = array())
+    {
         parent::__construct($em);
         
         $this->mailer = $mailer;
@@ -79,8 +107,13 @@ class MailManager extends BaseManager
         $this->_session        = $session;
         $this->_domaineManager = $domaineManager;
         $this->_userManager    = $userManager;
+        $this->referenceManager = $referenceManager;
+        $this->activiteExpertManager = $activiteExpertManager;
+        $this->courrielRegistreManager = $courrielRegistreManager;
 
         $this->setOptions();
+
+        $this->user = (null !== $securityContext->getToken() ? ($securityContext->getToken()->getUser() instanceof User ? $securityContext->getToken()->getUser() : null) : null);
     }
 
     public function getDestinataire()
@@ -111,7 +144,7 @@ class MailManager extends BaseManager
     /**
      * Envoi un mail du type AjoutUser
      *
-     * @param User $user Utilisateur qui recevras l'email
+     * @param User $user Utilisateur qui recevra l'email
      *
      * @return Swift_Message
      */
@@ -441,7 +474,7 @@ class MailManager extends BaseManager
     }
 
     /**
-     * Envoi un mail pour acceder au formulaire d'évaluation à une session d'un module
+     * Envoie un mail pour acceder au formulaire d'évaluation à une session d'un module
      *
      * @param Inscriptions $inscriptions  
      * @param array        $options      Variables à remplacer dans le template : '%nomDansLeTemplate' => valeurDeRemplacement
@@ -453,14 +486,16 @@ class MailManager extends BaseManager
         $mail = $this->findOneById(33);
 
         $toSend = array();
-        $domaine = $this->_domaineManager->findOneById($this->_session->get('domaineId'));
+
+        // Récupération du domaine de la session
+        $domaines = $inscriptions[0]->getSession()->getModule()->getDomaines();
+        $domaine = $domaines[0];
 
         foreach ($inscriptions as $key => $inscription) 
         {
             if($inscription->getSession()->getModule()->getMailAlerteEvaluation())
             {
-
-                $toSend[] = $this->generationMail($inscription->getUser(), $mail, array(
+                $mailGenere = $this->generationMail($inscription->getUser(), $mail, array(
                                 'date'    => $inscription->getSession()->getDateSession()->format('d/m/Y'),
                                 'module'  => $inscription->getSession()->getModule()->getTitre(),
                                 'url'     => '<a href="'. $this->_requestStack->getCurrentRequest()->getUriForPath( $this->_router->generate( 'hopitalnumerique_module_evaluation_form_front', array(
@@ -468,6 +503,10 @@ class MailManager extends BaseManager
                                             ))) .'" target="_blank" >'. $domaine->getNom() .'</a>'
 
                 ));
+                $mailGenere->setFrom($domaine->getAdresseMailContact());
+                $objet = str_replace('%subjectDomaine', $domaine->getNom(),$mail->getObjet());
+                $mailGenere->SetSubject($objet);
+                $toSend[] = $mailGenere;
             }
         }
     
@@ -478,11 +517,11 @@ class MailManager extends BaseManager
      * Envoie un courriel concernant les demandes d'intervention.
      *
      * @param \Nodevo\MailBundle\Entity\Mail $mail Le courriel à envoyer
-     * @param \HopitalNumerique\UserBundle\Entity\User $destinataire Le destinataire du message
+     * @param \HopitalNumerique\UserBundle\Entity\User|array $destinataire Le destinataire du message
      * @param array $options Les paramètres à remplacer
-     * @return \Swift_Message Le message près à être envoyer
+     * @return \Swift_Message Le message prêt à être envoyé
      */
-    public function sendInterventionMail(\Nodevo\MailBundle\Entity\Mail $mail, \HopitalNumerique\UserBundle\Entity\User $destinataire, $options)
+    public function sendInterventionMail(\Nodevo\MailBundle\Entity\Mail $mail, $destinataire, $options)
     {
         return $this->generationMail($destinataire, $mail, $options);
     }
@@ -498,12 +537,11 @@ class MailManager extends BaseManager
     public function sendInscriptionSession( $user, $options )
     {
         $mail = $this->findOneById(34);
-    
         return $this->generationMail($user, $mail, $options);
     }
     
     /**
-     * Envoi un mail pour notifier le changement de domaine
+     * Envoie un mail pour notifier le changement de domaine
      *
      * @param User  $user    Utilisateur qui recevras l'email
      * @param array $options Variables à remplacer dans le template : 'nomDansLeTemplate' => valeurDeRemplacement
@@ -616,9 +654,9 @@ class MailManager extends BaseManager
     }
 
     /**
-     * Envoi un mail de contact (différent des autres envoie de mail)
+     * Envoie un mail de contact (différent des autres envois de mail)
      *
-     * @param array $user    Utilisateurs qui recevras l'email (tableau configuré en config.yml)
+     * @param array $user    Utilisateurs qui recevront l'email (tableau configuré en config.yml)
      * @param array $options Variables à remplacer dans le template : '%nomDansLeTemplate' => valeurDeRemplacement
      *
      * @return Swift_Message[]
@@ -651,7 +689,7 @@ class MailManager extends BaseManager
     }
 
     /**
-     * Envoi un mail de partage de résultat d'autodiag (différent des autres envoie de mail)
+     * Envoie un mail de partage de résultat d'autodiag (différent des autres envois de mail)
      *
      * @param array                                            $options  Variables à remplacer dans le template : '%nomDansLeTemplate' => valeurDeRemplacement
      * @param \HopitalNumerique\AutodiagBundle\Entity\Resultat $resultat Résultat à partager
@@ -695,7 +733,7 @@ class MailManager extends BaseManager
     }
 
     /**
-     * Envoi un mail de contact (différent des autres envoie de mail)
+     * Envoie un mail de contact (différent des autres envois de mail)
      *
      * @param array $user    Utilisateurs qui recevras l'email (tableau configuré en config.yml)
      * @param array $options Variables à remplacer dans le template : '%nomDansLeTemplate' => valeurDeRemplacement
@@ -730,7 +768,7 @@ class MailManager extends BaseManager
     }
 
     /**
-     * Envoi un mail des réponses+question d'un questionnaire rempli par un utilisateur (différent des autres envoie de mail)
+     * Envoie un mail des réponses+questions d'un questionnaire rempli par un utilisateur (différent des autres envois de mail)
      *
      * @param array $user    Utilisateurs qui recevras l'email (tableau configuré en config.yml/parameters.yml)
      * @param array $options Variables à remplacer dans le template : '%nomDansLeTemplate' => valeurDeRemplacement
@@ -792,7 +830,7 @@ class MailManager extends BaseManager
     }
 
     /**
-     * Envoi le courriel de partage d'un autodiagnostic.
+     * Envoie le courriel de partage d'un autodiagnostic.
      *
      * @param array $user    Utilisateurs qui recevras l'email (tableau configuré en config.yml)
      * @param array $options Variables à remplacer dans le template : '%nomDansLeTemplate' => valeurDeRemplacement
@@ -826,6 +864,66 @@ class MailManager extends BaseManager
                     $this->getMailDomaine()
                 )
             );
+        }
+    }
+
+    /**
+     * Envoie le courriel avec le modèle de contrat.
+     *
+     * @param string $destinataireAdresseElectronique Adresse du destinataire
+     */
+    public function sendExpertActiviteContratMail(ActiviteExpert $activiteExpert, $destinataireAdresseElectronique)
+    {
+        $courriel = $this->findOneById(60);
+        $contratModele = $this->referenceManager->findOneByCode('ACTIVITE_EXPERT_CONTRAT_MODELE');
+
+        $csvFile = \Swift_Attachment::fromPath($this->activiteExpertManager->getContratCsv($activiteExpert));
+        $csvFile->setFilename('activite.csv');
+        $message =
+            $this->generationMail(null, $courriel)
+            ->setTo($destinataireAdresseElectronique)
+            ->attach(\Swift_Attachment::fromPath('medias'.DIRECTORY_SEPARATOR.'ActiviteExperts'.DIRECTORY_SEPARATOR.$contratModele->getLibelle()))
+            ->attach($csvFile)
+        ;
+
+        $this->mailer->send($message);
+
+        if (null !== $this->user) {
+            $courrielRegistre = $this->courrielRegistreManager->createEmpty();
+            $courrielRegistre->setDestinataire($destinataireAdresseElectronique);
+            $courrielRegistre->setUser($this->user);
+            $courrielRegistre->setType(CourrielRegistre::TYPE_CONTRAT);
+            $this->courrielRegistreManager->save($courrielRegistre);
+        }
+    }
+
+    /**
+     * Envoie le courriel avec le modèle de paiement.
+     *
+     * @param string $destinataireAdresseElectronique Adresse du destinataire
+     */
+    public function sendExpertActivitePaimentMail(ActiviteExpert $activiteExpert, $destinataireAdresseElectronique)
+    {
+        $courriel = $this->findOneById(61);
+        $paiementModele = $this->referenceManager->findOneByCode('ACTIVITE_EXPERT_PV_RECETTES_MODELE');
+
+        $csvFile = \Swift_Attachment::fromPath($this->activiteExpertManager->getContratCsv($activiteExpert));
+        $csvFile->setFilename('activite.csv');
+        $message =
+            $this->generationMail(null, $courriel)
+            ->setTo($destinataireAdresseElectronique)
+            ->attach(\Swift_Attachment::fromPath('medias'.DIRECTORY_SEPARATOR.'ActiviteExperts'.DIRECTORY_SEPARATOR.$paiementModele->getLibelle()))
+            ->attach($csvFile)
+        ;
+
+        $this->mailer->send($message);
+
+        if (null !== $this->user) {
+            $courrielRegistre = $this->courrielRegistreManager->createEmpty();
+            $courrielRegistre->setDestinataire($destinataireAdresseElectronique);
+            $courrielRegistre->setUser($this->user);
+            $courrielRegistre->setType(CourrielRegistre::TYPE_PAIEMENT);
+            $this->courrielRegistreManager->save($courrielRegistre);
         }
     }
 
@@ -870,7 +968,7 @@ class MailManager extends BaseManager
     }
 
     /**
-     * Génération du mail avec le template NodevoMailBundle::template.mail.html.twig + envoi à l'user
+     * Génération du mail avec le template NodevoMailBundle::template.mail.html.twig + envoie à l'user
      * 
      * @param \HopitalNumerique\UserBundle\Entity\User $user
      * @param \Nodevo\MailBundle\Entity\Mail           $mail
@@ -892,7 +990,7 @@ class MailManager extends BaseManager
         $cci     = ($mail->getId() === 1 || $mail->getId() === 2) ? false : $cci;
         $subject = $this->replaceContent($mail->getObjet(), $user, $options);
 
-        return $this->sendMail( $subject, $from, $user->getEmail(), $body, $cci, $check );
+        return $this->sendMail( $subject, $from, (null !== $user ? $user->getEmail() : null), $body, $cci, $check );
     }
 
     /**
@@ -943,14 +1041,15 @@ class MailManager extends BaseManager
      *
      * @return \Swift_Message
      */
-    private function sendMail( $subject, $from, $destinataire, $body, $bcc = false, $check = 0 )
+    private function sendMail( $subject, $from, $destinataire = null, $body, $bcc = false, $check = 0 )
     {
         $body = quoted_printable_decode($body);
 
-        $user_mail = $this->_userManager->findOneBy(array("email" => $destinataire));
-        
-        if(($user_mail != null && !$user_mail->isActif()) || $check != 0) {
-            return \Swift_Message::newInstance();
+        if (null !== $destinataire) {
+            $user_mail = $this->_userManager->findOneBy(array("email" => $destinataire));
+            if(($user_mail != null && !$user_mail->isActif()) || $check != 0) {
+                return \Swift_Message::newInstance();
+            }
         }
 
         //prepare content HTML
@@ -969,11 +1068,14 @@ class MailManager extends BaseManager
 
         //prepare Mail
         $mail = \Swift_Message::newInstance()
-                        ->setSubject( $this->replaceContent($subject, NULL, array() ) )
-                        ->setFrom( $from )
-                        ->setTo( $destinataire )
-                        ->setBody( $bodyTxt )
-                        ->addPart( $bodyHtml, 'text/html' );
+            ->setSubject( $this->replaceContent($subject, NULL, array() ) )
+            ->setFrom( $from )
+            ->setBody( $bodyTxt )
+            ->addPart( $bodyHtml, 'text/html' )
+        ;
+        if (null !== $destinataire) {
+            $mail->setTo($destinataire);
+        }
 
         if( $bcc )
             $mail->setBcc( $bcc );

@@ -37,6 +37,11 @@ class InterventionCourrielManager
     private $envoiCourrielsAffichageLogs;
 
     /**
+     * @var array Contacts HN
+     */
+    private $contacts;
+
+    /**
      * Constructeur du manager gérant les demandes d'intervention.
      *
      * @param \Nodevo\MailBundle\Manager\MailManager $mailManager Manager de Mail
@@ -45,12 +50,13 @@ class InterventionCourrielManager
      * @param \HopitalNumerique\InterventionBundle\DependencyInjection\Demande\EnvoiCourrielsAffichageLogs $envoiCourrielsAffichageLogs Service de logs des envois de courriel
      * @return void
      */
-    public function __construct(MailManager $mailManager, \Swift_Mailer $mailer, Router $router, EnvoiCourrielsAffichageLogs $envoiCourrielsAffichageLogs)
+    public function __construct(MailManager $mailManager, \Swift_Mailer $mailer, Router $router, EnvoiCourrielsAffichageLogs $envoiCourrielsAffichageLogs, $contacts)
     {
         $this->mailManager                 = $mailManager;
         $this->mailer                      = $mailer;
         $this->router                      = $router;
         $this->envoiCourrielsAffichageLogs = $envoiCourrielsAffichageLogs;
+        $this->contacts = $contacts;
     }
 
     /**
@@ -280,21 +286,42 @@ class InterventionCourrielManager
         $this->envoiCourriel($courriel, $interventionDemande->getCmsi(), array('l' => $interventionDemandeUrl));
     }
 
+    /**
+     * Envoie le courriel quand le référent n'a pas d'ES rattaché.
+     *
+     * @param \HopitalNumerique\UserBundle\Entity\User $referent Référent
+     */
+    public function envoiCourrielSollicitationSansEtablissement(User $referent)
+    {
+        $courriel = $this->mailManager->findOneById(InterventionCourriel::COURRIEL_SOLLICITATION_SANS_ETABLISSEMENT_ID);
+    
+        $referentUrl = $this->router->generate('hopital_numerique_user_edit', array('id' => $referent->getId()), true);
+        $this->envoiCourriel($courriel, $this->contacts, array('url' => $referentUrl));
+    }
+
 
     /**
      * Envoi un courriel concernant les interventions.
-     * 
+     *
      * @param \Nodevo\MailBundle\Entity\Mail $mail Le courriel à envoyer
-     * @param \HopitalNumerique\UserBundle\Entity\User $destinataire Le destinataire du courriel
+     * @param \HopitalNumerique\UserBundle\Entity\User|array $destinataire Le destinataire du courriel
      * @param array $remplacements Les textes dynamiques
      * @return void
      */
-    private function envoiCourriel(Mail $mail, User $destinataire, $remplacements = array())
+    private function envoiCourriel(Mail $mail, $destinataire, $remplacements = array())
     {
-        $remplacements['u'] = $destinataire->getAppellation();
-        $courriel = $this->mailManager->sendInterventionMail($mail, $destinataire, $remplacements);
+        if ($destinataire instanceof User) {
+            $remplacements['u'] = $destinataire->getAppellation();
+            $courriel = $this->mailManager->sendInterventionMail($mail, $destinataire, $remplacements);
+        } else {
+            $courriel = $this->mailManager->sendInterventionMail($mail, null, $remplacements);
+            foreach ($destinataire as $destinataireAdresseElectronique => $destinataireNom) {
+                $courriel->addTo($destinataireAdresseElectronique, $destinataireNom);
+            }
+        }
+
         $this->mailer->send($courriel);
-        
-        $this->envoiCourrielsAffichageLogs->addLog('Courriel "'.$mail->getObjet().'" envoyé à '.$destinataire->getAppellation()."\n");
+
+        $this->envoiCourrielsAffichageLogs->addLog('Courriel "'.$mail->getObjet().'" envoyé à '.($destinataire instanceof User ? $destinataire->getAppellation() : print_r($destinataire, true))."\n");
     }
 }

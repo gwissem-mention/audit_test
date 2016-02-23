@@ -167,18 +167,6 @@ class UserManager extends BaseManager
      *
      * @return boolean
      */
-    public function userExistForRoleArs( $user )
-    {
-        return $this->getRepository()->userExistForRoleArs( $user )->getQuery()->getOneOrNullResult();
-    }
-
-    /**
-     * On cherche a savoir si un user existe avec le role et la région de l'user modifié
-     *
-     * @param User $user L'utilisateur modifié
-     *
-     * @return boolean
-     */
     public function userExistForRoleDirection( $user )
     {
         return $this->getRepository()->userExistForRoleDirection( $user )->getQuery()->getOneOrNullResult();

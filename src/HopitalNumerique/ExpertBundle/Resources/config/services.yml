@@ -25,6 +25,21 @@ services:
         tags:
             - { name: form.type, alias: hopitalnumerique_expert_activiteexpert }
 
+    hopitalnumerique_expert.form.activiteexpert.paiement:
+        class: 'HopitalNumerique\ExpertBundle\Form\ActiviteExpert\PaiementType'
+        tags:
+            - { name: form.type, alias: hopitalnumerique_expert_activiteexpert_paiement }
+
+    hopitalnumerique_expert.form.activiteexpert.paiements:
+        class: 'HopitalNumerique\ExpertBundle\Form\ActiviteExpert\PaiementsType'
+        arguments: ["@nodevo_mail.manager.mail"]
+        tags:
+            - { name: form.type, alias: hopitalnumerique_expert_activiteexpert_paiements }
+
+    hopitalnumerique_expert.manager.courriel_registre:
+        class: 'HopitalNumerique\ExpertBundle\Manager\CourrielRegistreManager'
+        arguments: ['@doctrine.orm.entity_manager']
+
     hopitalnumerique_expert.manager.evenementexpert:
         class: %hopitalnumerique_expert.manager.evenementexpert.class%
         arguments: ["@doctrine.orm.entity_manager"]
