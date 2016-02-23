@@ -112,7 +112,7 @@ class AdminType extends InterventionDemandeType
                 'read_only' => true
             ))
             ->add('ambassadeur', 'entity', array(
-                    'choices' => $this->formUserManager->getAmbassadeursChoices($this->interventionDemande->getCmsi()->getRegion()),
+                    'choices' => $this->formUserManager->getAmbassadeursChoices(),
                     'class' => 'HopitalNumerique\UserBundle\Entity\User',
                     'property' => 'appellation',
                     'label' => 'Ambassadeur',

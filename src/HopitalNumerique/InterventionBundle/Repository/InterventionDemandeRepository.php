@@ -572,6 +572,7 @@ class InterventionDemandeRepository extends EntityRepository
                 'CONCAT(interventionDemande.evaluationDate, \'\') AS evaluationDateLibelle',
                 'CONCAT(interventionDemande.ambassadeurDateChoix, \'\') AS ambassadeurDateChoixLibelle',
                 'evaluationEtat.id AS evaluationEtatId',
+                'evaluationEtat.libelle AS evaluationEtatLibelle',
                 'remboursementEtat.libelle AS remboursementEtatLibelle'
             )
             ->from('HopitalNumeriqueInterventionBundle:InterventionDemande', 'interventionDemande')

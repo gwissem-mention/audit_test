@@ -120,7 +120,7 @@ class UserGrid extends Grid implements GridInterface
         $contractualisationColumn->setAlign('center');
         $contractualisationColumn->setFilterType('select');
         $contractualisationColumn->setSelectFrom('values');
-        $contractualisationColumn->setOperatorsVisible( false );
+        $contractualisationColumn->setOperatorsVisible( false )->setSortable(false)->setFilterable(false);
         //Affichage de l'icone uniquement si le role fait parti de $arrayRolesDateContractualisation
         $contractualisationColumn->manipulateRenderCell(
             function($value, \APY\DataGridBundle\Grid\Row $row) use ($arrayRolesDateContractualisation) {

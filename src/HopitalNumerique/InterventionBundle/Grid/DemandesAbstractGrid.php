@@ -216,7 +216,7 @@ abstract class DemandesAbstractGrid extends Grid implements GridInterface
      */
     public static function renderCellReferent($value, $row)
     {
-        return
+        echo
             '<strong>'.$row->getField('referent_nom').'</strong>'.
             ($row->getField('referentEtablissementNom') != null ? '<br>'.$row->getField('referentEtablissementNom').' - '.$row->getField('referentEtablissementFiness') : '').
             ($row->getField('referentRegionLibelle') != null ? '<br>'.$row->getField('referentRegionLibelle') : '')
@@ -230,7 +230,7 @@ abstract class DemandesAbstractGrid extends Grid implements GridInterface
      */
     public static function renderCellAmbassadeur($value, $row)
     {
-        return
+        echo
             '<strong>'.$row->getField('ambassadeur_nom').'</strong>'.
             ($row->getField('ambassadeurRegionLibelle') != null ? '<br>'.$row->getField('ambassadeurRegionLibelle') : '')
         ;
@@ -272,7 +272,7 @@ abstract class DemandesAbstractGrid extends Grid implements GridInterface
             $dateChoixEvaluation = $row->getField('evaluationDateLibelle') === "" ? "Date non communiquée" : (new \DateTime($row->getField('evaluationDateLibelle')))->format('d/m/Y');
             $dateChoix .= '<div><strong>Évaluation : </strong>'.$dateChoixEvaluation.'</div>';
         }
-        return $dateChoix;
+        echo $dateChoix;
     }
 
     /**
@@ -283,11 +283,11 @@ abstract class DemandesAbstractGrid extends Grid implements GridInterface
     public static function renderCellInitiateur($value, $row)
     {
         if ($row->getField('interventionInitiateurId') == InterventionInitiateur::getInterventionInitiateurCmsiId()) {
-            return '<span class="fa fa-user" title="Initié par CMSI"></span>';
+            echo '<span class="fa fa-user" title="Initié par CMSI"></span>';
         } elseif ($row->getField('interventionInitiateurId') == InterventionInitiateur::getInterventionInitiateurEtablissementId()) {
-            return '<span class="fa fa-home" title="Initié par ES"></span>';
+            echo '<span class="fa fa-home" title="Initié par ES"></span>';
         } elseif ($row->getField('interventionInitiateurId') == InterventionInitiateur::getInterventionInitiateurAnapId()) {
-            return '<span class="fa fa-briefcase" title="Initié par ANAP"></span>';
+            echo '<span class="fa fa-briefcase" title="Initié par ANAP"></span>';
         }
 
         return '';
