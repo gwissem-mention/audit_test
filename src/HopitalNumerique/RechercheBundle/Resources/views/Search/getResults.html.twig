@@ -26,7 +26,7 @@
         <div class="shows">
             <span class="btn btn-default btn-xs showMore" {% if count <= showMorePointsDurs %}style="display:none"{% endif %} onclick="showMore(this, 1);" >Plus de résultats</span>
             <span class="btn btn-default btn-xs showLess" {% if showMorePointsDurs <= 2 %}style="display:none"{% endif %} onclick="showLess(this, 1);" >Moins de résultats</span>
-        </div>    
+        </div>
     </div>
 {% endif %}
 
@@ -51,7 +51,7 @@
                 <p> Il n'y a pas encore de ressource correspondant à cette recherche. Pour être informé de la publication d'une nouvelle publication sur ce sujet, enregistrez votre recherche. </p>
             {% endfor %}
         </div>
-    </div>    
+    </div>
     <div class="shows">
         <span class="btn btn-default btn-xs showMore" {% if count <= showMoreProductions %}style="display:none"{% endif %} onclick="showMore(this, 2);" >Plus de résultats</span>
         <span class="btn btn-default btn-xs showLess" {% if showMoreProductions <= 2 %}style="display:none"{% endif %} onclick="showLess(this, 2);" >Moins de résultats</span>

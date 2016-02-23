@@ -76,7 +76,7 @@
                             <li class="{% if infra %}active{% endif %}"><a href="#infra" data-toggle="tab">Infra-documentaire</a></li>
                             <li><a href="#productions" data-toggle="tab">Productions liées</a></li>
                         {% endif %}
-                        {%- if is_granted('ROLE_SUPER_ADMIN') or is_granted('ROLE_ADMINISTRATEUR_DE_DOMAINE_106' or is_granted('ROLE_ADMINISTRATEUR_DU_DOMAINE_HN_107')) -%}
+                        {%- if objet.id is not null and (is_granted('ROLE_SUPER_ADMIN') or is_granted('ROLE_ADMINISTRATEUR_DE_DOMAINE_106' or is_granted('ROLE_ADMINISTRATEUR_DU_DOMAINE_HN_107'))) -%}
                             <li><a href="{{ path('hopitalnumerique_objet_administration_fichierModifiable', {'id': objet.id}) }}">Administration</a></li>
                         {%- endif -%}
                     </ul>

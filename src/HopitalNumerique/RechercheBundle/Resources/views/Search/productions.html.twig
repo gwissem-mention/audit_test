@@ -42,9 +42,9 @@
     </div>
     <div class="col-md-12">
         {% if objet['hasPageBreak']%}
-            <p>{{ objet['resume']|trim }}</p>
+            <p>{{ objet['resume']|trim|parseResumeRecherche }}</p>
         {% else %}
-            <p>{{ objet['resume']|trim|truncate(400) }}</p>
+            <p>{{ objet['resume']|trim|parseResumeRecherche|truncate(400) }}</p>
         {% endif %}
     </div>
 </div>
