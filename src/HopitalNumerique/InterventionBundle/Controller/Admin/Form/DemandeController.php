@@ -65,10 +65,10 @@ class DemandeController extends Controller
             {
                 $this->interventionDemande->setDateCreation(new \DateTime());
                 //<-- CMSI de la région de l'ambassadeur
-                $cmsi = $this->container->get('hopitalnumerique_user.manager.user')->getCmsi(array('region' => $this->interventionDemande->getAmbassadeur()->getRegion(), 'enabled' => true));
+                $cmsi = $this->get('hopitalnumerique_user.manager.user')->getCmsi(array('region' => $this->getUser()->getRegion(), 'enabled' => true));
                 if ($cmsi == null)
                 {
-                    $this->container->get('session')->getFlashBag()->add('danger', 'Un CMSI pour la région de l\'ambassadeur choisi doit exister pour créer une demande d\'intervention.');
+                    $this->container->get('session')->getFlashBag()->add('danger', 'Un CMSI pour votre région doit exister pour créer une demande d\'intervention.');
                     return false;
                 }
                 $this->interventionDemande->setCmsi($cmsi);
