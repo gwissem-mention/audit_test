@@ -94,10 +94,13 @@ class ErreursController extends Controller
         $dateFinDateTime   = $dateFin   === "" ? null : new \DateTime($dateFin);
 
         $resultat = $this->getAllUrlObjets($dateDebutDateTime, $dateFinDateTime);
+
+        $domaines = $this->get('hopitalnumerique_domaine.manager.domaine')->findBy(array(), array('nom' => 'ASC'));
         
         return $this->render('HopitalNumeriqueStatBundle:Back:partials/Erreurs/tableau.html.twig', array(
             'urls'   => $resultat['urls'],
-            'objets' => $resultat['objets']
+            'objets' => $resultat['objets'],
+            'domaines' => $domaines
         ));
     }
 
@@ -328,16 +331,16 @@ class ErreursController extends Controller
                         {
                             if(!array_key_exists($idObjet, $urls['PUBLICATION']))
                             {
-                                //Tableau 
+                                //Tableau
                                 $urls['PUBLICATION'][$idObjet] = array(
-                                    'objet'   => array(), 
+                                    'objet'   => array(),
                                     $idContenu => array()
                                 );
                             }
                             if($isContenu)
-                                $urls['PUBLICATION'][$idObjet][$idContenu][$objet->getId()] = $this->getRequest()->getUriForPath('/publication/' . $matches[2][$key] . '-' . $objet->getAlias());
+                                $urls['PUBLICATION'][$idObjet][$idContenu][$objet->getId()] = '/publication/' . $matches[2][$key] . '-' . $objet->getAlias();
                             else
-                                $urls['PUBLICATION'][$idObjet]['objet'][$objet->getId()] = $this->getRequest()->getUriForPath('/publication/' . $matches[2][$key] . '-' . $objet->getAlias());    
+                                $urls['PUBLICATION'][$idObjet]['objet'][$objet->getId()] = '/publication/' . $matches[2][$key] . '-' . $objet->getAlias();
                         }
                         break;
                     case 'INFRADOC':
@@ -354,9 +357,9 @@ class ErreursController extends Controller
                             }
                             $objet  = $contenu->getObjet();
                             if($isContenu)
-                                $urls['INFRADOC'][$idObjet][$idContenu][$contenu->getId()] = $this->getRequest()->getUriForPath('/publication/'. $objet->getId().'-' . $objet->getAlias() . '/'.$matches[2][$key].'-'.$contenu->getAlias());
+                                $urls['INFRADOC'][$idObjet][$idContenu][$contenu->getId()] = '/publication/'. $objet->getId().'-' . $objet->getAlias() . '/'.$matches[2][$key].'-'.$contenu->getAlias();
                             else
-                                $urls['INFRADOC'][$idObjet]['objet'][$contenu->getId()] = $this->getRequest()->getUriForPath('/publication/'. $objet->getId().'-' . $objet->getAlias() . '/'.$matches[2][$key].'-'.$contenu->getAlias());
+                                $urls['INFRADOC'][$idObjet]['objet'][$contenu->getId()] = '/publication/'. $objet->getId().'-' . $objet->getAlias() . '/'.$matches[2][$key].'-'.$contenu->getAlias();
                         }
                         break;
                     case 'ARTICLE':
@@ -372,9 +375,9 @@ class ErreursController extends Controller
                                 );
                             }
                             if($isContenu)
-                                $urls['ARTICLE'][$idObjet][$idContenu][$objet->getId()] = $this->getRequest()->getUriForPath('/publication/article/'.$matches[2][$key].'-' . $objet->getAlias());
+                                $urls['ARTICLE'][$idObjet][$idContenu][$objet->getId()] = '/publication/article/'.$matches[2][$key].'-' . $objet->getAlias();
                             else
-                                $urls['ARTICLE'][$idObjet]['objet'][$objet->getId()] = $this->getRequest()->getUriForPath('/publication/article/'.$matches[2][$key].'-' . $objet->getAlias());
+                                $urls['ARTICLE'][$idObjet]['objet'][$objet->getId()] = '/publication/article/'.$matches[2][$key].'-' . $objet->getAlias();
                         }
                         break;
                     case 'AUTODIAG':
@@ -390,9 +393,9 @@ class ErreursController extends Controller
                                 );
                             }
                             if($isContenu)
-                                $urls['AUTODIAG'][$idObjet][$idContenu][$outil->getId()] = $this->getRequest()->getUriForPath('/autodiagnostic/outil/'.$outil->getId() . '-' . $outil->getAlias());
+                                $urls['AUTODIAG'][$idObjet][$idContenu][$outil->getId()] = '/autodiagnostic/outil/'.$outil->getId() . '-' . $outil->getAlias();
                             else
-                                $urls['AUTODIAG'][$idObjet]['objet'][$outil->getId()] = $this->getRequest()->getUriForPath('/autodiagnostic/outil/'.$outil->getId() . '-' . $outil->getAlias());
+                                $urls['AUTODIAG'][$idObjet]['objet'][$outil->getId()] = '/autodiagnostic/outil/'.$outil->getId() . '-' . $outil->getAlias();
                         } 
                         break;
                     case 'QUESTIONNAIRE':
@@ -403,14 +406,14 @@ class ErreursController extends Controller
                             if(!array_key_exists($idObjet, $urls['QUESTIONNAIRE']))
                             {
                                 $urls['QUESTIONNAIRE'][$idObjet] = array(
-                                    'objet'   => array(), 
+                                    'objet'   => array(),
                                     $idContenu => array()
                                 );
                             }
                             if($isContenu)
-                                $urls['QUESTIONNAIRE'][$idObjet][$idContenu][$questionnaire->getId()] = $this->getRequest()->getUriForPath('/questionnaire/edit/'. $questionnaire->getId());
+                                $urls['QUESTIONNAIRE'][$idObjet][$idContenu][$questionnaire->getId()] = '/questionnaire/edit/'. $questionnaire->getId();
                             else
-                                $urls['QUESTIONNAIRE'][$idObjet]['objet'][$questionnaire->getId()] = $this->getRequest()->getUriForPath('/questionnaire/edit/'. $questionnaire->getId());
+                                $urls['QUESTIONNAIRE'][$idObjet]['objet'][$questionnaire->getId()] = '/questionnaire/edit/'. $questionnaire->getId();
                         }
                         break;
                 }

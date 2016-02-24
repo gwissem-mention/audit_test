@@ -2,9 +2,10 @@
     <table id="item-erreurs-curl" class="table table-hover" style="margin:0 auto; border-collapse:collapse;">
         <thead>
             <tr class="grid-row-titles" style="background-color:#34495E;">
+                <th style="text-align:center;font-size:12px;vertical-align:middle;border:1px solid #e3e3e3;margin: 0; padding: 0;color: #ffffff;" width="10%" height="25px"><strong>Domaine</strong></th>
                 <th style="text-align:center;font-size:12px;vertical-align:middle;border:1px solid #e3e3e3;margin: 0; padding: 0;color: #ffffff;" width="5%" height="25px"><strong>Id Objet</strong></th>
                 <th style="text-align:center;font-size:12px;vertical-align:middle;border:1px solid #e3e3e3;margin: 0; padding: 0;color: #ffffff;" width="30%" height="25px"><strong>Titre objet</strong></th>
-                <th style="text-align:center;font-size:12px;vertical-align:middle;border:1px solid #e3e3e3;margin: 0; padding: 0;color: #ffffff;" width="30%" height="25px"><strong>Infradoc ?</strong></th>
+                <th style="text-align:center;font-size:12px;vertical-align:middle;border:1px solid #e3e3e3;margin: 0; padding: 0;color: #ffffff;" width="20%" height="25px"><strong>Infradoc ?</strong></th>
                 <th style="text-align:center;font-size:12px;vertical-align:middle;border:1px solid #e3e3e3;margin: 0; padding: 0;color: #ffffff;" width="25%" height="25px"><strong>Url</strong></th>
                 <th style="text-align:center;font-size:12px;vertical-align:middle;border:1px solid #e3e3e3;margin: 0; padding: 0;color: #ffffff;" width="10%" height="25px"><strong>Valide</strong></th>
             </tr>
@@ -12,38 +13,48 @@
         <tbody>
             {# Boucle sur les catégories 'Publication', 'Infradoc', 'Article' ... #}
             {% for keyUrl, url in urls %}
-                <tr style="background-color:#34495E;">
-                    <td colspan="5" style="text-align:center;font-size:12px;vertical-align:middle;border:1px solid #e3e3e3;margin: 0; padding: 0; color: #ffffff" height="25px">
+                <tr style="background-color:#34495E"">
+                    <td colspan="6" style="text-align:center;font-size:12px;vertical-align:middle;border:1px solid #e3e3e3;margin: 0; padding: 0; color: #ffffff" height="25px">
                         {{keyUrl|capitalize}}
                     </td>
                 </tr>
-                {# Boucle sur les objets par catégorie #}
-                {% for keyObjetUrl, objetUrl in url %}
-                    {# Boucle sur les objets/ contenu #}
-                    {% for keyObjetOrContenu, objetOrContenu in objetUrl %}
-                        {# Boucle sur les urls par objets #}
-                        {% for url in objetOrContenu %}
-                            <tr>
-                                <td style="border:1px solid #e3e3e3;font-size:12px;text-align:center;">
-                                    <a target="_blank" href="{{path('hopitalnumerique_objet_objet_edit', {'id': keyObjetUrl})}}">{{keyObjetUrl|truncate(30)}}</a>
-                                </td>
-                                <td style="border:1px solid #e3e3e3;font-size:12px;text-align:center;">
-                                    {{objets[keyObjetUrl].getTitre()}}
-                                </td>
-                                <td style="border:1px solid #e3e3e3;font-size:12px;text-align:center;">
-                                    {% if keyObjetOrContenu != 'objet' %}
-                                        {{objets[keyObjetUrl].getContenuById(keyObjetOrContenu).getOrder()}} . {{objets[keyObjetUrl].getContenuById(keyObjetOrContenu).getTitre()}}
+                {% for domaineExistant in domaines %}
+                    {# Boucle sur les objets par catégorie #}
+                    {% for keyObjetUrl, objetUrl in url %}
+                        {# Boucle sur les objets/ contenu #}
+                        {% for keyObjetOrContenu, objetOrContenu in objetUrl %}
+                            {# Boucle sur les urls par objets #}
+                            {% for url in objetOrContenu %}
+                                {# Boucle sur les objets par domaine #}
+                                {% for domaine in objets[keyObjetUrl].domaines %}
+                                    {% if domaine.id == domaineExistant.id %}
+                                        <tr>
+                                            <td style="border:1px solid #e3e3e3;font-size:12px;text-align:center;">
+                                                {{ domaine.nom }}
+                                            </td>
+                                            <td style="border:1px solid #e3e3e3;font-size:12px;text-align:center;">
+                                                <a target="_blank" href="{{path('hopitalnumerique_objet_objet_edit', {'id': keyObjetUrl})}}">{{keyObjetUrl|truncate(30)}}</a>
+                                            </td>
+                                            <td style="border:1px solid #e3e3e3;font-size:12px;text-align:center;">
+                                                {{objets[keyObjetUrl].getTitre()}}
+                                            </td>
+                                            <td style="border:1px solid #e3e3e3;font-size:12px;text-align:center;">
+                                                {% if keyObjetOrContenu != 'objet' %}
+                                                    {{objets[keyObjetUrl].getContenuById(keyObjetOrContenu).getOrder()}} . {{objets[keyObjetUrl].getContenuById(keyObjetOrContenu).getTitre()}}
+                                                {% endif %}
+                                            </td>
+                                            <td style="border:1px solid #e3e3e3;font-size:11px;">
+                                                <a target="_blank" href="{{domaine.url ~ url}}">{{(url)|truncate(40)}}</a>
+                                            </td>
+                                            <td id="check-url-{{keyUrl}}-{{keyObjetUrl}}" class="url-check" style="border:1px solid #e3e3e3;text-align:center;" data-url="{{domaine.url ~ url}}">
+                                            </td>
+                                        </tr>
                                     {% endif %}
-                                </td>
-                                <td style="border:1px solid #e3e3e3;font-size:11px;">
-                                    <a target="_blank" href="{{url}}">{{url|truncate(30)}}</a>
-                                </td>
-                                <td id="check-url-{{keyUrl}}-{{keyObjetUrl}}" class="url-check" style="border:1px solid #e3e3e3;text-align:center;" data-url="{{url}}">
-                                </td>
-                            </tr>
+                                {% endfor %}
+                            {% endfor %}
                         {% endfor %}
                     {% endfor %}
-                {% endfor %}  
+                {% endfor %}
             {% endfor %}  
         </tbody>
     </table>

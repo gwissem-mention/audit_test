@@ -149,7 +149,10 @@ class UserGrid extends Grid implements GridInterface
 
         $this->addColonne( $etatColonne );
 
-        if ($this->_container->get('security.authorization_checker')->isGranted('ROLE_SUPER_ADMIN')) {
+        if ($this->_container->get('security.authorization_checker')->isGranted('ROLE_ADMINISTRATEUR_1') ||
+            $this->_container->get('security.authorization_checker')->isGranted('ROLE_ADMINISTRATEUR_DU_DOMAINE_HN_107') ||
+            $this->_container->get('security.authorization_checker')->isGranted('ROLE_ADMINISTRATEUR_DE_DOMAINE_106')
+        ) {
             $simulationColonne = new Column\TextColumn('usernameSimulated', 'Simuler');
             $simulationColonne->setFilterable(false)->setSortable(false);
             $this->addColonne($simulationColonne);
