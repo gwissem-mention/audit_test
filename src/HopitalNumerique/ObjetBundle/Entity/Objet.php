@@ -391,7 +391,6 @@ class Objet implements RoutedItemInterface
     public function __construct()
     {
         $this->dateCreation  = new \DateTime();
-        $this->etat          = 3;
         $this->nbVue         = 0;
         $this->commentaires  = true;
         $this->notes         = true;
