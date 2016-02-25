@@ -103,14 +103,14 @@ class AdminType extends InterventionDemandeType
         parent::buildForm($builder, $options);
 
         $builder
-            ->add('referent', 'text', array(
-                'label' => 'Demandeur',
-                'mapped' => false,
-                'data' => $this->interventionDemande->getReferent()->getAppellation().' '.
-                    ($this->interventionDemande->getReferent()->getEtablissementRattachementSante() != null ? $this->interventionDemande->getReferent()->getEtablissementRattachementSante()->getAppellation() : $this->interventionDemande->getReferent()->getAutreStructureRattachementSante()),
-                'required' => false,
-                'read_only' => true
+            ->add('referent', 'entity', array(
+                'choices'  => $this->formUserManager->getReferentsChoices(),
+                'class'    => 'HopitalNumerique\UserBundle\Entity\User',
+                'label'    => 'Demandeur',
+                'property' => 'appellation',
+                'required' => true
             ))
+
             ->add('ambassadeur', 'entity', array(
                     'choices' => $this->formUserManager->getAmbassadeursChoices(),
                     'class' => 'HopitalNumerique\UserBundle\Entity\User',

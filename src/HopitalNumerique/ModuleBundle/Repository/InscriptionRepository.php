@@ -140,7 +140,7 @@ class InscriptionRepository extends EntityRepository
                          ->leftJoin('insc.etatInscription','refEtatInscription')
                          ->andWhere('insc.user = :user', 'refEtatInscription.id != 409')
                          ->setParameter('user', $user)
-                         ->orderBy('session.dateSession', 'ASC');
+                         ->orderBy('session.dateSession', 'DESC');
     }
     
     /**
