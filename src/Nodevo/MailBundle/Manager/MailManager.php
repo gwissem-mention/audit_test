@@ -167,7 +167,7 @@ class MailManager extends BaseManager
         $mail = $this->findOneById(2);
         $url = $this->_router->generate('fos_user_registration_confirm', array('token' => $user->getConfirmationToken()), true);
         $options['url'] = $url;
-        $check = 1;
+        $check = 0;
         return $this->generationMail($user, $mail, $options, $check);
     }
     
@@ -1047,6 +1047,7 @@ class MailManager extends BaseManager
 
         if (null !== $destinataire) {
             $user_mail = $this->_userManager->findOneBy(array("email" => $destinataire));
+
             if(($user_mail != null && !$user_mail->isActif()) || $check != 0) {
                 return \Swift_Message::newInstance();
             }
