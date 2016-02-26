@@ -103,7 +103,7 @@ class AdminType extends InterventionDemandeType
         parent::buildForm($builder, $options);
 
         $builder
-            ->add('referent', 'entity', array(
+            ->add('referent', 'genemu_jqueryselect2_entity', array(
                 'choices'  => $this->formUserManager->getReferentsChoices(),
                 'class'    => 'HopitalNumerique\UserBundle\Entity\User',
                 'label'    => 'Demandeur',
@@ -111,7 +111,7 @@ class AdminType extends InterventionDemandeType
                 'required' => true
             ))
 
-            ->add('ambassadeur', 'entity', array(
+            ->add('ambassadeur', 'genemu_jqueryselect2_entity', array(
                     'choices' => $this->formUserManager->getAmbassadeursChoices(),
                     'class' => 'HopitalNumerique\UserBundle\Entity\User',
                     'property' => 'appellation',
