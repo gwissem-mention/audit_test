@@ -15,59 +15,73 @@ class ErreursController extends Controller
     {
         if ($id == 'SPTR6D7U5QFH4YMH5VVAXEWMTJ4XPCQBKGJR92E3')
         {
+            set_time_limit(36000);
             $resultats = $this->getAllUrlObjets(null,null);
+            $domaines = $this->get('hopitalnumerique_domaine.manager.domaine')->findBy(array(), array('nom' => 'ASC'));
 
-            foreach ($resultats['urls'] as $categsUrl) 
-            {
-                //Chaque catégorie des url (Publication, Infradoc, Article ...)
-                foreach ($categsUrl as $urls) 
-                {
-                    foreach ($urls as $keyObjetOrContenu => $objetOrContenu) 
-                    {
-                        //Parcourt du tableau des url des categs
-                        foreach ($objetOrContenu as $url) 
-                        {
-                            //Set du booléan pour l'entité
-                            $isOk = true;
+            foreach ($domaines as $domaineExistant) {
+                foreach ($resultats['urls'] as $categsUrl) {
+                    //Chaque catégorie des url (Publication, Infradoc, Article ...)
+                    foreach ($categsUrl as $urls) {
+                        foreach ($urls as $keyObjetOrContenu => $objetOrContenu) {
+                            //Parcourt du tableau des url des categs
+                            foreach ($objetOrContenu as $objetId => $url) {
+                                $objet  = $this->get('hopitalnumerique_objet.manager.objet')->findOneBy( array( 'id' => $objetId ) );
+                                if ($objet != null) {
+                                    $domainesObjet = $objet->getDomaines();
 
-                            $handle = curl_init($url);
-                            curl_setopt($handle,  CURLOPT_RETURNTRANSFER, TRUE);
+                                    foreach ($domainesObjet as $domaineObjet) {
 
-                            /* Get the HTML or whatever is linked in $url. */
-                            $response = curl_exec($handle);
+                                        if ($domaineObjet->getId() === $domaineExistant->getId()) {
 
-                            /* Check for not 200 */
-                            $httpCode = curl_getinfo($handle, CURLINFO_HTTP_CODE);
-                            if($httpCode >= 400 || $httpCode === 0) 
-                            {
-                                $isOk = false;
+                                            if (strpos($url, 'http') === false &&
+                                                strpos($url, 'www.') === false){
+                                                $url = $domaineObjet->getUrl() . $url;
+                                            }
+
+                                            //Set du booléan pour l'entité
+                                            $isOk = true;
+
+                                            $handle = curl_init($url);
+                                            curl_setopt($handle, CURLOPT_RETURNTRANSFER, TRUE);
+
+                                            /* Get the HTML or whatever is linked in $url. */
+                                            $response = curl_exec($handle);
+
+                                            /* Check for not 200 */
+                                            $httpCode = curl_getinfo($handle, CURLINFO_HTTP_CODE);
+                                            if ($httpCode >= 400 || $httpCode === 0) {
+                                                $isOk = false;
+                                            }
+
+                                            $this->get('hopitalnumerique_forum.service.logger.cronlogger')->addLog('Url ' . $url . ($isOk ? ' valide' : ' non valide.'));
+
+                                            curl_close($handle);
+
+                                            //Recherche si une entité existe déjà pour cette url
+                                            $errorUrl = $this->get('hopitalnumerique_stat.manager.errorurl')->existeErrorByUrl($url);
+                                            $errorUrl->setOk($isOk);
+
+                                            $this->get('hopitalnumerique_stat.manager.errorurl')->save($errorUrl);
+                                        }
+                                    }
+                                }
                             }
-
-                            $this->get('hopitalnumerique_forum.service.logger.cronlogger')->addLog('Url ' . $url . ($isOk ? ' valide' : ' non valide.'));
-
-                            curl_close($handle);
-
-                            //Recherche si une entité existe déjà pour cette url
-                            $errorUrl = $this->get('hopitalnumerique_stat.manager.errorurl')->existeErrorByUrl($url);
-                            $errorUrl->setOk($isOk);
-
-                            $this->get('hopitalnumerique_stat.manager.errorurl')->save($errorUrl);
                         }
                     }
                 }
             }
 
-            
 
             return new Response($this->get('hopitalnumerique_forum.service.logger.cronlogger')->getHtml().'<p>Fin du traitement : OK.</p>');
         }
-        
+
         return new Response('Clef invalide.');
     }
 
     /**
      * Affiche les statistiques des items de requete
-     * 
+     *
      * @author Gaetan MELCHILSEN
      * @copyright Nodevo™
      */
@@ -80,7 +94,7 @@ class ErreursController extends Controller
      * Génération du tableau à exporter
      *
      * @param  Symfony\Component\HttpFoundation\Request  $request
-     * 
+     *
      * @return View
      */
     public function generateTableauAction( Request $request )
@@ -93,14 +107,15 @@ class ErreursController extends Controller
         $dateDebutDateTime = $dateDebut === "" ? null : new \DateTime($dateDebut);
         $dateFinDateTime   = $dateFin   === "" ? null : new \DateTime($dateFin);
 
-        $resultat = $this->getAllUrlObjets($dateDebutDateTime, $dateFinDateTime);
+        $resultats = $this->getAllUrlObjets($dateDebutDateTime, $dateFinDateTime);
 
         $domaines = $this->get('hopitalnumerique_domaine.manager.domaine')->findBy(array(), array('nom' => 'ASC'));
-        
+
         return $this->render('HopitalNumeriqueStatBundle:Back:partials/Erreurs/tableau.html.twig', array(
-            'urls'   => $resultat['urls'],
-            'objets' => $resultat['objets'],
-            'domaines' => $domaines
+            'urls'   => $resultats['urls'],
+            'objets' => $resultats['objets'],
+            'domaines' => $domaines,
+            'oksByUrl'      => $resultats['oksByUrl']
         ));
     }
 
@@ -108,7 +123,7 @@ class ErreursController extends Controller
      * Génération du tableau à exporter
      *
      * @param  Symfony\Component\HttpFoundation\Request  $request
-     * 
+     *
      * @return View
      */
     public function exportCSVAction( Request $request )
@@ -140,12 +155,12 @@ class ErreursController extends Controller
     }
 
     /**
-    * Génération du tableau à exporter
-    *
-    * @param  Symfony\Component\HttpFoundation\Request  $request
-    * 
-    * @return View
-    */
+     * Génération du tableau à exporter
+     *
+     * @param  Symfony\Component\HttpFoundation\Request  $request
+     *
+     * @return View
+     */
     public function curlAction( Request $request )
     {
         //Récupération de la requete
@@ -159,7 +174,7 @@ class ErreursController extends Controller
 
         /* Check for not 200 */
         $httpCode = curl_getinfo($handle, CURLINFO_HTTP_CODE);
-        if($httpCode >= 400 || $httpCode === 0) 
+        if($httpCode >= 400 || $httpCode === 0)
         {
             curl_close($handle);
             return new Response('{"success":false}', 200);
@@ -170,12 +185,12 @@ class ErreursController extends Controller
     }
 
     /**
-    * Génération du tableau à exporter
-    *
-    * @param  Symfony\Component\HttpFoundation\Request  $request
-    * 
-    * @return View
-    */
+     * Génération du tableau à exporter
+     *
+     * @param  Symfony\Component\HttpFoundation\Request  $request
+     *
+     * @return View
+     */
     public function curlWithBaseAction( Request $request )
     {
         //Récupération de la requete
@@ -193,7 +208,7 @@ class ErreursController extends Controller
 
             /* Check for not 200 */
             $httpCode = curl_getinfo($handle, CURLINFO_HTTP_CODE);
-            if($httpCode >= 400 || $httpCode === 0) 
+            if($httpCode >= 400 || $httpCode === 0)
             {
                 curl_close($handle);
                 return new Response('{"success":false}', 200);
@@ -217,9 +232,6 @@ class ErreursController extends Controller
 
 
 
-
-
-
     /**
      * Récupère l'ensemble des url de tout les objets présent en base
      *
@@ -239,15 +251,16 @@ class ErreursController extends Controller
         $objets = $this->get('hopitalnumerique_objet.manager.objet')->getObjetsByDate($dateDebut, $dateFin);
         $objetsArray = array();
 
-        foreach ($objets as $key => $objet) 
+        foreach ($objets as $key => $objet)
         {
             $urls                         = $this->getUrlByObjet($objet, $urls);
             $objetsArray[$objet->getId()] = $objet;
         }
 
         return array(
-            'urls'   =>$urls,
-            'objets' => $objetsArray
+            'urls'   => $urls,
+            'objets' => $objetsArray,
+            'oksByUrl' => $this->get('hopitalnumerique_stat.manager.errorurl')->getOksByUrl()
         );
     }
 
@@ -266,7 +279,7 @@ class ErreursController extends Controller
         $urls = $this->recuperationLien($objet->getSynthese(), $objet->getId(), $urls);
         $urls = $this->recuperationLien($objet->getResume(), $objet->getId(), $urls);
 
-        foreach ($objet->getContenus() as $key => $contenu) 
+        foreach ($objet->getContenus() as $key => $contenu)
         {
             $urls = $this->recuperationLien($contenu->getContenu(), $objet->getId(), $urls, true, $contenu->getId());
         }
@@ -295,19 +308,19 @@ class ErreursController extends Controller
         if(count($matchesURLTemp[0]) > 0 )
         {
             $matchesURL = $matchesURLTemp[0];
-            foreach ($matchesURL as $matcheURL) 
+            foreach ($matchesURL as $matcheURL)
             {
 
                 if(!array_key_exists($idObjet, $urls['URL']))
                 {
                     $urls['URL'][$idObjet] = array(
-                        'objet'    => array(), 
+                        'objet'    => array(),
                         $idContenu => array()
                     );
                 }
                 if($isContenu)
                     $urls['URL'][$idObjet][$idContenu][] = trim($matcheURL, '"');
-                else    
+                else
                     $urls['URL'][$idObjet]['objet'][] = trim($matcheURL, '"');
             }
         }
@@ -315,7 +328,7 @@ class ErreursController extends Controller
         //Remplacement des liens internes
         $pattern = '/\[([a-zA-Z]+)\:(\d+)\;(([a-zA-Z0-9àáâãäåçèéêëìíîïðòóôõöùúûüýÿ\&\'\`\"\<\>\!\:\?\,\;\.\%\#\@\_\-\+]| )*)\;([a-zA-Z0-9]+)\]/';
         preg_match_all($pattern, $texte, $matches);
-        
+
         // matches[0] tableau des chaines completes trouvée
         // matches[1] tableau des chaines avant les : trouvé
         // matches[2] tableau des ID après les : trouvé
@@ -351,7 +364,7 @@ class ErreursController extends Controller
                             if(!array_key_exists($idObjet, $urls['INFRADOC']))
                             {
                                 $urls['INFRADOC'][$idObjet] = array(
-                                    'objet'   => array(), 
+                                    'objet'   => array(),
                                     $idContenu => array()
                                 );
                             }
@@ -370,7 +383,7 @@ class ErreursController extends Controller
                             if(!array_key_exists($idObjet, $urls['ARTICLE']))
                             {
                                 $urls['ARTICLE'][$idObjet] = array(
-                                    'objet'   => array(), 
+                                    'objet'   => array(),
                                     $idContenu => array()
                                 );
                             }
@@ -388,7 +401,7 @@ class ErreursController extends Controller
                             if(!array_key_exists($idObjet, $urls['AUTODIAG']))
                             {
                                 $urls['AUTODIAG'][$idObjet] = array(
-                                    'objet'   => array(), 
+                                    'objet'   => array(),
                                     $idContenu => array()
                                 );
                             }
@@ -396,7 +409,7 @@ class ErreursController extends Controller
                                 $urls['AUTODIAG'][$idObjet][$idContenu][$outil->getId()] = '/autodiagnostic/outil/'.$outil->getId() . '-' . $outil->getAlias();
                             else
                                 $urls['AUTODIAG'][$idObjet]['objet'][$outil->getId()] = '/autodiagnostic/outil/'.$outil->getId() . '-' . $outil->getAlias();
-                        } 
+                        }
                         break;
                     case 'QUESTIONNAIRE':
                         //cas Questionnaire
@@ -435,7 +448,7 @@ class ErreursController extends Controller
             {
                 $string .= '&#' . ord($obj) . ';';
             }
-         }
-         return $string;
+        }
+        return $string;
     }
 }
