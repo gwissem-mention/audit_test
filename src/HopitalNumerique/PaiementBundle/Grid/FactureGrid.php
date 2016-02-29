@@ -71,6 +71,14 @@ class FactureGrid extends Grid implements GridInterface
         $this->addActionButton( $payeButton );
         
         $this->addActionButton( new Action\ShowButton( 'hopitalnumerique_paiement_facture_detail' ) );
+
+        $cancelButton = new \APY\DataGridBundle\Grid\Action\RowAction('', 'hopitalnumerique_paiement_facture_cancel');
+        $cancelButton->setRouteParameters(['id']);
+        $cancelButton->setAttributes(array('class'=>'btn btn-danger fa fa-times','title' => 'Annuler'));
+        $cancelButton->manipulateRender(function($action, \APY\DataGridBundle\Grid\Row $row) {
+            return (!$row->getEntity()->hasBeenCanceled() ? $action : null);
+        });
+        $this->addActionButton($cancelButton);
     }
 
     /**

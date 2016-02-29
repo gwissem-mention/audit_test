@@ -335,6 +335,13 @@ class InterventionDemande
      */
     protected $facture;
 
+    /**
+     * @var \Doctrine\Common\Collections\Collection
+     *
+     * @ORM\ManyToMany(targetEntity="HopitalNumerique\PaiementBundle\Entity\FactureAnnulee", mappedBy="interventions")
+     */
+    private $facturesAnnulees;
+
     //Ajout GME:
     /**
      * @var string
@@ -1188,7 +1195,7 @@ class InterventionDemande
      *
      * @param \HopitalNumerique\PaiementBundle\Entity\Facture $facture
      */
-    public function setFacture(\HopitalNumerique\PaiementBundle\Entity\Facture $facture)
+    public function setFacture(\HopitalNumerique\PaiementBundle\Entity\Facture $facture = null)
     {
         $this->facture = $facture;
         return $this;
@@ -1485,5 +1492,39 @@ class InterventionDemande
     public function getEvaluationDate()
     {
         return $this->evaluationDate;
+    }
+
+    /**
+     * Add facturesAnnulee
+     *
+     * @param \HopitalNumerique\PaiementBundle\Entity\FactureAnnulee $facturesAnnulee
+     *
+     * @return InterventionDemande
+     */
+    public function addFacturesAnnulee(\HopitalNumerique\PaiementBundle\Entity\FactureAnnulee $facturesAnnulee)
+    {
+        $this->facturesAnnulees[] = $facturesAnnulee;
+
+        return $this;
+    }
+
+    /**
+     * Remove facturesAnnulee
+     *
+     * @param \HopitalNumerique\PaiementBundle\Entity\FactureAnnulee $facturesAnnulee
+     */
+    public function removeFacturesAnnulee(\HopitalNumerique\PaiementBundle\Entity\FactureAnnulee $facturesAnnulee)
+    {
+        $this->facturesAnnulees->removeElement($facturesAnnulee);
+    }
+
+    /**
+     * Get facturesAnnulees
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getFacturesAnnulees()
+    {
+        return $this->facturesAnnulees;
     }
 }

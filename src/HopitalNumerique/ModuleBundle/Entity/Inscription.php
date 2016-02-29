@@ -112,6 +112,14 @@ class Inscription
     protected $facture;
 
     /**
+     * @var \Doctrine\Common\Collections\Collection
+     *
+     * @ORM\ManyToMany(targetEntity="HopitalNumerique\PaiementBundle\Entity\FactureAnnulee", mappedBy="formations")
+     */
+    private $facturesAnnulees;
+
+
+    /**
      * Constructor
      */
     public function __construct()
@@ -397,7 +405,7 @@ class Inscription
      *
      * @param \HopitalNumerique\PaiementBundle\Entity\Facture $facture
      */
-    public function setFacture(\HopitalNumerique\PaiementBundle\Entity\Facture $facture)
+    public function setFacture(\HopitalNumerique\PaiementBundle\Entity\Facture $facture = null)
     {
         $this->facture = $facture;
         return $this;

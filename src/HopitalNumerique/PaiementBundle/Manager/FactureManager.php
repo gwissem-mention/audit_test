@@ -3,7 +3,9 @@
 namespace HopitalNumerique\PaiementBundle\Manager;
 
 use Doctrine\ORM\EntityManager;
+use HopitalNumerique\PaiementBundle\Manager\FactureAnnuleeManager;
 use Nodevo\ToolsBundle\Manager\Manager as BaseManager;
+use HopitalNumerique\PaiementBundle\Entity\Facture;
 
 /**
  * Manager de l'entité Facture.
@@ -15,17 +17,24 @@ class FactureManager extends BaseManager
     protected $_referenceManager;
 
     /**
+     * @var \HopitalNumerique\PaiementBundle\Manager\FactureAnnuleeManager FactureAnnuleeManager
+     */
+    private $factureAnnuleeManager;
+
+
+    /**
      * Contruit le manager
      *
      * @param EntityManager $em L'Entity Manager
      */
-    public function __construct(EntityManager $em, array $managers)
+    public function __construct(EntityManager $em, array $managers, FactureAnnuleeManager $factureAnnuleeManager)
     {
         parent::__construct($em);
 
         $this->_interventionManager = $managers[0];
         $this->_referenceManager    = $managers[1];
         $this->_formationManager    = $managers[2];
+        $this->factureAnnuleeManager = $factureAnnuleeManager;
     }
 
     /**
@@ -172,5 +181,20 @@ class FactureManager extends BaseManager
         }
 
         return true;
+    }
+
+    /**
+     * Annule la facture.
+     *
+     * @param \HopitalNumerique\PaiementBundle\Entity\Facture $facture Facture
+     */
+    public function cancel(Facture $facture)
+    {
+        $factureAnnulee = $this->factureAnnuleeManager->createByFacture($facture);
+        $this->save($factureAnnulee);
+
+        $facture->removeInterventions();
+        $facture->removeFormations();
+        $this->save($facture);
     }
 }
