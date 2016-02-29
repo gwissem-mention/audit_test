@@ -161,9 +161,9 @@ class FactureManager extends BaseManager
      *
      * @return array
      */
-    public function getFacturesOrdered( $user )
+    public function getFacturesOrdered( $user, $onlyValid = true )
     {
-        return $this->getRepository()->getFacturesOrdered( $user )->getQuery()->getResult();
+        return $this->getRepository()->getFacturesOrdered($user, $onlyValid)->getQuery()->getResult();
     }
 
     /**

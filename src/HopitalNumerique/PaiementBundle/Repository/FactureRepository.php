@@ -14,13 +14,24 @@ class FactureRepository extends EntityRepository
      *
      * @return QueryBuilder
      */
-    public function getFacturesOrdered( $user )
+    public function getFacturesOrdered($user, $onlyValid)
     {
-        return $this->_em->createQueryBuilder()
-                         ->select('fac')
-                         ->from('HopitalNumeriquePaiementBundle:Facture', 'fac')
-                         ->where('fac.user = :user')
-                         ->setParameter('user', $user)
-                         ->orderBy('fac.dateCreation','DESC');
+        $qb = $this->_em->createQueryBuilder();
+        $qb
+            ->select('fac')
+            ->from('HopitalNumeriquePaiementBundle:Facture', 'fac')
+            ->where('fac.user = :user')
+        ;
+        if ($onlyValid) {
+            $qb
+                ->leftJoin('fac.factureAnnulee', 'factureAnnulee')
+                ->andWhere($qb->expr()->isNull('factureAnnulee.id'))
+            ;
+        }
+        $qb
+            ->setParameter('user', $user)
+            ->orderBy('fac.dateCreation', 'DESC')
+        ;
+        return $qb;
     }
 }
