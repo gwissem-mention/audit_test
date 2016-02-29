@@ -24,17 +24,19 @@ class InterventionDemandeRepository extends EntityRepository
      */
     public function getForFactures( $user = null )
     {
-        $qb = $this->_em->createQueryBuilder()
-                         ->select('interventionDemande')
-                         ->from('\HopitalNumerique\InterventionBundle\Entity\InterventionDemande', 'interventionDemande')
-                         ->leftJoin('interventionDemande.remboursementEtat', 'refRemboursement')
-                         ->leftJoin('interventionDemande.interventionEtat', 'refEtat')
-                         ->leftJoin('interventionDemande.evaluationEtat', 'refEvaluation')
-                         ->andWhere('refRemboursement.id = 5 ', 'refEtat.id = 22')
-                         ->andWhere('refEvaluation.id = 29 ', 'interventionDemande.facture IS NULL')
-                         ->orderBy('interventionDemande.dateCreation');
+        $qb = $this->_em->createQueryBuilder();
+        $qb
+            ->select('interventionDemande')
+            ->from('\HopitalNumerique\InterventionBundle\Entity\InterventionDemande', 'interventionDemande')
+            ->leftJoin('interventionDemande.remboursementEtat', 'refRemboursement')
+            ->leftJoin('interventionDemande.interventionEtat', 'refEtat')
+            ->leftJoin('interventionDemande.evaluationEtat', 'refEvaluation')
+            ->andWhere('refRemboursement.id = 5 ', 'refEtat.id = 22')
+            ->andWhere('refEvaluation.id = 29 ', 'interventionDemande.facture IS NULL')
+            ->orderBy('interventionDemande.dateCreation')
+        ;
 
-        if( !is_null($user) ){
+        if (!is_null($user)) {
             $qb->andWhere('interventionDemande.ambassadeur = :user')
                ->setParameter('user', $user);
         }
