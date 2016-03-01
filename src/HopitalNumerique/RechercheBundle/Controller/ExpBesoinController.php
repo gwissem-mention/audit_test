@@ -8,7 +8,6 @@ use Symfony\Component\HttpFoundation\Response;
 
 use HopitalNumerique\RechercheBundle\Entity\ExpBesoin;
 use HopitalNumerique\RechercheBundle\Entity\ExpBesoinGestion;
-use HopitalNumerique\RechercheBundle\Entity\ExpBesoinReponses;
 
 class ExpBesoinController extends Controller
 {
@@ -20,6 +19,38 @@ class ExpBesoinController extends Controller
                 'expBesoins'       => $expBesoins,
                 'expBesoinGestion' => $expBesoinGestion
             ));
+    }
+
+    /**
+     * Édite l'entité (appel AJAX).
+     *
+     * @param \Symfony\Component\HttpFoundation\Request          $request   Request
+     * @param \HopitalNumerique\RechercheBundle\Entity\ExpBesoin $expBesoin ExpBesoin
+     */
+    public function editAction(Request $request, ExpBesoin $expBesoin)
+    {
+        $form = $this->createForm('hopitalnumerique_recherche_expbesoin', $expBesoin);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted()) {
+            if (!$form->isValid()) {
+                foreach ($form->getErrors(true) as $field) {
+                    foreach ($field->getErrors() as $fieldError) {
+                        $this->addFlash('danger', $fieldError->getMessage());
+                    }
+                }
+            } else {
+                $this->container->get('hopitalnumerique_recherche.manager.expbesoin')->save($expBesoin);
+                $this->addFlash('success', 'Image enregistrée.');
+            }
+
+            return $this->redirectToRoute('hopital_numerique_expbesoin_index', ['id' => $expBesoin->getExpBesoinGestion()->getId()]);
+        }
+
+        return $this->render('HopitalNumeriqueRechercheBundle:ExpBesoin:edit.html.twig', [
+            'form' => $form->createView(),
+            'expBesoin' => $expBesoin
+        ]);
     }
 
     public function addQuestionAction(Request $request, ExpBesoinGestion $expBesoinGestion )

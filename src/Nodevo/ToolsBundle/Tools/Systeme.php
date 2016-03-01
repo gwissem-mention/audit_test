@@ -44,8 +44,8 @@ class Systeme
      * @return integer Taille max des uploads
      */
     public static function getFileUploadMaxSize()
-    {  
-        return min(self::getPhpSizeInBytes(ini_get('post_max_size')), self::getPhpSizeInBytes(ini_get('upload_max_filesize')));  
+    {
+        return min(self::getPhpSizeInBytes(ini_get('post_max_size')), self::getPhpSizeInBytes(ini_get('upload_max_filesize')));
     }
 
     /**
@@ -54,7 +54,7 @@ class Systeme
      * @return integer Taille max des uploads
      */
     public static function getPhpSizeInBytes($phpSize)
-    {  
+    {
         if ( is_numeric($phpSize) ) {
             return $phpSize;
         }

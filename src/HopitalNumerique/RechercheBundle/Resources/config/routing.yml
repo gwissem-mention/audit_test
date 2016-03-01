@@ -111,6 +111,12 @@ hopital_numerique_expbesoin_index:
     requirements: 
         id: \d+
 
+hopital_numerique_expbesoin_edit:
+    pattern:  /admin/aide-expression-besoin/edit/{id}
+    defaults: { _controller: HopitalNumeriqueRechercheBundle:ExpBesoin:edit }
+    requirements: 
+        id: \d+
+
 hopital_numerique_expbesoin_addquestion:
     pattern:  /admin/aide-expression-besoin/{id}/add-question   #l'id correspond à l'id du gestionnaire
     defaults: { _controller: HopitalNumeriqueRechercheBundle:ExpBesoin:addQuestion }

@@ -68,3 +68,9 @@ services:
         arguments: ["@hopitalnumerique_recherche.manager.expbesoingestion", "@validator", "@hopitalnumerique_user.manager.user"]
         tags:
             - { name: form.type, alias: hopitalnumerique_recherche_expbesoingestion }
+
+    hopitalnumerique_recherche.form.expbesoin:
+        class: 'HopitalNumerique\RechercheBundle\Form\ExpBesoinType'
+        arguments: ['@router']
+        tags:
+            - { name: 'form.type', alias: 'hopitalnumerique_recherche_expbesoin' }

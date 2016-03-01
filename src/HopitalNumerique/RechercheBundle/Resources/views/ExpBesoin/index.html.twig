@@ -2,8 +2,8 @@
 
 {% block stylesheets %}
     {{ parent() }}
-    {% stylesheets output="compiled/hopitalnumerique-recherche-chapitre-index.css" filter="cssrewrite, ?yui_css" 
-        "@select2_css" 
+    {% stylesheets output="compiled/hopitalnumerique-recherche-chapitre-index.css" filter="cssrewrite, ?yui_css"
+        "@select2_css"
         "@validationEngine_css"
         "@jquery_toggles_css"
         'bundles/nodevoadmin/css/jquery.nestable.css'
@@ -16,7 +16,7 @@
 
 {% block javascripts %}
     {{parent()}}
-    {% javascripts output="compiled/hopitalnumerique-recherche-chapitre-index.js" 
+    {% javascripts output="compiled/hopitalnumerique-recherche-chapitre-index.js"
         "@select2_js"
         "@nestable_js"
         "@tinymce_js"
@@ -107,6 +107,9 @@
         <div class="dd3-actions">
             <div onclick="deleteQuestion( {{expBesoin.id}}, '{{path('hopital_numerique_expbesoin_deletequestion', {'id':expBesoin.id})}}' );" class="pull-right dd3-trash"><i class="fa fa-trash-o"></i></div>
             <div onclick="editQuestion( {{expBesoin.id}}, '{{path('hopital_numerique_expbesoin_editquestion', {'id':expBesoin.id})}}' );" class="pull-right dd3-edit question-edit"><i class="fa fa-edit"></i></div>
+            <div class="pull-right dd3-url">
+                <a href="{{path('hopital_numerique_expbesoin_edit', { 'id':expBesoin.id })}}" class="fancybox fancybox.ajax"></a>
+            </div>
         </div>
     </li>
 {% endmacro %}
