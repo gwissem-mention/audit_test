@@ -7,7 +7,6 @@ namespace HopitalNumerique\InterventionBundle\Grid\Admin;
 use HopitalNumerique\InterventionBundle\Grid\DemandesAbstractGrid;
 use Nodevo\GridBundle\Grid\Column;
 use Nodevo\GridBundle\Grid\Action;
-use HopitalNumerique\InterventionBundle\Entity\InterventionEvaluationEtat;
 
 /**
  * Configuration du grid des demandes d'intervention pour l'ambassadeur.
@@ -53,8 +52,6 @@ class DemandesGrid extends DemandesAbstractGrid
      */
     public function setColumns()
     {
-        $utilisateurConnecte = $this->utilisateurConnecte;
-
         //parent::setColumns();
 
         $colonneId = new Column\NumberColumn('idIntervention', 'ID');
