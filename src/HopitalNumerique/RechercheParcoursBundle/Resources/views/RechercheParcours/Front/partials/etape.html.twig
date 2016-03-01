@@ -2,6 +2,9 @@
     <div class="col-md-12 row etape">
         <div class="bloc-etape">
             <p class="mode-normal">
+                {%- if etape.reference.hasImage -%}
+                    <img src="{{ etape.reference.imageUrl }}" height="22"> &nbsp;
+                {% endif -%}
                 {{etape.reference.libelle}}
             </p>
             <div class="icone"></div>
