@@ -1,7 +1,7 @@
 <?php
-
 namespace HopitalNumerique\UserBundle\Manager;
 
+use HopitalNumerique\PaiementBundle\Manager\RemboursementManager;
 use Nodevo\ToolsBundle\Manager\Manager as BaseManager;
 use Doctrine\Common\Collections\Collection;
 use HopitalNumerique\UserBundle\Entity\User;
@@ -17,7 +17,7 @@ class UserManager extends BaseManager
     protected $_managerDomaine;    
     protected $_options;
 
-    public function __construct($managerUser, $securityContext, $managerReponse, $managerRefusCandidature, $managerDomaine)
+    public function __construct($managerUser, $securityContext, $managerReponse, $managerRefusCandidature, $managerDomaine, RemboursementManager $remboursementManager)
     {
         parent::__construct($managerUser);
         $this->_securityContext = $securityContext;
@@ -25,6 +25,7 @@ class UserManager extends BaseManager
         $this->_managerReponse          = $managerReponse;
         $this->_managerRefusCandidature = $managerRefusCandidature;
         $this->_managerDomaine          = $managerDomaine;
+        $this->remboursementManager = $remboursementManager;
         $this->_options                 = array();
     }
 
@@ -223,6 +224,17 @@ class UserManager extends BaseManager
     }
 
     /**
+     * Retourne la liste des utilisateurs possédant un des roles demandés.
+     *
+     * @param array $roles Rôles
+     * @return array<\HopitalNumerique\UserBundle\Entity\User> Users
+     */
+    public function findUsersByRoles(array $roles)
+    {
+        return $this->getRepository()->findUsersByRoles($roles)->getQuery()->getResult();
+    }
+
+    /**
      * Retourne la liste des utilisateurs étant assigné au domaine
      *
      * @param int $idDomaine Identifiant du domaine à filtrer
@@ -409,5 +421,26 @@ class UserManager extends BaseManager
         }
 
         $this->save($user);
+    }
+
+    /**
+     * Retourne le référent d'une région.
+     *
+     * @param \HopitalNumerique\ReferenceBundle\Entity\Reference $region Région
+     * @return \HopitalNumerique\UserBundle\Entity\User|null Référent
+     */
+    public function getRegionReferent(Reference $region)
+    {
+        $regionRemboursements = $this->remboursementManager->findBy(
+            ['region' => $region],
+            null,
+            1
+        );
+
+        if (count($regionRemboursements) > 0) {
+            return $regionRemboursements[0]->getReferent();
+        }
+
+        return null;
     }
 }
