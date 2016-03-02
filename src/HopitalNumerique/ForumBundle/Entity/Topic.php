@@ -39,4 +39,13 @@ class Topic extends BaseTopic
     
         return $this;
     }
+
+
+    /**
+     * @return string
+     */
+    public function __toString()
+    {
+        return $this->title;
+    }
 }

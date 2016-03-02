@@ -4,6 +4,7 @@ namespace HopitalNumerique\ForumBundle\Repository;
 
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\Query\Expr\Join;
+use HopitalNumerique\ForumBundle\Entity\Forum;
 
 /**
  * TopicRepository
@@ -34,4 +35,27 @@ class TopicRepository extends EntityRepository
 
     return $qb;
   }
+
+    /**
+     * Retourne les topics d'un forum.
+     *
+     * @param \HopitalNumerique\ForumBundle\Entity\Forum $forum Forum
+     * @return array<\HopitalNumerique\ForumBundle\Entity\Topic> Topics
+     */
+    public function findByForum(Forum $forum)
+    {
+        $query = $this->createQueryBuilder('topic');
+
+        $query
+            ->addSelect(array('board', 'category'))
+            ->innerJoin('topic.board', 'board')
+            ->innerJoin('board.category', 'category', Join::WITH, 'category.forum = :forum')
+            ->setParameter('forum', $forum)
+            ->orderBy('category.listOrderPriority')
+            ->addOrderBy('board.listOrderPriority')
+            ->addOrderBy('topic.lastPost', 'DESC')
+        ;
+
+        return $query->getQuery()->getResult();
+    }
 }

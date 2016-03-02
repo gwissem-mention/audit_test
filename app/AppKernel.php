@@ -27,6 +27,11 @@ class AppKernel extends Kernel
             new Igorw\FileServeBundle\IgorwFileServeBundle(),
             new Stof\DoctrineExtensionsBundle\StofDoctrineExtensionsBundle(),
             new FOS\JsRoutingBundle\FOSJsRoutingBundle(),
+            //-v- Bundles du Forum -v-
+            new Knp\Bundle\PaginatorBundle\KnpPaginatorBundle(),
+            new CCDNForum\ForumBundle\CCDNForumForumBundle(),
+            new CCDNComponent\BBCodeBundle\CCDNComponentBBCodeBundle(),
+            //-^- Bundles du Forum -^-,
             new Nodevo\AdminBundle\NodevoAdminBundle(),
             new Nodevo\MenuBundle\NodevoMenuBundle(),
             new Nodevo\RoleBundle\NodevoRoleBundle(),
@@ -62,11 +67,6 @@ class AppKernel extends Kernel
             new HopitalNumerique\DomaineBundle\HopitalNumeriqueDomaineBundle(),
             new HopitalNumerique\ExpertBundle\HopitalNumeriqueExpertBundle(),
             new HopitalNumerique\AideBundle\HopitalNumeriqueAideBundle(),
-            //-v- Bundles du Forum -v-
-            new Knp\Bundle\PaginatorBundle\KnpPaginatorBundle(),
-            new CCDNForum\ForumBundle\CCDNForumForumBundle(),
-            new CCDNComponent\BBCodeBundle\CCDNComponentBBCodeBundle(),
-            //-^- Bundles du Forum -^-,
             new HopitalNumerique\StatBundle\HopitalNumeriqueStatBundle(),
             new HopitalNumerique\ReportBundle\HopitalNumeriqueReportBundle(),
             new HopitalNumerique\ImportExcelBundle\HopitalNumeriqueImportExcelBundle(),

@@ -3,6 +3,7 @@
 namespace HopitalNumerique\ForumBundle\Manager;
 
 use Doctrine\ORM\EntityManager;
+use HopitalNumerique\ForumBundle\Entity\Forum;
 use Nodevo\ToolsBundle\Manager\Manager as BaseManager;
 use Symfony\Component\Validator\Constraints\Null;
 
@@ -150,6 +151,16 @@ class TopicManager extends BaseManager
       return $this->getRepository()->getLastTopicsForum($id, $limit)->getQuery()->getResult();
     }
 
+    /**
+     * Retourne les topics d'un forum.
+     *
+     * @param \HopitalNumerique\ForumBundle\Entity\Forum $forum Forum
+     * @return array<\HopitalNumerique\ForumBundle\Entity\Topic> Topics
+     */
+    public function findByForum(Forum $forum)
+    {
+        return $this->getRepository()->findByForum($forum);
+    }
 
     /**
      * Filtre les reférences en fonction de l'outil passés en paramètre
