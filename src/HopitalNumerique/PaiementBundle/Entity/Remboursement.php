@@ -51,7 +51,7 @@ class Remboursement
     /**
      * @var \HopitalNumerique\UserBundle\Entity\User
      *
-     * @ORM\OneToOne(targetEntity="\HopitalNumerique\UserBundle\Entity\User")
+     * @ORM\ManyToOne(targetEntity="\HopitalNumerique\UserBundle\Entity\User")
      * @ORM\JoinColumn(name="referent_id", referencedColumnName="usr_id", nullable=true, onDelete="SET NULL")
      */
     private $referent;
