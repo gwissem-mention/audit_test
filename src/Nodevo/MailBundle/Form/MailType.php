@@ -46,7 +46,12 @@ class MailType extends AbstractType
                 'required'   => true, 
                 'label'      => 'Corps du mail',
                 'attr'       => array('class' => $this->_constraints['body']['class'], 'rows' => 10 )
-            ));
+            ))
+            ->add('notificationRegionReferent', 'checkbox', [
+                'label' => 'Notifier le référent de la région du destinataire',
+                'required' => false
+            ])
+        ;
     }
 
     public function setDefaultOptions(OptionsResolverInterface $resolver)

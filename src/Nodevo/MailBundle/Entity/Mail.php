@@ -92,6 +92,13 @@ class Mail
     private $body;
 
     /**
+     * @var boolean
+     *
+     * @ORM\Column(name="mail_notification_region_referent", type="boolean", nullable=false, options={"default"=false,"comment"="Indique si le référent de région est notifié"})
+     */
+    private $notificationRegionReferent;
+
+    /**
      * @var array
      *
      * @ORM\Column(name="mail_params", type="json_array")
@@ -246,5 +253,29 @@ class Mail
     public function setParams($params)
     {
         $this->params = $params;
+    }
+
+    /**
+     * Set notificationRegionReferent
+     *
+     * @param boolean $notificationRegionReferent
+     *
+     * @return Mail
+     */
+    public function setNotificationRegionReferent($notificationRegionReferent)
+    {
+        $this->notificationRegionReferent = $notificationRegionReferent;
+
+        return $this;
+    }
+
+    /**
+     * Get notificationRegionReferent
+     *
+     * @return boolean
+     */
+    public function isNotificationRegionReferent()
+    {
+        return $this->notificationRegionReferent;
     }
 }
