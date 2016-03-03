@@ -41,7 +41,9 @@ class ReferenceType extends AbstractType
         if( $datas->getLock() )
             $attrCode['readonly'] = 'readonly';
         //parent
-        $attrParent = array();
+        $attrParent = array(
+            'class' => 'select2'
+        );
         if( $datas->getLock() )
             $attrParent['disabled'] = 'disabled';
 
