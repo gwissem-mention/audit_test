@@ -4,25 +4,12 @@
     {{ parent() }}
     {% javascripts output="compiled/hopitalnumerique-domaine-domaine-edit.js"
         "@tinymce_js"
-        "@fancybox_js" 
-        "@select2_js"
         'bundles/nodevogestionnairemedia/js/moxiemanager/js/moxman.loader.min.js'
         'bundles/nodevogestionnairemedia/js/MoxieManager.js'
         "bundles/hopitalnumeriquedomaine/js/script.js"
     %}
         <script type="text/javascript" src="{{ asset_url }}"></script>
     {% endjavascripts %}
-{% endblock %}
-
-
-{% block stylesheets %}
-    {{parent()}}
-    {% stylesheets output="compiled/hopitalnumerique-domaine-domaine-edit.css" filter="cssrewrite, ?yui_css"
-        "@fancybox_css"
-        "@select2_css"
-    %}
-        <link rel="stylesheet" href="{{ asset_url }}" />
-    {% endstylesheets %}
 {% endblock %}
 
 {% block h1Title %}

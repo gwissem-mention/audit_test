@@ -3,8 +3,6 @@
 {% block javascripts %}
     {{parent()}}
     {% javascripts output="compiled/nodevo-menu-item-edit.js"
-        "@select2_js" 
-        "@fancybox_js"
         "@bootstrap_iconpicker_js"
         'bundles/nodevomenu/js/itemForm.js'
         'bundles/hopitalnumeriqueobjet/js/popup-menu.js'
@@ -15,9 +13,7 @@
 
 {% block stylesheets %}
     {{parent()}}
-    {% stylesheets output="compiled/nodevo-menu-item-edit.css" filter="cssrewrite" 
-        "@select2_css" 
-        "@fancybox_css"
+    {% stylesheets output="compiled/nodevo-menu-item-edit.css" filter="cssrewrite"
         "@bootstrap_iconpicker_css"
     %}
         <link rel="stylesheet" href="{{ asset_url }}" />

@@ -3,8 +3,6 @@
 {% block stylesheets %}
     {{ parent() }}
     {% stylesheets output="compiled/hopitalnumerique-recherche-chapitre-index.css" filter="cssrewrite, ?yui_css"
-        "@select2_css"
-        "@validationEngine_css"
         "@jquery_toggles_css"
         'bundles/nodevoadmin/css/jquery.nestable.css'
         'bundles/hopitalnumeriquerecherche/css/ExpBesoin/style.css'
@@ -17,7 +15,6 @@
 {% block javascripts %}
     {{parent()}}
     {% javascripts output="compiled/hopitalnumerique-recherche-chapitre-index.js"
-        "@select2_js"
         "@nestable_js"
         "@tinymce_js"
         "@jquery_toggles_js"

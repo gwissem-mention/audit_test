@@ -3,7 +3,6 @@
 {% block stylesheets %}
     {{parent()}}
     {% stylesheets output="compiled/hopitalnumerique-expert-activite.css" filter="cssrewrite, ?yui_css"
-        "@select2_css"
         'bundles/nodevoadmin/plugins/nodevoLoader/nodevoLoader.css'
     %}
         <link rel="stylesheet" href="{{ asset_url }}" />
@@ -13,7 +12,6 @@
 {% block javascripts %}
     {{parent()}}
     {% javascripts output="compiled/hopitalnumerique-expert-activite.js"
-        "@select2_js"
         'bundles/nodevoadmin/plugins/nodevoLoader/nodevoLoader.js'
         'bundles/hopitalnumeriqueexpert/js/script.js'
     %}

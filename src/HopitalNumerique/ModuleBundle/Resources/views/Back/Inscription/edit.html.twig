@@ -12,19 +12,9 @@
     {% endif %}
 {% endblock %}
 
-{% block stylesheets %}
-    {{parent()}}
-    {% stylesheets output="compiled/hopitalnumerique-module-inscription-edit.css" filter="cssrewrite, ?yui_css"
-        '@select2_css'
-    %}
-        <link rel="stylesheet" href="{{ asset_url }}" />
-    {% endstylesheets %}
-{% endblock %}
-
 {% block javascripts %}
     {{parent()}}
     {% javascripts output="compiled/hopitalnumerique-module-inscription-edit.js"
-        '@select2_js'
         'bundles/hopitalnumeriquemodule/js/inscription/script.js'
         'bundles/hopitalnumeriquemodule/js/inscription/edit.js'
     %}

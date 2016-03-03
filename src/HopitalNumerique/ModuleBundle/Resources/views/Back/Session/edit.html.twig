@@ -15,7 +15,6 @@
 {% block stylesheets %}
     {{parent()}}
     {% stylesheets output="compiled/hopitalnumerique-module-session-edit.css" filter="cssrewrite, ?yui_css"
-        '@select2_css'
         'bundles/nodevoadmin/plugins/apprise/apprise.css'
         'bundles/hopitalnumeriquemodule/css/session/edit.css'
     %}
@@ -26,7 +25,6 @@
 {% block javascripts %}
     {{parent()}}
     {% javascripts output="compiled/hopitalnumerique-module-session-edit.js"
-        '@select2_js'
         'bundles/nodevoadmin/plugins/apprise/apprise.js'
         'bundles/hopitalnumeriquemodule/js/session/script.js'
     %}

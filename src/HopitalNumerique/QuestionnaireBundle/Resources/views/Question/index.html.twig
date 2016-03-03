@@ -2,8 +2,7 @@
 
 {% block stylesheets %}
     {{ parent() }}
-    {% stylesheets output="compiled/hopitalnumerique-questionnaire-question-index.css" filter="cssrewrite, ?yui_css" 
-        "@select2_css"
+    {% stylesheets output="compiled/hopitalnumerique-questionnaire-question-index.css" filter="cssrewrite, ?yui_css"
         "@jquery_toggles_css"
         'bundles/nodevoadmin/css/jquery.nestable.css'
         'bundles/nodevoadmin/css/toggles.css'
@@ -15,8 +14,7 @@
 
 {% block javascripts %}
     {{parent()}}
-    {% javascripts output="compiled/hopitalnumerique-questionnaire-question-index.js" 
-        "@select2_js"
+    {% javascripts output="compiled/hopitalnumerique-questionnaire-question-index.js"
         "@nestable_js"
         "@tinymce_js"
         "@jquery_toggles_js"
