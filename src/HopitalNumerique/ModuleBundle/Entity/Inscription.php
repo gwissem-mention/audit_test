@@ -39,7 +39,7 @@ class Inscription
     /**
      * @var integer
      *
-     * @ORM\ManyToOne(targetEntity="\HopitalNumerique\UserBundle\Entity\User")
+     * @ORM\ManyToOne(targetEntity="\HopitalNumerique\UserBundle\Entity\User", inversedBy="inscriptions")
      * @ORM\JoinColumn(name="usr_participant", referencedColumnName="usr_id", nullable=true, onDelete="CASCADE")
      * @ORM\OrderBy({"nom" = "ASC", "prenom" = "ASC"})
      *

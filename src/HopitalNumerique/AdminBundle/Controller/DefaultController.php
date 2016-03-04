@@ -21,13 +21,21 @@ class DefaultController extends Controller
 
         //récupère la conf (l'ordre) des blocks du dashboard de l'user connecté
         $userConf = $this->buildDashboardRows( json_decode($user->getDashboardBack(), true) );
+        $anneeEnCours = intval(date('Y'));
 
         //Initialisation des blocs
         $blocUser          = $this->getBlockuser();
         $blocObjets        = $this->getBlockObjets();
         $blocForum         = $this->getBlockForum();
         $blocInterventions = array( 'total' => 0, 'demandees' => 0, 'attente' => 0, 'en-cours' => 0, 'refusees' => 0, 'annulees' => 0 );
-        $blocSessions      = array( 'inscriptions' => 0, 'next' => array() );
+        $blocSessions = array(
+            'next' => array(),
+            'totalInscriptionsAnneeEnCours' => $this->container->get('hopitalnumerique_module.manager.inscription')->getCountForYear($anneeEnCours),
+            'totalInscriptionsAnneePrecedente' => $this->container->get('hopitalnumerique_module.manager.inscription')->getCountForYear($anneeEnCours - 1),
+            'totalParticipantsAnneeEnCours' => $this->container->get('hopitalnumerique_module.manager.inscription')->getUsersCountForYear($anneeEnCours),
+            'totalParticipantsAnneePrecedente' => $this->container->get('hopitalnumerique_module.manager.inscription')->getUsersCountForYear($anneeEnCours - 1),
+            'totalSessionsRisquees' => $this->container->get('hopitalnumerique_module.manager.session')->getSessionsRisqueesCount()
+        );
         $blocPaiements     = array( 'apayer' => 0, 'attente' => 0, 'janvier' => 0 );
 
         //Bloc Interventions
@@ -74,10 +82,6 @@ class DefaultController extends Controller
                             $domaineInsriptionInDomaineUser = true;
                             break;
                         }
-                    }
-
-                    if( $inscription->getEtatInscription()->getId() == 406 && $domaineInsriptionInDomaineUser){
-                        $blocSessions['inscriptions']++;
                     }
 
                     if( $inscription->getEtatParticipation() && $inscription->getEtatParticipation()->getId() == 411 
@@ -129,6 +133,7 @@ class DefaultController extends Controller
         }
         
         return $this->render('HopitalNumeriqueAdminBundle:Default:index.html.twig', array(
+            'anneeEnCours' => $anneeEnCours,
             'userConf'          => $userConf,
             'blocUser'          => $blocUser,
             'blocObjets'        => $blocObjets,

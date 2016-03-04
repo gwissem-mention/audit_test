@@ -3,6 +3,7 @@
 namespace HopitalNumerique\ModuleBundle\Repository;
 
 use Doctrine\ORM\EntityRepository;
+use Doctrine\ORM\Query\Expr;
 
 /**
  * InscriptionRepository
@@ -165,5 +166,68 @@ class InscriptionRepository extends EntityRepository
             ->groupBy('user.id, module.id');
         
         return $qb;
+    }
+
+    /**
+     * Retourne le nombre d'inscriptions pour l'année.
+     *
+     * @param integer $annee Année
+     * @return integer Total
+     */
+    public function getCountForYear($annee)
+    {
+        $queryBuilder = $this->createQueryBuilder('inscription');
+        $anneeCourantePremierJour = new \DateTime();
+        $anneeCourantePremierJour->setDate($annee, 1, 1);
+        $anneeCourantePremierJour->setTime(0, 0, 0);
+        $anneeSuivanteDernierJour = new \DateTime();
+        $anneeSuivanteDernierJour->setDate($annee + 1, 1, 1);
+        $anneeSuivanteDernierJour->setTime(0, 0, 0);
+
+        $queryBuilder
+            ->select('COUNT(DISTINCT(inscription.id)) AS total')
+            ->where($queryBuilder->expr()->andX(
+                $queryBuilder->expr()->gte('inscription.dateInscription', ':anneeCourantePremierJour'),
+                $queryBuilder->expr()->lt('inscription.dateInscription', ':anneeSuivanteDernierJour')
+            ))
+            ->setParameters(array(
+                'anneeCourantePremierJour' => $anneeCourantePremierJour,
+                'anneeSuivanteDernierJour' => $anneeSuivanteDernierJour
+            ))
+        ;
+
+        return intval($queryBuilder->getQuery()->getSingleScalarResult());
+    }
+
+    /**
+     * Retourne le nombre d'utilisateurs uniques inscrits pour l'année.
+     *
+     * @param integer $annee Année
+     * @return integer Total
+     */
+    public function getUsersCountForYear($annee)
+    {
+        $queryBuilder = $this->getEntityManager()->createQueryBuilder();
+        $anneeCourantePremierJour = new \DateTime();
+        $anneeCourantePremierJour->setDate($annee, 1, 1);
+        $anneeCourantePremierJour->setTime(0, 0, 0);
+        $anneeSuivanteDernierJour = new \DateTime();
+        $anneeSuivanteDernierJour->setDate($annee + 1, 1, 1);
+        $anneeSuivanteDernierJour->setTime(0, 0, 0);
+
+        $queryBuilder
+            ->select('COUNT(DISTINCT(user.id)) AS total')
+            ->from('HopitalNumeriqueUserBundle:User', 'user')
+            ->innerJoin('user.inscriptions', 'inscription', Expr\Join::WITH, $queryBuilder->expr()->andX(
+                $queryBuilder->expr()->gte('inscription.dateInscription', ':anneeCourantePremierJour'),
+                $queryBuilder->expr()->lt('inscription.dateInscription', ':anneeSuivanteDernierJour')
+            ))
+            ->setParameters(array(
+                'anneeCourantePremierJour' => $anneeCourantePremierJour,
+                'anneeSuivanteDernierJour' => $anneeSuivanteDernierJour
+            ))
+        ;
+
+        return intval($queryBuilder->getQuery()->getSingleScalarResult());
     }
 }

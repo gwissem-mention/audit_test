@@ -309,4 +309,26 @@ class InscriptionManager extends BaseManager
         
         return array('colonnes' => $colonnes, 'datas' => $datas );
     }
+
+    /**
+     * Retourne le nombre d'inscriptions pour l'année.
+     *
+     * @param integer $annee Année
+     * @return integer Total
+     */
+    public function getCountForYear($annee)
+    {
+        return $this->getRepository()->getCountForYear($annee);
+    }
+
+    /**
+     * Retourne le nombre d'utilisateurs uniques inscrits pour l'année.
+     *
+     * @param integer $annee Année
+     * @return integer Total
+     */
+    public function getUsersCountForYear($annee)
+    {
+        return $this->getRepository()->getUsersCountForYear($annee);
+    }
 }

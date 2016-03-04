@@ -327,4 +327,17 @@ class SessionManager extends BaseManager
             $charset
         );
     }
+
+    /**
+     * Retourne les sessions à risque, càd n'ayant pas assez de participants pour des sessions prochaines.
+     *
+     * @return integer Total
+     */
+    public function getSessionsRisqueesCount()
+    {
+        $dans3mois = new \DateTime();
+        $dans3mois->add(new \DateInterval('P12M'));
+
+        return count($this->getRepository()->getSessionsRisquees(2, $dans3mois)->getQuery()->getResult());
+    }
 }

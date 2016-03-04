@@ -177,4 +177,30 @@ class SessionRepository extends EntityRepository
                         ->groupBy('ses.id')
                         ->orderBy('ses.dateSession', 'ASC');
     }
+
+    /**
+     * Retourne les sessions à risque, càd n'ayant pas assez de participants pour des sessions prochaines.
+     *
+     * @param integer   $nombreParticipantsActuelMax Nombre maximum de particpants actuellement enregistrés
+     * @param \DateTime $dateLimite                  Date limite
+     * @return \Doctrine\ORM\QueryBuilder QueryBuilder
+     */
+    public function getSessionsRisquees($nombreParticipantsActuelMax, \DateTime $dateLimite)
+    {
+        $queryBuilder = $this->createQueryBuilder('session');
+
+        $queryBuilder
+            ->leftJoin('session.inscriptions', 'inscription')
+            ->where($queryBuilder->expr()->between('session.dateSession', ':aujourdhui', ':dateLimite'))
+            ->groupBy('session.id')
+            ->having($queryBuilder->expr()->lte('COUNT(inscription.id)', ':nombreParticipantsActuelMax'))
+            ->setParameters(array(
+                'aujourdhui' => new \DateTime(),
+                'dateLimite' => $dateLimite,
+                'nombreParticipantsActuelMax' => $nombreParticipantsActuelMax
+            ))
+        ;
+
+        return $queryBuilder;
+    }
 }
