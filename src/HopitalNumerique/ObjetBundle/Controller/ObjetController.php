@@ -3,6 +3,7 @@
 namespace HopitalNumerique\ObjetBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use \Nodevo\ToolsBundle\Tools\Chaine;
 use Doctrine\Common\Cache\ApcCache;
@@ -325,9 +326,10 @@ class ObjetController extends Controller
      *
      * @return Response XML Feed
      */
-    public function feedAction()
+    public function feedAction(Request $request)
     {
-        $actualites = $this->get('hopitalnumerique_objet.manager.objet')->getObjetsForRSS();
+        $domaine = $this->container->get('hopitalnumerique_domaine.manager.domaine')->findOneById($request->getSession()->get('domaineId', 1));
+        $actualites = $this->get('hopitalnumerique_objet.manager.objet')->getObjetsForRSS($domaine);
 
         $feed = $this->get('eko_feed.feed.manager')->get('objet');
         $feed->addFromArray($actualites);

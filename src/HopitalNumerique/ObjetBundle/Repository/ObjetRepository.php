@@ -95,11 +95,12 @@ class ObjetRepository extends EntityRepository
      *
      * @return QueryBuilder
      */
-    public function getObjetsForRSS()
+    public function getObjetsForRSS(Domaine $domaine)
     {
         $qb = $this->_em->createQueryBuilder();
         $qb->select('obj')
             ->from('HopitalNumeriqueObjetBundle:Objet', 'obj')
+            ->innerJoin('obj.domaines', 'domaine', Expr\Join::WITH, 'domaine.id = :domaine')
             ->where('obj.etat = :idEtat')
             ->leftJoin('obj.types','refTypes')
             ->andWhere(
@@ -112,6 +113,7 @@ class ObjetRepository extends EntityRepository
                 )
             )
             ->setParameters(array(
+                'domaine' => $domaine,
                 'idEtat'      => 3,
                 'code_artcle' => 'CATEGORIE_ARTICLE',
                 'code_objet'  => 'CATEGORIE_OBJET'

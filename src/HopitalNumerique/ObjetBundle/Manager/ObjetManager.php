@@ -89,9 +89,9 @@ class ObjetManager extends BaseManager
         return $this->getRepository()->getObjetsForDashboard()->getQuery()->getResult();
     }
 
-    public function getObjetsForRSS()
+    public function getObjetsForRSS(Domaine $domaine)
     {
-        return $this->getRepository()->getObjetsForRSS()->getQuery()->getResult();
+        return $this->getRepository()->getObjetsForRSS($domaine)->getQuery()->getResult();
     }
 
     /**
