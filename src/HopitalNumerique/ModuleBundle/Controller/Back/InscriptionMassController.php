@@ -160,6 +160,36 @@ class InscriptionMassController extends Controller
     }
 
     /**
+     * Envoyer un mail de relance d'évaluation aux utilisateurs.
+     *
+     * @param array $primaryKeys    ID des lignes sélectionnées
+     * @param array $allPrimaryKeys allPrimaryKeys ???
+     *
+     * @return Redirect
+     */
+    public function sendMailEvaluationMassAction($primaryKeys, $allPrimaryKeys)
+    {
+        if ($allPrimaryKeys == 1) {
+            $rawDatas = $this->get('hopitalnumerique_module.grid.inscription')->getRawData();
+            foreach ($rawDatas as $data) {
+                $primaryKeys[] = $data['id'];
+            }
+        }
+        $inscriptions = $this->get('hopitalnumerique_module.manager.inscription')->findBy(array('id' => $primaryKeys));
+
+        if (count($inscriptions) > 0) {
+            $mails = $this->get('nodevo_mail.manager.mail')->sendFormulaireEvaluationsMassMail($inscriptions, array());
+            foreach ($mails as $mail) {
+                $this->get('mailer')->send($mail);
+            }
+
+            $this->get('session')->getFlashBag()->add('success', 'Mail(s) envoyé(s) avec succès.');
+        }
+        
+        return $this->redirect($this->getRequest()->headers->get('referer'));
+    }
+
+    /**
      * Suppression de masse des inscriptions
      *
      * @param array $primaryKeys    ID des lignes sélectionnées
@@ -180,15 +210,11 @@ class InscriptionMassController extends Controller
 
         $inscriptions = $this->get('hopitalnumerique_module.manager.inscription')->findBy( array('id' => $primaryKeys) );
 
-        $sessionId = array_values($inscriptions)[0]->getSession()->getModule()->getId();
-
-        $url = strpos($this->getRequest()->headers->get('referer'), 'inscription/all') ? $this->generateUrl('hopitalnumerique_module_module_allinscription') : $this->generateUrl('hopitalnumerique_module_module_session_inscription', array('id'=>$sessionId));
-
         $this->get('hopitalnumerique_module.manager.inscription')->delete( $inscriptions );
 
         $this->get('session')->getFlashBag()->add('info', 'Suppression effectuée avec succès.' );
 
-        return $this->redirect( $url );
+        return $this->redirect($this->getRequest()->headers->get('referer'));
     }
     
 

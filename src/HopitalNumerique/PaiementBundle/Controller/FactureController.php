@@ -41,10 +41,17 @@ class FactureController extends Controller
      */
     public function detailAction( Facture $facture)
     {
-        $formations = $this->get('hopitalnumerique_module.manager.inscription')->getInscriptionsForFactureOrdered($facture->getId());
+        if ($facture->hasBeenCanceled()) {
+            $interventions = $facture->getFactureAnnulee()->getInterventions();
+            $formations = $facture->getFactureAnnulee()->getFormations();
+        } else {
+            $formations = $this->get('hopitalnumerique_module.manager.inscription')->getInscriptionsForFactureOrdered($facture->getId());
+            $interventions = $facture->getInterventions();
+        }
 
         return $this->render('HopitalNumeriquePaiementBundle:Facture:detail.html.twig', array(
-            'facture'    => $facture,
+            'facture' => $facture,
+            'interventions' => $interventions,
             'formations' => $formations
         ));
     }
@@ -140,7 +147,18 @@ class FactureController extends Controller
         return $this->redirect( $this->generateUrl('hopitalnumerique_paiement_facture') );
     }
 
+    /**
+     * Annule la facture.
+     *
+     * @param \HopitalNumerique\PaiementBundle\Entity\Facture $facture Facture
+     */
+    public function cancelAction(Facture $facture)
+    {
+        if (!$facture->hasBeenCanceled()) {
+            $this->container->get('hopitalnumerique_paiement.manager.facture')->cancel($facture);
+            $this->addFlash('success', 'Facture annulée.');
+        }
 
-
-
+        return $this->redirect($this->generateUrl('hopitalnumerique_paiement_facture'));
+    }
 }

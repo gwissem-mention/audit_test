@@ -76,6 +76,7 @@ class BaseInscriptionGrid extends Grid implements GridInterface
         /* Exports */
         $this->addMassAction( new Action\ActionMass('Export CSV - Inscriptions', 'HopitalNumeriqueModuleBundle:Back/ExportMass:exportCsv') );
         $this->addMassAction( new Action\ActionMass('Envoyer un mail'          , 'HopitalNumeriqueModuleBundle:Back/InscriptionMass:envoyerMailMass') );
+        $this->addMassAction(new Action\ActionMass('Envoyer le mail d\'alerte d\'évaluation', 'HopitalNumeriqueModuleBundle:Back/InscriptionMass:sendMailEvaluationMass'));
 
         $this->addMassAction( new Action\ActionMass('Supprimer', 'HopitalNumeriqueModuleBundle:Back/InscriptionMass:deleteMass') );
     }

@@ -10,18 +10,9 @@
     {% endif %}
 {% endblock %}
 
-{% block stylesheets %}
-    {{parent()}}
-    {% stylesheets output="compiled/hopitalnumerique-user-user-edit.css" filter="cssrewrite, ?yui_css" 
-        "@select2_css"
-    %}
-        <link rel="stylesheet" href="{{ asset_url }}" />
-    {% endstylesheets %}
-{% endblock %}
 {% block javascripts %}
     {{parent()}}
-    {% javascripts output="compiled/hopitalnumerique-user-user-edit.js" 
-        "@select2_js"
+    {% javascripts output="compiled/hopitalnumerique-user-user-edit.js"
         "@jquery_maskedinput_js"
         'bundles/hopitalnumeriqueuser/js/User/script.js'
     %}

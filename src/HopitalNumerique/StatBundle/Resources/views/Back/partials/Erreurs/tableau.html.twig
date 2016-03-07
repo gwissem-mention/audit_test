@@ -44,10 +44,34 @@
                                                 {% endif %}
                                             </td>
                                             <td style="border:1px solid #e3e3e3;font-size:11px;">
-                                                <a target="_blank" href="{{domaine.url ~ url}}">{{(url)|truncate(40)}}</a>
+                                                {% if 'http' in url or 'www.' in url%}
+                                                    <a target="_blank" href="{{url}}">{{(url)|truncate(40)}}</a>
+                                                {% else %}
+                                                    <a target="_blank" href="{{domaine.url ~ url}}">{{(url)|truncate(40)}}</a>
+                                                {% endif %}
                                             </td>
-                                            <td id="check-url-{{keyUrl}}-{{keyObjetUrl}}" class="url-check" style="border:1px solid #e3e3e3;text-align:center;" data-url="{{domaine.url ~ url}}">
-                                            </td>
+                                            {% if 'http' in url or 'www.' in url %}
+                                                <td id="check-url-{{keyUrl}}-{{keyObjetUrl}}" class="url-check" style="border:1px solid #e3e3e3;text-align:center;" data-url="{{url}}">
+                                                    {% if oksByUrl[url] is defined %}
+                                                        {% if oksByUrl[url] == true %}
+                                                            <div class="finish btn btn-success url-check" disabled="disabled"><i class="fa fa-check"></i></div>
+                                                        {% else %}
+                                                            <div class="finish btn btn-danger url-check" disabled="disabled"><i class="fa fa-minus-circle"></i></div>
+                                                        {% endif %}
+                                                    {% endif %}
+                                                </td>
+                                            {% else %}
+                                                <td id="check-url-{{keyUrl}}-{{keyObjetUrl}}" class="url-check" style="border:1px solid #e3e3e3;text-align:center;" data-url="{{domaine.url ~ url}}">
+                                                    {% if oksByUrl[domaine.url ~ url] is defined %}
+                                                        {% if oksByUrl[domaine.url ~ url] == true %}
+                                                            <div class="finish btn btn-success url-check" disabled="disabled"><i class="fa fa-check"></i></div>
+                                                        {% else %}
+                                                            <div class="finish btn btn-danger url-check" disabled="disabled"><i class="fa fa-minus-circle"></i></div>
+                                                        {% endif %}
+                                                    {% endif %}
+                                                </td>
+                                            {% endif %}
+
                                         </tr>
                                     {% endif %}
                                 {% endfor %}

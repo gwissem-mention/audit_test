@@ -135,4 +135,24 @@ class ErrorUrlManager extends BaseManager
         return $results;
     }
 
+    /**
+     * Récupère l'état de l'url
+     *
+     * @return array
+     */
+    public function getOksByUrl()
+    {
+        $errorUrls = $this->getRepository()->findAll();
+
+        $oks = array();
+
+        foreach ($errorUrls as $errorUrl)
+        {
+            $oks[$errorUrl->getUrl()] = $errorUrl->getOk();
+        }
+
+        return $oks;
+
+    }
+
 }

@@ -221,7 +221,11 @@
 
                             <div class="panel-body">
                                 <ol>
-                                    <li><a href="{{path('hopitalnumerique_module_module_allinscription')}}"><strong>{{blocSessions['inscriptions']}}</strong> demandes d'inscriptions en attente</a></li>
+                                    <li><strong>{{blocSessions['totalInscriptionsAnneePrecedente']}}</strong> inscriptions en {{ anneeEnCours - 1 }}</li>
+                                    <li><strong>{{blocSessions['totalInscriptionsAnneeEnCours']}}</strong> inscriptions en {{ anneeEnCours }}</li>
+                                    <li><strong>{{blocSessions['totalParticipantsAnneePrecedente']}}</strong> personnes inscrites en {{ anneeEnCours - 1 }}</li>
+                                    <li><strong>{{blocSessions['totalParticipantsAnneeEnCours']}}</strong> personnes inscrites en {{ anneeEnCours }}</li>
+                                    <li><strong>{{blocSessions['totalSessionsRisquees']}}</strong> sessions à risque dans les 3 mois</li>
                                 </ol>
                             </div>
                         </div>
@@ -249,7 +253,7 @@
                         </div>
                     </li>
 
-                    <li data-row="{{userConf['paiements']['row']}}" data-col="{{userConf['paiements']['col']}}" data-sizex="1" data-sizey="1" data-id="paiements" >
+                    {#<li data-row="{{userConf['paiements']['row']}}" data-col="{{userConf['paiements']['col']}}" data-sizex="1" data-sizey="1" data-id="paiements" >
                         <div class="panel panel-midnightblue">
                             <div class="panel-heading">
                                 <h3 class="panel-title"><i class="fa fa-credit-card"></i>Paiements</h3>
@@ -266,7 +270,7 @@
                                 </ol>
                             </div>
                         </div>
-                    </li>
+                    </li>#}
 
                     {% for name,datas in blocForum %}
                         <li data-row="{{userConf[ name ]['row']}}" data-col="{{userConf[ name ]['col']}}" data-sizex="1" data-sizey="1" data-id="{{ name }}" >

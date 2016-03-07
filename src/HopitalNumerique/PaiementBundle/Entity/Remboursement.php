@@ -48,6 +48,14 @@ class Remboursement
      */
     protected $region;
 
+    /**
+     * @var \HopitalNumerique\UserBundle\Entity\User
+     *
+     * @ORM\ManyToOne(targetEntity="\HopitalNumerique\UserBundle\Entity\User")
+     * @ORM\JoinColumn(name="referent_id", referencedColumnName="usr_id", nullable=true, onDelete="SET NULL")
+     */
+    private $referent;
+
 
     /**
      * Get id
@@ -146,5 +154,29 @@ class Remboursement
     public function setRegion(\HopitalNumerique\ReferenceBundle\Entity\Reference $region)
     {
         $this->region = $region;
+    }
+
+    /**
+     * Set referent
+     *
+     * @param \HopitalNumerique\UserBundle\Entity\User $referent
+     *
+     * @return Remboursement
+     */
+    public function setReferent(\HopitalNumerique\UserBundle\Entity\User $referent = null)
+    {
+        $this->referent = $referent;
+
+        return $this;
+    }
+
+    /**
+     * Get referent
+     *
+     * @return \HopitalNumerique\UserBundle\Entity\User
+     */
+    public function getReferent()
+    {
+        return $this->referent;
     }
 }

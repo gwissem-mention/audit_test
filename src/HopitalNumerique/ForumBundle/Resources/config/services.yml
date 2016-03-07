@@ -1,3 +1,6 @@
+imports:
+    - { resource: 'services/forms-post.yml' }
+
 parameters:
     hopitalnumerique_forum.manager.subscription.class: HopitalNumerique\ForumBundle\Manager\SubscriptionManager
     hopitalnumerique_forum.manager.post.class: HopitalNumerique\ForumBundle\Manager\PostManager
@@ -83,3 +86,4 @@ services:
         arguments: ["@ccdn_forum_forum.model.post", "@nodevo_mail.manager.mail", "@hopitalnumerique_user.manager.user", "@mailer"]
         tags:
             - { name: 'kernel.event_subscriber' }
+

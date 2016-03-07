@@ -5,6 +5,8 @@ namespace HopitalNumerique\ReferenceBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Criteria;
+use Nodevo\ToolsBundle\Tools\Systeme;
+use Nodevo\ToolsBundle\Traits\ImageTrait;
 
 //Asserts Stuff
 use Symfony\Component\Validator\Constraints as Assert;
@@ -20,6 +22,9 @@ use Nodevo\ToolsBundle\Validator\Constraints as Nodevo;
  */
 class Reference
 {
+    use ImageTrait;
+
+
     /**
      * @var integer ID de Monsieur
      */
@@ -112,6 +117,18 @@ class Reference
     protected $parent = null;
 
     /**
+     * @var string
+     *
+     * @ORM\Column(name="ref_image", type="text", nullable=true, length=255)
+     */
+    protected $image;
+
+    /**
+     * @var \Symfony\Component\HttpFoundation\File\UploadedFile
+     */
+    protected $imageFile;
+
+    /**
      * @ORM\OneToMany(targetEntity="Reference", mappedBy="parent")
      */
     protected $childs;
@@ -132,6 +149,7 @@ class Reference
      * )
      */
     protected $domaines;
+
 
     public function __construct()
     {
@@ -501,5 +519,36 @@ class Reference
     public function getChilds()
     {
         return $this->childs;
+    }
+
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getImageUploadDir()
+    {
+        return 'media'.DIRECTORY_SEPARATOR.'referentiel';
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function imageFileIsValid()
+    {
+        return (null !== $this->imageFile && $this->imageFile->getClientSize() <= Systeme::getFileUploadMaxSize());
+    }
+
+    /**
+     * Retourne l'URL de l'image.
+     *
+     * @return string|null URL
+     */
+    public function getImageUrl()
+    {
+        if (null !== $this->image) {
+            return '/'.str_replace(DIRECTORY_SEPARATOR, '/', $this->getImageUploadDir()).'/'.$this->image;
+        }
+
+        return null;
     }
 }

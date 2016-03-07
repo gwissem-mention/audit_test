@@ -1,17 +1,11 @@
 <?php
-
 namespace Nodevo\MailBundle\Manager;
 
-
+use Nodevo\MailBundle\Entity\Mail;
 use Nodevo\ToolsBundle\Manager\Manager as BaseManager;
 use Doctrine\ORM\EntityManager;
 use Symfony\Component\HttpFoundation\RequestStack;
-use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Security\Core\SecurityContextInterface;
-use FOS\UserBundle\Model\UserInterface;
-
-use Symfony\Component\HttpFoundation\Request;
-
 use HopitalNumerique\ExpertBundle\Entity\ActiviteExpert;
 use HopitalNumerique\ExpertBundle\Entity\CourrielRegistre;
 use HopitalNumerique\ExpertBundle\Manager\ActiviteExpertManager;
@@ -719,8 +713,8 @@ class MailManager extends BaseManager
 
         $from           = array($expediteurMail => $expediteurName );
         $subject        = $this->replaceContent($mail->getObjet(), $resultat->getUser(), $options);
-        
-        $mail = $this->sendMail( $subject, $from, array($destinataire), $content, $this->getMailDomaine() );
+
+        $mail = $this->sendMail( $subject, $from, array($destinataire), $content, $this->getMailDomaine());
 
         $fileName = __ROOT_DIRECTORY__ . '/files/autodiag/' . $resultat->getPdf();
 
@@ -826,7 +820,7 @@ class MailManager extends BaseManager
         $from = array($expediteurMail => $expediteurName );
 
         //return test email
-        return $this->sendMail( $mail->getObjet(), $from, $this->_destinataire, $mail->getBody() );
+        return $this->sendMail($mail->getObjet(), $from, $this->_destinataire, $mail->getBody());
     }
 
     /**
@@ -986,8 +980,18 @@ class MailManager extends BaseManager
         //prepare content
         $body    = $this->replaceContent($mail->getBody(), $user, $options);
         $from    = array($mailExpediteur => $nameExpediteur );
-        $cci     = $this->_expediteurEnCopie ? array_merge( $this->getMailDomaine(), $from ) : $this->getMailDomaine();
-        $cci     = ($mail->getId() === 1 || $mail->getId() === 2) ? false : $cci;
+
+        if ($mail->getId() !== 1 && $mail->getId() !== 2) {
+            $cci     = $this->_expediteurEnCopie ? array_merge( $this->getMailDomaine(), $from ) : array($this->getMailDomaine());
+
+            $regionReferentEmail = $this->getReferentRegionEmailForMailAndDestinataire($mail, $user);
+            if (null !== $regionReferentEmail) {
+                $cci[] = $regionReferentEmail;
+            }
+        } else {
+            $cci = false;
+        }
+
         $subject = $this->replaceContent($mail->getObjet(), $user, $options);
 
         return $this->sendMail( $subject, $from, (null !== $user ? $user->getEmail() : null), $body, $cci, $check );
@@ -1038,7 +1042,7 @@ class MailManager extends BaseManager
      * @param string $from         Expéditeur
      * @param string $destinataire Destinataire
      * @param string $body         Contenu du mail
-     *
+     * @param string|array $bcc Copie(s) cachée(s)
      * @return \Swift_Message
      */
     private function sendMail( $subject, $from, $destinataire = null, $body, $bcc = false, $check = 0 )
@@ -1078,10 +1082,29 @@ class MailManager extends BaseManager
             $mail->setTo($destinataire);
         }
 
-        if( $bcc )
-            $mail->setBcc( $bcc );
+        if ($bcc) {
+            $mail->setBcc($bcc);
+        }
 
-        //return mail
         return $mail;
+    }
+
+    /**
+     * Retourne l'adresse électronique du référent de région.
+     *
+     * @param \Nodevo\MailBundle\Manager\Mail $mail Mail
+     * @param \HopitalNumerique\UserBundle\Entity\User $destinataire Destinataire
+     * @return string|null Adresse du référent
+     */
+    private function getReferentRegionEmailForMailAndDestinataire(Mail $mail, User $destinataire)
+    {
+        if ($mail->isNotificationRegionReferent() && null !== $destinataire->getRegion()) {
+            $regionReferent = $this->_userManager->getRegionReferent($destinataire->getRegion());
+            if (null !== $regionReferent) {
+                return $regionReferent->getEmail();
+            }
+        }
+
+        return null;
     }
 }

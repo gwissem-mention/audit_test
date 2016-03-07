@@ -3,10 +3,8 @@
 {% block stylesheets %}
     {{parent()}}
     {% stylesheets output="compiled/hopitalnumerique-autodiag-outil-edit.css" filter="cssrewrite, ?yui_css"
-        "@fancybox_css"
         "@jquery_toggles_css"
         'bundles/nodevoadmin/css/jquery.nestable.css'
-        "@select2_css"
         'bundles/hopitalnumeriqueautodiag/css/form.css'
     %}
         <link rel="stylesheet" href="{{ asset_url }}" />
@@ -16,7 +14,6 @@
 {% block javascripts %}
     {{parent()}}
     {% javascripts output="compiled/hopitalnumerique-autodiag-outil-edit.js"
-        "@fancybox_js"
         "@tinymce_js"
         'bundles/nodevogestionnairemedia/js/moxiemanager/js/moxman.loader.min.js'
         'bundles/nodevogestionnairemedia/js/MoxieManager.js'
@@ -28,7 +25,6 @@
     {% javascripts output="compiled/hopitalnumerique-autodiag-outil-edit-libjs.js"
         '@nestable_js'
         "@jquery_toggles_js"
-        "@select2_js"
     %}
         <script type="text/javascript" src="{{ asset_url }}"></script>
     {% endjavascripts %}

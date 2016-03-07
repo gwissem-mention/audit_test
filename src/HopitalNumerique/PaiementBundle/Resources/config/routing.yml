@@ -15,6 +15,12 @@ hopitalnumerique_paiement_facture_paye:
     requirements: 
         id : \d+
 
+hopitalnumerique_paiement_facture_cancel:
+    pattern:  /admin/facture/cancel/{id}
+    defaults: { _controller: "HopitalNumeriquePaiementBundle:Facture:cancel" }
+    requirements: 
+        id: \d+
+
 hopitalnumerique_paiement_facture_total:
     pattern:  /admin/facture/total/{id}
     defaults: { _controller: "HopitalNumeriquePaiementBundle:Facture:total" }

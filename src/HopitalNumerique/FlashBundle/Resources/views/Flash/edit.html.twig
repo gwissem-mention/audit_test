@@ -10,8 +10,7 @@
 
 {% block stylesheets %}
     {{parent()}}
-    {% stylesheets output="compiled/hopitalnumerique-flash-flash-edit.css" filter="cssrewrite, ?yui_css" 
-        "@select2_css"
+    {% stylesheets output="compiled/hopitalnumerique-flash-flash-edit.css" filter="cssrewrite, ?yui_css"
         'bundles/hopitalnumeriqueuser/js/nSelect/style.css'
     %}
         <link rel="stylesheet" href="{{ asset_url }}" />
@@ -21,7 +20,6 @@
 {% block javascripts %}
     {{parent()}}
     {% javascripts output="compiled/hopitalnumerique-flash-flash-edit.js"
-        "@select2_js"
         'bundles/hopitalnumeriqueuser/js/nSelect/nSelect.min.js'
         'bundles/hopitalnumeriqueflash/js/script.js'
     %}

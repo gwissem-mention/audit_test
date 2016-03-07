@@ -3,6 +3,8 @@
 namespace HopitalNumerique\RechercheBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Nodevo\ToolsBundle\Tools\Systeme;
+use Nodevo\ToolsBundle\Traits\ImageTrait;
 
 /**
  * ExpBesoin
@@ -12,7 +14,9 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class ExpBesoin
 {
-    
+    use ImageTrait;
+
+
     /**
      * @var integer
      *
@@ -48,6 +52,18 @@ class ExpBesoin
      * @ORM\Column(name="expbr_description", type="text", nullable=true)
      */
     protected $description;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="expb_image", type="text", nullable=true, length=255)
+     */
+    protected $image;
+
+    /**
+     * @var \Symfony\Component\HttpFoundation\File\UploadedFile
+     */
+    protected $imageFile;
 
 
     /**
@@ -199,5 +215,36 @@ class ExpBesoin
     public function getExpBesoinGestion()
     {
         return $this->expBesoinGestion;
+    }
+
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getImageUploadDir()
+    {
+        return 'media'.DIRECTORY_SEPARATOR.'expression-besoin';
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function imageFileIsValid()
+    {
+        return (null !== $this->imageFile && $this->imageFile->getClientSize() <= Systeme::getFileUploadMaxSize());
+    }
+
+    /**
+     * Retourne l'URL de l'image.
+     *
+     * @return string|null URL
+     */
+    public function getImageUrl()
+    {
+        if (null !== $this->image) {
+            return '/'.str_replace(DIRECTORY_SEPARATOR, '/', $this->getImageUploadDir()).'/'.$this->image;
+        }
+
+        return null;
     }
 }

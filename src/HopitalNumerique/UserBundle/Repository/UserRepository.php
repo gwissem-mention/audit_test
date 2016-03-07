@@ -246,8 +246,7 @@ class UserRepository extends EntityRepository
         $qb->select('user')
             ->from('HopitalNumeriqueUserBundle:User', 'user');
 
-            foreach ($roles as $key => $role) 
-            {
+            foreach ($roles as $key => $role) {
                 $qb->orWhere('user.roles LIKE :role' . $key )
                     ->setParameter('role'. $key, '%'.$role.'%');
             }

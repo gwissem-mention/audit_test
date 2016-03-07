@@ -45,6 +45,18 @@
                     {{ form_row(form.recherche) }}
                     {% form_theme form 'HopitalNumeriqueReferenceBundle::form.html.twig' %}
                     {{ form_row(form.parent) }}
+                    
+                    <div class="form-group">
+                        {{ form_label(form.imageFile) }}
+                        <div class="col-md-6">
+                            {{ form_widget(form.imageFile) }}
+                            {%- if reference.hasImage -%}
+                                <img src="{{ reference.imageUrl }}">
+                            {%- endif -%}
+                        </div>
+                        <div class="col-md-3">{{ form_errors(form.imageFile) }}</div>
+                    </div>
+
                     {{ form_row(form.order) }}
                     {% form_theme form 'NodevoAdminBundle::form.html.twig' %}
                     {% if reference.childs|length == 0 %}

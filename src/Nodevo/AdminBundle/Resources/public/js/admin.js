@@ -1,5 +1,7 @@
 $(document).ready(function() {    
     $('form.toValidate').validationEngine();
 
-    $('.fancy-aide').fancybox();
+    $('.fancybox').fancybox();
+
+    $('.select2').select2();
 });

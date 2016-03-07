@@ -13,8 +13,13 @@ services:
         arguments: 
             - "@doctrine.orm.entity_manager"
             - [ "@hopitalnumerique_intervention.manager.intervention_demande", "@hopitalnumerique_reference.manager.reference", "@hopitalnumerique_module.manager.inscription"]
+            - '@hopitalnumerique_paiement.manager.facture_annulee'
         calls:
            - [ setCache, ["@liip_doctrine_cache.ns.main"] ]
+    hopitalnumerique_paiement.manager.facture_annulee:
+        class: 'HopitalNumerique\PaiementBundle\Manager\FactureAnnuleeManager'
+        arguments: 
+            - '@doctrine.orm.entity_manager'
 
     hopitalnumerique_paiement.grid.facture:
         class: %hopitalnumerique_paiement.grid.facture.class%

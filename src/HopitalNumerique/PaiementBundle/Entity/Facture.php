@@ -72,7 +72,14 @@ class Facture
      * @ORM\Column(name="fac_payee", type="boolean", options = {"comment" = "Est ce que la facture est payee"})
      */
     private $payee;
-    
+
+    /**
+     * @var \HopitalNumerique\PaiementBundle\Entity\FactureAnnulee
+     *
+     * @ORM\OneToOne(targetEntity="FactureAnnulee", mappedBy="facture")
+     */
+    protected $factureAnnulee;
+
     /**
      * @ORM\OneToMany(targetEntity="\HopitalNumerique\InterventionBundle\Entity\InterventionDemande", mappedBy="facture", cascade={"persist"})
      */
@@ -82,6 +89,7 @@ class Facture
      * @ORM\OneToMany(targetEntity="\HopitalNumerique\ModuleBundle\Entity\Inscription", mappedBy="facture", cascade={"persist"})
      */
     private $formations;
+
 
     /**
      * Initialisation de l'entitée (valeurs par défaut)
@@ -233,6 +241,30 @@ class Facture
         $this->payee = $payee;
         return $this;
     }
+
+    /**
+     * Set factureAnnulee
+     *
+     * @param \HopitalNumerique\PaiementBundle\Entity\FactureAnnulee $factureAnnulee
+     *
+     * @return Facture
+     */
+    public function setFactureAnnulee(\HopitalNumerique\PaiementBundle\Entity\FactureAnnulee $factureAnnulee = null)
+    {
+        $this->factureAnnulee = $factureAnnulee;
+
+        return $this;
+    }
+
+    /**
+     * Get factureAnnulee
+     *
+     * @return \HopitalNumerique\PaiementBundle\Entity\FactureAnnulee
+     */
+    public function getFactureAnnulee()
+    {
+        return $this->factureAnnulee;
+    }
     
     /**
      * Add intervention
@@ -255,6 +287,19 @@ class Facture
     public function removeIntervention(\HopitalNumerique\InterventionBundle\Entity\InterventionDemande $intervention)
     {
         $this->interventions->removeElement($intervention);
+        $intervention->setFacture(null);
+    }
+
+    /**
+     * Remove all interventions.
+     *
+     * @return \HopitalNumerique\PaiementBundle\Entity\Facture
+     */
+    public function removeInterventions()
+    {
+        foreach ($this->interventions as $intervention) {
+            $this->removeIntervention($intervention);
+        }
     }
 
     /**
@@ -301,6 +346,19 @@ class Facture
     public function removeFormation(\HopitalNumerique\ModuleBundle\Entity\Inscription $formation)
     {
         $this->formations->removeElement($formation);
+        $formation->setFacture(null);
+    }
+
+    /**
+     * Remove all formations.
+     *
+     * @return \HopitalNumerique\PaiementBundle\Entity\Facture
+     */
+    public function removeFormations()
+    {
+        foreach ($this->formations as $formation) {
+            $this->removeFormation($formation);
+        }
     }
 
     /**
@@ -326,6 +384,7 @@ class Facture
         return $this->formations;
     }
 
+
     /**
      * toString.
      *
@@ -334,5 +393,16 @@ class Facture
     public function __toString()
     {
         return $this->name;
+    }
+
+
+    /**
+     * Retourne si la facture a été annulée.
+     *
+     * @return boolean Si annulée
+     */
+    public function hasBeenCanceled()
+    {
+        return (null !== $this->factureAnnulee);
     }
 }

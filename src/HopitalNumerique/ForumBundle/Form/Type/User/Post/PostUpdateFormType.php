@@ -13,9 +13,11 @@
 
 namespace HopitalNumerique\ForumBundle\Form\Type\User\Post;
 
+use HopitalNumerique\ForumBundle\Manager\TopicManager;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
+use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 
 /**
  *
@@ -36,14 +38,28 @@ class PostUpdateFormType extends AbstractType
     protected $postClass;
 
     /**
+     * @var \Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface
+     */
+    private $authorizationChecker;
+
+    /**
+     * @var \HopitalNumerique\ForumBundle\Manager\TopicManager TopicManager
+     */
+    private $topicManager;
+
+
+    /**
      *
      * @access public
      * @param string $postClass
      */
-    public function __construct($postClass)
+    public function __construct($postClass, AuthorizationCheckerInterface $authorizationChecker, TopicManager $topicManager)
     {
         $this->postClass = $postClass;
+        $this->authorizationChecker = $authorizationChecker;
+        $this->topicManager = $topicManager;
     }
+
 
     /**
      *
@@ -53,6 +69,29 @@ class PostUpdateFormType extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
+        $forum = $builder->getData()->getTopic()->getBoard()->getCategory()->getForum();
+
+        if ($this->authorizationChecker->isGranted('ROLE_ADMINISTRATEUR_1')
+            || $this->authorizationChecker->isGranted('ROLE_ADMINISTRATEUR_DE_DOMAINE_106')
+            || $this->authorizationChecker->isGranted('ROLE_ADMINISTRATEUR_DU_DOMAINE_HN_107')) {
+            $builder
+                ->add(
+                    'topic',
+                    'entity',
+                    array(
+                        'class' => 'HopitalNumeriqueForumBundle:Topic',
+                        'choices' => $this->topicManager->findByForum($forum),
+                        'label'              => 'topic.label',
+                        'translation_domain' => 'CCDNForumForumBundle',
+                        'group_by' => 'board.name',
+                        'attr' => array(
+                            'class' => 'validate[required]'
+                        )
+                    )
+                )
+            ;
+        }
+
         $builder
             ->add('body', 'bb_editor',
                 array(

@@ -16,6 +16,7 @@
                 <thead>
                     <tr>
                         <th>Régions</th>
+                        <th>Référent</th>
                         <th width="200px" >Supplément formation</th>
                         <th width="200px" >Forfait repas</th>
                         <th width="300px" >Forfait de gestion administrative</th>
@@ -25,6 +26,16 @@
                     {% for remboursement in remboursements %}
                         <tr>
                             <td>{{remboursement.region.libelle}}</td>
+                            <td>
+                                <div class="input-group">
+                                    <select name="remboursement[{{remboursement.id}}][referent]" class="form-control">
+                                        <option value="">-</option>
+                                        {%- for user in usersPouvantEtreReferent -%}
+                                            <option value="{{ user.id }}"{{ remboursement.referent is not null and user.id == remboursement.referent.id ? ' selected' : '' }}>{{ user.prenomNom }}</option>
+                                        {%- endfor -%}
+                                    </select>
+                                </div>
+                            </td>
                             <td>
                                 <div class="input-group">
                                     <input type="text" class="form-control" name="remboursement[{{remboursement.id}}][supplement]" value="{{remboursement.supplement}}" />

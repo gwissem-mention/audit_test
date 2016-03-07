@@ -11,7 +11,6 @@
 {% block javascripts %}
     {{parent()}}
     {% javascripts output="compiled/nodevo-textedynamique-code-edit.js"
-        "@fancybox_js" 
         "@nestable_js"
         "@jquery_toggles_js"
         "@json_js"
@@ -26,8 +25,7 @@
 
 {% block stylesheets %}
     {{ parent() }}
-    {% stylesheets output="compiled/nodevo-textedynamique-code.css" filter="cssrewrite, ?yui_css" 
-        "@fancybox_css"
+    {% stylesheets output="compiled/nodevo-textedynamique-code.css" filter="cssrewrite, ?yui_css"
         "@jquery_toggles_css"
         'bundles/nodevoadmin/css/jquery.nestable.css'
         'bundles/hopitalnumeriqueautodiag/css/style.css'

@@ -13,22 +13,12 @@
 {% block javascripts %}
     {{parent()}}
     {% javascripts output="compiled/hopitalnumerique-aide-aide-edit.js"
-        "@validationEngine_js"
         "@tinymce_js"
         'bundles/nodevogestionnairemedia/js/moxiemanager/js/moxman.loader.min.js'
         'bundles/nodevogestionnairemedia/js/MoxieManager.js'
     %}
         <script type="text/javascript" src="{{ asset_url }}"></script>
     {% endjavascripts %}
-{% endblock %}
-
-{% block stylesheets %}
-    {{parent()}}
-    {% stylesheets output="compiled/hopitalnumerique-aide-aide-edit.css" filter="cssrewrite, ?yui_css"
-    "@validationEngine_css"
-    %}
-    <link rel="stylesheet" href="{{ asset_url }}" />
-    {% endstylesheets %}
 {% endblock %}
 
 {% block toolbarButton %}

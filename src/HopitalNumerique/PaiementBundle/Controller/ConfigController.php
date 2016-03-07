@@ -16,9 +16,15 @@ class ConfigController extends Controller
     public function indexAction()
     {
         $remboursements = $this->get('hopitalnumerique_paiement.manager.remboursement')->getRemboursementsOrdered();
+        $usersPouvantEtreReferent = $this->container->get('hopitalnumerique_user.manager.user')->findUsersByRoles([
+            'ROLE_ADMINISTRATEUR_1',
+            'ROLE_ADMINISTRATEUR_DE_DOMAINE_106',
+            'ROLE_ADMINISTRATEUR_DU_DOMAINE_HN_107'
+        ]);
 
         return $this->render('HopitalNumeriquePaiementBundle:Config:index.html.twig', array(
-            'remboursements' => $remboursements
+            'remboursements' => $remboursements,
+            'usersPouvantEtreReferent' => $usersPouvantEtreReferent
         ));
     }
 
@@ -40,7 +46,7 @@ class ConfigController extends Controller
         //run on each lines
         foreach($remboursements as $id => $remboursement) {
             $entity = $this->get('hopitalnumerique_paiement.manager.remboursement')->findOneBy( array( 'id' => $id ) );
-            $entity->setIntervention( intval($remboursement['intervention']) );
+            $entity->setReferent($this->container->get('hopitalnumerique_user.manager.user')->findOneById(intval($remboursement['referent'])));
             $entity->setSupplement( trim($remboursement['supplement']) === "" ? NULL : intval($remboursement['supplement']) );
             $entity->setRepas( intval($remboursement['repas']) );
             $entity->setGestion( intval($remboursement['gestion']) );

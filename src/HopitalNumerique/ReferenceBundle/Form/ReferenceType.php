@@ -2,9 +2,15 @@
 
 namespace HopitalNumerique\ReferenceBundle\Form;
 
+use Nodevo\ToolsBundle\Tools\Systeme;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\Form\FormError;
+use Symfony\Component\Form\FormEvent;
+use Symfony\Component\Form\FormEvents;
+use Symfony\Component\Form\FormInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
+use HopitalNumerique\ReferenceBundle\Entity\Reference;
 use HopitalNumerique\ReferenceBundle\Manager\ReferenceManager;
 
 use Doctrine\ORM\EntityRepository;
@@ -35,7 +41,9 @@ class ReferenceType extends AbstractType
         if( $datas->getLock() )
             $attrCode['readonly'] = 'readonly';
         //parent
-        $attrParent = array();
+        $attrParent = array(
+            'class' => 'select2'
+        );
         if( $datas->getLock() )
             $attrParent['disabled'] = 'disabled';
 
@@ -94,11 +102,16 @@ class ReferenceType extends AbstractType
                     return $qb;
                 }
             ))
+            ->add('imageFile', 'file', array(
+                'label' => 'Image',
+                'required' => false
+            ))
             ->add('order', 'number', array(
                 'required' => true, 
                 'label'    => 'Ordre d\'affichage',
                 'attr'     => array('class' => $this->_constraints['order']['class'] )
-            ));
+            ))
+        ;
 
         if(count($datas->getChilds()) === 0)
         {
@@ -114,6 +127,23 @@ class ReferenceType extends AbstractType
                         return $er->getDomainesUserConnectedForForm($connectedUser->getId());
                     }
                 )); 
+        }
+
+        $builder->addEventListener(FormEvents::SUBMIT, function (FormEvent $event) {
+            $this->verifyImage($event->getForm(), $event->getData());
+        });
+    }
+
+    /**
+     * Vérifie la validité de l'image.
+     *
+     * @param \Symfony\Component\Form\FormInterface              $form      Formulaire
+     * @param \HopitalNumerique\ReferenceBundle\Entity\Reference $reference Référence
+     */
+    private function verifyImage(FormInterface $form, Reference $reference)
+    {
+        if (null !== $reference->getImageFile() && !$reference->imageFileIsValid()) {
+            $form->get('imageFile')->addError(new FormError('Veuillez choisir une image inférieure à '.intval(Systeme::getFileUploadMaxSize() / 1024 / 1024).' Mo.'));
         }
     }
 

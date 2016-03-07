@@ -681,6 +681,13 @@ class User extends BaseUser
 
     /* --> */
 
+    /**
+     * @var \Doctrine\Common\Collections\Collection
+     *
+     * @ORM\OneToMany(targetEntity="HopitalNumerique\ModuleBundle\Entity\Inscription", mappedBy="user")
+     */
+    private $inscriptions;
+
 
     /**
      * Constructor

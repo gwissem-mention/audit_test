@@ -39,7 +39,7 @@ class Inscription
     /**
      * @var integer
      *
-     * @ORM\ManyToOne(targetEntity="\HopitalNumerique\UserBundle\Entity\User")
+     * @ORM\ManyToOne(targetEntity="\HopitalNumerique\UserBundle\Entity\User", inversedBy="inscriptions")
      * @ORM\JoinColumn(name="usr_participant", referencedColumnName="usr_id", nullable=true, onDelete="CASCADE")
      * @ORM\OrderBy({"nom" = "ASC", "prenom" = "ASC"})
      *
@@ -110,6 +110,14 @@ class Inscription
      * @ORM\JoinColumn(name="fac_id", referencedColumnName="fac_id", nullable=true, onDelete="SET NULL")
      */
     protected $facture;
+
+    /**
+     * @var \Doctrine\Common\Collections\Collection
+     *
+     * @ORM\ManyToMany(targetEntity="HopitalNumerique\PaiementBundle\Entity\FactureAnnulee", mappedBy="formations")
+     */
+    private $facturesAnnulees;
+
 
     /**
      * Constructor
@@ -397,7 +405,7 @@ class Inscription
      *
      * @param \HopitalNumerique\PaiementBundle\Entity\Facture $facture
      */
-    public function setFacture(\HopitalNumerique\PaiementBundle\Entity\Facture $facture)
+    public function setFacture(\HopitalNumerique\PaiementBundle\Entity\Facture $facture = null)
     {
         $this->facture = $facture;
         return $this;
