@@ -64,7 +64,7 @@ abstract class InterventionDemandeType extends AbstractType
         $this->formInterventionDemandeManager = $formInterventionDemandeManager;
         $this->formUserManager                = $formUserManager;
         $this->formEtablissementManager       = $formEtablissementManager;
-        
+
         $this->utilisateurConnecte = $securityContext->getToken()->getUser();
     }
 

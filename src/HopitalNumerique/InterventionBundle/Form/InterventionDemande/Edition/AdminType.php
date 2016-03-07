@@ -6,6 +6,7 @@
  */
 namespace HopitalNumerique\InterventionBundle\Form\InterventionDemande\Edition;
 
+use HopitalNumerique\UserBundle\Manager\UserManager;
 use Symfony\Component\Form\FormBuilderInterface;
 use HopitalNumerique\InterventionBundle\Form\InterventionDemandeType;
 use Symfony\Component\Security\Core\SecurityContext;
@@ -20,6 +21,11 @@ use HopitalNumerique\InterventionBundle\Manager\Form\EtablissementManager as For
  */
 class AdminType extends InterventionDemandeType
 {
+    /**
+     * @var \HopitalNumerique\UserBundle\Manager\UserManager UserManager
+     */
+    private $userManager;
+
     /**
      * @var \HopitalNumerique\InterventionBundle\Manager\Form\InterventionInitiateurManager Manager Form\InterventionInitiateurManager
      */
@@ -37,9 +43,10 @@ class AdminType extends InterventionDemandeType
      * @param \HopitalNumerique\InterventionBundle\Manager\Form\EtablissementManager $formEtablissementManager Manager Form\Etablissement
      * @return void
      */
-    public function __construct(SecurityContext $securityContext, $validator, InterventionDemandeManager $interventionDemandeManager, FormInterventionDemandeManager $formInterventionDemandeManager, FormInterventionInitiateurManager $formInterventionInitiateurManager, FormUserManager $formUserManager, FormEtablissementManager $formEtablissementManager)
+    public function __construct(SecurityContext $securityContext, $validator, UserManager $userManager, InterventionDemandeManager $interventionDemandeManager, FormInterventionDemandeManager $formInterventionDemandeManager, FormInterventionInitiateurManager $formInterventionInitiateurManager, FormUserManager $formUserManager, FormEtablissementManager $formEtablissementManager)
     {
         parent::__construct($securityContext, $validator, $interventionDemandeManager, $formInterventionDemandeManager, $formUserManager, $formEtablissementManager);
+        $this->userManager = $userManager;
         $this->formInterventionInitiateurManager = $formInterventionInitiateurManager;
     }
 
@@ -104,7 +111,7 @@ class AdminType extends InterventionDemandeType
 
         $builder
             ->add('referent', 'genemu_jqueryselect2_entity', array(
-                'choices'  => $this->formUserManager->getReferentsChoices(),
+                'choices'  => $this->userManager->findUsersByDomaine(1), // Les interventions ne concernent que HN
                 'class'    => 'HopitalNumerique\UserBundle\Entity\User',
                 'label'    => 'Demandeur',
                 'property' => 'appellation',
