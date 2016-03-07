@@ -143,11 +143,16 @@
                     </div>
                     <div class="col-md-8">
                         <select name="transfert-topic" id="transfert-topic" class="form-control">
-                            {% for boardTemp in boards %}
-                                {% if boardTemp.id != topic.board.id %}
-                                    <option value="{{boardTemp.id}}">{{boardTemp.name}}</option>
-                                {% endif %}
-                            {% endfor %}
+                            
+                            {%- for forumCaracteritics in boards -%}
+                                {%- for categoryCaracteritics in forumCaracteritics.categories -%}
+                                    <optgroup label="{{ forumCaracteritics.forum }} - {{ categoryCaracteritics.category }}">
+                                        {%- for board in categoryCaracteritics.boards -%}
+                                            <option value="{{ board.id }}">{{ board }}</option>
+                                        {%- endfor -%}
+                                    </optgroup>
+                                {%- endfor -%}
+                            {%- endfor -%}
                         </select>
                     </div>
 

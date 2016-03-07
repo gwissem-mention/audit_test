@@ -70,7 +70,7 @@ function transfertPost( url ){
         dataType : 'json',
         success  : function( data ){
            loader.finished();
-           window.location.reload();
+           window.location = data.url;
         }
     });
 }
