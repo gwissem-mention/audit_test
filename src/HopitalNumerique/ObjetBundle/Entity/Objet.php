@@ -415,6 +415,7 @@ class Objet implements RoutedItemInterface
         $this->maitriseUsers = array();
     }
 
+
     /**
      * Get id
      *
