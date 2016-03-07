@@ -384,6 +384,11 @@ class Objet implements RoutedItemInterface
      */
     private $communautePratiqueGroupe;
 
+    /**
+     * @ORM\ManyToMany(targetEntity="Contenu", mappedBy="infradocs")
+     */
+    private $infradocContenus;
+
 
     /**
      * Initialisation de l'entitée (valeurs par défaut)
@@ -1970,5 +1975,63 @@ class Objet implements RoutedItemInterface
     public function getSource()
     {
         return $this->source;
+    }
+
+    /**
+     * Add infradocContenus
+     *
+     * @param \HopitalNumerique\ObjetBundle\Entity\Contenu $infradocContenus
+     *
+     * @return Objet
+     */
+    public function addInfradocContenus(\HopitalNumerique\ObjetBundle\Entity\Contenu $infradocContenus)
+    {
+        $this->infradocContenus[] = $infradocContenus;
+
+        return $this;
+    }
+
+    /**
+     * Remove infradocContenus
+     *
+     * @param \HopitalNumerique\ObjetBundle\Entity\Contenu $infradocContenus
+     */
+    public function removeInfradocContenus(\HopitalNumerique\ObjetBundle\Entity\Contenu $infradocContenus)
+    {
+        $this->infradocContenus->removeElement($infradocContenus);
+    }
+
+    /**
+     * Get infradocContenus
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getInfradocContenus()
+    {
+        return $this->infradocContenus;
+    }
+
+
+    /**
+     * @return string
+     */
+    public function __toString()
+    {
+        return $this->titre;
+    }
+
+    /**
+     * Retourne le résumé du résumé (contenu de l'objet).
+     *
+     * @return string
+     */
+    public function getResumeResume()
+    {
+        if (false !== strpos($this->resume, '<!-- pagebreak -->')) {
+            $resumeExplode = explode('<!-- pagebreak -->', $this->resume);
+            return html_entity_decode(strip_tags($resumeExplode[0]), 2 | 0, 'UTF-8');
+        }
+
+        return $this->resume;
     }
 }

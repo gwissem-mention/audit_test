@@ -128,6 +128,18 @@ class Contenu
     protected $listeNotes;
 
     /**
+     * @var \Doctrine\Common\Collections\Collection
+     *
+     * @ORM\ManyToMany(targetEntity="Objet")
+     * @ORM\JoinTable(name="hn_objet_contenu_infradoc",
+     *      joinColumns={ @ORM\JoinColumn(name="con_id", referencedColumnName="con_id")},
+     *      inverseJoinColumns={ @ORM\JoinColumn(name="obj_id", referencedColumnName="obj_id")}
+     * )
+     */
+    private $infradocs;
+
+
+    /**
      * Initialisation de l'entitée (valeurs par défaut)
      */
     public function __construct()
@@ -141,7 +153,9 @@ class Contenu
         $this->nbVue        = 0;
         $this->references   = array();
         $this->glossaires   = array();
+        $this->infradocs = new \Doctrine\Common\Collections\ArrayCollection();
     }
+
 
     /**
      * Get id
@@ -478,5 +492,49 @@ class Contenu
         $this->listeNotes = $listeNotes;
     
         return $this;
+    }
+
+    /**
+     * Add infradoc
+     *
+     * @param \HopitalNumerique\ObjetBundle\Entity\Objet $infradoc
+     *
+     * @return Contenu
+     */
+    public function addInfradoc(\HopitalNumerique\ObjetBundle\Entity\Objet $infradoc)
+    {
+        $this->infradocs[] = $infradoc;
+
+        return $this;
+    }
+
+    /**
+     * Remove infradoc
+     *
+     * @param \HopitalNumerique\ObjetBundle\Entity\Objet $infradoc
+     */
+    public function removeInfradoc(\HopitalNumerique\ObjetBundle\Entity\Objet $infradoc)
+    {
+        $this->infradocs->removeElement($infradoc);
+    }
+
+    /**
+     * Remove all infradocs.
+     */
+    public function removeInfradocs()
+    {
+        $this->infradocs = new \Doctrine\Common\Collections\ArrayCollection();
+
+        return $this;
+    }
+
+    /**
+     * Get infradocs
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getInfradocs()
+    {
+        return $this->infradocs;
     }
 }

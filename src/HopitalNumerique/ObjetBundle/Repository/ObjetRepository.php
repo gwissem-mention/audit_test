@@ -385,4 +385,27 @@ class ObjetRepository extends EntityRepository
         
         return $qb;
     }
+
+    /**
+     * Retourne les infradocs d'un domaine.
+     *
+     * @param \HopitalNumerique\DomaineBundle\Entity\Domaine $domaine Domaine
+     * @return array<\HopitalNumerique\ObjetBundle\Entity\Objet> Infradocs
+     */
+    public function getInfradocs(Domaine $domaine)
+    {
+        $qb = $this->createQueryBuilder('objet');
+
+        $qb
+            ->innerJoin('objet.domaines', 'domaine', Expr\Join::WITH, $qb->expr()->eq('domaine.id', ':domaine'))
+            ->where($qb->expr()->eq('objet.isInfraDoc', ':infradoc'))
+            ->orderBy('objet.titre', 'ASC')
+            ->setParameters([
+                'domaine' => $domaine,
+                'infradoc' => true
+            ])
+        ;
+
+        return $qb->getQuery()->getResult();
+    }
 }

@@ -805,7 +805,16 @@ class ObjetManager extends BaseManager
         return $this->getRepository()->getLastArticleForCategorie($categorie, $domaine);
     }
 
-
+    /**
+     * Retourne les infradocs d'un domaine.
+     *
+     * @param \HopitalNumerique\DomaineBundle\Entity\Domaine $domaine Domaine
+     * @return array<\HopitalNumerique\ObjetBundle\Entity\Objet> Infradocs
+     */
+    public function getInfradocs(Domaine $domaine)
+    {
+        return $this->getRepository()->getInfradocs($domaine);
+    }
 
 
 

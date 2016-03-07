@@ -1,6 +1,7 @@
 <?php
 namespace HopitalNumerique\ObjetBundle\Form;
 
+use HopitalNumerique\ObjetBundle\Manager\ObjetManager;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
@@ -9,13 +10,22 @@ class ContenuType extends AbstractType
 {
     private $_constraints = array();
 
-    public function __construct($manager, $validator)
+    /**
+     * @var \HopitalNumerique\ObjetBundle\Manager\ObjetManager ObjetManager
+     */
+    private $objetManager;
+
+
+    public function __construct($manager, $validator, ObjetManager $objetManager)
     {
         $this->_constraints = $manager->getConstraints( $validator );
+        $this->objetManager = $objetManager;
     }
 
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
+        $domaine = $options['domaine'];
+
         $builder
             ->add('titre', 'text', array(
                 'max_length' => $this->_constraints['titre']['maxlength'],
@@ -36,14 +46,30 @@ class ContenuType extends AbstractType
             ))
             ->add('modified', 'hidden', array(
                 'mapped' => false
-            ));
+            ))
+            ->add('infradocs', 'entity', [
+                'class' => 'HopitalNumeriqueObjetBundle:Objet',
+                'choices' => $this->objetManager->getInfradocs($domaine),
+                'label' => 'Infradocs',
+                'multiple' => true,
+                'attr' => [
+                    'class' => 'select2'
+                ]
+            ])
+        ;
     }
 
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
-        $resolver->setDefaults(array(
-            'data_class' => 'HopitalNumerique\ObjetBundle\Entity\Contenu'
-        ));
+        $resolver
+            ->setDefaults(array(
+                'data_class' => 'HopitalNumerique\ObjetBundle\Entity\Contenu'
+            ))
+            ->setRequired(['domaine'])
+            ->setAllowedTypes([
+                'domaine' => 'HopitalNumerique\DomaineBundle\Entity\Domaine'
+            ])
+        ;
     }
 
     public function getName()
