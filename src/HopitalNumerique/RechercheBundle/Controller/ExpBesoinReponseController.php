@@ -110,6 +110,38 @@ class ExpBesoinReponseController extends Controller
         return new Response('{"success":true}', 200);   
     }
 
+    /**
+     * Édite la réponse (appel AJAX).
+     *
+     * @param \Symfony\Component\HttpFoundation\Request                  $request          Request
+     * @param \HopitalNumerique\RechercheBundle\Entity\ExpBesoinReponses $expBesoinReponse Réponse
+     */
+    public function ajaxEditAction(Request $request, ExpBesoinReponses $expBesoinReponse)
+    {
+        $form = $this->createForm('hopitalnumerique_recherche_expbesoinreponse', $expBesoinReponse);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted()) {
+            if (!$form->isValid()) {
+                foreach ($form->getErrors(true) as $field) {
+                    foreach ($field->getErrors() as $fieldError) {
+                        $this->addFlash('danger', $fieldError->getMessage());
+                    }
+                }
+            } else {
+                $this->container->get('hopitalnumerique_recherche.manager.expbesoinreponses')->save($expBesoinReponse);
+                $this->addFlash('success', 'Image enregistrée.');
+            }
+
+            return $this->redirectToRoute('hopital_numerique_expbesoin_index', ['id' => $expBesoinReponse->getQuestion()->getExpBesoinGestion()->getId()]);
+        }
+
+        return $this->render('HopitalNumeriqueRechercheBundle:ExpBesoinReponse:ajaxEdit.html.twig', [
+            'form' => $form->createView(),
+            'expBesoinReponse' => $expBesoinReponse
+        ]);
+    }
+
 
     /**
      * Edit libellé d'une réponse

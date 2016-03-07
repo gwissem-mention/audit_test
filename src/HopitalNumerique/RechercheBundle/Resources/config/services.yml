@@ -74,3 +74,9 @@ services:
         arguments: ['@router']
         tags:
             - { name: 'form.type', alias: 'hopitalnumerique_recherche_expbesoin' }
+
+    hopitalnumerique_recherche.form.expbesoinreponse:
+        class: 'HopitalNumerique\RechercheBundle\Form\ExpBesoinReponseType'
+        arguments: ['@router']
+        tags:
+            - { name: 'form.type', alias: 'hopitalnumerique_recherche_expbesoinreponse' }

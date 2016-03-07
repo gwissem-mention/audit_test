@@ -42,6 +42,9 @@ trait ImageTrait
      */
     public function setImage($image)
     {
+        if ('' == $image) {
+            $this->deleteImage();
+        }
         $this->image = $image;
         return $this;
     }

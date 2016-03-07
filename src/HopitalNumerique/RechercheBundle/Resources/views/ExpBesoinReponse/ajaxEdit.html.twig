@@ -1,0 +1,11 @@
+{{ form_start(form) -}}
+    {{- form_widget(form) -}}
+    <button type="submit" class="btn btn-success">Enregistrer</button>
+    {%- if expBesoinReponse.hasImage -%}
+        <button type="submit" class="btn btn-danger" onclick="$('#hopitalnumerique_recherche_expbesoinreponse_image').val('');">Supprimer</button>
+    {%- endif -%}
+{{- form_end(form) -}}
+
+{%- if expBesoinReponse.hasImage -%}
+    <br><img src="{{ expBesoinReponse.imageUrl }}">
+{%- endif -%}

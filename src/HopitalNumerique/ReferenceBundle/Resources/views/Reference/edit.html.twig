@@ -49,9 +49,18 @@
                     <div class="form-group">
                         {{ form_label(form.imageFile) }}
                         <div class="col-md-6">
-                            {{ form_widget(form.imageFile) }}
+                            <div class="input-group">
+                                {{ form_widget(form.imageFile) }}
+                                {%- if reference.hasImage -%}
+                                    <span class="input-group-btn">
+                                        <button type="button" class="btn btn-danger" onclick="$('#hopitalnumerique_reference_reference_image').val('');$('#reference-image').remove();">Supprimer</button>
+                                    </span>
+                                {%- endif -%}
+                            </div>
                             {%- if reference.hasImage -%}
-                                <img src="{{ reference.imageUrl }}">
+                                <div id="reference-image">
+                                    <img src="{{ reference.imageUrl }}">
+                                </div>
                             {%- endif -%}
                         </div>
                         <div class="col-md-3">{{ form_errors(form.imageFile) }}</div>

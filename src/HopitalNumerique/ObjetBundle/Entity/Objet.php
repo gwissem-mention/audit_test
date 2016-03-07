@@ -85,7 +85,7 @@ class Objet implements RoutedItemInterface
 
     /**
      * @var string
-     * 
+     *
      * @Gedmo\Versioned
      * @ORM\Column(name="obj_synthese", type="text", nullable=true, options = {"comment" = "Synthèse de l objet"})
      */
@@ -93,7 +93,7 @@ class Objet implements RoutedItemInterface
 
     /**
      * @var string
-     * 
+     *
      * @Assert\NotBlank(message="Le résumé ne peut pas être vide.")
      * @Nodevo\Javascript(class="validate[required]")
      * @Gedmo\Versioned

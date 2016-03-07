@@ -177,6 +177,12 @@ hopitalnumerique_expbesoin_reponse_edit:
     requirements: 
         id : \d+
 
+hopitalnumerique_expbesoin_reponse_edit_ajax:
+    pattern:  /admin/aide-expression-besoin/question/ajax-edit/{id}
+    defaults: { _controller: "HopitalNumeriqueRechercheBundle:ExpBesoinReponse:ajaxEdit" }
+    requirements: 
+        id : \d+
+
 hopitalnumerique_expbesoin_reponse_edit_libelle:
     pattern:  /admin/aide-expression-besoin/question/edit-libelle/{id}.{_format}
     defaults: { _controller: "HopitalNumeriqueRechercheBundle:ExpBesoinReponse:editLibelle",  _format: json }
