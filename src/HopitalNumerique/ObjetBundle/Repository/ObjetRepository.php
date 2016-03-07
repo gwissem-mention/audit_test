@@ -97,12 +97,17 @@ class ObjetRepository extends EntityRepository
      */
     public function getObjetsForRSS(Domaine $domaine)
     {
+        $aujourdhui = new \DateTime();
+        $aujourdhui->setTime(0, 0, 0);
+
         $qb = $this->_em->createQueryBuilder();
         $qb->select('obj')
             ->from('HopitalNumeriqueObjetBundle:Objet', 'obj')
             ->innerJoin('obj.domaines', 'domaine', Expr\Join::WITH, 'domaine.id = :domaine')
+            ->leftJoin('obj.roles', 'role')
             ->where('obj.etat = :idEtat')
-            ->leftJoin('obj.types','refTypes')
+            ->andWhere($qb->expr()->isNull('role.id'))
+            ->leftJoin('obj.types', 'refTypes')
             ->andWhere(
                 $qb->expr()->orx(
                     $qb->expr()->andX(
@@ -112,13 +117,17 @@ class ObjetRepository extends EntityRepository
                     $qb->expr()->eq('refTypes.code', ':code_objet')
                 )
             )
+            ->andWhere($qb->expr()->orX($qb->expr()->isNull('obj.dateDebutPublication'), $qb->expr()->lte('obj.dateDebutPublication', ':aujourdhui')))
+            ->andWhere($qb->expr()->orX($qb->expr()->isNull('obj.dateFinPublication'), $qb->expr()->gte('obj.dateFinPublication', ':aujourdhui')))
             ->setParameters(array(
                 'domaine' => $domaine,
                 'idEtat'      => 3,
                 'code_artcle' => 'CATEGORIE_ARTICLE',
-                'code_objet'  => 'CATEGORIE_OBJET'
+                'code_objet'  => 'CATEGORIE_OBJET',
+                'aujourdhui' => $aujourdhui
             ))
-            ->orderBy('obj.dateCreation', 'DESC');
+            ->orderBy('obj.dateCreation', 'DESC')
+        ;
         
         return $qb;
     }
