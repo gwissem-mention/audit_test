@@ -25,6 +25,7 @@
 #recherche-par-parcours .bandeau .bloc-gauche .parcours .parcours-liens .etape:hover > .bloc-etape .icone{width: 9px; height: 10px; float: right;margin:4px 0 0;background: transparent url('../../img/chevron-blanc.png')  no-repeat bottom right;}
 #recherche-par-parcours .bandeau .bloc-gauche .parcours .parcours-liens .etape .bloc-etape p{ color:#5C5C5C; float:left;margin:0 0 0 10px; font-size: 13px;}
 #recherche-par-parcours .bandeau .bloc-gauche .parcours .parcours-liens .etape .bloc-etape .icone{width: 9px; height: 10px; float: right;margin:4px 0 0;background: transparent url('../../img/chevron.png')  no-repeat bottom right;}
+#recherche-par-parcours .bandeau .bloc-gauche .parcours .parcours-liens .etape .bloc-etape img{margin: -5px 0px 0px -10px;}
 
 /* -- Bloc droit -- */
 /* Mode non connecté */
