@@ -384,7 +384,7 @@ class Inscription
      *
      * @param \HopitalNumerique\ReferenceBundle\Entity\Reference $etatRemboursement
      */
-    public function setEtatRemboursement(\HopitalNumerique\ReferenceBundle\Entity\Reference $etatRemboursement)
+    public function setEtatRemboursement(\HopitalNumerique\ReferenceBundle\Entity\Reference $etatRemboursement = null)
     {
         $this->etatRemboursement = $etatRemboursement;
         return $this;
