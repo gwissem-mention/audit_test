@@ -283,11 +283,11 @@ abstract class DemandesAbstractGrid extends Grid implements GridInterface
     public static function renderCellInitiateur($value, $row)
     {
         if ($row->getField('interventionInitiateurId') == InterventionInitiateur::getInterventionInitiateurCmsiId()) {
-            echo '<span class="fa fa-user" title="Initié par CMSI"></span>';
+            return '<span class="fa fa-user" title="Initié par CMSI"></span>';
         } elseif ($row->getField('interventionInitiateurId') == InterventionInitiateur::getInterventionInitiateurEtablissementId()) {
-            echo '<span class="fa fa-home" title="Initié par ES"></span>';
+            return '<span class="fa fa-home" title="Initié par ES"></span>';
         } elseif ($row->getField('interventionInitiateurId') == InterventionInitiateur::getInterventionInitiateurAnapId()) {
-            echo '<span class="fa fa-briefcase" title="Initié par ANAP"></span>';
+            return '<span class="fa fa-briefcase" title="Initié par ANAP"></span>';
         }
 
         return '';

@@ -35,8 +35,7 @@ class EvaluationController extends Controller
     {
         $utilisateurConnecte = $this->get('security.context')->getToken()->getUser();
     
-        if ($this->container->get('hopitalnumerique_intervention.manager.intervention_evaluation')->utilisateurPeutEvaluer($interventionDemande, $utilisateurConnecte))
-        {
+        if ($this->container->get('hopitalnumerique_intervention.manager.intervention_evaluation')->utilisateurPeutEvaluer($interventionDemande, $utilisateurConnecte)) {
             $questionnaire = $this->get('hopitalnumerique_questionnaire.manager.questionnaire')->findOneById(InterventionEvaluation::getEvaluationQuestionnaireId());
     
             return $this->render('HopitalNumeriqueInterventionBundle:Evaluation/Form:nouveau.html.twig', array(
