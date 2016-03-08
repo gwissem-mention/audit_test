@@ -167,6 +167,7 @@ class PublicationController extends Controller
 
         //on récupère le contenu
         $contenu = $this->get('hopitalnumerique_objet.manager.contenu')->findOneBy( array( 'id' => $idc ) );
+        $contenuObjets = $this->getProductionsAssocies($contenu->getObjets());
 
         $prefix  = $this->get('hopitalnumerique_objet.manager.contenu')->getPrefix($contenu);
 
@@ -293,6 +294,7 @@ class PublicationController extends Controller
             'contenus'         => $contenus,
             'types'            => $types,
             'contenu'          => $contenu,
+            'contenuObjets' => $contenuObjets,
             'breadCrumbsArray' => $breadCrumbsArray,
             'prefix'           => $prefix,
             'productions'      => array(),

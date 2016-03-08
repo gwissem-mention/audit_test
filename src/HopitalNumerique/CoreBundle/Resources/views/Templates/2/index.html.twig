@@ -264,7 +264,7 @@
                     </div>
                 </div>
             </div>
-            <div class="block-home-menu forum col-md-3 col-sm-6 col-xs-12">
+            {#<div class="block-home-menu forum col-md-3 col-sm-6 col-xs-12">
                 <div class="col-md-12 no-padding" style="background:url({{asset('bundles/hopitalnumeriquecore/img/03-bloc-FORUM.jpg')}}) no-repeat top center;-webkit-background-size:cover;-moz-background-size:cover;-o-background-size:cover;background-size:cover;">
                     <a href="{{ path('ccdn_forum_user_category_index', {'forumName' : forumName}) }}" class="img-link"></a>
                     <div class="block-bottom">
@@ -273,8 +273,8 @@
                         <p><img src="{{asset('bundles/hopitalnumeriquecore/img/picto-forum.png')}}" alt="Forum"/></p>
                     </div>
                 </div>
-            </div>
- {#           <div class="block-home-menu forum col-md-3 col-sm-6 col-xs-12">
+            </div>#}
+            <div class="block-home-menu forum col-md-3 col-sm-6 col-xs-12">
                 <div class="col-md-12 no-padding" style="background:url({{asset('bundles/hopitalnumeriquecore/img/03-bloc-CP.jpg')}}) no-repeat top center;-webkit-background-size:cover;-moz-background-size:cover;-o-background-size:cover;background-size:cover;">
                     <a href="{{ app.user is not null and app.user.inscritCommunautePratique ? path('hopitalnumerique_communautepratique_accueil_index') : path('hopital_numerique_publication_publication_article', { categorie:'article', id:1000, alias:'la-communaute-de-pratiques' }) }}" class="img-link"></a>
                     <div class="block-bottom">
@@ -283,7 +283,7 @@
                         <p><img src="{{asset('bundles/hopitalnumeriquecore/img/picto-communaute-de-pratiques.png')}}" alt="Communauté de pratiques"/></p>
                     </div>
                 </div>
-            </div> #}
+            </div>
             <div class="block-home-menu experts col-md-3 col-sm-6 col-xs-12">
                 <div class="col-md-12 no-padding" style="background:url({{asset('bundles/hopitalnumeriquecore/img/bloc-expert.jpg')}}) no-repeat top center;-webkit-background-size:cover;-moz-background-size:cover;-o-background-size:cover;background-size:cover;">
                     <a href="{{path('hopitalnumerique_expert_front_expert')}}" class="img-link"></a>

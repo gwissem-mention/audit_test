@@ -193,6 +193,14 @@ class FactureManager extends BaseManager
         $factureAnnulee = $this->factureAnnuleeManager->createByFacture($facture);
         $this->save($factureAnnulee);
 
+        foreach ($facture->getInterventions() as $intervention) {
+            $intervention->setRemboursementEtat(null);
+        }
+
+        foreach ($facture->getFormations() as $formation) {
+            $formation->setEtatRemboursement(null);
+        }
+
         $facture->removeInterventions();
         $facture->removeFormations();
         $this->save($facture);

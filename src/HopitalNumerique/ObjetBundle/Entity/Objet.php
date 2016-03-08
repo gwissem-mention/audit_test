@@ -2022,6 +2022,22 @@ class Objet implements RoutedItemInterface
     }
 
     /**
+     * Retourne les libellés des types.
+     *
+     * @return array<string> Libellés
+     */
+    public function getTypeLabels()
+    {
+        $typeLabels = [];
+
+        foreach ($this->types as $type) {
+            $typeLabels[] = $type->getLibelle();
+        }
+
+        return $typeLabels;
+    }
+
+    /**
      * Retourne le résumé du résumé (contenu de l'objet).
      *
      * @return string

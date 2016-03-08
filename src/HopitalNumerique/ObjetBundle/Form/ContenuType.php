@@ -40,24 +40,26 @@ class ContenuType extends AbstractType
                 'attr'       => array('class' => $this->_constraints['alias']['class'] )
             ))
             ->add('contenu', 'textarea', array(
-                'required' => true, 
+                'required' => true,
                 'label'    => 'Contenu',
                 'attr'     => array('class' => $this->_constraints['contenu']['class'] )
             ))
             ->add('modified', 'hidden', array(
                 'mapped' => false
             ))
-            ->add('infradocs', 'entity', [
-                'class' => 'HopitalNumeriqueObjetBundle:Objet',
-                'choices' => $this->objetManager->getInfradocs($domaine),
-                'label' => 'Infradocs',
+            ->add('objets', 'choice', [
+                'mapped' => false,
+                'choices' => $this->objetManager->getObjetsAndContenuForFormTypeChoices(),
+                'label' => 'Productions liées',
                 'multiple' => true,
+                'data' => $builder->getData()->getObjets()->toArray(),
                 'attr' => [
                     'class' => 'select2'
                 ]
             ])
         ;
     }
+
 
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
