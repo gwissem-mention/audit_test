@@ -89,21 +89,35 @@
     #publication #resultats #pointsdurs .wrapper-results .results .fa-refresh{ color:#3da20b; }
 
     /* Productions */
-    #publication #resultats #productions{padding:0; }
+    #publication #resultats #productions,
+    #publication #resultats #infradocs {padding:0; }
     /*#publication #resultats #productions h3{ color: #d60030; font-size: 12px; text-transform: uppercase; margin: 0 0 10px 0; font-weight: bold }*/
-    #publication #resultats #productions h3 {display: block; margin-bottom:5px;background-image: url('../img/panel.png');background-repeat: no-repeat;cursor: pointer; height: 25px}
-    #publication #resultats #productions h3.open{background-position: right -38px;}
-    #publication #resultats #productions h3.closed{background-position: right -5px; }
-    #publication #resultats #productions .wrapper-results{ padding:0 0; position: relative; display: block;}
-    #publication #resultats #productions .wrapper-results .background-rose{width: 85px; height: 4px; position: absolute; top: 0; left: 0;}
-    #publication #resultats #productions .wrapper-results .results {padding:20px;}
-    #publication #resultats #productions .wrapper-results .results h4{clear: both; margin-top: 0}
-    #publication #resultats #productions .wrapper-results .results h4 a{color:#070005; font-size: 18px; font-weight: bold}
-    #publication #resultats #productions .wrapper-results .results h4 img.niveau{vertical-align: top; margin-bottom: 6px; }
-    #publication #resultats #productions .wrapper-results .results h5{color:#d60030; font-size: 13px; font-weight: normal; text-transform: uppercase; margin-bottom: 5px}
-    #publication #resultats #productions .wrapper-results .results a.synthese{font-size: 11px; color:#161616; background: url('../img/synthese.png') no-repeat right center; padding-right:25px; margin-top:10px; display: block; height: 18px; text-align: right}
-    #publication #resultats #productions .wrapper-results .results p{font-size: 13px; color:#070707; }
-    #publication #resultats #productions .wrapper-results .results .fa-refresh{ color:#3da20b; }
+    #publication #resultats #productions h3,
+    #publication #resultats #infradocs h3 {display: block; margin-bottom:5px;background-image: url('../img/panel.png');background-repeat: no-repeat;cursor: pointer; height: 25px}
+    #publication #resultats #productions h3.open,
+    #publication #resultats #infradocs h3.open {background-position: right -38px;}
+    #publication #resultats #productions h3.closed,
+    #publication #resultats #infradocs h3.closed {background-position: right -5px; }
+    #publication #resultats #productions .wrapper-results,
+    #publication #resultats #infradocs .wrapper-results { padding:0 0; position: relative; display: block;}
+    #publication #resultats #productions .wrapper-results .background-rose,
+    #publication #resultats #infradocs .wrapper-results .background-rose {width: 85px; height: 4px; position: absolute; top: 0; left: 0;}
+    #publication #resultats #productions .wrapper-results .results,
+    #publication #resultats #infradocs .wrapper-results .results {padding:20px;}
+    #publication #resultats #productions .wrapper-results .results h4,
+    #publication #resultats #infradocs .wrapper-results .results h4 {clear: both; margin-top: 0}
+    #publication #resultats #productions .wrapper-results .results h4 a,
+    #publication #resultats #infradocs .wrapper-results .results h4 a {color:#070005; font-size: 18px; font-weight: bold}
+    #publication #resultats #productions .wrapper-results .results h4 img.niveau,
+    #publication #resultats #infradocs .wrapper-results .results h4 img.niveau {vertical-align: top; margin-bottom: 6px; }
+    #publication #resultats #productions .wrapper-results .results h5,
+    #publication #resultats #infradocs .wrapper-results .results h5 {color:#d60030; font-size: 13px; font-weight: normal; text-transform: uppercase; margin-bottom: 5px}
+    #publication #resultats #productions .wrapper-results .results a.synthese,
+    #publication #resultats #infradocs .wrapper-results .results a.synthese {font-size: 11px; color:#161616; background: url('../img/synthese.png') no-repeat right center; padding-right:25px; margin-top:10px; display: block; height: 18px; text-align: right}
+    #publication #resultats #productions .wrapper-results .results p,
+    #publication #resultats #infradocs .wrapper-results .results p {font-size: 13px; color:#070707; }
+    #publication #resultats #productions .wrapper-results .results .fa-refresh,
+    #publication #resultats #infradocs .wrapper-results .results .fa-refresh { color:#3da20b; }
 
     /* Bloc résumé */
     #publication #publication-resume h1{font-size: 24px; font-weight: bold; margin:2px 0 20px 0; border-bottom: 1px solid #D5D5D5; padding-bottom: 5px;}

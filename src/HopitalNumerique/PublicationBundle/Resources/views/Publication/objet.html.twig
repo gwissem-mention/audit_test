@@ -146,46 +146,8 @@ window.open ("report/showReport.action?"+request,null,"location=no,menubar=0,res
                 <div class="clearfix"></div>
             {% endif %}
             <div class="col-md-12" id="publication-resume">
-                
-                {%- if contenu.infradocs|length > 0 -%}
-                    <div class="row">
-                        <div class="col-md-6">
-                            {{contenu.contenu|parsePublication(contenu.glossaires)|raw}}
-                        </div>
-                        <div class="col-md-6">
-                            <div class="row">
-                                <div class="col-md-12">
-                                    <h2 class="noCollapse">Infradocs associés</h2>
-                                    <div class="wrapper-results">
-                                        <div class="background-rose"></div>
 
-                                        <div class="results">
-                                            {% for infradoc in contenu.infradocs %}
-                                                <div class="row">
-                                                    <div class="col-md-10">
-                                                        <h5 style="font-size:13px;">{% if infradoc.source is not null and infradoc.source != "" %}<span class="text-muted"> ({{infradoc.source}})</span>{% endif %}</h5>
-                                                    </div>
-                                                    <div class="col-md-12">
-                                                        <h4 style="font-size:14px;line-height:24px;margin:0px 0 5px 0">
-                                                            <a href="{{path('hopital_numerique_publication_publication_objet', {'id':infradoc.id, 'alias': infradoc.alias})}}">{{infradoc.titre}}</a>
-                                                        </h4>
-                                                    </div>
-                                                    <div class="col-md-12">
-                                                        <p>{{ infradoc.resumeResume|parsePublication|raw }}</p>
-                                                    </div>
-                                                </div>
-                                            {% endfor %}
-                                            <div class="clearfix"></div>
-                                        </div>
-
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                {%- else -%}
-                    {{contenu.contenu|parsePublication(contenu.glossaires)|raw}}
-                {%- endif -%}
+                {{contenu.contenu|parsePublication(contenu.glossaires)|raw}}
 
             </div>
         {# Cas Objet #}
@@ -393,7 +355,6 @@ window.open ("report/showReport.action?"+request,null,"location=no,menubar=0,res
         {% endif %}
 
         {% if (app.user and objet.notes) and types != "Point dur" %}
-
             <div id="bloc-notation-objet" class="col-md-5">
                 <div class="wrapper">
                     <input type="hidden" id="note-sauvegarde-url" value="{{path('hopital_numerique_publication_note_add' ) }}">
@@ -497,6 +458,36 @@ window.open ("report/showReport.action?"+request,null,"location=no,menubar=0,res
         {% endif %}
 
         <div class="col-md-12" id="resultats">
+
+            {%- if contenu is defined and contenu.infradocs|length > 0 -%}
+                <div class="col-md-12" id="infradocs">
+                    <h3 class="open">Infradocs associés</h3>
+                    <div class="wrapper-results">
+                        <div class="background-rose"></div>
+
+                        <div class="results">
+                            {% for infradoc in contenu.infradocs %}
+                                <div class="row">
+                                    <div class="col-md-10">
+                                        <h5 style="font-size:13px;">{% if infradoc.source is not null and infradoc.source != "" %}<span class="text-muted"> ({{infradoc.source}})</span>{% endif %}</h5>
+                                    </div>
+                                    <div class="col-md-12">
+                                        <h4 style="font-size:14px;line-height:24px;margin:0px 0 5px 0">
+                                            <a href="{{path('hopital_numerique_publication_publication_objet', {'id':infradoc.id, 'alias': infradoc.alias})}}">{{infradoc.titre}}</a>
+                                        </h4>
+                                    </div>
+                                    <div class="col-md-12">
+                                        <p>{{ infradoc.resumeResume|parsePublication|raw }}</p>
+                                    </div>
+                                </div>
+                            {% endfor %}
+                            <div class="clearfix"></div>
+                        </div>
+
+                    </div>
+                </div>
+            {%- endif -%}
+
             {% set count = 0 %}
             {% for objet in objets if objet['categ'] == "point-dur" %}
                 {% set count = count + 1 %}

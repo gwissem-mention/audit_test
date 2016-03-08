@@ -49,9 +49,14 @@ $(document).ready(function() {
         $(this).toggleClass('open closed');
         $('#resultats #productions .results').slideToggle();
     });
+    $('#resultats #infradocs h3').click(function(){
+        $(this).toggleClass('open closed');
+        $('#resultats #infradocs .results').slideToggle();
+    });
 
     $('#resultats #pointsdurs h3').click();
     $('#resultats #productions h3').click();
+    $('#resultats #infradocs h3').click();
 
     //Style WYSIWYG custom : titre pliable
     $('h2 .titre_depliable').click(function(){
