@@ -46,7 +46,7 @@
             {% for reponse in expBesoin.reponses %}
                 <li class="dd-item dd3-item" data-id="{{reponse.id}}" id="reponse-{{reponse.id}}" >
                     <div class="dd-handle dd3-handle"></div>
-                    <div class="dd3-content" style="padding:1px 50px 5px 40px;">
+                    <div class="dd3-content" style="padding:1px 70px 5px 40px;">
                         <div class="col-sm-5 row" style="margin-top:4px">
                             <span title="{{reponse.libelle}}">{{reponse.libelle|truncate(25,'...')}}</span>
                         </div>
@@ -77,6 +77,9 @@
                     <div class="dd3-actions">
                         <div onclick="deleteQuestion( {{reponse.id}}, '{{path('hopitalnumerique_expbesoin_reponse_delete', {'id':reponse.id})}}' );" class="pull-right dd3-trash"><i class="fa fa-trash-o"></i></div>
                         <div onclick="saveReponse( {{reponse.id}}, '{{path('hopitalnumerique_expbesoin_reponse_edit', {'id':reponse.id})}}' );" class="pull-right dd3-valid"><i class="fa fa-check"></i></div>
+                        <div class="pull-right dd3-url">
+                            <a href="{{path('hopitalnumerique_expbesoin_reponse_edit_ajax', { 'id':reponse.id })}}" class="fancybox fancybox.ajax" title="Choisir une image"></a>
+                        </div>
                         <div onclick="editLibelleReponse( {{reponse.id}}, '{{path('hopitalnumerique_expbesoin_reponse_edit_libelle', {'id':reponse.id})}}' );" class="pull-right dd3-edit question-edit"><i class="fa fa-edit"></i></div>
                         <div id="reference-reponse-{{reponse.id}}" class="pull-right dd3-cog {% if reponse.autreQuestion %}hide{% endif %}"><a href="{{path('hopitalnumerique_expbesoin_reponse_reference', {'id':reponse.id})}}" class="fancy fancybox.ajax"></a></div>
                     </div>

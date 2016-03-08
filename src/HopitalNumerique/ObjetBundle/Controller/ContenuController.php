@@ -208,8 +208,11 @@ class ContenuController extends Controller
      */
     private function renderForm( $formName, $contenu, $view )
     {
-        //Création du formulaire via le service
-        $form = $this->createForm( $formName, $contenu);
+        $formOptions = [];
+        if ('hopitalnumerique_objet_contenu' === $formName) {
+            $formOptions['domaine'] = $this->get('hopitalnumerique_domaine.manager.domaine')->findOneById($this->get('request')->getSession()->get('domaineId'));
+        }
+        $form = $this->createForm($formName, $contenu, $formOptions);
 
         $request = $this->get('request');
         
@@ -220,6 +223,7 @@ class ContenuController extends Controller
             $alias   = $request->request->get('alias');
             $content = $request->request->get('contenu');
             $notify  = $request->request->get('notify');
+            $infradocs = $this->container->get('hopitalnumerique_objet.manager.objet')->findBy(['id' => $request->request->get('infradocs')]);
 
             //error si le titre est vide
             if($titre == '')
@@ -231,6 +235,11 @@ class ContenuController extends Controller
 
             if( $notify === "1")
                 $contenu->setDateModification( new \DateTime() );
+
+            $contenu->removeInfradocs();
+            foreach ($infradocs as $infradoc) {
+                $contenu->addInfradoc($infradoc);
+            }
 
             //on régénère l'alias à chaque fois
             $tool = ( $alias == '' || $alias == 'nouveau-contenu' ) ? new Chaine( $titre ) : new Chaine( $alias );

@@ -18,9 +18,6 @@
     <div class="col-md-8 col-sm-7 aide-liens">
         <div id="question-precedente" onclick="retourDerniereQuestion({{expBesoin.id}});" class="btn btn-link pull-left" title="Question précédente" style="margin-right:5px;"><i class="fa fa-reply"></i></div>
         <label style="margin-top:5px;">
-            {%- if expBesoin.hasImage -%}
-                <img src="{{ expBesoin.imageUrl }}" height="22"> &nbsp;
-            {% endif -%}
             {{expBesoin.libelle}}
         </label>
         {% for reponse in expBesoin.reponses %}

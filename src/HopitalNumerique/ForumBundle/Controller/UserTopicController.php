@@ -2,6 +2,7 @@
 namespace HopitalNumerique\ForumBundle\Controller;
 
 use CCDNForum\ForumBundle\Controller\UserTopicController as UserTopicControllerCCDN;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use HopitalNumerique\ForumBundle\Entity\Board;
@@ -42,14 +43,7 @@ class UserTopicController extends UserTopicControllerCCDN
         }
 
         //Récupération de l'ensemble des boards pour le déplacement des posts
-        $boards = array();
-        foreach ($forum->getCategories() as $tempCategory)
-        {
-            foreach ($tempCategory->getBoards() as $tempBoard)
-            {
-                $boards[] = $tempBoard;
-            }
-        }
+        $boards = $this->container->get('hopitalnumerique_forum.manager.board')->findAllClassifiedByCategoryClassifiedByForum();
 
         //get ponderations
         $domainesDuForum = $this->container->get('hopitalnumerique_domaine.manager.domaine')->getDomaineForForumId($forum->getId());
@@ -63,6 +57,7 @@ class UserTopicController extends UserTopicControllerCCDN
 
         $subscriberCount = $this->getSubscriptionModel()->countSubscriptionsForTopicById($topicId);
         $this->getTopicModel()->incrementViewCounter($topic);
+
         $response = $this->renderResponse('CCDNForumForumBundle:User:Topic/show.html.', array(
             'crumbs'             => $this->getCrumbs()->addUserTopicShow($forum, $topic), 
             'forum'              => $forum, 
@@ -174,7 +169,10 @@ class UserTopicController extends UserTopicControllerCCDN
         $boardOrigine->setCachedPostCount($stats['postCount']);
         $this->container->get('hopitalnumerique_forum.manager.board')->save( $boardOrigine );
 
-        return new Response('{"success":true}', 200);
+        return new JsonResponse([
+            'success' => true,
+            'url' => $this->getRouter()->generate('ccdn_forum_user_topic_show', ['topicId' => $topicId, 'forumName' => $topic->getBoard()->getCategory()->getForum()->getName()])
+        ], 200);
     }
 
     /**

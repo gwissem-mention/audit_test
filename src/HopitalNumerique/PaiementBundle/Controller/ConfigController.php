@@ -18,6 +18,7 @@ class ConfigController extends Controller
         $remboursements = $this->get('hopitalnumerique_paiement.manager.remboursement')->getRemboursementsOrdered();
         $usersPouvantEtreReferent = $this->container->get('hopitalnumerique_user.manager.user')->findUsersByRoles([
             'ROLE_ADMINISTRATEUR_1',
+            'ROLE_ANAP_MEMBRES_2',
             'ROLE_ADMINISTRATEUR_DE_DOMAINE_106',
             'ROLE_ADMINISTRATEUR_DU_DOMAINE_HN_107'
         ]);

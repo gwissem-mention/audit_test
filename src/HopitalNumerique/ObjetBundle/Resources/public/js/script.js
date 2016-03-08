@@ -148,6 +148,7 @@ function selectChapitre( id, url )
             $('#edition-infradox .results').html( data );
             $('#edition-infradox .infradoc').val( id );
             loader.finished();
+            $('.select2').select2();
         }
     });
 
@@ -175,7 +176,8 @@ function saveContenu()
             titre   : $('#hopitalnumerique_objet_contenu_titre').val(),
             alias   : $('#hopitalnumerique_objet_contenu_alias').val(),
             notify  : $('#hopitalnumerique_objet_contenu_modified').val(),
-            contenu : tinyMCE.get('hopitalnumerique_objet_contenu_contenu').getContent()
+            contenu : tinyMCE.get('hopitalnumerique_objet_contenu_contenu').getContent(),
+            infradocs: $('#hopitalnumerique_objet_contenu_infradocs').val()
         },
         type     : 'POST',
         dataType : 'json',

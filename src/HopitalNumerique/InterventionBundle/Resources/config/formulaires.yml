@@ -40,5 +40,5 @@ services:
         class: "%hopitalnumerique_intervention.type.intervention_demande.edition.admin.class%"
         tags:
             - { name: form.type, alias: hopitalnumerique_interventionbundle_interventiondemande_edition_admin }
-        arguments: ["@security.context", "@validator", "@hopitalnumerique_intervention.manager.intervention_demande", "@hopitalnumerique_intervention.manager.form_intervention_demande", "@hopitalnumerique_intervention.manager.form_intervention_initiateur", "@hopitalnumerique_intervention.manager.form_user", "@hopitalnumerique_intervention.manager.form_etablissement"]
+        arguments: ["@security.context", "@validator", '@hopitalnumerique_user.manager.user', "@hopitalnumerique_intervention.manager.intervention_demande", "@hopitalnumerique_intervention.manager.form_intervention_demande", "@hopitalnumerique_intervention.manager.form_intervention_initiateur", "@hopitalnumerique_intervention.manager.form_user", "@hopitalnumerique_intervention.manager.form_etablissement"]
     #-->

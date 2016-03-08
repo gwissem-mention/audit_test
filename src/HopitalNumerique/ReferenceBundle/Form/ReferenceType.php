@@ -102,6 +102,9 @@ class ReferenceType extends AbstractType
                     return $qb;
                 }
             ))
+            ->add('image', 'hidden', [
+                'required' => false
+            ])
             ->add('imageFile', 'file', array(
                 'label' => 'Image',
                 'required' => false

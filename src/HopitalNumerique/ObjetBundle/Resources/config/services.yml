@@ -61,7 +61,7 @@ services:
 
     hopitalnumerique_objet.form.contenu:
         class: %hopitalnumerique_objet.form.contenu.class%
-        arguments: ["@hopitalnumerique_objet.manager.contenu", "@validator"]
+        arguments: ["@hopitalnumerique_objet.manager.contenu", "@validator", '@hopitalnumerique_objet.manager.objet']
         tags:
             - { name: form.type, alias: hopitalnumerique_objet_contenu }
 

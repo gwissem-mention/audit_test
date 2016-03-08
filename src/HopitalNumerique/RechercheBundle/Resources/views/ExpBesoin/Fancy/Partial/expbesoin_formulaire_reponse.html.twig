@@ -2,6 +2,9 @@
     <div class="col-md-12 row reponse">
         <div class="bloc-reponse">
             <p class="mode-normal">
+                {%- if reponse.hasImage -%}
+                    <img src="{{ reponse.imageUrl }}" height="22"> &nbsp;
+                {% endif -%}
                 {{reponse.libelle}}
             </p>
             <div class="icone"></div>

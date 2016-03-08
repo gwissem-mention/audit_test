@@ -1,6 +1,3 @@
-imports:
-    - { resource: 'services/forms-post.yml' }
-
 parameters:
     hopitalnumerique_forum.manager.subscription.class: HopitalNumerique\ForumBundle\Manager\SubscriptionManager
     hopitalnumerique_forum.manager.post.class: HopitalNumerique\ForumBundle\Manager\PostManager

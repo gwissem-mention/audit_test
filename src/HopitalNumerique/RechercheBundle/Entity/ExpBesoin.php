@@ -65,7 +65,6 @@ class ExpBesoin
      */
     protected $imageFile;
 
-
     /**
      * Liste des inscriptions liées au module
      *
@@ -75,6 +74,15 @@ class ExpBesoin
      * @ORM\OrderBy({"order" = "ASC"})
      */
     protected $reponses;
+
+
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->reponses = new \Doctrine\Common\Collections\ArrayCollection();
+    }
 
 
     /**
@@ -162,13 +170,6 @@ class ExpBesoin
     public function getReponses()
     {
         return $this->reponses;
-    }
-    /**
-     * Constructor
-     */
-    public function __construct()
-    {
-        $this->reponses = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
