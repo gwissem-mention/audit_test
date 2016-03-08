@@ -105,7 +105,7 @@ class Contenu
 
     /**
      * @var integer
-     * 
+     *
      * @ORM\Column(name="con_nb_vue", type="integer", options = {"comment" = "Nombre de fois où le contenu à été vue"})     
      */
     protected $nbVue;
@@ -128,15 +128,11 @@ class Contenu
     protected $listeNotes;
 
     /**
-     * @var \Doctrine\Common\Collections\Collection
+     * @var array
      *
-     * @ORM\ManyToMany(targetEntity="Objet")
-     * @ORM\JoinTable(name="hn_objet_contenu_infradoc",
-     *      joinColumns={ @ORM\JoinColumn(name="con_id", referencedColumnName="con_id")},
-     *      inverseJoinColumns={ @ORM\JoinColumn(name="obj_id", referencedColumnName="obj_id")}
-     * )
+     * @ORM\Column(name="con_objets", type="array", nullable=true)
      */
-    private $infradocs;
+    private $objets;
 
 
     /**
@@ -153,7 +149,7 @@ class Contenu
         $this->nbVue        = 0;
         $this->references   = array();
         $this->glossaires   = array();
-        $this->infradocs = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->objets = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
 
@@ -495,46 +491,46 @@ class Contenu
     }
 
     /**
-     * Add infradoc
+     * Add objet
      *
-     * @param \HopitalNumerique\ObjetBundle\Entity\Objet $infradoc
+     * @param \HopitalNumerique\ObjetBundle\Entity\Objet $objet
      *
      * @return Contenu
      */
-    public function addInfradoc(\HopitalNumerique\ObjetBundle\Entity\Objet $infradoc)
+    public function addObjet($objet)
     {
-        $this->infradocs[] = $infradoc;
+        $this->objets[] = $objet;
 
         return $this;
     }
 
     /**
-     * Remove infradoc
+     * Remove objet
      *
-     * @param \HopitalNumerique\ObjetBundle\Entity\Objet $infradoc
+     * @param \HopitalNumerique\ObjetBundle\Entity\Objet $objet
      */
-    public function removeInfradoc(\HopitalNumerique\ObjetBundle\Entity\Objet $infradoc)
+    public function removeObjet($objet)
     {
-        $this->infradocs->removeElement($infradoc);
+        $this->objets->removeElement($objet);
     }
 
     /**
-     * Remove all infradocs.
+     * Remove all objets.
      */
-    public function removeInfradocs()
+    public function removeObjets()
     {
-        $this->infradocs = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->objets = new \Doctrine\Common\Collections\ArrayCollection();
 
         return $this;
     }
 
     /**
-     * Get infradocs
+     * Get objets
      *
      * @return \Doctrine\Common\Collections\Collection
      */
-    public function getInfradocs()
+    public function getObjets()
     {
-        return $this->infradocs;
+        return $this->objets;
     }
 }

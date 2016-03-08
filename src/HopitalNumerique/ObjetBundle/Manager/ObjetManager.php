@@ -596,6 +596,21 @@ class ObjetManager extends BaseManager
     }
 
     /**
+     * @return array<string, string>
+     */
+    public function getObjetsAndContenuForFormTypeChoices()
+    {
+        $objetsAndContenuForFormTypeChoices = [];
+        $objetsAndContenuArbo = $this->getObjetsAndContenuArbo();
+
+        foreach ($objetsAndContenuArbo as $objetOrContenu) {
+            $objetsAndContenuForFormTypeChoices[$objetOrContenu['value']] = $objetOrContenu['text'];
+        }
+
+        return $objetsAndContenuForFormTypeChoices;
+    }
+
+    /**
      * Récupération du nombre de vue total de toutes les publications
      *
      * @return int

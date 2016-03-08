@@ -459,25 +459,31 @@ window.open ("report/showReport.action?"+request,null,"location=no,menubar=0,res
 
         <div class="col-md-12" id="resultats">
 
-            {%- if contenu is defined and contenu.infradocs|length > 0 -%}
+            {%- if contenuObjets is defined and contenuObjets|length > 0 -%}
                 <div class="col-md-12" id="infradocs">
                     <h3 class="open">Infradocs associés</h3>
                     <div class="wrapper-results">
                         <div class="background-rose"></div>
 
                         <div class="results">
-                            {% for infradoc in contenu.infradocs %}
+                            {% for infradoc in contenuObjets %}
                                 <div class="row">
-                                    {%- if infradoc.types|length > 0 -%}
-                                        <div class="col-md-12"><h5>{{ infradoc.typeLabels|join(' ♦ ') }}</h5></div>
+                                    {%- if infradoc.type != '' -%}
+                                        <div class="col-md-12"><h5>{{ infradoc.type }}</h5></div>
                                     {%- endif -%}
                                     <div class="col-md-12">
                                         <h4 style="font-size:14px;line-height:24px;margin:0px 0 5px 0">
-                                            <a href="{{path('hopital_numerique_publication_publication_objet', {'id':infradoc.id, 'alias': infradoc.alias})}}">{{infradoc.titre}}</a>
+
+                                            {% if infradoc.objet %}
+                                                <a href="{{path('hopital_numerique_publication_publication_objet', {'id':infradoc.id, 'alias': infradoc.alias})}}">{{infradoc.titre}}</a>
+                                            {% else %}
+                                                <a href="{{path('hopital_numerique_publication_publication_contenu', {'id':infradoc.id, 'alias': infradoc.alias, 'idc':infradoc.idc, 'aliasc': infradoc.aliasc})}}">{{infradoc.titre}}</a><br />
+                                            {% endif %}
+
                                         </h4>
                                     </div>
                                     <div class="col-md-12">
-                                        <p>{{ infradoc.resumeResume|parsePublication|raw }}</p>
+                                        <p>{{ infradoc.resume|parsePublication|raw }}</p>
                                     </div>
                                 </div>
                             {% endfor %}
