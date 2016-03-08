@@ -984,9 +984,11 @@ class MailManager extends BaseManager
         if ($mail->getId() !== 1 && $mail->getId() !== 2) {
             $cci     = $this->_expediteurEnCopie ? array_merge( $this->getMailDomaine(), $from ) : array($this->getMailDomaine());
 
-            $regionReferentEmail = $this->getReferentRegionEmailForMailAndDestinataire($mail, $user);
-            if (null !== $regionReferentEmail) {
-                $cci[] = $regionReferentEmail;
+            if (null !== $user && $user instanceof User) {
+                $regionReferentEmail = $this->getReferentRegionEmailForMailAndDestinataire($mail, $user);
+                if (null !== $regionReferentEmail) {
+                    $cci[] = $regionReferentEmail;
+                }
             }
         } else {
             $cci = false;
