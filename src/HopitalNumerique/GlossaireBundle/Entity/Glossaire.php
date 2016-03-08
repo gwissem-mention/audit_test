@@ -85,7 +85,6 @@ class Glossaire
         $this->sensitive   = false;
         $this->intitule    = null;
         $this->description = null;
-        $this->etat        = 3;
     }
 
     /**
