@@ -47,24 +47,16 @@ class DemandesGrid extends DemandesAbstractGrid
         $colonneEvaluation = new Column\TextColumn('evaluationEtatId', 'Éval.');
         $colonneEvaluation->setAlign('center');
         $colonneEvaluation->manipulateRenderCell(
-            function($value, \APY\DataGridBundle\Grid\Row $row, \Symfony\Component\Routing\Router $router)
-            {
-                if (intval($row->getField('nombreDemandesPrincipales')) == 0)
-                {
-                    if ($row->getField('evaluationEtatId') == InterventionEvaluationEtat::getInterventionEvaluationEtatAEvaluerId())
-                    {
-                        return '<a class="btn btn-warning" title="Évaluer la demande" href="'.$router->generate('hopital_numerique_intervention_evaluation_nouveau', array('interventionDemande' => $row->getField('id'))).'"><span class="glyphicon glyphicon-edit"></span></a>';
+            function ($value, \APY\DataGridBundle\Grid\Row $row, \Symfony\Component\Routing\Router $router) {
+                if (intval($row->getField('nombreDemandesPrincipales')) == 0) {
+                    if ($row->getField('evaluationEtatId') == InterventionEvaluationEtat::getInterventionEvaluationEtatAEvaluerId()) {
+                        return '<a class="btn btn-warning" title="Évaluer la demande" href="'.$router->generate('hopital_numerique_intervention_evaluation_nouveau', array('interventionDemande' => $row->getField('id'))).'"><span class="fa fa-edit"></span></a>';
+                    } else if ($row->getField('evaluationEtatId') == InterventionEvaluationEtat::getInterventionEvaluationEtatEvalueId()) {
+                        return '<a class="btn btn-success" title="Voir l\'évaluation" href="'.$router->generate('hopital_numerique_intervention_evaluation_voir', array('interventionDemande' => $row->getField('id'))).'"><span class="fa fa-check"></span></a>';
                     }
-                    else if ($row->getField('evaluationEtatId') == InterventionEvaluationEtat::getInterventionEvaluationEtatEvalueId())
-                    {
-                        return '<a class="btn btn-success" title="Voir l\'évaluation" href="'.$router->generate('hopital_numerique_intervention_evaluation_voir', array('interventionDemande' => $row->getField('id'))).'"><span class="glyphicon glyphicon-check"></span></a>';
-                    }
-                }
-                else
-                {
-                    if ($row->getField('evaluationEtatId') == InterventionEvaluationEtat::getInterventionEvaluationEtatEvalueId())
-                    {
-                        return '<button disabled class="btn btn-success"><span class="glyphicon glyphicon-check"></span></button>';
+                } else {
+                    if ($row->getField('evaluationEtatId') == InterventionEvaluationEtat::getInterventionEvaluationEtatEvalueId()) {
+                        return '<button disabled class="btn btn-success"><span class="fa fa-check"></span></button>';
                     }
                 }
                 return '';

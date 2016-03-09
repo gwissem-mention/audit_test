@@ -3,10 +3,10 @@
     {{ form_start(form) }}
         
         <div class="form-group">
-            <div class="col-md-1">
+            <div class="col-md-2">
                 <label class="control-label">Titre <span style="color:red;font-size:10px" title="Ce champ est requis">*</span></label>
             </div>
-            <div class="col-md-5 titre-contenu">
+            <div class="col-md-4 titre-contenu">
                 {{ form_widget(form.titre) }}
             </div>
             <div class="col-md-1">
@@ -36,8 +36,8 @@
         </div>
 
         <div class="row">
-            {{ form_label(form.objets) }}
-            <div class="col-md-9">
+            <div class="col-md-2">Productions liées :</div>
+            <div class="col-md-10">
                 {{ form_widget(form.objets) }}
             </div>
         </div>

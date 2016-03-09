@@ -304,9 +304,9 @@ function {{ grid.hash }}_markAll(select)
     <span class="grid_boolean_{{ row.getField(column.id)|default('0') }}" >{{ row.getField(column.id)|default('0') }}</span>
 {% endblock grid_column_boolean_cell %}
 
-{% block grid_column_text_cell %}
+{% block grid_column_usernameSimulated_cell %}
     {{ row.getField(column.id)|raw }}
-{% endblock grid_column_text_cell %}
+{% endblock %}
 
 {# Block grid : génère toute la structure du grid #}
 {% block grid %}

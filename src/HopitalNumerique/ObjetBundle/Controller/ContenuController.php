@@ -225,9 +225,11 @@ class ContenuController extends Controller
             $notify  = $request->request->get('notify');
 
             $objets = $this->get('request')->request->get('objets');
-            $contenu->removeObjets();
-            foreach ($objets as $objet) {
-                $contenu->addObjet($objet);
+            if ('' != $objets) {
+                $contenu->removeObjets();
+                foreach ($objets as $objet) {
+                    $contenu->addObjet($objet);
+                }
             }
 
             //error si le titre est vide
