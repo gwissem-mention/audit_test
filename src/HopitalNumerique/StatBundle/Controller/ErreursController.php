@@ -20,13 +20,14 @@ class ErreursController extends Controller
             $domaines = $this->get('hopitalnumerique_domaine.manager.domaine')->findBy(array(), array('nom' => 'ASC'));
 
             foreach ($domaines as $domaineExistant) {
-                foreach ($resultats['urls'] as $categsUrl) {
+                foreach ($resultats['urls'] as $categorieNom => $categsUrl) {
                     //Chaque catégorie des url (Publication, Infradoc, Article ...)
-                    foreach ($categsUrl as $urls) {
+                    foreach ($categsUrl as $objetId => $urls) {
                         foreach ($urls as $keyObjetOrContenu => $objetOrContenu) {
                             //Parcourt du tableau des url des categs
-                            foreach ($objetOrContenu as $objetId => $url) {
+                            foreach ($objetOrContenu as $url) {
                                 $objet  = $this->get('hopitalnumerique_objet.manager.objet')->findOneBy( array( 'id' => $objetId ) );
+
                                 if ($objet != null) {
                                     $domainesObjet = $objet->getDomaines();
 
@@ -54,13 +55,14 @@ class ErreursController extends Controller
                                                 $isOk = false;
                                             }
 
-                                            $this->get('hopitalnumerique_forum.service.logger.cronlogger')->addLog('Url ' . $url . ($isOk ? ' valide' : ' non valide.'));
+                                            $this->get('hopitalnumerique_forum.service.logger.cronlogger')->addLog('Url ' . $url . ($isOk ? ' valide' : ' non valide.').' - code '.$httpCode);
 
                                             curl_close($handle);
 
                                             //Recherche si une entité existe déjà pour cette url
                                             $errorUrl = $this->get('hopitalnumerique_stat.manager.errorurl')->existeErrorByUrl($url);
                                             $errorUrl->setOk($isOk);
+                                            $errorUrl->setCode($httpCode);
 
                                             $this->get('hopitalnumerique_stat.manager.errorurl')->save($errorUrl);
                                         }
@@ -310,7 +312,6 @@ class ErreursController extends Controller
             $matchesURL = $matchesURLTemp[0];
             foreach ($matchesURL as $matcheURL)
             {
-
                 if(!array_key_exists($idObjet, $urls['URL']))
                 {
                     $urls['URL'][$idObjet] = array(

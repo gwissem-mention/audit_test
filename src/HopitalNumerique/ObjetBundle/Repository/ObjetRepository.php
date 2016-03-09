@@ -272,7 +272,8 @@ class ObjetRepository extends EntityRepository
         $qb = $this->_em->createQueryBuilder();
         $qb->select('obj')
             ->from('HopitalNumeriqueObjetBundle:Objet', 'obj')
-            ->leftJoin('obj.contenus','contenus');
+            ->leftJoin('obj.contenus','contenus')
+        ;
 
             if(!is_null($dateDebut))
             {

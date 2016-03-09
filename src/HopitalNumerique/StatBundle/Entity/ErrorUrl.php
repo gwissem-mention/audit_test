@@ -24,7 +24,7 @@ class ErrorUrl
     /**
      * @var string
      *
-     * @ORM\Column(name="sturl_url", type="string", length=255)
+     * @ORM\Column(name="sturl_url", type="string", length=1024)
      */
     private $url;
 
@@ -34,6 +34,13 @@ class ErrorUrl
      * @ORM\Column(name="sturl_ok", type="boolean")
      */
     private $ok;
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="sturl_code", type="smallint", nullable=true)
+     */
+    private $code;
 
     /**
      * @var \DateTime
@@ -97,6 +104,29 @@ class ErrorUrl
     public function getOk()
     {
         return $this->ok;
+    }
+
+    /**
+     * Set code
+     *
+     * @param integer $code
+     * @return ErrorUrl
+     */
+    public function setCode($code)
+    {
+        $this->code = $code;
+
+        return $this;
+    }
+
+    /**
+     * Get code
+     *
+     * @return integer
+     */
+    public function getCode()
+    {
+        return $this->code;
     }
 
     /**
