@@ -25,6 +25,18 @@ class ContenuType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $domaine = $options['domaine'];
+        $objetsOptions = [
+            'mapped' => false,
+            'choices' => $this->objetManager->getObjetsAndContenuForFormTypeChoices(),
+            'label' => 'Productions liées',
+            'multiple' => true,
+            'attr' => [
+                'class' => 'select2'
+            ]
+        ];
+        if (null !== $builder->getData()->getObjets()) {
+            $objetsOptions['data'] = $builder->getData()->getObjets()->toArray();
+        }
 
         $builder
             ->add('titre', 'text', array(
@@ -47,16 +59,7 @@ class ContenuType extends AbstractType
             ->add('modified', 'hidden', array(
                 'mapped' => false
             ))
-            ->add('objets', 'choice', [
-                'mapped' => false,
-                'choices' => $this->objetManager->getObjetsAndContenuForFormTypeChoices(),
-                'label' => 'Productions liées',
-                'multiple' => true,
-                'data' => $builder->getData()->getObjets()->toArray(),
-                'attr' => [
-                    'class' => 'select2'
-                ]
-            ])
+            ->add('objets', 'choice', $objetsOptions)
         ;
     }
 
