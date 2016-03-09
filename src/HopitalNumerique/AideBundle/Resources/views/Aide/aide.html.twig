@@ -2,8 +2,14 @@
     <div class="col-sm-12">
         <div class="panel panel-midnightblue">
             <div class="panel-heading">
-                <h4>Route de la page : {{ aide is not null ? aide.route : route}}</h4>
-
+                <h4>
+                    Route de la page :
+                    {% if aide is not null -%}
+                        <a href="{{ path('hopitalnumerique_aide_aide_edit', { 'id':aide.id }) }}">{{ aide.route }}</a>
+                    {%- else -%}
+                        {{ route }}
+                    {%- endif -%}
+                </h4>
             </div>
 
             <div class="panel-body" >
