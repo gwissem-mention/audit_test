@@ -7,8 +7,6 @@ services:
     hopitalnumerique_reference.manager.reference:
         class: "%hopitalnumerique_reference.manager.reference.class%"
         arguments: ["@doctrine.orm.entity_manager", "@session", "@hopitalnumerique_user.manager.user"]
-        calls:
-           - [ setCache, [ "@liip_doctrine_cache.ns.main" ] ]
 
     hopitalnumerique_reference.grid.reference:
         class: "%hopitalnumerique_reference.grid.reference.class%"

@@ -12,8 +12,6 @@ services:
     nodevo_role.manager.role:
         class: %nodevo_role.manager.role.class%
         arguments: ["@doctrine.orm.entity_manager"]
-        calls:
-            - [ setCache, ["@liip_doctrine_cache.ns.main"] ]
 
     nodevo_role.grid.role:
         class: %nodevo_role.grid.role.class%

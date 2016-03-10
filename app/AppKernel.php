@@ -20,7 +20,6 @@ class AppKernel extends Kernel
             new FOS\UserBundle\FOSUserBundle(),
             new Knp\Bundle\MenuBundle\KnpMenuBundle(),
             new Knp\Bundle\SnappyBundle\KnpSnappyBundle(),
-            new Liip\DoctrineCacheBundle\LiipDoctrineCacheBundle(),
             new APY\DataGridBundle\APYDataGridBundle(),
             new Genemu\Bundle\FormBundle\GenemuFormBundle(),
             new WhiteOctober\PagerfantaBundle\WhiteOctoberPagerfantaBundle(),

@@ -11,8 +11,6 @@ services:
     nodevo_contact.manager.contact:
         class: "%nodevo_contact.manager.contact.class%"
         arguments: ["@doctrine.orm.entity_manager", "%nodevo_contact.options%"]
-        calls:
-            - [ setCache, ["@liip_doctrine_cache.ns.main"] ]
     #--Type
     nodevo_contact.form.type.contact:
         class: "%nodevo_contact.form.type.contact%"

@@ -12,27 +12,19 @@ services:
     hopitalnumerique_recherche_parcours.manager.recherche_parcours:
         class: %hopitalnumerique_recherche_parcours.manager.recherche_parcours.class%
         arguments: ["@doctrine.orm.entity_manager"]
-        calls:
-           - [ setCache, ["@liip_doctrine_cache.ns.main"] ]
     #RechercheParcours Détails
     hopitalnumerique_recherche_parcours.manager.recherche_parcours_details:
         class: %hopitalnumerique_recherche_parcours.manager.recherche_parcours_details.class%
         arguments: ["@doctrine.orm.entity_manager"]
-        calls:
-           - [ setCache, ["@liip_doctrine_cache.ns.main"] ]
     #RechercheParcours Détails
     hopitalnumerique_recherche_parcours.manager.matrise_user:
         class: %hopitalnumerique_recherche_parcours.manager.matrise_user.class%
         arguments: ["@doctrine.orm.entity_manager"]
-        calls:
-           - [ setCache, ["@liip_doctrine_cache.ns.main"] ]
 
     #gestionnaire
     hopitalnumerique_rechercheparcours.manager.rechercheparcoursgestion:
         class: %hopitalnumerique_rechercheparcours.manager.rechercheparcoursgestion.class%
         arguments: ["@doctrine.orm.entity_manager", "@hopitalnumerique_user.manager.user"]
-        calls:
-           - [ setCache, ["@liip_doctrine_cache.ns.main"] ]
 
     hopitalnumerique_rechercheparcours.grid.rechercheparcoursgestion:
         class: %hopitalnumerique_rechercheparcours.grid.rechercheparcoursgestion.class%

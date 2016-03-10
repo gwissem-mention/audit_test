@@ -99,12 +99,6 @@ swiftmailer:
     password:  "%mailer_password%"
     spool:     { type: memory }
 
-# Cache Doctrine
-liip_doctrine_cache:
-    namespaces:
-        main:
-            type: apc
-
 # Gestion des users via FOSUserBundle
 fos_user:
     db_driver: orm

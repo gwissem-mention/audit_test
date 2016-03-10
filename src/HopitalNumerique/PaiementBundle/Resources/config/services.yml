@@ -14,8 +14,6 @@ services:
             - "@doctrine.orm.entity_manager"
             - [ "@hopitalnumerique_intervention.manager.intervention_demande", "@hopitalnumerique_reference.manager.reference", "@hopitalnumerique_module.manager.inscription"]
             - '@hopitalnumerique_paiement.manager.facture_annulee'
-        calls:
-           - [ setCache, ["@liip_doctrine_cache.ns.main"] ]
     hopitalnumerique_paiement.manager.facture_annulee:
         class: 'HopitalNumerique\PaiementBundle\Manager\FactureAnnuleeManager'
         arguments: 
@@ -29,5 +27,3 @@ services:
     hopitalnumerique_paiement.manager.remboursement:
         class: %hopitalnumerique_paiement.manager.remboursement.class%
         arguments: ["@doctrine.orm.entity_manager", '@hopitalnumerique_intervention.dependency_injection.intervention.forfait_transport']
-        calls:
-           - [ setCache, ["@liip_doctrine_cache.ns.main"] ]

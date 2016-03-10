@@ -42,8 +42,6 @@ services:
     hopitalnumerique_user.manager.user:
         class: %hopitalnumerique_user.manager.user.class%
         arguments: ["@doctrine.orm.entity_manager", "@security.context" , "@hopitalnumerique_questionnaire.manager.reponse",  "@hopitalnumerique_user.manager.refus_candidature", "@hopitalnumerique_domaine.manager.domaine", '@hopitalnumerique_paiement.manager.remboursement']
-        calls:
-            - [ setCache, ["@liip_doctrine_cache.ns.main"] ]
     #--Type
     hopitalnumerique_user.form.type.user:
         class: %hopitalnumerique_user.form.type.user%
@@ -78,8 +76,6 @@ services:
     hopitalnumerique_user.manager.contractualisation:
         class: %hopitalnumerique_user.manager.contractualisation.class%
         arguments: ["@doctrine.orm.entity_manager"]
-        calls:
-           - [ setCache, ["@liip_doctrine_cache.ns.main"] ]
     #--Grid
     hopitalnumerique_user.grid.contractualisation:
         class: %hopitalnumerique_user.grid.contractualisation.class%
@@ -101,8 +97,6 @@ services:
     hopitalnumerique_user.manager.refus_candidature:
         class: %hopitalnumerique_user.manager.refus_candidature.class%
         arguments: ["@doctrine.orm.entity_manager"]
-        calls:
-           - [ setCache, ["@liip_doctrine_cache.ns.main"] ]
     #--Grid
     hopitalnumerique_user.grid.refuscandidature:
         class: %hopitalnumerique_user.grid.refuscandidature.class%
@@ -117,14 +111,10 @@ services:
     hopitalnumerique_user.manager.connaissance_ambassadeur:
         class: %hopitalnumerique_user.manager.connaissance_ambassadeur.class%
         arguments: ["@doctrine.orm.entity_manager"]
-        calls:
-           - [ setCache, ["@liip_doctrine_cache.ns.main"] ]
     #--Manager
     hopitalnumerique_user.manager.connaissance_ambassadeur_si:
         class: %hopitalnumerique_user.manager.connaissance_ambassadeur_si.class%
         arguments: ["@doctrine.orm.entity_manager"]
-        calls:
-           - [ setCache, ["@liip_doctrine_cache.ns.main"] ]
 
     #Etablissement
     #--Grid

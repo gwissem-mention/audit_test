@@ -11,8 +11,6 @@ services:
     hopital_numerique_contact.manager.contact:
         class: "%hopital_numerique_contact.manager.contact.class%"
         arguments: ["@doctrine.orm.entity_manager", "%hopital_numerique_contact.options%"]
-        calls:
-            - [ setCache, ["@liip_doctrine_cache.ns.main"] ]
     #--Type
     hopital_numerique_contact.form.type.contact:
         class: "%hopital_numerique_contact.form.type.contact%"

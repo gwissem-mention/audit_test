@@ -10,8 +10,6 @@ services:
     nodevo_mail.manager.mail:
         class: "%nodevo_mail.manager.mail.class%"
         arguments: ["@doctrine.orm.entity_manager", "@mailer", "@twig", "@router", '@security.context', "@request_stack", "@session", "@hopitalnumerique_domaine.manager.domaine", "@hopitalnumerique_user.manager.user", '@hopitalnumerique_reference.manager.reference', '@hopitalnumerique_expert.manager.activiteexpert', '@hopitalnumerique_expert.manager.courriel_registre', "%nodevo_mail.options%"]
-        calls:
-           - [ setCache, [ "@liip_doctrine_cache.ns.main" ] ]
 
     nodevo_mail.grid.mail:
         class: %nodevo_mail.grid.mail.class%
