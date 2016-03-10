@@ -21,7 +21,7 @@
                 {# Boucle sur les objets par catégorie #}
                 {% for typeUrl, arrayUrl in url %}
                     {# Boucle sur les objets/ contenu #}
-                    {% for key, currentUrl in arrayUrl %}
+                    {% for key, currentUrlCaracteristiques in arrayUrl %}
                         <tr>
                             <td style="border:1px solid #e3e3e3;font-size:12px;text-align:center;">
                                 <a target="_blank" href="{{path('hopitalnumerique_autodiag_outil_edit', {'id': allChapitres[keyUrl].outil.id})}}">{{allChapitres[keyUrl].outil.id}}</a>
@@ -38,9 +38,16 @@
                                 {% endif %}
                             </td>
                             <td style="border:1px solid #e3e3e3;font-size:11px;">
-                                <a target="_blank" href="{{currentUrl}}">{{currentUrl|truncate(30)}}</a>
+                                <a target="_blank" href="{{ currentUrlCaracteristiques.url }}">{{ currentUrlCaracteristiques.url|truncate(30) }}</a>
                             </td>
-                            <td id="check-url-{{keyUrl}}-{{key}}" class="url-check" style="border:1px solid #e3e3e3;text-align:center;" data-url="{{currentUrl}}">
+                            <td id="check-url-{{keyUrl}}-{{key}}" class="url-check" style="border:1px solid #e3e3e3;text-align:center;" data-url="{{ currentUrlCaracteristiques.url }}">
+                                {%- if currentUrlCaracteristiques.ok is not null -%}
+                                    {%- if currentUrlCaracteristiques.ok -%}
+                                        <div class="finish btn btn-success url-check" disabled="disabled"><i class="fa fa-check"></i></div>
+                                    {%- else -%}
+                                        <div class="finish btn btn-danger url-check" disabled="disabled"><i class="fa fa-minus-circle"></i></div>
+                                    {%- endif -%}
+                                {%- endif -%}
                             </td>
                         </tr>
                     {% endfor %}

@@ -155,4 +155,19 @@ class ErrorUrlManager extends BaseManager
 
     }
 
+    /**
+     * Retourne toutes les erreurs par URL.
+     *
+     * @return array<string, \HopitalNumerique\StatBundle\Entity\ErrorUrl> Erreurs
+     */
+    public function findAllGroupedByUrl()
+    {
+        $erreurUrlsByUrl = [];
+
+        foreach ($this->findAll() as $erreurUrl) {
+            $erreurUrlsByUrl[$erreurUrl->getUrl()] = $erreurUrl;
+        }
+
+        return $erreurUrlsByUrl;
+    }
 }
