@@ -14,10 +14,11 @@ class DefaultController extends Controller
     /**
      * Index Action
      */
-    public function indexAction()
+    public function indexAction(Request $request)
     {
         //On récupère l'user connecté
         $user = $this->get('security.context')->getToken()->getUser();
+        $currentDomaine = $this->get('hopitalnumerique_domaine.manager.domaine')->findOneById($request->getSession()->get('domaineId'));
 
         //récupère la conf (l'ordre) des blocks du dashboard de l'user connecté
         $userConf = $this->buildDashboardRows( json_decode($user->getDashboardBack(), true) );
@@ -30,10 +31,10 @@ class DefaultController extends Controller
         $blocInterventions = array( 'total' => 0, 'demandees' => 0, 'attente' => 0, 'en-cours' => 0, 'refusees' => 0, 'annulees' => 0 );
         $blocSessions = array(
             'next' => array(),
-            'totalInscriptionsAnneeEnCours' => $this->container->get('hopitalnumerique_module.manager.inscription')->getCountForYear($anneeEnCours),
-            'totalInscriptionsAnneePrecedente' => $this->container->get('hopitalnumerique_module.manager.inscription')->getCountForYear($anneeEnCours - 1),
-            'totalParticipantsAnneeEnCours' => $this->container->get('hopitalnumerique_module.manager.inscription')->getUsersCountForYear($anneeEnCours),
-            'totalParticipantsAnneePrecedente' => $this->container->get('hopitalnumerique_module.manager.inscription')->getUsersCountForYear($anneeEnCours - 1),
+            'totalInscriptionsAnneeEnCours' => $this->container->get('hopitalnumerique_module.manager.inscription')->getCountForYear($anneeEnCours, $currentDomaine),
+            'totalInscriptionsAnneePrecedente' => $this->container->get('hopitalnumerique_module.manager.inscription')->getCountForYear($anneeEnCours - 1, $currentDomaine),
+            'totalParticipantsAnneeEnCours' => $this->container->get('hopitalnumerique_module.manager.inscription')->getUsersCountForYear($anneeEnCours, $currentDomaine),
+            'totalParticipantsAnneePrecedente' => $this->container->get('hopitalnumerique_module.manager.inscription')->getUsersCountForYear($anneeEnCours - 1, $currentDomaine),
             'totalSessionsRisquees' => $this->container->get('hopitalnumerique_module.manager.session')->getSessionsRisqueesCount()
         );
         $blocPaiements     = array( 'apayer' => 0, 'attente' => 0, 'janvier' => 0 );
