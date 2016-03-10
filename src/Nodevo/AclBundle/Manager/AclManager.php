@@ -8,7 +8,6 @@ use Nodevo\AclBundle\Manager\RessourceManager;
 use Nodevo\RoleBundle\Manager\RoleManager;
 
 use Doctrine\ORM\EntityManager;
-use Doctrine\Common\Cache\ApcCache;
 
 use Symfony\Component\Security\Core\Authorization\Voter\VoterInterface;
 
@@ -150,27 +149,16 @@ class AclManager extends BaseManager
      */
     public function checkAuthorization( $url, $user )
     {
-        $cacheDriver = new ApcCache();
-
         if( $url === '#' || $url === '/' || substr($url, 0, 11) === 'javascript:')
             return VoterInterface::ACCESS_GRANTED;
 
-        if ($cacheDriver->contains("_acl_roles"))
-        {
-            $rolesByRole = $cacheDriver->fetch("_acl_roles");
-        }
-        else
-        {
-            //Récupération des roles par 'role'
-            $roles = $this->_roleManager->findAll();
-            $rolesByRole = array();
+        //Récupération des roles par 'role'
+        $roles = $this->_roleManager->findAll();
+        $rolesByRole = array();
 
-            foreach ($roles as $role) 
-            {
-                $rolesByRole[$role->getRole()] = $role;
-            }
-
-            $cacheDriver->save("_acl_roles", $rolesByRole, null);
+        foreach ($roles as $role) 
+        {
+            $rolesByRole[$role->getRole()] = $role;
         }
 
         if( $user === 'anon.' )
@@ -191,16 +179,7 @@ class AclManager extends BaseManager
         if( is_null($ressource) )
             return VoterInterface::ACCESS_DENIED;
 
-        //search if Acl matching role and Ressource exist
-        if ($cacheDriver->contains("_acl_acls"))
-        {
-            $acls = $cacheDriver->fetch("_acl_acls");
-        }
-        else
-        {
-            $acls = $this->getAclByRessourceByRole();
-            $cacheDriver->save("_acl_acls", $acls, null);
-        }
+        $acls = $this->getAclByRessourceByRole();
 
         if(count($acls) > 0
             && array_key_exists($roles[0]->getId(), $acls)

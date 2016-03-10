@@ -6,8 +6,6 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
 use \Nodevo\ToolsBundle\Tools\Chaine;
-use Doctrine\Common\Cache\ApcCache;
-
 
 /**
  * Contenu controller.
@@ -254,11 +252,6 @@ class ContenuController extends Controller
             //save
             $this->get('hopitalnumerique_objet.manager.contenu')->save($contenu);
 
-            //Destruction du cache APC concernant le contenu
-            $cacheDriver = new ApcCache();
-            $cacheName   = "_publication_contenu_" . $contenu->getId();
-            $cacheDriver->delete($cacheName);
-            
             //reload glossaire stuff
             $this->get('hopitalnumerique_glossaire.manager.glossaire')->parsePublications( array(), array($contenu) );
             $this->getDoctrine()->getManager()->flush();

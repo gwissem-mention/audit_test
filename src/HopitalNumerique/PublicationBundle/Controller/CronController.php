@@ -4,7 +4,6 @@ namespace HopitalNumerique\PublicationBundle\Controller;
 
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Doctrine\Common\Cache\ApcCache;
 
 class CronController extends Controller
 {
@@ -17,16 +16,11 @@ class CronController extends Controller
         {
             ini_set("memory_limit","512M");
             ini_set('max_execution_time', 0);
-            
-            $cacheDriver = new ApcCache();
+
             $objets = $this->get('hopitalnumerique_objet.manager.objet')->findBy(array('etat' => 3));
 
             foreach ($objets as $objet) 
             {
-                //Destruction du cache APC concernant la page à regenerer
-                $cacheName = "_publication_objet_" . $objet->getId();
-                $cacheDriver->delete($cacheName);
-
                 $this->forward('HopitalNumeriquePublicationBundle:Publication:objet', array( 'id' => $objet->getId() ));
 
                 $this->get('hopitalnumerique_publication.service.logger.cronlogger')->addLog('( Objet )' . $objet->getId() . " - " . $objet->getTitre());
@@ -40,10 +34,6 @@ class CronController extends Controller
 
             foreach ($contenus as $contenu) 
             {
-                //Destruction du cache APC concernant la page à regenerer
-                $cacheName = "_publication_contenu_" . $contenu->getId();
-                $cacheDriver->delete($cacheName);
-
                 $this->forward('HopitalNumeriquePublicationBundle:Publication:contenu', array( 'id' => $contenu->getObjet()->getId(), 'idc' => $contenu->getId() ));
 
                 $this->get('hopitalnumerique_publication.service.logger.cronlogger')->addLog('( Contenu ) ' . $contenu->getId() . " - " . $contenu->getTitre());

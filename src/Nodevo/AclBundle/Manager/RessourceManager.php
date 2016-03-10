@@ -3,7 +3,6 @@
 namespace Nodevo\AclBundle\Manager;
 
 use Nodevo\ToolsBundle\Manager\Manager as BaseManager;
-use Doctrine\Common\Cache\ApcCache;
 
 /**
  * Manager de l'entité Ressource
@@ -23,18 +22,7 @@ class RessourceManager extends BaseManager
      */
     public function getRessourceMatchingUrl( $url )
     {
-        $cacheDriver = new ApcCache();
-
-        if ($cacheDriver->contains("_acl_ressources_all"))
-        {
-            $ressources = $cacheDriver->fetch("_acl_ressources_all");
-        }
-        else
-        {
-            $ressources = $this->findAll();
-
-            $cacheDriver->save("_acl_ressources_all", $ressources, null);
-        }
+        $ressources = $this->findAll();
 
         foreach( $ressources as $ressource ) {
             $pattern = $ressource->getPattern();

@@ -1,18 +1,11 @@
 <?php
-
 namespace HopitalNumerique\RechercheParcoursBundle\Controller;
 
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-
-use HopitalNumerique\ReferenceBundle\Entity\Reference;
 use HopitalNumerique\RechercheParcoursBundle\Entity\RechercheParcours;
 use HopitalNumerique\RechercheParcoursBundle\Entity\RechercheParcoursDetails;
-
-use Doctrine\Common\Cache\ApcCache;
-
 use Nodevo\ToolsBundle\Tools\Chaine;
 
 class RechercheParcoursDetailsController extends Controller
@@ -254,43 +247,60 @@ class RechercheParcoursDetailsController extends Controller
         } else {
             $idUser = null;
         }
-        $cache = array();
-        $cacheDriver = new ApcCache();
-        $cacheName = "_pointDurs_etape_" . $idEtape .'_'. $idRefEtapeChild . '_' . $idUser;
-        if ($cacheDriver->contains($cacheName)) {
-            $cache = $cacheDriver->fetch($cacheName);
 
-            $rechercheParcoursDetails = $cache['rechercheParcoursDetails'];
-            $objets               = $cache['objets'];
-            if (isset($cache['objetsParents'])) {
-                $objetsParents            = $cache['objetsParents'];
+        //Récupération des infos de l'utilisateur, si il y en a un connecté, pour ajouter les filtres "Etablissement" et "Métier"
+        if ('anon.' !== $user) {
+            //Type d'établissement
+            if (!is_null($user->getStatutEtablissementSante())) {
+                $referencesTemp[] = $user->getStatutEtablissementSante();
+
+                if ($rechercheParcoursDetails->getShowChildren()) {
+                    $referencesTempParent[] = $user->getStatutEtablissementSante();
+                }
             }
 
-        } else {
-            //Récupération des infos de l'utilisateur, si il y en a un connecté, pour ajouter les filtres "Etablissement" et "Métier"
-            if ('anon.' !== $user) {
-                //Type d'établissement
-                if (!is_null($user->getStatutEtablissementSante())) {
-                    $referencesTemp[] = $user->getStatutEtablissementSante();
+            //Métier internaute
+            if (!is_null($user->getProfilEtablissementSante())) {
+                $referencesTemp[] = $user->getProfilEtablissementSante();
 
-                    if ($rechercheParcoursDetails->getShowChildren()) {
-                        $referencesTempParent[] = $user->getStatutEtablissementSante();
-                    }
+                if ($rechercheParcoursDetails->getShowChildren()) {
+                    $referencesTempParent[] = $user->getProfilEtablissementSante();
                 }
-
-                //Métier internaute
-                if (!is_null($user->getProfilEtablissementSante())) {
-                    $referencesTemp[] = $user->getProfilEtablissementSante();
-
-                    if ($rechercheParcoursDetails->getShowChildren()) {
-                        $referencesTempParent[] = $user->getProfilEtablissementSante();
-                    }
-                }
-
             }
 
-            //Parcourt les références de la réponse, puis les tris pour l'affichage de la recherche
-            foreach ($referencesTemp as $reference) {
+        }
+
+        //Parcourt les références de la réponse, puis les tris pour l'affichage de la recherche
+        foreach ($referencesTemp as $reference) {
+            //Récupère la référence courante
+            $referenceTemp = $reference;
+
+            //Récupère le premier parent
+            while (!is_null($referenceTemp->getParent())
+                && $referenceTemp->getParent()->getId() != null) {
+                $referenceTemp = $referenceTemp->getParent();
+            }
+
+            //Trie la référence dans la bonne catégorie
+            switch ($referenceTemp->getId()) {
+                case 220:
+                    $references['categ1'][] = $reference->getId();
+                    break;
+                case 221:
+                    $references['categ2'][] = $reference->getId();
+                    break;
+                case 223:
+                    $references['categ3'][] = $reference->getId();
+                    break;
+                case 222:
+                    $references['categ4'][] = $reference->getId();
+                    break;
+            }
+        }
+
+        if ($rechercheParcoursDetails->getShowChildren()) {
+            //Recherche de l'étape parent
+            foreach ($referencesTempParent as $reference) {
                 //Récupère la référence courante
                 $referenceTemp = $reference;
 
@@ -303,88 +313,51 @@ class RechercheParcoursDetailsController extends Controller
                 //Trie la référence dans la bonne catégorie
                 switch ($referenceTemp->getId()) {
                     case 220:
-                        $references['categ1'][] = $reference->getId();
+                        $referencesParent['categ1'][] = $reference->getId();
                         break;
                     case 221:
-                        $references['categ2'][] = $reference->getId();
+                        $referencesParent['categ2'][] = $reference->getId();
                         break;
                     case 223:
-                        $references['categ3'][] = $reference->getId();
+                        $referencesParent['categ3'][] = $reference->getId();
                         break;
                     case 222:
-                        $references['categ4'][] = $reference->getId();
+                        $referencesParent['categ4'][] = $reference->getId();
                         break;
                 }
             }
+        }
 
-            if ($rechercheParcoursDetails->getShowChildren()) {
-                //Recherche de l'étape parent
-                foreach ($referencesTempParent as $reference) {
-                    //Récupère la référence courante
-                    $referenceTemp = $reference;
+        //Récupérations
+        $refsPonderees = $this->get('hopitalnumerique_reference.manager.reference')->getReferencesPonderees();
+        $objets = $this->get('hopitalnumerique_recherche.manager.search')->getObjetsForRecherche($references, $role, $refsPonderees);
+        $objets = $this->get('hopitalnumerique_objet.manager.consultation')->updateObjetsWithConnectedUser($domaineId, $objets, $user);
 
-                    //Récupère le premier parent
-                    while (!is_null($referenceTemp->getParent())
-                        && $referenceTemp->getParent()->getId() != null) {
-                        $referenceTemp = $referenceTemp->getParent();
-                    }
+        //Vire les publications qui ne font pas parti du domaine
+        $domaine = $this->get('hopitalnumerique_domaine.manager.domaine')->findOneById($domaineId);
+        $objetsDuDomaine = $domaine->getObjets();
+        $objetsDuDomaineIds = array();
 
-                    //Trie la référence dans la bonne catégorie
-                    switch ($referenceTemp->getId()) {
-                        case 220:
-                            $referencesParent['categ1'][] = $reference->getId();
-                            break;
-                        case 221:
-                            $referencesParent['categ2'][] = $reference->getId();
-                            break;
-                        case 223:
-                            $referencesParent['categ3'][] = $reference->getId();
-                            break;
-                        case 222:
-                            $referencesParent['categ4'][] = $reference->getId();
-                            break;
-                    }
-                }
+        foreach ($objetsDuDomaine as $objet) {
+            $objetsDuDomaineIds[] = $objet->getId();
+        }
+
+        foreach ($objets as $key => $objet) {
+            if (!in_array($objet['id'], $objetsDuDomaineIds)) {
+                unset($objets[$key]);
             }
+        }
 
+        if ($rechercheParcoursDetails->getShowChildren()) {
             //Récupérations
-            $refsPonderees = $this->get('hopitalnumerique_reference.manager.reference')->getReferencesPonderees();
-            $objets = $this->get('hopitalnumerique_recherche.manager.search')->getObjetsForRecherche($references, $role, $refsPonderees);
-            $objets = $this->get('hopitalnumerique_objet.manager.consultation')->updateObjetsWithConnectedUser($domaineId, $objets, $user);
+            $objetsParents = $this->get('hopitalnumerique_recherche.manager.search')->getObjetsForRecherche($referencesParent, $role, $refsPonderees);
+            $objetsParents = $this->get('hopitalnumerique_objet.manager.consultation')->updateObjetsWithConnectedUser($domaineId, $objetsParents, $user);
 
-            //Vire les publications qui ne font pas parti du domaine
-            $domaine = $this->get('hopitalnumerique_domaine.manager.domaine')->findOneById($domaineId);
-            $objetsDuDomaine = $domaine->getObjets();
-            $objetsDuDomaineIds = array();
-
-            foreach ($objetsDuDomaine as $objet) {
-                $objetsDuDomaineIds[] = $objet->getId();
-            }
-
-            foreach ($objets as $key => $objet) {
+            foreach ($objetsParents as $key => $objet) {
                 if (!in_array($objet['id'], $objetsDuDomaineIds)) {
-                    unset($objets[$key]);
+                    unset($objetsParents[$key]);
                 }
             }
-
-            if ($rechercheParcoursDetails->getShowChildren()) {
-                //Récupérations
-                $objetsParents = $this->get('hopitalnumerique_recherche.manager.search')->getObjetsForRecherche($referencesParent, $role, $refsPonderees);
-                $objetsParents = $this->get('hopitalnumerique_objet.manager.consultation')->updateObjetsWithConnectedUser($domaineId, $objetsParents, $user);
-
-                foreach ($objetsParents as $key => $objet) {
-                    if (!in_array($objet['id'], $objetsDuDomaineIds)) {
-                        unset($objetsParents[$key]);
-                    }
-                }
-                $cache['objetsParents'] = $objetsParents;
-
-            }
-
-            $cache['objets'] = $objets;
-            $cache['rechercheParcoursDetails'] = $rechercheParcoursDetails;
-
-            $cacheDriver->save($cacheName, $cache, null);
         }
 
         //En mode connecté
@@ -392,7 +365,7 @@ class RechercheParcoursDetailsController extends Controller
             //Récupération des notes existante sur les points dur pour l'utilisateur courant
             $notes = $this->get('hopitalnumerique_recherche_parcours.manager.matrise_user')->getAllOrderedByPointDurForParcoursEtape($user, $rechercheParcoursDetails->getId());
 
-            $objetsForNote = $rechercheParcoursDetails->getShowChildren() ? $cache['objetsParents'] : $objets;
+            $objetsForNote = $rechercheParcoursDetails->getShowChildren() ? $objetsParents : $objets;
 
             foreach ($objetsForNote as $objet) {
                 if (in_array($objet["categ"], $rechercheParcours->getRecherchesParcoursGestion()->getPublicationString())

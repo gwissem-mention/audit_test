@@ -6,8 +6,6 @@ use HopitalNumerique\ObjetBundle\Entity\Objet;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 
-use Doctrine\Common\Cache\ApcCache;
-
 class PublicationController extends Controller
 {
     /**
@@ -53,72 +51,48 @@ class PublicationController extends Controller
 
         $objetsOrder = array();
 
-        //~~APC~~
-        $cacheDriver = new ApcCache();
-        $cacheName = "_publication_objet_" . $objet->getId();
-        if ($cacheDriver->contains($cacheName))
-        {
-            $cache = $cacheDriver->fetch($cacheName);
+        $objets = $this->getObjetsFromRecherche( $objet );
 
-            $objetsOrder = $cache['objetsOrder'];
-            $objets      = $cache['objets'];
-            $productions = $cache['productions'];
-            $contenus    = $cache['contenus'];
+        //build productions with authorizations
+        $productions = $this->getProductionsAssocies($objet->getObjets());
+
+        //get Contenus : for sommaire
+        $contenus = $objet->isInfraDoc() ? $this->get('hopitalnumerique_objet.manager.contenu')->getArboForObjet( $objet->getId() ) : array();
+
+        foreach ($objets as $key => $objetTemp) 
+        {
+            if(array_key_exists('objet', $objetTemp) && !is_null($objetTemp["objet"]))
+            {
+                $objetsOrder['-' . $objetTemp["id"]] = $objetTemp;
+            }
+            else
+            {
+                $objetsOrder[$objetTemp["id"]] = $objetTemp;
+            }
         }
-        else
+
+        foreach ($objetsOrder as $key => $objetCurrent) 
         {
-            $objets = $this->getObjetsFromRecherche( $objet );
-
-            //build productions with authorizations
-            $productions = $this->getProductionsAssocies($objet->getObjets());
-
-            //get Contenus : for sommaire
-            $contenus = $objet->isInfraDoc() ? $this->get('hopitalnumerique_objet.manager.contenu')->getArboForObjet( $objet->getId() ) : array();
-
-            foreach ($objets as $key => $objetTemp) 
+            if (array_key_exists('objet', $objetCurrent) && !is_null($objetCurrent['objet'])) 
             {
-                if(array_key_exists('objet', $objetTemp) && !is_null($objetTemp["objet"]))
-                {
-                    $objetsOrder['-' . $objetTemp["id"]] = $objetTemp;
-                }
-                else
-                {
-                    $objetsOrder[$objetTemp["id"]] = $objetTemp;
-                }
+                $libContenu = $this->get('hopitalnumerique_objet.manager.contenu')->getPrefix($this->get('hopitalnumerique_objet.manager.contenu')->findOneBy(array('id' => $objetCurrent['id'])));
+                $objetsOrder[$key]['prefixe'] = $libContenu;
+                $objetsOrder[$key]['parent']  = $this->get('hopitalnumerique_objet.manager.objet')->findOneBy(array('id' => $objetCurrent['objet']));
+            }
+        }
+
+        //Ajout des objets liés au prods
+        foreach ($productions as $production) 
+        {
+            $libContenu = "";
+
+            if(!is_null($production->idc))
+            {
+                $libContenu = $this->get('hopitalnumerique_objet.manager.contenu')->getPrefix($this->get('hopitalnumerique_objet.manager.contenu')->findOneBy(array('id' => $production->idc)));
             }
 
-            foreach ($objetsOrder as $key => $objetCurrent) 
-            {
-                if (array_key_exists('objet', $objetCurrent) && !is_null($objetCurrent['objet'])) 
-                {
-                    $libContenu = $this->get('hopitalnumerique_objet.manager.contenu')->getPrefix($this->get('hopitalnumerique_objet.manager.contenu')->findOneBy(array('id' => $objetCurrent['id'])));
-                    $objetsOrder[$key]['prefixe'] = $libContenu;
-                    $objetsOrder[$key]['parent']  = $this->get('hopitalnumerique_objet.manager.objet')->findOneBy(array('id' => $objetCurrent['objet']));
-                }
-            }
-
-            //Ajout des objets liés au prods
-            foreach ($productions as $production) 
-            {
-                $libContenu = "";
-
-                if(!is_null($production->idc))
-                {
-                    $libContenu = $this->get('hopitalnumerique_objet.manager.contenu')->getPrefix($this->get('hopitalnumerique_objet.manager.contenu')->findOneBy(array('id' => $production->idc)));
-                }
-
-                $objetsOrder[$production->id]['prefixe'] = $libContenu;
-                $objetsOrder[$production->id]['parent']  = $this->get('hopitalnumerique_objet.manager.objet')->findOneBy(array('id' => $production->id));
-            }
-
-            $cache = array(
-                'objetsOrder' => $objetsOrder,
-                'objets'      => $objets,
-                'productions' => $productions,
-                'contenus'    => $contenus
-            );
-
-            $cacheDriver->save($cacheName, $cache, null);
+            $objetsOrder[$production->id]['prefixe'] = $libContenu;
+            $objetsOrder[$production->id]['parent']  = $this->get('hopitalnumerique_objet.manager.objet')->findOneBy(array('id' => $production->id));
         }
 
         //render
@@ -194,96 +168,57 @@ class PublicationController extends Controller
 
         $objetsOrder = array();
 
-        //~~APC~~
-        $cacheDriver = new ApcCache();
-        $cacheName = "_publication_contenu_" . $contenu->getId();
-        // $cacheDriver->delete($cacheName);
-        if ($cacheDriver->contains($cacheName))
+        $contenusNonVidesTries  = $this->get('hopitalnumerique_objet.manager.contenu')->getContenusNonVidesTries( $objet );
+
+        $precedent      = $this->get('hopitalnumerique_objet.manager.contenu')->getPrecedent( $contenusNonVidesTries, $contenu );
+        $precedentOrder = $this->get('hopitalnumerique_objet.manager.contenu')->getFullOrder($precedent);
+        $suivant        = $this->get('hopitalnumerique_objet.manager.contenu')->getSuivant( $contenusNonVidesTries, $contenu );
+        $suivantOrder   = $this->get('hopitalnumerique_objet.manager.contenu')->getFullOrder($suivant);
+
+        //Types objet
+        $types = $this->get('hopitalnumerique_objet.manager.objet')->formatteTypes( $objet->getTypes() );
+
+        //get Contenus : for sommaire
+        $contenus = $objet->isInfraDoc() ? $this->get('hopitalnumerique_objet.manager.contenu')->getArboForObjet( $id ) : array();
+
+        $objets = $this->getObjetsFromRecherche( $contenu );
+
+        //Ajout du contenu courant
+        $breadCrumbsArray[] = array(
+            'label'   => $this->get('hopitalnumerique_objet.manager.contenu')->getPrefix($contenu) . ' ' . $contenu->getTitre(),
+            'contenu' => $contenu
+        );
+        $breadCrumbs      = "";
+
+        while(!is_null($contenuTemp->getParent()))
         {
-            $cache = $cacheDriver->fetch($cacheName);
-
-            $objetsOrder      = $cache['objetsOrder'];
-            $objets           = $cache['objets'];
-            $breadCrumbsArray = $cache['breadCrumbsArray'];
-            $contenus         = $cache['contenus'];
-            $types            = $cache['types'];
-            $meta             = $cache['meta'];
-            $precedent        = $cache['precedent'];
-            $precedentOrder   = $cache['precedentOrder'];
-            $suivant          = $cache['suivant'];
-            $suivantOrder     = $cache['suivantOrder'];
-            $ambassadeurs     = $cache['ambassadeurs'];
+            $contenuTemp      = $contenuTemp->getParent();
+            array_unshift($breadCrumbsArray, array(
+                    'label'   => $this->get('hopitalnumerique_objet.manager.contenu')->getPrefix($contenuTemp) . ' ' . $contenuTemp->getTitre(),
+                    'contenu' => $contenuTemp
+                )
+            );
         }
-        else
+
+        //ObjetsOrder
+        foreach ($this->getObjetsFromRecherche( $contenu ) as $key => $objetTemp)
         {
-            $contenusNonVidesTries  = $this->get('hopitalnumerique_objet.manager.contenu')->getContenusNonVidesTries( $objet );
-
-            $precedent      = $this->get('hopitalnumerique_objet.manager.contenu')->getPrecedent( $contenusNonVidesTries, $contenu );
-            $precedentOrder = $this->get('hopitalnumerique_objet.manager.contenu')->getFullOrder($precedent);
-            $suivant        = $this->get('hopitalnumerique_objet.manager.contenu')->getSuivant( $contenusNonVidesTries, $contenu );
-            $suivantOrder   = $this->get('hopitalnumerique_objet.manager.contenu')->getFullOrder($suivant);
-
-            //Types objet
-            $types = $this->get('hopitalnumerique_objet.manager.objet')->formatteTypes( $objet->getTypes() );
-
-            //get Contenus : for sommaire
-            $contenus = $objet->isInfraDoc() ? $this->get('hopitalnumerique_objet.manager.contenu')->getArboForObjet( $id ) : array();
-
-            $objets = $this->getObjetsFromRecherche( $contenu );
-
-            //Ajout du contenu courant
-            $breadCrumbsArray[] = array(
-                'label'   => $this->get('hopitalnumerique_objet.manager.contenu')->getPrefix($contenu) . ' ' . $contenu->getTitre(),
-                'contenu' => $contenu
-            );
-            $breadCrumbs      = "";
-
-            while(!is_null($contenuTemp->getParent()))
-            {
-                $contenuTemp      = $contenuTemp->getParent();
-                array_unshift($breadCrumbsArray, array(
-                        'label'   => $this->get('hopitalnumerique_objet.manager.contenu')->getPrefix($contenuTemp) . ' ' . $contenuTemp->getTitre(),
-                        'contenu' => $contenuTemp
-                    )
-                );
-            }
-
-            //ObjetsOrder
-            foreach ($this->getObjetsFromRecherche( $contenu ) as $key => $objetTemp)
-            {
-                $objetsOrder[$objetTemp["id"]] = $objetTemp;
-            }
-
-            foreach ($objetsOrder as $key => $objetCurrent)
-            {
-                if (array_key_exists('objet', $objetCurrent) && !is_null($objetCurrent['objet']) )
-                {
-                    $libContenu = $this->get('hopitalnumerique_objet.manager.contenu')->getPrefix($this->get('hopitalnumerique_objet.manager.contenu')->findOneBy(array('id' => $objetCurrent['id'])));
-                    $objetsOrder[$key]['prefixe'] = $libContenu;
-                    $objetsOrder[$key]['parent']  = $this->get('hopitalnumerique_objet.manager.objet')->findOneBy(array('id' => $objetCurrent['objet']));
-                }
-            }
-
-            $meta = $this->get('hopitalnumerique_recherche.manager.search')->getMetas($contenu->getReferences(), $contenu->getContenu() );
-
-            $ambassadeurs = $this->getAmbassadeursConcernes( $objet->getId() );
-
-            $cache = array(
-                'objets'           => $objets,
-                'objetsOrder'      => $objetsOrder,
-                'breadCrumbsArray' => $breadCrumbsArray,
-                'contenus'         => $contenus,
-                'types'            => $types,
-                'precedent'        => $precedent,
-                'precedentOrder'   => $precedentOrder,
-                'suivant'          => $suivant,
-                'suivantOrder'     => $suivantOrder,
-                'meta'             => $meta,
-                'ambassadeurs'     => $ambassadeurs
-            );
-
-            $cacheDriver->save($cacheName, $cache, null);
+            $objetsOrder[$objetTemp["id"]] = $objetTemp;
         }
+
+        foreach ($objetsOrder as $key => $objetCurrent)
+        {
+            if (array_key_exists('objet', $objetCurrent) && !is_null($objetCurrent['objet']) )
+            {
+                $libContenu = $this->get('hopitalnumerique_objet.manager.contenu')->getPrefix($this->get('hopitalnumerique_objet.manager.contenu')->findOneBy(array('id' => $objetCurrent['id'])));
+                $objetsOrder[$key]['prefixe'] = $libContenu;
+                $objetsOrder[$key]['parent']  = $this->get('hopitalnumerique_objet.manager.objet')->findOneBy(array('id' => $objetCurrent['objet']));
+            }
+        }
+
+        $meta = $this->get('hopitalnumerique_recherche.manager.search')->getMetas($contenu->getReferences(), $contenu->getContenu() );
+
+        $ambassadeurs = $this->getAmbassadeursConcernes( $objet->getId() );
 
         //render
         return $this->render('HopitalNumeriquePublicationBundle:Publication:objet.html.twig', array(

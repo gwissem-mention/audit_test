@@ -62,9 +62,7 @@ class MenuManager extends BaseManager
         $tree = new MenuNode();
         $tree = $this->addNodeChilds( $tree, $itemsCollection, null );
 
-        $cached_data = $tree;
-
-        return $cached_data;
+        return $tree;
     }
 
     /**
