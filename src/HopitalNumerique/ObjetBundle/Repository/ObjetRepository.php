@@ -275,16 +275,16 @@ class ObjetRepository extends EntityRepository
             ->leftJoin('obj.contenus','contenus')
         ;
 
-            if(!is_null($dateDebut))
-            {
-                $qb->andWhere('obj.dateDebutPublication >= :dateDebut')->setParameter('dateDebut', $dateDebut );
-            }
+        if(!is_null($dateDebut))
+        {
+            $qb->andWhere('obj.dateDebutPublication >= :dateDebut')->setParameter('dateDebut', $dateDebut );
+        }
 
-            if(!is_null($dateFin))
-            {
-                $qb->andWhere('obj.dateFinPublication <= :dateFin')->setParameter('dateFin', $dateFin );
-            }
-            $qb->orderBy('obj.dateDebutPublication', 'DESC');
+        if(!is_null($dateFin))
+        {
+            $qb->andWhere('obj.dateFinPublication <= :dateFin')->setParameter('dateFin', $dateFin );
+        }
+        $qb->orderBy('obj.dateDebutPublication', 'DESC');
 
         return $qb;
     }
