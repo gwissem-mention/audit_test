@@ -237,17 +237,6 @@ class ReferenceManager extends BaseManager
         }
     }
 
-    /*
-     * Raffraîchit l'ordre des referentiels
-     */
-    public function refreshOrder( $referentiel = null )
-    {
-        //get All References
-        $datas = new ArrayCollection($this->getRepository()->findBy( array( 'lock' => 0 ) ) );
-        
-        $this->refreshReferentielOrder($datas, $referentiel);
-    }
-
     /**
      * Retourne la liste des objets ordonnées pour les références des objets
      *
@@ -562,61 +551,6 @@ class ReferenceManager extends BaseManager
 
         //return big table
         return $tab;
-    }
-
-    /**
-     * Rafraîchit l'ordre des referentiels enfants d'un $referentiel
-     *
-     * @param ArrayCollection   $referentiels Les référentiels à ordonner
-     * @param Reference         $referentiel  Le référentiel parent
-     */
-    private function refreshReferentielOrder( ArrayCollection $referentiels, Reference $referentiel = null)
-    {
-        $childs   = $this->getReferentielChildsFromCollection($referentiels, $referentiel);
-        $nbChilds = count($childs);
-
-        $compteur = 0;
-        foreach ($childs as $key => $child) 
-        {
-            $compteur++;
-            $childs[$key]->setOrder($compteur);
-            $this->save($childs[$key]);
-            $this->refreshReferentielOrder($referentiels, $childs[$key]);
-        }
-
-        //Correctif 
-        // for ($i=0; $i < $nbChilds; $i++) 
-        // { 
-        //     $childs[$i]->setOrder($i+1);
-        //     $this->save($childs[$i]);
-        //     $this->refreshReferentielOrder($referentiels, $childs[$i]);
-        // }
-    }
-
-    /**
-     * Récupère dans une collection de $referentiels tous les referentiels qui ont pour parent $parent
-     * 
-     * @param ArrayCollection   $referentiels   Liste des référentiels
-     * @param Reference         $parent         Réferentiel parent
-     *
-     * @return $childs Les référentiels enfants de $parent
-     */
-    private function getReferentielChildsFromCollection( ArrayCollection $referentiels, Reference $parent = null)
-    {
-        //si le parent n'existe pas, on filtre dans la collection pour récupérer TOUS les referentiels SANS parents
-        if (null === $parent){
-            $criteria = Criteria::create()
-                                        ->where(Criteria::expr()->eq("parent", $parent))
-                                        ->orderBy( array("order" => Criteria::ASC) );
-            $childs = $referentiels->matching( $criteria );
-        //si le parent existe, on récupère tous ses enfants
-        } 
-        else 
-        {
-            $childs = $parent->getChildsFromCollection( $referentiels );
-        }
-
-        return $childs;
     }
 
     /**

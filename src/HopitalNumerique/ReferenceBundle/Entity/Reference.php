@@ -342,7 +342,6 @@ class Reference
     {
         $this->lock = $lock;
     }
-    
 
     /**
      * Get parent
@@ -418,21 +417,6 @@ class Reference
         }
 
         return $sep . $this->code . ' - ' . $this->libelle;
-    }
-
-    /**
-     * Retourne les liste des enfants de la Collection
-     *
-     * @param  ArrayCollection $collection La collection
-     *
-     * @return array
-     */
-    public function getChildsFromCollection( ArrayCollection $collection )
-    {
-        $criteria = Criteria::create()
-                                    ->where(Criteria::expr()->eq("parent", $this))
-                                    ->orderBy( array("order" => Criteria::ASC) );
-        return $collection->matching( $criteria );
     }
 
     /**

@@ -133,7 +133,6 @@ class ReferenceController extends Controller
             {
                 //Suppression de l'entité
                 $this->get('hopitalnumerique_reference.manager.reference')->delete( $reference );
-                $this->get('hopitalnumerique_reference.manager.reference')->refreshOrder();
                 $this->get('session')->getFlashBag()->add('info', 'Suppression effectuée avec succès.' );
             }
             catch ( \Exception $e) 
