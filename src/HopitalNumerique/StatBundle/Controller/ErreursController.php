@@ -247,7 +247,8 @@ class ErreursController extends Controller
             'ARTICLE'       => array(),
             'AUTODIAG'      => array(),
             'QUESTIONNAIRE' => array(),
-            'URL'           => array()
+            'URL'           => array(),
+            'FICHIER'       => array()
         );
 
         $objets = $this->get('hopitalnumerique_objet.manager.objet')->getObjetsByDate($dateDebut, $dateFin);
@@ -276,6 +277,19 @@ class ErreursController extends Controller
      */
     private function getUrlByObjet( \HopitalNumerique\ObjetBundle\Entity\Objet $objet, $urls )
     {
+        if (null !== $objet->getPath()) {
+            foreach ($objet->getDomaines() as $domaine) {
+                $url = $domaine->getUrl().'/'.$objet->getWebPath(1);
+                $urls['FICHIER'][$objet->getId()]['objet'][] = $url;
+            }
+        }
+        if (null !== $objet->getPath2()) {
+            foreach ($objet->getDomaines() as $domaine) {
+                $url = $domaine->getUrl().'/'.$objet->getWebPath(2);
+                $urls['FICHIER'][$objet->getId()]['objet'][] = $url;
+            }
+        }
+
         $res = array( $objet->getId() => array() );
 
         $urls = $this->recuperationLien($objet->getSynthese(), $objet->getId(), $urls);
