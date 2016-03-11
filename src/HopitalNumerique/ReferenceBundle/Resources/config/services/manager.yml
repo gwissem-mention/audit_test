@@ -1,4 +1,8 @@
 services:
+    hopitalnumerique_reference.manager.champ_lexical_nom:
+        class: 'HopitalNumerique\ReferenceBundle\Manager\ChampLexicalNomManager'
+        arguments: ['@doctrine.orm.entity_manager']
+
     hopitalnumerique_reference.manager.reference:
         class: 'HopitalNumerique\ReferenceBundle\Manager\ReferenceManager'
         arguments: ["@doctrine.orm.entity_manager", "@session", "@hopitalnumerique_user.manager.user"]

@@ -162,6 +162,13 @@ class ReferenceType extends AbstractType
                 'allow_add' => true,
                 'allow_delete' => true
             ])
+            ->add('champLexicalNoms', 'collection', [
+                'label' => 'Champ lexical',
+                'type' => ChampLexicalNomType::class,
+                'by_reference' => false,
+                'allow_add' => true,
+                'allow_delete' => true
+            ])
         ;
     }
 

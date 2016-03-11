@@ -16,6 +16,7 @@
     {% javascripts output="compiled/hopitalnumerique-reference-reference-edit.js"
         'bundles/hopitalnumeriquereference/js/script.js'
         'bundles/hopitalnumeriquereference/js/Form/Synonyme.js'
+        'bundles/hopitalnumeriquereference/js/Form/ChampLexicalNom.js'
     %}
         <script type="text/javascript" src="{{ asset_url }}"></script>
     {% endjavascripts %}
@@ -59,6 +60,17 @@
                         {% endfor %}
                     </ul>
                     {{ form_widget(form.synonymes) }}
+
+                    <h3>Champ lexical</h3>
+                    <ul class="row list-unstyled" id="reference_champlexicalnoms_form" data-prototype="{{ form_widget(form.champLexicalNoms.vars.prototype)|e }}">
+                        {% for champLexicalNom in form.champLexicalNoms %}
+                            <li class="col-lg-3 col-md-4">
+                                <div class="hide">{{ form_widget(champLexicalNom) }}</div>
+                                <input type="text" class="form-control" value="{{ champLexicalNom.vars.data.libelle }}" disabled>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                    {{ form_widget(form.champLexicalNoms) }}
                     
                     
                     

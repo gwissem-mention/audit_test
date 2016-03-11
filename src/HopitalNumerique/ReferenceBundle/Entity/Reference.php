@@ -166,11 +166,22 @@ class Reference
      *
      * @ORM\ManyToMany(targetEntity="\HopitalNumerique\ReferenceBundle\Entity\Reference\Synonyme", cascade={"persist"})
      * @ORM\JoinTable(name="hn_reference_has_synonyme",
-     *      joinColumns={ @ORM\JoinColumn(name="ref_id", referencedColumnName="ref_id", onDelete="CASCADE")},
-     *      inverseJoinColumns={ @ORM\JoinColumn(name="syn_id", referencedColumnName="syn_id", onDelete="CASCADE")}
+     *      joinColumns={@ORM\JoinColumn(name="ref_id", referencedColumnName="ref_id", onDelete="CASCADE")},
+     *      inverseJoinColumns={@ORM\JoinColumn(name="syn_id", referencedColumnName="syn_id", onDelete="CASCADE")}
      * )
      */
     private $synonymes;
+
+    /**
+     * @var \Doctrine\Common\Collections\Collection
+     *
+     * @ORM\ManyToMany(targetEntity="\HopitalNumerique\ReferenceBundle\Entity\Reference\ChampLexicalNom", cascade={"persist"})
+     * @ORM\JoinTable(name="hn_reference_has_champ_lexical_nom",
+     *      joinColumns={@ORM\JoinColumn(name="ref_id", referencedColumnName="ref_id", onDelete="CASCADE")},
+     *      inverseJoinColumns={@ORM\JoinColumn(name="chl_id", referencedColumnName="chl_id", onDelete="CASCADE")}
+     * )
+     */
+    private $champLexicalNoms;
 
 
     /**
@@ -183,6 +194,7 @@ class Reference
         $this->domaines = new ArrayCollection();
         $this->allDomaines = false;
         $this->synonymes = new ArrayCollection();
+        $this->champLexicalNoms = new ArrayCollection();
     }
 
 
@@ -601,6 +613,40 @@ class Reference
     public function getSynonymes()
     {
         return $this->synonymes;
+    }
+
+    /**
+     * Add champLexicalNom
+     *
+     * @param \HopitalNumerique\ReferenceBundle\Entity\Reference\ChampLexicalNom $champLexicalNom
+     *
+     * @return Reference
+     */
+    public function addChampLexicalNom(\HopitalNumerique\ReferenceBundle\Entity\Reference\ChampLexicalNom $champLexicalNom)
+    {
+        $this->champLexicalNoms[] = $champLexicalNom;
+
+        return $this;
+    }
+
+    /**
+     * Remove champLexicalNom
+     *
+     * @param \HopitalNumerique\ReferenceBundle\Entity\Reference\ChampLexicalNom $champLexicalNom
+     */
+    public function removeChampLexicalNom(\HopitalNumerique\ReferenceBundle\Entity\Reference\ChampLexicalNom $champLexicalNom)
+    {
+        $this->champLexicalNoms->removeElement($champLexicalNom);
+    }
+
+    /**
+     * Get champLexicalNoms
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getChampLexicalNoms()
+    {
+        return $this->champLexicalNoms;
     }
 
 

@@ -1,4 +1,10 @@
 services:
+    hopitalnumerique_reference.form.type.champ_lexical_nom:
+        class: 'HopitalNumerique\ReferenceBundle\Form\Type\ChampLexicalNomType'
+        arguments: ['@hopitalnumerique_reference.manager.champ_lexical_nom']
+        tags:
+            - { name: 'form.type' }
+
     hopitalnumerique_reference.form.reference:
         class: 'HopitalNumerique\ReferenceBundle\Form\Type\ReferenceType'
         arguments: ["@hopitalnumerique_reference.manager.reference", "@validator", "@hopitalnumerique_user.manager.user", "@hopitalnumerique_reference.manager.reference"]

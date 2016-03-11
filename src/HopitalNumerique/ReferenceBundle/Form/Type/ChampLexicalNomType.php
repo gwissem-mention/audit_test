@@ -1,7 +1,7 @@
 <?php
 namespace HopitalNumerique\ReferenceBundle\Form\Type;
 
-use HopitalNumerique\ReferenceBundle\Manager\SynonymeManager;
+use HopitalNumerique\ReferenceBundle\Manager\ChampLexicalNomManager;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormEvent;
@@ -9,22 +9,22 @@ use Symfony\Component\Form\FormEvents;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**
- * SynonymeType.
+ * ChampLexicalNomType.
  */
-class SynonymeType extends AbstractType
+class ChampLexicalNomType extends AbstractType
 {
     /**
-     * @var \HopitalNumerique\ReferenceBundle\Manager\SynonymeManager SynonymeManager
+     * @var \HopitalNumerique\ReferenceBundle\Manager\ChampLexicalNomManager ChampLexicalNomManager
      */
-    private $synonymeManager;
+    private $champLexicalNomManager;
 
 
     /**
      * {@inheritdoc}
      */
-    public function __construct(SynonymeManager $synonymeManager)
+    public function __construct(ChampLexicalNomManager $champLexicalNomManager)
     {
-        $this->synonymeManager = $synonymeManager;
+        $this->champLexicalNomManager = $champLexicalNomManager;
     }
 
 
@@ -35,7 +35,7 @@ class SynonymeType extends AbstractType
     {
         $builder
             ->add('libelle', 'text', [
-                'label' => 'Libellé',
+                'label' => 'Nom',
                 'required' => true,
                 'read_only' => (null !== $builder->getData()),
                 'attr' => [
@@ -45,23 +45,23 @@ class SynonymeType extends AbstractType
             ])
         ;
         $builder->addEventListener(FormEvents::POST_SUBMIT, function (FormEvent $event) {
-            $this->processExistingSynonyme($event);
+            $this->processExistingChampLexicalNom($event);
         });
     }
 
     /**
-     * Si un synonyme identique existe déjà à la création, il est utilisé (pour éviter les doublons).
+     * Si un terme du champ lexical identique existe déjà à la création, il est utilisé (pour éviter les doublons).
      *
      * @param \Symfony\Component\Form\FormEvent $event Event
      */
-    private function processExistingSynonyme(FormEvent $event)
+    private function processExistingChampLexicalNom(FormEvent $event)
     {
         if (null === $event->getData()) {
             $libelle = $event->getForm()->get('libelle')->getData();
 
-            $synonyme = $this->synonymeManager->findOneBy(['libelle' => $libelle]);
-            if (null !== $synonyme) {
-                $event->setData($synonyme);
+            $champLexicalNom = $this->champLexicalNomManager->findOneBy(['libelle' => $libelle]);
+            if (null !== $champLexicalNom) {
+                $event->setData($champLexicalNom);
             }
         }
     }
@@ -73,7 +73,7 @@ class SynonymeType extends AbstractType
     {
         $resolver
             ->setDefaults([
-                'data_class' => 'HopitalNumerique\\ReferenceBundle\\Entity\\Reference\\Synonyme'
+                'data_class' => 'HopitalNumerique\\ReferenceBundle\\Entity\\Reference\\ChampLexicalNom'
             ])
         ;
     }
