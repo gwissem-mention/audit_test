@@ -9,6 +9,12 @@ use Symfony\Component\HttpFoundation\Response;
 class ErreursAutodiagController extends Controller
 {
     /**
+     * @var array<\HopitalNumerique\StatBundle\Entity\ErrorUrl> Liste de toutes les erreurs d'URL
+     */
+    private $erreurUrlsGroupedByUrl = null;
+
+
+    /**
      * Cron de check des urls des objets
      */
     public function cronAction($id)
@@ -22,12 +28,12 @@ class ErreursAutodiagController extends Controller
             {
                 foreach ($categsUrl as $typeCateg => $arrayUrl) 
                 {
-	                foreach ($arrayUrl as $idQuestion => $url) 
-	                {
+                    foreach ($arrayUrl as $idQuestion => $urlCaracteristiques) 
+                    {
                         //Set du booléan pour l'entité
                         $isOk = true;
 
-                        $handle = curl_init($url);
+                        $handle = curl_init($urlCaracteristiques['url']);
                         curl_setopt($handle,  CURLOPT_RETURNTRANSFER, TRUE);
 
                         /* Get the HTML or whatever is linked in $url. */
@@ -40,19 +46,20 @@ class ErreursAutodiagController extends Controller
                             $isOk = false;
                         }
 
-                        $this->get('hopitalnumerique_forum.service.logger.cronlogger')->addLog('Url ' . $url . ($isOk ? ' valide' : ' non valide.'));
+                        $this->get('hopitalnumerique_forum.service.logger.cronlogger')->addLog('Url ' . $urlCaracteristiques['url'] . ($isOk ? ' valide' : ' non valide.'));
 
                         curl_close($handle);
 
                         //Recherche si une entité existe déjà pour cette url
-                        $errorUrl = $this->get('hopitalnumerique_stat.manager.errorurl')->existeErrorByUrl($url);
+                        $errorUrl = $this->get('hopitalnumerique_stat.manager.errorurl')->existeErrorByUrl($urlCaracteristiques['url']);
                         $errorUrl->setOk($isOk);
+                        $errorUrl->setCode($httpCode);
 
                         $this->get('hopitalnumerique_stat.manager.errorurl')->save($errorUrl);
 
                         $compteur++;
-	                }
-	            }
+                    }
+                }
             }
 
             $this->get('hopitalnumerique_forum.service.logger.cronlogger')->addLog('Nombre d\'url(s) trouvé(s): ' . $compteur);
@@ -93,7 +100,7 @@ class ErreursAutodiagController extends Controller
 
         $resultat = $this->getAllUrlOutils($dateDebutDateTime, $dateFinDateTime);
         $chapitres = $this->get('hopitalnumerique_autodiag.manager.chapitre')->getChapitresById();
-        
+
         return $this->render('HopitalNumeriqueStatBundle:Back:partials/Erreurs_autodiag/tableau.html.twig', array(
             'urls'         => $resultat['urls'],
             'chapitres'    => $resultat['chapitres'],
@@ -231,11 +238,11 @@ class ErreursAutodiagController extends Controller
 
         foreach ($autodiags as $autodiag) 
         {
-        	foreach ($autodiag->getChapitres() as $chapitre) 
-        	{
-        		$urls = $this->getUrlByChapitre($chapitre, $urls);
-            	$chapitresArray[$chapitre->getId()] = $chapitre;
-        	}
+            foreach ($autodiag->getChapitres() as $chapitre) 
+            {
+                $urls = $this->getUrlByChapitre($chapitre, $urls);
+                $chapitresArray[$chapitre->getId()] = $chapitre;
+            }
         }
 
         return array(
@@ -264,14 +271,17 @@ class ErreursAutodiagController extends Controller
         if(count($matchesURLTemp[0]) > 0 )
         {
             $matchesURL = $matchesURLTemp[0];
-            foreach ($matchesURL as $matcheURL) 
+            foreach ($matchesURL as $matcheURL)
             {
-		        if(!array_key_exists($chapitre->getId(), $urls))
-		        {
-		        	$urls[$chapitre->getId()] = array('chapitre' => array());
-		        }
-
-                $urls[$chapitre->getId()]['chapitre'][] = trim($matcheURL, '"');
+                if(!array_key_exists($chapitre->getId(), $urls))
+                {
+                    $urls[$chapitre->getId()] = array('chapitre' => array());
+                }
+                $url = trim($matcheURL, '"');
+                $urls[$chapitre->getId()]['chapitre'][] = [
+                    'url' => $url,
+                    'ok' => $this->urlIsOk($url)
+                ];
             }
         }
         //Sur le champ "description"
@@ -281,48 +291,66 @@ class ErreursAutodiagController extends Controller
             $matchesURL = $matchesURLTemp[0];
             foreach ($matchesURL as $matcheURL) 
             {
-		        if(!array_key_exists($chapitre->getId(), $urls))
-		        {
-		        	$urls[$chapitre->getId()] = array();
-		        }
+                if(!array_key_exists($chapitre->getId(), $urls))
+                {
+                    $urls[$chapitre->getId()] = array();
+                }
 
-                $urls[$chapitre->getId()]['chapitre'][] = trim($matcheURL, '"');
+                $url = trim($matcheURL, '"');
+                $urls[$chapitre->getId()]['chapitre'][] = [
+                    'url' => $url,
+                    'ok' => $this->urlIsOk($url)
+                ];
             }
         }
         foreach ($chapitre->getQuestions() as $question) 
         {
-        	preg_match_all($reg_exUrl, $question->getLien(), $matchesURLTemp);
-        	if(count($matchesURLTemp[0]) > 0 )
-	        {
-	            $matchesURL = $matchesURLTemp[0];
-	            foreach ($matchesURL as $matcheURL) 
-	            {
-	                if(!array_key_exists($chapitre->getId(), $urls))
-	                {
-	                	$urls[$chapitre->getId()] = array('questions' => array());
-	                }
+            preg_match_all($reg_exUrl, $question->getLien(), $matchesURLTemp);
+            if(count($matchesURLTemp[0]) > 0 )
+            {
+                $matchesURL = $matchesURLTemp[0];
+                foreach ($matchesURL as $matcheURL) 
+                {
+                    if(!array_key_exists($chapitre->getId(), $urls))
+                    {
+                        $urls[$chapitre->getId()] = array('questions' => array());
+                    }
 
-	                $urls[$chapitre->getId()]['questions'][$question->getId()] = trim($matcheURL, '"');
-	            }
-	        }
+                    $url = trim($matcheURL, '"');
+                    $urls[$chapitre->getId()]['questions'][$question->getId()] = [
+                        'url' => $url,
+                        'ok' => $this->urlIsOk($url)
+                    ];
+                }
+            }
         }
 
         return $urls;
     }
 
     /**
-     * to assci
+     * Initialise les erreurs d'URL.
      */
-    private function toascii($string)
+    private function initErreurUrls()
     {
-        if(!empty($string)){
-            $tempo = utf8_decode($string);
-            $string = '';
-            foreach (str_split($tempo) as $obj)
-            {
-                $string .= '&#' . ord($obj) . ';';
-            }
-         }
-         return $string;
+        if (null === $this->erreurUrlsGroupedByUrl) {
+            $this->erreurUrlsGroupedByUrl = $this->container->get('hopitalnumerique_stat.manager.errorurl')->findAllGroupedByUrl();
+        }
+    }
+
+    /**
+     * Retourne si l'URL est OK.
+     *
+     * @param string $url URL
+     * @return bool|null Ok
+     */
+    private function urlIsOk($url)
+    {
+        $this->initErreurUrls();
+        if (array_key_exists($url, $this->erreurUrlsGroupedByUrl)) {
+            return $this->erreurUrlsGroupedByUrl[$url]->getOk();
+        }
+
+        return null;
     }
 }
