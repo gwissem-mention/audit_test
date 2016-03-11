@@ -323,6 +323,9 @@ class UserManager extends BaseManager
         return $this->getRepository()->getUsersByQuestionnaire( $idQuestionnaire )->getQuery()->getResult();
     }
 
+    /**
+     * @return \HopitalNumerique\UserBundle\Entity\User Utilisateur connecté
+     */
     public function getUserConnected()
     {
         return $this->_securityContext->getToken()->getUser();

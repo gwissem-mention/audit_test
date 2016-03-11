@@ -1,22 +1,11 @@
-parameters:
-    hopitalnumerique_reference.manager.reference.class: HopitalNumerique\ReferenceBundle\Manager\ReferenceManager
-    hopitalnumerique_reference.grid.reference.class: HopitalNumerique\ReferenceBundle\Grid\ReferenceGrid
-    hopitalnumerique_reference.form.reference.class: HopitalNumerique\ReferenceBundle\Form\ReferenceType
+imports:
+    - { resource: 'services/manager.yml' }
+    - { resource: 'services/form.yml' }
 
 services:
-    hopitalnumerique_reference.manager.reference:
-        class: "%hopitalnumerique_reference.manager.reference.class%"
-        arguments: ["@doctrine.orm.entity_manager", "@session", "@hopitalnumerique_user.manager.user"]
-
     hopitalnumerique_reference.grid.reference:
-        class: "%hopitalnumerique_reference.grid.reference.class%"
+        class: 'HopitalNumerique\ReferenceBundle\Grid\ReferenceGrid'
         arguments: ["@service_container"]
-
-    hopitalnumerique_reference.form.reference:
-        class: "%hopitalnumerique_reference.form.reference.class%"
-        arguments: ["@hopitalnumerique_reference.manager.reference", "@validator", "@hopitalnumerique_user.manager.user", "@hopitalnumerique_reference.manager.reference"]
-        tags:
-            - { name: form.type, alias: hopitalnumerique_reference_reference }
 
     hopitalnumerique.twig.ref_extension:
         class: HopitalNumerique\ReferenceBundle\Twig\ReferenceExtension

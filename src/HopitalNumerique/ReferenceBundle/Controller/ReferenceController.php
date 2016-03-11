@@ -315,8 +315,10 @@ class ReferenceController extends Controller
                         //Parent suivant ou null si on est au sommet de l'arbre
                         $daddy = $daddy->getParent();
                     }
-                
-                    $this->get('hopitalnumerique_reference.manager.reference')->save($family);
+
+                    if (count($family) > 0) {
+                        $this->get('hopitalnumerique_reference.manager.reference')->save($family);
+                    }
                 }
                 
                 //test ajout ou edition

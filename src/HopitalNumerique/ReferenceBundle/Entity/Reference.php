@@ -7,8 +7,6 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Criteria;
 use Nodevo\ToolsBundle\Tools\Systeme;
 use Nodevo\ToolsBundle\Traits\ImageTrait;
-
-//Asserts Stuff
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Nodevo\ToolsBundle\Validator\Constraints as Nodevo;
@@ -40,10 +38,17 @@ class Reference
      */
     const ARTICLE_CATEGORIE_COMMUNAUTE_DE_PRATIQUES_ID = 800;
 
-
+    /**
+     * @var integer
+     */
     const STATUT_ACTIF_ID = 3;
+
+    /**
+     * @var integer
+     */
     const STATUT_INACTIF_ID = 4;
-    
+
+
     /**
      * @var integer
      *
@@ -62,7 +67,6 @@ class Reference
      *      minMessage="Il doit y avoir au moins {{ limit }} caractères dans le libellé.",
      *      maxMessage="Il doit y avoir au maximum {{ limit }} caractères dans le libellé."
      * )
-     * @Nodevo\Javascript(class="validate[required,minSize[1],maxSize[255]]")
      * @ORM\Column(name="ref_libelle", type="string", length=255, options = {"comment" = "Libellé de la référence"})
      */
     protected $libelle;
@@ -150,17 +154,37 @@ class Reference
      */
     protected $domaines;
 
+    /**
+     * @var bool
+     *
+     * @ORM\Column(name="ref_all_domaines", type="boolean", nullable=false, options={"default"=false, "comment"="Tous les domaines sont liés au concept"})
+     */
+    private $allDomaines;
 
+    /**
+     * @var \Doctrine\Common\Collections\Collection
+     *
+     * @ORM\ManyToMany(targetEntity="\HopitalNumerique\ReferenceBundle\Entity\Reference\Synonyme", cascade={"persist"})
+     * @ORM\JoinTable(name="hn_reference_has_synonyme",
+     *      joinColumns={ @ORM\JoinColumn(name="ref_id", referencedColumnName="ref_id", onDelete="CASCADE")},
+     *      inverseJoinColumns={ @ORM\JoinColumn(name="syn_id", referencedColumnName="syn_id", onDelete="CASCADE")}
+     * )
+     */
+    private $synonymes;
+
+
+    /**
+     * Constructeur.
+     */
     public function __construct()
     {
         $this->lock  = false;
         $this->order = 1;
+        $this->domaines = new ArrayCollection();
+        $this->allDomaines = false;
+        $this->synonymes = new ArrayCollection();
     }
 
-    public function __toString()
-    {
-        return $this->code . ' - ' . $this->libelle;
-    }
 
     /**
      * Get id
@@ -519,6 +543,70 @@ class Reference
     public function getChilds()
     {
         return $this->childs;
+    }
+
+    /**
+     * Set allDomaines
+     *
+     * @param boolean $allDomaines
+     *
+     * @return Reference
+     */
+    public function setAllDomaines($allDomaines)
+    {
+        $this->allDomaines = $allDomaines;
+
+        return $this;
+    }
+
+    /**
+     * Get allDomaines
+     *
+     * @return boolean
+     */
+    public function getAllDomaines()
+    {
+        return $this->allDomaines;
+    }
+
+    /**
+     * Add synonyme
+     *
+     * @param \HopitalNumerique\ReferenceBundle\Entity\Reference\Synonyme $synonyme
+     *
+     * @return Reference
+     */
+    public function addSynonyme(\HopitalNumerique\ReferenceBundle\Entity\Reference\Synonyme $synonyme)
+    {
+        $this->synonymes[] = $synonyme;
+
+        return $this;
+    }
+
+    /**
+     * Remove synonyme
+     *
+     * @param \HopitalNumerique\ReferenceBundle\Entity\Reference\Synonyme $synonyme
+     */
+    public function removeSynonyme(\HopitalNumerique\ReferenceBundle\Entity\Reference\Synonyme $synonyme)
+    {
+        $this->synonymes->removeElement($synonyme);
+    }
+
+    /**
+     * Get synonymes
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getSynonymes()
+    {
+        return $this->synonymes;
+    }
+
+
+    public function __toString()
+    {
+        return $this->code . ' - ' . $this->libelle;
     }
 
 

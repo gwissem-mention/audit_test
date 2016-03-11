@@ -1,6 +1,6 @@
 <?php
 
-namespace HopitalNumerique\ReferenceBundle\Form;
+namespace HopitalNumerique\ReferenceBundle\Form\Type;
 
 use Nodevo\ToolsBundle\Tools\Systeme;
 use Symfony\Component\Form\AbstractType;
@@ -12,7 +12,6 @@ use Symfony\Component\Form\FormInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 use HopitalNumerique\ReferenceBundle\Entity\Reference;
 use HopitalNumerique\ReferenceBundle\Manager\ReferenceManager;
-
 use Doctrine\ORM\EntityRepository;
 
 class ReferenceType extends AbstractType
@@ -49,16 +48,35 @@ class ReferenceType extends AbstractType
 
         $id = $datas->getId();
 
+        if (count($datas->getChilds()) === 0) {
+            $builder
+                ->add('domaines', 'entity', array(
+                    'class'       => 'HopitalNumeriqueDomaineBundle:Domaine',
+                    'property'    => 'nom',
+                    'required'    => false,
+                    'multiple'    => true,
+                    'label'       => 'Domaine(s) associé(s)',
+                    'empty_value' => ' - ',
+                    'query_builder' => function (EntityRepository $er) use ($connectedUser) {
+                        return $er->getDomainesUserConnectedForForm($connectedUser->getId());
+                    }
+                ))
+            ;
+
+            if ($connectedUser->hasRoleAdmin()) {
+                $builder
+                    ->add('allDomaines', 'checkbox', [
+                        'label' => 'Tous les domaines',
+                        'required' => false
+                    ])
+                ;
+            }
+        }
+
+        $this->buildFormPartConcept($builder);
+
         $builder
-            ->add('libelle', 'text', array(
-                'max_length' => $this->_constraints['libelle']['maxlength'],
-                'required'   => true, 
-                'label'      => 'Libellé',
-                'attr'       => array('class' => $this->_constraints['libelle']['class'] )
-            ))
             ->add('code', 'text', array(
-                //'class'      => 'HopitalNumeriqueReferenceBundle:Reference',
-                //'property'   => 'code',
                 'max_length' => $this->_constraints['code']['maxlength'],
                 'required'   => true, 
                 'label'      => 'Code',
@@ -116,25 +134,35 @@ class ReferenceType extends AbstractType
             ))
         ;
 
-        if(count($datas->getChilds()) === 0)
-        {
-            $builder
-                ->add('domaines', 'entity', array(
-                    'class'       => 'HopitalNumeriqueDomaineBundle:Domaine',
-                    'property'    => 'nom',
-                    'required'    => false,
-                    'multiple'    => true,
-                    'label'       => 'Domaine(s) associé(s)',
-                    'empty_value' => ' - ',
-                    'query_builder' => function(EntityRepository $er) use ($connectedUser){
-                        return $er->getDomainesUserConnectedForForm($connectedUser->getId());
-                    }
-                )); 
-        }
-
         $builder->addEventListener(FormEvents::SUBMIT, function (FormEvent $event) {
             $this->verifyImage($event->getForm(), $event->getData());
         });
+    }
+
+    /**
+     * Construit la partie Concept du formulaire.
+     *
+     * @param \Symfony\Component\Form\FormBuilderInterface $builder Builder
+     */
+    private function buildFormPartConcept(FormBuilderInterface $builder)
+    {
+        $builder
+            ->add('libelle', 'text', array(
+                'required' => true,
+                'label' => 'Libellé du concept',
+                'attr' => [
+                    'maxlength' => 255,
+                    'class' => 'validate[required]'
+                ]
+            ))
+            ->add('synonymes', 'collection', [
+                'label' => 'Synonymes',
+                'type' => SynonymeType::class,
+                'by_reference' => false,
+                'allow_add' => true,
+                'allow_delete' => true
+            ])
+        ;
     }
 
     /**

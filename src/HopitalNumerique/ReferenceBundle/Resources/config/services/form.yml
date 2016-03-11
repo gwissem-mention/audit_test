@@ -1,0 +1,12 @@
+services:
+    hopitalnumerique_reference.form.reference:
+        class: 'HopitalNumerique\ReferenceBundle\Form\Type\ReferenceType'
+        arguments: ["@hopitalnumerique_reference.manager.reference", "@validator", "@hopitalnumerique_user.manager.user", "@hopitalnumerique_reference.manager.reference"]
+        tags:
+            - { name: form.type, alias: hopitalnumerique_reference_reference }
+
+    hopitalnumerique_reference.form.type.synonyme:
+        class: 'HopitalNumerique\ReferenceBundle\Form\Type\SynonymeType'
+        arguments: ['@hopitalnumerique_reference.manager.synonyme']
+        tags:
+            - { name: 'form.type' }

@@ -1,19 +1,21 @@
 {% extends 'NodevoAdminBundle::admin.html.twig' %}
 
-{% block title %}{{parent()}} - Référentiel{% endblock %}
+{% block title %}{{parent()}} - Concept{% endblock %}
 
 {% block h1Title %}
     {% if reference.id %}
-        Editer le référentiel
+        Editer le
     {% else %}
-        Ajouter un référentiel
+        Ajouter un
     {% endif %}
+    concept
 {% endblock %}
 
 {% block javascripts %}
     {{parent()}}
     {% javascripts output="compiled/hopitalnumerique-reference-reference-edit.js"
         'bundles/hopitalnumeriquereference/js/script.js'
+        'bundles/hopitalnumeriquereference/js/Form/Synonyme.js'
     %}
         <script type="text/javascript" src="{{ asset_url }}"></script>
     {% endjavascripts %}
@@ -36,8 +38,37 @@
             </div>
 
             <div class="panel-body">
-                {% form_theme form 'NodevoAdminBundle::form.html.twig' %}
+                {% form_theme form 'HopitalNumeriqueReferenceBundle:Form:form_div_layout.html.twig' %}
                 {{ form_start(form) }}
+
+                    {% if form.domaines is defined %}
+                        {{ form_row(form.domaines) }}
+                    {% endif %}
+                    {% if form.allDomaines is defined %}
+                        {{ form_row(form.allDomaines) }}
+                    {% endif %}
+
+                    <h2>Paramètres du concept</h2>
+                    <h3>Synonymes</h3>
+                    <ul class="row list-unstyled" id="reference_synonymes_form" data-prototype="{{ form_widget(form.synonymes.vars.prototype)|e }}">
+                        {% for synonyme in form.synonymes %}
+                            <li class="col-lg-3 col-md-4">
+                                <div class="hide">{{ form_widget(synonyme) }}</div>
+                                <input type="text" class="form-control" value="{{ synonyme.vars.data.libelle }}" disabled>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                    {{ form_widget(form.synonymes) }}
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
                     {{ form_row(form.libelle) }}
                     {{ form_row(form.code) }}
                     {{ form_row(form.etat) }}
@@ -68,9 +99,6 @@
 
                     {{ form_row(form.order) }}
                     {% form_theme form 'NodevoAdminBundle::form.html.twig' %}
-                    {% if reference.childs|length == 0 %}
-                        {{ form_row(form.domaines) }}
-                    {% endif %}
                 {{ form_end(form) }}
             </div>
         </div>

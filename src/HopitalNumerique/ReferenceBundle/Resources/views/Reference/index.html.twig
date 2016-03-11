@@ -16,12 +16,12 @@
 {% block title %}{{parent()}} - Référentiel{% endblock %}
 
 {% block h1Title %}
-    Liste des référentiels
+    Dictionnaire
 {% endblock %}
 
 {% block toolbarButton %}
     {% if app.user|checkAuthorization( path('hopitalnumerique_reference_reference_add') ) %}
-    <a class="btn btn-default" href="{{ path('hopitalnumerique_reference_reference_add') }}" title="Ajouter un référentiel"><i class="fa fa-plus"></i></a>
+    <a class="btn btn-default" href="{{ path('hopitalnumerique_reference_reference_add') }}" title="Ajouter un concept"><i class="fa fa-plus"></i></a>
     {% endif %}
     <a class="btn btn-default" href="{{ path('hopitalnumerique_reference_sitemap') }}" title="Arborescence"><i class="fa fa-sitemap"></i></a>
 {% endblock %}

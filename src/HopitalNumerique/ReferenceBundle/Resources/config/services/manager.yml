@@ -1,0 +1,8 @@
+services:
+    hopitalnumerique_reference.manager.reference:
+        class: 'HopitalNumerique\ReferenceBundle\Manager\ReferenceManager'
+        arguments: ["@doctrine.orm.entity_manager", "@session", "@hopitalnumerique_user.manager.user"]
+
+    hopitalnumerique_reference.manager.synonyme:
+        class: 'HopitalNumerique\ReferenceBundle\Manager\SynonymeManager'
+        arguments: ['@doctrine.orm.entity_manager']
