@@ -31,23 +31,14 @@ class ReferenceType extends AbstractType
 
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $datas = $options['data'];
         $connectedUser = $this->_userManager->getUserConnected();
 
         //code
         $attrCode = array('class' => $this->_constraints['code']['class']);
-        if( $datas->getLock() )
+        if( $options['data']->getLock() )
             $attrCode['readonly'] = 'readonly';
-        //parent
-        $attrParent = array(
-            'class' => 'select2'
-        );
-        if( $datas->getLock() )
-            $attrParent['disabled'] = 'disabled';
 
-        $id = $datas->getId();
-
-        if (count($datas->getEnfants()) === 0) {
+        if (count($options['data']->getEnfants()) === 0) {
             $builder
                 ->add('domaines', 'entity', array(
                     'class'       => 'HopitalNumeriqueDomaineBundle:Domaine',
@@ -72,7 +63,7 @@ class ReferenceType extends AbstractType
             }
         }
 
-        $this->buildFormPartConcept($builder);
+        $this->buildFormPartConcept($builder, $options);
 
         $builder
             ->add('code', 'text', array(
@@ -99,28 +90,6 @@ class ReferenceType extends AbstractType
                 'label'    => 'Présent dans les champs du moteur de recherche',
                 'attr'     => array( 'class'=> 'checkbox' )
             ))
-            ->add('parents', 'entity', array(
-                'class'         => 'HopitalNumeriqueReferenceBundle:Reference',
-                //'property'      => 'arboName',
-                'multiple' => true,
-                'required'      => false,
-                'empty_value'   => ' - ',
-                'label'         => 'Item parent',
-                'attr'          => $attrParent,
-                'query_builder' => function(EntityRepository $er) use ($id) {
-                    $qb = $er->createQueryBuilder('ref')
-                              ->andWhere('ref.lock = 0')
-                        ->leftJoin('ref.parents', 'parent')
-                              ->orderBy('parent.id, ref.code, ref.order', 'ASC');
-
-                    if( $id )
-                    {
-                        $qb->andWhere("ref.id != $id");
-                    }
-
-                    return $qb;
-                }
-            ))
             ->add('image', 'hidden', [
                 'required' => false
             ])
@@ -144,9 +113,18 @@ class ReferenceType extends AbstractType
      * Construit la partie Concept du formulaire.
      *
      * @param \Symfony\Component\Form\FormBuilderInterface $builder Builder
+     * @param array                                        $options Options
      */
-    private function buildFormPartConcept(FormBuilderInterface $builder)
+    private function buildFormPartConcept(FormBuilderInterface $builder, array $options)
     {
+        $parentAttr = [
+            'class' => 'select2'
+        ];
+        if ($options['data']->getLock()) {
+            $parentAttr['disabled'] = 'disabled';
+        }
+        $referenceId = $options['data']->getId();
+
         $builder
             ->add('libelle', 'text', array(
                 'required' => true,
@@ -170,6 +148,26 @@ class ReferenceType extends AbstractType
                 'allow_add' => true,
                 'allow_delete' => true
             ])
+            ->add('parents', 'entity', array(
+                'class' => 'HopitalNumeriqueReferenceBundle:Reference',
+                'multiple' => true,
+                'required' => false,
+                'label' => 'Parents',
+                'attr' => $parentAttr,
+                'query_builder' => function(EntityRepository $er) use ($referenceId) {
+                    $qb = $er->createQueryBuilder('ref')
+                              ->andWhere('ref.lock = 0')
+                        ->leftJoin('ref.parents', 'parent')
+                              ->orderBy('parent.id, ref.code, ref.order', 'ASC');
+
+                    if( $referenceId )
+                    {
+                        $qb->andWhere("ref.id != $referenceId");
+                    }
+
+                    return $qb;
+                }
+            ))
         ;
     }
 
