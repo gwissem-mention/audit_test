@@ -115,12 +115,6 @@ class Reference
     protected $lock;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Reference", cascade={"persist"})
-     * @ORM\JoinColumn(name="parent_id", referencedColumnName="ref_id")
-     */
-    protected $parent = null;
-
-    /**
      * @var string
      *
      * @ORM\Column(name="ref_image", type="text", nullable=true, length=255)
@@ -133,17 +127,31 @@ class Reference
     protected $imageFile;
 
     /**
-     * @ORM\OneToMany(targetEntity="Reference", mappedBy="parent")
-     */
-    protected $childs;
-
-    /**
      * @var float
      * @Assert\NotBlank(message="L'ordre ne peut pas être vide.")
      * @Nodevo\Javascript(class="validate[required, custom[number]]")
      * @ORM\Column(name="ref_order", type="float", options = {"comment" = "Ordre de la référence"})
      */
     protected $order;
+
+    /**
+     * @var \Doctrine\Common\Collections\Collection
+     *
+     * @ORM\ManyToMany(targetEntity="Reference", inversedBy="enfants")
+     * @ORM\JoinTable(
+     *  name="hn_reference_has_parent",
+     *  joinColumns={@ORM\JoinColumn(name="ref_parent_id", referencedColumnName="ref_id", onDelete="CASCADE")},
+     *  inverseJoinColumns={@ORM\JoinColumn(name="ref_id", referencedColumnName="ref_id", onDelete="CASCADE")}
+     * )
+     */
+    protected $parents;
+    
+    /**
+     * @var \Doctrine\Common\Collections\Collection
+     *
+     * @ORM\ManyToMany(targetEntity="Reference", mappedBy="parents")
+     */
+    protected $enfants;
 
     /**
      * @ORM\ManyToMany(targetEntity="\HopitalNumerique\DomaineBundle\Entity\Domaine", cascade={"persist"})
@@ -344,29 +352,6 @@ class Reference
     }
 
     /**
-     * Get parent
-     *
-     * @return Reference $parent
-     */
-    public function getParent()
-    {
-        return $this->parent;
-    }
-    
-    /**
-     * Set parent
-     *
-     * @param Reference $parent
-     */
-    public function setParent($parent)
-    {
-        if( $parent instanceof Reference)
-        	$this->parent = $parent;
-        else
-            $this->parent = null;        
-    }
-
-    /**
      * Get order
      *
      * @return float $order
@@ -385,26 +370,13 @@ class Reference
     {
         $this->order = $order;
     }
-    
-    /**
-     * Retourne le nom du parent
-     *
-     * @return string|null
-     */
-    public function getParentName()
-    {
-        if( null === $this->getParent() )
-            return null;
-
-        return $this->getParent()->getLibelle();
-    }
 
     /**
      * Retourne le nom de l'arbo
      *
      * @return string
      */
-    public function getArboName()
+    /*public function getArboName()
     {
         //retourne le niveau de profondeur de l'élément courent
         $level = $this->getLevel( 0, $this );
@@ -417,7 +389,7 @@ class Reference
         }
 
         return $sep . $this->code . ' - ' . $this->libelle;
-    }
+    }*/
 
     /**
      * Retourne le niveau de profondeur de l'élément
@@ -506,39 +478,6 @@ class Reference
         $this->domaines = $domaines;
 
         return $this;
-    }
-
-    /**
-     * Add childs
-     *
-     * @param \HopitalNumerique\ReferenceBundle\Entity\Reference $childs
-     * @return Reference
-     */
-    public function addChild(\HopitalNumerique\ReferenceBundle\Entity\Reference $childs)
-    {
-        $this->childs[] = $childs;
-
-        return $this;
-    }
-
-    /**
-     * Remove childs
-     *
-     * @param \HopitalNumerique\ReferenceBundle\Entity\Reference $childs
-     */
-    public function removeChild(\HopitalNumerique\ReferenceBundle\Entity\Reference $childs)
-    {
-        $this->childs->removeElement($childs);
-    }
-
-    /**
-     * Get childs
-     *
-     * @return \Doctrine\Common\Collections\Collection 
-     */
-    public function getChilds()
-    {
-        return $this->childs;
     }
 
     /**
