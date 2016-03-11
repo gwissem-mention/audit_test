@@ -419,6 +419,74 @@ class Reference
     }
 
     /**
+     * Add parent
+     *
+     * @param \HopitalNumerique\ReferenceBundle\Entity\Reference $parent
+     *
+     * @return Reference
+     */
+    public function addParent(\HopitalNumerique\ReferenceBundle\Entity\Reference $parent)
+    {
+        $this->parents[] = $parent;
+
+        return $this;
+    }
+
+    /**
+     * Remove parent
+     *
+     * @param \HopitalNumerique\ReferenceBundle\Entity\Reference $parent
+     */
+    public function removeParent(\HopitalNumerique\ReferenceBundle\Entity\Reference $parent)
+    {
+        $this->parents->removeElement($parent);
+    }
+
+    /**
+     * Get parents
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getParents()
+    {
+        return $this->parents;
+    }
+
+    /**
+     * Add enfant
+     *
+     * @param \HopitalNumerique\ReferenceBundle\Entity\Reference $enfant
+     *
+     * @return Reference
+     */
+    public function addEnfant(\HopitalNumerique\ReferenceBundle\Entity\Reference $enfant)
+    {
+        $this->enfants[] = $enfant;
+
+        return $this;
+    }
+
+    /**
+     * Remove enfant
+     *
+     * @param \HopitalNumerique\ReferenceBundle\Entity\Reference $enfant
+     */
+    public function removeEnfant(\HopitalNumerique\ReferenceBundle\Entity\Reference $enfant)
+    {
+        $this->enfants->removeElement($enfant);
+    }
+
+    /**
+     * Get enfants
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getEnfants()
+    {
+        return $this->enfants;
+    }
+
+    /**
      * Add domaines
      *
      * @param \HopitalNumerique\DomaineBundle\Entity\Domaine $domaines

@@ -1,5 +1,4 @@
 <?php
-
 namespace HopitalNumerique\ReferenceBundle\Form\Type;
 
 use Nodevo\ToolsBundle\Tools\Systeme;
@@ -48,7 +47,7 @@ class ReferenceType extends AbstractType
 
         $id = $datas->getId();
 
-        if (count($datas->getChilds()) === 0) {
+        if (count($datas->getEnfants()) === 0) {
             $builder
                 ->add('domaines', 'entity', array(
                     'class'       => 'HopitalNumeriqueDomaineBundle:Domaine',
@@ -100,9 +99,10 @@ class ReferenceType extends AbstractType
                 'label'    => 'Présent dans les champs du moteur de recherche',
                 'attr'     => array( 'class'=> 'checkbox' )
             ))
-            ->add('parent', 'entity', array(
+            ->add('parents', 'entity', array(
                 'class'         => 'HopitalNumeriqueReferenceBundle:Reference',
-                'property'      => 'arboName',
+                //'property'      => 'arboName',
+                'multiple' => true,
                 'required'      => false,
                 'empty_value'   => ' - ',
                 'label'         => 'Item parent',
@@ -110,7 +110,8 @@ class ReferenceType extends AbstractType
                 'query_builder' => function(EntityRepository $er) use ($id) {
                     $qb = $er->createQueryBuilder('ref')
                               ->andWhere('ref.lock = 0')
-                              ->orderBy('ref.parent, ref.code, ref.order', 'ASC');
+                        ->leftJoin('ref.parents', 'parent')
+                              ->orderBy('parent.id, ref.code, ref.order', 'ASC');
 
                     if( $id )
                     {

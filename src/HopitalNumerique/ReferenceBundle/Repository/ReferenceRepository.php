@@ -21,7 +21,7 @@ class ReferenceRepository extends EntityRepository
         $qb = $this->_em->createQueryBuilder();
         $qb->select('ref.id, ref.libelle, ref.code, par.id as parent, ref.order')
             ->from('HopitalNumeriqueReferenceBundle:Reference', 'ref')
-            ->leftJoin('ref.parent','par');
+            ->leftJoin('ref.parents','par');
 
         if(count($domaineIds) !== 0)
         {
@@ -52,7 +52,7 @@ class ReferenceRepository extends EntityRepository
             $qb->andWhere('ref.recherche = 1');
         }
 
-        $qb->orderBy('ref.parent, ref.code, ref.order');
+        $qb->orderBy('parent, ref.code, ref.order');
 
         return $qb->getQuery()->getResult();
     }
@@ -68,7 +68,7 @@ class ReferenceRepository extends EntityRepository
         $qb->select('ref.id, ref.libelle, ref.code, ref.dictionnaire, ref.recherche, ref.lock, ref.order, refEtat.libelle as etat, refParent.id as idParent, domaine.nom as domaineNom')
             ->from('HopitalNumeriqueReferenceBundle:Reference', 'ref')
             ->leftJoin('ref.etat','refEtat')
-            ->leftJoin('ref.parent','refParent')
+            ->leftJoin('ref.parents','refParent')
             ->leftJoin('ref.domaines', 'domaine')
                 ->where($qb->expr()->orX(
                     $qb->expr()->in('domaine.id', ':domainesId'),
@@ -92,7 +92,7 @@ class ReferenceRepository extends EntityRepository
         $qb->select('ref.id, ref.libelle, ref.code, ref.dictionnaire, ref.recherche, ref.lock, ref.order, refEtat.libelle as etat, refParent.id as idParent, domaine.nom as domaineNom')
             ->from('HopitalNumeriqueReferenceBundle:Reference', 'ref')
             ->leftJoin('ref.etat','refEtat')
-            ->leftJoin('ref.parent','refParent')
+            ->leftJoin('ref.parents','refParent')
             ->leftJoin('ref.domaines', 'domaine')
             ->where('ref.id IN (:ids)')
             ->orderBy('ref.code, ref.order')
@@ -212,7 +212,7 @@ class ReferenceRepository extends EntityRepository
 
         if (null !== $parent) {
             $qb
-                ->andWhere('ref.parent = :parent')
+                ->innerJoin('ref.parents', 'parent', Expr\Join::WITH, 'parent.id = :parent')
                 ->setParameter('parent', $parent)
             ;
 

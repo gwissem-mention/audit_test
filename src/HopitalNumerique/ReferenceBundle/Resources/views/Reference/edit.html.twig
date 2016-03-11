@@ -71,6 +71,8 @@
                         {% endfor %}
                     </ul>
                     {{ form_widget(form.champLexicalNoms) }}
+
+                    {{ form_row(form.parents) }}
                     
                     
                     
@@ -86,8 +88,6 @@
                     {{ form_row(form.etat) }}
                     {{ form_row(form.dictionnaire) }}
                     {{ form_row(form.recherche) }}
-                    {% form_theme form 'HopitalNumeriqueReferenceBundle::form.html.twig' %}
-                    {{ form_row(form.parent) }}
                     
                     <div class="form-group">
                         {{ form_label(form.imageFile) }}
