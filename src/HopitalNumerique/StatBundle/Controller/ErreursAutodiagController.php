@@ -33,7 +33,7 @@ class ErreursAutodiagController extends Controller
                         //Set du booléan pour l'entité
                         $isOk = true;
 
-                        $handle = curl_init($urlCaracteristiques['url']);
+                        $handle = curl_init(str_replace(' ', '%20', $urlCaracteristiques['url']));
                         curl_setopt($handle,  CURLOPT_RETURNTRANSFER, TRUE);
 
                         /* Get the HTML or whatever is linked in $url. */
@@ -155,7 +155,7 @@ class ErreursAutodiagController extends Controller
         //Récupération de la requete
         $url    = $request->request->get('url');
 
-        $handle = curl_init($url);
+        $handle = curl_init(str_replace(' ', '%20', $url));
         curl_setopt($handle,  CURLOPT_RETURNTRANSFER, TRUE);
 
         /* Get the HTML or whatever is linked in $url. */
@@ -189,7 +189,7 @@ class ErreursAutodiagController extends Controller
 
         if(is_null($errorUrl))
         {
-            $handle = curl_init($url);
+            $handle = curl_init(str_replace(' ', '%20', $url));
             curl_setopt($handle,  CURLOPT_RETURNTRANSFER, TRUE);
 
             /* Get the HTML or whatever is linked in $url. */
