@@ -83,7 +83,8 @@
                     </ul>
                     {{ form_widget(form.champLexicalNoms) }}
 
-                    <div class="hide">{{ form_row(form.parents) }}</div>
+                    <h3>{{ form_label(form.parents) }}</h3>
+                    <div class="hide">{{ form_widget(form.parents) }}</div>
                     <div id="reference-tree"></div>
                     
                     

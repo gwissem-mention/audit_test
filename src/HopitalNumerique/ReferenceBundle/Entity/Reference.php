@@ -533,6 +533,21 @@ class Reference
     }
 
     /**
+     * Add domaines
+     *
+     * @param array<\HopitalNumerique\DomaineBundle\Entity\Domaine> $domaines Domaines
+     * @return Reference
+     */
+    public function addDomaines($domaines)
+    {
+        foreach ($domaines as $domaine) {
+            $this->addDomaine($domaine);
+        }
+
+        return $this;
+    }
+
+    /**
      * Remove domaines
      *
      * @param \HopitalNumerique\DomaineBundle\Entity\Domaine $domaines
@@ -579,6 +594,42 @@ class Reference
         $this->domaines = $domaines;
 
         return $this;
+    }
+
+    /**
+     * Retourne si la référence est liée au domaine.
+     *
+     * @param \HopitalNumerique\DomaineBundle\Entity\Domaine $domaine Domaine
+     */
+    public function hasDomaine(\HopitalNumerique\DomaineBundle\Entity\Domaine $domaine)
+    {
+        if (true === $this->allDomaines) {
+            return true;
+        }
+
+        foreach ($this->domaines as $domaineExistant) {
+            if ($domaineExistant->equals($domaine)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * Retourne si la référence possède l'un des domaines.
+     *
+     * @param array<\HopitalNumerique\DomaineBundle\Entity\Domaine> $domaines Domaines
+     */
+    public function hasAtLeastOneDomaine($domaines)
+    {
+        foreach ($domaines as $domaine) {
+            if ($this->hasDomaine($domaine)) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     /**
@@ -677,6 +728,17 @@ class Reference
     public function __toString()
     {
         return $this->code . ' - ' . $this->libelle;
+    }
+
+    /**
+     * Retourne l'égalité entre deux références.
+     *
+     * @param \HopitalNumerique\ReferenceBundle\Entity\Reference $reference Autre référence
+     * @return boolean Si égalité
+     */
+    public function equals(Reference $reference)
+    {
+        return ($this->id === $reference->getId());
     }
 
 

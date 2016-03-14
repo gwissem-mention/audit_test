@@ -16,3 +16,9 @@ services:
     hopitalnumerique_reference.dependency_injection.reference.tree:
         class: 'HopitalNumerique\ReferenceBundle\DependencyInjection\Reference\Tree'
         arguments: ['@hopitalnumerique_reference.manager.reference']
+
+    hopitalnumerique_reference.doctrine.reference_listener:
+        class: 'HopitalNumerique\ReferenceBundle\Doctrine\ReferenceListener'
+        tags:
+            - { name: 'doctrine.event_listener', event: 'prePersist' }
+            - { name: 'doctrine.event_listener', event: 'preUpdate' }

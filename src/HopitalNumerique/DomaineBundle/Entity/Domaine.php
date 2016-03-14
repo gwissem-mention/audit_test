@@ -680,4 +680,15 @@ class Domaine
     {
         return $this->nom;
     }
+
+    /**
+     * Retourne l'égalité entre deux domaines.
+     *
+     * @param \HopitalNumerique\ReferenceBundle\Entity\Domaine $domaine Autre domaine
+     * @return boolean Si égalité
+     */
+    public function equals(Domaine $domaine)
+    {
+        return ($this->id === $domaine->getId());
+    }
 }
