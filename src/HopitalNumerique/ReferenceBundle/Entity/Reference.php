@@ -135,6 +135,13 @@ class Reference
     protected $order;
 
     /**
+     * @var boolean
+     *
+     * @ORM\Column(name="ref_parentable", type="boolean", options={"comment"="Si la référence peut être parent", "default"=false})
+     */
+    private $parentable;
+
+    /**
      * @var \Doctrine\Common\Collections\Collection
      *
      * @ORM\ManyToMany(targetEntity="Reference", inversedBy="enfants")
@@ -198,6 +205,7 @@ class Reference
     public function __construct()
     {
         $this->lock  = false;
+        $this->parentable = false;
         $this->order = 1;
         $this->domaines = new ArrayCollection();
         $this->allDomaines = false;
@@ -372,24 +380,28 @@ class Reference
     }
 
     /**
-     * Retourne le nom de l'arbo
+     * Set parentable
      *
-     * @return string
+     * @param boolean $parentable
+     *
+     * @return Reference
      */
-    /*public function getArboName()
+    public function setParentable($parentable)
     {
-        //retourne le niveau de profondeur de l'élément courent
-        $level = $this->getLevel( 0, $this );
-        $sep   = '';
+        $this->parentable = $parentable;
 
-        //selon le level de profondeur, le séparateur change
-        if( $level > 1 ) {
-            for( $i = 2; $i <= $level; $i++ )
-                $sep .= '|--';
-        }
+        return $this;
+    }
 
-        return $sep . $this->code . ' - ' . $this->libelle;
-    }*/
+    /**
+     * Get parentable
+     *
+     * @return boolean
+     */
+    public function isParentable()
+    {
+        return $this->parentable;
+    }
 
     /**
      * Retourne le niveau de profondeur de l'élément

@@ -77,7 +77,7 @@ class Tree
      */
     private function getOrderedReferences()
     {
-        $references = $this->referenceManager->findBy(['lock' => false], ['order' => 'ASC']);
+        $references = $this->referenceManager->findBy(['lock' => false, 'parentable' => true], ['order' => 'ASC']);
         return $this->getOrderedReferencesTreePart($references);
     }
 
@@ -97,7 +97,7 @@ class Tree
                 unset($references[$i]);
                 $referencesSubTreeNode = [
                     'reference' => $reference,
-                    'enfants' => $this->getOrderedReferencesTreePart($reference->getEnfants(), $reference)
+                    'enfants' => $this->getOrderedReferencesTreePart($references, $reference)
                 ];
                 $referencesSubTree[] = $referencesSubTreeNode;
             }
