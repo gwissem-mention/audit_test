@@ -163,6 +163,9 @@ assetic:
                 - '%kernel.root_dir%/Resources/components/jquery-file-upload/js/jquery.fileupload-process.js'
                 - '%kernel.root_dir%/Resources/components/jquery-file-upload/js/jquery.fileupload-ui.js'
                 #- '%kernel.root_dir%/Resources/components/jquery-file-upload/js/jquery.fileupload-validate.js'
+        jstree_js:
+            inputs:
+                - '%kernel.root_dir%/Resources/components/jstree/dist/jstree.min.js'
         #CSS
         bbcode_css:
             inputs:
@@ -223,3 +226,7 @@ assetic:
             inputs:
                 - 'bundles/nodevoadmin/fonts/glyphicons/css/glyphicons.min.css'
                 - 'bundles/hopitalnumeriqueadmin/css/fonts.css'
+        jstree_css:
+            inputs:
+                - '%kernel.root_dir%/Resources/components/jstree/dist/themes/default/style.min.css'
+                - 'bundles/hopitalnumeriquecore/css/redefinitions/jstree.css'

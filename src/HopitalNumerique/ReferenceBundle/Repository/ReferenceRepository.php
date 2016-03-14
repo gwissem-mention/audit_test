@@ -3,7 +3,7 @@
 namespace HopitalNumerique\ReferenceBundle\Repository;
 
 use Doctrine\ORM\EntityRepository;
-use Doctrine\ORM\Query\Expr\Join;
+use Doctrine\ORM\Query\Expr;
 use HopitalNumerique\ReferenceBundle\Entity\Reference;
 
 /**
@@ -142,8 +142,8 @@ class ReferenceRepository extends EntityRepository
         $qb = $this->_em->createQueryBuilder();
         $qb->select('ref')
             ->from('HopitalNumeriqueReferenceBundle:Reference', 'ref')
-            ->innerJoin('ref.domaines', 'domaine', Join::WITH, 'domaine.id = :idDomaine')
-            ->innerJoin('ref.parent', 'par', Join::WITH, 'par.id = :idParent')
+            ->innerJoin('ref.domaines', 'domaine', Expr\Join::WITH, 'domaine.id = :idDomaine')
+            ->innerJoin('ref.parent', 'par', Expr\Join::WITH, 'par.id = :idParent')
             ->setParameters(array(
                 'idDomaine' => $idDomaine,
                 'idParent'  => $idParent,
@@ -174,6 +174,23 @@ class ReferenceRepository extends EntityRepository
             ->orderBy('ref.code');
             
         return $qb;
+    }
+
+    /**
+     * Retourne les références enfants.
+     *
+     * @return array<\HopitalNumerique\ReferenceBundle\Entity\Reference> Références
+     */
+    public function findByParent(Reference $parent)
+    {
+        $qb = $this->createQueryBuilder('reference');
+
+        $qb
+            ->innerJoin('reference.parents', 'parent', Expr\Join::WITH, $qb->expr()->eq('parent.id', ':parent'))
+            ->setParameter('parent', $parent)
+        ;
+
+        return $qb->getQuery()->getResult();
     }
 
     /**

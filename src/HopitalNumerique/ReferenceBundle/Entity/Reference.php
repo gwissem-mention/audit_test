@@ -140,8 +140,8 @@ class Reference
      * @ORM\ManyToMany(targetEntity="Reference", inversedBy="enfants")
      * @ORM\JoinTable(
      *  name="hn_reference_has_parent",
-     *  joinColumns={@ORM\JoinColumn(name="ref_parent_id", referencedColumnName="ref_id", onDelete="CASCADE")},
-     *  inverseJoinColumns={@ORM\JoinColumn(name="ref_id", referencedColumnName="ref_id", onDelete="CASCADE")}
+     *  joinColumns={@ORM\JoinColumn(name="ref_id", referencedColumnName="ref_id", onDelete="CASCADE")},
+     *  inverseJoinColumns={@ORM\JoinColumn(name="ref_parent_id", referencedColumnName="ref_id", onDelete="CASCADE")}
      * )
      */
     protected $parents;
@@ -450,6 +450,39 @@ class Reference
     public function getParents()
     {
         return $this->parents;
+    }
+
+    /**
+     * Get ID des parents
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getParentIds()
+    {
+        $parentIds = [];
+
+        foreach ($this->parents as $parent) {
+            $parentIds[] = $parent->getId();
+        }
+
+        return $parentIds;
+    }
+
+    /**
+     * Retourne si la référence à tel parent.
+     *
+     * @param \HopitalNumerique\ReferenceBundle\Entity\Reference $referenceParent Parent
+     * @return boolean Si a parent
+     */
+    public function hasParent(Reference $referenceParent)
+    {
+        foreach ($this->getParents() as $parent) {
+            if ($referenceParent->getId() === $parent->getId()) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     /**

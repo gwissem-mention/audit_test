@@ -22,6 +22,7 @@
                 '@fancybox_css'
                 '@select2_css'
                 '@validationEngine_css'
+                '@jstree_css'
             %}
                 <link rel="stylesheet" href="{{ asset_url }}" />
             {% endstylesheets %}
@@ -48,11 +49,19 @@
                 '@fancybox_js'
                 '@select2_js'
                 '@validationEngine_js'
+                '@jstree_js'
                 'bundles/nodevoadmin/js/admin.js'
             %}
                 <script type="text/javascript" src="{{ asset_url }}"></script>
             {% endjavascripts %}
             <script src="{{ path('fos_js_routing_js', {"callback": "fos.Router.setData"}) }}"></script>
+            {% if app.debug %}
+                {% javascripts output="compiled/admin-debogage.js"
+                    'bundles/nodevotools/js/Debogage.js'
+                %}
+                    <script type="text/javascript" src="{{ asset_url }}"></script>
+                {% endjavascripts %}
+            {% endif %}
         {% endblock %}
     </head>
 

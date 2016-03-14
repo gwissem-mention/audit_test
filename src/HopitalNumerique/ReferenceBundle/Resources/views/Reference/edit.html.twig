@@ -15,11 +15,22 @@
     {{parent()}}
     {% javascripts output="compiled/hopitalnumerique-reference-reference-edit.js"
         'bundles/hopitalnumeriquereference/js/script.js'
+        '%kernel.root_dir%/Resources/lib/nodevo/Form/Select.js'
+        'bundles/hopitalnumeriquereference/js/Tree.js'
         'bundles/hopitalnumeriquereference/js/Form/Synonyme.js'
         'bundles/hopitalnumeriquereference/js/Form/ChampLexicalNom.js'
     %}
         <script type="text/javascript" src="{{ asset_url }}"></script>
     {% endjavascripts %}
+    <script type="text/javascript">
+        $(document).ready(function () {
+            var referenceTree = new Hn_Reference_Tree('#reference-tree', '#hopitalnumerique_reference_reference_parents');
+            referenceTree.display({{ referenceTreeOptions|raw }});
+            referenceTree.container.on('ready.jstree', function () {
+                referenceTree.select({{ reference.parentIds|json_encode }});
+            });
+        });
+    </script>
 {% endblock %}
 
 {% block toolbarButton %}
@@ -72,8 +83,8 @@
                     </ul>
                     {{ form_widget(form.champLexicalNoms) }}
 
-                    {{ form_row(form.parents) }}
-                    
+                    <div class="hide">{{ form_row(form.parents) }}</div>
+                    <div id="reference-tree"></div>
                     
                     
                     

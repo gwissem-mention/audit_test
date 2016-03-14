@@ -61,7 +61,7 @@ class ReferenceController extends Controller
             }
         }
 
-        return $this->renderForm('hopitalnumerique_reference_reference', $reference, 'HopitalNumeriqueReferenceBundle:Reference:edit.html.twig' );
+        return $this->renderForm($reference);
     }
 
     /**
@@ -72,7 +72,7 @@ class ReferenceController extends Controller
         //Récupération de l'entité passée en paramètre
         $reference = $this->get('hopitalnumerique_reference.manager.reference')->findOneBy( array('id' => $id) );
 
-        return $this->renderForm('hopitalnumerique_reference_reference', $reference, 'HopitalNumeriqueReferenceBundle:Reference:edit.html.twig' );
+        return $this->renderForm($reference);
     }
 
     /**
@@ -214,16 +214,16 @@ class ReferenceController extends Controller
     /**
      * Effectue le render du formulaire Reference.
      *
-     * @param string    $formName Nom du service associé au formulaire
      * @param Reference $item     Entité Référence
-     * @param string    $view     Chemin de la vue ou sera rendu le formulaire
      *
      * @return Form | redirect
      */
-    private function renderForm( $formName, $reference, $view )
+    private function renderForm($reference)
     {
+        $referenceTreeOptions = $this->container->get('hopitalnumerique_reference.dependency_injection.reference.tree')->getOptions();
+
         //Création du formulaire via le service
-        $form = $this->createForm( $formName, $reference);
+        $form = $this->createForm('hopitalnumerique_reference_reference', $reference);
 
         $request = $this->get('request');
 
@@ -238,8 +238,6 @@ class ReferenceController extends Controller
             //si le formulaire est valide
             if ( $form->isValid() ) 
             {
-                $oldParent = $reference->getParent();
-
                 if( isset($formDatas['parent']) && !is_null($formDatas['parent']) ){
                     $parent = $this->get('hopitalnumerique_reference.manager.reference')->findOneBy( array( 'id' => $formDatas['parent'] ) );    
                     $reference->setParent( $parent );
@@ -334,9 +332,10 @@ class ReferenceController extends Controller
             }
         }
 
-        return $this->render( $view , array(
+        return $this->render('HopitalNumeriqueReferenceBundle:Reference:edit.html.twig', array(
             'form'      => $form->createView(),
-            'reference' => $reference
+            'reference' => $reference,
+            'referenceTreeOptions' => json_encode($referenceTreeOptions)
         ));
     }
 }

@@ -117,9 +117,7 @@ class ReferenceType extends AbstractType
      */
     private function buildFormPartConcept(FormBuilderInterface $builder, array $options)
     {
-        $parentAttr = [
-            'class' => 'select2'
-        ];
+        $parentAttr = [];
         if ($options['data']->getLock()) {
             $parentAttr['disabled'] = 'disabled';
         }

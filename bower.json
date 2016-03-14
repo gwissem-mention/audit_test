@@ -37,6 +37,7 @@
     "jquery.mosaicflow": "0.2.5",
     "canvg-gabelerner": "*",
     "jquery-file-upload" : "9.11.*",
-    "blueimp-tmpl" : "2.5.*"
+    "blueimp-tmpl" : "2.5.*",
+    "jstree":"3.2.*"
   }
 }

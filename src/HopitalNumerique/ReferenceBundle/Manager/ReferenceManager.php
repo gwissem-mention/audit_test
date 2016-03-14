@@ -405,6 +405,16 @@ class ReferenceManager extends BaseManager
         return $this->findByCode('CONTEXT_SPECIALITE_ES');
     }
 
+    /**
+     * Retourne les références enfants.
+     *
+     * @return array<\HopitalNumerique\ReferenceBundle\Entity\Reference> Références
+     */
+    public function findByParent(Reference $parent)
+    {
+        return $this->getRepository()->findByParent($parent);
+    }
+
     public function findByCode($code, $isActif = true)
     {
         return $this->getRepository()->findByCode($code, $isActif);

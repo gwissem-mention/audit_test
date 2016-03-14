@@ -250,11 +250,12 @@ class ObjetRepository extends EntityRepository
             ->from('HopitalNumeriqueObjetBundle:Objet', 'obj')
             ->innerJoin('obj.types','refType')
             ->leftJoin('obj.etat','refEtat')
-            ->leftJoin('refType.parent','parentType')
+            ->leftJoin('refType.parents','parentType')
             ->leftJoin('obj.domaines','domaine')
-                ->where('domaine.id = :idDomaine')
-                ->setParameter('idDomaine', 1)
-            ;
+            ->where('domaine.id = :idDomaine')
+            ->setParameter('idDomaine', 1)
+            ->groupBy('obj.id')
+        ;
         
         return $qb;
     }

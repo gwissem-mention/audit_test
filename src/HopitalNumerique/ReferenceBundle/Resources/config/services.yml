@@ -12,3 +12,7 @@ services:
         arguments : ["@hopitalnumerique_reference.manager.reference"]
         tags:
             - { name: twig.extension }
+
+    hopitalnumerique_reference.dependency_injection.reference.tree:
+        class: 'HopitalNumerique\ReferenceBundle\DependencyInjection\Reference\Tree'
+        arguments: ['@hopitalnumerique_reference.manager.reference']

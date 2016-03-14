@@ -924,8 +924,9 @@ class ObjetManager extends BaseManager
         $type      = $types[0];
         $categorie = '';
 
-        if( $parent = $type->getParent() )
-            $categorie .= $parent->getLibelle().'-';
+        foreach ($type->getParents() as $typeParent) {
+            $categorie .= $typeParent->getLibelle().'-';
+        }
         $categorie .= $type->getLibelle();
 
         $tool = new Chaine( $categorie );

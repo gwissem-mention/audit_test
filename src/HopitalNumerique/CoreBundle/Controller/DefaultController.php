@@ -20,7 +20,7 @@ class DefaultController extends Controller
         $article = $this->get('hopitalnumerique_objet.manager.objet')->getArticleHome();
 
         //get actus
-        $allCategories = $this->get('hopitalnumerique_reference.manager.reference')->findBy( array( 'parent' => 188) );
+        $allCategories = $this->get('hopitalnumerique_reference.manager.reference')->findByParent($this->get('hopitalnumerique_reference.manager.reference')->findOneById(188));
         $user          = $this->get('security.context')->getToken()->getUser();
         $role          = $this->get('nodevo_role.manager.role')->getUserRole($user);
         $actualites    = $this->get('hopitalnumerique_objet.manager.objet')->getActualitesByCategorie( $allCategories, $role, 3, array( 'champ' => 'obj.dateCreation', 'tri' => 'DESC') );
