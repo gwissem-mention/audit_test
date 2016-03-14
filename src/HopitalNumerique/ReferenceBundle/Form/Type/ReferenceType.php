@@ -34,9 +34,6 @@ class ReferenceType extends AbstractType
         $connectedUser = $this->_userManager->getUserConnected();
 
         //code
-        $attrCode = array('class' => $this->_constraints['code']['class']);
-        if( $options['data']->getLock() )
-            $attrCode['readonly'] = 'readonly';
 
         if (count($options['data']->getEnfants()) === 0) {
             $builder
@@ -64,14 +61,10 @@ class ReferenceType extends AbstractType
         }
 
         $this->buildFormPartConcept($builder, $options);
+        $this->buildFormPartListe($builder, $options);
+        $this->buildFormPartReference($builder, $options);
 
         $builder
-            ->add('code', 'text', array(
-                'max_length' => $this->_constraints['code']['maxlength'],
-                'required'   => true, 
-                'label'      => 'Code',
-                'attr'       => $attrCode
-            ))
             ->add('etat', 'entity', array(
                 'class'       => 'HopitalNumeriqueReferenceBundle:Reference',
                 'choices'     => $this->referenceManager->findByCode('ETAT'),
@@ -96,11 +89,6 @@ class ReferenceType extends AbstractType
             ->add('imageFile', 'file', array(
                 'label' => 'Image',
                 'required' => false
-            ))
-            ->add('order', 'number', array(
-                'required' => true, 
-                'label'    => 'Ordre d\'affichage',
-                'attr'     => array('class' => $this->_constraints['order']['class'] )
             ))
         ;
 
@@ -165,6 +153,63 @@ class ReferenceType extends AbstractType
 
                     return $qb;
                 }
+            ))
+        ;
+    }
+
+    /**
+     * Construit la partie Liste du formulaire.
+     *
+     * @param \Symfony\Component\Form\FormBuilderInterface $builder Builder
+     * @param array                                        $options Options
+     */
+    private function buildFormPartListe(FormBuilderInterface $builder, array $options)
+    {
+        $attrCode = array('class' => $this->_constraints['code']['class']);
+        if ($options['data']->getLock())
+            $attrCode['readonly'] = 'readonly';
+
+        $builder
+            ->add('code', 'text', array(
+                'max_length' => $this->_constraints['code']['maxlength'],
+                'required'   => true,
+                'label'      => 'Code',
+                'attr'       => $attrCode
+            ))
+            ->add('order', 'number', array(
+                'required' => true,
+                'label'    => 'Ordre d\'affichage',
+                'attr'     => array('class' => $this->_constraints['order']['class'] )
+            ))
+        ;
+    }
+
+    /**
+     * Construit la partie Référence du formulaire.
+     *
+     * @param \Symfony\Component\Form\FormBuilderInterface $builder Builder
+     * @param array                                        $options Options
+     */
+    private function buildFormPartReference(FormBuilderInterface $builder, array $options)
+    {
+        $builder
+            ->add('reference', 'checkbox', array(
+                'required' => false,
+                'label' => 'Est une référence ?'
+            ))
+            ->add('inRecherche', 'checkbox', array(
+                'required' => false,
+                'label' => 'Présente dans la recherche ?'
+            ))
+            ->add('referenceLibelle', 'text', array(
+                'required' => false,
+                'label' => 'Libellé de la référence',
+                'label_attr' => [
+                    'title' => 'Si différent du libellé du concept'
+                ],
+                'attr' => [
+                    'maxlength' => 255
+                ]
             ))
         ;
     }

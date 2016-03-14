@@ -198,6 +198,27 @@ class Reference
      */
     private $champLexicalNoms;
 
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="ref_reference", type="boolean", options={"comment"="Est une référence ?", "default"=false})
+     */
+    private $reference;
+
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="ref_in_recherche", type="boolean", options={"comment"="Présente dans la recherche ?", "default"=false})
+     */
+    private $inRecherche;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="ref_reference_libelle", type="string", length=255, options={"comment"="Libellé de la référence si différent du libellé du concept"})
+     */
+    private $referenceLibelle;
+
 
     /**
      * Constructeur.
@@ -734,6 +755,78 @@ class Reference
     public function getChampLexicalNoms()
     {
         return $this->champLexicalNoms;
+    }
+
+    /**
+     * Set reference
+     *
+     * @param boolean $reference
+     *
+     * @return Reference
+     */
+    public function setReference($reference)
+    {
+        $this->reference = $reference;
+
+        return $this;
+    }
+
+    /**
+     * Get reference
+     *
+     * @return boolean
+     */
+    public function isReference()
+    {
+        return $this->reference;
+    }
+
+    /**
+     * Set inRecherche
+     *
+     * @param boolean $inRecherche
+     *
+     * @return Reference
+     */
+    public function setInRecherche($inRecherche)
+    {
+        $this->inRecherche = $inRecherche;
+
+        return $this;
+    }
+
+    /**
+     * Get inRecherche
+     *
+     * @return boolean
+     */
+    public function isInRecherche()
+    {
+        return $this->inRecherche;
+    }
+
+    /**
+     * Set referenceLibelle
+     *
+     * @param string $referenceLibelle
+     *
+     * @return Reference
+     */
+    public function setReferenceLibelle($referenceLibelle)
+    {
+        $this->referenceLibelle = $referenceLibelle;
+
+        return $this;
+    }
+
+    /**
+     * Get referenceLibelle
+     *
+     * @return string
+     */
+    public function getReferenceLibelle()
+    {
+        return $this->referenceLibelle;
     }
 
 

@@ -1,5 +1,5 @@
 /**
- * Classe gérant les prix d'élement dans les formulaires.
+ * Classe gérant les noms du champ lexical dans les formulaires.
  * 
  * @author Rémi Leclerc
  */

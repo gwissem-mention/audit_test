@@ -17,6 +17,7 @@
         'bundles/hopitalnumeriquereference/js/script.js'
         '%kernel.root_dir%/Resources/lib/nodevo/Form/Select.js'
         'bundles/hopitalnumeriquereference/js/Tree.js'
+        'bundles/hopitalnumeriquereference/js/Form/Reference.js'
         'bundles/hopitalnumeriquereference/js/Form/Synonyme.js'
         'bundles/hopitalnumeriquereference/js/Form/ChampLexicalNom.js'
     %}
@@ -61,6 +62,7 @@
                     {% endif %}
 
                     <h2>Paramètres du concept</h2>
+                    {{ form_row(form.libelle) }}
                     <h3>Synonymes</h3>
                     <ul class="row list-unstyled" id="reference_synonymes_form" data-prototype="{{ form_widget(form.synonymes.vars.prototype)|e }}">
                         {% for synonyme in form.synonymes %}
@@ -86,18 +88,24 @@
                     <h3>{{ form_label(form.parents) }}</h3>
                     <div class="hide">{{ form_widget(form.parents) }}</div>
                     <div id="reference-tree"></div>
-                    
-                    
-                    
-                    
-                    
-                    
-                    
-                    
-                    
-                    {{ form_row(form.libelle) }}
+
+                    <br>{{ form_row(form.etat) }}
+
+                    <h2>Paramètres de liste</h2>
                     {{ form_row(form.code) }}
-                    {{ form_row(form.etat) }}
+                    {{ form_row(form.order) }}
+
+                    <h2>Paramètres de la référence</h2>
+                    {{ form_row(form.reference) }}
+                    <div id="reference-in-recherche-container">
+                        {{ form_row(form.inRecherche) }}
+                    </div>
+                    {{ form_row(form.referenceLibelle) }}
+                    
+                    
+                    
+                    
+                    
                     {{ form_row(form.dictionnaire) }}
                     {{ form_row(form.recherche) }}
                     
@@ -121,7 +129,6 @@
                         <div class="col-md-3">{{ form_errors(form.imageFile) }}</div>
                     </div>
 
-                    {{ form_row(form.order) }}
                     {% form_theme form 'NodevoAdminBundle::form.html.twig' %}
                 {{ form_end(form) }}
             </div>
