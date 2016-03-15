@@ -260,6 +260,8 @@ class Reference
         $this->allDomaines = false;
         $this->synonymes = new ArrayCollection();
         $this->champLexicalNoms = new ArrayCollection();
+        $this->parents = new ArrayCollection();
+        $this->enfants = new ArrayCollection();
     }
 
 
