@@ -14,7 +14,9 @@ class ReferenceListener
      */
     public function prePersist(LifecycleEventArgs $args)
     {
-        $this->preUpdate($args);
+        if ($args->getEntity() instanceof Reference) {
+            $this->preUpdate($args);
+        }
     }
 
     /**
@@ -22,7 +24,9 @@ class ReferenceListener
      */
     public function preUpdate(LifecycleEventArgs $args)
     {
-        $this->processDomaineAdding($args->getEntity());
+        if ($args->getEntity() instanceof Reference) {
+            $this->processDomaineAdding($args->getEntity());
+        }
     }
 
     /**

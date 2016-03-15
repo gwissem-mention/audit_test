@@ -63,6 +63,7 @@ class ReferenceType extends AbstractType
         $this->buildFormPartConcept($builder, $options);
         $this->buildFormPartListe($builder, $options);
         $this->buildFormPartReference($builder, $options);
+        $this->buildFormPartGlossaire($builder, $options);
 
         $builder
             ->add('etat', 'entity', array(
@@ -213,6 +214,55 @@ class ReferenceType extends AbstractType
             ))
         ;
     }
+
+    /**
+     * Construit la partie Glossaire du formulaire.
+     *
+     * @param \Symfony\Component\Form\FormBuilderInterface $builder Builder
+     * @param array                                        $options Options
+     */
+    private function buildFormPartGlossaire(FormBuilderInterface $builder, array $options)
+    {
+        $builder
+            ->add('inGlossaire', 'checkbox', array(
+                'required' => false,
+                'label' => 'Présente dans le glossaire ?'
+            ))
+            ->add('sigle', 'text', array(
+                'required' => false,
+                'label' => 'Sigle',
+                'attr' => [
+                    'maxlength' => 255
+                ]
+            ))
+            ->add('glossaireLibelle', 'text', array(
+                'required' => false,
+                'label' => 'Libellé dans le glossaire',
+                'label_attr' => [
+                    'title' => 'Si différent du libellé du concept'
+                ],
+                'attr' => [
+                    'maxlength' => 255
+                ]
+            ))
+            ->add('descriptionCourte', 'textarea', array(
+                'required' => false,
+                'label' => 'Description courte'
+            ))
+            ->add('descriptionLongue', 'textarea', array(
+                'required' => false,
+                'label' => 'Description longue',
+                'attr' => [
+                    'class' => 'tinyMce'
+                ]
+            ))
+            ->add('casseSensible', 'checkbox', array(
+                'required' => false,
+                'label' => 'Sensible à la casse ?'
+            ))
+        ;
+    }
+
 
     /**
      * Vérifie la validité de l'image.

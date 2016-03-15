@@ -201,23 +201,65 @@ class Reference
     /**
      * @var boolean
      *
-     * @ORM\Column(name="ref_reference", type="boolean", options={"comment"="Est une référence ?", "default"=false})
+     * @ORM\Column(name="ref_reference", type="boolean", nullable=false, options={"comment"="Est une référence ?", "default"=false})
      */
     private $reference;
 
     /**
      * @var boolean
      *
-     * @ORM\Column(name="ref_in_recherche", type="boolean", options={"comment"="Présente dans la recherche ?", "default"=false})
+     * @ORM\Column(name="ref_in_recherche", type="boolean", nullable=false, options={"comment"="Présente dans la recherche ?", "default"=false})
      */
     private $inRecherche;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="ref_reference_libelle", type="string", length=255, options={"comment"="Libellé de la référence si différent du libellé du concept"})
+     * @ORM\Column(name="ref_reference_libelle", type="string", length=255, nullable=true, options={"comment"="Libellé de la référence si différent du libellé du concept"})
      */
     private $referenceLibelle;
+
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="ref_in_glossaire", type="boolean", nullable=false, options={"comment"="Présente dans le glossaire ?", "default"=false})
+     */
+    private $inGlossaire;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="ref_sigle", type="string", length=255, nullable=true)
+     */
+    private $sigle;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="ref_glossaire_libelle", type="string", length=255, nullable=true, options={"comment"="Libellé du glossaire si différent du libellé du concept"})
+     */
+    private $glossaireLibelle;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="ref_description_courte", type="text", nullable=true)
+     */
+    private $descriptionCourte;
+
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="ref_casse_sensible", type="boolean", nullable=false, options={"default"=false})
+     */
+    private $casseSensible;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="ref_description_longue", type="text", nullable=true)
+     */
+    private $descriptionLongue;
 
 
     /**
@@ -827,6 +869,150 @@ class Reference
     public function getReferenceLibelle()
     {
         return $this->referenceLibelle;
+    }
+
+    /**
+     * Set inGlossaire
+     *
+     * @param boolean $inGlossaire
+     *
+     * @return Reference
+     */
+    public function setInGlossaire($inGlossaire)
+    {
+        $this->inGlossaire = $inGlossaire;
+
+        return $this;
+    }
+
+    /**
+     * Get inGlossaire
+     *
+     * @return boolean
+     */
+    public function isInGlossaire()
+    {
+        return $this->inGlossaire;
+    }
+
+    /**
+     * Set sigle
+     *
+     * @param string $sigle
+     *
+     * @return Reference
+     */
+    public function setSigle($sigle)
+    {
+        $this->sigle = $sigle;
+
+        return $this;
+    }
+
+    /**
+     * Get sigle
+     *
+     * @return string
+     */
+    public function getSigle()
+    {
+        return $this->sigle;
+    }
+
+    /**
+     * Set glossaireLibelle
+     *
+     * @param string $glossaireLibelle
+     *
+     * @return Reference
+     */
+    public function setGlossaireLibelle($glossaireLibelle)
+    {
+        $this->glossaireLibelle = $glossaireLibelle;
+
+        return $this;
+    }
+
+    /**
+     * Get glossaireLibelle
+     *
+     * @return string
+     */
+    public function getGlossaireLibelle()
+    {
+        return $this->glossaireLibelle;
+    }
+
+    /**
+     * Set descriptionCourte
+     *
+     * @param string $descriptionCourte
+     *
+     * @return Reference
+     */
+    public function setDescriptionCourte($descriptionCourte)
+    {
+        $this->descriptionCourte = $descriptionCourte;
+
+        return $this;
+    }
+
+    /**
+     * Get descriptionCourte
+     *
+     * @return string
+     */
+    public function getDescriptionCourte()
+    {
+        return $this->descriptionCourte;
+    }
+
+    /**
+     * Set descriptionLongue
+     *
+     * @param string $descriptionLongue
+     *
+     * @return Reference
+     */
+    public function setDescriptionLongue($descriptionLongue)
+    {
+        $this->descriptionLongue = $descriptionLongue;
+
+        return $this;
+    }
+
+    /**
+     * Get descriptionLongue
+     *
+     * @return string
+     */
+    public function getDescriptionLongue()
+    {
+        return $this->descriptionLongue;
+    }
+
+    /**
+     * Set casseSensible
+     *
+     * @param boolean $casseSensible
+     *
+     * @return Reference
+     */
+    public function setCasseSensible($casseSensible)
+    {
+        $this->casseSensible = $casseSensible;
+
+        return $this;
+    }
+
+    /**
+     * Get casseSensible
+     *
+     * @return boolean
+     */
+    public function isCasseSensible()
+    {
+        return $this->casseSensible;
     }
 
 
