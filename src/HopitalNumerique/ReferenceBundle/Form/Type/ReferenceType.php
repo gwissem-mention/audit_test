@@ -33,51 +33,40 @@ class ReferenceType extends AbstractType
     {
         $connectedUser = $this->_userManager->getUserConnected();
 
-        //code
-
-        if (count($options['data']->getEnfants()) === 0) {
-            $builder
-                ->add('domaines', 'entity', array(
-                    'class'       => 'HopitalNumeriqueDomaineBundle:Domaine',
-                    'property'    => 'nom',
-                    'required'    => false,
-                    'multiple'    => true,
-                    'label'       => 'Domaine(s) associé(s)',
-                    'empty_value' => ' - ',
-                    'query_builder' => function (EntityRepository $er) use ($connectedUser) {
-                        return $er->getDomainesUserConnectedForForm($connectedUser->getId());
-                    }
-                ))
-            ;
-
-            if ($connectedUser->hasRoleAdmin()) {
+        if ($connectedUser->hasRoleAdmin()) {
+            if (count($options['data']->getEnfants()) === 0) {
                 $builder
-                    ->add('allDomaines', 'checkbox', [
-                        'label' => 'Tous les domaines',
-                        'required' => false
-                    ])
+                    ->add('domaines', 'entity', array(
+                        'class'       => 'HopitalNumeriqueDomaineBundle:Domaine',
+                        'property'    => 'nom',
+                        'required'    => false,
+                        'multiple'    => true,
+                        'label'       => 'Domaine(s) associé(s)',
+                        'empty_value' => ' - ',
+                        'query_builder' => function (EntityRepository $er) use ($connectedUser) {
+                            return $er->getDomainesUserConnectedForForm($connectedUser->getId());
+                        },
+                        'attr' => [
+                            'class' => 'select2'
+                        ]
+                    ))
                 ;
+
+                if ($connectedUser->hasRoleAdmin()) {
+                    $builder
+                        ->add('allDomaines', 'checkbox', [
+                            'label' => 'Tous les domaines',
+                            'required' => false
+                        ])
+                    ;
+                }
             }
+
+            $this->buildFormPartConcept($builder, $options);
+            $this->buildFormPartListe($builder, $options);
+            $this->buildFormPartReference($builder, $options);
         }
-
-        $this->buildFormPartConcept($builder, $options);
-        $this->buildFormPartListe($builder, $options);
-        $this->buildFormPartReference($builder, $options);
         $this->buildFormPartGlossaire($builder, $options);
-
-        $builder
-            ->add('image', 'hidden', [
-                'required' => false
-            ])
-            ->add('imageFile', 'file', array(
-                'label' => 'Image',
-                'required' => false
-            ))
-        ;
-
-        $builder->addEventListener(FormEvents::SUBMIT, function (FormEvent $event) {
-            $this->verifyImage($event->getForm(), $event->getData());
-        });
     }
 
     /**
@@ -103,6 +92,16 @@ class ReferenceType extends AbstractType
                     'class' => 'validate[required]'
                 ]
             ))
+            ->add('image', 'hidden', [
+                'required' => false
+            ])
+            ->add('imageFile', 'file', array(
+                'label' => 'Image',
+                'required' => false
+            ))
+            ->addEventListener(FormEvents::SUBMIT, function (FormEvent $event) {
+                $this->verifyImage($event->getForm(), $event->getData());
+            })
             ->add('synonymes', 'collection', [
                 'label' => 'Synonymes',
                 'type' => SynonymeType::class,

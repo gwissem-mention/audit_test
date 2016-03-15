@@ -54,72 +54,74 @@
                 {% form_theme form 'HopitalNumeriqueReferenceBundle:Form:form_div_layout.html.twig' %}
                 {{ form_start(form, { 'attr':{'class':'toValidate'} }) }}
 
-                    {% if form.domaines is defined %}
-                        {{ form_row(form.domaines) }}
-                    {% endif %}
-                    {% if form.allDomaines is defined %}
-                        {{ form_row(form.allDomaines) }}
-                    {% endif %}
+                    {%- if app.user.hasRoleAdmin -%}
+                        {% if form.domaines is defined %}
+                            {{ form_row(form.domaines) }}
+                        {% endif %}
+                        {% if form.allDomaines is defined %}
+                            {{ form_row(form.allDomaines) }}
+                        {% endif %}
 
-                    <h2>Paramètres du concept</h2>
-                    {{ form_row(form.libelle) }}
+                        <h2>Paramètres du concept</h2>
+                        {{ form_row(form.libelle) }}
 
-                    <div class="form-group">
-                        {{ form_label(form.imageFile) }}
-                        <div class="input-group">
-                            {{ form_widget(form.imageFile) }}
-                            {%- if reference.hasImage -%}
-                                <span class="input-group-btn">
-                                    <button type="button" class="btn btn-danger" onclick="$('#hopitalnumerique_reference_reference_image').val('');$('#reference-image').remove();">Supprimer</button>
-                                </span>
-                            {%- endif -%}
-                        </div>
-                        {%- if reference.hasImage -%}
-                            <div id="reference-image">
-                                <img src="{{ reference.imageUrl }}">
+                        <div class="form-group">
+                            {{ form_label(form.imageFile) }}
+                            <div class="input-group">
+                                {{ form_widget(form.imageFile) }}
+                                {%- if reference.hasImage -%}
+                                    <span class="input-group-btn">
+                                        <button type="button" class="btn btn-danger" onclick="$('#hopitalnumerique_reference_reference_image').val('');$('#reference-image').remove();">Supprimer</button>
+                                    </span>
+                                {%- endif -%}
                             </div>
-                        {%- endif -%}
-                        {{ form_errors(form.imageFile) }}
-                    </div>
+                            {%- if reference.hasImage -%}
+                                <div id="reference-image">
+                                    <img src="{{ reference.imageUrl }}">
+                                </div>
+                            {%- endif -%}
+                            {{ form_errors(form.imageFile) }}
+                        </div>
 
-                    <h3>Synonymes</h3>
-                    <ul class="row list-unstyled" id="reference_synonymes_form" data-prototype="{{ form_widget(form.synonymes.vars.prototype)|e }}">
-                        {% for synonyme in form.synonymes %}
-                            <li class="col-lg-3 col-md-4">
-                                <div class="hide">{{ form_widget(synonyme) }}</div>
-                                <input type="text" class="form-control" value="{{ synonyme.vars.data.libelle }}" disabled>
-                            </li>
-                        {% endfor %}
-                    </ul>
-                    {{ form_widget(form.synonymes) }}
+                        <h3>Synonymes</h3>
+                        <ul class="row list-unstyled" id="reference_synonymes_form" data-prototype="{{ form_widget(form.synonymes.vars.prototype)|e }}">
+                            {% for synonyme in form.synonymes %}
+                                <li class="col-lg-3 col-md-4">
+                                    <div class="hide">{{ form_widget(synonyme) }}</div>
+                                    <input type="text" class="form-control" value="{{ synonyme.vars.data.libelle }}" disabled>
+                                </li>
+                            {% endfor %}
+                        </ul>
+                        {{ form_widget(form.synonymes) }}
 
-                    <h3>Champ lexical</h3>
-                    <ul class="row list-unstyled" id="reference_champlexicalnoms_form" data-prototype="{{ form_widget(form.champLexicalNoms.vars.prototype)|e }}">
-                        {% for champLexicalNom in form.champLexicalNoms %}
-                            <li class="col-lg-3 col-md-4">
-                                <div class="hide">{{ form_widget(champLexicalNom) }}</div>
-                                <input type="text" class="form-control" value="{{ champLexicalNom.vars.data.libelle }}" disabled>
-                            </li>
-                        {% endfor %}
-                    </ul>
-                    {{ form_widget(form.champLexicalNoms) }}
+                        <h3>Champ lexical</h3>
+                        <ul class="row list-unstyled" id="reference_champlexicalnoms_form" data-prototype="{{ form_widget(form.champLexicalNoms.vars.prototype)|e }}">
+                            {% for champLexicalNom in form.champLexicalNoms %}
+                                <li class="col-lg-3 col-md-4">
+                                    <div class="hide">{{ form_widget(champLexicalNom) }}</div>
+                                    <input type="text" class="form-control" value="{{ champLexicalNom.vars.data.libelle }}" disabled>
+                                </li>
+                            {% endfor %}
+                        </ul>
+                        {{ form_widget(form.champLexicalNoms) }}
 
-                    <h3>{{ form_label(form.parents) }}</h3>
-                    <div class="hide">{{ form_widget(form.parents) }}</div>
-                    <div id="reference-tree"></div>
+                        <h3>{{ form_label(form.parents) }}</h3>
+                        <div class="hide">{{ form_widget(form.parents) }}</div>
+                        <div id="reference-tree"></div>
 
-                    <br>{{ form_row(form.etat) }}
+                        <br>{{ form_row(form.etat) }}
 
-                    <h2>Paramètres de liste</h2>
-                    {{ form_row(form.code) }}
-                    {{ form_row(form.order) }}
+                        <h2>Paramètres de liste</h2>
+                        {{ form_row(form.code) }}
+                        {{ form_row(form.order) }}
 
-                    <h2>Paramètres de la référence</h2>
-                    {{ form_row(form.reference) }}
-                    <div id="reference-in-recherche-container">
-                        {{ form_row(form.inRecherche) }}
-                    </div>
-                    {{ form_row(form.referenceLibelle) }}
+                        <h2>Paramètres de la référence</h2>
+                        {{ form_row(form.reference) }}
+                        <div id="reference-in-recherche-container">
+                            {{ form_row(form.inRecherche) }}
+                        </div>
+                        {{ form_row(form.referenceLibelle) }}
+                    {%- endif -%}
 
                     <h2>Paramètres du glossaire</h2>
                     {{ form_row(form.inGlossaire) }}
