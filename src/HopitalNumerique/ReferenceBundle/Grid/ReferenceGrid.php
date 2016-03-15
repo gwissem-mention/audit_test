@@ -30,36 +30,38 @@ class ReferenceGrid extends Grid implements GridInterface
      */
     public function setColumns()
     {
+        $this->addColonne(new Column\TextColumn('idReference', 'ID'));
 
-        $this->addColonne( new Column\TextColumn('idReference', 'ID') );
-        $this->addColonne( new Column\TextColumn('code', 'Code') );
-        $this->addColonne( new Column\TextColumn('libelle', 'Libellé') );
+        $this->addColonne(new Column\TextColumn('libelle', 'Libellé du concept'));
 
         $domaineColumn = new Column\TextColumn('domaineNom', 'Domaine(s)');
-        $domaineColumn->setSize( 150 );
-        $this->addColonne( $domaineColumn );
+        $domaineColumn->setSize(150);
+        $this->addColonne($domaineColumn);
+
+        $dictionnaireColumn = new Column\BooleanColumn('reference', 'Est une référence');
+        $dictionnaireColumn->setValues([1 => 'Oui', 0 => 'Non']);
+        $dictionnaireColumn->setSize(100);
+        $this->addColonne($dictionnaireColumn);
+
+        $rechercheColumn = new Column\BooleanColumn('inRecherche', 'Présent dans la recherche');
+        $rechercheColumn->setValues([1 => 'Oui', 0 => 'Non']);
+        $rechercheColumn->setSize(100);
+        $this->addColonne($rechercheColumn);
 
         $etatColonne = new Column\TextColumn('etat', 'Etat');
-        $etatColonne->setSize( 80 );
+        $etatColonne->setSize(80);
         $etatColonne->setFilterType('select');
         $etatColonne->setSelectFrom('source');
-        $etatColonne->setOperatorsVisible( false );
-        $etatColonne->setDefaultOperator( \APY\DataGridBundle\Grid\Column\Column::OPERATOR_EQ );
-        $this->addColonne( $etatColonne );
+        $etatColonne->setOperatorsVisible(false);
+        $etatColonne->setDefaultOperator(\APY\DataGridBundle\Grid\Column\Column::OPERATOR_EQ);
+        $this->addColonne($etatColonne);
 
-        $this->addColonne( new Column\OrderColumn() );
+        $inGlossaireColumn = new Column\BooleanColumn('inGlossaire', 'Actif dans le glossaire');
+        $inGlossaireColumn->setValues([1 => 'Oui', 0 => 'Non']);
+        $inGlossaireColumn->setSize(100);
+        $this->addColonne($inGlossaireColumn);
 
-        $dictionnaireColumn = new Column\BooleanColumn('reference', 'Est référence');
-        $dictionnaireColumn->setValues( array( 1 => 'Présent dans le dictionnaire de référencement', 0 => 'Absent du dictionnaire') );
-        $dictionnaireColumn->setSize( 100 );
-        $this->addColonne( $dictionnaireColumn );
-
-        $rechercheColumn = new Column\BooleanColumn('recherche', 'Recherche');
-        $rechercheColumn->setValues( array( 1 => 'Présent dans les champs du moteur de recherche', 0 => 'Absent des champs du moteur de recherche') );
-        $rechercheColumn->setSize( 100 );
-        $this->addColonne( $rechercheColumn );
-
-        $this->addColonne( new Column\LockedColumn() );
+        $this->addColonne(new Column\TextColumn('code', 'Code'));
 
         /* Colonnes inactives */
         $this->addColonne( new Column\BlankColumn('idParent') );
