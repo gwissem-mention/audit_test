@@ -52,7 +52,7 @@
 
             <div class="panel-body">
                 {% form_theme form 'HopitalNumeriqueReferenceBundle:Form:form_div_layout.html.twig' %}
-                {{ form_start(form) }}
+                {{ form_start(form, { 'attr':{'class':'toValidate'} }) }}
 
                     {% if form.domaines is defined %}
                         {{ form_row(form.domaines) }}
