@@ -96,20 +96,6 @@ class Reference
     /**
      * @var boolean
      *
-     * @ORM\Column(name="ref_dictionnaire", type="boolean", options = {"comment" = "Référence présente dans dictionnaire de référencement ?"})
-     */
-    protected $dictionnaire;
-
-    /**
-     * @var boolean
-     *
-     * @ORM\Column(name="ref_recherche", type="boolean", options = {"comment" = "Référence présente dans le moteur de recherche ?"})
-     */
-    protected $recherche;
-
-    /**
-     * @var boolean
-     *
      * @ORM\Column(name="ref_lock", type="boolean", options = {"comment" = "Référence verrouillée ?"})
      */
     protected $lock;
@@ -354,52 +340,6 @@ class Reference
     public function getEtat()
     {
         return $this->etat;
-    }
-
-    /**
-     * Set dictionnaire
-     *
-     * @param boolean $dictionnaire
-     * @return Reference
-     */
-    public function setDictionnaire($dictionnaire)
-    {
-        $this->dictionnaire = $dictionnaire;
-
-        return $this;
-    }
-
-    /**
-     * Get dictionnaire
-     *
-     * @return boolean 
-     */
-    public function getDictionnaire()
-    {
-        return $this->dictionnaire;
-    }
-
-    /**
-     * Set recherche
-     *
-     * @param boolean $recherche
-     * @return Reference
-     */
-    public function setRecherche($recherche)
-    {
-        $this->recherche = $recherche;
-
-        return $this;
-    }
-
-    /**
-     * Get recherche
-     *
-     * @return boolean 
-     */
-    public function getRecherche()
-    {
-        return $this->recherche;
     }
 
     /**

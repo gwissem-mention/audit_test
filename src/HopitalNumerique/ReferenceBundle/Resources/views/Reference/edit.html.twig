@@ -63,6 +63,25 @@
 
                     <h2>Paramètres du concept</h2>
                     {{ form_row(form.libelle) }}
+
+                    <div class="form-group">
+                        {{ form_label(form.imageFile) }}
+                        <div class="input-group">
+                            {{ form_widget(form.imageFile) }}
+                            {%- if reference.hasImage -%}
+                                <span class="input-group-btn">
+                                    <button type="button" class="btn btn-danger" onclick="$('#hopitalnumerique_reference_reference_image').val('');$('#reference-image').remove();">Supprimer</button>
+                                </span>
+                            {%- endif -%}
+                        </div>
+                        {%- if reference.hasImage -%}
+                            <div id="reference-image">
+                                <img src="{{ reference.imageUrl }}">
+                            </div>
+                        {%- endif -%}
+                        {{ form_errors(form.imageFile) }}
+                    </div>
+
                     <h3>Synonymes</h3>
                     <ul class="row list-unstyled" id="reference_synonymes_form" data-prototype="{{ form_widget(form.synonymes.vars.prototype)|e }}">
                         {% for synonyme in form.synonymes %}
@@ -109,33 +128,7 @@
                     {{ form_row(form.descriptionCourte) }}
                     {{ form_row(form.descriptionLongue) }}
                     {{ form_row(form.casseSensible) }}
-                    
-                    
-                    
-                    {{ form_row(form.dictionnaire) }}
-                    {{ form_row(form.recherche) }}
-                    
-                    <div class="form-group">
-                        {{ form_label(form.imageFile) }}
-                        <div class="col-md-6">
-                            <div class="input-group">
-                                {{ form_widget(form.imageFile) }}
-                                {%- if reference.hasImage -%}
-                                    <span class="input-group-btn">
-                                        <button type="button" class="btn btn-danger" onclick="$('#hopitalnumerique_reference_reference_image').val('');$('#reference-image').remove();">Supprimer</button>
-                                    </span>
-                                {%- endif -%}
-                            </div>
-                            {%- if reference.hasImage -%}
-                                <div id="reference-image">
-                                    <img src="{{ reference.imageUrl }}">
-                                </div>
-                            {%- endif -%}
-                        </div>
-                        <div class="col-md-3">{{ form_errors(form.imageFile) }}</div>
-                    </div>
 
-                    {% form_theme form 'NodevoAdminBundle::form.html.twig' %}
                 {{ form_end(form) }}
             </div>
         </div>

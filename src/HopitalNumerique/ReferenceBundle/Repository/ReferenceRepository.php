@@ -44,7 +44,7 @@ class ReferenceRepository extends EntityRepository
 
         if( $fromDictionnaire )
         {
-            $qb->andWhere('ref.dictionnaire = 1');
+            $qb->andWhere('ref.reference = 1');
         }
 
         if( $fromRecherche )
@@ -65,7 +65,7 @@ class ReferenceRepository extends EntityRepository
     public function getDatasForGrid($domainesIds, $condition = null)
     {
         $qb = $this->_em->createQueryBuilder();
-        $qb->select('ref.id, ref.libelle, ref.code, ref.dictionnaire, ref.recherche, ref.lock, ref.order, refEtat.libelle as etat, refParent.id as idParent, domaine.nom as domaineNom')
+        $qb->select('ref.id, ref.libelle, ref.code, ref.reference, ref.recherche, ref.lock, ref.order, refEtat.libelle as etat, refParent.id as idParent, domaine.nom as domaineNom')
             ->from('HopitalNumeriqueReferenceBundle:Reference', 'ref')
             ->leftJoin('ref.etat','refEtat')
             ->leftJoin('ref.parents','refParent')
@@ -89,7 +89,7 @@ class ReferenceRepository extends EntityRepository
     public function getDatasForExport( $ids )
     {
         $qb = $this->_em->createQueryBuilder();
-        $qb->select('ref.id, ref.libelle, ref.code, ref.dictionnaire, ref.recherche, ref.lock, ref.order, refEtat.libelle as etat, refParent.id as idParent, domaine.nom as domaineNom')
+        $qb->select('ref.id, ref.libelle, ref.code, ref.reference, ref.recherche, ref.lock, ref.order, refEtat.libelle as etat, refParent.id as idParent, domaine.nom as domaineNom')
             ->from('HopitalNumeriqueReferenceBundle:Reference', 'ref')
             ->leftJoin('ref.etat','refEtat')
             ->leftJoin('ref.parents','refParent')
@@ -130,7 +130,7 @@ class ReferenceRepository extends EntityRepository
                 $qb->expr()->isNull('domaine.id')
             ))
             ->setParameter('userId', $userId)
-            ->andWhere('ref.dictionnaire = 1')
+            ->andWhere('ref.reference = 1')
             ->andWhere('ref.recherche = 1')
             ->orderBy('ref.order', 'ASC');
             

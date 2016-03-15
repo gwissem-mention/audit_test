@@ -66,24 +66,6 @@ class ReferenceType extends AbstractType
         $this->buildFormPartGlossaire($builder, $options);
 
         $builder
-            ->add('etat', 'entity', array(
-                'class'       => 'HopitalNumeriqueReferenceBundle:Reference',
-                'choices'     => $this->referenceManager->findByCode('ETAT'),
-                'property'    => 'libelle',
-                'required'    => true,
-                'label'       => 'Etat',
-                'attr'        => array('class' => $this->_constraints['etat']['class'] ),
-            ))
-            ->add('dictionnaire', 'checkbox', array(
-                'required' => false,
-                'label'    => 'Fait parti du dictionnaire de référencement',
-                'attr'     => array( 'class'=> 'checkbox' )
-            ))
-            ->add('recherche', 'checkbox', array(
-                'required' => false,
-                'label'    => 'Présent dans les champs du moteur de recherche',
-                'attr'     => array( 'class'=> 'checkbox' )
-            ))
             ->add('image', 'hidden', [
                 'required' => false
             ])
@@ -154,6 +136,14 @@ class ReferenceType extends AbstractType
 
                     return $qb;
                 }
+            ))
+            ->add('etat', 'entity', array(
+                'class'       => 'HopitalNumeriqueReferenceBundle:Reference',
+                'choices'     => $this->referenceManager->findByCode('ETAT'),
+                'property'    => 'libelle',
+                'required'    => true,
+                'label'       => 'Etat',
+                'attr'        => array('class' => $this->_constraints['etat']['class'] ),
             ))
         ;
     }

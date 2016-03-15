@@ -49,7 +49,7 @@ class ReferenceGrid extends Grid implements GridInterface
 
         $this->addColonne( new Column\OrderColumn() );
 
-        $dictionnaireColumn = new Column\BooleanColumn('dictionnaire', 'Dictionnaire');
+        $dictionnaireColumn = new Column\BooleanColumn('reference', 'Est référence');
         $dictionnaireColumn->setValues( array( 1 => 'Présent dans le dictionnaire de référencement', 0 => 'Absent du dictionnaire') );
         $dictionnaireColumn->setSize( 100 );
         $this->addColonne( $dictionnaireColumn );

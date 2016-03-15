@@ -70,7 +70,7 @@ class ReferenceController extends Controller
     public function editAction( $id )
     {
         //Récupération de l'entité passée en paramètre
-        $reference = $this->get('hopitalnumerique_reference.manager.reference')->findOneBy( array('id' => $id) );
+        $reference = $this->get('hopitalnumerique_reference.manager.reference')->findOneById($id);
 
         return $this->renderForm($reference);
     }
@@ -191,7 +191,7 @@ class ReferenceController extends Controller
                             'libelle'      => 'Libelle',
                             'domaineNom'   => 'Domaine(s)',
                             'code'         => 'Code', 
-                            'dictionnaire' => 'Présent dans le dictionnaire', 
+                            'reference' => 'Est une référence', 
                             'recherche'    => 'Présent dans la recherhce', 
                             'lock'         => 'Vérouillé ?', 
                             'order'        => 'Ordre d\'affichage', 
