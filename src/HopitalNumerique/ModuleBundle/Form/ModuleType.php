@@ -62,7 +62,7 @@ class ModuleType extends AbstractType
                     'property'      => 'libelle',
                     'multiple'      => true,
                     'required'      => false,
-                    'group_by'      => 'parentName',
+                    //'group_by'      => 'parentName',
                     'label'         => 'Connaissances concernées',
                     'empty_value'   => ' - ',
                     'attr'          => array('class' => 'connaissances'),
@@ -70,9 +70,10 @@ class ModuleType extends AbstractType
                         return $er->createQueryBuilder('ref')
                             ->where('ref.code = :etat')
                             ->setParameter('etat', 'CONNAISSANCES_AMBASSADEUR_SI')
-                            ->leftJoin('ref.parent', 'parent')
+                            ->leftJoin('ref.parents', 'parent')
                             ->orderBy('parent.libelle', 'ASC')
-                            ->addOrderBy('ref.order', 'ASC');
+                            ->addOrderBy('ref.order', 'ASC')
+                        ;
                     }
             ))
             ->add('domaines', 'entity', array(

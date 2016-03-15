@@ -79,7 +79,7 @@ class ObjetType extends AbstractType
                 'required'      => true,
                 'multiple'      => true,
                 'label'         => 'Catégorie',
-                'group_by'      => 'parentName',
+                //'group_by'      => 'parentName',
                 'attr'          => array( 'placeholder' => 'Selectionnez le ou les catégories de cette publication' ),
                 'query_builder' => function(EntityRepository $er) use ($datas) {
                     $qb = $er->createQueryBuilder('ref');
@@ -94,7 +94,7 @@ class ObjetType extends AbstractType
                            ->setParameter('objet', 'CATEGORIE_OBJET');
                     }
 
-                    $qb->orderBy('ref.parent, ref.order', 'ASC');
+                    $qb->orderBy('parent.id, ref.order', 'ASC');
 
                     return $qb;
                 }

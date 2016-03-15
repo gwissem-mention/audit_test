@@ -7,6 +7,7 @@
 namespace HopitalNumerique\InterventionBundle\Form;
 
 use Doctrine\ORM\EntityRepository;
+use Doctrine\ORM\Query\Expr;
 use Symfony\Component\Security\Core\SecurityContext;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -152,18 +153,18 @@ abstract class InterventionDemandeType extends AbstractType
                 'property' => 'libelle',
                 'multiple' => true,
                 'required' => false,
-                'group_by' => 'parentName',
+                //'group_by' => 'parentName',
                 'query_builder' => function(EntityRepository $er) {
                     return $er->createQueryBuilder('ref')
                         ->where('ref.code = :code')
-                        ->leftJoin('ref.etat', 'etat')
-                            ->andWhere('etat.id = 3')
-                        ->andWhere('ref.parent = :idParent')
+                        ->leftJoin('ref.etat', 'etat', Expr\Join::WITH, 'etat.id = 3')
+                        ->innerJoin('ref.parents', 'parent', Expr\Join::WITH, 'ref.parent = :idParent')
                         ->setParameters(array(
                             'code'     => 'PERIMETRE_FONCTIONNEL_DOMAINES_FONCTIONNELS',
                             'idParent' => 221
                         ))
-                        ->orderBy('ref.order', 'ASC');
+                        ->orderBy('ref.order', 'ASC')
+                    ;
                 }
             ))
             ->add('connaissancesSI', 'genemu_jqueryselect2_entity', array(
@@ -173,7 +174,7 @@ abstract class InterventionDemandeType extends AbstractType
                 'property' => 'libelle',
                 'multiple' => true,
                 'required' => false,
-                'group_by' => 'parentName',
+                //'group_by' => 'parentName',
                 'query_builder' => function(EntityRepository $er) {
                     return $er->createQueryBuilder('ref')
                         ->where('ref.code = :code')
