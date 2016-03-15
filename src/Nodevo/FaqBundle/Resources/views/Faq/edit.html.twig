@@ -5,9 +5,6 @@
 {% block javascripts %}
     {{parent()}}
     {% javascripts output="compiled/nodevo-faq-faq-edit.js"
-        "@tinymce_js"
-        'bundles/nodevogestionnairemedia/js/moxiemanager/js/moxman.loader.min.js'
-        'bundles/nodevogestionnairemedia/js/MoxieManager.js'
     %}
         <script type="text/javascript" src="{{ asset_url }}"></script>
     {% endjavascripts %}

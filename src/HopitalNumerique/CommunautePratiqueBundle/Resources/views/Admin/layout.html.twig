@@ -3,9 +3,6 @@
 {% block javascripts %}
     {{ parent() }}
     {% javascripts output="compiled/hopitalnumerique-communautepratique-admin.js"
-        '@tinymce_js'
-        'bundles/nodevogestionnairemedia/js/moxiemanager/js/moxman.loader.min.js'
-        'bundles/nodevogestionnairemedia/js/MoxieManager.js'
         'bundles/nodevotextedynamique/js/script.js'
     %}
         <script type="text/javascript" src="{{ asset_url }}"></script>
