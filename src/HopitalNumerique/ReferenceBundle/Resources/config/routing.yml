@@ -7,8 +7,8 @@ hopitalnumerique_reference_sitemap:
     defaults: { _controller: "HopitalNumeriqueReferenceBundle:Reference:sitemap" }
 
 hopitalnumerique_reference_reference_add:
-    pattern:  /reference/add/{id}/{mod}
-    defaults: { _controller: "HopitalNumeriqueReferenceBundle:Reference:add", id: null, mod: null }
+    pattern:  /reference/add
+    defaults: { _controller: "HopitalNumeriqueReferenceBundle:Reference:add" }
 
 hopitalnumerique_reference_reference_edit:
     pattern:  /reference/edit/{id}

@@ -40,27 +40,9 @@ class ReferenceController extends Controller
     /**
      * Affiche le formulaire d'ajout de Reference.
      */
-    public function addAction( $id = null, $mod = null )
+    public function addAction()
     {
         $reference = $this->get('hopitalnumerique_reference.manager.reference')->createEmpty();
-
-        if( !is_null($id)){
-            $referenceBase = $this->get('hopitalnumerique_reference.manager.reference')->findOneBy( array( 'id' => $id) );
-
-            if (!is_null($mod)){
-                $reference->setCode( $referenceBase->getCode() );
-                if( $referenceBase->getParent() ){
-                    $reference->setParent( $referenceBase->getParent() );
-                }
-            } else {
-                if ( $referenceBase->getLock() ){
-                    $this->get('session')->getFlashBag()->add('warning', 'Attention, l\'élément que vous avez choisi est verrouillé, il ne peut donc pas être sélectionné comme Item parent.' );
-                } else {
-                    $reference->setParent( $referenceBase );
-                }
-            }
-        }
-
         return $this->renderForm($reference);
     }
 
