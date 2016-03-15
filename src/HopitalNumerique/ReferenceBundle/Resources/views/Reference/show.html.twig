@@ -16,37 +16,122 @@
 {% block body %}
     <div class="col-sm-12">
         <div class="panel panel-midnightblue">
-            <div class="panel-heading">
-                <h4>Informations</h4>
+            <div class="panel-body">
+                <p>
+                    <strong>ID</strong> : {{ reference.id }}
+                </p>
+                <p>
+                    <strong>Domaine(s)</strong> :
+                    {% if reference.allDomaines -%}
+                        <em>Tous</em>
+                    {%- else -%}
+                        {%- for domaine in reference.domaines -%}
+                            {{ domaine }} &nbsp; 
+                        {% endfor -%}
+                    {%- endif -%}
+                </p>
             </div>
+        </div>
+    </div>
 
-            <div class="panel-body" >
+    <div class="col-sm-12">
+        <div class="panel panel-midnightblue">
+            <div class="panel-heading">
+                <h4>Paramètres du concept</h4>
+            </div>
+            <div class="panel-body">
                 <p>
-                    <strong>Libelle : </strong>
-                    {{ reference.libelle }}
+                    <strong>Libelle du concept</strong> : {{ reference.libelle }}
                 </p>
                 <p>
-                    <strong>Code : </strong>
-                    {{ reference.code }}
+                    <strong>Synonymes</strong> :
+                    {% for synonyme in reference.synonymes -%}
+                        {{ synonyme }} &nbsp; 
+                    {% endfor -%}
                 </p>
-                {% if reference.reference %}
-                    <p>
-                        <strong>Affichée dans le dictionnaire de référencement </strong>
-                    </p>
-                {% endif %}
-                {% if reference.inRecherche %}
-                    <p>
-                        <strong>Présent dans les champs du moteur de recherche </strong>
-                    </p>
-                {% endif %}
-                {% if reference.lock %}
-                    <p>
-                        <strong>Cet élément est vérouillé </strong>
-                    </p>
-                {% endif %}
                 <p>
-                    <strong>Ordre d'affichage : </strong>
-                    {{ reference.order }}
+                    <strong>Champ lexical</strong> :
+                    {% for champLexicalNom in reference.champLexicalNoms -%}
+                        {{ champLexicalNom }} &nbsp; 
+                    {% endfor -%}
+                </p>
+                <p>
+                    <strong>Parents</strong> :
+                    {% for parent in reference.parents -%}
+                        {{ parent }} &nbsp; 
+                    {% endfor -%}
+                </p>
+                <p>
+                    <strong>Enfants</strong> :
+                    {% for enfant in reference.enfants -%}
+                        {{ enfant }} &nbsp; 
+                    {% endfor -%}
+                </p>
+                <p>
+                    <strong>État</strong> : {{ reference.etat }}
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-sm-12">
+        <div class="panel panel-midnightblue">
+            <div class="panel-heading">
+                <h4>Paramètres de liste</h4>
+            </div>
+            <div class="panel-body">
+                <p>
+                    <strong>Code</strong> : {{ reference.code }}
+                </p>
+                <p>
+                    <strong>Ordre</strong> : {{ reference.order }}
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-sm-12">
+        <div class="panel panel-midnightblue">
+            <div class="panel-heading">
+                <h4>Paramètres de la référence</h4>
+            </div>
+            <div class="panel-body">
+                <p>
+                    <strong>Est une référence ?</strong> {{ reference.reference ? 'Oui' : 'Non' }}
+                </p>
+                <p>
+                    <strong>Présente dans la recherche ?</strong> {{ reference.inRecherche ? 'Oui' : 'Non' }}
+                </p>
+                <p>
+                    <strong>Libellé de la référence</strong> : {{ reference.referenceLibelle }}
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-sm-12">
+        <div class="panel panel-midnightblue">
+            <div class="panel-heading">
+                <h4>Paramètres du glossaire</h4>
+            </div>
+            <div class="panel-body">
+                <p>
+                    <strong>Présente dans le glossaire ?</strong> {{ reference.inGlossaire ? 'Oui' : 'Non' }}
+                </p>
+                <p>
+                    <strong>Sigle</strong> : {{ reference.sigle }}
+                </p>
+                <p>
+                    <strong>Libellé dans le glossaire</strong> : {{ reference.glossaireLibelle }}
+                </p>
+                <p>
+                    <strong>Description courte</strong> : {{ reference.descriptionCourte|nl2br }}
+                </p>
+                <p>
+                    <strong>Description longue</strong> : {{ reference.descriptionLongue|raw }}
+                </p>
+                <p>
+                    <strong>Sensible à la casse ?</strong> {{ reference.casseSensible ? 'Oui' : 'Non' }}
                 </p>
             </div>
         </div>
