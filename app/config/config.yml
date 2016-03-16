@@ -21,7 +21,7 @@ framework:
     session:
         name: hopitalnumerique
         handler_id:  ~
-        cookie_lifetime: 36000
+        cookie_lifetime: 86400 # 24h
     fragments:       ~
     http_method_override: true
 
