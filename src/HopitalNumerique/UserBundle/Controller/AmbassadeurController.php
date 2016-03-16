@@ -382,17 +382,19 @@ class AmbassadeurController extends Controller
 
         foreach ($domaines as $domaine) 
         {
-            if(!is_null($domaine->getParent()))
+            if (count($domaine->getParents()) > 0)
             {
-                if(!array_key_exists($domaine->getParent()->getId(), $affichageDomaines))
-                {
-                    $affichageDomaines[$domaine->getParent()->getId()] = array(
-                        'libelle' => $domaine->getParent()->getLibelle(),
-                        'fils'    => array()
-                    );    
+                foreach ($domaine->getParents() as $parent) {
+                    if (!array_key_exists($parent->getId(), $affichageDomaines))
+                    {
+                        $affichageDomaines[$parent->getId()] = array(
+                            'libelle' => $parent->getLibelle(),
+                            'fils'    => array()
+                        );    
+                    }
                 }
 
-                $affichageDomaines[$domaine->getParent()->getId()]['fils'][] = $domaine;
+                $affichageDomaines[$parent->getId()]['fils'][] = $domaine;
             }
             else
             {
@@ -490,14 +492,14 @@ class AmbassadeurController extends Controller
 
         if($domaines)
         {
-            foreach ($domaines as $domaine) 
-            {
-                if(!array_key_exists($domaine->getDomaine()->getParent()->getId(), $domainesWithParent))
-                {
-                    $domainesWithParent[$domaine->getDomaine()->getParent()->getId()] = array();
-                }
+            foreach ($domaines as $domaine) {
+                foreach ($domaine->getDomaine()->getParents() as $parent) {
+                    if(!array_key_exists($parent->getId(), $domainesWithParent)) {
+                        $domainesWithParent[$parent->getId()] = array();
+                    }
 
-                $domainesWithParent[$domaine->getDomaine()->getParent()->getId()][] = $domaine;
+                    $domainesWithParent[$parent->getId()][] = $domaine;
+                }
             }
         }
 

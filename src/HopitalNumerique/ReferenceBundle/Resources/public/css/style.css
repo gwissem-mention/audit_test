@@ -1,10 +1,8 @@
-.references .panel-body{
-    padding:5px 20px !important;
-    display:none;
-}
-.references .panel-body > li{
-    list-style:none;
-}
+#references-list {}
+    #references-list ul { font-size: 140%;list-style-type: none;margin: 10px 0; }
+        #references-list ul li {  }
+            #references-list ul ul { font-size: 90%; }
+
 @media print {
     @page{
         margin: 1cm 0.5cm;
@@ -13,10 +11,6 @@
     #page-leftbar{ display:none !important; }
     #page-content{
         margin-left:0px !important;
-    }
-    .references .panel-body{
-        display:block !important;
-        border:0 !important;
     }
     .breadcrumb{
         display:none;

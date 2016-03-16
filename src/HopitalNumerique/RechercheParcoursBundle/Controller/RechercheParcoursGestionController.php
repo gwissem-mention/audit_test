@@ -27,7 +27,7 @@ class RechercheParcoursGestionController extends Controller
     {
         $rechercheparcoursgestion = $this->get('hopitalnumerique_rechercheparcours.manager.rechercheparcoursgestion')->createEmpty();
 
-        return $this->renderForm('hopitalnumerique_rechercheparcours_rechercheparcoursgestion', $rechercheparcoursgestion, 'HopitalNumeriqueRechercheParcoursBundle:RechercheParcoursGestion:edit.html.twig' );
+        return $this->renderForm($rechercheparcoursgestion, 'HopitalNumeriqueRechercheParcoursBundle:RechercheParcoursGestion:edit.html.twig' );
     }
 
     /**
@@ -40,7 +40,7 @@ class RechercheParcoursGestionController extends Controller
         //Récupération de l'entité passée en paramètre
         $rechercheparcoursgestion = $this->get('hopitalnumerique_rechercheparcours.manager.rechercheparcoursgestion')->findOneBy( array('id' => $id) );
 
-        return $this->renderForm('hopitalnumerique_rechercheparcours_rechercheparcoursgestion', $rechercheparcoursgestion, 'HopitalNumeriqueRechercheParcoursBundle:RechercheParcoursGestion:edit.html.twig' );
+        return $this->renderForm($rechercheparcoursgestion, 'HopitalNumeriqueRechercheParcoursBundle:RechercheParcoursGestion:edit.html.twig' );
     }
 
     /**
@@ -111,16 +111,15 @@ class RechercheParcoursGestionController extends Controller
     /**
      * Effectue le render du formulaire RechercheParcoursGestion.
      *
-     * @param string $formName Nom du service associé au formulaire
      * @param RechercheParcoursGestion   $entity   Entité $rechercheparcoursgestion
      * @param string $view     Chemin de la vue ou sera rendu le formulaire
      *
      * @return Form | redirect
      */
-    private function renderForm( $formName, $rechercheparcoursgestion, $view )
+    private function renderForm($rechercheparcoursgestion, $view )
     {
         //Création du formulaire via le service
-        $form = $this->createForm( $formName, $rechercheparcoursgestion);
+        $form = $this->createForm('hopitalnumerique_rechercheparcours_rechercheparcoursgestion', $rechercheparcoursgestion);
 
         $request = $this->get('request');
         

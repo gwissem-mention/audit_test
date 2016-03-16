@@ -908,7 +908,7 @@ class SearchManager extends BaseManager
 
         foreach ($types as $one) {
             //pas de parent : check ressource / point dur
-            if( is_null($one->getParent()) ){
+            if( is_null($one->getFirstParent()) ){
                 if( $one->getId() == $this->_ressource ){
                     $categ  = 'ressource';
                     $type[] = $one->getLibelle();
@@ -918,7 +918,7 @@ class SearchManager extends BaseManager
                 }
             //parent : check production / forum
             }else{
-                $parent = $one->getParent();
+                $parent = $one->getFirstParent();
                 if( $parent->getId() == $this->_production ){
                     $categ  = 'production';
                     $type[] = $one->getLibelle();

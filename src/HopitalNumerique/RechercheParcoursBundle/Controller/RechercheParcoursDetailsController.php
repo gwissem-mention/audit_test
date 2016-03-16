@@ -276,9 +276,8 @@ class RechercheParcoursDetailsController extends Controller
             $referenceTemp = $reference;
 
             //Récupère le premier parent
-            while (!is_null($referenceTemp->getParent())
-                && $referenceTemp->getParent()->getId() != null) {
-                $referenceTemp = $referenceTemp->getParent();
+            while (count($referenceTemp->getParents()) > 0) {
+                $referenceTemp = $referenceTemp->getParents()[0];
             }
 
             //Trie la référence dans la bonne catégorie
@@ -305,9 +304,8 @@ class RechercheParcoursDetailsController extends Controller
                 $referenceTemp = $reference;
 
                 //Récupère le premier parent
-                while (!is_null($referenceTemp->getParent())
-                    && $referenceTemp->getParent()->getId() != null) {
-                    $referenceTemp = $referenceTemp->getParent();
+                while (count($referenceTemp->getParents()) > 0) {
+                    $referenceTemp = $referenceTemp->getParents()[0];
                 }
 
                 //Trie la référence dans la bonne catégorie

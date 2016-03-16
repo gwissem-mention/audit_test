@@ -94,7 +94,7 @@ class ObjetType extends AbstractType
                            ->setParameter('objet', 'CATEGORIE_OBJET');
                     }
 
-                    $qb->orderBy('parent.id, ref.order', 'ASC');
+                    $qb->orderBy('ref.order', 'ASC');
 
                     return $qb;
                 }

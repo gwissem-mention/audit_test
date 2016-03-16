@@ -73,11 +73,23 @@ class Tree
     /**
      * Retourne les références classées.
      *
-     * \Doctrine\Common\Collections\Collection Références
+     * @param array<\HopitalNumerique\DomaineBundle\Entity\Domaine>|null $domaines   Domaines des références
+     * @param boolean|null                                               $parentable Parentable
+     * @return \Doctrine\Common\Collections\Collection Références
      */
-    private function getOrderedReferences()
+    public function getOrderedReferences($parentable = true, $domaines = null)
     {
-        $references = $this->referenceManager->findBy(['lock' => false, 'parentable' => true], ['order' => 'ASC']);
+        if (null === $domaines) {
+            $referencesConditions = [
+                'lock' => false,
+                'parentable' => $parentable
+            ];
+
+            $references = $this->referenceManager->findBy($referencesConditions, ['order' => 'ASC']);
+        } else {
+            $references = $this->referenceManager->findByDomaines($domaines, false, $parentable);
+        }
+
         return $this->getOrderedReferencesTreePart($references);
     }
 

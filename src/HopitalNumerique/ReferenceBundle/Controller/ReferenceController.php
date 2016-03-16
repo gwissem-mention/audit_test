@@ -33,6 +33,7 @@ class ReferenceController extends Controller
 
         return $this->render('HopitalNumeriqueReferenceBundle:Reference:sitemap.html.twig', array(
             'references'                 => $references,
+            'orderedReferences' => $this->container->get('hopitalnumerique_reference.dependency_injection.reference.tree')->getOrderedReferences(null, $this->getUser()->getDomaines()),
             'domainesOrderedByReference' => $domainesOrderedByReference
         )); 
     }

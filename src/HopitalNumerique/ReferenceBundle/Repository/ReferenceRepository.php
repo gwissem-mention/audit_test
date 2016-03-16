@@ -49,7 +49,7 @@ class ReferenceRepository extends EntityRepository
 
         if( $fromRecherche )
         {
-            $qb->andWhere('ref.recherche = 1');
+            $qb->andWhere('ref.inRecherche = 1');
         }
 
         $qb->orderBy('parent, ref.code, ref.order');
@@ -75,7 +75,7 @@ class ReferenceRepository extends EntityRepository
                     $qb->expr()->isNull('domaine.id')
                 ))
                 ->setParameter('domainesId', $domainesIds)
-            // ->groupBy('ref')
+            ->groupBy('ref.id')
             ->orderBy('ref.code, ref.order');
             
         return $qb;
@@ -89,7 +89,7 @@ class ReferenceRepository extends EntityRepository
     public function getDatasForExport( $ids )
     {
         $qb = $this->_em->createQueryBuilder();
-        $qb->select('ref.id, ref.libelle, ref.code, ref.reference, ref.recherche, ref.lock, ref.order, refEtat.libelle as etat, refParent.id as idParent, domaine.nom as domaineNom')
+        $qb->select('ref.id, ref.libelle, ref.code, ref.reference, ref.inRecherche, ref.lock, ref.order, refEtat.libelle as etat, refParent.id as idParent, domaine.nom as domaineNom')
             ->from('HopitalNumeriqueReferenceBundle:Reference', 'ref')
             ->leftJoin('ref.etat','refEtat')
             ->leftJoin('ref.parents','refParent')
@@ -131,7 +131,7 @@ class ReferenceRepository extends EntityRepository
             ))
             ->setParameter('userId', $userId)
             ->andWhere('ref.reference = 1')
-            ->andWhere('ref.recherche = 1')
+            ->andWhere('ref.inRecherche = 1')
             ->orderBy('ref.order', 'ASC');
             
         return $qb;
@@ -143,7 +143,7 @@ class ReferenceRepository extends EntityRepository
         $qb->select('ref')
             ->from('HopitalNumeriqueReferenceBundle:Reference', 'ref')
             ->innerJoin('ref.domaines', 'domaine', Expr\Join::WITH, 'domaine.id = :idDomaine')
-            ->innerJoin('ref.parent', 'par', Expr\Join::WITH, 'par.id = :idParent')
+            ->innerJoin('ref.parents', 'par', Expr\Join::WITH, 'par.id = :idParent')
             ->setParameters(array(
                 'idDomaine' => $idDomaine,
                 'idParent'  => $idParent,
@@ -233,6 +233,45 @@ class ReferenceRepository extends EntityRepository
                 ->setParameter('parent', $parent)
             ;
 
+        }
+
+        return $qb->getQuery()->getResult();
+    }
+
+    /**
+     * Retourne les références selon des domaines.
+     *
+     * @param array<\HopitalNumerique\DomaineBundle\Entity\Domaine> $domaines   Domaines
+     * @param boolean|null                                          $lock       Lock
+     * @param boolean|null                                          $parentable Parentable
+     * @return array<\HopitalNumerique\ReferenceBundle\Entity\Reference> Références
+     */
+    public function findByDomaines($domaines, $lock, $parentable)
+    {
+        if (0 === count($domaines)) {
+            return [];
+        }
+
+        $qb = $this->createQueryBuilder('reference');
+
+        $qb
+            ->innerJoin('reference.domaines', 'domaine', Expr\Join::WITH, $qb->expr()->in('domaine.id', ':domaines'))
+            ->orderBy('reference.order', 'ASC')
+            ->setParameters([
+                'domaines' => $domaines
+            ])
+        ;
+        if (null !== $lock) {
+            $qb
+                ->andWhere($qb->expr()->eq('reference.lock', ':lock'))
+                ->setParameter('lock', $lock)
+            ;
+        }
+        if (null !== $parentable) {
+            $qb
+                ->andWhere($qb->expr()->eq('reference.parentable', ':parentable'))
+                ->setParameter('parentable', $parentable)
+            ;
         }
 
         return $qb->getQuery()->getResult();

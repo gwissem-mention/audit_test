@@ -32,40 +32,37 @@
 {% block body %}
     {% import _self as mySelf %}
     <div class="col-sm-12">
-        <ul class="references">
-            {% for code,reference in references %}
-            <div class="panel panel-midnightblue">
-                <div class="panel-heading panel-collapse">{{ code }}</div>
-                <div class="panel-body">
-                    {{ mySelf.buildTree(reference, domainesOrderedByReference) }}
-                </div>
-            </div>
-            {% endfor %}
-        </ul>
+        <div id="references-list">
+            <ul>
+                {%- for referenceProperties in orderedReferences -%}
+                    {{ mySelf.buildTreePart(referenceProperties) }}
+                {%- endfor -%}
+            </ul>
+        </div>
     </div>
 {% endblock %}
 
-{% macro buildTree(reference, domainesOrderedByReference, codeChild = false) %}
+{% macro buildTreePart(referencesTreePart) -%}
     {% import _self as mySelf %}
-    {% for ref in reference  %}
-        <li>
-            {{ref.libelle}} {% if codeChild %} ({{ codeChild }}) {% endif %}
-            {# Ajout du/des domaine(s) de la référence #}
-            {% if ref.id in domainesOrderedByReference|keys %}
-                <span class="text-muted" style="font-size:10px;">( 
-                    {% for domaine in domainesOrderedByReference[ref.id] %}
-                        {% if not loop.first %} - {% endif %}{{domaine.nom}}
-                    {% endfor %}
-                )</span>
-            {% endif %}
-     
-            {% if ref.childs %}
-                <ul>
-                    {% for code, child in ref.childs %}
-                        {{ mySelf.buildTree(child, domainesOrderedByReference, code) }}
-                    {% endfor %}
-                </ul>
-            {% endif %}
-        </li>
-    {% endfor %}
-{% endmacro %}
+    <li>
+        {{- referencesTreePart.reference.id }} -
+        {% if referencesTreePart.reference.reference %}<em class="fa fa-asterisk" title="Est une référence"></em> -{% endif %}
+        {% if referencesTreePart.reference.inRecherche %}<em class="fa fa-search" title="Présent dans la recherche"></em> -{% endif %}
+        <a href="{{ path('hopitalnumerique_reference_reference_edit', { 'id':referencesTreePart.reference.id }) }}">{{ referencesTreePart.reference.libelle }}</a> -
+
+        {% if referencesTreePart.reference.allDomaines -%}
+            <em>Tous</em>
+        {%- else -%}
+            {%- for domaine in referencesTreePart.reference.domaines -%}
+                {{ domaine }} &nbsp; 
+            {% endfor -%}
+        {%- endif -%}
+        {%- if referencesTreePart.enfants|length > 0 -%}
+            <ul>
+                {%- for referenceEnfantTree in referencesTreePart.enfants -%}
+                    {{ mySelf.buildTreePart(referenceEnfantTree) }}
+                {%- endfor -%}
+            </ul>
+        {%- endif -%}
+    </li>
+{%- endmacro %}

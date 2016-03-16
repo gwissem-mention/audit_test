@@ -929,14 +929,15 @@ class Session
         $connaissances = $this->connaissances;
         $connaissancesOrdered = array();
 
-        foreach ($connaissances as $connaissance)
-        {
-            if(!array_key_exists($connaissance->getParent()->getId(), $connaissancesOrdered))
-            {
-                $connaissancesOrdered[$connaissance->getParent()->getId()] = array();
-            }
+        foreach ($connaissances as $connaissance) {
+            foreach ($connaissance->getParents() as $parent) {
+                if(!array_key_exists($parent->getId(), $connaissancesOrdered))
+                {
+                    $connaissancesOrdered[$parent->getId()] = array();
+                }
 
-            $connaissancesOrdered[$connaissance->getParent()->getId()][] = $connaissance;
+                $connaissancesOrdered[$parent->getId()][] = $connaissance;
+            }
         }
 
         return $connaissancesOrdered;

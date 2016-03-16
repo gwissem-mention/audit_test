@@ -7,8 +7,6 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 use HopitalNumerique\ReferenceBundle\Manager\ReferenceManager;
 
-use Doctrine\ORM\EntityRepository;
-
 class EtablissementType extends AbstractType
 {
     private $_constraints = array();

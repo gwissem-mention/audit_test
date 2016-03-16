@@ -264,22 +264,25 @@ class ReferenceManager extends BaseManager
             'ids'      => array(),
             'domaines' => array()
         );
-        foreach ($results as $result) 
-        {
-            if(!array_key_exists($result->getParent()->getId(), $domaines['domaines']))
-            {
-                $domaines['domaines'][$result->getParent()->getId()] = array();
+        foreach ($results as $result) {
+            if (count($result->getParents()) > 0) {
+                $parentId = $result->getParentIds()[0];
+                
+                if(!array_key_exists($parentId, $domaines['domaines']))
+                {
+                    $domaines['domaines'][$parentId] = array();
+                }
+
+                $tmp           = new \stdClass;
+                $tmp->id       = $result->getId();
+                $tmp->libelle  = $result->getLibelle();
+                $tmp->code     = $result->getCode();
+                $tmp->parent   = $result->getParents()[0]->getLibelle();
+                $tmp->selected = false;
+
+                $domaines['domaines'][$parentId][] = $tmp;
+                $domaines['ids'][] = $result->getId();
             }
-
-            $tmp           = new \stdClass;
-            $tmp->id       = $result->getId();
-            $tmp->libelle  = $result->getLibelle();
-            $tmp->code     = $result->getCode();
-            $tmp->parent   = $result->getParent()->getLibelle();
-            $tmp->selected = false;
-
-            $domaines['domaines'][$result->getParent()->getId()][] = $tmp;
-            $domaines['ids'][] = $result->getId();
         }
 
         return $domaines;
@@ -437,6 +440,19 @@ class ReferenceManager extends BaseManager
         $byCode = $this->findByCode($code, $isActif);
 
         return (count($byCode) > 0 ? $byCode[0] : null);
+    }
+
+    /**
+     * Retourne les références selon des domaines.
+     *
+     * @param array<\HopitalNumerique\DomaineBundle\Entity\Domaine> $domaines   Domaines
+     * @param boolean                                               $lock       Lock
+     * @param boolean                                               $parentable Parentable
+     * @return array<\HopitalNumerique\ReferenceBundle\Entity\Reference> Références
+     */
+    public function findByDomaines($domaines = null, $lock = null, $parentable = null)
+    {
+        return $this->getRepository()->findByDomaines($domaines, $lock, $parentable);
     }
 
 

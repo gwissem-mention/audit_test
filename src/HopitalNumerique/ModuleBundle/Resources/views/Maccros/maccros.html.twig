@@ -316,7 +316,7 @@
             <strong>Connaissances concernées : </strong>
             <ul>
                 {% for connaissanceParent in session.getConnaissancesByParent() %}
-                    <li>{{ connaissanceParent[0].parent.libelle }}</li>
+                    <li>{% for parent in connaissanceParent[0].parents %}{{ parent.libelle }} &nbsp; {% endfor %}</li>
                     <ul>
                         {% for connaissance in connaissanceParent %}
                             <li>

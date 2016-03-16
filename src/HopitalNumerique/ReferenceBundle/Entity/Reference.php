@@ -4,7 +4,6 @@ namespace HopitalNumerique\ReferenceBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Criteria;
 use Nodevo\ToolsBundle\Tools\Systeme;
 use Nodevo\ToolsBundle\Traits\ImageTrait;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -483,6 +482,20 @@ class Reference
         }
 
         return $parentIds;
+    }
+
+    /**
+     * Get first parent
+     *
+     * @return \HopitalNumerique\ReferenceBundle\Entity\Reference|null First parent
+     */
+    public function getFirstParent()
+    {
+        if (count($this->parents) > 0) {
+            return $this->parents[0];
+        }
+
+        return null;
     }
 
     /**

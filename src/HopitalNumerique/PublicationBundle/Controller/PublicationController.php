@@ -319,7 +319,7 @@ class PublicationController extends Controller
         $types = $objet->getTypes();
 
         foreach ($types as $one) {
-            $parent = $one->getParent();
+            $parent = $one->getFirstParent();
             if( !is_null($parent) && $parent->getId() == 175 )
                 $type[] = $one->getLibelle();
         }
@@ -515,15 +515,15 @@ class PublicationController extends Controller
         foreach( $references as $reference ) {
             $one = $reference->getReference();
 
-            if( !is_null($one->getParent()) ) {
-                $parentId = $one->getParent()->getId();
+            if( !is_null($one->getFirstParent()) ) {
+                $parentId = $one->getFirstParent()->getId();
                 //get Grand Parent if needed
-                if ( !in_array($parentId, array_keys($categs)) && !is_null($one->getParent()->getParent())){
-                    $parentId = $one->getParent()->getParent()->getId();
+                if ( !in_array($parentId, array_keys($categs)) && !is_null($one->getFirstParent()->getFirstParent())){
+                    $parentId = $one->getFirstParent()->getFirstParent()->getId();
 
                     //get Arrière Grand Parent if needed
-                    if ( !in_array($parentId, array_keys($categs)) && !is_null($one->getParent()->getParent()->getParent()))
-                        $parentId = $one->getParent()->getParent()->getParent()->getId();
+                    if ( !in_array($parentId, array_keys($categs)) && !is_null($one->getFirstParent()->getFirstParent()->getFirstParent()))
+                        $parentId = $one->getFirstParent()->getFirstParent()->getFirstParent()->getId();
                 }
 
                 if( !isset($refs[ $categs[$parentId] ]) )

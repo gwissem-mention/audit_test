@@ -158,7 +158,7 @@ abstract class InterventionDemandeType extends AbstractType
                     return $er->createQueryBuilder('ref')
                         ->where('ref.code = :code')
                         ->leftJoin('ref.etat', 'etat', Expr\Join::WITH, 'etat.id = 3')
-                        ->innerJoin('ref.parents', 'parent', Expr\Join::WITH, 'ref.parent = :idParent')
+                        ->innerJoin('ref.parents', 'parent', Expr\Join::WITH, 'parent.id = :idParent')
                         ->setParameters(array(
                             'code'     => 'PERIMETRE_FONCTIONNEL_DOMAINES_FONCTIONNELS',
                             'idParent' => 221

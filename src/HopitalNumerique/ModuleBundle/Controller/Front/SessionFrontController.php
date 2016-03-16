@@ -22,12 +22,12 @@ class SessionFrontController extends Controller
 
         foreach ($connaissances as $connaissance) 
         {
-            if(!array_key_exists($connaissance->getParent()->getId(), $connaissancesOrderedByParent))
+            if(!array_key_exists($connaissance->getFirstParent()->getId(), $connaissancesOrderedByParent))
             {
-                $connaissancesOrderedByParent[$connaissance->getParent()->getId()] = array();
+                $connaissancesOrderedByParent[$connaissance->getFirstParent()->getId()] = array();
             }
 
-            $connaissancesOrderedByParent[$connaissance->getParent()->getId()][] = $connaissance;
+            $connaissancesOrderedByParent[$connaissance->getFirstParent()->getId()][] = $connaissance;
         }
 
 

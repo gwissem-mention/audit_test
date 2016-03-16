@@ -51,9 +51,10 @@ class RechercheParcoursGestionType extends AbstractType
                 'empty_value' => ' - ',
                 'query_builder' => function(EntityRepository $er){
                     return $er->createQueryBuilder('ref')
-                              ->where('ref.code = :code')
-                              ->andWhere('ref.parent IS NULL')
-                              ->setParameter('code', 'CATEGORIE_OBJET');
+                        ->leftJoin('ref.parents', 'parent')
+                        ->where('ref.code = :code')
+                        ->andWhere('parent.id IS NULL')
+                        ->setParameter('code', 'CATEGORIE_OBJET');
                 }
             )) 
             ->add('referencesParentes', 'genemu_jqueryselect2_entity', array(
@@ -62,7 +63,7 @@ class RechercheParcoursGestionType extends AbstractType
                 'required'    => true,
                 'multiple'    => true,
                 'label'       => 'Référence(s) parente(s)',
-                'group_by'    => 'parent',
+                //'group_by'    => 'parent',
                 'empty_value' => ' - ',
                 'query_builder' => function(EntityRepository $er) use ($connectedUser){
                     return $er->getReferencesUserConnectedForForm($connectedUser->getId());
@@ -74,7 +75,7 @@ class RechercheParcoursGestionType extends AbstractType
                 'required'    => true,
                 'multiple'    => true,
                 'label'       => 'Référence(s) de ventilation',
-                'group_by'    => 'parent',
+                //'group_by'    => 'parent',
                 'empty_value' => ' - ',
                 'query_builder' => function(EntityRepository $er) use ($connectedUser){
                     return $er->getReferencesUserConnectedForForm($connectedUser->getId());
