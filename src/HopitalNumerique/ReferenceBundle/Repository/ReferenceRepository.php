@@ -244,9 +244,10 @@ class ReferenceRepository extends EntityRepository
      * @param array<\HopitalNumerique\DomaineBundle\Entity\Domaine> $domaines   Domaines
      * @param boolean|null                                          $lock       Lock
      * @param boolean|null                                          $parentable Parentable
+     * @param boolean                                               $reference  Reference
      * @return array<\HopitalNumerique\ReferenceBundle\Entity\Reference> Références
      */
-    public function findByDomaines($domaines, $lock, $parentable)
+    public function findByDomaines($domaines, $lock, $parentable, $reference)
     {
         if (0 === count($domaines)) {
             return [];
@@ -271,6 +272,12 @@ class ReferenceRepository extends EntityRepository
             $qb
                 ->andWhere($qb->expr()->eq('reference.parentable', ':parentable'))
                 ->setParameter('parentable', $parentable)
+            ;
+        }
+        if (null !== $reference) {
+            $qb
+                ->andWhere($qb->expr()->eq('reference.reference', ':reference'))
+                ->setParameter('reference', $reference)
             ;
         }
 

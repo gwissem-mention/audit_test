@@ -448,11 +448,12 @@ class ReferenceManager extends BaseManager
      * @param array<\HopitalNumerique\DomaineBundle\Entity\Domaine> $domaines   Domaines
      * @param boolean                                               $lock       Lock
      * @param boolean                                               $parentable Parentable
+     * @param boolean                                               $reference  Reference
      * @return array<\HopitalNumerique\ReferenceBundle\Entity\Reference> Références
      */
-    public function findByDomaines($domaines = null, $lock = null, $parentable = null)
+    public function findByDomaines($domaines = null, $lock = null, $parentable = null, $reference = null)
     {
-        return $this->getRepository()->findByDomaines($domaines, $lock, $parentable);
+        return $this->getRepository()->findByDomaines($domaines, $lock, $parentable, $reference);
     }
 
 

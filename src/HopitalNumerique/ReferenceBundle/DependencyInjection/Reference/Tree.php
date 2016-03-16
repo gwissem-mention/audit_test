@@ -100,7 +100,7 @@ class Tree
      * @param \HopitalNumerique\ReferenceBundle\Entity\Reference\Reference $referenceParent Référence parente
      * @return array Arbre
      */
-    private function getOrderedReferencesTreePart($references, Reference $referenceParent = null)
+    public function getOrderedReferencesTreePart($references, Reference $referenceParent = null)
     {
         $referencesSubTree = [];
 
