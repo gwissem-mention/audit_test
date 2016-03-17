@@ -63,3 +63,5 @@ label.control-label[for=Post_subscribe]{padding:0}
 #Post_subscribe{margin-top:2px}
 
 abbr[title], abbr[data-original-title] {cursor: auto;border-bottom: none;}
+
+pre{word-break: normal;}
