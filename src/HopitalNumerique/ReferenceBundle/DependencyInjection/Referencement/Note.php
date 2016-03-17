@@ -1,5 +1,5 @@
 <?php
-namespace HopitalNumerique\ReferenceBundle\DependencyInjection\Reference;
+namespace HopitalNumerique\ReferenceBundle\DependencyInjection\Referencement;
 
 use HopitalNumerique\DomaineBundle\Entity\Domaine;
 use HopitalNumerique\ReferenceBundle\DependencyInjection\Reference\Referencement as ReferencementService;
@@ -9,7 +9,7 @@ use HopitalNumerique\ReferenceBundle\Manager\EntityHasReferenceManager;
 /**
  * Service gérant le score d'un référencement.
  */
-class ReferencementScore
+class Note
 {
     /**
      * @var integer Score maximal
@@ -69,7 +69,7 @@ class ReferencementScore
 
         foreach (array_keys($referencesSubtree) as $i) {
             $referencesSubtree[$i]['score'] = $scoreEnfant;
-            $this->addScoresInReferencesSubtree($scoreEnfant[$i]['enfants'], $scoreEnfant);
+            $this->addScoresInReferencesSubtree($referencesSubtree[$i]['enfants'], $scoreEnfant);
         }
     }
 

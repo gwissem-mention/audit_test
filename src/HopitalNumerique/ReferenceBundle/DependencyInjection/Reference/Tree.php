@@ -87,7 +87,7 @@ class Tree
 
             $references = $this->referenceManager->findBy($referencesConditions, ['order' => 'ASC']);
         } else {
-            $references = $this->referenceManager->findByDomaines($domaines, false, $parentable);
+            $references = $this->referenceManager->findByDomaines($domaines, true, false, $parentable);
         }
 
         return $this->getOrderedReferencesTreePart($references);

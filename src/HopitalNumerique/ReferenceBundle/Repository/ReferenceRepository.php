@@ -242,12 +242,13 @@ class ReferenceRepository extends EntityRepository
      * Retourne les références selon des domaines.
      *
      * @param array<\HopitalNumerique\DomaineBundle\Entity\Domaine> $domaines   Domaines
+     * @param boolean|null                                          $actif      Actif
      * @param boolean|null                                          $lock       Lock
      * @param boolean|null                                          $parentable Parentable
      * @param boolean                                               $reference  Reference
      * @return array<\HopitalNumerique\ReferenceBundle\Entity\Reference> Références
      */
-    public function findByDomaines($domaines, $lock, $parentable, $reference)
+    public function findByDomaines($domaines, $actif, $lock, $parentable, $reference)
     {
         if (0 === count($domaines)) {
             return [];
@@ -262,6 +263,12 @@ class ReferenceRepository extends EntityRepository
                 'domaines' => $domaines
             ])
         ;
+        if (null !== $actif) {
+            $qb
+                ->andWhere($qb->expr()->eq('reference.etat', ':actif'))
+                ->setParameter('actif', $actif ? Reference::STATUT_ACTIF_ID : Reference::STATUT_INACTIF_ID)
+            ;
+        }
         if (null !== $lock) {
             $qb
                 ->andWhere($qb->expr()->eq('reference.lock', ':lock'))

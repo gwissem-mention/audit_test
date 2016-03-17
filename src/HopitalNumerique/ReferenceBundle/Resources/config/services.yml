@@ -13,6 +13,18 @@ services:
         tags:
             - { name: twig.extension }
 
+    hopitalnumerique_reference.dependency_injection.referencement:
+        class: 'HopitalNumerique\ReferenceBundle\DependencyInjection\Referencement'
+        arguments: ['@hopitalnumerique_reference.dependency_injection.reference.tree', '@hopitalnumerique_reference.manager.reference', '@hopitalnumerique_reference.manager.entity_has_reference']
+
+    hopitalnumerique_reference.dependency_injection.referencement.entity:
+        class: 'HopitalNumerique\ReferenceBundle\DependencyInjection\Referencement\Entity'
+        arguments: ['@hopitalnumerique_objet.manager.objet', '@hopitalnumerique_objet.manager.contenu']
+
+    hopitalnumerique_reference.dependency_injection.referencement.score:
+        class: 'HopitalNumerique\ReferenceBundle\DependencyInjection\Referencement\Score'
+        arguments: ['@hopitalnumerique_reference.dependency_injection.referencement', '@hopitalnumerique_reference.manager.entity_has_reference', '@hopitalnumerique_reference.manager.entity_has_note']
+
     hopitalnumerique_reference.dependency_injection.reference.tree:
         class: 'HopitalNumerique\ReferenceBundle\DependencyInjection\Reference\Tree'
         arguments: ['@hopitalnumerique_reference.manager.reference']

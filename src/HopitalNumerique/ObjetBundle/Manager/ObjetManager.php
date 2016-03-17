@@ -887,7 +887,7 @@ class ObjetManager extends BaseManager
                 {
                     $inArray = false;
 
-                    foreach ($reference->getDomaines() as $domaine) 
+                    foreach ($reference->getDomaines() as $domaine)
                     {
                         if(in_array($domaine->getId(), $domainesObjetIds))
                         {

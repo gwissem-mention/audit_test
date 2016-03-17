@@ -451,9 +451,9 @@ class ReferenceManager extends BaseManager
      * @param boolean                                               $reference  Reference
      * @return array<\HopitalNumerique\ReferenceBundle\Entity\Reference> Références
      */
-    public function findByDomaines($domaines = null, $lock = null, $parentable = null, $reference = null)
+    public function findByDomaines($domaines = null, $actif = null, $lock = null, $parentable = null, $reference = null)
     {
-        return $this->getRepository()->findByDomaines($domaines, $lock, $parentable, $reference);
+        return $this->getRepository()->findByDomaines($domaines, $actif, $lock, $parentable, $reference);
     }
 
 
@@ -524,7 +524,7 @@ class ReferenceManager extends BaseManager
 
                 //merge les enfants
                 $childsIds = array_merge($childsIds, $newChilds);
-            }            
+            }
         }
 
         return $childsIds;

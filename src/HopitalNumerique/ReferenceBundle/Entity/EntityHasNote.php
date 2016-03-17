@@ -39,7 +39,7 @@ class EntityHasNote
     /**
      * @var \HopitalNumerique\DomaineBundle\Entity\Domaine
      *
-     * @ORM\ManyToOne(targetEntity="Domaine")
+     * @ORM\ManyToOne(targetEntity="HopitalNumerique\DomaineBundle\Entity\Domaine")
      * @ORM\JoinColumn(name="dom_id", referencedColumnName="dom_id", onDelete="CASCADE")
      */
     private $domaine;
@@ -47,7 +47,7 @@ class EntityHasNote
     /**
      * @var float
      *
-     * @ORM\Column(name="entnot_note", type="float", nullable=false)
+     * @ORM\Column(name="entnot_note", type="decimal", nullable=false, precision=6, scale=2)
      */
     private $note;
 

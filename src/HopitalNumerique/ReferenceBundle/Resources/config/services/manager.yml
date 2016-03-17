@@ -10,3 +10,11 @@ services:
     hopitalnumerique_reference.manager.synonyme:
         class: 'HopitalNumerique\ReferenceBundle\Manager\SynonymeManager'
         arguments: ['@doctrine.orm.entity_manager']
+
+    hopitalnumerique_reference.manager.entity_has_reference:
+        class: 'HopitalNumerique\ReferenceBundle\Manager\EntityHasReferenceManager'
+        arguments: ["@doctrine.orm.entity_manager"]
+
+    hopitalnumerique_reference.manager.entity_has_note:
+        class: 'HopitalNumerique\ReferenceBundle\Manager\EntityHasNoteManager'
+        arguments: ["@doctrine.orm.entity_manager"]

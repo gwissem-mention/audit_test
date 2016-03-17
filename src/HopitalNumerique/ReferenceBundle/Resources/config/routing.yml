@@ -1,3 +1,6 @@
+imports:
+    resource: 'routing/referencement.yml'
+
 hopitalnumerique_reference_reference:
     pattern:  /reference/
     defaults: { _controller: "HopitalNumeriqueReferenceBundle:Reference:index" }
