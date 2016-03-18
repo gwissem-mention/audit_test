@@ -1,0 +1,151 @@
+{% import _self as mySelf %}
+<div class="referencement-popin panel panel-midnightblue">
+    <div class="panel-heading">
+        <h4>Gestion des références</h4>
+    </div>
+    <div class="panel-body">
+        <div class="tableContent" >
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th style="width:60px;"><input type="checkbox" class="checkbox" id="toggle-check-all"></th>
+                        <th style="width:150px;">Type Primaire ?</th>
+                        <th style="width:100px;">Nb élements</th>
+                        <th>Nom</th>
+                        <th style="width:50px;"></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {{- mySelf.display_referencement_subtree(referencesTree) -}}
+                </tbody>
+            </table>    
+        </div>
+        
+        <div class="panel-footer" >
+            <div class="row">
+                <div class="btn-toolbar pull-right">
+                    <div onclick="$.fancybox.close(true);" class="btn-danger btn">Fermer</div>
+                    <div onclick="saveReferences();" class="btn-primary btn">Enregistrer</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+                
+{% macro display_referencement_subtree(referencesSubtree, referenceParentId = null, level = 1) %}
+    {% import _self as mySelf %}
+    {% for referenceParameters in referencesSubtree -%}
+        <tr data-reference="{{ referenceParameters.reference.id }}" data-reference-parent="{{ referenceParentId }}" data-children-open="0" data-level="{{ level }}">
+            <td>
+                <input type="checkbox" class="checkbox" data-reference="{{ referenceParameters.reference.id }}" id="reference-{{ referenceParameters.reference.id }}" {% if referenceParameters.entityHasReference is not null %} checked="checked"{% endif %}>
+            </td>
+            <td>
+                <div class="toggle toggle-success {% if referenceParameters.entityHasReference is not null and referenceParameters.entityHasReference.isPrimary %}on{% else %}off{% endif %}"></div>
+            </td>
+            <td>
+                {%- if referenceParameters.enfants|length > 0 -%}
+                    <span class="nbChilds" >0</span> / <span class="nbChildsDirect" >{{ referenceParameters.enfants|length }}</span>
+                {%- endif -%}
+            </td>
+            <td>
+                <label for="reference-{{ referenceParameters.reference.id }}">{{ referenceParameters.reference.libelle }} (id: {{ referenceParameters.reference.id }})</label>
+            </td>
+            <td>
+                {%- if referenceParameters.enfants|length > 0 -%}
+                    <a onclick="Hn_Reference_Referencement_Popin.toggleDisplayingReferencesSubtree({{ referenceParameters.reference.id }});" class="btn btn-{{ level < 2 ? 'sky' : (level <3 ? 'md' : 'sm') }}"><i class="fa fa-arrow-right"></i></a>
+                {%- endif -%}
+            </td>
+        </tr>
+        {{- mySelf.display_referencement_subtree(referenceParameters.enfants, referenceParameters.reference.id, level + 1) -}}
+    {%- endfor %}
+{% endmacro %}
+
+<script type="text/javascript" >
+    Hn_Reference_Referencement_Popin.initEvents();
+
+    $(document).ready(function() {
+        //toggles primary
+        $('.toggle.on').toggles( { on : true, text : { on : 'OUI', off : 'NON' }, type : 'select' } );
+        $('.toggle.off').toggles( { on : false, text : { on : 'OUI', off : 'NON' }, type : 'select' } );
+
+        //click de la checkbox globale
+        $('#references-tab .checkAll').on('click', function(){
+            if( $('.checkAll').prop('checked') ){
+                $('#references-tab .checkbox').each(function(){
+                    $(this).prop('checked', 'checked');
+                })
+            }else{
+                $('#references-tab .checkbox').each(function(){
+                    $(this).prop('checked', false);
+                })
+            }
+
+            updateNbChilds();
+        });
+
+        //click de chaque checkbox : on gère les enfants (selected)
+        $('#references-tab .checkbox').on('click', function(){
+            $('#references-tab .checkAll').prop('checked',false);
+
+            //get childs (if exist)
+            childs = $(this).parent().parent().data('childs');
+
+            if( childs.length > 0 ){
+                //on coche les enfants
+                if ( $(this).prop('checked') ){
+                    $.each(childs,function(key, val){
+                        $('.ref-'+val+' .checkbox').prop('checked','checked');
+                    });
+                // on décoche les enfants
+                }else{
+                    $.each(childs,function(key, val){
+                        $('.ref-'+val+' .checkbox').prop('checked',false);
+                    });
+                }
+            }
+
+            //get parents (if exist)
+            var parents = $(this).parents('tr').data('parents');
+
+            if( parents.length > 0 ){
+                //on coche les parents
+                if ( $(this).prop('checked') ){
+                    $.each(parents,function(key, val){
+                        $('.ref-'+val+' .checkbox').prop('checked','checked');
+                    });
+                }else{
+                    parents.reverse();
+                    //si on a décoché la case, on fait un traitement spécial aux parents
+                    $.each(parents,function(key, val){
+                        uncheck = true;
+
+                        //si on vient de décoché le dernier enfant on décoche le parent
+                        childs = $('.ref-'+val).data('childs');
+                        $.each(childs, function(cKey, cVal){
+                            if( $('.ref-'+cVal+' .checkbox').prop('checked') )
+                                uncheck = false;
+                        });
+
+                        if( uncheck )
+                            $('.ref-'+val+' .checkbox').prop('checked',false);
+                    });
+
+                    //on remet le tableau dans le bon ordre : sinon il le reverse au prochain click
+                    parents.reverse();
+                }
+            }
+
+            updateNbChilds();
+        });
+
+        //Gère les collapse
+        $('#references-tab .btn').on('click', function(){
+            //détermine le sens : collapse/expend
+            way = ( $(this).find('i').hasClass('fa-arrow-down') ) ? 'collapse' : 'expend';
+            
+            manageCollapse( $(this), way);
+        });
+
+        updateNbChilds();
+    });
+</script>

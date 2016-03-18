@@ -149,13 +149,11 @@ class ExpBesoinController extends Controller
     }
 
     /**
-     * Met à jour l'ordre des différentes questions
+     * .
      */
     public function modificationSessionAction(Request $request)
     {
-        $idExpBesoinReponses = $request->request->get('id');
-
-        $expBesoinReponses = $this->get('hopitalnumerique_recherche.manager.expbesoinreponses')->findOneBy(array('id' => $idExpBesoinReponses));
+        $expBesoinReponse = $this->get('hopitalnumerique_recherche.manager.expbesoinreponses')->findOneBy(array('id' => $request->request->get('id')));
 
         //Création du tableau pour la session de recherche
         $resultats = array(
@@ -166,7 +164,7 @@ class ExpBesoinController extends Controller
         );
 
         //Parcourt les références de la réponse, puis les tris pour l'affichage de la recherche
-        foreach ($expBesoinReponses->getReferences() as $refExpBesoinReponses) 
+        foreach ($expBesoinReponse->getReferences() as $refExpBesoinReponses)
         {
             //Récupère la référence courante
             $reference     = $refExpBesoinReponses->getReference();

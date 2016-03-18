@@ -26,11 +26,8 @@ class ReferencementController extends Controller
             $entityId
         );
 
-        dump($referencesTree);
-        die();
-
         return $this->render('HopitalNumeriqueReferenceBundle:Referencement:popin.html.twig', array(
-            
+            'referencesTree' => $referencesTree
         ));
     }
 }

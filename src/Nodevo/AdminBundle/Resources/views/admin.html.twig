@@ -10,7 +10,7 @@
         <title>{% block title %}Mon Hôpital Numérique{% endblock %}</title>
 
         <link href='http://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600' rel='stylesheet' type='text/css'>
-        <link rel="shortcut icon" href="{% if domaineCurrent.id != 1 %}{{ asset('favicon_anap.ico') }}{% else %}{{ asset('favicon.ico') }}{% endif %}" />
+        <link rel="shortcut icon" href="{% if domaineCurrent.id != 1 %}{{ asset('favicon_anap.ico') }}{% else %}{{ asset('favicon.ico') }}{% endif %}">
         {% block stylesheets %}
             {% stylesheets output="compiled/admin-main.css" filter="cssrewrite, ?yui_css"
                 'bundles/nodevoadmin/css/avant.css'
@@ -23,8 +23,9 @@
                 '@select2_css'
                 '@validationEngine_css'
                 '@jstree_css'
+                'bundles/hopitalnumeriquereference/css/referencement-popin.css'
             %}
-                <link rel="stylesheet" href="{{ asset_url }}" />
+                <link rel="stylesheet" href="{{ asset_url }}">
             {% endstylesheets %}
         {% endblock %}
     
@@ -52,7 +53,9 @@
                 '@jstree_js'
                 '@tinymce_js'
                 '@moxiemanager_js'
+                '%kernel.root_dir%/Resources/lib/nodevo/Form/Box.js'
                 'bundles/nodevoadmin/js/admin.js'
+                'bundles/hopitalnumeriquereference/js/Referencement/Popin.js'
             %}
                 <script type="text/javascript" src="{{ asset_url }}"></script>
             {% endjavascripts %}
