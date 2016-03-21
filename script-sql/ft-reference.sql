@@ -11,3 +11,10 @@ UPDATE hn_reference SET ref_parentable = 1 WHERE ref_id IN (SELECT ref_parent_id
 ALTER TABLE hn_reference ADD ref_in_recherche TINYINT(1) DEFAULT '0' NOT NULL;
 ALTER TABLE hn_reference ADD ref_reference TINYINT(1) DEFAULT '0' NOT NULL;
 UPDATE hn_reference SET ref_in_recherche = ref_recherche, ref_reference = ref_dictionnaire;
+
+
+
+
+
+UPDATE `core_menu_item` SET `itm_name` = 'Erreurs dans les URL' WHERE `core_menu_item`.`itm_id` = 177;
+
