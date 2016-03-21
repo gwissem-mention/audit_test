@@ -162,7 +162,7 @@ class ReferenceType extends AbstractType
         $builder
             ->add('code', 'text', array(
                 'max_length' => $this->_constraints['code']['maxlength'],
-                'required'   => true,
+                'required'   => false,
                 'label'      => 'Code',
                 'attr'       => $attrCode
             ))
@@ -186,6 +186,10 @@ class ReferenceType extends AbstractType
             ->add('reference', 'checkbox', array(
                 'required' => false,
                 'label' => 'Est une référence ?'
+            ))
+            ->add('parentable', 'checkbox', array(
+                'required' => false,
+                'label' => 'Peut être parent ?'
             ))
             ->add('inRecherche', 'checkbox', array(
                 'required' => false,

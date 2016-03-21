@@ -7,3 +7,15 @@
 {% block _hopitalnumerique_reference_reference_champLexicalNoms_entry_widget %}
     {{- form_widget(form.libelle) -}}
 {% endblock %}
+
+{% block form_label %}
+    {% if label is empty %}
+        {% set label = name|humanize %}
+    {% endif %}
+    <label for="{{ id }}">
+        {{ label|trans }}
+        {% if required %}
+            <span style="color:red;font-size:10px" title="Ce champ est requis">*</span>
+        {% endif %}
+    </label>
+{% endblock %}
