@@ -20,7 +20,7 @@
 {% endblock %}
 
 {% block toolbarButton %}
-    {% if app.user|checkAuthorization( path('hopitalnumerique_reference_reference_add') ) %}
+    {% if app.user|checkAuthorization( path('hopitalnumerique_reference_reference_add') ) and app.user.hasRoleAdmin %}
     <a class="btn btn-default" href="{{ path('hopitalnumerique_reference_reference_add') }}" title="Ajouter un concept"><i class="fa fa-plus"></i></a>
     {% endif %}
     <a class="btn btn-default" href="{{ path('hopitalnumerique_reference_sitemap') }}" title="Arborescence"><i class="fa fa-sitemap"></i></a>

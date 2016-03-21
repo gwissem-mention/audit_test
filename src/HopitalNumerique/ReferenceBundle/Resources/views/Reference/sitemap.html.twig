@@ -54,7 +54,7 @@
             <em>Tous</em>
         {%- else -%}
             {%- for domaine in referencesTreePart.reference.domaines -%}
-                {{ domaine }} &nbsp; 
+                {{ domaine }} {{ loop.last == false ? ';' : '' }} 
             {% endfor -%}
         {%- endif -%}
         {%- if referencesTreePart.enfants|length > 0 -%}
