@@ -97,7 +97,7 @@ class Referencement
     {
         foreach ($entitiesHasReferences as $entityHasReference) {
             if ($reference->equals($entityHasReference->getReference())) {
-                return true;
+                return $entityHasReference;
             }
         }
 

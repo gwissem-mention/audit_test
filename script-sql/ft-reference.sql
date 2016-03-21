@@ -7,4 +7,7 @@ INSERT INTO hn_reference_has_parent(ref_parent_id, ref_id) (SELECT parent_id, re
 ALTER TABLE hn_reference ADD ref_parentable TINYINT(1) DEFAULT '0' NOT NULL COMMENT 'Si la référence peut être parent';
 UPDATE hn_reference SET ref_parentable = 1 WHERE ref_id IN (SELECT ref_parent_id FROM hn_reference_has_parent);
 
+
+ALTER TABLE hn_reference ADD ref_in_recherche TINYINT(1) DEFAULT '0' NOT NULL;
+ALTER TABLE hn_reference ADD ref_reference TINYINT(1) DEFAULT '0' NOT NULL;
 UPDATE hn_reference SET ref_in_recherche = ref_recherche, ref_reference = ref_dictionnaire;

@@ -1,3 +1,9 @@
 hopitalnumerique_reference_referencement_popin:
     pattern:  /referencement/popin/{entityType}/{entityId}
     defaults: { _controller: 'HopitalNumeriqueReferenceBundle:Referencement:popin' }
+    methods: 'get'
+
+hopitalnumerique_reference_referencement_savechosenreferences:
+    pattern:  /referencement/popin/{entityType}/{entityId}/savechosenreferences
+    defaults: { _controller: 'HopitalNumeriqueReferenceBundle:Referencement:saveChosenReferences' }
+    methods: 'post'

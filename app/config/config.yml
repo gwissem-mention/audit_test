@@ -230,6 +230,7 @@ fos_js_routing:
         - hopitalnumerique_communautepratique_user_desinscritgroupe
         - hopitalnumerique_communautepratique_user_listbygroupe
         - hopitalnumerique_objet_objet_getObjets
+        - hopitalnumerique_reference_referencement_savechosenreferences
 
 # Miniatures
 liip_imagine:

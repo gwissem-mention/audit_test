@@ -25,7 +25,7 @@
             <div class="row">
                 <div class="btn-toolbar pull-right">
                     <div onclick="$.fancybox.close(true);" class="btn-danger btn">Fermer</div>
-                    <div onclick="saveReferences();" class="btn-primary btn">Enregistrer</div>
+                    <div data-action="save" class="btn-primary btn">Enregistrer</div>
                 </div>
             </div>
         </div>
@@ -37,7 +37,7 @@
     {% for referenceParameters in referencesSubtree -%}
         <tr data-reference="{{ referenceParameters.reference.id }}" data-reference-parent="{{ referenceParentId }}" data-children-open="0" data-level="{{ level }}">
             <td>
-                <input type="checkbox" class="checkbox" data-reference="{{ referenceParameters.reference.id }}" id="reference-{{ referenceParameters.reference.id }}" {% if referenceParameters.entityHasReference is not null %} checked="checked"{% endif %}>
+                <input type="checkbox" class="checkbox" data-reference="{{ referenceParameters.reference.id }}" data-initial-checked="{{ referenceParameters.entityHasReference is not null ? '1' : '0' }}" id="reference-{{ referenceParameters.reference.id }}">
             </td>
             <td>
                 <div class="toggle toggle-success {% if referenceParameters.entityHasReference is not null and referenceParameters.entityHasReference.isPrimary %}on{% else %}off{% endif %}"></div>
@@ -61,13 +61,11 @@
 {% endmacro %}
 
 <script type="text/javascript" >
-    Hn_Reference_Referencement_Popin.initEvents();
+    Hn_Reference_Referencement_Popin.ENTITY_TYPE = '{{ entityType }}';
+    Hn_Reference_Referencement_Popin.ENTITY_ID = '{{ entityId }}';
+    Hn_Reference_Referencement_Popin.init();
 
     $(document).ready(function() {
-        //toggles primary
-        $('.toggle.on').toggles( { on : true, text : { on : 'OUI', off : 'NON' }, type : 'select' } );
-        $('.toggle.off').toggles( { on : false, text : { on : 'OUI', off : 'NON' }, type : 'select' } );
-
         //click de la checkbox globale
         $('#references-tab .checkAll').on('click', function(){
             if( $('.checkAll').prop('checked') ){
