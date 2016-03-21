@@ -17,4 +17,12 @@ UPDATE hn_reference SET ref_in_recherche = ref_recherche, ref_reference = ref_di
 
 
 UPDATE `core_menu_item` SET `itm_name` = 'Erreurs dans les URL' WHERE `core_menu_item`.`itm_id` = 177;
+UPDATE `core_menu_item` SET `itm_name` = 'Dictionnaire' WHERE `core_menu_item`.`itm_id` = 17 ;
+UPDATE `core_menu_item` SET `itm_name` = 'Ajouter un concept' WHERE `core_menu_item`.`itm_id` = 35;
+UPDATE `core_menu_item` SET `itm_name` = 'Fiche concept' WHERE `core_menu_item`.`itm_id` = 36;
+UPDATE `core_menu_item` SET `itm_name` = 'Editer un concept' WHERE `core_menu_item`.`itm_id` = 37;
+
+
+
+
 
