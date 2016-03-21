@@ -2,8 +2,9 @@
 namespace HopitalNumerique\ReferenceBundle\DependencyInjection\Referencement;
 
 use HopitalNumerique\DomaineBundle\Entity\Domaine;
-use HopitalNumerique\ReferenceBundle\DependencyInjection\Reference\Referencement as ReferencementService;
+use HopitalNumerique\ReferenceBundle\DependencyInjection\Referencement as ReferencementService;
 use HopitalNumerique\ReferenceBundle\Entity\EntityHasReference;
+use HopitalNumerique\ReferenceBundle\Manager\EntityHasNoteManager;
 use HopitalNumerique\ReferenceBundle\Manager\EntityHasReferenceManager;
 
 /**
@@ -34,6 +35,12 @@ class Note
 
 
     /**
+     * @var array Toutes les EntityHasReference groupés par Type + ID d'entité
+     */
+    private $entitiesHaveReferencesClassifiedByEntityTypeClassifiedByEntityId = null;
+
+
+    /**
      * Constructeur.
      */
     public function __construct(ReferencementService $referencementService, EntityHasReferenceManager $entityHasReferenceManager, EntityHasNoteManager $entityHasNoteManager)
@@ -55,6 +62,8 @@ class Note
         $referencesTree = $this->referencementService->getReferencesTree([$domaine]);
 
         $this->addScoresInReferencesSubtree($referencesTree, self::SCORE_GLOBAL);
+
+        return $referencesTree;
     }
 
     /**
@@ -65,11 +74,13 @@ class Note
      */
     private function addScoresInReferencesSubtree(array &$referencesSubtree, $scoreParent)
     {
-        $scoreEnfant = $scoreParent / count($referencesSubtree);
+        if (count($referencesSubtree) > 0) {
+            $scoreEnfant = $scoreParent / count($referencesSubtree);
 
-        foreach (array_keys($referencesSubtree) as $i) {
-            $referencesSubtree[$i]['score'] = $scoreEnfant;
-            $this->addScoresInReferencesSubtree($referencesSubtree[$i]['enfants'], $scoreEnfant);
+            foreach (array_keys($referencesSubtree) as $i) {
+                $referencesSubtree[$i]['score'] = $scoreEnfant;
+                $this->addScoresInReferencesSubtree($referencesSubtree[$i]['enfants'], $scoreEnfant);
+            }
         }
     }
 
@@ -81,25 +92,31 @@ class Note
     public function saveScoresForDomaine(Domaine $domaine)
     {
         $referencesTreeWithScores = $this->getReferencesTreeWithScores($domaine);
-        $entitiesHasReferencesByEntityTypeByEntityId = $this->entityHasReferenceManager->getAllClassifiedByEntityTypeClassifiedByEntityId();
+        if (null === $this->entitiesHaveReferencesClassifiedByEntityTypeClassifiedByEntityId) {
+            $this->entitiesHasReferencesByEntityTypeByEntityId = $this->entityHasReferenceManager->getAllClassifiedByEntityTypeClassifiedByEntityId();
+        }
 
-        foreach ($entitiesHasReferencesByEntityTypeByEntityId as $entityType => $entitiesHasReferencesByEntityId) {
+        foreach ($this->entitiesHasReferencesByEntityTypeByEntityId as $entityType => $entitiesHasReferencesByEntityId) {
             foreach ($entitiesHasReferencesByEntityId as $entityId => $entitiesHasReferences) {
-                $note = $this->getNoteForEntitiesHaveReferences();
+                $note = $this->getNoteForEntitiesHaveReferences($entitiesHasReferences, $referencesTreeWithScores);
 
                 $entityHasNote = $this->entityHasNoteManager->findOneBy([
                     'entityType' => $entityType,
                     'entityId' => $entityId,
                     'domaine' => $domaine
                 ]);
-                if (null === $entityHasNote) {
-                    $entityHasNote = $this->entityHasNoteManager->createEmpty();
-                    $entityHasNote->setEntityType($entityType);
-                    $entityHasNote->setEntityId($entityId);
-                    $entityHasNote->setDomaine($domaine);
+                if (null !== $note) {
+                    if (null === $entityHasNote) {
+                        $entityHasNote = $this->entityHasNoteManager->createEmpty();
+                        $entityHasNote->setEntityType($entityType);
+                        $entityHasNote->setEntityId($entityId);
+                        $entityHasNote->setDomaine($domaine);
+                    }
+                    $entityHasNote->setNote($note);
+                    $this->entityHasNoteManager->save($entityHasNote);
+                } elseif (null !== $entityHasNote) {
+                    $this->entityHasNoteManager->remove($entityHasNote);
                 }
-                $entityHasNote->setNote($note);
-                $this->entityHasNoteManager->save($entityHasNote);
             }
         }
     }
@@ -118,7 +135,7 @@ class Note
         foreach ($entitiesHasReferences as $entityHasReference) {
             $referenceScore = $this->getNoteForEntityHasReference($entityHasReference, $referencesTreeWithScores);
             if (null === $referenceScore) {
-                throw new \Exception('Aucun score trouvé pour EntityHasReference #'.$entityHasReference->getId().'.');
+                return null;
             }
             $score += $referenceScore;
         }
@@ -139,11 +156,10 @@ class Note
             if ($referenceParameters['reference']->getId() === $entityHasReference->getReference()->getId()) {
                 return $referenceParameters['score'];
             }
-            foreach ($referenceParameters['enfants'] as $referenceEnfants) {
-                $score = $this->getnoteForEntityHasReference($entityHasReference, $referenceEnfants);
-                if (null !== $score) {
-                    return $score;
-                }
+
+            $score = $this->getNoteForEntityHasReference($entityHasReference, $referenceParameters['enfants']);
+            if (null !== $score) {
+                return $score;
             }
         }
 

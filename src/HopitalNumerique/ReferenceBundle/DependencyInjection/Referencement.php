@@ -44,7 +44,7 @@ class Referencement
      * @param array<\HopitalNumerique\DomaineBundle\Entity\Domaine> $domaines Domaines
      * @return array Arbre
      */
-    private function getReferencesTree($domaines)
+    public function getReferencesTree($domaines)
     {
         $references = $this->referenceManager->findByDomaines($domaines, true, false, null, true);
 

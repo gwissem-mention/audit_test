@@ -21,8 +21,8 @@ services:
         class: 'HopitalNumerique\ReferenceBundle\DependencyInjection\Referencement\Entity'
         arguments: ['@hopitalnumerique_objet.manager.objet', '@hopitalnumerique_objet.manager.contenu']
 
-    hopitalnumerique_reference.dependency_injection.referencement.score:
-        class: 'HopitalNumerique\ReferenceBundle\DependencyInjection\Referencement\Score'
+    hopitalnumerique_reference.dependency_injection.referencement.note:
+        class: 'HopitalNumerique\ReferenceBundle\DependencyInjection\Referencement\Note'
         arguments: ['@hopitalnumerique_reference.dependency_injection.referencement', '@hopitalnumerique_reference.manager.entity_has_reference', '@hopitalnumerique_reference.manager.entity_has_note']
 
     hopitalnumerique_reference.dependency_injection.reference.tree:

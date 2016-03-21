@@ -2,6 +2,7 @@
 namespace HopitalNumerique\ReferenceBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use HopitalNumerique\DomaineBundle\Entity\Domaine;
 
 /**
  * EntityHasReference.
@@ -117,7 +118,7 @@ class EntityHasNote
      *
      * @return EntityHasNote
      */
-    public function setDomaine(\HopitalNumerique\ReferenceBundle\Entity\Domaine $domaine = null)
+    public function setDomaine(Domaine $domaine = null)
     {
         $this->domaine = $domaine;
 

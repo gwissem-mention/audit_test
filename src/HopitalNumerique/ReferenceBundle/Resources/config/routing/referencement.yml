@@ -7,3 +7,8 @@ hopitalnumerique_reference_referencement_savechosenreferences:
     pattern:  /referencement/popin/{entityType}/{entityId}/savechosenreferences
     defaults: { _controller: 'HopitalNumeriqueReferenceBundle:Referencement:saveChosenReferences' }
     methods: 'post'
+
+hopitalnumerique_reference_referencement_cronsavenotes:
+    pattern:  /referencement/cron-save-notes/{token}
+    defaults: { _controller: 'HopitalNumeriqueReferenceBundle:Referencement:cronSaveNotes' }
+    methods: 'get'

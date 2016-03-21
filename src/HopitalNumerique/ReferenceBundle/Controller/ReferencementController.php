@@ -4,6 +4,7 @@ namespace HopitalNumerique\ReferenceBundle\Controller;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  * Referencement controller.
@@ -70,5 +71,19 @@ class ReferencementController extends Controller
         return new JsonResponse(array(
             'success' => true
         ));
+    }
+
+    /**
+     * Cron qui met à jour toutes les notes du référencement.
+     */
+    public function cronSaveNotesAction($token)
+    {
+        if ($token === 'PBYDHWURJYILOLP24FKGMERO78HD7SUXVRT') {
+            foreach ($this->container->get('hopitalnumerique_domaine.manager.domaine')->findAll() as $domaine) {
+                $this->container->get('hopitalnumerique_reference.dependency_injection.referencement.note')->saveScoresForDomaine($domaine);
+            }
+        }
+
+        return new Response('Cron termin&eacute; !');
     }
 }
