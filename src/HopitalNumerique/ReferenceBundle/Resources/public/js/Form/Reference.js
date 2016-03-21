@@ -17,8 +17,8 @@ $(document).ready(function() {
 Hn_Reference_Form_Reference.init = function()
 {
     Hn_Reference_Form_Reference.initEvents();
-    Hn_Reference_Form_Reference.processInRechercheAndParentableDisplaying();
-    Hn_Reference_Form_Reference.processDescriptionCourteObligatory();
+    Hn_Reference_Form_Reference.processReferenceChecking();
+    Hn_Reference_Form_Reference.processInGlossaireChecking();
 };
 
 /**
@@ -27,17 +27,17 @@ Hn_Reference_Form_Reference.init = function()
 Hn_Reference_Form_Reference.initEvents = function()
 {
     $('#hopitalnumerique_reference_reference_reference').click(function() {
-        Hn_Reference_Form_Reference.processInRechercheAndParentableDisplaying();
+        Hn_Reference_Form_Reference.processReferenceChecking();
     });
     $('#hopitalnumerique_reference_reference_inGlossaire').click(function() {
-        Hn_Reference_Form_Reference.processDescriptionCourteObligatory();
+        Hn_Reference_Form_Reference.processInGlossaireChecking();
     });
 };
 
 /**
- * Affiche ou pas la case "Présente dans la recherche ?".
+ * Affiche ou pas la case "Présente dans la recherche ?" et "Parentable ?" si "Est une référence ?" est cochée.
  */
-Hn_Reference_Form_Reference.processInRechercheAndParentableDisplaying = function()
+Hn_Reference_Form_Reference.processReferenceChecking = function()
 {
     var isReference = $('#hopitalnumerique_reference_reference_reference').is(':checked');
 
@@ -50,12 +50,13 @@ Hn_Reference_Form_Reference.processInRechercheAndParentableDisplaying = function
 };
 
 /**
- * Rend la description courte obligatoire si le concept est présent dans le glossaire.
+ * Rend la description courte obligatoire et affiche les champs du glossaire si le concept est présent dans le glossaire.
  */
-Hn_Reference_Form_Reference.processDescriptionCourteObligatory = function()
+Hn_Reference_Form_Reference.processInGlossaireChecking = function()
 {
     var isInGlossaire = $('#hopitalnumerique_reference_reference_inGlossaire').is(':checked');
 
+    $('#reference-glossaire-subcontainer').css({ display:(isInGlossaire ? 'block' : 'none') });
     if (isInGlossaire) {
         $('#hopitalnumerique_reference_reference_descriptionCourte').addClass('validate[required]');
     } else {
