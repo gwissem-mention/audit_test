@@ -117,18 +117,6 @@ hopitalnumerique_objet_contenu_reorder:
     defaults: { _controller: "HopitalNumeriqueObjetBundle:Contenu:reorder" }
 
 #partie reference
-hopitalnumerique_objet_reference_objet:
-    pattern:  /objet/reference/objet/{id}
-    defaults: { _controller: "HopitalNumeriqueObjetBundle:Reference:objet", id:1 }
-    requirements:
-        id: \d+
-
-hopitalnumerique_objet_reference_objet_own:
-    pattern:  /objet/reference/objet-own/{id}
-    defaults: { _controller: "HopitalNumeriqueObjetBundle:Reference:objetOwn", id:1 }
-    requirements:
-        id: \d+
-
 hopitalnumerique_objet_reference_objet_save:
     pattern:  /objet/reference/save/objet/{id}
     defaults: { _controller: "HopitalNumeriqueObjetBundle:Reference:saveObjet" }

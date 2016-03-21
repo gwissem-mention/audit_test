@@ -332,9 +332,9 @@
                                 <div class="form-group {% if not objet.id or (objet.id and objet.isArticle()) %}hide{% endif %}">
                                     <label class="col-md-2" for="hopitalnumerique_objet_objet_references">Références</label>
                                     <div class="col-md-10">
-                                        <a href="{{path('hopitalnumerique_objet_reference_objet_own', {'id':objet.id})}}" class="manageReferences btn btn-xs btn-primary fancybox.ajax pull-right"><i class="fa fa-eye"></i></a>
-                                        <a href="{{path('hopitalnumerique_objet_reference_objet', {'id':objet.id})}}" class="manageReferences edit btn btn-xs btn-primary fancybox.ajax pull-right"><i class="fa fa-cog"></i></a>
-                                        <a href="{{path('hopitalnumerique_reference_referencement_popin', { 'entityType':'publication', 'entityId':objet.id })}}" class="manageReferences edit btn btn-xs btn-primary fancybox.ajax pull-right"><i class="fa fa-cog"></i></a>
+                                        {%- if objet.id is not null -%}
+                                            <a href="{{path('hopitalnumerique_reference_referencement_popin', { 'entityType':'publication', 'entityId':objet.id })}}" class="manageReferences edit btn btn-xs btn-primary fancybox.ajax pull-right"><i class="fa fa-cog"></i></a>
+                                        {%- endif -%}
                                         <p class="text-muted text-right pull-right">Note référencement : <span class="nbRefs">{{note|number_format(2,',')}}</span> / 400</p>
                                     </div>
                                     <div class="col-md-10 hide">
