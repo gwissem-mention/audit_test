@@ -44,7 +44,7 @@
             </td>
             <td>
                 {%- if referenceParameters.enfants|length > 0 -%}
-                    <span class="nbChilds" >0</span> / <span class="nbChildsDirect" >{{ referenceParameters.enfants|length }}</span>
+                    <span class="count-checked-children">0</span> / <span class="nbChildsDirect" >{{ referenceParameters.enfants|length }}</span>
                 {%- endif -%}
             </td>
             <td>
@@ -64,86 +64,4 @@
     Hn_Reference_Referencement_Popin.ENTITY_TYPE = '{{ entityType }}';
     Hn_Reference_Referencement_Popin.ENTITY_ID = '{{ entityId }}';
     Hn_Reference_Referencement_Popin.init();
-
-    $(document).ready(function() {
-        //click de la checkbox globale
-        $('#references-tab .checkAll').on('click', function(){
-            if( $('.checkAll').prop('checked') ){
-                $('#references-tab .checkbox').each(function(){
-                    $(this).prop('checked', 'checked');
-                })
-            }else{
-                $('#references-tab .checkbox').each(function(){
-                    $(this).prop('checked', false);
-                })
-            }
-
-            updateNbChilds();
-        });
-
-        //click de chaque checkbox : on gère les enfants (selected)
-        $('#references-tab .checkbox').on('click', function(){
-            $('#references-tab .checkAll').prop('checked',false);
-
-            //get childs (if exist)
-            childs = $(this).parent().parent().data('childs');
-
-            if( childs.length > 0 ){
-                //on coche les enfants
-                if ( $(this).prop('checked') ){
-                    $.each(childs,function(key, val){
-                        $('.ref-'+val+' .checkbox').prop('checked','checked');
-                    });
-                // on décoche les enfants
-                }else{
-                    $.each(childs,function(key, val){
-                        $('.ref-'+val+' .checkbox').prop('checked',false);
-                    });
-                }
-            }
-
-            //get parents (if exist)
-            var parents = $(this).parents('tr').data('parents');
-
-            if( parents.length > 0 ){
-                //on coche les parents
-                if ( $(this).prop('checked') ){
-                    $.each(parents,function(key, val){
-                        $('.ref-'+val+' .checkbox').prop('checked','checked');
-                    });
-                }else{
-                    parents.reverse();
-                    //si on a décoché la case, on fait un traitement spécial aux parents
-                    $.each(parents,function(key, val){
-                        uncheck = true;
-
-                        //si on vient de décoché le dernier enfant on décoche le parent
-                        childs = $('.ref-'+val).data('childs');
-                        $.each(childs, function(cKey, cVal){
-                            if( $('.ref-'+cVal+' .checkbox').prop('checked') )
-                                uncheck = false;
-                        });
-
-                        if( uncheck )
-                            $('.ref-'+val+' .checkbox').prop('checked',false);
-                    });
-
-                    //on remet le tableau dans le bon ordre : sinon il le reverse au prochain click
-                    parents.reverse();
-                }
-            }
-
-            updateNbChilds();
-        });
-
-        //Gère les collapse
-        $('#references-tab .btn').on('click', function(){
-            //détermine le sens : collapse/expend
-            way = ( $(this).find('i').hasClass('fa-arrow-down') ) ? 'collapse' : 'expend';
-            
-            manageCollapse( $(this), way);
-        });
-
-        updateNbChilds();
-    });
 </script>

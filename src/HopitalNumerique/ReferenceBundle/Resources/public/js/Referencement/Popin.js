@@ -95,12 +95,14 @@ Hn_Reference_Referencement_Popin.toggleCheckAll = function()
 Hn_Reference_Referencement_Popin.checkReference_click = function(event)
 {
     var checkbox = $(event.target);
+    var referenceId = parseInt($(checkbox).attr('data-reference'));
     var isChecked = checkbox.is(':checked');
 
-    Hn_Reference_Referencement_Popin.checkOrUncheckAllReferenceChildren(parseInt(checkbox.attr('data-reference')), isChecked);
+    Hn_Reference_Referencement_Popin.checkOrUncheckAllReferenceChildren(referenceId, isChecked);
     if (isChecked) {
-        Hn_Reference_Referencement_Popin.checkAllReferenceParent(parseInt(checkbox.attr('data-reference')));
+        Hn_Reference_Referencement_Popin.checkAllReferenceParent(referenceId);
     }
+    Hn_Reference_Referencement_Popin.refreshCountElements(referenceId);
 };
 
 /**
@@ -253,4 +255,21 @@ Hn_Reference_Referencement_Popin.saveEntitiesHaveReferencesAndClose = function()
             }
         }
     });
+};
+
+/**
+ * Affiche le nombre d'éléments d'une référence et de tous ses parents dans le tableau.
+ *
+ * @param integer referenceId ID de la référence
+ */
+Hn_Reference_Referencement_Popin.refreshCountElements = function(referenceId)
+{
+    var checkedChildren = $('tr[data-reference-parent="' + referenceId + '"] input:checked');
+
+    $('tr[data-reference="' + referenceId + '"] .count-checked-children').html($(checkedChildren).size());
+
+    var referenceParentId = $('tr[data-reference="' + referenceId + '"]').attr('data-reference-parent');
+    if ('' != referenceParentId) {
+        Hn_Reference_Referencement_Popin.refreshCountElements(referenceParentId);
+    }
 };
