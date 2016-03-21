@@ -204,6 +204,7 @@ class ReferenceController extends Controller
     private function renderForm($reference)
     {
         $referenceTreeOptions = $this->container->get('hopitalnumerique_reference.dependency_injection.reference.tree')->getOptions();
+        $this->container->get('hopitalnumerique_reference.doctrine.reference.domaine_udpater')->setInitialReference($reference);
 
         //Création du formulaire via le service
         $form = $this->createForm('hopitalnumerique_reference_reference', $reference);
@@ -217,6 +218,7 @@ class ReferenceController extends Controller
 
             // On bind les données du form
             $form->handleRequest($request);
+            $this->container->get('hopitalnumerique_reference.doctrine.reference.domaine_udpater')->updateDomaines($reference);
 
             //si le formulaire est valide
             if ( $form->isValid() ) 

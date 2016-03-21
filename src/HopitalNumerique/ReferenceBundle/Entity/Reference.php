@@ -137,7 +137,7 @@ class Reference
      * )
      */
     protected $parents;
-    
+
     /**
      * @var \Doctrine\Common\Collections\Collection
      *
@@ -681,7 +681,7 @@ class Reference
      *
      * @return boolean
      */
-    public function getAllDomaines()
+    public function isAllDomaines()
     {
         return $this->allDomaines;
     }
