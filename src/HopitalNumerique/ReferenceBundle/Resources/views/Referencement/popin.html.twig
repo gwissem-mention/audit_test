@@ -40,7 +40,7 @@
                 <input type="checkbox" class="checkbox" data-reference="{{ referenceParameters.reference.id }}" data-initial-checked="{{ referenceParameters.entityHasReference is not null ? '1' : '0' }}" id="reference-{{ referenceParameters.reference.id }}">
             </td>
             <td>
-                <div class="toggle toggle-success {% if referenceParameters.entityHasReference is not null and referenceParameters.entityHasReference.isPrimary %}on{% else %}off{% endif %}"></div>
+                <div class="toggle toggle-success {% if referenceParameters.entityHasReference is not null and referenceParameters.entityHasReference.isPrimary %}on{% else %}off{% endif %}" style="display:none;"></div>
             </td>
             <td>
                 {%- if referenceParameters.enfants|length > 0 -%}
