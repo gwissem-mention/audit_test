@@ -77,7 +77,7 @@ class ReferenceManager extends BaseManager
         //call recursive function to handle all datas
         return $this->getArboRecursive($datas, $parents, array() );
     }
-    
+
     /**
      * Retourne l'arbo formatée
      *
