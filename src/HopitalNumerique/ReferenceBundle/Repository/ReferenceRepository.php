@@ -76,7 +76,7 @@ class ReferenceRepository extends EntityRepository
                 ))
                 ->setParameter('domainesId', $domainesIds)
             ->groupBy('ref.id')
-            ->orderBy('ref.code, ref.order');
+            ->orderBy('ref.libelle');
             
         return $qb;
     }
