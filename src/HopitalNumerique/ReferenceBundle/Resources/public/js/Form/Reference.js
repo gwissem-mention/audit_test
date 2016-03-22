@@ -45,8 +45,7 @@ Hn_Reference_Form_Reference.processReferenceChecking = function()
         $('#hopitalnumerique_reference_reference_inRecherche').prop('checked', false);
         $('#hopitalnumerique_reference_reference_parentable').prop('checked', false);
     }
-    $('#reference-in-recherche-container').css({ display:(isReference ? 'block' : 'none') });
-    $('#reference-parentable-container').css({ display:(isReference ? 'block' : 'none') });
+    $('#reference-reference-subcontainer').css({ display:(isReference ? 'block' : 'none') });
 };
 
 /**
