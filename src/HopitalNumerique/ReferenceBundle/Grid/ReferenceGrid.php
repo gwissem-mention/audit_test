@@ -44,10 +44,10 @@ class ReferenceGrid extends Grid implements GridInterface
         $dictionnaireColumn->setSize(100);
         $this->addColonne($dictionnaireColumn);
 
-        $rechercheColumn = new Column\BooleanColumn('inRecherche', 'Présent dans la recherche');
-        $rechercheColumn->setValues([1 => 'Oui', 0 => 'Non']);
-        $rechercheColumn->setSize(100);
-        $this->addColonne($rechercheColumn);
+        $inGlossaireColumn = new Column\BooleanColumn('inGlossaire', 'Actif dans le glossaire');
+        $inGlossaireColumn->setValues([1 => 'Oui', 0 => 'Non']);
+        $inGlossaireColumn->setSize(100);
+        $this->addColonne($inGlossaireColumn);
 
         $etatColonne = new Column\TextColumn('etat', 'Etat');
         $etatColonne->setSize(80);
@@ -57,10 +57,10 @@ class ReferenceGrid extends Grid implements GridInterface
         $etatColonne->setDefaultOperator(\APY\DataGridBundle\Grid\Column\Column::OPERATOR_EQ);
         $this->addColonne($etatColonne);
 
-        $inGlossaireColumn = new Column\BooleanColumn('inGlossaire', 'Actif dans le glossaire');
-        $inGlossaireColumn->setValues([1 => 'Oui', 0 => 'Non']);
-        $inGlossaireColumn->setSize(100);
-        $this->addColonne($inGlossaireColumn);
+        $rechercheColumn = new Column\BooleanColumn('inRecherche', 'Présent dans la recherche');
+        $rechercheColumn->setValues([1 => 'Oui', 0 => 'Non']);
+        $rechercheColumn->setSize(100);
+        $this->addColonne($rechercheColumn);
 
         $this->addColonne(new Column\TextColumn('code', 'Code'));
 
