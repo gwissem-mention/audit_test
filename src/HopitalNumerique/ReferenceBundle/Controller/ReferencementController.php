@@ -80,7 +80,7 @@ class ReferencementController extends Controller
     {
         if ($token === 'PBYDHWURJYILOLP24FKGMERO78HD7SUXVRT') {
             foreach ($this->container->get('hopitalnumerique_domaine.manager.domaine')->findAll() as $domaine) {
-                $this->container->get('hopitalnumerique_reference.dependency_injection.referencement.note')->saveScoresForDomaine($domaine);
+                $this->container->get('hopitalnumerique_reference.doctrine.referencement.note_saver')->saveScoresForDomaine($domaine);
             }
         }
 
