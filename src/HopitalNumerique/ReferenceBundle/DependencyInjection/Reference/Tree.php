@@ -27,11 +27,12 @@ class Tree
     /**
      * Retourne les options permettant la création de l'arbre.
      *
+     * @param array<\HopitalNumerique\DomaineBundle\Entity\Domaine> $domaines Domaines
      * @return array Options
      */
-    public function getOptions()
+    public function getOptions($domaines)
     {
-        $references = $this->getOrderedReferences();
+        $references = $this->getOrderedReferences(true, $domaines);
 
         $jsTreeOptionsData = $this->getTreeOptionsDataPart($references);
         $jsTreeOptions = [
@@ -84,7 +85,6 @@ class Tree
                 'lock' => false,
                 'parentable' => $parentable
             ];
-
             $references = $this->referenceManager->findBy($referencesConditions, ['order' => 'ASC']);
         } else {
             $references = $this->referenceManager->findByDomaines($domaines, true, false, $parentable);
