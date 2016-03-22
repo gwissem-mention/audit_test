@@ -607,6 +607,22 @@ class Reference
     }
 
     /**
+     * Retourne les noms des domaines.
+     *
+     * @return array<string> Noms
+     */
+    public function getDomaineNoms()
+    {
+        $domaineLibelles = [];
+
+        foreach ($this->domaines as $domaine) {
+            $domaineLibelles[] = $domaine->getNom();
+        }
+
+        return $domaineLibelles;
+    }
+
+    /**
      * set domaines
      *
      * @return Reference

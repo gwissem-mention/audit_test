@@ -62,7 +62,7 @@ class Tree
         foreach ($orderedReferences as $referenceParemeters) {
             $jsTreeOptionsDataPart[] = [
                 'id' => $referenceParemeters['reference']->getId(),
-                'text' => $referenceParemeters['reference']->getLibelle(),
+                'text' => $referenceParemeters['reference']->getLibelle().(count($referenceParemeters['reference']->getDomaines()) > 0 ? ' <em><small>- '.implode(' ; ', $referenceParemeters['reference']->getDomaineNoms()).'</small></em>' : ''),
                 'children' => $this->getTreeOptionsDataPart($referenceParemeters['enfants'])
             ];
         }
