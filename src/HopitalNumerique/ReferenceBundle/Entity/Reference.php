@@ -1025,4 +1025,14 @@ class Reference
 
         return null;
     }
+
+    /**
+     * Retourne le libellé à afficher pour une référence.
+     *
+     * @return string Libellé
+     */
+    public function getLibelleForReference()
+    {
+        return ('' != $this->referenceLibelle ? $this->referenceLibelle : $this->libelle);
+    }
 }
