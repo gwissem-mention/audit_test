@@ -72,7 +72,7 @@ class Reference
 
     /**
      * @var string
-     * @ORM\Column(name="ref_code", type="string", length=255, options = {"comment" = "Code de la référence"})
+     * @ORM\Column(name="ref_code", type="string", length=255, nullable=true, options = {"comment" = "Code de la référence"})
      */
     protected $code;
 
