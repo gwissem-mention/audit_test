@@ -89,14 +89,16 @@ class ReferenceRepository extends EntityRepository
     public function getDatasForExport( $ids )
     {
         $qb = $this->_em->createQueryBuilder();
-        $qb->select('ref.id, ref.libelle, ref.code, ref.reference, ref.inRecherche, ref.lock, ref.order, refEtat.libelle as etat, refParent.id as idParent, domaine.nom as domaineNom')
+        $qb->select('ref.id, ref.libelle, ref.code, ref.reference, ref.inRecherche, ref.inGlossaire, refEtat.libelle as etat, GROUP_CONCAT(DISTINCT conceptParent.libelle SEPARATOR \',\') AS parentLibelles, GROUP_CONCAT(DISTINCT domaine.nom SEPARATOR \',\') AS domaineNoms')
             ->from('HopitalNumeriqueReferenceBundle:Reference', 'ref')
-            ->leftJoin('ref.etat','refEtat')
-            ->leftJoin('ref.parents','refParent')
+            ->leftJoin('ref.etat', 'refEtat')
+            ->leftJoin('ref.parents', 'conceptParent')
             ->leftJoin('ref.domaines', 'domaine')
             ->where('ref.id IN (:ids)')
             ->orderBy('ref.code, ref.order')
-            ->setParameter('ids', $ids);
+            ->groupBy('ref.id')
+            ->setParameter('ids', $ids)
+        ;
             
         return $qb;
     }

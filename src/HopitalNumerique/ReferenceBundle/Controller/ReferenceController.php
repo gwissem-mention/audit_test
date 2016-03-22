@@ -170,17 +170,16 @@ class ReferenceController extends Controller
         $refs = $this->get('hopitalnumerique_reference.manager.reference')->getDatasForExport( $primaryKeys );
 
         $colonnes = array( 
-                            'id'           => 'id', 
-                            'libelle'      => 'Libelle',
-                            'domaineNom'   => 'Domaine(s)',
-                            'code'         => 'Code', 
-                            'reference' => 'Est une référence', 
-                            'recherche'    => 'Présent dans la recherhce', 
-                            'lock'         => 'Vérouillé ?', 
-                            'order'        => 'Ordre d\'affichage', 
-                            'etat'         => 'Etat', 
-                            'idParent'     => 'ID du parent'
-                        );
+            'id'           => 'id', 
+            'libelle'      => 'Libellé du concept',
+            'domaineNoms'   => 'Domaine(s)',
+            'reference' => 'Est une référence',
+            'inGlossaire' => 'Actif dans le glossaire',
+            'etat'         => 'Etat',
+            'inRecherche'    => 'Présent dans la recherche',
+            'code'         => 'Code',
+            'parentLibelles'     => 'Parents'
+        );
 
         $kernelCharset = $this->container->getParameter('kernel.charset');
 
