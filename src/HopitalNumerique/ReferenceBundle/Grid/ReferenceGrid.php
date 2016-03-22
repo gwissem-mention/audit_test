@@ -31,7 +31,7 @@ class ReferenceGrid extends Grid implements GridInterface
      */
     public function setColumns()
     {
-        $this->addColonne(new Column\TextColumn('idReference', 'ID'));
+        $this->addColonne(new Column\NumberColumn('idReference', 'ID'));
 
         $this->addColonne(new Column\TextColumn('libelle', 'Libellé du concept'));
 
