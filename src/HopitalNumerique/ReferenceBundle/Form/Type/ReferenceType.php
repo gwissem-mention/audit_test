@@ -89,7 +89,8 @@ class ReferenceType extends AbstractType
                 'label' => 'Libellé du concept',
                 'attr' => [
                     'maxlength' => 255,
-                    'class' => 'validate[required]'
+                    'class' => 'validate[required]',
+                    'data-prompt-position' => 'bottomLeft'
                 ]
             ))
             ->add('image', 'hidden', [
@@ -235,7 +236,10 @@ class ReferenceType extends AbstractType
             ))
             ->add('descriptionCourte', 'textarea', array(
                 'required' => false,
-                'label' => 'Description courte <span title="Ce champ est requis" style="color:red;font-size:10px">*</span>'
+                'label' => 'Description courte <span title="Ce champ est requis" style="color:red;font-size:10px">*</span>',
+                'attr' => [
+                    'data-prompt-position' => 'bottomLeft'
+                ]
             ))
             ->add('descriptionLongue', 'textarea', array(
                 'required' => false,
