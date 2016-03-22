@@ -155,13 +155,14 @@ class ReferenceType extends AbstractType
      */
     private function buildFormPartListe(FormBuilderInterface $builder, array $options)
     {
-        $attrCode = array('class' => $this->_constraints['code']['class']);
+        $attrCode = array(
+            'maxlength' => 255
+        );
         if ($options['data']->getLock())
             $attrCode['readonly'] = 'readonly';
 
         $builder
             ->add('code', 'text', array(
-                'max_length' => $this->_constraints['code']['maxlength'],
                 'required'   => false,
                 'label'      => 'Code',
                 'attr'       => $attrCode

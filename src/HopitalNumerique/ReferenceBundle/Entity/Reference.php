@@ -72,14 +72,6 @@ class Reference
 
     /**
      * @var string
-     * @Assert\NotBlank(message="Le code ne peut pas être vide.")
-     * @Assert\Length(
-     *      min = "1",
-     *      max = "255",
-     *      minMessage="Il doit y avoir au moins {{ limit }} caractères dans le code.",
-     *      maxMessage="Il doit y avoir au maximum {{ limit }} caractères dans le code."
-     * )
-     * @Nodevo\Javascript(class="validate[required,minSize[1],maxSize[255]]")
      * @ORM\Column(name="ref_code", type="string", length=255, options = {"comment" = "Code de la référence"})
      */
     protected $code;
