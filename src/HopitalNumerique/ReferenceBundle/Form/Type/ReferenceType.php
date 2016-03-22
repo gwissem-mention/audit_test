@@ -217,7 +217,7 @@ class ReferenceType extends AbstractType
         $builder
             ->add('inGlossaire', 'checkbox', array(
                 'required' => false,
-                'label' => 'Présente dans le glossaire ?'
+                'label' => 'Présent dans le glossaire ?'
             ))
             ->add('sigle', 'text', array(
                 'required' => false,
