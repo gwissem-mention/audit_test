@@ -198,10 +198,7 @@ class ReferenceType extends AbstractType
             ))
             ->add('referenceLibelle', 'text', array(
                 'required' => false,
-                'label' => 'Libellé de la référence',
-                'label_attr' => [
-                    'title' => 'Si différent du libellé du concept'
-                ],
+                'label' => 'Libellé de la référence (si différent du libellé du concept)',
                 'attr' => [
                     'maxlength' => 255
                 ]
@@ -231,10 +228,7 @@ class ReferenceType extends AbstractType
             ))
             ->add('glossaireLibelle', 'text', array(
                 'required' => false,
-                'label' => 'Libellé dans le glossaire',
-                'label_attr' => [
-                    'title' => 'Si différent du libellé du concept'
-                ],
+                'label' => 'Libellé dans le glossaire (si différent du libellé du concept)',
                 'attr' => [
                     'maxlength' => 255
                 ]
