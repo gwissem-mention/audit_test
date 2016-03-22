@@ -7,8 +7,6 @@ use Nodevo\GridBundle\Grid\GridInterface;
 use Nodevo\GridBundle\Grid\Column;
 use Nodevo\GridBundle\Grid\Action;
 
-use APY\DataGridBundle\Grid\Action\RowAction;
-
 /**
  * Configuration du grid Reference.
  */

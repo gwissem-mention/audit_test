@@ -106,7 +106,6 @@ class Reference
     /**
      * @var float
      * @Assert\NotBlank(message="L'ordre ne peut pas être vide.")
-     * @Nodevo\Javascript(class="validate[required, custom[number]]")
      * @ORM\Column(name="ref_order", type="float", options = {"comment" = "Ordre de la référence"})
      */
     protected $order;

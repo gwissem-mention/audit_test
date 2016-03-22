@@ -170,7 +170,7 @@ class ReferenceType extends AbstractType
             ->add('order', 'number', array(
                 'required' => true,
                 'label'    => 'Ordre d\'affichage',
-                'attr'     => array('class' => $this->_constraints['order']['class'] )
+                'attr'     => array('class' => 'validate[required, custom[numberVirgule]]')
             ))
         ;
     }
