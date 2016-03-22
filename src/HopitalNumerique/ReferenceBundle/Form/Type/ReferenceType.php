@@ -235,7 +235,7 @@ class ReferenceType extends AbstractType
             ))
             ->add('descriptionCourte', 'textarea', array(
                 'required' => false,
-                'label' => 'Description courte'
+                'label' => 'Description courte <span title="Ce champ est requis" style="color:red;font-size:10px">*</span>'
             ))
             ->add('descriptionLongue', 'textarea', array(
                 'required' => false,
