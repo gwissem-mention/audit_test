@@ -23,6 +23,7 @@ class ReferenceGrid extends Grid implements GridInterface
         $this->setSourceType( self::SOURCE_TYPE_MANAGER );
         $this->setAffichageRecursif( 'idParent', 'libelle' );
         $this->setFilterIdColumn( false );
+        $this->setButtonSize(44);
     }
 
     /**
