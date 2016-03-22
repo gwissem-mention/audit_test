@@ -15,6 +15,12 @@ use HopitalNumerique\DomaineBundle\Entity\Domaine;
 class EntityHasNote
 {
     /**
+     * @var integer Score maximal
+     */
+    const SCORE_GLOBAL = 1000;
+
+
+    /**
      * @var integer
      *
      * @ORM\Column(name="entnot_id", type="integer", options={"unsigned"=true})

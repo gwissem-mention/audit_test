@@ -13,6 +13,12 @@ services:
         tags:
             - { name: twig.extension }
 
+    hopitalnumerique.twig.extension.referencement:
+        class: 'HopitalNumerique\ReferenceBundle\Twig\ReferencementExtension'
+        arguments : ['@hopitalnumerique_domaine.dependency_injection.current_domaine', '@hopitalnumerique_reference.doctrine.referencement.note_reader']
+        tags:
+            - { name: 'twig.extension' }
+
     hopitalnumerique_reference.dependency_injection.referencement:
         class: 'HopitalNumerique\ReferenceBundle\DependencyInjection\Referencement'
         arguments: ['@hopitalnumerique_reference.dependency_injection.reference.tree', '@hopitalnumerique_reference.manager.reference', '@hopitalnumerique_reference.manager.entity_has_reference']
@@ -31,3 +37,7 @@ services:
     hopitalnumerique_reference.doctrine.referencement.note_saver:
         class: 'HopitalNumerique\ReferenceBundle\Doctrine\Referencement\NoteSaver'
         arguments: ['@hopitalnumerique_reference.dependency_injection.referencement', '@hopitalnumerique_reference.manager.entity_has_reference', '@hopitalnumerique_reference.manager.entity_has_note']
+
+    hopitalnumerique_reference.doctrine.referencement.note_reader:
+        class: 'HopitalNumerique\ReferenceBundle\Doctrine\Referencement\NoteReader'
+        arguments: ['@hopitalnumerique_reference.dependency_injection.referencement.entity', '@hopitalnumerique_reference.manager.entity_has_note', '@hopitalnumerique_reference.dependency_injection.referencement.entity']

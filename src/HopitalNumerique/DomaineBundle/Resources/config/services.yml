@@ -35,3 +35,7 @@ services:
         arguments: ["@service_container"]
         tags:
             - { name: twig.extension }
+
+    hopitalnumerique_domaine.dependency_injection.current_domaine:
+        class: 'HopitalNumerique\DomaineBundle\DependencyInjection\CurrentDomaine'
+        arguments: ['@session', '@hopitalnumerique_domaine.manager.domaine']

@@ -335,7 +335,7 @@
                                         {%- if objet.id is not null -%}
                                             <a href="{{path('hopitalnumerique_reference_referencement_popin', { 'entityType':'publication', 'entityId':objet.id })}}" class="manageReferences edit btn btn-xs btn-primary fancybox.ajax pull-right"><i class="fa fa-cog"></i></a>
                                         {%- endif -%}
-                                        <p class="text-muted text-right pull-right">Note référencement : <span class="nbRefs">{{note|number_format(2,',')}}</span> / 400</p>
+                                        <p class="text-muted text-right pull-right">Note référencement : {{ referencement_note(objet) }}</p>
                                     </div>
                                     <div class="col-md-10 hide">
                                         {{ form_widget(form.references) }}

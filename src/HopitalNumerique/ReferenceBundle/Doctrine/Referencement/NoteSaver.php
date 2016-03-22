@@ -3,6 +3,7 @@ namespace HopitalNumerique\ReferenceBundle\Doctrine\Referencement;
 
 use HopitalNumerique\DomaineBundle\Entity\Domaine;
 use HopitalNumerique\ReferenceBundle\DependencyInjection\Referencement as ReferencementService;
+use HopitalNumerique\ReferenceBundle\Entity\EntityHasNote;
 use HopitalNumerique\ReferenceBundle\Entity\EntityHasReference;
 use HopitalNumerique\ReferenceBundle\Manager\EntityHasNoteManager;
 use HopitalNumerique\ReferenceBundle\Manager\EntityHasReferenceManager;
@@ -12,12 +13,6 @@ use HopitalNumerique\ReferenceBundle\Manager\EntityHasReferenceManager;
  */
 class NoteSaver
 {
-    /**
-     * @var integer Score maximal
-     */
-    const SCORE_GLOBAL = 1000;
-
-
     /**
      * @var \HopitalNumerique\ReferenceBundle\DependencyInjection\Reference\Referencement Service Referencement
      */
@@ -61,7 +56,7 @@ class NoteSaver
     {
         $referencesTree = $this->referencementService->getReferencesTree([$domaine]);
 
-        $this->addScoresInReferencesSubtree($referencesTree, self::SCORE_GLOBAL);
+        $this->addScoresInReferencesSubtree($referencesTree, EntityHasNote::SCORE_GLOBAL);
 
         return $referencesTree;
     }
