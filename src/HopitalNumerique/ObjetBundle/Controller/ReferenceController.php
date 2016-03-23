@@ -11,52 +11,6 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 class ReferenceController extends Controller
 {
     /**
-     * [contenuAction description]
-     *
-     * @param  [type] $id [description]
-     *
-     * @return [type]
-     */
-    public function contenuAction( $id )
-    {
-        //Récupération du contenu passée en paramètre
-        $contenu = $this->get('hopitalnumerique_objet.manager.contenu')->findOneBy( array('id' => $id) );
-
-        //get references and selected references as One Array
-        $results    = $this->get('hopitalnumerique_reference.manager.reference')->getRefsForGestionObjets();
-        $references = $this->get('hopitalnumerique_objet.manager.contenu')->getReferences($contenu, $results);
-
-        return $this->render('HopitalNumeriqueObjetBundle:Reference:manage.html.twig', array(
-            'references' => $references,
-            'objet'      => 'false',
-            'contenu'    => $id,
-            'titre'      => $contenu->getTitre()
-        ));
-    }
-
-    /**
-     * [contenuOwnAction description]
-     *
-     * @param  [type] $id [description]
-     *
-     * @return [type]
-     */
-    public function contenuOwnAction( $id )
-    {
-        //Récupération du contenu passée en paramètre
-        $contenu = $this->get('hopitalnumerique_objet.manager.contenu')->findOneBy( array('id' => $id) );
-
-        //get references and selected references as One Array
-        $references = $this->get('hopitalnumerique_objet.manager.contenu')->getReferencesOwn($contenu);
-        
-        return $this->render('HopitalNumeriqueObjetBundle:Reference:manage-own.html.twig', array(
-            'references' => $references,
-            'objet'      => 'false',
-            'contenu'    => $id
-        ));
-    }
-
-    /**
      * [saveObjetAction description]
      *
      * @param  [type] $id [description]

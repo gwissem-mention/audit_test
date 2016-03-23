@@ -137,8 +137,11 @@ class Entity
             return $entity->getDomaines();
         }
 
-        if (self::ENTITY_TYPE_FORUM_TOPIC === $this->getEntityType($entity)) {
-            return [$this->domaineManager->findOneById(Domaine::DOMAINE_HOPITAL_NUMERIQUE_ID)];
+        switch ($this->getEntityType($entity)) {
+            case self::ENTITY_TYPE_FORUM_TOPIC:
+                return [$this->domaineManager->findOneById(Domaine::DOMAINE_HOPITAL_NUMERIQUE_ID)];
+            case self::ENTITY_TYPE_INFRADOC:
+                return $this->getDomainesByEntity($entity->getObjet());
         }
 
         throw new \Exception('Domaines non trouvés pour l\'entité.');
