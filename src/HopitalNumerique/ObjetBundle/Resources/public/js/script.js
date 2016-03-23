@@ -83,7 +83,7 @@ $(document).ready(function() {
 
     //fancybox d'édition d'un contenu
     //fancybox de gestion des références liées à l'objet et au contenu
-    $('.dd3-content a, .manageReferences, .uploadSommaire, .addProd').fancybox({
+    $('.dd3-content a, .uploadSommaire, .addProd').fancybox({
         'padding'   : 0,
         'autoSize'  : false,
         'width'     : '80%',
@@ -126,7 +126,7 @@ $(document).ready(function() {
 
 $(window).load(function(){
     if( $('#toRef').val() != "0" ){
-        $('.manageReferences.edit').delay(800).click();
+        $('.open-popin-referencement.edit').delay(800).click();
     }
 
     $(".form-contenu").each(function(){

@@ -330,7 +330,7 @@
                                     <label class="col-md-2" for="hopitalnumerique_objet_objet_references">Références</label>
                                     <div class="col-md-10">
                                         {%- if objet.id is not null -%}
-                                            <a href="{{path('hopitalnumerique_reference_referencement_popin', { 'entityType':'publication', 'entityId':objet.id })}}" class="manageReferences edit btn btn-xs btn-primary fancybox.ajax pull-right"><i class="fa fa-cog"></i></a>
+                                            <a href="{{path('hopitalnumerique_reference_referencement_popin', { 'entityType':'publication', 'entityId':objet.id })}}" class="open-popin-referencement edit btn btn-xs btn-primary fancybox.ajax pull-right"><i class="fa fa-cog"></i></a>
                                         {%- endif -%}
                                         <p class="text-muted text-right pull-right">Note référencement : {{ referencement_note(objet) }}</p>
                                     </div>
@@ -454,7 +454,7 @@
         </div>
         <div class="dd3-actions">
             <div onclick="deleteContenu( {{contenu.id}}, '{{path('hopitalnumerique_objet_contenu_delete', {'id':contenu.id})}}' );" class="pull-right dd3-trash"><i class="fa fa-trash-o"></i></div>
-            <a href="{{path('hopitalnumerique_reference_referencement_popin', { 'entityType':'infradocs', 'entityId':contenu.id })}}" class="pull-right dd3-cog manageReferences fancybox.ajax"><i class="fa fa-cog"></i></a>
+            <a href="{{path('hopitalnumerique_reference_referencement_popin', { 'entityType':'infradocs', 'entityId':contenu.id })}}" class="pull-right dd3-cog open-popin-referencement fancybox.ajax"><i class="fa fa-cog"></i></a>
         </div>
 
         {% if contenu.childs %}

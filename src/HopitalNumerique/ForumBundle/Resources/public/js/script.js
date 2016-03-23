@@ -4,7 +4,7 @@ jQuery(document).ready(function() {
 });
 
 $(function() {
-    $('.dd3-content a, .manageReferences, .uploadSommaire').fancybox({
+    $('.dd3-content a, .uploadSommaire').fancybox({
         'padding'   : 0,
         'autoSize'  : false,
         'width'     : '80%',
