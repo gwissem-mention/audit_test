@@ -53,7 +53,6 @@ class UserTopicController extends UserTopicControllerCCDN
             $domainesIds[] = $domaine->getId();
         }
         $refsPonderees = $this->container->get('hopitalnumerique_reference.manager.reference')->getReferencesPonderees($domainesIds);
-        $note          = $this->container->get('hopitalnumerique_objet.manager.objet')->getNoteReferencement( $topic->getReferences(), $refsPonderees );
 
         $subscriberCount = $this->getSubscriptionModel()->countSubscriptionsForTopicById($topicId);
         $this->getTopicModel()->incrementViewCounter($topic);
@@ -67,7 +66,6 @@ class UserTopicController extends UserTopicControllerCCDN
             'subscription'       => $subscription,
             'subscription_count' => $subscriberCount,
             'isSubscriptionBoard' => $this->isSubscriptionBoard($topic->getBoard()),
-            'note'               => $note,
             'boards'             => $boards
         ));
 

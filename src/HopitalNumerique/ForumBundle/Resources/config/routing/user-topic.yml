@@ -31,18 +31,6 @@ hopitalnumerique_forum_post_move:
     defaults: { _controller: CCDNForumForumBundle:UserTopic:deplacerTopic, _locale: fr, forumName: Public }
 
 #Reference
-hopitalnumerique_forum_reference_topic:
-    pattern:  /reference/topic/{id}
-    defaults: { _controller: "HopitalNumeriqueForumBundle:Reference:topic", id:1, forumName: Public }
-    requirements:
-        id: \d+
-
-hopitalnumerique_forum_reference_topic_own:
-    pattern:  /reference/topic-own/{id}
-    defaults: { _controller: "HopitalNumeriqueForumBundle:Reference:topicOwn", id:1, forumName: Public  }
-    requirements:
-        id: \d+
-
 hopitalnumerique_forum_reference_topic_save:
     pattern:  /reference/save/topic/{id}
     defaults: { _controller: "HopitalNumeriqueForumBundle:Reference:saveTopic", forumName: Public  }

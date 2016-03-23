@@ -24,7 +24,7 @@ class ReferencementController extends Controller
         }
 
         $referencesTree = $this->container->get('hopitalnumerique_reference.dependency_injection.referencement')->getReferencesTreeWithEntitiesHasReferences(
-            $entity->getDomaines(),
+            $this->container->get('hopitalnumerique_reference.dependency_injection.referencement.entity')->getDomainesByEntity($entity),
             $entityType,
             $entityId
         );

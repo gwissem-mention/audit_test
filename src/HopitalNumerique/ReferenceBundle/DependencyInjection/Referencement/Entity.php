@@ -1,6 +1,9 @@
 <?php
 namespace HopitalNumerique\ReferenceBundle\DependencyInjection\Referencement;
 
+use HopitalNumerique\DomaineBundle\Entity\Domaine;
+use HopitalNumerique\DomaineBundle\Manager\DomaineManager;
+use HopitalNumerique\ForumBundle\Manager\TopicManager;
 use HopitalNumerique\ObjetBundle\Manager\ContenuManager;
 use HopitalNumerique\ObjetBundle\Manager\ObjetManager;
 
@@ -19,6 +22,11 @@ class Entity
      */
     const ENTITY_TYPE_INFRADOC = 'infradocs';
 
+    /**
+     * @var string Type Topic de forum
+     */
+    const ENTITY_TYPE_FORUM_TOPIC = 'forum';
+
 
     /**
      * @var \HopitalNumerique\ObjetBundle\Manager\ObjetManager ObjetManager
@@ -30,14 +38,26 @@ class Entity
      */
     private $contenuManager;
 
+    /**
+     * @var \HopitalNumerique\ForumBundle\Manager\TopicManager TopicManager
+     */
+    private $forumTopicManager;
+
+    /**
+     * @var \HopitalNumerique\DomaineBundle\Manager\DomaineManager DomaineManager
+     */
+    private $domaineManager;
+
 
     /**
      * Constructeur.
      */
-    public function __construct(ObjetManager $objetManager, ContenuManager $contenuManager)
+    public function __construct(ObjetManager $objetManager, ContenuManager $contenuManager, TopicManager $forumTopicManager, DomaineManager $domaineManager)
     {
         $this->objetManager = $objetManager;
         $this->contenuManager = $contenuManager;
+        $this->forumTopicManager = $forumTopicManager;
+        $this->domaineManager = $domaineManager;
     }
 
 
@@ -58,6 +78,8 @@ class Entity
                 return self::ENTITY_TYPE_PUBLICATION;
             case 'HopitalNumerique\ObjetBundle\Entity\Contenu':
                 return self::ENTITY_TYPE_INFRADOC;
+            case 'HopitalNumerique\ForumBundle\Entity\Topic':
+                return self::ENTITY_TYPE_FORUM_TOPIC;
         }
 
         return null;
@@ -96,8 +118,29 @@ class Entity
                 return $this->objetManager->findOneById($id);
             case self::ENTITY_TYPE_INFRADOC:
                 return $this->contenuManager->findOneById($id);
+            case self::ENTITY_TYPE_FORUM_TOPIC:
+                return $this->forumTopicManager->findOneById($id);
         }
 
         return null;
+    }
+
+    /**
+     * Retourne les dommaines d'une entité.
+     *
+     * @param object $entity Entité
+     * @return array<\HopitalNumerique\DomaineBundle\Entity\Domaine> Domaines
+     */
+    public function getDomainesByEntity($entity)
+    {
+        if (method_exists($entity, 'getDomaines')) {
+            return $entity->getDomaines();
+        }
+
+        if (self::ENTITY_TYPE_FORUM_TOPIC === $this->getEntityType($entity)) {
+            return [$this->domaineManager->findOneById(Domaine::DOMAINE_HOPITAL_NUMERIQUE_ID)];
+        }
+
+        throw new \Exception('Domaines non trouvés pour l\'entité.');
     }
 }

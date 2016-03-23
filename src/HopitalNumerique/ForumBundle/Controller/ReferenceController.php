@@ -13,46 +13,6 @@ use HopitalNumerique\ForumBundle\Entity\Topic;
 class ReferenceController extends Controller
 {
     /**
-     * [topicAction description]
-     *
-     * @param  Topic  $topic [description]
-     *
-     * @return [type]
-     */
-    public function topicAction( Topic $topic )
-    {
-        //get references and selected references as One Array
-        $results    = $this->get('hopitalnumerique_reference.manager.reference')->getRefsForGestionObjets();
-        $references = $this->get('hopitalnumerique_forum.manager.topic')->getReferences($topic, $results);
-
-        return $this->render('HopitalNumeriqueForumBundle:Reference:manage.html.twig', array(
-            'references' => $references,
-            'topic'      => true,
-            'contenu'    => 'null',
-            'titre'      => $topic->getTitle()
-        ));
-    }
-    
-    /**
-     * [topicOwnAction description]
-     *
-     * @param  Topic  $topic [description]
-     *
-     * @return [type]
-     */
-    public function topicOwnAction( Topic $topic )
-    {
-        //get references and selected references as One Array
-        $references = $this->get('hopitalnumerique_forum.manager.topic')->getReferencesOwn($topic);
-
-        return $this->render('HopitalNumeriqueForumBundle:Reference:manage-own.html.twig', array(
-            'references' => $references,
-            'topic'      => true,
-            'contenu'    => 'null'
-        ));
-    }
-
-    /**
      * [saveTopicAction description]
      *
      * @param  Topic  $topic [description]

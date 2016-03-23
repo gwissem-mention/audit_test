@@ -19,6 +19,12 @@ use \Nodevo\ToolsBundle\Tools\Chaine;
 class Domaine
 {
     /**
+     * @var integer ID du domaine HN
+     */
+    const DOMAINE_HOPITAL_NUMERIQUE_ID = 1;
+
+
+    /**
      * @var integer
      *
      * @ORM\Column(name="dom_id", type="integer")

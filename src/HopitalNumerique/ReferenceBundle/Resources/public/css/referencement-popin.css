@@ -1,5 +1,8 @@
 .referencement-popin {}
-    .referencement-popin tbody tr[data-level="1"] { background-color: #34495e;color: #fff; }
-    .referencement-popin tbody tr:not([data-level="1"]) { display: none; }
-    .referencement-popin tbody tr[data-level="2"] { background-color: #ddd; }
-    .referencement-popin tbody tr[data-level="3"] { background-color: #eee; }
+    .referencement-popin .panel-heading {}
+        .referencement-popin .panel-heading h4 { float:none !important; }
+    .referencement-popin .panel-body {}
+        .referencement-popin tbody tr[data-level="1"] { background-color: #34495e;color: #fff; }
+        .referencement-popin tbody tr:not([data-level="1"]) { display: none; }
+        .referencement-popin tbody tr[data-level="2"] { background-color: #ddd; }
+        .referencement-popin tbody tr[data-level="3"] { background-color: #eee; }

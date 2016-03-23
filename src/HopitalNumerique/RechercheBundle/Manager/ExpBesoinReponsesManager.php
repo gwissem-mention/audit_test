@@ -66,36 +66,6 @@ class ExpBesoinReponsesManager extends BaseManager
     }
 
     /**
-     * Formatte les références sous forme d'un unique tableau
-     *
-     * @param expBesoinReponse $expBesoinReponse      expBesoinReponse concerné
-     * @param array $references Liste des références de type dictionnaire
-     *
-     * @return array
-     */
-    public function getReferencesOwn($expBesoinReponse)
-    {
-        $return = array();
-        $selectedReferences = $expBesoinReponse->getReferences();
-
-        //applique les références 
-        foreach( $selectedReferences as $selected ){
-            $reference = $selected->getReference();
-
-            //on remet l'élément à sa place
-            $return[ $reference->getId() ]['nom']     = $reference->getCode() . " - " . $reference->getLibelle();
-            $return[ $reference->getId() ]['primary'] = $selected->getPrimary();
-            
-            if( $reference->getParent() )
-                $return[ $reference->getParent()->getId() ]['childs'][] = $reference->getId();
-        }
-        
-        $this->formatReferencesOwn( $return );
-        
-        return $return;
-    }
-
-    /**
      * Met à jour l'ordre des chapitres de manière récursive
      *
      * @param array  $elements Les éléments

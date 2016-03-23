@@ -4,25 +4,24 @@
         <h4>Gestion des références</h4>
     </div>
     <div class="panel-body">
-        <div class="tableContent" >
-            <table class="table">
-                <thead>
-                    <tr>
-                        <th style="width:60px;"><input type="checkbox" class="checkbox" id="toggle-check-all"></th>
-                        <th style="width:150px;">Type Primaire ?</th>
-                        <th style="width:100px;">Nb élements</th>
-                        <th>Nom</th>
-                        <th style="width:50px;"></th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {{- mySelf.display_referencement_subtree(referencesTree) -}}
-                </tbody>
-            </table>    
-        </div>
-        
-        <div class="panel-footer" >
-            <div class="row">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th style="width:60px;"><input type="checkbox" class="checkbox" id="toggle-check-all"></th>
+                    <th style="width:150px;">Type Primaire ?</th>
+                    <th style="width:100px;">Nb élements</th>
+                    <th>Nom</th>
+                    <th style="width:50px;"></th>
+                </tr>
+            </thead>
+            <tbody>
+                {{- mySelf.display_referencement_subtree(referencesTree) -}}
+            </tbody>
+        </table>
+    </div>
+    <div class="panel-footer" >
+        <div class="row">
+            <div class="col-sm-12">
                 <div class="btn-toolbar pull-right">
                     <div onclick="$.fancybox.close(true);" class="btn-danger btn">Fermer</div>
                     <div data-action="save" class="btn-primary btn">Enregistrer</div>
