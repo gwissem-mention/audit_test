@@ -44,9 +44,9 @@ class Referencement
      * @param array<\HopitalNumerique\DomaineBundle\Entity\Domaine> $domaines Domaines
      * @return array Arbre
      */
-    public function getReferencesTree($domaines)
+    public function getReferencesTree($domaines, $inRecherche = null)
     {
-        $references = $this->referenceManager->findByDomaines($domaines, true, false, null, true);
+        $references = $this->referenceManager->findByDomaines($domaines, true, false, null, true, $inRecherche);
 
         return $this->treeService->getOrderedReferencesTreePart($references);
     }

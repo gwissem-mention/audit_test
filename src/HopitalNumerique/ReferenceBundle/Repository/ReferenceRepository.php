@@ -243,14 +243,15 @@ class ReferenceRepository extends EntityRepository
     /**
      * Retourne les références selon des domaines.
      *
-     * @param array<\HopitalNumerique\DomaineBundle\Entity\Domaine> $domaines   Domaines
-     * @param boolean|null                                          $actif      Actif
-     * @param boolean|null                                          $lock       Lock
-     * @param boolean|null                                          $parentable Parentable
-     * @param boolean                                               $reference  Reference
+     * @param array<\HopitalNumerique\DomaineBundle\Entity\Domaine> $domaines    Domaines
+     * @param boolean|null                                          $actif       Actif
+     * @param boolean|null                                          $lock        Lock
+     * @param boolean|null                                          $parentable  Parentable
+     * @param boolean                                               $reference   Reference
+     * @param boolean                                               $inRecherche InRecherche ?
      * @return array<\HopitalNumerique\ReferenceBundle\Entity\Reference> Références
      */
-    public function findByDomaines($domaines, $actif, $lock, $parentable, $reference)
+    public function findByDomaines($domaines, $actif, $lock, $parentable, $reference, $inRecherche)
     {
         if (0 === count($domaines)) {
             return [];
@@ -287,6 +288,12 @@ class ReferenceRepository extends EntityRepository
             $qb
                 ->andWhere($qb->expr()->eq('reference.reference', ':reference'))
                 ->setParameter('reference', $reference)
+            ;
+        }
+        if (null !== $inRecherche) {
+            $qb
+                ->andWhere($qb->expr()->eq('reference.inRecherche', ':inRecherche'))
+                ->setParameter('inRecherche', $inRecherche)
             ;
         }
 

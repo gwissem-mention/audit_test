@@ -47,39 +47,6 @@ class NoteSaver
 
 
     /**
-     * Ajoute les scores pour chaque référence à l'arbre.
-     *
-     * @param \HopitalNumerique\DomaineBundle\Entity\Domaine $domaine Domaine
-     * @return array Arbre
-     */
-    private function getReferencesTreeWithScores(Domaine $domaine)
-    {
-        $referencesTree = $this->referencementService->getReferencesTree([$domaine]);
-
-        $this->addScoresInReferencesSubtree($referencesTree, EntityHasNote::SCORE_GLOBAL);
-
-        return $referencesTree;
-    }
-
-    /**
-     * Ajoute au sous-arbre les scores de chaque référence.
-     *
-     * @param array $referencesSubtree Sous-arbre de références
-     * @param float $scoreParent       Score du parent
-     */
-    private function addScoresInReferencesSubtree(array &$referencesSubtree, $scoreParent)
-    {
-        if (count($referencesSubtree) > 0) {
-            $scoreEnfant = $scoreParent / count($referencesSubtree);
-
-            foreach (array_keys($referencesSubtree) as $i) {
-                $referencesSubtree[$i]['score'] = $scoreEnfant;
-                $this->addScoresInReferencesSubtree($referencesSubtree[$i]['enfants'], $scoreEnfant);
-            }
-        }
-    }
-
-    /**
      * Enregistre tous les scores d'un domaine.
      *
      * @param \HopitalNumerique\DomaineBundle\Entity\Domaine $domaine Domaine
@@ -110,8 +77,41 @@ class NoteSaver
                     $entityHasNote->setNote($note);
                     $this->entityHasNoteManager->save($entityHasNote);
                 } elseif (null !== $entityHasNote) {
-                    $this->entityHasNoteManager->remove($entityHasNote);
+                    $this->entityHasNoteManager->delete($entityHasNote);
                 }
+            }
+        }
+    }
+
+    /**
+     * Ajoute les scores pour chaque référence à l'arbre.
+     *
+     * @param \HopitalNumerique\DomaineBundle\Entity\Domaine $domaine Domaine
+     * @return array Arbre
+     */
+    private function getReferencesTreeWithScores(Domaine $domaine)
+    {
+        $referencesTree = $this->referencementService->getReferencesTree([$domaine], true);
+
+        $this->addScoresInReferencesSubtree($referencesTree, EntityHasNote::SCORE_GLOBAL);
+
+        return $referencesTree;
+    }
+
+    /**
+     * Ajoute au sous-arbre les scores de chaque référence.
+     *
+     * @param array $referencesSubtree Sous-arbre de références
+     * @param float $scoreParent       Score du parent
+     */
+    private function addScoresInReferencesSubtree(array &$referencesSubtree, $scoreParent)
+    {
+        if (count($referencesSubtree) > 0) {
+            $scoreEnfant = $scoreParent / count($referencesSubtree);
+
+            foreach (array_keys($referencesSubtree) as $i) {
+                $referencesSubtree[$i]['score'] = $scoreEnfant;
+                $this->addScoresInReferencesSubtree($referencesSubtree[$i]['enfants'], $scoreEnfant);
             }
         }
     }
