@@ -28,6 +28,7 @@
         <div onclick='deleteWithConfirm("{{path('hopital_numerique_user_delete', {'id':user.id})}}" );' class="btn btn-default" title="Supprimer"><i class="fa fa-trash-o"></i></div>
     {% endif %}
 {% endblock %}
+
 {% block body %}
     <div class="col-sm-12">
         <div id="form_edit_user" class="panel panel-midnightblue">
@@ -73,7 +74,17 @@
                 </div>
             </div>
 
-            <div class="panel-body" >
+            <div class="panel-body">
+
+                {%- if user.hasRoleAmbassadeur -%}
+                    <div class="row">
+                        <div class="col-md-12 text-right">
+                            <span class="text-muted">Note référencement : {{ referencement_note(user) }}</span>
+                            &nbsp; <a class="open-popin-referencement btn btn-xs btn-primary fancybox.ajax" href="{{path('hopitalnumerique_reference_referencement_popin', { 'entityType':'ambassadeur', 'entityId':user.id })}}"><i class="fa fa-cog"></i></a>
+                        </div>
+                    </div>
+                {%- endif -%}
+
                 {% form_theme form 'NodevoAdminBundle::form.html.twig' %}
                 {{ form_start(form) }}
                     {{ form_errors(form) }}

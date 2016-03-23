@@ -17,6 +17,25 @@ Hn_Reference_Referencement_Popin.ENTITY_TYPE = null;
 Hn_Reference_Referencement_Popin.ENTITY_ID = null;
 
 
+$(document).ready(function () {
+    Hn_Reference_Referencement_Popin.preparePopin();
+});
+
+/**
+ * Initialise Fancybox.
+ */
+Hn_Reference_Referencement_Popin.preparePopin = function()
+{
+    $('.open-popin-referencement').fancybox({
+        'padding'   : 0,
+        'autoSize'  : false,
+        'width'     : '80%',
+        'scrolling' : 'auto',
+        'modal'     : true
+    });
+};
+
+
 /**
  * Initialise la fenêtre.
  */
