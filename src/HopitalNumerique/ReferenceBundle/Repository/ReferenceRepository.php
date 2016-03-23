@@ -260,10 +260,15 @@ class ReferenceRepository extends EntityRepository
         $qb = $this->createQueryBuilder('reference');
 
         $qb
-            ->innerJoin('reference.domaines', 'domaine', Expr\Join::WITH, $qb->expr()->in('domaine.id', ':domaines'))
+            ->leftJoin('reference.domaines', 'domaine')
+            ->where($qb->expr()->orX(
+                $qb->expr()->in('domaine.id', ':domaines'),
+                $qb->expr()->eq('reference.allDomaines', ':allDomaines')
+            ))
             ->orderBy('reference.order', 'ASC')
             ->setParameters([
-                'domaines' => $domaines
+                'domaines' => $domaines,
+                'allDomaines' => true
             ])
         ;
         if (null !== $actif) {
