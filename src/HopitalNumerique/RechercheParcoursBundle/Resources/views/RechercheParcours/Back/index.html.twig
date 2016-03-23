@@ -3,9 +3,7 @@
 {% block stylesheets %}
     {{ parent() }}
     {% stylesheets output="compiled/hopitalnumerique-recherche-parcours-index.css" filter="cssrewrite, ?yui_css"
-        "@jquery_toggles_css"
         'bundles/nodevoadmin/css/jquery.nestable.css'
-        'bundles/nodevoadmin/css/toggles.css'
         'bundles/nodevoadmin/plugins/nodevoLoader/nodevoLoader.css'
         'bundles/hopitalnumeriquerechercheparcours/css/style.css'
     %}
@@ -17,7 +15,6 @@
     {{parent()}}
     {% javascripts output="compiled/hopitalnumerique-recherche-parcours-index.js"
         "@nestable_js"
-        "@jquery_toggles_js"
         "@json_js"
         'bundles/nodevoadmin/plugins/nodevoLoader/nodevoLoader.js'
         'bundles/hopitalnumeriquerechercheparcours/js/script.js'

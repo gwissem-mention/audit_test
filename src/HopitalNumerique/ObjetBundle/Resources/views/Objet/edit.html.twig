@@ -13,12 +13,10 @@
 {% block stylesheets %}
     {{parent()}}
     {% stylesheets output="compiled/hopitalnumerique-objet-objet-edit.css" filter="cssrewrite, ?yui_css"
-        "@jquery_toggles_css"
         'bundles/nodevoadmin/plugins/nodevoLoader/nodevoLoader.css'
         'bundles/hopitalnumeriqueuser/js/nSelect/style.css'
         'bundles/nodevoadmin/css/jquery.nestable.css'
         'bundles/hopitalnumeriqueobjet/css/style.css'
-        'bundles/nodevoadmin/css/toggles.css'
     %}
         <link rel="stylesheet" href="{{ asset_url }}" />
     {% endstylesheets %}
@@ -29,7 +27,6 @@
     {% javascripts output="compiled/hopitalnumerique-objet-objet-edit.js"
         "@nestable_js"
         "@json_js"
-        "@jquery_toggles_js"
         'bundles/nodevoadmin/plugins/nodevoLoader/nodevoLoader.js'
         'bundles/hopitalnumeriqueuser/js/nSelect/nSelect.min.js'
         'bundles/hopitalnumeriqueobjet/js/script.js'

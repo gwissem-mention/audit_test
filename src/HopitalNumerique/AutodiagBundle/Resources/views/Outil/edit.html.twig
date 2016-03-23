@@ -3,7 +3,6 @@
 {% block stylesheets %}
     {{parent()}}
     {% stylesheets output="compiled/hopitalnumerique-autodiag-outil-edit.css" filter="cssrewrite, ?yui_css"
-        "@jquery_toggles_css"
         'bundles/nodevoadmin/css/jquery.nestable.css'
         'bundles/hopitalnumeriqueautodiag/css/form.css'
     %}
@@ -21,7 +20,6 @@
     {% endjavascripts %}
     {% javascripts output="compiled/hopitalnumerique-autodiag-outil-edit-libjs.js"
         '@nestable_js'
-        "@jquery_toggles_js"
     %}
         <script type="text/javascript" src="{{ asset_url }}"></script>
     {% endjavascripts %}

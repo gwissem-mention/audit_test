@@ -203,6 +203,7 @@ assetic:
         jquery_toggles_css:
             inputs:
                 - "%kernel.root_dir%/Resources/components/jquery-toggles/toggles.css"
+                - 'bundles/nodevoadmin/css/toggles.css'
             filters: [ cssembed, ?yui_css ]
         jquery_qtip2_css:
             inputs:
