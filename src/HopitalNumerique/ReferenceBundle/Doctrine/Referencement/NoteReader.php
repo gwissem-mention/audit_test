@@ -3,7 +3,6 @@ namespace HopitalNumerique\ReferenceBundle\Doctrine\Referencement;
 
 use HopitalNumerique\DomaineBundle\Entity\Domaine;
 use HopitalNumerique\ReferenceBundle\DependencyInjection\Referencement\Entity as ReferencementEntityService;
-use HopitalNumerique\ReferenceBundle\Entity\EntityHasNote;
 use HopitalNumerique\ReferenceBundle\Manager\EntityHasNoteManager;
 
 /**

@@ -153,7 +153,7 @@ services:
     #Listener
     hopitalnumerique_user.listener.user:
         class: %hopitalnumerique_user.listener.user.class%
-        arguments: ["@nodevo_mail.manager.mail", "@mailer"]
+        arguments: ["@nodevo_mail.manager.mail", "@mailer", '@hopitalnumerique_reference.doctrine.referencement_deleter']
         tags:
             - { name: 'kernel.event_subscriber' }
     #--Handler
