@@ -30,6 +30,10 @@ class ObjetType extends AbstractType
     {
         $datas = $options['data'] ;
         $connectedUser = $this->_userManager->getUserConnected();
+        /**
+         * @var \HopitalNumerique\ObjetBundle\Entity\Objet
+         */
+        $objet = $builder->getData();
         
         $builder
             ->add('titre', 'text', array(
@@ -44,12 +48,6 @@ class ObjetType extends AbstractType
                 'label'      => 'Alias',
                 'attr'       => array('class' => $this->_constraints['alias']['class'] )
             ))
-            ->add('source', 'text', array(
-                'required'   => false,
-                'max_length' => $this->_constraints['source']['maxlength'],
-                'label'      => 'Source (si externe)',
-                'attr'       => array('class' => $this->_constraints['source']['class'] )
-            ))
             ->add('etat', 'entity', array(
                 'class'         => 'HopitalNumeriqueReferenceBundle:Reference',
                 'choices'       => $this->referenceManager->findByCode('ETAT'),
@@ -58,13 +56,30 @@ class ObjetType extends AbstractType
                 'label'         => 'Etat',
                 'attr'          => array('class' => $this->_constraints['etat']['class'] ),
             ))
-            ->add('cibleDiffusion', 'entity', array(
-                'class'         => 'HopitalNumeriqueReferenceBundle:Reference',
-                'choices'       => $this->referenceManager->findByCode('CIBLE_DIFFUSION'),
-                'property'      => 'libelle',
-                'required'      => false,
-                'label'         => 'Cible de diffusion',
-            ))
+        ;
+        if (!$objet->isArticle()) {
+            $builder
+                ->add('source', 'text', array(
+                    'required'   => false,
+                    'max_length' => $this->_constraints['source']['maxlength'],
+                    'label'      => 'Source (si externe)',
+                    'attr'       => array('class' => $this->_constraints['source']['class'] )
+                ))
+                ->add('cibleDiffusion', 'entity', array(
+                    'class'         => 'HopitalNumeriqueReferenceBundle:Reference',
+                    'choices'       => $this->referenceManager->findByCode('CIBLE_DIFFUSION'),
+                    'property'      => 'libelle',
+                    'required'      => false,
+                    'label'         => 'Cible de diffusion',
+                ))
+                ->add('communautePratiqueGroupe', 'entity', array(
+                    'class' => 'HopitalNumeriqueCommunautePratiqueBundle:Groupe',
+                    'label' => 'Groupe de la communauté de partique associé',
+                    'required' => false
+                ))
+            ;
+        }
+        $builder
             ->add('roles', 'entity', array(
                 'class'    => 'NodevoRoleBundle:Role',
                 'property' => 'name',
@@ -235,11 +250,6 @@ class ObjetType extends AbstractType
                 'query_builder' => function(EntityRepository $er) use ($connectedUser){
                     return $er->getDomainesUserConnectedForForm($connectedUser->getId());
                 }
-            ))
-            ->add('communautePratiqueGroupe', 'entity', array(
-                'class' => 'HopitalNumeriqueCommunautePratiqueBundle:Groupe',
-                'label' => 'Groupe de la communauté de partique associé',
-                'required' => false
             ))
             ->add('modified', 'hidden', array(
                 'mapped'   => false

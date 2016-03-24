@@ -66,7 +66,7 @@
                             <li class="{% if infra %}active{% endif %}"><a href="#infra" data-toggle="tab">Infra-documentaire</a></li>
                             <li><a href="#productions" data-toggle="tab">Productions liées</a></li>
                         {% endif %}
-                        {%- if objet.id is not null and (is_granted('ROLE_SUPER_ADMIN') or is_granted('ROLE_ADMINISTRATEUR_DE_DOMAINE_106' or is_granted('ROLE_ADMINISTRATEUR_DU_DOMAINE_HN_107'))) -%}
+                        {%- if objet.id is not null and not objet.isArticle and (is_granted('ROLE_SUPER_ADMIN') or is_granted('ROLE_ADMINISTRATEUR_DE_DOMAINE_106' or is_granted('ROLE_ADMINISTRATEUR_DU_DOMAINE_HN_107'))) -%}
                             <li><a href="{{ path('hopitalnumerique_objet_administration_fichierModifiable', {'id': objet.id}) }}">Administration</a></li>
                         {%- endif -%}
                     </ul>
@@ -98,9 +98,9 @@
                                 </div>
 
                                 {{ form_row(form.etat) }}
-                                {{ form_row(form.cibleDiffusion) }}
+                                {{ form.cibleDiffusion is defined ? form_row(form.cibleDiffusion) : '' }}
                                 {{ form_row(form.roles) }}
-                                {{ form_row(form.source) }}
+                                {{ form.source is defined ? form_row(form.source) : '' }}
                                 <div class="form-group">
                                     {{ form_label(form.types) }}
                                     <div class="col-md-9">
@@ -201,17 +201,19 @@
                                     </div>
                                 </div>
 
-                                <div class="form-group">
-                                    {{ form_label(form.communautePratiqueGroupe) }}
-                                    <div class="col-md-5">
-                                        {{ form_widget(form.communautePratiqueGroupe) }}
-                                    </div>
-                                    <div class="col-md-5 col-md-offset-7">
-                                        <div class="help-block">
-                                            {{ form_errors(form.communautePratiqueGroupe) }}
+                                {%- if form.communautePratiqueGroupe is defined -%}
+                                    <div class="form-group">
+                                        {{ form_label(form.communautePratiqueGroupe) }}
+                                        <div class="col-md-5">
+                                            {{ form_widget(form.communautePratiqueGroupe) }}
+                                        </div>
+                                        <div class="col-md-5 col-md-offset-7">
+                                            <div class="help-block">
+                                                {{ form_errors(form.communautePratiqueGroupe) }}
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
+                                {%- endif -%}
 
                                 <div class="form-group">
                                     {{ form_label(form.publicationPlusConsulte) }}
