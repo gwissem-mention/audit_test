@@ -55,7 +55,7 @@ class ToolsExtension extends \Twig_Extension
 
         $bitly_response = json_decode(file_get_contents("http://api.bit.ly/v3/shorten?login={$bitly_login}&apiKey={$bitly_apikey}&longUrl={$long_url}&format=json"));
 
-        return $bitly_response->data->url;
+        return (isset($bitly_response->data->url) ? $bitly_response->data->url : '');
     }
 
     public function unescape($html)
