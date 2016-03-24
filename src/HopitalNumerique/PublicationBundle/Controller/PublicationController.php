@@ -44,11 +44,6 @@ class PublicationController extends Controller
             $this->get('hopitalnumerique_objet.manager.consultation')->consulted( $domaine, $objet );
         }
 
-        //On récupère l'utilisateur qui est connecté
-        $user = $this->get('security.context')->getToken()->getUser();
-        //Récupération de la note pour l'objet de l'utilisateur courant
-        $note = $this->get('hopitalnumerique_objet.manager.note')->findOneBy(array('user' => $user, 'objet' => $objet));
-
         $objetsOrder = array();
 
         $objets = $this->getObjetsFromRecherche( $objet );
@@ -100,7 +95,7 @@ class PublicationController extends Controller
             'objet'        => $objet,
             'objets'       => $objets,
             'objetsOrder'  => $objetsOrder,
-            'note'         => $note,
+            'note'         => $this->container->get('hopitalnumerique_objet.doctrine.note_reader')->getNoteByObjetAndUser($objet, $this->getUser()),
             'types'        => $types,
             'contenus'     => $contenus,
             'productions'  => $productions,
@@ -151,11 +146,6 @@ class PublicationController extends Controller
             $contenu->setNbVue( ($contenu->getNbVue() + 1) );
             $this->get('hopitalnumerique_objet.manager.contenu')->save($contenu);
         }
-
-        //On récupère l'utilisateur qui est connecté
-        $user = $this->get('security.context')->getToken()->getUser();
-        //Récupération de la note pour l'objet de l'utilisateur courant
-        $note = $this->get('hopitalnumerique_objet.manager.note')->findOneBy(array('user' => $user, 'contenu' => $contenu));
 
         //set Consultation entry
         if(!$objet->isArticle())
@@ -225,7 +215,7 @@ class PublicationController extends Controller
             'objet'            => $objet,
             'objets'           => $objets,
             'objetsOrder'      => $objetsOrder,
-            'note'             => $note,
+            'note'             => $this->container->get('hopitalnumerique_objet.doctrine.note_reader')->getNoteByContenuAndUser($contenu, $this->getUser()),
             'contenus'         => $contenus,
             'types'            => $types,
             'contenu'          => $contenu,

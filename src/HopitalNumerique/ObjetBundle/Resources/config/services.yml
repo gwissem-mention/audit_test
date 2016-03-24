@@ -92,3 +92,12 @@ services:
     hopitalnumerique_objet.manager.note:
         class: %hopitalnumerique_objet.manager.note.class%
         arguments: ["@doctrine.orm.entity_manager"]
+
+
+    hopitalnumerique_objet.doctrine.note_reader:
+        class: 'HopitalNumerique\ObjetBundle\Doctrine\NoteReader'
+        arguments: ['@session', '@hopitalnumerique_objet.manager.note']
+
+    hopitalnumerique_objet.doctrine.note_saver:
+        class: 'HopitalNumerique\ObjetBundle\Doctrine\NoteSaver'
+        arguments: ['@session', '@hopitalnumerique_objet.doctrine.note_reader', '@hopitalnumerique_objet.manager.note']
