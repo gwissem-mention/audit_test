@@ -24,7 +24,7 @@ class ObjetRepository extends EntityRepository
     {
         $qb = $this->_em->createQueryBuilder();
 
-        $qb->select('obj.id, obj.titre, obj.isInfraDoc, obj.nbVue, refEtat.libelle as etat, obj.dateCreation, obj.dateModification, obj.lock, user.email as lockedBy, refTypes.libelle as types, domaine.nom as domaineNom')
+        $qb->select('obj.id, obj.titre, obj.isInfraDoc, obj.isArticle, obj.nbVue, refEtat.libelle as etat, obj.dateCreation, obj.dateModification, obj.lock, user.email as lockedBy, refTypes.libelle as types, domaine.nom as domaineNom')
             ->from('HopitalNumeriqueObjetBundle:Objet', 'obj')
             ->leftJoin('obj.etat','refEtat')
             ->leftJoin('obj.types','refTypes')

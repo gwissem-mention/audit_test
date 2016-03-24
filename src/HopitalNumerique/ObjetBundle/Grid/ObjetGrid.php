@@ -58,6 +58,11 @@ class ObjetGrid extends Grid implements GridInterface
         $infraColumn->setSize( 90 );
         $this->addColonne( $infraColumn );
 
+        $isArticleColumn = new Column\BooleanColumn('isArticle', 'Article ?');
+        $isArticleColumn->setVisible(false);
+        $isArticleColumn->setFilterable(false);
+        $this->addColonne($isArticleColumn);
+
         $etatColonne = new Column\TextColumn('etat', 'Etat');
         $etatColonne->setSize( 80 );
         $etatColonne->setFilterType('select');
