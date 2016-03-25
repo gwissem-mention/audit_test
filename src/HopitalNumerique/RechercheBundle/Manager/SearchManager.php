@@ -465,7 +465,20 @@ class SearchManager extends BaseManager
                 $tabToReturn = array_merge( $categ, $tabToReturn);
         }
 
+        usort($tabToReturn, array($this, 'sortObjets'));
+
         return $tabToReturn;
+    }
+
+    private function sortObjets($objet1, $objet2)
+    {
+        if ($objet1['primary'] > $objet2['primary']) {
+            return -1;
+        } elseif ($objet1['primary'] < $objet2['primary']) {
+            return 1;
+        }
+
+        return (($objet1['countRef'] > $objet2['countRef']) ? -1 : (($objet1['countRef'] < $objet2['countRef']) ? 1 : 0));
     }
 
     /**
