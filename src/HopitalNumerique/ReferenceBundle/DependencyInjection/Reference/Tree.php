@@ -95,6 +95,7 @@ class Tree
 
     /**
      * Retourne un arbre de références.
+     * Le & pour $references permet d'éviter les doublons qui cassent le fonctionnement à cause d'ID identiques.
      *
      * @param array<\HopitalNumerique\ReferenceBundle\Entity\Reference\Reference> $references Références à trier
      * @param \HopitalNumerique\ReferenceBundle\Entity\Reference\Reference $referenceParent Référence parente

@@ -4,9 +4,15 @@ namespace HopitalNumerique\UserBundle\Twig;
 use HopitalNumerique\EtablissementBundle\Manager\EtablissementManager;
 use HopitalNumerique\ReferenceBundle\Manager\ReferenceManager;
 use HopitalNumerique\QuestionnaireBundle\Manager\QuestionnaireManager;
+use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 
 class UserExtension extends \Twig_Extension
 {
+    /**
+     * @var \Symfony\Component\Security\Csrf\CsrfTokenManagerInterface CsrfTokenManager
+     */
+    private $csrfTokenManagerInterface;
+
     private $_refManager;
     private $_etabManager;
     private $questionnaireManager;
@@ -14,8 +20,9 @@ class UserExtension extends \Twig_Extension
     /**
      * Construit l'extension Twig
      */
-    public function __construct( ReferenceManager $refManager, EtablissementManager $etabManager, QuestionnaireManager $questionnaireManager )
+    public function __construct(CsrfTokenManagerInterface $csrfTokenManagerInterface, ReferenceManager $refManager, EtablissementManager $etabManager, QuestionnaireManager $questionnaireManager )
     {
+        $this->csrfTokenManagerInterface = $csrfTokenManagerInterface;
         $this->_refManager  = $refManager;
         $this->_etabManager = $etabManager;
         $this->questionnaireManager = $questionnaireManager;
@@ -32,6 +39,16 @@ class UserExtension extends \Twig_Extension
             'informationsManquantes'  => new \Twig_Filter_Method($this, 'informationsManquantes'),
             'formateHistoryValueUser' => new \Twig_Filter_Method($this, 'formateHistoryValueUser')
         );
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getFunctions()
+    {
+        return [
+            'csrf_token' => new \Twig_Function_Method($this, 'getCsrfToken')
+        ];
     }
 
     /**
@@ -118,6 +135,17 @@ class UserExtension extends \Twig_Extension
 
         return $return;
     }
+
+    /**
+     * Retourne le token CSRF pour le formulaire de connexion.
+     *
+     * @return string Token
+     */
+    public function getCsrfToken()
+    {
+        return $this->csrfTokenManagerInterface->getToken('authenticate')->getValue();
+    }
+
 
     /**
      * Retourne le nom de l'extension : utilisé dans les services
