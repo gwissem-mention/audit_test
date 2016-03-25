@@ -294,8 +294,8 @@ class Objet implements RoutedItemInterface
     /**
      * @ORM\ManyToMany(targetEntity="\HopitalNumerique\ReferenceBundle\Entity\Reference")
      * @ORM\JoinTable(name="hn_objet_type",
-     *      joinColumns={ @ORM\JoinColumn(name="obj_id", referencedColumnName="obj_id")},
-     *      inverseJoinColumns={ @ORM\JoinColumn(name="ref_id", referencedColumnName="ref_id")}
+     *      joinColumns={ @ORM\JoinColumn(name="obj_id", referencedColumnName="obj_id", onDelete="CASCADE")},
+     *      inverseJoinColumns={ @ORM\JoinColumn(name="ref_id", referencedColumnName="ref_id", onDelete="CASCADE")}
      * )
      * @Assert\NotBlank(message="Merci de choisir un type au minimum.")
      */
@@ -383,11 +383,6 @@ class Objet implements RoutedItemInterface
      * @ORM\JoinColumn(name="cp_group_id", referencedColumnName="group_id", nullable=true)
      */
     private $communautePratiqueGroupe;
-
-    /**
-     * @ORM\ManyToMany(targetEntity="Contenu", mappedBy="infradocs")
-     */
-    private $infradocContenus;
 
 
     /**
@@ -1977,41 +1972,6 @@ class Objet implements RoutedItemInterface
     {
         return $this->source;
     }
-
-    /**
-     * Add infradocContenus
-     *
-     * @param \HopitalNumerique\ObjetBundle\Entity\Contenu $infradocContenus
-     *
-     * @return Objet
-     */
-    public function addInfradocContenus(\HopitalNumerique\ObjetBundle\Entity\Contenu $infradocContenus)
-    {
-        $this->infradocContenus[] = $infradocContenus;
-
-        return $this;
-    }
-
-    /**
-     * Remove infradocContenus
-     *
-     * @param \HopitalNumerique\ObjetBundle\Entity\Contenu $infradocContenus
-     */
-    public function removeInfradocContenus(\HopitalNumerique\ObjetBundle\Entity\Contenu $infradocContenus)
-    {
-        $this->infradocContenus->removeElement($infradocContenus);
-    }
-
-    /**
-     * Get infradocContenus
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getInfradocContenus()
-    {
-        return $this->infradocContenus;
-    }
-
 
     /**
      * @return string
