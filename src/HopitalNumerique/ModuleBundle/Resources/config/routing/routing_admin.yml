@@ -115,6 +115,11 @@ hopitalnumerique_module_module_session_impression_fiche:
         id: \d+
         _method: GET
 
+hopitalnumerique_module_session_popinsessionsrisquees:
+    pattern: '/module/session/popin-sessions-risquees'
+    defaults: { _controller: 'HopitalNumeriqueModuleBundle:Back/Session:popinSessionsRisquees' }
+    methods: 'GET'
+
 #Inscription
 #---Index - grid
 hopitalnumerique_module_module_session_inscription:

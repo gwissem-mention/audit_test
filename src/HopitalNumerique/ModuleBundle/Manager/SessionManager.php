@@ -331,13 +331,23 @@ class SessionManager extends BaseManager
     /**
      * Retourne les sessions à risque, càd n'ayant pas assez de participants pour des sessions prochaines.
      *
-     * @return integer Total
+     * @return array<\HopitalNumerique\ModuleBundle\Entity\Session> Sessions
      */
-    public function getSessionsRisqueesCount()
+    public function getSessionsRisquees()
     {
         $dans3mois = new \DateTime();
         $dans3mois->add(new \DateInterval('P12M'));
 
-        return count($this->getRepository()->getSessionsRisquees(2, $dans3mois)->getQuery()->getResult());
+        return $this->getRepository()->getSessionsRisquees(2, $dans3mois)->getQuery()->getResult();
+    }
+
+    /**
+     * Retourne les sessions à risque, càd n'ayant pas assez de participants pour des sessions prochaines.
+     *
+     * @return integer Total
+     */
+    public function getSessionsRisqueesCount()
+    {
+        return count($this->getSessionsRisquees());
     }
 }
