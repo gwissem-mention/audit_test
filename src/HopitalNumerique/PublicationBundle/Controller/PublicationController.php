@@ -477,8 +477,7 @@ class PublicationController extends Controller
     private function getObjetsFromRecherche( $publication )
     {
         //get Recherche results
-        $refs       = array();
-        $refs       = $this->getMoreRefs( $refs, $publication->getReferences() );
+        $refs       = $this->getMoreRefs( array(), $publication->getReferences() );
 
         //On récupère le role de l'user connecté
         $user = $this->get('security.context')->getToken()->getUser();

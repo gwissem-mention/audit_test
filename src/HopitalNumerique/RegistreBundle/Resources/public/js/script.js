@@ -33,7 +33,7 @@ function selectionnerToutesRegions()
     // Nouvelles régions
     var regions = ['bretagne', 'paysdelaloire', 'centrevaldeloire', 'iledefrance',
                     'provencealpescotedazur', 'corse', 'normandie', 'aquitainelimousinpoitoucharentes',
-                    'languedocroussillonmidipyrenees', 'nordpasdecalaispicardie', 'auvergnerhonealpes',
+                    'languedocroussillonmidipyrenees', 'hautsdefrance', 'auvergnerhonealpes',
                     'bourgognefranchecomte', 'alsacechampagneardennelorraine', 'martinique',
                     'reunion', 'guyane', 'guadeloupe', 'martinique', 'mayotte'];
     

@@ -193,7 +193,7 @@ class ObjetController extends Controller
         } 
         catch (\Exception $e)
         {
-            $this->get('session')->getFlashBag()->add('danger', 'Suppression impossible, l\' objet est actuellement lié et ne peut pas être supprimé.');
+            $this->get('session')->getFlashBag()->add('danger', 'Suppression impossible, l\'objet est actuellement lié et ne peut pas être supprimé.');
         }
 
         return $this->redirect( $this->generateUrl('hopitalnumerique_objet_objet') );

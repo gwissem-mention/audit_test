@@ -62,30 +62,21 @@ class UserManager extends BaseManager
             //Filtre uniquement si l'utilisateur connecté à un domaine, sinon on affiche toujours tout le monde
             if(!empty($userConnected->getDomainesId()))
             {
-                //Si l'utilisateur n'a pas de domaine concerné, il n'apparait plus dans la liste
-                if(!array_key_exists($user['id'], $domainesByUsers))
+                $notInArray = true;
+                $domainesIdUserConnected = $userConnected->getDomainesId();
+
+                foreach ($domainesIdUserConnected as $idDomaineUserConnected)
+                {
+                    if(in_array($idDomaineUserConnected, $domainesByUsers[$user['id']]['id']))
+                    {
+                        $notInArray = false;
+                        break;
+                    }
+                }
+
+                if($notInArray)
                 {
                     continue;
-                }
-                //Sinon on vérifié que l'utilisateur courant et l'utilisateur connecté appartiennent au(x) même(s) domaine(s)
-                else
-                {
-                    $notInArray = true;
-                    $domainesIdUserConnected = $userConnected->getDomainesId();
-
-                    foreach ($domainesIdUserConnected as $idDomaineUserConnected)
-                    {
-                        if(in_array($idDomaineUserConnected, $domainesByUsers[$user['id']]['id']))
-                        {
-                            $notInArray = false;
-                            break;
-                        }
-                    }
-
-                    if($notInArray)
-                    {
-                        continue;
-                    }
                 }
             }
 

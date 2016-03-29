@@ -201,6 +201,9 @@ class SearchController extends Controller
         foreach ($objets as $key => $objet) 
         {
             if( $objet['categ'] === 'forum' ){
+                if (1 != $domaineId) { // Si pas sur HN, on n'affiche pas les forums
+                    unset($objets[$key]);
+                }
                 continue;
             }
             //GME 14/09/2015 : Pour que l'objet soit dans le domaine il faut que l'id de l'objet soit dans le domaine (cas objet classique)
