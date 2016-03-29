@@ -52,6 +52,21 @@ assetic:
         yui_js:
             jar: %kernel.root_dir%/Resources/java/yuicompressor-2.4.8.jar
     assets:
+        #<-- Factorisation
+        front_css:
+            inputs:
+                - 'bundles/nodevoadmin/css/custom-jquery-ui.min.css'
+                - 'bundles/nodevoadmin/plugins/nodevoLoader/nodevoLoader.css'
+                - 'bundles/hopitalnumeriquecore/css/layout.css'
+                - 'bundles/hopitalnumeriquecore/css/Glyphter.css'
+                - 'bundles/hopitalnumeriqueaccount/css/connexion-bloc.css'
+        front_js:
+            inputs:
+                - 'bundles/fosjsrouting/js/router.js'
+                - 'bundles/hopitalnumeriquecore/js/script.js'
+                - 'bundles/hopitalnumeriquecore/js/recherche.js'
+                - 'bundles/nodevoadmin/plugins/nodevoLoader/nodevoLoader.js'
+        #-->
         #JS
         bbcode_js: 
             inputs:
