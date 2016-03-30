@@ -134,6 +134,15 @@ class Contenu
      */
     private $objets;
 
+    /**
+     * @ORM\ManyToMany(targetEntity="\HopitalNumerique\DomaineBundle\Entity\Domaine")
+     * @ORM\JoinTable(name="hn_domaine_gestions_contenu",
+     *      joinColumns={ @ORM\JoinColumn(name="con_id", referencedColumnName="con_id", onDelete="CASCADE")},
+     *      inverseJoinColumns={ @ORM\JoinColumn(name="dom_id", referencedColumnName="dom_id", onDelete="CASCADE")}
+     * )
+     */
+    private $domaines;
+
 
     /**
      * Initialisation de l'entitée (valeurs par défaut)
@@ -150,6 +159,7 @@ class Contenu
         $this->references   = array();
         $this->glossaires   = array();
         $this->objets = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->domaines = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
 
@@ -532,5 +542,53 @@ class Contenu
     public function getObjets()
     {
         return $this->objets;
+    }
+
+    /**
+     * Set objets
+     *
+     * @param array $objets
+     *
+     * @return Contenu
+     */
+    public function setObjets($objets)
+    {
+        $this->objets = $objets;
+
+        return $this;
+    }
+
+    /**
+     * Add domaine
+     *
+     * @param \HopitalNumerique\DomaineBundle\Entity\Domaine $domaine
+     *
+     * @return Contenu
+     */
+    public function addDomaine(\HopitalNumerique\DomaineBundle\Entity\Domaine $domaine)
+    {
+        $this->domaines[] = $domaine;
+
+        return $this;
+    }
+
+    /**
+     * Remove domaine
+     *
+     * @param \HopitalNumerique\DomaineBundle\Entity\Domaine $domaine
+     */
+    public function removeDomaine(\HopitalNumerique\DomaineBundle\Entity\Domaine $domaine)
+    {
+        $this->domaines->removeElement($domaine);
+    }
+
+    /**
+     * Get domaines
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getDomaines()
+    {
+        return $this->domaines;
     }
 }

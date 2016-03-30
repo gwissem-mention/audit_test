@@ -119,6 +119,11 @@ class Domaine
     protected $objets;
 
     /**
+     * @ORM\ManyToMany(targetEntity="\HopitalNumerique\ObjetBundle\Entity\Contenu", mappedBy="domaines")
+     */
+    private $contenus;
+
+    /**
      * @ORM\OneToMany(targetEntity="\HopitalNumerique\RechercheBundle\Entity\Requete", mappedBy="domaine")
      */
     protected $requetes;
@@ -162,6 +167,7 @@ class Domaine
         $this->users      = new \Doctrine\Common\Collections\ArrayCollection();
         $this->references = new \Doctrine\Common\Collections\ArrayCollection();
         $this->objets     = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->contenus = new \Doctrine\Common\Collections\ArrayCollection();
         $this->communautePratiqueGroupes = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
@@ -365,6 +371,40 @@ class Domaine
     public function getObjets()
     {
         return $this->objets;
+    }
+
+    /**
+     * Add contenus
+     *
+     * @param \HopitalNumerique\ObjetBundle\Entity\Contenu $contenus
+     *
+     * @return Domaine
+     */
+    public function addContenus(\HopitalNumerique\ObjetBundle\Entity\Contenu $contenus)
+    {
+        $this->contenus[] = $contenus;
+
+        return $this;
+    }
+
+    /**
+     * Remove contenus
+     *
+     * @param \HopitalNumerique\ObjetBundle\Entity\Contenu $contenus
+     */
+    public function removeContenus(\HopitalNumerique\ObjetBundle\Entity\Contenu $contenus)
+    {
+        $this->contenus->removeElement($contenus);
+    }
+
+    /**
+     * Get contenus
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getContenus()
+    {
+        return $this->contenus;
     }
 
     /**
