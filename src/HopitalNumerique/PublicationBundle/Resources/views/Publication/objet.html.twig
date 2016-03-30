@@ -63,7 +63,7 @@
             <h4 class="gris" >{{types}}{% if objet.source is not null and objet.source != '' %} <span class="text-muted">({{objet.source}})</span>{% endif %}</h4>
         </div>
         <div class="col-md-2 hidden-pdf">
-            <div class="btn btn-sm btn-default print btnprint" onclick="print();" title="Imprimer cette page"><i class="fa fa-print"></i></div>
+            <a class="btn btn-sm btn-default print btnprint" href="{{ path('hopital_numerique_publication_publication_objet_pdf', { 'id':objet.id }) }}" title="Imprimer cette page"><i class="fa fa-print"></i></a>
             <a href="{{path('hopitalnumerique_objet_objet_feed_rss')}}" class="pull-right btn btn-sm btn-default btnrss"><i class="fa fa-rss"></i></a>
             <a class="btn btn-sm btn-default back btnBack" href="{{path('hopital_numerique_recherche_homepage')}}" title="Retour à ma recherche"><i class="fa fa-reply"></i></a>
         </div>
