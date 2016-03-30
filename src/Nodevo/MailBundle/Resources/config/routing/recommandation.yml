@@ -1,0 +1,4 @@
+nodevo_mail_recommandation_popin:
+    pattern: '/popin'
+    defaults: { _controller: 'NodevoMailBundle:Recommandation:popin' }
+    methods: 'GET|POST'

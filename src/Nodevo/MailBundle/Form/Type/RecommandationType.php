@@ -93,8 +93,7 @@ class RecommandationType extends AbstractType
         $optionsResolver
             ->setRequired(['mail', 'expediteur', 'url'])
             ->setAllowedTypes([
-                'mail' => '\Nodevo\MailBundle\Entity\Mail',
-                'expediteur' => '\HopitalNumerique\UserBundle\Entity\User'
+                'mail' => '\Nodevo\MailBundle\Entity\Mail'
             ])
         ;
     }

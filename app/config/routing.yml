@@ -173,6 +173,9 @@ nodevo_admin:
 nodevo_mail:
     resource: "@NodevoMailBundle/Resources/config/routing.yml"
     prefix:   /admin
+nodevo_mail_recommandation:
+    resource: '@NodevoMailBundle/Resources/config/routing/recommandation.yml'
+    prefix: '/mail/recommandation'
 
 nodevo_contact:
     resource: "@NodevoContactBundle/Resources/config/routing.yml"
