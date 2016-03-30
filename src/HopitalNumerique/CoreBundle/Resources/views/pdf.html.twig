@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="fr">
+    <head>
+        <meta charset="utf-8">
+        <title>{% block title %}{{domaineCurrent.nom}}{% endblock title %}</title>
+        <link href='http://fonts.googleapis.com/css?family=Viga|Open+Sans:400,700' rel='stylesheet' type='text/css'>
+        {% block stylesheets %}
+            {% stylesheets output="compiled/hopitalnumerique-core-pdf.css" filter="cssrewrite, ?yui_css" 
+                "@bootstrap_css"
+                "@fancybox_css"
+                '@fonts_css'
+                '@front_css'
+                'bundles/hopitalnumeriquecore/css/Templates/2/layout.css'
+                'bundles/hopitalnumeriquecore/css/pdf.css'
+            %}
+                <link rel="stylesheet" href="{{ absolute_url(asset_url) }}" />
+            {% endstylesheets %}
+        {% endblock stylesheets %}
+    </head>
+
+    <body data-is-pdf="1">
+        <div class="row" id="body">
+            <div id="header" class="col-md-12">
+
+                    <div class="col-xs-8">
+                        <a href="/" id="logo-header" class="pull-left">
+                            <img src="/{{ domaineCurrent.getWebPath() }}" alt="{{domaineCurrent.nom}}" id="logoAnap">
+                        </a>
+                        <div id="titre" class="pull-left">
+                            <a href={% if domaineCurrent.urlTitre %}"{{domaineCurrent.urlTitre}}" {% else %} "{{path('hopital_numerique_homepage')}}" {% endif %} class="h1">{{domaineCurrent.nom}}</a>
+                            <div class="h2">{{domaineCurrent.description}}</div>
+                        </div>
+                        <div class="clearfix"></div>
+                    </div>
+                    <div class="col-xs-4">
+                        <div id="logoHn" class="pull-right">
+                            <a href="http://www.anap.fr/" target="_blank">
+                                <img src="{{asset('bundles/hopitalnumeriquecore/img/logo-anap-small.jpg')}}" alt="ANAP" />
+                            </a>
+                            <a href="http://www.sante.gouv.fr/le-programme-hopital-numerique.html" targt="_blank">
+                                <img src="{{asset('bundles/hopitalnumeriquecore/img/mhn-small.jpg')}}" alt="HOPITAL NUMERIQUE" />
+                            </a>
+                        </div>
+                    </div>
+
+                <div class="common-sprite common-sprite-header"></div>
+                <div class="clearfix"></div>
+            </div>
+            <div class="col-md-12" id="content">
+
+                {% block block_du_body %}
+                    {% block prebody %}{% endblock prebody %}
+                    <div class="clearfix"></div>
+                    {% block body %}{% endblock body %}
+                    <div class="clearfix"></div>
+                {% endblock %}
+
+                <input type="hidden" id="fancy-recherche-url" value="{{path('hopital_numerique_expbesoin_rechercheFancy', {'id' : 1 })}}" />
+            </div>
+        </div>
+
+        {% if app.user and app.user|checkAuthorization( path('hopital_numerique_requete_homepage') ) %}
+            <div id="mesrequetes" class="closed">
+                <div class="content col-md-12" style="display:none">
+                    <h3 class="violet">Mes recherches</h3>
+                    {{ render(controller("HopitalNumeriqueRechercheBundle:Requete:index", {'indexVue':false} )) }}
+                    <a href="{{path('hopital_numerique_requete_homepage')}}" class="readmore"><i class="common-sprite common-sprite-arrow"></i> Gérer mes recherches</a>
+                </div>
+            </div>
+        {% endif %}
+    </body>
+</html>

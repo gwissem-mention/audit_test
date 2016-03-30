@@ -185,7 +185,8 @@ knp_snappy:
     pdf:
         enabled: true
         binary: %wkhtmltopdf%
-        options: []
+        options:
+            load-error-handling: 'ignore'
     image:
         enabled: true
         binary: %wkhtmltoimage%

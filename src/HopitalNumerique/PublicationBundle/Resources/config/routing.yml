@@ -11,6 +11,12 @@ hopital_numerique_publication_publication_objet:
     requirements:
         id: \d+
 
+hopital_numerique_publication_publication_objet_pdf:
+    pattern: '/publication/{id}/pdf'
+    defaults: { _controller: 'HopitalNumeriquePublicationBundle:Publication:pdfObjet' }
+    requirements:
+        id: '\d+'
+
 hopital_numerique_publication_publication_contenu:
     pattern:  /publication/{id}-{alias}/{idc}-{aliasc}
     defaults: { _controller: "HopitalNumeriquePublicationBundle:Publication:contenu", id:1, idc:1, alias:alias, aliasc:aliasc}

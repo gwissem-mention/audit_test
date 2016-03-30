@@ -3,8 +3,11 @@
 namespace HopitalNumerique\PublicationBundle\Controller;
 
 use HopitalNumerique\ObjetBundle\Entity\Objet;
+use Nodevo\ToolsBundle\Tools\Chaine;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 class PublicationController extends Controller
 {
@@ -13,6 +16,7 @@ class PublicationController extends Controller
      */
     public function objetAction(Request $request, Objet $objet)
     {
+        $isPdf = ($request->query->has('pdf') && '1' == $request->query->get('pdf'));
         $domaineId = $request->getSession()->get('domaineId');
 
         if (!in_array($domaineId, $objet->getDomainesId())) {
@@ -100,8 +104,53 @@ class PublicationController extends Controller
             'contenus'     => $contenus,
             'productions'  => $productions,
             'meta'         => $this->get('hopitalnumerique_recherche.manager.search')->getMetas($objet->getReferences(), $objet->getResume() ),
-            'ambassadeurs' => $this->getAmbassadeursConcernes( $objet->getId() )
+            'ambassadeurs' => $this->getAmbassadeursConcernes( $objet->getId() ),
+            'is_pdf' => $isPdf
         ));
+    }
+
+    /**
+     * PDF.
+     */
+    public function pdfObjetAction(Request $request, Objet $objet)
+    {
+        //$currentDomaine = $this->get('hopitalnumerique_domaine.manager.domaine')->findOneById($request->getSession()->get('domaineId'));
+        //$domaineNomChaine = new Chaine($currentDomaine->getNom());
+        //$domaineNom = $domaineNomChaine->supprimeAccents();
+
+        $pdfUrl = $this->generateUrl(
+            'hopital_numerique_publication_publication_objet',
+            [
+                'id' => $objet->getId(),
+                'pdf' => 1
+            ],
+            UrlGeneratorInterface::ABSOLUTE_URL
+        );
+
+        $pdfOptions = array(
+            'encoding'         => 'UTF-8',
+            'javascript-delay' => 100,
+            'margin-top'       => '15',
+            'margin-bottom'    => '25',
+            'margin-right'     => '15',
+            'margin-left'      => '15',
+            'header-spacing'   => '2',
+            'header-left'      => date('d/m/Y'),
+            'header-right'     => 'Page [page] / [toPage]',
+            'header-font-size' => '10',
+            'footer-spacing'   => '10',
+            'page-width' => '1024px',
+            'footer-html'      => '<p style="font-size:10px;text-align:center;color:#999"> &copy; ANAP<br>Ces contenus extraits de l\'ANAP sont diffus&eacute;s gratuitement.<br>Toutefois, leur utilisation ou citation est soumise &agrave; l\'inscription de la mention suivante : "&copy; ANAP"</p>'
+        );
+
+        return new Response(
+            $this->container->get('knp_snappy.pdf')->getOutput($pdfUrl, $pdfOptions),
+            200,
+            [
+                'Content-Type' => 'application/pdf',
+                'Content-Disposition' => 'attachment; filename="publication.pdf"'
+            ]
+        );
     }
 
     /**

@@ -58,3 +58,7 @@
 .multiselect { text-align: left; }
     .multiselect .caret { position: absolute;right: 10px;top: 15px; }
 /* --> */
+
+/* <-- PDF */
+[data-is-pdf="1"] .hidden-pdf { display: none; }
+/* --> */
