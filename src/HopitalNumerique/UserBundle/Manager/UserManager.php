@@ -55,28 +55,30 @@ class UserManager extends BaseManager
         $refusCandidature = $this->_managerRefusCandidature->getRefusCandidatureByQuestionnaire();
 
         $domainesByUsers = $this->_managerDomaine->getDomainesByUsers();
-        
+
         //Pour chaque utilisateur, set la contractualisation à jour
-        foreach ($users as $key => $user)
-        {    
-            //Filtre uniquement si l'utilisateur connecté à un domaine, sinon on affiche toujours tout le monde
-            if(!empty($userConnected->getDomainesId()))
-            {
-                $notInArray = true;
-                $domainesIdUserConnected = $userConnected->getDomainesId();
-
-                foreach ($domainesIdUserConnected as $idDomaineUserConnected)
+        foreach ($users as $user)
+        {
+            if (array_key_exists($user['id'], $domainesByUsers)) {
+                //Filtre uniquement si l'utilisateur connecté à un domaine, sinon on affiche toujours tout le monde
+                if(!empty($userConnected->getDomainesId()))
                 {
-                    if(in_array($idDomaineUserConnected, $domainesByUsers[$user['id']]['id']))
+                    $notInArray = true;
+                    $domainesIdUserConnected = $userConnected->getDomainesId();
+
+                    foreach ($domainesIdUserConnected as $idDomaineUserConnected)
                     {
-                        $notInArray = false;
-                        break;
+                        if(in_array($idDomaineUserConnected, $domainesByUsers[$user['id']]['id']))
+                        {
+                            $notInArray = false;
+                            break;
+                        }
                     }
-                }
 
-                if($notInArray)
-                {
-                    continue;
+                    if($notInArray)
+                    {
+                        continue;
+                    }
                 }
             }
 
