@@ -24,4 +24,5 @@ UPDATE `core_menu_item` SET `itm_name` = 'Editer un concept' WHERE `core_menu_it
 # Nv menu RSS en pied de page
 INSERT INTO `core_menu_item` (`itm_id`, `itm_parent`, `mnu_menu`, `itm_name`, `itm_route`, `itm_route_parameters`, `itm_route_absolute`, `itm_uri`, `itm_icon`, `itm_display`, `itm_display_children`, `itm_role`, `itm_order`) VALUES (NULL, NULL, '2', 'RSS', 'hopitalnumerique_objet_objet_feed_rss', '[]', '0', NULL, NULL, '1', '0', 'IS_AUTHENTICATED_ANONYMOUSLY', '6');
 
-
+# Courriel de recommandation
+INSERT INTO `core_mail` (`mail_id`, `mail_objet`, `mail_description`, `mail_expediteur_mail`, `mail_expediteur_name`, `mail_body`, `mail_params`, `mail_notification_region_referent`) VALUES (63, 'Recommandation', 'Recommandation', '', '', 'Bonjour, Je te recommande cette page : %url. A+.', '', '0');

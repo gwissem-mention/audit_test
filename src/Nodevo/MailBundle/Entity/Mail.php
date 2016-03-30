@@ -19,6 +19,12 @@ use Nodevo\ToolsBundle\Validator\Constraints as Nodevo;
 class Mail
 {
     /**
+     * @var integer ID du courriel de recommandation à un ami
+     */
+    const MAIL_RECOMMANDATION_AMI_ID = 63;
+
+
+    /**
      * @var integer
      *
      * @ORM\Column(name="mail_id", type="integer", options = {"comment" = "ID du mail"})

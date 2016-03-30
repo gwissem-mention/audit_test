@@ -1047,7 +1047,7 @@ class MailManager extends BaseManager
      * @param string|array $bcc Copie(s) cachée(s)
      * @return \Swift_Message
      */
-    private function sendMail( $subject, $from, $destinataire = null, $body, $bcc = false, $check = 0 )
+    public function sendMail( $subject, $from, $destinataire = null, $body, $bcc = false, $check = 0 )
     {
         $body = quoted_printable_decode($body);
 

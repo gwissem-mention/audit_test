@@ -20,3 +20,9 @@ services:
         arguments: ["@nodevo_mail.manager.mail", "@validator"]
         tags:
             - { name: form.type, alias: nodevo_mail_mail }
+
+    nodevo_mail.form.type.recommandation:
+        class: 'Nodevo\MailBundle\Form\Type\RecommandationType'
+        arguments: ['@router']
+        tags:
+            - { name: 'form.type' }

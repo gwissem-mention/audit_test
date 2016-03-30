@@ -22,4 +22,6 @@ $(document).ready(function() {
         $('a#search-header-home').attr('href', "/recherche-par-referencement/requete-generator/null/" + $(this).val()  + "/null");
         $('a#search-avance-header-home').attr('href', "/recherche-par-referencement?type=avancee");
     });
+
+    $('.fancybox').fancybox();
 });
