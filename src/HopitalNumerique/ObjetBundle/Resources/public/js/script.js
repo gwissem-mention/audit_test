@@ -177,7 +177,8 @@ function saveContenu()
             alias   : $('#hopitalnumerique_objet_contenu_alias').val(),
             notify  : $('#hopitalnumerique_objet_contenu_modified').val(),
             contenu : tinyMCE.get('hopitalnumerique_objet_contenu_contenu').getContent(),
-            objets: $('#hopitalnumerique_objet_contenu_objets').val()
+            objets: $('#hopitalnumerique_objet_contenu_objets').val(),
+            domaines: $('#hopitalnumerique_objet_contenu_domaines').val()
         },
         type     : 'POST',
         dataType : 'json',

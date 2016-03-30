@@ -60,6 +60,14 @@ class ContenuType extends AbstractType
                 'mapped' => false
             ))
             ->add('objets', 'choice', $objetsOptions)
+            ->add('domaines', 'entity', [
+                'class' => 'HopitalNumerique\DomaineBundle\Entity\Domaine',
+                'label' => 'Domaines',
+                'multiple' => true,
+                'attr' => [
+                    'class' => 'select2'
+                ]
+            ])
         ;
     }
 

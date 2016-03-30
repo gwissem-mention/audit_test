@@ -230,6 +230,14 @@ class ContenuController extends Controller
                 }
             }
 
+            $domaines = $this->get('request')->request->get('domaines');
+            if ('' != $domaines) {
+                $contenu->removeDomaines();
+                foreach ($domaines as $domaineId) {
+                    $contenu->addDomaine($this->container->get('hopitalnumerique_domaine.manager.domaine')->findOneById($domaineId));
+                }
+            }
+
             //error si le titre est vide
             if($titre == '')
                 return new Response('{"success":false,"titre":true,"alias":false}', 200);

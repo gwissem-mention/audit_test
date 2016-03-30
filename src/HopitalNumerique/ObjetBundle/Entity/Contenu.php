@@ -583,6 +583,16 @@ class Contenu
     }
 
     /**
+     * Remove all domaines.
+     */
+    public function removeDomaines()
+    {
+        $this->domaines = new \Doctrine\Common\Collections\ArrayCollection();
+
+        return $this;
+    }
+
+    /**
      * Get domaines
      *
      * @return \Doctrine\Common\Collections\Collection

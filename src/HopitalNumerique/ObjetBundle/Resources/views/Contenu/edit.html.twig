@@ -35,10 +35,21 @@
             </div>
         </div>
 
-        <div class="row">
-            <div class="col-md-2">Productions liées :</div>
-            <div class="col-md-10">
-                {{ form_widget(form.objets) }}
+        <div class="form-group">
+            <div class="row">
+                <div class="col-md-2">Productions liées :</div>
+                <div class="col-md-10">
+                    {{ form_widget(form.objets) }}
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="row">
+                <div class="col-md-2">Domaines :</div>
+                <div class="col-md-10">
+                    {{- form_widget(form.domaines) -}}
+                </div>
             </div>
         </div>
 
