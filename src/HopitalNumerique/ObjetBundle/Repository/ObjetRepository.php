@@ -107,14 +107,15 @@ class ObjetRepository extends EntityRepository
             ->leftJoin('obj.roles', 'role')
             ->where('obj.etat = :idEtat')
             ->andWhere($qb->expr()->isNull('role.id'))
-            ->leftJoin('obj.types', 'refTypes')
+            ->leftJoin('obj.types', 'refType')
+            ->leftJoin('refType.parents', 'typeParent')
             ->andWhere(
                 $qb->expr()->orx(
                     $qb->expr()->andX(
-                        $qb->expr()->isNotNull('refTypes.parent'),
-                        $qb->expr()->eq('refTypes.code', ':code_artcle')
+                        $qb->expr()->isNotNull('typeParent.id'),
+                        $qb->expr()->eq('refType.code', ':code_artcle')
                     ),
-                    $qb->expr()->eq('refTypes.code', ':code_objet')
+                    $qb->expr()->eq('refType.code', ':code_objet')
                 )
             )
             ->andWhere($qb->expr()->orX($qb->expr()->isNull('obj.dateDebutPublication'), $qb->expr()->lte('obj.dateDebutPublication', ':aujourdhui')))
