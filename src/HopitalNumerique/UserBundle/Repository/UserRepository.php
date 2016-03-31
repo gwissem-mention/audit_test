@@ -309,12 +309,14 @@ class UserRepository extends EntityRepository
         $qb = $this->_em->createQueryBuilder();
     
         $qb->select('user')
-        ->from('HopitalNumeriqueUserBundle:User', 'user')
-        ->where('user.roles LIKE :role')
-        ->setParameter('role', '%'.$role.'%')
-        ->andWhere('user.region = :idRegion')
-        ->setParameter('idRegion', $idRegion)
-        ->andWhere('user.enabled = 1');
+            ->from('HopitalNumeriqueUserBundle:User', 'user')
+            ->where('user.roles LIKE :role')
+            ->setParameter('role', '%'.$role.'%')
+            ->andWhere('user.region = :idRegion')
+            ->setParameter('idRegion', $idRegion)
+            ->andWhere('user.enabled = 1')
+            ->setMaxResults(1)
+        ;
     
         return $qb;
     }
