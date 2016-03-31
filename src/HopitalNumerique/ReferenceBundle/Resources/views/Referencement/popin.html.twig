@@ -31,12 +31,12 @@
     </div>
 </div>
                 
-{% macro display_referencement_subtree(referencesSubtree, referenceParentId = null, level = 1) %}
+{% macro display_referencement_subtree(referencesSubtree, referenceParentId = null, referenceGrandParentId = null, level = 1) %}
     {% import _self as mySelf %}
     {% for referenceParameters in referencesSubtree -%}
-        <tr data-reference="{{ referenceParameters.reference.id }}" data-reference-parent="{{ referenceParentId }}" data-children-open="0" data-level="{{ level }}">
+        <tr data-reference="{{ referenceParameters.reference.id }}" data-reference-parent="{{ referenceParentId }}" data-reference-grand-parent="{{ referenceGrandParentId }}" data-children-open="0" data-level="{{ level }}">
             <td>
-                <input type="checkbox" class="checkbox" data-reference="{{ referenceParameters.reference.id }}" data-initial-checked="{{ referenceParameters.entityHasReference is not null ? '1' : '0' }}" id="reference-{{ referenceParameters.reference.id }}">
+                <input type="checkbox" class="checkbox" data-reference="{{ referenceParameters.reference.id }}" data-reference-parent="{{ referenceParentId }}" data-reference-grand-parent="{{ referenceGrandParentId }}" data-initial-checked="{{ referenceParameters.entityHasReference is not null ? '1' : '0' }}" id="reference-{{ referenceParentId }}-{{ referenceParameters.reference.id }}">
             </td>
             <td>
                 <div class="toggle toggle-success {% if referenceParameters.entityHasReference is not null and referenceParameters.entityHasReference.isPrimary %}on{% else %}off{% endif %}" style="display:none;"></div>
@@ -55,7 +55,7 @@
                 {%- endif -%}
             </td>
         </tr>
-        {{- mySelf.display_referencement_subtree(referenceParameters.enfants, referenceParameters.reference.id, level + 1) -}}
+        {{- mySelf.display_referencement_subtree(referenceParameters.enfants, referenceParameters.reference.id, referenceParentId, level + 1) -}}
     {%- endfor %}
 {% endmacro %}
 

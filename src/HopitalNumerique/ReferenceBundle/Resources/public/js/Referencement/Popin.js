@@ -115,14 +115,23 @@ Hn_Reference_Referencement_Popin.checkReference_click = function(event)
 {
     var checkbox = $(event.target);
     var referenceId = parseInt($(checkbox).attr('data-reference'));
+    var referenceParentId = $(checkbox).attr('data-reference-parent');
     var isChecked = checkbox.is(':checked');
 
-    Hn_Reference_Referencement_Popin.checkOrUncheckAllReferenceChildren(referenceId, isChecked);
+    Hn_Reference_Referencement_Popin.checkOrUncheckAllReferenceChildren(referenceId, referenceParentId, isChecked);
     if (isChecked) {
-        Hn_Reference_Referencement_Popin.checkAllReferenceParent(referenceId);
+        Hn_Reference_Referencement_Popin.checkAllReferenceParent(referenceId, referenceParentId);
     }
     Hn_Reference_Referencement_Popin.refreshCountElements(referenceId);
     Hn_Reference_Referencement_Popin.refreshPrimaryChoiceDisplaying();
+
+    //<-- Simuler le clic sur tous les éléments frères (même référence mais parent différent)
+    $('tr[data-reference="' + referenceId + '"] input[type="checkbox"]').each(function (i, checkboxWithSameReference) {
+        if (isChecked !== $(checkboxWithSameReference).is(':checked')) {
+            $(checkboxWithSameReference).click();
+        }
+    });
+    //-->
 };
 
 /**
@@ -131,14 +140,17 @@ Hn_Reference_Referencement_Popin.checkReference_click = function(event)
  * @param integer referenceParentId ID de la référence parente
  * @param boolean check             Si doivent être cochées ou décochées
  */
-Hn_Reference_Referencement_Popin.checkOrUncheckAllReferenceChildren = function(referenceParentId, check)
+Hn_Reference_Referencement_Popin.checkOrUncheckAllReferenceChildren = function(referenceParentId, referenceGrandParentId, check)
 {
-    $('tr[data-reference-parent="' + referenceParentId + '"] input[type="checkbox"]').each(function (key, checkbox) {
-        $(checkbox).prop('checked', check);
+    $('tr[data-reference-parent="' + referenceParentId + '"][data-reference-grand-parent="' + referenceGrandParentId + '"] input[type="checkbox"]').each(function (key, checkbox) {
+        if (check != $(checkbox).is(':checked')) {
+            $(checkbox).click();
+        }
+
         if (check) {
-            Hn_Reference_Referencement_Popin.checkOrUncheckAllReferenceChildren(parseInt($(checkbox).attr('data-reference')), check);
+            Hn_Reference_Referencement_Popin.checkOrUncheckAllReferenceChildren(parseInt($(checkbox).attr('data-reference')), referenceParentId, check);
         } else {
-            Hn_Reference_Referencement_Popin.checkOrUncheckAllReferenceChildren(parseInt($(checkbox).attr('data-reference')), check);
+            Hn_Reference_Referencement_Popin.checkOrUncheckAllReferenceChildren(parseInt($(checkbox).attr('data-reference')), referenceParentId, check);
         }
     });
 };
@@ -148,13 +160,13 @@ Hn_Reference_Referencement_Popin.checkOrUncheckAllReferenceChildren = function(r
  *
  * @param integer referenceId ID de la référence
  */
-Hn_Reference_Referencement_Popin.checkAllReferenceParent = function(referenceId)
+Hn_Reference_Referencement_Popin.checkAllReferenceParent = function(referenceId, referenceParentId)
 {
-    var referenceParentId = $('tr[data-reference="' + referenceId + '"]').attr('data-reference-parent');
+    var referenceGrandParentId = $('tr[data-reference="' + referenceId + '"][data-reference-parent="' + referenceParentId + '"]').attr('data-reference-grand-parent');
 
     if ('' !== referenceParentId) {
-        $('tr[data-reference="' + referenceParentId + '"] input[type="checkbox"]').prop('checked', true);
-        Hn_Reference_Referencement_Popin.checkAllReferenceParent(referenceParentId);
+        $('tr[data-reference="' + referenceParentId + '"][data-reference-parent="' + referenceGrandParentId + '"] input[type="checkbox"]').prop('checked', true);
+        Hn_Reference_Referencement_Popin.checkAllReferenceParent(referenceParentId, referenceGrandParentId);
     }
 };
 
@@ -203,8 +215,15 @@ Hn_Reference_Referencement_Popin.getChosenEntitiesHaveReferences = function(refe
 
         // Si une référence enfant est cochée, on ne récupère pas son parent
         if (Hn_Reference_Referencement_Popin.hasCheckedReferenceChildren(referenceId)) {
-            alreadyChosenEntitiesHaveReferences = alreadyChosenEntitiesHaveReferences.concat(Hn_Reference_Referencement_Popin.getChosenEntitiesHaveReferences(referenceId));
-        } else {
+            var newChosenEntitiesHaveReferencesToConcat = Hn_Reference_Referencement_Popin.getChosenEntitiesHaveReferences(referenceId);
+            for (var i in newChosenEntitiesHaveReferencesToConcat) {
+                if (!Hn_Reference_Referencement_Popin.chosenEntitiesHaveReferencesHasReference(alreadyChosenEntitiesHaveReferences, newChosenEntitiesHaveReferencesToConcat[i].referenceId)) {
+                    alreadyChosenEntitiesHaveReferences.push(newChosenEntitiesHaveReferencesToConcat[i]);
+                }
+            }
+
+            //alreadyChosenEntitiesHaveReferences = alreadyChosenEntitiesHaveReferences.concat(Hn_Reference_Referencement_Popin.getChosenEntitiesHaveReferences(referenceId));
+        } else if (!Hn_Reference_Referencement_Popin.chosenEntitiesHaveReferencesHasReference(alreadyChosenEntitiesHaveReferences, referenceId)) {
             alreadyChosenEntitiesHaveReferences.push({
                 'referenceId': referenceId,
                 'primary': (Hn_Reference_Referencement_Popin.getPrimaryForReferenceId(referenceId) ? '1' : '0')
@@ -213,6 +232,27 @@ Hn_Reference_Referencement_Popin.getChosenEntitiesHaveReferences = function(refe
     });
 
     return alreadyChosenEntitiesHaveReferences;
+};
+
+/**
+ * Retourne si le tableau de EntityHasReference en possède un pour telle référence.
+ *
+ * @param Array   chosenEntitiesHaveReferences EntitiesHaveReferences
+ * @param integer referenceId                  ID de la référence
+ * @return boolean Si présent
+ */
+Hn_Reference_Referencement_Popin.chosenEntitiesHaveReferencesHasReference = function(alreadyChosenEntitiesHaveReferences, referenceId)
+{
+    var isPresent = false;
+
+    for (var i in alreadyChosenEntitiesHaveReferences) {
+        if (referenceId == alreadyChosenEntitiesHaveReferences[i].referenceId) {
+            isPresent = true;
+            break;
+        }
+    }
+
+    return isPresent;
 };
 
 /**
@@ -225,7 +265,7 @@ Hn_Reference_Referencement_Popin.setReference = function(referenceId)
     var referenceCheckbox = $('tr[data-reference="' + referenceId + '"] input[type="checkbox"]');
     if (!$(referenceCheckbox).is(':checked')) {
         $(referenceCheckbox).click();
-        Hn_Reference_Referencement_Popin.checkOrUncheckAllReferenceChildren(referenceId, false);
+        Hn_Reference_Referencement_Popin.checkOrUncheckAllReferenceChildren(referenceId, $(referenceCheckbox).attr('data-reference-parent'), false);
     }
 };
 
@@ -299,22 +339,24 @@ Hn_Reference_Referencement_Popin.refreshCountElements = function(referenceId)
  *
  * @param integer referenceId ID de la référence
  */
-Hn_Reference_Referencement_Popin.refreshPrimaryChoiceDisplaying = function(referenceId)
+Hn_Reference_Referencement_Popin.refreshPrimaryChoiceDisplaying = function(referenceId, referenceParentId)
 {
     if (undefined === referenceId) {
         referenceId = '';
+        referenceParentId = '';
     }
-    var referenceLine = $('tr[data-reference="' + referenceId + '"]');
-    var referenceChildrenLines = $('tr[data-reference-parent="' + referenceId + '"]');
+    var referenceLine = $('tr[data-reference="' + referenceId + '"][data-reference-parent="' + referenceParentId + '"]');
+    var referenceChildrenLines = $('tr[data-reference-parent="' + referenceId + '"][data-reference-grand-parent="' + referenceParentId + '"]');
     var referenceIsChecked = (1 === $(referenceLine).find('input:checked').size());
-    var hasCheckedChildren = ($(referenceChildrenLines).find('input:checked').size(0));
+    var hasCheckedChildren = ($(referenceChildrenLines).find('input:checked').size() > 0);
 
     if (referenceIsChecked) {
         $(referenceLine).find('.toggle').css({ display:(hasCheckedChildren ? 'none' : 'block') });
     } else {
         $(referenceLine).find('.toggle').css({ display:'none' });
     }
+
     $(referenceChildrenLines).each(function (i, referenceChildLine) {
-        Hn_Reference_Referencement_Popin.refreshPrimaryChoiceDisplaying($(referenceChildLine).attr('data-reference'));
+        Hn_Reference_Referencement_Popin.refreshPrimaryChoiceDisplaying($(referenceChildLine).attr('data-reference'), $(referenceChildLine).attr('data-reference-parent'));
     });
 };
