@@ -16,6 +16,11 @@ Hn_Reference_Referencement_Popin.ENTITY_TYPE = null;
  */
 Hn_Reference_Referencement_Popin.ENTITY_ID = null;
 
+/**
+ * @var boolean Indique si un clic est en cours sur un toggle
+ */
+Hn_Reference_Referencement_Popin.TOGGLE_PROCESS_CLICK = false;
+
 
 $(document).ready(function () {
     Hn_Reference_Referencement_Popin.preparePopin();
@@ -63,6 +68,13 @@ Hn_Reference_Referencement_Popin.initEvents = function()
     });
     $('.referencement-popin [data-action="save"]').click(function (event) {
         Hn_Reference_Referencement_Popin.saveEntitiesHaveReferencesAndClose();
+    });
+    $('.referencement-popin .toggle').click(function (event) {
+        if (Hn_Reference_Referencement_Popin.TOGGLE_PROCESS_CLICK) {
+            event.preventDefault();
+        } else {
+            Hn_Reference_Referencement_Popin.toggle_click(event);
+        }
     });
 };
 
@@ -226,7 +238,7 @@ Hn_Reference_Referencement_Popin.getChosenEntitiesHaveReferences = function(refe
         } else if (!Hn_Reference_Referencement_Popin.chosenEntitiesHaveReferencesHasReference(alreadyChosenEntitiesHaveReferences, referenceId)) {
             alreadyChosenEntitiesHaveReferences.push({
                 'referenceId': referenceId,
-                'primary': (Hn_Reference_Referencement_Popin.getPrimaryForReferenceId(referenceId) ? '1' : '0')
+                'primary': (Hn_Reference_Referencement_Popin.getPrimaryForReferenceId(referenceId, referenceParentId) ? '1' : '0')
             });
         }
     });
@@ -267,28 +279,6 @@ Hn_Reference_Referencement_Popin.setReference = function(referenceId)
         $(referenceCheckbox).click();
         Hn_Reference_Referencement_Popin.checkOrUncheckAllReferenceChildren(referenceId, $(referenceCheckbox).attr('data-reference-parent'), false);
     }
-};
-
-/**
- * Set primary pour la référence.
- *
- * @param boolean primary     Primary
- * @param integer referenceId ID de référence
- */
-Hn_Reference_Referencement_Popin.setPrimaryForReferenceId = function(primary, referenceId)
-{
-    $('tr[data-reference="' + referenceId + '"] .toggle').removeClass(primary ? 'off' : 'on');
-    $('tr[data-reference="' + referenceId + '"] .toggle').addClass(primary ? 'on' : 'off');
-};
-
-/**
- * Retourne primary pour la référence.
- *
- * @param integer referenceId ID de référence
- */
-Hn_Reference_Referencement_Popin.getPrimaryForReferenceId = function(referenceId)
-{
-    return ($('tr[data-reference="' + referenceId + '"] .toggle-slide').hasClass('active'));
 };
 
 /**
@@ -360,3 +350,93 @@ Hn_Reference_Referencement_Popin.refreshPrimaryChoiceDisplaying = function(refer
         Hn_Reference_Referencement_Popin.refreshPrimaryChoiceDisplaying($(referenceChildLine).attr('data-reference'), $(referenceChildLine).attr('data-reference-parent'));
     });
 };
+
+
+//<-- Toggles
+/**
+ * Événement d'un clic sur un toggle.
+ *
+ * @param Event event Event
+ */
+Hn_Reference_Referencement_Popin.toggle_click = function(event)
+{
+    Hn_Reference_Referencement_Popin.TOGGLE_PROCESS_CLICK = true;
+
+    var toggle = $(event.target);
+    var referenceId = Hn_Reference_Referencement_Popin.getReferenceIdByElement(toggle);
+    var referenceParentId = Hn_Reference_Referencement_Popin.getReferenceParentIdByElement(toggle);
+    var toggleBros = $('tr[data-reference="' + referenceId + '"] .toggle');
+    var toggleIsChecked = !Hn_Reference_Referencement_Popin.getPrimaryForReferenceId(referenceId, referenceParentId);
+
+    $(toggleBros).each(function (i, toggleBrother) {
+        var toggleBrotherReferenceParentId = Hn_Reference_Referencement_Popin.getReferenceParentIdByElement(toggleBrother);
+        if (referenceParentId != toggleBrotherReferenceParentId) {
+            Hn_Reference_Referencement_Popin.setPrimaryForReferenceId(toggleIsChecked, referenceId, toggleBrotherReferenceParentId);
+        }
+    });
+
+    Hn_Reference_Referencement_Popin.TOGGLE_PROCESS_CLICK = false;
+};
+
+/**
+ * Set primary pour la référence.
+ *
+ * @param boolean primary     Primary
+ * @param integer referenceId ID de référence
+ */
+Hn_Reference_Referencement_Popin.setPrimaryForReferenceId = function(primary, referenceId, referenceParentId)
+{
+    if (primary !== Hn_Reference_Referencement_Popin.getPrimaryForReferenceId(referenceId, referenceParentId)) {
+        $('tr[data-reference="' + referenceId + '"][data-reference-parent="' + referenceParentId + '"] .toggle').click();
+    }
+};
+
+/**
+ * Retourne primary pour la référence.
+ *
+ * @param integer referenceId ID de référence
+ */
+Hn_Reference_Referencement_Popin.getPrimaryForReferenceId = function(referenceId, referenceParentId)
+{
+    return ($('tr[data-reference="' + referenceId + '"][data-reference-parent="' + referenceParentId + '"] .toggle-slide').hasClass('active'));
+};
+//-->
+
+
+//<-- Récupération des références
+/**
+ * Retourne l'ID de la référence de l'élément du DOM.
+ *
+ * @param Element element Élément
+ */
+Hn_Reference_Referencement_Popin.getReferenceIdByElement = function(element)
+{
+    return Hn_Reference_Referencement_Popin.getReferenceAttributeByElement(element, 'data-reference');
+};
+
+/**
+ * Retourne l'ID de la référence parente de l'élément du DOM.
+ *
+ * @param Element element Élément
+ */
+Hn_Reference_Referencement_Popin.getReferenceParentIdByElement = function(element)
+{
+    return Hn_Reference_Referencement_Popin.getReferenceAttributeByElement(element, 'data-reference-parent');
+};
+
+/**
+ * Retourne la référence d'attribut de l'élément du DOM.
+ *
+ * @param Element element Élément
+ */
+Hn_Reference_Referencement_Popin.getReferenceAttributeByElement = function(element, attribute)
+{
+    var referenceId = $(element).attr(attribute);
+    if (typeof referenceId !== typeof undefined && false !== referenceId) {
+        return referenceId;
+    }
+
+    var elementParent = $(element).parent();
+    return Hn_Reference_Referencement_Popin.getReferenceAttributeByElement(elementParent, attribute);
+};
+//-->
