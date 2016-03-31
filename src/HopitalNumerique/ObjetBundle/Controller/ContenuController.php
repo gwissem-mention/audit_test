@@ -219,6 +219,7 @@ class ContenuController extends Controller
             //get form Datas
             $titre   = $request->request->get('titre');
             $alias   = $request->request->get('alias');
+            $typeId = $request->request->get('type');
             $content = $request->request->get('contenu');
             $notify  = $request->request->get('notify');
 
@@ -245,6 +246,7 @@ class ContenuController extends Controller
             //set Form datas
             $contenu->setTitre( $titre );
             $contenu->setContenu( $content );
+            $contenu->setType($this->container->get('hopitalnumerique_reference.manager.reference')->findOneById($typeId));
 
             if( $notify === "1")
                 $contenu->setDateModification( new \DateTime() );

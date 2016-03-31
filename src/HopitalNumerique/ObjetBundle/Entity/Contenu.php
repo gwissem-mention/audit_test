@@ -99,6 +99,12 @@ class Contenu
     protected $objet;
 
     /**
+     * @ORM\ManyToOne(targetEntity="HopitalNumerique\ReferenceBundle\Entity\Reference")
+     * @ORM\JoinColumn(name="type_id", referencedColumnName="ref_id", nullable=true, onDelete="SET NULL")
+     */
+    protected $type;
+
+    /**
      * @ORM\OneToMany(targetEntity="\HopitalNumerique\ObjetBundle\Entity\Consultation", mappedBy="contenu", cascade={"persist", "remove" })
      */
     protected $consultations;
@@ -341,6 +347,30 @@ class Contenu
     public function setObjet(Objet $objet)
     {
         $this->objet = $objet;
+    }
+
+    /**
+     * Set type
+     *
+     * @param \HopitalNumerique\ReferenceBundle\Entity\Reference $type
+     *
+     * @return Contenu
+     */
+    public function setType(\HopitalNumerique\ReferenceBundle\Entity\Reference $type = null)
+    {
+        $this->type = $type;
+
+        return $this;
+    }
+
+    /**
+     * Get type
+     *
+     * @return \HopitalNumerique\ReferenceBundle\Entity\Reference
+     */
+    public function getType()
+    {
+        return $this->type;
     }
 
     /**

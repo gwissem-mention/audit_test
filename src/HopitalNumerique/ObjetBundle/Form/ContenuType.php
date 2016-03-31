@@ -1,6 +1,7 @@
 <?php
 namespace HopitalNumerique\ObjetBundle\Form;
 
+use Doctrine\ORM\EntityRepository;
 use HopitalNumerique\ObjetBundle\Manager\ObjetManager;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -24,7 +25,10 @@ class ContenuType extends AbstractType
 
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $domaine = $options['domaine'];
+        /**
+         * @var \HopitalNumerique\ObjetBundle\Entity\Contenu
+         */
+        $contenu = $builder->getData();
         $objetsOptions = [
             'mapped' => false,
             'choices' => $this->objetManager->getObjetsAndContenuForFormTypeChoices(),
@@ -67,6 +71,24 @@ class ContenuType extends AbstractType
                 'attr' => [
                     'class' => 'select2'
                 ]
+            ])
+            ->add('type', 'entity', [
+                'class' => 'HopitalNumeriqueReferenceBundle:Reference',
+                'property' => 'libelle',
+                'required' => false,
+                'label' => 'Type',
+                'query_builder' => function (EntityRepository $er) use ($contenu) {
+                    $qb = $er->createQueryBuilder('ref');
+                    if ($contenu->getObjet()->isArticle()) {
+                        $qb->andWhere('ref.id != 188', 'ref.id != 570', 'ref.code = :article')
+                           ->setParameter('article', 'CATEGORIE_ARTICLE');
+                    } elseif (!$contenu->getObjet()->isArticle()) {
+                        $qb->andWhere('ref.id != 175', 'ref.code = :objet')
+                           ->setParameter('objet', 'CATEGORIE_OBJET');
+                    }
+                    $qb->orderBy('ref.order', 'ASC');
+                    return $qb;
+                }
             ])
         ;
     }
