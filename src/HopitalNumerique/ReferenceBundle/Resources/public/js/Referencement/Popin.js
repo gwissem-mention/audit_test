@@ -274,7 +274,9 @@ Hn_Reference_Referencement_Popin.chosenEntitiesHaveReferencesHasReference = func
  */
 Hn_Reference_Referencement_Popin.setReference = function(referenceId)
 {
-    var referenceCheckbox = $('tr[data-reference="' + referenceId + '"] input[type="checkbox"]');
+    // On ne prend que la première checkbox car s'il y a des références doublons, elles seront automatiquement cochées
+    var referenceCheckbox = $('tr[data-reference="' + referenceId + '"] input[type="checkbox"]').get(0);
+
     if (!$(referenceCheckbox).is(':checked')) {
         $(referenceCheckbox).click();
         Hn_Reference_Referencement_Popin.checkOrUncheckAllReferenceChildren(referenceId, $(referenceCheckbox).attr('data-reference-parent'), false);
