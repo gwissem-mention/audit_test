@@ -15,7 +15,7 @@ services:
 
     hopitalnumerique.twig.extension.referencement:
         class: 'HopitalNumerique\ReferenceBundle\Twig\ReferencementExtension'
-        arguments : ['@hopitalnumerique_domaine.dependency_injection.current_domaine', '@hopitalnumerique_reference.doctrine.referencement.note_reader']
+        arguments : ['@hopitalnumerique_domaine.dependency_injection.current_domaine', '@hopitalnumerique_reference.doctrine.referencement.note_reader', '@hopitalnumerique_reference.dependency_injection.referencement.entity']
         tags:
             - { name: 'twig.extension' }
 

@@ -9,6 +9,8 @@ use Symfony\Bridge\Doctrine\RegistryInterface;
 
 /**
  * Migration.
+ *
+ * URL : /admin/referencement/cron-save-notes/PBYDHWURJYILOLP24FKGMERO78HD7SUXVRT
  */
 class Migration
 {
@@ -65,17 +67,8 @@ class Migration
     {
         set_time_limit(0);
         $this->migreReferencesForEntities(Entity::ENTITY_TYPE_PUBLICATION, 'hn_objet_reference', 'obj_id', 'refo_primary');
-        
-        
-        
-        
-        
-        
-        
-        
-        /*hn_objet_contenu_reference
-        hn_objet_reference
-        hn_forum_topic_reference*/
+        $this->migreReferencesForEntities(Entity::ENTITY_TYPE_INFRADOC, 'hn_objet_contenu_reference', 'con_id', 'refc_primary');
+        $this->migreReferencesForEntities(Entity::ENTITY_TYPE_FORUM_TOPIC, 'hn_forum_topic_reference', 'topic_id', 'reftop_primary');
     }
 
     /**
