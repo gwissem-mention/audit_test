@@ -27,14 +27,15 @@ class Tree
     /**
      * Retourne les options permettant la création de l'arbre.
      *
-     * @param array<\HopitalNumerique\DomaineBundle\Entity\Domaine> $domaines Domaines
+     * @param array<\HopitalNumerique\DomaineBundle\Entity\Domaine> $domaines              Domaines
+     * @param array<integer>                                        $forbiddenReferenceIds ID des références à ne pas afficher
      * @return array Options
      */
-    public function getOptions($domaines)
+    public function getOptions($domaines, $forbiddenReferenceIds = [])
     {
         $references = $this->getOrderedReferences(true, $domaines);
 
-        $jsTreeOptionsData = $this->getTreeOptionsDataPart($references);
+        $jsTreeOptionsData = $this->getTreeOptionsDataPart($references, $forbiddenReferenceIds);
         $jsTreeOptions = [
             'core' => [
                 'data' => $jsTreeOptionsData
@@ -54,18 +55,23 @@ class Tree
     /**
      * Retourne les données (paramètre data) des options de l'arbre.
      *
+     * @param array<integer> $forbiddenReferenceIds ID des références à ne pas afficher
      * @return array Data
      */
-    private function getTreeOptionsDataPart(array $orderedReferences)
+    private function getTreeOptionsDataPart(array $orderedReferences, $forbiddenReferenceIds = [])
     {
         $jsTreeOptionsDataPart = [];
 
         foreach ($orderedReferences as $referenceParemeters) {
-            $jsTreeOptionsDataPart[] = [
-                'id' => $referenceParemeters['reference']->getId(),
-                'text' => $referenceParemeters['reference']->getLibelle().(count($referenceParemeters['reference']->getDomaines()) > 0 ? ' <em><small>- '.implode(' ; ', $referenceParemeters['reference']->getDomaineNoms()).'</small></em>' : ''),
-                'children' => $this->getTreeOptionsDataPart($referenceParemeters['enfants'])
-            ];
+            $referenceId = $referenceParemeters['reference']->getId();
+            if (!in_array($referenceId, $forbiddenReferenceIds)) { // Éviter qu'un parent soit lui-même un des ses enfants (boucles infinies)
+                $forbiddenReferenceIds[] = $referenceId;
+                $jsTreeOptionsDataPart[] = [
+                    'id' => $referenceId,
+                    'text' => $referenceParemeters['reference']->getLibelle().(count($referenceParemeters['reference']->getDomaines()) > 0 ? ' <em><small>- '.implode(' ; ', $referenceParemeters['reference']->getDomaineNoms()).'</small></em>' : ''),
+                    'children' => $this->getTreeOptionsDataPart($referenceParemeters['enfants'], $forbiddenReferenceIds)
+                ];
+            }
         }
 
         return $jsTreeOptionsDataPart;
