@@ -133,4 +133,16 @@ class ReferencementController extends Controller
 
         return new Response('Cron termin&eacute; !');
     }
+
+    /**
+     * Migre les anciennes données.
+     */
+    public function migreAction($token)
+    {
+        if ('kawabunga' == $token) {
+            $this->container->get('hopitalnumerique_reference.doctrine.referencement.migration')->migreAll();
+        }
+
+        return new Response('Ah non non non.');
+    }
 }

@@ -49,3 +49,7 @@ services:
     hopitalnumerique_reference.doctrine.referencement.note_deleter:
         class: 'HopitalNumerique\ReferenceBundle\Doctrine\Referencement\NoteDeleter'
         arguments: ['@hopitalnumerique_reference.manager.entity_has_note']
+
+    hopitalnumerique_reference.doctrine.referencement.migration:
+        class: 'HopitalNumerique\ReferenceBundle\Doctrine\Referencement\Migration'
+        arguments: ['@doctrine', '@database_connection', '@hopitalnumerique_reference.manager.entity_has_reference']

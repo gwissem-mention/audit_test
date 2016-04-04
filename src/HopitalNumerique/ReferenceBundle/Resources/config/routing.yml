@@ -1,5 +1,6 @@
 imports:
     resource: 'routing/referencement.yml'
+    prefix: '/referencement'
 
 hopitalnumerique_reference_reference:
     pattern:  /reference/
