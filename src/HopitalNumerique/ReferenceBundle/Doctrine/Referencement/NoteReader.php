@@ -62,6 +62,6 @@ class NoteReader
             'domaine' => $domaine
         ]);
 
-        return (null !== $entityHasNote ? str_replace(',00', '', number_format($entityHasNote->getNote(), 2, ',', ' ')) : '-');
+        return (null !== $entityHasNote ? intval($entityHasNote->getNote()) : '-');
     }
 }
