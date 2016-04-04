@@ -144,7 +144,7 @@ class ReferenceController extends Controller
             {
                 $primaryKeys[] = $data['id'];
             }
-        }        
+        }
 
         $references = $this->get('hopitalnumerique_reference.manager.reference')->findBy( array('id' => $primaryKeys) );
 

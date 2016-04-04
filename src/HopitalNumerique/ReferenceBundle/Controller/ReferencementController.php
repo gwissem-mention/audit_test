@@ -23,8 +23,15 @@ class ReferencementController extends Controller
             throw new \Exception('Entité non trouvée pour TYPE = "'.$entityType.'" et ID = "'.$entityId.'".');
         }
 
+        $domaines = [];
+        foreach ($this->container->get('hopitalnumerique_reference.dependency_injection.referencement.entity')->getDomainesByEntity($entity) as $domaine) {
+            if ($this->getUser()->hasDomaine($domaine)) {
+                $domaines[] = $domaine;
+            }
+        }
+
         $referencesTree = $this->container->get('hopitalnumerique_reference.dependency_injection.referencement')->getReferencesTreeWithEntitiesHasReferences(
-            $this->container->get('hopitalnumerique_reference.dependency_injection.referencement.entity')->getDomainesByEntity($entity),
+            $domaines,
             $entityType,
             $entityId
         );
@@ -49,10 +56,9 @@ class ReferencementController extends Controller
          */
         $entitiesHaveReferencesParameters = $request->request->get('entitiesHaveReferencesParameters');
 
-        $references = $this->container->get('hopitalnumerique_reference.manager.entity_has_reference')->findBy([
-            'entityType' => $entityType,
-            'entityId' => $entityId
-        ]);
+        $entity = $this->container->get('hopitalnumerique_reference.dependency_injection.referencement.entity')->getEntityByTypeAndId($entityType, $entityId);
+        $referencesDomainesToDelete = $this->getDomainesToDeleteForNoteSaving($entity);
+        $references = $this->container->get('hopitalnumerique_reference.manager.entity_has_reference')->findByEntityTypeAndEntityIdAndDomaines($entityType, $entityId, $referencesDomainesToDelete);
         $this->container->get('hopitalnumerique_reference.manager.entity_has_reference')->delete($references);
 
         if (null !== $entitiesHaveReferencesParameters) {
@@ -65,12 +71,53 @@ class ReferencementController extends Controller
                 $this->container->get('hopitalnumerique_reference.manager.entity_has_reference')->save($entityHasReference);
             }
         }
+        $this->container->get('hopitalnumerique_reference.doctrine.referencement.note_saver')->saveScoresForEntityTypeAndEntityId($entityType, $entityId);
 
         $this->addFlash('success', 'Références enregistrées.');
 
         return new JsonResponse(array(
             'success' => true
         ));
+    }
+
+    /**
+     * Lors de l'enregistrement des références d'une entité, on ré-initialise les références existantes en supprimant celles du domaine de l'utilisateur connecté et celles n'appartenant plus à l'entité.
+     *
+     * @param object Entité
+     */
+    private function getDomainesToDeleteForNoteSaving($entity)
+    {
+        $domaines = [];
+        $userDomaines = $this->getUser()->getDomaines();
+        $entityDomaines = $this->container->get('hopitalnumerique_reference.dependency_injection.referencement.entity')->getDomainesByEntity($entity);
+
+        foreach ($this->container->get('hopitalnumerique_domaine.manager.domaine')->findAll() as $domaine) {
+            $userHasDomaine = false;
+            foreach ($userDomaines as $userDomaine) {
+                if ($userDomaine->equals($domaine)) {
+                    $userHasDomaine = true;
+                    break;
+                }
+            }
+
+            if ($userHasDomaine) {
+                $domaines[] = $domaine;
+            } else {
+                $entityHasDomaine = false;
+                foreach ($entityDomaines as $entityDomaine) {
+                    if ($entityDomaine->equals($domaine)) {
+                        $entityHasDomaine = true;
+                        break;
+                    }
+                }
+
+                if (!$entityHasDomaine) {
+                    $domaines[] = $domaine;
+                }
+            }
+        }
+
+        return $domaines;
     }
 
     /**

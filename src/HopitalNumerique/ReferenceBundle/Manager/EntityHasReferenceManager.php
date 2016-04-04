@@ -1,6 +1,7 @@
 <?php
 namespace HopitalNumerique\ReferenceBundle\Manager;
 
+use Doctrine\Common\Collections\Collection;
 use Nodevo\ToolsBundle\Manager\Manager as BaseManager;
 
 /**
@@ -35,5 +36,18 @@ class EntityHasReferenceManager extends BaseManager
         }
 
         return $allClassifiedByEntityTypeClassifiedByEntityId;
+    }
+
+    /**
+     * Retourne les EntityHasReference par type d'entité, ID d'entité et domaines.
+     *
+     * @param string $entityType Type d'entité
+     * @param integer $entityId ID de l'entité
+     * @param array<\HopitalNumerique\DomaineBundle\Entity\Domaine> $domaines Domaines
+     * @return array<\HopitalNumerique\ReferenceBundle\Entity\EntityHasReference> EntitiesHasReference
+     */
+    public function findByEntityTypeAndEntityIdAndDomaines($entityType, $entityId, $domaines)
+    {
+        return $this->getRepository()->findByEntityTypeAndEntityIdAndDomaines($entityType, $entityId, ($domaines instanceof Collection ? $domaines->toArray() : $domaines));
     }
 }

@@ -107,7 +107,7 @@ class Tree
 
         foreach ($references as $i => $reference) {
             if ((null === $referenceParent && 0 === count($reference->getParents())) || (null !== $referenceParent && $reference->hasParent($referenceParent))) {
-                unset($references[$i]);
+                //unset($references[$i]); // À décommenter uniquement si on passe une référence (pour éviter les doublons)
                 $referencesSubTreeNode = [
                     'reference' => $reference,
                     'enfants' => $this->getOrderedReferencesTreePart($references, $reference)

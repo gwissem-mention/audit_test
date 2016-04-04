@@ -9,7 +9,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Table(name="hn_entity_has_reference", uniqueConstraints={
  *     @ORM\UniqueConstraint(name="ENTITY_REFERENCE", columns={"entref_entity_id", "entref_entity_type", "ref_id"})
  * })
- * @ORM\Entity()
+ * @ORM\Entity(repositoryClass="HopitalNumerique\ReferenceBundle\Repository\EntityHasReferenceRepository")
  */
 class EntityHasReference
 {

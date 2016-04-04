@@ -2,9 +2,12 @@
 namespace HopitalNumerique\ReferenceBundle\Doctrine\Referencement;
 
 use HopitalNumerique\DomaineBundle\Entity\Domaine;
+use HopitalNumerique\DomaineBundle\Manager\DomaineManager;
+use HopitalNumerique\ReferenceBundle\DependencyInjection\Referencement\Entity as EntityService;
 use HopitalNumerique\ReferenceBundle\DependencyInjection\Referencement as ReferencementService;
 use HopitalNumerique\ReferenceBundle\Entity\EntityHasNote;
 use HopitalNumerique\ReferenceBundle\Entity\EntityHasReference;
+use HopitalNumerique\ReferenceBundle\Entity\Reference;
 use HopitalNumerique\ReferenceBundle\Manager\EntityHasNoteManager;
 use HopitalNumerique\ReferenceBundle\Manager\EntityHasReferenceManager;
 
@@ -19,6 +22,11 @@ class NoteSaver
     private $referencementService;
 
     /**
+     * @var \HopitalNumerique\ReferenceBundle\DependencyInjection\Referencement\Entity EntityService
+     */
+    private $entityService;
+
+    /**
      * @var \HopitalNumerique\ReferenceBundle\Manager\EntityHasReferenceManager EntityHasReferenceManager
      */
     private $entityHasReferenceManager;
@@ -27,6 +35,11 @@ class NoteSaver
      * @var \HopitalNumerique\ReferenceBundle\Manager\EntityHasNoteManager EntityHasNoteManager
      */
     private $entityHasNoteManager;
+
+    /**
+     * @var \HopitalNumerique\DomaineBundle\Manager\DomaineManager DomaineManager
+     */
+    private $domaineManager;
 
 
     /**
@@ -38,14 +51,17 @@ class NoteSaver
     /**
      * Constructeur.
      */
-    public function __construct(ReferencementService $referencementService, EntityHasReferenceManager $entityHasReferenceManager, EntityHasNoteManager $entityHasNoteManager)
+    public function __construct(ReferencementService $referencementService, EntityService $entityService, EntityHasReferenceManager $entityHasReferenceManager, EntityHasNoteManager $entityHasNoteManager, DomaineManager $domaineManager)
     {
         $this->referencementService = $referencementService;
+        $this->entityService = $entityService;
         $this->entityHasReferenceManager = $entityHasReferenceManager;
         $this->entityHasNoteManager = $entityHasNoteManager;
+        $this->domaineManager = $domaineManager;
     }
 
 
+    //<-- Sauvegarde globale
     /**
      * Enregistre tous les scores d'un domaine.
      *
@@ -61,27 +77,36 @@ class NoteSaver
         foreach ($this->entitiesHasReferencesByEntityTypeByEntityId as $entityType => $entitiesHasReferencesByEntityId) {
             foreach ($entitiesHasReferencesByEntityId as $entityId => $entitiesHasReferences) {
                 $note = $this->getNoteForEntitiesHaveReferences($entitiesHasReferences, $referencesTreeWithScores);
-
-                $entityHasNote = $this->entityHasNoteManager->findOneBy([
-                    'entityType' => $entityType,
-                    'entityId' => $entityId,
-                    'domaine' => $domaine
-                ]);
-                if (null !== $note) {
-                    if (null === $entityHasNote) {
-                        $entityHasNote = $this->entityHasNoteManager->createEmpty();
-                        $entityHasNote->setEntityType($entityType);
-                        $entityHasNote->setEntityId($entityId);
-                        $entityHasNote->setDomaine($domaine);
-                    }
-                    $entityHasNote->setNote($note);
-                    $this->entityHasNoteManager->save($entityHasNote);
-                } elseif (null !== $entityHasNote) {
-                    $this->entityHasNoteManager->delete($entityHasNote);
-                }
+                $this->save($entityType, $entityId, $domaine, $note);
             }
         }
     }
+    //-->
+
+
+    //<-- Sauvegarde partielle
+    /**
+     * Enregistre les notes d'une entité.
+     *
+     * @param object $entity Entity
+     */
+    public function saveScoresForEntityTypeAndEntityId($entityType, $entityId)
+    {
+        $domaines = $this->domaineManager->findAll();
+        $entitiesHasReferences = $this->entityHasReferenceManager->findBy([
+            'entityType' => $entityType,
+            'entityId' => $entityId
+        ]);
+
+        foreach ($domaines as $domaine) {
+            $referencesTreeWithScores = $this->getReferencesTreeWithScores($domaine);
+
+            $note = $this->getNoteForEntitiesHaveReferences($entitiesHasReferences, $referencesTreeWithScores);
+            $this->save($entityType, $entityId, $domaine, $note);
+        }
+    }
+    //-->
+
 
     /**
      * Ajoute les scores pour chaque référence à l'arbre.
@@ -128,11 +153,13 @@ class NoteSaver
         $score = 0;
 
         foreach ($entitiesHasReferences as $entityHasReference) {
-            $referenceScore = $this->getNoteForEntityHasReference($entityHasReference, $referencesTreeWithScores);
-            if (null === $referenceScore) {
-                return null;
+            if (0 === count($entityHasReference->getReference()->getParents())) {
+                $score += $this->getNoteForEntityHasReferenceForEachReferenceParent($referencesTreeWithScores, null, $referenceParent);
+            } else {
+                foreach ($entityHasReference->getReference()->getParents() as $referenceParent) {
+                    $score += $this->getNoteForEntityHasReferenceForEachReferenceParent($referencesTreeWithScores, $entityHasReference, $referenceParent);
+                }
             }
-            $score += $referenceScore;
         }
 
         return $score;
@@ -141,23 +168,80 @@ class NoteSaver
     /**
      * Retourne le score d'un EntityHasReference.
      *
-     * @param \HopitalNumerique\ReferenceBundle\Entity\EntityHasReference $entityHasReference          EntityHasReference
-     * @param array                                                       $referencesSubtreeWithScores Arbre des références avec les scores
+     * @param \HopitalNumerique\ReferenceBundle\Entity\EntityHasReference $entityHasReference                EntityHasReference
+     * @param array                                                       $referencesSubtreeWithScores       Arbre des références avec les scores
+     * @param \HopitalNumerique\ReferenceBundle\Entity\Reference|null     $entityHasReferenceReferenceParent Référence parent du EntityHasReference dont il faut récupérer la note
      * @return float|null Score
      */
-    private function getNoteForEntityHasReference(EntityHasReference $entityHasReference, array $referencesSubtreeWithScores)
+    private function getNoteForEntityHasReferenceForEachReferenceParent($referencesTreeWithScores, $entityHasReference, $referenceParent)
+    {
+        $referenceScore = $this->getNoteForEntityHasReference($referencesTreeWithScores, null, $entityHasReference, $referenceParent);
+
+        if (null === $referenceScore) {
+            //return null;
+            $referenceScore = 0; // On compte 0 dans le cas où inRecherche = faux
+        }
+
+        return $referenceScore;
+    }
+
+    /**
+     * Retourne le score d'un EntityHasReference.
+     *
+     * @param \HopitalNumerique\ReferenceBundle\Entity\EntityHasReference $entityHasReference                EntityHasReference
+     * @param \HopitalNumerique\ReferenceBundle\Entity\Reference|null     $subtreeReferenceParent            Référence parent du sous-arbre
+     * @param array                                                       $referencesSubtreeWithScores       Arbre des références avec les scores
+     * @param \HopitalNumerique\ReferenceBundle\Entity\Reference|null     $entityHasReferenceReferenceParent Référence parent du EntityHasReference dont il faut récupérer la note
+     * @return float|null Score
+     */
+    private function getNoteForEntityHasReference(array $referencesSubtreeWithScores, Reference $subtreeReferenceParent = null, EntityHasReference $entityHasReference, Reference $entityHasReferenceReferenceParent = null)
     {
         foreach ($referencesSubtreeWithScores as $referenceParameters) {
-            if ($referenceParameters['reference']->getId() === $entityHasReference->getReference()->getId()) {
+            if ((
+                    (null === $subtreeReferenceParent && null === $entityHasReferenceReferenceParent)
+                    || (null !== $subtreeReferenceParent && null !== $entityHasReferenceReferenceParent && $subtreeReferenceParent->getId() === $entityHasReferenceReferenceParent->getId())
+                )
+                && ($referenceParameters['reference']->getId() === $entityHasReference->getReference()->getId())
+            ) {
                 return $referenceParameters['score'];
             }
 
-            $score = $this->getNoteForEntityHasReference($entityHasReference, $referenceParameters['enfants']);
+            $score = $this->getNoteForEntityHasReference($referenceParameters['enfants'], $referenceParameters['reference'], $entityHasReference, $entityHasReferenceReferenceParent);
             if (null !== $score) {
                 return $score;
             }
         }
 
         return null;
+    }
+
+    /**
+     * Enregistre en base la note.
+     *
+     * @param string                                         $entityType Type d'entité
+     * @param integer                                        $entityId   ID de l'entité
+     * @param \HopitalNumerique\DomaineBundle\Entity\Domaine $domaine    Domaine
+     * @param float                                          $note       Note
+     */
+    private function save($entityType, $entityId, Domaine $domaine, $note)
+    {
+        $entityHasNote = $this->entityHasNoteManager->findOneBy([
+            'entityType' => $entityType,
+            'entityId' => $entityId,
+            'domaine' => $domaine
+        ]);
+
+        if (null !== $note) {
+            if (null === $entityHasNote) {
+                $entityHasNote = $this->entityHasNoteManager->createEmpty();
+                $entityHasNote->setEntityType($entityType);
+                $entityHasNote->setEntityId($entityId);
+                $entityHasNote->setDomaine($domaine);
+            }
+            $entityHasNote->setNote($note);
+            $this->entityHasNoteManager->save($entityHasNote);
+        } elseif (null !== $entityHasNote) {
+            $this->entityHasNoteManager->delete($entityHasNote);
+        }
     }
 }

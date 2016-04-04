@@ -66,7 +66,7 @@ Hn_Reference_Referencement_Popin.initEvents = function()
     $('.referencement-popin input[type="checkbox"][id!="toggle-check-all"]').click(function (event) {
         Hn_Reference_Referencement_Popin.checkReference_click(event);
     });
-    $('.referencement-popin [data-action="save"]').click(function (event) {
+    $('.referencement-popin [data-action="save"]').click(function () {
         Hn_Reference_Referencement_Popin.saveEntitiesHaveReferencesAndClose();
     });
     $('.referencement-popin .toggle').click(function (event) {

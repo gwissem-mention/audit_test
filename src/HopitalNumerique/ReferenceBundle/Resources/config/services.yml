@@ -40,7 +40,7 @@ services:
 
     hopitalnumerique_reference.doctrine.referencement.note_saver:
         class: 'HopitalNumerique\ReferenceBundle\Doctrine\Referencement\NoteSaver'
-        arguments: ['@hopitalnumerique_reference.dependency_injection.referencement', '@hopitalnumerique_reference.manager.entity_has_reference', '@hopitalnumerique_reference.manager.entity_has_note']
+        arguments: ['@hopitalnumerique_reference.dependency_injection.referencement', '@hopitalnumerique_reference.dependency_injection.referencement.entity', '@hopitalnumerique_reference.manager.entity_has_reference', '@hopitalnumerique_reference.manager.entity_has_note', '@hopitalnumerique_domaine.manager.domaine']
 
     hopitalnumerique_reference.doctrine.referencement.note_reader:
         class: 'HopitalNumerique\ReferenceBundle\Doctrine\Referencement\NoteReader'

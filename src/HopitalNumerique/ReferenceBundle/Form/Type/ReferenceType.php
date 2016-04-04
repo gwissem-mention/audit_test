@@ -34,32 +34,30 @@ class ReferenceType extends AbstractType
         $connectedUser = $this->_userManager->getUserConnected();
 
         if ($connectedUser->hasRoleAdmin()) {
-            if (count($options['data']->getEnfants()) === 0) {
-                $builder
-                    ->add('domaines', 'entity', array(
-                        'class'       => 'HopitalNumeriqueDomaineBundle:Domaine',
-                        'property'    => 'nom',
-                        'required'    => false,
-                        'multiple'    => true,
-                        'label'       => 'Domaine(s) associé(s)',
-                        'empty_value' => ' - ',
-                        'query_builder' => function (EntityRepository $er) use ($connectedUser) {
-                            return $er->getDomainesUserConnectedForForm($connectedUser->getId());
-                        },
-                        'attr' => [
-                            'class' => 'select2'
-                        ]
-                    ))
-                ;
+            $builder
+                ->add('domaines', 'entity', array(
+                    'class'       => 'HopitalNumeriqueDomaineBundle:Domaine',
+                    'property'    => 'nom',
+                    'required'    => false,
+                    'multiple'    => true,
+                    'label'       => 'Domaine(s) associé(s)',
+                    'empty_value' => ' - ',
+                    'query_builder' => function (EntityRepository $er) use ($connectedUser) {
+                        return $er->getDomainesUserConnectedForForm($connectedUser->getId());
+                    },
+                    'attr' => [
+                        'class' => 'select2'
+                    ]
+                ))
+            ;
 
-                if ($connectedUser->hasRoleAdmin()) {
-                    $builder
-                        ->add('allDomaines', 'checkbox', [
-                            'label' => 'Tous les domaines',
-                            'required' => false
-                        ])
-                    ;
-                }
+            if ($connectedUser->hasRoleAdmin()) {
+                $builder
+                    ->add('allDomaines', 'checkbox', [
+                        'label' => 'Tous les domaines',
+                        'required' => false
+                    ])
+                ;
             }
 
             $this->buildFormPartConcept($builder, $options);

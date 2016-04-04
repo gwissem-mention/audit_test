@@ -1030,6 +1030,23 @@ class User extends BaseUser
         return $this->domaines;
     }
 
+    /**
+     * Retourne si l'utilisateur possède ce domaine.
+     *
+     * @param \HopitalNumerique\DomaineBundle\Entity\Domaine $domaine Domaine
+     * @return boolean Si domaine
+     */
+    public function hasDomaine(\HopitalNumerique\DomaineBundle\Entity\Domaine $domaine)
+    {
+        foreach ($this->domaines as $userDomaine) {
+            if ($userDomaine->getId() === $domaine->getId()) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
     /*-- Fin gestion domaine --*/
     
     /**
