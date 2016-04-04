@@ -579,6 +579,14 @@ class Reference
     }
 
     /**
+     * Supprime tous les domaines.
+     */
+    public function removeDomaines()
+    {
+        $this->domaines = new ArrayCollection();
+    }
+
+    /**
      * Get domaines
      *
      * @return \Doctrine\Common\Collections\Collection 

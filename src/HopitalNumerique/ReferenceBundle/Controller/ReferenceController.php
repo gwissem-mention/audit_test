@@ -222,6 +222,10 @@ class ReferenceController extends Controller
             //si le formulaire est valide
             if ( $form->isValid() ) 
             {
+                if ($reference->isAllDomaines()) {
+                    $reference->removeDomaines();
+                }
+
                 if( isset($formDatas['parent']) && !is_null($formDatas['parent']) ){
                     $parent = $this->get('hopitalnumerique_reference.manager.reference')->findOneBy( array( 'id' => $formDatas['parent'] ) );    
                     $reference->setParent( $parent );
