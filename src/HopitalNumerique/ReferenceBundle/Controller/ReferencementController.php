@@ -141,6 +141,7 @@ class ReferencementController extends Controller
     {
         if ('kawabunga' == $token) {
             $this->container->get('hopitalnumerique_reference.doctrine.referencement.migration')->migreAll();
+            return new Response('OK');
         }
 
         return new Response('Ah non non non.');
