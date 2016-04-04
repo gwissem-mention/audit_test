@@ -154,7 +154,7 @@ class NoteSaver
 
         foreach ($entitiesHasReferences as $entityHasReference) {
             if (0 === count($entityHasReference->getReference()->getParents())) {
-                $score += $this->getNoteForEntityHasReferenceForEachReferenceParent($referencesTreeWithScores, null, $referenceParent);
+                $score += $this->getNoteForEntityHasReferenceForEachReferenceParent($referencesTreeWithScores, $entityHasReference, null);
             } else {
                 foreach ($entityHasReference->getReference()->getParents() as $referenceParent) {
                     $score += $this->getNoteForEntityHasReferenceForEachReferenceParent($referencesTreeWithScores, $entityHasReference, $referenceParent);
