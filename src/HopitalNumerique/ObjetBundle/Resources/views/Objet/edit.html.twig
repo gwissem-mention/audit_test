@@ -334,7 +334,7 @@
                                         {%- if objet.id is not null -%}
                                             <a href="{{path('hopitalnumerique_reference_referencement_popin', { 'entityType':'publication', 'entityId':objet.id })}}" class="open-popin-referencement edit btn btn-xs btn-primary fancybox.ajax pull-right"><i class="fa fa-cog"></i></a>
                                         {%- endif -%}
-                                        <p class="text-muted text-right pull-right">Note référencement : {{ referencement_note(objet) }}</p>
+                                        <p class="text-muted text-right pull-right"><strong>Note référencement :</strong> {% for domaineCommunWithUser in domainesCommunsWithUser %} &nbsp; {{ domaineCommunWithUser }} : {{ referencement_note(objet, domaineCommunWithUser) }}{% endfor %}</p>
                                     </div>
                                     <div class="col-md-10 hide">
                                         {{ form_widget(form.references) }}

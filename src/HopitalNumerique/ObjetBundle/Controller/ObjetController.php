@@ -118,7 +118,8 @@ class ObjetController extends Controller
             'infra'       => $infra,
             'toRef'       => $toRef,
             'note'        => $note,
-            'productions' => $productions
+            'productions' => $productions,
+            'domainesCommunsWithUser' => $this->container->get('hopitalnumerique_reference.dependency_injection.referencement.entity')->getDomainesCommunsWithUser($objet, $user)
         );
 
         return $this->renderForm('hopitalnumerique_objet_objet', $objet, 'HopitalNumeriqueObjetBundle:Objet:edit.html.twig', $options );
@@ -373,7 +374,8 @@ class ObjetController extends Controller
                     'infra'       => isset($options['infra'])       ? $options['infra']       : false,
                     'toRef'       => isset($options['toRef'])       ? $options['toRef']       : false,
                     'note'        => isset($options['note'])        ? $options['note']        : 0,
-                    'productions' => isset($options['productions']) ? $options['productions'] : array()
+                    'productions' => isset($options['productions']) ? $options['productions'] : array(),
+                    'domainesCommunsWithUser' => isset($options['domainesCommunsWithUser']) ? $options['domainesCommunsWithUser'] : array()
                 ));
             }
 
@@ -396,7 +398,8 @@ class ObjetController extends Controller
                         'infra'       => isset($options['infra'])       ? $options['infra']       : false,
                         'toRef'       => isset($options['toRef'])       ? $options['toRef']       : false,
                         'note'        => isset($options['note'])        ? $options['note']        : 0,
-                        'productions' => isset($options['productions']) ? $options['productions'] : array()
+                        'productions' => isset($options['productions']) ? $options['productions'] : array(),
+                        'domainesCommunsWithUser' => isset($options['domainesCommunsWithUser']) ? $options['domainesCommunsWithUser'] : array()
                     ));
                 }
 
@@ -483,7 +486,8 @@ class ObjetController extends Controller
             'infra'       => isset($options['infra'])       ? $options['infra']       : false,
             'toRef'       => isset($options['toRef'])       ? $options['toRef']       : false,
             'note'        => isset($options['note'])        ? $options['note']        : 0,
-            'productions' => isset($options['productions']) ? $options['productions'] : array()
+            'productions' => isset($options['productions']) ? $options['productions'] : array(),
+            'domainesCommunsWithUser' => isset($options['domainesCommunsWithUser']) ? $options['domainesCommunsWithUser'] : array()
         ));
     }
 }

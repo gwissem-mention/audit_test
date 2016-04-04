@@ -2,6 +2,7 @@
 namespace HopitalNumerique\ReferenceBundle\Twig;
 
 use HopitalNumerique\DomaineBundle\DependencyInjection\CurrentDomaine as CurrentDomaineService;
+use HopitalNumerique\DomaineBundle\Entity\Domaine;
 use HopitalNumerique\ReferenceBundle\Doctrine\Referencement\NoteReader;
 
 /**
@@ -47,9 +48,12 @@ class ReferencementExtension extends \Twig_Extension
      * @param object $entity Entité
      * @return string Note
      */
-    public function getReferencementNote($entity)
+    public function getReferencementNote($entity, Domaine $domaine = null)
     {
-        $domaine = $this->currentDomaineService->get();
+        if (null === $domaine) {
+            $domaine = $this->currentDomaineService->get();
+        }
+
         return $this->noteReader->getNoteByEntityAndDomaineForAffichage($entity, $domaine);
     }
 

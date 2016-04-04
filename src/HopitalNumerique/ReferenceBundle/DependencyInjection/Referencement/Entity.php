@@ -6,6 +6,7 @@ use HopitalNumerique\DomaineBundle\Manager\DomaineManager;
 use HopitalNumerique\ForumBundle\Manager\TopicManager;
 use HopitalNumerique\ObjetBundle\Manager\ContenuManager;
 use HopitalNumerique\ObjetBundle\Manager\ObjetManager;
+use HopitalNumerique\UserBundle\Entity\User;
 use HopitalNumerique\UserBundle\Manager\UserManager;
 
 /**
@@ -163,5 +164,26 @@ class Entity
         }
 
         throw new \Exception('Domaines non trouvés pour l\'entité.');
+    }
+
+    /**
+     * Retourne les dommaines communs à l'entité et l'utilisateur.
+     *
+     * @param object                                   $entity Entité
+     * @param \HopitalNumerique\UserBundle\Entity\User $user   User
+     * @return array<\HopitalNumerique\DomaineBundle\Entity\Domaine> Domaines
+     */
+    public function getDomainesCommunsWithUser($entity, User $user)
+    {
+        $domainesCommuns = [];
+        $entityDomaines = $this->getDomainesByEntity($entity);
+
+        foreach ($entityDomaines as $entityDomaine) {
+            if ($user->hasDomaine($entityDomaine)) {
+                $domainesCommuns[] = $entityDomaine;
+            }
+        }
+
+        return $domainesCommuns;
     }
 }
