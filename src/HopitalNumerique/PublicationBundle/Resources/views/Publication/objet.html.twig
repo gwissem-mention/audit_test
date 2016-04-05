@@ -40,7 +40,7 @@
 {% block body %}
     {% import _self as mySelf %}
     {% if objet.isInfraDoc %}
-        <div id="sommaire" class="closed">
+        <div id="sommaire" class="hidden-pdf closed">
             <div class="content" style="display:none">
                 {% if objet.synthese is not null %}
                     <a class="resume downloadLink synthese fancybox.iframe" style="width:90px;text-align:left" href="{{path('hopital_numerique_publication_synthese',{'id':objet.id})}}" ><i class="common-sprite common-sprite-arrow"></i>Synthèse</a>

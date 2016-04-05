@@ -5,3 +5,5 @@
         #header #titre .h1 { font-size: 14px;padding-top: 0; }
         #header #titre .h2 { font-size: 12px;margin-top: 1px; }
     #header #logoHn { display: block !important; }
+
+#publication #resultats #productions h3, #publication #resultats #infradocs h3 { background-image: none !important; }

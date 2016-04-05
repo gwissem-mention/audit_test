@@ -16,6 +16,20 @@
                 <link rel="stylesheet" href="{{ absolute_url(asset_url) }}" />
             {% endstylesheets %}
         {% endblock stylesheets %}
+        {% block javascripts %}
+            {% javascripts output="compiled/hopitalnumerique-core-pdf.js" 
+                "@jquery_js" 
+                "@jquery_ui_js"
+                "@bootstrap_js"
+                "@enquire_js"
+                "@fancybox_js"  
+                "@json_js"
+                '@front_js'
+            %}
+                <script type="text/javascript" src="{{ asset_url }}"></script>
+            {% endjavascripts %}
+            <script src="{{ path('fos_js_routing_js', {"callback": "fos.Router.setData"}) }}"></script>
+        {% endblock %}
     </head>
 
     <body data-is-pdf="1">

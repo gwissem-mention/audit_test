@@ -1,4 +1,6 @@
 $(document).ready(function() {
+    var IS_PDF = ('1' == $('body').attr('data-is-pdf'));
+
     /* Gestion de l'ouverture/fermeture du sommaire et de la liste des ambassadeurs */
     $('#sommaire.closed, #ambassadeurs.closed').click(function(){
         //on ouvre
@@ -25,34 +27,36 @@ $(document).ready(function() {
         $(this).find('.carousel-indicators li.pos-1').addClass('active');
     });
 
-    $('#autresResultats h2').click(function(){
-        $(this).toggleClass('open closed');
-        $('#autresResultats .row').slideToggle();
-    });
+    if (!IS_PDF) {
+        $('#autresResultats h2').click(function(){
+            $(this).toggleClass('open closed');
+            $('#autresResultats .row').slideToggle();
+        });
 
-    $('#productions-associes h2').click(function(){
-        $(this).toggleClass('open closed');
-        $('#productions-associes .row').slideToggle();
-    });
+        $('#productions-associes h2').click(function(){
+            $(this).toggleClass('open closed');
+            $('#productions-associes .row').slideToggle();
+        });
 
-    $('#commentaires h2').click(function(){
-        $(this).toggleClass('open closed');
-        $('#commentaires .bloc-commentaire').slideToggle();
-    });
+        $('#commentaires h2').click(function(){
+            $(this).toggleClass('open closed');
+            $('#commentaires .bloc-commentaire').slideToggle();
+        });
 
-    $('#resultats #pointsdurs h3').click(function(){
-        $(this).toggleClass('open closed');
-        $('#resultats #pointsdurs .results').slideToggle();
-    });
+        $('#resultats #pointsdurs h3').click(function(){
+            $(this).toggleClass('open closed');
+            $('#resultats #pointsdurs .results').slideToggle();
+        });
 
-    $('#resultats #productions h3').click(function(){
-        $(this).toggleClass('open closed');
-        $('#resultats #productions .results').slideToggle();
-    });
-    $('#resultats #infradocs h3').click(function(){
-        $(this).toggleClass('open closed');
-        $('#resultats #infradocs .results').slideToggle();
-    });
+        $('#resultats #productions h3').click(function(){
+            $(this).toggleClass('open closed');
+            $('#resultats #productions .results').slideToggle();
+        });
+        $('#resultats #infradocs h3').click(function(){
+            $(this).toggleClass('open closed');
+            $('#resultats #infradocs .results').slideToggle();
+        });
+    }
 
     $('#resultats #pointsdurs h3').click();
     $('#resultats #productions h3').click();

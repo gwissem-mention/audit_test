@@ -12,7 +12,7 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 class PublicationController extends Controller
 {
     /**
-     * Objet Action
+     * Objet Action. Ajout ?pdf=1 pour la vue PDF.
      */
     public function objetAction(Request $request, Objet $objet)
     {
