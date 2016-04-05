@@ -167,6 +167,24 @@ class Entity
     }
 
     /**
+     * Retourne si telle entité est liée à tel domaine.
+     *
+     * @param object                                         $entity  Entité
+     * @param \HopitalNumerique\DomaineBundle\Entity\Domaine $domaine Domaine
+     * @return boolean Si a domaine
+     */
+    public function entityHasDomaine($entity, Domaine $domaine)
+    {
+        foreach ($this->getDomainesByEntity($entity) as $entityDomaine) {
+            if ($domaine->equals($entityDomaine)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
      * Retourne les dommaines communs à l'entité et l'utilisateur.
      *
      * @param object                                   $entity Entité
