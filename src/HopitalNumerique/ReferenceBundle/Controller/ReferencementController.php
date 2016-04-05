@@ -126,6 +126,7 @@ class ReferencementController extends Controller
     public function cronSaveNotesAction($token)
     {
         if ($token === 'PBYDHWURJYILOLP24FKGMERO78HD7SUXVRT') {
+            set_time_limit(0);
             foreach ($this->container->get('hopitalnumerique_domaine.manager.domaine')->findAll() as $domaine) {
                 $this->container->get('hopitalnumerique_reference.doctrine.referencement.note_saver')->saveScoresForDomaine($domaine);
             }
