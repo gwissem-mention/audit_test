@@ -2,6 +2,7 @@
 namespace HopitalNumerique\ObjetBundle\Doctrine;
 
 use HopitalNumerique\ObjetBundle\Manager\NoteManager;
+use HopitalNumerique\ObjetBundle\Entity\Contenu;
 use HopitalNumerique\ObjetBundle\Entity\Objet;
 use HopitalNumerique\UserBundle\Entity\User;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;

@@ -89,7 +89,7 @@
                 {% endif %}
 
                 <div class="clearfix"></div>
-                <div class="mobile">
+                <div class="mobile hidden-pdf">
                     {% if objet.isInfraDoc %}
                         <a class="label label-success pull-left" href="#" onclick="$('#sommaire').click();">Sommaire</a>
                     {% endif %}
@@ -150,7 +150,7 @@
         {% else %}
             <div class="col-md-12">
                 <h1 class="violet">{{objet.titre}}</h1>
-                <div class="mobile" style="margin-bottom:20px;">
+                <div class="mobile hidden-pdf" style="margin-bottom:20px;">
                     <div class="clearfix"></div>
                     {% if objet.isInfraDoc %}
                         <a class="label label-success pull-left" style="cursor:pointer" onclick="$('#sommaire').click();">Sommaire</a>
@@ -324,7 +324,7 @@
 
         {# Téléchargement fichier + synthèse #}
         {% if objet.getAbsolutePath(1) is not null or objet.getAbsolutePath(2) is not null or objet.synthese is not null %}
-            <div class="col-md-4">
+            <div class="col-md-4 hidden-pdf">
                 <div class="wrapper">
                     {% if objet.getAbsolutePath(1) is not null %}
                         <a class="pull-left downloadLink readmore" href="/{{objet.getWebPath(1)}}" target="_blank" onclick="ga('send', 'event', 'Traking', 'Téléchargement', '{{objet.getWebPath(1)}}');"><i class="common-sprite common-sprite-arrow"></i><span class="violet">Télécharger</span> la production complète ( {{objet.getTypeMime(1)|upper}} ) <i class="fa fa-download violet"></i></a>

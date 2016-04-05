@@ -129,7 +129,7 @@ class PublicationController extends Controller
 
         $pdfOptions = array(
             'encoding'         => 'UTF-8',
-            'javascript-delay' => 100,
+            'javascript-delay' => 500,
             'margin-top'       => '15',
             'margin-bottom'    => '25',
             'margin-right'     => '15',
@@ -277,7 +277,8 @@ class PublicationController extends Controller
             'precedent'        => $precedent,
             'precedentOrder'   => $precedentOrder,
             'suivant'          => $suivant,
-            'suivantOrder'     => $suivantOrder
+            'suivantOrder'     => $suivantOrder,
+            'is_pdf' => ($request->query->has('pdf') && '1' == $request->query->get('pdf'))
         ));
     }
 
@@ -377,6 +378,10 @@ class PublicationController extends Controller
      */
     private function getProductionsAssocies( $prodLiees )
     {
+        if (null === $prodLiees) {
+            $prodLiees = [];
+        }
+
         $productions = array();
         foreach( $prodLiees as $prod){
             $tab = explode(':', $prod);
