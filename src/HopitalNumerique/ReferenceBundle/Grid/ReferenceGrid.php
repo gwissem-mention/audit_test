@@ -6,6 +6,7 @@ use Nodevo\GridBundle\Grid\Grid;
 use Nodevo\GridBundle\Grid\GridInterface;
 use Nodevo\GridBundle\Grid\Column;
 use Nodevo\GridBundle\Grid\Action;
+use APY\DataGridBundle\Grid\Row;
 
 /**
  * Configuration du grid Reference.
@@ -34,6 +35,12 @@ class ReferenceGrid extends Grid implements GridInterface
 
         $domaineColumn = new Column\TextColumn('domaineNom', 'Domaine(s)');
         $domaineColumn->setSize(150);
+        $domaineColumn->manipulateRenderCell(function ($value, Row $row) {
+            if ($row->getField('allDomaines')) {
+                return 'Tous';
+            }
+            return $value;
+        });
         $this->addColonne($domaineColumn);
 
         $dictionnaireColumn = new Column\BooleanColumn('reference', 'Est une référence');
