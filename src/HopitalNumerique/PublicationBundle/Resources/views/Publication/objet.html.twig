@@ -345,7 +345,7 @@
             </div>
         {% endif %}
 
-        {% if (app.user and objet.notes) and types != "Point dur" %}
+        {% if objet.notes and types != "Point dur" %}
             <div id="bloc-notation-objet" class="col-md-5 hidden-pdf">
                 <div class="wrapper">
                     <input type="hidden" id="note-sauvegarde-url" value="{{path('hopital_numerique_publication_note_add' ) }}">
