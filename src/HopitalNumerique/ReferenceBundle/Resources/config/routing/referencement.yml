@@ -1,19 +1,19 @@
 hopitalnumerique_reference_referencement_popin:
-    pattern: '/popin/{entityType}/{entityId}'
+    pattern: '/admin/referencement/popin/{entityType}/{entityId}'
     defaults: { _controller: 'HopitalNumeriqueReferenceBundle:Referencement:popin' }
     methods: 'get'
 
 hopitalnumerique_reference_referencement_savechosenreferences:
-    pattern: '/popin/{entityType}/{entityId}/savechosenreferences'
+    pattern: '/admin/referencement/popin/{entityType}/{entityId}/savechosenreferences'
     defaults: { _controller: 'HopitalNumeriqueReferenceBundle:Referencement:saveChosenReferences' }
     methods: 'post'
 
 hopitalnumerique_reference_referencement_cronsavenotes:
-    pattern: '/cron-save-notes/{token}'
+    pattern: '/referencement/cron-save-notes/{token}'
     defaults: { _controller: 'HopitalNumeriqueReferenceBundle:Referencement:cronSaveNotes' }
     methods: 'get'
 
 hopitalnumerique_reference_referencement_migre:
-    pattern: '/migre/{token}'
+    pattern: '/admin/referencement/migre/{token}'
     defaults: { _controller: 'HopitalNumeriqueReferenceBundle:Referencement:migre' }
     methods: 'get'
