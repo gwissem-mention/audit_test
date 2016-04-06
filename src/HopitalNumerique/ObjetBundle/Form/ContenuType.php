@@ -88,7 +88,10 @@ class ContenuType extends AbstractType
                     }
                     $qb->orderBy('ref.order', 'ASC');
                     return $qb;
-                }
+                },
+                'attr' => [
+                    'class' => 'select2'
+                ]
             ])
         ;
     }
