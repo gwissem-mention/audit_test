@@ -38,6 +38,8 @@
 {% endblock %}
 
 {% block body %}
+    {% set canVote = (app.user is not null or note is null) %}
+    
     {% import _self as mySelf %}
     {% if objet.isInfraDoc %}
         <div id="sommaire" class="hidden-pdf closed">
@@ -207,8 +209,7 @@
                             {{objet.resume|parsePublication(objet.glossaires)|raw}}
                         </div>
 
-                        {% if objet.notes %}
-
+                        {% if objet.notes and canVote %}
                             <div id="bloc-notation-objet" class="col-md-10 pull-right hidden-pdf">
                                 <div class="wrapper">
                                     <input type="hidden" id="note-sauvegarde-url" value="{{path('hopital_numerique_publication_note_add' ) }}">
@@ -224,8 +225,8 @@
                                 <input type="hidden" id="isContenu" name="isContenu" value="{{contenu is defined }}" />
                             </div>
                             <div class="clearfix"></div>
-
                         {% endif %}
+
                     </div>
                     <div class="col-md-6">
                         <div class="col-md-12 hidden-pdf" id="productionsPointDur">
@@ -345,7 +346,8 @@
             </div>
         {% endif %}
 
-        {% if objet.notes and types != "Point dur" %}
+        {# Si l'utilisateur n'est pas connecté et qu'il a déjà voté #}
+        {% if objet.notes and types != "Point dur" and canVote %}
             <div id="bloc-notation-objet" class="col-md-5 hidden-pdf">
                 <div class="wrapper">
                     <input type="hidden" id="note-sauvegarde-url" value="{{path('hopital_numerique_publication_note_add' ) }}">

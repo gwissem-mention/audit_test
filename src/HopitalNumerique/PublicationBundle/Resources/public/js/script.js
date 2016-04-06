@@ -227,6 +227,10 @@ function calculMoyenne()
             //Mise à jour de la moyenne des notes de l'objet + relancement du pluggin d'étoile
             $("#bloc-notation-moyenne-objet .bloc-star").html("<div class='rateit' id='note-moyenne-etoile' data-rateit-step='0.5' data-rateit-max='5' data-rateit-value='" + data.noteMoyenne + "' data-rateit-ispreset='true' data-rateit-readonly='true'></div>");
             $('#note-moyenne-etoile').rateit();
+
+            if (false === data.userCanVote) {
+                $('#bloc-notation-objet').hide();
+            }
         }
     });
 }

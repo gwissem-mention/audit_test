@@ -96,6 +96,29 @@ class NoteReader
         return (null !== $this->getNoteByContenuAndUser($contenu, $user));
     }
 
+    /**
+     * Retourne si l'utilisateur peut voter.
+     *
+     * @param object                                   $entity Entité (objet ou contenu)
+     * @param \HopitalNumerique\UserBundle\Entity\User $user   Utilisateur (null si non connecté)
+     * @return boolean Si peut voter
+     */
+    public function userCanVote($entity, User $user = null)
+    {
+        if (null !== $user) { // Un utilisateur connecté peut toujours modifier son vote
+            return true;
+        }
+
+        if ($entity instanceof Objet) {
+            return !$this->hasNoteForObjetAndUser($entity, $user);
+        }
+        if ($entity instanceof Contenu) {
+            return !$this->hasNoteForContenuAndUser($entity, $user);
+        }
+
+        return false;
+    }
+
 
     /**
      * Retourne la note de l'utilisateur en session.

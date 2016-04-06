@@ -3,6 +3,7 @@ namespace HopitalNumerique\ObjetBundle\Controller;
 
 use HopitalNumerique\UserBundle\Entity\User;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -68,7 +69,12 @@ class NoteController extends Controller
             $nombreNotes = $this->get('hopitalnumerique_objet.manager.note')->countNbNoteByObjet($objet->getId(), $isContenu);   
         }
 
-        return new Response('{"success":true, "nbNote" : "'.$nombreNotes.'", "noteMoyenne" : "'. $noteMoyenne .'"}', 200);
+        return new JsonResponse([
+            'success' => true,
+            'nbNote' => $nombreNotes,
+            'noteMoyenne' => $noteMoyenne,
+            'userCanVote' => $this->container->get('hopitalnumerique_objet.doctrine.note_reader')->userCanVote($objet, $this->getUser())
+        ]);
     }
 
     /**
