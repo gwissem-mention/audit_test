@@ -120,6 +120,6 @@ class Synonyme
      */
     public function equals(Synonyme $synonyme)
     {
-        return ($this->id === $synonyme->getId());
+        return ($this->libelle === $synonyme->getLibelle());
     }
 }

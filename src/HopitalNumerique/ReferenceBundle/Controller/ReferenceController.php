@@ -55,6 +55,10 @@ class ReferenceController extends Controller
         //Récupération de l'entité passée en paramètre
         $reference = $this->get('hopitalnumerique_reference.manager.reference')->findOneById($id);
 
+        if (null === $reference) {
+            return $this->redirectToRoute('hopitalnumerique_reference_reference');
+        }
+
         return $this->renderForm($reference);
     }
 

@@ -120,6 +120,6 @@ class ChampLexicalNom
      */
     public function equals(ChampLexicalNom $champLexicalNom)
     {
-        return ($this->id === $champLexicalNom->getId());
+        return ($this->libelle === $champLexicalNom->getLibelle());
     }
 }
