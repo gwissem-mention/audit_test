@@ -4,6 +4,7 @@ namespace HopitalNumerique\ReferenceBundle\DependencyInjection\Referencement;
 use HopitalNumerique\DomaineBundle\Entity\Domaine;
 use HopitalNumerique\DomaineBundle\Manager\DomaineManager;
 use HopitalNumerique\ForumBundle\Manager\TopicManager;
+use HopitalNumerique\ObjetBundle\Entity\Contenu;
 use HopitalNumerique\ObjetBundle\Manager\ContenuManager;
 use HopitalNumerique\ObjetBundle\Manager\ObjetManager;
 use HopitalNumerique\UserBundle\Entity\User;
@@ -153,6 +154,9 @@ class Entity
     public function getDomainesByEntity($entity)
     {
         if (method_exists($entity, 'getDomaines')) {
+            if (0 === count($entity->getDomaines()) && $entity instanceof Contenu) {
+                return $this->getDomainesByEntity($entity->getObjet());
+            }
             return $entity->getDomaines();
         }
 

@@ -63,10 +63,19 @@ class ReferencementController extends Controller
 
         if (null !== $entitiesHaveReferencesParameters) {
             foreach ($entitiesHaveReferencesParameters as $entityHasReferenceParameters) {
-                $entityHasReference = $this->container->get('hopitalnumerique_reference.manager.entity_has_reference')->createEmpty();
-                $entityHasReference->setEntityType($entityType);
-                $entityHasReference->setEntityId($entityId);
-                $entityHasReference->setReference($this->container->get('hopitalnumerique_reference.manager.reference')->findOneById($entityHasReferenceParameters['referenceId']));
+                $reference = $this->container->get('hopitalnumerique_reference.manager.reference')->findOneById($entityHasReferenceParameters['referenceId']);
+                $entityHasReference = $this->container->get('hopitalnumerique_reference.manager.entity_has_reference')->findOneBy([
+                    'entityType' => $entityType,
+                    'entityId' => $entityId,
+                    'reference' => $reference
+                ]);
+                if (null === $entityHasReference) {
+                    $entityHasReference = $this->container->get('hopitalnumerique_reference.manager.entity_has_reference')->createEmpty();
+                    $entityHasReference->setEntityType($entityType);
+                    $entityHasReference->setEntityId($entityId);
+                    $entityHasReference->setReference($reference);
+                }
+
                 $entityHasReference->setPrimary('1' == $entityHasReferenceParameters['primary']);
                 $this->container->get('hopitalnumerique_reference.manager.entity_has_reference')->save($entityHasReference);
             }
