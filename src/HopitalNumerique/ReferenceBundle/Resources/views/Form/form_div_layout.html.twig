@@ -19,3 +19,11 @@
         {% endif %}
     </label>
 {% endblock %}
+
+{%- block form_end -%}
+    {%- if not render_rest is defined or render_rest -%}
+        {{ form_rest(form) }}
+    {%- endif -%}
+    <input type="hidden" name="do" id="do">
+    </form>
+{%- endblock form_end -%}
