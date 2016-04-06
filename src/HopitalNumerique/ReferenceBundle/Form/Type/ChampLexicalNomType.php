@@ -44,7 +44,7 @@ class ChampLexicalNomType extends AbstractType
                 ]
             ])
         ;
-        $builder->addEventListener(FormEvents::POST_SUBMIT, function (FormEvent $event) {
+        $builder->addEventListener(FormEvents::SUBMIT, function (FormEvent $event) {
             $this->processExistingChampLexicalNom($event);
         });
     }
@@ -54,9 +54,9 @@ class ChampLexicalNomType extends AbstractType
      *
      * @param \Symfony\Component\Form\FormEvent $event Event
      */
-    private function processExistingChampLexicalNom(FormEvent $event)
+    private function processExistingChampLexicalNom(FormEvent &$event)
     {
-        if (null === $event->getData()) {
+        if (null === $event->getData() || null === $event->getData()->getId()) {
             $libelle = $event->getForm()->get('libelle')->getData();
 
             $champLexicalNom = $this->champLexicalNomManager->findOneBy(['libelle' => $libelle]);

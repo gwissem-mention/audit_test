@@ -110,4 +110,16 @@ class Synonyme
     {
         return $this->references;
     }
+
+
+    /**
+     * Retourne l'égalité entre deux synonyme.
+     *
+     * @param \HopitalNumerique\ReferenceBundle\Entity\Reference\Synonyme $synonyme Autre synonyme
+     * @return boolean Si égalité
+     */
+    public function equals(Synonyme $synonyme)
+    {
+        return ($this->id === $synonyme->getId());
+    }
 }

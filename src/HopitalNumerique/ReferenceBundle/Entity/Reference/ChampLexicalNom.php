@@ -110,4 +110,16 @@ class ChampLexicalNom
     {
         return $this->references;
     }
+
+
+    /**
+     * Retourne l'égalité entre deux champLexicalNom.
+     *
+     * @param \HopitalNumerique\ReferenceBundle\Entity\Reference\ChampLexicalNom $champLexicalNom Autre champLexicalNom
+     * @return boolean Si égalité
+     */
+    public function equals(ChampLexicalNom $champLexicalNom)
+    {
+        return ($this->id === $champLexicalNom->getId());
+    }
 }

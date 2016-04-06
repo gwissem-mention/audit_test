@@ -710,7 +710,9 @@ class Reference
      */
     public function addSynonyme(\HopitalNumerique\ReferenceBundle\Entity\Reference\Synonyme $synonyme)
     {
-        $this->synonymes[] = $synonyme;
+        if (!$this->hasSynonyme($synonyme)) {
+            $this->synonymes[] = $synonyme;
+        }
 
         return $this;
     }
@@ -736,6 +738,23 @@ class Reference
     }
 
     /**
+     * Retourne si la référence possède déjà tel synonyme.
+     *
+     * @param \HopitalNumerique\ReferenceBundle\Entity\Reference\Synonyme $synonyme Synonyme
+     * @return boolean si existant
+     */
+    public function hasSynonyme(\HopitalNumerique\ReferenceBundle\Entity\Reference\Synonyme $synonyme)
+    {
+        foreach ($this->synonymes as $synonymeExistant) {
+            if ($synonymeExistant->equals($synonyme)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
      * Add champLexicalNom
      *
      * @param \HopitalNumerique\ReferenceBundle\Entity\Reference\ChampLexicalNom $champLexicalNom
@@ -744,7 +763,9 @@ class Reference
      */
     public function addChampLexicalNom(\HopitalNumerique\ReferenceBundle\Entity\Reference\ChampLexicalNom $champLexicalNom)
     {
-        $this->champLexicalNoms[] = $champLexicalNom;
+        if (!$this->hasChampLexicalNom($champLexicalNom)) {
+            $this->champLexicalNoms[] = $champLexicalNom;
+        }
 
         return $this;
     }
@@ -767,6 +788,23 @@ class Reference
     public function getChampLexicalNoms()
     {
         return $this->champLexicalNoms;
+    }
+
+    /**
+     * Retourne si la référence possède déjà tel champLexicalNom.
+     *
+     * @param \HopitalNumerique\ReferenceBundle\Entity\Reference\ChampLexicalNom $champLexicalNom ChampLexicalNom
+     * @return boolean si existant
+     */
+    public function hasChampLexicalNom(\HopitalNumerique\ReferenceBundle\Entity\Reference\ChampLexicalNom $champLexicalNom)
+    {
+        foreach ($this->champLexicalNoms as $champLexicalNomExistant) {
+            if ($champLexicalNomExistant->equals($champLexicalNom)) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     /**

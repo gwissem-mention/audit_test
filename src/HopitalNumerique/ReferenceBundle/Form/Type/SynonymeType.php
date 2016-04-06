@@ -44,7 +44,7 @@ class SynonymeType extends AbstractType
                 ]
             ])
         ;
-        $builder->addEventListener(FormEvents::POST_SUBMIT, function (FormEvent $event) {
+        $builder->addEventListener(FormEvents::SUBMIT, function (FormEvent $event) {
             $this->processExistingSynonyme($event);
         });
     }
@@ -54,9 +54,9 @@ class SynonymeType extends AbstractType
      *
      * @param \Symfony\Component\Form\FormEvent $event Event
      */
-    private function processExistingSynonyme(FormEvent $event)
+    private function processExistingSynonyme(FormEvent &$event)
     {
-        if (null === $event->getData()) {
+        if (null === $event->getData() || null === $event->getData()->getId()) {
             $libelle = $event->getForm()->get('libelle')->getData();
 
             $synonyme = $this->synonymeManager->findOneBy(['libelle' => $libelle]);
