@@ -107,7 +107,7 @@
             {% if objet.notes %}
                 {# Ajout la moyenne de l'objet #}
                 <div class="col-md-12">
-                    <div id="bloc-notation-moyenne-objet" class="pull-left">
+                    <div id="bloc-notation-moyenne-objet" class="pull-left hidden-pdf">
                         <input type="hidden" id="note-moyenne-url" value="{{path('hopital_numerique_publication_note_moyenne_objet' ) }}">
                         <div class="bloc-star pull-left">
                             <div class="rateit" id="note-moyenne-etoile" data-rateit-max="5" data-rateit-value="0" data-rateit-ispreset="true" data-rateit-readonly="true"></div>
@@ -173,7 +173,7 @@
                         <div class="col-md-12">
                             {% if objet.notes %}
                                 {# Ajout la moyenne de l'objet #}
-                                <div id="bloc-notation-moyenne-objet" class="pull-left">
+                                <div id="bloc-notation-moyenne-objet" class="pull-left hidden-pdf">
                                     <input type="hidden" id="note-moyenne-url" value="{{path('hopital_numerique_publication_note_moyenne_objet' ) }}">
                                     <div class="bloc-star pull-left">
                                         <div class="rateit" id="note-moyenne-etoile" data-rateit-max="5" data-rateit-value="0" data-rateit-ispreset="true" data-rateit-readonly="true"></div>
@@ -278,7 +278,7 @@
                 {% if objet.notes %}
                     {# Ajout la moyenne de l'objet #}
                     <div class="col-md-12">
-                        <div id="bloc-notation-moyenne-objet" class="pull-left">
+                        <div id="bloc-notation-moyenne-objet" class="pull-left hidden-pdf">
                             <input type="hidden" id="note-moyenne-url" value="{{path('hopital_numerique_publication_note_moyenne_objet' ) }}">
                             <div class="bloc-star pull-left">
                                 <div class="rateit" id="note-moyenne-etoile" data-rateit-max="5" data-rateit-value="0" data-rateit-ispreset="true" data-rateit-readonly="true"></div>
@@ -509,7 +509,7 @@
                 </div>
             {% endif %}
 
-            <div id="productions" class="col-md-12">
+            <div id="productions" class="col-md-12 hidden-pdf">
                 {% set count = 0 %}
                 {% for objet in objets if (objet['categ'] == "production" or objet['categ'] == "ressource" or objet['categ'] == "forum") %}
                     {% set count = count + 1 %}
