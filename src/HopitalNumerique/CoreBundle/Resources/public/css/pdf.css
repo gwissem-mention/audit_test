@@ -6,4 +6,7 @@
         #header #titre .h2 { font-size: 12px;margin-top: 1px; }
     #header #logoHn { display: block !important; }
 
-#publication #resultats #productions h3, #publication #resultats #infradocs h3 { background-image: none !important; }
+#publication #resultats #productions h3,
+#publication #resultats #infradocs h3,
+#publication #commentaires h2.open,
+#commentaires h2 .h2-arrow { background-image: none !important; }

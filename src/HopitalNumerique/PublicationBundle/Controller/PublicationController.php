@@ -114,10 +114,6 @@ class PublicationController extends Controller
      */
     public function pdfObjetAction(Request $request, Objet $objet)
     {
-        //$currentDomaine = $this->get('hopitalnumerique_domaine.manager.domaine')->findOneById($request->getSession()->get('domaineId'));
-        //$domaineNomChaine = new Chaine($currentDomaine->getNom());
-        //$domaineNom = $domaineNomChaine->supprimeAccents();
-
         $pdfUrl = $this->generateUrl(
             'hopital_numerique_publication_publication_objet',
             [
@@ -129,7 +125,7 @@ class PublicationController extends Controller
 
         $pdfOptions = array(
             'encoding'         => 'UTF-8',
-            'javascript-delay' => 500,
+            'javascript-delay' => 1000,
             'margin-top'       => '15',
             'margin-bottom'    => '25',
             'margin-right'     => '15',
