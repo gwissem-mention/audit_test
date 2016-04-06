@@ -63,9 +63,9 @@
         <div class="col-md-2">
             <div class="hidden-pdf text-right">
                 <a class="btn btn-sm btn-default" href="{{path('hopital_numerique_recherche_homepage')}}" title="Retour à ma recherche"><i class="fa fa-reply"></i></a>
-                <a class="btn btn-sm btn-default" href="{{ path('hopital_numerique_publication_publication_objet_pdf', { 'id':objet.id }) }}" title="Télécharger la production complète ( PDF )"><i class="fa fa-print"></i></a>
+                <a class="btn btn-sm btn-default" href="{{ path('hopital_numerique_publication_publication_objet_pdf', { 'id':objet.id }) }}" title="Imprimer cette page"><i class="fa fa-print"></i></a>
                 {% if objet.getAbsolutePath(1) is not null -%}
-                    <a class="btn btn-sm btn-default" href="/{{objet.getWebPath(1)}}" target="_blank" onclick="ga('send', 'event', 'Traking', 'Téléchargement', '{{objet.getWebPath(1)}}');" title="Imprimer le fichier 1"><i class="fa fa-download"></i></a>
+                    <a class="btn btn-sm btn-default" href="/{{objet.getWebPath(1)}}" target="_blank" onclick="ga('send', 'event', 'Traking', 'Téléchargement', '{{objet.getWebPath(1)}}');" title="Télécharger la production complète ( PDF )"><i class="fa fa-download"></i></a>
                 {%- endif %}
                 <a class="btn btn-sm btn-default fancybox fancybox.ajax" href="{{ path('nodevo_mail_recommandation_popin') }}" title="Recommander à un ami"><i class="fa fa-envelope"></i></a>
             </div>
