@@ -18,6 +18,7 @@ class PublicationController extends Controller
     {
         $isPdf = ($request->query->has('pdf') && '1' == $request->query->get('pdf'));
         $domaineId = $request->getSession()->get('domaineId');
+        $request->getSession()->set('urlToRedirect', $request->getUri());
 
         if (!in_array($domaineId, $objet->getDomainesId())) {
             throw $this->createNotFoundException("La publication n'appartient pas au domaine courant.");
@@ -174,6 +175,7 @@ class PublicationController extends Controller
     {
         $domaineId = $request->getSession()->get('domaineId');
         $domaine   = $this->get('hopitalnumerique_domaine.manager.domaine')->findOneById($domaineId);
+        $request->getSession()->set('urlToRedirect', $request->getUri());
 
         $objet = $this->get('hopitalnumerique_objet.manager.objet')->findOneBy( array( 'id' => $id ) );
 
