@@ -39,7 +39,8 @@ class ReferencementController extends Controller
         return $this->render('HopitalNumeriqueReferenceBundle:Referencement:popin.html.twig', array(
             'entityType' => $entityType,
             'entityId' => $entityId,
-            'referencesTree' => $referencesTree
+            'referencesTree' => $referencesTree,
+            'redirectionUrl' => $this->container->get('hopitalnumerique_reference.dependency_injection.referencement.entity')->getMangementUrlByEntity($entity)
         ));
     }
 

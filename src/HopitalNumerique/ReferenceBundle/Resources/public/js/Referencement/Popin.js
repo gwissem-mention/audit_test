@@ -17,6 +17,11 @@ Hn_Reference_Referencement_Popin.ENTITY_TYPE = null;
 Hn_Reference_Referencement_Popin.ENTITY_ID = null;
 
 /**
+ * @var string URL de redirection
+ */
+Hn_Reference_Referencement_Popin.REDIRECTION_URL = null;
+
+/**
  * @var boolean Indique si un clic est en cours sur un toggle
  */
 Hn_Reference_Referencement_Popin.TOGGLE_PROCESS_CLICK = false;
@@ -303,7 +308,11 @@ Hn_Reference_Referencement_Popin.saveEntitiesHaveReferencesAndClose = function()
         dataType: 'json',
         success: function(response) {
             if (response.success) {
-                Nodevo_Web.reload();
+                if (null !== Hn_Reference_Referencement_Popin.REDIRECTION_URL) {
+                    Nodevo_Web.redirect(Hn_Reference_Referencement_Popin.REDIRECTION_URL);
+                } else {
+                    Nodevo_Web.reload();
+                }
             }
         }
     });

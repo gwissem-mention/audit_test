@@ -59,8 +59,11 @@
     {%- endfor %}
 {% endmacro %}
 
-<script type="text/javascript" >
+<script type="text/javascript">
     Hn_Reference_Referencement_Popin.ENTITY_TYPE = '{{ entityType }}';
     Hn_Reference_Referencement_Popin.ENTITY_ID = '{{ entityId }}';
+    {%- if redirectionUrl is not null -%}
+        Hn_Reference_Referencement_Popin.REDIRECTION_URL = '{{ redirectionUrl }}';
+    {%- endif -%}
     Hn_Reference_Referencement_Popin.init();
 </script>

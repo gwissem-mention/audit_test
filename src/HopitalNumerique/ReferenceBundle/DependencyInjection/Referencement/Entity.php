@@ -5,10 +5,12 @@ use HopitalNumerique\DomaineBundle\Entity\Domaine;
 use HopitalNumerique\DomaineBundle\Manager\DomaineManager;
 use HopitalNumerique\ForumBundle\Manager\TopicManager;
 use HopitalNumerique\ObjetBundle\Entity\Contenu;
+use HopitalNumerique\ObjetBundle\Entity\Objet;
 use HopitalNumerique\ObjetBundle\Manager\ContenuManager;
 use HopitalNumerique\ObjetBundle\Manager\ObjetManager;
 use HopitalNumerique\UserBundle\Entity\User;
 use HopitalNumerique\UserBundle\Manager\UserManager;
+use Symfony\Component\Routing\RouterInterface;
 
 /**
  * Service gérant une entité de référencement.
@@ -35,6 +37,11 @@ class Entity
      */
     const ENTITY_TYPE_AMBASSADEUR = 'ambassadeur';
 
+
+    /**
+     * @var \Symfony\Component\Routing\RouterInterface Router
+     */
+    private $router;
 
     /**
      * @var \HopitalNumerique\UserBundle\Manager\UserManager UserManager
@@ -65,8 +72,9 @@ class Entity
     /**
      * Constructeur.
      */
-    public function __construct(UserManager $userManager, ObjetManager $objetManager, ContenuManager $contenuManager, TopicManager $forumTopicManager, DomaineManager $domaineManager)
+    public function __construct(RouterInterface $router, UserManager $userManager, ObjetManager $objetManager, ContenuManager $contenuManager, TopicManager $forumTopicManager, DomaineManager $domaineManager)
     {
+        $this->router = $router;
         $this->userManager = $userManager;
         $this->objetManager = $objetManager;
         $this->contenuManager = $contenuManager;
@@ -207,5 +215,28 @@ class Entity
         }
 
         return $domainesCommuns;
+    }
+
+    /**
+     * Retourne l'URL de la page gérant le référencement de l'entité.
+     *
+     * @param object $entity Entité
+     * @return string|null URL
+     */
+    public function getMangementUrlByEntity($entity)
+    {
+        if ($entity instanceof Contenu) {
+            return $this->router->generate('hopitalnumerique_objet_objet_edit', [
+                'id' => $entity->getObjet()->getId(),
+                'infra' => 1
+            ]);
+        }
+        if ($entity instanceof Objet) {
+            return $this->router->generate('hopitalnumerique_objet_objet_edit', [
+                'id' => $entity->getId()
+            ]);
+        }
+
+        return null;
     }
 }
