@@ -43,7 +43,7 @@
                 </div>
             {# Sinon demande à l'utilisateur de se connecter #}
             {% else %}
-                {% include 'HopitalNumeriqueAccountBundle:include:login.html.twig' %}
+                {% include 'HopitalNumeriqueAccountBundle:include:login.html.twig' with { 'title':'Pour ajouter un commentaire vous devez vous identifier.' } %}
             {% endif %}
         </div>
     </div>
