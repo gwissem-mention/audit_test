@@ -44,21 +44,6 @@ class GlossaireController extends Controller
     }
 
     /**
-     * Affiche le Glossaire en fonction de son ID passé en paramètre.
-     * 
-     * @param integer $id Id de Glossaire.
-     */
-    public function showAction( $id )
-    {
-        //Récupération de l'entité en fonction du paramètre
-        $glossaire = $this->get('hopitalnumerique_glossaire.manager.glossaire')->findOneBy( array( 'id' => $id) );
-
-        return $this->render('HopitalNumeriqueGlossaireBundle:Glossaire:show.html.twig', array(
-            'glossaire' => $glossaire,
-        ));
-    }
-
-    /**
      * Suppresion d'un Glossaire.
      * 
      * @param integer $id Id de Glossaire.
