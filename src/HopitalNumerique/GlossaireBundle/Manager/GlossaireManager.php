@@ -58,32 +58,6 @@ class GlossaireManager extends BaseManager
     }
 
     /**
-     * Récupère les données pour l'export CSV
-     *
-     * @return array
-     */
-    public function getDatasForExport( $ids )
-    {
-        $glossairesForExport = array();
-
-        $glossaires = $this->getRepository()->getDatasForExport( $ids )->getQuery()->getResult();
-
-        foreach ($glossaires as $glossaire) 
-        {
-            if(!array_key_exists($glossaire['id'], $glossairesForExport))
-            {
-                $glossairesForExport[$glossaire['id']] = $glossaire;
-            }
-            else
-            {
-                $glossairesForExport[$glossaire['id']]['domaineNom'] .= "|" . $glossaire['domaineNom'];
-            }
-        }
-
-        return array_values($glossairesForExport);
-    }
-
-    /**
      * Retourne le tableau du glossaire
      *
      * @param  int $domaineId Domaine courrant

@@ -57,7 +57,6 @@ class GlossaireGrid extends Grid implements GridInterface
      */
     public function setMassActions()
     {
-        $this->addMassAction( new Action\ActionMass('Export CSV', 'HopitalNumeriqueGlossaireBundle:Glossaire:exportCsv') );
         $this->addMassAction( new Action\ActionMass('Supprimer', 'HopitalNumeriqueGlossaireBundle:Glossaire:deleteMass') );
     }
 }
