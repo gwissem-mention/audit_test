@@ -246,6 +246,7 @@ class Reference
         $this->lock  = false;
         $this->parentable = false;
         $this->order = 1;
+        $this->inRecherche = false;
         $this->domaines = new ArrayCollection();
         $this->allDomaines = false;
         $this->synonymes = new ArrayCollection();

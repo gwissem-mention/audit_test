@@ -91,6 +91,8 @@ hopital_numerique_faq:
 hopital_numerique_reference:
     resource: "@HopitalNumeriqueReferenceBundle/Resources/config/routing.yml"
     prefix:   /admin
+hopital_numerique_reference_glossaire:
+    resource: '@HopitalNumeriqueReferenceBundle/Resources/config/routing/glossaire.yml'
 hopital_numerique_reference_referencement:
     resource: '@HopitalNumeriqueReferenceBundle/Resources/config/routing/referencement.yml'
 

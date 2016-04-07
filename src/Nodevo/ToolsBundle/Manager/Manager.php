@@ -188,6 +188,24 @@ abstract class Manager
     }
 
     /**
+     * Retourne un tableau d'entités indexés par leur identifiant.
+     *
+     * @param array<object> $entities Entités
+     * @return array<mixed, object> Entités
+     */
+    public function getEntitiesKeyedById(array $entities)
+    {
+        $entitiesById = array();
+
+        foreach ($entities as $entity) {
+            $entitiesById[$entity->getId()] = $entity;
+        }
+
+        return $entitiesById;
+    }
+
+
+    /**
      * Enregistre l'entitée
      *
      * @param Entity|array $entity L'entitée

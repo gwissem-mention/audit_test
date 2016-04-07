@@ -31,6 +31,10 @@ services:
         class: 'HopitalNumerique\ReferenceBundle\DependencyInjection\Reference\Tree'
         arguments: ['@hopitalnumerique_reference.manager.reference']
 
+    hopitalnumerique_reference.doctrine.glossaire.migration:
+        class: 'HopitalNumerique\ReferenceBundle\Doctrine\Glossaire\Migration'
+        arguments: ['@database_connection', '@hopitalnumerique_reference.manager.reference', '@hopitalnumerique_domaine.manager.domaine']
+
     hopitalnumerique_reference.doctrine.reference.domaine_udpater:
         class: 'HopitalNumerique\ReferenceBundle\Doctrine\Reference\DomaineUpdater'
 
