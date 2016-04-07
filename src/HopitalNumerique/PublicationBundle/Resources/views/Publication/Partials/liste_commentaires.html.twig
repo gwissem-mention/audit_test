@@ -43,9 +43,6 @@
                 </div>
             {# Sinon demande à l'utilisateur de se connecter #}
             {% else %}
-                <p>
-                    Pour ajouter un commentaire vous devez vous <a href="{{path('account_login')}}">identifier</a>.
-                </p>
                 {% include 'HopitalNumeriqueAccountBundle:include:login.html.twig' %}
             {% endif %}
         </div>
