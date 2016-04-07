@@ -274,12 +274,12 @@ class StatRechercheManager extends BaseManager
                 $references[ $referenceTemp->getId() ] = $referenceTemp;
                 
                 //parcourt tout les parents pour avoir l'ensemble des références utilisées
-                while( !is_null( $referenceTemp->getParent() ) )
+                // @todo Le faire pour les grand-parents, arrière...
+                foreach ($referenceTemp->getParents() as $parent)
                 {
-                    $referenceTemp = $referenceTemp->getParent();
                     //Si ce parent n'a pas déjà été ajouté
-                    if( !array_key_exists($referenceTemp->getId(), $references) )
-                        $references[ $referenceTemp->getId() ] = $referenceTemp;
+                    if( !array_key_exists($parent->getId(), $references) )
+                        $references[ $parent->getId() ] = $parent;
                 }
             }
         }
