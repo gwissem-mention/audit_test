@@ -452,7 +452,7 @@
         <div class="dd-handle dd3-handle"></div>
         <div class="dd3-content">
             <a data-url="{{path('hopitalnumerique_objet_contenu_form', {'id':contenu.id})}}" href="javascript:selectChapitre({{contenu.id}}, '{{path('hopitalnumerique_objet_contenu_form', {'id':contenu.id})}}')" title="{{contenu.titre}}">{{contenu.order ~ ' ' ~ contenu.titre|truncate(50)}}</a>
-            <p class="text-muted pull-right">{{contenu.nbVue}} vues - <span title="{% for domaineCommunWithUser in domaines_communs_with_user(contenu.entity, app.user) %} {{ domaineCommunWithUser }} : {{ referencement_note(contenu.entity, domaineCommunWithUser) }} {% endfor %}">Note référencement</span></p>
+            <p class="text-muted pull-right">{{contenu.nbVue}} vues - <span title="{% for domaineCommunWithUser in domaines_communs_with_user(contenu.entity, app.user) %} {{ domaineCommunWithUser }} : {{ referencement_note(contenu.entity, domaineCommunWithUser) }} {% endfor %}">Survoler pour afficher les scores</span></p>
         </div>
         <div class="dd3-actions">
             <div onclick="deleteContenu( {{contenu.id}}, '{{path('hopitalnumerique_objet_contenu_delete', {'id':contenu.id})}}' );" class="pull-right dd3-trash"><i class="fa fa-trash-o"></i></div>
