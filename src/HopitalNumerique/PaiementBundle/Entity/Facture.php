@@ -77,6 +77,7 @@ class Facture
      * @var \HopitalNumerique\PaiementBundle\Entity\FactureAnnulee
      *
      * @ORM\OneToOne(targetEntity="FactureAnnulee", mappedBy="facture")
+     * @GRID\Column(visible=false, filterable=true, field="factureAnnulee.facture.name")
      */
     protected $factureAnnulee;
 
