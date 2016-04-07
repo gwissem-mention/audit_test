@@ -48,6 +48,7 @@ class RecommandationType extends AbstractType
             ->setAction($this->router->generate('nodevo_mail_recommandation_popin'))
             ->add('destinataire', 'email', [
                 'attr' => [
+                    'maxlength' => 255,
                     'class' => 'validate[required,custom[email]]',
                     'data-prompt-position' => 'bottomLeft'
                 ]
@@ -55,6 +56,7 @@ class RecommandationType extends AbstractType
             ->add('expediteur', 'email', [
                 'data' => (null !== $expediteur ? $expediteur->getEmail() : ''),
                 'attr' => [
+                    'maxlength' => 255,
                     'class' => 'validate[required,custom[email]]',
                     'data-prompt-position' => 'bottomLeft'
                 ]
@@ -62,6 +64,7 @@ class RecommandationType extends AbstractType
             ->add('objet', 'text', [
                 'data' => $recommandationMail->getObjet(),
                 'attr' => [
+                    'maxlength' => 255,
                     'class' => 'validate[required]',
                     'data-prompt-position' => 'bottomLeft'
                 ]
