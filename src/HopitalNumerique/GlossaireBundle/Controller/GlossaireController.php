@@ -21,16 +21,6 @@ class GlossaireController extends Controller
     }
 
     /**
-     * Affiche le formulaire d'ajout de Glossaire.
-     */
-    public function addAction()
-    {
-        $glossaire = $this->get('hopitalnumerique_glossaire.manager.glossaire')->createEmpty();
-
-        return $this->renderForm('hopitalnumerique_glossaire_glossaire', $glossaire, 'HopitalNumeriqueGlossaireBundle:Glossaire:edit.html.twig' );
-    }
-
-    /**
      * Affiche le formulaire d'édition de Glossaire.
      *
      * @param integer $id Id de Glossaire.

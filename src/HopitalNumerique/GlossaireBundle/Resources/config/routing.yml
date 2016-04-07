@@ -12,12 +12,6 @@ hopitalnumerique_glossaire_glossaire:
     requirements: 
         _method: GET|POST
 
-hopitalnumerique_glossaire_glossaire_add:
-    pattern:  /admin/glossaire/add
-    defaults: { _controller: "HopitalNumeriqueGlossaireBundle:Glossaire:add" }
-    requirements: 
-        _method: GET|POST
-
 hopitalnumerique_glossaire_glossaire_edit:
     pattern:  /admin/glossaire/edit/{id}
     defaults: { _controller: "HopitalNumeriqueGlossaireBundle:Glossaire:edit" }
