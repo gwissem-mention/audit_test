@@ -99,10 +99,13 @@ class Contenu
     protected $objet;
 
     /**
-     * @ORM\ManyToOne(targetEntity="HopitalNumerique\ReferenceBundle\Entity\Reference")
-     * @ORM\JoinColumn(name="type_id", referencedColumnName="ref_id", nullable=true, onDelete="SET NULL")
+     * @ORM\ManyToMany(targetEntity="\HopitalNumerique\ReferenceBundle\Entity\Reference")
+     * @ORM\JoinTable(name="hn_contenu_type",
+     *      joinColumns={ @ORM\JoinColumn(name="con_id", referencedColumnName="con_id", onDelete="CASCADE")},
+     *      inverseJoinColumns={ @ORM\JoinColumn(name="type_id", referencedColumnName="ref_id", onDelete="CASCADE")}
+     * )
      */
-    protected $type;
+    private $types;
 
     /**
      * @ORM\OneToMany(targetEntity="\HopitalNumerique\ObjetBundle\Entity\Consultation", mappedBy="contenu", cascade={"persist", "remove" })
@@ -350,27 +353,47 @@ class Contenu
     }
 
     /**
-     * Set type
+     * Add type
      *
      * @param \HopitalNumerique\ReferenceBundle\Entity\Reference $type
      *
      * @return Contenu
      */
-    public function setType(\HopitalNumerique\ReferenceBundle\Entity\Reference $type = null)
+    public function addType(\HopitalNumerique\ReferenceBundle\Entity\Reference $type)
     {
-        $this->type = $type;
+        $this->types[] = $type;
 
         return $this;
     }
 
     /**
-     * Get type
+     * Remove type
      *
-     * @return \HopitalNumerique\ReferenceBundle\Entity\Reference
+     * @param \HopitalNumerique\ReferenceBundle\Entity\Reference $type
      */
-    public function getType()
+    public function removeType(\HopitalNumerique\ReferenceBundle\Entity\Reference $type)
     {
-        return $this->type;
+        $this->types->removeElement($type);
+    }
+
+    /**
+     * Remove all types.
+     */
+    public function removeTypes()
+    {
+        $this->types = new \Doctrine\Common\Collections\ArrayCollection();
+
+        return $this;
+    }
+
+    /**
+     * Get types
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getTypes()
+    {
+        return $this->types;
     }
 
     /**

@@ -79,11 +79,11 @@ class ContenuType extends AbstractType
                     'class' => 'select2'
                 ]
             ])
-            ->add('type', 'entity', [
+            ->add('types', 'entity', [
                 'class' => 'HopitalNumeriqueReferenceBundle:Reference',
                 'property' => 'libelle',
                 'required' => false,
-                'label' => 'Type',
+                'multiple' => true,
                 'query_builder' => function (EntityRepository $er) use ($contenu) {
                     $qb = $er->createQueryBuilder('ref');
                     if ($contenu->getObjet()->isArticle()) {
