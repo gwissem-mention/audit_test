@@ -3,7 +3,7 @@
         <div class="panel panel-midnightblue">
             <div class="panel-heading">
                 <h4>
-                    Route de la page :
+                    Aide de la page :
                     {% if aide is not null -%}
                         <a href="{{ path('hopitalnumerique_aide_aide_edit', { 'id':aide.id }) }}">{{ aide.route }}</a>
                     {%- else -%}
@@ -17,8 +17,10 @@
                     <p>
                         {{ aide.libelle|raw }}
                     </p>
-                {% else %}
+                {% elseif app.user|checkAuthorization( path('hopitalnumerique_aide_aide_add') ) %}
                     <p>Il n'y a pas encore d'aide pour cette page, vous pouvez en ajouter une avec la route : <strong><a href="{{ path('hopitalnumerique_aide_aide_add', {'route': route}) }}" title="Ajouter une aide">{{ route }}</a></strong></p>
+                {% else %}
+                    <p>Il n'y a pas encore d'aide disponible pour cette page</p>
                 {% endif %}
             </div>
         </div>
