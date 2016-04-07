@@ -43,6 +43,9 @@ class FactureGrid extends Grid implements GridInterface
         $this->addColonne( new Column\AssocColumn('user.etablissementRattachementSante.nom', 'Établissement') );
         $this->addColonne( new Column\TextColumn('total', 'Total') );
         $this->addColonne( new Column\TextColumn('id', 'Numéro de facture') );
+
+        $factureAnnuleeColumn = new Column\AssocColumn('factureAnnulee.facture.name', 'Facture annulée');
+        $this->addColonne($factureAnnuleeColumn);
         
         $payedColumn = new Column\BooleanColumn('payee', 'Payé');
         $payedColumn->setSize( 60 );
