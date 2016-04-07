@@ -39,34 +39,6 @@ class GlossaireController extends Controller
     }
 
     /**
-     * Suppression de masse des glossaires
-     *
-     * @param array $primaryKeys    ID des lignes sélectionnées
-     * @param array $allPrimaryKeys allPrimaryKeys ???
-     *
-     * @return Redirect
-     */
-    public function deleteMassAction( $primaryKeys, $allPrimaryKeys )
-    {
-        //get all selected Users
-        if($allPrimaryKeys == 1){
-            $rawDatas = $this->get('hopitalnumerique_glossaire.manager.glossaire')->getRawData();
-            foreach($rawDatas as $data)
-            {
-                $primaryKeys[] = $data['id'];
-            }
-        }        
-
-        $glossaires = $this->get('hopitalnumerique_glossaire.manager.glossaire')->findBy( array('id' => $primaryKeys) );
-
-        $this->get('hopitalnumerique_glossaire.manager.glossaire')->delete( $glossaires );
-
-        $this->get('session')->getFlashBag()->add('info', 'Suppression effectuée avec succès.' );
-
-        return $this->redirect( $this->generateUrl('hopitalnumerique_glossaire_glossaire') );
-    }
-
-    /**
      * Parse les publication à la recherche de mots du glossaire
      *
      * @return redirect

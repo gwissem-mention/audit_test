@@ -5,7 +5,6 @@ namespace HopitalNumerique\GlossaireBundle\Grid;
 use Nodevo\GridBundle\Grid\Grid;
 use Nodevo\GridBundle\Grid\GridInterface;
 use Nodevo\GridBundle\Grid\Column;
-use Nodevo\GridBundle\Grid\Action;
 
 /**
  * Configuration du grid Glossaire.
@@ -57,6 +56,6 @@ class GlossaireGrid extends Grid implements GridInterface
      */
     public function setMassActions()
     {
-        $this->addMassAction( new Action\ActionMass('Supprimer', 'HopitalNumeriqueGlossaireBundle:Glossaire:deleteMass') );
+        
     }
 }
