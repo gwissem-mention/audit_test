@@ -631,4 +631,21 @@ class Contenu
     {
         return $this->domaines;
     }
+
+    /**
+     * Retourne si le contenu possède ce domaine.
+     *
+     * @param \HopitalNumerique\DomaineBundle\Entity\Domaine $domaine Domaine
+     * @return boolean Si domaine
+     */
+    public function hasDomaine(\HopitalNumerique\DomaineBundle\Entity\Domaine $domaine)
+    {
+        foreach ($this->domaines as $contenuDomaine) {
+            if ($contenuDomaine->getId() === $domaine->getId()) {
+                return true;
+            }
+        }
+
+        return false;
+    }
 }

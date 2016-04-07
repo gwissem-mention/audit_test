@@ -29,6 +29,12 @@ class ContenuType extends AbstractType
          * @var \HopitalNumerique\ObjetBundle\Entity\Contenu
          */
         $contenu = $builder->getData();
+        
+        /**
+         * @var \HopitalNumerique\UserBundle\Entity\User
+         */
+        $user = $options['user'];
+
         $objetsOptions = [
             'mapped' => false,
             'choices' => $this->objetManager->getObjetsAndContenuForFormTypeChoices(),
@@ -66,6 +72,7 @@ class ContenuType extends AbstractType
             ->add('objets', 'choice', $objetsOptions)
             ->add('domaines', 'entity', [
                 'class' => 'HopitalNumerique\DomaineBundle\Entity\Domaine',
+                'choices' => $user->getDomaines(),
                 'label' => 'Domaines',
                 'multiple' => true,
                 'attr' => [
@@ -103,9 +110,10 @@ class ContenuType extends AbstractType
             ->setDefaults(array(
                 'data_class' => 'HopitalNumerique\ObjetBundle\Entity\Contenu'
             ))
-            ->setRequired(['domaine'])
+            ->setRequired(['domaine', 'user'])
             ->setAllowedTypes([
-                'domaine' => 'HopitalNumerique\DomaineBundle\Entity\Domaine'
+                'domaine' => 'HopitalNumerique\DomaineBundle\Entity\Domaine',
+                'user' => 'HopitalNumerique\UserBundle\Entity\User'
             ])
         ;
     }

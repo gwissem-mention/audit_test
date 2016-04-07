@@ -46,4 +46,16 @@ class CurrentDomaine
 
         return $domaine;
     }
+
+    /**
+     * Retourne l'URL du domaine.
+     *
+     * @return string URL
+     */
+    public function getUrl()
+    {
+        $domaine = $this->get();
+
+        return $domaine->getUrl();
+    }
 }

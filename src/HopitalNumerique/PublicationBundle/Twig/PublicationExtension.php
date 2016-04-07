@@ -48,6 +48,8 @@ class PublicationExtension extends \Twig_Extension
      */
     public function parsePublication($content, $glossaires = false )
     {
+        $domaineUrl = $this->container->get('hopitalnumerique_domaine.dependency_injection.current_domaine')->getUrl();
+
         $pattern = '/\[([a-zA-Z]+)\:(\d+)\;(([a-zA-Z0-9àáâãäåçèéêëìíîïðòóôõöùúûüýÿ\&\'\`\"\<\>\!\:\?\,\;\.\%\#\@\_\-\+]| )*)\;([a-zA-Z0-9]*)\]/';
         preg_match_all($pattern, $content, $matches);
 
@@ -226,7 +228,7 @@ class PublicationExtension extends \Twig_Extension
                     foreach($matches[0] as $match)
                     {
 
-                        $html  = '¬<a target="_blank" href="/glossaire#¬'. $tool->minifie() .'¬" style="text-decoration:none"><acronym class="glosstool" data-html="true" title="¬';
+                        $html  = '¬<a target="_blank" href="'.$domaineUrl.'/glossaire#¬'. $tool->minifie() .'¬" style="text-decoration:none"><acronym class="glosstool" data-html="true" title="¬';
                         $html .= ($data['intitule'] ? $this->toascii($data['intitule']) : $this->toascii(substr($match, 1, -1)) );
                         $html .= (!empty($description)) ? ' : <br>' . $description  : '';
                         $html .= '¬" >¬' . $this->toascii(substr($match, 1, -1)) . '</acronym></a>';

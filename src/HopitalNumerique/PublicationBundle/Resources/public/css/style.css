@@ -48,7 +48,7 @@
     #publication ul li{list-style-position: inside;}
     #publication{margin-top: 20px; position: relative}
     #publication .print{margin-left:5px;}
-    #publication h1{font-size: 24px; font-weight: bold; margin:2px 0 20px 0; border-bottom: 1px solid #D5D5D5; padding-bottom: 5px; font-family: 'Open Sans', sans-serif; width: 90%;}
+    #publication h1{font-size: 24px; font-weight: bold; margin:2px 0 20px 0; border-bottom: 1px solid #D5D5D5; padding-bottom: 5px; font-family: 'Open Sans', sans-serif; }
     #publication h2{font-size: 20px; color: #d60030; font-family: 'Open Sans', sans-serif;}
     #publication #resultats h3{font-size: 20px; color: #d60030; font-family: 'Open Sans', sans-serif;}
     #publication h3{font-size: 16px; font-family: 'Open Sans', sans-serif;}

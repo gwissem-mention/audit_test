@@ -112,16 +112,31 @@ class PublicationController extends Controller
     /**
      * PDF.
      */
-    public function pdfObjetAction(Request $request, Objet $objet)
+    public function pdfAction(Request $request, $entityType, $entityId)
     {
-        $pdfUrl = $this->generateUrl(
-            'hopital_numerique_publication_publication_objet',
-            [
-                'id' => $objet->getId(),
-                'pdf' => 1
-            ],
-            UrlGeneratorInterface::ABSOLUTE_URL
-        );
+        if ('objet' === $entityType) {
+            $pdfUrl = $this->generateUrl(
+                'hopital_numerique_publication_publication_objet',
+                [
+                    'id' => $entityId,
+                    'pdf' => 1
+                ],
+                UrlGeneratorInterface::ABSOLUTE_URL
+            );
+        } elseif ('contenu' === $entityType) {
+            $contenu = $this->container->get('hopitalnumerique_objet.manager.contenu')->findOneById($entityId);
+            $pdfUrl = $this->generateUrl(
+                'hopital_numerique_publication_publication_contenu_without_alias',
+                [
+                    'id' => $contenu->getObjet()->getId(),
+                    'idc' => $contenu->getId(),
+                    'pdf' => 1
+                ],
+                UrlGeneratorInterface::ABSOLUTE_URL
+            );
+        } else {
+            throw new \Exception('Type d\'entité "'.$entityType.'" non reconnu pour la génération du PDF.');
+        }
 
         $pdfOptions = array(
             'encoding'         => 'UTF-8',
@@ -151,6 +166,9 @@ class PublicationController extends Controller
 
     /**
      * Contenu Action
+     * 
+     * @param $id ID de l'objet
+     * @param $idc ID du contenu
      */
     public function contenuAction(Request $request, $id, $alias = null, $idc, $aliasc = null)
     {

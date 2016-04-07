@@ -206,7 +206,10 @@ class ContenuController extends Controller
      */
     private function renderForm( $formName, $contenu, $view )
     {
-        $formOptions = [];
+        $user = $this->getUser();
+        $formOptions = [
+            'user' => $this->getUser()
+        ];
         if ('hopitalnumerique_objet_contenu' === $formName) {
             $formOptions['domaine'] = $this->get('hopitalnumerique_domaine.manager.domaine')->findOneById($this->get('request')->getSession()->get('domaineId'));
         }
@@ -233,9 +236,28 @@ class ContenuController extends Controller
 
             $domaines = $this->get('request')->request->get('domaines');
             if ('' != $domaines) {
-                $contenu->removeDomaines();
+                // Ajout des nouveaux domaines
                 foreach ($domaines as $domaineId) {
-                    $contenu->addDomaine($this->container->get('hopitalnumerique_domaine.manager.domaine')->findOneById($domaineId));
+                    $domaineChoisi = $this->container->get('hopitalnumerique_domaine.manager.domaine')->findOneById($domaineId);
+                    if (!$contenu->hasDomaine($domaineChoisi)) {
+                        $contenu->addDomaine($domaineChoisi);
+                    }
+                }
+
+                // Suppression des domaines
+                foreach ($contenu->getDomaines() as $domaine) {
+                    if ($user->hasDomaine($domaine)) {
+                        $isDomaineChoisi = false;
+                        foreach ($domaines as $domaineId) {
+                            if ($domaineId == $domaine->getId()) {
+                                $isDomaineChoisi = true;
+                                break;
+                            }
+                        }
+                        if (!$isDomaineChoisi) {
+                            $contenu->removeDomaine($domaine);
+                        }
+                    }
                 }
             }
 
