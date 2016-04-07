@@ -49,7 +49,7 @@ class GlossaireGrid extends Grid implements GridInterface
      */
     public function setActionsButtons()
     {
-        $this->addActionButton( new Action\EditButton( 'hopitalnumerique_glossaire_glossaire_edit' ) );
+        
     }
 
     /**

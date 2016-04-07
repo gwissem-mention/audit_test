@@ -21,19 +21,6 @@ class GlossaireController extends Controller
     }
 
     /**
-     * Affiche le formulaire d'édition de Glossaire.
-     *
-     * @param integer $id Id de Glossaire.
-     */
-    public function editAction( $id )
-    {
-        //Récupération de l'entité passée en paramètre
-        $glossaire = $this->get('hopitalnumerique_glossaire.manager.glossaire')->findOneBy( array('id' => $id) );
-
-        return $this->renderForm('hopitalnumerique_glossaire_glossaire', $glossaire, 'HopitalNumeriqueGlossaireBundle:Glossaire:edit.html.twig' );
-    }
-
-    /**
      * Suppresion d'un Glossaire.
      * 
      * @param integer $id Id de Glossaire.
@@ -126,60 +113,5 @@ class GlossaireController extends Controller
         $this->get('session')->getFlashBag()->add('info', 'Publications parsées avec succès.' );
 
         return $this->redirect( $this->generateUrl('hopitalnumerique_glossaire_glossaire') );
-    }
-
-
-
-
-
-
-
-
-
-
-
-    /**
-     * Effectue le render du formulaire Glossaire.
-     *
-     * @param string $formName Nom du service associé au formulaire
-     * @param Glossaire   $entity   Entité $glossaire
-     * @param string $view     Chemin de la vue ou sera rendu le formulaire
-     *
-     * @return Form | redirect
-     */
-    private function renderForm( $formName, $glossaire, $view )
-    {
-        //Création du formulaire via le service
-        $form = $this->createForm( $formName, $glossaire);
-
-        $request = $this->get('request');
-        
-        // Si l'utilisateur soumet le formulaire
-        if ('POST' == $request->getMethod()) {
-            
-            // On bind les données du form
-            $form->handleRequest($request);
-
-            //si le formulaire est valide
-            if ($form->isValid()) {
-                //test ajout ou edition
-                $new = is_null($glossaire->getId());
-
-                //On utilise notre Manager pour gérer la sauvegarde de l'objet
-                $this->get('hopitalnumerique_glossaire.manager.glossaire')->save($glossaire);
-                
-                // On envoi une 'flash' pour indiquer à l'utilisateur que l'entité est ajoutée
-                $this->get('session')->getFlashBag()->add( ($new ? 'success' : 'info') , 'Glossaire ' . ($new ? 'ajouté.' : 'mis à jour.') ); 
-                
-                //on redirige vers la page index ou la page edit selon le bouton utilisé
-                $do = $request->request->get('do');
-                return $this->redirect( ($do == 'save-close' ? $this->generateUrl('hopitalnumerique_glossaire_glossaire') : $this->generateUrl('hopitalnumerique_glossaire_glossaire_edit', array( 'id' => $glossaire->getId() ) ) ) );
-            }
-        }
-
-        return $this->render( $view , array(
-            'form'      => $form->createView(),
-            'glossaire' => $glossaire
-        ));
     }
 }
