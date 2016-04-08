@@ -56,7 +56,6 @@ HopitalNumeriqueInterventionBundle_InterventionDemande_Formulaire.initChamps = f
         }
     });
     $('#hopitalnumerique_interventionbundle_interventiondemande_admin_ambassadeur').select2();
-    $('#hopitalnumerique_interventionbundle_interventiondemande_admin_referent').select2();
 };
 
 

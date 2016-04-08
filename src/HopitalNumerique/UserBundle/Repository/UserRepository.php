@@ -378,6 +378,26 @@ class UserRepository extends EntityRepository
         return $this->findByRole(array(Role::$ROLE_ES_LABEL, Role::$ROLE_ENREGISTRE_LABEL), $criteres);
     }
     /**
+     * Retourne une liste d'utilisateurs Admins.
+     *
+     * @param array $criteres Filtres à appliquer sur la liste
+     * @return \HopitalNumerique\UserBundle\Entity\User[] La liste des utilisateurs
+     */
+    public function getAdmins(array $criteres = array())
+    {
+        return $this->findByRole(array(Role::$ROLE_ADMIN_HN_LABEL, Role::$ROLE_ADMIN_LABEL), $criteres);
+    }
+    /**
+     * Retourne une liste d'utilisateurs Cmsi
+     *
+     * @param array $criteres Filtres à appliquer sur la liste
+     * @return \HopitalNumerique\UserBundle\Entity\User[] La liste des utilisateurs
+     */
+    public function getcmsis(array $criteres = array())
+    {
+        return $this->findByRole(array(Role::$ROLE_CMSI_LABEL), $criteres);
+    }
+    /**
      * Retourne une liste d'utilisateurs en fonction d'un rôle.
      *
      * @param string|array $role Label(s) du(es) rôle(s) sur lequel(lesquels) filtrer

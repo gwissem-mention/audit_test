@@ -123,7 +123,7 @@ class AdminType extends InterventionDemandeType
                 'choices'  => $this->formUserManager->getReferentsChoices(),
                 'class'    => 'HopitalNumerique\UserBundle\Entity\User',
                 'label'    => 'Demandeur',
-                'property' => 'appellation',
+                'property' => 'prenomNom',
                 'required' => true
             ))
             ->add('objets', 'entity', array(
