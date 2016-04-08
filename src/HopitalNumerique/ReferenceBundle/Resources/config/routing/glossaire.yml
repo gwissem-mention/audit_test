@@ -1,6 +1,11 @@
-hopitalnumerique_reference_glossaire_index:
+hopitalnumerique_reference_glossaire_list:
     pattern: '/glossaire'
-    defaults: { _controller: 'HopitalNumeriqueReferenceBundle:Glossaire:index' }
+    defaults: { _controller: 'HopitalNumeriqueReferenceBundle:Glossaire:list' }
+    methods: 'get'
+
+hopitalnumerique_reference_glossaire_list_full:
+    pattern: '/glossaire/complet'
+    defaults: { _controller: 'HopitalNumeriqueReferenceBundle:Glossaire:listFull' }
     methods: 'get'
 
 hopitalnumerique_reference_glossaire_migre:

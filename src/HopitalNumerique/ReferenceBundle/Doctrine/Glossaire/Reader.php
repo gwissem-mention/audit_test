@@ -26,6 +26,22 @@ class Reader
 
 
     /**
+     * Retourne le glossaire complet.
+     *
+     * @return array<\HopitalNumerique\ReferenceBundle\Entity\Reference> Glossaire
+     */
+    public function getGlossaireGroupedByLetter()
+    {
+        $glossaireReferences = $this->referenceManager->findBy([
+            'inGlossaire' => true,
+            'etat' => $this->referenceManager->getEtatActif()
+        ]);
+        usort($glossaireReferences, array($this, 'order'));
+
+        return $this->groupGlossaireByLetter($glossaireReferences);
+    }
+
+    /**
      * Retourne le glossaire selon un domaine.
      *
      * @param \HopitalNumerique\DomaineBundle\Entity\Domaine $domaine Domaine

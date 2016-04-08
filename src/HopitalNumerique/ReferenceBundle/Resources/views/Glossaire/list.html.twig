@@ -1,0 +1,76 @@
+{% extends 'HopitalNumeriqueCoreBundle:Templates:' ~ templateCurrentId ~ '/layout.html.twig' %}
+
+{% block stylesheets %}
+    {{parent()}}
+    {% stylesheets output="compiled/hopitalnumerique-reference-glossaire-index.css" filter="cssrewrite, ?yui_css" 
+        'bundles/hopitalnumeriquereference/css/glossaire.css'
+    %}
+        <link rel="stylesheet" href="{{ asset_url }}">
+    {% endstylesheets %}
+{% endblock %}
+
+{% block body %}
+    <div class="glossaire">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="row">
+                    <div class="col-md-4">
+                        <p class="text-muted">Sauf indication contraire, les définitions apportées sont issues des productions ANAP.</p>
+                    </div>
+                    <div class="col-md-4">
+                        <a class="btn btn-success" href="{{ path('hopitalnumerique_reference_glossaire_list_full') }}"><i class="fa fa-search-plus"></i> &nbsp; Étendre la recherche au glossaire de l'Anap</a>
+                    </div>
+                    <div class="col-md-4">
+                        <form>
+                            <div class="input-group">
+                                <span class="input-group-addon"><i class="fa fa-search"></i></span>
+                                <input type="text" name="recherche_textuelle" id="recherche_textuelle" class="form-control">
+                                <span class="input-group-btn">
+                                    <button class="btn btn-success" type="button"><i class="fa fa-check"></i></button>
+                                </span>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="sommaire">
+            <div class="row">
+                <div class="col-md-2">
+                    <h1 class="violet">Glossaire</h1>
+                </div>
+                <div class="col-md-10">
+                    <ul class="list-inline">
+                        {%- for firstLetter, references in glossaire -%}
+                            {%- if ('#' != firstLetter or references|length > 0) -%}
+                                <li>
+                                    {%- if (references|length > 0) -%}
+                                        <a href="#lettre-{{ firstLetter }}">{{ firstLetter }}</a>
+                                    {%- else -%}
+                                        <span>{{ firstLetter }}</span>
+                                    {%- endif -%}
+                                </li>
+                            {%- endif -%}
+                        {%- endfor -%}
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="elements">
+            {%- for firstLetter, references in glossaire -%}
+                {%- if (references|length > 0) -%}
+                    <h2 class="violet" id="lettre-{{ firstLetter }}">{{ firstLetter }}</h2>
+                    <dl>
+                        {%- for reference in references -%}
+                            <dt>{{ reference.sigleForGlossaire }}</dt>
+                            <dd>{{ reference.descriptionCourte }}</dd>
+                        {%- endfor -%}
+                    </dl>
+                {%- endif -%}
+            {%- endfor -%}
+        </div>
+
+    </div>
+{% endblock %}

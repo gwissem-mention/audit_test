@@ -10,13 +10,25 @@ use Symfony\Component\HttpFoundation\Response;
 class GlossaireController extends Controller
 {
     /**
-     * Liste du glossaire.
+     * Liste du glossaire du domaine courant.
      */
-    public function indexAction()
+    public function listAction()
     {
         $glossaire = $this->container->get('hopitalnumerique_reference.doctrine.glossaire.reader')->getGlossaireGroupedByLetterByDomaine($this->container->get('hopitalnumerique_domaine.dependency_injection.current_domaine')->get());
 
-        return $this->render('HopitalNumeriqueReferenceBundle:Glossaire:index.html.twig', [
+        return $this->render('HopitalNumeriqueReferenceBundle:Glossaire:list.html.twig', [
+            'glossaire' => $glossaire
+        ]);
+    }
+
+    /**
+     * Liste du glossaire complet.
+     */
+    public function listFullAction()
+    {
+        $glossaire = $this->container->get('hopitalnumerique_reference.doctrine.glossaire.reader')->getGlossaireGroupedByLetter();
+
+        return $this->render('HopitalNumeriqueReferenceBundle:Glossaire:list.html.twig', [
             'glossaire' => $glossaire
         ]);
     }
