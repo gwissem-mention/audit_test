@@ -66,6 +66,7 @@ assetic:
                 - 'bundles/hopitalnumeriquecore/js/script.js'
                 - 'bundles/hopitalnumeriquecore/js/recherche.js'
                 - 'bundles/nodevoadmin/plugins/nodevoLoader/nodevoLoader.js'
+                - '%kernel.root_dir%/Resources/lib/Highlight.js'
         #-->
         #JS
         bbcode_js: 

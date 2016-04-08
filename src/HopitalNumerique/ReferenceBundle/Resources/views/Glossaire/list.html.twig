@@ -1,12 +1,21 @@
 {% extends 'HopitalNumeriqueCoreBundle:Templates:' ~ templateCurrentId ~ '/layout.html.twig' %}
 
 {% block stylesheets %}
-    {{parent()}}
+    {{ parent() }}
     {% stylesheets output="compiled/hopitalnumerique-reference-glossaire-index.css" filter="cssrewrite, ?yui_css" 
         'bundles/hopitalnumeriquereference/css/glossaire.css'
     %}
         <link rel="stylesheet" href="{{ asset_url }}">
     {% endstylesheets %}
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    {% javascripts output="compiled/hopitalnumerique-reference-glossaire-index.js"
+        'bundles/hopitalnumeriquereference/js/Glossaire.js'
+    %}
+        <script type="text/javascript" src="{{ asset_url }}"></script>
+    {% endjavascripts %}
 {% endblock %}
 
 {% block body %}
@@ -21,12 +30,12 @@
                         <a class="btn btn-success" href="{{ path('hopitalnumerique_reference_glossaire_list_full') }}"><i class="fa fa-search-plus"></i> &nbsp; Étendre la recherche au glossaire de l'Anap</a>
                     </div>
                     <div class="col-md-4">
-                        <form>
+                        <form id="glossaire-recherche-form">
                             <div class="input-group">
                                 <span class="input-group-addon"><i class="fa fa-search"></i></span>
-                                <input type="text" name="recherche_textuelle" id="recherche_textuelle" class="form-control">
+                                <input type="text" name="glossaire_recherche" id="glossaire-recherche" placeholder="Rechercher" class="form-control">
                                 <span class="input-group-btn">
-                                    <button class="btn btn-success" type="button"><i class="fa fa-check"></i></button>
+                                    <button class="btn btn-success" type="submit"><i class="fa fa-check"></i></button>
                                 </span>
                             </div>
                         </form>
