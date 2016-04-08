@@ -29,21 +29,4 @@ class GlossaireRepository extends EntityRepository
             
         return $qb;
     }
-
-    /**
-     * Récupération de tout les glossaires ayant un domaine
-     *
-     * @return [type]
-     */
-    public function getAllGlossaireDomaineNotNull()
-    {
-        $qb = $this->_em->createQueryBuilder();
-        $qb->select('glo')
-            ->from('HopitalNumeriqueGlossaireBundle:Glossaire', 'glo')
-            ->leftJoin('glo.domaines', 'domaine')
-            ->where('domaine.id IS NOT NULL')
-            ->orderBy('domaine.id');
-            
-        return $qb;
-    }
 }

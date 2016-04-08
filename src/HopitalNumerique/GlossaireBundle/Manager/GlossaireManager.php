@@ -58,55 +58,6 @@ class GlossaireManager extends BaseManager
     }
 
     /**
-     * Retourne le tableau du glossaire
-     *
-     * @param  int $domaineId Domaine courrant
-     *
-     * @return array
-     */
-    public function findGlossaireTable($domaineId)
-    {
-        $glossaires = $this->getRepository()->getAllGlossaireDomaineNotNull()->getQuery()->getResult();
-
-        $datas = array();
-        foreach($glossaires as $one)
-        {
-            if( $one->getEtat()->getId() == 3)
-            {
-                $firstL = substr( ucfirst($one->getMot()), 0, 1);
-                foreach ($one->getDomaines() as $domaineGlossaire) 
-                {
-                    if(!array_key_exists('all', $datas))
-                    {
-                        $datas['all'] = array();
-                    }
-                    
-                    $datas['all'][ $firstL ][ strtolower($one->getMot()) ] = $one;
-                    //Récupère que le domaine courant
-                    if($domaineGlossaire->getId() == $domaineId)
-                    {
-                        if(!array_key_exists($domaineGlossaire->getId(), $datas))
-                        {
-                            $datas[$domaineGlossaire->getId()] = array();
-                        }
-                        $datas[$domaineGlossaire->getId()][ $firstL ][ strtolower($one->getMot()) ] = $one;
-                    }
-                }
-            }
-        }
-
-        foreach($datas as &$domaine)
-        {
-            foreach ($domaine as &$data) 
-            {
-                ksort($data);
-            }
-        }
-
-        return $datas;
-    }
-
-    /**
      * Parse la liste des publications à la recherche de mots du glossaires
      *
      * @param array $objets Liste des objets

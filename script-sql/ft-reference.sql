@@ -26,3 +26,8 @@ INSERT INTO `core_menu_item` (`itm_id`, `itm_parent`, `mnu_menu`, `itm_name`, `i
 
 # Courriel de recommandation
 INSERT INTO `core_mail` (`mail_id`, `mail_objet`, `mail_description`, `mail_expediteur_mail`, `mail_expediteur_name`, `mail_body`, `mail_params`, `mail_notification_region_referent`) VALUES (63, 'Recommandation', 'Recommandation', '', '', 'Bonjour, Je te recommande cette page : %url. A+.', '', '0');
+
+#<-- Glossaire
+# Menu Glossaire en pied de page
+UPDATE `core_menu_item` SET `itm_route` = 'hopitalnumerique_reference_glossaire_list' WHERE `core_menu_item`.`itm_id` = 186;
+#-->
