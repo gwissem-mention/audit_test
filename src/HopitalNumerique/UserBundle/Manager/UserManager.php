@@ -269,7 +269,7 @@ class UserManager extends BaseManager
      * @param array $criteres Filtres à appliquer sur la liste
      * @return \HopitalNumerique\UserBundle\Entity\User|null Un CMSI si trouvé, sinon NIL
      */
-    public function getCmsi(array $criteres)
+    public function getCmsi(array $criteres = array())
     {
         return $this->getRepository()->getCmsi($criteres);
     }
@@ -302,6 +302,29 @@ class UserManager extends BaseManager
     public function getESAndEnregistres(array $criteres = array())
     {
         return $this->getRepository()->getESAndEnregistres($criteres);
+    }
+
+    /**
+     * Retourne une liste d'utilisateurs Admin.
+     *
+     * @param array $criteres Filtres à appliquer sur la liste
+     * @return \HopitalNumerique\UserBundle\Entity\User[] La liste des utilisateurs
+     */
+    public function getAdmins(array $criteres = array())
+    {
+        return $this->getRepository()->getAdmins($criteres);
+    }
+
+
+    /**
+     * Retourne une liste d'utilisateurs CMSI
+     *
+     * @param array $criteres Filtres à appliquer sur la liste
+     * @return \HopitalNumerique\UserBundle\Entity\User[] La liste des utilisateurs
+     */
+    public function getCMSIs(array $criteres = array())
+    {
+        return $this->getRepository()->getCmsis($criteres);
     }
 
     /**

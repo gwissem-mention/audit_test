@@ -57,21 +57,20 @@ class AdminType extends InterventionDemandeType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $this->interventionDemande = $options['interventionDemande'];
-        
+
         $builder
+            ->add('dateCreation', 'text', array(
+                'label' => 'Date de création de la demande',
+                'mapped' => false,
+                'data' => $this->interventionDemande->getDateCreation()->format('d/m/Y'),
+                'required' => false,
+                'read_only' => true
+            ))
             ->add('interventionInitiateur', 'entity', array(
                 'choices' => $this->formInterventionInitiateurManager->getInterventionInitiateursChoices(),
                 'class' => 'HopitalNumerique\InterventionBundle\Entity\InterventionInitiateur',
                 'property' => 'type',
                 'label' => 'Initiateur de la demande',
-                'required' => false,
-                'read_only' => true
-            ))
-            ->add('referent', 'text') // Initialisé correctement après l'appel de la méthode mère
-            ->add('dateCreation', 'text', array(
-                'label' => 'Date',
-                'mapped' => false,
-                'data' => $this->interventionDemande->getDateCreation()->format('d/m/Y'),
                 'required' => false,
                 'read_only' => true
             ))
@@ -82,7 +81,12 @@ class AdminType extends InterventionDemandeType
                 'label' => 'État actuel',
                 'required' => true,
                 'read_only' => false
-            ))
+            ));
+
+        parent::buildForm($builder, $options);
+
+        $builder
+            ->add('referent', 'text') // Initialisé correctement après l'appel de la méthode mère
             ->add('cmsi', 'text', array(
                 'label' => 'CMSI',
                 'mapped' => false,
@@ -92,29 +96,24 @@ class AdminType extends InterventionDemandeType
             ))
             ->add('ambassadeur', 'entity') // Initialisé correctement après l'appel de la méthode mère
             ->add('cmsiDateChoix', 'text', array(
-                'label' => 'Choix CMSI',
+                'label' => 'Date de refus ou acceptation CMSI',
                 'mapped' => false,
                 'data' => ($this->interventionDemande->getCmsiDateChoix() != null ? $this->interventionDemande->getCmsiDateChoix()->format('d/m/Y') : ''),
                 'required' => false,
                 'read_only' => true
             ))
             ->add('ambassadeurDateChoix', 'text', array(
-                'label' => 'Choix ambassadeur',
+                'label' => 'Date de refus ou acceptation ambassadeur',
                 'mapped' => false,
                 'data' => ($this->interventionDemande->getAmbassadeurDateChoix() != null ? $this->interventionDemande->getAmbassadeurDateChoix()->format('d/m/Y') : ''),
                 'required' => false,
                 'read_only' => true
             ))
-        ;
-
-        parent::buildForm($builder, $options);
-
-        $builder
-            ->add('referent', 'genemu_jqueryselect2_entity', array(
-                'choices'  => $this->userManager->findUsersByDomaine(1), // Les interventions ne concernent que HN
+            ->add('referent', 'entity', array(
+                'choices'  =>  $this->formUserManager->getReferentsChoices(),
                 'class'    => 'HopitalNumerique\UserBundle\Entity\User',
                 'label'    => 'Demandeur',
-                'property' => 'appellation',
+                'property' => 'prenomNom',
                 'required' => true
             ))
 
