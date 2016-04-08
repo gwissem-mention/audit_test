@@ -1,3 +1,8 @@
+hopitalnumerique_reference_glossaire_index:
+    pattern: '/glossaire'
+    defaults: { _controller: 'HopitalNumeriqueReferenceBundle:Glossaire:index' }
+    methods: 'get'
+
 hopitalnumerique_reference_glossaire_migre:
     pattern: '/admin/glossaire/migre/{token}'
     defaults: { _controller: 'HopitalNumeriqueReferenceBundle:Glossaire:migre' }

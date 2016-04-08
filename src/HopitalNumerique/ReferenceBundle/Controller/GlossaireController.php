@@ -10,6 +10,18 @@ use Symfony\Component\HttpFoundation\Response;
 class GlossaireController extends Controller
 {
     /**
+     * Liste du glossaire.
+     */
+    public function indexAction()
+    {
+        $glossaire = $this->container->get('hopitalnumerique_reference.doctrine.glossaire.reader')->getGlossaireGroupedByLetterByDomaine($this->container->get('hopitalnumerique_domaine.dependency_injection.current_domaine')->get());
+
+        return $this->render('HopitalNumeriqueReferenceBundle:Glossaire:index.html.twig', [
+            'glossaire' => $glossaire
+        ]);
+    }
+
+    /**
      * Migre l'ancien glossaire.
      * /admin/glossaire/migre/troispetitschapeaudepaillaisson
      */

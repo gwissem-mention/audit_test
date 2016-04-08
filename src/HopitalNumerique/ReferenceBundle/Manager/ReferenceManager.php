@@ -450,11 +450,22 @@ class ReferenceManager extends BaseManager
      * @param boolean                                               $parentable  Parentable
      * @param boolean                                               $reference   Reference
      * @param boolean                                               $inRecherche InRecherche ?
+     * @param boolean                                               $inGlossaire InGlossaire ?
      * @return array<\HopitalNumerique\ReferenceBundle\Entity\Reference> Références
      */
-    public function findByDomaines($domaines = null, $actif = null, $lock = null, $parentable = null, $reference = null, $inRecherche = null)
+    public function findByDomaines($domaines = null, $actif = null, $lock = null, $parentable = null, $reference = null, $inRecherche = null, $inGlossaire = null)
     {
-        return $this->getRepository()->findByDomaines($domaines, $actif, $lock, $parentable, $reference, $inRecherche);
+        return $this->getRepository()->findByDomaines($domaines, $actif, $lock, $parentable, $reference, $inRecherche, $inGlossaire);
+    }
+
+    /**
+     * Retourne l'état actif.
+     *
+     * @return \HopitalNumerique\ReferenceBundle\Entity\Reference Actif
+     */
+    public function getEtatActif()
+    {
+        return $this->findOneById(Reference::STATUT_ACTIF_ID);
     }
 
 

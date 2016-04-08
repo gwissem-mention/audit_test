@@ -104,7 +104,10 @@ class Migration
                 $etat = (Reference::STATUT_ACTIF_ID == $result['ref_statut'] ? self::$ETAT_ACTIF : (Reference::STATUT_INACTIF_ID == $result['ref_statut'] ? self::$ETAT_INACTIF : null));
                 $mot = trim($result['glo_mot']);
                 $intitule = trim($result['glo_intitule']);
-                $description = strip_tags($result['glo_description']);
+                $description = trim(strip_tags($result['glo_description']));
+                if ('' == $description) {
+                    $description = $intitule;
+                }
                 $sensitive = boolval($result['glo_sensitive']);
 
                 $glossaireData[$glossaireId] = [

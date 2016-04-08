@@ -1,0 +1,137 @@
+{% extends 'HopitalNumeriqueCoreBundle:Templates:' ~ templateCurrentId ~ '/layout.html.twig' %}
+
+{% block stylesheets %}
+    {{parent()}}
+    {% stylesheets output="compiled/hopitalnumerique-reference-glossaire-index.css" filter="cssrewrite, ?yui_css" 
+        'bundles/hopitalnumeriquereference/css/glossaire.css'
+    %}
+        <link rel="stylesheet" href="{{ asset_url }}">
+    {% endstylesheets %}
+{% endblock %}
+
+{% block body %}
+    <div class="glossaire">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="row">
+                    <div class="col-md-4">
+                        <p class="text-muted">Sauf indication contraire, les définitions apportées sont issues des productions ANAP.</p>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="btn btn-success"><i class="fa fa-search-plus"></i> &nbsp; Étendre la recherche au glossaire de l'Anap</div>
+                    </div>
+                    <div class="col-md-4">
+                        <form>
+                            <div class="input-group">
+                                <span class="input-group-addon"><i class="fa fa-search"></i></span>
+                                <input type="text" name="recherche_textuelle" id="recherche_textuelle" class="form-control">
+                                <span class="input-group-btn">
+                                    <button class="btn btn-success" type="button"><i class="fa fa-check"></i></button>
+                                </span>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="sommaire">
+            <div class="row">
+                <div class="col-md-2">
+                    <h1 class="violet">Glossaire</h1>
+                </div>
+                <div class="col-md-10">
+                    <ul class="list-inline">
+                        {%- for firstLetter, references in glossaire -%}
+                            {%- if ('#' != firstLetter or references|length > 0) -%}
+                                <li>
+                                    {%- if (references|length > 0) -%}
+                                        <a href="#lettre-{{ firstLetter }}">{{ firstLetter }}</a>
+                                    {%- else -%}
+                                        <span>{{ firstLetter }}</span>
+                                    {%- endif -%}
+                                </li>
+                            {%- endif -%}
+                        {%- endfor -%}
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="elements">
+            {%- for firstLetter, references in glossaire -%}
+                {%- if (references|length > 0) -%}
+                    <h2 class="violet" id="lettre-{{ firstLetter }}">{{ firstLetter }}</h2>
+                    <dl>
+                        {%- for reference in references -%}
+                            <dt>{{ reference.sigleForGlossaire }}</dt>
+                            <dd>{{ reference.descriptionCourte }}</dd>
+                        {%- endfor -%}
+                    </dl>
+                {%- endif -%}
+            {%- endfor -%}
+        </div>
+
+{#
+        <div class="row">
+            <div class="col-md-12">
+                
+
+                    {% for key,datas in glossaire %}
+                    <div>
+                        <div class="alphabet">
+                            {% for letter in 'a'|upper..'z'|upper %}
+                                {% if letter in datas|keys %}
+                                    <a href="#{{letter}}">{{letter}}</a>
+                                {% else %}
+                                    <p>{{letter}}</p>
+                                {% endif %}
+                            {% endfor %}
+                        </div>
+
+                        <div class="clearfix"></div>
+
+                        <div class="liste">
+                            {% for letter in 'a'|upper..'z'|upper %}
+                                {% if letter in datas|keys %}
+                                    {% set glossaires = datas[letter] %}
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <h2 class="{{ cycle(['rose', 'violet'], loop.index) }}" id="{{letter}}">{{letter}}</h2>
+                                            <div class="sep"></div>
+                                            <div class="elements">
+                                                {% for element in glossaires %}
+                                                    <div class="row" id="{{element.mot|minifieMoi}}">
+                                                        <div class="col-md-12">
+                                                            <p class="titre">
+                                                                {% if element.intitule %}
+                                                                    <strong>{{ element.mot ~ ' : '}} </strong> {{  element.intitule }}
+                                                                {% else %}
+                                                                    <strong>{{ element.mot }}</strong>
+                                                                {% endif %}
+                                                            </p>
+                                                            <p class="desc">
+                                                                {{ element.description|raw|nl2br }}
+                                                            </p>
+                                                        </div>
+                                                    </div>
+                                                    <div class="sep"></div>
+                                                {% endfor %}
+                                            </div>
+                                        </div>
+                                    </div>
+                                {% endif %}
+                            {% endfor %}
+                        </div>
+                    </div>
+                {% else %}
+                    <p>- Aucun élément à afficher -</p>
+                {% endfor %}
+
+            </div>
+        </div>
+#}
+                
+                
+    </div>
+{% endblock %}

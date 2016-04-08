@@ -1081,4 +1081,14 @@ class Reference
     {
         return ('' != $this->referenceLibelle ? $this->referenceLibelle : $this->libelle);
     }
+
+    /**
+     * Retourne le sigle pour le glossaire.
+     *
+     * @return string Sigle
+     */
+    public function getSigleForGlossaire()
+    {
+        return (null !== $this->sigle ? $this->sigle : (null !== $this->glossaireLibelle ? $this->glossaireLibelle : $this->libelle));
+    }
 }
