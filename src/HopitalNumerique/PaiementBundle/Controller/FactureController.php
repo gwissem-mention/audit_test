@@ -173,7 +173,7 @@ class FactureController extends Controller
     {
         if (!$facture->hasBeenCanceled()) {
             $this->container->get('hopitalnumerique_paiement.manager.facture')->cancel($facture);
-            $this->addFlash('success', 'Facture annulée.');
+            $this->addFlash('success', 'Facture Abandonnée.');
         }
 
         return $this->redirect($this->generateUrl('hopitalnumerique_paiement_facture'));
