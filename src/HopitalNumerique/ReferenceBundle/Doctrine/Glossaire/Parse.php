@@ -51,16 +51,6 @@ class Parse
      */
     private static $GLOSSAIRE_REFERENCES_GROUPED_BY_DOMAINE_ID = null;
 
-    /**
-     * @var array<\HopitalNumerique\ObjetBundle\Entity\Objet> Objets
-     */
-    private static $OBJETS = null;
-
-    /**
-     * @var array<\HopitalNumerique\ObjetBundle\Entity\Contenu> Contenus
-     */
-    private static $CONTENUS = null;
-
 
     /**
      * Constructeur.
@@ -81,11 +71,6 @@ class Parse
     private function init()
     {
         $this->initGlossaire();
-
-        self::$OBJETS = $this->objetManager->findBy([
-            'etat' => $this->referenceManager->getEtatActif()
-        ]);
-        self::$CONTENUS = $this->contenuManager->findAll();
     }
 
     /**
@@ -93,12 +78,14 @@ class Parse
      */
     private function initGlossaire()
     {
-        self::$GLOSSAIRE_REFERENCES_GROUPED_BY_DOMAINE_ID = [];
+        if (null === self::$GLOSSAIRE_REFERENCES_GROUPED_BY_DOMAINE_ID) {
+            self::$GLOSSAIRE_REFERENCES_GROUPED_BY_DOMAINE_ID = [];
 
-        foreach ($this->domaineManager->findAll() as $domaine) {
-            $glossaireReferences = $this->referenceManager->findByDomaines([$domaine], true, null, null, null, null, true);
-            usort($glossaireReferences, [$this, 'sortGlossaireReferences']);
-            self::$GLOSSAIRE_REFERENCES_GROUPED_BY_DOMAINE_ID[$domaine->getId()] = $glossaireReferences;
+            foreach ($this->domaineManager->findAll() as $domaine) {
+                $glossaireReferences = $this->referenceManager->findByDomaines([$domaine], true, null, null, null, null, true);
+                usort($glossaireReferences, [$this, 'sortGlossaireReferences']);
+                self::$GLOSSAIRE_REFERENCES_GROUPED_BY_DOMAINE_ID[$domaine->getId()] = $glossaireReferences;
+            }
         }
     }
 
@@ -117,20 +104,24 @@ class Parse
     /**
      * Parse toutes les publications.
      */
-    public function execute()
+    public function parseAndSaveAll()
     {
-        $this->init();
-
-        $this->parseAndSaveObjets();
-        $this->parseAndSaveContenus();
+        $this->parseAndSaveObjets($this->objetManager->findBy([
+            'etat' => $this->referenceManager->getEtatActif()
+        ]));
+        $this->parseAndSaveContenus($this->contenuManager->findAll());
     }
 
     /**
      * Parse et sauvegarde le glossaire des objets.
+     *
+     * @param array<\HopitalNumerique\ObjetBundle\Entity\Objet> Objets
      */
-    private function parseAndSaveObjets()
+    private function parseAndSaveObjets($objets)
     {
-        foreach (self::$OBJETS as $objet) {
+        $this->init();
+
+        foreach ($objets as $objet) {
             foreach ($this->entity->getDomainesByEntity($objet) as $domaine) {
                 $foundSigles = $this->getFoundSiglesByText(self::$GLOSSAIRE_REFERENCES_GROUPED_BY_DOMAINE_ID[$domaine->getId()], strip_tags($objet->getResume()).' '.strip_tags($objet->getSynthese()));
                 $this->saveEntityHasGlossaire(Entity::ENTITY_TYPE_PUBLICATION, $objet->getId(), $domaine, $foundSigles);
@@ -140,14 +131,37 @@ class Parse
 
     /**
      * Parse et sauvegarde le glossaire des contenus.
+     *
+     * @param array<\HopitalNumerique\ObjetBundle\Entity\Contenu> Contenus
      */
-    private function parseAndSaveContenus()
+    private function parseAndSaveContenus($contenus)
     {
-        foreach (self::$CONTENUS as $contenu) {
+        $this->init();
+
+        foreach ($contenus as $contenu) {
             foreach ($this->entity->getDomainesByEntity($contenu) as $domaine) {
                 $foundSigles = $this->getFoundSiglesByText(self::$GLOSSAIRE_REFERENCES_GROUPED_BY_DOMAINE_ID[$domaine->getId()], strip_tags($contenu->getContenu()));
-                $this->saveEntityHasGlossaire(Entity::ENTITY_TYPE_PUBLICATION, $contenu->getId(), $domaine, $foundSigles);
+                $this->saveEntityHasGlossaire(Entity::ENTITY_TYPE_INFRADOC, $contenu->getId(), $domaine, $foundSigles);
             }
+        }
+    }
+
+    /**
+     * Parse et enregistre le glossaire de l'entité.
+     *
+     * @param objet $entity Entité
+     */
+    public function parseAndSaveEntity($entity)
+    {
+        switch ($this->entity->getEntityType($entity)) {
+            case Entity::ENTITY_TYPE_PUBLICATION:
+                $this->parseAndSaveObjets([$entity]);
+                break;
+            case Entity::ENTITY_TYPE_INFRADOC:
+                $this->parseAndSaveContenus([$entity]);
+                break;
+            default:
+                throw new \Exception('Entité non parsable pour le glossaire.');
         }
     }
 
@@ -178,7 +192,7 @@ class Parse
             }
         }
 
-        return $foundSigles;
+        return array_unique($foundSigles);
     }
 
     /**

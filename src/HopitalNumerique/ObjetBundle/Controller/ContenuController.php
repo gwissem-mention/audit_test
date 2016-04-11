@@ -291,9 +291,7 @@ class ContenuController extends Controller
             //save
             $this->get('hopitalnumerique_objet.manager.contenu')->save($contenu);
 
-            //reload glossaire stuff
-            //$this->get('hopitalnumerique_glossaire.manager.glossaire')->parsePublications( array(), array($contenu) );
-            $this->getDoctrine()->getManager()->flush();
+            $this->get('hopitalnumerique_reference.doctrine.glossaire.parse')->parseAndSaveEntity($contenu);
 
             return new Response('{"success":true, "titre" : "'.$titre.'"}', 200);
         }

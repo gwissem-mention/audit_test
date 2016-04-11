@@ -54,7 +54,7 @@ class GlossaireController extends Controller
     public function parseAction()
     {
         set_time_limit(0);
-        $this->container->get('hopitalnumerique_reference.doctrine.glossaire.parse')->execute();
+        $this->container->get('hopitalnumerique_reference.doctrine.glossaire.parse')->parseAndSaveAll();
 
         return new Response('OK');
     }
