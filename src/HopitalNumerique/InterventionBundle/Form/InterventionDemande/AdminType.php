@@ -77,17 +77,7 @@ class AdminType extends InterventionDemandeType
                 'required' => true,
                 'read_only' => true,
                 'disabled' => true
-            ))
-            ->add('interventionType', 'entity', array(
-                'choices'     => $this->formInterventionDemandeManager->getInterventionTypesChoices(),
-                'class'       => 'HopitalNumerique\ReferenceBundle\Entity\Reference',
-                'property'    => 'libelle',
-                'label'       => 'Type d\'intervention souhaitée',
-                'empty_value' => '-',
-                'required'    => true,
-                'attr'        => array('class' => $this->_constraints['interventionType']['class'] )
-            ))
-        ;
+            ));
         parent::buildForm($builder, $options);
         $builder
             ->add('region', 'entity', array(
@@ -105,7 +95,7 @@ class AdminType extends InterventionDemandeType
                 'class' => 'HopitalNumerique\EtablissementBundle\Entity\Etablissement',
                 'property' => 'nom',
                 'multiple' => true,
-                'label' => 'Rattacher des établissements à ma demande, parmi',
+                'label' => 'Rattacher d\'autres établissements à ma demande, parmi ',
                 'required' => false,
                 'attr' => array('class' => 'hopitalnumerique_interventionbundle_interventiondemande_etablissements')
             ))
@@ -123,7 +113,7 @@ class AdminType extends InterventionDemandeType
                 'choices'  => $this->formUserManager->getReferentsChoices(),
                 'class'    => 'HopitalNumerique\UserBundle\Entity\User',
                 'label'    => 'Demandeur',
-                'property' => 'prenomNom',
+                'property' => 'nomPrenom',
                 'required' => true
             ))
             ->add('objets', 'entity', array(
