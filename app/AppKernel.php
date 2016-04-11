@@ -62,7 +62,6 @@ class AppKernel extends Kernel
             new HopitalNumerique\AutodiagBundle\HopitalNumeriqueAutodiagBundle(),
             new HopitalNumerique\ForumBundle\HopitalNumeriqueForumBundle(),
             new HopitalNumerique\FlashBundle\HopitalNumeriqueFlashBundle(),
-            new HopitalNumerique\GlossaireBundle\HopitalNumeriqueGlossaireBundle(),
             new HopitalNumerique\DomaineBundle\HopitalNumeriqueDomaineBundle(),
             new HopitalNumerique\ExpertBundle\HopitalNumeriqueExpertBundle(),
             new HopitalNumerique\AideBundle\HopitalNumeriqueAideBundle(),

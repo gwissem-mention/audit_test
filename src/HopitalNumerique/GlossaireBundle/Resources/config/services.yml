@@ -1,7 +1,0 @@
-parameters:
-    hopitalnumerique_glossaire.manager.glossaire.class: HopitalNumerique\GlossaireBundle\Manager\GlossaireManager
-
-services:
-    hopitalnumerique_glossaire.manager.glossaire:
-        class: %hopitalnumerique_glossaire.manager.glossaire.class%
-        arguments: ["@doctrine.orm.entity_manager"]
