@@ -98,7 +98,7 @@
                     </div>
                 {% endif %}
                 <div class="row col-md-12">
-                    {{objet.resume|parsePublication(objet.glossaires)|raw}}
+                    {{objet.resume|parsePublication|glossaire_add(objet)|raw}}
                 </div>
                 
                 {% if 1000 == objet.id %} {# Article La communauté de pratique #}

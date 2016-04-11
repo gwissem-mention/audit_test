@@ -35,7 +35,7 @@
                 <div class="panel panel-default">
                     <div class="panel-heading closed">{{objet.titre}}</div>
                     <div class="panel-body" style="display:none;">
-                        {{objet.resume|parsePublication(objet.glossaires)|raw}}
+                        {{objet.resume|parsePublication|glossaire_add(objet)|raw}}
                     </div>
                 </div>
             </div>
