@@ -73,7 +73,7 @@
                     <h2 class="violet" id="lettre-{{ firstLetter }}">{{ firstLetter }}</h2>
                     <dl>
                         {%- for reference in references -%}
-                            <dt>{{ reference.sigleForGlossaire }}</dt>
+                            <dt id="glossaire_{{ reference.id }}">{{ reference.sigleForGlossaire }}</dt>
                             <dd>{{ reference.descriptionCourte }}</dd>
                         {%- endfor -%}
                     </dl>

@@ -183,65 +183,6 @@ class PublicationExtension extends \Twig_Extension
             }
         }
 
-        //Glossaire stuff
-        if( $glossaires ){
-            // Ontransforme en ASCII les texte à ne pas parser
-            $noPattern = '/(<a(.*)<\/a>)|(<img.*\/>)/iU';
-            preg_match_all($noPattern, $content, $noMatches);
-            if ($noMatches[0]) {
-                foreach ($noMatches[0] as $match) {
-                    $content = str_replace($match, $this->toascii($match), $content);
-                }
-            }
-
-            $words      = $this->getManagerGlossaire()->findAll();
-            $motsFounds = array();
-            foreach($words as $key => $word){
-                if( $word->getEtat()->getId() == 3 && in_array( trim(htmlentities($word->getMot())), $glossaires) )
-                    $motsFounds[ trim(htmlentities($word->getMot())) ] = array('intitule' => $word->getIntitule(), 'sensitive' => $word->isSensitive(), 'description' => $word->getDescription());
-            }
-
-            //tri des éléments les plus longs aux plus petits
-            array_multisort(
-                array_map(create_function('$v', 'return strlen($v);'), array_keys($motsFounds)), SORT_DESC,
-                $motsFounds
-            );
-
-            foreach($motsFounds as $mot => $data ){
-
-                // On converti la description en ASCII pour ne pas trouver un des mots du glossaire dans la description
-                $description = $this->toascii($data['description']);
-
-                //search word in content
-                $pattern = '/[\;\<\>\,\"\(\)\'\& ]{1,1}'.$mot.'[\;\<\>\,\"\(\)\'\.\& ]{1,1}/';
-                if( !$data['sensitive'] )
-                    $pattern .= 'i';
-
-                preg_match_all($pattern, $content, $matches);
-
-                //when founded
-                if( $matches[0] ){
-                    //prepare Replacement stuff
-                    $tool = new Chaine( html_entity_decode($mot) );
-
-                    //iterate over matches
-                    foreach($matches[0] as $match)
-                    {
-
-                        $html  = '¬<a target="_blank" href="'.$domaineUrl.'/glossaire#¬'. $tool->minifie() .'¬" style="text-decoration:none"><acronym class="glosstool" data-html="true" title="¬';
-                        $html .= ($data['intitule'] ? $this->toascii($data['intitule']) : $this->toascii(substr($match, 1, -1)) );
-                        $html .= (!empty($description)) ? ' : <br>' . $description  : '';
-                        $html .= '¬" >¬' . $this->toascii(substr($match, 1, -1)) . '</acronym></a>';
-
-                        $html    = substr($match, 0, 1) . $html . substr($match, -1);
-                        $content = str_replace($match, $html, $content);
-                    }
-                }
-            }
-
-            $content = str_replace('¬', '', $content);
-        }
-
         $content = html_entity_decode($content);
         //Remplace un caractère qui n'est pas un espace mais un 'caractère vide' en
         $content = strtr($content,array(" " =>" "));
