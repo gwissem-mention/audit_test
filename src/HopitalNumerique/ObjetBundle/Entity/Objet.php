@@ -242,13 +242,6 @@ class Objet implements RoutedItemInterface
     /**
      * @var array
      *
-     * @ORM\Column(name="obj_glossaires", type="array", options = {"comment" = "Mots du glossaire liés à l objet"})
-     */
-    private $glossaires;
-
-    /**
-     * @var array
-     *
      * @Gedmo\Versioned
      * @ORM\Column(name="obj_referencement", type="array", options = {"comment" = "Copie du référencement pour l historique"})
      */
@@ -406,7 +399,6 @@ class Objet implements RoutedItemInterface
         $this->vignette      = array();
         $this->autodiags     = array();
         $this->objets        = array();
-        $this->glossaires    = array();
         $this->referencement = array();
         $this->roles         = array();
         $this->types         = array();
@@ -976,48 +968,6 @@ class Objet implements RoutedItemInterface
     public function addAutodiag($autodiag)
     {
         $this->autodiags[] = $autodiag;
-        return $this;
-    }
-    
-    /**
-     * Get glossaires
-     *
-     * @return array $glossaires
-     */
-    public function getGlossaires()
-    {
-        return $this->glossaires;
-    }
-    
-    /**
-     * Set glossaires
-     *
-     * @param array $glossaires
-     */
-    public function setGlossaires(array $glossaires)
-    {
-        $this->glossaires = $glossaires;
-        return $this;
-    }
-
-    /**
-     * Remove glossaire
-     *
-     * @param string $glossaire
-     */
-    public function removeGlossaire($glossaire)
-    {
-        $this->glossaires->removeElement($glossaire);
-    }
-    
-    /**
-     * add glossaire
-     *
-     * @param string $glossaire
-     */
-    public function addGlossaire($glossaire)
-    {
-        $this->glossaires[] = $glossaire;
         return $this;
     }
 
