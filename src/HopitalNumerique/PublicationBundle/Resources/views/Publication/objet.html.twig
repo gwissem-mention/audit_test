@@ -146,7 +146,7 @@
             {% endif %}
             <div class="col-md-12" id="publication-resume">
 
-                {{contenu.contenu|parsePublication|glossaire_add(contenu)|raw}}
+                {{contenu.contenu|glossaire_add(contenu)|parsePublication|raw}}
 
             </div>
         {# Cas Objet #}
@@ -207,7 +207,7 @@
                         </div>
                         <div class="clearfix"></div>
                         <div class="col-md-12" id="publication-resume">
-                            {{objet.resume|parsePublication|glossaire_add(objet)|raw}}
+                            {{objet.resume|glossaire_add(objet)|parsePublication|raw}}
                         </div>
 
                         {% if objet.notes and canVote %}
@@ -319,7 +319,7 @@
                 {% endif %}
 
                 <div class="col-md-12" id="publication-resume">
-                    {{objet.resume|parsePublication|glossaire_add(objet)|raw}}
+                    {{objet.resume|glossaire_add(objet)|parsePublication|raw}}
                 </div>
             {% endif %}
         {% endif %}

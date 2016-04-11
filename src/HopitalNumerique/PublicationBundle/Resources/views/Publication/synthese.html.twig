@@ -87,7 +87,7 @@
 
             <div class="content">
                 {% if objet %}
-                    {{objet.synthese|parsePublication|glossaire_add(objet)|raw}}
+                    {{objet.synthese|glossaire_add(objet)|parsePublication|raw}}
                     <p class="copyright text-muted text-center">
                         © ANAP - {{domaineCurrent.nom}}<br />
                         Ces contenus extraits de la plateforme de l'ANAP <a href="www.monhopitalnumerique.fr">www.MonHopitalNumerique.fr</a> sont diffusés gratuitement. <br />
