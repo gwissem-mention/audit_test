@@ -3,6 +3,8 @@ namespace HopitalNumerique\ReferenceBundle\Doctrine\Glossaire;
 
 use HopitalNumerique\DomaineBundle\Entity\Domaine;
 use HopitalNumerique\ReferenceBundle\Entity\Reference;
+use HopitalNumerique\ReferenceBundle\DependencyInjection\Referencement\Entity;
+use HopitalNumerique\ReferenceBundle\Manager\EntityHasGlossaireManager;
 use HopitalNumerique\ReferenceBundle\Manager\ReferenceManager;
 
 /**
@@ -10,6 +12,16 @@ use HopitalNumerique\ReferenceBundle\Manager\ReferenceManager;
  */
 class Reader
 {
+    /**
+     * @var \HopitalNumerique\ReferenceBundle\DependencyInjection\Referencement\Entity Entity
+     */
+    private $entity;
+
+    /**
+     * @var \HopitalNumerique\ReferenceBundle\Manager\EntityHasGlossaireManager EntityHasGlossaireManager
+     */
+    private $entityHasGlossaireManager;
+
     /**
      * @var \HopitalNumerique\ReferenceBundle\Manager\ReferenceManager ReferenceManager
      */
@@ -19,8 +31,10 @@ class Reader
     /**
      * Constructeur.
      */
-    public function __construct(ReferenceManager $referenceManager)
+    public function __construct(Entity $entity, EntityHasGlossaireManager $entityHasGlossaireManager, ReferenceManager $referenceManager)
     {
+        $this->entity = $entity;
+        $this->entityHasGlossaireManager = $entityHasGlossaireManager;
         $this->referenceManager = $referenceManager;
     }
 
@@ -90,5 +104,28 @@ class Reader
     private function order(Reference $glossaireReference1, Reference $glossaireReference2)
     {
         return (strcmp($glossaireReference1->getSigleForGlossaire(), $glossaireReference2->getSigleForGlossaire()));
+    }
+
+
+    /**
+     * Retourne les références du glossaire pour une entité et un domaine.
+     *
+     * @param object                                         $entity  Entité
+     * @param \HopitalNumerique\DomaineBundle\Entity\Domaine $domaine Domaine
+     * @return array<\HopitalNumerique\ReferenceBundle\Entity\Reference> Références
+     */
+    public function getGlossaireReferencesByEntityAndDomaine($entity, Domaine $domaine)
+    {
+        $entityHasGlossaire = $this->entityHasGlossaireManager->findOneBy([
+            'entityType' => $this->entity->getEntityType($entity),
+            'entityId' => $this->entity->getEntityId($entity),
+            'domaine' => $domaine
+        ]);
+
+        if (null !== $entityHasGlossaire) {
+            return $this->referenceManager->findBy(['id' => $entityHasGlossaire->getReferences()]);
+        }
+
+        return [];
     }
 }

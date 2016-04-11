@@ -186,7 +186,7 @@ class Parse
 
             foreach ($sigleMatches[0] as $sigleMatch) {
                 if (!in_array($sigleMatch[1], $siglePositions)) {
-                    $foundSigles[] = $glossaireReference->getSigleHtmlForGlossaire();
+                    $foundSigles[] = $glossaireReference->getId();
                     $siglePositions[] = $sigleMatch[1];
                 }
             }

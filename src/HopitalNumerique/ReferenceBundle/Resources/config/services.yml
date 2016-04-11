@@ -1,23 +1,12 @@
 imports:
     - { resource: 'services/manager.yml' }
     - { resource: 'services/form.yml' }
+    - { resource: 'services/twig.yml' }
 
 services:
     hopitalnumerique_reference.grid.reference:
         class: 'HopitalNumerique\ReferenceBundle\Grid\ReferenceGrid'
         arguments: ["@service_container"]
-
-    hopitalnumerique.twig.ref_extension:
-        class: HopitalNumerique\ReferenceBundle\Twig\ReferenceExtension
-        arguments : ["@hopitalnumerique_reference.manager.reference"]
-        tags:
-            - { name: twig.extension }
-
-    hopitalnumerique.twig.extension.referencement:
-        class: 'HopitalNumerique\ReferenceBundle\Twig\ReferencementExtension'
-        arguments : ['@hopitalnumerique_domaine.dependency_injection.current_domaine', '@hopitalnumerique_reference.doctrine.referencement.note_reader', '@hopitalnumerique_reference.dependency_injection.referencement.entity']
-        tags:
-            - { name: 'twig.extension' }
 
     hopitalnumerique_reference.dependency_injection.referencement:
         class: 'HopitalNumerique\ReferenceBundle\DependencyInjection\Referencement'
@@ -41,7 +30,7 @@ services:
 
     hopitalnumerique_reference.doctrine.glossaire.reader:
         class: 'HopitalNumerique\ReferenceBundle\Doctrine\Glossaire\Reader'
-        arguments: ['@hopitalnumerique_reference.manager.reference']
+        arguments: ['@hopitalnumerique_reference.dependency_injection.referencement.entity', '@hopitalnumerique_reference.manager.entity_has_glossaire', '@hopitalnumerique_reference.manager.reference']
 
     hopitalnumerique_reference.doctrine.reference.domaine_udpater:
         class: 'HopitalNumerique\ReferenceBundle\Doctrine\Reference\DomaineUpdater'
