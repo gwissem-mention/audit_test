@@ -51,8 +51,12 @@ class FactureGrid extends Grid implements GridInterface
         $payedColumn->setSize( 60 );
         $this->addColonne( $payedColumn );
 
+        $etatColumn = new Column\BooleanColumn('annulee', 'Annulé');
+        $etatColumn->setSize( 60 );
+        $this->addColonne( $etatColumn );
         /* Colonnes invisibles */
         $this->addColonne( new Column\BlankColumn('dateCreation') );
+
     }
 
     /**
@@ -69,15 +73,34 @@ class FactureGrid extends Grid implements GridInterface
         $payeButton->setRouteParameters( array('id') );    
         $payeButton->setAttributes( array('class'=>'btn btn-green fa fa-money','title' => 'Payer') );
         $payeButton->manipulateRender(function($action, \APY\DataGridBundle\Grid\Row $row) {
-            return !$row->getField('payee') ? $action : null;
+            return (!$row->getField('payee') && !$row->getField('annulee')) ? $action : null;
+
         });
         $this->addActionButton( $payeButton );
-        
+
         $this->addActionButton( new Action\ShowButton( 'hopitalnumerique_paiement_facture_detail' ) );
+
+        // Bouton pour désannuler la facture, s'affiche que si la facture est annulée
+        $etatButton = new \APY\DataGridBundle\Grid\Action\RowAction('', 'hopitalnumerique_paiement_change_etat');
+        $etatButton->setRouteParameters( array('id') );
+        $etatButton->setAttributes( array('class'=>'btn btn-primary fa fa-check','title' => 'désannuler', 'onclick' => 'return confirm(\'Confirmer la désannulation de la facture ?\');'));
+        $etatButton->manipulateRender(function($action, \APY\DataGridBundle\Grid\Row $row) {
+            return $row->getField('annulee') ? $action : null;
+
+        });
+        $this->addActionButton( $etatButton );
+
+        // Bouton pour annuler la facture, s'affiche que si la facture n'est pas annulée
+        $annuleButton = new \APY\DataGridBundle\Grid\Action\RowAction('', 'hopitalnumerique_paiement_change_etat');
+        $annuleButton->setAttributes( array('class'=>'btn btn-warning fa fa-times','title' => 'Annuler', 'onclick' => 'return confirm(\'Confirmer l\\\'annulation de la facture ?\');'));
+        $annuleButton->manipulateRender(function($action, \APY\DataGridBundle\Grid\Row  $row) {
+            return $row->getField('annulee') ? null : $action ;
+        });
+        $this->addActionButton( $annuleButton );
 
         $cancelButton = new \APY\DataGridBundle\Grid\Action\RowAction('', 'hopitalnumerique_paiement_facture_cancel');
         $cancelButton->setRouteParameters(['id']);
-        $cancelButton->setAttributes(array('class'=>'btn btn-danger fa fa-times', 'title' => 'Annuler', 'onclick' => 'return confirm(\'Confirmer l\\\'annulation de la facture ?\');'));
+        $cancelButton->setAttributes(array('class'=>'btn btn-danger fa fa-times', 'title' => 'abandonnée', 'onclick' => 'return confirm(\'Confirmer l\\\'abandon de la facture ?\');'));
         $cancelButton->manipulateRender(function ($action, \APY\DataGridBundle\Grid\Row $row) {
             return (!$row->getEntity()->hasBeenCanceled() ? $action : null);
         });

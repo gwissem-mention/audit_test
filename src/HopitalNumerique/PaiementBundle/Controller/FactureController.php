@@ -35,6 +35,23 @@ class FactureController extends Controller
     }
 
     /**
+     * Annule la facture et redirige l'admin sur la vue liste
+     *
+     * @param Facture $facture L'objet Facture à annuler
+     */
+    public function etatAction( Facture $facture)
+    {
+        $etat = $this->get('hopitalnumerique_paiement.manager.facture')->changeEtat( $facture );
+        if($etat){
+            $this->get('session')->getFlashBag()->add( 'success', 'Facture annulée' );
+
+        } else {
+            $this->get('session')->getFlashBag()->add('success', 'Facture désannulée');
+        }
+        return $this->redirect( $this->generateUrl('hopitalnumerique_paiement_facture') );
+    }
+
+    /**
      * Affiche le détail de la facture
      *
      * @param Facture $facture L'objet Facture à afficher
