@@ -31,13 +31,17 @@ services:
         class: 'HopitalNumerique\ReferenceBundle\DependencyInjection\Reference\Tree'
         arguments: ['@hopitalnumerique_reference.manager.reference']
 
-    hopitalnumerique_reference.doctrine.glossaire.reader:
-        class: 'HopitalNumerique\ReferenceBundle\Doctrine\Glossaire\Reader'
-        arguments: ['@hopitalnumerique_reference.manager.reference']
-
     hopitalnumerique_reference.doctrine.glossaire.migration:
         class: 'HopitalNumerique\ReferenceBundle\Doctrine\Glossaire\Migration'
         arguments: ['@database_connection', '@hopitalnumerique_reference.manager.reference', '@hopitalnumerique_domaine.manager.domaine']
+
+    hopitalnumerique_reference.doctrine.glossaire.parse:
+        class: 'HopitalNumerique\ReferenceBundle\Doctrine\Glossaire\Parse'
+        arguments: ['@hopitalnumerique_reference.dependency_injection.referencement.entity', '@hopitalnumerique_reference.manager.entity_has_glossaire', '@hopitalnumerique_reference.manager.reference', '@hopitalnumerique_domaine.manager.domaine', '@hopitalnumerique_objet.manager.objet', '@hopitalnumerique_objet.manager.contenu']
+
+    hopitalnumerique_reference.doctrine.glossaire.reader:
+        class: 'HopitalNumerique\ReferenceBundle\Doctrine\Glossaire\Reader'
+        arguments: ['@hopitalnumerique_reference.manager.reference']
 
     hopitalnumerique_reference.doctrine.reference.domaine_udpater:
         class: 'HopitalNumerique\ReferenceBundle\Doctrine\Reference\DomaineUpdater'

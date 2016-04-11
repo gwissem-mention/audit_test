@@ -47,4 +47,15 @@ class GlossaireController extends Controller
 
         return new Response(':(');
     }
+
+    /**
+     * Parse toutes les publications.
+     */
+    public function parseAction()
+    {
+        set_time_limit(0);
+        $this->container->get('hopitalnumerique_reference.doctrine.glossaire.parse')->execute();
+
+        return new Response('OK');
+    }
 }

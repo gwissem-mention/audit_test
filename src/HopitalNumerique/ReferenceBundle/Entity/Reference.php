@@ -1091,4 +1091,14 @@ class Reference
     {
         return (null !== $this->sigle ? $this->sigle : (null !== $this->glossaireLibelle ? $this->glossaireLibelle : $this->libelle));
     }
+
+    /**
+     * Retourne le sigle encodé en HTML pour le glossaire.
+     *
+     * @return string HTML
+     */
+    public function getSigleHtmlForGlossaire()
+    {
+        return htmlentities($this->getSigleForGlossaire());
+    }
 }
