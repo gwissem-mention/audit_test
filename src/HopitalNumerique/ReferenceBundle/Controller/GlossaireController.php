@@ -1,6 +1,7 @@
 <?php
 namespace HopitalNumerique\ReferenceBundle\Controller;
 
+use HopitalNumerique\ReferenceBundle\Entity\Reference;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -57,5 +58,15 @@ class GlossaireController extends Controller
         $this->container->get('hopitalnumerique_reference.doctrine.glossaire.parse')->parseAndSaveAll();
 
         return new Response('OK');
+    }
+
+    /**
+     * Fenêtre d'un élément du glossaire.
+     */
+    public function popinAction(Reference $glossaireReference)
+    {
+        return $this->render('HopitalNumeriqueReferenceBundle:Glossaire:popin.html.twig', [
+            'glossaireReference' => $glossaireReference
+        ]);
     }
 }

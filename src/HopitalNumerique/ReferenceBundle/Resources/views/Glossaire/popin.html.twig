@@ -1,0 +1,9 @@
+{% extends 'HopitalNumeriqueCoreBundle::popup.html.twig' %}
+
+{% block title %}{{ glossaireReference.sigleForGlossaire }}{% endblock %}
+
+{% block body %}
+    {{ (glossaireReference.descriptionLongue is not empty ? glossaireReference.descriptionLongue : glossaireReference.descriptionCourte)|parsePublication|raw }}
+
+    <br><br><a>Rechercher les résultats correspondants</a>
+{% endblock %}

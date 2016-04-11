@@ -17,3 +17,10 @@ hopitalnumerique_reference_glossaire_parse:
     pattern: '/admin/glossaire/parse'
     defaults: { _controller: 'HopitalNumeriqueReferenceBundle:Glossaire:parse' }
     methods: 'get'
+
+hopitalnumerique_reference_glossaire_popin:
+    pattern: '/glossaire/popin/{glossaireReference}'
+    defaults: { _controller: 'HopitalNumeriqueReferenceBundle:Glossaire:popin' }
+    methods: 'get'
+    requirements:
+        glossaireReference: '\d+'
