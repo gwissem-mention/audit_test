@@ -465,7 +465,7 @@ class ObjetController extends Controller
                 $this->get('hopitalnumerique_objet.manager.objet')->unlock($objet);
 
                 //reload glossaire stuff
-                $this->get('hopitalnumerique_glossaire.manager.glossaire')->parsePublications( array($objet) );
+                //$this->get('hopitalnumerique_glossaire.manager.glossaire')->parsePublications( array($objet) );
                 $this->getDoctrine()->getManager()->flush();
 
                 // On envoi une 'flash' pour indiquer à l'utilisateur que l'entité est ajoutée

@@ -18,23 +18,4 @@ class GlossaireController extends Controller
 
         return $grid->render('HopitalNumeriqueGlossaireBundle:Glossaire:index.html.twig');
     }
-
-    /**
-     * Parse les publication à la recherche de mots du glossaire
-     *
-     * @return redirect
-     */
-    public function parsePublicationsAction()
-    {
-        $objets   = $this->get('hopitalnumerique_objet.manager.objet')->findAll();
-        $contenus = $this->get('hopitalnumerique_objet.manager.contenu')->findAll();
-        $this->get('hopitalnumerique_glossaire.manager.glossaire')->parsePublications( $objets, $contenus );
-
-        //save changes
-        $this->getDoctrine()->getManager()->flush();
-
-        $this->get('session')->getFlashBag()->add('info', 'Publications parsées avec succès.' );
-
-        return $this->redirect( $this->generateUrl('hopitalnumerique_glossaire_glossaire') );
-    }
 }
