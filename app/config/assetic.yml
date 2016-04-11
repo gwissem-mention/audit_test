@@ -36,7 +36,6 @@ assetic:
         - HopitalNumeriqueImportExcelBundle
         - HopitalNumeriqueForumBundle
         - HopitalNumeriqueFlashBundle
-        - HopitalNumeriqueGlossaireBundle
         - HopitalNumeriqueReportBundle
         - HopitalNumeriqueDomaineBundle
         - HopitalNumeriqueCommunautePratiqueBundle

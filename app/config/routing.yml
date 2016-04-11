@@ -145,10 +145,6 @@ hopital_numerique_flash:
     resource: "@HopitalNumeriqueFlashBundle/Resources/config/routing.yml"
     prefix:   /
 
-hopital_numerique_glossaire:
-    resource: "@HopitalNumeriqueGlossaireBundle/Resources/config/routing.yml"
-    prefix:   /
-
 hopital_numerique_communautepratique:
     resource: "@HopitalNumeriqueCommunautePratiqueBundle/Resources/config/routing.yml"
     prefix: /

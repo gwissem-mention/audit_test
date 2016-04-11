@@ -1,13 +1,7 @@
 parameters:
-parameters:
     hopitalnumerique_glossaire.manager.glossaire.class: HopitalNumerique\GlossaireBundle\Manager\GlossaireManager
-    hopitalnumerique_glossaire.grid.glossaire.class: HopitalNumerique\GlossaireBundle\Grid\GlossaireGrid
 
 services:
     hopitalnumerique_glossaire.manager.glossaire:
         class: %hopitalnumerique_glossaire.manager.glossaire.class%
-        arguments: ["@doctrine.orm.entity_manager", "@hopitalnumerique_user.manager.user"]
-
-    hopitalnumerique_glossaire.grid.glossaire:
-        class: %hopitalnumerique_glossaire.grid.glossaire.class%
-        arguments: ["@service_container"]
+        arguments: ["@doctrine.orm.entity_manager"]

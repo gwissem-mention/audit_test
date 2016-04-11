@@ -1,6 +1,0 @@
-#Admin
-hopitalnumerique_glossaire_glossaire:
-    pattern:  /admin/glossaire
-    defaults: { _controller: "HopitalNumeriqueGlossaireBundle:Glossaire:index" }
-    requirements: 
-        _method: GET|POST

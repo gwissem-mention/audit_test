@@ -12,7 +12,7 @@ use Nodevo\ToolsBundle\Validator\Constraints as Nodevo;
  * Glossaire
  *
  * @ORM\Table(name="hn_glossaire")
- * @ORM\Entity(repositoryClass="HopitalNumerique\GlossaireBundle\Repository\GlossaireRepository")
+ * @ORM\Entity()
  */
 class Glossaire
 {

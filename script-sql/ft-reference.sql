@@ -30,4 +30,9 @@ INSERT INTO `core_mail` (`mail_id`, `mail_objet`, `mail_description`, `mail_expe
 #<-- Glossaire
 # Menu Glossaire en pied de page
 UPDATE `core_menu_item` SET `itm_route` = 'hopitalnumerique_reference_glossaire_list' WHERE `core_menu_item`.`itm_id` = 186;
+
+# Suppr vieux glossaire
+DELETE FROM `core_menu_item` WHERE `itm_route` LIKE 'hopitalnumerique_glossaire_glossaire';
+DELETE FROM `core_acl` WHERE `res_id` = 41;
+DELETE FROM `core_ressource` WHERE `core_ressource`.`res_id` = 41;
 #-->
