@@ -12,6 +12,7 @@ use APY\DataGridBundle\Grid\Mapping as GRID;
  *
  * @ORM\Table(name="hn_recherche_recherche_parcours_gestion")
  * @ORM\Entity(repositoryClass="HopitalNumerique\RechercheParcoursBundle\Repository\RechercheParcoursGestionRepository")
+ * @ORM\HasLifecycleCallbacks()
  */
 class RechercheParcoursGestion
 {
@@ -190,6 +191,22 @@ class RechercheParcoursGestion
     }
 
     /**
+     * Retourne si l'entité est liée au domaine.
+     *
+     * @param \HopitalNumerique\DomaineBundle\Entity\Domaine $domaine Domaine
+     */
+    public function hasDomaine(\HopitalNumerique\DomaineBundle\Entity\Domaine $domaine)
+    {
+        foreach ($this->domaines as $domaineExistant) {
+            if ($domaineExistant->equals($domaine)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
      * Add referencesParentes
      *
      * @param \HopitalNumerique\ReferenceBundle\Entity\Reference $referencesParentes
@@ -351,5 +368,59 @@ class RechercheParcoursGestion
 
 
         return $name;
+    }
+
+
+    /**
+     * @ORM\PreUpdate()
+     */
+    public function preUpdate()
+    {
+        $this->refreshReferencesParentes();
+        $this->refreshReferencesVentilations();
+    }
+
+    /**
+     * Supprime les références n'appartenant pas aux domaines de l'entité.
+     */
+    private function refreshReferencesParentes()
+    {
+        foreach ($this->referencesParentes as $referenceParent) {
+            if (!$referenceParent->isAllDomaines()) {
+                $referenceHasDomaine = false;
+                foreach ($referenceParent->getDomaines() as $referenceDomaine) {
+                    if ($this->hasDomaine($referenceDomaine)) {
+                        $referenceHasDomaine = true;
+                        break;
+                    }
+                }
+
+                if (!$referenceHasDomaine) {
+                    $this->removeReferencesParente($referenceParent);
+                }
+            }
+        }
+    }
+
+    /**
+     * Supprime les références n'appartenant pas aux domaines de l'entité.
+     */
+    private function refreshReferencesVentilations()
+    {
+        foreach ($this->referencesVentilations as $referenceParent) {
+            if (!$referenceParent->isAllDomaines()) {
+                $referenceHasDomaine = false;
+                foreach ($referenceParent->getDomaines() as $referenceDomaine) {
+                    if ($this->hasDomaine($referenceDomaine)) {
+                        $referenceHasDomaine = true;
+                        break;
+                    }
+                }
+
+                if (!$referenceHasDomaine) {
+                    $this->removeReferencesVentilation($referenceParent);
+                }
+            }
+        }
     }
 }
