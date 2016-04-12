@@ -1065,7 +1065,7 @@ class UserController extends Controller
             'user'        => $user,
             'twigOptions' => $options,
             'options'     => $this->get('hopitalnumerique_user.gestion_affichage_onglet')->getOptions($user),
-            'domainesCommunsWithUser' => $this->container->get('hopitalnumerique_reference.dependency_injection.referencement.entity')->getDomainesCommunsWithUser($user, $this->getUser())
+            'domainesCommunsWithUser' => $this->container->get('hopitalnumerique_core.dependency_injection.entity')->getDomainesCommunsWithUser($user, $this->getUser())
         ));
     }
 }

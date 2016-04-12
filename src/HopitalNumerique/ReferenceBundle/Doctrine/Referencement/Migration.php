@@ -2,7 +2,7 @@
 namespace HopitalNumerique\ReferenceBundle\Doctrine\Referencement;
 
 use Doctrine\DBAL\Driver\Connection;
-use HopitalNumerique\ReferenceBundle\DependencyInjection\Referencement\Entity;
+use HopitalNumerique\CoreBundle\DependencyInjection\Entity;
 use HopitalNumerique\ReferenceBundle\Entity\Reference;
 use HopitalNumerique\ReferenceBundle\Manager\EntityHasReferenceManager;
 use Symfony\Bridge\Doctrine\RegistryInterface;

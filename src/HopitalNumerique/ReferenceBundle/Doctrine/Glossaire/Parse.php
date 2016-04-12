@@ -5,7 +5,7 @@ use HopitalNumerique\DomaineBundle\Entity\Domaine;
 use HopitalNumerique\DomaineBundle\Manager\DomaineManager;
 use HopitalNumerique\ObjetBundle\Manager\ContenuManager;
 use HopitalNumerique\ObjetBundle\Manager\ObjetManager;
-use HopitalNumerique\ReferenceBundle\DependencyInjection\Referencement\Entity;
+use HopitalNumerique\CoreBundle\DependencyInjection\Entity;
 use HopitalNumerique\ReferenceBundle\Entity\Reference;
 use HopitalNumerique\ReferenceBundle\Manager\EntityHasGlossaireManager;
 use HopitalNumerique\ReferenceBundle\Manager\ReferenceManager;
@@ -16,7 +16,7 @@ use HopitalNumerique\ReferenceBundle\Manager\ReferenceManager;
 class Parse
 {
     /**
-     * @var \HopitalNumerique\ReferenceBundle\DependencyInjection\Referencement\Entity Entity
+     * @var \HopitalNumerique\CoreBundle\DependencyInjection\Entity Entity
      */
     private $entity;
 

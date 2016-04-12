@@ -18,13 +18,13 @@ class ReferencementController extends Controller
      */
     public function popinAction($entityType, $entityId)
     {
-        $entity = $this->container->get('hopitalnumerique_reference.dependency_injection.referencement.entity')->getEntityByTypeAndId($entityType, $entityId);
+        $entity = $this->container->get('hopitalnumerique_core.dependency_injection.entity')->getEntityByTypeAndId($entityType, $entityId);
         if (null === $entity) {
             throw new \Exception('Entité non trouvée pour TYPE = "'.$entityType.'" et ID = "'.$entityId.'".');
         }
 
         $domaines = [];
-        foreach ($this->container->get('hopitalnumerique_reference.dependency_injection.referencement.entity')->getDomainesByEntity($entity) as $domaine) {
+        foreach ($this->container->get('hopitalnumerique_core.dependency_injection.entity')->getDomainesByEntity($entity) as $domaine) {
             if ($this->getUser()->hasDomaine($domaine)) {
                 $domaines[] = $domaine;
             }
@@ -40,7 +40,7 @@ class ReferencementController extends Controller
             'entityType' => $entityType,
             'entityId' => $entityId,
             'referencesTree' => $referencesTree,
-            'redirectionUrl' => $this->container->get('hopitalnumerique_reference.dependency_injection.referencement.entity')->getMangementUrlByEntity($entity)
+            'redirectionUrl' => $this->container->get('hopitalnumerique_core.dependency_injection.entity')->getMangementUrlByEntity($entity)
         ));
     }
 
@@ -57,7 +57,7 @@ class ReferencementController extends Controller
          */
         $entitiesHaveReferencesParameters = $request->request->get('entitiesHaveReferencesParameters');
 
-        $entity = $this->container->get('hopitalnumerique_reference.dependency_injection.referencement.entity')->getEntityByTypeAndId($entityType, $entityId);
+        $entity = $this->container->get('hopitalnumerique_core.dependency_injection.entity')->getEntityByTypeAndId($entityType, $entityId);
         $referencesDomainesToDelete = $this->getDomainesToDeleteForNoteSaving($entity);
         $references = $this->container->get('hopitalnumerique_reference.manager.entity_has_reference')->findByEntityTypeAndEntityIdAndDomaines($entityType, $entityId, $referencesDomainesToDelete);
         $this->container->get('hopitalnumerique_reference.manager.entity_has_reference')->delete($references);
@@ -99,7 +99,7 @@ class ReferencementController extends Controller
     {
         $domaines = [];
         $userDomaines = $this->getUser()->getDomaines();
-        $entityDomaines = $this->container->get('hopitalnumerique_reference.dependency_injection.referencement.entity')->getDomainesByEntity($entity);
+        $entityDomaines = $this->container->get('hopitalnumerique_core.dependency_injection.entity')->getDomainesByEntity($entity);
 
         foreach ($this->container->get('hopitalnumerique_domaine.manager.domaine')->findAll() as $domaine) {
             $userHasDomaine = false;

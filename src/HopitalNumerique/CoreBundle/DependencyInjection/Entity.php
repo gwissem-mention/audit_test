@@ -1,5 +1,5 @@
 <?php
-namespace HopitalNumerique\ReferenceBundle\DependencyInjection\Referencement;
+namespace HopitalNumerique\CoreBundle\DependencyInjection;
 
 use HopitalNumerique\DomaineBundle\Entity\Domaine;
 use HopitalNumerique\DomaineBundle\Manager\DomaineManager;
@@ -13,7 +13,7 @@ use HopitalNumerique\UserBundle\Manager\UserManager;
 use Symfony\Component\Routing\RouterInterface;
 
 /**
- * Service gérant une entité de référencement.
+ * Service gérant une entité au sens générique (notamment pour le référencement).
  */
 class Entity
 {

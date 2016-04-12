@@ -3,7 +3,7 @@ namespace HopitalNumerique\ReferenceBundle\Twig;
 
 use HopitalNumerique\DomaineBundle\DependencyInjection\CurrentDomaine as CurrentDomaineService;
 use HopitalNumerique\DomaineBundle\Entity\Domaine;
-use HopitalNumerique\ReferenceBundle\DependencyInjection\Referencement\Entity;
+use HopitalNumerique\CoreBundle\DependencyInjection\Entity;
 use HopitalNumerique\ReferenceBundle\Doctrine\Referencement\NoteReader;
 use HopitalNumerique\UserBundle\Entity\User;
 
@@ -23,7 +23,7 @@ class ReferencementExtension extends \Twig_Extension
     private $noteReader;
 
     /**
-     * @var \HopitalNumerique\ReferenceBundle\DependencyInjection\Referencement\Entity Entity
+     * @var \HopitalNumerique\CoreBundle\DependencyInjection\Entity Entity
      */
     private $entity;
 

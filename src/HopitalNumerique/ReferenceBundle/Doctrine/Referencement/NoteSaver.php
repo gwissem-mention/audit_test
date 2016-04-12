@@ -3,7 +3,7 @@ namespace HopitalNumerique\ReferenceBundle\Doctrine\Referencement;
 
 use HopitalNumerique\DomaineBundle\Entity\Domaine;
 use HopitalNumerique\DomaineBundle\Manager\DomaineManager;
-use HopitalNumerique\ReferenceBundle\DependencyInjection\Referencement\Entity as EntityService;
+use HopitalNumerique\CoreBundle\DependencyInjection\Entity as EntityService;
 use HopitalNumerique\ReferenceBundle\DependencyInjection\Referencement as ReferencementService;
 use HopitalNumerique\ReferenceBundle\Entity\EntityHasNote;
 use HopitalNumerique\ReferenceBundle\Entity\EntityHasReference;
@@ -22,7 +22,7 @@ class NoteSaver
     private $referencementService;
 
     /**
-     * @var \HopitalNumerique\ReferenceBundle\DependencyInjection\Referencement\Entity EntityService
+     * @var \HopitalNumerique\CoreBundle\DependencyInjection\Entity EntityService
      */
     private $entityService;
 

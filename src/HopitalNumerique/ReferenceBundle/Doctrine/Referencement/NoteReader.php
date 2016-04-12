@@ -2,7 +2,7 @@
 namespace HopitalNumerique\ReferenceBundle\Doctrine\Referencement;
 
 use HopitalNumerique\DomaineBundle\Entity\Domaine;
-use HopitalNumerique\ReferenceBundle\DependencyInjection\Referencement\Entity as ReferencementEntityService;
+use HopitalNumerique\CoreBundle\DependencyInjection\Entity as ReferencementEntityService;
 use HopitalNumerique\ReferenceBundle\Manager\EntityHasNoteManager;
 
 /**
@@ -11,7 +11,7 @@ use HopitalNumerique\ReferenceBundle\Manager\EntityHasNoteManager;
 class NoteReader
 {
     /**
-     * @var \HopitalNumerique\ReferenceBundle\DependencyInjection\Referencement\Entity ReferencementEntityService
+     * @var \HopitalNumerique\CoreBundle\DependencyInjection\Entity ReferencementEntityService
      */
     private $referencementEntityService;
 

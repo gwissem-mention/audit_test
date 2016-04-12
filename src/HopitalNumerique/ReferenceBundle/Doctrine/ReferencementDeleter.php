@@ -1,7 +1,7 @@
 <?php
 namespace HopitalNumerique\ReferenceBundle\Doctrine;
 
-use HopitalNumerique\ReferenceBundle\DependencyInjection\Referencement\Entity as ReferencementEntity;
+use HopitalNumerique\CoreBundle\DependencyInjection\Entity as ReferencementEntity;
 use HopitalNumerique\ReferenceBundle\Doctrine\Referencement\NoteDeleter;
 use HopitalNumerique\ReferenceBundle\Manager\EntityHasReferenceManager;
 use HopitalNumerique\UserBundle\Entity\User;
@@ -12,7 +12,7 @@ use HopitalNumerique\UserBundle\Entity\User;
 class ReferencementDeleter
 {
     /**
-     * @var \HopitalNumerique\ReferenceBundle\DependencyInjection\Referencement\Entity ReferencementEntity
+     * @var \HopitalNumerique\CoreBundle\DependencyInjection\Entity ReferencementEntity
      */
     private $referencementEntity;
 
