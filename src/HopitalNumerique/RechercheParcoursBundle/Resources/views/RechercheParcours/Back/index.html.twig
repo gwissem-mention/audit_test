@@ -17,6 +17,7 @@
         "@nestable_js"
         "@json_js"
         'bundles/nodevoadmin/plugins/nodevoLoader/nodevoLoader.js'
+        'bundles/hopitalnumeriquerechercheparcours/js/RechercheParcours.js'
         'bundles/hopitalnumeriquerechercheparcours/js/script.js'
     %}
         <script type="text/javascript" src="{{ asset_url }}"></script>
@@ -76,6 +77,7 @@
         </div>
         <div class="dd3-actions">
             <a href="{{path('hopitalnumerique_reference_referencement_popin', { 'entityType':'demarche', 'entityId':rechercheParcours.id })}}" class="pull-right dd3-cog open-popin-referencement fancybox.ajax"><i class="fa fa-cog"></i></a>
+            <a href="{{path('hopital_numerique_recherche_parcours_edit',{ 'rechercheParcours':rechercheParcours.id })}}" class="fancy pull-right dd3-edit fancybox.ajax"><i class="fa fa-edit"></i></a>
         </div>
     </li>
 {% endmacro %}

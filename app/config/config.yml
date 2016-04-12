@@ -231,6 +231,7 @@ fos_js_routing:
         - hopitalnumerique_communautepratique_user_desinscritgroupe
         - hopitalnumerique_communautepratique_user_listbygroupe
         - hopitalnumerique_objet_objet_getObjets
+        - hopital_numerique_recherche_parcours_save
         - hopitalnumerique_reference_referencement_savechosenreferences
 
 # Miniatures

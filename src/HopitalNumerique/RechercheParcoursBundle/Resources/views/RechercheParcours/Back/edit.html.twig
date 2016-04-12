@@ -1,6 +1,6 @@
 <div class="panel panel-midnightblue" style="margin:0" >
     <div class="panel-heading" style="height:65px">
-        <h4 style="line-height:22px; padding:0;margin:20px;">Déscription de {{rechercheParcoursDetails.reference.libelle}} de {{rechercheParcoursDetails.rechercheParcours.reference.libelle}}</h4>
+        <h4 style="line-height:22px; padding:0;margin:20px;">Description</h4>
     </div>
     <div class="clearfix"></div>
 
@@ -14,12 +14,8 @@
                         </label>
                     </div>
                     <div class="col-sm-12">
-                        <textarea rows="11" class="form-control" name="description_detail" id="description_detail">{{rechercheParcoursDetails.description}}</textarea>
+                        <textarea rows="11" class="form-control" name="description_detail" id="description_detail">{{ rechercheParcours.description }}</textarea>
                     </div>
-                </div>
-                <div class="col-md-12">
-                    <input type="checkbox" class="pull-left" id="checkbox_show_child" name="checkbox_show_child" {% if rechercheParcoursDetails.showChildren %} checked="checked"{% endif %} style="margin-top:5px;margin-right:5px;"/>
-                    <label class="labelCheckbox pull-left" for="checkbox_show_child">Afficher les enfants de cette étape</div>
                 </div>
                 <div class="clearfix"></div>
             </form>
@@ -29,7 +25,7 @@
             <div class="row">
                 <div class="btn-toolbar pull-right" style="margin:0 10px 0 0;">
                     <div onclick="$.fancybox.close(true);" class="btn-danger btn">Fermer</div>
-                    <div onclick="saveDetails( '{{path('hopital_numerique_recherche_parcours_details_save',{'id':rechercheParcoursDetails.id})}}' );" class="btn-primary btn">Enregistrer</div>
+                    <div onclick="Hn_RechercheParcoursBundle_RechercheParcours.save({{ rechercheParcours.id }});" class="btn-primary btn">Enregistrer</div>
                 </div>
             </div>
         </div>

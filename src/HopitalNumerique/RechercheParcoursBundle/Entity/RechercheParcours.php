@@ -28,6 +28,13 @@ class RechercheParcours
     protected $recherchesParcoursGestion;
 
     /**
+     * @var string
+     *
+     * @ORM\Column(name="rrpg_description", type="text", nullable=true)
+     */
+    private $description;
+
+    /**
      * Détails liés à la recherche par parcours
      *
      * @var /HopitalNumerique/RechercheParcoursBundle/Entity/RechercheParcoursDetails
@@ -70,6 +77,30 @@ class RechercheParcours
     public function getId()
     {
         return $this->id;
+    }
+
+    /**
+     * Set description
+     *
+     * @param string $description
+     *
+     * @return RechercheParcours
+     */
+    public function setDescription($description)
+    {
+        $this->description = $description;
+
+        return $this;
+    }
+
+    /**
+     * Get description
+     *
+     * @return string
+     */
+    public function getDescription()
+    {
+        return $this->description;
     }
 
     /**
