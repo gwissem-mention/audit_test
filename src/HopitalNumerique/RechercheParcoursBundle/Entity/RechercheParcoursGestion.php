@@ -89,6 +89,8 @@ class RechercheParcoursGestion
     public function __construct()
     {
         $this->domaines = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->referencesParentes = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->referencesVentilations = new \Doctrine\Common\Collections\ArrayCollection();
         $this->typePublication = new \Doctrine\Common\Collections\ArrayCollection();
     }
 

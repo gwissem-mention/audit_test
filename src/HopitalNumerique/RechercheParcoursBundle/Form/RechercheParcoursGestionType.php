@@ -23,6 +23,7 @@ class RechercheParcoursGestionType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $connectedUser = $this->_userManager->getUserConnected();
+        $isCreation = (null === $builder->getData()->getId());
 
         $builder
             ->add('nom', 'text', array(
@@ -56,32 +57,36 @@ class RechercheParcoursGestionType extends AbstractType
                         ->andWhere('parent.id IS NULL')
                         ->setParameter('code', 'CATEGORIE_OBJET');
                 }
-            )) 
-            ->add('referencesParentes', 'genemu_jqueryselect2_entity', array(
-                'class'       => 'HopitalNumeriqueReferenceBundle:Reference',
-                'property'    => 'libelle',
-                'required'    => true,
-                'multiple'    => true,
-                'label'       => 'Référence(s) parente(s)',
-                //'group_by'    => 'parent',
-                'empty_value' => ' - ',
-                'query_builder' => function(EntityRepository $er) use ($connectedUser){
-                    return $er->getReferencesUserConnectedForForm($connectedUser->getId());
-                }
             ))
-            ->add('referencesVentilations', 'genemu_jqueryselect2_entity', array(
-                'class'       => 'HopitalNumeriqueReferenceBundle:Reference',
-                'property'    => 'libelle',
-                'required'    => true,
-                'multiple'    => true,
-                'label'       => 'Référence(s) de ventilation',
-                //'group_by'    => 'parent',
-                'empty_value' => ' - ',
-                'query_builder' => function(EntityRepository $er) use ($connectedUser){
-                    return $er->getReferencesUserConnectedForForm($connectedUser->getId());
-                }
-            ))     
+        ;
+        if (!$isCreation) {
+            $builder
+                ->add('referencesParentes', 'genemu_jqueryselect2_entity', array(
+                    'class'       => 'HopitalNumeriqueReferenceBundle:Reference',
+                    'property'    => 'libelle',
+                    'required'    => true,
+                    'multiple'    => true,
+                    'label'       => 'Référence(s) parente(s)',
+                    //'group_by'    => 'parent',
+                    'empty_value' => ' - ',
+                    'query_builder' => function(EntityRepository $er) use ($connectedUser){
+                        return $er->getReferencesUserConnectedForForm($connectedUser->getId());
+                    }
+                ))
+                ->add('referencesVentilations', 'genemu_jqueryselect2_entity', array(
+                    'class'       => 'HopitalNumeriqueReferenceBundle:Reference',
+                    'property'    => 'libelle',
+                    'required'    => true,
+                    'multiple'    => true,
+                    'label'       => 'Référence(s) de ventilation',
+                    //'group_by'    => 'parent',
+                    'empty_value' => ' - ',
+                    'query_builder' => function(EntityRepository $er) use ($connectedUser){
+                        return $er->getReferencesUserConnectedForForm($connectedUser->getId());
+                    }
+                ))
             ;
+        }
     }
 
     public function setDefaultOptions(OptionsResolverInterface $resolver)

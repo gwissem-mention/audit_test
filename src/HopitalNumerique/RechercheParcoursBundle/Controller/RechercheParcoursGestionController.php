@@ -118,35 +118,33 @@ class RechercheParcoursGestionController extends Controller
      */
     private function renderForm($rechercheparcoursgestion, $view )
     {
-        //Création du formulaire via le service
+        $isCreation = (null === $rechercheparcoursgestion->getId());
         $form = $this->createForm('hopitalnumerique_rechercheparcours_rechercheparcoursgestion', $rechercheparcoursgestion);
 
         $request = $this->get('request');
         
         // Si l'utilisateur soumet le formulaire
         if ('POST' == $request->getMethod()) {
-            
             // On bind les données du form
             $form->handleRequest($request);
 
             //si le formulaire est valide
             if ($form->isValid()) {
-                $referencesParentes    = $form->get('referencesParentes')->getData();
-                $referencesVentilation = $form->get('referencesVentilations')->getData();
+                if (!$isCreation) {
+                    $referencesParentes    = $form->get('referencesParentes')->getData();
+                    $referencesVentilation = $form->get('referencesVentilations')->getData();
 
-                //Vérif à la mano php pour select2
-                if(count($referencesParentes) === 0 || count($referencesVentilation) === 0)
-                {
-                    $this->get('session')->getFlashBag()->add( 'danger', 'Les références sont obligatoires, veuillez remplir ces champs avant de sauvegarder à nouveau.' ); 
+                    //Vérif à la mano php pour select2
+                    if(count($referencesParentes) === 0 || count($referencesVentilation) === 0)
+                    {
+                        $this->get('session')->getFlashBag()->add( 'danger', 'Les références sont obligatoires, veuillez remplir ces champs avant de sauvegarder à nouveau.' ); 
 
-                    return $this->render( $view , array(
-                        'form'             => $form->createView(),
-                        'rechercheparcoursgestion' => $rechercheparcoursgestion
-                    ));
+                        return $this->render( $view , array(
+                            'form'             => $form->createView(),
+                            'rechercheparcoursgestion' => $rechercheparcoursgestion
+                        ));
+                    }
                 }
-
-                //test ajout ou edition
-                $new = is_null($rechercheparcoursgestion->getId());
 
                 //On utilise notre Manager pour gérer la sauvegarde de l'objet
                 $this->get('hopitalnumerique_rechercheparcours.manager.rechercheparcoursgestion')->save($rechercheparcoursgestion);
@@ -170,7 +168,7 @@ class RechercheParcoursGestionController extends Controller
                 $this->get('hopitalnumerique_recherche_parcours.manager.recherche_parcours')->save($rechercheParcoursFilsNew);
                 
                 // On envoi une 'flash' pour indiquer à l'utilisateur que l'entité est ajoutée
-                $this->get('session')->getFlashBag()->add( ($new ? 'success' : 'info') , 'Gestionnaire de recherche par parcours ' . ($new ? 'ajouté.' : 'mis à jour.') ); 
+                $this->get('session')->getFlashBag()->add( ($isCreation ? 'success' : 'info') , 'Gestionnaire de recherche par parcours ' . ($isCreation ? 'ajouté.' : 'mis à jour.') ); 
                 
                 //on redirige vers la page index ou la page edit selon le bouton utilisé
                 $do = $request->request->get('do');
