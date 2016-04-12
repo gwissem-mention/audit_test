@@ -5,7 +5,6 @@ parameters:
     #gestionnaire
     hopitalnumerique_rechercheparcours.manager.rechercheparcoursgestion.class: HopitalNumerique\RechercheParcoursBundle\Manager\RechercheParcoursGestionManager
     hopitalnumerique_rechercheparcours.grid.rechercheparcoursgestion.class: HopitalNumerique\RechercheParcoursBundle\Grid\RechercheParcoursGestionGrid
-    hopitalnumerique_rechercheparcours.form.rechercheparcoursgestion.class: HopitalNumerique\RechercheParcoursBundle\Form\RechercheParcoursGestionType
 
 services:
     #RechercheParcours
@@ -31,7 +30,7 @@ services:
         arguments: ["@service_container"]
 
     hopitalnumerique_rechercheparcours.form.rechercheparcoursgestion:
-        class: %hopitalnumerique_rechercheparcours.form.rechercheparcoursgestion.class%
-        arguments: ["@hopitalnumerique_rechercheparcours.manager.rechercheparcoursgestion", "@validator", "@hopitalnumerique_user.manager.user"]
+        class: 'HopitalNumerique\RechercheParcoursBundle\Form\RechercheParcoursGestionType'
+        arguments: ["@hopitalnumerique_rechercheparcours.manager.rechercheparcoursgestion", "@validator", '@hopitalnumerique_core.dependency_injection.entity', "@hopitalnumerique_user.manager.user", '@hopitalnumerique_reference.manager.reference']
         tags:
             - { name: form.type, alias: hopitalnumerique_rechercheparcours_rechercheparcoursgestion }

@@ -140,6 +140,19 @@ class RechercheParcoursGestion
     }
 
     /**
+     * Set domaines
+     *
+     * @param array<\HopitalNumerique\DomaineBundle\Entity\Domaine> $domaines
+     * @return RechercheParcoursGestion
+     */
+    public function setDomaines($domaines)
+    {
+        $this->domaines = $domaines;
+
+        return $this;
+    }
+
+    /**
      * Remove domaines
      *
      * @param \HopitalNumerique\DomaineBundle\Entity\Domaine $domaines

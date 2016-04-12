@@ -119,7 +119,7 @@ class ObjetController extends Controller
             'toRef'       => $toRef,
             'note'        => $note,
             'productions' => $productions,
-            'domainesCommunsWithUser' => $this->container->get('hopitalnumerique_core.dependency_injection.entity')->getDomainesCommunsWithUser($objet, $user)
+            'domainesCommunsWithUser' => $this->container->get('hopitalnumerique_core.dependency_injection.entity')->getEntityDomainesCommunsWithUser($objet, $user)
         );
 
         return $this->renderForm('hopitalnumerique_objet_objet', $objet, 'HopitalNumeriqueObjetBundle:Objet:edit.html.twig', $options );

@@ -1,6 +1,8 @@
 <?php
 namespace HopitalNumerique\CoreBundle\DependencyInjection;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\ORM\PersistentCollection;
 use HopitalNumerique\DomaineBundle\Entity\Domaine;
 use HopitalNumerique\DomaineBundle\Manager\DomaineManager;
 use HopitalNumerique\ForumBundle\Manager\TopicManager;
@@ -153,6 +155,7 @@ class Entity
         return null;
     }
 
+    //<-- Domaines
     /**
      * Retourne les dommaines d'une entité.
      *
@@ -203,12 +206,23 @@ class Entity
      * @param \HopitalNumerique\UserBundle\Entity\User $user   User
      * @return array<\HopitalNumerique\DomaineBundle\Entity\Domaine> Domaines
      */
-    public function getDomainesCommunsWithUser($entity, User $user)
+    public function getEntityDomainesCommunsWithUser($entity, User $user)
+    {
+        return $this->getDomainesCommunsWithUser($this->getDomainesByEntity($entity), $user);
+    }
+
+    /**
+     * Retourne les dommaines en commun avec l'utilisateur.
+     *
+     * @param array<\HopitalNumerique\DomaineBundle\Entity\Domaine> $domaines Domaines
+     * @param \HopitalNumerique\UserBundle\Entity\User              $user     User
+     * @return array<\HopitalNumerique\DomaineBundle\Entity\Domaine> Domaines
+     */
+    public function getDomainesCommunsWithUser($domaines, User $user)
     {
         $domainesCommuns = [];
-        $entityDomaines = $this->getDomainesByEntity($entity);
 
-        foreach ($entityDomaines as $entityDomaine) {
+        foreach ($domaines as $entityDomaine) {
             if ($user->hasDomaine($entityDomaine)) {
                 $domainesCommuns[] = $entityDomaine;
             }
@@ -216,6 +230,52 @@ class Entity
 
         return $domainesCommuns;
     }
+
+    /**
+     * Traite les domaines d'une entité lors de la soumission d'un formulaire notamment.
+     * Un objet peut posséder des domaines non visibles par l'utilisateur, ceux-ci ne sont donc pas soumis par le formulaire mais ne doivent pas être supprimés.
+     *
+     * @param array<\HopitalNumerique\DomaineBundle\Entity\Domaine> $allInitialDomaines Tous les domaines de l'entité (mais si invisible à l'utilisateur)
+     * @param array<\HopitalNumerique\DomaineBundle\Entity\Domaine> $userChosenDomaines Tous les domaines choisis par l'utilisateur
+     * @param \HopitalNumerique\UserBundle\Entity\User              $user               Utilisateur
+     * @return array<\HopitalNumerique\DomaineBundle\Entity\Domaine> Domaines de l'entité
+     */
+    public function processSubmitedDomaines($allInitialDomaines, $userChosenDomaines, User $user)
+    {
+        if ($allInitialDomaines instanceof PersistentCollection) {
+            $domaines = new ArrayCollection($allInitialDomaines->toArray());
+        } else {
+            $domaines = clone $allInitialDomaines;
+        }
+
+        //<-- Ajout des nouveaux domaines (choisis par l'utilisateur)
+        foreach ($userChosenDomaines as $domaineChoisi) {
+            if (!$domaines->contains($domaineChoisi)) {
+                $domaines->add($domaineChoisi);
+            }
+        }
+        //-->
+
+        //<-- Suppression des domaines (supprimés par l'utilisateur)
+        foreach ($allInitialDomaines as $domaine) {
+            if ($user->hasDomaine($domaine)) {
+                $isDomaineChoisi = false;
+                foreach ($userChosenDomaines as $domaineChoisi) {
+                    if ($domaineChoisi->equals($domaine)) {
+                        $isDomaineChoisi = true;
+                        break;
+                    }
+                }
+                if (!$isDomaineChoisi) {
+                    $domaines->removeElement($domaine);
+                }
+            }
+        }
+        //-->
+
+        return $domaines;
+    }
+    //-->
 
     /**
      * Retourne l'URL de la page gérant le référencement de l'entité.

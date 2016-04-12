@@ -119,6 +119,7 @@ class RechercheParcoursGestionController extends Controller
     private function renderForm($rechercheparcoursgestion, $view )
     {
         $isCreation = (null === $rechercheparcoursgestion->getId());
+        $rechercheparcoursgestionInitialDomaines = clone $rechercheparcoursgestion->getDomaines();
         $form = $this->createForm('hopitalnumerique_rechercheparcours_rechercheparcoursgestion', $rechercheparcoursgestion);
 
         $request = $this->get('request');
@@ -145,6 +146,8 @@ class RechercheParcoursGestionController extends Controller
                         ));
                     }
                 }
+
+                $rechercheparcoursgestion->setDomaines($this->get('hopitalnumerique_core.dependency_injection.entity')->processSubmitedDomaines($rechercheparcoursgestionInitialDomaines, $form->get('domaines')->getData(), $this->getUser()));
 
                 //On utilise notre Manager pour gérer la sauvegarde de l'objet
                 $this->get('hopitalnumerique_rechercheparcours.manager.rechercheparcoursgestion')->save($rechercheparcoursgestion);

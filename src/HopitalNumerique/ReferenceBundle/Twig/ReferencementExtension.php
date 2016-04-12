@@ -47,7 +47,7 @@ class ReferencementExtension extends \Twig_Extension
         return array(
             new \Twig_SimpleFunction('referencement_note', array($this, 'getReferencementNote')),
             //@todo déplacer dans DomaineBundle
-            new \Twig_SimpleFunction('domaines_communs_with_user', array($this, 'getDomainesCommunsWithUser'))
+            new \Twig_SimpleFunction('domaines_communs_with_user', array($this, 'getEntityDomainesCommunsWithUser'))
         );
     }
 
@@ -67,9 +67,9 @@ class ReferencementExtension extends \Twig_Extension
         return $this->noteReader->getNoteByEntityAndDomaineForAffichage($entity, $domaine);
     }
 
-    public function getDomainesCommunsWithUser($entity, User $user)
+    public function getEntityDomainesCommunsWithUser($entity, User $user)
     {
-        return $this->entity->getDomainesCommunsWithUser($entity, $user);
+        return $this->entity->getEntityDomainesCommunsWithUser($entity, $user);
     }
 
 
