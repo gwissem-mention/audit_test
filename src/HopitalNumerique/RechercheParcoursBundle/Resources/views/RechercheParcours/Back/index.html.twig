@@ -73,11 +73,14 @@
     <li class="dd-item dd3-item" data-id="{{rechercheParcours.id}}" id="rechercheParcours-{{rechercheParcours.id}}" >
         <div class="dd-handle dd3-handle"></div>
         <div class="dd3-content">
+            <p class="text-muted pull-right" style="margin-right: 56px;">Note référencement : {{ referencement_note(rechercheParcours) }}</p>
             <a href="javascript:selectRecherche({{rechercheParcours.id}}, '{{path('hopital_numerique_recherche_parcours_details_index', {'id':rechercheParcours.id})}}')">{{rechercheParcours.reference.libelle}}</a>
+            
         </div>
         <div class="dd3-actions">
             <a href="{{path('hopitalnumerique_reference_referencement_popin', { 'entityType':'demarche', 'entityId':rechercheParcours.id })}}" class="pull-right dd3-cog open-popin-referencement fancybox.ajax"><i class="fa fa-cog"></i></a>
             <a href="{{path('hopital_numerique_recherche_parcours_edit',{ 'rechercheParcours':rechercheParcours.id })}}" class="fancy pull-right dd3-edit fancybox.ajax"><i class="fa fa-edit"></i></a>
+            
         </div>
     </li>
 {% endmacro %}
