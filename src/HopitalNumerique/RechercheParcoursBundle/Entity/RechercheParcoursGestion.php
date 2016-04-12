@@ -3,8 +3,6 @@
 namespace HopitalNumerique\RechercheParcoursBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-
-//Asserts Stuff
 use Symfony\Component\Validator\Constraints as Assert;
 use Nodevo\ToolsBundle\Validator\Constraints as Nodevo;
 use APY\DataGridBundle\Grid\Mapping as GRID;
@@ -39,6 +37,7 @@ class RechercheParcoursGestion
      *      joinColumns={ @ORM\JoinColumn(name="rrpg_id", referencedColumnName="rrpg_id", onDelete="CASCADE")},
      *      inverseJoinColumns={ @ORM\JoinColumn(name="dom_id", referencedColumnName="dom_id", onDelete="CASCADE")}
      * )
+     * @Assert\Count(min=1);
      */
     protected $domaines;
 

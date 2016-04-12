@@ -35,7 +35,7 @@ class RechercheParcoursGestionType extends AbstractType
             ->add('domaines', 'entity', array(
                 'class'       => 'HopitalNumeriqueDomaineBundle:Domaine',
                 'property'    => 'nom',
-                'required'    => false,
+                'required'    => true,
                 'multiple'    => true,
                 'label'       => 'Domaine(s) associé(s)',
                 'empty_value' => ' - ',
