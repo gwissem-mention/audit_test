@@ -124,7 +124,7 @@ class Parse
         foreach ($objets as $objet) {
             foreach ($this->entity->getDomainesByEntity($objet) as $domaine) {
                 $foundSigles = $this->getFoundSiglesByText(self::$GLOSSAIRE_REFERENCES_GROUPED_BY_DOMAINE_ID[$domaine->getId()], strip_tags($objet->getResume()).' '.strip_tags($objet->getSynthese()));
-                $this->saveEntityHasGlossaire(Entity::ENTITY_TYPE_PUBLICATION, $objet->getId(), $domaine, $foundSigles);
+                $this->saveEntityHasGlossaire(Entity::ENTITY_TYPE_OBJET, $objet->getId(), $domaine, $foundSigles);
             }
         }
     }
@@ -141,7 +141,7 @@ class Parse
         foreach ($contenus as $contenu) {
             foreach ($this->entity->getDomainesByEntity($contenu) as $domaine) {
                 $foundSigles = $this->getFoundSiglesByText(self::$GLOSSAIRE_REFERENCES_GROUPED_BY_DOMAINE_ID[$domaine->getId()], strip_tags($contenu->getContenu()));
-                $this->saveEntityHasGlossaire(Entity::ENTITY_TYPE_INFRADOC, $contenu->getId(), $domaine, $foundSigles);
+                $this->saveEntityHasGlossaire(Entity::ENTITY_TYPE_CONTENU, $contenu->getId(), $domaine, $foundSigles);
             }
         }
     }
@@ -154,10 +154,10 @@ class Parse
     public function parseAndSaveEntity($entity)
     {
         switch ($this->entity->getEntityType($entity)) {
-            case Entity::ENTITY_TYPE_PUBLICATION:
+            case Entity::ENTITY_TYPE_OBJET:
                 $this->parseAndSaveObjets([$entity]);
                 break;
-            case Entity::ENTITY_TYPE_INFRADOC:
+            case Entity::ENTITY_TYPE_CONTENU:
                 $this->parseAndSaveContenus([$entity]);
                 break;
             default:

@@ -52,6 +52,7 @@ class RechercheParcours
      */
     protected $order;
 
+
     /**
      * Constructor
      */
@@ -59,6 +60,7 @@ class RechercheParcours
     {
         $this->recherchesParcoursDetails = new \Doctrine\Common\Collections\ArrayCollection();
     }
+
 
     /**
      * Get id
@@ -69,7 +71,6 @@ class RechercheParcours
     {
         return $this->id;
     }
-
 
     /**
      * Add rechercheParcoursDetails

@@ -3,7 +3,7 @@ parameters:
 services:
     hopitalnumerique_core.dependency_injection.entity:
         class: 'HopitalNumerique\CoreBundle\DependencyInjection\Entity'
-        arguments: ['@router', '@hopitalnumerique_user.manager.user', '@hopitalnumerique_objet.manager.objet', '@hopitalnumerique_objet.manager.contenu', '@hopitalnumerique_forum.manager.topic', '@hopitalnumerique_domaine.manager.domaine']
+        arguments: ['@router', '@hopitalnumerique_user.manager.user', '@hopitalnumerique_objet.manager.objet', '@hopitalnumerique_objet.manager.contenu', '@hopitalnumerique_forum.manager.topic', '@hopitalnumerique_domaine.manager.domaine', '@hopitalnumerique_recherche_parcours.manager.recherche_parcours']
 
     hopitalnumerique_core.pagerfanta.view:
         class: Pagerfanta\View\OptionableView

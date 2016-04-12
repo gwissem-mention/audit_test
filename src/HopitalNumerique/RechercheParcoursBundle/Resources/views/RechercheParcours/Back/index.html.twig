@@ -75,6 +75,7 @@
             <a href="javascript:selectRecherche({{rechercheParcours.id}}, '{{path('hopital_numerique_recherche_parcours_details_index', {'id':rechercheParcours.id})}}')">{{rechercheParcours.reference.libelle}}</a>
         </div>
         <div class="dd3-actions">
+            <a href="{{path('hopitalnumerique_reference_referencement_popin', { 'entityType':'demarche', 'entityId':rechercheParcours.id })}}" class="pull-right dd3-cog open-popin-referencement fancybox.ajax"><i class="fa fa-cog"></i></a>
         </div>
     </li>
 {% endmacro %}

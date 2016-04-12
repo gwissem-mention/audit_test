@@ -10,6 +10,7 @@ use HopitalNumerique\ObjetBundle\Entity\Contenu;
 use HopitalNumerique\ObjetBundle\Entity\Objet;
 use HopitalNumerique\ObjetBundle\Manager\ContenuManager;
 use HopitalNumerique\ObjetBundle\Manager\ObjetManager;
+use HopitalNumerique\RechercheParcoursBundle\Manager\RechercheParcoursManager;
 use HopitalNumerique\UserBundle\Entity\User;
 use HopitalNumerique\UserBundle\Manager\UserManager;
 use Symfony\Component\Routing\RouterInterface;
@@ -22,12 +23,12 @@ class Entity
     /**
      * @var string Type publication
      */
-    const ENTITY_TYPE_PUBLICATION = 'publication';
+    const ENTITY_TYPE_OBJET = 'publication';
 
     /**
      * @var string Type infradoc
      */
-    const ENTITY_TYPE_INFRADOC = 'infradocs';
+    const ENTITY_TYPE_CONTENU = 'infradocs';
 
     /**
      * @var string Type Topic de forum
@@ -38,6 +39,11 @@ class Entity
      * @var string Type Ambassadeur
      */
     const ENTITY_TYPE_AMBASSADEUR = 'ambassadeur';
+
+    /**
+     * @var string Type RechercheParcours
+     */
+    const ENTITY_TYPE_RECHERCHE_PARCOURS = 'demarche';
 
 
     /**
@@ -70,11 +76,16 @@ class Entity
      */
     private $domaineManager;
 
+    /**
+     * @var \HopitalNumerique\RechercheParcoursBundle\Manager\RechercheParcoursManager RechercheParcoursManager
+     */
+    private $rechercheParcoursManager;
+
 
     /**
      * Constructeur.
      */
-    public function __construct(RouterInterface $router, UserManager $userManager, ObjetManager $objetManager, ContenuManager $contenuManager, TopicManager $forumTopicManager, DomaineManager $domaineManager)
+    public function __construct(RouterInterface $router, UserManager $userManager, ObjetManager $objetManager, ContenuManager $contenuManager, TopicManager $forumTopicManager, DomaineManager $domaineManager, RechercheParcoursManager $rechercheParcoursManager)
     {
         $this->router = $router;
         $this->userManager = $userManager;
@@ -82,6 +93,7 @@ class Entity
         $this->contenuManager = $contenuManager;
         $this->forumTopicManager = $forumTopicManager;
         $this->domaineManager = $domaineManager;
+        $this->rechercheParcoursManager = $rechercheParcoursManager;
     }
 
 
@@ -99,15 +111,18 @@ class Entity
 
         switch (get_class($entity)) {
             case 'HopitalNumerique\ObjetBundle\Entity\Objet':
-                return self::ENTITY_TYPE_PUBLICATION;
+                return self::ENTITY_TYPE_OBJET;
             case 'HopitalNumerique\ObjetBundle\Entity\Contenu':
-                return self::ENTITY_TYPE_INFRADOC;
+                return self::ENTITY_TYPE_CONTENU;
             case 'HopitalNumerique\ForumBundle\Entity\Topic':
                 return self::ENTITY_TYPE_FORUM_TOPIC;
             case 'HopitalNumerique\UserBundle\Entity\User':
                 if ($entity->hasRoleAmbassadeur()) {
                     return self::ENTITY_TYPE_AMBASSADEUR;
                 }
+                break;
+            case 'HopitalNumerique\RechercheParcoursBundle\Entity\RechercheParcours':
+                return self::ENTITY_TYPE_RECHERCHE_PARCOURS;
         }
 
         return null;
@@ -142,14 +157,16 @@ class Entity
     public function getEntityByTypeAndId($type, $id)
     {
         switch ($type) {
-            case self::ENTITY_TYPE_PUBLICATION:
+            case self::ENTITY_TYPE_OBJET:
                 return $this->objetManager->findOneById($id);
-            case self::ENTITY_TYPE_INFRADOC:
+            case self::ENTITY_TYPE_CONTENU:
                 return $this->contenuManager->findOneById($id);
             case self::ENTITY_TYPE_FORUM_TOPIC:
                 return $this->forumTopicManager->findOneById($id);
             case self::ENTITY_TYPE_AMBASSADEUR:
                 return $this->userManager->findOneById($id);
+            case self::ENTITY_TYPE_RECHERCHE_PARCOURS:
+                return $this->rechercheParcoursManager->findOneById($id);
         }
 
         return null;
@@ -174,8 +191,10 @@ class Entity
         switch ($this->getEntityType($entity)) {
             case self::ENTITY_TYPE_FORUM_TOPIC:
                 return [$this->domaineManager->findOneById(Domaine::DOMAINE_HOPITAL_NUMERIQUE_ID)];
-            case self::ENTITY_TYPE_INFRADOC:
+            case self::ENTITY_TYPE_CONTENU:
                 return $this->getDomainesByEntity($entity->getObjet());
+            case self::ENTITY_TYPE_RECHERCHE_PARCOURS:
+                return $this->getDomainesByEntity($entity->getRecherchesParcoursGestion());
         }
 
         throw new \Exception('Domaines non trouvés pour l\'entité.');
