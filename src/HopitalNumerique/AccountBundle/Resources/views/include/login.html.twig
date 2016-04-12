@@ -1,48 +1,74 @@
 <div class="connexion-bloc hidden-pdf">
 
-    <h3>{{ title }}</h3>
+    {# medium / small #}
+    {% set size = (size is defined ? size : 'medium') %}
+
 
     <form action="{{ path('account_login_check') }}" class="form-horizontal" method="post">
+
+        {%- if 'small' == size -%}
+            <div class="pull-right">
+                <a href="{{path('hopital_numerique_user_inscription')}}" target="_blank">Inscription</a>
+            </div>
+        {%- endif -%}
+        <h3>{{ title|raw }}</h3>
+
         <div class="form-group">
             <div class="row">
-                <div class="col-md-4">
+                <div class="col-md-{{ 'small' == size ? '12' : '4' }}">
                     <label class="control-label" for="username">Identifiant ou email</label>
                 </div>
-                <div class="col-md-8">
+                <div class="col-md-{{ 'small' == size ? '12' : '8' }}">
                     <input type="text" class="form-control" id="username" name="_username">
                 </div>
             </div>
         </div>
-        <div class="form-group">
+        <div class="form-group bloc-password">
             <div class="row">
-                <div class="col-md-4">
+                <div class="col-md-{{ 'small' == size ? '12' : '4' }}">
                     <label class="control-label" for="password">Mot de passe</label>
                 </div>
-                <div class="col-md-8">
+                <div class="col-md-{{ 'small' == size ? '12' : '8' }}">
                     <input type="password" class="form-control" id="password" name="_password">
                 </div>
             </div>
         </div>
 
         <div class="form-group">
-            <div class="row text-right">
-                <div class="col-md-4">&nbsp;</div>
-                <div class="col-md-8">
-                    <div class="row">
-                        <div class="col-md-4">
-                            <label for="remember_me">
-                                <input type="checkbox" id="remember_me" name="_remember_me" value="on">
-                                Rester connecté
-                            </label>
-                        </div>
-                        <div class="col-md-4">
-                            <a href="{{path('fos_user_resetting_request')}}" target="_blank">Mot de passe oublié</a>
-                        </div>
-                        <div class="col-md-4">
-                            <a href="{{path('hopital_numerique_user_inscription')}}" target="_blank">Inscription</a>
+            <div class="row">
+                {%- if 'small' == size -%}
+                    <div class="col-md-12">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <label for="remember_me">
+                                    <input type="checkbox" id="remember_me" name="_remember_me" value="on">
+                                    Rester connecté
+                                </label>
+                            </div>
+                            <div class="col-md-6 text-right">
+                                <a href="{{path('fos_user_resetting_request')}}" target="_blank">Mot de passe oublié</a>
+                            </div>
                         </div>
                     </div>
-                </div>
+                {%- else -%}
+                    <div class="col-md-4">&nbsp;</div>
+                    <div class="col-md-8">
+                        <div class="row">
+                            <div class="col-md-4">
+                                <label for="remember_me">
+                                    <input type="checkbox" id="remember_me" name="_remember_me" value="on">
+                                    Rester connecté
+                                </label>
+                            </div>
+                            <div class="col-md-4">
+                                <a href="{{path('fos_user_resetting_request')}}" target="_blank">Mot de passe oublié</a>
+                            </div>
+                            <div class="col-md-4">
+                                <a href="{{path('hopital_numerique_user_inscription')}}" target="_blank">Inscription</a>
+                            </div>
+                        </div>
+                    </div>
+                {%- endif -%}
             </div>
         </div>
 

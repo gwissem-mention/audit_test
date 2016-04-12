@@ -130,6 +130,7 @@ class RechercheParcoursDetailsController extends Controller
     public function indexFrontAction($id, $alias, $idEtape, $etape, $idRefEtapeChild = null, $libRefEtapeChild = null )
     {
         $request   = $this->get('request');
+        $request->getSession()->set('urlToRedirect', $request->getUri());
         $domaineId = $request->getSession()->get('domaineId');
 
         //Récup!ère la recherche par parcours passé en param

@@ -64,8 +64,10 @@ class RechercheParcoursController extends Controller
     /**
      * Index du front Action
      */
-    public function indexFrontAction(RechercheParcoursGestion $rechercheParcoursGestion)
+    public function indexFrontAction(Request $request, RechercheParcoursGestion $rechercheParcoursGestion)
     {
+        $request->getSession()->set('urlToRedirect', $request->getUri());
+
         //Tableau des étapes du projet
         $etapes = $this->get('hopitalnumerique_recherche_parcours.manager.recherche_parcours')->findBy(array('recherchesParcoursGestion' => $rechercheParcoursGestion), array('order' => 'ASC'));
 

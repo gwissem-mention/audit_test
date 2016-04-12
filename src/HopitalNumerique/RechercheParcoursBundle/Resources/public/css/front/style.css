@@ -5,10 +5,14 @@
 /* Le bandeau contenant les 2 blocs : Gauche et Droit */
 #recherche-par-parcours .bandeau{margin: 30px 0 0 0;}
 
+#recherche-par-parcours .bandeau .connexion-bloc {}
+    #recherche-par-parcours .bandeau .connexion-bloc label { font-weight: normal; }
+    #recherche-par-parcours .bandeau .connexion-bloc .bloc-password { margin-bottom: 5px; }
+
 /* -- Bloc gauche -- */
 /* Description + titre */
-#recherche-par-parcours .bandeau .bloc-gauche {padding:0;height: auto;}
-#recherche-par-parcours .bandeau .bloc-gauche .parcours {background-color:#F4F4F4; margin: 0 15px 0 0;height: auto;}
+#recherche-par-parcours .bandeau .bloc-gauche { height: auto;}
+#recherche-par-parcours .bandeau .bloc-gauche .parcours {background-color:#F4F4F4; margin: 0 0 0 0;height: auto;}
 #recherche-par-parcours .bandeau .bloc-gauche .parcours .parcours-presentation .entete {margin: 25px 15px 0 15px;}
 #recherche-par-parcours .bandeau .bloc-gauche .parcours .parcours-presentation .entete .icone{display:block;background: transparent url('../../img/fleche-parcours.png')  no-repeat bottom left;width: 51px; height: 49px; float:left;}
 #recherche-par-parcours .bandeau .bloc-gauche .parcours .parcours-presentation .entete .titre{text-transform: uppercase; float:left; color:#E11954; font-weight: bold;width: 125px;margin: 5px 0 0 10px;}
@@ -30,7 +34,7 @@
 /* -- Bloc droit -- */
 /* Mode non connecté */
 #recherche-par-parcours .bandeau .bloc-droit-offline {padding:0;height: 260px;}
-#recherche-par-parcours .bandeau .bloc-droit-offline .bloc-creation{margin: 0 0 0 15px; height: 260px;}
+#recherche-par-parcours .bandeau .bloc-droit-offline .bloc-creation {}
 #recherche-par-parcours .bandeau .bloc-droit-offline .icone { width: 48px; height: 48px; background-position: -1345px 0;margin:0 auto 10px;  }
 #recherche-par-parcours .bandeau .bloc-droit-offline > div{ padding:30px; background: #9abc0d }
 #recherche-par-parcours .bandeau .bloc-droit-offline:hover > div{ background: #779f08 }
@@ -108,20 +112,7 @@
 #pointsdurs .note .pourcentage{width: 100px;}
 
 /* Mode non connecté */
-#pointsdurs .bloc-offline {padding:0;}
-#pointsdurs .bloc-offline .bloc-creation{margin: 0 0 0 15px;}
-#pointsdurs .bloc-offline .icone { width: 48px; height: 48px; background-position: -1345px 0;margin:0 auto 10px;  }
-#pointsdurs .bloc-offline > div{ padding:30px; background: #9abc0d }
-#pointsdurs .bloc-offline:hover > div{ background: #779f08 }
-#pointsdurs .bloc-offline p{ color :#ffffff; font-size: 13px; text-align: center; }
-#pointsdurs .bloc-offline p a{ color :#ffffff; }
-#pointsdurs .bloc-offline h3{text-align: center; font-size: 25px; font-weight: bold; margin:0 0 5px 0; color: #ffffff; text-transform: uppercase;}
-#pointsdurs .bloc-offline .buttons{margin-top:10px;}
-#pointsdurs .bloc-offline .buttons .signup{margin: 10px auto 0; display: block;float: none;}
-#pointsdurs .bloc-offline .buttons .login{margin: 10px auto 0; display: block;float: none;}
-#pointsdurs .bloc-offline .buttons-tdb{margin-top:10px;}
-#pointsdurs .bloc-offline .buttons-tdb .buttons-centrer{margin:10px auto 0; width: 200px;}
-#pointsdurs .bloc-offline .buttons-tdb .tdb{margin:auto; width: 200px;}
+#pointsdurs .bloc-offline { padding: 0 0 0 15px; }
 
 #pointsdurs .bloc-presentation {padding:0;margin-bottom: 15px;}
 #pointsdurs .bloc-presentation > div{ padding:30px; background: #F4F4F4; margin: 0 0 0 15px;}
