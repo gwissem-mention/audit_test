@@ -190,7 +190,7 @@
     /* Blocs Communauté de pratiques */
         #articles .communaute-de-pratiques-blocs { clear: both;padding:40px 0 0 0; }
             #articles .communaute-de-pratiques-blocs .title { color: #d60030;font-size: 17px;font-weight: bold; }
-            #articles .communaute-de-pratiques-blocs .btn { background-color: #d60030;border-radius: 0;color: #fff;font-size: 12px;padding: 5px 26px; }
+            #articles .communaute-de-pratiques-blocs .btn { background-color: #d60030;background-image: none;border-radius: 0;border-width: 0;color: #fff;font-size: 12px;padding: 5px 26px; }
             #articles .communaute-de-pratiques-blocs p { font-size: 12px;margin: 14px 0; }
             #articles .communaute-de-pratiques-blocs .bloc-rejoindre, #articles .communaute-de-pratiques-blocs .bloc-action { margin: 0 0 15px 0;min-height: 190px;padding: 14px 20px; }
             #articles .communaute-de-pratiques-blocs .bloc-rejoindre { background-color: #e5e5e5; }

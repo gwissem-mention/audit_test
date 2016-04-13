@@ -14,6 +14,7 @@
                                 <br>- {{ informationManquante }}</li>
                             {%- endfor -%}
                         </p>
+                        {{ render(controller('HopitalNumeriqueAccountBundle:InformationsManquantes:communautePratique')) }}
                     {%- else -%}
                         <p>Pour rejoindre la communauté, cliquez sur le bouton suivant.</p>
                         <p>&nbsp;</p>

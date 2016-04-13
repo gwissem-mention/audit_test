@@ -162,3 +162,10 @@ services:
         arguments:  ["@router", "@security.context", "@nodevo_acl.manager.acl", "@hopitalnumerique_user.manager.user", "@hopitalnumerique_domaine.manager.domaine"]
         tags:
             - { name: 'monolog.logger', channel: 'security' }
+
+
+    hopitalnumerique_user.form.user.informations_manquantes:
+        class: 'HopitalNumerique\UserBundle\Form\Type\User\InformationsManquantesType'
+        arguments: ['@security.token_storage', '@router', '@request_stack', '@hopitalnumerique_reference.manager.reference']
+        tags:
+            - { name: 'form.type', alias: 'nodevouser_user_informationsmanquantes' }

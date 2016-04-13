@@ -1,0 +1,39 @@
+<?xml version="1.0"?>
+<xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
+    <file source-language="en" datatype="plaintext" original="">
+        <body>
+            <trans-unit id="user.region">
+                <source>user.region</source>
+                <target>Région</target>
+            </trans-unit>
+            <trans-unit id="user.departement">
+                <source>user.departement</source>
+                <target>Département</target>
+            </trans-unit>
+            <trans-unit id="user.etablissementRattachementSante">
+                <source>user.etablissementRattachementSante</source>
+                <target>Etablissement de rattachement</target>
+            </trans-unit>
+            <trans-unit id="user.autreStructureRattachementSante">
+                <source>user.autreStructureRattachementSante</source>
+                <target>Nom de votre établissement</target>
+            </trans-unit>
+            <trans-unit id="user.nomStructure">
+                <source>user.nomStructure</source>
+                <target>Nom de la structure</target>
+            </trans-unit>
+            <trans-unit id="user.profilEtablissementSante">
+                <source>user.profilEtablissementSante</source>
+                <target>Profil</target>
+            </trans-unit>
+            <trans-unit id="user.typeActivite">
+                <source>user.typeActivite</source>
+                <target>Activité</target>
+            </trans-unit>
+            <trans-unit id="user.fonctionDansEtablissementSanteReferencement">
+                <source>user.fonctionDansEtablissementSanteReferencement</source>
+                <target>Fonction</target>
+            </trans-unit>
+        </body>
+    </file>
+</xliff>

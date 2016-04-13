@@ -29,24 +29,19 @@ class Inscription
     {
         $informationsManquantes = array();
 
-        if (null === $user->getRegion() || null === $user->getDepartement())
-        {
+        if (null === $user->getRegion() || null === $user->getDepartement()) {
             $informationsManquantes[] = 'Région & département';
         }
-        if (null === $user->getEtablissementRattachementSante() && null === $user->getAutreStructureRattachementSante() && null === $user->getNomStructure())
-        {
+        if (null === $user->getEtablissementRattachementSante() && null === $user->getAutreStructureRattachementSante() && null === $user->getNomStructure()) {
             $informationsManquantes[] = 'Etablissement de rattachement / Nom de votre établissement / Nom de la structure';
         }
-        if (null === $user->getProfilEtablissementSante())
-        {
+        if (null === $user->getProfilEtablissementSante()) {
             $informationsManquantes[] = 'Profil';
         }
-        if (0 == count($user->getTypeActivite()))
-        {
+        if (0 == count($user->getTypeActivite())) {
             $informationsManquantes[] = 'Activité';
         }
-        if (null === $user->getFonctionDansEtablissementSanteReferencement())
-        {
+        if (null === $user->getFonctionDansEtablissementSanteReferencement()) {
             $informationsManquantes[] = 'Fonction';
         }
 

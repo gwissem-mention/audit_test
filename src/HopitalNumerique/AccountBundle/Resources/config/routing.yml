@@ -1,3 +1,7 @@
+hopital_numerique_account_informationsmanquantes:
+    prefix: '/informations-manquantes'
+    resource: 'routing/informations_manquantes.yml'
+
 hopital_numerique_account_homepage:
     pattern:  /
     defaults: { _controller: HopitalNumeriqueAccountBundle:Default:index }
