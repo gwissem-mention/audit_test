@@ -197,6 +197,9 @@
             #articles .communaute-de-pratiques-blocs .bloc-action { background-color: #f6f6f6;text-align: center; }
                 #articles .communaute-de-pratiques-blocs .bloc-action .subtitle { font-weight: bold; }
                 #articles .communaute-de-pratiques-blocs .bloc-action p em { color: #d60030; }
+            #articles .communaute-de-pratiques-blocs .connexion-bloc {}
+            @media screen and (max-width: 991px) { #articles .communaute-de-pratiques-blocs .connexion-bloc { margin-bottom: 20px; } }
+                #articles .communaute-de-pratiques-blocs .connexion-bloc h3 { margin-left: 0; }
 
 /* Productions fortement liées */
     #productions-associes h2{display: block; margin:0 0 5px 0;background-image: url('../img/panel.png');background-repeat: no-repeat;cursor: pointer; height: 25px;}
