@@ -7,7 +7,6 @@
 {% block stylesheets %}
     {{parent()}}
     {% stylesheets output="compiled/nodevo-contact-layout.css" filter="cssrewrite, ?yui_css"
-        "@validationEngine_css"
         'bundles/hopitalnumeriqueaccount/css/layout.css'
     %}
         <link rel="stylesheet" href="{{ asset_url }}" />
@@ -17,7 +16,6 @@
 {% block javascripts %}
     {{parent()}}
     {% javascripts output="compiled/nodevo-contact-layout.js"
-        "@validationEngine_js"
         "@jquery_maskedinput_js"
         'bundles/nodevocontact/js/script.js'
     %}

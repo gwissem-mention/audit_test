@@ -6,7 +6,6 @@
 {% block stylesheets %}
     {{parent()}}
     {% stylesheets output="compiled/hopitalnumerique-questionnaire-front-index.css" filter="cssrewrite, ?yui_css"
-        "@validationEngine_css"
         "@select2_css"
         'bundles/hopitalnumeriquequestionnaire/css/Front/style.css'
     %}
@@ -17,7 +16,6 @@
 {% block javascripts %}
     {{parent()}}
     {% javascripts output="compiled/hopitalnumerique-questionnaire-front-index.js"
-        "@validationEngine_js"
         "@select2_js"
         'bundles/hopitalnumeriqueuser/js/script.js'
         'bundles/hopitalnumeriquequestionnaire/js/Front/script.js'

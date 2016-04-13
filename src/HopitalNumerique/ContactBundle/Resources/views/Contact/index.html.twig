@@ -7,7 +7,6 @@
     {{parent()}}
     {% stylesheets output="compiled/hopitalnumerique-contact-index.css" filter="cssrewrite, ?yui_css" 
         "@select2_css"
-        "@validationEngine_css"
         'bundles/nodevoadmin/plugins/nodevoLoader/nodevoLoader.css'
         'bundles/hopitalnumeriquecontact/css/contact.css'
     %}
@@ -19,7 +18,6 @@
     {{parent()}}
     {% javascripts output="compiled/hopitalnumerique-contact-index.js" filter="yui_js" 
         "@select2_js"
-        "@validationEngine_js"
         "@jquery_maskedinput_js"
         'bundles/nodevoadmin/plugins/nodevoLoader/nodevoLoader.js'
         'bundles/hopitalnumeriquecontact/js/script.js'
