@@ -20,6 +20,13 @@
             </div>
 
             <div class="panel-body">
+                {% if groupe.id is not null -%}
+                    <p class="text-right">
+                        <strong>Note référencement :</strong> {{ referencement_note(groupe, groupe.domaine) }}
+                        &nbsp; <a href="{{path('hopitalnumerique_reference_referencement_popin', { 'entityType':'commpratique', 'entityId':groupe.id })}}" class="open-popin-referencement edit btn btn-xs btn-primary fancybox.ajax"><i class="fa fa-cog"></i></a>
+                    </p>
+                {%- endif -%}
+
                 {% form_theme groupeForm 'HopitalNumeriqueAccountBundle:Formulaire:theme.default.html.twig' %}
                 {{ form_start(groupeForm, { attr:{ class:'form-horizontal toValidate', novalidate:'novalidate' }}) }}
                     

@@ -3,6 +3,7 @@ namespace HopitalNumerique\CoreBundle\DependencyInjection;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\PersistentCollection;
+use HopitalNumerique\CommunautePratiqueBundle\Manager\GroupeManager as CommunautePratiqueGroupeManager;
 use HopitalNumerique\DomaineBundle\Entity\Domaine;
 use HopitalNumerique\DomaineBundle\Manager\DomaineManager;
 use HopitalNumerique\ForumBundle\Manager\TopicManager;
@@ -45,6 +46,11 @@ class Entity
      */
     const ENTITY_TYPE_RECHERCHE_PARCOURS = 'demarche';
 
+    /**
+     * @var string Type Groupe de la communauté de pratiques
+     */
+    const ENTITY_TYPE_COMMUNAUTE_PRATIQUES_GROUPE = 'commpratique';
+
 
     /**
      * @var \Symfony\Component\Routing\RouterInterface Router
@@ -81,11 +87,16 @@ class Entity
      */
     private $rechercheParcoursManager;
 
+    /**
+     * @var \HopitalNumerique\CommunautePratiqueBundle\Manager\GroupeManager GroupeManager
+     */
+    private $communautePratiqueGroupeManager;
+
 
     /**
      * Constructeur.
      */
-    public function __construct(RouterInterface $router, UserManager $userManager, ObjetManager $objetManager, ContenuManager $contenuManager, TopicManager $forumTopicManager, DomaineManager $domaineManager, RechercheParcoursManager $rechercheParcoursManager)
+    public function __construct(RouterInterface $router, UserManager $userManager, ObjetManager $objetManager, ContenuManager $contenuManager, TopicManager $forumTopicManager, DomaineManager $domaineManager, RechercheParcoursManager $rechercheParcoursManager, CommunautePratiqueGroupeManager $communautePratiqueGroupeManager)
     {
         $this->router = $router;
         $this->userManager = $userManager;
@@ -94,6 +105,7 @@ class Entity
         $this->forumTopicManager = $forumTopicManager;
         $this->domaineManager = $domaineManager;
         $this->rechercheParcoursManager = $rechercheParcoursManager;
+        $this->communautePratiqueGroupeManager = $communautePratiqueGroupeManager;
     }
 
 
@@ -123,6 +135,8 @@ class Entity
                 break;
             case 'HopitalNumerique\RechercheParcoursBundle\Entity\RechercheParcours':
                 return self::ENTITY_TYPE_RECHERCHE_PARCOURS;
+            case 'HopitalNumerique\CommunautePratiqueBundle\Entity\Groupe':
+                return self::ENTITY_TYPE_COMMUNAUTE_PRATIQUES_GROUPE;
         }
 
         return null;
@@ -167,6 +181,8 @@ class Entity
                 return $this->userManager->findOneById($id);
             case self::ENTITY_TYPE_RECHERCHE_PARCOURS:
                 return $this->rechercheParcoursManager->findOneById($id);
+            case self::ENTITY_TYPE_COMMUNAUTE_PRATIQUES_GROUPE:
+                return $this->communautePratiqueGroupeManager->findOneById($id);
         }
 
         return null;
@@ -182,10 +198,17 @@ class Entity
     public function getDomainesByEntity($entity)
     {
         if (method_exists($entity, 'getDomaines')) {
+            // S'il s'agit d'un contenu sans domaine, on prend en compte les domaines de son objet
             if (0 === count($entity->getDomaines()) && $entity instanceof Contenu) {
                 return $this->getDomainesByEntity($entity->getObjet());
             }
             return $entity->getDomaines();
+        }
+        if (method_exists($entity, 'getDomaine')) {
+            if (null === $entity->getDomaine()) {
+                return [];
+            }
+            return [$entity->getDomaine()];
         }
 
         switch ($this->getEntityType($entity)) {
