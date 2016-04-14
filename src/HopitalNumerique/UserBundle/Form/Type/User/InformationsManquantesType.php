@@ -101,8 +101,10 @@ class InformationsManquantesType extends AbstractType
     private function getCommunautePratiqueFields()
     {
         $fields = [];
+        $displayEtablissementNom = (null === $this->user->getEtablissementRattachementSante() && null === $this->user->getAutreStructureRattachementSante() && null === $this->user->getNomStructure());
+        $displayRegionDepartement = ((null === $this->user->getRegion() || null === $this->user->getDepartement()) || $displayEtablissementNom);
 
-        if (null === $this->user->getRegion() || null === $this->user->getDepartement()) {
+        if ($displayRegionDepartement) {
             $fields['region'] = [
                 'type' => 'entity',
                 'options' => [
@@ -132,7 +134,17 @@ class InformationsManquantesType extends AbstractType
                 ]
             ];
         }
-        if (null === $this->user->getEtablissementRattachementSante() && null === $this->user->getAutreStructureRattachementSante() && null === $this->user->getNomStructure()) {
+        if ($displayEtablissementNom) {
+            $fields['statutEtablissementSante'] = [
+                'type' => 'entity',
+                'options' => [
+                    'class' => 'HopitalNumeriqueReferenceBundle:Reference',
+                    'choices' => $this->referenceManager->findByCode('CONTEXTE_TYPE_ES'),
+                    'property' => 'libelle',
+                    'label' => 'user.statutEtablissementSante',
+                    'required' => false
+                ]
+            ];
             $fields['etablissementRattachementSante'] = [
                 'type' => 'entity',
                 'options' => [
@@ -194,7 +206,7 @@ class InformationsManquantesType extends AbstractType
                 ]
             ];
         }
-        if (null === $this->user->getFonctionDansEtablissementSanteReferencement()) {
+        if (null === $this->user->getFonctionDansEtablissementSanteReferencement() && null === $this->user->getFonctionStructure()) {
             $fields['fonctionDansEtablissementSanteReferencement'] = [
                 'type' => 'entity',
                 'options' => [
@@ -203,9 +215,16 @@ class InformationsManquantesType extends AbstractType
                     'property' => 'libelle',
                     'label' => 'user.fonctionDansEtablissementSanteReferencement',
                     'empty_value' => ' - ',
-                    'required' => true,
+                    'required' => false
+                ]
+            ];
+            $fields['fonctionStructure'] = [
+                'type' => 'text',
+                'options' => [
+                    'label' => 'user.fonctionStructure',
+                    'required' => false,
                     'attr' => [
-                        'data-validation-engine' => 'validate[required]'
+                        'maxlength' => 255
                     ]
                 ]
             ];

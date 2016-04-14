@@ -41,7 +41,7 @@ class Inscription
         if (0 == count($user->getTypeActivite())) {
             $informationsManquantes[] = 'Activité';
         }
-        if (null === $user->getFonctionDansEtablissementSanteReferencement()) {
+        if (null === $user->getFonctionDansEtablissementSanteReferencement() && null === $user->getFonctionStructure()) {
             $informationsManquantes[] = 'Fonction';
         }
 

@@ -1,6 +1,27 @@
 {% form_theme form 'HopitalNumeriqueAccountBundle:Formulaire:theme.default.html.twig' %}
 {{ form_start(form) }}
+
+    {{ form.region is defined ? form_row(form.region) : '' }}
+    {{ form.departement is defined ? form_row(form.departement) : '' }}
+    {{ form.profilEtablissementSante is defined ? form_row(form.profilEtablissementSante) : '' }}
+
+    {% if form.etablissementRattachementSante is defined or form.autreStructureRattachementSante is defined %}
+        <h3>Vous êtes un établissement de santé</h3>
+        {{ form.statutEtablissementSante is defined ? form_row(form.statutEtablissementSante) : '' }}
+        {{ form.etablissementRattachementSante is defined ? form_row(form.etablissementRattachementSante) : '' }}
+        {{ form.autreStructureRattachementSante is defined ? form_row(form.autreStructureRattachementSante) : '' }}
+        {{ form.typeActivite is defined ? form_row(form.typeActivite) : '' }}
+        {{ form.fonctionDansEtablissementSanteReferencement is defined ? form_row(form.fonctionDansEtablissementSanteReferencement) : '' }}
+    {% endif %}
+
+    {% if form.nomStructure is defined %}
+        <h3>Vous êtes une structure autre qu'un établissement de santé</h3>
+        {{ form.nomStructure is defined ? form_row(form.nomStructure) : '' }}
+        {{ form.fonctionStructure is defined ? form_row(form.fonctionStructure) : '' }}
+    {% endif %}
+
     {{ form_rest(form) }}
+
     <div class="text-right">
         <div class="row">
             <div class="col-md-12">
@@ -8,7 +29,9 @@
             </div>
         </div>
     </div>
+
 {{ form_end(form) }}
+
 <script type="text/javascript">
-    $('form.toValidate').validationEngine();
+    Hn_AccountBundle_InformationsManquantes.init();
 </script>
