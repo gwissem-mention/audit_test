@@ -305,6 +305,7 @@ class PublicationController extends Controller
     {
         $domaineId = $request->getSession()->get('domaineId');
         $objet = $this->get('hopitalnumerique_objet.manager.objet')->findOneBy( array( 'id' => $id ) );
+        $request->getSession()->set('urlToRedirect', $request->getUri());
 
         if (!in_array($domaineId, $objet->getDomainesId())) {
             throw $this->createNotFoundException("La publication n'appartient pas au domaine courant.");
