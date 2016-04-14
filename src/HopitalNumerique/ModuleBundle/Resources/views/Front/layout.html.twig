@@ -7,7 +7,6 @@
 {% block stylesheets %}
     {{parent()}}
     {% stylesheets output="compiled/hopitalnumerique-module-front-module-index.css" filter="cssrewrite, ?yui_css"
-        "@fancybox_css" 
         'bundles/hopitalnumeriquemodule/css/Front/module/style.css'
     %}
         <link rel="stylesheet" href="{{ asset_url }}" />
@@ -17,7 +16,6 @@
 {% block javascripts %}
     {{parent()}}
     {% javascripts output="compiled/hopitalnumerique-module-front-module-index.js"
-        "@fancybox_js"
         'bundles/hopitalnumeriquemodule/js/Front/script.js'
     %}
         <script type="text/javascript" src="{{ asset_url }}"></script>

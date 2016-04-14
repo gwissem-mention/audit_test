@@ -3,7 +3,6 @@
 {% block stylesheets %}
     {{parent()}}
     {% stylesheets output="compiled/hopitalnumerique-recherche-requete-index.css" filter="cssrewrite, ?yui_css"
-        "@fancybox_css" 
         "@jquery_toggles_css"
         'bundles/nodevoadmin/plugins/apprise/apprise.css'
         'bundles/hopitalnumeriquerecherche/css/requete.css'
@@ -16,7 +15,6 @@
 {% block javascripts %}
     {{parent()}}
     {% javascripts output="compiled/hopitalnumerique-recherche-requete-index.js"
-        "@fancybox_js" 
         "@jquery_toggles_js"
         'bundles/nodevoadmin/plugins/apprise/apprise.js'
         'bundles/hopitalnumeriquerecherche/js/requete.js'

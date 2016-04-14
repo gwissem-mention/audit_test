@@ -3,7 +3,6 @@
 {% block stylesheets %}
     {{ parent() }}
     {% stylesheets output="compiled/hopitalnumerique-intervention.css" filter="cssrewrite, ?yui_css"
-        "@select2_css" 
         'bundles/nodevoadmin/plugins/nodevoLoader/nodevoLoader.css'
         'bundles/hopitalnumeriqueintervention/css/intervention.css'
         'bundles/nodevoadmin/plugins/apprise/apprise.css'
@@ -14,8 +13,7 @@
 
 {% block javascripts %}
     {{ parent() }}
-    {% javascripts output="compiled/hopitalnumerique-intervention.js" 
-        "@select2_js" 
+    {% javascripts output="compiled/hopitalnumerique-intervention.js"
         'bundles/nodevoadmin/plugins/nodevoLoader/nodevoLoader.js'
         'bundles/nodevoadmin/plugins/apprise/apprise.js'
     %}
