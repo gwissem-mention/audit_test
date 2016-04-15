@@ -131,7 +131,7 @@ class NoteSaver
      * Enregistre la note d'une entité en session.
      *
      * @param integer $note       Note
-     * @param string  $entityType Type d'entité
+     * @param integer $entityType Type d'entité
      * @param integer $entityId   ID de l'entité
      */
     private function saveNoteSessionForEntity($note, $entityType, $entityId)

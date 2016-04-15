@@ -5,6 +5,6 @@
     </div>
     <div class="dd3-actions">
         <div onclick="deleteContenu( {{id}}, '{{path('hopitalnumerique_objet_contenu_delete', {'id':id})}}' );" class="pull-right dd3-trash"><i class="fa fa-trash-o"></i></div>
-        <a href="{{path('hopitalnumerique_reference_referencement_popin', { 'entityType':'infradocs', 'entityId':id })}}" class="pull-right dd3-cog open-popin-referencement fancybox.ajax"><i class="fa fa-cog"></i></a>
+        <a href="{{path('hopitalnumerique_reference_referencement_popin', { 'entityType':2, 'entityId':id })}}" class="pull-right dd3-cog open-popin-referencement fancybox.ajax"><i class="fa fa-cog"></i></a>
     </div>
 </li>

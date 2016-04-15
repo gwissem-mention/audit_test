@@ -37,9 +37,9 @@ class EntityHasNote
     private $entityId;
 
     /**
-     * @var string
+     * @var integer
      *
-     * @ORM\Column(name="entnot_entity_type", type="string", length=16, nullable=false)
+     * @ORM\Column(name="entnot_entity_type", type="smallint", nullable=false)
      */
     private $entityType;
 
@@ -96,7 +96,7 @@ class EntityHasNote
     /**
      * Set entityType
      *
-     * @param string $entityType
+     * @param integer $entityType
      *
      * @return EntityHasNote
      */
@@ -110,7 +110,7 @@ class EntityHasNote
     /**
      * Get entityType
      *
-     * @return string
+     * @return integer
      */
     public function getEntityType()
     {

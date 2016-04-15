@@ -23,9 +23,9 @@ class EntityHasGlossaire
     private $id;
 
     /**
-     * @var string
+     * @var integer
      *
-     * @ORM\Column(name="entglo_entity_type", type="string", length=16, nullable=false)
+     * @ORM\Column(name="entglo_entity_type", type="smallint", nullable=false)
      */
     private $entityType;
 
@@ -65,7 +65,7 @@ class EntityHasGlossaire
     /**
      * Set entityType
      *
-     * @param string $entityType
+     * @param integer $entityType
      *
      * @return EntityHasGlossaire
      */
@@ -79,7 +79,7 @@ class EntityHasGlossaire
     /**
      * Get entityType
      *
-     * @return string
+     * @return integer
      */
     public function getEntityType()
     {

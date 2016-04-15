@@ -145,7 +145,7 @@ class NoteReader
     /**
      * Retourne la note de l'utilisateur en session.
      *
-     * @param string  $entityType Type d'entité
+     * @param integer $entityType Type d'entité
      * @param integer $entityId   ID de l'entité
      * @return integer|null Note
      */

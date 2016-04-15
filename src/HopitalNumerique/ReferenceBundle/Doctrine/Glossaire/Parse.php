@@ -198,7 +198,7 @@ class Parse
     /**
      * Enregistre en base le glossaire si existant de l'entité.
      *
-     * @param string                                         $entityType Type d'entité
+     * @param integer                                         $entityType Type d'entité
      * @param integer                                        $entityId   ID de l'entité
      * @param \HopitalNumerique\DomaineBundle\Entity\Domaine $domaine    Domaine
      * @param array                                          $glossaire  Références trouvées

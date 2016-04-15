@@ -41,7 +41,7 @@ class EntityHasReferenceManager extends BaseManager
     /**
      * Retourne les EntityHasReference par type d'entité, ID d'entité et domaines.
      *
-     * @param string $entityType Type d'entité
+     * @param integer $entityType Type d'entité
      * @param integer $entityId ID de l'entité
      * @param array<\HopitalNumerique\DomaineBundle\Entity\Domaine> $domaines Domaines
      * @return array<\HopitalNumerique\ReferenceBundle\Entity\EntityHasReference> EntitiesHasReference

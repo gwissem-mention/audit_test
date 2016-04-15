@@ -12,6 +12,26 @@ ALTER TABLE hn_reference ADD ref_in_recherche TINYINT(1) DEFAULT '0' NOT NULL;
 ALTER TABLE hn_reference ADD ref_reference TINYINT(1) DEFAULT '0' NOT NULL;
 UPDATE hn_reference SET ref_in_recherche = ref_recherche, ref_reference = ref_dictionnaire;
 
+# Remplacement des entity_type en entier
+UPDATE hn_entity_has_glossaire SET entglo_entity_type = REPLACE(entglo_entity_type, 'publication', '1');
+UPDATE hn_entity_has_glossaire SET entglo_entity_type = REPLACE(entglo_entity_type, 'infradocs', '2');
+UPDATE hn_entity_has_glossaire SET entglo_entity_type = REPLACE(entglo_entity_type, 'forum', '3');
+UPDATE hn_entity_has_glossaire SET entglo_entity_type = REPLACE(entglo_entity_type, 'ambassadeur', '4');
+UPDATE hn_entity_has_glossaire SET entglo_entity_type = REPLACE(entglo_entity_type, 'demarche', '5');
+UPDATE hn_entity_has_glossaire SET entglo_entity_type = REPLACE(entglo_entity_type, 'commpratique', '6');
+UPDATE hn_entity_has_note SET entnot_entity_type = REPLACE(entnot_entity_type, 'publication', '1');
+UPDATE hn_entity_has_note SET entnot_entity_type = REPLACE(entnot_entity_type, 'infradocs', '2');
+UPDATE hn_entity_has_note SET entnot_entity_type = REPLACE(entnot_entity_type, 'forum', '3');
+UPDATE hn_entity_has_note SET entnot_entity_type = REPLACE(entnot_entity_type, 'ambassadeur', '4');
+UPDATE hn_entity_has_note SET entnot_entity_type = REPLACE(entnot_entity_type, 'demarche', '5');
+UPDATE hn_entity_has_note SET entnot_entity_type = REPLACE(entnot_entity_type, 'commpratique', '6');
+UPDATE hn_entity_has_reference SET entref_entity_type = REPLACE(entref_entity_type, 'publication', '1');
+UPDATE hn_entity_has_reference SET entref_entity_type = REPLACE(entref_entity_type, 'infradocs', '2');
+UPDATE hn_entity_has_reference SET entref_entity_type = REPLACE(entref_entity_type, 'forum', '3');
+UPDATE hn_entity_has_reference SET entref_entity_type = REPLACE(entref_entity_type, 'ambassadeur', '4');
+UPDATE hn_entity_has_reference SET entref_entity_type = REPLACE(entref_entity_type, 'demarche', '5');
+UPDATE hn_entity_has_reference SET entref_entity_type = REPLACE(entref_entity_type, 'commpratique', '6');
+
 #-->
 
 # Modif menu libellés

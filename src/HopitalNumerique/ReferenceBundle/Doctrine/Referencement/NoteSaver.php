@@ -223,7 +223,7 @@ class NoteSaver
     /**
      * Enregistre en base la note.
      *
-     * @param string                                         $entityType Type d'entité
+     * @param integer                                        $entityType Type d'entité
      * @param integer                                        $entityId   ID de l'entité
      * @param \HopitalNumerique\DomaineBundle\Entity\Domaine $domaine    Domaine
      * @param float                                          $note       Note

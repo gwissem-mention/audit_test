@@ -22,34 +22,34 @@ use Symfony\Component\Routing\RouterInterface;
 class Entity
 {
     /**
-     * @var string Type publication
+     * @var int Type publication
      */
-    const ENTITY_TYPE_OBJET = 'publication';
+    const ENTITY_TYPE_OBJET = 1;
 
     /**
-     * @var string Type infradoc
+     * @var int Type infradoc
      */
-    const ENTITY_TYPE_CONTENU = 'infradocs';
+    const ENTITY_TYPE_CONTENU = 2;
 
     /**
-     * @var string Type Topic de forum
+     * @var int Type Topic de forum
      */
-    const ENTITY_TYPE_FORUM_TOPIC = 'forum';
+    const ENTITY_TYPE_FORUM_TOPIC = 3;
 
     /**
-     * @var string Type Ambassadeur
+     * @var int Type Ambassadeur
      */
-    const ENTITY_TYPE_AMBASSADEUR = 'ambassadeur';
+    const ENTITY_TYPE_AMBASSADEUR = 4;
 
     /**
-     * @var string Type RechercheParcours
+     * @var int Type RechercheParcours
      */
-    const ENTITY_TYPE_RECHERCHE_PARCOURS = 'demarche';
+    const ENTITY_TYPE_RECHERCHE_PARCOURS = 5;
 
     /**
-     * @var string Type Groupe de la communauté de pratiques
+     * @var int Type Groupe de la communauté de pratiques
      */
-    const ENTITY_TYPE_COMMUNAUTE_PRATIQUES_GROUPE = 'commpratique';
+    const ENTITY_TYPE_COMMUNAUTE_PRATIQUES_GROUPE = 6;
 
 
     /**
@@ -113,7 +113,7 @@ class Entity
      * Retourne le type d'entité d'un objet.
      *
      * @param object $entity Entité
-     * @return string|null Type
+     * @return int|null Type
      */
     public function getEntityType($entity)
     {
@@ -164,7 +164,7 @@ class Entity
     /**
      * Retourne l'entité selon son type et son ID.
      *
-     * @param string  $type Type
+     * @param integer $type Type
      * @param integer $id   ID
      * @return object|null Entité
      */

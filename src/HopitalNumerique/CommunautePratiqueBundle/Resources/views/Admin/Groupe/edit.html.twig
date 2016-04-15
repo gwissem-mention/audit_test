@@ -23,7 +23,7 @@
                 {% if groupe.id is not null -%}
                     <p class="text-right">
                         <strong>Note référencement :</strong> {{ referencement_note(groupe, groupe.domaine) }}
-                        &nbsp; <a href="{{path('hopitalnumerique_reference_referencement_popin', { 'entityType':'commpratique', 'entityId':groupe.id })}}" class="open-popin-referencement edit btn btn-xs btn-primary fancybox.ajax"><i class="fa fa-cog"></i></a>
+                        &nbsp; <a href="{{path('hopitalnumerique_reference_referencement_popin', { 'entityType':6, 'entityId':groupe.id })}}" class="open-popin-referencement edit btn btn-xs btn-primary fancybox.ajax"><i class="fa fa-cog"></i></a>
                     </p>
                 {%- endif -%}
 

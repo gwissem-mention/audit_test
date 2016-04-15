@@ -30,9 +30,9 @@ class EntityHasReference
     private $entityId;
 
     /**
-     * @var string
+     * @var integer
      *
-     * @ORM\Column(name="entref_entity_type", type="string", length=16, nullable=false)
+     * @ORM\Column(name="entref_entity_type", type="smallint", nullable=false)
      */
     private $entityType;
 

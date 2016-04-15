@@ -47,7 +47,7 @@ class ReferencementController extends Controller
     /**
      * Enregistre les EntityHasReference de la popin.
      *
-     * @param string  $entityType                       Type d'entité
+     * @param integer $entityType                       Type d'entité
      * @param integer $entityId                         ID de l'entité
      */
     public function saveChosenReferencesAction(Request $request, $entityType, $entityId)

@@ -55,7 +55,7 @@ class Referencement
      * Retourne l'arbre des références avec pour chaque référence son EntityHasReference si existant.
      *
      * @param array<\HopitalNumerique\DomaineBundle\Entity\Domaine> $domaines   Domaines
-     * @param string                                                $entityType Type d'entité
+     * @param integer                                               $entityType Type d'entité
      * @param integer                                               $entityId   ID de l'entité
      * @return array Arbre
      */

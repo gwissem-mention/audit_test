@@ -49,7 +49,7 @@ class NoteReader
     /**
      * Retourne la note telle qu'elle peut être affichée.
      *
-     * @param string                                         $entityType Type d'entité
+     * @param integer                                        $entityType Type d'entité
      * @param integer                                        $entityId   ID d'entité
      * @param \HopitalNumerique\DomaineBundle\Entity\Domaine $domaine    Domaine
      * @return string Note

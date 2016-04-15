@@ -332,7 +332,7 @@
                                     <label class="col-md-2" for="hopitalnumerique_objet_objet_references">Références</label>
                                     <div class="col-md-10">
                                         {%- if objet.id is not null -%}
-                                            <a href="{{path('hopitalnumerique_reference_referencement_popin', { 'entityType':'publication', 'entityId':objet.id })}}" class="open-popin-referencement edit btn btn-xs btn-primary fancybox.ajax pull-right"><i class="fa fa-cog"></i></a>
+                                            <a href="{{path('hopitalnumerique_reference_referencement_popin', { 'entityType':1, 'entityId':objet.id })}}" class="open-popin-referencement edit btn btn-xs btn-primary fancybox.ajax pull-right"><i class="fa fa-cog"></i></a>
                                         {%- endif -%}
                                         <p class="text-muted text-right pull-right"><strong>Note référencement :</strong> {% for domaineCommunWithUser in domainesCommunsWithUser %} &nbsp; {{ domaineCommunWithUser }} : {{ referencement_note(objet, domaineCommunWithUser) }}{% endfor %}</p>
                                     </div>

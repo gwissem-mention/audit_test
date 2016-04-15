@@ -80,7 +80,7 @@
                     <div class="row">
                         <div class="col-md-12 text-right">
                             <span class="text-muted"><strong>Note référencement :</strong> : {% for domaineCommunWithUser in domainesCommunsWithUser %} &nbsp; {{ domaineCommunWithUser }} : {{ referencement_note(user, domaineCommunWithUser) }}{% endfor %}</span>
-                            &nbsp; <a class="open-popin-referencement btn btn-xs btn-primary fancybox.ajax" href="{{path('hopitalnumerique_reference_referencement_popin', { 'entityType':'ambassadeur', 'entityId':user.id })}}"><i class="fa fa-cog"></i></a>
+                            &nbsp; <a class="open-popin-referencement btn btn-xs btn-primary fancybox.ajax" href="{{path('hopitalnumerique_reference_referencement_popin', { 'entityType':4, 'entityId':user.id })}}"><i class="fa fa-cog"></i></a>
                         </div>
                     </div>
                 {%- endif -%}
