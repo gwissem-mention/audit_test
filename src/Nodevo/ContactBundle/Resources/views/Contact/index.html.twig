@@ -16,7 +16,6 @@
 {% block javascripts %}
     {{parent()}}
     {% javascripts output="compiled/nodevo-contact-layout.js"
-        "@jquery_maskedinput_js"
         'bundles/nodevocontact/js/script.js'
     %}
         <script type="text/javascript" src="{{ asset_url }}"></script>
