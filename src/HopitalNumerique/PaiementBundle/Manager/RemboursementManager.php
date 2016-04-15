@@ -71,8 +71,7 @@ class RemboursementManager extends BaseManager
             $row->discr    = 'intervention';
 
             //calcul total
-            $ambassadeurRegion = $intervention->getAmbassadeur()->getRegion()->getId();
-            $referentRegion    = $referent->getRegion()->getId();
+            $ambassadeurRegion = (null === $intervention->getAmbassadeur()->getRegion() ? '0' : $intervention->getAmbassadeur()->getRegion()->getId());
             $row->total        = array('prix' => $prix['interventions'][$ambassadeurRegion]['total'] + $forfaitTransport);
             
             $results[] = $row;
