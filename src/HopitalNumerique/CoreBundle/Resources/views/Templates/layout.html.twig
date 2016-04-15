@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="fr">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="description" content="{% block metadesc %}{{domaineCurrent.nom}}{% endblock %}">
+        <meta name="keywords" content="{% block metakeywords %}{% endblock %}">
+        <meta name="author" content="NODEVO">
+
+        <title>{% block title %}{{domaineCurrent.nom}}{% endblock title %}</title>
+
+        <link href='http://fonts.googleapis.com/css?family=Viga|Open+Sans:400,700' rel='stylesheet' type='text/css'>
+        <link rel="shortcut icon" href="{% if domaineCurrent.id != 1 %}{{ asset('favicon_anap.ico') }}{% else %}{{ asset('favicon.ico') }}{% endif %}" />
+        {% block stylesheets %}
+            {% stylesheets output="compiled/hopitalnumerique-core.css" filter="cssrewrite, ?yui_css" 
+                "@bootstrap_css"
+                '@validationEngine_css'
+                "@fancybox_css"
+                '@fonts_css'
+                '@select2_css'
+                '@front_css'
+            %}
+                <link rel="stylesheet" href="{{ asset_url }}" />
+            {% endstylesheets %}
+        {% endblock stylesheets %}
+
+        {% block javascripts %}
+            {% javascripts output="compiled/hopitalnumerique-core.js" 
+                "@jquery_js" 
+                "@jquery_ui_js"
+                "@bootstrap_js"
+                '@validationEngine_js'
+                '@select2_js'
+                "@enquire_js"
+                "@fancybox_js"
+                '@jquery_maskedinput_js'
+                "@json_js"
+                '@front_js'
+            %}
+                <script type="text/javascript" src="{{ asset_url }}"></script>
+            {% endjavascripts %}
+            <script src="{{ path('fos_js_routing_js', {"callback": "fos.Router.setData"}) }}"></script>
+            {% if app.debug %}
+                {% javascripts output="compiled/nodevo-debogage.js"
+                    'bundles/nodevotools/js/Debogage.js'
+                %}
+                    <script type="text/javascript" src="{{ asset_url }}"></script>
+                {% endjavascripts %}
+            {% endif %}
+        {% endblock %}
+
+        <script>
+            {{domaineCurrent.googleAnalytics|raw}}
+        </script>
+        <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+        <!--[if lt IE 9]> 
+            <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+            <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+        <![endif]-->
+    </head>
+
+    <body>
+        {% include 'NodevoCookieBundle:Cookie:index.html.twig' %}
+        {% block layout_body %}{% endblock %}
+    </body>
+</html>
+
+{% block flashBags %}
+    {% for type, messages in app.session.flashBag.all %}
+        {% for message in messages %}
+            <div class="alert alert-block nalert-{{type}}" onclick="$(this).slideUp();">
+                {{ message }}
+            </div>
+        {% endfor %}
+    {% endfor %}
+{% endblock %}
