@@ -6,7 +6,6 @@
 {% block stylesheets %}
     {{parent()}}
     {% stylesheets output="compiled/hopitalnumerique-contact-index.css" filter="cssrewrite, ?yui_css"
-        'bundles/nodevoadmin/plugins/nodevoLoader/nodevoLoader.css'
         'bundles/hopitalnumeriquecontact/css/contact.css'
     %}
         <link rel="stylesheet" href="{{ asset_url }}" />
@@ -16,7 +15,6 @@
 {% block javascripts %}
     {{parent()}}
     {% javascripts output="compiled/hopitalnumerique-contact-index.js" filter="yui_js"
-        'bundles/nodevoadmin/plugins/nodevoLoader/nodevoLoader.js'
         'bundles/hopitalnumeriquecontact/js/script.js'
     %}
         <script type="text/javascript" src="{{ asset_url }}"></script>

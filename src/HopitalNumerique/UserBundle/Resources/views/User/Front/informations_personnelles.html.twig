@@ -4,7 +4,6 @@
     {{parent()}}
     {% stylesheets output="compiled/hopitalnumerique-user-informations_personnelles-edit.css" filter="cssrewrite, ?yui_css"
         'bundles/hopitalnumeriqueuser/css/specificationUser.css'
-        'bundles/nodevoadmin/plugins/nodevoLoader/nodevoLoader.css'
         'bundles/hopitalnumeriqueuser/css/inscription.css'
         'bundles/nodevoadmin/plugins/apprise/apprise.css'
     %}
@@ -15,7 +14,6 @@
 {% block javascripts %}
     {{parent()}}
     {% javascripts output="compiled/hopitalnumerique-user-informations_personnelles-edit.js"
-        'bundles/nodevoadmin/plugins/nodevoLoader/nodevoLoader.js'
         'bundles/hopitalnumeriqueuser/js/User/script.js'
         'bundles/hopitalnumeriqueuser/js/User/inscription.js'
         'bundles/nodevoadmin/plugins/apprise/apprise.js'
