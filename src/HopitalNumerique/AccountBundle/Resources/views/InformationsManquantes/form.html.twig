@@ -1,6 +1,7 @@
 {% form_theme form 'HopitalNumeriqueAccountBundle:Formulaire:theme.default.html.twig' %}
 {{ form_start(form) }}
 
+    {{ form.telephoneDirect is defined ? form_row(form.telephoneDirect) : '' }}
     {{ form.region is defined ? form_row(form.region) : '' }}
     {{ form.departement is defined ? form_row(form.departement) : '' }}
     {{ form.profilEtablissementSante is defined ? form_row(form.profilEtablissementSante) : '' }}

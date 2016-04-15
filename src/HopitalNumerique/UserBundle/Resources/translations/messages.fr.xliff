@@ -38,6 +38,10 @@
                 <source>user.statutEtablissementSante</source>
                 <target>Type d'établissement</target>
             </trans-unit>
+            <trans-unit id="user.telephoneDirect">
+                <source>user.telephoneDirect</source>
+                <target>Téléphone direct</target>
+            </trans-unit>
             <trans-unit id="user.typeActivite">
                 <source>user.typeActivite</source>
                 <target>Activité</target>

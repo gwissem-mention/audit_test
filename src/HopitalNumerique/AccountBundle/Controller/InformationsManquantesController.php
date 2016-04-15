@@ -10,11 +10,20 @@ class InformationsManquantesController extends Controller
     /**
      * Formulaire des infos manquantes à l'inscription à la communauté de pratique.
      */
-    public function communautePratiqueAction(Request $request)
+    public function communautePratiqueAction()
     {
         return $this->render('HopitalNumeriqueAccountBundle:InformationsManquantes:form.html.twig', [
-            //'form' => $this->container->get('hopitalnumerique_communautepratique.dependency_injection.inscription')->getInformationsManquantesForm($this->getUser())->createView()
             'form' => $this->createForm('nodevouser_user_informationsmanquantes', $this->getUser(), ['informations_type' => InformationsManquantesType::TYPE_COMMUNAUTE_PRATIQUE])->createView()
+        ]);
+    }
+
+    /**
+     * Formulaire des infos manquantes à la demande d'intervention d'un ambassadeur.
+     */
+    public function demandeInterventionAction()
+    {
+        return $this->render('HopitalNumeriqueAccountBundle:InformationsManquantes:form.html.twig', [
+            'form' => $this->createForm('nodevouser_user_informationsmanquantes', $this->getUser(), ['informations_type' => InformationsManquantesType::TYPE_DEMANDE_INTERVENTION])->createView()
         ]);
     }
 

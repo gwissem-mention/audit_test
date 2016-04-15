@@ -24,4 +24,8 @@ $(document).ready(function() {
     });
 
     $('.fancybox').fancybox();
+
+    $('[data-mask]').each(function(i, element) {
+        $(element).mask($(element).attr('data-mask'));
+    });
 });

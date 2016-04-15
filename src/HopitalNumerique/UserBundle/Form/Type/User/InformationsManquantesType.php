@@ -16,6 +16,11 @@ class InformationsManquantesType extends AbstractType
      */
     const TYPE_COMMUNAUTE_PRATIQUE = 1;
 
+    /**
+     * @var integer Type Demande d'intervention d'un ambssadeur
+     */
+    const TYPE_DEMANDE_INTERVENTION = 2;
+
 
     /**
      * @var \Symfony\Component\Routing\RouterInterface Router
@@ -88,6 +93,8 @@ class InformationsManquantesType extends AbstractType
         switch ($informationsType) {
             case self::TYPE_COMMUNAUTE_PRATIQUE:
                 return $this->getCommunautePratiqueFields();
+            case self::TYPE_DEMANDE_INTERVENTION:
+                return $this->getDemandeInterventionFields();
             default:
                 throw new \Exception('Type non reconnu pour le formulaire des informations manquantes.');
         }
@@ -105,65 +112,13 @@ class InformationsManquantesType extends AbstractType
         $displayRegionDepartement = ((null === $this->user->getRegion() || null === $this->user->getDepartement()) || $displayEtablissementNom);
 
         if ($displayRegionDepartement) {
-            $fields['region'] = [
-                'type' => 'entity',
-                'options' => [
-                    'class' => 'HopitalNumeriqueReferenceBundle:Reference',
-                    'choices' => $this->referenceManager->findByCode('REGION'),
-                    'property' => 'libelle',
-                    'label' => 'user.region',
-                    'required' => true,
-                    'empty_value' => ' - ',
-                    'attr' => [
-                        'data-validation-engine' => 'validate[required]'
-                    ]
-                ]
-            ];
-            $fields['departement'] = [
-                'type' => 'entity',
-                'options' => [
-                    'class' => 'HopitalNumeriqueReferenceBundle:Reference',
-                    'choices' => $this->referenceManager->findByCode('DEPARTEMENT'),
-                    'property' => 'libelle',
-                    'label' => 'user.departement',
-                    'required' => true,
-                    'empty_value' => ' - ',
-                    'attr' => [
-                        'data-validation-engine' => 'validate[required]'
-                    ]
-                ]
-            ];
+            $fields['region'] = $this->getRegionField();
+            $fields['departement'] = $this->getDepartementField();
         }
         if ($displayEtablissementNom) {
-            $fields['statutEtablissementSante'] = [
-                'type' => 'entity',
-                'options' => [
-                    'class' => 'HopitalNumeriqueReferenceBundle:Reference',
-                    'choices' => $this->referenceManager->findByCode('CONTEXTE_TYPE_ES'),
-                    'property' => 'libelle',
-                    'label' => 'user.statutEtablissementSante',
-                    'required' => false
-                ]
-            ];
-            $fields['etablissementRattachementSante'] = [
-                'type' => 'entity',
-                'options' => [
-                    'class' => 'HopitalNumeriqueEtablissementBundle:Etablissement',
-                    'property' => 'usersAffichage',
-                    'label' => 'user.etablissementRattachementSante',
-                    'required' => false
-                ]
-            ];
-            $fields['autreStructureRattachementSante'] = [
-                'type' => 'text',
-                'options' => [
-                    'label' => 'user.autreStructureRattachementSante',
-                    'required' => false,
-                    'attr' => [
-                        'maxlength' => 255
-                    ]
-                ]
-            ];
+            $fields['statutEtablissementSante'] = $this->getStatutEtablissementSanteField();
+            $fields['etablissementRattachementSante'] = $this->getEtablissementRattachementSanteField();
+            $fields['autreStructureRattachementSante'] = $this->getAutreStructureRattachementSanteField();
             $fields['nomStructure'] = [
                 'type' => 'text',
                 'options' => [
@@ -176,19 +131,7 @@ class InformationsManquantesType extends AbstractType
             ];
         }
         if (null === $this->user->getProfilEtablissementSante()) {
-            $fields['profilEtablissementSante'] = [
-                'type' => 'entity',
-                'options' => [
-                    'class' => 'HopitalNumeriqueReferenceBundle:Reference',
-                    'choices' => $this->referenceManager->findByCode('CONTEXTE_METIER_INTERNAUTE'),
-                    'property' => 'libelle',
-                    'label' => 'user.profilEtablissementSante',
-                    'required' => true,
-                    'attr' => [
-                        'data-validation-engine' => 'validate[required]'
-                    ]
-                ]
-            ];
+            $fields['profilEtablissementSante'] = $this->getProfilEtablissementSanteField();
         }
         if (0 == count($this->user->getTypeActivite())) {
             $fields['typeActivite'] = [
@@ -233,6 +176,187 @@ class InformationsManquantesType extends AbstractType
         return $fields;
     }
 
+    /**
+     * Retourne les champs du formulaire pour une demande d'intervention.
+     *
+     * @return array Champs
+     */
+    private function getDemandeInterventionFields()
+    {
+        $fields = [];
+
+        $hasEtablissement = (null !== $this->user->getEtablissementRattachementSante() || null !== $this->user->getAutreStructureRattachementSante());
+
+        if (null === $this->user->getTelephoneDirect()) {
+            $fields['telephoneDirect'] = $this->getTelephoneDirectField();
+        }
+        if (null === $this->user->getRegion() || !$hasEtablissement) {
+            $fields['region'] = $this->getRegionField();
+        }
+        if (null === $this->user->getDepartement() || !$hasEtablissement) {
+            $fields['departement'] = $this->getDepartementField();
+        }
+
+        if (!$hasEtablissement) {
+            $fields['statutEtablissementSante'] = $this->getStatutEtablissementSanteField();
+            $fields['etablissementRattachementSante'] = $this->getEtablissementRattachementSanteField();
+            $fields['autreStructureRattachementSante'] = $this->getAutreStructureRattachementSanteField();
+        }
+        if (null === $this->user->getProfilEtablissementSante()) {
+            $fields['profilEtablissementSante'] = $this->getProfilEtablissementSanteField();
+        }
+
+        return $fields;
+    }
+
+
+    /**
+     * Retourne le champ Région.
+     *
+     * @return array Champ
+     */
+    private function getTelephoneDirectField()
+    {
+        return [
+            'type' => 'text',
+            'options' => [
+                'label' => 'user.telephoneDirect',
+                'required' => true,
+                'attr' => [
+                    'data-validation-engine' => 'validate[required,minSize[14],maxSize[14]],custom[phone]',
+                    'data-mask' => '99 99 99 99 99'
+                ]
+            ]
+        ];
+    }
+
+    /**
+     * Retourne le champ Région.
+     *
+     * @return array Champ
+     */
+    private function getRegionField()
+    {
+        return [
+            'type' => 'entity',
+            'options' => [
+                'class' => 'HopitalNumeriqueReferenceBundle:Reference',
+                'choices' => $this->referenceManager->findByCode('REGION'),
+                'property' => 'libelle',
+                'label' => 'user.region',
+                'required' => true,
+                'empty_value' => ' - ',
+                'attr' => [
+                    'data-validation-engine' => 'validate[required]'
+                ]
+            ]
+        ];
+    }
+
+    /**
+     * Retourne le champ Département.
+     *
+     * @return array Champ
+     */
+    private function getDepartementField()
+    {
+        return [
+            'type' => 'entity',
+            'options' => [
+                'class' => 'HopitalNumeriqueReferenceBundle:Reference',
+                'choices' => $this->referenceManager->findByCode('DEPARTEMENT'),
+                'property' => 'libelle',
+                'label' => 'user.departement',
+                'required' => true,
+                'empty_value' => ' - ',
+                'attr' => [
+                    'data-validation-engine' => 'validate[required]'
+                ]
+            ]
+        ];
+    }
+
+    /**
+     * Retourne le champ Type d'ES. Obligatoire pour choisir un ES de rattachement.
+     *
+     * @return array Champ
+     */
+    private function getStatutEtablissementSanteField()
+    {
+        return [
+            'type' => 'entity',
+            'options' => [
+                'class' => 'HopitalNumeriqueReferenceBundle:Reference',
+                'choices' => $this->referenceManager->findByCode('CONTEXTE_TYPE_ES'),
+                'property' => 'libelle',
+                'label' => 'user.statutEtablissementSante',
+                'required' => false
+            ]
+        ];
+    }
+
+    /**
+     * Retourne le champ ES de rattachement.
+     *
+     * @return array Champ
+     */
+    private function getEtablissementRattachementSanteField()
+    {
+        return [
+            'type' => 'entity',
+            'options' => [
+                'class' => 'HopitalNumeriqueEtablissementBundle:Etablissement',
+                'property' => 'usersAffichage',
+                'label' => 'user.etablissementRattachementSante',
+                'required' => false
+            ]
+        ];
+    }
+
+    /**
+     * Retourne le champ Autre structure de rattachement.
+     *
+     * @return array Champ
+     */
+    private function getAutreStructureRattachementSanteField()
+    {
+        return [
+            'type' => 'text',
+            'options' => [
+                'label' => 'user.autreStructureRattachementSante',
+                'required' => false,
+                'attr' => [
+                    'maxlength' => 255
+                ]
+            ]
+        ];
+    }
+
+    /**
+     * Retourne le champ Profil de l'ES.
+     *
+     * @return array Champ
+     */
+    private function getProfilEtablissementSanteField()
+    {
+        return [
+            'type' => 'entity',
+            'options' => [
+                'class' => 'HopitalNumeriqueReferenceBundle:Reference',
+                'choices' => $this->referenceManager->findByCode('CONTEXTE_METIER_INTERNAUTE'),
+                'property' => 'libelle',
+                'label' => 'user.profilEtablissementSante',
+                'required' => true,
+                'empty_value' => ' - ',
+                'attr' => [
+                    'data-validation-engine' => 'validate[required]'
+                ]
+            ]
+        ];
+    }
+
+
+
 
     /**
      * {@inheritdoc}
@@ -243,7 +367,8 @@ class InformationsManquantesType extends AbstractType
             ->setRequired(['informations_type'])
             ->setAllowedValues([
                 'informations_type' => [
-                    self::TYPE_COMMUNAUTE_PRATIQUE
+                    self::TYPE_COMMUNAUTE_PRATIQUE,
+                    self::TYPE_DEMANDE_INTERVENTION
                 ]
             ])
             ->setDefaults([

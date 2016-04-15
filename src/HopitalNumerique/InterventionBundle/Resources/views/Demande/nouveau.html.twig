@@ -55,9 +55,7 @@
                         </ul>
                     {% endif %}
                 {% endfor %}
-            </div>      
-            <div class="col-md-12 text-right button_donnees_personnelles">
-               <a href="{{path('hopital_numerique_user_informations_personnelles')}}" class="btn btn-success" title="Données personnelles">{{ 'données personnelles'|upper }}</i></a>
+                {{ render(controller('HopitalNumeriqueAccountBundle:InformationsManquantes:demandeIntervention')) }}
             </div>
             <div class="clearfix"></div>
         {% endif %} 

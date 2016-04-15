@@ -22,7 +22,7 @@ Hn_AccountBundle_InformationsManquantes.initEvents = function ()
     $('#nodevouser_user_informationsmanquantes_region').change(function () {
         Hn_AccountBundle_InformationsManquantes.loadDepartements();
     });
-    $('#nodevouser_user_informationsmanquantes_departement').change(function () {
+    $('#nodevouser_user_informationsmanquantes_statutEtablissementSante, #nodevouser_user_informationsmanquantes_departement').change(function () {
         Hn_AccountBundle_InformationsManquantes.loadEtablissementRattachementSantes();
     });
 };
