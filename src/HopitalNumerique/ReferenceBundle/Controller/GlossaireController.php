@@ -54,12 +54,16 @@ class GlossaireController extends Controller
     /**
      * Parse toutes les publications.
      */
-    public function parseAction()
+    public function parseAction($token)
     {
-        set_time_limit(0);
-        $this->container->get('hopitalnumerique_reference.doctrine.glossaire.parse')->parseAndSaveAll();
+        if ('dsg18df6gfd1gdf8gfd1g9sgsdfs6f5sdf41' == $token) {
+            set_time_limit(0);
+            $this->container->get('hopitalnumerique_reference.doctrine.glossaire.parse')->parseAndSaveAll();
 
-        return new Response('OK');
+            return new Response('OK');
+        }
+
+        return new Response('NOK :(');
     }
 
     /**

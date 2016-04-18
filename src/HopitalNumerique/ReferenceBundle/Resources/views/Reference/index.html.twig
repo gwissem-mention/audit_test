@@ -24,9 +24,6 @@
         <a class="btn btn-default" href="{{ path('hopitalnumerique_reference_reference_add') }}" title="Ajouter un concept"><i class="fa fa-plus"></i></a>
     {% endif %}
     <a class="btn btn-default" href="{{ path('hopitalnumerique_reference_sitemap') }}" title="Arborescence"><i class="fa fa-sitemap"></i></a>
-    {% if app.user.hasRoleAdmin %}
-        <a class="btn btn-default" href="{{ path('hopitalnumerique_reference_glossaire_parse') }}" target="_blank" title="Parser les publications à la recherche de mots du glossaire"><i class="fa fa-refresh"></i></a>
-    {% endif %}
 {% endblock %}
 
 {% block body %}

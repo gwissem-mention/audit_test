@@ -14,7 +14,7 @@ hopitalnumerique_reference_glossaire_migre:
     methods: 'get'
 
 hopitalnumerique_reference_glossaire_parse:
-    pattern: '/admin/glossaire/parse'
+    pattern: '/glossaire/parse/{token}'
     defaults: { _controller: 'HopitalNumeriqueReferenceBundle:Glossaire:parse' }
     methods: 'get'
 
