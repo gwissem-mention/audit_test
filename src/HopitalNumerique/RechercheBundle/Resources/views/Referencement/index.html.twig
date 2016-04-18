@@ -1,0 +1,62 @@
+{% extends 'HopitalNumeriqueCoreBundle:Templates:' ~ templateCurrentId ~ '/layout.html.twig' %}
+
+{% block title %}{{ parent() }} - Recherche avancée{% endblock %}
+
+{% block stylesheets -%}
+    {{ parent() }}
+    {% stylesheets output="compiled/hopitalnumerique-recherche-search-index.css" filter="cssrewrite, ?yui_css"
+        'bundles/hopitalnumeriquerecherche/css/referencement.css'
+    %}
+        <link rel="stylesheet" href="{{ asset_url }}">
+    {% endstylesheets %}
+{%- endblock %}
+
+{% block javascripts -%}
+    {{ parent() }}
+    {% javascripts output="compiled/hopitalnumerique-recherche-search-index.js"
+        'bundles/hopitalnumeriquerecherche/js/Referencement.js'
+    %}
+        <script type="text/javascript" src="{{ asset_url }}"></script>
+    {% endjavascripts %}
+{%- endblock %}
+
+{% block body -%}
+    <div class="recherche-referencement">
+        <div class="row">
+            <div class="col-md-4">
+                {% import _self as mySelf %}
+                <nav class="references">
+                    <ul>
+                        {%- for referenceProperties in referencesTree -%}
+                            {{ mySelf.buildTreePart(referenceProperties) }}
+                        {%- endfor -%}
+                    </ul>
+                </nav>
+
+                {% macro buildTreePart(referencesTreePart) -%}
+                    {% import _self as mySelf %}
+                    <li>
+                        <a class="reference" data-reference="{{ referencesTreePart.reference.id }}" data-chosen="false">
+                            <span class="add"><i class="fa fa-plus-circle"></i></span>
+                            {%- if referencesTreePart.enfants|length > 0 -%}
+                                <span class="toggle"><i class="fa fa-chevron-right"></i></span>
+                            {%- endif -%}
+                            {{ referencesTreePart.reference.libelle }}
+                        </a>
+
+                        {%- if referencesTreePart.enfants|length > 0 -%}
+                            <ul data-reference="{{ referencesTreePart.reference.id }}">
+                                {%- for referenceEnfantTree in referencesTreePart.enfants -%}
+                                    {{ mySelf.buildTreePart(referenceEnfantTree) }}
+                                {%- endfor -%}
+                            </ul>
+                        {%- endif -%}
+                    </li>
+                {%- endmacro %}
+            </div>
+            <div class="col-md-8">
+
+            </div>
+        </div>
+    </div>
+{%- endblock %}

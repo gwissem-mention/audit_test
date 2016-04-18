@@ -80,20 +80,26 @@ class Tree
     /**
      * Retourne les références classées.
      *
-     * @param array<\HopitalNumerique\DomaineBundle\Entity\Domaine>|null $domaines   Domaines des références
      * @param boolean|null                                               $parentable Parentable
+     * @param array<\HopitalNumerique\DomaineBundle\Entity\Domaine>|null $domaines   Domaines des références
+     * @param boolean|null                                               $inRecherche InRecherche ?
      * @return \Doctrine\Common\Collections\Collection Références
      */
-    public function getOrderedReferences($parentable = true, $domaines = null)
+    public function getOrderedReferences($parentable = true, $domaines = null, $inRecherche = null)
     {
         if (null === $domaines) {
             $referencesConditions = [
-                'lock' => false,
-                'parentable' => $parentable
+                'lock' => false
             ];
+            if (null !== $parentable) {
+                $referencesConditions['parentable'] = $parentable;
+            }
+            if (null !== $inRecherche) {
+                $referencesConditions['inRecherche'] = $inRecherche;
+            }
             $references = $this->referenceManager->findBy($referencesConditions, ['order' => 'ASC']);
         } else {
-            $references = $this->referenceManager->findByDomaines($domaines, true, false, $parentable);
+            $references = $this->referenceManager->findByDomaines($domaines, true, false, $parentable, null, $inRecherche);
         }
 
         return $this->getOrderedReferencesTreePart($references);

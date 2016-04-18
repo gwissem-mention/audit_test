@@ -1,0 +1,17 @@
+.recherche-referencement { margin: 15px 0 0 0; }
+    .recherche-referencement .references {}
+        .recherche-referencement .references a { cursor: default; }
+        .recherche-referencement .references ul { background-color: #f4f4f4;border-color: #eee;border-style: solid;border-width: 1px 1px 0 1px;font-weight: bold;list-style-type: none;margin: 0;padding: 0; }
+            .recherche-referencement .references ul li {}
+                .recherche-referencement .references ul li .reference { background-color: #d60030;border-color: #eee;border-style: solid;border-width: 0 0 1px 0;color: #fff;display: block;font-size: 17px;padding: 8px 12px;text-transform: uppercase; }
+                .recherche-referencement .references ul li .reference:hover { text-decoration: none; }
+                    .recherche-referencement .references ul li .add { cursor: pointer;display: none;float: left;margin: -2px 0 0;padding: 2px 7px; }
+                    .recherche-referencement .references ul li .add:hover { color: #d60030; }
+                    .recherche-referencement .references ul li .toggle { color: #fff;float: right;font-size: 20px;margin: -2px -2px 0 4px; }
+                .recherche-referencement .references ul ul { display: none; }
+                    .recherche-referencement .references ul ul li {}
+                        .recherche-referencement .references ul ul li .reference { background-color: transparent;color: #000;font-size: 14px;padding-left: 0px;text-transform: none; }
+                            .recherche-referencement .references ul ul li .add { display: block; }
+                            .recherche-referencement .references ul ul li .toggle { color: #d60030;font-size: 14px;margin-top: 2px; }
+                            .recherche-referencement .references ul ul ul {}
+                            .recherche-referencement .references ul ul ul li .reference { font-weight: normal;padding-left: 12px; }

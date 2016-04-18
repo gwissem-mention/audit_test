@@ -1,3 +1,7 @@
+hopitalnumerique_recherche_referencement:
+    prefix: '/recherche-avancee'
+    resource: 'routing/referencement.yml'
+
 #Recherche
 hopital_numerique_recherche_homepage:
     pattern:  /recherche-par-referencement/
