@@ -18,7 +18,8 @@ class GlossaireController extends Controller
         $glossaire = $this->container->get('hopitalnumerique_reference.doctrine.glossaire.reader')->getGlossaireGroupedByLetterByDomaine($this->container->get('hopitalnumerique_domaine.dependency_injection.current_domaine')->get());
 
         return $this->render('HopitalNumeriqueReferenceBundle:Glossaire:list.html.twig', [
-            'glossaire' => $glossaire
+            'glossaire' => $glossaire,
+            'complet' => false
         ]);
     }
 
@@ -30,7 +31,8 @@ class GlossaireController extends Controller
         $glossaire = $this->container->get('hopitalnumerique_reference.doctrine.glossaire.reader')->getGlossaireGroupedByLetter();
 
         return $this->render('HopitalNumeriqueReferenceBundle:Glossaire:list.html.twig', [
-            'glossaire' => $glossaire
+            'glossaire' => $glossaire,
+            'complet' => true
         ]);
     }
 

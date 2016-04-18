@@ -27,7 +27,9 @@
                         <p class="text-muted">Sauf indication contraire, les définitions apportées sont issues des productions ANAP.</p>
                     </div>
                     <div class="col-md-4">
-                        <a class="btn btn-success" href="{{ path('hopitalnumerique_reference_glossaire_list_full') }}"><i class="fa fa-search-plus"></i> &nbsp; Étendre la recherche au glossaire de l'Anap</a>
+                        {%- if not complet -%}
+                            <a class="btn btn-success" href="{{ path('hopitalnumerique_reference_glossaire_list_full') }}"><i class="fa fa-search-plus"></i> &nbsp; Étendre la recherche au glossaire de l'Anap</a>
+                        {%- endif -%}
                     </div>
                     <div class="col-md-4">
                         <form id="glossaire-recherche-form">
