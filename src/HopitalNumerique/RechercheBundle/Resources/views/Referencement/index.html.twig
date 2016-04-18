@@ -24,8 +24,9 @@
     <div class="recherche-referencement">
         <div class="row">
             <div class="col-md-4">
+
                 {% import _self as mySelf %}
-                <nav class="references">
+                <nav class="references-bloc">
                     <ul>
                         {%- for referenceProperties in referencesTree -%}
                             {{ mySelf.buildTreePart(referenceProperties) }}
@@ -53,8 +54,17 @@
                         {%- endif -%}
                     </li>
                 {%- endmacro %}
+
             </div>
             <div class="col-md-8">
+
+                <div class="filtres-bloc">
+                    <h1>Ma recherche</h1>
+                    <nav class="references">
+                        <ul></ul>
+                    </nav>
+                    <div class="clearfix"></div>
+                </div>
 
             </div>
         </div>
