@@ -35,8 +35,8 @@
 
                 {% macro buildTreePart(referencesTreePart) -%}
                     {% import _self as mySelf %}
-                    <li>
-                        <a class="reference" data-reference="{{ referencesTreePart.reference.id }}" data-chosen="false">
+                    <li data-reference="{{ referencesTreePart.reference.id }}" data-chosen="false">
+                        <a class="reference">
                             <span class="add"><i class="fa fa-plus-circle"></i></span>
                             {%- if referencesTreePart.enfants|length > 0 -%}
                                 <span class="toggle"><i class="fa fa-chevron-right"></i></span>
@@ -45,7 +45,7 @@
                         </a>
 
                         {%- if referencesTreePart.enfants|length > 0 -%}
-                            <ul data-reference="{{ referencesTreePart.reference.id }}">
+                            <ul>
                                 {%- for referenceEnfantTree in referencesTreePart.enfants -%}
                                     {{ mySelf.buildTreePart(referenceEnfantTree) }}
                                 {%- endfor -%}
