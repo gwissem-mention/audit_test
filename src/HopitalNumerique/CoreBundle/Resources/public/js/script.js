@@ -23,7 +23,10 @@ $(document).ready(function() {
         $('a#search-avance-header-home').attr('href', "/recherche-par-referencement?type=avancee");
     });
 
-    $('.fancybox').fancybox();
+    $('.fancybox').fancybox({
+        autoSize: false,
+        width: '80%'
+    });
 
     $('[data-mask]').each(function(i, element) {
         $(element).mask($(element).attr('data-mask'));
