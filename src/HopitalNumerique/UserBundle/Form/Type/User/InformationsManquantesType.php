@@ -133,22 +133,6 @@ class InformationsManquantesType extends AbstractType
         if (null === $this->user->getProfilEtablissementSante()) {
             $fields['profilEtablissementSante'] = $this->getProfilEtablissementSanteField();
         }
-        if (0 == count($this->user->getTypeActivite())) {
-            $fields['typeActivite'] = [
-                'type' => 'entity',
-                'options' => [
-                    'class' => 'HopitalNumeriqueReferenceBundle:Reference',
-                    'choices' => $this->referenceManager->findByCode('CONTEXTE_SPECIALITE_ES'),
-                    'property' => 'libelle',
-                    'label' => 'user.typeActivite',
-                    'multiple' => true,
-                    'required' => true,
-                    'attr' => [
-                        'data-validation-engine' => 'validate[required]'
-                    ]
-                ]
-            ];
-        }
         if (null === $this->user->getFonctionDansEtablissementSanteReferencement() && null === $this->user->getFonctionStructure()) {
             $fields['fonctionDansEtablissementSanteReferencement'] = [
                 'type' => 'entity',
@@ -354,8 +338,6 @@ class InformationsManquantesType extends AbstractType
             ]
         ];
     }
-
-
 
 
     /**
