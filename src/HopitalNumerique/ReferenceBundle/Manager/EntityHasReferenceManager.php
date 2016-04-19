@@ -50,4 +50,26 @@ class EntityHasReferenceManager extends BaseManager
     {
         return $this->getRepository()->findByEntityTypeAndEntityIdAndDomaines($entityType, $entityId, ($domaines instanceof Collection ? $domaines->toArray() : $domaines));
     }
+
+    /**
+     * Retourne les EntityHasReference avec leur note.
+     *
+     * @param \HopitalNumerique\DomaineBundle\Entity\Domaine $domaine Domaine
+     * @param array $references Références
+     * @return array EntitiesHasReference
+     */
+    public function getWithNotes(Domaine $domaine, array $references)
+    {
+        return $this->getRepository()->findWithNotes($domaine, $references);
+    }
+
+    /**
+     * Retourne toutes les entités (couples type + id).
+     *
+     * @return array Entités
+     */
+    public function getAllDistinctEntityTypesAndIds()
+    {
+        return $this->getRepository()->getAllDistinctEntityTypesAndIds();
+    }
 }

@@ -35,6 +35,10 @@ services:
         class: 'HopitalNumerique\ReferenceBundle\Doctrine\ReferencementDeleter'
         arguments: ['@hopitalnumerique_core.dependency_injection.entity', '@hopitalnumerique_reference.doctrine.referencement.note_deleter', '@hopitalnumerique_reference.manager.entity_has_reference']
 
+    hopitalnumerique_reference.doctrine.referencement.deleter:
+        class: 'HopitalNumerique\ReferenceBundle\Doctrine\Referencement\Deleter'
+        arguments: ['@hopitalnumerique_core.dependency_injection.entity', '@hopitalnumerique_reference.doctrine.referencement.note_deleter', '@hopitalnumerique_reference.manager.entity_has_reference']
+
     hopitalnumerique_reference.doctrine.referencement.note_saver:
         class: 'HopitalNumerique\ReferenceBundle\Doctrine\Referencement\NoteSaver'
         arguments: ['@hopitalnumerique_reference.dependency_injection.referencement', '@hopitalnumerique_core.dependency_injection.entity', '@hopitalnumerique_reference.manager.entity_has_reference', '@hopitalnumerique_reference.manager.entity_has_note', '@hopitalnumerique_domaine.manager.domaine']

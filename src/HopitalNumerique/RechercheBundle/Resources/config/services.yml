@@ -68,3 +68,7 @@ services:
         arguments: ['@router']
         tags:
             - { name: 'form.type', alias: 'hopitalnumerique_recherche_expbesoinreponse' }
+
+    hopitalnumerique_recherche.doctrine.referencement.reader:
+        class: 'HopitalNumerique\RechercheBundle\Doctrine\Referencement\Reader'
+        arguments: ['@hopitalnumerique_domaine.dependency_injection.current_domaine', '@hopitalnumerique_reference.manager.entity_has_reference', '@hopitalnumerique_reference.manager.entity_has_note']

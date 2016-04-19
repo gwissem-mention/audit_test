@@ -140,9 +140,25 @@ class ReferencementController extends Controller
             foreach ($this->container->get('hopitalnumerique_domaine.manager.domaine')->findAll() as $domaine) {
                 $this->container->get('hopitalnumerique_reference.doctrine.referencement.note_saver')->saveScoresForDomaine($domaine);
             }
+
+            return new Response('Cron termin&eacute; !');
         }
 
-        return new Response('Cron termin&eacute; !');
+        return new Response('NOK :(');
+    }
+
+    /**
+     * Cron qui supprime les entités qui n'existent pas.
+     */
+    public function cronRemoveInexistantsAction($token)
+    {
+        if ($token === 'gfd5g6df81df6gdf1g6fd1scd8s6f') {
+            set_time_limit(0);
+            $this->container->get('hopitalnumerique_reference.doctrine.referencement.deleter')->removeInexistants();
+            return new Response('Cron termin&eacute; !');
+        }
+
+        return new Response('NOK :(');
     }
 
     /**

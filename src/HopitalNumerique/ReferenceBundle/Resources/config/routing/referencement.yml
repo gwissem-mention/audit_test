@@ -13,6 +13,11 @@ hopitalnumerique_reference_referencement_cronsavenotes:
     defaults: { _controller: 'HopitalNumeriqueReferenceBundle:Referencement:cronSaveNotes' }
     methods: 'get'
 
+hopitalnumerique_reference_referencement_cronremoveinexistants:
+    pattern: '/referencement/cron-remove-inexistants/{token}'
+    defaults: { _controller: 'HopitalNumeriqueReferenceBundle:Referencement:cronRemoveInexistants' }
+    methods: 'get'
+
 hopitalnumerique_reference_referencement_migre:
     pattern: '/admin/referencement/migre/{token}'
     defaults: { _controller: 'HopitalNumeriqueReferenceBundle:Referencement:migre' }
