@@ -6,6 +6,7 @@ use HopitalNumerique\ReferenceBundle\Entity\Reference;
 use HopitalNumerique\CoreBundle\DependencyInjection\Entity;
 use HopitalNumerique\ReferenceBundle\Manager\EntityHasGlossaireManager;
 use HopitalNumerique\ReferenceBundle\Manager\ReferenceManager;
+use Nodevo\ToolsBundle\Tools\Chaine;
 
 /**
  * Lecture du glossaire.
@@ -83,7 +84,8 @@ class Reader
         }
 
         foreach ($glossaireReferences as $glossaireReference) {
-            $firstLetter = substr(strtolower($glossaireReference->getSigleForGlossaire()), 0, 1);
+            $firstLetterChaine = new Chaine(utf8_encode(substr(utf8_decode($glossaireReference->getSigleForGlossaire()), 0, 1)));
+            $firstLetter = strtolower($firstLetterChaine->supprimeAccents());
             if (!array_key_exists($firstLetter, $glossaireByLetter)) {
                 $firstLetter = '#';
             }
@@ -103,7 +105,10 @@ class Reader
      */
     private function order(Reference $glossaireReference1, Reference $glossaireReference2)
     {
-        return (strcmp($glossaireReference1->getSigleForGlossaire(), $glossaireReference2->getSigleForGlossaire()));
+        $glossaireReference1Chaine = new Chaine($glossaireReference1->getSigleForGlossaire());
+        $glossaireReference2Chaine = new Chaine($glossaireReference2->getSigleForGlossaire());
+
+        return (strcmp($glossaireReference1Chaine->supprimeAccents(), $glossaireReference2Chaine->supprimeAccents()));
     }
 
 

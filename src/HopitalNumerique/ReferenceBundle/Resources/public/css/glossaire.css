@@ -3,7 +3,7 @@
         .glossaire .sommaire h1 { font-size: 24px;margin: 0; }
         .glossaire .sommaire ul { font-size: 20px;font-weight: bold;text-align: center; }
             .glossaire .sommaire ul li {}
-                .glossaire .sommaire ul li a, .glossaire .sommaire ul li span { padding: 1px 6px; }
+                .glossaire .sommaire ul li a, .glossaire .sommaire ul li span { padding: 1px 5px; }
                 .glossaire .sommaire ul li a { color: #5d5d5d; }
                 .glossaire .sommaire ul li a:hover { background-color: #e5e5e5;text-decoration: none; }
                 .glossaire .sommaire ul li span { color: #e5e5e5; }
