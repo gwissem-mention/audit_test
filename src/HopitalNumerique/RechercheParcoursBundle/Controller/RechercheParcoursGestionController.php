@@ -167,6 +167,22 @@ class RechercheParcoursGestionController extends Controller
                         $rechercheParcoursFilsNew[] = $rechercheParcours; 
                     }
                 }
+                //<-- Suppression des RechercheParcours
+                foreach (array_keys($rechercheParcoursFils) as $referenceId) {
+                    $referenceExists = false;
+
+                    foreach ($rechercheparcoursgestion->getReferencesParentes() as $refParente) {
+                        if ($refParente->getId() == $referenceId) {
+                            $referenceExists = true;
+                            break;
+                        }
+                    }
+
+                    if (!$referenceExists) {
+                        $this->get('hopitalnumerique_recherche_parcours.manager.recherche_parcours')->delete($rechercheParcoursFils[$referenceId]);
+                    }
+                }
+                //-->
 
                 $this->get('hopitalnumerique_recherche_parcours.manager.recherche_parcours')->save($rechercheParcoursFilsNew);
                 
