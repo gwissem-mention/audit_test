@@ -9,7 +9,7 @@
                     <div class="title">Rejoindre la communauté de pratiques</div>
                     {%- if app.user|communautePratiqueHasInformationManquante -%}
                         <p>
-                            Certaines informations de votre profil sont nécessaires pour rejoindre la communauté, <a href="{{ path('hopital_numerique_user_informations_personnelles') }}">cliquez sur ce lien pour accéder au profil</a> :
+                            Certaines informations de votre profil sont nécessaires pour rejoindre la communauté :
                             {%- for informationManquante in app.user|communautePratiqueGetInformationsManquantes -%}
                                 <br>- {{ informationManquante }}</li>
                             {%- endfor -%}
