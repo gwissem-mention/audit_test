@@ -1,8 +1,13 @@
 .referencement-popin {}
     .referencement-popin .panel-heading {}
-        .referencement-popin .panel-heading h4 { float:none !important; }
+        .referencement-popin .panel-heading h4 { float:none !important;font-family: Arial,sans-serif;font-size: 17px; }
     .referencement-popin .panel-body {}
-        .referencement-popin tbody tr[data-level="1"] { background-color: #34495e;color: #fff; }
-        .referencement-popin tbody tr:not([data-level="1"]) { display: none; }
-        .referencement-popin tbody tr[data-level="2"] { background-color: #ddd; }
-        .referencement-popin tbody tr[data-level="3"] { background-color: #eee; }
+        .referencement-popin thead {}
+            .referencement-popin thead th { font-family: Arial,sans-serif;font-size: 13px; }
+        .referencement-popin tbody { font-family: Arial,sans-serif;font-size: 14px;font-weight: normal; }
+            .referencement-popin label { font-weight: normal; }
+            .referencement-popin tbody tr[data-level="1"] { background-color: #34495e;color: #fff; }
+            .referencement-popin tbody tr:not([data-level="1"]) { display: none; }
+            .referencement-popin tbody tr[data-level="2"] { background-color: #ddd; }
+            .referencement-popin tbody tr[data-level="3"] { background-color: #eee; }
+            .referencement-popin .btn-md { color: #4f8edc; }
