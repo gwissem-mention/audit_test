@@ -32,22 +32,6 @@
 #recherche-par-parcours .bandeau .bloc-gauche .parcours .parcours-liens .etape .bloc-etape img{margin: -5px 0px 0px -10px;}
 
 /* -- Bloc droit -- */
-/* Mode non connecté */
-#recherche-par-parcours .bandeau .bloc-droit-offline {padding:0;height: 260px;}
-#recherche-par-parcours .bandeau .bloc-droit-offline .bloc-creation {}
-#recherche-par-parcours .bandeau .bloc-droit-offline .icone { width: 48px; height: 48px; background-position: -1345px 0;margin:0 auto 10px;  }
-#recherche-par-parcours .bandeau .bloc-droit-offline > div{ padding:30px; background: #9abc0d }
-#recherche-par-parcours .bandeau .bloc-droit-offline:hover > div{ background: #779f08 }
-#recherche-par-parcours .bandeau .bloc-droit-offline p{ color :#ffffff; font-size: 13px; text-align: center; }
-#recherche-par-parcours .bandeau .bloc-droit-offline p a{ color :#ffffff; }
-#recherche-par-parcours .bandeau .bloc-droit-offline h3{text-align: center; font-size: 25px; font-weight: bold; margin:0 0 5px 0; color: #ffffff; text-transform: uppercase;}
-#recherche-par-parcours .bandeau .bloc-droit-offline .buttons{margin-top:10px;}
-#recherche-par-parcours .bandeau .bloc-droit-offline .buttons .signup{margin: 10px auto 0; display: block;float: none;;}
-#recherche-par-parcours .bandeau .bloc-droit-offline .buttons .login{margin: 10px auto 0; display: block;float: none;;}
-#recherche-par-parcours .bandeau .bloc-droit-offline .buttons-tdb{margin-top:10px;}
-#recherche-par-parcours .bandeau .bloc-droit-offline .buttons-tdb .buttons-centrer{margin:10px auto 0; width: 200px;}
-#recherche-par-parcours .bandeau .bloc-droit-offline .buttons-tdb .tdb{margin:auto; width: 200px;}
-
 /* -- Page du détail -- */
 
 /* En-tête de la page */
@@ -138,9 +122,6 @@
     #recherche-par-parcours .bandeau .bloc-gauche .parcours .parcours-presentation .entete .icone{display: none;}
     #recherche-par-parcours .bandeau .bloc-gauche .parcours .parcours-presentation .entete .titre{margin-left: 0px;}
 }
-@media screen and (max-width: 1005px) {
-    #recherche-par-parcours .bandeau .bloc-droit-offline > div {padding-right: 20px; padding-left: 20px;}
-}
 @media screen and (max-width: 991px) {
     #recherche-par-parcours .bandeau .bloc-tablette{display: block;}
     #recherche-par-parcours .bandeau .bloc-gauche{ height: auto;}
@@ -149,9 +130,6 @@
 
     #recherche-par-parcours .bandeau .bloc-droit-online {height: auto; margin-top: 30px;}
     #recherche-par-parcours .bandeau .bloc-droit-online .bloc-gris{ margin: 20px 0 0 0; height: auto;}
-
-    #recherche-par-parcours .bandeau .bloc-droit-offline { height: auto;margin-top: 30px;}
-    #recherche-par-parcours .bandeau .bloc-droit-offline .bloc-creation{ margin: 20px 0 0 0;height: auto;}
 
     #recherche-par-parcours-details .en-tete-scroll{overflow: scroll;}
     #recherche-par-parcours-details .note {width: 260px;}

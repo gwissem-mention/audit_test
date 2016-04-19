@@ -64,20 +64,7 @@
                 {% if app.user is null %}
                     {# Mode non connecté : bloc de création de compte #}
                     <div class="col-md-4">
-
                         {% include 'HopitalNumeriqueAccountBundle:include:login.html.twig' with { 'size':'small', 'title':'Connexion' } %}
-
-                        <div class="bloc-droit-offline">
-                            <div class="bloc-creation">
-                                <div class="common-sprite icone"></div>
-                                <h3>Mon compte</h3>
-                                <p>
-                                    En créant mon compte, je bénéficie de nombreux services.
-                                    <a target="_blank" href="{{path('hopital_numerique_publication_publication_article',{'id':314, 'alias':'pourquoi-creer-un-compte','categorie':'publication'|lower})}}">Pourquoi créer un compte ?</a>                             
-                                </p>
-                            </div>
-                        </div>
-
                     </div>
                 {% endif %}
             </div>
