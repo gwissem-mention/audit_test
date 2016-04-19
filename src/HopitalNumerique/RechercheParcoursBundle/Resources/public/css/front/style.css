@@ -1,5 +1,5 @@
 /* En-tête de la page */
-#recherche-par-parcours h3{color:#672F9E;font-size: 24px;font-weight: bold;}
+#recherche-par-parcours h3{color:#672F9E;font-weight: bold;}
 #recherche-par-parcours .description p{color:#828282; }
 
 /* Le bandeau contenant les 2 blocs : Gauche et Droit */
