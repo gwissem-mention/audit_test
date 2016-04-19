@@ -126,7 +126,7 @@
                     <span class="pull-left">|</span>
                     <input type="hidden" id="save-references-topic-url" value="{{path('hopitalnumerique_forum_reference_topic_save',{'id':topic.id})}}" />
                     <input type="hidden" id="save-references-contenu-url" value="{{path('hopitalnumerique_forum_reference_contenu')}}" />
-                    <a href="{{path('hopitalnumerique_reference_referencement_popin', { 'entityType':3, 'entityId':topic.id })}}" class="open-popin-referencement btn btn-xs btn-success fancybox.ajax pull-left"><i class="fa fa-tags"></i></a>
+                    <a href="{{path('hopitalnumerique_reference_referencement_popin', { 'entityType':3, 'entityId':topic.id })}}" class="open-popin-referencement btn btn-xs btn-success fancybox.ajax pull-left"><i class="fa fa-cog"></i></a>
                     <p class="text-muted text-right pull-left">Note référencement : {{ referencement_note(topic) }}</p>
                 {% endif %}
             </div>
