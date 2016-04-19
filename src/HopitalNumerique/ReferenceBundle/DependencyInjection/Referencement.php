@@ -103,4 +103,24 @@ class Referencement
 
         return null;
     }
+
+    /**
+     * Retourne le niveau de pertinence d'une entité.
+     *
+     * @param boolean $primary Primary
+     * @param float   $note    Note
+     * @return int Niveau
+     */
+    public function getPertinenceNiveauByPrimaryAndNote($primary, $note)
+    {
+        if ($primary) {
+            return 1;
+        }
+
+        if ($note > 200) {
+            return 2;
+        }
+
+        return 3;
+    }
 }

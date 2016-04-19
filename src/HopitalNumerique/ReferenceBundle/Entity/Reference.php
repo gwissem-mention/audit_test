@@ -47,6 +47,11 @@ class Reference
      */
     const STATUT_INACTIF_ID = 4;
 
+    /**
+     * @var integer ID du point dur
+     */
+    const CATEGORIE_OBJET_POINT_DUR_ID = 184;
+
 
     /**
      * @var integer

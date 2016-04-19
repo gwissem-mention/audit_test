@@ -2,6 +2,7 @@
 namespace HopitalNumerique\RechercheBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 
 /**
@@ -28,8 +29,8 @@ class ReferencementController extends Controller
     public function jsonEntitiesByReferencesAction(Request $request)
     {
         $referenceIds = $request->request->get('references');
+        $entitiesPropertiesByGroup = $this->container->get('hopitalnumerique_recherche.doctrine.referencement.reader')->getEntitiesPropertiesByReferenceIdsByGroup($referenceIds);
 
-        $entityProperties = $this->container->get('hopitalnumerique_recherche.doctrine.referencement.reader')->getEntityPropertiesByReferenceIds($referenceIds);
-        dump($entityProperties);die();
+        return new JsonResponse($entitiesPropertiesByGroup);
     }
 }

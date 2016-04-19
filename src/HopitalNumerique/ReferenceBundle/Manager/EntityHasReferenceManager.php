@@ -2,6 +2,7 @@
 namespace HopitalNumerique\ReferenceBundle\Manager;
 
 use Doctrine\Common\Collections\Collection;
+use HopitalNumerique\DomaineBundle\Entity\Domaine;
 use Nodevo\ToolsBundle\Manager\Manager as BaseManager;
 
 /**
@@ -60,7 +61,7 @@ class EntityHasReferenceManager extends BaseManager
      */
     public function getWithNotes(Domaine $domaine, array $references)
     {
-        return $this->getRepository()->findWithNotes($domaine, $references);
+        return $this->getRepository()->getWithNotes($domaine, $references);
     }
 
     /**

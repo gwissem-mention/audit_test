@@ -54,7 +54,7 @@ Hn_RechercheBundle_Referencement.getReferenceIdByElement = function(element)
  */
 Hn_RechercheBundle_Referencement.getReferenceLibelleById = function(referenceId)
 {
-    return $('.references-bloc [data-reference="' + referenceId + '"] a.reference').text();
+    return $('.references-bloc [data-reference="' + referenceId + '"] a.reference').first().text().trim();
 };
 
 /**
@@ -126,5 +126,33 @@ Hn_RechercheBundle_Referencement.initReferenceFilters = function()
     $('.filtres-bloc .references ul').css({ display: 'none' });
     $('.filtres-bloc .references ul').html(filtersHtml);
     $('.filtres-bloc .references ul').fadeIn('slow');
+
+    Hn_RechercheBundle_Referencement.displayResults();
 };
 //-->
+
+/**
+ * Affiche les résultats.
+ */
+Hn_RechercheBundle_Referencement.displayResults = function()
+{
+    $.ajax({
+        url: Routing.generate('hopitalnumerique_recherche_referencement_jsonentitiesbyreferences'),
+        method: 'post',
+        type: 'json',
+        data: {
+            'references': Hn_RechercheBundle_Referencement.getChosenReferenceIds()
+        },
+        success: function(data) {
+            var index = 0;
+            var otherResultsHtml = '';
+            for (var group in data) {
+                for (var i in data[group]) {
+                    index++;
+                    otherResultsHtml += '<div data-index="' + index + '" data-visible="false" data-entity-type="' + data[group][i].entityType + '" data-entity-id="' + data[group][i].entityId + '" data-pertinence-niveau="' + data[group][i].pertinenceNiveau + '">' + index + '</div>';
+                }
+                $('#results-' + group).html(otherResultsHtml);
+            }
+        }
+    });
+};

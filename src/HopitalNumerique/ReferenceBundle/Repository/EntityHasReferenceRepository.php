@@ -3,7 +3,11 @@ namespace HopitalNumerique\ReferenceBundle\Repository;
 
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\Query\Expr;
+use HopitalNumerique\CoreBundle\DependencyInjection\Entity;
 use HopitalNumerique\DomaineBundle\Entity\Domaine;
+use HopitalNumerique\ObjetBundle\Entity\Objet;
+use HopitalNumerique\ReferenceBundle\Entity\EntityHasNote;
+use HopitalNumerique\ReferenceBundle\Entity\Reference;
 
 /**
  * EntityHasReferenceRepository.
@@ -72,20 +76,39 @@ class EntityHasReferenceRepository extends EntityRepository
         $qb = $this->createQueryBuilder('entityHasReference');
 
         $qb
-            ->select('entityHasReference.entityType', 'entityHasReference.entityId', 'entityHasNote.note')
+            ->select('entityHasReference.entityType', 'entityHasReference.entityId', 'entityHasReference.primary', 'entityHasNote.note', 'objetPointDurType.id as objetPointDurTypeId')
             ->leftJoin(
-                'HopitalNumeriqueReferenceBundle:EntityHasNote',
+                EntityHasNote::class,
                 'entityHasNote',
-                Expr\Join::ON,
+                Expr\Join::WITH,
                 $qb->expr()->andX(
                     $qb->expr()->eq('entityHasReference.entityType', 'entityHasNote.entityType'),
                     $qb->expr()->eq('entityHasReference.entityId', 'entityHasNote.entityId'),
                     $qb->expr()->eq('entityHasNote.domaine', ':domaine')
                 )
             )
-            ->setParameter('domaine', $domaine)
+            ->leftJoin(
+                Objet::class,
+                'objetPointDur',
+                Expr\Join::WITH,
+                $qb->expr()->andX(
+                    $qb->expr()->eq('objetPointDur.id', 'entityHasReference.entityId'),
+                    $qb->expr()->eq('entityHasReference.entityType', ':entityTypeObjet')
+                )
+            )
+            ->leftJoin(
+                'objetPointDur.types',
+                'objetPointDurType',
+                Expr\Join::WITH,
+                $qb->expr()->eq('objetPointDurType.id', ':objetCategoriePointDur')
+            )
             ->where($qb->expr()->in('entityHasReference.reference', ':references'))
-            ->setParameter('references', $references)
+            ->setParameters([
+                'domaine' => $domaine,
+                'references' => $references,
+                'entityTypeObjet' => Entity::ENTITY_TYPE_OBJET,
+                'objetCategoriePointDur' => Reference::CATEGORIE_OBJET_POINT_DUR_ID
+            ])
         ;
 
         return $qb->getQuery()->getResult();

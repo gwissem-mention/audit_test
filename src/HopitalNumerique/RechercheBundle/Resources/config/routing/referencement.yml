@@ -2,3 +2,8 @@ hopitalnumerique_recherche_referencement_index:
     pattern: ''
     defaults: { _controller: 'HopitalNumeriqueRechercheBundle:Referencement:index' }
     methods: 'GET'
+
+hopitalnumerique_recherche_referencement_jsonentitiesbyreferences:
+    pattern: 'json-entities-by-references'
+    defaults: { _controller: 'HopitalNumeriqueRechercheBundle:Referencement:jsonEntitiesByReferences' }
+    methods: 'POST'
