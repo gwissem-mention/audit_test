@@ -5,7 +5,7 @@
 /* Le bandeau contenant les 2 blocs : Gauche et Droit */
 #recherche-par-parcours .bandeau{margin: 30px 0 0 0;}
 
-#recherche-par-parcours .bandeau .connexion-bloc { min-height: 290px; }
+#recherche-par-parcours .bandeau .connexion-bloc { background-color:#F4F4F4;min-height: 290px; }
     #recherche-par-parcours .bandeau .connexion-bloc label { font-weight: normal; }
     #recherche-par-parcours .bandeau .connexion-bloc .bloc-password { margin-bottom: 5px; }
 
