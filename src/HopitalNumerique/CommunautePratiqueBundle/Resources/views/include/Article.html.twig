@@ -1,44 +1,47 @@
 <aside class="communaute-de-pratiques-blocs">
     <div class="row">
-        <div class="col-md-8 col-sm-8">
-
-            {%- if app.user is null -%}
-                {% include 'HopitalNumeriqueAccountBundle:include:login.html.twig' with { 'size':'small', 'title':'Rejoindre la communauté de pratiques' } %}
-            {%- else -%}
+        {%- if app.user|communautePratiqueHasInformationManquante -%}
+            <div class="col-md-12">
                 <div class="bloc-rejoindre">
                     <div class="title">Rejoindre la communauté de pratiques</div>
-                    {%- if app.user|communautePratiqueHasInformationManquante -%}
-                        <p>
-                            Certaines informations de votre profil sont nécessaires pour rejoindre la communauté :
-                            {%- for informationManquante in app.user|communautePratiqueGetInformationsManquantes -%}
-                                <br>- {{ informationManquante }}</li>
-                            {%- endfor -%}
-                        </p>
-                        {{ render(controller('HopitalNumeriqueAccountBundle:InformationsManquantes:communautePratique')) }}
-                    {%- else -%}
+                    <p>
+                        Certaines informations de votre profil sont nécessaires pour rejoindre la communauté :
+                        {%- for informationManquante in app.user|communautePratiqueGetInformationsManquantes -%}
+                            <br>- {{ informationManquante }}</li>
+                        {%- endfor -%}
+                    </p>
+                    {{ render(controller('HopitalNumeriqueAccountBundle:InformationsManquantes:communautePratique')) }}
+                </div>
+            </div>
+        {%- else -%}
+            <div class="col-md-8 col-sm-8">
+                {%- if app.user is null -%}
+                    {% include 'HopitalNumeriqueAccountBundle:include:login.html.twig' with { 'size':'small', 'title':'Rejoindre la communauté de pratiques' } %}
+                {%- else -%}
+                    <div class="bloc-rejoindre">
+                        <div class="title">Rejoindre la communauté de pratiques</div>
                         <p>Pour rejoindre la communauté, cliquez sur le bouton suivant.</p>
                         <p>&nbsp;</p>
                         <div class="text-right">
                             <a class="btn" onclick="CommunautePratique.inscrit();">Rejoindre la communauté</a>
                         </div>
-                    {%- endif -%}
-                </div>
-            {%- endif -%}
-
-        </div>
-        <div class="col-sm-4 col-md-4">
-            <div class="bloc-action">
-                {% if app.user is not null and app.user.inscritCommunautePratique %}
-                    <div class="title">Quitter</div>
-                    <div class="subtitle">la communauté de pratiques</div>
-                    <p><em>Votre fiche sera supprimée de l'annuaire de la communauté</em></p>
-                    <a class="btn" onclick="CommunautePratique.desinscrit();">Quitter la communauté</a>
-                {% else %}
-                    <div class="title">Productions issues de la communauté</div>
-                    <p><em>Retrouvez les productions issues du travail des groupes de la communauté</em></p>
-                    <a class="btn" href="{{ path('hopitalnumerique_communautepratique_publication_list') }}">Voir les productions</a>
-                {% endif %}
+                    </div>
+                {%- endif -%}
             </div>
-        </div>
+            <div class="col-sm-4 col-md-4">
+                <div class="bloc-action">
+                    {% if app.user is not null and app.user.inscritCommunautePratique %}
+                        <div class="title">Quitter</div>
+                        <div class="subtitle">la communauté de pratiques</div>
+                        <p><em>Votre fiche sera supprimée de l'annuaire de la communauté</em></p>
+                        <a class="btn" onclick="CommunautePratique.desinscrit();">Quitter la communauté</a>
+                    {% else %}
+                        <div class="title">Productions issues de la communauté</div>
+                        <p><em>Retrouvez les productions issues du travail des groupes de la communauté</em></p>
+                        <a class="btn" href="{{ path('hopitalnumerique_communautepratique_publication_list') }}">Voir les productions</a>
+                    {% endif %}
+                </div>
+            </div>
+        {%- endif -%}
     </div>
 </aside>
