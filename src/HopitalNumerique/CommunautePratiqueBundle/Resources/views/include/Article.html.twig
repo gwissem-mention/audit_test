@@ -1,6 +1,6 @@
 <aside class="communaute-de-pratiques-blocs">
     <div class="row">
-        {%- if app.user|communautePratiqueHasInformationManquante -%}
+        {%- if app.user is not null and app.user|communautePratiqueHasInformationManquante -%}
             <div class="col-md-12">
                 <div class="bloc-rejoindre">
                     <div class="title">Rejoindre la communauté de pratiques</div>
