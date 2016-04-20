@@ -67,31 +67,28 @@ class Reader
      */
     private function orderEntitiesProperties($entityProperties1, $entityProperties2)
     {
-        if (intval($entityProperties1['primary']) > intval($entityProperties2['primary'])) {
+        if (intval($entityProperties1['primarySum']) > intval($entityProperties2['primarySum'])) {
             return -1;
         }
-        if (intval($entityProperties1['primary']) < intval($entityProperties2['primary'])) {
+        if (intval($entityProperties1['primarySum']) < intval($entityProperties2['primarySum'])) {
             return 1;
         }
 
-        if (null == $entityProperties1['note'] && null == $entityProperties2['note']) {
-            return 0;
-        }
-        if (null == $entityProperties2['note']) {
+        if (intval($entityProperties1['referencesCount']) > intval($entityProperties2['referencesCount'])) {
             return -1;
         }
-        if (null == $entityProperties1['note']) {
+        if (intval($entityProperties1['referencesCount']) < intval($entityProperties2['referencesCount'])) {
             return 1;
         }
 
-        if ($entityProperties1['note'] == $entityProperties2['note']) {
-            return 0;
-        }
         if ($entityProperties1['note'] > $entityProperties2['note']) {
             return -1;
-        } else {
+        }
+        if ($entityProperties1['note'] < $entityProperties2['note']) {
             return 1;
         }
+
+        return 0;
     }
 
     /**
@@ -115,7 +112,7 @@ class Reader
                 $entitiesPropertiesByGroup[$group][] = [
                     'entityType' => $entityProperties['entityType'],
                     'entityId' => $entityProperties['entityId'],
-                    'pertinenceNiveau' => $this->referencement->getPertinenceNiveauByPrimaryAndNote($entityProperties['primary'], $entityProperties['note'])
+                    'pertinenceNiveau' => $this->referencement->getPertinenceNiveauByPrimaryAndNote($entityProperties['primarySum'], $entityProperties['note'])
                 ];
             }
         }

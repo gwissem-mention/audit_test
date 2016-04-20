@@ -76,7 +76,7 @@ class EntityHasReferenceRepository extends EntityRepository
         $qb = $this->createQueryBuilder('entityHasReference');
 
         $qb
-            ->select('entityHasReference.entityType', 'entityHasReference.entityId', 'COUNT(entityHasReference.reference) AS referencesCount', 'SUM(entityHasReference.primary) AS primary', 'entityHasNote.note', 'objetPointDurType.id as objetPointDurTypeId')
+            ->select('entityHasReference.entityType', 'entityHasReference.entityId', 'COUNT(DISTINCT(entityHasReference.reference)) AS referencesCount', 'SUM(DISTINCT(entityHasReference.primary)) AS primarySum', 'entityHasNote.note', 'objetPointDurType.id as objetPointDurTypeId')
             //->select('entityHasReference.entityType', 'entityHasReference.entityId', 'COUNT(entityHasReference.reference) AS referencesCount', 'SUM(entityHasReference.primary) AS primary', 'entityHasNote.note')
             ->leftJoin(
                 EntityHasNote::class,
