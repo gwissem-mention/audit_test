@@ -24,3 +24,15 @@
                 .recherche-referencement .filtres-bloc .references ul li { background-color: #fff;border-radius: 4px;box-shadow: 3px 3px 5px 0 rgba(50, 50, 50, 0.75);float: left;margin: 4px;padding: 4px;white-space: nowrap; }
                     .recherche-referencement .filtres-bloc .references ul li .remove { color: #000;cursor: pointer;padding: 0 3px; }
                     .recherche-referencement .filtres-bloc .references ul li .remove:hover { color: #d60030;text-decoration: none; }
+    .recherche-referencement .results-bloc {}
+        .recherche-referencement .results-bloc h2 { color: #d60030;font-size: 14px;font-weight: bold;text-transform: uppercase; }
+            .recherche-referencement .results-bloc h2 .title { border-color: #d60030;border-style: solid;border-width: 0 0 4px 0; }
+        .recherche-referencement .results-bloc .category { color: #d60030;font-size: 12px;margin: 20px 0 0 0;text-transform: uppercase; }
+        .recherche-referencement .results-bloc h3 { font-size: 17px;font-weight: bold;margin: 0; }
+            .recherche-referencement .results-bloc h3 a { color: #000;display: block; }
+                .recherche-referencement .results-bloc h3 a .pertinence-niveau-1, .recherche-referencement .results-bloc h3 a .pertinence-niveau-2, .recherche-referencement .results-bloc h3 a .pertinence-niveau-3 { background-repeat: no-repeat;float: left;height: 14px;margin: 4px 3px 0 0;width: 14px; }
+                .recherche-referencement .results-bloc h3 a .pertinence-niveau-1 { background-image: url("/bundles/hopitalnumeriquerecherche/img/niv-1-prod.png"); }
+                .recherche-referencement .results-bloc h3 a .pertinence-niveau-2 { background-image: url("/bundles/hopitalnumeriquerecherche/img/niv-2-prod.png"); }
+                .recherche-referencement .results-bloc h3 a .pertinence-niveau-3 { background-image: url("/bundles/hopitalnumeriquerecherche/img/niv-3-prod.png"); }
+            .recherche-referencement .results-bloc h3 a .subtitle { color: #5d5d5d;display: block;font-size: 95%; }
+        .recherche-referencement .results-bloc p { font-size: 13px;margin: 8px 0; }

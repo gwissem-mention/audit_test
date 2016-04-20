@@ -3,6 +3,13 @@
  */
 var Hn_RechercheBundle_Referencement = function() {};
 
+
+/**
+ * @param int Nombre de résultats à afficher
+ */
+Hn_RechercheBundle_Referencement.RESULTS_RANGE = 10;
+
+
 $(document).ready(function () {
     Hn_RechercheBundle_Referencement.init();
 });
@@ -114,6 +121,9 @@ Hn_RechercheBundle_Referencement.toggleReferenceChoosing = function(referenceId)
 //-->
 
 //<-- Filtres de recherche
+/**
+ * Initialise les filtres.
+ */
 Hn_RechercheBundle_Referencement.initReferenceFilters = function()
 {
     var filtersHtml = '';
@@ -131,6 +141,8 @@ Hn_RechercheBundle_Referencement.initReferenceFilters = function()
 };
 //-->
 
+
+//<-- Résultats
 /**
  * Affiche les résultats.
  */
@@ -144,15 +156,107 @@ Hn_RechercheBundle_Referencement.displayResults = function()
             'references': Hn_RechercheBundle_Referencement.getChosenReferenceIds()
         },
         success: function(data) {
-            var index = 0;
-            var otherResultsHtml = '';
             for (var group in data) {
+                var index = 0;
+                var otherResultsHtml = '';
+
                 for (var i in data[group]) {
                     index++;
-                    otherResultsHtml += '<div data-index="' + index + '" data-visible="false" data-entity-type="' + data[group][i].entityType + '" data-entity-id="' + data[group][i].entityId + '" data-pertinence-niveau="' + data[group][i].pertinenceNiveau + '">' + index + '</div>';
+                    otherResultsHtml += '<div data-index="' + index + '" data-initialized="false" data-visible="false" data-entity-type="' + data[group][i].entityType + '" data-entity-id="' + data[group][i].entityId + '" data-pertinence-niveau="' + data[group][i].pertinenceNiveau + '"></div>';
                 }
+
                 $('#results-' + group).html(otherResultsHtml);
+                $('#results-' + group + '-count').html(data[group].length);
+                Hn_RechercheBundle_Referencement.displayMoreResults(group);
             }
         }
     });
 };
+
+/**
+ * Affiche plus de résultats.
+ *
+ * @param string resultsGroup Groupe des résultats
+ */
+Hn_RechercheBundle_Referencement.displayMoreResults = function(resultsGroup)
+{
+    var entitiesContainers = $('#results-' + resultsGroup + ' [data-visible="false"]');
+
+    $(entitiesContainers).each(function (i, entityContainer) {
+        Hn_RechercheBundle_Referencement.fillAndDisplayEntity(resultsGroup, $(entityContainer).attr('data-entity-type'), $(entityContainer).attr('data-entity-id'));
+
+        if (i == Hn_RechercheBundle_Referencement.RESULTS_RANGE - 1) {
+            return false;
+        }
+    });
+};
+
+/**
+ * Affiche moins de résultats.
+ *
+ * @param string resultsGroup Groupe des résultats
+ */
+Hn_RechercheBundle_Referencement.displayLessResults = function(resultsGroup)
+{
+    var entitiesContainers = $('#results-' + resultsGroup + ' [data-visible="true"]').toArray().reverse();
+
+    $(entitiesContainers).each(function (i, entityContainer) {
+        $(entityContainer).attr('data-visible', 'false');
+        $(entityContainer).slideUp('slow');
+
+        if (i == Hn_RechercheBundle_Referencement.RESULTS_RANGE - 1) {
+            return false;
+        }
+    });
+
+    Hn_RechercheBundle_Referencement.processResultButtonsActivating(resultsGroup);
+};
+
+/**
+ * Active ou pas les boutons Plus/moins de résultats.
+ *
+ * @param string resultsGroup Groupe des résultats
+ */
+Hn_RechercheBundle_Referencement.processResultButtonsActivating = function(resultsGroup)
+{
+    var lessResultsPossible = ($('#results-' + resultsGroup + ' [data-visible="true"]').size() > Hn_RechercheBundle_Referencement.RESULTS_RANGE);
+    var moreResultsPossible = ($('#results-' + resultsGroup + ' [data-visible="false"]').size() > 0);
+
+    $('#results-' + resultsGroup + '-less-button').prop('disabled', !lessResultsPossible);
+    $('#results-' + resultsGroup + '-more-button').prop('disabled', !moreResultsPossible);
+};
+
+/**
+ * Remplit le contenu de l'entité (sauf si déjà initialisé) et l'affiche.
+ *
+ * @param string resultsGroup Groupe des résultats
+ * @param int entityType Type d'entité
+ * @param int entityiD   ID de l'entité
+ */
+Hn_RechercheBundle_Referencement.fillAndDisplayEntity = function(resultsGroup, entityType, entityId)
+{
+    var entityContainer = $('.results-bloc [data-entity-type="' + entityType + '"][data-entity-id="' + entityId + '"]');
+
+    if ('false' === $(entityContainer).attr('data-initialized')) {
+        $.ajax({
+            url: Routing.generate('hopitalnumerique_recherche_referencement_viewentity', { entityType:entityType, entityId:entityId }),
+            method: 'POST',
+            data: {
+                pertinenceNiveau: $(entityContainer).attr('data-pertinence-niveau')
+            },
+            success: function (data) {
+                //$(entityContainer).html($(entityContainer).attr('data-pertinence-niveau') + ' ' + entityId);
+                $(entityContainer).html(data);
+                $(entityContainer).attr('data-initialized', 'true');
+                $(entityContainer).attr('data-visible', 'true');
+                $(entityContainer).slideDown('slow');
+                Hn_RechercheBundle_Referencement.processResultButtonsActivating(resultsGroup);
+            }
+        });
+    } else {
+        $(entityContainer).attr('data-visible', 'true');
+        $(entityContainer).slideDown('slow');
+        Hn_RechercheBundle_Referencement.processResultButtonsActivating(resultsGroup);
+    }
+};
+//-->

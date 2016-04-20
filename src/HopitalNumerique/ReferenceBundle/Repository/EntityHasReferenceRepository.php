@@ -109,6 +109,7 @@ class EntityHasReferenceRepository extends EntityRepository
                 'entityTypeObjet' => Entity::ENTITY_TYPE_OBJET,
                 'objetCategoriePointDur' => Reference::CATEGORIE_OBJET_POINT_DUR_ID
             ])
+            ->groupBy('entityHasReference.entityType', 'entityHasReference.entityId')
         ;
 
         return $qb->getQuery()->getResult();

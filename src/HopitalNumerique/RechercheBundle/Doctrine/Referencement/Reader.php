@@ -71,29 +71,29 @@ class Reader
             return 0;
         }
         if ($entityProperties1['primary'] && !$entityProperties2['primary']) {
-            return 1;
+            return -1;
         }
         if (!$entityProperties1['primary'] && $entityProperties2['primary']) {
-            return -1;
+            return 1;
         }
 
         if (null == $entityProperties1['note'] && null == $entityProperties2['note']) {
             return 0;
         }
         if (null == $entityProperties2['note']) {
-            return 1;
+            return -1;
         }
         if (null == $entityProperties1['note']) {
-            return -1;
+            return 1;
         }
 
         if ($entityProperties1['note'] == $entityProperties2['note']) {
             return 0;
         }
         if ($entityProperties1['note'] > $entityProperties2['note']) {
-            return 1;
-        } else {
             return -1;
+        } else {
+            return 1;
         }
     }
 
@@ -109,15 +109,18 @@ class Reader
             'points-durs' => [],
             'productions' => []
         ];
-        $entitiesProperties = $this->getEntitiesPropertiesByReferenceIds($referenceIds);
 
-        foreach ($entitiesProperties as $entityProperties) {
-            $group = (null !== $entityProperties['objetPointDurTypeId'] ? 'points-durs' : 'productions');
-            $entitiesPropertiesByGroup[$group][] = [
-                'entityType' => $entityProperties['entityType'],
-                'entityId' => $entityProperties['entityId'],
-                'pertinenceNiveau' => $this->referencement->getPertinenceNiveauByPrimaryAndNote($entityProperties['primary'], $entityProperties['note'])
-            ];
+        if (count($referenceIds) > 0) {
+            $entitiesProperties = $this->getEntitiesPropertiesByReferenceIds($referenceIds);
+
+            foreach ($entitiesProperties as $entityProperties) {
+                $group = (null !== $entityProperties['objetPointDurTypeId'] ? 'points-durs' : 'productions');
+                $entitiesPropertiesByGroup[$group][] = [
+                    'entityType' => $entityProperties['entityType'],
+                    'entityId' => $entityProperties['entityId'],
+                    'pertinenceNiveau' => $this->referencement->getPertinenceNiveauByPrimaryAndNote($entityProperties['primary'], $entityProperties['note'])
+                ];
+            }
         }
 
         return $entitiesPropertiesByGroup;

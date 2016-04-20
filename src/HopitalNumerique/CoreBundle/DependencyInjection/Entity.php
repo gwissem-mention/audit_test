@@ -188,6 +188,7 @@ class Entity
         return null;
     }
 
+
     //<-- Domaines
     /**
      * Retourne les dommaines d'une entité.
@@ -319,6 +320,141 @@ class Entity
     }
     //-->
 
+
+    /**
+     * Retourne le libellé de l'entité.
+     *
+     * @param object $entity Entité
+     * @return string Libellé
+     */
+    public function getTitleByEntity($entity)
+    {
+        switch ($this->getEntityType($entity)) {
+            case self::ENTITY_TYPE_OBJET:
+            case self::ENTITY_TYPE_COMMUNAUTE_PRATIQUES_GROUPE:
+                return $entity->getTitre();
+            case self::ENTITY_TYPE_CONTENU:
+                return $entity->getObjet()->getTitre();
+            case self::ENTITY_TYPE_FORUM_TOPIC:
+                return $entity->getTitle();
+            case self::ENTITY_TYPE_AMBASSADEUR:
+                return $entity->getPrenomNom();
+            case self::ENTITY_TYPE_RECHERCHE_PARCOURS:
+                return $entity->getReference()->getLibelle();
+        }
+
+        return null;
+    }
+
+    /**
+     * Retourne le sous-titre de l'entité.
+     *
+     * @param object $entity Entité
+     * @return string Sous-titre
+     */
+    public function getSubtitleByEntity($entity)
+    {
+        switch ($this->getEntityType($entity)) {
+            case self::ENTITY_TYPE_CONTENU:
+                return $entity->getTitre();
+        }
+
+        return null;
+    }
+
+    /**
+     * Retourne la catégorie de l'entité.
+     *
+     * @param object $entity Entité
+     * @return string|null Catégorie
+     */
+    public function getCategoryByEntity($entity)
+    {
+        $categories = [];
+
+        switch ($this->getEntityType($entity)) {
+            // Si contenu sans aucun type, on prend les types de son objet
+            case self::ENTITY_TYPE_CONTENU:
+                if (0 === count($entity->getTypes())) {
+                    return $this->getCategoryByEntity($entity->getObjet());
+                }
+                // no break
+            case self::ENTITY_TYPE_OBJET:
+                foreach ($entity->getTypes() as $type) {
+                    $categories[] = $type->getLibelle();
+                }
+                break;
+            case self::ENTITY_TYPE_FORUM_TOPIC:
+                return 'Fil de forum';
+            case self::ENTITY_TYPE_AMBASSADEUR:
+                return 'Ambassadeur';
+            case self::ENTITY_TYPE_RECHERCHE_PARCOURS:
+                return 'Démarche';
+            case self::ENTITY_TYPE_COMMUNAUTE_PRATIQUES_GROUPE:
+                return 'Groupe en cours de la communauté de pratiques';
+        }
+
+        return implode('&diams;', $categories);
+    }
+
+    /**
+     * Retourne la description de l'entité.
+     *
+     * @param object $entity Entité
+     * @return string|null Description
+     */
+    public function getDescriptionByEntity($entity)
+    {
+        $description = null;
+
+        switch ($this->getEntityType($entity)) {
+            case self::ENTITY_TYPE_OBJET:
+                $description = $entity->getResume();
+                break;
+            case self::ENTITY_TYPE_RECHERCHE_PARCOURS:
+                $description = $entity->getDescription();
+                break;
+            case self::ENTITY_TYPE_COMMUNAUTE_PRATIQUES_GROUPE:
+                $description = $entity->getDescriptionCourte();
+        }
+
+        if (null !== $description) {
+            $description = substr(strip_tags($description), 0, 255).'...';
+        }
+
+        return $description;
+    }
+
+
+    //<-- URL
+    /**
+     * Retourne l'URL de la page de l'entité.
+     *
+     * @param object $entity Entité
+     * @return string|null URL
+     */
+    public function getFrontUrlByEntity($entity)
+    {
+        $entityId = $this->getEntityId($entity);
+
+        switch ($this->getEntityType($entity)) {
+            case self::ENTITY_TYPE_OBJET:
+                return $this->router->generate('hopital_numerique_publication_publication_objet', ['id' => $entityId, 'alias' => $entity->getAlias()]);
+            case self::ENTITY_TYPE_CONTENU:
+                return $this->router->generate('hopital_numerique_publication_publication_contenu', ['idc' => $entityId, 'aliasc' => $entity->getAlias(), 'id' => $this->getEntityId($entity->getObjet()), 'alias' => $entity->getObjet()->getAlias()]);
+            case self::ENTITY_TYPE_FORUM_TOPIC:
+                return $this->router->generate('ccdn_forum_user_topic_show', ['topicId' => $entityId, 'forumName' => $entity->getBoard()->getCategory()->getForum()->getName()]);
+            case self::ENTITY_TYPE_AMBASSADEUR:
+                return $this->router->generate('hopital_numerique_intervention_demande_nouveau', ['ambassadeur' => $entityId]);
+            case self::ENTITY_TYPE_RECHERCHE_PARCOURS:
+                return $this->router->generate('hopital_numerique_recherche_parcours_details_index', ['id' => $entityId]);
+            case self::ENTITY_TYPE_COMMUNAUTE_PRATIQUES_GROUPE:
+                return $this->router->generate('hopitalnumerique_communautepratique_groupe_view', ['groupe' => $entityId]);
+        }
+
+        return null;
+    }
+
     /**
      * Retourne l'URL de la page gérant le référencement de l'entité.
      *
@@ -341,4 +477,5 @@ class Entity
 
         return null;
     }
+    //-->
 }

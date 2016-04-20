@@ -1,0 +1,13 @@
+<div class="category">{{ category }}</div>
+<h3>
+    <a href="{{ url }}">
+        <em class="pertinence-niveau-{{ pertinenceNiveau }}"></em>
+        {{- title -}}
+        {%- if subtitle is not null -%}
+            <span class="subtitle"><em class="fa fa-share fa-flip-vertical"></em> {{ subtitle }}</span>
+        {%- endif -%}
+    </a>
+</h3>
+{%- if description is not null -%}
+    <p>{{ description }}</p>
+{%- endif -%}

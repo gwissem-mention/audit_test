@@ -67,18 +67,16 @@
                 </div>
 
                 <div class="results-bloc">
-                    <div id="results-points-durs-bloc">
-                        <h2>Points durs</h2>
-                        <div id="results-points-durs">
-                            
+                    {%- for groupId, groupTitle in { 'points-durs':'Points durs', 'productions':'Productions' } -%}
+                        <div id="results-{{ groupId }}-bloc">
+                            <h2><span class="title">{{ groupTitle }}</span> (<span id="results-{{ groupId }}-count"></span> résultats)</h2>
+                            <div id="results-{{ groupId }}"></div>
+                            <div class="text-right">
+                                <button type="button" disabled id="results-{{ groupId }}-less-button" class="btn btn-xs btn-danger" onclick="Hn_RechercheBundle_Referencement.displayLessResults('{{ groupId }}');"><em class="fa fa-angle-double-up"></em> &nbsp; Moins de résultats</button>
+                                <button type="button" disabled id="results-{{ groupId }}-more-button" class="btn btn-xs btn-primary" onclick="Hn_RechercheBundle_Referencement.displayMoreResults('{{ groupId }}');"><em class="fa fa-angle-double-down"></em> &nbsp; Plus de résultats</button>
+                            </div>
                         </div>
-                    </div>
-                    <div id="results-productions-bloc">
-                        <h2>Productions</h2>
-                        <div id="results-productions">
-                            
-                        </div>
-                    </div>
+                    {%- endfor -%}
                 </div>
 
             </div>

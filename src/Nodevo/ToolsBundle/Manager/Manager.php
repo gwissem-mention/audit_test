@@ -214,12 +214,22 @@ abstract class Manager
      */
     public function save( $entity )
     {
+        $this->persist($entity);
+
+        $this->flush();
+    }
+
+    public function persist($entity)
+    {
         if( is_array($entity) ){
             foreach( $entity as $one )
                 $this->_em->persist( $one );
         }else
             $this->_em->persist( $entity );
+    }
 
+    public function flush()
+    {
         $this->_em->flush();
     }
 

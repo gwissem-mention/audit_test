@@ -28,9 +28,26 @@ class ReferencementController extends Controller
      */
     public function jsonEntitiesByReferencesAction(Request $request)
     {
-        $referenceIds = $request->request->get('references');
+        $referenceIds = $request->request->get('references', []);
         $entitiesPropertiesByGroup = $this->container->get('hopitalnumerique_recherche.doctrine.referencement.reader')->getEntitiesPropertiesByReferenceIdsByGroup($referenceIds);
 
         return new JsonResponse($entitiesPropertiesByGroup);
+    }
+
+    /**
+     * Affiche une entité.
+     */
+    public function viewEntityAction(Request $request, $entityType, $entityId)
+    {
+        $entity = $this->container->get('hopitalnumerique_core.dependency_injection.entity')->getEntityByTypeAndId($entityType, $entityId);
+
+        return $this->render('HopitalNumeriqueRechercheBundle:Referencement:view_entity.html.twig', [
+            'category' => $this->container->get('hopitalnumerique_core.dependency_injection.entity')->getCategoryByEntity($entity),
+            'title' => $this->container->get('hopitalnumerique_core.dependency_injection.entity')->getTitleByEntity($entity),
+            'subtitle' => $this->container->get('hopitalnumerique_core.dependency_injection.entity')->getSubtitleByEntity($entity),
+            'url' => $this->container->get('hopitalnumerique_core.dependency_injection.entity')->getFrontUrlByEntity($entity),
+            'description' => $this->container->get('hopitalnumerique_core.dependency_injection.entity')->getDescriptionByEntity($entity),
+            'pertinenceNiveau' => $request->request->get('pertinenceNiveau')
+        ]);
     }
 }

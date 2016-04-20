@@ -183,8 +183,9 @@ class Migration
                 $entityHasReference->setEntityType($entityType);
                 $entityHasReference->setReference($referenceEntity['reference']);
                 $entityHasReference->setPrimary($referenceEntity['primary']);
-                $this->entityHasReferenceManager->save($entityHasReference);
+                $this->entityHasReferenceManager->persist($entityHasReference);
             }
+            $this->entityHasReferenceManager->flush();
         }
     }
 }
