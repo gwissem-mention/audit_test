@@ -67,13 +67,10 @@ class Reader
      */
     private function orderEntitiesProperties($entityProperties1, $entityProperties2)
     {
-        if ($entityProperties1['primary'] && $entityProperties2['primary']) {
-            return 0;
-        }
-        if ($entityProperties1['primary'] && !$entityProperties2['primary']) {
+        if (intval($entityProperties1['primary']) > intval($entityProperties2['primary'])) {
             return -1;
         }
-        if (!$entityProperties1['primary'] && $entityProperties2['primary']) {
+        if (intval($entityProperties1['primary']) < intval($entityProperties2['primary'])) {
             return 1;
         }
 

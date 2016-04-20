@@ -76,7 +76,8 @@ class EntityHasReferenceRepository extends EntityRepository
         $qb = $this->createQueryBuilder('entityHasReference');
 
         $qb
-            ->select('entityHasReference.entityType', 'entityHasReference.entityId', 'entityHasReference.primary', 'entityHasNote.note', 'objetPointDurType.id as objetPointDurTypeId')
+            ->select('entityHasReference.entityType', 'entityHasReference.entityId', 'COUNT(entityHasReference.reference) AS referencesCount', 'SUM(entityHasReference.primary) AS primary', 'entityHasNote.note', 'objetPointDurType.id as objetPointDurTypeId')
+            //->select('entityHasReference.entityType', 'entityHasReference.entityId', 'COUNT(entityHasReference.reference) AS referencesCount', 'SUM(entityHasReference.primary) AS primary', 'entityHasNote.note')
             ->leftJoin(
                 EntityHasNote::class,
                 'entityHasNote',
@@ -103,13 +104,13 @@ class EntityHasReferenceRepository extends EntityRepository
                 $qb->expr()->eq('objetPointDurType.id', ':objetCategoriePointDur')
             )
             ->where($qb->expr()->in('entityHasReference.reference', ':references'))
+            ->groupBy('entityHasReference.entityType', 'entityHasReference.entityId')
             ->setParameters([
                 'domaine' => $domaine,
                 'references' => $references,
                 'entityTypeObjet' => Entity::ENTITY_TYPE_OBJET,
                 'objetCategoriePointDur' => Reference::CATEGORIE_OBJET_POINT_DUR_ID
             ])
-            ->groupBy('entityHasReference.entityType', 'entityHasReference.entityId')
         ;
 
         return $qb->getQuery()->getResult();

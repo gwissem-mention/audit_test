@@ -157,17 +157,20 @@ Hn_RechercheBundle_Referencement.displayResults = function()
         },
         success: function(data) {
             for (var group in data) {
-                var index = 0;
-                var otherResultsHtml = '';
+                $('#results-' + group + '-bloc').css({ display: (data[group].length > 0 ? 'block' : 'none') });
+                if (data[group].length > 0) {
+                    var index = 0;
+                    var otherResultsHtml = '';
 
-                for (var i in data[group]) {
-                    index++;
-                    otherResultsHtml += '<div data-index="' + index + '" data-initialized="false" data-visible="false" data-entity-type="' + data[group][i].entityType + '" data-entity-id="' + data[group][i].entityId + '" data-pertinence-niveau="' + data[group][i].pertinenceNiveau + '"></div>';
+                    for (var i in data[group]) {
+                        index++;
+                        otherResultsHtml += '<div data-index="' + index + '" data-initialized="false" data-visible="false" data-entity-type="' + data[group][i].entityType + '" data-entity-id="' + data[group][i].entityId + '" data-pertinence-niveau="' + data[group][i].pertinenceNiveau + '"></div>';
+                    }
+
+                    $('#results-' + group).html(otherResultsHtml);
+                    $('#results-' + group + '-count').html(data[group].length);
+                    Hn_RechercheBundle_Referencement.displayMoreResults(group);
                 }
-
-                $('#results-' + group).html(otherResultsHtml);
-                $('#results-' + group + '-count').html(data[group].length);
-                Hn_RechercheBundle_Referencement.displayMoreResults(group);
             }
         }
     });
