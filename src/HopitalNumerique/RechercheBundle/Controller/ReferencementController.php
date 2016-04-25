@@ -35,19 +35,29 @@ class ReferencementController extends Controller
     }
 
     /**
-     * Affiche une entité.
+     * Retourne les entités résultats.
      */
-    public function viewEntityAction(Request $request, $entityType, $entityId)
+    public function jsonEntitiesAction(Request $request)
     {
-        $entity = $this->container->get('hopitalnumerique_core.dependency_injection.entity')->getEntityByTypeAndId($entityType, $entityId);
+        $entitiesByType = $request->request->get('entitiesByType');
 
-        return $this->render('HopitalNumeriqueRechercheBundle:Referencement:view_entity.html.twig', [
-            'category' => $this->container->get('hopitalnumerique_core.dependency_injection.entity')->getCategoryByEntity($entity),
-            'title' => $this->container->get('hopitalnumerique_core.dependency_injection.entity')->getTitleByEntity($entity),
-            'subtitle' => $this->container->get('hopitalnumerique_core.dependency_injection.entity')->getSubtitleByEntity($entity),
-            'url' => $this->container->get('hopitalnumerique_core.dependency_injection.entity')->getFrontUrlByEntity($entity),
-            'description' => $this->container->get('hopitalnumerique_core.dependency_injection.entity')->getDescriptionByEntity($entity),
-            'pertinenceNiveau' => $request->request->get('pertinenceNiveau')
-        ]);
+        foreach ($entitiesByType as $entityType => $entitiesPropertiesById) {
+            $entityIds = array_keys($entitiesPropertiesById);
+
+            $entities = $this->container->get('hopitalnumerique_core.dependency_injection.entity')->getEntitiesByTypeAndIds($entityType, $entityIds);
+            foreach ($entities as $entity) {
+                $entityId = $this->container->get('hopitalnumerique_core.dependency_injection.entity')->getEntityId($entity);
+                $entitiesByType[$entityType][$entityId]['viewHtml'] = $this->renderView('HopitalNumeriqueRechercheBundle:Referencement:view_entity.html.twig', [
+                    'category' => $this->container->get('hopitalnumerique_core.dependency_injection.entity')->getCategoryByEntity($entity),
+                    'title' => $this->container->get('hopitalnumerique_core.dependency_injection.entity')->getTitleByEntity($entity),
+                    'subtitle' => $this->container->get('hopitalnumerique_core.dependency_injection.entity')->getSubtitleByEntity($entity),
+                    'url' => $this->container->get('hopitalnumerique_core.dependency_injection.entity')->getFrontUrlByEntity($entity),
+                    'description' => $this->container->get('hopitalnumerique_core.dependency_injection.entity')->getDescriptionByEntity($entity),
+                    'pertinenceNiveau' => $entitiesPropertiesById[$entityId]['pertinenceNiveau']
+                ]);
+            }
+        }
+
+        return new JsonResponse($entitiesByType);
     }
 }

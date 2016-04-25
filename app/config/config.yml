@@ -232,9 +232,9 @@ fos_js_routing:
         - hopitalnumerique_communautepratique_user_listbygroupe
         - hopitalnumerique_objet_objet_getObjets
         - hopital_numerique_recherche_parcours_save
+        - hopitalnumerique_recherche_referencement_jsonentities
         - hopitalnumerique_recherche_referencement_jsonentitiesbyreferences
         - hopitalnumerique_reference_referencement_savechosenreferences
-        - hopitalnumerique_recherche_referencement_viewentity
         - hopital_numerique_user_front_departements_informationsPersonelles
         - hopital_numerique_user_front_etablissements_informationsPersonelles
 

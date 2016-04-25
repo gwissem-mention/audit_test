@@ -184,12 +184,40 @@ Hn_RechercheBundle_Referencement.displayResults = function()
 Hn_RechercheBundle_Referencement.displayMoreResults = function(resultsGroup)
 {
     var entitiesContainers = $('#results-' + resultsGroup + ' [data-visible="false"]');
+    var entitiesByType = {};
 
     $(entitiesContainers).each(function (i, entityContainer) {
-        Hn_RechercheBundle_Referencement.fillAndDisplayEntity(resultsGroup, $(entityContainer).attr('data-entity-type'), $(entityContainer).attr('data-entity-id'));
+        var entityType = $(entityContainer).attr('data-entity-type');
+        var entityId = $(entityContainer).attr('data-entity-id');
+        var pertinenceNiveau = $(entityContainer).attr('data-pertinence-niveau');
+
+        if (undefined == entitiesByType[entityType]) {
+            entitiesByType[entityType] = {};
+        }
+        entitiesByType[entityType][entityId] = {
+            pertinenceNiveau: pertinenceNiveau
+        };
 
         if (i == Hn_RechercheBundle_Referencement.RESULTS_RANGE - 1) {
             return false;
+        }
+    });
+
+    $.ajax({
+        url: Routing.generate('hopitalnumerique_recherche_referencement_jsonentities'),
+        method: 'POST',
+        data: {
+            entitiesByType: entitiesByType
+        },
+        dataType: 'json',
+        success: function (entitiesByType) {
+            for (var entityType in entitiesByType) {
+                for (var entityId in entitiesByType[entityType]) {
+                    var entityContainer = $('.results-bloc [data-entity-type="' + entityType + '"][data-entity-id="' + entityId + '"]');
+                    $(entityContainer).html(entitiesByType[entityType][entityId]['viewHtml']);
+                    Hn_RechercheBundle_Referencement.displayEntity(resultsGroup, entityType, entityId);
+                }
+            }
         }
     });
 };
@@ -236,30 +264,13 @@ Hn_RechercheBundle_Referencement.processResultButtonsActivating = function(resul
  * @param int entityType Type d'entité
  * @param int entityiD   ID de l'entité
  */
-Hn_RechercheBundle_Referencement.fillAndDisplayEntity = function(resultsGroup, entityType, entityId)
+Hn_RechercheBundle_Referencement.displayEntity = function(resultsGroup, entityType, entityId)
 {
     var entityContainer = $('.results-bloc [data-entity-type="' + entityType + '"][data-entity-id="' + entityId + '"]');
 
-    if ('false' === $(entityContainer).attr('data-initialized')) {
-        $.ajax({
-            url: Routing.generate('hopitalnumerique_recherche_referencement_viewentity', { entityType:entityType, entityId:entityId }),
-            method: 'POST',
-            data: {
-                pertinenceNiveau: $(entityContainer).attr('data-pertinence-niveau')
-            },
-            success: function (data) {
-                //$(entityContainer).html($(entityContainer).attr('data-pertinence-niveau') + ' ' + entityId);
-                $(entityContainer).html(data);
-                $(entityContainer).attr('data-initialized', 'true');
-                $(entityContainer).attr('data-visible', 'true');
-                $(entityContainer).slideDown('slow');
-                Hn_RechercheBundle_Referencement.processResultButtonsActivating(resultsGroup);
-            }
-        });
-    } else {
-        $(entityContainer).attr('data-visible', 'true');
-        $(entityContainer).slideDown('slow');
-        Hn_RechercheBundle_Referencement.processResultButtonsActivating(resultsGroup);
-    }
+    $(entityContainer).attr('data-initialized', 'true');
+    $(entityContainer).attr('data-visible', 'true');
+    $(entityContainer).slideDown('slow');
+    Hn_RechercheBundle_Referencement.processResultButtonsActivating(resultsGroup);
 };
 //-->

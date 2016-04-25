@@ -170,22 +170,40 @@ class Entity
      */
     public function getEntityByTypeAndId($type, $id)
     {
-        switch ($type) {
-            case self::ENTITY_TYPE_OBJET:
-                return $this->objetManager->findOneById($id);
-            case self::ENTITY_TYPE_CONTENU:
-                return $this->contenuManager->findOneById($id);
-            case self::ENTITY_TYPE_FORUM_TOPIC:
-                return $this->forumTopicManager->findOneById($id);
-            case self::ENTITY_TYPE_AMBASSADEUR:
-                return $this->userManager->findOneById($id);
-            case self::ENTITY_TYPE_RECHERCHE_PARCOURS:
-                return $this->rechercheParcoursManager->findOneById($id);
-            case self::ENTITY_TYPE_COMMUNAUTE_PRATIQUES_GROUPE:
-                return $this->communautePratiqueGroupeManager->findOneById($id);
+        $entities = $this->getEntitiesByTypeAndIds($type, [$id]);
+
+        if (0 === count($entities)) {
+            return null;
         }
 
-        return null;
+        return $entities[0];
+    }
+
+    /**
+     * Retourne l'entité selon son type et son ID.
+     *
+     * @param integer        $type Type
+     * @param array<integer> $ids  IDs des entités
+     * @return array<object> Entités
+     */
+    public function getEntitiesByTypeAndIds($type, array $ids)
+    {
+        switch ($type) {
+            case self::ENTITY_TYPE_OBJET:
+                return $this->objetManager->findBy(['id' => $ids]);
+            case self::ENTITY_TYPE_CONTENU:
+                return $this->contenuManager->findBy(['id' => $ids]);
+            case self::ENTITY_TYPE_FORUM_TOPIC:
+                return $this->forumTopicManager->findBy(['id' => $ids]);
+            case self::ENTITY_TYPE_AMBASSADEUR:
+                return $this->userManager->findBy(['id' => $ids]);
+            case self::ENTITY_TYPE_RECHERCHE_PARCOURS:
+                return $this->rechercheParcoursManager->findBy(['id' => $ids]);
+            case self::ENTITY_TYPE_COMMUNAUTE_PRATIQUES_GROUPE:
+                return $this->communautePratiqueGroupeManager->findBy(['id' => $ids]);
+        }
+
+        throw new \Exception('Type "'.$type.'" introuvable.');
     }
 
 

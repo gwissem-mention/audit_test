@@ -8,7 +8,7 @@ hopitalnumerique_recherche_referencement_jsonentitiesbyreferences:
     defaults: { _controller: 'HopitalNumeriqueRechercheBundle:Referencement:jsonEntitiesByReferences' }
     methods: 'POST'
 
-hopitalnumerique_recherche_referencement_viewentity:
-    pattern: 'view-entity/{entityType}/{entityId}'
-    defaults: { _controller: 'HopitalNumeriqueRechercheBundle:Referencement:viewEntity' }
+hopitalnumerique_recherche_referencement_jsonentities:
+    pattern: 'view-entities'
+    defaults: { _controller: 'HopitalNumeriqueRechercheBundle:Referencement:jsonEntities' }
     methods: 'POST'
