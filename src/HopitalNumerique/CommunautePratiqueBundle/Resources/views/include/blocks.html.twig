@@ -278,6 +278,12 @@
     </div>
 {% endmacro %}
 
+{% macro display_article_truncate(article,size) %}
+    <div class="communaute-de-pratiques-actualite">
+        <h3>{{ article.titre }} <span class="date">{{ article.dateCreation|date('d/m/Y') }}</span> </h3>
+        <div class="body">{{ article.resume|truncate(size)|parsePublication|unescape }}</div>
+    </div>
+{% endmacro %}
 {##
  # Affiche le bloc d'un utilisateur.
  #

@@ -48,13 +48,13 @@ class AccueilController extends \Symfony\Bundle\FrameworkBundle\Controller\Contr
                 'membres' => $this->getMembresAuHasard(),
                 'forum' => $forum,
                 'forumLastTopics' => $this->container->get('hopitalnumerique_forum.manager.topic')
-                    ->getLastTopicsForum($forum->getId(), 3)
+                    ->getLastTopicsForum($forum->getId(), 4)
             )
         );
     }
 
     /**
-     * Retourne 9 membres au hasard pour le tableau de bord.
+     * Retourne 12 membres au hasard pour le tableau de bord.
      *
      * @return array<\HopitalNumerique\UserBundle\Entity\User> Membres
      */
@@ -62,14 +62,14 @@ class AccueilController extends \Symfony\Bundle\FrameworkBundle\Controller\Contr
     {
         $messieursAuHasard = $this->container->get('hopitalnumerique_user.manager.user')
             ->findCommunautePratiqueRandomMembres(
-                4,
+                6,
                 $this->container->get('hopitalnumerique_reference.manager.reference')
                     ->findOneById(Reference::CIVILITE_MONSIEUR_ID)
             )
         ;
         $mesdamesAuHasard = $this->container->get('hopitalnumerique_user.manager.user')
             ->findCommunautePratiqueRandomMembres(
-                4,
+                6,
                 $this->container->get('hopitalnumerique_reference.manager.reference')
                     ->findOneById(Reference::CIVILITE_MADAME_ID)
             )

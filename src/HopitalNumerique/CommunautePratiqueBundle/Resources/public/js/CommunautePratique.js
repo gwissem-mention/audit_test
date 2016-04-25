@@ -7,7 +7,9 @@ var CommunautePratique = function() {};
 $(document).ready(function() {
     CommunautePratique.init();
 });
-
+$(window).load(function() {
+    CommunautePratique.sizeBlock();
+});
 
 /**
  * Initialisation.
@@ -86,3 +88,18 @@ CommunautePratique.desinscrit = function()
         }
     );
 };
+
+CommunautePratique.sizeBlock = function() {
+    if($(window).width() > 1000) {
+        $('#panel-communaute-de-pratiques-actualites').each(function () {
+            var h1 = $('#panel-communaute-de-pratiques-forums');
+            var h2 = $(this).height();
+            if (h1.height() > h2) {
+                $(this).height(h1.height());
+            }
+            else {
+                h1.height(h2);
+            }
+        });
+    }
+}

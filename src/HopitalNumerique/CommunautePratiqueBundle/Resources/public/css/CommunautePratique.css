@@ -182,10 +182,10 @@ ul.communaute-de-pratiques-mes-groupes { list-style-type: none;margin: 0;padding
 .communaute-de-pratiques-bloc-fiche[data-communaute-pratique-fiche-resolu="1"] { background-color: #fff; }
 
 /* Actualité */
-.communaute-de-pratiques-actualite { margin: 0 0 30px 0; }
-    .communaute-de-pratiques-actualite h3 { font-weight: bold;margin: 0; }
+.communaute-de-pratiques-actualite { margin: 0 0 20px 0; }
+    .communaute-de-pratiques-actualite h3 { font-weight: bold;margin: 0; font-size: 14px;}
     .communaute-de-pratiques-actualite .date { color: #dd3157;margin: 0 0 12px; font-size: 13px;font-weight: normal; }
-    .communaute-de-pratiques-actualite .body { color: #777; }
+    .communaute-de-pratiques-actualite .body { color: #777; font-size: 13px;}
 
 /* Menu actualités */
 .communaute-de-pratiques-menu-actualites { background-color: #f6f6f6;border-radius: 5px;margin: 0 0 30px 0;padding: 10px; }
@@ -252,7 +252,7 @@ ul.communaute-de-pratiques-mes-groupes { list-style-type: none;margin: 0;padding
     .communaute-de-pratiques-tableau-de-bord .communaute-de-pratiques-bloc-mes-groupes {}
     /* Bloc Forum */
     .communaute-de-pratiques-tableau-de-bord #panel-communaute-de-pratiques-forums { margin-bottom: 0; }
-        .communaute-de-pratiques-tableau-de-bord .forum { font-size: 11px; }
+        .communaute-de-pratiques-tableau-de-bord .forum { font-size: 13px; margin-bottom: 20px;}
             .communaute-de-pratiques-tableau-de-bord .panel-body { padding: 30px; }
             .communaute-de-pratiques-tableau-de-bord .forum h3 { font-size: 14px;margin: 0 0 4px; }
 
