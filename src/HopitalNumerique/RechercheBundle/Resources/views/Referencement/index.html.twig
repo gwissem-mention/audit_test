@@ -15,6 +15,8 @@
     {{ parent() }}
     {% javascripts output="compiled/hopitalnumerique-recherche-search-index.js"
         'bundles/hopitalnumeriquerecherche/js/Referencement.js'
+        'bundles/hopitalnumeriquerecherche/js/Referencement/Filtre.js'
+        'bundles/hopitalnumeriquerecherche/js/Referencement/Result.js'
     %}
         <script type="text/javascript" src="{{ asset_url }}"></script>
     {% endjavascripts %}
@@ -59,7 +61,15 @@
             <div class="col-md-8">
 
                 <div class="filtres-bloc">
-                    <h1>Ma recherche</h1>
+                    <h1>Ma recherche <span id="results-count"></span></h1>
+                    <div id="filtres-actions">
+                        <button class="btn btn-xs btn-danger" onclick="Hn_RechercheBundle_Referencement.removeFilters();">Réinitialiser</button>
+                    </div>
+                    <div id="filtres-info">
+                        <p>Ici seront placés les critères de recherche que vous aurez sélectionnés dans le menu à gauche. Pour voir le détail d'un critère, cliquer le critère ou le chevron. Pour sélectionner un critère, cliquer le signe + ou double-cliquer le critère.</p>
+                        <p>La recherche textuelle fonctionne sur les titres, les résumés et les synthèses des productions.</p>
+                        <p>Les résultats peuvent être filtrés par types de production (méthode, autodiagnostic, retour d'expériences, etc.)</p>
+                    </div>
                     <nav class="references">
                         <ul></ul>
                     </nav>
