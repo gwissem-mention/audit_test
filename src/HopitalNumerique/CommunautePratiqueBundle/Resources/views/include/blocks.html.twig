@@ -309,10 +309,17 @@
             </div>
             {% if groupe is not null and groupe.hasAnimateur(user) %}
                 <div class="animateur">
-                    <em class="icon icon-speaker15"></em>
+                    <em class="fa icon-speaker15"></em>
                     Animateur du groupe
                 </div>
             {% endif %}
+        </div>
+        <div class="contact">
+            <span >
+                <i class="fa fa-info-circle" aria-hidden="true"></i> <a href="mailto::{{ user.email }}">{{ user.email }}</a>
+                </br>
+                <i class="fa fa-phone"></i> {{ user.telephoneDirect != '' ? user.telephoneDirect : 'Téléphone non renseigné' }}
+            </span>
         </div>
         <div class="type">
             <em class="icon icon-hospital11"></em>
