@@ -55,6 +55,7 @@ assetic:
         front_css:
             inputs:
                 - 'bundles/nodevoadmin/css/custom-jquery-ui.min.css'
+                - 'bundles/nodevoadmin/plugins/apprise/apprise.css'
                 - 'bundles/nodevoadmin/plugins/nodevoLoader/nodevoLoader.css'
                 - 'bundles/hopitalnumeriquecore/css/layout.css'
                 - 'bundles/hopitalnumeriquecore/css/Glyphter.css'
@@ -64,6 +65,7 @@ assetic:
                 - 'bundles/fosjsrouting/js/router.js'
                 - 'bundles/hopitalnumeriquecore/js/script.js'
                 - 'bundles/hopitalnumeriquecore/js/recherche.js'
+                - 'bundles/nodevoadmin/plugins/apprise/apprise.js'
                 - 'bundles/nodevoadmin/plugins/nodevoLoader/nodevoLoader.js'
                 - '%kernel.root_dir%/Resources/lib/Highlight.js'
                 - 'bundles/hopitalnumeriqueaccount/js/InformationsManquantes.js'

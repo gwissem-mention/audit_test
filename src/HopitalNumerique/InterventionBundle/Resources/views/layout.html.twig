@@ -4,7 +4,6 @@
     {{ parent() }}
     {% stylesheets output="compiled/hopitalnumerique-intervention.css" filter="cssrewrite, ?yui_css"
         'bundles/hopitalnumeriqueintervention/css/intervention.css'
-        'bundles/nodevoadmin/plugins/apprise/apprise.css'
     %}
         <link rel="stylesheet" href="{{ asset_url }}">
     {% endstylesheets %}
@@ -13,7 +12,6 @@
 {% block javascripts %}
     {{ parent() }}
     {% javascripts output="compiled/hopitalnumerique-intervention.js"
-        'bundles/nodevoadmin/plugins/apprise/apprise.js'
     %}
         <script type="text/javascript" src="{{ asset_url }}"></script>
     {% endjavascripts %}

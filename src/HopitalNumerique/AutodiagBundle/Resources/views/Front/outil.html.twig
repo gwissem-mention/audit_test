@@ -8,7 +8,6 @@
     {% javascripts output="compiled/hopitalnumerique-autodiag-front-outil.js" 
         '@jquery_stepy_js'
         '@jquery_qtip2_js'
-        'bundles/nodevoadmin/plugins/apprise/apprise.js'
         'bundles/hopitalnumeriqueautodiag/js/front.js'
     %}
         <script type="text/javascript" src="{{ asset_url }}"></script>
@@ -19,7 +18,6 @@
     {{parent()}}
     {% stylesheets output="compiled/hopitalnumerique-autodiag-front-outil.css" filter="cssrewrite, ?yui_css" 
         "@jquery_qtip2_css"
-        'bundles/nodevoadmin/plugins/apprise/apprise.css'
         'bundles/hopitalnumeriqueautodiag/css/front.css'
     %}
         <link rel="stylesheet" href="{{ asset_url }}" />

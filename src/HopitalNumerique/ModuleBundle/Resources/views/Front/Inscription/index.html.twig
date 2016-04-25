@@ -3,7 +3,6 @@
 {% block stylesheets %}
     {{parent()}}
     {% stylesheets output="compiled/hopitalnumerique-module-front-inscription-index.css" filter="cssrewrite, ?yui_css"
-        'bundles/nodevoadmin/plugins/apprise/apprise.css'
         'bundles/hopitalnumeriquemodule/css/Front/inscription/style.css'
     %}
         <link rel="stylesheet" href="{{ asset_url }}" />
@@ -13,7 +12,6 @@
 {% block javascripts %}
     {{parent()}}
     {% javascripts output="compiled/hopitalnumerique-module-front-inscription-index.js"
-        'bundles/nodevoadmin/plugins/apprise/apprise.js'
         'bundles/hopitalnumeriquemodule/js/Front/script.js'
     %}
         <script type="text/javascript" src="{{ asset_url }}"></script>
