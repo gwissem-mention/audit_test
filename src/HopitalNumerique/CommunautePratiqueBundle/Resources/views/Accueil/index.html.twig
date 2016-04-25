@@ -166,14 +166,13 @@
                                 <div class="col-md-12">
                                     <div class="forum">
                                         <h3><a href="{{ path('ccdn_forum_user_topic_show', { forumName:topic.board.category.forum.name, topicId:topic.firstPost.topic.id }) }}"><strong>{{ topic.firstPost.topic.title }}</strong></a></h3>
-                                        {{ topic.firstPost.body|truncate(250) }} <a href="{{ path('ccdn_forum_user_topic_show', { forumName:topic.board.category.forum.name, topicId:topic.firstPost.topic.id }) }}">En savoir plus</a>
+                                        {{ topic.firstPost.body|replace({'\"[': '' , ']\"': ''})|truncate(250) }} <a href="{{ path('ccdn_forum_user_topic_show', { forumName:topic.board.category.forum.name, topicId:topic.firstPost.topic.id }) }}">En savoir plus</a>
                                     </div>
                                 </div>
                             {%- endfor -%}
                         </div>
-
                         <nav class="lien">
-                            <a href="{{ path('ccdn_forum_user_category_index') }}"><em class="fa fa-angle-double-right"></em> &nbsp; Accéder au forum</a>
+                            <a href="{{- path('ccdn_forum_user_category_show', {'categoryId': 13, 'forumName': forum.name}) -}}"><em class="fa fa-angle-double-right"></em> &nbsp; Accéder au forum</a>
                         </nav>
 
                     </div>
