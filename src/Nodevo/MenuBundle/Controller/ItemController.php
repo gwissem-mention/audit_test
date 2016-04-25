@@ -60,6 +60,7 @@ class ItemController extends Controller
         //Suppression de l'item
         $this->get('nodevo_menu.manager.item')->delete( $item );
         $this->get('nodevo_menu.manager.menu')->refreshTree( $menu );
+        $this->container->get('nodevo_menu.dependency_injection.menu_cache')->deleteRenderByAlias($menu->getAlias());
 
         $this->get('session')->getFlashBag()->add('info', 'Suppression effectuée avec succès.' );
 
@@ -117,6 +118,7 @@ class ItemController extends Controller
 
                 // Menu
                 $this->get('nodevo_menu.manager.menu')->getTree( $item->getMenu(), true );
+                $this->container->get('nodevo_menu.dependency_injection.menu_cache')->deleteRenderByAlias($item->getMenu()->getAlias());
 
                 // On envoi une 'flash' pour indiquer à l'utilisateur que l'entité est ajoutée
                 $this->get('session')->getFlashBag()->add( ($new ? 'success' : 'info') , 'Element ' . ($new ? 'ajouté.' : 'mis à jour.') ); 

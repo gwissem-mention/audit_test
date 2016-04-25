@@ -52,6 +52,7 @@ class MenuController extends Controller
         if ( !$menu->getLock() ) {
             //Suppression de l'utilisateur
             $this->get('nodevo_menu.manager.menu')->delete( $menu );
+            $this->container->get('nodevo_menu.dependency_injection.menu_cache')->deleteRenderByAlias($menu->getAlias());
             $this->get('session')->getFlashBag()->add('info', 'Suppression effectuée avec succès.' );
         }else
             $this->get('session')->getFlashBag()->add('warning', 'La suppression d\'un menu vérouillé est interdit.' );
@@ -91,6 +92,7 @@ class MenuController extends Controller
 
                 // On utilise notre Manager pour gérer la sauvegarde de l'objet
                 $this->get('nodevo_menu.manager.menu')->save($menu);
+                $this->container->get('nodevo_menu.dependency_injection.menu_cache')->deleteRenderByAlias($menu->getAlias());
                 
                 // On envoi une 'flash' pour indiquer à l'utilisateur que l'entité est ajoutée
                 $this->get('session')->getFlashBag()->add( ($new ? 'success' : 'info') , 'Menu ' . ($new ? 'ajouté.' : 'mis à jour.') ); 

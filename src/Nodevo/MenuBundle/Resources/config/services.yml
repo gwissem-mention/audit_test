@@ -1,3 +1,6 @@
+imports:
+    - { resource: 'services/twig.yml' }
+
 parameters:
     #Options
     nodevo_menu.options:
@@ -59,3 +62,6 @@ services:
     nodevo_menu.grid.item:
         class: %nodevo_menu.grid.item.class%
         arguments: ["@service_container"]
+
+    nodevo_menu.dependency_injection.menu_cache:
+        class: 'Nodevo\MenuBundle\DependencyInjection\MenuCache'
