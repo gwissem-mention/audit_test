@@ -68,7 +68,7 @@
 
                 <div class="results-bloc">
                     {%- for groupId, groupTitle in { 'points-durs':'Points durs', 'productions':'Productions' } -%}
-                        <div id="results-{{ groupId }}-bloc">
+                        <div class="results-group-bloc" id="results-{{ groupId }}-bloc">
                             <h2><span class="title">{{ groupTitle }}</span> (<span id="results-{{ groupId }}-count"></span> résultats)</h2>
                             <div id="results-{{ groupId }}"></div>
                             <div class="buttons">

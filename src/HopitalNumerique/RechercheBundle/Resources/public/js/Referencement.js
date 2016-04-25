@@ -164,12 +164,13 @@ Hn_RechercheBundle_Referencement.displayResults = function()
 
                     for (var i in data[group]) {
                         index++;
-                        otherResultsHtml += '<div data-index="' + index + '" data-initialized="false" data-visible="false" data-entity-type="' + data[group][i].entityType + '" data-entity-id="' + data[group][i].entityId + '" data-pertinence-niveau="' + data[group][i].pertinenceNiveau + '"></div>';
+                        otherResultsHtml += '<div class="result" data-index="' + index + '" data-initialized="false" data-visible="false" data-entity-type="' + data[group][i].entityType + '" data-entity-id="' + data[group][i].entityId + '" data-pertinence-niveau="' + data[group][i].pertinenceNiveau + '"></div>';
                     }
 
                     $('#results-' + group).html(otherResultsHtml);
                     $('#results-' + group + '-count').html(data[group].length);
                     Hn_RechercheBundle_Referencement.displayMoreResults(group);
+                    $('#results-' + group + '-bloc').show('fast');
                 }
             }
         }
@@ -233,7 +234,7 @@ Hn_RechercheBundle_Referencement.displayLessResults = function(resultsGroup)
 
     $(entitiesContainers).each(function (i, entityContainer) {
         $(entityContainer).attr('data-visible', 'false');
-        $(entityContainer).slideUp('slow');
+        $(entityContainer).slideUp('fast');
 
         if (i == Hn_RechercheBundle_Referencement.RESULTS_RANGE - 1) {
             return false;
@@ -270,7 +271,7 @@ Hn_RechercheBundle_Referencement.displayEntity = function(resultsGroup, entityTy
 
     $(entityContainer).attr('data-initialized', 'true');
     $(entityContainer).attr('data-visible', 'true');
-    $(entityContainer).slideDown('slow');
+    $(entityContainer).slideDown('fast');
     Hn_RechercheBundle_Referencement.processResultButtonsActivating(resultsGroup);
 };
 //-->

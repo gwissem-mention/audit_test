@@ -25,20 +25,26 @@
                     .recherche-referencement .filtres-bloc .references ul li .remove { color: #000;cursor: pointer;padding: 0 3px; }
                     .recherche-referencement .filtres-bloc .references ul li .remove:hover { color: #d60030;text-decoration: none; }
     .recherche-referencement .results-bloc {}
-        .recherche-referencement .results-bloc h2 { color: #d60030;font-size: 14px;font-weight: bold;margin: 20px 0 2px 0;text-transform: uppercase; }
-            .recherche-referencement .results-bloc h2 .title { border-color: #d60030;border-style: solid;border-width: 0 0 4px 0; }
-        .recherche-referencement .results-bloc .buttons { margin: 15px 0 0 0;text-align: right; }
-        .recherche-referencement .results-bloc .category { color: #d60030;font-size: 12px;margin: 20px 0 0 0;text-transform: uppercase; }
-        .recherche-referencement .results-bloc h3 { font-size: 17px;font-weight: bold;margin: 0; }
-            .recherche-referencement .results-bloc h3 a { color: #000;display: block; }
-                .recherche-referencement .results-bloc h3 a .pertinence-niveau-1, .recherche-referencement .results-bloc h3 a .pertinence-niveau-2, .recherche-referencement .results-bloc h3 a .pertinence-niveau-3 { background-repeat: no-repeat;float: left;height: 14px;margin: 4px 3px 0 0;width: 14px; }
-                .recherche-referencement .results-bloc h3 a .pertinence-niveau-1 { background-image: url("/bundles/hopitalnumeriquerecherche/img/niv-1-prod.png"); }
-                .recherche-referencement .results-bloc h3 a .pertinence-niveau-2 { background-image: url("/bundles/hopitalnumeriquerecherche/img/niv-2-prod.png"); }
-                .recherche-referencement .results-bloc h3 a .pertinence-niveau-3 { background-image: url("/bundles/hopitalnumeriquerecherche/img/niv-3-prod.png"); }
-            .recherche-referencement .results-bloc h3 a .subtitle { color: #5d5d5d;display: block;font-size: 95%; }
-        .recherche-referencement .results-bloc p { font-size: 13px;margin: 8px 0; }
+        .recherche-referencement .results-bloc .results-group-bloc { display: none; }
+            .recherche-referencement .results-bloc h2 { color: #d60030;font-size: 14px;font-weight: bold;margin: 20px 0 2px 0;text-transform: uppercase; }
+                .recherche-referencement .results-bloc h2 .title { border-color: #d60030;border-style: solid;border-width: 0 0 4px 0; }
+            .recherche-referencement .results-bloc .buttons { margin: 15px 0 0 0;text-align: right; }
+        /* <-- Bloc résultat */
+        .recherche-referencement .results-bloc .result { display: none; }
+            .recherche-referencement .results-bloc .category { color: #d60030;font-size: 12px;margin: 20px 0 0 0;text-transform: uppercase; }
+            .recherche-referencement .results-bloc h3 { font-size: 17px;font-weight: bold;margin: 0; }
+                .recherche-referencement .results-bloc h3 a { color: #000;display: block; }
+                    .recherche-referencement .results-bloc h3 a .pertinence-niveau-1, .recherche-referencement .results-bloc h3 a .pertinence-niveau-2, .recherche-referencement .results-bloc h3 a .pertinence-niveau-3 { background-repeat: no-repeat;float: left;height: 14px;margin: 4px 3px 0 0;width: 14px; }
+                    .recherche-referencement .results-bloc h3 a .pertinence-niveau-1 { background-image: url("/bundles/hopitalnumeriquerecherche/img/niv-1-prod.png"); }
+                    .recherche-referencement .results-bloc h3 a .pertinence-niveau-2 { background-image: url("/bundles/hopitalnumeriquerecherche/img/niv-2-prod.png"); }
+                    .recherche-referencement .results-bloc h3 a .pertinence-niveau-3 { background-image: url("/bundles/hopitalnumeriquerecherche/img/niv-3-prod.png"); }
+                .recherche-referencement .results-bloc h3 a .subtitle { color: #5d5d5d;display: block;font-size: 95%; }
+            .recherche-referencement .results-bloc p { font-size: 13px;margin: 8px 0; }
+        /* --> */
+        /* <-- Spécifiques aux points durs */
         .recherche-referencement #results-points-durs { background-color: #f4f4f4;padding: 4px 15px; }
             .recherche-referencement #results-points-durs h3 { font-size: 15px;margin: 10px 0; }
                 .recherche-referencement #results-points-durs h3 a { color: #d60030;padding: 4px 0; }
             .recherche-referencement #results-points-durs .category { display: none; }
             .recherche-referencement #results-points-durs p { display: none; }
+        /* --> */
