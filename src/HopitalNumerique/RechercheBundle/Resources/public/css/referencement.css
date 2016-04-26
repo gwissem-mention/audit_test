@@ -51,3 +51,6 @@
             .recherche-referencement #results-points-durs .category { display: none; }
             .recherche-referencement #results-points-durs p { display: none; }
         /* --> */
+    /* <-- Résultats des autres domaines */
+    #results-domaines { background-color: #f4f4f4;display: none;padding: 15px; }
+    /* --> */

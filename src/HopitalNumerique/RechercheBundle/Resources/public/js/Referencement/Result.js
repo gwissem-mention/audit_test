@@ -47,6 +47,9 @@ Hn_RechercheBundle_Referencement.displayResults = function()
         $('.results-bloc > div').slideUp('fast');
         $('#filtres-info').slideDown('fast');
     }
+
+    Hn_RechercheBundle_Referencement.processFilterButtonsActivating();
+    Hn_RechercheBundle_Referencement.displayDomaineResults();
 };
 
 /**

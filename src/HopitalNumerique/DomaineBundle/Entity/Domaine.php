@@ -728,6 +728,19 @@ class Domaine
     }
 
     /**
+     * Retourne l'entité comme un tableau.
+     *
+     * @return array Domaine
+     */
+    public function __toArray()
+    {
+        return [
+            'id' => $this->id,
+            'nom' => $this->nom
+        ];
+    }
+
+    /**
      * Retourne l'égalité entre deux domaines.
      *
      * @param \HopitalNumerique\ReferenceBundle\Entity\Domaine $domaine Autre domaine

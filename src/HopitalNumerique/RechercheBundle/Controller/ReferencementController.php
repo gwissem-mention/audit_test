@@ -22,7 +22,8 @@ class ReferencementController extends Controller
 
         return $this->render('HopitalNumeriqueRechercheBundle:Referencement:index.html.twig', [
             'referencesTree' => $referencesTree,
-            'choosenReferenceIds' => $choosenReferenceIds
+            'choosenReferenceIds' => $choosenReferenceIds,
+            'domaines' => $this->container->get('hopitalnumerique_domaine.manager.domaine')->getAllArray()
         ]);
     }
 

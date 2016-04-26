@@ -15,7 +15,6 @@ Hn_RechercheBundle_Referencement.initReferenceFilters = function()
     $('.filtres-bloc .references ul').fadeIn('slow');
 
     Hn_RechercheBundle_Referencement.displayResults();
-    Hn_RechercheBundle_Referencement.processFilterButtonsActivating();
 };
 
 /**
@@ -40,7 +39,7 @@ Hn_RechercheBundle_Referencement.removeFilters = function()
 {
     apprise('Confirmer la réinitialisation de la requête ?', { 'verify':true,'textYes':'Oui','textNo':'Non' }, function (response) {
         if (response) {
-            $('.references-bloc [data-chosen="true"]').attr('data-chosen', 'false');
+            Hn_RechercheBundle_Referencement.getChosenElements().attr('data-chosen', 'false');
             Hn_RechercheBundle_Referencement.initReferenceFilters();
         }
     });

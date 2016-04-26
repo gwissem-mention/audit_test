@@ -261,8 +261,9 @@ class ReferenceRepository extends EntityRepository
         $qb = $this->createQueryBuilder('reference');
 
         $qb
-            ->select('reference, referenceParent')
+            ->select('reference, referenceParent, allDomaines')
             ->leftJoin('reference.parents', 'referenceParent')
+            ->leftJoin('reference.domaines', 'allDomaines')
             ->leftJoin('reference.domaines', 'domaine')
             ->where($qb->expr()->orX(
                 $qb->expr()->in('domaine.id', ':domaines'),

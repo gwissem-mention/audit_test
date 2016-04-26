@@ -66,6 +66,16 @@ Hn_RechercheBundle_Referencement.getReferenceLibelleById = function(referenceId)
 };
 
 /**
+ * Retourne les éléments des références choisies.
+ *
+ * @return Array<Element> Éléments
+ */
+Hn_RechercheBundle_Referencement.getChosenElements = function()
+{
+    return $('.references-bloc [data-chosen="true"]');
+};
+
+/**
  * Retourne les ID des références choisies.
  *
  * @return Array<integer> IDs
@@ -74,7 +84,7 @@ Hn_RechercheBundle_Referencement.getChosenReferenceIds = function()
 {
     var referenceIds = new Array();
 
-    $('.references-bloc [data-chosen="true"]').each(function (i, element) {
+    Hn_RechercheBundle_Referencement.getChosenElements().each(function (i, element) {
         referenceIds.push(Hn_RechercheBundle_Referencement.getReferenceIdByElement(element));
     });
 
@@ -126,7 +136,7 @@ Hn_RechercheBundle_Referencement.toggleReferenceChoosing = function(referenceId)
  */
 Hn_RechercheBundle_Referencement.setReferenceIds = function(referenceIds)
 {
-    $('.references-bloc [data-chosen="true"]').attr('data-chosen', 'false');
+    Hn_RechercheBundle_Referencement.getChosenElements().attr('data-chosen', 'false');
     for (var i in referenceIds) {
         Hn_RechercheBundle_Referencement.toggleReferenceChoosing(referenceIds[i]);
     }

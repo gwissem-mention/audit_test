@@ -14,7 +14,9 @@
 {% block javascripts -%}
     {{ parent() }}
     {% javascripts output="compiled/hopitalnumerique-recherche-search-index.js"
+        'bundles/hopitalnumeriquedomaine/js/Domaine.js'
         'bundles/hopitalnumeriquerecherche/js/Referencement.js'
+        'bundles/hopitalnumeriquerecherche/js/Referencement/Domaine.js'
         'bundles/hopitalnumeriquerecherche/js/Referencement/Filtre.js'
         'bundles/hopitalnumeriquerecherche/js/Referencement/Result.js'
     %}
@@ -22,6 +24,8 @@
     {% endjavascripts %}
     <script type="text/javascript">
         $(document).ready(function() {
+            Hn_DomaineBundle_Domaine.CURRENT_DOMAINE_ID = {{ domaineCurrent.id }};
+            Hn_DomaineBundle_Domaine.setDomaines({{ domaines|json_encode|raw }});
             Hn_RechercheBundle_Referencement.setReferenceIds({{ choosenReferenceIds|json_encode|raw }});
             Hn_RechercheBundle_Referencement.initReferenceFilters();
         });
@@ -44,7 +48,7 @@
 
                 {% macro buildTreePart(referencesTreePart) -%}
                     {% import _self as mySelf %}
-                    <li data-reference="{{ referencesTreePart.reference.id }}" data-chosen="false">
+                    <li data-reference="{{ referencesTreePart.reference.id }}" data-chosen="false" data-domaines="{{ referencesTreePart.reference.domainesId|join(',') }}">
                         <a class="reference">
                             <span class="add"><i class="fa fa-plus-circle"></i></span>
                             {%- if referencesTreePart.enfants|length > 0 -%}
@@ -94,6 +98,11 @@
                             </div>
                         </div>
                     {%- endfor -%}
+                </div>
+
+                <div id="results-domaines">
+                    <p>D'autres résultats de recherche pour ces critères existent sur les thèmes suivants :</p>
+                    <ul></ul>
                 </div>
 
             </div>

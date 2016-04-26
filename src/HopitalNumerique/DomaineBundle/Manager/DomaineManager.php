@@ -92,4 +92,20 @@ class DomaineManager extends BaseManager
     {
         return $this->getRepository()->getDomaineForForumId($idForum)->getQuery()->getResult();
     }
+
+    /**
+     * Retourne tous les domaines en tableau.
+     *
+     * @return array Domaines
+     */
+    public function getAllArray()
+    {
+        $domaines = [];
+
+        foreach ($this->findAll() as $domaine) {
+            $domaines[] = $domaine->__toArray();
+        }
+
+        return $domaines;
+    }
 }
