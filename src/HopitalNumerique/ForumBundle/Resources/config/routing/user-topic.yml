@@ -37,6 +37,12 @@ hopitalnumerique_forum_reference_topic:
     requirements:
         id: \d+
 
+hopitalnumerique_forum_reference_sticky_topic:
+        pattern:  /reference/topic/pin/{id}
+        defaults: { _controller: "HopitalNumeriqueForumBundle:Reference:topicPin", id:1, forumName: Public }
+        requirements:
+            id: \d+
+
 hopitalnumerique_forum_reference_topic_own:
     pattern:  /reference/topic-own/{id}
     defaults: { _controller: "HopitalNumeriqueForumBundle:Reference:topicOwn", id:1, forumName: Public  }

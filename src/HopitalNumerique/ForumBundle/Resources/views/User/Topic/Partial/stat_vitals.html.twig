@@ -128,6 +128,11 @@
                     <input type="hidden" id="save-references-contenu-url" value="{{path('hopitalnumerique_forum_reference_contenu')}}" />
                     <a href="{{path('hopitalnumerique_forum_reference_topic_own', {'id':topic.id})}}" class="manageReferences btn btn-xs btn-success fancybox.ajax pull-left"><i class="fa fa-eye"></i></a>
                     <a href="{{path('hopitalnumerique_forum_reference_topic', {'id':topic.id})}}" class="manageReferences edit btn btn-xs btn-success fancybox.ajax pull-left"><i class="fa fa-tags"></i></a>
+                    {% if topic.isSticky %}
+                        <button id="pinTopic" href="{{path('hopitalnumerique_forum_reference_sticky_topic', {'id':topic.id})}}" class="manageReferences edit btn btn-xs btn-success pull-left" title="Supprimer des favoris"><i class="fa fa-star"></i></button>
+                    {% else %}
+                        <button id="pinTopic" href="{{path('hopitalnumerique_forum_reference_sticky_topic', {'id':topic.id})}}" class="manageReferences edit btn btn-xs btn-warning pull-left" title="Ajouter aux favoris"><i class="fa fa-star"></i></button>
+                    {% endif %}
                     <p class="text-muted text-right pull-left">Note référencement : <span class="nbRefs">{{note|number_format(2, ',')}}</span> / 400</p>
                 {% endif %}
             </div>
