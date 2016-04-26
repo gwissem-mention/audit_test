@@ -14,9 +14,14 @@ use Symfony\Component\HttpFoundation\Session\SessionInterface;
 class RequeteSession
 {
     /**
-     * @var string Préfixe de la session
+     * @var string Préfixe de la session des références
      */
-    const SESSION_NAME = 'hnrecherche_referencement_requete';
+    const SESSION_REFERENCES_NAME = 'hnrecherche_referencement_requete_references';
+
+    /**
+     * @var string Préfixe de la session de la requete
+     */
+    const SESSION_REQUETE_NAME = 'hnrecherche_referencement_requete_requete';
 
 
     /**
@@ -61,7 +66,7 @@ class RequeteSession
      */
     public function getReferenceIds()
     {
-        return $this->session->get(self::SESSION_NAME, []);
+        return $this->session->get(self::SESSION_REFERENCES_NAME, []);
     }
 
     /**
@@ -71,7 +76,33 @@ class RequeteSession
      */
     public function setReferenceIds(array $referenceIds)
     {
-        $this->session->set(self::SESSION_NAME, $referenceIds);
+        $this->session->set(self::SESSION_REFERENCES_NAME, $referenceIds);
+    }
+
+    /**
+     * Retourne la requête.
+     *
+     * @return \HopitalNumerique\RechercheBundle\Entity\Requete|null Requête
+     */
+    public function getRequete()
+    {
+        $requeteId = $this->session->get(self::SESSION_REQUETE_NAME);
+
+        if (null !== $requeteId) {
+            return $this->requeteManager->findOneById($requeteId);
+        }
+
+        return null;
+    }
+
+    /**
+     * Enregistre la requête en session.
+     *
+     * @param \HopitalNumerique\RechercheBundle\Entity\Requete $requete Requête
+     */
+    private function setRequete(Requete $requete)
+    {
+        $this->session->set(self::SESSION_REQUETE_NAME, $requete->getId());
     }
 
     /**
@@ -79,7 +110,8 @@ class RequeteSession
      */
     public function remove()
     {
-        $this->session->remove(self::SESSION_NAME);
+        $this->session->remove(self::SESSION_REFERENCES_NAME);
+        $this->session->remove(self::SESSION_REQUETE_NAME);
     }
 
     /**
@@ -101,7 +133,18 @@ class RequeteSession
                 $requete->setUser($requeteUser);
                 $requete->setDomaine($this->domaine);
                 $this->requeteManager->save($requete);
+                $this->setRequete($requete);
             }
         }
+    }
+
+    /**
+     * Enregistre la requête.
+     */
+    public function saveRequete(Requete $requete)
+    {
+        $requete->setRefs($this->getReferenceIds());
+        $this->requeteManager->save($requete);
+        $this->setRequete($requete);
     }
 }

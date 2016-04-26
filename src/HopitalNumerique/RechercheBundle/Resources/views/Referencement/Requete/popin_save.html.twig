@@ -6,7 +6,17 @@
 
 {% block body %}
     {%- if app.user is not null -%}
-        <input>
+        {{ form_start(requeteForm) }}
+            <div class="form-group">
+                {{ form_widget(requeteForm.nom) }}
+            </div>
+            <div class="text-right">
+                <button type="submit" name="save-as-new" class="btn btn-md btn-success">Enregistrer{{ requete.id is not null ? ' comme nouvelle requête' : '' }}</button>
+                {% if requete.id is not null %}
+                    <button type="submit" name="save" class="btn btn-md btn-success">Mettre à jour la requête courante</button>
+                {% endif %}
+            </div>
+        {{ form_end(requeteForm) }}
     {%- else -%}
         {% include 'HopitalNumeriqueAccountBundle:include:login.html.twig' with { 'size':'medium' } %}
     {%- endif -%}

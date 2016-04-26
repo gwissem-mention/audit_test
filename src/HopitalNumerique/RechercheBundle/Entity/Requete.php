@@ -30,7 +30,7 @@ class Requete
     /**
      * @var string
      *
-     * @ORM\Column(name="req_nom", type="string", length=128, options = {"comment" = "Nom de la requete"})
+     * @ORM\Column(name="req_nom", type="string", length=128, options = {"comment" = "Nom de la requete"}, nullable=false)
      */
     private $nom;
 
@@ -86,7 +86,7 @@ class Requete
     /**
      * @var string
      *
-     * @ORM\Column(name="req_categ_point_dur", type="array", nullable=true)
+     * @ORM\Column(name="req_categ_point_dur", type="json_array", nullable=true)
      */
     private $categPointDur;
 
@@ -99,13 +99,13 @@ class Requete
 
     /**
      * @ORM\ManyToOne(targetEntity="\HopitalNumerique\UserBundle\Entity\User", cascade={"persist"})
-     * @ORM\JoinColumn(name="usr_id", referencedColumnName="usr_id", onDelete="CASCADE")
+     * @ORM\JoinColumn(name="usr_id", referencedColumnName="usr_id", nullable=false, onDelete="CASCADE")
      */
     private $user;
 
     /**
      * @ORM\ManyToOne(targetEntity="\HopitalNumerique\DomaineBundle\Entity\Domaine", inversedBy="requetes", cascade={"persist"})
-     * @ORM\JoinColumn(name="dom_id", referencedColumnName="dom_id")
+     * @ORM\JoinColumn(name="dom_id", referencedColumnName="dom_id", nullable=false)
      */
     protected $domaine;
 

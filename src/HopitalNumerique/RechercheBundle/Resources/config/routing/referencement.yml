@@ -17,3 +17,8 @@ hopitalnumerique_recherche_referencement_requete_popinsave:
     pattern: 'requete/popin-save'
     defaults: { _controller: 'HopitalNumeriqueRechercheBundle:Referencement\Requete:popinSave' }
     methods: 'POST'
+
+hopitalnumerique_recherche_referencement_requete_save:
+    pattern: 'requete/save'
+    defaults: { _controller: 'HopitalNumeriqueRechercheBundle:Referencement\Requete:save' }
+    methods: 'POST'

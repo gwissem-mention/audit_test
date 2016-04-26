@@ -1,3 +1,6 @@
+imports:
+    - { resource: 'services/form.yml' }
+
 parameters:
     #Permet d'avoir une valeur par défaut et/ou d'etre surchargé par le config.yml de app/config
     hopital_numerique_recherche.options:
@@ -11,7 +14,6 @@ parameters:
     #Gestionnaire
     hopitalnumerique_recherche.manager.expbesoingestion.class : HopitalNumerique\RechercheBundle\Manager\ExpBesoinGestionManager
     hopitalnumerique_recherche.grid.expbesoingestion.class    : HopitalNumerique\RechercheBundle\Grid\ExpBesoinGestionGrid
-    hopitalnumerique_recherche.form.expbesoingestion.class    : HopitalNumerique\RechercheBundle\Form\ExpBesoinGestionType
 
 services:
     hopitalnumerique_recherche.manager.search:
@@ -50,24 +52,6 @@ services:
     hopitalnumerique_recherche.grid.expbesoingestion:
         class: %hopitalnumerique_recherche.grid.expbesoingestion.class%
         arguments: ["@service_container"]
-
-    hopitalnumerique_recherche.form.expbesoingestion:
-        class: %hopitalnumerique_recherche.form.expbesoingestion.class%
-        arguments: ["@hopitalnumerique_recherche.manager.expbesoingestion", "@validator", "@hopitalnumerique_user.manager.user"]
-        tags:
-            - { name: form.type, alias: hopitalnumerique_recherche_expbesoingestion }
-
-    hopitalnumerique_recherche.form.expbesoin:
-        class: 'HopitalNumerique\RechercheBundle\Form\ExpBesoinType'
-        arguments: ['@router']
-        tags:
-            - { name: 'form.type', alias: 'hopitalnumerique_recherche_expbesoin' }
-
-    hopitalnumerique_recherche.form.expbesoinreponse:
-        class: 'HopitalNumerique\RechercheBundle\Form\ExpBesoinReponseType'
-        arguments: ['@router']
-        tags:
-            - { name: 'form.type', alias: 'hopitalnumerique_recherche_expbesoinreponse' }
 
     hopitalnumerique_recherche.dependency_injection.referencement.requete_session:
         class: 'HopitalNumerique\RechercheBundle\DependencyInjection\Referencement\RequeteSession'

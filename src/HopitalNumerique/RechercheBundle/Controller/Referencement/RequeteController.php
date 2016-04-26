@@ -1,6 +1,7 @@
 <?php
 namespace HopitalNumerique\RechercheBundle\Controller\Referencement;
 
+use HopitalNumerique\RechercheBundle\Form\Type\RequeteType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -15,9 +16,48 @@ class RequeteController extends Controller
     public function popinSaveAction(Request $request)
     {
         $referenceIds = $request->request->get('referenceIds', []);
+        $requete = $this->container->get('hopitalnumerique_recherche.dependency_injection.referencement.requete_session')->getRequete();
+        if (null === $requete) {
+            $requete = $this->container->get('hopitalnumerique_recherche.manager.requete')->createEmpty();
+        }
+        $requeteForm = null;
+        if (null !== $this->getUser()) {
+            $requeteForm = $this->createForm(RequeteType::class, $requete);
+            $requeteForm->handleRequest($request);
+        }
 
         $this->container->get('hopitalnumerique_recherche.dependency_injection.referencement.requete_session')->setReferenceIds($referenceIds);
 
-        return $this->render('HopitalNumeriqueRechercheBundle:Referencement\Requete:popin_save.html.twig');
+        return $this->render('HopitalNumeriqueRechercheBundle:Referencement\Requete:popin_save.html.twig', [
+            'requete' => $requete,
+            'requeteForm' => (null !== $requeteForm ? $requeteForm->createView() : null)
+        ]);
+    }
+
+    /**
+     * Enregistre la requête.
+     */
+    public function saveAction(Request $request)
+    {
+        if ($request->request->has('save-as-new')) {
+            $requete = null;
+        } else {
+            $requete = $this->container->get('hopitalnumerique_recherche.dependency_injection.referencement.requete_session')->getRequete();
+        }
+        if (null === $requete) {
+            $requete = $this->container->get('hopitalnumerique_recherche.manager.requete')->createEmpty();
+            $requete->setUser($this->getUser());
+            $requete->setDomaine($this->container->get('hopitalnumerique_domaine.dependency_injection.current_domaine')->get());
+        }
+
+        $requeteForm = $this->createForm(RequeteType::class, $requete);
+        $requeteForm->handleRequest($request);
+
+        if ($requeteForm->isValid()) {
+            $this->container->get('hopitalnumerique_recherche.dependency_injection.referencement.requete_session')->saveRequete($requete);
+            $this->addFlash('success', 'Requête enregistrée.');
+        }
+
+        return $this->redirectToRoute('hopitalnumerique_recherche_referencement_index');
     }
 }

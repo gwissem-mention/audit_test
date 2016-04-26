@@ -19,7 +19,6 @@ class ReferencementController extends Controller
         $referencesTree = $this->container->get('hopitalnumerique_reference.dependency_injection.reference.tree')->getOrderedReferences(null, [$currentDomaine], true);
 
         $choosenReferenceIds = $this->container->get('hopitalnumerique_recherche.dependency_injection.referencement.requete_session')->getReferenceIds();
-        $this->container->get('hopitalnumerique_recherche.dependency_injection.referencement.requete_session')->remove();
 
         return $this->render('HopitalNumeriqueRechercheBundle:Referencement:index.html.twig', [
             'referencesTree' => $referencesTree,
