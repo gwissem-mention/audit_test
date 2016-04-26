@@ -1,0 +1,13 @@
+{% extends 'HopitalNumeriqueCoreBundle::popup.html.twig' %}
+
+{% block title %}
+    Enregistrement de votre requête
+{% endblock %}
+
+{% block body %}
+    {%- if app.user is not null -%}
+        <input>
+    {%- else -%}
+        {% include 'HopitalNumeriqueAccountBundle:include:login.html.twig' with { 'size':'medium' } %}
+    {%- endif -%}
+{% endblock %}

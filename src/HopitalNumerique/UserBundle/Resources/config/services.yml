@@ -169,3 +169,7 @@ services:
         arguments: ['@security.token_storage', '@router', '@request_stack', '@hopitalnumerique_reference.manager.reference']
         tags:
             - { name: 'form.type', alias: 'nodevouser_user_informationsmanquantes' }
+
+    hopitalnumerique_user.dependency_injection.connected_user:
+        class: 'HopitalNumerique\UserBundle\DependencyInjection\ConnectedUser'
+        arguments: ['@security.token_storage']

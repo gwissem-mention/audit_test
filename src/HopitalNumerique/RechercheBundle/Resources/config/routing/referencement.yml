@@ -12,3 +12,8 @@ hopitalnumerique_recherche_referencement_jsonentities:
     pattern: 'view-entities'
     defaults: { _controller: 'HopitalNumeriqueRechercheBundle:Referencement:jsonEntities' }
     methods: 'POST'
+
+hopitalnumerique_recherche_referencement_requete_popinsave:
+    pattern: 'requete/popin-save'
+    defaults: { _controller: 'HopitalNumeriqueRechercheBundle:Referencement\Requete:popinSave' }
+    methods: 'POST'

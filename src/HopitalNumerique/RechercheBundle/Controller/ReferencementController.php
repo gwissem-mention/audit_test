@@ -18,8 +18,12 @@ class ReferencementController extends Controller
         $currentDomaine = $this->container->get('hopitalnumerique_domaine.dependency_injection.current_domaine')->get();
         $referencesTree = $this->container->get('hopitalnumerique_reference.dependency_injection.reference.tree')->getOrderedReferences(null, [$currentDomaine], true);
 
+        $choosenReferenceIds = $this->container->get('hopitalnumerique_recherche.dependency_injection.referencement.requete_session')->getReferenceIds();
+        $this->container->get('hopitalnumerique_recherche.dependency_injection.referencement.requete_session')->remove();
+
         return $this->render('HopitalNumeriqueRechercheBundle:Referencement:index.html.twig', [
-            'referencesTree' => $referencesTree
+            'referencesTree' => $referencesTree,
+            'choosenReferenceIds' => $choosenReferenceIds
         ]);
     }
 

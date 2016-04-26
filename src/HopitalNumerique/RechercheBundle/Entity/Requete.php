@@ -13,6 +13,12 @@ use Doctrine\ORM\Mapping as ORM;
 class Requete
 {
     /**
+     * @var string Nom par défaut d'une requête
+     */
+    const DEFAULT_NOM = 'Ma requête';
+
+
+    /**
      * @var integer
      *
      * @ORM\Column(name="req_id", type="integer")
@@ -80,14 +86,14 @@ class Requete
     /**
      * @var string
      *
-     * @ORM\Column(name="req_categ_point_dur", type="string", length=256)
+     * @ORM\Column(name="req_categ_point_dur", type="array", nullable=true)
      */
     private $categPointDur;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="req_recherche_textuelle", type="string", length=256)
+     * @ORM\Column(name="req_recherche_textuelle", type="string", length=256, nullable=true)
      */
     private $rechercheTextuelle;
 
@@ -115,6 +121,7 @@ class Requete
         $this->dateDebut      = null;
         $this->dateFin        = null;
         $this->refs           = array();
+        $this->categPointDur = [];
     }
 
     /**

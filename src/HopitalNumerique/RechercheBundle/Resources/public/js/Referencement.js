@@ -29,6 +29,7 @@ Hn_RechercheBundle_Referencement.initEvents = function()
 {
     $('.recherche-referencement .add').click(function(event) {
         Hn_RechercheBundle_Referencement.toggleReferenceChoosing(Hn_RechercheBundle_Referencement.getReferenceIdByElement($(this)));
+        Hn_RechercheBundle_Referencement.initReferenceFilters();
         event.stopPropagation();
     });
     $('.recherche-referencement a.reference').click(function() {
@@ -116,6 +117,18 @@ Hn_RechercheBundle_Referencement.toggleReferenceChoosing = function(referenceId)
     var referenceIsChosen = ('true' === $('[data-reference="' + referenceId + '"]').attr('data-chosen'));
 
     $('.references-bloc [data-reference="' + referenceId + '"]').attr('data-chosen', referenceIsChosen ? 'false' : 'true');
-    Hn_RechercheBundle_Referencement.initReferenceFilters();
+};
+
+/**
+ * Sélection une référence.
+ *
+ * @param integer referenceId ID de la référence
+ */
+Hn_RechercheBundle_Referencement.setReferenceIds = function(referenceIds)
+{
+    $('.references-bloc [data-chosen="true"]').attr('data-chosen', 'false');
+    for (var i in referenceIds) {
+        Hn_RechercheBundle_Referencement.toggleReferenceChoosing(referenceIds[i]);
+    }
 };
 //-->

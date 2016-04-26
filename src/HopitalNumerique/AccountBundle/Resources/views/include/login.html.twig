@@ -11,7 +11,7 @@
                 <a href="{{path('hopital_numerique_user_inscription')}}" target="_blank">Inscription</a>
             </div>
         {%- endif -%}
-        <h3>{{ title|raw }}</h3>
+        <h3>{{ title is defined ? title|raw : 'Connexion' }}</h3>
 
         <div class="form-group">
             <div class="row">

@@ -267,8 +267,12 @@ class Entity
      * @param \HopitalNumerique\UserBundle\Entity\User $user   User
      * @return array<\HopitalNumerique\DomaineBundle\Entity\Domaine> Domaines
      */
-    public function getEntityDomainesCommunsWithUser($entity, User $user)
+    public function getEntityDomainesCommunsWithUser($entity, User $user = null)
     {
+        if (null === $user) {
+            return [];
+        }
+
         return $this->getDomainesCommunsWithUser($this->getDomainesByEntity($entity), $user);
     }
 
