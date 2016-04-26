@@ -1239,7 +1239,19 @@ class User extends BaseUser
     {
         return $this->etablissementRattachementSante;
     }
-    
+
+    /**
+     * Get etablissementRattachementSanteString
+     *
+     * @return string $etablissementRattachementSante
+     */
+    public function getEtablissementRattachementSanteString()
+    {
+        if(is_object($this->etablissementRattachementSante)) {
+           return $this->etablissementRattachementSante->getNom();
+        }
+    }
+
     /**
      * Set etablissementRattachementSante
      *
@@ -1720,6 +1732,30 @@ class User extends BaseUser
         return $this->connaissancesAmbassadeurs;
     }
 
+    /**
+     * Get connaissanceAmbassadeurString
+     *
+     * @return String liste des connaissances
+     */
+    public function getConnaissancesAmbassadeursString()
+    {
+        $ambassadeurString = '';
+
+        if(is_null($this->connaissancesAmbassadeurs))
+        {
+            return $ambassadeurString;
+        }
+
+        foreach ($this->connaissancesAmbassadeurs as $ambassadeur)
+        {
+
+            if($ambassadeur->getDomaine()) {
+
+                $ambassadeurString .= ($ambassadeurString != '' ? ' | ' : ' ') . $ambassadeur->getDomaine()->getLibelle();
+            }
+        }
+        return $ambassadeurString;
+    }
     /**
      * Get connaissancesAmbassadeursSI
      *
