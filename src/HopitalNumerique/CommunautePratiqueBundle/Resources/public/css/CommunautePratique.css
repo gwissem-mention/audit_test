@@ -251,7 +251,7 @@ ul.communaute-de-pratiques-mes-groupes { list-style-type: none;margin: 0;padding
     /* Bloc Mes groupes */
     .communaute-de-pratiques-tableau-de-bord .communaute-de-pratiques-bloc-mes-groupes {}
     /* Bloc Forum */
-    .communaute-de-pratiques-tableau-de-bord #panel-communaute-de-pratiques-forums { margin-bottom: 0; }
+    .communaute-de-pratiques-tableau-de-bord #panel-communaute-de-pratiques-forums { margin-bottom: 30px; }
         .communaute-de-pratiques-tableau-de-bord .forum { font-size: 13px; margin-bottom: 20px;}
             .communaute-de-pratiques-tableau-de-bord .panel-body { padding: 30px; }
             .communaute-de-pratiques-tableau-de-bord .forum h3 { font-size: 14px;margin: 0 0 4px; }
