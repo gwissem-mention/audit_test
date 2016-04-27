@@ -24,7 +24,7 @@
     {# Ligne du module #}
     <tr style="border:1px solid #e3e3e3;">
         <td colspan="2">
-            <strong>{{ session.module.titre }} - {{ session.dateSession|date('d/m/Y') }} - Formateur : {% if session.formateur is not null %}{{ session.formateur.getAppellation() }}{% else %} N/A {% endif %}</strong>
+            <strong>{{ session.module.titre }} - {{ session.dateSession|date('d/m/Y') }} - {{ session.duree.libelle }} - Formateur : {% if session.formateur is not null %}{{ session.formateur.getAppellation() }}{% else %} N/A {% endif %}</strong>
         </td>
     </tr>
 </table>
