@@ -278,6 +278,12 @@
     </div>
 {% endmacro %}
 
+{% macro display_article_truncate(article,size) %}
+    <div class="communaute-de-pratiques-actualite">
+        <h3>{{ article.titre }} <span class="date">{{ article.dateCreation|date('d/m/Y') }}</span> </h3>
+        <div class="body">{{ article.resume|truncate(size)|parsePublication|unescape }}</div>
+    </div>
+{% endmacro %}
 {##
  # Affiche le bloc d'un utilisateur.
  #
@@ -303,10 +309,17 @@
             </div>
             {% if groupe is not null and groupe.hasAnimateur(user) %}
                 <div class="animateur">
-                    <em class="icon icon-speaker15"></em>
+                    <em class="fa icon-speaker15"></em>
                     Animateur du groupe
                 </div>
             {% endif %}
+        </div>
+        <div class="contact">
+            <span >
+                <i class="fa fa-info-circle" aria-hidden="true"></i> <a href="mailto::{{ user.email }}">{{ user.email }}</a>
+                </br>
+                <i class="fa fa-phone"></i> {{ user.telephoneDirect != '' ? user.telephoneDirect : 'Téléphone non renseigné' }}
+            </span>
         </div>
         <div class="type">
             <em class="icon icon-hospital11"></em>

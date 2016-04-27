@@ -132,7 +132,7 @@
 
         <div class="row">
             <div class="col-md-6">
-
+            <!-- Block actualités CDP !-->
                 <div class="panel panel-communaute-de-pratiques" id="panel-communaute-de-pratiques-actualites">
                     <div class="panel-heading">
                         <h2 class="lien-titre" ><a href="{{ path('hopitalnumerique_communautepratique_actualite_list') }}"><em class="icon icon-news"></em> Actualités de la communauté</a></h2>
@@ -140,8 +140,8 @@
                     <div class="panel-body">
 
                         {% if actualites is not null %}
-                            {% for derniereActualite in actualites|slice(0, 2) %}
-                                {{ communaute_pratique.display_article(derniereActualite) }}
+                            {% for derniereActualite in actualites|slice(0, 4) %}
+                                {{ communaute_pratique.display_article_truncate(derniereActualite,250) }}
                             {% endfor %}
                         {% endif %}
 
@@ -154,7 +154,35 @@
 
             </div>
             <div class="col-md-6">
+                <!-- Block forum CDP !-->
+                <div class="panel panel-communaute-de-pratiques" id="panel-communaute-de-pratiques-forums">
+                    <div class="panel-heading">
+                        <h2 class="lien-titre"><a href="{{ path('ccdn_forum_user_category_index') }}"><em class="icon icon-chat27"></em> Échanger avec toute la communauté</a></h2>
+                    </div>
+                    <div class="panel-body">
 
+                        <div class="row">
+                            {%- for topic in forumLastTopics -%}
+                                <div class="col-md-12">
+                                    <div class="forum">
+                                        <h3><a href="{{ path('ccdn_forum_user_topic_show', { forumName:topic.board.category.forum.name, topicId:topic.firstPost.topic.id }) }}"><strong>{{ topic.firstPost.topic.title }}</strong></a></h3>
+                                        {{ topic.firstPost.body|replace({'\"[': '' , ']\"': ''})|truncate(250) }} <a href="{{ path('ccdn_forum_user_topic_show', { forumName:topic.board.category.forum.name, topicId:topic.firstPost.topic.id }) }}">En savoir plus</a>
+                                    </div>
+                                </div>
+                            {%- endfor -%}
+                        </div>
+                        <nav class="lien">
+                            <a href="{{- path('ccdn_forum_user_category_show', {'categoryId': 13, 'forumName': forum.name}) -}}"><em class="fa fa-angle-double-right"></em> &nbsp; Accéder au forum</a>
+                        </nav>
+
+                    </div>
+                </div>
+
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <!-- Block membres de la CDP !-->
                 <div class="panel panel-communaute-de-pratiques communaute-de-pratiques-bloc-membres" id="panel-communaute-de-pratiques-membres">
                     <div class="panel-heading">
                         <h2 class="lien-titre" ><a href="{{ path('hopitalnumerique_communautepratique_user_list') }}"><em class="icon icon-social20"></em> Membres de la communauté</a></h2>
@@ -166,7 +194,7 @@
                         <div class="row">
 
                             {%- for membre in membres -%}
-                                <div class="col-xs-3">
+                                <div class="col-xs-2">
                                     <div class="membre lien-titre">
                                         <a href="{{ path('hopitalnumerique_communautepratique_user_list', { page:1, membreId:membre.id }) }}" >
                                             <div class="communaute-de-pratiques-avatar" style="background-image: url('{{ asset(membre.avatarWebPath) }}');"></div>
@@ -184,13 +212,11 @@
 
                     </div>
                 </div>
-
             </div>
         </div>
-
         <div class="row">
             <div class="col-md-9">
-
+<!-- Block groupe CDP !-->
                 <div class="panel panel-communaute-de-pratiques" id="panel-communaute-de-pratiques-groupes">
                     <div class="panel-heading">
                         <h2 class="lien-titre"><a href="{{ path('hopitalnumerique_communautepratique_groupe_list') }}"><em class="icon icon-social20"></em> Groupes thématiques</a></h2>
@@ -220,34 +246,6 @@
                     <a href="{{ path('hopitalnumerique_communautepratique_publication_list') }}"><em class="icon-documents7"></em> Publications issues des groupes</a>
                 </div>
 
-            </div>
-        </div>
-
-        <div class="row">
-            <div class="col-md-12">
-                <div class="panel panel-communaute-de-pratiques" id="panel-communaute-de-pratiques-forums">
-                    <div class="panel-heading">
-                        <h2 class="lien-titre"><a href="{{ path('ccdn_forum_user_category_index') }}"><em class="icon icon-chat27"></em> Échanger avec toute la communauté</a></h2>
-                    </div>
-                    <div class="panel-body">
-
-                        <div class="row">
-                            {%- for topic in forumLastTopics -%}
-                                <div class="col-md-4">
-                                    <div class="forum">
-                                        <h3><a href="{{ path('ccdn_forum_user_topic_show', { forumName:topic.board.category.forum.name, topicId:topic.firstPost.topic.id }) }}"><strong>{{ topic.firstPost.topic.title }}</strong></a></h3>
-                                        {{ topic.firstPost.body|truncate(240) }} <a href="{{ path('ccdn_forum_user_topic_show', { forumName:topic.board.category.forum.name, topicId:topic.firstPost.topic.id }) }}">En savoir plus</a>
-                                    </div>
-                                </div>
-                            {%- endfor -%}
-                        </div>
-
-                        <nav class="lien">
-                            <a href="{{ path('ccdn_forum_user_category_index') }}"><em class="fa fa-angle-double-right"></em> &nbsp; Accéder au forum</a>
-                        </nav>
-
-                    </div>
-                </div>
             </div>
         </div>
 

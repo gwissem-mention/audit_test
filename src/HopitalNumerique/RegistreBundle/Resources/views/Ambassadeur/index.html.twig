@@ -29,7 +29,12 @@
     <div id="registre-ambassadeur">
         {# En-tête #}
         <div class="col-md-12">
-            <h3 class="violet">Annuaire des ambassadeurs <a href="{{path('hopital_numerique_user_informations_personnelles')}}" class="pull-right lienTableauDeBord">Tableau de bord</a> </h3>
+            <h3 class="violet">Annuaire des ambassadeurs
+                {% if app.user.granted('ROLE_AMBASSADEUR_7') %}
+                    <a href="{{path('hopital_numerique_user_informations_ambassadeurs')}}" class="pull-right listesDesAmbassadeurs" title="Obtenir la liste des ambassadeurs"></a>
+                {% endif %}
+                <a href="{{path('hopital_numerique_user_informations_personnelles')}}" class="pull-right lienTableauDeBord">Tableau de bord</a>
+            </h3>
         </div> 
         
         {# Critère de recherche #}
