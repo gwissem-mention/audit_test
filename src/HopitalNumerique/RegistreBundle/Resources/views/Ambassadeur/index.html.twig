@@ -30,9 +30,6 @@
         {# En-tête #}
         <div class="col-md-12">
             <h3 class="violet">Annuaire des ambassadeurs
-                {% if is_granted('ROLE_AMBASSADEUR_7') or is_granted("ROLE_ADMINISTRATEUR_1") or is_granted("ROLE_ADMINISTRATEUR_DU_DOMAINE_HN_107") or is_granted("ROLE_ADMINISTRATEUR_DU_DOMAINE_106") %}
-                    <a href="{{path('hopital_numerique_user_informations_ambassadeurs')}}" class="pull-right listesDesAmbassadeurs" title="Obtenir la liste des ambassadeurs"></a>
-                {% endif %}
                 <a href="{{path('hopital_numerique_user_informations_personnelles')}}" class="pull-right lienTableauDeBord">Tableau de bord</a>
             </h3>
         </div> 
@@ -51,7 +48,6 @@
                 </select>
                 {# Carte de france #}
                 <div id="canvas_france"></div>
-
                 <span onclick="selectionnerToutesRegions();" class="link violet col-md-12" title="Sélectionner tout">> Sélectionner tout</span>
                 <span onclick="deselectionnerToutesRegions();" class="link violet col-md-12" title="Désélectionner tout">> Désélectionner tout</span>
                 <input type="hidden" id="selected-region" value='{{regions.regionsSelected|raw}}' />
@@ -73,10 +69,12 @@
 				            </div>
 			            </div>
                         <div class="clearfix"></div>
-			        {% endblock %}
-			        
-			        {% block contenu %}
-				        {% if regions.regions %}
+                    {% endblock %}
+                    {% if is_granted('ROLE_AMBASSADEUR_7') or is_granted("ROLE_ADMINISTRATEUR_1") or is_granted("ROLE_ADMINISTRATEUR_DU_DOMAINE_HN_107") or is_granted("ROLE_ADMINISTRATEUR_DU_DOMAINE_106") %}
+                        <a href="{{path('hopital_numerique_user_informations_ambassadeurs')}}" class="pull-right listesDesAmbassadeurs" style="margin-right:20px;" title="Obtenir la liste des ambassadeurs">Télécharger la liste des coordonnées des ambassadeurs <i class="fa fa-download purple-logo"></i></a>
+                    {% endif %}
+                    {% block contenu %}
+                        {% if regions.regions %}
 			                {% for region in regions.regions %}
 			                    <div class="col-md-12">
 			                         {# Ajout du nom de la région + nombre ambassadeur concerné sous la forme : "Nom région ( Nb ambassadeur(s) )" #}
