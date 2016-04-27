@@ -42,22 +42,23 @@ CommunautePratique_TableauDeBord.fixeHauteurBlocs = function()
     } else if (panelMesGroupesHeight > panelGroupesHeight) {
         $('#panel-communaute-de-pratiques-groupes').height($('#panel-communaute-de-pratiques-groupes').height() + panelMesGroupesHeight - panelGroupesHeight);
     }
+    if($(window).width() > 1000) {
+        var panelActualitesHeight = $('#panel-communaute-de-pratiques-actualites').height()
+            + parseInt($('#panel-communaute-de-pratiques-actualites').css('marginTop'))
+            + parseInt($('#panel-communaute-de-pratiques-actualites').css('marginBottom'))
+            + parseInt($('#panel-communaute-de-pratiques-actualites').css('paddingTop'))
+            + parseInt($('#panel-communaute-de-pratiques-actualites').css('paddingBottom'));
+        var panelForumHeight = $('#panel-communaute-de-pratiques-forums').height()
+            + parseInt($('#panel-communaute-de-pratiques-forums').css('marginTop'))
+            + parseInt($('#panel-communaute-de-pratiques-forums').css('marginBottom'))
+            + parseInt($('#panel-communaute-de-pratiques-forums').css('paddingTop'))
+            + parseInt($('#panel-communaute-de-pratiques-forums').css('paddingBottom'));
 
-    var panelActualitesHeight = $('#panel-communaute-de-pratiques-actualites').height()
-        + parseInt($('#panel-communaute-de-pratiques-actualites').css('marginTop'))
-        + parseInt($('#panel-communaute-de-pratiques-actualites').css('marginBottom'))
-        + parseInt($('#panel-communaute-de-pratiques-actualites').css('paddingTop'))
-        + parseInt($('#panel-communaute-de-pratiques-actualites').css('paddingBottom'));
-    var panelMembresHeight = $('#panel-communaute-de-pratiques-membres').height()
-        + parseInt($('#panel-communaute-de-pratiques-membres').css('marginTop'))
-        + parseInt($('#panel-communaute-de-pratiques-membres').css('marginBottom'))
-        + parseInt($('#panel-communaute-de-pratiques-membres').css('paddingTop'))
-        + parseInt($('#panel-communaute-de-pratiques-membres').css('paddingBottom'));
-    
-    if (panelActualitesHeight > panelMembresHeight) {
-        $('#panel-communaute-de-pratiques-membres').height($('#panel-communaute-de-pratiques-membres').height() + panelActualitesHeight - panelMembresHeight);
-    } else if (panelMembresHeight > panelActualitesHeight) {
-        $('#panel-communaute-de-pratiques-actualites').height($('#panel-communaute-de-pratiques-actualites').height() + panelMembresHeight - panelActualitesHeight);
+        if (panelActualitesHeight > panelForumHeight) {
+            $('#panel-communaute-de-pratiques-forums').height($('#panel-communaute-de-pratiques-forums').height() + panelActualitesHeight - panelForumHeight);
+        } else if (panelForumHeight > panelActualitesHeight) {
+            $('#panel-communaute-de-pratiques-actualites').height($('#panel-communaute-de-pratiques-actualites').height() + panelForumHeight - panelActualitesHeight);
+        }
     }
 };
 

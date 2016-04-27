@@ -7,9 +7,11 @@ var CommunautePratique = function() {};
 $(document).ready(function() {
     CommunautePratique.init();
 });
+
 $(window).load(function() {
     CommunautePratique.sizeBlock();
 });
+
 
 /**
  * Initialisation.

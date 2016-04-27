@@ -66,4 +66,4 @@ abbr[title], abbr[data-original-title] {cursor: auto;border-bottom: none;}
 
 pre{word-break: normal;}
 
-.link-callback {float:right;font-size: 11px;}
+.link-callback {float:right;font-size: 11px; line-height: 3.4;}
