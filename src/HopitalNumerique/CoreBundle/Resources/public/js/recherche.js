@@ -5,11 +5,14 @@ function rechercheAideEtBesoin()
     $.fancybox.open({
         'padding'   : 0,
         'autoSize'  : false,
-        'width'     : '80%',
+/*        'width'     : '70%',
+        'maxWidth'  : '1000px',*/
+        'autoWidth' : true,
         'scrolling' : 'no',
         'showCloseButton' : true,
-        'height' : '360px',
+        'height'    : '360px',
         'type'      : 'iframe',
+        'fitToView' : true,
         'href'      : url
     });
 

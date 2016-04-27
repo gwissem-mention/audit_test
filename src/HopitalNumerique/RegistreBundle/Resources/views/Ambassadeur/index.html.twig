@@ -30,7 +30,7 @@
         {# En-tête #}
         <div class="col-md-12">
             <h3 class="violet">Annuaire des ambassadeurs
-                {% if app.user.granted('ROLE_AMBASSADEUR_7') %}
+                {% if is_granted('ROLE_AMBASSADEUR_7') or is_granted("ROLE_ADMINISTRATEUR_1") or is_granted("ROLE_ADMINISTRATEUR_DU_DOMAINE_HN_107") or is_granted("ROLE_ADMINISTRATEUR_DU_DOMAINE_106") %}
                     <a href="{{path('hopital_numerique_user_informations_ambassadeurs')}}" class="pull-right listesDesAmbassadeurs" title="Obtenir la liste des ambassadeurs"></a>
                 {% endif %}
                 <a href="{{path('hopital_numerique_user_informations_personnelles')}}" class="pull-right lienTableauDeBord">Tableau de bord</a>
