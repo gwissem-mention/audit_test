@@ -4,6 +4,37 @@
 var Hn_RechercheBundle_Referencement_Filter_Category = function() {};
 
 
+$(document).ready(function() {
+    Hn_RechercheBundle_Referencement_Filter_Category.init();
+});
+
+
+/**
+ * Initialisation.
+ */
+Hn_RechercheBundle_Referencement_Filter_Category.init = function()
+{
+    $('#entity-categories').multiselect({
+        nonSelectedText: 'Filtrer par type de production ',
+        buttonContainer: '<div class="btn-group" />',
+        numberDisplayed: 1,
+        buttonWidth: '100%',
+        nSelectedText: 'catégories sélectionnées'
+    });
+    Hn_RechercheBundle_Referencement_Filter_Category.initEvents();
+};
+
+/**
+ * Initialisation des événements.
+ */
+Hn_RechercheBundle_Referencement_Filter_Category.initEvents = function()
+{
+    $('#entity-categories').change(function() {
+        Hn_RechercheBundle_Referencement.displayResults();
+    });
+};
+
+
 /**
  * Retourne si un filtre est choisi.
  *
