@@ -6,34 +6,47 @@ Hn_RechercheBundle_Referencement.displayResults = function()
     $('#results-count').html('');
     var chosenReferenceIds = Hn_RechercheBundle_Referencement.getChosenReferenceIds();
 
+    var ajaxOptions = {
+        'references': chosenReferenceIds
+    };
+    if (Hn_RechercheBundle_Referencement_Filter_Category.hasFilter()) {
+        var entityTypeIds = Hn_RechercheBundle_Referencement_Filter_Category.getEntityTypeIds();
+        var publicationCategoryIds = Hn_RechercheBundle_Referencement_Filter_Category.getPublicationCategoryIds();
+
+        ajaxOptions['entityTypeIds'] = entityTypeIds;
+        if (publicationCategoryIds.length > 0) { // Si un filtre concernent une catégorie de publication, on récupère les types Objet + Contenu
+            ajaxOptions['publicationCategoryIds'] = publicationCategoryIds;
+        }
+    }
+
     if (chosenReferenceIds.length > 0) {
         $.ajax({
             url: Routing.generate('hopitalnumerique_recherche_referencement_jsonentitiesbyreferences'),
             method: 'post',
             type: 'json',
-            data: {
-                'references': chosenReferenceIds
-            },
+            data: ajaxOptions,
             success: function(data) {
                 var totalCount = 0;
 
                 for (var group in data) {
-                    $('#results-' + group + '-bloc').css({ display: (data[group].length > 0 ? 'block' : 'none') });
-                    if (data[group].length > 0) {
-                        totalCount += data[group].length;
+                    if ($('#results-' + group + '-bloc').size() > 0) {
+                        $('#results-' + group + '-bloc').css({ display: (data[group].length > 0 ? 'block' : 'none') });
+                        if (data[group].length > 0) {
+                            totalCount += data[group].length;
 
-                        var index = 0;
-                        var otherResultsHtml = '';
+                            var index = 0;
+                            var otherResultsHtml = '';
 
-                        for (var i in data[group]) {
-                            index++;
-                            otherResultsHtml += '<div class="result" data-index="' + index + '" data-initialized="false" data-visible="false" data-entity-type="' + data[group][i].entityType + '" data-entity-id="' + data[group][i].entityId + '" data-pertinence-niveau="' + data[group][i].pertinenceNiveau + '"></div>';
+                            for (var i in data[group]) {
+                                index++;
+                                otherResultsHtml += '<div class="result" data-index="' + index + '" data-initialized="false" data-visible="false" data-entity-type="' + data[group][i].entityType + '" data-entity-id="' + data[group][i].entityId + '" data-pertinence-niveau="' + data[group][i].pertinenceNiveau + '"></div>';
+                            }
+
+                            $('#results-' + group).html(otherResultsHtml);
+                            $('#results-' + group + '-count').html(data[group].length);
+                            Hn_RechercheBundle_Referencement.displayMoreResults(group);
+                            $('#results-' + group + '-bloc').show('fast');
                         }
-
-                        $('#results-' + group).html(otherResultsHtml);
-                        $('#results-' + group + '-count').html(data[group].length);
-                        Hn_RechercheBundle_Referencement.displayMoreResults(group);
-                        $('#results-' + group + '-bloc').show('fast');
                     }
                 }
 

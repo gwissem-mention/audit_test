@@ -26,6 +26,7 @@ class ReferencementController extends Controller
 
         return $this->render('HopitalNumeriqueRechercheBundle:Referencement:index.html.twig', [
             'referencesTree' => $referencesTree,
+            'categoriesProperties' => $this->container->get('hopitalnumerique_recherche.doctrine.referencement.category')->getCategoriesProperties(),
             'choosenReferenceIds' => $choosenReferenceIds,
             'domaines' => $this->container->get('hopitalnumerique_domaine.manager.domaine')->getAllArray()
         ]);
@@ -48,7 +49,10 @@ class ReferencementController extends Controller
     public function jsonEntitiesByReferencesAction(Request $request)
     {
         $referenceIds = $request->request->get('references', []);
-        $entitiesPropertiesByGroup = $this->container->get('hopitalnumerique_recherche.doctrine.referencement.reader')->getEntitiesPropertiesByReferenceIdsByGroup($referenceIds);
+        $entityTypeIds = $request->request->get('entityTypeIds', null);
+        $publicationCategoryIds = $request->request->get('publicationCategoryIds', null);
+
+        $entitiesPropertiesByGroup = $this->container->get('hopitalnumerique_recherche.doctrine.referencement.reader')->getEntitiesPropertiesByReferenceIdsByGroup($referenceIds, $entityTypeIds, $publicationCategoryIds);
 
         return new JsonResponse($entitiesPropertiesByGroup);
     }

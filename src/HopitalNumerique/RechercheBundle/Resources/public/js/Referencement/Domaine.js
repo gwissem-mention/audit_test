@@ -60,7 +60,10 @@ Hn_RechercheBundle_Referencement.displayDomaineResults = function()
 
     $.each(Hn_RechercheBundle_Referencement.getChosenDomaineIds(), function (i, domaineId) {
         if (Hn_DomaineBundle_Domaine.CURRENT_DOMAINE_ID !== domaineId) {
-            domaineResultsHtml += '<li><a onclick="Hn_RechercheBundle_Referencement.redirectDomaine(' + domaineId + ');">' + Hn_DomaineBundle_Domaine.getNomById(domaineId) + '</a></li>';
+            var referenceString = Hn_RechercheBundle_Referencement.getChosenReferenceIdsByDomaineId(domaineId).join('-');
+            var domaineLink = Hn_DomaineBundle_Domaine.getUrlById(domaineId) + Routing.generate('hopitalnumerique_recherche_referencement_indexwithreferences', { referenceString: referenceString }, false);
+
+            domaineResultsHtml += '<li><a href="' + domaineLink + '" target="_blank">' + Hn_DomaineBundle_Domaine.getNomById(domaineId) + '</a></li>';
         }
     });
 

@@ -5,6 +5,7 @@ use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\Query\Expr;
 use HopitalNumerique\CoreBundle\DependencyInjection\Entity;
 use HopitalNumerique\DomaineBundle\Entity\Domaine;
+use HopitalNumerique\ObjetBundle\Entity\Contenu;
 use HopitalNumerique\ObjetBundle\Entity\Objet;
 use HopitalNumerique\ReferenceBundle\Entity\EntityHasNote;
 use HopitalNumerique\ReferenceBundle\Entity\Reference;
@@ -68,16 +69,17 @@ class EntityHasReferenceRepository extends EntityRepository
      * Retourne les EntityHasReference avec leur note.
      *
      * @param \HopitalNumerique\DomaineBundle\Entity\Domaine $domaine Domaine
-     * @param array $references Références
+     * @param array               $references             Références
+     * @param array<integer>|null $entityTypeIds          ID des types d'entité à récupérer
+     * @param array<integer>|null $publicationCategoryIds ID des catégories de publications à récupérer
      * @return array EntitiesHasReference
      */
-    public function getWithNotes(Domaine $domaine, array $references)
+    public function getWithNotes(Domaine $domaine, array $references, array $entityTypeIds = null, array $publicationCategoryIds = null)
     {
         $qb = $this->createQueryBuilder('entityHasReference');
 
         $qb
             ->select('entityHasReference.entityType', 'entityHasReference.entityId', 'COUNT(DISTINCT(entityHasReference.reference)) AS referencesCount', 'SUM(DISTINCT(entityHasReference.primary)) AS primarySum', 'entityHasNote.note', 'objetPointDurType.id as objetPointDurTypeId')
-            //->select('entityHasReference.entityType', 'entityHasReference.entityId', 'COUNT(entityHasReference.reference) AS referencesCount', 'SUM(entityHasReference.primary) AS primary', 'entityHasNote.note')
             ->leftJoin(
                 EntityHasNote::class,
                 'entityHasNote',
@@ -112,6 +114,73 @@ class EntityHasReferenceRepository extends EntityRepository
                 'objetCategoriePointDur' => Reference::CATEGORIE_OBJET_POINT_DUR_ID
             ])
         ;
+
+        if (null !== $publicationCategoryIds) {
+            $qb
+                ->leftJoin(
+                    Objet::class,
+                    'objet',
+                    Expr\Join::WITH,
+                    $qb->expr()->andX(
+                        $qb->expr()->eq('objet.id', 'entityHasReference.entityId'),
+                        $qb->expr()->eq('entityHasReference.entityType', ':entityTypeObjet')
+                    )
+                )
+                ->leftJoin(
+                    'objet.types',
+                    'objetCategory'
+                )
+                ->leftJoin(
+                    Contenu::class,
+                    'contenu',
+                    Expr\Join::WITH,
+                    $qb->expr()->andX(
+                        $qb->expr()->eq('contenu.id', 'entityHasReference.entityId'),
+                        $qb->expr()->eq('entityHasReference.entityType', ':entityTypeContenu')
+                    )
+                )
+                ->leftJoin(
+                    'contenu.types',
+                    'contenuCategory'
+                )
+                ->leftJoin(
+                    'contenu.objet',
+                    'contenuObjet'
+                )
+                ->leftJoin(
+                    'contenuObjet.types',
+                    'contenuObjetCategory'
+                )
+                ->setParameter('entityTypeContenu', Entity::ENTITY_TYPE_CONTENU)
+                ->setParameter('publicationCategoryIds', $publicationCategoryIds)
+            ;
+            if (null !== $entityTypeIds) {
+                $qb
+                    ->andWhere($qb->expr()->orX(
+                        $qb->expr()->orX(
+                            $qb->expr()->in('objetCategory.id', ':publicationCategoryIds'),
+                            $qb->expr()->in('contenuCategory.id', ':publicationCategoryIds'),
+                            $qb->expr()->in('contenuObjetCategory.id', ':publicationCategoryIds')
+                        ),
+                        $qb->expr()->in('entityHasReference.entityType', ':entityTypes')
+                    ))
+                    ->setParameter('entityTypes', $entityTypeIds)
+                ;
+            } else {
+                $qb
+                    ->andWhere($qb->expr()->orX(
+                        $qb->expr()->in('objetCategory.id', ':publicationCategoryIds'),
+                        $qb->expr()->in('contenuCategory.id', ':publicationCategoryIds'),
+                        $qb->expr()->in('contenuObjetCategory.id', ':publicationCategoryIds')
+                    ))
+                ;
+            }
+        } elseif (null !== $entityTypeIds) {
+            $qb
+                ->andWhere($qb->expr()->in('entityHasReference.entityType', ':entityTypes'))
+                ->setParameter('entityTypes', $entityTypeIds)
+            ;
+        }
 
         return $qb->getQuery()->getResult();
     }

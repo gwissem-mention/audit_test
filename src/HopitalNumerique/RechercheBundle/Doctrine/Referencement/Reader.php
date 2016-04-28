@@ -47,13 +47,15 @@ class Reader
     /**
      * Retourne les entités.
      *
-     * @param array<integer> $referenceIds ID des références
+     * @param array<integer>      $referenceIds           ID des références
+     * @param array<integer>|null $entityTypeIds          ID des types d'entité à récupérer
+     * @param array<integer>|null $publicationCategoryIds ID des catégories de publications à récupérer
      * @return array Entités
      */
-    private function getEntitiesPropertiesByReferenceIds(array $referenceIds)
+    private function getEntitiesPropertiesByReferenceIds(array $referenceIds, array $entityTypeIds = null, array $publicationCategoryIds = null)
     {
         $currentDomaine = $this->currentDomaine->get();
-        $entitiesProperties = $this->entityHasReferenceManager->getWithNotes($currentDomaine, $referenceIds);
+        $entitiesProperties = $this->entityHasReferenceManager->getWithNotes($currentDomaine, $referenceIds, $entityTypeIds, $publicationCategoryIds);
         usort($entitiesProperties, [$this, 'orderEntitiesProperties']);
 
         return $entitiesProperties;
@@ -94,10 +96,12 @@ class Reader
     /**
      * Retourne les entités par groupe.
      *
-     * @param array<integer> $referenceIds ID des références
+     * @param array<integer>      $referenceIds           ID des références
+     * @param array<integer>|null $entityTypeIds          ID des types d'entité à récupérer
+     * @param array<integer>|null $publicationCategoryIds ID des catégories de publications à récupérer
      * @return array Entités
      */
-    public function getEntitiesPropertiesByReferenceIdsByGroup(array $referenceIds)
+    public function getEntitiesPropertiesByReferenceIdsByGroup(array $referenceIds, array $entityTypeIds = null, array $publicationCategoryIds = null)
     {
         $entitiesPropertiesByGroup = [
             'points-durs' => [],
@@ -105,7 +109,7 @@ class Reader
         ];
 
         if (count($referenceIds) > 0) {
-            $entitiesProperties = $this->getEntitiesPropertiesByReferenceIds($referenceIds);
+            $entitiesProperties = $this->getEntitiesPropertiesByReferenceIds($referenceIds, $entityTypeIds, $publicationCategoryIds);
 
             foreach ($entitiesProperties as $entityProperties) {
                 $group = (null !== $entityProperties['objetPointDurTypeId'] ? 'points-durs' : 'productions');

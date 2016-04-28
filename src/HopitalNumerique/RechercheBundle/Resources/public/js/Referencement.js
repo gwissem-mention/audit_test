@@ -142,16 +142,3 @@ Hn_RechercheBundle_Referencement.setReferenceIds = function(referenceIds)
     }
 };
 //-->
-
-
-/**
- * Redirige vers la recherche par référencement d'un autre domaine.
- *
- * @param string domaineUrl URL de l'autre domaine
- */
-Hn_RechercheBundle_Referencement.redirectDomaine = function(domaineId)
-{
-    var referenceString = Hn_RechercheBundle_Referencement.getChosenReferenceIdsByDomaineId(domaineId).join('-');
-    Nodevo_Web.redirect(Hn_DomaineBundle_Domaine.getUrlById(domaineId) + Routing.generate('hopitalnumerique_recherche_referencement_indexwithreferences', { referenceString: referenceString }, false));
-};
-

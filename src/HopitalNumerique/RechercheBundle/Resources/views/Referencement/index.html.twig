@@ -18,6 +18,7 @@
         'bundles/hopitalnumeriquerecherche/js/Referencement.js'
         'bundles/hopitalnumeriquerecherche/js/Referencement/Domaine.js'
         'bundles/hopitalnumeriquerecherche/js/Referencement/Filtre.js'
+        'bundles/hopitalnumeriquerecherche/js/Referencement/Filter/Category.js'
         'bundles/hopitalnumeriquerecherche/js/Referencement/Result.js'
     %}
         <script type="text/javascript" src="{{ asset_url }}"></script>
@@ -84,6 +85,19 @@
                     <nav class="references">
                         <ul></ul>
                     </nav>
+                    <div class="clearfix"></div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            
+                        </div>
+                        <div class="col-md-6">
+                            <select id="entity-categories" multiple>
+                                {%- for categoryProperties in categoriesProperties -%}
+                                    <option value="{{ categoryProperties.id }}"{% if categoryProperties.entityType is defined and categoryProperties.entityType is not null %} data-entity-type="{{ categoryProperties.entityType }}"{% endif %}{% if categoryProperties.referenceId is defined and categoryProperties.referenceId is not null %} data-reference="{{ categoryProperties.referenceId }}"{% endif %}>{{ categoryProperties.libelle }}</option>
+                                {%- endfor -%}
+                            </select>
+                        </div>
+                    </div>
                     <div class="clearfix"></div>
                 </div>
 

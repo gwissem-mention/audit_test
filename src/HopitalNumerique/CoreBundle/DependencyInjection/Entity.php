@@ -51,6 +51,26 @@ class Entity
      */
     const ENTITY_TYPE_COMMUNAUTE_PRATIQUES_GROUPE = 6;
 
+    /**
+     * @var string Nom de la catégorie du fil de forum
+     */
+    const CATEGORY_FORUM_TOPIC_LABEL = 'Fil de forum';
+
+    /**
+     * @var string Nom de la catégorie de l'ambassadeur
+     */
+    const CATEGORY_AMBASSADEUR_LABEL = 'Ambassadeur';
+
+    /**
+     * @var string Nom de la catégorie de la démarche
+     */
+    const CATEGORY_RECHERCHE_PARCOURS_LABEL = 'Démarche';
+
+    /**
+     * @var string Nom de la catégorie du groupe de la communauté de pratiques
+     */
+    const CATEGORY_COMMUNAUTE_PRATIQUES_GROUPE_LABEL = 'Groupe en cours de la communauté de pratiques';
+
 
     /**
      * @var \Symfony\Component\Routing\RouterInterface Router
@@ -407,16 +427,16 @@ class Entity
                 }
                 break;
             case self::ENTITY_TYPE_FORUM_TOPIC:
-                return 'Fil de forum';
+                return self::CATEGORY_FORUM_TOPIC_LABEL;
             case self::ENTITY_TYPE_AMBASSADEUR:
-                return 'Ambassadeur';
+                return self::CATEGORY_AMBASSADEUR_LABEL;
             case self::ENTITY_TYPE_RECHERCHE_PARCOURS:
-                return 'Démarche';
+                return self::CATEGORY_RECHERCHE_PARCOURS_LABEL;
             case self::ENTITY_TYPE_COMMUNAUTE_PRATIQUES_GROUPE:
-                return 'Groupe en cours de la communauté de pratiques';
+                return self::CATEGORY_COMMUNAUTE_PRATIQUES_GROUPE_LABEL;
         }
 
-        return implode('&diams;', $categories);
+        return implode(' &diams; ', $categories);
     }
 
     /**
