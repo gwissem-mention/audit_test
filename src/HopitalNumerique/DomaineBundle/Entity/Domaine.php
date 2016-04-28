@@ -736,7 +736,8 @@ class Domaine
     {
         return [
             'id' => $this->id,
-            'nom' => $this->nom
+            'nom' => $this->nom,
+            'url' => $this->url
         ];
     }
 

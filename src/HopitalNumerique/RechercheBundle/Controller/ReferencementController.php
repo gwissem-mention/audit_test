@@ -13,18 +13,33 @@ class ReferencementController extends Controller
     /**
      * Recherche avancée.
      */
-    public function indexAction()
+    public function indexAction(Request $request)
     {
         $currentDomaine = $this->container->get('hopitalnumerique_domaine.dependency_injection.current_domaine')->get();
         $referencesTree = $this->container->get('hopitalnumerique_reference.dependency_injection.reference.tree')->getOrderedReferences(null, [$currentDomaine], true);
 
-        $choosenReferenceIds = $this->container->get('hopitalnumerique_recherche.dependency_injection.referencement.requete_session')->getReferenceIds();
+        if ($request->request->has('references')) {
+            $choosenReferenceIds = $request->request->get('references');
+        } else {
+            $choosenReferenceIds = $this->container->get('hopitalnumerique_recherche.dependency_injection.referencement.requete_session')->getReferenceIds();
+        }
 
         return $this->render('HopitalNumeriqueRechercheBundle:Referencement:index.html.twig', [
             'referencesTree' => $referencesTree,
             'choosenReferenceIds' => $choosenReferenceIds,
             'domaines' => $this->container->get('hopitalnumerique_domaine.manager.domaine')->getAllArray()
         ]);
+    }
+
+    /**
+     * Affiche la recherche par référencement avec des références prédéfinies.
+     */
+    public function indexWithReferencesAction($referenceString)
+    {
+        $referenceIds = explode('-', $referenceString);
+        $this->container->get('hopitalnumerique_recherche.dependency_injection.referencement.requete_session')->setReferenceIds($referenceIds);
+
+        return $this->redirectToRoute('hopitalnumerique_recherche_referencement_index');
     }
 
     /**

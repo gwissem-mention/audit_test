@@ -36,3 +36,13 @@ Hn_DomaineBundle_Domaine.getNomById = function(domaineId)
 {
     return Hn_DomaineBundle_Domaine.DOMAINES_BY_ID[domaineId].nom;
 };
+
+/**
+ * Retourne l'URL d'un domaine selon son ID.
+ *
+ * @param integer domaineId ID du domaine
+ */
+Hn_DomaineBundle_Domaine.getUrlById = function(domaineId)
+{
+    return Hn_DomaineBundle_Domaine.DOMAINES_BY_ID[domaineId].url;
+};

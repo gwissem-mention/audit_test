@@ -60,7 +60,7 @@ Hn_RechercheBundle_Referencement.displayDomaineResults = function()
 
     $.each(Hn_RechercheBundle_Referencement.getChosenDomaineIds(), function (i, domaineId) {
         if (Hn_DomaineBundle_Domaine.CURRENT_DOMAINE_ID !== domaineId) {
-            domaineResultsHtml += '<li>' + Hn_DomaineBundle_Domaine.getNomById(domaineId) + '</li>';
+            domaineResultsHtml += '<li><a onclick="Hn_RechercheBundle_Referencement.redirectDomaine(' + domaineId + ');">' + Hn_DomaineBundle_Domaine.getNomById(domaineId) + '</a></li>';
         }
     });
 

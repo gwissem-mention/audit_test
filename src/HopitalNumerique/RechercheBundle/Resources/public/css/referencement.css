@@ -53,4 +53,5 @@
         /* --> */
     /* <-- Résultats des autres domaines */
     #results-domaines { background-color: #f4f4f4;display: none;padding: 15px; }
+        #results-domaines a { cursor: pointer; }
     /* --> */

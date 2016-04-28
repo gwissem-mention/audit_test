@@ -3,6 +3,13 @@ hopitalnumerique_recherche_referencement_index:
     defaults: { _controller: 'HopitalNumeriqueRechercheBundle:Referencement:index' }
     methods: 'GET'
 
+hopitalnumerique_recherche_referencement_indexwithreferences:
+    pattern: '/references/{referenceString}'
+    defaults: { _controller: 'HopitalNumeriqueRechercheBundle:Referencement:indexWithReferences' }
+    methods: 'GET'
+    requirements:
+        referenceString: '[\d\-]+'
+
 hopitalnumerique_recherche_referencement_jsonentitiesbyreferences:
     pattern: 'json-entities-by-references'
     defaults: { _controller: 'HopitalNumeriqueRechercheBundle:Referencement:jsonEntitiesByReferences' }
