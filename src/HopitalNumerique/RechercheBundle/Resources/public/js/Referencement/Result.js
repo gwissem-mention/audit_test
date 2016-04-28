@@ -61,6 +61,7 @@ Hn_RechercheBundle_Referencement.displayResults = function()
         $('#filtres-info').slideDown('fast');
     }
 
+    Hn_RechercheBundle_Referencement_Filter_Category.processFilterDisplaying();
     Hn_RechercheBundle_Referencement.processFilterButtonsActivating();
     Hn_RechercheBundle_Referencement.displayDomaineResults();
 };

@@ -77,3 +77,17 @@ Hn_RechercheBundle_Referencement_Filter_Category.getEntityTypeIds = function()
     return entityTypeIds;
 };
 
+/**
+ * Affiche ou pas les catégories selon les filtres choisis.
+ */
+Hn_RechercheBundle_Referencement_Filter_Category.processFilterDisplaying = function()
+{
+    var hasChosenReferences = Hn_RechercheBundle_Referencement.getChosenElements().size() > 0;
+    var filterIsDisplayed = ('block' === $('#entity-categories-container').css('display'));
+
+    if (hasChosenReferences && !filterIsDisplayed) {
+        $('#entity-categories-container').slideDown();
+    } else if (!hasChosenReferences && filterIsDisplayed) {
+        $('#entity-categories-container').slideUp();
+    }
+};
