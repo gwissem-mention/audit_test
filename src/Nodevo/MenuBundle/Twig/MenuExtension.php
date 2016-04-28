@@ -1,14 +1,21 @@
 <?php
 namespace Nodevo\MenuBundle\Twig;
 
-use Nodevo\MenuBundle\DependencyInjection\MenuCache;
+use HopitalNumerique\UserBundle\Entity\User;
 use Knp\Menu\Twig\Helper;
+use Nodevo\MenuBundle\DependencyInjection\MenuCache;
+use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 
 /**
  * {@inheritdoc}
  */
 class MenuExtension extends \Knp\Menu\Twig\MenuExtension
 {
+    /**
+     * @var \Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface TokenStorage
+     */
+    private $tokenStorage;
+
     /**
      * @var \Knp\Menu\Twig\Helper TwigHelper
      */
@@ -23,11 +30,23 @@ class MenuExtension extends \Knp\Menu\Twig\MenuExtension
     /**
      * Constructeur.
      */
-    public function __construct(Helper $knpMenuTwigHelper, MenuCache $menuCache)
+    public function __construct(TokenStorageInterface $tokenStorage, Helper $knpMenuTwigHelper, MenuCache $menuCache)
     {
         parent::__construct($knpMenuTwigHelper);
+        $this->tokenStorage = $tokenStorage;
         $this->knpMenuTwigHelper = $knpMenuTwigHelper;
         $this->menuCache = $menuCache;
+    }
+
+
+    /**
+     * Retourne l'utilisateur connecté.
+     *
+     * @return \HopitalNumerique\UserBundle\Entity\User|null User
+     */
+    private function getUser()
+    {
+        return (null !== $this->tokenStorage->getToken() ? ($this->tokenStorage->getToken()->getUser() instanceof User ? $this->tokenStorage->getToken()->getUser() : null) : null);
     }
 
 
@@ -56,7 +75,7 @@ class MenuExtension extends \Knp\Menu\Twig\MenuExtension
     public function render($menu, array $options = array(), $renderer = null)
     {
         if (is_string($menu)) {
-            $menuCacheId = $this->menuCache->getMenuCacheLabel($menu, $options);
+            $menuCacheId = $this->menuCache->getMenuCacheLabel($menu, $options, $this->getUser());
 
             if ($this->menuCache->hasRender($menuCacheId)) {
                 return $this->menuCache->getRender($menuCacheId);

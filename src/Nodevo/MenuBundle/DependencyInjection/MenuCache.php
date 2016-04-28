@@ -1,6 +1,8 @@
 <?php
 namespace Nodevo\MenuBundle\DependencyInjection;
 
+use HopitalNumerique\UserBundle\Entity\User;
+
 /**
  * Gestion du cache du menu.
  */
@@ -19,9 +21,11 @@ class MenuCache
      * @param array  $menuOptions Options du menu
      * @return string Label du cache
      */
-    public function getMenuCacheLabel($menuAlias, array $menuOptions = [])
+    public function getMenuCacheLabel($menuAlias, array $menuOptions = [], User $user = null)
     {
-        return self::RENDER_PREFIX.$menuAlias.(array_key_exists('template', $menuOptions) ? $menuOptions['template'] : '');
+        $userRole = (null !== $user ? '_'.$user->getRole() : '');
+
+        return self::RENDER_PREFIX.$menuAlias.(array_key_exists('template', $menuOptions) ? $menuOptions['template'] : '').$userRole;
     }
 
     /**

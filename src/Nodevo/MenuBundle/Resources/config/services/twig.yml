@@ -1,6 +1,6 @@
 services:
     hopitalnumerique_menu.twig.menu_extension:
         class: 'Nodevo\MenuBundle\Twig\MenuExtension'
-        arguments: ['@knp_menu.helper', '@nodevo_menu.dependency_injection.menu_cache']
+        arguments: ['@security.token_storage', '@knp_menu.helper', '@nodevo_menu.dependency_injection.menu_cache']
         tags:
             - { name: 'twig.extension' }
