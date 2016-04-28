@@ -67,6 +67,7 @@ assetic:
                 - 'bundles/hopitalnumeriquecore/js/recherche.js'
                 - 'bundles/nodevoadmin/plugins/apprise/apprise.js'
                 - 'bundles/nodevoadmin/plugins/nodevoLoader/nodevoLoader.js'
+                - '%kernel.root_dir%/Resources/lib/nodevo/Web.js'
                 - '%kernel.root_dir%/Resources/lib/Highlight.js'
                 - 'bundles/hopitalnumeriqueaccount/js/InformationsManquantes.js'
         #-->
