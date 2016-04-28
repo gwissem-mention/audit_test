@@ -256,3 +256,24 @@ ivory_google_map:
         adapter: "widop_http_adapter.curl"
         https: true
         format: "json"
+
+# ckeditor
+ivory_ck_editor:
+    configs:
+        config_questionnaire:
+            toolbar: "toolbar_questionnaire"
+    toolbars:
+        configs:
+            toolbar_questionnaire: [ "@basicstyles", "-", "@colors", "-", "@paragraph" ]
+        items:
+            document: [ "Source", "-", "Save", "NewPage", "DocProps", "Preview", "Print", "-", "Templates" ]
+            clipboard: [ 'Cut','Copy','Paste','PasteText','PasteFromWord','-','Undo','Redo' ]
+            editing: [ 'Find','Replace','-','SelectAll','-','SpellChecker', 'Scayt' ]
+            forms: [ 'Form', 'Checkbox', 'Radio', 'TextField', 'Textarea', 'Select', 'Button', 'ImageButton','HiddenField' ]
+            basicstyles: [ 'Bold','Italic','Underline','Strike','Subscript','Superscript','-','RemoveFormat' ]
+            paragraph: [ 'NumberedList','BulletedList','-','Outdent','Indent','-','Blockquote','-','JustifyLeft','JustifyCenter','JustifyRight','JustifyBlock','-','BidiLtr','BidiRtl' ]
+            links: [ 'Link','Unlink','Anchor' ]
+            insert: [ 'Image','Flash','Table','HorizontalRule','Smiley','SpecialChar','PageBreak','Iframe' ]
+            styles: [ 'Styles','Format','Font','FontSize' ]
+            colors: [ 'TextColor','BGColor' ]
+            tools: [ 'Maximize', 'ShowBlocks','-','About' ]
