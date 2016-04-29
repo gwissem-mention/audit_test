@@ -79,7 +79,8 @@ class AppKernel extends Kernel
             new HopitalNumerique\FichierBundle\HopitalNumeriqueFichierBundle(),
             new HopitalNumerique\CommunautePratiqueBundle\HopitalNumeriqueCommunautePratiqueBundle(),
             new Widop\HttpAdapterBundle\WidopHttpAdapterBundle(),
-            new Ivory\GoogleMapBundle\IvoryGoogleMapBundle()
+            new Ivory\GoogleMapBundle\IvoryGoogleMapBundle(),
+            new Ivory\CKEditorBundle\IvoryCKEditorBundle()
         );
 
         if (in_array($this->getEnvironment(), array('dev', 'test'))) {
