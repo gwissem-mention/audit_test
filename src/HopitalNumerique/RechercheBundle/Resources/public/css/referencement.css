@@ -2,8 +2,9 @@
     .recherche-referencement #contexte-container {}
         .recherche-referencement #contexte-container #contexte-button { border-radius: 0;margin: 0 0 15px 0; }
         .recherche-referencement #contexte-container .modal {}
+            .recherche-referencement #contexte-container .modal label { font-weight: normal;margin: 0; }
             .recherche-referencement #contexte-container .modal ul { list-style-type: none;padding: 0; }
-                .recherche-referencement #contexte-container .modal ul ul { list-style-type: none;padding: 0 0 0 20px; }
+                .recherche-referencement #contexte-container .modal ul ul { list-style-type: none;padding: 0 0 10px 20px; }
     .recherche-referencement .references-bloc {}
         .recherche-referencement .references-bloc a { cursor: default; }
         .recherche-referencement .references-bloc ul { background-color: #f4f4f4;border-color: #eee;border-style: solid;border-width: 1px 1px 0 1px;font-weight: bold;list-style-type: none;margin: 0;padding: 0; }

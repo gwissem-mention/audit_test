@@ -56,7 +56,7 @@
                                         <div class="modal-body">
                                             <ul>
                                                 {%- for referenceEnfantTree in referenceProperties.enfants -%}
-                                                    {{ mySelf.buildContextTreePart(referenceEnfantTree) }}
+                                                    {{ mySelf.buildContextTreePart(referenceEnfantTree, 1) }}
                                                 {%- endfor -%}
                                             </ul>
                                         </div>
@@ -69,14 +69,18 @@
                         </div>
                     {% endif %}
                 {%- endfor -%}
-                {% macro buildContextTreePart(referencesTreePart) -%}
+                {% macro buildContextTreePart(referencesTreePart, level) -%}
                     {% import _self as mySelf %}
                     <li data-reference="{{ referencesTreePart.reference.id }}" data-chosen="false" data-domaines="{{ referencesTreePart.reference.domainesId|join(',') }}">
-                        <label><input type="checkbox"> {{ referencesTreePart.reference.libelle }}</label>
+                        {%- if level > 1 -%}
+                            <label><input type="checkbox"> {{ referencesTreePart.reference.libelle }}</label>
+                        {%- else -%}
+                            <div><strong>{{ referencesTreePart.reference.libelle }}</strong></div>
+                        {%- endif -%}
                         {%- if referencesTreePart.enfants|length > 0 -%}
                             <ul>
                                 {%- for referenceEnfantTree in referencesTreePart.enfants -%}
-                                    {{ mySelf.buildContextTreePart(referenceEnfantTree) }}
+                                    {{ mySelf.buildContextTreePart(referenceEnfantTree, level + 1) }}
                                 {%- endfor -%}
                             </ul>
                         {%- endif -%}
