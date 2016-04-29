@@ -62,7 +62,11 @@ Hn_RechercheBundle_Referencement.getReferenceIdByElement = function(element)
  */
 Hn_RechercheBundle_Referencement.getReferenceLibelleById = function(referenceId)
 {
-    return $('.references-bloc [data-reference="' + referenceId + '"] a.reference').first().text().trim();
+    if ($('.references-bloc [data-reference="' + referenceId + '"]').size() > 0) {
+        return $('.references-bloc [data-reference="' + referenceId + '"] a.reference').first().text().trim();
+    } else { // Mon contexte
+        return $('#contexte-modal [data-reference="' + referenceId + '"] label').first().text().trim();
+    }
 };
 
 /**
@@ -72,7 +76,7 @@ Hn_RechercheBundle_Referencement.getReferenceLibelleById = function(referenceId)
  */
 Hn_RechercheBundle_Referencement.getChosenElements = function()
 {
-    return $('.references-bloc [data-chosen="true"]');
+    return $('.references-bloc [data-chosen="true"], #contexte-modal [data-chosen="true"]');
 };
 
 /**
@@ -126,7 +130,8 @@ Hn_RechercheBundle_Referencement.toggleReferenceChoosing = function(referenceId)
 {
     var referenceIsChosen = ('true' === $('[data-reference="' + referenceId + '"]').attr('data-chosen'));
 
-    $('.references-bloc [data-reference="' + referenceId + '"]').attr('data-chosen', referenceIsChosen ? 'false' : 'true');
+    $('[data-reference="' + referenceId + '"]').attr('data-chosen', referenceIsChosen ? 'false' : 'true');
+    $('#contexte-modal [data-reference="' + referenceId + '"] input[type="checkbox"]').prop('checked', referenceIsChosen ? 'false' : 'true');
 };
 
 /**

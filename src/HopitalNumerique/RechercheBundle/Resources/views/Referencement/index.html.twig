@@ -19,6 +19,7 @@
         'bundles/hopitalnumeriquerecherche/js/Referencement/Domaine.js'
         'bundles/hopitalnumeriquerecherche/js/Referencement/Filtre.js'
         'bundles/hopitalnumeriquerecherche/js/Referencement/Filter/Category.js'
+        'bundles/hopitalnumeriquerecherche/js/Referencement/Filter/Contexte.js'
         'bundles/hopitalnumeriquerecherche/js/Referencement/Result.js'
     %}
         <script type="text/javascript" src="{{ asset_url }}"></script>
@@ -41,6 +42,47 @@
             <div class="col-md-4">
 
                 {% import _self as mySelf %}
+
+                {%- for referenceProperties in referencesTree -%}
+                    {% if referenceProperties.reference.id == 222 %}
+                        <div id="contexte-container">
+                            <button type="button" id="contexte-button" class="btn btn-primary btn-block btn-lg" data-toggle="modal" data-target="#contexte-modal">{{ referenceProperties.reference.libelle }}</button>
+                            <div class="modal fade" id="contexte-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+                                <div class="modal-dialog" role="document">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h4 class="modal-title" id="myModalLabel">{{ referenceProperties.reference.libelle }}</h4>
+                                        </div>
+                                        <div class="modal-body">
+                                            <ul>
+                                                {%- for referenceEnfantTree in referenceProperties.enfants -%}
+                                                    {{ mySelf.buildContextTreePart(referenceEnfantTree) }}
+                                                {%- endfor -%}
+                                            </ul>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-success" onclick="Hn_RechercheBundle_Referencement_Filter_Contexte.valid();">Valider</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    {% endif %}
+                {%- endfor -%}
+                {% macro buildContextTreePart(referencesTreePart) -%}
+                    {% import _self as mySelf %}
+                    <li data-reference="{{ referencesTreePart.reference.id }}" data-chosen="false" data-domaines="{{ referencesTreePart.reference.domainesId|join(',') }}">
+                        <label><input type="checkbox"> {{ referencesTreePart.reference.libelle }}</label>
+                        {%- if referencesTreePart.enfants|length > 0 -%}
+                            <ul>
+                                {%- for referenceEnfantTree in referencesTreePart.enfants -%}
+                                    {{ mySelf.buildContextTreePart(referenceEnfantTree) }}
+                                {%- endfor -%}
+                            </ul>
+                        {%- endif -%}
+                    </li>
+                {%- endmacro %}
+
                 <nav class="references-bloc">
                     <ul>
                         {%- for referenceProperties in referencesTree -%}
@@ -50,24 +92,26 @@
                 </nav>
 
                 {% macro buildTreePart(referencesTreePart) -%}
-                    {% import _self as mySelf %}
-                    <li data-reference="{{ referencesTreePart.reference.id }}" data-chosen="false" data-domaines="{{ referencesTreePart.reference.domainesId|join(',') }}">
-                        <a class="reference">
-                            <span class="add"><i class="fa fa-plus-circle"></i></span>
-                            {%- if referencesTreePart.enfants|length > 0 -%}
-                                <span class="toggle"><i class="fa fa-chevron-right"></i></span>
-                            {%- endif -%}
-                            {{ referencesTreePart.reference.libelle }}
-                        </a>
+                    {% if referencesTreePart.reference.id != 222 %}
+                        {% import _self as mySelf %}
+                        <li data-reference="{{ referencesTreePart.reference.id }}" data-chosen="false" data-domaines="{{ referencesTreePart.reference.domainesId|join(',') }}">
+                            <a class="reference">
+                                <span class="add"><i class="fa fa-plus-circle"></i></span>
+                                {%- if referencesTreePart.enfants|length > 0 -%}
+                                    <span class="toggle"><i class="fa fa-chevron-right"></i></span>
+                                {%- endif -%}
+                                {{ referencesTreePart.reference.libelle }}
+                            </a>
 
-                        {%- if referencesTreePart.enfants|length > 0 -%}
-                            <ul>
-                                {%- for referenceEnfantTree in referencesTreePart.enfants -%}
-                                    {{ mySelf.buildTreePart(referenceEnfantTree) }}
-                                {%- endfor -%}
-                            </ul>
-                        {%- endif -%}
-                    </li>
+                            {%- if referencesTreePart.enfants|length > 0 -%}
+                                <ul>
+                                    {%- for referenceEnfantTree in referencesTreePart.enfants -%}
+                                        {{ mySelf.buildTreePart(referenceEnfantTree) }}
+                                    {%- endfor -%}
+                                </ul>
+                            {%- endif -%}
+                        </li>
+                    {% endif %}
                 {%- endmacro %}
 
             </div>
