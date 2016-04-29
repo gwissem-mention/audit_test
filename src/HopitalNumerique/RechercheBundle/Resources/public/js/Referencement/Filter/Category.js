@@ -46,6 +46,38 @@ Hn_RechercheBundle_Referencement_Filter_Category.hasFilter = function()
 };
 
 /**
+ * Récupère les IDs des types d'entités du filtre.
+ *
+ * @return array<integer> IDs
+ */
+Hn_RechercheBundle_Referencement_Filter_Category.getEntityTypeIds = function()
+{
+    var entityTypeIds = [];
+
+    $('#entity-categories [data-entity-type]:selected').each(function(i, option) {
+        entityTypeIds.push(parseInt($(option).attr('data-entity-type')));
+    });
+
+    return entityTypeIds;
+};
+
+/**
+ * Spécifie les ID des types d'entité.
+ *
+ * @param Array<integer>|null entityTypeIds IDs
+ */
+Hn_RechercheBundle_Referencement_Filter_Category.setEntityTypeIds = function(entityTypeIds)
+{
+    $('#entity-categories [data-entity-type]:selected').prop('selected', false);
+
+    if (null !== entityTypeIds) {
+        $.each(entityTypeIds, function(i, entityTypeId) {
+            $('#entity-categories [data-entity-type="' + entityTypeId +'"]').prop('selected', true);
+        });
+    }
+};
+
+/**
  * Récupère les IDs des catégories de publication du filtre.
  *
  * @return array<integer> IDs
@@ -62,19 +94,19 @@ Hn_RechercheBundle_Referencement_Filter_Category.getPublicationCategoryIds = fun
 };
 
 /**
- * Récupère les IDs des types d'entités du filtre.
+ * Spécifie les ID des catégories de publication.
  *
- * @return array<integer> IDs
+ * @param Array<integer>|null publicationCategoryIds IDs
  */
-Hn_RechercheBundle_Referencement_Filter_Category.getEntityTypeIds = function()
+Hn_RechercheBundle_Referencement_Filter_Category.setPublicationCategoryIds = function(publicationCategoryIds)
 {
-    var entityTypeIds = [];
+    $('#entity-categories [data-reference]:selected').prop('selected', false);
 
-    $('#entity-categories [data-entity-type]:selected').each(function(i, option) {
-        entityTypeIds.push(parseInt($(option).attr('data-entity-type')));
-    });
-
-    return entityTypeIds;
+    if (null !== publicationCategoryIds) {
+        $.each(publicationCategoryIds, function(i, publicationCategoryId) {
+            $('#entity-categories [data-reference="' + publicationCategoryId +'"]').prop('selected', true);
+        });
+    }
 };
 
 /**

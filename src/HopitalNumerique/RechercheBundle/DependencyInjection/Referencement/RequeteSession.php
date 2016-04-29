@@ -19,6 +19,21 @@ class RequeteSession
     const SESSION_REFERENCES_NAME = 'hnrecherche_referencement_requete_references';
 
     /**
+     * @var string Préfixe de la session des catégories
+     */
+    const SESSION_CATEGORY_FILTERS_NAME = 'hnrecherche_referencement_requete_categories';
+
+    /**
+     * @var string Index des types d'entités dans la session
+     */
+    const SESSION_CATEGORY_FILTERS_ENTITY_TYPES_KEY = '1';
+
+    /**
+     * @var string Index des catégories de publication dans la session
+     */
+    const SESSION_CATEGORY_FILTERS_PUBLICATION_CATEGORIES_KEY = '2';
+
+    /**
      * @var string Préfixe de la session de la requete
      */
     const SESSION_REQUETE_NAME = 'hnrecherche_referencement_requete_requete';
@@ -79,6 +94,100 @@ class RequeteSession
         $this->session->set(self::SESSION_REFERENCES_NAME, $referenceIds);
     }
 
+
+    /**
+     * Retourne les filtres de catégories.
+     *
+     * @return array Filtres
+     */
+    private function getCategoryFilters()
+    {
+        return $this->session->get(self::SESSION_CATEGORY_FILTERS_NAME, []);
+    }
+
+    /**
+     * Enregistre les filtres de catégorie en session.
+     *
+     * @param array $categoryFilters Filtres
+     */
+    private function setCategoryFilters(array $categoryFilters)
+    {
+        $this->session->set(self::SESSION_CATEGORY_FILTERS_NAME, $categoryFilters);
+    }
+
+    /**
+     * Retourne les IDs des types d'entité.
+     *
+     * @return array<integer>|null IDs
+     */
+    public function getEntityTypeIds()
+    {
+        $categoryFilters = $this->getCategoryFilters();
+
+        if (array_key_exists(self::SESSION_CATEGORY_FILTERS_ENTITY_TYPES_KEY, $categoryFilters)) {
+            return $categoryFilters[self::SESSION_CATEGORY_FILTERS_ENTITY_TYPES_KEY];
+        }
+
+        return null;
+    }
+
+    /**
+     * Enregistre les types d'entité en session.
+     *
+     * @param array<integer> $entityTypeIds IDs des types d'entité
+     */
+    public function setEntityTypeIds(array $entityTypeIds = null)
+    {
+        $categoryFilters = $this->getCategoryFilters();
+
+        if (null === $entityTypeIds) {
+            if (array_key_exists(self::SESSION_CATEGORY_FILTERS_ENTITY_TYPES_KEY, $categoryFilters)) {
+                unset($categoryFilters[self::SESSION_CATEGORY_FILTERS_ENTITY_TYPES_KEY]);
+            }
+        } else {
+            $categoryFilters[self::SESSION_CATEGORY_FILTERS_ENTITY_TYPES_KEY] = $entityTypeIds;
+        }
+
+        $this->setCategoryFilters($categoryFilters);
+    }
+
+    /**
+     * Retourne les IDs des catégories de publication.
+     *
+     * @return array<integer>|null IDs
+     */
+    public function getPublicationCategoryIds()
+    {
+        $categoryFilters = $this->getCategoryFilters();
+
+        if (array_key_exists(self::SESSION_CATEGORY_FILTERS_PUBLICATION_CATEGORIES_KEY, $categoryFilters)) {
+            return $categoryFilters[self::SESSION_CATEGORY_FILTERS_PUBLICATION_CATEGORIES_KEY];
+        }
+
+        return null;
+    }
+
+    /**
+     * Enregistre les catégories de publication en session.
+     *
+     * @param array<integer> $publicationCategoryIds IDs
+     */
+    public function setPublicationCategoryIds(array $publicationCategoryIds = null)
+    {
+        $categoryFilters = $this->getCategoryFilters();
+
+        if (null === $publicationCategoryIds) {
+            if (array_key_exists(self::SESSION_CATEGORY_FILTERS_PUBLICATION_CATEGORIES_KEY, $categoryFilters)) {
+                unset($categoryFilters[self::SESSION_CATEGORY_FILTERS_PUBLICATION_CATEGORIES_KEY]);
+            }
+        } else {
+            $categoryFilters[self::SESSION_CATEGORY_FILTERS_PUBLICATION_CATEGORIES_KEY] = $publicationCategoryIds;
+        }
+
+        $this->setCategoryFilters($categoryFilters);
+    }
+
+
     /**
      * Retourne la requête.
      *
@@ -129,11 +238,9 @@ class RequeteSession
                 $requete->setNom(Requete::DEFAULT_NOM);
                 $requete->setIsDefault(true);
                 $requete->setIsUserNotified(false);
-                $requete->setRefs($referenceIds);
                 $requete->setUser($requeteUser);
                 $requete->setDomaine($this->domaine);
-                $this->requeteManager->save($requete);
-                $this->setRequete($requete);
+                $this->saveRequete($requete);
             }
         }
     }
@@ -144,6 +251,7 @@ class RequeteSession
     public function saveRequete(Requete $requete)
     {
         $requete->setRefs($this->getReferenceIds());
+        $requete->setCategPointDur($this->getCategoryFilters());
         $this->requeteManager->save($requete);
         $this->setRequete($requete);
     }

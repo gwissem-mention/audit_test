@@ -28,6 +28,8 @@ class ReferencementController extends Controller
             'referencesTree' => $referencesTree,
             'categoriesProperties' => $this->container->get('hopitalnumerique_recherche.doctrine.referencement.category')->getCategoriesProperties(),
             'choosenReferenceIds' => $choosenReferenceIds,
+            'entityTypeIds' => $this->container->get('hopitalnumerique_recherche.dependency_injection.referencement.requete_session')->getEntityTypeIds(),
+            'publicationCategoryIds' => $this->container->get('hopitalnumerique_recherche.dependency_injection.referencement.requete_session')->getPublicationCategoryIds(),
             'domaines' => $this->container->get('hopitalnumerique_domaine.manager.domaine')->getAllArray()
         ]);
     }

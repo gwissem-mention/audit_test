@@ -57,7 +57,9 @@ Hn_RechercheBundle_Referencement.saveFilters = function()
             url: Routing.generate('hopitalnumerique_recherche_referencement_requete_popinsave'),
             method: 'POST',
             data: {
-                referenceIds: chooseReferenceIds
+                referenceIds: chooseReferenceIds,
+                entityTypesIds: Hn_RechercheBundle_Referencement_Filter_Category.getEntityTypeIds(),
+                publicationCategoryIds: Hn_RechercheBundle_Referencement_Filter_Category.getPublicationCategoryIds()
             },
             success: function (data) {
                 $.fancybox.open(data);
