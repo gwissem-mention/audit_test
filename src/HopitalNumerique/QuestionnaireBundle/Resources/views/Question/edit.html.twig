@@ -20,12 +20,8 @@
             <div class="col-md-12">
                 <label class="control-label" for="questionObligatoire">
                     La question sera obligatoire pour la validation du questionnaire
+                    <input type="checkbox" {% if question.obligatoire %}checked="checked"{% endif %} class="checkboxObligatoire" name="question_obligatoire" id="questionObligatoire">
                 </label>
-            </div>
-            <div class="col-md-12">
-                <div class="checkbox">
-                    <input type="checkbox" {% if question.obligatoire %}checked="checked"{% endif %} class="checkbox form-control" name="question_obligatoire" id="questionObligatoire">
-                </div>
             </div>
         </div>
         <div class="col-md-12">
