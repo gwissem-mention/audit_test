@@ -1,6 +1,6 @@
 .recherche-referencement { margin: 15px 15px 0 15px; }
     .recherche-referencement #contexte-container {}
-        .recherche-referencement #contexte-container #contexte-button { border-radius: 0;margin: 0 0 15px 0; }
+        .recherche-referencement #contexte-container #contexte-button { border-radius: 0;font-size: 16px;margin: 0 0 15px 0; }
         .recherche-referencement #contexte-container .modal {}
             .recherche-referencement #contexte-container .modal label { font-weight: normal;margin: 0; }
             .recherche-referencement #contexte-container .modal ul { list-style-type: none;padding: 0; }
@@ -9,16 +9,16 @@
         .recherche-referencement .references-bloc a { cursor: default; }
         .recherche-referencement .references-bloc ul { background-color: #f4f4f4;border-color: #eee;border-style: solid;border-width: 1px 1px 0 1px;font-weight: bold;list-style-type: none;margin: 0;padding: 0; }
             .recherche-referencement .references-bloc ul li {}
-                .recherche-referencement .references-bloc ul li .reference { background-color: #d60030;border-color: #eee;border-style: solid;border-width: 0 0 1px 0;color: #fff;display: block;font-size: 17px;font-style: normal;padding: 8px 12px;text-decoration: none;text-transform: uppercase; }
+                .recherche-referencement .references-bloc ul li .reference { background-color: #d60030;border-color: #eee;border-style: solid;border-width: 0 0 1px 0;color: #fff;display: block;font-size: 16px;font-style: normal;padding: 8px 12px;text-decoration: none;text-transform: uppercase; }
                 .recherche-referencement .references-bloc ul li .reference:hover { text-decoration: none; }
                     .recherche-referencement .references-bloc ul li .add { cursor: pointer;display: none;float: left;margin: -2px 0 0;padding: 2px 7px; }
                     .recherche-referencement .references-bloc ul li .add:hover { color: #d60030; }
-                    .recherche-referencement .references-bloc ul li .toggle { color: #fff;float: right;font-size: 20px;margin: -2px -2px 0 4px; }
+                    .recherche-referencement .references-bloc ul li .toggle { color: #fff;float: right;font-size: 20px;margin: -3px -2px 0 4px; }
             .recherche-referencement .references-bloc ul li[data-chosen="true"] > .reference { background-color: #fff;font-style: italic;text-decoration: underline; }
                     .recherche-referencement .references-bloc ul li[data-chosen="true"] > .reference .add { color: #d60030; }
             .recherche-referencement .references-bloc ul ul { display: none; }
                 .recherche-referencement .references-bloc ul ul li {}
-                    .recherche-referencement .references-bloc ul ul li .reference { background-color: transparent;color: #000;font-size: 14px;padding-left: 0px;text-transform: none; }
+                    .recherche-referencement .references-bloc ul ul li .reference { background-color: transparent;color: #000;font-size: 13px;padding-left: 0px;text-transform: none; }
                         .recherche-referencement .references-bloc ul ul li .add { display: block; }
                         .recherche-referencement .references-bloc ul ul li .toggle { color: #d60030;font-size: 14px;margin-top: 2px; }
                         .recherche-referencement .references-bloc ul ul ul {}
@@ -48,7 +48,7 @@
                     .recherche-referencement .results-bloc h3 a .pertinence-niveau-1 { background-image: url("/bundles/hopitalnumeriquerecherche/img/niv-1-prod.png"); }
                     .recherche-referencement .results-bloc h3 a .pertinence-niveau-2 { background-image: url("/bundles/hopitalnumeriquerecherche/img/niv-2-prod.png"); }
                     .recherche-referencement .results-bloc h3 a .pertinence-niveau-3 { background-image: url("/bundles/hopitalnumeriquerecherche/img/niv-3-prod.png"); }
-                .recherche-referencement .results-bloc h3 a .subtitle { color: #5d5d5d;display: block;font-size: 95%; }
+                .recherche-referencement .results-bloc h3 a .subtitle { color: #5d5d5d;display: block;font-size: 85%; }
             .recherche-referencement .results-bloc p { font-size: 13px;margin: 8px 0; }
         /* --> */
         /* <-- Spécifiques aux points durs */
