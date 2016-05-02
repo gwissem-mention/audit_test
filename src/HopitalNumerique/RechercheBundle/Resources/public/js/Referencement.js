@@ -131,7 +131,7 @@ Hn_RechercheBundle_Referencement.toggleReferenceChoosing = function(referenceId)
     var referenceIsChosen = ('true' === $('[data-reference="' + referenceId + '"]').attr('data-chosen'));
 
     $('[data-reference="' + referenceId + '"]').attr('data-chosen', referenceIsChosen ? 'false' : 'true');
-    $('#contexte-modal [data-reference="' + referenceId + '"] input[type="checkbox"]').prop('checked', referenceIsChosen ? 'false' : 'true');
+    $('#contexte-modal [data-reference="' + referenceId + '"] input[type="checkbox"]').prop('checked', referenceIsChosen ? false : true);
 };
 
 /**

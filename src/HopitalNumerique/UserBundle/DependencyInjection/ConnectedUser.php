@@ -36,4 +36,14 @@ class ConnectedUser
     {
         return $this->user;
     }
+
+    /**
+     * Retourne s'il y a un utilisateur connecté.
+     *
+     * @return boolean Si connecté
+     */
+    public function is()
+    {
+        return (null !== $this->user);
+    }
 }

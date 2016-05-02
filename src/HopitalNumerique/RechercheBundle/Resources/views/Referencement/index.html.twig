@@ -4,7 +4,7 @@
 
 {% block stylesheets -%}
     {{ parent() }}
-    {% stylesheets output="compiled/hopitalnumerique-recherche-search-index.css" filter="cssrewrite, ?yui_css"
+    {% stylesheets output="compiled/hopitalnumerique-recherche-referencement-index.css" filter="cssrewrite, ?yui_css"
         'bundles/hopitalnumeriquerecherche/css/referencement.css'
     %}
         <link rel="stylesheet" href="{{ asset_url }}">
@@ -13,7 +13,7 @@
 
 {% block javascripts -%}
     {{ parent() }}
-    {% javascripts output="compiled/hopitalnumerique-recherche-search-index.js"
+    {% javascripts output="compiled/hopitalnumerique-recherche-referencement-index.js"
         'bundles/hopitalnumeriquedomaine/js/Domaine.js'
         'bundles/hopitalnumeriquerecherche/js/Referencement.js'
         'bundles/hopitalnumeriquerecherche/js/Referencement/Domaine.js'

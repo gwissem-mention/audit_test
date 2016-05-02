@@ -22,6 +22,9 @@ class ReferencementController extends Controller
             $choosenReferenceIds = $request->request->get('references');
         } else {
             $choosenReferenceIds = $this->container->get('hopitalnumerique_recherche.dependency_injection.referencement.requete_session')->getReferenceIds();
+            if (count($choosenReferenceIds) === 0) {
+                $choosenReferenceIds = $this->container->get('hopitalnumerique_account.dependency_injection.doctrine.reference.contexte')->getReferenceIds();
+            }
         }
 
         return $this->render('HopitalNumeriqueRechercheBundle:Referencement:index.html.twig', [
