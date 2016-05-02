@@ -16,12 +16,14 @@
 {% block title %}{{parent()}} - Publication{% endblock %}
 
 {% block h1Title %}
-    Gestion des publications
+    Gestion des {{ (filtre is defined and filtre == 'Article') ? 'articles' : 'publications' }}
 {% endblock %}
 
 {% block toolbarButton %}
-    {% if app.user|checkAuthorization( path('hopitalnumerique_objet_objet_add') ) %}
-    <a class="btn btn-default" href="{{ path('hopitalnumerique_objet_objet_add') }}" title="Ajouter une publication"><i class="fa fa-plus"></i></a>
+    {% if app.user|checkAuthorization( path('hopitalnumerique_objet_objet_add')) and filtre is defined and filtre == 'Article' %}
+        <a class="btn btn-default" href="{{path('hopitalnumerique_objet_objet_add', {'type':2})}}" title="Ajouter un article"><i class="fa fa-plus"></i></a>
+    {% elseif app.user|checkAuthorization( path('hopitalnumerique_objet_objet_add') ) %}
+        <a class="btn btn-default" href="{{ path('hopitalnumerique_objet_objet_add') }}" title="Ajouter une publication"><i class="fa fa-plus"></i></a>    
     {% endif %}
 {% endblock %}
 
@@ -35,4 +37,4 @@
     {% else %}
         <span class="grid_boolean_1" >1</span>
     {% endif %}
-{% endblock grid_column_autodiags_cell %}
+{% endblock grid_column_autodiags_cell %}Obj    

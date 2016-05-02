@@ -35,6 +35,10 @@ hopitalnumerique_objet_objet_cancel:
     pattern:  /objet/cancel/{id}/{message}
     defaults: { _controller: "HopitalNumeriqueObjetBundle:Objet:cancel", message:null }
 
+hopitalnumerique_objet_objet_cancel_with_filtre:
+    pattern:  /objet/cancelwithfiltre/{id}/{message}/{filtre}
+    defaults: { _controller: "HopitalNumeriqueObjetBundle:Objet:cancelWithFiltre",message:null}
+
 hopitalnumerique_objet_objet_show:
     pattern:  /objet/show/{id}
     defaults: { _controller: "HopitalNumeriqueObjetBundle:Objet:show", id:1 }
