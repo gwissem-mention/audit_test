@@ -51,7 +51,7 @@ Hn_RechercheBundle_Referencement.displayResults = function()
                 }
 
                 if (totalCount > 0) {
-                    $('#filtres-info').css({ display: 'none' });
+                    $('#filtres-info').slideUp('fast');
                     $('#results-count').html('(' + totalCount + ' résultat' + (totalCount > 1 ? 's' : '') + ')');
                 }
             }
