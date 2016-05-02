@@ -1,10 +1,10 @@
 hopitalnumerique_recherche_referencement:
-    prefix: '/recherche-avancee'
+    prefix: '/recherche-par-referencement'
     resource: 'routing/referencement.yml'
 
 #Recherche
-hopital_numerique_recherche_homepage:
-    pattern:  /recherche-par-referencement/
+hopital_numerique_recherche_homepage_vieille:
+    pattern: '/recherche-par-referencement-vieille'
     defaults: { _controller: HopitalNumeriqueRechercheBundle:Search:index}
 
 hopital_numerique_recherche_homepage_requete:

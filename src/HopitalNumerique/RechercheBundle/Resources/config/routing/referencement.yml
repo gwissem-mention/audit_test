@@ -1,4 +1,4 @@
-hopitalnumerique_recherche_referencement_index:
+hopital_numerique_recherche_homepage:
     pattern: ''
     defaults: { _controller: 'HopitalNumeriqueRechercheBundle:Referencement:index' }
     methods: 'GET'
