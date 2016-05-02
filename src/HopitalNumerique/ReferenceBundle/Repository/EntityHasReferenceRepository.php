@@ -128,10 +128,22 @@ class EntityHasReferenceRepository extends EntityRepository
                 )
             )
             ->leftJoin(
+                'contenu.objet',
+                'contenuObjet'
+            )
+            ->leftJoin(
                 'contenu.domaines',
                 'contenuDomaine'
             )
-            ->andWhere($qb->expr()->orX($qb->expr()->isNull('contenu.id'), $qb->expr()->eq('contenuDomaine.id', ':domaine')))
+            ->leftJoin(
+                'contenuObjet.domaines',
+                'contenuObjetDomaine'
+            )
+            ->andWhere($qb->expr()->orX(
+                $qb->expr()->isNull('contenu.id'),
+                $qb->expr()->eq('contenuDomaine.id', ':domaine'),
+                $qb->expr()->eq('contenuObjetDomaine.id', ':domaine')
+            ))
             //-->
             //<-- Fils de forum
             ->leftJoin(
@@ -216,10 +228,6 @@ class EntityHasReferenceRepository extends EntityRepository
                 ->leftJoin(
                     'contenu.types',
                     'contenuCategory'
-                )
-                ->leftJoin(
-                    'contenu.objet',
-                    'contenuObjet'
                 )
                 ->leftJoin(
                     'contenuObjet.types',
