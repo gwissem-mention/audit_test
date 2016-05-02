@@ -30,7 +30,7 @@ class ObjetGrid extends Grid implements GridInterface {
 				$filtres ['types'] = 'Point dur';
 				break;
 			case 'Article' :
-				$filtres ['types'] = 'Article';
+				$filtres ['isArticle'] = true;
 				break;
 			case 'publication' :
 				$filtres ['isArticle'] = false;
@@ -76,7 +76,15 @@ class ObjetGrid extends Grid implements GridInterface {
 		/* Colonnes inactives */
 		$this->addColonne ( new Column\BlankColumn ( 'lockedBy' ) );
 		$this->addColonne ( new Column\BlankColumn ( 'dateModification' ) );
-		$this->addColonne ( new Column\BooleanColumn ( 'isArticle', "isArticle" ) );
+		
+		$isArticleColonne = new Column\BooleanColumn ( 'isArticle', 'isArticle' );
+		$isArticleColonne->setSize ( 80 );
+		$isArticleColonne->setFilterType ( 'select' );
+		$isArticleColonne->setOperatorsVisible ( false );
+		$isArticleColonne->setDefaultOperator ( \APY\DataGridBundle\Grid\Column\Column::OPERATOR_EQ );
+		$isArticleColonne->setVisible(false);
+		$isArticleColonne->setFilterable(false);
+		$this->addColonne ( $isArticleColonne );
 	}
 	
 	/**
@@ -104,7 +112,12 @@ class ObjetGrid extends Grid implements GridInterface {
 		
 		$filtre = $this->_defaultFilters;
 		if ("isArticle" == key($filtre)) {
-			$filtre[key($filtre)] = 'publication';
+			if (reset($filtre)) {
+				$filtre[key($filtre)] = 'Article';
+			} else {
+				$filtre[key($filtre)] = 'publication';
+			}
+			
 		}
 		// Custom Unlock button : Affiche le bouton dévérouillé si la ligne est vérouillée
 		$unlockButton = new \APY\DataGridBundle\Grid\Action\RowAction ( '', 'hopitalnumerique_objet_objet_cancel' );
