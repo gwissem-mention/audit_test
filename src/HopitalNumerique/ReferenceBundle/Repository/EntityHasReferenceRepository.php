@@ -3,12 +3,16 @@ namespace HopitalNumerique\ReferenceBundle\Repository;
 
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\Query\Expr;
+use HopitalNumerique\CommunautePratiqueBundle\Entity\Groupe;
 use HopitalNumerique\CoreBundle\DependencyInjection\Entity;
 use HopitalNumerique\DomaineBundle\Entity\Domaine;
+use HopitalNumerique\ForumBundle\Entity\Topic;
 use HopitalNumerique\ObjetBundle\Entity\Contenu;
 use HopitalNumerique\ObjetBundle\Entity\Objet;
+use HopitalNumerique\RechercheParcoursBundle\Entity\RechercheParcours;
 use HopitalNumerique\ReferenceBundle\Entity\EntityHasNote;
 use HopitalNumerique\ReferenceBundle\Entity\Reference;
+use HopitalNumerique\UserBundle\Entity\User;
 
 /**
  * EntityHasReferenceRepository.
@@ -90,27 +94,115 @@ class EntityHasReferenceRepository extends EntityRepository
                     $qb->expr()->eq('entityHasNote.domaine', ':domaine')
                 )
             )
+            ->where($qb->expr()->in('entityHasReference.reference', ':references'))
+            //<-- Objets
             ->leftJoin(
                 Objet::class,
-                'objetPointDur',
+                'objet',
                 Expr\Join::WITH,
                 $qb->expr()->andX(
-                    $qb->expr()->eq('objetPointDur.id', 'entityHasReference.entityId'),
-                    $qb->expr()->eq('entityHasReference.entityType', ':entityTypeObjet')
+                    $qb->expr()->eq('entityHasReference.entityType', ':entityTypeObjet'),
+                    $qb->expr()->eq('objet.id', 'entityHasReference.entityId')
                 )
             )
             ->leftJoin(
-                'objetPointDur.types',
+                'objet.domaines',
+                'objetDomaine'
+            )
+            ->andWhere($qb->expr()->orX($qb->expr()->isNull('objet.id'), $qb->expr()->eq('objetDomaine.id', ':domaine')))
+            ->leftJoin(
+                'objet.types',
                 'objetPointDurType',
                 Expr\Join::WITH,
                 $qb->expr()->eq('objetPointDurType.id', ':objetCategoriePointDur')
             )
-            ->where($qb->expr()->in('entityHasReference.reference', ':references'))
+            //-->
+            //<-- Contenus
+            ->leftJoin(
+                Contenu::class,
+                'contenu',
+                Expr\Join::WITH,
+                $qb->expr()->andX(
+                    $qb->expr()->eq('entityHasReference.entityType', ':entityTypeContenu'),
+                    $qb->expr()->eq('contenu.id', 'entityHasReference.entityId')
+                )
+            )
+            ->leftJoin(
+                'contenu.domaines',
+                'contenuDomaine'
+            )
+            ->andWhere($qb->expr()->orX($qb->expr()->isNull('contenu.id'), $qb->expr()->eq('contenuDomaine.id', ':domaine')))
+            //-->
+            //<-- Fils de forum
+            ->leftJoin(
+                Topic::class,
+                'topic',
+                Expr\Join::WITH,
+                $qb->expr()->andX(
+                    $qb->expr()->eq('entityHasReference.entityType', ':entityTypeForumTopic'),
+                    $qb->expr()->eq('topic.id', 'entityHasReference.entityId'),
+                    $qb->expr()->eq($domaine->getId(), Domaine::DOMAINE_HOPITAL_NUMERIQUE_ID)
+                )
+            )
+            //-->
+            //<-- Ambassadeurs
+            ->leftJoin(
+                User::class,
+                'ambassadeur',
+                Expr\Join::WITH,
+                $qb->expr()->andX(
+                    $qb->expr()->eq('entityHasReference.entityType', ':entityTypeAmbassadeur'),
+                    $qb->expr()->eq('ambassadeur.id', 'entityHasReference.entityId')
+                )
+            )
+            ->leftJoin(
+                'ambassadeur.domaines',
+                'ambassadeurDomaine'
+            )
+            ->andWhere($qb->expr()->orX($qb->expr()->isNull('ambassadeur.id'), $qb->expr()->eq('ambassadeurDomaine.id', ':domaine')))
+            //-->
+            //<-- Recherche parcours
+            ->leftJoin(
+                RechercheParcours::class,
+                'rechercheParcours',
+                Expr\Join::WITH,
+                $qb->expr()->andX(
+                    $qb->expr()->eq('entityHasReference.entityType', ':entityTypeRechercheParcours'),
+                    $qb->expr()->eq('rechercheParcours.id', 'entityHasReference.entityId')
+                )
+            )
+            ->leftJoin(
+                'rechercheParcours.recherchesParcoursGestion',
+                'rechercheParcoursGestion'
+            )
+            ->leftJoin(
+                'rechercheParcoursGestion.domaines',
+                'rechercheParcoursGestionDomaine'
+            )
+            ->andWhere($qb->expr()->orX($qb->expr()->isNull('rechercheParcours.id'), $qb->expr()->eq('rechercheParcoursGestionDomaine.id', ':domaine')))
+            //-->
+            //<-- Groupes de la communauté de pratiques
+            ->leftJoin(
+                Groupe::class,
+                'communautePratiqueGroupe',
+                Expr\Join::WITH,
+                $qb->expr()->andX(
+                    $qb->expr()->eq('entityHasReference.entityType', ':entityTypeCommunautePratiqueGroupe'),
+                    $qb->expr()->eq('communautePratiqueGroupe.id', 'entityHasReference.entityId'),
+                    $qb->expr()->eq('communautePratiqueGroupe.domaine', ':domaine')
+                )
+            )
+            //-->
             ->groupBy('entityHasReference.entityType', 'entityHasReference.entityId')
             ->setParameters([
                 'domaine' => $domaine,
                 'references' => $references,
                 'entityTypeObjet' => Entity::ENTITY_TYPE_OBJET,
+                'entityTypeContenu' => Entity::ENTITY_TYPE_CONTENU,
+                'entityTypeForumTopic' => Entity::ENTITY_TYPE_FORUM_TOPIC,
+                'entityTypeAmbassadeur' => Entity::ENTITY_TYPE_AMBASSADEUR,
+                'entityTypeRechercheParcours' => Entity::ENTITY_TYPE_RECHERCHE_PARCOURS,
+                'entityTypeCommunautePratiqueGroupe' => Entity::ENTITY_TYPE_COMMUNAUTE_PRATIQUES_GROUPE,
                 'objetCategoriePointDur' => Reference::CATEGORIE_OBJET_POINT_DUR_ID
             ])
         ;
@@ -118,26 +210,8 @@ class EntityHasReferenceRepository extends EntityRepository
         if (null !== $publicationCategoryIds) {
             $qb
                 ->leftJoin(
-                    Objet::class,
-                    'objet',
-                    Expr\Join::WITH,
-                    $qb->expr()->andX(
-                        $qb->expr()->eq('objet.id', 'entityHasReference.entityId'),
-                        $qb->expr()->eq('entityHasReference.entityType', ':entityTypeObjet')
-                    )
-                )
-                ->leftJoin(
                     'objet.types',
                     'objetCategory'
-                )
-                ->leftJoin(
-                    Contenu::class,
-                    'contenu',
-                    Expr\Join::WITH,
-                    $qb->expr()->andX(
-                        $qb->expr()->eq('contenu.id', 'entityHasReference.entityId'),
-                        $qb->expr()->eq('entityHasReference.entityType', ':entityTypeContenu')
-                    )
                 )
                 ->leftJoin(
                     'contenu.types',
@@ -151,7 +225,6 @@ class EntityHasReferenceRepository extends EntityRepository
                     'contenuObjet.types',
                     'contenuObjetCategory'
                 )
-                ->setParameter('entityTypeContenu', Entity::ENTITY_TYPE_CONTENU)
                 ->setParameter('publicationCategoryIds', $publicationCategoryIds)
             ;
             if (null !== $entityTypeIds) {
