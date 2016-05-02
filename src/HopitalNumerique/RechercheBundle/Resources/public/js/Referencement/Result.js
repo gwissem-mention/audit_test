@@ -73,6 +73,7 @@ Hn_RechercheBundle_Referencement.displayResults = function()
  */
 Hn_RechercheBundle_Referencement.displayMoreResults = function(resultsGroup)
 {
+    $('#results-' + resultsGroup + '-more-button').prop('disabled', true);
     var entitiesContainers = $('#results-' + resultsGroup + ' [data-visible="false"]');
     var entitiesByType = {};
 
