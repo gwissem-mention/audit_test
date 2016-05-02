@@ -67,3 +67,19 @@ Hn_RechercheBundle_Referencement.saveFilters = function()
         });
     }
 };
+
+/**
+ * Sauvegarde les filtres choisis en session.
+ */
+Hn_RechercheBundle_Referencement.saveSession = function()
+{
+    $.ajax({
+        url: Routing.generate('hopitalnumerique_recherche_referencement_requete_savesession'),
+        method: 'POST',
+        data: {
+            referenceIds: Hn_RechercheBundle_Referencement.getChosenReferenceIds(),
+            entityTypesIds: Hn_RechercheBundle_Referencement_Filter_Category.getEntityTypeIds(),
+            publicationCategoryIds: Hn_RechercheBundle_Referencement_Filter_Category.getPublicationCategoryIds()
+        }
+    });
+};

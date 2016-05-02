@@ -15,7 +15,6 @@ class RequeteController extends Controller
      */
     public function popinSaveAction(Request $request)
     {
-        $referenceIds = $request->request->get('referenceIds', []);
         $requete = $this->container->get('hopitalnumerique_recherche.dependency_injection.referencement.requete_session')->getRequete();
         if (null === $requete) {
             $requete = $this->container->get('hopitalnumerique_recherche.manager.requete')->createEmpty();
@@ -25,10 +24,6 @@ class RequeteController extends Controller
             $requeteForm = $this->createForm(RequeteType::class, $requete);
             $requeteForm->handleRequest($request);
         }
-
-        $this->container->get('hopitalnumerique_recherche.dependency_injection.referencement.requete_session')->setReferenceIds($referenceIds);
-        $this->container->get('hopitalnumerique_recherche.dependency_injection.referencement.requete_session')->setEntityTypeIds($request->request->get('entityTypesIds', null));
-        $this->container->get('hopitalnumerique_recherche.dependency_injection.referencement.requete_session')->setPublicationCategoryIds($request->request->get('publicationCategoryIds', null));
 
         return $this->render('HopitalNumeriqueRechercheBundle:Referencement\Requete:popin_save.html.twig', [
             'requete' => $requete,
@@ -61,5 +56,17 @@ class RequeteController extends Controller
         }
 
         return $this->redirectToRoute('hopitalnumerique_recherche_referencement_index');
+    }
+
+    /**
+     * Enregistre la session de la requête.
+     */
+    public function saveSessionAction(Request $request)
+    {
+        $referenceIds = $request->request->get('referenceIds', []);
+
+        $this->container->get('hopitalnumerique_recherche.dependency_injection.referencement.requete_session')->setReferenceIds($referenceIds);
+        $this->container->get('hopitalnumerique_recherche.dependency_injection.referencement.requete_session')->setEntityTypeIds($request->request->get('entityTypesIds', null));
+        $this->container->get('hopitalnumerique_recherche.dependency_injection.referencement.requete_session')->setPublicationCategoryIds($request->request->get('publicationCategoryIds', null));
     }
 }

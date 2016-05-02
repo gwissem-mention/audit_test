@@ -29,3 +29,8 @@ hopitalnumerique_recherche_referencement_requete_save:
     pattern: 'requete/save'
     defaults: { _controller: 'HopitalNumeriqueRechercheBundle:Referencement\Requete:save' }
     methods: 'POST'
+
+hopitalnumerique_recherche_referencement_requete_savesession:
+    pattern: 'requete/save-session'
+    defaults: { _controller: 'HopitalNumeriqueRechercheBundle:Referencement\Requete:saveSession' }
+    methods: 'POST'

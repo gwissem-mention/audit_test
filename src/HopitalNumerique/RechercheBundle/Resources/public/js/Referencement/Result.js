@@ -64,6 +64,7 @@ Hn_RechercheBundle_Referencement.displayResults = function()
     Hn_RechercheBundle_Referencement_Filter_Category.processFilterDisplaying();
     Hn_RechercheBundle_Referencement.processFilterButtonsActivating();
     Hn_RechercheBundle_Referencement.displayDomaineResults();
+    Hn_RechercheBundle_Referencement.saveSession();
 };
 
 /**
