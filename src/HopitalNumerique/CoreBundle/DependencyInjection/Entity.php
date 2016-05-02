@@ -453,6 +453,9 @@ class Entity
             case self::ENTITY_TYPE_OBJET:
                 $description = $entity->getResume();
                 break;
+            case self::ENTITY_TYPE_CONTENU:
+                $description = $entity->getContenu();
+                break;
             case self::ENTITY_TYPE_RECHERCHE_PARCOURS:
                 $description = $entity->getDescription();
                 break;
