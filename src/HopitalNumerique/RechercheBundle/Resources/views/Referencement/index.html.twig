@@ -136,16 +136,18 @@
                         <ul></ul>
                     </nav>
                     <div class="clearfix"></div>
-                    <div class="row">
-                        <div class="col-md-6">
-                            
-                        </div>
-                        <div class="col-md-6" id="entity-categories-container">
-                            <select id="entity-categories" multiple>
-                                {%- for categoryProperties in categoriesProperties -%}
-                                    <option value="{{ categoryProperties.id }}"{% if categoryProperties.entityType is defined and categoryProperties.entityType is not null %} data-entity-type="{{ categoryProperties.entityType }}"{% endif %}{% if categoryProperties.referenceId is defined and categoryProperties.referenceId is not null %} data-reference="{{ categoryProperties.referenceId }}"{% endif %}>{{ categoryProperties.libelle }}</option>
-                                {%- endfor -%}
-                            </select>
+                    <div id="filtres-more">
+                        <div class="row">
+                            <div class="col-md-6">
+
+                            </div>
+                            <div class="col-md-6" id="entity-categories-container">
+                                <select id="entity-categories" multiple>
+                                    {%- for categoryProperties in categoriesProperties -%}
+                                        <option value="{{ categoryProperties.id }}"{% if categoryProperties.entityType is defined and categoryProperties.entityType is not null %} data-entity-type="{{ categoryProperties.entityType }}"{% endif %}{% if categoryProperties.referenceId is defined and categoryProperties.referenceId is not null %} data-reference="{{ categoryProperties.referenceId }}"{% endif %}>{{ categoryProperties.libelle }}</option>
+                                    {%- endfor -%}
+                                </select>
+                            </div>
                         </div>
                     </div>
                     <div class="clearfix"></div>
