@@ -94,33 +94,111 @@ Hn_RechercheBundle_Referencement.getChosenReferenceIds = function()
 
     return referenceIds;
 };
+
+/**
+ * Retourne le niveau d'une référence.
+ *
+ * @param integer referenceId ID de la référence
+ * @return integer Niveau
+ */
+Hn_RechercheBundle_Referencement.getLevelByReferenceId = function(referenceId)
+{
+    return parseInt($('[data-reference="' + referenceId + '"]').attr('data-level'));
+};
 //-->
 
 
 //<-- Arbre des références
 /**
  * Plie / déplie les enfants d'une référence.
+ *
+ * @param integer referenceId ID de la référence
  */
 Hn_RechercheBundle_Referencement.toggleReferenceDisplaying = function(referenceId)
 {
-    var referenceChildrenList = $('[data-reference="' + referenceId + '"] ul').first();
+    var referenceChildrenList = Hn_RechercheBundle_Referencement.getReferenceChildrenElement(referenceId);
     var referenceLink = $('[data-reference="' + referenceId + '"] .reference').first();
+    var referenceLevel = Hn_RechercheBundle_Referencement.getLevelByReferenceId(referenceId);
 
     if ($(referenceChildrenList).size() > 0) {
         var chevron = $(referenceLink).find('.toggle .fa');
 
-        if ('none' === $(referenceChildrenList).css('display')) {
-            $(referenceChildrenList).slideDown();
+        if (!Hn_RechercheBundle_Referencement.referenceChildrenAreDisplayed(referenceId)) {
+            Hn_RechercheBundle_Referencement.showReferenceChildren(referenceId);
 
-            $(chevron).removeClass('fa-chevron-right');
-            $(chevron).addClass('fa-chevron-down');
+            if (1 === referenceLevel) { // On cache les autres si ouvre premier niveau
+                var referencesNiveau1 = $('.references-bloc [data-level="' + referenceLevel + '"]');
+                $(referencesNiveau1).each(function (i, element) {
+                    var otherReferenceId = Hn_RechercheBundle_Referencement.getReferenceIdByElement(element);
+                    if (referenceId !== otherReferenceId && Hn_RechercheBundle_Referencement.referenceChildrenAreDisplayed(otherReferenceId)) {
+                        Hn_RechercheBundle_Referencement.hideReferenceChildren(otherReferenceId);
+                    }
+                });
+            }
         } else {
-            $(referenceChildrenList).slideUp();
-
-            $(chevron).removeClass('fa-chevron-down');
-            $(chevron).addClass('fa-chevron-right');
+            Hn_RechercheBundle_Referencement.hideReferenceChildren(referenceId);
         }
     }
+};
+
+/**
+ * Affiche le sous-arbre.
+ *
+ * @param integer referenceId ID de la référence
+ */
+Hn_RechercheBundle_Referencement.showReferenceChildren = function(referenceId)
+{
+    var referenceLink = $('[data-reference="' + referenceId + '"] .reference').first();
+    var chevron = $(referenceLink).find('.toggle .fa');
+
+    Hn_RechercheBundle_Referencement.getReferenceChildrenElement(referenceId).slideDown();
+
+    $(chevron).removeClass('fa-chevron-right');
+    $(chevron).addClass('fa-chevron-down');
+};
+
+/**
+ * Cache le sous-arbre.
+ *
+ * @param integer referenceId ID de la référence
+ */
+Hn_RechercheBundle_Referencement.hideReferenceChildren = function(referenceId)
+{
+    var referenceLink = $('[data-reference="' + referenceId + '"] .reference').first();
+    var chevron = $(referenceLink).find('.toggle .fa');
+
+    Hn_RechercheBundle_Referencement.getReferenceChildrenElement(referenceId).slideUp();
+
+    $(chevron).removeClass('fa-chevron-down');
+    $(chevron).addClass('fa-chevron-right');
+};
+
+/**
+ * Retourne le sous-arbre d'une référence.
+ *
+ * @param integer referenceId ID de la référence
+ * @returns Element Sous-arbre
+ */
+Hn_RechercheBundle_Referencement.getReferenceChildrenElement = function(referenceId)
+{
+    return $('[data-reference="' + referenceId + '"] ul').first();
+};
+
+/**
+ * Retourne si le sous-arbre d'une référence est visible.
+ *
+ * @param integer referenceId ID de la référence
+ * @returns boolean Si visible
+ */
+Hn_RechercheBundle_Referencement.referenceChildrenAreDisplayed = function(referenceId)
+{
+    var referenceChildrenList = Hn_RechercheBundle_Referencement.getReferenceChildrenElement(referenceId);
+
+    if ($(referenceChildrenList).size() > 0) {
+        return ('none' !== $(referenceChildrenList).css('display'));
+    }
+
+    return false;
 };
 
 /**

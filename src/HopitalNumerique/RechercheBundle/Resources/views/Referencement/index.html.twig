@@ -90,15 +90,15 @@
                 <nav class="references-bloc">
                     <ul>
                         {%- for referenceProperties in referencesTree -%}
-                            {{ mySelf.buildTreePart(referenceProperties) }}
+                            {{ mySelf.buildTreePart(referenceProperties, 1) }}
                         {%- endfor -%}
                     </ul>
                 </nav>
 
-                {% macro buildTreePart(referencesTreePart) -%}
+                {% macro buildTreePart(referencesTreePart, level) -%}
                     {% if referencesTreePart.reference.id != 222 %}
                         {% import _self as mySelf %}
-                        <li data-reference="{{ referencesTreePart.reference.id }}" data-chosen="false" data-domaines="{{ referencesTreePart.reference.domainesId|join(',') }}">
+                        <li data-reference="{{ referencesTreePart.reference.id }}" data-chosen="false" data-level="{{ level }}" data-domaines="{{ referencesTreePart.reference.domainesId|join(',') }}">
                             <a class="reference">
                                 <span class="add"><i class="fa fa-plus-circle"></i></span>
                                 {%- if referencesTreePart.enfants|length > 0 -%}
@@ -110,7 +110,7 @@
                             {%- if referencesTreePart.enfants|length > 0 -%}
                                 <ul>
                                     {%- for referenceEnfantTree in referencesTreePart.enfants -%}
-                                        {{ mySelf.buildTreePart(referenceEnfantTree) }}
+                                        {{ mySelf.buildTreePart(referenceEnfantTree, level + 1) }}
                                     {%- endfor -%}
                                 </ul>
                             {%- endif -%}
