@@ -8,7 +8,7 @@ hopital_numerique_recherche_homepage_vieille:
     defaults: { _controller: HopitalNumeriqueRechercheBundle:Search:index}
 
 hopital_numerique_recherche_homepage_requete:
-    pattern:  /recherche-par-referencement/requete/{id}
+    pattern:  /recherche-par-referencement-vieille/requete/{id}
     defaults: { _controller: HopitalNumeriqueRechercheBundle:Search:index, id:null}
     requirements: 
         id: \d+

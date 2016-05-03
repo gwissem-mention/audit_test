@@ -110,7 +110,7 @@ class RequeteSession
      *
      * @param array $categoryFilters Filtres
      */
-    private function setCategoryFilters(array $categoryFilters)
+    public function setCategoryFilters(array $categoryFilters)
     {
         $this->session->set(self::SESSION_CATEGORY_FILTERS_NAME, $categoryFilters);
     }
@@ -209,9 +209,11 @@ class RequeteSession
      *
      * @param \HopitalNumerique\RechercheBundle\Entity\Requete $requete Requête
      */
-    private function setRequete(Requete $requete)
+    public function setRequete(Requete $requete)
     {
         $this->session->set(self::SESSION_REQUETE_NAME, $requete->getId());
+        $this->setReferenceIds($requete->getRefs());
+        $this->setCategoryFilters($requete->getCategPointDur());
     }
 
     /**

@@ -2275,6 +2275,19 @@ class User extends BaseUser
 
     /* --> */
 
+
+    /**
+     * Equals.
+     *
+     * @param \HopitalNumerique\UserBundle\Entity\User $user User
+     * @return boolean Si égalité
+     */
+    public function equals(User $user)
+    {
+        return ($this->id === $user->getId());
+    }
+
+
     /* <-- Avatar */
 
     /**

@@ -20,6 +20,12 @@ hopitalnumerique_recherche_referencement_jsonentities:
     defaults: { _controller: 'HopitalNumeriqueRechercheBundle:Referencement:jsonEntities' }
     methods: 'POST'
 
+hopitalnumerique_recherche_referencement_requete_view:
+    pattern: 'requete/view/{requete}'
+    defaults: { _controller: 'HopitalNumeriqueRechercheBundle:Referencement\Requete:view' }
+    requirements:
+        requete: '\d+'
+
 hopitalnumerique_recherche_referencement_requete_popinsave:
     pattern: 'requete/popin-save'
     defaults: { _controller: 'HopitalNumeriqueRechercheBundle:Referencement\Requete:popinSave' }

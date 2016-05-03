@@ -1,6 +1,7 @@
 <?php
 namespace HopitalNumerique\RechercheBundle\Controller\Referencement;
 
+use HopitalNumerique\RechercheBundle\Entity\Requete;
 use HopitalNumerique\RechercheBundle\Form\Type\RequeteType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -11,6 +12,18 @@ use Symfony\Component\HttpFoundation\Request;
  */
 class RequeteController extends Controller
 {
+    /**
+     * Visualiser une requête.
+     */
+    public function viewAction(Requete $requete)
+    {
+        if (null !== $this->getUser() && $this->getUser()->equals($requete->getUser())) {
+            $this->container->get('hopitalnumerique_recherche.dependency_injection.referencement.requete_session')->setRequete($requete);
+        }
+
+        return $this->redirectToRoute('hopital_numerique_recherche_homepage');
+    }
+
     /**
      * Popin de sauvegarde.
      */
