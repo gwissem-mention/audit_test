@@ -14,6 +14,14 @@ $(document).ready(function() {
  */
 Hn_RechercheBundle_Referencement_Filter_Category.init = function()
 {
+    Hn_RechercheBundle_Referencement_Filter_Category.initEvents();
+};
+
+/**
+ * Initialisation du multiselect.
+ */
+Hn_RechercheBundle_Referencement_Filter_Category.initFilterCategoriesSelect = function()
+{
     $('#entity-categories').multiselect({
         nonSelectedText: 'Filtrer par type de production ',
         buttonContainer: '<div class="btn-group" />',
@@ -21,7 +29,6 @@ Hn_RechercheBundle_Referencement_Filter_Category.init = function()
         buttonWidth: '100%',
         nSelectedText: 'catégories sélectionnées'
     });
-    Hn_RechercheBundle_Referencement_Filter_Category.initEvents();
 };
 
 /**
