@@ -48,7 +48,7 @@ class AccueilController extends \Symfony\Bundle\FrameworkBundle\Controller\Contr
                 'membres' => $this->getMembresAuHasard(),
                 'forum' => $forum,
                 'forumLastTopics' => $this->container->get('hopitalnumerique_forum.manager.topic')
-                    ->getLastTopicsForumEpingle($forum->getId(), 4)
+                    ->getLastTopicsForumEpingle($forum->getId(), 4, Forum::FORUM_COMMUNAUTE_DE_PRATIQUES_ID)
             )
         );
     }

@@ -161,11 +161,11 @@ class TopicManager extends BaseManager
      *
      * @return \HopitalNumerique\ForumBundle\Entity\Topic[] Liste des topics
      */
-    public function getLastTopicsForumEpingle($id, $limit = null) {
-    	$topicEpingle = $this->getRepository()->getLastTopicsForumEpingle($id, $limit, true)->getQuery()->getResult();
+    public function getLastTopicsForumEpingle($id, $limit = null, $idCat) {
+    	$topicEpingle = $this->getRepository()->getLastTopicsForumEpingle($id, $limit, true, $idCat)->getQuery()->getResult();
     	
     	if ($limit > count($topicEpingle)) {
-    		$topic = $this->getRepository()->getLastTopicsForumEpingle($id, $limit - count($topicEpingle),false)->getQuery()->getResult();
+    		$topic = $this->getRepository()->getLastTopicsForumEpingle($id, $limit - count($topicEpingle),false , $idCat)->getQuery()->getResult();
     		$topicEpingle = array_merge($topicEpingle, $topic);
     	}
 

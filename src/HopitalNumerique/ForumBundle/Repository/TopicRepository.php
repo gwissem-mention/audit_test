@@ -41,7 +41,7 @@ class TopicRepository extends EntityRepository
    *
    * @return  QueryBuilder
    */
-  public function getLastTopicsForumEpingle($id, $limit = null, $epingle) {
+  public function getLastTopicsForumEpingle($id, $limit = null, $epingle, $idCat) {
   	$qb = $this->_em->createQueryBuilder();
   
   	$qb->select('topic')
@@ -50,9 +50,11 @@ class TopicRepository extends EntityRepository
   	->innerJoin('topic.board', 'board')
   	->innerJoin('board.category', 'cat')
   	->innerJoin('cat.forum', 'forum', Join::WITH, 'forum.id = :idForum')
+  	->andWhere('cat.id = :idCategorie')
   	->andWhere('topic.isSticky = :sticky')
   	->setParameter('idForum', $id)
   	->setParameter('sticky', $epingle)
+  	->setParameter('idCategorie', $idCat)
   	->groupBy('topic.id')
   	->orderBy('post.createdDate', 'DESC');
   
