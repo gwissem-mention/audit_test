@@ -1,12 +1,14 @@
-#requete-popin-detail-container {}
-    #requete-popin-detail-container h2 { color: #703695;font-size: 16px;font-weight: bold;text-transform: uppercase; }
-    #requete-popin-detail-container ul { padding: 0; }
-        #requete-popin-detail-container li { display: none; }
-            #requete-popin-detail-container li div { color: #703695;font-size: 16px;font-weight: bold;text-transform: uppercase; }
-            #requete-popin-detail-container li[data-chosen="true"] div { color: #0a0; }
-        #requete-popin-detail-container ul ul { padding: 0 0 0 15px; }
-            #requete-popin-detail-container ul ul li {}
-                #requete-popin-detail-container ul ul li div { color: #000;font-size: 12px;font-weight: bold;text-transform: none; }
-            #requete-popin-detail-container ul ul ul { padding: 0 0 0 15px; }
-                #requete-popin-detail-container ul ul ul li {}
-                    #requete-popin-detail-container ul ul ul li div { font-weight: normal; }
+#requete-popin-detail-references-container {}
+    #requete-popin-detail-references-container ul { padding: 0; }
+        #requete-popin-detail-references-container li { display: none; }
+            #requete-popin-detail-references-container li div { color: #703695;font-size: 16px;font-weight: bold;text-transform: uppercase; }
+            #requete-popin-detail-references-container li[data-chosen="true"] div { text-decoration: underline; }
+        #requete-popin-detail-references-container ul ul { padding: 0 0 0 15px; }
+            #requete-popin-detail-references-container ul ul li {}
+                #requete-popin-detail-references-container ul ul li div { color: #000;font-size: 12px;font-weight: bold;text-transform: none; }
+            #requete-popin-detail-references-container ul ul ul { padding: 0 0 0 15px; }
+                #requete-popin-detail-references-container ul ul ul li {}
+                    #requete-popin-detail-references-container ul ul ul li div { font-weight: normal; }
+
+#requete-popin-detail-categories-container { font-size: 12px; }
+    #requete-popin-detail-categories-container h2 { color: #703695;font-size: 16px;font-weight: bold;text-transform: uppercase; }
