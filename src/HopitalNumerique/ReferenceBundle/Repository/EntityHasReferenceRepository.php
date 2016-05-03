@@ -14,6 +14,7 @@ use HopitalNumerique\ReferenceBundle\Entity\EntityHasNote;
 use HopitalNumerique\ReferenceBundle\Entity\EntityHasReference;
 use HopitalNumerique\ReferenceBundle\Entity\Reference;
 use HopitalNumerique\UserBundle\Entity\User;
+use Nodevo\RoleBundle\Entity\Role;
 
 /**
  * EntityHasReferenceRepository.
@@ -73,18 +74,29 @@ class EntityHasReferenceRepository extends EntityRepository
     /**
      * Retourne les EntityHasReference avec leur note.
      *
-     * @param \HopitalNumerique\DomaineBundle\Entity\Domaine $domaine Domaine
-     * @param array               $groupedReferences      Références
-     * @param array<integer>|null $entityTypeIds          ID des types d'entité à récupérer
-     * @param array<integer>|null $publicationCategoryIds ID des catégories de publications à récupérer
+     * @param \HopitalNumerique\DomaineBundle\Entity\Domaine $domaine                Domaine
+     * @param array                                          $groupedReferences      Références
+     * @param array<integer>|null                            $entityTypeIds          ID des types d'entité à récupérer
+     * @param array<integer>|null                            $publicationCategoryIds ID des catégories de publications à récupérer
      * @return array EntitiesHasReference
      */
     public function getWithNotes(Domaine $domaine, array $groupedReferences, array $entityTypeIds = null, array $publicationCategoryIds = null)
     {
+        $now = new \DateTime();
+        $now->setTime(0, 0, 0);
         $qb = $this->createQueryBuilder('entityHasReference');
 
         $qb
-            ->select('entityHasReference.entityType', 'entityHasReference.entityId', 'COUNT(DISTINCT(entityHasReference.reference)) AS referencesCount', 'SUM(DISTINCT(entityHasReference.primary)) AS primarySum', 'entityHasNote.note', 'objetPointDurType.id as objetPointDurTypeId')
+            ->select(
+                'entityHasReference.entityType',
+                'entityHasReference.entityId',
+                'COUNT(DISTINCT(entityHasReference.reference)) AS referencesCount',
+                'SUM(DISTINCT(entityHasReference.primary)) AS primarySum',
+                'entityHasNote.note',
+                'objetPointDurType.id as objetPointDurTypeId',
+                'GROUP_CONCAT(objetRole.id) AS objetRoleIds',
+                'GROUP_CONCAT(contenuObjetRole.id) AS contenuObjetRoleIds'
+            )
             ->leftJoin(
                 EntityHasNote::class,
                 'entityHasNote',
@@ -122,10 +134,44 @@ class EntityHasReferenceRepository extends EntityRepository
                 Expr\Join::WITH,
                 $qb->expr()->andX(
                     $qb->expr()->eq('entityHasReference.entityType', ':entityTypeObjet'),
-                    $qb->expr()->eq('objet.id', 'entityHasReference.entityId')
+                    $qb->expr()->eq('objet.id', 'entityHasReference.entityId'),
+                    $qb->expr()->orX($qb->expr()->isNull('objet.dateDebutPublication'), $qb->expr()->gte('objet.dateDebutPublication', ':now')),
+                    $qb->expr()->orX($qb->expr()->isNull('objet.dateFinPublication'), $qb->expr()->lt('objet.dateFinPublication', ':now'))
                 )
             )
             ->setParameter('entityTypeObjet', Entity::ENTITY_TYPE_OBJET)
+            ->leftJoin(
+                'objet.roles',
+                'objetRole'
+            )
+        ;
+        /*if (null === $userRole) {
+            $qb
+                ->leftJoin(
+                    'objet.roles',
+                    'objetRole'
+                )
+                ->andHaving($qb->expr()->isNull('objetRole.id'))
+            ;
+        } else {
+            $qb
+                ->leftJoin(
+                    'objet.roles',
+                    'objetRole'
+                )
+                ->leftJoin(
+                    'objet.roles',
+                    'objetUserRole',
+                    Expr\Join::WITH,
+                    $qb->expr()->eq('objetUserRole.id', ':userRole')
+                )
+                ->andHaving(
+                    $qb->expr()->isNotNull('objetUserRole.id')
+                )
+                ->addSelect('objetUserRole.id')
+            ;
+        }*/
+        $qb
             ->leftJoin(
                 'objet.domaines',
                 'objetDomaine'
@@ -153,6 +199,32 @@ class EntityHasReferenceRepository extends EntityRepository
             ->leftJoin(
                 'contenu.objet',
                 'contenuObjet'
+            )
+        ;
+        /*if (null === $userRole) {
+            $qb
+                ->leftJoin(
+                    'contenuObjet.roles',
+                    'contenuObjetRole'
+                )
+                ->andHaving($qb->expr()->isNull('contenuObjetRole.id'))
+            ;
+        } else {
+            $qb
+                ->leftJoin(
+                    'contenuObjet.roles',
+                    'contenuObjetRole',
+                    Expr\Join::WITH,
+                    $qb->expr()->eq('contenuObjetRole.id', ':userRole')
+                )
+                ->andHaving($qb->expr()->isNull('contenuObjetRole.id'))
+                ->addSelect('contenuObjetRole.id')
+            ;
+        }*/
+        $qb
+            ->leftJoin(
+                'contenuObjet.roles',
+                'contenuObjetRole'
             )
             ->leftJoin(
                 'contenu.domaines',
@@ -234,7 +306,11 @@ class EntityHasReferenceRepository extends EntityRepository
             //-->
             ->groupBy('entityHasReference.entityType', 'entityHasReference.entityId')
             ->setParameter('domaine', $domaine)
+            ->setParameter('now', $now)
         ;
+        /*if (null !== $userRole) {
+            $qb->setParameter('userRole', $userRole->getId());
+        }*/
 
         if (null !== $publicationCategoryIds) {
             $qb

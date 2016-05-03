@@ -5,6 +5,7 @@ use HopitalNumerique\DomaineBundle\DependencyInjection\CurrentDomaine;
 use HopitalNumerique\ReferenceBundle\DependencyInjection\Referencement;
 use HopitalNumerique\ReferenceBundle\Manager\EntityHasNoteManager;
 use HopitalNumerique\ReferenceBundle\Manager\EntityHasReferenceManager;
+use HopitalNumerique\UserBundle\DependencyInjection\ConnectedUser;
 
 /**
  * Lecteur de la recherche par référencement.
@@ -22,6 +23,11 @@ class Reader
     private $currentDomaine;
 
     /**
+     * @var \HopitalNumerique\UserBundle\DependencyInjection\ConnectedUser ConnectedUser
+     */
+    private $connectedUser;
+
+    /**
      * @var \HopitalNumerique\ReferenceBundle\Manager\EntityHasReferenceManager EntityHasReferenceManager
      */
     private $entityHasReferenceManager;
@@ -35,10 +41,11 @@ class Reader
     /**
      * Constructor.
      */
-    public function __construct(Referencement $referencement, CurrentDomaine $currentDomaine, EntityHasReferenceManager $entityHasReferenceManager, EntityHasNoteManager $entityHasNoteManager)
+    public function __construct(Referencement $referencement, CurrentDomaine $currentDomaine, ConnectedUser $connectedUser, EntityHasReferenceManager $entityHasReferenceManager, EntityHasNoteManager $entityHasNoteManager)
     {
         $this->referencement = $referencement;
         $this->currentDomaine = $currentDomaine;
+        $this->connectedUser = $connectedUser;
         $this->entityHasReferenceManager = $entityHasReferenceManager;
         $this->entityHasNoteManager = $entityHasNoteManager;
     }
@@ -55,7 +62,7 @@ class Reader
     private function getEntitiesPropertiesByReferenceIds(array $groupedReferenceIds, array $entityTypeIds = null, array $publicationCategoryIds = null)
     {
         $currentDomaine = $this->currentDomaine->get();
-        $entitiesProperties = $this->entityHasReferenceManager->getWithNotes($currentDomaine, $groupedReferenceIds, $entityTypeIds, $publicationCategoryIds);
+        $entitiesProperties = $this->entityHasReferenceManager->getWithNotes($currentDomaine, $groupedReferenceIds, $this->connectedUser->get(), $entityTypeIds, $publicationCategoryIds);
         usort($entitiesProperties, [$this, 'orderEntitiesProperties']);
 
         return $entitiesProperties;

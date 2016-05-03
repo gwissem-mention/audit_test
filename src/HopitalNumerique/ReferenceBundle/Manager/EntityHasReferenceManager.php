@@ -2,7 +2,10 @@
 namespace HopitalNumerique\ReferenceBundle\Manager;
 
 use Doctrine\Common\Collections\Collection;
+use Doctrine\ORM\EntityManager;
 use HopitalNumerique\DomaineBundle\Entity\Domaine;
+use HopitalNumerique\UserBundle\Entity\User;
+use Nodevo\RoleBundle\Manager\RoleManager;
 use Nodevo\ToolsBundle\Manager\Manager as BaseManager;
 
 /**
@@ -11,6 +14,22 @@ use Nodevo\ToolsBundle\Manager\Manager as BaseManager;
 class EntityHasReferenceManager extends BaseManager
 {
     protected $_class = 'HopitalNumerique\ReferenceBundle\Entity\EntityHasReference';
+
+    /**
+     * @var \Nodevo\RoleBundle\Manager\RoleManager RoleManager
+     */
+    private $roleManager;
+
+
+    /**
+     * Constructeur.
+     */
+    public function __construct(EntityManager $em, RoleManager $roleManager)
+    {
+        parent::__construct($em);
+
+        $this->roleManager = $roleManager;
+    }
 
 
     /**
@@ -57,13 +76,49 @@ class EntityHasReferenceManager extends BaseManager
      *
      * @param \HopitalNumerique\DomaineBundle\Entity\Domaine $domaine Domaine
      * @param array               $groupedReferences      Références
+     * @param \HopitalNumerique\UserBundle\Entity\User       $user    User
      * @param array<integer>|null $entityTypeIds          ID des types d'entité à récupérer
      * @param array<integer>|null $publicationCategoryIds ID des catégories de publications à récupérer
      * @return array EntitiesHasReference
      */
-    public function getWithNotes(Domaine $domaine, array $groupedReferences, array $entityTypeIds = null, array $publicationCategoryIds = null)
+    public function getWithNotes(Domaine $domaine, array $groupedReferences, User $user = null, array $entityTypeIds = null, array $publicationCategoryIds = null)
     {
-        return $this->getRepository()->getWithNotes($domaine, $groupedReferences, $entityTypeIds, $publicationCategoryIds);
+        $userRole = null;
+        if (null !== $user) {
+            $userRoles = $this->roleManager->findByUser($user);
+            if (count($userRoles) > 0) {
+                $userRole = $userRoles[0];
+            }
+        }
+
+        $entitiesHaveReferences = [];
+        $entitiesHaveReferencesWithoutRoles = $this->getRepository()->getWithNotes($domaine, $groupedReferences, $entityTypeIds, $publicationCategoryIds);
+        // Prise en compte des rôles utilisateur
+        foreach ($entitiesHaveReferencesWithoutRoles as $entityHaveReferenceWithoutRoles) {
+            $objetRoleIds = explode(',', $entityHaveReferenceWithoutRoles['objetRoleIds']);
+            $contenuObjetRoleIds = explode(',', $entityHaveReferenceWithoutRoles['contenuObjetRoleIds']);
+
+            if ((
+                    null === $userRole
+                    && (
+                        0 === count($objetRoleIds)
+                        && 0 === count($contenuObjetRoleIds)
+                    )
+                )
+                || (
+                    null !== $userRole
+                    && (
+                        (0 === count($objetRoleIds) || !in_array($userRole->getId(), $objetRoleIds))
+                        && (0 === count($contenuObjetRoleIds) || !in_array($userRole->getId(), $contenuObjetRoleIds))
+                    )
+                )
+            ) {
+                $entitiesHaveReferences[] = $entityHaveReferenceWithoutRoles;
+            }
+        }
+
+        return $entitiesHaveReferences;
+
     }
 
     /**

@@ -2,6 +2,7 @@
 
 namespace Nodevo\RoleBundle\Manager;
 
+use HopitalNumerique\UserBundle\Entity\User;
 use Nodevo\ToolsBundle\Manager\Manager as BaseManager;
 
 /**
@@ -131,5 +132,18 @@ class RoleManager extends BaseManager
         }
         
         return $roles;
+    }
+
+    /**
+     * Retourne les Role d'un utilisateur.
+     *
+     * @param \Nodevo\RoleBundle\Manager\User $user User
+     * @return array<\Nodevo\RoleBundle\Entity\Role> Rôles
+     */
+    public function findByUser(User $user)
+    {
+        $roleLabels = $user->getRoles();
+
+        return $this->findBy(['role' => $roleLabels]);
     }
 }

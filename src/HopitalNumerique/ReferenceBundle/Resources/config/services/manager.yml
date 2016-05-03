@@ -17,7 +17,7 @@ services:
 
     hopitalnumerique_reference.manager.entity_has_reference:
         class: 'HopitalNumerique\ReferenceBundle\Manager\EntityHasReferenceManager'
-        arguments: ["@doctrine.orm.entity_manager"]
+        arguments: ['@doctrine.orm.entity_manager', '@nodevo_role.manager.role']
 
     hopitalnumerique_reference.manager.entity_has_note:
         class: 'HopitalNumerique\ReferenceBundle\Manager\EntityHasNoteManager'
