@@ -145,32 +145,6 @@ class EntityHasReferenceRepository extends EntityRepository
                 'objetRole'
             )
         ;
-        /*if (null === $userRole) {
-            $qb
-                ->leftJoin(
-                    'objet.roles',
-                    'objetRole'
-                )
-                ->andHaving($qb->expr()->isNull('objetRole.id'))
-            ;
-        } else {
-            $qb
-                ->leftJoin(
-                    'objet.roles',
-                    'objetRole'
-                )
-                ->leftJoin(
-                    'objet.roles',
-                    'objetUserRole',
-                    Expr\Join::WITH,
-                    $qb->expr()->eq('objetUserRole.id', ':userRole')
-                )
-                ->andHaving(
-                    $qb->expr()->isNotNull('objetUserRole.id')
-                )
-                ->addSelect('objetUserRole.id')
-            ;
-        }*/
         $qb
             ->leftJoin(
                 'objet.domaines',
@@ -201,26 +175,6 @@ class EntityHasReferenceRepository extends EntityRepository
                 'contenuObjet'
             )
         ;
-        /*if (null === $userRole) {
-            $qb
-                ->leftJoin(
-                    'contenuObjet.roles',
-                    'contenuObjetRole'
-                )
-                ->andHaving($qb->expr()->isNull('contenuObjetRole.id'))
-            ;
-        } else {
-            $qb
-                ->leftJoin(
-                    'contenuObjet.roles',
-                    'contenuObjetRole',
-                    Expr\Join::WITH,
-                    $qb->expr()->eq('contenuObjetRole.id', ':userRole')
-                )
-                ->andHaving($qb->expr()->isNull('contenuObjetRole.id'))
-                ->addSelect('contenuObjetRole.id')
-            ;
-        }*/
         $qb
             ->leftJoin(
                 'contenuObjet.roles',
@@ -308,9 +262,6 @@ class EntityHasReferenceRepository extends EntityRepository
             ->setParameter('domaine', $domaine)
             ->setParameter('now', $now)
         ;
-        /*if (null !== $userRole) {
-            $qb->setParameter('userRole', $userRole->getId());
-        }*/
 
         if (null !== $publicationCategoryIds) {
             $qb
