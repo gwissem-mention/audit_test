@@ -19,44 +19,43 @@ Hn_RechercheBundle_Referencement.displayResults = function()
         }
     }
 
-    if (chosenGroupedReferenceIds.length > 0) {
-        $.ajax({
-            url: Routing.generate('hopitalnumerique_recherche_referencement_jsonentitiesbyreferences'),
-            method: 'post',
-            type: 'json',
-            data: ajaxOptions,
-            success: function(data) {
-                var totalCount = 0;
+    $.ajax({
+        url: Routing.generate('hopitalnumerique_recherche_referencement_jsonentitiesbyreferences'),
+        method: 'post',
+        type: 'json',
+        data: ajaxOptions,
+        success: function(data) {
+            var totalCount = 0;
 
-                for (var group in data) {
-                    if ($('#results-' + group + '-bloc').size() > 0) {
-                        $('#results-' + group + '-bloc').css({ display: (data[group].length > 0 ? 'block' : 'none') });
-                        if (data[group].length > 0) {
-                            totalCount += data[group].length;
+            for (var group in data) {
+                if ($('#results-' + group + '-bloc').size() > 0) {
+                    $('#results-' + group + '-bloc').css({ display: (data[group].length > 0 ? 'block' : 'none') });
+                    if (data[group].length > 0) {
+                        totalCount += data[group].length;
 
-                            var index = 0;
-                            var otherResultsHtml = '';
+                        var index = 0;
+                        var otherResultsHtml = '';
 
-                            for (var i in data[group]) {
-                                index++;
-                                otherResultsHtml += '<div class="result" data-index="' + index + '" data-initialized="false" data-visible="false" data-entity-type="' + data[group][i].entityType + '" data-entity-id="' + data[group][i].entityId + '" data-pertinence-niveau="' + data[group][i].pertinenceNiveau + '"></div>';
-                            }
-
-                            $('#results-' + group).html(otherResultsHtml);
-                            $('#results-' + group + '-count').html(data[group].length);
-                            Hn_RechercheBundle_Referencement.displayMoreResults(group);
-                            $('#results-' + group + '-bloc').show('fast');
+                        for (var i in data[group]) {
+                            index++;
+                            otherResultsHtml += '<div class="result" data-index="' + index + '" data-initialized="false" data-visible="false" data-entity-type="' + data[group][i].entityType + '" data-entity-id="' + data[group][i].entityId + '" data-pertinence-niveau="' + data[group][i].pertinenceNiveau + '"></div>';
                         }
+
+                        $('#results-' + group).html(otherResultsHtml);
+                        $('#results-' + group + '-count').html(data[group].length);
+                        Hn_RechercheBundle_Referencement.displayMoreResults(group);
+                        $('#results-' + group + '-bloc').show('fast');
                     }
                 }
-
-                if (totalCount > 0) {
-                    $('#filtres-info').slideUp('fast');
-                    $('#results-count').html('(' + totalCount + ' résultat' + (totalCount > 1 ? 's' : '') + ')');
-                }
             }
-        });
-    } else {
+
+            if (totalCount > 0) {
+                $('#filtres-info').slideUp('fast');
+                $('#results-count').html('(' + totalCount + ' résultat' + (totalCount > 1 ? 's' : '') + ')');
+            }
+        }
+    });
+    if (chosenGroupedReferenceIds.length == 0) {
         $('.results-bloc > div').slideUp('fast');
         $('#filtres-info').slideDown('fast');
     }
