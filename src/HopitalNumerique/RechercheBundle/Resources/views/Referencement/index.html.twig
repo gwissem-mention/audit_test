@@ -125,7 +125,9 @@
                 <div class="filtres-bloc">
                     <h1>Ma recherche <span id="results-count"></span></h1>
                     <div id="filtres-actions">
-                        <div id="search-name"></div>
+                        {%- if requete is not null -%}
+                            <div id="search-name">{{ requete }}</div>
+                        {%- endif -%}
                         <button class="btn btn-xs btn-success" onclick="Hn_RechercheBundle_Referencement.saveFilters();">Enregistrer</button>
                         <button class="btn btn-xs btn-danger" onclick="Hn_RechercheBundle_Referencement.removeFilters();">Réinitialiser</button>
                     </div>

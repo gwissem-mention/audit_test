@@ -29,6 +29,7 @@ class ReferencementController extends Controller
 
         return $this->render('HopitalNumeriqueRechercheBundle:Referencement:index.html.twig', [
             'referencesTree' => $referencesTree,
+            'requete' => $this->container->get('hopitalnumerique_recherche.dependency_injection.referencement.requete_session')->getRequete(),
             'categoriesProperties' => $this->container->get('hopitalnumerique_recherche.doctrine.referencement.category')->getCategoriesProperties(),
             'choosenReferenceIds' => $choosenReferenceIds,
             'entityTypeIds' => $this->container->get('hopitalnumerique_recherche.dependency_injection.referencement.requete_session')->getEntityTypeIds(),
