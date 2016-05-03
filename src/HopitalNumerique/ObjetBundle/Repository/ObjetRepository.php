@@ -29,6 +29,22 @@ class ObjetRepository extends EntityRepository {
 		return $qb;
 	}
 	
+	
+	/**
+	 * Retourne la liste des objets
+	 *
+	 *
+	 * @return QueryBuilder
+	 */
+	public function getObjets() {
+		$qb = $this->_em->createQueryBuilder ();
+		$qb->select ( 'obj' )->from ( 'HopitalNumeriqueObjetBundle:Objet', 'obj' )->leftJoin ( 'obj.contenus', 'contenus' );
+		$qb->orderBy ( 'obj.dateDebutPublication', 'DESC' );
+	
+		return $qb;
+	}
+	
+	
 	/**
 	 * Récupère les objets pour l'export
 	 *
