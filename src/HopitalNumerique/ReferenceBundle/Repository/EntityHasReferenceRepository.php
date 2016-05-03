@@ -135,8 +135,8 @@ class EntityHasReferenceRepository extends EntityRepository
                 $qb->expr()->andX(
                     $qb->expr()->eq('entityHasReference.entityType', ':entityTypeObjet'),
                     $qb->expr()->eq('objet.id', 'entityHasReference.entityId'),
-                    $qb->expr()->orX($qb->expr()->isNull('objet.dateDebutPublication'), $qb->expr()->gte('objet.dateDebutPublication', ':now')),
-                    $qb->expr()->orX($qb->expr()->isNull('objet.dateFinPublication'), $qb->expr()->lt('objet.dateFinPublication', ':now'))
+                    $qb->expr()->orX($qb->expr()->isNull('objet.dateDebutPublication'), $qb->expr()->lte('objet.dateDebutPublication', ':now')),
+                    $qb->expr()->orX($qb->expr()->isNull('objet.dateFinPublication'), $qb->expr()->gt('objet.dateFinPublication', ':now'))
                 )
             )
             ->setParameter('entityTypeObjet', Entity::ENTITY_TYPE_OBJET)
@@ -172,7 +172,12 @@ class EntityHasReferenceRepository extends EntityRepository
             ->setParameter('entityTypeContenu', Entity::ENTITY_TYPE_CONTENU)
             ->leftJoin(
                 'contenu.objet',
-                'contenuObjet'
+                'contenuObjet',
+                Expr\Join::WITH,
+                $qb->expr()->andX(
+                    $qb->expr()->orX($qb->expr()->isNull('contenuObjet.dateDebutPublication'), $qb->expr()->lte('contenuObjet.dateDebutPublication', ':now')),
+                    $qb->expr()->orX($qb->expr()->isNull('contenuObjet.dateFinPublication'), $qb->expr()->gt('contenuObjet.dateFinPublication', ':now'))
+                )
             )
         ;
         $qb
