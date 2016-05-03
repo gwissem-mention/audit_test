@@ -56,7 +56,7 @@ class RequeteController extends Controller
             $this->addFlash('success', 'Requête enregistrée.');
         }
 
-        return $this->redirectToRoute('hopitalnumerique_recherche_referencement_index');
+        return $this->redirectToRoute('hopital_numerique_recherche_homepage');
     }
 
     /**

@@ -45,7 +45,7 @@ class ReferencementController extends Controller
         $referenceIds = explode('-', $referenceString);
         $this->container->get('hopitalnumerique_recherche.dependency_injection.referencement.requete_session')->setReferenceIds($referenceIds);
 
-        return $this->redirectToRoute('hopitalnumerique_recherche_referencement_index');
+        return $this->redirectToRoute('hopital_numerique_recherche_homepage');
     }
 
     /**
