@@ -91,8 +91,8 @@ class SearchController extends Controller
             'rechercheTextuelle'            => $rechercheTextuelle,
             'activationExalead'             => $activationExalead,
             'categoriesProduction'          => $categoriesProduction,
-            'categoriesProductionActif'     => $categoriesProductionActif,
-            'categoriesProductionActifJSON' => json_encode(explode(',', $categoriesProductionActif))
+            'categoriesProductionActif'     => '',//$categoriesProductionActif,
+            'categoriesProductionActifJSON' => json_encode([]) //json_encode(explode(',', $categoriesProductionActif))
         ));
     }
 
