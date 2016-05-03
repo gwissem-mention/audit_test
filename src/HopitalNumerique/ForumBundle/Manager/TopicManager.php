@@ -152,6 +152,27 @@ class TopicManager extends BaseManager
     }
 
     /**
+     * Récupère les derniers topics commentés par type de forum et affiche les epinglés en premier
+     * si le nombre d'epinglés est inferieur a la limit alors on recupere les non epinglés
+     *
+     * @param $id int
+     * @param $limit int
+     * @param $epingle boolean
+     *
+     * @return \HopitalNumerique\ForumBundle\Entity\Topic[] Liste des topics
+     */
+    public function getLastTopicsForumEpingle($id, $limit = null) {
+    	$topicEpingle = $this->getRepository()->getLastTopicsForumEpingle($id, $limit, true)->getQuery()->getResult();
+    	
+    	if ($limit > count($topicEpingle)) {
+    		$topic = $this->getRepository()->getLastTopicsForumEpingle($id, $limit - count($topicEpingle),false)->getQuery()->getResult();
+    		$topicEpingle = array_merge($topicEpingle, $topic);
+    	}
+
+    	return $topicEpingle;
+    }
+    
+    /**
      * Retourne les topics d'un forum.
      *
      * @param \HopitalNumerique\ForumBundle\Entity\Forum $forum Forum

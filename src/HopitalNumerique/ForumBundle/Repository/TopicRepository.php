@@ -36,6 +36,33 @@ class TopicRepository extends EntityRepository
     return $qb;
   }
 
+  /**
+   * Récupère les derniers topics commentés par type de forum
+   *
+   * @return  QueryBuilder
+   */
+  public function getLastTopicsForumEpingle($id, $limit = null, $epingle) {
+  	$qb = $this->_em->createQueryBuilder();
+  
+  	$qb->select('topic')
+  	->from('\HopitalNumerique\ForumBundle\Entity\Topic', 'topic')
+  	->innerJoin('topic.lastPost', 'post')
+  	->innerJoin('topic.board', 'board')
+  	->innerJoin('board.category', 'cat')
+  	->innerJoin('cat.forum', 'forum', Join::WITH, 'forum.id = :idForum')
+  	->andWhere('topic.isSticky = :sticky')
+  	->setParameter('idForum', $id)
+  	->setParameter('sticky', $epingle)
+  	->groupBy('topic.id')
+  	->orderBy('post.createdDate', 'DESC');
+  
+  	if($limit != null) {
+  		$qb->setMaxResults($limit);
+  	}
+  
+  	return $qb;
+  }
+  
     /**
      * Retourne les topics d'un forum.
      *
