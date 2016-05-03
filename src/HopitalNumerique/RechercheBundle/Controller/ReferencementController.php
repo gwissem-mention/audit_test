@@ -23,7 +23,16 @@ class ReferencementController extends Controller
         } else {
             $choosenReferenceIds = $this->container->get('hopitalnumerique_recherche.dependency_injection.referencement.requete_session')->getReferenceIds();
             if (count($choosenReferenceIds) === 0) {
-                $choosenReferenceIds = $this->container->get('hopitalnumerique_account.dependency_injection.doctrine.reference.contexte')->getReferenceIds();
+                if (null !== $this->getUser()) {
+                    $requeteDefault = $this->container->get('hopitalnumerique_recherche.manager.requete')->findDefaultByUser($this->getUser());
+                    if (null !== $requeteDefault) {
+                        $this->container->get('hopitalnumerique_recherche.dependency_injection.referencement.requete_session')->setRequete($requeteDefault);
+                        $choosenReferenceIds = $this->container->get('hopitalnumerique_recherche.dependency_injection.referencement.requete_session')->getReferenceIds();
+                    }
+                }
+                if (count($choosenReferenceIds) === 0) {
+                    $choosenReferenceIds = $this->container->get('hopitalnumerique_account.dependency_injection.doctrine.reference.contexte')->getReferenceIds();
+                }
             }
         }
 

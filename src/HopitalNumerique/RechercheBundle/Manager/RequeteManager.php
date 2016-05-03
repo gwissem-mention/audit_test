@@ -2,6 +2,7 @@
 
 namespace HopitalNumerique\RechercheBundle\Manager;
 
+use HopitalNumerique\UserBundle\Entity\User;
 use Nodevo\ToolsBundle\Manager\Manager as BaseManager;
 
 /**
@@ -21,5 +22,19 @@ class RequeteManager extends BaseManager
     public function getRequetesForDashboard( $user )
     {
         return $this->getRepository()->getRequetesForDashboard( $user )->getQuery()->getResult();
+    }
+
+    /**
+     * Retourne la requête par défaut d'un utilisateur.
+     *
+     * @param \HopitalNumerique\UserBundle\Entity\User $user User
+     * @return \HopitalNumerique\RechercheBundle\Entity\Requete|null Requête
+     */
+    public function findDefaultByUser(User $user)
+    {
+        return $this->findOneBy([
+            'user' => $user,
+            'isDefault' => true
+        ]);
     }
 }
