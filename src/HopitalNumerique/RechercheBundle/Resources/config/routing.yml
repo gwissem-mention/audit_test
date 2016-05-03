@@ -26,10 +26,6 @@ hopital_numerique_recherche_gettypeproduction:
     defaults: { _controller: HopitalNumeriqueRechercheBundle:Search:getTypeProduction }
 
 #Requêtes de recherche
-hopital_numerique_requete_detail:
-    pattern:  /requetes/detail/{id}
-    defaults: { _controller: HopitalNumeriqueRechercheBundle:Requete:detail }
-
 hopital_numerique_requete_save:
     pattern:  /requetes/save
     defaults: { _controller: HopitalNumeriqueRechercheBundle:Requete:save }

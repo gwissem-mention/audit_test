@@ -152,32 +152,6 @@ class RequeteController extends Controller
     }
 
     /**
-     * Toggle Default d'une requete (AJAX)
-     *
-     * @param integer $id ID de la requete à toggle
-     */
-    public function detailAction($id)
-    {
-        $requete  = $this->get('hopitalnumerique_recherche.manager.requete')->findOneBy( array( 'id' => $id ) );
-        $elements = $this->get('hopitalnumerique_reference.manager.reference')->getArboFormat(false, false, true);
-
-        $categsId = explode(',' , $requete->getCategPointDur());
-
-        $categs   = array();
-        foreach ($categsId as $categId) 
-        {
-            if("" !== trim($categId))
-            $categs[] = $this->get('hopitalnumerique_reference.manager.reference')->findOneBy(array('id' => trim($categId)));
-        }
-
-        return $this->render('HopitalNumeriqueRechercheBundle:Requete:detail.html.twig', array(
-            'refs'     => json_encode($requete->getRefs()),
-            'categs'   => $categs,
-            'elements' => $elements['CATEGORIES_RECHERCHE']
-        ));
-    }
-
-    /**
      * Popup : Notif par mail de la requete
      *
      * @param integer $id ID de la requete
