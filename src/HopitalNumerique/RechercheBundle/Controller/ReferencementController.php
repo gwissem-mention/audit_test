@@ -53,11 +53,11 @@ class ReferencementController extends Controller
      */
     public function jsonEntitiesByReferencesAction(Request $request)
     {
-        $referenceIds = $request->request->get('references', []);
+        $groupedReferenceIds = $request->request->get('references', []);
         $entityTypeIds = $request->request->get('entityTypeIds', null);
         $publicationCategoryIds = $request->request->get('publicationCategoryIds', null);
 
-        $entitiesPropertiesByGroup = $this->container->get('hopitalnumerique_recherche.doctrine.referencement.reader')->getEntitiesPropertiesByReferenceIdsByGroup($referenceIds, $entityTypeIds, $publicationCategoryIds);
+        $entitiesPropertiesByGroup = $this->container->get('hopitalnumerique_recherche.doctrine.referencement.reader')->getEntitiesPropertiesByReferenceIdsByGroup($groupedReferenceIds, $entityTypeIds, $publicationCategoryIds);
 
         return new JsonResponse($entitiesPropertiesByGroup);
     }

@@ -4,10 +4,10 @@
 Hn_RechercheBundle_Referencement.displayResults = function()
 {
     $('#results-count').html('');
-    var chosenReferenceIds = Hn_RechercheBundle_Referencement.getChosenReferenceIds();
+    var chosenGroupedReferenceIds = Hn_RechercheBundle_Referencement.getChosenGroupedReferenceIds();
 
     var ajaxOptions = {
-        'references': chosenReferenceIds
+        'references': chosenGroupedReferenceIds
     };
     if (Hn_RechercheBundle_Referencement_Filter_Category.hasFilter()) {
         var entityTypeIds = Hn_RechercheBundle_Referencement_Filter_Category.getEntityTypeIds();
@@ -19,7 +19,7 @@ Hn_RechercheBundle_Referencement.displayResults = function()
         }
     }
 
-    if (chosenReferenceIds.length > 0) {
+    if (chosenGroupedReferenceIds.length > 0) {
         $.ajax({
             url: Routing.generate('hopitalnumerique_recherche_referencement_jsonentitiesbyreferences'),
             method: 'post',

@@ -56,14 +56,14 @@ class EntityHasReferenceManager extends BaseManager
      * Retourne les EntityHasReference avec leur note.
      *
      * @param \HopitalNumerique\DomaineBundle\Entity\Domaine $domaine Domaine
-     * @param array               $references             Références
+     * @param array               $groupedReferences      Références
      * @param array<integer>|null $entityTypeIds          ID des types d'entité à récupérer
      * @param array<integer>|null $publicationCategoryIds ID des catégories de publications à récupérer
      * @return array EntitiesHasReference
      */
-    public function getWithNotes(Domaine $domaine, array $references, array $entityTypeIds = null, array $publicationCategoryIds = null)
+    public function getWithNotes(Domaine $domaine, array $groupedReferences, array $entityTypeIds = null, array $publicationCategoryIds = null)
     {
-        return $this->getRepository()->getWithNotes($domaine, $references, $entityTypeIds, $publicationCategoryIds);
+        return $this->getRepository()->getWithNotes($domaine, $groupedReferences, $entityTypeIds, $publicationCategoryIds);
     }
 
     /**

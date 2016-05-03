@@ -96,6 +96,30 @@ Hn_RechercheBundle_Referencement.getChosenReferenceIds = function()
 };
 
 /**
+ * Retourne les ID des références choisies par regroupement (pour chaque référence de niveau 1).
+ *
+ * @return Array IDs
+ */
+Hn_RechercheBundle_Referencement.getChosenGroupedReferenceIds = function()
+{
+    var groupedChosenReferenceIds = [];
+
+    $('[data-level="1"]').each(function(i, tree) {
+        var referenceIds = [];
+
+        $(tree).find('[data-chosen="true"]').each(function(j, element) {
+            referenceIds.push(parseInt($(element).attr('data-reference')));
+        });
+
+        if (referenceIds.length > 0) {
+            groupedChosenReferenceIds.push(referenceIds);
+        }
+    });
+
+    return groupedChosenReferenceIds;
+};
+
+/**
  * Retourne le niveau d'une référence.
  *
  * @param integer referenceId ID de la référence

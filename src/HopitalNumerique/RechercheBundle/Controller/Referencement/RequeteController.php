@@ -3,6 +3,7 @@ namespace HopitalNumerique\RechercheBundle\Controller\Referencement;
 
 use HopitalNumerique\RechercheBundle\Form\Type\RequeteType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 
 /**
@@ -68,5 +69,7 @@ class RequeteController extends Controller
         $this->container->get('hopitalnumerique_recherche.dependency_injection.referencement.requete_session')->setReferenceIds($referenceIds);
         $this->container->get('hopitalnumerique_recherche.dependency_injection.referencement.requete_session')->setEntityTypeIds($request->request->get('entityTypesIds', null));
         $this->container->get('hopitalnumerique_recherche.dependency_injection.referencement.requete_session')->setPublicationCategoryIds($request->request->get('publicationCategoryIds', null));
+
+        return new JsonResponse(['success' => true]);
     }
 }

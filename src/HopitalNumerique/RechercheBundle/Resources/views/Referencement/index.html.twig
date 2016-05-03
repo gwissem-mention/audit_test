@@ -54,9 +54,9 @@
                                             <h4 class="modal-title" id="myModalLabel">{{ referenceProperties.reference.libelle }}</h4>
                                         </div>
                                         <div class="modal-body">
-                                            <ul>
+                                            <ul data-level="1">
                                                 {%- for referenceEnfantTree in referenceProperties.enfants -%}
-                                                    {{ mySelf.buildContextTreePart(referenceEnfantTree, 1) }}
+                                                    {{ mySelf.buildContextTreePart(referenceEnfantTree, 2) }}
                                                 {%- endfor -%}
                                             </ul>
                                         </div>
@@ -71,8 +71,8 @@
                 {%- endfor -%}
                 {% macro buildContextTreePart(referencesTreePart, level) -%}
                     {% import _self as mySelf %}
-                    <li data-reference="{{ referencesTreePart.reference.id }}" data-chosen="false" data-domaines="{{ referencesTreePart.reference.domainesId|join(',') }}">
-                        {%- if level > 1 -%}
+                    <li data-reference="{{ referencesTreePart.reference.id }}" data-level="{{ level }}" data-chosen="false" data-domaines="{{ referencesTreePart.reference.domainesId|join(',') }}">
+                        {%- if level > 2 -%}
                             <label><input type="checkbox"> {{ referencesTreePart.reference.libelle }}</label>
                         {%- else -%}
                             <div><strong>{{ referencesTreePart.reference.libelle }}</strong></div>
