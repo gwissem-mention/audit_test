@@ -26,6 +26,11 @@ hopitalnumerique_recherche_referencement_requete_view:
     requirements:
         requete: '\d+'
 
+hopitalnumerique_recherche_referencement_requete_popindetail:
+    pattern: 'requete/popin-detail/{requete}'
+    defaults: { _controller: 'HopitalNumeriqueRechercheBundle:Referencement\Requete:popinDetail' }
+    methods: 'GET'
+
 hopitalnumerique_recherche_referencement_requete_popinsave:
     pattern: 'requete/popin-save'
     defaults: { _controller: 'HopitalNumeriqueRechercheBundle:Referencement\Requete:popinSave' }

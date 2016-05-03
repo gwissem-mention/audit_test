@@ -1,6 +1,7 @@
 <?php
 namespace HopitalNumerique\RechercheBundle\Controller\Referencement;
 
+use HopitalNumerique\CoreBundle\DependencyInjection\Entity;
 use HopitalNumerique\RechercheBundle\Entity\Requete;
 use HopitalNumerique\RechercheBundle\Form\Type\RequeteType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -22,6 +23,44 @@ class RequeteController extends Controller
         }
 
         return $this->redirectToRoute('hopital_numerique_recherche_homepage');
+    }
+
+    /**
+     * Popin de détails.
+     */
+    public function popinDetailAction(Requete $requete)
+    {
+        $currentDomaine = $this->container->get('hopitalnumerique_domaine.dependency_injection.current_domaine')->get();
+        $referencesTree = $this->container->get('hopitalnumerique_reference.dependency_injection.reference.tree')->getOrderedReferences(null, [$currentDomaine], true);
+
+        $filtreCategoryLabels = [];
+        if (null !== $requete->getEntityTypeIds()) {
+            foreach ($requete->getEntityTypeIds() as $entityTypeId) {
+                switch ($entityTypeId) {
+                    case Entity::ENTITY_TYPE_FORUM_TOPIC:
+                        $filtreCategoryLabels[] = Entity::CATEGORY_FORUM_TOPIC_LABEL;
+                        break;
+                    case Entity::ENTITY_TYPE_AMBASSADEUR:
+                        $filtreCategoryLabels[] = Entity::CATEGORY_AMBASSADEUR_LABEL;
+                        break;
+                    case Entity::ENTITY_TYPE_RECHERCHE_PARCOURS:
+                        $filtreCategoryLabels[] = Entity::CATEGORY_RECHERCHE_PARCOURS_LABEL;
+                        break;
+                    case Entity::ENTITY_TYPE_COMMUNAUTE_PRATIQUES_GROUPE:
+                        $filtreCategoryLabels[] = Entity::CATEGORY_COMMUNAUTE_PRATIQUES_GROUPE_LABEL;
+                        break;
+                }
+            }
+        }
+        foreach ($this->container->get('hopitalnumerique_reference.manager.reference')->findBy(['id' => $requete->getPublicationCategoryIds()]) as $publicationCategory) {
+            $filtreCategoryLabels[] = $publicationCategory->getLibelle();
+        }
+
+        return $this->render('HopitalNumeriqueRechercheBundle:Referencement\Requete:popin_detail.html.twig', [
+            'referencesTree' => $referencesTree,
+            'requete' => $requete,
+            'filtreCategoryLabels' => $filtreCategoryLabels
+        ]);
     }
 
     /**

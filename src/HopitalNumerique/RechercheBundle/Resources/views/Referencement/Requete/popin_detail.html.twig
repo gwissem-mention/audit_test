@@ -1,0 +1,50 @@
+{% extends 'HopitalNumeriqueCoreBundle::popup.html.twig' %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script type="text/javascript">
+        $(document).ready(function() {
+            Hn_RechercheBundle_Requete_PopinDetail.init();
+        });
+    </script>
+{% endblock %}
+
+{% block title %}
+    {{ requete }}
+{% endblock %}
+
+{% block body %}
+    {% import _self as mySelf %}
+    <div id="requete-popin-detail-container">
+        <ul>
+            {%- for referenceProperties in referencesTree -%}
+                {{ mySelf.buildTreePart(referenceProperties, null, requete.refs, 1) }}
+            {%- endfor -%}
+        </ul>
+        {% macro buildTreePart(referencesTreePart, referenceParentId, referenceIds, level) -%}
+            {% import _self as mySelf %}
+            <li data-reference="{{ referencesTreePart.reference.id }}" data-reference-parent="{{ referenceParentId }}" data-chosen="{{ referencesTreePart.reference.id in referenceIds ? 'true' : 'false' }}" data-level="{{ level }}">
+                <div>
+                    {{ referencesTreePart.reference.libelle }}
+                </div>
+
+                {%- if referencesTreePart.enfants|length > 0 -%}
+                    <ul>
+                        {%- for referenceEnfantTree in referencesTreePart.enfants -%}
+                            {{ mySelf.buildTreePart(referenceEnfantTree, referencesTreePart.reference.id, referenceIds, level + 1) }}
+                        {%- endfor -%}
+                    </ul>
+                {%- endif -%}
+            </li>
+        {%- endmacro %}
+    </div>
+
+    {%- if filtreCategoryLabels|length > 0 -%}
+        <h2>Liste du filtre des catégories</h2>
+        <ul>
+            {%- for filtreCategoryLabel in filtreCategoryLabels -%}
+                <li>{{ filtreCategoryLabel }}</li>
+            {%- endfor -%}
+        </ul>
+    {%- endif -%}
+{% endblock %}

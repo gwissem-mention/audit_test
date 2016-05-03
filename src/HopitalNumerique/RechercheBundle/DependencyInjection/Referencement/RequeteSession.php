@@ -24,16 +24,6 @@ class RequeteSession
     const SESSION_CATEGORY_FILTERS_NAME = 'hnrecherche_referencement_requete_categories';
 
     /**
-     * @var string Index des types d'entités dans la session
-     */
-    const SESSION_CATEGORY_FILTERS_ENTITY_TYPES_KEY = '1';
-
-    /**
-     * @var string Index des catégories de publication dans la session
-     */
-    const SESSION_CATEGORY_FILTERS_PUBLICATION_CATEGORIES_KEY = '2';
-
-    /**
      * @var string Préfixe de la session de la requete
      */
     const SESSION_REQUETE_NAME = 'hnrecherche_referencement_requete_requete';
@@ -124,8 +114,8 @@ class RequeteSession
     {
         $categoryFilters = $this->getCategoryFilters();
 
-        if (array_key_exists(self::SESSION_CATEGORY_FILTERS_ENTITY_TYPES_KEY, $categoryFilters)) {
-            return $categoryFilters[self::SESSION_CATEGORY_FILTERS_ENTITY_TYPES_KEY];
+        if (array_key_exists(Requete::CATEGORY_FILTERS_ENTITY_TYPES_KEY, $categoryFilters)) {
+            return $categoryFilters[Requete::CATEGORY_FILTERS_ENTITY_TYPES_KEY];
         }
 
         return null;
@@ -141,11 +131,11 @@ class RequeteSession
         $categoryFilters = $this->getCategoryFilters();
 
         if (null === $entityTypeIds) {
-            if (array_key_exists(self::SESSION_CATEGORY_FILTERS_ENTITY_TYPES_KEY, $categoryFilters)) {
-                unset($categoryFilters[self::SESSION_CATEGORY_FILTERS_ENTITY_TYPES_KEY]);
+            if (array_key_exists(Requete::CATEGORY_FILTERS_ENTITY_TYPES_KEY, $categoryFilters)) {
+                unset($categoryFilters[Requete::CATEGORY_FILTERS_ENTITY_TYPES_KEY]);
             }
         } else {
-            $categoryFilters[self::SESSION_CATEGORY_FILTERS_ENTITY_TYPES_KEY] = $entityTypeIds;
+            $categoryFilters[Requete::CATEGORY_FILTERS_ENTITY_TYPES_KEY] = $entityTypeIds;
         }
 
         $this->setCategoryFilters($categoryFilters);
@@ -160,8 +150,8 @@ class RequeteSession
     {
         $categoryFilters = $this->getCategoryFilters();
 
-        if (array_key_exists(self::SESSION_CATEGORY_FILTERS_PUBLICATION_CATEGORIES_KEY, $categoryFilters)) {
-            return $categoryFilters[self::SESSION_CATEGORY_FILTERS_PUBLICATION_CATEGORIES_KEY];
+        if (array_key_exists(Requete::CATEGORY_FILTERS_PUBLICATION_CATEGORIES_KEY, $categoryFilters)) {
+            return $categoryFilters[Requete::CATEGORY_FILTERS_PUBLICATION_CATEGORIES_KEY];
         }
 
         return null;
@@ -177,11 +167,11 @@ class RequeteSession
         $categoryFilters = $this->getCategoryFilters();
 
         if (null === $publicationCategoryIds) {
-            if (array_key_exists(self::SESSION_CATEGORY_FILTERS_PUBLICATION_CATEGORIES_KEY, $categoryFilters)) {
-                unset($categoryFilters[self::SESSION_CATEGORY_FILTERS_PUBLICATION_CATEGORIES_KEY]);
+            if (array_key_exists(Requete::CATEGORY_FILTERS_PUBLICATION_CATEGORIES_KEY, $categoryFilters)) {
+                unset($categoryFilters[Requete::CATEGORY_FILTERS_PUBLICATION_CATEGORIES_KEY]);
             }
         } else {
-            $categoryFilters[self::SESSION_CATEGORY_FILTERS_PUBLICATION_CATEGORIES_KEY] = $publicationCategoryIds;
+            $categoryFilters[Requete::CATEGORY_FILTERS_PUBLICATION_CATEGORIES_KEY] = $publicationCategoryIds;
         }
 
         $this->setCategoryFilters($categoryFilters);

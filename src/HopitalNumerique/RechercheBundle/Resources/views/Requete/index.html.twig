@@ -6,6 +6,7 @@
         "@jquery_toggles_css"
         'bundles/hopitalnumeriquerecherche/css/requete.css'
         'bundles/nodevoadmin/css/toggles.css'
+        'bundles/hopitalnumeriquerecherche/css/Requete/popin-detail.css'
     %}
         <link rel="stylesheet" href="{{ asset_url }}" />
     {% endstylesheets %}
@@ -16,6 +17,7 @@
     {% javascripts output="compiled/hopitalnumerique-recherche-requete-index.js"
         "@jquery_toggles_js"
         'bundles/hopitalnumeriquerecherche/js/requete.js'
+        'bundles/hopitalnumeriquerecherche/js/Requete/PopinDetail.js'
     %}
         <script type="text/javascript" src="{{ asset_url }}"></script>
     {% endjavascripts %}
@@ -56,7 +58,7 @@
 
                 <div class="actions pull-right">
                     <div class="fa fa-envelope btn-pas-mobile hide {% if requete.isUserNotified %}active{% else %}inactive{% endif %}" title="Notifications" onclick="showDetails('{{path('hopital_numerique_requete_mail',{'id':requete.id})}}')"></div>
-                    <div class="fa fa-eye btn-pas-mobile" title="Voir le détail" onclick="showDetails('{{path('hopital_numerique_requete_detail',{'id':requete.id})}}')"></div>
+                    <div class="fa fa-eye btn-pas-mobile" title="Voir le détail" onclick="showDetails('{{path('hopitalnumerique_recherche_referencement_requete_popindetail',{'requete':requete.id})}}')"></div>
                     <div class="fa fa-edit btn-pas-mobile" title="Editer" onclick="editRequete('{{path('hopital_numerique_requete_edit',{'id':requete.id})}}')"></div>
                     <div class="fa fa-times-circle" title="Supprimer" onclick="deleteWithConfirm('{{path('hopital_numerique_requete_delete',{'id':requete.id})}}')"></div>
                 </div>

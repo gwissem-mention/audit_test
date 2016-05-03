@@ -17,6 +17,16 @@ class Requete
      */
     const DEFAULT_NOM = 'Ma requête';
 
+    /**
+     * @var string Index des types d'entités
+     */
+    const CATEGORY_FILTERS_ENTITY_TYPES_KEY = '1';
+
+    /**
+     * @var string Index des catégories de publication
+     */
+    const CATEGORY_FILTERS_PUBLICATION_CATEGORIES_KEY = '2';
+
 
     /**
      * @var integer
@@ -482,5 +492,47 @@ class Requete
     public function getDomaine()
     {
         return $this->domaine;
+    }
+
+
+    /**
+     * @return string
+     */
+    public function __toString()
+    {
+        return $this->nom;
+    }
+
+
+    /**
+     * Retourne les IDs des types d'entité.
+     *
+     * @return array<integer>|null IDs
+     */
+    public function getEntityTypeIds()
+    {
+        $categoryFilters = $this->getCategPointDur();
+
+        if (array_key_exists(Requete::CATEGORY_FILTERS_ENTITY_TYPES_KEY, $categoryFilters)) {
+            return $categoryFilters[Requete::CATEGORY_FILTERS_ENTITY_TYPES_KEY];
+        }
+
+        return null;
+    }
+
+    /**
+     * Retourne les IDs des catégories de publication.
+     *
+     * @return array<integer>|null IDs
+     */
+    public function getPublicationCategoryIds()
+    {
+        $categoryFilters = $this->getCategPointDur();
+
+        if (array_key_exists(Requete::CATEGORY_FILTERS_PUBLICATION_CATEGORIES_KEY, $categoryFilters)) {
+            return $categoryFilters[Requete::CATEGORY_FILTERS_PUBLICATION_CATEGORIES_KEY];
+        }
+
+        return null;
     }
 }
