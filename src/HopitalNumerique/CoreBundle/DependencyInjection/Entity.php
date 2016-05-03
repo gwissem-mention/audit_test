@@ -464,7 +464,10 @@ class Entity
         }
 
         if (null !== $description) {
-            $description = substr(strip_tags($description), 0, 255);
+            $description = substr(trim(strip_tags($description)), 0, 255);
+            if ('' == $description) {
+                return null;
+            }
             $description = substr($description, 0, strrpos($description, ' ')).'...';
         }
 
