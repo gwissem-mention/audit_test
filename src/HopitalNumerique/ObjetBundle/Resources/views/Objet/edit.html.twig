@@ -49,7 +49,7 @@
 {% block toolbarButton %}
     {% if objet.id %}
         {% if objet.isArticle %}
-            <a class="btn btn-default" href="{{ path('hopitalnumerique_objet_objet_cancel_with_filtre', { 'id': objet.id, 'message':0, 'filtre': objet.types|first.libelle }) }}" title="Retour à la liste"><i class="fa fa-reply"></i></a>
+            <a class="btn btn-default" href="{{ path('hopitalnumerique_objet_objet_cancel_with_filtre', { 'id': objet.id, 'message':0, 'filtre': 'Article' }) }}" title="Retour à la liste"><i class="fa fa-reply"></i></a>
         {% else %}
             <a class="btn btn-default" href="{{ path('hopitalnumerique_objet_objet_cancel_with_filtre', { 'id': objet.id, 'message':0 , 'filtre':"publication" }) }}" title="Retour à la liste"><i class="fa fa-reply"></i></a>
         {% endif %}
