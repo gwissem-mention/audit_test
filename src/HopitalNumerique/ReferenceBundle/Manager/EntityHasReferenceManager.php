@@ -95,8 +95,8 @@ class EntityHasReferenceManager extends BaseManager
         $entitiesHaveReferencesWithoutRoles = $this->getRepository()->getWithNotes($domaine, $groupedReferences, $entityTypeIds, $publicationCategoryIds);
         // Prise en compte des rôles utilisateur
         foreach ($entitiesHaveReferencesWithoutRoles as $entityHaveReferenceWithoutRoles) {
-            $objetRoleIds = explode(',', $entityHaveReferenceWithoutRoles['objetRoleIds']);
-            $contenuObjetRoleIds = explode(',', $entityHaveReferenceWithoutRoles['contenuObjetRoleIds']);
+            $objetRoleIds = ('' != $entityHaveReferenceWithoutRoles['objetRoleIds'] ? explode(',', $entityHaveReferenceWithoutRoles['objetRoleIds']) : []);
+            $contenuObjetRoleIds = ('' != $entityHaveReferenceWithoutRoles['contenuObjetRoleIds'] ? explode(',', $entityHaveReferenceWithoutRoles['contenuObjetRoleIds']) : []);
 
             if ((
                     null === $userRole
