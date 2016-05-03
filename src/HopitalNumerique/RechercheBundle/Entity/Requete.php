@@ -13,11 +13,6 @@ use Doctrine\ORM\Mapping as ORM;
 class Requete
 {
     /**
-     * @var string Nom par défaut d'une requête
-     */
-    const DEFAULT_NOM = 'Ma requête';
-
-    /**
      * @var string Index des types d'entités
      */
     const CATEGORY_FILTERS_ENTITY_TYPES_KEY = '1';

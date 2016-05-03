@@ -227,7 +227,7 @@ class RequeteSession
 
             if (count($referenceIds) > 0) {
                 $requete = $this->requeteManager->createEmpty();
-                $requete->setNom(Requete::DEFAULT_NOM);
+                $requete->setNom('Ma requête du '.date('d/m/Y à H:i'));
                 $requete->setIsDefault(true);
                 $requete->setIsUserNotified(false);
                 $requete->setUser($requeteUser);
