@@ -10,7 +10,7 @@
             <a href="{{ path('hopitalnumerique_communautepratique_user_list') }}"><em class="icon-group2"></em> Membres de la communauté</a>
         </div>
         <div class="col-md-3">
-            <a href="{{ path('ccdn_forum_user_category_index') }}"><em class="icon-chat27"></em> Forum de la communauté de pratiques</a>
+            <a href="{{- path('ccdn_forum_user_category_show', {'categoryId': 13, 'forumName': 'public'}) -}}"><em class="icon-chat27"></em> Forum de la communauté de pratiques</a>
         </div>
     </div>
 </div>
