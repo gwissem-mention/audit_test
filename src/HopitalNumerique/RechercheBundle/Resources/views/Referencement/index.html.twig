@@ -158,6 +158,10 @@
                 </div>
 
                 <div class="results-bloc">
+                    <div id="no-result-bloc">
+                        Il n'y a pas encore de ressource correspondant à cette recherche.
+                        Pour être informé d'une nouvelle publication sur ce sujet, enregistrez votre recherche.
+                    </div>
                     {%- for groupId, groupTitle in { 'points-durs':'Points durs', 'productions':'Productions' } -%}
                         <div class="results-group-bloc" id="results-{{ groupId }}-bloc">
                             <h2><span class="title">{{ groupTitle }}</span> (<span id="results-{{ groupId }}-count"></span> résultats)</h2>

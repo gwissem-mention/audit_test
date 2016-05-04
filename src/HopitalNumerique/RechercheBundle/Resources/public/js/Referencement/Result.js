@@ -54,7 +54,10 @@ Hn_RechercheBundle_Referencement.displayResults = function()
             }
 
             if (totalCount > 0) {
+                $('#no-result-bloc').slideUp('fast');
                 $('#results-count').html('(' + totalCount + ' résultat' + (totalCount > 1 ? 's' : '') + ')');
+            } else if (chosenGroupedReferenceIds.length > 0) {
+                $('#no-result-bloc').slideDown('fast');
             }
         }
     });
