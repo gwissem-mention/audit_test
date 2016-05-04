@@ -49,8 +49,11 @@ Hn_RechercheBundle_Referencement.displayResults = function()
                 }
             }
 
-            if (totalCount > 0) {
+            if (chosenGroupedReferenceIds.length > 0) {
                 $('#filtres-info').slideUp('fast');
+            }
+
+            if (totalCount > 0) {
                 $('#results-count').html('(' + totalCount + ' résultat' + (totalCount > 1 ? 's' : '') + ')');
             }
         }
