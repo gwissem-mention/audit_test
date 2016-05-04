@@ -76,6 +76,13 @@ class StatRecherche
     protected $user;
 
     /**
+     * @var string
+     *
+     * @ORM\Column(name="stat_session_id", type="text", nullable=true)
+     */
+    protected $sessionId;
+    
+    /**
      * Constructor
      */
     public function __construct()
@@ -275,5 +282,28 @@ class StatRecherche
     public function getCategPointDur()
     {
         return $this->categPointDur;
+    }
+    
+    /**
+     * Set sessionId
+     *
+     * @param string $sessionId
+     * @return StatRecherche
+     */
+    public function setSessionId($sessionId)
+    {
+    	$this->sessionId = $sessionId;
+    
+    	return $this;
+    }
+    
+    /**
+     * Get sessionId
+     *
+     * @return string
+     */
+    public function getsessionId()
+    {
+    	return $this->sessionId;
     }
 }
