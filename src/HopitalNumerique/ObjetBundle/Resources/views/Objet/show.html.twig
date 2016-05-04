@@ -59,7 +59,11 @@
                         
                         <p>
                             <strong>Ambassadeurs concernés : </strong>
-                            {{ objet.ambassadeurs|rearangeDatas('prenomNom') }}
+                            {{ objet.ambassadeurs|rearangeDatasAmbassadeur('prenomNom') }}
+                        </p>
+						<p>
+                            <strong>Expert concernés : </strong>
+                            {{ objet.ambassadeurs|rearangeDatasExpert('prenomNom') }}
                         </p>
                     </div>
                     <div class="col-md-6">
