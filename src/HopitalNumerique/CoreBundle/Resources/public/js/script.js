@@ -22,4 +22,9 @@ $(document).ready(function() {
         $('a#search-header-home').attr('href', "/recherche-par-referencement/requete-generator/null/" + $(this).val()  + "/null");
         $('a#search-avance-header-home').attr('href', "/recherche-par-referencement?type=avancee");
     });
+    
+    // Form recherche home, modification du href on change
+    $("button#search-header-home-generate").click(function() {
+        window.location.href = ('href', "/recherche-par-referencement/requete-generator/null/" + $("input#recherche-texte-generate").val()  + "/null");
+    });
 });

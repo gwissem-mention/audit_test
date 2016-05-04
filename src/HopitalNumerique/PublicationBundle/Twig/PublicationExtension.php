@@ -177,6 +177,13 @@ class PublicationExtension extends \Twig_Extension
                         $content = str_replace($pattern, $replacement, $content);
 
                         break;
+					case 'RECHERCHETEXTE':
+                       	//cas Recherche texte
+                       	$replacement = "<input type='texte' id=\"recherche-texte-generate\" /><button type='button' id=\"search-header-home-generate\">Rechercher</button>";
+						$pattern = $matches[0][$key];
+                       	$content = str_replace($pattern, $replacement, $content);
+
+                       	break;
                 }
             }
         }
@@ -348,10 +355,17 @@ class PublicationExtension extends \Twig_Extension
                         $content = str_replace($pattern, $replacement, $content);
 
                         break;
-                }
+                        
+                    case 'RECHERCHETEXTE':
+                       	//cas Recherche texte
+                       	$replacement = "<input type='texte' id=\"recherche-texte-generate\" /><button type='button' id=\"search-header-home-generate\">Rechercher</button>";
+                       	$pattern = $matches[0][$key];
+                       	$content = str_replace($pattern, $replacement, $content);
+                       
+                       	break;
+                }            
             }
         }
-
         $content = html_entity_decode($content);
         //Remplace un caractère qui n'est pas un espace mais un 'caractère vide' en
         $content = strtr($content,array(" " =>" "));
