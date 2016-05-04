@@ -223,7 +223,7 @@ hopitalnumerique_user_ambassadeur_liste_objets:
         id: \d+
 
 hopitalnumerique_user_ambassadeur_objets:
-    pattern:  /admin/user/ambassadeur/objets/{id}
+    pattern:  /admin/user/productions/objets/{id}
     defaults: { _controller: "HopitalNumeriqueUserBundle:Ambassadeur:objets", id: 1 }
     requirements:
         id: \d+

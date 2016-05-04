@@ -23,8 +23,10 @@ class ObjetExtension extends \Twig_Extension
     public function getFilters()
     {
         return array(
-            'rearangeDatas'       => new \Twig_Filter_Method($this, 'rearangeDatas'),
-            'formateHistoryValue' => new \Twig_Filter_Method($this, 'formateHistoryValue')
+            'rearangeDatas'       		=> new \Twig_Filter_Method($this, 'rearangeDatas'),
+        	'rearangeDatasAmbassadeur'  => new \Twig_Filter_Method($this, 'rearangeDatasAmbassadeur'),
+        	'rearangeDatasExpert'       => new \Twig_Filter_Method($this, 'rearangeDatasExpert'),	
+            'formateHistoryValue' 		=> new \Twig_Filter_Method($this, 'formateHistoryValue')
         );
     }
 
@@ -45,6 +47,44 @@ class ObjetExtension extends \Twig_Extension
         return implode(', ', $newDatas);
     }
 
+    
+    /**
+     * Retourne le tableau réarangé en chaine de caractère trié par role Expert
+     *
+     * @param array $datas Tableau de datas
+     *
+     * @return string
+     */
+    public function rearangeDatasAmbassadeur( $datas, $field )
+    {
+    	$field    = 'get'. ucfirst($field);
+    	$newDatas = array();
+    	foreach($datas as $data)
+    		if ($data->isGranted('ROLE_AMBASSADEUR_7')){
+    			$newDatas[] = call_user_func( array( $data, $field ) );    			
+    		}
+    
+    		return implode(', ', $newDatas);
+    }
+    
+    /**
+     * Retourne le tableau réarangé en chaine de caractère trié par role Expert
+     *
+     * @param array $datas Tableau de datas
+     *
+     * @return string
+     */
+    public function rearangeDatasExpert( $datas, $field )
+    {
+    	$field    = 'get'. ucfirst($field);
+    	$newDatas = array();
+    	foreach($datas as $data)
+        	if ($data->isGranted('ROLE_EXPERT_6')){
+    			$newDatas[] = call_user_func( array( $data, $field ) );    			
+    		}
+    
+    		return implode(', ', $newDatas);
+    }
     /**
      * Retourne la donnée d'historique formatée correctement
      *
