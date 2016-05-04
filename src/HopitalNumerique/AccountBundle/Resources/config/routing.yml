@@ -1,4 +1,8 @@
-hopital_numerique_account_informationsmanquantes:
+hopitalnumerique_account_contexte:
+    prefix: '/contexte'
+    resource: 'routing/contexte.yml'
+
+hopitalnumerique_account_informationsmanquantes:
     prefix: '/informations-manquantes'
     resource: 'routing/informations_manquantes.yml'
 

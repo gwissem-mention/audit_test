@@ -1,4 +1,4 @@
 services:
     hopitalnumerique_account.dependency_injection.doctrine.reference.contexte:
         class: 'HopitalNumerique\AccountBundle\Doctrine\Reference\Contexte'
-        arguments: ['@hopitalnumerique_user.dependency_injection.connected_user']
+        arguments: ['@hopitalnumerique_user.dependency_injection.connected_user', '@hopitalnumerique_reference.manager.reference', '@hopitalnumerique_user.manager.user']

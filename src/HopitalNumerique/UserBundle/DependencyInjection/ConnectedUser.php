@@ -10,6 +10,11 @@ use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInt
 class ConnectedUser
 {
     /**
+     * @var \Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface TokenStorage
+     */
+    private $tokenStorage;
+
+    /**
      *
      * @var \HopitalNumerique\UserBundle\Entity\User|null User
      */
@@ -21,9 +26,7 @@ class ConnectedUser
      */
     public function __construct(TokenStorageInterface $tokenStorage)
     {
-        if (null !== $tokenStorage->getToken() && $tokenStorage->getToken()->getUser() instanceof User) {
-            $this->user = $tokenStorage->getToken()->getUser();
-        }
+        $this->tokenStorage = $tokenStorage;
     }
 
 
@@ -34,6 +37,12 @@ class ConnectedUser
      */
     public function get()
     {
+        if (null === $this->user) {
+            if (null !== $this->tokenStorage->getToken() && $this->tokenStorage->getToken()->getUser() instanceof User) {
+                $this->user = $this->tokenStorage->getToken()->getUser();
+            }
+        }
+
         return $this->user;
     }
 
@@ -44,6 +53,6 @@ class ConnectedUser
      */
     public function is()
     {
-        return (null !== $this->user);
+        return (null !== $this->get());
     }
 }

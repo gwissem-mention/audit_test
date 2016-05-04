@@ -3,6 +3,16 @@
  */
 var Hn_RechercheBundle_Referencement_Filter_Contexte = function() {};
 
+
+/**
+ * Sauvegarde le contexte utilisateur et valide ses choix.
+ */
+Hn_RechercheBundle_Referencement_Filter_Contexte.saveAndValid = function()
+{
+    Hn_RechercheBundle_Referencement_Filter_Contexte.valid();
+    Hn_RechercheBundle_Referencement_Filter_Contexte.saveUser();
+};
+
 /**
  * Valide les choix de l'utilisateur.
  */
@@ -17,4 +27,31 @@ Hn_RechercheBundle_Referencement_Filter_Contexte.valid = function()
 
     Hn_RechercheBundle_Referencement.initReferenceFilters();
     $('#contexte-modal').modal('hide');
+};
+
+/**
+ * Enregistre le contexte sur l'utilisateur.
+ */
+Hn_RechercheBundle_Referencement_Filter_Contexte.saveUser = function()
+{
+    var contexteReferenceIds = [];
+    var contextechoosenElements = $('#contexte-modal [data-chosen="true"]');
+
+    $(contextechoosenElements).each(function (i, element) {
+        contexteReferenceIds.push(parseInt($(element).attr('data-reference')));
+    });
+
+    $.ajax({
+        url: Routing.generate('hopitalnumerique_account_contexte_save'),
+        method: 'POST',
+        data: {
+            'referenceIds': contexteReferenceIds
+        },
+        dataType: 'json'/*,
+        success: function (data) {
+            if (data.save) {
+                apprise('Votre compte a été modifié.');
+            }
+        }*/
+    });
 };
