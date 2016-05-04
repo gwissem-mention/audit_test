@@ -39,7 +39,7 @@ class ObjetRepository extends EntityRepository {
 	public function getObjets() {
 		$qb = $this->_em->createQueryBuilder ();
 		$qb->select ( 'obj' )->from ( 'HopitalNumeriqueObjetBundle:Objet', 'obj' )->leftJoin ( 'obj.contenus', 'contenus' );
-		$qb->orderBy ( 'obj.dateDebutPublication', 'DESC' );
+		$qb->orderBy ( 'obj.titre', 'ASC' );
 	
 		return $qb;
 	}
