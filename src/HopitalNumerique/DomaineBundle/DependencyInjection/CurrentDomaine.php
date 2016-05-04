@@ -37,14 +37,13 @@ class CurrentDomaine
      */
     public function get()
     {
-        $domaineId = $this->session->get('domaineId');
-        $domaine = $this->domaineManager->findOneById($domaineId);
+        $domaineId = $this->session->get('domaineId', null);
 
-        if (null === $domaine) {
-            throw new \Exception('Domaine introuvable.');
+        if (null !== $domaineId) {
+            return $this->domaineManager->findOneById($domaineId);
         }
 
-        return $domaine;
+        return null;
     }
 
     /**

@@ -33,7 +33,7 @@ services:
            - { name: twig.extension }
     logout_handler:
         class: HopitalNumerique\UserBundle\Handler\LogoutHandler
-        arguments: ["@hopitalnumerique_objet.manager.objet", "@security.context"]
+        arguments: ["@hopitalnumerique_objet.manager.objet", "@security.context", '@hopitalnumerique_recherche.dependency_injection.referencement.requete_session']
     genemu.form.jquery.type.date:
         class: Nodevo\FormBundle\Form\JQuery\Type\DateType
         arguments: ["%genemu.form.date.options%"]

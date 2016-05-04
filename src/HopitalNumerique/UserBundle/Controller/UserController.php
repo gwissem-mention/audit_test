@@ -1020,7 +1020,7 @@ class UserController extends Controller
 
                 //Mise à jour / création de l'utilisateur
                 $this->get('fos_user.user_manager')->updateUser( $user );
-                if ($new) {
+                if ($new && $this->container->get('hopitalnumerique_recherche.dependency_injection.referencement.requete_session')->isWantToSaveRequete()) {
                     $this->container->get('hopitalnumerique_recherche.dependency_injection.referencement.requete_session')->saveAsNewRequete($user);
                 }
 

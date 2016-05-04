@@ -14,19 +14,24 @@ use Symfony\Component\HttpFoundation\Session\SessionInterface;
 class RequeteSession
 {
     /**
-     * @var string Préfixe de la session des références
+     * @var string Label de la session des références
      */
     const SESSION_REFERENCES_NAME = 'hnrecherche_referencement_requete_references';
 
     /**
-     * @var string Préfixe de la session des catégories
+     * @var string Label de la session des catégories
      */
     const SESSION_CATEGORY_FILTERS_NAME = 'hnrecherche_referencement_requete_categories';
 
     /**
-     * @var string Préfixe de la session de la requete
+     * @var string Label de la session de la requete
      */
     const SESSION_REQUETE_NAME = 'hnrecherche_referencement_requete_requete';
+
+    /**
+     * @var string Label de la session de demande de sauvegarde
+     */
+    const SESSION_WANT_SAVE_REQUETE = 'hnrecherche_referencement_requete_wantsave';
 
 
     /**
@@ -211,8 +216,29 @@ class RequeteSession
      */
     public function remove()
     {
-        $this->session->remove(self::SESSION_REFERENCES_NAME);
         $this->session->remove(self::SESSION_REQUETE_NAME);
+        $this->session->remove(self::SESSION_REFERENCES_NAME);
+        $this->session->remove(self::SESSION_CATEGORY_FILTERS_NAME);
+    }
+
+    /**
+     * Spécifie si la requête demande à être sauvegardée (si utilisateur pas encore connecté).
+     *
+     * @param boolean $wantSave Sauvegarder ?
+     */
+    public function setWantToSaveRequete($wantSave)
+    {
+        $this->session->set(self::SESSION_WANT_SAVE_REQUETE, $wantSave);
+    }
+
+    /**
+     * Retourne si la requête demande à être sauvegardée.
+     *
+     * @return boolean Sauvegarder ?
+     */
+    public function isWantToSaveRequete()
+    {
+        return $this->session->get(self::SESSION_WANT_SAVE_REQUETE, false);
     }
 
     /**
@@ -228,7 +254,7 @@ class RequeteSession
             if (count($referenceIds) > 0) {
                 $requete = $this->requeteManager->createEmpty();
                 $requete->setNom('Ma requête du '.date('d/m/Y à H:i'));
-                $requete->setIsDefault(true);
+                $requete->setIsDefault(false);
                 $requete->setIsUserNotified(false);
                 $requete->setUser($requeteUser);
                 $requete->setDomaine($this->domaine);

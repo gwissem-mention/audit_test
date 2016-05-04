@@ -68,6 +68,7 @@ class RequeteController extends Controller
      */
     public function popinSaveAction(Request $request)
     {
+        $this->container->get('hopitalnumerique_recherche.dependency_injection.referencement.requete_session')->setWantToSaveRequete(true);
         $requete = $this->container->get('hopitalnumerique_recherche.dependency_injection.referencement.requete_session')->getRequete();
         if (null === $requete) {
             $requete = $this->container->get('hopitalnumerique_recherche.manager.requete')->createEmpty();
