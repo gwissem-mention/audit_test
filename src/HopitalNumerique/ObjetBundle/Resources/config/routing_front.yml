@@ -1,0 +1,5 @@
+#partie Objet
+
+hopitalnumerique_objet_objet_index:
+    pattern:  /index-des-publications
+    defaults: { _controller: "HopitalNumeriqueObjetBundle:Objet:treeIndex" }

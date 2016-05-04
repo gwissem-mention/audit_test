@@ -103,7 +103,11 @@ hopital_numerique_admin:
 hopital_numerique_objet:
     resource: "@HopitalNumeriqueObjetBundle/Resources/config/routing.yml"
     prefix:   /admin
-
+    
+hopital_numerique_objet_front:
+    resource: "@HopitalNumeriqueObjetBundle/Resources/config/routing_front.yml"
+    prefix:   /
+    
 hopital_numerique_domaine:
     resource: "@HopitalNumeriqueDomaineBundle/Resources/config/routing.yml"
     prefix:   /
