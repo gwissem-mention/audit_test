@@ -9,8 +9,6 @@ use HopitalNumerique\DomaineBundle\Entity\Domaine;
 use HopitalNumerique\ReferenceBundle\Entity\Reference;
 use HopitalNumerique\UserBundle\Manager\UserManager;
 use HopitalNumerique\ReferenceBundle\Manager\ReferenceManager;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Criteria;
 
 
 use Symfony\Component\HttpFoundation\Session\Session;
