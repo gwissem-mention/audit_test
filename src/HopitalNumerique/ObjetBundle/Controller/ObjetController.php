@@ -12,6 +12,7 @@ use Doctrine\Common\Cache\ApcCache;
  * Objet controller.
  */
 class ObjetController extends Controller {
+
 	/**
 	 * Affiche la liste des Objet.
 	 */
@@ -20,6 +21,18 @@ class ObjetController extends Controller {
 		
 		return $grid->render ( 'HopitalNumeriqueObjetBundle:Objet:index.html.twig' );
 	}
+	
+	/**
+	 * Affiche la liste des Objet sous fomes d'arbre.
+	 */
+	public function treeIndexAction() {
+		
+		$objets = $this->get('hopitalnumerique_objet.manager.objet')->getObjets();
+        return $this->render('HopitalNumeriqueObjetBundle:Index:index.html.twig', array(
+            'objets' => $objets,
+        ));	
+	}
+	
 	/**
 	 * Affiche la liste des Objet.
 	 */

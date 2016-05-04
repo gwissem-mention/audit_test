@@ -3,6 +3,10 @@ hopitalnumerique_objet_objet:
     pattern:  /objet
     defaults: { _controller: "HopitalNumeriqueObjetBundle:Objet:index" }
 
+hopitalnumerique_objet_objet_index:
+    pattern:  /index-des-publications
+    defaults: { _controller: "HopitalNumeriqueObjetBundle:Objet:treeIndex" }
+
 hopitalnumerique_objet_objet_filtre:
     pattern:  /objet-avec-filtre/{filtre}
     defaults: { _controller: "HopitalNumeriqueObjetBundle:Objet:indexFiltre", filtre: null }

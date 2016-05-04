@@ -9,6 +9,9 @@ use HopitalNumerique\DomaineBundle\Entity\Domaine;
 use HopitalNumerique\ReferenceBundle\Entity\Reference;
 use HopitalNumerique\UserBundle\Manager\UserManager;
 use HopitalNumerique\ReferenceBundle\Manager\ReferenceManager;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Criteria;
+
 
 use Symfony\Component\HttpFoundation\Session\Session;
 
@@ -79,6 +82,16 @@ class ObjetManager extends BaseManager
         return $this->rearangeForTypes( $results );
     }
 
+    /**
+     * Retourne la liste des objets
+     *
+     * @return array
+     */
+    public function getObjets()
+    {
+    	return $this->getRepository()->getObjets()->getQuery()->getResult();
+    } 
+    
     /**
      * Récupère les objets pour le dashboard Back
      *

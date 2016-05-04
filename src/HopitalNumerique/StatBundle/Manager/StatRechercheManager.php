@@ -117,7 +117,7 @@ class StatRechercheManager extends BaseManager
         {
             return;
         }
-
+        
         $referencesJSON = json_encode($tableauIdRef);
 
         //Récupération des références correspondant à la requête
@@ -125,8 +125,12 @@ class StatRechercheManager extends BaseManager
 
         $statRecherche = $this->createEmpty();
 
-        if(!is_null($user) && "anon." !== $user)
-            $statRecherche->setUser($user);
+        if(!is_null($user) && "anon." !== $user) {
+        	$statRecherche->setUser($user);
+        } else {
+        	$statRecherche->setSessionId(session_id());
+        	 
+        }
 
         $statRecherche->setReferences($references);
         $statRecherche->setDate(new \DateTime());
