@@ -19,6 +19,10 @@ Hn_RechercheBundle_Referencement.displayResults = function()
         }
     }
 
+    if (chosenGroupedReferenceIds.length > 0) {
+        $('#filtres-info').slideUp('fast');
+    }
+
     $.ajax({
         url: Routing.generate('hopitalnumerique_recherche_referencement_jsonentitiesbyreferences'),
         method: 'post',
@@ -47,10 +51,6 @@ Hn_RechercheBundle_Referencement.displayResults = function()
                         $('#results-' + group + '-bloc').show('fast');
                     }
                 }
-            }
-
-            if (chosenGroupedReferenceIds.length > 0) {
-                $('#filtres-info').slideUp('fast');
             }
 
             if (totalCount > 0) {
