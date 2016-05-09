@@ -120,11 +120,25 @@ class Reader
 
             foreach ($entitiesProperties as $entityProperties) {
                 $group = (null !== $entityProperties['objetPointDurTypeId'] ? 'points-durs' : 'productions');
-                $entitiesPropertiesByGroup[$group][] = [
+
+                $entityPropertiesByGroup = [
                     'entityType' => $entityProperties['entityType'],
                     'entityId' => $entityProperties['entityId'],
-                    'pertinenceNiveau' => $this->referencement->getPertinenceNiveauByPrimaryAndNote($entityProperties['primarySum'], $entityProperties['note'])
+                    'pertinenceNiveau' => $this->referencement->getPertinenceNiveauByPrimaryAndNote($entityProperties['primarySum'], $entityProperties['note']),
+                    'categoryIds' => []
                 ];
+                foreach ($entityProperties['objetTypeIds'] as $objetTypeId) {
+                    if (!empty($objetTypeId)) {
+                        $entityPropertiesByGroup['categoryIds'][] = $objetTypeId;
+                    }
+                }
+                foreach ($entityProperties['contenuObjetTypeIds'] as $objetTypeId) {
+                    if (!empty($objetTypeId)) {
+                        $entityPropertiesByGroup['categoryIds'][] = $objetTypeId;
+                    }
+                }
+
+                $entitiesPropertiesByGroup[$group][] = $entityPropertiesByGroup;
             }
         }
 

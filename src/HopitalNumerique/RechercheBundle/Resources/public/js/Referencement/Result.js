@@ -38,7 +38,7 @@ Hn_RechercheBundle_Referencement.displayResults = function()
 
                         for (var i in data[group]) {
                             index++;
-                            otherResultsHtml += '<div class="result" data-index="' + index + '" data-initialized="false" data-visible="false" data-entity-type="' + data[group][i].entityType + '" data-entity-id="' + data[group][i].entityId + '" data-pertinence-niveau="' + data[group][i].pertinenceNiveau + '"></div>';
+                            otherResultsHtml += '<div class="result" data-index="' + index + '" data-initialized="false" data-visible="false" data-entity-type="' + data[group][i].entityType + '" data-entity-id="' + data[group][i].entityId + '" data-pertinence-niveau="' + data[group][i].pertinenceNiveau + '"' + (data[group][i].categoryIds.length > 0 ? ' data-categories="' + data[group][i].categoryIds.join(' ') + '"' : '') + '></div>';
                         }
 
                         $('#results-' + group).html(otherResultsHtml);
@@ -56,8 +56,10 @@ Hn_RechercheBundle_Referencement.displayResults = function()
             if (totalCount > 0) {
                 $('#no-result-bloc').slideUp('fast');
                 $('#results-count').html('(' + totalCount + ' résultat' + (totalCount > 1 ? 's' : '') + ')');
+                Hn_RechercheBundle_Referencement_Filter_Category.displayEntityCounts();
             } else if (chosenGroupedReferenceIds.length > 0) {
                 $('#no-result-bloc').slideDown('fast');
+                Hn_RechercheBundle_Referencement_Filter_Category.removeEntityCounts();
             }
         }
     });

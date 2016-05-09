@@ -95,7 +95,9 @@ class EntityHasReferenceRepository extends EntityRepository
                 'entityHasNote.note',
                 'objetPointDurType.id as objetPointDurTypeId',
                 'GROUP_CONCAT(objetRole.id) AS objetRoleIds',
-                'GROUP_CONCAT(contenuObjetRole.id) AS contenuObjetRoleIds'
+                'GROUP_CONCAT(contenuObjetRole.id) AS contenuObjetRoleIds',
+                'GROUP_CONCAT(objetType.id) AS objetTypeIds',
+                'GROUP_CONCAT(contenuObjetType.id) AS contenuObjetTypeIds'
             )
             ->leftJoin(
                 EntityHasNote::class,
@@ -144,8 +146,10 @@ class EntityHasReferenceRepository extends EntityRepository
                 'objet.roles',
                 'objetRole'
             )
-        ;
-        $qb
+            ->leftJoin(
+                'objet.types',
+                'objetType'
+            )
             ->leftJoin(
                 'objet.domaines',
                 'objetDomaine'
@@ -179,8 +183,10 @@ class EntityHasReferenceRepository extends EntityRepository
                     $qb->expr()->orX($qb->expr()->isNull('contenuObjet.dateFinPublication'), $qb->expr()->gt('contenuObjet.dateFinPublication', ':now'))
                 )
             )
-        ;
-        $qb
+            ->leftJoin(
+                'contenuObjet.types',
+                'contenuObjetType'
+            )
             ->leftJoin(
                 'contenuObjet.roles',
                 'contenuObjetRole'
