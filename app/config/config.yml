@@ -237,6 +237,7 @@ fos_js_routing:
         - hopitalnumerique_recherche_referencement_jsonentities
         - hopitalnumerique_recherche_referencement_jsonentitiesbyreferences
         - hopitalnumerique_recherche_referencement_requete_popinsave
+        - hopitalnumerique_recherche_referencement_requete_removesession
         - hopitalnumerique_recherche_referencement_requete_savesession
         - hopitalnumerique_reference_referencement_savechosenreferences
         - hopital_numerique_user_front_departements_informationsPersonelles

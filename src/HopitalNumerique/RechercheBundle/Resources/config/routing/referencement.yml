@@ -45,3 +45,8 @@ hopitalnumerique_recherche_referencement_requete_savesession:
     pattern: 'requete/save-session'
     defaults: { _controller: 'HopitalNumeriqueRechercheBundle:Referencement\Requete:saveSession' }
     methods: 'POST'
+
+hopitalnumerique_recherche_referencement_requete_removesession:
+    pattern: 'requete/remove-session'
+    defaults: { _controller: 'HopitalNumeriqueRechercheBundle:Referencement\Requete:removeSession' }
+    methods: 'POST'

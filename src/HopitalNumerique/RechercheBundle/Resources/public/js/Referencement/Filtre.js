@@ -41,6 +41,11 @@ Hn_RechercheBundle_Referencement.removeFilters = function()
         if (response) {
             Hn_RechercheBundle_Referencement.getChosenElements().attr('data-chosen', 'false');
             Hn_RechercheBundle_Referencement.initReferenceFilters();
+            $.ajax({
+                url: Routing.generate('hopitalnumerique_recherche_referencement_requete_removesession'),
+                method: 'POST'
+            });
+            $('#filtres-actions #search-name').hide();
         }
     });
 };

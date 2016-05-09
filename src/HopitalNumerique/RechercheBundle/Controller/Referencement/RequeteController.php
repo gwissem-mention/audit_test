@@ -125,4 +125,14 @@ class RequeteController extends Controller
 
         return new JsonResponse(['success' => true]);
     }
+
+    /**
+     * Supprime la requête en session.
+     */
+    public function removeSessionAction()
+    {
+        $this->container->get('hopitalnumerique_recherche.dependency_injection.referencement.requete_session')->remove();
+
+        return new JsonResponse(['success' => true]);
+    }
 }
