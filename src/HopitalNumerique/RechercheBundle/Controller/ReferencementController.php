@@ -44,7 +44,8 @@ class ReferencementController extends Controller
             'choosenReferenceIds' => $choosenReferenceIds,
             'entityTypeIds' => $this->container->get('hopitalnumerique_recherche.dependency_injection.referencement.requete_session')->getEntityTypeIds(),
             'publicationCategoryIds' => $this->container->get('hopitalnumerique_recherche.dependency_injection.referencement.requete_session')->getPublicationCategoryIds(),
-            'domaines' => $this->container->get('hopitalnumerique_domaine.manager.domaine')->getAllArray()
+            'domaines' => $this->container->get('hopitalnumerique_domaine.manager.domaine')->getAllArray(),
+            'exaleadIsActivated' => $this->container->get('hopitalnumerique_recherche.manager.search')->getActivationExalead()
         ]);
     }
 
@@ -64,13 +65,75 @@ class ReferencementController extends Controller
      */
     public function jsonEntitiesByReferencesAction(Request $request)
     {
-        $groupedReferenceIds = $request->request->get('references', []);
+        $domaine = $this->container->get('hopitalnumerique_domaine.dependency_injection.current_domaine')->get();
         $entityTypeIds = $request->request->get('entityTypeIds', null);
         $publicationCategoryIds = $request->request->get('publicationCategoryIds', null);
+        $exaleadSearchedText = $request->request->get('exaleadSearch', null);
+        $foundedWords = [];
+        $resultFilters = [];
 
-        $entitiesPropertiesByGroup = $this->container->get('hopitalnumerique_recherche.doctrine.referencement.reader')->getEntitiesPropertiesByReferenceIdsByGroup($groupedReferenceIds, $entityTypeIds, $publicationCategoryIds);
+        if (null !== $exaleadSearchedText) {
+            $groupedReferenceIds = $request->request->get('references', null);
+            $this->container->get('hopitalnumerique_recherche.dependency_injection.referencement.exalead.search')->setText($exaleadSearchedText);
+            $resultFilters['objetIds'] = $this->container->get('hopitalnumerique_recherche.dependency_injection.referencement.exalead.search')->getObjetIds();
+            $resultFilters['contenuIds'] = $this->container->get('hopitalnumerique_recherche.dependency_injection.referencement.exalead.search')->getContenuIds();
 
-        return new JsonResponse($entitiesPropertiesByGroup);
+            if (null !== $groupedReferenceIds && count($groupedReferenceIds) > 0) {
+                $entitiesPropertiesByGroup = $this->container->get('hopitalnumerique_recherche.doctrine.referencement.reader')->getEntitiesPropertiesByReferenceIdsByGroup($groupedReferenceIds, $entityTypeIds, $publicationCategoryIds, $resultFilters);
+                foreach ($entitiesPropertiesByGroup as $group => $entitiesProperties) {
+                    foreach ($entitiesProperties as $i => $entityProperties) {
+                        $entitiesPropertiesByGroup[$group][$i] = $this->container->get('hopitalnumerique_recherche.dependency_injection.referencement.exalead.search')->mergeEntityProperties($entityProperties);
+                    }
+                }
+            } else {
+                $entitiesPropertiesByGroup = $this->container->get('hopitalnumerique_recherche.dependency_injection.referencement.exalead.search')->getEntitiesPropertiesByGroup();
+            }
+            /*$groupedReferenceIds = $request->request->get('references', null);
+            $resultFilters['objets'] = [];
+            $resultFilters['contenus'] = [];
+            $exaleadXml = simplexml_load_file($this->container->get('hopitalnumerique_recherche.manager.search')->getUrlRechercheTextuelle().urlencode($exaleadSearchedText.' AND id_domaine='.$domaine->getId()));
+
+            if (false !== $exaleadXml) {
+                if (null !== $exaleadXml->hits->Hit) {
+                    foreach ($exaleadXml->hits->Hit as $hit) {
+                        $hitUrl = (string)$hit->attributes()->url;
+                        $hitUrlExplode = explode('=', $hitUrl);
+
+                        if ($hitUrlExplode[0] == 'obj_id') {
+                            $resultFilters['objets'][] = [
+                                'id' => intval(substr($hitUrlExplode[1], 0, -1))
+                            ];
+                        } elseif ($hitUrlExplode[0] == 'con_id') {
+                            $resultFilters['contenus'][] = intval(substr($hitUrlExplode[1], 0, -1));
+                        }
+
+                        // YRO 10/02/2015 : les occurrences réellement trouvées dans les contenus
+                        foreach ($hit->metas->Meta as $meta) {
+                            if (in_array($meta->attributes()->name, ['text', 'title'])) {
+                                foreach ($meta->MetaText as $metaText) {
+                                    foreach ($metaText->TextSeg as $textSeg) {
+                                        if ($textSeg->attributes()->highlighted == 'true') {
+                                            $texteTrouve = (string) $textSeg;
+                                            if (!in_array($texteTrouve, $foundedWords)) {
+                                                $foundedWords[] = $texteTrouve;
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }*/
+        } else {
+            $groupedReferenceIds = $request->request->get('references', []);
+            $entitiesPropertiesByGroup = $this->container->get('hopitalnumerique_recherche.doctrine.referencement.reader')->getEntitiesPropertiesByReferenceIdsByGroup($groupedReferenceIds, $entityTypeIds, $publicationCategoryIds, $resultFilters);
+        }
+
+        return new JsonResponse([
+            'results' => $entitiesPropertiesByGroup,
+            'foundedWords' => $foundedWords
+        ]);
     }
 
     /**

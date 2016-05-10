@@ -3,6 +3,7 @@
 namespace HopitalNumerique\ObjetBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use HopitalNumerique\ReferenceBundle\Entity\Reference;
 
 //Asserts Stuff
 use Symfony\Component\Validator\Constraints as Assert;
@@ -389,6 +390,22 @@ class Contenu
     }
 
     /**
+     * Get types ID
+     *
+     * @return array<integer>
+     */
+    public function getTypeIds()
+    {
+        $typeIds = [];
+
+        foreach ($this->types as $type) {
+            $typeIds[] = $type->getId();
+        }
+
+        return $typeIds;
+    }
+
+    /**
      * Set dateCreation
      *
      * @param \DateTime $dateCreation
@@ -620,5 +637,42 @@ class Contenu
         }
 
         return false;
+    }
+
+
+    /**
+     * Retourne si l'objet est un point dur.
+     *
+     * @return boolean Si point dur
+     */
+    public function isPointDur()
+    {
+        if ($this->objet->isPointDur()) {
+            return true;
+        }
+
+        foreach ($this->types as $type) {
+            if ($type->getId() === Reference::CATEGORIE_OBJET_POINT_DUR_ID) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * Retourne les libellés des types.
+     *
+     * @return array<string> Libellés
+     */
+    public function getTypeLabels()
+    {
+        $typeLabels = [];
+
+        foreach ($this->types as $type) {
+            $typeLabels[] = $type->getLibelle();
+        }
+
+        return $typeLabels;
     }
 }

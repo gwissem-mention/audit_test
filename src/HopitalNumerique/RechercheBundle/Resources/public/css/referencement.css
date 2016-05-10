@@ -35,6 +35,13 @@
                     .recherche-referencement .filtres-bloc .references ul li .remove { color: #000;cursor: pointer;padding: 0 3px; }
                     .recherche-referencement .filtres-bloc .references ul li .remove:hover { color: #d60030;text-decoration: none; }
         .recherche-referencement .filtres-bloc #filtres-more { border-color: #d5d5d5;border-style: solid;border-width: 1px 0 0 0;margin: 13px 0 0 0;padding: 15px 0 0 0; }
+            #exalead-bloc {}
+                #exalead-bloc .recherche_textuelle_avancee { background-color:#f4f4f4;border-color:#ccc;border-style:solid;border-width:1px;display:none;left:0px;position:absolute;top:33px;width:100%;z-index:1000; }
+                    #exalead-bloc .recherche_textuelle_avancee .close { float:right;font-size:15px;padding:10px; }
+                    #exalead-bloc .recherche_textuelle_avancee .title { color:#d60030;font-weight:bold;padding:10px; }
+                    #exalead-bloc .recherche_textuelle_avancee ul { list-style-type:none; }
+                        #exalead-bloc .recherche_textuelle_avancee ul a { cursor:pointer; }
+                #exalead-bloc #alert-exalead, #exalead-bloc #alert-exalead-asterisque { display: none;margin: 10px 0;text-align: center; }
             .recherche-referencement .filtres-bloc #entity-categories-container { display: none; }
                 .recherche-referencement .filtres-bloc #entity-categories-container span[id$="-count"]:before { content: '('; }
                 .recherche-referencement .filtres-bloc #entity-categories-container span[id$="-count"]:after { content: ')'; }

@@ -3,6 +3,7 @@
 namespace HopitalNumerique\ObjetBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use HopitalNumerique\ReferenceBundle\Entity\Reference;
 
 //Asserts Stuff
 use Symfony\Component\Validator\Constraints as Assert;
@@ -937,6 +938,22 @@ class Objet implements RoutedItemInterface
     public function getTypes()
     {
         return $this->types;
+    }
+
+    /**
+     * Get types ID
+     *
+     * @return array<integer>
+     */
+    public function getTypeIds()
+    {
+        $typeIds = [];
+
+        foreach ($this->types as $type) {
+            $typeIds[] = $type->getId();
+        }
+
+        return $typeIds;
     }
 
     /**
@@ -1969,6 +1986,23 @@ class Objet implements RoutedItemInterface
     public function __toString()
     {
         return $this->titre;
+    }
+
+
+    /**
+     * Retourne si l'objet est un point dur.
+     *
+     * @return boolean Si point dur
+     */
+    public function isPointDur()
+    {
+        foreach ($this->types as $type) {
+            if ($type->getId() === Reference::CATEGORIE_OBJET_POINT_DUR_ID) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     /**

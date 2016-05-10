@@ -21,6 +21,7 @@
         'bundles/hopitalnumeriquerecherche/js/Referencement/Filter/Category.js'
         'bundles/hopitalnumeriquerecherche/js/Referencement/Filter/Category/Count.js'
         'bundles/hopitalnumeriquerecherche/js/Referencement/Filter/Contexte.js'
+        'bundles/hopitalnumeriquerecherche/js/Referencement/Filter/Exalead.js'
         'bundles/hopitalnumeriquerecherche/js/Referencement/Result.js'
     %}
         <script type="text/javascript" src="{{ asset_url }}"></script>
@@ -145,7 +146,39 @@
                     <div id="filtres-more">
                         <div class="row">
                             <div class="col-md-6">
-
+                                <div id="exalead-bloc" {% if not exaleadIsActivated %}style="display:none;"{% endif %}>
+                                    <div id="recherche_textuelle_group">
+                                        <div class="input-group">
+                                            <span class="input-group-addon"><i class="fa fa-search"></i></span>
+                                            <input type="text" name="recherche_textuelle" id="recherche_textuelle" class="form-control col-md-12" value="" />
+                                            <span class="input-group-btn">
+                                                <button class="btn btn-success" type="button" onclick="Hn_RechercheBundle_Referencement.displayResults();"><i class="fa fa-check"></i></button>
+                                                <button class="btn btn-primary" type="button" title="Recherche avancée" onclick="Hn_RechercheBundle_Referencement_Filter_Exalead.toggleParametersDisplaying();"><i class="fa fa-cog"></i></button>
+                                            </span>
+                                        </div>
+                                        <div class="recherche_textuelle_avancee">
+                                            <a class="close" onclick="Hn_RechercheBundle_Referencement_Filter_Exalead.toggleParametersDisplaying();">Fermer</i></a>
+                                            <div class="title">Que cherchez vous ?</div>
+                                            <ul>
+                                                <li><a onclick="Hn_RechercheBundle_Referencement_Filter_Exalead.addParameter('&quot;Entrez votre formulation ici&quot;', 1, -1);">Formulation exacte</a></li>
+                                                <li><a onclick="Hn_RechercheBundle_Referencement_Filter_Exalead.addParameter('-Entrez le terme ici', 1, 0);">Termes exclus</a></li>
+                                                <li><a onclick="Hn_RechercheBundle_Referencement_Filter_Exalead.addParameter('OPT (Entrez le terme ici)', 5, -1);">Termes optionnels</a></li>
+                                                <li><a onclick="Hn_RechercheBundle_Referencement_Filter_Exalead.addParameter('NEAR Entrez le terme ici', 5, 0);">Recherche de proximité</a></li>
+                                                <li><a onclick="Hn_RechercheBundle_Referencement_Filter_Exalead.addParameter('Entrez le terme ici*', 0, -1);">Termes commençant par</a></li>
+                                            </ul>
+                                            <div class="title">Où voulez-vous chercher ?</div>
+                                            <ul>
+                                                <li><a onclick="Hn_RechercheBundle_Referencement_Filter_Exalead.addParameter('title:(Entrez le terme ici)', 7, -1);">Recherche par titre</a></li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                    <div id="alert-exalead">
+                                        <span class="label label-danger">Merci de préciser votre recherche (2 caractères minimum)</span>
+                                    </div>
+                                    <div id="alert-exalead-asterisque">
+                                        <span class="label label-danger">Merci de préciser votre recherche (3 caractères minimum)</span>
+                                    </div>
+                                </div>
                             </div>
                             <div class="col-md-6" id="entity-categories-container">
                                 <select id="entity-categories" multiple>

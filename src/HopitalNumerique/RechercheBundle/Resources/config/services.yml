@@ -53,6 +53,10 @@ services:
         class: %hopitalnumerique_recherche.grid.expbesoingestion.class%
         arguments: ["@service_container"]
 
+    hopitalnumerique_recherche.dependency_injection.referencement.exalead.search:
+        class: 'HopitalNumerique\RechercheBundle\DependencyInjection\Referencement\Exalead\Search'
+        arguments: ['@hopitalnumerique_domaine.dependency_injection.current_domaine', '@hopitalnumerique_recherche.doctrine.referencement.reader', '@hopitalnumerique_recherche.manager.search']
+
     hopitalnumerique_recherche.dependency_injection.referencement.requete_session:
         class: 'HopitalNumerique\RechercheBundle\DependencyInjection\Referencement\RequeteSession'
         arguments: ['@session', '@hopitalnumerique_user.dependency_injection.connected_user', '@hopitalnumerique_domaine.dependency_injection.current_domaine', '@hopitalnumerique_recherche.manager.requete']
@@ -63,4 +67,4 @@ services:
 
     hopitalnumerique_recherche.doctrine.referencement.reader:
         class: 'HopitalNumerique\RechercheBundle\Doctrine\Referencement\Reader'
-        arguments: ['@hopitalnumerique_reference.dependency_injection.referencement', '@hopitalnumerique_domaine.dependency_injection.current_domaine', '@hopitalnumerique_user.dependency_injection.connected_user', '@hopitalnumerique_reference.manager.entity_has_reference', '@hopitalnumerique_reference.manager.entity_has_note']
+        arguments: ['@router', '@hopitalnumerique_reference.dependency_injection.referencement', '@hopitalnumerique_domaine.dependency_injection.current_domaine', '@hopitalnumerique_user.dependency_injection.connected_user', '@hopitalnumerique_reference.manager.entity_has_reference', '@hopitalnumerique_reference.manager.entity_has_note', '@hopitalnumerique_objet.manager.objet', '@hopitalnumerique_objet.manager.contenu']

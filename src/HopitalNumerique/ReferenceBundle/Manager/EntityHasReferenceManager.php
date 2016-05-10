@@ -75,13 +75,14 @@ class EntityHasReferenceManager extends BaseManager
      * Retourne les EntityHasReference avec leur note.
      *
      * @param \HopitalNumerique\DomaineBundle\Entity\Domaine $domaine Domaine
-     * @param array               $groupedReferences      Références
+     * @param array|null          $groupedReferences      Références
      * @param \HopitalNumerique\UserBundle\Entity\User       $user    User
      * @param array<integer>|null $entityTypeIds          ID des types d'entité à récupérer
      * @param array<integer>|null $publicationCategoryIds ID des catégories de publications à récupérer
+     * @param array               $resultFilters          Filtres à appliquer
      * @return array EntitiesHasReference
      */
-    public function getWithNotes(Domaine $domaine, array $groupedReferences, User $user = null, array $entityTypeIds = null, array $publicationCategoryIds = null)
+    public function getWithNotes(Domaine $domaine, array $groupedReferences = null, User $user = null, array $entityTypeIds = null, array $publicationCategoryIds = null, $resultFilters = [])
     {
         $userRole = null;
         if (null !== $user) {
@@ -92,7 +93,7 @@ class EntityHasReferenceManager extends BaseManager
         }
 
         $entitiesHaveReferences = [];
-        $entitiesHaveReferencesWithoutRoles = $this->getRepository()->getWithNotes($domaine, $groupedReferences, $entityTypeIds, $publicationCategoryIds);
+        $entitiesHaveReferencesWithoutRoles = $this->getRepository()->getWithNotes($domaine, $groupedReferences, $entityTypeIds, $publicationCategoryIds, $resultFilters);
         // Prise en compte des rôles utilisateur
         foreach ($entitiesHaveReferencesWithoutRoles as $entityHaveReferenceWithoutRoles) {
             $objetRoleIds = ('' != $entityHaveReferenceWithoutRoles['objetRoleIds'] ? explode(',', $entityHaveReferenceWithoutRoles['objetRoleIds']) : []);

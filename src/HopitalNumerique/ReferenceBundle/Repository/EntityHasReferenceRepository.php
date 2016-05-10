@@ -14,7 +14,6 @@ use HopitalNumerique\ReferenceBundle\Entity\EntityHasNote;
 use HopitalNumerique\ReferenceBundle\Entity\EntityHasReference;
 use HopitalNumerique\ReferenceBundle\Entity\Reference;
 use HopitalNumerique\UserBundle\Entity\User;
-use Nodevo\RoleBundle\Entity\Role;
 
 /**
  * EntityHasReferenceRepository.
@@ -75,12 +74,13 @@ class EntityHasReferenceRepository extends EntityRepository
      * Retourne les EntityHasReference avec leur note.
      *
      * @param \HopitalNumerique\DomaineBundle\Entity\Domaine $domaine                Domaine
-     * @param array                                          $groupedReferences      Références
+     * @param array|null                                     $groupedReferences      Références
      * @param array<integer>|null                            $entityTypeIds          ID des types d'entité à récupérer
      * @param array<integer>|null                            $publicationCategoryIds ID des catégories de publications à récupérer
+     * @param array                                          $resultFilters          Filtres à appliquer
      * @return array EntitiesHasReference
      */
-    public function getWithNotes(Domaine $domaine, array $groupedReferences, array $entityTypeIds = null, array $publicationCategoryIds = null)
+    public function getWithNotes(Domaine $domaine, array $groupedReferences = null, array $entityTypeIds = null, array $publicationCategoryIds = null, $resultFilters = [])
     {
         $now = new \DateTime();
         $now->setTime(0, 0, 0);
@@ -111,21 +111,23 @@ class EntityHasReferenceRepository extends EntityRepository
             )
         ;
 
-        // ET pour chaque référence de niveau 1 et OU pour les sous-références
-        for ($i = 0; $i < count($groupedReferences); $i++) {
-            $qb
-                ->innerJoin(
-                    EntityHasReference::class,
-                    'entityHasReference'.$i,
-                    Expr\Join::WITH,
-                    $qb->expr()->andX(
-                        $qb->expr()->eq('entityHasReference.entityType', 'entityHasReference'.$i.'.entityType'),
-                        $qb->expr()->eq('entityHasReference.entityId', 'entityHasReference'.$i.'.entityId'),
-                        $qb->expr()->in('entityHasReference'.$i.'.reference', ':references'.$i)
+        if (null !== $groupedReferences) {
+            // ET pour chaque référence de niveau 1 et OU pour les sous-références
+            for ($i = 0; $i < count($groupedReferences); $i++) {
+                $qb
+                    ->innerJoin(
+                        EntityHasReference::class,
+                        'entityHasReference'.$i,
+                        Expr\Join::WITH,
+                        $qb->expr()->andX(
+                            $qb->expr()->eq('entityHasReference.entityType', 'entityHasReference'.$i.'.entityType'),
+                            $qb->expr()->eq('entityHasReference.entityId', 'entityHasReference'.$i.'.entityId'),
+                            $qb->expr()->in('entityHasReference'.$i.'.reference', ':references'.$i)
+                        )
                     )
-                )
-                ->setParameter(':references'.$i, $groupedReferences[$i])
-            ;
+                    ->setParameter(':references'.$i, $groupedReferences[$i])
+                ;
+            }
         }
 
         $qb
@@ -315,6 +317,31 @@ class EntityHasReferenceRepository extends EntityRepository
             $qb
                 ->andWhere($qb->expr()->in('entityHasReference.entityType', ':entityTypes'))
                 ->setParameter('entityTypes', $entityTypeIds)
+            ;
+        }
+
+        $resultFiltersConditions = [];
+        //$resultFiltersParameters = [];
+        foreach ($resultFilters as $resultType => $resultFilter) {
+            if (count($resultFilter) > 0) {
+                switch ($resultType) {
+                    case 'objetIds':
+                        $resultFiltersConditions[] = 'objet.id IN (:objetIds)';// $qb->expr()->in('objet.id', ':objetIds')->setParameter('objetIds', $resultFilter);
+                        $qb->setParameter('objetIds', $resultFilter);
+                        //$resultFiltersParameters['objetIds'] = $resultFilter;
+                        break;
+                    case 'contenuIds':
+                        $resultFiltersConditions[] = 'contenu.id IN (:contenuIds)';//$qb->expr()->in('contenu.id', ':contenuIds')->setParameter('contenuIds', $resultFilter);
+                        $qb->setParameter('contenuIds', $resultFilter);
+                        //$resultFiltersParameters['contenuIds'] = $resultFilter;
+                        break;
+                }
+            }
+        }
+        if (count($resultFiltersConditions) > 0) {
+            $qb
+                ->andWhere(implode(' OR ', $resultFiltersConditions))
+                //->setParameters($resultFiltersParameters)
             ;
         }
 
