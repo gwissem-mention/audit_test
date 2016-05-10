@@ -136,7 +136,7 @@
         {# Menu #}
         <div class="col-md-12" id="menu-container">
             <div class="col-md-12 col-sm-12">
-                {{ knp_menu_render(aliasMenuTemplateCurrent, {'currentClass': 'active', 'ancestorClass':'active','template':'HopitalNumeriqueCoreBundle::menu.html.twig'}) }}
+                {{ hn_menu_render(aliasMenuTemplateCurrent, {'currentClass': 'active', 'ancestorClass':'active','template':'HopitalNumeriqueCoreBundle::menu.html.twig'}) }}
             </div>
             <div class="clearfix"></div>
         </div>
@@ -349,7 +349,7 @@
 </div>
 
 <div class="col-md-12" id="footer">
-    {{ knp_menu_render(aliasMenuFooterTemplateCurrent, {'currentClass': 'active', 'ancestorClass':'active','template':'HopitalNumeriqueCoreBundle::menu.html.twig'}) }}
+    {{ hn_menu_render(aliasMenuFooterTemplateCurrent, {'currentClass': 'active', 'ancestorClass':'active','template':'HopitalNumeriqueCoreBundle::menu.html.twig'}) }}
 
 {#    {% if app.user %}
         <a class="reporting btn btn-xs" href="{{path('hopitalnumerique_report_homepage', {url: app.request.uri|base64Nodevo})}}">Signaler une anomalie sur cette page</a>
