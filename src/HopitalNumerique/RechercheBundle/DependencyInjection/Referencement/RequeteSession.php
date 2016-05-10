@@ -195,7 +195,7 @@ class RequeteSession
      */
     public function getSearchedText()
     {
-        return $this->session->get(self::SESSION_SEARCHED_TEXT_NAME, []);
+        return $this->session->get(self::SESSION_SEARCHED_TEXT_NAME, '');
     }
 
     /**
