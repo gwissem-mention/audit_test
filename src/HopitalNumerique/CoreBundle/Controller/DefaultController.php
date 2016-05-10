@@ -61,19 +61,6 @@ class DefaultController extends Controller
           $forumName = "Public";
         }
 
-        // Get nombres de fils sur le forum
-        $boards = $this->get('ccdn_forum_forum.model.board')->findAllBoards();
-        $i = 0;
-        foreach($boards as $board ) {
-          $topics = $board->getTopics();
-          $cat = $board->getCategory();
-          if($cat->getForum()->getId() == $idForum) {
-            foreach ($topics as $topic) {
-              $i++;
-            }
-          }
-        }
-        $nb_fils = $i;
         $topics = $this->get('hopitalnumerique_forum.manager.topic')->getLastTopicsForum($idForum,3);
 
         // Get Article à la une
@@ -91,7 +78,7 @@ class DefaultController extends Controller
             'publications'     => $publications,
             'articlesALaUne'   => $articlesALaUne,
             'nb_eta'           => $nb_eta,
-            'nb_fils'          => $nb_fils,
+            'nb_fils'          => $this->container->get('hopitalnumerique_forum.manager.topic')->getCountForForum($idForum),
             'topics'           => $topics,
             'forumName'        => $forumName,
             'alaune'           => $alaune,

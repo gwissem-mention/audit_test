@@ -86,4 +86,15 @@ class TopicManager extends BaseManager
     {
         return $this->getRepository()->findByForum($forum);
     }
+
+    /**
+     * Retourne le nombre de fils d'un forum.
+     *
+     * @param integer $forumId ID du forum
+     * @return integer Nombre
+     */
+    public function getCountForForum($forumId)
+    {
+        return $this->getRepository()->getCountForForum($forumId);
+    }
 }

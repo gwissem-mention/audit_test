@@ -58,4 +58,24 @@ class TopicRepository extends EntityRepository
 
         return $query->getQuery()->getResult();
     }
+
+    /**
+     * Retourne le nombre de fils d'un forum.
+     *
+     * @param integer $forumId ID du forum
+     * @return integer Nombre
+     */
+    public function getCountForForum($forumId)
+    {
+        $qb = $this->createQueryBuilder('topic');
+
+        $qb
+            ->select($qb->expr()->count('topic'))
+            ->innerJoin('topic.board', 'board')
+            ->innerJoin('board.category', 'category', Join::WITH, $qb->expr()->eq('category.forum', ':forumId'))
+            ->setParameter('forumId', $forumId)
+        ;
+
+        return intval($qb->getQuery()->getSingleScalarResult());
+    }
 }
