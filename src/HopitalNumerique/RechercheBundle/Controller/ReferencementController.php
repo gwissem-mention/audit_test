@@ -88,43 +88,6 @@ class ReferencementController extends Controller
             } else {
                 $entitiesPropertiesByGroup = $this->container->get('hopitalnumerique_recherche.dependency_injection.referencement.exalead.search')->getEntitiesPropertiesByGroup();
             }
-            /*$groupedReferenceIds = $request->request->get('references', null);
-            $resultFilters['objets'] = [];
-            $resultFilters['contenus'] = [];
-            $exaleadXml = simplexml_load_file($this->container->get('hopitalnumerique_recherche.manager.search')->getUrlRechercheTextuelle().urlencode($exaleadSearchedText.' AND id_domaine='.$domaine->getId()));
-
-            if (false !== $exaleadXml) {
-                if (null !== $exaleadXml->hits->Hit) {
-                    foreach ($exaleadXml->hits->Hit as $hit) {
-                        $hitUrl = (string)$hit->attributes()->url;
-                        $hitUrlExplode = explode('=', $hitUrl);
-
-                        if ($hitUrlExplode[0] == 'obj_id') {
-                            $resultFilters['objets'][] = [
-                                'id' => intval(substr($hitUrlExplode[1], 0, -1))
-                            ];
-                        } elseif ($hitUrlExplode[0] == 'con_id') {
-                            $resultFilters['contenus'][] = intval(substr($hitUrlExplode[1], 0, -1));
-                        }
-
-                        // YRO 10/02/2015 : les occurrences réellement trouvées dans les contenus
-                        foreach ($hit->metas->Meta as $meta) {
-                            if (in_array($meta->attributes()->name, ['text', 'title'])) {
-                                foreach ($meta->MetaText as $metaText) {
-                                    foreach ($metaText->TextSeg as $textSeg) {
-                                        if ($textSeg->attributes()->highlighted == 'true') {
-                                            $texteTrouve = (string) $textSeg;
-                                            if (!in_array($texteTrouve, $foundedWords)) {
-                                                $foundedWords[] = $texteTrouve;
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-            }*/
         } else {
             $groupedReferenceIds = $request->request->get('references', []);
             $entitiesPropertiesByGroup = $this->container->get('hopitalnumerique_recherche.doctrine.referencement.reader')->getEntitiesPropertiesByReferenceIdsByGroup($groupedReferenceIds, $entityTypeIds, $publicationCategoryIds, $resultFilters);

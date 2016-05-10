@@ -190,7 +190,7 @@ class Reader
                 'pertinenceNiveau' => null,
                 'pointDur' => $objet->isPointDur(),
                 'categoryIds' => $objet->getTypeIds(),
-                'categoryLabels' => $objet->getTypeLabels()
+                'categoryLabels' => implode(' &diams; ', $objet->getTypeLabels())
             ];
         }
 

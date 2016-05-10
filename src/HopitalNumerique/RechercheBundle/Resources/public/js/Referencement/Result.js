@@ -133,7 +133,7 @@ Hn_RechercheBundle_Referencement.displayMoreResults = function(resultsGroup)
         }
     });
 
-    if (entitiesByTypeToGet.length > 0) {
+    if (Object.keys(entitiesByTypeToGet).length > 0) {
         $.ajax({
             url: Routing.generate('hopitalnumerique_recherche_referencement_jsonentities'),
             method: 'POST',
