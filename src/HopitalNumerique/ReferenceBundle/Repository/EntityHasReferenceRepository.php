@@ -85,13 +85,14 @@ class EntityHasReferenceRepository extends EntityRepository
         $now = new \DateTime();
         $now->setTime(0, 0, 0);
         $qb = $this->createQueryBuilder('entityHasReference');
+        $referenceIds = [];
 
         $qb
             ->select(
                 'entityHasReference.entityType',
                 'entityHasReference.entityId',
-                'COUNT(DISTINCT(entityHasReference.reference)) AS referencesCount',
-                'SUM(DISTINCT(entityHasReference.primary)) AS primarySum',
+                'COUNT(DISTINCT(entityHasReferenceMatch.reference)) AS referencesCount',
+                'SUM(DISTINCT(entityHasReferenceMatch.primary)) AS primarySum',
                 'entityHasNote.note',
                 'objetPointDurType.id as objetPointDurTypeId',
                 'GROUP_CONCAT(objetRole.id) AS objetRoleIds',
@@ -114,6 +115,7 @@ class EntityHasReferenceRepository extends EntityRepository
         if (null !== $groupedReferences) {
             // ET pour chaque référence de niveau 1 et OU pour les sous-références
             for ($i = 0; $i < count($groupedReferences); $i++) {
+                $referenceIds = array_merge($referenceIds, $groupedReferences[$i]);
                 $qb
                     ->innerJoin(
                         EntityHasReference::class,
@@ -129,6 +131,21 @@ class EntityHasReferenceRepository extends EntityRepository
                 ;
             }
         }
+
+        //<-- Références matchées
+        $qb
+            ->leftJoin(
+                EntityHasReference::class,
+                'entityHasReferenceMatch',
+                Expr\Join::WITH,
+                $qb->expr()->andX(
+                    $qb->expr()->eq('entityHasReference.entityType', 'entityHasReferenceMatch.entityType'),
+                    $qb->expr()->eq('entityHasReference.entityId', 'entityHasReferenceMatch.entityId'),
+                    $qb->expr()->in('entityHasReferenceMatch.reference', (count($referenceIds) > 0 ? $referenceIds : [-1]))
+                )
+            )
+        ;
+        //-->
 
         $qb
             //<-- Objets
