@@ -107,10 +107,10 @@ class Reader
         }
 
         if (intval($entityProperties1['referencesCount']) > intval($entityProperties2['referencesCount'])) {
-            return -1;
+            return 1;
         }
         if (intval($entityProperties1['referencesCount']) < intval($entityProperties2['referencesCount'])) {
-            return 1;
+            return -1;
         }
 
         if ($entityProperties1['note'] > $entityProperties2['note']) {
