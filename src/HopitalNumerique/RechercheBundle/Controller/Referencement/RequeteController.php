@@ -122,6 +122,7 @@ class RequeteController extends Controller
         $this->container->get('hopitalnumerique_recherche.dependency_injection.referencement.requete_session')->setReferenceIds($referenceIds);
         $this->container->get('hopitalnumerique_recherche.dependency_injection.referencement.requete_session')->setEntityTypeIds($request->request->get('entityTypesIds', null));
         $this->container->get('hopitalnumerique_recherche.dependency_injection.referencement.requete_session')->setPublicationCategoryIds($request->request->get('publicationCategoryIds', null));
+        $this->container->get('hopitalnumerique_recherche.dependency_injection.referencement.requete_session')->setSearchedText($request->request->get('searchedText', null));
 
         return new JsonResponse(['success' => true]);
     }

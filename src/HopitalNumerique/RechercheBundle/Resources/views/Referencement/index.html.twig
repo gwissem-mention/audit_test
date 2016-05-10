@@ -33,6 +33,7 @@
             Hn_RechercheBundle_Referencement.setReferenceIds({{ choosenReferenceIds|json_encode|raw }});
             Hn_RechercheBundle_Referencement_Filter_Category.setEntityTypeIds({{ entityTypeIds|json_encode|raw }});
             Hn_RechercheBundle_Referencement_Filter_Category.setPublicationCategoryIds({{ publicationCategoryIds|json_encode|raw }});
+            Hn_RechercheBundle_Referencement_Filter_Exalead.setSearchedText('{{ searchedText }}');
             Hn_RechercheBundle_Referencement.initReferenceFilters();
             Hn_RechercheBundle_Referencement_Filter_Category.initFilterCategoriesSelect();
         });

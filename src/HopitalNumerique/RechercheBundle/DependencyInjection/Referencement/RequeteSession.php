@@ -24,6 +24,11 @@ class RequeteSession
     const SESSION_CATEGORY_FILTERS_NAME = 'hnrecherche_referencement_requete_categories';
 
     /**
+     * @var string Label de la session du texte
+     */
+    const SESSION_SEARCHED_TEXT_NAME = 'hnrecherche_referencement_requete_texte';
+
+    /**
      * @var string Label de la session de la requete
      */
     const SESSION_REQUETE_NAME = 'hnrecherche_referencement_requete_requete';
@@ -184,6 +189,27 @@ class RequeteSession
 
 
     /**
+     * Retourne le texte.
+     *
+     * @return string Texte
+     */
+    public function getSearchedText()
+    {
+        return $this->session->get(self::SESSION_SEARCHED_TEXT_NAME, []);
+    }
+
+    /**
+     * Enregistre le texte.
+     *
+     * @param string $searchedText Texte
+     */
+    public function setSearchedText($searchedText)
+    {
+        $this->session->set(self::SESSION_SEARCHED_TEXT_NAME, $searchedText);
+    }
+
+
+    /**
      * Retourne la requête.
      *
      * @return \HopitalNumerique\RechercheBundle\Entity\Requete|null Requête
@@ -209,6 +235,7 @@ class RequeteSession
         $this->session->set(self::SESSION_REQUETE_NAME, $requete->getId());
         $this->setReferenceIds($requete->getRefs());
         $this->setCategoryFilters($requete->getCategPointDur());
+        $this->setSearchedText($requete->getRechercheTextuelle());
     }
 
     /**
@@ -219,6 +246,7 @@ class RequeteSession
         $this->session->remove(self::SESSION_REQUETE_NAME);
         $this->session->remove(self::SESSION_REFERENCES_NAME);
         $this->session->remove(self::SESSION_CATEGORY_FILTERS_NAME);
+        $this->session->remove(self::SESSION_SEARCHED_TEXT_NAME);
     }
 
     /**
@@ -270,6 +298,7 @@ class RequeteSession
     {
         $requete->setRefs($this->getReferenceIds());
         $requete->setCategPointDur($this->getCategoryFilters());
+        $requete->setRechercheTextuelle($this->getSearchedText());
         $this->requeteManager->save($requete);
         $this->setRequete($requete);
     }

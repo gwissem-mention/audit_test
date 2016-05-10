@@ -44,6 +44,7 @@ class ReferencementController extends Controller
             'choosenReferenceIds' => $choosenReferenceIds,
             'entityTypeIds' => $this->container->get('hopitalnumerique_recherche.dependency_injection.referencement.requete_session')->getEntityTypeIds(),
             'publicationCategoryIds' => $this->container->get('hopitalnumerique_recherche.dependency_injection.referencement.requete_session')->getPublicationCategoryIds(),
+            'searchedText' => $this->container->get('hopitalnumerique_recherche.dependency_injection.referencement.requete_session')->getSearchedText(),
             'domaines' => $this->container->get('hopitalnumerique_domaine.manager.domaine')->getAllArray(),
             'exaleadIsActivated' => $this->container->get('hopitalnumerique_recherche.manager.search')->getActivationExalead()
         ]);

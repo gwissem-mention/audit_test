@@ -47,6 +47,16 @@ Hn_RechercheBundle_Referencement_Filter_Exalead.getSearchedText = function()
 };
 
 /**
+ * Spécifie le texte recherché.
+ *
+ * @return string Texte recherché
+ */
+Hn_RechercheBundle_Referencement_Filter_Exalead.setSearchedText = function(text)
+{
+    return $('#recherche_textuelle').val(text);
+};
+
+/**
  * Retourne si une recherche avancée est saisie.
  *
  * @return boolean Si recherche
