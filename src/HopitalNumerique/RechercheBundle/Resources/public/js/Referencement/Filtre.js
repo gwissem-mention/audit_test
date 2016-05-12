@@ -41,6 +41,8 @@ Hn_RechercheBundle_Referencement.removeFilters = function()
     apprise('Confirmer la réinitialisation de la requête ?', { 'verify':true,'textYes':'Oui','textNo':'Non' }, function (response) {
         if (response) {
             Hn_RechercheBundle_Referencement.getChosenElements().attr('data-chosen', 'false');
+            Hn_RechercheBundle_Referencement_Filter_Exalead.setSearchedText('');
+            Hn_RechercheBundle_Referencement_Filter_Category.clear();
             Hn_RechercheBundle_Referencement.initReferenceFilters();
             $.ajax({
                 url: Routing.generate('hopitalnumerique_recherche_referencement_requete_removesession'),

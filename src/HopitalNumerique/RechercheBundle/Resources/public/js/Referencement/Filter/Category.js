@@ -117,6 +117,18 @@ Hn_RechercheBundle_Referencement_Filter_Category.setPublicationCategoryIds = fun
 };
 
 /**
+ * Spécifie les ID des catégories de publication.
+ *
+ * @param Array<integer>|null publicationCategoryIds IDs
+ */
+Hn_RechercheBundle_Referencement_Filter_Category.clear = function()
+{
+    Hn_RechercheBundle_Referencement_Filter_Category.setEntityTypeIds([]);
+    Hn_RechercheBundle_Referencement_Filter_Category.setPublicationCategoryIds([]);
+    $('#entity-categories').multiselect('refresh');
+};
+
+/**
  * Affiche ou pas les catégories selon les filtres choisis.
  */
 Hn_RechercheBundle_Referencement_Filter_Category.processFilterDisplaying = function()

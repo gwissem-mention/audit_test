@@ -87,7 +87,6 @@ class RequeteController extends Controller
     public function deleteAction($id)
     {
         $requete = $this->get('hopitalnumerique_recherche.manager.requete')->findOneBy( array( 'id' => $id ) );
-        $default = $requete->isDefault();
 
         //get connected user
         $user = $this->get('security.context')->getToken()->getUser();
@@ -96,7 +95,7 @@ class RequeteController extends Controller
         $this->get('hopitalnumerique_recherche.manager.requete')->delete( $requete );
 
         //si on a supprimé la dernière requete par défaut, on met en défaut une autre requete 
-        if($default){
+        if($requete->isDefault()){
             $newRequete = $this->get('hopitalnumerique_recherche.manager.requete')->findOneBy( array( 'user' => $user) );
             if($newRequete){
                 $newRequete->setDefault(true);

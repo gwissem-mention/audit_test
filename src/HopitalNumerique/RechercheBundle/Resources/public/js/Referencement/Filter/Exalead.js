@@ -21,6 +21,7 @@ Hn_RechercheBundle_Referencement_Filter_Exalead.initEvents = function()
         //$('#search-text-button').prop('disabled', searchedText.length < 2);
         Hn_RechercheBundle_Referencement_Filter_Exalead.processSearchValidating();
         Hn_RechercheBundle_Referencement.processFilterButtonsActivating();
+        Hn_RechercheBundle_Referencement_Filter_Category.processFilterDisplaying();
     });
 };
 
