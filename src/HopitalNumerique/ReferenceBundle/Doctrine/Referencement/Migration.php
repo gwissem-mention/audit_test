@@ -69,6 +69,7 @@ class Migration
         $this->migreReferencesForEntities(Entity::ENTITY_TYPE_OBJET, 'hn_objet_reference', 'obj_id', 'refo_primary');
         $this->migreReferencesForEntities(Entity::ENTITY_TYPE_CONTENU, 'hn_objet_contenu_reference', 'con_id', 'refc_primary');
         $this->migreReferencesForEntities(Entity::ENTITY_TYPE_FORUM_TOPIC, 'hn_forum_topic_reference', 'topic_id', 'reftop_primary');
+        $this->migreReferencesForEntities(Entity::ENTITY_TYPE_RECHERCHE_PARCOURS, 'hn_recherche_expBesoinReponses_reference', 'expbr_id', 'reftop_primary');
     }
 
     /**

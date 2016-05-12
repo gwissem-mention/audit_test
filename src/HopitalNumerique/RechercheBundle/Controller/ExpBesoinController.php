@@ -2,7 +2,9 @@
 
 namespace HopitalNumerique\RechercheBundle\Controller;
 
+use HopitalNumerique\CoreBundle\DependencyInjection\Entity;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -153,55 +155,20 @@ class ExpBesoinController extends Controller
      */
     public function modificationSessionAction(Request $request)
     {
-        $expBesoinReponse = $this->get('hopitalnumerique_recherche.manager.expbesoinreponses')->findOneBy(array('id' => $request->request->get('id')));
+        $entityHasReferences = $this->container->get('hopitalnumerique_reference.manager.entity_has_reference')->findBy([
+            'entityId' => $request->request->getInt('id'),
+            'entityType' => Entity::ENTITY_TYPE_RECHERCHE_PARCOURS
+        ]);
 
-        //Création du tableau pour la session de recherche
-        $resultats = array(
-            'categ1' => array(),
-            'categ2' => array(),
-            'categ3' => array(),
-            'categ4' => array()
-        );
-
-        //Parcourt les références de la réponse, puis les tris pour l'affichage de la recherche
-        foreach ($expBesoinReponse->getReferences() as $refExpBesoinReponses)
-        {
-            //Récupère la référence courante
-            $reference     = $refExpBesoinReponses->getReference();
-            $referenceTemp = $reference;
-
-            //Récupère le premier parent
-            while (count($referenceTemp->getParent()) > 0)
-            {
-                $referenceTemp = $referenceTemp->getParents()[0];
-            }
-
-            //Trie la référence dans la bonne catégorie
-            switch ($referenceTemp->getId()) 
-            {
-                case 220:
-                    $resultats['categ1'][] = $reference->getId();
-                    break;
-                case 221:
-                    $resultats['categ2'][] = $reference->getId();
-                    break;
-                case 223:
-                    $resultats['categ3'][] = $reference->getId();
-                    break;
-                case 222:
-                    $resultats['categ4'][] = $reference->getId();
-                    break;
-            }
+        $referenceIds = [];
+        foreach ($entityHasReferences as $entityHasReference) {
+            $referenceIds[] = $entityHasReference->getReference()->getId();
         }
 
-        //on prépare la session
-        $session = $this->getRequest()->getSession();
-        $session->set('requete-id', null);
-        $session->set('requete-refs', json_encode($resultats) );
-        $session->set('requete-refs-categProd', '' );
+        $this->container->get('hopitalnumerique_recherche.dependency_injection.referencement.requete_session')->remove();
+        $this->container->get('hopitalnumerique_recherche.dependency_injection.referencement.requete_session')->setReferenceIds($referenceIds);
 
-        //return success.true si le fichier existe deja
-        return new Response('{"success":true}', 200);
+        return new JsonResponse(['success' => true]);
     }
 
 
