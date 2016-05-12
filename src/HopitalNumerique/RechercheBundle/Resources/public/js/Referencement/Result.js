@@ -64,10 +64,14 @@ Hn_RechercheBundle_Referencement.displayResults = function()
 
             if (totalCount > 0) {
                 $('#no-result-bloc').slideUp('fast');
+            } else {
+                $('#no-result-bloc').slideDown('fast');
+            }
+
+            if (totalCount > 0) {
                 $('#results-count').html('(' + totalCount + ' résultat' + (totalCount > 1 ? 's' : '') + ')');
                 Hn_RechercheBundle_Referencement_Filter_Category.displayEntityCounts();
             } else if (chosenGroupedReferenceIds.length > 0) {
-                $('#no-result-bloc').slideDown('fast');
                 Hn_RechercheBundle_Referencement_Filter_Category.removeEntityCounts();
             }
 
