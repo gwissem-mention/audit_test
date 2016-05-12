@@ -405,6 +405,29 @@ class Entity
     }
 
     /**
+     * Retourne les ID de catégorie de l'entité.
+     *
+     * @param object $entity Entité
+     * @return array<integer> IDs
+     */
+    public function getCategoryIdsByEntity($entity)
+    {
+        switch ($this->getEntityType($entity)) {
+            // Si contenu sans aucun type, on prend les types de son objet
+            case self::ENTITY_TYPE_CONTENU:
+                if (0 === count($entity->getTypes())) {
+                    return $this->getCategoryIdsByEntity($entity->getObjet());
+                }
+                // no break
+            case self::ENTITY_TYPE_OBJET:
+                return $entity->getTypeIds();
+                break;
+        }
+
+        return [];
+    }
+
+    /**
      * Retourne la catégorie de l'entité.
      *
      * @param object $entity Entité
@@ -422,9 +445,7 @@ class Entity
                 }
                 // no break
             case self::ENTITY_TYPE_OBJET:
-                foreach ($entity->getTypes() as $type) {
-                    $categories[] = $type->getLibelle();
-                }
+                $categories = $entity->getTypeLabels();
                 break;
             case self::ENTITY_TYPE_FORUM_TOPIC:
                 return self::CATEGORY_FORUM_TOPIC_LABEL;

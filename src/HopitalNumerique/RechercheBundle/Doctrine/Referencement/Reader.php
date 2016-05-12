@@ -217,8 +217,8 @@ class Reader
                 'url' => $this->router->generate('hopital_numerique_publication_publication_objet', ['id' => $objet->getId(), 'alias' => $objet->getAlias()]),
                 'pertinenceNiveau' => null,
                 'pointDur' => $objet->isPointDur(),
-                'categoryIds' => $objet->getTypeIds(),
-                'categoryLabels' => $objet->getTypeLabels()
+                'categoryIds' => $this->entity->getCategoryIdsByEntity($objet),
+                'categoryLabels' => $this->entity->getCategoryByEntity($objet)
             ];
         }
 
@@ -245,8 +245,8 @@ class Reader
                 'url' => $this->router->generate('hopital_numerique_publication_publication_contenu', ['idc' => $contenu->getId(), 'aliasc' => $contenu->getAlias(), 'id' => $contenu->getObjet()->getId(), 'alias' => $contenu->getObjet()->getAlias()]),
                 'pertinenceNiveau' => null,
                 'pointDur' => $contenu->isPointDur(),
-                'categoryIds' => (count($contenu->getTypes()) > 0 ? $contenu->getTypeIds() : $contenu->getObjet()->getTypeIds()),
-                'categoryLabels' => $contenu->getTypeLabels()
+                'categoryIds' => $this->entity->getCategoryIdsByEntity($contenu),
+                'categoryLabels' => $this->entity->getCategoryByEntity($contenu)
             ];
         }
 

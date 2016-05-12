@@ -117,7 +117,7 @@ class Referencement
             return 1;
         }
 
-        if ($note > 200) {
+        if ($note > 500) {
             return 2;
         }
 
