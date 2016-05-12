@@ -1,8 +1,12 @@
+Hn_RechercheBundle_Referencement.AJAX_LOADER = null;
+
 /**
  * Affiche les résultats.
  */
 Hn_RechercheBundle_Referencement.displayResults = function()
 {
+    Hn_RechercheBundle_Referencement.desactiveSearch();
+
     $('#results-count').html('');
     var chosenGroupedReferenceIds = Hn_RechercheBundle_Referencement.getChosenGroupedReferenceIds();
 
@@ -66,6 +70,8 @@ Hn_RechercheBundle_Referencement.displayResults = function()
                 $('#no-result-bloc').slideDown('fast');
                 Hn_RechercheBundle_Referencement_Filter_Category.removeEntityCounts();
             }
+
+            Hn_RechercheBundle_Referencement.activeSearch();
         }
     });
     if (chosenGroupedReferenceIds.length == 0) {
@@ -77,6 +83,18 @@ Hn_RechercheBundle_Referencement.displayResults = function()
     Hn_RechercheBundle_Referencement.processFilterButtonsActivating();
     Hn_RechercheBundle_Referencement.displayDomaineResults();
     Hn_RechercheBundle_Referencement.saveSession();
+};
+
+Hn_RechercheBundle_Referencement.activeSearch = function()
+{
+    $('#search-text-button').prop('disabled', false);
+    Hn_RechercheBundle_Referencement.AJAX_LOADER.finished();
+};
+
+Hn_RechercheBundle_Referencement.desactiveSearch = function()
+{
+    $('#search-text-button').prop('disabled', true);
+    Hn_RechercheBundle_Referencement.AJAX_LOADER = $('.results-bloc').nodevoLoader().start();
 };
 
 /**
