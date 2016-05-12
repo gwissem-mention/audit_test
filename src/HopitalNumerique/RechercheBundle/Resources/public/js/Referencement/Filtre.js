@@ -24,10 +24,11 @@ Hn_RechercheBundle_Referencement.processFilterButtonsActivating = function()
 {
     var choosenReferenceIds = Hn_RechercheBundle_Referencement.getChosenReferenceIds();
     var filterButtonsVisible = ('none' !== $('#filtres-actions').css('display'));
+    var canActivate = (choosenReferenceIds.length > 0 || Hn_RechercheBundle_Referencement_Filter_Exalead.hasSearch());
 
-    if (choosenReferenceIds.length > 0 && !filterButtonsVisible) {
+    if (canActivate && !filterButtonsVisible) {
         $('#filtres-actions').slideDown();
-    } else if (0 === choosenReferenceIds.length && filterButtonsVisible) {
+    } else if (!canActivate && filterButtonsVisible) {
         $('#filtres-actions').slideUp();
     }
 };
