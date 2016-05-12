@@ -142,7 +142,7 @@ class EntityHasReferenceRepository extends EntityRepository
                 $qb->expr()->andX(
                     $qb->expr()->eq('entityHasReference.entityType', 'entityHasReferenceMatch.entityType'),
                     $qb->expr()->eq('entityHasReference.entityId', 'entityHasReferenceMatch.entityId'),
-                    $qb->expr()->in('entityHasReferenceMatch.reference', (count($referenceIds) > 0 ? $referenceIds : [-1]))
+                    $qb->expr()->in('entityHasReferenceMatch.reference', (count($referenceIds) > 0 ? $referenceIds : [0]))
                 )
             )
         ;

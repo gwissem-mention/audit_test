@@ -67,4 +67,4 @@ services:
 
     hopitalnumerique_recherche.doctrine.referencement.reader:
         class: 'HopitalNumerique\RechercheBundle\Doctrine\Referencement\Reader'
-        arguments: ['@router', '@hopitalnumerique_reference.dependency_injection.referencement', '@hopitalnumerique_domaine.dependency_injection.current_domaine', '@hopitalnumerique_user.dependency_injection.connected_user', '@hopitalnumerique_reference.manager.entity_has_reference', '@hopitalnumerique_reference.manager.entity_has_note', '@hopitalnumerique_objet.manager.objet', '@hopitalnumerique_objet.manager.contenu']
+        arguments: ['@router', '@hopitalnumerique_core.dependency_injection.entity', '@hopitalnumerique_reference.dependency_injection.referencement', '@hopitalnumerique_domaine.dependency_injection.current_domaine', '@hopitalnumerique_user.dependency_injection.connected_user', '@hopitalnumerique_reference.manager.entity_has_reference', '@hopitalnumerique_reference.manager.entity_has_note', '@hopitalnumerique_objet.manager.objet', '@hopitalnumerique_objet.manager.contenu']

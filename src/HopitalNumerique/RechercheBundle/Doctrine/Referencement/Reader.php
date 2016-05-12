@@ -22,6 +22,11 @@ class Reader
     private $router;
 
     /**
+     * @var \HopitalNumerique\CoreBundle\DependencyInjection\Entity Entity
+     */
+    private $entity;
+
+    /**
      * @var \HopitalNumerique\ReferenceBundle\DependencyInjection\Referencement Referencement
      */
     private $referencement;
@@ -66,9 +71,10 @@ class Reader
     /**
      * Constructor.
      */
-    public function __construct(RouterInterface $router, Referencement $referencement, CurrentDomaine $currentDomaine, ConnectedUser $connectedUser, EntityHasReferenceManager $entityHasReferenceManager, EntityHasNoteManager $entityHasNoteManager, ObjetManager $objetManager, ContenuManager $contenuManager)
+    public function __construct(RouterInterface $router, Entity $entity, Referencement $referencement, CurrentDomaine $currentDomaine, ConnectedUser $connectedUser, EntityHasReferenceManager $entityHasReferenceManager, EntityHasNoteManager $entityHasNoteManager, ObjetManager $objetManager, ContenuManager $contenuManager)
     {
         $this->router = $router;
+        $this->entity = $entity;
         $this->referencement = $referencement;
         $this->currentDomaine = $currentDomaine;
         $this->connectedUser = $connectedUser;
@@ -80,7 +86,7 @@ class Reader
 
 
     /**
-     * 
+     *
      * @param boolean $isSearchedText
      */
     public function setIsSearchedText($isSearchedText)
@@ -102,7 +108,7 @@ class Reader
     {
         $currentDomaine = $this->currentDomaine->get();
         $entitiesProperties = $this->entityHasReferenceManager->getWithNotes($currentDomaine, $groupedReferenceIds, $this->connectedUser->get(), $entityTypeIds, $publicationCategoryIds, $resultFilters);
-        //print_r(($entitiesProperties));die();
+
         if (!$this->isSearchedText) {
             usort($entitiesProperties, [$this, 'orderEntitiesProperties']);
         }
@@ -204,13 +210,15 @@ class Reader
 
         foreach ($objets as $objet) {
             $entitiesProperties[] = [
+                'title' => $this->entity->getTitleByEntity($objet),
+                'subtitle' => $this->entity->getSubtitleByEntity($objet),
                 'entityType' => Entity::ENTITY_TYPE_OBJET,
                 'entityId' => $objet->getId(),
                 'url' => $this->router->generate('hopital_numerique_publication_publication_objet', ['id' => $objet->getId(), 'alias' => $objet->getAlias()]),
                 'pertinenceNiveau' => null,
                 'pointDur' => $objet->isPointDur(),
                 'categoryIds' => $objet->getTypeIds(),
-                'categoryLabels' => implode(' &diams; ', $objet->getTypeLabels())
+                'categoryLabels' => $objet->getTypeLabels()
             ];
         }
 
@@ -230,6 +238,8 @@ class Reader
 
         foreach ($contenus as $contenu) {
             $entitiesProperties[] = [
+                'title' => $this->entity->getTitleByEntity($contenu),
+                'subtitle' => $this->entity->getSubtitleByEntity($contenu),
                 'entityType' => Entity::ENTITY_TYPE_CONTENU,
                 'entityId' => $contenu->getId(),
                 'url' => $this->router->generate('hopital_numerique_publication_publication_contenu', ['idc' => $contenu->getId(), 'aliasc' => $contenu->getAlias(), 'id' => $contenu->getObjet()->getId(), 'alias' => $contenu->getObjet()->getAlias()]),

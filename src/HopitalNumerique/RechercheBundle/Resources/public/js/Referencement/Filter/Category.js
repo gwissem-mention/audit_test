@@ -122,11 +122,12 @@ Hn_RechercheBundle_Referencement_Filter_Category.setPublicationCategoryIds = fun
 Hn_RechercheBundle_Referencement_Filter_Category.processFilterDisplaying = function()
 {
     var hasChosenReferences = Hn_RechercheBundle_Referencement.getChosenElements().size() > 0;
+    var hasSearch = (hasChosenReferences || Hn_RechercheBundle_Referencement_Filter_Exalead.hasSearch());
     var filterIsDisplayed = ('block' === $('#entity-categories-container').css('display'));
 
-    if (hasChosenReferences && !filterIsDisplayed) {
+    if (hasSearch && !filterIsDisplayed) {
         $('#entity-categories-container').slideDown();
-    } else if (!hasChosenReferences && filterIsDisplayed) {
+    } else if (!v && filterIsDisplayed) {
         $('#entity-categories-container').slideUp();
     }
 };

@@ -75,7 +75,7 @@ Hn_RechercheBundle_Referencement.displayResults = function()
         }
     });
     if (chosenGroupedReferenceIds.length == 0) {
-        $('.results-bloc > div').slideUp('fast');
+        $('.results-bloc > div[id]').slideUp('fast');
         $('#filtres-info').slideDown('fast');
     }
 
@@ -108,7 +108,13 @@ Hn_RechercheBundle_Referencement.getEntityBlocHtml = function(entityProperties)
     var html = '';
 
     html += '<div class="category">' + entityProperties['categoryLabels'] + '</div>';
-    html += '<h3><a href="' + entityProperties['url'] + '">' + entityProperties['title'] + '</a></h3>';
+    html += '<h3><a href="' + entityProperties['url'] + '">';
+        html += entityProperties['title'];
+        if (undefined != entityProperties['subtitle']) {
+            html += '<span class="subtitle"><em class="fa fa-share fa-flip-vertical"></em> ' + entityProperties['subtitle'] + '</span>';
+        }
+    html += '</a></h3>';
+
     html += '<p>' + entityProperties['description'] + '</p>';
 
     return html;

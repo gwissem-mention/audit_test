@@ -179,12 +179,13 @@ class Search
         }
 
         $this->objetsProperties = [];
+        $entitiesPropertiesByObjetIds = $this->referencementReader->getEntitiesPropertiesByObjetIds($this->getObjetIds());
 
         foreach ($this->results as $objet) {
-            foreach ($this->referencementReader->getEntitiesPropertiesByObjetIds($this->getObjetIds()) as $i => $objetProperties) {
+            foreach ($entitiesPropertiesByObjetIds as $i => $objetProperties) {
                 if ($objet['entityType'] == Entity::ENTITY_TYPE_OBJET && $objetProperties['entityId'] == $objet['entityId']) {
                     $this->objetsProperties[$i] = $objetProperties;
-                    $this->objetsProperties[$i]['title'] = $objet['title'];
+                    //$this->objetsProperties[$i]['title'] = $objet['title'];
                     $this->objetsProperties[$i]['description'] = $objet['description'];
                     break;
                 }
@@ -206,12 +207,13 @@ class Search
         }
 
         $this->contenusProperties = [];
+        $entitiesPropertiesByContenuIds = $this->referencementReader->getEntitiesPropertiesByContenuIds($this->getContenuIds());
 
         foreach ($this->results as $contenu) {
-            foreach ($this->referencementReader->getEntitiesPropertiesByContenuIds($this->getContenuIds()) as $i => $contenuProperties) {
+            foreach ($entitiesPropertiesByContenuIds as $i => $contenuProperties) {
                 if ($contenu['entityType'] == Entity::ENTITY_TYPE_CONTENU && $contenuProperties['entityId'] == $contenu['entityId']) {
                     $this->contenusProperties[$i] = $contenuProperties;
-                    $this->contenusProperties[$i]['title'] = $contenu['title'];
+                    //$this->contenusProperties[$i]['title'] = $contenu['title'];
                     if (array_key_exists('description', $contenu)) {
                         $this->contenusProperties[$i]['description'] = $contenu['description'];
                     }
@@ -254,7 +256,7 @@ class Search
      * @param integer $entityId   Id
      * @return array|null Propriétés
      */
-    private function getEntityPropertiesByTypeAndId($entityType, $entityId)
+    /*private function getEntityPropertiesByTypeAndId($entityType, $entityId)
     {
         switch ($entityType) {
             case Entity::ENTITY_TYPE_OBJET:
@@ -276,7 +278,7 @@ class Search
         }
 
         return null;
-    }
+    }*/
 
     /**
      * Retourne les propriétés fusionnées avec celles d'Exalead.

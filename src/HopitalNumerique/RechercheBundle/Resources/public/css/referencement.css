@@ -45,7 +45,7 @@
             .recherche-referencement .filtres-bloc #entity-categories-container { display: none; }
                 .recherche-referencement .filtres-bloc #entity-categories-container span[id$="-count"]:before { content: '('; }
                 .recherche-referencement .filtres-bloc #entity-categories-container span[id$="-count"]:after { content: ')'; }
-    .recherche-referencement .results-bloc {}
+    .recherche-referencement .results-bloc { padding: 4px 0; }
         .recherche-referencement .results-bloc #no-result-bloc { display: none;padding: 20px 40px 0 40px; }
         .recherche-referencement .results-bloc .results-group-bloc { display: none; }
             .recherche-referencement .results-bloc h2 { color: #d60030;font-size: 14px;font-weight: bold;margin: 20px 0 2px 0;text-transform: uppercase; }

@@ -73,13 +73,14 @@ class ReferencementController extends Controller
         $resultFilters = [];
 
         $this->container->get('hopitalnumerique_recherche.doctrine.referencement.reader')->setIsSearchedText(null !== $exaleadSearchedText);
-        if (null !== $exaleadSearchedText) {
+        if (null !== $exaleadSearchedText) { // Recherche Exalead
             $groupedReferenceIds = $request->request->get('references', null);
             $this->container->get('hopitalnumerique_recherche.dependency_injection.referencement.exalead.search')->setText($exaleadSearchedText);
             $resultFilters['objetIds'] = $this->container->get('hopitalnumerique_recherche.dependency_injection.referencement.exalead.search')->getObjetIds();
             $resultFilters['contenuIds'] = $this->container->get('hopitalnumerique_recherche.dependency_injection.referencement.exalead.search')->getContenuIds();
 
-            if (null !== $groupedReferenceIds && count($groupedReferenceIds) > 0) {
+            // Si autre filtre qu'Exalead
+            if ((null !== $groupedReferenceIds && count($groupedReferenceIds) > 0) || (null !== $publicationCategoryIds && count($publicationCategoryIds) > 0)) {
                 $exaleadEntitiesPropertiesByGroup = $this->container->get('hopitalnumerique_recherche.dependency_injection.referencement.exalead.search')->getEntitiesPropertiesByGroup();
                 $dbEntitiesPropertiesByGroup = $this->container->get('hopitalnumerique_recherche.doctrine.referencement.reader')->getEntitiesPropertiesByReferenceIdsByGroup($groupedReferenceIds, $entityTypeIds, $publicationCategoryIds, $resultFilters);
 
@@ -89,8 +90,13 @@ class ReferencementController extends Controller
                         $entityPresent = false;
                         foreach ($dbEntitiesPropertiesByGroup[$group] as $entityProperties) {
                             if ($exaleadEntityProperties['entityId'] == $entityProperties['entityId'] && $exaleadEntityProperties['entityType'] == $entityProperties['entityType']) {
+                                //$exaleadEntitiesPropertiesByGroup[$group][$i]['title'] = $entityProperties['title'];
+                                //$exaleadEntitiesPropertiesByGroup[$group][$i]['subtitle'] = $entityProperties['subtitle'];
                                 $exaleadEntitiesPropertiesByGroup[$group][$i]['pertinenceNiveau'] = $entityProperties['pertinenceNiveau'];
                                 $exaleadEntitiesPropertiesByGroup[$group][$i]['categoryIds'] = $entityProperties['categoryIds'];
+                                /*if (array_key_exists('categoryLabels', $entityProperties)) {
+                                    $exaleadEntitiesPropertiesByGroup[$group][$i]['categoryLabels'] = $entityProperties['categoryLabels'];
+                                }*/
                                 $entityPresent = true;
                                 break;
                             }
