@@ -59,8 +59,10 @@ Hn_RechercheBundle_Referencement.removeFilters = function()
 Hn_RechercheBundle_Referencement.saveFilters = function()
 {
     var chooseReferenceIds = Hn_RechercheBundle_Referencement.getChosenReferenceIds();
+    var canSave = (chooseReferenceIds.length > 0 || Hn_RechercheBundle_Referencement_Filter_Exalead.hasSearch());
 
-    if (chooseReferenceIds.length > 0) {
+    if (canSave) {
+        Hn_RechercheBundle_Referencement.saveSession();
         $.ajax({
             url: Routing.generate('hopitalnumerique_recherche_referencement_requete_popinsave'),
             method: 'POST',
