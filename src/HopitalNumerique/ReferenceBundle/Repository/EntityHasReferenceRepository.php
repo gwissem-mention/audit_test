@@ -339,19 +339,16 @@ class EntityHasReferenceRepository extends EntityRepository
         }
 
         $resultFiltersConditions = [];
-        //$resultFiltersParameters = [];
         foreach ($resultFilters as $resultType => $resultFilter) {
             if (count($resultFilter) > 0) {
                 switch ($resultType) {
                     case 'objetIds':
                         $resultFiltersConditions[] = 'objet.id IN (:objetIds)';// $qb->expr()->in('objet.id', ':objetIds')->setParameter('objetIds', $resultFilter);
                         $qb->setParameter('objetIds', $resultFilter);
-                        //$resultFiltersParameters['objetIds'] = $resultFilter;
                         break;
                     case 'contenuIds':
                         $resultFiltersConditions[] = 'contenu.id IN (:contenuIds)';//$qb->expr()->in('contenu.id', ':contenuIds')->setParameter('contenuIds', $resultFilter);
                         $qb->setParameter('contenuIds', $resultFilter);
-                        //$resultFiltersParameters['contenuIds'] = $resultFilter;
                         break;
                 }
             }

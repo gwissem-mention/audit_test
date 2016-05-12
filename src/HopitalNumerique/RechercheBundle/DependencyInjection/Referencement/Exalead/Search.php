@@ -295,4 +295,52 @@ class Search
 
         return $exaleadEntityProperties;
     }*/
+    
+    public function mergeEntitiesPropertiesByGroup($exaleadEntitiesPropertiesByGroup, $dbEntitiesPropertiesByGroup, $deleteIfNotReferenced = false)
+    {
+        foreach ($exaleadEntitiesPropertiesByGroup as $group => $exaleadEntitiesProperties) {
+            foreach ($exaleadEntitiesProperties as $i => $exaleadEntityProperties) {
+                $entityPresent = false;
+                foreach ($dbEntitiesPropertiesByGroup[$group] as $entityProperties) {
+                    if ($exaleadEntityProperties['entityId'] == $entityProperties['entityId'] && $exaleadEntityProperties['entityType'] == $entityProperties['entityType']) {
+                        //$exaleadEntitiesPropertiesByGroup[$group][$i]['title'] = $entityProperties['title'];
+                        //$exaleadEntitiesPropertiesByGroup[$group][$i]['subtitle'] = $entityProperties['subtitle'];
+                        $exaleadEntitiesPropertiesByGroup[$group][$i]['pertinenceNiveau'] = $entityProperties['pertinenceNiveau'];
+                        $exaleadEntitiesPropertiesByGroup[$group][$i]['categoryIds'] = $entityProperties['categoryIds'];
+                        /*if (array_key_exists('categoryLabels', $entityProperties)) {
+                            $exaleadEntitiesPropertiesByGroup[$group][$i]['categoryLabels'] = $entityProperties['categoryLabels'];
+                        }*/
+                        $entityPresent = true;
+                        break;
+                    }
+                }
+                if ($deleteIfNotReferenced && !$entityPresent) {
+                    unset($exaleadEntitiesPropertiesByGroup[$group][$i]);
+                }
+            }
+            $exaleadEntitiesPropertiesByGroup[$group] = array_values($exaleadEntitiesPropertiesByGroup[$group]);
+        }
+        return $exaleadEntitiesPropertiesByGroup;
+    }
+
+    public function deleteOthersCategoriesFromEntitiesPropertiesByGroup($exaleadEntitiesPropertiesByGroup, array $publicationCategoryIds)
+    {
+        foreach ($exaleadEntitiesPropertiesByGroup as $group => $exaleadEntitiesProperties) {
+            foreach ($exaleadEntitiesProperties as $i => $exaleadEntityProperties) {
+                $oneCategoryPresent = false;
+                foreach ($publicationCategoryIds as $publicationCategoryId) {
+                    if (in_array($publicationCategoryId, $exaleadEntityProperties['categoryIds'])) {
+                        $oneCategoryPresent = true;
+                        break;
+                    }
+                }
+                if (!$oneCategoryPresent) {
+                    unset($exaleadEntitiesPropertiesByGroup[$group][$i]);
+                }
+            }
+            $exaleadEntitiesPropertiesByGroup[$group] = array_values($exaleadEntitiesPropertiesByGroup[$group]);
+        }
+
+        return $exaleadEntitiesPropertiesByGroup;
+    }
 }
