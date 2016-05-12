@@ -1,6 +1,7 @@
 <?php
 namespace HopitalNumerique\ReferenceBundle\DependencyInjection;
 
+use HopitalNumerique\DomaineBundle\Entity\Domaine;
 use HopitalNumerique\ReferenceBundle\DependencyInjection\Reference\Tree as TreeService;
 use HopitalNumerique\ReferenceBundle\Entity\Reference;
 use HopitalNumerique\ReferenceBundle\Manager\EntityHasReferenceManager;
@@ -122,5 +123,11 @@ class Referencement
         }
 
         return 3;
+    }
+
+
+    public function getReferenceIdskeyedByGroup(array $referenceIds, Domaine $domaine)
+    {
+        $referencesTree = $this->getReferencesTree([$domaine]);
     }
 }

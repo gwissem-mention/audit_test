@@ -252,4 +252,17 @@ class Reader
 
         return $entitiesProperties;
     }
+
+    public function getEntitiesPropertiesKeyedByGroupForEntity($entity)
+    {
+        $entitiesHaveReferences = $this->entityHasReferenceManager->findBy([
+            'entityId' => $this->entity->getEntityId($entity),
+            'entityType' => $this->entity->getEntityType($entity)
+        ]);
+
+        $referenceIds = $this->entityHasReferenceManager->getReferenceIdsForEntitiesHaveReferences($entitiesHaveReferences);
+        $referenceIdskeyedByGroup = $this->referencement->getReferenceIdskeyedByGroup($referenceIds, $this->currentDomaine->get());
+
+        return $this->getEntitiesPropertiesByReferenceIdsByGroup($referenceIdskeyedByGroup);
+    }
 }

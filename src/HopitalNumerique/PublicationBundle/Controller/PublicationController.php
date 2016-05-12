@@ -26,6 +26,8 @@ class PublicationController extends Controller
 
         $domaine = $this->get('hopitalnumerique_domaine.manager.domaine')->findOneById($domaineId);
 
+        //$entitiesProperties = $this->container->get('hopitalnumerique_recherche.doctrine.referencement.reader')->getEntitiesPropertiesKeyedByGroupForEntity($publication);
+        
         //objet visualisation
         if(!$this->get('security.context')->isGranted('ROLE_ADMINISTRATEUR_1'))
         {
@@ -49,61 +51,16 @@ class PublicationController extends Controller
             $this->get('hopitalnumerique_objet.manager.consultation')->consulted( $domaine, $objet );
         }
 
-        $objetsOrder = array();
-
-        $objets = $this->getObjetsFromRecherche( $objet );
-
-        //build productions with authorizations
-        $productions = $this->getProductionsAssocies($objet->getObjets());
-
         //get Contenus : for sommaire
         $contenus = $objet->isInfraDoc() ? $this->get('hopitalnumerique_objet.manager.contenu')->getArboForObjet( $objet->getId() ) : array();
 
-        foreach ($objets as $key => $objetTemp) 
-        {
-            if(array_key_exists('objet', $objetTemp) && !is_null($objetTemp["objet"]))
-            {
-                $objetsOrder['-' . $objetTemp["id"]] = $objetTemp;
-            }
-            else
-            {
-                $objetsOrder[$objetTemp["id"]] = $objetTemp;
-            }
-        }
-
-        foreach ($objetsOrder as $key => $objetCurrent) 
-        {
-            if (array_key_exists('objet', $objetCurrent) && !is_null($objetCurrent['objet'])) 
-            {
-                $libContenu = $this->get('hopitalnumerique_objet.manager.contenu')->getPrefix($this->get('hopitalnumerique_objet.manager.contenu')->findOneBy(array('id' => $objetCurrent['id'])));
-                $objetsOrder[$key]['prefixe'] = $libContenu;
-                $objetsOrder[$key]['parent']  = $this->get('hopitalnumerique_objet.manager.objet')->findOneBy(array('id' => $objetCurrent['objet']));
-            }
-        }
-
-        //Ajout des objets liés au prods
-        foreach ($productions as $production) 
-        {
-            $libContenu = "";
-
-            if(!is_null($production->idc))
-            {
-                $libContenu = $this->get('hopitalnumerique_objet.manager.contenu')->getPrefix($this->get('hopitalnumerique_objet.manager.contenu')->findOneBy(array('id' => $production->idc)));
-            }
-
-            $objetsOrder[$production->id]['prefixe'] = $libContenu;
-            $objetsOrder[$production->id]['parent']  = $this->get('hopitalnumerique_objet.manager.objet')->findOneBy(array('id' => $production->id));
-        }
 
         //render
         return $this->render('HopitalNumeriquePublicationBundle:Publication:objet.html.twig', array(
             'objet'        => $objet,
-            'objets'       => $objets,
-            'objetsOrder'  => $objetsOrder,
             'note'         => $this->container->get('hopitalnumerique_objet.doctrine.note_reader')->getNoteByObjetAndUser($objet, $this->getUser()),
             'types'        => $types,
             'contenus'     => $contenus,
-            'productions'  => $productions,
             'meta'         => $this->get('hopitalnumerique_recherche.manager.search')->getMetas($objet->getReferences(), $objet->getResume() ),
             'ambassadeurs' => $this->getAmbassadeursConcernes( $objet->getId() ),
             'is_pdf' => $isPdf
@@ -221,8 +178,6 @@ class PublicationController extends Controller
         $contenuTemp      = $contenu;
         $breadCrumbsArray = array();
 
-        $objetsOrder = array();
-
         $contenusNonVidesTries  = $this->get('hopitalnumerique_objet.manager.contenu')->getContenusNonVidesTries( $objet );
 
         $precedent      = $this->get('hopitalnumerique_objet.manager.contenu')->getPrecedent( $contenusNonVidesTries, $contenu );
@@ -235,8 +190,6 @@ class PublicationController extends Controller
 
         //get Contenus : for sommaire
         $contenus = $objet->isInfraDoc() ? $this->get('hopitalnumerique_objet.manager.contenu')->getArboForObjet( $id ) : array();
-
-        $objets = $this->getObjetsFromRecherche( $contenu );
 
         //Ajout du contenu courant
         $breadCrumbsArray[] = array(
@@ -255,22 +208,6 @@ class PublicationController extends Controller
             );
         }
 
-        //ObjetsOrder
-        foreach ($this->getObjetsFromRecherche( $contenu ) as $key => $objetTemp)
-        {
-            $objetsOrder[$objetTemp["id"]] = $objetTemp;
-        }
-
-        foreach ($objetsOrder as $key => $objetCurrent)
-        {
-            if (array_key_exists('objet', $objetCurrent) && !is_null($objetCurrent['objet']) )
-            {
-                $libContenu = $this->get('hopitalnumerique_objet.manager.contenu')->getPrefix($this->get('hopitalnumerique_objet.manager.contenu')->findOneBy(array('id' => $objetCurrent['id'])));
-                $objetsOrder[$key]['prefixe'] = $libContenu;
-                $objetsOrder[$key]['parent']  = $this->get('hopitalnumerique_objet.manager.objet')->findOneBy(array('id' => $objetCurrent['objet']));
-            }
-        }
-
         $meta = $this->get('hopitalnumerique_recherche.manager.search')->getMetas($contenu->getReferences(), $contenu->getContenu() );
 
         $ambassadeurs = $this->getAmbassadeursConcernes( $objet->getId() );
@@ -278,8 +215,6 @@ class PublicationController extends Controller
         //render
         return $this->render('HopitalNumeriquePublicationBundle:Publication:objet.html.twig', array(
             'objet'            => $objet,
-            'objets'           => $objets,
-            'objetsOrder'      => $objetsOrder,
             'note'             => $this->container->get('hopitalnumerique_objet.doctrine.note_reader')->getNoteByContenuAndUser($contenu, $this->getUser()),
             'contenus'         => $contenus,
             'types'            => $types,
@@ -287,7 +222,6 @@ class PublicationController extends Controller
             'contenuObjets' => $contenuObjets,
             'breadCrumbsArray' => $breadCrumbsArray,
             'prefix'           => $prefix,
-            'productions'      => array(),
             'meta'             => $meta,
             'ambassadeurs'     => $ambassadeurs,
             'precedent'        => $precedent,
@@ -461,46 +395,6 @@ class PublicationController extends Controller
         $productions = $this->get('hopitalnumerique_objet.manager.consultation')->updateProductionsWithConnectedUser( $domaineId, $productions, $user );
 
         return $productions;
-    }
-
-    /**
-     * Récupère les objets de la recherche et filtre sur 10 résulats maxi par catégorie
-     *
-     * @param Objet|Contenu $publication La publication (Objet ou Contenu)
-     *
-     * @return array
-     */
-    private function getObjetsFromRecherche( $publication )
-    {
-        //get Recherche results
-        $refs       = array();
-        $refs       = $this->getMoreRefs( $refs, $publication->getReferences() );
-
-        //On récupère le role de l'user connecté
-        $user = $this->get('security.context')->getToken()->getUser();
-        $role = $this->get('nodevo_role.manager.role')->getUserRole($user);
-
-        $domaineId = $this->get('request')->getSession()->get('domaineId');
-
-        //on récupère sa recherche
-        $refsPonderees = $this->get('hopitalnumerique_reference.manager.reference')->getReferencesPonderees();
-        $objets = $this->get('hopitalnumerique_recherche.manager.search')->getObjetsForRecherche( $refs, $role, $refsPonderees );
-        $objets = $this->get('hopitalnumerique_objet.manager.consultation')->updateObjetsWithConnectedUser( $domaineId, $objets, $user );
-
-        //make array unique
-        $ids = array();
-        foreach($objets as $objet) {
-            if( $publication->getId() != $objet['id'] )
-                $ids[] = $objet['id'];
-        }
-        $ids = array_unique($ids);
-        $newObjets = array();
-        foreach($objets as $objet) {
-            if( in_array($objet['id'], $ids) )
-                $newObjets[$objet['id']] = $objet;
-        }
-
-        return $this->get('hopitalnumerique_recherche.manager.search')->formatForPublication( $newObjets, $publication );
     }
 
     /**
