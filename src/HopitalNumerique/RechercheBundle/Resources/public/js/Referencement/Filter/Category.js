@@ -127,7 +127,7 @@ Hn_RechercheBundle_Referencement_Filter_Category.processFilterDisplaying = funct
 
     if (hasSearch && !filterIsDisplayed) {
         $('#entity-categories-container').slideDown();
-    } else if (!v && filterIsDisplayed) {
+    } else if (!hasSearch && filterIsDisplayed) {
         $('#entity-categories-container').slideUp();
     }
 };
