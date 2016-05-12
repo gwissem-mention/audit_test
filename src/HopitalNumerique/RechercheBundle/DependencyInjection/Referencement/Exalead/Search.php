@@ -284,14 +284,13 @@ class Search
      * @param array $entityProperties Entity properties
      * @return array Propriétés
      */
-    public function mergeEntityProperties($entityProperties)
+    /*public function mergeEntityProperties($entityProperties)
     {
         $exaleadEntityProperties = $this->getEntityPropertiesByTypeAndId($entityProperties['entityType'], $entityProperties['entityId']);
 
-        if (null !== $exaleadEntityProperties) {
-            return array_merge($entityProperties, $exaleadEntityProperties);
-        }
+        $exaleadEntityProperties['pertinenceNiveau'] = $entityProperties['pertinenceNiveau'];
+        $exaleadEntityProperties['categoryIds'] = $entityProperties['categoryIds'];
 
-        return $entityProperties;
-    }
+        return $exaleadEntityProperties;
+    }*/
 }

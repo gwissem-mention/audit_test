@@ -102,6 +102,7 @@ class Reader
     {
         $currentDomaine = $this->currentDomaine->get();
         $entitiesProperties = $this->entityHasReferenceManager->getWithNotes($currentDomaine, $groupedReferenceIds, $this->connectedUser->get(), $entityTypeIds, $publicationCategoryIds, $resultFilters);
+        //print_r(($entitiesProperties));die();
         if (!$this->isSearchedText) {
             usort($entitiesProperties, [$this, 'orderEntitiesProperties']);
         }
@@ -172,6 +173,7 @@ class Reader
                 'pertinenceNiveau' => $this->referencement->getPertinenceNiveauByPrimaryAndNote($entityProperties['primarySum'], $entityProperties['note']),
                 'categoryIds' => []
             ];
+
             foreach ($entityProperties['objetTypeIds'] as $objetTypeId) {
                 if (!empty($objetTypeId)) {
                     $entityPropertiesByGroup['categoryIds'][] = $objetTypeId;

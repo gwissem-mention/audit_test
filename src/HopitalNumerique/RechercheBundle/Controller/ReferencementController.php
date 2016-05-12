@@ -80,12 +80,29 @@ class ReferencementController extends Controller
             $resultFilters['contenuIds'] = $this->container->get('hopitalnumerique_recherche.dependency_injection.referencement.exalead.search')->getContenuIds();
 
             if (null !== $groupedReferenceIds && count($groupedReferenceIds) > 0) {
-                $entitiesPropertiesByGroup = $this->container->get('hopitalnumerique_recherche.doctrine.referencement.reader')->getEntitiesPropertiesByReferenceIdsByGroup($groupedReferenceIds, $entityTypeIds, $publicationCategoryIds, $resultFilters);
-                foreach ($entitiesPropertiesByGroup as $group => $entitiesProperties) {
-                    foreach ($entitiesProperties as $i => $entityProperties) {
-                        $entitiesPropertiesByGroup[$group][$i] = $this->container->get('hopitalnumerique_recherche.dependency_injection.referencement.exalead.search')->mergeEntityProperties($entityProperties);
+                $exaleadEntitiesPropertiesByGroup = $this->container->get('hopitalnumerique_recherche.dependency_injection.referencement.exalead.search')->getEntitiesPropertiesByGroup();
+                $dbEntitiesPropertiesByGroup = $this->container->get('hopitalnumerique_recherche.doctrine.referencement.reader')->getEntitiesPropertiesByReferenceIdsByGroup($groupedReferenceIds, $entityTypeIds, $publicationCategoryIds, $resultFilters);
+
+                //<-- @todo Merge à faire dans une méthode
+                foreach ($exaleadEntitiesPropertiesByGroup as $group => $exaleadEntitiesProperties) {
+                    foreach ($exaleadEntitiesProperties as $i => $exaleadEntityProperties) {
+                        $entityPresent = false;
+                        foreach ($dbEntitiesPropertiesByGroup[$group] as $entityProperties) {
+                            if ($exaleadEntityProperties['entityId'] == $entityProperties['entityId'] && $exaleadEntityProperties['entityType'] == $entityProperties['entityType']) {
+                                $exaleadEntitiesPropertiesByGroup[$group][$i]['pertinenceNiveau'] = $entityProperties['pertinenceNiveau'];
+                                $exaleadEntitiesPropertiesByGroup[$group][$i]['categoryIds'] = $entityProperties['categoryIds'];
+                                $entityPresent = true;
+                                break;
+                            }
+                        }
+                        if (!$entityPresent) {
+                            unset($exaleadEntitiesPropertiesByGroup[$group][$i]);
+                        }
                     }
+                    $exaleadEntitiesPropertiesByGroup[$group] = array_values($exaleadEntitiesPropertiesByGroup[$group]);
                 }
+                $entitiesPropertiesByGroup = $exaleadEntitiesPropertiesByGroup;
+                //-->
             } else {
                 $entitiesPropertiesByGroup = $this->container->get('hopitalnumerique_recherche.dependency_injection.referencement.exalead.search')->getEntitiesPropertiesByGroup();
             }
