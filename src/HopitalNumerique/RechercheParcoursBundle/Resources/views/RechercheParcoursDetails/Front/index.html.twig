@@ -16,9 +16,8 @@
 {% endblock %}
 
 {% block javascripts %}
-    {% javascripts output="compiled/hopitalnumerique-recherche-parcours-details-front-index.js" 
-        "@jquery_js"
-        "@jquery_ui_js"
+    {{parent()}}
+    {% javascripts output="compiled/hopitalnumerique-recherche-parcours-details-front-index.js"
         "@enquire_js"
         'bundles/hopitalnumeriquerechercheparcours/js/jquery.ui.touch-punch.min.js'
         'bundles/hopitalnumeriquerechercheparcours/js/recherche-parcours-details-index.js'
