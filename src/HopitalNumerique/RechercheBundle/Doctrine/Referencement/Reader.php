@@ -58,6 +58,12 @@ class Reader
 
 
     /**
+     * @var boolean
+     */
+    private $isSearchedText = false;
+
+
+    /**
      * Constructor.
      */
     public function __construct(RouterInterface $router, Referencement $referencement, CurrentDomaine $currentDomaine, ConnectedUser $connectedUser, EntityHasReferenceManager $entityHasReferenceManager, EntityHasNoteManager $entityHasNoteManager, ObjetManager $objetManager, ContenuManager $contenuManager)
@@ -74,6 +80,16 @@ class Reader
 
 
     /**
+     * 
+     * @param boolean $isSearchedText
+     */
+    public function setIsSearchedText($isSearchedText)
+    {
+        $this->isSearchedText = $isSearchedText;
+    }
+
+
+    /**
      * Retourne les entités.
      *
      * @param array<integer>|null $groupedReferenceIds    ID des références
@@ -86,7 +102,9 @@ class Reader
     {
         $currentDomaine = $this->currentDomaine->get();
         $entitiesProperties = $this->entityHasReferenceManager->getWithNotes($currentDomaine, $groupedReferenceIds, $this->connectedUser->get(), $entityTypeIds, $publicationCategoryIds, $resultFilters);
-        usort($entitiesProperties, [$this, 'orderEntitiesProperties']);
+        if (!$this->isSearchedText) {
+            usort($entitiesProperties, [$this, 'orderEntitiesProperties']);
+        }
 
         return $entitiesProperties;
     }
@@ -107,17 +125,17 @@ class Reader
         }
 
         if (intval($entityProperties1['referencesCount']) > intval($entityProperties2['referencesCount'])) {
-            return 1;
+            return -1;
         }
         if (intval($entityProperties1['referencesCount']) < intval($entityProperties2['referencesCount'])) {
-            return -1;
+            return 1;
         }
 
         if ($entityProperties1['note'] > $entityProperties2['note']) {
-            return -1;
+            return 1;
         }
         if ($entityProperties1['note'] < $entityProperties2['note']) {
-            return 1;
+            return -1;
         }
 
         return 0;

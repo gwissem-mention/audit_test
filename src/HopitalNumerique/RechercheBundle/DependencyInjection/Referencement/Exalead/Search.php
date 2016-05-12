@@ -71,8 +71,6 @@ class Search
      */
     public function setText($searchedText)
     {
-        $this->results['objets'] = [];
-        $this->results['contenus'] = [];
         $xmlUrl = $this->exaleadUrl.urlencode($searchedText.' AND id_domaine').'='.$this->domaine->getId();
         $exaleadXml = simplexml_load_file($xmlUrl);
 
@@ -111,9 +109,11 @@ class Search
                     }
 
                     if ($hitUrlExplode[0] == 'obj_id') {
-                        $this->results['objets'][] = $properties;
+                        $properties['entityType'] = Entity::ENTITY_TYPE_OBJET;
+                        $this->results[] = $properties;
                     } elseif ($hitUrlExplode[0] == 'con_id') {
-                        $this->results['contenus'][] = $properties;
+                        $properties['entityType'] = Entity::ENTITY_TYPE_CONTENU;
+                        $this->results[] = $properties;
                     }
                 }
             }
@@ -137,13 +137,15 @@ class Search
      */
     public function getObjetIds()
     {
-        $objetIds = [];
+        $entityIds = [];
 
-        foreach ($this->results['objets'] as $objet) {
-            $objetIds[] = $objet['entityId'];
+        foreach ($this->results as $entity) {
+            if (Entity::ENTITY_TYPE_OBJET == $entity['entityType']) {
+                $entityIds[] = $entity['entityId'];
+            }
         }
 
-        return $objetIds;
+        return $entityIds;
     }
 
     /**
@@ -153,13 +155,15 @@ class Search
      */
     public function getContenuIds()
     {
-        $contenuIds = [];
+        $entityIds = [];
 
-        foreach ($this->results['contenus'] as $contenu) {
-            $contenuIds[] = $contenu['entityId'];
+        foreach ($this->results as $entity) {
+            if (Entity::ENTITY_TYPE_CONTENU == $entity['entityType']) {
+                $entityIds[] = $entity['entityId'];
+            }
         }
 
-        return $contenuIds;
+        return $entityIds;
     }
 
 
@@ -174,11 +178,12 @@ class Search
             return $this->objetsProperties;
         }
 
-        $this->objetsProperties = $this->referencementReader->getEntitiesPropertiesByObjetIds($this->getObjetIds());
+        $this->objetsProperties = [];
 
-        foreach ($this->objetsProperties as $i => $objetProperties) {
-            foreach ($this->results['objets'] as $objet) {
-                if ($objetProperties['entityId'] == $objet['entityId']) {
+        foreach ($this->results as $objet) {
+            foreach ($this->referencementReader->getEntitiesPropertiesByObjetIds($this->getObjetIds()) as $i => $objetProperties) {
+                if ($objet['entityType'] == Entity::ENTITY_TYPE_OBJET && $objetProperties['entityId'] == $objet['entityId']) {
+                    $this->objetsProperties[$i] = $objetProperties;
                     $this->objetsProperties[$i]['title'] = $objet['title'];
                     $this->objetsProperties[$i]['description'] = $objet['description'];
                     break;
@@ -200,11 +205,12 @@ class Search
             return $this->contenusProperties;
         }
 
-        $this->contenusProperties = $this->referencementReader->getEntitiesPropertiesByContenuIds($this->getContenuIds());
+        $this->contenusProperties = [];
 
-        foreach ($this->contenusProperties as $i => $contenuProperties) {
-            foreach ($this->results['contenus'] as $contenu) {
-                if ($contenuProperties['entityId'] == $contenu['entityId']) {
+        foreach ($this->results as $contenu) {
+            foreach ($this->referencementReader->getEntitiesPropertiesByContenuIds($this->getContenuIds()) as $i => $contenuProperties) {
+                if ($contenu['entityType'] == Entity::ENTITY_TYPE_CONTENU && $contenuProperties['entityId'] == $contenu['entityId']) {
+                    $this->contenusProperties[$i] = $contenuProperties;
                     $this->contenusProperties[$i]['title'] = $contenu['title'];
                     if (array_key_exists('description', $contenu)) {
                         $this->contenusProperties[$i]['description'] = $contenu['description'];

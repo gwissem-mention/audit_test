@@ -208,6 +208,14 @@ class RequeteSession
         $this->session->set(self::SESSION_SEARCHED_TEXT_NAME, $searchedText);
     }
 
+    /**
+     * @return boolean
+     */
+    public function hasSearchedText()
+    {
+        return ('' != $this->getSearchedText());
+    }
+
 
     /**
      * Retourne la requête.

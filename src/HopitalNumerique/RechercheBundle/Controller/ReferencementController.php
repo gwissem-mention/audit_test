@@ -23,7 +23,7 @@ class ReferencementController extends Controller
             $choosenReferenceIds = $request->request->get('references');
         } else {
             $choosenReferenceIds = $this->container->get('hopitalnumerique_recherche.dependency_injection.referencement.requete_session')->getReferenceIds();
-            if (count($choosenReferenceIds) === 0) {
+            if (count($choosenReferenceIds) === 0 && !$this->container->get('hopitalnumerique_recherche.dependency_injection.referencement.requete_session')->hasSearchedText()) {
                 if (null !== $this->getUser()) {
                     $requeteDefault = $this->container->get('hopitalnumerique_recherche.manager.requete')->findDefaultByUser($this->getUser());
                     if (null !== $requeteDefault) {
@@ -66,13 +66,13 @@ class ReferencementController extends Controller
      */
     public function jsonEntitiesByReferencesAction(Request $request)
     {
-        $domaine = $this->container->get('hopitalnumerique_domaine.dependency_injection.current_domaine')->get();
         $entityTypeIds = $request->request->get('entityTypeIds', null);
         $publicationCategoryIds = $request->request->get('publicationCategoryIds', null);
         $exaleadSearchedText = $request->request->get('exaleadSearch', null);
         $foundedWords = [];
         $resultFilters = [];
 
+        $this->container->get('hopitalnumerique_recherche.doctrine.referencement.reader')->setIsSearchedText(null !== $exaleadSearchedText);
         if (null !== $exaleadSearchedText) {
             $groupedReferenceIds = $request->request->get('references', null);
             $this->container->get('hopitalnumerique_recherche.dependency_injection.referencement.exalead.search')->setText($exaleadSearchedText);
