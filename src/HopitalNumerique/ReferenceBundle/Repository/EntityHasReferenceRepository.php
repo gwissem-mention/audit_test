@@ -98,7 +98,8 @@ class EntityHasReferenceRepository extends EntityRepository
                 'GROUP_CONCAT(objetRole.id) AS objetRoleIds',
                 'GROUP_CONCAT(contenuObjetRole.id) AS contenuObjetRoleIds',
                 'GROUP_CONCAT(objetType.id) AS objetTypeIds',
-                'GROUP_CONCAT(contenuObjetType.id) AS contenuObjetTypeIds'
+                'GROUP_CONCAT(contenuObjetType.id) AS contenuObjetTypeIds',
+                'objet.id as objetId'
             )
             ->leftJoin(
                 EntityHasNote::class,

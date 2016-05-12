@@ -1,6 +1,7 @@
 <?php
 namespace HopitalNumerique\ReferenceBundle\Manager;
 
+use HopitalNumerique\CoreBundle\DependencyInjection\Entity;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\EntityManager;
 use HopitalNumerique\DomaineBundle\Entity\Domaine;
@@ -99,21 +100,23 @@ class EntityHasReferenceManager extends BaseManager
             $objetRoleIds = ('' != $entityHaveReferenceWithoutRoles['objetRoleIds'] ? explode(',', $entityHaveReferenceWithoutRoles['objetRoleIds']) : []);
             $contenuObjetRoleIds = ('' != $entityHaveReferenceWithoutRoles['contenuObjetRoleIds'] ? explode(',', $entityHaveReferenceWithoutRoles['contenuObjetRoleIds']) : []);
 
-            if ((
-                    null === $userRole
-                    && (
-                        0 === count($objetRoleIds)
-                        && 0 === count($contenuObjetRoleIds)
-                    )
+            $entityValid = (
+                null === $userRole
+                && (
+                    0 === count($objetRoleIds)
+                    && 0 === count($contenuObjetRoleIds)
                 )
-                || (
-                    null !== $userRole
-                    && (
-                        (0 === count($objetRoleIds) || !in_array($userRole->getId(), $objetRoleIds))
-                        && (0 === count($contenuObjetRoleIds) || !in_array($userRole->getId(), $contenuObjetRoleIds))
-                    )
+            )
+            || (
+                null !== $userRole
+                && (
+                    (0 === count($objetRoleIds) || !in_array($userRole->getId(), $objetRoleIds))
+                    && (0 === count($contenuObjetRoleIds) || !in_array($userRole->getId(), $contenuObjetRoleIds))
                 )
-            ) {
+            );
+            // Si objet, objet vérifier si objet valide
+            $entityValid = $entityValid && ($entityHaveReferenceWithoutRoles['entityType'] !== Entity::ENTITY_TYPE_OBJET || null !== $entityHaveReferenceWithoutRoles['objetId']);
+            if ($entityValid) {
                 $entityHaveReferenceWithoutRoles['objetTypeIds'] = ('' != $entityHaveReferenceWithoutRoles['objetTypeIds'] ? array_values(array_unique(explode(',', $entityHaveReferenceWithoutRoles['objetTypeIds']))) : []);
                 $entityHaveReferenceWithoutRoles['contenuObjetTypeIds'] = ('' != $entityHaveReferenceWithoutRoles['contenuObjetTypeIds'] ? array_values(array_unique(explode(',', $entityHaveReferenceWithoutRoles['contenuObjetTypeIds']))) : []);
 
