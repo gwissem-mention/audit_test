@@ -142,7 +142,7 @@ Hn_RechercheBundle_Referencement_Filter_Category.processFilterDisplaying = funct
         $('#exalead-bloc-container').addClass('col-md-6');
         $('#exalead-bloc-container').removeClass('col-md-12');
     } else if (!hasSearch && filterIsDisplayed) {
-        $('#entity-categories-container').slideUp();
+        $('#entity-categories-container').css({ display: 'none' });
         $('#exalead-bloc-container').addClass('col-md-12');
         $('#exalead-bloc-container').removeClass('col-md-6');
     }
