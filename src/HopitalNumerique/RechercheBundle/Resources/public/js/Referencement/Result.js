@@ -91,7 +91,8 @@ Hn_RechercheBundle_Referencement.displayResults = function()
 
 Hn_RechercheBundle_Referencement.activeSearch = function()
 {
-    $('#search-text-button').prop('disabled', false);
+    //$('#search-text-button').prop('disabled', false);
+    Hn_RechercheBundle_Referencement_Filter_Exalead.processSearchValidating();
     Hn_RechercheBundle_Referencement.AJAX_LOADER.finished();
 };
 

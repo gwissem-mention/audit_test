@@ -4,6 +4,26 @@
 var Hn_RechercheBundle_Referencement_Filter_Exalead = function() {};
 
 
+$(document).ready(function() {
+    Hn_RechercheBundle_Referencement_Filter_Exalead.init();
+});
+
+
+Hn_RechercheBundle_Referencement_Filter_Exalead.init = function()
+{
+    Hn_RechercheBundle_Referencement_Filter_Exalead.initEvents();
+};
+
+Hn_RechercheBundle_Referencement_Filter_Exalead.initEvents = function()
+{
+    $('#recherche_textuelle').keyup(function() {
+        //var searchedText = Hn_RechercheBundle_Referencement_Filter_Exalead.getSearchedText();
+        //$('#search-text-button').prop('disabled', searchedText.length < 2);
+        Hn_RechercheBundle_Referencement_Filter_Exalead.processSearchValidating();
+    });
+};
+
+
 /**
  * Affiche / cache la popin de recherche avancée.
  */
@@ -34,7 +54,7 @@ Hn_RechercheBundle_Referencement_Filter_Exalead.addParameter = function(paramete
     
     document.getElementById('recherche_textuelle').focus();
     document.getElementById('recherche_textuelle').setSelectionRange(positionInitiale + selectionStart, positionInitiale + parameter.length + selectionEnd);
-}
+};
 
 /**
  * Retourne le texte recherché.
@@ -43,7 +63,13 @@ Hn_RechercheBundle_Referencement_Filter_Exalead.addParameter = function(paramete
  */
 Hn_RechercheBundle_Referencement_Filter_Exalead.getSearchedText = function()
 {
-    return $('#recherche_textuelle').val();
+    var searchedText = $('#recherche_textuelle').val();
+
+    if (searchedText.length > 1) {
+        return searchedText;
+    }
+
+    return '';
 };
 
 /**
@@ -75,7 +101,11 @@ Hn_RechercheBundle_Referencement_Filter_Exalead.processSearchValidating = functi
 {
     var searchedText = Hn_RechercheBundle_Referencement_Filter_Exalead.getSearchedText();
 
-    if ((searchedText.length < 2 )) {
+    $('#search-text-button').prop('disabled', searchedText.length < 2);
+
+    //return (searchedText.length > 1);
+
+    /*if ((searchedText.length < 2 )) {
         $('#alert-exalead').show('slow');
         $('#alert-exalead-asterisque').hide('slow');
     } else if ((searchedText.length <= 3 && searchedText.indexOf('*') >= 0 )) {
@@ -84,8 +114,7 @@ Hn_RechercheBundle_Referencement_Filter_Exalead.processSearchValidating = functi
     } else {
         $('#alert-exalead').hide('slow');
         $('#alert-exalead-asterisque').hide('slow');
-        return true;
-    }
+    }*/
 
-    return false;
+    return (searchedText.length > 1);
 };
