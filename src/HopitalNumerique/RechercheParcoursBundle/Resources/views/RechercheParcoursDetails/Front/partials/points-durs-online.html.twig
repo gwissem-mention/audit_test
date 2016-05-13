@@ -7,7 +7,7 @@
         <div class="col-md-4 notation" id="notation-{{objet['id']}}">
             <div class="nonConcerne" id="nonConcerne-{{objet['id']}}">
                 <form>
-                    <input type="checkbox" class="checkbox pull-left" data-id="{{objet['id']}}" id="checkbox-{{objet['id']}}"{% if notes[objet['id']].nonConcerne %} checked="checked"{% endif %} />
+                    <input type="checkbox" class="checkbox pull-left" data-id="{{objet['id']}}" id="checkbox-{{objet['id']}}"{% if notes[objet['id']] is defined and notes[objet['id']].nonConcerne %} checked="checked"{% endif %} />
                     <div class="labelCheckbox pull-left">Non concerné par ce point dur</div>
                 </form>
                 <div class="clearfix"></div>

@@ -168,6 +168,14 @@ class Reader
             return $entitiesPropertiesByGroup;
         }
 
+        //<-- Transformation des ID en entier
+        foreach ($groupedReferenceIds as $group => $referenceIds) {
+            foreach ($referenceIds as $i => $referenceId) {
+                $groupedReferenceIds[$group][$i] = intval($referenceId);
+            }
+        }
+        //->
+
         $entitiesProperties = $this->getEntitiesPropertiesByReferenceIds($groupedReferenceIds, $entityTypeIds, $publicationCategoryIds, $resultFilters);
 
         foreach ($entitiesProperties as $entityProperties) {
@@ -264,5 +272,52 @@ class Reader
         $referenceIdskeyedByGroup = $this->referencement->getReferenceIdskeyedByGroup($referenceIds, $this->currentDomaine->get());
 
         return $this->getEntitiesPropertiesByReferenceIdsByGroup($referenceIdskeyedByGroup);
+    }
+
+    public function getEntitiesPropertiesKeyedByGroupByGroupedReferenceIds(array $groupedReferenceIds, array $entityTypeIds = null, array $publicationCategoryIds = null, array $resultFilters = [])
+    {
+        $entitiesPropertiesKeyedByGroup = [];
+        $entitiesPropertiesByReferenceIdsByGroup = $this->getEntitiesPropertiesByReferenceIdsByGroup($groupedReferenceIds, $entityTypeIds, $publicationCategoryIds, $resultFilters);
+
+        foreach ($entitiesPropertiesByReferenceIdsByGroup as $group => $entitiesPropertiesByReferenceIds) {
+            $entitiesPropertiesKeyedByGroup[$group] = [];
+
+            $entitiesPropertiesByReferenceIdsByType = [];
+            foreach ($entitiesPropertiesByReferenceIds as $entityProperties) {
+                if (!array_key_exists($entityProperties['entityType'], $entitiesPropertiesByReferenceIdsByType)) {
+                    $entitiesPropertiesByReferenceIdsByType[$entityProperties['entityType']] = [];
+                }
+                $entitiesPropertiesByReferenceIdsByType[$entityProperties['entityType']][$entityProperties['entityId']] = $entityProperties;
+                //$entitiesPropertiesKeyedByGroup[$group][$entityProperties['entityId']] = [];
+            }
+
+            foreach ($entitiesPropertiesByReferenceIdsByType as $entityType => $entitiesProperties) {
+                $entities = $this->entity->getEntitiesByTypeAndIds($entityType, array_keys($entitiesProperties));
+                foreach ($entities as $entity) {
+                    $entityId = $this->entity->getEntityId($entity);
+                    $entityProperties = [
+                        'entityId' => $entityId,
+                        'entityType' => $entityType,
+                        'title' => $this->entity->getTitleByEntity($entity),
+                        'subtitle' => $this->entity->getSubtitleByEntity($entity),
+                        'url' => $this->entity->getFrontUrlByEntity($entity),
+                        'description' => $this->entity->getDescriptionByEntity($entity),
+                        'category' => $this->entity->getCategoryByEntity($entity),
+                        'pertinenceNiveau' => $entitiesProperties[$entityId]['pertinenceNiveau']
+                    ];
+                    $entitiesPropertiesKeyedByGroup[$group][] = $entityProperties;
+                    /*$entitiesPropertiesKeyedByGroup[$group][$entityId]['entityId'] = $entityId;
+                    $entitiesPropertiesKeyedByGroup[$group][$entityId]['entityType'] = $entityType;
+                    $entitiesPropertiesKeyedByGroup[$group][$entityId]['title'] = $this->entity->getTitleByEntity($entity);
+                    $entitiesPropertiesKeyedByGroup[$group][$entityId]['subtitle'] = $this->entity->getSubtitleByEntity($entity);
+                    $entitiesPropertiesKeyedByGroup[$group][$entityId]['url'] = $this->entity->getFrontUrlByEntity($entity);
+                    $entitiesPropertiesKeyedByGroup[$group][$entityId]['description'] = $this->entity->getDescriptionByEntity($entity);
+                    $entitiesPropertiesKeyedByGroup[$group][$entityId]['category'] = $this->entity->getCategoryByEntity($entity);
+                    $entitiesPropertiesKeyedByGroup[$group][$entityId]['pertinenceNiveau'] = $entitiesProperties[$entityId]['pertinenceNiveau'];*/
+                }
+            }
+        }
+
+        return $entitiesPropertiesKeyedByGroup;
     }
 }

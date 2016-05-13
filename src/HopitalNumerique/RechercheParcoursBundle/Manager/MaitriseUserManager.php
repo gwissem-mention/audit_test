@@ -2,6 +2,7 @@
 
 namespace HopitalNumerique\RechercheParcoursBundle\Manager;
 
+use HopitalNumerique\CoreBundle\DependencyInjection\Entity;
 use Nodevo\ToolsBundle\Manager\Manager as BaseManager;
 
 /**
@@ -270,5 +271,25 @@ class MaitriseUserManager extends BaseManager
         }
 
         return $notesTemp;
+    }
+
+    public function removeNotesNotInEntities($notes, $entitiesProperties)
+    {
+        $objetIds = [];
+
+        foreach ($entitiesProperties as $entityProperties) {
+            if (Entity::ENTITY_TYPE_OBJET == $entityProperties['entityType']) {
+                $objetIds[] = $entityProperties['entityId'];
+            }
+        }
+
+        foreach ($notes as $entityId => $note) {
+            if (!in_array($entityId, $objetIds)) {
+                $this->delete($note);
+                unset($notes[$entityId]);
+            }
+        }
+
+        return $notes;
     }
 }

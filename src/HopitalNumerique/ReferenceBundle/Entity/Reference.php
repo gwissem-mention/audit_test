@@ -48,7 +48,12 @@ class Reference
     const STATUT_INACTIF_ID = 4;
 
     /**
-     * @var integer ID du point dur
+     * @var integer ID de production
+     */
+    const CATEGORIE_OBJET_PRODUCTION_ID = 175;
+
+    /**
+     * @var integer ID de point dur
      */
     const CATEGORIE_OBJET_POINT_DUR_ID = 184;
 

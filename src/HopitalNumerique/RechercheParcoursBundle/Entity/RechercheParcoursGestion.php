@@ -3,6 +3,7 @@
 namespace HopitalNumerique\RechercheParcoursBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use HopitalNumerique\ReferenceBundle\Entity\Reference;
 use Symfony\Component\Validator\Constraints as Assert;
 use Nodevo\ToolsBundle\Validator\Constraints as Nodevo;
 use APY\DataGridBundle\Grid\Mapping as GRID;
@@ -378,6 +379,43 @@ class RechercheParcoursGestion
     {
         $this->refreshReferencesParentes();
         $this->refreshReferencesVentilations();
+    }
+
+    /**
+     * Retourne si le parcours possède le type Point dur.
+     *
+     * @return boolean Si possède
+     */
+    public function hasTypePublicationPointDur()
+    {
+        return $this->hasTypePublicationId(Reference::CATEGORIE_OBJET_POINT_DUR_ID);
+    }
+
+    /**
+     * Retourne si le parcours possède le type Production.
+     *
+     * @return boolean Si possède
+     */
+    public function hasTypePublicationProduction()
+    {
+        return $this->hasTypePublicationId(Reference::CATEGORIE_OBJET_PRODUCTION_ID);
+    }
+
+    /**
+     * Retourne si le parcours possède un type de publication.
+     *
+     * @param integer $referenceId ID du type
+     * @return boolean Si possède
+     */
+    private function hasTypePublicationId($referenceId)
+    {
+        foreach ($this->typePublication as $typePublication) {
+            if ($referenceId === $typePublication->getId()) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     /**

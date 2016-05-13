@@ -80,7 +80,7 @@ class EntityHasReferenceManager extends BaseManager
      * @param \HopitalNumerique\UserBundle\Entity\User       $user    User
      * @param array<integer>|null $entityTypeIds          ID des types d'entité à récupérer
      * @param array<integer>|null $publicationCategoryIds ID des catégories de publications à récupérer
-     * @param array               $resultFilters          Filtres à appliquer
+     * @param array               $resultFilters          Filtres à appliquer (objetIds, contenuIds, primary)
      * @return array EntitiesHasReference
      */
     public function getWithNotes(Domaine $domaine, array $groupedReferences = null, User $user = null, array $entityTypeIds = null, array $publicationCategoryIds = null, $resultFilters = [])
@@ -114,8 +114,12 @@ class EntityHasReferenceManager extends BaseManager
                     && (0 === count($contenuObjetRoleIds) || !in_array($userRole->getId(), $contenuObjetRoleIds))
                 )
             );
-            // Si objet, objet vérifier si objet valide
-            $entityValid = $entityValid && ($entityHaveReferenceWithoutRoles['entityType'] !== Entity::ENTITY_TYPE_OBJET || null !== $entityHaveReferenceWithoutRoles['objetId']);
+            $entityValid = $entityValid
+                    // Si objet, vérifier si objet valide
+                    && ($entityHaveReferenceWithoutRoles['entityType'] !== Entity::ENTITY_TYPE_OBJET || null !== $entityHaveReferenceWithoutRoles['objetId'])
+                    // Vérifier si filtre primary
+                    && (!array_key_exists('primary', $resultFilters) || (($resultFilters['primary'] && $entityHaveReferenceWithoutRoles['primarySum'] >= 1) || (!$resultFilters['primary'] && $entityHaveReferenceWithoutRoles['primarySum'] < 1)))
+                ;
             if ($entityValid) {
                 $entityHaveReferenceWithoutRoles['objetTypeIds'] = ('' != $entityHaveReferenceWithoutRoles['objetTypeIds'] ? array_values(array_unique(explode(',', $entityHaveReferenceWithoutRoles['objetTypeIds']))) : []);
                 $entityHaveReferenceWithoutRoles['contenuObjetTypeIds'] = ('' != $entityHaveReferenceWithoutRoles['contenuObjetTypeIds'] ? array_values(array_unique(explode(',', $entityHaveReferenceWithoutRoles['contenuObjetTypeIds']))) : []);

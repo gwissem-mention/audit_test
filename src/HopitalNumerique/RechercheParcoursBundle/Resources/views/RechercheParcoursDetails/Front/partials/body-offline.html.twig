@@ -14,6 +14,31 @@
             {% else %}
                 <p> - Aucun point dur trouvé - </p>
             {% endfor %}
+            
+            
+            <div class="recherche-referencement">
+                {% for group, entitiesProperties in entitiesPropertiesKeyedByGroup if entitiesProperties|length > 0 %}
+                    <h4>
+                        {% if 'points-durs' == group %}
+                            Point-dur(s)
+                        {% else %}
+                            Production(s)
+                        {% endif %}
+                        ( {{ entitiesProperties|length }} résultat{{ entitiesProperties|length > 1 ? 's' : '' }} )
+                    </h4>
+                    <div class="wrapper-results results-bloc">
+                        <div class="background-violet"></div>
+                        {% for entityProperties in entitiesProperties %}
+                            {% include 'HopitalNumeriqueRechercheBundle:Referencement:view_entity.html.twig' with entityProperties %}
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    <p> - Aucun point dur trouvé - </p>
+                {% endfor %}
+            </div>
+            
+            
+            
             <div class="clearfix"></div>
         </div>
         <div class="col-md-4">

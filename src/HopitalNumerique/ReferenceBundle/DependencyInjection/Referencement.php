@@ -126,8 +126,49 @@ class Referencement
     }
 
 
-    public function getReferenceIdskeyedByGroup(array $referenceIds, Domaine $domaine)
+    /**
+     * Retourne les IDs de référence groupés par grandes catégories.
+     *
+     * @param array<integer>                                 $referenceIds IDs des références
+     * @param \HopitalNumerique\DomaineBundle\Entity\Domaine $domaine      Domaine
+     * @return array IDs par groupe
+     */
+    public function getReferenceIdsKeyedByGroup(array $referenceIds, Domaine $domaine)
     {
         $referencesTree = $this->getReferencesTree([$domaine]);
+        $referenceIdsByGroup = [];
+
+        foreach ($referencesTree as $referencesSubtree) {
+            $foundReferenceIds = $this->getReferenceIdsInSubtree($referenceIds, $referencesSubtree['enfants']);
+
+            if (count($foundReferenceIds) > 0) {
+                $referenceIdsByGroup[] = $foundReferenceIds;
+                $referenceIds = array_diff($referenceIds, $foundReferenceIds);
+            }
+        }
+
+        return $referenceIdsByGroup;
+    }
+
+    /**
+     * Parmi des IDs de références, retourne ceux présents dans l'arbre de références.
+     * @param array $referenceIds
+     * @param array $referencesSubtree
+     * @return array<integer> Ids trouvés
+     */
+    private function getReferenceIdsInSubtree(array $referenceIds, array $referencesSubtree)
+    {
+        $foundedReferenceIds = [];
+
+        foreach ($referencesSubtree as $referenceSubtree) {
+            if (in_array($referenceSubtree['reference']->getId(), $referenceIds)) {
+                $foundedReferenceIds[] = $referenceSubtree['reference']->getId();
+                $referenceIds = array_diff($referenceIds, [$referenceSubtree['reference']->getId()]);
+            }
+
+            $foundedReferenceIds = array_merge($foundedReferenceIds, $this->getReferenceIdsInSubtree($referenceIds, $referenceSubtree['enfants']));
+        }
+
+        return $foundedReferenceIds;
     }
 }
