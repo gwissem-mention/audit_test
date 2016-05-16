@@ -39,6 +39,18 @@ Hn_RechercheBundle_Referencement.initEvents = function()
 
 
 //<-- Accesseurs / mutateurs
+Hn_RechercheBundle_Referencement.getElementByReferenceId = function(referenceId)
+{
+    return $('.references-bloc [data-reference="' + referenceId + '"]');
+};
+
+Hn_RechercheBundle_Referencement.getReferenceParentIdByReferenceId = function(referenceId)
+{
+    var elementParent = Hn_RechercheBundle_Referencement.getElementByReferenceId(referenceId).parent().parent();
+
+    return Hn_RechercheBundle_Referencement.getReferenceIdByElement(elementParent);
+};
+
 /**
  * Retourne l'ID de référence d'un élément.
  */
@@ -48,7 +60,7 @@ Hn_RechercheBundle_Referencement.getReferenceIdByElement = function(element)
         return parseInt($(element).attr('data-reference'));
     }
 
-    if (null != $(element).parent()) {
+    if (1 == $(element).parent().size()) {
         return Hn_RechercheBundle_Referencement.getReferenceIdByElement($(element).parent());
     }
 
@@ -62,7 +74,7 @@ Hn_RechercheBundle_Referencement.getReferenceIdByElement = function(element)
  */
 Hn_RechercheBundle_Referencement.getReferenceLibelleById = function(referenceId)
 {
-    if ($('.references-bloc [data-reference="' + referenceId + '"]').size() > 0) {
+    if (Hn_RechercheBundle_Referencement.getElementByReferenceId(referenceId).size() > 0) {
         return $('.references-bloc [data-reference="' + referenceId + '"] a.reference').first().text().trim();
     } else { // Mon contexte
         return $('#contexte-modal [data-reference="' + referenceId + '"] label').first().text().trim();
@@ -72,10 +84,15 @@ Hn_RechercheBundle_Referencement.getReferenceLibelleById = function(referenceId)
 /**
  * Retourne les éléments des références choisies.
  *
+ * @param Element element (optionnel) Si défini, retourne uniquement les éléments choisis sous cet élément
  * @return Array<Element> Éléments
  */
-Hn_RechercheBundle_Referencement.getChosenElements = function()
+Hn_RechercheBundle_Referencement.getChosenElements = function(element)
 {
+    if (undefined !== element) {
+        return $(element).find('[data-chosen="true"]');
+    }
+
     return $('.references-bloc [data-chosen="true"], #contexte-modal [data-chosen="true"]');
 };
 
@@ -93,6 +110,14 @@ Hn_RechercheBundle_Referencement.getChosenReferenceIds = function()
     });
 
     return referenceIds;
+};
+
+Hn_RechercheBundle_Referencement.referenceIdIsChosen = function(referenceId)
+{
+    return (
+        'true' == Hn_RechercheBundle_Referencement.getElementByReferenceId(referenceId).attr('data-chosen')
+        || 1 == $('#contexte-modal [data-reference="' + referenceId + '"] input:checked').size()
+    );
 };
 
 /**
@@ -127,7 +152,7 @@ Hn_RechercheBundle_Referencement.getChosenGroupedReferenceIds = function()
  */
 Hn_RechercheBundle_Referencement.getLevelByReferenceId = function(referenceId)
 {
-    return parseInt($('[data-reference="' + referenceId + '"]').attr('data-level'));
+    return parseInt(Hn_RechercheBundle_Referencement.getElementByReferenceId(referenceId).attr('data-level'));
 };
 //-->
 
@@ -230,10 +255,28 @@ Hn_RechercheBundle_Referencement.referenceChildrenAreDisplayed = function(refere
  */
 Hn_RechercheBundle_Referencement.toggleReferenceChoosing = function(referenceId)
 {
-    var referenceIsChosen = ('true' === $('[data-reference="' + referenceId + '"]').attr('data-chosen'));
+    var referenceIsChosen = ('true' === Hn_RechercheBundle_Referencement.getElementByReferenceId(referenceId).attr('data-chosen'));
+    //var referenceParentId = Hn_RechercheBundle_Referencement.getReferenceParentIdByReferenceId(referenceId);
 
-    $('[data-reference="' + referenceId + '"]').attr('data-chosen', referenceIsChosen ? 'false' : 'true');
+    Hn_RechercheBundle_Referencement.getElementByReferenceId(referenceId).attr('data-chosen', referenceIsChosen ? 'false' : 'true');
     $('#contexte-modal [data-reference="' + referenceId + '"] input[type="checkbox"]').prop('checked', referenceIsChosen ? false : true);
+
+    if (!referenceIsChosen) {
+        // On décoche tous les enfants (récupérés automatiquement dans la requête)
+        Hn_RechercheBundle_Referencement.getChosenElements(Hn_RechercheBundle_Referencement.getElementByReferenceId(referenceId)).each(function (i, chosenElement) {
+            Hn_RechercheBundle_Referencement.toggleReferenceChoosing(Hn_RechercheBundle_Referencement.getReferenceIdByElement(chosenElement));
+        });
+        // On décoche tous les parents (récupérés automatiquement dans la requête)
+        var referenceParentId = Hn_RechercheBundle_Referencement.getReferenceParentIdByReferenceId(referenceId);
+        while (null != referenceParentId) {
+            if (Hn_RechercheBundle_Referencement.referenceIdIsChosen(referenceParentId)) {
+                Hn_RechercheBundle_Referencement.toggleReferenceChoosing(referenceParentId);
+                break;
+            } else {
+                referenceParentId = Hn_RechercheBundle_Referencement.getReferenceParentIdByReferenceId(referenceParentId);
+            }
+        }
+    }
 };
 
 /**
