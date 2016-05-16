@@ -129,7 +129,6 @@ class EntityHasReferenceManager extends BaseManager
         }
 
         return $entitiesHaveReferences;
-
     }
 
     /**
@@ -155,4 +154,15 @@ class EntityHasReferenceManager extends BaseManager
 
         return $referenceIds;
     }
+
+    /**
+     * À partir de références groupés par catégorie, on retourne les références à rechercher selob la modularité.
+     *
+     * @param array $referenceIds IDs de référence
+     * @return array IDs
+     */
+    /*public function getModulatedReferenceIdsByReferenceIds(array $referenceIds, array $referenceParentIds, array $referenceFrereIds)
+    {
+        return $this->getRepository()->getModulatedReferenceIdsByReferenceIds($referenceIds, $referenceParentIds, $referenceFrereIds);
+    }*/
 }

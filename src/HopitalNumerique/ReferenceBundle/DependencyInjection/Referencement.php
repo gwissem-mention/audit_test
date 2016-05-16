@@ -150,6 +150,19 @@ class Referencement
         return $referenceIdsByGroup;
     }
 
+    public function getReferenceIdsByGroupedReferenceIds($groupedReferenceIds)
+    {
+        $referenceIds = [];
+
+        foreach ($groupedReferenceIds as $groupReferenceIds) {
+            foreach ($groupReferenceIds as $referenceId) {
+                $referenceIds[] = $referenceId;
+            }
+        }
+
+        return $referenceIds;
+    }
+
     /**
      * Parmi des IDs de références, retourne ceux présents dans l'arbre de références.
      * @param array $referenceIds

@@ -130,4 +130,42 @@ class Tree
 
         return $referencesSubTree;
     }
+
+    public function addCheckedReferenceIdsInTree(array $referencesTree, array $checkedReferenceIds)
+    {
+        $referencesTree = $this->addCheckedReferenceIdsInSubtree($referencesTree, $checkedReferenceIds);
+
+        return $referencesTree;
+    }
+
+    public function addCheckedReferenceIdsInSubtree(array $referencesSubtree, array &$checkedReferenceIds)
+    {
+        $referencesSubtreeWithCheckedReferenceIds = [];
+
+        foreach ($referencesSubtree as $referenceSubtree) {
+            $referenceSubtree['checked'] = in_array($referenceSubtree['reference']->getId(), $checkedReferenceIds);
+
+            if ($referenceSubtree['checked']) {
+                $checkedReferenceIds = array_diff($checkedReferenceIds, [$referenceSubtree['reference']->getId()]);
+            }
+
+            $referenceSubtree['enfants'] = $this->addCheckedReferenceIdsInSubtree($referenceSubtree['enfants'], $checkedReferenceIds);
+
+            $referencesSubtreeWithCheckedReferenceIds[] = $referenceSubtree;
+        }
+
+        return $referencesSubtreeWithCheckedReferenceIds;
+    }
+
+    public function getAllReferenceIdsByTree(array $referencesTree)
+    {
+        $referenceIds = [];
+
+        foreach ($referencesTree as $referenceSubtree) {
+            $referenceIds[] = $referenceSubtree['reference']->getId();
+            $referenceIds = array_merge($referenceIds, $this->getAllReferenceIdsByTree($referenceSubtree['enfants']));
+        }
+
+        return $referenceIds;
+    }
 }

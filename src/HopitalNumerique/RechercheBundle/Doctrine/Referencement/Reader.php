@@ -32,6 +32,11 @@ class Reader
     private $referencement;
 
     /**
+     * @var \HopitalNumerique\RechercheBundle\Doctrine\Referencement\Modulation Modulation
+     */
+    private $modulation;
+
+    /**
      * @var \HopitalNumerique\DomaineBundle\DependencyInjection\CurrentDomaine CurrentDomaine
      */
     private $currentDomaine;
@@ -71,11 +76,12 @@ class Reader
     /**
      * Constructor.
      */
-    public function __construct(RouterInterface $router, Entity $entity, Referencement $referencement, CurrentDomaine $currentDomaine, ConnectedUser $connectedUser, EntityHasReferenceManager $entityHasReferenceManager, EntityHasNoteManager $entityHasNoteManager, ObjetManager $objetManager, ContenuManager $contenuManager)
+    public function __construct(RouterInterface $router, Entity $entity, Referencement $referencement, Modulation $modulation, CurrentDomaine $currentDomaine, ConnectedUser $connectedUser, EntityHasReferenceManager $entityHasReferenceManager, EntityHasNoteManager $entityHasNoteManager, ObjetManager $objetManager, ContenuManager $contenuManager)
     {
         $this->router = $router;
         $this->entity = $entity;
         $this->referencement = $referencement;
+        $this->modulation = $modulation;
         $this->currentDomaine = $currentDomaine;
         $this->connectedUser = $connectedUser;
         $this->entityHasReferenceManager = $entityHasReferenceManager;
@@ -175,6 +181,12 @@ class Reader
             }
         }
         //->
+
+        $referenceIds = $this->modulation->getModulatedReferenceIdsByGroupedReferenceIds(
+            $this->referencement->getReferenceIdsByGroupedReferenceIds($groupedReferenceIds),
+            $this->currentDomaine->get()
+        );
+        $groupedReferenceIds = $this->referencement->getReferenceIdsKeyedByGroup($referenceIds, $this->currentDomaine->get());
 
         $entitiesProperties = $this->getEntitiesPropertiesByReferenceIds($groupedReferenceIds, $entityTypeIds, $publicationCategoryIds, $resultFilters);
 
