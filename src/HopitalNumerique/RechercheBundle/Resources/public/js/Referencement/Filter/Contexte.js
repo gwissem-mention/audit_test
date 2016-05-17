@@ -5,19 +5,12 @@ var Hn_RechercheBundle_Referencement_Filter_Contexte = function() {};
 
 
 /**
- * Sauvegarde le contexte utilisateur et valide ses choix.
- */
-Hn_RechercheBundle_Referencement_Filter_Contexte.saveAndValid = function()
-{
-    Hn_RechercheBundle_Referencement_Filter_Contexte.valid();
-    Hn_RechercheBundle_Referencement_Filter_Contexte.saveUser();
-};
-
-/**
  * Valide les choix de l'utilisateur.
  */
 Hn_RechercheBundle_Referencement_Filter_Contexte.valid = function()
 {
+    var saveUserContext = ($('input[name="contexte-valid"]').is(':checked'));
+
     $('#contexte-modal [data-chosen="true"]').attr('data-chosen', false);
 
     $('#contexte-modal input:checked').each(function(i, input) {
@@ -27,6 +20,10 @@ Hn_RechercheBundle_Referencement_Filter_Contexte.valid = function()
 
     Hn_RechercheBundle_Referencement.initReferenceFilters();
     $('#contexte-modal').modal('hide');
+
+    if (saveUserContext) {
+        Hn_RechercheBundle_Referencement_Filter_Contexte.saveUser();
+    }
 };
 
 /**
