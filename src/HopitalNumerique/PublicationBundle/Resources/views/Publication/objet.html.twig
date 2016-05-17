@@ -232,7 +232,7 @@
         {% endif %}
 
         {# Si l'utilisateur n'est pas connecté et qu'il a déjà voté #}
-        {% if objet.notes and types != "Point dur" and canVote %}
+        {% if objet.notes and canVote %}
             <div id="bloc-notation-objet" class="col-md-5 hidden-pdf">
                 <div class="wrapper">
                     <input type="hidden" id="note-sauvegarde-url" value="{{path('hopital_numerique_publication_note_add' ) }}">
