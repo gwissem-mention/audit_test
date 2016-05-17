@@ -70,7 +70,7 @@ class ReferencementController extends Controller
         $entityTypeIds = $request->request->get('entityTypeIds', null);
         $publicationCategoryIds = $request->request->get('publicationCategoryIds', null);
         $exaleadSearchedText = $request->request->get('exaleadSearch', null);
-        $foundedWords = [];
+        $foundWords = [];
         $resultFilters = [];
 
         $this->container->get('hopitalnumerique_recherche.doctrine.referencement.reader')->setIsSearchedText(null !== $exaleadSearchedText);
@@ -95,6 +95,7 @@ class ReferencementController extends Controller
             } else {
                 $entitiesPropertiesByGroup = $this->container->get('hopitalnumerique_recherche.dependency_injection.referencement.exalead.search')->getEntitiesPropertiesByGroup();
             }
+            $foundWords = $this->container->get('hopitalnumerique_recherche.dependency_injection.referencement.exalead.search')->getFoundWords();
         } else {
             $groupedReferenceIds = $request->request->get('references', []);
             $entitiesPropertiesByGroup = $this->container->get('hopitalnumerique_recherche.doctrine.referencement.reader')->getEntitiesPropertiesByReferenceIdsByGroup($groupedReferenceIds, $entityTypeIds, $publicationCategoryIds, $resultFilters);
@@ -102,7 +103,7 @@ class ReferencementController extends Controller
 
         return new JsonResponse([
             'results' => $entitiesPropertiesByGroup,
-            'foundedWords' => $foundedWords
+            'foundWords' => $foundWords
         ]);
     }
 

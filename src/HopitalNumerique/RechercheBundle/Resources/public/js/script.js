@@ -912,7 +912,7 @@ function isEmpty( el )
 {
     return !$.trim(el.html())
 }
-
+/*
 //Plugin de highlight
 jQuery.extend({
     highlight: function (node, re, nodeName, className) {
@@ -976,3 +976,4 @@ jQuery.fn.highlight = function (words, options) {
         jQuery.highlight(this, re, settings.element, settings.className);
     });
 };
+*/

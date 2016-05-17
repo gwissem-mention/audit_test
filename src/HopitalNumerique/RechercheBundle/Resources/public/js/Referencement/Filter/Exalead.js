@@ -102,21 +102,23 @@ Hn_RechercheBundle_Referencement_Filter_Exalead.hasSearch = function()
 Hn_RechercheBundle_Referencement_Filter_Exalead.processSearchValidating = function()
 {
     var searchedText = Hn_RechercheBundle_Referencement_Filter_Exalead.getSearchedText();
+    var canSearch = (
+        searchedText.length > 1
+        || (Hn_RechercheBundle_Referencement.getChosenElements().size() > 0)
+    );
 
-    $('#search-text-button').prop('disabled', searchedText.length < 2);
-
-    //return (searchedText.length > 1);
-
-    /*if ((searchedText.length < 2 )) {
-        $('#alert-exalead').show('slow');
-        $('#alert-exalead-asterisque').hide('slow');
-    } else if ((searchedText.length <= 3 && searchedText.indexOf('*') >= 0 )) {
-        $('#alert-exalead').hide('slow');
-        $('#alert-exalead-asterisque').show('slow');
-    } else {
-        $('#alert-exalead').hide('slow');
-        $('#alert-exalead-asterisque').hide('slow');
-    }*/
+    $('#search-text-button').prop('disabled', !canSearch);
 
     return (searchedText.length > 1);
+};
+
+Hn_RechercheBundle_Referencement_Filter_Exalead.highlightWords = function(words)
+{
+    var highlightOptions = {
+        wordsOnly: false,
+        caseSensitive: false
+    };
+
+    $('.results-group-bloc .result').unhighlight(highlightOptions);
+    $('.results-group-bloc .result').highlight(words, highlightOptions);
 };

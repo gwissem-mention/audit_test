@@ -76,6 +76,7 @@ Hn_RechercheBundle_Referencement.displayResults = function()
             }
 
             Hn_RechercheBundle_Referencement.activeSearch();
+            Hn_RechercheBundle_Referencement_Filter_Exalead.highlightWords(data.foundWords);
         }
     });
     if (chosenGroupedReferenceIds.length == 0) {
