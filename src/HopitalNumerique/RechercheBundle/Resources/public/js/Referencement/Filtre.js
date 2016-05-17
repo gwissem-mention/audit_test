@@ -78,14 +78,17 @@ Hn_RechercheBundle_Referencement.saveFilters = function()
  */
 Hn_RechercheBundle_Referencement.saveSession = function()
 {
-    $.ajax({
-        url: Routing.generate('hopitalnumerique_recherche_referencement_requete_savesession'),
-        method: 'POST',
-        data: {
-            referenceIds: Hn_RechercheBundle_Referencement.getChosenReferenceIds(),
-            entityTypesIds: Hn_RechercheBundle_Referencement_Filter_Category.getEntityTypeIds(),
-            publicationCategoryIds: Hn_RechercheBundle_Referencement_Filter_Category.getPublicationCategoryIds(),
-            searchedText: Hn_RechercheBundle_Referencement_Filter_Exalead.getSearchedText()
-        }
-    });
+    // Timeout pour ne pas ralentir la recherche
+    setTimeout(function() {
+        $.ajax({
+            url: Routing.generate('hopitalnumerique_recherche_referencement_requete_savesession'),
+            method: 'POST',
+            data: {
+                referenceIds: Hn_RechercheBundle_Referencement.getChosenReferenceIds(),
+                entityTypesIds: Hn_RechercheBundle_Referencement_Filter_Category.getEntityTypeIds(),
+                publicationCategoryIds: Hn_RechercheBundle_Referencement_Filter_Category.getPublicationCategoryIds(),
+                searchedText: Hn_RechercheBundle_Referencement_Filter_Exalead.getSearchedText()
+            }
+        });
+    }, 1500);
 };

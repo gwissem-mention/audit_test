@@ -362,7 +362,7 @@ class EntityHasReferenceRepository extends EntityRepository
         ;
 
         if (null !== $groupedReferences) {
-            // ET pour chaque référence de niveau 1 et OU pour les sous-références
+            // ET pour chaque référence de niveau 1, OU pour les sous-références
             for ($i = 0; $i < count($groupedReferences); $i++) {
                 $referenceIds = array_merge($referenceIds, $groupedReferences[$i]);
                 $qb
