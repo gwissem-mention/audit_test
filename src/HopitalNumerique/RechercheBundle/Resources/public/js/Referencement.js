@@ -41,7 +41,7 @@ Hn_RechercheBundle_Referencement.initEvents = function()
 //<-- Accesseurs / mutateurs
 Hn_RechercheBundle_Referencement.getElementByReferenceId = function(referenceId)
 {
-    return $('.references-bloc [data-reference="' + referenceId + '"]');
+    return $('.references-bloc [data-reference="' + referenceId + '"], #contexte-modal [data-reference="' + referenceId + '"]');
 };
 
 Hn_RechercheBundle_Referencement.getReferenceParentIdByReferenceId = function(referenceId)
@@ -74,7 +74,7 @@ Hn_RechercheBundle_Referencement.getReferenceIdByElement = function(element)
  */
 Hn_RechercheBundle_Referencement.getReferenceLibelleById = function(referenceId)
 {
-    if (Hn_RechercheBundle_Referencement.getElementByReferenceId(referenceId).size() > 0) {
+    if ($('.references-bloc [data-reference="' + referenceId + '"]').size() > 0) {
         return $('.references-bloc [data-reference="' + referenceId + '"] a.reference').first().text().trim();
     } else { // Mon contexte
         return $('#contexte-modal [data-reference="' + referenceId + '"] label').first().text().trim();
@@ -259,21 +259,25 @@ Hn_RechercheBundle_Referencement.toggleReferenceChoosing = function(referenceId)
     //var referenceParentId = Hn_RechercheBundle_Referencement.getReferenceParentIdByReferenceId(referenceId);
 
     Hn_RechercheBundle_Referencement.getElementByReferenceId(referenceId).attr('data-chosen', referenceIsChosen ? 'false' : 'true');
-    $('#contexte-modal [data-reference="' + referenceId + '"] input[type="checkbox"]').prop('checked', referenceIsChosen ? false : true);
-
-    if (!referenceIsChosen) {
-        // On décoche tous les enfants (récupérés automatiquement dans la requête)
-        Hn_RechercheBundle_Referencement.getChosenElements(Hn_RechercheBundle_Referencement.getElementByReferenceId(referenceId)).each(function (i, chosenElement) {
-            Hn_RechercheBundle_Referencement.toggleReferenceChoosing(Hn_RechercheBundle_Referencement.getReferenceIdByElement(chosenElement));
-        });
-        // On décoche tous les parents (récupérés automatiquement dans la requête)
-        var referenceParentId = Hn_RechercheBundle_Referencement.getReferenceParentIdByReferenceId(referenceId);
-        while (null != referenceParentId) {
-            if (Hn_RechercheBundle_Referencement.referenceIdIsChosen(referenceParentId)) {
-                Hn_RechercheBundle_Referencement.toggleReferenceChoosing(referenceParentId);
-                break;
-            } else {
-                referenceParentId = Hn_RechercheBundle_Referencement.getReferenceParentIdByReferenceId(referenceParentId);
+    
+    var referenceCheckbox = $('#contexte-modal [data-reference="' + referenceId + '"] input[type="checkbox"]');
+    if ($(referenceCheckbox).size() === 1) { // Popin Mon contexte
+        $('#contexte-modal [data-reference="' + referenceId + '"] input[type="checkbox"]').prop('checked', referenceIsChosen ? false : true);
+    } else { // Menu de gauche
+        if (!referenceIsChosen) {
+            // On décoche tous les enfants (récupérés automatiquement dans la requête)
+            Hn_RechercheBundle_Referencement.getChosenElements(Hn_RechercheBundle_Referencement.getElementByReferenceId(referenceId)).each(function (i, chosenElement) {
+                Hn_RechercheBundle_Referencement.toggleReferenceChoosing(Hn_RechercheBundle_Referencement.getReferenceIdByElement(chosenElement));
+            });
+            // On décoche tous les parents (récupérés automatiquement dans la requête)
+            var referenceParentId = Hn_RechercheBundle_Referencement.getReferenceParentIdByReferenceId(referenceId);
+            while (null != referenceParentId) {
+                if (Hn_RechercheBundle_Referencement.referenceIdIsChosen(referenceParentId)) {
+                    Hn_RechercheBundle_Referencement.toggleReferenceChoosing(referenceParentId);
+                    break;
+                } else {
+                    referenceParentId = Hn_RechercheBundle_Referencement.getReferenceParentIdByReferenceId(referenceParentId);
+                }
             }
         }
     }
