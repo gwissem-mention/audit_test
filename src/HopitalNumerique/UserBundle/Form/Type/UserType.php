@@ -42,14 +42,14 @@ class UserType extends AbstractType
                 'intention'       => 'task_item',
         ));
     }
-    
+
     /**
      * Ajout des éléments dans le formulaire, spécifie les labels, les widgets utilisés ainsi que l'obligation
-     * 
+     *
      * @param  FormBuilderInterface $builder Le builder contient les champs du formulaire
      * @param  array                $options Data passée au formulaire
-     * 
-     * @return void                 
+     *
+     * @return void
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
@@ -60,14 +60,14 @@ class UserType extends AbstractType
 
         $builder->add('username', 'text', array(
                 'max_length' => $this->_constraints['username']['maxlength'],
-                'required'   => true, 
+                'required'   => true,
                 'label'      => 'Identifiant (login)',
                 'attr'       => array('class' => $this->_constraints['username']['class'] )
             ));
 
         $builder->add('pseudonymeForum', 'text', array(
                 'max_length' => $this->_constraints['pseudonymeForum']['maxlength'],
-                'required'   => false, 
+                'required'   => false,
                 'label'      => 'Pseudonyme pour le forum',
                 'attr'       => array('class' => $this->_constraints['pseudonymeForum']['class'] )
             ));
@@ -75,17 +75,17 @@ class UserType extends AbstractType
         $builder
             ->add('nom', 'text', array(
                 'max_length' => $this->_constraints['nom']['maxlength'],
-                'required'   => true, 
+                'required'   => true,
                 'label'      => 'Nom',
                 'attr'       => array('class' => $this->_constraints['nom']['class'] )
             ))
 
             ->add('prenom', 'text', array(
                 'max_length' => $this->_constraints['prenom']['maxlength'],
-                'required'   => true, 
+                'required'   => true,
                 'label'      => 'Prénom',
                 'attr'       => array('class' => $this->_constraints['prenom']['class'] )
-            ));   
+            ));
 
             if( is_null($datas->getId()) ) {
                 $builder
@@ -107,15 +107,15 @@ class UserType extends AbstractType
             }
 
             $builder->add('email', 'email', array(
-                'max_length' => $this->_constraints['email']['maxlength'], 
-                'required'   => true, 
+                'max_length' => $this->_constraints['email']['maxlength'],
+                'required'   => true,
                 'label'      => 'Adresse email',
                 'attr'       => array(
                                         'autocomplete' => 'off',
                                         'class'        => $this->_constraints['email']['class']
                                     )
             ))
-            
+
             ->add('civilite', 'entity', array(
                     'class'         => 'HopitalNumeriqueReferenceBundle:Reference',
                     'choices'       => $this->referenceManager->findByCode('CIVILITE'),
@@ -135,14 +135,14 @@ class UserType extends AbstractType
                     'empty_value'   => ' - ',
                     'attr'          => array(),
             ))
-            
+
             ->add('telephoneDirect', 'text', array(
                 'max_length' => $this->_constraints['telephoneDirect']['maxlength'],
-                'required'   => false, 
+                'required'   => false,
                 'label'      => 'Téléphone direct',
                 'attr'       => array(
-                                        'class'     => $this->_constraints['telephoneDirect']['class'], 
-                                        'data-mask' => $this->_constraints['telephoneDirect']['mask'] 
+                                        'class'     => $this->_constraints['telephoneDirect']['class'],
+                                        'data-mask' => $this->_constraints['telephoneDirect']['mask']
                                     )
             ))
 
@@ -151,11 +151,11 @@ class UserType extends AbstractType
                     'required'   => false,
                     'label'      => 'Téléphone portable',
                     'attr'       => array(
-                                        'class'     => $this->_constraints['telephonePortable']['class'], 
-                                        'data-mask' => $this->_constraints['telephonePortable']['mask'] 
+                                        'class'     => $this->_constraints['telephonePortable']['class'],
+                                        'data-mask' => $this->_constraints['telephonePortable']['mask']
                                     )
             ));
-            
+
 
             //Si il y a un utilisateur connecté nous sommes en BO ou dans informations perso
             if($this->_securityContext->isGranted('ROLE_USER'))
@@ -188,11 +188,12 @@ class UserType extends AbstractType
                     ->add('domaines', 'entity', array(
                             'class'       => 'HopitalNumeriqueDomaineBundle:Domaine',
                             'property'    => 'nom',
-                            'required'    => false,
+                            'required'    => true,
                             'multiple'    => true,
                             'label'       => 'Domaine(s) concerné(s)',
                             'empty_value' => ' - ',
-                            'query_builder' => function(EntityRepository $er) use ($connectedUser) { 
+                            'attr'          => array('class'=>'validate[required]'),
+                            'query_builder' => function(EntityRepository $er) use ($connectedUser) {
                                 if($this->_securityContext->isGranted('ROLE_ADMINISTRATEUR_1'))
                                 {
                                     return $er->createQueryBuilder('dom')->orderBy('dom.nom');
@@ -204,22 +205,22 @@ class UserType extends AbstractType
                             }
                     ))
                     ->add('remarque', 'textarea', array(
-                        'required'   => false, 
+                        'required'   => false,
                         'label'      => 'Remarque pour la gestion'
                     ))
                     ->add('biographie', 'textarea', array(
-                        'required'   => false, 
+                        'required'   => false,
                         'label'      => 'Biographie',
                         'attr'       => array(
                             'rows' => 8
                         )
                     ))
                     ->add('raisonDesinscription', 'textarea', array(
-                        'required'   => false, 
+                        'required'   => false,
                         'label'      => 'Raison de la désinscription'
                     ))
                     ->add('file', 'file', array(
-                        'required' => false, 
+                        'required' => false,
                         'label'    => 'Photo de profil'
                     ))
                     ->add('path', 'hidden');
@@ -236,7 +237,7 @@ class UserType extends AbstractType
                         'label'       => 'Région',
                         'empty_value' => ' - ',
                 ))
-                
+
                 ->add('departement', 'entity', array(
                         'class'       => 'HopitalNumeriqueReferenceBundle:Reference',
                         'choices'       => $this->referenceManager->findByCode('DEPARTEMENT'),
@@ -247,7 +248,7 @@ class UserType extends AbstractType
                         'attr'        => array(),
                 ));
             }
-            
+
             $builder->add('etat', 'entity', array(
                 'class'       => 'HopitalNumeriqueReferenceBundle:Reference',
                 'choices'       => $this->referenceManager->findByCode('ETAT'),
@@ -260,7 +261,7 @@ class UserType extends AbstractType
             $builder->add('inscritCommunautePratique', 'checkbox', array(
                 'label' => 'Membre de la communauté de pratiques'
             ));
-            
+
             $builder->add('contactAutre', 'textarea', array(
                     'required'   => false,
                     'label'      => 'Contact autre',
@@ -299,7 +300,7 @@ class UserType extends AbstractType
                     'empty_value' => ' - ',
                     'attr'        => array('class' => 'etablissement_sante'),
             ))
-            
+
             ->add('etablissementRattachementSante', 'genemu_jqueryselect2_entity', array(
                     'class'         => 'HopitalNumeriqueEtablissementBundle:Etablissement',
                     'property'      => 'usersAffichage',
@@ -309,7 +310,7 @@ class UserType extends AbstractType
                     'empty_value'   => ' - ',
                     'attr'        => array('class' => 'etablissement_sante')
             ))
-            
+
 
             ->add('autreStructureRattachementSante', 'text', array(
                     'max_length' => $this->_constraints['autreStructureRattachementSante']['maxlength'],
@@ -317,7 +318,7 @@ class UserType extends AbstractType
                     'label'      => 'Nom de votre établissement si non disponible dans la liste précédente',
                     'attr'       => array('class' => $this->_constraints['autreStructureRattachementSante']['class'] . ' etablissement_sante' )
             ))
-            
+
 
             ->add('fonctionDansEtablissementSante', 'text', array(
                     'max_length' => $this->_constraints['fonctionDansEtablissementSante']['maxlength'],
@@ -325,7 +326,7 @@ class UserType extends AbstractType
                     'label'      => 'Libellé fonction',
                     'attr'       => array('class' => $this->_constraints['fonctionDansEtablissementSante']['class'] . ' etablissement_sante' )
             ))
-            
+
             ->add('fonctionDansEtablissementSanteReferencement', 'entity', array(
                     'class'       => 'HopitalNumeriqueReferenceBundle:Reference',
                     'choices'       => $this->referenceManager->findByCode('CONTEXTE_FONCTION_INTERNAUTE'),
@@ -335,7 +336,7 @@ class UserType extends AbstractType
                     'empty_value' => ' - ',
                     'attr'        => array('class' => 'etablissement_sante'),
             ))
-            
+
             ->add('typeActivite', 'entity', array(
                     'class'       => 'HopitalNumeriqueReferenceBundle:Reference',
                     'choices'       => $this->referenceManager->findByCode('CONTEXTE_SPECIALITE_ES'),
@@ -346,7 +347,7 @@ class UserType extends AbstractType
                     'empty_value' => ' - ',
                     'attr'        => array('class' => 'etablissement_sante'),
             ))
-            
+
             ->add('profilEtablissementSante', 'entity', array(
                     'class'       => 'HopitalNumeriqueReferenceBundle:Reference',
                     'choices'       => $this->referenceManager->findByCode('CONTEXTE_METIER_INTERNAUTE'),
@@ -359,16 +360,16 @@ class UserType extends AbstractType
             ;
 
             // v -------- Onglet : Vous êtes un établissement de santé -------- v
-            
+
             // ^ -------- Onglet : Vous êtes une structure autre qu'un établissement de santé  -------- ^
-            
+
             $builder->add('nomStructure', 'text', array(
                     'max_length' => $this->_constraints['nomStructure']['maxlength'],
                     'required'   => false,
                     'label'      => 'Nom de la structure',
                     'attr'       => array('class' => $this->_constraints['nomStructure']['class'] . ' autre_structure' )
             ))
-            
+
             ->add('fonctionStructure', 'text', array(
                     'max_length' => $this->_constraints['fonctionStructure']['maxlength'],
                     'required'   => false,
@@ -376,9 +377,9 @@ class UserType extends AbstractType
                     'attr'       => array('class' => $this->_constraints['fonctionStructure']['class'] . ' autre_structure' )
             ))
             ;
-            
+
             // v -------- Onglet : Vous êtes une structure autre qu'un établissement de santé  -------- v
-            
+
             // Conditions générales d'utilisation - Uniquement en FO = Si l'utilisateur n'est pas connecté
             if(!$this->_securityContext->isGranted('ROLE_USER'))
                 $builder->add('termsAccepted', 'checkbox', array(
@@ -387,7 +388,7 @@ class UserType extends AbstractType
                         'label_attr' => array('class' => 'conditonsGenerales'),
                         'attr'       => array('class' => $this->_constraints['termsAccepted']['class'] . ' checkbox')
                 ));
-            
+
     }
 
     /**
