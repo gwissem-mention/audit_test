@@ -16,6 +16,7 @@ namespace HopitalNumerique\ForumBundle\Controller;
 use CCDNForum\ForumBundle\Component\Dispatcher\ForumEvents;
 use CCDNForum\ForumBundle\Component\Dispatcher\Event\AdminCategoryEvent;
 use CCDNForum\ForumBundle\Component\Dispatcher\Event\AdminCategoryResponseEvent;
+use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
 /**
  *
@@ -174,7 +175,10 @@ class AdminCategoryController extends \CCDNForum\ForumBundle\Controller\AdminCat
      */
     public function deleteAction($categoryId)
     {
-        $this->isAuthorised('ROLE_SUPER_ADMIN');
+        //$this->isAuthorised('ROLE_SUPER_ADMIN');
+        if(!$this->getSecurityContext()->getToken()->getUser()->isGranted('ROLE_ADMINISTRATEUR_DU_DOMAINE_HN_107') && !$this->getSecurityContext()->isGranted('ROLE_SUPER_ADMIN') && !$this->getSecurityContext()->isGranted('ROLE_ADMINISTRATEUR_DE_DOMAINE_106')) {
+            throw new AccessDeniedException('You do not have permission to use this resource.');
+        }
         $this->isFound($category = $this->getCategoryModel()->findOneCategoryById($categoryId));
         $formHandler = $this->getFormHandlerToDeleteCategory($category);
         $response = $this->renderResponse('CCDNForumForumBundle:Admin:/Category/delete.html.', array(

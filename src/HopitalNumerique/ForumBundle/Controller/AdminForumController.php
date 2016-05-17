@@ -30,9 +30,9 @@ class AdminForumController extends \CCDNForum\ForumBundle\Controller\AdminForumB
         if(!$this->getSecurityContext()->getToken()->getUser()->isGranted('ROLE_ADMINISTRATEUR_DU_DOMAINE_HN_107') && !$this->getSecurityContext()->isGranted('ROLE_SUPER_ADMIN')) {
             throw new AccessDeniedException('You do not have permission to use this resource.');
         }
-        //$this->isAuthorised('ROLE_SUPER_ADMIN');        
+        //$this->isAuthorised('ROLE_SUPER_ADMIN');
 
-        $forums = $this->getForumModel()->findAllForums(); 
+        $forums = $this->getForumModel()->findAllForums();
         $response = $this->renderResponse('CCDNForumForumBundle:Admin:/Forum/list.html.', array(
             'crumbs' => $this->getCrumbs()->addAdminManageForumsIndex(),
             'forums' => $forums
@@ -159,7 +159,7 @@ class AdminForumController extends \CCDNForum\ForumBundle\Controller\AdminForumB
     public function deleteAction($forumId)
     {
         // TODO : Utiliser la gestion des droits du backoffice
-        if(!$this->getSecurityContext()->getToken()->getUser()->isGranted('ROLE_ADMINISTRATEUR_DU_DOMAINE_HN_107') && !$this->getSecurityContext()->isGranted('ROLE_SUPER_ADMIN')) {
+        if(!$this->getSecurityContext()->getToken()->getUser()->isGranted('ROLE_ADMINISTRATEUR_DU_DOMAINE_HN_107') && !$this->getSecurityContext()->isGranted('ROLE_SUPER_ADMIN') && !$this->getSecurityContext()->isGranted('ROLE_ADMINISTRATEUR_DE_DOMAINE_106')) {
             throw new AccessDeniedException('You do not have permission to use this resource.');
         }
         //$this->isAuthorised('ROLE_SUPER_ADMIN');
@@ -189,7 +189,7 @@ class AdminForumController extends \CCDNForum\ForumBundle\Controller\AdminForumB
             throw new AccessDeniedException('You do not have permission to use this resource.');
         }
         //$this->isAuthorised('ROLE_SUPER_ADMIN');
-        
+
         $this->isFound($forum = $this->getForumModel()->findOneForumById($forumId));
         $formHandler = $this->getFormHandlerToDeleteForum($forum);
 
