@@ -431,20 +431,6 @@ class PublicationController extends Controller
             return false;
         }
 
-        $today = new \DateTime();
-
-        //test si l'objet est publié
-        if( !is_null($objet->getDateDebutPublication()) && $today < $objet->getDateDebutPublication() ){
-            $this->get('session')->getFlashBag()->add('warning', $message );
-            return false;
-        }
-
-        //test si l'objet est toujours publié
-        if( !is_null($objet->getDateFinPublication()) && $today > $objet->getDateFinPublication() ){
-            $this->get('session')->getFlashBag()->add('warning', $message );
-            return false;
-        }
-
         //test si l'objet est actif : état actif === 3
         if( $objet->getEtat()->getId() != 3 ){
             $this->get('session')->getFlashBag()->add('warning', $message );

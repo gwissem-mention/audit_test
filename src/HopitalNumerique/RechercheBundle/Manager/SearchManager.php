@@ -80,27 +80,6 @@ class SearchManager extends BaseManager
                 continue;
             }
 
-            if( !is_null($objet->getDateDebutPublication()) )
-            {
-                $today = new \DateTime();
-
-                //L'objet n'est pas encore publié on ne le prend pas en compte
-                if($today < $objet->getDateDebutPublication())
-                {
-                    continue;
-                }
-            }
-            if( !is_null($objet->getDateFinPublication()) )
-            {
-                $today = new \DateTime();
-
-                //L'objet n'est plus publié on ne le prend pas en compte
-                if($today > $objet->getDateFinPublication())
-                {
-                    continue;
-                }
-            }
-
             //Gestion des catégories
             if($objet->isArticle())
             {
@@ -187,25 +166,6 @@ class SearchManager extends BaseManager
         foreach ($contenusRecherche as $contenu) 
         {
             $objet = $contenu->getObjet();
-
-            if( !is_null($objet->getDateDebutPublication()) )
-            {
-                $today = new \DateTime();
-
-                if($today < $objet->getDateDebutPublication())
-                {
-                    continue;
-                }
-            }
-            if( !is_null($objet->getDateFinPublication()) )
-            {
-                $today = new \DateTime();
-
-                if($today > $objet->getDateFinPublication())
-                {
-                    continue;
-                }
-            }
 
             //on teste si le rôle de l'user connecté ne fait pas parti de la liste des restriction de l'objet
             $roles = $objet->getRoles();

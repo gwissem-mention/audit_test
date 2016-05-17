@@ -82,8 +82,6 @@ class EntityHasReferenceRepository extends EntityRepository
      */
     public function getWithNotes(Domaine $domaine, array $groupedReferences = null, array $entityTypeIds = null, array $publicationCategoryIds = null, $resultFilters = [])
     {
-        $now = new \DateTime();
-        $now->setTime(0, 0, 0);
         $qb = $this->createQueryBuilder('entityHasReference');
         $referenceIds = [];
 
@@ -156,9 +154,7 @@ class EntityHasReferenceRepository extends EntityRepository
                 Expr\Join::WITH,
                 $qb->expr()->andX(
                     $qb->expr()->eq('entityHasReference.entityType', ':entityTypeObjet'),
-                    $qb->expr()->eq('objet.id', 'entityHasReference.entityId'),
-                    $qb->expr()->orX($qb->expr()->isNull('objet.dateDebutPublication'), $qb->expr()->lte('objet.dateDebutPublication', ':now')),
-                    $qb->expr()->orX($qb->expr()->isNull('objet.dateFinPublication'), $qb->expr()->gt('objet.dateFinPublication', ':now'))
+                    $qb->expr()->eq('objet.id', 'entityHasReference.entityId')
                 )
             )
             ->setParameter('entityTypeObjet', Entity::ENTITY_TYPE_OBJET)
@@ -196,12 +192,7 @@ class EntityHasReferenceRepository extends EntityRepository
             ->setParameter('entityTypeContenu', Entity::ENTITY_TYPE_CONTENU)
             ->leftJoin(
                 'contenu.objet',
-                'contenuObjet',
-                Expr\Join::WITH,
-                $qb->expr()->andX(
-                    $qb->expr()->orX($qb->expr()->isNull('contenuObjet.dateDebutPublication'), $qb->expr()->lte('contenuObjet.dateDebutPublication', ':now')),
-                    $qb->expr()->orX($qb->expr()->isNull('contenuObjet.dateFinPublication'), $qb->expr()->gt('contenuObjet.dateFinPublication', ':now'))
-                )
+                'contenuObjet'
             )
             ->leftJoin(
                 'contenuObjet.types',
@@ -291,7 +282,6 @@ class EntityHasReferenceRepository extends EntityRepository
             //-->
             ->groupBy('entityHasReference.entityType', 'entityHasReference.entityId')
             ->setParameter('domaine', $domaine)
-            ->setParameter('now', $now)
         ;
 
         if (null !== $publicationCategoryIds) {

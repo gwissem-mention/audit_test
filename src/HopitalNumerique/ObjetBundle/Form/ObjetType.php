@@ -215,22 +215,6 @@ class ObjetType extends AbstractType
                     'class' => 'col-md-7 control-label'
                 )
             ))
-            ->add('dateDebutPublication', 'genemu_jquerydate', array(
-                'required'   => false, 
-                'label'      => 'Début de publication',
-                'widget'     => 'single_text',
-                'label_attr' => array(
-                    'class' => 'col-md-7 control-label'
-                )
-            ))
-            ->add('dateFinPublication', 'genemu_jquerydate', array(
-                'required'   => false, 
-                'label'      => 'Fin de publication',
-                'widget'     => 'single_text',
-                'label_attr' => array(
-                    'class' => 'col-md-7 control-label'
-                )
-            ))
             ->add('dateModification', 'date', array(
                 'required'   => false, 
                 'widget'     => 'single_text',

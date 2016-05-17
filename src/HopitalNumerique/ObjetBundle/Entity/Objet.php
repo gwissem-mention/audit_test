@@ -163,22 +163,6 @@ class Objet implements RoutedItemInterface
      * @ORM\Column(name="obj_date_debut_parution", type="string", length=255, nullable=true, options = {"comment" = "Date de parution de l objet"})
      */
     private $dateParution;
-    
-    /**
-     * @var \DateTime
-     *
-     * @Gedmo\Versioned
-     * @ORM\Column(name="obj_date_debut_publication", type="datetime", nullable=true, options = {"comment" = "Date de début de la publication de l objet"})
-     */
-    private $dateDebutPublication;
-
-    /**
-     * @var \DateTime
-     *
-     * @Gedmo\Versioned
-     * @ORM\Column(name="obj_date_fin_publication", type="datetime", nullable=true, options = {"comment" = "Date de fin de la publication de l objet"})
-     */
-    private $dateFinPublication;
 
     /**
      * @var \DateTime
@@ -630,52 +614,6 @@ class Objet implements RoutedItemInterface
     public function getDateCreation()
     {
         return $this->dateCreation;
-    }
-
-    /**
-     * Set dateDebutPublication
-     *
-     * @param \DateTime $dateDebutPublication
-     * @return Objet
-     */
-    public function setDateDebutPublication($dateDebutPublication)
-    {
-        $this->dateDebutPublication = $dateDebutPublication;
-
-        return $this;
-    }
-
-    /**
-     * Get dateDebutPublication
-     *
-     * @return \DateTime 
-     */
-    public function getDateDebutPublication()
-    {
-        return $this->dateDebutPublication;
-    }
-
-    /**
-     * Set dateFinPublication
-     *
-     * @param \DateTime $dateFinPublication
-     * @return Objet
-     */
-    public function setDateFinPublication($dateFinPublication)
-    {
-        $this->dateFinPublication = $dateFinPublication;
-
-        return $this;
-    }
-
-    /**
-     * Get dateFinPublication
-     *
-     * @return \DateTime 
-     */
-    public function getDateFinPublication()
-    {
-        return $this->dateFinPublication;
     }
 
     /**

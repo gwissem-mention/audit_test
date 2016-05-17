@@ -16,7 +16,7 @@ class ErreursController extends Controller
         if ($id == 'SPTR6D7U5QFH4YMH5VVAXEWMTJ4XPCQBKGJR92E3')
         {
             set_time_limit(36000);
-            $resultats = $this->getAllUrlObjets(null,null);
+            $resultats = $this->getAllUrlObjets();
             $domaines = $this->get('hopitalnumerique_domaine.manager.domaine')->findBy(array(), array('nom' => 'ASC'));
 
             foreach ($domaines as $domaineExistant) {
@@ -101,15 +101,7 @@ class ErreursController extends Controller
      */
     public function generateTableauAction( Request $request )
     {
-        //Récupération de la requete
-        $dateDebut    = $request->request->get('datedebut-erreursCurl');
-        $dateFin      = $request->request->get('dateFin-erreursCurl');
-
-        //Récupération des dates sous forme DateTime
-        $dateDebutDateTime = $dateDebut === "" ? null : new \DateTime($dateDebut);
-        $dateFinDateTime   = $dateFin   === "" ? null : new \DateTime($dateFin);
-
-        $resultats = $this->getAllUrlObjets($dateDebutDateTime, $dateFinDateTime);
+        $resultats = $this->getAllUrlObjets();
 
         $domaines = $this->get('hopitalnumerique_domaine.manager.domaine')->findBy(array(), array('nom' => 'ASC'));
 
@@ -130,15 +122,7 @@ class ErreursController extends Controller
      */
     public function exportCSVAction( Request $request )
     {
-        //Récupération de la requete
-        $dateDebut    = $request->request->get('datedebut-erreursCurl');
-        $dateFin      = $request->request->get('dateFin-erreursCurl');
-
-        //Récupération des dates sous forme DateTime
-        $dateDebutDateTime = $dateDebut === "" ? null : new \DateTime($dateDebut);
-        $dateFinDateTime   = $dateFin   === "" ? null : new \DateTime($dateFin);
-
-        $resultat = $this->getAllUrlObjets($dateDebutDateTime, $dateFinDateTime);
+        $resultat = $this->getAllUrlObjets();
 
         //Colonnes communes
         $colonnes = array(
@@ -239,7 +223,7 @@ class ErreursController extends Controller
      *
      * @return array(string) Array = clé:Id de l'objet, value: Url
      */
-    private function getAllUrlObjets($dateDebut, $dateFin)
+    private function getAllUrlObjets()
     {
         $urls = array(
             'PUBLICATION'   => array(),
@@ -250,7 +234,7 @@ class ErreursController extends Controller
             'URL'           => array()
         );
 
-        $objets = $this->get('hopitalnumerique_objet.manager.objet')->getObjetsByDate($dateDebut, $dateFin);
+        $objets = $this->get('hopitalnumerique_objet.manager.objet')->findAll();
         $objetsArray = array();
 
         foreach ($objets as $key => $objet)

@@ -118,8 +118,6 @@ class ObjetRepository extends EntityRepository
                     $qb->expr()->eq('refType.code', ':code_objet')
                 )
             )
-            ->andWhere($qb->expr()->orX($qb->expr()->isNull('obj.dateDebutPublication'), $qb->expr()->lte('obj.dateDebutPublication', ':aujourdhui')))
-            ->andWhere($qb->expr()->orX($qb->expr()->isNull('obj.dateFinPublication'), $qb->expr()->gte('obj.dateFinPublication', ':aujourdhui')))
             ->setParameters(array(
                 'domaine' => $domaine,
                 'idEtat'      => 3,
@@ -165,17 +163,6 @@ class ObjetRepository extends EntityRepository
             ->from('HopitalNumeriqueObjetBundle:Objet', 'obj')
             ->leftJoin('obj.types','refTypes')
             ->where('refTypes.id IN (:types)','obj.etat = 3')
-            ->andWhere(
-                $qb->expr()->orx(
-                    $qb->expr()->isNull('obj.dateDebutPublication'),
-                    $qb->expr()->lte('obj.dateDebutPublication', ':today')
-                ),
-                $qb->expr()->orx(
-                    $qb->expr()->isNull('obj.dateFinPublication'),
-                    $qb->expr()->gte('obj.dateFinPublication', ':today')
-                )
-            )
-            ->setParameter('today', new \DateTime() )
             ->orderBy($order['champ'], $order['tri'])
             ->setParameter('types', $types );
         
@@ -200,19 +187,8 @@ class ObjetRepository extends EntityRepository
          ->leftJoin('obj.types','refTypes')
          ->where('obj.etat = 3')
          ->andWhere('obj.publicationPlusConsulte = :true')
-         ->andWhere(
-           $qb->expr()->orx(
-             $qb->expr()->isNull('obj.dateDebutPublication'),
-             $qb->expr()->lte('obj.dateDebutPublication', ':today')
-           ),
-           $qb->expr()->orx(
-             $qb->expr()->isNull('obj.dateFinPublication'),
-             $qb->expr()->gte('obj.dateFinPublication', ':today')
-           )
-         )
          ->setParameters(
             array(
-                'today' => new \DateTime(),
                 'true'  => true
          ))
          ->orderBy('obj.nbVue', 'DESC');
@@ -247,7 +223,7 @@ class ObjetRepository extends EntityRepository
     public function getObjetsForDashboard()
     {
         $qb = $this->_em->createQueryBuilder();
-        $qb->select('obj.id, obj.nbVue, obj.titre, refType.id as typeId, parentType.id as parentId, refEtat.id as etat, obj.dateCreation, obj.dateDebutPublication, obj.dateFinPublication')
+        $qb->select('obj.id, obj.nbVue, obj.titre, refType.id as typeId, parentType.id as parentId, refEtat.id as etat, obj.dateCreation')
             ->from('HopitalNumeriqueObjetBundle:Objet', 'obj')
             ->innerJoin('obj.types','refType')
             ->leftJoin('obj.etat','refEtat')
@@ -258,36 +234,6 @@ class ObjetRepository extends EntityRepository
             ->groupBy('obj.id')
         ;
         
-        return $qb;
-    }
-
-    /**
-     * Retourne la liste des objets en fonction des dates passées en param
-     *
-     * @param DateTime $dateDebut Date début fourchette
-     * @param DateTime $dateFin   Date fin fourchette
-     *
-     * @return QueryBuilder
-     */
-    public function getObjetsByDate( $dateDebut, $dateFin )
-    {
-        $qb = $this->_em->createQueryBuilder();
-        $qb->select('obj')
-            ->from('HopitalNumeriqueObjetBundle:Objet', 'obj')
-            ->leftJoin('obj.contenus','contenus')
-        ;
-
-            if(!is_null($dateDebut))
-            {
-                $qb->andWhere('obj.dateDebutPublication >= :dateDebut')->setParameter('dateDebut', $dateDebut );
-            }
-
-            if(!is_null($dateFin))
-            {
-                $qb->andWhere('obj.dateFinPublication <= :dateFin')->setParameter('dateFin', $dateFin );
-            }
-            $qb->orderBy('obj.dateDebutPublication', 'DESC');
-
         return $qb;
     }
 
@@ -336,17 +282,11 @@ class ObjetRepository extends EntityRepository
      */
     public function getArticlesForCategorieQueryBuilder(Reference $categorie, Domaine $domaine)
     {
-        $aujourdhui = new \DateTime();
-        $aujourdhui->setTime(0, 0, 0);
-
         $query = $this->createQueryBuilder('article');
 
         $query
             ->andWhere('article.isArticle = :isArticle')
             ->setParameter('isArticle', true)
-            ->andWhere($query->expr()->orX('article.dateDebutPublication < :aujourdhui', $query->expr()->isNull('article.dateDebutPublication')))
-            ->andWhere($query->expr()->orX('article.dateFinPublication > :aujourdhui', $query->expr()->isNull('article.dateFinPublication')))
-            ->setParameter('aujourdhui', $aujourdhui)
             ->innerJoin('article.domaines', 'domaine', Expr\Join::WITH, 'domaine = :domaine')
             ->setParameter('domaine', $domaine)
             ->innerJoin('article.types', 'categorie')

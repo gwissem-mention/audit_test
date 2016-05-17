@@ -25,18 +25,7 @@ class RefContenuRepository extends EntityRepository
                         ->leftJoin('refC.contenu','con')
                         ->leftJoin('con.objet','obj')
                         ->andWhere('refC.reference in (:references)','obj.etat = 3')
-                        ->andWhere(
-                            $qb->expr()->orx(
-                                $qb->expr()->isNull('obj.dateDebutPublication'),
-                                $qb->expr()->lte('obj.dateDebutPublication', ':today')
-                            ),
-                            $qb->expr()->orx(
-                                $qb->expr()->isNull('obj.dateFinPublication'),
-                                $qb->expr()->gte('obj.dateFinPublication', ':today')
-                            )
-                        )
                         ->setParameter('references', $references )
-                        ->setParameter('today', new \DateTime() )
                         ->orderBy('refC.primary', 'ASC');
     }
 }

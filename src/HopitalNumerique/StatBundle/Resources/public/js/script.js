@@ -112,31 +112,6 @@ $(document).ready(function() {
         $( "#datepicker-datefin-requeteFantom" ).datepicker( "option", "showAnim", "fadeIn" );
 
         //---Erreurs du curl
-
-        //Date début
-        $( "#datepicker-datedebut-erreursCurl" ).datepicker({
-            defaultDate: "now",
-            changeMonth: true,
-            numberOfMonths: 1,
-            dateFormat: "dd-mm-yy",
-            onClose: function( selectedDate ) {
-                $( "#datepicker-datefin-erreursCurl" ).datepicker( "option", "minDate", selectedDate );
-            }
-        });
-        $( "#datepicker-datedebut-erreursCurl" ).datepicker( "option", "showAnim", "fadeIn" );
-
-        //Date de fin
-        $( "#datepicker-datefin-erreursCurl" ).datepicker({
-            defaultDate: "+1d",
-            changeMonth: true,
-            numberOfMonths: 1,
-            dateFormat: "dd-mm-yy",
-            onClose: function( selectedDate ) {
-                $( "#datepicker-datedebut-erreursCurl" ).datepicker( "option", "maxDate", selectedDate );
-            }
-        });
-        $( "#datepicker-datefin-erreursCurl" ).datepicker( "option", "showAnim", "fadeIn" );
-
         //----Pour autodiag
         //Date début
         $( "#datepicker-datedebut-erreursCurl-autodiag" ).datepicker({
