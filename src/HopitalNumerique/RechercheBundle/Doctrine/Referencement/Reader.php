@@ -6,6 +6,7 @@ use HopitalNumerique\DomaineBundle\DependencyInjection\CurrentDomaine;
 use HopitalNumerique\ObjetBundle\Manager\ContenuManager;
 use HopitalNumerique\ObjetBundle\Manager\ObjetManager;
 use HopitalNumerique\ReferenceBundle\DependencyInjection\Referencement;
+use HopitalNumerique\ReferenceBundle\Entity\Reference;
 use HopitalNumerique\ReferenceBundle\Manager\EntityHasNoteManager;
 use HopitalNumerique\ReferenceBundle\Manager\EntityHasReferenceManager;
 use HopitalNumerique\UserBundle\DependencyInjection\ConnectedUser;
@@ -193,8 +194,6 @@ class Reader
         $entitiesProperties = $this->getEntitiesPropertiesByReferenceIds($groupedReferenceIds, $entityTypeIds, $publicationCategoryIds, $resultFilters);
 
         foreach ($entitiesProperties as $entityProperties) {
-            $group = (null !== $entityProperties['objetPointDurTypeId'] ? 'points-durs' : 'productions');
-
             $entityPropertiesByGroup = [
                 'entityType' => $entityProperties['entityType'],
                 'entityId' => $entityProperties['entityId'],
@@ -212,6 +211,8 @@ class Reader
                     $entityPropertiesByGroup['categoryIds'][] = $objetTypeId;
                 }
             }
+
+            $group = (in_array(Reference::CATEGORIE_OBJET_POINT_DUR_ID, $entityPropertiesByGroup['categoryIds']) ? 'points-durs' : 'productions');
 
             $entitiesPropertiesByGroup[$group][] = $entityPropertiesByGroup;
         }

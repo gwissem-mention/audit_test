@@ -23,6 +23,7 @@ class ReferencementController extends Controller
             $choosenReferenceIds = $request->request->get('references');
         } else {
             $choosenReferenceIds = $this->container->get('hopitalnumerique_recherche.dependency_injection.referencement.requete_session')->getReferenceIds();
+            
             if (count($choosenReferenceIds) === 0 && !$this->container->get('hopitalnumerique_recherche.dependency_injection.referencement.requete_session')->hasSearchedText()) {
                 if (null !== $this->getUser()) {
                     $requeteDefault = $this->container->get('hopitalnumerique_recherche.manager.requete')->findDefaultByUser($this->getUser());

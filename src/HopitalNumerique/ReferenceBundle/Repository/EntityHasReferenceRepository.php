@@ -92,7 +92,6 @@ class EntityHasReferenceRepository extends EntityRepository
                 'COUNT(DISTINCT(entityHasReferenceMatch.reference)) AS referencesCount',
                 'SUM(DISTINCT(entityHasReferenceMatch.primary)) AS primarySum',
                 'entityHasNote.note',
-                'objetPointDurType.id as objetPointDurTypeId',
                 'GROUP_CONCAT(objetRole.id) AS objetRoleIds',
                 'GROUP_CONCAT(contenuObjetRole.id) AS contenuObjetRoleIds',
                 'GROUP_CONCAT(objetType.id) AS objetTypeIds',
@@ -171,13 +170,6 @@ class EntityHasReferenceRepository extends EntityRepository
                 'objetDomaine'
             )
             ->andWhere($qb->expr()->orX($qb->expr()->isNull('objet.id'), $qb->expr()->eq('objetDomaine.id', ':domaine')))
-            ->leftJoin(
-                'objet.types',
-                'objetPointDurType',
-                Expr\Join::WITH,
-                $qb->expr()->eq('objetPointDurType.id', ':objetCategoriePointDur')
-            )
-            ->setParameter('objetCategoriePointDur', Reference::CATEGORIE_OBJET_POINT_DUR_ID)
             //-->
             //<-- Contenus
             ->leftJoin(
