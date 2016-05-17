@@ -236,50 +236,15 @@ class MaitriseUserManager extends BaseManager
         return $moyennes;
     }
 
-    /**
-     * Supprime les notes des objets qui ne sont plus d'actualités
-     *
-     * @param [type] $notes  Ensemble des notes à trier
-     * @param [type] $objets Objets à garder
-     *
-     * @return array(MaitriseUser) Ensemble des notes triées
-     */
-    public function cleanNotesByObjet($notes, $objets)
-    {
-        //Tableau temp des notes
-        $notesTemp = array();
-        $objetIds  = array();
-
-        //Récupération de l'ensemble des Ids des objets pour le tri
-        foreach ($objets as $objet) 
-        {
-            if($objet['categ'] === 'point-dur' && ($objet['primary'] >= 1))
-                $objetIds[] = $objet['id'];
-        }
-
-        //Tri des notes, si la note ne correspond plus à un objet à afficher on la supprime
-        foreach ($notes as $key => $note) 
-        {
-            if(!in_array($key, $objetIds) )
-            {
-                $this->delete($note);
-            }
-            else
-            {
-                $notesTemp[$note->getObjet()->getId()] = $note;
-            }
-        }
-
-        return $notesTemp;
-    }
-
-    public function removeNotesNotInEntities($notes, $entitiesProperties)
+    public function removeNotesNotInEntities($notes, $entitiesPropertiesKeyedByGroup)
     {
         $objetIds = [];
 
-        foreach ($entitiesProperties as $entityProperties) {
-            if (Entity::ENTITY_TYPE_OBJET == $entityProperties['entityType']) {
-                $objetIds[] = $entityProperties['entityId'];
+        foreach ($entitiesPropertiesKeyedByGroup as $entitiesProperties) {
+            foreach ($entitiesProperties as $entityProperties) {
+                if (Entity::ENTITY_TYPE_OBJET == $entityProperties['entityType']) {
+                    $objetIds[] = $entityProperties['entityId'];
+                }
             }
         }
 

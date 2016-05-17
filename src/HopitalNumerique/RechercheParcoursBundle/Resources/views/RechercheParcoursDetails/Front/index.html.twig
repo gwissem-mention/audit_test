@@ -73,7 +73,7 @@
             <input type="hidden" id="sauvegarde-nonconcerne-url" value="{{path("hopital_numerique_recherche_parcours_details_save_non_concerne_front")}}" />
             {% if app.user %}
                 {# Include du body en mode connecté #}
-                {% include 'HopitalNumeriqueRechercheParcoursBundle:RechercheParcoursDetails:Front/partials/body-online-2.html.twig' with { 'rechercheParcours' : rechercheParcours, 'etapeSelected' : etapesSelected.id } %}
+                {% include 'HopitalNumeriqueRechercheParcoursBundle:RechercheParcoursDetails:Front/partials/body-online.html.twig' with { 'rechercheParcours' : rechercheParcours, 'etapeSelected' : etapesSelected.id } %}
 
                 {# Input hidden permettant de stocker le tableau des notes triés par objet #}
                 <input type="hidden" id="note-json" value="{{ notesJSON }}" />
