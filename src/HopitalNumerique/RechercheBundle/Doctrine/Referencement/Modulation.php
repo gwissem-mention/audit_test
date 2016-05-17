@@ -40,23 +40,15 @@ class Modulation
 
     public function getModulatedReferenceIdsByGroupedReferenceIds(array $referenceIds, Domaine $domaine)
     {
-        $referencesTree = $this->referencement->getReferencesTree([$domaine]);
-        $referencesTree = $this->referenceTree->addCheckedReferenceIdsInTree($referencesTree, $referenceIds);
-        //$referencesTree = $this->alsoCheckReferenceParentsInReferencesTree($referencesTree);
+        $referencesTree = $this->referenceTree->addCheckedReferenceIdsInTree(
+            $this->referencement->getReferencesTree([$domaine]),
+            $referenceIds
+        );
 
         $referenceParentIds = $this->getReferenceParentIdsByReferencesTree($referencesTree);
         $referenceEnfantIds = $this->getReferenceEnfantIdsByReferenceIds($referenceIds, $referencesTree);
 
         return array_merge($referenceIds, $referenceParentIds, $referenceEnfantIds);
-        
-        /*$referenceFrereIds = $this->getReferenceFrereIdsByReferencesTree($referencesTree);
-
-        $referenceResults = $this->entityHasReferenceManager->getModulatedReferenceIdsByReferenceIds($referenceIds, $referenceParentIds, $referenceFrereIds);
-        $referenceIds = [];
-        foreach ($referenceResults as $referenceResult) {
-            $referenceIds[] = $referenceResult[1];
-        }
-        return $referenceIds;*/
     }
 
     private function getReferenceParentIdsByReferencesTree(array $referencesTree)
@@ -80,32 +72,6 @@ class Modulation
         return $referenceParentIds;
     }
 
-    private function getReferenceFrereIdsByReferencesTree(array $referencesTree)
-    {
-        return $this->getReferenceFrereIdsByReferencesSubtree($referencesTree);
-    }
-
-    private function getReferenceFrereIdsByReferencesSubtree(array $referencesTree)
-    {
-        $referenceFrereIds = [];
-
-        foreach ($referencesTree as $referenceSubtree) {
-            foreach ($this->getReferenceFrereIdsByReferencesSubtree($referenceSubtree['enfants']) as $referenceFrereId) {
-                $referenceFrereIds[] = $referenceFrereId;
-            }
-            if ($referenceSubtree['checked']) {
-                foreach ($referencesTree as $referenceFratrieSubtree) {
-                    if (!$referenceFratrieSubtree['checked']) {
-                        $referenceFrereIds[] = $referenceFratrieSubtree['reference']->getId();
-                    }
-                }
-                break;
-            }
-        }
-
-        return $referenceFrereIds;
-    }
-
     private function getReferenceEnfantIdsByReferenceIds(array $referenceIds, array $referencesTree)
     {
         return array_values(array_unique($this->getReferenceEnfantIdsByReferenceIdsInSubtree($referenceIds, $referencesTree)));
@@ -124,23 +90,6 @@ class Modulation
         }
 
         return $referenceEnfantIds;
-    }
-
-    private function alsoCheckReferenceParentsInReferencesTree(array $referencesTree)
-    {
-        $referencesTreeWithCheckedParents = [];
-
-        foreach ($referencesTree as $referenceSubtree) {
-            if (!$referenceSubtree['checked'] && $this->hasCheckedReferenceInReferencesSubtree($referenceSubtree['enfants'])) {
-                $referenceSubtree['checked'] = true;
-            }
-            $referenceSubtree['enfants'] = $this->alsoCheckReferenceParentsInReferencesTree($referenceSubtree['enfants']);
-            //$this->alsoCheckReferenceParentsInReferencesTree($referenceSubtree['enfants']);
-
-            $referencesTreeWithCheckedParents[] = $referenceSubtree;
-        }
-
-        return $referencesTreeWithCheckedParents;
     }
 
     private function hasCheckedReferenceInReferencesSubtree(array $referencesSubtree)
