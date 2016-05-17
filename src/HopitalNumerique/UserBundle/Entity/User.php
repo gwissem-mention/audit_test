@@ -644,7 +644,7 @@ class User extends BaseUser
      */
     protected $notficationRequete;
 
-    /* <-- Communauté de pratiques */
+    /* <-- Communauté de pratique */
 
     /**
      * @var boolean
@@ -2128,7 +2128,7 @@ class User extends BaseUser
       return $this;
     }
 
-    /* <-- Communauté de pratiques */
+    /* <-- Communauté de pratique */
 
     /**
      * Get inscritCommunautePratique

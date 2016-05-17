@@ -351,7 +351,7 @@ class UserManager extends BaseManager
   }
 
   	/**
-     * Retourne des membres de la communauté de pratiques.
+     * Retourne des membres de la communauté de pratique.
      *
      * @param \HopitalNumerique\UserBundle\Manager\Domaine $domaine Domaine
      * @return array<\HopitalNumerique\UserBundle\Entity\User> Utilisateurs

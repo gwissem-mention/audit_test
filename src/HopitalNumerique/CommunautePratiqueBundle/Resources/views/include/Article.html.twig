@@ -3,7 +3,7 @@
         {%- if app.user is not null and app.user|communautePratiqueHasInformationManquante -%}
             <div class="col-md-12">
                 <div class="bloc-rejoindre">
-                    <div class="title">Rejoindre la communauté de pratiques</div>
+                    <div class="title">Rejoindre la communauté de pratique</div>
                     <p>
                         Certaines informations de votre profil sont nécessaires pour rejoindre la communauté :
                         {%- for informationManquante in app.user|communautePratiqueGetInformationsManquantes -%}
@@ -16,10 +16,10 @@
         {%- else -%}
             <div class="col-md-8 col-sm-8">
                 {%- if app.user is null -%}
-                    {% include 'HopitalNumeriqueAccountBundle:include:login.html.twig' with { 'size':'small', 'title':'Rejoindre la communauté de pratiques' } %}
+                    {% include 'HopitalNumeriqueAccountBundle:include:login.html.twig' with { 'size':'small', 'title':'Rejoindre la communauté de pratique' } %}
                 {%- else -%}
                     <div class="bloc-rejoindre">
-                        <div class="title">Rejoindre la communauté de pratiques</div>
+                        <div class="title">Rejoindre la communauté de pratique</div>
                         <p>Pour rejoindre la communauté, cliquez sur le bouton suivant.</p>
                         <p>&nbsp;</p>
                         <div class="text-right">
@@ -32,7 +32,7 @@
                 <div class="bloc-action">
                     {% if app.user is not null and app.user.inscritCommunautePratique %}
                         <div class="title">Quitter</div>
-                        <div class="subtitle">la communauté de pratiques</div>
+                        <div class="subtitle">la communauté de pratique</div>
                         <p><em>Votre fiche sera supprimée de l'annuaire de la communauté</em></p>
                         <a class="btn" onclick="CommunautePratique.desinscrit();">Quitter la communauté</a>
                     {% else %}

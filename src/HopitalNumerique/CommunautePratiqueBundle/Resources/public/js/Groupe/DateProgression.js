@@ -1,5 +1,5 @@
 /**
- * Classe gérant les barres de progression des dates dans les groupes de la communauté de pratiques.
+ * Classe gérant les barres de progression des dates dans les groupes de la communauté de pratique.
  */
 var CommunautePratique_Groupe_DateProgression = function() {};
 

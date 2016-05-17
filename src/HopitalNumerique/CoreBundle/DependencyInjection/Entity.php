@@ -47,7 +47,7 @@ class Entity
     const ENTITY_TYPE_RECHERCHE_PARCOURS = 5;
 
     /**
-     * @var int Type Groupe de la communauté de pratiques
+     * @var int Type Groupe de la communauté de pratique
      */
     const ENTITY_TYPE_COMMUNAUTE_PRATIQUES_GROUPE = 6;
 
@@ -67,9 +67,9 @@ class Entity
     const CATEGORY_RECHERCHE_PARCOURS_LABEL = 'Démarche';
 
     /**
-     * @var string Nom de la catégorie du groupe de la communauté de pratiques
+     * @var string Nom de la catégorie du groupe de la communauté de pratique
      */
-    const CATEGORY_COMMUNAUTE_PRATIQUES_GROUPE_LABEL = 'Groupe en cours de la communauté de pratiques';
+    const CATEGORY_COMMUNAUTE_PRATIQUES_GROUPE_LABEL = 'Groupe en cours de la communauté de pratique';
 
 
     /**

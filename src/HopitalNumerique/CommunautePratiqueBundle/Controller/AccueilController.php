@@ -6,12 +6,12 @@ use HopitalNumerique\ReferenceBundle\Entity\Reference;
 use HopitalNumerique\ForumBundle\Entity\Forum;
 
 /**
- * Accueil de la communauté de pratiques.
+ * Accueil de la communauté de pratique.
  */
 class AccueilController extends \Symfony\Bundle\FrameworkBundle\Controller\Controller
 {
     /**
-     * Accueil de la communauté de pratiques.
+     * Accueil de la communauté de pratique.
      */
     public function indexAction(Request $request)
     {

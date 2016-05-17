@@ -12,7 +12,7 @@ use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInt
 class InformationsManquantesType extends AbstractType
 {
     /**
-     * @var integer Type Communauté de pratiques
+     * @var integer Type Communauté de pratique
      */
     const TYPE_COMMUNAUTE_PRATIQUE = 1;
 
@@ -101,7 +101,7 @@ class InformationsManquantesType extends AbstractType
     }
 
     /**
-     * Retourne les champs du formulaire pour l'inscription à la communauté de pratiques.
+     * Retourne les champs du formulaire pour l'inscription à la communauté de pratique.
      *
      * @return array Champs
      */

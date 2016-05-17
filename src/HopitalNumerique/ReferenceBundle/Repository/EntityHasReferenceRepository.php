@@ -244,7 +244,7 @@ class EntityHasReferenceRepository extends EntityRepository
             )
             ->andWhere($qb->expr()->orX($qb->expr()->isNull('rechercheParcours.id'), $qb->expr()->eq('rechercheParcoursGestionDomaine.id', ':domaine')))
             //-->
-            //<-- Groupes de la communauté de pratiques
+            //<-- Groupes de la communauté de pratique
             ->leftJoin(
                 Groupe::class,
                 'communautePratiqueGroupe',

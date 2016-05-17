@@ -258,7 +258,7 @@ class UserType extends AbstractType
             ));
 
             $builder->add('inscritCommunautePratique', 'checkbox', array(
-                'label' => 'Membre de la communauté de pratiques'
+                'label' => 'Membre de la communauté de pratique'
             ));
             
             $builder->add('contactAutre', 'textarea', array(
