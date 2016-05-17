@@ -352,37 +352,4 @@ class EntityHasReferenceRepository extends EntityRepository
 
         return $qb->getQuery()->getResult();
     }
-
-    /**
-     * À partir de références groupés par catégorie, on retourne les références à rechercher selob la modularité.
-     *
-     * @return array IDs
-     */
-    /*public function getModulatedReferenceIdsByReferenceIds(array $referenceIds, array $referenceParentIds, array $referenceFrereIds)
-    {
-        $subQb = $this->createQueryBuilder('entityHasReferenceFilter');
-        $subQb
-            ->select('IDENTITY(entityHasReferenceFilter.reference)')
-            ->where($subQb->expr()->andX(
-                $subQb->expr()->in('IDENTITY(entityHasReferenceFilter.reference)', ':referenceFrereIds'),
-                $subQb->expr()->notIn('IDENTITY(entityHasReferenceFilter.reference)', ':referenceIds')
-            ))
-        ;
-
-        $qb = $this->createQueryBuilder('entityHasReference');
-        $qb
-            ->select('DISTINCT(IDENTITY(entityHasReference.reference))')
-            ->where($qb->expr()->andX(
-                $qb->expr()->in('IDENTITY(entityHasReference.reference)', ':referenceWhiteParentIds'),
-                $qb->expr()->notIn('IDENTITY(entityHasReference.reference)', $subQb->getQuery()->getDQL())
-            ))
-            ->setParameters([
-                'referenceFrereIds' => $referenceFrereIds,
-                'referenceIds' => $referenceIds,
-                'referenceWhiteParentIds' => array_merge($referenceIds, $referenceParentIds)
-            ])
-        ;
-
-        return $qb->getQuery()->getResult();
-    }*/
 }
