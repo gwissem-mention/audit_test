@@ -1,7 +1,6 @@
 <?php
 namespace HopitalNumerique\RechercheBundle\Doctrine\Referencement;
 
-use HopitalNumerique\DomaineBundle\Entity\Domaine;
 use HopitalNumerique\ReferenceBundle\DependencyInjection\Reference\Tree as ReferenceTree;
 use HopitalNumerique\ReferenceBundle\DependencyInjection\Referencement;
 use HopitalNumerique\ReferenceBundle\Manager\EntityHasReferenceManager;
@@ -38,10 +37,10 @@ class Modulation
     }
 
 
-    public function getModulatedReferenceIdsByGroupedReferenceIds(array $referenceIds, Domaine $domaine)
+    public function getModulatedReferenceIdsByGroupedReferenceIds(array $referenceIds, array $referencesTree)
     {
         $referencesTree = $this->referenceTree->addCheckedReferenceIdsInTree(
-            $this->referencement->getReferencesTree([$domaine]),
+            $referencesTree,
             $referenceIds
         );
 

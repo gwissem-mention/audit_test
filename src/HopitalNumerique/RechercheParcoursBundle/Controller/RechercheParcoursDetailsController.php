@@ -155,7 +155,8 @@ class RechercheParcoursDetailsController extends Controller
                 ],
                 $this->container->get('hopitalnumerique_account.dependency_injection.doctrine.reference.contexte')->getReferenceIds()
             );
-            $groupedReferencesLieesIds = $this->container->get('hopitalnumerique_reference.dependency_injection.referencement')->getReferenceIdsKeyedByGroup($referencesLieesIds, $domaine);
+            $referencesTree = $this->container->get('hopitalnumerique_reference.dependency_injection.referencement')->getReferencesTree([$domaine]);
+            $groupedReferencesLieesIds = $this->container->get('hopitalnumerique_reference.dependency_injection.referencement')->getReferenceIdsKeyedByGroup($referencesLieesIds, $referencesTree);
             $entitiesPropertiesKeyedByGroup = $this->container->get('hopitalnumerique_recherche.doctrine.referencement.reader')->getEntitiesPropertiesKeyedByGroupByGroupedReferenceIds($groupedReferencesLieesIds, [Entity::ENTITY_TYPE_OBJET], null, ['primary' => true]);
             if (!$rechercheParcours->getRecherchesParcoursGestion()->hasTypePublicationPointDur()) {
                 unset($entitiesPropertiesKeyedByGroup['points-durs']);

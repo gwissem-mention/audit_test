@@ -182,11 +182,13 @@ class Reader
         }
         //->
 
+        $referencesTree = $this->referencement->getReferencesTree([$this->currentDomaine->get()]);
         $referenceIds = $this->modulation->getModulatedReferenceIdsByGroupedReferenceIds(
             $this->referencement->getReferenceIdsByGroupedReferenceIds($groupedReferenceIds),
-            $this->currentDomaine->get()
+            $referencesTree
         );
-        $groupedReferenceIds = $this->referencement->getReferenceIdsKeyedByGroup($referenceIds, $this->currentDomaine->get());
+
+        $groupedReferenceIds = $this->referencement->getReferenceIdsKeyedByGroup($referenceIds, $referencesTree);
 
         $entitiesProperties = $this->getEntitiesPropertiesByReferenceIds($groupedReferenceIds, $entityTypeIds, $publicationCategoryIds, $resultFilters);
 
@@ -275,13 +277,14 @@ class Reader
 
     public function getEntitiesPropertiesKeyedByGroupForEntity($entity)
     {
+        $referencesTree = $this->referencement->getReferencesTree([$this->currentDomaine->get()]);
         $entitiesHaveReferences = $this->entityHasReferenceManager->findBy([
             'entityId' => $this->entity->getEntityId($entity),
             'entityType' => $this->entity->getEntityType($entity)
         ]);
 
         $referenceIds = $this->entityHasReferenceManager->getReferenceIdsForEntitiesHaveReferences($entitiesHaveReferences);
-        $referenceIdskeyedByGroup = $this->referencement->getReferenceIdskeyedByGroup($referenceIds, $this->currentDomaine->get());
+        $referenceIdskeyedByGroup = $this->referencement->getReferenceIdskeyedByGroup($referenceIds, $referencesTree);
 
         return $this->getEntitiesPropertiesByReferenceIdsByGroup($referenceIdskeyedByGroup);
     }
