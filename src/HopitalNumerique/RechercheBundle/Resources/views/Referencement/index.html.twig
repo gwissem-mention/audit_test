@@ -60,7 +60,7 @@
                                         <div class="modal-body">
                                             <ul data-level="1">
                                                 {%- for referenceEnfantTree in referenceProperties.enfants -%}
-                                                    {{ mySelf.buildContextTreePart(referenceEnfantTree, 2) }}
+                                                    {{ mySelf.buildContextTreePart(referenceEnfantTree, 2, null) }}
                                                 {%- endfor -%}
                                             </ul>
                                         </div>
@@ -74,18 +74,18 @@
                         </div>
                     {% endif %}
                 {%- endfor -%}
-                {% macro buildContextTreePart(referencesTreePart, level) -%}
+                {% macro buildContextTreePart(referencesTreePart, level, referenceParentId) -%}
                     {% import _self as mySelf %}
                     <li data-reference="{{ referencesTreePart.reference.id }}" data-level="{{ level }}" data-chosen="false" data-domaines="{{ referencesTreePart.reference.domainesId|join(',') }}">
                         {%- if level > 2 -%}
-                            <label><input type="checkbox"> {{ referencesTreePart.reference.libelle }}</label>
+                            <label><input name="ref-{{ referenceParentId }}" type="{{ referenceParentId == '271' ? 'checkbox' : 'radio' }}"> {{ referencesTreePart.reference.libelle }}</label>
                         {%- else -%}
                             <div><strong>{{ referencesTreePart.reference.libelle }}</strong></div>
                         {%- endif -%}
                         {%- if referencesTreePart.enfants|length > 0 -%}
                             <ul>
                                 {%- for referenceEnfantTree in referencesTreePart.enfants -%}
-                                    {{ mySelf.buildContextTreePart(referenceEnfantTree, level + 1) }}
+                                    {{ mySelf.buildContextTreePart(referenceEnfantTree, level + 1, referencesTreePart.reference.id) }}
                                 {%- endfor -%}
                             </ul>
                         {%- endif -%}

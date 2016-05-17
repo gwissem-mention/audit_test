@@ -260,9 +260,9 @@ Hn_RechercheBundle_Referencement.toggleReferenceChoosing = function(referenceId)
 
     Hn_RechercheBundle_Referencement.getElementByReferenceId(referenceId).attr('data-chosen', referenceIsChosen ? 'false' : 'true');
     
-    var referenceCheckbox = $('#contexte-modal [data-reference="' + referenceId + '"] input[type="checkbox"]');
+    var referenceCheckbox = $('#contexte-modal [data-reference="' + referenceId + '"] input');
     if ($(referenceCheckbox).size() === 1) { // Popin Mon contexte
-        $('#contexte-modal [data-reference="' + referenceId + '"] input[type="checkbox"]').prop('checked', referenceIsChosen ? false : true);
+        $('#contexte-modal [data-reference="' + referenceId + '"] input').prop('checked', referenceIsChosen ? false : true);
     } else { // Menu de gauche
         if (!referenceIsChosen) {
             // On décoche tous les enfants (récupérés automatiquement dans la requête)
