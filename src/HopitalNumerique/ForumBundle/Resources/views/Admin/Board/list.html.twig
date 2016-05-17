@@ -29,7 +29,7 @@
 
         <section class="col-md-12 row clearfix">
             <div class="row">
-                <div id="choix-forum">  
+                <div id="choix-forum">
                     <div class="col-md-6">
                         <div class="panel panel-default">
                             <div class="panel-heading">
@@ -108,7 +108,7 @@
                                                 <i class="fa fa-edit"></i>
                                             </a>
 
-                                            {%- if is_granted('ROLE_SUPER_ADMIN') -%}
+                                            {%- if is_granted('ROLE_SUPER_ADMIN') or is_granted("ROLE_ADMINISTRATEUR_DU_DOMAINE_HN_107") or is_granted('ROLE_ADMINISTRATEUR_1') or is_granted('ROLE_ADMINISTRATEUR_DE_DOMAINE_106') -%}
                                                 <a class="btn btn-danger" href="{{- path('ccdn_forum_admin_board_delete', {'boardId': board.id, 'forum_filter': forum_filter, 'category_filter': category_filter}) -}}"
                                                  id="delete_board[{{- board.name -}}]">
                                                     <i class="fa fa-trash-o"></i>
