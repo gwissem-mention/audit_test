@@ -23,22 +23,22 @@ class UserRepository extends EntityRepository
      * @return qb
      */
     public function getDatasForGrid()
-    {        
+    {
         $qb = $this->_em->createQueryBuilder();
-        $qb->select('user.id, 
-                        user.dateInscription, 
+        $qb->select('user.id,
+                        user.dateInscription,
                         user.username,
                         CONCAT(CONCAT(\'<a href="/?_switch_user=\', user.username), \'" target="_blank" class="btn btn-magenta fa fa-user" title="Simuler"></a>\') AS usernameSimulated,
                         user.pseudonymeForum,
-                        user.email, 
-                        user.nom, 
+                        user.email,
+                        user.nom,
                         user.prenom,
                         user.alreadyBeAmbassadeur,
                         user.alreadyBeExpert,
-                        refRegion.libelle as region, 
+                        refRegion.libelle as region,
                         user.roles,
-                        refEtat.libelle as etat, 
-                        user.lock, 
+                        refEtat.libelle as etat,
+                        user.lock,
                         min(contractualisation.dateRenouvellement) as contra,
                         user.nbVisites
             ')
@@ -53,7 +53,7 @@ class UserRepository extends EntityRepository
             ->groupBy('user')
             ->orderBy('user.dateInscription', 'DESC')
             ->addOrderBy('user.username');
-        
+
         return $qb;
     }
 
@@ -65,11 +65,11 @@ class UserRepository extends EntityRepository
     public function getEtablissementForGrid()
     {
         $qb = $this->_em->createQueryBuilder();
-        $qb->select('user.id, 
-                     user.username, 
-                     user.nom, 
-                     user.prenom, 
-                     refRegion.libelle as region, 
+        $qb->select('user.id,
+                     user.username,
+                     user.nom,
+                     user.prenom,
+                     refRegion.libelle as region,
                      user.autreStructureRattachementSante,
                      user.archiver
 
@@ -78,7 +78,7 @@ class UserRepository extends EntityRepository
             ->leftJoin('user.region','refRegion')
             ->where('user.autreStructureRattachementSante IS NOT NULL')
             ->orderBy('user.username');
-        
+
         return $qb;
     }
 
@@ -90,11 +90,11 @@ class UserRepository extends EntityRepository
     public function getEtablissementForExport( $ids )
     {
         $qb = $this->_em->createQueryBuilder();
-        $qb->select('user.id, 
-                     user.username, 
-                     user.nom, 
-                     user.prenom, 
-                     refRegion.libelle as region, 
+        $qb->select('user.id,
+                     user.username,
+                     user.nom,
+                     user.prenom,
+                     refRegion.libelle as region,
                      user.autreStructureRattachementSante,
                      user.archiver
             ')
@@ -103,7 +103,7 @@ class UserRepository extends EntityRepository
             ->andWhere('user.autreStructureRattachementSante IS NOT NULL', 'user.id IN (:ids)')
             ->orderBy('user.username')
             ->setParameter('ids', $ids);
-        
+
         return $qb;
     }
 
@@ -167,7 +167,7 @@ class UserRepository extends EntityRepository
             ->andWhere('user.enabled = 1')
             ->andWhere('user.roles LIKE :role')
             ->setParameter('role', '%ROLE_ES_8%');
-        
+
         foreach ($criteres as $critereChamp => $critereValeur)
         {
             if (is_array($critereValeur))
@@ -210,7 +210,7 @@ class UserRepository extends EntityRepository
 
         return $qb;
     }
-    
+
     /**
      * Retourne la liste des utilisateurs possédant le role demandé
      *
@@ -221,7 +221,7 @@ class UserRepository extends EntityRepository
     public function findUsersByRole( $role )
     {
         $qb = $this->_em->createQueryBuilder();
-    
+
         $qb->select('user')
             ->from('HopitalNumeriqueUserBundle:User', 'user')
             ->where('user.roles LIKE :role')
@@ -231,7 +231,7 @@ class UserRepository extends EntityRepository
 
         return $qb;
     }
-    
+
     /**
      * Retourne la liste des utilisateurs possédant les roles demandés
      *
@@ -242,7 +242,7 @@ class UserRepository extends EntityRepository
     public function findUsersByRoles( $roles )
     {
         $qb = $this->_em->createQueryBuilder();
-    
+
         $qb->select('user')
             ->from('HopitalNumeriqueUserBundle:User', 'user');
 
@@ -253,11 +253,11 @@ class UserRepository extends EntityRepository
 
             $qb->orderBy('user.nom', 'ASC')
                 ->addOrderBy('user.prenom', 'DESC');
-            
+
 
         return $qb;
     }
-    
+
     /**
      * Retourne la liste des utilisateurs étant assigné au domaine
      *
@@ -268,7 +268,7 @@ class UserRepository extends EntityRepository
     public function findUsersByDomaine( $idDomaine )
     {
         $qb = $this->_em->createQueryBuilder();
-    
+
         $qb->select('user')
             ->from('HopitalNumeriqueUserBundle:User', 'user')
             ->leftJoin('user.domaines', 'domaine')
@@ -277,22 +277,22 @@ class UserRepository extends EntityRepository
 
         return $qb;
     }
-    
+
     /**
      * Retourne les utilisateurs liés à un de ces domaines.
-     * 
+     *
      * @param \Doctrine\Common\Collections\Collection $domaines Domaines
      * @return array<\HopitalNumerique\UserBundle\Entity\User> Utilisateurs
      */
     public function findByDomaines(Collection $domaines)
     {
         $query = $this->createQueryBuilder('user');
-        
+
         $query
             ->innerJoin('user.domaines', 'domaine', Expr\Join::WITH, $query->expr()->in('domaine.id', ':domaines'))
             ->setParameter('domaines', $domaines->toArray())
         ;
-        
+
         return $query->getQuery()->getResult();
     }
 
@@ -307,7 +307,7 @@ class UserRepository extends EntityRepository
     public function findUsersByRoleAndRegion( $idRegion, $role )
     {
         $qb = $this->_em->createQueryBuilder();
-    
+
         $qb->select('user')
             ->from('HopitalNumeriqueUserBundle:User', 'user')
             ->where('user.roles LIKE :role')
@@ -317,7 +317,7 @@ class UserRepository extends EntityRepository
             ->andWhere('user.enabled = 1')
             ->setMaxResults(1)
         ;
-    
+
         return $qb;
     }
 
@@ -367,6 +367,17 @@ class UserRepository extends EntityRepository
     {
         return $this->findByRole(Role::$ROLE_AMBASSADEUR_LABEL, $criteres);
     }
+
+    /**
+     * Retourne une liste des experts.
+     *
+     * @param array $criteres Filtres à appliquer sur la liste
+     * @return \HopitalNumerique\UserBundle\Entity\User[] La liste des experts
+     */
+    public function getExperts(array $criteres = array())
+    {
+        return $this->findByRole(Role::$ROLE_EXPERT_LABEL, $criteres);
+    }
     /**
      * Retourne une liste d'utilisateurs ES ou Enregistré.
      *
@@ -407,7 +418,7 @@ class UserRepository extends EntityRepository
     private function findByRole($role, array $criteres)
     {
         $requete = $this->_em->createQueryBuilder();
-    
+
         $requete
             ->select('user')
             ->from('HopitalNumeriqueUserBundle:User', 'user')
@@ -428,7 +439,7 @@ class UserRepository extends EntityRepository
                 ;
             }
         }
-    
+
         foreach ($criteres as $critereChamp => $critereValeur)
         {
             if (is_array($critereValeur))
@@ -447,12 +458,12 @@ class UserRepository extends EntityRepository
                 ;
             }
         }
-        
+
         $requete
             ->addOrderBy('user.nom', 'ASC')
             ->addOrderBy('user.prenom', 'ASC')
         ;
-        
+
         return $requete->getQuery()->getResult();
     }
 
@@ -469,7 +480,7 @@ class UserRepository extends EntityRepository
     public function getUsersByRole($role, array $criteres = array())
     {
         $qb = $this->_em->createQueryBuilder();
-    
+
         $qb
             ->select('user')
             ->from('HopitalNumeriqueUserBundle:User', 'user')
@@ -492,7 +503,7 @@ class UserRepository extends EntityRepository
                 ;
             }
         }
-    
+
         foreach ($criteres as $critereChamp => $critereValeur)
         {
             if (is_array($critereValeur))
@@ -511,12 +522,12 @@ class UserRepository extends EntityRepository
                 ;
             }
         }
-        
+
         $qb
             ->addOrderBy('user.nom', 'ASC')
             ->addOrderBy('user.prenom', 'ASC')
         ;
-        
+
         return $qb;
     }
 
@@ -540,7 +551,7 @@ class UserRepository extends EntityRepository
             ->groupBy('user')
             ->orderBy('user.nom', 'ASC')
             ->addOrderBy('user.prenom');
-        
+
         return $qb;
     }
 
@@ -549,7 +560,7 @@ class UserRepository extends EntityRepository
      *
      * @return QueryBuilder
      */
-    public function getAllUsers() 
+    public function getAllUsers()
     {
         $qb = $this->_em->createQueryBuilder();
         $qb->select('user')
@@ -568,7 +579,7 @@ class UserRepository extends EntityRepository
            ->from('HopitalNumeriqueUserBundle:User', 'user')
            ->where('user.etablissementRattachementSante IS NOT NULL')
            ->groupBy('user.etablissementRattachementSante');
-    
+
         return $qb;
   }
 
@@ -581,7 +592,7 @@ class UserRepository extends EntityRepository
     public function getCommunautePratiqueMembresQueryBuilder(\HopitalNumerique\CommunautePratiqueBundle\Entity\Groupe $groupe = null, Domaine $domaine = null, $membreId = null)
     {
         $query = $this->createQueryBuilder('user');
-        
+
         $query
             ->select('user, esProfil, region, esStatut, typeActivite')
             ->leftJoin('user.profilEtablissementSante', 'esProfil')
