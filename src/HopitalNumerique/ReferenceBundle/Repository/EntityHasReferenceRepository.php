@@ -89,14 +89,13 @@ class EntityHasReferenceRepository extends EntityRepository
             ->select(
                 'entityHasReference.entityType',
                 'entityHasReference.entityId',
-                //'COUNT(DISTINCT(entityHasReferenceMatch.reference)) AS referencesCount',
-                //'SUM(DISTINCT(entityHasReferenceMatch.primary)) AS primarySum',
                 'entityHasNote.note',
                 'GROUP_CONCAT(objetRole.id) AS objetRoleIds',
                 'GROUP_CONCAT(contenuObjetRole.id) AS contenuObjetRoleIds',
                 'GROUP_CONCAT(objetType.id) AS objetTypeIds',
                 'GROUP_CONCAT(contenuObjetType.id) AS contenuObjetTypeIds',
-                'objet.id as objetId'
+                'objet.id as objetId',
+                'AVG(objetNote.note) AS avgObjetNote'
             )
             ->leftJoin(
                 EntityHasNote::class,
@@ -130,21 +129,6 @@ class EntityHasReferenceRepository extends EntityRepository
             }
         }
 
-        //<-- Références matchées
-        /*$qb
-            ->leftJoin(
-                EntityHasReference::class,
-                'entityHasReferenceMatch',
-                Expr\Join::WITH,
-                $qb->expr()->andX(
-                    $qb->expr()->eq('entityHasReference.entityType', 'entityHasReferenceMatch.entityType'),
-                    $qb->expr()->eq('entityHasReference.entityId', 'entityHasReferenceMatch.entityId'),
-                    $qb->expr()->in('entityHasReferenceMatch.reference', (count($referenceIds) > 0 ? $referenceIds : [0]))
-                )
-            )
-        ;*/
-        //-->
-
         $qb
             //<-- Objets
             ->leftJoin(
@@ -170,6 +154,7 @@ class EntityHasReferenceRepository extends EntityRepository
                 'objetDomaine'
             )
             ->andWhere($qb->expr()->orX($qb->expr()->isNull('objet.id'), $qb->expr()->eq('objetDomaine.id', ':domaine')))
+            ->leftJoin('objet.listeNotes', 'objetNote')
             //-->
             //<-- Contenus
             ->leftJoin(

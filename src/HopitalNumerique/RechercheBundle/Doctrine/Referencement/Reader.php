@@ -152,6 +152,13 @@ class Reader
             return -1;
         }
 
+        if (intval($entityProperties1['avgObjetNote']) > intval($entityProperties2['avgObjetNote'])) {
+            return 1;
+        }
+        if (intval($entityProperties1['avgObjetNote']) < intval($entityProperties2['avgObjetNote'])) {
+            return -1;
+        }
+
         return 0;
     }
 
