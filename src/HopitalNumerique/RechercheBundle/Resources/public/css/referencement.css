@@ -54,8 +54,9 @@
             .recherche-referencement .results-bloc .buttons { margin: 15px 0 0 0;text-align: right; }
         /* <-- Spécifiques aux points durs */
         .recherche-referencement #results-points-durs { background-color: #f4f4f4;padding: 4px 15px; }
-            .recherche-referencement #results-points-durs h3 { font-size: 15px;margin: 10px 0; }
-                .recherche-referencement #results-points-durs h3 a { color: #d60030;padding: 4px 0; }
+            .recherche-referencement #results-points-durs h3 { margin: 10px 0; }
+                .recherche-referencement #results-points-durs h3 a { font-size: 14px;padding: 4px 0; }
+                    .recherche-referencement #results-points-durs h3 a em { margin-top: 1px; }
             .recherche-referencement #results-points-durs .category { display: none; }
             .recherche-referencement #results-points-durs p { display: none; }
         /* --> */

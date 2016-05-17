@@ -76,7 +76,7 @@
 .recherche-referencement .results-bloc .result { display: none; }
     .recherche-referencement .results-bloc .category { color: #d60030;font-size: 12px;margin: 20px 0 0 0;text-transform: uppercase; }
     .recherche-referencement .results-bloc .title { font-weight: bold;margin: 0; }
-        .recherche-referencement .results-bloc .title a { color: #000;display: block;font-size: 17px; }
+        .recherche-referencement .results-bloc .title a { color: #000;display: block;font-size: 16px; }
             .recherche-referencement .results-bloc .title a .pertinence-niveau-1, .recherche-referencement .results-bloc .title a .pertinence-niveau-2, .recherche-referencement .results-bloc .title a .pertinence-niveau-3 { background-repeat: no-repeat;float: left;height: 14px;margin: 4px 3px 0 0;width: 14px; }
             .recherche-referencement .results-bloc .title a .pertinence-niveau-1 { background-image: url("/bundles/hopitalnumeriquerecherche/img/niv-1-prod.png"); }
             .recherche-referencement .results-bloc .title a .pertinence-niveau-2 { background-image: url("/bundles/hopitalnumeriquerecherche/img/niv-2-prod.png"); }
