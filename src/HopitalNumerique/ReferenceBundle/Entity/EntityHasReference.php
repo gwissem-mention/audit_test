@@ -6,9 +6,15 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * EntityHasReference.
  *
- * @ORM\Table(name="hn_entity_has_reference", uniqueConstraints={
- *     @ORM\UniqueConstraint(name="ENTITY_REFERENCE", columns={"entref_entity_id", "entref_entity_type", "ref_id"})
- * })
+ * @ORM\Table(name="hn_entity_has_reference",
+ *     uniqueConstraints={
+ *         @ORM\UniqueConstraint(name="ENTITY_REFERENCE", columns={"entref_entity_id", "entref_entity_type", "ref_id"})
+ *     },
+ *     indexes={
+ *         @ORM\Index(name="ENTITY_TYPE_INDEX", columns={"entref_entity_type"}),
+ *         @ORM\Index(name="ENTITY_ID_TYPE_INDEX", columns={"entref_entity_type", "entref_entity_id"})
+ *     }
+ * )
  * @ORM\Entity(repositoryClass="HopitalNumerique\ReferenceBundle\Repository\EntityHasReferenceRepository")
  */
 class EntityHasReference
