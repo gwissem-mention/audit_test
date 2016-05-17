@@ -95,6 +95,7 @@ class EntityHasReferenceManager extends BaseManager
 
         $entitiesHaveReferences = [];
         $entitiesHaveReferencesWithoutRoles = $this->getRepository()->getWithNotes($domaine, $groupedReferences, $entityTypeIds, $publicationCategoryIds, $resultFilters);
+        $entitiesMatchProperties = $this->getRepository()->getMatchProperties($groupedReferences, $entityTypeIds);
         // Prise en compte des rôles utilisateur
         foreach ($entitiesHaveReferencesWithoutRoles as $entityHaveReferenceWithoutRoles) {
             $objetRoleIds = ('' != $entityHaveReferenceWithoutRoles['objetRoleIds'] ? explode(',', $entityHaveReferenceWithoutRoles['objetRoleIds']) : []);
@@ -124,11 +125,26 @@ class EntityHasReferenceManager extends BaseManager
                 $entityHaveReferenceWithoutRoles['objetTypeIds'] = ('' != $entityHaveReferenceWithoutRoles['objetTypeIds'] ? array_values(array_unique(explode(',', $entityHaveReferenceWithoutRoles['objetTypeIds']))) : []);
                 $entityHaveReferenceWithoutRoles['contenuObjetTypeIds'] = ('' != $entityHaveReferenceWithoutRoles['contenuObjetTypeIds'] ? array_values(array_unique(explode(',', $entityHaveReferenceWithoutRoles['contenuObjetTypeIds']))) : []);
 
-                $entitiesHaveReferences[] = $entityHaveReferenceWithoutRoles;
+                $entitiesHaveReferences[] = $this->addEntityMatchProperties($entityHaveReferenceWithoutRoles, $entitiesMatchProperties);
             }
         }
 
         return $entitiesHaveReferences;
+    }
+
+    private function addEntityMatchProperties($entityHaveReferenceProperties, $entitiesMatchProperties)
+    {
+        $entityHaveReferenceProperties['referencesCount'] = 0;
+        $entityHaveReferenceProperties['primarySum'] = 0;
+
+        foreach ($entitiesMatchProperties as $existingEntityMatchProperties) {
+            if ($existingEntityMatchProperties['entityType'] == $entityHaveReferenceProperties['entityType'] && $existingEntityMatchProperties['entityId'] == $entityHaveReferenceProperties['entityId']) {
+                $entityHaveReferenceProperties['referencesCount'] = $existingEntityMatchProperties['referencesCount'];
+                $entityHaveReferenceProperties['primarySum'] = $existingEntityMatchProperties['primarySum'];
+            }
+        }
+
+        return $entityHaveReferenceProperties;
     }
 
     /**

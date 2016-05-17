@@ -89,8 +89,8 @@ class EntityHasReferenceRepository extends EntityRepository
             ->select(
                 'entityHasReference.entityType',
                 'entityHasReference.entityId',
-                'COUNT(DISTINCT(entityHasReferenceMatch.reference)) AS referencesCount',
-                'SUM(DISTINCT(entityHasReferenceMatch.primary)) AS primarySum',
+                //'COUNT(DISTINCT(entityHasReferenceMatch.reference)) AS referencesCount',
+                //'SUM(DISTINCT(entityHasReferenceMatch.primary)) AS primarySum',
                 'entityHasNote.note',
                 'GROUP_CONCAT(objetRole.id) AS objetRoleIds',
                 'GROUP_CONCAT(contenuObjetRole.id) AS contenuObjetRoleIds',
@@ -131,7 +131,7 @@ class EntityHasReferenceRepository extends EntityRepository
         }
 
         //<-- Références matchées
-        $qb
+        /*$qb
             ->leftJoin(
                 EntityHasReference::class,
                 'entityHasReferenceMatch',
@@ -142,7 +142,7 @@ class EntityHasReferenceRepository extends EntityRepository
                     $qb->expr()->in('entityHasReferenceMatch.reference', (count($referenceIds) > 0 ? $referenceIds : [0]))
                 )
             )
-        ;
+        ;*/
         //-->
 
         $qb
@@ -338,9 +338,73 @@ class EntityHasReferenceRepository extends EntityRepository
         if (count($resultFiltersConditions) > 0) {
             $qb
                 ->andWhere(implode(' OR ', $resultFiltersConditions))
-                //->setParameters($resultFiltersParameters)
             ;
         }
+
+        return $qb->getQuery()->getResult();
+    }
+
+    /**
+     * Récupérations de valeurs pour le tri pour la recherche.
+     */
+    public function getMatchProperties(array $groupedReferences = null, array $entityTypeIds = null)
+    {
+        $qb = $this->createQueryBuilder('entityHasReference');
+        $referenceIds = [];
+
+        $qb
+            ->select(
+                'entityHasReference.entityType',
+                'entityHasReference.entityId',
+                'COUNT(DISTINCT(entityHasReferenceMatch.reference)) AS referencesCount',
+                'SUM(DISTINCT(entityHasReferenceMatch.primary)) AS primarySum'
+            )
+        ;
+
+        if (null !== $groupedReferences) {
+            // ET pour chaque référence de niveau 1 et OU pour les sous-références
+            for ($i = 0; $i < count($groupedReferences); $i++) {
+                $referenceIds = array_merge($referenceIds, $groupedReferences[$i]);
+                $qb
+                    ->innerJoin(
+                        EntityHasReference::class,
+                        'entityHasReference'.$i,
+                        Expr\Join::WITH,
+                        $qb->expr()->andX(
+                            $qb->expr()->eq('entityHasReference.entityType', 'entityHasReference'.$i.'.entityType'),
+                            $qb->expr()->eq('entityHasReference.entityId', 'entityHasReference'.$i.'.entityId'),
+                            $qb->expr()->in('entityHasReference'.$i.'.reference', ':references'.$i)
+                        )
+                    )
+                    ->setParameter(':references'.$i, $groupedReferences[$i])
+                ;
+            }
+        }
+        if (null !== $entityTypeIds) {
+            $qb
+                ->andWhere($qb->expr()->in('entityHasReference.entityType', ':entityTypes'))
+                ->setParameter('entityTypes', $entityTypeIds)
+            ;
+        }
+
+        //<-- Références matchées
+        $qb
+            ->leftJoin(
+                EntityHasReference::class,
+                'entityHasReferenceMatch',
+                Expr\Join::WITH,
+                $qb->expr()->andX(
+                    $qb->expr()->eq('entityHasReference.entityType', 'entityHasReferenceMatch.entityType'),
+                    $qb->expr()->eq('entityHasReference.entityId', 'entityHasReferenceMatch.entityId'),
+                    $qb->expr()->in('entityHasReferenceMatch.reference', (count($referenceIds) > 0 ? $referenceIds : [0]))
+                )
+            )
+        ;
+        //-->
+
+        $qb
+            ->groupBy('entityHasReference.entityType', 'entityHasReference.entityId')
+        ;
 
         return $qb->getQuery()->getResult();
     }
