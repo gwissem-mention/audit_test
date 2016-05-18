@@ -30,7 +30,7 @@ class ObjetManager extends BaseManager
     private $_session;
 
     /**
-     * Construct 
+     * Construct
      *
      * @param EntityManager  $em              Entity Mangager de doctrine
      * @param ContenuManager $contenuManager  ContenuManager
@@ -59,7 +59,7 @@ class ObjetManager extends BaseManager
         $userConnectedDomainesId = $this->_userManager->getUserConnected()->getDomainesId();
         $results                 = $this->getRepository()->getDatasForGrid( $userConnectedDomainesId, $condition )->getQuery()->getResult();
 
-        foreach ($results as $result) 
+        foreach ($results as $result)
         {
             if(!array_key_exists($result['id'], $resultatsForGrid))
             {
@@ -88,8 +88,8 @@ class ObjetManager extends BaseManager
     public function getObjets()
     {
     	return $this->getRepository()->getObjets()->getQuery()->getResult();
-    } 
-    
+    }
+
     /**
      * Récupère les objets pour le dashboard Back
      *
@@ -153,7 +153,7 @@ class ObjetManager extends BaseManager
             $row['dateDebutPublication'] = !is_null($objet->getDateDebutPublication()) ? $objet->getDateDebutPublication()->format('d/m/Y') : '';
             $row['dateFinPublication']   = !is_null($objet->getDateFinPublication())   ? $objet->getDateFinPublication()->format('d/m/Y')   : '';
             $row['dateModification']     = !is_null($objet->getDateModification())     ? $objet->getDateModification()->format('d/m/Y')     : '';
-            
+
             //handle Productions liées
             $row['objets'] = json_encode($objet->getObjets());
 
@@ -168,16 +168,16 @@ class ObjetManager extends BaseManager
 
             //handle source
             $row['sourceExterne'] = $objet->getSource();
-            
+
             //handle domaines
             $domaines = $objet->getDomaines();
             $row['domaines'] = array();
-            foreach ($domaines as $domaine) 
+            foreach ($domaines as $domaine)
             {
                 $row['domaines'][] = $domaine->getNom();
             }
             $row['domaines'] = implode('|', $row['domaines']);
-                
+
             //handle types (catégories)
             $types        = $objet->getTypes();
             $row['types'] = array();
@@ -216,7 +216,7 @@ class ObjetManager extends BaseManager
             $row['pathEdit']       = is_null($objet->getFichierModifiable()) ? '' : $objet->getFichierModifiable()->getPathEdit();
 
             $row['module'] = "";
-            foreach ($objet->getModules() as $module) 
+            foreach ($objet->getModules() as $module)
             {
                 $row['module'] .= $module->getId() . ' - ' . $module->getTitre() . ';';
             }
@@ -241,7 +241,7 @@ class ObjetManager extends BaseManager
             if( $objet->isInfraDoc() ) {
                 $contenus = $objet->getContenus();
                 if( $contenus ){
-                    foreach($contenus as $contenu) {                        
+                    foreach($contenus as $contenu) {
                         $rowInfradoc = array();
 
                         $rowInfradoc['id'] = $rowInfradoc['idParent'] = $rowInfradoc['titre'] = $rowInfradoc['alias'] = $rowInfradoc['synthese'] = $rowInfradoc['resume'] = $rowInfradoc['commentaires'] = $rowInfradoc['notes'] = $rowInfradoc['type'] = $rowInfradoc['nbVue'] = $rowInfradoc['etat'] = '';
@@ -303,7 +303,7 @@ class ObjetManager extends BaseManager
     {
       return $this->getRepository()->getObjetsByNbVue( $limit )->getQuery()->getResult();
     }
-    
+
     /**
      * Retourne l'ensemble des productions actives
      */
@@ -320,7 +320,7 @@ class ObjetManager extends BaseManager
     public function getDatasForGridAmbassadeur( $condition = null )
     {
         $results = $this->getRepository()->getDatasForGridAmbassadeur( $condition )->getQuery()->getResult();
-        
+
         return $this->rearangeForTypes( $results );
     }
 
@@ -372,13 +372,13 @@ class ObjetManager extends BaseManager
     {
         $selectedReferences = $objet->getReferences();
 
-        //applique les références 
+        //applique les références
         foreach( $selectedReferences as $selected )
         {
             //on récupère l'élément que l'on va manipuler
             $ref = $references[ $selected->getReference()->getId() ];
 
-            //on le met à jour 
+            //on le met à jour
             $ref->selected = true;
             $ref->primary  = $selected->getPrimary();
 
@@ -387,7 +387,7 @@ class ObjetManager extends BaseManager
         }
 
         $references = $this->filtreReferencesByDomaines($objet, $references);
-        
+
         return $references;
     }
 
@@ -404,33 +404,33 @@ class ObjetManager extends BaseManager
         $return = array();
         $selectedReferences = $objet->getReferences();
 
-        //applique les références 
+        //applique les références
         foreach( $selectedReferences as $selected ){
             $reference = $selected->getReference();
 
             //on remet l'élément à sa place
             $return[ $reference->getId() ]['nom']     = $reference->getCode() . " - " . $reference->getLibelle();
             $return[ $reference->getId() ]['primary'] = $selected->getPrimary();
-            
+
             if( $reference->getParent() )
                 $return[ $reference->getParent()->getId() ]['childs'][] = $reference->getId();
         }
-        
+
         $this->formatReferencesOwn( $return );
-        
+
         return $return;
     }
-    
+
     /**
      * Retourne la liste des objets pour un ambassadeur donné
-     * 
+     *
      * @param integer $idUser Id de l'ambassadeur
      */
     public function getObjetsByAmbassadeur( $idUser )
-    { 
+    {
         return $this->getRepository()->getObjetsByAmbassadeur( $idUser )->getQuery()->getResult();
     }
-    
+
     /**
      * Retourne la liste des objets non maitrisés par l'ambassadeur
      *
@@ -464,6 +464,27 @@ class ObjetManager extends BaseManager
                 $objets[]     = $objet;
             }
         }
+
+        return $objets;
+    }
+
+    /**
+     * Retourne la liste des objets non maitrisés par domaine
+     *
+     * @param integer $id    Id de
+     * @param array   $types Liste des types
+     *
+     * @return array
+     */
+    public function getObjetsNonMaitrisesByDomaine( $id, $types, $domaines )
+    {
+        // $results = $this->getProductions($types);
+        foreach($types as $key => $type){
+            if( $type->getId() == 183 || $type->getId() == 184)
+                unset($types[$key]);
+        }
+
+        $objets = $this->getRepository()->getObjetsByTypeAmbassadeursAndDomaines($types,$id,$domaines);
 
         return $objets;
     }
@@ -511,7 +532,7 @@ class ObjetManager extends BaseManager
 
         return true;
     }
-    
+
     /**
      * Formatte les types d'objet sous forme d'une chaine de caractère avec le séparateur $sep
      *
@@ -545,7 +566,7 @@ class ObjetManager extends BaseManager
             return true;
         elseif( $alias && $new === false && $alias->getId() != $objet->getId() )
             return true;
-        
+
         return false;
     }
 
@@ -571,7 +592,7 @@ class ObjetManager extends BaseManager
         }
 
         //formate datas
-        foreach( $objets as $one ) 
+        foreach( $objets as $one )
         {
             //Traitement pour Article
             if($one->isArticle())
@@ -582,16 +603,16 @@ class ObjetManager extends BaseManager
                 );
             }
             //Traitement pour Publication et Infradoc
-            else 
+            else
             {
                 $results[] = array(
                         "text"  => $one->getTitre(),
                         "value" => "PUBLICATION:" . $one->getId()
                 );
-                
+
                 if( !isset($contenus[ $one->getId() ]) || count( $contenus[ $one->getId() ] ) <= 0 )
                     continue;
-                
+
                 foreach( $contenus[ $one->getId() ] as $content ){
                     $results[] = array(
                             "text"  => "|--" . $content->titre,
@@ -600,7 +621,7 @@ class ObjetManager extends BaseManager
                     $this->getObjetsChilds($results, $content, 2);
                 }
             }
-            
+
         }
 
         return $results;
@@ -691,7 +712,7 @@ class ObjetManager extends BaseManager
 
         return $actualites;
     }
-    
+
     /**
      * Retourne les catégories qui ont des articles
      *
@@ -728,7 +749,7 @@ class ObjetManager extends BaseManager
     {
         $article = $this->findOneBy( array('id' => 1) );
         $item    = new \stdClass;
-        
+
         $item->id         = $article->getId();
         $item->titre      = $article->getTitre();
         $item->alias      = $article->getAlias();
@@ -762,7 +783,7 @@ class ObjetManager extends BaseManager
                 $note += $ponderations[ $id ]['poids'];
             }
         }
-        
+
         return $note;
     }
 
@@ -872,7 +893,7 @@ class ObjetManager extends BaseManager
         $userConnectedDomaineIds = $this->_userManager->getUserConnected()->getDomainesId();
 
         //Récupération des id de domaine de l'objet
-        foreach ($objet->getDomaines() as $domaine) 
+        foreach ($objet->getDomaines() as $domaine)
         {
             if(in_array($domaine->getId(), $userConnectedDomaineIds))
             {
@@ -882,9 +903,9 @@ class ObjetManager extends BaseManager
 
         //Vérifie qu'il y a bien un domaine pour la publication courante
         if(count($domainesObjetIds) !== 0)
-        {   
+        {
             //Récupération des id des références "stdClass" pour récupérer les entités correspondantes et donc les domaines
-            foreach ($references as $reference) 
+            foreach ($references as $reference)
             {
                 $referencesIds[] = $reference->id;
             }
@@ -892,19 +913,19 @@ class ObjetManager extends BaseManager
             $referencesByIds = $this->_referenceManager->findBy(array('id'=> $referencesIds));
 
             //Parcourt la liste des entités de référence
-            foreach ($referencesByIds as $reference) 
+            foreach ($referencesByIds as $reference)
             {
                 if(array_key_exists($reference->getId(), $references))
                 {
                     $inArray = false;
 
-                    foreach ($reference->getDomaines() as $domaine) 
+                    foreach ($reference->getDomaines() as $domaine)
                     {
                         if(in_array($domaine->getId(), $domainesObjetIds))
                         {
                             $inArray = true;
                             break;
-                        }   
+                        }
                     }
 
                     if(!$inArray)
@@ -946,11 +967,11 @@ class ObjetManager extends BaseManager
 
     /**
      * Ajoute les enfants de $objet dans $return, formatées en fonction de $level
-     * 
+     *
      * @param array    $return
      * @param stdClass $objet
      * @param integer  $level
-     * 
+     *
      * @return void
      */
     private function getObjetsChilds( &$return, $objet, $level = 1 )
@@ -987,7 +1008,7 @@ class ObjetManager extends BaseManager
 
         return array_values($objets);
     }
-    
+
     /**
      * [formatReferencesOwn description]
      *
@@ -1001,7 +1022,7 @@ class ObjetManager extends BaseManager
             $retour[ $key ]['childs'] = $this->getChilds($retour, $one);
         }
     }
-    
+
     /**
      * [getChilds description]
      *
@@ -1073,9 +1094,9 @@ class ObjetManager extends BaseManager
     public function getArticleAlaUne() {
       return $this->getRepository()->getArticleAlaUne()->getQuery()->getResult();
     }
-    
+
     /**
-     * Retourne les articles du domaine 
+     * Retourne les articles du domaine
      * @return \HopitalNumerique\ObjetBundle\Entity\Objet[]
      */
     public function getObjetByDomaine() {
@@ -1083,7 +1104,7 @@ class ObjetManager extends BaseManager
     	$ids    = array();
     	foreach( $objets as $one )
     		$ids[] = $one->getId();
-    	
+
     		//get Contenus
     		$datas    = $this->_contenuManager->getArboForObjet($ids);
     		$contenus = array();
@@ -1091,7 +1112,7 @@ class ObjetManager extends BaseManager
     			if( $one->objet != null )
     				$contenus[ $one->objet ][] = $one;
     		}
-    	
+
     		//formate datas
     		foreach( $objets as $one )
     		{
@@ -1110,10 +1131,10 @@ class ObjetManager extends BaseManager
     						"text"  => $one->getTitre(),
     						"value" => "PUBLICATION:" . $one->getId()
     				);
-    	
+
     				if( !isset($contenus[ $one->getId() ]) || count( $contenus[ $one->getId() ] ) <= 0 )
     					continue;
-    	
+
     					foreach( $contenus[ $one->getId() ] as $content ){
     						$results[] = array(
     								"text"  => "|--" . $content->titre,
@@ -1122,9 +1143,9 @@ class ObjetManager extends BaseManager
     						$this->getObjetsChilds($results, $content, 2);
     					}
     			}
-    	
+
     		}
-    	
+
     		return $results;
     }
 }
