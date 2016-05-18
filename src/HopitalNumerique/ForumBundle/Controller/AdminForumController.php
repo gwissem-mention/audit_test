@@ -184,8 +184,7 @@ class AdminForumController extends \CCDNForum\ForumBundle\Controller\AdminForumB
      */
     public function deleteProcessAction($forumId)
     {
-        // TODO : Utiliser la gestion des droits du backoffice
-        if(!$this->getSecurityContext()->getToken()->getUser()->isGranted('ROLE_ADMINISTRATEUR_DU_DOMAINE_HN_107') && !$this->getSecurityContext()->isGranted('ROLE_SUPER_ADMIN')) {
+        if(!$this->getSecurityContext()->getToken()->getUser()->isGranted('ROLE_ADMINISTRATEUR_DU_DOMAINE_HN_107') && !$this->getSecurityContext()->isGranted('ROLE_SUPER_ADMIN') && !$this->getSecurityContext()->isGranted('ROLE_ADMINISTRATEUR_DE_DOMAINE_106')) {
             throw new AccessDeniedException('You do not have permission to use this resource.');
         }
         //$this->isAuthorised('ROLE_SUPER_ADMIN');

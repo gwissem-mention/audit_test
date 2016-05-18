@@ -179,6 +179,7 @@ class AdminCategoryController extends \CCDNForum\ForumBundle\Controller\AdminCat
         if(!$this->getSecurityContext()->getToken()->getUser()->isGranted('ROLE_ADMINISTRATEUR_DU_DOMAINE_HN_107') && !$this->getSecurityContext()->isGranted('ROLE_SUPER_ADMIN') && !$this->getSecurityContext()->isGranted('ROLE_ADMINISTRATEUR_DE_DOMAINE_106')) {
             throw new AccessDeniedException('You do not have permission to use this resource.');
         }
+
         $this->isFound($category = $this->getCategoryModel()->findOneCategoryById($categoryId));
         $formHandler = $this->getFormHandlerToDeleteCategory($category);
         $response = $this->renderResponse('CCDNForumForumBundle:Admin:/Category/delete.html.', array(
@@ -200,7 +201,9 @@ class AdminCategoryController extends \CCDNForum\ForumBundle\Controller\AdminCat
      */
     public function deleteProcessAction($categoryId)
     {
-        $this->isAuthorised('ROLE_SUPER_ADMIN');
+        if(!$this->getSecurityContext()->getToken()->getUser()->isGranted('ROLE_ADMINISTRATEUR_DU_DOMAINE_HN_107') && !$this->getSecurityContext()->isGranted('ROLE_SUPER_ADMIN') && !$this->getSecurityContext()->isGranted('ROLE_ADMINISTRATEUR_DE_DOMAINE_106')) {
+            throw new AccessDeniedException('You do not have permission to use this resource.');
+        }
         $this->isFound($category = $this->getCategoryModel()->findOneCategoryById($categoryId));
         $formHandler = $this->getFormHandlerToDeleteCategory($category);
 
