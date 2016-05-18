@@ -146,7 +146,7 @@ class ObjetType extends AbstractType
                 'multiple' => true,
                 'label'    => 'Ambassadeurs / Experts concernés',
                 'attr'     => array( 'placeholder' => 'Selectionnez le ou les ambassadeurs/Experts qui sont concernés par cette publication' ),
-                'choices'  => $this->objetManagerForm->getReferentsChoices(),
+                'choices'  => $this->objetManagerForm->getConcernesChoices(),
             ))
             ->add('alaune', 'checkbox', array(
               'required'   => false,

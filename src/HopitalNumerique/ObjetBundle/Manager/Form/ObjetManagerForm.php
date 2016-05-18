@@ -2,7 +2,7 @@
 /**
  * Manager pour les objets utilisés dans les formulaires des demandes d'intervention.
  *
- * @author Rémi Leclerc <rleclerc@nodevo.com>
+ * @author Guillaume Neveux <gneveux@nodevo.com>
  */
 namespace HopitalNumerique\ObjetBundle\Manager\Form;
 
@@ -42,7 +42,7 @@ class ObjetManagerForm
      *
      * @return array Liste des référents pour les listes de formulaire
      */
-    public function getReferentsChoices()
+    public function getConcernesChoices()
     {
         $referents = array();
         $referents['Ambassadeurs'] = $this->userManager->getAmbassadeurs();
