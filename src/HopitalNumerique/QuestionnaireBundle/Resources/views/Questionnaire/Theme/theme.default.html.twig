@@ -20,7 +20,7 @@
 
 {% block nodevocommentaire_widget %}
     {% spaceless %}
-        <strong>{{data|nl2br}}</strong>
+        <strong>{{data|raw}}</strong>
     {% endspaceless %}
 {% endblock %}
 
