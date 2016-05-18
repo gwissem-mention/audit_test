@@ -195,7 +195,7 @@
                     <div class="clearfix"></div>
                     {% if topics %}
                         <div id="block-fil-discussion">
-                            <h2><a href="{{ path('ccdn_forum_user_category_index', {'forumName' : forumName}) }}">Discussions en cours</h2> 
+                            <h2><a href="{{ path('ccdn_forum_user_category_index', {'forumName' : forumName}) }}">Discussions en cours</h2>
                             <ul>
                         {% for topic in topics %}
                             <li><a href="{{ path('ccdn_forum_user_topic_show', {'forumName': forumName,'topicId': topic.id}) }}" title="{{ topic.title }}">
