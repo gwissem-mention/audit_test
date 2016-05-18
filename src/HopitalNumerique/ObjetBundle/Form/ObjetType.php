@@ -7,6 +7,7 @@ use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
 use HopitalNumerique\ReferenceBundle\Manager\ReferenceManager;
 use HopitalNumerique\UserBundle\Manager\UserManager;
+use HopitalNumerique\ObjetBundle\Manager\Form\ObjetManagerForm;
 
 use Doctrine\ORM\EntityRepository;
 
