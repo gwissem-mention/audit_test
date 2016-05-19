@@ -37,7 +37,7 @@ class Modulation
     }
 
 
-    public function getModulatedReferenceIdsByGroupedReferenceIds(array $referenceIds, array $referencesTree)
+    public function getModulatedReferenceIds(array $referenceIds, array $referencesTree)
     {
         $referencesTree = $this->referenceTree->addCheckedReferenceIdsInTree(
             $referencesTree,

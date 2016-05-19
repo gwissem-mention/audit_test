@@ -118,11 +118,16 @@ class RequeteController extends Controller
     public function saveSessionAction(Request $request)
     {
         $referenceIds = $request->request->get('referenceIds', []);
+        $entityTypesIds = $request->request->get('entityTypesIds', null);
+        $publicationCategoryIds = $request->request->get('publicationCategoryIds', null);
+        $searchedText = $request->request->get('searchedText', null);
+        $resultsCount = $request->request->get('resultsCount', 0);
 
         $this->container->get('hopitalnumerique_recherche.dependency_injection.referencement.requete_session')->setReferenceIds($referenceIds);
-        $this->container->get('hopitalnumerique_recherche.dependency_injection.referencement.requete_session')->setEntityTypeIds($request->request->get('entityTypesIds', null));
-        $this->container->get('hopitalnumerique_recherche.dependency_injection.referencement.requete_session')->setPublicationCategoryIds($request->request->get('publicationCategoryIds', null));
-        $this->container->get('hopitalnumerique_recherche.dependency_injection.referencement.requete_session')->setSearchedText($request->request->get('searchedText', null));
+        $this->container->get('hopitalnumerique_recherche.dependency_injection.referencement.requete_session')->setEntityTypeIds($entityTypesIds);
+        $this->container->get('hopitalnumerique_recherche.dependency_injection.referencement.requete_session')->setPublicationCategoryIds($publicationCategoryIds);
+        $this->container->get('hopitalnumerique_recherche.dependency_injection.referencement.requete_session')->setSearchedText($searchedText);
+        $this->container->get('hopitalnumerique_recherche.dependency_injection.referencement.requete_session')->saveStatistique($resultsCount);
 
         return new JsonResponse(['success' => true]);
     }

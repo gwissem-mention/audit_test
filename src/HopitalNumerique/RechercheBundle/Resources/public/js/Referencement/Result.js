@@ -255,3 +255,15 @@ Hn_RechercheBundle_Referencement.displayEntity = function(resultsGroup, entityTy
     $(entityContainer).slideDown('fast');
     Hn_RechercheBundle_Referencement.processResultButtonsActivating(resultsGroup);
 };
+
+/**
+ * Retourne le nombre de résultats totaux.
+ *
+ * @param string resultsGroup Groupe des résultats
+ * @param int entityType Type d'entité
+ * @param int entityiD   ID de l'entité
+ */
+Hn_RechercheBundle_Referencement.count = function()
+{
+    return ($('.results-bloc .result').size());
+};

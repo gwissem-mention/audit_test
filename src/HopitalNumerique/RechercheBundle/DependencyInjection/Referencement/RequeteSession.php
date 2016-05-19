@@ -2,8 +2,12 @@
 namespace HopitalNumerique\RechercheBundle\DependencyInjection\Referencement;
 
 use HopitalNumerique\DomaineBundle\DependencyInjection\CurrentDomaine;
+use HopitalNumerique\RechercheBundle\Doctrine\Referencement\Modulation as ReferencementModulation;
 use HopitalNumerique\RechercheBundle\Entity\Requete;
 use HopitalNumerique\RechercheBundle\Manager\RequeteManager;
+use HopitalNumerique\ReferenceBundle\DependencyInjection\Reference\Tree as ReferenceTree;
+use HopitalNumerique\ReferenceBundle\Manager\ReferenceManager;
+use HopitalNumerique\StatBundle\Manager\StatRechercheManager;
 use HopitalNumerique\UserBundle\DependencyInjection\ConnectedUser;
 use HopitalNumerique\UserBundle\Entity\User;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
@@ -45,15 +49,35 @@ class RequeteSession
     private $session;
 
     /**
+     * @var \HopitalNumerique\UserBundle\DependencyInjection\ConnectedUser ConnectedUser
+     */
+    private $connectedUser;
+
+    /**
+     * @var \HopitalNumerique\ReferenceBundle\DependencyInjection\Reference\Tree ReferenceTree
+     */
+    private $referenceTree;
+
+    /**
+     * @var \HopitalNumerique\RechercheBundle\Doctrine\Referencement\Modulation ReferencementModulation
+     */
+    private $referencementModulation;
+
+    /**
+     * @var \HopitalNumerique\ReferenceBundle\Manager\ReferenceManager ReferenceManager
+     */
+    private $referenceManager;
+
+    /**
      * @var \HopitalNumerique\RechercheBundle\Manager\RequeteManager RequeteManager
      */
     private $requeteManager;
 
-
     /**
-     * @var \HopitalNumerique\UserBundle\Entity\User|null User
+     * @var \HopitalNumerique\StatBundle\Manager\StatRechercheManager StatRechercheManager
      */
-    private $user;
+    private $statRechercheManager;
+
 
     /**
      * @var \HopitalNumerique\DomaineBundle\Entity\Domaine Domaine courant
@@ -64,12 +88,16 @@ class RequeteSession
     /**
      * Constructeur.
      */
-    public function __construct(SessionInterface $session, ConnectedUser $connectedUser, CurrentDomaine $currentDomaine, RequeteManager $requeteManager)
+    public function __construct(SessionInterface $session, ConnectedUser $connectedUser, CurrentDomaine $currentDomaine, ReferenceTree $referenceTree, ReferencementModulation $referencementModulation, ReferenceManager $referenceManager, RequeteManager $requeteManager, StatRechercheManager $statRechercheManager)
     {
         $this->session = $session;
+        $this->connectedUser = $connectedUser;
+        $this->referenceTree = $referenceTree;
+        $this->referencementModulation = $referencementModulation;
+        $this->referenceManager = $referenceManager;
         $this->requeteManager = $requeteManager;
+        $this->statRechercheManager = $statRechercheManager;
 
-        $this->user = $connectedUser->get();
         $this->domaine = $currentDomaine->get();
     }
 
@@ -282,7 +310,7 @@ class RequeteSession
      */
     public function saveAsNewRequete(User $user = null)
     {
-        $requeteUser = (null !== $user ? $user : $this->user);
+        $requeteUser = (null !== $user ? $user : $this->connectedUser->get());
 
         if (null !== $requeteUser) {
             $referenceIds = $this->getReferenceIds();
@@ -309,5 +337,32 @@ class RequeteSession
         $requete->setRechercheTextuelle($this->getSearchedText());
         $this->requeteManager->save($requete);
         $this->setRequete($requete);
+    }
+
+
+    /**
+     * Sauvegarde la statistique de cette requête.
+     *
+     * @param int $resultsCount Nombre de résultats
+     */
+    public function saveStatistique($resultsCount)
+    {
+        $statRecherche = $this->statRechercheManager->createEmpty();
+
+        $referencesTree = $this->referenceTree->getOrderedReferences(null, [$this->domaine]);
+        $referenceIds = $this->getReferenceIds();
+        $categoryFilters = $this->getCategoryFilters();
+        $modulatedReferenceIds = $this->referencementModulation->getModulatedReferenceIds($referenceIds, $referencesTree);
+        $modulatedReferences = $this->referenceManager->findBy(['id' => $modulatedReferenceIds]);
+
+        $statRecherche->setUser($this->connectedUser->get());
+        $statRecherche->setReferences($modulatedReferences);
+        $statRecherche->setDate(new \DateTime());
+        $statRecherche->setNbResultats($resultsCount);
+        $statRecherche->setRequete(json_encode($referenceIds));
+        $statRecherche->setIsRequeteSaved(null !== $this->getRequete());
+        $statRecherche->setCategPointDur(count($categoryFilters) > 0 ? json_encode($categoryFilters) : '');
+
+        $this->statRechercheManager->save($statRecherche);
     }
 }

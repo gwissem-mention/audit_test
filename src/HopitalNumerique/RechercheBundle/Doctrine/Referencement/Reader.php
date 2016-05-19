@@ -191,7 +191,7 @@ class Reader
         //->
 
         $referencesTree = $this->referencement->getReferencesTree([$this->currentDomaine->get()]);
-        $referenceIds = $this->modulation->getModulatedReferenceIdsByGroupedReferenceIds(
+        $referenceIds = $this->modulation->getModulatedReferenceIds(
             $this->referencement->getReferenceIdsByGroupedReferenceIds($groupedReferenceIds),
             $referencesTree
         );

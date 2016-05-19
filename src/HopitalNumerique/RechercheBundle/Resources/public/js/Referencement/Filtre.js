@@ -87,7 +87,8 @@ Hn_RechercheBundle_Referencement.saveSession = function()
                 referenceIds: Hn_RechercheBundle_Referencement.getChosenReferenceIds(),
                 entityTypesIds: Hn_RechercheBundle_Referencement_Filter_Category.getEntityTypeIds(),
                 publicationCategoryIds: Hn_RechercheBundle_Referencement_Filter_Category.getPublicationCategoryIds(),
-                searchedText: Hn_RechercheBundle_Referencement_Filter_Exalead.getSearchedText()
+                searchedText: Hn_RechercheBundle_Referencement_Filter_Exalead.getSearchedText(),
+                resultsCount: Hn_RechercheBundle_Referencement.count()
             }
         });
     }, 1500);

@@ -59,7 +59,15 @@ services:
 
     hopitalnumerique_recherche.dependency_injection.referencement.requete_session:
         class: 'HopitalNumerique\RechercheBundle\DependencyInjection\Referencement\RequeteSession'
-        arguments: ['@session', '@hopitalnumerique_user.dependency_injection.connected_user', '@hopitalnumerique_domaine.dependency_injection.current_domaine', '@hopitalnumerique_recherche.manager.requete']
+        arguments:
+            - '@session'
+            - '@hopitalnumerique_user.dependency_injection.connected_user'
+            - '@hopitalnumerique_domaine.dependency_injection.current_domaine'
+            - '@hopitalnumerique_reference.dependency_injection.reference.tree'
+            - '@hopitalnumerique_recherche.doctrine.referencement.modulation'
+            - '@hopitalnumerique_reference.manager.reference'
+            - '@hopitalnumerique_recherche.manager.requete'
+            - '@hopitalnumerique_stat.manager.statrecherche'
 
     hopitalnumerique_recherche.doctrine.referencement.category:
         class: 'HopitalNumerique\RechercheBundle\Doctrine\Referencement\Category'
