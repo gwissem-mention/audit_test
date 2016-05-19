@@ -44,13 +44,12 @@ class AllSessionGrid extends Grid implements GridInterface
         $domaineColumn = new Column\TextColumn('domaineNom', 'Domaine(s) associé(s)');
         $this->addColonne( $domaineColumn );
 
-        $dateOuvertureInscriptionColumn = new Column\DateColumn('dateOuvertureInscription', 'Date d\'ouverture des inscriptions');
-        $dateOuvertureInscriptionColumn->setSize( 150 );
-        $this->addColonne( $dateOuvertureInscriptionColumn );
-
-        $dateFermetureInscriptionColumn = new Column\DateColumn('dateFermetureInscription', 'Date de clôture des inscriptions');
-        $dateFermetureInscriptionColumn->setSize( 150 );
-        $this->addColonne( $dateFermetureInscriptionColumn );
+        $formateurColumn = new Column\TextColumn('formateur', 'Animateur');
+        $formateurColumn->setSize( 150 );
+        $formateurColumn->setFilterType('select');
+        $formateurColumn->setOperatorsVisible( false );
+        $formateurColumn->setDefaultOperator( \APY\DataGridBundle\Grid\Column\Column::OPERATOR_EQ );
+        $this->addColonne( $formateurColumn );
 
         $dateSessionColumn = new Column\DateColumn('dateSession', 'Date de début de la session');
         $dateSessionColumn->setSize( 150 );

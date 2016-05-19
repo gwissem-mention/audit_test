@@ -45,8 +45,9 @@ class SessionRepository extends EntityRepository
     public function getAllDatasForGrid( $domainesIds, $condition )
     {
         $qb = $this->_em->createQueryBuilder();
-        $qb->select('ses')
+        $qb->select('ses', 'form')
             ->from('HopitalNumeriqueModuleBundle:Session', 'ses')
+            ->join('ses.formateur', 'form')
             ->leftJoin('ses.module', 'mod')
                 ->leftJoin('mod.domaines', 'domaine')
                     ->andWhere($qb->expr()->orX(

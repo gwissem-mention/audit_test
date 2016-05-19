@@ -153,6 +153,7 @@ class SessionManager extends BaseManager
                 'placeRestantes'           => $nbPlacesRestantes . '/' . $session->getNombrePlaceDisponible(),
                 'etat'                     => $session->getEtat()->getLibelle(),
                 'archiver'                 => $session->getArchiver(),
+                'formateur'                => $session->getFormateur()->getNomPrenom(),
                 'domaineNom'               => $domaineNom
             );
         }
