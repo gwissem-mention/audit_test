@@ -16,7 +16,7 @@ use CCDNForum\ForumBundle\Component\Security\Authorizer as CCDNAuthorizer;
 
 class Authorizer extends CCDNAuthorizer
 {
-    
+
     public function canDeleteTopic(Topic $topic, Forum $forum = null)
     {
         if ($topic->isDeleted()) {
@@ -81,56 +81,56 @@ class Authorizer extends CCDNAuthorizer
         return true;
     }
 
-    
+
     public function canSubscribeToBoard(Board $board, Forum $forum = null, Subscription $subscription = null)
     {
         if (! $this->securityContext->isGranted('ROLE_USER')) {
             return false;
         }
-    
+
         if (! $this->canShowBoard($board, $forum)) {
             return false;
         }
-    
+
         if ($subscription) {
             if ($subscription->getBoard()) {
                 if ($subscription->getBoard()->getId() != $board->getId()) {
                     return false;
                 }
             }
-    
+
             if ($subscription->isSubscribed()) {
                 return false;
             }
         }
-    
+
         return true;
     }
-    
+
     public function canUnsubscribeFromBoard(Board $board, Forum $forum = null, Subscription $subscription = null)
     {
         if (! $this->securityContext->isGranted('ROLE_USER')) {
             return false;
         }
-    
+
         if (! $this->canShowBoard($board, $forum)) {
             return false;
         }
-    
+
         if ($subscription) {
             if ($subscription->getBoard()) {
                 if ($subscription->getBoard()->getId() != $board->getId()) {
                     return false;
                 }
             }
-    
+
             if (! $subscription->isSubscribed()) {
                 return false;
             }
         } else {
             return false;
         }
-    
+
         return true;
     }
 }
