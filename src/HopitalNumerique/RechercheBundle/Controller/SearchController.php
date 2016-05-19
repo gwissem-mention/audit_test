@@ -108,6 +108,16 @@ class SearchController extends Controller
     public function generateManuallyRequeteAction($refs = null, $q = null, $type = null)
     {
         $referenceIds = explode(',', $refs);
+        $searchedText = ($q == 'null' ? '' : $q);
+        $publicationCategoryIds = ($type == "null" ? [] :[$type]);
+
+        $this->container->get('hopitalnumerique_recherche.dependency_injection.referencement.requete_session')->setReferenceIds($referenceIds);
+        $this->container->get('hopitalnumerique_recherche.dependency_injection.referencement.requete_session')->setPublicationCategoryIds($publicationCategoryIds);
+        $this->container->get('hopitalnumerique_recherche.dependency_injection.referencement.requete_session')->setSearchedText($searchedText);
+
+        return $this->redirectToRoute('hopital_numerique_recherche_homepage');
+        
+        /*$referenceIds = explode(',', $refs);
         $references = $this->get('hopitalnumerique_reference.manager.reference')->findBy(array('id' => $referenceIds));
 
         //Création du tableau pour la session de recherche
@@ -156,7 +166,8 @@ class SearchController extends Controller
         $session->set('requete-refs-categProd', $type == "null" ? '' : $type );
         $session->set('requete-refs-recherche-textuelle', $q == "null" ? '' : $q);
 
-        return $this->redirect( $this->generateUrl('hopital_numerique_recherche_homepage') );
+
+        return $this->redirect( $this->generateUrl('hopital_numerique_recherche_homepage') );*/
     }
 
     /**
