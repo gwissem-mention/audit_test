@@ -398,7 +398,7 @@ class Entity
     {
         switch ($this->getEntityType($entity)) {
             case self::ENTITY_TYPE_CONTENU:
-                return $entity->getTitre();
+                return $this->contenuManager->getPrefix($entity).' '.$entity->getTitre();
         }
 
         return null;
