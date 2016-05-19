@@ -15,6 +15,7 @@ class ReferencementController extends Controller
      */
     public function indexAction(Request $request)
     {
+        $request->getSession()->set('urlToRedirect', $request->getUri());
         $this->container->get('hopitalnumerique_recherche.dependency_injection.referencement.requete_session')->setWantToSaveRequete(false);
         $currentDomaine = $this->container->get('hopitalnumerique_domaine.dependency_injection.current_domaine')->get();
         $referencesTree = $this->container->get('hopitalnumerique_reference.dependency_injection.reference.tree')->getOrderedReferences(null, [$currentDomaine], true);
@@ -33,7 +34,7 @@ class ReferencementController extends Controller
                     }
                 }
                 if (count($choosenReferenceIds) === 0) {
-                    $choosenReferenceIds = $this->container->get('hopitalnumerique_account.dependency_injection.doctrine.reference.contexte')->getReferenceIds();
+                    $choosenReferenceIds = $this->container->get('hopitalnumerique_account.doctrine.reference.contexte')->getReferenceIds();
                 }
             }
         }

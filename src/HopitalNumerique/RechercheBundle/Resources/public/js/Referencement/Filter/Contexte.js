@@ -18,12 +18,14 @@ Hn_RechercheBundle_Referencement_Filter_Contexte.valid = function()
         $('#contexte-modal [data-reference="' + referenceId + '"]').attr('data-chosen', true);
     });
 
-    Hn_RechercheBundle_Referencement.initReferenceFilters();
-    $('#contexte-modal').modal('hide');
 
     if (saveUserContext) {
         Hn_RechercheBundle_Referencement_Filter_Contexte.saveUser();
+    } else {
+        Hn_RechercheBundle_Referencement.initReferenceFilters();
     }
+
+    $('#contexte-modal').modal('hide');
 };
 
 /**
@@ -44,11 +46,13 @@ Hn_RechercheBundle_Referencement_Filter_Contexte.saveUser = function()
         data: {
             'referenceIds': contexteReferenceIds
         },
-        dataType: 'json'/*,
+        dataType: 'json',
         success: function (data) {
-            if (data.save) {
-                apprise('Votre compte a été modifié.');
+            if (null !== data.urlRedirection) {
+                Nodevo_Web.redirect(data.urlRedirection);
+            } else {
+                Hn_RechercheBundle_Referencement.initReferenceFilters();
             }
-        }*/
+        }
     });
 };

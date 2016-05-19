@@ -3,13 +3,26 @@ namespace HopitalNumerique\AccountBundle\Doctrine\Reference;
 
 use HopitalNumerique\ReferenceBundle\Manager\ReferenceManager;
 use HopitalNumerique\UserBundle\DependencyInjection\ConnectedUser;
+use HopitalNumerique\UserBundle\Entity\User;
 use HopitalNumerique\UserBundle\Manager\UserManager;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
 
 /**
  * Connexion entre certaines références et le compte utilisateur.
  */
 class Contexte
 {
+    /**
+     * @var string Label de session de la demande de création de compte avec contexte
+     */
+    const WANT_CREATE_USER_SESSION_LABEL = 'hn_wantcreateuserwithcontexte';
+
+
+    /**
+     * @var \Symfony\Component\HttpFoundation\Session\SessionInterface Session
+     */
+    private $session;
+
     /**
      * @var \HopitalNumerique\UserBundle\DependencyInjection\ConnectedUser ConnectedUser
      */
@@ -29,8 +42,9 @@ class Contexte
     /**
      * Constructeur.
      */
-    public function __construct(ConnectedUser $connectedUser, ReferenceManager $referenceManager, UserManager $userManager)
+    public function __construct(SessionInterface $session, ConnectedUser $connectedUser, ReferenceManager $referenceManager, UserManager $userManager)
     {
+        $this->session = $session;
         $this->connectedUser = $connectedUser;
         $this->referenceManager = $referenceManager;
         $this->userManager = $userManager;
@@ -152,6 +166,21 @@ class Contexte
 
 
     /**
+     * Retourne un nouvel utilisateur avec les champs de contexte pré-remplis.
+     *
+     * @param array<integer> $referenceIds Contexte
+     * @return \HopitalNumerique\UserBundle\Entity\User Nouvel utilisateur
+     */
+    public function getNewUserWithContexte(array $referenceIds)
+    {
+        $user = $this->userManager->createEmpty();
+
+        $this->fillUserWithContexte($user, $referenceIds);
+
+        return $user;
+    }
+
+    /**
      * Sauvegarde le contexte d'un utilisateur.
      *
      * @param array<integer> $referenceIds IDs des références
@@ -164,33 +193,69 @@ class Contexte
         if ($this->connectedUser->is()) {
             $user = $this->connectedUser->get();
 
-            $fonctionDansEtablissementSanteReferencement = $this->getFonctionDansEtablissementSanteReferencementByReferenceIds($referenceIds);
-            $profilEtablissementSante = $this->getProfilEtablissementSanteByReferenceIds($referenceIds);
-            $statutEtablissementSante = $this->getStatutEtablissementSanteByReferenceIds($referenceIds);
-            $activiteTypes = $this->getActiviteTypesByReferenceIds($referenceIds);
+            $userIsModified = $this->fillUserWithContexte($user, $referenceIds);
 
-            if (null !== $fonctionDansEtablissementSanteReferencement && (null === $user->getFonctionDansEtablissementSanteReferencement() || !$user->getFonctionDansEtablissementSanteReferencement()->equals($fonctionDansEtablissementSanteReferencement))) {
-                $user->setFonctionDansEtablissementSanteReferencement($fonctionDansEtablissementSanteReferencement);
-                $userIsModified = true;
-            }
-            if (null !== $profilEtablissementSante && (null === $user->getProfilEtablissementSante() || !$user->getProfilEtablissementSante()->equals($profilEtablissementSante))) {
-                $user->setProfilEtablissementSante($profilEtablissementSante);
-                $userIsModified = true;
-            }
-            if (null !== $statutEtablissementSante && (null === $user->getStatutEtablissementSante() || !$user->getStatutEtablissementSante()->equals($statutEtablissementSante))) {
-                $user->setStatutEtablissementSante($statutEtablissementSante);
-                $userIsModified = true;
-            }
-            if (!$user->equalsTypeActivite($activiteTypes)) {
-                $user->setTypeActivites($activiteTypes);
-                $userIsModified = true;
+            if ($userIsModified) {
+                $this->userManager->save($user);
             }
         }
 
-        if ($userIsModified) {
-            $this->userManager->save($user);
+
+        return $userIsModified;
+    }
+
+    /**
+     * Modifie les champs de contexte de l'utilisateur.
+     *
+     * @param \HopitalNumerique\UserBundle\Entity\User $user         User
+     * @param array<integer>                           $referenceIds Contexte
+     * @return boolean Si l'utilisateur a été modifié
+     */
+    private function fillUserWithContexte(User &$user, array $referenceIds)
+    {
+        $userIsModified = false;
+
+        $fonctionDansEtablissementSanteReferencement = $this->getFonctionDansEtablissementSanteReferencementByReferenceIds($referenceIds);
+        $profilEtablissementSante = $this->getProfilEtablissementSanteByReferenceIds($referenceIds);
+        $statutEtablissementSante = $this->getStatutEtablissementSanteByReferenceIds($referenceIds);
+        $activiteTypes = $this->getActiviteTypesByReferenceIds($referenceIds);
+
+        if (null !== $fonctionDansEtablissementSanteReferencement && (null === $user->getFonctionDansEtablissementSanteReferencement() || !$user->getFonctionDansEtablissementSanteReferencement()->equals($fonctionDansEtablissementSanteReferencement))) {
+            $user->setFonctionDansEtablissementSanteReferencement($fonctionDansEtablissementSanteReferencement);
+            $userIsModified = true;
+        }
+        if (null !== $profilEtablissementSante && (null === $user->getProfilEtablissementSante() || !$user->getProfilEtablissementSante()->equals($profilEtablissementSante))) {
+            $user->setProfilEtablissementSante($profilEtablissementSante);
+            $userIsModified = true;
+        }
+        if (null !== $statutEtablissementSante && (null === $user->getStatutEtablissementSante() || !$user->getStatutEtablissementSante()->equals($statutEtablissementSante))) {
+            $user->setStatutEtablissementSante($statutEtablissementSante);
+            $userIsModified = true;
+        }
+        if (!$user->equalsTypeActivite($activiteTypes)) {
+            $user->setTypeActivites($activiteTypes);
+            $userIsModified = true;
         }
 
         return $userIsModified;
+    }
+
+
+    /**
+     * Spécifie que l'utilisateur souhaite créer un compte avec le contexte choisi lors de la recherche.
+     */
+    public function setWantCreateUserWithContext()
+    {
+        $this->session->set(self::WANT_CREATE_USER_SESSION_LABEL, true);
+    }
+
+    /**
+     * Retourne si l'utilisateur souhaite créer un compte avec son contexte.
+     *
+     * @return boolean Si souhaite compte
+     */
+    public function isWantCreateUserWithContext()
+    {
+        return $this->session->get(self::WANT_CREATE_USER_SESSION_LABEL, false);
     }
 }

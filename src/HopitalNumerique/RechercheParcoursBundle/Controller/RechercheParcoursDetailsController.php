@@ -153,7 +153,7 @@ class RechercheParcoursDetailsController extends Controller
                     $rechercheParcours->getReference()->getId(),
                     $rechercheParcoursDetails->getReference()->getId()
                 ],
-                $this->container->get('hopitalnumerique_account.dependency_injection.doctrine.reference.contexte')->getReferenceIds()
+                $this->container->get('hopitalnumerique_account.doctrine.reference.contexte')->getReferenceIds()
             );
             $referencesTree = $this->container->get('hopitalnumerique_reference.dependency_injection.referencement')->getReferencesTree([$domaine]);
             $groupedReferencesLieesIds = $this->container->get('hopitalnumerique_reference.dependency_injection.referencement')->getReferenceIdsKeyedByGroup($referencesLieesIds, $referencesTree);

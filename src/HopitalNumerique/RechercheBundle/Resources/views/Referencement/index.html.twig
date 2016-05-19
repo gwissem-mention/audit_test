@@ -57,17 +57,37 @@
                                         <div class="modal-header">
                                             <h4 class="modal-title" id="myModalLabel">{{ referenceProperties.reference.libelle }}</h4>
                                         </div>
-                                        <div class="modal-body">
-                                            <ul data-level="1">
-                                                {%- for referenceEnfantTree in referenceProperties.enfants -%}
-                                                    {{ mySelf.buildContextTreePart(referenceEnfantTree, 2, null) }}
-                                                {%- endfor -%}
-                                            </ul>
-                                        </div>
-                                        <div class="modal-footer">
-                                            <label><input type="checkbox" name="contexte-valid"> Valider et enregistrer dans les informations personnelles</label>
-                                            <button type="button" class="btn btn-success" onclick="Hn_RechercheBundle_Referencement_Filter_Contexte.valid();">Valider</button>
-                                        </div>
+                                        {%- if app.user is not null -%}
+                                            <div class="modal-body">
+                                                <ul data-level="1">
+                                                    {%- for referenceEnfantTree in referenceProperties.enfants -%}
+                                                        {{ mySelf.buildContextTreePart(referenceEnfantTree, 2, null) }}
+                                                    {%- endfor -%}
+                                                </ul>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <label><input type="checkbox" name="contexte-valid"> Valider et enregistrer dans les informations personnelles</label>
+                                                <button type="button" class="btn btn-success" onclick="Hn_RechercheBundle_Referencement_Filter_Contexte.valid();">Valider</button>
+                                            </div>
+                                        {%- else -%}
+                                            <div class="modal-body">
+                                                <div class="row">
+                                                    <div class="col-md-6">
+                                                        {% include 'HopitalNumeriqueAccountBundle:include:login.html.twig' with { 'size':'small', 'title':'J\'ai déjà renseigné mon profil ? Me connecter : ' } %}
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <h3>Décrivez votre profil</h3>
+                                                        <ul data-level="1">
+                                                            {%- for referenceEnfantTree in referenceProperties.enfants -%}
+                                                                {{ mySelf.buildContextTreePart(referenceEnfantTree, 2, null) }}
+                                                            {%- endfor -%}
+                                                        </ul>
+                                                        <label><input type="checkbox" name="contexte-valid"> Valider et enregistrer dans les informations personnelles</label>
+                                                        <button type="button" class="btn btn-success" onclick="Hn_RechercheBundle_Referencement_Filter_Contexte.valid();">Valider</button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        {%- endif -%}
                                     </div>
                                 </div>
                             </div>

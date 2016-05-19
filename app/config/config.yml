@@ -242,6 +242,7 @@ fos_js_routing:
         - hopitalnumerique_reference_referencement_savechosenreferences
         - hopital_numerique_user_front_departements_informationsPersonelles
         - hopital_numerique_user_front_etablissements_informationsPersonelles
+        - hopital_numerique_user_inscription
 
 # Miniatures
 liip_imagine:

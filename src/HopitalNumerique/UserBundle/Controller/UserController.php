@@ -30,8 +30,13 @@ class UserController extends Controller
         //Si il n'y a pas d'utilisateur connecté
         if(!$this->get('security.context')->isGranted('ROLE_USER'))
         {
-            //Création d'un nouvel user
-            $user = $this->get('hopitalnumerique_user.manager.user')->createEmpty();
+            if ($this->container->get('hopitalnumerique_account.doctrine.reference.contexte')->isWantCreateUserWithContext()) {
+                //Création d'un nouvel user avec contexte préremplis
+                $referenceIds = $this->container->get('hopitalnumerique_recherche.dependency_injection.referencement.requete_session')->getReferenceIds();
+                $user = $this->container->get('hopitalnumerique_account.doctrine.reference.contexte')->getNewUserWithContexte($referenceIds);
+            } else {
+                $user = $this->get('hopitalnumerique_user.manager.user')->createEmpty();
+            }
 
             //Tableau des options à passer à la vue twig
             $options = array(
