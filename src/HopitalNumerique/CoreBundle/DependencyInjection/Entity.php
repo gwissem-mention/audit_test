@@ -469,7 +469,6 @@ class Entity
     public function getDescriptionByEntity($entity)
     {
         $description = null;
-
         switch ($this->getEntityType($entity)) {
             case self::ENTITY_TYPE_OBJET:
                 $description = $entity->getResume();
@@ -489,7 +488,9 @@ class Entity
             if ('' == $description) {
                 return null;
             }
-            $description = substr($description, 0, strrpos($description, ' ')).'...';
+            if (strrpos($description, ' ') > 0) {
+                $description = substr($description, 0, strrpos($description, ' ')).'...';
+            }
         }
 
         return $description;
