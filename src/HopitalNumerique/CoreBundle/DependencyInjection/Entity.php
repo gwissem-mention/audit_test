@@ -518,7 +518,7 @@ class Entity
             case self::ENTITY_TYPE_AMBASSADEUR:
                 return $this->router->generate('hopital_numerique_intervention_demande_nouveau', ['ambassadeur' => $entityId]);
             case self::ENTITY_TYPE_RECHERCHE_PARCOURS:
-                return $this->router->generate('hopital_numerique_recherche_parcours_details_index', ['id' => $entityId]);
+                return $this->router->generate('hopital_numerique_recherche_parcours_details_index_front', ['id' => $entityId]);
             case self::ENTITY_TYPE_COMMUNAUTE_PRATIQUES_GROUPE:
                 return $this->router->generate('hopitalnumerique_communautepratique_groupe_view', ['groupe' => $entityId]);
         }
