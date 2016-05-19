@@ -27,11 +27,15 @@ Hn_RechercheBundle_Referencement.init = function()
  */
 Hn_RechercheBundle_Referencement.initEvents = function()
 {
+    // Ajout d'une référence
     $('.recherche-referencement .add').click(function(event) {
-        Hn_RechercheBundle_Referencement.toggleReferenceChoosing(Hn_RechercheBundle_Referencement.getReferenceIdByElement($(this)));
-        Hn_RechercheBundle_Referencement.initReferenceFilters();
+        if (!Hn_RechercheBundle_Referencement.IS_SEARCHING) {
+            Hn_RechercheBundle_Referencement.toggleReferenceChoosing(Hn_RechercheBundle_Referencement.getReferenceIdByElement($(this)));
+            Hn_RechercheBundle_Referencement.initReferenceFilters();
+        }
         event.stopPropagation();
     });
+    // Pliage / dépliage
     $('.recherche-referencement a.reference').click(function() {
         Hn_RechercheBundle_Referencement.toggleReferenceDisplaying(Hn_RechercheBundle_Referencement.getReferenceIdByElement($(this)));
     });
@@ -256,7 +260,6 @@ Hn_RechercheBundle_Referencement.referenceChildrenAreDisplayed = function(refere
 Hn_RechercheBundle_Referencement.toggleReferenceChoosing = function(referenceId)
 {
     var referenceIsChosen = ('true' === Hn_RechercheBundle_Referencement.getElementByReferenceId(referenceId).attr('data-chosen'));
-    //var referenceParentId = Hn_RechercheBundle_Referencement.getReferenceParentIdByReferenceId(referenceId);
 
     Hn_RechercheBundle_Referencement.getElementByReferenceId(referenceId).attr('data-chosen', referenceIsChosen ? 'false' : 'true');
     

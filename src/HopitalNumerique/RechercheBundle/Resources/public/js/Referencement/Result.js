@@ -1,4 +1,12 @@
+/**
+ * @var Element Ajax loader
+ */
 Hn_RechercheBundle_Referencement.AJAX_LOADER = null;
+
+/**
+ * @var boolean Si une recherche est en cours
+ */
+Hn_RechercheBundle_Referencement.IS_SEARCHING = false;
 
 /**
  * Affiche les résultats.
@@ -92,6 +100,7 @@ Hn_RechercheBundle_Referencement.displayResults = function()
 
 Hn_RechercheBundle_Referencement.activeSearch = function()
 {
+    Hn_RechercheBundle_Referencement.IS_SEARCHING = false;
     //$('#search-text-button').prop('disabled', false);
     Hn_RechercheBundle_Referencement_Filter_Exalead.processSearchValidating();
     Hn_RechercheBundle_Referencement.AJAX_LOADER.finished();
@@ -99,6 +108,7 @@ Hn_RechercheBundle_Referencement.activeSearch = function()
 
 Hn_RechercheBundle_Referencement.desactiveSearch = function()
 {
+    Hn_RechercheBundle_Referencement.IS_SEARCHING = true;
     $('#search-text-button').prop('disabled', true);
     Hn_RechercheBundle_Referencement.AJAX_LOADER = $('.results-bloc').nodevoLoader().start();
 };
