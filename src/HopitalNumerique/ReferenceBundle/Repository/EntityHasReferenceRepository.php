@@ -341,8 +341,8 @@ class EntityHasReferenceRepository extends EntityRepository
             ->select(
                 'entityHasReference.entityType',
                 'entityHasReference.entityId',
-                'COUNT(DISTINCT(entityHasReferenceMatch.reference)) AS referencesCount',
-                'SUM(DISTINCT(entityHasReferenceMatch.primary)) AS primarySum'
+                'COUNT(DISTINCT(entityHasReference.reference)) AS referencesCount',
+                'SUM(DISTINCT(entityHasReference.primary)) AS primarySum'
             )
         ;
 
@@ -374,16 +374,7 @@ class EntityHasReferenceRepository extends EntityRepository
 
         //<-- Références matchées
         $qb
-            ->leftJoin(
-                EntityHasReference::class,
-                'entityHasReferenceMatch',
-                Expr\Join::WITH,
-                $qb->expr()->andX(
-                    $qb->expr()->eq('entityHasReference.entityType', 'entityHasReferenceMatch.entityType'),
-                    $qb->expr()->eq('entityHasReference.entityId', 'entityHasReferenceMatch.entityId'),
-                    $qb->expr()->in('entityHasReferenceMatch.reference', (count($referenceIds) > 0 ? $referenceIds : [0]))
-                )
-            )
+            ->andWhere($qb->expr()->in('entityHasReference.reference', (count($referenceIds) > 0 ? $referenceIds : [0])))
         ;
         //-->
 

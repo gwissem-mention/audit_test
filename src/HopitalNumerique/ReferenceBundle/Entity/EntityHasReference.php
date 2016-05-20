@@ -11,6 +11,7 @@ use Doctrine\ORM\Mapping as ORM;
  *         @ORM\UniqueConstraint(name="ENTITY_REFERENCE", columns={"entref_entity_id", "entref_entity_type", "ref_id"})
  *     },
  *     indexes={
+ *         @ORM\Index(name="ENTITY_ID_INDEX", columns={"entref_entity_id"}),
  *         @ORM\Index(name="ENTITY_TYPE_INDEX", columns={"entref_entity_type"}),
  *         @ORM\Index(name="ENTITY_ID_TYPE_INDEX", columns={"entref_entity_type", "entref_entity_id"})
  *     }
