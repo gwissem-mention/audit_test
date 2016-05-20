@@ -316,9 +316,9 @@ class InscriptionManager extends BaseManager
      * @param integer $annee Année
      * @return integer Total
      */
-    public function getCountForYear($annee)
+    public function getCountForYear($annee, Domaine $domaine)
     {
-        return $this->getRepository()->getCountForYear($annee);
+        return $this->getRepository()->getCountForYear($annee, $domaine);
     }
 
     /**
@@ -327,8 +327,8 @@ class InscriptionManager extends BaseManager
      * @param integer $annee Année
      * @return integer Total
      */
-    public function getUsersCountForYear($annee)
+    public function getUsersCountForYear($annee, Domaine $domaine)
     {
-        return $this->getRepository()->getUsersCountForYear($annee);
+        return $this->getRepository()->getUsersCountForYear($annee, $domaine);
     }
 }

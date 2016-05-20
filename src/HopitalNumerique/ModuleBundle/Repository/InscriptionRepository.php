@@ -175,7 +175,7 @@ class InscriptionRepository extends EntityRepository
      * @param integer $annee Année
      * @return integer Total
      */
-    public function getCountForYear($annee)
+    public function getCountForYear($annee, Domaine $domaine)
     {
         $queryBuilder = $this->createQueryBuilder('inscription');
         $anneeCourantePremierJour = new \DateTime();
@@ -189,6 +189,7 @@ class InscriptionRepository extends EntityRepository
             ->select('COUNT(DISTINCT(inscription.id)) AS total')
             ->innerJoin('inscription.session', 'session')
             ->innerJoin('session.module', 'module')
+            ->innerJoin('module.domaines', 'domaine', Expr\Join::WITH, $queryBuilder->expr()->eq('domaine.id', ':domaine'))
             ->where($queryBuilder->expr()->andX(
                 $queryBuilder->expr()->gte('inscription.dateInscription', ':anneeCourantePremierJour'),
                 $queryBuilder->expr()->lt('inscription.dateInscription', ':anneeSuivanteDernierJour')
@@ -196,6 +197,7 @@ class InscriptionRepository extends EntityRepository
             ->andWhere($queryBuilder->expr()->eq('inscription.etatInscription', ':etatInscriptionAccepte'))
             ->andWhere($queryBuilder->expr()->eq('inscription.etatParticipation', ':etatParticipationParticipe'))
             ->setParameters(array(
+                'domaine' => $domaine,
                 'etatInscriptionAccepte' => 407, // Accepté
                 'etatParticipationParticipe' => 411, // A participé
                 'anneeCourantePremierJour' => $anneeCourantePremierJour,
@@ -212,7 +214,7 @@ class InscriptionRepository extends EntityRepository
      * @param integer $annee Année
      * @return integer Total
      */
-    public function getUsersCountForYear($annee)
+    public function getUsersCountForYear($annee, Domaine $domaine)
     {
         $queryBuilder = $this->getEntityManager()->createQueryBuilder();
         $anneeCourantePremierJour = new \DateTime();
@@ -230,9 +232,12 @@ class InscriptionRepository extends EntityRepository
                 $queryBuilder->expr()->lt('inscription.dateInscription', ':anneeSuivanteDernierJour')
             ))
             ->innerJoin('inscription.session', 'session')
+            ->innerJoin('session.module', 'module')
+            ->innerJoin('module.domaines', 'domaine', Expr\Join::WITH, $queryBuilder->expr()->eq('domaine.id', ':domaine'))
             ->where($queryBuilder->expr()->eq('inscription.etatInscription', ':etatInscriptionAccepte'))
             ->andWhere($queryBuilder->expr()->eq('inscription.etatParticipation', ':etatParticipationParticipe'))
             ->setParameters(array(
+                'domaine' => $domaine,
                 'etatInscriptionAccepte' => 407, // Accepté
                 'etatParticipationParticipe' => 411, // A participé
                 'anneeCourantePremierJour' => $anneeCourantePremierJour,
