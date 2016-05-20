@@ -52,9 +52,10 @@
                         <div id="contexte-container">
                             <button type="button" id="contexte-button" class="btn btn-primary btn-block btn-lg" data-toggle="modal" data-target="#contexte-modal">{{ referenceProperties.reference.libelle }}</button>
                             <div class="modal fade" id="contexte-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-                                <div class="modal-dialog" role="document">
+                                <div class="modal-dialog{% if app.user is null %} modal-lg{% endif %}" role="document">
                                     <div class="modal-content">
                                         <div class="modal-header">
+                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                                             <h4 class="modal-title" id="myModalLabel">{{ referenceProperties.reference.libelle }}</h4>
                                         </div>
                                         {%- if app.user is not null -%}
@@ -73,6 +74,7 @@
                                             <div class="modal-body">
                                                 <div class="row">
                                                     <div class="col-md-6">
+                                                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed non risus. Suspendisse lectus tortor, dignissim sit amet, adipiscing nec, ultricies sed, dolor. Cras elementum ultrices diam. Maecenas ligula massa, varius a, semper congue, euismod non, mi. Proin porttitor, orci nec nonummy molestie, enim est eleifend mi, non fermentum diam nisl sit amet erat.</p>
                                                         {% include 'HopitalNumeriqueAccountBundle:include:login.html.twig' with { 'size':'small', 'title':'J\'ai déjà renseigné mon profil ? Me connecter : ' } %}
                                                     </div>
                                                     <div class="col-md-6">
@@ -82,7 +84,7 @@
                                                                 {{ mySelf.buildContextTreePart(referenceEnfantTree, 2, null) }}
                                                             {%- endfor -%}
                                                         </ul>
-                                                        <label><input type="checkbox" name="contexte-valid"> Valider et enregistrer dans les informations personnelles</label>
+                                                        <label><input type="checkbox" name="contexte-valid"> Enregistrer mon profil</label>
                                                         <button type="button" class="btn btn-success" onclick="Hn_RechercheBundle_Referencement_Filter_Contexte.valid();">Valider</button>
                                                     </div>
                                                 </div>
