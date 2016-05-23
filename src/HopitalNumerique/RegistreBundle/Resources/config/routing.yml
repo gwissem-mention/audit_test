@@ -23,3 +23,9 @@ hopital_numerique_registre_ambassadeur_connaissance_si:
     defaults: { _controller: HopitalNumeriqueRegistreBundle:Ambassadeur:connaissanceSI }
     requirements:
         id: \d+
+
+hopital_numerique_user_informations_ambassadeurs:
+    pattern:  /registre-ambassadeurs/download/ambassadeurs
+    defaults: { _controller: HopitalNumeriqueRegistreBundle:Ambassadeur:downloadAmbassadeurs }
+    requirements:
+        id: \d+

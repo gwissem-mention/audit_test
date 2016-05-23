@@ -156,6 +156,25 @@ class FactureManager extends BaseManager
         $this->save( $facture );
     }
 
+
+    /**
+     * Passe les interventions de la facture au statut annulée ou activée
+     *
+     * @param Facture $facture La facture
+     *
+     * @return empty
+     */
+    public function changeEtat( $facture )
+    {
+        if($facture->isAnnulee()){
+            $facture->setAnnulee(false);
+        } else {
+            $facture->setAnnulee(true);
+        }
+        $this->save( $facture );
+        return $facture->isAnnulee();
+    }
+
     /**
      * Retourne la liste des factures ordonnées par date
      *

@@ -4,6 +4,7 @@ namespace HopitalNumerique\ModuleBundle\Repository;
 
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\Query\Expr;
+use HopitalNumerique\DomaineBundle\Entity\Domaine;
 
 /**
  * InscriptionRepository
@@ -17,17 +18,17 @@ class InscriptionRepository extends EntityRepository
      * Récupère les données du grid sous forme de tableau correctement formaté
      *
      * @return array
-     * 
+     *
      * @author Gaetan MELCHILSEN
      * @copyright Nodevo
      */
     public function getDatasForGrid( \StdClass $condition )
     {
         $qb = $this->_em->createQueryBuilder();
-        $qb->select('insc.id, 
+        $qb->select('insc.id,
                      user.id as userId,
                      user.nom as userNom,
-                     user.prenom as userPrenom, 
+                     user.prenom as userPrenom,
                      user.roles,
                      session.id as sessionId,
                      refProfilEtablissementSante.libelle as userProfil,
@@ -47,7 +48,7 @@ class InscriptionRepository extends EntityRepository
             ->where( 'session.id = :idSession' )
             ->setParameter('idSession', $condition->value )
             ->orderBy('user.nom');
-    
+
         return $qb;
     }
 
@@ -55,7 +56,7 @@ class InscriptionRepository extends EntityRepository
      * Récupère les données du grid sous forme de tableau correctement formaté
      *
      * @return array
-     * 
+     *
      * @author Gaetan MELCHILSEN
      * @copyright Nodevo
      */
@@ -143,7 +144,7 @@ class InscriptionRepository extends EntityRepository
                          ->setParameter('user', $user)
                          ->orderBy('session.dateSession', 'DESC');
     }
-    
+
     /**
      * Retourne la date de début de session de la première inscription de chaque utilisateur pour chaque module.
      */
@@ -164,7 +165,7 @@ class InscriptionRepository extends EntityRepository
             ->setParameter('users', $usersId )
             ->orderBy('insc.dateInscription')
             ->groupBy('user.id, module.id');
-        
+
         return $qb;
     }
 
@@ -174,7 +175,7 @@ class InscriptionRepository extends EntityRepository
      * @param integer $annee Année
      * @return integer Total
      */
-    public function getCountForYear($annee)
+    public function getCountForYear($annee, Domaine $domaine)
     {
         $queryBuilder = $this->createQueryBuilder('inscription');
         $anneeCourantePremierJour = new \DateTime();
@@ -186,11 +187,19 @@ class InscriptionRepository extends EntityRepository
 
         $queryBuilder
             ->select('COUNT(DISTINCT(inscription.id)) AS total')
+            ->innerJoin('inscription.session', 'session')
+            ->innerJoin('session.module', 'module')
+            ->innerJoin('module.domaines', 'domaine', Expr\Join::WITH, $queryBuilder->expr()->eq('domaine.id', ':domaine'))
             ->where($queryBuilder->expr()->andX(
                 $queryBuilder->expr()->gte('inscription.dateInscription', ':anneeCourantePremierJour'),
                 $queryBuilder->expr()->lt('inscription.dateInscription', ':anneeSuivanteDernierJour')
             ))
+            ->andWhere($queryBuilder->expr()->eq('inscription.etatInscription', ':etatInscriptionAccepte'))
+            ->andWhere($queryBuilder->expr()->eq('inscription.etatParticipation', ':etatParticipationParticipe'))
             ->setParameters(array(
+                'domaine' => $domaine,
+                'etatInscriptionAccepte' => 407, // Accepté
+                'etatParticipationParticipe' => 411, // A participé
                 'anneeCourantePremierJour' => $anneeCourantePremierJour,
                 'anneeSuivanteDernierJour' => $anneeSuivanteDernierJour
             ))
@@ -205,7 +214,7 @@ class InscriptionRepository extends EntityRepository
      * @param integer $annee Année
      * @return integer Total
      */
-    public function getUsersCountForYear($annee)
+    public function getUsersCountForYear($annee, Domaine $domaine)
     {
         $queryBuilder = $this->getEntityManager()->createQueryBuilder();
         $anneeCourantePremierJour = new \DateTime();
@@ -222,7 +231,15 @@ class InscriptionRepository extends EntityRepository
                 $queryBuilder->expr()->gte('inscription.dateInscription', ':anneeCourantePremierJour'),
                 $queryBuilder->expr()->lt('inscription.dateInscription', ':anneeSuivanteDernierJour')
             ))
+            ->innerJoin('inscription.session', 'session')
+            ->innerJoin('session.module', 'module')
+            ->innerJoin('module.domaines', 'domaine', Expr\Join::WITH, $queryBuilder->expr()->eq('domaine.id', ':domaine'))
+            ->where($queryBuilder->expr()->eq('inscription.etatInscription', ':etatInscriptionAccepte'))
+            ->andWhere($queryBuilder->expr()->eq('inscription.etatParticipation', ':etatParticipationParticipe'))
             ->setParameters(array(
+                'domaine' => $domaine,
+                'etatInscriptionAccepte' => 407, // Accepté
+                'etatParticipationParticipe' => 411, // A participé
                 'anneeCourantePremierJour' => $anneeCourantePremierJour,
                 'anneeSuivanteDernierJour' => $anneeSuivanteDernierJour
             ))

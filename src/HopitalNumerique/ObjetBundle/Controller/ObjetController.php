@@ -21,6 +21,18 @@ class ObjetController extends Controller
 
         return $grid->render('HopitalNumeriqueObjetBundle:Objet:index.html.twig');
     }
+
+    /**
+     * Affiche la liste des Objet sous fomes d'arbre.
+     */
+    public function treeIndexAction() {
+		
+		$objets = $this->get('hopitalnumerique_objet.manager.objet')->getObjets();
+        return $this->render('HopitalNumeriqueObjetBundle:Index:index.html.twig', array(
+            'objets' => $objets,
+        ));	
+    }
+    
     /**
      * Affiche la liste des Objet.
      */
@@ -33,9 +45,31 @@ class ObjetController extends Controller
             $grid->setDefaultFiltreFromController($filtre);
         }
 
-        return $grid->render('HopitalNumeriqueObjetBundle:Objet:index.html.twig');
+        return $grid->render ( 'HopitalNumeriqueObjetBundle:Objet:index.html.twig', array (
+            'filtre' => $filtre 
+        ) );
     }
+    
+    /**
+     * Action Annuler, on dévérouille l'objet et on redirige vers l'index
+     */
+    public function cancelWithFiltreAction($id, $message, $filtre) {
+        $objet = $this->get ( 'hopitalnumerique_objet.manager.objet' )->findOneBy ( array (
+                        'id' => $id 
+        ) );
 
+        $this->get ( 'hopitalnumerique_objet.manager.objet' )->unlock ( $objet );
+
+        // si on à appellé l'action depuis le button du grid, on met un message à l'user, sinon pas besoin de message
+        if (! is_null ( $message )) {
+                $this->get ( 'session' )->getFlashBag ()->add ( 'info', 'Objet dévérouillé.' );
+        }
+
+        return $this->redirect ( $this->generateUrl ( 'hopitalnumerique_objet_objet_filtre', array (
+                        'filtre' => $filtre 
+        ) ) );
+    }
+    
     /**
      * Action Annuler, on dévérouille l'objet et on redirige vers l'index
      */
@@ -160,7 +194,7 @@ class ObjetController extends Controller
 
         $this->get('session')->getFlashBag()->add('info', 'Suppression effectuée avec succès.' );
 
-        return new Response('{"success":true, "url" : "'.$this->generateUrl('hopitalnumerique_objet_objet').'"}', 200);
+        return new Response ( '{"success":true, "url" : "' . $this->generateUrl ( 'hopitalnumerique_objet_objet_filtre' , array('filtre' => $filtre)) . '"}', 200 );
     }
 
     /**
@@ -473,7 +507,14 @@ class ObjetController extends Controller
                     $this->get('session')->getFlashBag()->add( ($new ? 'success' : 'info') , 'Objet ' . ($new ? 'ajouté.' : 'mis à jour.') ); 
                 
                 // On redirige vers la home page
-                return $this->redirect( ($do == 'save-close' ? $this->generateUrl('hopitalnumerique_objet_objet') : $this->generateUrl('hopitalnumerique_objet_objet_edit', array('id'=>$objet->getId())) ) );
+                if ($objet->isArticle()) {
+                        return $this->redirect ( ($do == 'save-close' ? $this->generateUrl ( 'hopitalnumerique_objet_objet_filtre',array('filtre' => 'Article') ) : $this->generateUrl ( 'hopitalnumerique_objet_objet_edit', array (
+                                        'id' => $objet->getId ()
+                        ) )) );
+                }
+                return $this->redirect ( ($do == 'save-close' ? $this->generateUrl ( 'hopitalnumerique_objet_objet_filtre',array('filtre' => 'publication') ) : $this->generateUrl ( 'hopitalnumerique_objet_objet_edit', array (
+                                'id' => $objet->getId () 
+                ) )) );
             }
         }
 

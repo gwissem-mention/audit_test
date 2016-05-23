@@ -73,8 +73,33 @@ class ConsultationManager extends BaseManager
                 $consultation->setDateLastConsulted( new \DateTime() );
             }
             
-            $this->save( $consultation );
+        } else {
+        	
+        	$consultation = $isContenu ? $this->findOneBy( array( 'objet'=>$objet->getObjet(), 'contenu'=>$objet, 'user'=>null, 'domaine' => $domaine) ) : $this->findOneBy( array('objet'=>$objet, 'user'=>null, 'contenu'=>null, 'domaine' => $domaine) );
+        	//new
+        	if( is_null($consultation) ){
+        		$consultation = $this->createEmpty();
+        	
+        		$consultation->setDomaine($domaine);
+        	
+        		if( $isContenu ){
+        			$consultation->setContenu( $objet );
+        			$consultation->setObjet( $objet->getObjet() );
+        		} else {
+        			$consultation->setObjet( $objet );
+        		}
+        		
+        		$consultation->setSessionId(session_id());
+        		
+        	}
+        	else
+        	{
+        		$consultation->setSessionId(session_id());
+        		$consultation->setDateLastConsulted( new \DateTime() );
+        	}
         }
+        $this->save( $consultation );
+        
     }
 
     /**

@@ -91,6 +91,12 @@ class Facture
      */
     private $formations;
 
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="fac_annulee", type="boolean", options = {"comment" = "Est ce que la facture est annulee"})
+     */
+    private $annulee;
 
     /**
      * Initialisation de l'entitée (valeurs par défaut)
@@ -101,6 +107,7 @@ class Facture
         $this->interventions = new \Doctrine\Common\Collections\ArrayCollection();
         $this->formations    = new \Doctrine\Common\Collections\ArrayCollection();
         $this->payee         = false;
+        $this->annulee       = false;
     }
 
     /**
@@ -240,6 +247,27 @@ class Facture
     public function setPayee($payee)
     {
         $this->payee = $payee;
+        return $this;
+    }
+
+    /**
+     * Get annulee
+     *
+     * @return boolean $annulee
+     */
+    public function isAnnulee()
+    {
+        return $this->annulee;
+    }
+
+    /**
+     * Set annulee
+     *
+     * @param boolean $annulee
+     */
+    public function setAnnulee($annulee)
+    {
+        $this->annulee = $annulee;
         return $this;
     }
 

@@ -43,16 +43,18 @@
 							    <a href="{{path('hopitalnumerique_user_ambassadeur_edit', {'id':user.id})}}">Candidature ambassadeur</a>
 							</li>
 						{% endif %}
-                        {% if user.id is not null and options.ambassadeur %}
+                        {% if user.id is not null and (options.ambassadeur or options.expert) %}
                             <li>
                                 <a href="{{path('hopitalnumerique_user_ambassadeur_objets', {'id':user.id})}}">Productions maîtrisées</a>
                             </li>
-                            <li>
-                                <a href="{{path('hopitalnumerique_user_ambassadeur_domainesFonctionnels', {'id':user.id})}}">Connaissances métiers</a>
-                            </li>
-                            <li>
-                                <a href="{{path('hopitalnumerique_user_ambassadeur_connaissancesSI', {'id':user.id})}}">Connaissances SI</a>
-                            </li>
+                            {% if user.id is not null and options.ambassadeur %}
+                                <li>
+                                    <a href="{{path('hopitalnumerique_user_ambassadeur_domainesFonctionnels', {'id':user.id})}}">Connaissances métiers</a>
+                                </li>
+                                <li>
+                                    <a href="{{path('hopitalnumerique_user_ambassadeur_connaissancesSI', {'id':user.id})}}">Connaissances SI</a>
+                                </li>
+                            {% endif %}
                         {% endif %}
                         {% if user.id is not null %}
                             <li>

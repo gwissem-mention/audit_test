@@ -7,7 +7,7 @@ use HopitalNumerique\UserBundle\Entity\User as HopiUser;
 
 /**
  * Controller des abassadeurs
- * 
+ *
  * @author Gaetan MELCHILSEN
  * @copyright Nodevo
  */
@@ -16,18 +16,18 @@ class AmbassadeurController extends Controller
     //---- Front Office ------
     /**
      * Affichage du formulaire d'utilisateur
-     * 
+     *
      * @param integer $id Identifiant de l'utilisateur
      */
     public function editFrontAction( )
     {
         //On récupère l'utilisateur qui est connecté
         $user = $this->get('security.context')->getToken()->getUser();
-        
+
         //Récupération du questionnaire de l'expert
         $idQuestionnaireAmbassadeur = $this->get('hopitalnumerique_questionnaire.manager.questionnaire')->getQuestionnaireId('ambassadeur');
         $questionnaire              = $this->get('hopitalnumerique_questionnaire.manager.questionnaire')->findOneBy( array('id' => $idQuestionnaireAmbassadeur) );
-        
+
         //Récupération des réponses pour le questionnaire et utilisateur courant, triées par idQuestion en clé
         $reponses = $this->get('hopitalnumerique_questionnaire.manager.reponse')->reponsesByQuestionnaireByUser( $questionnaire->getId(), $user->getId(), true );
 
@@ -52,7 +52,7 @@ class AmbassadeurController extends Controller
             )
         ));
     }
-    
+
     //---- Back Office ------
     /**
      * Affichage du formulaire d'utilisateur
@@ -64,7 +64,7 @@ class AmbassadeurController extends Controller
         //Récupération du questionnaire de l'expert
         $idQuestionnaireExpert = $this->get('hopitalnumerique_questionnaire.manager.questionnaire')->getQuestionnaireId('ambassadeur');
         $questionnaire = $this->get('hopitalnumerique_questionnaire.manager.questionnaire')->findOneBy( array('id' => $idQuestionnaireExpert) );
-    
+
         return $this->render('HopitalNumeriqueUserBundle:Ambassadeur:edit.html.twig',array(
             'questionnaire' => $questionnaire,
                 'user'             => $user,
@@ -96,16 +96,16 @@ class AmbassadeurController extends Controller
     {
         //Récupération du questionnaire de l'ambassadeur
         $idQuestionnaireAmbassadeur = $this->get('hopitalnumerique_questionnaire.manager.questionnaire')->getQuestionnaireId('ambassadeur');
-    
+
         //Récupération de l'utilisateur passé en param
         $reponses = $this->get('hopitalnumerique_questionnaire.manager.reponse')->reponsesByQuestionnaireByUser( $idQuestionnaireAmbassadeur , $idUser );
-    
+
         return $this->render('HopitalNumeriqueUserBundle:Ambassadeur:show.html.twig', array(
             'reponses'       => $reponses,
             'nombreReponses' => count($reponses)
         ));
     }
-    
+
     /**
      * Affichage de la liste des objets d'un utilisateur
      *
@@ -115,13 +115,13 @@ class AmbassadeurController extends Controller
     {
         //Récupération de l'utilisateur passé en param
         $objets = $this->get('hopitalnumerique_objet.manager.objet')->getObjetsByAmbassadeur($idUser);
-    
+
         return $this->render('HopitalNumeriqueUserBundle:Ambassadeur:liste_objets.html.twig', array(
             'objets'       => $objets,
             'nombreObjets' => count($objets)
         ));
     }
-    
+
     /**
      * Affiche la liste des objets maitrisés par l'ambassadeur
      *
@@ -133,7 +133,7 @@ class AmbassadeurController extends Controller
     {
         //Récupération de l'utilisateur passé en param
         $user = $this->get('hopitalnumerique_user.manager.user')->findOneBy( array('id' => $id) );
-        
+
         $grid = $this->get('hopitalnumerique_user.grid.objet');
         $grid->setSourceCondition('ambassadeur', $id);
 
@@ -169,9 +169,10 @@ class AmbassadeurController extends Controller
      */
     public function addObjetAction( $id )
     {
+        $user = $this->get('hopitalnumerique_user.manager.user')->findOneBy( array('id' => $id) );
         $types  = $this->get('hopitalnumerique_reference.manager.reference')->findBy(array('code'=>'CATEGORIE_OBJET'));
-        $objets = $this->get('hopitalnumerique_objet.manager.objet')->getObjetsNonMaitrises( $id, $types );
-        
+        $domaines = $user->getDomaines()->getValues();
+        $objets = $this->get('hopitalnumerique_objet.manager.objet')->getObjetsNonMaitrisesByDomaine( $id, $types, $domaines);
         return $this->render('HopitalNumeriqueUserBundle:Ambassadeur:add_objet.html.twig', array(
             'objets'      => $objets,
             'ambassadeur' => $id
@@ -194,13 +195,13 @@ class AmbassadeurController extends Controller
         $objets = $this->get('hopitalnumerique_objet.manager.objet')->findBy( array( 'id' => $objets ) );
         foreach($objets as &$objet)
             $objet->addAmbassadeur( $ambassadeur );
-        
+
         $this->get('hopitalnumerique_objet.manager.objet')->save( $objets );
-        
+
         $this->get('session')->getFlashBag()->add( 'success' ,  'Les productions ont été liées à l\'ambassadeur.' );
 
         return new Response('{"success":true, "url" : "'. $this->generateUrl('hopitalnumerique_user_ambassadeur_objets', array('id' => $id)).'"}', 200);
-    }  
+    }
 
     /**
      * Validation de la candidature de l'utilisateur pour le questionnaire
@@ -211,7 +212,7 @@ class AmbassadeurController extends Controller
     {
         $routeRedirection = $this->get('request')->request->get('routeRedirection');
         $routeRedirection = json_decode($routeRedirection, true);
-        
+
         //Récupération du questionnaire de l'ambassadeur
         $idQuestionnaireAmbassadeur = $this->get('hopitalnumerique_questionnaire.manager.questionnaire')->getQuestionnaireId('ambassadeur');
         $questionnaire = $this->get('hopitalnumerique_questionnaire.manager.questionnaire')->findOneBy( array('id' => $idQuestionnaireAmbassadeur) );
@@ -225,15 +226,15 @@ class AmbassadeurController extends Controller
         //Envoie du mail de validation de la candidature
         $mail = $this->get('nodevo_mail.manager.mail')->sendValidationCandidatureAmbassadeurMail($user, $CMSI);
         $this->get('mailer')->send($mail);
-        
+
         //Mise à jour / création de l'utilisateur
         $this->get('fos_user.user_manager')->updateUser( $user );
-    
+
         $this->get('session')->getFlashBag()->add( 'success' ,  'La candidature au poste '. $questionnaire->getNomMinifie() .' a été validé.' );
-    
+
         return new Response('{"success":true, "url" : "'.$this->generateUrl($routeRedirection['sauvegarde']['route'], $routeRedirection['sauvegarde']['arguments']).'"}', 200);
     }
-    
+
     /**
      * Refus de la candidature de l'utilisateur pour le questionnaire
      *
@@ -244,14 +245,14 @@ class AmbassadeurController extends Controller
     {
         $routeRedirection = $this->get('request')->request->get('routeRedirection');
         $routeRedirection = json_decode($routeRedirection, true);
-        
+
         //Texte du refus entré dans la fancybox
         $texteRefus = $this->get('request')->request->get('texteRefus');
 
         //Récupération du questionnaire de l'ambassadeur
         $idQuestionnaireAmbassadeur = $this->get('hopitalnumerique_questionnaire.manager.questionnaire')->getQuestionnaireId('ambassadeur');
         $questionnaire = $this->get('hopitalnumerique_questionnaire.manager.questionnaire')->findOneBy( array('id' => $idQuestionnaireAmbassadeur) );
-        
+
         //Ajout en base du message de refus
         $refusCandidature = $this->get('hopitalnumerique_user.manager.refus_candidature')->createEmpty();
         $refusCandidature->setQuestionnaire($questionnaire);
@@ -260,16 +261,16 @@ class AmbassadeurController extends Controller
         $refusCandidature->setUserOrigineRefus($this->get('security.context')->getToken()->getUser());
         $refusCandidature->setMotifRefus($texteRefus);
         $refusCandidature->setDateRefus(new \DateTime());
-        
+
         $this->get('hopitalnumerique_user.manager.refus_candidature')->save($refusCandidature);
-        
+
         //Envoie du mail de validation de la candidature
         $CMSI = $this->get('hopitalnumerique_user.manager.user')->findUsersByRoleAndRegion($user->getRegion(), 'ROLE_ARS_CMSI_4');
         $mail = $this->get('nodevo_mail.manager.mail')->sendRefusCandidatureAmbassadeurMail($user, array('message' => $texteRefus), $CMSI);
         $this->get('mailer')->send($mail);
-        
+
         $this->get('session')->getFlashBag()->add( 'success' ,  'La candidature au poste '. $questionnaire->getNomMinifie() .' a été refusé.' );
-        
+
         return new Response('{"success":true, "url" : "'.$this->generateUrl($routeRedirection['sauvegarde']['route'], $routeRedirection['sauvegarde']['arguments']).'"}', 200);
     }
 
@@ -330,12 +331,12 @@ class AmbassadeurController extends Controller
         $user = $this->get('hopitalnumerique_user.manager.user')->findOneBy( array('id' => $id) );
 
         $domainesIds = array_keys($domaines);
-        
+
         //bind objects
         $refDomaines = $this->get('hopitalnumerique_reference.manager.reference')->findBy( array( 'id' => $domainesIds ) );
 
         $connaissancesAmbassadeurs = array();
-        foreach ($refDomaines as $refDomaine) 
+        foreach ($refDomaines as $refDomaine)
         {
             //Vérifie si l'utilisateur a déjà renseigné ce domaine
             $connaissanceAmbassadeur = $this->get('hopitalnumerique_user.manager.connaissance_ambassadeur')->findOneBy(array('user' => $user, 'domaine' => $refDomaine));
@@ -380,7 +381,7 @@ class AmbassadeurController extends Controller
         $domainesIds = array();
         $affichageDomaines = array();
 
-        foreach ($domaines as $domaine) 
+        foreach ($domaines as $domaine)
         {
             if (count($domaine->getParents()) > 0)
             {
@@ -403,7 +404,7 @@ class AmbassadeurController extends Controller
                     $affichageDomaines[$domaine->getId()] = array(
                         'libelle' => '',
                         'fils'    => array()
-                    );    
+                    );
                 }
                 $affichageDomaines[$domaine->getId()]['fils'][] = $domaine;
             }
@@ -446,12 +447,12 @@ class AmbassadeurController extends Controller
         $user = $this->get('hopitalnumerique_user.manager.user')->findOneBy( array('id' => $id) );
 
         $domainesIds = array_keys($domaines);
-        
+
         //bind objects
         $refDomaines = $this->get('hopitalnumerique_reference.manager.reference')->findBy( array( 'id' => $domainesIds ) );
 
         $connaissancesAmbassadeurs = array();
-        foreach ($refDomaines as $refDomaine) 
+        foreach ($refDomaines as $refDomaine)
         {
             //Vérifie si l'utilisateur a déjà renseigné ce domaine
             $connaissanceAmbassadeur = $this->get('hopitalnumerique_user.manager.connaissance_ambassadeur_si')->findOneBy(array('user' => $user, 'domaine' => $refDomaine));

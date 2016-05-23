@@ -16,6 +16,7 @@ namespace HopitalNumerique\ForumBundle\Controller;
 use CCDNForum\ForumBundle\Component\Dispatcher\ForumEvents;
 use CCDNForum\ForumBundle\Component\Dispatcher\Event\AdminBoardEvent;
 use CCDNForum\ForumBundle\Component\Dispatcher\Event\AdminBoardResponseEvent;
+use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
 /**
  *
@@ -175,7 +176,10 @@ class AdminBoardController extends \CCDNForum\ForumBundle\Controller\AdminBoardB
      */
     public function deleteAction($boardId)
     {
-        $this->isAuthorised('ROLE_SUPER_ADMIN');
+        //$this->isAuthorised('ROLE_SUPER_ADMIN');
+        if(!$this->getSecurityContext()->getToken()->getUser()->isGranted('ROLE_ADMINISTRATEUR_DU_DOMAINE_HN_107') && !$this->getSecurityContext()->isGranted('ROLE_SUPER_ADMIN') && !$this->getSecurityContext()->isGranted('ROLE_ADMINISTRATEUR_DE_DOMAINE_106')) {
+            throw new AccessDeniedException('You do not have permission to use this resource.');
+        }
         $this->isFound($board = $this->getBoardModel()->findOneBoardById($boardId));
         $formHandler = $this->getFormHandlerToDeleteBoard($board);
         $response = $this->renderResponse('CCDNForumForumBundle:Admin:/Board/delete.html.', array(
@@ -197,7 +201,9 @@ class AdminBoardController extends \CCDNForum\ForumBundle\Controller\AdminBoardB
      */
     public function deleteProcessAction($boardId)
     {
-        $this->isAuthorised('ROLE_SUPER_ADMIN');
+        if(!$this->getSecurityContext()->getToken()->getUser()->isGranted('ROLE_ADMINISTRATEUR_DU_DOMAINE_HN_107') && !$this->getSecurityContext()->isGranted('ROLE_SUPER_ADMIN') && !$this->getSecurityContext()->isGranted('ROLE_ADMINISTRATEUR_DE_DOMAINE_106')) {
+            throw new AccessDeniedException('You do not have permission to use this resource.');
+        }
         $this->isFound($board = $this->getBoardModel()->findOneBoardById($boardId));
         $formHandler = $this->getFormHandlerToDeleteBoard($board);
 

@@ -1,0 +1,38 @@
+{% extends 'HopitalNumeriqueCoreBundle:Templates:' ~ templateCurrentId ~ '/layout.html.twig' %}
+
+{# Référencement #}
+{% block title %}{{parent()}} - index - publications{% endblock %}
+
+{% block stylesheets %}
+    {{parent()}}
+    {% stylesheets output="compiled/hopitalnumerique-index-front-index.css" filter="cssrewrite, ?yui_css"
+        'bundles/hopitalnumeriqueobjet/css/style.css'
+    %}
+        <link rel="stylesheet" href="{{ asset_url }}" />
+    {% endstylesheets %}
+{% endblock %}
+
+{% block javascripts %}
+    {{parent()}}
+    {% javascripts output="compiled/hopitalnumerique-index-front-index.js" 
+        'bundles/hopitalnumeriquefaq/js/script.js'
+    %}
+        <script type="text/javascript" src="{{ asset_url }}"></script>
+    {% endjavascripts %}
+{% endblock %}
+
+{% block body %}
+    <div id="index">
+        <div class="col-md-12">
+            <h1>Index des publications</h1>
+        </div>
+        {% for objet in objets %}
+		    <div class="col-md-12">
+	            <div class="panel panel-default">
+					 <div class="panel-heading"><a href="{{ path('hopital_numerique_publication_publication_objet', { 'id': objet.id ,'alias': objet.alias })}}">{{objet.titre}}</a></div>
+                </div>
+            </div>
+        {% endfor %}
+
+{% endblock %}
+

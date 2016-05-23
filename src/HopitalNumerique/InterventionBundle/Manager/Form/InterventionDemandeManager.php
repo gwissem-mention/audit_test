@@ -1,7 +1,7 @@
 <?php
 /**
  * Manager pour le formulaire des demandes d'intervention.
- * 
+ *
  * @author Rémi Leclerc <rleclerc@nodevo.com>
  */
 namespace HopitalNumerique\InterventionBundle\Manager\Form;
@@ -80,10 +80,7 @@ class InterventionDemandeManager
      */
     public function getObjetsChoices()
     {
-        return $this->objetManager->getObjetsByTypes( array(175, 176, 177, 178, 179, 180, 181, 182), 0, array(
-            'champ' => 'obj.titre',
-            'tri'   => 'ASC'
-        ));
+        return $this->objetManager->getObjetsByTypesAndDomaine( array(175, 176, 177, 178, 179, 180, 181, 182), null);
     }
     /**
      * Retourne la liste des objets pour les listes de formulaire.
@@ -100,7 +97,7 @@ class InterventionDemandeManager
         else
         {
             $connaissances = array();
-            foreach ($ambassadeur->getConnaissancesAmbassadeurs() as $connaissance) 
+            foreach ($ambassadeur->getConnaissancesAmbassadeurs() as $connaissance)
             {
                 if(!is_null($connaissance->getConnaissance()))
                 {
@@ -126,7 +123,7 @@ class InterventionDemandeManager
         else
         {
             $connaissancesSI = array();
-            foreach ($ambassadeur->getConnaissancesAmbassadeursSI() as $connaissanceSI) 
+            foreach ($ambassadeur->getConnaissancesAmbassadeursSI() as $connaissanceSI)
             {
                 if(!is_null($connaissanceSI->getConnaissance()))
                 {

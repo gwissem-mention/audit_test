@@ -126,8 +126,15 @@
                     <span class="pull-left">|</span>
                     <input type="hidden" id="save-references-topic-url" value="{{path('hopitalnumerique_forum_reference_topic_save',{'id':topic.id})}}" />
                     <input type="hidden" id="save-references-contenu-url" value="{{path('hopitalnumerique_forum_reference_contenu')}}" />
+
                     <a href="{{path('hopitalnumerique_reference_referencement_popin', { 'entityType':3, 'entityId':topic.id })}}" class="open-popin-referencement btn btn-xs btn-success fancybox.ajax pull-left"><i class="fa fa-cog"></i></a>
                     <p class="text-muted text-right pull-left">Note référencement : {{ referencement_note(topic) }}</p>
+
+                    {% if topic.isSticky %}
+                        <button id="pinTopic" href="{{path('hopitalnumerique_forum_reference_sticky_topic', {'id':topic.id})}}" class="manageReferences edit btn btn-xs btn-success pull-left" title="Supprimer des favoris"><i class="fa fa-star"></i></button>
+                    {% else %}
+                        <button id="pinTopic" href="{{path('hopitalnumerique_forum_reference_sticky_topic', {'id':topic.id})}}" class="manageReferences edit btn btn-xs btn-warning pull-left" title="Ajouter aux favoris"><i class="fa fa-star"></i></button>
+                    {% endif %}
                 {% endif %}
             </div>
         </div>

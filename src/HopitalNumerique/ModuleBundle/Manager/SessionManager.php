@@ -10,32 +10,32 @@ use HopitalNumerique\UserBundle\Manager\UserManager;
 
 /**
  * Manager de l'entité Session.
- * 
+ *
  * @author Gaetan MELCHILSEN
  * @copyright Nodevo
  */
 class SessionManager extends BaseManager
 {
     protected $_class = 'HopitalNumerique\ModuleBundle\Entity\Session';
-    
+
     /**
      * @var \HopitalNumerique\QuestionnaireBundle\Manager\ReponseManager ReponseManager
      */
     private $reponseManager;
-    
+
     /**
      * @var \HopitalNumerique\ReferenceBundle\Manager\ReferenceManager ReferenceManager
      */
     private $referenceManager;
-    
+
     /**
      * @var \HopitalNumerique\UserBundle\Manager\UserManager UserManager
      */
     private $_userManager;
-    
+
     /**
      * Constructeur du manager de Session.
-     * 
+     *
      * @param \Doctrine\ORM\EntityManager $em EntityManager
      * @param \HopitalNumerique\QuestionnaireBundle\Manager\ReponseManager $reponseManager ReponseManager
      * @param \HopitalNumerique\ReferenceBundle\Manager\ReferenceManager $referenceManager ReferenceManager
@@ -44,7 +44,7 @@ class SessionManager extends BaseManager
     public function __construct(EntityManager $em, ReponseManager $reponseManager, ReferenceManager $referenceManager, UserManager $userManager)
     {
         parent::__construct($em);
-        
+
         $this->reponseManager   = $reponseManager;
         $this->referenceManager = $referenceManager;
         $this->_userManager     = $userManager;
@@ -54,7 +54,7 @@ class SessionManager extends BaseManager
      * Override : Récupère les données pour le grid sous forme de tableau
      *
      * @return array
-     * 
+     *
      * @author Gaetan MELCHILSEN
      * @copyright Nodevo
      */
@@ -64,13 +64,13 @@ class SessionManager extends BaseManager
 
         $result = array();
 
-        foreach ($sessions as $key => $session) 
+        foreach ($sessions as $key => $session)
         {
             $nbInscritsAccepte   = 0;
             $nbInscritsEnAttente = 0;
             $nbPlacesRestantes   = $session->getNombrePlaceDisponible();
 
-            foreach ($session->getInscriptions() as $inscription) 
+            foreach ($session->getInscriptions() as $inscription)
             {
                 if($inscription->getEtatInscription()->getId() === 406)
                     $nbInscritsEnAttente++;
@@ -103,7 +103,7 @@ class SessionManager extends BaseManager
      * Override : Récupère les données pour le grid sous forme de tableau
      *
      * @return array
-     * 
+     *
      * @author Gaetan MELCHILSEN
      * @copyright Nodevo
      */
@@ -113,13 +113,13 @@ class SessionManager extends BaseManager
 
         $sessions = $this->getRepository()->getAllDatasForGrid( $domainesIds, $condition )->getQuery()->getResult();
 
-        foreach ($sessions as $key => $session) 
+        foreach ($sessions as $key => $session)
         {
             $nbInscritsAccepte   = 0;
             $nbInscritsEnAttente = 0;
             $nbPlacesRestantes   = $session->getNombrePlaceDisponible();
 
-            foreach ($session->getInscriptions() as $inscription) 
+            foreach ($session->getInscriptions() as $inscription)
             {
                 if($inscription->getEtatInscription()->getId() === 406)
                     $nbInscritsEnAttente++;
@@ -131,7 +131,7 @@ class SessionManager extends BaseManager
             }
 
             $domaineNom = '';
-            foreach ($session->getModule()->getDomaines() as $domaine) 
+            foreach ($session->getModule()->getDomaines() as $domaine)
             {
                 if($domaineNom !== '')
                 {
@@ -153,6 +153,7 @@ class SessionManager extends BaseManager
                 'placeRestantes'           => $nbPlacesRestantes . '/' . $session->getNombrePlaceDisponible(),
                 'etat'                     => $session->getEtat()->getLibelle(),
                 'archiver'                 => $session->getArchiver(),
+                'formateur'                => $session->getFormateur()->getNomPrenom(),
                 'domaineNom'               => $domaineNom
             );
         }
@@ -164,7 +165,7 @@ class SessionManager extends BaseManager
      * Retourne la liste des sessions du domaine courrant étant en court d'inscription et active
      *
      * @param idDomaine $idDomaine Domaine concerné
-     * 
+     *
      * @return array
      */
     public function getSessionsInscriptionOuverteModuleDomaine( $idDomaine )
@@ -176,7 +177,7 @@ class SessionManager extends BaseManager
      * Retourne la liste des sessions du formateur
      *
      * @param User $user L'utilisateur concerné
-     * 
+     *
      * @return array
      */
     public function getSessionsForFormateur( $user )
@@ -188,7 +189,7 @@ class SessionManager extends BaseManager
      * Retourne la liste des sessions à évaluer pour le dashboard user
      *
      * @param User $user L'utilisateur concerné
-     * 
+     *
      * @return array
      */
     public function getSessionsForDashboard( $user )
@@ -198,7 +199,7 @@ class SessionManager extends BaseManager
 
     /**
      * Retourne les sessions des 15 prochains jours
-     * 
+     *
      * @return array
      */
     public function getNextSessions($domainesUser)
@@ -231,8 +232,8 @@ class SessionManager extends BaseManager
     public function getExportEvaluationsCsv(array $sessionIds, $charset)
     {
         $sessions = $this->findBy(array('id' => $sessionIds));
-        
-        
+
+
         $colonnes = array
         (
             'Nom du module',
@@ -241,7 +242,7 @@ class SessionManager extends BaseManager
             'Participant - Nom'
         );
         $datas    = array();
-        
+
         foreach ($sessions as $session)
         {
             $inscriptions = $session->getInscriptionsAccepte();
@@ -251,16 +252,16 @@ class SessionManager extends BaseManager
                 $user     = $inscription->getUser();
                 $reponses = $this->reponseManager->reponsesByQuestionnaireByUser( 4, $user->getId() , true, null, $session->getId() );
                 $row      = array();
-            
+
                 foreach($reponses as $reponse)
                 {
                     $question   = $reponse->getQuestion();
                     $idQuestion = $question->getId();
-            
+
                     //ajoute la question si non présente dans les colonnes
                     if( !isset($colonnes[$idQuestion]) )
                         $colonnes[$idQuestion] = $question->getLibelle();
-            
+
                     //handle la réponse
                     switch($question->getTypeQuestion()->getLibelle())
                     {
@@ -269,9 +270,9 @@ class SessionManager extends BaseManager
                             break;
                         case 'entityradio':
                             $question = $reponse->getQuestion();
-            
+
                             $referenceReponse = $this->referenceManager->findOneBy( array( 'id' => $reponse->getReponse()) );
-            
+
                             if(!is_null($referenceReponse))
                             {
                                 $row[$idQuestion] = $referenceReponse->getLibelle();
@@ -285,15 +286,15 @@ class SessionManager extends BaseManager
                             $row[$idQuestion] = $reponse->getReponse();
                             break;
                     }
-            
+
                     $hasReponses = true;
                 }
-            
+
                 if(!$hasReponses)
                     continue;
-            
+
                 ksort($row);
-            
+
                 $tab = array_merge
                 (
                     array
@@ -308,17 +309,17 @@ class SessionManager extends BaseManager
                 $datas[] = $tab;
             }
         }
-        
+
         if(empty($datas))
         {
             $colonnes = array(0 => "Aucune donnée");
             $datas[] = array(0 => "");
         }
-        
+
         ksort($colonnes);
 
-        
-    
+
+
         return $this->exportCsv
         (
             array_values($colonnes),
@@ -331,13 +332,23 @@ class SessionManager extends BaseManager
     /**
      * Retourne les sessions à risque, càd n'ayant pas assez de participants pour des sessions prochaines.
      *
-     * @return integer Total
+     * @return array<\HopitalNumerique\ModuleBundle\Entity\Session> Sessions
      */
-    public function getSessionsRisqueesCount()
+    public function getSessionsRisquees()
     {
         $dans3mois = new \DateTime();
         $dans3mois->add(new \DateInterval('P12M'));
 
-        return count($this->getRepository()->getSessionsRisquees(2, $dans3mois)->getQuery()->getResult());
+        return $this->getRepository()->getSessionsRisquees(2, $dans3mois)->getQuery()->getResult();
+    }
+
+    /**
+     * Retourne les sessions à risque, càd n'ayant pas assez de participants pour des sessions prochaines.
+     *
+     * @return integer Total
+     */
+    public function getSessionsRisqueesCount()
+    {
+        return count($this->getSessionsRisquees());
     }
 }

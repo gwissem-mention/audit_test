@@ -800,3 +800,6 @@ div.homepage  {
     .nalert-danger {color: #ffffff;background-color: #cb324e;border-color: #ebccd1;}
     .nalert-danger hr {border-top-color: #e4b9c0;}
     .nalert-danger .alert-link {color: #843534;}
+.fancybox-item.fancybox-close {
+        background-position: 0 0;
+}

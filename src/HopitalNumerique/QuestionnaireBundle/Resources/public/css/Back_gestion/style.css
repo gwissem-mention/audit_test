@@ -1,5 +1,6 @@
 /* Second Toolbar  */
 div.sous_options {text-align: right; margin: 0px 10px 20px 0px;}
 form .checkbox input{margin: 5px 0 0 0}
+.checkboxObligatoire input{margin: 0 10px 0 0 !important; width: 25px;}
 
 #export-csv-buttons{margin:29px 0 0;}

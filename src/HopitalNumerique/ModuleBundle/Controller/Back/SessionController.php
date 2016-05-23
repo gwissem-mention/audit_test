@@ -239,6 +239,15 @@ class SessionController extends Controller
         );
     }
 
+    /**
+     * Affiche la popin des sessions à risque.
+     */
+    public function popinSessionsRisqueesAction()
+    {
+        return $this->render('HopitalNumeriqueModuleBundle:Back/Session:sessions_risquees.html.twig', [
+            'sessionsRisquees' => $this->container->get('hopitalnumerique_module.manager.session')->getSessionsRisquees()
+        ]);
+    }
 
 
 

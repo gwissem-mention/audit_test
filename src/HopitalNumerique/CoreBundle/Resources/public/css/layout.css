@@ -84,3 +84,9 @@
         .recherche-referencement .results-bloc .title a .subtitle { color: #5d5d5d;display: block;font-size: 85%; }
     .recherche-referencement .results-bloc p { font-size: 13px;margin: 8px 0; }
 /* --> */
+
+@media print {
+  a[href]:after {
+    content: none !important;
+  }
+}

@@ -14,10 +14,11 @@ class DefaultController extends Controller
     /**
      * Index Action
      */
-    public function indexAction()
+    public function indexAction(Request $request)
     {
         //On récupère l'user connecté
         $user = $this->get('security.context')->getToken()->getUser();
+        $currentDomaine = $this->get('hopitalnumerique_domaine.manager.domaine')->findOneById($request->getSession()->get('domaineId'));
 
         //récupère la conf (l'ordre) des blocks du dashboard de l'user connecté
         $userConf = $this->buildDashboardRows( json_decode($user->getDashboardBack(), true) );
@@ -30,10 +31,10 @@ class DefaultController extends Controller
         $blocInterventions = array( 'total' => 0, 'demandees' => 0, 'attente' => 0, 'en-cours' => 0, 'refusees' => 0, 'annulees' => 0 );
         $blocSessions = array(
             'next' => array(),
-            'totalInscriptionsAnneeEnCours' => $this->container->get('hopitalnumerique_module.manager.inscription')->getCountForYear($anneeEnCours),
-            'totalInscriptionsAnneePrecedente' => $this->container->get('hopitalnumerique_module.manager.inscription')->getCountForYear($anneeEnCours - 1),
-            'totalParticipantsAnneeEnCours' => $this->container->get('hopitalnumerique_module.manager.inscription')->getUsersCountForYear($anneeEnCours),
-            'totalParticipantsAnneePrecedente' => $this->container->get('hopitalnumerique_module.manager.inscription')->getUsersCountForYear($anneeEnCours - 1),
+            'totalInscriptionsAnneeEnCours' => $this->container->get('hopitalnumerique_module.manager.inscription')->getCountForYear($anneeEnCours, $currentDomaine),
+            'totalInscriptionsAnneePrecedente' => $this->container->get('hopitalnumerique_module.manager.inscription')->getCountForYear($anneeEnCours - 1, $currentDomaine),
+            'totalParticipantsAnneeEnCours' => $this->container->get('hopitalnumerique_module.manager.inscription')->getUsersCountForYear($anneeEnCours, $currentDomaine),
+            'totalParticipantsAnneePrecedente' => $this->container->get('hopitalnumerique_module.manager.inscription')->getUsersCountForYear($anneeEnCours - 1, $currentDomaine),
             'totalSessionsRisquees' => $this->container->get('hopitalnumerique_module.manager.session')->getSessionsRisqueesCount()
         );
         $blocPaiements     = array( 'apayer' => 0, 'attente' => 0, 'janvier' => 0 );
@@ -42,7 +43,7 @@ class DefaultController extends Controller
         $interventions = $this->get('hopitalnumerique_intervention.manager.intervention_demande')->findAll();
         foreach($interventions as $intervention){
             $etat = $intervention->getInterventionEtat()->getId();
-            
+
             $blocInterventions['total']++;
 
             if( $etat == 14 || $etat == 17 || $etat == 18 || $etat == 19)
@@ -61,7 +62,7 @@ class DefaultController extends Controller
         //GME 01/09/15 : Ajout du filtre du domaine pour le compteur des inscriptions
         //Récupération des domaines de l'utilisateur courant
         $domainesUser = $user->getDomainesId();
-        
+
         //Bloc Sessions
         $blocSessions['next'] = $this->get('hopitalnumerique_module.manager.session')->getNextSessions($domainesUser);
         $inscriptions         = $this->get('hopitalnumerique_module.manager.inscription')->findAll();
@@ -75,7 +76,7 @@ class DefaultController extends Controller
                     //Récupération des domaines de l'inscription
                     $domainesInscription = $inscription->getSession()->getModule()->getDomainesId();
                     $domaineInsriptionInDomaineUser = false;
-                    foreach ($domainesInscription as $idDomaineInscription) 
+                    foreach ($domainesInscription as $idDomaineInscription)
                     {
                         if(in_array($idDomaineInscription, $domainesUser))
                         {
@@ -84,8 +85,8 @@ class DefaultController extends Controller
                         }
                     }
 
-                    if( $inscription->getEtatParticipation() && $inscription->getEtatParticipation()->getId() == 411 
-                        && $inscription->getUser()->hasRoleAmbassadeur() && $inscription->getSession()->getModule()->getId() == 6 
+                    if( $inscription->getEtatParticipation() && $inscription->getEtatParticipation()->getId() == 411
+                        && $inscription->getUser()->hasRoleAmbassadeur() && $inscription->getSession()->getModule()->getId() == 6
                     ){
                         $blocUser['ambassadeursMAPF']++;
                     }
@@ -99,7 +100,7 @@ class DefaultController extends Controller
         foreach($factures as $facture){
             if( $facture->isPayee() && $facture->getDatePaiement() >= $firstJanuary )
                 $blocPaiements['janvier'] += $facture->getTotal();
-            
+
             if( !$facture->isPayee() )
                 $blocPaiements['apayer'] += $facture->getTotal();
         }
@@ -131,7 +132,7 @@ class DefaultController extends Controller
                 }
             }
         }
-        
+
         return $this->render('HopitalNumeriqueAdminBundle:Default:index.html.twig', array(
             'anneeEnCours' => $anneeEnCours,
             'userConf'          => $userConf,
@@ -157,7 +158,7 @@ class DefaultController extends Controller
         $dashboardBack = array();
         foreach($datas as $one)
             $dashboardBack[ $one['id'] ] = array( 'row' => $one['row'], 'col' => $one['col'] );
-        
+
         //On récupère l'user connecté
         $user = $this->get('security.context')->getToken()->getUser();
         $user->setDashboardBack( json_encode($dashboardBack) );
@@ -221,7 +222,7 @@ class DefaultController extends Controller
      */
     private function getBlockObjets()
     {
-        $blocObjets = array( 
+        $blocObjets = array(
             'points-durs'               => 0,
             'productions'               => 0,
             'publications-non-publiees' => 0,
@@ -255,7 +256,7 @@ class DefaultController extends Controller
         $today        = new \DateTime('now');
         $notes        = $this->get('hopitalnumerique_objet.manager.note')->findNoteByDomaine(1);
         $commentaires = $this->get('hopitalnumerique_objet.manager.commentaire')->findCommentaireByDomaine(1);
-        foreach($publications as $publication) 
+        foreach($publications as $publication)
         {
             if ($publication['etat'] == 4)
             {
@@ -293,7 +294,7 @@ class DefaultController extends Controller
         }
         $publicationNoted          = array();
         $publicationNotedHighValue = array();
-        foreach ($notes as $note) 
+        foreach ($notes as $note)
         {
             if(!is_null($note->getObjet()))
             {
@@ -307,11 +308,11 @@ class DefaultController extends Controller
         }
 
         //Calcul de la note moyenne des publication
-        foreach ($publicationNotedHighValue as $key => $arrayNote) 
+        foreach ($publicationNotedHighValue as $key => $arrayNote)
         {
             $note = 0;
             $nbNote = 0;
-            foreach ($arrayNote as $value) 
+            foreach ($arrayNote as $value)
             {
                 $nbNote++;
                 $note += $value;
@@ -338,7 +339,7 @@ class DefaultController extends Controller
         $blocObjets['bottom5-points-dur']        = $this->get5('bottom', $blocObjets['bottom5-points-dur'] );
         $blocObjets['top5-productions']          = $this->get5('top', $blocObjets['top5-productions'] );
         $blocObjets['bottom5-productions']       = $this->get5('bottom', $blocObjets['bottom5-productions'] );
-        
+
         return $blocObjets;
     }
 
@@ -349,18 +350,18 @@ class DefaultController extends Controller
      */
     private function getBlockuser()
     {
-        $blocUser = array( 
-            'nb'                 => 0, 
-            'actif'              => 0, 
-            'es'                 => 0, 
-            'ambCandidats'       => 0, 
-            'ambassadeurs'       => 0, 
-            'ambassadeursMAPF'   => 0, 
-            'ambCandidatsRecues' => 0, 
-            'conventions'        => 0, 
-            'expCandidats'       => 0, 
-            'experts'            => 0, 
-            'expCandidatsRecues' => 0, 
+        $blocUser = array(
+            'nb'                 => 0,
+            'actif'              => 0,
+            'es'                 => 0,
+            'ambCandidats'       => 0,
+            'ambassadeurs'       => 0,
+            'ambassadeursMAPF'   => 0,
+            'ambCandidatsRecues' => 0,
+            'conventions'        => 0,
+            'expCandidats'       => 0,
+            'experts'            => 0,
+            'expCandidatsRecues' => 0,
             'contribution'       => 0
         );
 
@@ -370,10 +371,10 @@ class DefaultController extends Controller
         //Get Questionnaire Infos
         $idExpert      = $this->get('hopitalnumerique_questionnaire.manager.questionnaire')->getQuestionnaireId('expert');
         $idAmbassadeur = $this->get('hopitalnumerique_questionnaire.manager.questionnaire')->getQuestionnaireId('ambassadeur');
-        
+
         //Récupération des questionnaires et users
         $questionnaireByUser = $this->get('hopitalnumerique_questionnaire.manager.reponse')->reponseExiste($idExpert, $idAmbassadeur);
-        
+
         //On récupère les candidatures refusées
         $refusCandidature = $this->get('hopitalnumerique_user.manager.refus_candidature')->getRefusCandidatureByQuestionnaire();
 
@@ -401,11 +402,11 @@ class DefaultController extends Controller
 
             //Récupération des questionnaires rempli par l'utilisateur courant
             $questionnairesByUser = array_key_exists($user->getId(), $questionnaireByUser) ? $questionnaireByUser[ $user->getId() ] : array();
-            
+
             //Récupèration d'un booléen : Vérification de réponses pour le questionnaire expert, que son role n'est pas expert et que sa candidature n'a pas encore été refusé
             if (in_array($idExpert, $questionnairesByUser) && !$user->hasRoleExpert() && !$user->getAlreadyBeExpert() && !$this->get('hopitalnumerique_user.manager.refus_candidature')->refusExisteByUserByQuestionnaire($user->getId(), $idExpert, $refusCandidature))
                 $blocUser['expCandidats']++;
-            
+
             //Récupèration d'un booléen : Vérification de réponses pour le questionnaire expert, que son role n'est pas expert et que sa candidature n'a pas encore été refusé
             if (in_array($idAmbassadeur, $questionnairesByUser) && !$user->hasRoleAmbassadeur() && !$user->getAlreadyBeAmbassadeur() && !$this->get('hopitalnumerique_user.manager.refus_candidature')->refusExisteByUserByQuestionnaire($user->getId(), $idAmbassadeur, $refusCandidature))
                 $blocUser['ambCandidats']++;
@@ -417,7 +418,7 @@ class DefaultController extends Controller
                 $blocUser['ambCandidatsRecues']++;
         }
 
-        
+
 
         return $blocUser;
     }
@@ -490,7 +491,7 @@ class DefaultController extends Controller
 
         if( !is_null($dashboardBack) )
             $datas = array_replace($datas, $dashboardBack);
-        
+
         return $datas;
     }
 }

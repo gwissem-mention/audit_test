@@ -225,7 +225,7 @@
                                     <li><strong>{{blocSessions['totalInscriptionsAnneeEnCours']}}</strong> inscriptions en {{ anneeEnCours }}</li>
                                     <li><strong>{{blocSessions['totalParticipantsAnneePrecedente']}}</strong> personnes inscrites en {{ anneeEnCours - 1 }}</li>
                                     <li><strong>{{blocSessions['totalParticipantsAnneeEnCours']}}</strong> personnes inscrites en {{ anneeEnCours }}</li>
-                                    <li><strong>{{blocSessions['totalSessionsRisquees']}}</strong> sessions à risque dans les 3 mois</li>
+                                    <li><a{% if blocSessions['totalSessionsRisquees'] > 0 %} href="{{ path('hopitalnumerique_module_session_popinsessionsrisquees') }}"{% endif %} class="fancybox fancybox.ajax"><strong>{{blocSessions['totalSessionsRisquees']}}</strong> sessions à risque dans les 3 mois</a></li>
                                 </ol>
                             </div>
                         </div>

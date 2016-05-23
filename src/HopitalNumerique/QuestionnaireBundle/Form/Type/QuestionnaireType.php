@@ -11,8 +11,13 @@ use HopitalNumerique\UserBundle\Manager\UserManager;
 use HopitalNumerique\QuestionnaireBundle\Entity\Questionnaire;
 use HopitalNumerique\QuestionnaireBundle\Entity\Occurrence;
 use HopitalNumerique\UserBundle\Entity\User;
+use Symfony\Component\Form\FormEvents;
+use Symfony\Component\Form\FormEvent;
+
 use Doctrine\ORM\Query\Expr;
 use HopitalNumerique\ReferenceBundle\Entity\Reference;
+use Symfony\Component\Validator\Constraints\NotBlank;
+use Symfony\Component\Validator\Constraints\NotNull;
 
 class QuestionnaireType extends AbstractType
 {
@@ -388,6 +393,27 @@ class QuestionnaireType extends AbstractType
         	            'data'       => is_null($reponseCourante) ? '' : $reponseCourante->getReponse()
             	    ));
             	    break;
+                case 'wysiwyg':
+                    if ($question->getObligatoire()) {
+                        $constraints = array(
+                            new NotNull()
+                        );
+                    } else {
+                        $constraints = array();
+                    }
+                    $builder->add($question->getTypeQuestion()->getLibelle() . '_' . $question->getId(). '_' . $question->getAlias(),'ckeditor', array(
+                        'required'   => $question->getObligatoire(),
+                        'label'      => $question->getLibelle(),
+                        'trim'       => true,
+                        'mapped'     => false,
+                        'read_only'  => $this->_readOnly,
+                        'disabled'   => $this->_readOnly,
+                        'attr'       => is_null($question->getVerifJS()) ? $attr : array('class' => $question->getVerifJS() ),
+                        'data'       => is_null($reponseCourante) ? '' : $reponseCourante->getReponse(),
+                        'config_name'=> 'config_questionnaire',
+                        'constraints' => $constraints,
+                    ));
+                    break;
                 case 'etablissement':
                     $builder->add($question->getTypeQuestion()->getLibelle() . '_' . $question->getId(). '_' . $question->getAlias(), 'genemu_jqueryselect2_entity', array(
                             'class'       => 'HopitalNumeriqueEtablissementBundle:Etablissement',

@@ -36,7 +36,7 @@
             </div>
         {%- endif -%}
 
-        {%- if topic.isSticky -%}
+{#        {%- if topic.isSticky -%}
             <div class="alert alert-info">
                 <i class="glyphicon glyphicon-bullhorn"></i>
 
@@ -47,7 +47,7 @@
 
                 {{- topic.getStickiedDate |date(ccdn_forum_forum.topic.user.show.deleted_datetime_format) -}}
             </div>
-        {%- endif -%}
+        {%- endif -%}#}
     </section>
 
 {%- endspaceless -%}

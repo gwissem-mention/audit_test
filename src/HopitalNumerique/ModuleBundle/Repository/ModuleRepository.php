@@ -7,7 +7,7 @@ use Doctrine\ORM\Query\Expr\Join;
 
 /**
  * ModuleRepository
- * 
+ *
  * @author Gaetan MELCHILSEN
  * @copyright Nodevo
  */
@@ -17,15 +17,16 @@ class ModuleRepository extends EntityRepository
      * Récupère les données du grid sous forme de tableau correctement formaté
      *
      * @return array
-     * 
+     *
      * @author Gaetan MELCHILSEN
      * @copyright Nodevo
      */
     public function getDatasForGrid($domainesIds, $condition = null)
     {
         $qb = $this->_em->createQueryBuilder();
-        $qb->select('mod.id, mod.titre, refEtat.libelle as statut, productions.titre as prod_titre, domaine.nom as domaineNom')
+        $qb->select('mod.id, mod.titre, refEtat.libelle as statut, productions.titre as prod_titre, domaine.nom as domaineNom', 'form.nom as formateurNom, form.prenom as formateurPrenom')
             ->from('HopitalNumeriqueModuleBundle:Module', 'mod')
+            ->join('mod.formateur', 'form')
             ->leftJoin('mod.statut','refEtat')
             ->leftJoin('mod.productions','productions')
             ->leftJoin('mod.domaines', 'domaine')
@@ -36,7 +37,7 @@ class ModuleRepository extends EntityRepository
             ->setParameter('domainesId', $domainesIds)
             ->orderBy('mod.titre')
             ->groupBy('mod.id', 'domaine.id');
-        
+
         return $qb;
     }
 
@@ -44,7 +45,7 @@ class ModuleRepository extends EntityRepository
      * Récupère les modules et leurs sessions actives et leurs inscriptions pas encore passées
      *
      * @return array(Module)
-     * 
+     *
      * @author Gaetan MELCHILSEN
      * @copyright Nodevo
      */
@@ -60,7 +61,7 @@ class ModuleRepository extends EntityRepository
             ->setParameter('today', new \DateTime() )
             ->leftJoin('session.inscriptions', 'inscription', Join::WITH, 'inscription.etatInscription = 407')
             ->orderBy('mod.titre');
-        
+
         return $qb;
     }
 
@@ -68,7 +69,7 @@ class ModuleRepository extends EntityRepository
      * Récupère les modules du domaine passé en param
      *
      * @return array(Module)
-     * 
+     *
      * @author Gaetan MELCHILSEN
      * @copyright Nodevo
      */
@@ -83,7 +84,7 @@ class ModuleRepository extends EntityRepository
             ->andWhere('domaine.id = :domaineId')
             ->setParameter('domaineId', $domaineId )
             ->orderBy('mod.titre');
-        
+
         return $qb;
     }
 }

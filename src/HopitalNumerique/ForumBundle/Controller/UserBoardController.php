@@ -20,7 +20,7 @@ class UserBoardController extends BaseUserBoardController
         $itemsPerPage = $this->getPageHelper()->getTopicsPerPageOnBoards();
         $stickyTopics = $this->getTopicModel()->findAllTopicsStickiedByBoardId($boardId, true);
         $topicsPager = $this->getTopicModel()->findAllTopicsPaginatedByBoardId($boardId, $this->getQuery('page', 1), $itemsPerPage, true);
-    
+
         if ($this->isGranted('ROLE_USER')) {
             if ($subscription = $this->getSubscriptionModel()->findOneSubscriptionForBoardAndUser($board, $this->getUser())) {
                 $this->getSubscriptionModel()->markAsRead($subscription);
@@ -28,7 +28,6 @@ class UserBoardController extends BaseUserBoardController
         } else {
             $subscription = null;
         }
-        
         return $this->renderResponse('CCDNForumForumBundle:User:Board/show.html.', array(
             'crumbs' => $this->getCrumbs()->addUserBoardShow($forum, $board),
             'forum' => $forum,

@@ -43,7 +43,7 @@ class ErreursController extends Controller
                                             //Set du booléan pour l'entité
                                             $isOk = true;
 
-                                            $handle = curl_init($url);
+                                            $handle = curl_init(str_replace(' ', '%20', $url));
                                             curl_setopt($handle, CURLOPT_RETURNTRANSFER, TRUE);
 
                                             /* Get the HTML or whatever is linked in $url. */
@@ -152,7 +152,7 @@ class ErreursController extends Controller
         //Récupération de la requete
         $url    = $request->request->get('url');
 
-        $handle = curl_init($url);
+        $handle = curl_init(str_replace(' ', '%20', $url));
         curl_setopt($handle,  CURLOPT_RETURNTRANSFER, TRUE);
 
         /* Get the HTML or whatever is linked in $url. */
@@ -186,7 +186,7 @@ class ErreursController extends Controller
 
         if(is_null($errorUrl))
         {
-            $handle = curl_init($url);
+            $handle = curl_init(str_replace(' ', '%20', $url));
             curl_setopt($handle,  CURLOPT_RETURNTRANSFER, TRUE);
 
             /* Get the HTML or whatever is linked in $url. */
@@ -231,7 +231,8 @@ class ErreursController extends Controller
             'ARTICLE'       => array(),
             'AUTODIAG'      => array(),
             'QUESTIONNAIRE' => array(),
-            'URL'           => array()
+            'URL'           => array(),
+            'FICHIER'       => array()
         );
 
         $objets = $this->get('hopitalnumerique_objet.manager.objet')->findAll();
@@ -260,6 +261,19 @@ class ErreursController extends Controller
      */
     private function getUrlByObjet( \HopitalNumerique\ObjetBundle\Entity\Objet $objet, $urls )
     {
+        if (null !== $objet->getPath()) {
+            foreach ($objet->getDomaines() as $domaine) {
+                $url = $domaine->getUrl().'/'.$objet->getWebPath(1);
+                $urls['FICHIER'][$objet->getId()]['objet'][] = $url;
+            }
+        }
+        if (null !== $objet->getPath2()) {
+            foreach ($objet->getDomaines() as $domaine) {
+                $url = $domaine->getUrl().'/'.$objet->getWebPath(2);
+                $urls['FICHIER'][$objet->getId()]['objet'][] = $url;
+            }
+        }
+
         $res = array( $objet->getId() => array() );
 
         $urls = $this->recuperationLien($objet->getSynthese(), $objet->getId(), $urls);

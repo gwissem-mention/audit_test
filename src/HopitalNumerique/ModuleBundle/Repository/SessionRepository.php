@@ -6,7 +6,7 @@ use Doctrine\ORM\EntityRepository;
 
 /**
  * SessionRepository
- * 
+ *
  * @author Gaetan MELCHILSEN
  * @copyright Nodevo
  */
@@ -16,7 +16,7 @@ class SessionRepository extends EntityRepository
      * Récupère les données du grid sous forme de tableau correctement formaté
      *
      * @return array
-     * 
+     *
      * @author Gaetan MELCHILSEN
      * @copyright Nodevo
      */
@@ -38,17 +38,16 @@ class SessionRepository extends EntityRepository
      * Récupère les données du grid sous forme de tableau correctement formaté
      *
      * @return array
-     * 
+     *
      * @author Gaetan MELCHILSEN
      * @copyright Nodevo
      */
     public function getAllDatasForGrid( $domainesIds, $condition )
     {
         $qb = $this->_em->createQueryBuilder();
-        $qb->select('ses')
+        $qb->select('ses', 'form')
             ->from('HopitalNumeriqueModuleBundle:Session', 'ses')
-            ->leftJoin('ses.etat', 'refEtat')
-                ->andWhere('refEtat.id = 403')
+            ->join('ses.formateur', 'form')
             ->leftJoin('ses.module', 'mod')
                 ->leftJoin('mod.domaines', 'domaine')
                     ->andWhere($qb->expr()->orX(
@@ -67,7 +66,7 @@ class SessionRepository extends EntityRepository
      * Retourne la liste des sessions du formateur
      *
      * @param User $user L'utilisateur concerné
-     * 
+     *
      * @return QueryBuilder
      */
     public function getSessionsForFormateur( $user, $withDate = false, $limit = false )
@@ -101,7 +100,7 @@ class SessionRepository extends EntityRepository
      * Retourne la liste des sessions ou l'utilisateur doit/à participé pour le dashboard user
      *
      * @param idDomaine $idDomaine Domaine concerné
-     * 
+     *
      * @return QueryBuilder
      */
     public function getSessionsInscriptionOuverteModuleDomaine($idDomaine)
@@ -132,7 +131,7 @@ class SessionRepository extends EntityRepository
      * Retourne la liste des sessions ou l'utilisateur doit/à participé pour le dashboard user
      *
      * @param User $user L'utilisateur concerné
-     * 
+     *
      * @return QueryBuilder
      */
     public function getSessionsForDashboard( $user )

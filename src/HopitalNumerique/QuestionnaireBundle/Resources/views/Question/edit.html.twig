@@ -20,12 +20,8 @@
             <div class="col-md-12">
                 <label class="control-label" for="questionObligatoire">
                     La question sera obligatoire pour la validation du questionnaire
+                    <input type="checkbox" {% if question.obligatoire %}checked="checked"{% endif %} class="checkboxObligatoire" name="question_obligatoire" id="questionObligatoire">
                 </label>
-            </div>
-            <div class="col-md-12">
-                <div class="checkbox">
-                    <input type="checkbox" {% if question.obligatoire %}checked="checked"{% endif %} class="checkbox form-control" name="question_obligatoire" id="questionObligatoire">
-                </div>
             </div>
         </div>
         <div class="col-md-12">
@@ -68,7 +64,7 @@
                 </label>
             </div>
             <div class="col-md-12">
-                <textarea name="commentaire_question" id="commentaire_question" class="form-control" placeholder="Écrire un commentaire qui sera affiché dans le FrontOffice." rows="9">{{question.commentaire}}</textarea>
+                <textarea name="commentaire_question" id="commentaire_question" class="tinyMce" placeholder="Écrire un commentaire qui sera affiché dans le FrontOffice." rows="9">{{question.commentaire}}</textarea>
             </div>
         </div>
 

@@ -21,6 +21,12 @@
 .settings
 /nbproject/
 
+#Atom
+.tags
+.tags1
+.tags_swap
+q
+
 #Windows
 .thumbs
 

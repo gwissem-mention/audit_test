@@ -7,6 +7,7 @@ use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
 use HopitalNumerique\ReferenceBundle\Manager\ReferenceManager;
 use HopitalNumerique\UserBundle\Manager\UserManager;
+use HopitalNumerique\ObjetBundle\Manager\Form\ObjetManagerForm;
 
 use Doctrine\ORM\EntityRepository;
 
@@ -19,32 +20,39 @@ class ObjetType extends AbstractType
      */
     private $referenceManager;
 
-    public function __construct($manager, $validator, UserManager $userManager, ReferenceManager $referenceManager)
+    /**
+     * @var \HopitalNumerique\ObjetBundle\Manager\Form\objetManagerForm
+     */
+    private $objetManagerForm;
+
+    public function __construct($manager, $validator, UserManager $userManager, ReferenceManager $referenceManager, ObjetManagerForm $objetManagerForm)
     {
         $this->_constraints = $manager->getConstraints( $validator );
         $this->_userManager = $userManager;
         $this->referenceManager = $referenceManager;
+        $this->objetManagerForm = $objetManagerForm;
     }
 
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $datas = $options['data'] ;
         $connectedUser = $this->_userManager->getUserConnected();
+
         /**
          * @var \HopitalNumerique\ObjetBundle\Entity\Objet
          */
         $objet = $builder->getData();
-        
+
         $builder
             ->add('titre', 'text', array(
                 'max_length' => $this->_constraints['titre']['maxlength'],
-                'required'   => true, 
+                'required'   => true,
                 'label'      => 'Titre',
                 'attr'       => array('class' => $this->_constraints['titre']['class'] )
             ))
             ->add('alias', 'text', array(
                 'max_length' => $this->_constraints['alias']['maxlength'],
-                'required'   => true, 
+                'required'   => true,
                 'label'      => 'Alias',
                 'attr'       => array('class' => $this->_constraints['alias']['class'] )
             ))
@@ -115,22 +123,22 @@ class ObjetType extends AbstractType
                 }
             ))
             ->add('synthese', 'textarea', array(
-                'required' => false, 
+                'required' => false,
                 'label'    => 'Synthèse',
                 'attr'     => array('class' => 'tinyMce')
             ))
             ->add('resume', 'textarea', array(
-                'required' => true, 
+                'required' => true,
                 'label'    => 'Résumé',
                 'attr'     => array('class' => 'tinyMce '.$this->_constraints['resume']['class'] )
             ))
             ->add('file', 'file', array(
-                'required' => false, 
+                'required' => false,
                 'label'    => 'Fichier 1'
             ))
             ->add('path', 'hidden')
             ->add('file2', 'file', array(
-                'required' => false, 
+                'required' => false,
                 'label'    => 'Fichier 2'
             ))
             ->add('path2', 'hidden')
@@ -151,14 +159,9 @@ class ObjetType extends AbstractType
                 'property' => 'nomPrenom',
                 'required' => false,
                 'multiple' => true,
-                'label'    => 'Ambassadeurs concernés',
-                'attr'     => array( 'placeholder' => 'Selectionnez le ou les ambassadeurs qui sont concernés par cette publication' ),
-                'query_builder' => function(EntityRepository $er) {
-                    return $er->createQueryBuilder('user')
-                              ->where('user.roles LIKE :ambassadeur')
-                              ->setParameter('ambassadeur','%ROLE_AMBASSADEUR_7%')
-                              ->orderBy('user.nom');
-                }
+                'label'    => 'Ambassadeurs / Experts concernés',
+                'attr'     => array( 'placeholder' => 'Selectionnez le ou les ambassadeurs/Experts qui sont concernés par cette publication' ),
+                'choices'  => $this->objetManagerForm->getConcernesChoices(),
             ))
             ->add('alaune', 'checkbox', array(
               'required'   => false,
@@ -201,7 +204,7 @@ class ObjetType extends AbstractType
                 'attr'       => array( 'class'=> 'checkbox' )
             ))
             ->add('dateCreation', 'genemu_jquerydate', array(
-                'required'   => true, 
+                'required'   => true,
                 'label'      => 'Date de création',
                 'widget'     => 'single_text',
                 'label_attr' => array(
@@ -209,14 +212,14 @@ class ObjetType extends AbstractType
                 )
             ))
             ->add('dateParution', 'text', array(
-                'required'   => false, 
+                'required'   => false,
                 'label'      => 'Début de parution',
                 'label_attr' => array(
                     'class' => 'col-md-7 control-label'
                 )
             ))
             ->add('dateModification', 'date', array(
-                'required'   => false, 
+                'required'   => false,
                 'widget'     => 'single_text',
                 'label'      => 'Date de dernière modification notifiée',
                 'attr'       => array('readonly' => 'readonly'),

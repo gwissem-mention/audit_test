@@ -13,8 +13,8 @@ class UserManager extends BaseManager
     protected $_class = '\HopitalNumerique\UserBundle\Entity\User';
     protected $_securityContext;
     protected $_managerReponse;
-    protected $_managerRefusCandidature;    
-    protected $_managerDomaine;    
+    protected $_managerRefusCandidature;
+    protected $_managerDomaine;
     protected $_options;
 
     public function __construct($managerUser, $securityContext, $managerReponse, $managerRefusCandidature, $managerDomaine, RemboursementManager $remboursementManager)
@@ -42,33 +42,26 @@ class UserManager extends BaseManager
 
         $idExpert      = 1;
         $idAmbassadeur = 2;
-        
+
         //Récupération des questionnaires et users
         $questionnaireByUser = $this->_managerReponse->reponseExiste($idExpert, $idAmbassadeur);
-        
+
         $aujourdHui = new \DateTime('now');
-        
+
         //On enlève un mois à la date courante pour prévenir 1mois à l'avance
         $interval    = new \DateInterval('P1M');
         $interval->m = -1;
-        
+
         $refusCandidature = $this->_managerRefusCandidature->getRefusCandidatureByQuestionnaire();
 
         $domainesByUsers = $this->_managerDomaine->getDomainesByUsers();
-        
+
         //Pour chaque utilisateur, set la contractualisation à jour
-        foreach ($users as $key => $user)
-        {    
-            //Filtre uniquement si l'utilisateur connecté à un domaine, sinon on affiche toujours tout le monde
-            if(!empty($userConnected->getDomainesId()))
-            {
-                //Si l'utilisateur n'a pas de domaine concerné, il n'apparait plus dans la liste
-                if(!array_key_exists($user['id'], $domainesByUsers))
-                {
-                    continue;
-                }
-                //Sinon on vérifié que l'utilisateur courant et l'utilisateur connecté appartiennent au(x) même(s) domaine(s)
-                else
+        foreach ($users as $user)
+        {
+            if (array_key_exists($user['id'], $domainesByUsers)) {
+                //Filtre uniquement si l'utilisateur connecté à un domaine, sinon on affiche toujours tout le monde
+                if(!empty($userConnected->getDomainesId()))
                 {
                     $notInArray = true;
                     $domainesIdUserConnected = $userConnected->getDomainesId();
@@ -91,19 +84,19 @@ class UserManager extends BaseManager
 
             //Récupération des questionnaires rempli par l'utilisateur courant
             $questionnairesByUser = array_key_exists($user['id'], $questionnaireByUser) ? $questionnaireByUser[$user['id']] : array();
-            
+
             //Récupèration d'un booléen : Vérification de réponses pour le questionnaire expert, que son role n'est pas expert et que sa candidature n'a pas encore été refusé
-            $user['expert'] = (in_array($idExpert, $questionnairesByUser) 
-                                        && !in_array('ROLE_EXPERT_6', $user["roles"]) 
+            $user['expert'] = (in_array($idExpert, $questionnairesByUser)
+                                        && !in_array('ROLE_EXPERT_6', $user["roles"])
                                         && !$this->_managerRefusCandidature->refusExisteByUserByQuestionnaire($user['id'], $idExpert, $refusCandidature)
                                         && !$user["alreadyBeExpert"]);
-            
+
             //Récupèration d'un booléen : Vérification de réponses pour le questionnaire ambassadeur, que son role n'est pas expert et que sa candidature n'a pas encore été refusé
-            $user['ambassadeur'] = (in_array($idAmbassadeur, $questionnairesByUser) 
-                                        && !in_array('ROLE_AMBASSADEUR_7', $user["roles"]) 
+            $user['ambassadeur'] = (in_array($idAmbassadeur, $questionnairesByUser)
+                                        && !in_array('ROLE_AMBASSADEUR_7', $user["roles"])
                                         && !$this->_managerRefusCandidature->refusExisteByUserByQuestionnaire($user['id'], $idAmbassadeur, $refusCandidature)
                                         && !$user["alreadyBeAmbassadeur"]);
-            
+
             $dateCourante = new \DateTime($user['contra']);
             $dateCourante->add($interval);
             $user['contra'] = ('' != $user['contra']) ? ($dateCourante >= $aujourdHui) : false;
@@ -117,7 +110,7 @@ class UserManager extends BaseManager
 
             $usersForGrid[] = $user;
         }
-        
+
         return $usersForGrid;
     }
 
@@ -245,10 +238,10 @@ class UserManager extends BaseManager
     {
         return $this->getRepository()->findUsersByDomaine($idDomaine)->getQuery()->getResult();
     }
-    
+
     /**
      * Retourne les utilisateurs liés à un de ces domaines.
-     * 
+     *
      * @param \Doctrine\Common\Collections\Collection $domaines Domaines
      * @return array<\HopitalNumerique\UserBundle\Entity\User> Utilisateurs
      */
@@ -276,7 +269,7 @@ class UserManager extends BaseManager
      * @param array $criteres Filtres à appliquer sur la liste
      * @return \HopitalNumerique\UserBundle\Entity\User|null Un CMSI si trouvé, sinon NIL
      */
-    public function getCmsi(array $criteres)
+    public function getCmsi(array $criteres = array())
     {
         return $this->getRepository()->getCmsi($criteres);
     }
@@ -300,6 +293,18 @@ class UserManager extends BaseManager
     {
         return $this->getRepository()->getAmbassadeurs($criteres);
     }
+
+    /**
+     * Retourne une liste des experts.
+     *
+     * @param array $criteres Filtres à appliquer sur la liste
+     * @return \HopitalNumerique\UserBundle\Entity\User[] La liste des experts
+     */
+    public function getExperts(array $criteres = array())
+    {
+        return $this->getRepository()->getExperts($criteres);
+    }
+
     /**
      * Retourne une liste d'utilisateurs ES ou Enregistré.
      *
@@ -309,6 +314,29 @@ class UserManager extends BaseManager
     public function getESAndEnregistres(array $criteres = array())
     {
         return $this->getRepository()->getESAndEnregistres($criteres);
+    }
+
+    /**
+     * Retourne une liste d'utilisateurs Admin.
+     *
+     * @param array $criteres Filtres à appliquer sur la liste
+     * @return \HopitalNumerique\UserBundle\Entity\User[] La liste des utilisateurs
+     */
+    public function getAdmins(array $criteres = array())
+    {
+        return $this->getRepository()->getAdmins($criteres);
+    }
+
+
+    /**
+     * Retourne une liste d'utilisateurs CMSI
+     *
+     * @param array $criteres Filtres à appliquer sur la liste
+     * @return \HopitalNumerique\UserBundle\Entity\User[] La liste des utilisateurs
+     */
+    public function getCMSIs(array $criteres = array())
+    {
+        return $this->getRepository()->getCmsis($criteres);
     }
 
     /**
@@ -336,7 +364,7 @@ class UserManager extends BaseManager
      *
      * @return \HopitalNumerique\UserBundle\Entity\User[] La liste des utilisateurs
      */
-    public function getAllUsers() 
+    public function getAllUsers()
     {
         return $this->getRepository()->getAllUsers()->getQuery()->getResult();
     }

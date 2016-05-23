@@ -50,7 +50,7 @@ abstract class InterventionDemandeType extends AbstractType
 
     /**
      * Constructeur du formulaire de demande d'intervention.
-     * 
+     *
      * @param \Symfony\Component\Security\Core\SecurityContext $securityContext SecurityContext de l'application
      * @param \Symfony\Component\Validator\Validator\LegacyValidator $validator LegacyValidator
      * @param \Nodevo\InterventionBundle\Manager\InterventionDemandeManager $interventionDemandeManager Manager InterventionDemande

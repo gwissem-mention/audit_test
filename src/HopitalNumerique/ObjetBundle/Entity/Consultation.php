@@ -57,6 +57,13 @@ class Consultation
      */
     private $dateLastConsulted;
 
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="obj_session_id", type="text", nullable=true)
+     */
+    protected $sessionId;
+    
     public function __construct()
     {
         $this->dateLastConsulted = new \DateTime();
@@ -173,5 +180,28 @@ class Consultation
     public function getDomaine()
     {
         return $this->domaine;
+    }
+    
+    /**
+     * Set sessionId
+     *
+     * @param string $sessionId
+     * @return StatRecherche
+     */
+    public function setSessionId($sessionId)
+    {
+    	$this->sessionId = $sessionId;
+    
+    	return $this;
+    }
+    
+    /**
+     * Get sessionId
+     *
+     * @return string
+     */
+    public function getsessionId()
+    {
+    	return $this->sessionId;
     }
 }

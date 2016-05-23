@@ -1,0 +1,6 @@
+<h3>Sessions à risque</h3>
+<ul>
+    {%- for sessionRisquee in sessionsRisquees -%}
+        <li><a href="{{ path('hopitalnumerique_module_module_session_edit', { id:sessionRisquee.id }) }}">{{ sessionRisquee.module }}</a></li>
+    {%- endfor -%}
+</ul>

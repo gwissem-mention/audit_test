@@ -11,7 +11,7 @@ use APY\DataGridBundle\Grid\Action\RowAction;
 
 /**
  * Configuration du grid Module.
- * 
+ *
  * @author Gaetan MELCHILSEN
  * @copyright Nodevo
  */
@@ -25,7 +25,7 @@ class ModuleGrid extends Grid implements GridInterface
         //Manager
         $this->setSource( 'hopitalnumerique_module.manager.module' );
         $this->setSourceType( self::SOURCE_TYPE_MANAGER );
-        
+
         $this->setNoDataMessage('Aucun module à afficher.');
     }
 
@@ -39,11 +39,11 @@ class ModuleGrid extends Grid implements GridInterface
 
         $domaineColumn = new Column\TextColumn('domaineNom', 'Domaine(s) associé(s)');
         $this->addColonne( $domaineColumn );
-        
-        $productionColumn = new Column\TextColumn('prod_titre', 'Productions concernées');
-        $productionColumn->setSize( 400 );
-        $this->addColonne($productionColumn);
-        
+
+        $formateurColumn = new Column\TextColumn('formateur', 'Animateur');
+        $formateurColumn->setSize( 400 );
+        $this->addColonne($formateurColumn);
+
         $statutColumn = new Column\TextColumn('statut', 'Statut');
         $statutColumn->setSize( 80 );
         $statutColumn->setFilterType('select');
@@ -61,13 +61,13 @@ class ModuleGrid extends Grid implements GridInterface
         $this->addActionButton( new Action\ShowButton( 'hopitalnumerique_module_module_show' ) );
         $this->addActionButton( new Action\FilsButton('hopitalnumerique_module_module_session') );
         $this->addActionButton( new Action\EditButton( 'hopitalnumerique_module_module_edit' ) );
-        
+
         //Boutton d'ajout d'un référentiel avec le même code par défaut
         $ajoutSession = new RowAction('', 'hopitalnumerique_module_module_session_add');
         $ajoutSession->setRouteParameters( array('id') );
         $ajoutSession->setAttributes( array('class'=>'btn btn-warning fa fa-plus','title' => 'Ajouter une session') );
         $this->addActionButton( $ajoutSession );
-        
+
         // $this->addActionButton( new Action\DeleteButton( 'hopitalnumerique_module_module_delete' ) );
     }
 

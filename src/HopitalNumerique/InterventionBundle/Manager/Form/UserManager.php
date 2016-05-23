@@ -147,10 +147,11 @@ class UserManager
      */
     public function getReferentsChoices()
     {
-        $referents = $this->userManager->getESAndEnregistres();
-        if ($this->ajouteUtilisateurConnecteCommeDemandeur())
-            $referents[] = $this->utilisateurConnecte;
-        
+        $referents = array();
+        $referents['Administrateur'] = $this->userManager->getAdmins();
+        $referents['CMSI'] = $this->userManager->getCmsis();
+        $referents['ES et Enregistrés'] = $this->userManager->getESAndEnregistres();
+        asort($referents);
         return $referents;
     }
 

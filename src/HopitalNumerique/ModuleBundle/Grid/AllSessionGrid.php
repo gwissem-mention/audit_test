@@ -9,7 +9,7 @@ use Nodevo\GridBundle\Grid\Action;
 
 /**
  * Configuration du grid Session de l'ensemble des modules.
- * 
+ *
  * @author Gaetan MELCHILSEN
  * @copyright Nodevo
  */
@@ -32,50 +32,57 @@ class AllSessionGrid extends Grid implements GridInterface
      */
     public function setColumns()
     {
+        $etatArrays = array(
+            "Actif" => "Actif",
+            "Inactif" => "Inactif",
+            "Annulé" => "Annulé"
+        );
+
         $moduleColumn = new Column\TextColumn('moduleTitre', 'Module');
         $this->addColonne( $moduleColumn );
 
         $domaineColumn = new Column\TextColumn('domaineNom', 'Domaine(s) associé(s)');
         $this->addColonne( $domaineColumn );
 
-        $dateOuvertureInscriptionColumn = new Column\DateColumn('dateOuvertureInscription', 'Date d\'ouverture des inscriptions');
-        $dateOuvertureInscriptionColumn->setSize( 150 );
-        $this->addColonne( $dateOuvertureInscriptionColumn );
-        
-        $dateFermetureInscriptionColumn = new Column\DateColumn('dateFermetureInscription', 'Date de clôture des inscriptions');
-        $dateFermetureInscriptionColumn->setSize( 150 );
-        $this->addColonne( $dateFermetureInscriptionColumn );
-        
+        $formateurColumn = new Column\TextColumn('formateur', 'Animateur');
+        $formateurColumn->setSize( 150 );
+        $formateurColumn->setFilterType('select');
+        $formateurColumn->setOperatorsVisible( false );
+        $formateurColumn->setDefaultOperator( \APY\DataGridBundle\Grid\Column\Column::OPERATOR_EQ );
+        $this->addColonne( $formateurColumn );
+
         $dateSessionColumn = new Column\DateColumn('dateSession', 'Date de début de la session');
         $dateSessionColumn->setSize( 150 );
         $this->addColonne( $dateSessionColumn );
-        
+
         $dureeColumn = new Column\TextColumn('duree', 'Durée de la session');
         $this->addColonne( $dureeColumn );
-        
+
         $horaireColumn = new Column\TextColumn('horaires', 'Horaires');
         $this->addColonne( $horaireColumn );
-        
+
         $nbInscritsColumn = new Column\TextColumn('nbInscrits', 'Nombres d\'inscrits');
         $this->addColonne( $nbInscritsColumn );
-        
+
         $nbInscritsEnAttenteColumn = new Column\TextColumn('nbInscritsEnAttente', 'Nombres d\'inscrits en attente');
         $this->addColonne( $nbInscritsEnAttenteColumn );
-        
+
         $nbInscritsColumn = new Column\TextColumn('placeRestantes', 'Nombres de places restantes');
         $this->addColonne( $nbInscritsColumn );
-        
+
         $archiverColumn = new Column\BooleanColumn('archiver', 'Archivée');
         $archiverColumn->setSize( 70 );
         $archiverColumn->setFilterType('select');
         $archiverColumn->setOperatorsVisible( false );
         $archiverColumn->setDefaultOperator( \APY\DataGridBundle\Grid\Column\Column::OPERATOR_EQ );
         $this->addColonne( $archiverColumn );
-        
+
         $etatColumn = new Column\TextColumn('etat', 'Etat');
         $etatColumn->setSize( 60 );
         $etatColumn->setFilterType('select');
         $etatColumn->setOperatorsVisible( false );
+        $etatColumn->setSelectFrom("values");
+        $etatColumn->setValues($etatArrays);
         $etatColumn->setDefaultOperator( \APY\DataGridBundle\Grid\Column\Column::OPERATOR_EQ );
         $this->addColonne( $etatColumn );
     }
@@ -86,7 +93,7 @@ class AllSessionGrid extends Grid implements GridInterface
     public function setActionsButtons()
     {
         $this->addActionButton( new Action\ShowButton( 'hopitalnumerique_module_module_session_show' ) );
-        
+
         $actionListeInscrits = new Action\ShowButton('hopitalnumerique_module_module_session_inscription');
         $actionListeInscrits->setAttributes( array(
                 'class'=>'btn btn-primary fa fa-users',

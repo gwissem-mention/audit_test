@@ -13,6 +13,7 @@ parameters:
     hopitalnumerique_objet.manager.note.class: HopitalNumerique\ObjetBundle\Manager\NoteManager
     hopitalnumerique_objet.manager.fichiermodifiable.class: HopitalNumerique\ObjetBundle\Manager\FichierModifiableManager
     hopitalnumerique_objet.form.fichiermodifiable.class: HopitalNumerique\ObjetBundle\Form\FichierModifiableType
+    hopitalnumerique_objet.manager.form.Objetmanagerform.class: HopitalNumerique\ObjetBundle\Manager\Form\ObjetManagerForm
 
 services:
     #managers
@@ -40,10 +41,18 @@ services:
         class: %hopitalnumerique_objet.manager.fichiermodifiable.class%
         arguments: ["@doctrine.orm.entity_manager","@security.context"]
 
+    hopitalnumerique_objet.manager.form.objetmanagerform:
+        class: %hopitalnumerique_objet.manager.form.Objetmanagerform.class%
+        arguments: ["@hopitalnumerique_objet.manager.objet", "@hopitalnumerique_user.manager.user" ]
     #forms
     hopitalnumerique_objet.form.objet:
         class: %hopitalnumerique_objet.form.objet.class%
-        arguments: ["@hopitalnumerique_objet.manager.objet", "@validator", "@hopitalnumerique_user.manager.user", "@hopitalnumerique_reference.manager.reference"]
+        arguments:
+            - "@hopitalnumerique_objet.manager.objet"
+            - "@validator"
+            - "@hopitalnumerique_user.manager.user"
+            - "@hopitalnumerique_reference.manager.reference"
+            - "@hopitalnumerique_objet.manager.form.objetmanagerform"
         tags:
             - { name: form.type, alias: hopitalnumerique_objet_objet }
 
@@ -92,7 +101,6 @@ services:
     hopitalnumerique_objet.manager.note:
         class: %hopitalnumerique_objet.manager.note.class%
         arguments: ["@doctrine.orm.entity_manager"]
-
 
     hopitalnumerique_objet.doctrine.note_reader:
         class: 'HopitalNumerique\ObjetBundle\Doctrine\NoteReader'

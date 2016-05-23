@@ -11,6 +11,7 @@ use HopitalNumerique\QuestionnaireBundle\Entity\Occurrence;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Criteria;
+use Symfony\Component\PropertyAccess\PropertyAccess;
 
 /**
  * Controller des Questionnaire
@@ -232,13 +233,14 @@ class QuestionnaireController extends Controller
         $themeQuestionnaire  = array_key_exists('themeQuestionnaire', $optionRenderForm) ? $optionRenderForm['themeQuestionnaire'] : 'default';
         $this->_envoieDeMail = array_key_exists('envoieDeMail', $optionRenderForm) ? $optionRenderForm['envoieDeMail'] : true;
         $showAllQuestions    = array_key_exists('showAllQuestions', $optionRenderForm) ? $optionRenderForm['showAllQuestions'] : true;
-    
+
         //Si le tableau n'est pas vide on le récupère
         if(!is_null($routeRedirection))
             $this->_routeRedirection = $routeRedirection;
 
         //Récupération du thème de formulaire
         $this->_themeQuestionnaire = $themeQuestionnaire;
+
 
         $options =  array(
             'questionnaire'    => $questionnaire,
@@ -248,7 +250,7 @@ class QuestionnaireController extends Controller
             'showAllQuestions' => $showAllQuestions,
             'session'          => 0
         );
-    
+
         return $this->renderForm('nodevo_questionnaire_questionnaire', $options, 'HopitalNumeriqueQuestionnaireBundle:Questionnaire:edit_front.html.twig');
     }
     
@@ -351,7 +353,7 @@ class QuestionnaireController extends Controller
             'readOnly'         => $readOnly,
             'idSession'        => $idSession
         );
-
+        
         if(isset($options['showAllQuestions']) && !is_null($options['showAllQuestions']))
             $label_attr['showAllQuestions'] = $options['showAllQuestions'];
     
@@ -367,12 +369,12 @@ class QuestionnaireController extends Controller
     
             // On bind les données du form
             $form->handleRequest($request);
-            
+
             $routeRedirection = json_decode($form["routeRedirect"]->getData(), true);
 
             //si le formulaire est valide
             if ($form->isValid()) {
-    
+
                 $occurrence = ($form->has('occurrence') ? $form->get('occurrence')->getData() : null);
 
                 //Les champs file uploadés ne sont pas dans params, params ne recupère que les inputs
@@ -742,6 +744,13 @@ class QuestionnaireController extends Controller
                 $do = $request->request->get('do');
                 return $this->redirect( $do == 'save-close' ? $this->generateUrl($routeRedirection['quit']['route'], $routeRedirection['quit']['arguments']) : ( 'save-add' == $do ? $this->generateUrl('hopitalnumerique_questionnaire_occurrence_add', array('questionnaire' => $questionnaire->getId())) : $this->generateUrl($routeRedirection['sauvegarde']['route'], $routeRedirection['sauvegarde']['arguments']) ) );
             }
+
+            foreach ($form->getErrors(true) as $error) {
+                $erreur = $error->getOrigin()->getConfig()->getOptions()['label']. ' '. $error->getMessage();
+            }
+
+            $this->get('session')->getFlashBag()->add( ('danger') , $erreur );
+            return $this->redirect( $request->headers->get('referer') );
         }
     
         return $this->render( $view , array(

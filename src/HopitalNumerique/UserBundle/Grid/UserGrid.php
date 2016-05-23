@@ -123,7 +123,7 @@ class UserGrid extends Grid implements GridInterface
         $contractualisationColumn->setOperatorsVisible( false )->setSortable(false)->setFilterable(false);
         //Affichage de l'icone uniquement si le role fait parti de $arrayRolesDateContractualisation
         $contractualisationColumn->manipulateRenderCell(
-            function($value, \APY\DataGridBundle\Grid\Row $row) use ($arrayRolesDateContractualisation) {
+            function($value, Row $row) use ($arrayRolesDateContractualisation) {
                 $roles = $row->getField('roles');
                 return in_array( reset($roles), $arrayRolesDateContractualisation, true ) ? ($value ? 'true' : 'false') : null;
             }

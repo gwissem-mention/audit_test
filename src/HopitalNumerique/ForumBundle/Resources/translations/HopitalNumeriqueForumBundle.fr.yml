@@ -176,6 +176,7 @@ board:
     post-count-th:                     "Messages"
     last-post-th:                      "Dernier message"
     announcements-th:                  "Annonces"
+    favorite-th:                       "Favoris"
     label:                             "Thème : "
     name-label:                        "Nom : "
     topic-count-label:                 "Fils de discussion : "

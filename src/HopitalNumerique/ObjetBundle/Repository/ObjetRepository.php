@@ -36,8 +36,24 @@ class ObjetRepository extends EntityRepository
                 ))
                 ->setParameter('domainesId', $domainesIds)
             ->groupBy('obj.id')
+            ->orderBy('obj.dateCreation', 'DESC')
         ;
-            
+
+        return $qb;
+    }
+    
+    /**
+     * Retourne la liste des objets
+     *
+     *
+     * @return QueryBuilder
+     */
+    public function getObjets()
+    {
+        $qb = $this->_em->createQueryBuilder ();
+        $qb->select ( 'obj' )->from ( 'HopitalNumeriqueObjetBundle:Objet', 'obj' )->leftJoin ( 'obj.contenus', 'contenus' );
+        $qb->orderBy ( 'obj.titre', 'ASC' );
+
         return $qb;
     }
 
@@ -360,4 +376,54 @@ class ObjetRepository extends EntityRepository
 
         return $qb->getQuery()->getResult();
     }
+    
+    
+    /**
+   * Retourne les publications par domaine et compétences de l'ambassadeur.
+   *
+   * @param array \HopitalNumerique\DomaineBundle\Entity\Domaine $domaine
+   *          Domaine
+   * @param array type
+   * @param int id de l'ambassadeur
+   * @return array<\HopitalNumerique\ObjetBundle\Entity\Objet> Objet
+   */
+  public function getObjetsByTypeAmbassadeursAndDomaines ($types, $id, $domaines) {
+    $qb = $this->_em->createQueryBuilder ();
+    $qb->select ( 'obj.id, obj.titre, ambassadeur.id as amb_id' )
+        ->from ( 'HopitalNumeriqueObjetBundle:Objet', 'obj' )
+        ->leftJoin ( 'obj.types', 'refTypes' )
+        ->Join ('obj.domaines', 'dom', Expr\Join::WITH, $qb->expr ()->in ( 'dom', ':domaine' ) )
+        ->leftJoin ('obj.ambassadeurs', 'ambassadeur')
+        ->where ( 'refTypes.id IN (:types)', 'obj.etat = 3' )
+        ->andWhere ( $qb->expr ()->orx ( $qb->expr ()->isNull ( 'obj.dateDebutPublication' ), $qb->expr ()->lte ( 'obj.dateDebutPublication', ':today' ) ), $qb->expr ()->orx ( $qb->expr ()->isNull ( 'obj.dateFinPublication' ), $qb->expr ()->gte ( 'obj.dateFinPublication', ':today' ) ) )
+        ->groupBy ('obj.id')
+        ->having ('ambassadeur.id != :id')
+        ->setParameter ('id', $id)
+        ->setParameter ('domaine', $domaines)
+        ->setParameter ( 'today', new \DateTime () )
+        ->setParameter ( 'types', $types );
+
+    return $qb->getQuery ()->getResult (\Doctrine\ORM\Query::HYDRATE_OBJECT);
+  }
+
+  /**
+   * Retourne les publications par domaine et type.
+   *
+   * @param array type
+   * @param int id du domaine
+   * @return array<\HopitalNumerique\ObjetBundle\Entity\Objet> Objet
+   */
+  public function getObjetsByTypesAndDomaine ($types, $domaine) {
+    $qb = $this->_em->createQueryBuilder ();
+    $qb->select ( 'obj' )
+        ->from ( 'HopitalNumeriqueObjetBundle:Objet', 'obj' )
+        ->leftJoin ( 'obj.types', 'refTypes' )
+        ->leftJoin ('obj.domaines', 'dom')
+        ->where ( 'refTypes.id IN (:types)', 'obj.etat = 3' )
+        ->groupBy ('obj.id')
+        ->andWhere ('dom.id = :idDomaine')
+        ->setParameter ('idDomaine', $domaine)
+        ->setParameter ( 'types', $types );
+    return $qb->getQuery()->getResult();
+  }
 }

@@ -31,4 +31,26 @@ $(document).ready(function() {
     $('[data-mask]').each(function(i, element) {
         $(element).mask($(element).attr('data-mask'));
     });
+
+    
+    // Form recherche on click
+    $("button#search-header-home-generate").click(function() {
+    	rechercheTexte();
+    });
+    
+    // Form recherche on press enter
+    $("input#recherche-texte-generate").keypress(function(e) {
+        if(e.which == 13) {
+        	rechercheTexte();
+        }
+    });
+
 });
+// Permet la recherche textuelle depuis l'input généré du wysiwyg
+function rechercheTexte()
+{
+	if ($("input#recherche-texte-generate").val().length) {
+		window.location.href = ('href', "/recherche-par-referencement/requete-generator/null/" + $("input#recherche-texte-generate").val()  + "/null");
+	}
+
+}

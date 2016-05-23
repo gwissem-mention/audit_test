@@ -110,7 +110,6 @@ class SearchController extends Controller
         $referenceIds = explode(',', $refs);
         $searchedText = ($q == 'null' ? '' : $q);
         $publicationCategoryIds = ($type == "null" ? [] :[$type]);
-
         $this->container->get('hopitalnumerique_recherche.dependency_injection.referencement.requete_session')->setReferenceIds($referenceIds);
         $this->container->get('hopitalnumerique_recherche.dependency_injection.referencement.requete_session')->setPublicationCategoryIds($publicationCategoryIds);
         $this->container->get('hopitalnumerique_recherche.dependency_injection.referencement.requete_session')->setSearchedText($searchedText);
@@ -157,9 +156,12 @@ class SearchController extends Controller
             $objetsDuDomaineIds[] = $objet->getId();
         }
 
-        foreach ($objets as $key => $objet) 
+        foreach ($objets as $key => $objet)
         {
             if( $objet['categ'] === 'forum' ){
+                if (1 != $domaineId) { // Si pas sur HN, on n'affiche pas les forums
+                    unset($objets[$key]);
+                }
                 continue;
             }
             //GME 14/09/2015 : Pour que l'objet soit dans le domaine il faut que l'id de l'objet soit dans le domaine (cas objet classique)
@@ -178,13 +180,13 @@ class SearchController extends Controller
         $rechercheTextuelle                 = $request->request->get('rechercheTextuelle');
         $resultatsTrouveeRechercheTextuelle = true;
         //^^^^^
-        
+
         // YRO 20/01/2015 : cacher l'icone de pertinence
         $onlyText = false;
-        
+
         // YRO 10/02/2015 : les occurrences réellement trouvées dans les contenus
         $patternFounded = array();
-        
+
         //vvvvv GME 21/11/2014 : Exalead
         if(trim($rechercheTextuelle) !== "")
         {
@@ -211,7 +213,7 @@ class SearchController extends Controller
                     {
                         $hitUrl      = (string)$hit->attributes()->url;
                         $hitUrlArray = explode("=", $hitUrl);
-                        
+
                         // YRO 10/02/2015 : les occurrences réellement trouvées dans les contenus
                         foreach($hit->metas->Meta as $Meta){
                             if( $Meta->attributes()->name == "text" || $Meta->attributes()->name == "title" ){
@@ -251,7 +253,7 @@ class SearchController extends Controller
                 $contenusRecherche = $this->get('hopitalnumerique_objet.manager.contenu')->findBy(array('id' => $contenuIds));
 
                 $objets = $this->get('hopitalnumerique_recherche.manager.search')->getObjetsForRechercheTextuelle( $objetsRecherche, $contenusRecherche, $role );
-                
+
                 // YRO 20/01/2015 : cacher l'icone de pertinence
                 $onlyText = true;
             }
@@ -260,25 +262,25 @@ class SearchController extends Controller
 
         //Filtre uniquement si pas vide
         if(!empty($categPointDur))
-        { 
+        {
             $categPointDurIdsArray = explode(',', $categPointDur);
             $categPointDurArray    = array();
 
-            foreach ($categPointDurIdsArray as $categPointDurId) 
+            foreach ($categPointDurIdsArray as $categPointDurId)
             {
                 if ($categPointDurId != 'forum'){
                     $categPointDurArray[] = $this->get('hopitalnumerique_reference.manager.reference')->findOneBy(array('id' => $categPointDurId))->getLibelle();
                 }
             }
 
-            foreach ($objets as $key => $objet) 
+            foreach ($objets as $key => $objet)
             {
                if($objet["categ"] === "production")
                {
                     //Récupèration de tout les types de l'objet
                     $types = explode('♦', $objet["type"]);
                     $isInArray = false;
-                    foreach ($types as $type) 
+                    foreach ($types as $type)
                     {
                         if(in_array(trim($type), $categPointDurArray))
                         {
@@ -299,9 +301,9 @@ class SearchController extends Controller
         {
             $categPointDurIdsArray = array();
         }
-        
+
         if( true){//!$onlyText ){
-            foreach ($objets as $key => $objet) 
+            foreach ($objets as $key => $objet)
             {
                 if(array_key_exists('objet', $objet) && !is_null($objet["objet"]))
                 {
@@ -319,8 +321,8 @@ class SearchController extends Controller
         //Dans le cas où une recherche textuelle est donnée
         if(trim($rechercheTextuelle) !== "")
         {
-            //Parcourt les objets 
-            foreach ($objets as $objet) 
+            //Parcourt les objets
+            foreach ($objets as $objet)
             {
                 //Contenu
                 if(array_key_exists('objet', $objet) && !is_null($objet["objet"]))
@@ -341,7 +343,7 @@ class SearchController extends Controller
             }
 
             //$objets = $this->get('hopitalnumerique_recherche.manager.search')->getObjetsForRechercheTextuelle( $objetsRecherche, $contenusRecherche, $role );
-            
+
             if( $onlyText ){
                 $objetsRechercheTextuelleOrder = array();
                 for($i = 0; $i < count($allIds); $i++)
@@ -363,10 +365,10 @@ class SearchController extends Controller
             $objetsRechercheTextuelle = $objets;
         }
 
-        foreach ($objetsOrder as $key => $objetCurrent) 
+        foreach ($objetsOrder as $key => $objetCurrent)
         {
             //Tout les cas ci-dessous sont en infrad
-            if (array_key_exists('objet', $objetCurrent) && !is_null($objetCurrent['objet'])) 
+            if (array_key_exists('objet', $objetCurrent) && !is_null($objetCurrent['objet']))
             {
                 //Dans le cas où une recherche textuelle est donnée
                 if(trim($rechercheTextuelle) !== "")

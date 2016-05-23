@@ -8,7 +8,7 @@ use HopitalNumerique\UserBundle\Manager\UserManager;
 
 /**
  * Manager de l'entité Module.
- * 
+ *
  * @author Gaetan MELCHILSEN
  * @copyright Nodevo
  */
@@ -16,7 +16,7 @@ class ModuleManager extends BaseManager
 {
     protected $_class = 'HopitalNumerique\ModuleBundle\Entity\Module';
     protected $_userManager;
-        
+
     /**
      * Constructeur du manager
      *
@@ -27,12 +27,12 @@ class ModuleManager extends BaseManager
         parent::__construct($em);
         $this->_userManager = $userManager;
     }
-    
+
     /**
      * Override : Récupère les données pour le grid sous forme de tableau
      *
      * @return array
-     * 
+     *
      * @author Gaetan MELCHILSEN
      * @copyright Nodevo
      */
@@ -44,7 +44,7 @@ class ModuleManager extends BaseManager
 
         $modules = $this->getRepository()->getDatasForGrid( $domainesIds, $condition )->getQuery()->getResult();
 
-        foreach ($modules as $module) 
+        foreach ($modules as $module)
         {
             if(!array_key_exists($module['id'], $modulesForGrid))
             {
@@ -54,39 +54,44 @@ class ModuleManager extends BaseManager
             {
                 $modulesForGrid[$module['id']]['domaineNom'] .= ";" . $module['domaineNom'];
             }
-        }
 
+            if(!empty($module['formateurNom']) && !empty($module['formateurPrenom']))
+            {
+              $modulesForGrid[$module['id']]['formateur'] = $module['formateurNom'] . ' ' . $module['formateurPrenom'];
+            }
+
+        }
         return $this->rearangeForProduction( array_values($modulesForGrid) );
     }
-    
+
     public function getAllInscriptionsBySessionsActivesNonPasseesByModules()
     {
         return $this->getRepository()->getAllInscriptionsBySessionsActivesNonPasseesByModules()->getQuery()->getResult();
     }
 
-    
+
     public function getModuleActifForDomaine($domaineId)
     {
         return $this->getRepository()->getModuleActifForDomaine($domaineId)->getQuery()->getResult();
     }
-    
-    
-    
-    
+
+
+
+
     /**
      * Réarrange les objets pour afficher correctement les types
      *
      * @param array $results Les résultats de la requete
      *
      * @return array
-     * 
+     *
      * @author Gaetan MELCHILSEN
      * @copyright Nodevo
      */
     private function rearangeForProduction( $results )
     {
         $objets  = array();
-    
+
         foreach($results as $result)
         {
             if( isset( $objets[ $result['id'] ] ) )
@@ -94,7 +99,7 @@ class ModuleManager extends BaseManager
             else
                 $objets[ $result['id'] ] = $result;
         }
-    
+
         return array_values($objets);
     }
 }

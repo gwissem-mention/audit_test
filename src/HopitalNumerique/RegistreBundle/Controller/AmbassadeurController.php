@@ -272,4 +272,28 @@ class AmbassadeurController extends Controller
                 'connaissances' => $connaissancesOrderedForFront
         ));
     }
+    /*
+     *
+     */
+    public function downloadAmbassadeursAction ()
+    {
+
+        $ambassadeurs = $this->get('hopitalnumerique_user.manager.user')->getAmbassadeurs();
+
+        $colonnes = array(
+            'id'                                   => 'Id',
+            'nom'                                  => 'Nom',
+            'prenom'                               => 'Prénom',
+            'email'                                => 'Adresse e-mail',
+            'domainesString'                       => 'Domaine',
+            'connaissancesAmbassadeursString'      => 'Connaissances',
+            'telephoneDirect'                      => 'Téléphone direct',
+            'telephonePortable'                    => 'Téléphone portable',
+            'etablissementRattachementSanteString' => 'Etablissemenent de rattachement',
+        );
+
+        $kernelCharset = $this->container->getParameter('kernel.charset');
+
+        return $this->get('hopitalnumerique_user.manager.user')->exportCsv( $colonnes, $ambassadeurs, 'liste-ambassadeurs.csv', $kernelCharset );
+    }
 }

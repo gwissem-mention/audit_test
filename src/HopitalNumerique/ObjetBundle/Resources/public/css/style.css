@@ -34,3 +34,12 @@ input[type="date"]{min-width: 145px}
     #infra #sommaire {border-bottom: 1px solid #e6e7e8; padding-bottom: 20px;margin-bottom: 20px;}
     #edition-infradox.well{margin-bottom: 0;}
     #edition-infradox .panel-body{border:1px solid #d2d3d6;}
+    
+#index p.intro{margin-bottom: 20px}
+#index .panel-heading{color:#703695;cursor: pointer; font-weight: bold}
+#index .panel-heading.closed{background: #F6F6F6 url('../images/close.png') no-repeat 98% center;}
+#index .panel-heading.open{background: #F6F6F6 url('../images/open.png') no-repeat 98% center;}
+#index .panel-parent{color:#703695;cursor: pointer; font-weight: bold; padding: 15px;}
+#index .panel-parent.closed{background: #F6F6F6 url('../images/close.png') no-repeat 98% center;}
+#index .panel-parent.open{background: #F6F6F6 url('../images/open.png') no-repeat 98% center;}
+#index .panel-children{color:#703695;cursor: pointer; font-weight: bold; padding: 15px;}

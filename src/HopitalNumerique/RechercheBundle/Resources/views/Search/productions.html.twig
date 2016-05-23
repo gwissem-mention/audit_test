@@ -24,7 +24,7 @@
                     <img class="niveau" src="{{asset('bundles/hopitalnumeriquerecherche/img/niv-3-prod.png')}}" alt="Niveau 3" title="Contenus potentiellement pertinents" />
                 {% endif %}
             {% endif %}
-            
+
             {% if objet['objet'] is not null %}
                 <a href="{{path('hopital_numerique_publication_publication_contenu', {'id':objet['objet'],'alias':objet['aliasO'],'idc':objet['id'],'aliasc':objet['aliasC']})}}" >
             {% else %}
