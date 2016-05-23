@@ -9,7 +9,7 @@ use Nodevo\GridBundle\Grid\Action;
 
 /**
  * Configuration du grid Session.
- * 
+ *
  * @author Gaetan MELCHILSEN
  * @copyright Nodevo
  */
@@ -30,40 +30,48 @@ class SessionGrid extends Grid implements GridInterface
      */
     public function setColumns()
     {
+        $etatArrays = array(
+            "Actif" => "Actif",
+            "Inactif" => "Inactif",
+            "Annulé" => "Annulé"
+        );
+
         $dateOuvertureInscriptionColumn = new Column\DateColumn('dateOuvertureInscription', 'Date d\'ouverture des inscriptions');
         $dateOuvertureInscriptionColumn->setSize( 150 );
         $this->addColonne( $dateOuvertureInscriptionColumn );
-        
+
         $dateFermetureInscriptionColumn = new Column\DateColumn('dateFermetureInscription', 'Date de clôture des inscriptions');
         $dateFermetureInscriptionColumn->setSize( 150 );
         $this->addColonne( $dateFermetureInscriptionColumn );
-        
+
         $dateSessionColumn = new Column\DateColumn('dateSession', 'Date de début de la session');
         $dateSessionColumn->setSize( 150 );
         $this->addColonne( $dateSessionColumn );
-        
+
         $dureeColumn = new Column\TextColumn('duree', 'Durée de la session');
         $this->addColonne( $dureeColumn );
-        
+
         $horaireColumn = new Column\TextColumn('horaires', 'Horaires');
         $this->addColonne( $horaireColumn );
-        
+
         $nbInscritsColumn = new Column\TextColumn('nbInscrits', 'Nombres d\'inscrits');
         $this->addColonne( $nbInscritsColumn );
-        
+
         $nbInscritsEnAttenteColumn = new Column\TextColumn('nbInscritsEnAttente', 'Nombres d\'inscrits en attente');
         $this->addColonne( $nbInscritsEnAttenteColumn );
-        
+
         $nbInscritsColumn = new Column\TextColumn('placeRestantes', 'Nombres de places restantes');
         $this->addColonne( $nbInscritsColumn );
-        
+
         $etatColumn = new Column\TextColumn('etat', 'Etat');
         $etatColumn->setSize( 140 );
         $etatColumn->setFilterType('select');
         $etatColumn->setOperatorsVisible( false );
+        $etatColumn->setSelectFrom("values");
+        $etatColumn->setValues($etatArrays);
         $etatColumn->setDefaultOperator( \APY\DataGridBundle\Grid\Column\Column::OPERATOR_EQ );
         $this->addColonne( $etatColumn );
-        
+
         $archiverColumn = new Column\BooleanColumn('archiver', 'Archivée');
         $archiverColumn->setSize( 70 );
         $archiverColumn->setFilterType('select');
@@ -78,7 +86,7 @@ class SessionGrid extends Grid implements GridInterface
     public function setActionsButtons()
     {
         $this->addActionButton( new Action\ShowButton( 'hopitalnumerique_module_module_session_show' ) );
-        
+
         $actionListeInscrits = new Action\ShowButton('hopitalnumerique_module_module_session_inscription');
         $actionListeInscrits->setAttributes( array(
                 'class'=>'btn btn-primary fa fa-users',

@@ -1148,4 +1148,17 @@ class ObjetManager extends BaseManager
 
     		return $results;
     }
+
+    /**
+     * Retourne les objets des types données et du domaine
+     * @param array Types
+     * @param int domaine
+     * @return \HopitalNumerique\ObjetBundle\Entity\Objet[]
+     */
+    public function getObjetsByTypesAndDomaine($types, $idDomaine = null) {
+      if (is_null($idDomaine)) {
+          $idDomaine = $this->_session->get('domaineId');
+      }
+      return $this->getRepository()->getObjetsByTypesAndDomaine($types, $idDomaine);
+    }
 }

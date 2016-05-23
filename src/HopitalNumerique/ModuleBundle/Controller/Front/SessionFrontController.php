@@ -20,7 +20,7 @@ class SessionFrontController extends Controller
         $connaissances = $session->getConnaissances();
         $connaissancesOrderedByParent = array();
 
-        foreach ($connaissances as $connaissance) 
+        foreach ($connaissances as $connaissance)
         {
             if(!array_key_exists($connaissance->getParent()->getId(), $connaissancesOrderedByParent))
             {
@@ -83,7 +83,7 @@ class SessionFrontController extends Controller
                 $i++;
             }
         }
-        
+
         // On envoi une 'flash' pour indiquer à l'utilisateur que le fichier n'existe pas: suppression manuelle sur le serveur
         $this->get('session')->getFlashBag()->add( ('success') , 'Mails de rappel envoyé aux utilisateurs acceptés à cette session.' );
 
@@ -182,7 +182,7 @@ class SessionFrontController extends Controller
             'session' => $session
         ));
     }
-    
+
     /**
      * POPIN : gestion de la présence des experts
      */
@@ -195,7 +195,7 @@ class SessionFrontController extends Controller
         $refParticipation    = $this->get('hopitalnumerique_reference.manager.reference')->findOneById(411);
         $refPasParticipation = $this->get('hopitalnumerique_reference.manager.reference')->findOneById(412);
         $refEval             = $this->get('hopitalnumerique_reference.manager.reference')->findOneById(28);
-        $refEvalCanceled     = $this->get('hopitalnumerique_reference.manager.reference')->findOneById(27);
+        $refEvalCanceled     = $this->get('hopitalnumerique_reference.manager.reference')->findOneById(430);
 
         $mails = array();
         foreach ($inscriptions as &$inscription) {
@@ -246,9 +246,9 @@ class SessionFrontController extends Controller
         );
 
         //Pour chaque session, on parcourt les inscriptions pour les lister
-        foreach ($sessions as $session) 
+        foreach ($sessions as $session)
         {
-            foreach ($session->getInscriptions() as $inscription) 
+            foreach ($session->getInscriptions() as $inscription)
             {
                 $row = array();
 
@@ -292,7 +292,7 @@ class SessionFrontController extends Controller
             'Commentaire'
         );
 
-        foreach ($session->getInscriptions() as $inscription) 
+        foreach ($session->getInscriptions() as $inscription)
         {
             $row = array();
 
@@ -310,7 +310,7 @@ class SessionFrontController extends Controller
 
             $datas[] = $row;
         }
-    
+
 
         $kernelCharset = $this->container->getParameter('kernel.charset');
 

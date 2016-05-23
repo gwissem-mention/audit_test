@@ -15,7 +15,7 @@ use APY\DataGridBundle\Grid\Mapping as GRID;
  * @ORM\Table(name="hn_module_session")
  * @ORM\Entity(repositoryClass="HopitalNumerique\ModuleBundle\Repository\SessionRepository")
  * @ORM\HasLifecycleCallbacks
- * 
+ *
  * @author Gaetan MELCHILSEN
  * @copyright Nodevo
  */
@@ -37,7 +37,7 @@ class Session
      * @ORM\JoinColumn(name="mod_module", referencedColumnName="mod_id")
      */
     protected $module;
-    
+
     /**
      * Liste des inscriptions liées au module
      *
@@ -47,7 +47,7 @@ class Session
      * @ORM\OrderBy({"id" = "ASC"})
      */
     protected $inscriptions;
-    
+
     /**
      * @var \DateTime
      *
@@ -76,10 +76,10 @@ class Session
     protected $dateFermetureInscription;
 
     /**
-     * 
+     *
      * @Assert\NotBlank(message="La durée ne peut pas être vide.")
      * @Nodevo\Javascript(class="validate[required]")
-     * 
+     *
      * @ORM\ManyToOne(targetEntity="\HopitalNumerique\ReferenceBundle\Entity\Reference", cascade={"persist"})
      * @ORM\JoinColumn(name="ref_duree", referencedColumnName="ref_id")
      *
@@ -92,7 +92,7 @@ class Session
      *
      * @Assert\NotBlank(message="Les horaires ne peuvent pas être vide.")
      * @Nodevo\Javascript(class="validate[required]")
-     * 
+     *
      * @ORM\Column(name="ses_horaires", type="text", options = {"comment" = "Horaires de la session"})
      */
     protected $horaires;
@@ -102,7 +102,7 @@ class Session
      *
      * @Assert\NotBlank(message="Le lieu ne peut pas être vide.")
      * @Nodevo\Javascript(class="validate[required]")
-     * 
+     *
      * @ORM\Column(name="ses_lieu", type="text", options = {"comment" = "Lieu de la session"})
      */
     protected $lieu;
@@ -121,7 +121,7 @@ class Session
      *
      * @ORM\ManyToOne(targetEntity="\HopitalNumerique\UserBundle\Entity\User")
      * @ORM\JoinColumn(name="usr_formateur", referencedColumnName="usr_id", nullable=true, onDelete="SET NULL")
-     * 
+     *
      * @GRID\Column(field="formateur.nom")
      */
     protected $formateur;
@@ -136,28 +136,28 @@ class Session
 
     /**
      * @var integer
-     * 
+     *
      * @ORM\ManyToMany(targetEntity="\Nodevo\RoleBundle\Entity\Role")
      * @ORM\JoinTable(name="hn_module_session_rolerestriction",
      *      joinColumns={ @ORM\JoinColumn(name="ses_id", referencedColumnName="ses_id")},
      *      inverseJoinColumns={ @ORM\JoinColumn(name="ro_id", referencedColumnName="ro_id")}
      * )
      * @ORM\OrderBy({"name" = "ASC"})
-     * 
+     *
      * @GRID\Column(field="restrictionAcces.name")
      */
     protected $restrictionAcces;
-    
+
     /**
      * @var integer
-     * 
+     *
      * @ORM\ManyToMany(targetEntity="\HopitalNumerique\ReferenceBundle\Entity\Reference")
      * @ORM\JoinTable(name="hn_module_session_connaissances",
      *      joinColumns={ @ORM\JoinColumn(name="ses_id", referencedColumnName="ses_id")},
      *      inverseJoinColumns={ @ORM\JoinColumn(name="ref_id", referencedColumnName="ref_id")}
      * )
      * @ORM\OrderBy({"order" = "ASC"})
-     * 
+     *
      * @GRID\Column(field="connaissances.libelle")
      */
     protected $connaissances;
@@ -195,7 +195,7 @@ class Session
 
     /**
      * @var boolean
-     * 
+     *
      * @ORM\Column(name="ses_archiver", type="boolean", nullable=true, options = {"comment" = "Session archivé ?"})
      */
     protected $archiver;
@@ -213,7 +213,7 @@ class Session
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
@@ -224,17 +224,17 @@ class Session
     {
         return $this->module;
     }
-    
+
     public function getModuleId()
     {
         return $this->module->getId();
     }
-    
+
     public function getModuleTitre()
     {
         return $this->module->getTitre();
     }
-    
+
     public function setModule( Module $module )
     {
         $this->module = $module;
@@ -256,7 +256,7 @@ class Session
     /**
      * Get dateSession
      *
-     * @return \DateTime 
+     * @return \DateTime
      */
     public function getDateSession()
     {
@@ -289,7 +289,7 @@ class Session
     /**
      * Get dateOuvertureInscription
      *
-     * @return \DateTime 
+     * @return \DateTime
      */
     public function getDateOuvertureInscription()
     {
@@ -312,7 +312,7 @@ class Session
     /**
      * Get dateFermetureInscription
      *
-     * @return \DateTime 
+     * @return \DateTime
      */
     public function getDateFermetureInscription()
     {
@@ -328,10 +328,10 @@ class Session
     public function setFormateur(\HopitalNumerique\UserBundle\Entity\User $formateur = null)
     {
         $this->formateur = $formateur;
-    
+
         return $this;
     }
-    
+
     /**
      * Get formateur
      *
@@ -381,7 +381,7 @@ class Session
     /**
      * Get horaires
      *
-     * @return string 
+     * @return string
      */
     public function getHoraires()
     {
@@ -404,7 +404,7 @@ class Session
     /**
      * Get lieu
      *
-     * @return string 
+     * @return string
      */
     public function getLieu()
     {
@@ -427,7 +427,7 @@ class Session
     /**
      * Get textMailRappel
      *
-     * @return string 
+     * @return string
      */
     public function getTextMailRappel()
     {
@@ -450,7 +450,7 @@ class Session
     /**
      * Get description
      *
-     * @return string 
+     * @return string
      */
     public function getDescription()
     {
@@ -466,7 +466,7 @@ class Session
     {
         return $this->archiver;
     }
-    
+
     /**
      * Set archiver
      *
@@ -493,7 +493,7 @@ class Session
     /**
      * Get nombrePlaceDisponible
      *
-     * @return integer 
+     * @return integer
      */
     public function getNombrePlaceDisponible()
     {
@@ -509,10 +509,10 @@ class Session
     public function addRestrictionAcces(\Nodevo\RoleBundle\Entity\Role $role)
     {
         $this->restrictionAcces[] = $role;
-    
+
         return $this;
     }
-    
+
     /**
      * Remove restrictionAcces
      *
@@ -522,7 +522,7 @@ class Session
     {
         $this->restrictionAcces->removeElement($role);
     }
-    
+
     /**
      * Set restrictionsAcces
      *
@@ -532,10 +532,10 @@ class Session
     public function setRestrictionAcces($restrictionsAcces)
     {
         $this->restrictionAcces = $restrictionsAcces;
-    
+
         return $this;
     }
-    
+
     /**
      * Get restrictionsAcces
      *
@@ -565,7 +565,7 @@ class Session
     {
         return $this->etat->getId();
     }
-    
+
     /**
      * Set etat
      *
@@ -588,7 +588,7 @@ class Session
     public function addInscription(\HopitalNumerique\ModuleBundle\Entity\Inscription $inscriptions)
     {
         $this->inscriptions[] = $inscriptions;
-    
+
         return $this;
     }
 
@@ -605,7 +605,7 @@ class Session
     /**
      * Get inscriptions
      *
-     * @return \Doctrine\Common\Collections\Collection 
+     * @return \Doctrine\Common\Collections\Collection
      */
     public function getInscriptions()
     {
@@ -624,13 +624,13 @@ class Session
     /**
      * Get inscriptions
      *
-     * @return \Doctrine\Common\Collections\Collection 
+     * @return \Doctrine\Common\Collections\Collection
      */
     public function getInscriptionsAccepte()
     {
         $inscriptionsAcceptees = array();
 
-        foreach ($this->inscriptions as $key => $inscription) 
+        foreach ($this->inscriptions as $key => $inscription)
         {
             //Récupération de l'état de l'inscription courante
             $etatInscription = $inscription->getEtatInscription();
@@ -640,7 +640,7 @@ class Session
             }
         }
         ksort($inscriptionsAcceptees);
-        
+
         return $inscriptionsAcceptees;
     }
 
@@ -657,7 +657,7 @@ class Session
             return false;
 
         //Recherche pour chacune des inscriptions à ce module l'utilisateur passé en param
-        foreach ($this->inscriptions as $inscription) 
+        foreach ($this->inscriptions as $inscription)
         {
             //Si l'utilisateur existe
             if($inscription->getUser()->getId() === $user->getId())
@@ -681,10 +681,10 @@ class Session
             return false;
 
         //Recherche pour chacune des inscriptions à ce module l'utilisateur passé en param
-        foreach ($this->inscriptions as $inscription) 
+        foreach ($this->inscriptions as $inscription)
         {
             //Si l'utilisateur existe
-            if($inscription->getUser()->getId() === $user->getId() 
+            if($inscription->getUser()->getId() === $user->getId()
                 && $inscription->getEtatInscription()->getId() === 409)
             {
                 //&& $inscription->isInscrit())
@@ -709,12 +709,12 @@ class Session
     {
         if( is_null($path) && file_exists($this->getAbsolutePath()) )
             unlink($this->getAbsolutePath());
-    
+
         $this->path = $path;
-    
+
         return $this;
     }
-    
+
     /**
      * Get path
      *
@@ -724,28 +724,28 @@ class Session
     {
         return $this->path;
     }
-    
+
     public function getAbsolutePath()
     {
         return null === $this->path ? null : $this->getUploadRootDir().'/'.$this->path;
     }
-    
+
     public function getWebPath()
     {
         return null === $this->path ? null : $this->getUploadDir().'/'.$this->path;
     }
-    
+
     public function getUploadRootDir()
     {
         // le chemin absolu du répertoire où les documents uploadés doivent être sauvegardés
         return __ROOT_DIRECTORY__.'/'.$this->getUploadDir();
     }
-    
+
     public function getUploadDir()
     {
         return 'files/sessions';
     }
-    
+
     /**
      * @ORM\PrePersist()
      * @ORM\PreUpdate()
@@ -756,11 +756,11 @@ class Session
             //delete Old File
             if ( file_exists($this->getAbsolutePath()) )
                 unlink($this->getAbsolutePath());
-    
+
             $this->path = round(microtime(true) * 1000) . '_' . $this->file->getClientOriginalName();
         }
     }
-    
+
     /**
      * @ORM\PostPersist()
      * @ORM\PostUpdate()
@@ -769,30 +769,30 @@ class Session
     {
         if (null === $this->file)
             return;
-    
+
         // s'il y a une erreur lors du déplacement du fichier, une exception
         // va automatiquement être lancée par la méthode move(). Cela va empêcher
         // proprement l'entité d'être persistée dans la base de données si
         // erreur il y a
         $this->file->move($this->getUploadRootDir(), $this->path);
-    
+
         unset($this->file);
     }
-    
+
     /**
      * @ORM\PostRemove()
      */
     public function removeUpload()
     {
         $file = $this->getAbsolutePath();
-    
+
         if (file_exists($file) )
             unlink($file);
     }
 
     /**
      * Set les valeurs du module lié, si il y en a un
-     * 
+     *
      * @return this
      */
     public function getDefaultValueFromModule()
@@ -801,7 +801,7 @@ class Session
         if(!is_null($this->getModule()))
         {
             $module = $this->getModule();
-            
+
             //Note GME : merci php 5.3 pour les variables temporaires
             //Durée
             $duree = $module->getDuree();
@@ -852,7 +852,7 @@ class Session
                 $this->setTextMailRappel($textMailRappel);
             }
         }
-        
+
         return $this;
     }
 
@@ -905,7 +905,7 @@ class Session
     /**
      * Get connaissances
      *
-     * @return \Doctrine\Common\Collections\Collection 
+     * @return \Doctrine\Common\Collections\Collection
      */
     public function getConnaissances()
     {
@@ -915,7 +915,7 @@ class Session
     /**
      * Set connaissances
      *
-     * @return Session 
+     * @return Session
      */
     public function setConnaissances($connaissances)
     {
