@@ -683,4 +683,13 @@ class Contenu
 
         return $typeLabels;
     }
+
+    public function getRealDomaines()
+    {
+        if (null !== $this->domaines && count($this->domaines) > 0) {
+            return $this->domaines;
+        }
+
+        return $this->objet->getDomaines();
+    }
 }

@@ -1,0 +1,27 @@
+{# Cas Contenu #}
+{% if contenu is defined and contenu is not sameas(false) %}
+    {% if contenu.realDomaines|length > 1 %}
+        <div class="col-md-12">
+            Cette publication est également présente sur :
+            {% for domaine in contenu.realDomaines %}
+                {% if not domaineCurrent.equals(domaine) %}
+                    <a href="{{ domaine.url }}{{ path('hopital_numerique_publication_publication_contenu', { 'id':contenu.objet.id, 'alias':contenu.objet.alias, 'idc':contenu.id, 'aliasc':contenu.alias }) }}" target="_blank">{{ domaine }}</a>
+                    {{ not loop.last ? '-' : '' }}
+                {% endif %}
+            {% endfor %}
+        </div>
+    {% endif %}
+{# Cas objet #}
+{% else %}
+    {% if objet.domaines|length > 1 %}
+        <div class="col-md-12">
+            Cette publication est également présente sur :
+            {% for domaine in objet.domaines %}
+                {% if not domaineCurrent.equals(domaine) %}
+                    <a href="{{ domaine.url }}{{ path('hopital_numerique_publication_publication_objet', { 'id':objet.id, 'alias':objet.alias }) }}" target="_blank">{{ domaine }}</a>
+                    {{ not loop.last ? '-' : '' }}
+                {% endif %}
+            {% endfor %}
+        </div>
+    {% endif %}
+{% endif %}

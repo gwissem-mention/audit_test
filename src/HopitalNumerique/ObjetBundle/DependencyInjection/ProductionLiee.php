@@ -44,30 +44,32 @@ class ProductionLiee
     {
         $formattedProductionsLiees = [];
 
-        foreach ($entity->getObjets() as $productionLieeString) {
-            $productionLieeStringExplode = explode(':', $productionLieeString);
-            $productionLieeType = $productionLieeStringExplode[0];
-            $entityId = intval($productionLieeStringExplode[1]);
+        if (null !== $entity->getObjets()) {
+            foreach ($entity->getObjets() as $productionLieeString) {
+                $productionLieeStringExplode = explode(':', $productionLieeString);
+                $productionLieeType = $productionLieeStringExplode[0];
+                $entityId = intval($productionLieeStringExplode[1]);
 
-            switch ($productionLieeType) {
-                case 'PUBLICATION':
-                case 'ARTICLE':
-                    $entity = $this->objetManager->findOneById($entityId);
-                    break;
-                case 'INFRADOC':
-                    $entity = $this->contenuManager->findOneById($entityId);
-                    break;
-                default:
-                    continue;
+                switch ($productionLieeType) {
+                    case 'PUBLICATION':
+                    case 'ARTICLE':
+                        $entity = $this->objetManager->findOneById($entityId);
+                        break;
+                    case 'INFRADOC':
+                        $entity = $this->contenuManager->findOneById($entityId);
+                        break;
+                    default:
+                        continue;
+                }
+
+                $formattedProductionsLiees[] = [
+                    'title' => $this->entity->getTitleByEntity($entity),
+                    'subtitle' => $this->entity->getSubtitleByEntity($entity),
+                    'category' => $this->entity->getCategoryByEntity($entity),
+                    'description' => $this->entity->getDescriptionByEntity($entity),
+                    'url' => $this->entity->getFrontUrlByEntity($entity)
+                ];
             }
-
-            $formattedProductionsLiees[] = [
-                'title' => $this->entity->getTitleByEntity($entity),
-                'subtitle' => $this->entity->getSubtitleByEntity($entity),
-                'category' => $this->entity->getCategoryByEntity($entity),
-                'description' => $this->entity->getDescriptionByEntity($entity),
-                'url' => $this->entity->getFrontUrlByEntity($entity)
-            ];
         }
 
         return $formattedProductionsLiees;
