@@ -51,6 +51,11 @@ class ModuleGrid extends Grid implements GridInterface
         $statutColumn->setOperatorsVisible( false );
         $statutColumn->setDefaultOperator( \APY\DataGridBundle\Grid\Column\Column::OPERATOR_EQ );
         $this->addColonne($statutColumn);
+        
+        $productionColumn = new Column\TextColumn('prod_titre', 'Productions concernées');
+        $productionColumn->setFilterable(false);
+        $productionColumn->setVisible(false);
+        $this->addColonne($productionColumn);
     }
 
     /**
