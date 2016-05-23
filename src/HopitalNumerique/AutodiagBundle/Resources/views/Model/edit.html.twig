@@ -1,0 +1,37 @@
+{% extends 'NodevoAdminBundle::admin.html.twig' %}
+
+{% block javascripts %}
+    {{parent()}}
+    {% javascripts output="compiled/hopitalnumerique-autodiag-model.js"
+        '@HopitalNumeriqueCoreBundle/Resources/public/js/tinymce.js'
+    %}
+    <script type="text/javascript" src="{{ asset_url }}"></script>
+    {% endjavascripts %}
+{% endblock %}
+
+{% block h1Title %}
+    {% if model.id %}
+        Editer un modèle
+    {% else %}
+        Ajouter un modèle d'autodiag
+    {% endif %}
+{% endblock %}
+
+{% block toolbarButton %}
+
+{% endblock %}
+
+{% block body %}
+    <div class="col-sm-12">
+        <div class="panel panel-midnightblue">
+            <div class="panel-heading">
+                <h4>Informations</h4>
+            </div>
+
+            <div class="panel-body">
+                {% form_theme form 'NodevoAdminBundle::form.html.twig' %}
+                {{ form(form) }}
+            </div>
+        </div>
+    </div>
+{% endblock %}

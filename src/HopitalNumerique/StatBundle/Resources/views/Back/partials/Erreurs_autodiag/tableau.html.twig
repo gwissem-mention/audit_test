@@ -24,7 +24,7 @@
                     {% for key, currentUrlCaracteristiques in arrayUrl %}
                         <tr>
                             <td style="border:1px solid #e3e3e3;font-size:12px;text-align:center;">
-                                <a target="_blank" href="{{path('hopitalnumerique_autodiag_outil_edit', {'id': allChapitres[keyUrl].outil.id})}}">{{allChapitres[keyUrl].outil.id}}</a>
+
                             </td>
                             <td style="border:1px solid #e3e3e3;font-size:12px;text-align:center;">
                                 {{allChapitres[keyUrl].outil.title}}
@@ -51,8 +51,8 @@
                             </td>
                         </tr>
                     {% endfor %}
-                {% endfor %}  
-            {% endfor %}  
+                {% endfor %}
+            {% endfor %}
         </tbody>
     </table>
     <input type="hidden" id="curl-url" value="{{path('hopital_numerique_stat_erreurs_curl')}}" />

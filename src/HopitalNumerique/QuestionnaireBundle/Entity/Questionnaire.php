@@ -42,17 +42,17 @@ class Questionnaire
      * @ORM\Column(name="qst_lien", type="string", length=255, nullable=true, options = {"comment" = "Lien de redirection après validation du questionnaire"})
      */
     protected $lien;
-    
+
     /**
      * @var boolean
-     * 
+     *
      * @ORM\Column(name="qst_occurrence_multiple", type="boolean", nullable=false, options={"default"=false, "comment"="Indique si le questionnaire peut être répondu plusieurs fois"})
      */
     private $occurrenceMultiple;
-    
+
     /**
      * @var \Doctrine\Common\Collections\ArrayCollection
-     * 
+     *
      * @ORM\OneToMany(targetEntity="Occurrence", mappedBy="questionnaire")
      */
     private $occurrences;
@@ -62,16 +62,11 @@ class Questionnaire
      * @ORM\OrderBy({"ordre" = "ASC"})
      */
     private $questions;
-    
+
     /**
      * @ORM\OneToMany(targetEntity="HopitalNumerique\UserBundle\Entity\RefusCandidature", mappedBy="questionnaire", cascade={"persist", "remove" })
      */
     protected $refusCandidature;
-    
-    /**
-     * @ORM\OneToMany(targetEntity="HopitalNumerique\AutodiagBundle\Entity\Outil", mappedBy="questionnairePrealable")
-     */
-    private $outils;
 
     /**
      * @ORM\ManyToMany(targetEntity="\HopitalNumerique\DomaineBundle\Entity\Domaine", cascade={"persist"})
@@ -84,7 +79,7 @@ class Questionnaire
 
     /**
      * @var \Doctrine\Common\Collections\Collection
-     * 
+     *
      * @ORM\OneToMany(targetEntity="HopitalNumerique\CommunautePratiqueBundle\Entity\Groupe", mappedBy="questionnaire")
      */
     protected $communautePratiqueGroupes;
@@ -105,7 +100,7 @@ class Questionnaire
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
@@ -128,13 +123,13 @@ class Questionnaire
     /**
      * Get nom
      *
-     * @return string 
+     * @return string
      */
     public function getNom()
     {
         return $this->nom;
     }
-    
+
     /**
      * Get nom minifié
      *
@@ -143,7 +138,7 @@ class Questionnaire
     public function getNomMinifie()
     {
         $nom = new Chaine($this->nom);
-        
+
         return $nom->minifie();
     }
 
@@ -156,7 +151,7 @@ class Questionnaire
     {
         return $this->lock;
     }
-    
+
     /**
      * Set lock
      *
@@ -183,7 +178,7 @@ class Questionnaire
     /**
      * Get occurrenceMultiple
      *
-     * @return boolean 
+     * @return boolean
      */
     public function isOccurrenceMultiple()
     {
@@ -216,13 +211,13 @@ class Questionnaire
     /**
      * Get occurrences
      *
-     * @return \Doctrine\Common\Collections\Collection 
+     * @return \Doctrine\Common\Collections\Collection
      */
     public function getOccurrences()
     {
         return $this->occurrences;
     }
-    
+
 
     /**
      * Add questions
@@ -233,10 +228,10 @@ class Questionnaire
     public function addQuestion(\HopitalNumerique\QuestionnaireBundle\Entity\Question $questions)
     {
         $this->questions[] = $questions;
-    
+
         return $this;
     }
-    
+
     /**
      * Remove questions
      *
@@ -246,7 +241,7 @@ class Questionnaire
     {
         $this->questions->removeElement($questions);
     }
-    
+
     /**
      * Get questions
      *
@@ -256,21 +251,21 @@ class Questionnaire
     {
         return $this->questions;
     }
-    
+
     /**
      * Retourne les ID des questions du questionnaire.
-     * 
+     *
      * @return integer[] IDs des questions
      */
     public function getQuestionIds()
     {
         $questionIds = array();
-        
+
         foreach ($this->questions as $question)
         {
             $questionIds[] = $question->getId();
         }
-        
+
         return $questionIds;
     }
 
@@ -300,7 +295,7 @@ class Questionnaire
     /**
      * Get refusCandidature
      *
-     * @return \Doctrine\Common\Collections\Collection 
+     * @return \Doctrine\Common\Collections\Collection
      */
     public function getRefusCandidature()
     {
@@ -323,44 +318,11 @@ class Questionnaire
     /**
      * Get lien
      *
-     * @return string 
+     * @return string
      */
     public function getLien()
     {
         return $this->lien;
-    }
-
-    /**
-     * Add outil
-     *
-     * @param \HopitalNumerique\AutodiagBundle\Entity\Outil $outils
-     * @return Questionnaire
-     */
-    public function addOutil(\HopitalNumerique\AutodiagBundle\Entity\Outil $outils)
-    {
-        $this->outils[] = $outils;
-
-        return $this;
-    }
-
-    /**
-     * Remove outil
-     *
-     * @param \HopitalNumerique\AutodiagBundle\Entity\Outil $outils
-     */
-    public function removeOutil(\HopitalNumerique\AutodiagBundle\Entity\Outil $outils)
-    {
-        $this->outils->removeElement($outils);
-    }
-
-    /**
-     * Get outils
-     *
-     * @return \Doctrine\Common\Collections\Collection 
-     */
-    public function getOutils()
-    {
-        return $this->outils;
     }
 
     /**
@@ -393,16 +355,16 @@ class Questionnaire
      * @return Domaine
      */
     public function setDomaines($domaines)
-    {        
+    {
         $this->domaines = $domaines;
-    
+
         return $this;
     }
 
     /**
      * Get domaines
      *
-     * @return \Doctrine\Common\Collections\Collection 
+     * @return \Doctrine\Common\Collections\Collection
      */
     public function getDomaines()
     {
@@ -417,7 +379,7 @@ class Questionnaire
     {
         $domainesId = array();
 
-        foreach ($this->domaines as $domaine) 
+        foreach ($this->domaines as $domaine)
         {
             $domainesId[] = $domaine->getId();
         }
@@ -451,14 +413,14 @@ class Questionnaire
     /**
      * Get communautePratiqueGroupes
      *
-     * @return \Doctrine\Common\Collections\Collection 
+     * @return \Doctrine\Common\Collections\Collection
      */
     public function getCommunautePratiqueGroupes()
     {
         return $this->communautePratiqueGroupes;
     }
-    
-    
+
+
     /**
      * @return string
      */
