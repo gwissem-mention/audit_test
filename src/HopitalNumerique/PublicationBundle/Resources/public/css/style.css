@@ -218,12 +218,12 @@
 /*  Chapitre Précédent / Suivant */
     #precedent-suivant a{width: 100%; color: #d60030;}
 
-/* Commentaires */
-    #commentaires h2{display: block; margin-bottom:5px;background-image: url('../img/panel.png');background-repeat: no-repeat;cursor: pointer; height: 25px}
-    #commentaires h2.open{background-position: right -38px;}
-    #commentaires h2.closed{background-position: right -5px; }
+/* Commentaires & Prods liées */
+    #commentaires h2, #productions_liees h2 {display: block; margin-bottom:5px;background-image: url('../img/panel.png');background-repeat: no-repeat;cursor: pointer; height: 25px}
+    #commentaires h2.open, #productions_liees h2.open {background-position: right -38px;}
+    #commentaires h2.closed, #productions_liees h2.closed {background-position: right -5px; }
     #commentaires h3 {color:#6B339B;}
-    #commentaires .mysep.background-rose{width: 85px; height: 4px; margin-bottom: 10px}
+    #commentaires .mysep.background-rose, #productions_liees .mysep.background-rose {width: 85px; height: 4px; margin-bottom: 10px}
     #commentaires .separator{height: 20px}
 
     #commentaires .commentaire { background: #F6F6F6; padding: 10px; margin-bottom: 15px; position: relative}

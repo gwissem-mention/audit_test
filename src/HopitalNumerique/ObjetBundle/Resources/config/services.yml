@@ -102,6 +102,10 @@ services:
         class: %hopitalnumerique_objet.manager.note.class%
         arguments: ["@doctrine.orm.entity_manager"]
 
+    hopitalnumerique_objet.dependency_injection.production_liee:
+        class: 'HopitalNumerique\ObjetBundle\DependencyInjection\ProductionLiee'
+        arguments: ['@hopitalnumerique_core.dependency_injection.entity', '@hopitalnumerique_objet.manager.objet', '@hopitalnumerique_objet.manager.contenu']
+
     hopitalnumerique_objet.doctrine.note_reader:
         class: 'HopitalNumerique\ObjetBundle\Doctrine\NoteReader'
         arguments: ['@session', '@hopitalnumerique_objet.manager.note']

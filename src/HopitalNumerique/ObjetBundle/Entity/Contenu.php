@@ -641,6 +641,14 @@ class Contenu
 
 
     /**
+     * @return string
+     */
+    public function __toString()
+    {
+        return $this->titre;
+    }
+
+    /**
      * Retourne si l'objet est un point dur.
      *
      * @return boolean Si point dur

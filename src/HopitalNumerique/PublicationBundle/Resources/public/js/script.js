@@ -38,6 +38,10 @@ $(document).ready(function() {
             $('#productions-associes .row').slideToggle();
         });
 
+        $('#productions_liees h2').click(function(){
+            $(this).toggleClass('open closed');
+            $('#productions_liees .results-bloc').slideToggle();
+        });
         $('#commentaires h2').click(function(){
             $(this).toggleClass('open closed');
             $('#commentaires .bloc-commentaire').slideToggle();

@@ -291,44 +291,7 @@
             {% endif %}
         {% endif %}
 
-        <div class="col-md-12" id="resultats">
-
-            {%- if contenuObjets is defined and contenuObjets|length > 0 -%}
-                <div class="col-md-12" id="infradocs">
-                    <h3 class="open">Productions associées</h3>
-                    <div class="wrapper-results">
-                        <div class="background-rose"></div>
-
-                        <div class="results">
-                            {% for infradoc in contenuObjets %}
-                                <div class="row">
-                                    {%- if infradoc.type != '' -%}
-                                        <div class="col-md-12"><h5>{{ infradoc.type }}</h5></div>
-                                    {%- endif -%}
-                                    <div class="col-md-12">
-                                        <h4 style="font-size:14px;line-height:24px;margin:0px 0 5px 0">
-
-                                            {% if infradoc.objet %}
-                                                <a href="{{path('hopital_numerique_publication_publication_objet', {'id':infradoc.id, 'alias': infradoc.alias})}}">{{infradoc.titre}}</a>
-                                            {% else %}
-                                                <a href="{{path('hopital_numerique_publication_publication_contenu', {'id':infradoc.id, 'alias': infradoc.alias, 'idc':infradoc.idc, 'aliasc': infradoc.aliasc})}}">{{infradoc.titre}}</a><br />
-                                            {% endif %}
-
-                                        </h4>
-                                    </div>
-                                    <div class="col-md-12">
-                                        <p>{{ infradoc.resume|parsePublication|raw }}</p>
-                                    </div>
-                                </div>
-                            {% endfor %}
-                            <div class="clearfix"></div>
-                        </div>
-
-                    </div>
-                </div>
-            {%- endif -%}
-            <div class="clearfix"></div>
-        </div>
+        {% include 'HopitalNumeriquePublicationBundle:Publication:Partials/productions_liees.html.twig' with { 'objet':objet } %}
 
         {# Gestion des commantaires #}
         {% if objet.commentaires %}

@@ -54,7 +54,6 @@ class PublicationController extends Controller
         //get Contenus : for sommaire
         $contenus = $objet->isInfraDoc() ? $this->get('hopitalnumerique_objet.manager.contenu')->getArboForObjet( $objet->getId() ) : array();
 
-
         //render
         return $this->render('HopitalNumeriquePublicationBundle:Publication:objet.html.twig', array(
             'objet'        => $objet,
@@ -63,6 +62,7 @@ class PublicationController extends Controller
             'contenus'     => $contenus,
             'meta'         => $this->get('hopitalnumerique_recherche.manager.search')->getMetas($objet->getReferences(), $objet->getResume() ),
             'ambassadeurs' => $this->getAmbassadeursConcernes( $objet->getId() ),
+            'productionsLiees' => $this->get('hopitalnumerique_objet.dependency_injection.production_liee')->getFormattedProductionsLiees($objet),
             'is_pdf' => $isPdf
         ));
     }
@@ -158,7 +158,6 @@ class PublicationController extends Controller
 
         //on récupère le contenu
         $contenu = $this->get('hopitalnumerique_objet.manager.contenu')->findOneBy( array( 'id' => $idc ) );
-        $contenuObjets = $this->getProductionsAssocies($contenu->getObjets());
 
         $prefix  = $this->get('hopitalnumerique_objet.manager.contenu')->getPrefix($contenu);
 
@@ -219,7 +218,6 @@ class PublicationController extends Controller
             'contenus'         => $contenus,
             'types'            => $types,
             'contenu'          => $contenu,
-            'contenuObjets' => $contenuObjets,
             'breadCrumbsArray' => $breadCrumbsArray,
             'prefix'           => $prefix,
             'meta'             => $meta,
@@ -228,6 +226,7 @@ class PublicationController extends Controller
             'precedentOrder'   => $precedentOrder,
             'suivant'          => $suivant,
             'suivantOrder'     => $suivantOrder,
+            'productionsLiees' => $this->get('hopitalnumerique_objet.dependency_injection.production_liee')->getFormattedProductionsLiees($contenu),
             'is_pdf' => ($request->query->has('pdf') && '1' == $request->query->get('pdf'))
         ));
     }
