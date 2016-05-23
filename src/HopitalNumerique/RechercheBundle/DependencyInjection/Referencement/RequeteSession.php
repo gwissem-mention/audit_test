@@ -362,6 +362,9 @@ class RequeteSession
         $statRecherche->setRequete(json_encode($referenceIds));
         $statRecherche->setIsRequeteSaved(null !== $this->getRequete());
         $statRecherche->setCategPointDur(count($categoryFilters) > 0 ? json_encode($categoryFilters) : '');
+        if (!$this->connectedUser->is()) {
+            $statRecherche->setSessionId(session_id());
+        }
 
         $this->statRechercheManager->save($statRecherche);
     }
