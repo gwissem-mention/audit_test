@@ -107,7 +107,7 @@ class SearchController extends Controller
      */
     public function generateManuallyRequeteAction($refs = null, $q = null, $type = null)
     {
-        $referenceIds = explode(',', $refs);
+        $referenceIds = ('null' != $refs ? explode(',', $refs) : []);
         $searchedText = ($q == 'null' ? '' : $q);
         $publicationCategoryIds = ($type == "null" ? [] :[$type]);
         $this->container->get('hopitalnumerique_recherche.dependency_injection.referencement.requete_session')->setReferenceIds($referenceIds);
