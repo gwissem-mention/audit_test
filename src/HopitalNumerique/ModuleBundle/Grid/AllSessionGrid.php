@@ -85,6 +85,17 @@ class AllSessionGrid extends Grid implements GridInterface
         $etatColumn->setValues($etatArrays);
         $etatColumn->setDefaultOperator( \APY\DataGridBundle\Grid\Column\Column::OPERATOR_EQ );
         $this->addColonne( $etatColumn );
+
+        $dateOuvertureInscriptionColumn = new Column\DateColumn('dateOuvertureInscription', 'Date d\'ouverture des inscriptions');
+        $dateOuvertureInscriptionColumn->setVisible(false);
+        $dateOuvertureInscriptionColumn->setFilterable(false);
+        $this->addColonne( $dateOuvertureInscriptionColumn );
+         
+        $dateFermetureInscriptionColumn = new Column\DateColumn('dateFermetureInscription', 'Date de clôture des inscriptions');
+        $dateFermetureInscriptionColumn->setVisible(false);
+        $dateFermetureInscriptionColumn->setFilterable(false);
+        $this->addColonne( $dateFermetureInscriptionColumn );
+
     }
 
     /**
