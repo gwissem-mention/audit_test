@@ -504,12 +504,16 @@ class Entity
         }
 
         if (null !== $description) {
-            $description = substr(trim(strip_tags(html_entity_decode($description))), 0, 255);
+            $description = trim(strip_tags(html_entity_decode($description)));
+            if (strlen($description) > 255) {
+                $description = substr($description, 0, 255);
+                if (strrpos($description, ' ') > 0) {
+                    $description = substr($description, 0, strrpos($description, ' ')).'...';
+                }
+            }
+
             if ('' == $description) {
                 return null;
-            }
-            if (strrpos($description, ' ') > 0) {
-                $description = substr($description, 0, strrpos($description, ' ')).'...';
             }
         }
 
