@@ -63,6 +63,7 @@ class PublicationController extends Controller
             'meta'         => $this->get('hopitalnumerique_recherche.manager.search')->getMetas($objet->getReferences(), $objet->getResume() ),
             'ambassadeurs' => $this->getAmbassadeursConcernes( $objet->getId() ),
             'productionsLiees' => $this->get('hopitalnumerique_objet.dependency_injection.production_liee')->getFormattedProductionsLiees($objet),
+            'parcoursGuides' => $this->container->get('hopitalnumerique_rechercheparcours.dependency_injection.parcours_guide_lie')->getFormattedParcoursGuidesLies($objet),
             'is_pdf' => $isPdf
         ));
     }
@@ -227,6 +228,7 @@ class PublicationController extends Controller
             'suivant'          => $suivant,
             'suivantOrder'     => $suivantOrder,
             'productionsLiees' => $this->get('hopitalnumerique_objet.dependency_injection.production_liee')->getFormattedProductionsLiees($contenu),
+            'parcoursGuides' => $this->container->get('hopitalnumerique_rechercheparcours.dependency_injection.parcours_guide_lie')->getFormattedParcoursGuidesLies($objet),
             'is_pdf' => ($request->query->has('pdf') && '1' == $request->query->get('pdf'))
         ));
     }

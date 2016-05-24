@@ -111,7 +111,7 @@ class Reader
      * @param array               $resultFilters          Filtres à appliquer
      * @return array Entités
      */
-    private function getEntitiesPropertiesByReferenceIds(array $groupedReferenceIds = null, array $entityTypeIds = null, array $publicationCategoryIds = null, $resultFilters = [])
+    public function getEntitiesPropertiesByReferenceIds(array $groupedReferenceIds = null, array $entityTypeIds = null, array $publicationCategoryIds = null, $resultFilters = [])
     {
         $currentDomaine = $this->currentDomaine->get();
         $entitiesProperties = $this->entityHasReferenceManager->getWithNotes($currentDomaine, $groupedReferenceIds, $this->connectedUser->get(), $entityTypeIds, $publicationCategoryIds, $resultFilters);

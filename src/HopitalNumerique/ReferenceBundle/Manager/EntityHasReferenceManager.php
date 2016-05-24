@@ -171,4 +171,22 @@ class EntityHasReferenceManager extends BaseManager
 
         return $referenceIds;
     }
+    
+    /**
+     * @return array<integer>
+     */
+    public function getReferenceIdsByEntityTypeAndEntityId($entityType, $entityId)
+    {
+        $referenceIds = [];
+        $entityHasReferences = $this->findBy([
+            'entityType' => $entityType,
+            'entityId' => $entityId
+        ]);
+
+        foreach ($entityHasReferences as $entityHasReference) {
+            $referenceIds[] = $entityHasReference->getReference()->getId();
+        }
+
+        return $referenceIds;
+    }
 }

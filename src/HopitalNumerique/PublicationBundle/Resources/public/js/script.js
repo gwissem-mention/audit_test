@@ -42,6 +42,10 @@ $(document).ready(function() {
             $(this).toggleClass('open closed');
             $('#productions_liees .results-bloc').slideToggle();
         });
+        $('#parcours_guides h2').click(function(){
+            $(this).toggleClass('open closed');
+            $('#parcours_guides .results-bloc').slideToggle();
+        });
         $('#commentaires h2').click(function(){
             $(this).toggleClass('open closed');
             $('#commentaires .bloc-commentaire').slideToggle();

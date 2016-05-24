@@ -1,0 +1,21 @@
+{% if parcoursGuides|length > 0 -%}
+    <div class="col-md-12 recherche-referencement" id="parcours_guides">
+        <h2 class="open">Démarches<span class="h2-arrow"></span></h2>
+        <div class="clearfix"></div>
+        <div class="mysep background-rose"></div>
+        <div class="results-bloc">
+            <div class="clearfix"></div>
+            {%- for parcoursGuide in parcoursGuides -%}
+                {% include 'HopitalNumeriqueRechercheBundle:Referencement:view_entity.html.twig' with parcoursGuide %}
+            {%- endfor -%}
+
+        </div>
+    </div>
+    <div class="clearfix"></div>
+
+    <script type="text/javascript">
+        $(document).ready(function() {
+            $("#parcours_guides h2").click();
+        });
+    </script>
+{%- endif %}

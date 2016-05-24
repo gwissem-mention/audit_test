@@ -34,3 +34,7 @@ services:
         arguments: ["@hopitalnumerique_rechercheparcours.manager.rechercheparcoursgestion", "@validator", '@hopitalnumerique_core.dependency_injection.entity', "@hopitalnumerique_user.manager.user", '@hopitalnumerique_reference.manager.reference']
         tags:
             - { name: form.type, alias: hopitalnumerique_rechercheparcours_rechercheparcoursgestion }
+
+    hopitalnumerique_rechercheparcours.dependency_injection.parcours_guide_lie:
+        class: 'HopitalNumerique\RechercheParcoursBundle\DependencyInjection\ParcoursGuideLie'
+        arguments: ['@hopitalnumerique_core.dependency_injection.entity', '@hopitalnumerique_recherche.doctrine.referencement.reader', '@hopitalnumerique_reference.manager.entity_has_reference', '@hopitalnumerique_recherche_parcours.manager.recherche_parcours']
