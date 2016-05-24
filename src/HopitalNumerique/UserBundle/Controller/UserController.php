@@ -7,6 +7,8 @@ use HopitalNumerique\UserBundle\Event\UserEvent;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
+use Symfony\Component\Security\Http\Event\InteractiveLoginEvent;
 
 /**
  * Controller des utilisateurs
@@ -1028,19 +1030,28 @@ class UserController extends Controller
                 if ($new && $this->container->get('hopitalnumerique_recherche.dependency_injection.referencement.requete_session')->isWantToSaveRequete()) {
                     $this->container->get('hopitalnumerique_recherche.dependency_injection.referencement.requete_session')->saveAsNewRequete($user);
                 }
-
-                // On envoi une 'flash' pour indiquer à l'utilisateur que l'entité est ajoutée
-                if($this->get('security.context')->isGranted('ROLE_USER')) {
-                    $this->get('session')->getFlashBag()->add( ($new ? 'success' : 'info') , 'Utilisateur ' . $user->getUsername() . ($new ? ' ajouté.' : ' mis à jour.') );
-                }
                 
                 $do = $request->request->get('do');
+
+                // On envoi une 'flash' pour indiquer à l'utilisateur que l'entité est ajoutée
+                if ($do == 'inscription') {
+                    //<-- Connexion automatique
+                    $token = new UsernamePasswordToken($user, null, 'frontoffice_connecte', $user->getRoles());
+                    $this->get('security.context')->setToken($token);
+                    $this->get('event_dispatcher')->dispatch('security.interactive_login', new InteractiveLoginEvent($request, $token));
+                    //-->
+                } else {
+                    $this->get('session')->getFlashBag()->add( ($new ? 'success' : 'info') , 'Utilisateur ' . $user->getUsername() . ($new ? ' ajouté.' : ' mis à jour.') );
+                }
                 
                 switch ($do)
                 {
                     case 'inscription':
-                        $this->get('session')->getFlashBag()->add( 'danger' , 'Certains serveurs de messagerie peuvent bloquer la bonne réception des emails émis par la plateforme Hôpital Numérique. Merci de vérifier auprès de votre service de informatique que les adresses accompagnement-hn@anap.fr et communication@anap.fr ne sont pas considérées comme du spam et qu\'elles font bien parties des adresses autorisées sur le serveur mail de votre établissement.' ); 
-                        return $this->redirect( $this->generateUrl('hopital_numerique_homepage') );
+                        $this->get('session')->getFlashBag()->add( 'danger' , 'Certains serveurs de messagerie peuvent bloquer la bonne réception des emails émis par la plateforme Hôpital Numérique. Merci de vérifier auprès de votre service de informatique que les adresses accompagnement-hn@anap.fr et communication@anap.fr ne sont pas considérées comme du spam et qu\'elles font bien parties des adresses autorisées sur le serveur mail de votre établissement.' );
+                        
+                        $urlParameter = $request->getSession()->get('urlToRedirect');
+                        $request->getSession()->remove('urlToRedirect');
+                        return $this->redirect(is_null($urlParameter) || $urlParameter == "" ? $this->generateUrl('hopital_numerique_homepage' ) : $urlParameter);
                         break;
                     case 'information-personnelles':
                         return $this->redirect( $this->generateUrl('hopital_numerique_user_informations_personnelles') );
