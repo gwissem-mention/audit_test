@@ -886,7 +886,7 @@ class UserController extends Controller
                 }
             }
             else
-            {    
+            {
                 //--FO-- inscription            
                 //Set de l'état
                 $idEtatActif = intval($this->get('hopitalnumerique_user.options.user')->getOptionsByLabel('idEtatActif'));
@@ -1030,7 +1030,9 @@ class UserController extends Controller
                 }
 
                 // On envoi une 'flash' pour indiquer à l'utilisateur que l'entité est ajoutée
-                $this->get('session')->getFlashBag()->add( ($new ? 'success' : 'info') , 'Utilisateur ' . $user->getUsername() . ($new ? ' ajouté.' : ' mis à jour.') );
+                if($this->get('security.context')->isGranted('ROLE_USER')) {
+                    $this->get('session')->getFlashBag()->add( ($new ? 'success' : 'info') , 'Utilisateur ' . $user->getUsername() . ($new ? ' ajouté.' : ' mis à jour.') );
+                }
                 
                 $do = $request->request->get('do');
                 
