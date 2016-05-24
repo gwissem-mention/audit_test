@@ -1,7 +1,7 @@
 {# Cas Contenu #}
 {% if contenu is defined and contenu is not sameas(false) %}
     {% if contenu.realDomaines|length > 1 %}
-        <div class="col-md-12">
+        <div class="col-md-12" style="margin-top: 15px;">
             Cette publication est également présente sur :
             {% for domaine in contenu.realDomaines %}
                 {% if not domaineCurrent.equals(domaine) %}
@@ -14,7 +14,7 @@
 {# Cas objet #}
 {% else %}
     {% if objet.domaines|length > 1 %}
-        <div class="col-md-12">
+        <div class="col-md-12" style="margin-top: 15px;">
             Cette publication est également présente sur :
             {% for domaine in objet.domaines %}
                 {% if not domaineCurrent.equals(domaine) %}
