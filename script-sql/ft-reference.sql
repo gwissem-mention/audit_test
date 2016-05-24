@@ -42,3 +42,7 @@ DELETE FROM `core_menu_item` WHERE `itm_route` LIKE 'hopitalnumerique_glossaire_
 DELETE FROM `core_acl` WHERE `res_id` = 41;
 DELETE FROM `core_ressource` WHERE `core_ressource`.`res_id` = 41;
 #-->
+
+# Texte ambassadeur dans la recherche
+INSERT INTO `core_textedynamique_code` (`txt_id`, `txt_code`, `txt_texte`) VALUES (13, 'Module_recherche_ambassadeur', '');
+INSERT INTO `core_textedynamique_code_domaine` (`txt_id`, `dom_id`) VALUES (13, 1);

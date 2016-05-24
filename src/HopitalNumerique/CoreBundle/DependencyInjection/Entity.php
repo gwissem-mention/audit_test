@@ -4,6 +4,7 @@ namespace HopitalNumerique\CoreBundle\DependencyInjection;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\PersistentCollection;
 use HopitalNumerique\CommunautePratiqueBundle\Manager\GroupeManager as CommunautePratiqueGroupeManager;
+use HopitalNumerique\DomaineBundle\DependencyInjection\CurrentDomaine;
 use HopitalNumerique\DomaineBundle\Entity\Domaine;
 use HopitalNumerique\DomaineBundle\Manager\DomaineManager;
 use HopitalNumerique\ForumBundle\Manager\TopicManager;
@@ -12,6 +13,7 @@ use HopitalNumerique\ObjetBundle\Entity\Objet;
 use HopitalNumerique\ObjetBundle\Manager\ContenuManager;
 use HopitalNumerique\ObjetBundle\Manager\ObjetManager;
 use HopitalNumerique\RechercheParcoursBundle\Manager\RechercheParcoursManager;
+use Nodevo\TexteDynamiqueBundle\Manager\CodeManager as TexteDynamiqueCodeManager;
 use HopitalNumerique\UserBundle\Entity\User;
 use HopitalNumerique\UserBundle\Manager\UserManager;
 use Symfony\Component\Routing\RouterInterface;
@@ -78,6 +80,11 @@ class Entity
     private $router;
 
     /**
+     * @var \HopitalNumerique\DomaineBundle\DependencyInjection\CurrentDomaine CurrentDomaine
+     */
+    private $currentDomaine;
+
+    /**
      * @var \HopitalNumerique\UserBundle\Manager\UserManager UserManager
      */
     private $userManager;
@@ -112,13 +119,19 @@ class Entity
      */
     private $communautePratiqueGroupeManager;
 
+    /**
+     * @var \Nodevo\TexteDynamiqueBundle\Manager\CodeManager CodeManager
+     */
+    private $texteDynamiqueCodeManager;
+
 
     /**
      * Constructeur.
      */
-    public function __construct(RouterInterface $router, UserManager $userManager, ObjetManager $objetManager, ContenuManager $contenuManager, TopicManager $forumTopicManager, DomaineManager $domaineManager, RechercheParcoursManager $rechercheParcoursManager, CommunautePratiqueGroupeManager $communautePratiqueGroupeManager)
+    public function __construct(RouterInterface $router, CurrentDomaine $currentDomaine, UserManager $userManager, ObjetManager $objetManager, ContenuManager $contenuManager, TopicManager $forumTopicManager, DomaineManager $domaineManager, RechercheParcoursManager $rechercheParcoursManager, CommunautePratiqueGroupeManager $communautePratiqueGroupeManager, TexteDynamiqueCodeManager $texteDynamiqueCodeManager)
     {
         $this->router = $router;
+        $this->currentDomaine = $currentDomaine;
         $this->userManager = $userManager;
         $this->objetManager = $objetManager;
         $this->contenuManager = $contenuManager;
@@ -126,6 +139,7 @@ class Entity
         $this->domaineManager = $domaineManager;
         $this->rechercheParcoursManager = $rechercheParcoursManager;
         $this->communautePratiqueGroupeManager = $communautePratiqueGroupeManager;
+        $this->texteDynamiqueCodeManager = $texteDynamiqueCodeManager;
     }
 
 
@@ -475,6 +489,12 @@ class Entity
                 break;
             case self::ENTITY_TYPE_CONTENU:
                 $description = $entity->getContenu();
+                break;
+            case self::ENTITY_TYPE_AMBASSADEUR:
+                $texteDynamique = $this->texteDynamiqueCodeManager->findOneByCodeAndDomaine('Module_recherche_ambassadeur', $this->currentDomaine->get());
+                if (null !== $texteDynamique) {
+                    $description = $texteDynamique->getTexte();
+                }
                 break;
             case self::ENTITY_TYPE_RECHERCHE_PARCOURS:
                 $description = $entity->getDescription();

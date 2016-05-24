@@ -2,6 +2,7 @@
 
 namespace Nodevo\TexteDynamiqueBundle\Manager;
 
+use HopitalNumerique\DomaineBundle\Entity\Domaine;
 use Nodevo\ToolsBundle\Manager\Manager as BaseManager;
 use Doctrine\ORM\EntityManager;
 use HopitalNumerique\UserBundle\Manager\UserManager;
@@ -86,4 +87,11 @@ class CodeManager extends BaseManager
         return $codesOrdered;
     }
 
+    /**
+     * @return \Nodevo\TexteDynamiqueBundle\Entity\Code|null
+     */
+    public function findOneByCodeAndDomaine($code, Domaine $domaine)
+    {
+        return $this->getRepository()->findOneByCodeAndDomaine($code, $domaine);
+    }
 }
