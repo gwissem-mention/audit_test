@@ -38,14 +38,6 @@ $(document).ready(function() {
             $('#productions-associes .row').slideToggle();
         });
 
-        $('#productions_liees h2').click(function(){
-            $(this).toggleClass('open closed');
-            $('#productions_liees .results-bloc').slideToggle();
-        });
-        $('#parcours_guides h2').click(function(){
-            $(this).toggleClass('open closed');
-            $('#parcours_guides .results-bloc').slideToggle();
-        });
         $('#commentaires h2').click(function(){
             $(this).toggleClass('open closed');
             $('#commentaires .bloc-commentaire').slideToggle();
@@ -127,6 +119,23 @@ $(document).ready(function() {
             deleteNote();
         });
     }
+
+
+    // Sommaire : Toggle
+    $('.toggle-children').click(function() {
+        var contenuId = $(this).attr('data-contenu');
+        var childrenContainerIsOpen = !$(this).find('.fa').hasClass('fa-plus-circle');
+
+        if (childrenContainerIsOpen) {
+            $(this).find('.fa').removeClass('fa-minus-circle');
+            $(this).find('.fa').addClass('fa-plus-circle');
+        } else {
+            $(this).find('.fa').removeClass('fa-plus-circle');
+            $(this).find('.fa').addClass('fa-minus-circle');
+        }
+
+        $('ul[data-contenu="' + contenuId + '"]').slideToggle();
+    });
 
 });
 

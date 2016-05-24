@@ -33,24 +33,8 @@
     {% set canVote = (app.user is not null or note is null) %}
     
     {% import _self as mySelf %}
-    {% if objet.isInfraDoc %}
-        <div id="sommaire" class="hidden-pdf closed">
-            <div class="content" style="display:none">
-                {% if objet.synthese is not null %}
-                    <a class="resume downloadLink synthese fancybox.iframe" style="width:90px;text-align:left" href="{{path('hopital_numerique_publication_synthese',{'id':objet.id})}}" ><i class="common-sprite common-sprite-arrow"></i>Synthèse</a>
-                {% endif %}
-                <h3 class="violet">Sommaire</h3>
-                <ul>
-                    {% for one in contenus %}
-                        {{ mySelf.buildTree(one, objet) }}
-                    {% endfor %}
-                </ul>
-            </div>
-        </div>
-        <div id="publication" class="with-sommaire">
-    {% else %}
-        <div id="publication">
-    {% endif %}
+
+    <div id="publication">
         <div class="hidden-pdf">
             <div class="col-md-10">
                 <a class="btn btn-sm btn-default" href="{{path('hopital_numerique_recherche_homepage')}}" title="Retour à ma recherche"><i class="fa fa-reply"></i></a>
@@ -73,77 +57,76 @@
         {% if contenu is defined %}
             <div class="col-md-12">
                 <h1 class="violet"><a href="{{path('hopital_numerique_publication_publication_objet', {'id':objet.id,'alias':objet.alias})}}">{{objet.titre}}</a></h1>
-                {% if breadCrumbsArray is defined and breadCrumbsArray is not null %}
-
-                    <div class="titre-infradoc violet" style="margin-top: -15px;margin-bottom:5px;padding-top:5px;">
-                        {% for breadcrumb in breadCrumbsArray %}
-                            <i class="fa fa-share fa-flip-vertical" style="margin-right:5px;margin-left:{{breadcrumb.label|alignBreadcrumbs}}px;height:13px"></i><a href="{{path('hopital_numerique_publication_publication_contenu',{'id':objet.id, 'idc':breadcrumb.contenu.id, 'alias':objet.alias, 'aliasc':breadcrumb.contenu.alias})}}" style="color:#672F9E;{% if not loop.first %}font-size:16px;{% endif %}{% if loop.index > 2 %}font-size:14px;{% endif %}">{{breadcrumb.label}}</a>{% if loop.index != breadCrumbsArray|length %} <span style="margin-right:5px; margin-left:5px;"></span><br /> {% endif %}
-                        {% endfor %}
-                    </div>
-                    <div class="titre-infradoc-pdf violet" style="margin-top: -15px;margin-bottom:5px;padding-top:5px;">
-                        {% for breadcrumb in breadCrumbsArray %}
-                            <i class="fa fa-share fa-flip-vertical" style="margin-right:5px;margin-left:{{breadcrumb.label|alignBreadcrumbs}}px;height:13px;"></i><a href="{{path('hopital_numerique_publication_publication_contenu',{'id':objet.id, 'idc':breadcrumb.contenu.id, 'alias':objet.alias, 'aliasc':breadcrumb.contenu.alias})}}" style="color:#672F9E;">{{breadcrumb.label}}</a>{% if loop.index != breadCrumbsArray|length %} <span style="margin-right:5px; margin-left:5px;" ></span><br /> {% endif %}
-                        {% endfor %}
-                    </div>
-                {% endif %}
-
-                <div class="clearfix"></div>
-                <div class="mobile hidden-pdf">
-                    {% if objet.isInfraDoc %}
-                        <a class="label label-success pull-left" href="#" onclick="$('#sommaire').click();">Sommaire</a>
-                    {% endif %}
-                    {% if app.user %}
-                        <a class="label label-ambassadeur pull-right" href="#" onclick="$('#ambassadeurs').click();">Ambassadeurs</a>
-                        <a class="label label-requete pull-right" href="#" onclick="$('#mesrequetes').click();">Mes requetes</a>
-                    {% endif %}
-                    <div class="clearfix"></div>
-                </div>
             </div>
-
-            <input type="hidden" id="isContenu" name="isContenu" value="{{contenu is defined }}" />
-            <input type="hidden" id="objetId" style="display: none;" value="{% if contenu is defined %}{{contenu.id}}{% else %}{{objet.id}}{% endif %}">
-            <input type="hidden" id="notesAutorisees" style="display: none;" value="{{objet.notes}}">
-            {% if objet.notes %}
-                {# Ajout la moyenne de l'objet #}
-                <div class="col-md-12">
-                    <div id="bloc-notation-moyenne-objet" class="pull-left hidden-pdf">
-                        <input type="hidden" id="note-moyenne-url" value="{{path('hopital_numerique_publication_note_moyenne_objet' ) }}">
-                        <div class="bloc-star pull-left">
-                            <div class="rateit" id="note-moyenne-etoile" data-rateit-max="5" data-rateit-value="0" data-rateit-ispreset="true" data-rateit-readonly="true"></div>
+            <div class="clearfix"></div>
+            <div class="col-md-12">
+                {% include 'HopitalNumeriquePublicationBundle:Publication:Partials/sommaire.html.twig' %}
+                {% include 'HopitalNumeriquePublicationBundle:Publication:Partials/column_right.html.twig' %}
+                <div>
+                    {% if breadCrumbsArray is defined and breadCrumbsArray is not null %}
+                        <div class="titre-infradoc violet" style="margin-top: -10px;margin-bottom:5px;padding-top:5px;">
+                            {% for breadcrumb in breadCrumbsArray %}
+                                <i class="fa fa-share fa-flip-vertical" style="margin-right:5px;margin-left:{{breadcrumb.label|alignBreadcrumbs}}px;height:13px"></i><a href="{{path('hopital_numerique_publication_publication_contenu',{'id':objet.id, 'idc':breadcrumb.contenu.id, 'alias':objet.alias, 'aliasc':breadcrumb.contenu.alias})}}" style="color:#672F9E;{% if not loop.first %}font-size:16px;{% endif %}{% if loop.index > 2 %}font-size:14px;{% endif %}">{{breadcrumb.label}}</a>{% if loop.index != breadCrumbsArray|length %} <span style="margin-right:5px; margin-left:5px;"></span><br /> {% endif %}
+                            {% endfor %}
                         </div>
-                        <div class="pull-left" id="info-note-moyenne"></div>
+                        <div class="titre-infradoc-pdf violet" style="margin-top: -10px;margin-bottom:5px;padding-top:5px;">
+                            {% for breadcrumb in breadCrumbsArray %}
+                                <i class="fa fa-share fa-flip-vertical" style="margin-right:5px;margin-left:{{breadcrumb.label|alignBreadcrumbs}}px;height:13px;"></i><a href="{{path('hopital_numerique_publication_publication_contenu',{'id':objet.id, 'idc':breadcrumb.contenu.id, 'alias':objet.alias, 'aliasc':breadcrumb.contenu.alias})}}" style="color:#672F9E;">{{breadcrumb.label}}</a>{% if loop.index != breadCrumbsArray|length %} <span style="margin-right:5px; margin-left:5px;" ></span><br /> {% endif %}
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+
+                    <div class="mobile hidden-pdf">
+                        {% if objet.isInfraDoc %}
+                            <a class="label label-success pull-left" href="#" onclick="$('#sommaire').click();">Sommaire</a>
+                        {% endif %}
+                        {% if app.user %}
+                            <a class="label label-ambassadeur pull-right" href="#" onclick="$('#ambassadeurs').click();">Ambassadeurs</a>
+                            <a class="label label-requete pull-right" href="#" onclick="$('#mesrequetes').click();">Mes requetes</a>
+                        {% endif %}
+                        <div class="clearfix"></div>
                     </div>
-            {% else %}
-                <div class="col-md-12">
-            {% endif %}
 
-            <div style="float: left;" class="hidden-pdf">&nbsp;{{ contenu.nbVue }} vues</div>
+                    <input type="hidden" id="isContenu" name="isContenu" value="{{contenu is defined }}" />
+                    <input type="hidden" id="objetId" style="display: none;" value="{% if contenu is defined %}{{contenu.id}}{% else %}{{objet.id}}{% endif %}">
+                    <input type="hidden" id="notesAutorisees" style="display: none;" value="{{objet.notes}}">
 
-            {% if ActivateRsxSociaux and objet.btnSociaux %}
-                    <div class="reseaux-sociaux pull-right hidden-pdf">
-                        <div class="tweet pull-left">
-                            {% set currentPath = app.request.getUri %}
-                            <a href="https://twitter.com/share" class="twitter-share-button" data-count="none" data-url="{{currentPath|bitly}}" data-text="{{objet.titre}}" data-hashtags="HNUM" >Tweet</a>
-                            <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
-                        </div>
-                        <div class="scoopt-it pull-left">
-                            <a href="http://www.scoop.it" class="scoopit-button" scit-position="none" {#scit-url="{{currentPath|tinyUrl}}"#} >Scoop.it</a>
-                            <script type="text/javascript" src="http://www.scoop.it/button/scit.js"></script>
-                        </div>
-                        <div class="linkedin pull-left">
-                            <script src="//platform.linkedin.com/in.js" type="text/javascript"> lang: fr_FR</script>
-                            <script type="IN/Share"></script>
-                        </div>
+                    <div style="height: 30px;">
+                        {% if objet.notes %}
+                            {# Ajout la moyenne de l'objet #}
+                            <div id="bloc-notation-moyenne-objet" class="pull-left hidden-pdf">
+                                <input type="hidden" id="note-moyenne-url" value="{{path('hopital_numerique_publication_note_moyenne_objet' ) }}">
+                                <div class="bloc-star pull-left">
+                                    <div class="rateit" id="note-moyenne-etoile" data-rateit-max="5" data-rateit-value="0" data-rateit-ispreset="true" data-rateit-readonly="true"></div>
+                                </div>
+                                <div class="pull-left" id="info-note-moyenne"></div>
+                            </div>
+                        {% endif %}
+
+                        <div style="float: left;" class="hidden-pdf">&nbsp;{{ contenu.nbVue }} vues</div>
+
+                        {% if ActivateRsxSociaux and objet.btnSociaux %}
+                            <div class="reseaux-sociaux pull-right hidden-pdf">
+                                <div class="tweet pull-left">
+                                    {% set currentPath = app.request.getUri %}
+                                    <a href="https://twitter.com/share" class="twitter-share-button" data-count="none" data-url="{{currentPath|bitly}}" data-text="{{objet.titre}}" data-hashtags="HNUM" >Tweet</a>
+                                    <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+                                </div>
+                                <div class="scoopt-it pull-left">
+                                    <a href="http://www.scoop.it" class="scoopit-button" scit-position="none" {#scit-url="{{currentPath|tinyUrl}}"#} >Scoop.it</a>
+                                    <script type="text/javascript" src="http://www.scoop.it/button/scit.js"></script>
+                                </div>
+                                <div class="linkedin pull-left">
+                                    <script src="//platform.linkedin.com/in.js" type="text/javascript"> lang: fr_FR</script>
+                                    <script type="IN/Share"></script>
+                                </div>
+                            </div>
+                        {% endif %}
                     </div>
-                    <div class="clearfix"></div>
-            {% else %}
+                    <div id="publication-resume">
+                        {{contenu.contenu|glossaire_add(contenu)|parsePublication|raw}}
+                    </div>
                 </div>
-                <div class="clearfix"></div>
-            {% endif %}
-            <div class="col-md-12" id="publication-resume">
-
-                {{contenu.contenu|glossaire_add(contenu)|parsePublication|raw}}
-
             </div>
         {# Cas Objet #}
         {% else %}
@@ -161,54 +144,49 @@
                     <div class="clearfix"></div>
                 </div>
             </div>
+            <div class="col-md-12">
+                {% include 'HopitalNumeriquePublicationBundle:Publication:Partials/column_right.html.twig' %}
 
-            <input type="hidden" id="objetId" style="display: none;" value="{% if contenu is defined %}{{contenu.id}}{% else %}{{objet.id}}{% endif %}">
-            <input type="hidden" id="notesAutorisees" style="display: none;" value="{{objet.notes}}">
+                <input type="hidden" id="objetId" style="display: none;" value="{% if contenu is defined %}{{contenu.id}}{% else %}{{objet.id}}{% endif %}">
+                <input type="hidden" id="notesAutorisees" style="display: none;" value="{{objet.notes}}">
 
-            {# Affichage particulier pour le point-dur #}
-            {% if objet.notes %}
-                {# Ajout la moyenne de l'objet #}
-                <div class="col-md-12">
-                    <div id="bloc-notation-moyenne-objet" class="pull-left hidden-pdf">
-                        <input type="hidden" id="note-moyenne-url" value="{{path('hopital_numerique_publication_note_moyenne_objet' ) }}">
-                        <div class="bloc-star pull-left">
-                            <div class="rateit" id="note-moyenne-etoile" data-rateit-max="5" data-rateit-value="0" data-rateit-ispreset="true" data-rateit-readonly="true"></div>
+                <div style="height: 30px;">
+                    {# Affichage particulier pour le point-dur #}
+                    {% if objet.notes %}
+                        {# Ajout la moyenne de l'objet #}
+                        <div id="bloc-notation-moyenne-objet" class="pull-left hidden-pdf">
+                            <input type="hidden" id="note-moyenne-url" value="{{path('hopital_numerique_publication_note_moyenne_objet' ) }}">
+                            <div class="bloc-star pull-left">
+                                <div class="rateit" id="note-moyenne-etoile" data-rateit-max="5" data-rateit-value="0" data-rateit-ispreset="true" data-rateit-readonly="true"></div>
+                            </div>
+                            <div class="pull-left" id="info-note-moyenne"></div>
                         </div>
-                        <div class="pull-left" id="info-note-moyenne"></div>
+                    {% endif %}
 
-                    </div>
+                    <div style="float: left;" class="hidden-pdf">&nbsp;{{ objet.nbVue }} vues</div>
 
-            {% else %}
-                <div class="col-md-12">
-            {% endif %}
-
-            <div style="float: left;" class="hidden-pdf">&nbsp;{{ objet.nbVue }} vues</div>
-
-            {% if ActivateRsxSociaux and objet.btnSociaux %}
-                    <div class="reseaux-sociaux pull-right hidden-pdf">
-                        <div class="tweet pull-left">
-                            {% set currentPath = app.request.getUri %}
-                            <a href="https://twitter.com/share" class="twitter-share-button" data-count="none" data-url="{{currentPath|bitly}}" data-text="{{objet.titre}}" data-hashtags="HNUM" >Tweet</a>
-                            <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+                    {% if ActivateRsxSociaux and objet.btnSociaux %}
+                        <div class="reseaux-sociaux pull-right hidden-pdf">
+                            <div class="tweet pull-left">
+                                {% set currentPath = app.request.getUri %}
+                                <a href="https://twitter.com/share" class="twitter-share-button" data-count="none" data-url="{{currentPath|bitly}}" data-text="{{objet.titre}}" data-hashtags="HNUM" >Tweet</a>
+                                <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+                            </div>
+                            <div class="scoopt-it pull-left">
+                                <a href="http://www.scoop.it" class="scoopit-button" scit-position="none" {#scit-url="{{currentPath|tinyUrl}}"#} >Scoop.it</a>
+                                <script type="text/javascript" src="http://www.scoop.it/button/scit.js"></script>
+                            </div>
+                            <div class="linkedin pull-left">
+                                <script src="//platform.linkedin.com/in.js" type="text/javascript"> lang: fr_FR</script>
+                                <script type="IN/Share"></script>
+                            </div>
                         </div>
-                        <div class="scoopt-it pull-left">
-                            <a href="http://www.scoop.it" class="scoopit-button" scit-position="none" {#scit-url="{{currentPath|tinyUrl}}"#} >Scoop.it</a>
-                            <script type="text/javascript" src="http://www.scoop.it/button/scit.js"></script>
-                        </div>
-                        <div class="linkedin pull-left">
-                            <script src="//platform.linkedin.com/in.js" type="text/javascript"> lang: fr_FR</script>
-                            <script type="IN/Share"></script>
-                        </div>
-                    </div>
+                    {% endif %}
                 </div>
-                <div class="clearfix"></div>
-            {% else %}
-                </div>
-                <div class="clearfix"></div>
-            {% endif %}
 
-            <div class="col-md-12" id="publication-resume">
-                {{objet.resume|glossaire_add(objet)|parsePublication|raw}}
+                <div id="publication-resume">
+                    {{objet.resume|glossaire_add(objet)|parsePublication|raw}}
+                </div>
             </div>
         {% endif %}
 
@@ -296,8 +274,6 @@
         {% endif %}
 
         {% include 'HopitalNumeriquePublicationBundle:Publication:Partials/autres_domaines.html.twig' %}
-        {% include 'HopitalNumeriquePublicationBundle:Publication:Partials/productions_liees.html.twig' %}
-        {% include 'HopitalNumeriquePublicationBundle:Publication:Partials/parcours_guides.html.twig' %}
 
         {# Gestion des commantaires #}
         {% if objet.commentaires %}
@@ -348,24 +324,6 @@
         </div>
     {% endif %}
 {% endblock %}
-
-{% macro buildTree(one, objet) %}
-    {% import _self as mySelf %}
-    <li>
-        {% if one.hasContent %}
-            <a href="{{path('hopital_numerique_publication_publication_contenu', {'id':objet.id,'alias':objet.alias,'idc':one.id,'aliasc':one.alias})}}" >{{one.order ~ ' ' ~ one.titre}} </a>
-        {% else %}
-            <p>{{one.order ~ ' ' ~ one.titre}}</p>
-        {% endif %}
-        {% if one.childs %}
-            <ul>
-                {% for child in one.childs %}
-                    {{ mySelf.buildTree(child, objet) }}
-                {% endfor %}
-            </ul>
-        {% endif %}
-    </li>
-{% endmacro %}
 
 {% macro buildCarousel(objet, objets, contenu, emptyMessage, key, objetsOrder) %}
     <div id="{{key}}-slides" class="results carousel slide" data-ride="carousel" >

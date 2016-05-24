@@ -1,0 +1,37 @@
+{% import _self as mySelf %}
+{% if objet.isInfraDoc %}
+    <div id="sommaire">
+        <div class="content">
+            {% if objet.synthese is not null %}
+                <a class="resume downloadLink synthese fancybox.iframe" style="width:90px;text-align:left" href="{{path('hopital_numerique_publication_synthese',{'id':objet.id})}}" ><i class="common-sprite common-sprite-arrow"></i>Synthèse</a>
+            {% endif %}
+            <h3 class="violet">Sommaire</h3>
+            <ul>
+                {% for one in contenus %}
+                    {{ mySelf.buildTree(one, objet) }}
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+{% endif %}
+
+{% macro buildTree(contenu, objet) %}
+    {% import _self as mySelf %}
+    <li data-has-children="{{ contenu.childs ? '1' : '0' }}">
+        {% if contenu.childs %}
+            <a class="toggle-children" data-contenu="{{ contenu.id }}"><em class="fa fa-plus-circle"></em></a>
+        {% endif %}
+        {% if contenu.hasContent %}
+            <a href="{{path('hopital_numerique_publication_publication_contenu', {'id':objet.id,'alias':objet.alias,'idc':contenu.id,'aliasc':contenu.alias})}}" >{{contenu.order ~ ' ' ~ contenu.titre}} </a>
+        {% else %}
+            <span>{{contenu.order ~ ' ' ~ contenu.titre}}</span>
+        {% endif %}
+        {% if contenu.childs %}
+            <ul data-contenu="{{ contenu.id }}">
+                {% for child in contenu.childs %}
+                    {{ mySelf.buildTree(child, objet) }}
+                {% endfor %}
+            </ul>
+        {% endif %}
+    </li>
+{% endmacro %}
