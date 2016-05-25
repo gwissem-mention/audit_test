@@ -42,8 +42,10 @@
                 {% if date('now') >= groupe.dateDemarrage %} {# Groupes en cours #}
                     {% if (app.user.hasCommunautePratiqueGroupe(groupe)) %}
                         <a class="button" href="{{ path('hopitalnumerique_communautepratique_groupe_view', { groupe: groupe.id }) }}">Travailler dans ce groupe</a>
+                    {% elseif groupe.users|length >= groupe.nombreParticipantsMaximum %}
+                        <a class="button" onclick="Contact_Popup.display({{ groupe.animateurEmailsJson }}, '{{ path(app.request.get('_route')) }}', 'Je souhaite participer au groupe {{ groupe.titre|replace({ '\'':'\\\'', '"':'' }) }}');">Groupe complet contactez l'animateur</a>
                     {% else %}
-                        <a class="button" onclick="Contact_Popup.display({{ groupe.animateurEmailsJson }}, '{{ path(app.request.get('_route')) }}', 'Je souhaite participer au groupe {{ groupe.titre|replace({ '\'':'\\\'', '"':'' }) }}');" title="Contactez l’administrateur pour le rejoindre" >Démarré</a>
+                        <a class="button" href="{{ path('hopitalnumerique_communautepratique_groupe_inscrit', { 'groupe':groupe.id }) }}", 'Je souhaite participer au groupe {{ groupe.titre|replace({ '\'':'\\\'', '"':'' }) }}');" title="Contactez l’administrateur pour le rejoindre" >Démarré</a>
                     {% endif %}
                 {% elseif (app.user.hasCommunautePratiqueGroupe(groupe)) %}
                     <a class="button" href="{{ path('hopitalnumerique_communautepratique_groupe_view', { groupe: groupe.id }) }}">Vous êtes inscrit</a>
@@ -349,9 +351,9 @@
                      <div class="infobulle" >Participations aux groupes
                         <div class="groupeContent">
                             {% if groupesTermines|length == 0 and groupesNonDemarres|length == 0 and groupesEnCours|length == 0 %}
-                        
+
                                 <p>Aucune participation à un groupe pour l'instant.</p>
-                        
+
                             {% else %}
                                 <p><strong>{{ user.appellation }} a participé aux groupes thématiques suivants :</strong></p>
                                 {% if groupesTermines|length > 0 %}
@@ -365,7 +367,7 @@
                                         {%- endfor -%}
                                     </ul>
                                 {% endif %}
-                        
+
                                 {% if groupesNonDemarres|length > 0 or groupesEnCours|length > 0 %}
                                     <ul>
                                         {%- for groupe in groupesNonDemarres -%}
@@ -482,7 +484,7 @@
                                     {% endif %}
                                </h2>
                                     {{ publication.resume|parsePublication|striptags|truncate(400) }}
-                               
+
                                 {% if publication.resume|parsePublication|striptags|length > 399 %}
                                     <a href="{{ path('hopital_numerique_publication_publication_objet', { id:publication.id, alias:publication.alias }) }}">Lire la suite</a>
                                {% endif %}
