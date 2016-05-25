@@ -134,7 +134,7 @@ class SessionType extends AbstractType
                     'property'      => 'libelle',
                     'multiple'      => true,
                     'required'      => false,
-                    'group_by'      => 'parentName',
+                    // 'group_by'      => 'parentName',
                     'label'         => 'Connaissances métiers',
                     'empty_value'   => ' - ',
                     'attr'          => array('class' => 'connaissancesMetier'),
