@@ -27,15 +27,15 @@ class EvaluationFrontController extends Controller
     {
         //On récupère l'utilisateur qui est connecté
         $user = $this->get('security.context')->getToken()->getUser();
-        
+
         //Récupération du questionnaire
         $idQuestionnaireModuleEvaluation = $this->get('hopitalnumerique_questionnaire.manager.questionnaire')->getQuestionnaireId('module-evaluation');
         $questionnaire                   = $this->get('hopitalnumerique_questionnaire.manager.questionnaire')->findOneBy( array('id' => $idQuestionnaireModuleEvaluation) );
-        
+
         //Vérification si l'utilisateur connecté a participé à cette session, sinon il n'a pas accès au formulaire d'évaluation
         $aParticipe = false;
         $inscriptionsAcceptes = $session->getInscriptionsAccepte();
-        foreach ($inscriptionsAcceptes as $inscriptionAccepte) 
+        foreach ($inscriptionsAcceptes as $inscriptionAccepte)
         {
             if($user->getId() === $inscriptionAccepte->getUser()->getId()
                 && $inscriptionAccepte->getEtatParticipation()->getId() === 411)
@@ -58,20 +58,20 @@ class EvaluationFrontController extends Controller
                     'idUser'           => $user->getId(),
                     'idQuestionnaire'  => $questionnaire->getId(),
                     'paramId'          => $session->getId(),
-                    'readOnly'         => $readOnly 
+                    'readOnly'         => $readOnly
                 )
         ));
 
         $request = $this->get('request');
 
-        if ( $form->handleRequest($request)->isValid() ) 
+        if ( $form->handleRequest($request)->isValid() )
         {
             //Les champs file uploadés ne sont pas dans params, params ne recupère que les inputs
             $params = $request->get('nodevo_questionnaire_questionnaire');
-            
+
             //Récupération des réponses pour le questionnaire et utilisateur courant, triées par idQuestion en clé pour la session courante
             $reponses = $this->get('hopitalnumerique_questionnaire.manager.reponse')->reponsesByQuestionnaireByUser( $questionnaire->getId(), $user->getId(), true, null, $session->getId() );
-            
+
             //Gestion des réponses
             foreach ($params as $key => $param)
             {
@@ -87,7 +87,7 @@ class EvaluationFrontController extends Controller
                     continue;
 
                 //récupération de la réponse courante
-                $reponse = array_key_exists($idQuestion, $reponses) ? $reponses[$idQuestion] : null;    
+                $reponse = array_key_exists($idQuestion, $reponses) ? $reponses[$idQuestion] : null;
 
                 //Mode ajout
                 if(is_null($reponse))
@@ -106,7 +106,7 @@ class EvaluationFrontController extends Controller
 
                 //Test ajout ou edition
                 $new = is_null($reponse->getId());
-                
+
                 //Mise à jour de la réponse dans le tableau des réponses
                 $reponses[$idQuestion] = $reponse;
             }
@@ -116,7 +116,7 @@ class EvaluationFrontController extends Controller
             {
                 //Récupération des formations
                 $formations = $session->getModule()->getProductions();
-                
+
                 //Pour chaque production on ajout l'utilisateur à la liste des ambassadeurs qui la maitrise
                 foreach($formations as $formation)
                 {
@@ -154,7 +154,7 @@ class EvaluationFrontController extends Controller
 
                         $connaissance->setUser($user);
                         $connaissance->setConnaissance($this->get('hopitalnumerique_reference.manager.reference')->findBy(array('code' => 'CONNAISSANCES_AMBASSADEUR'), array('order' => 'ASC'))[1]);
-                        $connaissance->setDomaine( $connaissanceSession );   
+                        $connaissance->setDomaine( $connaissanceSession );
                     }
                     else
                     {
@@ -168,9 +168,35 @@ class EvaluationFrontController extends Controller
                 {
                     $this->get('hopitalnumerique_user.manager.connaissance_ambassadeur_si')->save($connaissances);
                 }
-            }
 
-            //Modifications de l'inscription: modification du statut "etatEvaluer"  
+                //Connaissances métiers
+
+                //Pour chaque connaissance métier associé à la session, on les associe à l'ambassadeur qui vient de remplir le formulaire d'évaluation
+                $connaissancesMetierSession = $session->getConnaissancesMetier();
+                $connaissancesMetiers = array();
+
+                foreach ($connaissancesMetierSession as $connaissanceMetierSession) {
+                    $connaissanceMetier = $this->get('hopitalnumerique_user.manager.connaissance_ambassadeur')->findOneBy(array('user' => $user, 'domaine' => $connaissanceMetierSession));
+                    //Si il a deja cette connaissance, on ne le rajoute pas
+                    if (!is_null($connaissanceMetier) && !is_null($connaissanceMetier->getConnaissance())) {
+                        continue;
+                    } elseif (is_null($connaissanceMetier)) {
+                        $connaissanceMetier = $this->get('hopitalnumerique_user.manager.connaissance_ambassadeur')->createEmpty();
+
+                        $connaissanceMetier->setUser($user);
+                        $connaissanceMetier->setConnaissance($this->get('hopitalnumerique_reference.manager.reference')->findBy(array('code' => 'CONNAISSANCES_AMBASSADEUR'), array('order' => 'ASC'))[1]);
+                        $connaissanceMetier->setDomaine($connaissanceMetierSession);
+                    } else {
+                        $connaissanceMetier->setConnaissance($this->get('hopitalnumerique_reference.manager.reference')->findBy(array('code' => 'CONNAISSANCES_AMBASSADEUR'), array('order' => 'ASC'))[1]);
+                    }
+
+                    $connaissancesMetiers[] = $connaissanceMetier;
+                }
+                if (!empty($connaissancesMetiers)) {
+                    $this->get('hopitalnumerique_user.manager.connaissance_ambassadeur')->save($connaissancesMetiers);
+                }
+            }
+            //Modifications de l'inscription: modification du statut "etatEvaluer"
             $inscription = $this->get('hopitalnumerique_module.manager.inscription')->findOneBy( array('user' => $user, 'session' => $session) );
             $inscription->setEtatEvaluation( $this->get('hopitalnumerique_reference.manager.reference')->findOneBy(array('id' => 29)));
 
@@ -179,7 +205,7 @@ class EvaluationFrontController extends Controller
             if( $session->getDateSession() < new \DateTime() )
             {
                 $sessionAArchiver = true;
-                foreach ($session->getInscriptions() as $inscription) 
+                foreach ($session->getInscriptions() as $inscription)
                 {
                     if( 407 === $inscription->getEtatInscription()->getId()
                         && 411 === $inscription->getEtatParticipation()->getId() )
@@ -202,13 +228,13 @@ class EvaluationFrontController extends Controller
             $this->get('hopitalnumerique_module.manager.inscription')->save( $inscription );
 
             $this->get('session')->getFlashBag()->add( ($new ? 'success' : 'info') , 'Votre évaluation de la session ' . $session->getModule()->getTitre() . ' a bien été prise en compte, nous vous remercions.' );
-                            
+
             //Mise à jour/création des réponses
             $this->get('hopitalnumerique_questionnaire.manager.reponse')->save( $reponses );
 
             return $this->redirect($this->generateUrl( 'hopitalnumerique_module_evaluation_view_front', array('id' => $session->getId()) ));
         }
-    
+
         return $this->render( 'HopitalNumeriqueModuleBundle:Front/Evaluation:form.html.twig' , array(
                 'form'              => $form->createView(),
                 'questionnaire'     => $questionnaire,

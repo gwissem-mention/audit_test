@@ -42,12 +42,13 @@
                 {{ form_start(form) }}
                     {# Application des librairies JS sur le form : #}
                     {{ form_javascript(form) }}
-                    
+
                     {# Formulaire : #}
                     {{ form_row(form.titre) }}
                     {{ form_row(form.domaines) }}
                     {{ form_row(form.productions) }}
                     {{ form_row(form.connaissances) }}
+                    {{ form_row(form.connaissancesMetier) }}
                     {{ form_row(form.duree) }}
                     {{ form_row(form.horairesType) }}
                     {{ form_row(form.lieu) }}

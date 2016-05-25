@@ -56,7 +56,7 @@
 	                {{ form_start(form) }}
 	                    {# Application des librairies JS sur le form : #}
 	                    {{ form_javascript(form) }}
-	                    
+
 				        <div class="form-group">
 					        <div class="titre row">
 					            <div class="col-md-3 text-right">
@@ -81,6 +81,7 @@
                         {{ form_row(form.textMailRappel) }}
                         {{ form_row(form.restrictionAcces) }}
 	                    {{ form_row(form.connaissances) }}
+						{{ form_row(form.connaissancesMetier) }}
 	                    {# Gestion de l'upload #}
 	                    <div class="form-group">
 	                        {{ form_label(form.file) }}
@@ -93,7 +94,7 @@
 	                            <div class="inputUpload" style="display:{{visibility}}">
 	                                {{ form_widget(form.file) }}
 	                            </div>
-	
+
 	                            {% if session.getAbsolutePath() is not null %}
 	                                <a class="uploadedFile" href="{{path('hopitalnumerique_module_module_session_dowload', {'id': session.id })}}">{{session.path}}</a>
 	                                <div class="deleteUploadedFile btn btn-danger btn-xs pull-right" ><i class="fa fa-trash-o"></i></div>
