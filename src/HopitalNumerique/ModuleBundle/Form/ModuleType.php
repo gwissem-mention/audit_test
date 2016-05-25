@@ -70,9 +70,7 @@ class ModuleType extends AbstractType
                         return $er->createQueryBuilder('ref')
                             ->where('ref.code = :etat')
                             ->setParameter('etat', 'CONNAISSANCES_AMBASSADEUR_SI')
-                            ->leftJoin('ref.parents', 'parent')
-                            ->orderBy('parent.libelle', 'ASC')
-                            ->addOrderBy('ref.order', 'ASC')
+                            ->orderBy('ref.order', 'ASC')
                         ;
                     }
             ))
@@ -89,9 +87,7 @@ class ModuleType extends AbstractType
                         return $er->createQueryBuilder('ref')
                             ->where('ref.code = :etat')
                             ->setParameter('etat', 'PERIMETRE_FONCTIONNEL_DOMAINES_FONCTIONNELS')
-                            ->leftJoin('ref.parent', 'parent')
-                            ->orderBy('parent.libelle', 'ASC')
-                            ->addOrderBy('ref.order', 'ASC');
+                            ->orderBy('ref.order', 'ASC');
                     }
             ))
             ->add('domaines', 'entity', array(
