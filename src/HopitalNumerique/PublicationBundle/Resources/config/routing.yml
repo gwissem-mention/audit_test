@@ -62,7 +62,7 @@ hopitalnumerique_objet_objet_feed_rss:
 hopital_numerique_publication_commentaire_delete:
     pattern:  /publication/commentaire/delete/{id}.{_format}
     defaults: { _controller: "HopitalNumeriqueObjetBundle:Commentaire:delete", _format: json }
-    requirements: 
+    requirements:
         id: \d+
         _method: POST|DELETE
 #--Ajout
@@ -99,3 +99,9 @@ hopital_numerique_publication_note_delete:
     defaults: { _controller: "HopitalNumeriqueObjetBundle:Note:deleteNote", _format: json }
     requirements:
         _method: POST
+#--Export
+hopital_numerique_publication_front_export:
+    pattern:  /publication/export/{id}/{type}
+    defaults: { _controller: "HopitalNumeriqueObjetBundle:Export:export", id:1 }
+    requirements:
+        id: \d+
