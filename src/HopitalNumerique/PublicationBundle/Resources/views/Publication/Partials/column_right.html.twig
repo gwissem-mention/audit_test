@@ -1,0 +1,6 @@
+{% if productionsLiees|length > 0 or parcoursGuides|length > 0 %}
+    <div id="column-right">
+        {% include 'HopitalNumeriquePublicationBundle:Publication:Partials/productions_liees.html.twig' %}
+        {% include 'HopitalNumeriquePublicationBundle:Publication:Partials/parcours_guides.html.twig' %}
+    </div>
+{% endif %}
