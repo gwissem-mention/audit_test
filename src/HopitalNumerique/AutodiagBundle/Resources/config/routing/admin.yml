@@ -2,6 +2,10 @@ hopitalnumerique_autodiag_model_list:
     path:     /autodiag
     defaults: { _controller: HopitalNumeriqueAutodiagBundle:Model:list }
 
+hopitalnumerique_autodiag_model_create:
+    path:     /autodiag/create
+    defaults: { _controller: HopitalNumeriqueAutodiagBundle:Model:create }
+
 hopitalnumerique_autodiag_model_edit:
     path:     /autodiag/edit/{id}
     defaults: { _controller: HopitalNumeriqueAutodiagBundle:Model:edit }

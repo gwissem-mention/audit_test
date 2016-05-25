@@ -4,7 +4,6 @@
     {{ parent() }}
     {% stylesheets output="compiled/hopitalnumerique-autodiag-chapitre-index.css" filter="cssrewrite, ?yui_css"
         'bundles/nodevoadmin/css/jquery.nestable.css'
-        'bundles/hopitalnumeriqueautodiag/css/style.css'
     %}
         <link rel="stylesheet" href="{{ asset_url }}" />
     {% endstylesheets %}
@@ -12,10 +11,9 @@
 
 {% block javascripts %}
     {{parent()}}
-    {% javascripts output="compiled/hopitalnumerique-autodiag-chapitre-index.js" 
+    {% javascripts output="compiled/hopitalnumerique-autodiag-chapitre-index.js"
         "@nestable_js"
         "@json_js"
-        'bundles/hopitalnumeriqueautodiag/js/script.js'
     %}
         <script type="text/javascript" src="{{ asset_url }}"></script>
     {% endjavascripts %}
@@ -67,7 +65,7 @@
                     <div class="well well-lg" id="questions">
                         <span class="selectChapitre">Vous devez sélectionner un chapitre avant de visualiser les questions.</span>
                         <div class="results">
-                            
+
                         </div>
                         <input type="hidden" class="chapitre" value="0" />
                     </div>
@@ -99,7 +97,7 @@
             <a href="{{path('hopitalnumerique_autodiag_question_add', {'id':chapitre.id})}}" class="fancy pull-right dd3-plus fancybox.ajax" onclick="selectChapter({{chapitre.id}}, '{{path('hopitalnumerique_autodiag_question', {'id':chapitre.id})}}')" ><i class="fa fa-plus"></i></a>
             <!--<a href="{{path('hopitalnumerique_autodiag_reference_chapitre',{'id':chapitre.id})}}" class="fancy pull-right dd3-cog fancybox.ajax"><i class="fa fa-cog"></i></a>-->
         </div>
-        
+
         {% if chapitre.childs %}
             <ol class="dd-list">
                 {% import _self as mySelf %}

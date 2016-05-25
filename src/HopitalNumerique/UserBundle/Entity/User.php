@@ -1324,7 +1324,6 @@ class User extends BaseUser
         return $this->etablissementRattachementSante;
     }
 
-<<<<<<< HEAD
     /**
      * Get etablissementRattachementSanteString
      *
@@ -1337,8 +1336,6 @@ class User extends BaseUser
         }
     }
 
-=======
->>>>>>> Initialisation refonte autodiag
     /**
      * Set etablissementRattachementSante
      *

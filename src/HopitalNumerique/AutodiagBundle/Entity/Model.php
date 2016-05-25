@@ -2,8 +2,11 @@
 
 namespace HopitalNumerique\AutodiagBundle\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\Mapping as ORM;
+use HopitalNumerique\AutodiagBundle\Entity\Model\Preset\Attribute;
 use HopitalNumerique\DomaineBundle\Entity\Domaine;
 use HopitalNumerique\QuestionnaireBundle\Entity\Questionnaire;
 
@@ -78,6 +81,7 @@ class Model
      */
     private $questionnaire;
 
+    public $criticite;
 
     /**
      * Get id

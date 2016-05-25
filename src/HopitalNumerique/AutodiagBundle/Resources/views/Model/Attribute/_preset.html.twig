@@ -1,0 +1,14 @@
+<div class="preset">
+    <div class="preset-title">
+        {{ preset.vars.data.label }}
+    </div>
+    {% if preset.vars.data.childs|length > 0 %}
+        <div class="preset-childs">
+            {% for subattribute in attribute.childs %}
+                {% include 'HopitalNumeriqueAutodiagBundle:Model/Attribute:_preset.html.twig' with {'preset': subattribute} %}
+            {% endfor %}
+        </div>
+    {% else %}
+        {{ form_widget(preset.options) }}
+    {% endif %}
+</div>

@@ -1,18 +1,20 @@
 <?php
+namespace HopitalNumerique\AutodiagBundle\Form\Type\Domain;
 
-namespace HopitalNumerique\AutodiagBundle\Form\Type;
-
+use HopitalNumerique\AutodiagBundle\Form\Type\Model\PresetType;
+use HopitalNumerique\AutodiagBundle\Form\Type\ModelType;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
 /**
- * ModelType
+ * ModelAdminUpdateType represent the admin form for create and update Model
  *
- * @package HopitalNumerique\AutodiagBundle\Form\Type
+ * @package HopitalNumerique\AutodiagBundle\Form\Type\Domain
  * @author Emmanuel Da Fonseca <edafonseca@nodevo.com>
  */
-class ModelType extends AbstractType
+class ModelAdminUpdateType extends AbstractType
 {
     /**
      * @param FormBuilderInterface $builder
@@ -21,12 +23,10 @@ class ModelType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('title')
-            ->add('instructions')
-            ->add('partialResultsAuthorized')
-            ->add('synthesisAuthorized')
-            ->add('domaines')
-            ->add('questionnaire')
+            ->add('model', ModelType::class)
+            ->add('presets', CollectionType::class, [
+                'entry_type' => PresetType::class,
+            ])
         ;
     }
 
@@ -36,7 +36,7 @@ class ModelType extends AbstractType
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
         $resolver->setDefaults(array(
-            'data_class' => 'HopitalNumerique\AutodiagBundle\Entity\Model',
+            'data_class' => 'HopitalNumerique\AutodiagBundle\Domain\ModelAdminUpdate',
             'label_format' => 'ad.model.%name%'
         ));
     }

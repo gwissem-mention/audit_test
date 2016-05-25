@@ -51,7 +51,7 @@ class Attribute
      * Attribute type
      *
      * @var int
-     * @ORM\Column(type="smallint")
+     * @ORM\Column(type="string", length=50)
      */
     private $type;
 

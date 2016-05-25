@@ -1,4 +1,9 @@
+imports:
+    - { resource: attribute/builder.yml }
+
 services:
-#    hopital_numerique_autodiag.example:
-#        class: HopitalNumerique\AutodiagBundle\Example
-#        arguments: [@service_id, "plain_value", %parameter%]
+    autodiag.form.model_preset:
+        class: HopitalNumerique\AutodiagBundle\Form\Type\Model\PresetType
+        arguments: ['@autodiag.attribute_builder_provider']
+        tags:
+            - { name: form.type }
