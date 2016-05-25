@@ -217,12 +217,12 @@
             <div class="col-md-4 hidden-pdf">
                 <div class="wrapper">
                     {% if objet.getAbsolutePath(1) is not null %}
-                        <a class="pull-left downloadLink readmore" href="/{{objet.getWebPath(1)}}" target="_blank" onclick="ga('send', 'event', 'Traking', 'Téléchargement', '{{objet.getWebPath(1)}}');"><i class="common-sprite common-sprite-arrow"></i><span class="violet">Télécharger</span> la production complète ( {{objet.getTypeMime(1)|upper}} ) <i class="fa fa-download violet"></i></a>
+                        <a class="pull-left downloadLink" href="{{path('hopital_numerique_publication_front_export', {'id':objet.id, 'type': '1'})}}" <i class="common-sprite common-sprite-arrow"></i><span class="violet">Télécharger</span> la production complète ( {{objet.getTypeMime(1)|upper}} ) <i class="fa fa-download violet"></i></a>
                     {% endif %}
 
                     <div class="clearfix"></div>
                     {% if objet.getAbsolutePath(2) is not null %}
-                        <a class="pull-left downloadLink readmore" href="/{{objet.getWebPath(2)}}" target="_blank" onclick="ga('send', 'event', 'Traking', 'Téléchargement', '{{objet.getWebPath(2)}}');"><i class="common-sprite common-sprite-arrow"></i><span class="violet">Télécharger</span> la production complète ( {{objet.getTypeMime(2)|upper}} )<i class="fa fa-download violet"></i></a>
+                        <a class="pull-left downloadLink" href="{{path('hopital_numerique_publication_front_export', {'id':objet.id, 'type': '2'})}}" <i class="common-sprite common-sprite-arrow"></i><span class="violet">Télécharger</span> la production complète ( {{objet.getTypeMime(2)|upper}} )<i class="fa fa-download violet"></i></a>
                     {% endif %}
 
                     <div class="clearfix"></div>

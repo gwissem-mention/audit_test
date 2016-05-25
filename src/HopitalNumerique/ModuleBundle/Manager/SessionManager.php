@@ -337,9 +337,8 @@ class SessionManager extends BaseManager
     public function getSessionsRisquees()
     {
         $dans3mois = new \DateTime();
-        $dans3mois->add(new \DateInterval('P12M'));
-
-        return $this->getRepository()->getSessionsRisquees(2, $dans3mois)->getQuery()->getResult();
+        $dans3mois->add(new \DateInterval('P3M'));
+        return $this->getRepository()->getSessionsRisquees(3, $dans3mois)->getQuery()->getResult();
     }
 
     /**

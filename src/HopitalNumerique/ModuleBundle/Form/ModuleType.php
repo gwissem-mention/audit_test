@@ -11,7 +11,7 @@ use HopitalNumerique\ReferenceBundle\Manager\ReferenceManager;
 use HopitalNumerique\UserBundle\Manager\UserManager;
 
 /**
- * 
+ *
  * @author Gaetan MELCHILSEN
  * @copyright Nodevo
  */
@@ -23,7 +23,7 @@ class ModuleType extends AbstractType
      * @var \HopitalNumerique\ReferenceBundle\Manager\ReferenceManager
      */
     private $referenceManager;
-    
+
     public function __construct($manager, $validator, UserManager $userManager, ReferenceManager $referenceManager)
     {
         $this->_constraints = $manager->getConstraints( $validator );
@@ -31,7 +31,7 @@ class ModuleType extends AbstractType
         $this->_userManager = $userManager;
         $this->referenceManager = $referenceManager;
     }
-    
+
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $connectedUser = $this->_userManager->getUserConnected();
@@ -63,10 +63,10 @@ class ModuleType extends AbstractType
                     'multiple'      => true,
                     'required'      => false,
                     //'group_by'      => 'parentName',
-                    'label'         => 'Connaissances concernées',
+                    'label'         => 'Connaissances SI',
                     'empty_value'   => ' - ',
                     'attr'          => array('class' => 'connaissances'),
-                    'query_builder' => function(EntityRepository $er) {
+                    'query_builder' => function (EntityRepository $er) {
                         return $er->createQueryBuilder('ref')
                             ->where('ref.code = :etat')
                             ->setParameter('etat', 'CONNAISSANCES_AMBASSADEUR_SI')
@@ -74,6 +74,24 @@ class ModuleType extends AbstractType
                             ->orderBy('parent.libelle', 'ASC')
                             ->addOrderBy('ref.order', 'ASC')
                         ;
+                    }
+            ))
+            ->add('connaissancesMetier', 'genemu_jqueryselect2_entity', array(
+                    'class'         => 'HopitalNumeriqueReferenceBundle:Reference',
+                    'property'      => 'libelle',
+                    'multiple'      => true,
+                    'required'      => false,
+                    'group_by'      => 'parentName',
+                    'label'         => 'Connaissances métiers',
+                    'empty_value'   => ' - ',
+                    'attr'          => array('class' => 'connaissancesMetier'),
+                    'query_builder' => function (EntityRepository $er) {
+                        return $er->createQueryBuilder('ref')
+                            ->where('ref.code = :etat')
+                            ->setParameter('etat', 'PERIMETRE_FONCTIONNEL_DOMAINES_FONCTIONNELS')
+                            ->leftJoin('ref.parent', 'parent')
+                            ->orderBy('parent.libelle', 'ASC')
+                            ->addOrderBy('ref.order', 'ASC');
                     }
             ))
             ->add('domaines', 'entity', array(
@@ -119,7 +137,7 @@ class ModuleType extends AbstractType
                     ),
             ))
             ->add('nombrePlaceDisponible', 'integer', array(
-                    'required'   => false, 
+                    'required'   => false,
                     'label'      => 'Nombre de places disponibles',
                     'attr'        => array(
                             'class' => $this->_constraints['nombrePlaceDisponible']['class']
@@ -157,32 +175,32 @@ class ModuleType extends AbstractType
             ))
 
             ->add('mailAccuseInscription', 'checkbox', array(
-                'required'   => false, 
+                'required'   => false,
                 'label'      => 'Envoyer le mail d\'accusé de réception d\'inscription ?'
             ))
 
             ->add('mailConfirmationInscription', 'checkbox', array(
-                'required'   => false, 
+                'required'   => false,
                 'label'      => 'Envoyer le mail de confirmation d\'inscription ?'
             ))
 
             ->add('mailRefusInscription', 'checkbox', array(
-                'required'   => false, 
+                'required'   => false,
                 'label'      => 'Envoyer le mail de refus ?'
             ))
 
             ->add('mailRappelEvalution', 'checkbox', array(
-                'required'   => false, 
+                'required'   => false,
                 'label'      => 'Envoyer le mail de rappel d\'évalution ?'
             ))
 
             ->add('mailAlerteEvaluation', 'checkbox', array(
-                'required'   => false, 
+                'required'   => false,
                 'label'      => 'Envoyer le mail d\'alerte pour l\'évaluation ?'
             ))
 
             ->add('file', 'file', array(
-                    'required' => false, 
+                    'required' => false,
                     'label'    => 'Pièce-jointe'
             ))
             ->add('path', 'hidden')
