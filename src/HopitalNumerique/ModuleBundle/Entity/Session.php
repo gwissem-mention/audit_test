@@ -163,6 +163,20 @@ class Session
     protected $connaissances;
 
     /**
+     * @var integer
+     *
+     * @ORM\ManyToMany(targetEntity="\HopitalNumerique\ReferenceBundle\Entity\Reference")
+     * @ORM\JoinTable(name="hn_module_session_connaissances_metier",
+     *      joinColumns={ @ORM\JoinColumn(name="ses_id", referencedColumnName="ses_id")},
+     *      inverseJoinColumns={ @ORM\JoinColumn(name="ref_id", referencedColumnName="ref_id")}
+     * )
+     * @ORM\OrderBy({"order" = "ASC"})
+     *
+     * @GRID\Column(field="connaissancesMetier.libelle")
+     */
+    protected $connaissancesMetier;
+
+    /**
      * @Assert\File(
      *     maxSize = "10M",
      *     mimeTypes = {"application/pdf", "application/x-pdf"},
@@ -208,6 +222,7 @@ class Session
         $this->archiver                 = false;
         $this->dateOuvertureInscription = new \DateTime();
         $this->connaissances            = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->connaissancesMetier      = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
@@ -798,57 +813,53 @@ class Session
     public function getDefaultValueFromModule()
     {
         //Si il y a bien un module renseigné
-        if(!is_null($this->getModule()))
-        {
+        if (!is_null($this->getModule())) {
             $module = $this->getModule();
 
             //Note GME : merci php 5.3 pour les variables temporaires
             //Durée
             $duree = $module->getDuree();
-            if(!is_null($duree))
-            {
+            if (!is_null($duree)) {
                 $this->setDuree($duree);
             }
             //Horaires
             $horaire = $module->getHorairesType();
-            if(!empty($horaire))
-            {
+            if (!empty($horaire)) {
                 $this->setHoraires($horaire);
             }
             //Lieu
             $lieu = $module->getLieu();
-            if(!empty($lieu))
-            {
+            if (!empty($lieu)) {
                 $this->setLieu($lieu);
             }
             //Description
             $description = $module->getDescription();
-            if(!empty($description))
-            {
+            if (!empty($description)) {
                 $this->setDescription($description);
             }
             //Nombre de places disponibles
             $nbPlaceDispo = $module->getNombrePlaceDisponible();
-            if(!empty($nbPlaceDispo))
-            {
+            if (!empty($nbPlaceDispo)) {
                 $this->setNombrePlaceDisponible($nbPlaceDispo);
             }
             //Formateur
             $formateur = $module->getFormateur();
-            if(!is_null($formateur))
-            {
+            if (!is_null($formateur)) {
                 $this->setFormateur($formateur);
             }
             //Connaissances
             $connaissances = $module->getConnaissances();
-            if(!is_null($connaissances))
-            {
+            if (!is_null($connaissances)) {
                 $this->setConnaissances($connaissances);
+            }
+            //Connaissances métier
+            $connaissancesMetier = $module->getConnaissancesMetier();
+            if (!is_null($connaissancesMetier)) {
+                $this->setConnaissancesMetier($connaissancesMetier);
             }
             //Texte mail defaut
             $textMailRappel = $module->getTextMailRappel();
-            if(!empty($textMailRappel))
-            {
+            if (!empty($textMailRappel)) {
                 $this->setTextMailRappel($textMailRappel);
             }
         }
@@ -940,5 +951,66 @@ class Session
         }
 
         return $connaissancesOrdered;
+    }
+
+    // Connaissances Métiers
+    /**
+     * Add connaissancesMetier
+     *
+     * @param \HopitalNumerique\ReferenceBundle\Entity\Reference $connaissancesMetier
+     * @return Session
+     */
+    public function addConnaissanceMetier(\HopitalNumerique\ReferenceBundle\Entity\Reference $connaissancesMetier)
+    {
+        $this->connaissancesMetier[] = $connaissancesMetier;
+
+        return $this;
+    }
+
+    /**
+     * Remove connaissancesMetier
+     *
+     * @param \HopitalNumerique\ReferenceBundle\Entity\Reference $connaissancesMetier
+     */
+    public function removeConnaissanceMetier(\HopitalNumerique\ReferenceBundle\Entity\Reference $connaissancesMetier)
+    {
+        $this->connaissancesMetier->removeElement($connaissancesMetier);
+    }
+
+    /**
+     * Get connaissancesMetier
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getConnaissancesMetier()
+    {
+        return $this->connaissancesMetier;
+    }
+
+    /**
+     * Set connaissancesMetier
+     *
+     * @return Session
+     */
+    public function setConnaissancesMetier($connaissancesMetier)
+    {
+        $this->connaissancesMetier = $connaissancesMetier;
+
+        return $this;
+    }
+
+    public function getConnaissancesMetierByParent()
+    {
+        $connaissancesMetier = $this->connaissancesMetier;
+        $connaissancesMetierOrdered = array();
+
+        foreach ($connaissancesMetier as $connaissanceMetier) {
+            if (!array_key_exists($connaissanceMetier->getParent()->getId(), $connaissancesMetierOrdered)) {
+                $connaissancesMetierOrdered[$connaissanceMetier->getParent()->getId()] = array();
+            }
+
+            $connaissancesMetierOrdered[$connaissanceMetier->getParent()->getId()][] = $connaissanceMetier;
+        }
+        return $connaissancesMetierOrdered;
     }
 }

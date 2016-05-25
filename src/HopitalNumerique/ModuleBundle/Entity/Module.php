@@ -16,7 +16,7 @@ use APY\DataGridBundle\Grid\Mapping as GRID;
  * @ORM\Table(name="hn_module")
  * @ORM\Entity(repositoryClass="HopitalNumerique\ModuleBundle\Repository\ModuleRepository")
  * @ORM\HasLifecycleCallbacks
- * 
+ *
  * @author Gaetan MELCHILSEN
  * @copyright Nodevo
  */
@@ -33,9 +33,9 @@ class Module
 
     /**
      * Liste des sessions liées au module
-     * 
+     *
      * @var /HopitalNumerique/ModuleBundle/Entity/Session
-     * 
+     *
      * @ORM\OneToMany(targetEntity="Session", mappedBy="module", cascade={"persist", "remove" })
      * @ORM\OrderBy({"dateSession" = "ASC"})
      */
@@ -47,7 +47,7 @@ class Module
      * @ORM\Column(name="mod_date_derniere_maj", type="datetime")
      */
     protected $dateLastUpdate;
-    
+
     /**
      * @var string
      * @Assert\NotBlank(message="Le titre ne peut pas être vide.")
@@ -61,38 +61,52 @@ class Module
      * @ORM\Column(name="mod_titre", type="string", length=255, options = {"comment" = "Titre du module"})
      */
     protected $titre;
-    
+
     /**
      * @var integer
-     * 
+     *
      * @Assert\NotBlank(message="Les productions ne peuvent pas être vides.")
      * @Nodevo\Javascript(class="validate[required]")
-     * 
+     *
      * @ORM\ManyToMany(targetEntity="\HopitalNumerique\ObjetBundle\Entity\Objet", inversedBy="modules")
      * @ORM\JoinTable(name="hn_module_objet",
      *      joinColumns={ @ORM\JoinColumn(name="mod_id", referencedColumnName="mod_id")},
      *      inverseJoinColumns={ @ORM\JoinColumn(name="obj_id", referencedColumnName="obj_id")}
      * )
      * @ORM\OrderBy({"titre" = "ASC"})
-     * 
+     *
      * @GRID\Column(field="productions.titre")
      */
     protected $productions;
-    
+
     /**
      * @var integer
-     * 
+     *
      * @ORM\ManyToMany(targetEntity="\HopitalNumerique\ReferenceBundle\Entity\Reference")
      * @ORM\JoinTable(name="hn_module_connaissances",
      *      joinColumns={ @ORM\JoinColumn(name="mod_id", referencedColumnName="mod_id")},
      *      inverseJoinColumns={ @ORM\JoinColumn(name="ref_id", referencedColumnName="ref_id")}
      * )
      * @ORM\OrderBy({"order" = "ASC"})
-     * 
+     *
      * @GRID\Column(field="connaissances.libelle")
      */
     protected $connaissances;
-    
+
+    /**
+     * @var integer
+     *
+     * @ORM\ManyToMany(targetEntity="\HopitalNumerique\ReferenceBundle\Entity\Reference")
+     * @ORM\JoinTable(name="hn_module_connaissances_metier",
+     *      joinColumns={ @ORM\JoinColumn(name="mod_id", referencedColumnName="mod_id")},
+     *      inverseJoinColumns={ @ORM\JoinColumn(name="ref_id", referencedColumnName="ref_id")}
+     * )
+     * @ORM\OrderBy({"order" = "ASC"})
+     *
+     * @GRID\Column(field="connaissancesMetier.libelle")
+     */
+    protected $connaissancesMetier;
+
     /**
      * @ORM\ManyToOne(targetEntity="\HopitalNumerique\ReferenceBundle\Entity\Reference", cascade={"persist"})
      * @ORM\JoinColumn(name="ref_duree", referencedColumnName="ref_id")
@@ -135,31 +149,31 @@ class Module
      * @ORM\Column(name="mod_nombrePlaceDisponible", type="integer", nullable=true, options = {"comment" = "Nombre de places disponibles du module"})
      */
     protected $nombrePlaceDisponible;
-    
+
     /**
      * @var string
      *
      * @ORM\Column(name="mod_prerequis", type="text", nullable=true, options = {"comment" = "Prérequis du module"})
      */
     protected $prerequis;
-    
+
     /**
      * @Assert\File(
      *     maxSize = "10M",
-     *     mimeTypes = { 
-     *         "application/pdf", 
-     *         "application/x-pdf", 
-     *         "application/vnd.ms-excel", 
-     *         "application/msword", 
-     *         "application/xls", 
-     *         "application/x-xls", 
-     *         "application/vnd.openxmlformats-officedocument.wordprocessingml.document", 
-     *         "application/vnd.ms-powerpoint", 
-     *         "application/vnd.openxmlformats-officedocument.presentationml.presentation", 
-     *         "image/gif", 
-     *         "image/jpeg", 
-     *         "image/png", 
-     *         "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", 
+     *     mimeTypes = {
+     *         "application/pdf",
+     *         "application/x-pdf",
+     *         "application/vnd.ms-excel",
+     *         "application/msword",
+     *         "application/xls",
+     *         "application/x-xls",
+     *         "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+     *         "application/vnd.ms-powerpoint",
+     *         "application/vnd.openxmlformats-officedocument.presentationml.presentation",
+     *         "image/gif",
+     *         "image/jpeg",
+     *         "image/png",
+     *         "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
      *         "application/zip",
      *         "application/vnd.oasis.opendocument.text ",
      *         "application/vnd.oasis.opendocument.graphics",
@@ -175,7 +189,7 @@ class Module
      * )
      */
     public $file;
-    
+
     /**
      * @var string
      *
@@ -189,13 +203,13 @@ class Module
      * @ORM\Column(name="mod_mail", type="text", nullable=true, options = {"comment" = "Texte dans le mail de rappel"})
      */
     protected $textMailRappel;
-    
+
     /**
      * @var integer
      *
      * @ORM\ManyToOne(targetEntity="\HopitalNumerique\UserBundle\Entity\User")
      * @ORM\JoinColumn(name="usr_formateur", referencedColumnName="usr_id", nullable=true, onDelete="SET NULL")
-     * 
+     *
      * @GRID\Column(field="formateur.nom")
      */
     protected $formateur;
@@ -258,21 +272,23 @@ class Module
      */
     public function __construct()
     {
-        $this->sessions      = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->productions   = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->connaissances = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->sessions            = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->productions         = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->connaissances       = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->connaissancesMetier = new \Doctrine\Common\Collections\ArrayCollection();
+
     }
-    
+
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
         return $this->id;
     }
-    
+
     /**
      * Get dateLastUpdate
      *
@@ -282,7 +298,7 @@ class Module
     {
         return $this->dateLastUpdate;
     }
-    
+
     /**
      * Set dateLastUpdate
      *
@@ -310,7 +326,7 @@ class Module
     /**
      * Get titre
      *
-     * @return string 
+     * @return string
      */
     public function getTitre()
     {
@@ -326,10 +342,10 @@ class Module
     public function addProduction(\HopitalNumerique\ObjetBundle\Entity\Objet $production)
     {
         $this->productions[] = $production;
-    
+
         return $this;
     }
-    
+
     /**
      * Remove production
      *
@@ -339,7 +355,7 @@ class Module
     {
         $this->productions->removeElement($production);
     }
-    
+
     /**
      * Set productions
      *
@@ -349,10 +365,10 @@ class Module
     public function setProductions(array $productions)
     {
         $this->productions = $productions;
-    
+
         return $this;
     }
-    
+
     /**
      * Get productions
      *
@@ -362,7 +378,7 @@ class Module
     {
         return $this->productions;
     }
-    
+
     /**
      * Set horairesType
      *
@@ -379,7 +395,7 @@ class Module
     /**
      * Get horairesType
      *
-     * @return string 
+     * @return string
      */
     public function getHorairesType()
     {
@@ -402,7 +418,7 @@ class Module
     /**
      * Get lieu
      *
-     * @return string 
+     * @return string
      */
     public function getLieu()
     {
@@ -425,7 +441,7 @@ class Module
     /**
      * Get textMailRappel
      *
-     * @return string 
+     * @return string
      */
     public function getTextMailRappel()
     {
@@ -448,7 +464,7 @@ class Module
     /**
      * Get description
      *
-     * @return string 
+     * @return string
      */
     public function getDescription()
     {
@@ -471,7 +487,7 @@ class Module
     /**
      * Get nombrePlaceDisponible
      *
-     * @return integer 
+     * @return integer
      */
     public function getNombrePlaceDisponible()
     {
@@ -494,7 +510,7 @@ class Module
     /**
      * Get prerequis
      *
-     * @return string 
+     * @return string
      */
     public function getPrerequis()
     {
@@ -510,10 +526,10 @@ class Module
     public function setFormateur(\HopitalNumerique\UserBundle\Entity\User $formateur = null)
     {
         $this->formateur = $formateur;
-    
+
         return $this;
     }
-    
+
     /**
      * Get formateur
      *
@@ -523,7 +539,7 @@ class Module
     {
         return $this->formateur;
     }
-    
+
     /**
      * Get statut
      *
@@ -533,7 +549,7 @@ class Module
     {
         return $this->statut;
     }
-    
+
     /**
      * Set statut
      *
@@ -546,7 +562,7 @@ class Module
         else
             $this->statut = null;
     }
-    
+
     /**
      * Get duree
      *
@@ -556,7 +572,7 @@ class Module
     {
         return $this->duree;
     }
-    
+
     /**
      * Set duree
      *
@@ -579,7 +595,7 @@ class Module
     public function addSession(\HopitalNumerique\ModuleBundle\Entity\Session $sessions)
     {
         $this->sessions[] = $sessions;
-    
+
         return $this;
     }
 
@@ -596,7 +612,7 @@ class Module
     /**
      * Get sessions
      *
-     * @return \Doctrine\Common\Collections\Collection 
+     * @return \Doctrine\Common\Collections\Collection
      */
     public function getSessions()
     {
@@ -606,13 +622,13 @@ class Module
     /**
      * Get sessions actives
      *
-     * @return \Doctrine\Common\Collections\Collection 
+     * @return \Doctrine\Common\Collections\Collection
      */
     public function getSessionsActives()
     {
         $sessions = array();
 
-        foreach ($this->sessions as $session) 
+        foreach ($this->sessions as $session)
         {
             if(403 === $session->getEtat()->getId())
             {
@@ -625,13 +641,13 @@ class Module
     /**
      * Get sessions dont la date d'inscription est en ce moment
      *
-     * @return \Doctrine\Common\Collections\Collection 
+     * @return \Doctrine\Common\Collections\Collection
      */
     public function getSessionsInscriptionsOuvertes()
     {
         $sessions = array();
 
-        foreach ($this->sessions as $session) 
+        foreach ($this->sessions as $session)
         {
             if($session->getDateOuvertureInscription() <= new \DateTime()
                 && $session->getDateFermetureInscription() >= new \DateTime()
@@ -643,11 +659,11 @@ class Module
         }
         return $sessions;
     }
-    
+
     // ----------------------------------------
     // --- Gestion de l'upload des fichiers ---
     // ----------------------------------------
-    
+
     /**
      * Set path
      *
@@ -658,12 +674,12 @@ class Module
     {
         if( is_null($path) && file_exists($this->getAbsolutePath()) )
             unlink($this->getAbsolutePath());
-    
+
         $this->path = $path;
-    
+
         return $this;
     }
-    
+
     /**
      * Get path
      *
@@ -673,28 +689,28 @@ class Module
     {
         return $this->path;
     }
-    
+
     public function getAbsolutePath()
     {
         return null === $this->path ? null : $this->getUploadRootDir().'/'.$this->path;
     }
-    
+
     public function getWebPath()
     {
         return null === $this->path ? null : $this->getUploadDir().'/'.$this->path;
     }
-    
+
     public function getUploadRootDir()
     {
         // le chemin absolu du répertoire où les documents uploadés doivent être sauvegardés
         return __ROOT_DIRECTORY__.'/'.$this->getUploadDir();
     }
-    
+
     public function getUploadDir()
     {
         return 'files/modules';
     }
-    
+
     /**
      * @ORM\PrePersist()
      * @ORM\PreUpdate()
@@ -705,11 +721,11 @@ class Module
             //delete Old File
             if ( file_exists($this->getAbsolutePath()) )
                 unlink($this->getAbsolutePath());
-    
+
             $this->path = round(microtime(true) * 1000) . '_' . $this->file->getClientOriginalName();
         }
     }
-    
+
     /**
      * @ORM\PostPersist()
      * @ORM\PostUpdate()
@@ -718,30 +734,30 @@ class Module
     {
         if (null === $this->file)
             return;
-    
+
         // s'il y a une erreur lors du déplacement du fichier, une exception
         // va automatiquement être lancée par la méthode move(). Cela va empêcher
         // proprement l'entité d'être persistée dans la base de données si
         // erreur il y a
         $this->file->move($this->getUploadRootDir(), $this->path);
-    
+
         unset($this->file);
     }
-    
+
     /**
      * @ORM\PostRemove()
      */
     public function removeUpload()
     {
         $file = $this->getAbsolutePath();
-    
+
         if (file_exists($file) )
             unlink($file);
     }
 
     /**
      * toString.
-     * 
+     *
      * @return string Titre
      */
     public function __toString()
@@ -775,7 +791,7 @@ class Module
     /**
      * Get connaissances
      *
-     * @return \Doctrine\Common\Collections\Collection 
+     * @return \Doctrine\Common\Collections\Collection
      */
     public function getConnaissances()
     {
@@ -826,14 +842,14 @@ class Module
     /**
      * Get domaines
      *
-     * @return \Doctrine\Common\Collections\Collection 
+     * @return \Doctrine\Common\Collections\Collection
      */
     public function getDomaines()
     {
         return $this->domaines;
     }
-    
-    
+
+
     /**
      * Get les ids des domaines
      *
@@ -843,7 +859,7 @@ class Module
     {
         $domainesId = array();
 
-        foreach ($this->domaines as $domaine) 
+        foreach ($this->domaines as $domaine)
         {
             $domainesId[] = $domaine->getId();
         }
@@ -867,7 +883,7 @@ class Module
     /**
      * Get mailAccuseInscription
      *
-     * @return boolean 
+     * @return boolean
      */
     public function getMailAccuseInscription()
     {
@@ -890,7 +906,7 @@ class Module
     /**
      * Get mailConfirmationInscription
      *
-     * @return boolean 
+     * @return boolean
      */
     public function getMailConfirmationInscription()
     {
@@ -913,7 +929,7 @@ class Module
     /**
      * Get mailRefusInscription
      *
-     * @return boolean 
+     * @return boolean
      */
     public function getMailRefusInscription()
     {
@@ -936,7 +952,7 @@ class Module
     /**
      * Get mailRappelEvalution
      *
-     * @return boolean 
+     * @return boolean
      */
     public function getMailRappelEvalution()
     {
@@ -959,10 +975,71 @@ class Module
     /**
      * Get mailAlerteEvaluation
      *
-     * @return boolean 
+     * @return boolean
      */
     public function getMailAlerteEvaluation()
     {
         return $this->mailAlerteEvaluation;
+    }
+
+    // Connaissances Métiers
+    /**
+     * Add connaissancesMetier
+     *
+     * @param \HopitalNumerique\ReferenceBundle\Entity\Reference $connaissancesMetier
+     * @return Session
+     */
+    public function addConnaissanceMetier(\HopitalNumerique\ReferenceBundle\Entity\Reference $connaissancesMetier)
+    {
+        $this->connaissancesMetier[] = $connaissancesMetier;
+
+        return $this;
+    }
+
+    /**
+     * Remove connaissancesMetier
+     *
+     * @param \HopitalNumerique\ReferenceBundle\Entity\Reference $connaissancesMetier
+     */
+    public function removeConnaissanceMetier(\HopitalNumerique\ReferenceBundle\Entity\Reference $connaissancesMetier)
+    {
+        $this->connaissancesMetier->removeElement($connaissancesMetier);
+    }
+
+    /**
+     * Get connaissancesMetier
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getConnaissancesMetier()
+    {
+        return $this->connaissancesMetier;
+    }
+
+    /**
+     * Set connaissancesMetier
+     *
+     * @return Session
+     */
+    public function setConnaissancesMetier($connaissancesMetier)
+    {
+        $this->connaissancesMetier = $connaissancesMetier;
+
+        return $this;
+    }
+
+    public function getConnaissancesMetierByParent()
+    {
+        $connaissancesMetier = $this->connaissancesMetier;
+        $connaissancesMetierOrdered = array();
+
+        foreach ($connaissancesMetier as $connaissanceMetier) {
+            if (!array_key_exists($connaissanceMetier->getParent()->getId(), $connaissancesMetierOrdered)) {
+                $connaissancesMetierOrdered[$connaissanceMetier->getParent()->getId()] = array();
+            }
+
+            $connaissancesMetierOrdered[$connaissanceMetier->getParent()->getId()][] = $connaissanceMetier;
+        }
+        return $connaissancesMetierOrdered;
     }
 }
