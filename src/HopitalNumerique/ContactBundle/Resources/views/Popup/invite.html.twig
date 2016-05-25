@@ -1,0 +1,22 @@
+<div id="contact-popup">
+
+    <h4 class="violet" id="contact-popup-label">Inviter des utilisateurs a la communauté de pratique</h4>
+
+    {{ form_start(inviteForm, { 'action':path('hopitalnumerique_contact_popup_invite_submit'), 'attr':{ 'novalidate':'novalidate' } }) }}
+
+        <div class="form_vertical_row">
+            <div class="clearfix"></div>
+        </div>
+
+        {{ form_row(inviteForm.destinataires) }}
+
+        <div class="form_vertical_row">
+            <div class="col-md-12">
+                <div class="pull-right">
+                    <button type="submit" class="btn btn-success"><em class="fa fa-envelope"></em> &nbsp; Envoyer</button>
+                </div>
+            </div>
+        </div>
+    {{ form_end(inviteForm) }}
+
+</div>

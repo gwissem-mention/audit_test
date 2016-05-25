@@ -90,6 +90,20 @@
 {% endmacro %}
 
 {##
+ # Affiche le lien d'invitation par mail'.
+ #
+ # @param \HopitalNumerique\CommunautePratiqueBundle\Entity\Groupe groupe Groupe
+ #}
+{% macro display_action_contact_invitation(groupe) %}
+    <div class="invite">
+        <a onclick="Contact_Popup.invite('{{ path( app.request.get('_route'), app.request.get('_route_params') ) }}');">
+            <em class="icon-users149"></em>
+            Inviter <br> des utilisateurs
+        </a>
+    </div>
+{% endmacro %}
+
+{##
  # Affiche le lien de contact des animateurs du groupe.
  #
  # @param \HopitalNumerique\CommunautePratiqueBundle\Entity\Groupe groupe Groupe

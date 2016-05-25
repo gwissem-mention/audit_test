@@ -7,7 +7,17 @@ hopitalnumerique_contact_popup_index:
     defaults: { _controller: "HopitalNumeriqueContactBundle:Popup:index" }
     methods: 'POST'
 
+hopitalnumerique_invite_popup_index:
+    pattern:  /contact/popup/invite
+    defaults: { _controller: "HopitalNumeriqueContactBundle:Popup:invite" }
+    methods: 'POST'
+
 hopitalnumerique_contact_popup_submit:
     pattern:  /contact/popup/submit
     defaults: { _controller: "HopitalNumeriqueContactBundle:Popup:submit" }
+    methods: 'POST'
+
+hopitalnumerique_contact_popup_invite_submit:
+    pattern:  /contact/popup/invite/submit
+    defaults: { _controller: "HopitalNumeriqueContactBundle:Popup:submitInvite" }
     methods: 'POST'
