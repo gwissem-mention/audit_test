@@ -15,7 +15,7 @@
     #sommaire { background-color: #e5e5e5;float: left;margin: 0 20px 0 0;padding: 10px;width: 250px; }
         #sommaire .toggle-children { cursor: pointer; }
         #sommaire h3 { font-size: 18px;font-weight: bold;margin: 0 0 10px 0; }
-        #sommaire ul { list-style-type: none;margin: 0;padding: 0 !important; }
+        #sommaire ul { font-size: 12px;list-style-type: none;margin: 0;padding: 0 !important; }
             #sommaire ul .toggle-children { display: none; }
             #sommaire ul ul { padding-left: 15px !important; }
                 #sommaire ul ul .toggle-children { display: inline; }
@@ -38,6 +38,8 @@
         {color: #d60030; font-weight: bold; }*/
 
     #column-right { background-color: #e5e5e5;float: right;margin: 0 0 0 20px;padding: 10px;width: 250px; }
+    #column-right div h2 { margin-top: 20px; }
+    #column-right div:first-child h2 { margin-top: 0; }
 
 /* Productions */
     #productionsPointDur{ margin-top: 30px; }
@@ -243,7 +245,10 @@
     #commentaires .commentaire .texte{ margin-top: 5px; margin-bottom: 5px;}
     
     #productions_liees h2, #parcours_guides h2 { margin-bottom:5px;margin-top: 0; }
-    #productions_liees .mysep.background-rose, #parcours_guides .mysep.background-rose {width: 85px; height: 4px; margin-bottom: 10px}
+    #productions_liees .results-bloc, #parcours_guides .results-bloc { margin: 0 0 10px 0; }
+        #productions_liees .results-bloc .title a, #parcours_guides .results-bloc .title a { font-size: 13px; }
+        #productions_liees .results-bloc p, #parcours_guides .results-bloc p { font-size: 12px;margin: 0; }
+    #productions_liees .mysep.background-rose, #parcours_guides .mysep.background-rose {width: 85px; height: 4px; }
 
 /* Autres résultats */
     #autresResultats h2{display: block; margin-bottom:5px;background-image: url('../img/panel.png');background-repeat: no-repeat;cursor: pointer; height: 25px}

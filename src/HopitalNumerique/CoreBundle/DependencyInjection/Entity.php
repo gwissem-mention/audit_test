@@ -380,26 +380,37 @@ class Entity
     /**
      * Retourne le libellé de l'entité.
      *
-     * @param object $entity Entité
+     * @param object       $entity                 Entité
+     * @param integer|null $truncateCaractersCount Nombre de caractères à afficher
      * @return string Libellé
      */
-    public function getTitleByEntity($entity)
+    public function getTitleByEntity($entity, $truncateCaractersCount = null)
     {
+        $title = null;
+
         switch ($this->getEntityType($entity)) {
             case self::ENTITY_TYPE_OBJET:
             case self::ENTITY_TYPE_COMMUNAUTE_PRATIQUES_GROUPE:
-                return $entity->getTitre();
+                $title = $entity->getTitre();
+                break;
             case self::ENTITY_TYPE_CONTENU:
-                return $entity->getObjet()->getTitre();
+                $title = $entity->getObjet()->getTitre();
+                break;
             case self::ENTITY_TYPE_FORUM_TOPIC:
-                return $entity->getTitle();
+                $title = $entity->getTitle();
+                break;
             case self::ENTITY_TYPE_AMBASSADEUR:
-                return $entity->getPrenomNom();
+                $title = $entity->getPrenomNom();
+                break;
             case self::ENTITY_TYPE_RECHERCHE_PARCOURS:
-                return $entity->getReference()->getLibelle();
+                $title = $entity->getReference()->getLibelle();
         }
 
-        return null;
+        if (null !== $title && null !== $truncateCaractersCount && strlen($title) > $truncateCaractersCount) {
+            $title = '<span title="'.$title.'">'.substr($title, 0, $truncateCaractersCount).'...</span>';
+        }
+
+        return $title;
     }
 
     /**
@@ -477,12 +488,14 @@ class Entity
     /**
      * Retourne la description de l'entité.
      *
-     * @param object $entity Entité
+     * @param object       $entity                 Entité
+     * @param integer|null $truncateCaractersCount Nombre de caractères à afficher
      * @return string|null Description
      */
-    public function getDescriptionByEntity($entity)
+    public function getDescriptionByEntity($entity, $truncateCaractersCount = 255)
     {
         $description = null;
+
         switch ($this->getEntityType($entity)) {
             case self::ENTITY_TYPE_OBJET:
                 $description = $entity->getResume();
@@ -505,8 +518,9 @@ class Entity
 
         if (null !== $description) {
             $description = trim(strip_tags(html_entity_decode($description)));
-            if (strlen($description) > 255) {
-                $description = substr($description, 0, 255);
+            
+            if (null !== $truncateCaractersCount && strlen($description) > $truncateCaractersCount) {
+                $description = substr($description, 0, $truncateCaractersCount);
                 if (strrpos($description, ' ') > 0) {
                     $description = substr($description, 0, strrpos($description, ' ')).'...';
                 }

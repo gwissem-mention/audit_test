@@ -12,6 +12,17 @@ use HopitalNumerique\RechercheParcoursBundle\Manager\RechercheParcoursManager;
 class ParcoursGuideLie
 {
     /**
+     * @var integer Nombre de caractères max pour le titre
+     */
+    const TITLE_MAXLENGTH = 100;
+
+    /**
+     * @var integer Nombre de caractères max pour la description
+     */
+    const DESCRIPTION_MAXLENGTH = 100;
+
+
+    /**
      * @var \HopitalNumerique\CoreBundle\DependencyInjection\Entity Entity
      */
     private $entity;
@@ -67,11 +78,14 @@ class ParcoursGuideLie
         $formattedParcoursGuides = [];
 
         foreach ($parcoursGuides as $parcoursGuide) {
+            $title = $this->entity->getTitleByEntity($parcoursGuide, self::TITLE_MAXLENGTH);
+            $description = $this->entity->getDescriptionByEntity($parcoursGuide, self::DESCRIPTION_MAXLENGTH);
+
             $formattedParcoursGuides[] = [
-                'title' => $this->entity->getTitleByEntity($parcoursGuide),
+                'title' => $title,
                 'subtitle' => $this->entity->getSubtitleByEntity($parcoursGuide),
                 'category' => $this->entity->getCategoryByEntity($parcoursGuide),
-                'description' => $this->entity->getDescriptionByEntity($parcoursGuide),
+                'description' => $description,
                 'url' => $this->entity->getFrontUrlByEntity($parcoursGuide)
             ];
         }

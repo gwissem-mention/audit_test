@@ -11,6 +11,17 @@ use HopitalNumerique\ObjetBundle\Manager\ObjetManager;
 class ProductionLiee
 {
     /**
+     * @var integer Nombre de caractères max pour le titre
+     */
+    const TITLE_MAXLENGTH = 100;
+
+    /**
+     * @var integer Nombre de caractères max pour la description
+     */
+    const DESCRIPTION_MAXLENGTH = 100;
+
+
+    /**
      * @var \HopitalNumerique\CoreBundle\DependencyInjection\Entity Entity
      */
     private $entity;
@@ -63,10 +74,10 @@ class ProductionLiee
                 }
 
                 $formattedProductionsLiees[] = [
-                    'title' => $this->entity->getTitleByEntity($entity),
+                    'title' => $this->entity->getTitleByEntity($entity, self::TITLE_MAXLENGTH),
                     'subtitle' => $this->entity->getSubtitleByEntity($entity),
                     'category' => $this->entity->getCategoryByEntity($entity),
-                    'description' => $this->entity->getDescriptionByEntity($entity),
+                    'description' => $this->entity->getDescriptionByEntity($entity, self::DESCRIPTION_MAXLENGTH),
                     'url' => $this->entity->getFrontUrlByEntity($entity)
                 ];
             }
