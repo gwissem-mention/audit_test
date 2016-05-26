@@ -59,6 +59,7 @@ maj-prod:
 	sudo rm -rf app/cache/*;
 	sudo rm -rf app/logs/*;
 	sudo chmod -R 777 app/cache app/logs;
+	php app/console fos:js-routing:dump
 	php -d memory_limit=-1 app/console c:cl --env=prod;
 	sudo chmod -R 777 app/cache app/logs;
 	sudo php -d memory_limit=-1 app/console d:s:u --dump-sql;
