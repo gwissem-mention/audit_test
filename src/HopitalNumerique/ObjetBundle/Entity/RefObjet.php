@@ -24,7 +24,7 @@ class RefObjet
     /**
      * @var integer
      *
-     * @ORM\ManyToOne(targetEntity="\HopitalNumerique\ReferenceBundle\Entity\Reference")
+     * @ORM\ManyToOne(targetEntity="\HopitalNumerique\ReferenceBundle\Entity\Reference", fetch="EAGER")
      * @ORM\JoinColumn(name="ref_id", referencedColumnName="ref_id", onDelete="CASCADE")
      */
     private $reference;
