@@ -12,3 +12,8 @@ ad:
             occurence: Occurence
             impact: Impact
             action: Capacité d'action
+        edit_menu:
+            general: Propriétés générales
+            survey: Questionnaire
+            algorithm: Algorithme
+            restitution: Restitution

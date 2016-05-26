@@ -2,11 +2,17 @@
 
 namespace HopitalNumerique\AutodiagBundle\Controller;
 
+use HopitalNumerique\AutodiagBundle\Domain\ModelAdminFileImport;
 use HopitalNumerique\AutodiagBundle\Domain\ModelAdminUpdate;
 use HopitalNumerique\AutodiagBundle\Entity\Model;
 use HopitalNumerique\AutodiagBundle\Form\Type\Domain\ModelAdminUpdateType;
+use HopitalNumerique\AutodiagBundle\Form\Type\Model\FileImportType;
 use HopitalNumerique\AutodiagBundle\Grid\ModelGrid;
+use HopitalNumerique\AutodiagBundle\Service\Import\SurveyWriter;
 use HopitalNumerique\AutodiagBundle\Service\Model\ModelFactory;
+use Nodevo\Component\Import\DataImporter;
+use Nodevo\Component\Import\Reader\ExcelFileReader;
+use Nodevo\Component\Import\Writer\DoctrineWriter;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -69,7 +75,28 @@ class ModelController extends Controller
             ]);
         }
 
-        return $this->render('HopitalNumeriqueAutodiagBundle:Model:edit.html.twig', [
+        return $this->render('HopitalNumeriqueAutodiagBundle:Model/Edit:_general.html.twig', [
+            'form' => $form->createView(),
+            'model' => $model,
+        ]);
+    }
+
+    public function surveyEditAction(Request $request, Model $model)
+    {
+        $import = new ModelAdminFileImport();
+        $form = $this->createForm(FileImportType::class, $import);
+
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+
+            $fileReader = new ExcelFileReader();
+            $writer = new SurveyWriter($this->getDoctrine()->getManager(), $model);
+            $dataImporter = new DataImporter($fileReader, $writer);
+            $progress = $dataImporter->import($import->getFile());
+            dump($progress->getDuraction());die;
+        }
+
+        return $this->render('HopitalNumeriqueAutodiagBundle:Model/Edit:_survey.html.twig', [
             'form' => $form->createView(),
             'model' => $model,
         ]);

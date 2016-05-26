@@ -9,3 +9,7 @@ hopitalnumerique_autodiag_model_create:
 hopitalnumerique_autodiag_model_edit:
     path:     /autodiag/edit/{id}
     defaults: { _controller: HopitalNumeriqueAutodiagBundle:Model:edit }
+
+hopitalnumerique_autodiag_model_edit_survey:
+    path:     /autodiag/edit/{id}/survey
+    defaults: { _controller: HopitalNumeriqueAutodiagBundle:Model:surveyEdit }

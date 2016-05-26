@@ -3,6 +3,7 @@
 namespace HopitalNumerique\AutodiagBundle\Entity\Model;
 
 use Doctrine\ORM\Mapping as ORM;
+use HopitalNumerique\AutodiagBundle\Entity\Model;
 
 /**
  * Container
@@ -48,11 +49,22 @@ abstract class Container
     /**
      * @var Container
      *
-     * @ORM\OneToOne(targetEntity="HopitalNumerique\AutodiagBundle\Entity\Model\Container")
-     * @ORM\JoinColumn(name="parent_id", referencedColumnName="id")
+     * @ORM\ManyToOne(targetEntity="HopitalNumerique\AutodiagBundle\Entity\Model\Container", cascade={"all"})
+     * @ORM\JoinColumn(name="parent_id", referencedColumnName="id", onDelete="CASCADE")
      */
     private $parent;
 
+    /**
+     * @var Model
+     * @ORM\ManyToOne(targetEntity="HopitalNumerique\AutodiagBundle\Entity\Model")
+     * @ORM\JoinColumn(name="model_id", referencedColumnName="id", onDelete="CASCADE")
+     */
+    private $model;
+
+    public function setId($id)
+    {
+        $this->id = $id;
+    }
     /**
      * Get id
      *
@@ -123,9 +135,32 @@ abstract class Container
      * @param Container $parent
      * @return $this
      */
-    public function setParent(Container $parent)
+    public function setParent(Container $parent = null)
     {
         $this->parent = $parent;
+
+        return $this;
+    }
+
+    /**
+     * Get model
+     *
+     * @return Model
+     */
+    public function getModel()
+    {
+        return $this->model;
+    }
+
+    /**
+     * Set Model
+     *
+     * @param Model $model
+     * @return $this
+     */
+    public function setModel(Model $model)
+    {
+        $this->model = $model;
 
         return $this;
     }

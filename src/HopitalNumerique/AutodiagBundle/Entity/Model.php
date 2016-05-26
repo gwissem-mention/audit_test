@@ -6,6 +6,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\Mapping as ORM;
+use HopitalNumerique\AutodiagBundle\Entity\Model\Container\Chapter;
 use HopitalNumerique\AutodiagBundle\Entity\Model\Preset\Attribute;
 use HopitalNumerique\DomaineBundle\Entity\Domaine;
 use HopitalNumerique\QuestionnaireBundle\Entity\Questionnaire;
@@ -81,8 +82,22 @@ class Model
      */
     private $questionnaire;
 
-    public $criticite;
+    /**
+     * @var Collection
+     * @ORM\OneToMany(
+     *     targetEntity="HopitalNumerique\AutodiagBundle\Entity\Model\Container\Chapter",
+     *     mappedBy="model",
+     *     cascade={"persist"},
+     *     orphanRemoval=true
+     * )
+     */
+    private $chapters;
 
+    public function __construct()
+    {
+        $this->chapters = new ArrayCollection();
+    }
+    
     /**
      * Get id
      *
@@ -240,6 +255,43 @@ class Model
     public function setQuestionnaire($questionnaire = null)
     {
         $this->questionnaire = $questionnaire;
+        return $this;
+    }
+
+    /**
+     * Get chapters
+     *
+     * @return Collection
+     */
+    public function getChapters()
+    {
+        return $this->chapters;
+    }
+
+    /**
+     * Add chapter
+     *
+     * @param Chapter $chapter
+     * @return $this
+     */
+    public function addChapter(Chapter $chapter)
+    {
+        $chapter->setModel($this);
+        $this->chapters->add($chapter);
+
+        return $this;
+    }
+
+    /**
+     * Remove chapter
+     *
+     * @param Chapter $chapter
+     * @return $this
+     */
+    public function removeChapter(Chapter $chapter)
+    {
+        $this->chapters->removeElement($chapter);
+
         return $this;
     }
 }
