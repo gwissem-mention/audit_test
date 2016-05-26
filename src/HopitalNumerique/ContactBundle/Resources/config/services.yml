@@ -4,6 +4,7 @@ parameters:
     #Contact
     hopital_numerique_contact.manager.contact.class: HopitalNumerique\ContactBundle\Manager\ContactManager
     hopital_numerique_contact.form.type.contact: HopitalNumerique\ContactBundle\Form\Type\ContactType
+    hopital_numerique_contact.form.type.popup.invite.class : HopitalNumerique\ContactBundle\Form\Type\PopupInviteType
 
 services:
     #Contact:
@@ -22,3 +23,7 @@ services:
         arguments: ['@security.context', '@mailer', '@twig']
         tags:
             - { name: form.type, alias: hopitalnumerique_contactbundle_popup }
+    hopital_numerique_contact.form.type.popup.invite:
+        class: "%hopital_numerique_contact.form.type.popup.invite.class%"
+        tags:
+            - { name: form.type, alias: hopitalnumerique_contactbundle_popup_invite }
