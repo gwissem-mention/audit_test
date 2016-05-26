@@ -41,7 +41,7 @@ class PublicationController extends Controller
             $urlPublication = rtrim(strtr(base64_encode($urlPublication), '+/', '-_'), '=');
             return $this->redirect( $this->generateUrl('account_login', array('urlToRedirect' => $urlPublication) ) );
         }
-        
+
         //Types objet
         $types = $this->get('hopitalnumerique_objet.manager.objet')->formatteTypes( $objet->getTypes() );
 
@@ -439,42 +439,5 @@ class PublicationController extends Controller
         }
 
         return true;
-    }
-
-    /**
-     * Récupère les références de la production consulté
-     *
-     * @param array $refs       Les refs
-     * @param array $references Les RefObjet/RefContenu
-     *
-     * @return array
-     */
-    private function getMoreRefs($refs, $references )
-    {
-        //prépare les categs
-        $categs = array( 220 => 'categ1', 221 => 'categ2', 223 => 'categ3', 222 => 'categ4' );
-        //get refs from consulted object
-        foreach( $references as $reference ) {
-            $one = $reference->getReference();
-
-            if( !is_null($one->getFirstParent()) ) {
-                $parentId = $one->getFirstParent()->getId();
-                //get Grand Parent if needed
-                if ( !in_array($parentId, array_keys($categs)) && !is_null($one->getFirstParent()->getFirstParent())){
-                    $parentId = $one->getFirstParent()->getFirstParent()->getId();
-
-                    //get Arrière Grand Parent if needed
-                    if ( !in_array($parentId, array_keys($categs)) && !is_null($one->getFirstParent()->getFirstParent()->getFirstParent()))
-                        $parentId = $one->getFirstParent()->getFirstParent()->getFirstParent()->getId();
-                }
-
-                if( !isset($refs[ $categs[$parentId] ]) )
-                    $refs[ $categs[$parentId] ] = array();
-
-                $refs[ $categs[$parentId] ][] = $one->getId();
-            }
-        }
-
-        return $refs;
     }
 }
