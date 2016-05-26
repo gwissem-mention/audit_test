@@ -23,7 +23,7 @@
                 <img src="/{{ domaineCurrent.getWebPath() }}" alt="{{domaineCurrent.nom}}" id="logoAnap" class="pull-left" />
             </a>
             <div id="titre" class="pull-left">
-                <a href={% if domaineCurrent.urlTitre %}"{{domaineCurrent.urlTitre}}" {% else %} "{{path('hopital_numerique_homepage')}}" {% endif %} class="h1">{{domaineCurrent.nom}}</a>
+                <a href="{{ domaineCurrent.urlTitre ? domaineCurrent.urlTitre : path('hopital_numerique_homepage') }}" class="h1">{{domaineCurrent.nom}}</a>
                 <div class="h2">{{domaineCurrent.description}}</div>
             </div>
 
@@ -58,7 +58,6 @@
                         {% endif %}
                     </div>
                     <a class="btn btn-success" href="{{path('hopital_numerique_user_informations_personnelles')}}">Mon compte</a>
-                    {#<a class="infos btn btn-rose" href="{{path('hopital_numerique_account_homepage')}}">Tableau de bord</a>#}
                 {% else %}
                     <a class="infos btn btn-rose" href="{{path('hopital_numerique_user_inscription')}}">Créer un compte</a>
                 {% endif %}
