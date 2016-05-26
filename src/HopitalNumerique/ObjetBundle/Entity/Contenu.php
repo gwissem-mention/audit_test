@@ -83,7 +83,7 @@ class Contenu
     private $dateModification;
 
     /**
-     * @ORM\OneToMany(targetEntity="\HopitalNumerique\ObjetBundle\Entity\RefContenu", mappedBy="contenu", cascade={"persist", "remove" })
+     * @ORM\OneToMany(targetEntity="\HopitalNumerique\ObjetBundle\Entity\RefContenu", mappedBy="contenu", fetch="EAGER", cascade={"persist", "remove" })
      */
     protected $references;
 
