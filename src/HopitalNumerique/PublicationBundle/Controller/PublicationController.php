@@ -17,17 +17,13 @@ class PublicationController extends Controller
     public function objetAction(Request $request, Objet $objet)
     {
         $isPdf = ($request->query->has('pdf') && '1' == $request->query->get('pdf'));
-        $domaineId = $request->getSession()->get('domaineId');
+        $domaine = $this->container->get('hopitalnumerique_domaine.dependency_injection.current_domaine')->get();
         $request->getSession()->set('urlToRedirect', $request->getUri());
 
-        if (!in_array($domaineId, $objet->getDomainesId())) {
+        if (!in_array($domaine->getId(), $objet->getDomainesId())) {
             throw $this->createNotFoundException("La publication n'appartient pas au domaine courant.");
         }
 
-        $domaine = $this->get('hopitalnumerique_domaine.manager.domaine')->findOneById($domaineId);
-
-        //$entitiesProperties = $this->container->get('hopitalnumerique_recherche.doctrine.referencement.reader')->getEntitiesPropertiesKeyedByGroupForEntity($publication);
-        
         //objet visualisation
         if(!$this->get('security.context')->isGranted('ROLE_ADMINISTRATEUR_1'))
         {
@@ -131,13 +127,12 @@ class PublicationController extends Controller
      */
     public function contenuAction(Request $request, $id, $alias = null, $idc, $aliasc = null)
     {
-        $domaineId = $request->getSession()->get('domaineId');
-        $domaine   = $this->get('hopitalnumerique_domaine.manager.domaine')->findOneById($domaineId);
+        $domaine = $this->container->get('hopitalnumerique_domaine.dependency_injection.current_domaine')->get();
         $request->getSession()->set('urlToRedirect', $request->getUri());
 
         $objet = $this->get('hopitalnumerique_objet.manager.objet')->findOneBy( array( 'id' => $id ) );
 
-        if (!in_array($domaineId, $objet->getDomainesId())) {
+        if (!in_array($domaine->getId(), $objet->getDomainesId())) {
             throw $this->createNotFoundException("La publication n'appartient pas au domaine courant.");
         }
 
