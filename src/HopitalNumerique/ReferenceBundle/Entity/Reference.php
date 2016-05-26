@@ -165,7 +165,7 @@ class Reference
     /**
      * @var \Doctrine\Common\Collections\Collection
      *
-     * @ORM\ManyToMany(targetEntity="\HopitalNumerique\ReferenceBundle\Entity\Reference\Synonyme", cascade={"persist"})
+     * @ORM\ManyToMany(targetEntity="\HopitalNumerique\ReferenceBundle\Entity\Reference\Synonyme", cascade={"persist"}, inversedBy="references")
      * @ORM\JoinTable(name="hn_reference_has_synonyme",
      *      joinColumns={@ORM\JoinColumn(name="ref_id", referencedColumnName="ref_id", onDelete="CASCADE")},
      *      inverseJoinColumns={@ORM\JoinColumn(name="syn_id", referencedColumnName="syn_id", onDelete="CASCADE")}
@@ -176,7 +176,7 @@ class Reference
     /**
      * @var \Doctrine\Common\Collections\Collection
      *
-     * @ORM\ManyToMany(targetEntity="\HopitalNumerique\ReferenceBundle\Entity\Reference\ChampLexicalNom", cascade={"persist"})
+     * @ORM\ManyToMany(targetEntity="\HopitalNumerique\ReferenceBundle\Entity\Reference\ChampLexicalNom", cascade={"persist"}, inversedBy="references")
      * @ORM\JoinTable(name="hn_reference_has_champ_lexical_nom",
      *      joinColumns={@ORM\JoinColumn(name="ref_id", referencedColumnName="ref_id", onDelete="CASCADE")},
      *      inverseJoinColumns={@ORM\JoinColumn(name="chl_id", referencedColumnName="chl_id", onDelete="CASCADE")}
