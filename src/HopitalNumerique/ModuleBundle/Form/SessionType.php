@@ -11,7 +11,7 @@ use Doctrine\ORM\EntityRepository;
 use HopitalNumerique\ReferenceBundle\Manager\ReferenceManager;
 
 /**
- * 
+ *
  * @author Gaetan MELCHILSEN
  * @copyright Nodevo
  */
@@ -22,30 +22,30 @@ class SessionType extends AbstractType
      * @var \HopitalNumerique\ReferenceBundle\Manager\ReferenceManager
      */
     private $referenceManager;
-    
+
     public function __construct($manager, $validator, ReferenceManager $referenceManager)
     {
         $this->_constraints = $manager->getConstraints( $validator );
         $this->referenceManager = $referenceManager;
     }
-    
+
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
             ->add('dateSession', 'genemu_jquerydate', array(
-                'required' => true, 
+                'required' => true,
                 'label'    => 'Début de la session',
                 'widget'   => 'single_text',
                 'attr'     => array('class' => $this->_constraints['dateSession']['class'] )
             ))
             ->add('dateOuvertureInscription', 'genemu_jquerydate', array(
-                'required' => true, 
+                'required' => true,
                 'label'    => 'Date d\'ouverture des inscriptions',
                 'widget'   => 'single_text',
                 'attr'     => array('class' => $this->_constraints['dateOuvertureInscription']['class'] )
             ))
             ->add('dateFermetureInscription', 'genemu_jquerydate', array(
-                'required' => true, 
+                'required' => true,
                 'label'    => 'Date de fermeture des inscriptions',
                 'widget'   => 'single_text',
                 'attr'     => array('class' => $this->_constraints['dateFermetureInscription']['class'] )
@@ -84,8 +84,8 @@ class SessionType extends AbstractType
                     ),
             ))
             ->add('nombrePlaceDisponible', 'text', array(
-                'max_length' => 255, 
-                'required'   => false, 
+                'max_length' => 255,
+                'required'   => false,
                 'label'      => 'Nombre de places disponibles',
                 'attr'       => array('class' => $this->_constraints['nombrePlaceDisponible']['class'] )
             ))
@@ -124,9 +124,20 @@ class SessionType extends AbstractType
                     'multiple'      => true,
                     'required'      => false,
                     //'group_by'      => 'parentName',
-                    'label'         => 'Connaissances concernées',
+                    'label'         => 'Connaissances SI',
                     'empty_value'   => ' - ',
                     'attr'          => array('class' => 'connaissances'),
+            ))
+            ->add('connaissancesMetier', 'genemu_jqueryselect2_entity', array(
+                    'class'         => 'HopitalNumeriqueReferenceBundle:Reference',
+                    'choices'       => $this->referenceManager->findByCode('PERIMETRE_FONCTIONNEL_DOMAINES_FONCTIONNELS'),
+                    'property'      => 'libelle',
+                    'multiple'      => true,
+                    'required'      => false,
+                    // 'group_by'      => 'parentName',
+                    'label'         => 'Connaissances métiers',
+                    'empty_value'   => ' - ',
+                    'attr'          => array('class' => 'connaissancesMetier'),
             ))
             ->add('textMailRappel', 'textarea', array(
                     'required' => false,
@@ -136,7 +147,7 @@ class SessionType extends AbstractType
                     ),
             ))
             ->add('file', 'file', array(
-                    'required' => false, 
+                    'required' => false,
                     'label'    => 'Fiche de présence'
             ))
             ->add('path', 'hidden')
@@ -150,7 +161,7 @@ class SessionType extends AbstractType
                     'attr'          => array('class' => $this->_constraints['etat']['class'] ),
             ))
             ->add('archiver', 'checkbox', array(
-                'required' => false, 
+                'required' => false,
                 'label'    => 'Archiver la session ?',
                 'attr'     => array( 'class' => 'checkbox' )
             ));

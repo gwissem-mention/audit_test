@@ -191,8 +191,8 @@ class InscriptionRepository extends EntityRepository
             ->innerJoin('session.module', 'module')
             ->innerJoin('module.domaines', 'domaine', Expr\Join::WITH, $queryBuilder->expr()->eq('domaine.id', ':domaine'))
             ->where($queryBuilder->expr()->andX(
-                $queryBuilder->expr()->gte('inscription.dateInscription', ':anneeCourantePremierJour'),
-                $queryBuilder->expr()->lt('inscription.dateInscription', ':anneeSuivanteDernierJour')
+                $queryBuilder->expr()->gte('session.dateSession', ':anneeCourantePremierJour'),
+                $queryBuilder->expr()->lt('session.dateSession', ':anneeSuivanteDernierJour')
             ))
             ->andWhere($queryBuilder->expr()->eq('inscription.etatInscription', ':etatInscriptionAccepte'))
             ->andWhere($queryBuilder->expr()->eq('inscription.etatParticipation', ':etatParticipationParticipe'))
@@ -227,11 +227,11 @@ class InscriptionRepository extends EntityRepository
         $queryBuilder
             ->select('COUNT(DISTINCT(user.id)) AS total')
             ->from('HopitalNumeriqueUserBundle:User', 'user')
-            ->innerJoin('user.inscriptions', 'inscription', Expr\Join::WITH, $queryBuilder->expr()->andX(
-                $queryBuilder->expr()->gte('inscription.dateInscription', ':anneeCourantePremierJour'),
-                $queryBuilder->expr()->lt('inscription.dateInscription', ':anneeSuivanteDernierJour')
+            ->innerJoin('user.inscriptions', 'inscription')
+            ->innerJoin('inscription.session', 'session', Expr\Join::WITH, $queryBuilder->expr()->andX(
+                $queryBuilder->expr()->gte('session.dateSession', ':anneeCourantePremierJour'),
+                $queryBuilder->expr()->lt('session.dateSession', ':anneeSuivanteDernierJour')
             ))
-            ->innerJoin('inscription.session', 'session')
             ->innerJoin('session.module', 'module')
             ->innerJoin('module.domaines', 'domaine', Expr\Join::WITH, $queryBuilder->expr()->eq('domaine.id', ':domaine'))
             ->where($queryBuilder->expr()->eq('inscription.etatInscription', ':etatInscriptionAccepte'))
