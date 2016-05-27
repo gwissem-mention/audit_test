@@ -15,7 +15,6 @@ class SearchManager extends BaseManager
     private $_refObjetManager       = null;
     private $_refContenuManager     = null;
     private $_refsPonderees         = null;
-    private $_refTopicManager       = null;
     private $_ccdnAuthorizer        = null;
     private $_urlRechercheTextuelle = "";
     private $_activationExalead     = false;
@@ -25,13 +24,11 @@ class SearchManager extends BaseManager
      *
      * @param RefObjetManager   $refObjetManager   Entitée RefObjetManager
      * @param RefContenuManager $refContenuManager Entitée RefContenuManager
-     * @param RefTopicManager   $refTopicManager   Entitée RefTopicManager
      */
-    public function __construct( $refObjetManager, $refContenuManager, $refTopicManager, $ccdnAuthorizer, $options = array() )
+    public function __construct( $refObjetManager, $refContenuManager, $ccdnAuthorizer, $options = array() )
     {
         $this->_refObjetManager   = $refObjetManager;
         $this->_refContenuManager = $refContenuManager;
-        $this->_refTopicManager   = $refTopicManager;
         $this->_ccdnAuthorizer    = $ccdnAuthorizer;
 
         $this->_urlRechercheTextuelle = isset($options['urlRechercheTextuelle']) ? $options['urlRechercheTextuelle'] : '';
@@ -66,7 +63,7 @@ class SearchManager extends BaseManager
      *
      * @return array
      */
-    public function getObjetsForRecherche( $references, $role, $refsPonderees, $filterForum = null )
+    public function getObjetsForRecherche( $references, $role, $refsPonderees)
     {
         //prepare some vars
         $nbCateg              = 4;
@@ -142,38 +139,6 @@ class SearchManager extends BaseManager
                 {
                     $contenusToIntersect[] = array();
                 }
-
-                //on récupères tous les objets, on les formate et on les ajoute à nos catégories
-                $results = $this->_refTopicManager->getTopicForRecherche( $references['categ'.$i] );                
-                if( $results && $filterForum['forum'] == true || $filterForum['objet'] == false || $filterForum == null){
-                    $tmp = array();
-                    foreach( $results as $one) {
-                        $topic = $this->formateTopic( $one, $role );
-                        if( !is_null($topic) && $topic['categ'] != '' )
-                        {
-                            //Dans le cas où on est déjà sur une ref d'un topic qui existe déjà, on ajout les primary
-                            if(array_key_exists($topic['id'], $tmp))
-                            {
-                                $primary                        = $tmp[ $topic['id'] ]['primary'];
-                                $tmp[ $topic['id'] ]            = $topic;
-                                $tmp[ $topic['id'] ]['primary'] = $tmp[ $topic['id'] ]['primary'] + $primary;
-                            }
-                            else
-                            {
-                                $tmp[ $topic['id'] ] = $topic;
-                                $tmp[ $topic['id'] ]['primary'] = intval($topic['primary'] ? 1 : 0);
-                            }
-                        }
-                    }
-
-                        //il y'a eu des résultats pour cette catégorie, on place donc ces résultats dans le tableau d'intersection (analyse multi categ)
-                        $filsForumToIntersect[] = $tmp;
-                    }
-                    else
-                    {
-                        $filsForumToIntersect[] = array();
-                    }
-                //}
             }
         }
 
@@ -676,42 +641,6 @@ class SearchManager extends BaseManager
         }
         
         return $note;
-    }
-   
-    /*
-     * Formatte Correctement les refTopic
-     *
-     * @param RefTopic $one  L'entité RefTopic
-     * 
-     * @return stdClass
-     */
-    private function formateTopic( $one, $role = null )
-    {
-        //Références
-        $item            = array();
-        $item['primary'] = array_key_exists('primary', $item) ? ( $one->getPrimary() ? $item['primary']++ : $item['primary']) : ($one->getPrimary() ? 1 : 0) ;
-
-        //topic
-        $topic = $one->getTopic();
-        $forum = $topic->getBoard()->getCategory()->getForum();
-
-        if( !is_null($role) ) {
-            //si on à pas accès au topic, on retourne null
-            if( !$this->_ccdnAuthorizer->canShowTopic( $topic, $forum ) )
-            {
-                return null;
-            }
-        }
-
-        $item['id']       = $topic->getId();
-        $item['titre']    = $topic->getTitle();
-        $item['resume']   = preg_replace("/[<\[](.*?)[>\]]/", "", $topic->getFirstPost()->getBody());
-        $item['countRef'] = $this->getNoteReferencement($topic->getReferences());
-
-        //get Type
-        $item['categ'] = 'forum';
-
-        return $item;
     }
 
     /**
