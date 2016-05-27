@@ -48,11 +48,16 @@
                 .recherche-referencement .filtres-bloc #entity-categories-container span[id$="-count"]:before { content: '('; }
                 .recherche-referencement .filtres-bloc #entity-categories-container span[id$="-count"]:after { content: ')'; }
     .recherche-referencement .results-bloc { padding: 4px 0; }
+        .recherche-referencement .results-bloc .loader {}
+            .recherche-referencement .results-bloc .loader .loaderIcon { margin: 14px auto auto auto;position: static; }
         .recherche-referencement .results-bloc #no-result-bloc { display: none;padding: 20px 40px 0 40px; }
         .recherche-referencement .results-bloc .results-group-bloc { display: none; }
             .recherche-referencement .results-bloc h2 { color: #d60030;font-size: 14px;font-weight: bold;margin: 20px 0 2px 0;text-transform: uppercase; }
                 .recherche-referencement .results-bloc h2 .title { border-color: #d60030;border-style: solid;border-width: 0 0 4px 0; }
             .recherche-referencement .results-bloc .buttons { margin: 15px 0 0 0;text-align: right; }
+                .recherche-referencement .results-bloc .buttons .ajax-loader { float: left;height: 20px;width: 20px; }
+                    .recherche-referencement .results-bloc .buttons .ajax-loader .loader .loaderBackground { background-color: transparent;background-image: none; }
+                    .recherche-referencement .results-bloc .buttons .ajax-loader .loader .loaderIcon { margin-top: 0; }
         /* <-- Spécifiques aux points durs */
         .recherche-referencement #results-points-durs { background-color: #f4f4f4;padding: 4px 15px; }
             .recherche-referencement #results-points-durs h3 { margin: 10px 0; }
