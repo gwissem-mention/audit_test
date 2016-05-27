@@ -3,3 +3,4 @@
 .panel_intervention_edition {}
     .panel_intervention_edition div.form-group {}
         .panel_intervention_edition div.form-group div.form-control { height:auto;min-height:36px; }
+#intervention_demande_panel .label-custom {text-align: right;}
