@@ -24,11 +24,11 @@ class AccueilController extends \Symfony\Bundle\FrameworkBundle\Controller\Contr
             ->findOneById($request->getSession()->get('domaineId'));
         $forum = $this->container->get('hopitalnumerique_forum.manager.forum')
             ->findOneById(Forum::FORUM_PUBLIC_ID);
-		$groupeUserEnCour = $this->container->get('hopitalnumerique_communautepratique.manager.groupe')
+        $groupeUserEnCour = $this->container->get('hopitalnumerique_communautepratique.manager.groupe')
                     ->findEnCoursByUser($domaine, $this->getUser());
-		$groupeUserAVenir = $this->container->get('hopitalnumerique_communautepratique.manager.groupe')
+        $groupeUserAVenir = $this->container->get('hopitalnumerique_communautepratique.manager.groupe')
                     ->findNonDemarresByUser($domaine, $this->getUser());
-		$groupeUser = array_merge($groupeUserEnCour,$groupeUserAVenir);
+        $groupeUser = array_merge($groupeUserEnCour, $groupeUserAVenir);
         return $this->render(
             'HopitalNumeriqueCommunautePratiqueBundle:Accueil:index.html.twig',
             array(

@@ -33,7 +33,7 @@ class GroupeRepository extends \Doctrine\ORM\EntityRepository
         ;
         if (null !== $user) {
             $query
-                ->innerJoin('groupe.users', 'user', Expr\Join::WITH, 'user = :user')
+                ->innerJoin('groupe.inscriptions', 'inscription', Expr\Join::WITH, 'inscription.user = :user')
                 ->setParameter('user', $user)
             ;
         }
@@ -75,7 +75,7 @@ class GroupeRepository extends \Doctrine\ORM\EntityRepository
         ;
         if (null !== $user) {
             $query
-                ->innerJoin('groupe.users', 'user', Expr\Join::WITH, 'user = :user')
+                ->innerJoin('groupe.inscriptions', 'inscription', Expr\Join::WITH, 'inscription.user = :user')
                 ->setParameter('user', $user)
             ;
         }
@@ -116,7 +116,7 @@ class GroupeRepository extends \Doctrine\ORM\EntityRepository
         ;
         if (null !== $user) {
             $query
-                ->innerJoin('groupe.users', 'user', Expr\Join::WITH, 'user = :user')
+                ->innerJoin('groupe.inscriptions', 'inscription', Expr\Join::WITH, 'inscription.user = :user')
                 ->setParameter('user', $user)
             ;
         }
@@ -154,7 +154,9 @@ class GroupeRepository extends \Doctrine\ORM\EntityRepository
         $query
             ->leftJoin('groupe.fiches', 'fiche')
             ->addSelect('fiche')
-            ->leftJoin('groupe.users', 'groupeUser')
+            ->leftJoin('groupe.inscriptions', 'groupeInscription')
+            ->addSelect('groupeInscription')
+            ->leftJoin('groupeInscription.user', 'groupeUser')
             ->addSelect('groupeUser')
             ->leftJoin('groupe.documents', 'document')
             ->addSelect('document')
@@ -174,8 +176,9 @@ class GroupeRepository extends \Doctrine\ORM\EntityRepository
 
         if (null !== $user) {
             $query
-                ->innerJoin('groupe.users', 'user', Expr\Join::WITH, 'user = :user')
+                ->innerJoin('groupe.inscriptions', 'inscription', Expr\Join::WITH, 'inscription.user = :user')
                 ->setParameter('user', $user)
+                ->innerJoin('inscription.user', 'user')
                 ->addOrderBy('user.nom')
                 ->addOrderBy('user.prenom')
             ;

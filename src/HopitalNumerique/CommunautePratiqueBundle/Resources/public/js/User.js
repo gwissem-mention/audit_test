@@ -5,7 +5,7 @@ var CommunautePratique_User = function() {};
 
 /**
  * Supprime un utilisateur.
- * 
+ *
  * @param integer groupeId ID du groupe
  * @param integer userId   ID de l'utilisateur
  */
@@ -22,6 +22,30 @@ CommunautePratique_User.desinscritGroupe = function(groupeId, userId)
                 window.location = Routing.generate('hopitalnumerique_communautepratique_user_listbygroupe', { groupe: groupeId });
             } else {
                 alert('L\'utilisateur n\'a pu être désinscrit.');
+            }
+        });
+    }
+};
+
+/**
+ * Active/innactive un utilisateur.
+ *
+ * @param integer groupeId ID du groupe
+ * @param integer userId   ID de l'utilisateur
+ */
+CommunautePratique_User.ActiveInscriptionGroupe = function(groupeId, userId)
+{
+    if (confirm('Confirmez-vous l\'activation / désactivation de ce membre ?'))
+    {
+        $.ajax({
+            url: Routing.generate('hopitalnumerique_communautepratique_user_activegroupe', { groupe: groupeId, user: userId }),
+            method: 'post',
+            dataType: 'json'
+        }).done(function(data) {
+            if (data.success) {
+                window.location = Routing.generate('hopitalnumerique_communautepratique_user_listbygroupe', { groupe: groupeId });
+            } else {
+                alert('L\'utilisateur n\'a pu être activé \ désactivé.');
             }
         });
     }

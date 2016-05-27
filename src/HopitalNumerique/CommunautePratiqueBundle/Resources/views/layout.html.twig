@@ -52,7 +52,7 @@
                 <li class="active">{{ block('title_communaute_pratique')|striptags }}</li>
             </ol>
         {% endblock %}
-        
+
         <div class="clearfix"></div>
 
         <h1>{% block title_communaute_pratique %}{% endblock %}</h1>
@@ -65,6 +65,7 @@
                         Un problème ?<br><strong>Contacter l'administrateur</strong>
                     </a>
                 </div>
+                {{ communaute_pratique.display_action_contact_invitation() }}
             {% endblock %}
         </div>
         <div class="clearfix"></div>

@@ -64,8 +64,15 @@ class PopupController extends \Symfony\Bundle\FrameworkBundle\Controller\Control
 
         if (!empty($form['destinataires'])) {
             $destinataires = explode(",", $form['destinataires']);
+            $regex = '/^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]{2,}[.][a-zA-Z]{2,3}$/';
+            foreach ($destinataires as $destinataire) {
+                if (!preg_match($regex, $destinataire)) {
+                    $this->get('session')->getFlashBag()->add('danger', 'Vérifier le format des adresses e-mail renseignées.');
+                    return $this->redirect($form['urlRedirection']);
+                }
+            }
             $this->get('nodevo_mail.manager.mail')->sendInvitationMail($this->get('security.context')->getToken()->getUser(), $destinataires);
-            $this->get('session')->getFlashBag()->add('success', 'Votre invitation a été envoyé.');
+            $this->get('session')->getFlashBag()->add('success', 'Votre invitation a été envoyée.');
         } else {
             $this->get('session')->getFlashBag()->add('danger', 'Invitation non envoyé.');
         }
