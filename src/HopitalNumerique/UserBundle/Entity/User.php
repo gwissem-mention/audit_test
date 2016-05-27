@@ -3,9 +3,11 @@
 namespace HopitalNumerique\UserBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\Common\Collections\ArrayCollection;
 use FOS\UserBundle\Model\User as BaseUser;
 use Nodevo\RoleBundle\Entity\Role;
 use HopitalNumerique\ReferenceBundle\Entity\Reference;
+use HopitalNumerique\CommunautePratiqueBundle\Entity\Inscription;
 
 //Asserts Stuff
 use Symfony\Component\Validator\Constraints as Assert;
@@ -34,7 +36,7 @@ use \Nodevo\ToolsBundle\Tools\Chaine;
  *              length   = 50,
  *              options  = {"comment" = "Nom utilisateur pour la connexion"}
  *          )
- *      ), 
+ *      ),
  *      @ORM\AttributeOverride(name="usernameCanonical",
  *          column=@ORM\Column(
  *              name     = "usr_username_canonical",
@@ -213,10 +215,10 @@ class User extends BaseUser
      * @Gedmo\Versioned
      */
     protected $pseudonymeForum;
-    
+
     /**
      * @var string
-     * 
+     *
      * @Assert\NotBlank(message="L'adresse éléctronique ne peut pas être vide.")
      * @Assert\Regex(pattern= "/^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]{2,}[.][a-zA-Z]{2,3}$/")
      * @Assert\Length(
@@ -244,7 +246,7 @@ class User extends BaseUser
      * @Gedmo\Versioned
      */
     protected $nom;
-    
+
     /**
      * @var string
      * @Assert\NotBlank(message="Le prénom ne peut pas être vide.")
@@ -262,8 +264,8 @@ class User extends BaseUser
 
     /**
      * @var integer
-     * 
-     * @ORM\Column(name="usr_nb_visite", type="integer", options = {"comment" = "Nombre de fois où un user est connecté"})     
+     *
+     * @ORM\Column(name="usr_nb_visite", type="integer", options = {"comment" = "Nombre de fois où un user est connecté"})
      */
     protected $nbVisites;
 
@@ -271,7 +273,7 @@ class User extends BaseUser
      * @ORM\ManyToOne(targetEntity="\HopitalNumerique\ReferenceBundle\Entity\Reference", cascade={"persist"})
      * @ORM\JoinColumn(name="ref_region", referencedColumnName="ref_id")
      * @Gedmo\Versioned
-     * 
+     *
      * @GRID\Column(field="region.libelle")
      */
     protected $region;
@@ -300,14 +302,14 @@ class User extends BaseUser
      * @Gedmo\Versioned
      */
     protected $etat;
-    
+
     /**
      * @ORM\ManyToOne(targetEntity="\HopitalNumerique\ReferenceBundle\Entity\Reference", cascade={"persist"})
      * @ORM\JoinColumn(name="ref_titre", referencedColumnName="ref_id")
      * @Gedmo\Versioned
      */
     protected $titre;
-    
+
     /**
      * @ORM\ManyToOne(targetEntity="\HopitalNumerique\ReferenceBundle\Entity\Reference", cascade={"persist"})
      * @ORM\JoinColumn(name="ref_civilite", referencedColumnName="ref_id")
@@ -316,10 +318,10 @@ class User extends BaseUser
      * @Gedmo\Versioned
      */
     protected $civilite;
-    
+
     /**
      * @var string
-     * 
+     *
      * @Assert\Length(
      *      min = "14",
      *      max = "14",
@@ -331,10 +333,10 @@ class User extends BaseUser
      * @ORM\Column(name="usr_telephone_direct", type="string", length=14, nullable=true, options = {"comment" = "Téléphone de l utilisateur"})
      */
     protected $telephoneDirect;
-    
+
     /**
      * @var string
-     * 
+     *
      * @Assert\Length(
      *      min = "14",
      *      max = "14",
@@ -346,34 +348,34 @@ class User extends BaseUser
      * @ORM\Column(name="usr_telephone_portable", type="string", length=14, nullable=true, options = {"comment" = "Téléphone portable de l utilisateur"})
      */
     protected $telephonePortable;
-    
+
     /**
      * @var string
-     * 
+     *
      * @ORM\Column(name="usr_contact_autre", type="text", nullable=true, options = {"comment" = "Autre moyen de contacter l utilsateur"})
      * @Gedmo\Versioned
      */
     protected $contactAutre;
-    
+
     /**
      * @ORM\OneToMany(targetEntity="ConnaissanceAmbassadeur", mappedBy="user", cascade={"persist", "remove" })
      */
     protected $connaissancesAmbassadeurs;
-    
+
     /**
      * @ORM\OneToMany(targetEntity="ConnaissanceAmbassadeurSI", mappedBy="user", cascade={"persist", "remove" })
      */
     protected $connaissancesAmbassadeursSI;
 
     // ^ -------- Onglet : Vous êtes un établissement de santé -------- ^
-    
+
     /**
      * @ORM\ManyToOne(targetEntity="\HopitalNumerique\ReferenceBundle\Entity\Reference", cascade={"persist"})
      * @ORM\JoinColumn(name="ref_statut_etablissement_sante", referencedColumnName="ref_id")
      * @Gedmo\Versioned
      */
     protected $statutEtablissementSante;
-    
+
     /**
      * @ORM\ManyToOne(targetEntity="\HopitalNumerique\EtablissementBundle\Entity\Etablissement", inversedBy="usersRattachement", cascade={"persist"})
      * @ORM\JoinColumn(name="eta_etablissement_rattachement_sante", referencedColumnName="eta_id")
@@ -389,10 +391,10 @@ class User extends BaseUser
      * )
      */
     protected $typeActivite;
-    
+
     /**
      * @var string
-     * 
+     *
      * @Assert\Length(
      *      min = "1",
      *      max = "255",
@@ -404,10 +406,10 @@ class User extends BaseUser
      * @ORM\Column(name="usr_autre_rattachement_sante", type="string", length=255, nullable=true, options = {"comment" = "Nom de votre établissement si non disponible dans la liste précédente santé de l utilisateur"})
      */
     protected $autreStructureRattachementSante;
-    
+
     /**
      * @var string
-     * 
+     *
      * @Assert\Length(
      *      min = "3",
      *      max = "255",
@@ -434,12 +436,12 @@ class User extends BaseUser
     protected $profilEtablissementSante;
 
     // v -------- Onglet : Vous êtes un établissement de santé -------- v
-    
+
     // ^ -------- Onglet : Vous êtes une structure autre qu'un établissement de santé  -------- ^
 
     /**
      * @var string
-     * 
+     *
      * @Assert\Length(
      *      min = "1",
      *      max = "255",
@@ -451,10 +453,10 @@ class User extends BaseUser
      * @Gedmo\Versioned
      */
     protected $nomStructure;
-    
+
     /**
      * @var string
-     * 
+     *
      * @Assert\Length(
      *      min = "1",
      *      max = "255",
@@ -466,14 +468,14 @@ class User extends BaseUser
      * @Gedmo\Versioned
      */
     protected $fonctionStructure;
-    
+
     // v -------- Onglet : Vous êtes une structure autre qu'un établissement de santé  -------- v
 
     /**
      * @ORM\ManyToMany(targetEntity="\HopitalNumerique\ObjetBundle\Entity\Objet", mappedBy="ambassadeurs")
      */
     protected $objets;
-    
+
     /**
      * @ORM\OneToMany(targetEntity="Contractualisation", mappedBy="user", cascade={"persist", "remove" })
      */
@@ -489,7 +491,7 @@ class User extends BaseUser
     /**
      * @var boolean
      *
-     * @ORM\Column(name="usr_archiver", type="boolean", options = {"comment" = "L utilisateur est-il archivé ?"}) 
+     * @ORM\Column(name="usr_archiver", type="boolean", options = {"comment" = "L utilisateur est-il archivé ?"})
      * @Gedmo\Versioned
      */
     protected $archiver;
@@ -498,10 +500,10 @@ class User extends BaseUser
      * @ORM\OneToMany(targetEntity="\HopitalNumerique\QuestionnaireBundle\Entity\Reponse", mappedBy="user", cascade={"persist", "remove" })
      */
     protected $reponses;
-    
+
     /**
      * @var \Doctrine\Common\Collections\ArrayCollection
-     * 
+     *
      * @ORM\OneToMany(targetEntity="HopitalNumerique\QuestionnaireBundle\Entity\Occurrence", mappedBy="user")
      */
     private $questionnaireOccurrences;
@@ -510,8 +512,8 @@ class User extends BaseUser
      * @ORM\OneToMany(targetEntity="RefusCandidature", mappedBy="user", cascade={"persist", "remove" })
      */
     protected $refusCandidature;
- 
-    // ------- Conditions générales d'utilisations ------- 
+
+    // ------- Conditions générales d'utilisations -------
     /**
      * @Nodevo\Javascript(class="validate[required]")
      */
@@ -537,21 +539,21 @@ class User extends BaseUser
     /**
      * @Assert\File(
      *     maxSize = "1000k",
-     *     mimeTypes = { 
-     *         "image/gif", 
-     *         "image/jpeg", 
+     *     mimeTypes = {
+     *         "image/gif",
+     *         "image/jpeg",
      *         "image/png",
      *     },
      *     mimeTypesMessage = "Choisissez un fichier valide (IMAGE)"
      * )
      */
     public $file;
-    
+
     /**
      * @var string
      *
      * @ORM\Column(name="usr_photo", type="string", length=255, nullable=true, options = {"comment" = "Nom du fichier stocké"})
-     * 
+     *
      * @Gedmo\Versioned
      */
     protected $path;
@@ -562,22 +564,22 @@ class User extends BaseUser
      * @ORM\Column(name="usr_date_derniere_maj", type="datetime")
      */
     protected $dateLastUpdate;
-    
+
     // ------- Dashboards
     /**
      * @var string
-     * 
+     *
      * @ORM\Column(name="usr_dashboard_front", type="text", options = {"comment" = "Dashboard de l utilisateur"}, nullable=true)
      */
     protected $dashboardFront;
 
     /**
      * @var string
-     * 
+     *
      * @ORM\Column(name="usr_dashboard_back", type="text", options = {"comment" = "Dashboard admin de l utilisateur"}, nullable=true)
      */
     protected $dashboardBack;
-    
+
     // ------- Interventions -------
     /**
      * @ORM\OneToMany(targetEntity="\HopitalNumerique\InterventionBundle\Entity\InterventionDemande", mappedBy="referent", cascade={"persist", "remove" })
@@ -648,7 +650,7 @@ class User extends BaseUser
 
     /**
      * @var boolean
-     * 
+     *
      * @Assert\NotNull()
      * @ORM\Column(name="usr_inscrit_communaute_pratique", type="boolean", options={"default"=false,"comment"="Indique si l utilisateur est inscrit à la communauté de pratiques"})
      */
@@ -660,8 +662,13 @@ class User extends BaseUser
     private $communautePratiqueAnimateurGroupes;
 
     /**
-     * @ORM\ManyToMany(targetEntity="HopitalNumerique\CommunautePratiqueBundle\Entity\Groupe", mappedBy="users", cascade={"persist", "remove"})
+     * @var \Doctrine\Common\Collections\Collection
+     * @ORM\OneToMany(targetEntity="HopitalNumerique\CommunautePratiqueBundle\Entity\Inscription", mappedBy="user", cascade={"persist", "remove"})
      */
+    private $groupeInscription;
+
+    /**
+    */
     private $communautePratiqueGroupes;
 
     /**
@@ -695,9 +702,10 @@ class User extends BaseUser
     public function __construct()
     {
         parent::__construct();
-        
+
         $this->objets               = new \Doctrine\Common\Collections\ArrayCollection();
         $this->communautePratiqueGroupes = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->$groupeInscription   = new \Doctrine\Common\Collections\ArrayCollection();
         $this->communautePratiqueDocuments = new \Doctrine\Common\Collections\ArrayCollection();
         $this->communautePratiqueFiches = new \Doctrine\Common\Collections\ArrayCollection();
         $this->username             = '';
@@ -711,7 +719,7 @@ class User extends BaseUser
         $this->nbVisites            = 0;
         $this->notficationRequete   = true;
         $this->inscritCommunautePratique = false;
-        $this->previousAdmin 		= false;
+        $this->previousAdmin        = false;
         $this->typeActivite         = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
@@ -732,11 +740,11 @@ class User extends BaseUser
     {
         return (string) $this->id;
     }
-    
+
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
@@ -752,10 +760,10 @@ class User extends BaseUser
     public function setDateInscription($dateInscription)
     {
         $this->dateInscription = $dateInscription;
-    
+
         return $this;
     }
-    
+
     /**
      * Get dateInscription
      *
@@ -785,7 +793,7 @@ class User extends BaseUser
     {
         return $this->lastLogin ? $this->lastLogin->format('d/m/Y') : '';
     }
-    
+
     /**
      * Get pseudonymeForum
      *
@@ -795,7 +803,7 @@ class User extends BaseUser
     {
         return $this->pseudonymeForum;
     }
-    
+
     /**
      * Set pseudonymeForum
      *
@@ -805,7 +813,7 @@ class User extends BaseUser
     {
         $this->pseudonymeForum = $pseudonymeForum;
     }
-    
+
     /**
      * Get nom
      *
@@ -815,7 +823,7 @@ class User extends BaseUser
     {
         return $this->nom;
     }
-    
+
     /**
      * Set nom
      *
@@ -825,7 +833,7 @@ class User extends BaseUser
     {
         $this->nom = $nom;
     }
-    
+
     /**
      * Get prenom
      *
@@ -835,7 +843,7 @@ class User extends BaseUser
     {
         return $this->prenom;
     }
-    
+
     /**
      * Set prenom
      *
@@ -855,7 +863,7 @@ class User extends BaseUser
     {
         return $this->nbVisites;
     }
-    
+
     /**
      * Add nbVisites
      *
@@ -875,7 +883,7 @@ class User extends BaseUser
     {
         return $this->region;
     }
-    
+
     /**
      * Set region
      *
@@ -915,7 +923,7 @@ class User extends BaseUser
     /**
      * Get rattachementRegions
      *
-     * @return \Doctrine\Common\Collections\Collection 
+     * @return \Doctrine\Common\Collections\Collection
      */
     public function getRattachementRegions()
     {
@@ -954,7 +962,7 @@ class User extends BaseUser
             return $domaineString;
         }
 
-        foreach ($this->domaines as $domaine) 
+        foreach ($this->domaines as $domaine)
         {
             $domaineString .= ($domaineString != '' ? ' | ' : ' ') . $domaine->getNom();
         }
@@ -976,7 +984,7 @@ class User extends BaseUser
             return $domainesId;
         }
 
-        foreach ($this->domaines as $domaine) 
+        foreach ($this->domaines as $domaine)
         {
             $domainesId[] = $domaine->getId();
         }
@@ -993,7 +1001,7 @@ class User extends BaseUser
     public function addDomaine(\HopitalNumerique\DomaineBundle\Entity\Domaine $domaine)
     {
         $this->domaines[] = $domaine;
-    
+
         return $this;
     }
 
@@ -1014,16 +1022,16 @@ class User extends BaseUser
      * @return Domaine
      */
     public function setDomaines($domaines)
-    {        
+    {
         $this->domaines = $domaines;
-    
+
         return $this;
     }
 
     /**
      * Get domaines
      *
-     * @return \Doctrine\Common\Collections\Collection 
+     * @return \Doctrine\Common\Collections\Collection
      */
     public function getDomaines()
     {
@@ -1031,7 +1039,7 @@ class User extends BaseUser
     }
 
     /*-- Fin gestion domaine --*/
-    
+
     /**
      * Get département
      *
@@ -1041,7 +1049,7 @@ class User extends BaseUser
     {
         return $this->departement;
     }
-    
+
     /**
      * Set département
      *
@@ -1064,7 +1072,7 @@ class User extends BaseUser
     {
         return $this->etat;
     }
-    
+
     /**
      * Set etat
      *
@@ -1077,7 +1085,7 @@ class User extends BaseUser
         else
             $this->etat = null;
     }
-    
+
     /**
      * Get titre
      *
@@ -1087,7 +1095,7 @@ class User extends BaseUser
     {
         return $this->titre;
     }
-    
+
     /**
      * Set titre
      *
@@ -1100,7 +1108,7 @@ class User extends BaseUser
         else
             $this->titre = null;
     }
-    
+
     /**
      * Get civilite
      *
@@ -1110,7 +1118,7 @@ class User extends BaseUser
     {
         return $this->civilite;
     }
-    
+
     /**
      * Set civilite
      *
@@ -1123,7 +1131,7 @@ class User extends BaseUser
         else
             $this->civilite = null;
     }
-    
+
     /**
      * Get telephoneDirect
      *
@@ -1133,7 +1141,7 @@ class User extends BaseUser
     {
         return $this->telephoneDirect;
     }
-    
+
     /**
      * Set telephoneDirect
      *
@@ -1143,7 +1151,7 @@ class User extends BaseUser
     {
         $this->telephoneDirect = $telephoneDirect;
     }
-    
+
     /**
      * Get telephonePortable
      *
@@ -1153,7 +1161,7 @@ class User extends BaseUser
     {
         return $this->telephonePortable;
     }
-    
+
     /**
      * Set telephonePortable
      *
@@ -1163,7 +1171,7 @@ class User extends BaseUser
     {
         $this->telephonePortable = $telephonePortable;
     }
-    
+
     /**
      * Get contactAutre
      *
@@ -1173,7 +1181,7 @@ class User extends BaseUser
     {
         return $this->contactAutre;
     }
-    
+
     /**
      * Set contactAutre
      *
@@ -1183,7 +1191,7 @@ class User extends BaseUser
     {
         $this->contactAutre = $contactAutre;
     }
-    
+
     /**
      * Set typeActivite
      *
@@ -1196,7 +1204,7 @@ class User extends BaseUser
         else
             $this->typeActivite = null;
     }
-    
+
     /**
      * Get typeActivite
      *
@@ -1206,7 +1214,7 @@ class User extends BaseUser
     {
         return $this->typeActivite;
     }
-    
+
     /**
      * Set statutEtablissementSante
      *
@@ -1219,7 +1227,7 @@ class User extends BaseUser
         else
             $this->statutEtablissementSante = null;
     }
-    
+
     /**
      * Get statutEtablissementSante
      *
@@ -1229,7 +1237,7 @@ class User extends BaseUser
     {
         return $this->statutEtablissementSante;
     }
-    
+
     /**
      * Get etablissementRattachementSante
      *
@@ -1264,7 +1272,7 @@ class User extends BaseUser
         else
             $this->etablissementRattachementSante = null;
     }
-    
+
     /**
      * Get autreStructureRattachementSante
      *
@@ -1274,7 +1282,7 @@ class User extends BaseUser
     {
         return $this->autreStructureRattachementSante;
     }
-    
+
     /**
      * Set autreStructureRattachementSante
      *
@@ -1284,7 +1292,7 @@ class User extends BaseUser
     {
         $this->autreStructureRattachementSante = $autreStructureRattachementSante;
     }
-    
+
     /**
      * Get fonctionDansEtablissementSante
      *
@@ -1294,7 +1302,7 @@ class User extends BaseUser
     {
         return $this->fonctionDansEtablissementSante;
     }
-    
+
     /**
      * Set fonctionDansEtablissementSante
      *
@@ -1304,7 +1312,7 @@ class User extends BaseUser
     {
         $this->fonctionDansEtablissementSante = $fonctionDansEtablissementSante;
     }
-    
+
     /**
      * Set fonctionDansEtablissementSanteReferencement
      *
@@ -1317,7 +1325,7 @@ class User extends BaseUser
         else
             $this->fonctionDansEtablissementSanteReferencement = null;
     }
-    
+
     /**
      * Get fonctionDansEtablissementSanteReferencement
      *
@@ -1327,7 +1335,7 @@ class User extends BaseUser
     {
         return $this->fonctionDansEtablissementSanteReferencement;
     }
-    
+
     /**
      * Set profilEtablissementSante
      *
@@ -1340,7 +1348,7 @@ class User extends BaseUser
         else
             $this->profilEtablissementSante = null;
     }
-    
+
     /**
      * Get profilEtablissementSante
      *
@@ -1360,7 +1368,7 @@ class User extends BaseUser
     {
         return $this->nomStructure;
     }
-    
+
     /**
      * Set nomStructure
      *
@@ -1370,7 +1378,7 @@ class User extends BaseUser
     {
         $this->nomStructure = $nomStructure;
     }
-    
+
     /**
      * Get fonctionStructure
      *
@@ -1380,7 +1388,7 @@ class User extends BaseUser
     {
         return $this->fonctionStructure;
     }
-    
+
     /**
      * Set fonctionStructure
      *
@@ -1390,7 +1398,7 @@ class User extends BaseUser
     {
         $this->fonctionStructure = $fonctionStructure;
     }
-    
+
     /**
      * Get lock
      *
@@ -1400,7 +1408,7 @@ class User extends BaseUser
     {
         return $this->lock;
     }
-    
+
     /**
      * Set lock
      *
@@ -1410,7 +1418,7 @@ class User extends BaseUser
     {
         $this->lock = $lock;
     }
-    
+
     /**
      * Get notficationRequete
      *
@@ -1420,7 +1428,7 @@ class User extends BaseUser
     {
         return $this->notficationRequete;
     }
-    
+
     /**
      * Set notficationRequete
      *
@@ -1440,7 +1448,7 @@ class User extends BaseUser
     {
         return $this->archiver;
     }
-    
+
     /**
      * Set archiver
      *
@@ -1460,7 +1468,7 @@ class User extends BaseUser
     {
         return $this->alreadyBeAmbassadeur;
     }
-    
+
     /**
      * Set alreadyBeAmbassadeur
      *
@@ -1480,7 +1488,7 @@ class User extends BaseUser
     {
         return $this->alreadyBeExpert;
     }
-    
+
     /**
      * Set alreadyBeExpert
      *
@@ -1500,10 +1508,10 @@ class User extends BaseUser
     public function addContractualisation(\HopitalNumerique\UserBundle\Entity\Contractualisation $contractualisations)
     {
         $this->contractualisations[] = $contractualisations;
-    
+
         return $this;
     }
-    
+
     /**
      * Remove Contractualisation
      *
@@ -1513,7 +1521,7 @@ class User extends BaseUser
     {
         $this->contractualisations->removeElement($contractualisations);
     }
-    
+
     /**
      * Get contractualisations
      *
@@ -1533,9 +1541,9 @@ class User extends BaseUser
     {
         return $this->objets;
     }
-    
+
     // ^ -------- Gestion questionnaire  -------- ^
-    
+
     /**
      * Add reponses
      *
@@ -1545,10 +1553,10 @@ class User extends BaseUser
     public function addReponse(\HopitalNumerique\QuestionnaireBundle\Entity\Reponse $reponses)
     {
         $this->reponses[] = $reponses;
-    
+
         return $this;
     }
-    
+
     /**
      * Remove reponses
      *
@@ -1558,7 +1566,7 @@ class User extends BaseUser
     {
         $this->reponses->removeElement($reponses);
     }
-    
+
     /**
      * Get reponses
      *
@@ -1595,25 +1603,25 @@ class User extends BaseUser
     /**
      * Get questionnaireOccurrences
      *
-     * @return \Doctrine\Common\Collections\Collection 
+     * @return \Doctrine\Common\Collections\Collection
      */
     public function getQuestionnaireOccurrences()
     {
         return $this->questionnaireOccurrences;
     }
-    
+
     // v -------- Gestion questionnaire  -------- v
-    
+
     public function getTermsAccepted()
     {
         return $this->termsAccepted;
     }
-    
+
     public function setTermsAccepted($termsAccepted)
     {
         $this->termsAccepted = (Boolean) $termsAccepted;
     }
-    
+
     /**
      * Retourne le prénom puis le nom
      *
@@ -1708,10 +1716,10 @@ class User extends BaseUser
     public function addConnaissancesAmbassadeur(\HopitalNumerique\UserBundle\Entity\ConnaissanceAmbassadeur $connaissanceAmbassadeur)
     {
         $this->connaissancesAmbassadeurs[] = $connaissanceAmbassadeur;
-    
+
         return $this;
     }
-    
+
     /**
      * Remove ConnaissancesAmbassadeur
      *
@@ -1721,7 +1729,7 @@ class User extends BaseUser
     {
         $this->connaissancesAmbassadeurs->removeElement($connaissanceAmbassadeur);
     }
-    
+
     /**
      * Get connaissanceAmbassadeur
      *
@@ -1768,7 +1776,7 @@ class User extends BaseUser
 
     /**
      * Retourne les prénom et nom de l'utilisateur avec sa civilité.
-     * 
+     *
      * @return string Appelation de l'utilisateur
      */
     public function getAppellation()
@@ -1785,16 +1793,16 @@ class User extends BaseUser
         {
             $prenom .= ("" !== $prenom) ? ('-' . ucwords($tempPrenom)) : ucwords($tempPrenom);
         }
-        
+
         // ----Mise en majuscule du nom
         $nom = strtoupper($this->getNom());
-        
+
         return ($this->civilite != null ? $this->civilite->getLibelle().' ' : '').$prenom.' '.$nom;
     }
 
     /**
      * Retourne si l'utilisateur est actif.
-     * 
+     *
      * @return boolean VRAI ssi l'utilisateur est actif.
      */
     public function isActif()
@@ -1845,7 +1853,7 @@ class User extends BaseUser
     {
         return $this->raisonDesinscription;
     }
-    
+
     /**
      * Set raisonDesinscription
      *
@@ -1865,7 +1873,7 @@ class User extends BaseUser
     {
         return $this->remarque;
     }
-    
+
     /**
      * Set remarque
      *
@@ -1886,7 +1894,7 @@ class User extends BaseUser
     {
         return $this->biographie;
     }
-    
+
     /**
      * Set biographie
      *
@@ -1897,7 +1905,7 @@ class User extends BaseUser
         $this->biographie = $biographie;
         return $this;
     }
-    
+
     /**
      * Get dateLastUpdate
      *
@@ -1907,7 +1915,7 @@ class User extends BaseUser
     {
         return $this->dateLastUpdate;
     }
-    
+
     /**
      * Set dateLastUpdate
      *
@@ -1928,7 +1936,7 @@ class User extends BaseUser
     {
         return $this->dashboardFront;
     }
-    
+
     /**
      * Set dashboardFront
      *
@@ -1939,7 +1947,7 @@ class User extends BaseUser
         $this->dashboardFront = $dashboardFront;
         return $this;
     }
-    
+
     /**
      * Get dashboardBack
      *
@@ -1949,7 +1957,7 @@ class User extends BaseUser
     {
         return $this->dashboardBack;
     }
-    
+
     /**
      * Set dashboardBack
      *
@@ -1969,7 +1977,7 @@ class User extends BaseUser
     // ----------------------------------------
     // --- Gestion de l'upload des fichiers ---
     // ----------------------------------------
-    
+
     /**
      * Set path
      *
@@ -1980,12 +1988,12 @@ class User extends BaseUser
     {
         if( is_null($path) && file_exists($this->getAbsolutePath()) )
             unlink($this->getAbsolutePath());
-    
+
         $this->path = $path;
-    
+
         return $this;
     }
-    
+
     /**
      * Get path
      *
@@ -1995,28 +2003,28 @@ class User extends BaseUser
     {
         return $this->path;
     }
-    
+
     public function getAbsolutePath()
     {
         return null === $this->path ? null : $this->getUploadRootDir().'/'.$this->path;
     }
-    
+
     public function getWebPath()
     {
         return null === $this->path ? null : $this->getUploadDir().'/'.$this->path;
     }
-    
+
     public function getUploadRootDir()
     {
         // le chemin absolu du répertoire où les documents uploadés doivent être sauvegardés
         return __WEB_DIRECTORY__.'/'.$this->getUploadDir();
     }
-    
+
     public function getUploadDir()
     {
         return 'medias/Utilisateurs';
     }
-    
+
     /**
      * @ORM\PrePersist()
      * @ORM\PreUpdate()
@@ -2034,7 +2042,7 @@ class User extends BaseUser
             $this->path = round(microtime(true) * 1000) . '_' . $nomFichier . '.jpg';
         }
     }
-    
+
     /**
      * @ORM\PostPersist()
      * @ORM\PostUpdate()
@@ -2043,23 +2051,23 @@ class User extends BaseUser
     {
         if (null === $this->file)
             return;
-    
+
         // s'il y a une erreur lors du déplacement du fichier, une exception
         // va automatiquement être lancée par la méthode move(). Cela va empêcher
         // proprement l'entité d'être persistée dans la base de données si
         // erreur il y a
         $this->file->move($this->getUploadRootDir(), $this->path);
-    
+
         unset($this->file);
     }
-    
+
     /**
      * @ORM\PostRemove()
      */
     public function removeUpload()
     {
         $file = $this->getAbsolutePath();
-    
+
         if (file_exists($file) )
             unlink($file);
     }
@@ -2103,7 +2111,7 @@ class User extends BaseUser
     {
         $this->inscritCommunautePratique = $inscritCommunautePratique;
     }
-    
+
     /**
      * Add communautePratiqueGroupe
      *
@@ -2112,8 +2120,20 @@ class User extends BaseUser
      */
     public function addCommunautePratiqueAnimateurGroupe(\HopitalNumerique\CommunautePratiqueBundle\Entity\Groupe $communautePratiqueGroupe)
     {
-        $communautePratiqueGroupe->addAnimateur($this);
-        $this->communautePratiqueAnimateurGroupes[] = $communautePratiqueGroupe;
+        $this->addCommunautePratiqueAnimateurGroupeInscription(new Inscription($communautePratiqueGroupe, $this));
+        return $this;
+    }
+
+    /**
+     * Add groupeInscription
+     *
+     * @param \HopitalNumerique\CommunautePratiqueBundle\Entity\Inscription $groupeInscription
+     * @return User
+     */
+    public function addCommunautePratiqueAnimateurGroupeInscription(\HopitalNumerique\CommunautePratiqueBundle\Entity\Inscription $groupeInscription)
+    {
+        $groupeInscription->getgroupe->addAnimateur($this);
+        $this->communautePratiqueAnimateurGroupes[] = $groupeInscription->getGroupe();
 
         return $this;
     }
@@ -2125,14 +2145,24 @@ class User extends BaseUser
      */
     public function removeCommunautePratiqueAnimateurGroupe(\HopitalNumerique\CommunautePratiqueBundle\Entity\Groupe $communautePratiqueGroupes)
     {
-        $this->communautePratiqueAnimateurGroupes->removeElement($communautePratiqueGroupes);
-        $communautePratiqueGroupes->removeAnimateur($this);
+        $this->removeCommunautePratiqueAnimateurGroupeInscription(new Inscription($communautePratiqueGroupes, $this));
+    }
+
+    /**
+     * Remove groupeInscription
+     *
+     * @param \HopitalNumerique\CommunautePratiqueBundle\Entity\Inscription $groupeInscription
+     */
+    public function removeCommunautePratiqueAnimateurGroupeInscription(\HopitalNumerique\CommunautePratiqueBundle\Entity\Inscription $groupeInscription)
+    {
+        $this->communautePratiqueAnimateurGroupes->removeElement($groupeInscription->getGroupe());
+        $groupeInscription->getGroupe()->removeAnimateur($this);
     }
 
     /**
      * Get communautePratiqueGroupes
      *
-     * @return \Doctrine\Common\Collections\Collection 
+     * @return \Doctrine\Common\Collections\Collection
      */
     public function getCommunautePratiqueAnimateurGroupes()
     {
@@ -2147,12 +2177,47 @@ class User extends BaseUser
      */
     public function addCommunautePratiqueGroupe(\HopitalNumerique\CommunautePratiqueBundle\Entity\Groupe $communautePratiqueGroupe)
     {
-        $communautePratiqueGroupe->addUser($this);
-        $this->communautePratiqueGroupes[] = $communautePratiqueGroupe;
-
+        $this->addCommunautePratiqueGroupeInscription(new Inscription($communautePratiqueGroupe, $this));
         return $this;
     }
 
+    /**
+     * Add groupeInscription
+     *
+     * @param \HopitalNumerique\CommunautePratiqueBundle\Entity\Inscription $groupeInscription
+     * @return User
+     */
+    public function addCommunautePratiqueGroupeInscription(\HopitalNumerique\CommunautePratiqueBundle\Entity\inscription $groupeInscription)
+    {
+        $this->groupeInscription[] = $groupeInscription;
+
+        return $this;
+    }
+    /**
+     * is Actif in groupe
+     *
+     * @param \HopitalNumerique\CommunautePratiqueBundle\Entity\Inscription $groupeInscription
+     * @return User
+     */
+    public function isActifInGroupe(\HopitalNumerique\CommunautePratiqueBundle\Entity\Groupe $groupe)
+    {
+        return $this->isActifGroupeInscription(new Inscription($groupe, $this));
+    }
+    /**
+     * is Actif in groupe
+     *
+     * @param \HopitalNumerique\CommunautePratiqueBundle\Entity\Inscription $groupeInscription
+     * @return User
+     */
+    public function isActifGroupeInscription(\HopitalNumerique\CommunautePratiqueBundle\Entity\inscription $groupeInscription)
+    {
+        foreach ($this->groupeInscription->getValues() as $inscrit) {
+            if ($inscrit->getGroupe()->getId() == $groupeInscription->getGroupe()->getId()) {
+                return $inscrit->isActif();
+            }
+        }
+        return false;
+    }
     /**
      * Remove communautePratiqueGroupes
      *
@@ -2160,39 +2225,69 @@ class User extends BaseUser
      */
     public function removeCommunautePratiqueGroupe(\HopitalNumerique\CommunautePratiqueBundle\Entity\Groupe $communautePratiqueGroupes)
     {
-        $this->communautePratiqueGroupes->removeElement($communautePratiqueGroupes);
-        $communautePratiqueGroupes->removeUser($this);
+        $this->removeCommunautePratiqueGroupeInscription(new Inscription($communautePratiqueGroupes, $this));
+    }
+
+    /**
+     * Remove groupeInscription
+     *
+     * @param \HopitalNumerique\CommunautePratiqueBundle\Entity\Inscription $groupeInscription
+     */
+    public function removeCommunautePratiqueGroupeInscription(\HopitalNumerique\CommunautePratiqueBundle\Entity\Inscription $groupeInscription)
+    {
+        $this->groupeInscription->removeElement($groupeInscription);
+        $groupeInscription->getGroupe()->removeUser($this);
     }
 
     /**
      * Has communautePratiqueGroupe ?
-     * 
+     *
      * @param \HopitalNumerique\CommunautePratiqueBundle\Entity\Groupe $communautePratiqueGroupe
      * @return boolean
      */
     public function hasCommunautePratiqueGroupe(\HopitalNumerique\CommunautePratiqueBundle\Entity\Groupe $communautePratiqueGroupe)
     {
-        foreach ($this->communautePratiqueGroupes as $communautePratiqueGroupeExistant)
-        {
-            if ($communautePratiqueGroupeExistant->getId() == $communautePratiqueGroupe->getId())
-            {
+        return $this->hasCommunautePratiqueGroupeInscription(new Inscription($communautePratiqueGroupe, $this));
+    }
+
+    /**
+     * Has $groupeInscription ?
+     *
+     * @param \HopitalNumerique\CommunautePratiqueBundle\Entity\Inscription $groupeInscription
+     * @return boolean
+     */
+    public function hasCommunautePratiqueGroupeInscription(\HopitalNumerique\CommunautePratiqueBundle\Entity\Inscription $groupeInscription)
+    {
+        foreach ($this->groupeInscription->getValues() as $inscrit) {
+            if ($inscrit->getGroupe()->getId() == $groupeInscription->getGroupe()->getId()) {
                 return true;
             }
         }
-
         return false;
     }
 
     /**
      * Get communautePratiqueGroupes
      *
-     * @return \Doctrine\Common\Collections\Collection 
+     * @return \Doctrine\Common\Collections\Collection
      */
     public function getCommunautePratiqueGroupes()
     {
+        foreach ($this->getGroupeInscription() as $inscrit) {
+            $this->communautePratiqueGroupes[] = $inscrit->getGroupe();
+        }
         return $this->communautePratiqueGroupes;
     }
 
+    /**
+     * Get groupeInscription
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getGroupeInscription()
+    {
+        return $this->groupeInscription;
+    }
     /**
      * Add communautePratiqueDocument
      *
@@ -2219,7 +2314,7 @@ class User extends BaseUser
     /**
      * Get communautePratiqueDocuments
      *
-     * @return \Doctrine\Common\Collections\Collection 
+     * @return \Doctrine\Common\Collections\Collection
      */
     public function getCommunautePratiqueDocuments()
     {
@@ -2252,7 +2347,7 @@ class User extends BaseUser
     /**
      * Get communautePratiqueFiches
      *
-     * @return \Doctrine\Common\Collections\Collection 
+     * @return \Doctrine\Common\Collections\Collection
      */
     public function getCommunautePratiqueFiches()
     {
@@ -2307,7 +2402,7 @@ class User extends BaseUser
         {
             return '/'.$this->getWebPath();
         }
-        
+
         if (null !== $this->civilite && Reference::CIVILITE_MADAME_ID == $this->civilite->getId())
         {
             return '/bundles/hopitalnumeriqueuser/img/madame.png';

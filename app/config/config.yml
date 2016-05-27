@@ -164,7 +164,7 @@ igorw_file_serve:
     base_dir: ~        # The default value is "%kernel.root_dir%"
 
 hopital_numerique_user:
-    options: 
+    options:
         idEtatActif: 3      #Ids de la table Référence
         idTypeAutres : 10
 
@@ -201,7 +201,7 @@ knp_snappy:
 stof_doctrine_extensions:
     default_locale: fr_FR
     orm:
-        default: 
+        default:
             loggable: true
             timestampable: true
 
@@ -234,6 +234,7 @@ fos_js_routing:
         - hopitalnumerique_communautepratique_fiche_view
         - hopitalnumerique_communautepratique_tinymce_documents
         - hopitalnumerique_communautepratique_user_desinscritgroupe
+        - hopitalnumerique_communautepratique_user_activegroupe
         - hopitalnumerique_communautepratique_user_listbygroupe
         - hopitalnumerique_objet_objet_getObjets
 

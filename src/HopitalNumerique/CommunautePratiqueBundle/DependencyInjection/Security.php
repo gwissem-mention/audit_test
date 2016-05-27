@@ -98,8 +98,8 @@ class Security
         return (
             ( $groupe->isEnCours() || $groupe->isPeriodeInscription())
             && (
-                (null !== $this->getUser() && $this->getUser()->hasCommunautePratiqueGroupe($groupe))
-                || $this->isAdmin()
+                (null !== $this->getUser() && $this->getUser()->hasCommunautePratiqueGroupe($groupe) && $this->getUser()->isActifInGroupe($groupe))
+                || ($this->isAdmin() || (null !== $this->getUser() && $groupe->hasAnimateur($this->getUser())))
             )
         );
     }
