@@ -48,13 +48,6 @@ class CronController extends Controller
                     }
                 }
 
-                //get Objets with refs
-                $objets = $this->container->get('hopitalnumerique_recherche.manager.search')->getObjetsForCronAutodiag( array_unique($refs) );
-                if( count($objets) != 0 ){
-                    foreach($objets as $objet)
-                        $productions[ $objet['id'] ]['outils'][] = $outil->getId();
-                }
-                
                 //updates objets
                 foreach($productions as $production){
                     $objet = $production['objet'];

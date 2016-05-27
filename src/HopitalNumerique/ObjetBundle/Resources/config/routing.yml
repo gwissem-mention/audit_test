@@ -120,13 +120,6 @@ hopitalnumerique_objet_contenu_reorder:
     pattern:  /objet/contenu/reorder
     defaults: { _controller: "HopitalNumeriqueObjetBundle:Contenu:reorder" }
 
-#partie reference
-hopitalnumerique_objet_reference_objet_save:
-    pattern:  /objet/reference/save/objet/{id}
-    defaults: { _controller: "HopitalNumeriqueObjetBundle:Reference:saveObjet" }
-    requirements:
-        id: \d+
-
 #---Commentaire
 hopitalnumerique_objet_admin_commentaire:
     pattern:  /objet/commentaire

@@ -18,7 +18,7 @@ parameters:
 services:
     hopitalnumerique_recherche.manager.search:
         class: %hopitalnumerique_recherche.manager.search.class%
-        arguments: ["@hopitalnumerique_objet.manager.refobjet", "@ccdn_forum_forum.component.security.authorizer", "%hopital_numerique_recherche.options%"]
+        arguments: ["@ccdn_forum_forum.component.security.authorizer", "%hopital_numerique_recherche.options%"]
 
     hopitalnumerique_recherche.manager.requete:
         class: %hopitalnumerique_recherche.manager.requete.class%

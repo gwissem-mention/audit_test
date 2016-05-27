@@ -280,11 +280,6 @@ class Objet implements RoutedItemInterface
     protected $types;
 
     /**
-     * @ORM\OneToMany(targetEntity="\HopitalNumerique\ObjetBundle\Entity\RefObjet", mappedBy="objet", cascade={"persist", "remove" })
-     */
-    protected $references;
-
-    /**
      * @ORM\OneToMany(targetEntity="\HopitalNumerique\ObjetBundle\Entity\Consultation", mappedBy="objet", cascade={"persist", "remove" })
      */
     protected $consultations;
@@ -1069,29 +1064,6 @@ class Objet implements RoutedItemInterface
     }
 
     /**
-     * Get references
-     *
-     * @return \Doctrine\Common\Collections\ArrayCollection $references
-     */
-    public function getReferences()
-    {
-        return $this->references;
-    }
-
-    /**
-     * Set references
-     *
-     * @param \Doctrine\Common\Collections\ArrayCollection $references
-     * @return Objet
-     */
-    public function setReferences(\Doctrine\Common\Collections\ArrayCollection $references)
-    {
-        $this->references = $references;
-
-        return $this;
-    }
-
-    /**
      * Get consultations
      *
      * @return \Doctrine\Common\Collections\ArrayCollection $consultations
@@ -1439,29 +1411,6 @@ class Objet implements RoutedItemInterface
     public function getIsArticle()
     {
         return $this->isArticle;
-    }
-
-    /**
-     * Add references
-     *
-     * @param \HopitalNumerique\ObjetBundle\Entity\RefObjet $references
-     * @return Objet
-     */
-    public function addReference(\HopitalNumerique\ObjetBundle\Entity\RefObjet $references)
-    {
-        $this->references[] = $references;
-
-        return $this;
-    }
-
-    /**
-     * Remove references
-     *
-     * @param \HopitalNumerique\ObjetBundle\Entity\RefObjet $references
-     */
-    public function removeReference(\HopitalNumerique\ObjetBundle\Entity\RefObjet $references)
-    {
-        $this->references->removeElement($references);
     }
 
     /**
