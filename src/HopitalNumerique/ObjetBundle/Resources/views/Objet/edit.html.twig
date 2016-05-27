@@ -415,7 +415,6 @@
                 <input type="hidden" id="objet-id" value="{{objet.id}}" />
                 <input type="hidden" id="save-references-objet-url" value="{{path('hopitalnumerique_objet_reference_objet_save',{'id':objet.id})}}" />
                 <input type="hidden" id="parse-upload-url" value="{{path('hopitalnumerique_objet_contenu_uploadparse',{'id':objet.id})}}" />
-                <input type="hidden" id="save-references-contenu-url" value="{{path('hopitalnumerique_objet_reference_contenu_save')}}" />
             {% endif %}
             <input type="hidden" id="toRef" value="{{toRef}}" />
             <input type="hidden" id="getObjets" value="{{path('hopitalnumerique_objet_objet_getObjets')}}" />

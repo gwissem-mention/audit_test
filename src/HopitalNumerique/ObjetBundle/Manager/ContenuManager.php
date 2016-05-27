@@ -236,27 +236,6 @@ class ContenuManager extends BaseManager
 
 
     /**
-     * Retourne la note des références
-     *
-     * @param array $references   Tableau des références
-     * @param array $ponderations Tableau des pondérations
-     *
-     * @return integer
-     */
-    private function getNoteReferencement( $references )
-    {
-        $note = 0;
-        foreach($references as $reference){
-            $id = $reference->getReference()->getId();
-
-            if( isset($this->_refPonderees[ $id ]) )
-                $note += $this->_refPonderees[ $id ]['poids'];
-        }
-        
-        return $note;
-    }
-
-    /**
      * Retourne le prefix du contenu
      *
      * @param Contenu $contenu Contenu
@@ -302,7 +281,6 @@ class ContenuManager extends BaseManager
             $item->alias      = $element->getAlias();
             $item->id         = $element->getId();
             $item->nbVue      = $element->getNbVue();
-            $item->note       = $this->getNoteReferencement( $element->getReferences() );
             $item->order      = $chapitre;
             $item->hasContent = $element->getContenu() == ''   ? false : true;
             $item->objet      = $element->getParent()  == null ? $element->getObjet()->getId() : NULL;

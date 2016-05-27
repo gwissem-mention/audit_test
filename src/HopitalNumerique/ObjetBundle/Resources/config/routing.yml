@@ -127,10 +127,6 @@ hopitalnumerique_objet_reference_objet_save:
     requirements:
         id: \d+
 
-hopitalnumerique_objet_reference_contenu_save:
-    pattern:  /objet/reference/save/contenu
-    defaults: { _controller: "HopitalNumeriqueObjetBundle:Reference:saveContenu" }
-
 #---Commentaire
 hopitalnumerique_objet_admin_commentaire:
     pattern:  /objet/commentaire

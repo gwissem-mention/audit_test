@@ -5,7 +5,6 @@ parameters:
     hopitalnumerique_objet.manager.contenu.class: HopitalNumerique\ObjetBundle\Manager\ContenuManager
     hopitalnumerique_objet.form.contenu.class: HopitalNumerique\ObjetBundle\Form\ContenuType
     hopitalnumerique_objet.manager.refobjet.class: HopitalNumerique\ObjetBundle\Manager\RefObjetManager
-    hopitalnumerique_objet.manager.refcontenu.class: HopitalNumerique\ObjetBundle\Manager\RefContenuManager
     hopitalnumerique_objet.manager.consultation.class: HopitalNumerique\ObjetBundle\Manager\ConsultationManager
     hopitalnumerique_objet.manager.commentaire.class: HopitalNumerique\ObjetBundle\Manager\CommentaireManager
     hopitalnumerique_objet.grid.commentaire.class: HopitalNumerique\ObjetBundle\Grid\CommentaireGrid
@@ -27,10 +26,6 @@ services:
 
     hopitalnumerique_objet.manager.refobjet:
         class: %hopitalnumerique_objet.manager.refobjet.class%
-        arguments: ["@doctrine.orm.entity_manager"]
-
-    hopitalnumerique_objet.manager.refcontenu:
-        class: %hopitalnumerique_objet.manager.refcontenu.class%
         arguments: ["@doctrine.orm.entity_manager"]
 
     hopitalnumerique_objet.manager.consultation:

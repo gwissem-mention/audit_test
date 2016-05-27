@@ -83,11 +83,6 @@ class Contenu
     private $dateModification;
 
     /**
-     * @ORM\OneToMany(targetEntity="\HopitalNumerique\ObjetBundle\Entity\RefContenu", mappedBy="contenu", fetch="EAGER", cascade={"persist", "remove" })
-     */
-    protected $references;
-
-    /**
      * @ORM\ManyToOne(targetEntity="Contenu", cascade={"persist"})
      * @ORM\JoinColumn(name="parent_id", referencedColumnName="con_id", onDelete="CASCADE")
      */
@@ -159,7 +154,6 @@ class Contenu
         $this->parent       = null;
         $this->order        = 0;
         $this->nbVue        = 0;
-        $this->references   = array();
         $this->objets = new \Doctrine\Common\Collections\ArrayCollection();
         $this->domaines = new \Doctrine\Common\Collections\ArrayCollection();
     }
@@ -263,27 +257,7 @@ class Contenu
     {
         $this->order = $order;
     }
-    
-    /**
-     * Get references
-     *
-     * @return \Doctrine\Common\Collections\ArrayCollection $references
-     */
-    public function getReferences()
-    {
-        return $this->references;
-    }
-    
-    /**
-     * Set references
-     *
-     * @param \Doctrine\Common\Collections\ArrayCollection $references
-     */
-    public function setReferences(\Doctrine\Common\Collections\ArrayCollection $references)
-    {
-        $this->references = $references;
-    }
-    
+
     /**
      * Get parent
      *

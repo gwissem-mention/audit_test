@@ -11,6 +11,7 @@ use Symfony\Bridge\Doctrine\RegistryInterface;
  * Migration.
  *
  * URL : /admin/referencement/cron-save-notes/PBYDHWURJYILOLP24FKGMERO78HD7SUXVRT
+ * @todo Service à supprimer après migration en prod
  */
 class Migration
 {

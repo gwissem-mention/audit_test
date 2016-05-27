@@ -13,7 +13,6 @@ class SearchManager extends BaseManager
     private $_ressource             = 183;
     private $_pointDur              = 184;
     private $_refObjetManager       = null;
-    private $_refContenuManager     = null;
     private $_refsPonderees         = null;
     private $_ccdnAuthorizer        = null;
     private $_urlRechercheTextuelle = "";
@@ -23,12 +22,10 @@ class SearchManager extends BaseManager
      * Override du contrct d'un manager normal : ce manager n'est lié à aucune entitée
      *
      * @param RefObjetManager   $refObjetManager   Entitée RefObjetManager
-     * @param RefContenuManager $refContenuManager Entitée RefContenuManager
      */
-    public function __construct( $refObjetManager, $refContenuManager, $ccdnAuthorizer, $options = array() )
+    public function __construct( $refObjetManager, $ccdnAuthorizer, $options = array() )
     {
         $this->_refObjetManager   = $refObjetManager;
-        $this->_refContenuManager = $refContenuManager;
         $this->_ccdnAuthorizer    = $ccdnAuthorizer;
 
         $this->_urlRechercheTextuelle = isset($options['urlRechercheTextuelle']) ? $options['urlRechercheTextuelle'] : '';
@@ -53,96 +50,6 @@ class SearchManager extends BaseManager
     public function getActivationExalead()
     {
         return $this->_activationExalead;
-    }
-
-    /**
-     * Retourne la liste des objets concernés par la requete de recherche
-     *
-     * @param array  $references Liste des références sélectionées
-     * @param string $role       Role de l'user connecté
-     *
-     * @return array
-     */
-    public function getObjetsForRecherche( $references, $role, $refsPonderees)
-    {
-        //prepare some vars
-        $nbCateg              = 4;
-        $objetsToIntersect    = array();
-        $contenusToIntersect  = array();
-        $this->_refsPonderees = $refsPonderees;
-        $filsForumToIntersect = array();
-
-        //get objets from each Categ
-        for ( $i = 1; $i <= $nbCateg; $i++ ) 
-        {
-            //si on a filtré sur la catégorie
-            if( isset($references['categ'.$i]) )
-            {
-                //on récupères tous les objets, on les formate et on les ajoute à nos catégories
-                $results = $this->_refObjetManager->getObjetsForRecherche( $references['categ'.$i] );
-                if( $results)
-                {
-                    $tmp = array();
-                    foreach( $results as $one) 
-                    {
-                        $objet = $this->formateObjet( $one, $role );
-                        if( !is_null($objet) && $objet['categ'] != '' )
-                        {
-                            //Dans le cas où on est déjà sur une ref d'un objet qui existe déjà, on ajout les primary
-                            if(array_key_exists($objet['id'], $tmp))
-                            {
-                                $primary                        = $tmp[ $objet['id'] ]['primary'];
-                                $tmp[ $objet['id'] ]            = $objet;
-                                $tmp[ $objet['id'] ]['primary'] = $tmp[ $objet['id'] ]['primary'] + $primary;
-                            }
-                            else
-                            {
-                                $tmp[ $objet['id'] ] = $objet;
-                            }
-                        }
-                    }
-                    //il y'a eu des résultats pour cette catégorie, on place donc ces résultats dans le tableau d'intersection (analyse multi categ)
-                    $objetsToIntersect[] = $tmp;
-                }
-                else
-                {
-                    $objetsToIntersect[] = array();
-                }
-
-                //on récupères tous les contenus (infradoc), on les formate et on les ajoute à nos catégories
-                $results = $this->_refContenuManager->getContenusForRecherche( $references['categ'.$i] );
-                if( $results ) {
-                    $tmp = array();
-                    foreach( $results as $one) {
-                        $contenu = $this->formateContenu( $one, $role );
-                        if( !is_null($contenu) && $contenu['categ'] != '' )
-                        {
-                            //Dans le cas où on est déjà sur une ref d'un contenu qui existe déjà, on ajout les primary
-                            if(array_key_exists($contenu['id'], $tmp))
-                            {
-                                $primary                          = $tmp[ $contenu['id'] ]['primary'];
-                                $tmp[ $contenu['id'] ]            = $contenu;
-                                $tmp[ $contenu['id'] ]['primary'] = $tmp[ $contenu['id'] ]['primary'] + $primary;
-                            }
-                            else
-                            {
-                                $tmp[ $contenu['id'] ] = $contenu;
-                                $tmp[ $contenu['id'] ]['primary'] = intval($contenu['primary'] ? 1 : 0);
-                            }
-                        }
-                    }
-
-                    //il y'a eu des résultats pour cette catégorie, on place donc ces résultats dans le tableau d'intersection (analyse multi categ)
-                    $contenusToIntersect[] = $tmp;
-                }
-                else
-                {
-                    $contenusToIntersect[] = array();
-                }
-            }
-        }
-
-        return $this->mergeDatas( $objetsToIntersect, $contenusToIntersect, $filsForumToIntersect );
     }
 
     /**
@@ -293,32 +200,6 @@ class SearchManager extends BaseManager
         else
         {
             $objetsToIntersect[] = array();
-        }
-
-        //on récupères tous les contenus (infradoc), on les formate et on les ajoute à nos catégories
-        $results = $this->_refContenuManager->getContenusForRecherche( $references );
-        if( $results ) 
-        {
-            $tmp = array();
-            foreach( $results as $one) 
-            {
-                if(!in_array($domaineId, $one->getContenu()->getObjet()->getDomainesId()))
-                {
-                    continue;
-                }
-                $contenu = $this->formateContenu( $one, $role );
-                if( !is_null($contenu) && $contenu['categ'] != '' )
-                {
-                    $tmp[ $contenu['id'] ] = $contenu;
-                }
-            }
-
-            //il y'a eu des résultats pour cette catégorie, on place donc ces résultats dans le tableau d'intersection (analyse multi categ)
-            $contenusToIntersect[] = $tmp;
-        }
-        else
-        {
-            $contenusToIntersect[] = array();
         }
 
         return $this->mergeDatas( $objetsToIntersect, $contenusToIntersect, array() );
@@ -503,63 +384,6 @@ class SearchManager extends BaseManager
         array_multisort($sort['primary'], SORT_DESC, $sort['countRef'], SORT_ASC,$sort['id'], SORT_DESC,$fusion);
 
         return $fusion;
-    }
-
-    /**
-     * Formatte Correctement les refContenus
-     *
-     * @param RefContenu $one  L'entité RefContenu
-     * @param string     $role Le rôle de l'user connecté
-     *
-     * @return stdClass
-     */
-    private function formateContenu( $one, $role )
-    {
-        //Références
-        $item            = array();
-        $item['primary'] = array_key_exists('primary', $item) ? ( $one->getPrimary() ? $item['primary']++ : $item['primary']) : ($one->getPrimary() ? 1 : 0) ;
-
-        //contenu
-        $contenu = $one->getContenu();
-        $objet   = $contenu->getObjet();
-
-        //on teste si le rôle de l'user connecté ne fait pas parti de la liste des restriction de l'objet
-        $roles = $objet->getRoles();
-        foreach($roles as $restrictedRole){
-            //on "break" en retournant null, l'objet n'est pas ajouté
-            if( $restrictedRole->getRole() == $role)
-            {
-                return null;
-            }
-        }
-
-        $item['id']       = $contenu->getId();
-        $item['titre']    = $contenu->getTitre();
-        $item['countRef'] = $this->getNoteReferencement($contenu->getReferences());
-        $item['objet']    = $objet->getId();
-        $item['aliasO']   = $objet->getAlias();
-        $item['source']   = $objet->getSource();
-        $item['aliasC']   = $contenu->getAlias();
-        $item['synthese'] = $objet->getSynthese() != '' ? $objet->getId() : null;
-
-        //clean resume (pagebreak)
-        $tab                  = explode('<!-- pagebreak -->', $contenu->getContenu());
-        $item['resume']       = html_entity_decode(strip_tags($tab[0]), 2 | 0, 'UTF-8');
-        $item['hasPageBreak'] = strpos($contenu->getContenu(),'<!-- pagebreak -->') !== false;
-        $item['type']         = array();
-
-        //get Categ and Type
-        $tmp = $this->getTypeAndCateg( $objet );
-        $item['type']  = $tmp['type'];
-        $item['categ'] = $tmp['categ'];
-
-        //status (new/updated/datecreation)
-        $item['new']      = false;
-        $item['updated']  = false;
-        $item['created']  = $contenu->getDateCreation();
-        $item['modified'] = $contenu->getDateModification();
-
-        return $item;
     }
 
     /**

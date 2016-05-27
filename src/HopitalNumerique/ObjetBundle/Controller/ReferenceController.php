@@ -55,42 +55,4 @@ class ReferenceController extends Controller
 
         return new Response('{"success":true, "note":"' . number_format($note, 2, ',', ' ') . '"}', 200);
     }
-
-    /**
-     * [saveContenuAction description]
-     *
-     * @return [type]
-     */
-    public function saveContenuAction()
-    {
-        //on récupère le contenu
-        $id      = $this->get('request')->request->get('contenu');
-        $contenu = $this->get('hopitalnumerique_objet.manager.contenu')->findOneBy( array('id' => $id) );
-        
-        //efface toutes les anciennes références
-        $oldRefs = $this->get('hopitalnumerique_objet.manager.refcontenu')->findBy( array('contenu' => $contenu) );
-        $this->get('hopitalnumerique_objet.manager.refcontenu')->delete( $oldRefs );
-
-        //ajoute les nouvelles références
-        $references = json_decode( $this->get('request')->request->get('references') );
-        $refsToSave = array();
-        foreach( $references as $reference ) {
-            $ref = $this->get('hopitalnumerique_objet.manager.refcontenu')->createEmpty();
-            $ref->setContenu( $contenu );
-            $ref->setPrimary( $reference->type );
-
-            //get ref
-            $ref->setReference( $this->get('hopitalnumerique_reference.manager.reference')->findOneBy( array( 'id' => $reference->id) ) );
-
-            //save it
-            $refsToSave[] = $ref;
-        }
-        $this->get('hopitalnumerique_objet.manager.refcontenu')->save( $refsToSave );
-
-        //get Object Note
-        $refsPonderees = $this->get('hopitalnumerique_reference.manager.reference')->getReferencesPonderees();
-        $note = $this->get('hopitalnumerique_objet.manager.objet')->getNoteReferencement( $contenu->getReferences(), $refsPonderees );
-
-        return new Response('{"success":true, "note":"' . number_format($note, 2, ',', ' ') . '"}', 200);
-    }
 }

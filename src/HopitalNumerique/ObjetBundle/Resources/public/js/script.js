@@ -274,10 +274,8 @@ function saveReferences( objet, idContenu )
     //JSONify IT !
     json = JSON.stringify( references );
 
-    if( objet )
+    if( objet ) {
         ajaxUrl = $('#save-references-objet-url').val();
-    else
-        ajaxUrl = $('#save-references-contenu-url').val();
 
     //save the value
     $.ajax({
@@ -300,6 +298,7 @@ function saveReferences( objet, idContenu )
             $.fancybox.close(true);
         }
     });
+    }
 }
 
 //Upload le contenu CSV et le transforme en sommaire

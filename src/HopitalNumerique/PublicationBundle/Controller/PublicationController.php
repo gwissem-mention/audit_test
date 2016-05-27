@@ -50,13 +50,18 @@ class PublicationController extends Controller
         //get Contenus : for sommaire
         $contenus = $objet->isInfraDoc() ? $this->get('hopitalnumerique_objet.manager.contenu')->getArboForObjet( $objet->getId() ) : array();
 
+        $references = $this->container->get('hopitalnumerique_reference.manager.entity_has_reference')->findByEntityTypeAndEntityIdAndDomaines(
+            $this->container->get('hopitalnumerique_core.dependency_injection.entity')->getEntityType($objet),
+            $this->container->get('hopitalnumerique_core.dependency_injection.entity')->getEntityId($objet),
+            [$this->container->get('hopitalnumerique_domaine.dependency_injection.current_domaine')->get()]
+        );
         //render
         return $this->render('HopitalNumeriquePublicationBundle:Publication:objet.html.twig', array(
             'objet'        => $objet,
             'note'         => $this->container->get('hopitalnumerique_objet.doctrine.note_reader')->getNoteByObjetAndUser($objet, $this->getUser()),
             'types'        => $types,
             'contenus'     => $contenus,
-            'meta'         => $this->get('hopitalnumerique_recherche.manager.search')->getMetas($objet->getReferences(), $objet->getResume() ),
+            'meta'         => $this->get('hopitalnumerique_recherche.manager.search')->getMetas($references, $objet->getResume() ),
             'ambassadeurs' => $this->getAmbassadeursConcernes( $objet->getId() ),
             'productionsLiees' => $this->get('hopitalnumerique_objet.dependency_injection.production_liee')->getFormattedProductionsLiees($objet),
             'parcoursGuides' => $this->container->get('hopitalnumerique_rechercheparcours.dependency_injection.parcours_guide_lie')->getFormattedParcoursGuidesLies($objet),
@@ -202,8 +207,13 @@ class PublicationController extends Controller
                 )
             );
         }
-
-        $meta = $this->get('hopitalnumerique_recherche.manager.search')->getMetas($contenu->getReferences(), $contenu->getContenu() );
+        
+        $references = $this->container->get('hopitalnumerique_reference.manager.entity_has_reference')->findByEntityTypeAndEntityIdAndDomaines(
+            $this->container->get('hopitalnumerique_core.dependency_injection.entity')->getEntityType($contenu),
+            $this->container->get('hopitalnumerique_core.dependency_injection.entity')->getEntityId($contenu),
+            [$this->container->get('hopitalnumerique_domaine.dependency_injection.current_domaine')->get()]
+        );
+        $meta = $this->get('hopitalnumerique_recherche.manager.search')->getMetas($references, $contenu->getContenu() );
 
         $ambassadeurs = $this->getAmbassadeursConcernes( $objet->getId() );
 
@@ -261,10 +271,15 @@ class PublicationController extends Controller
         //get Type
         $types = $this->get('hopitalnumerique_objet.manager.objet')->formatteTypes( $objet->getTypes() );
 
+        $references = $this->container->get('hopitalnumerique_reference.manager.entity_has_reference')->findByEntityTypeAndEntityIdAndDomaines(
+            $this->container->get('hopitalnumerique_core.dependency_injection.entity')->getEntityType($objet),
+            $this->container->get('hopitalnumerique_core.dependency_injection.entity')->getEntityId($objet),
+            [$this->container->get('hopitalnumerique_domaine.dependency_injection.current_domaine')->get()]
+        );
         //render
         return $this->render('HopitalNumeriquePublicationBundle:Publication:articles.html.twig', array(
             'objet'      => $objet,
-            'meta'       => $this->get('hopitalnumerique_recherche.manager.search')->getMetas($objet->getReferences(), $objet->getResume() ),
+            'meta'       => $this->get('hopitalnumerique_recherche.manager.search')->getMetas($references, $objet->getResume() ),
             'menu'       => $item ? $item->getMenu()->getAlias() : null,
             'categories' => $categories,
             'types'      => $types
