@@ -1296,9 +1296,6 @@ class User extends BaseUser
 
         return false;
     }
-
-=======
->>>>>>> develop
     /**
      * Set statutEtablissementSante
      *
