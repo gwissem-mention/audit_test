@@ -78,9 +78,11 @@ class NoteSaver
             foreach ($entitiesHasReferencesByEntityId as $entityId => $entitiesHasReferences) {
                 $entity = $this->entityService->getEntityByTypeAndId($entityType, $entityId);
 
-                if ($this->entityService->entityHasDomaine($entity, $domaine)) {
-                    $note = $this->getNoteForEntitiesHaveReferences($entitiesHasReferences, $referencesTreeWithScores);
-                    $this->save($entityType, $entityId, $domaine, $note);
+                if (null !== $entity) {
+                    if ($this->entityService->entityHasDomaine($entity, $domaine)) {
+                        $note = $this->getNoteForEntitiesHaveReferences($entitiesHasReferences, $referencesTreeWithScores);
+                        $this->save($entityType, $entityId, $domaine, $note);
+                    }
                 }
             }
         }
