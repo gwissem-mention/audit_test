@@ -192,7 +192,7 @@
 
         {# Téléchargement fichier + synthèse #}
         {% if objet.getAbsolutePath(1) is not null or objet.getAbsolutePath(2) is not null or objet.synthese is not null %}
-            <div class="col-md-4 hidden-pdf">
+            <div class="download-prod-bloc col-md-6 hidden-pdf">
                 <div class="wrapper">
                     {% if objet.getAbsolutePath(1) is not null %}
                         <a class="pull-left downloadLink" href="{{path('hopital_numerique_publication_front_export', {'id':objet.id, 'type': '1'})}}" <i class="common-sprite common-sprite-arrow"></i><span class="violet">Télécharger</span> la production complète ( {{objet.getTypeMime(1)|upper}} ) <i class="fa fa-download violet"></i></a>
@@ -215,7 +215,7 @@
 
         {# Si l'utilisateur n'est pas connecté et qu'il a déjà voté #}
         {% if objet.notes and canVote %}
-            <div id="bloc-notation-objet" class="col-md-5 hidden-pdf">
+            <div id="bloc-notation-objet" class="col-md-6 hidden-pdf">
                 <div class="wrapper">
                     <input type="hidden" id="note-sauvegarde-url" value="{{path('hopital_numerique_publication_note_add' ) }}">
                     <input type="hidden" id="note-delete-url" value="{{path('hopital_numerique_publication_note_delete' ) }}">

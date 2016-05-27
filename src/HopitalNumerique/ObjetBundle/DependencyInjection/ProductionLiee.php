@@ -77,7 +77,7 @@ class ProductionLiee
                     'title' => $this->entity->getTitleByEntity($entity, self::TITLE_MAXLENGTH),
                     'subtitle' => $this->entity->getSubtitleByEntity($entity),
                     'category' => $this->entity->getCategoryByEntity($entity),
-                    'description' => $this->entity->getDescriptionByEntity($entity, self::DESCRIPTION_MAXLENGTH),
+                    'description' => null,
                     'url' => $this->entity->getFrontUrlByEntity($entity)
                 ];
             }

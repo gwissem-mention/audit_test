@@ -54,10 +54,10 @@
     #publication h4.objetTitre{font-weight: bold}
     #publication .objetLink{font-size: 16px}
     #publication .wrapper a{font-family: 'Open Sans', sans-serif }
-    #publication .col-md-4 div.wrapper{border:1px solid #e2e2e2; padding:10px 20px 0;margin-top:10px;}
-    #publication .col-md-4 div.wrapper a.downloadLink{color:#070707; font-size: 13px; font-weight: normal; margin-bottom: 10px}
-    #publication .col-md-4 div.wrapper a.synthese{background: url('../img/synthese-violet.png') no-repeat right center; padding-right:25px;display: block;height: 18px; text-align: right; width: 96px; font-weight: normal; margin-bottom: 10px}
-    #publication .col-md-4 div.wrapper .fa-download{margin:3px 0 0 7px;}
+    #publication .download-prod-bloc div.wrapper{border:1px solid #e2e2e2; padding:10px 20px 0;margin-top:10px;}
+    #publication .download-prod-bloc div.wrapper a.downloadLink{color:#070707; font-size: 13px; font-weight: normal; margin-bottom: 10px}
+    #publication .download-prod-bloc div.wrapper a.synthese{background: url('../img/synthese-violet.png') no-repeat right center; padding-right:25px;display: block;height: 18px; text-align: right; width: 96px; font-weight: normal; margin-bottom: 10px}
+    #publication .download-prod-bloc div.wrapper .fa-download{margin:3px 0 0 7px;}
     #publication .titre-infradoc a{font-size: 22px;}
     #publication .titre-infradoc-pdf {display: none;}
     #publication table {margin: 0 20px 20px 0;}
