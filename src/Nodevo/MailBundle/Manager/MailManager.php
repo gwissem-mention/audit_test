@@ -1120,7 +1120,28 @@ class MailManager extends BaseManager
 
         foreach ($destinataires as $destinataire) {
             $message->setTo($destinataire);
+            $this->mailer->send($message);
         }
+    }
+
+    public function sendAlerteInscriptionMail($destinataires)
+    {
+        $courriel = $this->findOneById(64);
+        $content = $this->replaceContent($courriel->getBody(), null, array());
+        $message = $this->generationMail(null, $courriel);
+
+        foreach ($destinataires as $destinataire) {
+            $message->setTo($destinataire);
+            $this->mailer->send($message);
+        }
+    }
+
+    public function sendAlerteInscriptionValideMail($destinataire)
+    {
+        $courriel = $this->findOneById(65);
+        $content = $this->replaceContent($courriel->getBody(), null, array());
+        $message = $this->generationMail(null, $courriel);
+        $message->setTo($destinataire);
         $this->mailer->send($message);
     }
 }

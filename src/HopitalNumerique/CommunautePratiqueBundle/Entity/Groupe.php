@@ -6,6 +6,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 use Gedmo\Mapping\Annotation as Gedmo;
 use HopitalNumerique\UserBundle\Entity\User;
 use Symfony\Component\Validator\Constraints\Collection;
+use Doctrine\Common\Collections\ArrayCollection;
 
 /**
  * Entité Groupe.
@@ -82,7 +83,7 @@ class Groupe
      * @Assert\NotNull()
      */
     private $dateFin;
-    
+
     /**
      * @var boolean
      *
@@ -90,7 +91,7 @@ class Groupe
      * @Assert\NotNull()
      */
     private $vedette;
-    
+
     /**
      * @var boolean
      *
@@ -98,7 +99,7 @@ class Groupe
      * @Assert\NotNull()
      */
     private $actif;
-    
+
     /**
      * @var \HopitalNumerique\DomaineBundle\Entity\Domaine
      *
@@ -141,11 +142,15 @@ class Groupe
 
     /**
      * @var \Doctrine\Common\Collections\Collection
-     *
-     * @ORM\ManyToMany(targetEntity="HopitalNumerique\UserBundle\Entity\User", inversedBy="communautePratiqueGroupes", cascade={"persist"})
-     * @ORM\JoinTable(name="hn_communautepratique_groupe_user", joinColumns={@ORM\JoinColumn(name="group_id", referencedColumnName="group_id")}, inverseJoinColumns={@ORM\JoinColumn(name="usr_id", referencedColumnName="usr_id")})
      */
     private $users;
+
+    /**
+     * @var \Doctrine\Common\Collections\Collection
+     *
+     * @ORM\OneToMany(targetEntity="Inscription", mappedBy="groupe", cascade={"persist", "remove"})
+     */
+    private $inscriptions;
 
     /**
      * @ORM\OneToMany(targetEntity="Document", mappedBy="groupe")
@@ -169,19 +174,20 @@ class Groupe
      */
     public function __construct()
     {
-        $this->fiches = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->animateurs = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->users = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->documents = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->publications = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->commentaires = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->fiches       = new ArrayCollection();
+        $this->animateurs   = new ArrayCollection();
+        $this->inscriptions = new ArrayCollection();
+        $this->documents    = new ArrayCollection();
+        $this->publications = new ArrayCollection();
+        $this->commentaires = new ArrayCollection();
+        $this->users        = new ArrayCollection();
     }
 
 
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
@@ -204,7 +210,7 @@ class Groupe
     /**
      * Get titre
      *
-     * @return string 
+     * @return string
      */
     public function getTitre()
     {
@@ -227,7 +233,7 @@ class Groupe
     /**
      * Get descriptionCourte
      *
-     * @return string 
+     * @return string
      */
     public function getDescriptionCourte()
     {
@@ -250,7 +256,7 @@ class Groupe
     /**
      * Get descriptionHtml
      *
-     * @return string 
+     * @return string
      */
     public function getDescriptionHtml()
     {
@@ -273,7 +279,7 @@ class Groupe
     /**
      * Get nombreParticipantsMaximum
      *
-     * @return integer 
+     * @return integer
      */
     public function getNombreParticipantsMaximum()
     {
@@ -296,7 +302,7 @@ class Groupe
     /**
      * Get dateInscriptionOuverture
      *
-     * @return \DateTime 
+     * @return \DateTime
      */
     public function getDateInscriptionOuverture()
     {
@@ -319,7 +325,7 @@ class Groupe
     /**
      * Get dateDemarrage
      *
-     * @return \DateTime 
+     * @return \DateTime
      */
     public function getDateDemarrage()
     {
@@ -342,7 +348,7 @@ class Groupe
     /**
      * Get dateFin
      *
-     * @return \DateTime 
+     * @return \DateTime
      */
     public function getDateFin()
     {
@@ -365,7 +371,7 @@ class Groupe
     /**
      * Get vedette
      *
-     * @return boolean 
+     * @return boolean
      */
     public function getVedette()
     {
@@ -388,7 +394,7 @@ class Groupe
     /**
      * Get actif
      *
-     * @return boolean 
+     * @return boolean
      */
     public function getActif()
     {
@@ -411,7 +417,7 @@ class Groupe
     /**
      * Get domaine
      *
-     * @return \HopitalNumerique\DomaineBundle\Entity\Domaine 
+     * @return \HopitalNumerique\DomaineBundle\Entity\Domaine
      */
     public function getDomaine()
     {
@@ -434,7 +440,7 @@ class Groupe
     /**
      * Get questionnaire
      *
-     * @return \HopitalNumerique\QuestionnaireBundle\Entity\Questionnaire 
+     * @return \HopitalNumerique\QuestionnaireBundle\Entity\Questionnaire
      */
     public function getQuestionnaire()
     {
@@ -490,7 +496,7 @@ class Groupe
     /**
      * Get fiches
      *
-     * @return \Doctrine\Common\Collections\Collection 
+     * @return \Doctrine\Common\Collections\Collection
      */
     public function getFiches()
     {
@@ -527,7 +533,7 @@ class Groupe
     /**
      * Get animateurs
      *
-     * @return \Doctrine\Common\Collections\Collection 
+     * @return \Doctrine\Common\Collections\Collection
      */
     public function getAnimateurs()
     {
@@ -542,7 +548,7 @@ class Groupe
      */
     public function addUser(\HopitalNumerique\UserBundle\Entity\User $users)
     {
-        $this->users[] = $users;
+        $this->addInscription(new Inscription($this, $users));
 
         return $this;
     }
@@ -554,17 +560,54 @@ class Groupe
      */
     public function removeUser(\HopitalNumerique\UserBundle\Entity\User $users)
     {
-        $this->users->removeElement($users);
+        $this->removeInscription(new Inscription($this, $users));
     }
 
     /**
      * Get users
      *
-     * @return \Doctrine\Common\Collections\Collection 
+     * @return \Doctrine\Common\Collections\Collection
      */
     public function getUsers()
     {
-        return $this->users;
+        $inscrits = new ArrayCollection();
+        foreach ($this->getInscriptions() as $inscrit) {
+            $inscrits[] =  $inscrit->getUser();
+        }
+        return $inscrits;
+    }
+
+    /**
+     * Add inscription
+     *
+     * @param \HopitalNumerique\UserBundle\Entity\User $inscription
+     * @return Groupe
+     */
+    public function addInscription(\HopitalNumerique\CommunautePratiqueBundle\Entity\Inscription $inscription)
+    {
+        $this->inscriptions[] = $inscription;
+
+        return $this;
+    }
+
+    /**
+     * Remove inscription
+     *
+     * @param \HopitalNumerique\UserBundle\Entity\User $inscription
+     */
+    public function removeInscription(\HopitalNumerique\CommunautePratiqueBundle\Entity\Inscription $inscription)
+    {
+        $this->inscriptions->removeElement($inscription);
+    }
+
+    /**
+     * Get inscriptions
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getInscriptions()
+    {
+        return $this->inscriptions;
     }
 
     /**
@@ -593,7 +636,7 @@ class Groupe
     /**
      * Get documents
      *
-     * @return \Doctrine\Common\Collections\Collection 
+     * @return \Doctrine\Common\Collections\Collection
      */
     public function getDocuments()
     {
@@ -626,7 +669,7 @@ class Groupe
     /**
      * Get publications
      *
-     * @return \Doctrine\Common\Collections\Collection 
+     * @return \Doctrine\Common\Collections\Collection
      */
     public function getPublications()
     {
@@ -659,7 +702,7 @@ class Groupe
     /**
      * Get commentaires
      *
-     * @return \Doctrine\Common\Collections\Collection 
+     * @return \Doctrine\Common\Collections\Collection
      */
     public function getCommentaires()
     {
@@ -698,7 +741,7 @@ class Groupe
     {
     	$aujourdhui = new \DateTime();
     	$aujourdhui->setTime(0, 0, 0);
-    
+
     	return ($aujourdhui >= $this->dateInscriptionOuverture && $aujourdhui <= $this->dateDemarrage);
     }
 
@@ -718,7 +761,7 @@ class Groupe
 
         return false;
     }
-    
+
     /**
      * Retourne les utilisateurs qui ne sont pas animateurs.
      *
@@ -754,19 +797,19 @@ class Groupe
 
     /**
      * Retourne le nombre de places restantes.
-     * 
+     *
      * @return integer Nombre de places restantes
      */
     public function getNombrePlacesRestantes()
     {
         $nombrePlacesRestantes = $this->nombreParticipantsMaximum - count($this->users);
-        
+
         return ($nombrePlacesRestantes > 0 ? $nombrePlacesRestantes : 0);
     }
 
     /**
      * Retourne le nombre de jours qu'il reste avant l'ouverture des inscriptions.
-     * 
+     *
      * @return integer Nombre de jours
      */
     public function getNombreJoursRestantsAvantInscriptionOuverture()
@@ -890,7 +933,7 @@ class Groupe
 
     /**
      * Retourne le JSON avec toutes les adresses électroniques des animateurs.
-     * 
+     *
      * @return string JSON
      */
     public function getAnimateurEmailsJson()

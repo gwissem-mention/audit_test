@@ -14,10 +14,13 @@
 {% block communaute_pratique_actions %}
     {{ parent() }}
     {{ communaute_pratique.display_action_contact_animateur(groupe) }}
-    <div class="lien">
-        <a target="_blank" href="{{ path('hopital_numerique_user_informations_personnelles') }}">Mise à jour de mes informations personnelles <em class="icon icon-settings48"></em></a>
+    <div class="contact">
+        <a target="_blank" href="{{ path('hopital_numerique_user_informations_personnelles') }}"> </a>
+            <em class="icon icon-settings48"></em>
+            Mise à jour de mes </br> informations personnelles
+        </a>
     </div>
-    {{ communaute_pratique.display_action_contact_invitation(groupe) }}
+    {{ communaute_pratique.display_action_contact_invitation() }}
 {% endblock %}
 
 {% block communaute_pratique_breadcrumbs_parent %}<li><a href="{{ path('hopitalnumerique_communautepratique_groupe_view', { groupe:groupe.id }) }}">Groupe thématique {{ groupe }}</a></li>{% endblock %}
@@ -50,9 +53,11 @@
 
         <div class="row">
             {% for membre in pagerFantaMembres.currentPageResults %}
-                <div class="col-md-3 col-sm-6">
-                    {{ communaute_pratique.display_bloc_membre(membre, groupe, canDeleteMembre, groupesTermines, groupesNonDemarres, groupesEnCours) }}
-                </div>
+                {% if membre.isActifInGroupe(groupe) or canDeleteMembre or groupe.hasAnimateur(membre) %}
+                    <div class="col-md-3 col-sm-6">
+                        {{ communaute_pratique.display_bloc_membre(membre, groupe, canDeleteMembre, groupesTermines, groupesNonDemarres, groupesEnCours) }}
+                    </div>
+                {% endif %}
             {% endfor %}
         </div>
 

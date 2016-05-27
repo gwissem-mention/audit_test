@@ -13,6 +13,11 @@
 
 {% block communaute_pratique_sommaire %}{% endblock %}
 
+{% block communaute_pratique_actions %}
+    {{ parent() }}
+    {{ communaute_pratique.display_action_contact_invitation() }}
+{% endblock %}
+
 {% block body_communaute_pratique %}
 
     <div class="communaute-de-pratiques-tableau-de-bord">

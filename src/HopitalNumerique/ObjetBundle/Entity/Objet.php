@@ -327,14 +327,14 @@ class Objet implements RoutedItemInterface
 
     /**
      * @Assert\File(
-     *     maxSize = "10M"
+     *     maxSize = "100M"
      * )
      */
     public $file;
 
     /**
      * @Assert\File(
-     *     maxSize = "10M"
+     *     maxSize = "100M"
      * )
      */
     public $file2;
@@ -1011,7 +1011,7 @@ class Objet implements RoutedItemInterface
     {
         return $this->ambassadeurs;
     }
-    
+
     /**
      * Get roles
      *
