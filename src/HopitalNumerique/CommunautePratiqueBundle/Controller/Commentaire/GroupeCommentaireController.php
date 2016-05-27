@@ -17,7 +17,7 @@ class GroupeCommentaireController extends CommentaireController
     {
         if (!$this->container->get('hopitalnumerique_communautepratique.dependency_injection.security')
                 ->canAccessGroupe($groupe)) {
-            return $this->redirect($this->generateUrl('hopital_numerique_homepage'));
+            return $this->redirect($this->generateUrl('hopitalnumerique_communautepratique_accueil_index'));
         }
 
         $nouveauCommentaire = $this->container

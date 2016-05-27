@@ -44,7 +44,10 @@ class GroupeController extends \Symfony\Bundle\FrameworkBundle\Controller\Contro
     public function viewAction(Groupe $groupe)
     {
         if (!$this->container->get('hopitalnumerique_communautepratique.dependency_injection.security')->canAccessGroupe($groupe)) {
-            return $this->redirect($this->generateUrl('hopital_numerique_homepage'));
+            if ("anon." != $this->get("security.context")->getToken()->getUser() && !$this->get("security.context")->getToken()->getUser()->isActifInGroupe($groupe)) {
+                $this->container->get('session')->getFlashBag()->add('success', 'Votre inscription sera activé prochainement par un animateur. Vous receverez un mail de confirmation');
+            }
+            return $this->redirect($this->generateUrl('hopitalnumerique_communautepratique_accueil_index'));
         }
 
         return $this->render(
@@ -97,8 +100,17 @@ class GroupeController extends \Symfony\Bundle\FrameworkBundle\Controller\Contro
                 ->reponsesByQuestionnaireByUser($groupe->getQuestionnaire()->getId(), $user->getId())) > 0) {
                 $user->addCommunautePratiqueGroupe($groupe);
                 $this->container->get('hopitalnumerique_user.manager.user')->save($user);
+                $this->container->get('session')->getFlashBag()->add('success', 'Votre inscription sera activé prochainement par un animateur.');
+                // Envoi du mail d'alert pour les animateurs
+                $destinataires = array();
+                foreach ($groupe->getAnimateurs()->getValues() as $animateur) {
+                    $destinataires[$animateur->getNom()] = $animateur->getEmail();
+                }
+                $this->get('nodevo_mail.manager.mail')->sendAlerteInscriptionMail($destinataires);
             }
         }
+
+
 
         return $this->redirect($this->generateUrl('hopitalnumerique_communautepratique_groupe_list'));
     }

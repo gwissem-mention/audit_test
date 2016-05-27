@@ -10,6 +10,7 @@
 {% block communaute_pratique_actions %}
     {{ parent() }}
     {{ communaute_pratique.display_action_contact_animateur(groupe) }}
+    {{ communaute_pratique.display_action_contact_invitation() }}
 {% endblock %}
 
 {% block body_communaute_pratique %}
@@ -53,7 +54,7 @@
                 {%- if documents|length > 0 -%}
 
                     <div class="pull-right">
-                        
+
                         <select class="form-control" onchange="CommunautePratique_Document.filtreByExtensions($(this).val());">
                             <option selected="selected" value="">Filtrer par type de fichier</option>
                             {%- for fichierType in fichierTypes -%}

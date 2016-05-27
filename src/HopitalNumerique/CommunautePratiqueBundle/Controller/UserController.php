@@ -4,6 +4,7 @@ namespace HopitalNumerique\CommunautePratiqueBundle\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use HopitalNumerique\CommunautePratiqueBundle\Entity\Groupe;
+use HopitalNumerique\CommunautePratiqueBundle\Entity\Inscription;
 use HopitalNumerique\UserBundle\Entity\User;
 
 /**
@@ -27,16 +28,16 @@ class UserController extends \Symfony\Bundle\FrameworkBundle\Controller\Controll
 			$this->container->get('hopitalnumerique_communautepratique.dependency_injection.annuaire')
 				->removeFiltres();
 			return $this->redirect($this->generateUrl('hopitalnumerique_communautepratique_user_list'));
-			
+
 		} else {
 	        $this->container->get('hopitalnumerique_communautepratique.dependency_injection.annuaire')
 	            ->setFiltres($request);
 	        $rechercheForm->handleRequest($request);
 		}
-		
+
 		$domaine = $this->container->get('hopitalnumerique_domaine.manager.domaine')
 		->findOneById($request->getSession()->get('domaineId'));
-		
+
         return $this->render('HopitalNumeriqueCommunautePratiqueBundle:User:list.html.twig', array(
             'rechercheForm' => $rechercheForm->createView(),
             'pagerFantaMembres' => $this->container
@@ -136,6 +137,33 @@ class UserController extends \Symfony\Bundle\FrameworkBundle\Controller\Controll
         $groupe->removeUser($user);
         $this->container->get('hopitalnumerique_communautepratique.manager.groupe')->save($groupe);
         $this->container->get('session')->getFlashBag()->add('success', 'Membre désinscrit.');
+
+        return new JsonResponse(array('success' => true));
+    }
+
+    /**
+     * Active/désactive un membre d'un groupe.
+     */
+    public function activeGroupeAction(Groupe $groupe, User $user)
+    {
+        if (!$this->container
+            ->get('hopitalnumerique_communautepratique.dependency_injection.security')->canDeleteMembre($groupe)
+        ) {
+            return new JsonResponse(array('success' => false));
+        }
+        $inscription = $this->container->get('hopitalnumerique_communautepratique.manager.groupe.inscription')->getInscription($groupe, $user)[0];
+        $etat = null;
+        if (!$inscription->isActif()) {
+            $inscription->setActif(true);
+            // Alerte l'utilisateur que son compte est activée
+            $this->get('nodevo_mail.manager.mail')->sendAlerteInscriptionValideMail($user->getEmail());
+            $etat = true;
+        } else {
+            $inscription->setActif(false);
+            $etat = false;
+        }
+        $this->container->get('hopitalnumerique_communautepratique.manager.groupe.inscription')->save($inscription);
+        $this->container->get('session')->getFlashBag()->add('success', ($etat) ? 'Membre Activé.': 'Membre Désactivé.');
 
         return new JsonResponse(array('success' => true));
     }

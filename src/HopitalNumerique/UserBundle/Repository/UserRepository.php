@@ -610,7 +610,7 @@ class UserRepository extends EntityRepository
 
         if (null !== $groupe) {
             $query
-                ->innerJoin('user.communautePratiqueGroupes', 'groupe', Join::WITH, 'groupe = :groupe')
+                ->innerJoin('user.groupeInscription', 'groupeInscription', Join::WITH, 'groupeInscription.groupe = :groupe')
                 ->setParameter('groupe', $groupe)
             ;
         }
@@ -643,7 +643,7 @@ class UserRepository extends EntityRepository
         $query = $this->createQueryBuilder('groupeUser');
 
         $query
-            ->innerJoin('groupeUser.communautePratiqueGroupes', 'groupeUserGroupe', Join::WITH, 'groupeUserGroupe = :groupeUserGroupe')
+            ->innerJoin('groupeUser.groupeInscription', 'groupeUserGroupe', Join::WITH, 'groupeUserGroupe.groupe = :groupeUserGroupe')
             ->setParameter('groupeUserGroupe', $groupe)
         ;
 
@@ -665,7 +665,7 @@ class UserRepository extends EntityRepository
         $domaine = $this->getEntityManager()->getRepository('HopitalNumeriqueDomaineBundle:Domaine')->getDomaineFromHttpHost($_SERVER["SERVER_NAME"])->getQuery()->getOneOrNullResult();
 
         $query
-            ->leftJoin('user.communautePratiqueGroupes', 'groupe')
+            ->leftJoin('user.groupeInscription', 'groupeInscription')
             ->andWhere('user.inscritCommunautePratique = :inscritCommunautePratique')
             ->setParameter('inscritCommunautePratique', true)
             ->andWhere('user.etat = :etat')

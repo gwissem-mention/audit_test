@@ -29,3 +29,11 @@ hopitalnumerique_communautepratique_user_desinscritgroupe:
     requirements:
         groupe: '\d+'
         user: '\d+'
+
+hopitalnumerique_communautepratique_user_activegroupe:
+    pattern: '/groupe/{groupe}/activegroupe/{user}'
+    defaults: { _controller: 'HopitalNumeriqueCommunautePratiqueBundle:User:activeGroupe' }
+    methods: 'POST'
+    requirements:
+        groupe: '\d+'
+        user: '\d+'

@@ -18,7 +18,6 @@ class ObjetController extends Controller
     public function indexAction()
     {
         $grid = $this->get('hopitalnumerique_objet.grid.objet');
-
         return $grid->render('HopitalNumeriqueObjetBundle:Objet:index.html.twig');
     }
 
@@ -26,13 +25,13 @@ class ObjetController extends Controller
      * Affiche la liste des Objet sous fomes d'arbre.
      */
     public function treeIndexAction() {
-		
+
 		$objets = $this->get('hopitalnumerique_objet.manager.objet')->getObjets();
         return $this->render('HopitalNumeriqueObjetBundle:Index:index.html.twig', array(
             'objets' => $objets,
-        ));	
+        ));
     }
-    
+
     /**
      * Affiche la liste des Objet.
      */
@@ -46,16 +45,16 @@ class ObjetController extends Controller
         }
 
         return $grid->render ( 'HopitalNumeriqueObjetBundle:Objet:index.html.twig', array (
-            'filtre' => $filtre 
+            'filtre' => $filtre
         ) );
     }
-    
+
     /**
      * Action Annuler, on dévérouille l'objet et on redirige vers l'index
      */
     public function cancelWithFiltreAction($id, $message, $filtre) {
         $objet = $this->get ( 'hopitalnumerique_objet.manager.objet' )->findOneBy ( array (
-                        'id' => $id 
+                        'id' => $id
         ) );
 
         $this->get ( 'hopitalnumerique_objet.manager.objet' )->unlock ( $objet );
@@ -66,10 +65,10 @@ class ObjetController extends Controller
         }
 
         return $this->redirect ( $this->generateUrl ( 'hopitalnumerique_objet_objet_filtre', array (
-                        'filtre' => $filtre 
+                        'filtre' => $filtre
         ) ) );
     }
-    
+
     /**
      * Action Annuler, on dévérouille l'objet et on redirige vers l'index
      */
@@ -79,7 +78,7 @@ class ObjetController extends Controller
 
         //On récupère l'user connecté et son role
         $user  = $this->get('security.context')->getToken()->getUser();
-        
+
 
         $this->get('hopitalnumerique_objet.manager.objet')->unlock($objet);
 
@@ -88,7 +87,7 @@ class ObjetController extends Controller
         {
             $this->get('session')->getFlashBag()->add( 'info' , 'Objet dévérouillé.' );
         }
-        
+
         return $this->redirect( $this->generateUrl('hopitalnumerique_objet_objet') );
     }
 
@@ -99,7 +98,7 @@ class ObjetController extends Controller
     {
         $objet = $this->get('hopitalnumerique_objet.manager.objet')->createEmpty();
 
-        if( $type == 2 ) 
+        if( $type == 2 )
         {
           $objet->setArticle(true);
         }
@@ -122,7 +121,7 @@ class ObjetController extends Controller
 
         if(is_null($objet))
         {
-            $this->get('session')->getFlashBag()->add( 'info' , 'L\'objet n\'existe pas.' ); 
+            $this->get('session')->getFlashBag()->add( 'info' , 'L\'objet n\'existe pas.' );
 
             return $this->redirect( $this->generateUrl('hopitalnumerique_objet_objet'));
         }
@@ -131,7 +130,7 @@ class ObjetController extends Controller
 
         // l'objet est locked, on redirige vers la home page
         if( $objet->getLock() && $objet->getLockedBy() && $objet->getLockedBy() != $user ){
-            $this->get('session')->getFlashBag()->add( 'warning' , 'Cet objet est en cours d\'édition par '.$objet->getLockedBy()->getEmail().', il n\'est donc pas accessible pour le moment.' ); 
+            $this->get('session')->getFlashBag()->add( 'warning' , 'Cet objet est en cours d\'édition par '.$objet->getLockedBy()->getEmail().', il n\'est donc pas accessible pour le moment.' );
             return $this->redirect($this->generateUrl('hopitalnumerique_objet_objet'));
         }
 
@@ -215,7 +214,7 @@ class ObjetController extends Controller
             {
                 $primaryKeys[] = $data['id'];
             }
-        }      
+        }
 
         $objets = $this->get('hopitalnumerique_objet.manager.objet')->findBy( array('id' => $primaryKeys) );
 
@@ -224,7 +223,7 @@ class ObjetController extends Controller
             //Suppression de l'etablissement
             $this->get('hopitalnumerique_objet.manager.objet')->delete( $objets );
             $this->get('session')->getFlashBag()->add('info', 'Suppression effectuée avec succès.' );
-        } 
+        }
         catch (\Exception $e)
         {
             $this->get('session')->getFlashBag()->add('danger', 'Suppression impossible, l\' objet est actuellement lié et ne peut pas être supprimé.');
@@ -247,7 +246,7 @@ class ObjetController extends Controller
         //seek if the file already exist for objets
         $objet  = $this->get('hopitalnumerique_objet.manager.objet')->findOneBy( array( 'path' => end($fileName) ) );
         $result = is_null( $objet ) ? 'false' : 'true';
-        
+
         //return success.true si le fichier existe deja
         return new Response('{"success":'.$result.'}', 200);
     }
@@ -264,20 +263,20 @@ class ObjetController extends Controller
             'texte' => $this->get('request')->request->get('texte')
         ));
     }
-    
+
     /**
      * Action appelée dans le plugin "Publication" pour tinymce
      */
     public function getObjetsByDomaineAction()
     {
     	$arbo = $this->get('hopitalnumerique_objet.manager.objet')->getObjetByDomaine();
-    	
+
     	return $this->render('HopitalNumeriqueObjetBundle:Objet:getObjets.html.twig', array(
     			'objet' => $arbo,
     			'texte' => $this->get('request')->request->get('texte')
     	));
     }
-    
+
     /**
      * POPIN : liste des publication (utilisé dans le menu item)
      */
@@ -351,7 +350,7 @@ class ObjetController extends Controller
                 $result['success'] = false;
         }else
             $result['success'] = false;
-        
+
         return new Response(json_encode($result), 200);
     }
 
@@ -389,10 +388,10 @@ class ObjetController extends Controller
         $form = $this->createForm( $formName, $objet);
 
         $request = $this->get('request');
-        
+
         // Si l'utilisateur soumet le formulaire
         if ('POST' == $request->getMethod()) {
-            
+
             // On bind les données du form
             $form->handleRequest($request);
 
@@ -447,7 +446,7 @@ class ObjetController extends Controller
                     $domaines = $this->get('hopitalnumerique_domaine.manager.domaine')->findBy(array('id' => 1 ));
                     $objet->setDomaines($domaines);
                 }
-                
+
                 //Met à jour la date de modification
                 $notify = $form->get("modified")->getData();
                 if( $notify === "1")
@@ -488,12 +487,12 @@ class ObjetController extends Controller
                         $mails[] = $this->get('nodevo_mail.manager.mail')->sendNotificationRequete($user, $options );
                     }
 
-                    foreach ($mails as $mail) 
+                    foreach ($mails as $mail)
                     {
                         $this->get('mailer')->send($mail);
                     }
                 }
-                
+
                 //si on à choisis fermer et sauvegarder : on unlock l'user (unlock + save)
                 $do = $request->request->get('do');
                 $this->get('hopitalnumerique_objet.manager.objet')->unlock($objet);
@@ -502,10 +501,10 @@ class ObjetController extends Controller
 
                 // On envoi une 'flash' pour indiquer à l'utilisateur que l'entité est ajoutée
                 if( $do == "save-auto" )
-                    $this->get('session')->getFlashBag()->add( 'info' , 'Objet sauvegardé automatiquement.' ); 
+                    $this->get('session')->getFlashBag()->add( 'info' , 'Objet sauvegardé automatiquement.' );
                 else
-                    $this->get('session')->getFlashBag()->add( ($new ? 'success' : 'info') , 'Objet ' . ($new ? 'ajouté.' : 'mis à jour.') ); 
-                
+                    $this->get('session')->getFlashBag()->add( ($new ? 'success' : 'info') , 'Objet ' . ($new ? 'ajouté.' : 'mis à jour.') );
+
                 // On redirige vers la home page
                 if ($objet->isArticle()) {
                         return $this->redirect ( ($do == 'save-close' ? $this->generateUrl ( 'hopitalnumerique_objet_objet_filtre',array('filtre' => 'Article') ) : $this->generateUrl ( 'hopitalnumerique_objet_objet_edit', array (
@@ -513,7 +512,7 @@ class ObjetController extends Controller
                         ) )) );
                 }
                 return $this->redirect ( ($do == 'save-close' ? $this->generateUrl ( 'hopitalnumerique_objet_objet_filtre',array('filtre' => 'publication') ) : $this->generateUrl ( 'hopitalnumerique_objet_objet_edit', array (
-                                'id' => $objet->getId () 
+                                'id' => $objet->getId ()
                 ) )) );
             }
         }
