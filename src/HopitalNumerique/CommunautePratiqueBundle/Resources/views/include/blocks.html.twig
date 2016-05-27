@@ -40,10 +40,10 @@
                 </p>
                 <div class="places-progression hidden-xs" id="places-progression-barre-{{ groupe.id }}"{% if date('now') >= groupe.dateDemarrage %} style="visibility: hidden;"{% endif %}><div class="contenu"></div></div>
                 {% if date('now') >= groupe.dateDemarrage %} {# Groupes en cours #}
-                    {% if (app.user.hasCommunautePratiqueGroupe(groupe) and app.user.isActifInGroupe(groupe) ) %}
+                    {% if (app.user.hasCommunautePratiqueGroupe(groupe) and (app.user.isActifInGroupe(groupe) or app.user.hasRoleAdmin) ) %}
                         <a class="button" href="{{ path('hopitalnumerique_communautepratique_groupe_view', { groupe: groupe.id }) }}">Travailler dans ce groupe</a>
                     {% elseif (app.user.hasCommunautePratiqueGroupe(groupe) and not app.user.isActifInGroupe(groupe)) %}
-                        <a class="button">En attente d'activation</a>
+                        <span class="button" style="cursor:default">En attente d'acceptation</span>
                     {% elseif groupe.users|length >= groupe.nombreParticipantsMaximum %}
                         <a class="button" onclick="Contact_Popup.display({{ groupe.animateurEmailsJson }}, '{{ path(app.request.get('_route')) }}', 'Je souhaite participer au groupe {{ groupe.titre|replace({ '\'':'\\\'', '"':'' }) }}');">Groupe complet contactez l'animateur</a>
                     {% else %}
@@ -316,7 +316,7 @@
                 <div class="delete">
                     <a onclick="CommunautePratique_User.desinscritGroupe({{ groupe.id }}, {{ user.id }});" title="Désinscrire l utilisateur"><em class="fa fa-times-circle"></em></a>
                 </div>
-                {% if not groupe.hasAnimateur(user) %}
+                {% if not groupe.hasAnimateur(user) and not user.hasRoleAdmin %}
                     <div class="actif">
                         <a onclick="CommunautePratique_User.ActiveInscriptionGroupe({{ groupe.id }}, {{ user.id }});" title="Activer / désactiver l utilisateur"> {{ user.isActifInGroupe(groupe) ? "<em class='fa fa-times-circle orange'></em>" : "<em class='fa fa-check-circle green'> </em>"  }}</a>
                     </div>

@@ -12,11 +12,14 @@
 {% block title_communaute_pratique %}Annuaire du groupe{% endblock %}
 
 {% block communaute_pratique_actions %}
-    {{ parent() }}
     {{ communaute_pratique.display_action_contact_animateur(groupe) }}
-    <div class="lien">
-        <a target="_blank" href="{{ path('hopital_numerique_user_informations_personnelles') }}">Mise à jour de mes informations personnelles <em class="icon icon-settings48"></em></a>
+    <div class="contact">
+        <a target="_blank" href="{{ path('hopital_numerique_user_informations_personnelles') }}"> </a>
+            <em class="icon icon-settings48"></em>
+            Mise à jour de mes </br> informations personnelles
+        </a>
     </div>
+    {{ parent() }}
 {% endblock %}
 
 {% block communaute_pratique_breadcrumbs_parent %}<li><a href="{{ path('hopitalnumerique_communautepratique_groupe_view', { groupe:groupe.id }) }}">Groupe thématique {{ groupe }}</a></li>{% endblock %}
