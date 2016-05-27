@@ -41,7 +41,7 @@
     <h2 class="requeteTitle" >Gérer mes recherches</h2>
     <div class="requetes">
         {% for requete in requetes %}
-            <div class="ligne requete-{{requete.id}}" data-target="{{path('hopital_numerique_recherche_homepage_requete',{ id : requete.id } ) }}">
+            <div class="ligne requete-{{requete.id}}" data-target="{{path('hopitalnumerique_recherche_referencement_requete_view',{ 'requete': requete.id } ) }}">
                 <div {% if not requete.isDefault %}title="Mettre par défaut"{% endif %} class="default {% if requete.isDefault %}active{% endif %}" data-link="{{path('hopital_numerique_requete_toggle',{'id':requete.id})}}" >
                     <i class="fa {% if requete.isDefault %}fa-star{% endif %}"></i>
                 </div>

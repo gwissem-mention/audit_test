@@ -68,7 +68,7 @@
                             {% endif %}
                             <ol>
                                 {% for requete in requetes %}
-                                    <li>- <a href="{{path('hopital_numerique_recherche_homepage_requete',{ id : requete.id } ) }}">{{requete.nom|capitalize}}</a></li>
+                                    <li>- <a href="{{path('hopitalnumerique_recherche_referencement_requete_view',{ 'requete': requete.id } ) }}">{{requete.nom|capitalize}}</a></li>
                                 {% else %}
                                     <li>- Aucune nouveauté -</li>
                                 {% endfor %}

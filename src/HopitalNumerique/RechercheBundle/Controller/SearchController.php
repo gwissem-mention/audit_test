@@ -34,7 +34,7 @@ class SearchController extends Controller
 
         //si on à charger une requete, on load la bonne url
         if ( is_null($id) && !is_null($session->get('requete-id')) )
-            return $this->redirect( $this->generateUrl('hopital_numerique_recherche_homepage_requete', array('id'=>$session->get('requete-id'))) );
+            return $this->redirect( $this->generateUrl('hopitalnumerique_recherche_referencement_requete_view', array('requete'=>$session->get('requete-id'))) );
 
         //on essaye de charger la requete par défaut
         if ( is_null($id) ){
@@ -74,7 +74,7 @@ class SearchController extends Controller
                 $session->set('requete-id', $id);
             }else{
                 $session->set('requete-id', null);
-                return $this->redirect( $this->generateUrl('hopital_numerique_recherche_homepage_requete') );
+                return $this->redirect( $this->generateUrl('hopital_numerique_recherche_homepage') );
             }
         }
 
