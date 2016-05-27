@@ -28,58 +28,6 @@ class RequeteController extends Controller
     }
 
     /**
-     * Save en AJAX de la requête
-     */
-    public function saveAction()
-    {
-        $id                 = $this->get('request')->request->get('id');
-        $nom                = $this->get('request')->request->get('nom');
-        $references         = $this->get('request')->request->get('references');
-        $categPointDur      = $this->get('request')->request->get('categPointDur');
-        $rechercheTextuelle = $this->get('request')->request->get('rechercheTextuelle');
-
-        //get connected user
-        $user = $this->get('security.context')->getToken()->getUser();
-        //get domaine courant
-        $domaineId = $this->get('request')->getSession()->get('domaineId');
-        $domaine   = $this->get('hopitalnumerique_domaine.manager.domaine')->findOneById($domaineId);
-
-        $add = false;
-        //cas AJOUT
-        if( $id === ''){
-            //on crée une nouvelle requete
-            $requete = $this->get('hopitalnumerique_recherche.manager.requete')->createEmpty();
-            $requete->setNom( $nom );
-            $add = true;
-        //cas UPDATE
-        }else
-            $requete = $this->get('hopitalnumerique_recherche.manager.requete')->findOneBy( array( 'user' => $user, 'id' => $id ) );
-
-        $requete->setRefs( $references );
-        $requete->setUser( $user );
-        $requete->setDomaine($domaine);
-
-        //Categ de la multi select
-        $requete->setCategPointDur( $categPointDur );
-        $requete->setRechercheTextuelle( $rechercheTextuelle );
-
-        //s'il n'existe pas encore de requête pour cet utilisateur, on met celle la en requête par défaut
-        $tmp = $this->get('hopitalnumerique_recherche.manager.requete')->findOneBy( array( 'user' => $user ) );
-        if( !$tmp )
-            $requete->setDefault( true );
-
-        $this->get('hopitalnumerique_recherche.manager.requete')->save( $requete );
-
-        //update Session
-        $session = $this->getRequest()->getSession();
-        $session->set('requete-id', $requete->getId() );
-
-        $path = $this->generateUrl('hopitalnumerique_recherche_referencement_requete_view', array('requete'=>$requete->getId()));
-
-        return new Response('{"success":true, "id":'.$requete->getId().', "nom":"'.ucfirst($requete->getNom()).'", "path":"'.$path.'","add":'.$add.', "def":'.( $requete->isDefault() ? 1 : 0 ).'}', 200);
-    }
-
-    /**
      * Delete d'une requete (AJAX)
      *
      * @param integer $id ID de la requete à supprimer

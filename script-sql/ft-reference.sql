@@ -47,6 +47,6 @@ DELETE FROM `core_ressource` WHERE `core_ressource`.`res_id` = 41;
 INSERT INTO `core_textedynamique_code` (`txt_id`, `txt_code`, `txt_texte`) VALUES (13, 'Module_recherche_ambassadeur', '');
 INSERT INTO `core_textedynamique_code_domaine` (`txt_id`, `dom_id`) VALUES (13, 1);
 
-# Suppr tables inutiles
+# Suppr tables inutiles // Exécuter après script de migration
 DROP TABLE hn_forum_topic_reference;
 DELETE FROM `core_menu_item` WHERE `core_menu_item`.`itm_id` = 81 AND itm_route = 'hopital_numerique_recherche_homepage_requete';

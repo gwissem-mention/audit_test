@@ -7,32 +7,6 @@ $(document).ready(function() {
         $("#check-url-erreurs-curl").hide();
         $("#check-url-erreurs-curl-with-base").hide();
 
-        //---Point dur
-
-        //Date début
-        $( "#datepicker-datedebut-pointDur" ).datepicker({
-            defaultDate: "now",
-            changeMonth: true,
-            numberOfMonths: 1,
-            dateFormat: "dd-mm-yy",
-            onClose: function( selectedDate ) {
-                $( "#datepicker-datefin-pointDur" ).datepicker( "option", "minDate", selectedDate );
-            }
-        });
-        $( "#datepicker-datedebut-pointDur" ).datepicker( "option", "showAnim", "fadeIn" );
-
-        //Date de fin
-        $( "#datepicker-datefin-pointDur" ).datepicker({
-            defaultDate: "+1d",
-            changeMonth: true,
-            numberOfMonths: 1,
-            dateFormat: "dd-mm-yy",
-            onClose: function( selectedDate ) {
-                $( "#datepicker-datedebut-pointDur" ).datepicker( "option", "maxDate", selectedDate );
-            }
-        });
-        $( "#datepicker-datefin-pointDur" ).datepicker( "option", "showAnim", "fadeIn" );
-
         //---Etape
 
         //Date début
@@ -214,35 +188,6 @@ $(document).ready(function() {
         });
         $( "#datepicker-datefin-forum" ).datepicker( "option", "showAnim", "fadeIn" );
     });
-
-    function exportCSVPointDur()
-    {
-        if ( $('#form-point-dur').validationEngine('validate') ) 
-        {
-            $('#form-point-dur').submit();
-        }
-    }
-
-    function generationPointDur(url)
-    {
-        if ( $('#form-point-dur').validationEngine('validate') ) 
-        {
-            var loaderButton  = $('#generation-tableau-point-dur').nodevoLoader().start();
-            var loaderTableau = $('#point-dur-tableau').nodevoLoader().start();
-
-            $.ajax({
-                url     : url,
-                data    :  $('#form-point-dur').serialize(),
-                type    : 'POST',
-                success : function( data ){
-                    //Ajout de la réponse
-                    $('#point-dur-tableau').html( data );
-                    loaderButton.finished();
-                    loaderTableau.finished();
-                }
-            });
-        }
-    }
 
     function generationRechercheParcours(url)
     {
