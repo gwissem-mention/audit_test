@@ -43,10 +43,10 @@
     .communaute-pratique-actions .contact { float: right;margin-bottom: 15px;width: 200px; }
         .communaute-pratique-actions .contact a { color: #2e2e2e;cursor: pointer;display: block; }
             .communaute-pratique-actions .contact em { color: #777;float: right;font-size: 26px;margin: -3px 0 0 6px; }
-    .communaute-pratique-actions .invite { float: right;margin-bottom: 15px; width: 200px; }
-        .communaute-pratique-actions .invite a { color: #2e2e2e;cursor: pointer;display: block; font-family: bold}
+    .communaute-pratique-actions .invite { float: right;margin-bottom: 15px; width: 145px; }
+        .communaute-pratique-actions .invite a { color: #2e2e2e;cursor: pointer;display: block; font-weight: bold}
             .communaute-pratique-actions .invite em { color: #439943;float: right;font-size: 26px;margin: -3px 0 0 6px; }
-    .communaute-pratique-actions .lien { float: right;margin-bottom: 15px; }
+    .communaute-pratique-actions .lien { float: right;margin-bottom: 15px; width: 200px;}
         .communaute-pratique-actions .lien a { color: #2e2e2e; }
             .communaute-pratique-actions .lien a .icon { color: #777;font-size: 26px;margin: 0 0 0 2px;vertical-align: middle; }
     .communaute-pratique-actions .dropdown {}

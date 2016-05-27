@@ -53,7 +53,7 @@
                 {%- if documents|length > 0 -%}
 
                     <div class="pull-right">
-                        
+
                         <select class="form-control" onchange="CommunautePratique_Document.filtreByExtensions($(this).val());">
                             <option selected="selected" value="">Filtrer par type de fichier</option>
                             {%- for fichierType in fichierTypes -%}

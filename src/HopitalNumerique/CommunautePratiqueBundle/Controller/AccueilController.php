@@ -15,6 +15,8 @@ class AccueilController extends \Symfony\Bundle\FrameworkBundle\Controller\Contr
      */
     public function indexAction(Request $request)
     {
+        // dump(phpinfo());die;
+
         if (!$this->container->get('hopitalnumerique_communautepratique.dependency_injection.security')
             ->canAccessCommunautePratique()) {
             return $this->redirect($this->generateUrl('hopital_numerique_homepage'));
