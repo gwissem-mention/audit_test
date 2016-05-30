@@ -32,7 +32,7 @@ class EntityHasReference
     /**
      * @var integer
      *
-     * @ORM\Column(name="entref_entity_id", type="integer", options={"unsigned"=true})
+     * @ORM\Column(name="entref_entity_id", type="integer", nullable=false, options={"unsigned"=true})
      */
     private $entityId;
 
@@ -47,7 +47,7 @@ class EntityHasReference
      * @var \HopitalNumerique\ReferenceBundle\Entity\Reference
      *
      * @ORM\ManyToOne(targetEntity="Reference")
-     * @ORM\JoinColumn(name="ref_id", referencedColumnName="ref_id", onDelete="CASCADE")
+     * @ORM\JoinColumn(name="ref_id", referencedColumnName="ref_id", nullable=false, onDelete="CASCADE")
      */
     private $reference;
 
