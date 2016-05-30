@@ -705,7 +705,7 @@ class User extends BaseUser
 
         $this->objets               = new \Doctrine\Common\Collections\ArrayCollection();
         $this->communautePratiqueGroupes = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->$groupeInscription   = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->groupeInscription   = new \Doctrine\Common\Collections\ArrayCollection();
         $this->communautePratiqueDocuments = new \Doctrine\Common\Collections\ArrayCollection();
         $this->communautePratiqueFiches = new \Doctrine\Common\Collections\ArrayCollection();
         $this->username             = '';
