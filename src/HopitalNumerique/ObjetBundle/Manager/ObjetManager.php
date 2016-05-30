@@ -501,6 +501,7 @@ class ObjetManager extends BaseManager
      */
     public function getObjetsAndContenuArbo( $types = null )
     {
+        //@todo Vérif pour remplacer $this->findAll() qui pourrait générer des centaines de requêtes
         //get objets and IDS
         $objets = is_null($types) ? $this->findAll() : $this->getObjetsByTypes( $types );
         $ids    = array();

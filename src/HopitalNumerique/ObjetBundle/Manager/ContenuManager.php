@@ -268,7 +268,7 @@ class ContenuManager extends BaseManager
      * @return array
      */
     private function getArboRecursive( ArrayCollection $items, $elements, $tab, $numeroChapitre )
-    {        
+    {
         foreach($elements as $element)
         {
             //creation du mero de chapitre

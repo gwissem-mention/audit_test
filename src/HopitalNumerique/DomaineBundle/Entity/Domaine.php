@@ -104,6 +104,12 @@ class Domaine
     protected $adresseMailContact;
 
     /**
+     * @ORM\ManyToOne(targetEntity="HopitalNumerique\ReferenceBundle\Entity\Reference")
+     * @ORM\JoinColumn(name="ref_root_id", referencedColumnName="ref_id", nullable=true)
+     */
+    private $referenceRoot;
+
+    /**
      * @ORM\ManyToMany(targetEntity="\HopitalNumerique\UserBundle\Entity\User", mappedBy="domaines")
      */
     protected $users;
@@ -272,6 +278,30 @@ class Domaine
     public function getTemplate()
     {
         return $this->template;
+    }
+
+    /**
+     * Set referenceRoot
+     *
+     * @param \HopitalNumerique\ReferenceBundle\Entity\Reference $referenceRoot
+     *
+     * @return Domaine
+     */
+    public function setReferenceRoot(\HopitalNumerique\ReferenceBundle\Entity\Reference $referenceRoot = null)
+    {
+        $this->referenceRoot = $referenceRoot;
+
+        return $this;
+    }
+
+    /**
+     * Get referenceRoot
+     *
+     * @return \HopitalNumerique\ReferenceBundle\Entity\Reference
+     */
+    public function getReferenceRoot()
+    {
+        return $this->referenceRoot;
     }
 
     /**

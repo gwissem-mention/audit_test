@@ -66,10 +66,35 @@ Hn_Reference_Tree.prototype.select = function (nodeIds) {
 };
 
 /**
- * désélectionne un élément.
+ * Sélectionne un élément.
+ *
+ * @param string|array<string> nodeIds ID(s)
+ */
+Hn_Reference_Tree.prototype.selectOnly = function (nodeId) {
+    var selectedNodes = this.container.jstree('get_selected');
+
+    for (var i in selectedNodes) {
+        if (nodeId != selectedNodes[i]) {
+            this.deselect(selectedNodes[i]);
+        }
+    }
+
+    var select = new Nodevo_Form_Select(this.originalSelect);
+    select.setValue(nodeId);
+};
+
+/**
+ * Désélectionne un élément.
  *
  * @param string nodeId ID
  */
 Hn_Reference_Tree.prototype.deselect = function (nodeId) {
     this.container.jstree('deselect_node', nodeId);
+};
+
+/**
+ * Désélectionne tous les éléments.
+ */
+Hn_Reference_Tree.prototype.deselectAll = function () {
+    this.container.jstree('deselect_all');
 };

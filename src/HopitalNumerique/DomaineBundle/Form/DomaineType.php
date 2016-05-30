@@ -64,6 +64,11 @@ class DomaineType extends AbstractType
             		'required'   => false,
             		'label'      => 'Lien du titre',
             ))
+            ->add('referenceRoot', 'entity', [
+                'class' => 'HopitalNumeriqueReferenceBundle:Reference',
+                'label' => 'Référence root',
+                'required' => false
+            ])
             ;
     }
 
