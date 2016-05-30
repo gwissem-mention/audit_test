@@ -2,13 +2,18 @@
 
 {% block title_communaute_pratique %}Groupes thématiques{% endblock %}
 
+{% block communaute_pratique_actions %}
+    {{ parent() }}
+    {{ communaute_pratique.display_action_contact_invitation() }}
+{% endblock %}
+
 {% block body_communaute_pratique %}
 
     {% import "HopitalNumeriqueCommunautePratiqueBundle:include:blocks.html.twig" as communaute_pratique %}
-    
+
     <div class="row" id="communaute-pratiques-groupes">
         <div class="col-md-9">
-            
+
             <div>
                 <ul class="nav nav-tabs" role="tablist">
                     <li role="presentation"{{ groupesNonDemarres|length > 0 or groupesEnCours|length == 0 ? ' class="active"' : '' }}><a href="#a-venir" aria-controls="a-venir" role="tab" data-toggle="tab"><em class="icon-social20"></em> &nbsp; Groupes thématique à venir</a></li>
@@ -36,7 +41,7 @@
                     </div>
                 </div>
             </div>
-            
+
         </div>
         <div class="col-md-3">
 

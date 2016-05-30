@@ -2,6 +2,11 @@
 
 {% block title_communaute_pratique %}Actualités{% endblock %}
 
+{% block communaute_pratique_actions %}
+    {{ parent() }}
+    {{ communaute_pratique.display_action_contact_invitation() }}
+{% endblock %}
+
 {% block communaute_pratique_breadcrumbs_parent %}
     {%- if categorie.parent is not null -%}
         <li><a href="{{ path('hopitalnumerique_communautepratique_actualite_list') }}">Actualités</a></li>
@@ -56,6 +61,3 @@
     </div>
 </div>
 {% endblock %}
-
-
-

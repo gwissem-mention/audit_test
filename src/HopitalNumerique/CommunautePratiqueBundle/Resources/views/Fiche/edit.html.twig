@@ -5,6 +5,7 @@
 {% block communaute_pratique_actions %}
     {{ parent() }}
     {{ communaute_pratique.display_action_contact_animateur(fiche.groupe) }}
+    {{ communaute_pratique.display_action_contact_invitation() }}
 {% endblock %}
 
 {% block communaute_pratique_sommaire %}{% endblock %}
@@ -29,7 +30,7 @@
 {% block body_communaute_pratique %}
 
     {{ communaute_pratique.display_groupe_sommaire(fiche.groupe) }}
-    
+
     <div class="panel panel-communaute-de-pratiques panel-communaute-de-pratiques-fiche-edit">
         <div class="panel-heading">
             <h2><em class="icon icon-file148"></em>Fiche de problématique</h2>

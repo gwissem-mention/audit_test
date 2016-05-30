@@ -36,7 +36,7 @@ class PopupInviteType extends AbstractType
 
         $builder
             ->add('destinataires', 'text', array(
-                'label' => 'E-mail des utilisateurs (Séparer les adresses par des virgules) *',
+                'label' => 'E-mail des utilisateurs (Séparer les adresses par des virgules)',
                 'attr' => array(
                     'class' => 'validate[required]',
                     'maxlength' => 250
