@@ -139,10 +139,6 @@ class ObjetController extends Controller
         $this->get('hopitalnumerique_objet.manager.contenu')->setRefPonderees( $this->get('hopitalnumerique_reference.manager.reference')->getReferencesPonderees($objet->getDomainesId()) );
         $contenus = $this->get('hopitalnumerique_objet.manager.contenu')->getArboForObjet( $id, $objet->getDomainesId() );
 
-        //get Note referencement
-        $refsPonderees = $this->get('hopitalnumerique_reference.manager.reference')->getReferencesPonderees($objet->getDomainesId());
-        $note          = $this->get('hopitalnumerique_objet.manager.objet')->getNoteReferencement( $objet->getReferences(), $refsPonderees );
-
         //build Productions liées
         $productions = $this->get('hopitalnumerique_objet.manager.objet')->formatteProductionsLiees( $objet->getObjets() );
 
@@ -150,7 +146,6 @@ class ObjetController extends Controller
             'contenus'    => $contenus,
             'infra'       => $infra,
             'toRef'       => $toRef,
-            'note'        => $note,
             'productions' => $productions,
             'domainesCommunsWithUser' => $this->container->get('hopitalnumerique_core.dependency_injection.entity')->getEntityDomainesCommunsWithUser($objet, $user)
         );

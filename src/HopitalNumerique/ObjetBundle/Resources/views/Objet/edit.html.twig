@@ -318,14 +318,6 @@
                                         {%- endif -%}
                                         <p class="text-muted text-right pull-right"><strong>Note référencement :</strong> {% for domaineCommunWithUser in domainesCommunsWithUser %} &nbsp; {{ domaineCommunWithUser }} : {{ referencement_note(objet, domaineCommunWithUser) }}{% endfor %}</p>
                                     </div>
-                                    <div class="col-md-10 hide">
-                                        {{ form_widget(form.references) }}
-                                    </div>
-                                    <div class="col-md-12">
-                                        <div class="help-block">
-                                            {{ form_errors(form.references) }}
-                                        </div>
-                                    </div>
                                 </div>
                                 <div class="form-group">
                                     <div class="col-md-12">

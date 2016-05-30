@@ -147,13 +147,6 @@ class ObjetType extends AbstractType
                 'label'    => 'Vignette',
                 'attr'     => array('readonly'=>'readonly')
             ))
-            ->add('references', 'entity', array(
-                'class'    => 'HopitalNumeriqueReferenceBundle:Reference',
-                'property' => 'libelle',
-                'required' => false,
-                'multiple' => true,
-                'label'    => 'Référencement'
-            ))
             ->add('ambassadeurs', 'entity', array(
                 'class'    => 'HopitalNumeriqueUserBundle:User',
                 'property' => 'nomPrenom',
