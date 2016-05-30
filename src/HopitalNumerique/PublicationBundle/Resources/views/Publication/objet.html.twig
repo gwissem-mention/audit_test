@@ -336,20 +336,6 @@
                     <div class="item" data-pos="{{count}}" >
                         {% if key != 'forum' %}
                             <h4>
-                                {% if key != 'ressource' %}
-                                    {% if item['updated'] %}
-                                        <span class="label label-success">MaJ</span>
-                                    {% elseif item['new'] %}
-                                        <span class="label label-danger">Nouveau</span>
-                                    {% endif %}
-                                {% else %}
-                                    {% if item['updated'] %}
-                                        <span class="label btn-default btn-xs" style="color:#333">MaJ</span>
-                                    {% elseif item['new'] %}
-                                        <span class="label btn-default btn-xs" style="color:#333">Nouveau</span>
-                                    {% endif %}
-                                {% endif %}
-
                                 {% if item['objet'] is not null %}
                                     <a href="{{path('hopital_numerique_publication_publication_contenu', {'id':item['objet'],'alias':item['aliasO'],'idc':item['id'],'aliasc':item['aliasC']})}}" >
                                 {% else %}
