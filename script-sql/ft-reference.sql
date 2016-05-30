@@ -51,6 +51,7 @@ INSERT INTO `core_textedynamique_code_domaine` (`txt_id`, `dom_id`) VALUES (13, 
 #<-- !!! Après lancement script de migration
 
 # Suppr tables inutiles
+DROP FOREIGN KEY FK_AE3D83A021B741A9;
 DROP TABLE hn_forum_topic_reference;
 DELETE FROM `core_menu_item` WHERE `core_menu_item`.`itm_id` = 81 AND itm_route = 'hopital_numerique_recherche_homepage_requete';
 DROP TABLE hn_objet_contenu_reference;
