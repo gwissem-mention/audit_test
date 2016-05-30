@@ -33,7 +33,7 @@ class Tree
      */
     public function getOptions($domaines, $forbiddenReferenceIds = [])
     {
-        $references = $this->getOrderedReferences(true, $domaines);
+        $references = $this->getOrderedReferences(null, true, $domaines);
 
         $jsTreeOptionsData = $this->getTreeOptionsDataPart($references, $forbiddenReferenceIds);
         $jsTreeOptions = [
@@ -85,7 +85,7 @@ class Tree
      * @param boolean|null                                               $inRecherche InRecherche ?
      * @return \Doctrine\Common\Collections\Collection Références
      */
-    public function getOrderedReferences($parentable = true, $domaines = null, $inRecherche = null)
+    public function getOrderedReferences(Reference $referenceRoot = null, $parentable = true, $domaines = null, $inRecherche = null)
     {
         if (null === $domaines) {
             $referencesConditions = [
@@ -102,7 +102,7 @@ class Tree
             $references = $this->referenceManager->findByDomaines($domaines, true, false, $parentable, null, $inRecherche);
         }
 
-        return $this->getOrderedReferencesTreePart($references);
+        return $this->getOrderedReferencesTreePart($references, $referenceRoot);
     }
 
     /**

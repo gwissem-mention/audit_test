@@ -31,7 +31,7 @@ class RequeteController extends Controller
     public function popinDetailAction(Requete $requete)
     {
         $currentDomaine = $this->container->get('hopitalnumerique_domaine.dependency_injection.current_domaine')->get();
-        $referencesTree = $this->container->get('hopitalnumerique_reference.dependency_injection.reference.tree')->getOrderedReferences(null, [$currentDomaine], true);
+        $referencesTree = $this->container->get('hopitalnumerique_reference.dependency_injection.reference.tree')->getOrderedReferences(null, null, [$currentDomaine], true);
 
         $filtreCategoryLabels = [];
         if (null !== $requete->getEntityTypeIds()) {

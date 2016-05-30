@@ -348,7 +348,7 @@ class RequeteSession
     {
         $statRecherche = $this->statRechercheManager->createEmpty();
 
-        $referencesTree = $this->referenceTree->getOrderedReferences(null, [$this->domaine]);
+        $referencesTree = $this->referenceTree->getOrderedReferences(null, null, [$this->domaine]);
         $referenceIds = $this->getReferenceIds();
         $categoryFilters = $this->getCategoryFilters();
         $modulatedReferenceIds = $this->referencementModulation->getModulatedReferenceIds($referenceIds, $referencesTree);

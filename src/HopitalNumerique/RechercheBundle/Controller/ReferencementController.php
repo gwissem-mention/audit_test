@@ -18,7 +18,7 @@ class ReferencementController extends Controller
         $request->getSession()->set('urlToRedirect', $request->getUri());
         $this->container->get('hopitalnumerique_recherche.dependency_injection.referencement.requete_session')->setWantToSaveRequete(false);
         $currentDomaine = $this->container->get('hopitalnumerique_domaine.dependency_injection.current_domaine')->get();
-        $referencesTree = $this->container->get('hopitalnumerique_reference.dependency_injection.reference.tree')->getOrderedReferences(null, [$currentDomaine], true);
+        $referencesTree = $this->container->get('hopitalnumerique_reference.dependency_injection.reference.tree')->getOrderedReferences($currentDomaine->getReferenceRoot(), null, [$currentDomaine], true);
 
         if ($request->request->has('references')) {
             $choosenReferenceIds = $request->request->get('references');
