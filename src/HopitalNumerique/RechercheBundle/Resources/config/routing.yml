@@ -26,16 +26,6 @@ hopital_numerique_requete_toggle:
     requirements: 
         id: \d+
 
-hopital_numerique_requete_mail:
-    pattern:  /requetes/mail/{id}
-    defaults: { _controller: HopitalNumeriqueRechercheBundle:Requete:mail, id:1}
-    requirements: 
-        id: \d+
-
-hopital_numerique_requete_mail_notified:
-    pattern:  /requetes/getNotified/{id}
-    defaults: { _controller: HopitalNumeriqueRechercheBundle:Requete:getNotified }
-
 hopital_numerique_requete_consultation_delete:
     pattern:  /requetes/consultation/delete/{id}.{_format}
     defaults: { _controller: HopitalNumeriqueRechercheBundle:Consultation:delete, id:1, _format:json }

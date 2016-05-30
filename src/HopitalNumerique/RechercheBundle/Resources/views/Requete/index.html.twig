@@ -46,18 +46,11 @@
                     <i class="fa {% if requete.isDefault %}fa-star{% endif %}"></i>
                 </div>
 
-                <p {% if requete.isDefault %}class="violet"{% endif %} >
+                <p {% if requete.isDefault %}class="violet"{% endif %}>
                     {{requete.nom|capitalize}}
-                    {% if requete.isNew %}
-                        <span class="label label-danger">Nouveau</span>
-                    {% endif %}
-                    {% if requete.isUpdated %}
-                        <span class="label label-success">MaJ</span>
-                    {% endif %}
                 </p>
 
                 <div class="actions pull-right">
-                    <div class="fa fa-envelope btn-pas-mobile hide {% if requete.isUserNotified %}active{% else %}inactive{% endif %}" title="Notifications" onclick="showDetails('{{path('hopital_numerique_requete_mail',{'id':requete.id})}}')"></div>
                     <div class="fa fa-eye btn-pas-mobile" title="Voir le détail" onclick="showDetails('{{path('hopitalnumerique_recherche_referencement_requete_popindetail',{'requete':requete.id})}}')"></div>
                     <div class="fa fa-edit btn-pas-mobile" title="Editer" onclick="editRequete('{{path('hopital_numerique_requete_edit',{'id':requete.id})}}')"></div>
                     <div class="fa fa-times-circle" title="Supprimer" onclick="deleteWithConfirm('{{path('hopital_numerique_requete_delete',{'id':requete.id})}}')"></div>

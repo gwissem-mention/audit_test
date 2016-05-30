@@ -3,12 +3,6 @@
         <li>
             <a href="{{path('hopitalnumerique_recherche_referencement_requete_view', { 'requete':requete.id })}}">
                 <i class="fa fa-star {% if requete.isDefault %}violet{% else %}fa-inverse{% endif %}" ></i>{{requete.nom|capitalize}}
-                {% if requete.isNew %}
-                    <i class="fa fa-bullhorn"></i>
-                {% endif %}
-                {% if requete.isUpdated %}
-                    <i class="fa fa-refresh"></i>
-                {% endif %}
             </a>
         </li>
     {% else %}

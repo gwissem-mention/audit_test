@@ -319,7 +319,6 @@ class RequeteSession
                 $requete = $this->requeteManager->createEmpty();
                 $requete->setNom('Ma requête du '.date('d/m/Y à H:i'));
                 $requete->setIsDefault(false);
-                $requete->setIsUserNotified(false);
                 $requete->setUser($requeteUser);
                 $requete->setDomaine($this->domaine);
                 $this->saveRequete($requete);

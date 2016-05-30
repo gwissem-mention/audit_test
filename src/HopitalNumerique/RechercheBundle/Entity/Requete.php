@@ -47,27 +47,6 @@ class Requete
     private $isDefault;
 
     /**
-     * @var boolean
-     *
-     * @ORM\Column(name="req_isNew", type="boolean", options = {"comment" = "Un element de la requete est taggue comme nouveau ?"})
-     */
-    private $isNew;
-
-    /**
-     * @var boolean
-     *
-     * @ORM\Column(name="req_isUpdated", type="boolean", options = {"comment" = "Un element de la requete est taggue comme mis a jour ?"})
-     */
-    private $isUpdated;
-
-    /**
-     * @var boolean
-     *
-     * @ORM\Column(name="req_isUserNotified", type="boolean", options = {"comment" = "L utilisateur a demande d etre notifie sur cette requete"})
-     */
-    private $isUserNotified;
-
-    /**
      * @var \DateTime
      *
      * @ORM\Column(name="obj_date_debut", type="datetime", options = {"comment" = "Date de debut de la notification"}, nullable=true)
@@ -120,9 +99,6 @@ class Requete
     public function __construct()
     {
         $this->isDefault      = false;
-        $this->isNew          = false;
-        $this->isUpdated      = false;
-        $this->isUserNotified = true;
         $this->dateDebut      = null;
         $this->dateFin        = null;
         $this->refs           = array();
@@ -185,66 +161,6 @@ class Requete
         return $this->isDefault;
     }
 
-    /**
-     * Get isNew
-     *
-     * @return boolean $isNew
-     */
-    public function isNew()
-    {
-        return $this->isNew;
-    }
-    
-    /**
-     * Set isNew
-     *
-     * @param boolean $isNew
-     */
-    public function setNew($isNew)
-    {
-        $this->isNew = $isNew;
-    }
-    
-    /**
-     * Get isUpdated
-     *
-     * @return boolean $isUpdated
-     */
-    public function isUpdated()
-    {
-        return $this->isUpdated;
-    }
-    
-    /**
-     * Set isUpdated
-     *
-     * @param boolean $isUpdated
-     */
-    public function setUpdated($isUpdated)
-    {
-        $this->isUpdated = $isUpdated;
-    }
-    
-    /**
-     * Get isUserNotified
-     *
-     * @return boolean $isUserNotified
-     */
-    public function isUserNotified()
-    {
-        return $this->isUserNotified;
-    }
-    
-    /**
-     * Set isUserNotified
-     *
-     * @param boolean $isUserNotified
-     */
-    public function setUserNotified($isUserNotified)
-    {
-        $this->isUserNotified = $isUserNotified;
-    }
-    
     /**
      * Get dateDebut
      *
@@ -349,75 +265,6 @@ class Requete
     public function getIsDefault()
     {
         return $this->isDefault;
-    }
-
-    /**
-     * Set isNew
-     *
-     * @param boolean $isNew
-     * @return Requete
-     */
-    public function setIsNew($isNew)
-    {
-        $this->isNew = $isNew;
-
-        return $this;
-    }
-
-    /**
-     * Get isNew
-     *
-     * @return boolean 
-     */
-    public function getIsNew()
-    {
-        return $this->isNew;
-    }
-
-    /**
-     * Set isUpdated
-     *
-     * @param boolean $isUpdated
-     * @return Requete
-     */
-    public function setIsUpdated($isUpdated)
-    {
-        $this->isUpdated = $isUpdated;
-
-        return $this;
-    }
-
-    /**
-     * Get isUpdated
-     *
-     * @return boolean 
-     */
-    public function getIsUpdated()
-    {
-        return $this->isUpdated;
-    }
-
-    /**
-     * Set isUserNotified
-     *
-     * @param boolean $isUserNotified
-     * @return Requete
-     */
-    public function setIsUserNotified($isUserNotified)
-    {
-        $this->isUserNotified = $isUserNotified;
-
-        return $this;
-    }
-
-    /**
-     * Get isUserNotified
-     *
-     * @return boolean 
-     */
-    public function getIsUserNotified()
-    {
-        return $this->isUserNotified;
     }
 
     /**
