@@ -1,0 +1,4 @@
+hopitalnumerique_account_inscription_popin:
+    pattern: '/popin'
+    defaults: { _controller: 'HopitalNumeriqueAccountBundle:Inscription:popin' }
+    methods: 'POST'

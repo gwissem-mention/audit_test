@@ -37,7 +37,7 @@
 {% block content%}
 	<div id="form_edit_user">
 	    <div id="form_edit_informations_personnelles">
-            {% form_theme form 'HopitalNumeriqueAccountBundle:Formulaire:theme.default.html.twig' %}
+                {% form_theme form 'HopitalNumeriqueAccountBundle:Formulaire:theme.default.html.twig' %}
                 {{ form_start(form) }}
                     {{ form_javascript(form) }}
                     <div class="champ-obligatoire"><span class="etoile">*</span> champ(s) obligatoire(s)</div>
@@ -48,11 +48,11 @@
                     <input type="hidden" id="etablissement-url" value="{{path('hopital_numerique_user_front_etablissements_informationsPersonelles')}}" />
                     
                     {# Formulaire : #}
-		            <div class="form-group">
+                    <div class="form-group">
                         <label class="control-label col-md-4">Identifiant (login)</label>
                         <div class="username col-md-7">{{ user.username }}</div>
                     </div>
-	                <div class="clearfix"></div>
+                    <div class="clearfix"></div>
                     {{ form_row(form.pseudonymeForum) }}
                     {{ form_row(form.civilite) }}
                     {{ form_row(form.titre) }}
