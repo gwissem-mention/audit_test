@@ -39,7 +39,8 @@
             </div>
 
             <div class="bloc-offline">
-                {% include 'HopitalNumeriqueAccountBundle:include:login.html.twig' with { 'size':'small', 'title':'Connexion' } %}
+                {% include 'HopitalNumeriqueAccountBundle:include:login.html.twig' with { 'size':'small', 'displayInscription':false } %}
+                {{ render(controller('HopitalNumeriqueAccountBundle:Inscription:popin', { 'urlRedirection':app.request.uri })) }}
             </div>
 
         </div>
