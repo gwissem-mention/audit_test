@@ -6,7 +6,7 @@
 
     <form action="{{ path('account_login_check') }}" class="form-horizontal" method="post">
 
-        {%- if 'small' == size -%}
+        {%- if 'small' == size and (displayInscription is not defined or displayInscription == true) -%}
             <div class="pull-right">
                 <a href="{{path('hopital_numerique_user_inscription')}}" target="_blank">Inscription</a>
             </div>
@@ -63,9 +63,11 @@
                             <div class="col-md-4">
                                 <a href="{{path('fos_user_resetting_request')}}" target="_blank">Mot de passe oublié</a>
                             </div>
-                            <div class="col-md-4">
-                                <a href="{{path('hopital_numerique_user_inscription')}}" target="_blank">Inscription</a>
-                            </div>
+                            {%- if displayInscription is not defined or displayInscription == true -%}
+                                <div class="col-md-4">
+                                    <a href="{{path('hopital_numerique_user_inscription')}}" target="_blank">Inscription</a>
+                                </div>
+                            {%- endif -%}
                         </div>
                     </div>
                 {%- endif -%}
