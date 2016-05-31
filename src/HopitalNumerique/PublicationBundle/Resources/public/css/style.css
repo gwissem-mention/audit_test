@@ -117,6 +117,10 @@
     #publication #resultats #productions .wrapper-results .results .fa-refresh,
     #publication #resultats #infradocs .wrapper-results .results .fa-refresh { color:#3da20b; }
 
+    /* Sous-chapitres */
+    .sous-chapitres-container {}
+        .sous-chapitres-container .title { text-decoration: underline; }
+
     /* Bloc résumé */
     #publication #publication-resume h1{font-size: 24px; font-weight: bold; margin:2px 0 20px 0; border-bottom: 1px solid #D5D5D5; padding-bottom: 5px;}
     #publication #publication-resume h2{font-size: 18px; color: #d60030; font-weight: bold;}

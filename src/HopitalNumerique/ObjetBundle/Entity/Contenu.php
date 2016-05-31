@@ -83,10 +83,15 @@ class Contenu
     private $dateModification;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Contenu", cascade={"persist"})
+     * @ORM\ManyToOne(targetEntity="Contenu", inversedBy="children", cascade={"persist"})
      * @ORM\JoinColumn(name="parent_id", referencedColumnName="con_id", onDelete="CASCADE")
      */
     protected $parent = null;
+
+    /**
+     * @ORM\OneToMany(targetEntity="Contenu", mappedBy="parent")
+     */
+    private $children;
    
     /**
      * @ORM\ManyToOne(targetEntity="Objet", cascade={"persist"}, inversedBy="contenus", fetch="EAGER")
@@ -276,6 +281,40 @@ class Contenu
     public function setParent($parent)
     {
         $this->parent = $parent;
+    }
+
+    /**
+     * Add child
+     *
+     * @param \HopitalNumerique\ObjetBundle\Entity\Contenu $child
+     *
+     * @return Contenu
+     */
+    public function addChild(\HopitalNumerique\ObjetBundle\Entity\Contenu $child)
+    {
+        $this->children[] = $child;
+
+        return $this;
+    }
+
+    /**
+     * Remove child
+     *
+     * @param \HopitalNumerique\ObjetBundle\Entity\Contenu $child
+     */
+    public function removeChild(\HopitalNumerique\ObjetBundle\Entity\Contenu $child)
+    {
+        $this->children->removeElement($child);
+    }
+
+    /**
+     * Get children
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getChildren()
+    {
+        return $this->children;
     }
     
     /**
@@ -658,6 +697,11 @@ class Contenu
         return $typeLabels;
     }
 
+    /**
+     * Retourne les domaines du contenu (ceux de l'objet si aucun objet lié directement au contenu).
+     *
+     * @return array<\HopitalNumerique\DomaineBundle\Entity\Domaine> Domaines
+     */
     public function getRealDomaines()
     {
         if (null !== $this->domaines && count($this->domaines) > 0) {
@@ -665,5 +709,41 @@ class Contenu
         }
 
         return $this->objet->getDomaines();
+    }
+
+    /**
+     * Retourne le préfixe du contenu.
+     *
+     * @return string Préfixe
+     */
+    public function getPrefix()
+    {
+        return $this->getPrefixFromContenu($this);
+    }
+
+    /**
+     * Retourne le préfixe d'un contenu.
+     *
+     * @param \HopitalNumerique\ObjetBundle\Entity\Contenu $contenu Contenu
+     * @param string                                       $prefix  Préfixe
+     * @return string Préfixe
+     */
+    private function getPrefixFromContenu(Contenu $contenu = null, $prefix = '')
+    {
+        if (is_null($contenu)) {
+            return $prefix;
+        }
+
+        return $this->getPrefixFromContenu($contenu->getParent(), $contenu->getOrder().'.'.$prefix);
+    }
+
+    /**
+     * Retourne si le contenu a un... contenu.
+     *
+     * @return boolean Si contenu
+     */
+    public function hasContenu()
+    {
+        return ('' != $this->getContenu());
     }
 }

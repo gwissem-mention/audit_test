@@ -126,6 +126,26 @@
                     <div id="publication-resume">
                         {{contenu.contenu|glossaire_add(contenu)|parsePublication|raw}}
                     </div>
+                    
+                    {%- if contenu.children|length > 0 -%}
+                        <div class="sous-chapitres-container">
+                            <h3 class="title">Sous-chapitres :</h3>
+                            <ul>
+                                {%- for contenuChild in contenu.children -%}
+                                    <li>
+                                        {%- if contenuChild.hasContenu -%}
+                                            <a href="{{path('hopital_numerique_publication_publication_contenu', {'id':contenuChild.objet.id,'alias':contenuChild.objet.alias,'idc':contenuChild.id,'aliasc':contenuChild.alias})}}">
+                                        {%- endif -%}
+                                        {{ contenuChild.prefix }} {{ contenuChild }}
+                                        {%- if contenuChild.hasContenu -%}
+                                            </a>
+                                        {%- endif -%}
+                                    </li>
+                                {%- endfor -%}
+                            </ul>
+                        </div>
+                    {%- endif -%}
+                    
                 </div>
             </div>
         {# Cas Objet #}
