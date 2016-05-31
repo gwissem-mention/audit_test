@@ -9,20 +9,22 @@
     %}
         <script type="text/javascript" src="{{ asset_url }}"></script>
     {% endjavascripts %}
-    <script type="text/javascript">
-        $(document).ready(function () {
-            var referenceTree = new Hn_Reference_Tree('#reference-tree', '#hopitalnumerique_domaine_domaine_referenceRoot');
-            referenceTree.display({{ referenceTreeOptions|raw }});
-            {%- if domaine.referenceRoot is not null -%}
-                referenceTree.container.on('ready.jstree', function () {
-                    referenceTree.select({{ domaine.referenceRoot.id }});
+    {% if referenceTreeOptions is defined %}
+        <script type="text/javascript">
+            $(document).ready(function () {
+                var referenceTree = new Hn_Reference_Tree('#reference-tree', '#hopitalnumerique_domaine_domaine_referenceRoot');
+                referenceTree.display({{ referenceTreeOptions|raw }});
+                {%- if domaine.referenceRoot is not null -%}
+                    referenceTree.container.on('ready.jstree', function () {
+                        referenceTree.select({{ domaine.referenceRoot.id }});
+                    });
+                {%- endif -%}
+                referenceTree.container.on('select_node.jstree', function (event, node) {
+                    referenceTree.selectOnly(node.node.id);
                 });
-            {%- endif -%}
-            referenceTree.container.on('select_node.jstree', function (event, node) {
-                referenceTree.selectOnly(node.node.id);
             });
-        });
-    </script>
+        </script>
+    {% endif %}
 {% endblock %}
 
 {% block h1Title %}
@@ -87,15 +89,16 @@
                         {{form_row(form.homepage)}}
                     </div>
 
-                    <div class="form-group">
-                        {{ form_label(form.referenceRoot) }}
-                        <div class="col-md-6">
-                            <div class="hide">{{ form_widget(form.referenceRoot) }}</div>
-                            <div id="reference-tree"></div>
+                    {% if form.referenceRoot is defined %}
+                        <div class="form-group">
+                            {{ form_label(form.referenceRoot) }}
+                            <div class="col-md-6">
+                                <div class="hide">{{ form_widget(form.referenceRoot) }}</div>
+                                <div id="reference-tree"></div>
+                            </div>
+                            {{ form_errors(form.referenceRoot) }}
                         </div>
-                        {{ form_errors(form.referenceRoot) }}
-                    </div>
-                    <h3></h3>
+                    {% endif %}
                     
 
                 {{ form_end(form) }}
