@@ -138,10 +138,10 @@ class ObjetRepository extends EntityRepository
                 'domaine' => $domaine,
                 'idEtat'      => 3,
                 'code_artcle' => 'CATEGORIE_ARTICLE',
-                'code_objet'  => 'CATEGORIE_OBJET',
-                'aujourdhui' => $aujourdhui
+                'code_objet'  => 'CATEGORIE_OBJET'
             ))
             ->orderBy('obj.dateCreation', 'DESC')
+            ->setMaxResults(20)
         ;
         
         return $qb;

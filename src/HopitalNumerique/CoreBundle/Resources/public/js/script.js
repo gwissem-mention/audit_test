@@ -45,6 +45,7 @@ $(document).ready(function() {
         }
     });
 
+    $('form.toValidate').validationEngine();
 });
 // Permet la recherche textuelle depuis l'input généré du wysiwyg
 function rechercheTexte()

@@ -20,10 +20,15 @@
     {%- else -%}
         <div class="row">
             <div class="col-md-6">
-                {% include 'HopitalNumeriqueAccountBundle:include:login.html.twig' with { 'size':'medium' } %}
+                {% include 'HopitalNumeriqueAccountBundle:include:login.html.twig' with { 'size':'medium', 'displayInscription':false } %}
             </div>
             <div class="col-md-6">
-                {{ render(controller('HopitalNumeriqueAccountBundle:Inscription:popin', { 'urlRedirection':path('hopital_numerique_recherche_homepage') })) }}
+                <div id="popin-save-requete-form">
+                    {{ render(controller('HopitalNumeriqueAccountBundle:Inscription:popin', { 'urlRedirection':path('hopital_numerique_recherche_homepage') })) }}
+                </div>
+                <script type="text/javascript">
+                    $('#popin-save-requete-form form.toValidate').validationEngine();
+                </script>
             </div>
         </div>
     {%- endif -%}

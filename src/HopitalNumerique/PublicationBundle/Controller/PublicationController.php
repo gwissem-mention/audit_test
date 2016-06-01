@@ -74,7 +74,7 @@ class PublicationController extends Controller
      */
     public function pdfAction(Request $request, $entityType, $entityId)
     {
-        if (Entity::ENTITY_TYPE_OBJET === $entityType) {
+        if (Entity::ENTITY_TYPE_OBJET == $entityType) {
             $pdfUrl = $this->generateUrl(
                 'hopital_numerique_publication_publication_objet',
                 [
@@ -83,7 +83,7 @@ class PublicationController extends Controller
                 ],
                 UrlGeneratorInterface::ABSOLUTE_URL
             );
-        } elseif (Entity::ENTITY_TYPE_CONTENU === $entityType) {
+        } elseif (Entity::ENTITY_TYPE_CONTENU == $entityType) {
             $contenu = $this->container->get('hopitalnumerique_objet.manager.contenu')->findOneById($entityId);
             $pdfUrl = $this->generateUrl(
                 'hopital_numerique_publication_publication_contenu_without_alias',

@@ -42,9 +42,9 @@
             </div>
             <div class="col-md-2">
                 <div class="text-right">
-                    <a class="btn btn-sm btn-default" href="{{ path('hopital_numerique_publication_publication_pdf', { 'entityType':(contenu is defined ? 'contenu' :'objet'), 'entityId':(contenu is defined ? contenu.id : objet.id) }) }}" title="Imprimer cette page"><i class="fa fa-print"></i></a>
+                    <a class="btn btn-sm btn-default" href="{{ path('hopital_numerique_publication_publication_pdf', { 'entityType':(contenu is defined ? '2' :'1'), 'entityId':(contenu is defined ? contenu.id : objet.id) }) }}" title="Imprimer cette page"><i class="fa fa-print"></i></a>
                     {% if objet.getAbsolutePath(1) is not null -%}
-                        <a class="btn btn-sm btn-default" href="/{{objet.getWebPath(1)}}" target="_blank" onclick="ga('send', 'event', 'Traking', 'Téléchargement', '{{objet.getWebPath(1)}}');" title="Télécharger la production complète ( PDF )"><i class="fa fa-download"></i></a>
+                        <a class="btn btn-sm btn-default" href="{{path('hopital_numerique_publication_front_export', {'id':objet.id, 'type': '1'})}}" target="_blank" onclick="ga('send', 'event', 'Traking', 'Téléchargement', '{{path('hopital_numerique_publication_front_export', {'id':objet.id, 'type': '1'})}}');" title="Télécharger la production complète ( PDF )"><i class="fa fa-download"></i></a>
                     {%- endif %}
                     <a class="btn btn-sm btn-default fancybox fancybox.ajax" href="{{ path('nodevo_mail_recommandation_popin') }}" title="Recommander à un ami"><i class="fa fa-envelope"></i></a>
                 </div>

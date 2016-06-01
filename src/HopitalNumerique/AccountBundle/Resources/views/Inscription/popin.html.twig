@@ -2,7 +2,14 @@
 
     <h3>{{ title is defined ? title|raw : 'Inscription' }}</h3>
 
-    {{ form_start(inscriptionForm) }}
+    {{ form_start(inscriptionForm, { 'attr': { 'class':'form-horizontal' } }) }}
+        <div class="form-group">
+            <div class="row">
+                <div class="col-md-12">{{ form_label(inscriptionForm.email) }}</div>
+                <div class="col-md-12">{{ form_widget(inscriptionForm.email) }}</div>
+                {{ form_errors(inscriptionForm.email) }}
+            </div>
+        </div>
         {{ form_rest(inscriptionForm) }}
         <div class="text-right">
             <button type="submit" class="btn btn-success">S'INSCRIRE</button>
