@@ -39,6 +39,10 @@ class InscriptionController extends Controller
 
                 $this->container->get('hopitalnumerique_user.manager.user')->save($user);
 
+                if ($this->container->get('hopitalnumerique_recherche.dependency_injection.referencement.requete_session')->isWantToSaveRequete()) {
+                    $this->container->get('hopitalnumerique_recherche.dependency_injection.referencement.requete_session')->saveAsNewRequete($user);
+                }
+
                 // Connexion automatique
                 $token = new UsernamePasswordToken($user, null, 'frontoffice_connecte', $user->getRoles());
                 $this->container->get('security.context')->setToken($token);

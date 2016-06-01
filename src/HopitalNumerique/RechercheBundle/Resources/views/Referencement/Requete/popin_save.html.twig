@@ -18,6 +18,13 @@
             </div>
         {{ form_end(requeteForm) }}
     {%- else -%}
-        {% include 'HopitalNumeriqueAccountBundle:include:login.html.twig' with { 'size':'medium' } %}
+        <div class="row">
+            <div class="col-md-6">
+                {% include 'HopitalNumeriqueAccountBundle:include:login.html.twig' with { 'size':'medium' } %}
+            </div>
+            <div class="col-md-6">
+                {{ render(controller('HopitalNumeriqueAccountBundle:Inscription:popin', { 'urlRedirection':path('hopital_numerique_recherche_homepage') })) }}
+            </div>
+        </div>
     {%- endif -%}
 {% endblock %}
