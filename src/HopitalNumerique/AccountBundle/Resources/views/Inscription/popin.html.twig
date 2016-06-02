@@ -2,7 +2,7 @@
 
     <h3>{{ title is defined ? title|raw : 'Inscription' }}</h3>
 
-    {{ form_start(inscriptionForm, { 'attr': { 'class':'form-horizontal' } }) }}
+    {{ form_start(inscriptionForm, { 'attr': { 'class':'form-horizontal toValidate ' } }) }}
         <div class="form-group">
             <div class="row">
                 <div class="col-md-12">{{ form_label(inscriptionForm.email) }}</div>
