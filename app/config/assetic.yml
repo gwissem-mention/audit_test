@@ -117,7 +117,7 @@ assetic:
             filters : [ ?yui_js ]
         json_js:
             inputs:
-                - "%kernel.root_dir%/Resources/components/JSON-js/json2.js"
+                - "%kernel.root_dir%/Resources/components/json-js/json2.js"
             filters : [ ?yui_js ]
         bootstrap_iconpicker_js:
             inputs:
@@ -129,7 +129,7 @@ assetic:
             filters : [ ?yui_js ]
         nestable_js:
             inputs:
-                - "%kernel.root_dir%/Resources/components/Nestable/jquery.nestable.js"
+                - "%kernel.root_dir%/Resources/components/nestable/jquery.nestable.js"
             filters : [ ?yui_js ]
         enquire_js:
             inputs:
