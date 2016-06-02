@@ -37,4 +37,11 @@ class AttributeBuilderProvider
 
         return null;
     }
+
+    public function getBuildersName()
+    {
+        return array_values(array_map(function (AttributeBuilderInterface $element) {
+            return $element->getName();
+        }, $this->attributeBuilders));
+    }
 }

@@ -9,7 +9,7 @@ use Nodevo\Component\Import\Progress\ProgressAwareTrait;
 use Nodevo\Component\Import\Writer\WriterInterface;
 use Symfony\Component\PropertyAccess\PropertyAccessor;
 
-class SurveyWriter implements WriterInterface, ProgressAwareInterface
+class ChapterWriter implements WriterInterface, ProgressAwareInterface
 {
     use ProgressAwareTrait;
 
@@ -45,35 +45,41 @@ class SurveyWriter implements WriterInterface, ProgressAwareInterface
 
     public function write($item)
     {
-        $parentChapter = null;
+        if ($this->validate($item)) {
+            $parentChapter = null;
 
-        if (isset($item['code_chapitre_enfant'])) {
-            if (!isset($item['code_chapitre'])) {
-                throw new \Exception('Parent code needed for child chapter');
+            if (isset($item['code_chapitre_enfant'])) {
+                if (!isset($item['code_chapitre'])) {
+                    throw new \Exception('Parent code needed for child chapter');
+                }
+                $parentCode = $item['code_chapitre'];
+                $chapterCode = (string)$item['code_chapitre_enfant'];
+
+                $parentChapter = $this->getChapter($parentCode);
+            } else {
+                $chapterCode = (string)$item['code_chapitre'];
             }
-            $parentCode = $item['code_chapitre'];
-            $chapterCode = (string)$item['code_chapitre_enfant'];
 
-            $parentChapter = $this->getChapter($parentCode);
-        } else {
-            $chapterCode = (string)$item['code_chapitre'];
-        }
+            $chapter = $this->getChapter($chapterCode);
+            $propertyAccessor = new PropertyAccessor();
 
-        $chapter = $this->getChapter($chapterCode);
-        $propertyAccessor = new PropertyAccessor();
-
-        foreach ($this->mapping as $key => $attribute) {
-            if (array_key_exists($key, $item) && null !== $item[$key]) {
-                $propertyAccessor->setValue($chapter, $attribute, (string) $item[$key]);
+            foreach ($this->mapping as $key => $attribute) {
+                if (array_key_exists($key, $item) && null !== $item[$key]) {
+                    $propertyAccessor->setValue($chapter, $attribute, (string)$item[$key]);
+                }
             }
-        }
 
-        $this->progress->addMessage('', $chapter, 'chapter.updated');
+            $this->progress->addMessage('', $chapter, 'chapter.updated');
 
-        if ($parentChapter) {
-            $chapter->setParent($parentChapter);
+            if ($parentChapter) {
+                $chapter->setParent($parentChapter);
+            } else {
+                $chapter->setParent();
+            }
         } else {
-            $chapter->setParent();
+            $this->progress->addException(
+                new \Exception('chapter incorect format')
+            );
         }
     }
 
@@ -117,5 +123,20 @@ class SurveyWriter implements WriterInterface, ProgressAwareInterface
         $this->importedChapterCodes[$chapter->getCode()] = true;
 
         return $chapter;
+    }
+
+    protected function validate($item)
+    {
+        return
+            count($item) === 8
+            && count(array_intersect_key($item, [
+                'code_chapitre' => true,
+                'code_chapitre_enfant' => true,
+                'libelle_chapitre' => true,
+                'libelle_chapitre_enfant' => true,
+                'titre_avant' => true,
+                'texte_avant' => true,
+                'texte_apres' => true,
+            ])) === 7;
     }
 }

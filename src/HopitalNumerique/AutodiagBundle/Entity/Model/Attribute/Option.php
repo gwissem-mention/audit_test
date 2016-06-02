@@ -25,22 +25,23 @@ class Option
     /**
      * @var string
      *
-     * @ORM\Id @ORM\Column(type="string", length=255)
+     * @ORM\Id
+     * @ORM\Column(type="string", length=255)
      */
-    private $option;
+    private $value;
 
     /**
      * @var string
      *
      * @ORM\Column(type="string", length=255)
      */
-    private $value;
+    private $label;
 
-    public function __construct(Attribute $attribute, $name, $value)
+    public function __construct(Attribute $attribute, $value, $label = null)
     {
         $this->attribute = $attribute;
-        $this->option = $name;
         $this->value = $value;
+        $this->label = $label;
     }
 
     /**
@@ -49,16 +50,6 @@ class Option
     public function getAttribute()
     {
         return $this->attribute;
-    }
-
-    /**
-     * Get option
-     *
-     * @return string
-     */
-    public function getOption()
-    {
-        return $this->option;
     }
 
     /**
@@ -72,14 +63,24 @@ class Option
     }
 
     /**
-     * Set value
+     * Get label
      *
-     * @param string $value
+     * @return string
+     */
+    public function getLabel()
+    {
+        return $this->label;
+    }
+
+    /**
+     * Set label
+     *
+     * @param string $label
      * @return $this
      */
-    public function setValue($value)
+    public function setLabel($label)
     {
-        $this->value = $value;
+        $this->label = $label;
 
         return $this;
     }

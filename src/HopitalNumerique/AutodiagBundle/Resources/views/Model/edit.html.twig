@@ -32,21 +32,23 @@
             <div class="panel-heading">
                 <h4></h4>
                 <div class="options">
-                    <ul class="nav nav-tabs">
-                        {% set routes = {
-                            'ad.model.edit_menu.general': 'hopitalnumerique_autodiag_model_edit',
-                            'ad.model.edit_menu.survey': 'hopitalnumerique_autodiag_model_edit_survey',
-                            'ad.model.edit_menu.algorithm': 'hopitalnumerique_autodiag_model_list',
-                            'ad.model.edit_menu.restitution': 'hopitalnumerique_autodiag_model_list',
-                        } %}
-                        {% for label, route in routes %}
-                            <li class="{{ app.request.attributes.get('_route') == route ? 'active' : '' }}">
-                                <a href="{{ path(route, {'id': model.id}) }}">
-                                    {{ label|trans }}
-                                </a>
-                            </li>
-                        {% endfor %}
-                    </ul>
+                    {% if model.id is not null %}
+                        <ul class="nav nav-tabs">
+                            {% set routes = {
+                                'ad.model.edit_menu.general': 'hopitalnumerique_autodiag_model_edit',
+                                'ad.model.edit_menu.survey': 'hopitalnumerique_autodiag_model_edit_survey',
+                                'ad.model.edit_menu.algorithm': 'hopitalnumerique_autodiag_model_list',
+                                'ad.model.edit_menu.restitution': 'hopitalnumerique_autodiag_model_list',
+                            } %}
+                            {% for label, route in routes %}
+                                <li class="{{ app.request.attributes.get('_route') == route ? 'active' : '' }}">
+                                    <a href="{{ path(route, {'id': model.id}) }}">
+                                        {{ label|trans }}
+                                    </a>
+                                </li>
+                            {% endfor %}
+                        </ul>
+                    {% endif %}
                 </div>
             </div>
 

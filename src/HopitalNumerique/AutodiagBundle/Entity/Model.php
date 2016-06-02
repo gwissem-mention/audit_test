@@ -4,10 +4,8 @@ namespace HopitalNumerique\AutodiagBundle\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
-use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\Mapping as ORM;
 use HopitalNumerique\AutodiagBundle\Entity\Model\Container\Chapter;
-use HopitalNumerique\AutodiagBundle\Entity\Model\Preset\Attribute;
 use HopitalNumerique\DomaineBundle\Entity\Domaine;
 use HopitalNumerique\QuestionnaireBundle\Entity\Questionnaire;
 
@@ -95,9 +93,10 @@ class Model
 
     public function __construct()
     {
+        $this->domaines = new ArrayCollection();
         $this->chapters = new ArrayCollection();
     }
-    
+
     /**
      * Get id
      *

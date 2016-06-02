@@ -1,5 +1,6 @@
 imports:
     - { resource: attribute/builder.yml }
+    - { resource: import.yml }
 
 services:
     autodiag.form.model_preset:

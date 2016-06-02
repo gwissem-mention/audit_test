@@ -12,6 +12,11 @@ class ExcelFileReader implements ReaderInterface, ProgressAwareInterface
 
     protected $sheetNumber = 0;
 
+    public function __construct($sheetNumber)
+    {
+        $this->sheetNumber = $sheetNumber;
+    }
+
     /**
      * @param File $file
      * @return KeyedExcelFileIterator

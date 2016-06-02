@@ -1,0 +1,20 @@
+services:
+    autodiag.import.chapter:
+        class: Nodevo\Component\Import\DataImporter
+        arguments: ['@autodiag.import.chapter.reader']
+
+    autodiag.import.chapter.reader:
+        class: Nodevo\Component\Import\Reader\ExcelFileReader
+        arguments: [0]
+        public: false
+
+
+
+    autodiag.import.question:
+        class: Nodevo\Component\Import\DataImporter
+        arguments: ['@autodiag.import.question.reader']
+
+    autodiag.import.question.reader:
+        class: Nodevo\Component\Import\Reader\ExcelFileReader
+        arguments: [1]
+        public: false

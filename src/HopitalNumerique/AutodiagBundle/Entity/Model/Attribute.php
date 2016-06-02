@@ -79,7 +79,8 @@ class Attribute
      *     targetEntity="HopitalNumerique\AutodiagBundle\Entity\Model\Attribute\Option",
      *     mappedBy="attribute",
      *     cascade={"persist"},
-     *     orphanRemoval=true
+     *     orphanRemoval=true,
+     *     fetch="EAGER"
      * )
      */
     private $options;
@@ -216,7 +217,7 @@ class Attribute
      */
     public function setColored($colored)
     {
-        $this->colored = $colored;
+        $this->colored = (bool) $colored;
 
         return $this;
     }

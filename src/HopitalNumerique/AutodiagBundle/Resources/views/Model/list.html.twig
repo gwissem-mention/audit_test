@@ -20,8 +20,8 @@
 {% endblock %}
 
 {% block toolbarButton %}
-    {% if app.user|checkAuthorization( path('hopitalnumerique_objet_objet_add') ) %}
-        <a class="btn btn-default" href="{{ path('hopitalnumerique_objet_objet_add') }}" title="Ajouter une publication"><i class="fa fa-plus"></i></a>
+    {% if app.user|checkAuthorization( path('hopitalnumerique_autodiag_model_create') ) %}
+        <a class="btn btn-default" href="{{ path('hopitalnumerique_autodiag_model_create') }}" title="Ajouter un autodiag"><i class="fa fa-plus"></i></a>
     {% endif %}
 {% endblock %}
 

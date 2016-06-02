@@ -8,7 +8,8 @@ use HopitalNumerique\AutodiagBundle\Entity\Model;
 use HopitalNumerique\AutodiagBundle\Form\Type\Domain\ModelAdminUpdateType;
 use HopitalNumerique\AutodiagBundle\Form\Type\Model\FileImportType;
 use HopitalNumerique\AutodiagBundle\Grid\ModelGrid;
-use HopitalNumerique\AutodiagBundle\Service\Import\SurveyWriter;
+use HopitalNumerique\AutodiagBundle\Service\Import\ChapterWriter;
+use HopitalNumerique\AutodiagBundle\Service\Import\QuestionWriter;
 use HopitalNumerique\AutodiagBundle\Service\Model\ModelFactory;
 use Nodevo\Component\Import\DataImporter;
 use Nodevo\Component\Import\Reader\ExcelFileReader;
@@ -32,10 +33,7 @@ class ModelController extends Controller
 
     public function createAction(Request $request)
     {
-        $modelFactory = new ModelFactory();
-        $model = $modelFactory->create();
-
-        return $this->editAction($request, $model);
+        return $this->editAction($request, new Model);
     }
 
     /**
@@ -89,11 +87,27 @@ class ModelController extends Controller
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
 
-            $fileReader = new ExcelFileReader();
-            $writer = new SurveyWriter($this->getDoctrine()->getManager(), $model);
-            $dataImporter = new DataImporter($fileReader, $writer);
-            $progress = $dataImporter->import($import->getFile());
-            dump($progress->getDuraction());die;
+            // Import chapter
+            $chapterImporter = $this->get('autodiag.import.chapter');
+            $chapterImporter->setWriter(
+                new ChapterWriter($this->getDoctrine()->getManager(), $model)
+            );
+            $chapterProgress = $chapterImporter->import($import->getFile());
+
+            // Import questions
+            $questionImporter = $this->get('autodiag.import.question');
+            $questionImporter->setWriter(
+                new QuestionWriter(
+                    $this->getDoctrine()->getManager(),
+                    $model,
+                    $this->get('autodiag.attribute_builder_provider')
+                )
+            );
+            $questionProgress = $questionImporter->import($import->getFile());
+
+            dump($chapterProgress);
+            dump($questionProgress);
+            die;
         }
 
         return $this->render('HopitalNumeriqueAutodiagBundle:Model/Edit:_survey.html.twig', [

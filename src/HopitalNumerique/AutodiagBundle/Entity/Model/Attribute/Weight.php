@@ -9,10 +9,10 @@ use HopitalNumerique\AutodiagBundle\Entity\Model\Container;
 /**
  * Weighted
  *
- * @ORM\Table(name="ad_model_attribute_weighted")
+ * @ORM\Table(name="ad_model_attribute_weight")
  * @ORM\Entity
  */
-class Weighted
+class Weight
 {
     /**
      * @var Container
@@ -37,15 +37,28 @@ class Weighted
      *
      * @var float
      *
-     * @ORM\Column(type="decimal")
+     * @ORM\Column(type="float")
      */
     private $weight;
 
-    public function __construct(Container $container, Attribute $attribute, $weight)
+    public function __construct(Container $container, Attribute $attribute, $weight = null)
     {
         $this->container = $container;
         $this->attribute = $attribute;
         $this->weight = $weight;
+    }
+
+    /**
+     * Set weight
+     *
+     * @param $weight
+     * @return $this
+     */
+    public function setWeight($weight)
+    {
+        $this->weight = $weight;
+
+        return $this;
     }
 }
 
