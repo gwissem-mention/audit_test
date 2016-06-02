@@ -61,4 +61,7 @@ DROP TABLE hn_glossaire;
 DROP TABLE hn_objet_contenu_infradoc;
 DROP TABLE user_reference;
 
+
+INSERT INTO `core_ressource` (`res_id`, `res_nom`, `res_pattern`, `res_order`, `res_type`) VALUES (65, 'FrontOffice - Informations manquantes', '/^\\/compte-hn\\/informations-manquantes/', '20', '2');
+
 #-->
