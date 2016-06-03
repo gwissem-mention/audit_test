@@ -12,6 +12,6 @@ use Nodevo\ToolsBundle\Manager\Manager as BaseManager;
  */
 class ContactManager extends BaseManager
 {
-    protected $_class = 'Nodevo\ContactBundle\Entity\Contact';
+    protected $class = 'Nodevo\ContactBundle\Entity\Contact';
     
 }

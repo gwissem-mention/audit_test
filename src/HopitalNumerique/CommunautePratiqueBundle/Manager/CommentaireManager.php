@@ -6,7 +6,7 @@ namespace HopitalNumerique\CommunautePratiqueBundle\Manager;
  */
 class CommentaireManager extends \Nodevo\ToolsBundle\Manager\Manager
 {
-    protected $_class = 'HopitalNumerique\CommunautePratiqueBundle\Entity\Commentaire';
+    protected $class = 'HopitalNumerique\CommunautePratiqueBundle\Entity\Commentaire';
 
     /**
      * Retourne true si le document n'est appelé dans aucun commentaire

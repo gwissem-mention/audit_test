@@ -9,7 +9,7 @@ use HopitalNumerique\UserBundle\Entity\User;
  */
 class OccurrenceManager extends \Nodevo\ToolsBundle\Manager\Manager
 {
-    protected $_class = 'HopitalNumerique\QuestionnaireBundle\Entity\Occurrence';
+    protected $class = 'HopitalNumerique\QuestionnaireBundle\Entity\Occurrence';
     
     /**
      * Retourne la dernière occurrence d'un questionnaire pour un utilisateur.

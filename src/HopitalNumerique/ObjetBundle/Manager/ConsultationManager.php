@@ -11,7 +11,7 @@ use HopitalNumerique\ObjetBundle\Entity\Objet;
  */
 class ConsultationManager extends BaseManager
 {
-    protected $_class = 'HopitalNumerique\ObjetBundle\Entity\Consultation';
+    protected $class = 'HopitalNumerique\ObjetBundle\Entity\Consultation';
     protected $_securityContext;
 
     /**

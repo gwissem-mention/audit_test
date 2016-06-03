@@ -10,7 +10,7 @@ use Nodevo\ToolsBundle\Manager\Manager as BaseManager;
  */
 class MaitriseUserManager extends BaseManager
 {
-    protected $_class = 'HopitalNumerique\RechercheParcoursBundle\Entity\MaitriseUser';
+    protected $class = 'HopitalNumerique\RechercheParcoursBundle\Entity\MaitriseUser';
 
     /**
      * Met à jour l'ordre du détails

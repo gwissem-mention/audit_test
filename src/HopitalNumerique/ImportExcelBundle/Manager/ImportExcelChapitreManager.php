@@ -14,7 +14,7 @@ use HopitalNumerique\ReferenceBundle\Manager\ReferenceManager;
  */
 class ImportExcelChapitreManager extends ChapitreManagerAutodiag
 {
-    protected $_class = 'HopitalNumerique\AutodiagBundle\Entity\Chapitre';
+    protected $class = 'HopitalNumerique\AutodiagBundle\Entity\Chapitre';
 
 
     /**

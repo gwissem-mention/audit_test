@@ -8,7 +8,7 @@ use HopitalNumerique\ImportExcelBundle\Manager\ImportExcelCategorieManager;
 class ImportExcelManager extends BaseManager
 {
 
-    protected $_class = 'HopitalNumerique\AutodiagBundle\Entity\Categorie';
+    protected $class = 'HopitalNumerique\AutodiagBundle\Entity\Categorie';
     protected $_importExcelCategorieManager;
 
     public function __construct($entityManager, ImportExcelCategorieManager $importExcelCategorieManager)

@@ -8,5 +8,5 @@ use Nodevo\ToolsBundle\Manager\Manager as BaseManager;
  */
 class ChampLexicalNomManager extends BaseManager
 {
-    protected $_class = 'HopitalNumerique\ReferenceBundle\Entity\Reference\ChampLexicalNom';
+    protected $class = 'HopitalNumerique\ReferenceBundle\Entity\Reference\ChampLexicalNom';
 }

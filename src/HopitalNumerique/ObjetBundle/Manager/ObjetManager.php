@@ -18,7 +18,7 @@ use Symfony\Component\HttpFoundation\Session\Session;
  */
 class ObjetManager extends BaseManager
 {
-    protected $_class = 'HopitalNumerique\ObjetBundle\Entity\Objet';
+    protected $class = 'HopitalNumerique\ObjetBundle\Entity\Objet';
     protected $_contenuManager;
     protected $_noteManager;
     protected $_userManager;

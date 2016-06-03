@@ -17,7 +17,7 @@ use Symfony\Component\HttpFoundation\Session\Session;
  */
 class ReferenceManager extends BaseManager
 {
-    protected $_class       = 'HopitalNumerique\ReferenceBundle\Entity\Reference';
+    protected $class       = 'HopitalNumerique\ReferenceBundle\Entity\Reference';
     private $_tabReferences = array();
     private $_session;
     protected $_userManager;

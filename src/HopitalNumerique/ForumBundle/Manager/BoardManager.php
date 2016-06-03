@@ -11,7 +11,7 @@ use CCDNForum\ForumBundle\Model\FrontModel\PostModel;
  */
 class BoardManager extends BaseManager
 {
-    protected $_class = 'HopitalNumerique\ForumBundle\Entity\Board';
+    protected $class = 'HopitalNumerique\ForumBundle\Entity\Board';
     
     /**
      * @var \CCDNForum\ForumBundle\Model\FrontModel\TopicModel TopicModel

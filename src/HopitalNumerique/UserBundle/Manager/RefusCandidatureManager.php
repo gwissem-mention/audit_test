@@ -9,7 +9,7 @@ use Nodevo\ToolsBundle\Manager\Manager as BaseManager;
  */
 class RefusCandidatureManager extends BaseManager
 {
-    protected $_class = 'HopitalNumerique\UserBundle\Entity\RefusCandidature';
+    protected $class = 'HopitalNumerique\UserBundle\Entity\RefusCandidature';
     
     /**
      * Override : Récupère les données pour le grid sous forme de tableau

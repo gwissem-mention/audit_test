@@ -9,7 +9,7 @@ use Nodevo\ToolsBundle\Manager\Manager as BaseManager;
  */
 class StatTelechargementManager extends BaseManager
 {
-    protected $_class = 'HopitalNumerique\StatBundle\Entity\StatTelechargement';
+    protected $class = 'HopitalNumerique\StatBundle\Entity\StatTelechargement';
     protected $_securityContext;
 
     /**

@@ -14,7 +14,7 @@ use Nodevo\ToolsBundle\Manager\Manager as BaseManager;
  */
 class EntityHasReferenceManager extends BaseManager
 {
-    protected $_class = 'HopitalNumerique\ReferenceBundle\Entity\EntityHasReference';
+    protected $class = 'HopitalNumerique\ReferenceBundle\Entity\EntityHasReference';
 
     /**
      * @var \Nodevo\RoleBundle\Manager\RoleManager RoleManager

@@ -15,7 +15,7 @@ use Doctrine\Common\Collections\Criteria;
  */
 class MenuManager extends BaseManager
 {
-    protected $_class = '\Nodevo\MenuBundle\Entity\Menu';
+    protected $class = '\Nodevo\MenuBundle\Entity\Menu';
 
     /**
      * Récupérer une instance de menu via son Alias

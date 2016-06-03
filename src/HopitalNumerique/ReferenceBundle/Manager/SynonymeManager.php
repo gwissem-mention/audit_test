@@ -8,5 +8,5 @@ use Nodevo\ToolsBundle\Manager\Manager as BaseManager;
  */
 class SynonymeManager extends BaseManager
 {
-    protected $_class = 'HopitalNumerique\ReferenceBundle\Entity\Reference\Synonyme';
+    protected $class = 'HopitalNumerique\ReferenceBundle\Entity\Reference\Synonyme';
 }

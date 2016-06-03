@@ -11,7 +11,7 @@ use HopitalNumerique\UserBundle\Manager\UserManager;
  */
 class ExpBesoinGestionManager extends BaseManager
 {
-    protected $_class = 'HopitalNumerique\RechercheBundle\Entity\ExpBesoinGestion';
+    protected $class = 'HopitalNumerique\RechercheBundle\Entity\ExpBesoinGestion';
     protected $_userManager;
 
     /**

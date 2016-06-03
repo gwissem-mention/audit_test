@@ -10,7 +10,7 @@ use Nodevo\ToolsBundle\Manager\Manager as BaseManager;
  */
 class RequeteManager extends BaseManager
 {
-    protected $_class = 'HopitalNumerique\RechercheBundle\Entity\Requete';
+    protected $class = 'HopitalNumerique\RechercheBundle\Entity\Requete';
 
 
     /**

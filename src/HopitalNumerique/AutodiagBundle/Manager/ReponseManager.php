@@ -11,7 +11,7 @@ use Doctrine\ORM\EntityManager;
  */
 class ReponseManager extends BaseManager
 {
-    protected $_class = 'HopitalNumerique\AutodiagBundle\Entity\Reponse';
+    protected $class = 'HopitalNumerique\AutodiagBundle\Entity\Reponse';
 
     /**
      * @var \HopitalNumerique\AutodiagBundle\Manager\ReponseManager

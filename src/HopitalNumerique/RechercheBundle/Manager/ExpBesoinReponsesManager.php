@@ -12,7 +12,7 @@ use Doctrine\ORM\EntityManager;
  */
 class ExpBesoinReponsesManager extends BaseManager
 {
-    protected $_class = 'HopitalNumerique\RechercheBundle\Entity\ExpBesoinReponses';
+    protected $class = 'HopitalNumerique\RechercheBundle\Entity\ExpBesoinReponses';
     protected $_userManager;
     protected $_referenceManager;
 

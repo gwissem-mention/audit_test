@@ -11,7 +11,7 @@ use HopitalNumerique\AutodiagBundle\Manager\QuestionManager;
  */
 class ImportExcelReponsesManager extends ReponseManagerAutodiag
 {
-    protected $_class = 'HopitalNumerique\AutodiagBundle\Entity\Reponse';
+    protected $class = 'HopitalNumerique\AutodiagBundle\Entity\Reponse';
     protected $_referenceManager;
     protected $_userManager;
 

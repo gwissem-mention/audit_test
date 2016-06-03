@@ -14,7 +14,7 @@ use HopitalNumerique\ReferenceBundle\Manager\ReferenceManager;
  */
 class QuestionManager extends BaseManager
 {
-    protected $_class = 'HopitalNumerique\AutodiagBundle\Entity\Question';
+    protected $class = 'HopitalNumerique\AutodiagBundle\Entity\Question';
     protected $_userManager;
     protected $_referenceManager;
     

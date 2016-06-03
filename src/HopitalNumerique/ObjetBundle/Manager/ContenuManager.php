@@ -18,7 +18,7 @@ use HopitalNumerique\ReferenceBundle\Manager\ReferenceManager;
  */
 class ContenuManager extends BaseManager
 {
-    protected $_class = 'HopitalNumerique\ObjetBundle\Entity\Contenu';
+    protected $class = 'HopitalNumerique\ObjetBundle\Entity\Contenu';
     protected $_userManager;
     protected $_referenceManager;
     private $_refPonderees;

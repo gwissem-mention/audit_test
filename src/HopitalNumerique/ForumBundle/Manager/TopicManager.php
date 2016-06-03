@@ -16,7 +16,7 @@ use HopitalNumerique\ReferenceBundle\Manager\ReferenceManager;
  */
 class TopicManager extends BaseManager
 {
-    protected $_class = '\HopitalNumerique\ForumBundle\Entity\Topic';
+    protected $class = '\HopitalNumerique\ForumBundle\Entity\Topic';
     protected $_userManager;
     protected $_domaineManager;
     protected $_referenceManager;

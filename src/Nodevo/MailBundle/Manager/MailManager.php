@@ -21,7 +21,7 @@ use HopitalNumerique\UserBundle\Manager\UserManager;
  */
 class MailManager extends BaseManager
 {
-    protected $_class = 'Nodevo\MailBundle\Entity\Mail';
+    protected $class = 'Nodevo\MailBundle\Entity\Mail';
 
     /**
      * @var \Swift_Mailer Mailer

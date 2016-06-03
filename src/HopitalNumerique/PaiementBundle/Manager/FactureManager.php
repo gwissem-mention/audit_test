@@ -12,7 +12,7 @@ use HopitalNumerique\PaiementBundle\Entity\Facture;
  */
 class FactureManager extends BaseManager
 {
-    protected $_class = 'HopitalNumerique\PaiementBundle\Entity\Facture';
+    protected $class = 'HopitalNumerique\PaiementBundle\Entity\Facture';
     protected $_interventionManager;
     protected $_referenceManager;
 

@@ -10,7 +10,7 @@ use HopitalNumerique\DomaineBundle\Entity\Domaine;
 
 class UserManager extends BaseManager
 {
-    protected $_class = '\HopitalNumerique\UserBundle\Entity\User';
+    protected $class = '\HopitalNumerique\UserBundle\Entity\User';
     protected $_securityContext;
     protected $_managerReponse;
     protected $_managerRefusCandidature;

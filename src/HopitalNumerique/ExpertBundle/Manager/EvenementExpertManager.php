@@ -9,7 +9,7 @@ use Nodevo\ToolsBundle\Manager\Manager as BaseManager;
  */
 class EvenementExpertManager extends BaseManager
 {
-    protected $_class = 'HopitalNumerique\ExpertBundle\Entity\EvenementExpert';
+    protected $class = 'HopitalNumerique\ExpertBundle\Entity\EvenementExpert';
 
     /**
      * Override : Récupère les données pour le grid sous forme de tableau

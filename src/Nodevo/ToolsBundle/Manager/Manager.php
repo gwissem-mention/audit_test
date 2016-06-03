@@ -19,7 +19,7 @@ abstract class Manager
      * @var \Doctrine\ORM\EntityRepository
      */
     protected $_repository = null;
-    protected $_class      = null;
+    protected $class      = null;
 
     /**
      * @var \Doctrine\Common\Cache\Cache Cache
@@ -34,7 +34,7 @@ abstract class Manager
     public function __construct( EntityManager $em )
     {
         $this->_em         = $em;
-        $this->_repository = $this->_em->getRepository( $this->_class );
+        $this->_repository = $this->_em->getRepository( $this->class );
     }
 
     /**
@@ -94,7 +94,7 @@ abstract class Manager
      */
     public function getConstraints( ValidatorInterface $validator )
     {
-        $metadata    = $validator->getMetadataFactory()->getMetadataFor( $this->_class );
+        $metadata    = $validator->getMetadataFactory()->getMetadataFor( $this->class );
         $constraints = array();
 
         foreach($metadata->members as $field) {
@@ -291,7 +291,7 @@ abstract class Manager
      */
     public function createEmpty()
     {
-        return new $this->_class;
+        return new $this->class;
     }
 
     /**

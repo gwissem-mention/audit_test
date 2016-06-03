@@ -8,5 +8,5 @@ use Nodevo\ToolsBundle\Manager\Manager as BaseManager;
  */
 class EntityHasGlossaireManager extends BaseManager
 {
-    protected $_class = 'HopitalNumerique\ReferenceBundle\Entity\EntityHasGlossaire';
+    protected $class = 'HopitalNumerique\ReferenceBundle\Entity\EntityHasGlossaire';
 }

@@ -10,7 +10,7 @@ use HopitalNumerique\CommunautePratiqueBundle\Entity\Inscription;
  */
 class GroupeInscriptionManager extends \Nodevo\ToolsBundle\Manager\Manager
 {
-    protected $_class = 'HopitalNumerique\CommunautePratiqueBundle\Entity\Inscription';
+    protected $class = 'HopitalNumerique\CommunautePratiqueBundle\Entity\Inscription';
     /**
      * Retourne les groupes n'ayant pas encore démarrés.
      *

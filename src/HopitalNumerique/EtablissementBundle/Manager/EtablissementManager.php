@@ -6,7 +6,7 @@ use Nodevo\ToolsBundle\Manager\Manager as BaseManager;
 
 class EtablissementManager extends BaseManager
 {
-    protected $_class = '\HopitalNumerique\EtablissementBundle\Entity\Etablissement';
+    protected $class = '\HopitalNumerique\EtablissementBundle\Entity\Etablissement';
 
     /**
      * Retourne une liste d'établissements regroupée par type d'organisme.

@@ -12,7 +12,7 @@ use HopitalNumerique\AutodiagBundle\Manager\OutilManager;
  */
 class ImportExcelResultatManager extends ResultatManagerAutodiag
 {
-    protected $_class = 'HopitalNumerique\AutodiagBundle\Entity\Resultat';
+    protected $class = 'HopitalNumerique\AutodiagBundle\Entity\Resultat';
     protected $_referenceManager;
     protected $_userManager;
 

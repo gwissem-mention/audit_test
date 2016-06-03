@@ -26,7 +26,7 @@ use HopitalNumerique\ObjetBundle\Manager\ObjetManager;
  */
 class InterventionDemandeManager extends BaseManager
 {
-    protected $_class = 'HopitalNumerique\InterventionBundle\Entity\InterventionDemande';
+    protected $class = 'HopitalNumerique\InterventionBundle\Entity\InterventionDemande';
 
     /**
      * @var \Symfony\Component\Security\Core\SecurityContext  SecurityContext de l'application

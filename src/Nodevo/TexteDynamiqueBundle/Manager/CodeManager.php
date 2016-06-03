@@ -12,7 +12,7 @@ use HopitalNumerique\UserBundle\Manager\UserManager;
  */
 class CodeManager extends BaseManager
 {
-    protected $_class = 'Nodevo\TexteDynamiqueBundle\Entity\Code';
+    protected $class = 'Nodevo\TexteDynamiqueBundle\Entity\Code';
     protected $_userManager;
         
     /**

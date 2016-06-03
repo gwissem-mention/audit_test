@@ -10,7 +10,7 @@ use HopitalNumerique\RechercheParcoursBundle\Entity\RechercheParcoursGestion;
  */
 class RechercheParcoursManager extends BaseManager
 {
-    protected $_class = 'HopitalNumerique\RechercheParcoursBundle\Entity\RechercheParcours';
+    protected $class = 'HopitalNumerique\RechercheParcoursBundle\Entity\RechercheParcours';
 
     /**
      * Met à jour l'ordre de la recherche par parcours

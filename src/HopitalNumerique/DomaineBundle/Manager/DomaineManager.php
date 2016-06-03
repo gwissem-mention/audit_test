@@ -9,7 +9,7 @@ use Nodevo\ToolsBundle\Manager\Manager as BaseManager;
  */
 class DomaineManager extends BaseManager
 {
-    protected $_class = 'HopitalNumerique\DomaineBundle\Entity\Domaine';
+    protected $class = 'HopitalNumerique\DomaineBundle\Entity\Domaine';
 
     /**
      * Override : Récupère les données pour le grid sous forme de tableau

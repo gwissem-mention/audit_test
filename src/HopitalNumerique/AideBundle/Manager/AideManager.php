@@ -13,5 +13,5 @@ use Symfony\Component\HttpFoundation\Session\Session;
  */
 class AideManager extends BaseManager
 {
-    protected $_class = 'HopitalNumerique\AideBundle\Entity\Aide';
+    protected $class = 'HopitalNumerique\AideBundle\Entity\Aide';
 }

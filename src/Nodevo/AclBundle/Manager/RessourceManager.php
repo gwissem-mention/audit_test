@@ -6,13 +6,15 @@ use Nodevo\ToolsBundle\Manager\Manager as BaseManager;
 
 /**
  * Manager de l'entité Ressource
- * 
+ *
  * @author Quentin SOMAZZI
  */
 class RessourceManager extends BaseManager
 {
-    protected $_class = '\Nodevo\AclBundle\Entity\Ressource';
-    
+    protected $class = '\Nodevo\AclBundle\Entity\Ressource';
+
+    protected $resourceList;
+
     /**
      * Retourne la liste des ressources qui matchs l'url passée en paramètre
      *
@@ -20,19 +22,28 @@ class RessourceManager extends BaseManager
      *
      * @return array
      */
-    public function getRessourceMatchingUrl( $url )
+    public function getRessourceMatchingUrl($url)
     {
         $ressources = $this->findAll();
 
-        foreach( $ressources as $ressource ) {
+        foreach ($ressources as $ressource) {
             $pattern = $ressource->getPattern();
 
-            preg_match($pattern, $url, $matches);            
+            preg_match($pattern, $url, $matches);
 
-            if (!empty($matches))
+            if (!empty($matches)) {
                 break;
+            }
         }
-        
+
         return (!empty($matches)) ? $ressource : null;
+    }
+
+    public function findAll()
+    {
+        if (null === $this->resourceList) {
+            $this->resourceList = parent::findAll();
+        }
+        return $this->resourceList;
     }
 }

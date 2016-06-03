@@ -77,7 +77,7 @@ class MenuExtension extends \Knp\Menu\Twig\MenuExtension
         if (is_string($menu)) {
             $menuCacheId = $this->menuCache->getMenuCacheLabel($menu, $options, $this->getUser());
 
-            if ($this->menuCache->hasRender($menuCacheId)) {
+            if (0 && $this->menuCache->hasRender($menuCacheId)) {
                 return $this->menuCache->getRender($menuCacheId);
             } else {
                 $menuRender = parent::render($menu, $options, $renderer);

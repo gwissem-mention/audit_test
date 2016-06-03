@@ -10,7 +10,7 @@ use Nodevo\ToolsBundle\Manager\Manager as BaseManager;
 class StatRechercheManager extends BaseManager
 {
     protected $_managerReference;
-    protected $_class = 'HopitalNumerique\StatBundle\Entity\StatRecherche';
+    protected $class = 'HopitalNumerique\StatBundle\Entity\StatRecherche';
     protected $_securityContext;
 
     /**

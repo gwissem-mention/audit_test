@@ -3,6 +3,7 @@
 namespace Nodevo\RoleBundle\Manager;
 
 use HopitalNumerique\UserBundle\Entity\User;
+use Nodevo\RoleBundle\Entity\Role;
 use Nodevo\ToolsBundle\Manager\Manager as BaseManager;
 
 /**
@@ -10,7 +11,9 @@ use Nodevo\ToolsBundle\Manager\Manager as BaseManager;
  */
 class RoleManager extends BaseManager
 {
-    protected $_class = '\Nodevo\RoleBundle\Entity\Role';
+    protected $class = '\Nodevo\RoleBundle\Entity\Role';
+
+    protected $roleList;
 
     public function __construct($em)
     {
@@ -24,7 +27,7 @@ class RoleManager extends BaseManager
      *
      * @return array
      */
-    public function reformateRolesForAcls( $datas )
+    public function reformateRolesForAcls($datas)
     {
         //prepare returned array
         $roles              = new \stdClass;
@@ -32,11 +35,12 @@ class RoleManager extends BaseManager
         $roles->nonInitiaux = array();
 
         //on construit 2 tableau (roles initiaux et roles non initiaux)
-        foreach($datas as $one){
-            if( $one->getInitial() )
+        foreach ($datas as $one) {
+            if ($one->getInitial()) {
                 $roles->initiaux[] = $one;
-            else
+            } else {
                 $roles->nonInitiaux[] = $one;
+            }
         }
 
         return $roles;
@@ -45,17 +49,15 @@ class RoleManager extends BaseManager
     /**
      * Override de la fonction save par défaut car on génère le code de l'utilisateur
      *
-     * @param Role $entity Entité role
-     *
-     * @return empty
+     * @param Role $role
      */
-    public function save( $role )
+    public function save($role)
     {
         $code = false;
 
         //GENERATE CODE
-        if($role->getRole() == '') {
-            $code = 'ROLE_' . strtoupper( str_replace(' ', '_', $role->getName()) ) . '_';
+        if ($role->getRole() == '') {
+            $code = 'ROLE_' . strtoupper(str_replace(' ', '_', $role->getName())) . '_';
             $role->setRole($code);
         }
 
@@ -65,8 +67,8 @@ class RoleManager extends BaseManager
         /**
          * Ajout de l'id en fin de code
          */
-        if( $code !== false){
-            $role->setRole($code . $role->getId() );
+        if ($code !== false) {
+            $role->setRole($code . $role->getId());
             $this->_em->persist($role);
             $this->_em->flush();
         }
@@ -81,8 +83,7 @@ class RoleManager extends BaseManager
     {
         $datas = $this->findAll();
         $roles = array();
-        foreach($datas as $data)
-        {
+        foreach ($datas as $data) {
             $roles[ $data->getRole() ] = $data->getName();
         }
 
@@ -98,10 +99,9 @@ class RoleManager extends BaseManager
      */
     public function getUserRole($user)
     {
-        if( $user === 'anon.' )
+        if ($user === 'anon.') {
             $role = 'ROLE_ANONYME_10';
-        else
-        {
+        } else {
             //on récupère le rôle de l'user connecté
             $roles = $user->getRoles();
             $role  = $roles[0];
@@ -112,25 +112,23 @@ class RoleManager extends BaseManager
 
     /**
      * Retourne un tableau d'entités de roles en fonction du tableau des noms de role passés en param
-     * 
+     *
      * @param array $nomsRoles Tableaux des noms de roles
-     * 
+     *
      * @return array[\Nodevo\RoleBundle\Entity\Role] Tableau des entités de roles correspondant
      */
-    public function getRoleByArrayName(array $nomsRoles )
+    public function getRoleByArrayName(array $nomsRoles)
     {
         //Récupération de l'ensemble des rôles
         $datas = $this->findAll();
         $roles = array();
         //Récupération des rôles correspondant aux noms passés en param
-        foreach($datas as $data)
-        {
-            if(in_array($data->getRole(), $nomsRoles))
-            {
+        foreach ($datas as $data) {
+            if (in_array($data->getRole(), $nomsRoles)) {
                 $roles[] = $data;
             }
         }
-        
+
         return $roles;
     }
 
@@ -145,5 +143,13 @@ class RoleManager extends BaseManager
         $roleLabels = $user->getRoles();
 
         return $this->findBy(['role' => $roleLabels]);
+    }
+
+    public function findAll()
+    {
+        if (null === $this->roleList) {
+            $this->roleList = parent::findAll();
+        }
+        return $this->roleList;
     }
 }

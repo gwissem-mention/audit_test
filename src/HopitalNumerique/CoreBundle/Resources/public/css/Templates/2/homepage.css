@@ -218,7 +218,7 @@ div.homepage  {
 }
 #slide {
     overflow: hidden;
-    position:relative; 
+    position:relative;
     height: 500px;
 }
 #slide a{
@@ -236,8 +236,8 @@ div.homepage  {
     width: 100%;
 }
 #slide .slick-slide img.bandeau-anap {
-    position:absolute; 
-    width:400px; 
+    position:absolute;
+    width:400px;
     right:0;
     top:0;
 }
@@ -538,7 +538,7 @@ div.homepage  {
     margin:0;
     list-style: none;
     padding:0;
-    height: 30px;
+    min-height: 30px;
     line-height: 24px;
     text-transform: uppercase;
     font-weight: bold;
@@ -573,20 +573,27 @@ div.homepage  {
     #menu-container {
         cursor: pointer;
     }
+
     .onbottom {
         display: none;
     }
-    #menu{display: none}
+
+    #menu li {
+        float: none;
+    }
+
     #menu-select{
         display: block;
         margin:0px;
         background-color: #d60030;
         cursor: pointer;
     }
+
     #menu-select.form-control {
         border:solid 1px #d60030;
         color: #fff;
     }
+
     #slide .slick-slide {height: auto!important;}
 }
 
