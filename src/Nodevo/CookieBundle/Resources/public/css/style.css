@@ -96,7 +96,7 @@ h3{font-size: 20px}
     #mesrequetes ul li:hover a{color:#6f3596;font-weight: bold}
     #mesrequetes ul li a i{margin-left: 5px;}
     #mesrequetes ul li a i.fa-star{margin-right: 5px; font-size: 0.7em;margin-left: 0px;}
-    
+
 /* FancyBox de recherche */
     .panel-midnightblue .panel-heading {background-color: #34495e;border-color: #34495e;color: #fff;padding: 4px 10px;}
     .panel-midnightblue .panel-heading h4 {float: left}
@@ -160,7 +160,7 @@ h3{font-size: 20px}
     #mesrequetes.closed{display: none}
 }
 
-@media screen and (max-width: 991px) {    
+@media screen and (max-width: 991px) {
     #header #logoAnap{margin:20px 10px 10px 10px;}
     #header #logoHn{margin:10px 15px 10px;}
     #header #titre{margin: 20px 0 0 20px; width: auto}
@@ -168,9 +168,6 @@ h3{font-size: 20px}
     #header p.violet{display: none}
     #header .common-sprite-header{width: 100%}
     #header .connexion a{margin-right: 5px; width: 100px;}
-
-    #menu{display: none}
-    #menu-select{display: block; margin:10px 0;}
 
     #footer .menu-footer li{display: block; text-align: center;}
     #footer .menu-footer li a{border-right: none;}

@@ -567,7 +567,6 @@ div.homepage  {
 .menu-bottom {
     bottom: 30px;
 }
-#menu-select{display: none}
 
 @media (max-width: 991px) {
     #menu-container {
@@ -592,18 +591,6 @@ div.homepage  {
     #menu .menu_level_1 {
         position: static;
         width: 100%;
-    }
-
-    #menu-select {
-        display: block;
-        margin:0px;
-        background-color: #d60030;
-        cursor: pointer;
-    }
-
-    #menu-select.form-control {
-        border:solid 1px #d60030;
-        color: #fff;
     }
 
     #slide .slick-slide {height: auto!important;}

@@ -17,8 +17,13 @@ $(document).ready(function() {
         window.location = $(this).find("option:selected").val();
     });
 
-    $('#menu li').each(function(){
+    $('#menu > li').each(function(){
         if ($(this).find('ul').length > 0) {
+
+            $(this).find('li').on('touchstart', function(e){
+                e.stopPropagation();
+            });
+
             $(this).on('touchstart', function() {
                 if ($(window).width() < 991) {
                     $(this).siblings().removeClass('touched');
