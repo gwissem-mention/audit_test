@@ -31,7 +31,7 @@
 
 {% block body %}
     {% set canVote = (app.user is not null or note is null) %}
-    
+
     {% import _self as mySelf %}
 
     <div id="publication">
@@ -126,7 +126,7 @@
                     <div id="publication-resume">
                         {{contenu.contenu|glossaire_add(contenu)|parsePublication|raw}}
                     </div>
-                    
+
                     {%- if contenu.children|length > 0 -%}
                         <div class="sous-chapitres-container">
                             <h3 class="title">Sous-chapitres :</h3>
@@ -145,7 +145,7 @@
                             </ul>
                         </div>
                     {%- endif -%}
-                    
+
                 </div>
             </div>
         {# Cas Objet #}

@@ -13,6 +13,10 @@ class PublicationController extends Controller
 {
     /**
      * Objet Action. Ajout ?pdf=1 pour la vue PDF.
+     * @param Request $request
+     * @param Objet $objet
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse|Response
+     * @throws \Exception
      */
     public function objetAction(Request $request, Objet $objet)
     {
@@ -25,44 +29,49 @@ class PublicationController extends Controller
         }
 
         //objet visualisation
-        if(!$this->get('security.context')->isGranted('ROLE_ADMINISTRATEUR_1'))
-        {
-            $objet->setNbVue( ($objet->getNbVue() + 1) );
+        if (!$this->get('security.context')->isGranted('ROLE_ADMINISTRATEUR_1')) {
+            $objet->setNbVue(($objet->getNbVue() + 1));
             $this->get('hopitalnumerique_objet.manager.objet')->save($objet);
         }
 
         //Si l'user connecté à le rôle requis pour voir l'objet
-        if( $this->checkAuthorization( $objet ) === false ){
-            $urlPublication = $this->generateUrl('hopital_numerique_publication_publication_objet', array('id' => $objet->getId()));
+        if ($this->checkAuthorization($objet) === false) {
+            $urlPublication = $this->generateUrl(
+                'hopital_numerique_publication_publication_objet',
+                array('id' => $objet->getId())
+            );
             $urlPublication = rtrim(strtr(base64_encode($urlPublication), '+/', '-_'), '=');
-            return $this->redirect( $this->generateUrl('account_login', array('urlToRedirect' => $urlPublication) ) );
+            return $this->redirect($this->generateUrl('account_login', array('urlToRedirect' => $urlPublication)));
         }
 
         //Types objet
-        $types = $this->get('hopitalnumerique_objet.manager.objet')->formatteTypes( $objet->getTypes() );
+        $types = $this->get('hopitalnumerique_objet.manager.objet')->formatteTypes($objet->getTypes());
 
         //set Consultation entry
-        if(!$objet->isArticle())
-        {
-            $this->get('hopitalnumerique_objet.manager.consultation')->consulted( $domaine, $objet );
+        if (!$objet->isArticle()) {
+            $this->get('hopitalnumerique_objet.manager.consultation')->consulted($domaine, $objet);
         }
 
         //get Contenus : for sommaire
-        $contenus = $objet->isInfraDoc() ? $this->get('hopitalnumerique_objet.manager.contenu')->getArboForObjet( $objet->getId() ) : array();
+        $contenus = $objet->isInfraDoc()
+            ? $this->get('hopitalnumerique_objet.manager.contenu')->getArboForObjet($objet->getId())
+            : array();
 
-        $references = $this->container->get('hopitalnumerique_reference.manager.entity_has_reference')->findByEntityTypeAndEntityIdAndDomaines(
-            $this->container->get('hopitalnumerique_core.dependency_injection.entity')->getEntityType($objet),
-            $this->container->get('hopitalnumerique_core.dependency_injection.entity')->getEntityId($objet),
-            [$this->container->get('hopitalnumerique_domaine.dependency_injection.current_domaine')->get()]
-        );
+        $references = $this->container->get('hopitalnumerique_reference.manager.entity_has_reference')
+            ->findByEntityTypeAndEntityIdAndDomaines(
+                $this->container->get('hopitalnumerique_core.dependency_injection.entity')->getEntityType($objet),
+                $this->container->get('hopitalnumerique_core.dependency_injection.entity')->getEntityId($objet),
+                [$this->container->get('hopitalnumerique_domaine.dependency_injection.current_domaine')->get()]
+            );
+
         //render
         return $this->render('HopitalNumeriquePublicationBundle:Publication:objet.html.twig', array(
             'objet'        => $objet,
             'note'         => $this->container->get('hopitalnumerique_objet.doctrine.note_reader')->getNoteByObjetAndUser($objet, $this->getUser()),
             'types'        => $types,
             'contenus'     => $contenus,
-            'meta'         => $this->get('hopitalnumerique_recherche.manager.search')->getMetas($references, $objet->getResume() ),
-            'ambassadeurs' => $this->getAmbassadeursConcernes( $objet->getId() ),
+            'meta'         => $this->get('hopitalnumerique_recherche.manager.search')->getMetas($references, $objet->getResume()),
+            'ambassadeurs' => $this->getAmbassadeursConcernes($objet->getId()),
             'productionsLiees' => $this->get('hopitalnumerique_objet.dependency_injection.production_liee')->getFormattedProductionsLiees($objet),
             'parcoursGuides' => $this->container->get('hopitalnumerique_rechercheparcours.dependency_injection.parcours_guide_lie')->getFormattedParcoursGuidesLies($objet),
             'is_pdf' => $isPdf
@@ -126,7 +135,7 @@ class PublicationController extends Controller
 
     /**
      * Contenu Action
-     * 
+     *
      * @param $id ID de l'objet
      * @param $idc ID du contenu
      */
@@ -207,7 +216,7 @@ class PublicationController extends Controller
                 )
             );
         }
-        
+
         $references = $this->container->get('hopitalnumerique_reference.manager.entity_has_reference')->findByEntityTypeAndEntityIdAndDomaines(
             $this->container->get('hopitalnumerique_core.dependency_injection.entity')->getEntityType($contenu),
             $this->container->get('hopitalnumerique_core.dependency_injection.entity')->getEntityId($contenu),

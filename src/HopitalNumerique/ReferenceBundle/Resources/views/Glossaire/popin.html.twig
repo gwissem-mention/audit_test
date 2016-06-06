@@ -3,7 +3,25 @@
 {% block title %}{{ glossaireReference.sigleForGlossaire }}{% endblock %}
 
 {% block body %}
-    {{ (glossaireReference.descriptionLongue is not empty ? glossaireReference.descriptionLongue : glossaireReference.descriptionCourte)|parsePublication|raw }}
+    <p>
+        {{ glossaireReference.descriptionCourte|parsePublication|raw }}
+    </p>
 
-    <br><br><a href="{{ path('hopital_numerique_recherche_homepage_requete_generator', { 'refs':'null', 'q':glossaireReference.sigleForGlossaire }) }}">Rechercher les résultats correspondants</a>
+    {% if glossaireReference.descriptionLongue is not empty %}
+        <p>
+            {{ glossaireReference.descriptionLongue|parsePublication|raw }}
+        </p>
+    {% endif %}
+
+    {% if glossaireReference.synonymes|length > 0 %}
+        {% set synonymes = [] %}
+        {% for synonyme in glossaireReference.synonymes %}
+            {% set synonymes = synonymes|merge([synonyme.libelle]) %}
+        {% endfor %}
+        <p>
+            <b>Synonymes</b> : {{ synonymes|join(', ') }}
+        </p>
+    {% endif %}
+
+    <a href="{{ path('hopital_numerique_recherche_homepage_requete_generator', { 'refs':'null', 'q':glossaireReference.sigleForGlossaire }) }}">Rechercher les résultats correspondants</a>
 {% endblock %}

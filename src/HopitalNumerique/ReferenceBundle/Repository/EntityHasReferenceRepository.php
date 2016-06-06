@@ -36,6 +36,7 @@ class EntityHasReferenceRepository extends EntityRepository
 
         $qb = $this->createQueryBuilder('entityHasReference');
         $qb
+            ->addSelect('reference')
             ->innerJoin('entityHasReference.reference', 'reference')
             ->innerJoin('reference.domaines', 'domaine', Expr\Join::WITH, $qb->expr()->in('domaine', ':domaines'))
             ->where(

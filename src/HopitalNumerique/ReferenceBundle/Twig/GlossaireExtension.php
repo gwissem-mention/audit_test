@@ -44,7 +44,7 @@ class GlossaireExtension extends \Twig_Extension
         ];
     }
 
-  
+
     /**
      * Vérifie que l'user à bien l'accès à la route
      *
@@ -54,11 +54,13 @@ class GlossaireExtension extends \Twig_Extension
      */
     public function add($text, $entity)
     {
-        $glossaireReferences = $this->glossaireReader->getGlossaireReferencesByEntityAndDomaine($entity, $this->currentDomaine->get());
+        $glossaireReferences = $this->glossaireReader->getGlossaireReferencesByEntityAndDomaine(
+            $entity,
+            $this->currentDomaine->get()
+        );
 
         if (count($glossaireReferences) > 0) {
             $text = $this->convertBadPortionsToAsciiHtml($text);
-
             foreach ($glossaireReferences as $glossaireReference) {
                 $wordSearchPattern = '/[\;\<\>\,\"\(\)\'\& ]{1,1}'.$glossaireReference->getSigleHtmlForGlossaire().'[\;\<\>\,\"\(\)\'\.\& ]{1,1}/'.($glossaireReference->isCasseSensible() ? '' : 'i');
                 preg_match_all($wordSearchPattern, $text, $wordSearchPatternMatches);
@@ -90,7 +92,7 @@ class GlossaireExtension extends \Twig_Extension
     {
         $noPattern = '/(<a(.*)<\/a>)|(<img.*\/>)/iU';
         preg_match_all($noPattern, $text, $noMatches);
-    
+
         foreach ($noMatches[0] as $match) {
             $text = str_replace($match, $this->convertToAsciiHtml($match), $text);
         }
