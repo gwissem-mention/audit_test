@@ -20,7 +20,21 @@ $(document).ready(function () {
 Hn_RechercheBundle_Referencement.init = function()
 {
     Hn_RechercheBundle_Referencement.initEvents();
+    Hn_RechercheBundle_Referencement.initTreeDisplay();
 };
+
+/**
+ * Initialise l'affichage de l'arbre de références
+ */
+Hn_RechercheBundle_Referencement.initTreeDisplay = function()
+{
+    // Ouvre la première référence de niveau 1
+    Hn_RechercheBundle_Referencement.toggleReferenceDisplaying(
+        Hn_RechercheBundle_Referencement.getReferenceIdByElement(
+            $('[data-reference][data-level=1]').first()
+        )
+    );
+}
 
 /**
  * Initialisation des événements.
@@ -191,6 +205,10 @@ Hn_RechercheBundle_Referencement.toggleReferenceDisplaying = function(referenceI
         } else {
             Hn_RechercheBundle_Referencement.hideReferenceChildren(referenceId);
         }
+    } else {
+        // S'il n'y a pas d'enfant, on sélectionne la référence directement
+        Hn_RechercheBundle_Referencement.toggleReferenceChoosing(referenceId);
+        Hn_RechercheBundle_Referencement.initReferenceFilters();
     }
 };
 
@@ -262,7 +280,7 @@ Hn_RechercheBundle_Referencement.toggleReferenceChoosing = function(referenceId)
     var referenceIsChosen = ('true' === Hn_RechercheBundle_Referencement.getElementByReferenceId(referenceId).attr('data-chosen'));
 
     Hn_RechercheBundle_Referencement.getElementByReferenceId(referenceId).attr('data-chosen', referenceIsChosen ? 'false' : 'true');
-    
+
     var referenceCheckbox = $('#contexte-modal [data-reference="' + referenceId + '"] input');
     if ($(referenceCheckbox).size() === 1) { // Popin Mon contexte
         $('#contexte-modal [data-reference="' + referenceId + '"] input').prop('checked', referenceIsChosen ? false : true);

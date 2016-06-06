@@ -10,7 +10,7 @@
         .recherche-referencement .references-bloc a { cursor: default; }
         .recherche-referencement .references-bloc ul { background-color: #f4f4f4;border-color: #eee;border-style: solid;border-width: 1px 1px 0 1px;font-weight: bold;list-style-type: none;margin: 0;padding: 0; }
             .recherche-referencement .references-bloc ul li {}
-                .recherche-referencement .references-bloc ul li .reference { background-color: #d60030;border-color: #eee;border-style: solid;border-width: 0 0 1px 0;color: #fff;display: block;font-size: 16px;font-style: normal;padding: 8px 12px;text-decoration: none;text-transform: uppercase; }
+                .recherche-referencement .references-bloc ul li .reference { background-color: #d60030; border-color: #E1E1E1;border-style: solid;border-width: 0 0 1px 0;color: #fff;display: block;font-size: 16px;font-style: normal;padding: 8px 12px;text-decoration: none;text-transform: uppercase; }
                 .recherche-referencement .references-bloc ul li .reference:hover { text-decoration: none; }
                     .recherche-referencement .references-bloc ul li .add { cursor: pointer;display: none;float: left;margin: -2px 0 0;padding: 2px 7px; }
                     .recherche-referencement .references-bloc ul li .add:hover { color: #d60030; }
