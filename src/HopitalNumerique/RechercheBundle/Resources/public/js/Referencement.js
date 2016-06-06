@@ -287,9 +287,10 @@ Hn_RechercheBundle_Referencement.toggleReferenceChoosing = function(referenceId)
     } else { // Menu de gauche
         if (!referenceIsChosen) {
             // On décoche tous les enfants (récupérés automatiquement dans la requête)
-            Hn_RechercheBundle_Referencement.getChosenElements(Hn_RechercheBundle_Referencement.getElementByReferenceId(referenceId)).each(function (i, chosenElement) {
-                Hn_RechercheBundle_Referencement.toggleReferenceChoosing(Hn_RechercheBundle_Referencement.getReferenceIdByElement(chosenElement));
-            });
+            Hn_RechercheBundle_Referencement.getChosenElements(Hn_RechercheBundle_Referencement.getElementByReferenceId(referenceId))
+                .each(function (i, chosenElement) {
+                    Hn_RechercheBundle_Referencement.toggleReferenceChoosing(Hn_RechercheBundle_Referencement.getReferenceIdByElement(chosenElement));
+                });
             // On décoche tous les parents (récupérés automatiquement dans la requête)
             var referenceParentId = Hn_RechercheBundle_Referencement.getReferenceParentIdByReferenceId(referenceId);
             while (null != referenceParentId) {

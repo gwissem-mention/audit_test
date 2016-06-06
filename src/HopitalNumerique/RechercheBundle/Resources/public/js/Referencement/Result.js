@@ -240,7 +240,11 @@ Hn_RechercheBundle_Referencement.processResultButtonsActivating = function(resul
 
     $('#results-' + resultsGroup + '-less-button').prop('disabled', !lessResultsPossible);
     $('#results-' + resultsGroup + '-more-button').prop('disabled', !moreResultsPossible);
+
+    $('#results-' + resultsGroup + '-less-button')[lessResultsPossible ? "show" : "hide"]();
+    $('#results-' + resultsGroup + '-more-button')[moreResultsPossible ? "show" : "hide"]();
 };
+
 
 /**
  * Remplit le contenu de l'entité (sauf si déjà initialisé) et l'affiche.

@@ -3,18 +3,45 @@
  */
 Hn_RechercheBundle_Referencement.initReferenceFilters = function()
 {
-    var filtersHtml = '';
+    $('.filtres-bloc .references ul').empty();
+
     var chosenReferenceIds = Hn_RechercheBundle_Referencement.getChosenReferenceIds();
     for (var i in chosenReferenceIds) {
         var referenceId = chosenReferenceIds[i];
-        filtersHtml += '<li data-reference="' + referenceId + '">' + Hn_RechercheBundle_Referencement.getReferenceLibelleById(referenceId) + ' <a onclick="Hn_RechercheBundle_Referencement.toggleReferenceChoosing(' + referenceId + ');Hn_RechercheBundle_Referencement.initReferenceFilters();" class="remove fa fa-times"></a></li> ';
+
+        var filter = $('<li />')
+            .attr('data-reference', referenceId)
+            .html(
+                Hn_RechercheBundle_Referencement.getReferenceLibelleById(referenceId) + ' <a onclick="Hn_RechercheBundle_Referencement.toggleReferenceChoosing(' + referenceId + ');Hn_RechercheBundle_Referencement.initReferenceFilters();" class="remove fa fa-times"></a>'
+            );
+
+        filter.tooltip({
+            title: Hn_RechercheBundle_Referencement.getReferenceFilterTitle(referenceId),
+            html: true
+        });
+
+        $('.filtres-bloc .references ul').append(filter);
     }
 
     $('.filtres-bloc .references ul').css({ display: 'none' });
-    $('.filtres-bloc .references ul').html(filtersHtml);
     $('.filtres-bloc .references ul').fadeIn('slow');
 
     Hn_RechercheBundle_Referencement.displayResults();
+};
+
+Hn_RechercheBundle_Referencement.getReferenceFilterTitle = function(referenceId)
+{
+    var title = [];
+    var parent = Hn_RechercheBundle_Referencement.getReferenceParentIdByReferenceId(referenceId);
+    while (null !== parent) {
+        var element = Hn_RechercheBundle_Referencement.getElementByReferenceId(parent);
+        if (element.data('libelle') !== undefined) {
+            title.unshift(element.data('libelle'));
+        }
+        parent = Hn_RechercheBundle_Referencement.getReferenceParentIdByReferenceId(parent);
+    }
+
+    return title.join(' > ');
 };
 
 /**
