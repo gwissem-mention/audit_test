@@ -2,6 +2,7 @@
 
 namespace Nodevo\TexteDynamiqueBundle\Grid;
 
+use APY\DataGridBundle\Grid\Action\DeleteMassAction;
 use Nodevo\GridBundle\Grid\Grid;
 use Nodevo\GridBundle\Grid\GridInterface;
 use Nodevo\GridBundle\Grid\Column;
@@ -18,9 +19,9 @@ class CodeGrid extends Grid implements GridInterface
     public function setConfig()
     {
         //Manager
-        $this->setSource( 'nodevo_textedynamique.manager.code' );
-        $this->setSourceType( self::SOURCE_TYPE_MANAGER );
-        
+        $this->setSource('nodevo_textedynamique.manager.code');
+        $this->setSourceType(self::SOURCE_TYPE_MANAGER);
+
         $this->setNoDataMessage('Aucun code à afficher.');
     }
 
@@ -30,12 +31,16 @@ class CodeGrid extends Grid implements GridInterface
     public function setColumns()
     {
         //field, titre, isSortable, size
-        $this->addColonne( new Column\TextColumn('code', 'Code') );
-        
-        $domaineColumn = new Column\TextColumn('domaineNom', 'Domaine(s) associé(s)');
-        $this->addColonne( $domaineColumn );
+        $this->addColonne(
+            new Column\TextColumn('code', 'Code')
+        );
 
-        $this->addColonne( new Column\TextColumn('texte', 'Texte') );        
+        $domaineColumn = new Column\TextColumn('domaineNom', 'Domaine(s) associé(s)');
+        $this->addColonne($domaineColumn);
+
+        $this->addColonne(
+            new Column\TextColumn('texte', 'Texte')
+        );
     }
 
     /**
@@ -43,7 +48,9 @@ class CodeGrid extends Grid implements GridInterface
      */
     public function setActionsButtons()
     {
-        $this->addActionButton( new Action\EditButton( 'nodevo_textedynamique_code_edit' ) );
+        $this->addActionButton(
+            new Action\EditButton('nodevo_textedynamique_code_edit')
+        );
 
     }
 
@@ -52,7 +59,8 @@ class CodeGrid extends Grid implements GridInterface
      */
     public function setMassActions()
     {
-        //TODO : faire action de masse pour le delete
-        
+        $this->addMassAction(
+            new Action\DeleteMass('NodevoTexteDynamiqueBundle:Code:deleteMass')
+        );
     }
 }
