@@ -108,7 +108,6 @@ Hn_RechercheBundle_Referencement.displayResults = function()
 
 Hn_RechercheBundle_Referencement.activeSearch = function()
 {
-    console.log('off');
     Hn_RechercheBundle_Referencement.IS_SEARCHING = false;
     //$('#search-text-button').prop('disabled', false);
     Hn_RechercheBundle_Referencement_Filter_Exalead.processSearchValidating();
@@ -117,7 +116,6 @@ Hn_RechercheBundle_Referencement.activeSearch = function()
 
 Hn_RechercheBundle_Referencement.desactiveSearch = function()
 {
-    console.log('on');
     Hn_RechercheBundle_Referencement.IS_SEARCHING = true;
     $('#search-text-button').prop('disabled', true);
     Hn_RechercheBundle_Referencement.AJAX_LOADER = $('.results-bloc').data('loader') !== undefined
