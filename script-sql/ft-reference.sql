@@ -67,4 +67,4 @@ INSERT INTO `core_ressource` (`res_id`, `res_nom`, `res_pattern`, `res_order`, `
 #-->
 
 -- Ajouter les permission par role via le back-office
-INSERT INTO hn_tma.core_ressource (res_nom, res_pattern, res_order, res_type) VALUES ('FrontOffice - Recommander à un ami', '/^\\/mail\\/recommandation\\/popin/', 50, 2);
+INSERT INTO core_ressource (res_nom, res_pattern, res_order, res_type) VALUES ('FrontOffice - Recommander à un ami', '/^\\/mail\\/recommandation\\/popin/', 50, 2);
