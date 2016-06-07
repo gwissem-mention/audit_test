@@ -7,6 +7,7 @@ Hn_RechercheBundle_Referencement.AJAX_LOADER = null;
  * @var boolean Si une recherche est en cours
  */
 Hn_RechercheBundle_Referencement.IS_SEARCHING = false;
+Hn_RechercheBundle_Referencement.mainSearchQuery = null;
 
 /**
  * Affiche les résultats.
@@ -38,12 +39,17 @@ Hn_RechercheBundle_Referencement.displayResults = function()
         $('#filtres-info').slideUp('fast');
     }
 
-    $.ajax({
+    Hn_RechercheBundle_Referencement.mainSearchQuery = $.ajax({
         url: Routing.generate('hopitalnumerique_recherche_referencement_jsonentitiesbyreferences'),
         method: 'post',
         type: 'json',
         data: ajaxOptions,
-        success: function(data) {
+    }).done(
+        function (data, status, jqXHR) {
+            if (Hn_RechercheBundle_Referencement.mainSearchQuery !== jqXHR) {
+                return true;
+            }
+
             var totalCount = 0;
 
             $.each(data.results, function(group, groupEntities) {
@@ -85,8 +91,10 @@ Hn_RechercheBundle_Referencement.displayResults = function()
 
             Hn_RechercheBundle_Referencement.activeSearch();
             Hn_RechercheBundle_Referencement_Filter_Exalead.highlightWords(data.foundWords);
+
         }
-    });
+    );
+
     if (chosenGroupedReferenceIds.length == 0) {
         $('.results-bloc > div[id]').slideUp('fast');
         $('#filtres-info').slideDown('fast');
@@ -100,6 +108,7 @@ Hn_RechercheBundle_Referencement.displayResults = function()
 
 Hn_RechercheBundle_Referencement.activeSearch = function()
 {
+    console.log('off');
     Hn_RechercheBundle_Referencement.IS_SEARCHING = false;
     //$('#search-text-button').prop('disabled', false);
     Hn_RechercheBundle_Referencement_Filter_Exalead.processSearchValidating();
@@ -108,9 +117,13 @@ Hn_RechercheBundle_Referencement.activeSearch = function()
 
 Hn_RechercheBundle_Referencement.desactiveSearch = function()
 {
+    console.log('on');
     Hn_RechercheBundle_Referencement.IS_SEARCHING = true;
     $('#search-text-button').prop('disabled', true);
-    Hn_RechercheBundle_Referencement.AJAX_LOADER = $('.results-bloc').nodevoLoader().start();
+    Hn_RechercheBundle_Referencement.AJAX_LOADER = $('.results-bloc').data('loader') !== undefined
+        ? $('.results-bloc').data('loader')
+        : $('.results-bloc').nodevoLoader();
+    Hn_RechercheBundle_Referencement.AJAX_LOADER.start();
 };
 
 /**

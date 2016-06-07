@@ -43,10 +43,10 @@ Hn_RechercheBundle_Referencement.initEvents = function()
 {
     // Ajout d'une référence
     $('.recherche-referencement .add').click(function(event) {
-        if (!Hn_RechercheBundle_Referencement.IS_SEARCHING) {
+        // if (!Hn_RechercheBundle_Referencement.IS_SEARCHING) {
             Hn_RechercheBundle_Referencement.toggleReferenceChoosing(Hn_RechercheBundle_Referencement.getReferenceIdByElement($(this)));
             Hn_RechercheBundle_Referencement.initReferenceFilters();
-        }
+        // }
         event.stopPropagation();
     });
     // Pliage / dépliage
