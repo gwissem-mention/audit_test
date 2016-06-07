@@ -4,13 +4,13 @@ namespace Nodevo\ToolsBundle\Manager;
 use Doctrine\Common\Cache\Cache;
 use Doctrine\ORM\EntityManager;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Validator\ValidatorInterface;
+use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 /**
  * Classe de base des Managers de la librairie
- * 
+ *
  * @author Quentin SOMAZZI
- * @copyright Nodevo 
+ * @copyright Nodevo
  */
 abstract class Manager
 {
@@ -60,12 +60,12 @@ abstract class Manager
     public function getDatasForGrid( \StdClass $condition = null )
     {
         $req = $this->getRepository()->createQueryBuilder('entity');
-        
+
         if ( !is_null($condition) ) {
             $req->where('entity.' . $condition->field . ' = :field' )
                 ->setParameters('field', $condition->value);
         }
-        
+
         return $req->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
     }
 
@@ -88,11 +88,11 @@ abstract class Manager
     /**
      * Retourne les contraintes des validators
      *
-     * @param Validator $validator Validator Symfony
+     * @param ValidatorInterface $validator Validator Symfony
      *
      * @return array
      */
-    public function getConstraints( ValidatorInterface $validator )
+    public function getConstraints(ValidatorInterface $validator)
     {
         $metadata    = $validator->getMetadataFactory()->getMetadataFor( $this->class );
         $constraints = array();
@@ -283,7 +283,7 @@ abstract class Manager
     {
         return $this->getRepository()->findAll();
     }
-    
+
     /**
      * Créer une nouvelle entity vide
      *
@@ -311,7 +311,7 @@ abstract class Manager
 
         $this->_em->flush();
     }
-    
+
     /**
      * Export CSV du grid selon les colonnes
      *

@@ -1,6 +1,6 @@
 /**
  * Classe gérant le formulaire d'une référence.
- * 
+ *
  * @author Rémi Leclerc
  */
 var Hn_Reference_Form_Reference = function() {};
@@ -35,7 +35,7 @@ Hn_Reference_Form_Reference.initEvents = function()
 };
 
 /**
- * Affiche ou pas la case "Présente dans la recherche ?" et "Parentable ?" si "Est une référence ?" est cochée.
+ * Affiche ou pas la case "Présente dans la recherche ?" si "Est une référence ?" est cochée.
  */
 Hn_Reference_Form_Reference.processReferenceChecking = function()
 {
@@ -43,7 +43,6 @@ Hn_Reference_Form_Reference.processReferenceChecking = function()
 
     if (!isReference) {
         $('#hopitalnumerique_reference_reference_inRecherche').prop('checked', false);
-        $('#hopitalnumerique_reference_reference_parentable').prop('checked', false);
     }
     $('#reference-reference-subcontainer').css({ display:(isReference ? 'block' : 'none') });
 };

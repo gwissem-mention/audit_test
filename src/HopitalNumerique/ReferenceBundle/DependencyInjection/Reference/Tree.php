@@ -91,9 +91,6 @@ class Tree
             $referencesConditions = [
                 'lock' => false
             ];
-            if (null !== $parentable) {
-                $referencesConditions['parentable'] = $parentable;
-            }
             if (null !== $inRecherche) {
                 $referencesConditions['inRecherche'] = $inRecherche;
             }
