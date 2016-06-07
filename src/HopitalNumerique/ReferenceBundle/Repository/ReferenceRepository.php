@@ -287,12 +287,6 @@ class ReferenceRepository extends EntityRepository
                 ->setParameter('lock', $lock)
             ;
         }
-        if (null !== $parentable) {
-            $qb
-                ->andWhere($qb->expr()->eq('reference.parentable', ':parentable'))
-                ->setParameter('parentable', $parentable)
-            ;
-        }
         if (null !== $reference) {
             $qb
                 ->andWhere($qb->expr()->eq('reference.reference', ':reference'))

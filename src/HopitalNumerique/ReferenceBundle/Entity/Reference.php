@@ -121,13 +121,6 @@ class Reference
     protected $order;
 
     /**
-     * @var boolean
-     *
-     * @ORM\Column(name="ref_parentable", type="boolean", options={"comment"="Si la référence peut être parent", "default"=false})
-     */
-    private $parentable;
-
-    /**
      * @var \Doctrine\Common\Collections\Collection
      *
      * @ORM\ManyToMany(targetEntity="Reference", inversedBy="enfants")
@@ -254,7 +247,6 @@ class Reference
     public function __construct()
     {
         $this->lock  = false;
-        $this->parentable = false;
         $this->order = 1;
         $this->inRecherche = false;
         $this->domaines = new ArrayCollection();
@@ -269,7 +261,7 @@ class Reference
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
@@ -292,7 +284,7 @@ class Reference
     /**
      * Get libelle
      *
-     * @return string 
+     * @return string
      */
     public function getLibelle()
     {
@@ -315,7 +307,7 @@ class Reference
     /**
      * Get code
      *
-     * @return string 
+     * @return string
      */
     public function getCode()
     {
@@ -338,7 +330,7 @@ class Reference
     /**
      * Get etat
      *
-     * @return Reference 
+     * @return Reference
      */
     public function getEtat()
     {
@@ -354,7 +346,7 @@ class Reference
     {
         return $this->lock;
     }
-    
+
     /**
      * Set lock
      *
@@ -374,7 +366,7 @@ class Reference
     {
         return $this->order;
     }
-    
+
     /**
      * Set order
      *
@@ -383,30 +375,6 @@ class Reference
     public function setOrder($order)
     {
         $this->order = $order;
-    }
-
-    /**
-     * Set parentable
-     *
-     * @param boolean $parentable
-     *
-     * @return Reference
-     */
-    public function setParentable($parentable)
-    {
-        $this->parentable = $parentable;
-
-        return $this;
-    }
-
-    /**
-     * Get parentable
-     *
-     * @return boolean
-     */
-    public function isParentable()
-    {
-        return $this->parentable;
     }
 
     /**
@@ -428,7 +396,7 @@ class Reference
 
     /**
      * Retourne l'ID pour le statut actif.
-     * 
+     *
      * @return integer ID pour le statut actif
      */
     public static function getStatutActifId()
@@ -600,7 +568,7 @@ class Reference
     /**
      * Get domaines
      *
-     * @return \Doctrine\Common\Collections\Collection 
+     * @return \Doctrine\Common\Collections\Collection
      */
     public function getDomaines()
     {
@@ -616,7 +584,7 @@ class Reference
     {
         $domainesId = array();
 
-        foreach ($this->domaines as $domaine) 
+        foreach ($this->domaines as $domaine)
         {
             $domainesId[] = $domaine->getId();
         }

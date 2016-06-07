@@ -1,6 +1,7 @@
 <?php
 namespace HopitalNumerique\ReferenceBundle\Form\Type;
 
+use HopitalNumerique\UserBundle\Manager\UserManager;
 use Nodevo\ToolsBundle\Tools\Systeme;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -12,26 +13,31 @@ use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 use HopitalNumerique\ReferenceBundle\Entity\Reference;
 use HopitalNumerique\ReferenceBundle\Manager\ReferenceManager;
 use Doctrine\ORM\EntityRepository;
+use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 class ReferenceType extends AbstractType
 {
-    private $_constraints = array();
-    private $_userManager;
+    private $constraints = array();
+    private $userManager;
     /**
      * @var \HopitalNumerique\ReferenceBundle\Manager\ReferenceManager
      */
     private $referenceManager;
 
-    public function __construct($manager, $validator, $userManager, ReferenceManager $referenceManager)
-    {
-        $this->_constraints = $manager->getConstraints( $validator );
-        $this->_userManager = $userManager;
+    public function __construct(
+        ReferenceManager $manager,
+        ValidatorInterface $validator,
+        UserManager $userManager,
+        ReferenceManager $referenceManager
+    ) {
+        $this->constraints = $manager->getConstraints($validator);
+        $this->userManager = $userManager;
         $this->referenceManager = $referenceManager;
     }
 
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $connectedUser = $this->_userManager->getUserConnected();
+        $connectedUser = $this->userManager->getUserConnected();
 
         if ($connectedUser->hasRoleAdmin()) {
             $builder
@@ -121,14 +127,13 @@ class ReferenceType extends AbstractType
                 'required' => false,
                 'label' => 'Parents',
                 'attr' => $parentAttr,
-                'query_builder' => function(EntityRepository $er) use ($referenceId) {
+                'query_builder' => function (EntityRepository $er) use ($referenceId) {
                     $qb = $er->createQueryBuilder('ref')
-                              ->andWhere('ref.lock = 0')
+                        ->andWhere('ref.lock = 0')
                         ->leftJoin('ref.parents', 'parent')
-                              ->orderBy('parent.id, ref.code, ref.order', 'ASC');
+                        ->orderBy('parent.id, ref.code, ref.order', 'ASC');
 
-                    if( $referenceId )
-                    {
+                    if ($referenceId) {
                         $qb->andWhere("ref.id != $referenceId");
                     }
 
@@ -141,7 +146,7 @@ class ReferenceType extends AbstractType
                 'property'    => 'libelle',
                 'required'    => true,
                 'label'       => 'Etat',
-                'attr'        => array('class' => $this->_constraints['etat']['class'] ),
+                'attr'        => array('class' => $this->constraints['etat']['class'] ),
             ))
         ;
     }
@@ -186,10 +191,6 @@ class ReferenceType extends AbstractType
             ->add('reference', 'checkbox', array(
                 'required' => false,
                 'label' => 'Est une référence ?'
-            ))
-            ->add('parentable', 'checkbox', array(
-                'required' => false,
-                'label' => 'Peut être parent ?'
             ))
             ->add('inRecherche', 'checkbox', array(
                 'required' => false,
