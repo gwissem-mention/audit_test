@@ -6,7 +6,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 
 /**
- * 
+ *
  */
 class DefaultController extends Controller
 {
@@ -32,7 +32,9 @@ class DefaultController extends Controller
         $articlesALaUne       = $this->get('hopitalnumerique_objet.manager.objet')->getObjetsByTypes($typeArticleCarrousel);
 
         // Get nombres comptes créés
-        $nb_eta = $this->get('hopitalnumerique_user.manager.user')->getNbEtablissements();
+        $nb_eta = $this->get('hopitalnumerique_user.manager.user')->getNbEtablissements(
+            $this->get('hopitalnumerique_domaine.dependency_injection.current_domaine')->get()
+        );
 
         // Définition du forum en fonction de l'utilisateur connecté
         if( $this->container->get('security.context')->isGranted('IS_AUTHENTICATED_FULLY') ){
@@ -83,7 +85,7 @@ class DefaultController extends Controller
         // $nb_pub_consultees = $this->get('hopitalnumerique_objet.manager.consultation')->getNbConsultations();
         $nb_pub_consultees = $this->get('hopitalnumerique_objet.manager.objet')->getNbVuesPublication();
 
-        $view = 'HopitalNumeriqueCoreBundle:Templates/' .  $request->getSession()->get('templateId') . ':index.html.twig'; 
+        $view = 'HopitalNumeriqueCoreBundle:Templates/' .  $request->getSession()->get('templateId') . ':index.html.twig';
 
         return $this->render($view, array(
             'article'          => $article,
