@@ -32,8 +32,12 @@ class DefaultController extends Controller
         $articlesALaUne       = $this->get('hopitalnumerique_objet.manager.objet')->getObjetsByTypes($typeArticleCarrousel);
 
         // Get nombres comptes créés
+        $currentDomaine = $this->get('session')->get('domaineId', null);
+        if (null !== $currentDomaine) {
+            $currentDomaine = $this->get('hopitalnumerique_domaine.manager.domaine')->findOneById($currentDomaine);
+        }
         $nb_eta = $this->get('hopitalnumerique_user.manager.user')->getNbEtablissements(
-            $this->get('hopitalnumerique_domaine.dependency_injection.current_domaine')->get()
+            $currentDomaine
         );
 
         // Définition du forum en fonction de l'utilisateur connecté
