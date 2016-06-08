@@ -1,6 +1,7 @@
 <?php
 namespace HopitalNumerique\UserBundle\Manager;
 
+use HopitalNumerique\DomaineBundle\Manager\DomaineManager;
 use HopitalNumerique\PaiementBundle\Manager\RemboursementManager;
 use Nodevo\ToolsBundle\Manager\Manager as BaseManager;
 use Doctrine\Common\Collections\Collection;
@@ -14,10 +15,12 @@ class UserManager extends BaseManager
     protected $_securityContext;
     protected $_managerReponse;
     protected $_managerRefusCandidature;
+
+    /** @var DomaineManager */
     protected $_managerDomaine;
     protected $_options;
 
-    public function __construct($managerUser, $securityContext, $managerReponse, $managerRefusCandidature, $managerDomaine, RemboursementManager $remboursementManager)
+    public function __construct($managerUser, $securityContext, $managerReponse, $managerRefusCandidature, DomaineManager $managerDomaine, RemboursementManager $remboursementManager)
     {
         parent::__construct($managerUser);
         $this->_securityContext = $securityContext;
@@ -369,14 +372,15 @@ class UserManager extends BaseManager
         return $this->getRepository()->getAllUsers()->getQuery()->getResult();
     }
 
-  /**
-   * Récupère le nombre d'établissements connectés
-   *
-   * @return int
-   */
-  public function getNbEtablissements() {
-    return count($this->getRepository()->getNbEtablissements()->getQuery()->getResult());
-  }
+    /**
+    * Récupère le nombre d'établissements connectés
+    *
+    * @return int
+    */
+    public function getNbEtablissements(Domaine $domaine = null)
+    {
+        return $this->getRepository()->getNbEtablissements($domaine);
+    }
 
   	/**
      * Retourne des membres de la communauté de pratique.
