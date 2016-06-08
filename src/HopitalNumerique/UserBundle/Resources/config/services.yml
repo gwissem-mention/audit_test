@@ -14,7 +14,7 @@ parameters:
     hopitalnumerique_user.manager.contractualisation.class: HopitalNumerique\UserBundle\Manager\ContractualisationManager
     hopitalnumerique_user.grid.contractualisation.class: HopitalNumerique\UserBundle\Grid\ContractualisationGrid
     hopitalnumerique_user.form.contractualisation.class: HopitalNumerique\UserBundle\Form\Type\ContractualisationType
-    #Contractualisation - grid  column  
+    #Contractualisation - grid  column
     hopitalnumerique_user.column.contractualisation.class: HopitalNumerique\UserBundle\Grid\Column\ContractualisationColumn
     #Refus candidature
     hopitalnumerique_user.manager.refus_candidature.class: HopitalNumerique\UserBundle\Manager\RefusCandidatureManager
@@ -45,7 +45,14 @@ services:
     #--Type
     hopitalnumerique_user.form.type.user:
         class: %hopitalnumerique_user.form.type.user%
-        arguments: ["@hopitalnumerique_user.manager.user", "@validator", "@nodevo_role.manager.role", "@security.context", "@hopitalnumerique_user.manager.user", "@hopitalnumerique_reference.manager.reference"]
+        arguments:
+            - "@hopitalnumerique_user.manager.user"
+            - "@validator"
+            - "@nodevo_role.manager.role"
+            - "@security.context"
+            - "@hopitalnumerique_user.manager.user"
+            - "@hopitalnumerique_reference.manager.reference"
+            - "@hopitalnumerique_etablissement.manager.etablissement"
         tags:
             - { name: form.type, alias: nodevo_user_user }
     #--Grid
@@ -57,14 +64,14 @@ services:
         class: %hopitalnumerique_user.options_config.class%
         arguments: ["%hopital_numerique_user.options%"]
     #MotDePasse:
-    #--Formulaire    
+    #--Formulaire
     hopitalnumerique_user.form.type.motdepasse:
         class: %hopitalnumerique_user.form.type.motdepasse%
         arguments: ["@hopitalnumerique_user.manager.user"]
         tags:
             - { name: form.type, alias: nodevo_user_motdepasse }
     #Desinscription:
-    #--Formulaire    
+    #--Formulaire
     hopitalnumerique_user.form.type.desinscription:
         class: %hopitalnumerique_user.form.type.desinscription%
         arguments: ["@hopitalnumerique_user.manager.user"]
@@ -134,7 +141,7 @@ services:
         class: HopitalNumerique\UserBundle\Util\GestionAffichageOnglets
         arguments: ["@hopitalnumerique_questionnaire.manager.reponse", "@hopitalnumerique_questionnaire.manager.questionnaire"]
 
-    #Extension Twig        
+    #Extension Twig
     hopitalnumerique_user.twig.user_extension:
         class: %hopitalnumerique_user.twig.extensions.class%
         arguments: ['@security.csrf.token_manager', "@hopitalnumerique_reference.manager.reference", "@hopitalnumerique_etablissement.manager.etablissement", "@hopitalnumerique_questionnaire.manager.questionnaire"]
