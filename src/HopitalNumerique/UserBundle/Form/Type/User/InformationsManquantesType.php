@@ -1,9 +1,13 @@
 <?php
 namespace HopitalNumerique\UserBundle\Form\Type\User;
 
+use HopitalNumerique\EtablissementBundle\Manager\EtablissementManager;
 use HopitalNumerique\ReferenceBundle\Manager\ReferenceManager;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\Form\FormEvent;
+use Symfony\Component\Form\FormEvents;
+use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Routing\RouterInterface;
@@ -43,17 +47,28 @@ class InformationsManquantesType extends AbstractType
      */
     private $request;
 
+    private $etablissementManager;
 
     /**
      * Constructeur.
+     * @param TokenStorageInterface $tokenStorage
+     * @param RouterInterface $router
+     * @param RequestStack $requestStack
+     * @param ReferenceManager $referenceManager
      */
-    public function __construct(TokenStorageInterface $tokenStorage, RouterInterface $router, RequestStack $requestStack, ReferenceManager $referenceManager)
-    {
+    public function __construct(
+        TokenStorageInterface $tokenStorage,
+        RouterInterface $router,
+        RequestStack $requestStack,
+        ReferenceManager $referenceManager,
+        EtablissementManager $etablissementManager
+    ) {
         $this->router = $router;
         $this->referenceManager = $referenceManager;
 
         $this->user = (null !== $tokenStorage->getToken() ? $tokenStorage->getToken()->getUser() : null);
         $this->request = $requestStack->getCurrentRequest();
+        $this->etablissementManager = $etablissementManager;
     }
 
 
@@ -64,7 +79,13 @@ class InformationsManquantesType extends AbstractType
     {
         $informationsType = $options['informations_type'];
 
-        $builder->setAction($this->router->generate('hopital_numerique_account_informationsmanquantes_save', ['informationsType' => $informationsType]));
+        $builder->setAction(
+            $this->router->generate(
+                'hopital_numerique_account_informationsmanquantes_save',
+                ['informationsType' => $informationsType]
+            )
+        );
+
         $builder
             ->add('informationsType', 'hidden', [
                 'mapped' => false,
@@ -75,7 +96,7 @@ class InformationsManquantesType extends AbstractType
                 'data' => $this->request->server->get('REDIRECT_URL')
             ])
         ;
-        foreach ($this->getFields($informationsType) as $field => $configuration) {
+        foreach ($this->getFields($builder, $informationsType) as $field => $configuration) {
             $builder
                 ->add($field, $configuration['type'], $configuration['options'])
             ;
@@ -88,13 +109,13 @@ class InformationsManquantesType extends AbstractType
      * @param string $informationsType Type des informations
      * @return array Champs
      */
-    private function getFields($informationsType)
+    private function getFields(FormBuilderInterface $builder, $informationsType)
     {
         switch ($informationsType) {
             case self::TYPE_COMMUNAUTE_PRATIQUE:
-                return $this->getCommunautePratiqueFields();
+                return $this->getCommunautePratiqueFields($builder);
             case self::TYPE_DEMANDE_INTERVENTION:
-                return $this->getDemandeInterventionFields();
+                return $this->getDemandeInterventionFields($builder);
             default:
                 throw new \Exception('Type non reconnu pour le formulaire des informations manquantes.');
         }
@@ -105,11 +126,20 @@ class InformationsManquantesType extends AbstractType
      *
      * @return array Champs
      */
-    private function getCommunautePratiqueFields()
+    private function getCommunautePratiqueFields(FormBuilderInterface $builder)
     {
         $fields = [];
-        $displayEtablissementNom = (null === $this->user->getEtablissementRattachementSante() && null === $this->user->getAutreStructureRattachementSante() && null === $this->user->getNomStructure());
-        $displayRegionDepartement = ((null === $this->user->getRegion() || null === $this->user->getDepartement()) || $displayEtablissementNom);
+
+        $displayEtablissementNom =
+            null === $this->user->getEtablissementRattachementSante()
+            && null === $this->user->getAutreStructureRattachementSante()
+            && null === $this->user->getNomStructure()
+        ;
+
+        $displayRegionDepartement =
+            (null === $this->user->getRegion() || null === $this->user->getDepartement())
+            || $displayEtablissementNom
+        ;
 
         if ($displayRegionDepartement) {
             $fields['region'] = $this->getRegionField();
@@ -117,7 +147,7 @@ class InformationsManquantesType extends AbstractType
         }
         if ($displayEtablissementNom) {
             $fields['statutEtablissementSante'] = $this->getStatutEtablissementSanteField();
-            $fields['etablissementRattachementSante'] = $this->getEtablissementRattachementSanteField();
+            $this->getEtablissementRattachementSanteField($builder);
             $fields['autreStructureRattachementSante'] = $this->getAutreStructureRattachementSanteField();
             $fields['nomStructure'] = [
                 'type' => 'text',
@@ -165,7 +195,7 @@ class InformationsManquantesType extends AbstractType
      *
      * @return array Champs
      */
-    private function getDemandeInterventionFields()
+    private function getDemandeInterventionFields(FormBuilderInterface $builder)
     {
         $fields = [];
 
@@ -183,7 +213,7 @@ class InformationsManquantesType extends AbstractType
 
         if (!$hasEtablissement) {
             $fields['statutEtablissementSante'] = $this->getStatutEtablissementSanteField();
-            $fields['etablissementRattachementSante'] = $this->getEtablissementRattachementSanteField();
+            $this->getEtablissementRattachementSanteField($builder);
             $fields['autreStructureRattachementSante'] = $this->getAutreStructureRattachementSanteField();
         }
         if (null === $this->user->getProfilEtablissementSante()) {
@@ -284,17 +314,51 @@ class InformationsManquantesType extends AbstractType
      *
      * @return array Champ
      */
-    private function getEtablissementRattachementSanteField()
+    private function getEtablissementRattachementSanteField(FormBuilderInterface $builder)
     {
-        return [
-            'type' => 'entity',
-            'options' => [
-                'class' => 'HopitalNumeriqueEtablissementBundle:Etablissement',
-                'property' => 'usersAffichage',
-                'label' => 'user.etablissementRattachementSante',
-                'required' => false
-            ]
-        ];
+        $etablissementRattachementSanteModifier = function (FormInterface $form, $data) {
+            $form->add('etablissementRattachementSante', 'choice', array(
+                'required'      => false,
+                'label'         => 'user.etablissementRattachementSante',
+                'empty_value'   => ' - ',
+                'attr'        => array('class' => 'etablissement_sante'),
+                'choices' => $data,
+                'choices_as_values' => true,
+                'choice_value' => 'id',
+                'choice_label' => 'nom',
+            ));
+        };
+
+        $builder->addEventListener(
+            FormEvents::PRE_SET_DATA,
+            function (FormEvent $event) use ($etablissementRattachementSanteModifier) {
+                /** @var User $data */
+                $data = $event->getData();
+                $form = $event->getForm();
+
+                $list = $this->etablissementManager->findBy(array(
+                    'departement'   => $data->getDepartement(),
+                    'typeOrganisme' => $data->getStatutEtablissementSante()
+                ));
+                $etablissementRattachementSanteModifier($form, $list);
+            }
+        );
+
+        $builder->addEventListener(
+            FormEvents::SUBMIT,
+            function (FormEvent $event) use ($etablissementRattachementSanteModifier) {
+                /** @var User $data */
+                $data = $event->getData();
+                $form = $event->getForm();
+
+                $list = $this->etablissementManager->findBy(array(
+                    'departement'   => $data->getDepartement(),
+                    'typeOrganisme' => $data->getStatutEtablissementSante()
+                ));
+
+                $etablissementRattachementSanteModifier($form, $list);
+            }
+        );
     }
 
     /**

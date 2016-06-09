@@ -173,7 +173,7 @@ services:
 
     hopitalnumerique_user.form.user.informations_manquantes:
         class: 'HopitalNumerique\UserBundle\Form\Type\User\InformationsManquantesType'
-        arguments: ['@security.token_storage', '@router', '@request_stack', '@hopitalnumerique_reference.manager.reference']
+        arguments: ['@security.token_storage', '@router', '@request_stack', '@hopitalnumerique_reference.manager.reference', '@hopitalnumerique_etablissement.manager.etablissement']
         tags:
             - { name: 'form.type', alias: 'nodevouser_user_informationsmanquantes' }
 
