@@ -609,4 +609,21 @@ class ReferenceManager extends BaseManager
         }
         return $retour;
     }
+
+    /**
+     * Récupère les domaines en fonction de l'id de la référence
+     *
+     * @return array
+     */
+    public function getDomainesByReference($idReference)
+    {
+        $res = $this->getRepository()->getDomainesByReference($idReference)[0];
+        $domaines = $res->getDomaines()->getValues();
+        $domaineResult = array();
+        foreach ($domaines as $domaine) {
+            $domaineResult[$domaine->getId()] = $domaine;
+        }
+        
+        return $domaineResult;
+    }
 }

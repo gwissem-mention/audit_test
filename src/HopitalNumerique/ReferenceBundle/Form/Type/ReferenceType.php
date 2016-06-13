@@ -203,6 +203,16 @@ class ReferenceType extends AbstractType
                     'maxlength' => 255
                 ]
             ))
+            ->add('domainesDisplay', 'entity', array(
+                'class'       => 'HopitalNumeriqueDomaineBundle:Domaine',
+                'choices'     => $builder->getData()->getDomaines(),
+                'required'    => false,
+                'label'       => 'Afficher un lien pour ces domaines :',
+                'multiple'    => true,
+                'attr' => [
+                    'class' => 'select2'
+                ]
+            ))
         ;
     }
 

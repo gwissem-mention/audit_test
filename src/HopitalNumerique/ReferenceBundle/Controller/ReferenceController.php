@@ -235,7 +235,7 @@ class ReferenceController extends Controller
      * @internal param Reference $item Entité Référence
      *
      */
-    private function renderForm($reference)
+    private function renderForm(Reference $reference)
     {
         $referenceTreeOptions = $this->container->get('hopitalnumerique_reference.dependency_injection.reference.tree')
             ->getOptions(
