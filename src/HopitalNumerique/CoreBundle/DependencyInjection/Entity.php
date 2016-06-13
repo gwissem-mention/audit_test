@@ -61,7 +61,7 @@ class Entity
     /**
      * @var string Nom de la catégorie de l'ambassadeur
      */
-    const CATEGORY_AMBASSADEUR_LABEL = 'Ambassadeur';
+    const CATEGORY_AMBASSADEUR_LABEL = 'Personne ressource';
 
     /**
      * @var string Nom de la catégorie de la démarche

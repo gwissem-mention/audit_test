@@ -58,18 +58,23 @@ Hn_RechercheBundle_Referencement.getChosenReferenceIdsByDomaineId = function(dom
  */
 Hn_RechercheBundle_Referencement.displayDomaineResults = function()
 {
-    var domaineResultsHtml = '';
+    var domaineResultsHtml = [];
     $.each(Hn_RechercheBundle_Referencement.getChosenDomaineIds(), function (i, domaineId) {
         if (Hn_DomaineBundle_Domaine.CURRENT_DOMAINE_ID !== domaineId) {
             var referenceString = Hn_RechercheBundle_Referencement.getChosenReferenceIdsByDomaineId(domaineId).join('-');
             var domaineLink = Hn_DomaineBundle_Domaine.getUrlById(domaineId) + Routing.generate('hopitalnumerique_recherche_referencement_indexwithreferences', { referenceString: referenceString }, false);
 
-            domaineResultsHtml += '<li><a href="' + domaineLink + '" target="_blank">' + Hn_DomaineBundle_Domaine.getNomById(domaineId) + '</a></li>';
+            domaineResultsHtml.push('<a href="' + domaineLink + '" target="_blank">' + Hn_DomaineBundle_Domaine.getNomById(domaineId) + '</a>');
         }
     });
 
-    if ('' !== domaineResultsHtml) {
-        $('#results-domaines ul').html(domaineResultsHtml);
+    if (domaineResultsHtml.length > 0) {
+        $('#results-domaines .filters').html(
+            Hn_RechercheBundle_Referencement.getChosenElements().get().map(function(e) {
+                 return $(e).data('libelle');
+            }).join(', ')
+        );
+        $('#results-domaines .domaines').html(domaineResultsHtml.join(', '));
         $('#results-domaines').css({ display: 'block' });
     } else {
         $('#results-domaines').css({ display: 'none' });

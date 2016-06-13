@@ -219,10 +219,13 @@
                     <div class="clearfix"></div>
                 </div>
 
+                <div id="results-domaines">
+                    D'autres résultats pour <span class="filters"></span> existent sur les thèmes suivants : <span class="domaines"></span>
+                </div>
+
                 <div class="results-bloc">
                     <div id="no-result-bloc">
-                        Il n'y a pas encore de ressource correspondant à cette recherche.
-                        Pour être informé d'une nouvelle publication sur ce sujet, enregistrez votre recherche.
+
                     </div>
                     {%- for groupId, groupTitle in { 'points-durs':'Points durs', 'productions':'Productions' } -%}
                         <div class="results-group-bloc" id="results-{{ groupId }}-bloc">
@@ -236,12 +239,6 @@
                         </div>
                     {%- endfor -%}
                 </div>
-
-                <div id="results-domaines">
-                    <p>D'autres résultats de recherche pour ces critères existent sur les thèmes suivants :</p>
-                    <ul></ul>
-                </div>
-
             </div>
         </div>
     </div>
