@@ -41,6 +41,22 @@ class InformationsManquantesController extends Controller
         if ($form->isValid()) {
             $this->container->get('hopitalnumerique_user.manager.user')->save($user);
             $this->addFlash('success', 'Informations enregistrées.');
+
+            if (null !== $user && !$this->container
+                    ->get('hopitalnumerique_communautepratique.dependency_injection.inscription')
+                    ->hasInformationManquante($user)) {
+                if (!$user->isInscritCommunautePratique()) {
+                    $user->setInscritCommunautePratique(true);
+                    $this->container->get('hopitalnumerique_user.manager.user')->save($user);
+                    $this->get('session')->getFlashBag()->add('success', 'L\'inscription à la communauté de pratique a été confirmée.');
+                }
+
+                return $this->redirect($this->generateUrl('hopitalnumerique_communautepratique_accueil_index'));
+            } else {
+                $this->get('session')->getFlashBag()->add('danger', 'L\'inscription à la communauté de pratique a échouée.');
+                return $this->redirect($this->generateUrl('hopital_numerique_homepage'));
+            }
+
         }
 
         return $this->redirect($form->get('redirection')->getData());
