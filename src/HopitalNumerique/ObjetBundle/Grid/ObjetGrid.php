@@ -35,6 +35,7 @@ class ObjetGrid extends Grid implements GridInterface
                 break;
             case 'Article':
                 $filtres ['isArticle'] = true;
+                break;
             case 'production':
                 $filtres['types'] = 'Article';
                 break;
@@ -43,7 +44,9 @@ class ObjetGrid extends Grid implements GridInterface
                 break;
         }
 
-        $this->setDefaultFilters($filtres);
+        if (!empty($filtres)) {
+            $this->setDefaultFilters($filtres);
+        }
     }
 
     /**
