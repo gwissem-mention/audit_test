@@ -308,4 +308,21 @@ class ReferenceRepository extends EntityRepository
 
         return $qb->getQuery()->getResult();
     }
+    
+    /**
+     * Récupère les domaines en fonction de la référence
+     *
+     * @return array
+     */
+    public function getDomainesByReference($idReference)
+    {
+        $qb = $this->_em->createQueryBuilder();
+        $qb->select('reference, dom')
+            ->from('HopitalNumeriqueReferenceBundle:Reference', 'reference')
+            ->join('reference.domaines', 'dom')
+            ->where('reference.id = :idReference')
+            ->setParameter('idReference', $idReference);
+
+        return $qb->getQuery()->getResult();
+    }
 }
