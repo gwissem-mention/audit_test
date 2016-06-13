@@ -518,7 +518,7 @@ class Entity
 
         if (null !== $description) {
             $description = trim(strip_tags(html_entity_decode($description)));
-            
+
             if (null !== $truncateCaractersCount && strlen($description) > $truncateCaractersCount) {
                 $description = substr($description, 0, $truncateCaractersCount);
                 if (strrpos($description, ' ') > 0) {
@@ -559,6 +559,33 @@ class Entity
                 return $this->router->generate('hopital_numerique_recherche_parcours_details_index_front', ['id' => $entityId]);
             case self::ENTITY_TYPE_COMMUNAUTE_PRATIQUES_GROUPE:
                 return $this->router->generate('hopitalnumerique_communautepratique_groupe_view', ['groupe' => $entityId]);
+        }
+
+        return null;
+    }
+
+    //<-- URL
+    /**
+     * Retourne l'URL de la page de l'entité.
+     *
+     * @param object $entity Entité
+     * @return string|null URL
+     */
+    public function getSourceByEntity($entity)
+    {
+        switch ($this->getEntityType($entity)) {
+            case self::ENTITY_TYPE_OBJET:
+                return $entity->getSource();
+            case self::ENTITY_TYPE_CONTENU:
+                return null;
+            case self::ENTITY_TYPE_FORUM_TOPIC:
+                return null;
+            case self::ENTITY_TYPE_AMBASSADEUR:
+                return null;
+            case self::ENTITY_TYPE_RECHERCHE_PARCOURS:
+                return null;
+            case self::ENTITY_TYPE_COMMUNAUTE_PRATIQUES_GROUPE:
+                return null;
         }
 
         return null;

@@ -2,6 +2,7 @@
 
 namespace Nodevo\AclBundle\Manager;
 
+use Nodevo\AclBundle\Entity\Ressource;
 use Nodevo\ToolsBundle\Manager\Manager as BaseManager;
 
 /**
@@ -25,6 +26,9 @@ class RessourceManager extends BaseManager
     public function getRessourceMatchingUrl($url)
     {
         $ressources = $this->findAll();
+        usort($ressources, function (Ressource $a, Ressource $b) {
+            return $a->getOrder() > $b->getOrder();
+        });
 
         foreach ($ressources as $ressource) {
             $pattern = $ressource->getPattern();

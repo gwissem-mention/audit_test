@@ -1,4 +1,9 @@
-<div class="category">{{ category|raw }}</div>
+<div class="category">
+    {{ category|raw }}
+    {% if source is defined and source is not null %}
+        <span class="text-muted">({{ source }})</span>
+    {% endif %}
+</div>
 <h3 class="title">
     <a href="{{ url }}">
         {%- if pertinenceNiveau is defined -%}

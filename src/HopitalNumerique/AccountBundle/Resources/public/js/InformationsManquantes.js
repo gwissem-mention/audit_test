@@ -61,7 +61,9 @@ Hn_AccountBundle_InformationsManquantes.loadEtablissementRattachementSantes = fu
         },
         type: 'POST',
         success: function (data) {
-            $('#nodevouser_user_informationsmanquantes_etablissementRattachementSante').html(data);
+            var value = $('#nodevouser_user_informationsmanquantes_etablissementRattachementSante').val();
+            $('#nodevouser_user_informationsmanquantes_etablissementRattachementSante').html( data );
+            $('#nodevouser_user_informationsmanquantes_etablissementRattachementSante option[value="' + value + '"]').prop('selected', true);
         }
     });
 };

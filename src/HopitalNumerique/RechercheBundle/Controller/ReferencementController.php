@@ -24,7 +24,7 @@ class ReferencementController extends Controller
             $choosenReferenceIds = $request->request->get('references');
         } else {
             $choosenReferenceIds = $this->container->get('hopitalnumerique_recherche.dependency_injection.referencement.requete_session')->getReferenceIds();
-            
+
             if (count($choosenReferenceIds) === 0 && !$this->container->get('hopitalnumerique_recherche.dependency_injection.referencement.requete_session')->hasSearchedText()) {
                 if (null !== $this->getUser()) {
                     $requeteDefault = $this->container->get('hopitalnumerique_recherche.manager.requete')->findDefaultByUser($this->getUser());
@@ -127,7 +127,8 @@ class ReferencementController extends Controller
                     'subtitle' => $this->container->get('hopitalnumerique_core.dependency_injection.entity')->getSubtitleByEntity($entity),
                     'url' => $this->container->get('hopitalnumerique_core.dependency_injection.entity')->getFrontUrlByEntity($entity),
                     'description' => $this->container->get('hopitalnumerique_core.dependency_injection.entity')->getDescriptionByEntity($entity),
-                    'pertinenceNiveau' => $entitiesPropertiesById[$entityId]['pertinenceNiveau']
+                    'pertinenceNiveau' => $entitiesPropertiesById[$entityId]['pertinenceNiveau'],
+                    'source' => $this->container->get('hopitalnumerique_core.dependency_injection.entity')->getSourceByEntity($entity),
                 ]);
             }
         }
