@@ -43,10 +43,8 @@ Hn_RechercheBundle_Referencement.initEvents = function()
 {
     // Ajout d'une référence
     $('.recherche-referencement .add').click(function(event) {
-        // if (!Hn_RechercheBundle_Referencement.IS_SEARCHING) {
-            Hn_RechercheBundle_Referencement.toggleReferenceChoosing(Hn_RechercheBundle_Referencement.getReferenceIdByElement($(this)));
-            Hn_RechercheBundle_Referencement.initReferenceFilters();
-        // }
+        Hn_RechercheBundle_Referencement.toggleReferenceChoosing(Hn_RechercheBundle_Referencement.getReferenceIdByElement($(this)));
+        Hn_RechercheBundle_Referencement.initReferenceFilters();
         event.stopPropagation();
     });
     // Pliage / dépliage
@@ -278,6 +276,14 @@ Hn_RechercheBundle_Referencement.referenceChildrenAreDisplayed = function(refere
 Hn_RechercheBundle_Referencement.toggleReferenceChoosing = function(referenceId)
 {
     var referenceIsChosen = ('true' === Hn_RechercheBundle_Referencement.getElementByReferenceId(referenceId).attr('data-chosen'));
+
+    if (referenceIsChosen && Hn_RechercheBundle_Referencement.getElementByReferenceId(referenceId).data('just-chosen') !== undefined) {
+        return false;
+    }
+    Hn_RechercheBundle_Referencement.getElementByReferenceId(referenceId).data('just-chosen', true);
+    setTimeout(function () {
+        Hn_RechercheBundle_Referencement.getElementByReferenceId(referenceId).removeData('just-chosen');
+    }, 2000);
 
     Hn_RechercheBundle_Referencement.getElementByReferenceId(referenceId).attr('data-chosen', referenceIsChosen ? 'false' : 'true');
 

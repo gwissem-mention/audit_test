@@ -26,7 +26,9 @@ Hn_RechercheBundle_Referencement.getDomaineIdsByElement = function(element)
     var domaineIds = [];
 
     $.each($(element).attr('data-domaines').split(','), function (i, elementDomaineId) {
-        domaineIds.push(parseInt(elementDomaineId));
+        if (elementDomaineId.length > 0) {
+            domaineIds.push(parseInt(elementDomaineId));
+        }
     });
 
     return domaineIds;
@@ -57,7 +59,6 @@ Hn_RechercheBundle_Referencement.getChosenReferenceIdsByDomaineId = function(dom
 Hn_RechercheBundle_Referencement.displayDomaineResults = function()
 {
     var domaineResultsHtml = '';
-
     $.each(Hn_RechercheBundle_Referencement.getChosenDomaineIds(), function (i, domaineId) {
         if (Hn_DomaineBundle_Domaine.CURRENT_DOMAINE_ID !== domaineId) {
             var referenceString = Hn_RechercheBundle_Referencement.getChosenReferenceIdsByDomaineId(domaineId).join('-');
