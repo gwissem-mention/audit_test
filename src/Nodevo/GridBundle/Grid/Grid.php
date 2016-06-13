@@ -5,6 +5,7 @@ use APY\DataGridBundle\Grid\Column;
 use APY\DataGridBundle\Grid\Source;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Criteria;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  * Classe GRID de Nodevo
@@ -70,7 +71,7 @@ abstract class Grid implements GridInterface
     /**
      * Met en place toute la config et retourne l'objet grid
      *
-     * @return APY\DataGridBundle\Grid
+     * @return Response
      */
     public function render( $vue, $params = array() )
     {
