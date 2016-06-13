@@ -41,7 +41,7 @@ class ObjetRepository extends EntityRepository
 
         return $qb;
     }
-    
+
     /**
      * Retourne la liste des objets
      *
@@ -71,7 +71,7 @@ class ObjetRepository extends EntityRepository
             ->where('obj.id IN (:ids)')
             ->orderBy('obj.titre', 'ASC')
             ->setParameter('ids', $ids);
-            
+
         return $qb;
     }
 
@@ -87,7 +87,7 @@ class ObjetRepository extends EntityRepository
                          ->from('HopitalNumeriqueObjetBundle:Objet', 'obj')
                          ->andWhere('obj.isArticle = 0');
     }
-    
+
     /**
      * Récupère les données du grid pour un ambassadeur sous forme de tableau correctement formaté
      *
@@ -102,10 +102,10 @@ class ObjetRepository extends EntityRepository
             ->leftJoin('obj.ambassadeurs','refUser')
             ->where('refUser.id = :idAmbassadeur')
             ->setParameter('idAmbassadeur', $idAmbassadeur->value );
-        
+
         return $qb;
     }
-    
+
     /**
      * Récupère les objets pour le flux RSS
      *
@@ -143,10 +143,10 @@ class ObjetRepository extends EntityRepository
             ->orderBy('obj.dateCreation', 'DESC')
             ->setMaxResults(20)
         ;
-        
+
         return $qb;
     }
-    
+
     /**
      * Récupère les objets pour un ambassadeur passé en param
      *
@@ -161,7 +161,7 @@ class ObjetRepository extends EntityRepository
             ->leftJoin('obj.ambassadeurs','refUser')
             ->where('refUser.id = :idAmbassadeur')
             ->setParameter('idAmbassadeur', $idAmbassadeur );
-        
+
         return $qb;
     }
 
@@ -181,7 +181,7 @@ class ObjetRepository extends EntityRepository
             ->where('refTypes.id IN (:types)','obj.etat = 3')
             ->orderBy($order['champ'], $order['tri'])
             ->setParameter('types', $types );
-        
+
         if( $limit !== 0 )
             $qb->setMaxResults($limit);
 
@@ -229,7 +229,7 @@ class ObjetRepository extends EntityRepository
             ->where('refTypesParent.id = :idParent')->setParameter('idParent', 175 )
             ->andWhere('etat.id = :idActif')->setParameter('idActif', 3 )
             ->orderBy('obj.alias', 'ASC');
-        
+
         return $qb;
     }
 
@@ -249,7 +249,7 @@ class ObjetRepository extends EntityRepository
             ->setParameter('idDomaine', 1)
             ->groupBy('obj.id')
         ;
-        
+
         return $qb;
     }
 
@@ -330,27 +330,27 @@ class ObjetRepository extends EntityRepository
             ->getOneOrNullResult()
         ;
     }
-    
+
     /**
      * Retourne les objets du domaine.
      *
      * @return query
      */
     public function getObjetByDomaine() {
-    	
+
 		$domaine = $this->getEntityManager()->getRepository('HopitalNumeriqueDomaineBundle:Domaine')->getDomaineFromHttpHost($_SERVER["SERVER_NAME"])->getQuery()->getOneOrNullResult();
-    	
+
         $qb = $this->_em->createQueryBuilder();
         $qb->select('obj')
             ->from('HopitalNumeriqueObjetBundle:Objet', 'obj')
             ->innerJoin('obj.types','refType')
             ->leftJoin('obj.etat','refEtat')
-            ->leftJoin('refType.parent','parentType')
+            ->leftJoin('refType.parents','parentType')
             ->leftJoin('obj.domaines','domaine')
                 ->where('domaine.id = :idDomaine')
                 ->setParameter('idDomaine', ($domaine) ? $domaine->getId() : 1)
             ;
-        
+
         return $qb;
     }
 
@@ -376,8 +376,8 @@ class ObjetRepository extends EntityRepository
 
         return $qb->getQuery()->getResult();
     }
-    
-    
+
+
     /**
    * Retourne les publications par domaine et compétences de l'ambassadeur.
    *
