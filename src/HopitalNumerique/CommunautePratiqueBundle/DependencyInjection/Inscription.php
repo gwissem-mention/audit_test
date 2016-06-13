@@ -10,7 +10,7 @@ class Inscription
 {
     /**
      * Retourne s'il manque une information à l'utilisateur.
-     * 
+     *
      * @param \HopitalNumerique\UserBundle\Entity\User $user Utilisateur
      * @return boolean VRAI si information manquante
      */
@@ -21,7 +21,7 @@ class Inscription
 
     /**
      * Retourne les informations manquantes pour se connecter à la communauté de pratique.
-     * 
+     *
      * @param \HopitalNumerique\UserBundle\Entity\User $user Utilisateur
      * @return array<string> Informations manquantes
      */
@@ -29,6 +29,9 @@ class Inscription
     {
         $informationsManquantes = array();
 
+        if (empty(trim($user->getNom())) || empty(trim($user->getPrenom()))) {
+            $informationsManquantes[] = 'Nom & Prénom';
+        }
         if (null === $user->getRegion() || null === $user->getDepartement()) {
             $informationsManquantes[] = 'Région & département';
         }

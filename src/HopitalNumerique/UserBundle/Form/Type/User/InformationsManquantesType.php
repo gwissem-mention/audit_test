@@ -130,6 +130,11 @@ class InformationsManquantesType extends AbstractType
     {
         $fields = [];
 
+        $displayUserNomPrenom =
+            empty(trim($this->user->getNom()))
+            || empty(trim($this->user->getPrenom()))
+        ;
+
         $displayEtablissementNom =
             null === $this->user->getEtablissementRattachementSante()
             && null === $this->user->getAutreStructureRattachementSante()
@@ -140,6 +145,11 @@ class InformationsManquantesType extends AbstractType
             (null === $this->user->getRegion() || null === $this->user->getDepartement())
             || $displayEtablissementNom
         ;
+
+        if ($displayUserNomPrenom) {
+            $fields['nom'] = $this->getNomField();
+            $fields['prenom'] = $this->getPrenomField();
+        }
 
         if ($displayRegionDepartement) {
             $fields['region'] = $this->getRegionField();
@@ -221,6 +231,44 @@ class InformationsManquantesType extends AbstractType
         }
 
         return $fields;
+    }
+
+    /**
+     * Retourne le champ Nom.
+     *
+     * @return array Champ
+     */
+    private function getNomField()
+    {
+        return [
+            'type' => 'text',
+            'options' => [
+                'required'   => true,
+                'label'      => 'Nom',
+                'attr' => [
+                    'data-validation-engine' => 'validate[required]'
+                ]
+            ]
+        ];
+    }
+
+    /**
+     * Retourne le champ Prénom.
+     *
+     * @return array Champ
+     */
+    private function getPrenomField()
+    {
+        return [
+            'type' => 'text',
+            'options' => [
+                'required'   => true,
+                'label'      => 'Prénom',
+                'attr' => [
+                    'data-validation-engine' => 'validate[required]'
+                ]
+            ]
+        ];
     }
 
 
