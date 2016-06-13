@@ -94,8 +94,16 @@ class EntityHasReferenceManager extends BaseManager
         }
 
         $entitiesHaveReferences = [];
-        $entitiesHaveReferencesWithoutRoles = $this->getRepository()->getWithNotes($domaine, $groupedReferences, $entityTypeIds, $publicationCategoryIds, $resultFilters);
+        $entitiesHaveReferencesWithoutRoles = $this->getRepository()->getWithNotes(
+            $domaine,
+            $groupedReferences,
+            $entityTypeIds,
+            $publicationCategoryIds,
+            $resultFilters
+        );
+
         $entitiesMatchProperties = $this->getRepository()->getMatchProperties($groupedReferences, $entityTypeIds);
+
         // Prise en compte des rôles utilisateur
         foreach ($entitiesHaveReferencesWithoutRoles as $entityHaveReferenceWithoutRoles) {
             $objetRoleIds = ('' != $entityHaveReferenceWithoutRoles['objetRoleIds'] ? explode(',', $entityHaveReferenceWithoutRoles['objetRoleIds']) : []);
@@ -171,7 +179,7 @@ class EntityHasReferenceManager extends BaseManager
 
         return $referenceIds;
     }
-    
+
     /**
      * @return array<integer>
      */

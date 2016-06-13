@@ -51,7 +51,12 @@ class Deleter
 
             if (null === $entity) {
                 $this->noteDeleter->removeByEntityTypeAndEntityId($entityType, $entityId);
-                $this->entityHasReferenceManager->delete($entitiesHasReference);
+                $this->entityHasReferenceManager->delete(
+                    $this->entityHasReferenceManager->findBy([
+                        'entityType' => $entityType,
+                        'entityId' => $entityId,
+                    ])
+                );
             }
         }
     }
