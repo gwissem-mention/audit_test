@@ -165,6 +165,7 @@
                 </div>
             </div>
             <div class="col-md-12">
+                {% include 'HopitalNumeriquePublicationBundle:Publication:Partials/sommaire.html.twig' %}
                 {% include 'HopitalNumeriquePublicationBundle:Publication:Partials/column_right.html.twig' %}
 
                 <input type="hidden" id="objetId" style="display: none;" value="{% if contenu is defined %}{{contenu.id}}{% else %}{{objet.id}}{% endif %}">

@@ -67,13 +67,13 @@ class PublicationController extends Controller
         //render
         return $this->render('HopitalNumeriquePublicationBundle:Publication:objet.html.twig', array(
             'objet'        => $objet,
-            'note'         => $this->container->get('hopitalnumerique_objet.doctrine.note_reader')->getNoteByObjetAndUser($objet, $this->getUser()),
+            'note'         => $this->get('hopitalnumerique_objet.doctrine.note_reader')->getNoteByObjetAndUser($objet, $this->getUser()),
             'types'        => $types,
             'contenus'     => $contenus,
             'meta'         => $this->get('hopitalnumerique_recherche.manager.search')->getMetas($references, $objet->getResume()),
             'ambassadeurs' => $this->getAmbassadeursConcernes($objet->getId()),
             'productionsLiees' => $this->get('hopitalnumerique_objet.dependency_injection.production_liee')->getFormattedProductionsLiees($objet),
-            'parcoursGuides' => $this->container->get('hopitalnumerique_rechercheparcours.dependency_injection.parcours_guide_lie')->getFormattedParcoursGuidesLies($objet),
+            'parcoursGuides' => $this->get('hopitalnumerique_rechercheparcours.dependency_injection.parcours_guide_lie')->getFormattedParcoursGuidesLies($objet),
             'is_pdf' => $isPdf
         ));
     }
