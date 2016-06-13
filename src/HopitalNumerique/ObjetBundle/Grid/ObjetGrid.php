@@ -36,6 +36,9 @@ class ObjetGrid extends Grid implements GridInterface
             case 'Article':
                 $filtres ['isArticle'] = true;
                 break;
+            case 'publication':
+                $filtres ['isArticle'] = false;
+                break;
             case 'production':
                 $filtres['types'] = 'Article';
                 break;
