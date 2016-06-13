@@ -1,6 +1,6 @@
 <div class="category">
     {{ category|raw }}
-    {% if source is not null %}
+    {% if source is defined and source is not null %}
         <span class="text-muted">({{ source }})</span>
     {% endif %}
 </div>
