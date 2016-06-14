@@ -241,6 +241,21 @@ class PublicationController extends Controller
         );
         $meta = $this->get('hopitalnumerique_recherche.manager.search')->getMetas($references, $contenu->getContenu() );
 
+        $referencesInDomaine = [];
+        $objetDomaines = $objet->getDomaines();
+        foreach ($objetDomaines as $domaine) {
+            $domaineReference = $this->container->get('hopitalnumerique_reference.manager.entity_has_reference')
+                ->findByEntityTypeAndEntityIdAndDomaines(
+                    $this->container->get('hopitalnumerique_core.dependency_injection.entity')->getEntityType($objet),
+                    $this->container->get('hopitalnumerique_core.dependency_injection.entity')->getEntityId($objet),
+                    [$domaine]
+                );
+            $referenceString = join('-', array_map(function (EntityHasReference $reference) {
+                return $reference->getReference()->getId();
+            }, $domaineReference));
+            $referencesInDomaine[$domaine->getId()] = $referenceString;
+        }
+
         $ambassadeurs = $this->getAmbassadeursConcernes( $objet->getId() );
 
         //render
@@ -260,7 +275,8 @@ class PublicationController extends Controller
             'suivantOrder'     => $suivantOrder,
             'productionsLiees' => $this->get('hopitalnumerique_objet.dependency_injection.production_liee')->getFormattedProductionsLiees($contenu),
             'parcoursGuides' => $this->container->get('hopitalnumerique_rechercheparcours.dependency_injection.parcours_guide_lie')->getFormattedParcoursGuidesLies($objet),
-            'is_pdf' => ($request->query->has('pdf') && '1' == $request->query->get('pdf'))
+            'is_pdf' => ($request->query->has('pdf') && '1' == $request->query->get('pdf')),
+            'referencesStringByDomaine' => $referencesInDomaine
         ));
     }
 

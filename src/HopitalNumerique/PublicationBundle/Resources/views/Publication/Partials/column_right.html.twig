@@ -1,10 +1,12 @@
 <div id="column-right">
-    <div class="column-right-container">
-        {% if productionsLiees|length > 0 or parcoursGuides|length > 0 %}
+
+    {% if productionsLiees|length > 0 or parcoursGuides|length > 0 %}
+        <div class="column-right-container">
             {% include 'HopitalNumeriquePublicationBundle:Publication:Partials/productions_liees.html.twig' %}
             {#{% include 'HopitalNumeriquePublicationBundle:Publication:Partials/parcours_guides.html.twig' %}#}
-        {% endif %}
-    </div>
+        </div>
+    {% endif %}
+    
     {% include 'HopitalNumeriquePublicationBundle:Publication:Partials/autres_domaines.html.twig' %}
 </div>
 
