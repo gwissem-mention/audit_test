@@ -50,7 +50,7 @@
                 {%- for referenceProperties in referencesTree -%}
                     {% if referenceProperties.reference.id == 222 %}
                         <div id="contexte-container">
-                            <button type="button" id="contexte-button" class="btn btn-primary btn-block btn-lg" data-toggle="modal" data-target="#contexte-modal">{{ referenceProperties.reference.libelle }}</button>
+                            <button type="button" id="contexte-button" class="btn btn-block btn-lg" data-toggle="modal" data-target="#contexte-modal">{{ referenceProperties.reference.libelle }}</button>
                             <div class="modal fade" id="contexte-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
                                 <div class="modal-dialog{% if app.user is null %} modal-lg{% endif %}" role="document">
                                     <div class="modal-content">
@@ -67,7 +67,7 @@
                                                 </ul>
                                             </div>
                                             <div class="modal-footer">
-                                                <label><input type="checkbox" name="contexte-valid"> Valider et enregistrer dans les informations personnelles</label>
+                                                <label><input type="checkbox" name="contexte-valid"> Mettre à jour mes informations personnelles</label>
                                                 <button type="button" class="btn btn-success" onclick="Hn_RechercheBundle_Referencement_Filter_Contexte.valid();">Valider</button>
                                             </div>
                                         {%- else -%}
