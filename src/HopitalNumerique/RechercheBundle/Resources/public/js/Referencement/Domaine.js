@@ -73,9 +73,9 @@ Hn_RechercheBundle_Referencement.displayDomaineResults = function()
                     var domaineLink =
                         Hn_DomaineBundle_Domaine.getUrlById(domaineId)
                         + Routing.generate(
-                            'hopitalnumerique_recherche_referencement_indexwithreferences',
+                            'hopital_numerique_recherche_homepage_requete_generator',
                             {
-                                referenceString: referenceString
+                                refs: referenceString
                             },
                             false
                         );

@@ -5,7 +5,7 @@
             Autres ressources sur
             {% for domaine in contenu.realDomaines %}
                 {% if not domaineCurrent.equals(domaine) %}
-                    <a href="{{ domaine.url }}{{ path('hopitalnumerique_recherche_referencement_indexwithreferences', { 'referenceString': referencesStringByDomaine[domaine.id] }) }}" target="_blank">{{ domaine }}</a>
+                    <a href="{{ domaine.url }}{{ path('hopital_numerique_recherche_homepage_requete_generator', { 'refs': referencesStringByDomaine[domaine.id] }) }}" target="_blank">{{ domaine }}</a>
                     {{- not loop.last ? ', ' : '' -}}
                 {%- endif -%}
             {%- endfor -%}
@@ -19,7 +19,7 @@
             Autres ressources sur
             {% for domaine in objet.domaines %}
                 {% if not domaineCurrent.equals(domaine) %}
-                    <a href="{{ domaine.url }}{{ path('hopitalnumerique_recherche_referencement_indexwithreferences', { 'referenceString': referencesStringByDomaine[domaine.id] }) }}" target="_blank">{{ domaine }}</a>
+                    <a href="{{ domaine.url }}{{ path('hopital_numerique_recherche_homepage_requete_generator', { 'refs': referencesStringByDomaine[domaine.id] }) }}" target="_blank">{{ domaine }}</a>
                     {{- not loop.last ? ', ' : '' -}}
                 {%- endif -%}
             {%- endfor -%}

@@ -74,7 +74,7 @@ class PublicationController extends Controller
                     $this->container->get('hopitalnumerique_core.dependency_injection.entity')->getEntityId($objet),
                     [$domaine]
                 );
-            $referenceString = join('-', array_map(function (EntityHasReference $reference) {
+            $referenceString = join(',', array_map(function (EntityHasReference $reference) {
                 return $reference->getReference()->getId();
             }, $domaineReference));
             $referencesInDomaine[$domaine->getId()] = $referenceString;
@@ -254,7 +254,7 @@ class PublicationController extends Controller
                     $this->container->get('hopitalnumerique_core.dependency_injection.entity')->getEntityId($objet),
                     [$domaine]
                 );
-            $referenceString = join('-', array_map(function (EntityHasReference $reference) {
+            $referenceString = join(',', array_map(function (EntityHasReference $reference) {
                 return $reference->getReference()->getId();
             }, $domaineReference));
             $referencesInDomaine[$domaine->getId()] = $referenceString;

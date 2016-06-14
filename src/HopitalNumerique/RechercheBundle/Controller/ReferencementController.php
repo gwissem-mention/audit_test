@@ -53,17 +53,6 @@ class ReferencementController extends Controller
     }
 
     /**
-     * Affiche la recherche par référencement avec des références prédéfinies.
-     */
-    public function indexWithReferencesAction($referenceString)
-    {
-        $referenceIds = explode('-', $referenceString);
-        $this->container->get('hopitalnumerique_recherche.dependency_injection.referencement.requete_session')->setReferenceIds($referenceIds);
-
-        return $this->redirectToRoute('hopital_numerique_recherche_homepage');
-    }
-
-    /**
      * Retourne les entités trouvées selon les références choisies.
      */
     public function jsonEntitiesByReferencesAction(Request $request)
