@@ -1,4 +1,4 @@
-{% if productionsLiees|length > 0 -%}
+{% if productionsLiees|length > 0 or parcoursGuide|length > 0 -%}
     <div class="recherche-referencement" id="productions_liees">
         <h2>Productions associées</h2>
         <div class="clearfix"></div>
@@ -6,7 +6,14 @@
         <div class="results-bloc">
             <div class="clearfix"></div>
             {%- for productionLiee in productionsLiees -%}
+                {# on n'affiche pas la description ici #}
+                {% set productionLiee = productionLiee|merge({'description': null}) %}
                 {% include 'HopitalNumeriqueRechercheBundle:Referencement:view_entity.html.twig' with productionLiee %}
+            {%- endfor -%}
+            {%- for parcoursGuide in parcoursGuides -%}
+                {# on n'affiche pas la description ici #}
+                {% set parcoursGuide = parcoursGuide|merge({'description': null}) %}
+                {% include 'HopitalNumeriqueRechercheBundle:Referencement:view_entity.html.twig' with parcoursGuide %}
             {%- endfor -%}
         </div>
     </div>

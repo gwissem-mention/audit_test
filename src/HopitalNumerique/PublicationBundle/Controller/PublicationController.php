@@ -4,6 +4,7 @@ namespace HopitalNumerique\PublicationBundle\Controller;
 
 use HopitalNumerique\CoreBundle\DependencyInjection\Entity;
 use HopitalNumerique\ObjetBundle\Entity\Objet;
+use HopitalNumerique\ReferenceBundle\Entity\EntityHasReference;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -64,6 +65,21 @@ class PublicationController extends Controller
                 [$this->container->get('hopitalnumerique_domaine.dependency_injection.current_domaine')->get()]
             );
 
+        $referencesInDomaine = [];
+        $objetDomaines = $objet->getDomaines();
+        foreach ($objetDomaines as $domaine) {
+            $domaineReference = $this->container->get('hopitalnumerique_reference.manager.entity_has_reference')
+                ->findByEntityTypeAndEntityIdAndDomaines(
+                    $this->container->get('hopitalnumerique_core.dependency_injection.entity')->getEntityType($objet),
+                    $this->container->get('hopitalnumerique_core.dependency_injection.entity')->getEntityId($objet),
+                    [$domaine]
+                );
+            $referenceString = join('-', array_map(function (EntityHasReference $reference) {
+                return $reference->getReference()->getId();
+            }, $domaineReference));
+            $referencesInDomaine[$domaine->getId()] = $referenceString;
+        }
+
         //render
         return $this->render('HopitalNumeriquePublicationBundle:Publication:objet.html.twig', array(
             'objet'        => $objet,
@@ -74,7 +90,8 @@ class PublicationController extends Controller
             'ambassadeurs' => $this->getAmbassadeursConcernes($objet->getId()),
             'productionsLiees' => $this->get('hopitalnumerique_objet.dependency_injection.production_liee')->getFormattedProductionsLiees($objet),
             'parcoursGuides' => $this->get('hopitalnumerique_rechercheparcours.dependency_injection.parcours_guide_lie')->getFormattedParcoursGuidesLies($objet),
-            'is_pdf' => $isPdf
+            'is_pdf' => $isPdf,
+            'referencesStringByDomaine' => $referencesInDomaine
         ));
     }
 
