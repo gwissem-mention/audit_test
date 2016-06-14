@@ -58,21 +58,42 @@ Hn_RechercheBundle_Referencement.getChosenReferenceIdsByDomaineId = function(dom
  */
 Hn_RechercheBundle_Referencement.displayDomaineResults = function()
 {
+    var chosenDomaineIds = [];
     var domaineResultsHtml = [];
-    $.each(Hn_RechercheBundle_Referencement.getChosenDomaineIds(), function (i, domaineId) {
-        if (Hn_DomaineBundle_Domaine.CURRENT_DOMAINE_ID !== domaineId) {
-            var referenceString = Hn_RechercheBundle_Referencement.getChosenReferenceIdsByDomaineId(domaineId).join('-');
-            var domaineLink = Hn_DomaineBundle_Domaine.getUrlById(domaineId) + Routing.generate('hopitalnumerique_recherche_referencement_indexwithreferences', { referenceString: referenceString }, false);
+    var choosenElements = [];
 
-            domaineResultsHtml.push('<a href="' + domaineLink + '" target="_blank">' + Hn_DomaineBundle_Domaine.getNomById(domaineId) + '</a>');
+    $.each(Hn_RechercheBundle_Referencement.getChosenElements(), function (i, element) {
+        var currentLength = chosenDomaineIds.length;
+        $.each(Hn_RechercheBundle_Referencement.getDomaineIdsByElement(element), function (j, domaineId) {
+            if ($.inArray(domaineId, chosenDomaineIds) === -1) {
+                chosenDomaineIds.push(domaineId);
+
+                if (Hn_DomaineBundle_Domaine.CURRENT_DOMAINE_ID !== domaineId) {
+                    var referenceString = Hn_RechercheBundle_Referencement.getChosenReferenceIdsByDomaineId(domaineId).join('-');
+                    var domaineLink =
+                        Hn_DomaineBundle_Domaine.getUrlById(domaineId)
+                        + Routing.generate(
+                            'hopitalnumerique_recherche_referencement_indexwithreferences',
+                            {
+                                referenceString: referenceString
+                            },
+                            false
+                        );
+                    domaineResultsHtml.push('<a href="' + domaineLink + '" target="_blank">' + Hn_DomaineBundle_Domaine.getNomById(domaineId) + '</a>');
+                }
+            }
+        });
+        if (chosenDomaineIds.length > currentLength) {
+            choosenElements.push(element);
         }
     });
 
     if (domaineResultsHtml.length > 0) {
-        $('#results-domaines .filters').html(
-            Hn_RechercheBundle_Referencement.getChosenElements().get().map(function(e) {
+        $('#results-domaines .filters').html('"' +
+            choosenElements.map(function(e) {
                  return $(e).data('libelle');
             }).join(', ')
+            + '"'
         );
         $('#results-domaines .domaines').html(domaineResultsHtml.join(', '));
         $('#results-domaines').css({ display: 'block' });
