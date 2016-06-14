@@ -22,7 +22,8 @@
                 #sommaire ul ul .toggle-children { display: inline; }
                 #sommaire ul ul ul { display: none; }
 
-    #column-right { background-color: #e5e5e5;float: right;margin: 0 0 20px 20px;padding: 10px;width: 250px; }
+    #column-right { float: right;margin: 0 0 20px 20px;width: 250px; }
+    #column-right .column-right-container { background-color: #e5e5e5; padding: 10px; }
     @media screen and (max-width: 991px) { #column-right { float: none;margin: 0 0 20px 0;width: 100%; } }
     #column-right div h2 { margin-top: 20px; }
     #column-right div:first-child h2 { margin-top: 0; }
@@ -68,7 +69,7 @@
     #publication #resultats span.label{ font-size:9px; line-height: 2; vertical-align: top }
     #publication #resultats .niveau{ margin-bottom: 4px }
     #publication #resultats .hl{ background-color: yellow; border: 1px dotted red; padding: 0 2px; }
-    
+
     /* Points Dur*/
     #publication #resultats #pointsdurs{padding:0;}
     /*#publication #resultats #pointsdurs h3{ color: #d60030; font-size: 12px; text-transform: uppercase; margin: 0 0 10px 0; font-weight: bold}*/
@@ -126,10 +127,10 @@
     #publication #publication-resume h2{font-size: 18px; color: #d60030; font-weight: bold;}
     #publication #publication-resume h3{font-size: 16px; color: #d60030; margin-left: 20px; font-weight: bold;}
     #publication #publication-resume h4{color: #d60030;font-size: 14px;font-style: italic;font-weight: normal; margin: 15px 0 10px 50px; font-weight: bold;}
-    #publication #publication-resume h5{color: #d60030;font-size: 14px;font-style: italic;font-weight: normal; margin: 15px 0 10px 75px; font-weight: bold;} 
+    #publication #publication-resume h5{color: #d60030;font-size: 14px;font-style: italic;font-weight: normal; margin: 15px 0 10px 75px; font-weight: bold;}
     #publication #publication-resume h6{color: #d60030;font-size: 14px;font-style: italic;font-weight: normal; margin: 15px 0 10px 100px; font-weight: bold;}
 	#publication #publication-resume iframe{ margin-right: 15px;}
-	
+
     /* Bloc Productions associés */
     #publication #productions-associes{ margin-top: 30px; }
     #publication #productions-associes h3{ color: #595959; font-size: 12px; text-transform: uppercase; margin: 0 0 10px 0; font-weight: normal }
@@ -143,7 +144,7 @@
     #publication #productions-associes .wrapper-results .results p{font-size: 13px; color:#070707; }
     #publication #productions-associes .wrapper-results .results .fa-refresh{ color:#3da20b; }
     #publication #productions-associes ul li {font-size: 13px;}
-    
+
     /* Bloc Date de parution - source du document */
     #publication #date-source{font-weight:bold;font-size:12px;margin-top:20px;}
 
@@ -167,7 +168,7 @@
         #articles h2{font-size: 18px; color: #d60030; font-weight: bold;}
         #articles h3{font-size: 16px; color: #d60030; margin-left: 20px; font-weight: bold;}
         #articles h4{color: #d60030;font-size: 14px;font-style: italic;font-weight: normal; margin: 15px 0 10px 50px; font-weight: bold;}
-        #articles h5{color: #d60030;font-size: 14px;font-style: italic;font-weight: normal; margin: 15px 0 10px 75px; font-weight: bold;} 
+        #articles h5{color: #d60030;font-size: 14px;font-style: italic;font-weight: normal; margin: 15px 0 10px 75px; font-weight: bold;}
         #articles h6{color: #d60030;font-size: 14px;font-style: italic;font-weight: normal; margin: 15px 0 10px 100px; font-weight: bold;}
 
         #articles h4.categorie {margin-left:0;}
@@ -233,7 +234,7 @@
     #commentaires .commentaire .user{ color:#6B339B; font-size: 15px;}
     #commentaires .commentaire .date-post{ color:#B5B5B5; font-size: 12px;}
     #commentaires .commentaire .texte{ margin-top: 5px; margin-bottom: 5px;}
-    
+
     #productions_liees h2, #parcours_guides h2 { margin-bottom:5px;margin-top: 0; }
     #productions_liees .results-bloc, #parcours_guides .results-bloc { margin: 0 0 10px 0; }
         #productions_liees .results-bloc .title a, #parcours_guides .results-bloc .title a { font-size: 13px; }
@@ -266,7 +267,7 @@
     #autresResultats .top .results h4{margin-bottom: 5px; margin-top: 5px; text-transform: none; }
     #autresResultats .top .results h4 a{color: #333333; font-size: 14px; font-weight: bold; }
     #autresResultats .top .results h4 a small{color: #333333;}
-    #autresResultats .top .results p{color: #333333; font-size: 12px; font-weight: normal; height: 85px; overflow-y:auto;margin-bottom:0;} 
+    #autresResultats .top .results p{color: #333333; font-size: 12px; font-weight: normal; height: 85px; overflow-y:auto;margin-bottom:0;}
 
     /* Ressources externes et forum*/
     #autresResultats #ressources{border:1px solid #DE0D4D;}
@@ -277,7 +278,7 @@
     #autresResultats #forum h3{background: url('../img/forum.png') no-repeat left center; padding-left: 45px}
     #autresResultats .bottom .results h4{margin-bottom: 5px; margin-top: 5px; text-transform: none; }
     #autresResultats .bottom .results h4 a{color: #ffffff; font-size: 14px; font-weight: bold; }
-    #autresResultats .bottom .results p{color: #ffffff; font-size: 12px; font-weight: normal; height: 85px; overflow-y:auto;} 
+    #autresResultats .bottom .results p{color: #ffffff; font-size: 12px; font-weight: normal; height: 85px; overflow-y:auto;}
 
 /**
  * MEDIA QUERIES
@@ -292,7 +293,7 @@
     #autresResultats h2{background-image:none;}
     #articles{margin-top: 10px;}
     #ambassadeurs.open, #sommaire.open, #mesrequetes.open{width: 100%; max-width: 100%}
-    
+
     #points-durs{margin-bottom: 20px}
     #ressources{margin-bottom: 20px}
     #autresResultats .carousel-inner{ width: 92%;}
@@ -312,4 +313,9 @@
     #autresResultats h2.closed .h2-arrow{background-position: right -5px; }
     #autresResultats h2 .h2-arrow{background-image: url('../img/panel.png');background-repeat: no-repeat;cursor: pointer; width: 30px;height: 25px; float: right;}
 
+}
+
+
+#publication .recherche-referencement h3 {
+    font-weight: normal;
 }
