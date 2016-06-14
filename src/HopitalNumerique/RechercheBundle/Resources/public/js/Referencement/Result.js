@@ -76,10 +76,10 @@ Hn_RechercheBundle_Referencement.displayResults = function()
                 }
             });
 
-            if (totalCount > 0) {
-                $('#no-result-bloc').slideUp('fast');
-            } else {
+            if (totalCount == 0 && (Hn_RechercheBundle_Referencement_Filter_Exalead.hasSearch() || chosenGroupedReferenceIds.length > 0)) {
                 $('#no-result-bloc').slideDown('fast');
+            } else {
+                $('#no-result-bloc').slideUp('fast');
             }
 
             if (totalCount > 0) {
