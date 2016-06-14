@@ -12,9 +12,6 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 /**
  * Update ambassadeur references
- *
- * Class ReminderTicketAvailableCommand
- * @package AppBundle\Command
  */
 class UpdateAmbassadeurReferencesCommand extends ContainerAwareCommand
 {

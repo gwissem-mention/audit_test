@@ -1103,7 +1103,9 @@ class Reference
 
     public function addDomainesDisplay(Domaine $domaine)
     {
-        $this->domainesDisplay->add($domaine);
+        if (!$this->domainesDisplay->contains($domaine)) {
+            $this->domainesDisplay->add($domaine);
+        }
     }
 
     public function removeDomainesDisplay(Domaine $domaine)
