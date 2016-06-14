@@ -351,4 +351,30 @@ class Reader
 
         return $entitiesPropertiesKeyedByGroup;
     }
+
+    public function getRelatedObjectsByType($entity, $type)
+    {
+        $entityType = $this->entity->getEntityType($entity);
+        $entityId = $this->entity->getEntityId($entity);
+        $referenceIds = $this->entityHasReferenceManager
+            ->getReferenceIdsByEntityTypeAndEntityId($entityType, $entityId);
+
+        $related = [];
+        $relatedsAttributes = $this->getEntitiesPropertiesByReferenceIds([$referenceIds], [$type]);
+        foreach ($relatedsAttributes as $relatedAttributes) {
+            $current = $this->entity->getEntityByTypeAndId(
+                $relatedAttributes['entityType'],
+                $relatedAttributes['entityId']
+            );
+            $related[] = [
+                'title' => $this->entity->getTitleByEntity($current),
+                'subtitle' => $this->entity->getSubtitleByEntity($current),
+                'category' => $this->entity->getCategoryByEntity($current),
+                'description' => $this->entity->getDescriptionByEntity($current),
+                'url' => $this->entity->getFrontUrlByEntity($current),
+            ];
+        }
+
+        return $related;
+    }
 }

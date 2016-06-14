@@ -10,10 +10,20 @@
                 {% set productionLiee = productionLiee|merge({'description': null}) %}
                 {% include 'HopitalNumeriqueRechercheBundle:Referencement:view_entity.html.twig' with productionLiee %}
             {%- endfor -%}
+
             {%- for parcoursGuide in parcoursGuides -%}
                 {# on n'affiche pas la description ici #}
                 {% set parcoursGuide = parcoursGuide|merge({'description': null}) %}
                 {% include 'HopitalNumeriqueRechercheBundle:Referencement:view_entity.html.twig' with parcoursGuide %}
+            {%- endfor -%}
+
+            {%- for topic in topicRelated -%}
+                {% include 'HopitalNumeriqueRechercheBundle:Referencement:view_entity.html.twig' with topic %}
+            {%- endfor -%}
+
+
+            {%- for user in userRelated -%}
+                {% include 'HopitalNumeriqueRechercheBundle:Referencement:view_entity.html.twig' with user %}
             {%- endfor -%}
         </div>
     </div>

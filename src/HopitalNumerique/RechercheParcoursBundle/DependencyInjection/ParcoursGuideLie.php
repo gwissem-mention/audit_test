@@ -73,8 +73,8 @@ class ParcoursGuideLie
             $parcoursGuideIds[] = $parcoursGuideProperties['entityId'];
         }
         $parcoursGuides = $this->rechercheParcoursManager->findBy(['id' => $parcoursGuideIds]);
-        
-        
+
+
         $formattedParcoursGuides = [];
 
         foreach ($parcoursGuides as $parcoursGuide) {

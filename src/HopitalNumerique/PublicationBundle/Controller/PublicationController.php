@@ -80,6 +80,8 @@ class PublicationController extends Controller
             $referencesInDomaine[$domaine->getId()] = $referenceString;
         }
 
+        $reader = $this->get('hopitalnumerique_recherche.doctrine.referencement.reader');
+
         //render
         return $this->render('HopitalNumeriquePublicationBundle:Publication:objet.html.twig', array(
             'objet'        => $objet,
@@ -90,6 +92,8 @@ class PublicationController extends Controller
             'ambassadeurs' => $this->getAmbassadeursConcernes($objet->getId()),
             'productionsLiees' => $this->get('hopitalnumerique_objet.dependency_injection.production_liee')->getFormattedProductionsLiees($objet),
             'parcoursGuides' => $this->get('hopitalnumerique_rechercheparcours.dependency_injection.parcours_guide_lie')->getFormattedParcoursGuidesLies($objet),
+            'topicRelated' => $reader->getRelatedObjectsByType($objet, Entity::ENTITY_TYPE_FORUM_TOPIC),
+            'userRelated' => $reader->getRelatedObjectsByType($objet, Entity::ENTITY_TYPE_AMBASSADEUR),
             'is_pdf' => $isPdf,
             'referencesStringByDomaine' => $referencesInDomaine
         ));
@@ -258,6 +262,8 @@ class PublicationController extends Controller
 
         $ambassadeurs = $this->getAmbassadeursConcernes( $objet->getId() );
 
+        $reader = $this->get('hopitalnumerique_recherche.doctrine.referencement.reader');
+
         //render
         return $this->render('HopitalNumeriquePublicationBundle:Publication:objet.html.twig', array(
             'objet'            => $objet,
@@ -274,7 +280,9 @@ class PublicationController extends Controller
             'suivant'          => $suivant,
             'suivantOrder'     => $suivantOrder,
             'productionsLiees' => $this->get('hopitalnumerique_objet.dependency_injection.production_liee')->getFormattedProductionsLiees($contenu),
-            'parcoursGuides' => $this->container->get('hopitalnumerique_rechercheparcours.dependency_injection.parcours_guide_lie')->getFormattedParcoursGuidesLies($objet),
+            'parcoursGuides'   => $this->container->get('hopitalnumerique_rechercheparcours.dependency_injection.parcours_guide_lie')->getFormattedParcoursGuidesLies($objet),
+            'topicRelated'     => $reader->getRelatedObjectsByType($objet, Entity::ENTITY_TYPE_FORUM_TOPIC),
+            'userRelated'      => $reader->getRelatedObjectsByType($objet, Entity::ENTITY_TYPE_AMBASSADEUR),
             'is_pdf' => ($request->query->has('pdf') && '1' == $request->query->get('pdf')),
             'referencesStringByDomaine' => $referencesInDomaine
         ));
