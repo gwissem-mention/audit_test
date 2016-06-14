@@ -43,7 +43,12 @@
                 </div>
             {# Sinon demande à l'utilisateur de se connecter #}
             {% else %}
-                {% include 'HopitalNumeriqueAccountBundle:include:login.html.twig' with { 'title':'Pour ajouter un commentaire vous devez vous identifier' } %}
+                <div class="col-md-6">
+                    {% include 'HopitalNumeriqueAccountBundle:include:login.html.twig' with { 'size':'small', 'title':'Pour ajouter un commentaire vous devez vous identifier', 'displayInscription':false } %}
+                </div>
+                <div class="col-md-6">
+                    {{ render(controller('HopitalNumeriqueAccountBundle:Inscription:popin', { 'urlRedirection':app.request.uri })) }}
+                </div>
             {% endif %}
         </div>
     </div>

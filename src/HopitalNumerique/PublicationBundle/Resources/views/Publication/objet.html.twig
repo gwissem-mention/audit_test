@@ -50,9 +50,22 @@
                 </div>
             </div>
         </div>
+
+        {% if is_pdf %}
+            <div class="col-md-12">
+                <div class="page-url">
+                    {{ absolute_url(path('hopital_numerique_publication_publication_objet', {
+                        "id": objet.id,
+                        "alias": objet.alias
+                    })) }}
+                </div>
+            </div>
+        {% endif %}
+
         <div class="col-md-12">
             <h4 class="gris" >{{types}}{% if objet.source is not null and objet.source != '' %} <span class="text-muted">({{objet.source}})</span>{% endif %}</h4>
         </div>
+
         {# Cas Contenu #}
         {% if contenu is defined %}
             <div class="col-md-12">
