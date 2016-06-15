@@ -9,7 +9,7 @@ use Nodevo\ToolsBundle\Manager\Manager as BaseManager;
  */
 class StatClicManager extends BaseManager
 {
-    protected $_class = 'HopitalNumerique\RechercheBundle\Entity\StatClic';
+    protected $class = 'HopitalNumerique\RechercheBundle\Entity\StatClic';
 
     /**
      * Retourne la liste des clicks par réponse

@@ -1,0 +1,24 @@
+services:
+    hopitalnumerique_reference.manager.champ_lexical_nom:
+        class: 'HopitalNumerique\ReferenceBundle\Manager\ChampLexicalNomManager'
+        arguments: ['@doctrine.orm.entity_manager']
+
+    hopitalnumerique_reference.manager.reference:
+        class: 'HopitalNumerique\ReferenceBundle\Manager\ReferenceManager'
+        arguments: ["@doctrine.orm.entity_manager", "@session", "@hopitalnumerique_user.manager.user"]
+
+    hopitalnumerique_reference.manager.synonyme:
+        class: 'HopitalNumerique\ReferenceBundle\Manager\SynonymeManager'
+        arguments: ['@doctrine.orm.entity_manager']
+
+    hopitalnumerique_reference.manager.entity_has_glossaire:
+        class: 'HopitalNumerique\ReferenceBundle\Manager\EntityHasGlossaireManager'
+        arguments: ['@doctrine.orm.entity_manager']
+
+    hopitalnumerique_reference.manager.entity_has_reference:
+        class: 'HopitalNumerique\ReferenceBundle\Manager\EntityHasReferenceManager'
+        arguments: ['@doctrine.orm.entity_manager', '@nodevo_role.manager.role']
+
+    hopitalnumerique_reference.manager.entity_has_note:
+        class: 'HopitalNumerique\ReferenceBundle\Manager\EntityHasNoteManager'
+        arguments: ["@doctrine.orm.entity_manager"]

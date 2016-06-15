@@ -16,7 +16,7 @@ use HopitalNumerique\DomaineBundle\Entity\Domaine;
  */
 class QuestionnaireManager extends BaseManager
 {
-    protected $_class = 'HopitalNumerique\QuestionnaireBundle\Entity\Questionnaire';
+    protected $class = 'HopitalNumerique\QuestionnaireBundle\Entity\Questionnaire';
     
     /**
      * @var \HopitalNumerique\QuestionnaireBundle\Manager\OccurrenceManager OccurrenceManager

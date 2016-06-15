@@ -9,7 +9,7 @@ use Nodevo\ToolsBundle\Manager\Manager as BaseManager;
  */
 class SubscriptionManager extends BaseManager
 {
-    protected $_class = 'HopitalNumerique\ForumBundle\Entity\Subscription';
+    protected $class = 'HopitalNumerique\ForumBundle\Entity\Subscription';
 
     public function deleteSubscriptionByTopicsArray($topics)
     {   

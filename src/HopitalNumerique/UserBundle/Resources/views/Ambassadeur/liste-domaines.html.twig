@@ -12,7 +12,9 @@
                             <li>
                                 <div class="form-group">
                                     <strong>
-                                        {{domaine[0].domaine.parent.libelle}}
+                                        {% for domaineParent in domaine[0].domaine.parents %}
+                                            {{domaineParent.libelle}} &nbsp;
+                                        {% endfor %}
                                     </strong>
                                 </div>
                                 <ul>

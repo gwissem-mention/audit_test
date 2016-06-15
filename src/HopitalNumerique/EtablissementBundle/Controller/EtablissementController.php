@@ -123,7 +123,10 @@ class EtablissementController extends Controller
     public function departementsAction()
     {
         $id           = $this->get('request')->request->get('id');
-        $departements = $this->get('hopitalnumerique_reference.manager.reference')->findBy( array('parent' => $id) );
+        $departements = [];
+        if ('' != $id) {
+            $departements = $this->get('hopitalnumerique_reference.manager.reference')->findByParent($this->get('hopitalnumerique_reference.manager.reference')->findOneById($id));
+        }
 
         return $this->render('HopitalNumeriqueEtablissementBundle:Etablissement:departements.html.twig', array(
             'departements' => $departements

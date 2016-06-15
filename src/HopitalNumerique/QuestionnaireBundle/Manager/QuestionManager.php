@@ -10,7 +10,7 @@ use HopitalNumerique\QuestionnaireBundle\Entity\Questionnaire;
  */
 class QuestionManager extends BaseManager
 {
-    protected $_class = 'HopitalNumerique\QuestionnaireBundle\Entity\Question';
+    protected $class = 'HopitalNumerique\QuestionnaireBundle\Entity\Question';
     
     /**
      * Recupère toutes les questions du type passé en paramètre pour le questionnaire $idQuestionnaire

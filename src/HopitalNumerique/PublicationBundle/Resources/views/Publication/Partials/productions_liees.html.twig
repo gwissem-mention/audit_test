@@ -1,0 +1,37 @@
+{% if productionsLiees|length > 0 or parcoursGuides|length > 0 or topicRelated|length > 0 or userRelated|length > 0 -%}
+    <div class="recherche-referencement" id="productions_liees">
+        <h2>Productions associées</h2>
+        <div class="clearfix"></div>
+        <div class="mysep background-rose"></div>
+        <div class="results-bloc">
+            <div class="clearfix"></div>
+            {%- for productionLiee in productionsLiees -%}
+                {# on n'affiche pas la description ici #}
+                {% set productionLiee = productionLiee|merge({'description': null}) %}
+                {% include 'HopitalNumeriqueRechercheBundle:Referencement:view_entity.html.twig' with productionLiee %}
+            {%- endfor -%}
+
+            {%- for parcoursGuide in parcoursGuides -%}
+                {# on n'affiche pas la description ici #}
+                {% set parcoursGuide = parcoursGuide|merge({'description': null}) %}
+                {% include 'HopitalNumeriqueRechercheBundle:Referencement:view_entity.html.twig' with parcoursGuide %}
+            {%- endfor -%}
+
+            {%- for topic in topicRelated -%}
+                {% include 'HopitalNumeriqueRechercheBundle:Referencement:view_entity.html.twig' with topic %}
+            {%- endfor -%}
+
+
+            {%- for user in userRelated -%}
+                {% include 'HopitalNumeriqueRechercheBundle:Referencement:view_entity.html.twig' with user %}
+            {%- endfor -%}
+        </div>
+    </div>
+    <div class="clearfix"></div>
+
+    <script type="text/javascript">
+        $(document).ready(function() {
+            $("#productions_liees h2").click();
+        });
+    </script>
+{%- endif %}

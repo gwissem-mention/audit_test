@@ -4,7 +4,6 @@ namespace Nodevo\AclBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Response;
-use Doctrine\Common\Cache\ApcCache;
 
 class AclController extends Controller
 {
@@ -41,18 +40,6 @@ class AclController extends Controller
             
             $result = $this->get('nodevo_acl.manager.acl')->addNew( $ressource, $role, $type );
         }
-
-        //Reset apc cache
-        $cacheDriver = new ApcCache();
-
-        //search if Acl matching role and Ressource exist
-        if ($cacheDriver->contains("_acl_acls"))
-        {
-            $cacheDriver->delete("_acl_acls");
-        }
-
-        $acls = $this->get('nodevo_acl.manager.acl')->getAclByRessourceByRole();
-        $cacheDriver->save("_acl_acls", $acls, null);
 
         return new Response('{"success":true, "class":"'.($result ? 'btn-success' : 'btn-default').'"}', 200);
     }

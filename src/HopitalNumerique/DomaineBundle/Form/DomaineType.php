@@ -12,6 +12,8 @@ class DomaineType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
+        $domaine = $builder->getData();
+        
         $builder
             ->add('nom', 'text', array(
                 'max_length' => 255, 
@@ -65,6 +67,15 @@ class DomaineType extends AbstractType
             		'label'      => 'Lien du titre',
             ))
             ;
+        if (null !== $domaine && null !== $domaine->getId()) {
+            $builder
+                ->add('referenceRoot', 'entity', [
+                    'class' => 'HopitalNumeriqueReferenceBundle:Reference',
+                    'label' => 'Référence root',
+                    'required' => false
+                ])
+            ;
+        }
     }
 
     public function setDefaultOptions(OptionsResolverInterface $resolver)

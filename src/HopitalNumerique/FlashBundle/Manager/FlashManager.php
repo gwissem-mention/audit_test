@@ -9,7 +9,7 @@ use Nodevo\ToolsBundle\Manager\Manager as BaseManager;
  */
 class FlashManager extends BaseManager
 {
-    protected $_class = 'HopitalNumerique\FlashBundle\Entity\Flash';
+    protected $class = 'HopitalNumerique\FlashBundle\Entity\Flash';
 
     /**
      * Récupère les messages visibles par l'utilisateur

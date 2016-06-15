@@ -12,7 +12,7 @@ use Symfony\Component\HttpFoundation\Response;
  */
 class ResultatManager extends BaseManager
 {
-    protected $_class = 'HopitalNumerique\AutodiagBundle\Entity\Resultat';
+    protected $class = 'HopitalNumerique\AutodiagBundle\Entity\Resultat';
     
     /**
      * @var \HopitalNumerique\AutodiagBundle\Manager\OutilManager OutilManager

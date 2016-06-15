@@ -58,6 +58,16 @@ class RechercheParcoursDetails
      */
     protected $showChildren;
 
+
+    /**
+     * Constructeur.
+     */
+    public function __construct()
+    {
+        $this->showChildren = false;
+    }
+
+
     /**
      * Get id
      *

@@ -11,7 +11,7 @@ use HopitalNumerique\UserBundle\Manager\UserManager;
  */
 class FaqManager extends BaseManager
 {
-    protected $_class = 'Nodevo\FaqBundle\Entity\Faq';
+    protected $class = 'Nodevo\FaqBundle\Entity\Faq';
     protected $_userManager;
 
     /**

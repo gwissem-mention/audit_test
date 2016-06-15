@@ -18,7 +18,7 @@ use HopitalNumerique\ReferenceBundle\Manager\ReferenceManager;
  */
 class ContenuManager extends BaseManager
 {
-    protected $_class = 'HopitalNumerique\ObjetBundle\Entity\Contenu';
+    protected $class = 'HopitalNumerique\ObjetBundle\Entity\Contenu';
     protected $_userManager;
     protected $_referenceManager;
     private $_refPonderees;
@@ -69,83 +69,6 @@ class ContenuManager extends BaseManager
         
         //call recursive function to handle all datas
         return $this->getArboRecursive($datas, $parents, array(), '' );
-    }
-
-    /**
-     * Formatte les références sous forme d'un unique tableau
-     *
-     * @param Contenu $contenu    Contenu concerné
-     * @param array   $references Liste des références de type dictionnaire
-     *
-     * @return array
-     */
-    public function getReferences($contenu, $references)
-    {
-        $selectedReferences = $contenu->getReferences();
-        $disabledChilds     = array();
-
-        //applique les références 
-        foreach( $selectedReferences as $selected )
-        {
-            //on récupère l'élément que l'on va manipuler
-            $ref = $references[ $selected->getReference()->getId() ];
-
-            //on le met à jour 
-            $ref->selected = true;
-            $ref->primary  = $selected->getPrimary();
-
-            //si on est un enfant et que l'on est présent dans le tableau disabled childs, on devient disabled (car notre parent est sélectionné)
-            if( in_array($ref->id, $disabledChilds))
-            {
-                $ref->disabled = true;
-            }
-
-            //si y'a des enfants, on ajoute les ids dans les disabledChilds
-            if( !is_null($ref->childs) ){
-                $childs         = json_decode($ref->childs);
-                $disabledChilds = array_unique( array_merge($disabledChilds, $childs) );
-            }
-
-            //on remet l'élément à sa place
-            $references[ $selected->getReference()->getId() ] = $ref;
-        }
-
-        $references = $this->filtreReferencesByDomaines($contenu->getObjet(), $references);
-        
-        return $references;
-    }
-
-    /**
-     * Formatte les références sous forme d'un unique tableau
-     *
-     * @param Contenu $contenu    Contenu concerné
-     * @param array   $references Liste des références de type dictionnaire
-     *
-     * @return array
-     */
-    public function getReferencesOwn($contenu)
-    {
-        $return = array();
-        $selectedReferences = $contenu->getReferences();
-
-        //applique les références 
-        foreach( $selectedReferences as $selected )
-        {
-            $reference = $selected->getReference();
-
-            //on remet l'élément à sa place
-            $return[ $selected->getReference()->getId() ]['nom']     = $reference->getCode() . " - " . $reference->getLibelle();
-            $return[ $selected->getReference()->getId() ]['primary'] = $selected->getPrimary();
-            
-            if( $reference->getParent() )
-            {
-                $return[ $reference->getParent()->getId() ]['childs'][] = $reference->getId();
-            }
-        }
-        
-        $this->formatReferencesOwn( $return );
-        
-        return $return;
     }
 
     /**
@@ -313,93 +236,6 @@ class ContenuManager extends BaseManager
 
 
     /**
-     * Filtre les reférences en fonction de l'objet passés en paramètre
-     *
-     * @param [type] $objet      [description]
-     * @param [type] $references [description]
-     *
-     * @return [type]
-     */
-    private function filtreReferencesByDomaines($objet, $references)
-    {
-        $referencesIds    = array();
-        $domainesObjetIds = array();
-        $userConnectedDomaineIds = $this->_userManager->getUserConnected()->getDomainesId();
-
-        //Récupération des id de domaine de l'objet
-        foreach ($objet->getDomaines() as $domaine) 
-        {
-            if(in_array($domaine->getId(), $userConnectedDomaineIds))
-            {
-                $domainesObjetIds[] = $domaine->getId();
-            }
-        }
-
-        //Vérifie qu'il y a bien un domaine pour la publication courante
-        if(count($domainesObjetIds) !== 0)
-        {   
-            //Récupération des id des références "stdClass" pour récupérer les entités correspondantes et donc les domaines
-            foreach ($references as $reference) 
-            {
-                $referencesIds[] = $reference->id;
-            }
-
-            $referencesByIds = $this->_referenceManager->findBy(array('id'=> $referencesIds));
-
-            //Parcourt la liste des entités de référence
-            foreach ($referencesByIds as $reference) 
-            {
-                if(array_key_exists($reference->getId(), $references))
-                {
-                    $inArray = false;
-
-                    foreach ($reference->getDomaines() as $domaine) 
-                    {
-                        if(in_array($domaine->getId(), $domainesObjetIds))
-                        {
-                            $inArray = true;
-                            break;
-                        }   
-                    }
-
-                    if(!$inArray)
-                    {
-                        unset($references[$reference->getId()]);
-                    }
-                }
-            }
-        }
-        //Sinon vide les références, car une publication sans domaine ne peut pas être référencées
-        else
-        {
-            $references = array();
-        }
-
-        return $references;
-    }
-
-    /**
-     * Retourne la note des références
-     *
-     * @param array $references   Tableau des références
-     * @param array $ponderations Tableau des pondérations
-     *
-     * @return integer
-     */
-    private function getNoteReferencement( $references )
-    {
-        $note = 0;
-        foreach($references as $reference){
-            $id = $reference->getReference()->getId();
-
-            if( isset($this->_refPonderees[ $id ]) )
-                $note += $this->_refPonderees[ $id ]['poids'];
-        }
-        
-        return $note;
-    }
-
-    /**
      * Retourne le prefix du contenu
      *
      * @param Contenu $contenu Contenu
@@ -432,7 +268,7 @@ class ContenuManager extends BaseManager
      * @return array
      */
     private function getArboRecursive( ArrayCollection $items, $elements, $tab, $numeroChapitre )
-    {        
+    {
         foreach($elements as $element)
         {
             //creation du mero de chapitre
@@ -440,11 +276,11 @@ class ContenuManager extends BaseManager
 
             //construction de l'element current
             $item             = new \stdClass;
+            $item->entity = $element;
             $item->titre      = $element->getTitre();
             $item->alias      = $element->getAlias();
             $item->id         = $element->getId();
             $item->nbVue      = $element->getNbVue();
-            $item->note       = $this->getNoteReferencement( $element->getReferences() );
             $item->order      = $chapitre;
             $item->hasContent = $element->getContenu() == ''   ? false : true;
             $item->objet      = $element->getParent()  == null ? $element->getObjet()->getId() : NULL;
@@ -461,21 +297,7 @@ class ContenuManager extends BaseManager
         //return big table
         return $tab;
     }
-    
-    /**
-     * [formatReferencesOwn description]
-     *
-     * @param  [type] $retour [description]
-     *
-     * @return [type]
-     */
-    private function formatReferencesOwn ( &$retour )
-    {
-        foreach( $retour as $key => $one ) {
-            $retour[ $key ]['childs'] = $this->getChilds($retour, $one);
-        }
-    }
-    
+
     /**
      * [getChilds description]
      *

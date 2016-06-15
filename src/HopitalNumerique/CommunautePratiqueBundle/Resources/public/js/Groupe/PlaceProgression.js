@@ -1,5 +1,5 @@
 /**
- * Classe gérant les barres de progression du nombre de places dans les groupes de la communauté de pratiques.
+ * Classe gérant les barres de progression du nombre de places dans les groupes de la communauté de pratique.
  */
 var CommunautePratique_Groupe_PlaceProgression = function() {};
 

@@ -491,7 +491,6 @@
                     {% endif %}
                     {#  Publications #}
                     {% if not affichageProduction %}
-                        {% set affichageProduction = chapitre.id|getPublicationsForChapitre(pdf) %}
                         {% if chapitre.lien is not null and chapitre.lien is not empty %}
                             {% set affichageProduction = true %}
                         {% endif %}
@@ -506,7 +505,6 @@
                         {% endif %}
                         {# Publications #}
                         {% if not affichageProduction %}
-                            {% set affichageProduction = question.id|getPublicationsForQuestion(pdf) %}
                             {% if question.lien is not null and question.lien is not empty %}
                                 {% set affichageProduction = true %}
                             {% endif %}
@@ -524,7 +522,6 @@
                             {% endif %}
                             {#  Publications #}
                             {% if not affichageProduction %}
-                                {% set affichageProduction = child.id|getPublicationsForChapitre(pdf) %}
                                 {% if child.lien is not null and child.lien is not empty %}
                                     {% set affichageProduction = true %}
                                 {% endif %}
@@ -538,7 +535,6 @@
                                 {% endif %}
                                 {# Publications #}
                                 {% if not affichageProduction %}
-                                    {% set affichageProduction = questionChild.id|getPublicationsForQuestion(pdf) %}
                                     {% if questionChild.lien is not null and questionChild.lien is not empty %}
                                         {% set affichageProduction = true %}
                                     {% endif %}
@@ -599,10 +595,6 @@
                                                 {# Affichage du lien défini en back office #}
                                                 <ul><li><a href="{{chapitre.lien}}" target="_blank">{{chapitre.descriptionLien}}</a></li></ul>
                                             {% endif %}
-                                            {% set publications = chapitre.id|getPublicationsForChapitre(pdf) %}
-                                            {% if publications %}
-                                                {{publications|raw}}
-                                            {% endif %}
                                         {% endif %}
                                     </td>
                                 {% endif %}
@@ -659,12 +651,6 @@
                                                 {# Affichage du lien défini en back office #}
                                                 <ul><li><a href="{{question.lien}}" target="_blank">{{question.descriptionLien}}</a></li></ul>
                                             {% endif %}
-                                            {# Affichage des liens de publications #}
-                                            {% set publications = question.id|getPublicationsForQuestion(pdf) %}
-                                            {% if publications %}
-                                                {{publications|raw}}
-                                                {% set doTheChapterHavePublications = true %}
-                                            {% endif %}
                                         </td>
                                     {% endif %}
                                 </tr>
@@ -696,10 +682,6 @@
                                                     {% if child.lien is not null and child.lien is not empty %}
                                                         {# Affichage du lien défini en back office #}
                                                         <ul><li><a href="{{child.lien}}" target="_blank">{{child.descriptionLien}}</a></li></ul>
-                                                    {% endif %}
-                                                    {% set publications = child.id|getPublicationsForChapitre(pdf) %}
-                                                    {% if publications %}
-                                                        {{publications|raw}}
                                                     {% endif %}
                                                 {% endif %}
                                             </td>
@@ -755,12 +737,6 @@
                                                     {% if questionChild.lien is not null and questionChild.lien is not empty %}
                                                         {# Affichage du lien défini en back office #}
                                                         <ul><li><a href="{{questionChild.lien}}" target="_blank">{{questionChild.descriptionLien}}</a></li></ul>
-                                                    {% endif %}
-                                                    {# Affichage des liens de publications #}
-                                                    {% set publications = questionChild.id|getPublicationsForQuestion(pdf) %}
-                                                    {% if publications %}
-                                                        {{publications|raw}}
-                                                        {% set doTheChapterHavePublications = true %}
                                                     {% endif %}
                                                 </td>
                                             {% endif %}

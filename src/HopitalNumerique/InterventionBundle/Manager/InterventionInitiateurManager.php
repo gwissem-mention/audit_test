@@ -14,7 +14,7 @@ use Nodevo\ToolsBundle\Manager\Manager as BaseManager;
  */
 class InterventionInitiateurManager extends BaseManager
 {
-    protected $_class = 'HopitalNumerique\InterventionBundle\Entity\InterventionInitiateur';
+    protected $class = 'HopitalNumerique\InterventionBundle\Entity\InterventionInitiateur';
 
     /**
      * Returne le CMSI.

@@ -16,7 +16,7 @@ use HopitalNumerique\ReferenceBundle\Manager\ReferenceManager;
  */
 class TopicManager extends BaseManager
 {
-    protected $_class = '\HopitalNumerique\ForumBundle\Entity\Topic';
+    protected $class = '\HopitalNumerique\ForumBundle\Entity\Topic';
     protected $_userManager;
     protected $_domaineManager;
     protected $_referenceManager;
@@ -36,81 +36,6 @@ class TopicManager extends BaseManager
         $this->_referenceManager = $referenceManager;
     }
 
-    /**
-     * Formatte les références sous forme d'un unique tableau
-     *
-     * @param topic $topic      topic concerné
-     * @param array $references Liste des références de type dictionnaire
-     *
-     * @return array
-     */
-    public function getReferences($topic, $references)
-    {
-        $selectedReferences = $topic->getReferences();
-
-        //applique les références 
-        foreach( $selectedReferences as $selected )
-        {
-            //on récupère l'élément que l'on va manipuler
-            $ref = $references[ $selected->getReference()->getId() ];
-
-            //on le met à jour 
-            $ref->selected = true;
-            $ref->primary  = $selected->getPrimary();
-
-            //on remet l'élément à sa place
-            $references[ $selected->getReference()->getId() ] = $ref;
-        }
-
-        $references = $this->filtreReferencesByDomaines($topic->getBoard()->getCategory()->getForum(), $references);
-        
-        return $references;
-    }
-
-    /**
-     * Formatte les références sous forme d'un unique tableau
-     *
-     * @param topic $topic      topic concerné
-     * @param array $references Liste des références de type dictionnaire
-     *
-     * @return array
-     */
-    public function getReferencesOwn($topic)
-    {
-        $return = array();
-        $selectedReferences = $topic->getReferences();
-
-        //applique les références 
-        foreach( $selectedReferences as $selected ){
-            $reference = $selected->getReference();
-
-            //on remet l'élément à sa place
-            $return[ $reference->getId() ]['nom']     = $reference->getCode() . " - " . $reference->getLibelle();
-            $return[ $reference->getId() ]['primary'] = $selected->getPrimary();
-            
-            if( $reference->getParent() )
-                $return[ $reference->getParent()->getId() ]['childs'][] = $reference->getId();
-        }
-        
-        $this->formatReferencesOwn( $return );
-        
-        return $return;
-    }
-
-    /**
-     * [formatReferencesOwn description]
-     *
-     * @param  [type] $retour [description]
-     *
-     * @return [type]
-     */
-    private function formatReferencesOwn( &$retour )
-    {
-        foreach( $retour as $key => $one ){
-            $retour[ $key ]['childs'] = $this->getChilds($retour, $one);
-        }
-    }
-    
     /**
      * [getChilds description]
      *
@@ -184,69 +109,13 @@ class TopicManager extends BaseManager
     }
 
     /**
-     * Filtre les reférences en fonction de l'outil passés en paramètre
+     * Retourne le nombre de fils d'un forum.
      *
-     * @param [type] $outil      [description]
-     * @param [type] $references [description]
-     *
-     * @return [type]
+     * @param integer $forumId ID du forum
+     * @return integer Nombre
      */
-    private function filtreReferencesByDomaines($forum, $references)
+    public function getCountForForum($forumId)
     {
-        $referencesIds    = array();
-        $domainesForumIds = array();
-        $userConnectedDomaineIds = $this->_userManager->getUserConnected()->getDomainesId();
-        $domaines = $this->_domaineManager->getDomaineForForumId($forum->getId());
-
-        //Récupération des id de domaine de l'outil
-        foreach ($domaines as $domaine) 
-        {
-            if(in_array($domaine->getId(), $userConnectedDomaineIds))
-            {
-                $domainesForumIds[] = $domaine->getId();
-            }
-        }
-
-        //Vérifie qu'il y a bien un domaine pour la publication courante
-        if(count($domainesForumIds) !== 0)
-        {   
-            //Récupération des id des références "stdClass" pour récupérer les entités correspondantes et donc les domaines
-            foreach ($references as $reference) 
-            {
-                $referencesIds[] = $reference->id;
-            }
-
-            $referencesByIds = $this->_referenceManager->findBy(array('id'=> $referencesIds));
-
-            //Parcourt la liste des entités de référence
-            foreach ($referencesByIds as $reference) 
-            {
-                if(array_key_exists($reference->getId(), $references))
-                {
-                    $inArray = false;
-
-                    foreach ($reference->getDomaines() as $domaine) 
-                    {
-                        if(in_array($domaine->getId(), $domainesForumIds))
-                        {
-                            $inArray = true;
-                            break;
-                        }   
-                    }
-
-                    if(!$inArray)
-                    {
-                        unset($references[$reference->getId()]);
-                    }
-                }
-            }
-        }
-        //Sinon vide les références, car une publication sans domaine ne peut pas être référencées
-        else
-        {
-            $references = array();
-        }
-
-        return $references;
+        return $this->getRepository()->getCountForForum($forumId);
     }
 }

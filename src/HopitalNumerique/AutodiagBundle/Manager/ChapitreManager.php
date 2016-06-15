@@ -15,7 +15,7 @@ use Doctrine\ORM\EntityManager;
  */
 class ChapitreManager extends BaseManager
 {
-    protected $_class = 'HopitalNumerique\AutodiagBundle\Entity\Chapitre';
+    protected $class = 'HopitalNumerique\AutodiagBundle\Entity\Chapitre';
     private $_refPonderees;
     protected $_userManager;
     protected $_referenceManager;

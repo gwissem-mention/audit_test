@@ -29,54 +29,50 @@ class ReferenceController extends Controller
     public function sitemapAction()
     {
         $references = $this->get('hopitalnumerique_reference.manager.reference')->getArboFormat();
-        $domainesOrderedByReference = $this->get('hopitalnumerique_reference.manager.reference')->getDomainesOrderedByReference();
+        $domainesOrderedByReference = $this->get('hopitalnumerique_reference.manager.reference')
+            ->getDomainesOrderedByReference();
+
+        $referenceTree = $this->container->get('hopitalnumerique_reference.dependency_injection.reference.tree');
 
         return $this->render('HopitalNumeriqueReferenceBundle:Reference:sitemap.html.twig', array(
-            'references'                 => $references,
+            'references' => $references,
+            'orderedReferences' => $referenceTree->getOrderedReferences(null, null, $this->getUser()->getDomaines()),
             'domainesOrderedByReference' => $domainesOrderedByReference
-        )); 
+        ));
     }
 
     /**
      * Affiche le formulaire d'ajout de Reference.
      */
-    public function addAction( $id = null, $mod = null )
+    public function addAction()
     {
         $reference = $this->get('hopitalnumerique_reference.manager.reference')->createEmpty();
-
-        if( !is_null($id)){
-            $referenceBase = $this->get('hopitalnumerique_reference.manager.reference')->findOneBy( array( 'id' => $id) );
-
-            if (!is_null($mod)){
-                $reference->setCode( $referenceBase->getCode() );
-                if( $referenceBase->getParent() ){
-                    $reference->setParent( $referenceBase->getParent() );
-                }
-            } else {
-                if ( $referenceBase->getLock() ){
-                    $this->get('session')->getFlashBag()->add('warning', 'Attention, l\'élément que vous avez choisi est verrouillé, il ne peut donc pas être sélectionné comme Item parent.' );
-                } else {
-                    $reference->setParent( $referenceBase );
-                }
-            }
-        }
-
-        return $this->renderForm('hopitalnumerique_reference_reference', $reference, 'HopitalNumeriqueReferenceBundle:Reference:edit.html.twig' );
+        return $this->renderForm($reference);
     }
 
     /**
      * Affiche le formulaire d'édition de Reference.
+     * @param $id
+     * @return Form|redirect|\Symfony\Component\HttpFoundation\RedirectResponse
      */
-    public function editAction( $id )
+    public function editAction($id)
     {
         //Récupération de l'entité passée en paramètre
-        $reference = $this->get('hopitalnumerique_reference.manager.reference')->findOneBy( array('id' => $id) );
+        $reference = $this->get('hopitalnumerique_reference.manager.reference')->findOneById($id);
 
-        return $this->renderForm('hopitalnumerique_reference_reference', $reference, 'HopitalNumeriqueReferenceBundle:Reference:edit.html.twig' );
+        if (null === $reference) {
+            return $this->redirectToRoute('hopitalnumerique_reference_reference');
+        }
+
+        return $this->renderForm($reference);
     }
 
     /**
      * Sauvegarde les paramètres des activités d'expert
+     * @param Request $request
+     * @param Reference $reference
+     * @return Response
+     * @throws \Exception
      */
     public function saveReferenceAjaxAction(Request $request, Reference $reference)
     {
@@ -84,14 +80,16 @@ class ReferenceController extends Controller
         $reference->setLibelle($montant);
         $this->get('hopitalnumerique_reference.manager.reference')->save($reference);
 
-        $contratModele = $this->container->get('hopitalnumerique_reference.manager.reference')->findOneByCode('ACTIVITE_EXPERT_CONTRAT_MODELE');
+        $referenceManager = $this->container->get('hopitalnumerique_reference.manager.reference');
+
+        $contratModele = $referenceManager->findOneByCode('ACTIVITE_EXPERT_CONTRAT_MODELE');
         if (null === $contratModele) {
             throw new \Exception('Référence "ACTIVITE_EXPERT_CONTRAT_MODELE" introuvable');
         }
         $contratModele->setLibelle($request->request->get('contratModele'));
         $this->get('hopitalnumerique_reference.manager.reference')->save($contratModele);
 
-        $pvRecettesModele = $this->container->get('hopitalnumerique_reference.manager.reference')->findOneByCode('ACTIVITE_EXPERT_PV_RECETTES_MODELE');
+        $pvRecettesModele = $referenceManager->findOneByCode('ACTIVITE_EXPERT_PV_RECETTES_MODELE');
         if (null === $pvRecettesModele) {
             throw new \Exception('Référence "ACTIVITE_EXPERT_PV_RECETTES_MODELE" introuvable');
         }
@@ -105,11 +103,17 @@ class ReferenceController extends Controller
 
     /**
      * Affiche le Reference en fonction de son ID passé en paramètre.
+     * @param $id
+     * @return Response
      */
-    public function showAction( $id )
+    public function showAction($id)
     {
         //Récupération de l'entité en fonction du paramètre
-        $reference = $this->get('hopitalnumerique_reference.manager.reference')->findOneBy( array( 'id' => $id) );
+        $reference = $this->get('hopitalnumerique_reference.manager.reference')->findOneBy(
+            array(
+                'id' => $id
+            )
+        );
 
         return $this->render('HopitalNumeriqueReferenceBundle:Reference:show.html.twig', array(
             'reference' => $reference,
@@ -121,24 +125,30 @@ class ReferenceController extends Controller
      *
      * METHOD = POST|DELETE
      */
-    public function deleteAction( $id )
+    public function deleteAction($id)
     {
-        $reference = $this->get('hopitalnumerique_reference.manager.reference')->findOneBy( array( 'id' => $id) );
-        
-        if( $reference->getLock() )
-            $this->get('session')->getFlashBag()->add('danger', 'Suppression impossible, la référence est verrouillée.');
-        else{
+        $reference = $this->get('hopitalnumerique_reference.manager.reference')->findOneBy(
+            array(
+                'id' => $id
+            )
+        );
+
+        if ($reference->getLock()) {
+            $this->get('session')->getFlashBag()->add(
+                'danger',
+                'Suppression impossible, la référence est verrouillée.'
+            );
+        } else {
             //Tentative de suppression si la référence est liée nulle part
-            try
-            {
+            try {
                 //Suppression de l'entité
-                $this->get('hopitalnumerique_reference.manager.reference')->delete( $reference );
-                $this->get('hopitalnumerique_reference.manager.reference')->refreshOrder();
-                $this->get('session')->getFlashBag()->add('info', 'Suppression effectuée avec succès.' );
-            }
-            catch ( \Exception $e) 
-            {
-                $this->get('session')->getFlashBag()->add('danger', 'Suppression impossible, la référence est actuellement liée et ne peut être supprimée.');
+                $this->get('hopitalnumerique_reference.manager.reference')->delete($reference);
+                $this->get('session')->getFlashBag()->add('info', 'Suppression effectuée avec succès.');
+            } catch (\Exception $e) {
+                $this->get('session')->getFlashBag()->add(
+                    'danger',
+                    'Suppression impossible, la référence est actuellement liée et ne peut être supprimée.'
+                );
             }
         }
 
@@ -153,78 +163,90 @@ class ReferenceController extends Controller
      *
      * @return Redirect
      */
-    public function deleteMassAction( $primaryKeys, $allPrimaryKeys )
+    public function deleteMassAction($primaryKeys, $allPrimaryKeys)
     {
         //get all selected Users
-        if($allPrimaryKeys == 1){
+        if ($allPrimaryKeys == 1) {
             $rawDatas = $this->get('hopitalnumerique_reference.manager.reference')->getRawData();
-            foreach($rawDatas as $data)
-            {
+            foreach ($rawDatas as $data) {
                 $primaryKeys[] = $data['id'];
             }
-        }        
+        }
 
-        $references = $this->get('hopitalnumerique_reference.manager.reference')->findBy( array('id' => $primaryKeys) );
+        $references = $this->get('hopitalnumerique_reference.manager.reference')->findBy(
+            array(
+                'id' => $primaryKeys
+            )
+        );
 
-        $this->get('hopitalnumerique_reference.manager.reference')->delete( $references );
+        $this->get('hopitalnumerique_reference.manager.reference')->delete($references);
 
-        return $this->redirect( $this->generateUrl('hopitalnumerique_reference_reference') );
+        return $this->redirect(
+            $this->generateUrl('hopitalnumerique_reference_reference')
+        );
     }
 
     /**
      * Export CSV de la liste des références sélectionnés
      *
-     * @param array $primaryKeys    ID des lignes sélectionnées
+     * @param array $primaryKeys ID des lignes sélectionnées
      * @param array $allPrimaryKeys allPrimaryKeys ???
+     * @return Response
      */
-    public function exportCsvAction( $primaryKeys, $allPrimaryKeys )
+    public function exportCsvAction($primaryKeys, $allPrimaryKeys)
     {
         //get all selected Users
-        if($allPrimaryKeys == 1){
+        if ($allPrimaryKeys == 1) {
             $rawDatas = $this->get('hopitalnumerique_reference.grid.reference')->getRawData();
-            foreach($rawDatas as $data)
+            foreach ($rawDatas as $data) {
                 $primaryKeys[] = $data['id'];
+            }
         }
-        $refs = $this->get('hopitalnumerique_reference.manager.reference')->getDatasForExport( $primaryKeys );
+        $refs = $this->get('hopitalnumerique_reference.manager.reference')->getDatasForExport($primaryKeys);
 
-        $colonnes = array( 
-                            'id'           => 'id', 
-                            'libelle'      => 'Libelle',
-                            'domaineNom'   => 'Domaine(s)',
-                            'code'         => 'Code', 
-                            'dictionnaire' => 'Présent dans le dictionnaire', 
-                            'recherche'    => 'Présent dans la recherhce', 
-                            'lock'         => 'Vérouillé ?', 
-                            'order'        => 'Ordre d\'affichage', 
-                            'etat'         => 'Etat', 
-                            'idParent'     => 'ID du parent'
-                        );
+        $colonnes = array(
+            'id' => 'id',
+            'libelle' => 'Libellé du concept',
+            'domaineNoms' => 'Domaine(s)',
+            'reference' => 'Est une référence',
+            'referenceLibelle' => 'Libellé de la référence',
+            'inGlossaire' => 'Actif dans le glossaire',
+            'etat' => 'Etat',
+            'order' => 'Ordre d\'affichage',
+            'inRecherche' => 'Présent dans la recherche',
+            'code' => 'Code',
+            'synonymesLibelle' => 'Synonymes',
+            'champLexicalNomsLibelle' => 'Champ lexical',
+            'parentLibelles' => 'Parents'
+        );
 
         $kernelCharset = $this->container->getParameter('kernel.charset');
 
-        return $this->get('hopitalnumerique_user.manager.user')->exportCsv( $colonnes, $refs, 'export-references.csv', $kernelCharset );
+        return $this->get('hopitalnumerique_user.manager.user')
+            ->exportCsv($colonnes, $refs, 'export-references.csv', $kernelCharset);
     }
-
-
-
-
-
-
 
 
     /**
      * Effectue le render du formulaire Reference.
      *
-     * @param string    $formName Nom du service associé au formulaire
-     * @param Reference $item     Entité Référence
-     * @param string    $view     Chemin de la vue ou sera rendu le formulaire
+     * @param $reference
+     * @return Form|redirect
+     * @internal param Reference $item Entité Référence
      *
-     * @return Form | redirect
      */
-    private function renderForm( $formName, $reference, $view )
+    private function renderForm(Reference $reference)
     {
+        $referenceTreeOptions = $this->container->get('hopitalnumerique_reference.dependency_injection.reference.tree')
+            ->getOptions(
+                $this->getUser()->getDomaines(),
+                [$reference->getId()]
+            );
+        $this->container->get('hopitalnumerique_reference.doctrine.reference.domaine_udpater')
+            ->setInitialReference($reference);
+
         //Création du formulaire via le service
-        $form = $this->createForm( $formName, $reference);
+        $form = $this->createForm('hopitalnumerique_reference_reference', $reference);
 
         $request = $this->get('request');
 
@@ -235,75 +257,69 @@ class ReferenceController extends Controller
 
             // On bind les données du form
             $form->handleRequest($request);
+            $this->container->get('hopitalnumerique_reference.doctrine.reference.domaine_udpater')
+                ->updateDomaines($reference);
 
-            //si le formulaire est valide
-            if ( $form->isValid() ) 
-            {
-                $oldParent = $reference->getParent();
+            // si le formulaire est valide
+            if ($form->isValid()) {
+                if ($reference->isAllDomaines()) {
+                    $reference->removeDomaines();
+                }
 
-                if( isset($formDatas['parent']) && !is_null($formDatas['parent']) ){
-                    $parent = $this->get('hopitalnumerique_reference.manager.reference')->findOneBy( array( 'id' => $formDatas['parent'] ) );    
-                    $reference->setParent( $parent );
+                if (isset($formDatas['parent']) && !is_null($formDatas['parent'])) {
+                    $parent = $this->get('hopitalnumerique_reference.manager.reference')->findOneBy(
+                        array(
+                            'id' => $formDatas['parent']
+                        )
+                    );
+                    $reference->setParent($parent);
 
-                    //Mise à jour du/des domaine(s) sur l'ensemble de l'arbre d'héritage des parents
+                    // Mise à jour du/des domaine(s) sur l'ensemble de l'arbre d'héritage des parents
                     $family = array();
                     $daddy  = $parent;
 
-                    //Tant qu'il y a des parents on ajoute le(s) nouveau(x) domaine(s) dessus
-                    while(!is_null($daddy))
-                    {
+                    // Tant qu'il y a des parents on ajoute le(s) nouveau(x) domaine(s) dessus
+                    while (!is_null($daddy)) {
                         $childsDomaines = array();
-                        //Vérifie si l'élément courant a un parent
+                        // Vérifie si l'élément courant a un parent
                         $childs = $daddy->getChilds();
 
-                        //Si on est au niveau du parent de la référence courante, on ajoute cette dernière au tableau des enfants du parent qui n'est pas encore setté
-                        //si la référence est un ajout
-                        if($daddy->getId() === $parent->getId() 
-                            && is_null($reference->getId()))
-                        {
-                            if(count($childs) !== 0)
-                            {
-                                foreach ($childs as $child) 
-                                {
+                        // Si on est au niveau du parent de la référence courante, on ajoute cette dernière au
+                        // tableau des enfants du parent qui n'est pas encore setté
+                        // si la référence est un ajout
+                        if ($daddy->getId() === $parent->getId() && is_null($reference->getId())) {
+                            if (count($childs) !== 0) {
+                                foreach ($childs as $child) {
                                     $childsTemp[] = $child;
                                 }
 
                                 $childsTemp[] = $reference;
-
                                 $childs = $childsTemp;
-                            }
-                            else
-                            {
+                            } else {
                                 $childs = array($reference);
                             }
                         }
 
 
-                        foreach ($childs as $child) 
-                        {
-                            if(count($child->getDomaines()) !== 0)
-                            {
-                                foreach ($child->getDomaines() as $domaine) 
-                                {
-                                    if(!array_key_exists($domaine->getId(), $childsDomaines))
-                                    {
+                        foreach ($childs as $child) {
+                            if (count($child->getDomaines()) !== 0) {
+                                foreach ($child->getDomaines() as $domaine) {
+                                    if (!array_key_exists($domaine->getId(), $childsDomaines)) {
                                         $childsDomaines[$domaine->getId()] = $domaine;
                                     }
                                 }
                             }
                         }
 
-                        //Vide les domaines du père pour remettre uniquement ceux des enfants (suppression d'un domaine lors de la sauvegarde n'étant plus chez aucun enfant)
+                        // Vide les domaines du père pour remettre uniquement ceux des enfants
+                        // (suppression d'un domaine lors de la sauvegarde n'étant plus chez aucun enfant)
                         $daddy->setDomaines(array());
 
-                        //Récupération des domaines du parent courant pour éviter la dupplication de domaine sur une entité
+                        // Récupération des domaines du parent courant pour éviter la dupplication de domaine sur une entité
                         $daddyDomainesId = $daddy->getDomainesId();
-                        if(count($childsDomaines) !== 0)
-                        {
-                            foreach ($childsDomaines as $domaine) 
-                            {
-                                if(!in_array($domaine->getId(),$daddyDomainesId))
-                                {
+                        if (count($childsDomaines) !== 0) {
+                            foreach ($childsDomaines as $domaine) {
+                                if (!in_array($domaine->getId(), $daddyDomainesId)) {
                                     //Si il n'a pas encore ce domaine, on lui ajoute
                                     $daddy->addDomaine($domaine);
                                 }
@@ -315,27 +331,42 @@ class ReferenceController extends Controller
                         //Parent suivant ou null si on est au sommet de l'arbre
                         $daddy = $daddy->getParent();
                     }
-                
-                    $this->get('hopitalnumerique_reference.manager.reference')->save($family);
+
+                    if (count($family) > 0) {
+                        $this->get('hopitalnumerique_reference.manager.reference')->save($family);
+                    }
                 }
-                
+
                 //test ajout ou edition
                 $new = is_null($reference->getId());
 
                 //On utilise notre Manager pour gérer la sauvegarde de l'objet
                 $this->get('hopitalnumerique_reference.manager.reference')->save($reference);
-                
+
                 // On envoi une 'flash' pour indiquer à l'utilisateur que l'entité est ajoutée
-                $this->get('session')->getFlashBag()->add( ($new ? 'success' : 'info') , 'Reference ' . ($new ? 'ajoutée.' : 'mise à jour.') ); 
-                
+                $this->get('session')->getFlashBag()->add(
+                    $new ? 'success' : 'info',
+                    'Reference ' . ($new ? 'ajoutée.' : 'mise à jour.')
+                );
+
                 $do = $request->request->get('do');
-                return $this->redirect( ($do == 'save-close' ? $this->generateUrl('hopitalnumerique_reference_reference') : $this->generateUrl('hopitalnumerique_reference_reference_edit', array( 'id' => $reference->getId() ) ) ) );
+                return $this->redirect(
+                    $do == 'save-close'
+                        ? $this->generateUrl('hopitalnumerique_reference_reference')
+                        : $this->generateUrl(
+                            'hopitalnumerique_reference_reference_edit',
+                            array(
+                                'id' => $reference->getId()
+                            )
+                        )
+                );
             }
         }
 
-        return $this->render( $view , array(
+        return $this->render('HopitalNumeriqueReferenceBundle:Reference:edit.html.twig', array(
             'form'      => $form->createView(),
-            'reference' => $reference
+            'reference' => $reference,
+            'referenceTreeOptions' => json_encode($referenceTreeOptions)
         ));
     }
 }

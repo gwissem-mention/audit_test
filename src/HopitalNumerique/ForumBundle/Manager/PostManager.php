@@ -10,7 +10,7 @@ use Doctrine\ORM\EntityManager;
  */
 class PostManager extends BaseManager
 {
-    protected $_class = 'HopitalNumerique\ForumBundle\Entity\Post';
+    protected $class = 'HopitalNumerique\ForumBundle\Entity\Post';
 
     protected $_managerTopic;
     protected $_managerBoard;

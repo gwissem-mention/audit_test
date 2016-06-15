@@ -1,4 +1,6 @@
 $(document).ready(function() {
+    var IS_PDF = ('1' == $('body').attr('data-is-pdf'));
+
     /* Gestion de l'ouverture/fermeture du sommaire et de la liste des ambassadeurs */
     $('#sommaire.closed, #ambassadeurs.closed').click(function(){
         //on ouvre
@@ -25,34 +27,36 @@ $(document).ready(function() {
         $(this).find('.carousel-indicators li.pos-1').addClass('active');
     });
 
-    $('#autresResultats h2').click(function(){
-        $(this).toggleClass('open closed');
-        $('#autresResultats .row').slideToggle();
-    });
+    if (!IS_PDF) {
+        $('#autresResultats h2').click(function(){
+            $(this).toggleClass('open closed');
+            $('#autresResultats .row').slideToggle();
+        });
 
-    $('#productions-associes h2').click(function(){
-        $(this).toggleClass('open closed');
-        $('#productions-associes .row').slideToggle();
-    });
+        $('#productions-associes h2').click(function(){
+            $(this).toggleClass('open closed');
+            $('#productions-associes .row').slideToggle();
+        });
 
-    $('#commentaires h2').click(function(){
-        $(this).toggleClass('open closed');
-        $('#commentaires .bloc-commentaire').slideToggle();
-    });
+        $('#commentaires h2').click(function(){
+            $(this).toggleClass('open closed');
+            $('#commentaires .bloc-commentaire').slideToggle();
+        });
 
-    $('#resultats #pointsdurs h3').click(function(){
-        $(this).toggleClass('open closed');
-        $('#resultats #pointsdurs .results').slideToggle();
-    });
+        $('#resultats #pointsdurs h3').click(function(){
+            $(this).toggleClass('open closed');
+            $('#resultats #pointsdurs .results').slideToggle();
+        });
 
-    $('#resultats #productions h3').click(function(){
-        $(this).toggleClass('open closed');
-        $('#resultats #productions .results').slideToggle();
-    });
-    $('#resultats #infradocs h3').click(function(){
-        $(this).toggleClass('open closed');
-        $('#resultats #infradocs .results').slideToggle();
-    });
+        $('#resultats #productions h3').click(function(){
+            $(this).toggleClass('open closed');
+            $('#resultats #productions .results').slideToggle();
+        });
+        $('#resultats #infradocs h3').click(function(){
+            $(this).toggleClass('open closed');
+            $('#resultats #infradocs .results').slideToggle();
+        });
+    }
 
     $('#resultats #pointsdurs h3').click();
     $('#resultats #productions h3').click();
@@ -115,6 +119,23 @@ $(document).ready(function() {
             deleteNote();
         });
     }
+
+
+    // Sommaire : Toggle
+    $('.toggle-children').click(function() {
+        var contenuId = $(this).attr('data-contenu');
+        var childrenContainerIsOpen = !$(this).find('.fa').hasClass('fa-plus-circle');
+
+        if (childrenContainerIsOpen) {
+            $(this).find('.fa').removeClass('fa-minus-circle');
+            $(this).find('.fa').addClass('fa-plus-circle');
+        } else {
+            $(this).find('.fa').removeClass('fa-plus-circle');
+            $(this).find('.fa').addClass('fa-minus-circle');
+        }
+
+        $('ul[data-contenu="' + contenuId + '"]').slideToggle();
+    });
 
 });
 
@@ -209,9 +230,6 @@ function sauvegardeNote()
 //Calcul JS de la note moyenne
 function calculMoyenne()
 {
-    var loader = $("#bloc-notation-moyenne-objet").nodevoLoader();
-    loader.start();
-
     $.ajax({
         url  : $('#note-moyenne-url').val(),
         data : {
@@ -226,9 +244,10 @@ function calculMoyenne()
             //Mise à jour de la moyenne des notes de l'objet + relancement du pluggin d'étoile
             $("#bloc-notation-moyenne-objet .bloc-star").html("<div class='rateit' id='note-moyenne-etoile' data-rateit-step='0.5' data-rateit-max='5' data-rateit-value='" + data.noteMoyenne + "' data-rateit-ispreset='true' data-rateit-readonly='true'></div>");
             $('#note-moyenne-etoile').rateit();
-            //Fin chargement
-            loader.finished();
 
+            if (false === data.userCanVote) {
+                $('#bloc-notation-objet').hide();
+            }
         }
     });
 }

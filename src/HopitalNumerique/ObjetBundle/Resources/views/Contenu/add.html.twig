@@ -2,11 +2,9 @@
     <div class="dd-handle dd3-handle"></div>
     <div class="dd3-content">
         <a data-url="{{path('hopitalnumerique_objet_contenu_form', {'id':id})}}" href="javascript:selectChapitre({{id}}, '{{path('hopitalnumerique_objet_contenu_form', {'id':id})}}')">{{order}}. Nouveau contenu</a>
-        <p class="text-muted pull-right">0 vues - Note référencement : <span>0</span> / 400</p>
     </div>
     <div class="dd3-actions">
         <div onclick="deleteContenu( {{id}}, '{{path('hopitalnumerique_objet_contenu_delete', {'id':id})}}' );" class="pull-right dd3-trash"><i class="fa fa-trash-o"></i></div>
-        <a href="{{path('hopitalnumerique_objet_reference_contenu_own', {'id':id})}}" class="pull-right dd3-eye manageReferences fancybox.ajax"><i class="fa fa-eye"></i></a>
-        <a href="{{path('hopitalnumerique_objet_reference_contenu', {'id':id})}}" class="pull-right dd3-cog manageReferences fancybox.ajax"><i class="fa fa-cog"></i></a>
+        <a href="{{path('hopitalnumerique_reference_referencement_popin', { 'entityType':2, 'entityId':id })}}" class="pull-right dd3-cog open-popin-referencement fancybox.ajax"><i class="fa fa-cog"></i></a>
     </div>
 </li>

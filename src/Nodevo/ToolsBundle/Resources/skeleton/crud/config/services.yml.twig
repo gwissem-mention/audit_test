@@ -7,8 +7,6 @@ services:
     {{ namespace|lower|replace({'\\': '_'})|replace({'bundle': ''}) }}.manager.{{entity|lower}}:
         class: %{{ namespace|lower|replace({'\\': '_'})|replace({'bundle': ''}) }}.manager.{{entity|lower}}.class%
         arguments: ["@doctrine.orm.entity_manager"]
-        calls:
-           - [ setCache, ["@liip_doctrine_cache.ns.main"] ]
 
     {{ namespace|lower|replace({'\\': '_'})|replace({'bundle': ''}) }}.grid.{{entity|lower}}:
         class: %{{ namespace|lower|replace({'\\': '_'})|replace({'bundle': ''}) }}.grid.{{entity|lower}}.class%

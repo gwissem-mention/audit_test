@@ -7,8 +7,6 @@ services:
     hopitalnumerique_etablissement.manager.etablissement:
         class: %hopitalnumerique_etablissement.manager.etablissement.class%
         arguments: ["@doctrine.orm.entity_manager"]
-        calls:
-            - [ setCache, ["@liip_doctrine_cache.ns.main"] ]
 
     hopitalnumerique_etablissement.grid.etablissement:
         class: %hopitalnumerique_etablissement.grid.etablissement.class%

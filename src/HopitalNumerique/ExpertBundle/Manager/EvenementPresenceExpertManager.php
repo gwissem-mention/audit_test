@@ -11,7 +11,7 @@ use HopitalNumerique\ExpertBundle\Entity\EvenementExpert;
  */
 class EvenementPresenceExpertManager extends BaseManager
 {
-    protected $_class = 'HopitalNumerique\ExpertBundle\Entity\EvenementPresenceExpert';
+    protected $class = 'HopitalNumerique\ExpertBundle\Entity\EvenementPresenceExpert';
 
     /**
      * [majExperts description]

@@ -7,6 +7,8 @@ use HopitalNumerique\UserBundle\Event\UserEvent;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
+use Symfony\Component\Security\Http\Event\InteractiveLoginEvent;
 
 /**
  * Controller des utilisateurs
@@ -30,8 +32,13 @@ class UserController extends Controller
         //Si il n'y a pas d'utilisateur connecté
         if(!$this->get('security.context')->isGranted('ROLE_USER'))
         {
-            //Création d'un nouvel user
-            $user = $this->get('hopitalnumerique_user.manager.user')->createEmpty();
+            if ($this->container->get('hopitalnumerique_account.doctrine.reference.contexte')->isWantCreateUserWithContext()) {
+                //Création d'un nouvel user avec contexte préremplis
+                $referenceIds = $this->container->get('hopitalnumerique_recherche.dependency_injection.referencement.requete_session')->getReferenceIds();
+                $user = $this->container->get('hopitalnumerique_account.doctrine.reference.contexte')->getNewUserWithContexte($referenceIds);
+            } else {
+                $user = $this->get('hopitalnumerique_user.manager.user')->createEmpty();
+            }
 
             //Tableau des options à passer à la vue twig
             $options = array(
@@ -307,7 +314,10 @@ class UserController extends Controller
     public function ajaxEditDepartementsAction()
     {
         $id             = $this->get('request')->request->get('id');
-        $departements   = $this->get('hopitalnumerique_reference.manager.reference')->findBy( array('parent' => $id) );
+        $departements = [];
+        if ('' != $id) {
+            $departements = $this->get('hopitalnumerique_reference.manager.reference')->findByParent($this->get('hopitalnumerique_reference.manager.reference')->findOneById($id));
+        }
     
         return $this->render('HopitalNumeriqueUserBundle:User:departements.html.twig', array(
             'departements' => $departements
@@ -878,7 +888,7 @@ class UserController extends Controller
                 }
             }
             else
-            {    
+            {
                 //--FO-- inscription            
                 //Set de l'état
                 $idEtatActif = intval($this->get('hopitalnumerique_user.options.user')->getOptionsByLabel('idEtatActif'));
@@ -1017,17 +1027,31 @@ class UserController extends Controller
 
                 //Mise à jour / création de l'utilisateur
                 $this->get('fos_user.user_manager')->updateUser( $user );
-
-                // On envoi une 'flash' pour indiquer à l'utilisateur que l'entité est ajoutée
-                $this->get('session')->getFlashBag()->add( ($new ? 'success' : 'info') , 'Utilisateur ' . $user->getUsername() . ($new ? ' ajouté.' : ' mis à jour.') );
+                if ($new && $this->container->get('hopitalnumerique_recherche.dependency_injection.referencement.requete_session')->isWantToSaveRequete()) {
+                    $this->container->get('hopitalnumerique_recherche.dependency_injection.referencement.requete_session')->saveAsNewRequete($user);
+                }
                 
                 $do = $request->request->get('do');
+
+                // On envoi une 'flash' pour indiquer à l'utilisateur que l'entité est ajoutée
+                if ($do == 'inscription') {
+                    //<-- Connexion automatique
+                    $token = new UsernamePasswordToken($user, null, 'frontoffice_connecte', $user->getRoles());
+                    $this->get('security.context')->setToken($token);
+                    $this->get('event_dispatcher')->dispatch('security.interactive_login', new InteractiveLoginEvent($request, $token));
+                    //-->
+                } else {
+                    $this->get('session')->getFlashBag()->add( ($new ? 'success' : 'info') , 'Utilisateur ' . $user->getUsername() . ($new ? ' ajouté.' : ' mis à jour.') );
+                }
                 
                 switch ($do)
                 {
                     case 'inscription':
-                        $this->get('session')->getFlashBag()->add( 'danger' , 'Certains serveurs de messagerie peuvent bloquer la bonne réception des emails émis par la plateforme Hôpital Numérique. Merci de vérifier auprès de votre service de informatique que les adresses accompagnement-hn@anap.fr et communication@anap.fr ne sont pas considérées comme du spam et qu\'elles font bien parties des adresses autorisées sur le serveur mail de votre établissement.' ); 
-                        return $this->redirect( $this->generateUrl('hopital_numerique_homepage') );
+                        $this->get('session')->getFlashBag()->add( 'success' , 'Certains serveurs de messagerie peuvent bloquer la bonne réception des emails émis par la plateforme Hôpital Numérique. Merci de vérifier auprès de votre service de informatique que les adresses accompagnement-hn@anap.fr et communication@anap.fr ne sont pas considérées comme du spam et qu\'elles font bien parties des adresses autorisées sur le serveur mail de votre établissement.' );
+                        
+                        $urlParameter = $request->getSession()->get('urlToRedirect');
+                        $request->getSession()->remove('urlToRedirect');
+                        return $this->redirect(is_null($urlParameter) || $urlParameter == "" ? $this->generateUrl('hopital_numerique_homepage' ) : $urlParameter);
                         break;
                     case 'information-personnelles':
                         return $this->redirect( $this->generateUrl('hopital_numerique_user_informations_personnelles') );
@@ -1061,7 +1085,8 @@ class UserController extends Controller
             'form'        => $form->createView(),
             'user'        => $user,
             'twigOptions' => $options,
-            'options'     => $this->get('hopitalnumerique_user.gestion_affichage_onglet')->getOptions($user)
+            'options'     => $this->get('hopitalnumerique_user.gestion_affichage_onglet')->getOptions($user),
+            'domainesCommunsWithUser' => $this->container->get('hopitalnumerique_core.dependency_injection.entity')->getEntityDomainesCommunsWithUser($user, $this->getUser())
         ));
     }
 }

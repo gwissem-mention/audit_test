@@ -9,7 +9,7 @@ use HopitalNumerique\CommunautePratiqueBundle\Entity\Fiche;
 use HopitalNumerique\CommunautePratiqueBundle\Entity\Commentaire;
 
 /**
- * Classe qui gère les accès / droits de la communauté de pratiques.
+ * Classe qui gère les accès / droits de la communauté de pratique.
  */
 class Security
 {

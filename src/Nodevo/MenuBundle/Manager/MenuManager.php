@@ -15,7 +15,7 @@ use Doctrine\Common\Collections\Criteria;
  */
 class MenuManager extends BaseManager
 {
-    protected $_class = '\Nodevo\MenuBundle\Entity\Menu';
+    protected $class = '\Nodevo\MenuBundle\Entity\Menu';
 
     /**
      * Récupérer une instance de menu via son Alias
@@ -62,9 +62,7 @@ class MenuManager extends BaseManager
         $tree = new MenuNode();
         $tree = $this->addNodeChilds( $tree, $itemsCollection, null );
 
-        $cached_data = $tree;
-
-        return $cached_data;
+        return $tree;
     }
 
     /**

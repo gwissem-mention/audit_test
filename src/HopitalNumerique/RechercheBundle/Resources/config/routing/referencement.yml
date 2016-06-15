@@ -1,0 +1,45 @@
+hopital_numerique_recherche_homepage:
+    pattern: ''
+    defaults: { _controller: 'HopitalNumeriqueRechercheBundle:Referencement:index' }
+    methods: 'GET'
+
+hopitalnumerique_recherche_referencement_jsonentitiesbyreferences:
+    pattern: 'json-entities-by-references'
+    defaults: { _controller: 'HopitalNumeriqueRechercheBundle:Referencement:jsonEntitiesByReferences' }
+    methods: 'POST'
+
+hopitalnumerique_recherche_referencement_jsonentities:
+    pattern: 'view-entities'
+    defaults: { _controller: 'HopitalNumeriqueRechercheBundle:Referencement:jsonEntities' }
+    methods: 'POST'
+
+hopitalnumerique_recherche_referencement_requete_view:
+    pattern: 'requete/view/{requete}'
+    defaults: { _controller: 'HopitalNumeriqueRechercheBundle:Referencement\Requete:view' }
+    requirements:
+        requete: '\d+'
+
+hopitalnumerique_recherche_referencement_requete_popindetail:
+    pattern: 'requete/popin-detail/{requete}'
+    defaults: { _controller: 'HopitalNumeriqueRechercheBundle:Referencement\Requete:popinDetail' }
+    methods: 'GET'
+
+hopitalnumerique_recherche_referencement_requete_popinsave:
+    pattern: 'requete/popin-save'
+    defaults: { _controller: 'HopitalNumeriqueRechercheBundle:Referencement\Requete:popinSave' }
+    methods: 'POST'
+
+hopitalnumerique_recherche_referencement_requete_save:
+    pattern: 'requete/save'
+    defaults: { _controller: 'HopitalNumeriqueRechercheBundle:Referencement\Requete:save' }
+    methods: 'POST'
+
+hopitalnumerique_recherche_referencement_requete_savesession:
+    pattern: 'requete/save-session'
+    defaults: { _controller: 'HopitalNumeriqueRechercheBundle:Referencement\Requete:saveSession' }
+    methods: 'POST'
+
+hopitalnumerique_recherche_referencement_requete_removesession:
+    pattern: 'requete/remove-session'
+    defaults: { _controller: 'HopitalNumeriqueRechercheBundle:Referencement\Requete:removeSession' }
+    methods: 'POST'

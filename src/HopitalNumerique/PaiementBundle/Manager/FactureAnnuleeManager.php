@@ -9,7 +9,7 @@ use Nodevo\ToolsBundle\Manager\Manager as BaseManager;
  */
 class FactureAnnuleeManager extends BaseManager
 {
-    protected $_class = 'HopitalNumerique\PaiementBundle\Entity\FactureAnnulee';
+    protected $class = 'HopitalNumerique\PaiementBundle\Entity\FactureAnnulee';
 
 
     /**

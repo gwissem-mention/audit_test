@@ -6,5 +6,5 @@ namespace HopitalNumerique\ForumBundle\Manager;
  */
 class ForumManager extends \Nodevo\ToolsBundle\Manager\Manager
 {
-    protected $_class = 'HopitalNumerique\ForumBundle\Entity\Forum';
+    protected $class = 'HopitalNumerique\ForumBundle\Entity\Forum';
 }

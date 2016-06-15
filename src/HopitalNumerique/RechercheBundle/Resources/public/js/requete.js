@@ -107,23 +107,3 @@ function showElementRecursive( destItem )
     if ( $(destItem).parent().parent().hasClass('hide') )
         showElementRecursive( $(destItem).parent().parent() );
 }
-
-/**
- * Sauvegarde la popin de mail requete
- */
-function getNotifiedRequete(path)
-{
-    $.ajax({
-        url  : path,
-        data : {
-            dateDebut : $('#dateDebut').val() != '' ? $('#dateDebut').datepicker("getDate").getTime() / 1000 : null,
-            dateFin   : $('#dateFin').val()   != '' ? $('#dateFin').datepicker("getDate").getTime() / 1000   : null,
-            notified  : $('#toggle').val()
-        },
-        type     : 'POST',
-        dataType : 'json',
-        success  : function( data ){
-            window.location = data.url;
-        }
-    });
-}

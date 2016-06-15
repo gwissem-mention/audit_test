@@ -1,0 +1,10 @@
+services:
+    hopitalnumerique_account.doctrine.reference.contexte:
+        class: 'HopitalNumerique\AccountBundle\Doctrine\Reference\Contexte'
+        arguments: ['@session', '@hopitalnumerique_user.dependency_injection.connected_user', '@hopitalnumerique_reference.manager.reference', '@hopitalnumerique_user.manager.user']
+
+    hopitalnumerique_account.form.type.inscription:
+        class: 'HopitalNumerique\AccountBundle\Form\Type\InscriptionType'
+        arguments: ['@router']
+        tags:
+            - { name: 'form.type' }

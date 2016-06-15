@@ -44,6 +44,12 @@ hopital_numerique_forum:
 hopital_numerique_account:
     resource: "@HopitalNumeriqueAccountBundle/Resources/config/routing.yml"
     prefix:   /compte-hn
+hopitalnumerique_account_contexte:
+    resource: '@HopitalNumeriqueAccountBundle/Resources/config/routing/contexte.yml'
+    prefix: '/recherche-par-referencement/contexte'
+hopitalnumerique_account_inscription:
+    resource: '@HopitalNumeriqueAccountBundle/Resources/config/routing/inscription.yml'
+    prefix: '/inscription'
 
 # vvvvv ---- GME 07/04/2014 : Fichiers de routing à revoir. Trop de d'appels : pas propre ---- vvvvv
 hopital_numerique_intervention:
@@ -91,6 +97,10 @@ hopital_numerique_faq:
 hopital_numerique_reference:
     resource: "@HopitalNumeriqueReferenceBundle/Resources/config/routing.yml"
     prefix:   /admin
+hopital_numerique_reference_glossaire:
+    resource: '@HopitalNumeriqueReferenceBundle/Resources/config/routing/glossaire.yml'
+hopital_numerique_reference_referencement:
+    resource: '@HopitalNumeriqueReferenceBundle/Resources/config/routing/referencement.yml'
 
 hopital_numerique_etablissement:
     resource: "@HopitalNumeriqueEtablissementBundle/Resources/config/routing.yml"
@@ -145,10 +155,6 @@ hopital_numerique_flash:
     resource: "@HopitalNumeriqueFlashBundle/Resources/config/routing.yml"
     prefix:   /
 
-hopital_numerique_glossaire:
-    resource: "@HopitalNumeriqueGlossaireBundle/Resources/config/routing.yml"
-    prefix:   /
-
 hopital_numerique_communautepratique:
     resource: "@HopitalNumeriqueCommunautePratiqueBundle/Resources/config/routing.yml"
     prefix: /
@@ -177,6 +183,9 @@ nodevo_admin:
 nodevo_mail:
     resource: "@NodevoMailBundle/Resources/config/routing.yml"
     prefix:   /admin
+nodevo_mail_recommandation:
+    resource: '@NodevoMailBundle/Resources/config/routing/recommandation.yml'
+    prefix: '/mail/recommandation'
 
 nodevo_contact:
     resource: "@NodevoContactBundle/Resources/config/routing.yml"

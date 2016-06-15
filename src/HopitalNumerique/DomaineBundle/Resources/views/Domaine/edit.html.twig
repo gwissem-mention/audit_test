@@ -3,17 +3,28 @@
 {% block javascripts %}
     {{ parent() }}
     {% javascripts output="compiled/hopitalnumerique-domaine-domaine-edit.js"
-        "@tinymce_js"
-        'bundles/nodevogestionnairemedia/js/moxiemanager/js/moxman.loader.min.js'
-        'bundles/nodevogestionnairemedia/js/MoxieManager.js'
+        '%kernel.root_dir%/Resources/lib/nodevo/Form/Select.js'
+        'bundles/hopitalnumeriquereference/js/Tree.js'
         "bundles/hopitalnumeriquedomaine/js/script.js"
     %}
         <script type="text/javascript" src="{{ asset_url }}"></script>
     {% endjavascripts %}
-    <script type="text/javascript">
-        NodevoGestionnaireMediaBundle_MoxieManager.PARAMETRES_GLOBAUX_URL = '{{ url('nodevo_gestionnaire_media_moxiemanager_json_parametres') }}';
-        NodevoGestionnaireMediaBundle_MoxieManager.initParametresGlobaux();
-    </script>
+    {% if referenceTreeOptions is defined %}
+        <script type="text/javascript">
+            $(document).ready(function () {
+                var referenceTree = new Hn_Reference_Tree('#reference-tree', '#hopitalnumerique_domaine_domaine_referenceRoot');
+                referenceTree.display({{ referenceTreeOptions|raw }});
+                {%- if domaine.referenceRoot is not null -%}
+                    referenceTree.container.on('ready.jstree', function () {
+                        referenceTree.select({{ domaine.referenceRoot.id }});
+                    });
+                {%- endif -%}
+                referenceTree.container.on('select_node.jstree', function (event, node) {
+                    referenceTree.selectOnly(node.node.id);
+                });
+            });
+        </script>
+    {% endif %}
 {% endblock %}
 
 {% block h1Title %}
@@ -77,6 +88,18 @@
                     <div class="tinyMCE-homepage">
                         {{form_row(form.homepage)}}
                     </div>
+
+                    {% if form.referenceRoot is defined %}
+                        <div class="form-group">
+                            {{ form_label(form.referenceRoot) }}
+                            <div class="col-md-6">
+                                <div class="hide">{{ form_widget(form.referenceRoot) }}</div>
+                                <div id="reference-tree"></div>
+                            </div>
+                            {{ form_errors(form.referenceRoot) }}
+                        </div>
+                    {% endif %}
+                    
 
                 {{ form_end(form) }}
             </div>

@@ -13,12 +13,10 @@
 {% block stylesheets %}
     {{parent()}}
     {% stylesheets output="compiled/hopitalnumerique-objet-objet-edit.css" filter="cssrewrite, ?yui_css"
-        "@jquery_toggles_css"
         'bundles/nodevoadmin/plugins/nodevoLoader/nodevoLoader.css'
         'bundles/hopitalnumeriqueuser/js/nSelect/style.css'
         'bundles/nodevoadmin/css/jquery.nestable.css'
         'bundles/hopitalnumeriqueobjet/css/style.css'
-        'bundles/nodevoadmin/css/toggles.css'
     %}
         <link rel="stylesheet" href="{{ asset_url }}" />
     {% endstylesheets %}
@@ -29,21 +27,12 @@
     {% javascripts output="compiled/hopitalnumerique-objet-objet-edit.js"
         "@nestable_js"
         "@json_js"
-        "@jquery_toggles_js"
-        "@tinymce_js"
         'bundles/nodevoadmin/plugins/nodevoLoader/nodevoLoader.js'
         'bundles/hopitalnumeriqueuser/js/nSelect/nSelect.min.js'
         'bundles/hopitalnumeriqueobjet/js/script.js'
-        'bundles/nodevogestionnairemedia/js/moxiemanager/js/moxman.loader.min.js'
-        'bundles/nodevogestionnairemedia/js/MoxieManager.js'
     %}
         <script type="text/javascript" src="{{ asset_url }}"></script>
     {% endjavascripts %}
-
-    <script type="text/javascript">
-        NodevoGestionnaireMediaBundle_MoxieManager.PARAMETRES_GLOBAUX_URL = '{{ url('nodevo_gestionnaire_media_moxiemanager_json_parametres') }}';
-        NodevoGestionnaireMediaBundle_MoxieManager.initParametresGlobaux();
-    </script>
 {% endblock %}
 
 {% block toolbarButton %}
@@ -78,7 +67,7 @@
                             <li class="{% if infra %}active{% endif %}"><a href="#infra" data-toggle="tab">Infra-documentaire</a></li>
                             <li><a href="#productions" data-toggle="tab">Productions liées</a></li>
                         {% endif %}
-                        {%- if objet.id is not null and (is_granted('ROLE_SUPER_ADMIN') or is_granted('ROLE_ADMINISTRATEUR_DE_DOMAINE_106' or is_granted('ROLE_ADMINISTRATEUR_DU_DOMAINE_HN_107'))) -%}
+                        {%- if objet.id is not null and not objet.isArticle and (is_granted('ROLE_SUPER_ADMIN') or is_granted('ROLE_ADMINISTRATEUR_DE_DOMAINE_106' or is_granted('ROLE_ADMINISTRATEUR_DU_DOMAINE_HN_107'))) -%}
                             <li><a href="{{ path('hopitalnumerique_objet_administration_fichierModifiable', {'id': objet.id}) }}">Administration</a></li>
                         {%- endif -%}
                     </ul>
@@ -110,9 +99,9 @@
                                 </div>
 
                                 {{ form_row(form.etat) }}
-                                {{ form_row(form.cibleDiffusion) }}
+                                {{ form.cibleDiffusion is defined ? form_row(form.cibleDiffusion) : '' }}
                                 {{ form_row(form.roles) }}
-                                {{ form_row(form.source) }}
+                                {{ form.source is defined ? form_row(form.source) : '' }}
                                 <div class="form-group">
                                     {{ form_label(form.types) }}
                                     <div class="col-md-9">
@@ -213,17 +202,19 @@
                                     </div>
                                 </div>
 
-                                <div class="form-group">
-                                    {{ form_label(form.communautePratiqueGroupe) }}
-                                    <div class="col-md-5">
-                                        {{ form_widget(form.communautePratiqueGroupe) }}
-                                    </div>
-                                    <div class="col-md-5 col-md-offset-7">
-                                        <div class="help-block">
-                                            {{ form_errors(form.communautePratiqueGroupe) }}
+                                {%- if form.communautePratiqueGroupe is defined -%}
+                                    <div class="form-group">
+                                        {{ form_label(form.communautePratiqueGroupe) }}
+                                        <div class="col-md-5">
+                                            {{ form_widget(form.communautePratiqueGroupe) }}
+                                        </div>
+                                        <div class="col-md-5 col-md-offset-7">
+                                            <div class="help-block">
+                                                {{ form_errors(form.communautePratiqueGroupe) }}
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
+                                {%- endif -%}
 
                                 <div class="form-group">
                                     {{ form_label(form.publicationPlusConsulte) }}
@@ -293,30 +284,6 @@
                                 </div>
 
                                 <div class="form-group">
-                                    {{ form_label(form.dateDebutPublication) }}
-                                    <div class="col-md-5">
-                                        {{ form_widget(form.dateDebutPublication) }}
-                                    </div>
-                                    <div class="col-md-5 col-md-offset-7">
-                                        <div class="help-block">
-                                            {{ form_errors(form.dateDebutPublication) }}
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class="form-group">
-                                    {{ form_label(form.dateFinPublication) }}
-                                    <div class="col-md-5">
-                                        {{ form_widget(form.dateFinPublication) }}
-                                    </div>
-                                    <div class="col-md-5 col-md-offset-7">
-                                        <div class="help-block">
-                                            {{ form_errors(form.dateFinPublication) }}
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class="form-group">
                                     {{ form_label(form.dateModification) }}
                                     <div class="col-md-5">
                                         {{ form_widget(form.dateModification) }}
@@ -341,17 +308,10 @@
                                 <div class="form-group {% if not objet.id or (objet.id and objet.isArticle()) %}hide{% endif %}">
                                     <label class="col-md-2" for="hopitalnumerique_objet_objet_references">Références</label>
                                     <div class="col-md-10">
-                                        <a href="{{path('hopitalnumerique_objet_reference_objet_own', {'id':objet.id})}}" class="manageReferences btn btn-xs btn-primary fancybox.ajax pull-right"><i class="fa fa-eye"></i></a>
-                                        <a href="{{path('hopitalnumerique_objet_reference_objet', {'id':objet.id})}}" class="manageReferences edit btn btn-xs btn-primary fancybox.ajax pull-right"><i class="fa fa-cog"></i></a>
-                                        <p class="text-muted text-right pull-right">Note référencement : <span class="nbRefs">{{note|number_format(2,',')}}</span> / 400</p>
-                                    </div>
-                                    <div class="col-md-10 hide">
-                                        {{ form_widget(form.references) }}
-                                    </div>
-                                    <div class="col-md-12">
-                                        <div class="help-block">
-                                            {{ form_errors(form.references) }}
-                                        </div>
+                                        {%- if objet.id is not null -%}
+                                            <a href="{{path('hopitalnumerique_reference_referencement_popin', { 'entityType':1, 'entityId':objet.id })}}" class="open-popin-referencement edit btn btn-xs btn-primary fancybox.ajax pull-right"><i class="fa fa-cog"></i></a>
+                                        {%- endif -%}
+                                        <p class="text-muted text-right pull-right"><strong>Note référencement :</strong> {% for domaineCommunWithUser in domainesCommunsWithUser %} &nbsp; {{ domaineCommunWithUser }} : {{ referencement_note(objet, domaineCommunWithUser) }}{% endfor %}</p>
                                     </div>
                                 </div>
                                 <div class="form-group">
@@ -440,9 +400,7 @@
                 <input type="hidden" id="reorder-objet-url" value="{{path('hopitalnumerique_objet_contenu_reorder')}}" />
                 <input type="hidden" id="reorder-prods-url" value="{{path('hopitalnumerique_objet_objet_reorder', {'id':objet.id})}}" />
                 <input type="hidden" id="objet-id" value="{{objet.id}}" />
-                <input type="hidden" id="save-references-objet-url" value="{{path('hopitalnumerique_objet_reference_objet_save',{'id':objet.id})}}" />
                 <input type="hidden" id="parse-upload-url" value="{{path('hopitalnumerique_objet_contenu_uploadparse',{'id':objet.id})}}" />
-                <input type="hidden" id="save-references-contenu-url" value="{{path('hopitalnumerique_objet_reference_contenu_save')}}" />
             {% endif %}
             <input type="hidden" id="toRef" value="{{toRef}}" />
             <input type="hidden" id="getObjets" value="{{path('hopitalnumerique_objet_objet_getObjets')}}" />
@@ -461,12 +419,11 @@
         <div class="dd-handle dd3-handle"></div>
         <div class="dd3-content">
             <a data-url="{{path('hopitalnumerique_objet_contenu_form', {'id':contenu.id})}}" href="javascript:selectChapitre({{contenu.id}}, '{{path('hopitalnumerique_objet_contenu_form', {'id':contenu.id})}}')" title="{{contenu.titre}}">{{contenu.order ~ ' ' ~ contenu.titre|truncate(50)}}</a>
-            <p class="text-muted pull-right">{{contenu.nbVue}} vues - Note réf. : <span>{{contenu.note|round(2)}}</span> / 400</p>
+            <p class="text-muted pull-right">{{contenu.nbVue}} vues - <span title="{% for domaineCommunWithUser in domaines_communs_with_user(contenu.entity, app.user) %} {{ domaineCommunWithUser }} : {{ referencement_note(contenu.entity, domaineCommunWithUser) }} {% endfor %}">Survoler pour afficher les scores</span></p>
         </div>
         <div class="dd3-actions">
             <div onclick="deleteContenu( {{contenu.id}}, '{{path('hopitalnumerique_objet_contenu_delete', {'id':contenu.id})}}' );" class="pull-right dd3-trash"><i class="fa fa-trash-o"></i></div>
-            <a href="{{path('hopitalnumerique_objet_reference_contenu_own', {'id':contenu.id})}}" class="pull-right dd3-eye manageReferences fancybox.ajax"><i class="fa fa-eye"></i></a>
-            <a href="{{path('hopitalnumerique_objet_reference_contenu', {'id':contenu.id})}}" class="pull-right dd3-cog manageReferences fancybox.ajax"><i class="fa fa-cog"></i></a>
+            <a href="{{path('hopitalnumerique_reference_referencement_popin', { 'entityType':2, 'entityId':contenu.id })}}" class="pull-right dd3-cog open-popin-referencement fancybox.ajax"><i class="fa fa-cog"></i></a>
         </div>
 
         {% if contenu.childs %}

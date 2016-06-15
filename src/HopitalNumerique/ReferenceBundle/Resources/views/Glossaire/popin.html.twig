@@ -1,0 +1,27 @@
+{% extends 'HopitalNumeriqueCoreBundle::popup.html.twig' %}
+
+{% block title %}{{ glossaireReference.sigleForGlossaire }}{% endblock %}
+
+{% block body %}
+    <p>
+        {{ glossaireReference.descriptionCourte|parsePublication|raw }}
+    </p>
+
+    {% if glossaireReference.descriptionLongue is not empty %}
+        <p>
+            {{ glossaireReference.descriptionLongue|parsePublication|raw }}
+        </p>
+    {% endif %}
+
+    {% if glossaireReference.synonymes|length > 0 %}
+        {% set synonymes = [] %}
+        {% for synonyme in glossaireReference.synonymes %}
+            {% set synonymes = synonymes|merge([synonyme.libelle]) %}
+        {% endfor %}
+        <p>
+            <b>Synonymes</b> : {{ synonymes|join(', ') }}
+        </p>
+    {% endif %}
+
+    <a href="{{ path('hopital_numerique_recherche_homepage_requete_generator', { 'refs':'null', 'q':glossaireReference.sigleForGlossaire }) }}">Rechercher les résultats correspondants</a>
+{% endblock %}

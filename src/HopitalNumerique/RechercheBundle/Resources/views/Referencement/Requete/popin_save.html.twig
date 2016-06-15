@@ -1,0 +1,35 @@
+{% extends 'HopitalNumeriqueCoreBundle::popup.html.twig' %}
+
+{% block title %}
+    Enregistrement de votre requête
+{% endblock %}
+
+{% block body %}
+    {%- if app.user is not null -%}
+        {{ form_start(requeteForm) }}
+            <div class="form-group">
+                {{ form_widget(requeteForm.nom) }}
+            </div>
+            <div class="text-right">
+                <button type="submit" name="save-as-new" class="btn btn-md btn-success">Enregistrer{{ requete.id is not null ? ' comme nouvelle requête' : '' }}</button>
+                {% if requete.id is not null %}
+                    <button type="submit" name="save" class="btn btn-md btn-success">Mettre à jour la requête courante</button>
+                {% endif %}
+            </div>
+        {{ form_end(requeteForm) }}
+    {%- else -%}
+        <div class="row">
+            <div class="col-md-6">
+                {% include 'HopitalNumeriqueAccountBundle:include:login.html.twig' with { 'size':'medium', 'displayInscription':false } %}
+            </div>
+            <div class="col-md-6">
+                <div id="popin-save-requete-form">
+                    {{ render(controller('HopitalNumeriqueAccountBundle:Inscription:popin', { 'urlRedirection':path('hopital_numerique_recherche_homepage') })) }}
+                </div>
+                <script type="text/javascript">
+                    $('#popin-save-requete-form form.toValidate').validationEngine();
+                </script>
+            </div>
+        </div>
+    {%- endif -%}
+{% endblock %}

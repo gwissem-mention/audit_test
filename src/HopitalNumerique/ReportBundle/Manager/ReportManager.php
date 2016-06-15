@@ -11,7 +11,7 @@ use HopitalNumerique\UserBundle\Manager\UserManager;
  */
 class ReportManager extends BaseManager
 {
-    protected $_class = 'HopitalNumerique\ReportBundle\Entity\Report';
+    protected $class = 'HopitalNumerique\ReportBundle\Entity\Report';
 
     /**
      * @author Gaetan MELCHILSEN

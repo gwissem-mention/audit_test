@@ -31,8 +31,7 @@ Nodevo_Debogage.alert = function(objet)
 {
     var texteAlerte = 'Type : ' + Nodevo_Debogage._getTypeObjet(objet) + "\n\n";
 
-    if (objet instanceof jQuery)
-    {
+    if (objet instanceof jQuery) {
         if (objet.length != undefined)
         {
             texteAlerte += 'Longueur du tableau : ' + objet.length + "\n\n";
@@ -42,15 +41,15 @@ Nodevo_Debogage.alert = function(objet)
             });
         }
         else texteAlerte += Nodevo_Debogage._getChaineProprietesEtFonctions(objet);
-    }
-    else if ((typeof objet) == 'string' || (typeof objet) == 'number')
-    {
+    } else if (objet instanceof Array) {
+	texteAlerte += 'Longueur du tableau : ' + objet.length + "\n\n";
+	for (var i in objet) {
+	    texteAlerte += i + (Nodevo_Debogage.AFFICHE_PROPRIETES_VIDES ? '' : ' : ' + objet[i]) + "\n";
+	}
+    } else if ((typeof objet) == 'string' || (typeof objet) == 'number' || (typeof objet) == 'boolean') {
 	texteAlerte += objet;
-    }
-    else
-    {
-	for (var i in objet)
-	{
+    } else {
+	for (var i in objet) {
 	    texteAlerte += i + (Nodevo_Debogage.AFFICHE_PROPRIETES_VIDES ? '' : ' : ' + objet[i]) + "\n";
 	}
     }
@@ -70,6 +69,9 @@ Nodevo_Debogage._getTypeObjet = function(objet)
         return 'Chaîne de caractères';
     if ((typeof objet) == 'number')
         return 'Nombre';
+    if (objet instanceof Array) {
+        return 'Tableau';
+    }
     if (objet instanceof jQuery)
         return 'Objet jQuery';
     if (objet instanceof Element)

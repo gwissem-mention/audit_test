@@ -2,7 +2,7 @@
 
 {% block title_communaute_pratique %}Publications issues des groupes de travail{% endblock %}
 
-{% block communaute_pratique_breadcrumbs_communautedepratiques %}<li><a href="{{ path('hopitalnumerique_communautepratique_accueil_index') }}">Communauté de pratiques</a></li>{% endblock %}
+{% block communaute_pratique_breadcrumbs_communautedepratiques %}<li><a href="{{ path('hopitalnumerique_communautepratique_accueil_index') }}">Communauté de pratique</a></li>{% endblock %}
 
 {% block communaute_pratique_actions %}
     {{ communaute_pratique.display_action_groupes_with_publications(groupes) }}
@@ -36,7 +36,7 @@
             <a href="{{ path('hopitalnumerique_communautepratique_groupe_list') }}"><em class="icon-social20"></em> Groupes de travail</a>
         </div>
         <div class="col-md-3">
-            <a href="{{- path('ccdn_forum_user_category_show', {'categoryId': 13, 'forumName': 'public'}) -}}"><em class="icon-chat27"></em> Forum de la communauté de pratiques</a>
+            <a href="{{- path('ccdn_forum_user_category_show', {'categoryId': 13, 'forumName': 'public'}) -}}"><em class="icon-chat27"></em> Forum de la communauté de pratique</a>
         </div>
     </div>
 </div>

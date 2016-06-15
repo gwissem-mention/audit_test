@@ -127,7 +127,7 @@ HopitalNumeriqueInterventionBundle_InterventionDemande_Formulaire.majInterventio
         },
         success:function() {
             loaderAjax.finished();
-            Nodevo_Web.rechargePage();
+            Nodevo_Web.reload();
         }
     });
 };
@@ -162,7 +162,7 @@ HopitalNumeriqueInterventionBundle_InterventionDemande_Formulaire.enregistreInte
         method:'GET',
         success:function() {
             loaderAjax.finished();
-            Nodevo_Web.rechargePage();
+            Nodevo_Web.reload();
         }
     });
 };
@@ -543,7 +543,7 @@ HopitalNumeriqueInterventionBundle_InterventionDemande_Formulaire.changeAmbassad
                     success:function(reponse) {
                         if (reponse != '1')
                             alert('L\'ambassadeur n\'a pu être modifié.');
-                        else Nodevo_Web.redirige('/compte-hn/intervention/demandes/liste');
+                        else Nodevo_Web.redirect('/compte-hn/intervention/demandes/liste');
 
                         loaderAjax.finished();
                     }
@@ -652,7 +652,7 @@ HopitalNumeriqueInterventionBundle_InterventionDemande_Formulaire.regroupeInterv
                 success:function(reponse) {
                     if (reponse != '1')
                         alert('Le regroupement ne s\est pas fait.');
-                    else Nodevo_Web.rechargePage();
+                    else Nodevo_Web.reload();
                 }
             });
         }

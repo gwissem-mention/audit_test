@@ -9,5 +9,5 @@ use Nodevo\ToolsBundle\Manager\Manager as BaseManager;
  */
 class DateFictiveActiviteExpertManager extends BaseManager
 {
-    protected $_class = 'HopitalNumerique\ExpertBundle\Entity\DateFictiveActiviteExpert';
+    protected $class = 'HopitalNumerique\ExpertBundle\Entity\DateFictiveActiviteExpert';
 }

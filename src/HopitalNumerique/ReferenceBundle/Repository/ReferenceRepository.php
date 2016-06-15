@@ -3,7 +3,7 @@
 namespace HopitalNumerique\ReferenceBundle\Repository;
 
 use Doctrine\ORM\EntityRepository;
-use Doctrine\ORM\Query\Expr\Join;
+use Doctrine\ORM\Query\Expr;
 use HopitalNumerique\ReferenceBundle\Entity\Reference;
 
 /**
@@ -21,7 +21,7 @@ class ReferenceRepository extends EntityRepository
         $qb = $this->_em->createQueryBuilder();
         $qb->select('ref.id, ref.libelle, ref.code, par.id as parent, ref.order')
             ->from('HopitalNumeriqueReferenceBundle:Reference', 'ref')
-            ->leftJoin('ref.parent','par');
+            ->leftJoin('ref.parents','par');
 
         if(count($domaineIds) !== 0)
         {
@@ -36,7 +36,7 @@ class ReferenceRepository extends EntityRepository
                 ->setParameter('etat', $actif)
             ;
         }
-            
+
         if( $unlockedOnly )
         {
             $qb->andWhere('ref.lock = 0');
@@ -44,15 +44,15 @@ class ReferenceRepository extends EntityRepository
 
         if( $fromDictionnaire )
         {
-            $qb->andWhere('ref.dictionnaire = 1');
+            $qb->andWhere('ref.reference = 1');
         }
 
         if( $fromRecherche )
         {
-            $qb->andWhere('ref.recherche = 1');
+            $qb->andWhere('ref.inRecherche = 1');
         }
 
-        $qb->orderBy('ref.parent, ref.code, ref.order');
+        $qb->orderBy('parent, ref.code, ref.order');
 
         return $qb->getQuery()->getResult();
     }
@@ -65,19 +65,19 @@ class ReferenceRepository extends EntityRepository
     public function getDatasForGrid($domainesIds, $condition = null)
     {
         $qb = $this->_em->createQueryBuilder();
-        $qb->select('ref.id, ref.libelle, ref.code, ref.dictionnaire, ref.recherche, ref.lock, ref.order, refEtat.libelle as etat, refParent.id as idParent, domaine.nom as domaineNom')
+        $qb->select('ref.id, ref.libelle, ref.code, ref.reference, ref.inRecherche, ref.inGlossaire, refEtat.libelle as etat, refParent.id as idParent, ref.allDomaines, domaine.nom as domaineNom')
             ->from('HopitalNumeriqueReferenceBundle:Reference', 'ref')
             ->leftJoin('ref.etat','refEtat')
-            ->leftJoin('ref.parent','refParent')
+            ->leftJoin('ref.parents','refParent')
             ->leftJoin('ref.domaines', 'domaine')
                 ->where($qb->expr()->orX(
                     $qb->expr()->in('domaine.id', ':domainesId'),
                     $qb->expr()->isNull('domaine.id')
                 ))
                 ->setParameter('domainesId', $domainesIds)
-            // ->groupBy('ref')
-            ->orderBy('ref.code, ref.order');
-            
+            ->groupBy('ref.id')
+            ->orderBy('ref.libelle');
+
         return $qb;
     }
 
@@ -89,15 +89,34 @@ class ReferenceRepository extends EntityRepository
     public function getDatasForExport( $ids )
     {
         $qb = $this->_em->createQueryBuilder();
-        $qb->select('ref.id, ref.libelle, ref.code, ref.dictionnaire, ref.recherche, ref.lock, ref.order, refEtat.libelle as etat, refParent.id as idParent, domaine.nom as domaineNom')
+        $qb
+            ->select(
+                'ref.id',
+                'ref.libelle',
+                'ref.code',
+                'ref.order',
+                'ref.reference',
+                'ref.referenceLibelle',
+                'ref.inRecherche',
+                'ref.inGlossaire',
+                'refEtat.libelle as etat',
+                'GROUP_CONCAT(DISTINCT conceptParent.libelle SEPARATOR \',\') AS parentLibelles',
+                'GROUP_CONCAT(DISTINCT domaine.nom SEPARATOR \',\') AS domaineNoms',
+                'GROUP_CONCAT(DISTINCT synonymes.libelle SEPARATOR \',\') AS synonymesLibelle',
+                'GROUP_CONCAT(DISTINCT champLexicalNoms.libelle SEPARATOR \',\') AS champLexicalNomsLibelle'
+            )
             ->from('HopitalNumeriqueReferenceBundle:Reference', 'ref')
-            ->leftJoin('ref.etat','refEtat')
-            ->leftJoin('ref.parent','refParent')
+            ->leftJoin('ref.etat', 'refEtat')
+            ->leftJoin('ref.parents', 'conceptParent')
             ->leftJoin('ref.domaines', 'domaine')
+            ->leftJoin('ref.synonymes', 'synonymes')
+            ->leftJoin('ref.champLexicalNoms', 'champLexicalNoms')
             ->where('ref.id IN (:ids)')
             ->orderBy('ref.code, ref.order')
-            ->setParameter('ids', $ids);
-            
+            ->groupBy('ref.id')
+            ->setParameter('ids', $ids)
+        ;
+
         return $qb;
     }
 
@@ -114,7 +133,7 @@ class ReferenceRepository extends EntityRepository
             ->leftJoin('ref.domaines','domaine')
                 ->where($qb->expr()->isNotNull('domaine.id'))
             ->orderBy('domaine.nom');
-            
+
         return $qb;
     }
 
@@ -130,10 +149,10 @@ class ReferenceRepository extends EntityRepository
                 $qb->expr()->isNull('domaine.id')
             ))
             ->setParameter('userId', $userId)
-            ->andWhere('ref.dictionnaire = 1')
-            ->andWhere('ref.recherche = 1')
+            ->andWhere('ref.reference = 1')
+            ->andWhere('ref.inRecherche = 1')
             ->orderBy('ref.order', 'ASC');
-            
+
         return $qb;
     }
 
@@ -142,14 +161,14 @@ class ReferenceRepository extends EntityRepository
         $qb = $this->_em->createQueryBuilder();
         $qb->select('ref')
             ->from('HopitalNumeriqueReferenceBundle:Reference', 'ref')
-            ->innerJoin('ref.domaines', 'domaine', Join::WITH, 'domaine.id = :idDomaine')
-            ->innerJoin('ref.parent', 'par', Join::WITH, 'par.id = :idParent')
+            ->innerJoin('ref.domaines', 'domaine', Expr\Join::WITH, 'domaine.id = :idDomaine')
+            ->innerJoin('ref.parents', 'par', Expr\Join::WITH, 'par.id = :idParent')
             ->setParameters(array(
                 'idDomaine' => $idDomaine,
                 'idParent'  => $idParent,
             ))
             ->orderBy('ref.order');
-            
+
         return $qb;
     }
 
@@ -172,8 +191,25 @@ class ReferenceRepository extends EntityRepository
                 ->setParameter('domainesId', $domainesQuestionnaireId)
             ->groupBy('ref.code')
             ->orderBy('ref.code');
-            
+
         return $qb;
+    }
+
+    /**
+     * Retourne les références enfants.
+     *
+     * @return array<\HopitalNumerique\ReferenceBundle\Entity\Reference> Références
+     */
+    public function findByParent(Reference $parent)
+    {
+        $qb = $this->createQueryBuilder('reference');
+
+        $qb
+            ->innerJoin('reference.parents', 'parent', Expr\Join::WITH, $qb->expr()->eq('parent.id', ':parent'))
+            ->setParameter('parent', $parent)
+        ;
+
+        return $qb->getQuery()->getResult();
     }
 
     /**
@@ -212,11 +248,97 @@ class ReferenceRepository extends EntityRepository
 
         if (null !== $parent) {
             $qb
-                ->andWhere('ref.parent = :parent')
+                ->innerJoin('ref.parents', 'parent', Expr\Join::WITH, 'parent.id = :parent')
                 ->setParameter('parent', $parent)
             ;
 
         }
+
+        return $qb->getQuery()->getResult();
+    }
+
+    /**
+     * Retourne les références selon des domaines.
+     *
+     * @param array<\HopitalNumerique\DomaineBundle\Entity\Domaine> $domaines    Domaines
+     * @param boolean|null                                          $actif       Actif
+     * @param boolean|null                                          $lock        Lock
+     * @param boolean|null                                          $parentable  Parentable
+     * @param boolean                                               $reference   Reference
+     * @param boolean                                               $inRecherche InRecherche ?
+     * @param boolean                                               $inGlossaire InGlossaire ?
+     * @return array<\HopitalNumerique\ReferenceBundle\Entity\Reference> Références
+     */
+    public function findByDomaines($domaines, $actif, $lock, $parentable, $reference, $inRecherche, $inGlossaire)
+    {
+        if (0 === count($domaines)) {
+            return [];
+        }
+
+        $qb = $this->createQueryBuilder('reference');
+
+        $qb
+            ->select('reference, referenceParent, allDomaines')
+            ->leftJoin('reference.parents', 'referenceParent')
+            ->leftJoin('reference.domaines', 'allDomaines')
+            ->leftJoin('reference.domaines', 'domaine')
+            ->where($qb->expr()->orX(
+                $qb->expr()->in('domaine.id', ':domaines'),
+                $qb->expr()->eq('reference.allDomaines', ':allDomaines')
+            ))
+            ->setParameters([
+                'domaines' => $domaines,
+                'allDomaines' => true
+            ])
+            ->orderBy('reference.order', 'ASC')
+        ;
+        if (null !== $actif) {
+            $qb
+                ->andWhere($qb->expr()->eq('reference.etat', ':actif'))
+                ->setParameter('actif', $actif ? Reference::STATUT_ACTIF_ID : Reference::STATUT_INACTIF_ID)
+            ;
+        }
+        if (null !== $lock) {
+            $qb
+                ->andWhere($qb->expr()->eq('reference.lock', ':lock'))
+                ->setParameter('lock', $lock)
+            ;
+        }
+        if (null !== $reference) {
+            $qb
+                ->andWhere($qb->expr()->eq('reference.reference', ':reference'))
+                ->setParameter('reference', $reference)
+            ;
+        }
+        if (null !== $inRecherche) {
+            $qb
+                ->andWhere($qb->expr()->eq('reference.inRecherche', ':inRecherche'))
+                ->setParameter('inRecherche', $inRecherche)
+            ;
+        }
+        if (null !== $inGlossaire) {
+            $qb
+                ->andWhere($qb->expr()->eq('reference.inGlossaire', ':inGlossaire'))
+                ->setParameter('inGlossaire', $inGlossaire)
+            ;
+        }
+
+        return $qb->getQuery()->getResult();
+    }
+    
+    /**
+     * Récupère les domaines en fonction de la référence
+     *
+     * @return array
+     */
+    public function getDomainesByReference($idReference)
+    {
+        $qb = $this->_em->createQueryBuilder();
+        $qb->select('reference, dom')
+            ->from('HopitalNumeriqueReferenceBundle:Reference', 'reference')
+            ->join('reference.domaines', 'dom')
+            ->where('reference.id = :idReference')
+            ->setParameter('idReference', $idReference);
 
         return $qb->getQuery()->getResult();
     }

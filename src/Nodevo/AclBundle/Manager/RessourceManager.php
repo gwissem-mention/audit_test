@@ -2,18 +2,20 @@
 
 namespace Nodevo\AclBundle\Manager;
 
+use Nodevo\AclBundle\Entity\Ressource;
 use Nodevo\ToolsBundle\Manager\Manager as BaseManager;
-use Doctrine\Common\Cache\ApcCache;
 
 /**
  * Manager de l'entité Ressource
- * 
+ *
  * @author Quentin SOMAZZI
  */
 class RessourceManager extends BaseManager
 {
-    protected $_class = '\Nodevo\AclBundle\Entity\Ressource';
-    
+    protected $class = '\Nodevo\AclBundle\Entity\Ressource';
+
+    protected $resourceList;
+
     /**
      * Retourne la liste des ressources qui matchs l'url passée en paramètre
      *
@@ -21,30 +23,31 @@ class RessourceManager extends BaseManager
      *
      * @return array
      */
-    public function getRessourceMatchingUrl( $url )
+    public function getRessourceMatchingUrl($url)
     {
-        $cacheDriver = new ApcCache();
+        $ressources = $this->findAll();
+        usort($ressources, function (Ressource $a, Ressource $b) {
+            return $a->getOrder() > $b->getOrder();
+        });
 
-        if ($cacheDriver->contains("_acl_ressources_all"))
-        {
-            $ressources = $cacheDriver->fetch("_acl_ressources_all");
-        }
-        else
-        {
-            $ressources = $this->findAll();
-
-            $cacheDriver->save("_acl_ressources_all", $ressources, null);
-        }
-
-        foreach( $ressources as $ressource ) {
+        foreach ($ressources as $ressource) {
             $pattern = $ressource->getPattern();
 
-            preg_match($pattern, $url, $matches);            
+            preg_match($pattern, $url, $matches);
 
-            if (!empty($matches))
+            if (!empty($matches)) {
                 break;
+            }
         }
-        
+
         return (!empty($matches)) ? $ressource : null;
+    }
+
+    public function findAll()
+    {
+        if (null === $this->resourceList) {
+            $this->resourceList = parent::findAll();
+        }
+        return $this->resourceList;
     }
 }

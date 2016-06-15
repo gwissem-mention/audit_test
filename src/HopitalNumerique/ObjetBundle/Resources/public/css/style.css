@@ -6,7 +6,7 @@ ul.list-unstyled{margin-bottom:0;}
     /* Tab Objet*/
     #objet .uploadedFile{display: block; margin-top: 7px}
     #objet .deleteUploadedFile{margin-top:7px;}
-    #objet .manageReferences{margin-left : 10px;}
+    #objet .open-popin-referencement {margin-left : 10px;}
 
     /* Tab Infra-documentaire */
     #infra .addContenu, #productions .addProd{position:absolute; right: 28px; z-index: 200}

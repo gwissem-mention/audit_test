@@ -52,32 +52,6 @@
                 </div>
             </li>
 
-            {% if app.user|checkAuthorization(path('hopital_numerique_requete_homepage'))  %}
-                <li data-row="{{userConf['requetes']['row']}}" data-col="{{userConf['requetes']['col']}}" data-sizex="1" data-sizey="1" data-id="requetes" >
-                    <div class="panel panel-default">
-                        <div class="panel-heading">
-                            <h3 class="panel-title"><a href="{{path('hopital_numerique_requete_homepage')}}"><i class="fa fa-search"></i>Nouveautés dans mes recherches</a></h3>
-                            <div class="options">
-                                <i class="fa fa-arrows"></i>
-                            </div>
-                        </div>
-
-                        <div class="panel-body">
-                            {% if requetes %}
-                                <h4>Nouveautés et mises à jour</h4>
-                            {% endif %}
-                            <ol>
-                                {% for requete in requetes %}
-                                    <li>- <a href="{{path('hopital_numerique_recherche_homepage_requete',{ id : requete.id } ) }}">{{requete.nom|capitalize}}</a></li>
-                                {% else %}
-                                    <li>- Aucune nouveauté -</li>
-                                {% endfor %}
-                            </ol>
-                        </div>
-                    </div>
-                </li>
-            {% endif %}
-
             {% if app.user|checkAuthorization(path('hopitalnumerique_module_inscription_index_front'))  %}
                 <li data-row="{{userConf['modules']['row']}}" data-col="{{userConf['modules']['col']}}" data-sizex="1" data-sizey="1" data-id="modules" >
                     <div class="panel panel-default">

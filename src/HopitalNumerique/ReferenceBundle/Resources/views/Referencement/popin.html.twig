@@ -1,0 +1,69 @@
+{% import _self as mySelf %}
+<div class="referencement-popin panel panel-midnightblue">
+    <div class="panel-heading">
+        <h4>Gestion des références</h4>
+    </div>
+    <div class="panel-body">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th style="width:60px;"><input type="checkbox" class="checkbox" id="toggle-check-all"></th>
+                    <th style="width:150px;">Type Primaire ?</th>
+                    <th style="width:100px;">Nb élements</th>
+                    <th>Nom</th>
+                    <th style="width:50px;"></th>
+                </tr>
+            </thead>
+            <tbody>
+                {{- mySelf.display_referencement_subtree(referencesTree) -}}
+            </tbody>
+        </table>
+    </div>
+    <div class="panel-footer">
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="btn-toolbar pull-right">
+                    <div onclick="$.fancybox.close(true);" class="btn-danger btn">Fermer</div>
+                    <div data-action="save" class="btn-primary btn">Enregistrer</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+                
+{% macro display_referencement_subtree(referencesSubtree, referenceParentId = null, referenceGrandParentId = null, level = 1) %}
+    {% import _self as mySelf %}
+    {% for referenceParameters in referencesSubtree -%}
+        <tr data-reference="{{ referenceParameters.reference.id }}" data-reference-parent="{{ referenceParentId }}" data-reference-grand-parent="{{ referenceGrandParentId }}" data-children-open="0" data-level="{{ level }}">
+            <td>
+                <input type="checkbox" class="checkbox" data-reference="{{ referenceParameters.reference.id }}" data-reference-parent="{{ referenceParentId }}" data-reference-grand-parent="{{ referenceGrandParentId }}" data-initial-checked="{{ referenceParameters.entityHasReference is not null ? '1' : '0' }}" id="reference-{{ referenceParentId }}-{{ referenceParameters.reference.id }}">
+            </td>
+            <td>
+                <div class="toggle toggle-success {% if referenceParameters.entityHasReference is not null and referenceParameters.entityHasReference.isPrimary %}on{% else %}off{% endif %}" style="display:none;"></div>
+            </td>
+            <td>
+                {%- if referenceParameters.enfants|length > 0 -%}
+                    <span class="count-checked-children">0</span> / <span class="nbChildsDirect" >{{ referenceParameters.enfants|length }}</span>
+                {%- endif -%}
+            </td>
+            <td>
+                <label for="reference-{{ referenceParameters.reference.id }}">{{ referenceParameters.reference.libelleForReference }} (id: {{ referenceParameters.reference.id }})</label>
+            </td>
+            <td>
+                {%- if referenceParameters.enfants|length > 0 -%}
+                    <a onclick="Hn_Reference_Referencement_Popin.toggleDisplayingReferencesSubtree({{ referenceParameters.reference.id }});" class="btn btn-{{ level < 2 ? 'sky' : (level <3 ? 'md' : 'sm') }}"><i class="fa fa-arrow-right"></i></a>
+                {%- endif -%}
+            </td>
+        </tr>
+        {{- mySelf.display_referencement_subtree(referenceParameters.enfants, referenceParameters.reference.id, referenceParentId, level + 1) -}}
+    {%- endfor %}
+{% endmacro %}
+
+<script type="text/javascript">
+    Hn_Reference_Referencement_Popin.ENTITY_TYPE = '{{ entityType }}';
+    Hn_Reference_Referencement_Popin.ENTITY_ID = '{{ entityId }}';
+    {%- if redirectionUrl is not null -%}
+        Hn_Reference_Referencement_Popin.REDIRECTION_URL = '{{ redirectionUrl }}';
+    {%- endif -%}
+    Hn_Reference_Referencement_Popin.init();
+</script>

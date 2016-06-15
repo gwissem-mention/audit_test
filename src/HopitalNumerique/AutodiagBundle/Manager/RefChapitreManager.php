@@ -9,6 +9,6 @@ use Nodevo\ToolsBundle\Manager\Manager as BaseManager;
  */
 class RefChapitreManager extends BaseManager
 {
-    protected $_class = 'HopitalNumerique\AutodiagBundle\Entity\RefChapitre';
+    protected $class = 'HopitalNumerique\AutodiagBundle\Entity\RefChapitre';
 
 }

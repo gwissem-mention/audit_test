@@ -9,5 +9,5 @@ use Nodevo\ToolsBundle\Manager\Manager as BaseManager;
  */
 class ReponseModuleManager extends BaseManager
 {
-    protected $_class = 'HopitalNumerique\ModuleBundle\Entity\ReponseModule';
+    protected $class = 'HopitalNumerique\ModuleBundle\Entity\ReponseModule';
 }

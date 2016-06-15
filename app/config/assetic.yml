@@ -36,7 +36,6 @@ assetic:
         - HopitalNumeriqueImportExcelBundle
         - HopitalNumeriqueForumBundle
         - HopitalNumeriqueFlashBundle
-        - HopitalNumeriqueGlossaireBundle
         - HopitalNumeriqueReportBundle
         - HopitalNumeriqueDomaineBundle
         - HopitalNumeriqueCommunautePratiqueBundle
@@ -52,6 +51,26 @@ assetic:
         yui_js:
             jar: %kernel.root_dir%/Resources/java/yuicompressor-2.4.8.jar
     assets:
+        #<-- Factorisation
+        front_css:
+            inputs:
+                - 'bundles/nodevoadmin/css/custom-jquery-ui.min.css'
+                - 'bundles/nodevoadmin/plugins/apprise/apprise.css'
+                - 'bundles/nodevoadmin/plugins/nodevoLoader/nodevoLoader.css'
+                - 'bundles/hopitalnumeriquecore/css/layout.css'
+                - 'bundles/hopitalnumeriquecore/css/Glyphter.css'
+                - 'bundles/hopitalnumeriqueaccount/css/connexion-bloc.css'
+        front_js:
+            inputs:
+                - 'bundles/fosjsrouting/js/router.js'
+                - 'bundles/hopitalnumeriquecore/js/script.js'
+                - 'bundles/hopitalnumeriquecore/js/recherche.js'
+                - 'bundles/nodevoadmin/plugins/apprise/apprise.js'
+                - 'bundles/nodevoadmin/plugins/nodevoLoader/nodevoLoader.js'
+                - '%kernel.root_dir%/Resources/lib/nodevo/Web.js'
+                - '%kernel.root_dir%/Resources/lib/Highlight.js'
+                - 'bundles/hopitalnumeriqueaccount/js/InformationsManquantes.js'
+        #-->
         #JS
         bbcode_js: 
             inputs:
@@ -62,6 +81,11 @@ assetic:
                 - "bundles/nodevotools/js/tinymce/tinymce.min.js"
                 - "bundles/nodevotools/js/tinymce/tinymce.fr_FR.js"
                 - "bundles/hopitalnumeriquecore/js/tinymce.js"
+            filters : [ ?yui_js ]
+        moxiemanager_js:
+            inputs:
+                - 'bundles/nodevogestionnairemedia/js/moxiemanager/js/moxman.loader.min.js'
+                - 'bundles/nodevogestionnairemedia/js/MoxieManager.js'
             filters : [ ?yui_js ]
         jquery_js:
             inputs:
@@ -93,7 +117,7 @@ assetic:
             filters : [ ?yui_js ]
         json_js:
             inputs:
-                - "%kernel.root_dir%/Resources/components/JSON-js/json2.js"
+                - "%kernel.root_dir%/Resources/components/json-js/json2.js"
             filters : [ ?yui_js ]
         bootstrap_iconpicker_js:
             inputs:
@@ -105,7 +129,7 @@ assetic:
             filters : [ ?yui_js ]
         nestable_js:
             inputs:
-                - "%kernel.root_dir%/Resources/components/Nestable/jquery.nestable.js"
+                - "%kernel.root_dir%/Resources/components/nestable/jquery.nestable.js"
             filters : [ ?yui_js ]
         enquire_js:
             inputs:
@@ -163,6 +187,9 @@ assetic:
                 - '%kernel.root_dir%/Resources/components/jquery-file-upload/js/jquery.fileupload-process.js'
                 - '%kernel.root_dir%/Resources/components/jquery-file-upload/js/jquery.fileupload-ui.js'
                 #- '%kernel.root_dir%/Resources/components/jquery-file-upload/js/jquery.fileupload-validate.js'
+        jstree_js:
+            inputs:
+                - '%kernel.root_dir%/Resources/components/jstree/dist/jstree.min.js'
         #CSS
         bbcode_css:
             inputs:
@@ -195,6 +222,7 @@ assetic:
         jquery_toggles_css:
             inputs:
                 - "%kernel.root_dir%/Resources/components/jquery-toggles/toggles.css"
+                - 'bundles/nodevoadmin/css/toggles.css'
             filters: [ cssembed, ?yui_css ]
         jquery_qtip2_css:
             inputs:
@@ -223,3 +251,7 @@ assetic:
             inputs:
                 - 'bundles/nodevoadmin/fonts/glyphicons/css/glyphicons.min.css'
                 - 'bundles/hopitalnumeriqueadmin/css/fonts.css'
+        jstree_css:
+            inputs:
+                - '%kernel.root_dir%/Resources/components/jstree/dist/themes/default/style.min.css'
+                - 'bundles/hopitalnumeriquecore/css/redefinitions/jstree.css'

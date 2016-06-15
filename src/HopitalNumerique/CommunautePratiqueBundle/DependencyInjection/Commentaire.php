@@ -7,7 +7,7 @@ use Symfony\Component\HttpFoundation\Request;
 use HopitalNumerique\CommunautePratiqueBundle\Entity\Commentaire as CommentaireEntity;
 
 /**
- * Classe qui gère les commentaires de la communauté de pratiques.
+ * Classe qui gère les commentaires de la communauté de pratique.
  */
 class Commentaire
 {

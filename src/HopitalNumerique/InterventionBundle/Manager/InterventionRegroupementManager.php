@@ -15,7 +15,7 @@ use HopitalNumerique\UserBundle\Entity\User;
  */
 class InterventionRegroupementManager extends BaseManager
 {
-    protected $_class = 'HopitalNumerique\InterventionBundle\Entity\InterventionRegroupement';
+    protected $class = 'HopitalNumerique\InterventionBundle\Entity\InterventionRegroupement';
 
     /** Indique si l'utilisateur peut regrouper des demandes d'intervention.
      *

@@ -1,0 +1,24 @@
+hopitalnumerique_reference_referencement_popin:
+    pattern: '/admin/referencement/popin/{entityType}/{entityId}'
+    defaults: { _controller: 'HopitalNumeriqueReferenceBundle:Referencement:popin' }
+    methods: 'get'
+
+hopitalnumerique_reference_referencement_savechosenreferences:
+    pattern: '/admin/referencement/popin/{entityType}/{entityId}/savechosenreferences'
+    defaults: { _controller: 'HopitalNumeriqueReferenceBundle:Referencement:saveChosenReferences' }
+    methods: 'post'
+
+hopitalnumerique_reference_referencement_cronsavenotes:
+    pattern: '/referencement/cron-save-notes/{token}'
+    defaults: { _controller: 'HopitalNumeriqueReferenceBundle:Referencement:cronSaveNotes' }
+    methods: 'get'
+
+hopitalnumerique_reference_referencement_cronremoveinexistants:
+    pattern: '/referencement/cron-remove-inexistants/{token}'
+    defaults: { _controller: 'HopitalNumeriqueReferenceBundle:Referencement:cronRemoveInexistants' }
+    methods: 'get'
+
+hopitalnumerique_reference_referencement_migre:
+    pattern: '/admin/referencement/migre/{token}'
+    defaults: { _controller: 'HopitalNumeriqueReferenceBundle:Referencement:migre' }
+    methods: 'get'

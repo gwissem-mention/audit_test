@@ -9,7 +9,7 @@ use HopitalNumerique\UserBundle\Entity\User;
  */
 class GroupeManager extends \Nodevo\ToolsBundle\Manager\Manager
 {
-    protected $_class = 'HopitalNumerique\CommunautePratiqueBundle\Entity\Groupe';
+    protected $class = 'HopitalNumerique\CommunautePratiqueBundle\Entity\Groupe';
 
     /**
      * Retourne les groupes n'ayant pas encore démarrés.

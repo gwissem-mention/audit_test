@@ -3,7 +3,7 @@
 {% block title %}{{parent()}} - statistiques{% endblock %}
 
 {% block h1Title %}
-    Ensemble des statistiques
+    Erreurs dans les URL
 {% endblock %}
 
 {% block javascripts %}
@@ -30,27 +30,22 @@
     <div class="col-sm-12">
         <div class="panel panel-midnightblue">
             <div class="panel-heading">
-                <h4>Ensemble des statistiques</h4>
+                <h4>Erreurs dans les URL</h4>
             </div>
 
             <div class="panel-body" >
-                
-                <div class="row">
-                    {# Points-dur #}
-                    {{ render(controller("HopitalNumeriqueStatBundle:Pointdur:index")) }}
-                </div>
-                
-                <div class="row">
+
+                <div class="row hide">
                     {# Recherche par parcours #}
                     {{ render(controller("HopitalNumeriqueStatBundle:RechercheParcours:index")) }}
                 </div>
                 
-                <div class="row">
+                <div class="row hide">
                     {# Requete de recherche #}
                     {{ render(controller("HopitalNumeriqueStatBundle:ItemRequete:index")) }}
                 </div>
                 
-                <div class="row">
+                <div class="row hide">
                     {# Requetes fantomes #}
                     {{ render(controller("HopitalNumeriqueStatBundle:RequeteFantome:index")) }}
                 </div>
@@ -65,17 +60,17 @@
                     {{ render(controller("HopitalNumeriqueStatBundle:ErreursAutodiag:index")) }}
                 </div>
                 
-                <div class="row">
+                <div class="row hide">
                     {# Requetes des productions #}
                     {{ render(controller("HopitalNumeriqueStatBundle:ItemRequete:indexProduction")) }}
                 </div>
                 
-                <div class="row">
+                <div class="row hide">
                     {# Statistiques recherche aidée #}
                     {{ render(controller("HopitalNumeriqueStatBundle:StatClic:index")) }}
                 </div>
                 
-                <div class="row">
+                <div class="row hide">
                     {# Statistiques des forum #}
                     {{ render(controller("HopitalNumeriqueStatBundle:Forum:index")) }}
                 </div>

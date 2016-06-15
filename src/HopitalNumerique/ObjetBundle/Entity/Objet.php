@@ -3,6 +3,7 @@
 namespace HopitalNumerique\ObjetBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use HopitalNumerique\ReferenceBundle\Entity\Reference;
 
 //Asserts Stuff
 use Symfony\Component\Validator\Constraints as Assert;
@@ -167,22 +168,6 @@ class Objet implements RoutedItemInterface
      * @var \DateTime
      *
      * @Gedmo\Versioned
-     * @ORM\Column(name="obj_date_debut_publication", type="datetime", nullable=true, options = {"comment" = "Date de début de la publication de l objet"})
-     */
-    private $dateDebutPublication;
-
-    /**
-     * @var \DateTime
-     *
-     * @Gedmo\Versioned
-     * @ORM\Column(name="obj_date_fin_publication", type="datetime", nullable=true, options = {"comment" = "Date de fin de la publication de l objet"})
-     */
-    private $dateFinPublication;
-
-    /**
-     * @var \DateTime
-     *
-     * @Gedmo\Versioned
      * @ORM\Column(name="obj_date_modification", type="datetime", nullable=true, options = {"comment" = "Date de modification de l objet"})
      */
     private $dateModification;
@@ -242,13 +227,6 @@ class Objet implements RoutedItemInterface
     /**
      * @var array
      *
-     * @ORM\Column(name="obj_glossaires", type="array", options = {"comment" = "Mots du glossaire liés à l objet"})
-     */
-    private $glossaires;
-
-    /**
-     * @var array
-     *
      * @Gedmo\Versioned
      * @ORM\Column(name="obj_referencement", type="array", options = {"comment" = "Copie du référencement pour l historique"})
      */
@@ -292,7 +270,7 @@ class Objet implements RoutedItemInterface
     protected $roles;
 
     /**
-     * @ORM\ManyToMany(targetEntity="\HopitalNumerique\ReferenceBundle\Entity\Reference")
+     * @ORM\ManyToMany(targetEntity="\HopitalNumerique\ReferenceBundle\Entity\Reference", fetch="EAGER")
      * @ORM\JoinTable(name="hn_objet_type",
      *      joinColumns={ @ORM\JoinColumn(name="obj_id", referencedColumnName="obj_id", onDelete="CASCADE")},
      *      inverseJoinColumns={ @ORM\JoinColumn(name="ref_id", referencedColumnName="ref_id", onDelete="CASCADE")}
@@ -300,11 +278,6 @@ class Objet implements RoutedItemInterface
      * @Assert\NotBlank(message="Merci de choisir un type au minimum.")
      */
     protected $types;
-
-    /**
-     * @ORM\OneToMany(targetEntity="\HopitalNumerique\ObjetBundle\Entity\RefObjet", mappedBy="objet", cascade={"persist", "remove" })
-     */
-    protected $references;
 
     /**
      * @ORM\OneToMany(targetEntity="\HopitalNumerique\ObjetBundle\Entity\Consultation", mappedBy="objet", cascade={"persist", "remove" })
@@ -401,7 +374,6 @@ class Objet implements RoutedItemInterface
         $this->vignette      = array();
         $this->autodiags     = array();
         $this->objets        = array();
-        $this->glossaires    = array();
         $this->referencement = array();
         $this->roles         = array();
         $this->types         = array();
@@ -632,52 +604,6 @@ class Objet implements RoutedItemInterface
     public function getDateCreation()
     {
         return $this->dateCreation;
-    }
-
-    /**
-     * Set dateDebutPublication
-     *
-     * @param \DateTime $dateDebutPublication
-     * @return Objet
-     */
-    public function setDateDebutPublication($dateDebutPublication)
-    {
-        $this->dateDebutPublication = $dateDebutPublication;
-
-        return $this;
-    }
-
-    /**
-     * Get dateDebutPublication
-     *
-     * @return \DateTime
-     */
-    public function getDateDebutPublication()
-    {
-        return $this->dateDebutPublication;
-    }
-
-    /**
-     * Set dateFinPublication
-     *
-     * @param \DateTime $dateFinPublication
-     * @return Objet
-     */
-    public function setDateFinPublication($dateFinPublication)
-    {
-        $this->dateFinPublication = $dateFinPublication;
-
-        return $this;
-    }
-
-    /**
-     * Get dateFinPublication
-     *
-     * @return \DateTime
-     */
-    public function getDateFinPublication()
-    {
-        return $this->dateFinPublication;
     }
 
     /**
@@ -943,6 +869,22 @@ class Objet implements RoutedItemInterface
     }
 
     /**
+     * Get types ID
+     *
+     * @return array<integer>
+     */
+    public function getTypeIds()
+    {
+        $typeIds = [];
+
+        foreach ($this->types as $type) {
+            $typeIds[] = $type->getId();
+        }
+
+        return $typeIds;
+    }
+
+    /**
      * Get autodiags
      *
      * @return array $autodiags
@@ -971,48 +913,6 @@ class Objet implements RoutedItemInterface
     public function addAutodiag($autodiag)
     {
         $this->autodiags[] = $autodiag;
-        return $this;
-    }
-
-    /**
-     * Get glossaires
-     *
-     * @return array $glossaires
-     */
-    public function getGlossaires()
-    {
-        return $this->glossaires;
-    }
-
-    /**
-     * Set glossaires
-     *
-     * @param array $glossaires
-     */
-    public function setGlossaires(array $glossaires)
-    {
-        $this->glossaires = $glossaires;
-        return $this;
-    }
-
-    /**
-     * Remove glossaire
-     *
-     * @param string $glossaire
-     */
-    public function removeGlossaire($glossaire)
-    {
-        $this->glossaires->removeElement($glossaire);
-    }
-
-    /**
-     * add glossaire
-     *
-     * @param string $glossaire
-     */
-    public function addGlossaire($glossaire)
-    {
-        $this->glossaires[] = $glossaire;
         return $this;
     }
 
@@ -1161,29 +1061,6 @@ class Objet implements RoutedItemInterface
     public function getObjets()
     {
         return $this->objets;
-    }
-
-    /**
-     * Get references
-     *
-     * @return \Doctrine\Common\Collections\ArrayCollection $references
-     */
-    public function getReferences()
-    {
-        return $this->references;
-    }
-
-    /**
-     * Set references
-     *
-     * @param \Doctrine\Common\Collections\ArrayCollection $references
-     * @return Objet
-     */
-    public function setReferences(\Doctrine\Common\Collections\ArrayCollection $references)
-    {
-        $this->references = $references;
-
-        return $this;
     }
 
     /**
@@ -1534,29 +1411,6 @@ class Objet implements RoutedItemInterface
     public function getIsArticle()
     {
         return $this->isArticle;
-    }
-
-    /**
-     * Add references
-     *
-     * @param \HopitalNumerique\ObjetBundle\Entity\RefObjet $references
-     * @return Objet
-     */
-    public function addReference(\HopitalNumerique\ObjetBundle\Entity\RefObjet $references)
-    {
-        $this->references[] = $references;
-
-        return $this;
-    }
-
-    /**
-     * Remove references
-     *
-     * @param \HopitalNumerique\ObjetBundle\Entity\RefObjet $references
-     */
-    public function removeReference(\HopitalNumerique\ObjetBundle\Entity\RefObjet $references)
-    {
-        $this->references->removeElement($references);
     }
 
     /**
@@ -1979,6 +1833,23 @@ class Objet implements RoutedItemInterface
     public function __toString()
     {
         return $this->titre;
+    }
+
+
+    /**
+     * Retourne si l'objet est un point dur.
+     *
+     * @return boolean Si point dur
+     */
+    public function isPointDur()
+    {
+        foreach ($this->types as $type) {
+            if ($type->getId() === Reference::CATEGORIE_OBJET_POINT_DUR_ID) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     /**

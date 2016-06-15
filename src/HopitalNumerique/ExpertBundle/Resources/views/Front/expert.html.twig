@@ -7,7 +7,6 @@
 {% block stylesheets %}
     {{parent()}}
     {% stylesheets output="compiled/hopitalnumerique-les-experts-index.css" filter="cssrewrite, ?yui_css"
-        "@fancybox_css"
         'bundles/hopitalnumeriqueexpert/css/expert.css'
     %}
         <link rel="stylesheet" href="{{ asset_url }}" />
@@ -17,7 +16,6 @@
 {% block javascripts %}
     {{parent()}}
     {% javascripts output="compiled/hopitalnumerique-les-experts-index.js"
-        "@fancybox_js"
         "@jquery_mosaicflow_js"
         'bundles/hopitalnumeriqueexpert/js/expert.js'
     %}

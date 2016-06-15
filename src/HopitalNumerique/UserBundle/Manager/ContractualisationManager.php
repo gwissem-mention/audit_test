@@ -9,7 +9,7 @@ use Nodevo\ToolsBundle\Manager\Manager as BaseManager;
  */
 class ContractualisationManager extends BaseManager
 {
-    protected $_class = 'HopitalNumerique\UserBundle\Entity\Contractualisation';
+    protected $class = 'HopitalNumerique\UserBundle\Entity\Contractualisation';
     
     /**
      * Récupère le nombre de contractualisation à renouveler depuis 45jours

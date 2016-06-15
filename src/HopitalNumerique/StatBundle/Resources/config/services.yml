@@ -11,13 +11,9 @@ services:
     hopitalnumerique_stat.manager.statrecherche:
         class: %hopitalnumerique_stat.manager.statrecherche.class%
         arguments: ["@doctrine.orm.entity_manager", "@hopitalnumerique_reference.manager.reference", "@security.context"]
-        calls:
-           - [ setCache, ["@liip_doctrine_cache.ns.main"] ]
     hopitalnumerique_stat.manager.stattelechargement:
         class: %hopitalnumerique_stat.manager.stattelechargement.class%
         arguments: ["@doctrine.orm.entity_manager", "@security.context"]
-        calls:
-           - [ setCache, ["@liip_doctrine_cache.ns.main"] ]
     #Listener
     hopitalnumerique_stat.manager.listenerstat.downloadsuccess:
         class: %hopitalnumerique_stat.event.listenerstat.class%
@@ -31,5 +27,3 @@ services:
     hopitalnumerique_stat.manager.errorurl:
         class: %hopitalnumerique_stat.manager.errorurl.class%
         arguments: ["@doctrine.orm.entity_manager"]
-        calls:
-           - [ setCache, ["@liip_doctrine_cache.ns.main"] ]

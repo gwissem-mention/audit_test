@@ -2,6 +2,7 @@
 
 namespace HopitalNumerique\UserBundle\Handler;
 
+use HopitalNumerique\RechercheBundle\DependencyInjection\Referencement\RequeteSession;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Http\Logout\LogoutSuccessHandlerInterface;
@@ -11,10 +12,11 @@ class LogoutHandler implements LogoutSuccessHandlerInterface
     private $_objetManager;
     private $_securityContext;
 
-    public function __construct( $objetManager, $securityContext )
+    public function __construct($objetManager, $securityContext, RequeteSession $requeteSession)
     {
         $this->_objetManager    = $objetManager;
         $this->_securityContext = $securityContext;
+        $this->requeteSession = $requeteSession;
     }
 
     /**
@@ -45,6 +47,8 @@ class LogoutHandler implements LogoutSuccessHandlerInterface
                 $this->_objetManager->save($objet);
             }
         }
+
+        $this->requeteSession->remove();
 
         return new RedirectResponse( $request->headers->get('referer') );
     }

@@ -7,13 +7,13 @@ use Doctrine\ORM\EntityManager;
 
 class ItemManager extends BaseManager
 {
-    protected $_class = '\Nodevo\MenuBundle\Entity\Item';
+    protected $class = '\Nodevo\MenuBundle\Entity\Item';
 
     public function __construct( EntityManager $em, $menuManager )
     {
         $this->_em          = $em;
         $this->_menuManager = $menuManager;
-        $this->_repository  = $this->_em->getRepository( $this->_class );
+        $this->_repository  = $this->_em->getRepository( $this->class );
     }
 
     /**

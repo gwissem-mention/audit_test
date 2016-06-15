@@ -3,9 +3,7 @@
 {% block stylesheets %}
     {{ parent() }}
     {% stylesheets output="compiled/hopitalnumerique-recherche-parcours-index.css" filter="cssrewrite, ?yui_css"
-        "@jquery_toggles_css"
         'bundles/nodevoadmin/css/jquery.nestable.css'
-        'bundles/nodevoadmin/css/toggles.css'
         'bundles/nodevoadmin/plugins/nodevoLoader/nodevoLoader.css'
         'bundles/hopitalnumeriquerechercheparcours/css/style.css'
     %}
@@ -17,12 +15,9 @@
     {{parent()}}
     {% javascripts output="compiled/hopitalnumerique-recherche-parcours-index.js"
         "@nestable_js"
-        "@tinymce_js"
-        "@jquery_toggles_js"
         "@json_js"
-        'bundles/nodevogestionnairemedia/js/moxiemanager/js/moxman.loader.min.js'
-        'bundles/nodevogestionnairemedia/js/MoxieManager.js'
         'bundles/nodevoadmin/plugins/nodevoLoader/nodevoLoader.js'
+        'bundles/hopitalnumeriquerechercheparcours/js/RechercheParcours.js'
         'bundles/hopitalnumeriquerechercheparcours/js/script.js'
     %}
         <script type="text/javascript" src="{{ asset_url }}"></script>
@@ -78,9 +73,14 @@
     <li class="dd-item dd3-item" data-id="{{rechercheParcours.id}}" id="rechercheParcours-{{rechercheParcours.id}}" >
         <div class="dd-handle dd3-handle"></div>
         <div class="dd3-content">
+            <p class="text-muted pull-right" style="margin-right: 56px;">Note référencement : {{ referencement_note(rechercheParcours) }}</p>
             <a href="javascript:selectRecherche({{rechercheParcours.id}}, '{{path('hopital_numerique_recherche_parcours_details_index', {'id':rechercheParcours.id})}}')">{{rechercheParcours.reference.libelle}}</a>
+            
         </div>
         <div class="dd3-actions">
+            <a href="{{path('hopitalnumerique_reference_referencement_popin', { 'entityType':5, 'entityId':rechercheParcours.id })}}" class="pull-right dd3-cog open-popin-referencement fancybox.ajax"><i class="fa fa-cog"></i></a>
+            <a href="{{path('hopital_numerique_recherche_parcours_edit',{ 'rechercheParcours':rechercheParcours.id })}}" class="fancy pull-right dd3-edit fancybox.ajax"><i class="fa fa-edit"></i></a>
+            
         </div>
     </li>
 {% endmacro %}

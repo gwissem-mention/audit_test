@@ -1,0 +1,6 @@
+hopital_numerique_account_informationsmanquantes_save:
+    pattern: '/save/{informationsType}'
+    defaults: { _controller: 'HopitalNumeriqueAccountBundle:InformationsManquantes:save' }
+    methods: 'POST'
+    requirements:
+        informationsType: '\d+'

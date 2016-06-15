@@ -6,5 +6,5 @@ namespace HopitalNumerique\FichierBundle\Manager;
  */
 class FichierTypeManager extends \Nodevo\ToolsBundle\Manager\Manager
 {
-    protected $_class = 'HopitalNumerique\FichierBundle\Entity\FichierType';
+    protected $class = 'HopitalNumerique\FichierBundle\Entity\FichierType';
 }

@@ -1,3 +1,6 @@
+imports:
+    - { resource: 'services/form.yml' }
+
 parameters:
     #Permet d'avoir une valeur par défaut et/ou d'etre surchargé par le config.yml de app/config
     hopital_numerique_recherche.options:
@@ -11,42 +14,31 @@ parameters:
     #Gestionnaire
     hopitalnumerique_recherche.manager.expbesoingestion.class : HopitalNumerique\RechercheBundle\Manager\ExpBesoinGestionManager
     hopitalnumerique_recherche.grid.expbesoingestion.class    : HopitalNumerique\RechercheBundle\Grid\ExpBesoinGestionGrid
-    hopitalnumerique_recherche.form.expbesoingestion.class    : HopitalNumerique\RechercheBundle\Form\ExpBesoinGestionType
 
 services:
     hopitalnumerique_recherche.manager.search:
         class: %hopitalnumerique_recherche.manager.search.class%
-        arguments: ["@hopitalnumerique_objet.manager.refobjet", "@hopitalnumerique_objet.manager.refcontenu", "@hopitalnumerique_forum.manager.reftopic", "@ccdn_forum_forum.component.security.authorizer", "%hopital_numerique_recherche.options%"]
+        arguments: ["@ccdn_forum_forum.component.security.authorizer", "%hopital_numerique_recherche.options%"]
 
     hopitalnumerique_recherche.manager.requete:
         class: %hopitalnumerique_recherche.manager.requete.class%
         arguments: ["@doctrine.orm.entity_manager"]
-        calls:
-           - [ setCache, ["@liip_doctrine_cache.ns.main"] ]
 
     hopitalnumerique_recherche.manager.expbesoin:
         class: %hopitalnumerique_recherche.manager.expbesoin.class%
         arguments: ["@doctrine.orm.entity_manager"]
-        calls:
-           - [ setCache, ["@liip_doctrine_cache.ns.main"] ]
 
     hopitalnumerique_recherche.manager.expbesoinreponses:
         class: %hopitalnumerique_recherche.manager.expbesoinreponses.class%
         arguments: ["@doctrine.orm.entity_manager", "@hopitalnumerique_user.manager.user", "@hopitalnumerique_reference.manager.reference"]
-        calls:
-           - [ setCache, ["@liip_doctrine_cache.ns.main"] ]
 
     hopitalnumerique_recherche.manager.refexpbesoinreponses:
         class: %hopitalnumerique_recherche.manager.refexpbesoinreponses.class%
         arguments: ["@doctrine.orm.entity_manager"]
-        calls:
-           - [ setCache, ["@liip_doctrine_cache.ns.main"] ]
 
     hopitalnumerique_recherche.manager.statClic:
         class: %hopitalnumerique_recherche.manager.statClic.class%
         arguments: ["@doctrine.orm.entity_manager"]
-        calls:
-           - [ setCache, ["@liip_doctrine_cache.ns.main"] ]
 
     hopitalnumerique_recherche.service.logger.cronlogger:
         class: "%hopitalnumerique_recherche.service.logger.cronlogger.class%"
@@ -56,27 +48,35 @@ services:
     hopitalnumerique_recherche.manager.expbesoingestion:
         class: %hopitalnumerique_recherche.manager.expbesoingestion.class%
         arguments: ["@doctrine.orm.entity_manager", "@hopitalnumerique_user.manager.user"]
-        calls:
-           - [ setCache, ["@liip_doctrine_cache.ns.main"] ]
 
     hopitalnumerique_recherche.grid.expbesoingestion:
         class: %hopitalnumerique_recherche.grid.expbesoingestion.class%
         arguments: ["@service_container"]
 
-    hopitalnumerique_recherche.form.expbesoingestion:
-        class: %hopitalnumerique_recherche.form.expbesoingestion.class%
-        arguments: ["@hopitalnumerique_recherche.manager.expbesoingestion", "@validator", "@hopitalnumerique_user.manager.user"]
-        tags:
-            - { name: form.type, alias: hopitalnumerique_recherche_expbesoingestion }
+    hopitalnumerique_recherche.dependency_injection.referencement.exalead.search:
+        class: 'HopitalNumerique\RechercheBundle\DependencyInjection\Referencement\Exalead\Search'
+        arguments: ['@hopitalnumerique_domaine.dependency_injection.current_domaine', '@hopitalnumerique_recherche.doctrine.referencement.reader', '@hopitalnumerique_recherche.manager.search']
 
-    hopitalnumerique_recherche.form.expbesoin:
-        class: 'HopitalNumerique\RechercheBundle\Form\ExpBesoinType'
-        arguments: ['@router']
-        tags:
-            - { name: 'form.type', alias: 'hopitalnumerique_recherche_expbesoin' }
+    hopitalnumerique_recherche.dependency_injection.referencement.requete_session:
+        class: 'HopitalNumerique\RechercheBundle\DependencyInjection\Referencement\RequeteSession'
+        arguments:
+            - '@session'
+            - '@hopitalnumerique_user.dependency_injection.connected_user'
+            - '@hopitalnumerique_domaine.dependency_injection.current_domaine'
+            - '@hopitalnumerique_reference.dependency_injection.reference.tree'
+            - '@hopitalnumerique_recherche.doctrine.referencement.modulation'
+            - '@hopitalnumerique_reference.manager.reference'
+            - '@hopitalnumerique_recherche.manager.requete'
+            - '@hopitalnumerique_stat.manager.statrecherche'
 
-    hopitalnumerique_recherche.form.expbesoinreponse:
-        class: 'HopitalNumerique\RechercheBundle\Form\ExpBesoinReponseType'
-        arguments: ['@router']
-        tags:
-            - { name: 'form.type', alias: 'hopitalnumerique_recherche_expbesoinreponse' }
+    hopitalnumerique_recherche.doctrine.referencement.category:
+        class: 'HopitalNumerique\RechercheBundle\Doctrine\Referencement\Category'
+        arguments: ['@hopitalnumerique_domaine.dependency_injection.current_domaine', '@hopitalnumerique_reference.manager.reference']
+
+    hopitalnumerique_recherche.doctrine.referencement.modulation:
+        class: 'HopitalNumerique\RechercheBundle\Doctrine\Referencement\Modulation'
+        arguments: ['@hopitalnumerique_reference.dependency_injection.referencement', '@hopitalnumerique_reference.dependency_injection.reference.tree', '@hopitalnumerique_reference.manager.entity_has_reference']
+
+    hopitalnumerique_recherche.doctrine.referencement.reader:
+        class: 'HopitalNumerique\RechercheBundle\Doctrine\Referencement\Reader'
+        arguments: ['@router', '@hopitalnumerique_core.dependency_injection.entity', '@hopitalnumerique_reference.dependency_injection.referencement', '@hopitalnumerique_recherche.doctrine.referencement.modulation', '@hopitalnumerique_domaine.dependency_injection.current_domaine', '@hopitalnumerique_user.dependency_injection.connected_user', '@hopitalnumerique_reference.manager.entity_has_reference', '@hopitalnumerique_reference.manager.entity_has_note', '@hopitalnumerique_objet.manager.objet', '@hopitalnumerique_objet.manager.contenu']

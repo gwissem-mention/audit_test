@@ -9,7 +9,7 @@ use Nodevo\ToolsBundle\Manager\Manager as BaseManager;
  */
 class CommentaireManager extends BaseManager
 {
-    protected $_class = 'HopitalNumerique\ObjetBundle\Entity\Commentaire';
+    protected $class = 'HopitalNumerique\ObjetBundle\Entity\Commentaire';
 
 
 

@@ -12,22 +12,21 @@
 .reseaux-sociaux .scoopt-it{margin-right: 10px;}
 
 /* Sommaire */
-    #sommaire{ position: fixed; left:0; top:0; height: 100%; max-width: 33% }
-    #sommaire.closed{ width:33px;background: url('../img/sommaire.jpg') no-repeat center 95px; cursor: pointer }
-    #sommaire.open{ z-index:20; background: #ffffff url('../img/sommaire-close.png') no-repeat 96% 15px; padding:15px 40px 15px 15px; border:1px solid #e2e2e2}
-    #sommaire a.resume{background: url('../img/synthese-violet.png') no-repeat right center; padding-right:25px;display: block;height: 18px; text-align: right; width: 79px; color:#777777;}
-    #sommaire h3{font-size: 18px;margin-top: 10px; }
-    #sommaire .content{overflow-y:auto;height: 100%}
-    #sommaire .content ul{list-style: none;}
-    #sommaire .content > ul{padding:0;}
-    #sommaire .content p{margin:0;}
+    #sommaire { background-color: #e5e5e5;float: left;margin: 0 20px 20px 0;padding: 10px;width: 250px; }
+    @media screen and (max-width: 991px) { #sommaire { float: none;width: 100%; } }
+        #sommaire .toggle-children { cursor: pointer; }
+        #sommaire h3 { font-size: 18px;font-weight: bold;margin: 0 0 10px 0; }
+        #sommaire ul { font-size: 12px;list-style-type: none;margin: 0;padding: 0 !important; }
+            #sommaire ul .toggle-children { display: none; }
+            #sommaire ul ul { padding-left: 15px !important; }
+                #sommaire ul ul .toggle-children { display: inline; }
+                #sommaire ul ul ul { display: none; }
 
-    #sommaire .content ul li a, 
-    #sommaire .content ul li p
-        {color: #777777; font-size: 12px}
-    #sommaire .content > ul > li > a, 
-    #sommaire .content > ul > li > p
-        {color: #d60030; font-weight: bold; }
+    #column-right { float: right;margin: 0 0 20px 20px;width: 250px; }
+    #column-right .column-right-container { background-color: #e5e5e5; padding: 10px; }
+    @media screen and (max-width: 991px) { #column-right { float: none;margin: 0 0 20px 0;width: 100%; } }
+    #column-right div h2 { margin-top: 20px; }
+    #column-right div:first-child h2 { margin-top: 0; }
 
 /* Productions */
     #productionsPointDur{ margin-top: 30px; }
@@ -48,7 +47,7 @@
     #publication ul li{list-style-position: inside;}
     #publication{margin-top: 20px; position: relative}
     #publication .print{margin-left:5px;}
-    #publication h1{font-size: 24px; font-weight: bold; margin:2px 0 20px 0; border-bottom: 1px solid #D5D5D5; padding-bottom: 5px; font-family: 'Open Sans', sans-serif; width: 90%;}
+    #publication h1{font-size: 24px; font-weight: bold; margin:2px 0 20px 0; border-bottom: 1px solid #D5D5D5; padding-bottom: 5px; font-family: 'Open Sans', sans-serif; }
     #publication h2{font-size: 20px; color: #d60030; font-family: 'Open Sans', sans-serif;}
     #publication #resultats h3{font-size: 20px; color: #d60030; font-family: 'Open Sans', sans-serif;}
     #publication h3{font-size: 16px; font-family: 'Open Sans', sans-serif;}
@@ -56,10 +55,10 @@
     #publication h4.objetTitre{font-weight: bold}
     #publication .objetLink{font-size: 16px}
     #publication .wrapper a{font-family: 'Open Sans', sans-serif }
-    #publication .col-md-4 div.wrapper{border:1px solid #e2e2e2; padding:10px 20px 0;margin-top:10px;}
-    #publication .col-md-4 div.wrapper a.downloadLink{color:#070707; font-size: 13px; font-weight: normal; margin-bottom: 10px}
-    #publication .col-md-4 div.wrapper a.synthese{background: url('../img/synthese-violet.png') no-repeat right center; padding-right:25px;display: block;height: 18px; text-align: right; width: 96px; font-weight: normal; margin-bottom: 10px}
-    #publication .col-md-4 div.wrapper .fa-download{margin:3px 0 0 7px;}
+    #publication .download-prod-bloc div.wrapper{border:1px solid #e2e2e2; padding:10px 20px 0;margin-top:10px;}
+    #publication .download-prod-bloc div.wrapper a.downloadLink{color:#070707; font-size: 13px; font-weight: normal; margin-bottom: 10px}
+    #publication .download-prod-bloc div.wrapper a.synthese{background: url('../img/synthese-violet.png') no-repeat right center; padding-right:25px;display: block;height: 18px; text-align: right; width: 96px; font-weight: normal; margin-bottom: 10px}
+    #publication .download-prod-bloc div.wrapper .fa-download{margin:3px 0 0 7px;}
     #publication .titre-infradoc a{font-size: 22px;}
     #publication .titre-infradoc-pdf {display: none;}
     #publication table {margin: 0 20px 20px 0;}
@@ -70,7 +69,7 @@
     #publication #resultats span.label{ font-size:9px; line-height: 2; vertical-align: top }
     #publication #resultats .niveau{ margin-bottom: 4px }
     #publication #resultats .hl{ background-color: yellow; border: 1px dotted red; padding: 0 2px; }
-    
+
     /* Points Dur*/
     #publication #resultats #pointsdurs{padding:0;}
     /*#publication #resultats #pointsdurs h3{ color: #d60030; font-size: 12px; text-transform: uppercase; margin: 0 0 10px 0; font-weight: bold}*/
@@ -119,15 +118,19 @@
     #publication #resultats #productions .wrapper-results .results .fa-refresh,
     #publication #resultats #infradocs .wrapper-results .results .fa-refresh { color:#3da20b; }
 
+    /* Sous-chapitres */
+    .sous-chapitres-container {}
+        .sous-chapitres-container .title { text-decoration: underline; }
+
     /* Bloc résumé */
     #publication #publication-resume h1{font-size: 24px; font-weight: bold; margin:2px 0 20px 0; border-bottom: 1px solid #D5D5D5; padding-bottom: 5px;}
     #publication #publication-resume h2{font-size: 18px; color: #d60030; font-weight: bold;}
     #publication #publication-resume h3{font-size: 16px; color: #d60030; margin-left: 20px; font-weight: bold;}
     #publication #publication-resume h4{color: #d60030;font-size: 14px;font-style: italic;font-weight: normal; margin: 15px 0 10px 50px; font-weight: bold;}
-    #publication #publication-resume h5{color: #d60030;font-size: 14px;font-style: italic;font-weight: normal; margin: 15px 0 10px 75px; font-weight: bold;} 
+    #publication #publication-resume h5{color: #d60030;font-size: 14px;font-style: italic;font-weight: normal; margin: 15px 0 10px 75px; font-weight: bold;}
     #publication #publication-resume h6{color: #d60030;font-size: 14px;font-style: italic;font-weight: normal; margin: 15px 0 10px 100px; font-weight: bold;}
 	#publication #publication-resume iframe{ margin-right: 15px;}
-	
+
     /* Bloc Productions associés */
     #publication #productions-associes{ margin-top: 30px; }
     #publication #productions-associes h3{ color: #595959; font-size: 12px; text-transform: uppercase; margin: 0 0 10px 0; font-weight: normal }
@@ -141,7 +144,7 @@
     #publication #productions-associes .wrapper-results .results p{font-size: 13px; color:#070707; }
     #publication #productions-associes .wrapper-results .results .fa-refresh{ color:#3da20b; }
     #publication #productions-associes ul li {font-size: 13px;}
-    
+
     /* Bloc Date de parution - source du document */
     #publication #date-source{font-weight:bold;font-size:12px;margin-top:20px;}
 
@@ -165,7 +168,7 @@
         #articles h2{font-size: 18px; color: #d60030; font-weight: bold;}
         #articles h3{font-size: 16px; color: #d60030; margin-left: 20px; font-weight: bold;}
         #articles h4{color: #d60030;font-size: 14px;font-style: italic;font-weight: normal; margin: 15px 0 10px 50px; font-weight: bold;}
-        #articles h5{color: #d60030;font-size: 14px;font-style: italic;font-weight: normal; margin: 15px 0 10px 75px; font-weight: bold;} 
+        #articles h5{color: #d60030;font-size: 14px;font-style: italic;font-weight: normal; margin: 15px 0 10px 75px; font-weight: bold;}
         #articles h6{color: #d60030;font-size: 14px;font-style: italic;font-weight: normal; margin: 15px 0 10px 100px; font-weight: bold;}
 
         #articles h4.categorie {margin-left:0;}
@@ -187,16 +190,19 @@
         #articles .actus ul li:hover a{color:#d60030;}
 
         #articles .dateModif{color: #a2a2a2;font-size: 12px;font-style : italic; margin-bottom: 20px;border-bottom: 1px solid #d5d5d5;}
-    /* Blocs Communauté de pratiques */
+    /* Blocs Communauté de pratique */
         #articles .communaute-de-pratiques-blocs { clear: both;padding:40px 0 0 0; }
             #articles .communaute-de-pratiques-blocs .title { color: #d60030;font-size: 17px;font-weight: bold; }
-            #articles .communaute-de-pratiques-blocs .btn { background-color: #d60030;border-radius: 0;color: #fff;font-size: 12px;padding: 5px 26px; }
+            #articles .communaute-de-pratiques-blocs .btn { background-color: #d60030;background-image: none;border-radius: 0;border-width: 0;color: #fff;font-size: 12px;padding: 5px 26px; }
             #articles .communaute-de-pratiques-blocs p { font-size: 12px;margin: 14px 0; }
             #articles .communaute-de-pratiques-blocs .bloc-rejoindre, #articles .communaute-de-pratiques-blocs .bloc-action { margin: 0 0 15px 0;min-height: 190px;padding: 14px 20px; }
             #articles .communaute-de-pratiques-blocs .bloc-rejoindre { background-color: #e5e5e5; }
             #articles .communaute-de-pratiques-blocs .bloc-action { background-color: #f6f6f6;text-align: center; }
                 #articles .communaute-de-pratiques-blocs .bloc-action .subtitle { font-weight: bold; }
                 #articles .communaute-de-pratiques-blocs .bloc-action p em { color: #d60030; }
+            #articles .communaute-de-pratiques-blocs .connexion-bloc {}
+            @media screen and (max-width: 991px) { #articles .communaute-de-pratiques-blocs .connexion-bloc { margin-bottom: 20px; } }
+                #articles .communaute-de-pratiques-blocs .connexion-bloc h3 { margin-left: 0; }
 
 /* Productions fortement liées */
     #productions-associes h2{display: block; margin:0 0 5px 0;background-image: url('../img/panel.png');background-repeat: no-repeat;cursor: pointer; height: 25px;}
@@ -208,19 +214,19 @@
     #bloc-notation-objet .wrapper #note-etoile{ margin-bottom: 7px;}
     #bloc-notation-objet .wrapper #note-etoile button{ margin-right: 5px; margin-left: 10px;}
     #bloc-notation-objet .wrapper .message-notation { margin-bottom: 10px;}
-    #bloc-notation-moyenne-objet {margin-top: 0px; margin-bottom: 15px;}
+    #bloc-notation-moyenne-objet {margin-top: 0px; }
     #bloc-notation-moyenne-objet #note-moyenne-etoile { margin-top: 2px;}
     #bloc-notation-moyenne-objet #info-note-moyenne { margin-left: 10px;}
 
 /*  Chapitre Précédent / Suivant */
     #precedent-suivant a{width: 100%; color: #d60030;}
 
-/* Commentaires */
-    #commentaires h2{display: block; margin-bottom:5px;background-image: url('../img/panel.png');background-repeat: no-repeat;cursor: pointer; height: 25px}
-    #commentaires h2.open{background-position: right -38px;}
-    #commentaires h2.closed{background-position: right -5px; }
+/* Commentaires & Prods liées */
+    #commentaires h2 {display: block; margin-bottom:5px;background-image: url('../img/panel.png');background-repeat: no-repeat;cursor: pointer; height: 25px}
+    #commentaires h2.open {background-position: right -38px;}
+    #commentaires h2.closed {background-position: right -5px; }
     #commentaires h3 {color:#6B339B;}
-    #commentaires .mysep.background-rose{width: 85px; height: 4px; margin-bottom: 10px}
+    #commentaires .mysep.background-rose {width: 85px; height: 4px; margin-bottom: 10px}
     #commentaires .separator{height: 20px}
 
     #commentaires .commentaire { background: #F6F6F6; padding: 10px; margin-bottom: 15px; position: relative}
@@ -228,6 +234,12 @@
     #commentaires .commentaire .user{ color:#6B339B; font-size: 15px;}
     #commentaires .commentaire .date-post{ color:#B5B5B5; font-size: 12px;}
     #commentaires .commentaire .texte{ margin-top: 5px; margin-bottom: 5px;}
+
+    #productions_liees h2, #parcours_guides h2 { margin-bottom:5px;margin-top: 0; }
+    #productions_liees .results-bloc, #parcours_guides .results-bloc { margin: 0 0 10px 0; }
+        #productions_liees .results-bloc .title a, #parcours_guides .results-bloc .title a { font-size: 13px; }
+        #productions_liees .results-bloc p, #parcours_guides .results-bloc p { font-size: 12px;margin: 0; }
+    #productions_liees .mysep.background-rose, #parcours_guides .mysep.background-rose {width: 85px; height: 4px; }
 
 /* Autres résultats */
     #autresResultats h2{display: block; margin-bottom:5px;background-image: url('../img/panel.png');background-repeat: no-repeat;cursor: pointer; height: 25px}
@@ -255,7 +267,7 @@
     #autresResultats .top .results h4{margin-bottom: 5px; margin-top: 5px; text-transform: none; }
     #autresResultats .top .results h4 a{color: #333333; font-size: 14px; font-weight: bold; }
     #autresResultats .top .results h4 a small{color: #333333;}
-    #autresResultats .top .results p{color: #333333; font-size: 12px; font-weight: normal; height: 85px; overflow-y:auto;margin-bottom:0;} 
+    #autresResultats .top .results p{color: #333333; font-size: 12px; font-weight: normal; height: 85px; overflow-y:auto;margin-bottom:0;}
 
     /* Ressources externes et forum*/
     #autresResultats #ressources{border:1px solid #DE0D4D;}
@@ -266,7 +278,7 @@
     #autresResultats #forum h3{background: url('../img/forum.png') no-repeat left center; padding-left: 45px}
     #autresResultats .bottom .results h4{margin-bottom: 5px; margin-top: 5px; text-transform: none; }
     #autresResultats .bottom .results h4 a{color: #ffffff; font-size: 14px; font-weight: bold; }
-    #autresResultats .bottom .results p{color: #ffffff; font-size: 12px; font-weight: normal; height: 85px; overflow-y:auto;} 
+    #autresResultats .bottom .results p{color: #ffffff; font-size: 12px; font-weight: normal; height: 85px; overflow-y:auto;}
 
 /**
  * MEDIA QUERIES
@@ -281,7 +293,7 @@
     #autresResultats h2{background-image:none;}
     #articles{margin-top: 10px;}
     #ambassadeurs.open, #sommaire.open, #mesrequetes.open{width: 100%; max-width: 100%}
-    
+
     #points-durs{margin-bottom: 20px}
     #ressources{margin-bottom: 20px}
     #autresResultats .carousel-inner{ width: 92%;}
@@ -301,4 +313,9 @@
     #autresResultats h2.closed .h2-arrow{background-position: right -5px; }
     #autresResultats h2 .h2-arrow{background-image: url('../img/panel.png');background-repeat: no-repeat;cursor: pointer; width: 30px;height: 25px; float: right;}
 
+}
+
+
+#publication .recherche-referencement h3 {
+    font-weight: normal;
 }

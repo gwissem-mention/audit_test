@@ -15,7 +15,7 @@ use HopitalNumerique\AutodiagBundle\Entity\Resultat;
  */
 class ProcessManager extends BaseManager
 {
-    protected $_class = 'HopitalNumerique\AutodiagBundle\Entity\Process';
+    protected $class = 'HopitalNumerique\AutodiagBundle\Entity\Process';
 
     /**
      * @var \HopitalNumerique\AutodiagBundle\Manager\ChapitreManager Le manager de l'entité Chapitre

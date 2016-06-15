@@ -9,7 +9,7 @@ use Nodevo\ToolsBundle\Manager\Manager as BaseManager;
  */
 class RefExpBesoinReponsesManager extends BaseManager
 {
-    protected $_class = 'HopitalNumerique\RechercheBundle\Entity\RefExpBesoinReponses';
+    protected $class = 'HopitalNumerique\RechercheBundle\Entity\RefExpBesoinReponses';
 
 
 }

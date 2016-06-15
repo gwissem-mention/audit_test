@@ -10,7 +10,7 @@ use HopitalNumerique\ExpertBundle\Entity\ActiviteExpert;
  */
 class ActiviteExpertManager extends BaseManager
 {
-    protected $_class = 'HopitalNumerique\ExpertBundle\Entity\ActiviteExpert';
+    protected $class = 'HopitalNumerique\ExpertBundle\Entity\ActiviteExpert';
 
     /**
      * Override : Récupère les données pour le grid sous forme de tableau

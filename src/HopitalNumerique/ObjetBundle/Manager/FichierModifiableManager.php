@@ -9,5 +9,5 @@ use Nodevo\ToolsBundle\Manager\Manager as BaseManager;
  */
 class FichierModifiableManager extends BaseManager
 {
-    protected $_class = 'HopitalNumerique\ObjetBundle\Entity\FichierModifiable';
+    protected $class = 'HopitalNumerique\ObjetBundle\Entity\FichierModifiable';
 }

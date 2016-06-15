@@ -16,7 +16,7 @@ class ItemRequeteController extends Controller
     public function indexAction( )
     {
         $modelsReferencement = $this->get('hopitalnumerique_reference.manager.reference')->findBy(array('code' => 'CATEGORIES_RECHERCHE'), array('order' => 'ASC'));
-        $categsContexte      = $this->get('hopitalnumerique_reference.manager.reference')->findBy(array('parent' => 222), array('order' => 'ASC'));
+        $categsContexte      = $this->get('hopitalnumerique_reference.manager.reference')->findByParent($this->get('hopitalnumerique_reference.manager.reference')->findOneById(222));
 
         return $this->render('HopitalNumeriqueStatBundle:Back:partials/ItemRequete/bloc.html.twig', array(
             'modelsReferencement' => $modelsReferencement,
@@ -94,8 +94,7 @@ class ItemRequeteController extends Controller
      */
     public function indexProductionAction( )
     {
-        $categsContexte       = $this->get('hopitalnumerique_reference.manager.reference')->findBy(array('parent' => 222), array('order' => 'ASC'));
-
+        $categsContexte       = $this->get('hopitalnumerique_reference.manager.reference')->findByParent($this->get('hopitalnumerique_reference.manager.reference')->findOneById(222));
         return $this->render('HopitalNumeriqueStatBundle:Back:partials/ItemProduction/bloc.html.twig', array(
             'categsContexte'      => $categsContexte
         ));
@@ -178,12 +177,11 @@ class ItemRequeteController extends Controller
         //Récupération des dates sous forme DateTime
         $dateDebutDateTime = $dateDebut === "" ? null : new \DateTime($dateDebut);
         $dateFinDateTime   = $dateFin   === "" ? null : new \DateTime($dateFin);
-        $entetesTableau    = array();
         $lignes            = array();
 
         $modelReferencement = $this->get('hopitalnumerique_reference.manager.reference')->findOneBy(array('id' => $modelReferencementId));
         
-        $entetes = $this->get('hopitalnumerique_reference.manager.reference')->findBy(array('parent' => $contexteId));
+        $entetes = $this->get('hopitalnumerique_reference.manager.reference')->findByParent($this->get('hopitalnumerique_reference.manager.reference')->findOneById($contexteId));
         
         $modelReferencement           = $this->get('hopitalnumerique_reference.manager.reference')->getArboFromAReference( $modelReferencement )[0];
         $lastChildsModelReferencement = $this->getLastChildRecursive($modelReferencement, $tab = array(), '');
@@ -225,11 +223,10 @@ class ItemRequeteController extends Controller
         //Récupération des dates sous forme DateTime
         $dateDebutDateTime = $dateDebut === "" ? null : new \DateTime($dateDebut);
         $dateFinDateTime   = $dateFin   === "" ? null : new \DateTime($dateFin);
-        $entetesTableau    = array();
         $lignes            = array();
         
-        $entetes   = $this->get('hopitalnumerique_reference.manager.reference')->findBy(array('parent' => $contexteId));
-        $categoriesProduction    = $this->get('hopitalnumerique_reference.manager.reference')->findBy(array('parent' => '175'), array('libelle' => 'ASC'));
+        $entetes   = $this->get('hopitalnumerique_reference.manager.reference')->findByParent($this->get('hopitalnumerique_reference.manager.reference')->findOneById($contexteId));
+        $categoriesProduction    = $this->get('hopitalnumerique_reference.manager.reference')->findByParent($this->get('hopitalnumerique_reference.manager.reference')->findOneById(175));
 
         foreach ($categoriesProduction as $categ) 
         {

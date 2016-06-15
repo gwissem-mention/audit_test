@@ -4,7 +4,7 @@ jQuery(document).ready(function() {
 });
 
 $(function() {
-    $('.dd3-content a, .manageReferences, .uploadSommaire').fancybox({
+    $('.dd3-content a, .uploadSommaire').fancybox({
         'padding'   : 0,
         'autoSize'  : false,
         'width'     : '80%',
@@ -99,9 +99,7 @@ function saveReferences( topic, idContenu )
     //JSONify IT !
     json = JSON.stringify( references );
 
-    if( topic )
-        ajaxUrl = $('#save-references-topic-url').val();
-    else
+    if( !topic ) {
         ajaxUrl = $('#save-references-contenu-url').val();
 
     //save the value
@@ -124,4 +122,5 @@ function saveReferences( topic, idContenu )
             $.fancybox.close(true);
         }
     });
+    }
 }

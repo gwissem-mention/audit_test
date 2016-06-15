@@ -12,7 +12,7 @@ use Nodevo\ContactBundle\Manager\ContactManager as NodevoContactManager;
  */
 class ContactManager extends NodevoContactManager
 {
-    protected $_class = 'HopitalNumerique\ContactBundle\Entity\Contact';
+    protected $class = 'HopitalNumerique\ContactBundle\Entity\Contact';
     /**
      * Adresses mails en Copie Caché de l'anap
      * @var array() Tableau clé: Nom affiché => valeur : Adresse mail

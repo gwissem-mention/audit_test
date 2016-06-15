@@ -7,7 +7,7 @@ use Pagerfanta\Adapter\ArrayAdapter;
 use Pagerfanta\Pagerfanta;
 
 /**
- * Contrôleur des actualités de la communauté de pratiques.
+ * Contrôleur des actualités de la communauté de pratique.
  */
 class ActualiteController extends \Symfony\Bundle\FrameworkBundle\Controller\Controller
 {

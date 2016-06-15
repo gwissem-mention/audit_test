@@ -646,7 +646,7 @@ class User extends BaseUser
      */
     protected $notficationRequete;
 
-    /* <-- Communauté de pratiques */
+    /* <-- Communauté de pratique */
 
     /**
      * @var boolean
@@ -1038,6 +1038,23 @@ class User extends BaseUser
         return $this->domaines;
     }
 
+    /**
+     * Retourne si l'utilisateur possède ce domaine.
+     *
+     * @param \HopitalNumerique\DomaineBundle\Entity\Domaine $domaine Domaine
+     * @return boolean Si domaine
+     */
+    public function hasDomaine(\HopitalNumerique\DomaineBundle\Entity\Domaine $domaine)
+    {
+        foreach ($this->domaines as $userDomaine) {
+            if ($userDomaine->getId() === $domaine->getId()) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
     /*-- Fin gestion domaine --*/
 
     /**
@@ -1195,6 +1212,22 @@ class User extends BaseUser
     /**
      * Set typeActivite
      *
+     * @param array<\HopitalNumerique\ReferenceBundle\Entity\Reference> $activiteTypes
+     */
+    public function setTypeActivites($activiteTypes)
+    {
+        $this->typeActivite = new \Doctrine\Common\Collections\ArrayCollection();
+
+        foreach ($activiteTypes as $activiteType) {
+            $this->addTypeActivite($activiteType);
+        }
+
+        return $this;
+    }
+
+    /**
+     * Set typeActivite
+     *
      * @param \HopitalNumerique\ReferenceBundle\Entity\Reference $typeActivite
      */
     public function setTypeActivite($typeActivite = null)
@@ -1203,6 +1236,18 @@ class User extends BaseUser
             $this->typeActivite = $typeActivite;
         else
             $this->typeActivite = null;
+    }
+
+    /**
+     * Add typeActivite
+     *
+     * @param \HopitalNumerique\ReferenceBundle\Entity\Reference $typeActivite
+     */
+    public function addTypeActivite(Reference $typeActivite)
+    {
+        $this->typeActivite[] = $typeActivite;
+
+        return $this;
     }
 
     /**
@@ -1215,6 +1260,42 @@ class User extends BaseUser
         return $this->typeActivite;
     }
 
+    /**
+     * Retourne si l'utilisateur possède tel type d'activité.
+     *
+     * @param \HopitalNumerique\ReferenceBundle\Entity\Reference $activiteType Type d'activité
+     * @return boolean Si possède
+     */
+    public function hasTypeActivite(Reference $activiteType)
+    {
+        foreach ($this->typeActivite as $existingActiviteType) {
+            if ($activiteType->equals($existingActiviteType)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * Retourne si l'utilisateur possède exactement ces types d'activité.
+     *
+     * @param array<\HopitalNumerique\ReferenceBundle\Entity\Reference> $activiteTypes Types d'activité
+     * @return boolean Si possède
+     */
+    public function equalsTypeActivite(array $activiteTypes)
+    {
+        if (count($this->typeActivite) === count($activiteTypes)) {
+            foreach ($activiteTypes as $activiteType) {
+                if (!$this->hasTypeActivite($activiteType)) {
+                    return false;
+                }
+            }
+            return true;
+        }
+
+        return false;
+    }
     /**
      * Set statutEtablissementSante
      *
@@ -2090,7 +2171,7 @@ class User extends BaseUser
       return $this;
     }
 
-    /* <-- Communauté de pratiques */
+    /* <-- Communauté de pratique */
 
     /**
      * Get inscritCommunautePratique
@@ -2388,6 +2469,19 @@ class User extends BaseUser
     }
 
     /* --> */
+
+
+    /**
+     * Equals.
+     *
+     * @param \HopitalNumerique\UserBundle\Entity\User $user User
+     * @return boolean Si égalité
+     */
+    public function equals(User $user)
+    {
+        return ($this->id === $user->getId());
+    }
+
 
     /* <-- Avatar */
 
