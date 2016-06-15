@@ -448,11 +448,15 @@ class UserManager extends BaseManager
         $user->setInscritCommunautePratique(false);
 
         // On supprime les liens entre le membre et les groupes
-        foreach ($user->getCommunautePratiqueGroupes() as $groupe) {
-            $user->removeCommunautePratiqueGroupe($groupe);
+        if ($user->getCommunautePratiqueGroupes() !== null) {
+            foreach ($user->getCommunautePratiqueGroupes() as $groupe) {
+                $user->removeCommunautePratiqueGroupe($groupe);
+            }
         }
-        foreach ($user->getCommunautePratiqueAnimateurGroupes() as $groupe) {
-            $user->removeCommunautePratiqueAnimateurGroupe($groupe);
+        if ($user->getCommunautePratiqueAnimateurGroupes() !== null) {
+            foreach ($user->getCommunautePratiqueAnimateurGroupes() as $groupe) {
+                $user->removeCommunautePratiqueAnimateurGroupe($groupe);
+            }
         }
 
         $this->save($user);
