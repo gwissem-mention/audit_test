@@ -74,7 +74,11 @@
             <div class="clearfix"></div>
             <div class="col-md-12">
                 {% include 'HopitalNumeriquePublicationBundle:Publication:Partials/sommaire.html.twig' %}
-                {% include 'HopitalNumeriquePublicationBundle:Publication:Partials/column_right.html.twig' %}
+
+                {% if is_pdf == false %}
+                    {% include 'HopitalNumeriquePublicationBundle:Publication:Partials/column_right.html.twig' %}
+                {% endif %}
+
                 <div>
                     {% if breadCrumbsArray is defined and breadCrumbsArray is not null %}
                         <div class="titre-infradoc violet" style="margin-top: -10px;margin-bottom:5px;padding-top:5px;">
@@ -160,6 +164,10 @@
                     {%- endif -%}
 
                 </div>
+
+                {% if is_pdf %}
+                    {% include 'HopitalNumeriquePublicationBundle:Publication:Partials/column_right.html.twig' %}
+                {% endif %}
             </div>
         {# Cas Objet #}
         {% else %}
@@ -179,7 +187,10 @@
             </div>
             <div class="col-md-12">
                 {% include 'HopitalNumeriquePublicationBundle:Publication:Partials/sommaire.html.twig' %}
-                {% include 'HopitalNumeriquePublicationBundle:Publication:Partials/column_right.html.twig' %}
+
+                {% if is_pdf == false %}
+                    {% include 'HopitalNumeriquePublicationBundle:Publication:Partials/column_right.html.twig' %}
+                {% endif %}
 
                 <input type="hidden" id="objetId" style="display: none;" value="{% if contenu is defined %}{{contenu.id}}{% else %}{{objet.id}}{% endif %}">
                 <input type="hidden" id="notesAutorisees" style="display: none;" value="{{objet.notes}}">
@@ -221,6 +232,10 @@
                 <div id="publication-resume">
                     {{objet.resume|glossaire_add(objet)|parsePublication|raw}}
                 </div>
+
+                {% if is_pdf %}
+                    {% include 'HopitalNumeriquePublicationBundle:Publication:Partials/column_right.html.twig' %}
+                {% endif %}
             </div>
         {% endif %}
 
