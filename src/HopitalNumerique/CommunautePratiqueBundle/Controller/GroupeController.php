@@ -43,11 +43,37 @@ class GroupeController extends \Symfony\Bundle\FrameworkBundle\Controller\Contro
      */
     public function viewAction(Groupe $groupe)
     {
-        if (!$this->container->get('hopitalnumerique_communautepratique.dependency_injection.security')->canAccessGroupe($groupe)) {
-            if ("anon." != $this->get("security.context")->getToken()->getUser() && !$this->get("security.context")->getToken()->getUser()->isActifInGroupe($groupe)) {
-                $this->container->get('session')->getFlashBag()->add('success', 'Votre inscription sera activé prochainement par un animateur. Vous receverez un mail de confirmation');
+        $user = $this->get('security.token_storage')->getToken()->getUser();
+
+        if ("anon." != $user) {
+
+            if ($this->container->get('hopitalnumerique_communautepratique.dependency_injection.inscription')->hasInformationManquante($user)
+                || !$user->isInscritCommunautePratique()) {
+                $this->container->get('session')->getFlashBag()->add('warning', 'Vous devez rejoindre la communauté de pratique avant de pouvoir rejoindre un groupe.');
+                return $this->redirect($this->generateUrl('hopital_numerique_publication_publication_article', [
+                    'id' => 1000,
+                    'categorie' => "article"
+                ]));
             }
-            return $this->redirect($this->generateUrl('hopitalnumerique_communautepratique_accueil_index'));
+
+            if (!$this->container->get('hopitalnumerique_communautepratique.dependency_injection.security')->canAccessGroupe($groupe)) {
+                if (!$user->hasCommunautePratiqueGroupe($groupe)) {
+                    return $this->redirect($this->generateUrl('hopitalnumerique_communautepratique_groupe_inscrit', [
+                        'groupe' => $groupe->getId()
+                    ]));
+                }
+
+                if (!$user->isActifInGroupe($groupe)) {
+                    $this->container->get('session')->getFlashBag()->add('success', 'Votre inscription sera activée prochainement par un animateur. Vous recevrez un mail de confirmation.');
+                    return $this->redirect($this->generateUrl('hopitalnumerique_communautepratique_accueil_index'));
+                }
+            }
+        }
+        else {
+            return $this->redirect($this->generateUrl('hopital_numerique_publication_publication_article', [
+                'id' => 1000,
+                'categorie' => "article"
+            ]));
         }
 
         return $this->render(
@@ -100,7 +126,7 @@ class GroupeController extends \Symfony\Bundle\FrameworkBundle\Controller\Contro
                 ->reponsesByQuestionnaireByUser($groupe->getQuestionnaire()->getId(), $user->getId())) > 0) {
                 $user->addCommunautePratiqueGroupe($groupe);
                 $this->container->get('hopitalnumerique_user.manager.user')->save($user);
-                $this->container->get('session')->getFlashBag()->add('success', 'Votre inscription sera activé prochainement par un animateur.');
+                $this->container->get('session')->getFlashBag()->add('success', 'Votre inscription sera activée prochainement par un animateur.');
                 // Envoi du mail d'alert pour les animateurs
                 $destinataires = array();
                 foreach ($groupe->getAnimateurs()->getValues() as $animateur) {
