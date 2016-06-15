@@ -50,10 +50,7 @@ class GroupeController extends \Symfony\Bundle\FrameworkBundle\Controller\Contro
             if ($this->container->get('hopitalnumerique_communautepratique.dependency_injection.inscription')->hasInformationManquante($user)
                 || !$user->isInscritCommunautePratique()) {
                 $this->container->get('session')->getFlashBag()->add('warning', 'Vous devez rejoindre la communauté de pratique avant de pouvoir rejoindre un groupe.');
-                return $this->redirect($this->generateUrl('hopital_numerique_publication_publication_article', [
-                    'id' => 1000,
-                    'categorie' => "article"
-                ]));
+                return $this->redirect('/publication/article/1000-la-communaute-de-pratique');
             }
 
             if (!$this->container->get('hopitalnumerique_communautepratique.dependency_injection.security')->canAccessGroupe($groupe)) {
@@ -70,10 +67,7 @@ class GroupeController extends \Symfony\Bundle\FrameworkBundle\Controller\Contro
             }
         }
         else {
-            return $this->redirect($this->generateUrl('hopital_numerique_publication_publication_article', [
-                'id' => 1000,
-                'categorie' => "article"
-            ]));
+            return $this->redirect('/publication/article/1000-la-communaute-de-pratique');
         }
 
         return $this->render(
