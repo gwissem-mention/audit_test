@@ -52,7 +52,8 @@ class GroupeController extends \Symfony\Bundle\FrameworkBundle\Controller\Contro
                 $this->container->get('session')->getFlashBag()->add('warning', 'Vous devez rejoindre la communauté de pratique avant de pouvoir rejoindre un groupe.');
                 return $this->redirect($this->generateUrl('hopital_numerique_publication_publication_article', [
                     'id' => 1000,
-                    'categorie' => "article"
+                    'categorie' => "article",
+                    'alias' => "la-communaute-de-pratique"
                 ]));
             }
 
@@ -72,7 +73,8 @@ class GroupeController extends \Symfony\Bundle\FrameworkBundle\Controller\Contro
         else {
             return $this->redirect($this->generateUrl('hopital_numerique_publication_publication_article', [
                 'id' => 1000,
-                'categorie' => "article"
+                'categorie' => "article",
+                'alias' => "la-communaute-de-pratique"
             ]));
         }
 
