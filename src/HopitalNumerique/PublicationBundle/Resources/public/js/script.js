@@ -146,6 +146,12 @@ $(document).ready(function() {
         })
         .rateit('resetable', false)
     ;
+    $("#note-moyenne-etoile").bind('rated', function (event, value) {
+        $('#note-valeur').val(value);
+        $('#note-valeur-show').text(value);
+        $('#note-etoile').rateit('value', value);
+        sauvegardeNote();
+    });
 
 });
 
@@ -256,13 +262,6 @@ function calculMoyenne()
             $('#note-moyenne-etoile')
                 .rateit('value', data.noteMoyenne)
             ;
-
-            $("#note-moyenne-etoile").bind('rated', function (event, value) {
-                $('#note-valeur').val(value);
-                $('#note-valeur-show').text(value);
-                $('#note-etoile').rateit('value', value);
-                sauvegardeNote();
-            });
 
             if (false === data.userCanVote) {
                 $('#bloc-notation-objet').hide();
