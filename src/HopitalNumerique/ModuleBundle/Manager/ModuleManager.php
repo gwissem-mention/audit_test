@@ -14,7 +14,7 @@ use HopitalNumerique\UserBundle\Manager\UserManager;
  */
 class ModuleManager extends BaseManager
 {
-    protected $_class = 'HopitalNumerique\ModuleBundle\Entity\Module';
+    protected $class = 'HopitalNumerique\ModuleBundle\Entity\Module';
     protected $_userManager;
 
     /**

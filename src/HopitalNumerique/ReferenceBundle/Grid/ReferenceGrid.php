@@ -6,8 +6,7 @@ use Nodevo\GridBundle\Grid\Grid;
 use Nodevo\GridBundle\Grid\GridInterface;
 use Nodevo\GridBundle\Grid\Column;
 use Nodevo\GridBundle\Grid\Action;
-
-use APY\DataGridBundle\Grid\Action\RowAction;
+use APY\DataGridBundle\Grid\Row;
 
 /**
  * Configuration du grid Reference.
@@ -21,8 +20,8 @@ class ReferenceGrid extends Grid implements GridInterface
     {
         $this->setSource( 'hopitalnumerique_reference.manager.reference' );
         $this->setSourceType( self::SOURCE_TYPE_MANAGER );
-        $this->setAffichageRecursif( 'idParent', 'libelle' );
         $this->setFilterIdColumn( false );
+        $this->setButtonSize(44);
     }
 
     /**
@@ -30,36 +29,44 @@ class ReferenceGrid extends Grid implements GridInterface
      */
     public function setColumns()
     {
+        $this->addColonne(new Column\NumberColumn('idReference', 'ID'));
 
-        $this->addColonne( new Column\TextColumn('idReference', 'ID') );
-        $this->addColonne( new Column\TextColumn('code', 'Code') );
-        $this->addColonne( new Column\TextColumn('libelle', 'Libellé') );
+        $this->addColonne(new Column\TextColumn('libelle', 'Libellé du concept'));
 
         $domaineColumn = new Column\TextColumn('domaineNom', 'Domaine(s)');
-        $domaineColumn->setSize( 150 );
-        $this->addColonne( $domaineColumn );
+        $domaineColumn->setSize(150);
+        $domaineColumn->manipulateRenderCell(function ($value, Row $row) {
+            if ($row->getField('allDomaines')) {
+                return 'Tous';
+            }
+            return $value;
+        });
+        $this->addColonne($domaineColumn);
+
+        $dictionnaireColumn = new Column\BooleanColumn('reference', 'Est une référence');
+        $dictionnaireColumn->setValues([1 => 'Oui', 0 => 'Non']);
+        $dictionnaireColumn->setSize(100);
+        $this->addColonne($dictionnaireColumn);
+
+        $rechercheColumn = new Column\BooleanColumn('inRecherche', 'Présent dans la recherche');
+        $rechercheColumn->setValues([1 => 'Oui', 0 => 'Non']);
+        $rechercheColumn->setSize(100);
+        $this->addColonne($rechercheColumn);
+
+        $inGlossaireColumn = new Column\BooleanColumn('inGlossaire', 'Actif dans le glossaire');
+        $inGlossaireColumn->setValues([1 => 'Oui', 0 => 'Non']);
+        $inGlossaireColumn->setSize(100);
+        $this->addColonne($inGlossaireColumn);
 
         $etatColonne = new Column\TextColumn('etat', 'Etat');
-        $etatColonne->setSize( 80 );
+        $etatColonne->setSize(80);
         $etatColonne->setFilterType('select');
         $etatColonne->setSelectFrom('source');
-        $etatColonne->setOperatorsVisible( false );
-        $etatColonne->setDefaultOperator( \APY\DataGridBundle\Grid\Column\Column::OPERATOR_EQ );
-        $this->addColonne( $etatColonne );
+        $etatColonne->setOperatorsVisible(false);
+        $etatColonne->setDefaultOperator(\APY\DataGridBundle\Grid\Column\Column::OPERATOR_EQ);
+        $this->addColonne($etatColonne);
 
-        $this->addColonne( new Column\OrderColumn() );
-
-        $dictionnaireColumn = new Column\BooleanColumn('dictionnaire', 'Dictionnaire');
-        $dictionnaireColumn->setValues( array( 1 => 'Présent dans le dictionnaire de référencement', 0 => 'Absent du dictionnaire') );
-        $dictionnaireColumn->setSize( 100 );
-        $this->addColonne( $dictionnaireColumn );
-
-        $rechercheColumn = new Column\BooleanColumn('recherche', 'Recherche');
-        $rechercheColumn->setValues( array( 1 => 'Présent dans les champs du moteur de recherche', 0 => 'Absent des champs du moteur de recherche') );
-        $rechercheColumn->setSize( 100 );
-        $this->addColonne( $rechercheColumn );
-
-        $this->addColonne( new Column\LockedColumn() );
+        $this->addColonne(new Column\TextColumn('code', 'Code'));
 
         /* Colonnes inactives */
         $this->addColonne( new Column\BlankColumn('idParent') );
@@ -72,19 +79,6 @@ class ReferenceGrid extends Grid implements GridInterface
     {
         $this->addActionButton( new Action\ShowButton('hopitalnumerique_reference_reference_show') );
         $this->addActionButton( new Action\EditButton('hopitalnumerique_reference_reference_edit') );
-        // $this->addActionButton( new Action\DeleteButton('hopitalnumerique_reference_reference_delete') );
-
-        //Boutton d'ajout d'un référentiel avec le même code par défaut
-        $button = new RowAction('', 'hopitalnumerique_reference_reference_add');
-        $button->setRouteParameters( array('id','mod' => 'code') );
-        $button->setAttributes( array('class'=>'btn btn-warning fa fa-plus','title' => 'Ajouter comme code') );
-        $this->addActionButton( $button );
-
-        //Boutton d'ajout d'un référentiel avec parent par défaut
-        $button = new RowAction('', 'hopitalnumerique_reference_reference_add');
-        $button->setRouteParameters( array('id') );
-        $button->setAttributes( array('class'=>'btn btn-warning fa fa-level-down','title' => 'Ajouter comme enfant') );
-        $this->addActionButton( $button );
     }
 
     /**

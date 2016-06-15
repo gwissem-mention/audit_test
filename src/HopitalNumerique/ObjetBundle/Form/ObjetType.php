@@ -38,6 +38,11 @@ class ObjetType extends AbstractType
         $datas = $options['data'] ;
         $connectedUser = $this->_userManager->getUserConnected();
 
+        /**
+         * @var \HopitalNumerique\ObjetBundle\Entity\Objet
+         */
+        $objet = $builder->getData();
+
         $builder
             ->add('titre', 'text', array(
                 'max_length' => $this->_constraints['titre']['maxlength'],
@@ -51,12 +56,6 @@ class ObjetType extends AbstractType
                 'label'      => 'Alias',
                 'attr'       => array('class' => $this->_constraints['alias']['class'] )
             ))
-            ->add('source', 'text', array(
-                'required'   => false,
-                'max_length' => $this->_constraints['source']['maxlength'],
-                'label'      => 'Source (si externe)',
-                'attr'       => array('class' => $this->_constraints['source']['class'] )
-            ))
             ->add('etat', 'entity', array(
                 'class'         => 'HopitalNumeriqueReferenceBundle:Reference',
                 'choices'       => $this->referenceManager->findByCode('ETAT'),
@@ -65,13 +64,30 @@ class ObjetType extends AbstractType
                 'label'         => 'Etat',
                 'attr'          => array('class' => $this->_constraints['etat']['class'] ),
             ))
-            ->add('cibleDiffusion', 'entity', array(
-                'class'         => 'HopitalNumeriqueReferenceBundle:Reference',
-                'choices'       => $this->referenceManager->findByCode('CIBLE_DIFFUSION'),
-                'property'      => 'libelle',
-                'required'      => false,
-                'label'         => 'Cible de diffusion',
-            ))
+        ;
+        if (!$objet->isArticle()) {
+            $builder
+                ->add('source', 'text', array(
+                    'required'   => false,
+                    'max_length' => $this->_constraints['source']['maxlength'],
+                    'label'      => 'Source (si externe)',
+                    'attr'       => array('class' => $this->_constraints['source']['class'] )
+                ))
+                ->add('cibleDiffusion', 'entity', array(
+                    'class'         => 'HopitalNumeriqueReferenceBundle:Reference',
+                    'choices'       => $this->referenceManager->findByCode('CIBLE_DIFFUSION'),
+                    'property'      => 'libelle',
+                    'required'      => false,
+                    'label'         => 'Cible de diffusion',
+                ))
+                ->add('communautePratiqueGroupe', 'entity', array(
+                    'class' => 'HopitalNumeriqueCommunautePratiqueBundle:Groupe',
+                    'label' => 'Groupe de la communauté de partique associé',
+                    'required' => false
+                ))
+            ;
+        }
+        $builder
             ->add('roles', 'entity', array(
                 'class'    => 'NodevoRoleBundle:Role',
                 'property' => 'name',
@@ -86,7 +102,7 @@ class ObjetType extends AbstractType
                 'required'      => true,
                 'multiple'      => true,
                 'label'         => 'Catégorie',
-                'group_by'      => 'parentName',
+                //'group_by'      => 'parentName',
                 'attr'          => array( 'placeholder' => 'Selectionnez le ou les catégories de cette publication' ),
                 'query_builder' => function(EntityRepository $er) use ($datas) {
                     $qb = $er->createQueryBuilder('ref');
@@ -101,7 +117,7 @@ class ObjetType extends AbstractType
                            ->setParameter('objet', 'CATEGORIE_OBJET');
                     }
 
-                    $qb->orderBy('ref.parent, ref.order', 'ASC');
+                    $qb->orderBy('ref.order', 'ASC');
 
                     return $qb;
                 }
@@ -130,13 +146,6 @@ class ObjetType extends AbstractType
                 'required' => false,
                 'label'    => 'Vignette',
                 'attr'     => array('readonly'=>'readonly')
-            ))
-            ->add('references', 'entity', array(
-                'class'    => 'HopitalNumeriqueReferenceBundle:Reference',
-                'property' => 'libelle',
-                'required' => false,
-                'multiple' => true,
-                'label'    => 'Référencement'
             ))
             ->add('ambassadeurs', 'entity', array(
                 'class'    => 'HopitalNumeriqueUserBundle:User',
@@ -202,22 +211,6 @@ class ObjetType extends AbstractType
                     'class' => 'col-md-7 control-label'
                 )
             ))
-            ->add('dateDebutPublication', 'genemu_jquerydate', array(
-                'required'   => false,
-                'label'      => 'Début de publication',
-                'widget'     => 'single_text',
-                'label_attr' => array(
-                    'class' => 'col-md-7 control-label'
-                )
-            ))
-            ->add('dateFinPublication', 'genemu_jquerydate', array(
-                'required'   => false,
-                'label'      => 'Fin de publication',
-                'widget'     => 'single_text',
-                'label_attr' => array(
-                    'class' => 'col-md-7 control-label'
-                )
-            ))
             ->add('dateModification', 'date', array(
                 'required'   => false,
                 'widget'     => 'single_text',
@@ -237,11 +230,6 @@ class ObjetType extends AbstractType
                 'query_builder' => function(EntityRepository $er) use ($connectedUser){
                     return $er->getDomainesUserConnectedForForm($connectedUser->getId());
                 }
-            ))
-            ->add('communautePratiqueGroupe', 'entity', array(
-                'class' => 'HopitalNumeriqueCommunautePratiqueBundle:Groupe',
-                'label' => 'Groupe de la communauté de partique associé',
-                'required' => false
             ))
             ->add('modified', 'hidden', array(
                 'mapped'   => false

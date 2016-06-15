@@ -9,7 +9,7 @@ use Nodevo\ToolsBundle\Manager\Manager as BaseManager;
  */
 class RechercheParcoursDetailsManager extends BaseManager
 {
-    protected $_class = 'HopitalNumerique\RechercheParcoursBundle\Entity\RechercheParcoursDetails';
+    protected $class = 'HopitalNumerique\RechercheParcoursBundle\Entity\RechercheParcoursDetails';
 
     public function countDetails()
     {

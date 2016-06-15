@@ -2,150 +2,172 @@
 
 namespace HopitalNumerique\PublicationBundle\Controller;
 
+use HopitalNumerique\CoreBundle\DependencyInjection\Entity;
 use HopitalNumerique\ObjetBundle\Entity\Objet;
+use HopitalNumerique\ReferenceBundle\Entity\EntityHasReference;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
-
-use Doctrine\Common\Cache\ApcCache;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 class PublicationController extends Controller
 {
     /**
-     * Objet Action
+     * Objet Action. Ajout ?pdf=1 pour la vue PDF.
+     * @param Request $request
+     * @param Objet $objet
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse|Response
+     * @throws \Exception
      */
     public function objetAction(Request $request, Objet $objet)
     {
-        $domaineId = $request->getSession()->get('domaineId');
+        $isPdf = ($request->query->has('pdf') && '1' == $request->query->get('pdf'));
+        $domaine = $this->container->get('hopitalnumerique_domaine.dependency_injection.current_domaine')->get();
+        $request->getSession()->set('urlToRedirect', $request->getUri());
 
-        if (!in_array($domaineId, $objet->getDomainesId())) {
+        if (!in_array($domaine->getId(), $objet->getDomainesId())) {
             throw $this->createNotFoundException("La publication n'appartient pas au domaine courant.");
         }
 
-        $domaine = $this->get('hopitalnumerique_domaine.manager.domaine')->findOneById($domaineId);
-
         //objet visualisation
-        if(!$this->get('security.context')->isGranted('ROLE_ADMINISTRATEUR_1'))
-        {
-            $objet->setNbVue( ($objet->getNbVue() + 1) );
+        if (!$this->get('security.context')->isGranted('ROLE_ADMINISTRATEUR_1')) {
+            $objet->setNbVue(($objet->getNbVue() + 1));
             $this->get('hopitalnumerique_objet.manager.objet')->save($objet);
         }
 
         //Si l'user connecté à le rôle requis pour voir l'objet
-        if( $this->checkAuthorization( $objet ) === false ){
-            $urlPublication = $this->generateUrl('hopital_numerique_publication_publication_objet', array('id' => $objet->getId()));
+        if ($this->checkAuthorization($objet) === false) {
+            $urlPublication = $this->generateUrl(
+                'hopital_numerique_publication_publication_objet',
+                array('id' => $objet->getId())
+            );
             $urlPublication = rtrim(strtr(base64_encode($urlPublication), '+/', '-_'), '=');
-            return $this->redirect( $this->generateUrl('account_login', array('urlToRedirect' => $urlPublication) ) );
+            return $this->redirect($this->generateUrl('account_login', array('urlToRedirect' => $urlPublication)));
         }
-        
+
         //Types objet
-        $types = $this->get('hopitalnumerique_objet.manager.objet')->formatteTypes( $objet->getTypes() );
+        $types = $this->get('hopitalnumerique_objet.manager.objet')->formatteTypes($objet->getTypes());
 
         //set Consultation entry
-        if(!$objet->isArticle())
-        {
-            $this->get('hopitalnumerique_objet.manager.consultation')->consulted( $domaine, $objet );
+        if (!$objet->isArticle()) {
+            $this->get('hopitalnumerique_objet.manager.consultation')->consulted($domaine, $objet);
         }
 
-        //On récupère l'utilisateur qui est connecté
-        $user = $this->get('security.context')->getToken()->getUser();
-        //Récupération de la note pour l'objet de l'utilisateur courant
-        $note = $this->get('hopitalnumerique_objet.manager.note')->findOneBy(array('user' => $user, 'objet' => $objet));
+        //get Contenus : for sommaire
+        $contenus = $objet->isInfraDoc()
+            ? $this->get('hopitalnumerique_objet.manager.contenu')->getArboForObjet($objet->getId())
+            : array();
 
-        $objetsOrder = array();
-
-        //~~APC~~
-        $cacheDriver = new ApcCache();
-        $cacheName = "_publication_objet_" . $objet->getId();
-        if ($cacheDriver->contains($cacheName))
-        {
-            $cache = $cacheDriver->fetch($cacheName);
-
-            $objetsOrder = $cache['objetsOrder'];
-            $objets      = $cache['objets'];
-            $productions = $cache['productions'];
-            $contenus    = $cache['contenus'];
-        }
-        else
-        {
-            $objets = $this->getObjetsFromRecherche( $objet );
-
-            //build productions with authorizations
-            $productions = $this->getProductionsAssocies($objet->getObjets());
-
-            //get Contenus : for sommaire
-            $contenus = $objet->isInfraDoc() ? $this->get('hopitalnumerique_objet.manager.contenu')->getArboForObjet( $objet->getId() ) : array();
-
-            foreach ($objets as $key => $objetTemp) 
-            {
-                if(array_key_exists('objet', $objetTemp) && !is_null($objetTemp["objet"]))
-                {
-                    $objetsOrder['-' . $objetTemp["id"]] = $objetTemp;
-                }
-                else
-                {
-                    $objetsOrder[$objetTemp["id"]] = $objetTemp;
-                }
-            }
-
-            foreach ($objetsOrder as $key => $objetCurrent) 
-            {
-                if (array_key_exists('objet', $objetCurrent) && !is_null($objetCurrent['objet'])) 
-                {
-                    $libContenu = $this->get('hopitalnumerique_objet.manager.contenu')->getPrefix($this->get('hopitalnumerique_objet.manager.contenu')->findOneBy(array('id' => $objetCurrent['id'])));
-                    $objetsOrder[$key]['prefixe'] = $libContenu;
-                    $objetsOrder[$key]['parent']  = $this->get('hopitalnumerique_objet.manager.objet')->findOneBy(array('id' => $objetCurrent['objet']));
-                }
-            }
-
-            //Ajout des objets liés au prods
-            foreach ($productions as $production) 
-            {
-                $libContenu = "";
-
-                if(!is_null($production->idc))
-                {
-                    $libContenu = $this->get('hopitalnumerique_objet.manager.contenu')->getPrefix($this->get('hopitalnumerique_objet.manager.contenu')->findOneBy(array('id' => $production->idc)));
-                }
-
-                $objetsOrder[$production->id]['prefixe'] = $libContenu;
-                $objetsOrder[$production->id]['parent']  = $this->get('hopitalnumerique_objet.manager.objet')->findOneBy(array('id' => $production->id));
-            }
-
-            $cache = array(
-                'objetsOrder' => $objetsOrder,
-                'objets'      => $objets,
-                'productions' => $productions,
-                'contenus'    => $contenus
+        $references = $this->container->get('hopitalnumerique_reference.manager.entity_has_reference')
+            ->findByEntityTypeAndEntityIdAndDomaines(
+                $this->container->get('hopitalnumerique_core.dependency_injection.entity')->getEntityType($objet),
+                $this->container->get('hopitalnumerique_core.dependency_injection.entity')->getEntityId($objet),
+                [$this->container->get('hopitalnumerique_domaine.dependency_injection.current_domaine')->get()]
             );
 
-            $cacheDriver->save($cacheName, $cache, null);
+        $referencesInDomaine = [];
+        $objetDomaines = $objet->getDomaines();
+        foreach ($objetDomaines as $domaine) {
+            $domaineReference = $this->container->get('hopitalnumerique_reference.manager.entity_has_reference')
+                ->findByEntityTypeAndEntityIdAndDomaines(
+                    $this->container->get('hopitalnumerique_core.dependency_injection.entity')->getEntityType($objet),
+                    $this->container->get('hopitalnumerique_core.dependency_injection.entity')->getEntityId($objet),
+                    [$domaine]
+                );
+            $referenceString = join(',', array_map(function (EntityHasReference $reference) {
+                return $reference->getReference()->getId();
+            }, $domaineReference));
+            $referencesInDomaine[$domaine->getId()] = $referenceString;
         }
+
+        $reader = $this->get('hopitalnumerique_recherche.doctrine.referencement.reader');
 
         //render
         return $this->render('HopitalNumeriquePublicationBundle:Publication:objet.html.twig', array(
             'objet'        => $objet,
-            'objets'       => $objets,
-            'objetsOrder'  => $objetsOrder,
-            'note'         => $note,
+            'note'         => $this->get('hopitalnumerique_objet.doctrine.note_reader')->getNoteByObjetAndUser($objet, $this->getUser()),
             'types'        => $types,
             'contenus'     => $contenus,
-            'productions'  => $productions,
-            'meta'         => $this->get('hopitalnumerique_recherche.manager.search')->getMetas($objet->getReferences(), $objet->getResume() ),
-            'ambassadeurs' => $this->getAmbassadeursConcernes( $objet->getId() )
+            'meta'         => $this->get('hopitalnumerique_recherche.manager.search')->getMetas($references, $objet->getResume()),
+            'ambassadeurs' => $this->getAmbassadeursConcernes($objet->getId()),
+            'productionsLiees' => $this->get('hopitalnumerique_objet.dependency_injection.production_liee')->getFormattedProductionsLiees($objet),
+            'parcoursGuides' => $this->get('hopitalnumerique_rechercheparcours.dependency_injection.parcours_guide_lie')->getFormattedParcoursGuidesLies($objet),
+            'topicRelated' => $reader->getRelatedObjectsByType($objet, Entity::ENTITY_TYPE_FORUM_TOPIC),
+            'userRelated' => $reader->getRelatedObjectsByType($objet, Entity::ENTITY_TYPE_AMBASSADEUR),
+            'is_pdf' => $isPdf,
+            'referencesStringByDomaine' => $referencesInDomaine
         ));
     }
 
     /**
+     * PDF.
+     */
+    public function pdfAction(Request $request, $entityType, $entityId)
+    {
+        if (Entity::ENTITY_TYPE_OBJET == $entityType) {
+            $pdfUrl = $this->generateUrl(
+                'hopital_numerique_publication_publication_objet',
+                [
+                    'id' => $entityId,
+                    'pdf' => 1
+                ],
+                UrlGeneratorInterface::ABSOLUTE_URL
+            );
+        } elseif (Entity::ENTITY_TYPE_CONTENU == $entityType) {
+            $contenu = $this->container->get('hopitalnumerique_objet.manager.contenu')->findOneById($entityId);
+            $pdfUrl = $this->generateUrl(
+                'hopital_numerique_publication_publication_contenu_without_alias',
+                [
+                    'id' => $contenu->getObjet()->getId(),
+                    'idc' => $contenu->getId(),
+                    'pdf' => 1
+                ],
+                UrlGeneratorInterface::ABSOLUTE_URL
+            );
+        } else {
+            throw new \Exception('Type d\'entité "'.$entityType.'" non reconnu pour la génération du PDF.');
+        }
+
+        $pdfOptions = array(
+            'encoding'         => 'UTF-8',
+            'javascript-delay' => 1000,
+            'margin-top'       => '15',
+            'margin-bottom'    => '25',
+            'margin-right'     => '15',
+            'margin-left'      => '15',
+            'header-spacing'   => '2',
+            'header-left'      => date('d/m/Y'),
+            'header-right'     => 'Page [page] / [toPage]',
+            'header-font-size' => '10',
+            'footer-spacing'   => '10',
+            'page-width' => '1024px',
+            'footer-html'      => '<p style="font-size:10px;text-align:center;color:#999"> &copy; ANAP<br>Ces contenus extraits de l\'ANAP sont diffus&eacute;s gratuitement.<br>Toutefois, leur utilisation ou citation est soumise &agrave; l\'inscription de la mention suivante : "&copy; ANAP"</p>'
+        );
+
+        return new Response(
+            $this->container->get('knp_snappy.pdf')->getOutput($pdfUrl, $pdfOptions),
+            200,
+            [
+                'Content-Type' => 'application/pdf',
+                'Content-Disposition' => 'attachment; filename="publication.pdf"'
+            ]
+        );
+    }
+
+    /**
      * Contenu Action
+     *
+     * @param $id ID de l'objet
+     * @param $idc ID du contenu
      */
     public function contenuAction(Request $request, $id, $alias = null, $idc, $aliasc = null)
     {
-        $domaineId = $request->getSession()->get('domaineId');
-        $domaine   = $this->get('hopitalnumerique_domaine.manager.domaine')->findOneById($domaineId);
+        $domaine = $this->container->get('hopitalnumerique_domaine.dependency_injection.current_domaine')->get();
+        $request->getSession()->set('urlToRedirect', $request->getUri());
 
         $objet = $this->get('hopitalnumerique_objet.manager.objet')->findOneBy( array( 'id' => $id ) );
 
-        if (!in_array($domaineId, $objet->getDomainesId())) {
+        if (!in_array($domaine->getId(), $objet->getDomainesId())) {
             throw $this->createNotFoundException("La publication n'appartient pas au domaine courant.");
         }
 
@@ -167,7 +189,6 @@ class PublicationController extends Controller
 
         //on récupère le contenu
         $contenu = $this->get('hopitalnumerique_objet.manager.contenu')->findOneBy( array( 'id' => $idc ) );
-        $contenuObjets = $this->getProductionsAssocies($contenu->getObjets());
 
         $prefix  = $this->get('hopitalnumerique_objet.manager.contenu')->getPrefix($contenu);
 
@@ -178,11 +199,6 @@ class PublicationController extends Controller
             $this->get('hopitalnumerique_objet.manager.contenu')->save($contenu);
         }
 
-        //On récupère l'utilisateur qui est connecté
-        $user = $this->get('security.context')->getToken()->getUser();
-        //Récupération de la note pour l'objet de l'utilisateur courant
-        $note = $this->get('hopitalnumerique_objet.manager.note')->findOneBy(array('user' => $user, 'contenu' => $contenu));
-
         //set Consultation entry
         if(!$objet->isArticle())
         {
@@ -192,118 +208,83 @@ class PublicationController extends Controller
         $contenuTemp      = $contenu;
         $breadCrumbsArray = array();
 
-        $objetsOrder = array();
+        $contenusNonVidesTries  = $this->get('hopitalnumerique_objet.manager.contenu')->getContenusNonVidesTries( $objet );
 
-        //~~APC~~
-        $cacheDriver = new ApcCache();
-        $cacheName = "_publication_contenu_" . $contenu->getId();
-        // $cacheDriver->delete($cacheName);
-        if ($cacheDriver->contains($cacheName))
+        $precedent      = $this->get('hopitalnumerique_objet.manager.contenu')->getPrecedent( $contenusNonVidesTries, $contenu );
+        $precedentOrder = $this->get('hopitalnumerique_objet.manager.contenu')->getFullOrder($precedent);
+        $suivant        = $this->get('hopitalnumerique_objet.manager.contenu')->getSuivant( $contenusNonVidesTries, $contenu );
+        $suivantOrder   = $this->get('hopitalnumerique_objet.manager.contenu')->getFullOrder($suivant);
+
+        //Types objet
+        $types = $this->get('hopitalnumerique_objet.manager.objet')->formatteTypes( $objet->getTypes() );
+
+        //get Contenus : for sommaire
+        $contenus = $objet->isInfraDoc() ? $this->get('hopitalnumerique_objet.manager.contenu')->getArboForObjet( $id ) : array();
+
+        //Ajout du contenu courant
+        $breadCrumbsArray[] = array(
+            'label'   => $this->get('hopitalnumerique_objet.manager.contenu')->getPrefix($contenu) . ' ' . $contenu->getTitre(),
+            'contenu' => $contenu
+        );
+        $breadCrumbs      = "";
+
+        while(!is_null($contenuTemp->getParent()))
         {
-            $cache = $cacheDriver->fetch($cacheName);
-
-            $objetsOrder      = $cache['objetsOrder'];
-            $objets           = $cache['objets'];
-            $breadCrumbsArray = $cache['breadCrumbsArray'];
-            $contenus         = $cache['contenus'];
-            $types            = $cache['types'];
-            $meta             = $cache['meta'];
-            $precedent        = $cache['precedent'];
-            $precedentOrder   = $cache['precedentOrder'];
-            $suivant          = $cache['suivant'];
-            $suivantOrder     = $cache['suivantOrder'];
-            $ambassadeurs     = $cache['ambassadeurs'];
-        }
-        else
-        {
-            $contenusNonVidesTries  = $this->get('hopitalnumerique_objet.manager.contenu')->getContenusNonVidesTries( $objet );
-
-            $precedent      = $this->get('hopitalnumerique_objet.manager.contenu')->getPrecedent( $contenusNonVidesTries, $contenu );
-            $precedentOrder = $this->get('hopitalnumerique_objet.manager.contenu')->getFullOrder($precedent);
-            $suivant        = $this->get('hopitalnumerique_objet.manager.contenu')->getSuivant( $contenusNonVidesTries, $contenu );
-            $suivantOrder   = $this->get('hopitalnumerique_objet.manager.contenu')->getFullOrder($suivant);
-
-            //Types objet
-            $types = $this->get('hopitalnumerique_objet.manager.objet')->formatteTypes( $objet->getTypes() );
-
-            //get Contenus : for sommaire
-            $contenus = $objet->isInfraDoc() ? $this->get('hopitalnumerique_objet.manager.contenu')->getArboForObjet( $id ) : array();
-
-            $objets = $this->getObjetsFromRecherche( $contenu );
-
-            //Ajout du contenu courant
-            $breadCrumbsArray[] = array(
-                'label'   => $this->get('hopitalnumerique_objet.manager.contenu')->getPrefix($contenu) . ' ' . $contenu->getTitre(),
-                'contenu' => $contenu
+            $contenuTemp      = $contenuTemp->getParent();
+            array_unshift($breadCrumbsArray, array(
+                    'label'   => $this->get('hopitalnumerique_objet.manager.contenu')->getPrefix($contenuTemp) . ' ' . $contenuTemp->getTitre(),
+                    'contenu' => $contenuTemp
+                )
             );
-            $breadCrumbs      = "";
+        }
 
-            while(!is_null($contenuTemp->getParent()))
-            {
-                $contenuTemp      = $contenuTemp->getParent();
-                array_unshift($breadCrumbsArray, array(
-                        'label'   => $this->get('hopitalnumerique_objet.manager.contenu')->getPrefix($contenuTemp) . ' ' . $contenuTemp->getTitre(),
-                        'contenu' => $contenuTemp
-                    )
+        $references = $this->container->get('hopitalnumerique_reference.manager.entity_has_reference')->findByEntityTypeAndEntityIdAndDomaines(
+            $this->container->get('hopitalnumerique_core.dependency_injection.entity')->getEntityType($contenu),
+            $this->container->get('hopitalnumerique_core.dependency_injection.entity')->getEntityId($contenu),
+            [$this->container->get('hopitalnumerique_domaine.dependency_injection.current_domaine')->get()]
+        );
+        $meta = $this->get('hopitalnumerique_recherche.manager.search')->getMetas($references, $contenu->getContenu() );
+
+        $referencesInDomaine = [];
+        $objetDomaines = $objet->getDomaines();
+        foreach ($objetDomaines as $domaine) {
+            $domaineReference = $this->container->get('hopitalnumerique_reference.manager.entity_has_reference')
+                ->findByEntityTypeAndEntityIdAndDomaines(
+                    $this->container->get('hopitalnumerique_core.dependency_injection.entity')->getEntityType($objet),
+                    $this->container->get('hopitalnumerique_core.dependency_injection.entity')->getEntityId($objet),
+                    [$domaine]
                 );
-            }
-
-            //ObjetsOrder
-            foreach ($this->getObjetsFromRecherche( $contenu ) as $key => $objetTemp)
-            {
-                $objetsOrder[$objetTemp["id"]] = $objetTemp;
-            }
-
-            foreach ($objetsOrder as $key => $objetCurrent)
-            {
-                if (array_key_exists('objet', $objetCurrent) && !is_null($objetCurrent['objet']) )
-                {
-                    $libContenu = $this->get('hopitalnumerique_objet.manager.contenu')->getPrefix($this->get('hopitalnumerique_objet.manager.contenu')->findOneBy(array('id' => $objetCurrent['id'])));
-                    $objetsOrder[$key]['prefixe'] = $libContenu;
-                    $objetsOrder[$key]['parent']  = $this->get('hopitalnumerique_objet.manager.objet')->findOneBy(array('id' => $objetCurrent['objet']));
-                }
-            }
-
-            $meta = $this->get('hopitalnumerique_recherche.manager.search')->getMetas($contenu->getReferences(), $contenu->getContenu() );
-
-            $ambassadeurs = $this->getAmbassadeursConcernes( $objet->getId() );
-
-            $cache = array(
-                'objets'           => $objets,
-                'objetsOrder'      => $objetsOrder,
-                'breadCrumbsArray' => $breadCrumbsArray,
-                'contenus'         => $contenus,
-                'types'            => $types,
-                'precedent'        => $precedent,
-                'precedentOrder'   => $precedentOrder,
-                'suivant'          => $suivant,
-                'suivantOrder'     => $suivantOrder,
-                'meta'             => $meta,
-                'ambassadeurs'     => $ambassadeurs
-            );
-
-            $cacheDriver->save($cacheName, $cache, null);
+            $referenceString = join(',', array_map(function (EntityHasReference $reference) {
+                return $reference->getReference()->getId();
+            }, $domaineReference));
+            $referencesInDomaine[$domaine->getId()] = $referenceString;
         }
+
+        $ambassadeurs = $this->getAmbassadeursConcernes( $objet->getId() );
+
+        $reader = $this->get('hopitalnumerique_recherche.doctrine.referencement.reader');
 
         //render
         return $this->render('HopitalNumeriquePublicationBundle:Publication:objet.html.twig', array(
             'objet'            => $objet,
-            'objets'           => $objets,
-            'objetsOrder'      => $objetsOrder,
-            'note'             => $note,
+            'note'             => $this->container->get('hopitalnumerique_objet.doctrine.note_reader')->getNoteByContenuAndUser($contenu, $this->getUser()),
             'contenus'         => $contenus,
             'types'            => $types,
             'contenu'          => $contenu,
-            'contenuObjets' => $contenuObjets,
             'breadCrumbsArray' => $breadCrumbsArray,
             'prefix'           => $prefix,
-            'productions'      => array(),
             'meta'             => $meta,
             'ambassadeurs'     => $ambassadeurs,
             'precedent'        => $precedent,
             'precedentOrder'   => $precedentOrder,
             'suivant'          => $suivant,
-            'suivantOrder'     => $suivantOrder
+            'suivantOrder'     => $suivantOrder,
+            'productionsLiees' => $this->get('hopitalnumerique_objet.dependency_injection.production_liee')->getFormattedProductionsLiees($contenu),
+            'parcoursGuides'   => $this->container->get('hopitalnumerique_rechercheparcours.dependency_injection.parcours_guide_lie')->getFormattedParcoursGuidesLies($objet),
+            'topicRelated'     => $reader->getRelatedObjectsByType($objet, Entity::ENTITY_TYPE_FORUM_TOPIC),
+            'userRelated'      => $reader->getRelatedObjectsByType($objet, Entity::ENTITY_TYPE_AMBASSADEUR),
+            'is_pdf' => ($request->query->has('pdf') && '1' == $request->query->get('pdf')),
+            'referencesStringByDomaine' => $referencesInDomaine
         ));
     }
 
@@ -314,6 +295,7 @@ class PublicationController extends Controller
     {
         $domaineId = $request->getSession()->get('domaineId');
         $objet = $this->get('hopitalnumerique_objet.manager.objet')->findOneBy( array( 'id' => $id ) );
+        $request->getSession()->set('urlToRedirect', $request->getUri());
 
         if (!in_array($domaineId, $objet->getDomainesId())) {
             throw $this->createNotFoundException("La publication n'appartient pas au domaine courant.");
@@ -334,15 +316,20 @@ class PublicationController extends Controller
         $item        = $this->get('nodevo_menu.manager.item')->findOneBy( array('route'=>$routeName, 'routeParameters'=>$routeParams) );
 
         //on récupère les actus
-        $categories = $this->get('hopitalnumerique_reference.manager.reference')->findBy( array( 'parent' => 188) );
+        $categories = $this->get('hopitalnumerique_reference.manager.reference')->findByParent($this->get('hopitalnumerique_reference.manager.reference')->findOneById(188));
 
         //get Type
         $types = $this->get('hopitalnumerique_objet.manager.objet')->formatteTypes( $objet->getTypes() );
 
+        $references = $this->container->get('hopitalnumerique_reference.manager.entity_has_reference')->findByEntityTypeAndEntityIdAndDomaines(
+            $this->container->get('hopitalnumerique_core.dependency_injection.entity')->getEntityType($objet),
+            $this->container->get('hopitalnumerique_core.dependency_injection.entity')->getEntityId($objet),
+            [$this->container->get('hopitalnumerique_domaine.dependency_injection.current_domaine')->get()]
+        );
         //render
         return $this->render('HopitalNumeriquePublicationBundle:Publication:articles.html.twig', array(
             'objet'      => $objet,
-            'meta'       => $this->get('hopitalnumerique_recherche.manager.search')->getMetas($objet->getReferences(), $objet->getResume() ),
+            'meta'       => $this->get('hopitalnumerique_recherche.manager.search')->getMetas($references, $objet->getResume() ),
             'menu'       => $item ? $item->getMenu()->getAlias() : null,
             'categories' => $categories,
             'types'      => $types
@@ -384,7 +371,7 @@ class PublicationController extends Controller
         $types = $objet->getTypes();
 
         foreach ($types as $one) {
-            $parent = $one->getParent();
+            $parent = $one->getFirstParent();
             if( !is_null($parent) && $parent->getId() == 175 )
                 $type[] = $one->getLibelle();
         }
@@ -403,6 +390,10 @@ class PublicationController extends Controller
      */
     private function getProductionsAssocies( $prodLiees )
     {
+        if (null === $prodLiees) {
+            $prodLiees = [];
+        }
+
         $productions = array();
         foreach( $prodLiees as $prod){
             $tab = explode(':', $prod);
@@ -468,45 +459,6 @@ class PublicationController extends Controller
     }
 
     /**
-     * Récupère les objets de la recherche et filtre sur 10 résulats maxi par catégorie
-     *
-     * @param Objet|Contenu $publication La publication (Objet ou Contenu)
-     *
-     * @return array
-     */
-    private function getObjetsFromRecherche( $publication )
-    {
-        //get Recherche results
-        $refs       = $this->getMoreRefs( array(), $publication->getReferences() );
-
-        //On récupère le role de l'user connecté
-        $user = $this->get('security.context')->getToken()->getUser();
-        $role = $this->get('nodevo_role.manager.role')->getUserRole($user);
-
-        $domaineId = $this->get('request')->getSession()->get('domaineId');
-
-        //on récupère sa recherche
-        $refsPonderees = $this->get('hopitalnumerique_reference.manager.reference')->getReferencesPonderees();
-        $objets = $this->get('hopitalnumerique_recherche.manager.search')->getObjetsForRecherche( $refs, $role, $refsPonderees );
-        $objets = $this->get('hopitalnumerique_objet.manager.consultation')->updateObjetsWithConnectedUser( $domaineId, $objets, $user );
-
-        //make array unique
-        $ids = array();
-        foreach($objets as $objet) {
-            if( $publication->getId() != $objet['id'] )
-                $ids[] = $objet['id'];
-        }
-        $ids = array_unique($ids);
-        $newObjets = array();
-        foreach($objets as $objet) {
-            if( in_array($objet['id'], $ids) )
-                $newObjets[$objet['id']] = $objet;
-        }
-
-        return $this->get('hopitalnumerique_recherche.manager.search')->formatForPublication( $newObjets, $publication );
-    }
-
-    /**
      * Retourne la liste des ambassadeurs concernés par la production
      *
      * @param Objet $objet La production consultée
@@ -540,20 +492,6 @@ class PublicationController extends Controller
             return false;
         }
 
-        $today = new \DateTime();
-
-        //test si l'objet est publié
-        if( !is_null($objet->getDateDebutPublication()) && $today < $objet->getDateDebutPublication() ){
-            $this->get('session')->getFlashBag()->add('warning', $message );
-            return false;
-        }
-
-        //test si l'objet est toujours publié
-        if( !is_null($objet->getDateFinPublication()) && $today > $objet->getDateFinPublication() ){
-            $this->get('session')->getFlashBag()->add('warning', $message );
-            return false;
-        }
-
         //test si l'objet est actif : état actif === 3
         if( $objet->getEtat()->getId() != 3 ){
             $this->get('session')->getFlashBag()->add('warning', $message );
@@ -561,42 +499,5 @@ class PublicationController extends Controller
         }
 
         return true;
-    }
-
-    /**
-     * Récupère les références de la production consulté
-     *
-     * @param array $refs       Les refs
-     * @param array $references Les RefObjet/RefContenu
-     *
-     * @return array
-     */
-    private function getMoreRefs($refs, $references )
-    {
-        //prépare les categs
-        $categs = array( 220 => 'categ1', 221 => 'categ2', 223 => 'categ3', 222 => 'categ4' );
-        //get refs from consulted object
-        foreach( $references as $reference ) {
-            $one = $reference->getReference();
-
-            if( !is_null($one->getParent()) ) {
-                $parentId = $one->getParent()->getId();
-                //get Grand Parent if needed
-                if ( !in_array($parentId, array_keys($categs)) && !is_null($one->getParent()->getParent())){
-                    $parentId = $one->getParent()->getParent()->getId();
-
-                    //get Arrière Grand Parent if needed
-                    if ( !in_array($parentId, array_keys($categs)) && !is_null($one->getParent()->getParent()->getParent()))
-                        $parentId = $one->getParent()->getParent()->getParent()->getId();
-                }
-
-                if( !isset($refs[ $categs[$parentId] ]) )
-                    $refs[ $categs[$parentId] ] = array();
-
-                $refs[ $categs[$parentId] ][] = $one->getId();
-            }
-        }
-
-        return $refs;
     }
 }

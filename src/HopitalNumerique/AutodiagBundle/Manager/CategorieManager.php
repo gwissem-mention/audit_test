@@ -9,7 +9,7 @@ use Nodevo\ToolsBundle\Manager\Manager as BaseManager;
  */
 class CategorieManager extends BaseManager
 {
-    protected $_class = 'HopitalNumerique\AutodiagBundle\Entity\Categorie';
+    protected $class = 'HopitalNumerique\AutodiagBundle\Entity\Categorie';
 
     /**
      * Override : Récupère les données pour le grid sous forme de tableau

@@ -20,7 +20,7 @@ class DefaultController extends Controller
         $article = $this->get('hopitalnumerique_objet.manager.objet')->getArticleHome();
 
         //get actus
-        $allCategories = $this->get('hopitalnumerique_reference.manager.reference')->findBy( array( 'parent' => 188) );
+        $allCategories = $this->get('hopitalnumerique_reference.manager.reference')->findByParent($this->get('hopitalnumerique_reference.manager.reference')->findOneById(188));
         $user          = $this->get('security.context')->getToken()->getUser();
         $role          = $this->get('nodevo_role.manager.role')->getUserRole($user);
         $actualites    = $this->get('hopitalnumerique_objet.manager.objet')->getActualitesByCategorie( $allCategories, $role, 3, array( 'champ' => 'obj.dateCreation', 'tri' => 'DESC') );
@@ -32,12 +32,8 @@ class DefaultController extends Controller
         $articlesALaUne       = $this->get('hopitalnumerique_objet.manager.objet')->getObjetsByTypes($typeArticleCarrousel);
 
         // Get nombres comptes créés
-        $currentDomaine = $this->get('session')->get('domaineId', null);
-        if (null !== $currentDomaine) {
-            $currentDomaine = $this->get('hopitalnumerique_domaine.manager.domaine')->findOneById($currentDomaine);
-        }
         $nb_eta = $this->get('hopitalnumerique_user.manager.user')->getNbEtablissements(
-            $currentDomaine
+            $this->get('hopitalnumerique_domaine.dependency_injection.current_domaine')->get()
         );
 
         // Définition du forum en fonction de l'utilisateur connecté
@@ -67,19 +63,6 @@ class DefaultController extends Controller
           $forumName = "Public";
         }
 
-        // Get nombres de fils sur le forum
-        $boards = $this->get('ccdn_forum_forum.model.board')->findAllBoards();
-        $i = 0;
-        foreach($boards as $board ) {
-          $topics = $board->getTopics();
-          $cat = $board->getCategory();
-          if($cat->getForum()->getId() == $idForum) {
-            foreach ($topics as $topic) {
-              $i++;
-            }
-          }
-        }
-        $nb_fils = $i;
         $topics = $this->get('hopitalnumerique_forum.manager.topic')->getLastTopicsForum($idForum,3);
 
         // Get Article à la une
@@ -97,7 +80,7 @@ class DefaultController extends Controller
             'publications'     => $publications,
             'articlesALaUne'   => $articlesALaUne,
             'nb_eta'           => $nb_eta,
-            'nb_fils'          => $nb_fils,
+            'nb_fils'          => $this->container->get('hopitalnumerique_forum.manager.topic')->getCountForForum($idForum),
             'topics'           => $topics,
             'forumName'        => $forumName,
             'alaune'           => $alaune,

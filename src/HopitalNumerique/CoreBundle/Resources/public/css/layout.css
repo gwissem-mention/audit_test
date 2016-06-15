@@ -59,6 +59,32 @@
     .multiselect .caret { position: absolute;right: 10px;top: 15px; }
 /* --> */
 
+/* <-- PDF */
+[data-is-pdf="1"] .hidden-pdf { display: none; }
+/* --> */
+
+/* <-- Highlight */
+.highlight {
+    background-color: #fff34d;
+    border-radius: 5px;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.7);
+}
+.highlight { padding:1px 1px;margin:0 0px; }
+/* --> */
+
+/* <-- Résultat d'une recherche par référence' */
+.recherche-referencement .results-bloc .result { display: none; }
+    .recherche-referencement .results-bloc .category { color: #d60030;font-size: 12px;margin: 20px 0 0 0;text-transform: uppercase; }
+    .recherche-referencement .results-bloc .title { font-weight: bold;margin: 0; }
+        .recherche-referencement .results-bloc .title a { color: #000;display: block;font-size: 16px; }
+            .recherche-referencement .results-bloc .title a .pertinence-niveau-1, .recherche-referencement .results-bloc .title a .pertinence-niveau-2, .recherche-referencement .results-bloc .title a .pertinence-niveau-3 { background-repeat: no-repeat;float: left;height: 14px;margin: 4px 3px 0 0;width: 14px; }
+            .recherche-referencement .results-bloc .title a .pertinence-niveau-1 { background-image: url("/bundles/hopitalnumeriquerecherche/img/niv-1-prod.png"); }
+            .recherche-referencement .results-bloc .title a .pertinence-niveau-2 { background-image: url("/bundles/hopitalnumeriquerecherche/img/niv-2-prod.png"); }
+            .recherche-referencement .results-bloc .title a .pertinence-niveau-3 { background-image: url("/bundles/hopitalnumeriquerecherche/img/niv-3-prod.png"); }
+        .recherche-referencement .results-bloc .title a .subtitle { color: #5d5d5d;display: block;font-size: 85%; }
+    .recherche-referencement .results-bloc p { font-size: 13px;margin: 8px 0; }
+/* --> */
+
 @media print {
   a[href]:after {
     content: none !important;

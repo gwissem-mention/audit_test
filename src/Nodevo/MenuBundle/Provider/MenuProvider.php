@@ -47,18 +47,21 @@ class MenuProvider implements MenuProviderInterface
      */
     public function get($name, array $options = array())
     {
-        $tree = $this->menuManager->getTree( $this->_menuEntity );
+        $cacheKey = $name . base64_encode(serialize($options));
+        if (apc_exists($cacheKey)) {
+            $tree = apc_fetch($cacheKey);
+        } else {
+            $tree = $this->menuManager->getTree($this->_menuEntity);
+            apc_store($cacheKey, $tree);
+        }
 
-        //Cas breadcrumb
-        if( isset($options['breadcrumb']) && $options['breadcrumb'] === 'yes' )
-        {
+        if (isset($options['breadcrumb']) && $options['breadcrumb'] === 'yes') {
+            //Cas breadcrumb
             $loader = $this->breadcrumbLoader;
             $class  = 'breadcrumb';
             $id     = '';
-        }
-        //Cas Menu
-        else
-        {
+        } else {
+            //Cas Menu
             $class  = !is_null($this->_menuEntity->getCssClass()) ? $this->_menuEntity->getCssClass() : '';
             $id     = !is_null($this->_menuEntity->getCssId())    ? $this->_menuEntity->getCssId()    : '';
             $loader = $this->loader;
@@ -68,11 +71,11 @@ class MenuProvider implements MenuProviderInterface
         }
 
         $menu = $loader->load($tree);
-        
-        //set Vars    
-        $menu->setChildrenAttribute('class', $class );
-        $menu->setChildrenAttribute('id', $id );
-        
+
+        //set Vars
+        $menu->setChildrenAttribute('class', $class);
+        $menu->setChildrenAttribute('id', $id);
+
         return $menu;
     }
 

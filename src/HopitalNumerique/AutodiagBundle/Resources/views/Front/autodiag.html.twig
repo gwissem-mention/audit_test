@@ -5,7 +5,6 @@
 {% block stylesheets %}
     {{parent()}}
     {% stylesheets output="compiled/hopitalnumerique-autodiag-front-autodiag.css" filter="cssrewrite, ?yui_css"
-        'bundles/nodevoadmin/plugins/apprise/apprise.css'
         'bundles/hopitalnumeriqueautodiag/css/front.css'
     %}
         <link rel="stylesheet" href="{{ asset_url }}" />
@@ -14,8 +13,7 @@
 
 {% block javascripts %}
     {{parent()}}
-    {% javascripts output="compiled/hopitalnumerique-autodiag-front-autodiag.js" 
-        'bundles/nodevoadmin/plugins/apprise/apprise.js'
+    {% javascripts output="compiled/hopitalnumerique-autodiag-front-autodiag.js"
         'bundles/hopitalnumeriqueautodiag/js/compte-hn.js'
     %}
         <script type="text/javascript" src="{{ asset_url }}"></script>

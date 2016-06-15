@@ -21,7 +21,7 @@ framework:
     session:
         name: hopitalnumerique
         handler_id:  ~
-        cookie_lifetime: 36000
+        cookie_lifetime: 86400 # 24h
     fragments:       ~
     http_method_override: true
 
@@ -33,7 +33,7 @@ services:
            - { name: twig.extension }
     logout_handler:
         class: HopitalNumerique\UserBundle\Handler\LogoutHandler
-        arguments: ["@hopitalnumerique_objet.manager.objet", "@security.context"]
+        arguments: ["@hopitalnumerique_objet.manager.objet", "@security.context", '@hopitalnumerique_recherche.dependency_injection.referencement.requete_session']
     genemu.form.jquery.type.date:
         class: Nodevo\FormBundle\Form\JQuery\Type\DateType
         arguments: ["%genemu.form.date.options%"]
@@ -98,12 +98,6 @@ swiftmailer:
     username:  "%mailer_user%"
     password:  "%mailer_password%"
     spool:     { type: memory }
-
-# Cache Doctrine
-liip_doctrine_cache:
-    namespaces:
-        main:
-            type: apc
 
 # Gestion des users via FOSUserBundle
 fos_user:
@@ -191,7 +185,8 @@ knp_snappy:
     pdf:
         enabled: true
         binary: %wkhtmltopdf%
-        options: []
+        options:
+            load-error-handling: 'ignore'
     image:
         enabled: true
         binary: %wkhtmltoimage%
@@ -222,6 +217,7 @@ white_october_pagerfanta:
 
 fos_js_routing:
     routes_to_expose:
+        - hopitalnumerique_account_contexte_save
         - hopitalnumerique_communautepratique_commentaire_blockview
         - hopitalnumerique_communautepratique_commentaire_delete
         - hopitalnumerique_communautepratique_commentaire_edit
@@ -237,6 +233,17 @@ fos_js_routing:
         - hopitalnumerique_communautepratique_user_activegroupe
         - hopitalnumerique_communautepratique_user_listbygroupe
         - hopitalnumerique_objet_objet_getObjets
+        - hopital_numerique_recherche_parcours_save
+        - hopitalnumerique_recherche_referencement_jsonentities
+        - hopitalnumerique_recherche_referencement_jsonentitiesbyreferences
+        - hopitalnumerique_recherche_referencement_requete_popinsave
+        - hopitalnumerique_recherche_referencement_requete_removesession
+        - hopitalnumerique_recherche_referencement_requete_savesession
+        - hopitalnumerique_reference_referencement_savechosenreferences
+        - hopital_numerique_user_front_departements_informationsPersonelles
+        - hopital_numerique_user_front_etablissements_informationsPersonelles
+        - hopital_numerique_user_inscription
+        - hopital_numerique_recherche_homepage_requete_generator
 
 # Miniatures
 liip_imagine:

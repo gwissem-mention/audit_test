@@ -10,7 +10,7 @@ use HopitalNumerique\UserBundle\Entity\User;
  */
 class ConnaissanceAmbassadeurSIManager extends BaseManager
 {
-    protected $_class = 'HopitalNumerique\UserBundle\Entity\ConnaissanceAmbassadeurSI';
+    protected $class = 'HopitalNumerique\UserBundle\Entity\ConnaissanceAmbassadeurSI';
 
     public function getConnaissanceAmbassadersSIOrderedByDomaine(User $user, $domaineIds)
     {

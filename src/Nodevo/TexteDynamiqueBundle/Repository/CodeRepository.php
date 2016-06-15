@@ -3,6 +3,8 @@
 namespace Nodevo\TexteDynamiqueBundle\Repository;
 
 use Doctrine\ORM\EntityRepository;
+use Doctrine\ORM\Query\Expr;
+use HopitalNumerique\DomaineBundle\Entity\Domaine;
 
 /**
  * CodeRepository
@@ -35,5 +37,24 @@ class CodeRepository extends EntityRepository
             ->groupBy('code.id', 'domaine.id');
         
         return $qb;
+    }
+
+    /**
+     * @return \Nodevo\TexteDynamiqueBundle\Entity\Code|null
+     */
+    public function findOneByCodeAndDomaine($code, Domaine $domaine)
+    {
+        $qb = $this->createQueryBuilder('code');
+
+        $qb
+            ->innerJoin('code.domaines', 'domaine', Expr\Join::WITH, $qb->expr()->eq('domaine.id', ':domaine'))
+            ->where($qb->expr()->eq('code.code', ':code'))
+            ->setParameters([
+                'code' => $code,
+                'domaine' => $domaine
+            ])
+        ;
+
+        return $qb->getQuery()->getOneOrNullResult();
     }
 }

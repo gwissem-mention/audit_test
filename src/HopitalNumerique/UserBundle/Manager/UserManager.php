@@ -11,7 +11,7 @@ use HopitalNumerique\DomaineBundle\Entity\Domaine;
 
 class UserManager extends BaseManager
 {
-    protected $_class = '\HopitalNumerique\UserBundle\Entity\User';
+    protected $class = '\HopitalNumerique\UserBundle\Entity\User';
     protected $_securityContext;
     protected $_managerReponse;
     protected $_managerRefusCandidature;
@@ -354,6 +354,9 @@ class UserManager extends BaseManager
         return $this->getRepository()->getUsersByQuestionnaire( $idQuestionnaire )->getQuery()->getResult();
     }
 
+    /**
+     * @return \HopitalNumerique\UserBundle\Entity\User Utilisateur connecté
+     */
     public function getUserConnected()
     {
         return $this->_securityContext->getToken()->getUser();
@@ -380,7 +383,7 @@ class UserManager extends BaseManager
     }
 
   	/**
-     * Retourne des membres de la communauté de pratiques.
+     * Retourne des membres de la communauté de pratique.
      *
      * @param \HopitalNumerique\UserBundle\Manager\Domaine $domaine Domaine
      * @return array<\HopitalNumerique\UserBundle\Entity\User> Utilisateurs

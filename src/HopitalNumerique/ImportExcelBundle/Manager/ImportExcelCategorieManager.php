@@ -9,7 +9,7 @@ use HopitalNumerique\AutodiagBundle\Manager\CategorieManager as CategManagerAuto
  */
 class ImportExcelCategorieManager extends CategManagerAutodiag
 {
-    protected $_class = 'HopitalNumerique\AutodiagBundle\Entity\Categorie';
+    protected $class = 'HopitalNumerique\AutodiagBundle\Entity\Categorie';
 
     /**
      * Récupération des données des catégories du fichier excel d'import

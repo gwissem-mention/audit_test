@@ -44,7 +44,6 @@
         "knplabs/knp-menu-bundle"                      : "2.0.*@dev",
         "knplabs/knp-snappy"                           : "*",
         "knplabs/knp-snappy-bundle"                    : "dev-master#0a30395",
-        "liip/doctrine-cache-bundle"                   : "~1.0",
         "apy/datagrid-bundle"                          : "2.1.15",
         "white-october/pagerfanta-bundle"              : "1.*",
         "pagerfanta/pagerfanta"                        : "1.0.*",

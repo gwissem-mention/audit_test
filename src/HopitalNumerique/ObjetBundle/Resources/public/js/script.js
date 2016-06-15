@@ -83,7 +83,7 @@ $(document).ready(function() {
 
     //fancybox d'édition d'un contenu
     //fancybox de gestion des références liées à l'objet et au contenu
-    $('.dd3-content a, .manageReferences, .uploadSommaire, .addProd').fancybox({
+    $('.dd3-content a, .uploadSommaire, .addProd').fancybox({
         'padding'   : 0,
         'autoSize'  : false,
         'width'     : '80%',
@@ -126,7 +126,7 @@ $(document).ready(function() {
 
 $(window).load(function(){
     if( $('#toRef').val() != "0" ){
-        $('.manageReferences.edit').delay(800).click();
+        $('.open-popin-referencement.edit').delay(800).click();
     }
 
     $(".form-contenu").each(function(){
@@ -177,7 +177,9 @@ function saveContenu()
             alias   : $('#hopitalnumerique_objet_contenu_alias').val(),
             notify  : $('#hopitalnumerique_objet_contenu_modified').val(),
             contenu : tinyMCE.get('hopitalnumerique_objet_contenu_contenu').getContent(),
-            objets: $('#hopitalnumerique_objet_contenu_objets').val()
+            types: $('#hopitalnumerique_objet_contenu_types').val(),
+            objets: $('#hopitalnumerique_objet_contenu_objets').val(),
+            domaines: $('#hopitalnumerique_objet_contenu_domaines').val()
         },
         type     : 'POST',
         dataType : 'json',
@@ -244,58 +246,6 @@ function deleteContenu( id, url )
                     }
                 }
             });
-        }
-    });
-}
-
-//Sauvegarde les références de l'objet et du contenu
-function saveReferences( objet, idContenu )
-{
-    var references = [];
-    var loader     = $('.panel-body').nodevoLoader().start();
-
-    $('#references-tab .ref').each(function() {
-        //si la référence est cochée, on l'ajoute dans les références à linker
-        if ( $(this).find('.checkbox').prop('checked') ) {
-            var ref = {};
-
-            //ref id
-            ref.id = $(this).data('id');
-
-            //type primary
-            ref.type = $(this).find('.toggle-slide').hasClass('active');
-
-            references.push( ref );    
-        }
-    });
-
-    //JSONify IT !
-    json = JSON.stringify( references );
-
-    if( objet )
-        ajaxUrl = $('#save-references-objet-url').val();
-    else
-        ajaxUrl = $('#save-references-contenu-url').val();
-
-    //save the value
-    $.ajax({
-        url  : ajaxUrl,
-        data : {
-            references : json,
-            contenu    : idContenu
-        },
-        type     : 'POST',
-        dataType : 'json',
-        async    : false,
-        success  : function( data ){
-            //update ref number
-            if(objet)
-                $('.nbRefs').html( data.note );    
-            else
-                $('#sommaire #contenu-'+idContenu+' > .dd3-content .text-muted span').html( data.note );
-            
-            loader.finished();
-            $.fancybox.close(true);
         }
     });
 }

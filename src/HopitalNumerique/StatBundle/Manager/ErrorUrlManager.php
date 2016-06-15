@@ -9,7 +9,7 @@ use Nodevo\ToolsBundle\Manager\Manager as BaseManager;
  */
 class ErrorUrlManager extends BaseManager
 {
-    protected $_class = 'HopitalNumerique\StatBundle\Entity\ErrorUrl';
+    protected $class = 'HopitalNumerique\StatBundle\Entity\ErrorUrl';
 
     /**
      * Retourne l'entité trouvée ou en créé une

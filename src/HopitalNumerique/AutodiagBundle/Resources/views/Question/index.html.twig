@@ -13,12 +13,12 @@
                     <a href="{{path('hopitalnumerique_autodiag_question_edit',{'id':question.id})}}" class="fancy fancybox.ajax" title="{{question.texte}}">{% if question.code != '' %}{{question.code ~ '. '}}{% endif %}{{question.texte|truncate(50, '...')}}</a>
                     <p class="text-muted pull-right">
                         {% if question.ponderation %}Pond. : {{question.ponderation}}&nbsp;&nbsp;|&nbsp;&nbsp;{% endif %}
-                        Note référencement : <span>{{question.note}}</span> / 400
+                        <!--Note référencement : <span>{{question.note}}</span> / 400-->
                     </p>
                 </div>
                 <div class="dd3-actions">
                     <div onclick="deleteQuestion( {{question.id}}, '{{path('hopitalnumerique_autodiag_question_delete', {'id':question.id})}}' );" class="pull-right dd3-trash"><i class="fa fa-trash-o"></i></div>
-                    <a href="{{path('hopitalnumerique_autodiag_reference_question', {'id':question.id})}}" class="fancy pull-right dd3-cog fancybox.ajax"><i class="fa fa-cog"></i></a>
+                    <!--<a href="{{path('hopitalnumerique_autodiag_reference_question', {'id':question.id})}}" class="fancy pull-right dd3-cog fancybox.ajax"><i class="fa fa-cog"></i></a>-->
                 </div>
             </li>
         {% endfor %}

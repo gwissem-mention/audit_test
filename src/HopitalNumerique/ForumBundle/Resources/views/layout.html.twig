@@ -7,15 +7,12 @@
 {% block stylesheets %}
     {{parent()}}
     {% stylesheets output="compiled/hopitalnumerique-forum-layout.css" filter="cssrewrite, ?yui_css"
-        "@select2_css" 
-        "@fancybox_css"
         "@jquery_toggles_css"
-        "@validationEngine_css"
         "@bbcode_css"
-        'bundles/nodevoadmin/plugins/nodevoLoader/nodevoLoader.css'
         'bundles/hopitalnumeriqueobjet/css/style.css'
         'bundles/nodevoadmin/css/toggles.css'
         'bundles/hopitalnumeriqueforum/css/forum.css'
+        'bundles/hopitalnumeriquereference/css/referencement-popin.css'
     %}
         <link rel="stylesheet" href="{{ asset_url }}" />
     {% endstylesheets %}
@@ -24,15 +21,14 @@
 {% block javascripts %}
     {{parent()}}
     {% javascripts output="compiled/hopitalnumerique-forum-layout.js"
-        "@fancybox_js"
         "@jquery_toggles_js"
-        "@validationEngine_js"
         "@bbcode_js"
-        'bundles/nodevoadmin/plugins/nodevoLoader/nodevoLoader.js'
         'bundles/hopitalnumeriqueforum/js/script.js'
         'bundles/hopitalnumeriqueforum/js/Forum/script.js'
         'bundles/hopitalnumeriqueforum/js/Category/script.js'
         'bundles/hopitalnumeriqueforum/js/Board/script.js'
+        '%kernel.root_dir%/Resources/lib/nodevo/Form/Box.js'
+        'bundles/hopitalnumeriquereference/js/Referencement/Popin.js'
     %}
         <script type="text/javascript" src="{{ asset_url }}"></script>
     {% endjavascripts %}

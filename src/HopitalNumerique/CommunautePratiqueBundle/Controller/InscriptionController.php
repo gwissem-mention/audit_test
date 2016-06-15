@@ -22,14 +22,14 @@ class InscriptionController extends \Symfony\Bundle\FrameworkBundle\Controller\C
             if (!$user->isInscritCommunautePratique()) {
                 $user->setInscritCommunautePratique(true);
                 $this->container->get('hopitalnumerique_user.manager.user')->save($user);
-                $this->get('session')->getFlashBag()->add('success', 'L\'inscription à la communauté de pratiques a été confirmée.');
+                $this->get('session')->getFlashBag()->add('success', 'L\'inscription à la communauté de pratique a été confirmée.');
             }
             
             return new JsonResponse(array(
                 'url' => $this->generateUrl('hopitalnumerique_communautepratique_accueil_index')
             ));
         } else {
-            $this->get('session')->getFlashBag()->add('danger', 'L\'inscription à la communauté de pratiques a échouée.');
+            $this->get('session')->getFlashBag()->add('danger', 'L\'inscription à la communauté de pratique a échouée.');
             return new JsonResponse(array( 'url' => $this->generateUrl('hopital_numerique_homepage') ));
         }
     }
@@ -58,7 +58,7 @@ class InscriptionController extends \Symfony\Bundle\FrameworkBundle\Controller\C
             ));
         } else {
             $this->get('session')->getFlashBag()
-                ->add('danger', 'La désinscription de la communauté de pratiques a échouée.');
+                ->add('danger', 'La désinscription de la communauté de pratique a échouée.');
             return new JsonResponse(array( 'url' => $this->generateUrl('hopital_numerique_homepage') ));
         }
     }

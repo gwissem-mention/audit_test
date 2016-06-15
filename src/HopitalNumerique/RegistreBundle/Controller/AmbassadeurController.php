@@ -224,18 +224,18 @@ class AmbassadeurController extends Controller
 
         foreach ($connaissances as $connaissance)
         {
-            if(!is_null($connaissance->getDomaine()->getParent()))
+            if(!is_null($connaissance->getDomaine()->getFirstParent()))
             {
-                if(!array_key_exists($connaissance->getDomaine()->getParent()->getId(), $connaissancesOrderedForFront))
+                if(!array_key_exists($connaissance->getDomaine()->getFirstParent()->getId(), $connaissancesOrderedForFront))
                 {
-                    $connaissancesOrderedForFront[$connaissance->getDomaine()->getParent()->getId()] = array(
-                        'libelle'  => $connaissance->getDomaine()->getParent()->getLibelle(),
+                    $connaissancesOrderedForFront[$connaissance->getDomaine()->getFirstParent()->getId()] = array(
+                        'libelle'  => $connaissance->getDomaine()->getFirstParent()->getLibelle(),
                         'fils'     => array(),
                         'filsVide' => false
                     );
                 }
 
-                $connaissancesOrderedForFront[$connaissance->getDomaine()->getParent()->getId()]['fils'][] = $connaissance;
+                $connaissancesOrderedForFront[$connaissance->getDomaine()->getFirstParent()->getId()]['fils'][] = $connaissance;
             }
             else
             {

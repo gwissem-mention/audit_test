@@ -31,8 +31,6 @@ services:
     hopitalnumerique_questionnaire.manager.questionnaire:
         class: "%hopitalnumerique_questionnaire.manager.questionnaire.class%"
         arguments: ["@doctrine.orm.entity_manager", "@hopitalnumerique_questionnaire.manager.occurrence", "@hopitalnumerique_questionnaire.manager.reponse", "@hopitalnumerique_user.manager.user", "%hopitalnumerique_questionnaire.options%"]
-        calls:
-            - [ setCache, ["@liip_doctrine_cache.ns.main"] ]
     #--Type
     hopitalnumerique_questionnaire.form.type.questionnaire:
         class: "%hopitalnumerique_questionnaire.form.type.questionnaire%"
@@ -55,22 +53,16 @@ services:
     hopitalnumerique_questionnaire.manager.question:
         class: "%hopitalnumerique_questionnaire.manager.question.class%"
         arguments: ["@doctrine.orm.entity_manager"]
-        calls:
-            - [ setCache, ["@liip_doctrine_cache.ns.main"] ]
     #Reponse:
     #--Manager
     hopitalnumerique_questionnaire.manager.reponse:
         class: "%hopitalnumerique_questionnaire.manager.reponse.class%"
         arguments: ["@doctrine.orm.entity_manager"]
-        calls:
-            - [ setCache, ["@liip_doctrine_cache.ns.main"] ]
     #TypeQuestion:
     #--Manager
     hopitalnumerique_questionnaire.manager.typequestion:
         class: "%hopitalnumerique_questionnaire.manager.typequestion.class%"
         arguments: ["@doctrine.orm.entity_manager"]
-        calls:
-            - [ setCache, ["@liip_doctrine_cache.ns.main"] ]
     #Occurrence
     hopitalnumerique_questionnaire.form.type.occurrence:
         class: "%hopitalnumerique_questionnaire.form.type.occurrence.class%"

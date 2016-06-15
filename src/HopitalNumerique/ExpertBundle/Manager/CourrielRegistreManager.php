@@ -8,5 +8,5 @@ use Nodevo\ToolsBundle\Manager\Manager;
  */
 class CourrielRegistreManager extends Manager
 {
-    protected $_class = 'HopitalNumerique\ExpertBundle\Entity\CourrielRegistre';
+    protected $class = 'HopitalNumerique\ExpertBundle\Entity\CourrielRegistre';
 }

@@ -16,6 +16,7 @@
     {% block stylesheets %}
         {% stylesheets output="compiled/hopitalnumerique_homepage-core.css" filter="cssrewrite, ?yui_css"
             "@bootstrap_css"
+            '@validationEngine_css'
             "@font_awesome_css"
             "@fancybox_css"
             "@slick_css"
@@ -43,10 +44,11 @@
     {% endblock stylesheets %}
 
     {% block javascripts %}
-        {% javascripts output="compiled/hopitalnumerique-homepage-core.js"
+        {% javascripts output="compiled/hopitalnumerique-homepage-core-4.js"
         "@jquery_js"
         "@jquery_ui_js"
         "@bootstrap_js"
+        '@validationEngine_js'
         "@enquire_js"
         "@fancybox_js"
         "@json_js"
@@ -137,11 +139,10 @@
         <div class="col-md-12" id="menu-container">
             <div class="col-md-12 col-sm-12">
                 {{ knp_menu_render(aliasMenuTemplateCurrent, {'currentClass': 'active', 'ancestorClass':'active','template':'HopitalNumeriqueCoreBundle::menu.html.twig'}) }}
-                {{ knp_menu_render(aliasMenuTemplateCurrent, {'currentClass': 'active', 'ancestorClass':'active','template':'HopitalNumeriqueCoreBundle::menu_responsive.html.twig'}) }}
             </div>
             <div class="clearfix"></div>
         </div>
-        
+
         <div class="clearfix"></div>
     </div>
 <div class="col-md-12 no-padding" id="content">
@@ -159,7 +160,7 @@
     {% endif %}
     {% block block_du_body %}
         {% block prebody %}
-            
+
         {% endblock prebody %}
         <div class="clearfix"></div>
         {% block body %}
@@ -168,7 +169,7 @@
                     {{domaineCurrent.homepage|parsePublication|raw}}
                 {% endif %}
             </div>
-        {% endblock body %}        
+        {% endblock body %}
 <div class="clearfix"></div>
     {% endblock %}
 

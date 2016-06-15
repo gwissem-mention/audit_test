@@ -1,5 +1,5 @@
 /**
- * Classe gérant la recherche des membres de la communauté de pratiques.
+ * Classe gérant la recherche des membres de la communauté de pratique.
  */
 var CommunautePratique_User_Recherche = function() {};
 

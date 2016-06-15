@@ -1,0 +1,246 @@
+{% extends 'HopitalNumeriqueCoreBundle:Templates:' ~ templateCurrentId ~ '/layout.html.twig' %}
+
+{% block title %}{{ parent() }} - Recherche avancée{% endblock %}
+
+{% block stylesheets -%}
+    {{ parent() }}
+    {% stylesheets output="compiled/hopitalnumerique-recherche-referencement-index.css" filter="cssrewrite, ?yui_css"
+        'bundles/hopitalnumeriquerecherche/css/referencement.css'
+    %}
+        <link rel="stylesheet" href="{{ asset_url }}">
+    {% endstylesheets %}
+{%- endblock %}
+
+{% block javascripts -%}
+    {{ parent() }}
+    {% javascripts output="compiled/hopitalnumerique-recherche-referencement-index.js"
+        'bundles/hopitalnumeriquedomaine/js/Domaine.js'
+        'bundles/hopitalnumeriquerecherche/js/Referencement.js'
+        'bundles/hopitalnumeriquerecherche/js/Referencement/Domaine.js'
+        'bundles/hopitalnumeriquerecherche/js/Referencement/Filtre.js'
+        'bundles/hopitalnumeriquerecherche/js/Referencement/Filter/Category.js'
+        'bundles/hopitalnumeriquerecherche/js/Referencement/Filter/Category/Count.js'
+        'bundles/hopitalnumeriquerecherche/js/Referencement/Filter/Contexte.js'
+        'bundles/hopitalnumeriquerecherche/js/Referencement/Filter/Exalead.js'
+        'bundles/hopitalnumeriquerecherche/js/Referencement/Result.js'
+    %}
+        <script type="text/javascript" src="{{ asset_url }}"></script>
+    {% endjavascripts %}
+    <script type="text/javascript">
+        $(document).ready(function() {
+            Hn_DomaineBundle_Domaine.CURRENT_DOMAINE_ID = {{ domaineCurrent.id }};
+            Hn_DomaineBundle_Domaine.setDomaines({{ domaines|json_encode|raw }});
+            Hn_RechercheBundle_Referencement.setReferenceIds({{ choosenReferenceIds|json_encode|raw }});
+            Hn_RechercheBundle_Referencement_Filter_Category.setEntityTypeIds({{ entityTypeIds|json_encode|raw }});
+            Hn_RechercheBundle_Referencement_Filter_Category.setPublicationCategoryIds({{ publicationCategoryIds|json_encode|raw }});
+            Hn_RechercheBundle_Referencement_Filter_Exalead.setSearchedText('{{ searchedText }}');
+            Hn_RechercheBundle_Referencement.initReferenceFilters();
+            Hn_RechercheBundle_Referencement_Filter_Category.initFilterCategoriesSelect();
+        });
+    </script>
+{%- endblock %}
+
+{% block body -%}
+    <div class="recherche-referencement">
+        <div class="row">
+            <div class="col-md-4">
+
+                {% import _self as mySelf %}
+
+                {%- for referenceProperties in referencesTree -%}
+                    {% if referenceProperties.reference.id == 222 %}
+                        <div id="contexte-container">
+                            <button type="button" id="contexte-button" class="btn btn-block btn-lg" data-toggle="modal" data-target="#contexte-modal">{{ referenceProperties.reference.libelle }}</button>
+                            <div class="modal fade" id="contexte-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+                                <div class="modal-dialog{% if app.user is null %} modal-lg{% endif %}" role="document">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                            <h4 class="modal-title" id="myModalLabel">{{ referenceProperties.reference.libelle }}</h4>
+                                        </div>
+                                        {%- if app.user is not null -%}
+                                            <div class="modal-body">
+                                                <ul data-level="1">
+                                                    {%- for referenceEnfantTree in referenceProperties.enfants -%}
+                                                        {{ mySelf.buildContextTreePart(referenceEnfantTree, 2, null) }}
+                                                    {%- endfor -%}
+                                                </ul>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <label><input type="checkbox" name="contexte-valid"> Mettre à jour mes informations personnelles</label>
+                                                <button type="button" class="btn btn-success" onclick="Hn_RechercheBundle_Referencement_Filter_Contexte.valid();">Valider</button>
+                                            </div>
+                                        {%- else -%}
+                                            <div class="modal-body">
+                                                <div class="row">
+                                                    <div class="col-md-6">
+                                                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed non risus. Suspendisse lectus tortor, dignissim sit amet, adipiscing nec, ultricies sed, dolor. Cras elementum ultrices diam. Maecenas ligula massa, varius a, semper congue, euismod non, mi. Proin porttitor, orci nec nonummy molestie, enim est eleifend mi, non fermentum diam nisl sit amet erat.</p>
+                                                        {% include 'HopitalNumeriqueAccountBundle:include:login.html.twig' with { 'size':'small' } %}
+                                                        {#{ render(controller('HopitalNumeriqueAccountBundle:Inscription:popin', { 'urlRedirection':app.request.uri })) }#}
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <h3>Décrivez votre profil</h3>
+                                                        <ul data-level="1">
+                                                            {%- for referenceEnfantTree in referenceProperties.enfants -%}
+                                                                {{ mySelf.buildContextTreePart(referenceEnfantTree, 2, null) }}
+                                                            {%- endfor -%}
+                                                        </ul>
+                                                        <label><input type="checkbox" name="contexte-valid"> Enregistrer mon profil</label>
+                                                        <button type="button" class="btn btn-success" onclick="Hn_RechercheBundle_Referencement_Filter_Contexte.valid();">Valider</button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        {%- endif -%}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    {% endif %}
+                {%- endfor -%}
+                {% macro buildContextTreePart(referencesTreePart, level, referenceParentId) -%}
+                    {% import _self as mySelf %}
+                    <li data-libelle="{{ referencesTreePart.reference.libelle }}" data-reference="{{ referencesTreePart.reference.id }}" data-level="{{ level }}" data-chosen="false" data-domaines="{{ referencesTreePart.reference.domainesId|join(',') }}">
+                        {%- if level > 2 -%}
+                            <label><input name="ref-{{ referenceParentId }}" type="{{ referenceParentId == '271' ? 'checkbox' : 'radio' }}"> {{ referencesTreePart.reference.libelle }}</label>
+                        {%- else -%}
+                            <div><strong>{{ referencesTreePart.reference.libelle }}</strong></div>
+                        {%- endif -%}
+                        {%- if referencesTreePart.enfants|length > 0 -%}
+                            <ul>
+                                {%- for referenceEnfantTree in referencesTreePart.enfants -%}
+                                    {{ mySelf.buildContextTreePart(referenceEnfantTree, level + 1, referencesTreePart.reference.id) }}
+                                {%- endfor -%}
+                            </ul>
+                        {%- endif -%}
+                    </li>
+                {%- endmacro %}
+
+                <nav class="references-bloc">
+                    <ul>
+                        {%- for referenceProperties in referencesTree -%}
+                            {{ mySelf.buildTreePart(referenceProperties, 1) }}
+                        {%- endfor -%}
+                    </ul>
+                </nav>
+
+                {% macro buildTreePart(referencesTreePart, level) -%}
+                    {% if referencesTreePart.reference.id != 222 %}
+                        {% import _self as mySelf %}
+                        <li data-libelle="{{ referencesTreePart.reference.libelleForReference }}" data-reference="{{ referencesTreePart.reference.id }}" data-chosen="false" data-level="{{ level }}" data-domaines="{{ referencesTreePart.reference.domainesDisplayId|join(',') }}">
+                            <a class="reference">
+                                <span class="add"><i class="fa fa-plus-circle"></i></span>
+                                {%- if referencesTreePart.enfants|length > 0 -%}
+                                    <span class="toggle"><i class="fa fa-chevron-right"></i></span>
+                                {%- endif -%}
+                                {{ referencesTreePart.reference.libelleForReference }}
+                            </a>
+
+                            {%- if referencesTreePart.enfants|length > 0 -%}
+                                <ul>
+                                    {%- for referenceEnfantTree in referencesTreePart.enfants -%}
+                                        {{ mySelf.buildTreePart(referenceEnfantTree, level + 1) }}
+                                    {%- endfor -%}
+                                </ul>
+                            {%- endif -%}
+                        </li>
+                    {% endif %}
+                {%- endmacro %}
+
+            </div>
+            <div class="col-md-8">
+
+                <div class="filtres-bloc">
+                    <h1>Ma recherche <span id="results-count"></span></h1>
+                    <div id="filtres-actions">
+                        {%- if requete is not null -%}
+                            <div id="search-name">{{ requete }}</div>
+                        {%- endif -%}
+                        <button class="btn btn-xs btn-success" onclick="Hn_RechercheBundle_Referencement.saveFilters();">Enregistrer</button>
+                        <button class="btn btn-xs btn-danger" onclick="Hn_RechercheBundle_Referencement.removeFilters();">Réinitialiser</button>
+                    </div>
+                    <div id="filtres-info">
+                        <p>Ici seront placés les critères de recherche que vous aurez sélectionnés dans le menu à gauche. Pour voir le détail d'un critère, cliquer le critère ou le chevron. Pour sélectionner un critère, cliquer le signe + ou double-cliquer le critère.</p>
+                        <p>La recherche textuelle fonctionne sur les titres, les résumés et les synthèses des productions.</p>
+                        <p>Les résultats peuvent être filtrés par types de production (méthode, autodiagnostic, retour d'expériences, etc.)</p>
+                    </div>
+                    <nav class="references">
+                        <ul></ul>
+                    </nav>
+                    <div class="clearfix"></div>
+                    <div id="filtres-more">
+                        <div class="row">
+                            <div class="col-md-12" id="exalead-bloc-container">
+                                <div id="exalead-bloc" {% if not exaleadIsActivated %}style="display:none;"{% endif %}>
+                                    <div id="recherche_textuelle_group">
+                                        <div class="input-group">
+                                            <span class="input-group-addon"><i class="fa fa-search"></i></span>
+                                            <input type="text" name="recherche_textuelle" id="recherche_textuelle" class="form-control col-md-12" value="" placeholder="Ou rechercher des résultats par mot-clés">
+                                            <span class="input-group-btn">
+                                                <button class="btn btn-success" id="search-text-button" type="button" onclick="Hn_RechercheBundle_Referencement.displayResults();"><i class="fa fa-check"></i></button>
+                                                <button class="btn btn-primary" type="button" title="Recherche avancée" onclick="Hn_RechercheBundle_Referencement_Filter_Exalead.toggleParametersDisplaying();"><i class="fa fa-cog"></i></button>
+                                            </span>
+                                        </div>
+                                        <div class="recherche_textuelle_avancee">
+                                            <a class="close" onclick="Hn_RechercheBundle_Referencement_Filter_Exalead.toggleParametersDisplaying();">Fermer</i></a>
+                                            <div class="title">Que cherchez vous ?</div>
+                                            <ul>
+                                                <li><a onclick="Hn_RechercheBundle_Referencement_Filter_Exalead.addParameter('&quot;Entrez votre formulation ici&quot;', 1, -1);">Formulation exacte</a></li>
+                                                <li><a onclick="Hn_RechercheBundle_Referencement_Filter_Exalead.addParameter('-Entrez le terme ici', 1, 0);">Termes exclus</a></li>
+                                                <li><a onclick="Hn_RechercheBundle_Referencement_Filter_Exalead.addParameter('OPT (Entrez le terme ici)', 5, -1);">Termes optionnels</a></li>
+                                                <li><a onclick="Hn_RechercheBundle_Referencement_Filter_Exalead.addParameter('NEAR Entrez le terme ici', 5, 0);">Recherche de proximité</a></li>
+                                                <li><a onclick="Hn_RechercheBundle_Referencement_Filter_Exalead.addParameter('Entrez le terme ici*', 0, -1);">Termes commençant par</a></li>
+                                            </ul>
+                                            <div class="title">Où voulez-vous chercher ?</div>
+                                            <ul>
+                                                <li><a onclick="Hn_RechercheBundle_Referencement_Filter_Exalead.addParameter('title:(Entrez le terme ici)', 7, -1);">Recherche par titre</a></li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                    <div id="alert-exalead">
+                                        <span class="label label-danger">Merci de préciser votre recherche (2 caractères minimum)</span>
+                                    </div>
+                                    <div id="alert-exalead-asterisque">
+                                        <span class="label label-danger">Merci de préciser votre recherche (3 caractères minimum)</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6" id="entity-categories-container">
+                                <select id="entity-categories" size="5">
+                                    <option value="">Filtrer par type de production</option>
+                                    {%- for categoryProperties in categoriesProperties -%}
+                                        <option value="{{ categoryProperties.id }}"{% if categoryProperties.entityType is defined and categoryProperties.entityType is not null %} data-entity-type="{{ categoryProperties.entityType }}"{% endif %}{% if categoryProperties.referenceId is defined and categoryProperties.referenceId is not null %} data-reference="{{ categoryProperties.referenceId }}"{% endif %}>
+                                            {{ categoryProperties.libelle }}
+                                        </option>
+                                    {%- endfor -%}
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="clearfix"></div>
+                </div>
+
+                <div id="results-domaines">
+                    D'autres résultats pour <span class="filters"></span> existent sur les thèmes suivants : <span class="domaines"></span>
+                </div>
+
+                <div class="results-bloc">
+                    <div id="no-result-bloc">
+                        Il n'y a pas encore de ressource correspondant à cette recherche.
+                        Pour être informé d'une nouvelle publication sur ce sujet, enregistrez votre recherche.
+                    </div>
+                    {%- for groupId, groupTitle in { 'points-durs':'Points durs', 'productions':'Productions' } -%}
+                        <div class="results-group-bloc" id="results-{{ groupId }}-bloc">
+                            <h2><span class="title">{{ groupTitle }}</span> (<span id="results-{{ groupId }}-count"></span> résultats)</h2>
+                            <div id="results-{{ groupId }}"></div>
+                            <div class="buttons">
+                                <div class="ajax-loader"></div>
+                                <button type="button" disabled id="results-{{ groupId }}-less-button" class="btn btn-xs btn-danger" onclick="Hn_RechercheBundle_Referencement.displayLessResults('{{ groupId }}');"><em class="fa fa-angle-double-up"></em> &nbsp; Moins de résultats</button>
+                                <button type="button" disabled id="results-{{ groupId }}-more-button" class="btn btn-xs btn-primary" onclick="Hn_RechercheBundle_Referencement.displayMoreResults('{{ groupId }}');"><em class="fa fa-angle-double-down"></em> &nbsp; Plus de résultats</button>
+                            </div>
+                        </div>
+                    {%- endfor -%}
+                </div>
+            </div>
+        </div>
+    </div>
+{%- endblock %}

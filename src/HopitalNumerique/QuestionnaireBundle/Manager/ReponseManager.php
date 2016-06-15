@@ -12,7 +12,7 @@ use HopitalNumerique\UserBundle\Entity\User;
  */
 class ReponseManager extends BaseManager
 {
-    protected $_class = 'HopitalNumerique\QuestionnaireBundle\Entity\Reponse';
+    protected $class = 'HopitalNumerique\QuestionnaireBundle\Entity\Reponse';
     
     /**
      * Récupère les réponses pour l'utilisateur en fonction du questionnaire passés en param

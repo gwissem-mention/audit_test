@@ -10,7 +10,7 @@ use HopitalNumerique\ObjetBundle\Entity\Objet;
  */
 class NoteManager extends BaseManager
 {
-    protected $_class = 'HopitalNumerique\ObjetBundle\Entity\Note';
+    protected $class = 'HopitalNumerique\ObjetBundle\Entity\Note';
 
 
     /**

@@ -11,7 +11,7 @@ use HopitalNumerique\UserBundle\Manager\UserManager;
  */
 class RechercheParcoursGestionManager extends BaseManager
 {
-    protected $_class = 'HopitalNumerique\RechercheParcoursBundle\Entity\RechercheParcoursGestion';
+    protected $class = 'HopitalNumerique\RechercheParcoursBundle\Entity\RechercheParcoursGestion';
     protected $_userManager;
 
     /**

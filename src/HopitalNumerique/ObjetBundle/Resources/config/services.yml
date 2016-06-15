@@ -4,8 +4,6 @@ parameters:
     hopitalnumerique_objet.form.objet.class: HopitalNumerique\ObjetBundle\Form\ObjetType
     hopitalnumerique_objet.manager.contenu.class: HopitalNumerique\ObjetBundle\Manager\ContenuManager
     hopitalnumerique_objet.form.contenu.class: HopitalNumerique\ObjetBundle\Form\ContenuType
-    hopitalnumerique_objet.manager.refobjet.class: HopitalNumerique\ObjetBundle\Manager\RefObjetManager
-    hopitalnumerique_objet.manager.refcontenu.class: HopitalNumerique\ObjetBundle\Manager\RefContenuManager
     hopitalnumerique_objet.manager.consultation.class: HopitalNumerique\ObjetBundle\Manager\ConsultationManager
     hopitalnumerique_objet.manager.commentaire.class: HopitalNumerique\ObjetBundle\Manager\CommentaireManager
     hopitalnumerique_objet.grid.commentaire.class: HopitalNumerique\ObjetBundle\Grid\CommentaireGrid
@@ -20,38 +18,18 @@ services:
     hopitalnumerique_objet.manager.objet:
         class: %hopitalnumerique_objet.manager.objet.class%
         arguments: ["@doctrine.orm.entity_manager", "@hopitalnumerique_objet.manager.contenu", "@hopitalnumerique_objet.manager.note", "@session", "@hopitalnumerique_user.manager.user", "@hopitalnumerique_reference.manager.reference"]
-        calls:
-           - [ setCache, ["@liip_doctrine_cache.ns.main"] ]
 
     hopitalnumerique_objet.manager.contenu:
         class: %hopitalnumerique_objet.manager.contenu.class%
         arguments: ["@doctrine.orm.entity_manager", "@hopitalnumerique_user.manager.user", "@hopitalnumerique_reference.manager.reference"]
-        calls:
-           - [ setCache, ["@liip_doctrine_cache.ns.main"] ]
-
-    hopitalnumerique_objet.manager.refobjet:
-        class: %hopitalnumerique_objet.manager.refobjet.class%
-        arguments: ["@doctrine.orm.entity_manager"]
-        calls:
-           - [ setCache, ["@liip_doctrine_cache.ns.main"] ]
-
-    hopitalnumerique_objet.manager.refcontenu:
-        class: %hopitalnumerique_objet.manager.refcontenu.class%
-        arguments: ["@doctrine.orm.entity_manager"]
-        calls:
-           - [ setCache, ["@liip_doctrine_cache.ns.main"] ]
 
     hopitalnumerique_objet.manager.consultation:
         class: %hopitalnumerique_objet.manager.consultation.class%
         arguments: ["@doctrine.orm.entity_manager","@security.context"]
-        calls:
-           - [ setCache, ["@liip_doctrine_cache.ns.main"] ]
 
     hopitalnumerique_objet.manager.fichiermodifiable:
         class: %hopitalnumerique_objet.manager.fichiermodifiable.class%
         arguments: ["@doctrine.orm.entity_manager","@security.context"]
-        calls:
-           - [ setCache, ["@liip_doctrine_cache.ns.main"] ]
 
     hopitalnumerique_objet.manager.form.objetmanagerform:
         class: %hopitalnumerique_objet.manager.form.Objetmanagerform.class%
@@ -97,8 +75,6 @@ services:
     hopitalnumerique_objet.manager.commentaire:
         class: %hopitalnumerique_objet.manager.commentaire.class%
         arguments: ["@doctrine.orm.entity_manager"]
-        calls:
-           - [ setCache, ["@liip_doctrine_cache.ns.main"] ]
     #--Grid
     hopitalnumerique_objet.grid.commentaire:
         class: %hopitalnumerique_objet.grid.commentaire.class%
@@ -115,5 +91,15 @@ services:
     hopitalnumerique_objet.manager.note:
         class: %hopitalnumerique_objet.manager.note.class%
         arguments: ["@doctrine.orm.entity_manager"]
-        calls:
-           - [ setCache, ["@liip_doctrine_cache.ns.main"] ]
+
+    hopitalnumerique_objet.dependency_injection.production_liee:
+        class: 'HopitalNumerique\ObjetBundle\DependencyInjection\ProductionLiee'
+        arguments: ['@hopitalnumerique_core.dependency_injection.entity', '@hopitalnumerique_objet.manager.objet', '@hopitalnumerique_objet.manager.contenu']
+
+    hopitalnumerique_objet.doctrine.note_reader:
+        class: 'HopitalNumerique\ObjetBundle\Doctrine\NoteReader'
+        arguments: ['@session', '@hopitalnumerique_objet.manager.note']
+
+    hopitalnumerique_objet.doctrine.note_saver:
+        class: 'HopitalNumerique\ObjetBundle\Doctrine\NoteSaver'
+        arguments: ['@session', '@hopitalnumerique_objet.doctrine.note_reader', '@hopitalnumerique_objet.manager.note']

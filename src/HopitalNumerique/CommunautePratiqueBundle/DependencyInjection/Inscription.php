@@ -10,7 +10,7 @@ class Inscription
 {
     /**
      * Retourne s'il manque une information à l'utilisateur.
-     * 
+     *
      * @param \HopitalNumerique\UserBundle\Entity\User $user Utilisateur
      * @return boolean VRAI si information manquante
      */
@@ -21,7 +21,7 @@ class Inscription
 
     /**
      * Retourne les informations manquantes pour se connecter à la communauté de pratique.
-     * 
+     *
      * @param \HopitalNumerique\UserBundle\Entity\User $user Utilisateur
      * @return array<string> Informations manquantes
      */
@@ -29,24 +29,19 @@ class Inscription
     {
         $informationsManquantes = array();
 
-        if (null === $user->getRegion() || null === $user->getDepartement())
-        {
+        if (empty(trim($user->getNom())) || empty(trim($user->getPrenom()))) {
+            $informationsManquantes[] = 'Nom & Prénom';
+        }
+        if (null === $user->getRegion() || null === $user->getDepartement()) {
             $informationsManquantes[] = 'Région & département';
         }
-        if (null === $user->getEtablissementRattachementSante() && null === $user->getAutreStructureRattachementSante() && null === $user->getNomStructure())
-        {
+        if (null === $user->getEtablissementRattachementSante() && null === $user->getAutreStructureRattachementSante() && null === $user->getNomStructure()) {
             $informationsManquantes[] = 'Etablissement de rattachement / Nom de votre établissement / Nom de la structure';
         }
-        if (null === $user->getProfilEtablissementSante())
-        {
+        if (null === $user->getProfilEtablissementSante()) {
             $informationsManquantes[] = 'Profil';
         }
-        if (0 == count($user->getTypeActivite()))
-        {
-            $informationsManquantes[] = 'Activité';
-        }
-        if (null === $user->getFonctionDansEtablissementSanteReferencement())
-        {
+        if (null === $user->getFonctionDansEtablissementSanteReferencement() && null === $user->getFonctionStructure()) {
             $informationsManquantes[] = 'Fonction';
         }
 

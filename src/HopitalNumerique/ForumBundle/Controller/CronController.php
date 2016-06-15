@@ -69,19 +69,6 @@ class CronController extends Controller
             //Suppression des abonnements liés au topics supprimés
             $this->get('hopitalnumerique_forum.manager.subscription')->deleteSubscriptionByTopicsArray($topicToDelete);
 
-            //---Référencement
-            //Suppression du référencement
-            $refTopicToDelete = array();
-            foreach ($topicToDelete as $topic) 
-            {
-                foreach ($topic->getReferences() as $refTopic) 
-                {
-                    $refTopicToDelete[] = $refTopic;
-                    $this->get('hopitalnumerique_forum.service.logger.cronlogger')->addLog('Référencement ( ' . $refTopic->getId() . ' )sur le topic ' . $topic->getId() . ' supprimé.');
-                }
-            }
-            $this->get('hopitalnumerique_forum.manager.reftopic')->delete($refTopicToDelete);
-            
             //Suppression des topics pour finir
             $this->get('hopitalnumerique_forum.manager.topic')->delete($topicToDelete);
 

@@ -13,7 +13,7 @@ use Nodevo\ToolsBundle\Tools\Chaine;
  */
 class OutilManager extends BaseManager
 {
-    protected $_class = 'HopitalNumerique\AutodiagBundle\Entity\Outil';
+    protected $class = 'HopitalNumerique\AutodiagBundle\Entity\Outil';
     protected $_userManager;
 
     /**

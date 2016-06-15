@@ -49,12 +49,6 @@ hopitalnumerique_forum_reference_topic_own:
     requirements:
         id: \d+
 
-hopitalnumerique_forum_reference_topic_save:
-    pattern:  /reference/save/topic/{id}
-    defaults: { _controller: "HopitalNumeriqueForumBundle:Reference:saveTopic", forumName: Public  }
-    requirements:
-        id: \d+
-
 hopitalnumerique_forum_reference_contenu:
     pattern:  /reference/contenu/{id}
     defaults: { _controller: "HopitalNumeriqueForumBundle:Reference:contenu", id:1, forumName: Public  }

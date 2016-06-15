@@ -29,17 +29,17 @@ class ReponseRepository extends EntityRepository
             ->leftJoin('reponse.user', 'user')
             ->where( 'user.id = :idUser')
             ->setParameter('idUser', $idUser );
-            
+
             if ($paramId != null) {
                 $qb->andWhere('reponse.paramId = :paramId')
                     ->setParameter('paramId', $paramId);
             }
-            
+
             $qb->leftJoin('reponse.reference', 'reference')
             ->innerJoin('question.questionnaire', 'questionnaire', 'WITH', 'questionnaire.id = :idQuestionnaire')
             ->setParameter('idQuestionnaire', $idQuestionnaire )
             ->leftJoin('question.typeQuestion', 'typeQuestion');
-        
+
         if (null !== $occurrence)
         {
             $qb
@@ -47,7 +47,7 @@ class ReponseRepository extends EntityRepository
                 ->setParameter('occurrence', $occurrence)
             ;
         }
-    
+
         return $qb->getQuery();
     }
 
@@ -62,20 +62,20 @@ class ReponseRepository extends EntityRepository
         $qb->select('reponse')
             ->from('\HopitalNumerique\QuestionnaireBundle\Entity\Reponse', 'reponse')
             ->leftJoin('reponse.question', 'question');
-            
+
             if ($paramId != null) {
                 $qb->andWhere('reponse.paramId = :paramId')
                     ->setParameter('paramId', $paramId);
             }
-            
+
             $qb->leftJoin('reponse.reference', 'reference')
             ->innerJoin('question.questionnaire', 'questionnaire', 'WITH', 'questionnaire.id = :idQuestionnaire')
             ->setParameter('idQuestionnaire', $idQuestionnaire )
             ->leftJoin('question.typeQuestion', 'typeQuestion');
-    
+
         return $qb->getQuery();
     }
-    
+
     /**
      * Récupère les réponses pour l'utilisateur en fonction du questionnaire passés en param pour les questions de type 'file'
      *
@@ -94,7 +94,7 @@ class ReponseRepository extends EntityRepository
             ->setParameter('idQuestionnaire', $idQuestionnaire )
             ->innerJoin('question.typeQuestion', 'typeQuestion', 'WITH', 'typeQuestion.libelle = :libTypeQuestion')
             ->setParameter('libTypeQuestion', 'file' );
-        
+
         if (null !== $occurrence)
         {
             $qb
@@ -102,10 +102,10 @@ class ReponseRepository extends EntityRepository
                 ->setParameter('occurrence', $occurrence)
             ;
         }
-    
+
         return $qb->getQuery();
     }
-    
+
     /**
      * Récupère les réponses du questionnaire passés en param
      *
@@ -119,13 +119,13 @@ class ReponseRepository extends EntityRepository
             ->leftJoin('reponse.question', 'question')
             ->innerJoin('question.questionnaire', 'questionnaire', 'WITH', 'questionnaire.id = :idQuestionnaire')
             ->setParameter('idQuestionnaire', $idQuestionnaire );
-    
+
         return $qb->getQuery();
     }
-    
+
     /**
      * Récupère les réponses pour l'utilisateur en fonction des questionnaires passés en param
-     * 
+     *
      * @param int $idExpert      Identifiant du questionnaire expert
      * @param int $idAmbassadeur Identifiant du questionnaire ambassadeur
      *
@@ -145,15 +145,15 @@ class ReponseRepository extends EntityRepository
                 //         'ambassadeurId' => $idAmbassadeur
                 //     )
                 // )
-            ->groupBy('user, questionnaire');
-        
+            ->groupBy('user.id, questionnaire.id');
+
         return $qb->getQuery();
     }
-    
-    
+
+
     /**
      * Affecte une occurrence à toutes les réponses d'un questionnaire répondu par un utilisateur.
-     * 
+     *
      * @param \HopitalNumerique\QuestionnaireBundle\Entity\Occurrence    $occurrence    Occurrence
      * @param \HopitalNumerique\QuestionnaireBundle\Entity\Questionnaire $questionnaire Questionnaire
      * @param \HopitalNumerique\UserBundle\Entity\User                   $user          User
@@ -162,11 +162,11 @@ class ReponseRepository extends EntityRepository
     public function setOccurrenceByQuestionnaireAndUser(Occurrence $occurrence, Questionnaire $questionnaire, User $user)
     {
         $query = $this->createQueryBuilder('reponse');
-        
+
         $query
             ->update()
             ->set('reponse.occurrence', $occurrence->getId())
-                
+
             ->where($query->expr()->in('reponse.question', $questionnaire->getQuestionIds())) // innerJoin() ne fonctionnant pas avec update() en Doctrine
             ->andWhere('reponse.user = :user')
             ->setParameter('user', $user)

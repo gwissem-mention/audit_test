@@ -11,7 +11,7 @@ use Nodevo\ToolsBundle\Manager\Manager as BaseManager;
  */
 class RemboursementManager extends BaseManager
 {
-    protected $_class = 'HopitalNumerique\PaiementBundle\Entity\Remboursement';
+    protected $class = 'HopitalNumerique\PaiementBundle\Entity\Remboursement';
 
     /**
      * @var \HopitalNumerique\InterventionBundle\DependencyInjection\Intervention\ForfaitTransport ForfaitTransportService
@@ -71,8 +71,7 @@ class RemboursementManager extends BaseManager
             $row->discr    = 'intervention';
 
             //calcul total
-            $ambassadeurRegion = $intervention->getAmbassadeur()->getRegion()->getId();
-            $referentRegion    = $referent->getRegion()->getId();
+            $ambassadeurRegion = (null === $intervention->getAmbassadeur()->getRegion() ? '0' : $intervention->getAmbassadeur()->getRegion()->getId());
             $row->total        = array('prix' => $prix['interventions'][$ambassadeurRegion]['total'] + $forfaitTransport);
             
             $results[] = $row;

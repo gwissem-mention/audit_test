@@ -18,14 +18,10 @@ services:
     nodevo_menu.manager.menu:
         class: %nodevo_menu.manager.menu.class%
         arguments: ["@doctrine.orm.entity_manager"]
-        calls:
-            - [ setCache, ["@liip_doctrine_cache.ns.main"] ]
 
     nodevo_menu.manager.item:
         class: %nodevo_menu.manager.item.class%
         arguments: ["@doctrine.orm.entity_manager", "@nodevo_menu.manager.menu"]
-        calls:
-            - [ setCache, ["@liip_doctrine_cache.ns.main"] ]
 
     nodevo_menu.form.menu:
         class: %nodevo_menu.form.menu.class%

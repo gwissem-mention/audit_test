@@ -5,9 +5,6 @@
 {% block stylesheets %}
     {{parent()}}
     {% stylesheets output="compiled/hopitalnumerique-communautepratique.css" filter="cssrewrite, ?yui_css"
-        '@validationEngine_css'
-        '@select2_css'
-        '@bootstrap_multiselect_css'
         'bundles/hopitalnumeriquecommunautepratique/css/CommunautePratique.css'
         'bundles/hopitalnumeriquecommunautepratique/css/Commentaire.css'
         'bundles/hopitalnumeriquecommunautepratique/css/Popup.css'
@@ -20,9 +17,6 @@
 {% block javascripts %}
     {{ parent() }}
     {% javascripts output="compiled/hopitalnumerique-communautepratique.js"
-        '@validationEngine_js'
-        '@select2_js'
-        '@bootstrap_multiselect_js'
         '@tinymce_js'
         'bundles/nodevogestionnairemedia/js/moxiemanager/js/moxman.loader.min.js'
         'bundles/nodevogestionnairemedia/js/MoxieManager.js'
@@ -38,7 +32,7 @@
     {% endjavascripts %}
 {% endblock %}
 
-{% block title %}{{ block('title_communaute_pratique')|striptags }} - Communauté de pratiques - {{ parent() }}{% endblock %}
+{% block title %}{{ block('title_communaute_pratique')|striptags }} - Communauté de pratique - {{ parent() }}{% endblock %}
 
 {% block body %}
 
@@ -47,7 +41,7 @@
         {% block communaute_pratique_breadcrumbs %}
             <ol class="breadcrumb">
                 <li><a href="{{ path('hopital_numerique_homepage') }}">Accueil</a></li>
-                {% block communaute_pratique_breadcrumbs_communautedepratiques %}<li><a href="{{ path('hopitalnumerique_communautepratique_accueil_index') }}">Communauté de pratiques</a></li>{% endblock %}
+                {% block communaute_pratique_breadcrumbs_communautedepratiques %}<li><a href="{{ path('hopitalnumerique_communautepratique_accueil_index') }}">Communauté de pratique</a></li>{% endblock %}
                 {% block communaute_pratique_breadcrumbs_parent %}{% endblock %}
                 <li class="active">{{ block('title_communaute_pratique')|striptags }}</li>
             </ol>

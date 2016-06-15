@@ -10,7 +10,7 @@ use Nodevo\ToolsBundle\Manager\Manager as BaseManager;
 class StatRechercheManager extends BaseManager
 {
     protected $_managerReference;
-    protected $_class = 'HopitalNumerique\StatBundle\Entity\StatRecherche';
+    protected $class = 'HopitalNumerique\StatBundle\Entity\StatRecherche';
     protected $_securityContext;
 
     /**
@@ -102,44 +102,6 @@ class StatRechercheManager extends BaseManager
     public function getStatFantome( $dateDebutDateTime, $dateFinDateTime )
     { 
         return $this->getRepository()->getStatFantome($dateDebutDateTime, $dateFinDateTime)->getQuery()->getResult();
-    }
-
-    /**
-     * Sauvegarde l'ensemble de la requete affichée en base pour les stats
-     *
-     * @param array $tableauIdRef Tableau formaté par la requete de récupération des références dans la recherche
-     *
-     * @return Void
-     */
-    public function sauvegardeRequete(array $tableauIdRef, $user, $categ, $nbResultats, $isRequete)
-    {
-        if(!is_null($user) && $this->_securityContext->isGranted('ROLE_ADMINISTRATEUR_1'))
-        {
-            return;
-        }
-        
-        $referencesJSON = json_encode($tableauIdRef);
-
-        //Récupération des références correspondant à la requête
-        $references = $this->getTabReferenceByArrayId($tableauIdRef);
-
-        $statRecherche = $this->createEmpty();
-
-        if(!is_null($user) && "anon." !== $user) {
-        	$statRecherche->setUser($user);
-        } else {
-        	$statRecherche->setSessionId(session_id());
-        	 
-        }
-
-        $statRecherche->setReferences($references);
-        $statRecherche->setDate(new \DateTime());
-        $statRecherche->setNbResultats($nbResultats);
-        $statRecherche->setRequete($referencesJSON);
-        $statRecherche->setIsRequeteSaved($isRequete);
-        $statRecherche->setCategPointDur($categ);
-
-        $this->save($statRecherche);
     }
 
     /**
@@ -256,38 +218,5 @@ class StatRechercheManager extends BaseManager
         ksort($results);
 
         return $results;
-    }
-
-    /**
-     * Retourne un tableau d'entité référence en fonction du tableau d'id passés en param : très gourmant en nombre de requete => à OPTIMISER
-     *
-     * @param array $tableauIdRef Tableau formaté par la requete de récupération des références dans la recherche
-     *
-     * @return array[Reference]
-     */
-    private function getTabReferenceByArrayId(array $tableauIdRef)
-    {
-        //Tableau de retour de l'ensemble des références de la recherche
-        $references = array();
-        foreach ($tableauIdRef as $categ => $tableauRefByCateg) 
-        {
-            foreach ($tableauRefByCateg as $ref) 
-            {
-                //Ajout de la référence
-                $referenceTemp = $this->_managerReference->findOneBy(array('id' => $ref));
-                $references[ $referenceTemp->getId() ] = $referenceTemp;
-                
-                //parcourt tout les parents pour avoir l'ensemble des références utilisées
-                while( !is_null( $referenceTemp->getParent() ) )
-                {
-                    $referenceTemp = $referenceTemp->getParent();
-                    //Si ce parent n'a pas déjà été ajouté
-                    if( !array_key_exists($referenceTemp->getId(), $references) )
-                        $references[ $referenceTemp->getId() ] = $referenceTemp;
-                }
-            }
-        }
-
-        return $references;
     }
 }

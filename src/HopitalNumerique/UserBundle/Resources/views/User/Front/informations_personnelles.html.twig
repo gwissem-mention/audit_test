@@ -2,13 +2,9 @@
 
 {% block stylesheets %}
     {{parent()}}
-    {% stylesheets output="compiled/hopitalnumerique-user-informations_personnelles-edit.css" filter="cssrewrite, ?yui_css" 
-        "@select2_css" 
-        "@validationEngine_css"
+    {% stylesheets output="compiled/hopitalnumerique-user-informations_personnelles-edit.css" filter="cssrewrite, ?yui_css"
         'bundles/hopitalnumeriqueuser/css/specificationUser.css'
-        'bundles/nodevoadmin/plugins/nodevoLoader/nodevoLoader.css'
         'bundles/hopitalnumeriqueuser/css/inscription.css'
-        'bundles/nodevoadmin/plugins/apprise/apprise.css'
     %}
         <link rel="stylesheet" href="{{ asset_url }}" />
     {% endstylesheets %}
@@ -16,14 +12,9 @@
 
 {% block javascripts %}
     {{parent()}}
-    {% javascripts output="compiled/hopitalnumerique-user-informations_personnelles-edit.js" 
-        "@select2_js" 
-        "@validationEngine_js"
-        "@jquery_maskedinput_js"
-        'bundles/nodevoadmin/plugins/nodevoLoader/nodevoLoader.js'
+    {% javascripts output="compiled/hopitalnumerique-user-informations_personnelles-edit.js"
         'bundles/hopitalnumeriqueuser/js/User/script.js'
         'bundles/hopitalnumeriqueuser/js/User/inscription.js'
-        'bundles/nodevoadmin/plugins/apprise/apprise.js'
     %}
         <script type="text/javascript" src="{{ asset_url }}"></script>
     {% endjavascripts %}
@@ -46,7 +37,7 @@
 {% block content%}
 	<div id="form_edit_user">
 	    <div id="form_edit_informations_personnelles">
-            {% form_theme form 'HopitalNumeriqueAccountBundle:Formulaire:theme.default.html.twig' %}
+                {% form_theme form 'HopitalNumeriqueAccountBundle:Formulaire:theme.default.html.twig' %}
                 {{ form_start(form) }}
                     {{ form_javascript(form) }}
                     <div class="champ-obligatoire"><span class="etoile">*</span> champ(s) obligatoire(s)</div>
@@ -55,13 +46,13 @@
                     {# Input hidden permettant de stocker la route pour le refresh du département en ajax #}
                     <input type="hidden" id="departement-url" value="{{path('hopital_numerique_user_front_departements_informationsPersonelles')}}" />
                     <input type="hidden" id="etablissement-url" value="{{path('hopital_numerique_user_front_etablissements_informationsPersonelles')}}" />
-                    
+
                     {# Formulaire : #}
-		            <div class="form-group">
+                    <div class="form-group">
                         <label class="control-label col-md-4">Identifiant (login)</label>
                         <div class="username col-md-7">{{ user.username }}</div>
                     </div>
-	                <div class="clearfix"></div>
+                    <div class="clearfix"></div>
                     {{ form_row(form.pseudonymeForum) }}
                     {{ form_row(form.civilite) }}
                     {{ form_row(form.titre) }}
@@ -92,9 +83,9 @@
                         {%- endif -%}
                         {{ form_row(form.departement) }}
                     {% endif %}
-                    
+
                     {{ form_row(form.profilEtablissementSante) }}
-                    
+
                     <div class="form-group">
                         {{ form_label(form.file) }}
                         <div class="col-md-6">
@@ -118,14 +109,14 @@
                             </div>
                         </div>
                     </div>
-                    
+
                     <div class="hide">
-                        {{ form_row(form.etat) }}  
+                        {{ form_row(form.etat) }}
                     </div>
-                    
+
                     {# Le role ARS CMSI ne voit ces informations ci-dessous #}
 	                {% if 'ROLE_ARS_CMSI_4' in user.getRoles() %}
-                        <div class="hide">		                
+                        <div class="hide">
 	                {% endif %}
                     <div id="etablissement_sante">
 	                    <h4 class="violet">Vous êtes un établissement de santé</h4>
@@ -142,10 +133,10 @@
 	                    {{ form_row(form.nomStructure) }}
 	                    {{ form_row(form.fonctionStructure) }}
                     </div>
-                    
+
 	                {% if 'ROLE_ARS_CMSI_4' in user.getRoles() %}
-                        </div>		                
-	                {% endif %}		                
+                        </div>
+	                {% endif %}
                 {# Permet de mettre à la ligne le submit #}
 	                <div class="clearfix"></div>
                     <div class="form-group">
@@ -153,12 +144,12 @@
 		                   <input onclick="$('#do').val('information-personnelles');sauvegardeFormulaire();" class="btn btn-success pull-right submit" value="ENREGISTRER MES MODIFICATIONS" type="button" />
 	                </div>
                 </div>
-                    
+
                     <div class="hide">
-                        {{ form_row(form.inscritCommunautePratique) }} 
-                        {{ form_row(form.username) }}  
+                        {{ form_row(form.inscritCommunautePratique) }}
+                        {{ form_row(form.username) }}
                     </div>
-            
+
             {{ form_end(form) }}
         </div>
     </div>

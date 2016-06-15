@@ -1,0 +1,9 @@
+{{- form_start(recommandationForm, { 'attr':{'novalidate':'novalidate','id':'recommandation-form'} }) -}}
+    {{- form_rest(recommandationForm) -}}
+    <div class="col-md-12 text-right">
+        <button type="submit" class="btn btn-success">Envoyer</button>
+    </div>
+{{- form_end(recommandationForm) -}}
+<script type="text/javascript">
+    $('form#recommandation-form').validationEngine();
+</script>

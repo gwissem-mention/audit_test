@@ -16,6 +16,7 @@
     {% block stylesheets %}
         {% stylesheets output="compiled/hopitalnumerique_homepage-core.css" filter="cssrewrite, ?yui_css"
             "@bootstrap_css"
+            '@validationEngine_css'
             "@font_awesome_css"
             "@fancybox_css"
             "@slick_css"
@@ -42,10 +43,11 @@
     {% endblock stylesheets %}
 
     {% block javascripts %}
-        {% javascripts output="compiled/hopitalnumerique-homepage-core.js"
+        {% javascripts output="compiled/hopitalnumerique-homepage-core-2.js"
         "@jquery_js"
         "@jquery_ui_js"
         "@bootstrap_js"
+        '@validationEngine_js'
         "@enquire_js"
         "@fancybox_js"
         "@json_js"
@@ -118,7 +120,7 @@
                             {% else %}
                                 <a href="{{path('account_logout')}}">Déconnexion</a>
                             {% endif %}
-		                </div>
+                        </div>
 	                {% else %}
                     <a class="infos btn btn-rose" href="{{path('hopital_numerique_user_inscription')}}">Créer un compte</a>
                 {% endif %}
@@ -137,7 +139,6 @@
         <div class="col-md-12" id="menu-container">
             <div class="col-md-12 col-sm-12">
                 {{ knp_menu_render(aliasMenuTemplateCurrent, {'currentClass': 'active', 'ancestorClass':'active','template':'HopitalNumeriqueCoreBundle::menu.html.twig'}) }}
-                {{ knp_menu_render(aliasMenuTemplateCurrent, {'currentClass': 'active', 'ancestorClass':'active','template':'HopitalNumeriqueCoreBundle::menu_responsive.html.twig'}) }}
             </div>
             <div class="clearfix"></div>
         </div>
@@ -279,8 +280,8 @@
                     <a href="{{ app.user is not null and app.user.inscritCommunautePratique ? path('hopitalnumerique_communautepratique_accueil_index') : path('hopital_numerique_publication_publication_article', { categorie:'article', id:1000, alias:'la-communaute-de-pratiques' }) }}" class="img-link"></a>
                     <div class="block-bottom">
                         <a href="{{ app.user is not null and app.user.inscritCommunautePratique ? path('hopitalnumerique_communautepratique_accueil_index') : path('hopital_numerique_publication_publication_article', { categorie:'article', id:1000, alias:'la-communaute-de-pratiques' }) }}"></a>
-                        <h2>COMMUNAUTÉ DE PRATIQUES</h2>
-                        <p><img src="{{asset('bundles/hopitalnumeriquecore/img/picto-communaute-de-pratiques.png')}}" alt="Communauté de pratiques"/></p>
+                        <h2>COMMUNAUTÉ DE PRATIQUE</h2>
+                        <p><img src="{{asset('bundles/hopitalnumeriquecore/img/picto-communaute-de-pratiques.png')}}" alt="Communauté de pratique"/></p>
                     </div>
                 </div>
             </div>

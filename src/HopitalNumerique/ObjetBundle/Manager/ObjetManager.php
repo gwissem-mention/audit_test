@@ -18,7 +18,7 @@ use Symfony\Component\HttpFoundation\Session\Session;
  */
 class ObjetManager extends BaseManager
 {
-    protected $_class = 'HopitalNumerique\ObjetBundle\Entity\Objet';
+    protected $class = 'HopitalNumerique\ObjetBundle\Entity\Objet';
     protected $_contenuManager;
     protected $_noteManager;
     protected $_userManager;
@@ -106,19 +106,6 @@ class ObjetManager extends BaseManager
     }
 
     /**
-     * Retourne la liste des objets en fonction des dates passées en param
-     *
-     * @param DateTime $dateDebut Date début fourchette
-     * @param DateTime $dateFin   Date fin fourchette
-     *
-     * @return array
-     */
-    public function getObjetsByDate($dateDebut, $dateFin)
-    {
-        return $this->getRepository()->getObjetsByDate($dateDebut, $dateFin)->getQuery()->getResult();
-    }
-
-    /**
      * Récupère les objets pour l'export
      *
      * @return array
@@ -150,8 +137,6 @@ class ObjetManager extends BaseManager
 
             //quelques Dates
             $row['dateCreation']         = !is_null($objet->getDateCreation())         ? $objet->getDateCreation()->format('d/m/Y')         : '';
-            $row['dateDebutPublication'] = !is_null($objet->getDateDebutPublication()) ? $objet->getDateDebutPublication()->format('d/m/Y') : '';
-            $row['dateFinPublication']   = !is_null($objet->getDateFinPublication())   ? $objet->getDateFinPublication()->format('d/m/Y')   : '';
             $row['dateModification']     = !is_null($objet->getDateModification())     ? $objet->getDateModification()->format('d/m/Y')     : '';
 
             //handle Productions liées
@@ -245,7 +230,7 @@ class ObjetManager extends BaseManager
                         $rowInfradoc = array();
 
                         $rowInfradoc['id'] = $rowInfradoc['idParent'] = $rowInfradoc['titre'] = $rowInfradoc['alias'] = $rowInfradoc['synthese'] = $rowInfradoc['resume'] = $rowInfradoc['commentaires'] = $rowInfradoc['notes'] = $rowInfradoc['type'] = $rowInfradoc['nbVue'] = $rowInfradoc['etat'] = '';
-                        $rowInfradoc['dateCreation'] = $rowInfradoc['dateParution'] = $rowInfradoc['dateDebutPublication'] = $rowInfradoc['dateFinPublication'] = $rowInfradoc['dateModification'] = $rowInfradoc['roles'] = $rowInfradoc['domaines'] = $rowInfradoc['types'] = $rowInfradoc['ambassadeurs'] = '';
+                        $rowInfradoc['dateCreation'] = $rowInfradoc['dateParution'] = $rowInfradoc['dateModification'] = $rowInfradoc['roles'] = $rowInfradoc['domaines'] = $rowInfradoc['types'] = $rowInfradoc['ambassadeurs'] = '';
                         $rowInfradoc['fichier1'] = $rowInfradoc['fichier2'] = $rowInfradoc['vignette'] = $rowInfradoc['note'] = $rowInfradoc['objets'] = $rowInfradoc['noteMoyenne'] = $rowInfradoc['nombreNote'] = $row['nombreUserMaitrise'] = '';
                         $rowInfradoc['referentAnap'] = $rowInfradoc['sourceDocument'] = $rowInfradoc['commentairesFichier'] =  $rowInfradoc['pathEdit'] =  $rowInfradoc['module'] = '';
 
@@ -358,67 +343,6 @@ class ObjetManager extends BaseManager
 
             $this->save( $objet );
         }
-    }
-
-    /**
-     * Formatte les références sous forme d'un unique tableau
-     *
-     * @param objet $objet      Objet concerné
-     * @param array $references Liste des références de type dictionnaire
-     *
-     * @return array
-     */
-    public function getReferences($objet, $references)
-    {
-        $selectedReferences = $objet->getReferences();
-
-        //applique les références
-        foreach( $selectedReferences as $selected )
-        {
-            //on récupère l'élément que l'on va manipuler
-            $ref = $references[ $selected->getReference()->getId() ];
-
-            //on le met à jour
-            $ref->selected = true;
-            $ref->primary  = $selected->getPrimary();
-
-            //on remet l'élément à sa place
-            $references[ $selected->getReference()->getId() ] = $ref;
-        }
-
-        $references = $this->filtreReferencesByDomaines($objet, $references);
-
-        return $references;
-    }
-
-    /**
-     * Formatte les références sous forme d'un unique tableau
-     *
-     * @param objet $objet      Objet concerné
-     * @param array $references Liste des références de type dictionnaire
-     *
-     * @return array
-     */
-    public function getReferencesOwn($objet)
-    {
-        $return = array();
-        $selectedReferences = $objet->getReferences();
-
-        //applique les références
-        foreach( $selectedReferences as $selected ){
-            $reference = $selected->getReference();
-
-            //on remet l'élément à sa place
-            $return[ $reference->getId() ]['nom']     = $reference->getCode() . " - " . $reference->getLibelle();
-            $return[ $reference->getId() ]['primary'] = $selected->getPrimary();
-
-            if( $reference->getParent() )
-                $return[ $reference->getParent()->getId() ]['childs'][] = $reference->getId();
-        }
-
-        $this->formatReferencesOwn( $return );
-
-        return $return;
     }
 
     /**
@@ -577,6 +501,7 @@ class ObjetManager extends BaseManager
      */
     public function getObjetsAndContenuArbo( $types = null )
     {
+        //@todo Vérif pour remplacer $this->findAll() qui pourrait générer des centaines de requêtes
         //get objets and IDS
         $objets = is_null($types) ? $this->findAll() : $this->getObjetsByTypes( $types );
         $ids    = array();
@@ -878,71 +803,6 @@ class ObjetManager extends BaseManager
     {
         return $a->date > $b->date ? 0 : 1;
     }
-    /**
-     * Filtre les reférences en fonction de l'objet passés en paramètre
-     *
-     * @param [type] $objet      [description]
-     * @param [type] $references [description]
-     *
-     * @return [type]
-     */
-    private function filtreReferencesByDomaines($objet, $references)
-    {
-        $referencesIds    = array();
-        $domainesObjetIds = array();
-        $userConnectedDomaineIds = $this->_userManager->getUserConnected()->getDomainesId();
-
-        //Récupération des id de domaine de l'objet
-        foreach ($objet->getDomaines() as $domaine)
-        {
-            if(in_array($domaine->getId(), $userConnectedDomaineIds))
-            {
-                $domainesObjetIds[] = $domaine->getId();
-            }
-        }
-
-        //Vérifie qu'il y a bien un domaine pour la publication courante
-        if(count($domainesObjetIds) !== 0)
-        {
-            //Récupération des id des références "stdClass" pour récupérer les entités correspondantes et donc les domaines
-            foreach ($references as $reference)
-            {
-                $referencesIds[] = $reference->id;
-            }
-
-            $referencesByIds = $this->_referenceManager->findBy(array('id'=> $referencesIds));
-
-            //Parcourt la liste des entités de référence
-            foreach ($referencesByIds as $reference)
-            {
-                if(array_key_exists($reference->getId(), $references))
-                {
-                    $inArray = false;
-
-                    foreach ($reference->getDomaines() as $domaine)
-                    {
-                        if(in_array($domaine->getId(), $domainesObjetIds))
-                        {
-                            $inArray = true;
-                            break;
-                        }
-                    }
-
-                    if(!$inArray)
-                    {
-                        unset($references[$reference->getId()]);
-                    }
-                }
-            }
-        }
-        //Sinon vide les références, car une publication sans domaine ne peut pas être référencées
-        else
-        {
-            $references = array();
-        }
-
-        return $references;
-    }
 
     /**
      * Formatte les types de l'objet pour les URLS (catégorie param)
@@ -956,8 +816,9 @@ class ObjetManager extends BaseManager
         $type      = $types[0];
         $categorie = '';
 
-        if( $parent = $type->getParent() )
-            $categorie .= $parent->getLibelle().'-';
+        foreach ($type->getParents() as $typeParent) {
+            $categorie .= $typeParent->getLibelle().'-';
+        }
         $categorie .= $type->getLibelle();
 
         $tool = new Chaine( $categorie );
@@ -1007,20 +868,6 @@ class ObjetManager extends BaseManager
         }
 
         return array_values($objets);
-    }
-
-    /**
-     * [formatReferencesOwn description]
-     *
-     * @param  [type] $retour [description]
-     *
-     * @return [type]
-     */
-    private function formatReferencesOwn( &$retour )
-    {
-        foreach( $retour as $key => $one ){
-            $retour[ $key ]['childs'] = $this->getChilds($retour, $one);
-        }
     }
 
     /**

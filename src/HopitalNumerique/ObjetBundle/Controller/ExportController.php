@@ -45,8 +45,6 @@ class ExportController extends Controller
                             'notes'                => 'Notes autorisé ?',
                             'dateCreation'         => 'Date de création de la publication',
                             'dateParution'         => 'Date de parution de la publication',
-                            'dateDebutPublication' => 'Date de début de la publication',
-                            'dateFinPublication'   => 'Date de fin de la publication',
                             'dateModification'     => 'Date de modification de la publication',
                             'type'                 => 'Type de la publication',
                             'nbVue'                => 'Nombre de visualisation de la publication',

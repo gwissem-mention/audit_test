@@ -3,8 +3,7 @@
 namespace HopitalNumerique\RechercheParcoursBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-
-//Asserts Stuff
+use HopitalNumerique\ReferenceBundle\Entity\Reference;
 use Symfony\Component\Validator\Constraints as Assert;
 use Nodevo\ToolsBundle\Validator\Constraints as Nodevo;
 use APY\DataGridBundle\Grid\Mapping as GRID;
@@ -14,6 +13,7 @@ use APY\DataGridBundle\Grid\Mapping as GRID;
  *
  * @ORM\Table(name="hn_recherche_recherche_parcours_gestion")
  * @ORM\Entity(repositoryClass="HopitalNumerique\RechercheParcoursBundle\Repository\RechercheParcoursGestionRepository")
+ * @ORM\HasLifecycleCallbacks()
  */
 class RechercheParcoursGestion
 {
@@ -39,6 +39,7 @@ class RechercheParcoursGestion
      *      joinColumns={ @ORM\JoinColumn(name="rrpg_id", referencedColumnName="rrpg_id", onDelete="CASCADE")},
      *      inverseJoinColumns={ @ORM\JoinColumn(name="dom_id", referencedColumnName="dom_id", onDelete="CASCADE")}
      * )
+     * @Assert\Count(min=1);
      */
     protected $domaines;
 
@@ -89,6 +90,8 @@ class RechercheParcoursGestion
     public function __construct()
     {
         $this->domaines = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->referencesParentes = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->referencesVentilations = new \Doctrine\Common\Collections\ArrayCollection();
         $this->typePublication = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
@@ -139,6 +142,19 @@ class RechercheParcoursGestion
     }
 
     /**
+     * Set domaines
+     *
+     * @param array<\HopitalNumerique\DomaineBundle\Entity\Domaine> $domaines
+     * @return RechercheParcoursGestion
+     */
+    public function setDomaines($domaines)
+    {
+        $this->domaines = $domaines;
+
+        return $this;
+    }
+
+    /**
      * Remove domaines
      *
      * @param \HopitalNumerique\DomaineBundle\Entity\Domaine $domaines
@@ -173,6 +189,22 @@ class RechercheParcoursGestion
         }
 
         return $domainesId;
+    }
+
+    /**
+     * Retourne si l'entité est liée au domaine.
+     *
+     * @param \HopitalNumerique\DomaineBundle\Entity\Domaine $domaine Domaine
+     */
+    public function hasDomaine(\HopitalNumerique\DomaineBundle\Entity\Domaine $domaine)
+    {
+        foreach ($this->domaines as $domaineExistant) {
+            if ($domaineExistant->equals($domaine)) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     /**
@@ -337,5 +369,96 @@ class RechercheParcoursGestion
 
 
         return $name;
+    }
+
+
+    /**
+     * @ORM\PreUpdate()
+     */
+    public function preUpdate()
+    {
+        $this->refreshReferencesParentes();
+        $this->refreshReferencesVentilations();
+    }
+
+    /**
+     * Retourne si le parcours possède le type Point dur.
+     *
+     * @return boolean Si possède
+     */
+    public function hasTypePublicationPointDur()
+    {
+        return $this->hasTypePublicationId(Reference::CATEGORIE_OBJET_POINT_DUR_ID);
+    }
+
+    /**
+     * Retourne si le parcours possède le type Production.
+     *
+     * @return boolean Si possède
+     */
+    public function hasTypePublicationProduction()
+    {
+        return $this->hasTypePublicationId(Reference::CATEGORIE_OBJET_PRODUCTION_ID);
+    }
+
+    /**
+     * Retourne si le parcours possède un type de publication.
+     *
+     * @param integer $referenceId ID du type
+     * @return boolean Si possède
+     */
+    private function hasTypePublicationId($referenceId)
+    {
+        foreach ($this->typePublication as $typePublication) {
+            if ($referenceId === $typePublication->getId()) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * Supprime les références n'appartenant pas aux domaines de l'entité.
+     */
+    private function refreshReferencesParentes()
+    {
+        foreach ($this->referencesParentes as $referenceParent) {
+            if (!$referenceParent->isAllDomaines()) {
+                $referenceHasDomaine = false;
+                foreach ($referenceParent->getDomaines() as $referenceDomaine) {
+                    if ($this->hasDomaine($referenceDomaine)) {
+                        $referenceHasDomaine = true;
+                        break;
+                    }
+                }
+
+                if (!$referenceHasDomaine) {
+                    $this->removeReferencesParente($referenceParent);
+                }
+            }
+        }
+    }
+
+    /**
+     * Supprime les références n'appartenant pas aux domaines de l'entité.
+     */
+    private function refreshReferencesVentilations()
+    {
+        foreach ($this->referencesVentilations as $referenceParent) {
+            if (!$referenceParent->isAllDomaines()) {
+                $referenceHasDomaine = false;
+                foreach ($referenceParent->getDomaines() as $referenceDomaine) {
+                    if ($this->hasDomaine($referenceDomaine)) {
+                        $referenceHasDomaine = true;
+                        break;
+                    }
+                }
+
+                if (!$referenceHasDomaine) {
+                    $this->removeReferencesVentilation($referenceParent);
+                }
+            }
+        }
     }
 }

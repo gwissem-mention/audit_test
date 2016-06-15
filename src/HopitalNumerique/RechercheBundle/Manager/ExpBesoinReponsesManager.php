@@ -12,7 +12,7 @@ use Doctrine\ORM\EntityManager;
  */
 class ExpBesoinReponsesManager extends BaseManager
 {
-    protected $_class = 'HopitalNumerique\RechercheBundle\Entity\ExpBesoinReponses';
+    protected $class = 'HopitalNumerique\RechercheBundle\Entity\ExpBesoinReponses';
     protected $_userManager;
     protected $_referenceManager;
 
@@ -63,36 +63,6 @@ class ExpBesoinReponsesManager extends BaseManager
         $references = $this->filtreReferencesByDomaines($expBesoinReponses->getQuestion()->getExpBesoinGestion(), $references);
         
         return $references;
-    }
-
-    /**
-     * Formatte les références sous forme d'un unique tableau
-     *
-     * @param expBesoinReponse $expBesoinReponse      expBesoinReponse concerné
-     * @param array $references Liste des références de type dictionnaire
-     *
-     * @return array
-     */
-    public function getReferencesOwn($expBesoinReponse)
-    {
-        $return = array();
-        $selectedReferences = $expBesoinReponse->getReferences();
-
-        //applique les références 
-        foreach( $selectedReferences as $selected ){
-            $reference = $selected->getReference();
-
-            //on remet l'élément à sa place
-            $return[ $reference->getId() ]['nom']     = $reference->getCode() . " - " . $reference->getLibelle();
-            $return[ $reference->getId() ]['primary'] = $selected->getPrimary();
-            
-            if( $reference->getParent() )
-                $return[ $reference->getParent()->getId() ]['childs'][] = $reference->getId();
-        }
-        
-        $this->formatReferencesOwn( $return );
-        
-        return $return;
     }
 
     /**

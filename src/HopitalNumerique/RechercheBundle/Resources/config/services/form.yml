@@ -1,0 +1,24 @@
+services:
+    hopitalnumerique_recherche.form.expbesoingestion:
+        class: 'HopitalNumerique\RechercheBundle\Form\ExpBesoinGestionType'
+        arguments: ["@hopitalnumerique_recherche.manager.expbesoingestion", "@validator", "@hopitalnumerique_user.manager.user"]
+        tags:
+            - { name: form.type, alias: hopitalnumerique_recherche_expbesoingestion }
+
+    hopitalnumerique_recherche.form.expbesoin:
+        class: 'HopitalNumerique\RechercheBundle\Form\ExpBesoinType'
+        arguments: ['@router']
+        tags:
+            - { name: 'form.type', alias: 'hopitalnumerique_recherche_expbesoin' }
+
+    hopitalnumerique_recherche.form.expbesoinreponse:
+        class: 'HopitalNumerique\RechercheBundle\Form\ExpBesoinReponseType'
+        arguments: ['@router']
+        tags:
+            - { name: 'form.type', alias: 'hopitalnumerique_recherche_expbesoinreponse' }
+
+    hopitalnumerique_recherche.form.type.requete:
+        class: 'HopitalNumerique\RechercheBundle\Form\Type\RequeteType'
+        arguments: ['@router']
+        tags:
+            - { name: 'form.type', alias: 'hopitalnumerique_recherche_requete' }

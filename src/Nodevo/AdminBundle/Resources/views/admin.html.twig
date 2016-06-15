@@ -10,7 +10,7 @@
         <title>{% block title %}Mon Hôpital Numérique{% endblock %}</title>
 
         <link href='http://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600' rel='stylesheet' type='text/css'>
-        <link rel="shortcut icon" href="{% if domaineCurrent.id != 1 %}{{ asset('favicon_anap.ico') }}{% else %}{{ asset('favicon.ico') }}{% endif %}" />
+        <link rel="shortcut icon" href="{% if domaineCurrent.id != 1 %}{{ asset('favicon_anap.ico') }}{% else %}{{ asset('favicon.ico') }}{% endif %}">
         {% block stylesheets %}
             {% stylesheets output="compiled/admin-main.css" filter="cssrewrite, ?yui_css"
                 'bundles/nodevoadmin/css/avant.css'
@@ -22,8 +22,11 @@
                 '@fancybox_css'
                 '@select2_css'
                 '@validationEngine_css'
+                '@jquery_toggles_css'
+                '@jstree_css'
+                'bundles/hopitalnumeriquereference/css/referencement-popin.css'
             %}
-                <link rel="stylesheet" href="{{ asset_url }}" />
+                <link rel="stylesheet" href="{{ asset_url }}">
             {% endstylesheets %}
         {% endblock %}
     
@@ -48,11 +51,29 @@
                 '@fancybox_js'
                 '@select2_js'
                 '@validationEngine_js'
+                '@jquery_toggles_js'
+                '@jstree_js'
+                '@tinymce_js'
+                '@moxiemanager_js'
+                '%kernel.root_dir%/Resources/lib/nodevo/Web.js'
+                '%kernel.root_dir%/Resources/lib/nodevo/Form/Box.js'
                 'bundles/nodevoadmin/js/admin.js'
+                'bundles/hopitalnumeriquereference/js/Referencement/Popin.js'
             %}
                 <script type="text/javascript" src="{{ asset_url }}"></script>
             {% endjavascripts %}
             <script src="{{ path('fos_js_routing_js', {"callback": "fos.Router.setData"}) }}"></script>
+            <script type="text/javascript">
+                NodevoGestionnaireMediaBundle_MoxieManager.PARAMETRES_GLOBAUX_URL = '{{ url('nodevo_gestionnaire_media_moxiemanager_json_parametres') }}';
+                NodevoGestionnaireMediaBundle_MoxieManager.initParametresGlobaux();
+            </script>
+            {% if app.debug %}
+                {% javascripts output="compiled/admin-debogage.js"
+                    'bundles/nodevotools/js/Debogage.js'
+                %}
+                    <script type="text/javascript" src="{{ asset_url }}"></script>
+                {% endjavascripts %}
+            {% endif %}
         {% endblock %}
     </head>
 

@@ -2,6 +2,7 @@
 
 namespace HopitalNumerique\RechercheBundle\Manager;
 
+use HopitalNumerique\UserBundle\Entity\User;
 use Nodevo\ToolsBundle\Manager\Manager as BaseManager;
 
 /**
@@ -9,17 +10,20 @@ use Nodevo\ToolsBundle\Manager\Manager as BaseManager;
  */
 class RequeteManager extends BaseManager
 {
-    protected $_class = 'HopitalNumerique\RechercheBundle\Entity\Requete';
+    protected $class = 'HopitalNumerique\RechercheBundle\Entity\Requete';
+
 
     /**
-     * Retourne la liste des request dont les résultats sont nouveaux/mis à jour
+     * Retourne la requête par défaut d'un utilisateur.
      *
-     * @param User $user L'utilisateur connecté
-     *
-     * @return array
+     * @param \HopitalNumerique\UserBundle\Entity\User $user User
+     * @return \HopitalNumerique\RechercheBundle\Entity\Requete|null Requête
      */
-    public function getRequetesForDashboard( $user )
+    public function findDefaultByUser(User $user)
     {
-        return $this->getRepository()->getRequetesForDashboard( $user )->getQuery()->getResult();
+        return $this->findOneBy([
+            'user' => $user,
+            'isDefault' => true
+        ]);
     }
 }

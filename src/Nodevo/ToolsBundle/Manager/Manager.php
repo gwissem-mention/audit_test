@@ -4,13 +4,13 @@ namespace Nodevo\ToolsBundle\Manager;
 use Doctrine\Common\Cache\Cache;
 use Doctrine\ORM\EntityManager;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Validator\ValidatorInterface;
+use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 /**
  * Classe de base des Managers de la librairie
- * 
+ *
  * @author Quentin SOMAZZI
- * @copyright Nodevo 
+ * @copyright Nodevo
  */
 abstract class Manager
 {
@@ -19,7 +19,7 @@ abstract class Manager
      * @var \Doctrine\ORM\EntityRepository
      */
     protected $_repository = null;
-    protected $_class      = null;
+    protected $class      = null;
 
     /**
      * @var \Doctrine\Common\Cache\Cache Cache
@@ -34,7 +34,7 @@ abstract class Manager
     public function __construct( EntityManager $em )
     {
         $this->_em         = $em;
-        $this->_repository = $this->_em->getRepository( $this->_class );
+        $this->_repository = $this->_em->getRepository( $this->class );
     }
 
     /**
@@ -60,12 +60,12 @@ abstract class Manager
     public function getDatasForGrid( \StdClass $condition = null )
     {
         $req = $this->getRepository()->createQueryBuilder('entity');
-        
+
         if ( !is_null($condition) ) {
             $req->where('entity.' . $condition->field . ' = :field' )
                 ->setParameters('field', $condition->value);
         }
-        
+
         return $req->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
     }
 
@@ -88,13 +88,13 @@ abstract class Manager
     /**
      * Retourne les contraintes des validators
      *
-     * @param Validator $validator Validator Symfony
+     * @param ValidatorInterface $validator Validator Symfony
      *
      * @return array
      */
-    public function getConstraints( ValidatorInterface $validator )
+    public function getConstraints(ValidatorInterface $validator)
     {
-        $metadata    = $validator->getMetadataFactory()->getMetadataFor( $this->_class );
+        $metadata    = $validator->getMetadataFactory()->getMetadataFor( $this->class );
         $constraints = array();
 
         foreach($metadata->members as $field) {
@@ -188,6 +188,24 @@ abstract class Manager
     }
 
     /**
+     * Retourne un tableau d'entités indexés par leur identifiant.
+     *
+     * @param array<object> $entities Entités
+     * @return array<mixed, object> Entités
+     */
+    public function getEntitiesKeyedById(array $entities)
+    {
+        $entitiesById = array();
+
+        foreach ($entities as $entity) {
+            $entitiesById[$entity->getId()] = $entity;
+        }
+
+        return $entitiesById;
+    }
+
+
+    /**
      * Enregistre l'entitée
      *
      * @param Entity|array $entity L'entitée
@@ -196,12 +214,22 @@ abstract class Manager
      */
     public function save( $entity )
     {
+        $this->persist($entity);
+
+        $this->flush();
+    }
+
+    public function persist($entity)
+    {
         if( is_array($entity) ){
             foreach( $entity as $one )
                 $this->_em->persist( $one );
         }else
             $this->_em->persist( $entity );
+    }
 
+    public function flush()
+    {
         $this->_em->flush();
     }
 
@@ -255,7 +283,7 @@ abstract class Manager
     {
         return $this->getRepository()->findAll();
     }
-    
+
     /**
      * Créer une nouvelle entity vide
      *
@@ -263,7 +291,7 @@ abstract class Manager
      */
     public function createEmpty()
     {
-        return new $this->_class;
+        return new $this->class;
     }
 
     /**
@@ -283,7 +311,7 @@ abstract class Manager
 
         $this->_em->flush();
     }
-    
+
     /**
      * Export CSV du grid selon les colonnes
      *
@@ -294,7 +322,7 @@ abstract class Manager
      *
      * @return Response
      */
-    public function exportCsv( $colonnes, $datas, $filename, $kernelCharset )
+    public function exportCsv($colonnes, $datas, $filename, $kernelCharset)
     {
         // Array to csv (copy from APY\DataGridBundle\Grid\Export\DSVExport.php)
         $outstream = fopen("php://temp", 'r+');

@@ -14,5 +14,5 @@ use Nodevo\ToolsBundle\Manager\Manager as BaseManager;
  */
 class ProcessChapitreManager extends BaseManager
 {
-    protected $_class = 'HopitalNumerique\AutodiagBundle\Entity\ProcessChapitre';
+    protected $class = 'HopitalNumerique\AutodiagBundle\Entity\ProcessChapitre';
 }

@@ -19,6 +19,12 @@ use \Nodevo\ToolsBundle\Tools\Chaine;
 class Domaine
 {
     /**
+     * @var integer ID du domaine HN
+     */
+    const DOMAINE_HOPITAL_NUMERIQUE_ID = 1;
+
+
+    /**
      * @var integer
      *
      * @ORM\Column(name="dom_id", type="integer")
@@ -98,6 +104,12 @@ class Domaine
     protected $adresseMailContact;
 
     /**
+     * @ORM\ManyToOne(targetEntity="HopitalNumerique\ReferenceBundle\Entity\Reference")
+     * @ORM\JoinColumn(name="ref_root_id", referencedColumnName="ref_id", nullable=true)
+     */
+    private $referenceRoot;
+
+    /**
      * @ORM\ManyToMany(targetEntity="\HopitalNumerique\UserBundle\Entity\User", mappedBy="domaines")
      */
     protected $users;
@@ -111,6 +123,11 @@ class Domaine
      * @ORM\ManyToMany(targetEntity="\HopitalNumerique\ObjetBundle\Entity\Objet", mappedBy="domaines")
      */
     protected $objets;
+
+    /**
+     * @ORM\ManyToMany(targetEntity="\HopitalNumerique\ObjetBundle\Entity\Contenu", mappedBy="domaines")
+     */
+    private $contenus;
 
     /**
      * @ORM\OneToMany(targetEntity="\HopitalNumerique\RechercheBundle\Entity\Requete", mappedBy="domaine")
@@ -156,6 +173,7 @@ class Domaine
         $this->users      = new \Doctrine\Common\Collections\ArrayCollection();
         $this->references = new \Doctrine\Common\Collections\ArrayCollection();
         $this->objets     = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->contenus = new \Doctrine\Common\Collections\ArrayCollection();
         $this->communautePratiqueGroupes = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
@@ -263,6 +281,30 @@ class Domaine
     }
 
     /**
+     * Set referenceRoot
+     *
+     * @param \HopitalNumerique\ReferenceBundle\Entity\Reference $referenceRoot
+     *
+     * @return Domaine
+     */
+    public function setReferenceRoot(\HopitalNumerique\ReferenceBundle\Entity\Reference $referenceRoot = null)
+    {
+        $this->referenceRoot = $referenceRoot;
+
+        return $this;
+    }
+
+    /**
+     * Get referenceRoot
+     *
+     * @return \HopitalNumerique\ReferenceBundle\Entity\Reference
+     */
+    public function getReferenceRoot()
+    {
+        return $this->referenceRoot;
+    }
+
+    /**
      * Add users
      *
      * @param \HopitalNumerique\UserBundle\Entity\User $users
@@ -359,6 +401,40 @@ class Domaine
     public function getObjets()
     {
         return $this->objets;
+    }
+
+    /**
+     * Add contenus
+     *
+     * @param \HopitalNumerique\ObjetBundle\Entity\Contenu $contenus
+     *
+     * @return Domaine
+     */
+    public function addContenus(\HopitalNumerique\ObjetBundle\Entity\Contenu $contenus)
+    {
+        $this->contenus[] = $contenus;
+
+        return $this;
+    }
+
+    /**
+     * Remove contenus
+     *
+     * @param \HopitalNumerique\ObjetBundle\Entity\Contenu $contenus
+     */
+    public function removeContenus(\HopitalNumerique\ObjetBundle\Entity\Contenu $contenus)
+    {
+        $this->contenus->removeElement($contenus);
+    }
+
+    /**
+     * Get contenus
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getContenus()
+    {
+        return $this->contenus;
     }
 
     /**
@@ -679,5 +755,30 @@ class Domaine
     public function __toString()
     {
         return $this->nom;
+    }
+
+    /**
+     * Retourne l'entité comme un tableau.
+     *
+     * @return array Domaine
+     */
+    public function __toArray()
+    {
+        return [
+            'id' => $this->id,
+            'nom' => $this->nom,
+            'url' => $this->url
+        ];
+    }
+
+    /**
+     * Retourne l'égalité entre deux domaines.
+     *
+     * @param \HopitalNumerique\ReferenceBundle\Entity\Domaine $domaine Autre domaine
+     * @return boolean Si égalité
+     */
+    public function equals(Domaine $domaine)
+    {
+        return ($this->id === $domaine->getId());
     }
 }

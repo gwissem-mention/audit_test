@@ -5,41 +5,36 @@ parameters:
     #gestionnaire
     hopitalnumerique_rechercheparcours.manager.rechercheparcoursgestion.class: HopitalNumerique\RechercheParcoursBundle\Manager\RechercheParcoursGestionManager
     hopitalnumerique_rechercheparcours.grid.rechercheparcoursgestion.class: HopitalNumerique\RechercheParcoursBundle\Grid\RechercheParcoursGestionGrid
-    hopitalnumerique_rechercheparcours.form.rechercheparcoursgestion.class: HopitalNumerique\RechercheParcoursBundle\Form\RechercheParcoursGestionType
 
 services:
     #RechercheParcours
     hopitalnumerique_recherche_parcours.manager.recherche_parcours:
         class: %hopitalnumerique_recherche_parcours.manager.recherche_parcours.class%
         arguments: ["@doctrine.orm.entity_manager"]
-        calls:
-           - [ setCache, ["@liip_doctrine_cache.ns.main"] ]
     #RechercheParcours Détails
     hopitalnumerique_recherche_parcours.manager.recherche_parcours_details:
         class: %hopitalnumerique_recherche_parcours.manager.recherche_parcours_details.class%
         arguments: ["@doctrine.orm.entity_manager"]
-        calls:
-           - [ setCache, ["@liip_doctrine_cache.ns.main"] ]
     #RechercheParcours Détails
     hopitalnumerique_recherche_parcours.manager.matrise_user:
         class: %hopitalnumerique_recherche_parcours.manager.matrise_user.class%
         arguments: ["@doctrine.orm.entity_manager"]
-        calls:
-           - [ setCache, ["@liip_doctrine_cache.ns.main"] ]
 
     #gestionnaire
     hopitalnumerique_rechercheparcours.manager.rechercheparcoursgestion:
         class: %hopitalnumerique_rechercheparcours.manager.rechercheparcoursgestion.class%
         arguments: ["@doctrine.orm.entity_manager", "@hopitalnumerique_user.manager.user"]
-        calls:
-           - [ setCache, ["@liip_doctrine_cache.ns.main"] ]
 
     hopitalnumerique_rechercheparcours.grid.rechercheparcoursgestion:
         class: %hopitalnumerique_rechercheparcours.grid.rechercheparcoursgestion.class%
         arguments: ["@service_container"]
 
     hopitalnumerique_rechercheparcours.form.rechercheparcoursgestion:
-        class: %hopitalnumerique_rechercheparcours.form.rechercheparcoursgestion.class%
-        arguments: ["@hopitalnumerique_rechercheparcours.manager.rechercheparcoursgestion", "@validator", "@hopitalnumerique_user.manager.user"]
+        class: 'HopitalNumerique\RechercheParcoursBundle\Form\RechercheParcoursGestionType'
+        arguments: ["@hopitalnumerique_rechercheparcours.manager.rechercheparcoursgestion", "@validator", '@hopitalnumerique_core.dependency_injection.entity', "@hopitalnumerique_user.manager.user", '@hopitalnumerique_reference.manager.reference']
         tags:
             - { name: form.type, alias: hopitalnumerique_rechercheparcours_rechercheparcoursgestion }
+
+    hopitalnumerique_rechercheparcours.dependency_injection.parcours_guide_lie:
+        class: 'HopitalNumerique\RechercheParcoursBundle\DependencyInjection\ParcoursGuideLie'
+        arguments: ['@hopitalnumerique_core.dependency_injection.entity', '@hopitalnumerique_recherche.doctrine.referencement.reader', '@hopitalnumerique_reference.manager.entity_has_reference', '@hopitalnumerique_recherche_parcours.manager.recherche_parcours']

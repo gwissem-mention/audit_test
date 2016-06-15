@@ -9,7 +9,7 @@ use Nodevo\ToolsBundle\Manager\Manager as BaseManager;
  */
 class ExpBesoinManager extends BaseManager
 {
-    protected $_class = 'HopitalNumerique\RechercheBundle\Entity\ExpBesoin';
+    protected $class = 'HopitalNumerique\RechercheBundle\Entity\ExpBesoin';
 
     public function countQuestions()
     {

@@ -11,7 +11,7 @@ use Doctrine\ORM\QueryBuilder;
 use HopitalNumerique\CommunautePratiqueBundle\Entity\Groupe;
 
 /**
- * Classe gérant l'affichage des membres de la communauté de pratiques.
+ * Classe gérant l'affichage des membres de la communauté de pratique.
  */
 class Annuaire
 {

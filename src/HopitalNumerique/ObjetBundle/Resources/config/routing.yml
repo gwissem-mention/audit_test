@@ -120,41 +120,6 @@ hopitalnumerique_objet_contenu_reorder:
     pattern:  /objet/contenu/reorder
     defaults: { _controller: "HopitalNumeriqueObjetBundle:Contenu:reorder" }
 
-#partie reference
-hopitalnumerique_objet_reference_objet:
-    pattern:  /objet/reference/objet/{id}
-    defaults: { _controller: "HopitalNumeriqueObjetBundle:Reference:objet", id:1 }
-    requirements:
-        id: \d+
-
-hopitalnumerique_objet_reference_objet_own:
-    pattern:  /objet/reference/objet-own/{id}
-    defaults: { _controller: "HopitalNumeriqueObjetBundle:Reference:objetOwn", id:1 }
-    requirements:
-        id: \d+
-
-hopitalnumerique_objet_reference_objet_save:
-    pattern:  /objet/reference/save/objet/{id}
-    defaults: { _controller: "HopitalNumeriqueObjetBundle:Reference:saveObjet" }
-    requirements:
-        id: \d+
-
-hopitalnumerique_objet_reference_contenu:
-    pattern:  /objet/reference/contenu/{id}
-    defaults: { _controller: "HopitalNumeriqueObjetBundle:Reference:contenu", id:1 }
-    requirements:
-        id: \d+
-
-hopitalnumerique_objet_reference_contenu_own:
-    pattern:  /objet/reference/contenu_own/{id}
-    defaults: { _controller: "HopitalNumeriqueObjetBundle:Reference:contenuOwn", id:1 }
-    requirements:
-        id: \d+
-
-hopitalnumerique_objet_reference_contenu_save:
-    pattern:  /objet/reference/save/contenu
-    defaults: { _controller: "HopitalNumeriqueObjetBundle:Reference:saveContenu" }
-
 #---Commentaire
 hopitalnumerique_objet_admin_commentaire:
     pattern:  /objet/commentaire

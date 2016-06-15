@@ -15,7 +15,7 @@ use HopitalNumerique\UserBundle\Manager\UserManager;
  */
 class InscriptionManager extends BaseManager
 {
-    protected $_class = 'HopitalNumerique\ModuleBundle\Entity\Inscription';
+    protected $class = 'HopitalNumerique\ModuleBundle\Entity\Inscription';
 
     /**
      * @var \HopitalNumerique\UserBundle\Manager\UserManager UserManager

@@ -12,11 +12,7 @@
     {{parent()}}
     {% javascripts output="compiled/nodevo-textedynamique-code-edit.js"
         "@nestable_js"
-        "@jquery_toggles_js"
         "@json_js"
-        "@tinymce_js"
-        'bundles/nodevogestionnairemedia/js/moxiemanager/js/moxman.loader.min.js'
-        'bundles/nodevogestionnairemedia/js/MoxieManager.js'
         'bundles/nodevotextedynamique/js/script.js'
     %}
         <script type="text/javascript" src="{{ asset_url }}"></script>
@@ -26,10 +22,8 @@
 {% block stylesheets %}
     {{ parent() }}
     {% stylesheets output="compiled/nodevo-textedynamique-code.css" filter="cssrewrite, ?yui_css"
-        "@jquery_toggles_css"
         'bundles/nodevoadmin/css/jquery.nestable.css'
         'bundles/hopitalnumeriqueautodiag/css/style.css'
-        'bundles/nodevoadmin/css/toggles.css'
     %}
         <link rel="stylesheet" href="{{ asset_url }}" />
     {% endstylesheets %}

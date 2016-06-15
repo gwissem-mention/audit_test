@@ -6,18 +6,39 @@ use HopitalNumerique\ReferenceBundle\Entity\Reference;
 use HopitalNumerique\ForumBundle\Entity\Forum;
 
 /**
- * Accueil de la communauté de pratiques.
+ * Accueil de la communauté de pratique.
  */
 class AccueilController extends \Symfony\Bundle\FrameworkBundle\Controller\Controller
 {
     /**
-     * Accueil de la communauté de pratiques.
+     * Accueil de la communauté de pratique.
      */
     public function indexAction(Request $request)
     {
-        if (!$this->container->get('hopitalnumerique_communautepratique.dependency_injection.security')
-            ->canAccessCommunautePratique()) {
-            return $this->redirect($this->generateUrl('hopital_numerique_homepage'));
+        $allowed = $this->container->get('hopitalnumerique_communautepratique.dependency_injection.security')
+            ->canAccessCommunautePratique();
+
+        if (!$allowed) {
+            $redirectPublication = $this->get('hopitalnumerique_objet.manager.objet')->findOneBy(array(
+                'alias' => 'la-communaute-de-pratiques'
+            ));
+
+            if (null !== $redirectPublication) {
+                return $this->redirect(
+                    $this->generateUrl(
+                        'hopital_numerique_publication_publication_article',
+                        array(
+                            'categorie' => 'article',
+                            'id' => $redirectPublication->getId(),
+                            'alias' => $redirectPublication->getAlias(),
+                        )
+                    )
+                );
+            }
+
+            return $this->redirect(
+                $this->generateUrl('hopital_numerique_account_homepage')
+            );
         }
 
         $domaine = $this->container->get('hopitalnumerique_domaine.manager.domaine')

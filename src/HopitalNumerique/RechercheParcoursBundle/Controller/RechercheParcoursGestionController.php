@@ -27,7 +27,7 @@ class RechercheParcoursGestionController extends Controller
     {
         $rechercheparcoursgestion = $this->get('hopitalnumerique_rechercheparcours.manager.rechercheparcoursgestion')->createEmpty();
 
-        return $this->renderForm('hopitalnumerique_rechercheparcours_rechercheparcoursgestion', $rechercheparcoursgestion, 'HopitalNumeriqueRechercheParcoursBundle:RechercheParcoursGestion:edit.html.twig' );
+        return $this->renderForm($rechercheparcoursgestion, 'HopitalNumeriqueRechercheParcoursBundle:RechercheParcoursGestion:edit.html.twig' );
     }
 
     /**
@@ -40,7 +40,7 @@ class RechercheParcoursGestionController extends Controller
         //Récupération de l'entité passée en paramètre
         $rechercheparcoursgestion = $this->get('hopitalnumerique_rechercheparcours.manager.rechercheparcoursgestion')->findOneBy( array('id' => $id) );
 
-        return $this->renderForm('hopitalnumerique_rechercheparcours_rechercheparcoursgestion', $rechercheparcoursgestion, 'HopitalNumeriqueRechercheParcoursBundle:RechercheParcoursGestion:edit.html.twig' );
+        return $this->renderForm($rechercheparcoursgestion, 'HopitalNumeriqueRechercheParcoursBundle:RechercheParcoursGestion:edit.html.twig' );
     }
 
     /**
@@ -111,43 +111,43 @@ class RechercheParcoursGestionController extends Controller
     /**
      * Effectue le render du formulaire RechercheParcoursGestion.
      *
-     * @param string $formName Nom du service associé au formulaire
      * @param RechercheParcoursGestion   $entity   Entité $rechercheparcoursgestion
      * @param string $view     Chemin de la vue ou sera rendu le formulaire
      *
      * @return Form | redirect
      */
-    private function renderForm( $formName, $rechercheparcoursgestion, $view )
+    private function renderForm($rechercheparcoursgestion, $view )
     {
-        //Création du formulaire via le service
-        $form = $this->createForm( $formName, $rechercheparcoursgestion);
+        $isCreation = (null === $rechercheparcoursgestion->getId());
+        $rechercheparcoursgestionInitialDomaines = clone $rechercheparcoursgestion->getDomaines();
+        $form = $this->createForm('hopitalnumerique_rechercheparcours_rechercheparcoursgestion', $rechercheparcoursgestion);
 
         $request = $this->get('request');
         
         // Si l'utilisateur soumet le formulaire
         if ('POST' == $request->getMethod()) {
-            
             // On bind les données du form
             $form->handleRequest($request);
 
             //si le formulaire est valide
             if ($form->isValid()) {
-                $referencesParentes    = $form->get('referencesParentes')->getData();
-                $referencesVentilation = $form->get('referencesVentilations')->getData();
+                if (!$isCreation) {
+                    $referencesParentes    = $form->get('referencesParentes')->getData();
+                    $referencesVentilation = $form->get('referencesVentilations')->getData();
 
-                //Vérif à la mano php pour select2
-                if(count($referencesParentes) === 0 || count($referencesVentilation) === 0)
-                {
-                    $this->get('session')->getFlashBag()->add( 'danger', 'Les références sont obligatoires, veuillez remplir ces champs avant de sauvegarder à nouveau.' ); 
+                    //Vérif à la mano php pour select2
+                    if(count($referencesParentes) === 0 || count($referencesVentilation) === 0)
+                    {
+                        $this->get('session')->getFlashBag()->add( 'danger', 'Les références sont obligatoires, veuillez remplir ces champs avant de sauvegarder à nouveau.' ); 
 
-                    return $this->render( $view , array(
-                        'form'             => $form->createView(),
-                        'rechercheparcoursgestion' => $rechercheparcoursgestion
-                    ));
+                        return $this->render( $view , array(
+                            'form'             => $form->createView(),
+                            'rechercheparcoursgestion' => $rechercheparcoursgestion
+                        ));
+                    }
                 }
 
-                //test ajout ou edition
-                $new = is_null($rechercheparcoursgestion->getId());
+                $rechercheparcoursgestion->setDomaines($this->get('hopitalnumerique_core.dependency_injection.entity')->processSubmitedDomaines($rechercheparcoursgestionInitialDomaines, $form->get('domaines')->getData(), $this->getUser()));
 
                 //On utilise notre Manager pour gérer la sauvegarde de l'objet
                 $this->get('hopitalnumerique_rechercheparcours.manager.rechercheparcoursgestion')->save($rechercheparcoursgestion);
@@ -167,11 +167,27 @@ class RechercheParcoursGestionController extends Controller
                         $rechercheParcoursFilsNew[] = $rechercheParcours; 
                     }
                 }
+                //<-- Suppression des RechercheParcours
+                foreach (array_keys($rechercheParcoursFils) as $referenceId) {
+                    $referenceExists = false;
+
+                    foreach ($rechercheparcoursgestion->getReferencesParentes() as $refParente) {
+                        if ($refParente->getId() == $referenceId) {
+                            $referenceExists = true;
+                            break;
+                        }
+                    }
+
+                    if (!$referenceExists) {
+                        $this->get('hopitalnumerique_recherche_parcours.manager.recherche_parcours')->delete($rechercheParcoursFils[$referenceId]);
+                    }
+                }
+                //-->
 
                 $this->get('hopitalnumerique_recherche_parcours.manager.recherche_parcours')->save($rechercheParcoursFilsNew);
                 
                 // On envoi une 'flash' pour indiquer à l'utilisateur que l'entité est ajoutée
-                $this->get('session')->getFlashBag()->add( ($new ? 'success' : 'info') , 'Gestionnaire de recherche par parcours ' . ($new ? 'ajouté.' : 'mis à jour.') ); 
+                $this->get('session')->getFlashBag()->add( ($isCreation ? 'success' : 'info') , 'Gestionnaire de recherche par parcours ' . ($isCreation ? 'ajouté.' : 'mis à jour.') ); 
                 
                 //on redirige vers la page index ou la page edit selon le bouton utilisé
                 $do = $request->request->get('do');

@@ -8,9 +8,7 @@
 {% block stylesheets %}
     {{parent()}}
     {% stylesheets output="compiled/hopitalnumerique-publication-publication-articles.css" filter="cssrewrite, ?yui_css"
-        "@fancybox_css" 
         'bundles/nodevotools/css/wysiwyg.css'
-        'bundles/nodevoadmin/plugins/apprise/apprise.css'
         'bundles/hopitalnumeriquepublication/css/style.css'
     %}
         <link rel="stylesheet" href="{{ asset_url }}" />
@@ -22,9 +20,7 @@
 {% block javascripts %}
     {{parent()}}
     {% javascripts output="compiled/hopitalnumerique-publication-publication-articles.js"
-        "@fancybox_js" 
         'bundles/hopitalnumeriquepublication/js/script.js'
-        'bundles/nodevoadmin/plugins/apprise/apprise.js'
         'bundles/hopitalnumeriquecommunautepratique/js/CommunautePratique.js'
     %}
         <script type="text/javascript" src="{{ asset_url }}"></script>
@@ -98,7 +94,7 @@
                     </div>
                 {% endif %}
                 <div class="row col-md-12">
-                    {{objet.resume|parsePublication(objet.glossaires)|raw}}
+                    {{objet.resume|glossaire_add(objet)|parsePublication|raw}}
                 </div>
                 
                 {% if 1000 == objet.id %} {# Article La communauté de pratique #}

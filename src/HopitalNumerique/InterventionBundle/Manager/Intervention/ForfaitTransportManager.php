@@ -8,7 +8,7 @@ use Nodevo\ToolsBundle\Manager\Manager;
  */
 class ForfaitTransportManager extends Manager
 {
-    protected $_class = 'HopitalNumerique\InterventionBundle\Entity\Intervention\ForfaitTransport';
+    protected $class = 'HopitalNumerique\InterventionBundle\Entity\Intervention\ForfaitTransport';
 
 
     /**

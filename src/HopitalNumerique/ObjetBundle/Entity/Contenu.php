@@ -3,6 +3,7 @@
 namespace HopitalNumerique\ObjetBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use HopitalNumerique\ReferenceBundle\Entity\Reference;
 
 //Asserts Stuff
 use Symfony\Component\Validator\Constraints as Assert;
@@ -82,21 +83,30 @@ class Contenu
     private $dateModification;
 
     /**
-     * @ORM\OneToMany(targetEntity="\HopitalNumerique\ObjetBundle\Entity\RefContenu", mappedBy="contenu", cascade={"persist", "remove" })
-     */
-    protected $references;
-
-    /**
-     * @ORM\ManyToOne(targetEntity="Contenu", cascade={"persist"})
+     * @ORM\ManyToOne(targetEntity="Contenu", inversedBy="children", cascade={"persist"})
      * @ORM\JoinColumn(name="parent_id", referencedColumnName="con_id", onDelete="CASCADE")
      */
     protected $parent = null;
+
+    /**
+     * @ORM\OneToMany(targetEntity="Contenu", mappedBy="parent")
+     */
+    private $children;
    
     /**
-     * @ORM\ManyToOne(targetEntity="Objet", cascade={"persist"}, inversedBy="contenus")
+     * @ORM\ManyToOne(targetEntity="Objet", cascade={"persist"}, inversedBy="contenus", fetch="EAGER")
      * @ORM\JoinColumn(name="obj_id", referencedColumnName="obj_id", onDelete="CASCADE")
      */
     protected $objet;
+
+    /**
+     * @ORM\ManyToMany(targetEntity="\HopitalNumerique\ReferenceBundle\Entity\Reference")
+     * @ORM\JoinTable(name="hn_contenu_type",
+     *      joinColumns={ @ORM\JoinColumn(name="con_id", referencedColumnName="con_id", onDelete="CASCADE")},
+     *      inverseJoinColumns={ @ORM\JoinColumn(name="type_id", referencedColumnName="ref_id", onDelete="CASCADE")}
+     * )
+     */
+    private $types;
 
     /**
      * @ORM\OneToMany(targetEntity="\HopitalNumerique\ObjetBundle\Entity\Consultation", mappedBy="contenu", cascade={"persist", "remove" })
@@ -109,13 +119,6 @@ class Contenu
      * @ORM\Column(name="con_nb_vue", type="integer", options = {"comment" = "Nombre de fois où le contenu à été vue"})     
      */
     protected $nbVue;
-
-    /**
-     * @var array
-     *
-     * @ORM\Column(name="con_glossaires", type="array", options = {"comment" = "Mots du glossaire liés au contenu"})
-     */
-    private $glossaires;
 
     /**
      * @ORM\OneToMany(targetEntity="\HopitalNumerique\ObjetBundle\Entity\Commentaire", mappedBy="contenu", cascade={"persist", "remove" })
@@ -134,6 +137,15 @@ class Contenu
      */
     private $objets;
 
+    /**
+     * @ORM\ManyToMany(targetEntity="\HopitalNumerique\DomaineBundle\Entity\Domaine")
+     * @ORM\JoinTable(name="hn_domaine_gestions_contenu",
+     *      joinColumns={ @ORM\JoinColumn(name="con_id", referencedColumnName="con_id", onDelete="CASCADE")},
+     *      inverseJoinColumns={ @ORM\JoinColumn(name="dom_id", referencedColumnName="dom_id", onDelete="CASCADE")}
+     * )
+     */
+    private $domaines;
+
 
     /**
      * Initialisation de l'entitée (valeurs par défaut)
@@ -147,9 +159,8 @@ class Contenu
         $this->parent       = null;
         $this->order        = 0;
         $this->nbVue        = 0;
-        $this->references   = array();
-        $this->glossaires   = array();
         $this->objets = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->domaines = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
 
@@ -251,27 +262,7 @@ class Contenu
     {
         $this->order = $order;
     }
-    
-    /**
-     * Get references
-     *
-     * @return \Doctrine\Common\Collections\ArrayCollection $references
-     */
-    public function getReferences()
-    {
-        return $this->references;
-    }
-    
-    /**
-     * Set references
-     *
-     * @param \Doctrine\Common\Collections\ArrayCollection $references
-     */
-    public function setReferences(\Doctrine\Common\Collections\ArrayCollection $references)
-    {
-        $this->references = $references;
-    }
-    
+
     /**
      * Get parent
      *
@@ -290,6 +281,40 @@ class Contenu
     public function setParent($parent)
     {
         $this->parent = $parent;
+    }
+
+    /**
+     * Add child
+     *
+     * @param \HopitalNumerique\ObjetBundle\Entity\Contenu $child
+     *
+     * @return Contenu
+     */
+    public function addChild(\HopitalNumerique\ObjetBundle\Entity\Contenu $child)
+    {
+        $this->children[] = $child;
+
+        return $this;
+    }
+
+    /**
+     * Remove child
+     *
+     * @param \HopitalNumerique\ObjetBundle\Entity\Contenu $child
+     */
+    public function removeChild(\HopitalNumerique\ObjetBundle\Entity\Contenu $child)
+    {
+        $this->children->removeElement($child);
+    }
+
+    /**
+     * Get children
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getChildren()
+    {
+        return $this->children;
     }
     
     /**
@@ -331,6 +356,66 @@ class Contenu
     public function setObjet(Objet $objet)
     {
         $this->objet = $objet;
+    }
+
+    /**
+     * Add type
+     *
+     * @param \HopitalNumerique\ReferenceBundle\Entity\Reference $type
+     *
+     * @return Contenu
+     */
+    public function addType(\HopitalNumerique\ReferenceBundle\Entity\Reference $type)
+    {
+        $this->types[] = $type;
+
+        return $this;
+    }
+
+    /**
+     * Remove type
+     *
+     * @param \HopitalNumerique\ReferenceBundle\Entity\Reference $type
+     */
+    public function removeType(\HopitalNumerique\ReferenceBundle\Entity\Reference $type)
+    {
+        $this->types->removeElement($type);
+    }
+
+    /**
+     * Remove all types.
+     */
+    public function removeTypes()
+    {
+        $this->types = new \Doctrine\Common\Collections\ArrayCollection();
+
+        return $this;
+    }
+
+    /**
+     * Get types
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getTypes()
+    {
+        return $this->types;
+    }
+
+    /**
+     * Get types ID
+     *
+     * @return array<integer>
+     */
+    public function getTypeIds()
+    {
+        $typeIds = [];
+
+        foreach ($this->types as $type) {
+            $typeIds[] = $type->getId();
+        }
+
+        return $typeIds;
     }
 
     /**
@@ -399,48 +484,6 @@ class Contenu
     {        
         $this->consultations = $consultations;
     
-        return $this;
-    }
-
-    /**
-     * Get glossaires
-     *
-     * @return array $glossaires
-     */
-    public function getGlossaires()
-    {
-        return $this->glossaires;
-    }
-    
-    /**
-     * Set glossaires
-     *
-     * @param array $glossaires
-     */
-    public function setGlossaires(array $glossaires)
-    {
-        $this->glossaires = $glossaires;
-        return $this;
-    }
-
-    /**
-     * Remove glossaire
-     *
-     * @param string $glossaire
-     */
-    public function removeGlossaire($glossaire)
-    {
-        $this->glossaires->removeElement($glossaire);
-    }
-    
-    /**
-     * add glossaire
-     *
-     * @param string $glossaire
-     */
-    public function addGlossaire($glossaire)
-    {
-        $this->glossaires[] = $glossaire;
         return $this;
     }
 
@@ -532,5 +575,175 @@ class Contenu
     public function getObjets()
     {
         return $this->objets;
+    }
+
+    /**
+     * Set objets
+     *
+     * @param array $objets
+     *
+     * @return Contenu
+     */
+    public function setObjets($objets)
+    {
+        $this->objets = $objets;
+
+        return $this;
+    }
+
+    /**
+     * Add domaine
+     *
+     * @param \HopitalNumerique\DomaineBundle\Entity\Domaine $domaine
+     *
+     * @return Contenu
+     */
+    public function addDomaine(\HopitalNumerique\DomaineBundle\Entity\Domaine $domaine)
+    {
+        $this->domaines[] = $domaine;
+
+        return $this;
+    }
+
+    /**
+     * Remove domaine
+     *
+     * @param \HopitalNumerique\DomaineBundle\Entity\Domaine $domaine
+     */
+    public function removeDomaine(\HopitalNumerique\DomaineBundle\Entity\Domaine $domaine)
+    {
+        $this->domaines->removeElement($domaine);
+    }
+
+    /**
+     * Remove all domaines.
+     */
+    public function removeDomaines()
+    {
+        $this->domaines = new \Doctrine\Common\Collections\ArrayCollection();
+
+        return $this;
+    }
+
+    /**
+     * Get domaines
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getDomaines()
+    {
+        return $this->domaines;
+    }
+
+    /**
+     * Retourne si le contenu possède ce domaine.
+     *
+     * @param \HopitalNumerique\DomaineBundle\Entity\Domaine $domaine Domaine
+     * @return boolean Si domaine
+     */
+    public function hasDomaine(\HopitalNumerique\DomaineBundle\Entity\Domaine $domaine)
+    {
+        foreach ($this->domaines as $contenuDomaine) {
+            if ($contenuDomaine->getId() === $domaine->getId()) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+
+    /**
+     * @return string
+     */
+    public function __toString()
+    {
+        return $this->titre;
+    }
+
+    /**
+     * Retourne si l'objet est un point dur.
+     *
+     * @return boolean Si point dur
+     */
+    public function isPointDur()
+    {
+        if ($this->objet->isPointDur()) {
+            return true;
+        }
+
+        foreach ($this->types as $type) {
+            if ($type->getId() === Reference::CATEGORIE_OBJET_POINT_DUR_ID) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * Retourne les libellés des types.
+     *
+     * @return array<string> Libellés
+     */
+    public function getTypeLabels()
+    {
+        $typeLabels = [];
+
+        foreach ($this->types as $type) {
+            $typeLabels[] = $type->getLibelle();
+        }
+
+        return $typeLabels;
+    }
+
+    /**
+     * Retourne les domaines du contenu (ceux de l'objet si aucun objet lié directement au contenu).
+     *
+     * @return array<\HopitalNumerique\DomaineBundle\Entity\Domaine> Domaines
+     */
+    public function getRealDomaines()
+    {
+        if (null !== $this->domaines && count($this->domaines) > 0) {
+            return $this->domaines;
+        }
+
+        return $this->objet->getDomaines();
+    }
+
+    /**
+     * Retourne le préfixe du contenu.
+     *
+     * @return string Préfixe
+     */
+    public function getPrefix()
+    {
+        return $this->getPrefixFromContenu($this);
+    }
+
+    /**
+     * Retourne le préfixe d'un contenu.
+     *
+     * @param \HopitalNumerique\ObjetBundle\Entity\Contenu $contenu Contenu
+     * @param string                                       $prefix  Préfixe
+     * @return string Préfixe
+     */
+    private function getPrefixFromContenu(Contenu $contenu = null, $prefix = '')
+    {
+        if (is_null($contenu)) {
+            return $prefix;
+        }
+
+        return $this->getPrefixFromContenu($contenu->getParent(), $contenu->getOrder().'.'.$prefix);
+    }
+
+    /**
+     * Retourne si le contenu a un... contenu.
+     *
+     * @return boolean Si contenu
+     */
+    public function hasContenu()
+    {
+        return ('' != $this->getContenu());
     }
 }

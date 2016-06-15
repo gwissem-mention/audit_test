@@ -16,7 +16,7 @@ use HopitalNumerique\UserBundle\Manager\UserManager;
  */
 class SessionManager extends BaseManager
 {
-    protected $_class = 'HopitalNumerique\ModuleBundle\Entity\Session';
+    protected $class = 'HopitalNumerique\ModuleBundle\Entity\Session';
 
     /**
      * @var \HopitalNumerique\QuestionnaireBundle\Manager\ReponseManager ReponseManager

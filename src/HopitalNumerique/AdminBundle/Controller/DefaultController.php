@@ -258,7 +258,7 @@ class DefaultController extends Controller
         $commentaires = $this->get('hopitalnumerique_objet.manager.commentaire')->findCommentaireByDomaine(1);
         foreach($publications as $publication)
         {
-            if( $publication['etat'] == 4 || (!is_null($publication['dateDebutPublication']) && $publication['dateDebutPublication'] > $today) || ( !is_null($publication['dateFinPublication']) && $publication['dateFinPublication'] < $today) )
+            if ($publication['etat'] == 4)
             {
                 $blocObjets['publications-non-publiees']++;
             }

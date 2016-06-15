@@ -1,0 +1,4 @@
+hopitalnumerique_account_contexte_save:
+    pattern: '/save'
+    defaults: { _controller: 'HopitalNumeriqueAccountBundle:Contexte:save' }
+    methods: 'POST'

@@ -19,9 +19,6 @@ class DefaultController extends Controller
         //get Flash messages visible for this user
         $messages = $this->get('hopitalnumerique_flash.manager.flash')->getMessagesForUser( $user );
 
-        //get requetes
-        $requetes = $this->get('hopitalnumerique_recherche.manager.requete')->getRequetesForDashboard( $user );
-
         //get Sessions
         $sessions = $this->get('hopitalnumerique_module.manager.session')->getSessionsForDashboard( $user );
         $sessionsFormateur = $this->get('hopitalnumerique_module.manager.session')->getSessionsForFormateurForDashboard( $user );
@@ -47,7 +44,6 @@ class DefaultController extends Controller
 
         return $this->render('HopitalNumeriqueAccountBundle:Default:index.html.twig', array(
             'messages'          => $messages,
-            'requetes'          => $requetes,
             'sessions'          => $sessions,
             'factures'          => $factures,
             'sessionsFormateur' => $sessionsFormateur,
@@ -106,7 +102,6 @@ class DefaultController extends Controller
     {
         $datas                   = array();
         $datas[ 'messages' ]     = array( 'row' => 1, 'col' => 1);
-        $datas[ 'requetes' ]     = array( 'row' => 1, 'col' => 2);
         $datas[ 'modules' ]      = array( 'row' => 2, 'col' => 1);
         $datas[ 'formateur' ]    = array( 'row' => 2, 'col' => 2);
         $datas[ 'intervention' ] = array( 'row' => 3, 'col' => 1);

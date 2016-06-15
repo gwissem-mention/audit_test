@@ -8,5 +8,5 @@ use Nodevo\ToolsBundle\Manager\Manager;
  */
 class FicheManager extends Manager
 {
-    protected $_class = 'HopitalNumerique\CommunautePratiqueBundle\Entity\Fiche';
+    protected $class = 'HopitalNumerique\CommunautePratiqueBundle\Entity\Fiche';
 }

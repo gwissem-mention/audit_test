@@ -13,7 +13,7 @@ use HopitalNumerique\UserBundle\Manager\UserManager;
  */
 class ImportExcelQuestionManager extends QuestManagerAutodiag
 {
-    protected $_class = 'HopitalNumerique\AutodiagBundle\Entity\Question';
+    protected $class = 'HopitalNumerique\AutodiagBundle\Entity\Question';
     protected $_importExcelCategorieManager;
     protected $_importExcelChapitreManager;
     protected $_referenceManager;

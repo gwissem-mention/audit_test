@@ -6,8 +6,13 @@
 namespace HopitalNumerique\UserBundle\Form\Type;
 
 use Doctrine\ORM\EntityRepository;
+use HopitalNumerique\EtablissementBundle\Manager\EtablissementManager;
+use HopitalNumerique\UserBundle\Entity\User;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\Form\FormEvent;
+use Symfony\Component\Form\FormEvents;
+use Symfony\Component\Form\FormInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 use HopitalNumerique\UserBundle\Manager\UserManager;
 use HopitalNumerique\ReferenceBundle\Manager\ReferenceManager;
@@ -23,13 +28,24 @@ class UserType extends AbstractType
      */
     private $referenceManager;
 
-    public function __construct($manager, $validator, $managerRole, $securityContext, UserManager $userManager, ReferenceManager $referenceManager)
-    {
-        $this->_constraints = $manager->getConstraints( $validator );
+    /** @var EtablissementManager */
+    private $etablissementManager;
+
+    public function __construct(
+        $manager,
+        $validator,
+        $managerRole,
+        $securityContext,
+        UserManager $userManager,
+        ReferenceManager $referenceManager,
+        EtablissementManager $etablissementManager
+    ) {
+        $this->_constraints = $manager->getConstraints($validator);
         $this->_managerRole = $managerRole;
         $this->_securityContext = $securityContext;
         $this->_userManager = $userManager;
         $this->referenceManager = $referenceManager;
+        $this->etablissementManager = $etablissementManager;
     }
 
     public function setDefaultOptions(OptionsResolverInterface $resolver)
@@ -259,7 +275,7 @@ class UserType extends AbstractType
             ));
 
             $builder->add('inscritCommunautePratique', 'checkbox', array(
-                'label' => 'Membre de la communauté de pratiques'
+                'label' => 'Membre de la communauté de pratique'
             ));
 
             $builder->add('contactAutre', 'textarea', array(
@@ -291,28 +307,74 @@ class UserType extends AbstractType
             }
 
             // ^ -------- Onglet : Vous êtes un établissement de santé -------- ^
-            $builder->add('statutEtablissementSante', 'entity', array(
-                    'class'       => 'HopitalNumeriqueReferenceBundle:Reference',
-                    'choices'       => $this->referenceManager->findByCode('CONTEXTE_TYPE_ES'),
-                    'property'    => 'libelle',
-                    'required'    => false,
-                    'label'       => 'Type d\'établissement',
-                    'empty_value' => ' - ',
-                    'attr'        => array('class' => 'etablissement_sante'),
-            ))
 
-            ->add('etablissementRattachementSante', 'genemu_jqueryselect2_entity', array(
-                    'class'         => 'HopitalNumeriqueEtablissementBundle:Etablissement',
-                    'property'      => 'usersAffichage',
+            $builder->add('statutEtablissementSante', 'entity', array(
+                'class'       => 'HopitalNumeriqueReferenceBundle:Reference',
+                'choices'       => $this->referenceManager->findByCode('CONTEXTE_TYPE_ES'),
+                'property'    => 'libelle',
+                'required'    => false,
+                'label'       => 'Type d\'établissement',
+                'empty_value' => ' - ',
+                'attr'        => array('class' => 'etablissement_sante'),
+            ));
+
+            $etablissementRattachementSanteModifier = function (FormInterface $form, $data) {
+                $form->add('etablissementRattachementSante', 'choice', array(
                     'multiple'      => false,
                     'required'      => false,
                     'label'         => 'Etablissement de rattachement',
                     'empty_value'   => ' - ',
-                    'attr'        => array('class' => 'etablissement_sante')
-            ))
+                    'attr'        => array('class' => 'etablissement_sante'),
+                    'choices' => $data,
+                    'choices_as_values' => true,
+                    'choice_value' => 'id',
+                    'choice_label' => 'nom',
+                ));
+            };
+
+            $builder->addEventListener(
+                FormEvents::PRE_SET_DATA,
+                function (FormEvent $event) use ($etablissementRattachementSanteModifier) {
+                    /** @var User $data */
+                    $data = $event->getData();
+                    $form = $event->getForm();
+
+                    $list = $this->etablissementManager->findBy(array(
+                        'departement'   => $data->getDepartement(),
+                        'typeOrganisme' => $data->getStatutEtablissementSante()
+                    ));
+                    $etablissementRattachementSanteModifier($form, $list);
+                }
+            );
+
+            $builder->addEventListener(
+                FormEvents::SUBMIT,
+                function (FormEvent $event) use ($etablissementRattachementSanteModifier) {
+                    /** @var User $data */
+                    $data = $event->getData();
+                    $form = $event->getForm();
+
+                    $list = $this->etablissementManager->findBy(array(
+                        'departement'   => $data->getDepartement(),
+                        'typeOrganisme' => $data->getStatutEtablissementSante()
+                    ));
+
+                    $etablissementRattachementSanteModifier($form, $list);
+                }
+            );
+
+//            ->add('etablissementRattachementSante', 'genemu_jqueryselect2_entity', array(
+//                    'class'         => 'HopitalNumeriqueEtablissementBundle:Etablissement',
+//                    'property'      => 'usersAffichage',
+//                    'multiple'      => false,
+//                    'required'      => false,
+//                    'label'         => 'Etablissement de rattachement',
+//                    'empty_value'   => ' - ',
+//                    'attr'        => array('class' => 'etablissement_sante')
+//            ))
 
 
-            ->add('autreStructureRattachementSante', 'text', array(
+            $builder->add('autreStructureRattachementSante', 'text', array(
                     'max_length' => $this->_constraints['autreStructureRattachementSante']['maxlength'],
                     'required'   => false,
                     'label'      => 'Nom de votre établissement si non disponible dans la liste précédente',

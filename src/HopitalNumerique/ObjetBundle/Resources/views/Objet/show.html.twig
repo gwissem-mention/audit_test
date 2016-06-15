@@ -95,18 +95,6 @@
                             {{ objet.dateCreation|date('d/m/Y') }}
                         </p>
 
-                        {% if objet.dateDebutPublication %}
-                            <p>
-                                <strong>Date de début de la publication : </strong>
-                                {{ objet.dateDebutPublication|date('d/m/Y') }}
-                            </p>
-                        {% endif %}
-                        {% if objet.dateFinPublication %}
-                            <p>
-                                <strong>Date de fin de publication : </strong>
-                                {{ objet.dateFinPublication|date('d/m/Y') }}
-                            </p>
-                        {% endif %}
                         {% if objet.dateModification %}
                             <p>
                                 <strong>Date de dernière modification : </strong>

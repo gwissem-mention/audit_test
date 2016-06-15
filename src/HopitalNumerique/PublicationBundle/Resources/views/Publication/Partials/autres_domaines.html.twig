@@ -1,0 +1,29 @@
+{# Cas Contenu #}
+{% if contenu is defined and contenu is not sameas(false) %}
+    {% if contenu.realDomaines|length > 1 %}
+        <div class="col-md-12" style="margin-top: 15px;">
+            Autres ressources sur
+            {% for domaine in contenu.realDomaines %}
+                {% if not domaineCurrent.equals(domaine) %}
+                    <a href="{{ domaine.url }}{{ path('hopital_numerique_recherche_homepage_requete_generator', { 'refs': referencesStringByDomaine[domaine.id] }) }}" target="_blank">{{ domaine }}</a>
+                    {{- not loop.last ? ', ' : '' -}}
+                {%- endif -%}
+            {%- endfor -%}
+            .
+        </div>
+    {% endif %}
+{# Cas objet #}
+{% else %}
+    {% if objet.domaines|length > 1 %}
+        <div class="col-md-12" style="margin-top: 15px;">
+            Autres ressources sur
+            {% for domaine in objet.domaines %}
+                {% if not domaineCurrent.equals(domaine) %}
+                    <a href="{{ domaine.url }}{{ path('hopital_numerique_recherche_homepage_requete_generator', { 'refs': referencesStringByDomaine[domaine.id] }) }}" target="_blank">{{ domaine }}</a>
+                    {{- not loop.last ? ', ' : '' -}}
+                {%- endif -%}
+            {%- endfor -%}
+            .
+        </div>
+    {% endif %}
+{% endif %}

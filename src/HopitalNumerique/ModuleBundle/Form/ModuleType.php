@@ -62,7 +62,7 @@ class ModuleType extends AbstractType
                     'property'      => 'libelle',
                     'multiple'      => true,
                     'required'      => false,
-                    'group_by'      => 'parentName',
+                    //'group_by'      => 'parentName',
                     'label'         => 'Connaissances SI',
                     'empty_value'   => ' - ',
                     'attr'          => array('class' => 'connaissances'),
@@ -70,9 +70,8 @@ class ModuleType extends AbstractType
                         return $er->createQueryBuilder('ref')
                             ->where('ref.code = :etat')
                             ->setParameter('etat', 'CONNAISSANCES_AMBASSADEUR_SI')
-                            ->leftJoin('ref.parent', 'parent')
-                            ->orderBy('parent.libelle', 'ASC')
-                            ->addOrderBy('ref.order', 'ASC');
+                            ->orderBy('ref.order', 'ASC')
+                        ;
                     }
             ))
             ->add('connaissancesMetier', 'genemu_jqueryselect2_entity', array(
@@ -80,7 +79,7 @@ class ModuleType extends AbstractType
                     'property'      => 'libelle',
                     'multiple'      => true,
                     'required'      => false,
-                    'group_by'      => 'parentName',
+                    // 'group_by'      => 'parentName',
                     'label'         => 'Connaissances métiers',
                     'empty_value'   => ' - ',
                     'attr'          => array('class' => 'connaissancesMetier'),
@@ -88,9 +87,7 @@ class ModuleType extends AbstractType
                         return $er->createQueryBuilder('ref')
                             ->where('ref.code = :etat')
                             ->setParameter('etat', 'PERIMETRE_FONCTIONNEL_DOMAINES_FONCTIONNELS')
-                            ->leftJoin('ref.parent', 'parent')
-                            ->orderBy('parent.libelle', 'ASC')
-                            ->addOrderBy('ref.order', 'ASC');
+                            ->orderBy('ref.order', 'ASC');
                     }
             ))
             ->add('domaines', 'entity', array(

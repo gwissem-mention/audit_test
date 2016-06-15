@@ -6,8 +6,6 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
 use \Nodevo\ToolsBundle\Tools\Chaine;
-use Doctrine\Common\Cache\ApcCache;
-
 
 /**
  * Contenu controller.
@@ -208,7 +206,10 @@ class ContenuController extends Controller
      */
     private function renderForm( $formName, $contenu, $view )
     {
-        $formOptions = [];
+        $user = $this->getUser();
+        $formOptions = [
+            'user' => $this->getUser()
+        ];
         if ('hopitalnumerique_objet_contenu' === $formName) {
             $formOptions['domaine'] = $this->get('hopitalnumerique_domaine.manager.domaine')->findOneById($this->get('request')->getSession()->get('domaineId'));
         }
@@ -224,11 +225,47 @@ class ContenuController extends Controller
             $content = $request->request->get('contenu');
             $notify  = $request->request->get('notify');
 
+            $types = $this->get('request')->request->get('types');
+            if ('' != $types) {
+                $contenu->removeTypes();
+                foreach ($types as $typeId) {
+                    $typeChoisi = $this->container->get('hopitalnumerique_reference.manager.reference')->findOneById($typeId);
+                    $contenu->addType($typeChoisi);
+                }
+            }
+
             $objets = $this->get('request')->request->get('objets');
             if ('' != $objets) {
                 $contenu->removeObjets();
                 foreach ($objets as $objet) {
                     $contenu->addObjet($objet);
+                }
+            }
+
+            $domaines = $this->get('request')->request->get('domaines');
+            if ('' != $domaines) {
+                // Ajout des nouveaux domaines
+                foreach ($domaines as $domaineId) {
+                    $domaineChoisi = $this->container->get('hopitalnumerique_domaine.manager.domaine')->findOneById($domaineId);
+                    if (!$contenu->hasDomaine($domaineChoisi)) {
+                        $contenu->addDomaine($domaineChoisi);
+                    }
+                }
+
+                // Suppression des domaines
+                foreach ($contenu->getDomaines() as $domaine) {
+                    if ($user->hasDomaine($domaine)) {
+                        $isDomaineChoisi = false;
+                        foreach ($domaines as $domaineId) {
+                            if ($domaineId == $domaine->getId()) {
+                                $isDomaineChoisi = true;
+                                break;
+                            }
+                        }
+                        if (!$isDomaineChoisi) {
+                            $contenu->removeDomaine($domaine);
+                        }
+                    }
                 }
             }
 
@@ -254,14 +291,7 @@ class ContenuController extends Controller
             //save
             $this->get('hopitalnumerique_objet.manager.contenu')->save($contenu);
 
-            //Destruction du cache APC concernant le contenu
-            $cacheDriver = new ApcCache();
-            $cacheName   = "_publication_contenu_" . $contenu->getId();
-            $cacheDriver->delete($cacheName);
-            
-            //reload glossaire stuff
-            $this->get('hopitalnumerique_glossaire.manager.glossaire')->parsePublications( array(), array($contenu) );
-            $this->getDoctrine()->getManager()->flush();
+            $this->get('hopitalnumerique_reference.doctrine.glossaire.parse')->parseAndSaveEntity($contenu);
 
             return new Response('{"success":true, "titre" : "'.$titre.'"}', 200);
         }

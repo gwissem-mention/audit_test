@@ -8,6 +8,20 @@ hopital_numerique_recherche_parcours_reorder:
     pattern:  /admin/recherche-par-parcours/reorder
     defaults: { _controller: HopitalNumeriqueRechercheParcoursBundle:RechercheParcours:reorder }
 
+hopital_numerique_recherche_parcours_edit:
+    pattern: '/admin/recherche-par-parcours/edit/{rechercheParcours}'
+    defaults: { _controller: 'HopitalNumeriqueRechercheParcoursBundle:RechercheParcours:edit' }
+    methods: 'GET'
+    requirements:
+        rechercheParcours: '\d+'
+
+hopital_numerique_recherche_parcours_save:
+    pattern: '/admin/recherche-par-parcours/save/{rechercheParcours}'
+    defaults: { _controller: 'HopitalNumeriqueRechercheParcoursBundle:RechercheParcours:save' }
+    methods: 'POST'
+    requirements:
+        rechercheParcours: '\d+'
+
 #Recherche par parcours - détails
 hopital_numerique_recherche_parcours_details_index:
     pattern:  /admin/recherche-par-parcours/{id}/details

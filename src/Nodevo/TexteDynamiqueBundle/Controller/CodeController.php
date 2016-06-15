@@ -45,7 +45,7 @@ class CodeController extends Controller
 
     /**
      * Suppresion d'un Code.
-     * 
+     *
      * @param integer $id Id de Code.
      * METHOD = POST|DELETE
      */
@@ -80,10 +80,10 @@ class CodeController extends Controller
         $form = $this->createForm( $formName, $code);
 
         $request = $this->get('request');
-        
+
         // Si l'utilisateur soumet le formulaire
         if ('POST' == $request->getMethod()) {
-            
+
             // On bind les données du form
             $form->handleRequest($request);
 
@@ -94,10 +94,10 @@ class CodeController extends Controller
 
                 //On utilise notre Manager pour gérer la sauvegarde de l'objet
                 $this->get('nodevo_textedynamique.manager.code')->save($code);
-                
+
                 // On envoi une 'flash' pour indiquer à l'utilisateur que l'entité est ajoutée
-                $this->get('session')->getFlashBag()->add( ($new ? 'success' : 'info') , 'Code ' . ($new ? 'ajouté.' : 'mis à jour.') ); 
-                
+                $this->get('session')->getFlashBag()->add( ($new ? 'success' : 'info') , 'Code ' . ($new ? 'ajouté.' : 'mis à jour.') );
+
                 //on redirige vers la page index ou la page edit selon le bouton utilisé
                 $do = $request->request->get('do');
                 return $this->redirect( ($do == 'save-close' ? $this->generateUrl('nodevo_textedynamique_code') : $this->generateUrl('nodevo_textedynamique_code_edit', array( 'id' => $code->getId() ) ) ) );
@@ -108,5 +108,24 @@ class CodeController extends Controller
             'form'             => $form->createView(),
             'code' => $code
         ));
+    }
+
+    public function deleteMassAction($primaryKeys, $allPrimaryKeys)
+    {
+        //get all selected Codes
+        if ($allPrimaryKeys == 1) {
+            $rawDatas = $this->get('nodevo_textedynamique.grid.code')->getRawData();
+            foreach ($rawDatas as $data) {
+                $primaryKeys[] = $data['id'];
+            }
+        }
+
+        $codes = $this->get('nodevo_textedynamique.manager.code')->findBy(array('id' => $primaryKeys));
+
+        $this->get('nodevo_textedynamique.manager.code')->delete($codes);
+
+        $this->get('session')->getFlashBag()->add('info', 'Suppression effectuée avec succès.');
+
+        return $this->redirect($this->generateUrl('nodevo_textedynamique_code'));
     }
 }

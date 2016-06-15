@@ -40,7 +40,11 @@ class DomaineController extends Controller
         //Récupération de l'entité passée en paramètre
         $domaine = $this->get('hopitalnumerique_domaine.manager.domaine')->findOneBy( array('id' => $id) );
 
-        return $this->renderForm('hopitalnumerique_domaine_domaine', $domaine, 'HopitalNumeriqueDomaineBundle:Domaine:edit.html.twig' );
+        $referenceTreeOptions = $this->container->get('hopitalnumerique_reference.dependency_injection.reference.tree')->getOptions([$domaine]);
+
+        return $this->renderForm('hopitalnumerique_domaine_domaine', $domaine, 'HopitalNumeriqueDomaineBundle:Domaine:edit.html.twig', [
+            'referenceTreeOptions' => json_encode($referenceTreeOptions)
+        ]);
     }
 
     /**
@@ -89,7 +93,7 @@ class DomaineController extends Controller
      *
      * @return Form | redirect
      */
-    private function renderForm( $formName, $domaine, $view )
+    private function renderForm( $formName, $domaine, $view, $options = [])
     {
         //Création du formulaire via le service
         $form = $this->createForm( $formName, $domaine);
@@ -132,9 +136,9 @@ class DomaineController extends Controller
             }
         }
 
-        return $this->render( $view , array(
-            'form'             => $form->createView(),
-            'domaine' => $domaine
-        ));
+        $options['form'] = $form->createView();
+        $options['domaine'] = $domaine;
+
+        return $this->render($view , $options);
     }
 }
