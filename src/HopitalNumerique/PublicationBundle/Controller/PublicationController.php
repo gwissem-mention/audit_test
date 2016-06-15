@@ -82,6 +82,11 @@ class PublicationController extends Controller
 
         $reader = $this->get('hopitalnumerique_recherche.doctrine.referencement.reader');
 
+        $userRelated = $reader->getRelatedObjectsByType($objet, Entity::ENTITY_TYPE_AMBASSADEUR);
+        shuffle($userRelated);
+        $topicRelated = $reader->getRelatedObjectsByType($objet, Entity::ENTITY_TYPE_FORUM_TOPIC);
+        shuffle($topicRelated);
+
         //render
         return $this->render('HopitalNumeriquePublicationBundle:Publication:objet.html.twig', array(
             'objet'        => $objet,
@@ -92,8 +97,8 @@ class PublicationController extends Controller
             'ambassadeurs' => $this->getAmbassadeursConcernes($objet->getId()),
             'productionsLiees' => $this->get('hopitalnumerique_objet.dependency_injection.production_liee')->getFormattedProductionsLiees($objet),
             'parcoursGuides' => $this->get('hopitalnumerique_rechercheparcours.dependency_injection.parcours_guide_lie')->getFormattedParcoursGuidesLies($objet),
-            'topicRelated' => $reader->getRelatedObjectsByType($objet, Entity::ENTITY_TYPE_FORUM_TOPIC),
-            'userRelated' => $reader->getRelatedObjectsByType($objet, Entity::ENTITY_TYPE_AMBASSADEUR),
+            'topicRelated' => array_slice($topicRelated, 0, 3),
+            'userRelated' => array_slice($userRelated, 0, 3),
             'is_pdf' => $isPdf,
             'referencesStringByDomaine' => $referencesInDomaine
         ));
@@ -264,6 +269,11 @@ class PublicationController extends Controller
 
         $reader = $this->get('hopitalnumerique_recherche.doctrine.referencement.reader');
 
+        $userRelated = $reader->getRelatedObjectsByType($objet, Entity::ENTITY_TYPE_AMBASSADEUR);
+        shuffle($userRelated);
+        $topicRelated = $reader->getRelatedObjectsByType($objet, Entity::ENTITY_TYPE_FORUM_TOPIC);
+        shuffle($topicRelated);
+
         //render
         return $this->render('HopitalNumeriquePublicationBundle:Publication:objet.html.twig', array(
             'objet'            => $objet,
@@ -281,8 +291,8 @@ class PublicationController extends Controller
             'suivantOrder'     => $suivantOrder,
             'productionsLiees' => $this->get('hopitalnumerique_objet.dependency_injection.production_liee')->getFormattedProductionsLiees($contenu),
             'parcoursGuides'   => $this->container->get('hopitalnumerique_rechercheparcours.dependency_injection.parcours_guide_lie')->getFormattedParcoursGuidesLies($objet),
-            'topicRelated'     => $reader->getRelatedObjectsByType($objet, Entity::ENTITY_TYPE_FORUM_TOPIC),
-            'userRelated'      => $reader->getRelatedObjectsByType($objet, Entity::ENTITY_TYPE_AMBASSADEUR),
+            'topicRelated'     => array_slice($topicRelated, 0, 3),
+            'userRelated'      => array_slice($userRelated, 0, 3),
             'is_pdf' => ($request->query->has('pdf') && '1' == $request->query->get('pdf')),
             'referencesStringByDomaine' => $referencesInDomaine
         ));
