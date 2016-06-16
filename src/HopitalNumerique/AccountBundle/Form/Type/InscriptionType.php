@@ -37,7 +37,7 @@ class InscriptionType extends AbstractType
                 'data' => $urlRedirection
             ])
             ->add('email', 'email', [
-                'label' => 'Adresse électronique',
+                'label' => 'Email',
                 'attr' => [
                     'data-validation-engine' => 'validate[required,custom[email]]'
                 ]

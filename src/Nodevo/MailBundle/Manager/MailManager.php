@@ -1112,7 +1112,7 @@ class MailManager extends BaseManager
 
     public function sendInvitationMail(User $expediteur, $destinataires)
     {
-        $courriel = $this->findOneById(63);
+        $courriel = $this->findOneById(67);
         $courriel->setExpediteurMail($expediteur->getEmail());
         $courriel->setExpediteurName($expediteur->getNom());
         $content = $this->replaceContent($courriel->getBody(), $expediteur, array());
@@ -1126,7 +1126,7 @@ class MailManager extends BaseManager
 
     public function sendAlerteInscriptionMail($destinataires)
     {
-        $courriel = $this->findOneById(64);
+        $courriel = $this->findOneById(65);
         $content = $this->replaceContent($courriel->getBody(), null, array());
         $message = $this->generationMail(null, $courriel);
 
@@ -1138,7 +1138,7 @@ class MailManager extends BaseManager
 
     public function sendAlerteInscriptionValideMail($destinataire)
     {
-        $courriel = $this->findOneById(65);
+        $courriel = $this->findOneById(64);
         $content = $this->replaceContent($courriel->getBody(), null, array());
         $message = $this->generationMail(null, $courriel);
         $message->setTo($destinataire);
