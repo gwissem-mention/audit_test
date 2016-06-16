@@ -6,6 +6,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use HopitalNumerique\AutodiagBundle\Entity\Autodiag\Container\Chapter;
+use HopitalNumerique\AutodiagBundle\Entity\Autodiag\Preset;
 use HopitalNumerique\DomaineBundle\Entity\Domaine;
 use HopitalNumerique\QuestionnaireBundle\Entity\Questionnaire;
 
@@ -90,6 +91,16 @@ class Autodiag
      * )
      */
     private $chapters;
+
+    /**
+     * @var Collection
+     * @ORM\OneToMany(
+     *     targetEntity="HopitalNumerique\AutodiagBundle\Entity\Autodiag\Preset",
+     *     mappedBy="autodiag",
+     *     fetch="EAGER"
+     * )
+     */
+    private $presets;
 
     public function __construct()
     {
@@ -292,5 +303,15 @@ class Autodiag
         $this->chapters->removeElement($chapter);
 
         return $this;
+    }
+
+    /**
+     * Get presets
+     *
+     * @return Collection
+     */
+    public function getPresets()
+    {
+        return $this->presets;
     }
 }

@@ -14,7 +14,7 @@ use Symfony\Component\OptionsResolver\OptionsResolverInterface;
  * @package HopitalNumerique\AutodiagBundle\Form\Type\Domain
  * @author Emmanuel Da Fonseca <edafonseca@nodevo.com>
  */
-class AutodiagAdminUpdateType extends AbstractType
+class AutodiagUpdateType extends AbstractType
 {
     /**
      * @param FormBuilderInterface $builder
@@ -36,7 +36,7 @@ class AutodiagAdminUpdateType extends AbstractType
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
         $resolver->setDefaults(array(
-            'data_class' => 'HopitalNumerique\AutodiagBundle\Model\AutodiagAdminUpdate',
+            'data_class' => 'HopitalNumerique\AutodiagBundle\Model\AutodiagUpdate',
             'label_format' => 'ad.autodiag.%name%'
         ));
     }

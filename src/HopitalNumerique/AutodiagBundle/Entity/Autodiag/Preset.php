@@ -22,7 +22,7 @@ class Preset
      * @var Autodiag
      *
      * @ORM\Id
-     * @ORM\ManyToOne(targetEntity="HopitalNumerique\AutodiagBundle\Entity\Autodiag")
+     * @ORM\ManyToOne(targetEntity="HopitalNumerique\AutodiagBundle\Entity\Autodiag", inversedBy="presets")
      * @ORM\JoinColumn(name="autodiag_id", referencedColumnName="id", onDelete="CASCADE")
      */
     private $autodiag;

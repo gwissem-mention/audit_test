@@ -2,10 +2,24 @@
 
 {% block edit_content %}
 
-
     {% form_theme form 'NodevoAdminBundle::form.html.twig' %}
     {{ form_start(form) }}
     {{ form_widget(form) }}
     {{ form_end(form) }}
 
+    <div class="repports-container">
+        {% if chapterProgress is not null %}
+            <div class="repport">
+                <h3>Rapport import chapitre</h3>
+                {% include "@HopitalNumeriqueAutodiag/Autodiag/Import/_repport.html.twig" with {"progress": chapterProgress} %}
+            </div>
+        {% endif %}
+
+        {% if questionProgress is not null %}
+            <div class="repport">
+                <h3>Rapport import question</h3>
+                {% include "@HopitalNumeriqueAutodiag/Autodiag/Import/_repport.html.twig" with {"progress": questionProgress} %}
+            </div>
+        {% endif %}
+    </div>
 {% endblock %}

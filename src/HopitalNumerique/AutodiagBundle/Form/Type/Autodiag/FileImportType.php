@@ -21,7 +21,7 @@ class FileImportType extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults(array(
-            'data_class' => 'HopitalNumerique\AutodiagBundle\Model\autodiagAdminFileImport',
+            'data_class' => 'HopitalNumerique\AutodiagBundle\Model\AutodiagFileImport',
             'label_format' => 'ad.autodiag.import.%name%'
         ));
     }

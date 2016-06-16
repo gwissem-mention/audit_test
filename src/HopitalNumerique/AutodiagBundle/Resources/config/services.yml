@@ -8,3 +8,9 @@ services:
         arguments: ['@autodiag.attribute_builder_provider']
         tags:
             - { name: form.type }
+
+    autodiag.form.autodiag_update:
+        class: HopitalNumerique\AutodiagBundle\Form\Type\Autodiag\AutodiagUpdateType
+        arguments: ['@autodiag.attribute_builder_provider']
+        tags:
+            - { name: form.type }

@@ -13,11 +13,10 @@ class Progress implements ProgressInterface
     protected $endTime;
 
     protected $messages = [];
-    protected $exceptions;
 
     public function __construct() //LOGGER
     {
-        $this->exceptions = new \SplObjectStorage();
+
     }
 
     public function start()
@@ -44,7 +43,7 @@ class Progress implements ProgressInterface
     {
         $this->success[] = [
             'index' => $this->currentIndex,
-            'context' =>$context
+            'context' => $context
         ];
     }
 
@@ -76,10 +75,9 @@ class Progress implements ProgressInterface
         return $this->messages;
     }
 
-    public function addException(\Exception $e)
+    public function addError($error)
     {
-        $this->exceptions->attach($e, $this->currentIndex);
-        $this->errors[$this->currentIndex] = $e->getMessage();
+        $this->errors[$this->currentIndex] = $error;
     }
 
     public function hasErrors()

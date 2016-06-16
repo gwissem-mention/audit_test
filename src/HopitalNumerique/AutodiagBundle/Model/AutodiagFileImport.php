@@ -3,7 +3,7 @@ namespace HopitalNumerique\AutodiagBundle\Model;
 
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 
-class AutodiagAdminFileImport
+class AutodiagFileImport
 {
     /**
      * @var UploadedFile

@@ -17,3 +17,11 @@ ad:
             survey: Questionnaire
             algorithm: Algorithme
             restitution: Restitution
+        import:
+            file: Fichier
+            notify_update: Notifier la mise à jour sur le frontoffice
+    import:
+        lines:
+            count: "{0}Aucune ligne n'a été importée|{1}%count% ligne à été importée|]1,Inf[%count% lignes ont été importées"
+        chapter:
+            updated: "{0}Aucunchapitre n'a été mis à jour|{1}%count% chapitre à été mis à jour|]1,Inf[%count% chapitres ont été mis à jour"

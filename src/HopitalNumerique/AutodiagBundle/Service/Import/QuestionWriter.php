@@ -31,6 +31,7 @@ class QuestionWriter implements WriterInterface, ProgressAwareInterface
     /** @var AttributeBuilderProvider */
     protected $attributesProvider;
 
+    /** @var array */
     protected $attributeTypesAvailable;
 
     protected $chapters = [];
@@ -60,7 +61,6 @@ class QuestionWriter implements WriterInterface, ProgressAwareInterface
     public function write($item)
     {
         if ($this->validate($item)) {
-
             $attribute = $this->getAttribute($item[self::COLUMN_CODE]);
 
             $propertyAccessor = new PropertyAccessor();
@@ -78,6 +78,7 @@ class QuestionWriter implements WriterInterface, ProgressAwareInterface
 
             $this->manager->persist($attribute);
 
+            $this->progress->addSuccess($item);
         } else {
             $this->progress->addException(
                 new \Exception('chapter incorect format')
