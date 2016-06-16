@@ -110,7 +110,7 @@ class PublicationController extends Controller
     public function pdfAction(Request $request, $entityType, $entityId)
     {
         if (Entity::ENTITY_TYPE_OBJET == $entityType) {
-            $objet = $this->container->get('hopitalnumerique_objet.manager.contenu')->findOneById($entityId);
+            $objet = $this->container->get('hopitalnumerique_objet.manager.objet')->findOneById($entityId);
             $pdfUrl = $this->generateUrl(
                 'hopital_numerique_publication_publication_objet',
                 [
