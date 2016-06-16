@@ -3,7 +3,7 @@ namespace HopitalNumerique\AutodiagBundle\Service\Attribute\Builder;
 
 use Doctrine\Common\Persistence\ObjectManager;
 use HopitalNumerique\AutodiagBundle\Form\Type\CsvType;
-use HopitalNumerique\AutodiagBundle\Form\Type\Model\PresetValueType;
+use HopitalNumerique\AutodiagBundle\Form\Type\Autodiag\PresetValueType;
 use Symfony\Component\Form\FormFactoryInterface;
 
 /**

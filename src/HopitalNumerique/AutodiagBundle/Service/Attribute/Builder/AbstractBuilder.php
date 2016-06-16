@@ -1,7 +1,7 @@
 <?php
 namespace HopitalNumerique\AutodiagBundle\Service\Attribute\Builder;
 
-use HopitalNumerique\AutodiagBundle\Entity\Model;
+use HopitalNumerique\AutodiagBundle\Entity\Autodiag;
 use HopitalNumerique\AutodiagBundle\Service\Attribute\AttributeBuilderInterface;
 
 /**

@@ -1,5 +1,5 @@
 ad:
-    model:
+    autodiag:
         title: Titre de l'autodiagnostic
         domaines: Domaines de diffusion
         questionnaire: Questionnaire préalable

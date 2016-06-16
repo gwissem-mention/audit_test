@@ -2,8 +2,8 @@
 namespace HopitalNumerique\AutodiagBundle\Form\DataTransformer\Model\Preset;
 
 use Doctrine\Common\Collections\ArrayCollection;
-use HopitalNumerique\AutodiagBundle\Entity\Model\Preset\Attribute;
-use HopitalNumerique\AutodiagBundle\Entity\Model\Preset\Attribute\Option;
+use HopitalNumerique\AutodiagBundle\Entity\Autodiag\Preset\Attribute;
+use HopitalNumerique\AutodiagBundle\Entity\Autodiag\Preset\Attribute\Option;
 use Symfony\Component\Form\DataTransformerInterface;
 use Symfony\Component\Form\Exception\TransformationFailedException;
 

@@ -4,7 +4,7 @@ imports:
 
 services:
     autodiag.form.model_preset:
-        class: HopitalNumerique\AutodiagBundle\Form\Type\Model\PresetType
+        class: HopitalNumerique\AutodiagBundle\Form\Type\Autodiag\PresetType
         arguments: ['@autodiag.attribute_builder_provider']
         tags:
             - { name: form.type }

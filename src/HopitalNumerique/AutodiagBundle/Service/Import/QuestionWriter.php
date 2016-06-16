@@ -3,8 +3,8 @@ namespace HopitalNumerique\AutodiagBundle\Service\Import;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\EntityManager;
-use HopitalNumerique\AutodiagBundle\Entity\Model;
-use HopitalNumerique\AutodiagBundle\Entity\Model\Attribute;
+use HopitalNumerique\AutodiagBundle\Entity\Autodiag;
+use HopitalNumerique\AutodiagBundle\Entity\Autodiag\Attribute;
 use HopitalNumerique\AutodiagBundle\Service\Attribute\AttributeBuilderProvider;
 use Nodevo\Component\Import\Progress\ProgressAwareInterface;
 use Nodevo\Component\Import\Progress\ProgressAwareTrait;
@@ -25,8 +25,8 @@ class QuestionWriter implements WriterInterface, ProgressAwareInterface
     /** @var EntityManager */
     protected $manager;
 
-    /** @var Model */
-    protected $model;
+    /** @var Autodiag */
+    protected $autodiag;
 
     /** @var AttributeBuilderProvider */
     protected $attributesProvider;
@@ -43,10 +43,10 @@ class QuestionWriter implements WriterInterface, ProgressAwareInterface
         'infobulle_question' => 'tooltip',
     ];
 
-    public function __construct(EntityManager $manager, Model $model, AttributeBuilderProvider $attributesProvider)
+    public function __construct(EntityManager $manager, Autodiag $autodiag, AttributeBuilderProvider $attributesProvider)
     {
         $this->manager = $manager;
-        $this->model = $model;
+        $this->autodiag = $autodiag;
         $this->attributesProvider = $attributesProvider;
 
         $this->attributeTypesAvailable = $this->attributesProvider->getBuildersName();
@@ -103,15 +103,15 @@ class QuestionWriter implements WriterInterface, ProgressAwareInterface
      */
     protected function getAttribute($code)
     {
-        $attribute = $this->manager->getRepository('HopitalNumeriqueAutodiagBundle:Model\Attribute')->findOneBy([
-            'model' => $this->model,
+        $attribute = $this->manager->getRepository('HopitalNumeriqueAutodiagBundle:Autodiag\Attribute')->findOneBy([
+            'autodiag' => $this->autodiag,
             'code' => $code
         ]);
 
         if (null === $attribute) {
             $attribute = new Attribute();
             $attribute
-                ->setModel($this->model)
+                ->setAutodiag($this->autodiag)
                 ->setCode($code);
         }
 
@@ -198,9 +198,9 @@ class QuestionWriter implements WriterInterface, ProgressAwareInterface
     protected function getChapter($code)
     {
         if (!array_key_exists((string)$code, $this->chapters)) {
-            $chapter = $this->manager->getRepository('HopitalNumeriqueAutodiagBundle:Model\Container\Chapter')
+            $chapter = $this->manager->getRepository('HopitalNumeriqueAutodiagBundle:Autodiag\Container\Chapter')
                 ->findOneBy([
-                    'model' => $this->model,
+                    'autodiag' => $this->autodiag,
                     'code' => $code
                 ]);
 
@@ -223,7 +223,7 @@ class QuestionWriter implements WriterInterface, ProgressAwareInterface
         if (null === $chapter) {
             $this->progress->addMessage('', $code, 'chapter.notfound');
         } else {
-            $weightObject = $this->manager->getRepository('HopitalNumeriqueAutodiagBundle:Model\Attribute\Weight')
+            $weightObject = $this->manager->getRepository('HopitalNumeriqueAutodiagBundle:Autodiag\Attribute\Weight')
                 ->findOneBy([
                     'attribute' => $attribute,
                     'container' => $chapter
@@ -248,21 +248,21 @@ class QuestionWriter implements WriterInterface, ProgressAwareInterface
     {
         $categoriesData = $this->parseMultiline($categoriesData);
         foreach ($categoriesData as $code => $weight) {
-            $category = $this->manager->getRepository('HopitalNumeriqueAutodiagBundle:Model\Container\Category')
+            $category = $this->manager->getRepository('HopitalNumeriqueAutodiagBundle:Autodiag\Container\Category')
                 ->findOneBy([
-                    'model' => $this->model,
+                    'autodiag' => $this->autodiag,
                     'code' => $code
                 ]);
             if (null === $category) {
-                $category = new Model\Container\Category();
+                $category = new Autodiag\Container\Category();
                 $category
-                    ->setModel($this->model)
+                    ->setAutodiag($this->autodiag)
                     ->setCode($code)
                     ->setLabel($code);
                 $this->manager->persist($category);
             }
 
-            $weightObject = $this->manager->getRepository('HopitalNumeriqueAutodiagBundle:Model\Attribute\Weight')
+            $weightObject = $this->manager->getRepository('HopitalNumeriqueAutodiagBundle:Autodiag\Attribute\Weight')
                 ->findOneBy([
                     'attribute' => $attribute,
                     'container' => $category

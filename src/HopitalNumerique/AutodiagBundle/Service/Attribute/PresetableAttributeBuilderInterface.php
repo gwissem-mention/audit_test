@@ -1,7 +1,7 @@
 <?php
 namespace HopitalNumerique\AutodiagBundle\Service\Attribute;
 
-use HopitalNumerique\AutodiagBundle\Entity\Model;
+use HopitalNumerique\AutodiagBundle\Entity\Autodiag;
 use Symfony\Component\Form\FormInterface;
 
 /**
@@ -15,18 +15,18 @@ interface PresetableAttributeBuilderInterface
     /**
      * Get preset options by Model
      *
-     * @param Model $model
+     * @param Autodiag $autodiag
      * @return mixed
      */
-    public function getPreset(Model $model);
+    public function getPreset(Autodiag $autodiag);
 
     /**
      * Set preset options by model
      *
-     * @param Model $model
+     * @param Autodiag $autodiag
      * @param $preset
      */
-    public function setPreset(Model $model, $preset);
+    public function setPreset(Autodiag $autodiag, $preset);
 
     /**
      * Get preset admin form

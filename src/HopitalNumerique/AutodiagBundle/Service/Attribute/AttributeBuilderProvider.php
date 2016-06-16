@@ -27,7 +27,7 @@ class AttributeBuilderProvider
      *
      * @param $type
      *
-     * @return AttributeBuilderInterface|null
+     * @return AttributeBuilderInterface|PresetableAttributeBuilderInterface|null
      */
     public function getBuilder($type)
     {

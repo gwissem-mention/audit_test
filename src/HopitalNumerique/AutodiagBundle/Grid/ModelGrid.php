@@ -11,7 +11,7 @@ class ModelGrid extends Grid implements GridInterface
 {
     public function setConfig()
     {
-        $this->setSource('\HopitalNumerique\AutodiagBundle\Entity\Model');
+        $this->setSource('\HopitalNumerique\AutodiagBundle\Entity\Autodiag');
         $this->setSourceType(self::SOURCE_TYPE_ENTITY);
     }
 
@@ -29,7 +29,7 @@ class ModelGrid extends Grid implements GridInterface
     public function setActionsButtons()
     {
         $this->addActionButton(
-            new ShowButton('hopitalnumerique_autodiag_model_edit')
+            new ShowButton('hopitalnumerique_autodiag_edit')
         );
     }
 

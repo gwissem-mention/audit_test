@@ -1,15 +1,15 @@
-hopitalnumerique_autodiag_model_list:
+hopitalnumerique_autodiag_list:
     path:     /autodiag
-    defaults: { _controller: HopitalNumeriqueAutodiagBundle:Model:list }
+    defaults: { _controller: HopitalNumeriqueAutodiagBundle:Back/Autodiag:list }
 
-hopitalnumerique_autodiag_model_create:
+hopitalnumerique_autodiag_create:
     path:     /autodiag/create
-    defaults: { _controller: HopitalNumeriqueAutodiagBundle:Model:create }
+    defaults: { _controller: HopitalNumeriqueAutodiagBundle:Back/Autodiag:create }
 
-hopitalnumerique_autodiag_model_edit:
+hopitalnumerique_autodiag_edit:
     path:     /autodiag/edit/{id}
-    defaults: { _controller: HopitalNumeriqueAutodiagBundle:Model:edit }
+    defaults: { _controller: HopitalNumeriqueAutodiagBundle:Back/Autodiag:edit }
 
-hopitalnumerique_autodiag_model_edit_survey:
+hopitalnumerique_autodiag_survey:
     path:     /autodiag/edit/{id}/survey
-    defaults: { _controller: HopitalNumeriqueAutodiagBundle:Model:surveyEdit }
+    defaults: { _controller: HopitalNumeriqueAutodiagBundle:Back/Autodiag:surveyEdit }

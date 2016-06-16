@@ -2,8 +2,8 @@
 namespace HopitalNumerique\AutodiagBundle\Service\Attribute\Builder;
 
 use Doctrine\Common\Persistence\ObjectManager;
-use HopitalNumerique\AutodiagBundle\Entity\Model;
-use HopitalNumerique\AutodiagBundle\Entity\Model\Preset;
+use HopitalNumerique\AutodiagBundle\Entity\Autodiag;
+use HopitalNumerique\AutodiagBundle\Entity\Autodiag\Preset;
 use HopitalNumerique\AutodiagBundle\Service\Attribute\PresetableAttributeBuilderInterface;
 use Symfony\Component\Form\FormFactoryInterface;
 
@@ -37,51 +37,51 @@ abstract class AbstractPresetableBuilder extends AbstractBuilder implements Pres
     /**
      * Check if attribute type has builder for Model
      *
-     * @param Model $model
+     * @param Autodiag $autodiag
      * @return bool
      */
-    public function hasPreset(Model $model)
+    public function hasPreset(Autodiag $autodiag)
     {
-        return $this->getPreset($model) !== null;
+        return $this->getPreset($autodiag) !== null;
     }
 
     /**
-     * Get Preset for Model
+     * Get Preset for Autodiag
      *
-     * @param Model $model
+     * @param Autodiag $autodiag
      * @return Preset|null
      */
-    public function getPreset(Model $model)
+    public function getPreset(Autodiag $autodiag)
     {
-        if (null === $model->getId()) {
+        if (null === $autodiag->getId()) {
             return null;
         }
 
-        if (!array_key_exists($model->getId(), $this->presets)) {
+        if (!array_key_exists($autodiag->getId(), $this->presets)) {
             $preset = $this->manager->find(Preset::class, [
-                'model' => $model,
+                'autodiag' => $autodiag,
                 'type' => $this->getName(),
             ]);
 
-            $this->presets[$model->getId()] = $preset;
+            $this->presets[$autodiag->getId()] = $preset;
         }
 
-        return $this->presets[$model->getId()];
+        return $this->presets[$autodiag->getId()];
     }
 
     /**
      * Set Preset value for Model
      *
-     * @param Model $model
+     * @param Autodiag $autodiag
      * @param $value
      */
-    public function setPreset(Model $model, $value)
+    public function setPreset(Autodiag $autodiag, $value)
     {
-        if (null !== $value || $this->hasPreset($model)) {
-            $preset = $this->createPreset($model);
+        if (null !== $value || $this->hasPreset($autodiag)) {
+            $preset = $this->createPreset($autodiag);
             $preset->setPreset($value);
 
-            $this->presets[$model->getId()] = $preset;
+            $this->presets[$autodiag->getId()] = $preset;
 
             if (null === $value) {
                 $this->manager->remove($preset);
@@ -95,12 +95,12 @@ abstract class AbstractPresetableBuilder extends AbstractBuilder implements Pres
     /**
      * Create Preset object for Model
      *
-     * @param Model $model
+     * @param Autodiag $autodiag
      * @return Preset
      */
-    protected function createPreset(Model $model)
+    protected function createPreset(Autodiag $autodiag)
     {
-        $preset = $this->getPreset($model) ?: new Preset($model, $this->getName());
+        $preset = $this->getPreset($autodiag) ?: new Preset($autodiag, $this->getName());
 
         return $preset;
     }

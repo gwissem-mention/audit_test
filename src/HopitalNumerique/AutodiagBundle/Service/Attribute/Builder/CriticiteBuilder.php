@@ -2,7 +2,7 @@
 namespace HopitalNumerique\AutodiagBundle\Service\Attribute\Builder;
 
 use HopitalNumerique\AutodiagBundle\Form\Type\CsvType;
-use HopitalNumerique\AutodiagBundle\Form\Type\Model\PresetValueType;
+use HopitalNumerique\AutodiagBundle\Form\Type\Autodiag\PresetValueType;
 
 /**
  * Criticite attribute builder
