@@ -83,8 +83,7 @@ class DataImporter
                     $this->itemProcessor ? $this->itemProcessor->process($data) : $data
                 );
             } catch (\Exception $e) {
-                $this->progress->addException($e);
-                dump($e);
+                $this->progress->addError($e->getMessage());
                 continue;
             }
         }

@@ -31,6 +31,7 @@ class QuestionWriter implements WriterInterface, ProgressAwareInterface
     /** @var AttributeBuilderProvider */
     protected $attributesProvider;
 
+    /** @var array */
     protected $attributeTypesAvailable;
 
     protected $chapters = [];
@@ -60,7 +61,6 @@ class QuestionWriter implements WriterInterface, ProgressAwareInterface
     public function write($item)
     {
         if ($this->validate($item)) {
-
             $attribute = $this->getAttribute($item[self::COLUMN_CODE]);
 
             $propertyAccessor = new PropertyAccessor();
@@ -78,6 +78,7 @@ class QuestionWriter implements WriterInterface, ProgressAwareInterface
 
             $this->manager->persist($attribute);
 
+            $this->progress->addSuccess($item);
         } else {
             $this->progress->addException(
                 new \Exception('chapter incorect format')
@@ -184,6 +185,7 @@ class QuestionWriter implements WriterInterface, ProgressAwareInterface
             });
 
             if (!$found) {
+                // @TODO: Voir la suppression des réponses en cascade
                 $attribute->removeOption($element);
             }
         }
@@ -234,7 +236,7 @@ class QuestionWriter implements WriterInterface, ProgressAwareInterface
                 $this->manager->persist($weightObject);
             }
 
-            $weightObject->setWeight(floatval(str_replace(',', '.', $weight)));
+            $weightObject->setWeight($this->parseFloatValue($weight));
         }
     }
 
@@ -273,10 +275,16 @@ class QuestionWriter implements WriterInterface, ProgressAwareInterface
                 $this->manager->persist($weightObject);
             }
 
-            $weightObject->setWeight(floatval(str_replace(',', '.', $weight)));
+            $weightObject->setWeight($this->parseFloatValue($weight));
         }
     }
 
+    /**
+     * Validate item line
+     *
+     * @param $item
+     * @return bool
+     */
     protected function validate($item)
     {
         // Valide le type
@@ -299,5 +307,16 @@ class QuestionWriter implements WriterInterface, ProgressAwareInterface
                 "ponderation_categorie" => true,
                 "ponderation_chapitre" => true,
             ])) === 10;
+    }
+
+    /**
+     * Parse CSV float value
+     *
+     * @param $value
+     * @return float
+     */
+    protected function parseFloatValue($value)
+    {
+        return floatval(str_replace(',', '.', $value));
     }
 }

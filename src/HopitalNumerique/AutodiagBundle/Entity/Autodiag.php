@@ -6,6 +6,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use HopitalNumerique\AutodiagBundle\Entity\Autodiag\Container\Chapter;
+use HopitalNumerique\AutodiagBundle\Entity\Autodiag\Preset;
 use HopitalNumerique\DomaineBundle\Entity\Domaine;
 use HopitalNumerique\QuestionnaireBundle\Entity\Questionnaire;
 
@@ -62,6 +63,15 @@ class Autodiag
     private $synthesisAuthorized;
 
     /**
+     * Public update date
+     *
+     * @var \DateTime
+     *
+     * @ORM\Column(type="datetime")
+     */
+    private $publicUpdatedDate;
+
+    /**
      * @var Collection
      *
      * @ORM\ManyToMany(targetEntity="HopitalNumerique\DomaineBundle\Entity\Domaine")
@@ -90,6 +100,16 @@ class Autodiag
      * )
      */
     private $chapters;
+
+    /**
+     * @var Collection
+     * @ORM\OneToMany(
+     *     targetEntity="HopitalNumerique\AutodiagBundle\Entity\Autodiag\Preset",
+     *     mappedBy="autodiag",
+     *     fetch="EAGER"
+     * )
+     */
+    private $presets;
 
     public function __construct()
     {
@@ -200,6 +220,29 @@ class Autodiag
     }
 
     /**
+     * Get public updated date
+     *
+     * @return \DateTime
+     */
+    public function getPublicUpdatedDate()
+    {
+        return $this->publicUpdatedDate;
+    }
+
+    /**
+     * Set public updated date
+     *
+     * @param \DateTime $publicUpdatedDate
+     * @return $this
+     */
+    public function setPublicUpdatedDate(\DateTime $publicUpdatedDate)
+    {
+        $this->publicUpdatedDate = $publicUpdatedDate;
+
+        return $this;
+    }
+
+    /**
      * Get Domaine
      *
      * @return Collection
@@ -292,5 +335,15 @@ class Autodiag
         $this->chapters->removeElement($chapter);
 
         return $this;
+    }
+
+    /**
+     * Get presets
+     *
+     * @return Collection
+     */
+    public function getPresets()
+    {
+        return $this->presets;
     }
 }

@@ -2,14 +2,14 @@
 
 namespace HopitalNumerique\AutodiagBundle\Controller\Back;
 
-use HopitalNumerique\AutodiagBundle\Model\AutodiagAdminFileImport;
-use HopitalNumerique\AutodiagBundle\Model\AutodiagAdminUpdate;
+use HopitalNumerique\AutodiagBundle\Model\AutodiagFileImport;
+use HopitalNumerique\AutodiagBundle\Model\AutodiagUpdate;
 use HopitalNumerique\AutodiagBundle\Entity\Autodiag;
-use HopitalNumerique\AutodiagBundle\Form\Type\Autodiag\AutodiagAdminUpdateType;
+use HopitalNumerique\AutodiagBundle\Entity\Autodiag\Preset;
+use HopitalNumerique\AutodiagBundle\Form\Type\Autodiag\AutodiagUpdateType;
 use HopitalNumerique\AutodiagBundle\Form\Type\Autodiag\FileImportType;
 use HopitalNumerique\AutodiagBundle\Grid\ModelGrid;
-use HopitalNumerique\AutodiagBundle\Service\Import\ChapterWriter;
-use HopitalNumerique\AutodiagBundle\Service\Import\QuestionWriter;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -41,14 +41,17 @@ class AutodiagController extends Controller
      */
     public function editAction(Request $request, Autodiag $autodiag)
     {
-        $domain = new AutodiagAdminUpdate();
-        $domain->setAutodiag($autodiag);
-        $criticite = $this->get('autodiag.attribute_builder_provider')->getBuilder('criticite')->getPreset($autodiag) ?: new Autodiag\Preset($autodiag, 'criticite');
-        $maitrise = $this->get('autodiag.attribute_builder_provider')->getBuilder('maitrise')->getPreset($autodiag) ?: new Autodiag\Preset($autodiag, 'maitrise');
-        $domain->addPreset($criticite);
-        $domain->addPreset($maitrise);
+        $attributeBuilderProvider = $this->get('autodiag.attribute_builder_provider');
 
-        $form = $this->createForm(new AutodiagAdminUpdateType($this->get('autodiag.attribute_builder_provider')), $domain);
+        $domain = new AutodiagUpdate(
+            $autodiag,
+            [
+                $attributeBuilderProvider->getBuilder('criticite')->getPreset($autodiag) ?: new Preset($autodiag, 'criticite'),
+                $attributeBuilderProvider->getBuilder('maitrise')->getPreset($autodiag) ?: new Preset($autodiag, 'maitrise'),
+            ]
+        );
+
+        $form = $this->createForm(AutodiagUpdateType::class, $domain);
 
         $form->handleRequest($request);
 
@@ -58,7 +61,7 @@ class AutodiagController extends Controller
             $manager->flush();
 
             foreach ($domain->getPresets() as $preset) {
-                $this->get('autodiag.attribute_builder_provider')
+                $attributeBuilderProvider
                     ->getBuilder($preset->getType())
                     ->setPreset($domain->getAutodiag(), $preset->getPreset());
             }
@@ -75,40 +78,73 @@ class AutodiagController extends Controller
         ]);
     }
 
+    /**
+     * Import survey data
+     *
+     * @param Request $request
+     * @param Autodiag $autodiag
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse|\Symfony\Component\HttpFoundation\Response
+     * @throws \Exception
+     */
     public function surveyEditAction(Request $request, Autodiag $autodiag)
     {
-        $import = new AutodiagAdminFileImport();
+        $importHandler = $this->get('autodiag.import.handler');
+        $import = new AutodiagFileImport($autodiag);
         $form = $this->createForm(FileImportType::class, $import);
 
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
-
-            // Import chapter
-            $chapterImporter = $this->get('autodiag.import.chapter');
-            $chapterImporter->setWriter(
-                new ChapterWriter($this->getDoctrine()->getManager(), $autodiag)
+            
+            $importHandler->handleSurveyImport(
+                $import,
+                $this->get('autodiag.import.chapter'),
+                $this->get('autodiag.import.question')
             );
-            $chapterProgress = $chapterImporter->import($import->getFile());
+            
+            $this->addFlash('success', 'ad.autodiag.import.success');
 
-            // Import questions
-            $questionImporter = $this->get('autodiag.import.question');
-            $questionImporter->setWriter(
-                new QuestionWriter(
-                    $this->getDoctrine()->getManager(),
-                    $autodiag,
-                    $this->get('autodiag.attribute_builder_provider')
-                )
-            );
-            $questionProgress = $questionImporter->import($import->getFile());
-
-            dump($chapterProgress);
-            dump($questionProgress);
-            die;
+            return $this->redirectToRoute('hopitalnumerique_autodiag_survey', [
+                'id' => $autodiag->getId()
+            ]);
         }
 
         return $this->render('HopitalNumeriqueAutodiagBundle:Autodiag/Edit:survey.html.twig', [
             'form' => $form->createView(),
             'model' => $autodiag,
+            'history' => $this->get('autodiag.history.reader')->getHistory(Autodiag\History::HISTORY_ENTRY_SURVEY),
+            'chapterProgress' => $importHandler->getChapterProgress(),
+            'questionProgress' => $importHandler->getQuestionProgress(),
+        ]);
+    }
+
+    /**
+     * @param Request $request
+     * @param Autodiag $autodiag
+     *
+     * @ParamConverter()
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse|\Symfony\Component\HttpFoundation\Response
+     */
+    public function algorithmEditAction(Request $request, Autodiag $autodiag)
+    {
+        $importHandler = $this->get('autodiag.import.handler');
+        $import = new AutodiagFileImport($autodiag);
+        $form = $this->createForm(FileImportType::class, $import);
+
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $importHandler->handleAlgorithmImport($import);
+            $this->addFlash('success', 'ad.autodiag.import.success');
+
+            return $this->redirectToRoute('hopitalnumerique_autodiag_algorithm', [
+                'id' => $autodiag->getId()
+            ]);
+        }
+        return $this->render('HopitalNumeriqueAutodiagBundle:Autodiag/Edit:survey.html.twig', [
+            'form' => $form->createView(),
+            'model' => $autodiag,
+            'history' => $this->get('autodiag.history.reader')->getHistory(Autodiag\History::HISTORY_ENTRY_ALGORITHM),
+            'chapterProgress' => $importHandler->getChapterProgress(),
+            'questionProgress' => $importHandler->getQuestionProgress(),
         ]);
     }
 }

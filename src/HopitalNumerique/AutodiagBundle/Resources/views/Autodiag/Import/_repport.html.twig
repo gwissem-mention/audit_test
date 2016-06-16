@@ -1,0 +1,10 @@
+<div>
+    {{ 'ad.import.lines.count'|transchoice(progress.successCount) }}
+</div>
+
+<div>
+    {% for type, list in progress.messages %}
+        <span>{{ ("ad.import." ~ type)|transchoice(list|length) }}</span>
+    {% endfor %}
+</div>
+

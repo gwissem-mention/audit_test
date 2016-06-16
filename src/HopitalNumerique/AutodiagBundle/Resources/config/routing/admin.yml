@@ -13,3 +13,7 @@ hopitalnumerique_autodiag_edit:
 hopitalnumerique_autodiag_survey:
     path:     /autodiag/edit/{id}/survey
     defaults: { _controller: HopitalNumeriqueAutodiagBundle:Back/Autodiag:surveyEdit }
+
+hopitalnumerique_autodiag_algorithm:
+    path:     /autodiag/edit/{id}/algorithm
+    defaults: { _controller: HopitalNumeriqueAutodiagBundle:Back/Autodiag:algorithmEdit }

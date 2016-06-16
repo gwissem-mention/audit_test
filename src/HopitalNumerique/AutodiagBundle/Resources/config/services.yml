@@ -8,3 +8,22 @@ services:
         arguments: ['@autodiag.attribute_builder_provider']
         tags:
             - { name: form.type }
+
+    autodiag.form.autodiag_update:
+        class: HopitalNumerique\AutodiagBundle\Form\Type\Autodiag\AutodiagUpdateType
+        arguments: ['@autodiag.attribute_builder_provider']
+        tags:
+            - { name: form.type }
+
+    autodiag.history.reader:
+        class: HopitalNumerique\AutodiagBundle\Service\Autodiag\HistoryReader
+        arguments:
+            - '@doctrine.orm.entity_manager'
+
+    autodiag.import.handler:
+        class: HopitalNumerique\AutodiagBundle\Model\AutodiagFileImportHandler
+        arguments:
+            - '@doctrine.orm.entity_manager'
+            - '@session'
+            - '@autodiag.attribute_builder_provider'
+            - '@security.token_storage'
