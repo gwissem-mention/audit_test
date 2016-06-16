@@ -214,9 +214,12 @@
     #bloc-notation-objet .wrapper #note-etoile{ margin-bottom: 7px;}
     #bloc-notation-objet .wrapper #note-etoile button{ margin-right: 5px; margin-left: 10px;}
     #bloc-notation-objet .wrapper .message-notation { margin-bottom: 10px;}
-    #bloc-notation-moyenne-objet {margin-top: 0px; }
+    #bloc-notation-moyenne-objet {margin-top: 0px; display: inline-block; vertical-align: middle; }
+    #bloc-notation-moyenne-objet > div { display: inline-block; vertical-align: middle; }
     #bloc-notation-moyenne-objet #note-moyenne-etoile { margin-top: 2px;}
     #bloc-notation-moyenne-objet #info-note-moyenne { margin-left: 10px;}
+
+    .nb-views { display: inline-block; vertical-align: middle; }
 
 /*  Chapitre Précédent / Suivant */
     #precedent-suivant a{width: 100%; color: #d60030;}
