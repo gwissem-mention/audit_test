@@ -45,6 +45,9 @@ class PopupInviteType extends AbstractType
             ->add('urlRedirection', 'hidden', array(
                 'data' => $urlRedirection
             ))
+            ->add('idGroupe', 'hidden', array(
+                'data' => $options['idGroupe']
+            ))
         ;
     }
     /**
@@ -53,6 +56,9 @@ class PopupInviteType extends AbstractType
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
         $resolver
+            ->setDefaults(array(
+                'idGroupe' => 0
+            ))
             ->setOptional(array('urlRedirection'))
         ;
     }
