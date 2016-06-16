@@ -26,7 +26,7 @@ class ModuleRepository extends EntityRepository
         $qb = $this->_em->createQueryBuilder();
         $qb->select('mod.id, mod.titre, refEtat.libelle as statut, productions.titre as prod_titre, domaine.nom as domaineNom', 'form.nom as formateurNom, form.prenom as formateurPrenom')
             ->from('HopitalNumeriqueModuleBundle:Module', 'mod')
-            ->join('mod.formateur', 'form')
+            ->leftjoin('mod.formateur', 'form')
             ->leftJoin('mod.statut','refEtat')
             ->leftJoin('mod.productions','productions')
             ->leftJoin('mod.domaines', 'domaine')
