@@ -49,7 +49,7 @@ class Aide
      * @Assert\NotBlank(message="Le libellé ne peut pas être vide.")
      *
      * @Nodevo\Javascript(class="validate[required,minSize[1]]")
-     * @ORM\Column(name="aide_libelle", type="string", options = {"comment" = "Libellé de l'aide"})
+     * @ORM\Column(name="aide_libelle", type="text", options = {"comment" = "Libellé de l'aide"})
      */
     protected $libelle;
 
