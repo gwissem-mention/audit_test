@@ -100,27 +100,36 @@ class ReferenceManager extends BaseManager
      */
     public function getDatasForGrid( \StdClass $condition = null )
     {
-        $referencesForGrid = array();
-
         $domainesIds = $this->_userManager->getUserConnected()->getDomainesId();
-
         $references = $this->getRepository()->getDatasForGrid( $domainesIds, $condition )->getQuery()->getResult();
 
-        foreach ($references as $reference)
-        {
-            $reference['idReference'] = $reference['id'];
-            if(!array_key_exists($reference['idReference'], $referencesForGrid))
-            {
-                $referencesForGrid[$reference['idReference']] = $reference;
+        $results = array();
 
-            }
-            else
+        foreach($references as $reference) 
+        {
+            $object = array();
+            $object['idReference'] = $object['id'] = $reference->getId();
+            $object['libelle'] = $reference->getLibelle();
+            $object['domainesNom'] = '';
+            $object['reference'] = $reference->isReference();
+            $object['inRecherche'] = $reference->isInRecherche();
+            $object['inGlossaire'] = $reference->isInGlossaire();
+            $object['etat'] = $reference->getEtat()->getLibelle();
+            $object['code'] = $reference->getCode();
+            $object['idParent'] = $reference->getParentIds();
+
+            foreach ($reference->getDomaines() as $domaine)
             {
-                $referencesForGrid[$reference['idReference']]['domaineNom'] .= ";" . $reference['domaineNom'];
+                $object['domainesNom'] = $object['domainesNom'] === '' ? $domaine->getNom() : $object['domainesNom'] . ' ; ' . $domaine->getNom();
             }
+            if ($reference->isAllDomaines()) {
+                $object['domainesNom'] = 'Tous';
+            }
+
+            $results[] = $object;
         }
 
-        return array_values($referencesForGrid);
+        return $results;
     }
 
     /**

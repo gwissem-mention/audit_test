@@ -52,7 +52,7 @@ class ModuleManager extends BaseManager
             }
             else
             {
-                $modulesForGrid[$module['id']]['domaineNom'] .= ";" . $module['domaineNom'];
+                $modulesForGrid[$module['id']]['domaineNom'] .= " ; " . $module['domaineNom'];
             }
 
             if(!empty($module['formateurNom']) && !empty($module['formateurPrenom']))

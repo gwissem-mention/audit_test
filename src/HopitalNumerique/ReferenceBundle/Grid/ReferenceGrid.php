@@ -33,28 +33,19 @@ class ReferenceGrid extends Grid implements GridInterface
 
         $this->addColonne(new Column\TextColumn('libelle', 'Libellé du concept'));
 
-        $domaineColumn = new Column\TextColumn('domaineNom', 'Domaine(s)');
+        $domaineColumn = new Column\TextColumn('domainesNom', 'Domaine(s)');
         $domaineColumn->setSize(150);
-        $domaineColumn->manipulateRenderCell(function ($value, Row $row) {
-            if ($row->getField('allDomaines')) {
-                return 'Tous';
-            }
-            return $value;
-        });
         $this->addColonne($domaineColumn);
 
         $dictionnaireColumn = new Column\BooleanColumn('reference', 'Est une référence');
-        $dictionnaireColumn->setValues([1 => 'Oui', 0 => 'Non']);
         $dictionnaireColumn->setSize(100);
         $this->addColonne($dictionnaireColumn);
 
         $rechercheColumn = new Column\BooleanColumn('inRecherche', 'Présent dans la recherche');
-        $rechercheColumn->setValues([1 => 'Oui', 0 => 'Non']);
         $rechercheColumn->setSize(100);
         $this->addColonne($rechercheColumn);
 
         $inGlossaireColumn = new Column\BooleanColumn('inGlossaire', 'Actif dans le glossaire');
-        $inGlossaireColumn->setValues([1 => 'Oui', 0 => 'Non']);
         $inGlossaireColumn->setSize(100);
         $this->addColonne($inGlossaireColumn);
 
