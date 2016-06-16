@@ -33,6 +33,12 @@ class ObjetGrid extends Grid implements GridInterface
             case 'point-dur':
                 $filtres['types'] = 'Point dur';
                 break;
+            case 'Article':
+                $filtres ['isArticle'] = true;
+                break;
+            case 'publication':
+                $filtres ['isArticle'] = false;
+                break;
             case 'production':
                 $filtres['types'] = 'Article';
                 break;
@@ -41,7 +47,9 @@ class ObjetGrid extends Grid implements GridInterface
                 break;
         }
 
-        $this->setDefaultFilters($filtres);
+        if (!empty($filtres)) {
+            $this->setDefaultFilters($filtres);
+        }
     }
 
     /**
@@ -52,16 +60,16 @@ class ObjetGrid extends Grid implements GridInterface
         $this->addColonne( new Column\NumberColumn('idObjet', 'ID') );
         $this->addColonne( new Column\TextColumn('titre', 'Titre') );
         $this->addColonne( new Column\TextColumn('types','Catégories') );
-        $this->addColonne( new Column\TextColumn('domaineNom','Domaine(s) associé(s)') );
-        
+        $this->addColonne( new Column\TextColumn('domainesNom','Domaine(s) associé(s)') );
+
         $infraColumn = new Column\BooleanColumn('isInfraDoc', 'Infra-doc ?');
         $infraColumn->setSize( 90 );
         $this->addColonne( $infraColumn );
 
-        /*$isArticleColumn = new Column\BooleanColumn('isArticle', 'Article ?');
+        $isArticleColumn = new Column\BooleanColumn('isArticle', 'Article ?');
         $isArticleColumn->setVisible(false);
         $isArticleColumn->setFilterable(false);
-        $this->addColonne($isArticleColumn);*/
+        $this->addColonne($isArticleColumn);
 
         $etatColonne = new Column\TextColumn('etat', 'Etat');
         $etatColonne->setSize( 80 );
@@ -74,7 +82,7 @@ class ObjetGrid extends Grid implements GridInterface
         $this->addColonne( new Column\DateColumn('dateCreation', 'Date de création') );
 
         $this->addColonne( new Column\NumberColumn('nbVue', 'Nombre de vues') );
-        
+
         $this->addColonne( new Column\NumberColumn('moyenne', 'Note moyenne') );
 
         $this->addColonne( new Column\NumberColumn('nbNotes', 'Nombre de notes') );
@@ -84,15 +92,6 @@ class ObjetGrid extends Grid implements GridInterface
         /* Colonnes inactives */
         $this->addColonne( new Column\BlankColumn('lockedBy') );
         $this->addColonne( new Column\BlankColumn('dateModification') );
-        
-        $isArticleColonne = new Column\BooleanColumn ( 'isArticle', 'isArticle' );
-        $isArticleColonne->setSize ( 80 );
-        $isArticleColonne->setFilterType ( 'select' );
-        $isArticleColonne->setOperatorsVisible ( false );
-        $isArticleColonne->setDefaultOperator ( \APY\DataGridBundle\Grid\Column\Column::OPERATOR_EQ );
-        $isArticleColonne->setVisible(false);
-        $isArticleColonne->setFilterable(false);
-        $this->addColonne ( $isArticleColonne );
     }
 
     /**
@@ -111,7 +110,7 @@ class ObjetGrid extends Grid implements GridInterface
             return !$row->getField('isArticle') ? $action : null;
         });
         $this->addActionButton( $referencesButton );
-        
+
         $filtre = $this->_defaultFilters;
         if ("isArticle" == key($filtre)) {
                 if (reset($filtre)) {
@@ -128,18 +127,18 @@ class ObjetGrid extends Grid implements GridInterface
                 $unlockButton->setRouteParameters ( array (
                                 'id',
                                 'message' => true,
-                                'filtre' => reset ( $filtre ) 
+                                'filtre' => reset ( $filtre )
                 ) );
         } else {
                 $unlockButton = new \APY\DataGridBundle\Grid\Action\RowAction ( '', 'hopitalnumerique_objet_objet_cancel' );
                 $unlockButton->setRouteParameters ( array (
                                 'id',
-                                'message' => true 
+                                'message' => true
                 ) );
         }
         $unlockButton->setAttributes ( array (
                         'class' => 'btn btn-warning fa fa-unlock',
-                        'title' => 'Déverrouiller' 
+                        'title' => 'Déverrouiller'
         ) );
         $unlockButton->manipulateRender ( function ($action, \APY\DataGridBundle\Grid\Row $row) {
                 return $row->getField ( 'lock' ) ? $action : null;

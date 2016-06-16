@@ -34,19 +34,20 @@ class ObjetController extends Controller
 
     /**
      * Affiche la liste des Objet.
+     * @param null $filtre
+     * @return Response
      */
     public function indexFiltreAction($filtre = null)
     {
         $grid = $this->get('hopitalnumerique_objet.grid.objet');
 
-        if(!is_null($filtre))
-        {
+        if (!is_null($filtre)) {
             $grid->setDefaultFiltreFromController($filtre);
         }
 
-        return $grid->render ( 'HopitalNumeriqueObjetBundle:Objet:index.html.twig', array (
+        return $grid->render('HopitalNumeriqueObjetBundle:Objet:index.html.twig', array(
             'filtre' => $filtre
-        ) );
+        ));
     }
 
     /**

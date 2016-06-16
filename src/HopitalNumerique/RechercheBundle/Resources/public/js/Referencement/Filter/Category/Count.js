@@ -14,13 +14,13 @@ Hn_RechercheBundle_Referencement_Filter_Category.removeEntityCounts = function()
  */
 Hn_RechercheBundle_Referencement_Filter_Category.displayEntityCounts = function()
 {
-    $('#entity-categories-container .multiselect-container input[type="checkbox"]').each(function (i, element) {
-        var inputVal = $(element).val();
+    $('#entity-categories-container .multiselect-container input').each(function () {
+        var inputVal = $(this).val();
         var elementCountId = inputVal + '-count';
         var elementId = inputVal.substr(inputVal.indexOf('-') + 1);
 
-        if ($(element).parent().find('#' + elementCountId).size() === 0) {
-            $(element).parent().append(' <span id="' + elementCountId + '"></span>');
+        if (inputVal !== "" && $(this).parent().find('#' + elementCountId).size() === 0) {
+            $(this).parent().append(' <span id="' + elementCountId + '"></span>');
         }
 
         if ('pc-' === inputVal.substr(0, 3)) { // Catégorie de production

@@ -16,12 +16,16 @@ Hn_RechercheBundle_Referencement_Filter_Exalead.init = function()
 
 Hn_RechercheBundle_Referencement_Filter_Exalead.initEvents = function()
 {
-    $('#recherche_textuelle').keyup(function() {
+    $('#recherche_textuelle').keyup(function(e) {
         //var searchedText = Hn_RechercheBundle_Referencement_Filter_Exalead.getSearchedText();
         //$('#search-text-button').prop('disabled', searchedText.length < 2);
-        Hn_RechercheBundle_Referencement_Filter_Exalead.processSearchValidating();
+        var canSearch = Hn_RechercheBundle_Referencement_Filter_Exalead.processSearchValidating();
         Hn_RechercheBundle_Referencement.processFilterButtonsActivating();
         Hn_RechercheBundle_Referencement_Filter_Category.processFilterDisplaying();
+
+        if (canSearch && e.keyCode == 13) {
+            Hn_RechercheBundle_Referencement.displayResults();
+        }
     });
 };
 
@@ -53,7 +57,7 @@ Hn_RechercheBundle_Referencement_Filter_Exalead.addParameter = function(paramete
     texteRecherche += parameter;
 
     $('#recherche_textuelle').val(texteRecherche);
-    
+
     document.getElementById('recherche_textuelle').focus();
     document.getElementById('recherche_textuelle').setSelectionRange(positionInitiale + selectionStart, positionInitiale + parameter.length + selectionEnd);
 };

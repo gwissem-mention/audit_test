@@ -61,7 +61,7 @@ class Entity
     /**
      * @var string Nom de la catégorie de l'ambassadeur
      */
-    const CATEGORY_AMBASSADEUR_LABEL = 'Ambassadeur';
+    const CATEGORY_AMBASSADEUR_LABEL = 'Personne ressource';
 
     /**
      * @var string Nom de la catégorie de la démarche
@@ -321,11 +321,14 @@ class Entity
     {
         $domainesCommuns = [];
 
-        foreach ($domaines as $entityDomaine) {
-            if ($user->hasDomaine($entityDomaine)) {
-                $domainesCommuns[] = $entityDomaine;
+        if ($domaines != null) {
+            foreach ($domaines as $entityDomaine) {
+                if ($user->hasDomaine($entityDomaine)) {
+                    $domainesCommuns[] = $entityDomaine;
+                }
             }
         }
+
 
         return $domainesCommuns;
     }
@@ -518,7 +521,7 @@ class Entity
 
         if (null !== $description) {
             $description = trim(strip_tags(html_entity_decode($description)));
-            
+
             if (null !== $truncateCaractersCount && strlen($description) > $truncateCaractersCount) {
                 $description = substr($description, 0, $truncateCaractersCount);
                 if (strrpos($description, ' ') > 0) {
@@ -554,11 +557,42 @@ class Entity
             case self::ENTITY_TYPE_FORUM_TOPIC:
                 return $this->router->generate('ccdn_forum_user_topic_show', ['topicId' => $entityId, 'forumName' => $entity->getBoard()->getCategory()->getForum()->getName()]);
             case self::ENTITY_TYPE_AMBASSADEUR:
+                $parameters = json_encode([
+                    $entity->getEmail() => $entity->getPrenom() . ' ' . $entity->getNom()
+                ]);
+                return 'javascript:Contact_Popup.display(' . $parameters . ', window.location.href);';
                 return $this->router->generate('hopital_numerique_intervention_demande_nouveau', ['ambassadeur' => $entityId]);
             case self::ENTITY_TYPE_RECHERCHE_PARCOURS:
                 return $this->router->generate('hopital_numerique_recherche_parcours_details_index_front', ['id' => $entityId]);
             case self::ENTITY_TYPE_COMMUNAUTE_PRATIQUES_GROUPE:
                 return $this->router->generate('hopitalnumerique_communautepratique_groupe_view', ['groupe' => $entityId]);
+        }
+
+        return null;
+    }
+
+    //<-- URL
+    /**
+     * Retourne l'URL de la page de l'entité.
+     *
+     * @param object $entity Entité
+     * @return string|null URL
+     */
+    public function getSourceByEntity($entity)
+    {
+        switch ($this->getEntityType($entity)) {
+            case self::ENTITY_TYPE_OBJET:
+                return $entity->getSource();
+            case self::ENTITY_TYPE_CONTENU:
+                return null;
+            case self::ENTITY_TYPE_FORUM_TOPIC:
+                return null;
+            case self::ENTITY_TYPE_AMBASSADEUR:
+                return null;
+            case self::ENTITY_TYPE_RECHERCHE_PARCOURS:
+                return null;
+            case self::ENTITY_TYPE_COMMUNAUTE_PRATIQUES_GROUPE:
+                return null;
         }
 
         return null;

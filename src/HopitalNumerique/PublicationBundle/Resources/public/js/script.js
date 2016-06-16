@@ -11,7 +11,7 @@ $(document).ready(function() {
         }else{
             $('.lock-screen').remove();
         }
-        
+
         $(this).toggleClass('closed open');
         $(this).find('.content').toggle();
     });
@@ -100,7 +100,7 @@ $(document).ready(function() {
 
     //Uniquement si les notes sont autorisées sur l'objet courant
     var notesAutorisees = $("#notesAutorisees").val() == "1";
-    
+
     if(notesAutorisees)
     {
         calculMoyenne();
@@ -109,12 +109,12 @@ $(document).ready(function() {
         $('#note-etoile').rateit({ max: 5, step: 1 });
 
         //Mise à jour des
-        $("#note-etoile").bind('rated', function (event, value) { 
+        $("#note-etoile").bind('rated', function (event, value) {
             $('#note-valeur').val(value);
             $('#note-valeur-show').text(value);
             sauvegardeNote();
         });
-        $("#note-etoile").bind('reset', function () { 
+        $("#note-etoile").bind('reset', function () {
             $('#note-valeur').val(0);
             deleteNote();
         });
@@ -135,6 +135,22 @@ $(document).ready(function() {
         }
 
         $('ul[data-contenu="' + contenuId + '"]').slideToggle();
+    });
+
+    $('#note-moyenne-etoile')
+        .rateit({
+            step: 0.5,
+            max: 5,
+            ispreset: true,
+            readonly: $('#bloc-notation-objet').length === 0
+        })
+        .rateit('resetable', false)
+    ;
+    $("#note-moyenne-etoile").bind('rated', function (event, value) {
+        $('#note-valeur').val(value);
+        $('#note-valeur-show').text(value);
+        $('#note-etoile').rateit('value', value);
+        sauvegardeNote();
     });
 
 });
@@ -163,7 +179,7 @@ enquire.register("screen and (max-width: 991px)", {
 function deleteWithConfirm(path)
 {
     apprise('Attention, cette opération est irréversible, êtes-vous sur de vouloir continuer ?', {'verify':true,'textYes':'Oui','textNo':'Non'}, function(r) {
-        if(r) { 
+        if(r) {
             $.ajax({
                 url      : path,
                 type     : 'POST',
@@ -182,7 +198,7 @@ function ajoutCommentaire(path)
 
     if ( $('#form-ajout form').validationEngine('validate') ) {
         loader.start();
-        
+
         $.ajax({
             url     : path,
             data    :  $('#form-ajout form').serialize(),
@@ -221,7 +237,7 @@ function sauvegardeNote()
             setTimeout(function(){
                 $("#bloc-notation-objet .message-notation").html('');
             }, 3000);
-            
+
             loader.finished();
         }
     });
@@ -238,12 +254,14 @@ function calculMoyenne()
         },
         type     : 'POST',
         dataType : 'json',
-        success  : function( data ){
+        success  : function(data) {
+
             //Mise à jour du nombre de note
             $("#info-note-moyenne").text("( " + data.nbNote + " avis )");
-            //Mise à jour de la moyenne des notes de l'objet + relancement du pluggin d'étoile
-            $("#bloc-notation-moyenne-objet .bloc-star").html("<div class='rateit' id='note-moyenne-etoile' data-rateit-step='0.5' data-rateit-max='5' data-rateit-value='" + data.noteMoyenne + "' data-rateit-ispreset='true' data-rateit-readonly='true'></div>");
-            $('#note-moyenne-etoile').rateit();
+
+            $('#note-moyenne-etoile')
+                .rateit('value', data.noteMoyenne)
+            ;
 
             if (false === data.userCanVote) {
                 $('#bloc-notation-objet').hide();

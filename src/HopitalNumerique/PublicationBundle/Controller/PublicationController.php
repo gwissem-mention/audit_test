@@ -4,6 +4,7 @@ namespace HopitalNumerique\PublicationBundle\Controller;
 
 use HopitalNumerique\CoreBundle\DependencyInjection\Entity;
 use HopitalNumerique\ObjetBundle\Entity\Objet;
+use HopitalNumerique\ReferenceBundle\Entity\EntityHasReference;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -64,17 +65,42 @@ class PublicationController extends Controller
                 [$this->container->get('hopitalnumerique_domaine.dependency_injection.current_domaine')->get()]
             );
 
+        $referencesInDomaine = [];
+        $objetDomaines = $objet->getDomaines();
+        foreach ($objetDomaines as $domaine) {
+            $domaineReference = $this->container->get('hopitalnumerique_reference.manager.entity_has_reference')
+                ->findByEntityTypeAndEntityIdAndDomaines(
+                    $this->container->get('hopitalnumerique_core.dependency_injection.entity')->getEntityType($objet),
+                    $this->container->get('hopitalnumerique_core.dependency_injection.entity')->getEntityId($objet),
+                    [$domaine]
+                );
+            $referenceString = join(',', array_map(function (EntityHasReference $reference) {
+                return $reference->getReference()->getId();
+            }, $domaineReference));
+            $referencesInDomaine[$domaine->getId()] = $referenceString;
+        }
+
+        $reader = $this->get('hopitalnumerique_recherche.doctrine.referencement.reader');
+
+        $userRelated = $reader->getRelatedObjectsByType($objet, Entity::ENTITY_TYPE_AMBASSADEUR);
+        shuffle($userRelated);
+        $topicRelated = $reader->getRelatedObjectsByType($objet, Entity::ENTITY_TYPE_FORUM_TOPIC);
+        shuffle($topicRelated);
+
         //render
         return $this->render('HopitalNumeriquePublicationBundle:Publication:objet.html.twig', array(
             'objet'        => $objet,
-            'note'         => $this->container->get('hopitalnumerique_objet.doctrine.note_reader')->getNoteByObjetAndUser($objet, $this->getUser()),
+            'note'         => $this->get('hopitalnumerique_objet.doctrine.note_reader')->getNoteByObjetAndUser($objet, $this->getUser()),
             'types'        => $types,
             'contenus'     => $contenus,
             'meta'         => $this->get('hopitalnumerique_recherche.manager.search')->getMetas($references, $objet->getResume()),
             'ambassadeurs' => $this->getAmbassadeursConcernes($objet->getId()),
             'productionsLiees' => $this->get('hopitalnumerique_objet.dependency_injection.production_liee')->getFormattedProductionsLiees($objet),
-            'parcoursGuides' => $this->container->get('hopitalnumerique_rechercheparcours.dependency_injection.parcours_guide_lie')->getFormattedParcoursGuidesLies($objet),
-            'is_pdf' => $isPdf
+            'parcoursGuides' => $this->get('hopitalnumerique_rechercheparcours.dependency_injection.parcours_guide_lie')->getFormattedParcoursGuidesLies($objet),
+            'topicRelated' => array_slice($topicRelated, 0, 3),
+            'userRelated' => array_slice($userRelated, 0, 3),
+            'is_pdf' => $isPdf,
+            'referencesStringByDomaine' => $referencesInDomaine
         ));
     }
 
@@ -224,7 +250,29 @@ class PublicationController extends Controller
         );
         $meta = $this->get('hopitalnumerique_recherche.manager.search')->getMetas($references, $contenu->getContenu() );
 
+        $referencesInDomaine = [];
+        $objetDomaines = $objet->getDomaines();
+        foreach ($objetDomaines as $domaine) {
+            $domaineReference = $this->container->get('hopitalnumerique_reference.manager.entity_has_reference')
+                ->findByEntityTypeAndEntityIdAndDomaines(
+                    $this->container->get('hopitalnumerique_core.dependency_injection.entity')->getEntityType($objet),
+                    $this->container->get('hopitalnumerique_core.dependency_injection.entity')->getEntityId($objet),
+                    [$domaine]
+                );
+            $referenceString = join(',', array_map(function (EntityHasReference $reference) {
+                return $reference->getReference()->getId();
+            }, $domaineReference));
+            $referencesInDomaine[$domaine->getId()] = $referenceString;
+        }
+
         $ambassadeurs = $this->getAmbassadeursConcernes( $objet->getId() );
+
+        $reader = $this->get('hopitalnumerique_recherche.doctrine.referencement.reader');
+
+        $userRelated = $reader->getRelatedObjectsByType($objet, Entity::ENTITY_TYPE_AMBASSADEUR);
+        shuffle($userRelated);
+        $topicRelated = $reader->getRelatedObjectsByType($objet, Entity::ENTITY_TYPE_FORUM_TOPIC);
+        shuffle($topicRelated);
 
         //render
         return $this->render('HopitalNumeriquePublicationBundle:Publication:objet.html.twig', array(
@@ -242,8 +290,11 @@ class PublicationController extends Controller
             'suivant'          => $suivant,
             'suivantOrder'     => $suivantOrder,
             'productionsLiees' => $this->get('hopitalnumerique_objet.dependency_injection.production_liee')->getFormattedProductionsLiees($contenu),
-            'parcoursGuides' => $this->container->get('hopitalnumerique_rechercheparcours.dependency_injection.parcours_guide_lie')->getFormattedParcoursGuidesLies($objet),
-            'is_pdf' => ($request->query->has('pdf') && '1' == $request->query->get('pdf'))
+            'parcoursGuides'   => $this->container->get('hopitalnumerique_rechercheparcours.dependency_injection.parcours_guide_lie')->getFormattedParcoursGuidesLies($objet),
+            'topicRelated'     => array_slice($topicRelated, 0, 3),
+            'userRelated'      => array_slice($userRelated, 0, 3),
+            'is_pdf' => ($request->query->has('pdf') && '1' == $request->query->get('pdf')),
+            'referencesStringByDomaine' => $referencesInDomaine
         ));
     }
 

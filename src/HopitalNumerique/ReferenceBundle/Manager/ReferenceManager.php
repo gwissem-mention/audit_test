@@ -53,7 +53,7 @@ class ReferenceManager extends BaseManager
         //Récupère uniquement les premiers parents
         $criteria = Criteria::create()->where(Criteria::expr()->eq("parent", null) );
         $parents  = $datas->matching( $criteria );
-        
+
         //call recursive function to handle all datas
         return $this->getArboRecursive($datas, $parents, array() );
     }
@@ -73,7 +73,7 @@ class ReferenceManager extends BaseManager
         //Récupère uniquement les premiers parents
         $criteria = Criteria::create()->where( Criteria::expr()->eq("id", $reference->getId() ) );
         $parents  = $datas->matching( $criteria );
-        
+
         //call recursive function to handle all datas
         return $this->getArboRecursive($datas, $parents, array() );
     }
@@ -92,7 +92,7 @@ class ReferenceManager extends BaseManager
         $arbo = $this->getArbo($unlockedOnly, $fromDictionnaire, $fromRecherche, $domaineIds );
         return $this->formatArbo($arbo);
     }
-    
+
     /**
      * Override : Récupère les données pour le grid sous forme de tableau
      *
@@ -100,27 +100,36 @@ class ReferenceManager extends BaseManager
      */
     public function getDatasForGrid( \StdClass $condition = null )
     {
-        $referencesForGrid = array();
-
         $domainesIds = $this->_userManager->getUserConnected()->getDomainesId();
-
         $references = $this->getRepository()->getDatasForGrid( $domainesIds, $condition )->getQuery()->getResult();
 
-        foreach ($references as $reference) 
-        {
-            $reference['idReference'] = $reference['id'];
-            if(!array_key_exists($reference['idReference'], $referencesForGrid))
-            {
-                $referencesForGrid[$reference['idReference']] = $reference;
+        $results = array();
 
-            }
-            else
+        foreach($references as $reference) 
+        {
+            $object = array();
+            $object['idReference'] = $object['id'] = $reference->getId();
+            $object['libelle'] = $reference->getLibelle();
+            $object['domainesNom'] = '';
+            $object['reference'] = $reference->isReference();
+            $object['inRecherche'] = $reference->isInRecherche();
+            $object['inGlossaire'] = $reference->isInGlossaire();
+            $object['etat'] = $reference->getEtat()->getLibelle();
+            $object['code'] = $reference->getCode();
+            $object['idParent'] = $reference->getParentIds();
+
+            foreach ($reference->getDomaines() as $domaine)
             {
-                $referencesForGrid[$reference['idReference']]['domaineNom'] .= ";" . $reference['domaineNom'];
+                $object['domainesNom'] = $object['domainesNom'] === '' ? $domaine->getNom() : $object['domainesNom'] . ' ; ' . $domaine->getNom();
             }
+            if ($reference->isAllDomaines()) {
+                $object['domainesNom'] = 'Tous';
+            }
+
+            $results[] = $object;
         }
 
-        return array_values($referencesForGrid);
+        return $results;
     }
 
     /**
@@ -128,20 +137,16 @@ class ReferenceManager extends BaseManager
      *
      * @return array
      */
-    public function getDatasForExport( $ids )
+    public function getDatasForExport($ids)
     {
         $referencesForExport = array();
 
-        $references = $this->getRepository()->getDatasForExport( $ids )->getQuery()->getResult();
+        $references = $this->getRepository()->getDatasForExport($ids)->getQuery()->getResult();
 
-        foreach ($references as $reference) 
-        {
-            if(!array_key_exists($reference['id'], $referencesForExport))
-            {
+        foreach ($references as $reference) {
+            if (!array_key_exists($reference['id'], $referencesForExport)) {
                 $referencesForExport[$reference['id']] = $reference;
-            }
-            else
-            {
+            } else {
                 $referencesForExport[$reference['id']]['domaineNom'] .= "|" . $reference['domaineNom'];
             }
         }
@@ -171,13 +176,13 @@ class ReferenceManager extends BaseManager
         $references                 = $this->getRepository()->getReferencesWithDomaine()->getQuery()->getResult();
         $domainesOrderedByReference = array();
 
-        foreach ($references as $reference) 
+        foreach ($references as $reference)
         {
-            foreach ($reference->getDomaines() as $domaine) 
+            foreach ($reference->getDomaines() as $domaine)
             {
                 if(!array_key_exists($reference->getId(), $domainesOrderedByReference))
                 {
-                    $domainesOrderedByReference[$reference->getId()] = array();    
+                    $domainesOrderedByReference[$reference->getId()] = array();
                 }
 
                 $domainesOrderedByReference[$reference->getId()][] = $domaine;
@@ -214,10 +219,10 @@ class ReferenceManager extends BaseManager
      */
     public function updateOrder( Reference $referentiel )
     {
-        
+
         //get All References
         $datas = new ArrayCollection($this->getRepository()->findBy(array('lock'=>0)));
-        
+
         //Récupération des réferentiels
         $criteria = Criteria::create()
                                     ->where(Criteria::expr()->eq("parent", $referentiel->getParent()))
@@ -245,7 +250,7 @@ class ReferenceManager extends BaseManager
     public function getRefsForGestionObjets()
     {
         $this->convertAsFlatArray( $this->getArbo(false, true), 1, array() );
-        
+
         return $this->_tabReferences;
     }
 
@@ -267,7 +272,7 @@ class ReferenceManager extends BaseManager
         foreach ($results as $result) {
             if (count($result->getParents()) > 0) {
                 $parentId = $result->getParentIds()[0];
-                
+
                 if(!array_key_exists($parentId, $domaines['domaines']))
                 {
                     $domaines['domaines'][$parentId] = array();
@@ -301,7 +306,7 @@ class ReferenceManager extends BaseManager
         {
             return array();
         }
-        
+
         $references = $references['CATEGORIES_RECHERCHE'];
         $results    = array();
 
@@ -314,7 +319,7 @@ class ReferenceManager extends BaseManager
                 $keys        = array_keys($reference['childs']);
                 $childs      = $reference['childs'][$keys[0]];
                 $childWeight = 100 / count($childs);
-                
+
                 foreach($childs as &$child)
                 {
                     $child['poids'] = $childWeight;
@@ -357,7 +362,7 @@ class ReferenceManager extends BaseManager
 
     public function delete( $references )
     {
-        try 
+        try
         {
             parent::delete($references);
             $this->_session->getFlashBag()->add('info', 'Suppression effectuée avec succès.' );
@@ -370,7 +375,7 @@ class ReferenceManager extends BaseManager
 
     /**
      * Retourne les régions.
-     * 
+     *
      * @return array<\HopitalNumerique\ReferenceBundle\Entity\Reference> Régions
      */
     public function findRegions()
@@ -380,7 +385,7 @@ class ReferenceManager extends BaseManager
 
     /**
      * Retourne les types d'ES.
-     * 
+     *
      * @return array<\HopitalNumerique\ReferenceBundle\Entity\Reference> Types
      */
     public function findEtablissementSanteTypes()
@@ -390,7 +395,7 @@ class ReferenceManager extends BaseManager
 
     /**
      * Retourne les profils des ES.
-     * 
+     *
      * @return array<\HopitalNumerique\ReferenceBundle\Entity\Reference> Profils
      */
     public function findEtablissementSanteProfils()
@@ -400,7 +405,7 @@ class ReferenceManager extends BaseManager
 
     /**
      * Retourne les types d'activité.
-     * 
+     *
      * @return array<\HopitalNumerique\ReferenceBundle\Entity\Reference> Types
      */
     public function findActiviteTypes()
@@ -612,5 +617,22 @@ class ReferenceManager extends BaseManager
             }
         }
         return $retour;
+    }
+
+    /**
+     * Récupère les domaines en fonction de l'id de la référence
+     *
+     * @return array
+     */
+    public function getDomainesByReference($idReference)
+    {
+        $res = $this->getRepository()->getDomainesByReference($idReference)[0];
+        $domaines = $res->getDomaines()->getValues();
+        $domaineResult = array();
+        foreach ($domaines as $domaine) {
+            $domaineResult[$domaine->getId()] = $domaine;
+        }
+        
+        return $domaineResult;
     }
 }

@@ -1,3 +1,5 @@
+Hn_RechercheBundle_Referencement.saveSessionTimer;
+
 /**
  * Initialise les filtres.
  */
@@ -105,8 +107,12 @@ Hn_RechercheBundle_Referencement.saveFilters = function()
  */
 Hn_RechercheBundle_Referencement.saveSession = function()
 {
+    if (Hn_RechercheBundle_Referencement.saveSessionTimer !== undefined) {
+        clearTimeout(Hn_RechercheBundle_Referencement.saveSessionTimer);
+    }
+
     // Timeout pour ne pas ralentir la recherche
-    setTimeout(function() {
+    Hn_RechercheBundle_Referencement.saveSessionTimer = setTimeout(function() {
         $.ajax({
             url: Routing.generate('hopitalnumerique_recherche_referencement_requete_savesession'),
             method: 'POST',
@@ -118,5 +124,6 @@ Hn_RechercheBundle_Referencement.saveSession = function()
                 resultsCount: Hn_RechercheBundle_Referencement.count()
             }
         });
+        Hn_RechercheBundle_Referencement.saveSessionTimer = undefined;
     }, 1500);
 };

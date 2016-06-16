@@ -47,13 +47,7 @@ class MenuProvider implements MenuProviderInterface
      */
     public function get($name, array $options = array())
     {
-        $cacheKey = $name . base64_encode(serialize($options));
-        if (apc_exists($cacheKey)) {
-            $tree = apc_fetch($cacheKey);
-        } else {
-            $tree = $this->menuManager->getTree($this->_menuEntity);
-            apc_store($cacheKey, $tree);
-        }
+        $tree = $this->menuManager->getTree($this->_menuEntity);
 
         if (isset($options['breadcrumb']) && $options['breadcrumb'] === 'yes') {
             //Cas breadcrumb

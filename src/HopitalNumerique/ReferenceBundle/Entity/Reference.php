@@ -4,6 +4,7 @@ namespace HopitalNumerique\ReferenceBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
+use HopitalNumerique\DomaineBundle\Entity\Domaine;
 use Nodevo\ToolsBundle\Tools\Systeme;
 use Nodevo\ToolsBundle\Traits\ImageTrait;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -240,6 +241,18 @@ class Reference
      */
     private $descriptionLongue;
 
+    /**
+     * @ORM\ManyToMany(
+     *     targetEntity="\HopitalNumerique\DomaineBundle\Entity\Domaine",
+     *     cascade={"persist"}
+     * )
+     * @ORM\JoinTable(name="hn_reference_domaine_display",
+     *      joinColumns={ @ORM\JoinColumn(name="ref_id", referencedColumnName="ref_id", onDelete="CASCADE")},
+     *      inverseJoinColumns={ @ORM\JoinColumn(name="dom_id", referencedColumnName="dom_id", onDelete="CASCADE")}
+     * )
+     */
+    protected $domainesDisplay;
+
 
     /**
      * Constructeur.
@@ -255,6 +268,7 @@ class Reference
         $this->champLexicalNoms = new ArrayCollection();
         $this->parents = new ArrayCollection();
         $this->enfants = new ArrayCollection();
+        $this->domainesDisplay = new ArrayCollection();
     }
 
 
@@ -522,12 +536,12 @@ class Reference
     /**
      * Add domaines
      *
-     * @param \HopitalNumerique\DomaineBundle\Entity\Domaine $domaines
+     * @param \HopitalNumerique\DomaineBundle\Entity\Domaine $domaine
      * @return Reference
      */
-    public function addDomaine(\HopitalNumerique\DomaineBundle\Entity\Domaine $domaines)
+    public function addDomaine(\HopitalNumerique\DomaineBundle\Entity\Domaine $domaine)
     {
-        $this->domaines[] = $domaines;
+        $this->domaines[] = $domaine;
 
         return $this;
     }
@@ -550,11 +564,13 @@ class Reference
     /**
      * Remove domaines
      *
-     * @param \HopitalNumerique\DomaineBundle\Entity\Domaine $domaines
+     * @param \HopitalNumerique\DomaineBundle\Entity\Domaine $domaine
      */
-    public function removeDomaine(\HopitalNumerique\DomaineBundle\Entity\Domaine $domaines)
+    public function removeDomaine(\HopitalNumerique\DomaineBundle\Entity\Domaine $domaine)
     {
-        $this->domaines->removeElement($domaines);
+        $this->removeDomainesDisplay($domaine);
+        $this->domaines->removeElement($domaine);
+
     }
 
     /**
@@ -1079,4 +1095,29 @@ class Reference
     {
         return htmlentities($this->getSigleForGlossaire());
     }
+
+    public function getDomainesDisplay()
+    {
+        return $this->domainesDisplay;
+    }
+
+    public function addDomainesDisplay(Domaine $domaine)
+    {
+        if (!$this->domainesDisplay->contains($domaine)) {
+            $this->domainesDisplay->add($domaine);
+        }
+    }
+
+    public function removeDomainesDisplay(Domaine $domaine)
+    {
+        $this->domainesDisplay->remove($domaine);
+    }
+
+    public function getDomainesDisplayId()
+    {
+        return $this->domainesDisplay->map(function (Domaine $domaine) {
+            return $domaine->getId();
+        });
+    }
+
 }

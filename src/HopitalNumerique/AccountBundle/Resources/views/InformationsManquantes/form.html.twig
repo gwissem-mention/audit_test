@@ -1,6 +1,8 @@
 {% form_theme form 'HopitalNumeriqueAccountBundle:Formulaire:theme.default.html.twig' %}
 {{ form_start(form) }}
 
+    {{ form.nom is defined ? form_row(form.nom) : '' }}
+    {{ form.prenom is defined ? form_row(form.prenom) : '' }}
     {{ form.telephoneDirect is defined ? form_row(form.telephoneDirect) : '' }}
     {{ form.region is defined ? form_row(form.region) : '' }}
     {{ form.departement is defined ? form_row(form.departement) : '' }}
@@ -26,7 +28,7 @@
     <div class="text-right">
         <div class="row">
             <div class="col-md-12">
-                <button type="submit" class="btn btn-success">Enregistrer</button>
+                <button type="submit" class="btn btn-success">Rejoindre la communauté</button>
             </div>
         </div>
     </div>

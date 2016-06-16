@@ -322,7 +322,7 @@ abstract class Manager
      *
      * @return Response
      */
-    public function exportCsv( $colonnes, $datas, $filename, $kernelCharset )
+    public function exportCsv($colonnes, $datas, $filename, $kernelCharset)
     {
         // Array to csv (copy from APY\DataGridBundle\Grid\Export\DSVExport.php)
         $outstream = fopen("php://temp", 'r+');

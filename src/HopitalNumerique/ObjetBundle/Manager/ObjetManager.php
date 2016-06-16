@@ -55,29 +55,57 @@ class ObjetManager extends BaseManager
      */
     public function getDatasForGrid( \StdClass $condition = null )
     {
-        $resultatsForGrid        = array();
-        $userConnectedDomainesId = $this->_userManager->getUserConnected()->getDomainesId();
-        $results                 = $this->getRepository()->getDatasForGrid( $userConnectedDomainesId, $condition )->getQuery()->getResult();
+        $domainesIds = $this->_userManager->getUserConnected()->getDomainesId();
+        $productions = $this->getRepository()->getDatasForGrid( $domainesIds, $condition )->getQuery()->getResult();
 
-        foreach ($results as $result)
+        $results = array();
+
+        foreach($productions as $production) 
         {
-            if(!array_key_exists($result['id'], $resultatsForGrid))
+            $object = array();
+            $object['idReference'] = $object['id'] = $production->getId();
+            $object['titre'] = $production->getTitre();
+            $object['types'] = '';
+            $object['domainesNom'] = '';
+            $object['isInfraDoc'] = $production->isInfraDoc();
+            $object['isArticle'] = $production->isArticle();
+            $object['etat'] = $production->getEtat()->getLibelle();
+            $object['dateCreation'] = $production->getDateCreation();
+            $object['nbVue'] = $production->getNbVue();
+            $object['moyenne'] = 0;
+            $object['nbNotes'] = 0;
+            $object['lockedBy'] = $production->getLockedBy();
+            $object['dateModification'] = $production->getDateModification();
+
+            foreach($production->getDomaines() as $domaine)
             {
-                $resultatsForGrid[$result['id']] = $result;
-                $resultatsForGrid[$result['id']]['moyenne'] = number_format($this->_noteManager->getMoyenneNoteByObjet($result['id'], false),2);
-                $resultatsForGrid[$result['id']]['nbNotes'] = $this->_noteManager->countNbNoteByObjet($result['id'], false);
-            }
-            elseif(trim($result['domaineNom']) != '')
-            {
-                $resultatsForGrid[$result['id']]['domaineNom'] .= ";" . $result['domaineNom'];
+                $object['domainesNom'] = $object['domainesNom'] === '' ? $domaine->getNom() : $object['domainesNom'] . ' ; ' . $domaine->getNom();
             }
 
-            $resultatsForGrid[$result['id']]['idObjet'] = $result['id'];
+            foreach($production->getTypeLabels() as $type)
+            {
+                $object['types'] = $object['types'] === '' ? $type : $object['types'] . ' ; ' . $type;
+            }
+
+            $nbNotes = count($production->getListeNotes());
+
+            if ($nbNotes > 0) {
+                $totalNotes = 0;
+                $object['nbNotes'] = $nbNotes;
+
+                foreach ($production->getListeNotes() as $note)
+                {
+                    $totalNotes = $totalNotes + $note->getNote();
+                }
+
+                $object['moyenne'] = round(($totalNotes / $nbNotes), 1);
+            }
+
+
+            $results[] = $object;
         }
 
-        $results = array_merge($resultatsForGrid);
-
-        return $this->rearangeForTypes( $results );
+        return $results;
     }
 
     /**

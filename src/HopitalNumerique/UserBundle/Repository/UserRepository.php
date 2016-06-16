@@ -571,17 +571,26 @@ class UserRepository extends EntityRepository
     /**
      * Récupère le nombre d'établissements connectés
      *
-     * @return QueryBuilder
+     * @param Domaine $domaine
+     * @return int
      */
-    public function getNbEtablissements() {
+    public function getNbEtablissements(Domaine $domaine = null)
+    {
         $qb = $this->_em->createQueryBuilder();
-        $qb->select('COUNT(user.etablissementRattachementSante)')
+        $qb->select('COUNT(distinct(user.etablissementRattachementSante))')
            ->from('HopitalNumeriqueUserBundle:User', 'user')
            ->where('user.etablissementRattachementSante IS NOT NULL')
-           ->groupBy('user.etablissementRattachementSante');
+        ;
 
-        return $qb;
-  }
+        if (null !== $domaine) {
+            $qb
+                ->join('user.domaines', 'domaines', Join::WITH, 'domaines.id = :domaine')
+                ->setParameter('domaine', $domaine)
+            ;
+        }
+
+        return (int) $qb->getQuery()->getSingleScalarResult();
+    }
 
     /**
      * Retourne la QueryBuilder avec les membres de la communauté de pratique.

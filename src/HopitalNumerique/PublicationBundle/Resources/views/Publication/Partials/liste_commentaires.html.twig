@@ -1,7 +1,7 @@
 {% set nbCommentaire = 0 %}
 {% for commentaire in objet.listeCommentaires %}
-    {% if isContenu 
-            or ( not isContenu and commentaire.contenu is null ) 
+    {% if isContenu
+            or ( not isContenu and commentaire.contenu is null )
         %}
         {% set nbCommentaire = nbCommentaire + 1 %}
     {% endif %}
@@ -14,8 +14,8 @@
         {% for commentaire in objet.listeCommentaires %}
             {# Cas contenu : affichage uniquement des commentaires de contenu #}
             {# Cas objet : affichage uniquement des objets = là où contenu est null #}
-            {% if isContenu 
-                or ( not isContenu and commentaire.contenu is null ) 
+            {% if isContenu
+                or ( not isContenu and commentaire.contenu is null )
             %}
                 {# Include commentaire #}
                 {% include 'HopitalNumeriquePublicationBundle:Publication:Partials/commentaire.html.twig' with { 'commentaire' : commentaire } %}
@@ -43,15 +43,14 @@
                 </div>
             {# Sinon demande à l'utilisateur de se connecter #}
             {% else %}
-                {% include 'HopitalNumeriqueAccountBundle:include:login.html.twig' with { 'title':'Pour ajouter un commentaire vous devez vous identifier' } %}
+                <div class="col-md-6">
+                    {% include 'HopitalNumeriqueAccountBundle:include:login.html.twig' with { 'size':'small', 'title':'Pour ajouter un commentaire vous devez vous identifier', 'displayInscription':false } %}
+                </div>
+                <div class="col-md-6">
+                    {{ render(controller('HopitalNumeriqueAccountBundle:Inscription:popin', { 'urlRedirection':app.request.uri })) }}
+                </div>
             {% endif %}
         </div>
     </div>
 </div>
 <div class="clearfix"></div>
-
-<script type="text/javascript">
-    $(document).ready(function() {
-        $("#commentaires h2").click();
-    });
-</script>

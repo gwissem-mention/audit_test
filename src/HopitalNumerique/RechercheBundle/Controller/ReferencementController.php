@@ -24,7 +24,7 @@ class ReferencementController extends Controller
             $choosenReferenceIds = $request->request->get('references');
         } else {
             $choosenReferenceIds = $this->container->get('hopitalnumerique_recherche.dependency_injection.referencement.requete_session')->getReferenceIds();
-            
+
             if (count($choosenReferenceIds) === 0 && !$this->container->get('hopitalnumerique_recherche.dependency_injection.referencement.requete_session')->hasSearchedText()) {
                 if (null !== $this->getUser()) {
                     $requeteDefault = $this->container->get('hopitalnumerique_recherche.manager.requete')->findDefaultByUser($this->getUser());
@@ -50,17 +50,6 @@ class ReferencementController extends Controller
             'domaines' => $this->container->get('hopitalnumerique_domaine.manager.domaine')->getAllArray(),
             'exaleadIsActivated' => $this->container->get('hopitalnumerique_recherche.manager.search')->getActivationExalead()
         ]);
-    }
-
-    /**
-     * Affiche la recherche par référencement avec des références prédéfinies.
-     */
-    public function indexWithReferencesAction($referenceString)
-    {
-        $referenceIds = explode('-', $referenceString);
-        $this->container->get('hopitalnumerique_recherche.dependency_injection.referencement.requete_session')->setReferenceIds($referenceIds);
-
-        return $this->redirectToRoute('hopital_numerique_recherche_homepage');
     }
 
     /**
@@ -127,7 +116,8 @@ class ReferencementController extends Controller
                     'subtitle' => $this->container->get('hopitalnumerique_core.dependency_injection.entity')->getSubtitleByEntity($entity),
                     'url' => $this->container->get('hopitalnumerique_core.dependency_injection.entity')->getFrontUrlByEntity($entity),
                     'description' => $this->container->get('hopitalnumerique_core.dependency_injection.entity')->getDescriptionByEntity($entity),
-                    'pertinenceNiveau' => $entitiesPropertiesById[$entityId]['pertinenceNiveau']
+                    'pertinenceNiveau' => $entitiesPropertiesById[$entityId]['pertinenceNiveau'],
+                    'source' => $this->container->get('hopitalnumerique_core.dependency_injection.entity')->getSourceByEntity($entity),
                 ]);
             }
         }

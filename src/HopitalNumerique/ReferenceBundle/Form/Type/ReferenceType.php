@@ -187,6 +187,8 @@ class ReferenceType extends AbstractType
      */
     private function buildFormPartReference(FormBuilderInterface $builder, array $options)
     {
+        $connectedUser = $this->userManager->getUserConnected();
+
         $builder
             ->add('reference', 'checkbox', array(
                 'required' => false,
@@ -201,6 +203,19 @@ class ReferenceType extends AbstractType
                 'label' => 'Libellé de la référence (si différent du libellé du concept)',
                 'attr' => [
                     'maxlength' => 255
+                ]
+            ))
+            ->add('domainesDisplay', 'entity', array(
+                'class'       => 'HopitalNumeriqueDomaineBundle:Domaine',
+                'property'    => 'nom',
+                'required'    => false,
+                'label'       => 'Afficher un lien pour ces domaines :',
+                'multiple'    => true,
+                'query_builder' => function (EntityRepository $er) use ($connectedUser) {
+                    return $er->getDomainesUserConnectedForForm($connectedUser->getId());
+                },
+                'attr' => [
+                    'class' => 'select2'
                 ]
             ))
         ;

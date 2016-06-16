@@ -205,15 +205,19 @@ class ReferenceController extends Controller
         $refs = $this->get('hopitalnumerique_reference.manager.reference')->getDatasForExport($primaryKeys);
 
         $colonnes = array(
-            'id'           => 'id',
-            'libelle'      => 'Libellé du concept',
-            'domaineNoms'   => 'Domaine(s)',
+            'id' => 'id',
+            'libelle' => 'Libellé du concept',
+            'domaineNoms' => 'Domaine(s)',
             'reference' => 'Est une référence',
+            'referenceLibelle' => 'Libellé de la référence',
             'inGlossaire' => 'Actif dans le glossaire',
-            'etat'         => 'Etat',
-            'inRecherche'    => 'Présent dans la recherche',
-            'code'         => 'Code',
-            'parentLibelles'     => 'Parents'
+            'etat' => 'Etat',
+            'order' => 'Ordre d\'affichage',
+            'inRecherche' => 'Présent dans la recherche',
+            'code' => 'Code',
+            'synonymesLibelle' => 'Synonymes',
+            'champLexicalNomsLibelle' => 'Champ lexical',
+            'parentLibelles' => 'Parents'
         );
 
         $kernelCharset = $this->container->getParameter('kernel.charset');
@@ -231,7 +235,7 @@ class ReferenceController extends Controller
      * @internal param Reference $item Entité Référence
      *
      */
-    private function renderForm($reference)
+    private function renderForm(Reference $reference)
     {
         $referenceTreeOptions = $this->container->get('hopitalnumerique_reference.dependency_injection.reference.tree')
             ->getOptions(

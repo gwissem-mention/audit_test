@@ -1,9 +1,14 @@
 <?php
 namespace HopitalNumerique\UserBundle\Form\Type\User;
 
+use HopitalNumerique\EtablissementBundle\Manager\EtablissementManager;
 use HopitalNumerique\ReferenceBundle\Manager\ReferenceManager;
+use HopitalNumerique\UserBundle\Entity\User;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\Form\FormEvent;
+use Symfony\Component\Form\FormEvents;
+use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Routing\RouterInterface;
@@ -43,17 +48,28 @@ class InformationsManquantesType extends AbstractType
      */
     private $request;
 
+    private $etablissementManager;
 
     /**
      * Constructeur.
+     * @param TokenStorageInterface $tokenStorage
+     * @param RouterInterface $router
+     * @param RequestStack $requestStack
+     * @param ReferenceManager $referenceManager
      */
-    public function __construct(TokenStorageInterface $tokenStorage, RouterInterface $router, RequestStack $requestStack, ReferenceManager $referenceManager)
-    {
+    public function __construct(
+        TokenStorageInterface $tokenStorage,
+        RouterInterface $router,
+        RequestStack $requestStack,
+        ReferenceManager $referenceManager,
+        EtablissementManager $etablissementManager
+    ) {
         $this->router = $router;
         $this->referenceManager = $referenceManager;
 
         $this->user = (null !== $tokenStorage->getToken() ? $tokenStorage->getToken()->getUser() : null);
         $this->request = $requestStack->getCurrentRequest();
+        $this->etablissementManager = $etablissementManager;
     }
 
 
@@ -64,7 +80,13 @@ class InformationsManquantesType extends AbstractType
     {
         $informationsType = $options['informations_type'];
 
-        $builder->setAction($this->router->generate('hopital_numerique_account_informationsmanquantes_save', ['informationsType' => $informationsType]));
+        $builder->setAction(
+            $this->router->generate(
+                'hopital_numerique_account_informationsmanquantes_save',
+                ['informationsType' => $informationsType]
+            )
+        );
+
         $builder
             ->add('informationsType', 'hidden', [
                 'mapped' => false,
@@ -75,7 +97,7 @@ class InformationsManquantesType extends AbstractType
                 'data' => $this->request->server->get('REDIRECT_URL')
             ])
         ;
-        foreach ($this->getFields($informationsType) as $field => $configuration) {
+        foreach ($this->buildFields($builder, $informationsType) as $field => $configuration) {
             $builder
                 ->add($field, $configuration['type'], $configuration['options'])
             ;
@@ -88,13 +110,13 @@ class InformationsManquantesType extends AbstractType
      * @param string $informationsType Type des informations
      * @return array Champs
      */
-    private function getFields($informationsType)
+    private function buildFields(FormBuilderInterface $builder, $informationsType)
     {
         switch ($informationsType) {
             case self::TYPE_COMMUNAUTE_PRATIQUE:
-                return $this->getCommunautePratiqueFields();
+                return $this->getCommunautePratiqueFields($builder);
             case self::TYPE_DEMANDE_INTERVENTION:
-                return $this->getDemandeInterventionFields();
+                return $this->getDemandeInterventionFields($builder);
             default:
                 throw new \Exception('Type non reconnu pour le formulaire des informations manquantes.');
         }
@@ -105,56 +127,70 @@ class InformationsManquantesType extends AbstractType
      *
      * @return array Champs
      */
-    private function getCommunautePratiqueFields()
+    private function getCommunautePratiqueFields(FormBuilderInterface $builder)
     {
         $fields = [];
-        $displayEtablissementNom = (null === $this->user->getEtablissementRattachementSante() && null === $this->user->getAutreStructureRattachementSante() && null === $this->user->getNomStructure());
-        $displayRegionDepartement = ((null === $this->user->getRegion() || null === $this->user->getDepartement()) || $displayEtablissementNom);
+
+        $displayUserNomPrenom =
+            empty(trim($this->user->getNom()))
+            || empty(trim($this->user->getPrenom()))
+        ;
+
+        $displayEtablissementNom =
+            null === $this->user->getEtablissementRattachementSante()
+            && null === $this->user->getAutreStructureRattachementSante()
+            && null === $this->user->getNomStructure()
+        ;
+
+        $displayRegionDepartement =
+            (null === $this->user->getRegion() || null === $this->user->getDepartement())
+            || $displayEtablissementNom
+        ;
+
+        if ($displayUserNomPrenom) {
+            $this->buildNomField($builder);
+            $this->buildPrenomField($builder);
+        }
 
         if ($displayRegionDepartement) {
-            $fields['region'] = $this->getRegionField();
-            $fields['departement'] = $this->getDepartementField();
-        }
-        if ($displayEtablissementNom) {
-            $fields['statutEtablissementSante'] = $this->getStatutEtablissementSanteField();
-            $fields['etablissementRattachementSante'] = $this->getEtablissementRattachementSanteField();
-            $fields['autreStructureRattachementSante'] = $this->getAutreStructureRattachementSanteField();
-            $fields['nomStructure'] = [
-                'type' => 'text',
-                'options' => [
+            $this->buildRegionField($builder);
+            $this->buildDepartementField($builder);
+
+            if ($displayEtablissementNom) {
+                $this->buildStatutEtablissementSanteField($builder);
+                $this->buildEtablissementRattachementSanteField($builder);
+                $this->buildAutreStructureRattachementSanteField($builder);
+                $builder->add('nomStructure', 'text', [
                     'label' => 'user.nomStructure',
                     'required' => false,
                     'attr' => [
                         'maxlength' => 255
                     ]
-                ]
-            ];
+                ]);
+            }
         }
+
         if (null === $this->user->getProfilEtablissementSante()) {
-            $fields['profilEtablissementSante'] = $this->getProfilEtablissementSanteField();
+            $this->buildProfilEtablissementSanteField($builder);
         }
+
         if (null === $this->user->getFonctionDansEtablissementSanteReferencement() && null === $this->user->getFonctionStructure()) {
-            $fields['fonctionDansEtablissementSanteReferencement'] = [
-                'type' => 'entity',
-                'options' => [
-                    'class' => 'HopitalNumeriqueReferenceBundle:Reference',
-                    'choices' => $this->referenceManager->findByCode('CONTEXTE_FONCTION_INTERNAUTE'),
-                    'property' => 'libelle',
-                    'label' => 'user.fonctionDansEtablissementSanteReferencement',
-                    'empty_value' => ' - ',
-                    'required' => false
+            $builder->add('fonctionDansEtablissementSanteReferencement', 'entity', [
+                'class' => 'HopitalNumeriqueReferenceBundle:Reference',
+                'choices' => $this->referenceManager->findByCode('CONTEXTE_FONCTION_INTERNAUTE'),
+                'property' => 'libelle',
+                'label' => 'user.fonctionDansEtablissementSanteReferencement',
+                'empty_value' => ' - ',
+                'required' => false
+            ]);
+
+            $builder->add('fonctionStructure', 'text', [
+                'label' => 'user.fonctionStructure',
+                'required' => false,
+                'attr' => [
+                    'maxlength' => 255
                 ]
-            ];
-            $fields['fonctionStructure'] = [
-                'type' => 'text',
-                'options' => [
-                    'label' => 'user.fonctionStructure',
-                    'required' => false,
-                    'attr' => [
-                        'maxlength' => 255
-                    ]
-                ]
-            ];
+            ]);
         }
 
         return $fields;
@@ -165,53 +201,82 @@ class InformationsManquantesType extends AbstractType
      *
      * @return array Champs
      */
-    private function getDemandeInterventionFields()
+    private function getDemandeInterventionFields(FormBuilderInterface $builder)
     {
         $fields = [];
 
         $hasEtablissement = (null !== $this->user->getEtablissementRattachementSante() || null !== $this->user->getAutreStructureRattachementSante());
 
         if (null === $this->user->getTelephoneDirect()) {
-            $fields['telephoneDirect'] = $this->getTelephoneDirectField();
+            $this->buildTelephoneDirectField($builder);
         }
         if (null === $this->user->getRegion() || !$hasEtablissement) {
-            $fields['region'] = $this->getRegionField();
+            $this->buildRegionField($builder);
         }
         if (null === $this->user->getDepartement() || !$hasEtablissement) {
-            $fields['departement'] = $this->getDepartementField();
+            $this->buildDepartementField($builder);
         }
 
         if (!$hasEtablissement) {
-            $fields['statutEtablissementSante'] = $this->getStatutEtablissementSanteField();
-            $fields['etablissementRattachementSante'] = $this->getEtablissementRattachementSanteField();
-            $fields['autreStructureRattachementSante'] = $this->getAutreStructureRattachementSanteField();
+            $this->buildStatutEtablissementSanteField($builder);
+            $this->buildEtablissementRattachementSanteField($builder);
+            $this->buildAutreStructureRattachementSanteField($builder);
         }
         if (null === $this->user->getProfilEtablissementSante()) {
-            $fields['profilEtablissementSante'] = $this->getProfilEtablissementSanteField();
+            $this->buildProfilEtablissementSanteField($builder);
         }
 
         return $fields;
     }
 
+    /**
+     * Retourne le champ Nom.
+     *
+     * @return array Champ
+     */
+    private function buildNomField(FormBuilderInterface $builder)
+    {
+        $builder->add('nom', 'text', [
+            'required'   => true,
+            'label'      => 'Nom',
+            'attr' => [
+                'data-validation-engine' => 'validate[required]'
+            ]
+        ]);
+    }
+
+    /**
+     * Retourne le champ Prénom.
+     *
+     * @return array Champ
+     */
+    private function buildPrenomField(FormBuilderInterface $builder)
+    {
+        $builder->add('prenom', 'text', [
+            'required'   => true,
+            'label'      => 'Prénom',
+            'attr' => [
+                'data-validation-engine' => 'validate[required]'
+            ]
+        ]);
+    }
+
 
     /**
      * Retourne le champ Région.
      *
      * @return array Champ
      */
-    private function getTelephoneDirectField()
+    private function buildTelephoneDirectField(FormBuilderInterface $builder)
     {
-        return [
-            'type' => 'text',
-            'options' => [
-                'label' => 'user.telephoneDirect',
-                'required' => true,
-                'attr' => [
-                    'data-validation-engine' => 'validate[required,minSize[14],maxSize[14]],custom[phone]',
-                    'data-mask' => '99 99 99 99 99'
-                ]
+        $builder->add('telephoneDirect', 'text', [
+            'label' => 'user.telephoneDirect',
+            'required' => true,
+            'attr' => [
+                'data-validation-engine' => 'validate[required,minSize[14],maxSize[14]],custom[phone]',
+                'data-mask' => '99 99 99 99 99'
             ]
-        ];
+        ]);
     }
 
     /**
@@ -219,22 +284,19 @@ class InformationsManquantesType extends AbstractType
      *
      * @return array Champ
      */
-    private function getRegionField()
+    private function buildRegionField(FormBuilderInterface $builder)
     {
-        return [
-            'type' => 'entity',
-            'options' => [
-                'class' => 'HopitalNumeriqueReferenceBundle:Reference',
-                'choices' => $this->referenceManager->findByCode('REGION'),
-                'property' => 'libelle',
-                'label' => 'user.region',
-                'required' => true,
-                'empty_value' => ' - ',
-                'attr' => [
-                    'data-validation-engine' => 'validate[required]'
-                ]
+        $builder->add('region', 'entity', [
+            'class' => 'HopitalNumeriqueReferenceBundle:Reference',
+            'choices' => $this->referenceManager->findByCode('REGION'),
+            'property' => 'libelle',
+            'label' => 'user.region',
+            'required' => true,
+            'empty_value' => ' - ',
+            'attr' => [
+                'data-validation-engine' => 'validate[required]'
             ]
-        ];
+        ]);
     }
 
     /**
@@ -242,22 +304,19 @@ class InformationsManquantesType extends AbstractType
      *
      * @return array Champ
      */
-    private function getDepartementField()
+    private function buildDepartementField(FormBuilderInterface $builder)
     {
-        return [
-            'type' => 'entity',
-            'options' => [
-                'class' => 'HopitalNumeriqueReferenceBundle:Reference',
-                'choices' => $this->referenceManager->findByCode('DEPARTEMENT'),
-                'property' => 'libelle',
-                'label' => 'user.departement',
-                'required' => true,
-                'empty_value' => ' - ',
-                'attr' => [
-                    'data-validation-engine' => 'validate[required]'
-                ]
+        $builder->add('departement', 'entity', [
+            'class' => 'HopitalNumeriqueReferenceBundle:Reference',
+            'choices' => $this->referenceManager->findByCode('DEPARTEMENT'),
+            'property' => 'libelle',
+            'label' => 'user.departement',
+            'required' => true,
+            'empty_value' => ' - ',
+            'attr' => [
+                'data-validation-engine' => 'validate[required]'
             ]
-        ];
+        ]);
     }
 
     /**
@@ -265,18 +324,15 @@ class InformationsManquantesType extends AbstractType
      *
      * @return array Champ
      */
-    private function getStatutEtablissementSanteField()
+    private function buildStatutEtablissementSanteField(FormBuilderInterface $builder)
     {
-        return [
-            'type' => 'entity',
-            'options' => [
-                'class' => 'HopitalNumeriqueReferenceBundle:Reference',
-                'choices' => $this->referenceManager->findByCode('CONTEXTE_TYPE_ES'),
-                'property' => 'libelle',
-                'label' => 'user.statutEtablissementSante',
-                'required' => false
-            ]
-        ];
+        $builder->add('statutEtablissementSante', 'entity', [
+            'class' => 'HopitalNumeriqueReferenceBundle:Reference',
+            'choices' => $this->referenceManager->findByCode('CONTEXTE_TYPE_ES'),
+            'property' => 'libelle',
+            'label' => 'user.statutEtablissementSante',
+            'required' => false
+        ]);
     }
 
     /**
@@ -284,17 +340,50 @@ class InformationsManquantesType extends AbstractType
      *
      * @return array Champ
      */
-    private function getEtablissementRattachementSanteField()
+    private function buildEtablissementRattachementSanteField(FormBuilderInterface $builder)
     {
-        return [
-            'type' => 'entity',
-            'options' => [
-                'class' => 'HopitalNumeriqueEtablissementBundle:Etablissement',
-                'property' => 'usersAffichage',
-                'label' => 'user.etablissementRattachementSante',
-                'required' => false
-            ]
-        ];
+        $etablissementRattachementSanteModifier = function (FormInterface $form, $data) {
+            $form->add('etablissementRattachementSante', 'choice', array(
+                'required'      => false,
+                'label'         => 'user.etablissementRattachementSante',
+                'empty_value'   => ' - ',
+                'attr'        => array('class' => 'etablissement_sante'),
+                'choices' => $data,
+                'choices_as_values' => true,
+                'choice_value' => 'id',
+                'choice_label' => 'nom',
+            ));
+        };
+
+        $builder->addEventListener(
+            FormEvents::PRE_SET_DATA,
+            function (FormEvent $event) use ($etablissementRattachementSanteModifier) {
+                /** @var User $data */
+                $data = $event->getData();
+                $form = $event->getForm();
+
+                $list = $this->etablissementManager->findBy(array(
+                    'departement'   => $data->getDepartement(),
+                    'typeOrganisme' => $data->getStatutEtablissementSante()
+                ));
+                $etablissementRattachementSanteModifier($form, $list);
+            }
+        );
+
+        $builder->get('statutEtablissementSante')->addEventListener(
+            FormEvents::POST_SUBMIT,
+            function (FormEvent $event) use ($etablissementRattachementSanteModifier) {
+                $form = $event->getForm()->getParent();
+                $status = $event->getForm()->getData();
+
+                $list = $this->etablissementManager->findBy(array(
+                    'departement'   => $event->getForm()->getParent()->get('departement')->getData(),
+                    'typeOrganisme' => $status
+                ));
+
+                $etablissementRattachementSanteModifier($form, $list);
+            }
+        );
     }
 
     /**
@@ -302,18 +391,15 @@ class InformationsManquantesType extends AbstractType
      *
      * @return array Champ
      */
-    private function getAutreStructureRattachementSanteField()
+    private function buildAutreStructureRattachementSanteField(FormBuilderInterface $builder)
     {
-        return [
-            'type' => 'text',
-            'options' => [
-                'label' => 'user.autreStructureRattachementSante',
-                'required' => false,
-                'attr' => [
-                    'maxlength' => 255
-                ]
+        $builder->add('autreStructureRattachementSante', 'text', [
+            'label' => 'user.autreStructureRattachementSante',
+            'required' => false,
+            'attr' => [
+                'maxlength' => 255
             ]
-        ];
+        ]);
     }
 
     /**
@@ -321,22 +407,19 @@ class InformationsManquantesType extends AbstractType
      *
      * @return array Champ
      */
-    private function getProfilEtablissementSanteField()
+    private function buildProfilEtablissementSanteField(FormBuilderInterface $builder)
     {
-        return [
-            'type' => 'entity',
-            'options' => [
-                'class' => 'HopitalNumeriqueReferenceBundle:Reference',
-                'choices' => $this->referenceManager->findByCode('CONTEXTE_METIER_INTERNAUTE'),
-                'property' => 'libelle',
-                'label' => 'user.profilEtablissementSante',
-                'required' => true,
-                'empty_value' => ' - ',
-                'attr' => [
-                    'data-validation-engine' => 'validate[required]'
-                ]
+        $builder->add('profilEtablissementSante', 'entity', [
+            'class' => 'HopitalNumeriqueReferenceBundle:Reference',
+            'choices' => $this->referenceManager->findByCode('CONTEXTE_METIER_INTERNAUTE'),
+            'property' => 'libelle',
+            'label' => 'user.profilEtablissementSante',
+            'required' => true,
+            'empty_value' => ' - ',
+            'attr' => [
+                'data-validation-engine' => 'validate[required]'
             ]
-        ];
+        ]);
     }
 
 

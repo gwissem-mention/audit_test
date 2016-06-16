@@ -50,7 +50,7 @@
                 {%- for referenceProperties in referencesTree -%}
                     {% if referenceProperties.reference.id == 222 %}
                         <div id="contexte-container">
-                            <button type="button" id="contexte-button" class="btn btn-primary btn-block btn-lg" data-toggle="modal" data-target="#contexte-modal">{{ referenceProperties.reference.libelle }}</button>
+                            <button type="button" id="contexte-button" class="btn btn-block btn-lg" data-toggle="modal" data-target="#contexte-modal">{{ referenceProperties.reference.libelle }}</button>
                             <div class="modal fade" id="contexte-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
                                 <div class="modal-dialog{% if app.user is null %} modal-lg{% endif %}" role="document">
                                     <div class="modal-content">
@@ -67,7 +67,7 @@
                                                 </ul>
                                             </div>
                                             <div class="modal-footer">
-                                                <label><input type="checkbox" name="contexte-valid"> Valider et enregistrer dans les informations personnelles</label>
+                                                <label><input type="checkbox" name="contexte-valid"> Mettre à jour mes informations personnelles</label>
                                                 <button type="button" class="btn btn-success" onclick="Hn_RechercheBundle_Referencement_Filter_Contexte.valid();">Valider</button>
                                             </div>
                                         {%- else -%}
@@ -126,7 +126,7 @@
                 {% macro buildTreePart(referencesTreePart, level) -%}
                     {% if referencesTreePart.reference.id != 222 %}
                         {% import _self as mySelf %}
-                        <li data-libelle="{{ referencesTreePart.reference.libelleForReference }}" data-reference="{{ referencesTreePart.reference.id }}" data-chosen="false" data-level="{{ level }}" data-domaines="{{ referencesTreePart.reference.domainesId|join(',') }}">
+                        <li data-libelle="{{ referencesTreePart.reference.libelleForReference }}" data-reference="{{ referencesTreePart.reference.id }}" data-chosen="false" data-level="{{ level }}" data-domaines="{{ referencesTreePart.reference.domainesDisplayId|join(',') }}">
                             <a class="reference">
                                 <span class="add"><i class="fa fa-plus-circle"></i></span>
                                 {%- if referencesTreePart.enfants|length > 0 -%}
@@ -205,15 +205,22 @@
                                 </div>
                             </div>
                             <div class="col-md-6" id="entity-categories-container">
-                                <select id="entity-categories" multiple>
+                                <select id="entity-categories" size="5">
+                                    <option value="">Filtrer par type de production</option>
                                     {%- for categoryProperties in categoriesProperties -%}
-                                        <option value="{{ categoryProperties.id }}"{% if categoryProperties.entityType is defined and categoryProperties.entityType is not null %} data-entity-type="{{ categoryProperties.entityType }}"{% endif %}{% if categoryProperties.referenceId is defined and categoryProperties.referenceId is not null %} data-reference="{{ categoryProperties.referenceId }}"{% endif %}>{{ categoryProperties.libelle }}</option>
+                                        <option value="{{ categoryProperties.id }}"{% if categoryProperties.entityType is defined and categoryProperties.entityType is not null %} data-entity-type="{{ categoryProperties.entityType }}"{% endif %}{% if categoryProperties.referenceId is defined and categoryProperties.referenceId is not null %} data-reference="{{ categoryProperties.referenceId }}"{% endif %}>
+                                            {{ categoryProperties.libelle }}
+                                        </option>
                                     {%- endfor -%}
                                 </select>
                             </div>
                         </div>
                     </div>
                     <div class="clearfix"></div>
+                </div>
+
+                <div id="results-domaines">
+                    D'autres résultats pour <span class="filters"></span> existent sur les thèmes suivants : <span class="domaines"></span>
                 </div>
 
                 <div class="results-bloc">
@@ -233,12 +240,6 @@
                         </div>
                     {%- endfor -%}
                 </div>
-
-                <div id="results-domaines">
-                    <p>D'autres résultats de recherche pour ces critères existent sur les thèmes suivants :</p>
-                    <ul></ul>
-                </div>
-
             </div>
         </div>
     </div>
