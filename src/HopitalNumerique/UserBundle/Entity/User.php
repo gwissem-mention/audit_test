@@ -855,6 +855,18 @@ class User extends BaseUser
     }
 
     /**
+     * Set email
+     *
+     * @param string $email
+     */
+    public function setEmail($email)
+    {
+        $this->email = $email;
+
+        $this->setUsername($email);
+    }
+
+    /**
      * Get nbVisites
      *
      * @return integer $nbVisites
