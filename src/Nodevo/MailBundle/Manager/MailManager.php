@@ -1128,8 +1128,10 @@ class MailManager extends BaseManager
     public function sendAlerteInscriptionMail($destinataires, $user)
     {
         $courriel = $this->findOneById(65);
+
         $content = $this->replaceContent($courriel->getBody(), $user, array());
         $courriel->setBody($content);
+
         $message = $this->generationMail(null, $courriel);
 
         foreach ($destinataires as $destinataire) {
@@ -1141,10 +1143,14 @@ class MailManager extends BaseManager
     public function sendAlerteInscriptionValideMail($destinataire, $nomGroupe, $urlGroupe)
     {
         $courriel = $this->findOneById(64);
+<<<<<<< HEAD
 
         $content = $this->replaceContent($courriel->getBody(), null, array('nomGroupe' => $nomGroupe, 'urlGroupe' => $urlGroupe));
         $courriel->setBody($content);
 
+=======
+        $content = $this->replaceContent($courriel->getBody(), null, array());
+>>>>>>> 6e7347a553a04b3be8963ee10a6c8c38986d625c
         $message = $this->generationMail(null, $courriel);
         $message->setTo($destinataire);
         $this->mailer->send($message);
