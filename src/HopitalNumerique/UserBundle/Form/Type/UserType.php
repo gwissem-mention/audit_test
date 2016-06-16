@@ -73,14 +73,6 @@ class UserType extends AbstractType
         $roles = $datas->getRoles();
         $connectedUser = $this->_userManager->getUserConnected();
 
-
-        $builder->add('username', 'text', array(
-                'max_length' => $this->_constraints['username']['maxlength'],
-                'required'   => true,
-                'label'      => 'Identifiant (login)',
-                'attr'       => array('class' => $this->_constraints['username']['class'] )
-            ));
-
         $builder->add('pseudonymeForum', 'text', array(
                 'max_length' => $this->_constraints['pseudonymeForum']['maxlength'],
                 'required'   => false,

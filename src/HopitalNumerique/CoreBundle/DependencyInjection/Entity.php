@@ -321,11 +321,14 @@ class Entity
     {
         $domainesCommuns = [];
 
-        foreach ($domaines as $entityDomaine) {
-            if ($user->hasDomaine($entityDomaine)) {
-                $domainesCommuns[] = $entityDomaine;
+        if ($domaines != null) {
+            foreach ($domaines as $entityDomaine) {
+                if ($user->hasDomaine($entityDomaine)) {
+                    $domainesCommuns[] = $entityDomaine;
+                }
             }
         }
+
 
         return $domainesCommuns;
     }
