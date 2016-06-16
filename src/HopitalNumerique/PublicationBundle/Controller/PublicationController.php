@@ -110,6 +110,7 @@ class PublicationController extends Controller
     public function pdfAction(Request $request, $entityType, $entityId)
     {
         if (Entity::ENTITY_TYPE_OBJET == $entityType) {
+            $objet = $this->container->get('hopitalnumerique_objet.manager.contenu')->findOneById($entityId);
             $pdfUrl = $this->generateUrl(
                 'hopital_numerique_publication_publication_objet',
                 [
@@ -118,6 +119,7 @@ class PublicationController extends Controller
                 ],
                 UrlGeneratorInterface::ABSOLUTE_URL
             );
+            $fileName = 'ANAP-' . $objet->getAlias() . '.pdf';
         } elseif (Entity::ENTITY_TYPE_CONTENU == $entityType) {
             $contenu = $this->container->get('hopitalnumerique_objet.manager.contenu')->findOneById($entityId);
             $pdfUrl = $this->generateUrl(
@@ -129,6 +131,7 @@ class PublicationController extends Controller
                 ],
                 UrlGeneratorInterface::ABSOLUTE_URL
             );
+            $fileName = 'ANAP-' . $contenu->getAlias() . '.pdf';
         } else {
             throw new \Exception('Type d\'entité "'.$entityType.'" non reconnu pour la génération du PDF.');
         }
@@ -154,7 +157,7 @@ class PublicationController extends Controller
             200,
             [
                 'Content-Type' => 'application/pdf',
-                'Content-Disposition' => 'attachment; filename="publication.pdf"'
+                'Content-Disposition' => 'attachment; filename="' . $fileName
             ]
         );
     }
