@@ -34,7 +34,7 @@
 {% block communaute_pratique_actions %}
     {{ parent() }}
     {{ communaute_pratique.display_action_contact_animateur(groupe) }}
-    {{ communaute_pratique.display_action_contact_invitation() }}
+    {{ communaute_pratique.display_action_contact_invitation(groupe.id) }}
 {% endblock %}
 
 {% block communaute_pratique_sommaire %}{% endblock %}
