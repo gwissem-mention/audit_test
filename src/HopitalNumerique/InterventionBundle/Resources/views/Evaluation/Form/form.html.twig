@@ -20,9 +20,11 @@
             </div>
         </div>
     
-        {% form_theme form 'HopitalNumeriqueQuestionnaireBundle:Questionnaire/Theme:theme.horizontal.html.twig' %}
+        {% form_theme form '@HopitalNumeriqueIntervention/Evaluation/Form/form_theme.html.twig' %}
         {{ form_javascript(form) }}
+
         {{ form_widget(form) }}
+
         {% if readOnly != true %}<div class="boutons">
             <input type="submit" class="btn btn-success" value="Valider mon évaluation">
         </div>{% endif %}

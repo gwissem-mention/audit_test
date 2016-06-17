@@ -1,0 +1,7 @@
+{% extends 'HopitalNumeriqueQuestionnaireBundle:Questionnaire/Theme:theme.horizontal.html.twig' %}
+
+{% block _nodevo_questionnaire_questionnaire_interventionobjets_26_evaluation_productions_row %}
+    {% if value is not empty %}
+        {{ block('form_row') }}
+    {% endif %}
+{% endblock %}
