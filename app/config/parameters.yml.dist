@@ -24,20 +24,18 @@ parameters:
     #Nodevo_Mail
     #Tableaux des adresses mails copie caché de tout les mails envoyé par l'application sous la forme "adresse_mail: nom_affiché"
     confighn_nodevomail_mailsAnap:
-        gmelchilsen@nodevo.com: adresse de copie
+        tdauriac@nodevo.com: adresse de copie
     #Permet de définir si tout les mails sont envoyé en copie à l'expéditeur pour en avoir une copie des "mails qu'il a envoyés"
     confighn_nodevomail_expediteurEnCopie: false
 
     #HopitalNumerique_Questionnaire
     confighn_hopitalnumerique_questionnaire_mailReponse:
-        gmelchilsen@nodevo.com: 'Gaëtan M.'
         tdauriac@nodevo.com: 'Thomas D.'
     confighn_hopitalnumerique_questionnaire_mailExpertReponses:
         reseaux-hn@anap.fr: 'Réseaux HN'
     
     #HopitalNumerique_Contact
     confighn_hopitalnumerique_contact:
-        gmelchilsen@nodevo.com: Gaëtan M.
         tdauriac@nodevo.com: Thomas D.
 
     #HopitalNumerique_Recherche : Url exalead

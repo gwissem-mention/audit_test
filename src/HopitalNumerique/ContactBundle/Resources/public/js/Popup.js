@@ -51,7 +51,7 @@ Contact_Popup.display = function(adressesElectroniques, urlRedirection, objet)
  * @param string urlRedirection        URL de redirection
  * @param string objet                 (optionnel) Objet par défaut
  */
-Contact_Popup.invite = function(urlRedirection)
+Contact_Popup.invite = function(urlRedirection, idGroupe)
 {
     var loader = $('body').nodevoLoader();
     loader.start();
@@ -59,7 +59,8 @@ Contact_Popup.invite = function(urlRedirection)
     $.ajax({
         url: '/contact/popup/invite',
         data: {
-            urlRedirection: urlRedirection
+            urlRedirection: urlRedirection,
+            idGroupe: idGroupe
         },
         type: 'POST',
         dataType: 'html',

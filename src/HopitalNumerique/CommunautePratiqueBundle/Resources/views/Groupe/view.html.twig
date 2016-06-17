@@ -20,7 +20,7 @@
     <div style= "float:right">
         {{ parent() }}
         {{ communaute_pratique.display_action_contact_animateur(groupe) }}
-        {{ communaute_pratique.display_action_contact_invitation() }}
+        {{ communaute_pratique.display_action_contact_invitation(groupe.id) }}
     </div>
 {% endblock %}
 

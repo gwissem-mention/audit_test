@@ -786,9 +786,11 @@ class Groupe
      */
     public function hasUser(\HopitalNumerique\UserBundle\Entity\User $user)
     {
-        foreach ($this->users as $membre) {
-            if ($membre->getId() == $user->getId()) {
-                return true;
+        if ($this->users != null) {
+            foreach ($this->users as $membre) {
+                if ($membre->getId() == $user->getId()) {
+                    return true;
+                }
             }
         }
 
