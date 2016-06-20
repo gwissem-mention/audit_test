@@ -94,13 +94,12 @@ class AutodiagController extends Controller
 
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
-            
             $importHandler->handleSurveyImport(
                 $import,
                 $this->get('autodiag.import.chapter'),
                 $this->get('autodiag.import.question')
             );
-            
+
             $this->addFlash('success', 'ad.autodiag.import.success');
 
             return $this->redirectToRoute('hopitalnumerique_autodiag_survey', [
