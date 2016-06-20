@@ -18,3 +18,13 @@ services:
         class: Nodevo\Component\Import\Reader\ExcelFileReader
         arguments: [1]
         public: false
+
+
+    autodiag.import.algorithm:
+        class: Nodevo\Component\Import\DataImporter
+        arguments: ['@autodiag.import.algorithm.reader']
+
+    autodiag.import.algorithm.reader:
+        class: Nodevo\Component\Import\Reader\ExcelFileReader
+        arguments: [0]
+        public: false

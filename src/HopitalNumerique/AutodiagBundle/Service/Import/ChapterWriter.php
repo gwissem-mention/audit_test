@@ -76,12 +76,10 @@ class ChapterWriter implements WriterInterface, ProgressAwareInterface
             } else {
                 $chapter->setParent();
             }
-            
+
             $this->progress->addSuccess($item);
         } else {
-            $this->progress->addException(
-                new \Exception('chapter incorect format')
-            );
+            $this->progress->addError('chapter incorect format');
         }
     }
 

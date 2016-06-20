@@ -80,9 +80,7 @@ class QuestionWriter implements WriterInterface, ProgressAwareInterface
 
             $this->progress->addSuccess($item);
         } else {
-            $this->progress->addException(
-                new \Exception('chapter incorect format')
-            );
+            $this->progress->addError('chapter incorect format');
         }
     }
 

@@ -2,39 +2,20 @@
 
 {% block edit_content %}
 
-    <div class="row">
-        <div class="col-md-10">
-            {% form_theme form 'NodevoAdminBundle::form.html.twig' %}
-            {{ form_start(form) }}
-            {{ form_widget(form) }}
-            {{ form_end(form) }}
-        </div>
-        <div class="col-md-2">
-            <h3>Historique des imports</h3>
-            {% for change in history %}
-                <div>
-                    {{ 'ad.autodiag.history.last_modified'|trans({
-                        '%date%': change.dateTime|date('d/m/Y'),
-                        '%time%': change.dateTime|date('H\\hi'),
-                        '%username%': change.username
-                    }) }}
-                </div>
-            {% endfor %}
-        </div>
-    </div>
+    {% include "@HopitalNumeriqueAutodiag/Autodiag/Edit/_import.html.twig" %}
 
     <div class="repports-container">
         {% if chapterProgress is not null %}
             <div class="repport">
                 <h3>Rapport import chapitre</h3>
-                {% include "@HopitalNumeriqueAutodiag/Autodiag/Import/_repport.html.twig" with {"progress": chapterProgress} %}
+                {% include "@HopitalNumeriqueAutodiag/Autodiag/Edit/_repport.html.twig" with {"progress": chapterProgress} %}
             </div>
         {% endif %}
 
         {% if questionProgress is not null %}
             <div class="repport">
                 <h3>Rapport import question</h3>
-                {% include "@HopitalNumeriqueAutodiag/Autodiag/Import/_repport.html.twig" with {"progress": questionProgress} %}
+                {% include "@HopitalNumeriqueAutodiag/Autodiag/Edit/_repport.html.twig" with {"progress": questionProgress} %}
             </div>
         {% endif %}
     </div>

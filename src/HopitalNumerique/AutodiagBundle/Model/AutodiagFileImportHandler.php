@@ -4,6 +4,7 @@ namespace HopitalNumerique\AutodiagBundle\Model;
 use Doctrine\ORM\EntityManager;
 use HopitalNumerique\AutodiagBundle\Entity\Autodiag\History;
 use HopitalNumerique\AutodiagBundle\Service\Attribute\AttributeBuilderProvider;
+use HopitalNumerique\AutodiagBundle\Service\Import\AlgorithmWriter;
 use HopitalNumerique\AutodiagBundle\Service\Import\ChapterWriter;
 use HopitalNumerique\AutodiagBundle\Service\Import\QuestionWriter;
 use Nodevo\Component\Import\DataImporter;
@@ -70,10 +71,7 @@ class AutodiagFileImportHandler
             $this->manager->persist($history);
         }
 
-        // Update public updated date if notify checked
-        if ($model->getNotifyUpdate()) {
-            $autodiag->setPublicUpdatedDate(new \DateTime());
-        }
+        $this->updatePublicAupdatedDate($model);
 
         $this->manager->flush();
     }
@@ -96,15 +94,42 @@ class AutodiagFileImportHandler
         return $questionProgress;
     }
 
-    public function handleAlgorithmImport(AutodiagFileImport $model)
+    public function getAlgorithmProgress()
+    {
+        $questionProgress = $this->session->get('algorithm_import_progress');
+        if (null !== $questionProgress) {
+            $this->session->remove('algorithm_import_progress');
+        }
+        return $questionProgress;
+    }
+
+    public function handleAlgorithmImport(AutodiagFileImport $model, DataImporter $algorithmImporter)
     {
         $autodiag = $model->getAutodiag();
-        
-        // Update public updated date if notify checked
-        if ($model->getNotifyUpdate()) {
-            $autodiag->setPublicUpdatedDate(new \DateTime());
+        if (null !== $model->getFile()) {
+            // Import chapter
+            $algorithmImporter->setWriter(
+                new AlgorithmWriter($this->manager, $autodiag)
+            );
+            $algorithmProgress = $algorithmImporter->import($model->getFile());
+            $this->session->set('algorithm_import_progress', $algorithmProgress);
+
+            // Save history
+            $user = $this->tokenStorage->getToken()->getUser();
+            $history = History::createAlgorithmImport($autodiag, $user);
+            $this->manager->persist($history);
         }
 
+        $this->updatePublicAupdatedDate($model);
+
         $this->manager->flush();
+    }
+
+    protected function updatePublicAupdatedDate(AutodiagFileImport $model)
+    {
+        // Update public updated date if notify checked
+        if ($model->getNotifyUpdate()) {
+            $model->getAutodiag()->setPublicUpdatedDate(new \DateTime());
+        }
     }
 }

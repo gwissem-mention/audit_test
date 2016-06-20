@@ -24,7 +24,7 @@ class AutodiagController extends Controller
     {
         $grid = new ModelGrid($this->container);
 
-        return $grid->render('HopitalNumeriqueAutodiagBundle:Model:list.html.twig');
+        return $grid->render('@HopitalNumeriqueAutodiag/Autodiag/list.html.twig');
     }
 
     public function createAction(Request $request)
@@ -131,19 +131,18 @@ class AutodiagController extends Controller
 
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
-            $importHandler->handleAlgorithmImport($import);
+            $importHandler->handleAlgorithmImport($import, $this->get('autodiag.import.algorithm'));
             $this->addFlash('success', 'ad.autodiag.import.success');
 
             return $this->redirectToRoute('hopitalnumerique_autodiag_algorithm', [
                 'id' => $autodiag->getId()
             ]);
         }
-        return $this->render('HopitalNumeriqueAutodiagBundle:Autodiag/Edit:survey.html.twig', [
+        return $this->render('HopitalNumeriqueAutodiagBundle:Autodiag/Edit:algorithm.html.twig', [
             'form' => $form->createView(),
             'model' => $autodiag,
             'history' => $this->get('autodiag.history.reader')->getHistory(Autodiag\History::HISTORY_ENTRY_ALGORITHM),
-            'chapterProgress' => $importHandler->getChapterProgress(),
-            'questionProgress' => $importHandler->getQuestionProgress(),
+            'progress' => $importHandler->getAlgorithmProgress(),
         ]);
     }
 }

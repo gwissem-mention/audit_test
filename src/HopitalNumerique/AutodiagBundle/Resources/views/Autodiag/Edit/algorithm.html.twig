@@ -1,0 +1,15 @@
+{% extends "@HopitalNumeriqueAutodiag/Autodiag/edit.html.twig" %}
+
+{% block edit_content %}
+
+    {% include "@HopitalNumeriqueAutodiag/Autodiag/Edit/_import.html.twig" %}
+
+    <div class="repports-container">
+        {% if progress is not null %}
+            <div class="repport">
+                <h3>Rapport import algorithme</h3>
+                {% include "@HopitalNumeriqueAutodiag/Autodiag/Edit/_repport.html.twig" with {"progress": progress} %}
+            </div>
+        {% endif %}
+    </div>
+{% endblock %}

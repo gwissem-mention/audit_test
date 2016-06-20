@@ -72,6 +72,15 @@ class Autodiag
     private $publicUpdatedDate;
 
     /**
+     * Autodiag algorithm
+     *
+     * @var string
+     *
+     * @ORM\Column(type="string", length=50, nullable=true)
+     */
+    private $algorithm;
+
+    /**
      * @var Collection
      *
      * @ORM\ManyToMany(targetEntity="HopitalNumerique\DomaineBundle\Entity\Domaine")
@@ -238,6 +247,25 @@ class Autodiag
     public function setPublicUpdatedDate(\DateTime $publicUpdatedDate)
     {
         $this->publicUpdatedDate = $publicUpdatedDate;
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getAlgorithm()
+    {
+        return $this->algorithm;
+    }
+
+    /**
+     * @param string $algorithm
+     * @return $this
+     */
+    public function setAlgorithm($algorithm)
+    {
+        $this->algorithm = $algorithm;
 
         return $this;
     }
