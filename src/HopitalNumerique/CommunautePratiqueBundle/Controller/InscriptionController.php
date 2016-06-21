@@ -29,8 +29,15 @@ class InscriptionController extends \Symfony\Bundle\FrameworkBundle\Controller\C
                 'url' => $this->generateUrl('hopitalnumerique_communautepratique_accueil_index')
             ));
         } else {
-            $this->get('session')->getFlashBag()->add('danger', 'L\'inscription à la communauté de pratique a échouée.');
-            return new JsonResponse(array( 'url' => $this->generateUrl('hopital_numerique_homepage') ));
+            $this->get('session')->getFlashBag()->add('danger', 'L\'inscription à la communauté de pratique a échouée. Veuillez vérifier vos informations.');
+            return new JsonResponse(array(
+                'url' => $this->generateUrl('hopital_numerique_publication_publication_article', 
+                    array(
+                        'categorie' => 'article', 
+                        'id' => 1000, 
+                        'alias' => 'la-communaute-de-pratiques')
+                )
+            ));
         }
     }
     
