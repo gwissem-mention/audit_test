@@ -2,6 +2,7 @@
 
 namespace HopitalNumerique\AutodiagBundle\Controller\Back;
 
+use HopitalNumerique\AutodiagBundle\Entity\Restitution;
 use HopitalNumerique\AutodiagBundle\Model\AutodiagFileImport;
 use HopitalNumerique\AutodiagBundle\Model\AutodiagUpdate;
 use HopitalNumerique\AutodiagBundle\Entity\Autodiag;
@@ -29,7 +30,7 @@ class AutodiagController extends Controller
 
     public function createAction(Request $request)
     {
-        return $this->editAction($request, new Autodiag);
+        return $this->editAction($request, new Autodiag());
     }
 
     /**
@@ -102,7 +103,7 @@ class AutodiagController extends Controller
 
             $this->addFlash('success', 'ad.autodiag.import.success');
 
-            return $this->redirectToRoute('hopitalnumerique_autodiag_survey', [
+            return $this->redirectToRoute('hopitalnumerique_autodiag_edit_survey', [
                 'id' => $autodiag->getId()
             ]);
         }
@@ -134,7 +135,7 @@ class AutodiagController extends Controller
             $importHandler->handleAlgorithmImport($import, $this->get('autodiag.import.algorithm'));
             $this->addFlash('success', 'ad.autodiag.import.success');
 
-            return $this->redirectToRoute('hopitalnumerique_autodiag_algorithm', [
+            return $this->redirectToRoute('hopitalnumerique_autodiag_edit_algorithm', [
                 'id' => $autodiag->getId()
             ]);
         }
@@ -143,6 +144,38 @@ class AutodiagController extends Controller
             'model' => $autodiag,
             'history' => $this->get('autodiag.history.reader')->getHistory(Autodiag\History::HISTORY_ENTRY_ALGORITHM),
             'progress' => $importHandler->getAlgorithmProgress(),
+        ]);
+    }
+
+    /**
+     * @param Request $request
+     * @param Autodiag $autodiag
+     *
+     * @ParamConverter("autodiag")
+     *
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse|\Symfony\Component\HttpFoundation\Response
+     */
+    public function restitutionEditAction(Request $request, Autodiag $autodiag)
+    {
+        $importHandler = $this->get('autodiag.import.handler');
+        $import = new AutodiagFileImport($autodiag);
+        $form = $this->createForm(FileImportType::class, $import);
+
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $importHandler->handleRestitutionImport($import, $this->get('autodiag.import.algorithm'));
+
+            $this->addFlash('success', 'ad.autodiag.import.success');
+
+            return $this->redirectToRoute('hopitalnumerique_autodiag_edit_restitution', [
+                'id' => $autodiag->getId()
+            ]);
+        }
+        return $this->render('@HopitalNumeriqueAutodiag/Autodiag/Edit/resitution.html.twig', [
+            'form' => $form->createView(),
+            'model' => $autodiag,
+            'history' => $this->get('autodiag.history.reader')->getHistory(Autodiag\History::HISTORY_ENTRY_RESTITUTION),
+            'progress' => $importHandler->getRestitutionProgress(),
         ]);
     }
 }

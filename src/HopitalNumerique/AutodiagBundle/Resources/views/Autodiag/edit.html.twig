@@ -36,9 +36,9 @@
                         <ul class="nav nav-tabs">
                             {% set routes = {
                                 'ad.autodiag.edit_menu.general': 'hopitalnumerique_autodiag_edit',
-                                'ad.autodiag.edit_menu.survey': 'hopitalnumerique_autodiag_survey',
-                                'ad.autodiag.edit_menu.algorithm': 'hopitalnumerique_autodiag_algorithm',
-                                'ad.autodiag.edit_menu.restitution': 'hopitalnumerique_autodiag_list',
+                                'ad.autodiag.edit_menu.survey': 'hopitalnumerique_autodiag_edit_survey',
+                                'ad.autodiag.edit_menu.algorithm': 'hopitalnumerique_autodiag_edit_algorithm',
+                                'ad.autodiag.edit_menu.resitution': 'hopitalnumerique_autodiag_edit_restitution',
                             } %}
                             {% for label, route in routes %}
                                 <li class="{{ app.request.attributes.get('_route') == route ? 'active' : '' }}">

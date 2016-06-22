@@ -120,6 +120,13 @@ class Autodiag
      */
     private $presets;
 
+    /**
+     * @var Restitution
+     * @ORM\ManyToOne(targetEntity="HopitalNumerique\AutodiagBundle\Entity\Restitution", cascade={"persist"})
+     * @ORM\JoinColumn(name="restitution_id", referencedColumnName="id", onDelete="SET NULL")
+     */
+    private $restitution;
+
     public function __construct()
     {
         $this->domaines = new ArrayCollection();
@@ -373,5 +380,24 @@ class Autodiag
     public function getPresets()
     {
         return $this->presets;
+    }
+
+    /**
+     * @return Restitution
+     */
+    public function getRestitution()
+    {
+        return $this->restitution;
+    }
+
+    /**
+     * @param Restitution $restitution
+     * @return $this
+     */
+    public function setRestitution(Restitution $restitution)
+    {
+        $this->restitution = $restitution;
+
+        return $this;
     }
 }

@@ -16,6 +16,7 @@ class History
 {
     const HISTORY_ENTRY_SURVEY = 'survey';
     const HISTORY_ENTRY_ALGORITHM = 'algorithm';
+    const HISTORY_ENTRY_RESTITUTION = 'resitution';
 
     /**
      * @var integer
@@ -87,6 +88,13 @@ class History
         return $history;
     }
 
+    public static function createRestitutionImport(Autodiag $autodiag, User $user)
+    {
+        $history = new self($autodiag, $user);
+        $history->setType(self::HISTORY_ENTRY_RESTITUTION);
+        return $history;
+    }
+
     /**
      * Get model
      *
@@ -145,6 +153,7 @@ class History
         return [
             'history.type.survey' => self::HISTORY_ENTRY_SURVEY,
             'history.type.algorithm' => self::HISTORY_ENTRY_ALGORITHM,
+            'history.type.restitution' => self::HISTORY_ENTRY_RESTITUTION,
         ];
     }
 }

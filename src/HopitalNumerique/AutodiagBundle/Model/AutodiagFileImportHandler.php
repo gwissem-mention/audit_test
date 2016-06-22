@@ -3,10 +3,12 @@ namespace HopitalNumerique\AutodiagBundle\Model;
 
 use Doctrine\ORM\EntityManager;
 use HopitalNumerique\AutodiagBundle\Entity\Autodiag\History;
+use HopitalNumerique\AutodiagBundle\Entity\Restitution;
 use HopitalNumerique\AutodiagBundle\Service\Attribute\AttributeBuilderProvider;
 use HopitalNumerique\AutodiagBundle\Service\Import\AlgorithmWriter;
 use HopitalNumerique\AutodiagBundle\Service\Import\ChapterWriter;
 use HopitalNumerique\AutodiagBundle\Service\Import\QuestionWriter;
+use HopitalNumerique\AutodiagBundle\Service\Import\RestitutionWriter;
 use Nodevo\Component\Import\DataImporter;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
@@ -103,6 +105,15 @@ class AutodiagFileImportHandler
         return $questionProgress;
     }
 
+    public function getRestitutionProgress()
+    {
+        $questionProgress = $this->session->get('restitution_import_progress');
+        if (null !== $questionProgress) {
+            $this->session->remove('restitution_import_progress');
+        }
+        return $questionProgress;
+    }
+
     public function handleAlgorithmImport(AutodiagFileImport $model, DataImporter $algorithmImporter)
     {
         $autodiag = $model->getAutodiag();
@@ -112,7 +123,7 @@ class AutodiagFileImportHandler
                 new AlgorithmWriter($this->manager, $autodiag)
             );
             $algorithmProgress = $algorithmImporter->import($model->getFile());
-            $this->session->set('algorithm_import_progress', $algorithmProgress);
+            $this->session->set('algorithm_import_restitution', $algorithmProgress);
 
             // Save history
             $user = $this->tokenStorage->getToken()->getUser();
@@ -122,6 +133,28 @@ class AutodiagFileImportHandler
 
         $this->updatePublicAupdatedDate($model);
 
+        $this->manager->flush();
+    }
+
+    public function handleRestitutionImport(AutodiagFileImport $model, DataImporter $restitutionImporter)
+    {
+        $autodiag = $model->getAutodiag();
+
+        if (null !== $model->getFile()) {
+            $restitutionImporter->setWriter(
+                new RestitutionWriter($this->manager, $autodiag)
+            );
+            $importProgress = $restitutionImporter->import($model->getFile());
+            $this->session->set('restitution_import_progress', $importProgress);
+
+            // Save history
+            $user = $this->tokenStorage->getToken()->getUser();
+            $history = History::createRestitutionImport($autodiag, $user);
+            $this->manager->persist($history);
+        }
+
+        $this->updatePublicAupdatedDate($model);
+        
         $this->manager->flush();
     }
 

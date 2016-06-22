@@ -16,7 +16,7 @@ ad:
             general: Propriétés générales
             survey: Questionnaire
             algorithm: Algorithme
-            restitution: Restitution
+            resitution: Restitution
         import:
             file: Fichier
             notify_update: Notifier la mise à jour sur le frontoffice
