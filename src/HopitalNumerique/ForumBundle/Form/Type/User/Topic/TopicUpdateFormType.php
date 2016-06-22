@@ -59,7 +59,7 @@ class TopicUpdateFormType extends AbstractType
                     'label'              => 'topic.title-label',
                     'translation_domain' => 'CCDNForumForumBundle',
                     'attr'               => array(
-                        'class' => 'validate[required,minSize[10],maxSize[255]]'
+                        'class' => 'validate[required,maxSize[255]]'
                     )
                 )
             )
@@ -79,7 +79,7 @@ class TopicUpdateFormType extends AbstractType
             'csrf_field_name'    => '_token',
             // a unique key to help generate the secret token
             'intention'          => 'forum_topic_update_item',
-            'validation_groups'  => array('forum_topic_update', 'forum_post_update'),
+            'validation_groups'  => array('forum_topic_custom', 'forum_post_update'),
         ));
     }
 
