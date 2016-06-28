@@ -144,7 +144,7 @@
                     {% endif %}
 
                     <div id="publication-resume">
-                        {{contenu.contenu|glossaire_add(contenu)|parsePublication|raw}}
+                        {{contenu.contenu|parsePublication|glossaire_add(contenu)|raw}}
                     </div>
 
                     {%- if contenu.children|length > 0 -%}
@@ -235,7 +235,7 @@
                 {% endif %}
 
                 <div id="publication-resume">
-                    {{objet.resume|glossaire_add(objet)|parsePublication|raw}}
+                    {{objet.resume|parsePublication|glossaire_add(objet)|raw}}
                 </div>
 
                 {% if is_pdf %}

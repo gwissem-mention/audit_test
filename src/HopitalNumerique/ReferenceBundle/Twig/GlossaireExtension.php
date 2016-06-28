@@ -22,6 +22,7 @@ class GlossaireExtension extends \Twig_Extension
      */
     private $currentDomaine;
 
+    private $badPortionsConverted = [];
 
     /**
      * Constructeur.
@@ -77,7 +78,15 @@ class GlossaireExtension extends \Twig_Extension
                 }
             }
 
+            // Revert bad portion to HTML
             $text = str_replace('¬', '', $text);
+            foreach ($this->badPortionsConverted as $portion) {
+                $text = str_replace(
+                    $portion,
+                    html_entity_decode($portion),
+                    $text
+                );
+            }
         }
 
         return $text;
@@ -94,7 +103,9 @@ class GlossaireExtension extends \Twig_Extension
         preg_match_all($noPattern, $text, $noMatches);
 
         foreach ($noMatches[0] as $match) {
-            $text = str_replace($match, $this->convertToAsciiHtml($match), $text);
+            $converted = $this->convertToAsciiHtml($match);
+            $this->badPortionsConverted[] = $converted;
+            $text = str_replace($match, $converted, $text);
         }
 
         return $text;
