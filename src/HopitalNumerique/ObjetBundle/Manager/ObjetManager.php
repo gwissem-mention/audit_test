@@ -74,6 +74,7 @@ class ObjetManager extends BaseManager
             $object['nbVue'] = $production->getNbVue();
             $object['moyenne'] = 0;
             $object['nbNotes'] = 0;
+            $object['lock'] = $production->getLock();
             $object['lockedBy'] = $production->getLockedBy();
             $object['dateModification'] = $production->getDateModification();
 
