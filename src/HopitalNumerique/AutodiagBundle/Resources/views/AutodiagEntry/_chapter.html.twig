@@ -1,0 +1,29 @@
+<div class="chapter">
+    <div class="chapter-title">
+        {{ chapter.title }}
+    </div>
+
+    <div class="chapter-desc">
+        {{ chapter.description }}
+    </div>
+
+    <div class="chapter-label">
+        {{ chapter.label }}
+    </div>
+
+    <div class="chapter-additionnal">
+        {{ chapter.additionalDescription }}
+    </div>
+
+    <div class="attributes">
+        {% for attribute in chapter.attributes %}
+            {% include "@HopitalNumeriqueAutodiag/AutodiagEntry/chapter/_attribute.html.twig" with {'attribute': attribute} %}
+        {% endfor %}
+    </div>
+
+    <div class="childs">
+        {% for child in chapter.childs %}
+            {% include "@HopitalNumeriqueAutodiag/AutodiagEntry/_chapter.html.twig" with {'chapter': child} %}
+        {% endfor %}
+    </div>
+</div>

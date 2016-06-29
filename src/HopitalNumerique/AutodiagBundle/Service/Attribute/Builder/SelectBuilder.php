@@ -1,6 +1,8 @@
 <?php
 namespace HopitalNumerique\AutodiagBundle\Service\Attribute\Builder;
 
+use HopitalNumerique\AutodiagBundle\Form\Type\Attribute\TextType;
+
 /**
  * Select attribute builder
  *
@@ -15,5 +17,10 @@ class SelectBuilder extends AbstractBuilder
     public function getName()
     {
         return 'liste';
+    }
+
+    public function getFormType()
+    {
+        return TextType::class;
     }
 }

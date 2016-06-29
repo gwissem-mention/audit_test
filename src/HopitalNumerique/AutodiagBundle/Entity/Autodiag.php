@@ -4,7 +4,9 @@ namespace HopitalNumerique\AutodiagBundle\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\Mapping as ORM;
+use HopitalNumerique\AutodiagBundle\Entity\Autodiag\Container;
 use HopitalNumerique\AutodiagBundle\Entity\Autodiag\Container\Chapter;
 use HopitalNumerique\AutodiagBundle\Entity\Autodiag\Preset;
 use HopitalNumerique\DomaineBundle\Entity\Domaine;
@@ -14,7 +16,7 @@ use HopitalNumerique\QuestionnaireBundle\Entity\Questionnaire;
  * Gabarit d'autodiag
  *
  * @ORM\Table(name="ad_autodiag")
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="HopitalNumerique\AutodiagBundle\Repository\AutodiagRepository")
  */
 class Autodiag
 {
@@ -102,13 +104,24 @@ class Autodiag
     /**
      * @var Collection
      * @ORM\OneToMany(
-     *     targetEntity="HopitalNumerique\AutodiagBundle\Entity\Autodiag\Container\Chapter",
+     *     targetEntity="HopitalNumerique\AutodiagBundle\Entity\Autodiag\Container",
      *     mappedBy="autodiag",
      *     cascade={"persist"},
      *     orphanRemoval=true
      * )
      */
-    private $chapters;
+    private $containers;
+
+    /**
+     * @var Collection
+     * @ORM\OneToMany(
+     *     targetEntity="HopitalNumerique\AutodiagBundle\Entity\Autodiag\Attribute",
+     *     mappedBy="autodiag",
+     *     cascade={"persist"},
+     *     orphanRemoval=true
+     * )
+     */
+    public $attributes;
 
     /**
      * @var Collection
@@ -335,6 +348,11 @@ class Autodiag
         return $this;
     }
 
+    public function getContainers()
+    {
+        return $this->containers;
+    }
+
     /**
      * Get chapters
      *
@@ -342,7 +360,9 @@ class Autodiag
      */
     public function getChapters()
     {
-        return $this->chapters;
+        return $this->containers->filter(function (Container $container) {
+            return $container instanceof Chapter && $container->getParent() === null;
+        });
     }
 
     /**
@@ -354,7 +374,7 @@ class Autodiag
     public function addChapter(Chapter $chapter)
     {
         $chapter->setAutodiag($this);
-        $this->chapters->add($chapter);
+        $this->containers->add($chapter);
 
         return $this;
     }
@@ -367,7 +387,7 @@ class Autodiag
      */
     public function removeChapter(Chapter $chapter)
     {
-        $this->chapters->removeElement($chapter);
+        $this->containers->removeElement($chapter);
 
         return $this;
     }

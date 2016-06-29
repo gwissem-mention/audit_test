@@ -1,10 +1,9 @@
 <?php
 namespace HopitalNumerique\AutodiagBundle\Service\Attribute\Builder;
 
-use Doctrine\Common\Persistence\ObjectManager;
+use HopitalNumerique\AutodiagBundle\Form\Type\Attribute\TextType;
 use HopitalNumerique\AutodiagBundle\Form\Type\CsvType;
 use HopitalNumerique\AutodiagBundle\Form\Type\Autodiag\PresetValueType;
-use Symfony\Component\Form\FormFactoryInterface;
 
 /**
  * Maitrise attribute builder
@@ -40,5 +39,10 @@ class MaitriseBuilder extends AbstractPresetableBuilder
         ;
 
         return $formBuilder->getForm();
+    }
+
+    public function getFormType()
+    {
+        return TextType::class;
     }
 }

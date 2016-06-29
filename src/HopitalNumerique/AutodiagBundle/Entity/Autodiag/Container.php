@@ -2,6 +2,7 @@
 
 namespace HopitalNumerique\AutodiagBundle\Entity\Autodiag;
 
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use HopitalNumerique\AutodiagBundle\Entity\Autodiag;
 
@@ -56,10 +57,19 @@ abstract class Container
 
     /**
      * @var Autodiag
-     * @ORM\ManyToOne(targetEntity="HopitalNumerique\AutodiagBundle\Entity\Autodiag")
+     * @ORM\ManyToOne(targetEntity="HopitalNumerique\AutodiagBundle\Entity\Autodiag", inversedBy="containers")
      * @ORM\JoinColumn(name="autodiag_id", referencedColumnName="id", onDelete="CASCADE")
      */
     private $autodiag;
+
+    /**
+     * @var Collection
+     * @ORM\OneToMany(
+     *     targetEntity="HopitalNumerique\AutodiagBundle\Entity\Autodiag\Attribute\Weight",
+     *     mappedBy="container"
+     * )
+     */
+    private $attributesWeighted;
 
     public function setId($id)
     {
@@ -163,5 +173,22 @@ abstract class Container
         $this->autodiag = $autodiag;
 
         return $this;
+    }
+
+    public function getAttributes()
+    {
+        $attributes = [];
+        foreach ($this->attributesWeighted as $weighted) {
+            $attributes[] = $weighted->getAttribute();
+        }
+
+        return $attributes;
+    }
+
+    public function getChilds()
+    {
+        return $this->getAutodiag()->getContainers()->filter(function (Container $container) {
+            return $container->getParent() !== null && $container->getParent()->getId() === $this->getId();
+        });
     }
 }

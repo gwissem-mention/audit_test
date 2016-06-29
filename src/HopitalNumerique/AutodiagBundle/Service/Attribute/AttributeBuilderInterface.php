@@ -18,4 +18,11 @@ interface AttributeBuilderInterface
      * @return string
      */
     public function getName();
+
+    /**
+     * Get form type class name
+     *
+     * @return mixed
+     */
+    public function getFormType();
 }

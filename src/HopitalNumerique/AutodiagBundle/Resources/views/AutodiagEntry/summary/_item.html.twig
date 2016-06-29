@@ -1,0 +1,12 @@
+<li class="summary-item">
+    <div class="title">{{ chapter.title }}</div>
+    <div class="progression"></div>
+    {% set childs = chapter.childs %}
+    {% if childs|length > 0 %}
+        <ul>
+            {% for child in chapter.childs %}
+                {% include "@HopitalNumeriqueAutodiag/AutodiagEntry/summary/_item.html.twig" with {"chapter": child} %}
+            {% endfor %}
+        </ul>
+    {% endif %}
+</li>

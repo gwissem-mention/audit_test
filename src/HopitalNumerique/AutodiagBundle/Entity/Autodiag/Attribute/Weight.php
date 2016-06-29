@@ -18,7 +18,7 @@ class Weight
      * @var Container
      *
      * @ORM\Id
-     * @ORM\ManyToOne(targetEntity="HopitalNumerique\AutodiagBundle\Entity\Autodiag\Container")
+     * @ORM\ManyToOne(targetEntity="HopitalNumerique\AutodiagBundle\Entity\Autodiag\Container", inversedBy="attributesWeighted")
      * @ORM\JoinColumn(name="container_id", referencedColumnName="id")
      */
     private $container;
@@ -59,6 +59,11 @@ class Weight
         $this->weight = $weight;
 
         return $this;
+    }
+
+    public function getAttribute()
+    {
+        return $this->attribute;
     }
 }
 

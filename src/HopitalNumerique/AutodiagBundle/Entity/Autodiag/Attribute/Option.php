@@ -17,7 +17,7 @@ class Option
      * @var Attribute
      *
      * @ORM\Id
-     * @ORM\ManyToOne(targetEntity="HopitalNumerique\AutodiagBundle\Entity\Autodiag\Attribute")
+     * @ORM\ManyToOne(targetEntity="HopitalNumerique\AutodiagBundle\Entity\Autodiag\Attribute", inversedBy="options")
      * @ORM\JoinColumn(name="attribute_id", referencedColumnName="id")
      */
     private $attribute;

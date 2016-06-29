@@ -27,3 +27,9 @@ services:
             - '@session'
             - '@autodiag.attribute_builder_provider'
             - '@security.token_storage'
+
+    autodiag.form.autodiagentry.value:
+        class: HopitalNumerique\AutodiagBundle\Form\Type\AutodiagEntry\ValueType
+        arguments: ['@autodiag.attribute_builder_provider']
+        tags:
+            - { name: form.type }

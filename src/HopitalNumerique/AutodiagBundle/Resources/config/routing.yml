@@ -1,3 +1,7 @@
 hopital_numerique_autodiag_admin:
     resource: "@HopitalNumeriqueAutodiagBundle/Resources/config/routing/admin.yml"
     prefix:   /admin
+
+hopital_numerique_autodiag_front:
+    resource: "@HopitalNumeriqueAutodiagBundle/Resources/config/routing/front.yml"
+    prefix:   /

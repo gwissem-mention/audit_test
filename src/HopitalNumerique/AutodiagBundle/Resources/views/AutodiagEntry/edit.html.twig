@@ -1,0 +1,34 @@
+{% extends 'HopitalNumeriqueAutodiagBundle::layout.html.twig' %}
+
+{% block body %}
+    {% block extra %}{% endblock %}
+
+    <div class="row">
+        <div class="col-md-2">
+            {% include "@HopitalNumeriqueAutodiag/AutodiagEntry/_summary.html.twig" %}
+        </div>
+        <div class="col-md-10">
+
+            <div class="autodiag-title">
+                {{ autodiag.title }}
+            </div>
+            <div class="synthesis-name">
+                {{ entry.synthesis.name }}
+            </div>
+
+            <div class="desc">
+                Lorem ipsum dolor sit amet, consectetur adipisicing elit. Aliquam amet animi commodi explicabo facilis fuga incidunt itaque iure laborum, magnam maiores porro quam, quidem sed, sequi similique voluptatem voluptatibus voluptatum!
+            </div>
+
+            <div class="chapters">
+                {% for chapter in autodiag.chapters %}
+                    {% include "@HopitalNumeriqueAutodiag/AutodiagEntry/_chapter.html.twig" with {'chapter': chapter} %}
+                {% endfor %}
+            </div>
+
+        </div>
+    </div>
+
+
+
+{% endblock %}

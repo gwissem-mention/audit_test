@@ -1,6 +1,8 @@
 <?php
 namespace HopitalNumerique\AutodiagBundle\Service\Attribute\Builder;
 
+use HopitalNumerique\AutodiagBundle\Form\Type\Attribute\TextType;
+
 /**
  * Text attribute builder
  *
@@ -15,5 +17,20 @@ class TextBuilder extends AbstractBuilder
     public function getName()
     {
         return 'texte';
+    }
+
+    public function getValue()
+    {
+        return ["a", "b"];
+    }
+
+    public function setValue()
+    {
+        return "a:b";
+    }
+
+    public function getFormType()
+    {
+        return TextType::class;
     }
 }

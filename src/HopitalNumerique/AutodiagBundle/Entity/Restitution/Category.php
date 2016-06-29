@@ -46,7 +46,7 @@ class Category
     /**
      * @var Restitution
      *
-     * @ORM\ManyToOne(targetEntity="HopitalNumerique\AutodiagBundle\Entity\Restitution")
+     * @ORM\ManyToOne(targetEntity="HopitalNumerique\AutodiagBundle\Entity\Restitution", inversedBy="categories")
      * @ORM\JoinColumn(name="restitution_id", referencedColumnName="id", onDelete="CASCADE")
      */
     private $restitution;
