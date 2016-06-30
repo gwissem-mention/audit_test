@@ -76,7 +76,7 @@
                                                     <div class="col-md-6">
                                                         <p>Renseignez votre contexte pour améliorer la pertinence des résultats.</p><p>Conservez votre profil en créant votre compte avec une simple adresse mail.</p><p>Si vous avez déjà un compte, connectez-vous !</p>
                                                         {% include 'HopitalNumeriqueAccountBundle:include:login.html.twig' with { 'size':'small' } %}
-                                                        {#{ render(controller('HopitalNumeriqueAccountBundle:Inscription:popin', { 'urlRedirection':app.request.uri })) }#}
+                                                        {% render(controller('HopitalNumeriqueAccountBundle:Inscription:popin', { 'urlRedirection':app.request.uri })) %}
                                                     </div>
                                                     <div class="col-md-6">
                                                         <h3>Décrivez votre profil</h3>
