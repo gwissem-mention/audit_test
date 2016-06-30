@@ -60,7 +60,7 @@ class ObjetManager extends BaseManager
 
         $results = array();
 
-        foreach($productions as $production) 
+        foreach($productions as $production)
         {
             $object = array();
             $object['idReference'] = $object['id'] = $production->getId();
@@ -161,7 +161,7 @@ class ObjetManager extends BaseManager
             $row['fichier1']     = $objet->getPath();
             $row['fichier2']     = $objet->getPath2();
             $row['vignette']     = $objet->getVignette();
-            $row['note']         = number_format($this->getNoteReferencement($objet->getReferences(), $refsPonderees), 0);
+            $row['note']         = null;//number_format($this->getNoteReferencement($objet->getReferences(), $refsPonderees), 0);
             $row['dateParution'] = $objet->getDateParution();
 
             //quelques Dates
@@ -272,7 +272,7 @@ class ObjetManager extends BaseManager
                         $rowInfradoc['dateCreationC']     = !is_null($contenu->getDateCreation()) ? $contenu->getDateCreation()->format('d/m/Y') : '';
                         $rowInfradoc['dateModificationC'] = !is_null($contenu->getDateModification()) ? $contenu->getDateModification()->format('d/m/Y') : '';
                         $rowInfradoc['nbVueC']            = $contenu->getNbVue();
-                        $rowInfradoc['noteC']             = number_format($this->getNoteReferencement($contenu->getReferences(), $refsPonderees), 0);
+                        $rowInfradoc['noteC']             = null;//number_format($this->getNoteReferencement($contenu->getReferences(), $refsPonderees), 0);
                         $rowInfradoc['noteMoyenneC']      = number_format($this->_noteManager->getMoyenneNoteByObjet($contenu->getId(), true),2);
                         $rowInfradoc['nombreNoteC']       = $this->_noteManager->countNbNoteByObjet($contenu->getId(), true);
 

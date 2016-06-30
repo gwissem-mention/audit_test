@@ -1,6 +1,11 @@
 {% extends 'HopitalNumeriqueAccountBundle::layout.html.twig' %}
 
 {% block headerTitle %}Autodiagnostics{% endblock %}
+{% block headerDesc %}
+    <p>
+        {{'Module_moncompte_autodiagnostic'|nodevoTexteDynamique(domaineCurrent.id)|raw|nl2br}}
+    </p>
+{% endblock %}
 
 {% block stylesheets %}
     {{parent()}}
