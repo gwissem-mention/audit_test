@@ -30,8 +30,10 @@ class ExportController extends Controller
             }
         }
 
+        $noteReader = $this->get('hopitalnumerique_reference.doctrine.referencement.note_reader');
+
         $refsPonderees = $this->get('hopitalnumerique_reference.manager.reference')->getReferencesPonderees();
-        $objets        = $this->get('hopitalnumerique_objet.manager.objet')->getDatasForExport($primaryKeys, $refsPonderees);
+        $objets        = $this->get('hopitalnumerique_objet.manager.objet')->getDatasForExport($primaryKeys, $refsPonderees, $noteReader);
 
         $colonnes = array(
                             'id'                   => 'ID publication',
