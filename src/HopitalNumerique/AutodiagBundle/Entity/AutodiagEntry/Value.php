@@ -26,7 +26,7 @@ class Value
     /**
      * @var Attribute
      *
-     * @ORM\ManyToOne(targetEntity="HopitalNumerique\AutodiagBundle\Entity\Restitution")
+     * @ORM\ManyToOne(targetEntity="HopitalNumerique\AutodiagBundle\Entity\Autodiag\Attribute")
      * @ORM\JoinColumn(name="attribute_id", referencedColumnName="id", onDelete="CASCADE")
      */
     private $attribute;
@@ -48,6 +48,8 @@ class Value
 
     /**
      * @var string
+     *
+     * @ORM\Column(type="text", nullable=true)
      */
     private $description;
 

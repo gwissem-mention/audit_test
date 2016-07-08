@@ -8,7 +8,10 @@ use HopitalNumerique\AutodiagBundle\Entity\Synthesis;
 use HopitalNumerique\AutodiagBundle\Form\Type\AutodiagEntryType;
 use HopitalNumerique\AutodiagBundle\Form\Type\AutodiagEntry\ValueType;
 use HopitalNumerique\AutodiagBundle\Form\Type\SynthesisType;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Request;
 
 class AutodiagEntryController extends Controller
 {
@@ -35,13 +38,27 @@ class AutodiagEntryController extends Controller
 
         $forms = [];
         foreach ($autodiag->attributes as $attribute) {
-            $entryValue = new AutodiagEntry\Value();
-            $entryValue->setAttribute($attribute);
-            $entryValue->setEntry($entry);
+            $entryValue = $this->getDoctrine()->getRepository('HopitalNumeriqueAutodiagBundle:AutodiagEntry\Value')
+                ->findOneBy([
+                    'entry' => $entry,
+                    'attribute' => $attribute
+                ]);
+
+            if (null === $entryValue) {
+                $entryValue = new AutodiagEntry\Value();
+                $entryValue->setAttribute($attribute);
+                $entryValue->setEntry($entry);
+            }
 
             $forms[$attribute->getId()] = $this->createForm(
                 ValueType::class,
-                $entryValue
+                $entryValue,
+                [
+                    'action' => $this->generateUrl('hopitalnumerique_autodiag_entry_attribute_save', [
+                        'entry' => $entry->getId(),
+                        'attribute' => $attribute->getId(),
+                    ])
+                ]
             )->createView();
         }
 
@@ -50,5 +67,40 @@ class AutodiagEntryController extends Controller
             'entry' => $entry,
             'forms' => $forms,
         ]);
+    }
+
+    /**
+     * @param AutodiagEntry $entry
+     * @param Autodiag\Attribute $attribute
+     *
+     * @ParamConverter("entry")
+     * @ParamConverter("attribute")
+     */
+    public function ajaxAttributeSaveAction(Request $request, AutodiagEntry $entry, Autodiag\Attribute $attribute)
+    {
+        $entryValue = $this->getDoctrine()->getRepository('HopitalNumeriqueAutodiagBundle:AutodiagEntry\Value')
+            ->findOneBy([
+                'entry' => $entry,
+                'attribute' => $attribute
+            ]);
+
+        if (null === $entryValue) {
+            $entryValue = new AutodiagEntry\Value();
+            $entryValue->setAttribute($attribute);
+            $entryValue->setEntry($entry);
+        }
+
+        $form = $this->createForm(
+            ValueType::class,
+            $entryValue
+        );
+
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $this->getDoctrine()->getManager()->persist($entryValue);
+            $this->getDoctrine()->getManager()->flush();
+        }
+
+        return new JsonResponse();
     }
 }

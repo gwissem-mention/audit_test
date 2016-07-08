@@ -2,13 +2,14 @@
 
 namespace HopitalNumerique\AutodiagBundle\Form\Type\Attribute;
 
+use HopitalNumerique\AutodiagBundle\Entity\Autodiag;
 use HopitalNumerique\AutodiagBundle\Service\Attribute\AttributeBuilderInterface;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\CallbackTransformer;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-abstract class AttributeType extends AbstractType
+class AttributeType extends AbstractType
 {
     /**
      * @param FormBuilderInterface $builder
@@ -35,14 +36,22 @@ abstract class AttributeType extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults(array(
-            'data_class' => 'HopitalNumerique\AutodiagBundle\Entity\AutodiagEntry\Value',
+            'data_class' => null,
             'label_format' => 'ad.autodiag.%name%',
         ));
 
-        $resolver->setRequired('attribute_builder');
+        $resolver->setRequired([
+            'attribute_builder',
+            'autodiag',
+            'attribute',
+        ]);
 
         $resolver->setAllowedTypes('attribute_builder', [
             AttributeBuilderInterface::class
+        ]);
+
+        $resolver->setAllowedTypes('autodiag', [
+            Autodiag::class
         ]);
     }
 }

@@ -1,7 +1,7 @@
 <?php
 namespace HopitalNumerique\AutodiagBundle\Service\Attribute\Builder;
 
-use HopitalNumerique\AutodiagBundle\Form\Type\Attribute\TextType;
+use HopitalNumerique\AutodiagBundle\Form\Type\Attribute\CriticiteType;
 use HopitalNumerique\AutodiagBundle\Form\Type\CsvType;
 use HopitalNumerique\AutodiagBundle\Form\Type\Autodiag\PresetValueType;
 
@@ -42,6 +42,16 @@ class CriticiteBuilder extends AbstractPresetableBuilder
 
     public function getFormType()
     {
-        return TextType::class;
+        return CriticiteType::class;
+    }
+
+    public function transform($data)
+    {
+        return json_decode($data, true);
+    }
+
+    public function reverseTransform($data)
+    {
+        return json_encode($data);
     }
 }

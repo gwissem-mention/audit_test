@@ -1,7 +1,7 @@
 <?php
 namespace HopitalNumerique\AutodiagBundle\Service\Attribute\Builder;
 
-use HopitalNumerique\AutodiagBundle\Form\Type\Attribute\TextType;
+use HopitalNumerique\AutodiagBundle\Form\Type\Attribute\RadioAttributeType;
 
 /**
  * Radio attribute builder
@@ -21,6 +21,16 @@ class RadioBuilder extends AbstractBuilder
 
     public function getFormType()
     {
-        return TextType::class;
+        return RadioAttributeType::class;
+    }
+
+    public function transform($data)
+    {
+        return json_decode($data, true);
+    }
+
+    public function reverseTransform($data)
+    {
+        return json_encode($data);
     }
 }

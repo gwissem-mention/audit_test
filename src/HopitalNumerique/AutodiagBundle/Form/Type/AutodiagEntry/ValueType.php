@@ -33,7 +33,9 @@ class ValueType extends AbstractType
             $attributeBuilder = $this->attributeBuilderProvider->getBuilder($data->getAttribute()->getType());
             $form
                 ->add('value', $attributeBuilder->getFormType(), [
-                    'attribute_builder' => $attributeBuilder
+                    'attribute_builder' => $attributeBuilder,
+                    'autodiag' => $data->getAttribute()->getAutodiag(),
+                    'attribute' => $data->getAttribute(),
                 ])
                 ->add('description', TextareaType::class)
             ;

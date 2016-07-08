@@ -2,5 +2,17 @@
     {#{{ attribute.label }}#}
 
     {#<input type="text" />#}
-    {{ form_widget(forms[attribute.id]) }}
+    {% if forms[attribute.id] is defined  %}
+
+        <div>
+            {{ attribute.label }}
+        </div>
+
+        {{ form_start(forms[attribute.id]) }}
+
+        {{ form_widget(forms[attribute.id].value) }}
+        {{ form_widget(forms[attribute.id].description) }}
+
+        {{ form_end(forms[attribute.id]) }}
+    {% endif %}
 </div>

@@ -1,9 +1,18 @@
 {% extends 'HopitalNumeriqueAutodiagBundle::layout.html.twig' %}
 
+{% block javascripts %}
+    {{ parent() }}
+    {% javascripts output="compiled/hopitalnumerique-autodiag-entry.js"
+        'bundles/hopitalnumeriqueautodiag/js/autodiagentry.js'
+    %}
+    <script type="text/javascript" src="{{ asset_url }}"></script>
+    {% endjavascripts %}
+{% endblock %}
+
 {% block body %}
     {% block extra %}{% endblock %}
 
-    <div class="row">
+    <div id="autodiag" class="row">
         <div class="col-md-2">
             {% include "@HopitalNumeriqueAutodiag/AutodiagEntry/_summary.html.twig" %}
         </div>
@@ -29,6 +38,8 @@
         </div>
     </div>
 
-
+    <script type="text/javascript">
+        var autodiag = new AutodiagEntry($('#autodiag'));
+    </script>
 
 {% endblock %}

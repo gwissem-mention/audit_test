@@ -19,14 +19,14 @@ class TextBuilder extends AbstractBuilder
         return 'texte';
     }
 
-    public function getValue()
+    public function transform($data)
     {
-        return ["a", "b"];
+        return $data;
     }
 
-    public function setValue()
+    public function reverseTransform($data)
     {
-        return "a:b";
+        return $data;
     }
 
     public function getFormType()
