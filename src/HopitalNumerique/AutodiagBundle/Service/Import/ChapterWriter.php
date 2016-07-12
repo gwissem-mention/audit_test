@@ -107,11 +107,11 @@ class ChapterWriter implements WriterInterface, ProgressAwareInterface
 
     protected function getChapter($code)
     {
-        $chapter = $this->autodiag->getChapters()->filter(
-            function (Chapter $chapter) use ($code) {
-                return $chapter->getCode() == $code;
-            }
-        )->first();
+        $chapter = $this->manager->getRepository('HopitalNumeriqueAutodiagBundle:Autodiag\Container\Chapter')
+            ->findOneBy([
+                'autodiag' => $this->autodiag,
+                'code' => $code
+            ]);
 
         if (!$chapter instanceof Chapter) {
             $chapter = new Chapter();
@@ -119,7 +119,7 @@ class ChapterWriter implements WriterInterface, ProgressAwareInterface
             $this->autodiag->addChapter($chapter);
         }
 
-        $this->importedChapterCodes[$chapter->getCode()] = true;
+        $this->importedChapterCodes[(string)$chapter->getCode()] = true;
 
         return $chapter;
     }

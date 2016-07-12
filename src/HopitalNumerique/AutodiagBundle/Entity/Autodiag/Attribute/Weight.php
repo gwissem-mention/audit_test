@@ -19,7 +19,7 @@ class Weight
      *
      * @ORM\Id
      * @ORM\ManyToOne(targetEntity="HopitalNumerique\AutodiagBundle\Entity\Autodiag\Container", inversedBy="attributesWeighted")
-     * @ORM\JoinColumn(name="container_id", referencedColumnName="id")
+     * @ORM\JoinColumn(name="container_id", referencedColumnName="id", onDelete="CASCADE")
      */
     private $container;
 
@@ -28,7 +28,7 @@ class Weight
      *
      * @ORM\Id
      * @ORM\ManyToOne(targetEntity="HopitalNumerique\AutodiagBundle\Entity\Autodiag\Attribute")
-     * @ORM\JoinColumn(name="attribute_id", referencedColumnName="id")
+     * @ORM\JoinColumn(name="attribute_id", referencedColumnName="id", onDelete="CASCADE")
      */
     private $attribute;
 

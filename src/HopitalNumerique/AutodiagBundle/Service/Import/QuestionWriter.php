@@ -36,6 +36,8 @@ class QuestionWriter implements WriterInterface, ProgressAwareInterface
 
     protected $chapters = [];
 
+    protected $categories = [];
+
     protected $mapping = [
         'texte_avant' => 'description',
         'libelle_question' => 'label',
@@ -190,27 +192,6 @@ class QuestionWriter implements WriterInterface, ProgressAwareInterface
     }
 
     /**
-     * Get existing chapter
-     *
-     * @param $code
-     * @return mixed
-     */
-    protected function getChapter($code)
-    {
-        if (!array_key_exists((string)$code, $this->chapters)) {
-            $chapter = $this->manager->getRepository('HopitalNumeriqueAutodiagBundle:Autodiag\Container\Chapter')
-                ->findOneBy([
-                    'autodiag' => $this->autodiag,
-                    'code' => $code
-                ]);
-
-            $this->chapters[$code] = $chapter;
-        }
-
-        return $this->chapters[$code];
-    }
-
-    /**
      * Handle attribute chapter and weight
      *
      * @param Attribute $attribute
@@ -248,19 +229,7 @@ class QuestionWriter implements WriterInterface, ProgressAwareInterface
     {
         $categoriesData = $this->parseMultiline($categoriesData);
         foreach ($categoriesData as $code => $weight) {
-            $category = $this->manager->getRepository('HopitalNumeriqueAutodiagBundle:Autodiag\Container\Category')
-                ->findOneBy([
-                    'autodiag' => $this->autodiag,
-                    'code' => $code
-                ]);
-            if (null === $category) {
-                $category = new Autodiag\Container\Category();
-                $category
-                    ->setAutodiag($this->autodiag)
-                    ->setCode($code)
-                    ->setLabel($code);
-                $this->manager->persist($category);
-            }
+            $category = $this->getCategory($code);
 
             $weightObject = $this->manager->getRepository('HopitalNumeriqueAutodiagBundle:Autodiag\Attribute\Weight')
                 ->findOneBy([
@@ -275,6 +244,57 @@ class QuestionWriter implements WriterInterface, ProgressAwareInterface
 
             $weightObject->setWeight($this->parseFloatValue($weight));
         }
+    }
+
+    /**
+     * Get existing chapter
+     *
+     * @param $code
+     * @return mixed
+     */
+    protected function getChapter($code)
+    {
+        if (!array_key_exists((string)$code, $this->chapters)) {
+            $chapter = $this->manager->getRepository('HopitalNumeriqueAutodiagBundle:Autodiag\Container\Chapter')
+                ->findOneBy([
+                    'autodiag' => $this->autodiag,
+                    'code' => $code
+                ]);
+
+            $this->chapters[$code] = $chapter;
+        }
+
+        return $this->chapters[$code];
+    }
+
+    /**
+     * Get existing category
+     *
+     * @param $code
+     * @return mixed
+     */
+    protected function getCategory($code)
+    {
+        if (!array_key_exists((string)$code, $this->categories)) {
+            $category = $this->manager->getRepository('HopitalNumeriqueAutodiagBundle:Autodiag\Container\Category')
+                ->findOneBy([
+                    'autodiag' => $this->autodiag,
+                    'code' => $code
+                ]);
+
+            if (null === $category) {
+                $category = new Autodiag\Container\Category();
+                $category
+                    ->setAutodiag($this->autodiag)
+                    ->setCode($code)
+                    ->setLabel($code);
+                $this->manager->persist($category);
+            }
+
+            $this->categories[$code] = $category;
+        }
+
+        return $this->categories[$code];
     }
 
     /**

@@ -88,7 +88,7 @@ class Autodiag
      * @ORM\ManyToMany(targetEntity="HopitalNumerique\DomaineBundle\Entity\Domaine")
      * @ORM\JoinTable(
      *     name="ad_autodiag_domain",
-     *     joinColumns={@ORM\JoinColumn(name="autodiag_id", referencedColumnName="id")},
+     *     joinColumns={@ORM\JoinColumn(name="autodiag_id", referencedColumnName="id", onDelete="CASCADE")},
      *     inverseJoinColumns={@ORM\JoinColumn(name="domaine_id", referencedColumnName="dom_id")}
      * )
      */
@@ -144,6 +144,7 @@ class Autodiag
     {
         $this->domaines = new ArrayCollection();
         $this->chapters = new ArrayCollection();
+        $this->publicUpdatedDate = new \DateTime();
     }
 
     /**

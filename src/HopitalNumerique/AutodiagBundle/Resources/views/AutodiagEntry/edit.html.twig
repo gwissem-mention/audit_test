@@ -1,9 +1,21 @@
 {% extends 'HopitalNumeriqueAutodiagBundle::layout.html.twig' %}
 
+{% block stylesheets %}
+    {{ parent() }}
+    {% stylesheets output="compiled/hopitalnumerique-autodiag-front.css" filter="cssrewrite, ?yui_css"
+        'bundles/hopitalnumeriqueautodiag/css/front.css'
+    %}
+        <link rel="stylesheet" href="{{ asset_url }}" />
+    {% endstylesheets %}
+{% endblock stylesheets %}
+
 {% block javascripts %}
     {{ parent() }}
     {% javascripts output="compiled/hopitalnumerique-autodiag-entry.js"
         'bundles/hopitalnumeriqueautodiag/js/autodiagentry.js'
+        'bundles/hopitalnumeriqueautodiag/js/AutodiagEntry/summary.js'
+        'bundles/hopitalnumeriqueautodiag/js/AutodiagEntry/chapter.js'
+        'bundles/hopitalnumeriqueautodiag/js/AutodiagEntry/attribute.js'
     %}
     <script type="text/javascript" src="{{ asset_url }}"></script>
     {% endjavascripts %}
@@ -12,21 +24,27 @@
 {% block body %}
     {% block extra %}{% endblock %}
 
-    <div id="autodiag" class="row">
-        <div class="col-md-2">
+    <div id="autodiag-entry" class="row">
+        <div class="col-md-3">
             {% include "@HopitalNumeriqueAutodiag/AutodiagEntry/_summary.html.twig" %}
         </div>
-        <div class="col-md-10">
+        <div class="col-md-9">
 
             <div class="autodiag-title">
-                {{ autodiag.title }}
+                <h1>
+                    {{ autodiag.title }}
+                </h1>
             </div>
             <div class="synthesis-name">
-                {{ entry.synthesis.name }}
+                {% if entry is defined %}
+                    <h2>{{ entry.synthesis.name }}</h2>
+                {% endif %}
             </div>
 
             <div class="desc">
-                Lorem ipsum dolor sit amet, consectetur adipisicing elit. Aliquam amet animi commodi explicabo facilis fuga incidunt itaque iure laborum, magnam maiores porro quam, quidem sed, sequi similique voluptatem voluptatibus voluptatum!
+                <p>
+                    Lorem ipsum dolor sit amet, consectetur adipisicing elit. Aliquam amet animi commodi explicabo facilis fuga incidunt itaque iure laborum, magnam maiores porro quam, quidem sed, sequi similique voluptatem voluptatibus voluptatum!
+                </p>
             </div>
 
             <div class="chapters">
@@ -39,7 +57,7 @@
     </div>
 
     <script type="text/javascript">
-        var autodiag = new AutodiagEntry($('#autodiag'));
+        var autodiag = new AutodiagEntry($('#autodiag-entry'));
     </script>
 
 {% endblock %}

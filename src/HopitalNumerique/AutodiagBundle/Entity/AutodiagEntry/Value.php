@@ -51,7 +51,7 @@ class Value
      *
      * @ORM\Column(type="text", nullable=true)
      */
-    private $description;
+    private $comment;
 
     /**
      * Get id
@@ -114,17 +114,17 @@ class Value
     /**
      * @return string
      */
-    public function getDescription()
+    public function getComment()
     {
-        return $this->description;
+        return $this->comment;
     }
 
     /**
-     * @param string $description
+     * @param string $comment
      */
-    public function setDescription($description)
+    public function setComment($comment)
     {
-        $this->description = $description;
+        $this->comment = $comment;
     }
 }
 

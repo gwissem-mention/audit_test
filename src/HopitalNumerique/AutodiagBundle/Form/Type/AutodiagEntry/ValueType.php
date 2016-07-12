@@ -37,7 +37,7 @@ class ValueType extends AbstractType
                     'autodiag' => $data->getAttribute()->getAutodiag(),
                     'attribute' => $data->getAttribute(),
                 ])
-                ->add('description', TextareaType::class)
+                ->add('comment', TextareaType::class)
             ;
         });
 

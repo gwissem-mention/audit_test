@@ -1,18 +1,35 @@
-<div class="attribute">
-    {#{{ attribute.label }}#}
-
-    {#<input type="text" />#}
+<div class="attribute" data-attribute="{{ attribute.id }}">
     {% if forms[attribute.id] is defined  %}
 
-        <div>
-            {{ attribute.label }}
+        <div class="attribute-description">
+            <p>
+                {{ attribute.description }}
+            </p>
         </div>
 
-        {{ form_start(forms[attribute.id]) }}
+        <div class="row">
+            <div class="col-md-3 attribute-label">
+                {{ attribute.label }}
+            </div>
 
-        {{ form_widget(forms[attribute.id].value) }}
-        {{ form_widget(forms[attribute.id].description) }}
+            <div class="col-md-8">
+                {{ form_start(forms[attribute.id]) }}
 
-        {{ form_end(forms[attribute.id]) }}
+                <div class="attribute-value">
+                    {{ form_widget(forms[attribute.id].value) }}
+                </div>
+
+                <div class="attribute-comment">
+                    {{ form_widget(forms[attribute.id].comment) }}
+                </div>
+
+                {{ form_end(forms[attribute.id]) }}
+            </div>
+
+            <div class="col-md-1 tools">
+                <div class="attribute-mood"></div>
+                <i title="{{ 'attribute.comment.add'|trans }}" class="fa fa-comment tool-comment"></i>
+            </div>
+        </div>
     {% endif %}
 </div>

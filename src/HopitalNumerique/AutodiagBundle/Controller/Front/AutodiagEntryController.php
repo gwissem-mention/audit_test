@@ -5,7 +5,6 @@ namespace HopitalNumerique\AutodiagBundle\Controller\Front;
 use HopitalNumerique\AutodiagBundle\Entity\Autodiag;
 use HopitalNumerique\AutodiagBundle\Entity\AutodiagEntry;
 use HopitalNumerique\AutodiagBundle\Entity\Synthesis;
-use HopitalNumerique\AutodiagBundle\Form\Type\AutodiagEntryType;
 use HopitalNumerique\AutodiagBundle\Form\Type\AutodiagEntry\ValueType;
 use HopitalNumerique\AutodiagBundle\Form\Type\SynthesisType;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;

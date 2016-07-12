@@ -1,6 +1,8 @@
-<h3>Sommaire</h3>
-<ul>
-    {% for chapter in autodiag.chapters %}
-        {% include "@HopitalNumeriqueAutodiag/AutodiagEntry/summary/_item.html.twig" with {"chapter": chapter} %}
-    {% endfor %}
-</ul>
+<div id="summary">
+    <h3>Sommaire</h3>
+    <ul>
+        {% for chapter in autodiag.chapters %}
+            {% include "@HopitalNumeriqueAutodiag/AutodiagEntry/summary/_item.html.twig" with {"chapter": chapter} %}
+        {% endfor %}
+    </ul>
+</div>
