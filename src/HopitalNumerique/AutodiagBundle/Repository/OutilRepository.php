@@ -4,6 +4,7 @@ namespace HopitalNumerique\AutodiagBundle\Repository;
 
 use Doctrine\ORM\EntityRepository;
 use HopitalNumerique\AutodiagBundle\Entity\Outil;
+use HopitalNumerique\ReferenceBundle\Entity\Reference;
 
 /**
  * OutilRepository
@@ -27,7 +28,7 @@ class OutilRepository extends EntityRepository
                 ))
                 ->setParameter('domainesId', $domainesIds)
             ->orderBy('out.title', 'ASC');
-            
+
         return $qb;
     }
 
@@ -47,19 +48,19 @@ class OutilRepository extends EntityRepository
                 $qb->andWhere('out.dateCreation >= :dateFin')
                     ->setParameter('dateFin', $dateFin);
             }
-            
+
         return $qb;
     }
 
     /**
      * Retourne un tableau à 2 dimensions avec les duos de tous les Resultat/Chapitre.
-     * 
+     *
      * @param \HopitalNumerique\AutodiagBundle\Entity\Outil $outil
      */
     public function getChapitreParentIdsAndResultatIds(Outil $outil)
     {
         $requete = $this->_em->createQueryBuilder();
-        
+
         $requete
             ->select('outilResultat.id AS resultatId, outilChapitre.id AS chapitreId')
             ->from('HopitalNumeriqueAutodiagBundle:Chapitre', 'outilChapitre')
@@ -84,7 +85,7 @@ class OutilRepository extends EntityRepository
     public function getCategoriesIdsAndResultatIds(Outil $outil)
     {
         $requete = $this->_em->createQueryBuilder();
-    
+
         $requete
             ->select('outilResultat.id AS resultatId, outilCategorie.id AS categorieId')
             ->from('HopitalNumeriqueAutodiagBundle:Categorie', 'outilCategorie')
@@ -95,10 +96,10 @@ class OutilRepository extends EntityRepository
             ->leftJoin('outilQuestion.reponses', 'outilReponse', 'WITH', 'outilReponse.resultat = outilResultat')
             ->groupBy('outilResultat.id, outilCategorie.id')
         ;
-    
+
         return ($requete->getQuery()->getResult());
     }
-    
+
     /**
      * Retourne un tableau à 2 dimensions avec les duos Resultat/Chapitre parent remplis à moins de 100%.
      *
@@ -107,7 +108,7 @@ class OutilRepository extends EntityRepository
     public function getChapitresParentsNonRemplisIdsAndResultatsNonRemplisIds(Outil $outil)
     {
         $requete = $this->_em->createQueryBuilder();
-    
+
         $requete
             ->select('outilResultat.id AS resultatId, outilChapitre.id AS chapitreId')
             ->from('HopitalNumeriqueAutodiagBundle:Chapitre', 'outilChapitre')
@@ -127,7 +128,7 @@ class OutilRepository extends EntityRepository
 
         return ($requete->getQuery()->getResult());
     }
-    
+
     /**
      * Retourne un tableau à 2 dimensions avec les duos Resultat/Categorie parent remplis à moins de 100%.
      *
@@ -136,7 +137,7 @@ class OutilRepository extends EntityRepository
     public function getCategoriesNonRempliesIdsAndResultatsNonRemplisIds(Outil $outil)
     {
         $requete = $this->_em->createQueryBuilder();
-    
+
         $requete
             ->select('outilResultat.id AS resultatId, outilCategorie.id AS categorieId')
             ->from('HopitalNumeriqueAutodiagBundle:Categorie', 'outilCategorie')
@@ -154,10 +155,10 @@ class OutilRepository extends EntityRepository
 
         return ($requete->getQuery()->getResult());
     }
-    
+
     /**
      * Retourne les caractéristiques d'un chapitre
-     * 
+     *
      * @param integer $chapitreParentId ID du chapitre
      * @param array<integer> $resultatIds Ids des résultarts
      */
@@ -177,13 +178,13 @@ class OutilRepository extends EntityRepository
             ->groupBy('outilReponse.resultat')
             ->orderBy('moyenne', 'ASC')
         ;
-        
+
         return ($requete->getQuery()->getResult());
     }
-    
+
     /**
      * Retourne les caractéristiques d'une catégorie
-     * 
+     *
      * @param integer $categorieId ID du chapitre
      * @param array<integer> $resultatIds Ids des résultarts
      */
@@ -203,7 +204,23 @@ class OutilRepository extends EntityRepository
             ->groupBy('outilReponse.resultat')
             ->orderBy('moyenne', 'ASC')
         ;
-        
+
         return ($requete->getQuery()->getResult());
+    }
+
+    public function findActiveById($id)
+    {
+        $qb = $this->createQueryBuilder('outil');
+        $qb
+            ->join('outil.statut', 'statut')
+            ->where(
+                $qb->expr()->eq('statut.id', Reference::STATUT_ACTIF_ID)
+            )
+            ->andWhere('outil.id = :outil_id')
+            ->setParameters([
+                'outil_id' => $id,
+            ])
+        ;
+        return ($qb->getQuery()->getOneOrNullResult());
     }
 }
