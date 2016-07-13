@@ -10,11 +10,26 @@ Summary.prototype = {
     {
         this.selectCurrent();
         this.bindEvents();
+        this.handleCompletion();
     },
 
     bindEvents: function()
     {
         $('.title', this.element).on('click', {instance: this}, this.onTitleSelection);
+    },
+
+    handleCompletion: function()
+    {
+        var instance = this;
+        $('.progression .value', this.element).each(function() {
+            var chapterId = $(this).closest('li').data('chapter');
+            var current = $(this);
+            $(this).html(instance.autodiag.chapters[chapterId].getCompletion());
+
+            instance.autodiag.chapters[chapterId].onCompletionChange(function (completion) {
+                current.html(completion);
+            })
+        });
     },
 
     onTitleSelection: function(event)

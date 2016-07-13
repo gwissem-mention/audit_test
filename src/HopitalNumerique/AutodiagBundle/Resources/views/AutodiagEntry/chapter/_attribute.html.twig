@@ -1,4 +1,4 @@
-<div class="attribute" data-attribute="{{ attribute.id }}">
+<div class="attribute" data-attribute="{{ attribute.id }}" {% if attribute.colored %}data-mood{% endif %}>
     {% if forms[attribute.id] is defined  %}
 
         <div class="attribute-description">

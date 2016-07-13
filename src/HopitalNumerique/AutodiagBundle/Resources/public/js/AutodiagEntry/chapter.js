@@ -8,6 +8,10 @@ var Chapter = function(id, element)
 
     this.attributes = {};
 
+    this.callbacks = {
+        onCompletionChange: $.Callbacks()
+    };
+
     this.init();
 };
 
@@ -24,13 +28,48 @@ Chapter.prototype = {
             var id;
             if ((id = $(this).data('attribute')) !== undefined) {
                 instance.attributes[id] = new Attribute(id, $(this));
+                instance.bindAttribute(instance.attributes[id]);
             }
+        });
+    },
+
+    bindAttribute: function(attribute)
+    {
+        var instance = this;
+        attribute.onChange(function() {
+            instance.callbacks.onCompletionChange.fire(
+                instance.getCompletion()
+            );
+
+            instance.parent.callbacks.onCompletionChange.fire(
+                instance.parent.getCompletion()
+            );
         });
     },
 
     getCompletion: function()
     {
-        
+        var filled = 0,
+            total = 0;
+        for (var i in this.attributes) {
+            total++;
+            filled += this.attributes[i].isFilled() ? 1 : 0;
+        }
+
+        for (var i in this.childrens) {
+            for (var j in this.childrens[i].attributes) {
+                total++;
+                filled += this.childrens[i].attributes[j].isFilled() ? 1 : 0;
+            }
+        }
+
+
+        return Math.round(filled * 100 / total);
+    },
+
+    onCompletionChange: function(callback)
+    {
+        this.callbacks.onCompletionChange.add(callback);
     },
 
     addChildren: function(chapter)

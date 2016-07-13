@@ -3,11 +3,16 @@ var Attribute = function(id, element)
     this.id = id;
     this.element = element;
 
+    this.callbacks = {
+        onChange: $.noop
+    };
+
     this.options = {
         saveDelay: 500
     };
-
+    this.moodEnabled = element.data('mood') !== undefined;
     this.commentEnabled = false;
+
     this.mood = undefined;
     this.moodIconClass = {
         1: 'fa fa-frown-o fa-2x',
@@ -21,9 +26,33 @@ var Attribute = function(id, element)
 Attribute.prototype = {
     init: function()
     {
+        this.bindEvents();
         this.bindSubmit();
         this.handleComment();
         this.handleMood();
+    },
+
+    bindEvents: function()
+    {
+        var instance = this;
+        $('input, select, textarea', this.element.find('.attribute-value')).on('change', function () {
+            instance.callbacks.onChange();
+        });
+    },
+
+    onChange: function(callback)
+    {
+        this.callbacks.onChange = callback;
+    },
+
+    isFilled: function()
+    {
+        var fields = $('input, select, textarea', this.element.find('.attribute-value'));
+        var filled = true;
+        fields.each(function () {
+            filled = filled && $(this).val().length > 0;
+        });
+        return filled;
     },
 
     bindSubmit: function()
@@ -83,7 +112,7 @@ Attribute.prototype = {
         $('form .attribute-comment', this.element).hide();
 
         // Trigger change if value before empty is same as value after empty
-        textarea.empty();
+        textarea.get(0).value = '';
         if (textarea.val() != originalValue) {
             textarea.trigger('change');
         }
@@ -91,11 +120,13 @@ Attribute.prototype = {
 
     handleMood: function()
     {
-        var instance = this;
-        this.computeMood();
-        $('input, select, textarea', this.element).on('change', function() {
-            instance.computeMood();
-        });
+        if (this.moodEnabled) {
+            var instance = this;
+            this.computeMood();
+            $('input, select, textarea', this.element).on('change', function () {
+                instance.computeMood();
+            });
+        }
     },
 
     /**
