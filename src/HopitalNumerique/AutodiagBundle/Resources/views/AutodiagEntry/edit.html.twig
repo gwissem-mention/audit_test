@@ -51,6 +51,20 @@
                 {% for chapter in autodiag.chapters %}
                     {% include "@HopitalNumeriqueAutodiag/AutodiagEntry/_chapter.html.twig" with {'chapter': chapter} %}
                 {% endfor %}
+
+                <div class="navigation row">
+                    <div class="col-md-6">
+                        <button class="prev btn btn-default">
+                            {{ "ad.navigation.prev"|trans }}
+                        </button>
+                    </div>
+
+                    <div class="col-md-6 text-right">
+                        <button class="next btn btn-default">
+                            {{ "ad.navigation.next"|trans }}
+                        </button>
+                    </div>
+                </div>
             </div>
 
         </div>

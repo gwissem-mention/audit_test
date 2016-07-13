@@ -12,11 +12,20 @@
                 {{ attribute.label }}
             </div>
 
-            <div class="col-md-8">
+            <div class="col-md-9">
                 {{ form_start(forms[attribute.id]) }}
 
                 <div class="attribute-value">
-                    {{ form_widget(forms[attribute.id].value) }}
+                    <div class="widget">
+                        {{ form_widget(forms[attribute.id].value) }}
+                    </div>
+
+                    <div class="tools">
+                        <div class="attribute-mood"></div>
+                        <i title="{{ 'attribute.comment.add'|trans }}" class="comment-button fa fa-comment tool-comment"></i>
+                    </div>
+
+                    <div class="clearfix"></div>
                 </div>
 
                 <div class="attribute-comment">
@@ -26,10 +35,7 @@
                 {{ form_end(forms[attribute.id]) }}
             </div>
 
-            <div class="col-md-1 tools">
-                <div class="attribute-mood"></div>
-                <i title="{{ 'attribute.comment.add'|trans }}" class="fa fa-comment tool-comment"></i>
-            </div>
+
         </div>
     {% endif %}
 </div>

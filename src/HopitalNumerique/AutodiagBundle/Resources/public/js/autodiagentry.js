@@ -15,9 +15,6 @@ AutodiagEntry.prototype = {
     {
         this.initChapters();
         this.initSummary();
-        // this.bindFormSubmit();
-
-        console.log(this.chapters);
     },
 
     initChapters: function()
@@ -41,32 +38,14 @@ AutodiagEntry.prototype = {
 
     initSummary: function()
     {
-        this.summary = new Summary($('#summary', this.element), this);
+        var instance = this;
+        this.summary = new Summary($('#summary', this.element), this, {
+            previous: $('.navigation .prev', this.element),
+            next: $('.navigation .next', this.element)
+        });
     },
 
-    // bindFormSubmit: function()
-    // {
-    //     var self = this;
-    //     $('input, select, textarea', this.element).on('change', function() {
-    //         if ($(this).data('changedTimer') !== undefined) {
-    //             clearTimeout($(this).data('changedTimer'));
-    //         }
-    //
-    //         var form = $(this).closest('form');
-    //         $(this).data('changedTimer', setTimeout(function() {
-    //             self.submitForm(form);
-    //         }, self.options.saveDelay));
-    //     });
-    // },
-    //
-    // submitForm: function(form)
-    // {
-    //     $.post(form.get(0).action, form.serialize(), function() {
-    //         console.log('saved');
-    //     });
-    // },
-
-    showChapter: function(id)
+    showChapter: function(id, scrollTo)
     {
         var chapter = this.chapters[id];
         for (var i in this.chapters) {
@@ -74,7 +53,7 @@ AutodiagEntry.prototype = {
         }
         chapter.show();
 
-        if (chapter.getParent() !== undefined) {
+        if (scrollTo === true || scrollTo === undefined) {
             $('html, body').animate({
                 scrollTop: chapter.getElement().offset().top
             }, {

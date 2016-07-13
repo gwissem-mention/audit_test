@@ -173,14 +173,14 @@ Attribute.prototype = {
         }
 
         if (null === value) {
-            $('.attribute-mood', this.element).hide();
+            $('.attribute-mood', this.element).css('visibility', 'hidden');
         } else {
             var a =  (max - min) / 100;
             var b = min;
             var x = (value - b) / a;
             var tier = Math.max(1, Math.ceil(x / (100 / 3)));
 
-            $('.attribute-mood', this.element).show().html(
+            $('.attribute-mood', this.element).css('visibility', 'visible').html(
                 $('<i />').addClass(
                     this.moodIconClass[tier]
                 )

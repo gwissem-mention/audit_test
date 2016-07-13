@@ -87,6 +87,10 @@
     font-size: 20px;
 }
 
+.chapters .navigation {
+    margin-top: 20px;
+}
+
 /**
 * Attribute
 */
@@ -97,6 +101,28 @@
 
 .attribute .attribute-comment {
     display: none;
+    margin-top: 10px;
+}
+
+.attribute .attribute-value .widget {
+    float: left;
+    width: 80%;
+}
+.attribute .attribute-value .tools {
+    float: right;
+    width: 15%;
+    text-align: right;
+}
+
+.attribute .attribute-value .tools .comment-button {
+    cursor: pointer;
+    color: #d60030;
+}
+
+.attribute .tools > * {
+    display: inline-block;
+    margin: 0 4px;
+    vertical-align: middle;
 }
 
 .attribute .attribute-mood .fa {

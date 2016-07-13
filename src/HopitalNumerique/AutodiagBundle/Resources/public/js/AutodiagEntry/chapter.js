@@ -41,9 +41,11 @@ Chapter.prototype = {
                 instance.getCompletion()
             );
 
-            instance.parent.callbacks.onCompletionChange.fire(
-                instance.parent.getCompletion()
-            );
+            if (instance.parent !== undefined) {
+                instance.parent.callbacks.onCompletionChange.fire(
+                    instance.parent.getCompletion()
+                );
+            }
         });
     },
 

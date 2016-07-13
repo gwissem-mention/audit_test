@@ -1,6 +1,16 @@
-var Summary = function(element, autodiag) {
+var Summary = function(element, autodiag, options) {
     this.element = element;
     this.autodiag = autodiag;
+
+    this.options = $.extend({
+        previous: undefined,
+        next: undefined
+    }, options);
+
+    this.elementOffsetTop = this.element.offset().top;
+
+    this.chapters = [];
+    this.currentIndex = 0;
 
     this.init();
 };
@@ -8,14 +18,50 @@ var Summary = function(element, autodiag) {
 Summary.prototype = {
     init: function()
     {
+        this.initChapters();
+        this.initNavigation();
         this.selectCurrent();
         this.bindEvents();
         this.handleCompletion();
     },
 
+    initChapters: function()
+    {
+        var chapters = this.autodiag.chapters;
+        for (var i in chapters) {
+            if (chapters[i].getParent() === undefined) {
+                this.chapters.push(chapters[i]);
+            }
+        }
+    },
+
+    initNavigation: function()
+    {
+        var instance = this;
+        if (this.options.previous !== undefined) {
+            this.options.previous.on('click', function() {
+                instance.previous();
+            });
+        }
+
+        if (this.options.next !== undefined) {
+            this.options.next.on('click', function() {
+                instance.next();
+            });
+        }
+    },
+
     bindEvents: function()
     {
         $('.title', this.element).on('click', {instance: this}, this.onTitleSelection);
+        // $(window).scroll($.proxy(this.onWindowScroll, this));
+    },
+
+    onWindowScroll: function()
+    {
+        this.element.css({
+            paddingTop: $(window).scrollTop() + 20 < this.elementOffsetTop ? 0 : ($(window).scrollTop() - this.elementOffsetTop) + 20
+        });
     },
 
     handleCompletion: function()
@@ -41,19 +87,27 @@ Summary.prototype = {
         }
     },
 
-    selectChapter: function(chapterId)
+    selectChapter: function(chapterId, scrollTo)
     {
-        this.autodiag.showChapter(chapterId);
+        this.autodiag.showChapter(chapterId, scrollTo);
+
         window.location.hash = this.getHashByChapter(chapterId);
 
         $('li', this.element).removeClass('active');
 
         var chapter = $('[data-chapter="' + chapterId + '"]', this.element);
+        var parentId = undefined;
         do {
             chapter.addClass('active');
+            parentId = chapter.data('chapter');
             chapter = chapter.parents('[data-chapter]');
-            console.log(chapter);
         } while (chapter.length > 0);
+
+        for (var i in this.chapters) {
+            if (this.chapters[i].id == parentId) {
+                this.setCurrentIndex(i);
+            }
+        }
     },
 
     selectCurrent: function()
@@ -62,7 +116,51 @@ Summary.prototype = {
             ? this.getChapterByHash(window.location.hash.substr(1))
             : $('li', this.element).first().data('chapter');
 
-        this.selectChapter(chapter);
+        this.selectChapter(chapter, false);
+    },
+
+    setCurrentIndex: function(index)
+    {
+        index = parseInt(index);
+        if (this.options.previous !== undefined) {
+            if (index <= 0) {
+                this.options.previous.hide();
+            } else {
+                this.options.previous.show();
+            }
+        }
+
+
+        if (this.options.next !== undefined) {
+            if (index >= (this.chapters.length - 1)) {
+                this.options.next.hide();
+            } else {
+                this.options.next.show();
+            }
+        }
+
+
+        this.currentIndex = index;
+    },
+
+    previous: function()
+    {
+        if (this.currentIndex > 0) {
+            this.setCurrentIndex(this.currentIndex - 1);
+            this.selectChapter(
+                this.chapters[this.currentIndex].id
+            );
+        }
+    },
+
+    next: function()
+    {
+        if (this.currentIndex < this.chapters.length) {
+            this.setCurrentIndex(this.currentIndex + 1);
+            this.selectChapter(
+                this.chapters[this.currentIndex].id
+            );
+        }
     },
 
     /**
