@@ -60,8 +60,25 @@
     top: 4px;
 }
 
+#autodiag-entry #summary .progression .red {
+    color: #c82f5b;
+}
+#autodiag-entry #summary .progression .orange {
+    color: #e88824;
+}
+
+#autodiag-entry #summary .progression i {
+    color: #b4dc00;
+}
+
 #autodiag-entry #summary ul li ul .title {
     padding-left: 40px;
+}
+
+@media screen and (max-width: 991px) {
+    #autodiag-entry #summary {
+        padding-top: 0 !important;
+    }
 }
 
 

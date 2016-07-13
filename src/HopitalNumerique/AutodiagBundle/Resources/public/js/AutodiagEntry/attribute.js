@@ -80,12 +80,14 @@ Attribute.prototype = {
     handleComment: function()
     {
         // Show non empty comments
-        if ($('form .attribute-comment textarea', this.element).val().length > 0) {
-            this.showComment();
-        }
+        if ($('form .attribute-comment textarea', this.element).length > 0) {
+            if ($('form .attribute-comment textarea', this.element).val().length > 0) {
+                this.showComment();
+            }
 
-        // Bind click on comment tool
-        $('.tools .tool-comment', this.element).on('click', $.proxy(this.toggleComment, this));
+            // Bind click on comment tool
+            $('.tools .tool-comment', this.element).on('click', $.proxy(this.toggleComment, this));
+        }
     },
 
     toggleComment: function()

@@ -54,7 +54,7 @@ Summary.prototype = {
     bindEvents: function()
     {
         $('.title', this.element).on('click', {instance: this}, this.onTitleSelection);
-        // $(window).scroll($.proxy(this.onWindowScroll, this));
+        $(window).scroll($.proxy(this.onWindowScroll, this));
     },
 
     onWindowScroll: function()
@@ -70,12 +70,29 @@ Summary.prototype = {
         $('.progression .value', this.element).each(function() {
             var chapterId = $(this).closest('li').data('chapter');
             var current = $(this);
-            $(this).html(instance.autodiag.chapters[chapterId].getCompletion());
+            $(this).html(
+                instance.getCompletionHtml(instance.autodiag.chapters[chapterId].getCompletion())
+            );
 
             instance.autodiag.chapters[chapterId].onCompletionChange(function (completion) {
-                current.html(completion);
+                current.html(instance.getCompletionHtml(completion));
             })
         });
+    },
+
+    getCompletionHtml: function(completion)
+    {
+        if (completion < 100) {
+            var content = completion + '%';
+
+            if (completion > 50) {
+                return '<div class="orange">' + content + '</div>';
+            }
+
+            return '<div class="red">' + content + '</div>';
+        }
+
+        return '<i class="fa fa-check"></i>';
     },
 
     onTitleSelection: function(event)
