@@ -1,0 +1,22 @@
+<ul>
+    <li {% if current == "fill" %}class="active"{% endif %}>
+        <a href="#">
+            {{ "ad.autodiag.path.fill" }}
+        </a>
+    </li>
+    <li {% if current == "results" %}class="active"{% endif %}>
+        <a href="#">
+            {{ "ad.autodiag.path.results" }}
+        </a>
+    </li>
+    <li {% if current == "validate" %}class="active"{% endif %}>
+        <a href="#">
+            {{ "ad.autodiag.path.validate" }}
+        </a>
+    </li>
+    <li {% if current == "share" %}class="active"{% endif %}>
+        <a href="#">
+            {{ "ad.autodiag.path.share" }}
+        </a>
+    </li>
+</ul>
