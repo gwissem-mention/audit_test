@@ -19,6 +19,7 @@ AutodiagEntry.prototype = {
         this.initSummary();
     },
 
+    // Init creation form
     initEntry: function()
     {
         if (this.entry === null && $('.popin').length > 0) {

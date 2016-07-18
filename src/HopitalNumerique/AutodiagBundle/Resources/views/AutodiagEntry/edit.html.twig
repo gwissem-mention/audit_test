@@ -23,7 +23,7 @@
 
 {% block body %}
     {% if synthesisCreateForm is not null %}
-        <div class="popin">
+        <div id="synthesisCreate" class="popin">
             {{ form_start(synthesisCreateForm) }}
 
             {{ form_widget(synthesisCreateForm) }}
@@ -35,6 +35,15 @@
 
     <div id="autodiag-entry" class="row">
         <div class="col-md-3">
+            {% if autodiag.instructions is not null %}
+                <div id="instructions">
+                    <a href="#instructions-container" class="fancybox btn btn-default">{{ "ad.autodiag.instructions"|trans }}</a>
+                    <div id="instructions-container">
+                        {% include '@HopitalNumeriqueAutodiag/AutodiagEntry/_instructions.html.twig' %}
+                    </div>
+                </div>
+            {% endif %}
+
             {% include "@HopitalNumeriqueAutodiag/AutodiagEntry/_summary.html.twig" %}
         </div>
         <div class="col-md-9">

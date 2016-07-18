@@ -1,8 +1,22 @@
 <div id="summary">
     <h3>Sommaire</h3>
     <ul>
+        {% if autodiag.questionnaire is not null %}
+            <li>
+                <div class="title">
+                    <a href="{{ path('hopitalnumerique_questionnaire_edit_questionnaire', {"questionnaire": autodiag.questionnaire}) }}">
+                        {{ 'ad.autodiag.questionnaire_prealable'|trans }}
+                    </a>
+                </div>
+            </li>
+        {% endif %}
+
         {% for chapter in autodiag.chapters %}
             {% include "@HopitalNumeriqueAutodiag/AutodiagEntry/summary/_item.html.twig" with {"chapter": chapter} %}
         {% endfor %}
     </ul>
+
+    <div class="progress progress-striped">
+        <div class="progress-bar progress-bar-danger"></div>
+    </div>
 </div>

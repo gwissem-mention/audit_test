@@ -76,8 +76,40 @@ Summary.prototype = {
 
             instance.autodiag.chapters[chapterId].onCompletionChange(function (completion) {
                 current.html(instance.getCompletionHtml(completion));
+                instance.handleGlobalCompletion();
             })
         });
+
+        this.handleGlobalCompletion();
+    },
+
+    handleGlobalCompletion: function()
+    {
+        var total = 0,
+            count = 0;
+        for (var i in this.autodiag.chapters) {
+            var chapter = this.autodiag.chapters[i];
+            if (chapter.parent === undefined) {
+                total += chapter.getCompletion();
+                count++;
+            }
+        }
+        var completion = total / count;
+
+        $('.progress-bar', this.element)
+            .css({
+                width: completion + '%'
+            })
+            .html(Math.round(completion) + '%')
+            .attr(
+                'class',
+                completion < 100
+                    ? completion < 50
+                        ? 'progress-bar progress-bar-danger'
+                        : 'progress-bar progress-bar-warning'
+                    : 'progress-bar progress-bar-success'
+            )
+        ;
     },
 
     getCompletionHtml: function(completion)

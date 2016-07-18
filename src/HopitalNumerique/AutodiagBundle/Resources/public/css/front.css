@@ -2,6 +2,22 @@
 
 }
 
+#synthesisCreate {
+    display: none;
+}
+
+#instructions {
+    margin-top: 20px;
+}
+
+#instructions a {
+    display: block;
+}
+
+#instructions-container {
+    display: none;
+}
+
 /**
 *   SUMMARY
 */
@@ -73,6 +89,10 @@
 
 #autodiag-entry #summary ul li ul .title {
     padding-left: 40px;
+}
+
+#autodiag-entry #summary .progress {
+    margin-top: 20px;
 }
 
 @media screen and (max-width: 991px) {
