@@ -1,11 +1,12 @@
-var AutodiagEntry = function(element) {
+var AutodiagEntry = function(element, entry) {
     this.element = element;
+    this.entry = entry;
     this.summary = undefined;
     this.chapters = {};
 
-    // this.options = {
-    //     saveDelay: 500
-    // };
+    this.options = {
+        saveDelay: 500
+    };
 
     this.init();
 };
@@ -13,8 +14,30 @@ var AutodiagEntry = function(element) {
 AutodiagEntry.prototype = {
     init: function()
     {
+        this.initEntry();
         this.initChapters();
         this.initSummary();
+    },
+
+    initEntry: function()
+    {
+        if (this.entry === null && $('.popin').length > 0) {
+            $(function () {
+                $.fancybox({
+                    content: $('.popin'),
+                    modal: true
+                });
+            });
+
+            // var instance = this;
+            // $('form', $('.popin')).submit(function (e) {
+            //     var form = $(this);
+            //     $.post(form.get(0).action, form.serialize(), function(response) {
+            //         instance.entry = response;
+            //         $.fancybox.close();
+            //     });
+            // });
+        }
     },
 
     initChapters: function()
@@ -23,9 +46,15 @@ AutodiagEntry.prototype = {
         $('.chapter[data-chapter]', this.element).each(function() {
             var id = $(this).data('chapter');
             instance.chapters[id] = new Chapter(id, $(this));
+            for (var attribute in instance.chapters[id].attributes) {
+                instance.bindAttributeSave(
+                    instance.chapters[id].attributes[attribute]
+                );
+            }
         });
 
         for (var i in this.chapters) {
+            // init hierarchy
             var chapter = this.chapters[i].getElement();
             while (chapter.parents('.chapter[data-chapter]').length > 0) {
                 this.chapters[i].setParent(
@@ -38,7 +67,6 @@ AutodiagEntry.prototype = {
 
     initSummary: function()
     {
-        var instance = this;
         this.summary = new Summary($('#summary', this.element), this, {
             previous: $('.navigation .prev', this.element),
             next: $('.navigation .next', this.element)
@@ -58,6 +86,39 @@ AutodiagEntry.prototype = {
                 scrollTop: chapter.getElement().offset().top
             }, {
                 easing: 'easeOutCubic'
+            });
+        }
+    },
+
+    bindAttributeSave: function(attribute)
+    {
+        var instance = this;
+        attribute.onChange(function () {
+            if (attribute.changedTimer !== undefined) {
+                clearTimeout(attribute.changedTimer);
+            }
+
+            attribute.changedTimer = setTimeout(function() {
+                instance.submitAttributeForm(attribute);
+            }, instance.options.saveDelay);
+        });
+    },
+
+    submitAttributeForm: function(attribute)
+    {
+        var form = attribute.element.find('form');
+        if (this.entry !== null) {
+            $.ajax({
+                url: Routing.generate(
+                    'hopitalnumerique_autodiag_entry_attribute_save',
+                    {
+                        attribute: attribute.id,
+                        entry: this.entry
+                    }
+                ),
+                data: form.serialize(),
+                method: 'POST',
+                dataType: 'json'
             });
         }
     }

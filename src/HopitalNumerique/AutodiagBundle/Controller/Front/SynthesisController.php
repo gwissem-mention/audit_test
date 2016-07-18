@@ -20,7 +20,9 @@ class SynthesisController extends Controller
             $this->get('doctrine.orm.entity_manager')->persist($synthesis);
             $this->get('doctrine.orm.entity_manager')->flush();
 
-            return new JsonResponse($synthesis);
+            return $this->redirectToRoute('hopitalnumerique_autodiag_entry_edit', [
+                'entry' => $synthesis->getEntries()->first()->getId()
+            ]);
         }
 
         return $this->createAccessDeniedException();

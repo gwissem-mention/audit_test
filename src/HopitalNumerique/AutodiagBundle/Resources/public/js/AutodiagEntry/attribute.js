@@ -4,12 +4,9 @@ var Attribute = function(id, element)
     this.element = element;
 
     this.callbacks = {
-        onChange: $.noop
+        onChange: $.Callbacks()
     };
 
-    this.options = {
-        saveDelay: 500
-    };
     this.moodEnabled = element.data('mood') !== undefined;
     this.commentEnabled = false;
 
@@ -27,7 +24,6 @@ Attribute.prototype = {
     init: function()
     {
         this.bindEvents();
-        this.bindSubmit();
         this.handleComment();
         this.handleMood();
     },
@@ -36,13 +32,13 @@ Attribute.prototype = {
     {
         var instance = this;
         $('input, select, textarea', this.element.find('.attribute-value')).on('change', function () {
-            instance.callbacks.onChange();
+            instance.callbacks.onChange.fire();
         });
     },
 
     onChange: function(callback)
     {
-        this.callbacks.onChange = callback;
+        this.callbacks.onChange.add(callback);
     },
 
     isFilled: function()
@@ -53,28 +49,6 @@ Attribute.prototype = {
             filled = filled && $(this).val().length > 0;
         });
         return filled;
-    },
-
-    bindSubmit: function()
-    {
-        var self = this;
-        $('input, select, textarea', this.element).on('change', function() {
-            if ($(this).data('changedTimer') !== undefined) {
-                clearTimeout($(this).data('changedTimer'));
-            }
-
-            var form = $(this).closest('form');
-            $(this).data('changedTimer', setTimeout(function() {
-                self.submitForm(form);
-            }, self.options.saveDelay));
-        });
-    },
-
-    submitForm: function(form)
-    {
-        $.post(form.get(0).action, form.serialize(), function() {
-            console.log('saved');
-        });
     },
 
     handleComment: function()

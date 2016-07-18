@@ -22,7 +22,16 @@
 {% endblock %}
 
 {% block body %}
-    {% block extra %}{% endblock %}
+    {% if synthesisCreateForm is not null %}
+        <div class="popin">
+            {{ form_start(synthesisCreateForm) }}
+
+            {{ form_widget(synthesisCreateForm) }}
+            <input class="btn" type="submit" value="{{ "ad.synthesis.save"|trans }}" />
+
+            {{ form_end(synthesisCreateForm) }}
+        </div>
+    {% endif %}
 
     <div id="autodiag-entry" class="row">
         <div class="col-md-3">
@@ -36,9 +45,7 @@
                 </h1>
             </div>
             <div class="synthesis-name">
-                {% if entry is defined %}
-                    <h2>{{ entry.synthesis.name }}</h2>
-                {% endif %}
+                <h2>{{ entry.synthesis.name }}</h2>
             </div>
 
             <div class="desc">
@@ -71,7 +78,8 @@
     </div>
 
     <script type="text/javascript">
-        var autodiag = new AutodiagEntry($('#autodiag-entry'));
+        var entry = {{ entry.id ? entry.id : 'null' }};
+        var autodiag = new AutodiagEntry($('#autodiag-entry'), entry);
     </script>
 
 {% endblock %}

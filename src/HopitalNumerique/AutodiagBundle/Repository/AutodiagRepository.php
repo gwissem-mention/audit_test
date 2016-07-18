@@ -13,21 +13,24 @@ use HopitalNumerique\AutodiagBundle\Entity\Autodiag\Container\Chapter;
 class AutodiagRepository extends EntityRepository
 {
 
-    public function getFullyLoaded(Autodiag $autodiag)
+    public function getFullyLoaded($autodiagId)
     {
         $qb = $this->createQueryBuilder('ad');
         $qb
             ->select(
                 'ad',
-                'chapters'
+                'chapters',
+                'attributes',
+                'options'
             )
             ->join('ad.containers', 'chapters', Join::WITH, $qb->expr()->isInstanceOf('chapters', Chapter::class))
-//            ->join('ad.attributes', 'attributes')
+            ->join('ad.attributes', 'attributes')
+            ->join('attributes.options', 'options')
             ->where(
-                $qb->expr()->eq('ad', ':autodiag')
+                $qb->expr()->eq('ad.id', ':autodiagId')
             )
             ->setParameters([
-                'autodiag' => $autodiag
+                'autodiagId' => $autodiagId
             ])
         ;
 

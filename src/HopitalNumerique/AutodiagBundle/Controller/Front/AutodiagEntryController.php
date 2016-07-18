@@ -14,26 +14,37 @@ use Symfony\Component\HttpFoundation\Request;
 
 class AutodiagEntryController extends Controller
 {
+    /**
+     * @ParamConverter("autodiag", class="HopitalNumeriqueAutodiagBundle:Autodiag", options={
+     *      "repository_method" = "getFullyLoaded"
+     * })
+     *
+     * @param Autodiag $autodiag
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
     public function addAction(Autodiag $autodiag)
     {
         $synthesis = Synthesis::create($autodiag);
-        $form = $this->createForm(SynthesisType::class, $synthesis, [
-            'action' => $this->generateUrl('hopitalnumerique_autodiag_synthesis_savenew', [
-                'autodiag' => $autodiag->getId()
-            ])
-        ]);
 
-        return $this->render('HopitalNumeriqueAutodiagBundle:AutodiagEntry:add.html.twig', [
-            'form' => $form->createView(),
-            'autodiag' => $autodiag,
-        ]);
+        return $this->editAction($synthesis->getEntries()->first());
+
+//        $form = $this->createForm(SynthesisType::class, $synthesis, [
+//            'action' => $this->generateUrl('hopitalnumerique_autodiag_synthesis_savenew', [
+//                'autodiag' => $autodiag->getId()
+//            ])
+//        ]);
+//
+//        return $this->render('HopitalNumeriqueAutodiagBundle:AutodiagEntry:add.html.twig', [
+//            'form' => $form->createView(),
+//            'autodiag' => $autodiag,
+//        ]);
     }
 
     public function editAction(AutodiagEntry $entry)
     {
         $autodiag = $entry->getSynthesis()->getAutodiag();
         $autodiag = $this->getDoctrine()->getRepository('HopitalNumeriqueAutodiagBundle:Autodiag')
-            ->getFullyLoaded($autodiag);
+            ->getFullyLoaded($autodiag->getId());
 
         $forms = [];
         foreach ($autodiag->attributes as $attribute) {
@@ -53,18 +64,30 @@ class AutodiagEntryController extends Controller
                 ValueType::class,
                 $entryValue,
                 [
-                    'action' => $this->generateUrl('hopitalnumerique_autodiag_entry_attribute_save', [
-                        'entry' => $entry->getId(),
-                        'attribute' => $attribute->getId(),
-                    ])
+                    'action' => $entry->getId() !== null
+                        ? $this->generateUrl('hopitalnumerique_autodiag_entry_attribute_save', [
+                            'entry' => $entry->getId(),
+                            'attribute' => $attribute->getId(),
+                        ])
+                        : null
                 ]
             )->createView();
+        }
+
+        $synthesisCreateForm = null;
+        if (null === $entry->getId()) {
+            $synthesisCreateForm = $this->createForm(SynthesisType::class, $entry->getSynthesis(), [
+                'action' => $this->generateUrl('hopitalnumerique_autodiag_synthesis_savenew', [
+                    'autodiag' => $autodiag->getId()
+                ])
+            ])->createView();
         }
 
         return $this->render('HopitalNumeriqueAutodiagBundle:AutodiagEntry:edit.html.twig', [
             'autodiag' => $autodiag,
             'entry' => $entry,
             'forms' => $forms,
+            'synthesisCreateForm' => $synthesisCreateForm,
         ]);
     }
 
@@ -74,6 +97,7 @@ class AutodiagEntryController extends Controller
      *
      * @ParamConverter("entry")
      * @ParamConverter("attribute")
+     * @return JsonResponse
      */
     public function ajaxAttributeSaveAction(Request $request, AutodiagEntry $entry, Autodiag\Attribute $attribute)
     {
