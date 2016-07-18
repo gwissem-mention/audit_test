@@ -48,13 +48,11 @@ class AutodiagEntryController extends Controller
 
         $forms = [];
         foreach ($autodiag->attributes as $attribute) {
-            $entryValue = $this->getDoctrine()->getRepository('HopitalNumeriqueAutodiagBundle:AutodiagEntry\Value')
-                ->findOneBy([
-                    'entry' => $entry,
-                    'attribute' => $attribute
-                ]);
+            $entryValue = $entry->getValues()->filter(function (AutodiagEntry\Value $value) use ($attribute) {
+                return $value->getAttribute() == $attribute;
+            })->first();
 
-            if (null === $entryValue) {
+            if (!$entryValue instanceof AutodiagEntry\Value) {
                 $entryValue = new AutodiagEntry\Value();
                 $entryValue->setAttribute($attribute);
                 $entryValue->setEntry($entry);
@@ -101,6 +99,8 @@ class AutodiagEntryController extends Controller
      */
     public function ajaxAttributeSaveAction(Request $request, AutodiagEntry $entry, Autodiag\Attribute $attribute)
     {
+
+
         $entryValue = $this->getDoctrine()->getRepository('HopitalNumeriqueAutodiagBundle:AutodiagEntry\Value')
             ->findOneBy([
                 'entry' => $entry,

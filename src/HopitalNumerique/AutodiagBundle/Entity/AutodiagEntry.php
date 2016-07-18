@@ -2,6 +2,7 @@
 
 namespace HopitalNumerique\AutodiagBundle\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -43,6 +44,7 @@ class AutodiagEntry
     public function __construct(Synthesis $synthesis)
     {
         $this->synthesis = $synthesis;
+        $this->values = new ArrayCollection();
     }
 
     /**

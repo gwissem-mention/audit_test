@@ -76,6 +76,7 @@ AutodiagEntry.prototype = {
 
     showChapter: function(id, scrollTo)
     {
+        console.log(id);
         var chapter = this.chapters[id];
         for (var i in this.chapters) {
             this.chapters[i].hide();

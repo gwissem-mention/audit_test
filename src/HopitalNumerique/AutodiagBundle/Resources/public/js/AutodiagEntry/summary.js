@@ -142,7 +142,7 @@ Summary.prototype = {
 
         window.location.hash = this.getHashByChapter(chapterId);
 
-        $('li', this.element).removeClass('active');
+        $('li.summary-item', this.element).removeClass('active');
 
         var chapter = $('[data-chapter="' + chapterId + '"]', this.element);
         var parentId = undefined;
@@ -163,7 +163,7 @@ Summary.prototype = {
     {
         var chapter = window.location.hash.substr(1).length > 0
             ? this.getChapterByHash(window.location.hash.substr(1))
-            : $('li', this.element).first().data('chapter');
+            : $('li.summary-item', this.element).first().data('chapter');
 
         this.selectChapter(chapter, false);
     },
