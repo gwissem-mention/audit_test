@@ -30,12 +30,24 @@ class AutodiagRepository extends EntityRepository
                 'autodiag' => $autodiag
             ])
         ;
-//
-//        $autodiag = $qb->getQuery()->getOneOrNullResult();
-//        foreach ($autodiag->getChapters() as $chapter) {
-//            dump($chapter->getAttributes());die;
-//        }
 
         return $qb->getQuery()->getOneOrNullResult();
+    }
+
+    public function getDatasForGrid()
+    {
+        $qb = $this->createQueryBuilder('ad');
+        $qb
+            ->select(
+                'ad.id',
+                'ad.title',
+                'GROUP_CONCAT(domaines.nom) AS domaines_list',
+                'ad.createdAt',
+                'ad.publicUpdatedDate'
+            )
+            ->join('ad.domaines', 'domaines')
+        ;
+
+        return $qb->getQuery()->getArrayResult();
     }
 }

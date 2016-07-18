@@ -178,4 +178,32 @@ class AutodiagController extends Controller
             'progress' => $importHandler->getRestitutionProgress(),
         ]);
     }
+
+    public function deleteMassAction($primaryKeys, $allPrimaryKeys)
+    {
+        $grid = new ModelGrid($this->container);
+        //get all selected Codes
+        if ($allPrimaryKeys == 1) {
+            $rawDatas = $grid->getRawData();
+            foreach ($rawDatas as $data) {
+                $primaryKeys[] = $data['id'];
+            }
+        }
+
+        $autodiags = $this->get('autodiag.repository.autodiag')->findBy([
+            'id' => $primaryKeys
+        ]);
+
+        try {
+            foreach ($autodiags as $autodiag) {
+                $this->getDoctrine()->getManager()->remove($autodiag);
+            }
+            $this->getDoctrine()->getManager()->flush();
+            $this->addFlash('info', 'Suppression effectuée avec succès.');
+        } catch (\Exception $e) {
+            $this->addFlash('error', "Une erreur est survenue.");
+        }
+
+        return $this->redirect($this->generateUrl('hopitalnumerique_autodiag_list'));
+    }
 }

@@ -33,3 +33,9 @@ services:
         arguments: ['@autodiag.attribute_builder_provider']
         tags:
             - { name: form.type }
+
+    autodiag.repository.autodiag:
+            class: HopitalNumerique\AutodiagBundle\Repository\AutodiagRepository
+            factory: ["@doctrine.orm.entity_manager", "getRepository"]
+            arguments:
+                - 'HopitalNumeriqueAutodiagBundle:Autodiag'

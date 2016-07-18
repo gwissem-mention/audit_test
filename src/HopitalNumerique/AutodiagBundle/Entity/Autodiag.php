@@ -74,6 +74,15 @@ class Autodiag
     private $publicUpdatedDate;
 
     /**
+     * Creation date and time
+     *
+     * @var \DateTime
+     *
+     * @ORM\Column(type="datetime")
+     */
+    private $createdAt;
+
+    /**
      * Autodiag algorithm
      *
      * @var string
@@ -145,6 +154,7 @@ class Autodiag
         $this->domaines = new ArrayCollection();
         $this->chapters = new ArrayCollection();
         $this->publicUpdatedDate = new \DateTime();
+        $this->createdAt = new \DateTime();
     }
 
     /**
@@ -268,6 +278,29 @@ class Autodiag
     public function setPublicUpdatedDate(\DateTime $publicUpdatedDate)
     {
         $this->publicUpdatedDate = $publicUpdatedDate;
+
+        return $this;
+    }
+
+    /**
+     * Get creation datetime
+     *
+     * @return \DateTime
+     */
+    public function getCreatedAt()
+    {
+        return $this->createdAt;
+    }
+
+    /**
+     * Set creation datetime
+     *
+     * @param \DateTime $createdAt
+     * @return $this
+     */
+    public function setCreatedAt(\DateTime $createdAt)
+    {
+        $this->createdAt = $createdAt;
 
         return $this;
     }

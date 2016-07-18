@@ -52,7 +52,7 @@ class ChapterWriter implements WriterInterface, ProgressAwareInterface
                 if (!isset($item['code_chapitre'])) {
                     throw new \Exception('Parent code needed for child chapter');
                 }
-                $parentCode = $item['code_chapitre'];
+                $parentCode = (string)$item['code_chapitre'];
                 $chapterCode = (string)$item['code_chapitre_enfant'];
 
                 $parentChapter = $this->getChapter($parentCode);
@@ -92,7 +92,7 @@ class ChapterWriter implements WriterInterface, ProgressAwareInterface
     {
         $toDelete = $this->autodiag->getChapters()->filter(
             function (Chapter $chapter) {
-                return !array_key_exists($chapter->getCode(), $this->importedChapterCodes);
+                return !array_key_exists((string)$chapter->getCode(), $this->importedChapterCodes);
             }
         );
 
@@ -114,12 +114,18 @@ class ChapterWriter implements WriterInterface, ProgressAwareInterface
             ]);
 
         if (!$chapter instanceof Chapter) {
-            $chapter = new Chapter();
-            $chapter->setCode($code);
-            $this->autodiag->addChapter($chapter);
+            $chapter = $this->autodiag->getChapters()->filter(function (Chapter $chapter) use ($code) {
+                return $chapter->getCode() == $code;
+            })->first();
+
+            if (!$chapter) {
+                $chapter = new Chapter();
+                $chapter->setCode($code);
+                $this->autodiag->addChapter($chapter);
+            }
         }
 
-        $this->importedChapterCodes[(string)$chapter->getCode()] = true;
+        $this->importedChapterCodes[$code] = true;
 
         return $chapter;
     }
