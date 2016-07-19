@@ -139,7 +139,7 @@ class ObjetManager extends BaseManager
      *
      * @return array
      */
-    public function getDatasForExport( $ids, $refsPonderees )
+    public function getDatasForExport( $ids, $refsPonderees, $noteReader )
     {
         $objets  = $this->getRepository()->getDatasForExport( $ids )->getQuery()->getResult();
         $results = array();
@@ -161,7 +161,6 @@ class ObjetManager extends BaseManager
             $row['fichier1']     = $objet->getPath();
             $row['fichier2']     = $objet->getPath2();
             $row['vignette']     = $objet->getVignette();
-            $row['note']         = null;//number_format($this->getNoteReferencement($objet->getReferences(), $refsPonderees), 0);
             $row['dateParution'] = $objet->getDateParution();
 
             //quelques Dates
@@ -191,6 +190,14 @@ class ObjetManager extends BaseManager
                 $row['domaines'][] = $domaine->getNom();
             }
             $row['domaines'] = implode('|', $row['domaines']);
+
+            //handle note referencement
+            $row['note']= array();
+            foreach ($domaines as $domaine)
+            {
+                $row['note'][] = $domaine->getNom() . ":" . $noteReader->getNoteByEntityAndDomaineForAffichage($objet, $domaine);
+            }
+            $row['note'] = implode('|', $row['note']);
 
             //handle types (catégories)
             $types        = $objet->getTypes();

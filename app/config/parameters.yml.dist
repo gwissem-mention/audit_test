@@ -10,13 +10,13 @@ parameters:
     mailer_host: smtp.nodevo.com
     mailer_user: noreply@nodevo.com
     mailer_password: 'W;a75g*2Ur'
-    
+
     locale: fr
     secret: '536ghdge7g&7hdjzy6g"gvxojheg'
-    
+
     #Variables spécifiques aux différents postes physique (Prod - preprod - chaque poste de dev, ... )
     disable_delivery : true
-    
+
     #KnpSnappy
     wkhtmltopdf: /usr/local/wkhtmltopdf/bin/wkhtmltopdf
     wkhtmltoimage: /usr/local/wkhtmltopdf/bin/wkhtmltoimage
@@ -33,7 +33,7 @@ parameters:
         tdauriac@nodevo.com: 'Thomas D.'
     confighn_hopitalnumerique_questionnaire_mailExpertReponses:
         reseaux-hn@anap.fr: 'Réseaux HN'
-    
+
     #HopitalNumerique_Contact
     confighn_hopitalnumerique_contact:
         tdauriac@nodevo.com: Thomas D.
@@ -43,7 +43,7 @@ parameters:
     confighn_hopitalnumerique_exalead  : false
 
     #Extensions autorisées dans le gestionnaire de media
-    nodevo_gestionnaire_media.moxie_manager.extensions_autorisees: jpg,jpeg,png,gif,html,htm,txt,docx,doc,zip,pdf,xls,xlsx,ppt,pptx,ods,odt
+    nodevo_gestionnaire_media.moxie_manager.extensions_autorisees: jpg,jpeg,png,gif,html,htm,txt,docx,doc,zip,pdf,xls,xlsx,ppt,pptx,ods,odt,xlsm
 
     #Activation des réseaux sociaux
     activateRsxSociaux : false
