@@ -38,7 +38,7 @@ class AutodiagEntry
 
     /**
      * @var Collection
-     * @ORM\OneToMany(targetEntity="HopitalNumerique\AutodiagBundle\Entity\AutodiagEntry\Value", mappedBy="entry")
+     * @ORM\OneToMany(targetEntity="HopitalNumerique\AutodiagBundle\Entity\AutodiagEntry\Value", mappedBy="entry", cascade={"persist"})
      */
     private $values;
 

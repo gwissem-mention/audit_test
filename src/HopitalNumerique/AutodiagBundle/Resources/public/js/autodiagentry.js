@@ -17,6 +17,8 @@ AutodiagEntry.prototype = {
         this.initEntry();
         this.initChapters();
         this.initSummary();
+
+        this.bindChapters();
     },
 
     // Init creation form
@@ -72,6 +74,21 @@ AutodiagEntry.prototype = {
             previous: $('.navigation .prev', this.element),
             next: $('.navigation .next', this.element)
         });
+    },
+
+    bindChapters: function()
+    {
+        var instance = this;
+        for (var i in this.chapters) {
+            this.chapters[i].onNotConcerned(function(chapter) {
+                $.post(
+                    Routing.generate('hopitalnumerique_autodiag_entry_chapter_notconcerned', {
+                        entry: instance.entry,
+                        chapter: chapter.id
+                    })
+                );
+            });
+        }
     },
 
     showChapter: function(id, scrollTo)

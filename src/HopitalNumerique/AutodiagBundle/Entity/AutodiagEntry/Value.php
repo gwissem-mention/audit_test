@@ -93,6 +93,7 @@ class Value
     public function setEntry($entry)
     {
         $this->entry = $entry;
+        $this->entry->addValue($this);
     }
 
     /**

@@ -245,6 +245,7 @@ fos_js_routing:
         - hopital_numerique_user_inscription
         - hopital_numerique_recherche_homepage_requete_generator
         - hopitalnumerique_autodiag_entry_attribute_save
+        - hopitalnumerique_autodiag_entry_chapter_notconcerned
 
 # Miniatures
 liip_imagine:

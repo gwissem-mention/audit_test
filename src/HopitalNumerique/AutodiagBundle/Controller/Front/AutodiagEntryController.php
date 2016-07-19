@@ -142,4 +142,26 @@ class AutodiagEntryController extends Controller
 
         return new JsonResponse();
     }
+
+    public function ajaxChapterNotConcernedAction(AutodiagEntry $entry, Autodiag\Container\Chapter $chapter)
+    {
+        foreach ($chapter->getAttributes() as $attribute) {
+            $entryValue = $entry->getValues()->filter(function (AutodiagEntry\Value $value) use ($attribute) {
+                return $value->getAttribute() == $attribute;
+            })->first();
+
+            if (!$entryValue instanceof AutodiagEntry\Value) {
+                $entryValue = new AutodiagEntry\Value();
+                $entryValue->setAttribute($attribute);
+                $entryValue->setEntry($entry);
+                $entryValue->setValue(-1);
+            }
+        }
+
+        $manager = $this->getDoctrine()->getManager();
+        $manager->persist($entry);
+        $manager->flush();
+
+        return new JsonResponse();
+    }
 }

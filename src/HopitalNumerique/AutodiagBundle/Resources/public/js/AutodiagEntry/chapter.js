@@ -9,7 +9,8 @@ var Chapter = function(id, element)
     this.attributes = {};
 
     this.callbacks = {
-        onCompletionChange: $.Callbacks()
+        onCompletionChange: $.Callbacks(),
+        onNotConcerned: $.Callbacks()
     };
 
     this.init();
@@ -19,6 +20,7 @@ Chapter.prototype = {
     init: function()
     {
         this.initAttributes();
+        this.handleNotConcerned();
     },
 
     initAttributes: function()
@@ -120,5 +122,39 @@ Chapter.prototype = {
                 this.childrens[i].show();
             }
         }
+    },
+
+    /**
+     * Gestion du "Non concerné"
+     */
+    handleNotConcerned: function()
+    {
+        var compliant = Object.keys(this.attributes).length > 0;
+        for (var i in this.attributes) {
+            compliant = compliant && this.attributes[i].isNotconcernedCompliant();
+        }
+
+        if (compliant) {
+            $('.not-concerned', this.element).show();
+        } else {
+            $('.not-concerned', this.element).hide();
+        }
+
+        $('.not-concerned', this.element).first().on('click', $.proxy(this.setNotConcerned, this));
+    },
+
+    setNotConcerned: function()
+    {
+        for (var i in this.attributes) {
+            this.attributes[i].setNotConcerned();
+        }
+
+        this.callbacks.onCompletionChange.fire();
+        this.callbacks.onNotConcerned.fire(this);
+    },
+
+    onNotConcerned: function(callback)
+    {
+        this.callbacks.onNotConcerned.add(callback);
     }
 };

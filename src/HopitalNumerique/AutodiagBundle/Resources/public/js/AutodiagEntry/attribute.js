@@ -100,7 +100,7 @@ Attribute.prototype = {
         if (this.moodEnabled) {
             var instance = this;
             this.computeMood();
-            $('input, select, textarea', this.element).on('change', function () {
+            this.onChange(function () {
                 instance.computeMood();
             });
         }
@@ -143,8 +143,8 @@ Attribute.prototype = {
                     min = Math.min(min, $(this).val());
                     max = Math.max(max, $(this).val());
                 }
-                value = $(this).prop('checked') ? $(this).val() : value;
             });
+            value = radios.filter(':checked').val() || null;
         } else if (inputs.length > 0) {
             value = null;
         } else {
@@ -164,6 +164,50 @@ Attribute.prototype = {
                     this.moodIconClass[tier]
                 )
             )
+        }
+    },
+
+    isNotconcernedCompliant: function()
+    {
+        var selects = $('.attribute-value *', this.element).filter('select'),
+            radios = $('.attribute-value *', this.element).filter('input[type="radio"]'),
+            compliant = false,
+            instance = this
+        ;
+
+        selects.each(function () {
+            $('option', $(this)).each(function () {
+                compliant = compliant || ($(this).val() == instance.notConcernedValue);
+            });
+        });
+
+        radios.each(function () {
+            compliant = compliant || ($(this).val() == instance.notConcernedValue);
+        });
+
+        return compliant;
+    },
+
+    setNotConcerned: function()
+    {
+        if (this.isNotconcernedCompliant()) {
+            var selects = $('.attribute-value *', this.element).filter('select'),
+                radios = $('.attribute-value *', this.element).filter('input[type="radio"]'),
+                instance = this
+            ;
+
+            selects.each(function() {
+                $(this).val(instance.notConcernedValue);
+            });
+
+            radios.each(function() {
+                $(this).prop('checked', $(this).val() === instance.notConcernedValue);
+            });
+
+            this.computeMood();
+
+            // Trigger on change
+            // this.callbacks.onChange.fire();
         }
     }
 };

@@ -10,6 +10,10 @@ hopitalnumerique_autodiag_entry_attribute_save:
     path:     /autodiagnostic/save/{entry}/{attribute}
     defaults: { _controller: HopitalNumeriqueAutodiagBundle:Front/AutodiagEntry:ajaxAttributeSave }
 
+hopitalnumerique_autodiag_entry_chapter_notconcerned:
+    path:     /autodiagnostic/setchapternotconcerned/{entry}/{chapter}
+    defaults: { _controller: HopitalNumeriqueAutodiagBundle:Front/AutodiagEntry:ajaxChapterNotConcerned }
+
 hopitalnumerique_autodiag_synthesis_savenew:
     path: /autodiagnostic/{autodiag}/synthese/save
     methods: ["POST"]

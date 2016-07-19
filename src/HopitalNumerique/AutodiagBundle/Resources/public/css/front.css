@@ -190,9 +190,13 @@
     font-size: 24px;
 }
 
-.chapter .chapter-label {
+.chapter .chapter-label span {
     font-weight: bold;
     font-size: 20px;
+}
+
+.chapter .chapter-label .not-concerned {
+    cursor: pointer;
 }
 
 .chapters .navigation {
