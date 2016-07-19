@@ -127,5 +127,10 @@ class Value
     {
         $this->comment = $comment;
     }
+
+    public function setNotConcerned()
+    {
+        $this->setValue(-1);
+    }
 }
 

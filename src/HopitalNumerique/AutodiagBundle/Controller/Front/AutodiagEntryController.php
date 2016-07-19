@@ -111,6 +111,7 @@ class AutodiagEntryController extends Controller
      *
      * @ParamConverter("entry")
      * @ParamConverter("attribute")
+     *
      * @return JsonResponse
      */
     public function ajaxAttributeSaveAction(Request $request, AutodiagEntry $entry, Autodiag\Attribute $attribute)
@@ -143,8 +144,21 @@ class AutodiagEntryController extends Controller
         return new JsonResponse();
     }
 
+    /**
+     * Set all chapter attributes to not concerned value
+     *
+     * @param AutodiagEntry $entry
+     * @param Autodiag\Container\Chapter $chapter
+     *
+     * @ParamConverter("entry")
+     * @ParamConverter("chapter")
+     *
+     * @return JsonResponse
+     */
     public function ajaxChapterNotConcernedAction(AutodiagEntry $entry, Autodiag\Container\Chapter $chapter)
     {
+        $this->denyAccessUnlessGranted('edit', $entry);
+
         foreach ($chapter->getAttributes() as $attribute) {
             $entryValue = $entry->getValues()->filter(function (AutodiagEntry\Value $value) use ($attribute) {
                 return $value->getAttribute() == $attribute;
@@ -154,8 +168,9 @@ class AutodiagEntryController extends Controller
                 $entryValue = new AutodiagEntry\Value();
                 $entryValue->setAttribute($attribute);
                 $entryValue->setEntry($entry);
-                $entryValue->setValue(-1);
             }
+
+            $entryValue->setNotConcerned();
         }
 
         $manager = $this->getDoctrine()->getManager();
