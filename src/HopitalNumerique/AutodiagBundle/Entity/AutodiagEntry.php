@@ -5,6 +5,7 @@ namespace HopitalNumerique\AutodiagBundle\Entity;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use HopitalNumerique\UserBundle\Entity\User;
 
 /**
  * Autodiag entry - a response to an autodiag
@@ -41,10 +42,27 @@ class AutodiagEntry
      */
     private $values;
 
-    public function __construct(Synthesis $synthesis)
+    /**
+     * @var User
+     * @ORM\ManyToOne(targetEntity="HopitalNumerique\UserBundle\Entity\User")
+     * @ORM\JoinColumn(name="user_id", referencedColumnName="usr_id", onDelete="CASCADE", nullable=true)
+     */
+    private $user;
+
+    public function __construct(Synthesis $synthesis, User $user = null)
     {
         $this->synthesis = $synthesis;
+        $this->user = $user;
         $this->values = new ArrayCollection();
+
+        $synthesis->addEntry($this);
+    }
+
+    public static function create(Autodiag $autodiag, User $user = null)
+    {
+        $entry = new self(Synthesis::create($autodiag), $user);
+
+        return $entry;
     }
 
     /**
@@ -74,5 +92,23 @@ class AutodiagEntry
     {
         $this->values->add($value);
     }
-}
 
+    /**
+     * @return User
+     */
+    public function getUser()
+    {
+        return $this->user;
+    }
+
+    /**
+     * @param User $user
+     * @return $this
+     */
+    public function setUser(User $user)
+    {
+        $this->user = $user;
+
+        return $this;
+    }
+}

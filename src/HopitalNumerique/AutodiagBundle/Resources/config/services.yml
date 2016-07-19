@@ -34,8 +34,27 @@ services:
         tags:
             - { name: form.type }
 
+    autodiag.entry.session:
+        class: HopitalNumerique\AutodiagBundle\Service\AutodiagEntrySession
+        arguments:
+            - '@autodiag.repository.autodiagentry'
+            - '@session'
+
+    autodiag.repository.autodiagentry:
+            class: HopitalNumerique\AutodiagBundle\Repository\AutodiagRepository
+            factory: ["@doctrine.orm.entity_manager", "getRepository"]
+            arguments:
+                - 'HopitalNumeriqueAutodiagBundle:AutodiagEntry'
+
     autodiag.repository.autodiag:
             class: HopitalNumerique\AutodiagBundle\Repository\AutodiagRepository
             factory: ["@doctrine.orm.entity_manager", "getRepository"]
             arguments:
                 - 'HopitalNumeriqueAutodiagBundle:Autodiag'
+
+    autodiag.autodiagentry_voter:
+        class: HopitalNumerique\AutodiagBundle\Security\AutodiagEntryVoter
+        arguments: ['@autodiag.entry.session']
+        tags:
+            - { name: security.voter }
+        public: false

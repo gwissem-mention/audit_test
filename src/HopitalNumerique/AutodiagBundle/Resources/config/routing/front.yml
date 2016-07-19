@@ -1,5 +1,5 @@
 hopitalnumerique_autodiag_entry_add:
-    path:     /autodiagnostic/{id}
+    path:     /autodiagnostic/{autodiag}
     defaults: { _controller: HopitalNumeriqueAutodiagBundle:Front/AutodiagEntry:add }
 
 hopitalnumerique_autodiag_entry_edit:
@@ -12,4 +12,5 @@ hopitalnumerique_autodiag_entry_attribute_save:
 
 hopitalnumerique_autodiag_synthesis_savenew:
     path: /autodiagnostic/{autodiag}/synthese/save
+    methods: ["POST"]
     defaults: { _controller: HopitalNumeriqueAutodiagBundle:Front/Synthesis:saveNew }

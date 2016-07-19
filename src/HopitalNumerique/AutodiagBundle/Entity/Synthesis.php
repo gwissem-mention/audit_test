@@ -5,6 +5,7 @@ namespace HopitalNumerique\AutodiagBundle\Entity;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use HopitalNumerique\UserBundle\Entity\User;
 
 /**
  * Synthesis
@@ -68,15 +69,12 @@ class Synthesis
     /**
      * Create new Synthesis
      *
+     * @param Autodiag $autodiag
      * @return Synthesis
      */
     public static function create(Autodiag $autodiag)
     {
         $synthesis = new self($autodiag);
-
-        $synthesis->addEntry(
-            new AutodiagEntry($synthesis)
-        );
 
         return $synthesis;
     }

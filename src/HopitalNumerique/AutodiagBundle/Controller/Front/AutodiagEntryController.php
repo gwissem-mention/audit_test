@@ -4,7 +4,6 @@ namespace HopitalNumerique\AutodiagBundle\Controller\Front;
 
 use HopitalNumerique\AutodiagBundle\Entity\Autodiag;
 use HopitalNumerique\AutodiagBundle\Entity\AutodiagEntry;
-use HopitalNumerique\AutodiagBundle\Entity\Synthesis;
 use HopitalNumerique\AutodiagBundle\Form\Type\AutodiagEntry\ValueType;
 use HopitalNumerique\AutodiagBundle\Form\Type\SynthesisType;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
@@ -24,25 +23,42 @@ class AutodiagEntryController extends Controller
      */
     public function addAction(Autodiag $autodiag)
     {
-        $synthesis = Synthesis::create($autodiag);
+        $entry = $this->get('autodiag.entry.session')->get($autodiag)->first();
+        if (false !== $entry && $entry->getId()) {
+            return $this->redirectToRoute('hopitalnumerique_autodiag_entry_edit', [
+                'entry' => $entry->getId()
+            ]);
+        }
 
-        return $this->editAction($synthesis->getEntries()->first());
-
-//        $form = $this->createForm(SynthesisType::class, $synthesis, [
-//            'action' => $this->generateUrl('hopitalnumerique_autodiag_synthesis_savenew', [
-//                'autodiag' => $autodiag->getId()
-//            ])
-//        ]);
-//
-//        return $this->render('HopitalNumeriqueAutodiagBundle:AutodiagEntry:add.html.twig', [
-//            'form' => $form->createView(),
-//            'autodiag' => $autodiag,
-//        ]);
+        $entry = AutodiagEntry::create($autodiag, $this->getUser());
+        return $this->editAction($entry);
     }
 
+    /**
+     * @param AutodiagEntry $entry
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse|\Symfony\Component\HttpFoundation\Response
+     */
     public function editAction(AutodiagEntry $entry)
     {
         $autodiag = $entry->getSynthesis()->getAutodiag();
+
+        if (!$this->isGranted('edit', $entry)) {
+            return $this->redirectToRoute('hopitalnumerique_autodiag_entry_add', [
+                'autodiag' => $autodiag->getId()
+            ]);
+        }
+
+        // Assigne l'utilisateur courrant à l'autodiag entry courrant
+        // On supprime l'entry de la session
+        if ($this->getUser() && null === $entry->getUser()) {
+            $manager = $this->getDoctrine()->getManager();
+            $entry->setUser($this->getUser());
+            $manager->persist($entry);
+            $manager->flush();
+
+            $this->get('autodiag.entry.session')->remove($entry);
+        }
+
         $autodiag = $this->getDoctrine()->getRepository('HopitalNumeriqueAutodiagBundle:Autodiag')
             ->getFullyLoaded($autodiag->getId());
 
@@ -99,7 +115,7 @@ class AutodiagEntryController extends Controller
      */
     public function ajaxAttributeSaveAction(Request $request, AutodiagEntry $entry, Autodiag\Attribute $attribute)
     {
-
+        $this->denyAccessUnlessGranted('edit', $entry);
 
         $entryValue = $this->getDoctrine()->getRepository('HopitalNumeriqueAutodiagBundle:AutodiagEntry\Value')
             ->findOneBy([
