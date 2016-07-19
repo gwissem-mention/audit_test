@@ -25,7 +25,7 @@ class AutodiagRepository extends EntityRepository
             )
             ->join('ad.containers', 'chapters', Join::WITH, $qb->expr()->isInstanceOf('chapters', Chapter::class))
             ->join('ad.attributes', 'attributes')
-            ->join('attributes.options', 'options')
+            ->leftJoin('attributes.options', 'options')
             ->where(
                 $qb->expr()->eq('ad.id', ':autodiagId')
             )

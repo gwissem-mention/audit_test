@@ -8,4 +8,12 @@ class TextType extends AttributeType
     {
         return \Symfony\Component\Form\Extension\Core\Type\TextType::class;
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getBlockPrefix()
+    {
+        return 'attribute_text';
+    }
 }

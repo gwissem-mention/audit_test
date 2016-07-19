@@ -38,6 +38,8 @@ class QuestionWriter implements WriterInterface, ProgressAwareInterface
 
     protected $categories = [];
 
+    protected $attributes;
+
     protected $mapping = [
         'texte_avant' => 'description',
         'libelle_question' => 'label',
@@ -52,6 +54,8 @@ class QuestionWriter implements WriterInterface, ProgressAwareInterface
         $this->autodiag = $autodiag;
         $this->attributesProvider = $attributesProvider;
 
+        $this->attributes = new ArrayCollection();
+
         $this->attributeTypesAvailable = $this->attributesProvider->getBuildersName();
     }
 
@@ -63,7 +67,7 @@ class QuestionWriter implements WriterInterface, ProgressAwareInterface
     public function write($item)
     {
         if ($this->validate($item)) {
-            $attribute = $this->getAttribute($item[self::COLUMN_CODE]);
+            $attribute = $this->getAttribute($item[self::COLUMN_CODE], $item[self::COLUMN_TYPE]);
 
             $propertyAccessor = new PropertyAccessor();
             foreach ($this->mapping as $key => $property) {
@@ -93,6 +97,15 @@ class QuestionWriter implements WriterInterface, ProgressAwareInterface
 
     public function end()
     {
+        $attributes = $this->manager->getRepository('HopitalNumeriqueAutodiagBundle:Autodiag\Attribute')->findBy([
+            'autodiag' => $this->autodiag,
+        ]);
+        foreach ($attributes as $attribute) {
+            if (!$this->attributes->contains($attribute)) {
+                $this->manager->remove($attribute);
+            }
+        }
+
         $this->manager->flush();
     }
 
@@ -102,11 +115,12 @@ class QuestionWriter implements WriterInterface, ProgressAwareInterface
      * @param $code
      * @return Attribute
      */
-    protected function getAttribute($code)
+    protected function getAttribute($code, $type)
     {
         $attribute = $this->manager->getRepository('HopitalNumeriqueAutodiagBundle:Autodiag\Attribute')->findOneBy([
             'autodiag' => $this->autodiag,
-            'code' => $code
+            'code' => $code,
+            'type' => $type,
         ]);
 
         if (null === $attribute) {
@@ -115,6 +129,8 @@ class QuestionWriter implements WriterInterface, ProgressAwareInterface
                 ->setAutodiag($this->autodiag)
                 ->setCode($code);
         }
+
+        $this->attributes->add($attribute);
 
         return $attribute;
     }
@@ -129,7 +145,7 @@ class QuestionWriter implements WriterInterface, ProgressAwareInterface
     protected function getOption(Attribute $attribute, $value)
     {
         $found = $attribute->getOptions()->filter(function (Attribute\Option $option) use ($value) {
-            return $option->getValue() == $value;
+            return $option->getValue() === (string) $value;
         });
 
         if ($found->count() > 0) {
