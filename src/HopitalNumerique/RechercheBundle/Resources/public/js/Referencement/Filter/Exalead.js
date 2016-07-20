@@ -99,6 +99,17 @@ Hn_RechercheBundle_Referencement_Filter_Exalead.hasSearch = function()
 };
 
 /**
+ * Enlève le mot recherché.
+ */
+Hn_RechercheBundle_Referencement_Filter_Exalead.emptySearch = function()
+{
+    if (Hn_RechercheBundle_Referencement_Filter_Exalead.hasSearch()) {
+        $('#recherche_textuelle').val('');
+        Hn_RechercheBundle_Referencement.displayResults();
+    }
+};
+
+/**
  * Vérifie la validité de la recherche et retourne si valide.
  *
  * @return boolean Si valide
@@ -111,7 +122,7 @@ Hn_RechercheBundle_Referencement_Filter_Exalead.processSearchValidating = functi
         || (Hn_RechercheBundle_Referencement.getChosenElements().size() > 0)
     );
 
-    $('#search-text-button').prop('disabled', !canSearch);
+    $('#search-text-button, #empty-search-text-button').prop('disabled', !canSearch);
 
     return (searchedText.length > 1);
 };
