@@ -1,0 +1,107 @@
+#restitution {
+
+}
+
+#restitution .item .low {
+    background: #FF0000;
+}
+#restitution .item .middle {
+    background: #FF9900;
+}
+#restitution .item .high {
+    background: #008000;
+}
+
+/**
+* JAUGE
+*/
+#restitution .jauge {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+#restitution .jauge-container-wrapper {
+    flex: 1;
+    min-width: 49%;
+    padding: 20px;
+}
+
+#restitution .jauge-container {
+    background: #f5f5f5;
+}
+
+#restitution .jauge-container .header {
+    height: 40px;
+    line-height: 32px;
+    padding: 4px 20px;
+    background: #f1eeee;
+}
+
+#restitution .jauge-container .content {
+    padding: 20px;
+}
+
+#restitution .item.jauge-widget {
+    height: 40px;
+    position: relative;
+}
+#restitution .item.jauge-widget .step {
+    float: left;
+    width: calc(100%/3);
+    height: 100%;
+    line-height: 40px;
+    text-align: center;
+}
+
+#restitution .item.jauge-widget .score {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    transition: 0.4s left;
+
+    width: 0;
+    height: 0;
+    border-left: 10px solid transparent;
+    border-right: 10px solid transparent;
+    border-bottom: 20px solid #7A38A2;
+    margin-left: -10px;
+
+    z-index: 2;
+}
+#restitution .item.jauge-widget .score.reference {
+    border-bottom-color: #424242;
+    z-index: 1;
+}
+
+
+/**
+* Processus
+*/
+#restitution .processus {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+#restitution .processus-wrapper {
+    flex: 1;
+    min-width: 33%;
+    padding: 20px;
+}
+
+.processus .processus-item {
+    background-image: url(data:image/gif;base64,R0lGODlhAQABAIAAAAUEBAAAACwAAAAAAQABAAACAkQBADs=);
+    background-position: top center;
+    background-repeat: repeat-y;
+}
+
+.processus .processus-line {
+    height: 30px;
+    line-height: 30px;
+    text-align: center;
+    font-weight: bold;
+    margin-bottom: 20px;
+}
+
+.processus .processus-line.head {
+    background: #fff;
+}

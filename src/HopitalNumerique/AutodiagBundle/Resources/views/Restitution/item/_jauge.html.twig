@@ -1,0 +1,55 @@
+<div class="jauge">
+
+    {% for jaugeData in result %}
+
+        <div class="jauge-container-wrapper">
+            <div class="jauge-container">
+                <div class="header">
+                    <div class="title pull-left">{{ jaugeData.label }}</div>
+                    <div class="pull-right">
+                        <span class="score">{{ jaugeData.score.value }}</span>
+                        <span class="completion-wrapper">
+                            {{ jaugeData.numberOfAnswers / jaugeData.numberOfQuestions * 100 }} %
+                            <span class="completion" data-value="{{ jaugeData.numberOfAnswers / jaugeData.numberOfQuestions * 100 }}"></span>
+                        </span>
+                    </div>
+                </div>
+
+                <div class="content">
+                    <div class="item jauge-widget">
+                        <div class="step low">Faible</div>
+                        <div class="step middle">Moyen</div>
+                        <div class="step high">Fort</div>
+
+                        <div class="score" data-value="{{ jaugeData.score.value }}"></div>
+                        {% for score in jaugeData.references %}
+                            <div class="score reference" data-value="{{ score.value }}" data-label="{{ score.label }}"></div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% endfor %}
+
+</div>
+
+<script type="text/javascript">
+    $(function() {
+        $('.jauge-widget').each(function (j) {
+            var el = $(this);
+            setTimeout(function() {
+                $('[data-value]', el).each(function(i) {
+                    var el = $(this);
+
+                    el.tooltip({
+                        title: (el.data('label') ? (el.data('label') + ' : ') : '') + el.data('value') + '%'
+                    });
+
+                    setTimeout(function() {
+                        el.css('left', el.data('value') + '%');
+                    }, i * 50);
+                });
+            }, j * 50);
+        });
+    });
+</script>

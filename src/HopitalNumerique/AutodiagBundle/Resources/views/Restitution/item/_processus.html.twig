@@ -1,0 +1,26 @@
+{% import _self as tools %}
+
+<div class="processus">
+    {% for data in result %}
+        <div class="processus-wrapper">
+            <div class="processus-item">
+                <div class="processus-line head" data-value="{{ data.score.value }}">{{ data.label }}</div>
+                {% for child in data.childrens %}
+                    <div class="processus-line {{- tools.cssClass(child.score.value) -}}">{{ child.label }}</div>
+                {% endfor %}
+            </div>
+        </div>
+    {% endfor %}
+</div>
+
+{% macro cssClass(value) %}
+    {% spaceless %}
+        {% if value < (100/3) %}
+            low
+        {% elseif value < (2 * 100 / 3) %}
+            middle
+        {% else %}
+            high
+        {% endif %}
+    {% endspaceless %}
+{% endmacro %}

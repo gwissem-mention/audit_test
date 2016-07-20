@@ -18,3 +18,7 @@ hopitalnumerique_autodiag_synthesis_savenew:
     path: /autodiagnostic/{autodiag}/synthese/save
     methods: ["POST"]
     defaults: { _controller: HopitalNumeriqueAutodiagBundle:Front/Synthesis:saveNew }
+
+hopitalnumerique_autodiag_restitution_index:
+    path:     /autodiagnostic/restitution/{synthesis}
+    defaults: { _controller: HopitalNumeriqueAutodiagBundle:Front/Restitution:index }

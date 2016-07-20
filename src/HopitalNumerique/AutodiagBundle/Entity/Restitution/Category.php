@@ -2,6 +2,7 @@
 
 namespace HopitalNumerique\AutodiagBundle\Entity\Restitution;
 
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use HopitalNumerique\AutodiagBundle\Entity\Restitution;
 
@@ -50,6 +51,17 @@ class Category
      * @ORM\JoinColumn(name="restitution_id", referencedColumnName="id", onDelete="CASCADE")
      */
     private $restitution;
+
+    /**
+     * @var Collection
+     * @ORM\OneToMany(
+     *     targetEntity="HopitalNumerique\AutodiagBundle\Entity\Restitution\Item",
+     *     mappedBy="category",
+     *     cascade={"persist"},
+     *     fetch="EAGER"
+     * )
+     */
+    private $items;
 
     /**
      * Get id
@@ -132,6 +144,11 @@ class Category
         $this->restitution = $restitution;
 
         return $this;
+    }
+
+    public function getItems()
+    {
+        return $this->items;
     }
 }
 

@@ -11,7 +11,7 @@ use HopitalNumerique\AutodiagBundle\Entity\Restitution\Category;
  * Restitution
  *
  * @ORM\Table(name="ad_restitution")
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="HopitalNumerique\AutodiagBundle\Repository\RestitutionRepository")
  */
 class Restitution
 {
@@ -30,7 +30,8 @@ class Restitution
      * @ORM\OneToMany(
      *     targetEntity="HopitalNumerique\AutodiagBundle\Entity\Restitution\Category",
      *     mappedBy="restitution",
-     *     cascade={"persist"}
+     *     cascade={"persist"},
+     *     fetch="EAGER"
      * )
      */
     private $categories;

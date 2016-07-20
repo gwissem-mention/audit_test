@@ -1,0 +1,43 @@
+{% extends 'HopitalNumeriqueAutodiagBundle::layout.html.twig' %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    {% stylesheets output="compiled/hopitalnumerique-autodiag-front.css" filter="cssrewrite, ?yui_css"
+        'bundles/hopitalnumeriqueautodiag/css/restitution.css'
+    %}
+    <link rel="stylesheet" href="{{ asset_url }}" />
+    {% endstylesheets %}
+{% endblock stylesheets %}
+
+{% block javascripts %}
+    {{ parent() }}
+    {% javascripts output="compiled/hopitalnumerique-autodiag-restitution.js"
+    %}
+    <script type="text/javascript" src="{{ asset_url }}"></script>
+    {% endjavascripts %}
+{% endblock %}
+
+{% block body %}
+
+    <div id="restitution">
+        {% for category in restitution.categories %}
+            {{ category.label }}
+        {% endfor %}
+
+        {% for category in restitution.categories %}
+            <p>
+                {{ category.description }}
+            </p>
+            {% for item in category.items %}
+                <div class="item">
+                    {% include ("@HopitalNumeriqueAutodiag/Restitution/item/_" ~ item.type ~ ".html.twig") with {
+                        'restitution': item,
+                        'result': result[item.id]
+                    } %}
+                </div>
+            {% endfor %}
+
+        {% endfor %}
+    </div>
+
+{% endblock %}

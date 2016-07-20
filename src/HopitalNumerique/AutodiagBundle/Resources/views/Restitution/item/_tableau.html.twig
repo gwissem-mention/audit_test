@@ -1,0 +1,35 @@
+{% import _self as tools %}
+
+<div class="tableau">
+    <table class="table">
+        <thead>
+            <tr>
+                <th></th>
+                <th>Nombre de réponses</th>
+                <th>Score</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for data in result %}
+                <tr>
+                    <td>{{ data.label }}</td>
+                    <td>{{ data.numberOfAnswers }}/{{ data.numberOfQuestions }}</td>
+                    <td>{{ data.score.value }}</td>
+                    {% for score in data.references %}
+                        <td>{{ score.value }}</td>
+                    {% endfor %}
+                </tr>
+                {% for children in data.childrens %}
+                    <tr>
+                        <td> --- {{ children.label }}</td>
+                        <td>{{ children.numberOfAnswers }}/{{ children.numberOfQuestions }}</td>
+                        <td>{{ children.score.value }}</td>
+                        {% for score in children.references %}
+                            <td>{{ score.value }}</td>
+                        {% endfor %}
+                    </tr>
+                {% endfor %}
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
