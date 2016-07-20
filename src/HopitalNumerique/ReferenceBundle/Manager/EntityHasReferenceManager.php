@@ -132,6 +132,7 @@ class EntityHasReferenceManager extends BaseManager
                 ;
             if ($entityValid) {
                 $entityHaveReferenceWithoutRoles['objetTypeIds'] = ('' != $entityHaveReferenceWithoutRoles['objetTypeIds'] ? array_values(array_unique(explode(',', $entityHaveReferenceWithoutRoles['objetTypeIds']))) : []);
+                $entityHaveReferenceWithoutRoles['contenuTypeIds'] = ('' != $entityHaveReferenceWithoutRoles['contenuTypeIds'] ? array_values(array_unique(explode(',', $entityHaveReferenceWithoutRoles['contenuTypeIds']))) : []);
                 $entityHaveReferenceWithoutRoles['contenuObjetTypeIds'] = ('' != $entityHaveReferenceWithoutRoles['contenuObjetTypeIds'] ? array_values(array_unique(explode(',', $entityHaveReferenceWithoutRoles['contenuObjetTypeIds']))) : []);
 
                 $entitiesHaveReferences[] = $entityHaveReferenceWithoutRoles;

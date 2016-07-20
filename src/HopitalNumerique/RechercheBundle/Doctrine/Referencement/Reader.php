@@ -221,6 +221,11 @@ class Reader
                     $entityPropertiesByGroup['categoryIds'][] = $objetTypeId;
                 }
             }
+            foreach ($entityProperties['contenuTypeIds'] as $contenuTypeId) {
+                if (!empty($contenuTypeId)) {
+                    $entityPropertiesByGroup['categoryIds'][] = $contenuTypeId;
+                }
+            }
             foreach ($entityProperties['contenuObjetTypeIds'] as $objetTypeId) {
                 if (!empty($objetTypeId)) {
                     $entityPropertiesByGroup['categoryIds'][] = $objetTypeId;
