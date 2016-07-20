@@ -12,6 +12,7 @@ use HopitalNumerique\ObjetBundle\Entity\Contenu;
 use HopitalNumerique\ObjetBundle\Entity\Objet;
 use HopitalNumerique\ObjetBundle\Manager\ContenuManager;
 use HopitalNumerique\ObjetBundle\Manager\ObjetManager;
+use HopitalNumerique\RechercheBundle\Manager\ExpBesoinReponsesManager;
 use HopitalNumerique\RechercheParcoursBundle\Manager\RechercheParcoursManager;
 use Nodevo\TexteDynamiqueBundle\Manager\CodeManager as TexteDynamiqueCodeManager;
 use HopitalNumerique\UserBundle\Entity\User;
@@ -54,6 +55,11 @@ class Entity
     const ENTITY_TYPE_COMMUNAUTE_PRATIQUES_GROUPE = 6;
 
     /**
+     * @var int Type Groupe de la communauté de pratique
+     */
+    const ENTITY_TYPE_EXPRESSION_BESOIN_REPONSE = 7;
+
+    /**
      * @var string Nom de la catégorie du fil de forum
      */
     const CATEGORY_FORUM_TOPIC_LABEL = 'Fil de forum';
@@ -72,6 +78,11 @@ class Entity
      * @var string Nom de la catégorie du groupe de la communauté de pratique
      */
     const CATEGORY_COMMUNAUTE_PRATIQUES_GROUPE_LABEL = 'Groupe en cours de la communauté de pratique';
+
+    /**
+     * @var string Recherche aidée
+     */
+    const CATEGORY_EXPRESSION_BESOIN_REPONSE_LABEL = 'Réponse';
 
 
     /**
@@ -120,6 +131,11 @@ class Entity
     private $communautePratiqueGroupeManager;
 
     /**
+     * @var \HopitalNumerique\RechercheBundle\Manager\ExpBesoinReponsesManager ExpBesoinReponsesManager
+     */
+    private $expressionBesoinReponseManager;
+
+    /**
      * @var \Nodevo\TexteDynamiqueBundle\Manager\CodeManager CodeManager
      */
     private $texteDynamiqueCodeManager;
@@ -128,7 +144,7 @@ class Entity
     /**
      * Constructeur.
      */
-    public function __construct(RouterInterface $router, CurrentDomaine $currentDomaine, UserManager $userManager, ObjetManager $objetManager, ContenuManager $contenuManager, TopicManager $forumTopicManager, DomaineManager $domaineManager, RechercheParcoursManager $rechercheParcoursManager, CommunautePratiqueGroupeManager $communautePratiqueGroupeManager, TexteDynamiqueCodeManager $texteDynamiqueCodeManager)
+    public function __construct(RouterInterface $router, CurrentDomaine $currentDomaine, UserManager $userManager, ObjetManager $objetManager, ContenuManager $contenuManager, TopicManager $forumTopicManager, DomaineManager $domaineManager, RechercheParcoursManager $rechercheParcoursManager, CommunautePratiqueGroupeManager $communautePratiqueGroupeManager, ExpBesoinReponsesManager $expressionBesoinReponseManager, TexteDynamiqueCodeManager $texteDynamiqueCodeManager)
     {
         $this->router = $router;
         $this->currentDomaine = $currentDomaine;
@@ -139,6 +155,7 @@ class Entity
         $this->domaineManager = $domaineManager;
         $this->rechercheParcoursManager = $rechercheParcoursManager;
         $this->communautePratiqueGroupeManager = $communautePratiqueGroupeManager;
+        $this->expressionBesoinReponseManager = $expressionBesoinReponseManager;
         $this->texteDynamiqueCodeManager = $texteDynamiqueCodeManager;
     }
 
@@ -171,6 +188,8 @@ class Entity
                 return self::ENTITY_TYPE_RECHERCHE_PARCOURS;
             case 'HopitalNumerique\CommunautePratiqueBundle\Entity\Groupe':
                 return self::ENTITY_TYPE_COMMUNAUTE_PRATIQUES_GROUPE;
+            case 'HopitalNumerique\RechercheBundle\Entity\ExpBesoinReponses':
+                return self::ENTITY_TYPE_EXPRESSION_BESOIN_REPONSE;
         }
 
         return null;
@@ -235,6 +254,8 @@ class Entity
                 return $this->rechercheParcoursManager->findBy(['id' => $ids]);
             case self::ENTITY_TYPE_COMMUNAUTE_PRATIQUES_GROUPE:
                 return $this->communautePratiqueGroupeManager->findBy(['id' => $ids]);
+            case self::ENTITY_TYPE_EXPRESSION_BESOIN_REPONSE:
+                return $this->expressionBesoinReponseManager->findBy(['id' => $ids]);
         }
 
         throw new \Exception('Type "'.$type.'" introuvable.');
@@ -271,6 +292,8 @@ class Entity
                 return $this->getDomainesByEntity($entity->getObjet());
             case self::ENTITY_TYPE_RECHERCHE_PARCOURS:
                 return $this->getDomainesByEntity($entity->getRecherchesParcoursGestion());
+            case self::ENTITY_TYPE_EXPRESSION_BESOIN_REPONSE:
+                return $this->getDomainesByEntity($entity->getQuestion()->getExpBesoinGestion());
         }
 
         throw new \Exception('Domaines non trouvés pour l\'entité.');
@@ -407,6 +430,9 @@ class Entity
                 break;
             case self::ENTITY_TYPE_RECHERCHE_PARCOURS:
                 $title = $entity->getReference()->getLibelle();
+                break;
+            case self::ENTITY_TYPE_EXPRESSION_BESOIN_REPONSE:
+                $title = $entity->getLibelle();
         }
 
         if (null !== $title && null !== $truncateCaractersCount && strlen($title) > $truncateCaractersCount) {
@@ -483,6 +509,8 @@ class Entity
                 return self::CATEGORY_RECHERCHE_PARCOURS_LABEL;
             case self::ENTITY_TYPE_COMMUNAUTE_PRATIQUES_GROUPE:
                 return self::CATEGORY_COMMUNAUTE_PRATIQUES_GROUPE_LABEL;
+            case self::ENTITY_TYPE_EXPRESSION_BESOIN_REPONSE:
+                return self::CATEGORY_EXPRESSION_BESOIN_REPONSE_LABEL;
         }
 
         return implode(' &diams; ', $categories);

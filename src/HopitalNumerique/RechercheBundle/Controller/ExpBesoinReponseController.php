@@ -16,21 +16,9 @@ class ExpBesoinReponseController extends Controller
     {
         $expBesoins = $this->get('hopitalnumerique_recherche.manager.expbesoin')->findBy(array('expBesoinGestion' => $expBesoin->getExpBesoinGestion()), array('order' => 'ASC'));
 
-        $notes = array();
-
-        foreach ($expBesoin->getReponses() as $reponse) 
-        {
-            //get ponderations
-            $refsPonderees = $this->container->get('hopitalnumerique_reference.manager.reference')->getReferencesPonderees();
-            $note          = $this->container->get('hopitalnumerique_objet.manager.objet')->getNoteReferencement( $reponse->getReferences(), $refsPonderees );
-
-            $notes[$reponse->getId()] = $note;
-        }
-
         return $this->render('HopitalNumeriqueRechercheBundle:ExpBesoinReponse:index.html.twig', array(
                 'expBesoinAll'  => $expBesoins,
-                'expBesoin'     => $expBesoin,
-                'notes'         => $notes
+                'expBesoin'     => $expBesoin
             ));    
     }
 
@@ -184,65 +172,4 @@ class ExpBesoinReponseController extends Controller
         //return success.true si le fichier existe deja
         return new Response('{"success":true}', 200);    
     }
-
-    /**
-     * [topicAction description]
-     *
-     * @param  ExpBesoinReponses  $topic [description]
-     *
-     * @return [type]
-     */
-    public function referenceAction( ExpBesoinReponses $expBesoinReponses )
-    {
-        //get references and selected references as One Array
-        $results    = $this->get('hopitalnumerique_reference.manager.reference')->getRefsForGestionObjets();
-        $references = $this->get('hopitalnumerique_recherche.manager.expbesoinreponses')->getReferences($expBesoinReponses, $results);
-
-        return $this->render('HopitalNumeriqueRechercheBundle:RefExpBesoinReponses:manage.html.twig', array(
-            'references'        => $references,
-            'topic'             => true,
-            'contenu'           => 'null',
-            'titre'             => $expBesoinReponses->getQuestion()->getLibelle(),
-            'expBesoinReponses' => $expBesoinReponses
-        ));
-    }
-
-    /**
-     * [saveExpBesoinReponsesAction description]
-     *
-     * @param  ExpBesoinReponses  $topic [description]
-     *
-     * @return [type]
-     */
-    public function referenceSaveAction( ExpBesoinReponses $expBesoinReponses )
-    {
-        //efface toutes les anciennes références
-        $oldRefs = $this->get('hopitalnumerique_recherche.manager.refexpbesoinreponses')->findBy( array('expBesoinReponses' => $expBesoinReponses) );
-        $this->get('hopitalnumerique_recherche.manager.refexpbesoinreponses')->delete( $oldRefs );
-
-        //ajoute les nouvelles références
-        $references = json_decode( $this->get('request')->request->get('references') );
-        $refToAdd   = array();
-        foreach( $references as $reference )
-        {
-            $ref = $this->get('hopitalnumerique_recherche.manager.refexpbesoinreponses')->createEmpty();
-            $ref->setExpBesoinReponses( $expBesoinReponses );
-            $ref->setPrimary( $reference->type );
-
-            //get ref
-            $ref->setReference( $this->get('hopitalnumerique_reference.manager.reference')->findOneBy( array( 'id' => $reference->id) ) );
-
-            //save it
-            $refToAdd[] = $ref;
-        }
-
-        $this->get('hopitalnumerique_recherche.manager.refexpbesoinreponses')->save( $refToAdd );
-
-        //get ExpBesoinReponses Note
-        $refsPonderees = $this->get('hopitalnumerique_reference.manager.reference')->getReferencesPonderees($expBesoinReponses->getQuestion()->getExpBesoinGestion()->getDomainesId());
-        $note = $this->get('hopitalnumerique_objet.manager.objet')->getNoteReferencement( $expBesoinReponses->getReferences(), $refsPonderees );
-
-        return new Response('{"success":true, "note":"'.$note.'"}', 200);
-    }
-
 }
