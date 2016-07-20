@@ -123,7 +123,7 @@ class NoteSaver
      */
     private function getReferencesTreeWithScores(Domaine $domaine)
     {
-        $referencesTree = $this->referencementService->getReferencesTree([$domaine], true);
+        $referencesTree = $this->referencementService->getReferencesTree([$domaine], true, $domaine->getReferenceRoot());
 
         $this->addScoresInReferencesSubtree($referencesTree, EntityHasNote::SCORE_GLOBAL);
 
