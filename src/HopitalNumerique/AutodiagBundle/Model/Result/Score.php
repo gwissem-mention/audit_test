@@ -3,7 +3,7 @@ namespace HopitalNumerique\AutodiagBundle\Model\Result;
 
 class Score
 {
-    protected $reference;
+    protected $code;
 
     protected $label;
 
@@ -11,13 +11,13 @@ class Score
 
     /**
      * Score constructor.
-     * @param $reference
+     * @param $code
      * @param $label
      * @param $score
      */
-    public function __construct($score, $label = null, $reference = null)
+    public function __construct($score, $label = null, $code = null)
     {
-        $this->reference = $reference;
+        $this->code = $code;
         $this->label = $label;
         $this->value = $score;
     }
@@ -25,9 +25,9 @@ class Score
     /**
      * @return mixed
      */
-    public function getReference()
+    public function getCode()
     {
-        return $this->reference;
+        return $this->code;
     }
 
     /**

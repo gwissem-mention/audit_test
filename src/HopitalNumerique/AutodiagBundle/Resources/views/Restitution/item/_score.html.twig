@@ -1,0 +1,12 @@
+<div class="score-type">
+
+    {% for data in result.items %}
+        <div class="score-widget-wrapper">
+            <div class="score-widget">
+                <div class="score-value">{{ data.score.value }}%</div>
+                <div class="score-label">{{ data.label }}</div>
+            </div>
+        </div>
+    {% endfor %}
+
+</div>

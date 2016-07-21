@@ -1,0 +1,7 @@
+<div class="radar">
+    <div id="{{ restitution.id }}"></div>
+</div>
+
+<script type="text/javascript">
+    $('#{{ restitution.id }}').highcharts({{ result_radar_data(result)|raw }});
+</script>

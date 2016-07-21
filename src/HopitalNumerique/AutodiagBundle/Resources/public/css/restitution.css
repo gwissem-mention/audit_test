@@ -105,3 +105,52 @@
 .processus .processus-line.head {
     background: #fff;
 }
+
+/**
+* TABLEAU
+*/
+#restitution .tableau td, #restitution .tableau th {
+    text-align: center;
+}
+
+#restitution .tableau tr.root {
+    font-weight: bold;
+}
+
+#restitution .tableau tr.children td.container-label {
+    text-indent: 20px;
+}
+
+#restitution .tableau td.container-label {
+    text-align: left;
+}
+
+
+/**
+* SCORE
+*/
+#restitution .score-type {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+#restitution .score-widget-wrapper {
+    flex: 1;
+    padding: 20px;
+    min-width: 25%;
+}
+
+#restitution .score-widget {
+    box-shadow: 4px 4px 12px 1px #CECECE;
+    text-align: center;
+}
+
+#restitution .score-widget .score-value {
+    padding: 20px 0;
+    font-weight: bold;
+    font-size: 32px;
+}
+#restitution .score-widget .score-label {
+    padding-bottom: 20px;
+    font-size: 24px;
+}

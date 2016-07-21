@@ -58,3 +58,9 @@ services:
         tags:
             - { name: security.voter }
         public: false
+
+    autodiag.twig_restitution_extension:
+        class: HopitalNumerique\AutodiagBundle\Twig\RestitutionExtension
+        public: false
+        tags:
+            - { name: twig.extension }

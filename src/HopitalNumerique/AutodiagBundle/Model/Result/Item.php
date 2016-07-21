@@ -75,7 +75,7 @@ class Item
 
     public function addReference(Score $score)
     {
-        $this->references[] = $score;
+        $this->references[$score->getCode()] = $score;
     }
 
     /**

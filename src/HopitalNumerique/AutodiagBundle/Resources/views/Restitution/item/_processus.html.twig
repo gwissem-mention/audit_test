@@ -1,7 +1,7 @@
 {% import _self as tools %}
 
 <div class="processus">
-    {% for data in result %}
+    {% for data in result.items %}
         <div class="processus-wrapper">
             <div class="processus-item">
                 <div class="processus-line head" data-value="{{ data.score.value }}">{{ data.label }}</div>

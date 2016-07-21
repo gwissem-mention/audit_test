@@ -6,6 +6,7 @@ use HopitalNumerique\AutodiagBundle\Entity\Restitution\Category;
 use HopitalNumerique\AutodiagBundle\Entity\Restitution\Item as RestitutionItem;
 use HopitalNumerique\AutodiagBundle\Model\Result\Item as ResultItem;
 use HopitalNumerique\AutodiagBundle\Entity\Synthesis;
+use HopitalNumerique\AutodiagBundle\Model\Result\Item;
 use HopitalNumerique\AutodiagBundle\Model\Result\Score;
 
 class RestitutionCalculator
@@ -32,11 +33,20 @@ class RestitutionCalculator
 
     protected function computeItem(RestitutionItem $item, Synthesis $synthesis)
     {
-        $result = [];
+        $result = [
+            'items' => [],
+            'references' => [],
+        ];
+
         $containers = $item->getContainers();
         foreach ($containers as $container) {
             /** @var Container $container */
-            $result[] = $this->computeItemContainer($container, $synthesis);
+            $resultItem = $this->computeItemContainer($container, $synthesis);
+
+            $result['items'][] = $resultItem;
+            foreach ($resultItem->getReferences() as $code => $reference) {
+                $result['references'][$code] = $reference->getLabel();
+            }
         }
 
         return $result;
@@ -50,10 +60,10 @@ class RestitutionCalculator
             new Score(rand(0, 100))
         );
         $resultItem->addReference(
-            new Score(rand(0, 100), 'Référene 1', 1)
+            new Score(rand(0, 100), 'Référene 1', rand(1, 5))
         );
         $resultItem->addReference(
-            new Score(rand(0, 100), 'Référene 1', 1)
+            new Score(rand(0, 100), 'Référene 1', rand(1, 5))
         );
         $resultItem->setNumberOfQuestions(rand(1, 50));
         $resultItem->setNumberOfAnswers(
