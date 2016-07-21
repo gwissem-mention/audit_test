@@ -3,6 +3,7 @@
 namespace HopitalNumerique\PublicationBundle\Controller;
 
 use HopitalNumerique\CoreBundle\DependencyInjection\Entity;
+use HopitalNumerique\DomaineBundle\Entity\Domaine;
 use HopitalNumerique\ObjetBundle\Entity\Objet;
 use HopitalNumerique\ReferenceBundle\Entity\EntityHasReference;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -84,7 +85,7 @@ class PublicationController extends Controller
 
         $userRelated = $reader->getRelatedObjectsByType($objet, Entity::ENTITY_TYPE_AMBASSADEUR);
         shuffle($userRelated);
-        $topicRelated = $reader->getRelatedObjectsByType($objet, Entity::ENTITY_TYPE_FORUM_TOPIC);
+        $topicRelated = (Domaine::DOMAINE_HOPITAL_NUMERIQUE_ID == $this->container->get('hopitalnumerique_domaine.dependency_injection.current_domaine')->get()->getId() ? $reader->getRelatedObjectsByType($objet, Entity::ENTITY_TYPE_FORUM_TOPIC) : []);
         shuffle($topicRelated);
 
         //render
