@@ -27,7 +27,7 @@ class ObjetGrid extends Grid implements GridInterface
     {
         $filtres = array();
 
-        $this->setPersistence(false);
+        $this->setPersistence(true);
 
         switch ($filtre) {
             case 'point-dur':

@@ -100,6 +100,7 @@ class EntityHasReferenceRepository extends EntityRepository
                 'GROUP_CONCAT(objetRole.id) AS objetRoleIds',
                 'GROUP_CONCAT(contenuObjetRole.id) AS contenuObjetRoleIds',
                 'GROUP_CONCAT(objetType.id) AS objetTypeIds',
+                'GROUP_CONCAT(contenuType.id) AS contenuTypeIds',
                 'GROUP_CONCAT(contenuObjetType.id) AS contenuObjetTypeIds',
                 'objet.id as objetId',
                 'AVG(objetNote.note) AS avgObjetNote'
@@ -174,6 +175,10 @@ class EntityHasReferenceRepository extends EntityRepository
                 )
             )
             ->setParameter('entityTypeContenu', Entity::ENTITY_TYPE_CONTENU)
+            ->leftJoin(
+                'contenu.types',
+                'contenuType'
+            )
             ->leftJoin(
                 'contenu.objet',
                 'contenuObjet'

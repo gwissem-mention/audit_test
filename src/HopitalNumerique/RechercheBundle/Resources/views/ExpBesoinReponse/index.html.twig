@@ -57,7 +57,7 @@
                             <input type="hidden" id="toggle-reponses-{{reponse.id}}" value="{% if reponse.autreQuestion %}true{% else %}false{% endif %}" />
                         </div>
                         <div class="col-sm-5 row note-referencement {% if reponse.autreQuestion %}hide{% endif %}" style="margin-top:4px">
-                            <p class="text-muted text-right pull-right">Note référencement : <span class="nbRefs">{{notes[reponse.id]|number_format(0)}}</span> / 400</p>
+                            <p class="text-muted text-right pull-right">Note référencement : {{ referencement_note(reponse) }}</p>
                         </div>
                         <div class="col-sm-5 row question {% if not reponse.autreQuestion %}hide{% endif %}">
                             <div class="pull-right">
@@ -81,7 +81,7 @@
                             <a href="{{path('hopitalnumerique_expbesoin_reponse_edit_ajax', { 'id':reponse.id })}}" class="fancybox fancybox.ajax" title="Choisir une image"></a>
                         </div>
                         <div onclick="editLibelleReponse( {{reponse.id}}, '{{path('hopitalnumerique_expbesoin_reponse_edit_libelle', {'id':reponse.id})}}' );" class="pull-right dd3-edit question-edit"><i class="fa fa-edit"></i></div>
-                        <div id="reference-reponse-{{reponse.id}}" class="pull-right dd3-cog {% if reponse.autreQuestion %}hide{% endif %}"><a href="{{path('hopitalnumerique_expbesoin_reponse_reference', {'id':reponse.id})}}" class="fancy fancybox.ajax"></a></div>
+                        <div id="reference-reponse-{{reponse.id}}" class="pull-right dd3-cog {% if reponse.autreQuestion %}hide{% endif %}"><a href="{{path('hopitalnumerique_reference_referencement_popin', { 'entityType':7, 'entityId':reponse.id })}}" class="fancy fancybox.ajax"></a></div>
                     </div>
                 </li>
             {% endfor %}

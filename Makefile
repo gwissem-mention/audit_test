@@ -13,6 +13,7 @@ install:
 	composer install
 	bower install
 	php app/console c:cl
+	php app/console fos:js-routing:dump
 	php app/console assets:install --symlink --relative
 	php app/console a:d
 
@@ -20,6 +21,7 @@ update:
 	composer update
 	bower update
 	php app/console c:cl
+	php app/console fos:js-routing:dump
 	php app/console assets:install --symlink --relative
 	php app/console a:d
 
