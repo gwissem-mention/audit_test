@@ -339,16 +339,15 @@ class UserType extends AbstractType
                 }
             );
 
-            $builder->addEventListener(
-                FormEvents::SUBMIT,
+            $builder->get('statutEtablissementSante')->addEventListener(
+                FormEvents::POST_SUBMIT,
                 function (FormEvent $event) use ($etablissementRattachementSanteModifier) {
-                    /** @var User $data */
-                    $data = $event->getData();
-                    $form = $event->getForm();
+                    $form = $event->getForm()->getParent();
+                    $status = $event->getForm()->getData();
 
                     $list = $this->etablissementManager->findBy(array(
-                        'departement'   => $data->getDepartement(),
-                        'typeOrganisme' => $data->getStatutEtablissementSante()
+                        'departement'   => $event->getForm()->getParent()->get('departement')->getData(),
+                        'typeOrganisme' => $status
                     ));
 
                     $etablissementRattachementSanteModifier($form, $list);
