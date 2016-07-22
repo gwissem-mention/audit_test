@@ -105,6 +105,7 @@ class EntityHasReferenceRepository extends EntityRepository
                 'objet.id as objetId',
                 'AVG(objetNote.note) AS avgObjetNote'
             )
+            ->andWhere($qb->expr()->neq('entityHasReference.entityType', Entity::ENTITY_TYPE_EXPRESSION_BESOIN_REPONSE))
             ->leftJoin(
                 EntityHasNote::class,
                 'entityHasNote',
