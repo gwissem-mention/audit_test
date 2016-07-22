@@ -169,12 +169,6 @@ hopitalnumerique_expbesoin_reponse_reference:
     requirements:
         id: \d+
 
-hopitalnumerique_expbesoin_reponse_reference_save:
-    pattern:  /admin/aide-expression-besoin/reponse/{id}/reference/save
-    defaults: { _controller: "HopitalNumeriqueRechercheBundle:ExpBesoinReponse:referenceSave" }
-    requirements:
-        id: \d+
-
 #Expression du besoin - FO
 hopital_numerique_expbesoin_rechercheFancy:
     pattern:  /recherche-par-referencement/aide-expression-besoin/{id}/fancy
