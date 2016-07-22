@@ -69,14 +69,6 @@ class ExpBesoinReponses
     /**
      * @var integer
      *
-     * @ORM\OneToMany(targetEntity="\HopitalNumerique\RechercheBundle\Entity\RefExpBesoinReponses", mappedBy="expBesoinReponses", cascade={"persist"})
-     * @ORM\JoinColumn(name="refexpbr_id", referencedColumnName="refexpbr_id", nullable=true, onDelete="CASCADE")
-     */
-    protected $references;
-    
-    /**
-     * @var integer
-     *
      * @ORM\ManyToOne(targetEntity="\HopitalNumerique\RechercheBundle\Entity\ExpBesoin")
      * @ORM\JoinColumn(name="expb_id_redirection", referencedColumnName="expb_id", nullable=true, onDelete="CASCADE")
      */
@@ -178,26 +170,6 @@ class ExpBesoinReponses
     public function isAutreQuestion()
     {
         return $this->autreQuestion;
-    }
-
-    /**
-     * Get reference
-     *
-     * @return \HopitalNumerique\ReferenceBundle\Entity\Reference $reference
-     */
-    public function getReferences()
-    {
-        return $this->references;
-    }
-    
-    /**
-     * Set reference
-     *
-     * @param \HopitalNumerique\ReferenceBundle\Entity\Reference $reference
-     */
-    public function setReferences(\HopitalNumerique\ReferenceBundle\Entity\Reference $references)
-    {
-        $this->references = $references;
     }
 
     /**
