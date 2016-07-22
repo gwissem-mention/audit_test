@@ -79,10 +79,6 @@ class ExpBesoinReponseController extends Controller
 
         if($isAutreQuestion)
         {
-            //efface toutes les références
-            $oldRefs = $this->get('hopitalnumerique_recherche.manager.refexpbesoinreponses')->findBy( array('expBesoinReponses' => $idReponse) );
-            $this->get('hopitalnumerique_recherche.manager.refexpbesoinreponses')->delete( $oldRefs );
-
             //Set la question
             $idQuestion = $request->request->get('idQuestion');
 
