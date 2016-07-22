@@ -10,12 +10,24 @@ class RestitutionController extends Controller
 {
     public function indexAction(Synthesis $synthesis)
     {
-        $restitution = $synthesis->getAutodiag()->getRestitution();
+        $autodiag = $synthesis->getAutodiag();
+
+        // L'utilisateur doit avoir les droits sur chaque entry de la synthèse
+        foreach ($synthesis->getEntries() as $entry) {
+            if (!$this->isGranted('edit', $entry)) {
+                return $this->redirectToRoute('hopitalnumerique_autodiag_entry_add', [
+                    'autodiag' => $autodiag->getId()
+                ]);
+            }
+        }
+
+        $restitution = $autodiag->getRestitution();
 
         $calculator = new RestitutionCalculator();
         $resultItems = $calculator->compute($synthesis);
 
         return $this->render('HopitalNumeriqueAutodiagBundle:Restitution:index.html.twig', [
+            'synthesis' => $synthesis,
             'restitution' => $restitution,
             'result' => $resultItems,
         ]);

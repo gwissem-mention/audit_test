@@ -137,6 +137,7 @@ class AutodiagEntryController extends Controller
 
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
+            $entry->setUpdatedAt();
             $this->getDoctrine()->getManager()->persist($entryValue);
             $this->getDoctrine()->getManager()->flush();
         }

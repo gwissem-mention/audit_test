@@ -1,17 +1,18 @@
 <?php
 namespace HopitalNumerique\AutodiagBundle\Service;
 
+use HopitalNumerique\AutodiagBundle\Entity\Autodiag;
 use HopitalNumerique\AutodiagBundle\Entity\Autodiag\Container;
 use HopitalNumerique\AutodiagBundle\Entity\Restitution\Category;
 use HopitalNumerique\AutodiagBundle\Entity\Restitution\Item as RestitutionItem;
 use HopitalNumerique\AutodiagBundle\Model\Result\Item as ResultItem;
 use HopitalNumerique\AutodiagBundle\Entity\Synthesis;
-use HopitalNumerique\AutodiagBundle\Model\Result\Item;
 use HopitalNumerique\AutodiagBundle\Model\Result\Score;
 
 class RestitutionCalculator
 {
 
+    protected $items = [];
 
     public function compute(Synthesis $synthesis)
     {
@@ -27,7 +28,7 @@ class RestitutionCalculator
                 $result[$item->getId()] = $this->computeItem($item, $synthesis);
             }
         }
-
+dump($result);die;
         return $result;
     }
 
@@ -41,41 +42,67 @@ class RestitutionCalculator
         $containers = $item->getContainers();
         foreach ($containers as $container) {
             /** @var Container $container */
-            $resultItem = $this->computeItemContainer($container, $synthesis);
+            $resultItem = $this->computeItemContainer($container, $synthesis, $item->getReferences());
+
+            foreach ($item->getReferences() as $reference) {
+                $resultItem->addReference(
+                    new Score(rand(0, 100), $reference->getLabel(), $reference->getId())
+                );
+
+                $result['references'][$reference->getId()] = $reference->getLabel();
+            }
 
             $result['items'][] = $resultItem;
-            foreach ($resultItem->getReferences() as $code => $reference) {
-                $result['references'][$code] = $reference->getLabel();
-            }
         }
 
         return $result;
     }
 
-    protected function computeItemContainer(Container $container, $synthesis)
+    /**
+     * @param Container $container
+     * @param Synthesis $synthesis
+     * @return ResultItem
+     */
+    protected function computeItemContainer(Container $container, Synthesis $synthesis, $references)
     {
-        $resultItem = new ResultItem();
-        $resultItem->setLabel($container->getLabel());
-        $resultItem->setScore(
-            new Score(rand(0, 100))
-        );
-        $resultItem->addReference(
-            new Score(rand(0, 100), 'Référene 1', rand(1, 5))
-        );
-        $resultItem->addReference(
-            new Score(rand(0, 100), 'Référene 1', rand(1, 5))
-        );
-        $resultItem->setNumberOfQuestions(rand(1, 50));
-        $resultItem->setNumberOfAnswers(
-            floor((rand(0, 100)/100) * $resultItem->getNumberOfQuestions())
+        $cacheKey = $this->getCacheKey(
+            $container->getAutodiag(),
+            $container,
+            $synthesis
         );
 
-        foreach ($container->getChilds() as $child) {
-            $resultItem->addChildren(
-                $this->computeItemContainer($child, $synthesis)
+        $algorithm = new \HopitalNumerique\AutodiagBundle\Service\Algorithm\Score();
+
+        if (!array_key_exists($cacheKey, $this->items)) {
+
+            $score = $algorithm->getScore($synthesis, $container);
+
+            $resultItem = new ResultItem();
+            $resultItem->setLabel($container->getLabel());
+            $resultItem->setScore(
+                new Score(rand(0, 100))
             );
+            $resultItem->setNumberOfQuestions(rand(1, 50));
+            $resultItem->setNumberOfAnswers(
+                floor((rand(0, 100)/100) * $resultItem->getNumberOfQuestions())
+            );
+
+            foreach ($container->getChilds() as $child) {
+                $resultItem->addChildren(
+                    $this->computeItemContainer($child, $synthesis)
+                );
+            }
+
+            $this->items[$cacheKey] = $resultItem;
         }
 
-        return $resultItem;
+        return $this->items[$cacheKey];
+    }
+
+    protected function getCacheKey(Autodiag $autodiag, Container $container, Synthesis $synthesis)
+    {
+        return $autodiag->getId()
+            . $container->getId()
+            . $synthesis->getId();
     }
 }

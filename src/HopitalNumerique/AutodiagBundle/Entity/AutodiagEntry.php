@@ -12,6 +12,7 @@ use HopitalNumerique\UserBundle\Entity\User;
  *
  * @ORM\Table(name="ad_entry")
  * @ORM\Entity
+ * @ORM\HasLifecycleCallbacks()
  */
 class AutodiagEntry
 {
@@ -23,6 +24,19 @@ class AutodiagEntry
      * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $id;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(type="string")
+     */
+    private $name;
+
+    /**
+     * @var \DateTime
+     * @ORM\Column(type="datetime")
+     */
+    private $updatedAt;
 
     /**
      * @var Synthesis
@@ -54,6 +68,7 @@ class AutodiagEntry
         $this->synthesis = $synthesis;
         $this->user = $user;
         $this->values = new ArrayCollection();
+        $this->updatedAt = new \DateTime();
 
         $synthesis->addEntry($this);
     }
@@ -73,6 +88,22 @@ class AutodiagEntry
     public function getId()
     {
         return $this->id;
+    }
+
+    /**
+     * @return string
+     */
+    public function getName()
+    {
+        return $this->name;
+    }
+
+    /**
+     * @param string $name
+     */
+    public function setName($name)
+    {
+        $this->name = $name;
     }
 
     /**
@@ -110,5 +141,25 @@ class AutodiagEntry
         $this->user = $user;
 
         return $this;
+    }
+
+    /**
+     * @return \DateTime
+     */
+    public function getUpdatedAt()
+    {
+        return $this->updatedAt;
+    }
+
+    /**
+     * Set updatedAt
+     *
+     * @ORM\PreUpdate
+     * @ORM\PrePersist
+     */
+    public function setUpdatedAt()
+    {
+        $this->updatedAt = new \DateTime();
+        $this->getSynthesis()->setUpdatedAt($this->updatedAt);
     }
 }

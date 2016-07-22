@@ -26,11 +26,11 @@ class RadioBuilder extends AbstractBuilder
 
     public function transform($data)
     {
-        return json_decode($data, true);
+        return $data;
     }
 
     public function reverseTransform($data)
     {
-        return json_encode($data);
+        return $data;
     }
 }

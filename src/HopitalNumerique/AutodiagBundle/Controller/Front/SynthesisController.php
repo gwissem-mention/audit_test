@@ -18,10 +18,13 @@ class SynthesisController extends Controller
         $form = $this->createForm(SynthesisType::class, $synthesis);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
+            $entry->setName($synthesis->getName());
             $this->get('doctrine.orm.entity_manager')->persist($synthesis);
             $this->get('doctrine.orm.entity_manager')->flush();
 
-            $this->get('autodiag.entry.session')->add($entry);
+            if (null === $entry->getUser()) {
+                $this->get('autodiag.entry.session')->add($entry);
+            }
 
             return $this->redirectToRoute('hopitalnumerique_autodiag_entry_edit', [
                 'entry' => $synthesis->getEntries()->first()->getId()

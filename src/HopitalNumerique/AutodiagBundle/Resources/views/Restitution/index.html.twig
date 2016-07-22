@@ -21,32 +21,56 @@
 {% block body %}
     <div id="restitution">
 
-        <ul class="nav nav-tabs" role="tablist">
-        {% for category in restitution.categories %}
-            <li role="presentation" class="{{ loop.first ? 'active' : '' }}">
-                <a href="#{{ category.id }}" aria-controls="home" role="tab" data-toggle="tab">
-                    {{ category.label }}
-                </a>
-            </li>
-        {% endfor %}
-        </ul>
+        <div class="header">
+            <div class="update-at">
+                Le {{ synthesis.updatedAt|date('d/m/Y') }}
+            </div>
 
-        <div class="tab-content">
-            {% for category in restitution.categories %}
-                <div role="tabpanel" class="tab-pane category {{ loop.first ? 'active' : '' }}" id="{{ category.id }}">
-                    <p>
-                        {{ category.description }}
-                    </p>
-                    {% for item in category.items %}
-                        <div class="item">
-                            {% include ("@HopitalNumeriqueAutodiag/Restitution/item/_" ~ item.type ~ ".html.twig") with {
-                                'restitution': item,
-                                'result': result[item.id]
-                            } %}
-                        </div>
+            <div class="identity">
+                <span class="title">{{ synthesis.autodiag.title }}</span>
+                <span class="name">{{ synthesis.name }}</span>
+            </div>
+        </div>
+
+        {% if synthesis.entries|length > 1 %}
+            <div class="synthesis">
+                <span>{{ "ad.restitution.synthesis"|trans }}</span>
+                <ul>
+                    {% for entry in synthesis.entries %}
+                        <li>{{ entry.name }}</li>
                     {% endfor %}
-                </div>
+                </ul>
+            </div>
+        {% endif %}
+
+        <div class="content">
+            <ul class="nav nav-tabs" role="tablist">
+            {% for category in restitution.categories %}
+                <li role="presentation" class="{{ loop.first ? 'active' : '' }}">
+                    <a href="#{{ category.id }}" aria-controls="home" role="tab" data-toggle="tab">
+                        {{ category.label }}
+                    </a>
+                </li>
             {% endfor %}
+            </ul>
+
+            <div class="tab-content">
+                {% for category in restitution.categories %}
+                    <div role="tabpanel" class="tab-pane category {{ loop.first ? 'active' : '' }}" id="{{ category.id }}">
+                        <p>
+                            {{ category.description }}
+                        </p>
+                        {% for item in category.items %}
+                            <div class="item">
+                                {% include ("@HopitalNumeriqueAutodiag/Restitution/item/_" ~ item.type ~ ".html.twig") with {
+                                    'restitution': item,
+                                    'result': result[item.id]
+                                } %}
+                            </div>
+                        {% endfor %}
+                    </div>
+                {% endfor %}
+            </div>
         </div>
     </div>
 

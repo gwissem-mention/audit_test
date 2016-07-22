@@ -26,7 +26,7 @@ class Option
      * @var string
      *
      * @ORM\Id
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(type="float")
      */
     private $value;
 

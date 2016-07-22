@@ -39,6 +39,12 @@ class Synthesis
     private $validatedAt;
 
     /**
+     * @var \DateTime
+     * @ORM\Column(type="datetime")
+     */
+    private $updatedAt;
+
+    /**
      * @var Autodiag
      *
      * @ORM\ManyToOne(targetEntity="HopitalNumerique\AutodiagBundle\Entity\Autodiag")
@@ -158,6 +164,22 @@ class Synthesis
     }
 
     /**
+     * @return \DateTime
+     */
+    public function getUpdatedAt()
+    {
+        return $this->updatedAt;
+    }
+
+    /**
+     * @param \DateTime $updatedAt
+     */
+    public function setUpdatedAt(\DateTime $updatedAt)
+    {
+        $this->updatedAt = $updatedAt;
+    }
+
+    /**
      * @return Autodiag
      */
     public function getAutodiag()
@@ -184,6 +206,10 @@ class Synthesis
     public function addEntry(AutodiagEntry $entry)
     {
         $this->entries->add($entry);
+
+        if (null === $this->getUpdatedAt() || $entry->getUpdatedAt() > $this->getUpdatedAt()) {
+            $this->setUpdatedAt($entry->getUpdatedAt());
+        }
 
         return $this;
     }
