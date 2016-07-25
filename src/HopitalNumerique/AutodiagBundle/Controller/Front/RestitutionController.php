@@ -23,7 +23,7 @@ class RestitutionController extends Controller
 
         $restitution = $autodiag->getRestitution();
 
-        $calculator = new RestitutionCalculator();
+        $calculator = $this->get('autodiag.restitution.calculator');
         $resultItems = $calculator->compute($synthesis);
 
         return $this->render('HopitalNumeriqueAutodiagBundle:Restitution:index.html.twig', [

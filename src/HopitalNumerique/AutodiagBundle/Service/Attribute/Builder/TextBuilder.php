@@ -33,4 +33,14 @@ class TextBuilder extends AbstractBuilder
     {
         return TextType::class;
     }
+
+    public function computeScore($data)
+    {
+        return null;
+    }
+
+    public function isEmpty($data)
+    {
+        return strlen($data) === 0;
+    }
 }

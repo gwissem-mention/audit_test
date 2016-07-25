@@ -92,6 +92,24 @@ abstract class AbstractPresetableBuilder extends AbstractBuilder implements Pres
         }
     }
 
+    public function getPresetMinScore(Autodiag $autodiag)
+    {
+        $presets = $this->getPreset($autodiag)->getPreset();
+        $presets = array_map(function ($element) {
+            return min(array_keys($element));
+        }, $presets);
+        return array_sum($presets) / count($presets);
+    }
+
+    public function getPresetMaxScore(Autodiag $autodiag)
+    {
+        $presets = $this->getPreset($autodiag)->getPreset();
+        $presets = array_map(function ($element) {
+            return max(array_keys($element));
+        }, $presets);
+        return array_sum($presets) / count($presets);
+    }
+
     /**
      * Create Preset object for Model
      *

@@ -25,4 +25,20 @@ interface AttributeBuilderInterface
      * @return mixed
      */
     public function getFormType();
+
+    /**
+     * Get attribute score
+     *
+     * @param $data
+     * @return float
+     */
+    public function computeScore($data);
+
+    /**
+     * Check if attribute data is considered as empty
+     *
+     * @param $data
+     * @return mixed
+     */
+    public function isEmpty($data);
 }

@@ -11,7 +11,7 @@ use HopitalNumerique\UserBundle\Entity\User;
  * Synthesis
  *
  * @ORM\Table(name="ad_synthesis")
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="HopitalNumerique\AutodiagBundle\Repository\SynthesisRepository")
  */
 class Synthesis
 {

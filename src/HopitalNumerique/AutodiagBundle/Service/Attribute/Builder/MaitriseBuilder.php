@@ -55,4 +55,23 @@ class MaitriseBuilder extends AbstractPresetableBuilder
     {
         return json_encode($data);
     }
+
+    public function computeScore($data)
+    {
+        $data = $this->transform($data);
+        if (in_array(null, $data)) {
+            return null;
+        }
+        return array_sum($data) / count($data);
+    }
+
+    public function isEmpty($data)
+    {
+        $data = $this->transform($data);
+        $empty = false;
+        foreach ($data as $value) {
+            $empty = $empty || ($value === null);
+        }
+        return $empty;
+    }
 }

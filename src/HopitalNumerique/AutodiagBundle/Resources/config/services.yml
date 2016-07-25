@@ -64,3 +64,13 @@ services:
         public: false
         tags:
             - { name: twig.extension }
+
+    autodiag.restitution.calculator:
+        class: HopitalNumerique\AutodiagBundle\Service\RestitutionCalculator
+        arguments:
+            - '@autodiag.algorithm.score'
+            - '@autodiag.attribute_builder_provider'
+
+    autodiag.algorithm.score:
+        class: HopitalNumerique\AutodiagBundle\Service\Algorithm\Score
+        arguments: ['@doctrine.orm.entity_manager', '@autodiag.attribute_builder_provider']

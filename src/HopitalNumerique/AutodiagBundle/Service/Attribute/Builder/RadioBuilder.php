@@ -33,4 +33,14 @@ class RadioBuilder extends AbstractBuilder
     {
         return $data;
     }
+
+    public function computeScore($data)
+    {
+        return (float) $data;
+    }
+
+    public function isEmpty($data)
+    {
+        return null === $data || strlen($data) === 0;
+    }
 }

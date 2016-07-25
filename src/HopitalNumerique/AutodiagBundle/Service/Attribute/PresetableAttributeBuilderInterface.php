@@ -34,4 +34,20 @@ interface PresetableAttributeBuilderInterface
      * @return FormInterface
      */
     public function getPresetForm();
+
+    /**
+     * Get preset min score
+     *
+     * @param Autodiag $autodiag
+     * @return mixed
+     */
+    public function getPresetMinScore(Autodiag $autodiag);
+
+    /**
+     * Get preset max score
+     *
+     * @param Autodiag $autodiag
+     * @return mixed
+     */
+    public function getPresetMaxScore(Autodiag $autodiag);
 }

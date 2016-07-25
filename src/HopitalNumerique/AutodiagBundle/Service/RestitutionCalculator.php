@@ -1,21 +1,49 @@
 <?php
 namespace HopitalNumerique\AutodiagBundle\Service;
 
+use Doctrine\ORM\EntityManager;
 use HopitalNumerique\AutodiagBundle\Entity\Autodiag;
 use HopitalNumerique\AutodiagBundle\Entity\Autodiag\Container;
+use HopitalNumerique\AutodiagBundle\Entity\AutodiagEntry;
 use HopitalNumerique\AutodiagBundle\Entity\Restitution\Category;
 use HopitalNumerique\AutodiagBundle\Entity\Restitution\Item as RestitutionItem;
 use HopitalNumerique\AutodiagBundle\Model\Result\Item as ResultItem;
 use HopitalNumerique\AutodiagBundle\Entity\Synthesis;
 use HopitalNumerique\AutodiagBundle\Model\Result\Score;
+use \HopitalNumerique\AutodiagBundle\Service\Algorithm\Score as Algorithm;
+use HopitalNumerique\AutodiagBundle\Service\Attribute\AttributeBuilderProvider;
 
 class RestitutionCalculator
 {
+    /**
+     * @var Algorithm
+     */
+    protected $algorithm;
+
+    /**
+     * @var AttributeBuilderProvider
+     */
+    protected $attributeBuilder;
 
     protected $items = [];
+    protected $attributeResponses = [];
+
+
+    /**
+     * RestitutionCalculator constructor.
+     * @param Algorithm $algorithm
+     * @TODO Injecter un algorithm factory qui connaitrais tous les algo possible via un compileur pass
+     */
+    public function __construct(Algorithm $algorithm, AttributeBuilderProvider $attributeBuilder)
+    {
+        $this->algorithm = $algorithm;
+        $this->attributeBuilder = $attributeBuilder;
+    }
 
     public function compute(Synthesis $synthesis)
     {
+        $this->computeCompletion($synthesis);
+
         $autodiag = $synthesis->getAutodiag();
         $restitution = $autodiag->getRestitution();
 
@@ -28,7 +56,7 @@ class RestitutionCalculator
                 $result[$item->getId()] = $this->computeItem($item, $synthesis);
             }
         }
-dump($result);die;
+
         return $result;
     }
 
@@ -71,25 +99,26 @@ dump($result);die;
             $synthesis
         );
 
-        $algorithm = new \HopitalNumerique\AutodiagBundle\Service\Algorithm\Score();
-
         if (!array_key_exists($cacheKey, $this->items)) {
 
-            $score = $algorithm->getScore($synthesis, $container);
+            $score = $this->algorithm->getScore($synthesis, $container);
 
             $resultItem = new ResultItem();
             $resultItem->setLabel($container->getLabel());
             $resultItem->setScore(
-                new Score(rand(0, 100))
+                new Score($score)
             );
-            $resultItem->setNumberOfQuestions(rand(1, 50));
-            $resultItem->setNumberOfAnswers(
-                floor((rand(0, 100)/100) * $resultItem->getNumberOfQuestions())
-            );
+
+            $answers = 0;
+            foreach ($container->getAttributes() as $attribute) {
+                $answers += $this->attributeResponses[$synthesis->getId()][$attribute->getId()] ? 1 : 0;
+            }
+            $resultItem->setNumberOfQuestions(count($container->getAttributes()));
+            $resultItem->setNumberOfAnswers($answers);
 
             foreach ($container->getChilds() as $child) {
                 $resultItem->addChildren(
-                    $this->computeItemContainer($child, $synthesis)
+                    $this->computeItemContainer($child, $synthesis, $references)
                 );
             }
 
@@ -97,6 +126,31 @@ dump($result);die;
         }
 
         return $this->items[$cacheKey];
+    }
+
+    protected function computeCompletion(Synthesis $synthesis)
+    {
+        if (!array_key_exists($synthesis->getId(), $this->attributeResponses)) {
+            $completion = [];
+            $autodiag = $synthesis->getAutodiag();
+            foreach ($autodiag->getAttributes() as $attribute) {
+                /** @var Autodiag\Attribute $attribute */
+                $completion[$attribute->getId()] = false;
+                foreach ($synthesis->getEntries() as $entry) {
+                    /** @var AutodiagEntry $entry */
+                    foreach ($entry->getValues() as $value) {
+                        /** @var AutodiagEntry\Value $value */
+                        $builder = $this->attributeBuilder->getBuilder($attribute->getType());
+                        if ($value->getAttribute()->getId() === $attribute->getId() && !$builder->isEmpty($value->getValue())) {
+                            $completion[$attribute->getId()] = true;
+                            break 2;
+                        }
+                    }
+                }
+            }
+
+            $this->attributeResponses[$synthesis->getId()] = $completion;
+        }
     }
 
     protected function getCacheKey(Autodiag $autodiag, Container $container, Synthesis $synthesis)

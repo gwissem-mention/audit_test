@@ -10,7 +10,7 @@ use HopitalNumerique\AutodiagBundle\Entity\AutodiagEntry;
  * Value
  *
  * @ORM\Table(name="ad_entry_value")
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="HopitalNumerique\AutodiagBundle\Repository\AutodiagEntry\ValueRepository")
  */
 class Value
 {
