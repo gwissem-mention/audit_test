@@ -39,6 +39,12 @@ class AutodiagEntry
     private $updatedAt;
 
     /**
+     * @var bool
+     * @ORM\Column(type="boolean")
+     */
+    private $valid;
+
+    /**
      * @var Synthesis
      *
      * @ORM\ManyToOne(
@@ -161,5 +167,21 @@ class AutodiagEntry
     {
         $this->updatedAt = new \DateTime();
         $this->getSynthesis()->setUpdatedAt($this->updatedAt);
+    }
+
+    /**
+     * @return boolean
+     */
+    public function isValid()
+    {
+        return $this->valid;
+    }
+
+    /**
+     * @param boolean $valid
+     */
+    public function setValid($valid)
+    {
+        $this->valid = $valid;
     }
 }

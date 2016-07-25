@@ -9,7 +9,7 @@ use HopitalNumerique\AutodiagBundle\Entity\Autodiag;
 use HopitalNumerique\AutodiagBundle\Entity\Autodiag\Preset;
 use HopitalNumerique\AutodiagBundle\Form\Type\Autodiag\AutodiagUpdateType;
 use HopitalNumerique\AutodiagBundle\Form\Type\Autodiag\FileImportType;
-use HopitalNumerique\AutodiagBundle\Grid\ModelGrid;
+use HopitalNumerique\AutodiagBundle\Grid\AutodiagGrid;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
@@ -23,7 +23,7 @@ class AutodiagController extends Controller
      */
     public function listAction()
     {
-        $grid = new ModelGrid($this->container);
+        $grid = new AutodiagGrid($this->container);
 
         return $grid->render('@HopitalNumeriqueAutodiag/Autodiag/list.html.twig');
     }
@@ -181,7 +181,7 @@ class AutodiagController extends Controller
 
     public function deleteMassAction($primaryKeys, $allPrimaryKeys)
     {
-        $grid = new ModelGrid($this->container);
+        $grid = new AutodiagGrid($this->container);
         //get all selected Codes
         if ($allPrimaryKeys == 1) {
             $rawDatas = $grid->getRawData();
