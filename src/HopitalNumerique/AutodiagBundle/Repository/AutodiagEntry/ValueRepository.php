@@ -9,11 +9,19 @@ use HopitalNumerique\AutodiagBundle\Entity\Synthesis;
 
 class ValueRepository extends EntityRepository
 {
-    public function getValuesAndWeight(Synthesis $synthesis, $container)
+    public function getValuesAndWeight(Synthesis $synthesis)
     {
         $qb = $this->createQueryBuilder('v');
         $qb
-            ->select('v.value', 'weight.weight', 'attribute.type', 'MIN(options.value) as lowest', 'MAX(options.value) as highest')
+            ->select(
+                'synthesis.id',
+                'container.id as container_id',
+                'v.value',
+                'weight.weight',
+                'attribute.type',
+                'MIN(options.value) as lowest',
+                'MAX(options.value) as highest'
+            )
             ->join('v.entry', 'entry')
             ->join('entry.synthesis', 'synthesis')
             ->join('v.attribute', 'attribute')
@@ -21,11 +29,10 @@ class ValueRepository extends EntityRepository
             ->join(Weight::class, 'weight', Join::WITH, 'attribute.id = weight.attribute')
             ->join('weight.container', 'container')
             ->where('synthesis.id = :synthesis_id')
-            ->andWhere('container.id = :container_id')
-            ->groupBy('attribute.id')
+            ->groupBy('v.id')
+            ->addGroupBy('container.id')
             ->setParameters([
                 'synthesis_id' => $synthesis->getId(),
-                'container_id' => $container->getId(),
             ]);
 
         return $qb->getQuery()->getResult();

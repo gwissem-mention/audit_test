@@ -1,7 +1,6 @@
 <?php
 namespace HopitalNumerique\AutodiagBundle\Service;
 
-use Doctrine\ORM\EntityManager;
 use HopitalNumerique\AutodiagBundle\Entity\Autodiag;
 use HopitalNumerique\AutodiagBundle\Entity\Autodiag\Container;
 use HopitalNumerique\AutodiagBundle\Entity\AutodiagEntry;
@@ -89,6 +88,7 @@ class RestitutionCalculator
     /**
      * @param Container $container
      * @param Synthesis $synthesis
+     * @param $references
      * @return ResultItem
      */
     protected function computeItemContainer(Container $container, Synthesis $synthesis, $references)
@@ -109,12 +109,8 @@ class RestitutionCalculator
                 new Score($score)
             );
 
-            $answers = 0;
-            foreach ($container->getAttributes() as $attribute) {
-                $answers += $this->attributeResponses[$synthesis->getId()][$attribute->getId()] ? 1 : 0;
-            }
-            $resultItem->setNumberOfQuestions(count($container->getAttributes()));
-            $resultItem->setNumberOfAnswers($answers);
+            $resultItem->setNumberOfQuestions($container->getTotalNumberOfAttributes());
+            $resultItem->setNumberOfAnswers($this->countAnswers($synthesis, $container));
 
             foreach ($container->getChilds() as $child) {
                 $resultItem->addChildren(
@@ -151,6 +147,27 @@ class RestitutionCalculator
 
             $this->attributeResponses[$synthesis->getId()] = $completion;
         }
+    }
+
+    /**
+     * Count number of container and container's childs  answers
+     *
+     * @param Synthesis $synthesis
+     * @param Container $container
+     * @return int
+     */
+    protected function countAnswers(Synthesis $synthesis, Container $container)
+    {
+        $answers = 0;
+        foreach ($container->getAttributes() as $attribute) {
+            $answers += $this->attributeResponses[$synthesis->getId()][$attribute->getId()] ? 1 : 0;
+        }
+
+        foreach ($container->getChilds() as $child) {
+            $answers += $this->countAnswers($synthesis, $child);
+        }
+
+        return $answers;
     }
 
     protected function getCacheKey(Autodiag $autodiag, Container $container, Synthesis $synthesis)

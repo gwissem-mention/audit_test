@@ -37,15 +37,19 @@ class Score
             return $this->scores[$key];
         }
 
-
         $autodiag = $synthesis->getAutodiag();
         $repository = $this->manager->getRepository(AutodiagEntry\Value::class);
         $values = $repository->getValuesAndWeight($synthesis, $container);
+        $containerIds = $this->getContainerIds($container);
 
         $sum = 0;
         $min = 0;
         $max = 0;
         foreach ($values as $value) {
+            if (!in_array($value['container_id'], $containerIds)) {
+                continue;
+            }
+
             $builder = $this->attributeProvider->getBuilder($value['type']);
             $score = $builder->computeScore($value['value']);
             if (null !== $score && $score > -1) {
@@ -69,16 +73,15 @@ class Score
             return ($sum - $min) / $a;
         }
         return null;
-
-        if ($max > 0) {
-            return round($sum / $max * 100);
-        }
-        return null;
     }
 
-    protected function getAttributeBounds(PresetableAttributeBuilderInterface $builder, $min, $max)
+    protected function getContainerIds(Container $container)
     {
-
+        $ids = [$container->getId()];
+        foreach ($container->getChilds() as $child) {
+            $ids = array_merge($ids, $this->getContainerIds($child));
+        }
+        return $ids;
     }
 
     protected function getCacheKey(Autodiag $autodiag, Container $container, Synthesis $synthesis)

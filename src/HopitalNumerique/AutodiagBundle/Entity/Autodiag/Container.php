@@ -191,4 +191,13 @@ abstract class Container
             return $container->getParent() !== null && $container->getParent()->getId() === $this->getId();
         });
     }
+
+    public function getTotalNumberOfAttributes()
+    {
+        $nb = count($this->getAttributes());
+        foreach ($this->getChilds() as $child) {
+            $nb += $child->getTotalNumberOfAttributes();
+        }
+        return $nb;
+    }
 }
