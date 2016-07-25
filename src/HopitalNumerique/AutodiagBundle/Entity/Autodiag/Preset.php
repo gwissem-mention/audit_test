@@ -2,11 +2,10 @@
 
 namespace HopitalNumerique\AutodiagBundle\Entity\Autodiag;
 
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use HopitalNumerique\AutodiagBundle\Entity\Autodiag;
-use HopitalNumerique\AutodiagBundle\Entity\Autodiag\Attribute\Option;
+use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Component\Validator\Context\ExecutionContextInterface;
 
 /**
  * Preset attribute options
@@ -100,5 +99,24 @@ class Preset
         $this->preset = $preset;
 
         return $this;
+    }
+
+    /**
+     * @Assert\Callback
+     */
+    public function validatePresets(ExecutionContextInterface $context)
+    {
+        $values = $this->getPreset();
+        $empties = 0;
+        foreach ($values as $value) {
+            if (count($value) === 0) {
+                $empties++;
+            }
+        }
+        if ($empties > 0 && $empties < count($values)) {
+            $context->buildViolation('Toutes les valeurs doivent êtres renseignées')
+                ->addViolation();
+        }
+
     }
 }

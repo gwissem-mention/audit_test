@@ -49,6 +49,10 @@ class OptionToCsvTransformer implements DataTransformerInterface
                 if (count($values) != 2) {
                     throw new TransformationFailedException('Invalid data.');
                 }
+
+                if (strlen((float)$values[0]) != strlen($values[0])) {
+                    throw new TransformationFailedException('Invalid data.');
+                }
                 $collection[$values[0]] = $values[1];
             }
         }

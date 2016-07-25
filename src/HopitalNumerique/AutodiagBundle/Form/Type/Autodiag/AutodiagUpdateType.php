@@ -28,6 +28,9 @@ class AutodiagUpdateType extends AbstractType
             ])
             ->add('presets', CollectionType::class, [
                 'entry_type' => PresetType::class,
+                'entry_options' => [
+                    'error_bubbling' => false,
+                ],
             ])
         ;
     }
