@@ -111,7 +111,7 @@ class AutodiagController extends Controller
         return $this->render('HopitalNumeriqueAutodiagBundle:Autodiag/Edit:survey.html.twig', [
             'form' => $form->createView(),
             'model' => $autodiag,
-            'history' => $this->get('autodiag.history.reader')->getHistory(Autodiag\History::HISTORY_ENTRY_SURVEY),
+            'history' => $this->get('autodiag.history.reader')->getHistory($autodiag, Autodiag\History::HISTORY_ENTRY_SURVEY),
             'chapterProgress' => $importHandler->getChapterProgress(),
             'questionProgress' => $importHandler->getQuestionProgress(),
         ]);
@@ -142,7 +142,7 @@ class AutodiagController extends Controller
         return $this->render('HopitalNumeriqueAutodiagBundle:Autodiag/Edit:algorithm.html.twig', [
             'form' => $form->createView(),
             'model' => $autodiag,
-            'history' => $this->get('autodiag.history.reader')->getHistory(Autodiag\History::HISTORY_ENTRY_ALGORITHM),
+            'history' => $this->get('autodiag.history.reader')->getHistory($autodiag, Autodiag\History::HISTORY_ENTRY_ALGORITHM),
             'progress' => $importHandler->getAlgorithmProgress(),
         ]);
     }
@@ -174,7 +174,7 @@ class AutodiagController extends Controller
         return $this->render('@HopitalNumeriqueAutodiag/Autodiag/Edit/resitution.html.twig', [
             'form' => $form->createView(),
             'model' => $autodiag,
-            'history' => $this->get('autodiag.history.reader')->getHistory(Autodiag\History::HISTORY_ENTRY_RESTITUTION),
+            'history' => $this->get('autodiag.history.reader')->getHistory($autodiag, Autodiag\History::HISTORY_ENTRY_RESTITUTION),
             'progress' => $importHandler->getRestitutionProgress(),
         ]);
     }

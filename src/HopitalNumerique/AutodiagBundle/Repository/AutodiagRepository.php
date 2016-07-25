@@ -5,7 +5,6 @@ namespace HopitalNumerique\AutodiagBundle\Repository;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\Query\Expr\Join;
-use HopitalNumerique\AutodiagBundle\Entity\Autodiag;
 use HopitalNumerique\AutodiagBundle\Entity\Autodiag\Container\Chapter;
 use HopitalNumerique\AutodiagBundle\Entity\Synthesis;
 
@@ -58,7 +57,7 @@ class AutodiagRepository extends EntityRepository
                 'COUNT(entries_valid.id) as nb_entries_valid',
                 'COUNT(entries_in_progress.id) as nb_entries_in_progress'
             )
-            ->join('ad.domaines', 'domaines', Join::WITH, 'domaines.id IN (:domaine_ids)')
+            ->leftJoin('ad.domaines', 'domaines', Join::WITH, 'domaines.id IN (:domaine_ids)')
             ->leftJoin(Synthesis::class, 'synthesis', Join::WITH, 'synthesis.autodiag = ad.id')
             ->leftJoin('synthesis.entries', 'entries_valid', Join::WITH, 'entries_valid.valid = true')
             ->leftJoin('synthesis.entries', 'entries_in_progress', Join::WITH, 'entries_in_progress.valid = false')

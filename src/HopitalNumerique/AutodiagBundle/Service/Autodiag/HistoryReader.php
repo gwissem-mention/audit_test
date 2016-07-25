@@ -3,6 +3,7 @@
 namespace HopitalNumerique\AutodiagBundle\Service\Autodiag;
 
 use Doctrine\Common\Persistence\ObjectManager;
+use HopitalNumerique\AutodiagBundle\Entity\Autodiag;
 use HopitalNumerique\AutodiagBundle\Entity\Autodiag\History;
 
 class HistoryReader
@@ -17,7 +18,7 @@ class HistoryReader
         $this->manager = $om;
     }
 
-    public function getHistory($type)
+    public function getHistory(Autodiag $autodiag, $type)
     {
         if (!in_array($type, History::getTypeList())) {
             throw new \Exception(
@@ -29,6 +30,6 @@ class HistoryReader
             );
         }
 
-        return $this->manager->getRepository(History::class)->getHistoryByType($type);
+        return $this->manager->getRepository(History::class)->getHistoryByType($autodiag, $type);
     }
 }

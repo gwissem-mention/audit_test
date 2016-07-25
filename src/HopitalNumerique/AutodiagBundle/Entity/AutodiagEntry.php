@@ -42,7 +42,7 @@ class AutodiagEntry
      * @var bool
      * @ORM\Column(type="boolean")
      */
-    private $valid;
+    private $valid = false;
 
     /**
      * @var Synthesis
