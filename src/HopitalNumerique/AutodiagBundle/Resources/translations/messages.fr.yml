@@ -22,6 +22,9 @@ ad:
             notify_update: Notifier la mise à jour sur le frontoffice
         history:
             last_modified: %date% à %time% par %username%
+        edit:
+            generique: Informations génériques
+            multiple_result_treatment: Paramètres de traitement de plusieurs résultats
     import:
         lines:
             count: "{0}Aucune ligne n'a été importée|{1}%count% ligne à été importée|]1,Inf[%count% lignes ont été importées"

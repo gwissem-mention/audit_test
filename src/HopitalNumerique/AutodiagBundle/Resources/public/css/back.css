@@ -1,0 +1,24 @@
+.preset .preset-title {
+
+}
+
+.preset .preset-childs .form-group {
+    float: left;
+    width: 33%;
+}
+
+.preset .preset-childs .form-group label {
+    text-align: left;
+}
+
+.preset .preset-childs .form-group > .col-md-3 {
+    float: none !important;
+    width: 100% !important;
+    clear: both;
+}
+
+.preset .preset-childs:after {
+    clear: both;
+    content: ' ';
+    display: block;
+}

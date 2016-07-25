@@ -6,29 +6,37 @@
     {% form_theme form 'NodevoAdminBundle::form.html.twig' %}
     {{ form_start(form) }}
 
-    {{ form_row(form.autodiag.title) }}
-    {{ form_row(form.autodiag.domaines, {"attr": {"class": "select2"}}) }}
-    {{ form_row(form.autodiag.questionnaire) }}
-    {{ form_row(form.autodiag.instructions, {"attr": {"class": "tinyMceBasic"}}) }}
-    {{ form_row(form.autodiag.partialResultsAuthorized) }}
+    <div>
+        <h2>{{ "ad.autodiag.edit.generique"|trans }}</h2>
+        <div>
+            {{ form_row(form.autodiag.title) }}
+            {{ form_row(form.autodiag.domaines, {"attr": {"class": "select2"}}) }}
+            {{ form_row(form.autodiag.questionnaire) }}
+            {{ form_row(form.autodiag.instructions, {"attr": {"class": "tinyMceBasic"}}) }}
+            {{ form_row(form.autodiag.partialResultsAuthorized) }}
+        </div>
+    </div>
 
     {% for preset in form.presets %}
         <div class="preset">
             <div class="preset-title">
-                {{ ("ad.autodiag.preset_value." ~ preset.vars.data.type)|trans }}
+                <h2>{{ ("ad.autodiag.preset_value." ~ preset.vars.data.type)|trans }}</h2>
             </div>
 
             <div class="preset-childs">
                 {% for child in preset %}
-                    <div class="preset-child">
-                        {{ form_widget(child) }}
-                    </div>
+                    {{ form_widget(child) }}
                 {% endfor %}
             </div>
         </div>
     {% endfor %}
 
-    {{ form_row(form.autodiag.synthesisAuthorized) }}
+    <div>
+        <h2>{{ "ad.autodiag.edit.multiple_result_treatment"|trans }}</h2>
+        <div>
+            {{ form_row(form.autodiag.synthesisAuthorized) }}
+        </div>
+    </div>
 
     {{ form_row(form._token) }}
     {{ form_end(form) }}

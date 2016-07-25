@@ -33,8 +33,14 @@ class CriticiteBuilder extends AbstractPresetableBuilder
             );
 
         $formBuilder
-            ->add('occurence', CsvType::class)
-            ->add('impact', CsvType::class)
+            ->add('occurence', CsvType::class, [
+                'required' => false,
+                'attr' => ['rows' => 5],
+            ])
+            ->add('impact', CsvType::class, [
+                'required' => false,
+                'attr' => ['rows' => 5],
+            ])
         ;
 
         return $formBuilder->getForm();

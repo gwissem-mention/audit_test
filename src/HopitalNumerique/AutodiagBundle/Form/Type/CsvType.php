@@ -24,7 +24,7 @@ class CsvType extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults(array(
-            'invalid_message' => 'The csv format is invalid',
+            'invalid_message' => 'ad.autodiag.csv.incorect_format',
         ));
     }
 
