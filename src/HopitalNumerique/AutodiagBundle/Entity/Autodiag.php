@@ -4,13 +4,13 @@ namespace HopitalNumerique\AutodiagBundle\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
-use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\Mapping as ORM;
 use HopitalNumerique\AutodiagBundle\Entity\Autodiag\Container;
 use HopitalNumerique\AutodiagBundle\Entity\Autodiag\Container\Chapter;
 use HopitalNumerique\AutodiagBundle\Entity\Autodiag\Preset;
 use HopitalNumerique\DomaineBundle\Entity\Domaine;
 use HopitalNumerique\QuestionnaireBundle\Entity\Questionnaire;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * Gabarit d'autodiag
@@ -34,6 +34,8 @@ class Autodiag
      *
      * @var string
      * @ORM\Column(type="string", length=255)
+     *
+     * @Assert\NotBlank()
      */
     private $title;
 
@@ -100,6 +102,8 @@ class Autodiag
      *     joinColumns={@ORM\JoinColumn(name="autodiag_id", referencedColumnName="id", onDelete="CASCADE")},
      *     inverseJoinColumns={@ORM\JoinColumn(name="domaine_id", referencedColumnName="dom_id")}
      * )
+     *
+     * @Assert\Count(min="1")
      */
     private $domaines;
 

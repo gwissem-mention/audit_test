@@ -2,6 +2,7 @@
 namespace HopitalNumerique\AutodiagBundle\Model;
 
 use HopitalNumerique\AutodiagBundle\Entity\Autodiag;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * Domain class that represent the form for update action on a Autodiag
@@ -11,7 +12,10 @@ use HopitalNumerique\AutodiagBundle\Entity\Autodiag;
  */
 class AutodiagUpdate
 {
-    /** @var Autodiag */
+    /**
+     * @var Autodiag
+     * @Assert\Valid
+     */
     private $autodiag;
 
     /** @var array<Autodiag\Preset> */

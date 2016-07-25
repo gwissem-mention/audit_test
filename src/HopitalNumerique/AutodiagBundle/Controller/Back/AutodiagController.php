@@ -52,7 +52,9 @@ class AutodiagController extends Controller
             ]
         );
 
-        $form = $this->createForm(AutodiagUpdateType::class, $domain);
+        $form = $this->createForm(AutodiagUpdateType::class, $domain, [
+            'user' => $this->getUser(),
+        ]);
 
         $form->handleRequest($request);
 

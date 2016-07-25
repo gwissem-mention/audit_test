@@ -1,12 +1,12 @@
 <?php
 namespace HopitalNumerique\AutodiagBundle\Form\Type\Autodiag;
 
-use HopitalNumerique\AutodiagBundle\Form\Type\Autodiag\PresetType;
 use HopitalNumerique\AutodiagBundle\Form\Type\AutodiagType;
+use HopitalNumerique\UserBundle\Entity\User;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Component\Form\FormBuilderInterface;
-use Symfony\Component\OptionsResolver\OptionsResolverInterface;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**
  * ModelAdminUpdateType represent the admin form for create and update Model
@@ -23,21 +23,23 @@ class AutodiagUpdateType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('autodiag', AutodiagType::class)
+            ->add('autodiag', AutodiagType::class, [
+                'user' => $options['user'],
+            ])
             ->add('presets', CollectionType::class, [
                 'entry_type' => PresetType::class,
             ])
         ;
     }
 
-    /**
-     * @param OptionsResolverInterface $resolver
-     */
-    public function setDefaultOptions(OptionsResolverInterface $resolver)
+    public function configureOptions(OptionsResolver $resolver)
     {
-        $resolver->setDefaults(array(
+        $resolver->setDefaults([
             'data_class' => 'HopitalNumerique\AutodiagBundle\Model\AutodiagUpdate',
-            'label_format' => 'ad.autodiag.%name%'
-        ));
+            'label_format' => 'ad.autodiag.%name%',
+        ]);
+
+        $resolver->setRequired(['user']);
+        $resolver->setAllowedTypes('user', User::class);
     }
 }
