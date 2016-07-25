@@ -44,11 +44,16 @@ Attribute.prototype = {
 
     isFilled: function()
     {
-        var fields = $('input, select, textarea', this.element.find('.attribute-value'));
-        var filled = true;
+        var fields = $('input[type="text"], select, textarea', this.element.find('.attribute-value'));
+        var filled = fields.length > 0;
         fields.each(function () {
             filled = filled && $(this).val().length > 0;
         });
+
+        $('input[type="radio"]', this.element.find('.attribute-value')).each(function() {
+            filled = filled || $(this).prop('checked');
+        });
+
         return filled;
     },
 
