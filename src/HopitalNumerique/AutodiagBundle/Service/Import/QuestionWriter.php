@@ -145,7 +145,7 @@ class QuestionWriter implements WriterInterface, ProgressAwareInterface
     protected function getOption(Attribute $attribute, $value)
     {
         $found = $attribute->getOptions()->filter(function (Attribute\Option $option) use ($value) {
-            return $option->getValue() === (string) $value;
+            return $option->getValue() === (float) $value;
         });
 
         if ($found->count() > 0) {
