@@ -10,21 +10,25 @@ class ExcelFileReader implements ReaderInterface, ProgressAwareInterface
 {
     use ProgressAwareTrait;
 
-    protected $sheetNumber = 0;
+    protected $sheetName;
 
     public function __construct($sheetNumber)
     {
-        $this->sheetNumber = $sheetNumber;
+        $this->sheetName = $sheetNumber;
     }
 
     /**
      * @param File $file
      * @return KeyedExcelFileIterator
+     * @throws \Exception
      */
     public function read($file)
     {
         $fileReader = $this->getFileReader($file);
-        $sheet = $fileReader->getSheet($this->sheetNumber);
+        $sheet = $fileReader->getSheetByName($this->sheetName);
+        if (!$sheet instanceof \PHPExcel_Worksheet) {
+            throw new \Exception('Sheet not found');
+        }
         $iterator = new KeyedExcelFileIterator($sheet);
 
         return $iterator;

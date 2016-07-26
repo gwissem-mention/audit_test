@@ -5,7 +5,7 @@ services:
 
     autodiag.import.chapter.reader:
         class: Nodevo\Component\Import\Reader\ExcelFileReader
-        arguments: [0]
+        arguments: ['chapitress']
         public: false
 
 
@@ -16,7 +16,7 @@ services:
 
     autodiag.import.question.reader:
         class: Nodevo\Component\Import\Reader\ExcelFileReader
-        arguments: [1]
+        arguments: ['questionss']
         public: false
 
 
@@ -26,5 +26,5 @@ services:
 
     autodiag.import.algorithm.reader:
         class: Nodevo\Component\Import\Reader\ExcelFileReader
-        arguments: [0]
+        arguments: ['algorithme']
         public: false

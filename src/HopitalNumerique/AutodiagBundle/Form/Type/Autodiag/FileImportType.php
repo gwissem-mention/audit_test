@@ -13,8 +13,12 @@ class FileImportType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('file', FileType::class)
-            ->add('notify_update', CheckboxType::class)
+            ->add('file', FileType::class, [
+                'attr' => ['class' => 'validate[required]']
+            ])
+            ->add('notify_update', CheckboxType::class, [
+                'required' => false,
+            ])
         ;
     }
 

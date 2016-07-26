@@ -1,1 +1,12 @@
-ad.autodiag.csv.incorect_format: Le format est incorrecte, un unique ";" par ligne est requis.
+ad:
+    autodiag:
+        csv.incorect_format: Le format est incorrecte, un unique ";" par ligne est requis.
+        import:
+            survey:
+                invalid_file_type: Le type de fichier est incorrect.
+                sheet_not_found:
+                    chapters: La page "chapitres" n'existe pas.
+                    questions: La page "questions" n'existe pas.
+                incorrect_columns:
+                    chapters: La page "chapitres" doit contenir en ligne 1 les cellules suivantes : code_chapitre, code_chapitre_enfant, libelle_chapitre, libelle_chapitre_enfant, titre_avant, texte_avant, texte_apres et plan_action
+                    questions: La page "questions" doit contenir en ligne 1 les cellules suivantes : code_question, code_chapitre, texte_avant, libelle_question, format_reponse, items_reponse, colorer_reponse, infobulle_question, ponderation_categorie et ponderation_chapitre

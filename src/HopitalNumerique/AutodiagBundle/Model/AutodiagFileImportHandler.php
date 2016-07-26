@@ -49,6 +49,11 @@ class AutodiagFileImportHandler
         $this->tokenStorage = $tokenStorage;
     }
 
+    /**
+     * @param AutodiagFileImport $model
+     * @param DataImporter $chapterImporter
+     * @param DataImporter $questionImporter
+     */
     public function handleSurveyImport(AutodiagFileImport $model, DataImporter $chapterImporter, DataImporter $questionImporter)
     {
         $autodiag = $model->getAutodiag();
@@ -78,6 +83,9 @@ class AutodiagFileImportHandler
         $this->manager->flush();
     }
 
+    /**
+     * @return mixed
+     */
     public function getChapterProgress()
     {
         $surveyProgress = $this->session->get('survey_import_progress_chapter');
@@ -87,6 +95,9 @@ class AutodiagFileImportHandler
         return $surveyProgress;
     }
 
+    /**
+     * @return mixed
+     */
     public function getQuestionProgress()
     {
         $questionProgress = $this->session->get('survey_import_progress_question');
@@ -96,6 +107,9 @@ class AutodiagFileImportHandler
         return $questionProgress;
     }
 
+    /**
+     * @return mixed
+     */
     public function getAlgorithmProgress()
     {
         $questionProgress = $this->session->get('algorithm_import_progress');
@@ -105,6 +119,9 @@ class AutodiagFileImportHandler
         return $questionProgress;
     }
 
+    /**
+     * @return mixed
+     */
     public function getRestitutionProgress()
     {
         $questionProgress = $this->session->get('restitution_import_progress');
@@ -114,6 +131,10 @@ class AutodiagFileImportHandler
         return $questionProgress;
     }
 
+    /**
+     * @param AutodiagFileImport $model
+     * @param DataImporter $algorithmImporter
+     */
     public function handleAlgorithmImport(AutodiagFileImport $model, DataImporter $algorithmImporter)
     {
         $autodiag = $model->getAutodiag();
@@ -136,6 +157,10 @@ class AutodiagFileImportHandler
         $this->manager->flush();
     }
 
+    /**
+     * @param AutodiagFileImport $model
+     * @param DataImporter $restitutionImporter
+     */
     public function handleRestitutionImport(AutodiagFileImport $model, DataImporter $restitutionImporter)
     {
         $autodiag = $model->getAutodiag();
@@ -154,10 +179,13 @@ class AutodiagFileImportHandler
         }
 
         $this->updatePublicAupdatedDate($model);
-        
+
         $this->manager->flush();
     }
 
+    /**
+     * @param AutodiagFileImport $model
+     */
     protected function updatePublicAupdatedDate(AutodiagFileImport $model)
     {
         // Update public updated date if notify checked

@@ -72,7 +72,13 @@ class DataImporter
         $this->progress->start();
         $this->writer->prepare();
 
-        $iterator = $this->reader->read($input);
+        try {
+            $iterator = $this->reader->read($input);
+        } catch (\Exception $e) {
+            $this->progress->addError($e->getMessage());
+            return $this->progress;
+        }
+
         foreach ($iterator as $key => $data) {
 
             $this->progress->setCurrentIndex($key);

@@ -25,7 +25,9 @@ class AutodiagType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('title')
+            ->add('title', null, [
+                'attr'       => array('class' => 'validate[required,max[255]]')
+            ])
             ->add('instructions')
             ->add('partialResultsAuthorized')
             ->add('synthesisAuthorized')
@@ -38,7 +40,7 @@ class AutodiagType extends AbstractType
                     return $er->getDomainesUserConnectedForForm($options['user']->getId());
                 },
                 'attr' => [
-                    'class' => 'select2'
+                    'class' => 'select2 validate[required,minSize[3],maxSize[255]]'
                 ]
             ])
             ->add('questionnaire', EntityType::class, [

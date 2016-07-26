@@ -3,6 +3,7 @@ namespace HopitalNumerique\AutodiagBundle\Model;
 
 use HopitalNumerique\AutodiagBundle\Entity\Autodiag;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
+use Symfony\Component\Validator\Constraints as Assert;
 
 class AutodiagFileImport
 {
@@ -13,8 +14,9 @@ class AutodiagFileImport
 
     /**
      * @var UploadedFile
+     * @Assert\NotBlank()
      */
-    private $file;
+    protected $file;
 
     /**
      * @var boolean
