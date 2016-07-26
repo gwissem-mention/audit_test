@@ -203,6 +203,11 @@ class QuestionWriter implements WriterInterface, ProgressAwareInterface
             if (!$found) {
                 // @TODO: Voir la suppression des réponses en cascade
                 $attribute->removeOption($element);
+                $this->progress->addMessage(
+                    '',
+                    $element,
+                    'option_removed'
+                );
             }
         }
     }
@@ -218,7 +223,7 @@ class QuestionWriter implements WriterInterface, ProgressAwareInterface
     {
         $chapter = $this->getChapter($code);
         if (null === $chapter) {
-            $this->progress->addMessage('', $code, 'chapter.notfound');
+            $this->progress->addMessage('', $code, 'chapter_notfound');
         } else {
             $weightObject = $this->manager->getRepository('HopitalNumeriqueAutodiagBundle:Autodiag\Attribute\Weight')
                 ->findOneBy([
@@ -305,6 +310,11 @@ class QuestionWriter implements WriterInterface, ProgressAwareInterface
                     ->setCode($code)
                     ->setLabel($code);
                 $this->manager->persist($category);
+                $this->progress->addMessage(
+                    '',
+                    $category,
+                    'category_created'
+                );
             }
 
             $this->categories[$code] = $category;

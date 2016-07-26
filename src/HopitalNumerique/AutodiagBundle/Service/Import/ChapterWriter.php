@@ -73,6 +73,16 @@ class ChapterWriter implements WriterInterface, ProgressAwareInterface
                 $chapterCode = (string)$item['code_chapitre'];
             }
 
+            if (array_key_exists($chapterCode, $this->importedChapterCodes)) {
+                $this->progress->addMessage(
+                    '',
+                    $chapterCode,
+                    'chapter_exists'
+                );
+                return;
+            }
+            $this->importedChapterCodes[$chapterCode] = true;
+
             $chapter = $this->getChapter($chapterCode);
             $propertyAccessor = new PropertyAccessor();
 
@@ -156,8 +166,6 @@ class ChapterWriter implements WriterInterface, ProgressAwareInterface
                 $this->autodiag->addChapter($chapter);
             }
         }
-
-        $this->importedChapterCodes[$code] = true;
 
         return $chapter;
     }
