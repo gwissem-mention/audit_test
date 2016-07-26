@@ -107,16 +107,17 @@ class Preset
     public function validatePresets(ExecutionContextInterface $context)
     {
         $values = $this->getPreset();
-        $empties = 0;
-        foreach ($values as $value) {
-            if (count($value) === 0) {
-                $empties++;
+        if (null !== $values) {
+            $empties = 0;
+            foreach ($values as $value) {
+                if (count($value) === 0) {
+                    $empties++;
+                }
+            }
+            if ($empties > 0 && $empties < count($values)) {
+                $context->buildViolation('Toutes les valeurs doivent êtres renseignées')
+                    ->addViolation();
             }
         }
-        if ($empties > 0 && $empties < count($values)) {
-            $context->buildViolation('Toutes les valeurs doivent êtres renseignées')
-                ->addViolation();
-        }
-
     }
 }
