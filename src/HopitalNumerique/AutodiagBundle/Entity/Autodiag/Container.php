@@ -5,6 +5,7 @@ namespace HopitalNumerique\AutodiagBundle\Entity\Autodiag;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use HopitalNumerique\AutodiagBundle\Entity\Autodiag;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * Container
@@ -35,6 +36,8 @@ abstract class Container
      * @var string
      *
      * @ORM\Column(type="string", length=255)
+     * @Assert\NotBlank
+     * @Assert\Length(max="255")
      */
     private $code;
 
@@ -44,6 +47,8 @@ abstract class Container
      * @var string
      *
      * @ORM\Column(type="string", length=255)
+     * @Assert\NotBlank
+     * @Assert\Length(max="255")
      */
     private $label;
 

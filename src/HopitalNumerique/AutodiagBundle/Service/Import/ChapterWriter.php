@@ -8,6 +8,7 @@ use Nodevo\Component\Import\Progress\ProgressAwareInterface;
 use Nodevo\Component\Import\Progress\ProgressAwareTrait;
 use Nodevo\Component\Import\Writer\WriterInterface;
 use Symfony\Component\PropertyAccess\PropertyAccessor;
+use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 class ChapterWriter implements WriterInterface, ProgressAwareInterface
 {
@@ -19,23 +20,29 @@ class ChapterWriter implements WriterInterface, ProgressAwareInterface
     /** @var Autodiag */
     protected $autodiag;
 
+    /** @var ValidatorInterface */
+    protected $validator;
+
+    protected $hasViolations = false;
+
     protected $importedChapterCodes = [];
 
     protected $mapping = [
-        'code_chapitre' => 'code',
-        'code_chapitre_enfant' => 'code',
-        'libelle_chapitre' => 'label',
-        'libelle_chapitre_enfant' => 'label',
+//        'code_chapitre' => 'code',
+//        'code_chapitre_enfant' => 'code',
+//        'libelle_chapitre' => 'label',
+//        'libelle_chapitre_enfant' => 'label',
         'titre_avant' => 'title',
         'texte_avant' => 'description',
         'texte_apres' => 'additionalDescription',
 //        'plan_action' => '',
     ];
 
-    public function __construct(EntityManager $manager, Autodiag $autodiag)
+    public function __construct(EntityManager $manager, Autodiag $autodiag, ValidatorInterface $validator)
     {
         $this->manager = $manager;
         $this->autodiag = $autodiag;
+        $this->validator = $validator;
     }
 
     public function prepare()
@@ -50,7 +57,13 @@ class ChapterWriter implements WriterInterface, ProgressAwareInterface
 
             if (isset($item['code_chapitre_enfant'])) {
                 if (!isset($item['code_chapitre'])) {
-                    throw new \Exception('Parent code needed for child chapter');
+                    $this->progress->addMessage(
+                        'ad.import.chapter.missing_parent_code',
+                        null,
+                        'missing_parent_code',
+                        'error'
+                    );
+                    return;
                 }
                 $parentCode = (string)$item['code_chapitre'];
                 $chapterCode = (string)$item['code_chapitre_enfant'];
@@ -64,22 +77,35 @@ class ChapterWriter implements WriterInterface, ProgressAwareInterface
             $propertyAccessor = new PropertyAccessor();
 
             foreach ($this->mapping as $key => $attribute) {
-                if (array_key_exists($key, $item) && null !== $item[$key]) {
+                if (array_key_exists($key, $item)) {
                     $propertyAccessor->setValue($chapter, $attribute, (string)$item[$key]);
                 }
             }
 
-            $this->progress->addMessage('', $chapter, 'chapter.updated');
-
             if ($parentChapter) {
                 $chapter->setParent($parentChapter);
+                $chapter->setLabel($item['libelle_chapitre_enfant']);
             } else {
                 $chapter->setParent();
+                $chapter->setLabel($item['libelle_chapitre']);
             }
 
+            $violations = $this->validator->validate($chapter);
+            if (count($violations) > 0) {
+                $this->progress->addMessage(
+                    '',
+                    $violations,
+                    'violation',
+                    'chapter'
+                );
+                $this->hasViolations = true;
+                return;
+            }
+
+            $this->progress->addMessage('', $chapter, 'chapter_updated');
             $this->progress->addSuccess($item);
         } else {
-            $this->progress->addError('chapter incorect format');
+            $this->progress->addError('ad.import.chapter.incorrect_row_format');
         }
     }
 
@@ -90,6 +116,12 @@ class ChapterWriter implements WriterInterface, ProgressAwareInterface
 
     public function end()
     {
+        if ($this->hasViolations) {
+            $this->manager->clear();
+            $this->progress->addError('ad.import.chapter.has_violations');
+            return;
+        }
+
         $toDelete = $this->autodiag->getChapters()->filter(
             function (Chapter $chapter) {
                 return !array_key_exists((string)$chapter->getCode(), $this->importedChapterCodes);

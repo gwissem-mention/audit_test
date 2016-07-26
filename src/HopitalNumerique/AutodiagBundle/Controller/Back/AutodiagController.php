@@ -98,14 +98,18 @@ class AutodiagController extends Controller
 
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
-            $importHandler->handleSurveyImport(
-                $import,
-                $this->get('autodiag.import.chapter'),
-                $this->get('autodiag.import.question')
-            );
+            try {
+                $importHandler->handleSurveyImport(
+                    $import,
+                    $this->get('autodiag.import.chapter'),
+                    $this->get('autodiag.import.question')
+                );
 
-            $this->addFlash('success', 'ad.autodiag.import.success');
-
+                $this->addFlash('success', 'ad.import.success');
+            } catch (\Exception $e) {
+                dump($e->getMessage());die;
+                $this->addFlash('danger', 'ad.import.errors.generic');
+            }
             return $this->redirectToRoute('hopitalnumerique_autodiag_edit_survey', [
                 'id' => $autodiag->getId()
             ]);

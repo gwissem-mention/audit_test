@@ -4,6 +4,7 @@ namespace HopitalNumerique\AutodiagBundle\Entity\Autodiag\Container;
 
 use Doctrine\ORM\Mapping as ORM;
 use HopitalNumerique\AutodiagBundle\Entity\Autodiag\Container;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * Chapter
@@ -19,6 +20,8 @@ class Chapter extends Container
      * @var string
      *
      * @ORM\Column(type="string", length=255)
+     * @Assert\NotBlank()
+     * @Assert\Length(max="255")
      */
     private $title;
 
@@ -28,6 +31,7 @@ class Chapter extends Container
      * @var string
      *
      * @ORM\Column(type="text")
+     * @Assert\NotBlank()
      */
     private $description;
 
@@ -37,6 +41,7 @@ class Chapter extends Container
      * @var string
      *
      * @ORM\Column(type="text")
+     * @Assert\NotBlank()
      */
     private $additionalDescription;
 

@@ -27,6 +27,7 @@ services:
             - '@session'
             - '@autodiag.attribute_builder_provider'
             - '@security.token_storage'
+            - '@validator'
 
     autodiag.form.autodiagentry.value:
         class: HopitalNumerique\AutodiagBundle\Form\Type\AutodiagEntry\ValueType

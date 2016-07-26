@@ -26,7 +26,26 @@ ad:
             generique: Informations génériques
             multiple_result_treatment: Paramètres de traitement de plusieurs résultats
     import:
+        success: Le fichier d'import à bien été traité.
         lines:
             count: "{0}Aucune ligne n'a été importée|{1}%count% ligne à été importée|]1,Inf[%count% lignes ont été importées"
         chapter:
             updated: "{0}Aucunchapitre n'a été mis à jour|{1}%count% chapitre à été mis à jour|]1,Inf[%count% chapitres ont été mis à jour"
+            missing_parent_code: Le code chapitre est manquant.
+            incorrect_row_format: Format de ligne incorrect.
+            has_violations: Le fichier contiens des erreurs, veuillez les corriger avant de soumettre à nouveau le fichier.
+        errors:
+            generic: Une erreur technique est survenue, veuillez réessayer ultérieurement.
+            count: "{0}Aucune erreur|{1}Une erreur à été trouvée|]1,Inf[%count% erreurs ont été trouvées"
+        message:
+            missing_parent_code: Codes chapitre parent manquant
+            chapter_updated: Chapitres mis à jour
+            chapter_deleted: Chapitres supprimés
+            violation: Validation
+
+    chapter:
+        code: Code
+        label: Libellé
+        title: Titre
+        description: Description
+        additionalDescription: Complément

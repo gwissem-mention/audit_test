@@ -1,20 +1,31 @@
-<div class="row">
-    <div class="col-md-10">
-        {% form_theme form 'NodevoAdminBundle::form.html.twig' %}
-        {{ form_start(form) }}
-        {{ form_widget(form) }}
-        {{ form_end(form) }}
-    </div>
-    <div class="col-md-2">
-        <h3>Historique des imports</h3>
-        {% for change in history %}
+{% extends "@HopitalNumeriqueAutodiag/Autodiag/edit.html.twig" %}
+
+{% block edit_content %}
+
+    <div class="row">
+        <div class="col-md-10">
             <div>
-                {{ 'ad.autodiag.history.last_modified'|trans({
-                    '%date%': change.dateTime|date('d/m/Y'),
-                    '%time%': change.dateTime|date('H\\hi'),
-                    '%username%': change.username
-                }) }}
+                {% form_theme form 'NodevoAdminBundle::form.html.twig' %}
+                {{ form_start(form) }}
+                {{ form_widget(form) }}
+                {{ form_end(form) }}
             </div>
-        {% endfor %}
+            <div class="repport">
+                {% block repport %}{% endblock %}
+            </div>
+        </div>
+        <div class="col-md-2">
+            <h3>Historique des imports</h3>
+            {% for change in history %}
+                <div>
+                    {{ 'ad.autodiag.history.last_modified'|trans({
+                        '%date%': change.dateTime|date('d/m/Y'),
+                        '%time%': change.dateTime|date('H\\hi'),
+                        '%username%': change.username
+                    }) }}
+                </div>
+            {% endfor %}
+        </div>
     </div>
-</div>
+
+{% endblock %}

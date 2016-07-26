@@ -22,3 +22,9 @@
     content: ' ';
     display: block;
 }
+
+
+.list-group-item-danger {
+    color: #a94442;
+    background-color: #f2dede;
+}

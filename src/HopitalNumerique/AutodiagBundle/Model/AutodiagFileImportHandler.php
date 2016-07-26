@@ -3,7 +3,6 @@ namespace HopitalNumerique\AutodiagBundle\Model;
 
 use Doctrine\ORM\EntityManager;
 use HopitalNumerique\AutodiagBundle\Entity\Autodiag\History;
-use HopitalNumerique\AutodiagBundle\Entity\Restitution;
 use HopitalNumerique\AutodiagBundle\Service\Attribute\AttributeBuilderProvider;
 use HopitalNumerique\AutodiagBundle\Service\Import\AlgorithmWriter;
 use HopitalNumerique\AutodiagBundle\Service\Import\ChapterWriter;
@@ -13,6 +12,7 @@ use Nodevo\Component\Import\DataImporter;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
+use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 class AutodiagFileImportHandler
 {
@@ -28,6 +28,9 @@ class AutodiagFileImportHandler
     /** @var ContainerInterface */
     protected $container;
 
+    /** @var ValidatorInterface */
+    protected $validator;
+
     /**
      * Handler constructor
      *
@@ -35,18 +38,21 @@ class AutodiagFileImportHandler
      * @param SessionInterface $session
      * @param AttributeBuilderProvider $attributeBuilder
      * @param TokenStorageInterface $tokenStorage
+     * @param ValidatorInterface $validator
      * @internal param ContainerInterface $container
      */
     public function __construct(
         EntityManager $em,
         SessionInterface $session,
         AttributeBuilderProvider $attributeBuilder,
-        TokenStorageInterface $tokenStorage
+        TokenStorageInterface $tokenStorage,
+        ValidatorInterface $validator
     ) {
         $this->manager = $em;
         $this->session = $session;
         $this->attributeBuilder = $attributeBuilder;
         $this->tokenStorage = $tokenStorage;
+        $this->validator = $validator;
     }
 
     /**
@@ -60,7 +66,7 @@ class AutodiagFileImportHandler
         if (null !== $model->getFile()) {
             // Import chapter
             $chapterImporter->setWriter(
-                new ChapterWriter($this->manager, $autodiag)
+                new ChapterWriter($this->manager, $autodiag, $this->validator)
             );
             $chapterProgress = $chapterImporter->import($model->getFile());
             $this->session->set('survey_import_progress_chapter', $chapterProgress);
@@ -72,10 +78,12 @@ class AutodiagFileImportHandler
             $questionProgress = $questionImporter->import($model->getFile());
             $this->session->set('survey_import_progress_question', $questionProgress);
 
-            // Save history
-            $user = $this->tokenStorage->getToken()->getUser();
-            $history = History::createSurveyImport($autodiag, $user);
-            $this->manager->persist($history);
+            if (!$chapterProgress->hasErrors() && !$questionProgress->hasErrors()) {
+                // Save history
+                $user = $this->tokenStorage->getToken()->getUser();
+                $history = History::createSurveyImport($autodiag, $user);
+                $this->manager->persist($history);
+            }
         }
 
         $this->updatePublicAupdatedDate($model);

@@ -1,10 +1,26 @@
+{% if progress.errors|length > 0 %}
+    <div class="errors">
+        {{ "ad.import.errors.count"|transchoice(progress.errors|length) }}
+        <ul class="list-group">
+            {% for line, error in progress.errors %}
+                <li class="list-group-item list-group-item-danger">{{ error|trans }}</li>
+            {% endfor %}
+        </ul>
+    </div>
+{% endif %}
+
 <div>
-    {{ 'ad.import.lines.count'|transchoice(progress.successCount) }}
+    <h3>{{ 'ad.import.lines.count'|transchoice(progress.successCount) }}</h3>
 </div>
 
 <div>
     {% for type, list in progress.messages %}
-        <span>{{ ("ad.import." ~ type)|transchoice(list|length) }}</span>
+        <h4>{{ ("ad.import.message." ~ type)|transchoice(list|length) }}</h4>
+        <ul class="list-group">
+            {% for message in list %}
+                {% include ("@HopitalNumeriqueAutodiag/Autodiag/Edit/Repport/_" ~ type ~ ".html.twig") ignore missing with {'message': message} %}
+            {% endfor %}
+        </ul>
     {% endfor %}
 </div>
 
