@@ -96,19 +96,22 @@ class QuestionWriter implements WriterInterface, ProgressAwareInterface
             }
 
             $this->handleOptions($attribute, $item[self::COLUMN_OPTIONS]);
-            $this->handleChapter($attribute, $item[self::COLUMN_CHAPTER], $item[self::COLUMN_CHAPTER_WEIGHT]);
+            $chapterValid = $this->handleChapter($attribute, $item[self::COLUMN_CHAPTER], $item[self::COLUMN_CHAPTER_WEIGHT]);
             $this->handleCategories($attribute, $item[self::COLUMN_CATEGORIES]);
 
             $this->manager->persist($attribute);
 
             $violations = $this->validator->validate($attribute);
-            if (!$this->validate($item) || count($violations) > 0) {
-                $this->progress->addMessage(
-                    '',
-                    $violations,
-                    'violation',
-                    'chapter'
-                );
+            $hasViolations = count($violations) > 0;
+            if (!$chapterValid || !$this->validate($item) || $hasViolations) {
+                if ($hasViolations) {
+                    $this->progress->addMessage(
+                        '',
+                        $violations,
+                        'violation',
+                        'chapter'
+                    );
+                }
 
                 $this->manager->detach($attribute);
                 foreach ($this->weights as $weight) {
@@ -275,6 +278,7 @@ class QuestionWriter implements WriterInterface, ProgressAwareInterface
         $chapter = $this->getChapter($code);
         if (null === $chapter) {
             $this->progress->addMessage('', $code ?: '', 'chapter_notfound');
+            return false;
         } else {
             $weightObject = $this->manager->getRepository('HopitalNumeriqueAutodiagBundle:Autodiag\Attribute\Weight')
                 ->findOneBy([
@@ -290,6 +294,7 @@ class QuestionWriter implements WriterInterface, ProgressAwareInterface
             $weightObject->setWeight($this->parseFloatValue($weight));
             $this->weights[] = $weightObject;
         }
+        return true;
     }
 
     /**
