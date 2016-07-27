@@ -1,8 +1,8 @@
 <li class="list-group-item">
     Ligne {{ message.index }} :
-    {% if message.context.code_chapitre is null %}
+    {% if message.context is empty %}
         Le code chapitre est manquant.
     {% else %}
-        {{ message.context.code_chapitre }}
+        {{ message.context }}
     {% endif %}
 </li>

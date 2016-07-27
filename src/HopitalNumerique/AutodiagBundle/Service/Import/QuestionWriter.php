@@ -274,7 +274,7 @@ class QuestionWriter implements WriterInterface, ProgressAwareInterface
     {
         $chapter = $this->getChapter($code);
         if (null === $chapter) {
-            $this->progress->addMessage('', $code, 'chapter_notfound');
+            $this->progress->addMessage('', $code ?: '', 'chapter_notfound');
         } else {
             $weightObject = $this->manager->getRepository('HopitalNumeriqueAutodiagBundle:Autodiag\Attribute\Weight')
                 ->findOneBy([
