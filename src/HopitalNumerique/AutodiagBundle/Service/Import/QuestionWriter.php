@@ -122,7 +122,7 @@ class QuestionWriter implements WriterInterface, ProgressAwareInterface
 
             $this->progress->addSuccess($item);
         } else {
-            $this->progress->addError('chapter incorect format');
+            $this->progress->addError('ad.import.attribute.incorrect_row_format');
         }
     }
 
@@ -413,12 +413,6 @@ class QuestionWriter implements WriterInterface, ProgressAwareInterface
      */
     protected function validateRow($item)
     {
-        // Valide le type
-        if (!in_array($item[self::COLUMN_TYPE], $this->attributeTypesAvailable)) {
-            $this->progress->addMessage('', $item[self::COLUMN_TYPE], 'attribute.type');
-            return false;
-        }
-
         return
             count($item) === 10
             && count(array_intersect_key($item, [

@@ -37,6 +37,7 @@ ad:
             code_already_exists: Le chapitre avec le code "%code%" existe déjà dans le fichier.
         attribute:
             code_already_exists: L'attribut avec le code "%code%" existe déjà dans le fichier.
+            incorrect_row_format: Format de ligne incorrect.
         errors:
             generic: Une erreur technique est survenue, veuillez réessayer ultérieurement.
             count: "{0}Aucune erreur|{1}Une erreur à été trouvée|]1,Inf[%count% erreurs ont été trouvées"
