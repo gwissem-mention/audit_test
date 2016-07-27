@@ -107,7 +107,7 @@ class AutodiagController extends Controller
 
                 $this->addFlash('success', 'ad.import.success');
             } catch (\Exception $e) {
-                dump($e->getMessage());die;
+                dump($e);die;
                 $this->addFlash('danger', 'ad.import.errors.generic');
             }
             return $this->redirectToRoute('hopitalnumerique_autodiag_edit_survey', [

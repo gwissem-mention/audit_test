@@ -61,9 +61,22 @@ class Weight
         return $this;
     }
 
+    public function getWeight()
+    {
+        return $this->weight;
+    }
+
     public function getAttribute()
     {
         return $this->attribute;
+    }
+
+    /**
+     * @return Container
+     */
+    public function getContainer()
+    {
+        return $this->container;
     }
 }
 

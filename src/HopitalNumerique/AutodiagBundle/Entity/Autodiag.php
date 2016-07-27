@@ -11,7 +11,6 @@ use HopitalNumerique\AutodiagBundle\Entity\Autodiag\Preset;
 use HopitalNumerique\DomaineBundle\Entity\Domaine;
 use HopitalNumerique\QuestionnaireBundle\Entity\Questionnaire;
 use Symfony\Component\Validator\Constraints as Assert;
-use Symfony\Component\Validator\Context\ExecutionContextInterface;
 
 /**
  * Gabarit d'autodiag

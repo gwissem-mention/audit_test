@@ -4,6 +4,7 @@ namespace HopitalNumerique\AutodiagBundle\Entity\Autodiag\Attribute;
 
 use Doctrine\ORM\Mapping as ORM;
 use HopitalNumerique\AutodiagBundle\Entity\Autodiag\Attribute;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * Option
@@ -27,6 +28,7 @@ class Option
      *
      * @ORM\Id
      * @ORM\Column(type="float")
+     * @Assert\NotBlank()
      */
     private $value;
 
@@ -34,6 +36,8 @@ class Option
      * @var string
      *
      * @ORM\Column(type="string", length=255)
+     * @Assert\NotBlank()
+     * @Assert\Length(max="255")
      */
     private $label;
 

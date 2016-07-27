@@ -7,6 +7,7 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use HopitalNumerique\AutodiagBundle\Entity\Autodiag;
 use HopitalNumerique\AutodiagBundle\Entity\Autodiag\Attribute\Option;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * Attribute
@@ -28,6 +29,8 @@ class Attribute
     /**
      * @var string
      * @ORM\Column(type="string", length=255)
+     * @Assert\NotBlank()
+     * @Assert\Length(max="255")
      */
     private $code;
 
@@ -36,6 +39,7 @@ class Attribute
      *
      * @var string
      * @ORM\Column(type="text")
+     * @Assert\NotBlank()
      */
     private $description;
 
@@ -44,6 +48,8 @@ class Attribute
      *
      * @var string
      * @ORM\Column(type="string", length=255)
+     * @Assert\NotBlank()
+     * @Assert\Length(max="255")
      */
     private $label;
 
@@ -52,6 +58,8 @@ class Attribute
      *
      * @var int
      * @ORM\Column(type="string", length=50)
+     * @Assert\NotBlank()
+     * @Assert\Length(max="50")
      */
     private $type;
 
@@ -60,6 +68,7 @@ class Attribute
      *
      * @var boolean
      * @ORM\Column(type="boolean")
+     * @Assert\NotNull()
      */
     private $colored;
 
@@ -78,10 +87,11 @@ class Attribute
      * @ORM\OneToMany(
      *     targetEntity="HopitalNumerique\AutodiagBundle\Entity\Autodiag\Attribute\Option",
      *     mappedBy="attribute",
-     *     cascade={"persist"},
+     *     cascade={"persist", "remove", "detach"},
      *     orphanRemoval=true,
      *     fetch="EAGER"
      * )
+     * @Assert\Valid()
      */
     private $options;
 
@@ -107,6 +117,11 @@ class Attribute
         return $this->id;
     }
 
+    public function setId($id)
+    {
+        $this->id = $id;
+    }
+
     /**
      * Get code
      *
@@ -121,7 +136,7 @@ class Attribute
      * Set code
      *
      * @param string $code
-     * @return $this
+     * @return Attribute
      */
     public function setCode($code)
     {
@@ -144,7 +159,7 @@ class Attribute
      * Set description
      *
      * @param string $description
-     * @return $this
+     * @return Attribute
      */
     public function setDescription($description)
     {
@@ -167,7 +182,7 @@ class Attribute
      * Set label
      *
      * @param string $label
-     * @return $this
+     * @return Attribute
      */
     public function setLabel($label)
     {
@@ -190,7 +205,7 @@ class Attribute
      * Set type
      *
      * @param int $type
-     * @return $this
+     * @return Attribute
      */
     public function setType($type)
     {
@@ -213,7 +228,7 @@ class Attribute
      * Set is colored
      *
      * @param boolean $colored
-     * @return $this
+     * @return Attribute
      */
     public function setColored($colored)
     {
@@ -236,7 +251,7 @@ class Attribute
      * Set tooltip content
      *
      * @param string $tooltip
-     * @return $this
+     * @return Attribute
      */
     public function setTooltip($tooltip)
     {
@@ -255,11 +270,16 @@ class Attribute
         return $this->options;
     }
 
+    public function setOptions($options)
+    {
+        $this->options = $options;
+    }
+
     /**
      * Add option
      *
      * @param Option $option
-     * @return $this
+     * @return Attribute
      */
     public function addOption(Option $option)
     {
@@ -272,7 +292,7 @@ class Attribute
      * Remove option
      *
      * @param Option $option
-     * @return $this
+     * @return Attribute
      */
     public function removeOption(Option $option)
     {
@@ -295,7 +315,7 @@ class Attribute
      * Set Model
      *
      * @param Autodiag $autodiag
-     * @return $this
+     * @return Attribute
      */
     public function setAutodiag(Autodiag $autodiag)
     {

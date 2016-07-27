@@ -28,14 +28,9 @@ class ChapterWriter implements WriterInterface, ProgressAwareInterface
     protected $importedChapterCodes = [];
 
     protected $mapping = [
-//        'code_chapitre' => 'code',
-//        'code_chapitre_enfant' => 'code',
-//        'libelle_chapitre' => 'label',
-//        'libelle_chapitre_enfant' => 'label',
         'titre_avant' => 'title',
         'texte_avant' => 'description',
         'texte_apres' => 'additionalDescription',
-//        'plan_action' => '',
     ];
 
     public function __construct(EntityManager $manager, Autodiag $autodiag, ValidatorInterface $validator)

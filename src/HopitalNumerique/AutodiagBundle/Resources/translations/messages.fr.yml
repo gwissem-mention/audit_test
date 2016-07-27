@@ -35,6 +35,8 @@ ad:
             incorrect_row_format: Format de ligne incorrect.
             has_violations: Le fichier contiens des erreurs, veuillez les corriger avant de soumettre à nouveau le fichier.
             code_already_exists: Le chapitre avec le code "%code%" existe déjà dans le fichier.
+        attribute:
+            code_already_exists: L'attribut avec le code "%code%" existe déjà dans le fichier.
         errors:
             generic: Une erreur technique est survenue, veuillez réessayer ultérieurement.
             count: "{0}Aucune erreur|{1}Une erreur à été trouvée|]1,Inf[%count% erreurs ont été trouvées"
@@ -42,11 +44,17 @@ ad:
             missing_parent_code: Codes chapitre parent manquant
             chapter_updated: Chapitres mis à jour
             chapter_exists: Chapitres déjà importés
+            attribute_exists: Attributs déjà importés
             chapter_deleted: Chapitres supprimés
+            attribute_deleted: Attributs supprimés
             category_created: Catégories créées
             chapter_notfound: Chapitres inexistants
             option_removed: Options supprimées
             violation: Validation
+            attribute_type: Type de l'attribut incorrect
+            attribute_colored: Coloré réponse doit être 1 ou -1
+            attribute_category: Format catégories incorrect
+            attribute_options: Format options incorrect
 
     chapter:
         code: Code
@@ -54,3 +62,16 @@ ad:
         title: Titre
         description: Description
         additionalDescription: Complément
+
+    attribute:
+        code: Code
+        label: Libellé attribut
+        description: Description
+        type: Type
+        colored: Coloré
+        tooltip: Infobulle
+        options: Options
+
+    category:
+        code: Code
+        label: Libellé catégorie

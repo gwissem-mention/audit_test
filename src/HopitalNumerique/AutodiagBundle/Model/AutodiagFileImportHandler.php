@@ -73,7 +73,7 @@ class AutodiagFileImportHandler
 
             // Import questions
             $questionImporter->setWriter(
-                new QuestionWriter($this->manager, $autodiag, $this->attributeBuilder)
+                new QuestionWriter($this->manager, $autodiag, $this->attributeBuilder, $this->validator)
             );
             $questionProgress = $questionImporter->import($model->getFile());
             $this->session->set('survey_import_progress_question', $questionProgress);
@@ -81,7 +81,7 @@ class AutodiagFileImportHandler
             if (!$chapterProgress->hasErrors() && !$questionProgress->hasErrors()) {
                 // Save history
                 $user = $this->tokenStorage->getToken()->getUser();
-                $history = History::createSurveyImport($autodiag, $user);
+                $history = History::createSurveyImport($this->manager->find('HopitalNumeriqueAutodiagBundle:Autodiag', $autodiag->getId()), $user);
                 $this->manager->persist($history);
             }
         }
