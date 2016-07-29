@@ -21,3 +21,7 @@ hopitalnumerique_autodiag_edit_algorithm:
 hopitalnumerique_autodiag_edit_restitution:
     path:     /autodiag/edit/{id}/result
     defaults: { _controller: HopitalNumeriqueAutodiagBundle:Back/Autodiag:restitutionEdit }
+
+hopitalnumerique_autodiag_export_survey:
+    path:     /autodiag/edit/{id}/survey/export
+    defaults: { _controller: HopitalNumeriqueAutodiagBundle:Back/Export:survey }
