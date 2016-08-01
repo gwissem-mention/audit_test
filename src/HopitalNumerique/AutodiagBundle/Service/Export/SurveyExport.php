@@ -31,6 +31,8 @@ class SurveyExport
         $sheet = $this->addSheet($excel, 'chapitres');
         $this->writeChapterHeaders($sheet);
 
+        $excel->removeSheetByIndex(0);
+
         $chapters = $autodiag->getChapters();
         foreach ($chapters as $chapter) {
             $this->writeChapterRow($sheet, $chapter);
