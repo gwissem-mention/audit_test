@@ -10,7 +10,7 @@ class ExportController extends Controller
 {
     public function surveyAction(Autodiag $autodiag)
     {
-        $exporter = new SurveyExport();
+        $exporter = new SurveyExport($this->getDoctrine()->getManager());
         return $exporter->export($autodiag);
     }
 }

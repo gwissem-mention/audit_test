@@ -13,7 +13,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  * Attribute
  *
  * @ORM\Table(name="ad_autodiag_attribute")
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="HopitalNumerique\AutodiagBundle\Repository\Autodiag\AttributeRepository")
  */
 class Attribute
 {

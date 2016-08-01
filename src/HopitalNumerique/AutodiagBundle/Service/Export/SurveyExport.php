@@ -1,18 +1,28 @@
 <?php
 namespace HopitalNumerique\AutodiagBundle\Service\Export;
 
+use Doctrine\Common\Persistence\ObjectManager;
 use HopitalNumerique\AutodiagBundle\Entity\Autodiag;
+use HopitalNumerique\AutodiagBundle\Entity\Autodiag\Container\Chapter;
+use HopitalNumerique\AutodiagBundle\Entity\Autodiag\Attribute;
+use HopitalNumerique\AutodiagBundle\Entity\Autodiag\Attribute\Weight;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 
 class SurveyExport
 {
 
+    protected $manager;
+
     protected $row = 1;
 
-    public function __construct()
+    /**
+     * SurveyExport constructor.
+     * @param ObjectManager $manager
+     */
+    public function __construct(ObjectManager $manager)
     {
-
+        $this->manager = $manager;
     }
 
     public function export(Autodiag $autodiag)
@@ -37,7 +47,6 @@ class SurveyExport
         foreach ($attributes as $attribute) {
             $this->writeAttributeRow($sheet, $attribute);
         }
-
 
         $file = stream_get_meta_data(tmpfile())['uri'];
         $this->getWriter($excel)->save($file);
@@ -102,12 +111,51 @@ class SurveyExport
 
         $this->addRow($sheet, $chapterData);
     }
-    
-    private function writeAttributeRow(\PHPExcel_Worksheet $sheet, Autodiag\Attribute $attribute)
+
+    private function writeAttributeRow(\PHPExcel_Worksheet $sheet, Attribute $attribute)
     {
-        $data = [];
-        $data[] = $attribute->getCode();
-        
+        $weights = $this->manager->getRepository(Attribute::class)->getAttributeContainersWeight($attribute);
+
+        $data = [
+            'code_question' => $attribute->getCode(),
+            'text_avant' => $attribute->getLabel(),
+            'libelle_question' => $attribute->getLabel(),
+            'format_reponse' => $attribute->getType(),
+            'colorer_reponse' => $attribute->isColored() ? '1' : '-1',
+            'infobulle_question' => $attribute->getTooltip(),
+        ];
+
+        $categoryData = [];
+        foreach ($weights as $weight) {
+            /** @var Weight $weight */
+            if ($weight->getContainer() instanceof Autodiag\Container\Chapter) {
+                $data['code_chapitre'] = $weight->getContainer()->getCode();
+                $data['ponderation_chapitre'] = $weight->getWeight();
+            } elseif ($weight->getContainer() instanceof Autodiag\Container\Category) {
+                $categoryData[] = [$weight->getContainer()->getCode(), $weight->getWeight()];
+            }
+        }
+
+        $data['poderation_categorie'] = implode("\n", array_map(function ($element) {
+            return implode("::", $element);
+        }, $categoryData));
+
+        $options = implode("\n", array_map(function (Attribute\Option $option) {
+            return $option->getValue() . '::' . $option->getLabel();
+        }, $attribute->getOptions()->toArray()));
+
+        $this->addRow($sheet, [
+            $data['code_question'],
+            array_key_exists('code_chapitre', $data) ? $data['code_chapitre'] : '',
+            $data['text_avant'],
+            $data['libelle_question'],
+            $data['format_reponse'],
+            $options,
+            $data['colorer_reponse'],
+            $data['infobulle_question'],
+            $data['poderation_categorie'],
+            array_key_exists('ponderation_chapitre', $data) ? $data['ponderation_chapitre'] : '',
+        ]);
     }
 
     protected function addSheet(\PHPExcel $excel, $title)
