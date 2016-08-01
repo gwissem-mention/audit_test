@@ -191,9 +191,9 @@ class ChapterWriter implements WriterInterface, ProgressAwareInterface
                 $this->manager->persist($object);
             }
 
-            $object->setDescription($action[1]);
-            $object->setLink($action[2]);
-            $object->setLinkDescription($action[3]);
+            $object->setDescription(isset($action[1]) ?: null);
+            $object->setLink(isset($action[2]) ?: null);
+            $object->setLinkDescription(isset($action[3]) ?: null);
 
             $violations = $this->validator->validate($object);
             if (count($violations) > 0) {

@@ -33,7 +33,7 @@ class ActionPlan
     /**
      * @var string
      * @ORM\Column(type="text", nullable=true)
-     * @Assert\Length(max="2")
+     * @Assert\Length(max="255")
      */
     private $description;
 
