@@ -47,6 +47,7 @@ class QuestionWriter implements WriterInterface, ProgressAwareInterface
     protected $attributes = [];
 
     protected $weights = [];
+    protected $actionPlans = [];
 
     protected $mapping = [
         'texte_avant' => 'description',
@@ -74,6 +75,7 @@ class QuestionWriter implements WriterInterface, ProgressAwareInterface
     public function write($item)
     {
         $this->weights = [];
+        $this->actionPlans = [];
 
         if ($this->validateRow($item)) {
             $attribute = $this->getAttribute($item[self::COLUMN_CODE], $item[self::COLUMN_TYPE]);
@@ -116,6 +118,10 @@ class QuestionWriter implements WriterInterface, ProgressAwareInterface
                 $this->manager->detach($attribute);
                 foreach ($this->weights as $weight) {
                     $this->manager->detach($weight);
+                }
+
+                foreach ($this->actionPlans as $action) {
+                    $this->manager->detach($action);
                 }
                 return;
             }
@@ -214,11 +220,8 @@ class QuestionWriter implements WriterInterface, ProgressAwareInterface
         $options = [];
 
         foreach ($lines as $line) {
-            $option = explode('::', $line);
-            if (count($option) == 2) {
-                $options[trim($option[0])] = trim($option[1]);
-            } elseif (strlen($line) > 0) {
-                return false;
+            if (strlen($line) > 0) {
+                $options[] = explode('::', $line);
             }
         }
 
@@ -236,18 +239,25 @@ class QuestionWriter implements WriterInterface, ProgressAwareInterface
     {
         $collection = new ArrayCollection();
         $optionsArray = $this->parseMultiline($options);
-        if (false === $optionsArray) {
-            $this->progress->addMessage(
-                '',
-                $options ?: '',
-                'attribute_options'
-            );
-            return false;
-        }
-        foreach ($optionsArray as $value => $label) {
+
+        foreach ($optionsArray as $data) {
+
+            if (count($data) < 2) {
+                $this->progress->addMessage(
+                    '',
+                    $options ?: '',
+                    'attribute_options'
+                );
+                return false;
+            }
+
+            $value = $data[0];
+            $label = $data[1];
             $option = $this->getOption($attribute, $value);
             $option->setLabel($label);
             $collection->add($option);
+
+            $this->handleActionPlan($attribute, $value, $data);
         }
 
         foreach ($attribute->getOptions() as $key => $element) {
@@ -265,6 +275,49 @@ class QuestionWriter implements WriterInterface, ProgressAwareInterface
                 );
             }
         }
+    }
+
+    protected function handleActionPlan(Attribute $attribute, $value, $data)
+    {
+        $object = $this->manager->getRepository('HopitalNumeriqueAutodiagBundle:Autodiag\ActionPlan')
+            ->findOneBy([
+                'attribute' => $attribute,
+                'value' => $value,
+            ]);
+
+        if (count($data) <= 2 && null !== $object) {
+            $this->manager->remove($object);
+            $this->actionPlans[] = $object;
+            return true;
+        } elseif (count($data) > 2) {
+            if (null === $object) {
+                $object = Autodiag\ActionPlan::createForAttribute($this->autodiag, $attribute, $value);
+                $this->manager->persist($object);
+            }
+
+            $object->setVisible((bool)$data[2]);
+            $object->setDescription(isset($data[3]) ? $data[3] : null);
+            $object->setLink(isset($data[4]) ? $data[4] : null);
+            $object->setLinkDescription(isset($data[5]) ? $data[5] : null);
+
+            $updatedActions[$object->getId()] = true;
+
+            $violations = $this->validator->validate($object);
+
+            if (count($violations) > 0) {
+                $this->progress->addMessage(
+                    '',
+                    $violations,
+                    'violation',
+                    'actionplan'
+                );
+                $this->manager->detach($object);
+            } else {
+                $this->actionPlans[] = $object;
+            }
+        }
+
+        return true;
     }
 
     /**
@@ -307,15 +360,21 @@ class QuestionWriter implements WriterInterface, ProgressAwareInterface
     protected function handleCategories(Attribute $attribute, $data)
     {
         $categoriesData = $this->parseMultiline($data);
-        if (false === $categoriesData) {
-            $this->progress->addMessage(
-                '',
-                $data ?: '',
-                'attribute_category'
-            );
-            return false;
-        }
-        foreach ($categoriesData as $code => $weight) {
+
+        foreach ($categoriesData as $data) {
+
+            if (count($data) > 2) {
+                $this->progress->addMessage(
+                    '',
+                    $data ?: '',
+                    'attribute_category'
+                );
+                return false;
+            }
+
+            $code = $data[0];
+            $weight = $data[1];
+
             $category = $this->getCategory($code);
             if (false === $category) {
                 return false;

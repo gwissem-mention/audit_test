@@ -173,13 +173,15 @@ class ChapterWriter implements WriterInterface, ProgressAwareInterface
             return;
         }
 
-        $actions = explode("\n", $item['plan_action']);
+        $actions = preg_split("/\\r\\n|\\r|\\n/", $item['plan_action']);
         array_walk($actions, function (&$element) {
             $element = explode("::", $element);
         });
 
+        $updatedActions = [];
+
         foreach ($actions as $action) {
-            $value = $this->parseFloatValue($action[0]);
+            $value = $this->parseFloatValue($action[1]);
             $object = $this->manager->getRepository('HopitalNumeriqueAutodiagBundle:Autodiag\ActionPlan')
                 ->findOneBy([
                     'container' => $chapter,
@@ -191,9 +193,12 @@ class ChapterWriter implements WriterInterface, ProgressAwareInterface
                 $this->manager->persist($object);
             }
 
-            $object->setDescription(isset($action[1]) ?: null);
-            $object->setLink(isset($action[2]) ?: null);
-            $object->setLinkDescription(isset($action[3]) ?: null);
+            $object->setVisible((bool)$action[1]);
+            $object->setDescription(isset($action[2]) ? $action[2] : null);
+            $object->setLink(isset($action[3]) ? $action[3] : null);
+            $object->setLinkDescription(isset($action[4]) ? $action[4]: null);
+
+            $updatedActions[$object->getId()] = true;
 
             $violations = $this->validator->validate($object);
             if (count($violations) > 0) {
@@ -204,6 +209,16 @@ class ChapterWriter implements WriterInterface, ProgressAwareInterface
                     'actionplan'
                 );
                 $this->manager->detach($object);
+            }
+        }
+
+        $actionPlans = $this->manager->getRepository('HopitalNumeriqueAutodiagBundle:Autodiag\ActionPlan')
+            ->findBy([
+                'container' => $chapter,
+            ]);
+        foreach ($actionPlans as $actionPlan) {
+            if (!array_key_exists($actionPlan->getId(), $updatedActions)) {
+                $this->manager->remove($actionPlan);
             }
         }
 

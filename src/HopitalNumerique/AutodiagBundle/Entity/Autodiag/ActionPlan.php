@@ -61,12 +61,14 @@ class ActionPlan
      *
      * @ORM\ManyToOne(targetEntity="HopitalNumerique\AutodiagBundle\Entity\Autodiag", inversedBy="actionPlans")
      * @ORM\JoinColumn(name="autodiag_id", referencedColumnName="id")
+     * @ORM\JoinColumn(onDelete="CASCADE")
      */
     private $autodiag;
 
     /**
      * @var Attribute
      * @ORM\ManyToOne(targetEntity="HopitalNumerique\AutodiagBundle\Entity\Autodiag\Attribute")
+     * @ORM\JoinColumn(onDelete="CASCADE")
      */
     private $attribute;
 
@@ -81,6 +83,15 @@ class ActionPlan
         $actionPlan = new ActionPlan();
         $actionPlan->setAutodiag($autodiag);
         $actionPlan->setContainer($container);
+        $actionPlan->setValue($value);
+        return $actionPlan;
+    }
+
+    public static function createForAttribute(Autodiag $autodiag, Attribute $attribute, $value)
+    {
+        $actionPlan = new ActionPlan();
+        $actionPlan->setAutodiag($autodiag);
+        $actionPlan->setAttribute($attribute);
         $actionPlan->setValue($value);
         return $actionPlan;
     }
