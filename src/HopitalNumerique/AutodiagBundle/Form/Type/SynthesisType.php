@@ -32,7 +32,7 @@ class SynthesisType extends AbstractType
     {
         $resolver->setDefaults(array(
             'data_class' => 'HopitalNumerique\AutodiagBundle\Entity\Synthesis',
-            'label_format' => 'ad.ynthesis.%name%'
+            'label_format' => 'ad.synthesis.%name%'
         ));
     }
 }

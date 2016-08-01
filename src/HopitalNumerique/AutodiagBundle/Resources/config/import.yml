@@ -28,3 +28,12 @@ services:
         class: Nodevo\Component\Import\Reader\ExcelFileReader
         arguments: ['algorithme']
         public: false
+
+    autodiag.import.restitution:
+        class: Nodevo\Component\Import\DataImporter
+        arguments: ['@autodiag.import.restitution.reader']
+
+    autodiag.import.restitution.reader:
+        class: Nodevo\Component\Import\Reader\ExcelFileReader
+        arguments: ['resultat']
+        public: false

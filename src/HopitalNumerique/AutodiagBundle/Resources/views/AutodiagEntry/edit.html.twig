@@ -29,10 +29,19 @@
 
     {% if synthesisCreateForm is not null %}
         <div id="synthesisCreate" class="popin">
+            <h3>{{ "ad.front.new_entry"|trans }}</h3>
             {{ form_start(synthesisCreateForm) }}
 
-            {{ form_widget(synthesisCreateForm) }}
-            <input class="btn" type="submit" value="{{ "ad.synthesis.save"|trans }}" />
+            {{ form_row(synthesisCreateForm.name, {"label": "ad.front.entry.name"}) }}
+
+            {% if autodiag.instructions %}
+                <div>
+                    <h3>Instructions</h3>
+                    {{ autodiag.instructions|raw }}
+                </div>
+            {% endif %}
+
+            <input class="btn" type="submit" value="{{ "ad.front.entry.save"|trans }}" />
 
             {{ form_end(synthesisCreateForm) }}
         </div>

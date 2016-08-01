@@ -169,7 +169,7 @@ class AutodiagController extends Controller
 
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
-            $importHandler->handleRestitutionImport($import, $this->get('autodiag.import.algorithm'));
+            $importHandler->handleRestitutionImport($import, $this->get('autodiag.import.restitution'));
 
             $this->addFlash('success', 'ad.autodiag.import.success');
 

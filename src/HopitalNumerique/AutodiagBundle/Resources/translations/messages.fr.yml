@@ -25,6 +25,11 @@ ad:
         edit:
             generique: Informations génériques
             multiple_result_treatment: Paramètres de traitement de plusieurs résultats
+        path:
+            fill: Remplir le questionnaire
+            results: Voir les résultats
+            validate: Valider mes résultats
+            share: Partager les résultats
     import:
         success: Le fichier d'import à bien été traité.
         lines:
@@ -84,3 +89,9 @@ ad:
 
     actionplan:
         description: Description
+
+    front:
+        new_entry: Nouvel autodiagnostic
+        entry:
+            name: Nom de votre autodiagnostic
+            save: Sauvegarder
