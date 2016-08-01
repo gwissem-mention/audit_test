@@ -6,6 +6,7 @@ use HopitalNumerique\AutodiagBundle\Entity\Autodiag;
 use HopitalNumerique\AutodiagBundle\Entity\Autodiag\Container\Chapter;
 use HopitalNumerique\AutodiagBundle\Entity\Autodiag\Attribute;
 use HopitalNumerique\AutodiagBundle\Entity\Autodiag\Attribute\Weight;
+use Nodevo\ToolsBundle\Tools\Chaine;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 
@@ -53,10 +54,12 @@ class SurveyExport
         $file = stream_get_meta_data(tmpfile())['uri'];
         $this->getWriter($excel)->save($file);
 
+        $title = new Chaine($autodiag->getTitle());
+
         $response = new BinaryFileResponse($file);
         $response->setContentDisposition(
             ResponseHeaderBag::DISPOSITION_ATTACHMENT,
-            'test.xlsx'
+            'questionnaire_' . $title->minifie() . '.xlsx'
         );
         return $response;
     }
