@@ -95,6 +95,8 @@ class ChapterWriter implements WriterInterface, ProgressAwareInterface
                 $chapter->setLabel($item['libelle_chapitre']);
             }
 
+            $this->handleActionPlan($chapter, $item);
+
             $violations = $this->validator->validate($chapter);
             if (count($violations) > 0) {
                 $this->progress->addMessage(
@@ -165,6 +167,59 @@ class ChapterWriter implements WriterInterface, ProgressAwareInterface
         return $chapter;
     }
 
+    protected function handleActionPlan(Chapter $chapter, $item)
+    {
+        if (strlen($item['plan_action']) === 0) {
+            return;
+        }
+
+        $actions = explode("\n", $item['plan_action']);
+        array_walk($actions, function (&$element) {
+            $element = explode("::", $element);
+        });
+
+        foreach ($actions as $action) {
+            $value = $this->parseFloatValue($action[0]);
+            $object = $this->manager->getRepository('HopitalNumeriqueAutodiagBundle:Autodiag\ActionPlan')
+                ->findOneBy([
+                    'container' => $chapter,
+                    'value' => $value,
+                ]);
+
+            if (null === $object) {
+                $object = Autodiag\ActionPlan::createForContainer($this->autodiag, $chapter, $value);
+                $this->manager->persist($object);
+            }
+
+            $object->setDescription($action[1]);
+            $object->setLink($action[2]);
+            $object->setLinkDescription($action[3]);
+
+            $violations = $this->validator->validate($object);
+            if (count($violations) > 0) {
+                $this->progress->addMessage(
+                    '',
+                    $violations,
+                    'violation',
+                    'actionplan'
+                );
+                $this->manager->detach($object);
+            }
+        }
+
+    }
+
+    /**
+     * Parse CSV float value
+     *
+     * @param $value
+     * @return float
+     */
+    protected function parseFloatValue($value)
+    {
+        return floatval(str_replace(',', '.', $value));
+    }
+
     protected function validate($item)
     {
         return
@@ -177,6 +232,7 @@ class ChapterWriter implements WriterInterface, ProgressAwareInterface
                 'titre_avant' => true,
                 'texte_avant' => true,
                 'texte_apres' => true,
-            ])) === 7;
+                'plan_action' => true,
+            ])) === 8;
     }
 }

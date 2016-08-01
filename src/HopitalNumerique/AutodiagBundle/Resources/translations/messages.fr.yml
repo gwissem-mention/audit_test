@@ -56,6 +56,11 @@ ad:
             attribute_colored: Coloré réponse doit être 1 ou -1
             attribute_category: Format catégories incorrect
             attribute_options: Format options incorrect
+        violations:
+            actionplan: Plan d'action
+            chapter: Chapitre
+            category: Catégorie
+            attribute: Question
 
     chapter:
         code: Code
@@ -76,3 +81,6 @@ ad:
     category:
         code: Code
         label: Libellé catégorie
+
+    actionplan:
+        description: Description

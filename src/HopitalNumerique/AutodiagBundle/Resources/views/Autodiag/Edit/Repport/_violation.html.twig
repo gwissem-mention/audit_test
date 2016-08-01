@@ -1,5 +1,6 @@
 <li class="list-group-item">
     Ligne {{ message.index }} :
+    <span>{{ ('ad.import.violations.' ~ message.code)|trans }}</span>
     <ul>
         {% for violation in message.context %}
             <li>{{ ('ad.' ~ message.code ~ '.' ~ violation.propertyPath)|trans }} : {{ violation.message }}</li>

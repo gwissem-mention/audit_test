@@ -5,6 +5,7 @@ namespace HopitalNumerique\AutodiagBundle\Entity;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use HopitalNumerique\AutodiagBundle\Entity\Autodiag\ActionPlan;
 use HopitalNumerique\AutodiagBundle\Entity\Autodiag\Container;
 use HopitalNumerique\AutodiagBundle\Entity\Autodiag\Container\Chapter;
 use HopitalNumerique\AutodiagBundle\Entity\Autodiag\Preset;
@@ -152,6 +153,12 @@ class Autodiag
      * @ORM\JoinColumn(name="restitution_id", referencedColumnName="id", onDelete="SET NULL")
      */
     private $restitution;
+
+    /**
+     * @var Collection
+     * @ORM\OneToMany(targetEntity="HopitalNumerique\AutodiagBundle\Entity\Autodiag\ActionPlan", mappedBy="autodiag")
+     */
+    private $actionPlans;
 
     public function __construct()
     {
@@ -462,5 +469,41 @@ class Autodiag
     public function getAttributes()
     {
         return $this->attributes;
+    }
+
+    /**
+     * Get ActionPlans
+     *
+     * @return Collection
+     */
+    public function getActionPlans()
+    {
+        return $this->actionPlans;
+    }
+
+    /**
+     * Add ActionPlan
+     *
+     * @param ActionPlan $actionPlan
+     * @return $this
+     */
+    public function addActionPlan(ActionPlan $actionPlan)
+    {
+        $this->actionPlans->add($actionPlan);
+
+        return $this;
+    }
+
+    /**
+     * Remove actionPlan
+     *
+     * @param ActionPlan $actionPlan
+     * @return $this
+     */
+    public function removeActionPlan(ActionPlan $actionPlan)
+    {
+        $this->actionPlans->removeElement($actionPlan);
+
+        return $this;
     }
 }

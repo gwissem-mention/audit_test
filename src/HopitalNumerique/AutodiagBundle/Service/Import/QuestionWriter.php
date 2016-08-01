@@ -109,7 +109,7 @@ class QuestionWriter implements WriterInterface, ProgressAwareInterface
                         '',
                         $violations,
                         'violation',
-                        'chapter'
+                        'attribute'
                     );
                 }
 
@@ -230,6 +230,7 @@ class QuestionWriter implements WriterInterface, ProgressAwareInterface
      *
      * @param Attribute $attribute
      * @param $options
+     * @return bool
      */
     protected function handleOptions(Attribute $attribute, $options)
     {
@@ -443,6 +444,7 @@ class QuestionWriter implements WriterInterface, ProgressAwareInterface
 
         return true;
     }
+
     /**
      * Parse CSV float value
      *
