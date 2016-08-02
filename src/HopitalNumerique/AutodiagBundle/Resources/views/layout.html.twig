@@ -2,12 +2,28 @@
 
 {% block stylesheets %}
     {{parent()}}
+
+    {% stylesheets output="compiled/hopitalnumerique-autodiag-front.css" filter="cssrewrite, ?yui_css"
+        'bundles/hopitalnumeriqueautodiag/css/front.css'
+        'bundles/hopitalnumeriqueautodiag/css/restitution.css'
+    %}
+        <link rel="stylesheet" href="{{ asset_url }}" />
+    {% endstylesheets %}
 {% endblock %}
 
 {% block javascripts %}
     {{parent()}}
+
+    {% javascripts output="compiled/hopitalnumerique-autodiag-front.js"
+        '@highcharts_js'
+        'bundles/hopitalnumeriqueautodiag/js/navigation.js'
+        'bundles/hopitalnumeriqueautodiag/js/autodiagentry.js'
+        'bundles/hopitalnumeriqueautodiag/js/AutodiagEntry/summary.js'
+        'bundles/hopitalnumeriqueautodiag/js/AutodiagEntry/chapter.js'
+        'bundles/hopitalnumeriqueautodiag/js/AutodiagEntry/attribute.js'
+    %}
+        <script type="text/javascript" src="{{ asset_url }}"></script>
+    {% endjavascripts %}
 {% endblock %}
 
-{% block body %}
-
-{% endblock %}
+{% block body %}{% endblock %}

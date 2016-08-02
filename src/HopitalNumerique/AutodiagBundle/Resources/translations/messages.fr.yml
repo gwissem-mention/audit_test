@@ -95,3 +95,8 @@ ad:
         entry:
             name: Nom de votre autodiagnostic
             save: Sauvegarder
+        navigation:
+            next: Chapitre suivant
+            prev: Chapitre précédent
+        chapter:
+            not_concerned: Non concerné

@@ -1,31 +1,8 @@
 {% extends 'HopitalNumeriqueAutodiagBundle::layout.html.twig' %}
 
-{% block stylesheets %}
-    {{ parent() }}
-    {% stylesheets output="compiled/hopitalnumerique-autodiag-front.css" filter="cssrewrite, ?yui_css"
-        'bundles/hopitalnumeriqueautodiag/css/front.css'
-    %}
-        <link rel="stylesheet" href="{{ asset_url }}" />
-    {% endstylesheets %}
-{% endblock stylesheets %}
-
-{% block javascripts %}
-    {{ parent() }}
-    {% javascripts output="compiled/hopitalnumerique-autodiag-entry.js"
-        'bundles/hopitalnumeriqueautodiag/js/autodiagentry.js'
-        'bundles/hopitalnumeriqueautodiag/js/AutodiagEntry/summary.js'
-        'bundles/hopitalnumeriqueautodiag/js/AutodiagEntry/chapter.js'
-        'bundles/hopitalnumeriqueautodiag/js/AutodiagEntry/attribute.js'
-    %}
-    <script type="text/javascript" src="{{ asset_url }}"></script>
-    {% endjavascripts %}
-{% endblock %}
-
 {% block body %}
 
-    <div id="autodiag-path">
-        {% include "@HopitalNumeriqueAutodiag/AutodiagEntry/_navigation.html.twig" with {"current": "fill"} %}
-    </div>
+    {% include "@HopitalNumeriqueAutodiag/_navigation.html.twig" with {"step": "fill", "autodiag": autodiag} %}
 
     {% if synthesisCreateForm is not null %}
         <div id="synthesisCreate" class="popin">
@@ -85,13 +62,13 @@
                 <div class="navigation row">
                     <div class="col-md-6">
                         <button class="prev btn btn-default">
-                            {{ "ad.navigation.prev"|trans }}
+                            {{ "ad.front.navigation.prev"|trans }}
                         </button>
                     </div>
 
                     <div class="col-md-6 text-right">
                         <button class="next btn btn-default">
-                            {{ "ad.navigation.next"|trans }}
+                            {{ "ad.front.navigation.next"|trans }}
                         </button>
                     </div>
                 </div>
@@ -103,6 +80,8 @@
     <script type="text/javascript">
         var entry = {{ entry.id ? entry.id : 'null' }};
         var autodiag = new AutodiagEntry($('#autodiag-entry'), entry);
+        new AutodiagNavigation($('#autodiag-path'), autodiag);
+        autodiagNavigation.setAutodiag(autodiag);
     </script>
 
 {% endblock %}

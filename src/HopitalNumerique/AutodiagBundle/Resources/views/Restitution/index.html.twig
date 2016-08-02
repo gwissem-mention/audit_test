@@ -1,25 +1,9 @@
 {% extends 'HopitalNumeriqueAutodiagBundle::layout.html.twig' %}
 
-{% block stylesheets %}
-    {{ parent() }}
-    {% stylesheets output="compiled/hopitalnumerique-autodiag-front.css" filter="cssrewrite, ?yui_css"
-        'bundles/hopitalnumeriqueautodiag/css/restitution.css'
-    %}
-    <link rel="stylesheet" href="{{ asset_url }}" />
-    {% endstylesheets %}
-{% endblock stylesheets %}
-
-{% block javascripts %}
-    {{ parent() }}
-    {% javascripts output="compiled/hopitalnumerique-autodiag-restitution.js"
-        '@highcharts_js'
-    %}
-    <script type="text/javascript" src="{{ asset_url }}"></script>
-    {% endjavascripts %}
-{% endblock %}
-
 {% block body %}
     <div id="restitution">
+
+        {% include "@HopitalNumeriqueAutodiag/_navigation.html.twig" with {"step": "restitution", "autodiag": synthesis.autodiag} %}
 
         <div class="header">
             <div class="update-at">

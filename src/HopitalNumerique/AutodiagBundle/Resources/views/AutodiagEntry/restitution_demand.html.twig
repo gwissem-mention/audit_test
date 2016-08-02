@@ -1,0 +1,9 @@
+<div>
+    <h3>{{ 'ad.front.restitution_demand.title'|trans }}</h3>
+    <p>{{ 'ad.front.restitution_demand.description'|trans({"%left%": left}) }}</p>
+    <a onclick="$.fancybox.close();">{{ 'ad.front.restitution_demand.back'|trans }}</a>
+
+    {% if autodiag.partialResultsAuthorized %}
+        <a href="{{ path("hopitalnumerique_autodiag_restitution_index", {"synthesis": synthesis.id}) }}">{{ 'ad.front.restitution_demand.continue'|trans }}</a>
+    {% endif %}
+</div>

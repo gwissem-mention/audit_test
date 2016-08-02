@@ -11,8 +11,12 @@ hopitalnumerique_autodiag_entry_attribute_save:
     defaults: { _controller: HopitalNumeriqueAutodiagBundle:Front/AutodiagEntry:ajaxAttributeSave }
 
 hopitalnumerique_autodiag_entry_chapter_notconcerned:
-    path:     /autodiagnostic/setchapternotconcerned/{entry}/{chapter}
+    path:     /autodiagnostic/edit/{entry}/setchapternotconcerned/{chapter}
     defaults: { _controller: HopitalNumeriqueAutodiagBundle:Front/AutodiagEntry:ajaxChapterNotConcerned }
+
+hopitalnumerique_autodiag_entry_restitution_demand:
+    path:     /autodiagnostic/edit/{entry}/restitution_demand
+    defaults: { _controller: HopitalNumeriqueAutodiagBundle:Front/AutodiagEntry:restitutionDemand }
 
 hopitalnumerique_autodiag_synthesis_savenew:
     path: /autodiagnostic/{autodiag}/synthese/save

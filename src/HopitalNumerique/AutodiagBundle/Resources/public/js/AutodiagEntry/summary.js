@@ -9,8 +9,13 @@ var Summary = function(element, autodiag, options) {
 
     this.elementOffsetTop = this.element.offset().top;
 
+    this.callbacks = {
+        onCompletionChange: $.Callbacks()
+    };
+
     this.chapters = [];
     this.currentIndex = 0;
+    this.globalCompletion = 0;
 
     this.init();
 };
@@ -85,16 +90,21 @@ Summary.prototype = {
 
     handleGlobalCompletion: function()
     {
-        var total = 0,
-            count = 0;
-        for (var i in this.autodiag.chapters) {
-            var chapter = this.autodiag.chapters[i];
-            if (chapter.parent === undefined) {
-                total += chapter.getCompletion();
-                count++;
+        var filled = 0,
+            total = 0;
+        for (var index in this.autodiag.chapters) {
+            var chapter = this.autodiag.chapters[index];
+            for (var i in chapter.attributes) {
+                total++;
+                filled += chapter.attributes[i].isFilled() ? 1 : 0;
             }
         }
-        var completion = total / count;
+        var completion = Math.round(filled * 100 / total);
+        this.globalCompletion = completion;
+
+        this.callbacks.onCompletionChange.fire(
+            completion
+        );
 
         $('.progress-bar', this.element)
             .css({
@@ -105,11 +115,21 @@ Summary.prototype = {
                 'class',
                 completion < 100
                     ? completion < 50
-                        ? 'progress-bar progress-bar-danger'
-                        : 'progress-bar progress-bar-warning'
+                    ? 'progress-bar progress-bar-danger'
+                    : 'progress-bar progress-bar-warning'
                     : 'progress-bar progress-bar-success'
             )
         ;
+    },
+
+    getGlobalCompletion: function()
+    {
+        return this.globalCompletion;
+    },
+
+    onCompletionChange: function(callback)
+    {
+        this.callbacks.onCompletionChange.add(callback);
     },
 
     getCompletionHtml: function(completion)

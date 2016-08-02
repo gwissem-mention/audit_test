@@ -1,0 +1,32 @@
+{% set step = step|default('fill') %}
+
+<div id="autodiag-path">
+    <ul>
+        <li class="{{ step == "fill" ? 'active' : '' }}">
+            <a href="#">
+                {{ "ad.autodiag.path.fill"|trans }}
+            </a>
+        </li>
+        <li class="restitution {{ step == "restitution" ? 'active' : '' }}">
+            <a href="{% if entry is defined %}{{ path('hopitalnumerique_autodiag_entry_restitution_demand', {"entry": entry.id}) }}{% else %}#{% endif %}">
+                {{ "ad.autodiag.path.results"|trans }}
+            </a>
+        </li>
+        <li class="{{ step == "validate" ? 'active' : '' }}">
+            <a href="#">
+                {{ "ad.autodiag.path.validate"|trans }}
+            </a>
+        </li>
+        <li class="{{ step == "share" ? 'active' : '' }}">
+            <a href="#">
+                {{ "ad.autodiag.path.share"|trans }}
+            </a>
+        </li>
+    </ul>
+</div>
+
+<script>
+    var autodiagNavigation = new AutodiagNavigation($('#autodiag-path'), {
+        partialResultsAuthorized: {{ autodiag.partialResultsAuthorized ? 'true' : 'false' }}
+    });
+</script>

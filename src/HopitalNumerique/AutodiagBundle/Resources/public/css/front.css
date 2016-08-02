@@ -66,9 +66,17 @@
     border-left-color: #c5c5c5;
 }
 
-/**
-* COMMON
-*/
+#autodiag-path a.disabled {
+    color: #c8c8c8;
+    cursor: default;
+}
+#autodiag-path a.disabled:hover {
+    text-decoration: none;
+}
+
+    /**
+    * COMMON
+    */
 #autodiag-entry {
 
 }

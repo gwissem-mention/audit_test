@@ -10,6 +10,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 
 class AutodiagEntryController extends Controller
 {
@@ -184,5 +185,38 @@ class AutodiagEntryController extends Controller
         $manager->flush();
 
         return new JsonResponse();
+    }
+
+    /**
+     * Demand for restitution page
+     * @param AutodiagEntry $entry
+     * @return Response
+     */
+    public function restitutionDemandAction(AutodiagEntry $entry)
+    {
+        $response = new Response();
+        $repo = $this->getDoctrine()->getManager()->getRepository('HopitalNumeriqueAutodiagBundle:Autodiag\Attribute');
+        $autodiag = $entry->getSynthesis()->getAutodiag();
+        $filled = $entry->getValues()->count();
+        $total = count($repo->getAttributesHavingChapter($autodiag));
+
+        if ($filled == $total) {
+            $response->headers->set(
+                'RESTITUTION_REDIRECT',
+                $this->generateUrl('hopitalnumerique_autodiag_restitution_index', [
+                    'synthesis' => $entry->getSynthesis()->getId()
+                ])
+            );
+        } else {
+            $response->setContent(
+                $this->renderView("@HopitalNumeriqueAutodiag/AutodiagEntry/restitution_demand.html.twig", [
+                    'left' => $total - $filled,
+                    'autodiag' => $autodiag,
+                    'synthesis' => $entry->getSynthesis(),
+                ])
+            );
+        }
+
+        return $response;
     }
 }
