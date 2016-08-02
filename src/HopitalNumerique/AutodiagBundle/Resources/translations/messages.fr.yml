@@ -100,3 +100,11 @@ ad:
             prev: Chapitre précédent
         chapter:
             not_concerned: Non concerné
+        restitution_demand:
+            title: Validation de l'autodiagnositc
+            description: |
+                {0}Autodiagnostic terminé
+                |{1}Il vous reste une questions non renseignées, vous pouvez facilement identifier les chapitres non complets en consultant le taux de remplissage à coté de chaque chapitre dans le menu de gauche.
+                |]1,Inf[Il vous reste %count% questions non renseignées, vous pouvez facilement identifier les chapitres non complets en consultant le taux de remplissage à coté de chaque chapitre dans le menu de gauche.
+            back: Continuer l'autodiagnostic
+            continue: Accéder quand même aux résultats
