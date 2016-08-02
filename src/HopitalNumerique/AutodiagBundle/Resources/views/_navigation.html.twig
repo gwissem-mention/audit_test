@@ -3,12 +3,12 @@
 <div id="autodiag-path">
     <ul>
         <li class="{{ step == "fill" ? 'active' : '' }}">
-            <a href="#">
+            <a href="{% if entry is not null %}{{ path('hopitalnumerique_autodiag_entry_edit', {"entry": entry.id}) }}{% else %}#{% endif %}" class="{{ entry is not defined or entry is null ? 'disabled' : '' }}">
                 {{ "ad.autodiag.path.fill"|trans }}
             </a>
         </li>
         <li class="restitution {{ step == "restitution" ? 'active' : '' }}">
-            <a href="{% if entry is defined %}{{ path('hopitalnumerique_autodiag_entry_restitution_demand', {"entry": entry.id}) }}{% else %}#{% endif %}">
+            <a href="{% if entry is not null %}{{ path('hopitalnumerique_autodiag_entry_restitution_demand', {"entry": entry.id}) }}{% else %}#{% endif %}">
                 {{ "ad.autodiag.path.results"|trans }}
             </a>
         </li>
