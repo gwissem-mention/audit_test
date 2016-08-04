@@ -33,7 +33,6 @@ class ActionPlan
     /**
      * @var string
      * @ORM\Column(type="text", nullable=true)
-     * @Assert\Length(max="255")
      */
     private $description;
 
@@ -46,6 +45,7 @@ class ActionPlan
     /**
      * @var string
      * @ORM\Column(type="string", nullable=true)
+     * @Assert\Length(max="255")
      */
     private $linkDescription;
 
@@ -75,6 +75,7 @@ class ActionPlan
     /**
      * @var Container
      * @ORM\ManyToOne(targetEntity="HopitalNumerique\AutodiagBundle\Entity\Autodiag\Container")
+     * @ORM\JoinColumn(onDelete="CASCADE")
      */
     private $container;
 

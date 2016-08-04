@@ -55,7 +55,7 @@ abstract class Container
     /**
      * @var Container
      *
-     * @ORM\ManyToOne(targetEntity="HopitalNumerique\AutodiagBundle\Entity\Autodiag\Container", cascade={"all"})
+     * @ORM\ManyToOne(targetEntity="HopitalNumerique\AutodiagBundle\Entity\Autodiag\Container")
      * @ORM\JoinColumn(name="parent_id", referencedColumnName="id", onDelete="CASCADE")
      */
     private $parent;
@@ -193,7 +193,7 @@ abstract class Container
     public function getChilds()
     {
         return $this->getAutodiag()->getContainers()->filter(function (Container $container) {
-            return $container->getParent() !== null && $container->getParent()->getId() === $this->getId();
+            return $container->getParent() !== null && $container->getParent()->getCode() === $this->getCode();
         });
     }
 

@@ -19,8 +19,7 @@ class Chapter extends Container
      *
      * @var string
      *
-     * @ORM\Column(type="string", length=255)
-     * @Assert\NotBlank()
+     * @ORM\Column(type="string", length=255, nullable=true)
      * @Assert\Length(max="255")
      */
     private $title;
@@ -30,8 +29,7 @@ class Chapter extends Container
      *
      * @var string
      *
-     * @ORM\Column(type="text")
-     * @Assert\NotBlank()
+     * @ORM\Column(type="text", nullable=true)
      */
     private $description;
 
@@ -40,8 +38,7 @@ class Chapter extends Container
      *
      * @var string
      *
-     * @ORM\Column(type="text")
-     * @Assert\NotBlank()
+     * @ORM\Column(type="text", nullable=true)
      */
     private $additionalDescription;
 

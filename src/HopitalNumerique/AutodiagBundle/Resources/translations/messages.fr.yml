@@ -38,7 +38,7 @@ ad:
             updated: "{0}Aucunchapitre n'a été mis à jour|{1}%count% chapitre à été mis à jour|]1,Inf[%count% chapitres ont été mis à jour"
             missing_parent_code: Le code chapitre est manquant.
             incorrect_row_format: Format de ligne incorrect.
-            has_violations: Le fichier contiens des erreurs, veuillez les corriger avant de soumettre à nouveau le fichier.
+            has_violations: Le fichier contiens des erreurs, veuillez les corriger avant de le soumettre à nouveau.
             code_already_exists: Le chapitre avec le code "%code%" existe déjà dans le fichier.
         attribute:
             code_already_exists: L'attribut avec le code "%code%" existe déjà dans le fichier.
@@ -70,9 +70,9 @@ ad:
     chapter:
         code: Code
         label: Libellé
-        title: Titre
-        description: Description
-        additionalDescription: Complément
+        title: titre_avant
+        description: texte_avant
+        additionalDescription: texte_apres
 
     attribute:
         code: Code
@@ -89,6 +89,7 @@ ad:
 
     actionplan:
         description: Description
+        linkDescription: Description du lien
 
     front:
         new_entry: Nouvel autodiagnostic

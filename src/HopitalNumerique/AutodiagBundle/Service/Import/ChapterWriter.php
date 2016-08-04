@@ -136,7 +136,10 @@ class ChapterWriter implements WriterInterface, ProgressAwareInterface
         );
 
         foreach ($toDelete as $chapter) {
-            $this->progress->addMessage('', $chapter, 'chapter.delete');
+            $this->progress->addMessage('', $chapter, 'chapter_deleted');
+            foreach ($chapter->getChilds() as $child) {
+                $this->autodiag->removeChapter($child);
+            }
             $this->autodiag->removeChapter($chapter);
         }
 
