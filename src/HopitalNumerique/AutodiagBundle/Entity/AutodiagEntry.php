@@ -52,7 +52,7 @@ class AutodiagEntry
      *     inversedBy="entries",
      *     fetch="EAGER"
      * )
-     * @ORM\JoinTable(name="ad_synthesys_entry",
+     * @ORM\JoinTable(name="ad_synthesis_entry",
      *      joinColumns={@ORM\JoinColumn(name="entry_id", referencedColumnName="id")},
      *      inverseJoinColumns={@ORM\JoinColumn(name="synthesis_id", referencedColumnName="id", onDelete="CASCADE")}
      * )
@@ -88,7 +88,7 @@ class AutodiagEntry
 
     public static function create(Autodiag $autodiag, User $user = null)
     {
-        $entry = new self(Synthesis::create($autodiag), $user);
+        $entry = new self(Synthesis::create($autodiag, $user), $user);
 
         return $entry;
     }

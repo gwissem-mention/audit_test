@@ -53,6 +53,14 @@ class Synthesis
     private $autodiag;
 
     /**
+     * @var User
+     *
+     * @ORM\ManyToOne(targetEntity="HopitalNumerique\UserBundle\Entity\User")
+     * @ORM\JoinColumn(name="user_id", referencedColumnName="usr_id", onDelete="CASCADE", nullable=true)
+     */
+    private $user;
+
+    /**
      * @var Collection
      *
      * @ORM\ManyToMany(
@@ -63,10 +71,11 @@ class Synthesis
      */
     private $entries;
 
-    private function __construct(Autodiag $autodiag)
+    private function __construct(Autodiag $autodiag, User $user = null)
     {
         $this->entries = new ArrayCollection();
         $this->autodiag = $autodiag;
+        $this->user = $user;
 
         $now = new \DateTime();
         $this->name = $now->format('d/m/Y H:i');
@@ -78,9 +87,9 @@ class Synthesis
      * @param Autodiag $autodiag
      * @return Synthesis
      */
-    public static function create(Autodiag $autodiag)
+    public static function create(Autodiag $autodiag, User $user = null)
     {
-        $synthesis = new self($autodiag);
+        $synthesis = new self($autodiag, $user);
 
         return $synthesis;
     }
@@ -226,4 +235,24 @@ class Synthesis
 
         return $this;
     }
+
+    /**
+     * @return User
+     */
+    public function getUser()
+    {
+        return $this->user;
+    }
+
+    /**
+     * @param User $user
+     * @return $this
+     */
+    public function setUser(User $user)
+    {
+        $this->user = $user;
+
+        return $this;
+    }
 }
+
