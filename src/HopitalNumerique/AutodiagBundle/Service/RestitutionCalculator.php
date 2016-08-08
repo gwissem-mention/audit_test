@@ -11,6 +11,7 @@ use HopitalNumerique\AutodiagBundle\Entity\Synthesis;
 use HopitalNumerique\AutodiagBundle\Model\Result\Score;
 use HopitalNumerique\AutodiagBundle\Repository\AutodiagEntryRepository;
 use HopitalNumerique\AutodiagBundle\Service\Algorithm\Reference\Average;
+use HopitalNumerique\AutodiagBundle\Service\Algorithm\ReferenceAlgorithm;
 use \HopitalNumerique\AutodiagBundle\Service\Algorithm\Score as Algorithm;
 use HopitalNumerique\AutodiagBundle\Service\Attribute\AttributeBuilderProvider;
 
@@ -159,7 +160,7 @@ class RestitutionCalculator
             $score = null;
             if (count($referenceScores) > 0) {
                 $score = new Score(
-                    Average::compute($referenceScores),
+                    ReferenceAlgorithm::compute($reference, $referenceScores),
                     $reference->getLabel(),
                     $reference->getId()
                 );
