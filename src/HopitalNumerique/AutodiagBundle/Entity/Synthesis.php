@@ -55,7 +55,7 @@ class Synthesis
     /**
      * @var Collection
      *
-     * @ORM\OneToMany(
+     * @ORM\ManyToMany(
      *     targetEntity="HopitalNumerique\AutodiagBundle\Entity\AutodiagEntry",
      *     mappedBy="synthesis",
      *     cascade={"persist"}

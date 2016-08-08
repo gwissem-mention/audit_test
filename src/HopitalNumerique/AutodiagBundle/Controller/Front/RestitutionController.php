@@ -12,6 +12,12 @@ class RestitutionController extends Controller
     {
         $autodiag = $synthesis->getAutodiag();
 
+        if ($synthesis->getEntries()->count() === 0) {
+            return $this->redirectToRoute('hopitalnumerique_autodiag_entry_add', [
+                'autodiag' => $autodiag->getId()
+            ]);
+        }
+
         // L'utilisateur doit avoir les droits sur chaque entry de la synthèse
         foreach ($synthesis->getEntries() as $entry) {
             if (!$this->isGranted('edit', $entry)) {

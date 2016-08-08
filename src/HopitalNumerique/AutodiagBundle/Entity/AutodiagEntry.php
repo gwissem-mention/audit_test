@@ -47,7 +47,7 @@ class AutodiagEntry
     /**
      * @var Synthesis
      *
-     * @ORM\ManyToOne(
+     * @ORM\ManyToMany(
      *     targetEntity="HopitalNumerique\AutodiagBundle\Entity\Synthesis",
      *     inversedBy="entries",
      *     fetch="EAGER"
@@ -58,7 +58,11 @@ class AutodiagEntry
 
     /**
      * @var Collection
-     * @ORM\OneToMany(targetEntity="HopitalNumerique\AutodiagBundle\Entity\AutodiagEntry\Value", mappedBy="entry", cascade={"persist"})
+     * @ORM\OneToMany(
+     *     targetEntity="HopitalNumerique\AutodiagBundle\Entity\AutodiagEntry\Value",
+     *     mappedBy="entry",
+     *     cascade={"persist"}
+     * )
      */
     private $values;
 
@@ -71,7 +75,7 @@ class AutodiagEntry
 
     public function __construct(Synthesis $synthesis, User $user = null)
     {
-        $this->synthesis = $synthesis;
+        $this->synthesis = new ArrayCollection([$synthesis]);
         $this->user = $user;
         $this->values = new ArrayCollection();
         $this->updatedAt = new \DateTime();
@@ -117,7 +121,7 @@ class AutodiagEntry
      */
     public function getSynthesis()
     {
-        return $this->synthesis;
+        return $this->synthesis->first();
     }
 
     public function getValues()
