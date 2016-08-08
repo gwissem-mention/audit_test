@@ -1,5 +1,5 @@
 <div class="radar">
-    <div id="{{ restitution.id }}"></div>
+    <div id="{{ restitution.id ~ restitution.type }}"></div>
 
     <div class="remplissage">
 
@@ -7,5 +7,5 @@
 </div>
 
 <script type="text/javascript">
-    $('#{{ restitution.id }}').highcharts({{ result_radar_data(result)|raw }});
+    $('#{{ restitution.id ~ restitution.type}}').highcharts({{ result_radar_data(result)|raw }});
 </script>

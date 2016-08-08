@@ -28,7 +28,7 @@ class RestitutionController extends Controller
             }
         }
 
-        $restitution = $autodiag->getRestitution();
+        $restitution = $this->get('autodiag.repository.restitution')->getForAutodiag($autodiag);
 
         $calculator = $this->get('autodiag.restitution.calculator');
         $resultItems = $calculator->compute($synthesis);

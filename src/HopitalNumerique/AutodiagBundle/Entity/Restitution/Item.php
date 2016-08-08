@@ -33,6 +33,18 @@ class Item
     private $type;
 
     /**
+     * @var int
+     * @ORM\Column(type="integer", name="x")
+     */
+    private $row;
+
+    /**
+     * @var int
+     * @ORM\Column(type="integer", name="y")
+     */
+    private $column;
+
+    /**
      * @var Collection
      * @ORM\ManyToMany(targetEntity="HopitalNumerique\AutodiagBundle\Entity\Autodiag\Container")
      * @ORM\JoinTable(
@@ -95,11 +107,52 @@ class Item
 
     /**
      * @param string $type
-     * @return $this
+     *
+     * @return Item
      */
     public function setType($type)
     {
         $this->type = $type;
+
+        return $this;
+    }
+
+    /**
+     * @return int
+     */
+    public function getRow()
+    {
+        return $this->row;
+    }
+
+    /**
+     * @param int $row
+     *
+     * @return Item
+     */
+    public function setRow($row)
+    {
+        $this->row = $row;
+
+        return $this;
+    }
+
+    /**
+     * @return int
+     */
+    public function getColumn()
+    {
+        return $this->column;
+    }
+
+    /**
+     * @param int $column
+     *
+     * @return Item
+     */
+    public function setColumn($column)
+    {
+        $this->column = $column;
 
         return $this;
     }

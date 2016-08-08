@@ -60,6 +60,7 @@ class Category
      *     cascade={"persist"},
      *     fetch="EAGER"
      * )
+     * @ORM\OrderBy({"row" = "ASC", "column" = "ASC"})
      */
     private $items;
 

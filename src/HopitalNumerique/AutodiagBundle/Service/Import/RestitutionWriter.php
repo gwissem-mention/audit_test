@@ -21,6 +21,7 @@ class RestitutionWriter implements WriterInterface, ProgressAwareInterface
     const COLUMN_CATEGORY_DESCRIPTION = "texte_avant";
     const COLUMN_CATEGORY_ORDER = "ordre_affichage_onglet";
 
+    const COLUMN_ITEM_ORDER = "ordre_affichage_contenu";
     const COLUMN_ITEM_TYPE = 'type_restitution';
     const COLUMN_ITEM_PRIORITY = 'ordre_restitution';
     const COLUMN_ITEM_SOURCE = 'axe_restitution';
@@ -130,6 +131,10 @@ class RestitutionWriter implements WriterInterface, ProgressAwareInterface
             default:
                 die('error');
         }
+
+        $position = explode('::', $item[self::COLUMN_ITEM_ORDER]);
+        $restitutionItem->setRow((int)$position[0]);
+        $restitutionItem->setColumn((int)$position[1]);
 
         $identifiers = explode('::', $item[self::COLUMN_ITEM_DATA]);
         foreach ($identifiers as $id) {

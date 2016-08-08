@@ -10,6 +10,10 @@ use HopitalNumerique\AutodiagBundle\Entity\Synthesis;
 
 class SynthesisRepository extends EntityRepository
 {
+    /**
+     * @param $id
+     * @return Synthesis|null
+     */
     public function getFullyLoadedSynthesis($id)
     {
         $qb = $this->createQueryBuilder('synthesis');

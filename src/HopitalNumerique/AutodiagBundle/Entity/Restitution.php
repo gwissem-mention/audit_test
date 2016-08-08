@@ -33,6 +33,7 @@ class Restitution
      *     cascade={"persist"},
      *     fetch="EAGER"
      * )
+     * @ORM\OrderBy({"position" = "ASC"})
      */
     private $categories;
 
