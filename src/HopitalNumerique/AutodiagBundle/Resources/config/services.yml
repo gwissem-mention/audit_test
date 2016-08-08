@@ -72,7 +72,13 @@ services:
             - '@autodiag.algorithm.score'
             - '@autodiag.attribute_builder_provider'
             - '@autodiag.repository.autodiagentry'
+            - '@autodiag.synthesis.completion'
 
     autodiag.algorithm.score:
         class: HopitalNumerique\AutodiagBundle\Service\Algorithm\Score
         arguments: ['@doctrine.orm.entity_manager', '@autodiag.attribute_builder_provider']
+
+    autodiag.synthesis.completion:
+        class: HopitalNumerique\AutodiagBundle\Service\Synthesis\Completion
+        arguments:
+            - '@autodiag.attribute_builder_provider'

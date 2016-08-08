@@ -14,6 +14,7 @@ use HopitalNumerique\AutodiagBundle\Service\Algorithm\Reference\Average;
 use HopitalNumerique\AutodiagBundle\Service\Algorithm\ReferenceAlgorithm;
 use \HopitalNumerique\AutodiagBundle\Service\Algorithm\Score as Algorithm;
 use HopitalNumerique\AutodiagBundle\Service\Attribute\AttributeBuilderProvider;
+use HopitalNumerique\AutodiagBundle\Service\Synthesis\Completion;
 
 class RestitutionCalculator
 {
@@ -32,6 +33,11 @@ class RestitutionCalculator
      */
     protected $entryRepository;
 
+    /**
+     * @var Completion
+     */
+    protected $completion;
+
     protected $items = [];
     protected $references = [];
     protected $attributeResponses = [];
@@ -42,16 +48,21 @@ class RestitutionCalculator
      * @param Algorithm $algorithm
      * @TODO Injecter un algorithm factory qui connaitrais tous les algo possible via un compileur pass
      */
-    public function __construct(Algorithm $algorithm, AttributeBuilderProvider $attributeBuilder, AutodiagEntryRepository $entryRepository)
-    {
+    public function __construct(
+        Algorithm $algorithm,
+        AttributeBuilderProvider $attributeBuilder,
+        AutodiagEntryRepository $entryRepository,
+        Completion $completion
+    ) {
         $this->algorithm = $algorithm;
         $this->attributeBuilder = $attributeBuilder;
         $this->entryRepository = $entryRepository;
+        $this->completion = $completion;
     }
 
     public function compute(Synthesis $synthesis)
     {
-        $this->computeCompletion($synthesis);
+        $this->attributeResponses[$synthesis->getId()] = $this->completion->getGlobalCompletion($synthesis);
 
         $autodiag = $synthesis->getAutodiag();
         $restitution = $autodiag->getRestitution();
@@ -170,33 +181,6 @@ class RestitutionCalculator
         }
 
         return $this->references[$cacheKey];
-    }
-
-    protected function computeCompletion(Synthesis $synthesis)
-    {
-        if (!array_key_exists($synthesis->getId(), $this->attributeResponses)) {
-            $completion = [];
-            $autodiag = $synthesis->getAutodiag();
-            foreach ($autodiag->getAttributes() as $attribute) {
-                /** @var Autodiag\Attribute $attribute */
-
-                $builder = $this->attributeBuilder->getBuilder($attribute->getType());
-                $completion[$attribute->getId()] = false;
-                foreach ($synthesis->getEntries() as $entry) {
-                    /** @var AutodiagEntry $entry */
-
-                    foreach ($entry->getValues() as $value) {
-                        /** @var AutodiagEntry\Value $value */
-                        if ($value->getAttribute()->getId() === $attribute->getId() && !$builder->isEmpty($value->getValue())) {
-                            $completion[$attribute->getId()] = true;
-                            break 2;
-                        }
-                    }
-                }
-            }
-
-            $this->attributeResponses[$synthesis->getId()] = $completion;
-        }
     }
 
     /**
