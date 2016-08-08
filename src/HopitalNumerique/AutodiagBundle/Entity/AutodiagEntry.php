@@ -52,7 +52,10 @@ class AutodiagEntry
      *     inversedBy="entries",
      *     fetch="EAGER"
      * )
-     * @ORM\JoinColumn(name="synthesis_id", referencedColumnName="id", onDelete="CASCADE")
+     * @ORM\JoinTable(name="ad_synthesys_entry",
+     *      joinColumns={@ORM\JoinColumn(name="entry_id", referencedColumnName="id")},
+     *      inverseJoinColumns={@ORM\JoinColumn(name="synthesis_id", referencedColumnName="id", onDelete="CASCADE")}
+     * )
      */
     private $synthesis;
 
