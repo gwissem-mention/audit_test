@@ -47,6 +47,12 @@ services:
             arguments:
                 - 'HopitalNumeriqueAutodiagBundle:AutodiagEntry'
 
+    autodiag.repository.restitution:
+            class: HopitalNumerique\AutodiagBundle\Repository\RestitutionRepository
+            factory: ["@doctrine.orm.entity_manager", "getRepository"]
+            arguments:
+                - 'HopitalNumeriqueAutodiagBundle:Restitution'
+
     autodiag.repository.autodiag:
             class: HopitalNumerique\AutodiagBundle\Repository\AutodiagRepository
             factory: ["@doctrine.orm.entity_manager", "getRepository"]
@@ -72,6 +78,7 @@ services:
             - '@autodiag.algorithm.score'
             - '@autodiag.attribute_builder_provider'
             - '@autodiag.repository.autodiagentry'
+            - '@autodiag.repository.restitution'
             - '@autodiag.synthesis.completion'
 
     autodiag.algorithm.score:

@@ -2,14 +2,15 @@
 
 namespace HopitalNumerique\AutodiagBundle\Controller\Front;
 
-use HopitalNumerique\AutodiagBundle\Entity\Synthesis;
-use HopitalNumerique\AutodiagBundle\Service\RestitutionCalculator;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
 class RestitutionController extends Controller
 {
-    public function indexAction(Synthesis $synthesis)
+    public function indexAction($synthesis)
     {
+        $synthesis = $this->getDoctrine()->getManager()->getRepository('HopitalNumeriqueAutodiagBundle:Synthesis')
+            ->getFullyLoadedSynthesis($synthesis);
+
         $autodiag = $synthesis->getAutodiag();
 
         if ($synthesis->getEntries()->count() === 0) {

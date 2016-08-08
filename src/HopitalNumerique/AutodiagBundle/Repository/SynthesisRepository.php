@@ -10,6 +10,26 @@ use HopitalNumerique\AutodiagBundle\Entity\Synthesis;
 
 class SynthesisRepository extends EntityRepository
 {
+    public function getFullyLoadedSynthesis($id)
+    {
+        $qb = $this->createQueryBuilder('synthesis');
+        $qb
+            ->addSelect('autodiag', 'entries', 'values')
+            ->leftJoin('synthesis.autodiag', 'autodiag')
+            ->leftJoin('synthesis.entries', 'entries')
+            ->leftJoin('entries.values', 'values')
+            ->where('synthesis.id = :id')
+            ->setParameters([
+                'id' => $id
+            ])
+        ;
+
+        return $qb->getQuery()->getOneOrNullResult();
+    }
+
+    /**
+     * @deprecated Should not be used
+     */
     public function getCompletion(Synthesis $synthesis)
     {
         $qb = $this->getEntityManager()->createQueryBuilder();

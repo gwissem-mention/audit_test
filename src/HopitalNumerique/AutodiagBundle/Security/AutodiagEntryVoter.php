@@ -54,7 +54,6 @@ class AutodiagEntryVoter extends Voter
         }
 
         if ($user instanceof User && $subject->getUser() === $user) {
-
             return true;
         }
 

@@ -87,11 +87,6 @@ class Score
         return null;
     }
 
-    protected function computeValues($values)
-    {
-
-    }
-
     protected function getContainerIds(Container $container)
     {
         $ids = [$container->getId()];

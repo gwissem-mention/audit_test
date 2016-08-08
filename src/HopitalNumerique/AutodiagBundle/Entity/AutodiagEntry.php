@@ -49,8 +49,7 @@ class AutodiagEntry
      *
      * @ORM\ManyToMany(
      *     targetEntity="HopitalNumerique\AutodiagBundle\Entity\Synthesis",
-     *     inversedBy="entries",
-     *     fetch="EAGER"
+     *     inversedBy="entries"
      * )
      * @ORM\JoinTable(name="ad_synthesis_entry",
      *      joinColumns={@ORM\JoinColumn(name="entry_id", referencedColumnName="id")},
