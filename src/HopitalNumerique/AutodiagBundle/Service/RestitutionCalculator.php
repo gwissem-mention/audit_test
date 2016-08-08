@@ -1,7 +1,6 @@
 <?php
 namespace HopitalNumerique\AutodiagBundle\Service;
 
-use Doctrine\ORM\EntityManager;
 use HopitalNumerique\AutodiagBundle\Entity\Autodiag;
 use HopitalNumerique\AutodiagBundle\Entity\Autodiag\Container;
 use HopitalNumerique\AutodiagBundle\Entity\Restitution\Category;
@@ -55,6 +54,7 @@ class RestitutionCalculator
      * @param Algorithm $algorithm
      * @param AttributeBuilderProvider $attributeBuilder
      * @param AutodiagEntryRepository $entryRepository
+     * @param RestitutionRepository $restitutionRepository
      * @param Completion $completion
      * @TODO Injecter un algorithm factory qui connaitrais tous les algo possible via un compileur pass
      */
@@ -103,9 +103,21 @@ class RestitutionCalculator
         $containers = $item->getContainers();
         foreach ($containers as $container) {
             /** @var Container $container */
-            $resultItem = $this->computeItemContainer($container, $synthesis, $item->getReferences());
-            foreach ($item->getReferences() as $reference) {
-                $result['references'][$reference->getId()] = $reference->getLabel();
+
+            $references = $item->getReferences();
+
+            // Dans le cas d'une synthèse (de plusieurs entries),on n'affiche plus les références de l'AD mais le min et
+            // max de la synthèse
+            if ($synthesis->getEntries()->count() > 1) {
+                $references = [
+                    (new Autodiag\Reference('min', $synthesis->getAutodiag()))->setValue('min')->setLabel('Minimum'),
+                    (new Autodiag\Reference('max', $synthesis->getAutodiag()))->setValue('max')->setLabel('Maximum'),
+                ];
+            }
+
+            $resultItem = $this->computeItemContainer($container, $synthesis, $references);
+            foreach ($references as $reference) {
+                $result['references'][$reference->getNumber()] = $reference->getLabel();
             }
 
             $result['items'][] = $resultItem;
@@ -186,7 +198,7 @@ class RestitutionCalculator
                 $score = new Score(
                     ReferenceAlgorithm::compute($reference, $referenceScores),
                     $reference->getLabel(),
-                    $reference->getId()
+                    $reference->getNumber()
                 );
             }
 

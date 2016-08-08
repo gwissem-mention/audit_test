@@ -77,6 +77,9 @@ class MaitriseBuilder extends AbstractPresetableBuilder
     public function isEmpty($data)
     {
         $data = $this->transform($data);
+        if (!is_array($data)) {
+            return false;
+        }
         $empty = false;
         foreach ($data as $value) {
             $empty = $empty || ($value === null);

@@ -13,6 +13,10 @@ class ReferenceAlgorithm
                 return static::average($values);
             case 'mediane':
                 return static::mediane($values);
+            case 'min':
+                return min($values);
+            case 'max':
+                return max($values);
             default:
                 if (strpos($reference->getValue(), 'decile') === 0) {
                     return static::decile(substr($reference->getValue(), -1), $values);
