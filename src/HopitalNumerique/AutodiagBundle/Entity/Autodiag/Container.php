@@ -190,6 +190,20 @@ abstract class Container
         return $attributes;
     }
 
+    public function getNestedAttributes()
+    {
+        $attributes = [];
+        foreach ($this->attributesWeighted as $weighted) {
+            $attributes[] = $weighted->getAttribute();
+        }
+
+        foreach ($this->getChilds() as $child) {
+            $attributes = array_merge($attributes, $child->getNestedAttributes());
+        }
+
+        return $attributes;
+    }
+
     public function getChilds()
     {
         return $this->getAutodiag()->getContainers()->filter(function (Container $container) {

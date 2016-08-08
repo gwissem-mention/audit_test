@@ -227,4 +227,3 @@ class Synthesis
         return $this;
     }
 }
-

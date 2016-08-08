@@ -11,7 +11,7 @@ use HopitalNumerique\UserBundle\Entity\User;
  * Autodiag entry - a response to an autodiag
  *
  * @ORM\Table(name="ad_entry")
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="HopitalNumerique\AutodiagBundle\Repository\AutodiagEntryRepository")
  * @ORM\HasLifecycleCallbacks()
  */
 class AutodiagEntry

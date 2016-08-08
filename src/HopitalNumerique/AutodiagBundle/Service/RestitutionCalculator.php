@@ -9,6 +9,8 @@ use HopitalNumerique\AutodiagBundle\Entity\Restitution\Item as RestitutionItem;
 use HopitalNumerique\AutodiagBundle\Model\Result\Item as ResultItem;
 use HopitalNumerique\AutodiagBundle\Entity\Synthesis;
 use HopitalNumerique\AutodiagBundle\Model\Result\Score;
+use HopitalNumerique\AutodiagBundle\Repository\AutodiagEntryRepository;
+use HopitalNumerique\AutodiagBundle\Service\Algorithm\Reference\Average;
 use \HopitalNumerique\AutodiagBundle\Service\Algorithm\Score as Algorithm;
 use HopitalNumerique\AutodiagBundle\Service\Attribute\AttributeBuilderProvider;
 
@@ -24,7 +26,13 @@ class RestitutionCalculator
      */
     protected $attributeBuilder;
 
+    /**
+     * @var AutodiagEntryRepository
+     */
+    protected $entryRepository;
+
     protected $items = [];
+    protected $references = [];
     protected $attributeResponses = [];
 
 
@@ -33,10 +41,11 @@ class RestitutionCalculator
      * @param Algorithm $algorithm
      * @TODO Injecter un algorithm factory qui connaitrais tous les algo possible via un compileur pass
      */
-    public function __construct(Algorithm $algorithm, AttributeBuilderProvider $attributeBuilder)
+    public function __construct(Algorithm $algorithm, AttributeBuilderProvider $attributeBuilder, AutodiagEntryRepository $entryRepository)
     {
         $this->algorithm = $algorithm;
         $this->attributeBuilder = $attributeBuilder;
+        $this->entryRepository = $entryRepository;
     }
 
     public function compute(Synthesis $synthesis)
@@ -70,12 +79,7 @@ class RestitutionCalculator
         foreach ($containers as $container) {
             /** @var Container $container */
             $resultItem = $this->computeItemContainer($container, $synthesis, $item->getReferences());
-
             foreach ($item->getReferences() as $reference) {
-                $resultItem->addReference(
-                    new Score(rand(0, 100), $reference->getLabel(), $reference->getId())
-                );
-
                 $result['references'][$reference->getId()] = $reference->getLabel();
             }
 
@@ -101,7 +105,11 @@ class RestitutionCalculator
 
         if (!array_key_exists($cacheKey, $this->items)) {
 
-            $score = $this->algorithm->getScore($synthesis, $container);
+            $score = $this->algorithm->getScore(
+                $synthesis->getAutodiag(),
+                $container,
+                $synthesis->getEntries()->toArray()
+            );
 
             $resultItem = new ResultItem();
             $resultItem->setLabel($container->getLabel());
@@ -111,6 +119,15 @@ class RestitutionCalculator
 
             $resultItem->setNumberOfQuestions($container->getTotalNumberOfAttributes());
             $resultItem->setNumberOfAnswers($this->countAnswers($synthesis, $container));
+
+            if (count($references) > 0) {
+                foreach ($references as $reference) {
+                    $referenceScore = $this->getReferenceScore($reference, $container);
+                    if ($referenceScore instanceof Score) {
+                        $resultItem->addReference($referenceScore);
+                    }
+                }
+            }
 
             foreach ($container->getChilds() as $child) {
                 $resultItem->addChildren(
@@ -124,6 +141,36 @@ class RestitutionCalculator
         return $this->items[$cacheKey];
     }
 
+    protected function getReferenceScore(Autodiag\Reference $reference, Container $container)
+    {
+        $cacheKey = implode('-', [
+            $reference->getValue(),
+            $container->getCode(),
+        ]);
+
+        if (!array_key_exists($cacheKey, $this->references)) {
+            $autodiag = $container->getAutodiag();
+            $referenceEntries = $this->getCompleteEntriesForContainer($container);
+            $referenceScores = [];
+            foreach ($referenceEntries as $entry) {
+                $referenceScores[] = $this->algorithm->getScore($autodiag, $container, [$entry]);
+            }
+
+            $score = null;
+            if (count($referenceScores) > 0) {
+                $score = new Score(
+                    Average::compute($referenceScores),
+                    $reference->getLabel(),
+                    $reference->getId()
+                );
+            }
+
+            $this->references[$cacheKey] = $score;
+        }
+
+        return $this->references[$cacheKey];
+    }
+
     protected function computeCompletion(Synthesis $synthesis)
     {
         if (!array_key_exists($synthesis->getId(), $this->attributeResponses)) {
@@ -131,12 +178,14 @@ class RestitutionCalculator
             $autodiag = $synthesis->getAutodiag();
             foreach ($autodiag->getAttributes() as $attribute) {
                 /** @var Autodiag\Attribute $attribute */
+
+                $builder = $this->attributeBuilder->getBuilder($attribute->getType());
                 $completion[$attribute->getId()] = false;
                 foreach ($synthesis->getEntries() as $entry) {
                     /** @var AutodiagEntry $entry */
+
                     foreach ($entry->getValues() as $value) {
                         /** @var AutodiagEntry\Value $value */
-                        $builder = $this->attributeBuilder->getBuilder($attribute->getType());
                         if ($value->getAttribute()->getId() === $attribute->getId() && !$builder->isEmpty($value->getValue())) {
                             $completion[$attribute->getId()] = true;
                             break 2;
@@ -147,6 +196,46 @@ class RestitutionCalculator
 
             $this->attributeResponses[$synthesis->getId()] = $completion;
         }
+    }
+
+    /**
+     * Get all entries that have answered all container attributes
+     *
+     * @param Container $container
+     * @return array
+     */
+    protected function getCompleteEntriesForContainer(Container $container)
+    {
+        $completed = [];
+        $autodiag = $container->getAutodiag();
+        $allEntries = $this->entryRepository->findByAutodiag($autodiag);
+
+        foreach ($allEntries as $entry) {
+            $complete = true;
+
+            foreach ($container->getNestedAttributes() as $attribute) {
+                /** @var Autodiag\Attribute $attribute */
+                $builder = $this->attributeBuilder->getBuilder($attribute->getType());
+                $attributeFound = false;
+
+                foreach ($entry->getValues() as $value) {
+                    if ($value->getAttribute()->getId() === $attribute->getId()) {
+                        if ($builder->isEmpty($value->getValue())) {
+                            $complete = false;
+                        }
+                        $attributeFound = true;
+                    }
+                }
+
+                $complete = $complete && $attributeFound;
+            }
+
+            if ($complete) {
+                $completed[] = $entry;
+            }
+        }
+
+        return $completed;
     }
 
     /**

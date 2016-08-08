@@ -42,7 +42,7 @@ services:
             - '@session'
 
     autodiag.repository.autodiagentry:
-            class: HopitalNumerique\AutodiagBundle\Repository\AutodiagRepository
+            class: HopitalNumerique\AutodiagBundle\Repository\AutodiagEntryRepository
             factory: ["@doctrine.orm.entity_manager", "getRepository"]
             arguments:
                 - 'HopitalNumeriqueAutodiagBundle:AutodiagEntry'
@@ -71,6 +71,7 @@ services:
         arguments:
             - '@autodiag.algorithm.score'
             - '@autodiag.attribute_builder_provider'
+            - '@autodiag.repository.autodiagentry'
 
     autodiag.algorithm.score:
         class: HopitalNumerique\AutodiagBundle\Service\Algorithm\Score

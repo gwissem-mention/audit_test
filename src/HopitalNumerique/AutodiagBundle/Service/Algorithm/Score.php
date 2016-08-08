@@ -30,16 +30,28 @@ class Score
         $this->attributeProvider = $attributeProvider;
     }
 
-    public function getScore(Synthesis $synthesis, Container $container)
+    /**
+     * Calcul le score
+     *
+     * @TODO: supprimer le getValuesAndWeight car génère trop de requêtes. Utiliser les valeurs de Entry[] et stocker...
+     *          ...en locale le weight par container/attribute ainsi que le min/max. Peut être faire une grosse requête
+     *          une seule fois pour récupérer toutes ces valeurs
+     *
+     * @param Autodiag $autodiag
+     * @param Container $container
+     * @param array $entries
+     * @return float|mixed|null
+     */
+    public function getScore(Autodiag $autodiag, Container $container, array $entries)
     {
-        $key = $this->getCacheKey($synthesis->getAutodiag(), $container, $synthesis);
+        $key = $this->getCacheKey($autodiag, $container, $entries);
+
         if (array_key_exists($key, $this->scores)) {
             return $this->scores[$key];
         }
 
-        $autodiag = $synthesis->getAutodiag();
         $repository = $this->manager->getRepository(AutodiagEntry\Value::class);
-        $values = $repository->getValuesAndWeight($synthesis, $container);
+        $values = $repository->getValuesAndWeight($entries);
         $containerIds = $this->getContainerIds($container);
 
         $sum = 0;
@@ -75,6 +87,11 @@ class Score
         return null;
     }
 
+    protected function computeValues($values)
+    {
+
+    }
+
     protected function getContainerIds(Container $container)
     {
         $ids = [$container->getId()];
@@ -84,11 +101,14 @@ class Score
         return $ids;
     }
 
-    protected function getCacheKey(Autodiag $autodiag, Container $container, Synthesis $synthesis)
+    protected function getCacheKey(Autodiag $autodiag, Container $container, array $entries)
     {
         return 'SCORE__'
-        . $autodiag->getId()
-        . $container->getId()
-        . $synthesis->getId();
+            . $autodiag->getId()
+            . $container->getId()
+            . implode('-', array_map(function (AutodiagEntry $entry) {
+                return $entry->getId();
+            }, $entries))
+        ;
     }
 }
