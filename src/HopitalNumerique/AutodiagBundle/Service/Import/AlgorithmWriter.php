@@ -43,23 +43,25 @@ class AlgorithmWriter implements WriterInterface, ProgressAwareInterface
             $referenceNumber = 1;
             while ($currentColumn + 3 <= count($item)) {
                 $reference = array_values(array_slice($item, $currentColumn, 3));
-                if ($this->validateReference($reference)) {
-                    $model = $this->manager->getRepository('HopitalNumeriqueAutodiagBundle:Autodiag\Reference')
-                        ->findOneBy([
-                            'autodiag' => $this->autodiag,
-                            'number' => $referenceNumber
-                        ]);
-                    if (null === $model) {
-                        $model = new Autodiag\Reference($referenceNumber, $this->autodiag);
+                if (array_sum($reference) !== 0) {
+                    if ($this->validateReference($reference)) {
+                        $model = $this->manager->getRepository('HopitalNumeriqueAutodiagBundle:Autodiag\Reference')
+                            ->findOneBy([
+                                'autodiag' => $this->autodiag,
+                                'number' => $referenceNumber
+                            ]);
+
+                        if (null === $model) {
+                            $model = new Autodiag\Reference($referenceNumber, $this->autodiag);
+                        }
+                        $model
+                            ->setLabel($reference[0])
+                            ->setValue($reference[1])
+                            ->setColor($reference[2]);
+                        $this->manager->persist($model);
+                    } else {
+                        $this->progress->addMessage('', $reference, 'reference_invalid');
                     }
-                    $model
-                        ->setLabel($reference[0])
-                        ->setValue($reference[1])
-                        ->setColor($reference[2])
-                    ;
-                    $this->manager->persist($model);
-                } else {
-                    $this->progress->addMessage('', $reference, 'reference_invalid');
                 }
                 $currentColumn += 3;
                 $referenceNumber++;
@@ -100,9 +102,9 @@ class AlgorithmWriter implements WriterInterface, ProgressAwareInterface
     protected function validateReference($reference)
     {
         return count($reference) === 3
-            && null !== $reference[0]
-            && null !== $reference[1]
-            && null !== $reference[2]
+            && empty($reference[0])
+            && empty($reference[1])
+            && empty($reference[2])
         ;
     }
 }
