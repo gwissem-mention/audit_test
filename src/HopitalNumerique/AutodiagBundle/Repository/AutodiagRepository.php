@@ -57,7 +57,7 @@ class AutodiagRepository extends EntityRepository
                 'COUNT(entries_valid.id) as nb_entries_valid',
                 'COUNT(entries_in_progress.id) as nb_entries_in_progress'
             )
-            ->leftJoin('ad.domaines', 'domaines', Join::WITH, 'domaines.id IN (:domaine_ids)')
+            ->join('ad.domaines', 'domaines', Join::WITH, 'domaines.id IN (:domaine_ids)')
             ->leftJoin(
                 Synthesis::class,
                 'synthesis_valid',

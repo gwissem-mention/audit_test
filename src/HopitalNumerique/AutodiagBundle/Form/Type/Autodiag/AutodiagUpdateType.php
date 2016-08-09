@@ -25,6 +25,7 @@ class AutodiagUpdateType extends AbstractType
         $builder
             ->add('autodiag', AutodiagType::class, [
                 'user' => $options['user'],
+                'edit' => $options['edit'],
             ])
             ->add('presets', CollectionType::class, [
                 'entry_type' => PresetType::class,
@@ -40,9 +41,11 @@ class AutodiagUpdateType extends AbstractType
         $resolver->setDefaults([
             'data_class' => 'HopitalNumerique\AutodiagBundle\Model\AutodiagUpdate',
             'label_format' => 'ad.autodiag.%name%',
+            'edit' => false,
         ]);
 
-        $resolver->setRequired(['user']);
+        $resolver->setRequired(['user', 'edit']);
         $resolver->setAllowedTypes('user', User::class);
+        $resolver->setAllowedTypes('edit', 'boolean');
     }
 }

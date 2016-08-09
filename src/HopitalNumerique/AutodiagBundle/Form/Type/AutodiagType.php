@@ -36,6 +36,7 @@ class AutodiagType extends AbstractType
                 'required' => true,
                 'multiple' => true,
                 'empty_value' => ' - ',
+                'disabled' => $options['edit'],
                 'query_builder' => function (EntityRepository $er) use ($options) {
                     return $er->getDomainesUserConnectedForForm($options['user']->getId());
                 },
@@ -59,9 +60,11 @@ class AutodiagType extends AbstractType
         $resolver->setDefaults([
             'data_class' => 'HopitalNumerique\AutodiagBundle\Entity\Autodiag',
             'label_format' => 'ad.autodiag.%name%',
+            'edit' => false,
         ]);
 
-        $resolver->setRequired(['user']);
+        $resolver->setRequired(['user', 'edit']);
         $resolver->setAllowedTypes('user', User::class);
+        $resolver->setAllowedTypes('edit', 'boolean');
     }
 }
