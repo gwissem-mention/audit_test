@@ -69,7 +69,7 @@ class AlgorithmWriter implements WriterInterface, ProgressAwareInterface
 
             $this->progress->addSuccess($item);
         } else {
-            $this->progress->addError('algorithm incorect format');
+            $this->progress->addError('ad.import.chapter.incorrect_row_format');
         }
     }
 

@@ -19,7 +19,7 @@ class ExcelFileReader implements ReaderInterface, ProgressAwareInterface
 
     /**
      * @param File $file
-     * @return KeyedExcelFileIterator
+     * @return KeyedExcelFileIterator|array
      * @throws \Exception
      */
     public function read($file)
@@ -27,7 +27,7 @@ class ExcelFileReader implements ReaderInterface, ProgressAwareInterface
         $fileReader = $this->getFileReader($file);
         $sheet = $fileReader->getSheetByName($this->sheetName);
         if (!$sheet instanceof \PHPExcel_Worksheet) {
-            throw new \Exception('Sheet not found');
+            return [];
         }
         $iterator = new KeyedExcelFileIterator($sheet);
 
