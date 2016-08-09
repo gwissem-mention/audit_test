@@ -120,11 +120,11 @@ class AutodiagFileImportHandler
      */
     public function getAlgorithmProgress()
     {
-        $questionProgress = $this->session->get('algorithm_import_progress');
-        if (null !== $questionProgress) {
+        $progress = $this->session->get('algorithm_import_progress');
+        if (null !== $progress) {
             $this->session->remove('algorithm_import_progress');
         }
-        return $questionProgress;
+        return $progress;
     }
 
     /**
@@ -132,11 +132,11 @@ class AutodiagFileImportHandler
      */
     public function getRestitutionProgress()
     {
-        $questionProgress = $this->session->get('restitution_import_progress');
-        if (null !== $questionProgress) {
+        $progress = $this->session->get('restitution_import_progress');
+        if (null !== $progress) {
             $this->session->remove('restitution_import_progress');
         }
-        return $questionProgress;
+        return $progress;
     }
 
     /**
@@ -152,7 +152,7 @@ class AutodiagFileImportHandler
                 new AlgorithmWriter($this->manager, $autodiag)
             );
             $algorithmProgress = $algorithmImporter->import($model->getFile());
-            $this->session->set('algorithm_import_restitution', $algorithmProgress);
+            $this->session->set('algorithm_import_progress', $algorithmProgress);
 
             // Save history
             $user = $this->tokenStorage->getToken()->getUser();

@@ -9,6 +9,7 @@ use HopitalNumerique\AutodiagBundle\Entity\Autodiag\Preset;
 use HopitalNumerique\AutodiagBundle\Form\Type\Autodiag\AutodiagUpdateType;
 use HopitalNumerique\AutodiagBundle\Form\Type\Autodiag\FileImportType;
 use HopitalNumerique\AutodiagBundle\Grid\AutodiagGrid;
+use HopitalNumerique\AutodiagBundle\Model\FileImport\Algorithm;
 use HopitalNumerique\AutodiagBundle\Model\FileImport\Restitution;
 use HopitalNumerique\AutodiagBundle\Model\FileImport\Survey;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
@@ -133,13 +134,13 @@ class AutodiagController extends Controller
     public function algorithmEditAction(Request $request, Autodiag $autodiag)
     {
         $importHandler = $this->get('autodiag.import.handler');
-        $import = new AutodiagFileImport($autodiag);
+        $import = new Algorithm($autodiag);
         $form = $this->createForm(FileImportType::class, $import);
 
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             $importHandler->handleAlgorithmImport($import, $this->get('autodiag.import.algorithm'));
-            $this->addFlash('success', 'ad.autodiag.import.success');
+            $this->addFlash('success', $this->get('translator')->trans('ad.import.success'));
 
             return $this->redirectToRoute('hopitalnumerique_autodiag_edit_algorithm', [
                 'id' => $autodiag->getId()
@@ -171,7 +172,7 @@ class AutodiagController extends Controller
         if ($form->isSubmitted() && $form->isValid()) {
             $importHandler->handleRestitutionImport($import, $this->get('autodiag.import.restitution'));
 
-            $this->addFlash('success', 'ad.autodiag.import.success');
+            $this->addFlash('success', $this->get('translator')->trans('ad.import.success'));
 
             return $this->redirectToRoute('hopitalnumerique_autodiag_edit_restitution', [
                 'id' => $autodiag->getId()

@@ -59,7 +59,7 @@ class AlgorithmWriter implements WriterInterface, ProgressAwareInterface
                     ;
                     $this->manager->persist($model);
                 } else {
-                    $this->progress->addMessage('', $reference, 'reference.invalid');
+                    $this->progress->addMessage('', $reference, 'reference_invalid');
                 }
                 $currentColumn += 3;
                 $referenceNumber++;
