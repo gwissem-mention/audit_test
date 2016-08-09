@@ -2,6 +2,20 @@
 
 }
 
+#restitution .item-row {
+    display: flex;
+}
+
+#restitution .item-row > .item {
+    display: flex;
+    margin: auto;
+    justify-content: center;
+    padding: 20px;
+}
+#restitution .item-row > .item > * {
+    width: 100%;
+}
+
 #restitution .item .low {
     background: #FF0000;
 }
@@ -109,6 +123,9 @@
 /**
 * TABLEAU
 */
+#restitution .tableau table {
+    margin-bottom: 0;
+}
 #restitution .tableau td, #restitution .tableau th {
     text-align: center;
 }
@@ -137,7 +154,7 @@
 #restitution .score-widget-wrapper {
     flex: 1;
     padding: 20px;
-    min-width: 25%;
+    min-width: 180px;
 }
 
 #restitution .score-widget {

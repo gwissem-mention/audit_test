@@ -50,14 +50,23 @@
                         </p>
 
                         <div class="items-wrapper">
+
+                            <div class="item-row">
+                            {% set currentRow = category.items.first.row %}
                             {% for item in category.items %}
-                                <div class="item">
+                                {% if item.row != currentRow %}
+                                {% set currentRow = item.row %}
+                                    </div>
+                                    <div class="item-row">
+                                {% endif %}
+                                <div class="item" data-row="{{ item.row }}" data-column="{{ item.column }}">
                                     {% include ("@HopitalNumeriqueAutodiag/Restitution/item/_" ~ item.type ~ ".html.twig") with {
                                         'restitution': item,
                                         'result': result[item.id]
                                     } %}
                                 </div>
                             {% endfor %}
+                            </div>
                         </div>
                     </div>
                 {% endfor %}
@@ -65,4 +74,18 @@
         </div>
     </div>
 
+    <script>
+        $('.item-row').each(function() {
+            var cols = $(this).find('[data-row][data-column]');
+            cols.css('width', (100 / cols.length) + "%");
+        });
+
+        $('a[data-toggle="tab"]').on('shown.bs.tab', function() {
+            $(window).trigger('resize');
+        });
+
+        $(window).trigger('resize');
+    </script>
 {% endblock %}
+
+
