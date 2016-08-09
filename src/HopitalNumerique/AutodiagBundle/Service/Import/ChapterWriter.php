@@ -129,11 +129,19 @@ class ChapterWriter implements WriterInterface, ProgressAwareInterface
             return;
         }
 
-        $toDelete = $this->autodiag->getChapters()->filter(
-            function (Chapter $chapter) {
-                return !array_key_exists((string)$chapter->getCode(), $this->importedChapterCodes);
+        $toDelete = [];
+        foreach ($this->autodiag->getChapters() as $chapter) {
+
+            if (!array_key_exists((string)$chapter->getCode(), $this->importedChapterCodes)) {
+                $toDelete[] = $chapter;
             }
-        );
+
+            foreach ($chapter->getChilds() as $child) {
+                if (!array_key_exists((string)$child->getCode(), $this->importedChapterCodes)) {
+                    $toDelete[] = $child;
+                }
+            }
+        }
 
         foreach ($toDelete as $chapter) {
             $this->progress->addMessage('', $chapter, 'chapter_deleted');
