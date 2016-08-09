@@ -2,7 +2,7 @@
 
 {% block toolbarButton %}
     {{ parent() }}
-    <a class="btn btn-default" href="{{ path('hopitalnumerique_autodiag_export_survey', {"id": model.id}) }}" title="Exporter"><i class="fa fa-upload"></i></a>
+    <a class="btn btn-default" href="{{ path('hopitalnumerique_autodiag_export_algorithm', {"id": model.id}) }}" title="Exporter"><i class="fa fa-upload"></i></a>
     <a class="btn btn-default" href="{{ path('hopitalnumerique_autodiag_export_algorithm_layout', {"id": model.id}) }}" title="Gabarit"><i class="fa fa-file-text-o"></i></a>
 {% endblock %}
 

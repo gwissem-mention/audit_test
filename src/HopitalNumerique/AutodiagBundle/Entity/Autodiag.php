@@ -160,6 +160,12 @@ class Autodiag
      */
     private $actionPlans;
 
+    /**
+     * @var Collection
+     * @ORM\OneToMany(targetEntity="HopitalNumerique\AutodiagBundle\Entity\Autodiag\Reference", mappedBy="autodiag")
+     */
+    private $references;
+
     public function __construct()
     {
         $this->domaines = new ArrayCollection();
@@ -505,5 +511,15 @@ class Autodiag
         $this->actionPlans->removeElement($actionPlan);
 
         return $this;
+    }
+
+    /**
+     * Get references
+     *
+     * @return Collection
+     */
+    public function getReferences()
+    {
+        return $this->references;
     }
 }

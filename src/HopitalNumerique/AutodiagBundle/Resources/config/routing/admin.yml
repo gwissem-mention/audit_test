@@ -28,6 +28,10 @@ hopitalnumerique_autodiag_edit_algorithm:
     path:     /autodiag/edit/{id}/algorithm
     defaults: { _controller: HopitalNumeriqueAutodiagBundle:Back/Autodiag:algorithmEdit }
 
+hopitalnumerique_autodiag_export_algorithm:
+    path:     /autodiag/edit/{id}/algorithm/export
+    defaults: { _controller: HopitalNumeriqueAutodiagBundle:Back/Export:algorithm }
+
 hopitalnumerique_autodiag_export_algorithm_layout:
     path:     /autodiag/edit/algorithm/export
     defaults: { _controller: HopitalNumeriqueAutodiagBundle:Back/Export:algorithmLayout }
@@ -36,6 +40,10 @@ hopitalnumerique_autodiag_export_algorithm_layout:
 hopitalnumerique_autodiag_edit_restitution:
     path:     /autodiag/edit/{id}/restitution
     defaults: { _controller: HopitalNumeriqueAutodiagBundle:Back/Autodiag:restitutionEdit }
+
+hopitalnumerique_autodiag_export_restitution:
+    path:     /autodiag/edit/{id}/restitution/export
+    defaults: { _controller: HopitalNumeriqueAutodiagBundle:Back/Export:restitution }
 
 hopitalnumerique_autodiag_export_restitution_layout:
     path:     /autodiag/edit/restitution/export

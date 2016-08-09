@@ -63,7 +63,7 @@ class Reference
      *
      * @var Autodiag
      *
-     * @ORM\ManyToOne(targetEntity="HopitalNumerique\AutodiagBundle\Entity\Autodiag")
+     * @ORM\ManyToOne(targetEntity="HopitalNumerique\AutodiagBundle\Entity\Autodiag", inversedBy="references")
      * @ORM\JoinColumn(name="autodiag_id", referencedColumnName="id", onDelete="CASCADE")
      */
     private $autodiag;

@@ -1,31 +1,13 @@
 <?php
 namespace HopitalNumerique\AutodiagBundle\Service\Export;
 
-use Doctrine\Common\Persistence\ObjectManager;
 use HopitalNumerique\AutodiagBundle\Entity\Autodiag;
 use HopitalNumerique\AutodiagBundle\Entity\Autodiag\Container\Chapter;
 use HopitalNumerique\AutodiagBundle\Entity\Autodiag\Attribute;
 use HopitalNumerique\AutodiagBundle\Entity\Autodiag\Attribute\Weight;
-use Nodevo\ToolsBundle\Tools\Chaine;
-use Symfony\Component\HttpFoundation\BinaryFileResponse;
-use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 
-class SurveyExport
+class SurveyExport extends AbstractExport
 {
-
-    protected $manager;
-
-    protected $row = 1;
-
-    /**
-     * SurveyExport constructor.
-     * @param ObjectManager $manager
-     */
-    public function __construct(ObjectManager $manager)
-    {
-        $this->manager = $manager;
-    }
-
     public function export(Autodiag $autodiag)
     {
         $excel = new \PHPExcel();
@@ -51,17 +33,7 @@ class SurveyExport
             $this->writeAttributeRow($sheet, $attribute);
         }
 
-        $file = stream_get_meta_data(tmpfile())['uri'];
-        $this->getWriter($excel)->save($file);
-
-        $title = new Chaine($autodiag->getTitle());
-
-        $response = new BinaryFileResponse($file);
-        $response->setContentDisposition(
-            ResponseHeaderBag::DISPOSITION_ATTACHMENT,
-            'questionnaire_' . $title->minifie() . '.xlsx'
-        );
-        return $response;
+        return $this->getFileResponse($excel, $autodiag->getTitle(), 'questionnaire');
     }
 
     private function writeChapterHeaders(\PHPExcel_Worksheet $sheet)
@@ -161,41 +133,5 @@ class SurveyExport
             $data['poderation_categorie'],
             array_key_exists('ponderation_chapitre', $data) ? $data['ponderation_chapitre'] : '',
         ]);
-    }
-
-    protected function addSheet(\PHPExcel $excel, $title)
-    {
-
-        foreach ($excel->getAllSheets() as $sheet) {
-            if ($sheet->getTitle() == $title) {
-                return $sheet;
-            }
-        }
-
-        $sheet = $excel->createSheet();
-        $sheet->setTitle($title);
-        $sheet->setCodeName($title);
-        return $sheet;
-    }
-
-    protected function addRow(\PHPExcel_Worksheet $sheet, $row)
-    {
-        $col = 'A';
-        foreach ($row as $cell) {
-            $sheet->setCellValue($col . $this->row, $cell);
-            $col++;
-        }
-        $this->row++;
-    }
-
-    /**
-     * Get Excel writer
-     *
-     * @param \PHPExcel $excel
-     * @return \PHPExcel_Writer_Excel2007
-     */
-    protected function getWriter($excel)
-    {
-        return new \PHPExcel_Writer_Excel2007($excel);
     }
 }

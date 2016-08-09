@@ -43,7 +43,7 @@ class AlgorithmWriter implements WriterInterface, ProgressAwareInterface
             $referenceNumber = 1;
             while ($currentColumn + 3 <= count($item)) {
                 $reference = array_values(array_slice($item, $currentColumn, 3));
-                if (array_sum($reference) !== 0) {
+                if (isset($reference[0]) || isset($reference[1]) || isset($reference[2])) {
                     if ($this->validateReference($reference)) {
                         $model = $this->manager->getRepository('HopitalNumeriqueAutodiagBundle:Autodiag\Reference')
                             ->findOneBy([
@@ -102,9 +102,9 @@ class AlgorithmWriter implements WriterInterface, ProgressAwareInterface
     protected function validateReference($reference)
     {
         return count($reference) === 3
-            && empty($reference[0])
-            && empty($reference[1])
-            && empty($reference[2])
+            && !empty($reference[0])
+            && !empty($reference[1])
+            && !empty($reference[2])
         ;
     }
 }
