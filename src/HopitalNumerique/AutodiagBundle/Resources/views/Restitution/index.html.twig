@@ -48,14 +48,17 @@
                         <p>
                             {{ category.description }}
                         </p>
-                        {% for item in category.items %}
-                            <div class="item">
-                                {% include ("@HopitalNumeriqueAutodiag/Restitution/item/_" ~ item.type ~ ".html.twig") with {
-                                    'restitution': item,
-                                    'result': result[item.id]
-                                } %}
-                            </div>
-                        {% endfor %}
+
+                        <div class="items-wrapper">
+                            {% for item in category.items %}
+                                <div class="item">
+                                    {% include ("@HopitalNumeriqueAutodiag/Restitution/item/_" ~ item.type ~ ".html.twig") with {
+                                        'restitution': item,
+                                        'result': result[item.id]
+                                    } %}
+                                </div>
+                            {% endfor %}
+                        </div>
                     </div>
                 {% endfor %}
             </div>

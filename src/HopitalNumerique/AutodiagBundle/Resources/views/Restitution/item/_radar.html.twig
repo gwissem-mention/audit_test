@@ -2,7 +2,22 @@
     <div id="{{ restitution.id ~ restitution.type }}"></div>
 
     <div class="remplissage">
-
+        <table>
+            <thead>
+                <tr>
+                    <th>Catégorie</th>
+                    <th>Remplissage</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for item in result.items %}
+                    <tr>
+                        <td>{{ item.label }}</td>
+                        <td>{{ item.numberOfAnswers / item.numberOfQuestions * 100 }} %</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
     </div>
 </div>
 
