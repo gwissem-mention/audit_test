@@ -1,5 +1,11 @@
 {% extends "@HopitalNumeriqueAutodiag/Autodiag/Edit/_import.html.twig" %}
 
+{% block toolbarButton %}
+    {{ parent() }}
+    <a class="btn btn-default" href="{{ path('hopitalnumerique_autodiag_export_survey', {"id": model.id}) }}" title="Exporter"><i class="fa fa-upload"></i></a>
+    <a class="btn btn-default" href="{{ path('hopitalnumerique_autodiag_export_restitution_layout', {"id": model.id}) }}" title="Gabarit"><i class="fa fa-file-text-o"></i></a>
+{% endblock %}
+
 {% block repport %}
     <div class="repports-container">
         {% if progress is not null %}

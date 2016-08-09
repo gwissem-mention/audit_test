@@ -10,17 +10,10 @@ hopitalnumerique_autodiag_edit:
     path:     /autodiag/edit/{id}
     defaults: { _controller: HopitalNumeriqueAutodiagBundle:Back/Autodiag:edit }
 
+
 hopitalnumerique_autodiag_edit_survey:
     path:     /autodiag/edit/{id}/survey
     defaults: { _controller: HopitalNumeriqueAutodiagBundle:Back/Autodiag:surveyEdit }
-
-hopitalnumerique_autodiag_edit_algorithm:
-    path:     /autodiag/edit/{id}/algorithm
-    defaults: { _controller: HopitalNumeriqueAutodiagBundle:Back/Autodiag:algorithmEdit }
-
-hopitalnumerique_autodiag_edit_restitution:
-    path:     /autodiag/edit/{id}/result
-    defaults: { _controller: HopitalNumeriqueAutodiagBundle:Back/Autodiag:restitutionEdit }
 
 hopitalnumerique_autodiag_export_survey:
     path:     /autodiag/edit/{id}/survey/export
@@ -29,3 +22,21 @@ hopitalnumerique_autodiag_export_survey:
 hopitalnumerique_autodiag_export_survey_layout:
     path:     /autodiag/edit/survey/export
     defaults: { _controller: HopitalNumeriqueAutodiagBundle:Back/Export:surveyLayout }
+
+
+hopitalnumerique_autodiag_edit_algorithm:
+    path:     /autodiag/edit/{id}/algorithm
+    defaults: { _controller: HopitalNumeriqueAutodiagBundle:Back/Autodiag:algorithmEdit }
+
+hopitalnumerique_autodiag_export_algorithm_layout:
+    path:     /autodiag/edit/algorithm/export
+    defaults: { _controller: HopitalNumeriqueAutodiagBundle:Back/Export:algorithmLayout }
+
+
+hopitalnumerique_autodiag_edit_restitution:
+    path:     /autodiag/edit/{id}/restitution
+    defaults: { _controller: HopitalNumeriqueAutodiagBundle:Back/Autodiag:restitutionEdit }
+
+hopitalnumerique_autodiag_export_restitution_layout:
+    path:     /autodiag/edit/restitution/export
+    defaults: { _controller: HopitalNumeriqueAutodiagBundle:Back/Export:restitutionLayout }

@@ -20,4 +20,18 @@ class ExportController extends Controller
 
         return $this->get('igorw_file_serve.response_factory')->create($fileName);
     }
+
+    public function algorithmLayoutAction()
+    {
+        $fileName =  $this->getParameter("kernel.root_dir") . '/../files/autodiag/algorithme.xlsx';
+
+        return $this->get('igorw_file_serve.response_factory')->create($fileName);
+    }
+
+    public function restitutionLayoutAction()
+    {
+        $fileName =  $this->getParameter("kernel.root_dir") . '/../files/autodiag/resultat.xlsx';
+
+        return $this->get('igorw_file_serve.response_factory')->create($fileName);
+    }
 }
