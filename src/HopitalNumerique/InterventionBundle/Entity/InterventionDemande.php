@@ -1432,7 +1432,7 @@ class InterventionDemande
 
         foreach ($connaissances as $connaissance)
         {
-            if(is_null($connaissance->getParent()))
+            /*if(is_null($connaissance->getParent()))
             {
                 continue;
             }
@@ -1442,7 +1442,8 @@ class InterventionDemande
                 $connaissancesOrdered[$connaissance->getParent()->getId()] = array();
             }
 
-            $connaissancesOrdered[$connaissance->getParent()->getId()][] = $connaissance;
+            $connaissancesOrdered[$connaissance->getParent()->getId()][] = $connaissance;*/
+            $connaissancesOrdered[0][] = $connaissance;
         }
 
         return $connaissancesOrdered;

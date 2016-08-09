@@ -96,9 +96,9 @@
  #
  # @param \HopitalNumerique\CommunautePratiqueBundle\Entity\Groupe groupe Groupe
  #}
-{% macro display_action_contact_invitation() %}
+{% macro display_action_contact_invitation(idGroupe) %}
     <div class="invite">
-        <a onclick="Contact_Popup.invite('{{ path( app.request.get('_route'), app.request.get('_route_params') ) }}');">
+        <a onclick="Contact_Popup.invite('{{ path( app.request.get('_route'), app.request.get('_route_params') ) }}', '{{ idGroupe }}');">
             <em class="icon-users149"></em>
             Inviter d'autres<br> personnes
         </a>

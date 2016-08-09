@@ -27,7 +27,7 @@ class ObjetGrid extends Grid implements GridInterface
     {
         $filtres = array();
 
-        $this->setPersistence(false);
+        $this->setPersistence(true);
 
         switch ($filtre) {
             case 'point-dur':
@@ -57,7 +57,7 @@ class ObjetGrid extends Grid implements GridInterface
      */
     public function setColumns()
     {
-        $this->addColonne( new Column\NumberColumn('idObjet', 'ID') );
+        $this->addColonne( new Column\NumberColumn('idReference', 'ID') );
         $this->addColonne( new Column\TextColumn('titre', 'Titre') );
         $this->addColonne( new Column\TextColumn('types','Catégories') );
         $this->addColonne( new Column\TextColumn('domainesNom','Domaine(s) associé(s)') );

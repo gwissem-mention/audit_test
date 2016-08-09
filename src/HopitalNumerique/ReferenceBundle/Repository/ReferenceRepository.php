@@ -65,7 +65,13 @@ class ReferenceRepository extends EntityRepository
     public function getDatasForGrid($domainesIds, $condition = null)
     {
         $qb = $this->_em->createQueryBuilder();
-        $qb->select('ref')
+        $qb
+            ->select(
+                'ref',
+                'refEtat',
+                'refParent',
+                'domaine'
+            )
             ->from('HopitalNumeriqueReferenceBundle:Reference', 'ref')
             ->leftJoin('ref.etat','refEtat')
             ->leftJoin('ref.parents','refParent')

@@ -148,7 +148,7 @@ class Groupe
     /**
      * @var \Doctrine\Common\Collections\Collection
      *
-     * @ORM\OneToMany(targetEntity="Inscription", mappedBy="groupe", cascade={"persist", "remove"})
+     * @ORM\OneToMany(targetEntity="Inscription", mappedBy="groupe", cascade={"persist", "remove"}, orphanRemoval=true)
      */
     private $inscriptions;
 
@@ -558,9 +558,14 @@ class Groupe
      *
      * @param \HopitalNumerique\UserBundle\Entity\User $users
      */
-    public function removeUser(\HopitalNumerique\UserBundle\Entity\User $users)
+    public function removeUser(\HopitalNumerique\UserBundle\Entity\User $user)
     {
-        $this->removeInscription(new Inscription($this, $users));
+        foreach ($this->getInscriptions() as $inscription) {
+            if ($user->equals($inscription->getUser())) {
+                $this->removeInscription($inscription);
+                break;
+            }
+        }
     }
 
     /**
@@ -786,9 +791,11 @@ class Groupe
      */
     public function hasUser(\HopitalNumerique\UserBundle\Entity\User $user)
     {
-        foreach ($this->users as $membre) {
-            if ($membre->getId() == $user->getId()) {
-                return true;
+        if ($this->users != null) {
+            foreach ($this->users as $membre) {
+                if ($membre->getId() == $user->getId()) {
+                    return true;
+                }
             }
         }
 

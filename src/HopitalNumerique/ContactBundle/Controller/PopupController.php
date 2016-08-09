@@ -40,11 +40,12 @@ class PopupController extends \Symfony\Bundle\FrameworkBundle\Controller\Control
     public function inviteAction(Request $request)
     {
         if (!$request->request->has('urlRedirection')) {
-            throw new \Exception('L\'URL de redirection doivent être précisés.');
+            throw new \Exception('L\'URL de redirection doit être précisée.');
         }
 
         $inviteForm = $this->createForm('hopitalnumerique_contactbundle_popup_invite', null, array(
-            'urlRedirection' => $request->request->get('urlRedirection')
+            'urlRedirection' => $request->request->get('urlRedirection'),
+            'idGroupe' => $request->request->get('idGroupe')
         ));
 
         return $this->render(
@@ -67,14 +68,23 @@ class PopupController extends \Symfony\Bundle\FrameworkBundle\Controller\Control
             $regex = '/^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]{2,}[.][a-zA-Z]{2,3}$/';
             foreach ($destinataires as $destinataire) {
                 if (!preg_match($regex, $destinataire)) {
-                    $this->get('session')->getFlashBag()->add('danger', 'Vérifier le format des adresses e-mail renseignées.');
+                    $this->get('session')->getFlashBag()->add('danger', 'Vérifiez le format des adresses e-mail renseignées.');
                     return $this->redirect($form['urlRedirection']);
                 }
             }
-            $this->get('nodevo_mail.manager.mail')->sendInvitationMail($this->get('security.context')->getToken()->getUser(), $destinataires);
+
+            $groupe = $this->container->get('hopitalnumerique_communautepratique.manager.groupe')->findOneBy(array('id' => $form['idGroupe']));
+            if ($groupe) {
+                $nomGroupe = $groupe->getTitre();
+            } else {
+                $nomGroupe = "";
+            }
+
+            $this->get('nodevo_mail.manager.mail')->sendInvitationMail($this->getUser(), $destinataires, $nomGroupe);
+
             $this->get('session')->getFlashBag()->add('success', 'Votre invitation a été envoyée.');
         } else {
-            $this->get('session')->getFlashBag()->add('danger', 'Invitation non envoyé.');
+            $this->get('session')->getFlashBag()->add('danger', 'Invitation non envoyée.');
         }
 
         return $this->redirect($form['urlRedirection']);

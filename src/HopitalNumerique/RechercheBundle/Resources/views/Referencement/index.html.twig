@@ -74,9 +74,9 @@
                                             <div class="modal-body">
                                                 <div class="row">
                                                     <div class="col-md-6">
-                                                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed non risus. Suspendisse lectus tortor, dignissim sit amet, adipiscing nec, ultricies sed, dolor. Cras elementum ultrices diam. Maecenas ligula massa, varius a, semper congue, euismod non, mi. Proin porttitor, orci nec nonummy molestie, enim est eleifend mi, non fermentum diam nisl sit amet erat.</p>
+                                                        <p>Renseignez votre contexte pour améliorer la pertinence des résultats.</p><p>Conservez votre profil en créant votre compte avec une simple adresse mail.</p><p>Si vous avez déjà un compte, connectez-vous !</p>
                                                         {% include 'HopitalNumeriqueAccountBundle:include:login.html.twig' with { 'size':'small' } %}
-                                                        {#{ render(controller('HopitalNumeriqueAccountBundle:Inscription:popin', { 'urlRedirection':app.request.uri })) }#}
+                                                        {% render(controller('HopitalNumeriqueAccountBundle:Inscription:popin', { 'urlRedirection':app.request.uri })) %}
                                                     </div>
                                                     <div class="col-md-6">
                                                         <h3>Décrivez votre profil</h3>
@@ -178,6 +178,7 @@
                                             <span class="input-group-btn">
                                                 <button class="btn btn-success" id="search-text-button" type="button" onclick="Hn_RechercheBundle_Referencement.displayResults();"><i class="fa fa-check"></i></button>
                                                 <button class="btn btn-primary" type="button" title="Recherche avancée" onclick="Hn_RechercheBundle_Referencement_Filter_Exalead.toggleParametersDisplaying();"><i class="fa fa-cog"></i></button>
+                                                <button class="btn btn-danger" id="empty-search-text-button" type="button" onclick="Hn_RechercheBundle_Referencement_Filter_Exalead.emptySearch();"><i class="fa fa-times"></i></button>
                                             </span>
                                         </div>
                                         <div class="recherche_textuelle_avancee">

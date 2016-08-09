@@ -635,4 +635,30 @@ class ReferenceManager extends BaseManager
         
         return $domaineResult;
     }
+
+    
+    /**
+     * Retourne la référence root commune entre plusieurs domaines.
+     *
+     * @param array<\HopitalNumerique\DomaineBundle\Entity\Domaine> $domaines Domaines
+     * @return \HopitalNumerique\ReferenceBundle\Entity\Reference|null Root
+     */
+    public function getReferenceRootCommun($domaines)
+    {
+        $referenceRoot = null;
+
+        foreach ($domaines as $domaine) {
+            if (null === $domaine->getReferenceRoot()) {
+                return null;
+            }
+
+            if (null !== $referenceRoot && $referenceRoot->getId() != $domaine->getReferenceRoot()->getId()) {
+                // Dès que 2 domaines ont 2 références root différentes, on prend la racine
+                return null;
+            }
+            $referenceRoot = $domaine->getReferenceRoot();
+        }
+        
+        return $referenceRoot;
+    }
 }

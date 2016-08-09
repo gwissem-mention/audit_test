@@ -61,7 +61,7 @@ class Referencement
      */
     public function getReferencesTreeWithEntitiesHasReferences($domaines, $entityType, $entityId)
     {
-        $referencesTree = $this->getReferencesTree($domaines);
+        $referencesTree = $this->getReferencesTree($domaines, null, $this->referenceManager->getReferenceRootCommun($domaines));
         $entitiesHasReferences = $this->entityHasReferenceManager->findBy([
             'entityType' => $entityType,
             'entityId' => $entityId

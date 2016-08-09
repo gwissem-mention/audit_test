@@ -89,11 +89,13 @@ Hn_RechercheBundle_Referencement.displayDomaineResults = function()
     });
 
     if (domaineResultsHtml.length > 0) {
-        $('#results-domaines .filters').html('"' +
-            choosenElements.map(function(e) {
-                 return $(e).data('libelle');
-            }).join(', ')
-            + '"'
+        var othersDomainesLibelles = new Array();
+        $.each(Hn_RechercheBundle_Referencement.getChosenElements(), function(i, chosenElement) {
+            if (Hn_DomaineBundle_Domaine.CURRENT_DOMAINE_ID != $(chosenElement).data('domaines')) {
+                othersDomainesLibelles.push($(chosenElement).data('libelle'));
+            }
+        });
+        $('#results-domaines .filters').html('"' + othersDomainesLibelles.join(', ') + '"'
         );
         $('#results-domaines .domaines').html(domaineResultsHtml.join(', '));
         $('#results-domaines').css({ display: 'block' });

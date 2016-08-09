@@ -9,7 +9,6 @@ parameters:
     hopitalnumerique_recherche.manager.statClic.class             : HopitalNumerique\RechercheBundle\Manager\StatClicManager
     hopitalnumerique_recherche.manager.expbesoin.class            : HopitalNumerique\RechercheBundle\Manager\ExpBesoinManager
     hopitalnumerique_recherche.manager.expbesoinreponses.class    : HopitalNumerique\RechercheBundle\Manager\ExpBesoinReponsesManager
-    hopitalnumerique_recherche.manager.refexpbesoinreponses.class : HopitalNumerique\RechercheBundle\Manager\RefExpBesoinReponsesManager
     hopitalnumerique_recherche.service.logger.cronlogger.class    : HopitalNumerique\RechercheBundle\DependencyInjection\Logger\CronLogger
     #Gestionnaire
     hopitalnumerique_recherche.manager.expbesoingestion.class : HopitalNumerique\RechercheBundle\Manager\ExpBesoinGestionManager
@@ -31,10 +30,6 @@ services:
     hopitalnumerique_recherche.manager.expbesoinreponses:
         class: %hopitalnumerique_recherche.manager.expbesoinreponses.class%
         arguments: ["@doctrine.orm.entity_manager", "@hopitalnumerique_user.manager.user", "@hopitalnumerique_reference.manager.reference"]
-
-    hopitalnumerique_recherche.manager.refexpbesoinreponses:
-        class: %hopitalnumerique_recherche.manager.refexpbesoinreponses.class%
-        arguments: ["@doctrine.orm.entity_manager"]
 
     hopitalnumerique_recherche.manager.statClic:
         class: %hopitalnumerique_recherche.manager.statClic.class%

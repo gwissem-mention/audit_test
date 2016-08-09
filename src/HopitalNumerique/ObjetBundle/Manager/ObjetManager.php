@@ -60,7 +60,7 @@ class ObjetManager extends BaseManager
 
         $results = array();
 
-        foreach($productions as $production) 
+        foreach($productions as $production)
         {
             $object = array();
             $object['idReference'] = $object['id'] = $production->getId();
@@ -74,6 +74,7 @@ class ObjetManager extends BaseManager
             $object['nbVue'] = $production->getNbVue();
             $object['moyenne'] = 0;
             $object['nbNotes'] = 0;
+            $object['lock'] = $production->getLock();
             $object['lockedBy'] = $production->getLockedBy();
             $object['dateModification'] = $production->getDateModification();
 
@@ -138,7 +139,7 @@ class ObjetManager extends BaseManager
      *
      * @return array
      */
-    public function getDatasForExport( $ids, $refsPonderees )
+    public function getDatasForExport( $ids, $refsPonderees, $noteReader )
     {
         $objets  = $this->getRepository()->getDatasForExport( $ids )->getQuery()->getResult();
         $results = array();
@@ -160,7 +161,6 @@ class ObjetManager extends BaseManager
             $row['fichier1']     = $objet->getPath();
             $row['fichier2']     = $objet->getPath2();
             $row['vignette']     = $objet->getVignette();
-            $row['note']         = number_format($this->getNoteReferencement($objet->getReferences(), $refsPonderees), 0);
             $row['dateParution'] = $objet->getDateParution();
 
             //quelques Dates
@@ -190,6 +190,14 @@ class ObjetManager extends BaseManager
                 $row['domaines'][] = $domaine->getNom();
             }
             $row['domaines'] = implode('|', $row['domaines']);
+
+            //handle note referencement
+            $row['note']= array();
+            foreach ($domaines as $domaine)
+            {
+                $row['note'][] = $domaine->getNom() . ":" . $noteReader->getNoteByEntityAndDomaineForAffichage($objet, $domaine);
+            }
+            $row['note'] = implode('|', $row['note']);
 
             //handle types (catégories)
             $types        = $objet->getTypes();
@@ -271,7 +279,7 @@ class ObjetManager extends BaseManager
                         $rowInfradoc['dateCreationC']     = !is_null($contenu->getDateCreation()) ? $contenu->getDateCreation()->format('d/m/Y') : '';
                         $rowInfradoc['dateModificationC'] = !is_null($contenu->getDateModification()) ? $contenu->getDateModification()->format('d/m/Y') : '';
                         $rowInfradoc['nbVueC']            = $contenu->getNbVue();
-                        $rowInfradoc['noteC']             = number_format($this->getNoteReferencement($contenu->getReferences(), $refsPonderees), 0);
+                        $rowInfradoc['noteC']             = null;//number_format($this->getNoteReferencement($contenu->getReferences(), $refsPonderees), 0);
                         $rowInfradoc['noteMoyenneC']      = number_format($this->_noteManager->getMoyenneNoteByObjet($contenu->getId(), true),2);
                         $rowInfradoc['nombreNoteC']       = $this->_noteManager->countNbNoteByObjet($contenu->getId(), true);
 

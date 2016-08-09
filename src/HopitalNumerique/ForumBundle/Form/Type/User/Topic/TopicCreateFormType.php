@@ -67,7 +67,7 @@ class TopicCreateFormType extends AbstractType
                     'label'              => 'topic.title-label',
                     'translation_domain' => 'CCDNForumForumBundle',
                     'attr'               => array(
-                        'class' => 'validate[required,minSize[10],maxSize[255]]'
+                        'class' => 'validate[required,maxSize[255]]'
                     )
                 )
             )
@@ -87,7 +87,7 @@ class TopicCreateFormType extends AbstractType
             'csrf_field_name'    => '_token',
             // a unique key to help generate the secret token
             'intention'          => 'forum_topic_create_item',
-            'validation_groups'  => array('forum_topic_create', 'forum_post_create'),
+            'validation_groups'  => array('forum_topic_custom', 'forum_post_create'),
             'boards'             => array(),
         ));
     }

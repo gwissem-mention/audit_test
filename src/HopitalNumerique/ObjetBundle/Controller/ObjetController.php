@@ -469,8 +469,8 @@ class ObjetController extends Controller
                     foreach ($consultations as $consultation)
                     {
                         $user = $consultation->getUser();
-
-                        if(!$user->getNotficationRequete())
+                        
+                        if(!$user || !$user->getNotficationRequete())
                         {
                             continue;
                         }
@@ -479,10 +479,9 @@ class ObjetController extends Controller
                             'titrepublication' => $objet->getTitre(),
                             'lienpublication'  => '<a href="'.$domaineUrl.$this->generateUrl('hopital_numerique_publication_publication_objet', array('id' => $objet->getId(), 'alias' => $objet->getAlias())).'" >Lien vers la publication</a>'
                         );
-
                         $mails[] = $this->get('nodevo_mail.manager.mail')->sendNotificationRequete($user, $options );
                     }
-
+                    
                     foreach ($mails as $mail)
                     {
                         $this->get('mailer')->send($mail);

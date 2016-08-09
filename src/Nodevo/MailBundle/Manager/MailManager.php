@@ -1000,7 +1000,7 @@ class MailManager extends BaseManager
     }
 
     /**
-     * Remplace les variables du mail par les vrais valeurs
+     * Remplace les variables du mail par les vraies valeurs
      *
      * @param string $content Contenu Templaté du mail
      * @param User   $user    User qui recevras l'email
@@ -1110,12 +1110,13 @@ class MailManager extends BaseManager
         return null;
     }
 
-    public function sendInvitationMail(User $expediteur, $destinataires)
+    public function sendInvitationMail(User $expediteur, $destinataires, $nomGroupe)
     {
-        $courriel = $this->findOneById(63);
+        $courriel = $this->findOneById(67);
         $courriel->setExpediteurMail($expediteur->getEmail());
         $courriel->setExpediteurName($expediteur->getNom());
-        $content = $this->replaceContent($courriel->getBody(), $expediteur, array());
+        $content = $this->replaceContent($courriel->getBody(), $expediteur, array('nomGroupe' => $nomGroupe));
+        $courriel->setBody($content);
         $message = $this->generationMail($expediteur, $courriel);
 
         foreach ($destinataires as $destinataire) {
@@ -1124,10 +1125,13 @@ class MailManager extends BaseManager
         }
     }
 
-    public function sendAlerteInscriptionMail($destinataires)
+    public function sendAlerteInscriptionMail($destinataires, $user)
     {
-        $courriel = $this->findOneById(64);
-        $content = $this->replaceContent($courriel->getBody(), null, array());
+        $courriel = $this->findOneById(65);
+
+        $content = $this->replaceContent($courriel->getBody(), $user, array());
+        $courriel->setBody($content);
+
         $message = $this->generationMail(null, $courriel);
 
         foreach ($destinataires as $destinataire) {
@@ -1136,10 +1140,13 @@ class MailManager extends BaseManager
         }
     }
 
-    public function sendAlerteInscriptionValideMail($destinataire)
+    public function sendAlerteInscriptionValideMail($destinataire, $nomGroupe, $urlGroupe)
     {
-        $courriel = $this->findOneById(65);
-        $content = $this->replaceContent($courriel->getBody(), null, array());
+        $courriel = $this->findOneById(64);
+
+        $content = $this->replaceContent($courriel->getBody(), null, array('nomGroupe' => $nomGroupe, 'urlGroupe' => $urlGroupe));
+        $courriel->setBody($content);
+
         $message = $this->generationMail(null, $courriel);
         $message->setTo($destinataire);
         $this->mailer->send($message);

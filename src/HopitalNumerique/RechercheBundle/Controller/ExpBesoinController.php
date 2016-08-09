@@ -157,7 +157,7 @@ class ExpBesoinController extends Controller
     {
         $entityHasReferences = $this->container->get('hopitalnumerique_reference.manager.entity_has_reference')->findBy([
             'entityId' => $request->request->getInt('id'),
-            'entityType' => Entity::ENTITY_TYPE_RECHERCHE_PARCOURS
+            'entityType' => Entity::ENTITY_TYPE_EXPRESSION_BESOIN_REPONSE
         ]);
 
         $referenceIds = [];

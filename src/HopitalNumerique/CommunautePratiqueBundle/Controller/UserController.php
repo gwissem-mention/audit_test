@@ -6,6 +6,8 @@ use Symfony\Component\HttpFoundation\Request;
 use HopitalNumerique\CommunautePratiqueBundle\Entity\Groupe;
 use HopitalNumerique\CommunautePratiqueBundle\Entity\Inscription;
 use HopitalNumerique\UserBundle\Entity\User;
+use HopitalNumerique\DomaineBundle\DependencyInjection\CurrentDomaine;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 /**
  * Contrôleur des utilisateurs.
@@ -155,8 +157,11 @@ class UserController extends \Symfony\Bundle\FrameworkBundle\Controller\Controll
         $etat = null;
         if (!$inscription->isActif()) {
             $inscription->setActif(true);
-            // Alerte l'utilisateur que son compte est activée
-            $this->get('nodevo_mail.manager.mail')->sendAlerteInscriptionValideMail($user->getEmail());
+
+            $currentDomaine = $this->container->get('hopitalnumerique_domaine.dependency_injection.current_domaine')->get();
+            $urlGroupe = $currentDomaine->getUrl() . $this->generateUrl('hopitalnumerique_communautepratique_groupe_view', array('groupe'=>$groupe->getId()));
+            // Alerte l'utilisateur que son compte est activé
+            $this->get('nodevo_mail.manager.mail')->sendAlerteInscriptionValideMail($user->getEmail(), $groupe->getTitre(), $urlGroupe);
             $etat = true;
         } else {
             $inscription->setActif(false);

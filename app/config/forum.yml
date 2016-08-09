@@ -150,9 +150,9 @@ ccdn_forum_forum:
             board_delete:
                 class:                HopitalNumerique\ForumBundle\Form\Type\Admin\Board\BoardDeleteFormType
             topic_create:
-                class:                CCDNForum\ForumBundle\Form\Type\User\Topic\TopicCreateFormType
+                class:                HopitalNumerique\ForumBundle\Form\Type\User\Topic\TopicCreateFormType
             topic_update:
-                class:                CCDNForum\ForumBundle\Form\Type\User\Topic\TopicUpdateFormType
+                class:                HopitalNumerique\ForumBundle\Form\Type\User\Topic\TopicUpdateFormType
             topic_delete:
                 class:                CCDNForum\ForumBundle\Form\Type\Moderator\Topic\TopicDeleteFormType
             change_topics_board:

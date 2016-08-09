@@ -23,7 +23,7 @@ class DemandesGrid extends DemandesAbstractGrid
         // Pour éviter que le second bouton passe au-dessous du premier
         $this->setButtonSize(43);
 
-        $this->ignoreColonnes(array('interventionInitiateurId', 'nombreDemandesRegroupees', 'nombreDemandesPrincipales', 'ambassadeurRegionLibelle', 'referentEtablissementNom', 'referentEtablissementFiness', 'referentRegionLibelle', 'cmsiDateChoixLibelle', 'ambassadeurDateChoixLibelle'));
+        $this->ignoreColonnes(array('interventionInitiateurId', 'nombreDemandesRegroupees', 'nombreDemandesPrincipales', 'ambassadeurRegionLibelle', 'referentRegionLibelle', 'cmsiDateChoixLibelle', 'ambassadeurDateChoixLibelle'));
     }
 
     public function setDefaultFiltreFromController($filtre)
@@ -89,6 +89,12 @@ class DemandesGrid extends DemandesAbstractGrid
 
         $colonneDemandeurInformations = new Column\TextColumn('referent_nom', 'Demandeur');
         $this->addColonne($colonneDemandeurInformations);
+
+        $colonneDemandeurEtablissement = new Column\TextColumn('referentEtablissementNom', 'Établissement');
+        $this->addColonne($colonneDemandeurEtablissement);
+
+        $colonneDemandeurEtablissementFiness = new Column\TextColumn('referentEtablissementFiness', 'FINESS');
+        $this->addColonne($colonneDemandeurEtablissementFiness);
 
         $colonneObjetsInformations = new Column\TextColumn('objetsInformations', 'Objets');
         $colonneObjetsInformations->setFilterable(false)->setSortable(false);
