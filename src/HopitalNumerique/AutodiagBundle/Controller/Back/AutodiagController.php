@@ -2,7 +2,6 @@
 
 namespace HopitalNumerique\AutodiagBundle\Controller\Back;
 
-use HopitalNumerique\AutodiagBundle\Entity\Restitution;
 use HopitalNumerique\AutodiagBundle\Model\AutodiagFileImport;
 use HopitalNumerique\AutodiagBundle\Model\AutodiagUpdate;
 use HopitalNumerique\AutodiagBundle\Entity\Autodiag;
@@ -10,6 +9,7 @@ use HopitalNumerique\AutodiagBundle\Entity\Autodiag\Preset;
 use HopitalNumerique\AutodiagBundle\Form\Type\Autodiag\AutodiagUpdateType;
 use HopitalNumerique\AutodiagBundle\Form\Type\Autodiag\FileImportType;
 use HopitalNumerique\AutodiagBundle\Grid\AutodiagGrid;
+use HopitalNumerique\AutodiagBundle\Model\FileImport\Restitution;
 use HopitalNumerique\AutodiagBundle\Model\FileImport\Survey;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -164,7 +164,7 @@ class AutodiagController extends Controller
     public function restitutionEditAction(Request $request, Autodiag $autodiag)
     {
         $importHandler = $this->get('autodiag.import.handler');
-        $import = new AutodiagFileImport($autodiag);
+        $import = new Restitution($autodiag);
         $form = $this->createForm(FileImportType::class, $import);
 
         $form->handleRequest($request);

@@ -60,7 +60,7 @@ class Survey extends AutodiagFileImport
             $headers = $sheet->rangeToArray('A1:J1');
             $headers = $headers[0];
             if (count($headers) !== 10
-                || count(array_intersect_key($headers, [
+                || count(array_intersect($headers, [
                     "code_question",
                     "code_chapitre",
                     "texte_avant",

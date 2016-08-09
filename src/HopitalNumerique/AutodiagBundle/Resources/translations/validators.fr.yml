@@ -10,3 +10,5 @@ ad:
                 incorrect_columns:
                     chapters: La page "chapitres" doit contenir en ligne 1 les cellules suivantes : code_chapitre, code_chapitre_enfant, libelle_chapitre, libelle_chapitre_enfant, titre_avant, texte_avant, texte_apres et plan_action
                     questions: La page "questions" doit contenir en ligne 1 les cellules suivantes : code_question, code_chapitre, texte_avant, libelle_question, format_reponse, items_reponse, colorer_reponse, infobulle_question, ponderation_categorie et ponderation_chapitre
+            restitution:
+                incorrect_columns: Le fichier doit continir en ligne 1 les cellules suivantes : libelle_onglet, ordre_affichage_onglet, ordre_affichage_contenu, texte_avant, type_restitution, axe_restitution, donnees, ordre_restitution, afficher_reference_1, afficher_reference_2, afficher_reference_3, afficher_reference_4, afficher_reference_5, afficher_reference_6, afficher_reference_7, afficher_reference_8, afficher_reference_9, afficher_reference_10

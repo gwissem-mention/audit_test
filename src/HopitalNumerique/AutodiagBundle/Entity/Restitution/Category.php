@@ -57,7 +57,7 @@ class Category
      * @ORM\OneToMany(
      *     targetEntity="HopitalNumerique\AutodiagBundle\Entity\Restitution\Item",
      *     mappedBy="category",
-     *     cascade={"persist"},
+     *     cascade={"persist", "remove"},
      *     fetch="EAGER"
      * )
      * @ORM\OrderBy({"row" = "ASC", "column" = "ASC"})
