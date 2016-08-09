@@ -80,6 +80,8 @@ ad:
             attribute_category: Format catégories incorrect
             attribute_options: Format options incorrect
             reference_invalid: Format de référence incorrect
+            container_identifier_notfound: Code de l'entité non trouvé
+            source_invalid: L'axe de restitution est incorrect, les valeurs "chapitres" ou "catégories" sont autorisées
         violations:
             actionplan: Plan d'action
             chapter: Chapitre

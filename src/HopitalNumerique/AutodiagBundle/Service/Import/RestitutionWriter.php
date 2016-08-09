@@ -129,7 +129,8 @@ class RestitutionWriter implements WriterInterface, ProgressAwareInterface
                 $field = 'label';
                 break;
             default:
-                die('error');
+                $this->progress->addMessage('', $item[self::COLUMN_ITEM_SOURCE], 'source_invalid');
+                return null;
         }
 
         $position = explode('::', $item[self::COLUMN_ITEM_ORDER]);
@@ -143,7 +144,7 @@ class RestitutionWriter implements WriterInterface, ProgressAwareInterface
                 $field => $id
             ]);
             if (null === $container) {
-                $this->progress->addMessage('', $id, 'container.identifier.notfound');
+                $this->progress->addMessage('', $id, 'container_identifier_notfound');
             } else {
                 $restitutionItem->addContainer($container);
             }
