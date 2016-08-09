@@ -104,7 +104,7 @@ class Autodiag
      *     inverseJoinColumns={@ORM\JoinColumn(name="domaine_id", referencedColumnName="dom_id")}
      * )
      *
-     * @Assert\Count(min="1")
+     * @Assert\Count(min="1", minMessage="ad.autodiag.domaines.limit.min")
      */
     private $domaines;
 

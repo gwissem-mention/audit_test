@@ -2,7 +2,6 @@
 
 namespace HopitalNumerique\AutodiagBundle\Controller\Back;
 
-use HopitalNumerique\AutodiagBundle\Model\AutodiagFileImport;
 use HopitalNumerique\AutodiagBundle\Model\AutodiagUpdate;
 use HopitalNumerique\AutodiagBundle\Entity\Autodiag;
 use HopitalNumerique\AutodiagBundle\Entity\Autodiag\Preset;
@@ -71,7 +70,7 @@ class AutodiagController extends Controller
                     ->setPreset($domain->getAutodiag(), $preset->getPreset());
             }
 
-            $this->addFlash('success', 'Autodiag enregistré');
+            $this->addFlash('success', $this->get('translator')->trans('ad.back.saved'));
             return $this->redirectToRoute('hopitalnumerique_autodiag_edit', [
                 'id' => $autodiag->getId()
             ]);
@@ -184,33 +183,5 @@ class AutodiagController extends Controller
             'history' => $this->get('autodiag.history.reader')->getHistory($autodiag, Autodiag\History::HISTORY_ENTRY_RESTITUTION),
             'progress' => $importHandler->getRestitutionProgress(),
         ]);
-    }
-
-    public function deleteMassAction($primaryKeys, $allPrimaryKeys)
-    {
-        $grid = new AutodiagGrid($this->container);
-        //get all selected Codes
-        if ($allPrimaryKeys == 1) {
-            $rawDatas = $grid->getRawData();
-            foreach ($rawDatas as $data) {
-                $primaryKeys[] = $data['id'];
-            }
-        }
-
-        $autodiags = $this->get('autodiag.repository.autodiag')->findBy([
-            'id' => $primaryKeys
-        ]);
-
-        try {
-            foreach ($autodiags as $autodiag) {
-                $this->getDoctrine()->getManager()->remove($autodiag);
-            }
-            $this->getDoctrine()->getManager()->flush();
-            $this->addFlash('info', 'Suppression effectuée avec succès.');
-        } catch (\Exception $e) {
-            $this->addFlash('error', "Une erreur est survenue.");
-        }
-
-        return $this->redirect($this->generateUrl('hopitalnumerique_autodiag_list'));
     }
 }

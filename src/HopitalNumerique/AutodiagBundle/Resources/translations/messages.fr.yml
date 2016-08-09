@@ -111,6 +111,7 @@ ad:
     actionplan:
         description: Description
         linkDescription: Description du lien
+        visible: Visible
 
     front:
         new_entry: Nouvel autodiagnostic
@@ -130,3 +131,10 @@ ad:
                 |]1,Inf[Il vous reste %count% questions non renseignées, vous pouvez facilement identifier les chapitres non complets en consultant le taux de remplissage à coté de chaque chapitre dans le menu de gauche.
             back: Continuer l'autodiagnostic
             continue: Accéder quand même aux résultats
+
+    back:
+        titles:
+            list: Gestion des autodiagnostics
+            add: Ajout autodiagnostic
+        add_button: Ajout autodiagnostic
+        saved: Autodiagnostic enregistré.

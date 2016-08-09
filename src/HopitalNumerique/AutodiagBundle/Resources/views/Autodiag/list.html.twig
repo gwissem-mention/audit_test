@@ -16,12 +16,12 @@
 {% block title %}{{parent()}} - Publication{% endblock %}
 
 {% block h1Title %}
-    Gestion des auto diagnostics
+    {{ "ad.back.titles.list"|trans }}
 {% endblock %}
 
 {% block toolbarButton %}
     {% if app.user|checkAuthorization( path('hopitalnumerique_autodiag_create') ) %}
-        <a class="btn btn-default" href="{{ path('hopitalnumerique_autodiag_create') }}" title="Ajouter un autodiag"><i class="fa fa-plus"></i></a>
+        <a class="btn btn-default" href="{{ path('hopitalnumerique_autodiag_create') }}" title="{{ "ad.back.add_button"|trans }}"><i class="fa fa-plus"></i></a>
     {% endif %}
 {% endblock %}
 
