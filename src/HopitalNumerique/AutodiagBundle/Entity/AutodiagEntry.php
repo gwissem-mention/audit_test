@@ -42,7 +42,7 @@ class AutodiagEntry
      * @var bool
      * @ORM\Column(type="boolean")
      */
-    private $valid = false;
+    private $copy = false;
 
     /**
      * @var Synthesis
@@ -178,16 +178,16 @@ class AutodiagEntry
     /**
      * @return boolean
      */
-    public function isValid()
+    public function isCopy()
     {
-        return $this->valid;
+        return $this->copy;
     }
 
     /**
-     * @param boolean $valid
+     * @param boolean $copy
      */
-    public function setValid($valid)
+    public function setCopy($copy)
     {
-        $this->valid = $valid;
+        $this->copy = $copy;
     }
 }

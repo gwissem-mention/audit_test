@@ -1,4 +1,22 @@
 ad:
+    account:
+        title: Autodiagnostics
+        in_progress: Mes autodiagnostics en cours :
+        valid: Mes autodiagnostics validés :
+        table:
+            name: Nom
+            last_save_date: Date de dernier enregistrement
+            validation_date: Date de validation
+            filling: Remplissage
+            share: Partage
+            none: - Aucun autodiagnostic
+        action:
+            continue: Continuer
+            delete: Supprimer
+            results: Résultats
+            reopen: Reprendre
+
+
     autodiag:
         title: Titre de l'autodiagnostic
         domaines: Domaines de diffusion

@@ -57,4 +57,18 @@ class SynthesisRepository extends EntityRepository
         });
         return $result;
     }
+
+    public function findByUserId($idUser)
+    {
+        $qb = $this->getEntityManager()->createQueryBuilder();
+        $qb
+            ->select('synthesis')
+            ->from('HopitalNumeriqueAutodiagBundle:Synthesis', 'synthesis')
+            ->where('synthesis.user = :user_id')
+            ->setParameters([
+               'user_id' => $idUser
+            ]);
+
+        return $qb->getQuery()->getResult();
+    }
 }

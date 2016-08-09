@@ -89,3 +89,9 @@ services:
         class: HopitalNumerique\AutodiagBundle\Service\Synthesis\Completion
         arguments:
             - '@autodiag.attribute_builder_provider'
+
+    autodiag.synthesis.dataformer:
+        class: HopitalNumerique\AutodiagBundle\Service\Synthesis\DataFormer
+        arguments:
+            - '@doctrine.orm.entity_manager'
+            - '@autodiag.synthesis.completion'
