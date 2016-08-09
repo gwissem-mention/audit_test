@@ -58,9 +58,20 @@ class AutodiagRepository extends EntityRepository
                 'COUNT(entries_in_progress.id) as nb_entries_in_progress'
             )
             ->leftJoin('ad.domaines', 'domaines', Join::WITH, 'domaines.id IN (:domaine_ids)')
-            ->leftJoin(Synthesis::class, 'synthesis', Join::WITH, 'synthesis.autodiag = ad.id')
-            ->leftJoin('synthesis.entries', 'entries_valid', Join::WITH, 'entries_valid.valid = true')
-            ->leftJoin('synthesis.entries', 'entries_in_progress', Join::WITH, 'entries_in_progress.valid = false')
+            ->leftJoin(
+                Synthesis::class,
+                'synthesis_valid',
+                Join::WITH,
+                'synthesis_valid.autodiag = ad.id AND synthesis_valid.validatedAt IS NOT NULL'
+            )
+                ->leftJoin('synthesis_valid.entries', 'entries_valid')
+            ->leftJoin(
+                Synthesis::class,
+                'synthesis_in_progress',
+                Join::WITH,
+                'synthesis_in_progress.autodiag = ad.id AND synthesis_in_progress.validatedAt IS NULL'
+            )
+                ->leftJoin('synthesis_in_progress.entries', 'entries_in_progress')
             ->groupBy('ad.id')
             ->setParameters([
                 'domaine_ids' => $domainesIds
