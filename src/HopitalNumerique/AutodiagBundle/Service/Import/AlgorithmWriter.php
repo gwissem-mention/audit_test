@@ -41,6 +41,7 @@ class AlgorithmWriter implements WriterInterface, ProgressAwareInterface
 
             $currentColumn = 1;
             $referenceNumber = 1;
+            $importedReferences = [];
             while ($currentColumn + 3 <= count($item)) {
                 $reference = array_values(array_slice($item, $currentColumn, 3));
                 if (isset($reference[0]) || isset($reference[1]) || isset($reference[2])) {
@@ -59,12 +60,19 @@ class AlgorithmWriter implements WriterInterface, ProgressAwareInterface
                             ->setValue($reference[1])
                             ->setColor($reference[2]);
                         $this->manager->persist($model);
+                        $importedReferences[$referenceNumber] = true;
                     } else {
                         $this->progress->addMessage('', $reference, 'reference_invalid');
                     }
                 }
                 $currentColumn += 3;
                 $referenceNumber++;
+            }
+
+            foreach ($this->autodiag->getReferences() as $reference) {
+                if (!array_key_exists($reference->getNumber(), $importedReferences)) {
+                    $this->manager->remove($reference);
+                }
             }
 
             $this->progress->addSuccess($item);
