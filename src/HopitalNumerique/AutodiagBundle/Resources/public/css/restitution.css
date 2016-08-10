@@ -8,12 +8,16 @@
 
 #restitution .item-row > .item {
     display: flex;
-    margin: auto;
-    justify-content: center;
+    /*margin: auto;*/
+    /*justify-content: center;*/
     padding: 20px;
+    margin: 20px;
+    overflow: auto;
+    box-shadow: 4px 4px 12px 1px #CECECE;
 }
 #restitution .item-row > .item > * {
     width: 100%;
+    overflow: auto;
 }
 
 #restitution .item .low {
@@ -123,6 +127,10 @@
 /**
 * TABLEAU
 */
+#restitution .tableau {
+    margin: auto;
+}
+
 #restitution .tableau table {
     margin-bottom: 0;
 }
