@@ -114,6 +114,10 @@ ad:
         label: libelle_onglet
         description: text_avant
         position: ordre_affichage_onglet
+        column: ordre_affichage_contenu colonne
+        row: ordre_affichage_contenu ligne
+        priority: ordre_restitution
+        type: type_restitution
 
     actionplan:
         description: Description

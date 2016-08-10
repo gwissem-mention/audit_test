@@ -30,7 +30,7 @@ class Item
      * @var string
      * @ORM\Column(type="string")
      * @Assert\NotNull
-     *
+     * @Assert\Expression("this.getType() in ['jauge', 'processus', 'radar', 'tableau', 'plan_action', 'reponses', 'histogramme', 'score', 'meteo']")
      */
     private $type;
 
@@ -38,6 +38,7 @@ class Item
      * @var int
      * @ORM\Column(type="integer", name="x")
      * @Assert\NotNull
+     * @Assert\GreaterThan(0)
      */
     private $row;
 
@@ -45,6 +46,7 @@ class Item
      * @var int
      * @ORM\Column(type="integer", name="y")
      * @Assert\NotNull
+     * @Assert\GreaterThan(0)
      */
     private $column;
 
@@ -63,6 +65,7 @@ class Item
      * @var string
      * @ORM\Column(type="string")
      * @Assert\NotNull
+     * @Assert\Expression("this.getPriority() in ['priorisé', 'questionnaire']")
      */
     private $priority;
 
@@ -71,6 +74,7 @@ class Item
      *
      * @ORM\ManyToOne(targetEntity="HopitalNumerique\AutodiagBundle\Entity\Restitution\Category", inversedBy="items", cascade={"persist"})
      * @ORM\JoinColumn(name="category_id", referencedColumnName="id", onDelete="CASCADE")
+     * @Assert\Valid
      */
     private $category;
 

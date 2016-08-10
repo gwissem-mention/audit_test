@@ -73,6 +73,18 @@ class RestitutionWriter implements WriterInterface, ProgressAwareInterface
             $restitutionItem = $this->handleItem($item, $category);
             if (null !== $restitutionItem) {
                 $this->handleReferences($item, $restitutionItem);
+
+                $violations = $this->validator->validate($restitutionItem);
+                if (count($violations) > 0) {
+                    $this->progress->addMessage(
+                        '',
+                        $violations,
+                        'violation',
+                        'restitution'
+                    );
+                    $this->manager->detach($restitutionItem);
+                    return;
+                }
             }
 
             $violations = $this->validator->validate($category);
@@ -150,10 +162,16 @@ class RestitutionWriter implements WriterInterface, ProgressAwareInterface
         }
 
         $position = explode('::', $item[self::COLUMN_ITEM_ORDER]);
-        $restitutionItem->setRow((int)$position[0]);
-        $restitutionItem->setColumn((int)$position[1]);
+
+        if (isset($position[0])) {
+            $restitutionItem->setRow((int)$position[0]);
+        }
+        if (isset($position[1])) {
+            $restitutionItem->setColumn((int)$position[1]);
+        }
 
         $identifiers = explode('::', $item[self::COLUMN_ITEM_DATA]);
+        $identifiers = array_unique($identifiers);
         foreach ($identifiers as $id) {
             $container = $repository->findOneBy([
                 'autodiag' => $this->autodiag,
