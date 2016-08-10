@@ -52,7 +52,7 @@ class ActionPlan
     /**
      * @var boolean
      * @ORM\Column(type="boolean")
-     * @Assert\NotBlank()
+     * @Assert\NotNull()
      */
     private $visible = true;
 
