@@ -192,7 +192,12 @@ class ChapterWriter implements WriterInterface, ProgressAwareInterface
         $updatedActions = [];
 
         foreach ($actions as $action) {
-            $value = $this->parseFloatValue($action[1]);
+            if (count($action) !== 5) {
+                $this->progress->addMessage('', implode(' - ', $action), 'chapter_actionplan_invalid');
+                continue;
+            }
+
+            $value = $this->parseFloatValue($action[0]);
             $object = $this->manager->getRepository('HopitalNumeriqueAutodiagBundle:Autodiag\ActionPlan')
                 ->findOneBy([
                     'container' => $chapter,
@@ -206,8 +211,8 @@ class ChapterWriter implements WriterInterface, ProgressAwareInterface
 
             $object->setVisible((bool)$action[1]);
             $object->setDescription(isset($action[2]) ? $action[2] : null);
-            $object->setLink(isset($action[3]) ? $action[3] : null);
-            $object->setLinkDescription(isset($action[4]) ? $action[4]: null);
+            $object->setLinkDescription(isset($action[3]) ? $action[3]: null);
+            $object->setLink(isset($action[4]) ? $action[4] : null);
 
             $updatedActions[$object->getId()] = true;
 

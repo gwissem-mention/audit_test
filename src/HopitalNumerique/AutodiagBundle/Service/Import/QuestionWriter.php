@@ -290,6 +290,12 @@ class QuestionWriter implements WriterInterface, ProgressAwareInterface
             $this->actionPlans[] = $object;
             return true;
         } elseif (count($data) > 2) {
+
+            if (count($data) !== 6) {
+                $this->progress->addMessage('', implode(' - ', $data), 'attribute_actionplan_invalid');
+                return false;
+            }
+
             if (null === $object) {
                 $object = Autodiag\ActionPlan::createForAttribute($this->autodiag, $attribute, $value);
                 $this->manager->persist($object);
@@ -297,8 +303,8 @@ class QuestionWriter implements WriterInterface, ProgressAwareInterface
 
             $object->setVisible((bool)$data[2]);
             $object->setDescription(isset($data[3]) ? $data[3] : null);
-            $object->setLink(isset($data[4]) ? $data[4] : null);
-            $object->setLinkDescription(isset($data[5]) ? $data[5] : null);
+            $object->setLinkDescription(isset($data[4]) ? $data[4] : null);
+            $object->setLink(isset($data[5]) ? $data[5] : null);
 
             $updatedActions[$object->getId()] = true;
 
