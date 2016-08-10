@@ -7,6 +7,7 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use HopitalNumerique\AutodiagBundle\Entity\Autodiag\Container;
 use HopitalNumerique\AutodiagBundle\Entity\Autodiag\Reference;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * Item
@@ -28,6 +29,7 @@ class Item
     /**
      * @var string
      * @ORM\Column(type="string")
+     * @Assert\NotNull
      *
      */
     private $type;
@@ -35,12 +37,14 @@ class Item
     /**
      * @var int
      * @ORM\Column(type="integer", name="x")
+     * @Assert\NotNull
      */
     private $row;
 
     /**
      * @var int
      * @ORM\Column(type="integer", name="y")
+     * @Assert\NotNull
      */
     private $column;
 
@@ -58,6 +62,7 @@ class Item
     /**
      * @var string
      * @ORM\Column(type="string")
+     * @Assert\NotNull
      */
     private $priority;
 

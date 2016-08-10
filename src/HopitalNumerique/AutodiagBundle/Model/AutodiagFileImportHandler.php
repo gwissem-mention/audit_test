@@ -175,7 +175,7 @@ class AutodiagFileImportHandler
 
         if (null !== $model->getFile()) {
             $restitutionImporter->setWriter(
-                new RestitutionWriter($this->manager, $autodiag)
+                new RestitutionWriter($this->manager, $autodiag, $this->validator)
             );
             $importProgress = $restitutionImporter->import($model->getFile());
             $this->session->set('restitution_import_progress', $importProgress);

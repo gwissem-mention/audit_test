@@ -12,6 +12,7 @@ use Nodevo\Component\Import\Progress\ProgressAwareInterface;
 use Nodevo\Component\Import\Progress\ProgressAwareTrait;
 use Nodevo\Component\Import\Writer\WriterInterface;
 use Symfony\Component\PropertyAccess\PropertyAccessor;
+use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 class RestitutionWriter implements WriterInterface, ProgressAwareInterface
 {
@@ -34,17 +35,20 @@ class RestitutionWriter implements WriterInterface, ProgressAwareInterface
     /** @var Autodiag */
     protected $autodiag;
 
+    /** @var ValidatorInterface */
+    protected $validator;
+
     /** @var Restitution */
     protected $restitution;
 
     /** @var array|Restitution\Category[] */
     protected $categories = [];
 
-    public function __construct(EntityManager $manager, Autodiag $autodiag)
+    public function __construct(EntityManager $manager, Autodiag $autodiag, ValidatorInterface $validator)
     {
         $this->manager = $manager;
         $this->autodiag = $autodiag;
-//        $this->restitution = $autodiag->getRestitution();
+        $this->validator = $validator;
     }
 
     public function prepare()
@@ -69,6 +73,18 @@ class RestitutionWriter implements WriterInterface, ProgressAwareInterface
             $restitutionItem = $this->handleItem($item, $category);
             if (null !== $restitutionItem) {
                 $this->handleReferences($item, $restitutionItem);
+            }
+
+            $violations = $this->validator->validate($category);
+            if (count($violations) > 0) {
+                $this->progress->addMessage(
+                    '',
+                    $violations,
+                    'violation',
+                    'restitution'
+                );
+                $this->manager->detach($category);
+                return;
             }
 
             $this->progress->addSuccess($item);
@@ -98,7 +114,7 @@ class RestitutionWriter implements WriterInterface, ProgressAwareInterface
             $category
                 ->setLabel($item[self::COLUMN_CATEGORY_LABEL])
             ;
-            $this->restitution->addCategory($category);
+            $category->setRestitution($this->restitution);
             $this->manager->persist($category);
         }
 

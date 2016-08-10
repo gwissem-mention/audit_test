@@ -110,6 +110,11 @@ ad:
         code: Code
         label: Libellé catégorie
 
+    restitution:
+        label: libelle_onglet
+        description: text_avant
+        position: ordre_affichage_onglet
+
     actionplan:
         description: Description
         linkDescription: Description du lien

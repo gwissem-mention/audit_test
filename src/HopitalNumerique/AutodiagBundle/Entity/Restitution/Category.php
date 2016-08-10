@@ -5,6 +5,7 @@ namespace HopitalNumerique\AutodiagBundle\Entity\Restitution;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use HopitalNumerique\AutodiagBundle\Entity\Restitution;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * Category
@@ -27,6 +28,7 @@ class Category
      * @var string
      *
      * @ORM\Column(type="string")
+     * @Assert\NotNull
      */
     private $label;
 
@@ -34,6 +36,7 @@ class Category
      * @var string
      *
      * @ORM\Column(type="string")
+     * @Assert\NotNull
      */
     private $description;
 
@@ -41,6 +44,7 @@ class Category
      * @var int
      *
      * @ORM\Column(type="integer")
+     * @Assert\NotNull
      */
     private $position;
 
@@ -57,10 +61,11 @@ class Category
      * @ORM\OneToMany(
      *     targetEntity="HopitalNumerique\AutodiagBundle\Entity\Restitution\Item",
      *     mappedBy="category",
-     *     cascade={"persist", "remove"},
+     *     cascade={"persist", "remove", "detach"},
      *     fetch="EAGER"
      * )
      * @ORM\OrderBy({"row" = "ASC", "column" = "ASC"})
+     * @Assert\Valid
      */
     private $items;
 
