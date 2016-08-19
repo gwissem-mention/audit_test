@@ -95,7 +95,7 @@ class SurveyExport extends AbstractExport
 
         $data = [
             'code_question' => $attribute->getCode(),
-            'text_avant' => $attribute->getLabel(),
+            'text_avant' => $attribute->getDescription(),
             'libelle_question' => $attribute->getLabel(),
             'format_reponse' => $attribute->getType(),
             'colorer_reponse' => $attribute->isColored() ? '1' : '-1',
