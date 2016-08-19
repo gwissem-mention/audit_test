@@ -38,8 +38,7 @@ class Attribute
      * Text before question
      *
      * @var string
-     * @ORM\Column(type="text")
-     * @Assert\NotBlank()
+     * @ORM\Column(type="text", nullable=true)
      */
     private $description;
 
@@ -47,9 +46,9 @@ class Attribute
      * Attribute label
      *
      * @var string
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(type="string", length=512)
      * @Assert\NotBlank()
-     * @Assert\Length(max="255")
+     * @Assert\Length(max="512")
      */
     private $label;
 

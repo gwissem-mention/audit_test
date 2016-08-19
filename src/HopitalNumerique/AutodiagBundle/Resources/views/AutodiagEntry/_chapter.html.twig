@@ -5,7 +5,7 @@
 
     <div class="chapter-desc">
         <p>
-            {{ chapter.description }}
+            {{ chapter.description | raw }}
         </p>
     </div>
 
@@ -19,7 +19,7 @@
 
     <div class="chapter-additionnal">
         <p>
-            {{ chapter.additionalDescription }}
+            {{ chapter.additionalDescription | raw }}
         </p>
     </div>
 
