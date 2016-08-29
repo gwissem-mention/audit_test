@@ -118,6 +118,7 @@ ad:
         row: ordre_affichage_contenu ligne
         priority: ordre_restitution
         type: type_restitution
+        empty: Il n'y a pas encore de mode de restitution pour cet autodiag.
 
     actionplan:
         description: Description

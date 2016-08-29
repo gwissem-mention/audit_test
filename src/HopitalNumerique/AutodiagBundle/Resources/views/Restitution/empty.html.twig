@@ -1,0 +1,16 @@
+{% extends 'HopitalNumeriqueAutodiagBundle::layout.html.twig' %}
+
+{% block body %}
+    <div id="restitution">
+
+        {% include "@HopitalNumeriqueAutodiag/_navigation.html.twig" with {
+        "step": "restitution",
+        "autodiag": synthesis.autodiag,
+        "entry" : synthesis.entries|length > 1 ? null : synthesis.entries.first
+        } %}
+
+        <h3>{{ 'ad.restitution.empty'|trans }}</h3>
+    </div>
+{% endblock %}
+
+
