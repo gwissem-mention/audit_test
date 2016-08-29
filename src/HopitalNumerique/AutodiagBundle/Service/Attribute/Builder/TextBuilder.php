@@ -19,6 +19,14 @@ class TextBuilder extends AbstractBuilder
         return 'texte';
     }
 
+    /**
+     * @inheritdoc
+     */
+    public function getTemplateName()
+    {
+        return 'text';
+    }
+
     public function transform($data)
     {
         return $data;

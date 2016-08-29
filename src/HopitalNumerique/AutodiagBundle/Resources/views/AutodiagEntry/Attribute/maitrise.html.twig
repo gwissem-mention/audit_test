@@ -1,0 +1,33 @@
+{% extends '@HopitalNumeriqueAutodiag/AutodiagEntry/Attribute/base.html.twig' %}
+
+{% import _self as forms %}
+
+{% block form_content %}
+
+    {#{{ dump(value) }}#}
+
+    <div class="row">
+        <div class="col-md-4">
+            {{ forms.select('occurence', viewData.preset, value) }}
+        </div>
+        <div class="col-md-4">
+            {{ forms.select('impact', viewData.preset, value) }}
+        </div>
+        <div class="col-md-4">
+            {{ forms.select('action', viewData.preset, value) }}
+        </div>
+    </div>
+{% endblock %}
+
+{% macro select(type, preset, value) %}
+    <select id="value_value" name="value[value][{{ type }}]" required="required" class="form-control">
+        <option value="">-</option>
+        {% if preset is not null %}
+            {% for presetValue, label in preset.preset[type] %}
+                <option value="{{ presetValue }}" {{ value is not null and value[type] == presetValue ? "selected" : "" }}>
+                    {{ label }}
+                </option>
+            {% endfor %}
+        {% endif %}
+    </select>
+{% endmacro %}

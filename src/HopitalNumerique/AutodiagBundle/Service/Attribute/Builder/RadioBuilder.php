@@ -19,6 +19,14 @@ class RadioBuilder extends AbstractBuilder
         return 'radio';
     }
 
+    /**
+     * @inheritdoc
+     */
+    public function getTemplateName()
+    {
+        return 'radio';
+    }
+
     public function getFormType()
     {
         return RadioAttributeType::class;

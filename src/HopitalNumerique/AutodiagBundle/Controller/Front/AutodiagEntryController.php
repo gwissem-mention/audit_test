@@ -63,8 +63,36 @@ class AutodiagEntryController extends Controller
         $autodiag = $this->getDoctrine()->getRepository('HopitalNumeriqueAutodiagBundle:Autodiag')
             ->getFullyLoaded($autodiag->getId());
 
+//        $forms = [];
+//        foreach ($autodiag->attributes as $attribute) {
+//            $entryValue = $entry->getValues()->filter(function (AutodiagEntry\Value $value) use ($attribute) {
+//                return $value->getAttribute() == $attribute;
+//            })->first();
+//
+//            if (!$entryValue instanceof AutodiagEntry\Value) {
+//                $entryValue = new AutodiagEntry\Value();
+//                $entryValue->setAttribute($attribute);
+//                $entryValue->setEntry($entry);
+//            }
+//
+//            $forms[$attribute->getId()] = $this->createForm(
+//                ValueType::class,
+//                $entryValue,
+//                [
+//                    'action' => $entry->getId() !== null
+//                        ? $this->generateUrl('hopitalnumerique_autodiag_entry_attribute_save', [
+//                            'entry' => $entry->getId(),
+//                            'attribute' => $attribute->getId(),
+//                        ])
+//                        : null
+//                ]
+//            )->createView();
+//        }
+
         $forms = [];
         foreach ($autodiag->attributes as $attribute) {
+            $builder = $this->get('autodiag.attribute_builder_provider')->getBuilder($attribute->getType());
+
             $entryValue = $entry->getValues()->filter(function (AutodiagEntry\Value $value) use ($attribute) {
                 return $value->getAttribute() == $attribute;
             })->first();
@@ -75,18 +103,7 @@ class AutodiagEntryController extends Controller
                 $entryValue->setEntry($entry);
             }
 
-            $forms[$attribute->getId()] = $this->createForm(
-                ValueType::class,
-                $entryValue,
-                [
-                    'action' => $entry->getId() !== null
-                        ? $this->generateUrl('hopitalnumerique_autodiag_entry_attribute_save', [
-                            'entry' => $entry->getId(),
-                            'attribute' => $attribute->getId(),
-                        ])
-                        : null
-                ]
-            )->createView();
+            $forms[$attribute->getId()] = $builder->getFormHtml($entryValue);
         }
 
         $synthesisCreateForm = null;

@@ -5,6 +5,8 @@ services:
     autodiag.attribute_builder.criticite:
         public: false
         class: HopitalNumerique\AutodiagBundle\Service\Attribute\Builder\CriticiteBuilder
+        calls:
+            - [setTwigRenderer, ['@twig']]
         arguments: ['@doctrine.orm.entity_manager', '@form.factory']
         tags:
             - { name: autodiag.attribute_builder }
@@ -12,6 +14,8 @@ services:
     autodiag.attribute_builder.maitrise:
         public: false
         class: HopitalNumerique\AutodiagBundle\Service\Attribute\Builder\MaitriseBuilder
+        calls:
+            - [setTwigRenderer, ['@twig']]
         arguments: ['@doctrine.orm.entity_manager', '@form.factory']
         tags:
             - { name: autodiag.attribute_builder }
@@ -19,6 +23,8 @@ services:
     autodiag.attribute_builder.text:
         public: false
         class: HopitalNumerique\AutodiagBundle\Service\Attribute\Builder\TextBuilder
+        calls:
+            - [setTwigRenderer, ['@twig']]
         arguments: ['@doctrine.orm.entity_manager']
         tags:
             - { name: autodiag.attribute_builder }
@@ -26,6 +32,8 @@ services:
     autodiag.attribute_builder.select:
         public: false
         class: HopitalNumerique\AutodiagBundle\Service\Attribute\Builder\SelectBuilder
+        calls:
+            - [setTwigRenderer, ['@twig']]
         arguments: ['@doctrine.orm.entity_manager']
         tags:
             - { name: autodiag.attribute_builder }
@@ -33,6 +41,8 @@ services:
     autodiag.attribute_builder.radio:
         public: false
         class: HopitalNumerique\AutodiagBundle\Service\Attribute\Builder\RadioBuilder
+        calls:
+            - [setTwigRenderer, ['@twig']]
         arguments: ['@doctrine.orm.entity_manager']
         tags:
             - { name: autodiag.attribute_builder }

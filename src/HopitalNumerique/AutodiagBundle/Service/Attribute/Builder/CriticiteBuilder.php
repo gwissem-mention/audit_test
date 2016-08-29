@@ -24,6 +24,14 @@ class CriticiteBuilder extends AbstractPresetableBuilder
     /**
      * @inheritdoc
      */
+    public function getTemplateName()
+    {
+        return 'criticite';
+    }
+
+    /**
+     * @inheritdoc
+     */
     public function getPresetForm()
     {
         $formBuilder = $this->formFactory

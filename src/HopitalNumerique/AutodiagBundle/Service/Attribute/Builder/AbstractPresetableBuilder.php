@@ -4,6 +4,7 @@ namespace HopitalNumerique\AutodiagBundle\Service\Attribute\Builder;
 use Doctrine\Common\Persistence\ObjectManager;
 use HopitalNumerique\AutodiagBundle\Entity\Autodiag;
 use HopitalNumerique\AutodiagBundle\Entity\Autodiag\Preset;
+use HopitalNumerique\AutodiagBundle\Entity\AutodiagEntry\Value;
 use HopitalNumerique\AutodiagBundle\Service\Attribute\PresetableAttributeBuilderInterface;
 use Symfony\Component\Form\FormFactoryInterface;
 
@@ -108,6 +109,13 @@ abstract class AbstractPresetableBuilder extends AbstractBuilder implements Pres
             return max(array_keys($element));
         }, $presets);
         return array_sum($presets) / count($presets);
+    }
+
+    public function getFormHtml(Value $entryValue, $viewData = [])
+    {
+        return parent::getFormHtml($entryValue, array_merge($viewData, [
+            'preset' => $this->getPreset($entryValue->getAttribute()->getAutodiag())
+        ]));
     }
 
     /**

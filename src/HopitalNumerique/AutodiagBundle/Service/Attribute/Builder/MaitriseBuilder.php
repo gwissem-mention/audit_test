@@ -24,6 +24,14 @@ class MaitriseBuilder extends AbstractPresetableBuilder
     /**
      * @inheritdoc
      */
+    public function getTemplateName()
+    {
+        return 'maitrise';
+    }
+
+    /**
+     * @inheritdoc
+     */
     public function getPresetForm()
     {
         $formBuilder = $this->formFactory

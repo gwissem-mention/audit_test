@@ -3,7 +3,7 @@
 
 
         <div class="row">
-            
+
             {% if attribute.description is not null %}
                 <div class="col-md-12 attribute-description">
                     <p>
@@ -17,26 +17,27 @@
             </div>
 
             <div class="col-md-12">
-                {{ form_start(forms[attribute.id]) }}
+                {{ forms[attribute.id]|raw }}
+                {#{{ form_start(forms[attribute.id]) }}#}
 
-                <div class="attribute-value">
-                    <div class="widget">
-                        {{ form_widget(forms[attribute.id].value) }}
-                    </div>
+                {#<div class="attribute-value">#}
+                    {#<div class="widget">#}
+                        {#{{ form_widget(forms[attribute.id].value) }}#}
+                    {#</div>#}
 
-                    <div class="tools">
-                        <div class="attribute-mood"></div>
-                        <i title="{{ 'attribute.comment.add'|trans }}" class="comment-button fa fa-comment tool-comment"></i>
-                    </div>
+                    {#<div class="tools">#}
+                        {#<div class="attribute-mood"></div>#}
+                        {#<i title="{{ 'attribute.comment.add'|trans }}" class="comment-button fa fa-comment tool-comment"></i>#}
+                    {#</div>#}
 
-                    <div class="clearfix"></div>
-                </div>
+                    {#<div class="clearfix"></div>#}
+                {#</div>#}
 
-                <div class="attribute-comment">
-                    {{ form_widget(forms[attribute.id].comment) }}
-                </div>
+                {#<div class="attribute-comment">#}
+                    {#{{ form_widget(forms[attribute.id].comment) }}#}
+                {#</div>#}
 
-                {{ form_end(forms[attribute.id]) }}
+                {#{{ form_end(forms[attribute.id]) }}#}
             </div>
 
 

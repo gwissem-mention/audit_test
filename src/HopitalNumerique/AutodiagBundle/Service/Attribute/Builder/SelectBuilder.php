@@ -19,6 +19,14 @@ class SelectBuilder extends AbstractBuilder
         return 'liste';
     }
 
+    /**
+     * @inheritdoc
+     */
+    public function getTemplateName()
+    {
+        return 'select';
+    }
+
     public function getFormType()
     {
         return SelectType::class;

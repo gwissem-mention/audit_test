@@ -20,6 +20,13 @@ interface AttributeBuilderInterface
     public function getName();
 
     /**
+     * Get twig template base name
+     *
+     * @return string
+     */
+    public function getTemplateName();
+
+    /**
      * Get form type class name
      *
      * @return mixed
@@ -41,4 +48,8 @@ interface AttributeBuilderInterface
      * @return mixed
      */
     public function isEmpty($data);
+
+    public function transform($data);
+
+    public function reverseTransform($data);
 }

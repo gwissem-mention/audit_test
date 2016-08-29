@@ -50,7 +50,8 @@ class ValueType extends AbstractType
     {
         $resolver->setDefaults(array(
             'data_class' => 'HopitalNumerique\AutodiagBundle\Entity\AutodiagEntry\Value',
-            'label_format' => 'ad.autodiag.%name%'
+            'label_format' => 'ad.autodiag.%name%',
+            'csrf_protection' => false,
         ));
     }
 }
