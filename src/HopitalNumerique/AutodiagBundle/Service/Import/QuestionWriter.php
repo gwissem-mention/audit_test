@@ -92,7 +92,7 @@ class QuestionWriter implements WriterInterface, ProgressAwareInterface
 
             $propertyAccessor = new PropertyAccessor();
             foreach ($this->mapping as $key => $property) {
-                if (array_key_exists($key, $item) && null !== $item[$key]) {
+                if (array_key_exists($key, $item)) {
                     $propertyAccessor->setValue($attribute, $property, (string)$item[$key]);
                 }
             }
