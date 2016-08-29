@@ -367,9 +367,9 @@ class QuestionWriter implements WriterInterface, ProgressAwareInterface
     {
         $categoriesData = $this->parseMultiline($data);
 
-        foreach ($categoriesData as $data) {
+        foreach ($categoriesData as $categoryData) {
 
-            if (count($data) > 2) {
+            if (count($categoryData) !== 2) {
                 $this->progress->addMessage(
                     '',
                     $data ?: '',
@@ -378,8 +378,8 @@ class QuestionWriter implements WriterInterface, ProgressAwareInterface
                 return false;
             }
 
-            $code = $data[0];
-            $weight = $data[1];
+            $code = $categoryData[0];
+            $weight = $categoryData[1];
 
             $category = $this->getCategory($code);
             if (false === $category) {
