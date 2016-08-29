@@ -51,9 +51,9 @@ class ValueType extends AbstractType
         $resolver->setDefaults(array(
             'data_class' => 'HopitalNumerique\AutodiagBundle\Entity\AutodiagEntry\Value',
             'label_format' => 'ad.autodiag.%name%',
-            'csrf_protection' => true,
-            'csrf_field_name' => '_token',
-            'intention' => 'entry_value_intention',
+            'csrf_protection' => false,
+//            'csrf_field_name' => '_token',
+//            'intention' => 'entry_value_intention',
         ));
     }
 }

@@ -4,6 +4,7 @@ namespace HopitalNumerique\AutodiagBundle\Service\Attribute\Builder;
 use HopitalNumerique\AutodiagBundle\Entity\Autodiag;
 use HopitalNumerique\AutodiagBundle\Entity\AutodiagEntry\Value;
 use HopitalNumerique\AutodiagBundle\Service\Attribute\AttributeBuilderInterface;
+use Symfony\Component\Security\Csrf\CsrfTokenManager;
 
 /**
  * Class AbstractBuilder
@@ -16,9 +17,17 @@ abstract class AbstractBuilder implements AttributeBuilderInterface
     /** @var \Twig_Environment */
     protected $twig;
 
+    /** @var CsrfTokenManager */
+    protected $tokenManager;
+
     public function setTwigRenderer(\Twig_Environment $twig)
     {
         $this->twig = $twig;
+    }
+
+    public function setCsrfTokenManager($tokenManager)
+    {
+        $this->tokenManager = $tokenManager;
     }
 
     public function getFormHtml(Value $entryValue, $viewData = [])
@@ -31,6 +40,7 @@ abstract class AbstractBuilder implements AttributeBuilderInterface
                 'value' => $this->transform($entryValue->getValue()),
                 'comment' => $entryValue->getComment(),
                 'viewData' => $viewData,
+                'token' => $this->tokenManager->getToken('entry_value_intention')->getValue(),
             ]
         );
     }

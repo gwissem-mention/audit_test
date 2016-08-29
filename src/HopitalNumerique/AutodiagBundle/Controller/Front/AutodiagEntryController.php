@@ -11,6 +11,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Security\Core\Exception\InvalidCsrfTokenException;
 
 class AutodiagEntryController extends Controller
 {
@@ -62,32 +63,6 @@ class AutodiagEntryController extends Controller
 
         $autodiag = $this->getDoctrine()->getRepository('HopitalNumeriqueAutodiagBundle:Autodiag')
             ->getFullyLoaded($autodiag->getId());
-
-//        $forms = [];
-//        foreach ($autodiag->attributes as $attribute) {
-//            $entryValue = $entry->getValues()->filter(function (AutodiagEntry\Value $value) use ($attribute) {
-//                return $value->getAttribute() == $attribute;
-//            })->first();
-//
-//            if (!$entryValue instanceof AutodiagEntry\Value) {
-//                $entryValue = new AutodiagEntry\Value();
-//                $entryValue->setAttribute($attribute);
-//                $entryValue->setEntry($entry);
-//            }
-//
-//            $forms[$attribute->getId()] = $this->createForm(
-//                ValueType::class,
-//                $entryValue,
-//                [
-//                    'action' => $entry->getId() !== null
-//                        ? $this->generateUrl('hopitalnumerique_autodiag_entry_attribute_save', [
-//                            'entry' => $entry->getId(),
-//                            'attribute' => $attribute->getId(),
-//                        ])
-//                        : null
-//                ]
-//            )->createView();
-//        }
 
         $forms = [];
         foreach ($autodiag->attributes as $attribute) {
@@ -146,6 +121,10 @@ class AutodiagEntryController extends Controller
             $entryValue = new AutodiagEntry\Value();
             $entryValue->setAttribute($attribute);
             $entryValue->setEntry($entry);
+        }
+
+        if ($request->request->get('_token') !== $this->get('security.csrf.token_manager')->getToken('entry_value_intention')->getValue()) {
+            throw new InvalidCsrfTokenException('Invalid CSRF token');
         }
 
         $form = $this->createForm(
