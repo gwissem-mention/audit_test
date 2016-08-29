@@ -42,22 +42,22 @@ services:
             - '@session'
 
     autodiag.repository.autodiagentry:
-            class: HopitalNumerique\AutodiagBundle\Repository\AutodiagEntryRepository
-            factory: ["@doctrine.orm.entity_manager", "getRepository"]
-            arguments:
-                - 'HopitalNumeriqueAutodiagBundle:AutodiagEntry'
+        class: HopitalNumerique\AutodiagBundle\Repository\AutodiagEntryRepository
+        factory: ["@doctrine.orm.entity_manager", "getRepository"]
+        arguments:
+            - 'HopitalNumeriqueAutodiagBundle:AutodiagEntry'
 
     autodiag.repository.restitution:
-            class: HopitalNumerique\AutodiagBundle\Repository\RestitutionRepository
-            factory: ["@doctrine.orm.entity_manager", "getRepository"]
-            arguments:
-                - 'HopitalNumeriqueAutodiagBundle:Restitution'
+        class: HopitalNumerique\AutodiagBundle\Repository\RestitutionRepository
+        factory: ["@doctrine.orm.entity_manager", "getRepository"]
+        arguments:
+            - 'HopitalNumeriqueAutodiagBundle:Restitution'
 
     autodiag.repository.autodiag:
-            class: HopitalNumerique\AutodiagBundle\Repository\AutodiagRepository
-            factory: ["@doctrine.orm.entity_manager", "getRepository"]
-            arguments:
-                - 'HopitalNumeriqueAutodiagBundle:Autodiag'
+        class: HopitalNumerique\AutodiagBundle\Repository\AutodiagRepository
+        factory: ["@doctrine.orm.entity_manager", "getRepository"]
+        arguments:
+            - 'HopitalNumeriqueAutodiagBundle:Autodiag'
 
     autodiag.autodiagentry_voter:
         class: HopitalNumerique\AutodiagBundle\Security\AutodiagEntryVoter
