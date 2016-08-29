@@ -29,6 +29,7 @@ abstract class AbstractBuilder implements AttributeBuilderInterface
                 'attribute' => $entryValue->getAttribute(),
                 'entry' => $entryValue->getEntry(),
                 'value' => $this->transform($entryValue->getValue()),
+                'comment' => $entryValue->getComment(),
                 'viewData' => $viewData,
             ]
         );

@@ -32,7 +32,7 @@ Attribute.prototype = {
     bindEvents: function()
     {
         var instance = this;
-        $('input, select, textarea', this.element.find('.attribute-value')).on('change', function () {
+        $('input, select, textarea', this.element).on('change', function () {
             instance.callbacks.onChange.fire();
         });
     },
