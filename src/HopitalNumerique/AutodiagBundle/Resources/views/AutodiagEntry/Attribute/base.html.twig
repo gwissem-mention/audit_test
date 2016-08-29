@@ -1,4 +1,8 @@
-<form action="{{ path('hopitalnumerique_autodiag_entry_attribute_save', {"entry": entry.id, "attribute": attribute.id}) }}">
+{% if entry.id is not null %}
+    <form action="{{ path('hopitalnumerique_autodiag_entry_attribute_save', {"entry": entry.id, "attribute": attribute.id}) }}">
+{% else %}
+    <form action="#">
+{% endif %}
 
     <div class="attribute-value">
         <div class="widget">

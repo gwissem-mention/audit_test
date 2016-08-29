@@ -4,7 +4,7 @@
     <select id="value_value" name="value[value]" required="required" class="form-control">
         <option value="">-</option>
         {% for option in attribute.options %}
-            <option value="{{ option.value }}" {{ option.value == value ? "selected" : "" }}>
+            <option value="{{ option.value }}" {{ value is not null and option.value == value ? "selected" : "" }}>
                 {{ option.label }}
             </option>
         {% endfor %}
