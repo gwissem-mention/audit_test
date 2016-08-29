@@ -22,7 +22,7 @@ ad:
         domaines: Domaines de diffusion
         questionnaire: Questionnaire préalable
         instructions: Instructions
-        partialResultsAuthorized: Activer l'affichage des résultats uniquement si toutes les questions sont renseignées
+        partialResultsAuthorized: Autoriser la consultation et validation des résultats pour les questionnaires incomplets
         synthesisAuthorized: Autoriser la création de synthèses
         preset_value:
             criticite: Criticité de risque

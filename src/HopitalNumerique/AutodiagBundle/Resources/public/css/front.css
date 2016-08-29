@@ -214,9 +214,13 @@
 /**
 * Attribute
 */
+.attribute .attribute-value {
+    margin-bottom: 25px
+}
+
+
 .attribute .attribute-label {
-    min-height: 36px;
-    line-height: 36px;
+    margin-bottom :5px
 }
 
 .attribute .attribute-comment {
@@ -226,11 +230,11 @@
 
 .attribute .attribute-value .widget {
     float: left;
-    width: 80%;
+    width: 90%;
 }
 .attribute .attribute-value .tools {
     float: right;
-    width: 15%;
+    width: 10%;
     text-align: right;
 }
 
