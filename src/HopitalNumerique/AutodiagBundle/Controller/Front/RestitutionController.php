@@ -13,7 +13,7 @@ class RestitutionController extends Controller
 
         $autodiag = $synthesis->getAutodiag();
 
-        if (null === $autodiag->getRestitution()) {
+        if (null === $autodiag->getRestitution() || null == $autodiag->getAlgorithm()) {
             return $this->render('HopitalNumeriqueAutodiagBundle:Restitution:empty.html.twig', [
                 'synthesis' => $synthesis,
             ]);
