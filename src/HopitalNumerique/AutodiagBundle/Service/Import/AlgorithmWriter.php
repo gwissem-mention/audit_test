@@ -37,7 +37,35 @@ class AlgorithmWriter implements WriterInterface, ProgressAwareInterface
     public function write($item)
     {
         if ($this->validate($item)) {
-            $this->autodiag->setAlgorithm($item[self::COLUMN_ALGORITHM]);
+
+            $algorithm = $item[self::COLUMN_ALGORITHM];
+            $allowed = [
+                'moyenne',
+                'mediane',
+                'decile1',
+                'decile1',
+                'decile2',
+                'decile3',
+                'decile4',
+                'decile5',
+                'decile6',
+                'decile7',
+                'decile8',
+                'decile9',
+            ];
+
+            $algorithmValid = true;
+            if (!in_array($algorithm, $allowed)) {
+                $algorithm = str_replace(',', '.', $algorithm);
+                if (strlen((float) $algorithm) != strlen($algorithm)) {
+                    $this->progress->addMessage('', $item[self::COLUMN_ALGORITHM], 'algorithm');
+                    $algorithmValid = false;
+                }
+            }
+
+            if ($algorithmValid) {
+                $this->autodiag->setAlgorithm($algorithm);
+            }
 
             $currentColumn = 1;
             $referenceNumber = 1;
@@ -101,9 +129,6 @@ class AlgorithmWriter implements WriterInterface, ProgressAwareInterface
     {
         return
             count($item) >= 1
-            && in_array($item[self::COLUMN_ALGORITHM], [
-                'moyenne'
-            ])
         ;
     }
 
