@@ -66,5 +66,8 @@ AutodiagNavigation.prototype = {
         } else {
             $('.restitution a', this.element).addClass('disabled');
         }
+        this.autodiag.summary.changeRestultMessageVisibility(
+            this.options.partialResultsAuthorized === false && completion == 100
+        );
     }
 };

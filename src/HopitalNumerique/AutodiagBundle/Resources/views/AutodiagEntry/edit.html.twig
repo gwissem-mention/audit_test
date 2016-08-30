@@ -95,7 +95,7 @@
     <script type="text/javascript">
         var entry = {{ entry.id ? entry.id : 'null' }};
         var autodiag = new AutodiagEntry($('#autodiag-entry'), entry);
-        new AutodiagNavigation($('#autodiag-path'), autodiag);
+        new AutodiagNavigation($('#autodiag-path'));
         autodiagNavigation.setAutodiag(autodiag);
     </script>
 

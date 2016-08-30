@@ -99,7 +99,7 @@ Summary.prototype = {
                 filled += chapter.attributes[i].isFilled() ? 1 : 0;
             }
         }
-        var completion = Math.round(filled * 100 / total);
+        var completion = filled * 100 / total;
         this.globalCompletion = completion;
 
         this.callbacks.onCompletionChange.fire(
@@ -110,7 +110,7 @@ Summary.prototype = {
             .css({
                 width: completion + '%'
             })
-            .html(Math.round(completion) + '%')
+            .html(Math.floor(completion) + '%')
             .attr(
                 'class',
                 completion < 100
@@ -251,5 +251,15 @@ Summary.prototype = {
     getChapterByHash: function(hash)
     {
         return hash;
+    },
+
+    changeRestultMessageVisibility: function(visible)
+    {
+        if (true === visible) {
+            $('.results', this.element).show();
+        } else {
+            $('.results', this.element).hide();
+        }
+
     }
 };

@@ -67,7 +67,7 @@ Chapter.prototype = {
             }
         }
 
-        return Math.round(filled * 100 / total);
+        return Math.floor(filled * 100 / total);
     },
 
     onCompletionChange: function(callback)

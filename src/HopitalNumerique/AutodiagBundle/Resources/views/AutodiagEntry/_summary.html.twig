@@ -19,4 +19,13 @@
     <div class="progress progress-striped">
         <div class="progress-bar progress-bar-danger"></div>
     </div>
+
+    {% if entry.synthesis.id is not null %}
+        <div class="results">
+            <a href="{{ path("hopitalnumerique_autodiag_restitution_index", {"synthesis": entry.synthesis.id}) }}">
+                Votre questionnaire est finalisé ! <br />
+                Vous pouvez désormais consulter les résultats
+            </a>
+        </div>
+    {% endif %}
 </div>

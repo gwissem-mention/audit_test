@@ -160,6 +160,16 @@
     font-weight: bold;
 }
 
+#autodiag-entry #summary .results {
+    display: none;
+    text-align: center;
+}
+
+#autodiag-entry #summary .results a {
+    color: #6B339B;
+    font-weight: bold;
+}
+
 #autodiag-entry #summary .title {
     margin: 4px 0;
     padding-left: 20px;
