@@ -85,6 +85,40 @@
     display: none;
 }
 
+#synthesisCreate h3 {
+    font-size: 20px;
+    color: #d60030;
+    margin: 0 0 5px 0;
+}
+
+#synthesisCreate .instructions .title {
+    margin-bottom: 5px;
+    background-image: url('../../hopitalnumeriquepublication/img/panel.png');
+    background-repeat: no-repeat;
+    cursor: pointer;
+    height: 25px;
+    font-size: 20px;
+    color: #d60030;
+}
+
+#synthesisCreate .instructions .instruction-content {
+    display: none;
+}
+
+#synthesisCreate .mysep {
+    width: 85px;
+    height: 4px;
+    margin-bottom: 10px;
+}
+
+#synthesisCreate .instructions.closed .title {
+    background-position: right -5px;
+}
+
+#synthesisCreate .instructions.open .title {
+    background-position: right -38px;
+}
+
 #instructions {
     margin-top: 20px;
 }

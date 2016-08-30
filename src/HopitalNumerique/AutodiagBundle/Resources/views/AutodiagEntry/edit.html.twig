@@ -7,18 +7,33 @@
     {% if synthesisCreateForm is not null %}
         <div id="synthesisCreate" class="popin">
             <h3>{{ "ad.front.new_entry"|trans }}</h3>
+            <div class="mysep background-rose"></div>
             {{ form_start(synthesisCreateForm) }}
 
             {{ form_row(synthesisCreateForm.name, {"label": "ad.front.entry.name"}) }}
 
             {% if autodiag.instructions %}
-                <div>
-                    <h3>Instructions</h3>
-                    {{ autodiag.instructions|raw }}
+                <div class="instructions closed">
+                    <div class="title">Instruction de l'autodiagnostic</div>
+                    <div class="mysep background-rose"></div>
+                    <div class="instruction-content">
+                        {{ autodiag.instructions|raw }}
+                    </div>
                 </div>
             {% endif %}
 
-            <input class="btn" type="submit" value="{{ "ad.front.entry.save"|trans }}" />
+            <script type="text/javascript">
+                $('#synthesisCreate .instructions').click(function() {
+                    $('.instruction-content').slideToggle();
+                    if ($(this).hasClass('closed')) {
+                        $(this).removeClass('closed').addClass('open');
+                    } else {
+                        $(this).removeClass('open').addClass('closed');
+                    }
+                });
+            </script>
+
+            <input class="btn btn-success pull-right" type="submit" value="{{ "ad.front.entry.save"|trans }}" />
 
             {{ form_end(synthesisCreateForm) }}
         </div>

@@ -125,7 +125,7 @@ class QuestionWriter implements WriterInterface, ProgressAwareInterface
                 }
                 return;
             }
-            
+
             $weights = $this->manager->getRepository('HopitalNumeriqueAutodiagBundle:Autodiag\Attribute\Weight')
                 ->findBy([
                     'attribute' => $attribute
