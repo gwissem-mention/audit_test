@@ -1,6 +1,6 @@
-{% block stylesheets %}    
+{% block stylesheets %}
     {% if templateCurrentId == 1 %}
-        {% stylesheets output="compiled/hopitalnumerique-autodiag-front-pdf-1.css" filter="cssrewrite, ?yui_css" 
+        {% stylesheets output="compiled/hopitalnumerique-autodiag-front-pdf-1.css" filter="cssrewrite, ?yui_css"
             "@bootstrap_css"
             'bundles/hopitalnumeriquecore/css/Templates/1/layout.css'
             'bundles/hopitalnumeriqueautodiag/css/front.css'
@@ -9,7 +9,7 @@
             <link rel="stylesheet" href="{{app.request.getSchemeAndHttpHost()}}{{ asset_url }}" />
         {% endstylesheets %}
     {% elseif templateCurrentId == 2 %}
-        {% stylesheets output="compiled/hopitalnumerique-autodiag-front-pdf-2.css" filter="cssrewrite, ?yui_css" 
+        {% stylesheets output="compiled/hopitalnumerique-autodiag-front-pdf-2.css" filter="cssrewrite, ?yui_css"
             "@bootstrap_css"
             'bundles/hopitalnumeriquecore/css/Templates/2/layout.css'
             'bundles/hopitalnumeriqueautodiag/css/front.css'
@@ -18,7 +18,7 @@
             <link rel="stylesheet" href="{{app.request.getSchemeAndHttpHost()}}{{ asset_url }}" />
         {% endstylesheets %}
     {% else %}
-        {% stylesheets output="compiled/hopitalnumerique-autodiag-front-pdf-default.css" filter="cssrewrite, ?yui_css" 
+        {% stylesheets output="compiled/hopitalnumerique-autodiag-front-pdf-default.css" filter="cssrewrite, ?yui_css"
             "@bootstrap_css"
             'bundles/hopitalnumeriquecore/css/Templates/1/layout.css'
             'bundles/hopitalnumeriqueautodiag/css/front.css'
@@ -30,8 +30,10 @@
 {% endblock %}
 
 {% block javascripts %}
-    {% javascripts output="compiled/hopitalnumerique-autodiag-front-pdf.js" 
+    {% javascripts output="compiled/hopitalnumerique-autodiag-front-pdf.js"
         "@jquery_js"
+        '@fancybox_js'
+        "@validationEngine_js"
         "@bootstrap_js"
         '@highcharts_js'
         '@svg_js'
