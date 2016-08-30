@@ -108,7 +108,6 @@ class AutodiagController extends Controller
 
                 $this->addFlash('success', $this->get('translator')->trans('ad.import.success'));
             } catch (\Exception $e) {
-                dump($e);die;
                 $this->addFlash('danger', $this->get('translator')->trans('ad.import.errors.generic'));
             }
             return $this->redirectToRoute('hopitalnumerique_autodiag_edit_survey', [

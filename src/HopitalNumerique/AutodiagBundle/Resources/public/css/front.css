@@ -85,7 +85,7 @@
     display: none;
 }
 
-#synthesisCreate h3 {
+#synthesisCreate h3, #instructions-container h3 {
     font-size: 20px;
     color: #d60030;
     margin: 0 0 5px 0;
@@ -105,7 +105,7 @@
     display: none;
 }
 
-#synthesisCreate .mysep {
+#synthesisCreate .mysep, #instructions-container .mysep {
     width: 85px;
     height: 4px;
     margin-bottom: 10px;
@@ -129,6 +129,7 @@
 
 #instructions-container {
     display: none;
+    width: 80%;
 }
 
 /**

@@ -14,7 +14,7 @@
 
             {% if autodiag.instructions %}
                 <div class="instructions closed">
-                    <div class="title">Instruction de l'autodiagnostic</div>
+                    <div class="title">{{ "ad.front.instruction_title"|trans }}</div>
                     <div class="mysep background-rose"></div>
                     <div class="instruction-content">
                         {{ autodiag.instructions|raw }}
