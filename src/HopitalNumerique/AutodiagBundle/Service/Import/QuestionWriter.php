@@ -125,6 +125,16 @@ class QuestionWriter implements WriterInterface, ProgressAwareInterface
                 }
                 return;
             }
+            
+            $weights = $this->manager->getRepository('HopitalNumeriqueAutodiagBundle:Autodiag\Attribute\Weight')
+                ->findBy([
+                    'attribute' => $attribute
+                ]);
+            foreach ($weights as $weight) {
+                if (!in_array($weight, $this->weights)) {
+                    $this->manager->remove($weight);
+                }
+            }
 
             $this->progress->addSuccess($item);
         } else {
