@@ -41,14 +41,14 @@ AutodiagNavigation.prototype = {
             xhr.complete(function(response) {
                 instance.restitutionEnabled = true;
                 var redirect = response.getResponseHeader('RESTITUTION_REDIRECT');
-                console.log(redirect);
                 if (null !== redirect) {
                     window.location.href = redirect;
                     return;
                 }
 
                 $.fancybox({
-                    content: response.responseText
+                    content: response.responseText,
+                    minWidth: '80%'
                 });
             });
         });

@@ -5,7 +5,7 @@
     {% include "@HopitalNumeriqueAutodiag/_navigation.html.twig" with {"step": "fill", "autodiag": autodiag} %}
 
     {% if synthesisCreateForm is not null %}
-        <div id="synthesisCreate" class="popin">
+        <div id="synthesisCreate" class="autodiag-popin">
             <h3>{{ "ad.front.new_entry"|trans }}</h3>
             <div class="mysep background-rose"></div>
             {{ form_start(synthesisCreateForm) }}

@@ -85,7 +85,7 @@
     display: none;
 }
 
-#synthesisCreate h3, #instructions-container h3 {
+.autodiag-popin h3 {
     font-size: 20px;
     color: #d60030;
     margin: 0 0 5px 0;
@@ -105,7 +105,7 @@
     display: none;
 }
 
-#synthesisCreate .mysep, #instructions-container .mysep {
+.autodiag-popin .mysep {
     width: 85px;
     height: 4px;
     margin-bottom: 10px;

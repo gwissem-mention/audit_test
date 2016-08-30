@@ -24,11 +24,10 @@ AutodiagEntry.prototype = {
     // Init creation form
     initEntry: function()
     {
-        if (this.entry === null && $('.popin').length > 0) {
+        if (this.entry === null && $('#synthesisCreate').length > 0) {
             $(function () {
                 $.fancybox({
-                    content: $('.popin'),
-                    // modal: true,
+                    content: $('#synthesisCreate'),
                     minWidth: '80%',
                     afterClose: function() {
                         history.back();

@@ -1,8 +1,13 @@
-<div>
+<div class="autodiag-popin">
     <h3>{{ 'ad.front.restitution_demand.title'|trans }}</h3>
-    <p>{{ 'ad.front.restitution_demand.description'|transchoice(left) }}</p>
+    <div class="mysep background-rose"></div>
+    <p>
+        {{ 'ad.front.restitution_demand.description'|transchoice(left) }}
+        <br />
+        {{ 'ad.front.restitution_demand.additionnal'|trans }}
+    </p>
     <div>
-        <a onclick="$.fancybox.close();">{{ 'ad.front.restitution_demand.back'|trans }}</a>
+        <a href="#" onclick="$.fancybox.close();">{{ 'ad.front.restitution_demand.back'|trans }}</a>
     </div>
 
     {% if autodiag.partialResultsAuthorized %}
