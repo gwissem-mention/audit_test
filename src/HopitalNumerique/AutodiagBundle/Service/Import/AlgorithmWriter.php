@@ -128,11 +128,11 @@ class AlgorithmWriter implements WriterInterface, ProgressAwareInterface
         $value = $reference[1];
         if (!in_array($value, $allowed)) {
 
-            preg_match('/[0-9]*[,\.][0-9]*/', $value, $matches);
+            preg_match('/[0-9]*[,\.]?[0-9]*/', $value, $matches);
             if (empty($matches)) {
                 return false;
             } else {
-                $reference[1] = (float) str_replace(',', '.', $reference[1]);
+                $reference[1] = round((float) str_replace(',', '.', $reference[1]), 2);
             }
         }
 
