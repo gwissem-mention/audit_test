@@ -128,7 +128,7 @@ ad:
 
     front:
         new_entry: Nouvel autodiagnostic
-        instruction_title: Instruction de l'autodiagnostic
+        instruction_title: Instructions de l'autodiagnostic
         entry:
             name: Nom de votre autodiagnostic
             save: Sauvegarder
