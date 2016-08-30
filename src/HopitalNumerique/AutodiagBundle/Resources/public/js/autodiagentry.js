@@ -28,8 +28,11 @@ AutodiagEntry.prototype = {
             $(function () {
                 $.fancybox({
                     content: $('.popin'),
-                    modal: true,
-                    minWidth: '80%'
+                    // modal: true,
+                    minWidth: '80%',
+                    afterClose: function() {
+                        history.back();
+                    }
                 });
             });
 
