@@ -38,34 +38,7 @@ class AlgorithmWriter implements WriterInterface, ProgressAwareInterface
     {
         if ($this->validate($item)) {
 
-            $algorithm = $item[self::COLUMN_ALGORITHM];
-            $allowed = [
-                'moyenne',
-                'mediane',
-                'decile1',
-                'decile1',
-                'decile2',
-                'decile3',
-                'decile4',
-                'decile5',
-                'decile6',
-                'decile7',
-                'decile8',
-                'decile9',
-            ];
-
-            $algorithmValid = true;
-            if (!in_array($algorithm, $allowed)) {
-                $algorithm = str_replace(',', '.', $algorithm);
-                if (strlen((float) $algorithm) != strlen($algorithm)) {
-                    $this->progress->addMessage('', $item[self::COLUMN_ALGORITHM], 'algorithm');
-                    $algorithmValid = false;
-                }
-            }
-
-            if ($algorithmValid) {
-                $this->autodiag->setAlgorithm($algorithm);
-            }
+            $this->autodiag->setAlgorithm($item[self::COLUMN_ALGORITHM]);
 
             $currentColumn = 1;
             $referenceNumber = 1;
@@ -129,11 +102,40 @@ class AlgorithmWriter implements WriterInterface, ProgressAwareInterface
     {
         return
             count($item) >= 1
+            && in_array($item[self::COLUMN_ALGORITHM], [
+                'moyenne'
+            ])
         ;
     }
 
-    protected function validateReference($reference)
+    protected function validateReference(&$reference)
     {
+        $allowed = [
+            'moyenne',
+            'mediane',
+            'decile1',
+            'decile1',
+            'decile2',
+            'decile3',
+            'decile4',
+            'decile5',
+            'decile6',
+            'decile7',
+            'decile8',
+            'decile9',
+        ];
+
+        $value = $reference[1];
+        if (!in_array($value, $allowed)) {
+
+            preg_match('/[0-9]*[,\.][0-9]*/', $value, $matches);
+            if (empty($matches)) {
+                return false;
+            } else {
+                $reference[1] = (float) str_replace(',', '.', $reference[1]);
+            }
+        }
+
         return count($reference) === 3
             && !empty($reference[0])
             && !empty($reference[1])
