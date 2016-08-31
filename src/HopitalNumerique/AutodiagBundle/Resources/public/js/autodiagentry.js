@@ -14,11 +14,17 @@ var AutodiagEntry = function(element, entry) {
 AutodiagEntry.prototype = {
     init: function()
     {
+        this.initUI();
         this.initEntry();
         this.initChapters();
         this.initSummary();
 
         this.bindChapters();
+    },
+
+    initUI: function()
+    {
+        $('[data-toggle="tooltip"]').tooltip();
     },
 
     // Init creation form

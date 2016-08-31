@@ -13,33 +13,15 @@
             {% endif %}
 
             <div class="col-md-12 attribute-label">
+                {% if attribute.tooltip is not empty %}
+                    <i class="attribute-tooltip fa fa-question" data-toggle="tooltip" title="{{ attribute.tooltip }}"></i>
+                {% endif %}
                 {{ attribute.label }}
             </div>
 
             <div class="col-md-12">
                 {{ forms[attribute.id]|raw }}
-                {#{{ form_start(forms[attribute.id]) }}#}
-
-                {#<div class="attribute-value">#}
-                    {#<div class="widget">#}
-                        {#{{ form_widget(forms[attribute.id].value) }}#}
-                    {#</div>#}
-
-                    {#<div class="tools">#}
-                        {#<div class="attribute-mood"></div>#}
-                        {#<i title="{{ 'attribute.comment.add'|trans }}" class="comment-button fa fa-comment tool-comment"></i>#}
-                    {#</div>#}
-
-                    {#<div class="clearfix"></div>#}
-                {#</div>#}
-
-                {#<div class="attribute-comment">#}
-                    {#{{ form_widget(forms[attribute.id].comment) }}#}
-                {#</div>#}
-
-                {#{{ form_end(forms[attribute.id]) }}#}
             </div>
-
 
         </div>
     {% endif %}
