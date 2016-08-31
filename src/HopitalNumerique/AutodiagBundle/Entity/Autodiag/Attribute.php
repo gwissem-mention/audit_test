@@ -72,6 +72,14 @@ class Attribute
     private $colored;
 
     /**
+     * Inverse colored attribute
+     *
+     * @var boolean
+     * @ORM\Column(type="boolean")
+     */
+    private $colorationInversed = false;
+
+    /**
      * Tooltip
      *
      * @var string
@@ -233,6 +241,24 @@ class Attribute
     {
         $this->colored = (bool) $colored;
 
+        return $this;
+    }
+
+    /**
+     * @return boolean
+     */
+    public function isColorationInversed()
+    {
+        return $this->colorationInversed;
+    }
+
+    /**
+     * @param boolean $colorationInversed
+     * @return Attribute
+     */
+    public function setColorationInversed($colorationInversed)
+    {
+        $this->colorationInversed = $colorationInversed;
         return $this;
     }
 

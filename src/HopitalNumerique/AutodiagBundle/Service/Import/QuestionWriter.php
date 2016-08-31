@@ -53,7 +53,7 @@ class QuestionWriter implements WriterInterface, ProgressAwareInterface
         'texte_avant' => 'description',
         'libelle_question' => 'label',
         'format_reponse' => 'type',
-        'colorer_reponse' => 'colored',
+//        'colorer_reponse' => 'colored',
         'infobulle_question' => 'tooltip',
     ];
 
@@ -95,6 +95,15 @@ class QuestionWriter implements WriterInterface, ProgressAwareInterface
                 if (array_key_exists($key, $item)) {
                     $propertyAccessor->setValue($attribute, $property, (string)$item[$key]);
                 }
+            }
+
+            if ($item[self::COLUMN_COLORED] == "1") {
+                $attribute->setColored(true);
+            } elseif ($item[self::COLUMN_COLORED] == "-1") {
+                $attribute->setColored(true);
+                $attribute->setColorationInversed(true);
+            } else {
+                $attribute->setColored(false);
             }
 
             $this->handleOptions($attribute, $item[self::COLUMN_OPTIONS]);
@@ -512,7 +521,7 @@ class QuestionWriter implements WriterInterface, ProgressAwareInterface
             return false;
         }
 
-        if (isset($item[self::COLUMN_COLORED]) && !in_array($item[self::COLUMN_COLORED], ["1", "-1"])) {
+        if (isset($item[self::COLUMN_COLORED]) && !in_array($item[self::COLUMN_COLORED], ["1", "-1", "0"])) {
             $this->progress->addMessage('', $item[self::COLUMN_COLORED] ?: '', 'attribute_colored');
             return false;
         }

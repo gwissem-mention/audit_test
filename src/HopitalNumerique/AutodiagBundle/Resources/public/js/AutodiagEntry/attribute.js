@@ -8,6 +8,8 @@ var Attribute = function(id, element)
     };
 
     this.moodEnabled = element.data('mood') !== undefined;
+    this.moodInversed = element.data('inverse-mood') !== undefined;
+
     this.commentEnabled = false;
 
     this.notConcernedValue = -1;
@@ -162,6 +164,9 @@ Attribute.prototype = {
             var a =  (max - min) / 100;
             var b = min;
             var x = (value - b) / a;
+            if (this.moodInversed) {
+                x = 100 - x;
+            }
             var tier = Math.max(1, Math.ceil(x / (100 / 3)));
 
             $('.attribute-mood', this.element).css('visibility', 'visible').html(

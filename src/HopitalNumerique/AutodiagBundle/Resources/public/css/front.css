@@ -285,6 +285,7 @@
     float: right;
     width: 10%;
     text-align: right;
+    min-height: 34px;
 }
 
 .attribute .attribute-value .tools .comment-button {
