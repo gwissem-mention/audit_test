@@ -117,16 +117,18 @@ class RestitutionWriter implements WriterInterface, ProgressAwareInterface
 
     protected function handleCategory($item)
     {
-        $criteria = Criteria::create()
-            ->where(Criteria::expr()->eq('label', $item[self::COLUMN_CATEGORY_LABEL]));
-        $category = $this->restitution->getCategories()->matching($criteria)->first();
+        $category = null;
+        if (isset($this->categories[$item[self::COLUMN_CATEGORY_LABEL]])) {
+            $category = $this->categories[$item[self::COLUMN_CATEGORY_LABEL]];
+        }
 
-        if (false === $category) {
+        if (null === $category) {
             $category = new Restitution\Category();
             $category
                 ->setLabel($item[self::COLUMN_CATEGORY_LABEL])
             ;
             $category->setRestitution($this->restitution);
+            $this->categories[$category->getLabel()] = $category;
             $this->manager->persist($category);
         }
 
