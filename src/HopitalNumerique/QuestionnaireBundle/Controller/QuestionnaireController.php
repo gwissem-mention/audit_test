@@ -22,20 +22,22 @@ use Symfony\Component\PropertyAccess\PropertyAccess;
 class QuestionnaireController extends Controller
 {
 
+    const REDIRECT_REFERER_SESSION_KEY = "questionnaire.redirect.referer";
+
     /**
      * Tableau de la route de redirection sous la forme :
      * array(
      *   'sauvegarde' => array( 'route' => nom_de_ma_route, 'arguments' => array ('keyArgument' => valueArgument))
      *   'quit'       => array( 'route' => nom_de_ma_route, 'arguments' => array ('keyArgument' => valueArgument))
      *  )
-     *  
+     *
      * @var array
      */
     private $_routeRedirection = array();
-    
+
     /**
      * Theme du formulaire utilisé
-     * 
+     *
      * @var string
      */
     private $_themeQuestionnaire;
@@ -48,7 +50,7 @@ class QuestionnaireController extends Controller
     private $_envoieDeMail;
 
     /* Gestionnaire des questionnaires */
-    
+
     /**
      * Liste tous les questionnaires (avec occurrences) de l'utilisateur connecté.
      */
@@ -88,7 +90,7 @@ class QuestionnaireController extends Controller
 
     /**
      * Affiche le formulaire d'ajout de Module.
-     * 
+     *
      * @author Gaetan MELCHILSEN
      * @copyright Nodevo
      */
@@ -101,10 +103,10 @@ class QuestionnaireController extends Controller
 
     /**
      * Suppresion d'un Module.
-     * 
+     *
      * @param integer $id Id de Module.
      * METHOD = POST|DELETE
-     * 
+     *
      * @author Gaetan MELCHILSEN
      * @copyright Nodevo
      */
@@ -117,7 +119,7 @@ class QuestionnaireController extends Controller
             $this->get('session')->getFlashBag()->add('danger', 'Suppression impossible car le questionnaire est utilisé par un ou plusieurs autodiags.');
             return new Response('{"success":false, "url" : "'.$this->generateUrl('hopitalnumerique_questionnaire_index').'"}', 200);
         }
-        
+
         //Suppression de l'entitée
         $this->get('hopitalnumerique_questionnaire.manager.questionnaire')->delete( $questionnaire );
 
@@ -144,7 +146,7 @@ class QuestionnaireController extends Controller
             {
                 $primaryKeys[] = $data['id'];
             }
-        }        
+        }
 
         $questionnaires = $this->get('hopitalnumerique_questionnaire.manager.questionnaire')->findBy( array('id' => $primaryKeys) );
 
@@ -156,7 +158,7 @@ class QuestionnaireController extends Controller
                 return $this->redirect( $this->generateUrl('hopitalnumerique_questionnaire_index') );
             }
         }
-        
+
         $this->get('hopitalnumerique_questionnaire.manager.questionnaire')->delete( $questionnaires );
 
         $this->get('session')->getFlashBag()->add('info', 'Suppression effectuée avec succès.' );
@@ -166,17 +168,22 @@ class QuestionnaireController extends Controller
 
     /**
      * Affichage du formulaire d'utilisateur
-     * 
+     *
      * @param integer $id Identifiant de l'utilisateur
      */
-    public function editFrontGestionnaireAction(HopiQuestionnaire $questionnaire)
+    public function editFrontGestionnaireAction(HopiQuestionnaire $questionnaire, $redirectReferer = false)
     {
+        if ((bool) $redirectReferer === true && !$this->get('session')->has(self::REDIRECT_REFERER_SESSION_KEY)) {
+            $referer = $this->getRequest()->headers->get('referer');
+            $this->get('session')->set(self::REDIRECT_REFERER_SESSION_KEY, $referer);
+        }
+
         return $this->editFrontGestionnaireOccurrenceAction($questionnaire);
     }
-    
+
     /**
      * Même action que editFrontGestionnaireAction() avec la paramètre Occurrence indiqué.
-     * 
+     *
      * @param \HopitalNumerique\QuestionnaireBundle\Entity\Questionnaire $questionnaire Questionnaire
      * @param \HopitalNumerique\QuestionnaireBundle\Entity\Occurrence    $occurrence    Occurrence
      */
@@ -194,7 +201,7 @@ class QuestionnaireController extends Controller
             $route = 'hopitalnumerique_questionnaire_edit_front_gestionnaire';
             $routeParameters = array('id' => $questionnaire->getId());
         }
-        
+
         return $this->render('HopitalNumeriqueQuestionnaireBundle:Questionnaire:Front/index.html.twig', array(
             'questionnaire'      => $questionnaire,
             'occurrence'         => $occurrence,
@@ -215,7 +222,7 @@ class QuestionnaireController extends Controller
     }
 
     /* Gestionnaire des formulaires */
-    
+
     /**
      * Génération dynamique du questionnaire en chargeant les réponses de l'utilisateur passés en param, ajout d'une route de redirection quand tout s'est bien passé
      *
@@ -253,15 +260,15 @@ class QuestionnaireController extends Controller
 
         return $this->renderForm('nodevo_questionnaire_questionnaire', $options, 'HopitalNumeriqueQuestionnaireBundle:Questionnaire:edit_front.html.twig');
     }
-    
+
     /**
      * Génération dynamique du questionnaire en chargeant les réponses de l'utilisateur passés en param, ajout d'une route de redirection quand tout s'est bien passé
-     * 
+     *
      * @param HopiUser          $user               Utilisateur courant
      * @param HopiQuestionnaire $questionnaire      Questionnaire à afficher
      * @param json              $routeRedirection   Tableau de la route de redirection une fois que le formulaire est validé
      * @param string            $themeQuestionnaire Theme de formulaire utilisé
-     * 
+     *
      * @return Ambigous <\HopitalNumerique\QuestionnaireBundle\Controller\Form, \Symfony\Component\HttpFoundation\RedirectResponse, \Symfony\Component\HttpFoundation\Response>
      */
     public function editAction( HopiUser $user, HopiQuestionnaire $questionnaire, $optionRenderForm = array())
@@ -271,14 +278,14 @@ class QuestionnaireController extends Controller
         $themeQuestionnaire = array_key_exists('themeQuestionnaire', $optionRenderForm) ? $optionRenderForm['themeQuestionnaire'] : 'default';
         $session            = array_key_exists('session', $optionRenderForm) ? $optionRenderForm['session'] : 0;
 
-        
+
         //Si le tableau n'est pas vide on le récupère
         if(!is_null($routeRedirection))
             $this->_routeRedirection = $routeRedirection;
-        
+
         //Récupération du thème de formulaire
         $this->_themeQuestionnaire = $themeQuestionnaire;
-        
+
         return $this->renderForm('nodevo_questionnaire_questionnaire',
             array(
                     'questionnaire' => $questionnaire,
@@ -295,7 +302,7 @@ class QuestionnaireController extends Controller
      *
      * @param HopiQuestionnaire $questionnaire Questionnaire à exporter
      *
-     * @return \Symfony\Component\HttpFoundation\Response 
+     * @return \Symfony\Component\HttpFoundation\Response
      */
     public function exportCSVAction( HopiQuestionnaire $questionnaire)
     {
@@ -353,20 +360,19 @@ class QuestionnaireController extends Controller
             'readOnly'         => $readOnly,
             'idSession'        => $idSession
         );
-        
+
         if(isset($options['showAllQuestions']) && !is_null($options['showAllQuestions']))
             $label_attr['showAllQuestions'] = $options['showAllQuestions'];
-    
+
         //Création du formulaire via le service
         $form = $this->createForm( $formName, $questionnaire, array(
             'label_attr' => $label_attr
         ));
-        
+
         $request = $this->get('request');
-        
+
         // Si l'utilisateur soumet le formulaire
         if ('POST' == $request->getMethod()) {
-    
             // On bind les données du form
             $form->handleRequest($request);
 
@@ -379,14 +385,14 @@ class QuestionnaireController extends Controller
 
                 //Les champs file uploadés ne sont pas dans params, params ne recupère que les inputs
                 $params = $request->get('nodevo_questionnaire_questionnaire');
-                
+
                 //Récupèrations des questions de type files pour le questionnaire courant
                 $questionsFiles = $this->get('hopitalnumerique_questionnaire.manager.question')->getQuestionsByType( $questionnaire->getId() , 'file' );
-                
+
                 //Gestion des files uploadés
                 $dossierRoot = $this->get('hopitalnumerique_questionnaire.manager.question')->getUploadRootDir($questionnaire->getNomMinifie());
                 $files = array();
-                
+
                 //get All References, and convert to ArrayCollection
                 $reponses = new ArrayCollection( $this->get('hopitalnumerique_questionnaire.manager.reponse')->reponsesByQuestionnaireByUserByFileQuestion( $questionnaire->getId(), $user->getId(), $occurrence ) );
 
@@ -397,17 +403,17 @@ class QuestionnaireController extends Controller
                     $criteria = Criteria::create()->where(Criteria::expr()->eq("question", $questionFiles) );
                     //Récupération d'un tableau comportant une seule réponse
                     $tempReponse = $reponses->matching( $criteria );
-                    
+
                     // -v-v-v- GME 26/02/2014 : Traitement brouillon, le array_shift ou reset ne fonctionne pas -v-v-v-
-                    $test = array();                 
+                    $test = array();
                     foreach ($tempReponse as $temp)
                     {
                         $test[] = $temp;
                         break;
-                    }                    
+                    }
                     $reponse  = !empty($test) ? $test[0] : null;
                     // -^-^-^- Traitement brouillon, le array_shift ou reset ne fonctionne pas -^-^-^-
-                
+
                     //Si il n'y a pas de réponses pour cette question pour cet utilisateur
                     if(is_null($reponse))
                     {
@@ -416,9 +422,9 @@ class QuestionnaireController extends Controller
                         $reponse->setQuestion($questionFiles);
                         $reponse->setOccurrence($occurrence);
                     }
-                
+
                     //Format du champ file
-                    $champFile = $questionFiles->getTypeQuestion()->getLibelle() . '_' . $questionFiles->getId() . '_' . $questionFiles->getAlias(); 
+                    $champFile = $questionFiles->getTypeQuestion()->getLibelle() . '_' . $questionFiles->getId() . '_' . $questionFiles->getAlias();
 
                     $file = $form[$champFile]->getData();
 
@@ -445,28 +451,28 @@ class QuestionnaireController extends Controller
                             'file' => $file,
                             'reponse' => $reponse
                     );
-                    
+
                     //MAJ/ajout du nouveau path
                     $files[$questionFiles->getAlias()]['reponse']->setReponse($files[$questionFiles->getAlias()]['nom']);
-                } 
-                
+                }
+
                 $reponses = array();
-                           
+
                 //Parcourt les fichiers uploadés
                 foreach ($files as $file)
                 {
                     //Si le JS est désactivé, il se peut qu'il n'y ait pas de fichier uploadé
                     if(is_null($file['file']))
                         break;
-                    
+
                     $file['file']->move($dossierRoot, $file['nom']);
-        
+
                     $reponses[] = $file['reponse'];
                 }
-                    
+
                 //Mise à jour / créations des réponses correspondantent aux fichiers
                 $this->get('hopitalnumerique_questionnaire.manager.reponse')->save( $reponses );
-                
+
                 //Récupération des réponses pour le questionnaire et utilisateur courant, triées par idQuestion en clé
                 $reponses = $this->get('hopitalnumerique_questionnaire.manager.reponse')->reponsesByQuestionnaireByUser( $questionnaire->getId(), $user->getId(), true, $occurrence );
 
@@ -475,7 +481,7 @@ class QuestionnaireController extends Controller
                 {
                     //Récupération de l'id de la question, la clé est sous la forme : "type_id_alias"
                     $arrayParamKey = explode('_', $key);
-    
+
                     //Le tableau de arrayParamKey : 0 => type du champ - 1 => Id de la question - 2+=> alias du champ
                     $typeParam  = isset($arrayParamKey) && array_key_exists(0, $arrayParamKey)  ? $arrayParamKey[0] : '';
                     $idQuestion = isset($arrayParamKey) && array_key_exists(1, $arrayParamKey)  ? $arrayParamKey[1] : 0;
@@ -483,10 +489,10 @@ class QuestionnaireController extends Controller
                     //Si l'id de la question n'a pas été récupéré alors on ne sauvegarde pas la question (exemple avec le cas particulier du token du formulaire)
                     if(0 === $idQuestion || '' === $idQuestion || '_token' === $key)
                         continue;
-    
+
                     //récupération de la réponse courante
                     $reponse = array_key_exists($idQuestion, $reponses) ? $reponses[$idQuestion] : null;
-    
+
                     //Mode ajout
                     if(is_null($reponse))
                     {
@@ -541,7 +547,7 @@ class QuestionnaireController extends Controller
 
                     //Test ajout ou edition
                     $new = is_null($reponse->getId());
-                    
+
                     //Mise à jour de la réponse dans le tableau des réponses
                     $reponses[$idQuestion] = $reponse;
                 }
@@ -555,7 +561,7 @@ class QuestionnaireController extends Controller
 
                     if(!is_null($session))
                     {
-                        //Modifications de l'inscription: modification du statut "etatEvaluer"  
+                        //Modifications de l'inscription: modification du statut "etatEvaluer"
                         $inscription = $this->get('hopitalnumerique_module.manager.inscription')->findOneBy( array('user' => $user, 'session' => $session) );
                         $inscription->setEtatEvaluation( $this->get('hopitalnumerique_reference.manager.reference')->findOneBy(array('id' => 29)));
 
@@ -564,7 +570,7 @@ class QuestionnaireController extends Controller
                         if( $session->getDateSession() < new \DateTime() )
                         {
                             $sessionAArchiver = true;
-                            foreach ($session->getInscriptions() as $inscription) 
+                            foreach ($session->getInscriptions() as $inscription)
                             {
                                 if( 407 === $inscription->getEtatInscription()->getId()
                                     && 411 === $inscription->getEtatParticipation()->getId() )
@@ -593,7 +599,7 @@ class QuestionnaireController extends Controller
                         {
                             //Récupération des formations
                             $formations = $session->getModule()->getProductions();
-                            
+
                             //Pour chaque production on ajout l'utilisateur à la liste des ambassadeurs qui la maitrise
                             foreach($formations as $formation)
                             {
@@ -619,7 +625,7 @@ class QuestionnaireController extends Controller
                             foreach ($connaissances as $connaissanceSession)
                             {
                                 $connaissance = $this->get('hopitalnumerique_user.manager.connaissance_ambassadeur_si')->findOneBy(array('user' => $user, 'domaine' => $connaissanceSession));
-                                
+
                                 //Si il a deja cette connaissance, on ne le rajoute pas
                                 if(!is_null($connaissance))
                                 {
@@ -644,12 +650,12 @@ class QuestionnaireController extends Controller
                             //Expert
                             $mailExpert = $this->get('nodevo_mail.manager.mail')->sendCandidatureExpertMail($user);
                             $this->get('mailer')->send($mailExpert);
-    
+
                             //send Mail to all admins
                             $candidature = $this->get('hopitalnumerique_questionnaire.manager.questionnaire')->getQuestionnaireFormateMail($reponses);
                             //Récupération de l'adresse mail en parameter.yml
                             $adressesMails = $this->get('hopitalnumerique_questionnaire.manager.questionnaire')->getMailExpertReponses();
-                            
+
                             if(!is_null($adressesMails))
                             {
                                 $variablesTemplate = array(
@@ -660,18 +666,18 @@ class QuestionnaireController extends Controller
                                 foreach($mailsExperts as $mailExperts)
                                     $this->get('mailer')->send($mailExperts);
                             }
-    
+
                             break;
                         case 'ambassadeur':
                             //Ambassadeur
                             $mailAmbassadeur = $this->get('nodevo_mail.manager.mail')->sendCandidatureAmbassadeurMail($user);
                             $this->get('mailer')->send($mailAmbassadeur);
-                            
+
                             //CMSI
                             $candidature = $this->get('hopitalnumerique_questionnaire.manager.questionnaire')->getQuestionnaireFormateMail($reponses);
-                            
+
                             $etablissement = is_null($user->getEtablissementRattachementSante()) ? $user->getAutreStructureRattachementSante() : $user->getEtablissementRattachementSante()->getNom();
-                            
+
                             $candidat = '<ul>';
                             $candidat .= '<li><strong>Prénom</strong> : ' . (trim($user->getPrenom()) === '' ? '-' : $user->getPrenom() ). '</li>';
                             $candidat .= '<li><strong>Nom</strong> : ' . (trim($user->getNom()) == '' ? '-' : $user->getNom() ). '</li>';
@@ -698,10 +704,10 @@ class QuestionnaireController extends Controller
                         default:
                             //Récupère les questions / réponses formatées correctement pour l'affichage dans les mails génériques
                             $candidature = $this->get('hopitalnumerique_questionnaire.manager.questionnaire')->getQuestionnaireFormateMail($reponses);
-                            
+
                             //Formate les données de l'utilisateur qui a répondu au questionnaire
                             $etablissement = is_null($user->getEtablissementRattachementSante()) ? $user->getAutreStructureRattachementSante() : $user->getEtablissementRattachementSante()->getNom();
-                            
+
                             $candidat = '<ul>';
                             $candidat .= '<li><strong>Prénom</strong> : ' . (trim($user->getPrenom()) === '' ? '-' : $user->getPrenom() ). '</li>';
                             $candidat .= '<li><strong>Nom</strong> : ' . (trim($user->getNom()) == '' ? '-' : $user->getNom() ). '</li>';
@@ -716,7 +722,7 @@ class QuestionnaireController extends Controller
 
                             //Récupération de l'adresse mail en parameter.yml
                             $adressesMails = $this->get('hopitalnumerique_questionnaire.manager.questionnaire')->getMailReponses();
-                            
+
                             //Set des variables du gabarit du mail
                             $variablesTemplate = array(
                                 'nomQuestionnaire' => $questionnaire->getNom(),
@@ -733,13 +739,20 @@ class QuestionnaireController extends Controller
                 //Mise à jour/création des réponses
                 $this->get('hopitalnumerique_questionnaire.manager.reponse')->save( $reponses );
 
+                if ($this->get('session')->has(self::REDIRECT_REFERER_SESSION_KEY)) {
+                    $redirect = $this->get('session')->get(self::REDIRECT_REFERER_SESSION_KEY);
+                    $this->get('session')->remove(self::REDIRECT_REFERER_SESSION_KEY);
+                    $this->get('session')->getFlashBag()->add( ($new ? 'success' : 'info') , 'Formulaire enregistré.' );
+                    return $this->redirect($redirect);
+                }
+
                 if(!is_null($questionnaire->getLien()) && trim($questionnaire->getLien() !== ""))
                 {
                     return $this->redirect($questionnaire->getLien());
                 }
-                
+
                 $this->get('session')->getFlashBag()->add( ($new ? 'success' : 'info') , 'Formulaire enregistré.' );
-    
+
                 //Sauvegarde / Sauvegarde + quitte
                 $do = $request->request->get('do');
                 return $this->redirect( $do == 'save-close' ? $this->generateUrl($routeRedirection['quit']['route'], $routeRedirection['quit']['arguments']) : ( 'save-add' == $do ? $this->generateUrl('hopitalnumerique_questionnaire_occurrence_add', array('questionnaire' => $questionnaire->getId())) : $this->generateUrl($routeRedirection['sauvegarde']['route'], $routeRedirection['sauvegarde']['arguments']) ) );
@@ -752,7 +765,7 @@ class QuestionnaireController extends Controller
             $this->get('session')->getFlashBag()->add( ('danger') , $erreur );
             return $this->redirect( $request->headers->get('referer') );
         }
-    
+
         return $this->render( $view , array(
                 'form'          => $form->createView(),
                 'questionnaire' => $questionnaire,
@@ -769,19 +782,19 @@ class QuestionnaireController extends Controller
      * @param string $view     Chemin de la vue ou sera rendu le formulaire
      *
      * @return Form | redirect
-     * 
+     *
      * @author Gaetan MELCHILSEN
      * @copyright Nodevo
      */
     private function renderGestionForm( $formName, HopiQuestionnaire $questionnaire )
     {
         $questionnaireEstOccurrenceMultiple = $questionnaire->isOccurrenceMultiple();
-        
+
         //Création du formulaire via le service
         $form = $this->createForm( $formName, $questionnaire);
 
         $request = $this->get('request');
-        
+
         // Si l'utilisateur soumet le formulaire
         if ('POST' == $request->getMethod())
         {
@@ -792,15 +805,15 @@ class QuestionnaireController extends Controller
             if ($form->isValid()) {
                 //test ajout ou edition
                 $new = is_null($questionnaire->getId());
-                
+
                 $this->processFormOccurrenceMultipleChange($questionnaire, $questionnaireEstOccurrenceMultiple);
-                
+
                 //On utilise notre Manager pour gérer la sauvegarde de l'objet
                 $this->get('hopitalnumerique_questionnaire.manager.questionnaire')->save($questionnaire);
-                
+
                 // On envoi une 'flash' pour indiquer à l'utilisateur que l'entité est ajoutée
-                $this->get('session')->getFlashBag()->add( ($new ? 'success' : 'info') , 'Questionnaire ' . ($new ? 'ajouté.' : 'mis à jour.') ); 
-                
+                $this->get('session')->getFlashBag()->add( ($new ? 'success' : 'info') , 'Questionnaire ' . ($new ? 'ajouté.' : 'mis à jour.') );
+
                 //on redirige vers la page index ou la page edit selon le bouton utilisé
                 $do = $request->request->get('do');
                 return $this->redirect( ($do == 'save-close' ? $this->generateUrl('hopitalnumerique_questionnaire_index') : $this->generateUrl('hopitalnumerique_questionnaire_edit_questionnaire', array( 'id' => $questionnaire->getId() ) ) ) );
@@ -814,10 +827,10 @@ class QuestionnaireController extends Controller
             'theme'         => 'vertical'
         ));
     }
-    
+
     /**
      * Effectue les traitements nécessaires selon la modification de l'occurrence multiple lors de la sauvegarde.
-     * 
+     *
      * @param \HopitalNumerique\QuestionnaireBundle\Entity\Questionnaire $questionnaire                              Questionnaire
      * @param boolean                                                    $questionnaireEstOccurrenceMultipleOriginal Valeur de l'occurrence multiple avant soumission du formulaire
      */

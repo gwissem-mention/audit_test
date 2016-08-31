@@ -1,10 +1,13 @@
 <div id="summary">
     <h3>Sommaire</h3>
     <ul>
-        {% if autodiag.questionnaire is not null %}
+        {% if autodiag.questionnaire is not null and app.user %}
             <li>
                 <div class="title">
-                    <a href="{{ path('hopitalnumerique_questionnaire_edit_front_gestionnaire', {"questionnaire": autodiag.questionnaire}) }}">
+                    <a href="{{ path('hopitalnumerique_questionnaire_edit_front_gestionnaire', {
+                        "id": autodiag.questionnaire.id,
+                        "redirectReferer": true
+                    }) }}">
                         {{ 'ad.autodiag.questionnaire'|trans }}
                     </a>
                 </div>
