@@ -48,6 +48,10 @@ ad:
             results: Voir les résultats
             validate: Valider mes résultats
             share: Partager les résultats
+
+    autodiagentry:
+        outofdate: L'autodiagnostic a été mis à jour par l'ANAP depuis votre dernière visite
+
     import:
         success: Le fichier d'import à bien été traité.
         lines:

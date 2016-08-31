@@ -60,7 +60,12 @@
                 </h1>
             </div>
             <div class="synthesis-name">
-                <h2>{{ entry.synthesis.name }}</h2>
+                <h2>
+                    {{ entry.synthesis.name }}
+                    {% if autodiag.publicUpdatedDate > entry.updatedAt %}
+                        - {{ 'ad.autodiagentry.outofdate'|trans }}
+                    {% endif %}
+                </h2>
             </div>
 
             <div class="desc">
