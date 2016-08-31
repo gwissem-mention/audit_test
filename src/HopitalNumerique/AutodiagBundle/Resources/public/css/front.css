@@ -77,8 +77,8 @@
     /**
     * COMMON
     */
-#autodiag-entry {
-
+#autodiag-entry .autodiag-title h1 {
+    font-size: 24px;
 }
 
 #synthesisCreate {
