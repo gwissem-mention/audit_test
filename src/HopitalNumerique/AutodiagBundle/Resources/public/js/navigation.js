@@ -35,10 +35,14 @@ AutodiagNavigation.prototype = {
 
             instance.restitutionEnabled = false;
 
+            $.fancybox.showLoading();
             var xhr = $.ajax({
                 url: $(this).attr('href')
             });
             xhr.complete(function(response) {
+
+                $.fancybox.hideLoading();
+                
                 instance.restitutionEnabled = true;
                 var redirect = response.getResponseHeader('RESTITUTION_REDIRECT');
                 if (null !== redirect) {
