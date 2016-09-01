@@ -11,6 +11,11 @@ class ItemAttribute
 
     public $colored;
 
+    /**
+     * @var ItemActionPlan
+     */
+    protected $actionPlan;
+
     public function __construct($label, $colored = true)
     {
         $this->label = $label;
@@ -31,5 +36,15 @@ class ItemAttribute
     public function setResponseText($value)
     {
         $this->responseText = $value;
+    }
+
+    public function setActionPlan(ItemActionPlan $actionPlan)
+    {
+        $this->actionPlan = $actionPlan;
+    }
+
+    public function getActionPlan()
+    {
+        return $this->actionPlan;
     }
 }

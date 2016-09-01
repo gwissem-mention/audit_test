@@ -8,6 +8,7 @@ use HopitalNumerique\AutodiagBundle\Entity\Restitution\Category;
 use HopitalNumerique\AutodiagBundle\Entity\Restitution\Item as RestitutionItem;
 use HopitalNumerique\AutodiagBundle\Model\Result\Item as ResultItem;
 use HopitalNumerique\AutodiagBundle\Entity\Synthesis;
+use HopitalNumerique\AutodiagBundle\Model\Result\ItemActionPlan;
 use HopitalNumerique\AutodiagBundle\Model\Result\ItemAttribute;
 use HopitalNumerique\AutodiagBundle\Model\Result\Score;
 use HopitalNumerique\AutodiagBundle\Repository\AutodiagEntryRepository;
@@ -181,7 +182,12 @@ class RestitutionCalculator
 
             $resultItem->setNumberOfQuestions($container->getTotalNumberOfAttributes());
             $resultItem->setNumberOfAnswers($this->countAnswers($synthesis, $container));
+            $actionPlan = $this->getContainerActionPlan($synthesis->getAutodiag(), $container, $score);
+            if ($actionPlan) {
+                $resultItem->setActionPlan($actionPlan);
+            }
 
+            // Traitement des questions / réponses
             foreach ($container->getAttributes() as $attribute) {
                 /** @var Autodiag\Attribute $attribute */
                 $builder = $this->attributeBuilder->getBuilder($attribute->getType());
@@ -218,6 +224,11 @@ class RestitutionCalculator
                             );
                         }
                     }
+                }
+
+                $actionPlan = $this->getContainerActionPlan($synthesis->getAutodiag(), $container, $score);
+                if ($actionPlan) {
+                    $itemAttribute->setActionPlan($itemAttribute->responseValue);
                 }
             }
 
@@ -357,6 +368,59 @@ class RestitutionCalculator
         }
 
         return $answers;
+    }
+
+    /**
+     * @param Autodiag\ActionPlan[] $plans
+     * @param $score
+     * @return null
+     */
+    protected function findActionPlan($plans, $score)
+    {
+        if (empty($plans)) {
+            return null;
+        }
+
+        $closest = null;
+        $closestValue = $plans[0]->getValue();
+
+        foreach ($plans as $plan) {
+            if ($score < $plan->getValue() && $plan->getValue() < $closestValue) {
+                $closest = $plan;
+                $closestValue = $plan->getValue();
+            }
+        }
+
+        if (null === $closest) {
+            return null;
+        }
+
+        $actionPlan = new ItemActionPlan(
+            $closest->getValue(),
+            $closest->getDescription(),
+            $closest->getLink(),
+            $closest->getLinkDescription()
+        );
+
+        return $actionPlan;
+    }
+
+    protected function getContainerActionPlan(Autodiag $autodiag, Container $container, $score)
+    {
+        $plans = $autodiag->getActionPlans()->filter(function (Autodiag\ActionPlan $actionPlan) use ($container) {
+            return $actionPlan->isVisible() && $actionPlan->getContainer() == $container;
+        });
+
+        return $this->findActionPlan($plans->toArray(), $score);
+    }
+
+    protected function getAttributeActionPlan(Autodiag $autodiag, Autodiag\Attribute $attribute, $score)
+    {
+        $plans = $autodiag->getActionPlans()->filter(function (Autodiag\ActionPlan $actionPlan) use ($attribute) {
+            return $actionPlan->isVisible() && $actionPlan->getAttribute() == $attribute;
+        });
+
+        return $this->findActionPlan($plans->toArray(), $score);
     }
 
     protected function getCacheKey(Autodiag $autodiag, Container $container, Synthesis $synthesis)

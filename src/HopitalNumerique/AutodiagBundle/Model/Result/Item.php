@@ -28,6 +28,11 @@ class Item
     protected $attributes;
 
     /**
+     * @var ItemActionPlan
+     */
+    protected $actionPlan;
+
+    /**
      * @return mixed
      */
     public function getLabel()
@@ -141,5 +146,15 @@ class Item
     public function getAttributes()
     {
         return $this->attributes;
+    }
+
+    public function setActionPlan(ItemActionPlan $actionPlan)
+    {
+        $this->actionPlan = $actionPlan;
+    }
+
+    public function getActionPlan()
+    {
+        return $this->actionPlan;
     }
 }
