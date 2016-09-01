@@ -3,16 +3,19 @@ namespace HopitalNumerique\AutodiagBundle\Service;
 
 use HopitalNumerique\AutodiagBundle\Entity\Autodiag;
 use HopitalNumerique\AutodiagBundle\Entity\Autodiag\Container;
+use HopitalNumerique\AutodiagBundle\Entity\AutodiagEntry;
 use HopitalNumerique\AutodiagBundle\Entity\Restitution\Category;
 use HopitalNumerique\AutodiagBundle\Entity\Restitution\Item as RestitutionItem;
 use HopitalNumerique\AutodiagBundle\Model\Result\Item as ResultItem;
 use HopitalNumerique\AutodiagBundle\Entity\Synthesis;
+use HopitalNumerique\AutodiagBundle\Model\Result\ItemAttribute;
 use HopitalNumerique\AutodiagBundle\Model\Result\Score;
 use HopitalNumerique\AutodiagBundle\Repository\AutodiagEntryRepository;
 use HopitalNumerique\AutodiagBundle\Repository\RestitutionRepository;
 use HopitalNumerique\AutodiagBundle\Service\Algorithm\ReferenceAlgorithm;
 use \HopitalNumerique\AutodiagBundle\Service\Algorithm\Score as Algorithm;
 use HopitalNumerique\AutodiagBundle\Service\Attribute\AttributeBuilderProvider;
+use HopitalNumerique\AutodiagBundle\Service\Attribute\PresetableAttributeBuilderInterface;
 use HopitalNumerique\AutodiagBundle\Service\Synthesis\Completion;
 
 class RestitutionCalculator
@@ -90,9 +93,28 @@ class RestitutionCalculator
             }
         }
 
+        foreach ($autodiag->getChapters() as $chapter) {
+            $cacheKey = $this->getCacheKey(
+                $autodiag,
+                $chapter,
+                $synthesis
+            );
+
+            if (!array_key_exists($cacheKey, $this->items)) {
+                $this->computeItemContainer($chapter, $synthesis, [], true);
+            }
+        }
+
         return $result;
     }
 
+    /**
+     * Traite un item de la page de restitution (représente 1 graphique d'un onglet de la page de resultat)
+     *
+     * @param RestitutionItem $item
+     * @param Synthesis $synthesis
+     * @return array
+     */
     protected function computeItem(RestitutionItem $item, Synthesis $synthesis)
     {
         $result = [
@@ -116,6 +138,7 @@ class RestitutionCalculator
             }
 
             $resultItem = $this->computeItemContainer($container, $synthesis, $references);
+
             foreach ($references as $reference) {
                 $result['references'][$reference->getNumber()] = $reference->getLabel();
             }
@@ -127,6 +150,8 @@ class RestitutionCalculator
     }
 
     /**
+     * Traite les données d'un container d'autodiag (chapitre ou catégorie) pour une synthèse donnée
+     *
      * @param Container $container
      * @param Synthesis $synthesis
      * @param $references
@@ -156,6 +181,45 @@ class RestitutionCalculator
 
             $resultItem->setNumberOfQuestions($container->getTotalNumberOfAttributes());
             $resultItem->setNumberOfAnswers($this->countAnswers($synthesis, $container));
+
+            foreach ($container->getAttributes() as $attribute) {
+                /** @var Autodiag\Attribute $attribute */
+                $builder = $this->attributeBuilder->getBuilder($attribute->getType());
+
+                $itemAttribute = new ItemAttribute($attribute->getLabel());
+                $resultItem->addAttribute($itemAttribute);
+
+                if ($builder instanceof PresetableAttributeBuilderInterface) {
+                    $options = $builder->getPreset($synthesis->getAutodiag())->getPreset();
+                } else {
+                    $options = $attribute->getOptions();
+                }
+
+                foreach ($synthesis->getEntries() as $entry) {
+                    /** @var AutodiagEntry $entry*/
+                    foreach ($entry->getValues() as $entryValue) {
+                        if ($entryValue->getAttribute()->getId() === $attribute->getId()) {
+                            $response = $builder->transform($entryValue->getValue());
+                            if (is_array($response)) {
+
+                                $responseValue = array_sum($response) / count($response);
+                                foreach ($response as $code => &$value) {
+                                    $value = isset($options[$code]) ? $options[$code][$value] : $value;
+                                }
+                                $response = implode(' - ', $response);
+                            } else {
+                                $responseValue = $response;
+                                $response = $options[$response]->getLabel();
+                            }
+
+                            $itemAttribute->setResponse(
+                                $responseValue,
+                                $response
+                            );
+                        }
+                    }
+                }
+            }
 
             if (count($references) > 0) {
                 foreach ($references as $reference) {

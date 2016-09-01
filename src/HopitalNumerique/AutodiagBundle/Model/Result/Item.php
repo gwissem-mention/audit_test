@@ -25,6 +25,8 @@ class Item
 
     protected $numberOfAnswers;
 
+    protected $attributes;
+
     /**
      * @return mixed
      */
@@ -129,5 +131,15 @@ class Item
     public function setNumberOfAnswers($numberOfAnswers)
     {
         $this->numberOfAnswers = $numberOfAnswers;
+    }
+
+    public function addAttribute(ItemAttribute $attribute)
+    {
+        $this->attributes[] = $attribute;
+    }
+
+    public function getAttributes()
+    {
+        return $this->attributes;
     }
 }

@@ -1,0 +1,25 @@
+<span class="chapter-title">
+
+    <span class="chapter-title">
+        {{ resultItem.label }}
+    </span>
+    <i>Nombre de réponses : {{ resultItem.numberOfAnswers }} / {{ resultItem.numberOfQuestions }}</i>
+
+    <table class="table table-bordered">
+        {% for attribute in resultItem.attributes %}
+            <tr>
+                <td>{{ attribute.label }}</td>
+                <td>{{ attribute.responseText }}</td>
+                <td>{{ attribute.responseValue }}</td>
+            </tr>
+        {% endfor %}
+    </table>
+
+    <ul>
+        {% for child in resultItem.childrens %}
+            <li>
+                {{ include('@HopitalNumeriqueAutodiag/Restitution/item/reponses/_chapter.html.twig', {"resultItem": child}) }}
+            </li>
+        {% endfor %}
+    </ul>
+</span>
