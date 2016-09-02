@@ -71,6 +71,18 @@ class Synthesis
      */
     private $entries;
 
+    /**
+     * @var Collection
+     *
+     * @ORM\ManyToMany(targetEntity="HopitalNumerique\UserBundle\Entity\User")
+     * @ORM\JoinTable(
+     *     name="ad_synthesis_share",
+     *     joinColumns={@ORM\JoinColumn(name="synthesis_id", referencedColumnName="id")},
+     *     inverseJoinColumns={@ORM\JoinColumn(name="user_id", referencedColumnName="usr_id")}
+     * )
+     */
+    private $shares;
+
     private function __construct(Autodiag $autodiag, User $user = null)
     {
         $this->entries = new ArrayCollection();
@@ -268,6 +280,41 @@ class Synthesis
     public function setUser(User $user)
     {
         $this->user = $user;
+
+        return $this;
+    }
+
+    /**
+     * Get shares
+     *
+     * @return Collection
+     */
+    public function getShares()
+    {
+        return $this->shares;
+    }
+
+    /**
+     * Add share
+     *
+     * @param User $user
+     * @return $this
+     */
+    public function addShare(User $user)
+    {
+        $this->shares->add($user);
+        return $this;
+    }
+
+    /**
+     * Remove share
+     *
+     * @param User $user
+     * @return $this
+     */
+    public function removeShare(User $user)
+    {
+        $this->shares->removeElement($user);
 
         return $this;
     }

@@ -20,6 +20,16 @@
         <div class="content">
             <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Aspernatur at atque aut cupiditate deserunt eaque explicabo inventore ipsum magnam molestias nihil non quisquam quos temporibus tenetur, ut vitae voluptatem voluptates.</p>
 
+
+
+
+            <div class="shares">
+                <ul>
+                    {% for share in synthesis.shares %}
+                        <li>{{ share.nom }} {{ share.prenom }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
             PARTAGE
 
         </div>

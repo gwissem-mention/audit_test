@@ -11,6 +11,7 @@ use Symfony\Component\Security\Core\Authorization\Voter\Voter;
 class AutodiagEntryVoter extends Voter
 {
     const EDIT = 'edit';
+    const READ = 'read';
 
     /**
      * @var AutodiagEntrySession
