@@ -39,6 +39,13 @@ class AutodiagEntry
     private $updatedAt;
 
     /**
+     * @var \DateTime
+     *
+     * @ORM\Column(type="datetime", nullable=true)
+     */
+    private $validatedAt;
+
+    /**
      * @var bool
      * @ORM\Column(type="boolean")
      */
@@ -173,6 +180,30 @@ class AutodiagEntry
     {
         $this->updatedAt = new \DateTime();
         $this->getSynthesis()->setUpdatedAt($this->updatedAt);
+    }
+
+    /**
+     * Get validation datetime
+     *
+     * @return \DateTime
+     */
+    public function getValidatedAt()
+    {
+        return $this->validatedAt;
+    }
+
+    /**
+     * Set validation datetime
+     *
+     * @param \DateTime $validatedAt
+     *
+     * @return $this
+     */
+    public function setValidatedAt($validatedAt)
+    {
+        $this->validatedAt = $validatedAt;
+
+        return $this;
     }
 
     /**

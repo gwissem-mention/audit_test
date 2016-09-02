@@ -168,6 +168,9 @@ class Synthesis
     public function setValidatedAt($validatedAt)
     {
         $this->validatedAt = $validatedAt;
+        foreach ($this->getEntries() as $entry) {
+            $entry->setValidatedAt($validatedAt);
+        }
 
         return $this;
     }

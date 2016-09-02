@@ -9,27 +9,47 @@
             "entry" : synthesis.entries|length > 1 ? null : synthesis.entries.first
         } %}
 
-        <div class="header">
+        <div class="restitution-header">
             <div class="update-at">
                 Le {{ synthesis.updatedAt|date('d/m/Y') }}
             </div>
 
             <div class="identity">
-                <span class="title">{{ synthesis.autodiag.title }}</span>
-                <span class="name">{{ synthesis.name }}</span>
+                <div class="title">{{ synthesis.autodiag.title }}</div>
+                <div class="name">{{ synthesis.name }}</div>
             </div>
-        </div>
 
-        {% if synthesis.entries|length > 1 %}
-            <div class="synthesis">
-                <span>{{ "ad.restitution.synthesis"|trans }}</span>
-                <ul>
-                    {% for entry in synthesis.entries %}
-                        <li>{{ entry.name }}</li>
-                    {% endfor %}
-                </ul>
+            <div class="pull-left">
+                {% if not app.user %}
+                    <div class="loggedout-warning">
+                        <div>{{ "ad.restitution.loggedout-warning"|trans }}</div>
+                        <a href="{{ path('account_login') }}">Connexion</a>
+                        ou
+                        <a href="{{ path('hopital_numerique_user_inscription') }}">Créer un compte</a>
+                    </div>
+                {% endif %}
+
+                {% if synthesis.entries|length > 1 %}
+                    <div class="synthesis">
+                        <span>{{ "ad.restitution.synthesis"|trans }} : </span>
+                        <ul>
+                            {% for entry in synthesis.entries %}
+                                <li>{{ entry.name }} - {{ entry.validatedAt|date('d/m/Y') }}</li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                {% endif %}
             </div>
-        {% endif %}
+
+            <div class="links pull-right">
+                <a class="btn btn-success" href="{{ path("hopitalnumerique_autodiag_entry_add", {"autodiag": synthesis.autodiag.id}) }}">
+                    {{ "ad.restitution.start_new"|trans }}
+                </a>
+            </div>
+
+            <div class="clearfix"></div>
+
+        </div>
 
         <div class="content">
             <ul class="nav nav-tabs" role="tablist">

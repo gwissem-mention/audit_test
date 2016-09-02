@@ -2,6 +2,27 @@
 
 }
 
+#restitution .restitution-header {
+    margin: 20px 0;
+}
+
+#restitution .restitution-header .identity {
+    text-align: center;
+    font-weight: bold;
+    font-size: 20px;
+}
+#restitution .restitution-header .identity .title {
+    font-size: 24px;
+}
+
+#restitution .restitution-header .loggedout-warning {
+    max-width: 350px;
+    background-color: #f9b1b1;
+    padding: 8px 14px;
+    border-radius: 4px;
+    margin: 10px 0;
+}
+
 #restitution .item-row {
     display: flex;
 }

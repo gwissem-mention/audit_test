@@ -124,6 +124,9 @@ ad:
         priority: ordre_restitution
         type: type_restitution
         empty: Il n'y a pas encore de mode de restitution pour cet autodiagnostic.
+        loggedout-warning: Attention, vous n'êtes pas connecté, vos résultats seront perdus à la fermeture du navigateur.
+        synthesis: Synthèse des autodiagnistics suivants
+        start_new: Commencer un nouvel autodiagnostic
 
     actionplan:
         description: Description
