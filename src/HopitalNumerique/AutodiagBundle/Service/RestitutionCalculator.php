@@ -182,6 +182,7 @@ class RestitutionCalculator
 
             $resultItem->setNumberOfQuestions($container->getTotalNumberOfAttributes());
             $resultItem->setNumberOfAnswers($this->countAnswers($synthesis, $container));
+
             $actionPlan = $this->getContainerActionPlan($synthesis->getAutodiag(), $container, $score);
             if ($actionPlan) {
                 $resultItem->setActionPlan($actionPlan);
@@ -226,9 +227,9 @@ class RestitutionCalculator
                     }
                 }
 
-                $actionPlan = $this->getContainerActionPlan($synthesis->getAutodiag(), $container, $score);
+                $actionPlan = $this->getAttributeActionPlan($synthesis->getAutodiag(), $attribute, $score);
                 if ($actionPlan) {
-                    $itemAttribute->setActionPlan($itemAttribute->responseValue);
+                    $itemAttribute->setActionPlan($actionPlan);
                 }
             }
 
@@ -382,10 +383,10 @@ class RestitutionCalculator
         }
 
         $closest = null;
-        $closestValue = $plans[0]->getValue();
+        $closestValue = current($plans)->getValue();
 
         foreach ($plans as $plan) {
-            if ($score < $plan->getValue() && $plan->getValue() < $closestValue) {
+            if ($score < $plan->getValue() && $plan->getValue() <= $closestValue) {
                 $closest = $plan;
                 $closestValue = $plan->getValue();
             }

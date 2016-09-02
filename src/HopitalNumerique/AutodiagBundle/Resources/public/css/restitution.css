@@ -179,3 +179,27 @@
     padding-bottom: 20px;
     font-size: 24px;
 }
+
+
+/**
+* Plan d'action
+*/
+#restitution .plan_action td.empty-cell {
+    background: #f1f1f1;
+}
+
+#restitution .plan_action tr.attribute td:first-child {
+    text-indent: 20px;
+}
+
+#restitution .plan_action tr.children td:first-child {
+    text-indent: 20px;
+}
+
+#restitution .plan_action tr.children.attribute td:first-child {
+    text-indent: 40px;
+}
+
+#restitution .plan_action tr.root {
+     font-weight: bold;
+}

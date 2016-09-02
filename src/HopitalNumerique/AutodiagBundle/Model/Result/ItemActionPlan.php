@@ -16,4 +16,36 @@ class ItemActionPlan
         $this->link = $link;
         $this->linkDescription = $linkDescription;
     }
+
+    /**
+     * @return mixed
+     */
+    public function getValue()
+    {
+        return $this->value;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getDescription()
+    {
+        return $this->description;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getLink()
+    {
+        return $this->link;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getLinkDescription()
+    {
+        return $this->linkDescription;
+    }
 }

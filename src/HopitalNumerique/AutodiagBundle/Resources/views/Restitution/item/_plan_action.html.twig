@@ -1,36 +1,78 @@
-<table class="table table-striped table-bordered">
-    <thead>
-        <tr>
-            <th>Container</th>
-            <th>Réponse</th>
-            <th>Plan d'action</th>
-            <th>Lien</th>
-        </tr>
-    </thead>
-    <tbody>
-        {% for data in result.items %}
-            <tr class="root">
-                <td class="container-label">{{ data.label }}</td>
-                <td></td>
-                <td>
-                    {% if data.actionPlan is not null %}
-                        {{ data.actionPlan.description }}
-                    {% endif %}
-                </td>
+<div class="plan_action">
+    <table class="table table-striped table-bordered">
+        <thead>
+            <tr>
+                <th>Container</th>
+                <th>Réponse</th>
+                <th>Plan d'action</th>
+                <th>Lien</th>
             </tr>
-            {% for children in data.childrens %}
-                <tr>
-                    <td class="container-label">{{ children.label }}</td>
-                    <td></td>
-                    <td>
-                        {% if children.actionPlan is not null %}
-                            {{ children.actionPlan.description }}
-                        {% endif %}
-                    </td>
+        </thead>
+        <tbody>
+            {% for data in result.items %}
+                <tr class="root autodiag-container">
+                    <td class="container-label">{{ data.label }}</td>
+                    <td class="empty-cell"></td>
+                    {% if data.actionPlan is not null %}
+                        <td>{{ data.actionPlan.description }}</td>
+                        <td>
+                            <a href="{{ data.actionPlan.link }}">{{ data.actionPlan.linkDescription }}</a>
+                        </td>
+                    {% else %}
+                        <td class="empty-cell"></td>
+                        <td class="empty-cell"></td>
+                    {% endif %}
                 </tr>
+
+                {% for attribute in data.attributes %}
+                    <tr class="attribute">
+                        <td>{{ attribute.label }}</td>
+                        <td>{{ attribute.responseText }}</td>
+                        {% if attribute.actionPlan is not null %}
+                            <td>{{ attribute.actionPlan.description }}</td>
+                            <td>
+                                <a href="{{ attribute.actionPlan.link }}">{{ attribute.actionPlan.linkDescription }}</a>
+                            </td>
+                        {% else %}
+                            <td class="empty-cell"></td>
+                            <td class="empty-cell"></td>
+                        {% endif %}
+                    </tr>
+                {% endfor %}
+
+                {% for children in data.childrens %}
+                    <tr class="children">
+                        <td class="container-label">{{ children.label }}</td>
+                        <td class="empty-cell"></td>
+                        {% if children.actionPlan is not null %}
+                            <td>{{ children.actionPlan.description }}</td>
+                            <td>
+                                <a href="{{ children.actionPlan.link }}">{{ children.actionPlan.linkDescription }}</a>
+                            </td>
+                        {% else %}
+                            <td class="empty-cell"></td>
+                            <td class="empty-cell"></td>
+                        {% endif %}
+
+                    {% for attribute in children.attributes %}
+                        <tr class="children attribute">
+                            <td>{{ attribute.label }}</td>
+                            <td>{{ attribute.responseText }}</td>
+                            {% if attribute.actionPlan is not null %}
+                                <td>{{ attribute.actionPlan.description }}</td>
+                                <td>
+                                    <a href="{{ attribute.actionPlan.link }}">{{ attribute.actionPlan.linkDescription }}</a>
+                                </td>
+                            {% else %}
+                                <td class="empty-cell"></td>
+                                <td class="empty-cell"></td>
+                            {% endif %}
+                        </tr>
+                    {% endfor %}
+
+                    </tr>
+                {% endfor %}
             {% endfor %}
-        {% endfor %}
-    </tbody>
-</table>
-
-
+        </tbody>
+    </table>
+</div>
