@@ -61,7 +61,7 @@
                                 {% endif %}
 
                                 <div class="item" data-row="{{ item.row }}" data-column="{{ item.column }}">
-                                    {% include ("@HopitalNumeriqueAutodiag/Restitution/item/_" ~ item.type ~ ".html.twig") with {
+                                    {% include ("@HopitalNumeriqueAutodiag/Restitution/item/_" ~ item.type ~ ".html.twig") ignore missing with {
                                         'restitution': item,
                                         'result': result[item.id]
                                     } %}

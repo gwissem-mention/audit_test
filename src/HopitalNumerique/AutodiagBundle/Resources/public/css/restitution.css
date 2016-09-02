@@ -21,13 +21,13 @@
 }
 
 #restitution .item .low {
-    background: #FF0000;
+    background: #f2dede;
 }
 #restitution .item .middle {
-    background: #FF9900;
+    background: #fcf8e3;
 }
 #restitution .item .high {
-    background: #008000;
+    background: #dff0d8;
 }
 
 /**
@@ -87,7 +87,7 @@
     z-index: 2;
 }
 #restitution .item.jauge-widget .score.reference {
-    border-bottom-color: #424242;
+    border-bottom-color: #888;
     z-index: 1;
 }
 
@@ -180,13 +180,65 @@
     font-size: 24px;
 }
 
+/**
+* METEO
+*/
+#restitution .meteo-type {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+#restitution .meteo-widget-wrapper {
+    flex: 1;
+    padding: 20px;
+    min-width: 180px;
+}
+
+#restitution .meteo-widget {
+    text-align: center;
+}
+
+#restitution .meteo-widget .meteo-value {
+    padding: 20px 0;
+    font-weight: bold;
+    font-size: 32px;
+}
+#restitution .meteo-widget .meteo-label {
+    font-size: 24px;
+}
+
+/**
+* Reponse
+*/
+#restitution .reponses ul {
+    padding: 0;
+    margin: 0;
+    list-style-type: none;
+}
+
+#restitution .reponses ul ul {
+    padding-left: 20px;
+    margin: 0;
+}
+
+#restitution .reponses .chapter-title {
+    font-weight: bold;
+}
+#restitution .reponses .chapter-title i {
+    font-weight: normal;
+    font-size: 11px;
+}
+#restitution .reponses table {
+    margin-top: 10px;
+}
+#restitution .reponses table .mood {
+    width: 60px;
+    text-align: center;
+}
 
 /**
 * Plan d'action
 */
-#restitution .plan_action td.empty-cell {
-    background: #f1f1f1;
-}
 
 #restitution .plan_action tr.attribute td:first-child {
     text-indent: 20px;

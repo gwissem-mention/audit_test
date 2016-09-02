@@ -1,0 +1,23 @@
+<div class="meteo-type">
+
+    {% for data in result.items %}
+        <div class="meteo-widget-wrapper">
+            <div class="meteo-widget">
+                <div class="meteo-label">{{ data.label }}</div>
+                <div class="meteo-value">
+                    {% if data.score.value < 33 %}
+                        <img src="{{ asset('bundles/hopitalnumeriqueautodiag/images/meteo/pluie.png') }}" alt="pluie" />
+                    {% elseif data.score.value < 66 %}
+                        <img src="{{ asset('bundles/hopitalnumeriqueautodiag/images/meteo/nuage.png') }}" alt="nuage" />
+                    {% else %}
+                        <img src="{{ asset('bundles/hopitalnumeriqueautodiag/images/meteo/soleil.png') }}" alt="soleil" />
+                    {% endif %}
+                </div>
+                <div class="meteo-score">
+                    {{ data.score.value }} / 100
+                </div>
+            </div>
+        </div>
+    {% endfor %}
+
+</div>
