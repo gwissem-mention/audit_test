@@ -10,69 +10,13 @@
         </thead>
         <tbody>
             {% for data in result.items %}
-                <tr class="root autodiag-container">
-                    <td class="container-label">{{ data.label }}</td>
-                    <td class="empty-cell"></td>
-                    {% if data.actionPlan is not null %}
-                        <td>{{ data.actionPlan.description }}</td>
-                        <td>
-                            <a href="{{ url(data.actionPlan.link) }}">{{ data.actionPlan.linkDescription }}</a>
-                        </td>
-                    {% else %}
-                        <td class="empty-cell"></td>
-                        <td class="empty-cell"></td>
-                    {% endif %}
-                </tr>
-
-                {% for attribute in data.attributes %}
-                    <tr class="attribute">
-                        <td>{{ attribute.label }}</td>
-                        <td>{{ attribute.responseText }}</td>
-                        {% if attribute.actionPlan is not null %}
-                            <td>{{ attribute.actionPlan.description }}</td>
-                            <td>
-                                <a href="{{ attribute.actionPlan.link }}">{{ attribute.actionPlan.linkDescription }}</a>
-                            </td>
-                        {% else %}
-                            <td class="empty-cell"></td>
-                            <td class="empty-cell"></td>
-                        {% endif %}
-                    </tr>
-                {% endfor %}
-
-                {% for children in data.childrens %}
-                    <tr class="children">
-                        <td class="container-label">{{ children.label }}</td>
-                        <td class="empty-cell"></td>
-                        {% if children.actionPlan is not null %}
-                            <td>{{ children.actionPlan.description }}</td>
-                            <td>
-                                <a href="{{ children.actionPlan.link }}">{{ children.actionPlan.linkDescription }}</a>
-                            </td>
-                        {% else %}
-                            <td class="empty-cell"></td>
-                            <td class="empty-cell"></td>
-                        {% endif %}
-
-                    {% for attribute in children.attributes %}
-                        <tr class="children attribute">
-                            <td>{{ attribute.label }}</td>
-                            <td>{{ attribute.responseText }}</td>
-                            {% if attribute.actionPlan is not null %}
-                                <td>{{ attribute.actionPlan.description }}</td>
-                                <td>
-                                    <a href="{{ attribute.actionPlan.link }}">{{ attribute.actionPlan.linkDescription }}</a>
-                                </td>
-                            {% else %}
-                                <td class="empty-cell"></td>
-                                <td class="empty-cell"></td>
-                            {% endif %}
-                        </tr>
-                    {% endfor %}
-
-                    </tr>
-                {% endfor %}
+                {% include "@HopitalNumeriqueAutodiag/Restitution/item/planAction/_container.html.twig" with {"container": data } %}
             {% endfor %}
+            <tr class="empty-data">
+                <td colspan="4">
+                    Aucun plan d'action
+                </td>
+            </tr>
         </tbody>
     </table>
 </div>
