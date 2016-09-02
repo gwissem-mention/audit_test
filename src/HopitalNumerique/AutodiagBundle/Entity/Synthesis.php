@@ -159,17 +159,31 @@ class Synthesis
     }
 
     /**
-     * Set validation datetime
-     *
-     * @param \DateTime $validatedAt
+     * Validate
      *
      * @return $this
      */
-    public function setValidatedAt($validatedAt)
+    public function validate()
     {
+        $validatedAt = new \DateTime();
         $this->validatedAt = $validatedAt;
         foreach ($this->getEntries() as $entry) {
             $entry->setValidatedAt($validatedAt);
+        }
+
+        return $this;
+    }
+
+    /**
+     * Unvalidate
+     *
+     * @return $this
+     */
+    public function unvalidate()
+    {
+        $this->validatedAt = null;
+        foreach ($this->getEntries() as $entry) {
+            $entry->setValidatedAt(null);
         }
 
         return $this;

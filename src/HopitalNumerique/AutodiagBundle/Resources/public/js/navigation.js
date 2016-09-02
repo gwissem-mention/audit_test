@@ -1,5 +1,6 @@
 var AutodiagNavigation = function(element, options) {
     this.element = element;
+    this.step = element.data('step');
 
     this.options = $.extend({
         partialResultsAuthorized: true
@@ -25,7 +26,11 @@ AutodiagNavigation.prototype = {
     bindEvents: function() {
         var instance = this;
 
-        $('.restitution a', this.element).click(function (e) {
+        $('.restitution a, .validation a', this.element).click(function (e) {
+
+            if (instance.step != "fill") {
+                return true;
+            }
 
             e.preventDefault();
 
@@ -38,7 +43,7 @@ AutodiagNavigation.prototype = {
             $.fancybox.helpers.overlay.open({parent: 'body'});
             $.fancybox.showLoading();
             var xhr = $.ajax({
-                url: $(this).attr('href')
+                url: $(this).data('demand')
             });
             xhr.complete(function(response) {
 
@@ -69,8 +74,10 @@ AutodiagNavigation.prototype = {
         this.restitutionEnabled = active;
         if (active) {
             $('.restitution a', this.element).removeClass('disabled');
+            $('.validation a', this.element).removeClass('disabled');
         } else {
             $('.restitution a', this.element).addClass('disabled');
+            $('.validation a', this.element).addClass('disabled');
         }
         this.autodiag.summary.changeRestultMessageVisibility(
             this.options.partialResultsAuthorized === false && completion == 100

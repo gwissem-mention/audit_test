@@ -81,6 +81,11 @@ class CriticiteBuilder extends AbstractPresetableBuilder
     public function isEmpty($data)
     {
         $data = $this->transform($data);
+
+        if (!is_array($data)) {
+            return true;
+        }
+
         $empty = false;
         foreach ($data as $value) {
             $empty = $empty || ($value === null);

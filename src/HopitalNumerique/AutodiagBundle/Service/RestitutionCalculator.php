@@ -211,7 +211,11 @@ class RestitutionCalculator
 
                                 $responseValue = array_sum($response) / count($response);
                                 foreach ($response as $code => &$value) {
-                                    $value = isset($options[$code]) ? $options[$code][$value] : $value;
+                                    if (null === $value) {
+                                        $value = " - ";
+                                    } else {
+                                        $value = isset($options[$code]) ? $options[$code][$value] : $value;
+                                    }
                                 }
                                 $response = implode(' - ', $response);
                             } else {

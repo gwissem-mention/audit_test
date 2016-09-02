@@ -2,7 +2,11 @@
 
 {% block body %}
 
-    {% include "@HopitalNumeriqueAutodiag/_navigation.html.twig" with {"step": "fill", "autodiag": autodiag} %}
+    {% include "@HopitalNumeriqueAutodiag/_navigation.html.twig" with {
+        "step": "fill",
+        "autodiag": autodiag,
+        "synthesis": entry.synthesis
+    } %}
 
     {% if synthesisCreateForm is not null %}
         <div id="synthesisCreate" class="autodiag-popin">

@@ -1,0 +1,30 @@
+{% extends 'HopitalNumeriqueAutodiagBundle::layout.html.twig' %}
+
+{% block body %}
+    <div id="validation">
+
+        {% include "@HopitalNumeriqueAutodiag/_navigation.html.twig" with {
+            "step": "share",
+            "autodiag": synthesis.autodiag,
+            "synthesis": synthesis,
+            "entry" : synthesis.entries|length > 1 ? null : synthesis.entries.first
+        } %}
+
+        <div class="validation-header">
+            <div class="identity">
+                <div class="title">{{ synthesis.autodiag.title }}</div>
+                <div class="name">{{ synthesis.name }}</div>
+            </div>
+        </div>
+
+        <div class="content">
+            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Aspernatur at atque aut cupiditate deserunt eaque explicabo inventore ipsum magnam molestias nihil non quisquam quos temporibus tenetur, ut vitae voluptatem voluptates.</p>
+
+            PARTAGE
+
+        </div>
+    </div>
+
+{% endblock %}
+
+

@@ -66,7 +66,7 @@
     border-left-color: #c5c5c5;
 }
 
-#autodiag-path a.disabled {
+#autodiag-path a.disabled, #autodiag-path span.disabled {
     color: #c8c8c8;
     cursor: default;
 }

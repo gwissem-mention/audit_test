@@ -188,27 +188,43 @@ class AutodiagEntryController extends Controller
      * @param AutodiagEntry $entry
      * @return Response
      */
-    public function restitutionDemandAction(AutodiagEntry $entry)
+    public function restitutionOrValidationDemandAction(AutodiagEntry $entry, $target)
     {
         $response = new Response();
         $repo = $this->getDoctrine()->getManager()->getRepository('HopitalNumeriqueAutodiagBundle:Autodiag\Attribute');
         $autodiag = $entry->getSynthesis()->getAutodiag();
-        $filled = $entry->getValues()->count();
+
+        $filled = 0;
+        foreach ($entry->getValues() as $entryValue) {
+            $builder = $this->get('autodiag.attribute_builder_provider')->getBuilder(
+                $entryValue->getAttribute()->getType()
+            );
+
+            if (!$builder->isEmpty($entryValue->getValue())) {
+                $filled++;
+            }
+        }
+
         $total = count($repo->getAttributesHavingChapter($autodiag));
 
         if ($filled == $total) {
-            $response->headers->set(
-                'RESTITUTION_REDIRECT',
-                $this->generateUrl('hopitalnumerique_autodiag_restitution_index', [
+            if ($target == "restitution") {
+                $path = $this->generateUrl('hopitalnumerique_autodiag_restitution_index', [
                     'synthesis' => $entry->getSynthesis()->getId()
-                ])
-            );
+                ]);
+            } else {
+                $path = $this->generateUrl('hopitalnumerique_autodiag_validation_index', [
+                    'synthesis' => $entry->getSynthesis()->getId()
+                ]);
+            }
+            $response->headers->set('RESTITUTION_REDIRECT', $path);
         } else {
             $response->setContent(
                 $this->renderView("@HopitalNumeriqueAutodiag/AutodiagEntry/restitution_demand.html.twig", [
                     'left' => $total - $filled,
                     'autodiag' => $autodiag,
                     'synthesis' => $entry->getSynthesis(),
+                    'target' => $target
                 ])
             );
         }

@@ -6,6 +6,7 @@
         {% include "@HopitalNumeriqueAutodiag/_navigation.html.twig" with {
             "step": "restitution",
             "autodiag": synthesis.autodiag,
+            "synthesis": synthesis,
             "entry" : synthesis.entries|length > 1 ? null : synthesis.entries.first
         } %}
 

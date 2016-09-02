@@ -12,7 +12,11 @@
 
     {% if autodiag.partialResultsAuthorized %}
         <div>
-            <a href="{{ path("hopitalnumerique_autodiag_restitution_index", {"synthesis": synthesis.id}) }}">{{ 'ad.front.restitution_demand.continue'|trans }}</a>
+            {% if target == "restitution" %}
+                <a href="{{ path("hopitalnumerique_autodiag_restitution_index", {"synthesis": synthesis.id}) }}">{{ 'ad.front.restitution_demand.continue'|trans }}</a>
+            {% elseif target == "validation" %}
+                <a href="{{ path("hopitalnumerique_autodiag_validation_index", {"synthesis": synthesis.id}) }}">{{ 'ad.front.validation_demand.continue'|trans }}</a>
+            {% endif %}
         </div>
     {% endif %}
 </div>

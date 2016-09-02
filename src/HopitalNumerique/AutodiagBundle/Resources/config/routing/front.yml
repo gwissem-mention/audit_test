@@ -14,9 +14,9 @@ hopitalnumerique_autodiag_entry_chapter_notconcerned:
     path:     /autodiagnostic/edit/{entry}/setchapternotconcerned/{chapter}
     defaults: { _controller: HopitalNumeriqueAutodiagBundle:Front/AutodiagEntry:ajaxChapterNotConcerned }
 
-hopitalnumerique_autodiag_entry_restitution_demand:
-    path:     /autodiagnostic/edit/{entry}/restitution_demand
-    defaults: { _controller: HopitalNumeriqueAutodiagBundle:Front/AutodiagEntry:restitutionDemand }
+hopitalnumerique_autodiag_entry_restitution_validation_demand:
+    path:     /autodiagnostic/edit/{entry}/demand/{target}
+    defaults: { _controller: HopitalNumeriqueAutodiagBundle:Front/AutodiagEntry:restitutionOrValidationDemand }
 
 hopitalnumerique_autodiag_synthesis_savenew:
     path: /autodiagnostic/{autodiag}/synthese/save
@@ -26,6 +26,24 @@ hopitalnumerique_autodiag_synthesis_savenew:
 hopitalnumerique_autodiag_restitution_index:
     path:     /autodiagnostic/restitution/{synthesis}
     defaults: { _controller: HopitalNumeriqueAutodiagBundle:Front/Restitution:index }
+
+hopitalnumerique_autodiag_validation_index:
+    path:     /autodiagnostic/validation/{synthesis}
+    defaults: { _controller: HopitalNumeriqueAutodiagBundle:Front/Validation:index }
+
+hopitalnumerique_autodiag_validate:
+    path:     /autodiagnostic/validation/{synthesis}/validate
+    defaults: { _controller: HopitalNumeriqueAutodiagBundle:Front/Validation:validate }
+
+hopitalnumerique_autodiag_unvalidate:
+    path:     /autodiagnostic/validation/{synthesis}/unvalidate
+    defaults: { _controller: HopitalNumeriqueAutodiagBundle:Front/Validation:unvalidate }
+
+
+hopitalnumerique_autodiag_share_index:
+    path:     /autodiagnostic/share/{synthesis}
+    defaults: { _controller: HopitalNumeriqueAutodiagBundle:Front/Share:index }
+
 
 hopitalnumerique_autodiag_account_index:
     path:     compte-hn/autodiagnostic

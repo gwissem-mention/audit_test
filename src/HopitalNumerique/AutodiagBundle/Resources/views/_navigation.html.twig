@@ -1,26 +1,47 @@
 {% set step = step|default('fill') %}
 
-<div id="autodiag-path">
+<div id="autodiag-path" data-step="{{ step }}">
     <ul>
         <li class="{{ step == "fill" ? 'active' : '' }}">
-            <a href="{% if entry is not null and entry.id is not null %}{{ path('hopitalnumerique_autodiag_entry_edit', {"entry": entry.id}) }}{% else %}#{% endif %}" class="{{ entry is not defined or entry is null ? 'disabled' : '' }}">
-                {{ "ad.autodiag.path.fill"|trans }}
-            </a>
+            {% if entry is not defined or entry is null or synthesis.validatedAt is not null %}
+                <span class="disabled">
+                    {{ "ad.autodiag.path.fill"|trans }}
+                </span>
+            {% else %}
+                <a href="{% if entry is not null and entry.id is not null %}{{ path('hopitalnumerique_autodiag_entry_edit', {"entry": entry.id}) }}{% else %}#{% endif %}">
+                    {{ "ad.autodiag.path.fill"|trans }}
+                </a>
+            {% endif %}
         </li>
         <li class="restitution {{ step == "restitution" ? 'active' : '' }}">
-            <a href="{% if entry is not null and entry.id is not null %}{{ path('hopitalnumerique_autodiag_entry_restitution_demand', {"entry": entry.id}) }}{% else %}#{% endif %}">
+            <a href="{{ path('hopitalnumerique_autodiag_restitution_index', {"synthesis": synthesis.id}) }}"
+               {% if entry is not null and entry.id is not null %}
+                    data-demand="{{ path('hopitalnumerique_autodiag_entry_restitution_validation_demand', {"entry": entry.id, "target": "restitution"}) }}"
+               {% endif %}
+            >
                 {{ "ad.autodiag.path.results"|trans }}
             </a>
         </li>
-        <li class="{{ step == "validate" ? 'active' : '' }}">
-            <a href="#">
+        <li class="validation {{ step == "validation" ? 'active' : '' }}">
+            <a href="{{ path('hopitalnumerique_autodiag_validation_index', {"synthesis": synthesis.id}) }}"
+                {% if entry is not null and entry.id is not null %}
+                    data-demand="{{ path('hopitalnumerique_autodiag_entry_restitution_validation_demand', {"entry": entry.id, "target": "validation"}) }}"
+                {% endif %}
+            >
                 {{ "ad.autodiag.path.validate"|trans }}
             </a>
         </li>
         <li class="{{ step == "share" ? 'active' : '' }}">
-            <a href="#">
-                {{ "ad.autodiag.path.share"|trans }}
-            </a>
+            {% if synthesis.validatedAt is not null %}
+                <a href="{{ path('hopitalnumerique_autodiag_share_index', {"synthesis": synthesis.id}) }}">
+                    {{ "ad.autodiag.path.share"|trans }}
+                </a>
+            {% else %}
+                <span class="disabled">
+                    {{ "ad.autodiag.path.share"|trans }}
+                </span>
+            {% endif %}
+
         </li>
     </ul>
 </div>

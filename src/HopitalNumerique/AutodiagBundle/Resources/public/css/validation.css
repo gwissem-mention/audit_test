@@ -1,0 +1,14 @@
+#validation .validation-header {
+    font-weight: bold;
+    font-size: 20px;
+    text-align: center;
+    margin: 20px 0;
+}
+
+#validation .validation-header .title {
+    font-size: 24px;
+}
+
+#validation .buttons {
+    text-align: center;
+}
