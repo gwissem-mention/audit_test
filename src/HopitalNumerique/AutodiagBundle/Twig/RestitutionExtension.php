@@ -42,7 +42,7 @@ class RestitutionExtension extends \Twig_Extension
             ],
             'tooltip' => [
                 'shared' => true,
-                'pointFormat' => '<span style="color:{series.color}">{series.name}: <b>${point.y:,.0f}</b><br/>',
+                'pointFormat' => '<span style="color:{series.color}">{series.name}: <b>{point.y:,.0f}</b><br/>',
             ],
             'legend' => [
                 'align' => 'right',

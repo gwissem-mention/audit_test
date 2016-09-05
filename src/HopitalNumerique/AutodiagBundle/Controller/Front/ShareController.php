@@ -16,10 +16,6 @@ class ShareController extends Controller
         $synthesis = $this->getDoctrine()->getManager()->getRepository('HopitalNumeriqueAutodiagBundle:Synthesis')
             ->getFullyLoadedSynthesis($synthesis);
 
-
-        $user = $this->get('hopitalnumerique_user.manager.user')->findOneById(209);
-        $synthesis->addShare($user);
-
         $autodiag = $synthesis->getAutodiag();
 
         if ($synthesis->getEntries()->count() === 0) {

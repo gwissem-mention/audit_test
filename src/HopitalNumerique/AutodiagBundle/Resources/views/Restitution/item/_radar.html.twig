@@ -13,7 +13,7 @@
                 {% for item in result.items %}
                     <tr>
                         <td>{{ item.label }}</td>
-                        <td>{{ item.numberOfAnswers / item.numberOfQuestions * 100 }} %</td>
+                        <td>{{ (item.numberOfAnswers / item.numberOfQuestions * 100)|round }} %</td>
                     </tr>
                 {% endfor %}
             </tbody>

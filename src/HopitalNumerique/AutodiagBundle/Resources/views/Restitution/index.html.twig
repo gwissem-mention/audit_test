@@ -66,7 +66,7 @@
             <div class="tab-content">
                 {% for category in restitution.categories %}
                     <div role="tabpanel" class="tab-pane category {{ loop.first ? 'active' : '' }}" id="{{ category.id }}">
-                        <p>
+                        <p class="category-description">
                             {{ category.description }}
                         </p>
 
@@ -81,7 +81,7 @@
                                     <div class="item-row">
                                 {% endif %}
 
-                                <div class="item" data-row="{{ item.row }}" data-column="{{ item.column }}">
+                                <div class="item" data-row="{{ item.row }}" data-column="{{ item.column }}" data-item-type="{{ item.type }}">
                                     {% include ("@HopitalNumeriqueAutodiag/Restitution/item/_" ~ item.type ~ ".html.twig") ignore missing with {
                                         'restitution': item,
                                         'result': result[item.id]
@@ -112,23 +112,14 @@
 
 
     <script type="text/javascript">
+
+        var restitution = new AutodiagRestitution($('#restitution'));
+        restitution.addHandler('jauge', 'Jauge');
+        restitution.initItems();
+
+
         $(function() {
-            $('.jauge-widget').each(function (j) {
-                var el = $(this);
-                setTimeout(function() {
-                    $('[data-value]', el).each(function(i) {
-                        var el = $(this);
 
-                        el.tooltip({
-                            title: (el.data('label') ? (el.data('label') + ' : ') : '') + el.data('value') + '%'
-                        });
-
-                        setTimeout(function() {
-                            el.css('left', el.data('value') + '%');
-                        }, i * 50);
-                    });
-                }, j * 50);
-            });
 
             $('.plan_action').each(function() {
                 console.log($(this).find('table tr').length);

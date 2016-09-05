@@ -9,7 +9,7 @@
         <tr>
             <td>{{ attribute.label }}</td>
             <td>{{ attribute.responseText }}</td>
-            <td class="mood">{{ attribute.responseValue }}</td>
+            <td class="mood">{{ attribute.responseValue|round(2) }}</td>
         </tr>
     {% endfor %}
 </table>

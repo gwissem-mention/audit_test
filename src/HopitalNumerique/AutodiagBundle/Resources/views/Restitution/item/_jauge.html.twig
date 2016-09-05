@@ -7,10 +7,13 @@
                 <div class="header">
                     <div class="title pull-left">{{ jaugeData.label }}</div>
                     <div class="pull-right">
-                        <span class="score">{{ jaugeData.score.value }}</span>
+                        <span class="score">
+                            Score : {{ jaugeData.score.value }} / 100
+                        </span>
                         <span class="completion-wrapper">
-                            {{ jaugeData.numberOfAnswers / jaugeData.numberOfQuestions * 100 }} %
-                            <span class="completion" data-value="{{ jaugeData.numberOfAnswers / jaugeData.numberOfQuestions * 100 }}"></span>
+                            {#{{ jaugeData.numberOfAnswers / jaugeData.numberOfQuestions * 100 }} %#}
+                            {% set completion = (jaugeData.numberOfAnswers / jaugeData.numberOfQuestions * 100) | round %}
+                            <span class="completion" data-title="Remplissage : {{ completion }}%" data-value="{{ completion }}"></span>
                         </span>
                     </div>
                 </div>
