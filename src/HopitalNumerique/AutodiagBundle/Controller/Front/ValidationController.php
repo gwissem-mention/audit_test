@@ -35,15 +35,21 @@ class ValidationController extends Controller
     }
 
     /**
-     * @TOTO Vérification à faire ! Sécurité !
-     *
      * @param Synthesis $synthesis
      * @return \Symfony\Component\HttpFoundation\RedirectResponse
      */
     public function validateAction(Synthesis $synthesis)
     {
+        // L'utilisateur doit avoir les droits sur chaque entry de la synthèse
+        foreach ($synthesis->getEntries() as $entry) {
+            if (!$this->isGranted('edit', $entry)) {
+                return $this->redirectToRoute('hopitalnumerique_autodiag_entry_add', [
+                    'autodiag' => $synthesis->getAutodiag()->getId()
+                ]);
+            }
+        }
+
         $synthesis->validate();
-        $this->getDoctrine()->getManager()->persist($synthesis);
         $this->getDoctrine()->getManager()->flush();
 
         return $this->redirectToRoute('hopitalnumerique_autodiag_validation_index', [
@@ -52,15 +58,21 @@ class ValidationController extends Controller
     }
 
     /**
-     * @TOTO Vérification à faire ! Sécurité !
-     *
      * @param Synthesis $synthesis
      * @return \Symfony\Component\HttpFoundation\RedirectResponse
      */
     public function unvalidateAction(Synthesis $synthesis)
     {
+        // L'utilisateur doit avoir les droits sur chaque entry de la synthèse
+        foreach ($synthesis->getEntries() as $entry) {
+            if (!$this->isGranted('edit', $entry)) {
+                return $this->redirectToRoute('hopitalnumerique_autodiag_entry_add', [
+                    'autodiag' => $synthesis->getAutodiag()->getId()
+                ]);
+            }
+        }
+
         $synthesis->unvalidate();
-        $this->getDoctrine()->getManager()->persist($synthesis);
         $this->getDoctrine()->getManager()->flush();
 
         return $this->redirectToRoute('hopitalnumerique_autodiag_validation_index', [

@@ -44,6 +44,9 @@ hopitalnumerique_autodiag_share_index:
     path:     /autodiagnostic/share/{synthesis}
     defaults: { _controller: HopitalNumeriqueAutodiagBundle:Front/Share:index }
 
+hopitalnumerique_autodiag_share_delete:
+    path:     /autodiagnostic/share/{synthesis}/{user}
+    defaults: { _controller: HopitalNumeriqueAutodiagBundle:Front/Share:delete }
 
 hopitalnumerique_autodiag_account_index:
     path:     compte-hn/autodiagnostic

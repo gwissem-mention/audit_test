@@ -302,7 +302,10 @@ class Synthesis
      */
     public function addShare(User $user)
     {
-        $this->shares->add($user);
+        if (!$this->shares->contains($user)) {
+            $this->shares->add($user);
+        }
+
         return $this;
     }
 

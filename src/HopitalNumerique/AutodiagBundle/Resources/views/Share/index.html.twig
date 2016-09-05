@@ -21,16 +21,34 @@
             <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Aspernatur at atque aut cupiditate deserunt eaque explicabo inventore ipsum magnam molestias nihil non quisquam quos temporibus tenetur, ut vitae voluptatem voluptates.</p>
 
 
-
-
-            <div class="shares">
-                <ul>
-                    {% for share in synthesis.shares %}
-                        <li>{{ share.nom }} {{ share.prenom }}</li>
-                    {% endfor %}
-                </ul>
+            <div class="row">
+                <div class="col-md-6">
+                    {{ form_start(form) }}
+                        <div class="row">
+                            {{ form_row(form.shares, {"label": "Partager mes résultats avec :"}) }}
+                        </div>
+                        <input type="submit" value="Partager" class="btn btn-success" />
+                    {{ form_end(form) }}
+                </div>
+                <div class="col-md-6">
+                    <div class="shares">
+                        <span>Mes résultats sont partagés avec:</span>
+                        <ul>
+                            {% for share in synthesis.shares %}
+                                <li>
+                                    <span>{{ share.nom }} {{ share.prenom }}</span>
+                                    <a href="{{ path('hopitalnumerique_autodiag_share_delete', {
+                                        "synthesis": synthesis.id,
+                                        "user": share.id
+                                    }) }}">
+                                        <i class="fa fa-times"></i>
+                                    </a>
+                                </li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                </div>
             </div>
-            PARTAGE
 
         </div>
     </div>

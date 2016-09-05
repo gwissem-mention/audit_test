@@ -95,3 +95,7 @@ services:
         arguments:
             - '@doctrine.orm.entity_manager'
             - '@autodiag.synthesis.completion'
+
+    autodiag.synthesis.share:
+        class: HopitalNumerique\AutodiagBundle\Service\Share
+        arguments: ['@doctrine.orm.entity_manager']
