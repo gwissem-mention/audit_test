@@ -170,6 +170,11 @@ class Synthesis
         return $this->validatedAt;
     }
 
+    public function isValidated()
+    {
+        return $this->validatedAt !== null;
+    }
+
     /**
      * Validate
      *

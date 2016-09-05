@@ -61,6 +61,12 @@ class AutodiagEntryController extends Controller
             $this->get('autodiag.entry.session')->remove($entry);
         }
 
+        if ($entry->getSynthesis()->isValidated()) {
+            return $this->redirectToRoute('hopitalnumerique_autodiag_restitution_index', [
+                'synthesis' => $entry->getSynthesis()->getId(),
+            ]);
+        }
+
         $autodiag = $this->getDoctrine()->getRepository('HopitalNumeriqueAutodiagBundle:Autodiag')
             ->getFullyLoaded($autodiag->getId());
 
