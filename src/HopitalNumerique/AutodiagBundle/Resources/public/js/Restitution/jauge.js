@@ -33,10 +33,9 @@ var Jauge;
                         el.tooltip({
                             title: (el.data('label') ? (el.data('label') + ' : ') : '') + el.data('value') + '%'
                         });
-
                         setTimeout(function() {
                             el.css('left', el.data('value') + '%');
-                        }, (jaugeCount * 500) + i * 50);
+                        }, i * 50);
                     });
                 }, (jaugeCount * 500) + j * 50);
             });
@@ -61,18 +60,27 @@ var Jauge;
                         $('<div />')
                             .addClass('completion-bar')
                             .addClass(value >= 1  ? 'active' : null)
-                            .css('height', '30%')
+                            .css({
+                                'height': '30%',
+                                'left': '0px'
+                            })
                     )
                     .append(
                         $('<div />')
                             .addClass('completion-bar')
                             .addClass(value >= 2  ? 'active' : null)
-                            .css('height', '60%')
+                            .css({
+                                'height': '60%',
+                                'left': '6px'
+                            })
                     )
                     .append(
                         $('<div />')
                             .addClass('completion-bar')
                             .addClass(value >= 3  ? 'active' : null)
+                            .css({
+                                'left': '12px'
+                            })
                     )
                     .tooltip();
             });
