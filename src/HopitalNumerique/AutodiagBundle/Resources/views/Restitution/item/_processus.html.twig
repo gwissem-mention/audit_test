@@ -7,7 +7,7 @@
                 <div class="processus-line head" data-value="{{ data.score.value }}">{{ data.label }}</div>
                 {% for child in data.childrens %}
                     {% if child.score.value is not null %}
-                        <div class="processus-line {{- tools.cssClass(child.score.value) -}}">{{ child.label }}</div>
+                        <div class="processus-line {{- tools.cssClass(child.score.value, data.colorationInversed) -}}">{{ child.label }}</div>
                     {% endif %}
                 {% endfor %}
             </div>
@@ -15,14 +15,14 @@
     {% endfor %}
 </div>
 
-{% macro cssClass(value) %}
+{% macro cssClass(value, inversed) %}
     {% spaceless %}
         {% if value < (100/3) %}
-            low
+            {{ inversed ? "high" : "low" }}
         {% elseif value < (2 * 100 / 3) %}
             middle
         {% else %}
-            high
+            {{ inversed ? "low" : "high" }}
         {% endif %}
     {% endspaceless %}
 {% endmacro %}

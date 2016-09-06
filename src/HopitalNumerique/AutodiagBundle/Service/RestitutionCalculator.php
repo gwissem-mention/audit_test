@@ -189,11 +189,16 @@ class RestitutionCalculator
             }
 
             // Traitement des questions / réponses
+            $colorationInversed = 0;
             foreach ($container->getAttributes() as $attribute) {
+
+                $colorationInversed += $attribute->isColorationInversed() ? 1 : -1;
+
                 /** @var Autodiag\Attribute $attribute */
                 $builder = $this->attributeBuilder->getBuilder($attribute->getType());
 
                 $itemAttribute = new ItemAttribute($attribute->getLabel());
+                $itemAttribute->setColorationInversed($attribute->isColorationInversed());
                 $resultItem->addAttribute($itemAttribute);
 
                 if ($builder instanceof PresetableAttributeBuilderInterface) {
@@ -240,6 +245,7 @@ class RestitutionCalculator
                     $itemAttribute->setActionPlan($actionPlan);
                 }
             }
+            $resultItem->setColorationInversed($colorationInversed > 0);
 
             if (count($references) > 0) {
                 foreach ($references as $reference) {

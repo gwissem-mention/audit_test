@@ -3,9 +3,11 @@
 </div>
 
 <script type="text/javascript">
-    var options = {{ result_histogramme_data(result)|raw }};
-    options.exporting.buttons.contextButton.onclick = function () {
-        this.exportChart();
-    };
-    $('#{{ restitution.id ~ restitution.type }}').highcharts(options);
+    (function () {
+        var options = {{ result_histogramme_data(result)|raw }};
+        options.exporting.buttons.contextButton.onclick = function () {
+            this.exportChart();
+        };
+        $('#{{ restitution.id ~ restitution.type }}').highcharts(options);
+    })();
 </script>

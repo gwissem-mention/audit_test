@@ -1,7 +1,6 @@
 <div class="jauge">
 
     {% for jaugeData in result.items %}
-
         <div class="jauge-container-wrapper">
             <div class="jauge-container">
                 <div class="header">
@@ -18,7 +17,7 @@
                 </div>
 
                 <div class="content">
-                    <div class="item jauge-widget">
+                    <div class="item jauge-widget {{ jaugeData.colorationInversed ? 'inversed' : '' }}">
                         <div class="step low">Faible</div>
                         <div class="step middle">Moyen</div>
                         <div class="step high">Fort</div>

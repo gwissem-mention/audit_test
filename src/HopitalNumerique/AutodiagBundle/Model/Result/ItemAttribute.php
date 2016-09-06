@@ -10,6 +10,7 @@ class ItemAttribute
     public $responseValue;
 
     public $colored;
+    public $colorationInversed = false;
 
     /**
      * @var ItemActionPlan
@@ -36,6 +37,16 @@ class ItemAttribute
     public function setResponseText($value)
     {
         $this->responseText = $value;
+    }
+
+    public function isColorationInversed()
+    {
+        return $this->colorationInversed;
+    }
+
+    public function setColorationInversed($inversed)
+    {
+        $this->colorationInversed = $inversed;
     }
 
     public function setActionPlan(ItemActionPlan $actionPlan)

@@ -99,6 +99,9 @@
     line-height: 40px;
     text-align: center;
 }
+#restitution .item.jauge-widget.inversed .step {
+    float: right;
+}
 
 #restitution .item.jauge-widget .score {
     position: absolute;

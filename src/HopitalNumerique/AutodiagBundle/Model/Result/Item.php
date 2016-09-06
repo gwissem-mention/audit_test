@@ -27,6 +27,8 @@ class Item
 
     protected $attributes;
 
+    protected $colorationInversed = false;
+
     /**
      * @var ItemActionPlan
      */
@@ -156,5 +158,15 @@ class Item
     public function getActionPlan()
     {
         return $this->actionPlan;
+    }
+
+    public function isColorationInversed()
+    {
+        return $this->colorationInversed;
+    }
+
+    public function setColorationInversed($inversed)
+    {
+        $this->colorationInversed = $inversed;
     }
 }
