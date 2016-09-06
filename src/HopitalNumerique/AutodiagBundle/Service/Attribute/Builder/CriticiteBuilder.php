@@ -72,7 +72,7 @@ class CriticiteBuilder extends AbstractPresetableBuilder
     public function computeScore($data)
     {
         $data = $this->transform($data);
-        if (in_array(null, $data)) {
+        if (!is_array($data) || in_array(null, $data)) {
             return null;
         }
         return array_sum($data) / count($data);
