@@ -42,7 +42,7 @@ class Value
     /**
      * @var string
      *
-     * @ORM\Column(type="string")
+     * @ORM\Column(type="string", nullable=true)
      */
     private $value;
 
@@ -130,7 +130,7 @@ class Value
 
     public function setNotConcerned()
     {
-        $this->setValue(-1);
+        $this->setValue(null);
     }
 }
 

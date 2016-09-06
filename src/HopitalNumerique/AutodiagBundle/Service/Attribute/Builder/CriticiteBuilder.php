@@ -61,7 +61,8 @@ class CriticiteBuilder extends AbstractPresetableBuilder
 
     public function transform($data)
     {
-        return json_decode($data, true);
+        $value = json_decode($data, true);
+        return $value === -1 ? null : $value;
     }
 
     public function reverseTransform($data)

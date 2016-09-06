@@ -182,6 +182,7 @@ class AutodiagEntryController extends Controller
             $entryValue->setNotConcerned();
         }
 
+
         $manager = $this->getDoctrine()->getManager();
         $manager->persist($entry);
         $manager->flush();

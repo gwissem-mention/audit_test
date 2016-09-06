@@ -19,7 +19,7 @@ class Score
     {
         $this->code = $code;
         $this->label = $label;
-        $this->value = round($score, 0);
+        $this->value = null !== $score ? round($score, 0) : null;
     }
 
     /**

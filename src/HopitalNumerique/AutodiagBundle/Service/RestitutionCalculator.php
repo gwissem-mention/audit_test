@@ -222,6 +222,8 @@ class RestitutionCalculator
                                 $responseValue = $response;
                                 if (isset($options[$response])) {
                                     $response = $options[$response]->getLabel();
+                                } elseif (null === $response) {
+                                    $response = "-";
                                 }
                             }
 

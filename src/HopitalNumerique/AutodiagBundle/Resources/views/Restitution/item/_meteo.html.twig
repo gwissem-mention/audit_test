@@ -1,6 +1,6 @@
 <div class="meteo-type">
 
-    {% for data in result.items %}
+    {% for data in result.items if data.score.value is not null %}
         <div class="meteo-widget-wrapper">
             <div class="meteo-widget">
                 <div class="meteo-label">{{ data.label }}</div>

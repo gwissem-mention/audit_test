@@ -8,10 +8,9 @@
                     <div class="title pull-left">{{ jaugeData.label }}</div>
                     <div class="pull-right">
                         <span class="score">
-                            Score : {{ jaugeData.score.value }} / 100
+                            Score : {{ jaugeData.score.value is not null ? jaugeData.score.value : '-'}} / 100
                         </span>
                         <span class="completion-wrapper">
-                            {#{{ jaugeData.numberOfAnswers / jaugeData.numberOfQuestions * 100 }} %#}
                             {% set completion = (jaugeData.numberOfAnswers / jaugeData.numberOfQuestions * 100) | round %}
                             <span class="completion" data-title="Remplissage : {{ completion }}%" data-value="{{ completion }}"></span>
                         </span>
@@ -24,9 +23,14 @@
                         <div class="step middle">Moyen</div>
                         <div class="step high">Fort</div>
 
-                        <div class="score" data-value="{{ jaugeData.score.value }}"></div>
+                        {% if jaugeData.score.value is not null %}
+                            <div class="score" data-value="{{ jaugeData.score.value }}"></div>
+                        {% endif %}
+
                         {% for score in jaugeData.references %}
-                            <div class="score reference" data-value="{{ score.value }}" data-label="{{ score.label }}"></div>
+                            {% if score.value is not null %}
+                                <div class="score reference" data-value="{{ score.value }}" data-label="{{ score.label }}"></div>
+                            {% endif %}
                         {% endfor %}
                     </div>
                 </div>

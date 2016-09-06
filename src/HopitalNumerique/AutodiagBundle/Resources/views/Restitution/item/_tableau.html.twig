@@ -15,7 +15,7 @@
                 <tr class="root">
                     <td class="container-label">{{ data.label }}</td>
                     <td>{{ data.numberOfAnswers }}/{{ data.numberOfQuestions }}</td>
-                    <td>{{ data.score.value }}/100</td>
+                    <td>{{ data.score.value is not null ? data.score.value : '-' }}/100</td>
                     {% for code, reference in result.references %}
                         <td>
                             {% if data.references[code] is defined %}
@@ -28,7 +28,7 @@
                     <tr class="children">
                         <td class="container-label">{{ children.label }}</td>
                         <td>{{ children.numberOfAnswers }}/{{ children.numberOfQuestions }}</td>
-                        <td>{{ children.score.value }}/100</td>
+                        <td>{{ children.score.value is not null ? children.score.value : '-' }}/100</td>
                         {% for code, reference in result.references %}
                             <td>
                                 {% if children.references[code] is defined %}

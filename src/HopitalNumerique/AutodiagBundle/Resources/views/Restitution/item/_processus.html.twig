@@ -1,12 +1,14 @@
 {% import _self as tools %}
 
 <div class="processus">
-    {% for data in result.items %}
+    {% for data in result.items if data.score.value is not null %}
         <div class="processus-wrapper">
             <div class="processus-item">
                 <div class="processus-line head" data-value="{{ data.score.value }}">{{ data.label }}</div>
                 {% for child in data.childrens %}
-                    <div class="processus-line {{- tools.cssClass(child.score.value) -}}">{{ child.label }}</div>
+                    {% if child.score.value is not null %}
+                        <div class="processus-line {{- tools.cssClass(child.score.value) -}}">{{ child.label }}</div>
+                    {% endif %}
                 {% endfor %}
             </div>
         </div>
