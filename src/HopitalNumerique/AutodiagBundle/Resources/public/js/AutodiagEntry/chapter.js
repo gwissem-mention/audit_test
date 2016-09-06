@@ -148,6 +148,10 @@ Chapter.prototype = {
             this.attributes[i].setNotConcerned();
         }
 
+        for (var j in this.childrens) {
+            this.childrens[j].setNotConcerned();
+        }
+
         this.callbacks.onCompletionChange.fire();
         this.callbacks.onNotConcerned.fire(this);
     },

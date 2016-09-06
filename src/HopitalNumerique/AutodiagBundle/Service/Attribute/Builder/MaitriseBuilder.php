@@ -65,8 +65,7 @@ class MaitriseBuilder extends AbstractPresetableBuilder
 
     public function transform($data)
     {
-        $value = json_decode($data, true);
-        return $value === -1 ? null : $value;
+        return json_decode($data, true);
     }
 
     public function reverseTransform($data)

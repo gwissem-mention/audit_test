@@ -32,12 +32,17 @@ abstract class AbstractBuilder implements AttributeBuilderInterface
 
     public function getFormHtml(Value $entryValue, $viewData = [])
     {
+        $value = $this->transform($entryValue->getValue());
+        if (null === $value && null !== $entryValue->getId()) {
+            $value = -1;
+        }
+
         return $this->twig->render(
             sprintf('HopitalNumeriqueAutodiagBundle:AutodiagEntry:Attribute/%s.html.twig', $this->getTemplateName()),
             [
                 'attribute' => $entryValue->getAttribute(),
                 'entry' => $entryValue->getEntry(),
-                'value' => $this->transform($entryValue->getValue()),
+                'value' => $value,
                 'comment' => $entryValue->getComment(),
                 'viewData' => $viewData,
                 'token' => $this->tokenManager->getToken('entry_value_intention')->getValue(),

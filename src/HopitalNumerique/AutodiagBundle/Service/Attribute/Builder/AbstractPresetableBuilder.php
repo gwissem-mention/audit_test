@@ -113,8 +113,18 @@ abstract class AbstractPresetableBuilder extends AbstractBuilder implements Pres
 
     public function getFormHtml(Value $entryValue, $viewData = [])
     {
+        $presets = $this->getPreset($entryValue->getAttribute()->getAutodiag());
+
+        if (null === $entryValue->getValue() && null !== $entryValue->getId()) {
+            $value = $presets->getPreset();
+            foreach ($value as &$key) {
+                $key = "-1";
+            }
+            $entryValue->setValue($this->reverseTransform($value));
+        }
+
         return parent::getFormHtml($entryValue, array_merge($viewData, [
-            'preset' => $this->getPreset($entryValue->getAttribute()->getAutodiag())
+            'preset' => $presets
         ]));
     }
 
