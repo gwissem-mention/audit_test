@@ -22,5 +22,11 @@
 </div>
 
 <script type="text/javascript">
-    $('#{{ restitution.id ~ restitution.type}}').highcharts({{ result_radar_data(result)|raw }});
+    (function () {
+        var options = {{ result_radar_data(result)|raw }};
+        options.exporting.buttons.contextButton.onclick = function () {
+            this.exportChart();
+        };
+        $('#{{ restitution.id ~ restitution.type}}').highcharts(options);
+    })();
 </script>

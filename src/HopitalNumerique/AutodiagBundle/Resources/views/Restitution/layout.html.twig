@@ -1,0 +1,92 @@
+{% extends 'HopitalNumeriqueAutodiagBundle::layout.html.twig' %}
+
+{% block body %}
+    <div id="restitution">
+
+        {% include "@HopitalNumeriqueAutodiag/_navigation.html.twig" with {
+            "step": "restitution",
+            "autodiag": synthesis.autodiag,
+            "synthesis": synthesis,
+            "entry" : synthesis.entries|length > 1 ? null : synthesis.entries.first
+        } %}
+
+        <div class="restitution-header">
+            <div class="update-at">
+                Le {{ synthesis.updatedAt|date('d/m/Y') }}
+            </div>
+
+            <div class="identity">
+                <div class="title">{{ synthesis.autodiag.title }}</div>
+                <div class="name">{{ synthesis.name }}</div>
+            </div>
+
+            <div class="pull-left">
+                {% if not app.user %}
+                    <div class="loggedout-warning">
+                        <div>{{ "ad.restitution.loggedout-warning"|trans }}</div>
+                        <a href="{{ path('account_login') }}">Connexion</a>
+                        ou
+                        <a href="{{ path('hopital_numerique_user_inscription') }}">Créer un compte</a>
+                    </div>
+                {% endif %}
+
+                {% if synthesis.entries|length > 1 %}
+                    <div class="synthesis">
+                        <span>{{ "ad.restitution.synthesis"|trans }} : </span>
+                        <ul>
+                            {% for entry in synthesis.entries %}
+                                <li>{{ entry.name }} - {{ entry.validatedAt|date('d/m/Y') }}</li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                {% endif %}
+            </div>
+
+            <div class="links pull-right">
+                <a class="btn btn-success" href="{{ path("hopitalnumerique_autodiag_entry_add", {"autodiag": synthesis.autodiag.id}) }}">
+                    {{ "ad.restitution.start_new"|trans }}
+                </a>
+            </div>
+
+            <div class="clearfix"></div>
+
+        </div>
+
+        <div class="content">
+            {% block restitution_content %}{% endblock %}
+        </div>
+    </div>
+
+    <script>
+        $('.item-row').each(function() {
+            var cols = $(this).find('[data-row][data-column]');
+            cols.css('width', (100 / cols.length) + "%");
+        });
+
+        $('a[data-toggle="tab"]').on('shown.bs.tab', function() {
+            $(window).trigger('resize');
+        });
+
+        $(window).trigger('resize');
+    </script>
+
+
+    <script type="text/javascript">
+
+        var restitution = new AutodiagRestitution($('#restitution'));
+        restitution.addHandler('jauge', 'Jauge');
+        restitution.initItems();
+
+
+        $(function() {
+            $('.plan_action').each(function() {
+                if ($('table tr', this).length > 2) {
+                    $('.empty-data', this).hide();
+                }
+            });
+        });
+    </script>
+
+{% endblock %}
+
+

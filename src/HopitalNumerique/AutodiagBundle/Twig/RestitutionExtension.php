@@ -53,6 +53,14 @@ class RestitutionExtension extends \Twig_Extension
             'credits' => [
                 'enabled' => false,
             ],
+            'exporting' => [
+                'buttons' => [
+                    'contextButton' => [
+                        'text' => 'Télécharger le graphique',
+                        'menuItems' => null,
+                    ],
+                ],
+            ],
             'series' => [
                 'score' => [
                     'name' => 'Score',
@@ -132,7 +140,18 @@ class RestitutionExtension extends \Twig_Extension
                     'name' => 'Score',
                     'data' => [],
                 ]
-            ]
+            ],
+            'exporting' => [
+                'buttons' => [
+                    'contextButton' => [
+                        'text' => 'Télécharger le graphique',
+                        'menuItems' => null,
+//                        'onclick' => "function () {
+//                            this.exportChart();
+//                        }"
+                    ],
+                ],
+            ],
         ];
 
         foreach ($result['references'] as $code => $reference) {
