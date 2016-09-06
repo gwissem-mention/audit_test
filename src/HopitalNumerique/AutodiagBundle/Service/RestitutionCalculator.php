@@ -220,7 +220,9 @@ class RestitutionCalculator
                                 $response = implode(' - ', $response);
                             } else {
                                 $responseValue = $response;
-                                $response = $options[$response]->getLabel();
+                                if (isset($options[$response])) {
+                                    $response = $options[$response]->getLabel();
+                                }
                             }
 
                             $itemAttribute->setResponse(
