@@ -221,4 +221,15 @@ class AutodiagEntry
     {
         $this->copy = $copy;
     }
+
+    public function __clone()
+    {
+        $this->id = null;
+        $originalValues = $this->values;
+        $this->values = new ArrayCollection();
+        foreach ($originalValues as $value) {
+            $clone = clone($value);
+            $clone->setEntry($this);
+        }
+    }
 }

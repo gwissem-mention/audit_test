@@ -1,0 +1,45 @@
+/**
+* Account
+*/
+thead tr {
+    color:#FFFFFF;
+    text-transform:uppercase;
+    font-size: 11px;
+}
+
+thead tr a {
+    color:#FFFFFF;
+    font-size: 11px
+}
+
+thead th {
+    background-color:#6F3596;
+    vertical-align: middle;
+    text-align: center;
+}
+th, table.table td {
+    border: 1px solid #ddd;
+    padding: 4px;
+    text-align: center;
+}
+
+.autodiag-title {
+    text-align: center;
+}
+
+.domain-choice {
+    padding-top: 20px;
+}
+
+.row-account {
+    display: inline-block;
+    margin: 0;
+}
+
+.form-control {
+    display: inline-block;
+}
+
+.synthesis-creation {
+    margin-bottom: 20px;
+}

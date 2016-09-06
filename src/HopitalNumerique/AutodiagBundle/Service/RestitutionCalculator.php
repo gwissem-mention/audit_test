@@ -433,7 +433,7 @@ class RestitutionCalculator
     protected function getCacheKey(Autodiag $autodiag, Container $container, Synthesis $synthesis)
     {
         return $autodiag->getId()
-            . $container->getId()
-            . $synthesis->getId();
+        . $container->getId()
+        . $synthesis->getId();
     }
 }

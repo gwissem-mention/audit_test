@@ -1,4 +1,5 @@
 /**
+/**
 * Autodiag PATH
 */
 #autodiag-path ul {
@@ -314,12 +315,3 @@
 .attribute .attribute-mood .fa-smile-o {
     color: #b4dc00;
 }
-
-/**
-* Account
-*/
-thead tr { color:#FFFFFF;text-transform:uppercase; font-size: 11px}
-thead tr a { color:#FFFFFF; font-size: 11px }
-thead th { background-color:#6F3596; vertical-align: middle }
-th, table.table td { border: 1px solid #ddd;padding:4px; }
-.autodiag-title { text-align: center; }

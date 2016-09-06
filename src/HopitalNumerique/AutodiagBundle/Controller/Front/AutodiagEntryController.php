@@ -213,6 +213,8 @@ class AutodiagEntryController extends Controller
 
         $total = count($repo->getAttributesHavingChapter($autodiag));
 
+//        $this->get('autodiag.synthesis.completion')->getGlobalCompletion($entry->getSynthesis());
+
         if ($filled == $total) {
             if ($target == "restitution") {
                 $path = $this->generateUrl('hopitalnumerique_autodiag_restitution_index', [

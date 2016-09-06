@@ -53,4 +53,22 @@ class Completion
 
         return $this->completion[$synthesis->getId()];
     }
+
+    /**
+     * Retourne le taux de complétion d'une synthèse
+     *
+     * @param Synthesis $synthesis
+     * @return int
+     */
+    public function getCompletionRate(Synthesis $synthesis)
+    {
+        $completions = $this->getGlobalCompletion($synthesis);
+
+        $complete = count(array_filter($completions, function ($element) {
+            return $element === true;
+        }));
+
+        return floor($complete / max(1, count($completions)) * 100);
+    }
+
 }

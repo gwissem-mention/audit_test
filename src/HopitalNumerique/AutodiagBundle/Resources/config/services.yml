@@ -99,3 +99,6 @@ services:
     autodiag.synthesis.share:
         class: HopitalNumerique\AutodiagBundle\Service\Share
         arguments: ['@doctrine.orm.entity_manager']
+
+    autodiag.synthesis.generator:
+        class: HopitalNumerique\AutodiagBundle\Service\Synthesis\SynthesisGenerator

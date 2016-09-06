@@ -15,6 +15,20 @@ ad:
             delete: Supprimer
             results: Résultats
             reopen: Reprendre
+        domain_selection: Sélectionnez votre domaine :
+        synthesis:
+            name: Synthèse
+            create:
+                label: Nom de la synthèse :
+                button: Créer une syntèse des autodiagnostics sélectionnés
+
+    synthesis:
+        generator:
+            success: La synthèse a bien été créée
+            error:
+                more_than_one_ad: Les cases cochées doivent toutes appartenir au même autodiagnostic
+                not_allowed: Vous ne pouvez pas faire de synthèse de cet autodianostic
+                at_least_2: Vous devez choisir au moins deux (...) pour générer une synthèse
 
 
     autodiag:
