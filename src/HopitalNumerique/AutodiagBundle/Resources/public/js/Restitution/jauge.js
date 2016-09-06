@@ -46,14 +46,15 @@ var Jauge;
             $('.completion[data-value]', this.element).each(function (j) {
                 var value = $(this).data('value');
 
-                if (value < 49) {
-                    value = 1;
-                } else if (value < 99) {
-                    value = 2;
-                } else {
-                    value = 3;
+                if (value > 0) {
+                    if (value < 49) {
+                        value = 1;
+                    } else if (value < 99) {
+                        value = 2;
+                    } else {
+                        value = 3;
+                    }
                 }
-
 
                 $(this)
                     .append(

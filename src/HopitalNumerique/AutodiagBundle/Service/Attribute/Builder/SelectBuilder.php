@@ -49,6 +49,6 @@ class SelectBuilder extends AbstractBuilder
 
     public function isEmpty($data)
     {
-        return null === $data || strlen($data) === 0;
+        return false;
     }
 }

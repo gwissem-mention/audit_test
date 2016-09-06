@@ -76,7 +76,7 @@ class MaitriseBuilder extends AbstractPresetableBuilder
     public function computeScore($data)
     {
         $data = $this->transform($data);
-        if (!is_array($data) || in_array(null, $data)) {
+        if (!is_array($data) || in_array(null, $data) || in_array(-1, $data)) {
             return null;
         }
         return array_sum($data) / count($data);
@@ -85,6 +85,11 @@ class MaitriseBuilder extends AbstractPresetableBuilder
     public function isEmpty($data)
     {
         $data = $this->transform($data);
+
+        if (null === $data) {
+            return false;
+        }
+
         if (!is_array($data)) {
             return false;
         }

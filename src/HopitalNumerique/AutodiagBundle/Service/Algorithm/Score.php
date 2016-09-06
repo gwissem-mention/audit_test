@@ -54,7 +54,7 @@ class Score
         $values = $repository->getValuesAndWeight($entries);
         $containerIds = $this->getContainerIds($container);
 
-        $notConcerned = true;
+        $notConcerned = false;
 
         $sum = 0;
         $min = 0;
@@ -68,7 +68,6 @@ class Score
             $score = $builder->computeScore($value['value']);
 
             if (null !== $score) {
-                $notConcerned = false;
                 if ($builder instanceof PresetableAttributeBuilderInterface) {
                     $attributeMin = $builder->getPresetMinScore($autodiag);
                     $attributeMax = $builder->getPresetMaxScore($autodiag);
@@ -80,20 +79,27 @@ class Score
                 $min += ($attributeMin * $value['weight']);
                 $max += ($attributeMax * $value['weight']);
                 $sum += ($score * $value['weight']);
+            } else {
+                $notConcerned = true;
             }
         }
 
         if ($notConcerned) {
+            $this->scores[$key] = null;
             return null;
         }
 
         // Fonction affine
         $a = ($max - $min) / 100;
 
+        $result = 0;
         if ($a > 0) {
-            return ($sum - $min) / $a;
+            $result =  ($sum - $min) / $a;
         }
-        return null;
+
+        $this->scores[$key] = $result;
+
+        return $this->scores[$key];
     }
 
     protected function getContainerIds(Container $container)
