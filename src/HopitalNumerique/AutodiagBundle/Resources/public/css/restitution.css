@@ -64,8 +64,8 @@
 }
 
 #restitution .jauge-container-wrapper {
-    flex: 1;
-    min-width: 49%;
+    /*flex: 1;*/
+    min-width: 50%;
     padding: 20px;
 }
 

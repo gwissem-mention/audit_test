@@ -44,7 +44,7 @@ class SelectBuilder extends AbstractBuilder
 
     public function computeScore($data)
     {
-        return (float) $data;
+        return null !== $data ? (float) $data : null;
     }
 
     public function isEmpty($data)

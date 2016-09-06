@@ -1,134 +1,47 @@
-{% extends 'HopitalNumeriqueAutodiagBundle::layout.html.twig' %}
+{% extends 'HopitalNumeriqueAutodiagBundle:Restitution:layout.html.twig' %}
 
-{% block body %}
-    <div id="restitution">
-
-        {% include "@HopitalNumeriqueAutodiag/_navigation.html.twig" with {
-            "step": "restitution",
-            "autodiag": synthesis.autodiag,
-            "synthesis": synthesis,
-            "entry" : synthesis.entries|length > 1 ? null : synthesis.entries.first
-        } %}
-
-        <div class="restitution-header">
-            <div class="update-at">
-                Le {{ synthesis.updatedAt|date('d/m/Y') }}
-            </div>
-
-            <div class="identity">
-                <div class="title">{{ synthesis.autodiag.title }}</div>
-                <div class="name">{{ synthesis.name }}</div>
-            </div>
-
-            <div class="pull-left">
-                {% if not app.user %}
-                    <div class="loggedout-warning">
-                        <div>{{ "ad.restitution.loggedout-warning"|trans }}</div>
-                        <a href="{{ path('account_login') }}">Connexion</a>
-                        ou
-                        <a href="{{ path('hopital_numerique_user_inscription') }}">Créer un compte</a>
-                    </div>
-                {% endif %}
-
-                {% if synthesis.entries|length > 1 %}
-                    <div class="synthesis">
-                        <span>{{ "ad.restitution.synthesis"|trans }} : </span>
-                        <ul>
-                            {% for entry in synthesis.entries %}
-                                <li>{{ entry.name }} - {{ entry.validatedAt|date('d/m/Y') }}</li>
-                            {% endfor %}
-                        </ul>
-                    </div>
-                {% endif %}
-            </div>
-
-            <div class="links pull-right">
-                <a class="btn btn-success" href="{{ path("hopitalnumerique_autodiag_entry_add", {"autodiag": synthesis.autodiag.id}) }}">
-                    {{ "ad.restitution.start_new"|trans }}
+{% block restitution_content %}
+    <ul class="nav nav-tabs" role="tablist">
+        {% for category in restitution.categories %}
+            <li role="presentation" class="{{ loop.first ? 'active' : '' }}">
+                <a href="#{{ category.id }}" aria-controls="home" role="tab" data-toggle="tab">
+                    {{ category.label }}
                 </a>
-            </div>
+            </li>
+        {% endfor %}
+    </ul>
 
-            <div class="clearfix"></div>
+    <div class="tab-content">
+        {% for category in restitution.categories %}
+            <div role="tabpanel" class="tab-pane category {{ loop.first ? 'active' : '' }}" id="{{ category.id }}">
+                <p class="category-description">
+                    {{ category.description }}
+                </p>
 
-        </div>
+                <div class="items-wrapper">
 
-        <div class="content">
-            <ul class="nav nav-tabs" role="tablist">
-            {% for category in restitution.categories %}
-                <li role="presentation" class="{{ loop.first ? 'active' : '' }}">
-                    <a href="#{{ category.id }}" aria-controls="home" role="tab" data-toggle="tab">
-                        {{ category.label }}
-                    </a>
-                </li>
-            {% endfor %}
-            </ul>
-
-            <div class="tab-content">
-                {% for category in restitution.categories if category.items|length > 0 %}
-                    <div role="tabpanel" class="tab-pane category {{ loop.first ? 'active' : '' }}" id="{{ category.id }}">
-                        <p class="category-description">
-                            {{ category.description }}
-                        </p>
-
-                        <div class="items-wrapper">
-
-                            <div class="item-row">
-                            {% set currentRow = category.items.first.row %}
-                            {% for item in category.items %}
-                                {% if item.row != currentRow %}
+                    <div class="item-row">
+                        {% set currentRow = category.items.first.row %}
+                        {% for item in category.items %}
+                            {% if item.row != currentRow %}
                                 {% set currentRow = item.row %}
-                                    </div>
-                                    <div class="item-row">
+                                </div>
+                                <div class="item-row">
                                 {% endif %}
 
-                                <div class="item" data-row="{{ item.row }}" data-column="{{ item.column }}" data-item-type="{{ item.type }}">
-                                    {% include ("@HopitalNumeriqueAutodiag/Restitution/item/_" ~ item.type ~ ".html.twig") ignore missing with {
-                                        'restitution': item,
-                                        'result': result[item.id]
-                                    } %}
-                                </div>
-
-                            {% endfor %}
+                            <div class="item" data-row="{{ item.row }}" data-column="{{ item.column }}" data-item-type="{{ item.type }}">
+                                {% include ("@HopitalNumeriqueAutodiag/Restitution/item/_" ~ item.type ~ ".html.twig") ignore missing with {
+                                'restitution': item,
+                                'result': result[item.id]
+                                } %}
                             </div>
-                        </div>
+
+                        {% endfor %}
                     </div>
-                {% endfor %}
+                </div>
             </div>
-        </div>
+        {% endfor %}
     </div>
-
-    <script>
-        $('.item-row').each(function() {
-            var cols = $(this).find('[data-row][data-column]');
-            cols.css('width', (100 / cols.length) + "%");
-        });
-
-        $('a[data-toggle="tab"]').on('shown.bs.tab', function() {
-            $(window).trigger('resize');
-        });
-
-        $(window).trigger('resize');
-    </script>
-
-
-    <script type="text/javascript">
-
-        var restitution = new AutodiagRestitution($('#restitution'));
-        restitution.addHandler('jauge', 'Jauge');
-        restitution.initItems();
-
-
-        $(function() {
-
-
-            $('.plan_action').each(function() {
-                console.log($(this).find('table tr').length);
-                 if ($('table tr', this).length > 2) {
-                     $('.empty-data', this).hide();
-                 }
-            });
-        });
-    </script>
 
 {% endblock %}
 
