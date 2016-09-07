@@ -3,6 +3,7 @@
 namespace HopitalNumerique\AutodiagBundle\Service\Synthesis;
 
 use Doctrine\ORM\EntityManager;
+use HopitalNumerique\DomaineBundle\Entity\Domaine;
 use HopitalNumerique\UserBundle\Entity\User;
 
 /**
@@ -36,17 +37,18 @@ class DataFormer
      * @param User $user
      * @return array
      */
-    public function getSynthesesByAutodiag(User $user)
+    public function getSynthesesByAutodiag(User $user, Domaine $domain = null)
     {
         $synthesisRepository = $this->manager->getRepository('HopitalNumeriqueAutodiagBundle:Synthesis');
 
-        $syntheses = $synthesisRepository->findByUser($user);
+        $syntheses = $synthesisRepository->findByUser($user, $domain);
 
         $currentSynthesesByAutodiag = [];
         $validSynthesesByAutodiag = [];
 
+        /** @var \HopitalNumerique\AutodiagBundle\Entity\Synthesis $synth */
         foreach ($syntheses as $synth) {
-            /** @var \HopitalNumerique\AutodiagBundle\Entity\Synthesis $synth */
+            $autodiagUpdateDate = $synth->getAutodiag()->getPublicUpdatedDate();
 
             // Si la synthèse n'est pas validée
             if ($synth->getValidatedAt() == null) {
@@ -54,6 +56,7 @@ class DataFormer
                     $currentSynthesesByAutodiag[$synth->getAutodiag()->getId()] = [
                         'syntheses' => [],
                         'name' => $synth->getAutodiag()->getTitle(),
+                        'updated' => false,
                     ];
                 }
 
@@ -73,6 +76,7 @@ class DataFormer
                         'name' => $synth->getAutodiag()->getTitle(),
                         'id' => $synth->getAutodiag()->getId(),
                         'synthesisAllowed' => $synth->getAutodiag()->isSynthesisAuthorized(),
+                        'updated' => false,
                     ];
                 }
 
@@ -86,6 +90,16 @@ class DataFormer
                         return $share->getPrenom() . ' ' . $share->getNom();
                     }, $synth->getShares()->toArray()),
                 ];
+            }
+
+            if ($synth->getUpdatedAt() < $autodiagUpdateDate) {
+                if (isset($currentSynthesesByAutodiag[$synth->getAutodiag()->getId()])) {
+                    $currentSynthesesByAutodiag[$synth->getAutodiag()->getId()]['updated'] = true;
+                }
+
+                if (isset($validSynthesesByAutodiag[$synth->getAutodiag()->getId()])) {
+                    $validSynthesesByAutodiag[$synth->getAutodiag()->getId()]['updated'] = true;
+                }
             }
         }
 

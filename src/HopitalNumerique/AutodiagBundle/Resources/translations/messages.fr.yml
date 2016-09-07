@@ -16,6 +16,7 @@ ad:
             results: Résultats
             reopen: Reprendre
         domain_selection: Sélectionnez votre domaine :
+        domain_all: Tous les domaines
         synthesis:
             name: Synthèse
             shared_with: Partagé avec
@@ -23,6 +24,8 @@ ad:
             create:
                 label: Nom de la synthèse :
                 button: Créer une syntèse des autodiagnostics sélectionnés
+        autodiag:
+            updated: L'autodiagnostic a été mis à jour par l'ANAP depuis votre dernière visite
 
     synthesis:
         generator:

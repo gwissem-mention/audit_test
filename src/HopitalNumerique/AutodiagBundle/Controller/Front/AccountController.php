@@ -5,28 +5,53 @@ namespace HopitalNumerique\AutodiagBundle\Controller\Front;
 use HopitalNumerique\AutodiagBundle\Entity\Synthesis;
 use HopitalNumerique\AutodiagBundle\Service\Synthesis\SynthesisGenerator;
 use HopitalNumerique\AutodiagBundle\Service\Synthesis\SynthesisRemover;
+use HopitalNumerique\DomaineBundle\Entity\Domaine;
 use HopitalNumerique\UserBundle\Entity\User;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use HopitalNumerique\AutodiagBundle\Service\Synthesis\DataFormer;
 use Symfony\Component\Config\Definition\Exception\Exception;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpKernel\Exception\HttpException;
 
 class AccountController extends Controller
 {
-    public function indexAction()
+    public function indexAction(Request $request, Domaine $domain = null)
     {
         /** @var User $currentUser */
         $currentUser = $this->getUser();
 
         $domainesUser = $currentUser->getDomaines();
 
+        // Si l'utilisateur choisit un domaine, on vérifie qu'il y a accès
+        if ($domain != null) {
+            $found = false;
+            foreach ($domainesUser as $domaineUser) {
+                if ($domaineUser == $domain) {
+                    $found = true;
+                    break;
+                }
+            }
+
+            if ($found == false) {
+                throw new HttpException(403);
+            }
+        }
+
         $dataFormer = $this->get('autodiag.synthesis.dataformer');
-        $datasForSyntheses = $dataFormer->getSynthesesByAutodiag($currentUser);
+        $datasForSyntheses = $dataFormer->getSynthesesByAutodiag($currentUser, $domain);
+
+        if ($request->isXmlHttpRequest()) {
+            return $this->render('HopitalNumeriqueAutodiagBundle:Account/partials:autodiag_list.html.twig', array(
+                'datasForSyntheses' => $datasForSyntheses,
+                'user' => $currentUser,
+            ));
+        }
 
         return $this->render('HopitalNumeriqueAutodiagBundle:Account:index.html.twig', array(
             'datasForSyntheses' => $datasForSyntheses,
             'domainesUser' => $domainesUser,
             'user' => $currentUser,
+            'currentDomain' => $domain,
         ));
     }
 

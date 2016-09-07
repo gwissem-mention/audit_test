@@ -6,6 +6,7 @@ use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\Query\Expr\Join;
 use HopitalNumerique\AutodiagBundle\Entity\AutodiagEntry;
 use HopitalNumerique\AutodiagBundle\Entity\Synthesis;
+use HopitalNumerique\DomaineBundle\Entity\Domaine;
 use HopitalNumerique\UserBundle\Entity\User;
 
 class SynthesisRepository extends EntityRepository
@@ -37,7 +38,7 @@ class SynthesisRepository extends EntityRepository
      * @param User $user
      * @return array
      */
-    public function findByUser(User $user)
+    public function findByUser(User $user, Domaine $domain = null)
     {
         $qb = $this->getEntityManager()->createQueryBuilder();
         $qb
@@ -46,10 +47,16 @@ class SynthesisRepository extends EntityRepository
             ->leftJoin('synthesis.shares', 'shares', Join::WITH, 'shares = :user')
             ->orWhere('synthesis.user = :user')
             ->orWhere('shares.id IS NOT NULL')
-            ->setParameters([
-                'user' => $user,
-            ])
+            ->setParameter('user', $user)
         ;
+
+        if ($domain != null) {
+            $qb
+                ->join('synthesis.autodiag', 'autodiag')
+                ->join('autodiag.domaines', 'domaines', Join::WITH, 'domaines = :domain')
+                ->setParameter('domain', $domain)
+            ;
+        }
 
         return $qb->getQuery()->getResult();
     }

@@ -29,6 +29,7 @@ th, table.table td {
 
 .domain-choice {
     padding-top: 20px;
+    margin-left: 35px;
 }
 
 .row-account {
@@ -42,4 +43,16 @@ th, table.table td {
 
 .synthesis-creation {
     margin-bottom: 20px;
+}
+
+.actions-column {
+    width: 142px;
+}
+
+i.maj::after {
+    content: "(MÀJ)";
+    color: #8c8c8c;
+    font-style: normal;
+    font-size: 12px;
+    cursor: pointer;
 }

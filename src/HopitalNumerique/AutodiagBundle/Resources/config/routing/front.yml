@@ -52,6 +52,12 @@ hopitalnumerique_autodiag_account_index:
     path:     compte-hn/autodiagnostic
     defaults: { _controller: HopitalNumeriqueAutodiagBundle:Front/Account:index }
 
+hopitalnumerique_autodiag_account_index_domain:
+    path:     compte-hn/autodiagnostic/{domain}
+    defaults: { _controller: HopitalNumeriqueAutodiagBundle:Front/Account:index }
+    requirements:
+            domain: \d+
+
 hopitalnumerique_autodiag_account_generate_synthesis:
     path:     compte-hn/autodiagnostic/generate-synthesis
     defaults: { _controller: HopitalNumeriqueAutodiagBundle:Front/Account:generateSynthesis }
