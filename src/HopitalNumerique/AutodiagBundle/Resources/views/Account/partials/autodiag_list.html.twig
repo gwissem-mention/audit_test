@@ -38,7 +38,7 @@
         </div>
     </div>
 
-    <form action="{{ path('hopitalnumerique_autodiag_account_generate_synthesis') }}" method="post">
+    <form action="{{ path('hopitalnumerique_autodiag_account_generate_synthesis') }}" method="post" id="syntheses-form">
         <h2>{{ 'ad.account.valid'|trans }}</h2>
         <div class="row-fluid">
             <div class="col-md-12">
@@ -105,10 +105,24 @@
                     <input type="text" name="synthesis-name" class="form-control" required>
                 </div>
                 <div class="row-account">
-                    <input type="submit" class="btn btn-success" value="{{ 'ad.account.synthesis.create.button'|trans }}">
+                    <input id="create-synthesis-btn" type="submit" data-errormessage="{{ 'ad.synthesis.generator.error.at_least_2'|trans }}" class="btn btn-success" value="{{ 'ad.account.synthesis.create.button'|trans }}">
                 </div>
             </div>
         {% endif %}
+
+        <script>
+            $(function(){
+                $('#create-synthesis-btn').click(function(){
+                    if ($('#syntheses-form input[type=checkbox]:checked').length < 2) {
+                        alert($(this).data('errormessage'));
+
+                        return false;
+                    }
+
+                    $('body').nodevoLoader().start();
+                });
+            })
+        </script>
 
     </form>
 </div>
