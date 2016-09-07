@@ -53,6 +53,12 @@ services:
         arguments:
             - 'HopitalNumeriqueAutodiagBundle:Restitution'
 
+    autodiag.repository.synthesis:
+        class: HopitalNumerique\AutodiagBundle\Repository\SynthesisRepository
+        factory: ["@doctrine.orm.entity_manager", "getRepository"]
+        arguments:
+            - 'HopitalNumeriqueAutodiagBundle:Synthesis'
+
     autodiag.repository.autodiag:
         class: HopitalNumerique\AutodiagBundle\Repository\AutodiagRepository
         factory: ["@doctrine.orm.entity_manager", "getRepository"]
@@ -102,3 +108,9 @@ services:
 
     autodiag.synthesis.generator:
         class: HopitalNumerique\AutodiagBundle\Service\Synthesis\SynthesisGenerator
+
+    autodiag.synthesis.remover:
+        class: HopitalNumerique\AutodiagBundle\Service\Synthesis\SynthesisRemover
+        arguments:
+            - '@doctrine.orm.entity_manager'
+            - '@autodiag.repository.synthesis'

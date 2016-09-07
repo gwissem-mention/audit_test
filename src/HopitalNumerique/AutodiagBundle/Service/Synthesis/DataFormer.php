@@ -19,7 +19,8 @@ class DataFormer
 
     /**
      * DataFormer constructor.
-     * @param $completion
+     * @param EntityManager $manager
+     * @param Completion $completion
      */
     public function __construct(EntityManager $manager, Completion $completion)
     {
@@ -57,6 +58,7 @@ class DataFormer
                 }
 
                 $currentSynthesesByAutodiag[$synth->getAutodiag()->getId()]['syntheses'][$synth->getId()] = [
+                    'id' => $synth->getId(),
                     'entryId' => count($synth->getEntries()) == 1 ? $synth->getEntries()[0]->getId() : null,
                     'synth' => $synth,
                     'name' => $synth->getName(),
@@ -70,6 +72,7 @@ class DataFormer
                         'syntheses' => [],
                         'name' => $synth->getAutodiag()->getTitle(),
                         'id' => $synth->getAutodiag()->getId(),
+                        'synthesisAllowed' => $synth->getAutodiag()->isSynthesisAuthorized(),
                     ];
                 }
 

@@ -65,7 +65,7 @@ class Synthesis
      *
      * @ORM\ManyToMany(
      *     targetEntity="HopitalNumerique\AutodiagBundle\Entity\AutodiagEntry",
-     *     mappedBy="synthesis",
+     *     mappedBy="syntheses",
      *     cascade={"persist"}
      * )
      */
@@ -248,10 +248,12 @@ class Synthesis
      */
     public function addEntry(AutodiagEntry $entry)
     {
-        $this->entries->add($entry);
+        if (!$this->entries->contains($entry)) {
+            $this->entries->add($entry);
 
-        if (null === $this->getUpdatedAt() || $entry->getUpdatedAt() > $this->getUpdatedAt()) {
-            $this->setUpdatedAt($entry->getUpdatedAt());
+            if (null === $this->getUpdatedAt() || $entry->getUpdatedAt() > $this->getUpdatedAt()) {
+                $this->setUpdatedAt($entry->getUpdatedAt());
+            }
         }
 
         return $this;
@@ -297,6 +299,19 @@ class Synthesis
     public function getShares()
     {
         return $this->shares;
+    }
+
+    /**
+     * Set shares
+     *
+     * @param ArrayCollection $shares
+     * @return $this
+     */
+    public function setShares(ArrayCollection $shares)
+    {
+        $this->shares = $shares;
+
+        return $this;
     }
 
     /**

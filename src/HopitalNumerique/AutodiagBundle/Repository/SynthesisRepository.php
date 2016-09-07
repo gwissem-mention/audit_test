@@ -4,6 +4,7 @@ namespace HopitalNumerique\AutodiagBundle\Repository;
 
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\Query\Expr\Join;
+use HopitalNumerique\AutodiagBundle\Entity\AutodiagEntry;
 use HopitalNumerique\AutodiagBundle\Entity\Synthesis;
 use HopitalNumerique\UserBundle\Entity\User;
 
@@ -47,6 +48,27 @@ class SynthesisRepository extends EntityRepository
             ->orWhere('shares.id IS NOT NULL')
             ->setParameters([
                 'user' => $user,
+            ])
+        ;
+
+        return $qb->getQuery()->getResult();
+    }
+
+    /**
+     * Retourne les synthèses qui contiennent l'entry en paramètre
+     *
+     * @param AutodiagEntry $entry
+     * @return array
+     */
+    public function findSynthesesByEntry(AutodiagEntry $entry)
+    {
+        $qb = $this->getEntityManager()->createQueryBuilder();
+        $qb
+            ->select('synthesis')
+            ->from('HopitalNumeriqueAutodiagBundle:Synthesis', 'synthesis')
+            ->join('synthesis.entries', 'entries', Join::WITH, 'entries.id = :entry')
+            ->setParameters([
+                'entry' => $entry->getId(),
             ])
         ;
 

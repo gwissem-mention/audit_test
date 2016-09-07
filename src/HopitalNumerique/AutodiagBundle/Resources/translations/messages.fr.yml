@@ -18,6 +18,8 @@ ad:
         domain_selection: Sélectionnez votre domaine :
         synthesis:
             name: Synthèse
+            shared_with: Partagé avec
+            shared_by: Partagé par
             create:
                 label: Nom de la synthèse :
                 button: Créer une syntèse des autodiagnostics sélectionnés
@@ -26,9 +28,16 @@ ad:
         generator:
             success: La synthèse a bien été créée
             error:
-                more_than_one_ad: Les cases cochées doivent toutes appartenir au même autodiagnostic
+                general: Une erreur s'est produite lors de la génération de la synthèse
+                more_than_one_ad: Les réponses sélectionnées doivent toutes appartenir au même autodiagnostic
                 not_allowed: Vous ne pouvez pas faire de synthèse de cet autodianostic
-                at_least_2: Vous devez choisir au moins deux (...) pour générer une synthèse
+                at_least_2: Vous devez choisir au moins deux réponses pour générer une synthèse
+                empty_name: Le nom de la synthèse doit être renseigné
+        delete:
+            succes: La synthèse a bien été supprimée
+            error: Une erreur est survenue lors de la suppression de la synthèse
+        share:
+            delete: Vous avez rennoncé au partage de cette réponse
 
 
     autodiag:

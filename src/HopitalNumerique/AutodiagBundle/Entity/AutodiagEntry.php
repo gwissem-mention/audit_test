@@ -63,7 +63,7 @@ class AutodiagEntry
      *      inverseJoinColumns={@ORM\JoinColumn(name="synthesis_id", referencedColumnName="id", onDelete="CASCADE")}
      * )
      */
-    private $synthesis;
+    private $syntheses;
 
     /**
      * @var Collection
@@ -84,7 +84,7 @@ class AutodiagEntry
 
     public function __construct(Synthesis $synthesis, User $user = null)
     {
-        $this->synthesis = new ArrayCollection([$synthesis]);
+        $this->syntheses = new ArrayCollection([$synthesis]);
         $this->user = $user;
         $this->values = new ArrayCollection();
         $this->updatedAt = new \DateTime();
@@ -130,7 +130,20 @@ class AutodiagEntry
      */
     public function getSynthesis()
     {
-        return $this->synthesis->first();
+        return $this->syntheses->first();
+    }
+
+    /**
+     * @param Synthesis $synthesis
+     * @return $this
+     */
+    public function addSynthesis(Synthesis $synthesis)
+    {
+        if (!$this->syntheses->contains($synthesis)) {
+            $this->syntheses->add($synthesis);
+        }
+
+        return $this;
     }
 
     public function getValues()
@@ -225,6 +238,7 @@ class AutodiagEntry
     public function __clone()
     {
         $this->id = null;
+        $this->syntheses = new ArrayCollection();
         $originalValues = $this->values;
         $this->values = new ArrayCollection();
         foreach ($originalValues as $value) {

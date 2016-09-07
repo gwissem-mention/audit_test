@@ -2,6 +2,7 @@
 
 namespace HopitalNumerique\AutodiagBundle\Controller\Front;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use HopitalNumerique\AutodiagBundle\Entity\Synthesis;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
@@ -73,6 +74,8 @@ class ValidationController extends Controller
         }
 
         $synthesis->unvalidate();
+        // On supprime tous les partages si la synthèse est dévalidée
+        $synthesis->setShares(new ArrayCollection());
         $this->getDoctrine()->getManager()->flush();
 
         return $this->redirectToRoute('hopitalnumerique_autodiag_validation_index', [

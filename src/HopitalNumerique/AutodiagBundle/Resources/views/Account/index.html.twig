@@ -58,7 +58,7 @@
                                     {% if synthesis.entryId is not null %}
                                         <a href="{{ path('hopitalnumerique_autodiag_entry_edit', {'entry': synthesis.entryId}) }}" class="btn btn-success" title="{{ 'ad.account.action.continue'|trans }}"><i class="fa fa-arrow-right"></i></a>
                                     {% endif %}
-                                    <a href="#" class="btn btn-danger" title="{{ 'ad.account.action.delete'|trans }}"><i class="fa fa-trash-o"></i></a>
+                                    <a href="{{ path('hopitalnumerique_autodiag_account_delete_synthesis', {'synthesis': synthesis.id}) }}" class="btn btn-danger" title="{{ 'ad.account.action.delete'|trans }}"><i class="fa fa-trash-o"></i></a>
                                 </td>
                             </tr>
                         {% endfor %}
@@ -89,18 +89,22 @@
                         <tr><td colspan="5" class="autodiag-title">{{ autodiag.name }}</td></tr>
                         {% for synthesis in autodiag.syntheses %}
                             <tr>
-                                <td><input name="synthesis-choice[{{ autodiag.id }}][]" type="checkbox" value="{{ synthesis.id }}"></td>
+                                <td>
+                                    {% if autodiag.synthesisAllowed == true %}
+                                        <input name="synthesis-choice[{{ autodiag.id }}][]" type="checkbox" value="{{ synthesis.id }}">
+                                    {% endif %}
+                                </td>
                                 {% if synthesis.entries|length > 1 %}
-                                    <td>[{{ 'ad.account.synthesis.name'|trans }}] {{ synthesis.name }}</td>
+                                    <td>{{ 'ad.account.synthesis.name'|trans }} : {{ synthesis.name }}</td>
                                 {% else %}
                                     <td>{{ synthesis.name }}</td>
                                 {% endif %}
                                 <td>{{ synthesis.validated_at|date('d/m/Y') }}</td>
                                 <td>
                                     {% if synthesis.user != user and synthesis.share is not empty %}
-                                        Partagé par : {{ synthesis.user.prenom ~ ' ' ~ synthesis.user.nom }}
+                                        {{ 'ad.account.synthesis.shared_by'|trans }} : {{ synthesis.user.prenom ~ ' ' ~ synthesis.user.nom }}
                                     {% elseif synthesis.share is not empty %}
-                                        Partagé avec : {{ synthesis.share|join(', ') }}
+                                        {{ 'ad.account.synthesis.shared_with'|trans }} : {{ synthesis.share|join(', ') }}
                                     {% else %}
                                         -
                                     {% endif %}
@@ -110,7 +114,7 @@
                                     {% if synthesis.user == user and synthesis.entries|length <= 1 %}
                                         <a href="{{ path('hopitalnumerique_autodiag_unvalidate', {'synthesis': synthesis.id}) }}" class="btn btn-warning" title="{{ 'ad.account.action.reopen'|trans }}"><i class="fa fa-arrow-up"></i></a>
                                     {% endif %}
-                                    <a href="#" class="btn btn-danger" title="{{ 'ad.account.action.delete'|trans }}"><i class="fa fa-trash-o"></i></a>
+                                    <a href="{{ path('hopitalnumerique_autodiag_account_delete_synthesis', {'synthesis': synthesis.id}) }}" class="btn btn-danger" title="{{ 'ad.account.action.delete'|trans }}"><i class="fa fa-trash-o"></i></a>
                                 </td>
                             </tr>
                         {% endfor %}
@@ -126,7 +130,7 @@
                 {{ 'ad.account.synthesis.create.label'|trans }}
             </div>
             <div class="row-account">
-                <input type="text" name="synthesis-name" class="form-control">
+                <input type="text" name="synthesis-name" class="form-control" required>
             </div>
             <div class="row-account">
                 <input type="submit" class="btn btn-success" value="{{ 'ad.account.synthesis.create.button'|trans }}">

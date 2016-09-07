@@ -2,7 +2,9 @@
 
 namespace HopitalNumerique\AutodiagBundle\Controller\Front;
 
+use HopitalNumerique\AutodiagBundle\Entity\Synthesis;
 use HopitalNumerique\AutodiagBundle\Service\Synthesis\SynthesisGenerator;
+use HopitalNumerique\AutodiagBundle\Service\Synthesis\SynthesisRemover;
 use HopitalNumerique\UserBundle\Entity\User;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use HopitalNumerique\AutodiagBundle\Service\Synthesis\DataFormer;
@@ -13,7 +15,6 @@ class AccountController extends Controller
 {
     public function indexAction()
     {
-
         /** @var User $currentUser */
         $currentUser = $this->getUser();
 
@@ -29,12 +30,23 @@ class AccountController extends Controller
         ));
     }
 
+    /**
+     * @param Request $request
+     *
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse
+     */
     public function generateSynthesisAction(Request $request)
     {
         $form = $request->request;
 
         if (count($form->get('synthesis-choice')) > 1) {
             $this->addFlash('danger', $this->get('translator')->trans('ad.synthesis.generator.error.more_than_one_ad'));
+
+            return $this->redirectToRoute('hopitalnumerique_autodiag_account_index');
+        }
+
+        if ($form->get('synthesis-name') == "") {
+            $this->addFlash('danger', $this->get('translator')->trans('ad.synthesis.generator.error.empty_name'));
 
             return $this->redirectToRoute('hopitalnumerique_autodiag_account_index');
         }
@@ -53,23 +65,53 @@ class AccountController extends Controller
         }
 
         try {
-            $this->get('autodiag.synthesis.generator')->generateSynthesis($autodiag, $syntheses);
+            $newSynthesis = $this
+                ->get('autodiag.synthesis.generator')
+                ->generateSynthesis($autodiag, $syntheses, $this->getUser())
+            ;
         } catch (Exception $e) {
             if ($e->getCode() == SynthesisGenerator::SYNTHESIS_NOT_ALLOWED) {
                 $this->addFlash('danger', $this->get('translator')->trans('ad.synthesis.generator.error.not_allowed'));
             } elseif ($e->getCode() == SynthesisGenerator::NEED_AT_LEAST_2) {
                 $this->addFlash('danger', $this->get('translator')->trans('ad.synthesis.generator.error.at_least_2'));
+            } else {
+                $this->addFlash('danger', $this->get('translator')->trans('ad.synthesis.generator.error.general'));
             }
 
             return $this->redirectToRoute('hopitalnumerique_autodiag_account_index');
         }
 
-        $this->addFlash(
-            'success',
-            $this->get('translator')->trans('ad.synthesis.generator.success')
-        );
+        if (isset($newSynthesis)) {
+            $newSynthesis->setName($form->get('synthesis-name'));
+            $this->getDoctrine()->getManager()->persist($newSynthesis);
+            $this->getDoctrine()->getManager()->flush();
+        }
+
+        $this->addFlash('success', $this->get('translator')->trans('ad.synthesis.generator.success'));
 
         return $this->redirectToRoute('hopitalnumerique_autodiag_account_index');
     }
-}
 
+    /**
+     * @param Synthesis $synthesis
+     *
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse
+     */
+    public function deleteAction(Synthesis $synthesis)
+    {
+        $user = $this->getUser();
+
+        $removeState = $this->get('autodiag.synthesis.remover')->removeSynthesis($synthesis, $user);
+
+        if ($removeState == SynthesisRemover::SYNTHESIS_REMOVED) {
+            $this->addFlash('success', $this->get('translator')->trans('ad.synthesis.delete.succes'));
+        } elseif ($removeState == SynthesisRemover::SHARE_REMOVED) {
+            $this->addFlash('success', $this->get('translator')->trans('ad.synthesis.share.delete'));
+        } else {
+            $this->addFlash('danger', $this->get('translator')->trans('ad.synthesis.delete.error'));
+        }
+
+        return $this->redirectToRoute('hopitalnumerique_autodiag_account_index');
+    }
+
+}

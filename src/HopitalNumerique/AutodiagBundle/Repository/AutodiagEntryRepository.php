@@ -12,9 +12,9 @@ class AutodiagEntryRepository extends EntityRepository
         $qb = $this->createQueryBuilder('entry');
         $qb
             ->addSelect('values')
-            ->join('entry.synthesis', 'synthesis')
+            ->join('entry.syntheses', 'syntheses')
             ->leftJoin('entry.values', 'values')
-            ->where('synthesis.autodiag = :autodiag_id')
+            ->where('syntheses.autodiag = :autodiag_id')
             ->setParameters([
                 'autodiag_id' => $autodiag->getId()
             ])
