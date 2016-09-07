@@ -25,7 +25,7 @@ class RestitutionExtension extends \Twig_Extension
                 'type' => 'line'
             ],
             'title' => [
-                'text' => 'Titre',
+                'text' => false,
             ],
             'pane' => [
                 'size' => '80%',
@@ -104,7 +104,7 @@ class RestitutionExtension extends \Twig_Extension
                 'type' => 'bar'
             ],
             'title' => [
-                'text' => 'Titre',
+                'text' => false,
             ],
             'xAxis' => [
                 'categories' => [],
