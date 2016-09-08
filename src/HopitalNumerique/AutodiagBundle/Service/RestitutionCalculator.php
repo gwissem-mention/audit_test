@@ -240,7 +240,7 @@ class RestitutionCalculator
                     }
                 }
 
-                $actionPlan = $this->getAttributeActionPlan($synthesis->getAutodiag(), $attribute, $score);
+                $actionPlan = $this->getAttributeActionPlan($synthesis->getAutodiag(), $attribute, $responseValue);
                 if ($actionPlan) {
                     $itemAttribute->setActionPlan($actionPlan);
                 }

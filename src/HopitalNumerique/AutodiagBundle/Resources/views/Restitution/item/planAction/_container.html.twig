@@ -14,7 +14,7 @@
 
 
 {% if visible %}
-    <tr class="root autodiag-container {% if isChild is defined %}children{% endif %}">
+    <tr class="autodiag-container {% if isChild is defined %}children{% else %}root{% endif %}">
         <td class="container-label">{{ container.label }}</td>
         <td class="empty-cell"></td>
         {% if container.actionPlan is not null %}
