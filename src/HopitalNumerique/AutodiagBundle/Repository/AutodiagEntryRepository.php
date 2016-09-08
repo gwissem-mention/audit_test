@@ -20,7 +20,7 @@ class AutodiagEntryRepository extends EntityRepository
             ->addSelect('values')
             ->join('entry.syntheses', 'syntheses')
             ->leftJoin('entry.values', 'values')
-            ->where('synthesis.autodiag = :autodiag_id')
+            ->where('syntheses.autodiag = :autodiag_id')
             ->andWhere('entry.copy = FALSE')
             ->setParameters([
                 'autodiag_id' => $autodiag->getId()

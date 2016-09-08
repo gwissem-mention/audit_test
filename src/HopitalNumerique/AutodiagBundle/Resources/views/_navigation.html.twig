@@ -30,7 +30,7 @@
 
         </li>
         <li class="validation {{ step == "validation" ? 'active' : '' }}">
-            {% if synthesis.id is not null %}
+            {% if synthesis.id is not null and synthesis.entries|length < 2 %}
                 <a href="{{ path('hopitalnumerique_autodiag_validation_index', {"synthesis": synthesis.id}) }}"
                     {% if entry is not null and entry.id is not null %}
                         data-demand="{{ path('hopitalnumerique_autodiag_entry_restitution_validation_demand', {"entry": entry.id, "target": "validation"}) }}"
