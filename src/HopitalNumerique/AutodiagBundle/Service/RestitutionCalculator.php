@@ -358,7 +358,7 @@ class RestitutionCalculator
         $cacheKey = $autodiag->getId();
 
         if (!array_key_exists($cacheKey, $this->entriesByAutodiag)) {
-            $this->entriesByAutodiag[$cacheKey] = $this->entryRepository->findByAutodiag($autodiag);
+            $this->entriesByAutodiag[$cacheKey] = $this->entryRepository->findOriginalByAutodiag($autodiag);
         }
 
         return $this->entriesByAutodiag[$cacheKey];
