@@ -13,7 +13,7 @@
         <link href='http://fonts.googleapis.com/css?family=Viga|Open+Sans:400,700' rel='stylesheet' type='text/css'>
         <link rel="shortcut icon" href="{% if domaineCurrent.id != 1 %}{{ asset('favicon_anap.ico') }}{% else %}{{ asset('favicon.ico') }}{% endif %}" />
         {% block stylesheets %}
-            {% stylesheets output="compiled/hopitalnumerique-core-3.css" filter="cssrewrite, ?yui_css" 
+            {% stylesheets output="compiled/hopitalnumerique-core-3.css" filter="cssrewrite, ?yui_css"
                 "@bootstrap_css"
                 "@fancybox_css"
                 'bundles/nodevoadmin/css/custom-jquery-ui.min.css'
@@ -25,12 +25,12 @@
         {% endblock %}
 
         {% block javascripts %}
-            {% javascripts output="compiled/hopitalnumerique-core.js" 
-                "@jquery_js" 
+            {% javascripts output="compiled/hopitalnumerique-core-sg3.js"
+                "@jquery_js"
                 "@jquery_ui_js"
                 "@bootstrap_js"
                 "@enquire_js"
-                "@fancybox_js"  
+                "@fancybox_js"
                 "@json_js"
                 'bundles/hopitalnumeriquecore/js/script.js'
                 'bundles/hopitalnumeriquecore/js/recherche.js'
@@ -55,7 +55,7 @@
     <body>
         <div class="row" id="body">
             <div class="col-md-12" id="content">
-                
+
                 {{ block('flashBags') }}
                 {% block block_du_body %}
                     {% block prebody %}{% endblock prebody %}
