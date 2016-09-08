@@ -69,22 +69,23 @@ class RestitutionExtension extends \Twig_Extension
             ]
         ];
 
-        foreach ($result['references'] as $code => $reference) {
-            $data['series'][$code] = [
-                'name' => $reference,
-                'data' => []
-            ];
-        }
-
         foreach ($result['items'] as $item) {
             /** @var Item $item */
             $data['xAxis']['categories'][] = $item->getLabel();
 
-            $data['series']['score']['data'][] =$item->getScore()->getValue();
-            foreach ($result['references'] as $code => $reference) {
-                $itemReferences = $item->getReferences();
-                $data['series'][$code]['data'][] =
-                    isset($itemReferences[$code]) ? $itemReferences[$code]->getValue() : 0;
+            $data['series']['score']['data'][] = $item->getScore()->getValue();
+
+            foreach ($item->getReferences() as $reference) {
+                $code = $reference->getCode();
+                if (!isset($data['series'][$code])) {
+                    $data['series'][$code] = [
+                        'name' => $reference->getLabel(),
+                        'data' => [],
+                        'color' => $reference->getColor(),
+                    ];
+                }
+
+                $data['series'][$code]['data'][] = $reference->getValue();
             }
         }
 
@@ -154,22 +155,22 @@ class RestitutionExtension extends \Twig_Extension
             ],
         ];
 
-        foreach ($result['references'] as $code => $reference) {
-            $data['series'][$code] = [
-                'name' => $reference,
-                'data' => []
-            ];
-        }
-
         foreach ($result['items'] as $item) {
             /** @var Item $item */
             $data['xAxis']['categories'][] = $item->getLabel();
 
             $data['series']['score']['data'][] =$item->getScore()->getValue();
-            foreach ($result['references'] as $code => $reference) {
-                $itemReferences = $item->getReferences();
-                $data['series'][$code]['data'][] =
-                    isset($itemReferences[$code]) ? $itemReferences[$code]->getValue() : 0;
+            foreach ($item->getReferences() as $reference) {
+                $code = $reference->getCode();
+                if (!isset($data['series'][$code])) {
+                    $data['series'][$code] = [
+                        'name' => $reference->getLabel(),
+                        'data' => [],
+                        'color' => $reference->getColor(),
+                    ];
+                }
+
+                $data['series'][$code]['data'][] = $reference->getValue();
             }
         }
 
