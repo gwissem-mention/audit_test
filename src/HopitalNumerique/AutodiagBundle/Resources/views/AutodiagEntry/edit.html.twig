@@ -12,6 +12,13 @@
         <div id="synthesisCreate" class="autodiag-popin">
             <h3>{{ "ad.front.new_entry"|trans }}</h3>
             <div class="mysep background-rose"></div>
+
+            <p>
+                Vous pouvez retrouver tous vos autodiagnostics en cours ou validés sur la page Mon compte > Autodiagnostics.
+                <br />
+                Si vous désirer commencer un nouvel autodiagnostic renseignez un nom et cliquez sur le bouton "Sauvegarder".
+            </p>
+
             {{ form_start(synthesisCreateForm) }}
 
             {{ form_row(synthesisCreateForm.name, {"label": "ad.front.entry.name"}) }}
