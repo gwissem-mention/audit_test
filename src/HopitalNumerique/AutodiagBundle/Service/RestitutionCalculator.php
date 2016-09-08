@@ -292,7 +292,8 @@ class RestitutionCalculator
                 $score = new Score(
                     ReferenceAlgorithm::compute($reference, $referenceScores),
                     $reference->getLabel(),
-                    $reference->getNumber()
+                    $reference->getNumber(),
+                    $reference->getColor()
                 );
             }
 

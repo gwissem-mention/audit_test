@@ -8,7 +8,11 @@ var Jauge;
     {
         this.element = element;
 
-        this.options = options;
+        this.options = $.extend({
+            bottom: -5
+        }, options);
+
+        this.stacks = [];
 
         this.init();
 
@@ -24,6 +28,8 @@ var Jauge;
 
         initScores: function ()
         {
+            var instance = this;
+
             $('.jauge-widget', this.element).each(function (j) {
                 var el = $(this);
                 setTimeout(function() {
@@ -34,8 +40,27 @@ var Jauge;
                             title: (el.data('label') ? (el.data('label') + ' : ') : '') + el.data('value') + '%',
                             container: 'body'
                         });
+
+                        if (el.data('color') !== undefined) {
+                            el.css({
+                                borderBottomColor: el.data('color')
+                            });
+                        }
+
                         setTimeout(function() {
-                            el.css('left', el.data('value') + '%');
+                            var bottom = instance.options.bottom;
+                            if (instance.stacks[el.data('value')] !== undefined) {
+                                bottom -= (instance.stacks[el.data('value')] * 2);
+                                instance.stacks[el.data('value')]++;
+                            } else {
+                                instance.stacks[el.data('value')] = 1;
+                            }
+
+                            el.css({
+                                left: el.data('value') + '%',
+                                bottom: bottom,
+                                zIndex: instance.stacks[el.data('value')]
+                            });
                         }, i * 50);
                     });
                 }, (jaugeCount * 500) + j * 50);

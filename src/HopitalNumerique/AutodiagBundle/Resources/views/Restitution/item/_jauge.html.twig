@@ -28,7 +28,7 @@
 
                         {% for score in jaugeData.references %}
                             {% if score.value is not null %}
-                                <div class="score reference" data-value="{{ score.value }}" data-label="{{ score.label }}"></div>
+                                <div class="score reference" data-value="{{ score.value }}" data-label="{{ score.label }}" data-color="{{ score.color }}"></div>
                             {% endif %}
                         {% endfor %}
                     </div>
