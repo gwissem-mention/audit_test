@@ -20,23 +20,23 @@
                 'bundles/nodevoadmin/plugins/nodevoLoader/nodevoLoader.css'
                 'bundles/hopitalnumeriquecore/css/Templates/2/layout.css'
             %}
-                <link rel="stylesheet" href="{{ asset_url }}" />
+                <link rel="stylesheet" href="{{ absolute_url(asset_url) }}" />
             {% endstylesheets %}
         {% endblock %}
 
         {% block javascripts %}
-            {% javascripts output="compiled/hopitalnumerique-core.js" 
-                "@jquery_js" 
+            {% javascripts output="compiled/hopitalnumerique-core.js"
+                "@jquery_js"
                 "@jquery_ui_js"
                 "@bootstrap_js"
                 "@enquire_js"
-                "@fancybox_js"  
+                "@fancybox_js"
                 "@json_js"
                 'bundles/hopitalnumeriquecore/js/script.js'
                 'bundles/hopitalnumeriquecore/js/recherche.js'
                 'bundles/nodevoadmin/plugins/nodevoLoader/nodevoLoader.js'
             %}
-                <script type="text/javascript" src="{{ asset_url }}"></script>
+                <script type="text/javascript" src="{{ absolute_url(asset_url) }}"></script>
             {% endjavascripts %}
         {% endblock %}
 
@@ -53,7 +53,7 @@
     <body>
         <div class="row" id="body">
             <div class="col-md-12" id="content">
-                
+
                 {{ block('flashBags') }}
                 {% block block_du_body %}
                     {% block prebody %}{% endblock prebody %}

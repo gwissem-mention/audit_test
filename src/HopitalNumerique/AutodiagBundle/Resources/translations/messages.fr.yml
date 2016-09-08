@@ -153,6 +153,7 @@ ad:
         loggedout-warning: Attention, vous n'êtes pas connecté, vos résultats seront perdus à la fermeture du navigateur.
         synthesis: Synthèse des autodiagnistics suivants
         start_new: Commencer un nouvel autodiagnostic
+        export_pdf: Télécharger les résultats en PDF
 
     validation:
         validate: Valider mes résultats

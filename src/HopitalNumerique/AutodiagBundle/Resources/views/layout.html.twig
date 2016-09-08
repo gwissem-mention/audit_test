@@ -1,4 +1,4 @@
-{% extends 'HopitalNumeriqueCoreBundle:Templates:' ~ templateCurrentId ~ '/layout.html.twig' %}
+{% extends pdf is not defined ? ('HopitalNumeriqueCoreBundle:Templates:' ~ templateCurrentId ~ '/layout.html.twig') : ('HopitalNumeriqueCoreBundle:Templates:' ~ templateCurrentId ~ '/layout_sans_gabarit.html.twig') %}
 
 {% block stylesheets %}
     {{parent()}}
@@ -8,7 +8,7 @@
         'bundles/hopitalnumeriqueautodiag/css/restitution.css'
         'bundles/hopitalnumeriqueautodiag/css/validation.css'
     %}
-        <link rel="stylesheet" href="{{ asset_url }}" />
+        <link rel="stylesheet" href="{{ absolute_url(asset_url) }}" />
     {% endstylesheets %}
 {% endblock %}
 
@@ -25,7 +25,7 @@
         'bundles/hopitalnumeriqueautodiag/js/restitution.js'
         'bundles/hopitalnumeriqueautodiag/js/Restitution/jauge.js'
     %}
-        <script type="text/javascript" src="{{ asset_url }}"></script>
+        <script type="text/javascript" src="{{ absolute_url(asset_url) }}"></script>
     {% endjavascripts %}
 {% endblock %}
 

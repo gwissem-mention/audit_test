@@ -8,19 +8,19 @@
 
                     {% if data.colorationInversed %}
                         {% if data.score.value < 33 %}
-                            <img src="{{ asset('bundles/hopitalnumeriqueautodiag/images/meteo/soleil.png') }}" alt="soleil" />
+                            <img src="{{ absolute_url(asset('bundles/hopitalnumeriqueautodiag/images/meteo/soleil.png')) }}" alt="soleil" />
                         {% elseif data.score.value < 66 %}
-                            <img src="{{ asset('bundles/hopitalnumeriqueautodiag/images/meteo/nuage.png') }}" alt="nuage" />
+                            <img src="{{ absolute_url(asset('bundles/hopitalnumeriqueautodiag/images/meteo/nuage.png')) }}" alt="nuage" />
                         {% else %}
-                            <img src="{{ asset('bundles/hopitalnumeriqueautodiag/images/meteo/pluie.png') }}" alt="pluie" />
+                            <img src="{{ absolute_url(asset('bundles/hopitalnumeriqueautodiag/images/meteo/pluie.png')) }}" alt="pluie" />
                         {% endif %}
                     {% else %}
                         {% if data.score.value < 33 %}
-                            <img src="{{ asset('bundles/hopitalnumeriqueautodiag/images/meteo/pluie.png') }}" alt="pluie" />
+                            <img src="{{ absolute_url(asset('bundles/hopitalnumeriqueautodiag/images/meteo/pluie.png')) }}" alt="pluie" />
                         {% elseif data.score.value < 66 %}
-                            <img src="{{ asset('bundles/hopitalnumeriqueautodiag/images/meteo/nuage.png') }}" alt="nuage" />
+                            <img src="{{ absolute_url(asset('bundles/hopitalnumeriqueautodiag/images/meteo/nuage.png')) }}" alt="nuage" />
                         {% else %}
-                            <img src="{{ asset('bundles/hopitalnumeriqueautodiag/images/meteo/soleil.png') }}" alt="soleil" />
+                            <img src="{{ absolute_url(asset('bundles/hopitalnumeriqueautodiag/images/meteo/soleil.png')) }}" alt="soleil" />
                         {% endif %}
                     {% endif %}
 

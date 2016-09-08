@@ -3,12 +3,14 @@
 {% block body %}
     <div id="restitution">
 
-        {% include "@HopitalNumeriqueAutodiag/_navigation.html.twig" with {
-            "step": "restitution",
-            "autodiag": synthesis.autodiag,
-            "synthesis": synthesis,
-            "entry" : synthesis.entries|length > 1 ? null : synthesis.entries.first
-        } %}
+        {% block navigation %}
+            {% include "@HopitalNumeriqueAutodiag/_navigation.html.twig" with {
+                "step": "restitution",
+                "autodiag": synthesis.autodiag,
+                "synthesis": synthesis,
+                "entry" : synthesis.entries|length > 1 ? null : synthesis.entries.first
+            } %}
+        {% endblock %}
 
         <div class="restitution-header">
             <div class="update-at">
@@ -42,11 +44,16 @@
                 {% endif %}
             </div>
 
-            <div class="links pull-right">
-                <a class="btn btn-success" href="{{ path("hopitalnumerique_autodiag_entry_add", {"autodiag": synthesis.autodiag.id}) }}">
-                    {{ "ad.restitution.start_new"|trans }}
-                </a>
-            </div>
+            {% if pdf is not defined %}
+                <div class="links pull-right">
+                    <a class="btn btn-success btn-block" href="{{ path("hopitalnumerique_autodiag_restitution_pdf", {"synthesis": synthesis.id}) }}">
+                        {{ "ad.restitution.export_pdf"|trans }}
+                    </a>
+                    <a class="btn btn-success btn-block" href="{{ path("hopitalnumerique_autodiag_entry_add", {"autodiag": synthesis.autodiag.id}) }}">
+                        {{ "ad.restitution.start_new"|trans }}
+                    </a>
+                </div>
+            {% endif %}
 
             <div class="clearfix"></div>
 
@@ -56,20 +63,6 @@
             {% block restitution_content %}{% endblock %}
         </div>
     </div>
-
-    <script>
-        $('.item-row').each(function() {
-            var cols = $(this).find('[data-row][data-column]');
-            cols.css('width', (100 / cols.length) + "%");
-        });
-
-        $('a[data-toggle="tab"]').on('shown.bs.tab', function() {
-            $(window).trigger('resize');
-        });
-
-        $(window).trigger('resize');
-    </script>
-
 
     <script type="text/javascript">
 

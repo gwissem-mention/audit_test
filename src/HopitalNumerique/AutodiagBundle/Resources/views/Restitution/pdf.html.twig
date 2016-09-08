@@ -1,19 +1,15 @@
 {% extends 'HopitalNumeriqueAutodiagBundle:Restitution:layout.html.twig' %}
 
-{% block restitution_content %}
-    <ul class="nav nav-tabs" role="tablist">
-        {% for category in restitution.categories %}
-            <li role="presentation" class="{{ loop.first ? 'active' : '' }}">
-                <a href="#{{ category.id }}" aria-controls="home" role="tab" data-toggle="tab">
-                    {{ category.label }}
-                </a>
-            </li>
-        {% endfor %}
-    </ul>
+{% set pdf = true %}
 
-    <div class="tab-content">
-        {% for category in restitution.categories if category.items|length > 0 %}
-            <div role="tabpanel" class="tab-pane category {{ loop.first ? 'active' : '' }}" id="{{ category.id }}">
+{% block navigation %}{% endblock %}
+
+{% block restitution_content %}
+    {% for category in restitution.categories %}
+        <div class="category" style="width: 1024px;">
+            <h3>{{ category.label }}</h3>
+
+            <div>
                 <p class="category-description">
                     {{ category.description }}
                 </p>
@@ -27,7 +23,7 @@
                                 {% set currentRow = item.row %}
                                 </div>
                                 <div class="item-row">
-                                {% endif %}
+                            {% endif %}
 
                             <div class="item" data-row="{{ item.row }}" data-column="{{ item.column }}" data-item-type="{{ item.type }}">
                                 {% include ("@HopitalNumeriqueAutodiag/Restitution/item/_" ~ item.type ~ ".html.twig") ignore missing with {
@@ -35,27 +31,16 @@
                                 'result': result[item.id]
                                 } %}
                             </div>
-
                         {% endfor %}
                     </div>
                 </div>
             </div>
-        {% endfor %}
-    </div>
+        </div>
 
-    <script>
-        $('.item-row').each(function() {
-            var cols = $(this).find('[data-row][data-column]');
-            cols.css('width', (100 / cols.length) + "%");
-        });
-
-        $('a[data-toggle="tab"]').on('shown.bs.tab', function() {
-            $(window).trigger('resize');
-        });
-
-        $(window).trigger('resize');
-    </script>
+        {% if not loop.last %}
+            <div style="page-break-after: always;"></div>
+        {% endif %}
+    {% endfor %}
 
 {% endblock %}
-
 
