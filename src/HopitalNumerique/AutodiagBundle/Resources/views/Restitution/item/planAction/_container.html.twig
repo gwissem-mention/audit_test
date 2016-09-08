@@ -16,7 +16,7 @@
         {% if container.actionPlan is not null %}
             <td>{{ container.actionPlan.description }}</td>
             <td>
-                <a href="{{ url(container.actionPlan.link) }}">{{ container.actionPlan.linkDescription }}</a>
+                <a href="{{ container.actionPlan.link }}">{{ container.actionPlan.linkDescription }}</a>
             </td>
         {% else %}
             <td class="empty-cell"></td>
