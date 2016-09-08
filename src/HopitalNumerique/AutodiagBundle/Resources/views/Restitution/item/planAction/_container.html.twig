@@ -1,23 +1,29 @@
 {% set visible = false %}
 
-{% if container.actionPlan is not null and container.actionPlan.visible %}
+{% if container.actionPlan is not null %}
     {% set visible = true %}
 {% endif %}
 
-{% for attribute in container.attributes if attribute.actionPlan is not null and attribute.actionPlan.visible %}
+{% for attribute in container.attributes if attribute.actionPlan is not null %}
     {% set visible = true %}
 {% endfor  %}
 
-{% for child in container.childrens if child.actionPlan is not null and child.actionPlan.visible %}
-    {% set visible = true %}
-{% endfor  %}
+{% for child in container.childrens %}
+    {% if child.actionPlan is not null %}
+        {% set visible = true %}
+    {% endif %}
 
+    {% for attribute in child.attributes if attribute.actionPlan is not null %}
+        {% set visible = true %}
+    {% endfor  %}
+
+{% endfor  %}
 
 {% if visible %}
-    <tr class="autodiag-container {% if isChild is defined %}children{% else %}root{% endif %}">
+    <tr class="root autodiag-container {% if isChild is defined %}children{% endif %}">
         <td class="container-label">{{ container.label }}</td>
         <td class="empty-cell"></td>
-        {% if container.actionPlan is not null %}
+        {% if container.actionPlan is not null and container.actionPlan.visible %}
             <td>{{ container.actionPlan.description }}</td>
             <td>
                 <a target="_blank" href="{{ container.actionPlan.link }}">{{ container.actionPlan.linkDescription }}</a>
@@ -28,7 +34,7 @@
         {% endif %}
     </tr>
 
-    {% for attribute in container.attributes if attribute.actionPlan is not null %}
+    {% for attribute in container.attributes if attribute.actionPlan is not null and attribute.actionPlan.visible %}
         <tr class="attribute {% if isChild is defined %}children{% endif %}">
             <td>{{ attribute.label }}</td>
             <td>{{ attribute.responseText }}</td>

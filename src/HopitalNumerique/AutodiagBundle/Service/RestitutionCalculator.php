@@ -204,7 +204,11 @@ class RestitutionCalculator
                 if ($builder instanceof PresetableAttributeBuilderInterface) {
                     $options = $builder->getPreset($synthesis->getAutodiag())->getPreset();
                 } else {
-                    $options = $attribute->getOptions();
+                    $attributeOptions = $attribute->getOptions();
+                    $options = [];
+                    foreach ($attributeOptions as $option) {
+                        $options[$option->getValue()] = $option->getLabel();
+                    }
                 }
 
                 foreach ($synthesis->getEntries() as $entry) {
@@ -226,7 +230,7 @@ class RestitutionCalculator
                             } else {
                                 $responseValue = $response;
                                 if (isset($options[$response])) {
-                                    $response = $options[$response]->getLabel();
+                                    $response = $options[$response];
                                 } elseif (null === $response) {
                                     $response = "-";
                                 }
