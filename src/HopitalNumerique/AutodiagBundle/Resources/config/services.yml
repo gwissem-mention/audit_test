@@ -72,6 +72,13 @@ services:
             - { name: security.voter }
         public: false
 
+    autodiag.synthesis_voter:
+        class: HopitalNumerique\AutodiagBundle\Security\SynthesisVoter
+        arguments: ['@autodiag.entry.session']
+        tags:
+            - { name: security.voter }
+        public: false
+
     autodiag.twig_restitution_extension:
         class: HopitalNumerique\AutodiagBundle\Twig\RestitutionExtension
         public: false

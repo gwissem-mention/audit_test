@@ -21,10 +21,22 @@
             <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Aspernatur at atque aut cupiditate deserunt eaque explicabo inventore ipsum magnam molestias nihil non quisquam quos temporibus tenetur, ut vitae voluptatem voluptates.</p>
 
             <div class="buttons">
-                {% if synthesis.validatedAt is not null %}
-                    <a href="{{ path('hopitalnumerique_autodiag_unvalidate', {"synthesis": synthesis.id}) }}" class="btn btn-success">{{ "ad.validation.unvalidate"|trans }}</a>
+                {% if not app.user %}
+                    <div class="loggedout-warning">
+                        <div>{{ "ad.restitution.loggedout-warning"|trans }}</div>
+                        <div>
+                            {{ "ad.restitution.loggedout-warning-validate"|trans }}
+                            <a href="{{ path('account_login') }}">connecter</a>
+                            ou
+                            <a href="{{ path('hopital_numerique_user_inscription') }}">créer un compte</a>.
+                        </div>
+                    </div>
                 {% else %}
-                    <a href="{{ path('hopitalnumerique_autodiag_validate', {"synthesis": synthesis.id}) }}" class="btn btn-success">{{ "ad.validation.validate"|trans }}</a>
+                    {% if synthesis.validatedAt is not null %}
+                        <a href="{{ path('hopitalnumerique_autodiag_unvalidate', {"synthesis": synthesis.id}) }}" class="btn btn-success">{{ "ad.validation.unvalidate"|trans }}</a>
+                    {% else %}
+                        <a href="{{ path('hopitalnumerique_autodiag_validate', {"synthesis": synthesis.id}) }}" class="btn btn-success">{{ "ad.validation.validate"|trans }}</a>
+                    {% endif %}
                 {% endif %}
             </div>
 

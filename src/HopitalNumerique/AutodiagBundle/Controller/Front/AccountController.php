@@ -86,7 +86,10 @@ class AccountController extends Controller
         $syntheses = [];
 
         foreach ($synthesesId as $id) {
-            $syntheses[] = $synthesisRepository->findOneBy(array('id' => $id));
+            $synth = $synthesisRepository->findOneBy(array('id' => $id));
+            if (!is_null($synth) && $this->isGranted('read', $synth)) {
+                $syntheses[] = $synth;
+            }
         }
 
         try {
@@ -125,6 +128,12 @@ class AccountController extends Controller
     public function deleteAction(Synthesis $synthesis)
     {
         $user = $this->getUser();
+
+        if (!$this->isGranted('delete', $synthesis)) {
+            $this->addFlash('danger', $this->get('translator')->trans('ad.synthesis.delete.forbidden'));
+
+            return $this->redirectToRoute('hopitalnumerique_autodiag_account_index');
+        }
 
         $removeState = $this->get('autodiag.synthesis.remover')->removeSynthesis($synthesis, $user);
 

@@ -5,9 +5,14 @@ namespace HopitalNumerique\AutodiagBundle\Controller\Front;
 use Doctrine\Common\Collections\ArrayCollection;
 use HopitalNumerique\AutodiagBundle\Entity\Synthesis;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 
 class ValidationController extends Controller
 {
+    /**
+     * @param $synthesis
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse|\Symfony\Component\HttpFoundation\Response
+     */
     public function indexAction($synthesis)
     {
         $synthesis = $this->getDoctrine()->getManager()->getRepository('HopitalNumeriqueAutodiagBundle:Synthesis')
@@ -15,19 +20,10 @@ class ValidationController extends Controller
 
         $autodiag = $synthesis->getAutodiag();
 
-        if ($synthesis->getEntries()->count() === 0) {
+        if (!$this->isGranted('read', $synthesis)) {
             return $this->redirectToRoute('hopitalnumerique_autodiag_entry_add', [
                 'autodiag' => $autodiag->getId()
             ]);
-        }
-
-        // L'utilisateur doit avoir les droits sur chaque entry de la synthèse
-        foreach ($synthesis->getEntries() as $entry) {
-            if (!$this->isGranted('edit', $entry)) {
-                return $this->redirectToRoute('hopitalnumerique_autodiag_entry_add', [
-                    'autodiag' => $autodiag->getId()
-                ]);
-            }
         }
 
         return $this->render('HopitalNumeriqueAutodiagBundle:Validation:index.html.twig', [
@@ -41,13 +37,8 @@ class ValidationController extends Controller
      */
     public function validateAction(Synthesis $synthesis)
     {
-        // L'utilisateur doit avoir les droits sur chaque entry de la synthèse
-        foreach ($synthesis->getEntries() as $entry) {
-            if (!$this->isGranted('edit', $entry)) {
-                return $this->redirectToRoute('hopitalnumerique_autodiag_entry_add', [
-                    'autodiag' => $synthesis->getAutodiag()->getId()
-                ]);
-            }
+        if (!$this->isGranted('validate', $synthesis)) {
+            throw new AccessDeniedHttpException();
         }
 
         $synthesis->validate();
@@ -64,13 +55,8 @@ class ValidationController extends Controller
      */
     public function unvalidateAction(Synthesis $synthesis)
     {
-        // L'utilisateur doit avoir les droits sur chaque entry de la synthèse
-        foreach ($synthesis->getEntries() as $entry) {
-            if (!$this->isGranted('edit', $entry)) {
-                return $this->redirectToRoute('hopitalnumerique_autodiag_entry_add', [
-                    'autodiag' => $synthesis->getAutodiag()->getId()
-                ]);
-            }
+        if (!$this->isGranted('validate', $synthesis)) {
+            throw new AccessDeniedHttpException();
         }
 
         $synthesis->unvalidate();

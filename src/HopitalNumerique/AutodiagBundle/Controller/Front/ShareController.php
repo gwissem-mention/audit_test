@@ -11,6 +11,11 @@ use Symfony\Component\HttpFoundation\Request;
 
 class ShareController extends Controller
 {
+    /**
+     * @param Request $request
+     * @param $synthesis
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse|\Symfony\Component\HttpFoundation\Response
+     */
     public function indexAction(Request $request, $synthesis)
     {
         $synthesis = $this->getDoctrine()->getManager()->getRepository('HopitalNumeriqueAutodiagBundle:Synthesis')
@@ -18,26 +23,16 @@ class ShareController extends Controller
 
         $autodiag = $synthesis->getAutodiag();
 
-        if ($synthesis->getEntries()->count() === 0) {
+        if (!$this->isGranted('share', $synthesis)) {
             return $this->redirectToRoute('hopitalnumerique_autodiag_entry_add', [
                 'autodiag' => $autodiag->getId()
             ]);
-        }
-
-        // L'utilisateur doit avoir les droits sur chaque entry de la synthèse
-        foreach ($synthesis->getEntries() as $entry) {
-            if (!$this->isGranted('edit', $entry)) {
-                return $this->redirectToRoute('hopitalnumerique_autodiag_entry_add', [
-                    'autodiag' => $autodiag->getId()
-                ]);
-            }
         }
 
         $form = $this->createForm(ShareType::class);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-
             $share = $this->get('autodiag.synthesis.share');
             $notFounds = $share->shareFromString($synthesis, $form->get('shares')->getData());
 
@@ -60,6 +55,11 @@ class ShareController extends Controller
         ]);
     }
 
+    /**
+     * @param Synthesis $synthesis
+     * @param User $user
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse
+     */
     public function deleteAction(Synthesis $synthesis, User $user)
     {
         // L'utilisateur doit avoir les droits sur chaque entry de la synthèse

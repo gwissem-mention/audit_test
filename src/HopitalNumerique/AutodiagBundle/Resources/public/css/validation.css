@@ -12,3 +12,11 @@
 #validation .buttons {
     text-align: center;
 }
+
+.loggedout-warning {
+    max-width: 350px;
+    background-color: #f9b1b1;
+    padding: 8px 14px;
+    border-radius: 4px;
+    margin: auto;
+}

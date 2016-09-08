@@ -39,6 +39,7 @@ ad:
         delete:
             succes: La synthèse a bien été supprimée
             error: Une erreur est survenue lors de la suppression de la synthèse
+            forbidden: Vous n'avez pas la permission de supprimer cette synthèse
         share:
             delete: Vous avez rennoncé au partage de cette réponse
 
@@ -151,6 +152,7 @@ ad:
         type: type_restitution
         empty: Il n'y a pas encore de mode de restitution pour cet autodiagnostic.
         loggedout-warning: Attention, vous n'êtes pas connecté, vos résultats seront perdus à la fermeture du navigateur.
+        loggedout-warning-validate: Pour pouvoir valider vos résultats vous devez vous
         synthesis: Synthèse des autodiagnistics suivants
         start_new: Commencer un nouvel autodiagnostic
         export_pdf: Télécharger les résultats en PDF
