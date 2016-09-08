@@ -396,7 +396,6 @@ class RestitutionCalculator
             return null;
         }
 
-
         $closest = null;
         foreach ($plans as $plan) {
             if ($score < $plan->getValue()) {
@@ -414,7 +413,8 @@ class RestitutionCalculator
             $closest->getValue(),
             $closest->getDescription(),
             $closest->getLink(),
-            $closest->getLinkDescription()
+            $closest->getLinkDescription(),
+            $closest->isVisible()
         );
 
         return $actionPlan;
@@ -423,7 +423,7 @@ class RestitutionCalculator
     protected function getContainerActionPlan(Autodiag $autodiag, Container $container, $score)
     {
         $plans = $autodiag->getActionPlans()->filter(function (Autodiag\ActionPlan $actionPlan) use ($container) {
-            return $actionPlan->isVisible() && $actionPlan->getContainer() == $container;
+            return $actionPlan->getContainer() == $container;
         });
 
         return $this->findActionPlan($plans->toArray(), $score);
@@ -432,7 +432,7 @@ class RestitutionCalculator
     protected function getAttributeActionPlan(Autodiag $autodiag, Autodiag\Attribute $attribute, $score)
     {
         $plans = $autodiag->getActionPlans()->filter(function (Autodiag\ActionPlan $actionPlan) use ($attribute) {
-            return $actionPlan->isVisible() && $actionPlan->getAttribute() == $attribute;
+            return $actionPlan->getAttribute() == $attribute;
         });
 
         return $this->findActionPlan($plans->toArray(), $score);

@@ -1,14 +1,14 @@
 {% set visible = false %}
 
-{% if container.actionPlan is not null %}
+{% if container.actionPlan is not null and container.actionPlan.visible %}
     {% set visible = true %}
 {% endif %}
 
-{% for attribute in container.attributes if attribute.actionPlan is not null %}
+{% for attribute in container.attributes if attribute.actionPlan is not null and attribute.actionPlan.visible %}
     {% set visible = true %}
 {% endfor  %}
 
-{% for child in container.childrens if child.actionPlan is not null %}
+{% for child in container.childrens if child.actionPlan is not null and child.actionPlan.visible %}
     {% set visible = true %}
 {% endfor  %}
 
