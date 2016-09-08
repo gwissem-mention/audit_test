@@ -23,6 +23,11 @@
     margin: 10px 0;
 }
 
+#restitution .restitution-header .btn {
+    padding-left: 10px;
+    padding-right: 10px;
+}
+
 /*#restitution .items-wrapper {*/
     /*page-break-after: always;*/
 /*}*/
