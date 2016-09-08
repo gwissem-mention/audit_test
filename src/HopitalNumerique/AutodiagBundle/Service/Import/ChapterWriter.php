@@ -180,10 +180,6 @@ class ChapterWriter implements WriterInterface, ProgressAwareInterface
 
     protected function handleActionPlan(Chapter $chapter, $item)
     {
-        if (strlen($item['plan_action']) === 0) {
-            return;
-        }
-
         $actions = preg_split("/\\r\\n|\\r|\\n/", $item['plan_action']);
         array_walk($actions, function (&$element) {
             $element = explode("::", $element);
@@ -232,6 +228,7 @@ class ChapterWriter implements WriterInterface, ProgressAwareInterface
             ->findBy([
                 'container' => $chapter,
             ]);
+
         foreach ($actionPlans as $actionPlan) {
             if (!array_key_exists($actionPlan->getId(), $updatedActions)) {
                 $this->manager->remove($actionPlan);
