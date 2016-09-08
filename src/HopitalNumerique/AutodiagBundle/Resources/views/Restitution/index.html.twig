@@ -2,7 +2,7 @@
 
 {% block restitution_content %}
     <ul class="nav nav-tabs" role="tablist">
-        {% for category in restitution.categories %}
+        {% for category in restitution.categories if category.items|length > 0 %}
             <li role="presentation" class="{{ loop.first ? 'active' : '' }}">
                 <a href="#{{ category.id }}" aria-controls="home" role="tab" data-toggle="tab">
                     {{ category.label }}
