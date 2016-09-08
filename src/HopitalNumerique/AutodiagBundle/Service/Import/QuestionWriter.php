@@ -99,6 +99,7 @@ class QuestionWriter implements WriterInterface, ProgressAwareInterface
 
             if ($item[self::COLUMN_COLORED] == "1") {
                 $attribute->setColored(true);
+                $attribute->setColorationInversed(false);
             } elseif ($item[self::COLUMN_COLORED] == "-1") {
                 $attribute->setColored(true);
                 $attribute->setColorationInversed(true);
