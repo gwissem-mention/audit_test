@@ -54,7 +54,7 @@ class Score
         $values = $repository->getValuesAndWeight($entries);
         $containerIds = $this->getContainerIds($container);
 
-        $notConcerned = false;
+        $notConcerned = true;
 
         $sum = 0;
         $min = 0;
@@ -67,7 +67,8 @@ class Score
             $builder = $this->attributeProvider->getBuilder($value['type']);
             $score = $builder->computeScore($value['value']);
 
-            if (null !== $score) {
+            if (null !== $score && $score != "-1") {
+                $notConcerned = false;
                 if ($builder instanceof PresetableAttributeBuilderInterface) {
                     $attributeMin = $builder->getPresetMinScore($autodiag);
                     $attributeMax = $builder->getPresetMaxScore($autodiag);
@@ -79,8 +80,6 @@ class Score
                 $min += ($attributeMin * $value['weight']);
                 $max += ($attributeMax * $value['weight']);
                 $sum += ($score * $value['weight']);
-            } else {
-                $notConcerned = true;
             }
         }
 
