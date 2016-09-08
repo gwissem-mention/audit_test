@@ -37,7 +37,7 @@
                         <span>{{ "ad.restitution.synthesis"|trans }} : </span>
                         <ul>
                             {% for entry in synthesis.entries %}
-                                <li>{{ entry.name }} - {{ entry.validatedAt|date('d/m/Y') }}</li>
+                                <li>{{ entry.name }} ({{ entry.user.prenom }} {{ entry.user.nom }}) - {{ entry.validatedAt|date('d/m/Y') }}</li>
                             {% endfor %}
                         </ul>
                     </div>
