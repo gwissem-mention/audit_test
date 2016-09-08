@@ -284,7 +284,10 @@ class RestitutionCalculator
             $referenceEntries = $this->getCompleteEntriesForContainer($container);
             $referenceScores = [];
             foreach ($referenceEntries as $entry) {
-                $referenceScores[] = $this->algorithm->getScore($autodiag, $container, [$entry]);
+                $referenceScore = $this->algorithm->getScore($autodiag, $container, [$entry]);
+                if (null !== $referenceScore) {
+                    $referenceScores[] = $referenceScore;
+                }
             }
 
             $score = null;
