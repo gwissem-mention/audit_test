@@ -8,6 +8,10 @@
     {% set visible = true %}
 {% endfor  %}
 
+{% for child in container.childrens if child.actionPlan is not null %}
+    {% set visible = true %}
+{% endfor  %}
+
 
 {% if visible %}
     <tr class="root autodiag-container {% if isChild is defined %}children{% endif %}">
