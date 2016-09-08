@@ -31,7 +31,8 @@ var Jauge;
                         var el = $(this);
 
                         el.tooltip({
-                            title: (el.data('label') ? (el.data('label') + ' : ') : '') + el.data('value') + '%'
+                            title: (el.data('label') ? (el.data('label') + ' : ') : '') + el.data('value') + '%',
+                            container: 'body'
                         });
                         setTimeout(function() {
                             el.css('left', el.data('value') + '%');

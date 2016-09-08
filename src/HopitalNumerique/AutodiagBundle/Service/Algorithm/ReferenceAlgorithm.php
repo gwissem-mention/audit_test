@@ -21,6 +21,8 @@ class ReferenceAlgorithm
                 if (strpos($reference->getValue(), 'decile') === 0) {
                     return static::decile(substr($reference->getValue(), -1), $values);
                 }
+
+                return (float) $reference->getValue();
         }
         return null;
     }
