@@ -396,13 +396,13 @@ class RestitutionCalculator
             return null;
         }
 
-        $closest = null;
-        $closestValue = current($plans)->getValue();
 
+        $closest = null;
         foreach ($plans as $plan) {
-            if ($score < $plan->getValue() && $plan->getValue() <= $closestValue) {
-                $closest = $plan;
-                $closestValue = $plan->getValue();
+            if ($score < $plan->getValue()) {
+                if (null === $closest || $plan->getValue() < $closest->getValue()) {
+                    $closest = $plan;
+                }
             }
         }
 

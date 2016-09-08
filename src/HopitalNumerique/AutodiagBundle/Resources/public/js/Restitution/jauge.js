@@ -84,7 +84,9 @@ var Jauge;
                                 'left': '12px'
                             })
                     )
-                    .tooltip();
+                    .tooltip({
+                        container: 'body'
+                    });
             });
         }
     };
