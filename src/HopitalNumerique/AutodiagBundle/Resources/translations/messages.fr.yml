@@ -42,6 +42,8 @@ ad:
             forbidden: Vous n'avez pas la permission de supprimer cette synthèse
         share:
             delete: Vous avez rennoncé au partage de cette réponse
+        restitution:
+            forbidden: Vous n'avez pas la permission d'accéder aux résultats de cet autodiagnostic
 
 
     autodiag:

@@ -20,19 +20,12 @@ class RestitutionController extends Controller
             ]);
         }
 
-        if ($synthesis->getEntries()->count() === 0) {
+        if (!$this->isGranted('read', $synthesis)) {
+            $this->addFlash('danger', $this->get('translator')->trans('ad.synthesis.restitution.forbidden'));
+
             return $this->redirectToRoute('hopitalnumerique_autodiag_entry_add', [
                 'autodiag' => $autodiag->getId()
             ]);
-        }
-
-        // L'utilisateur doit avoir les droits sur chaque entry de la synthèse
-        foreach ($synthesis->getEntries() as $entry) {
-            if (!$this->isGranted('edit', $entry)) {
-                return $this->redirectToRoute('hopitalnumerique_autodiag_entry_add', [
-                    'autodiag' => $autodiag->getId()
-                ]);
-            }
         }
 
         $restitution = $this->get('autodiag.repository.restitution')->getForAutodiag($autodiag);
