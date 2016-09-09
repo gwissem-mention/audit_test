@@ -180,6 +180,9 @@ abstract class Container
         return $this;
     }
 
+    /**
+     * @return Attribute[]
+     */
     public function getAttributes()
     {
         $attributes = [];

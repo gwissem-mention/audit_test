@@ -3,7 +3,6 @@
 namespace HopitalNumerique\AutodiagBundle\Controller\Back;
 
 use HopitalNumerique\AutodiagBundle\Entity\AutodiagEntry;
-use HopitalNumerique\AutodiagBundle\Grid\AutodiagEntryGrid;
 use HopitalNumerique\AutodiagBundle\Model\AutodiagUpdate;
 use HopitalNumerique\AutodiagBundle\Entity\Autodiag;
 use HopitalNumerique\AutodiagBundle\Entity\Autodiag\Preset;

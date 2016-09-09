@@ -85,6 +85,11 @@ services:
         tags:
             - { name: twig.extension }
 
+    autodiag.result.builder:
+        class: HopitalNumerique\AutodiagBundle\Service\Result\ResultItemBuilder
+        arguments:
+            - '@autodiag.synthesis.completion'
+
     autodiag.restitution.calculator:
         class: HopitalNumerique\AutodiagBundle\Service\RestitutionCalculator
         arguments:

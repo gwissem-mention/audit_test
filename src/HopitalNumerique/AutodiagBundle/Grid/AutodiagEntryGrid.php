@@ -127,17 +127,21 @@ class AutodiagEntryGrid extends Grid implements GridInterface
                             }
                         }
 
-                        $syntheses = $this->_container->get('autodiag.repository.synthesis')->findBy(
-                            [
-                                'id' => $ids
-                            ]
-                        );
+                        $syntheses = $this->_container->get('autodiag.repository.synthesis')->findBy([
+                            'id' => $ids
+                        ]);
 
-                        $newSynthesis = $this->_container->get('autodiag.synthesis.generator')->generateSynthesis(
-                            $this->autodiag,
-                            $syntheses,
-                            $this->_container->get('security.token_storage')->getToken()->getUser()
-                        );
+                        try {
+                            $newSynthesis = $this->_container->get('autodiag.synthesis.generator')->generateSynthesis(
+                                $this->autodiag,
+                                $syntheses,
+                                $this->_container->get('security.token_storage')->getToken()->getUser()
+                            );
+                            $this->_container->get('session')->getFlashBag()->add('info', 'La synthèse à bien été créée.');
+                        } catch (\Exception $e) {
+                            $this->_container->get('session')->getFlashBag()->add('error', "Une erreur est survenue.");
+                        }
+
                         $this->_container->get('doctrine.orm.entity_manager')->persist($newSynthesis);
                         $this->_container->get('doctrine.orm.entity_manager')->flush();
 
@@ -148,9 +152,6 @@ class AutodiagEntryGrid extends Grid implements GridInterface
 
         $this->addMassAction(
             new ActionMass('Export des résultats en CSV', function ($ids, $all) {
-
-
-
                 //get all selected Codes
                 if ($all == 1) {
                     $rawDatas = $this->getRawData();
@@ -159,7 +160,7 @@ class AutodiagEntryGrid extends Grid implements GridInterface
                     }
                 }
 
-                $autodiags = $this->_container->get('autodiag.repository.autodiag')->findBy([
+                $syntheses = $this->_container->get('autodiag.repository.synthesis')->findBy([
                     'id' => $ids
                 ]);
 

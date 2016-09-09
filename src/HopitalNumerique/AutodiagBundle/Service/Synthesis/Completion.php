@@ -3,6 +3,7 @@
 namespace HopitalNumerique\AutodiagBundle\Service\Synthesis;
 
 use HopitalNumerique\AutodiagBundle\Entity\Autodiag\Attribute;
+use HopitalNumerique\AutodiagBundle\Entity\Autodiag\Container;
 use HopitalNumerique\AutodiagBundle\Entity\AutodiagEntry;
 use HopitalNumerique\AutodiagBundle\Entity\Synthesis;
 use HopitalNumerique\AutodiagBundle\Service\Attribute\AttributeBuilderProvider;
@@ -69,6 +70,18 @@ class Completion
         }));
 
         return floor($complete / max(1, count($completions)) * 100);
+    }
+
+    public function getAnswersCount(Synthesis $synthesis, Container $container)
+    {
+        $completions = $this->getGlobalCompletion($synthesis);
+        $answers = 0;
+        foreach ($container->getAttributes() as $attribute) {
+            if (array_key_exists($attribute->getId(), $completions) && true === $completions[$attribute->getId()]) {
+                $answers++;
+            }
+        }
+        return $answers;
     }
 
 }
