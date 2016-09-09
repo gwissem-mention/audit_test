@@ -3,6 +3,7 @@
 namespace HopitalNumerique\AutodiagBundle\Controller\Back;
 
 use HopitalNumerique\AutodiagBundle\Entity\AutodiagEntry;
+use HopitalNumerique\AutodiagBundle\Entity\Synthesis;
 use HopitalNumerique\AutodiagBundle\Model\AutodiagUpdate;
 use HopitalNumerique\AutodiagBundle\Entity\Autodiag;
 use HopitalNumerique\AutodiagBundle\Entity\Autodiag\Preset;
@@ -200,10 +201,35 @@ class AutodiagController extends Controller
 
     public function autodiagEntryShowAction(AutodiagEntry $entry)
     {
-        $autodiag = $entry->getSynthesis()->getAutodiag();
+        /** @var Synthesis $synthesis */
+        $synthesis = $entry->getSynthesis();
+        /** @var Autodiag $autodiag */
+        $autodiag = $synthesis->getAutodiag();
+
+        $items = array();
+
+        /** @var Autodiag\Container\Chapter $chapter */
+        foreach ($autodiag->getChapters() as $chapter) {
+            $items[$chapter->getId()] = $this->get('autodiag.result.builder')->build($chapter, $synthesis);
+        }
+
+        $questionnaireReponses = null;
+
+        if ($autodiag->getQuestionnaire()) {
+            $questionnaireReponses = $this
+                ->get('hopitalnumerique_questionnaire.manager.reponse')
+                ->reponsesByQuestionnaireByUser(
+                    $autodiag->getQuestionnaire()->getId(),
+                    $entry->getUser()->getId()
+                )
+            ;
+        }
+
         return $this->render('@HopitalNumeriqueAutodiag/Autodiag/Edit/AutodiagEntry/show.html.twig', [
             'entry' => $entry,
             'model' => $autodiag,
+            'items' => $items,
+            'questionnaire' => $questionnaireReponses,
         ]);
     }
 }
