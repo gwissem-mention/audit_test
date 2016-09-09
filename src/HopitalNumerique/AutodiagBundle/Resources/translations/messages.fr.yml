@@ -62,6 +62,7 @@ ad:
             survey: Questionnaire
             algorithm: Algorithme
             resitution: Restitution
+            entries: Résultats
         import:
             file: Fichier
             notify_update: Notifier la mise à jour sur le frontoffice

@@ -4,6 +4,7 @@ namespace HopitalNumerique\AutodiagBundle\Repository;
 
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\Query\Expr\Join;
+use HopitalNumerique\AutodiagBundle\Entity\Autodiag;
 use HopitalNumerique\AutodiagBundle\Entity\AutodiagEntry;
 use HopitalNumerique\AutodiagBundle\Entity\Synthesis;
 use HopitalNumerique\DomaineBundle\Entity\Domaine;
@@ -82,5 +83,30 @@ class SynthesisRepository extends EntityRepository
         ;
 
         return $qb->getQuery()->getResult();
+    }
+
+//'GROUP_CONCAT(DISTINCT conceptParent.libelle SEPARATOR \',\') AS parentLibelles',
+    public function getDatasForGrid(Autodiag $autodiag)
+    {
+        $qb = $this->createQueryBuilder('synthesis');
+        $qb
+            ->select(
+                "synthesis",
+                "user",
+                "etablissement",
+                "shares",
+                "entries"
+            )
+            ->leftJoin('synthesis.user', 'user')
+            ->leftJoin('user.etablissementRattachementSante', 'etablissement')
+            ->leftJoin('synthesis.shares', 'shares')
+            ->leftJoin('synthesis.entries', 'entries')
+            ->where('synthesis.autodiag = :autodiag')
+            ->setParameters([
+                'autodiag' => $autodiag->getId()
+            ])
+        ;
+
+        return $qb;
     }
 }

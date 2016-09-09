@@ -2,6 +2,7 @@
 
 namespace HopitalNumerique\AutodiagBundle\Controller\Back;
 
+use HopitalNumerique\AutodiagBundle\Grid\AutodiagEntryGrid;
 use HopitalNumerique\AutodiagBundle\Model\AutodiagUpdate;
 use HopitalNumerique\AutodiagBundle\Entity\Autodiag;
 use HopitalNumerique\AutodiagBundle\Entity\Autodiag\Preset;
@@ -183,6 +184,17 @@ class AutodiagController extends Controller
             'model' => $autodiag,
             'history' => $this->get('autodiag.history.reader')->getHistory($autodiag, Autodiag\History::HISTORY_ENTRY_RESTITUTION),
             'progress' => $importHandler->getRestitutionProgress(),
+        ]);
+    }
+
+    public function autodiagEntriesAction(Autodiag $autodiag)
+    {
+        $grid = $this->get('autodiag.entries.grid');
+        $grid->setAutodiag($autodiag);
+
+
+        return $grid->render('@HopitalNumeriqueAutodiag/Autodiag/Edit/autodiag_entries.html.twig', [
+            'model' => $autodiag,
         ]);
     }
 }

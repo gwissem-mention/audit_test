@@ -121,3 +121,7 @@ services:
         arguments:
             - '@doctrine.orm.entity_manager'
             - '@autodiag.repository.synthesis'
+
+    autodiag.entries.grid:
+        class: HopitalNumerique\AutodiagBundle\Grid\AutodiagEntryGrid
+        arguments: ['@service_container']

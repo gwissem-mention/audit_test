@@ -1,0 +1,8 @@
+{% extends "@HopitalNumeriqueAutodiag/Autodiag/edit.html.twig" %}
+
+{# Grid mandatory Stuff #}
+{% use 'NodevoGridBundle::grid.config.html.twig' %}
+
+{% block edit_content %}
+    {{ grid(grid, _self) }}
+{% endblock %}

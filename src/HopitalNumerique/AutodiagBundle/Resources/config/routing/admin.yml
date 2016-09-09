@@ -41,6 +41,10 @@ hopitalnumerique_autodiag_edit_restitution:
     path:     /autodiag/edit/{id}/restitution
     defaults: { _controller: HopitalNumeriqueAutodiagBundle:Back/Autodiag:restitutionEdit }
 
+hopitalnumerique_autodiag_edit_entries:
+    path:     /autodiag/edit/{id}/reponses
+    defaults: { _controller: HopitalNumeriqueAutodiagBundle:Back/Autodiag:autodiagEntries }
+
 hopitalnumerique_autodiag_export_restitution:
     path:     /autodiag/edit/{id}/restitution/export
     defaults: { _controller: HopitalNumeriqueAutodiagBundle:Back/Export:restitution }
