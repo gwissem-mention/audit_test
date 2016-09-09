@@ -12,6 +12,8 @@ class ItemAttribute
     public $colored;
     public $colorationInversed = false;
 
+    public $attributeId;
+
     /**
      * @var ItemActionPlan
      */
@@ -47,6 +49,11 @@ class ItemAttribute
     public function setColorationInversed($inversed)
     {
         $this->colorationInversed = $inversed;
+    }
+
+    public function setAttributeId($attributeId)
+    {
+        $this->attributeId = $attributeId;
     }
 
     public function setActionPlan(ItemActionPlan $actionPlan)

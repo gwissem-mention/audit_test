@@ -89,6 +89,7 @@ services:
         class: HopitalNumerique\AutodiagBundle\Service\Result\ResultItemBuilder
         arguments:
             - '@autodiag.synthesis.completion'
+            - '@autodiag.attribute_builder_provider'
 
     autodiag.restitution.calculator:
         class: HopitalNumerique\AutodiagBundle\Service\RestitutionCalculator
