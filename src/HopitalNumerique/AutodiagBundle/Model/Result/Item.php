@@ -19,12 +19,15 @@ class Item
     /**
      * @var Item[]
      */
-    protected $childrens;
+    protected $childrens = [];
 
     protected $numberOfQuestions;
 
     protected $numberOfAnswers;
 
+    /**
+     * @var ItemAttribute[]
+     */
     protected $attributes;
 
     protected $colorationInversed = false;

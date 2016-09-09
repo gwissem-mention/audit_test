@@ -131,3 +131,10 @@ services:
     autodiag.entries.grid:
         class: HopitalNumerique\AutodiagBundle\Grid\AutodiagEntryGrid
         arguments: ['@service_container']
+
+    autodiag.entries.export:
+        class: HopitalNumerique\AutodiagBundle\Service\Export\AutodiagEntriesExport
+        arguments:
+            - '@doctrine.orm.entity_manager'
+            - '@autodiag.result.builder'
+            - '@autodiag.synthesis.completion'

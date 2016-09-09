@@ -1,6 +1,7 @@
 <?php
 namespace Nodevo\GridBundle\Grid;
 
+use APY\DataGridBundle\Grid\Action\MassAction;
 use APY\DataGridBundle\Grid\Action\RowActionInterface;
 use APY\DataGridBundle\Grid\Column;
 use APY\DataGridBundle\Grid\Source;

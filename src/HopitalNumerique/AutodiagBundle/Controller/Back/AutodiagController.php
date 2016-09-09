@@ -193,7 +193,6 @@ class AutodiagController extends Controller
         $grid = $this->get('autodiag.entries.grid');
         $grid->setAutodiag($autodiag);
 
-
         return $grid->render('@HopitalNumeriqueAutodiag/Autodiag/Edit/autodiag_entries.html.twig', [
             'model' => $autodiag,
         ]);

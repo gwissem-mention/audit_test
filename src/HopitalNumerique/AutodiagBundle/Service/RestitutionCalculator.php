@@ -19,6 +19,11 @@ use HopitalNumerique\AutodiagBundle\Service\Attribute\AttributeBuilderProvider;
 use HopitalNumerique\AutodiagBundle\Service\Attribute\PresetableAttributeBuilderInterface;
 use HopitalNumerique\AutodiagBundle\Service\Synthesis\Completion;
 
+/**
+ * Class RestitutionCalculator
+ * @package HopitalNumerique\AutodiagBundle\Service
+ * @TODO Utiliser le ResultItemBuilder pour construire les ResultItem, Attribute, calcul du score etc
+ */
 class RestitutionCalculator
 {
     /**

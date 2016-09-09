@@ -165,12 +165,13 @@ class AutodiagEntryGrid extends Grid implements GridInterface
                 ]);
 
                 try {
-                    foreach ($autodiags as $autodiag) {
-                        $this->_container->get('doctrine.orm.entity_manager')->remove($autodiag);
-                    }
+
+                    return $this->_container->get('autodiag.entries.export')->exportList($syntheses);
+
                     $this->_container->get('doctrine.orm.entity_manager')->flush();
                     $this->_container->get('session')->getFlashBag()->add('info', 'Suppression effectuée avec succès.');
                 } catch (\Exception $e) {
+                    dump($e);die;
                     $this->_container->get('session')->getFlashBag()->add('error', "Une erreur est survenue.");
                 }
             })
