@@ -52,3 +52,7 @@ hopitalnumerique_autodiag_export_restitution:
 hopitalnumerique_autodiag_export_restitution_layout:
     path:     /autodiag/edit/restitution/export
     defaults: { _controller: HopitalNumeriqueAutodiagBundle:Back/Export:restitutionLayout }
+
+hopitalnumerique_autodiag_edit_results_show:
+    path:     /autodiag/edit/result/show/{entry}
+    defaults: { _controller: HopitalNumeriqueAutodiagBundle:Back/Autodiag:resultShow }

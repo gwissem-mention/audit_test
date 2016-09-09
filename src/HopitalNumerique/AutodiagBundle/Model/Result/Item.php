@@ -14,7 +14,7 @@ class Item
     /**
      * @var Score[]
      */
-    protected $references;
+    protected $references = [];
 
     /**
      * @var Item[]

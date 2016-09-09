@@ -244,9 +244,11 @@ class RestitutionCalculator
                     }
                 }
 
-                $actionPlan = $this->getAttributeActionPlan($synthesis->getAutodiag(), $attribute, $responseValue);
-                if ($actionPlan) {
-                    $itemAttribute->setActionPlan($actionPlan);
+                if (isset($responseValue)) {
+                    $actionPlan = $this->getAttributeActionPlan($synthesis->getAutodiag(), $attribute, $responseValue);
+                    if ($actionPlan) {
+                        $itemAttribute->setActionPlan($actionPlan);
+                    }
                 }
             }
             $resultItem->setColorationInversed($colorationInversed > 0);

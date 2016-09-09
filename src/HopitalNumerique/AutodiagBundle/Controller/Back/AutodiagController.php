@@ -2,6 +2,7 @@
 
 namespace HopitalNumerique\AutodiagBundle\Controller\Back;
 
+use HopitalNumerique\AutodiagBundle\Entity\AutodiagEntry;
 use HopitalNumerique\AutodiagBundle\Grid\AutodiagEntryGrid;
 use HopitalNumerique\AutodiagBundle\Model\AutodiagUpdate;
 use HopitalNumerique\AutodiagBundle\Entity\Autodiag;
@@ -194,6 +195,15 @@ class AutodiagController extends Controller
 
 
         return $grid->render('@HopitalNumeriqueAutodiag/Autodiag/Edit/autodiag_entries.html.twig', [
+            'model' => $autodiag,
+        ]);
+    }
+
+    public function autodiagEntryShowAction(AutodiagEntry $entry)
+    {
+        $autodiag = $entry->getSynthesis()->getAutodiag();
+        return $this->render('@HopitalNumeriqueAutodiag/Autodiag/Edit/AutodiagEntry/show.html.twig', [
+            'entry' => $entry,
             'model' => $autodiag,
         ]);
     }
