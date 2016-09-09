@@ -3,6 +3,16 @@
 {# Grid mandatory Stuff #}
 {% use 'NodevoGridBundle::grid.config.html.twig' %}
 
+{% block stylesheets %}
+    {{ parent() }}
+    {{ block('grid_stylesheets')}}
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    {{ block('grid_javascripts')}}
+{% endblock %}
+
 {% block edit_content %}
     {{ grid(grid, _self) }}
 {% endblock %}

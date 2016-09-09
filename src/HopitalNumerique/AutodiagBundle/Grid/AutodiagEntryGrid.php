@@ -1,11 +1,14 @@
 <?php
 namespace HopitalNumerique\AutodiagBundle\Grid;
 
+use APY\DataGridBundle\Grid\Export\CSVExport;
+use APY\DataGridBundle\Grid\Export\SCSVExport;
 use HopitalNumerique\AutodiagBundle\Entity\Autodiag;
 use HopitalNumerique\AutodiagBundle\Entity\Synthesis;
 use HopitalNumerique\UserBundle\Entity\User;
 use Nodevo\GridBundle\Grid\Action\ActionMass;
 use Nodevo\GridBundle\Grid\Action\EditButton;
+use Nodevo\GridBundle\Grid\Action\Export\CsvMass;
 use Nodevo\GridBundle\Grid\Column\BooleanColumn;
 use Nodevo\GridBundle\Grid\Column\DateColumn;
 use Nodevo\GridBundle\Grid\Column\NumberColumn;
@@ -15,6 +18,9 @@ use Nodevo\GridBundle\Grid\GridInterface;
 
 class AutodiagEntryGrid extends Grid implements GridInterface
 {
+    /**
+     * @var Autodiag
+     */
     protected $autodiag;
 
     public function setAutodiag(Autodiag $autodiag)
@@ -92,6 +98,67 @@ class AutodiagEntryGrid extends Grid implements GridInterface
                     }
                 }
 
+                $syntheses = $this->_container->get('autodiag.repository.synthesis')->findBy([
+                    'id' => $ids
+                ]);
+
+                try {
+                    foreach ($syntheses as $synthesis) {
+                        $this->_container->get('doctrine.orm.entity_manager')->remove($synthesis);
+                    }
+                    $this->_container->get('doctrine.orm.entity_manager')->flush();
+                    $this->_container->get('session')->getFlashBag()->add('info', 'Suppression effectuée avec succès.');
+                } catch (\Exception $e) {
+                    $this->_container->get('session')->getFlashBag()->add('error', "Une erreur est survenue.");
+                }
+            })
+        );
+
+        if ($this->autodiag->isSynthesisAuthorized()) {
+            $this->addMassAction(
+                new ActionMass(
+                    'Créer une synthèse',
+                    function ($ids, $all) {
+                        //get all selected Codes
+                        if ($all == 1) {
+                            $rawDatas = $this->getRawData();
+                            foreach ($rawDatas as $data) {
+                                $ids[] = $data['id'];
+                            }
+                        }
+
+                        $syntheses = $this->_container->get('autodiag.repository.synthesis')->findBy(
+                            [
+                                'id' => $ids
+                            ]
+                        );
+
+                        $newSynthesis = $this->_container->get('autodiag.synthesis.generator')->generateSynthesis(
+                            $this->autodiag,
+                            $syntheses,
+                            $this->_container->get('security.token_storage')->getToken()->getUser()
+                        );
+                        $this->_container->get('doctrine.orm.entity_manager')->persist($newSynthesis);
+                        $this->_container->get('doctrine.orm.entity_manager')->flush();
+
+                    }
+                )
+            );
+        }
+
+        $this->addMassAction(
+            new ActionMass('Export des résultats en CSV', function ($ids, $all) {
+
+
+
+                //get all selected Codes
+                if ($all == 1) {
+                    $rawDatas = $this->getRawData();
+                    foreach ($rawDatas as $data) {
+                        $ids[] = $data['id'];
+                    }
+                }
+
                 $autodiags = $this->_container->get('autodiag.repository.autodiag')->findBy([
                     'id' => $ids
                 ]);
@@ -107,6 +174,13 @@ class AutodiagEntryGrid extends Grid implements GridInterface
                 }
             })
         );
+
+        $this->_grid->addExport(
+            new SCSVExport('CSV')
+        );
+//        $this->addMassAction(
+//            new CsvMass('Title')
+//        );
     }
 
     public function getDatasForGrid($autodiag)
