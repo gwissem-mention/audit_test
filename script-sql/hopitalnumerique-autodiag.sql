@@ -21,6 +21,11 @@ VALUES (@edit_id, 1, 'Algorithme', 'hopitalnumerique_autodiag_edit_algorithm', '
 INSERT INTO hn.core_menu_item (itm_parent, mnu_menu, itm_name, itm_route, itm_route_parameters, itm_route_absolute, itm_uri, itm_icon, itm_display, itm_display_children, itm_role, itm_order)
 VALUES (@edit_id, 1, 'Restitution', 'hopitalnumerique_autodiag_edit_restitution', '{"id":"0"}', 0, null, null, 0, 0, 'IS_AUTHENTICATED_ANONYMOUSLY', 10);
 
+INSERT INTO hn.core_menu_item (itm_parent, mnu_menu, itm_name, itm_route, itm_route_parameters, itm_route_absolute, itm_uri, itm_icon, itm_display, itm_display_children, itm_role, itm_order)
+VALUES (@edit_id, 1, 'Résultats', 'hopitalnumerique_autodiag_edit_entries', '{"id":"0"}', 0, null, null, 0, 0, 'IS_AUTHENTICATED_ANONYMOUSLY', 10);
+
+INSERT INTO hn.core_menu_item (itm_parent, mnu_menu, itm_name, itm_route, itm_route_parameters, itm_route_absolute, itm_uri, itm_icon, itm_display, itm_display_children, itm_role, itm_order)
+VALUES (@edit_id, 1, 'Afficher', 'hopitalnumerique_autodiag_edit_result_show_entry', '{"entry":"0"}', 0, null, null, 0, 0, 'IS_AUTHENTICATED_ANONYMOUSLY', 10);
 
 -- ACL Ressource
 INSERT INTO hn.core_ressource (res_nom, res_pattern, res_order, res_type)
