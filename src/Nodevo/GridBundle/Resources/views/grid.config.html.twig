@@ -54,6 +54,23 @@
     </div>
 {% endblock grid_actions %}
 
+{# --------------------------------------------------- grid_exports ------------------------------------------------- #}
+{% block grid_exports %}
+    <div class="exports pull-right form-group">
+        {% spaceless %}
+            <div class="pull-left" style="margin-right:10px">
+                <select name="{{grid.hash}}[{{ constant('APY\\DataGridBundle\\Grid\\Grid::REQUEST_QUERY_EXPORT') }}]" class="form-control">
+                    <option value="-1">{{ 'Export'|trans }}</option>
+                    {% for key, export in grid.exports %}
+                        <option value="{{key}}">{{ export.title|trans }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <input class="btn btn-default pull-left submit" type="submit" value="Exécuter"/>
+        {% endspaceless %}
+    </div>
+{% endblock grid_exports %}
+
 {# Translate FR #}
 {% block grid_scripts_mark_visible %}
 function {{ grid.hash }}_markVisible(select)
@@ -155,7 +172,7 @@ function {{ grid.hash }}_markAll(select)
                 {%- spaceless %}
                 {% if column.type == 'massaction' %}
                     <span class="align-center">
-                        <input type="checkbox" class="grid-mass-selector" onclick="{{ grid.hash }}_markVisible(this.checked);"/>    
+                        <input type="checkbox" class="grid-mass-selector" onclick="{{ grid.hash }}_markVisible(this.checked);"/>
                     </span>
                 {% else %}
                     {% set columnTitle = grid.prefixTitle ~ column.title ~ '__abbr' %}
@@ -234,7 +251,7 @@ function {{ grid.hash }}_markAll(select)
     {% set op = column.data.operator is defined ? column.data.operator : column.defaultOperator %}
     {% set from = column.data.from is defined ? column.data.from : null %}
     {% set to = column.data.to is defined ? column.data.to : null %}
-    
+
     {{ grid_column_operator(column, grid, op, submitOnChange) }}
     <span class="grid-filter-input-query col-md-4">
         <input type="{{ column.inputType }}" value="{{ from }}" class="form-control grid-filter-input-query-from" name="{{ grid.hash }}[{{ column.id }}][from]" id="{{ grid.hash }}__{{ column.id }}__query__from" {% if submitOnChange is sameas(true) %}onkeypress="return {{ grid.hash }}_submitForm(event, this.form);"{% endif%} {{ ( op == isNullOperator or op == isNotNullOperator ) ? 'style="display: none;" disabled="disabled"' : '' }} />
@@ -242,7 +259,7 @@ function {{ grid.hash }}_markAll(select)
         <br />
         <input type="{{ column.inputType }}" value="{{ to }}" class="form-control grid-filter-input-query-to" name="{{ grid.hash }}[{{ column.id }}][to]" id="{{ grid.hash }}__{{ column.id }}__query__to" {% if submitOnChange is sameas(true) %}onkeypress="return {{ grid.hash }}_submitForm(event, this.form);"{% endif%} {{ ( op == btwOperator or op == btweOperator ) ? '': 'style="display: none;" disabled="disabled"' }} />
         {% if column.type == 'date' %}<input type="text" class="form-control grid-filter-input-query-from" id="alt{{ grid.hash }}__{{ column.id }}__query__to" value="{{ to }}" {{ ( op == btwOperator or op == btweOperator ) ? '': 'style="display: none;" disabled="disabled"' }}>{% endif %}
-        
+
         {% if column.type == 'date' %}
             <script type="text/javascript">
                 NodevoGridBundle_Grid_initFiltreDate('{{ grid.hash }}', '{{ column.id }}');
