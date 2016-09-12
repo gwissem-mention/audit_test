@@ -1,14 +1,17 @@
 <?php
 namespace HopitalNumerique\AutodiagBundle\Grid;
 
+use APY\DataGridBundle\Grid\Action\RowAction;
 use APY\DataGridBundle\Grid\Export\CSVExport;
 use APY\DataGridBundle\Grid\Export\SCSVExport;
+use APY\DataGridBundle\Grid\Row;
 use HopitalNumerique\AutodiagBundle\Entity\Autodiag;
 use HopitalNumerique\AutodiagBundle\Entity\Synthesis;
 use HopitalNumerique\UserBundle\Entity\User;
 use Nodevo\GridBundle\Grid\Action\ActionMass;
 use Nodevo\GridBundle\Grid\Action\EditButton;
 use Nodevo\GridBundle\Grid\Action\Export\CsvMass;
+use Nodevo\GridBundle\Grid\Action\ShowButton;
 use Nodevo\GridBundle\Grid\Column\BooleanColumn;
 use Nodevo\GridBundle\Grid\Column\DateColumn;
 use Nodevo\GridBundle\Grid\Column\NumberColumn;
@@ -77,12 +80,28 @@ class AutodiagEntryGrid extends Grid implements GridInterface
         $this->addColonne(
             new BooleanColumn('is_synthesis', 'Synthèse')
         );
+        $this->addColonne(
+            new BooleanColumn('entry_id', 'Entry id')
+        );
     }
 
     public function setActionsButtons()
     {
+        $showAction = new ShowButton('hopitalnumerique_autodiag_edit_result_show_entry');
+
+        $showAction->manipulateRender(function (RowAction $action, Row $row) {
+            if (null === $row->getField('entry_id') || strlen($row->getField('entry_id')) === 0) {
+                return null;
+            }
+
+            $action->setRouteParameters(['entry_id']);
+            $action->setRouteParametersMapping(['entry_id' => 'entry']);
+
+            return $action;
+        });
+
         $this->addActionButton(
-            new EditButton('hopitalnumerique_autodiag_edit')
+            $showAction
         );
     }
 
@@ -171,7 +190,6 @@ class AutodiagEntryGrid extends Grid implements GridInterface
                     $this->_container->get('doctrine.orm.entity_manager')->flush();
                     $this->_container->get('session')->getFlashBag()->add('info', 'Suppression effectuée avec succès.');
                 } catch (\Exception $e) {
-                    dump($e);die;
                     $this->_container->get('session')->getFlashBag()->add('error', "Une erreur est survenue.");
                 }
             })
@@ -180,9 +198,6 @@ class AutodiagEntryGrid extends Grid implements GridInterface
         $this->_grid->addExport(
             new SCSVExport('CSV')
         );
-//        $this->addMassAction(
-//            new CsvMass('Title')
-//        );
     }
 
     public function getDatasForGrid($autodiag)
@@ -201,6 +216,10 @@ class AutodiagEntryGrid extends Grid implements GridInterface
                 })->toArray();
             }
 
+            $entryId = $synthesis->getEntries()->count() > 0 && $synthesis->getEntries()->count() < 2
+                ? $synthesis->getEntries()->first()->getId()
+                : null;
+
             $data[] = [
                 'id' => $synthesis->getId(),
                 'name' => $synthesis->getName(),
@@ -216,6 +235,7 @@ class AutodiagEntryGrid extends Grid implements GridInterface
                 'validated_at' => $synthesis->getValidatedAt(),
                 'shares' => implode(", ", $shares),
                 'is_synthesis' => $synthesis->getEntries()->count() > 1,
+                'entry_id' => $entryId,
             ];
         }
 
