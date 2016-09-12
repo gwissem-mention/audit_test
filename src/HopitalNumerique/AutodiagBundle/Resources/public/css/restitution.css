@@ -87,11 +87,10 @@
 }
 
 #restitution .jauge-container-wrapper {
-    /*-webkit-box-flex: 1;*/
-    /*-ms-box-flex: 1;*/
-    /*flex: 1;*/
-    min-width: 50%;
     padding: 20px;
+
+    flex-grow: 1;
+    flex-basis: 50%;
 }
 
 #restitution .jauge-container {
