@@ -106,6 +106,11 @@ AutodiagEntry.prototype = {
         for (var i in this.chapters) {
             this.chapters[i].hide();
         }
+
+        if (chapter === undefined) {
+            return false;
+        }
+        
         chapter.show();
 
         if (scrollTo === true || scrollTo === undefined) {
