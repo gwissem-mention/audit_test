@@ -9,6 +9,11 @@
     {% endstylesheets %}
 {% endblock %}
 
+{% block toolbarButton %}
+    <a class="btn btn-default" href="{{ path('hopitalnumerique_autodiag_edit_entries', {"id": model.id}) }}" title="Retour à la liste"><i class="fa fa-reply"></i></a>
+{% endblock %}
+
+
 {% block edit_content %}
 
     <h2>Réponse de {{ entry.user.prenom }} {{ entry.user.nom }}</h2>
