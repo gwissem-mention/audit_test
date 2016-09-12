@@ -3,6 +3,7 @@
 namespace HopitalNumerique\AutodiagBundle\Service\Synthesis;
 
 use Doctrine\ORM\EntityManager;
+use HopitalNumerique\AutodiagBundle\Entity\AutodiagEntry;
 use HopitalNumerique\AutodiagBundle\Entity\Synthesis;
 use HopitalNumerique\AutodiagBundle\Repository\SynthesisRepository;
 use HopitalNumerique\UserBundle\Entity\User;
@@ -41,7 +42,7 @@ class SynthesisRemover
         $found = false;
 
         // Si la synthèse n'appartient pas à l'utilisateur
-        if ($synthesis->getUser() != $user) {
+        if ($synthesis->getUser() != $user && !$user->isGranted('ROLE_ADMINISTRATEUR_1')) {
             foreach ($synthesis->getShares() as $share) {
                 if ($share == $user) {
                     $synthesis->removeShare($user);
@@ -63,10 +64,13 @@ class SynthesisRemover
 
             // Si les entries d'une synthèse ne sont pas utilisées par d'autres synthèses on les supprime
             foreach ($synthesis->getEntries() as $entry) {
+                /** @var AutodiagEntry $entry */
                 $relatedSyntheses = $this->synthesisRepository->findSynthesesByEntry($entry);
 
                 if (count($relatedSyntheses) == 1) {
                     $this->entityManager->remove($entry);
+                } else {
+                    $entry->removeSynthesis($synthesis);
                 }
             }
 

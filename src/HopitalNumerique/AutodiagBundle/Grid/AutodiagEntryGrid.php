@@ -10,8 +10,6 @@ use HopitalNumerique\AutodiagBundle\Entity\Synthesis;
 use HopitalNumerique\UserBundle\Entity\User;
 use Nodevo\GridBundle\Grid\Action\ActionMass;
 use Nodevo\GridBundle\Grid\Action\DownloadButton;
-use Nodevo\GridBundle\Grid\Action\EditButton;
-use Nodevo\GridBundle\Grid\Action\Export\CsvMass;
 use Nodevo\GridBundle\Grid\Action\ShowButton;
 use Nodevo\GridBundle\Grid\Column\BooleanColumn;
 use Nodevo\GridBundle\Grid\Column\DateColumn;
@@ -129,11 +127,16 @@ class AutodiagEntryGrid extends Grid implements GridInterface
                 ]);
 
                 try {
-                    foreach ($syntheses as $synthesis) {
-                        $this->_container->get('doctrine.orm.entity_manager')->remove($synthesis);
+                    $user = $this->_container->get('security.token_storage')->getToken()->getUser();
+                    if ($user instanceof User) {
+                        foreach ($syntheses as $synthesis) {
+                            $this->_container->get('autodiag.synthesis.remover')->removeSynthesis($synthesis, $user);
+                        }
+                        $this->_container->get('session')->getFlashBag()->add('info', 'Suppression effectuée avec succès.');
+                    } else {
+                        throw new \Exception('User not allowed');
                     }
-                    $this->_container->get('doctrine.orm.entity_manager')->flush();
-                    $this->_container->get('session')->getFlashBag()->add('info', 'Suppression effectuée avec succès.');
+
                 } catch (\Exception $e) {
                     $this->_container->get('session')->getFlashBag()->add('error', "Une erreur est survenue.");
                 }

@@ -70,7 +70,7 @@ class AutodiagEntry
      * @ORM\OneToMany(
      *     targetEntity="HopitalNumerique\AutodiagBundle\Entity\AutodiagEntry\Value",
      *     mappedBy="entry",
-     *     cascade={"persist"}
+     *     cascade={"persist", "remove"}
      * )
      */
     private $values;
@@ -141,6 +141,15 @@ class AutodiagEntry
     {
         if (!$this->syntheses->contains($synthesis)) {
             $this->syntheses->add($synthesis);
+        }
+
+        return $this;
+    }
+
+    public function removeSynthesis(Synthesis $synthesis)
+    {
+        if (!$this->syntheses->contains($synthesis)) {
+            $this->syntheses->removeElement($synthesis);
         }
 
         return $this;
