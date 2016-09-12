@@ -9,7 +9,7 @@ ad:
             validation_date: Date de validation
             filling: Remplissage
             share: Partage
-            none: - Aucun autodiagnostic
+            none: - Aucun autodiagnostic -
         action:
             continue: Continuer
             delete: Supprimer
