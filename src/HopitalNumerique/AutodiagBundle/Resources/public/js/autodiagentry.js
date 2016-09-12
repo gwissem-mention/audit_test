@@ -110,7 +110,7 @@ AutodiagEntry.prototype = {
         if (chapter === undefined) {
             return false;
         }
-        
+
         chapter.show();
 
         if (scrollTo === true || scrollTo === undefined) {
