@@ -3,6 +3,7 @@
 namespace HopitalNumerique\QuestionnaireBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use HopitalNumerique\AutodiagBundle\Entity\Autodiag;
 use Nodevo\ToolsBundle\Tools\Chaine;
 
 /**
@@ -67,6 +68,11 @@ class Questionnaire
      * @ORM\OneToMany(targetEntity="HopitalNumerique\UserBundle\Entity\RefusCandidature", mappedBy="questionnaire", cascade={"persist", "remove" })
      */
     protected $refusCandidature;
+
+    /**
+     * @ORM\OneToMany(targetEntity="HopitalNumerique\AutodiagBundle\Entity\Autodiag", mappedBy="questionnaire")
+     */
+    private $outils;
 
     /**
      * @ORM\ManyToMany(targetEntity="\HopitalNumerique\DomaineBundle\Entity\Domaine", cascade={"persist"})
@@ -323,6 +329,39 @@ class Questionnaire
     public function getLien()
     {
         return $this->lien;
+    }
+
+    /**
+     * Add outil
+     *
+     * @param Autodiag $outils
+     * @return Questionnaire
+     */
+    public function addOutil(Autodiag $outils)
+    {
+        $this->outils[] = $outils;
+
+        return $this;
+    }
+
+    /**
+     * Remove outil
+     *
+     * @param Autodiag $outils
+     */
+    public function removeOutil(Autodiag $outils)
+    {
+        $this->outils->removeElement($outils);
+    }
+
+    /**
+     * Get outils
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getOutils()
+    {
+        return $this->outils;
     }
 
     /**

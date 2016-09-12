@@ -1,3 +1,7 @@
+hopitalnumerique_autodiag_get_outils:
+    path: /admin/getOutils
+    defaults: { _controller: HopitalNumeriqueAutodiagBundle:Back/Autodiag:autodiagPlugins }
+
 hopitalnumerique_autodiag_list:
     path:     /autodiag
     defaults: { _controller: HopitalNumeriqueAutodiagBundle:Back/Autodiag:list }

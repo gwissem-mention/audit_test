@@ -5,6 +5,7 @@ namespace HopitalNumerique\AutodiagBundle\Repository;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\Query\Expr\Join;
+use HopitalNumerique\AutodiagBundle\Entity\Autodiag;
 use HopitalNumerique\AutodiagBundle\Entity\Autodiag\Container\Chapter;
 use HopitalNumerique\AutodiagBundle\Entity\Synthesis;
 
@@ -75,5 +76,27 @@ class AutodiagRepository extends EntityRepository
         ;
 
         return $qb->getQuery()->getArrayResult();
+    }
+
+    /**
+     * @param \DateTime|null $start
+     * @param \DateTime|null $end
+     * @return Autodiag[]
+     */
+    public function getAllBetweenDate(\DateTime $start = null, \DateTime $end = null)
+    {
+        $qb = $this->createQueryBuilder('autodiag');
+
+        if (!is_null($start)) {
+            $qb->where('autodiag.createdAt <= :start')
+                ->setParameter('start', $start);
+        }
+
+        if (!is_null($end)) {
+            $qb->andWhere('autodiag.createdAt >= :end')
+                ->setParameter('end', $end);
+        }
+
+        return $qb->getQuery()->getResult();
     }
 }

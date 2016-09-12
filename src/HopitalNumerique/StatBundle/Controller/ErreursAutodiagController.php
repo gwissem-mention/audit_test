@@ -2,6 +2,7 @@
 
 namespace HopitalNumerique\StatBundle\Controller;
 
+use HopitalNumerique\AutodiagBundle\Entity\Autodiag\Container\Chapter;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -24,11 +25,11 @@ class ErreursAutodiagController extends Controller
         {
             $resultats = $this->getAllUrlOutils(null,null);
 
-            foreach ($resultats['urls'] as $categsUrl) 
+            foreach ($resultats['urls'] as $categsUrl)
             {
-                foreach ($categsUrl as $typeCateg => $arrayUrl) 
+                foreach ($categsUrl as $typeCateg => $arrayUrl)
                 {
-                    foreach ($arrayUrl as $idQuestion => $urlCaracteristiques) 
+                    foreach ($arrayUrl as $idQuestion => $urlCaracteristiques)
                     {
                         //Set du booléan pour l'entité
                         $isOk = true;
@@ -41,7 +42,7 @@ class ErreursAutodiagController extends Controller
 
                         /* Check for not 200 */
                         $httpCode = curl_getinfo($handle, CURLINFO_HTTP_CODE);
-                        if($httpCode >= 400 || $httpCode === 0) 
+                        if($httpCode >= 400 || $httpCode === 0)
                         {
                             $isOk = false;
                         }
@@ -66,13 +67,13 @@ class ErreursAutodiagController extends Controller
 
             return new Response($this->get('hopitalnumerique_forum.service.logger.cronlogger')->getHtml().'<p>Fin du traitement : OK.</p>');
         }
-        
+
         return new Response('Clef invalide.');
     }
 
     /**
      * Affiche les statistiques des items de requete
-     * 
+     *
      * @author Gaetan MELCHILSEN
      * @copyright Nodevo™
      */
@@ -85,7 +86,7 @@ class ErreursAutodiagController extends Controller
      * Génération du tableau à exporter
      *
      * @param  Symfony\Component\HttpFoundation\Request  $request
-     * 
+     *
      * @return View
      */
     public function generateTableauAction( Request $request )
@@ -112,7 +113,7 @@ class ErreursAutodiagController extends Controller
      * Génération du tableau à exporter
      *
      * @param  Symfony\Component\HttpFoundation\Request  $request
-     * 
+     *
      * @return View
      */
     public function exportCSVAction( Request $request )
@@ -147,7 +148,7 @@ class ErreursAutodiagController extends Controller
     * Génération du tableau à exporter
     *
     * @param  Symfony\Component\HttpFoundation\Request  $request
-    * 
+    *
     * @return View
     */
     public function curlAction( Request $request )
@@ -163,7 +164,7 @@ class ErreursAutodiagController extends Controller
 
         /* Check for not 200 */
         $httpCode = curl_getinfo($handle, CURLINFO_HTTP_CODE);
-        if($httpCode >= 400 || $httpCode === 0) 
+        if($httpCode >= 400 || $httpCode === 0)
         {
             curl_close($handle);
             return new Response('{"success":false}', 200);
@@ -177,7 +178,7 @@ class ErreursAutodiagController extends Controller
     * Génération du tableau à exporter
     *
     * @param  Symfony\Component\HttpFoundation\Request  $request
-    * 
+    *
     * @return View
     */
     public function curlWithBaseAction( Request $request )
@@ -197,7 +198,7 @@ class ErreursAutodiagController extends Controller
 
             /* Check for not 200 */
             $httpCode = curl_getinfo($handle, CURLINFO_HTTP_CODE);
-            if($httpCode >= 400 || $httpCode === 0) 
+            if($httpCode >= 400 || $httpCode === 0)
             {
                 curl_close($handle);
                 return new Response('{"success":false}', 200);
@@ -233,12 +234,12 @@ class ErreursAutodiagController extends Controller
     {
         $urls = array();
 
-        $autodiags = $this->get('hopitalnumerique_autodiag.manager.outil')->getOutilsByDate($dateDebut, $dateFin);
+        $autodiags = $this->get('autodiag.repository.autodiag')->getAllBetweenDate($dateDebut, $dateFin);
         $chapitresArray = array();
 
-        foreach ($autodiags as $autodiag) 
+        foreach ($autodiags as $autodiag)
         {
-            foreach ($autodiag->getChapitres() as $chapitre) 
+            foreach ($autodiag->getChapters() as $chapitre)
             {
                 $urls = $this->getUrlByChapitre($chapitre, $urls);
                 $chapitresArray[$chapitre->getId()] = $chapitre;
@@ -254,12 +255,12 @@ class ErreursAutodiagController extends Controller
     /**
      * Pour un chapitre cherche les urls de ses questions et de ce dernier
      *
-     * @param HopitalNumerique\AutodiagBundle\Entity\Chapitre $chapitre Chapitre à parser
+     * @param Chapter $chapitre Chapitre à parser
      * @param array                                  $urls  Tableau contenant les urls déjà trouvée
      *
      * @return array Tableau contenant les urls déjà trouvée
      */
-    private function getUrlByChapitre( \HopitalNumerique\AutodiagBundle\Entity\Chapitre $chapitre, $urls )
+    private function getUrlByChapitre(Chapter $chapitre, $urls )
     {
         //Récupération des urls complètes
         // The Regular Expression filter
@@ -289,7 +290,7 @@ class ErreursAutodiagController extends Controller
         if(count($matchesURLTemp[0]) > 0 )
         {
             $matchesURL = $matchesURLTemp[0];
-            foreach ($matchesURL as $matcheURL) 
+            foreach ($matchesURL as $matcheURL)
             {
                 if(!array_key_exists($chapitre->getId(), $urls))
                 {
@@ -303,13 +304,13 @@ class ErreursAutodiagController extends Controller
                 ];
             }
         }
-        foreach ($chapitre->getQuestions() as $question) 
+        foreach ($chapitre->getQuestions() as $question)
         {
             preg_match_all($reg_exUrl, $question->getLien(), $matchesURLTemp);
             if(count($matchesURLTemp[0]) > 0 )
             {
                 $matchesURL = $matchesURLTemp[0];
-                foreach ($matchesURL as $matcheURL) 
+                foreach ($matchesURL as $matcheURL)
                 {
                     if(!array_key_exists($chapitre->getId(), $urls))
                     {

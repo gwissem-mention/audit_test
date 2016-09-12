@@ -394,7 +394,7 @@ class ErreursController extends Controller
                         break;
                     case 'AUTODIAG':
                         //cas Outil
-                        $outil  = $this->get('hopitalnumerique_autodiag.manager.outil')->findOneBy( array( 'id' => $matches[2][$key] ) );
+                        $outil  = $this->get('autodiag.repository.autodiag')->findOneBy( array( 'id' => $matches[2][$key] ) );
                         if($outil)
                         {
                             if(!array_key_exists($idObjet, $urls['AUTODIAG']))
@@ -405,9 +405,9 @@ class ErreursController extends Controller
                                 );
                             }
                             if($isContenu)
-                                $urls['AUTODIAG'][$idObjet][$idContenu][$outil->getId()] = '/autodiagnostic/outil/'.$outil->getId() . '-' . $outil->getAlias();
+                                $urls['AUTODIAG'][$idObjet][$idContenu][$outil->getId()] = '/autodiagnostic/'.$outil->getId();
                             else
-                                $urls['AUTODIAG'][$idObjet]['objet'][$outil->getId()] = '/autodiagnostic/outil/'.$outil->getId() . '-' . $outil->getAlias();
+                                $urls['AUTODIAG'][$idObjet]['objet'][$outil->getId()] = '/autodiagnostic/'.$outil->getId();
                         }
                         break;
                     case 'QUESTIONNAIRE':

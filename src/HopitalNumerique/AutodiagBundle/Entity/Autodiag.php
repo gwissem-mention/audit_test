@@ -377,6 +377,12 @@ class Autodiag
         return $this;
     }
 
+    public function setDomaines(Collection $domaines)
+    {
+        $this->domaines = $domaines;
+        return $this;
+    }
+
     /**
      * Get prior questionnaire
      *

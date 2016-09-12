@@ -231,4 +231,18 @@ class AutodiagController extends Controller
             'questionnaire' => $questionnaireReponses,
         ]);
     }
+
+
+    /**
+     * Action appelée dans le plugin "Outil" pour tinymce
+     */
+    public function autodiagPluginsAction()
+    {
+        $autodiags = $this->get('autodiag.repository.autodiag')->findAll();
+
+        return $this->render('HopitalNumeriqueAutodiagBundle:Autodiag:autodiag_plugin.html.twig', array(
+            'outils' => $autodiags,
+            'texte'  => $this->get('request')->request->get('texte')
+        ));
+    }
 }
