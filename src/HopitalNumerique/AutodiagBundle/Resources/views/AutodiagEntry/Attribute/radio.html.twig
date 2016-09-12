@@ -7,7 +7,7 @@
             <div class="row checkboxCustom">
                 <div class="col-md-1">
                     <input type="radio" class="validate[required]" id="value_value_{{ loop.index }}" name="value[value]" required="required" value="{{ option.value }}"
-                        {{ value == option.value ? "checked" : "" }}
+                        {{ value is not null and value == option.value ? "checked" : "" }}
                     />
                 </div>
                 <div class="col-md-11">
