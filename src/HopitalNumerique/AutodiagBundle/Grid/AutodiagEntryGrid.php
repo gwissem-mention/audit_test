@@ -85,6 +85,15 @@ class AutodiagEntryGrid extends Grid implements GridInterface
 
     public function setActionsButtons()
     {
+        $downloadAction = new DownloadButton('hopitalnumerique_autodiag_restitution_pdf');
+        $downloadAction->setRouteParametersMapping(['id' => 'synthesis']);
+        $downloadAction->setAttributes(array_merge($downloadAction->getAttributes(), ['target' => '_blank']));
+
+        $this->addActionButton(
+            $downloadAction
+        );
+
+
         $showAction = new ShowButton('hopitalnumerique_autodiag_edit_result_show_entry');
 
         $showAction->manipulateRender(function (RowAction $action, Row $row) {
@@ -100,15 +109,6 @@ class AutodiagEntryGrid extends Grid implements GridInterface
 
         $this->addActionButton(
             $showAction
-        );
-
-        $downloadAction = new DownloadButton('hopitalnumerique_autodiag_restitution_pdf');
-//        $downloadAction->setRouteParameters(['synthesis_id']);
-        $downloadAction->setRouteParametersMapping(['id' => 'synthesis']);
-        $downloadAction->setAttributes(array_merge($downloadAction->getAttributes(), ['target' => '_blank']));
-
-        $this->addActionButton(
-            $downloadAction
         );
     }
 
