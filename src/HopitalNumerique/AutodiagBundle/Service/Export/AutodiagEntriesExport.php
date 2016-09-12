@@ -190,6 +190,28 @@ class AutodiagEntriesExport extends AbstractExport
         $sheet->getStyle('C1:C6')->applyFromArray($style);
         $sheet->getStyle(sprintf('%s%s:%s%s', 'A', 7, $maxColumn, 7))->applyFromArray($style);
 
+//        $sheet->getDefaultStyle()->applyFromArray([
+//            'borders' => array(
+//                'allborders' => array(
+//                    'style' => \PHPExcel_Style_Border::BORDER_THIN,
+//                    'color' => array('rgb' => '000000'),
+//                ),
+//            ),
+//        ]);
+
+        $sheet->getStyle(
+            'A1:' .
+            $sheet->getHighestColumn() .
+            $sheet->getHighestRow()
+        )->applyFromArray([
+            'borders' => array(
+                'allborders' => array(
+                    'style' => \PHPExcel_Style_Border::BORDER_THIN,
+                    'color' => array('rgb' => '000000'),
+                ),
+            ),
+        ]);
+
         for ($i = 1; $i < 7; $i++) {
             $sheet->mergeCells(sprintf('%s%s:%s%s', 'C', $i, 'D', $i));
             $sheet->getRowDimension($i)->setRowHeight(30);
