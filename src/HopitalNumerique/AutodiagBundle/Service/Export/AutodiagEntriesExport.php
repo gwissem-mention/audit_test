@@ -139,11 +139,18 @@ class AutodiagEntriesExport extends AbstractExport
             $sheet->setCellValue(sprintf('%s%s', $column, 1), 'Anonyme');
         }
 
-        if ($synthesis->getUser() && $etab = $synthesis->getUser()->getEtablissementRattachementSante()) {
-            $sheet->setCellValue(
-                sprintf('%s%s', $column, 2),
-                $etab->getNom()
-            );
+        if ($synthesis->getUser()) {
+            $etab = $synthesis->getUser()->getEtablissementRattachementSante();
+            if (null === $etab) {
+                $etab = $synthesis->getUser()->getAutreStructureRattachementSante();
+            }
+
+            if (null !== $etab) {
+                $sheet->setCellValue(
+                    sprintf('%s%s', $column, 2),
+                    $etab->getNom()
+                );
+            }
         }
 
         $sheet->setCellValue(sprintf('%s%s', $column, 3), 'création');
