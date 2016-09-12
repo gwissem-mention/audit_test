@@ -9,6 +9,7 @@ use HopitalNumerique\AutodiagBundle\Entity\Autodiag;
 use HopitalNumerique\AutodiagBundle\Entity\Synthesis;
 use HopitalNumerique\UserBundle\Entity\User;
 use Nodevo\GridBundle\Grid\Action\ActionMass;
+use Nodevo\GridBundle\Grid\Action\DownloadButton;
 use Nodevo\GridBundle\Grid\Action\EditButton;
 use Nodevo\GridBundle\Grid\Action\Export\CsvMass;
 use Nodevo\GridBundle\Grid\Action\ShowButton;
@@ -102,6 +103,15 @@ class AutodiagEntryGrid extends Grid implements GridInterface
 
         $this->addActionButton(
             $showAction
+        );
+
+        $downloadAction = new DownloadButton('hopitalnumerique_autodiag_restitution_pdf');
+//        $downloadAction->setRouteParameters(['synthesis_id']);
+        $downloadAction->setRouteParametersMapping(['id' => 'synthesis']);
+        $downloadAction->setAttributes(array_merge($downloadAction->getAttributes(), ['target' => '_blank']));
+
+        $this->addActionButton(
+            $downloadAction
         );
     }
 
