@@ -151,7 +151,7 @@ class AutodiagEntryGrid extends Grid implements GridInterface
         }
 
         $this->addMassAction(
-            new ActionMass('Export des résultats en CSV', function ($ids, $all) {
+            new ActionMass('Export Excel des résultats', function ($ids, $all) {
                 //get all selected Codes
                 if ($all == 1) {
                     $rawDatas = $this->getRawData();
