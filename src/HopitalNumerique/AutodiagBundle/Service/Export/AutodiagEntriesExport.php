@@ -153,7 +153,7 @@ class AutodiagEntriesExport extends AbstractExport
             }
         }
 
-        $sheet->setCellValue(sprintf('%s%s', $column, 3), 'création');
+        $sheet->setCellValue(sprintf('%s%s', $column, 3), $synthesis->getCreatedAt()->format('d/m/Y'));
         $sheet->setCellValue(sprintf('%s%s', $column, 4), $synthesis->getUpdatedAt()->format('d/m/Y'));
 
         $sheet->setCellValue(

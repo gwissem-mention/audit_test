@@ -42,6 +42,12 @@ class Synthesis
      * @var \DateTime
      * @ORM\Column(type="datetime")
      */
+    private $createdAt;
+
+    /**
+     * @var \DateTime
+     * @ORM\Column(type="datetime")
+     */
     private $updatedAt;
 
     /**
@@ -91,6 +97,7 @@ class Synthesis
 
         $now = new \DateTime();
         $this->name = $now->format('d/m/Y H:i');
+        $this->createdAt = $now;
     }
 
     /**
@@ -204,6 +211,14 @@ class Synthesis
         }
 
         return $this;
+    }
+
+    /**
+     * @return \DateTime
+     */
+    public function getCreatedAt()
+    {
+        return $this->createdAt;
     }
 
     /**

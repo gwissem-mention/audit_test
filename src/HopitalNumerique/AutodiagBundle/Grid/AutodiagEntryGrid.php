@@ -240,7 +240,7 @@ class AutodiagEntryGrid extends Grid implements GridInterface
                     ? $synthesis->getUser()->getEtablissementRattachementSante()->getNom()
                     : '',
                 'remplissage' => sprintf('%d%%', $this->_container->get('autodiag.synthesis.completion')->getCompletionRate($synthesis)),
-                'created_at' => '',
+                'created_at' => $synthesis->getCreatedAt(),
                 'updated_at' => $synthesis->getUpdatedAt(),
                 'validated_at' => $synthesis->getValidatedAt(),
                 'shares' => implode(", ", $shares),
