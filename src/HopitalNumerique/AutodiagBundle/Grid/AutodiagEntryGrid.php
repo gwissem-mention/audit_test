@@ -81,9 +81,6 @@ class AutodiagEntryGrid extends Grid implements GridInterface
         $this->addColonne(
             new BooleanColumn('is_synthesis', 'Synthèse')
         );
-        $this->addColonne(
-            new BooleanColumn('entry_id', 'Entry id')
-        );
     }
 
     public function setActionsButtons()
