@@ -39,37 +39,32 @@
                     {# Recherche par parcours #}
                     {{ render(controller("HopitalNumeriqueStatBundle:RechercheParcours:index")) }}
                 </div>
-                
+
                 <div class="row hide">
                     {# Requete de recherche #}
                     {{ render(controller("HopitalNumeriqueStatBundle:ItemRequete:index")) }}
                 </div>
-                
+
                 <div class="row hide">
                     {# Requetes fantomes #}
                     {{ render(controller("HopitalNumeriqueStatBundle:RequeteFantome:index")) }}
                 </div>
-                
+
                 <div class="row">
                     {# Erreurs dans les urls #}
                     {{ render(controller("HopitalNumeriqueStatBundle:Erreurs:index")) }}
                 </div>
-                
-                <div class="row">
-                    {# Erreurs dans les urls #}
-                    {{ render(controller("HopitalNumeriqueStatBundle:ErreursAutodiag:index")) }}
-                </div>
-                
+
                 <div class="row hide">
                     {# Requetes des productions #}
                     {{ render(controller("HopitalNumeriqueStatBundle:ItemRequete:indexProduction")) }}
                 </div>
-                
+
                 <div class="row hide">
                     {# Statistiques recherche aidée #}
                     {{ render(controller("HopitalNumeriqueStatBundle:StatClic:index")) }}
                 </div>
-                
+
                 <div class="row hide">
                     {# Statistiques des forum #}
                     {{ render(controller("HopitalNumeriqueStatBundle:Forum:index")) }}
