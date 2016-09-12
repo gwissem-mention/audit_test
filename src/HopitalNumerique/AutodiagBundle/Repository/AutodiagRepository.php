@@ -50,8 +50,8 @@ class AutodiagRepository extends EntityRepository
                 'GROUP_CONCAT(DISTINCT domaines.nom SEPARATOR \', \') AS domaines_list',
                 'ad.createdAt',
                 'ad.publicUpdatedDate',
-                'COUNT(entries_valid.id) as nb_entries_valid',
-                'COUNT(entries_in_progress.id) as nb_entries_in_progress'
+                'COUNT(DISTINCT entries_valid.id) as nb_entries_valid',
+                'COUNT(DISTINCT entries_in_progress.id) as nb_entries_in_progress'
             )
             ->join('ad.domaines', 'domaines', Join::WITH, 'domaines.id IN (:domaine_ids)')
             ->leftJoin(
