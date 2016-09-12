@@ -1,0 +1,5 @@
+#share .shares > span {
+    font-weight: bold;
+    display: block;
+    margin-top: 16px;
+}

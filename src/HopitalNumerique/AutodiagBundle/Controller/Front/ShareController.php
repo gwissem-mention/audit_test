@@ -39,7 +39,7 @@ class ShareController extends Controller
             if (!empty($notFounds)) {
                 $this->addFlash(
                     'danger',
-                    sprintf('Les emails suivants n\'ont pas été trouvés : %s', implode(', ', $notFounds))
+                    sprintf('Email(s) non trouvé(s) sur la plateforme : %s', implode(', ', $notFounds))
                 );
             }
 

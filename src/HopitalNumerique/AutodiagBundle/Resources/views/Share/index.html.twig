@@ -1,7 +1,7 @@
 {% extends 'HopitalNumeriqueAutodiagBundle::layout.html.twig' %}
 
 {% block body %}
-    <div id="validation">
+    <div id="share">
 
         {% include "@HopitalNumeriqueAutodiag/_navigation.html.twig" with {
             "step": "share",
@@ -32,7 +32,7 @@
                 </div>
                 <div class="col-md-6">
                     <div class="shares">
-                        <span>Mes résultats sont partagés avec:</span>
+                        <span>Mes résultats sont partagés avec :</span>
                         <ul>
                             {% for share in synthesis.shares %}
                                 <li>
