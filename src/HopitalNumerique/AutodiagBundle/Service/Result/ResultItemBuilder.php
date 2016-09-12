@@ -1,12 +1,12 @@
 <?php
 namespace HopitalNumerique\AutodiagBundle\Service\Result;
 
-use HopitalNumerique\AutodiagBundle\Entity\Autodiag\Attribute;
 use HopitalNumerique\AutodiagBundle\Entity\Autodiag\Container;
 use HopitalNumerique\AutodiagBundle\Entity\AutodiagEntry;
 use HopitalNumerique\AutodiagBundle\Entity\Synthesis;
 use HopitalNumerique\AutodiagBundle\Model\Result\Item;
 use HopitalNumerique\AutodiagBundle\Model\Result\ItemAttribute;
+use HopitalNumerique\AutodiagBundle\Repository\Autodiag\Attribute\WeightRepository;
 use HopitalNumerique\AutodiagBundle\Service\Attribute\AttributeBuilderProvider;
 use HopitalNumerique\AutodiagBundle\Service\Attribute\PresetableAttributeBuilderInterface;
 use HopitalNumerique\AutodiagBundle\Service\Synthesis\Completion;
@@ -23,15 +23,22 @@ class ResultItemBuilder
      */
     protected $attributeBuilder;
 
-    public function __construct(Completion $completion, AttributeBuilderProvider $attributeBuilder)
+    /**
+     * @var WeightRepository
+     */
+    protected $weightRepository;
+
+    public function __construct(Completion $completion, AttributeBuilderProvider $attributeBuilder, WeightRepository $weightRepository)
     {
         $this->completion = $completion;
         $this->attributeBuilder = $attributeBuilder;
+        $this->weightRepository = $weightRepository;
     }
 
     public function build(Container $container, Synthesis $synthesis)
     {
         $resultItem = new Item();
+        $weights = $this->weightRepository->getWeightByContainerIndexedByAttributeId($container);
 
         $resultItem->setLabel($container->getLabel());
         $resultItem->setNumberOfQuestions($container->getTotalNumberOfAttributes());
@@ -43,6 +50,9 @@ class ResultItemBuilder
             $itemAttribute = new ItemAttribute($attribute->getLabel());
             $itemAttribute->setColorationInversed($attribute->isColorationInversed());
             $itemAttribute->setAttributeId($attribute->getId());
+            if (isset($weights[$attribute->getId()])) {
+                $itemAttribute->setWeight($weights[$attribute->getId()]);
+            }
             $resultItem->addAttribute($itemAttribute);
 
             $colorationInversed += $attribute->isColorationInversed() ? 1 : -1;

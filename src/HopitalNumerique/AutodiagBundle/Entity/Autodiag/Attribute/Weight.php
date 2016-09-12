@@ -10,7 +10,7 @@ use HopitalNumerique\AutodiagBundle\Entity\Autodiag\Container;
  * Weighted
  *
  * @ORM\Table(name="ad_autodiag_attribute_weight")
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="HopitalNumerique\AutodiagBundle\Repository\Autodiag\Attribute\WeightRepository")
  */
 class Weight
 {

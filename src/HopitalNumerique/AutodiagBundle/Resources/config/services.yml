@@ -65,6 +65,12 @@ services:
         arguments:
             - 'HopitalNumeriqueAutodiagBundle:Autodiag'
 
+    autodiag.repository.weight:
+        class: HopitalNumerique\AutodiagBundle\Repository\Autodiag\Attribute\WeightRepository
+        factory: ["@doctrine.orm.entity_manager", "getRepository"]
+        arguments:
+            - 'HopitalNumeriqueAutodiagBundle:Autodiag\Attribute\Weight'
+
     autodiag.autodiagentry_voter:
         class: HopitalNumerique\AutodiagBundle\Security\AutodiagEntryVoter
         arguments: ['@autodiag.entry.session']
@@ -90,6 +96,7 @@ services:
         arguments:
             - '@autodiag.synthesis.completion'
             - '@autodiag.attribute_builder_provider'
+            - '@autodiag.repository.weight'
 
     autodiag.restitution.calculator:
         class: HopitalNumerique\AutodiagBundle\Service\RestitutionCalculator

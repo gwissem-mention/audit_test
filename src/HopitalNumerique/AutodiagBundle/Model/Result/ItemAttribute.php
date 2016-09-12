@@ -12,6 +12,8 @@ class ItemAttribute
     public $colored;
     public $colorationInversed = false;
 
+    public $weight;
+
     public $attributeId;
 
     /**
@@ -54,6 +56,11 @@ class ItemAttribute
     public function setAttributeId($attributeId)
     {
         $this->attributeId = $attributeId;
+    }
+
+    public function setWeight($weight)
+    {
+        $this->weight = $weight;
     }
 
     public function setActionPlan(ItemActionPlan $actionPlan)

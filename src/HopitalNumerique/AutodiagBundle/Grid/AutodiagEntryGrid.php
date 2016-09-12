@@ -2,7 +2,6 @@
 namespace HopitalNumerique\AutodiagBundle\Grid;
 
 use APY\DataGridBundle\Grid\Action\RowAction;
-use APY\DataGridBundle\Grid\Export\CSVExport;
 use APY\DataGridBundle\Grid\Export\SCSVExport;
 use APY\DataGridBundle\Grid\Row;
 use HopitalNumerique\AutodiagBundle\Entity\Autodiag;
@@ -197,7 +196,6 @@ class AutodiagEntryGrid extends Grid implements GridInterface
 
                     return $this->_container->get('autodiag.entries.export')->exportList($syntheses);
 
-                    $this->_container->get('doctrine.orm.entity_manager')->flush();
                     $this->_container->get('session')->getFlashBag()->add('info', 'Suppression effectuée avec succès.');
                 } catch (\Exception $e) {
                     $this->_container->get('session')->getFlashBag()->add('error', "Une erreur est survenue.");

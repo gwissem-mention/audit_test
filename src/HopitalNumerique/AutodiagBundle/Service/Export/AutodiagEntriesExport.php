@@ -102,7 +102,10 @@ class AutodiagEntriesExport extends AbstractExport
             $sheet->setCellValue(sprintf('%s%s', 'A', $row), $parent ? $parent->getLabel() : $item->getLabel());
             $sheet->setCellValue(sprintf('%s%s', 'B', $row), $parent ? $item->getLabel() : '');
             $sheet->setCellValue(sprintf('%s%s', 'C', $row), $attribute->label);
-            $sheet->setCellValue(sprintf('%s%s', 'D', $row), 'p');
+            $sheet->setCellValue(sprintf('%s%s', 'D', $row), $attribute->weight);
+
+            $sheet->setCellValue(sprintf('%s%s', $column, 7), 'Réponse');
+            $sheet->setCellValue(sprintf('%s%s', $this->incrementColumn($column), 7), 'Valeur');
 
             $sheet->setCellValue(sprintf('%s%s', $column, $row), $attribute->responseText);
             $sheet->setCellValue(sprintf('%s%s', $this->incrementColumn($column), $row), $attribute->responseValue);

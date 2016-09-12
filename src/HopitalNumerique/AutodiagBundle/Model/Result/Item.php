@@ -28,7 +28,7 @@ class Item
     /**
      * @var ItemAttribute[]
      */
-    protected $attributes;
+    protected $attributes = [];
 
     protected $colorationInversed = false;
 
