@@ -29,7 +29,7 @@ ad:
 
     synthesis:
         generator:
-            success: La synthèse a bien été créée
+            success: La synthèse a bien été créée.
             error:
                 general: Une erreur s'est produite lors de la génération de la synthèse
                 more_than_one_ad: Les réponses sélectionnées doivent toutes appartenir au même autodiagnostic
@@ -37,7 +37,7 @@ ad:
                 at_least_2: Vous devez choisir au moins deux réponses pour générer une synthèse
                 empty_name: Le nom de la synthèse doit être renseigné
         delete:
-            succes: La synthèse a bien été supprimée
+            succes: L'autodiagnostic a bien été supprimée.
             error: Une erreur est survenue lors de la suppression de la synthèse
             forbidden: Vous n'avez pas la permission de supprimer cette synthèse
         share:
