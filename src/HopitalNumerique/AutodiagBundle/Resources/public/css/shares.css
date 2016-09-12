@@ -3,3 +3,14 @@
     display: block;
     margin-top: 16px;
 }
+
+#share .share-header {
+    font-weight: bold;
+    font-size: 20px;
+    text-align: center;
+    margin: 20px 0;
+}
+
+#share .share-header .title {
+    font-size: 24px;
+}
