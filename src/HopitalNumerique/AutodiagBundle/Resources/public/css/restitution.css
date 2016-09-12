@@ -154,7 +154,7 @@
     border-bottom: 20px solid #7A38A2;
     margin-left: -10px;
 
-    z-index: 2;
+    z-index: 100;
 }
 #restitution .item.jauge-widget .score.reference {
     border-bottom-color: #888;

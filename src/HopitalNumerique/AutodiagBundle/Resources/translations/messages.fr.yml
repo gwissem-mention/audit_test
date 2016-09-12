@@ -159,6 +159,7 @@ ad:
         synthesis: Synthèse des autodiagnistics suivants
         start_new: Commencer un nouvel autodiagnostic
         export_pdf: Télécharger les résultats en PDF
+        not_concerned: Aucune restitution; vous n'êtes pas concerné par cette section.
 
     validation:
         validate: Valider mes résultats
