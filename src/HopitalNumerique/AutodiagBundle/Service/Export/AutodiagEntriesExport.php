@@ -184,6 +184,13 @@ class AutodiagEntriesExport extends AbstractExport
             $sheet->mergeCells(sprintf('%s%s:%s%s', 'C', $i, 'D', $i));
             $sheet->getRowDimension($i)->setRowHeight(30);
         }
+
+        $startColumn = 'A';
+        do {
+            $sheet->getColumnDimension($startColumn)->setAutoSize(true);
+            $startColumn = $this->incrementColumn($startColumn);
+        } while ($startColumn !== $maxColumn);
+
         $sheet->getRowDimension(7)->setRowHeight(30);
     }
 }
