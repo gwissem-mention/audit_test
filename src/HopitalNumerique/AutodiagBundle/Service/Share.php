@@ -24,7 +24,7 @@ class Share
      *
      * @param Synthesis $synthesis
      * @param $string
-     * @return Synthesis
+     * @return array
      */
     public function shareFromString(Synthesis $synthesis, $string)
     {
@@ -35,7 +35,7 @@ class Share
         foreach ($emails as $email) {
             $email = trim($email);
             $user = $userRepository->findOneByEmail($email);
-            if ($user) {
+            if ($user && $user !== $synthesis->getUser()) {
                 $synthesis->addShare($user);
             } else {
                 $notFounds[] = $email;
