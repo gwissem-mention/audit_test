@@ -73,6 +73,7 @@ class RestitutionExtension extends \Twig_Extension
             /** @var Item $item */
             $data['xAxis']['categories'][] = $item->getLabel();
 
+            $data['series']['score']['name'] = $item->getScore()->getLabel();
             $data['series']['score']['data'][] = $item->getScore()->getValue();
 
             foreach ($item->getReferences() as $reference) {
@@ -159,7 +160,8 @@ class RestitutionExtension extends \Twig_Extension
             /** @var Item $item */
             $data['xAxis']['categories'][] = $item->getLabel();
 
-            $data['series']['score']['data'][] =$item->getScore()->getValue();
+            $data['series']['score']['name'] = $item->getScore()->getLabel();
+            $data['series']['score']['data'][] = $item->getScore()->getValue();
             foreach ($item->getReferences() as $reference) {
                 $code = $reference->getCode();
                 if (!isset($data['series'][$code])) {

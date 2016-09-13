@@ -182,7 +182,7 @@ class RestitutionCalculator
             $resultItem = new ResultItem();
             $resultItem->setLabel($container->getLabel());
             $resultItem->setScore(
-                new Score($score)
+                new Score($score, 'Mon score')
             );
 
             $resultItem->setNumberOfQuestions($container->getTotalNumberOfAttributes());
