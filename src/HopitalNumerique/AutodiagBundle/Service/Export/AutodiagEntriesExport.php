@@ -19,6 +19,8 @@ class AutodiagEntriesExport extends AbstractExport
      */
     protected $completion;
 
+    const STARTING_ROW = 8;
+
     public function __construct(ObjectManager $manager, ResultItemBuilder $resultItemBuilder, Completion $completion)
     {
         parent::__construct($manager);
@@ -48,8 +50,10 @@ class AutodiagEntriesExport extends AbstractExport
 
         $column = 'E';
         foreach ($syntheses as $synthesis) {
-            $this->writeSynthesisRows($synthesis, $sheet, $column);
-            $column = $this->incrementColumn($column, 2);
+            if ($synthesis->getEntries()->count() === 1) {
+                $this->writeSynthesisRows($synthesis, $sheet, $column);
+                $column = $this->incrementColumn($column, 2);
+            }
         }
 
         $this->applyStyle($sheet, $column);
@@ -67,6 +71,7 @@ class AutodiagEntriesExport extends AbstractExport
             'Dernier enregistrement',
             'Date de validation',
             'Pourcentage de remplissage',
+            'Nom donné par l\'utilisateur'
         ];
 
         foreach ($cells as $cell) {
@@ -87,7 +92,7 @@ class AutodiagEntriesExport extends AbstractExport
 
     protected function writeSynthesisRows(Synthesis $synthesis, \PHPExcel_Worksheet $sheet, $column)
     {
-        $row = 8;
+        $row = self::STARTING_ROW + 1;
         foreach ($synthesis->getAutodiag()->getChapters() as $chapter) {
             $item = $this->resultItemBuilder->build($chapter, $synthesis);
 
@@ -106,8 +111,8 @@ class AutodiagEntriesExport extends AbstractExport
             $sheet->setCellValue(sprintf('%s%s', 'C', $row), $attribute->label);
             $sheet->setCellValue(sprintf('%s%s', 'D', $row), $attribute->weight);
 
-            $sheet->setCellValue(sprintf('%s%s', $column, 7), 'Réponse');
-            $sheet->setCellValue(sprintf('%s%s', $this->incrementColumn($column), 7), 'Valeur');
+            $sheet->setCellValue(sprintf('%s%s', $column, self::STARTING_ROW), 'Réponse');
+            $sheet->setCellValue(sprintf('%s%s', $this->incrementColumn($column), self::STARTING_ROW), 'Valeur');
 
             $sheet->setCellValue(sprintf('%s%s', $column, $row), $attribute->responseText);
             $sheet->setCellValue(sprintf('%s%s', $this->incrementColumn($column), $row), $attribute->responseValue);
@@ -123,13 +128,20 @@ class AutodiagEntriesExport extends AbstractExport
 
     protected function incrementColumn($column, $nb = 1)
     {
-        $nb--;
-        $column++;
-
-        if ($nb > 0) {
-            $column = $this->incrementColumn($column, $nb);
+        $values = [];
+        $x = 'A';
+        while ($x != 'AAAA') {
+            $values[] = $x++;
         }
+        $values[] = $x;
 
+        $found = array_search($column, $values);
+        if (false !== $found) {
+            $key = array_search($column, $values) + $nb;
+            if (array_key_exists($key, $values)) {
+                return $values[$key];
+            }
+        }
         return $column;
     }
 
@@ -172,6 +184,11 @@ class AutodiagEntriesExport extends AbstractExport
             sprintf('%s%s', $column, 6),
             sprintf('%s%%', $this->completion->getCompletionRate($synthesis))
         );
+
+        $sheet->setCellValue(
+            sprintf('%s%s', $column, 7),
+            $synthesis->getName()
+        );
     }
 
     protected function applyStyle(\PHPExcel_Worksheet $sheet, $maxColumn)
@@ -191,8 +208,12 @@ class AutodiagEntriesExport extends AbstractExport
                 ]
             ]
         ];
-        $sheet->getStyle('C1:C6')->applyFromArray($style);
-        $sheet->getStyle(sprintf('%s%s:%s%s', 'A', 7, $maxColumn, 7))->applyFromArray($style);
+        $sheet->getStyle('C1:C' . (self::STARTING_ROW - 1))->applyFromArray($style);
+
+        $sheet->getStyle(
+            sprintf('%s%s:%s%s', 'A', self::STARTING_ROW, $this->incrementColumn($maxColumn, -1), self::STARTING_ROW)
+        )
+            ->applyFromArray($style);
 
 //        $sheet->getDefaultStyle()->applyFromArray([
 //            'borders' => array(
@@ -216,7 +237,7 @@ class AutodiagEntriesExport extends AbstractExport
             ),
         ]);
 
-        for ($i = 1; $i < 7; $i++) {
+        for ($i = 1; $i < self::STARTING_ROW; $i++) {
             $sheet->mergeCells(sprintf('%s%s:%s%s', 'C', $i, 'D', $i));
             $sheet->getRowDimension($i)->setRowHeight(30);
         }
@@ -227,6 +248,6 @@ class AutodiagEntriesExport extends AbstractExport
             $startColumn = $this->incrementColumn($startColumn);
         } while ($startColumn !== $maxColumn);
 
-        $sheet->getRowDimension(7)->setRowHeight(30);
+        $sheet->getRowDimension(self::STARTING_ROW)->setRowHeight(30);
     }
 }
