@@ -192,7 +192,9 @@ class Synthesis
         $validatedAt = new \DateTime();
         $this->validatedAt = $validatedAt;
         foreach ($this->getEntries() as $entry) {
-            $entry->setValidatedAt($validatedAt);
+            if (false === $entry->isCopy()) {
+                $entry->setValidatedAt($validatedAt);
+            }
         }
 
         return $this;

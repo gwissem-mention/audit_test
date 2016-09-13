@@ -6,6 +6,7 @@ use APY\DataGridBundle\Grid\Export\SCSVExport;
 use APY\DataGridBundle\Grid\Row;
 use HopitalNumerique\AutodiagBundle\Entity\Autodiag;
 use HopitalNumerique\AutodiagBundle\Entity\Synthesis;
+use HopitalNumerique\AutodiagBundle\Service\Synthesis\SynthesisGenerator;
 use HopitalNumerique\UserBundle\Entity\User;
 use Nodevo\GridBundle\Grid\Action\ActionMass;
 use Nodevo\GridBundle\Grid\Action\DownloadButton;
@@ -137,7 +138,7 @@ class AutodiagEntryGrid extends Grid implements GridInterface
                     }
 
                 } catch (\Exception $e) {
-                    $this->_container->get('session')->getFlashBag()->add('error', "Une erreur est survenue.");
+                    $this->_container->get('session')->getFlashBag()->add('danger', "Une erreur est survenue.");
                 }
             })
         );
@@ -165,12 +166,24 @@ class AutodiagEntryGrid extends Grid implements GridInterface
                                 $syntheses,
                                 $this->_container->get('security.token_storage')->getToken()->getUser()
                             );
+                            $this->_container->get('doctrine.orm.entity_manager')->persist($newSynthesis);
                             $this->_container->get('session')->getFlashBag()->add('info', 'La synthèse à bien été créée.');
                         } catch (\Exception $e) {
-                            $this->_container->get('session')->getFlashBag()->add('error', "Une erreur est survenue.");
+                            if ($e->getCode() == SynthesisGenerator::NEED_AT_LEAST_2) {
+                                $this->_container->get('session')->getFlashBag()->add(
+                                    'danger',
+                                    "Vous devez sélectionner au moins deux éléments."
+                                );
+                            } elseif ($e->getCode() == SynthesisGenerator::SYNTHESIS_NOT_VALIDATED) {
+                                $this->_container->get('session')->getFlashBag()->add(
+                                    'danger',
+                                    "Tous les autodiagnostics doivent etre validés avant de pouvoir créer une synthèse."
+                                );
+                            } else {
+                                $this->_container->get('session')->getFlashBag()->add('danger', "Une erreur est survenue.");
+                            }
                         }
 
-                        $this->_container->get('doctrine.orm.entity_manager')->persist($newSynthesis);
                         $this->_container->get('doctrine.orm.entity_manager')->flush();
 
                     }
@@ -198,7 +211,7 @@ class AutodiagEntryGrid extends Grid implements GridInterface
 
                     $this->_container->get('session')->getFlashBag()->add('info', 'Suppression effectuée avec succès.');
                 } catch (\Exception $e) {
-                    $this->_container->get('session')->getFlashBag()->add('error', "Une erreur est survenue.");
+                    $this->_container->get('session')->getFlashBag()->add('danger', "Une erreur est survenue.");
                 }
             })
         );
