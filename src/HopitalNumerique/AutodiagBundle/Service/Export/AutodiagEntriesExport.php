@@ -29,10 +29,12 @@ class AutodiagEntriesExport extends AbstractExport
 
     /**
      * @param Synthesis[] $syntheses
+     * @return \Symfony\Component\HttpFoundation\BinaryFileResponse
+     * @throws \Exception
      */
     public function exportList($syntheses)
     {
-        if (!is_array($syntheses) && count($syntheses) === 0) {
+        if (!is_array($syntheses) || count($syntheses) === 0) {
             throw new \Exception('Syntheses must be an array of Synthesis');
         }
 

@@ -205,6 +205,11 @@ class AutodiagEntryGrid extends Grid implements GridInterface
                     'id' => $ids
                 ]);
 
+                if (!is_array($syntheses) || count($syntheses) === 0) {
+                    $this->_container->get('session')->getFlashBag()->add('danger', "Veuillez séléctionner au moins une ligne.");
+                    return false;
+                }
+
                 try {
 
                     return $this->_container->get('autodiag.entries.export')->exportList($syntheses);
