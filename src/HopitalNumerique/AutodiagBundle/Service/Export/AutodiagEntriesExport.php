@@ -148,12 +148,14 @@ class AutodiagEntriesExport extends AbstractExport
             $etab = $synthesis->getUser()->getEtablissementRattachementSante();
             if (null === $etab) {
                 $etab = $synthesis->getUser()->getAutreStructureRattachementSante();
+            } else {
+                $etab = $etab->getNom();
             }
 
             if (null !== $etab) {
                 $sheet->setCellValue(
                     sprintf('%s%s', $column, 2),
-                    $etab->getNom()
+                    $etab
                 );
             }
         }
