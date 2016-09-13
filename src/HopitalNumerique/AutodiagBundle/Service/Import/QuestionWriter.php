@@ -78,7 +78,7 @@ class QuestionWriter implements WriterInterface, ProgressAwareInterface
         $this->actionPlans = [];
 
         if ($this->validateRow($item)) {
-            $attribute = $this->getAttribute($item[self::COLUMN_CODE], $item[self::COLUMN_TYPE]);
+            $attribute = $this->getAttribute($item[self::COLUMN_CODE]);
 
             if (isset($this->attributes[$attribute->getCode()])) {
                 $this->progress->addMessage(
@@ -187,12 +187,11 @@ class QuestionWriter implements WriterInterface, ProgressAwareInterface
      * @param $code
      * @return Attribute
      */
-    protected function getAttribute($code, $type)
+    protected function getAttribute($code)
     {
         $attribute = $this->manager->getRepository('HopitalNumeriqueAutodiagBundle:Autodiag\Attribute')->findOneBy([
             'autodiag' => $this->autodiag,
             'code' => $code,
-            'type' => $type,
         ]);
 
         if (null === $attribute) {
