@@ -211,7 +211,7 @@ Attribute.prototype = {
             });
 
             radios.each(function() {
-                $(this).prop('checked', $(this).val() === instance.notConcernedValue);
+                $(this).prop('checked', $(this).val() == instance.notConcernedValue);
             });
 
             this.computeMood();
