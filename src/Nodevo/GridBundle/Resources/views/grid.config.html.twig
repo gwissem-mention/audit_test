@@ -56,20 +56,21 @@
 
 {# --------------------------------------------------- grid_exports ------------------------------------------------- #}
 {% block grid_exports %}
-    <div class="exports pull-right form-group">
+    <div class="exports btn-group pull-right ">
         {% spaceless %}
-            <div class="pull-left" style="margin-right:10px">
-                <select name="{{grid.hash}}[{{ constant('APY\\DataGridBundle\\Grid\\Grid::REQUEST_QUERY_EXPORT') }}]" class="form-control">
-                    <option value="-1">{{ 'Export'|trans }}</option>
-                    {% for key, export in grid.exports %}
-                        <option value="{{key}}">{{ export.title|trans }}</option>
-                    {% endfor %}
-                </select>
-            </div>
-            <input class="btn btn-default pull-left submit" type="submit" value="Exécuter"/>
+
+            {% for key, export in grid.exports %}
+                <button name="{{grid.hash}}[{{ constant('APY\\DataGridBundle\\Grid\\Grid::REQUEST_QUERY_EXPORT') }}]" value="{{ key }}" type="submit" class="btn secondary">
+                    {{ export.title|trans }}
+                </button>
+            {% endfor %}
+
         {% endspaceless %}
     </div>
 {% endblock grid_exports %}
+
+
+
 
 {# Translate FR #}
 {% block grid_scripts_mark_visible %}

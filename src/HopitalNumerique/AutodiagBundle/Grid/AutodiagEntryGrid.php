@@ -222,7 +222,7 @@ class AutodiagEntryGrid extends Grid implements GridInterface
         );
 
         $this->_grid->addExport(
-            new SCSVExport('CSV')
+            new SCSVExport('Export du tableau')
         );
     }
 
