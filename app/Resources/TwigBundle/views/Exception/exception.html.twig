@@ -2,21 +2,27 @@
 <html>
     <body>
         <div class="container">            
-            <img src="{{ asset('bundles/nodevoerrors/images/nodevo.jpg')}}" class="logo" alt="" />
+            <img src="{{ asset('bundles/hopitalnumeriquecore/img/anap.jpg')}}" class="logo" alt="" />
         </div>
 
         <div class="bandeau">
-            <div class="container">             
+            <div class="container">
                 {% if status_code == "404" %}
                     Oups! Cette page n'est plus accessible
                 {% elseif status_code == "403" %}
                     Vous n'avez pas acces à cette page
-                {% elseif status_code == "500" %}
+                {% else %}
                     Oups! Erreur interne du serveur
                 {% endif %}
-                <span class="code_error">{{ status_code }}</span>
+                <span class="code_error">
+                {% if status_code == "404" or status_code == "403" %}
+                    {{ status_code }}
+                {% else %}
+                    500
+                {% endif %}
+                </span>
             </div>
-        </div>  
+        </div> 
         
         <div class="container">
              <div class="back">
