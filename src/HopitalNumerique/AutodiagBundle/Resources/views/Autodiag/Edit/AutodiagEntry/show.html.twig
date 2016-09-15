@@ -16,7 +16,13 @@
 
 {% block edit_content %}
 
-    <h2>Réponse de {{ entry.user.prenom }} {{ entry.user.nom }}</h2>
+    <h2>
+        {% if entry.user is not null %}
+            Réponse de {{ entry.user.prenom }} {{ entry.user.nom }}
+        {% else %}
+            Réponse anonyme
+        {% endif %}
+    </h2>
 
     {% if questionnaire is not null %}
         <h3>Réponses du questionnaire préalable</h3>

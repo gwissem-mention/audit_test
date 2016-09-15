@@ -27,7 +27,7 @@ class Option
      * @var string
      *
      * @ORM\Id
-     * @ORM\Column(type="float")
+     * @ORM\Column(name="option_value", type="float")
      * @Assert\NotBlank()
      */
     private $value;
