@@ -2,6 +2,8 @@
 
 namespace HopitalNumerique\AutodiagBundle\Controller\Front;
 
+use HopitalNumerique\AutodiagBundle\Entity\Restitution\Item;
+use HopitalNumerique\AutodiagBundle\Entity\Synthesis;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -70,5 +72,20 @@ class RestitutionController extends Controller
             'restitution' => $restitution,
             'result' => $resultItems,
         ]);
+    }
+
+    public function exportItemAction(Synthesis $synthesis, Item $restitutionItem)
+    {
+        if (!$this->isGranted('read', $synthesis)) {
+            $this->addFlash('danger', $this->get('translator')->trans('ad.synthesis.restitution.forbidden'));
+
+            return $this->redirectToRoute('hopitalnumerique_autodiag_entry_add', [
+                'autodiag' => $synthesis->getAutodiag()->getId()
+            ]);
+        }
+
+        return $this->get('autodiag.restitution_item.export')->export($synthesis, $restitutionItem, $this->getUser());
+
+
     }
 }

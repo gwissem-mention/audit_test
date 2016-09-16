@@ -31,8 +31,8 @@
 
                             <div class="item" data-row="{{ item.row }}" data-column="{{ item.column }}" data-item-type="{{ item.type }}">
                                 {% include ("@HopitalNumeriqueAutodiag/Restitution/item/_" ~ item.type ~ ".html.twig") ignore missing with {
-                                'restitution': item,
-                                'result': result[item.id]
+                                    'restitution': item,
+                                    'result': result[item.id]
                                 } %}
                             </div>
 

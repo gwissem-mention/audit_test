@@ -215,15 +215,6 @@ class AutodiagEntriesExport extends AbstractExport
         )
             ->applyFromArray($style);
 
-//        $sheet->getDefaultStyle()->applyFromArray([
-//            'borders' => array(
-//                'allborders' => array(
-//                    'style' => \PHPExcel_Style_Border::BORDER_THIN,
-//                    'color' => array('rgb' => '000000'),
-//                ),
-//            ),
-//        ]);
-
         $sheet->getStyle(
             'A1:' .
             $sheet->getHighestColumn() .

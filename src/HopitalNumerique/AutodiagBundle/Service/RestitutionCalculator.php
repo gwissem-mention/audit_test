@@ -107,7 +107,7 @@ class RestitutionCalculator
             );
 
             if (!array_key_exists($cacheKey, $this->items)) {
-                $this->computeItemContainer($chapter, $synthesis, [], true);
+                $this->computeItemContainer($chapter, $synthesis, []);
             }
         }
 
@@ -121,8 +121,12 @@ class RestitutionCalculator
      * @param Synthesis $synthesis
      * @return array
      */
-    protected function computeItem(RestitutionItem $item, Synthesis $synthesis)
+    public function computeItem(RestitutionItem $item, Synthesis $synthesis)
     {
+        if (empty($this->attributeResponses)) {
+            $this->attributeResponses[$synthesis->getId()] = $this->completion->getGlobalCompletion($synthesis);
+        }
+
         $result = [
             'items' => [],
             'references' => [],
