@@ -366,6 +366,9 @@
 /**
 * Plan d'action
 */
+#restitution .plan_action .exports {
+    margin-bottom: 20px;
+}
 
 #restitution .plan_action tr.attribute td:first-child {
     text-indent: 20px;

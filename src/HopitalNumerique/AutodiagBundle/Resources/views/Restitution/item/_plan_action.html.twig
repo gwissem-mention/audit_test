@@ -1,8 +1,9 @@
 <div class="plan_action">
-
-    <a href="{{ path('hopitalnumerique_autodiag_restitution_export', {'synthesis': synthesis.id, "restitutionItem": restitution.id}) }}">
-        Exporter le plan d'action
-    </a>
+    <div class="exports pull-right">
+        <a class="btn btn-primary" href="{{ path('hopitalnumerique_autodiag_restitution_export', {'synthesis': synthesis.id, "restitutionItem": restitution.id}) }}">
+            Exporter le plan d'action
+        </a>
+    </div>
 
     <table class="table table-striped table-bordered">
         <thead>
