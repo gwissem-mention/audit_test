@@ -2,71 +2,113 @@
 
 namespace HopitalNumerique\AutodiagBundle\Service\Export;
 
-use Doctrine\Common\Persistence\ObjectManager;
+use Box\Spout\Writer\AbstractMultiSheetsWriter;
+use Box\Spout\Writer\Style\StyleBuilder;
+use Box\Spout\Writer\WriterFactory;
+use Box\Spout\Writer\WriterInterface;
 use HopitalNumerique\AutodiagBundle\Entity\Restitution\Item;
 use \HopitalNumerique\AutodiagBundle\Model\Result\Item as ResultItem;
 use HopitalNumerique\AutodiagBundle\Entity\Synthesis;
 use HopitalNumerique\AutodiagBundle\Service\RestitutionCalculator;
 use HopitalNumerique\UserBundle\Entity\User;
+use Nodevo\ToolsBundle\Tools\Chaine;
+use Symfony\Component\HttpFoundation\BinaryFileResponse;
+use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 
-class RestitutionItemExport extends AbstractExport
+class RestitutionItemExport
 {
     protected $calculator;
     protected $gabaritPath;
 
-    public function __construct(ObjectManager $manager, RestitutionCalculator $calculator, $gabaritPath)
-    {
-        parent::__construct($manager);
+    protected $row = 1;
 
+    public function __construct(RestitutionCalculator $calculator, $gabaritPath)
+    {
         $this->calculator = $calculator;
         $this->gabaritPath = $gabaritPath;
     }
 
-    public function export(Synthesis $synthesis, Item $item, User $user)
+    public function export(Synthesis $synthesis, Item $item, User $user, $fileType = 'xlsx')
     {
+        /** @var AbstractMultiSheetsWriter $writer */
+        $writer = WriterFactory::create($fileType);
+        $file = stream_get_meta_data(tmpfile())['uri'];
+        $writer->openToFile($file);
+
         $result = $this->calculator->computeItem($item, $synthesis);
 
-        $XLSXDocument = new \PHPExcel_Reader_Excel2007();
-        $excel = $XLSXDocument->load($this->gabaritPath);
-        $excel->setActiveSheetIndex(0);
-
-        $sheet = $excel->getActiveSheet();
-
-        $this->writeHeader($sheet, $synthesis, $user);
+        $this->writeHeader($writer, $synthesis, $user);
 
         foreach ($result['items'] as $resultItem) {
-            $this->writeResultItem($sheet, $resultItem);
+            $this->writeResultItem($writer, $resultItem);
         }
 
-        return $this->getFileResponse($excel, $synthesis->getName(), 'plan_action');
+        $writer->close();
+
+        $title = new Chaine($synthesis->getName());
+        $name = 'plan_action_' . $title->minifie() . '.' . $fileType;
+
+        $response = new BinaryFileResponse($file);
+        $response->setContentDisposition(
+            ResponseHeaderBag::DISPOSITION_ATTACHMENT,
+            $name
+        );
+        return $response;
     }
 
 
 
-    protected function writeHeader(\PHPExcel_Worksheet $sheet, Synthesis $synthesis, User $user)
+    protected function writeHeader(WriterInterface $writer, Synthesis $synthesis, User $user)
     {
-        $this->addRow($sheet, [
+        $style = (new StyleBuilder())
+            ->setFontBold()
+            ->setFontSize(18)
+            ->build();
+
+        $writer->addRowWithStyle([
             sprintf(
                 'Autodiagnostic "%s" - "%s"',
                 $synthesis->getAutodiag()->getTitle(),
                 $synthesis->getName()
             )
-        ]);
+        ], $style);
+
+
+        $style = (new StyleBuilder())
+            ->setFontItalic()
+            ->build();
 
         $now = new \DateTime();
-        $this->addRow($sheet, [
+        $writer->addRowWithStyle([
             sprintf(
                 'Plan d\'action exporté le %s à %s par %s',
                 $now->format('d/m/Y'),
                 $now->format('H:i'),
                 $user->getPrenom() . ' ' . $user->getNom()
             )
-        ]);
+        ], $style);
 
-        $this->row++;
+
+        $style = (new StyleBuilder())
+            ->setFontBold()
+            ->setBackgroundColor('c0c0c0')
+            ->build();
+
+        $writer->addRowWithStyle([
+            'Chapitre',
+            'Sous chapitre',
+            'Question',
+            'Réponse',
+            'Synthèse',
+            'Commentaire',
+            'Acteur',
+            'Échéance',
+            'État d\'avancement',
+
+        ], $style);
     }
 
-    protected function writeResultItem(\PHPExcel_Worksheet $sheet, ResultItem $item, ResultItem $parent = null)
+    protected function writeResultItem(WriterInterface $writer, ResultItem $item, ResultItem $parent = null)
     {
         $visible = false;
 
@@ -99,7 +141,7 @@ class RestitutionItemExport extends AbstractExport
             return null;
         }
 
-        $this->addRow($sheet, [
+        $writer->addRow([
             $parent ? $parent->getLabel() : $item->getLabel(),
             $parent ? $item->getLabel() : '',
             '',
@@ -109,8 +151,7 @@ class RestitutionItemExport extends AbstractExport
 
         foreach ($item->getAttributes() as $attribute) {
             if (null !== $attribute->getActionPlan()) {
-                $this->addRow(
-                    $sheet,
+                $writer->addRow(
                     [
                         $parent ? $parent->getLabel() : $item->getLabel(),
                         $parent ? $item->getLabel() : '',
@@ -123,43 +164,7 @@ class RestitutionItemExport extends AbstractExport
         }
 
         foreach ($item->getChildrens() as $children) {
-            $this->writeResultItem($sheet, $children, $item);
+            $this->writeResultItem($writer, $children, $item);
         }
-    }
-
-    protected function applyStyle(\PHPExcel_Worksheet $sheet)
-    {
-        $sheet->getStyle('A1:Z1')->applyFromArray([
-            'font' => [
-                'size' => 18,
-                'bold' => true,
-            ]
-        ]);
-        $sheet->getRowDimension(1)->setRowHeight(30);
-
-        $sheet->getStyle('A2:Z2')->applyFromArray([
-            'font' => [
-                'italic' => true,
-            ]
-        ]);
-
-        $style = [
-            'font' => [
-//                'size' => 18,
-                'bold' => true,
-            ],
-            'fill' => [
-                'type' => \PHPExcel_Style_Fill::FILL_SOLID,
-                'startcolor' => [
-                    'rgb' => 'ff8080'
-                ]
-            ]
-        ];
-
-        $sheet->getStyle('A3:I3')->applyFromArray($style);
-
-        $sheet->mergeCells('A1:Z1');
-        $sheet->mergeCells('A2:Z2');
-//        $sheet->getRowDimension($i)->setRowHeight(30);
     }
 }

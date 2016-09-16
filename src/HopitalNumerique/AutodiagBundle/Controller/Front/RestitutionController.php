@@ -74,7 +74,7 @@ class RestitutionController extends Controller
         ]);
     }
 
-    public function exportItemAction(Synthesis $synthesis, Item $restitutionItem)
+    public function exportItemAction(Synthesis $synthesis, Item $restitutionItem, $type)
     {
         if (!$this->isGranted('read', $synthesis)) {
             $this->addFlash('danger', $this->get('translator')->trans('ad.synthesis.restitution.forbidden'));
@@ -84,7 +84,12 @@ class RestitutionController extends Controller
             ]);
         }
 
-        return $this->get('autodiag.restitution_item.export')->export($synthesis, $restitutionItem, $this->getUser());
+        return $this->get('autodiag.restitution_item.export')->export(
+            $synthesis,
+            $restitutionItem,
+            $this->getUser(),
+            $type
+        );
 
 
     }

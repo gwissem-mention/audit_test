@@ -32,8 +32,10 @@ hopitalnumerique_autodiag_restitution_pdf:
     defaults: { _controller: HopitalNumeriqueAutodiagBundle:Front/Restitution:index, pdf: true }
 
 hopitalnumerique_autodiag_restitution_export:
-    path:     /autodiagnostic/restitution/{synthesis}/export/{restitutionItem}
+    path:     /autodiagnostic/restitution/{synthesis}/export/{restitutionItem}/{type}
     defaults: { _controller: HopitalNumeriqueAutodiagBundle:Front/Restitution:exportItem }
+    requirements:
+        type: "xlsx|ods"
 
 hopitalnumerique_autodiag_validation_index:
     path:     /autodiagnostic/validation/{synthesis}

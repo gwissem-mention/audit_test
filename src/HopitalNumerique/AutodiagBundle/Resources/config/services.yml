@@ -149,6 +149,5 @@ services:
     autodiag.restitution_item.export:
             class: HopitalNumerique\AutodiagBundle\Service\Export\RestitutionItemExport
             arguments:
-                - '@doctrine.orm.entity_manager'
                 - '@autodiag.restitution.calculator'
-                - '%kernel.root_dir%/../files/autodiag/plan-action.xlsx'
+                - '%kernel.root_dir%/../files/autodiag/plan-action.'
