@@ -89,4 +89,8 @@ ExpiresByType application/x-shockwave-flash "access plus 60 days"
     Header set Cache-Control "max-age=2592000, public"
 </FilesMatch>
 
+# Memory limit
 php_value memory_limit 256M
+
+# 301 refonte autodiag
+RewriteRule ^autodiagnostic/outil/([0-9]+)(/)?$ /autodiagnostic/$1 [L,R=301]
