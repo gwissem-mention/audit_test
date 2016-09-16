@@ -60,7 +60,7 @@ class RestitutionItemExport
     {
         $style = (new StyleBuilder())
             ->setFontBold()
-            ->setFontSize(18)
+            ->setFontSize(14)
             ->build();
 
         $writer->addRowWithStyle([
