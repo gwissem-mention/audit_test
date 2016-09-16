@@ -18,14 +18,12 @@ use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 class RestitutionItemExport
 {
     protected $calculator;
-    protected $gabaritPath;
 
     protected $row = 1;
 
-    public function __construct(RestitutionCalculator $calculator, $gabaritPath)
+    public function __construct(RestitutionCalculator $calculator)
     {
         $this->calculator = $calculator;
-        $this->gabaritPath = $gabaritPath;
     }
 
     public function export(Synthesis $synthesis, Item $item, User $user, $fileType = 'xlsx')

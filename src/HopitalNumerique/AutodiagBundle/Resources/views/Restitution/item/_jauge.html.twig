@@ -1,40 +1,42 @@
-<div class="jauge">
+<div class="item-inner">
+    <div class="jauge">
 
-    {% for jaugeData in result.items %}
-        <div class="jauge-container-wrapper">
-            <div class="jauge-container">
-                <div class="header">
-                    <div class="title pull-left">{{ jaugeData.label }}</div>
-                    <div class="header-right">
-                        <span class="score">
-                            Score : {{ jaugeData.score.value is not null ? jaugeData.score.value : '-' }} / 100
-                        </span>
-                        <span class="completion-wrapper">
-                            {% set completion = (jaugeData.numberOfAnswers / jaugeData.numberOfQuestions * 100) | round %}
-                            <span class="completion" data-title="Remplissage : {{ completion }}%" data-value="{{ completion }}"></span>
-                        </span>
+        {% for jaugeData in result.items %}
+            <div class="jauge-container-wrapper">
+                <div class="jauge-container">
+                    <div class="header">
+                        <div class="title pull-left">{{ jaugeData.label }}</div>
+                        <div class="header-right">
+                            <span class="score">
+                                Score : {{ jaugeData.score.value is not null ? jaugeData.score.value : '-' }} / 100
+                            </span>
+                            <span class="completion-wrapper">
+                                {% set completion = (jaugeData.numberOfAnswers / jaugeData.numberOfQuestions * 100) | round %}
+                                <span class="completion" data-title="Remplissage : {{ completion }}%" data-value="{{ completion }}"></span>
+                            </span>
+                        </div>
                     </div>
-                </div>
 
-                <div class="content">
-                    <div class="item jauge-widget {{ jaugeData.colorationInversed ? 'inversed' : '' }}">
-                        <div class="step low">Faible</div>
-                        <div class="step middle">Moyen</div>
-                        <div class="step high">Fort</div>
+                    <div class="content">
+                        <div class="item jauge-widget {{ jaugeData.colorationInversed ? 'inversed' : '' }}">
+                            <div class="step low">Faible</div>
+                            <div class="step middle">Moyen</div>
+                            <div class="step high">Fort</div>
 
-                        {% if jaugeData.score.value is not null %}
-                            <div class="score" data-value="{{ jaugeData.score.value }}" data-label="{{ jaugeData.score.label }}" ></div>
-                        {% endif %}
-
-                        {% for score in jaugeData.references %}
-                            {% if score.value is not null %}
-                                <div class="score reference" data-value="{{ score.value }}" data-label="{{ score.label }}" data-color="{{ score.color }}"></div>
+                            {% if jaugeData.score.value is not null %}
+                                <div class="score" data-value="{{ jaugeData.score.value }}" data-label="{{ jaugeData.score.label }}" ></div>
                             {% endif %}
-                        {% endfor %}
+
+                            {% for score in jaugeData.references %}
+                                {% if score.value is not null %}
+                                    <div class="score reference" data-value="{{ score.value }}" data-label="{{ score.label }}" data-color="{{ score.color }}"></div>
+                                {% endif %}
+                            {% endfor %}
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
-    {% endfor %}
+        {% endfor %}
 
+    </div>
 </div>

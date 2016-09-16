@@ -1,23 +1,25 @@
-<div class="radar">
-    <div id="{{ restitution.id ~ restitution.type }}"></div>
+<div class="item-inner">
+    <div class="radar">
+        <div id="{{ restitution.id ~ restitution.type }}"></div>
 
-    <div class="remplissage">
-        <table class="table table-bordered table-striped">
-            <thead>
-                <tr>
-                    <th>Catégorie</th>
-                    <th>Remplissage</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for item in result.items %}
+        <div class="remplissage">
+            <table class="table table-bordered table-striped">
+                <thead>
                     <tr>
-                        <td>{{ item.label }}</td>
-                        <td>{{ (item.numberOfAnswers / item.numberOfQuestions * 100)|round }} %</td>
+                        <th>Catégorie</th>
+                        <th>Remplissage</th>
                     </tr>
-                {% endfor %}
-            </tbody>
-        </table>
+                </thead>
+                <tbody>
+                    {% for item in result.items %}
+                        <tr>
+                            <td>{{ item.label }}</td>
+                            <td>{{ (item.numberOfAnswers / item.numberOfQuestions * 100)|round }} %</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
     </div>
 </div>
 

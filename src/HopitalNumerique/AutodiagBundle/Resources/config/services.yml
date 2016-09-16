@@ -150,4 +150,3 @@ services:
             class: HopitalNumerique\AutodiagBundle\Service\Export\RestitutionItemExport
             arguments:
                 - '@autodiag.restitution.calculator'
-                - '%kernel.root_dir%/../files/autodiag/plan-action.'
