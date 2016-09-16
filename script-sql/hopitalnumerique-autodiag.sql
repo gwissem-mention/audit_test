@@ -36,4 +36,5 @@ INSERT INTO `core_menu_item` (`itm_id`, `itm_parent`, `mnu_menu`, `itm_name`, `i
 VALUES (336, 68, 3, 'Mes autodiagnostics', 'hopitalnumerique_autodiag_account_index', NULL, 0, NULL, NULL, 1, 0, 'IS_AUTHENTICATED_ANONYMOUSLY', 4);
 
 /* 11:43:38 Nodevo05 preprod_monhopitalnumeriqueautodiag */ DELETE FROM `core_menu_item` WHERE `itm_id` IN ('197','306');
-~                                                                                                                                                                                                           
+
+/* 12:01:21 Nodevo05 preprod_monhopitalnumeriqueautodiag */ DELETE FROM `core_menu_item` WHERE `itm_id` IN ('71','216','246','272');
