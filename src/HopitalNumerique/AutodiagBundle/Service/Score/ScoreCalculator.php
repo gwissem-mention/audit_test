@@ -44,6 +44,33 @@ class ScoreCalculator
         $this->entityManager = $entityManager;
     }
 
+    public function computeSynthesisScore(Synthesis $synthesis, $flush = true)
+    {
+        $autodiag = $synthesis->getAutodiag();
+        $containers = $autodiag->getContainers();
+
+        $values = $this->valueRepository->getSynthesisValuesForAlgorithm($synthesis);
+
+        foreach ($containers as $container) {
+            foreach ($this->computeScoreRecursive($synthesis, $container, $values) as $score) {
+                $existingScore = $this->scoreRepository->find([
+                    'container' => $score->getContainer(),
+                    'synthesis' => $score->getSynthesis()
+                ]);
+
+                if (null === $existingScore) {
+                    $existingScore = $score;
+                    $this->entityManager->persist($existingScore);
+                }
+                $existingScore->setScore($score->getScore());
+            }
+        }
+
+        if ($flush) {
+            $this->entityManager->flush();
+        }
+    }
+
     /**
      * @param AutodiagEntry $entry
      * @param Container[] $containers
