@@ -109,7 +109,6 @@ class ChapterWriter implements WriterInterface, ProgressAwareInterface
                 return;
             }
 
-            $this->progress->addMessage('', $chapter, 'chapter_updated');
             $this->progress->addSuccess($item);
         } else {
             $this->progress->addError('ad.import.chapter.incorrect_row_format');
@@ -180,7 +179,7 @@ class ChapterWriter implements WriterInterface, ProgressAwareInterface
 
     protected function handleActionPlan(Chapter $chapter, $item)
     {
-        $actions = preg_split("/\\r\\n|\\r|\\n/", $item['plan_action']);
+        $actions = null === $item['plan_action'] ? [] : preg_split("/\\r\\n|\\r|\\n/", $item['plan_action']);
         array_walk($actions, function (&$element) {
             $element = explode("::", $element);
         });
@@ -234,7 +233,6 @@ class ChapterWriter implements WriterInterface, ProgressAwareInterface
                 $this->manager->remove($actionPlan);
             }
         }
-
     }
 
     /**
