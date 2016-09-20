@@ -126,6 +126,7 @@ services:
             - '@autodiag.repository.autodiagentryvalue'
             - '@autodiag.repository.restitution'
             - '@autodiag.synthesis.completion'
+            - '@autodiag.repository.score'
 
     autodiag.score_calculator:
         class: HopitalNumerique\AutodiagBundle\Service\Score\ScoreCalculator

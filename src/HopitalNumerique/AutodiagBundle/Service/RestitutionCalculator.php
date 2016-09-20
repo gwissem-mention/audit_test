@@ -14,6 +14,7 @@ use HopitalNumerique\AutodiagBundle\Model\Result\Score;
 use HopitalNumerique\AutodiagBundle\Repository\AutodiagEntry\ValueRepository;
 use HopitalNumerique\AutodiagBundle\Repository\AutodiagEntryRepository;
 use HopitalNumerique\AutodiagBundle\Repository\RestitutionRepository;
+use HopitalNumerique\AutodiagBundle\Repository\ScoreRepository;
 use HopitalNumerique\AutodiagBundle\Service\Algorithm\ReferenceAlgorithm;
 use \HopitalNumerique\AutodiagBundle\Service\Algorithm\Score as Algorithm;
 use HopitalNumerique\AutodiagBundle\Service\Attribute\AttributeBuilderProvider;
@@ -53,6 +54,11 @@ class RestitutionCalculator
     protected $restitutionRepository;
 
     /**
+     * @var ScoreRepository
+     */
+    protected $scoreRepository;
+
+    /**
      * @var Completion
      */
     protected $completion;
@@ -80,7 +86,8 @@ class RestitutionCalculator
         AutodiagEntryRepository $entryRepository,
         ValueRepository $valueRepository,
         RestitutionRepository $restitutionRepository,
-        Completion $completion
+        Completion $completion,
+        ScoreRepository $scoreRepository
     ) {
         $this->algorithm = $algorithm;
         $this->attributeBuilder = $attributeBuilder;
@@ -88,6 +95,7 @@ class RestitutionCalculator
         $this->valueRepository = $valueRepository;
         $this->restitutionRepository = $restitutionRepository;
         $this->completion = $completion;
+        $this->scoreRepository = $scoreRepository;
     }
 
     public function compute(Synthesis $synthesis)
@@ -185,12 +193,14 @@ class RestitutionCalculator
         );
 
         if (!array_key_exists($cacheKey, $this->items)) {
-            $entries = $this->valueRepository->getSynthesisValuesByContainer($synthesis->getId(), $container);
+//            $entries = $this->valueRepository->getSynthesisValuesByContainer($synthesis->getId(), $container);
+//
+//            $score = $this->algorithm->getScore(
+//                $container,
+//                $entries
+//            );
 
-            $score = $this->algorithm->getScore(
-                $container,
-                $entries
-            );
+            $score = $this->scoreRepository->getScore($synthesis, $container);
 
             $resultItem = new ResultItem();
             $resultItem->setLabel($container->getLabel());
@@ -301,15 +311,8 @@ class RestitutionCalculator
         ]);
 
         if (!array_key_exists($cacheKey, $this->references)) {
-            $autodiag = $container->getAutodiag();
-            $referenceEntries = $this->getCompleteEntriesForContainer($container);
-            $referenceScores = [];
-            foreach ($referenceEntries as $entry) {
-                $referenceScore = $this->algorithm->getScore($container, [$entry]);
-                if (null !== $referenceScore) {
-                    $referenceScores[] = $referenceScore;
-                }
-            }
+
+            $referenceScores = $this->scoreRepository->getReferenceScores($container);
 
             $score = null;
             if (count($referenceScores) > 0) {

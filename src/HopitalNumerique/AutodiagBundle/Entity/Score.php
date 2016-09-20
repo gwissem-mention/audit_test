@@ -10,7 +10,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @package HopitalNumerique\AutodiagBundle\Entity
  *
  * @ORM\Table(name="ad_score")
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="HopitalNumerique\AutodiagBundle\Repository\ScoreRepository")
  */
 class Score
 {
