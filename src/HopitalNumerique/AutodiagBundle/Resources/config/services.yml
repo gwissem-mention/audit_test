@@ -41,12 +41,6 @@ services:
             - '@autodiag.repository.autodiagentry'
             - '@session'
 
-    autodiag.repository.autodiagentryvalue:
-        class: HopitalNumerique\AutodiagBundle\Repository\AutodiagEntry\ValueRepository
-        factory: ["@doctrine.orm.entity_manager", "getRepository"]
-        arguments:
-            - 'HopitalNumeriqueAutodiagBundle:AutodiagEntry\Value'
-
     autodiag.repository.autodiagentry:
         class: HopitalNumerique\AutodiagBundle\Repository\AutodiagEntryRepository
         factory: ["@doctrine.orm.entity_manager", "getRepository"]
@@ -110,7 +104,6 @@ services:
             - '@autodiag.algorithm.score'
             - '@autodiag.attribute_builder_provider'
             - '@autodiag.repository.autodiagentry'
-            - '@autodiag.repository.autodiagentryvalue'
             - '@autodiag.repository.restitution'
             - '@autodiag.synthesis.completion'
 
@@ -122,7 +115,6 @@ services:
         class: HopitalNumerique\AutodiagBundle\Service\Synthesis\Completion
         arguments:
             - '@autodiag.attribute_builder_provider'
-            - '@autodiag.repository.autodiagentryvalue'
 
     autodiag.synthesis.dataformer:
         class: HopitalNumerique\AutodiagBundle\Service\Synthesis\DataFormer

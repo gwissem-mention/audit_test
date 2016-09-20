@@ -193,15 +193,6 @@ abstract class Container
         return $attributes;
     }
 
-    public function getNestedContainerIds()
-    {
-        $ids = [$this->getId()];
-        foreach ($this->getChilds() as $child) {
-            $ids = array_merge($ids, $child->getNestedContainerIds());
-        }
-        return $ids;
-    }
-
     public function getNestedAttributes()
     {
         $attributes = [];

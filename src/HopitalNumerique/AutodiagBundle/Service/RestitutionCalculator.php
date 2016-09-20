@@ -11,7 +11,6 @@ use HopitalNumerique\AutodiagBundle\Entity\Synthesis;
 use HopitalNumerique\AutodiagBundle\Model\Result\ItemActionPlan;
 use HopitalNumerique\AutodiagBundle\Model\Result\ItemAttribute;
 use HopitalNumerique\AutodiagBundle\Model\Result\Score;
-use HopitalNumerique\AutodiagBundle\Repository\AutodiagEntry\ValueRepository;
 use HopitalNumerique\AutodiagBundle\Repository\AutodiagEntryRepository;
 use HopitalNumerique\AutodiagBundle\Repository\RestitutionRepository;
 use HopitalNumerique\AutodiagBundle\Service\Algorithm\ReferenceAlgorithm;
@@ -43,11 +42,6 @@ class RestitutionCalculator
     protected $entryRepository;
 
     /**
-     * @var ValueRepository
-     */
-    protected $valueRepository;
-
-    /**
      * @var RestitutionRepository
      */
     protected $restitutionRepository;
@@ -69,7 +63,6 @@ class RestitutionCalculator
      * @param Algorithm $algorithm
      * @param AttributeBuilderProvider $attributeBuilder
      * @param AutodiagEntryRepository $entryRepository
-     * @param ValueRepository $valueRepository
      * @param RestitutionRepository $restitutionRepository
      * @param Completion $completion
      * @TODO Injecter un algorithm factory qui connaitrais tous les algo possible via un compileur pass
@@ -78,14 +71,12 @@ class RestitutionCalculator
         Algorithm $algorithm,
         AttributeBuilderProvider $attributeBuilder,
         AutodiagEntryRepository $entryRepository,
-        ValueRepository $valueRepository,
         RestitutionRepository $restitutionRepository,
         Completion $completion
     ) {
         $this->algorithm = $algorithm;
         $this->attributeBuilder = $attributeBuilder;
         $this->entryRepository = $entryRepository;
-        $this->valueRepository = $valueRepository;
         $this->restitutionRepository = $restitutionRepository;
         $this->completion = $completion;
     }
@@ -185,12 +176,11 @@ class RestitutionCalculator
         );
 
         if (!array_key_exists($cacheKey, $this->items)) {
-            $entries = $this->valueRepository->getSynthesisValuesByContainer($synthesis->getId(), $container);
 
             $score = $this->algorithm->getScore(
                 $synthesis->getAutodiag(),
                 $container,
-                $entries
+                $synthesis->getEntries()->toArray()
             );
 
             $resultItem = new ResultItem();
@@ -209,67 +199,67 @@ class RestitutionCalculator
 
             // Traitement des questions / réponses
             $colorationInversed = 0;
-//            foreach ($container->getAttributes() as $attribute) {
-//
-//                $colorationInversed += $attribute->isColorationInversed() ? 1 : -1;
-//
-//                /** @var Autodiag\Attribute $attribute */
-//                $builder = $this->attributeBuilder->getBuilder($attribute->getType());
-//
-//                $itemAttribute = new ItemAttribute($attribute->getLabel());
-//                $itemAttribute->setColorationInversed($attribute->isColorationInversed());
-//                $resultItem->addAttribute($itemAttribute);
-//
-//                if ($builder instanceof PresetableAttributeBuilderInterface) {
-//                    $options = $builder->getPreset($synthesis->getAutodiag())->getPreset();
-//                } else {
-//                    $attributeOptions = $attribute->getOptions();
-//                    $options = [];
-//                    foreach ($attributeOptions as $option) {
-//                        $options[$option->getValue()] = $option->getLabel();
-//                    }
-//                }
-//
-//                foreach ($synthesis->getEntries() as $entry) {
-//                    /** @var AutodiagEntry $entry*/
-//                    foreach ($entry->getValues() as $entryValue) {
-//                        if ($entryValue->getAttribute()->getId() === $attribute->getId()) {
-//                            $response = $builder->transform($entryValue->getValue());
-//                            if (is_array($response)) {
-//
-//                                $responseValue = array_sum($response) / count($response);
-//                                foreach ($response as $code => &$value) {
-//                                    if (null === $value) {
-//                                        $value = " - ";
-//                                    } else {
-//                                        $value = isset($options[$code]) ? $options[$code][$value] : $value;
-//                                    }
-//                                }
-//                                $response = implode(' - ', $response);
-//                            } else {
-//                                $responseValue = $response;
-//                                if (isset($options[$response])) {
-//                                    $response = $options[$response];
-//                                } elseif (null === $response) {
-//                                    $response = "-";
-//                                }
-//                            }
-//
-//                            $itemAttribute->setResponse(
-//                                $responseValue,
-//                                $response
-//                            );
-//                        }
-//                    }
-//                }
-//
-//                if (isset($responseValue)) {
-//                    $actionPlan = $this->getAttributeActionPlan($synthesis->getAutodiag(), $attribute, $responseValue);
-//                    if ($actionPlan) {
-//                        $itemAttribute->setActionPlan($actionPlan);
-//                    }
-//                }
-//            }
+            foreach ($container->getAttributes() as $attribute) {
+
+                $colorationInversed += $attribute->isColorationInversed() ? 1 : -1;
+
+                /** @var Autodiag\Attribute $attribute */
+                $builder = $this->attributeBuilder->getBuilder($attribute->getType());
+
+                $itemAttribute = new ItemAttribute($attribute->getLabel());
+                $itemAttribute->setColorationInversed($attribute->isColorationInversed());
+                $resultItem->addAttribute($itemAttribute);
+
+                if ($builder instanceof PresetableAttributeBuilderInterface) {
+                    $options = $builder->getPreset($synthesis->getAutodiag())->getPreset();
+                } else {
+                    $attributeOptions = $attribute->getOptions();
+                    $options = [];
+                    foreach ($attributeOptions as $option) {
+                        $options[$option->getValue()] = $option->getLabel();
+                    }
+                }
+
+                foreach ($synthesis->getEntries() as $entry) {
+                    /** @var AutodiagEntry $entry*/
+                    foreach ($entry->getValues() as $entryValue) {
+                        if ($entryValue->getAttribute()->getId() === $attribute->getId()) {
+                            $response = $builder->transform($entryValue->getValue());
+                            if (is_array($response)) {
+
+                                $responseValue = array_sum($response) / count($response);
+                                foreach ($response as $code => &$value) {
+                                    if (null === $value) {
+                                        $value = " - ";
+                                    } else {
+                                        $value = isset($options[$code]) ? $options[$code][$value] : $value;
+                                    }
+                                }
+                                $response = implode(' - ', $response);
+                            } else {
+                                $responseValue = $response;
+                                if (isset($options[$response])) {
+                                    $response = $options[$response];
+                                } elseif (null === $response) {
+                                    $response = "-";
+                                }
+                            }
+
+                            $itemAttribute->setResponse(
+                                $responseValue,
+                                $response
+                            );
+                        }
+                    }
+                }
+
+                if (isset($responseValue)) {
+                    $actionPlan = $this->getAttributeActionPlan($synthesis->getAutodiag(), $attribute, $responseValue);
+                    if ($actionPlan) {
+                        $itemAttribute->setActionPlan($actionPlan);
+                    }
+                }
+            }
             $resultItem->setColorationInversed($colorationInversed > 0);
 
             if (count($references) > 0) {
@@ -289,7 +279,6 @@ class RestitutionCalculator
 
             $this->items[$cacheKey] = $resultItem;
         }
-
 
         return $this->items[$cacheKey];
     }
@@ -344,20 +333,19 @@ class RestitutionCalculator
 
             $completed = [];
             $autodiag = $container->getAutodiag();
-            $allEntries = $this->getAutodiagEntriesByContainer($autodiag, $container);
-            $containerAttributes = $container->getNestedAttributes();
+            $allEntries = $this->getAutodiagEntries($autodiag);
 
             foreach ($allEntries as $entry) {
                 $complete = true;
 
-                foreach ($containerAttributes as $attribute) {
+                foreach ($container->getNestedAttributes() as $attribute) {
                     /** @var Autodiag\Attribute $attribute */
                     $builder = $this->attributeBuilder->getBuilder($attribute->getType());
                     $attributeFound = false;
 
-                    foreach ($entry as $value) {
-                        if ($value['attribute_id'] == $attribute->getId()) {
-                            if ($builder->isEmpty($value['value'])) {
+                    foreach ($entry->getValues() as $value) {
+                        if ($value->getAttribute()->getId() === $attribute->getId()) {
+                            if ($builder->isEmpty($value->getValue())) {
                                 $complete = false;
                             }
                             $attributeFound = true;
@@ -382,20 +370,14 @@ class RestitutionCalculator
      * Get all entries for Autodiag
      *
      * @param Autodiag $autodiag
-     * @param Container $container
      * @return mixed
      */
-    protected function getAutodiagEntriesByContainer(Autodiag $autodiag, Container $container)
+    protected function getAutodiagEntries(Autodiag $autodiag)
     {
-        $cacheKey = implode('-', [
-            $autodiag->getId(),
-            $container->getId(),
-        ]);
+        $cacheKey = $autodiag->getId();
 
         if (!array_key_exists($cacheKey, $this->entriesByAutodiag)) {
-            $this->entriesByAutodiag[$cacheKey] = $this->valueRepository->getAllOriginalValuesByAutodiagAndContainer(
-                $container
-            );
+            $this->entriesByAutodiag[$cacheKey] = $this->entryRepository->findOriginalByAutodiag($autodiag);
         }
 
         return $this->entriesByAutodiag[$cacheKey];
