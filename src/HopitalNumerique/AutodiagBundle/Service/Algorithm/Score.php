@@ -50,36 +50,38 @@ class Score
             return $this->scores[$key];
         }
 
-        $repository = $this->manager->getRepository(AutodiagEntry\Value::class);
-        $values = $repository->getValuesAndWeight($entries);
-        $containerIds = $this->getContainerIds($container);
+//        $repository = $this->manager->getRepository(AutodiagEntry\Value::class);
+//        $values = $repository->getValuesAndWeight($entries);
+        $containerIds = $container->getNestedContainerIds();
 
         $notConcerned = true;
 
         $sum = 0;
         $min = 0;
         $max = 0;
-        foreach ($values as $value) {
-            if (!in_array($value['container_id'], $containerIds)) {
-                continue;
-            }
-
-            $builder = $this->attributeProvider->getBuilder($value['type']);
-            $score = $builder->computeScore($value['value']);
-
-            if (null !== $score && $score != "-1") {
-                $notConcerned = false;
-                if ($builder instanceof PresetableAttributeBuilderInterface) {
-                    $attributeMin = $builder->getPresetMinScore($autodiag);
-                    $attributeMax = $builder->getPresetMaxScore($autodiag);
-                } else {
-                    $attributeMin = $value['lowest'];
-                    $attributeMax = $value['highest'];
+        foreach ($entries as $entryId => $entryValues) {
+            foreach ($entryValues as $value) {
+                if (!in_array($value['container_id'], $containerIds)) {
+                    continue;
                 }
 
-                $min += ($attributeMin * $value['weight']);
-                $max += ($attributeMax * $value['weight']);
-                $sum += ($score * $value['weight']);
+                $builder = $this->attributeProvider->getBuilder($value['type']);
+                $score = $builder->computeScore($value['value']);
+
+                if (null !== $score && $score != "-1") {
+                    $notConcerned = false;
+                    if ($builder instanceof PresetableAttributeBuilderInterface) {
+                        $attributeMin = $builder->getPresetMinScore($autodiag);
+                        $attributeMax = $builder->getPresetMaxScore($autodiag);
+                    } else {
+                        $attributeMin = $value['lowest'];
+                        $attributeMax = $value['highest'];
+                    }
+
+                    $min += ($attributeMin * $value['weight']);
+                    $max += ($attributeMax * $value['weight']);
+                    $sum += ($score * $value['weight']);
+                }
             }
         }
 
@@ -97,7 +99,6 @@ class Score
         }
 
         $this->scores[$key] = $result;
-
         return $this->scores[$key];
     }
 
@@ -112,12 +113,12 @@ class Score
 
     protected function getCacheKey(Autodiag $autodiag, Container $container, array $entries)
     {
-        return 'SCORE__'
+        return sha1(
+            'SCORE__'
             . $autodiag->getId()
             . $container->getId()
-            . implode('-', array_map(function (AutodiagEntry $entry) {
-                return $entry->getId();
-            }, $entries))
-        ;
+            . implode('-', array_keys($entries))
+            . rand(0, 10000)
+        );
     }
 }

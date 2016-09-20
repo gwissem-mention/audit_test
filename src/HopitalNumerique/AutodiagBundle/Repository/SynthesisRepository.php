@@ -20,10 +20,10 @@ class SynthesisRepository extends EntityRepository
     {
         $qb = $this->createQueryBuilder('synthesis');
         $qb
-            ->addSelect('autodiag', 'entries', 'values')
+            ->addSelect('autodiag'/*, 'entries', 'values'*/)
             ->leftJoin('synthesis.autodiag', 'autodiag')
-            ->leftJoin('synthesis.entries', 'entries')
-            ->leftJoin('entries.values', 'values')
+//            ->leftJoin('synthesis.entries', 'entries')
+//            ->leftJoin('entries.values', 'values')
             ->where('synthesis.id = :id')
             ->setParameters([
                 'id' => $id

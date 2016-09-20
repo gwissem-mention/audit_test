@@ -56,9 +56,9 @@ class AutodiagEntryGrid extends Grid implements GridInterface
             new TextColumn('etablissement', 'Établissement')
         );
 
-//        $this->addColonne(
-//            new TextColumn('remplissage', 'Remplissage')
-//        );
+        $this->addColonne(
+            new TextColumn('remplissage', 'Remplissage')
+        );
 
         $this->addColonne(
             new DateColumn('created_at', 'Création')
@@ -255,7 +255,7 @@ class AutodiagEntryGrid extends Grid implements GridInterface
                 'etablissement' => null !== $synthesis->getUser() && null !== $synthesis->getUser()->getEtablissementRattachementSante()
                     ? $synthesis->getUser()->getEtablissementRattachementSante()->getNom()
                     : '',
-//                'remplissage' => sprintf('%d%%', $this->_container->get('autodiag.synthesis.completion')->getCompletionRate($synthesis)),
+                'remplissage' => sprintf('%d%%', $this->_container->get('autodiag.synthesis.completion')->getCompletionRate($synthesis)),
                 'created_at' => $synthesis->getCreatedAt(),
                 'updated_at' => $synthesis->getUpdatedAt(),
                 'validated_at' => $synthesis->getValidatedAt(),

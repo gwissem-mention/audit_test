@@ -11,6 +11,8 @@ class RestitutionController extends Controller
 {
     public function indexAction($synthesis, $pdf = false)
     {
+        ini_set('memory_limit', '2048M');
+
         $synthesis = $this->getDoctrine()->getManager()->getRepository('HopitalNumeriqueAutodiagBundle:Synthesis')
             ->getFullyLoadedSynthesis($synthesis);
 
