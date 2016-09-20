@@ -4,6 +4,8 @@ namespace HopitalNumerique\AutodiagBundle\Controller\Front;
 
 use HopitalNumerique\AutodiagBundle\Entity\Autodiag;
 use HopitalNumerique\AutodiagBundle\Entity\AutodiagEntry;
+use HopitalNumerique\AutodiagBundle\Event\EntryUpdatedEvent;
+use HopitalNumerique\AutodiagBundle\Events;
 use HopitalNumerique\AutodiagBundle\Form\Type\AutodiagEntry\ValueType;
 use HopitalNumerique\AutodiagBundle\Form\Type\SynthesisType;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
@@ -105,13 +107,13 @@ class AutodiagEntryController extends Controller
     }
 
     /**
+     * @param Request $request
      * @param AutodiagEntry $entry
      * @param Autodiag\Attribute $attribute
-     *
+     * @return JsonResponse
      * @ParamConverter("entry")
      * @ParamConverter("attribute")
      *
-     * @return JsonResponse
      */
     public function ajaxAttributeSaveAction(Request $request, AutodiagEntry $entry, Autodiag\Attribute $attribute)
     {
@@ -129,7 +131,8 @@ class AutodiagEntryController extends Controller
             $entryValue->setEntry($entry);
         }
 
-        if ($request->request->get('_token') !== $this->get('security.csrf.token_manager')->getToken('entry_value_intention')->getValue()) {
+        $token = $this->get('security.csrf.token_manager')->getToken('entry_value_intention')->getValue();
+        if ($request->request->get('_token') !== $token) {
             throw new InvalidCsrfTokenException('Invalid CSRF token');
         }
 
@@ -143,11 +146,16 @@ class AutodiagEntryController extends Controller
             if (null === $entryValue->getValue()) {
                 $this->getDoctrine()->getManager()->remove($entryValue);
             } else {
+                $builder = $this->get('autodiag.attribute_builder_provider')->getBuilder($attribute->getType());
+                $entryValue->setValid(!$builder->isEmpty($entryValue->getValue()));
                 $this->getDoctrine()->getManager()->persist($entryValue);
             }
             $entry->setUpdatedAt();
 
             $this->getDoctrine()->getManager()->flush();
+
+            $event = new EntryUpdatedEvent($entry, [$entryValue]);
+            $this->get('event_dispatcher')->dispatch(Events::ENTRY_UPDATED, $event);
         }
 
         return new JsonResponse();
@@ -168,6 +176,7 @@ class AutodiagEntryController extends Controller
     {
         $this->denyAccessUnlessGranted('edit', $entry);
 
+        $values = [];
         foreach ($chapter->getAttributes() as $attribute) {
             $entryValue = $entry->getValues()->filter(function (AutodiagEntry\Value $value) use ($attribute) {
                 return $value->getAttribute() == $attribute;
@@ -180,12 +189,16 @@ class AutodiagEntryController extends Controller
             }
 
             $entryValue->setNotConcerned();
+            $values[] = $entryValue;
         }
 
 
         $manager = $this->getDoctrine()->getManager();
         $manager->persist($entry);
         $manager->flush();
+
+        $event = new EntryUpdatedEvent($entry, $values);
+        $this->get('event_dispatcher')->dispatch(Events::ENTRY_UPDATED, $event);
 
         return new JsonResponse();
     }

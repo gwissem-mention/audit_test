@@ -11,7 +11,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  * Container
  *
  * @ORM\Table(name="ad_autodiag_container")
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="HopitalNumerique\AutodiagBundle\Repository\Autodiag\ContainerRepository")
  * @ORM\InheritanceType("JOINED")
  * @ORM\DiscriminatorColumn(name="type", type="string")
  * @ORM\DiscriminatorMap({

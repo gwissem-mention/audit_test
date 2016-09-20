@@ -125,6 +125,11 @@ class AutodiagEntry
         $this->name = $name;
     }
 
+    public function getSyntheses()
+    {
+        return $this->syntheses;
+    }
+
     /**
      * @return Synthesis
      */

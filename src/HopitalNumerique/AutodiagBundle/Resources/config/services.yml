@@ -1,6 +1,7 @@
 imports:
     - { resource: attribute/builder.yml }
     - { resource: import.yml }
+    - { resource: events.yml }
 
 services:
     autodiag.form.model_preset:
@@ -77,6 +78,18 @@ services:
         arguments:
             - 'HopitalNumeriqueAutodiagBundle:Autodiag\Attribute\Weight'
 
+    autodiag.repository.container:
+        class: HopitalNumerique\AutodiagBundle\Repository\Autodiag\ContainerRepository
+        factory: ["@doctrine.orm.entity_manager", "getRepository"]
+        arguments:
+            - 'HopitalNumeriqueAutodiagBundle:Autodiag\Container'
+
+    autodiag.repository.score:
+        class: HopitalNumerique\AutodiagBundle\Repository\Autodiag\ContainerRepository
+        factory: ["@doctrine.orm.entity_manager", "getRepository"]
+        arguments:
+            - 'HopitalNumeriqueAutodiagBundle:Score'
+
     autodiag.autodiagentry_voter:
         class: HopitalNumerique\AutodiagBundle\Security\AutodiagEntryVoter
         arguments: ['@autodiag.entry.session']
@@ -113,6 +126,14 @@ services:
             - '@autodiag.repository.autodiagentryvalue'
             - '@autodiag.repository.restitution'
             - '@autodiag.synthesis.completion'
+
+    autodiag.score_calculator:
+        class: HopitalNumerique\AutodiagBundle\Service\Score\ScoreCalculator
+        arguments:
+            - '@autodiag.algorithm.score'
+            - '@autodiag.repository.autodiagentryvalue'
+            - '@autodiag.repository.score'
+            - '@doctrine.orm.entity_manager'
 
     autodiag.algorithm.score:
         class: HopitalNumerique\AutodiagBundle\Service\Algorithm\Score

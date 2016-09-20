@@ -188,7 +188,6 @@ class RestitutionCalculator
             $entries = $this->valueRepository->getSynthesisValuesByContainer($synthesis->getId(), $container);
 
             $score = $this->algorithm->getScore(
-                $synthesis->getAutodiag(),
                 $container,
                 $entries
             );
@@ -306,7 +305,7 @@ class RestitutionCalculator
             $referenceEntries = $this->getCompleteEntriesForContainer($container);
             $referenceScores = [];
             foreach ($referenceEntries as $entry) {
-                $referenceScore = $this->algorithm->getScore($autodiag, $container, [$entry]);
+                $referenceScore = $this->algorithm->getScore($container, [$entry]);
                 if (null !== $referenceScore) {
                     $referenceScores[] = $referenceScore;
                 }

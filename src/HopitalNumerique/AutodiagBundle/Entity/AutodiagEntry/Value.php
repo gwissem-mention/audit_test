@@ -54,6 +54,13 @@ class Value
     private $comment;
 
     /**
+     * @var boolean
+     *
+     * @ORM\Column(type="boolean")
+     */
+    private $valid;
+
+    /**
      * Get id
      *
      * @return integer
@@ -131,6 +138,25 @@ class Value
     public function setNotConcerned()
     {
         $this->setValue(null);
+        $this->setValid(true);
+    }
+
+    /**
+     * @return boolean
+     */
+    public function isValid()
+    {
+        return $this->valid;
+    }
+
+    /**
+     * @param boolean $valid
+     * @return Value
+     */
+    public function setValid($valid)
+    {
+        $this->valid = $valid;
+
+        return $this;
     }
 }
-

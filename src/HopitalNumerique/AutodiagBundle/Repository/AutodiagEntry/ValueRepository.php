@@ -11,6 +11,9 @@ use HopitalNumerique\AutodiagBundle\Entity\Synthesis;
 
 class ValueRepository extends EntityRepository
 {
+    /**
+     * @deprecated
+     */
     public function getValuesAndWeight(array $entries)
     {
         $qb = $this->createQueryBuilder('v');
@@ -40,6 +43,9 @@ class ValueRepository extends EntityRepository
         return $qb->getQuery()->getResult();
     }
 
+    /**
+     * @deprecated
+     */
     public function getAllOriginalValuesByAutodiagAndContainer(Container $container)
     {
         $conn = $this->getEntityManager()->getConnection();
@@ -77,6 +83,9 @@ class ValueRepository extends EntityRepository
         return $data;
     }
 
+    /**
+     * @deprecated
+     */
     public function getSynthesisValuesByContainer($synthesisId, Container $container)
     {
         $conn = $this->getEntityManager()->getConnection();
@@ -115,6 +124,9 @@ class ValueRepository extends EntityRepository
         return $data;
     }
 
+    /**
+     * @deprecated
+     */
     public function getSynthesisValues(Synthesis $synthesis)
     {
         $qb = $this->createQueryBuilder('v');
@@ -134,21 +146,31 @@ class ValueRepository extends EntityRepository
         return $qb->getQuery()->getArrayResult();
     }
 
-    protected function createOriginalValuesQueryBuilder()
+    public function getSynthesisValuesForAlgorithm(Synthesis $synthesis)
     {
         $qb = $this->createQueryBuilder('v');
         $qb
             ->select(
+                'GROUP_CONCAT(DISTINCT container.id) as container_id',
                 'attribute.id as attribute_id',
-                'attribute.type as attribute_type',
-                'v.value as value',
-                'entry.id as entry_id',
-                'attribute.type as type'
+                'attribute.type as type',
+                'container_weight.weight as weight',
+                'MAX(options.value) as highest',
+                'MIN(options.value) as lowest',
+                'v.value'
             )
             ->join('v.entry', 'entry')
+            ->join('entry.syntheses', 'syntheses')
             ->join('v.attribute', 'attribute')
-            ->where('entry.copy = FALSE');
+            ->leftJoin('attribute.options', 'options')
+            ->join(Weight::class, 'container_weight', Join::WITH, 'container_weight.attribute = attribute.id')
+            ->join('container_weight.container', 'container')
+            ->where('syntheses.id = :synthesis_id')
+            ->groupBy('v.id')
+            ->addGroupBy('attribute.id')
+            ->setParameter('synthesis_id', $synthesis->getId())
+        ;
 
-        return $qb;
+        return $qb->getQuery()->getArrayResult();
     }
 }

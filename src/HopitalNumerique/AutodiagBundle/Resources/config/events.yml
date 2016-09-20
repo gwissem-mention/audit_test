@@ -1,0 +1,8 @@
+services:
+    autodiag.entry_listener:
+        class: HopitalNumerique\AutodiagBundle\EventListener\EntryListener
+        arguments:
+            - '@autodiag.repository.container'
+            - '@autodiag.score_calculator'
+        tags:
+            - { name: kernel.event_listener, event: entry.updated, method: onEntryUpdated }
