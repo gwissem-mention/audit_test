@@ -116,8 +116,8 @@ services:
         arguments:
             - '@autodiag.attribute_builder_provider'
 
-    autodiag.synthesis.dataformer:
-        class: HopitalNumerique\AutodiagBundle\Service\Synthesis\DataFormer
+    autodiag.synthesis.dataformatter:
+        class: HopitalNumerique\AutodiagBundle\Service\Synthesis\DataFormatter
         arguments:
             - '@doctrine.orm.entity_manager'
             - '@autodiag.synthesis.completion'
