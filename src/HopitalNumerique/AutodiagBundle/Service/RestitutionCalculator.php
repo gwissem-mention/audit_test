@@ -3,13 +3,11 @@ namespace HopitalNumerique\AutodiagBundle\Service;
 
 use HopitalNumerique\AutodiagBundle\Entity\Autodiag;
 use HopitalNumerique\AutodiagBundle\Entity\Autodiag\Container;
-use HopitalNumerique\AutodiagBundle\Entity\AutodiagEntry;
 use HopitalNumerique\AutodiagBundle\Entity\Restitution\Category;
 use HopitalNumerique\AutodiagBundle\Entity\Restitution\Item as RestitutionItem;
 use HopitalNumerique\AutodiagBundle\Model\Result\Item as ResultItem;
 use HopitalNumerique\AutodiagBundle\Entity\Synthesis;
 use HopitalNumerique\AutodiagBundle\Model\Result\ItemActionPlan;
-use HopitalNumerique\AutodiagBundle\Model\Result\ItemAttribute;
 use HopitalNumerique\AutodiagBundle\Model\Result\Score;
 use HopitalNumerique\AutodiagBundle\Repository\AutodiagEntry\ValueRepository;
 use HopitalNumerique\AutodiagBundle\Repository\AutodiagEntryRepository;
@@ -18,7 +16,6 @@ use HopitalNumerique\AutodiagBundle\Repository\ScoreRepository;
 use HopitalNumerique\AutodiagBundle\Service\Algorithm\ReferenceAlgorithm;
 use \HopitalNumerique\AutodiagBundle\Service\Algorithm\Score as Algorithm;
 use HopitalNumerique\AutodiagBundle\Service\Attribute\AttributeBuilderProvider;
-use HopitalNumerique\AutodiagBundle\Service\Attribute\PresetableAttributeBuilderInterface;
 use HopitalNumerique\AutodiagBundle\Service\Synthesis\Completion;
 
 /**
@@ -68,7 +65,9 @@ class RestitutionCalculator
     protected $attributeResponses = [];
     protected $completeEntriesByContainer = [];
     protected $entriesByAutodiag = [];
-
+    protected $synthesisScores = null;
+    protected $allScores = [];
+    protected $autodiagAttributesCount = null;
 
     /**
      * RestitutionCalculator constructor.
@@ -149,20 +148,19 @@ class RestitutionCalculator
             'references' => [],
         ];
 
+        $references = $item->getReferences();
+        // Dans le cas d'une synthèse (de plusieurs entries),on n'affiche plus les références de l'AD mais le min et
+        // max de la synthèse
+        if ($synthesis->getEntries()->count() > 1) {
+            $references = [
+                (new Autodiag\Reference('min', $synthesis->getAutodiag()))->setValue('min')->setLabel('Minimum'),
+                (new Autodiag\Reference('max', $synthesis->getAutodiag()))->setValue('max')->setLabel('Maximum'),
+            ];
+        }
+
         $containers = $item->getContainers();
         foreach ($containers as $container) {
             /** @var Container $container */
-
-            $references = $item->getReferences();
-
-            // Dans le cas d'une synthèse (de plusieurs entries),on n'affiche plus les références de l'AD mais le min et
-            // max de la synthèse
-            if ($synthesis->getEntries()->count() > 1) {
-                $references = [
-                    (new Autodiag\Reference('min', $synthesis->getAutodiag()))->setValue('min')->setLabel('Minimum'),
-                    (new Autodiag\Reference('max', $synthesis->getAutodiag()))->setValue('max')->setLabel('Maximum'),
-                ];
-            }
 
             $resultItem = $this->computeItemContainer($container, $synthesis, $references);
 
@@ -193,14 +191,8 @@ class RestitutionCalculator
         );
 
         if (!array_key_exists($cacheKey, $this->items)) {
-//            $entries = $this->valueRepository->getSynthesisValuesByContainer($synthesis->getId(), $container);
-//
-//            $score = $this->algorithm->getScore(
-//                $container,
-//                $entries
-//            );
 
-            $score = $this->scoreRepository->getScore($synthesis, $container);
+            $score = $this->getContainerSynthesisScore($synthesis, $container->getId());
 
             $resultItem = new ResultItem();
             $resultItem->setLabel($container->getLabel());
@@ -208,8 +200,8 @@ class RestitutionCalculator
                 new Score($score, 'Mon score')
             );
 
-            $resultItem->setNumberOfQuestions($container->getTotalNumberOfAttributes());
-            $resultItem->setNumberOfAnswers($this->countAnswers($synthesis, $container));
+            $resultItem->setNumberOfQuestions($this->completion->getAttributesCount($container));
+            $resultItem->setNumberOfAnswers($this->completion->getAnswersCount($synthesis, $container));
 
             $actionPlan = $this->getContainerActionPlan($synthesis->getAutodiag(), $container, $score);
             if ($actionPlan) {
@@ -312,7 +304,8 @@ class RestitutionCalculator
 
         if (!array_key_exists($cacheKey, $this->references)) {
 
-            $referenceScores = $this->scoreRepository->getReferenceScores($container);
+            $referenceScores = $this->getContainerScores($container);
+//            dump($container, $referenceScores);
 
             $score = null;
             if (count($referenceScores) > 0) {
@@ -328,6 +321,26 @@ class RestitutionCalculator
         }
 
         return $this->references[$cacheKey];
+    }
+
+    protected function getContainerSynthesisScore(Synthesis $synthesis, $containerId)
+    {
+        if (null === $this->synthesisScores) {
+            $this->synthesisScores = $this->scoreRepository->getScores($synthesis);
+        }
+
+        return array_key_exists($containerId, $this->synthesisScores)
+            ? $this->synthesisScores[$containerId]
+            : null;
+    }
+
+    protected function getContainerScores(Container $container)
+    {
+        if (!array_key_exists($container->getId(), $this->allScores)) {
+            $this->allScores[$container->getId()] = $this->scoreRepository->getReferenceScores($container);
+        }
+
+        return $this->allScores[$container->getId()];
     }
 
     /**

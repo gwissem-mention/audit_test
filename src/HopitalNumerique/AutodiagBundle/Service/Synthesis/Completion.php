@@ -2,10 +2,12 @@
 
 namespace HopitalNumerique\AutodiagBundle\Service\Synthesis;
 
+use HopitalNumerique\AutodiagBundle\Entity\Autodiag;
 use HopitalNumerique\AutodiagBundle\Entity\Autodiag\Attribute;
 use HopitalNumerique\AutodiagBundle\Entity\Autodiag\Container;
 use HopitalNumerique\AutodiagBundle\Entity\AutodiagEntry;
 use HopitalNumerique\AutodiagBundle\Entity\Synthesis;
+use HopitalNumerique\AutodiagBundle\Repository\Autodiag\AttributeRepository;
 use HopitalNumerique\AutodiagBundle\Repository\AutodiagEntry\ValueRepository;
 use HopitalNumerique\AutodiagBundle\Service\Attribute\AttributeBuilderProvider;
 
@@ -17,16 +19,27 @@ class Completion
     /** @var ValueRepository */
     protected $valueRepository;
 
+    /** @var AttributeRepository */
+    protected $attributeRepository;
+
     protected $completion = [];
+    protected $answersCount = [];
+    protected $autodiagAttributesCount = null;
 
     /**
      * Completion constructor.
      * @param AttributeBuilderProvider $attributeBuilder
+     * @param ValueRepository $valueRepository
+     * @param AttributeRepository $attributeRepository
      */
-    public function __construct(AttributeBuilderProvider $attributeBuilder, ValueRepository $valueRepository)
-    {
+    public function __construct(
+        AttributeBuilderProvider $attributeBuilder,
+        ValueRepository $valueRepository,
+        AttributeRepository $attributeRepository
+    ) {
         $this->attributeBuilder = $attributeBuilder;
         $this->valueRepository = $valueRepository;
+        $this->attributeRepository = $attributeRepository;
     }
 
     public function getGlobalCompletion(Synthesis $synthesis)
@@ -77,16 +90,36 @@ class Completion
         return floor($complete / max(1, count($completions)) * 100);
     }
 
-    public function getAnswersCount(Synthesis $synthesis, Container $container)
+    public function getAttributesCount(Container $container)
     {
-        $completions = $this->getGlobalCompletion($synthesis);
-        $answers = 0;
-        foreach ($container->getAttributes() as $attribute) {
-            if (array_key_exists($attribute->getId(), $completions) && true === $completions[$attribute->getId()]) {
-                $answers++;
-            }
+        if (null === $this->autodiagAttributesCount) {
+            $this->autodiagAttributesCount = $this->attributeRepository->countForAutodiag($container->getAutodiag());
         }
-        return $answers;
+
+        return array_sum(
+            array_intersect_key(
+                $this->autodiagAttributesCount,
+                array_flip($container->getNestedContainerIds())
+            )
+        );
     }
 
+    public function getAnswersCount(Synthesis $synthesis, Container $container)
+    {
+        if (!array_key_exists($synthesis->getId(), $this->answersCount)) {
+            $this->answersCount[$synthesis->getId()] = $this->valueRepository->getAnswersCount($synthesis);
+        }
+
+        return array_sum(
+            array_intersect_key(
+                $this->answersCount[$synthesis->getId()],
+                array_flip($container->getNestedContainerIds())
+            )
+        );
+    }
+
+    public function isComplete(Synthesis $synthesis, Container $container)
+    {
+        return $this->getAttributesCount($container) == $this->getAnswersCount($synthesis, $container);
+    }
 }

@@ -72,6 +72,12 @@ services:
         arguments:
             - 'HopitalNumeriqueAutodiagBundle:Autodiag'
 
+    autodiag.repository.attribute:
+        class: HopitalNumerique\AutodiagBundle\Repository\AutodiagRepository
+        factory: ["@doctrine.orm.entity_manager", "getRepository"]
+        arguments:
+            - 'HopitalNumeriqueAutodiagBundle:Autodiag\Attribute'
+
     autodiag.repository.weight:
         class: HopitalNumerique\AutodiagBundle\Repository\Autodiag\Attribute\WeightRepository
         factory: ["@doctrine.orm.entity_manager", "getRepository"]
@@ -134,6 +140,7 @@ services:
             - '@autodiag.algorithm.score'
             - '@autodiag.repository.autodiagentryvalue'
             - '@autodiag.repository.score'
+            - '@autodiag.synthesis.completion'
             - '@doctrine.orm.entity_manager'
 
     autodiag.algorithm.score:
@@ -145,6 +152,7 @@ services:
         arguments:
             - '@autodiag.attribute_builder_provider'
             - '@autodiag.repository.autodiagentryvalue'
+            - '@autodiag.repository.attribute'
 
     autodiag.synthesis.dataformer:
         class: HopitalNumerique\AutodiagBundle\Service\Synthesis\DataFormer

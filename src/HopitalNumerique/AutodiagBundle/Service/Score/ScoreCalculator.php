@@ -9,6 +9,7 @@ use HopitalNumerique\AutodiagBundle\Entity\AutodiagEntry;
 use HopitalNumerique\AutodiagBundle\Entity\Synthesis;
 use HopitalNumerique\AutodiagBundle\Repository\AutodiagEntry\ValueRepository;
 use HopitalNumerique\AutodiagBundle\Service\Algorithm\Score;
+use HopitalNumerique\AutodiagBundle\Service\Synthesis\Completion;
 
 class ScoreCalculator
 {
@@ -28,6 +29,11 @@ class ScoreCalculator
     protected $scoreRepository;
 
     /**
+     * @var Completion
+     */
+    protected $completion;
+
+    /**
      * @var EntityManager
      */
     protected $entityManager;
@@ -36,11 +42,13 @@ class ScoreCalculator
         Score $algorithm,
         ValueRepository $valueRepository,
         EntityRepository $scoreRepository,
+        Completion $completion,
         EntityManager $entityManager
     ) {
         $this->algorithm = $algorithm;
         $this->valueRepository = $valueRepository;
         $this->scoreRepository = $scoreRepository;
+        $this->completion = $completion;
         $this->entityManager = $entityManager;
     }
 
@@ -63,6 +71,7 @@ class ScoreCalculator
                     $this->entityManager->persist($existingScore);
                 }
                 $existingScore->setScore($score->getScore());
+                $existingScore->setComplete($this->completion->isComplete($synthesis, $container));
             }
         }
 
@@ -94,6 +103,7 @@ class ScoreCalculator
                         $this->entityManager->persist($existingScore);
                     }
                     $existingScore->setScore($score->getScore());
+                    $existingScore->setComplete($this->completion->isComplete($synthesis, $container));
                 }
             }
         }

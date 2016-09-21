@@ -71,7 +71,7 @@ abstract class Container
      * @var Collection
      * @ORM\OneToMany(
      *     targetEntity="HopitalNumerique\AutodiagBundle\Entity\Autodiag\Attribute\Weight",
-     *     mappedBy="container"
+     *     mappedBy="container",
      * )
      */
     private $attributesWeighted;

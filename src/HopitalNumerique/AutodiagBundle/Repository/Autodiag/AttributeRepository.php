@@ -5,6 +5,7 @@ use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\Query\Expr\Join;
 use HopitalNumerique\AutodiagBundle\Entity\Autodiag;
 use HopitalNumerique\AutodiagBundle\Entity\Autodiag\Attribute;
+use HopitalNumerique\AutodiagBundle\Entity\Synthesis;
 
 class AttributeRepository extends EntityRepository
 {
@@ -38,5 +39,27 @@ class AttributeRepository extends EntityRepository
         ;
 
         return $qb->getQuery()->getResult();
+    }
+
+    public function countForAutodiag(Autodiag $autodiag)
+    {
+        $qb = $this->createQueryBuilder('attribute');
+        $qb
+            ->select('count(attribute.id) as total', 'container.id as container_id')
+            ->join(Attribute\Weight::class, 'weight', Join::WITH, 'weight.attribute = attribute.id')
+            ->join('weight.container', 'container')
+            ->where('container.autodiag = :autodiag_id')
+            ->groupBy('container.id')
+            ->setParameters([
+                'autodiag_id' => $autodiag->getId()
+            ]);
+
+        $result = $qb->getQuery()->getArrayResult();
+        $data = [];
+        foreach ($result as $count) {
+            $data[$count['container_id']] = $count['total'];
+        }
+
+        return $data;
     }
 }

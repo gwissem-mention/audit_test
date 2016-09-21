@@ -151,7 +151,7 @@ class ValueRepository extends EntityRepository
         $qb = $this->createQueryBuilder('v');
         $qb
             ->select(
-                'GROUP_CONCAT(DISTINCT container.id) as container_id',
+                'container.id as container_id',
                 'attribute.id as attribute_id',
                 'attribute.type as type',
                 'container_weight.weight as weight',
@@ -162,15 +162,41 @@ class ValueRepository extends EntityRepository
             ->join('v.entry', 'entry')
             ->join('entry.syntheses', 'syntheses')
             ->join('v.attribute', 'attribute')
-            ->leftJoin('attribute.options', 'options')
+            ->leftJoin('attribute.options', 'options', Join::WITH, 'options.value != \'-1\'')
             ->join(Weight::class, 'container_weight', Join::WITH, 'container_weight.attribute = attribute.id')
             ->join('container_weight.container', 'container')
             ->where('syntheses.id = :synthesis_id')
-            ->groupBy('v.id')
-            ->addGroupBy('attribute.id')
+            ->groupBy('attribute.id')
+            ->addGroupBy('container.id')
+            ->addGroupBy('v.id')
             ->setParameter('synthesis_id', $synthesis->getId())
         ;
 
         return $qb->getQuery()->getArrayResult();
+    }
+
+    public function getAnswersCount(Synthesis $synthesis)
+    {
+        $qb = $this->createQueryBuilder('v');
+        $qb
+            ->select('count(distinct v.attribute) as total', 'container.id as container_id')
+            ->join('v.entry', 'entry')
+            ->join('entry.syntheses', 'syntheses')
+            ->join('v.attribute', 'attribute')
+            ->join(Weight::class, 'weight', Join::WITH, 'weight.attribute = attribute.id')
+            ->join('weight.container', 'container')
+            ->where('syntheses.id = :synthesis_id')
+            ->andWhere('v.valid = TRUE')
+            ->groupBy('container.id')
+            ->setParameter('synthesis_id', $synthesis->getId())
+        ;
+
+        $result = $qb->getQuery()->getArrayResult();
+        $data = [];
+        foreach ($result as $count) {
+            $data[$count['container_id']] = (int) $count['total'];
+        }
+
+        return $data;
     }
 }

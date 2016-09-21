@@ -41,6 +41,8 @@ class ResultItemBuilder
         $weights = $this->weightRepository->getWeightByContainerIndexedByAttributeId($container);
 
         $resultItem->setLabel($container->getLabel());
+
+        /* @TODO Supprimer "getTotalNumberOfAttributes" et remplacer par le service Completion */
         $resultItem->setNumberOfQuestions($container->getTotalNumberOfAttributes());
         $resultItem->setNumberOfAnswers($this->completion->getAnswersCount($synthesis, $container));
 

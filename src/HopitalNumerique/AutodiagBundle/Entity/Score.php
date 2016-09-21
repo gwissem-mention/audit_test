@@ -40,6 +40,13 @@ class Score
     private $score;
 
     /**
+     * @var boolean
+     *
+     * @ORM\Column(type="boolean")
+     */
+    private $complete;
+
+    /**
      * Score constructor.
      */
     public function __construct(Container $container, Synthesis $synthesis, $score = null)
@@ -79,5 +86,21 @@ class Score
     public function getSynthesis()
     {
         return $this->synthesis;
+    }
+
+    /**
+     * @return boolean
+     */
+    public function isComplete()
+    {
+        return $this->complete;
+    }
+
+    /**
+     * @param boolean $complete
+     */
+    public function setComplete($complete)
+    {
+        $this->complete = $complete;
     }
 }

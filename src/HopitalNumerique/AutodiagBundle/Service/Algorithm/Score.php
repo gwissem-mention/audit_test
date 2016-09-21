@@ -60,7 +60,7 @@ class Score
         $max = 0;
 
         foreach ($values as $value) {
-            if (empty(array_intersect(explode(',', $value['container_id']), $containerIds))) {
+            if (empty(in_array($value['container_id'], $containerIds))) {
                 continue;
             }
 
