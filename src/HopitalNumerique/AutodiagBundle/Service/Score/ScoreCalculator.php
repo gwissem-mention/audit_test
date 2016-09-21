@@ -75,6 +75,10 @@ class ScoreCalculator
             }
         }
 
+        $synthesis->setCompletion(
+            $this->completion->getCompletionRate($synthesis)
+        );
+
         if ($flush) {
             $this->entityManager->flush();
         }
@@ -106,6 +110,10 @@ class ScoreCalculator
                     $existingScore->setComplete($this->completion->isComplete($synthesis, $container));
                 }
             }
+
+            $synthesis->setCompletion(
+                $this->completion->getCompletionRate($synthesis)
+            );
         }
 
         $this->entityManager->flush();

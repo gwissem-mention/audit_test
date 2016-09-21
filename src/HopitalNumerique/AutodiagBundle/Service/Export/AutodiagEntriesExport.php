@@ -182,7 +182,7 @@ class AutodiagEntriesExport extends AbstractExport
 
         $sheet->setCellValue(
             sprintf('%s%s', $column, 6),
-            sprintf('%s%%', $this->completion->getCompletionRate($synthesis))
+            sprintf('%s%%', $synthesis->getCompletion())
         );
 
         $sheet->setCellValue(

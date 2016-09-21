@@ -17,7 +17,8 @@ class EntryListener
 
     /**
      * EntryListener constructor.
-     * @param $containerRepository
+     * @param ContainerRepository $containerRepository
+     * @param ScoreCalculator $calculator
      */
     public function __construct(ContainerRepository $containerRepository, ScoreCalculator $calculator)
     {

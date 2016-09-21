@@ -66,12 +66,6 @@ class ScoreRepository extends EntityRepository
             ->andWhere('score.complete = TRUE')
             ->groupBy('entries.id')
         ;
-//        if ($container->getId() == 731) {
-//            dump($container);
-//            dump($qb->getQuery()->getSQL());
-//            dump($qb->getQuery()->getResult(AbstractQuery::HYDRATE_ARRAY));die;
-//        }
-
 
         $result = $qb->getQuery()->getResult(AbstractQuery::HYDRATE_ARRAY);
 

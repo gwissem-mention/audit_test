@@ -2,6 +2,7 @@
 
 namespace HopitalNumerique\AutodiagBundle\Repository\AutodiagEntry;
 
+use Doctrine\ORM\AbstractQuery;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\Query\Expr\Join;
 use HopitalNumerique\AutodiagBundle\Entity\Autodiag\Attribute\Weight;
@@ -86,47 +87,6 @@ class ValueRepository extends EntityRepository
     /**
      * @deprecated
      */
-    public function getSynthesisValuesByContainer($synthesisId, Container $container)
-    {
-        $conn = $this->getEntityManager()->getConnection();
-        $sql = "
-            SELECT
-                attribute.id AS attribute_id,
-                attribute.type AS attribute_type,
-                entry_value.value AS value,
-                entry.id AS entry_id,
-                attribute.type AS type,
-                weight.weight as weight,
-                weight.container_id as container_id,
-                MAX(opt.option_value) as highest,
-                MIN(opt.option_value) as lowest
-            FROM ad_entry_value entry_value
-            INNER JOIN ad_entry entry ON entry_value.autodiagentry_id = entry.id
-            INNER JOIN ad_synthesis_entry ase ON ase.entry_id = entry.id AND ase.synthesis_id = $synthesisId
-            INNER JOIN ad_autodiag_attribute attribute ON entry_value.attribute_id = attribute.id
-            INNER JOIN ad_autodiag_attribute_weight weight ON weight.attribute_id = attribute.id
-            LEFT JOIN ad_autodiag_attribute_option opt ON opt.attribute_id = attribute.id AND opt.option_value <> '-1'
-            WHERE weight.container_id IN (" . implode(',', $container->getNestedContainerIds()) . ")
-            GROUP BY entry_value.id
-        ";
-
-
-        $stmt = $conn->query($sql);
-        $data = [];
-        while ($row = $stmt->fetch()) {
-            if (!isset($data[$row['entry_id']])) {
-                $data[$row['entry_id']] = [];
-            }
-
-            $data[$row['entry_id']][] = $row;
-        }
-
-        return $data;
-    }
-
-    /**
-     * @deprecated
-     */
     public function getSynthesisValues(Synthesis $synthesis)
     {
         $qb = $this->createQueryBuilder('v');
@@ -198,5 +158,31 @@ class ValueRepository extends EntityRepository
         }
 
         return $data;
+    }
+
+    public function getGlobalCompletion(Synthesis $synthesis)
+    {
+        $qb = $this->getEntityManager()->createQueryBuilder();
+        $qb
+            ->select('count(distinct val.attribute) * 100 / count(distinct attribute.id)')
+            ->from('HopitalNumeriqueAutodiagBundle:Autodiag\Attribute', 'attribute')
+            ->leftJoin(AutodiagEntry\Value::class, 'val', Join::WITH, 'val.attribute = attribute.id AND val.valid = TRUE')
+            ->leftJoin('val.entry', 'entry')
+            ->leftJoin('entry.syntheses', 'syntheses', Join::WITH, 'syntheses.id = :synthesis_id')
+            ->where('attribute.autodiag = :autodiag_id')
+            ->setParameters([
+                'autodiag_id' => $synthesis->getAutodiag()->getId(),
+                'synthesis_id' => $synthesis->getId(),
+            ])
+        ;
+
+        $p = $qb->getQuery()->getOneOrNullResult(AbstractQuery::HYDRATE_SINGLE_SCALAR);
+        if ($p > 100) {
+            dump($synthesis->getId());
+            dump($synthesis->getAutodiag()->getId());
+            die;
+        }
+
+        return floor($qb->getQuery()->getOneOrNullResult(AbstractQuery::HYDRATE_SINGLE_SCALAR));
     }
 }

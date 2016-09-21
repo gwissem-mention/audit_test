@@ -62,7 +62,6 @@ class RestitutionCalculator
 
     protected $items = [];
     protected $references = [];
-    protected $attributeResponses = [];
     protected $completeEntriesByContainer = [];
     protected $entriesByAutodiag = [];
     protected $synthesisScores = null;
@@ -77,6 +76,7 @@ class RestitutionCalculator
      * @param ValueRepository $valueRepository
      * @param RestitutionRepository $restitutionRepository
      * @param Completion $completion
+     * @param ScoreRepository $scoreRepository
      * @TODO Injecter un algorithm factory qui connaitrais tous les algo possible via un compileur pass
      */
     public function __construct(
@@ -99,8 +99,6 @@ class RestitutionCalculator
 
     public function compute(Synthesis $synthesis)
     {
-        $this->attributeResponses[$synthesis->getId()] = $this->completion->getGlobalCompletion($synthesis);
-
         $autodiag = $synthesis->getAutodiag();
 
         $restitution = $this->restitutionRepository->getForAutodiag($autodiag);
@@ -139,10 +137,6 @@ class RestitutionCalculator
      */
     public function computeItem(RestitutionItem $item, Synthesis $synthesis)
     {
-        if (empty($this->attributeResponses)) {
-            $this->attributeResponses[$synthesis->getId()] = $this->completion->getGlobalCompletion($synthesis);
-        }
-
         $result = [
             'items' => [],
             'references' => [],
@@ -305,7 +299,6 @@ class RestitutionCalculator
         if (!array_key_exists($cacheKey, $this->references)) {
 
             $referenceScores = $this->getContainerScores($container);
-//            dump($container, $referenceScores);
 
             $score = null;
             if (count($referenceScores) > 0) {
@@ -414,27 +407,6 @@ class RestitutionCalculator
         }
 
         return $this->entriesByAutodiag[$cacheKey];
-    }
-
-    /**
-     * Count number of container and container's childs  answers
-     *
-     * @param Synthesis $synthesis
-     * @param Container $container
-     * @return int
-     */
-    protected function countAnswers(Synthesis $synthesis, Container $container)
-    {
-        $answers = 0;
-        foreach ($container->getAttributes() as $attribute) {
-            $answers += $this->attributeResponses[$synthesis->getId()][$attribute->getId()] ? 1 : 0;
-        }
-
-        foreach ($container->getChilds() as $child) {
-            $answers += $this->countAnswers($synthesis, $child);
-        }
-
-        return $answers;
     }
 
     /**

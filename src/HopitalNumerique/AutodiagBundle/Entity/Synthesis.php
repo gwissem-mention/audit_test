@@ -89,6 +89,13 @@ class Synthesis
      */
     private $shares;
 
+    /**
+     * @var float
+     *
+     * @ORM\Column(type="float")
+     */
+    private $completion;
+
     private function __construct(Autodiag $autodiag, User $user = null)
     {
         $this->entries = new ArrayCollection();
@@ -357,6 +364,22 @@ class Synthesis
         $this->shares->removeElement($user);
 
         return $this;
+    }
+
+    /**
+     * @return float
+     */
+    public function getCompletion()
+    {
+        return $this->completion;
+    }
+
+    /**
+     * @param float $completion
+     */
+    public function setCompletion($completion)
+    {
+        $this->completion = $completion;
     }
 }
 

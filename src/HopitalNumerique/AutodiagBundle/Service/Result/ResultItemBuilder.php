@@ -38,72 +38,71 @@ class ResultItemBuilder
     public function build(Container $container, Synthesis $synthesis)
     {
         $resultItem = new Item();
-        $weights = $this->weightRepository->getWeightByContainerIndexedByAttributeId($container);
+//        $weights = $this->weightRepository->getWeightByContainerIndexedByAttributeId($container);
 
         $resultItem->setLabel($container->getLabel());
 
-        /* @TODO Supprimer "getTotalNumberOfAttributes" et remplacer par le service Completion */
-        $resultItem->setNumberOfQuestions($container->getTotalNumberOfAttributes());
+        $resultItem->setNumberOfQuestions($this->completion->getAttributesCount($container));
         $resultItem->setNumberOfAnswers($this->completion->getAnswersCount($synthesis, $container));
 
         $colorationInversed = 0;
-        foreach ($container->getAttributes() as $attribute) {
-
-            $itemAttribute = new ItemAttribute($attribute->getLabel());
-            $itemAttribute->setColorationInversed($attribute->isColorationInversed());
-            $itemAttribute->setAttributeId($attribute->getId());
-            if (isset($weights[$attribute->getId()])) {
-                $itemAttribute->setWeight($weights[$attribute->getId()]);
-            }
-            $resultItem->addAttribute($itemAttribute);
-
-            $colorationInversed += $attribute->isColorationInversed() ? 1 : -1;
-
-            $builder = $this->attributeBuilder->getBuilder($attribute->getType());
-
-            if ($builder instanceof PresetableAttributeBuilderInterface) {
-                $options = $builder->getPreset($synthesis->getAutodiag())->getPreset();
-            } else {
-                $attributeOptions = $attribute->getOptions();
-                $options = [];
-                foreach ($attributeOptions as $option) {
-                    $options[$option->getValue()] = $option->getLabel();
-                }
-            }
-
-            foreach ($synthesis->getEntries() as $entry) {
-                /** @var AutodiagEntry $entry*/
-                foreach ($entry->getValues() as $entryValue) {
-                    if ($entryValue->getAttribute()->getId() === $attribute->getId()) {
-                        $response = $builder->transform($entryValue->getValue());
-                        if (is_array($response)) {
-
-                            $responseValue = array_sum($response) / count($response);
-                            foreach ($response as $code => &$value) {
-                                if (null === $value) {
-                                    $value = " - ";
-                                } else {
-                                    $value = isset($options[$code]) ? $options[$code][$value] : $value;
-                                }
-                            }
-                            $response = implode(' - ', $response);
-                        } else {
-                            $responseValue = $response;
-                            if (isset($options[$response])) {
-                                $response = $options[$response];
-                            } elseif (null === $response) {
-                                $response = "-";
-                            }
-                        }
-
-                        $itemAttribute->setResponse(
-                            $responseValue,
-                            $response
-                        );
-                    }
-                }
-            }
-        }
+//        foreach ($container->getAttributes() as $attribute) {
+//
+//            $itemAttribute = new ItemAttribute($attribute->getLabel());
+//            $itemAttribute->setColorationInversed($attribute->isColorationInversed());
+//            $itemAttribute->setAttributeId($attribute->getId());
+//            if (isset($weights[$attribute->getId()])) {
+//                $itemAttribute->setWeight($weights[$attribute->getId()]);
+//            }
+//            $resultItem->addAttribute($itemAttribute);
+//
+//            $colorationInversed += $attribute->isColorationInversed() ? 1 : -1;
+//
+//            $builder = $this->attributeBuilder->getBuilder($attribute->getType());
+//
+//            if ($builder instanceof PresetableAttributeBuilderInterface) {
+//                $options = $builder->getPreset($synthesis->getAutodiag())->getPreset();
+//            } else {
+//                $attributeOptions = $attribute->getOptions();
+//                $options = [];
+//                foreach ($attributeOptions as $option) {
+//                    $options[$option->getValue()] = $option->getLabel();
+//                }
+//            }
+//
+//            foreach ($synthesis->getEntries() as $entry) {
+//                /** @var AutodiagEntry $entry*/
+//                foreach ($entry->getValues() as $entryValue) {
+//                    if ($entryValue->getAttribute()->getId() === $attribute->getId()) {
+//                        $response = $builder->transform($entryValue->getValue());
+//                        if (is_array($response)) {
+//
+//                            $responseValue = array_sum($response) / count($response);
+//                            foreach ($response as $code => &$value) {
+//                                if (null === $value) {
+//                                    $value = " - ";
+//                                } else {
+//                                    $value = isset($options[$code]) ? $options[$code][$value] : $value;
+//                                }
+//                            }
+//                            $response = implode(' - ', $response);
+//                        } else {
+//                            $responseValue = $response;
+//                            if (isset($options[$response])) {
+//                                $response = $options[$response];
+//                            } elseif (null === $response) {
+//                                $response = "-";
+//                            }
+//                        }
+//
+//                        $itemAttribute->setResponse(
+//                            $responseValue,
+//                            $response
+//                        );
+//                    }
+//                }
+//            }
+//        }
 
         foreach ($container->getChilds() as $child) {
             $resultItem->addChildren(

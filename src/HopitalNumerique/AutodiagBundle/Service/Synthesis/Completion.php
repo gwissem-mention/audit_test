@@ -2,7 +2,6 @@
 
 namespace HopitalNumerique\AutodiagBundle\Service\Synthesis;
 
-use HopitalNumerique\AutodiagBundle\Entity\Autodiag;
 use HopitalNumerique\AutodiagBundle\Entity\Autodiag\Attribute;
 use HopitalNumerique\AutodiagBundle\Entity\Autodiag\Container;
 use HopitalNumerique\AutodiagBundle\Entity\AutodiagEntry;
@@ -81,13 +80,7 @@ class Completion
      */
     public function getCompletionRate(Synthesis $synthesis)
     {
-        $completions = $this->getGlobalCompletion($synthesis);
-
-        $complete = count(array_filter($completions, function ($element) {
-            return $element === true;
-        }));
-
-        return floor($complete / max(1, count($completions)) * 100);
+        return $this->valueRepository->getGlobalCompletion($synthesis);
     }
 
     public function getAttributesCount(Container $container)

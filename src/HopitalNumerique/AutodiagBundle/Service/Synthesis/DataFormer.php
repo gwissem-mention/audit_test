@@ -66,7 +66,7 @@ class DataFormer
                     'synth' => $synth,
                     'name' => $synth->getName(),
                     'updated_at' => $synth->getUpdatedAt(),
-                    'completion' => $this->completion->getCompletionRate($synth),
+                    'completion' => $synth->getCompletion(),
                 ];
             } // Si la synthèse est validée
             else {
