@@ -123,6 +123,7 @@ class Autodiag
      *     cascade={"persist"},
      *     orphanRemoval=true
      * )
+     * @ORM\OrderBy({"order" = "ASC"})
      */
     private $containers;
 

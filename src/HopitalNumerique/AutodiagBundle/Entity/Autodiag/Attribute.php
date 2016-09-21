@@ -88,6 +88,14 @@ class Attribute
     private $tooltip;
 
     /**
+     * Order
+     *
+     * @var float
+     * @ORM\Column(name="position", type="float", nullable=true)
+     */
+    private $order;
+
+    /**
      * Question options
      *
      * @var Collection
@@ -281,6 +289,29 @@ class Attribute
     public function setTooltip($tooltip)
     {
         $this->tooltip = $tooltip;
+
+        return $this;
+    }
+
+    /**
+     * Get order
+     *
+     * @return integer
+     */
+    public function getOrder()
+    {
+        return $this->order;
+    }
+
+    /**
+     * Set order
+     *
+     * @param $order
+     * @return $this
+     */
+    public function setOrder($order)
+    {
+        $this->order = $order;
 
         return $this;
     }

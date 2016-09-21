@@ -167,11 +167,17 @@ class Item
     }
 
     /**
-     * @return Collection
+     * @return array
      */
     public function getContainers()
     {
-        return $this->containers;
+        $containers = (array) $this->containers->getValues();
+
+        usort($containers, function (Container $a, Container$b) {
+            return $a->getOrder() > $b->getOrder();
+        });
+
+        return $containers;
     }
 
     /**

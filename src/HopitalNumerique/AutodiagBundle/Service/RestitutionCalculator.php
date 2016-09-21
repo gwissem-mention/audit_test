@@ -133,19 +133,20 @@ class RestitutionCalculator
         ];
 
         $containers = $item->getContainers();
+
+        $references = $item->getReferences();
+
+        // Dans le cas d'une synthèse (de plusieurs entries),on n'affiche plus les références de l'AD mais le min et
+        // max de la synthèse
+        if ($synthesis->getEntries()->count() > 1) {
+            $references = [
+                (new Autodiag\Reference('min', $synthesis->getAutodiag()))->setValue('min')->setLabel('Minimum'),
+                (new Autodiag\Reference('max', $synthesis->getAutodiag()))->setValue('max')->setLabel('Maximum'),
+            ];
+        }
+
         foreach ($containers as $container) {
             /** @var Container $container */
-
-            $references = $item->getReferences();
-
-            // Dans le cas d'une synthèse (de plusieurs entries),on n'affiche plus les références de l'AD mais le min et
-            // max de la synthèse
-            if ($synthesis->getEntries()->count() > 1) {
-                $references = [
-                    (new Autodiag\Reference('min', $synthesis->getAutodiag()))->setValue('min')->setLabel('Minimum'),
-                    (new Autodiag\Reference('max', $synthesis->getAutodiag()))->setValue('max')->setLabel('Maximum'),
-                ];
-            }
 
             $resultItem = $this->computeItemContainer($container, $synthesis, $references);
 

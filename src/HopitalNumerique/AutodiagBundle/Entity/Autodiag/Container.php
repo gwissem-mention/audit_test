@@ -53,6 +53,15 @@ abstract class Container
     private $label;
 
     /**
+     * Order
+     *
+     * @var float
+     *
+     * @ORM\Column(name="position", type="float", nullable=true)
+     */
+    private $order;
+
+    /**
      * @var Container
      *
      * @ORM\ManyToOne(targetEntity="HopitalNumerique\AutodiagBundle\Entity\Autodiag\Container")
@@ -136,6 +145,29 @@ abstract class Container
     }
 
     /**
+     * Get order
+     *
+     * @return int
+     */
+    public function getOrder()
+    {
+        return $this->order;
+    }
+
+    /**
+     * Set order
+     *
+     * @param $order
+     * @return $this
+     */
+    public function setOrder($order)
+    {
+        $this->order = $order;
+
+        return $this;
+    }
+
+    /**
      * Get parent
      * @return Container
      */
@@ -189,6 +221,10 @@ abstract class Container
         foreach ($this->attributesWeighted as $weighted) {
             $attributes[] = $weighted->getAttribute();
         }
+
+        usort($attributes, function (Attribute $a, Attribute $b) {
+            return $a->getOrder() > $b->getOrder();
+        });
 
         return $attributes;
     }

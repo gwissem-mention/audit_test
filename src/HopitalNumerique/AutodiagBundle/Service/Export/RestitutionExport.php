@@ -62,12 +62,12 @@ class RestitutionExport extends AbstractExport
 
                 $containers = $item->getContainers();
 
-                if ($containers->count() > 0) {
-                    $containerCodes = $containers->map(function ($container) {
+                if (count($containers) > 0) {
+                    $containerCodes = array_map(function ($container) {
                         return $container->getCode();
-                    })->toArray();
+                    }, $containers);
                     $containerCodes = implode('::', $containerCodes);
-                    $row[] = $containers->first() instanceof Autodiag\Container\Chapter ? 'chapitres' : 'categories';
+                    $row[] = $containers[0] instanceof Autodiag\Container\Chapter ? 'chapitres' : 'categories';
                     $row[] = $containerCodes;
                 } else {
                     $row[] = '';
