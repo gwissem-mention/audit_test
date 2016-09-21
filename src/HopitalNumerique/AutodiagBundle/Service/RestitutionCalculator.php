@@ -418,7 +418,7 @@ class RestitutionCalculator
 
         $closest = null;
         foreach ($plans as $plan) {
-            if ($score < $plan->getValue()) {
+            if ($score <= $plan->getValue()) {
                 if (null === $closest || $plan->getValue() < $closest->getValue()) {
                     $closest = $plan;
                 }
