@@ -36,6 +36,8 @@ class AutodiagEntriesExport extends AbstractExport
      */
     public function exportList($syntheses)
     {
+        ini_set('max_execution_time', '200s');
+
         if (!is_array($syntheses) || count($syntheses) === 0) {
             throw new \Exception('Syntheses must be an array of Synthesis');
         }
@@ -51,7 +53,9 @@ class AutodiagEntriesExport extends AbstractExport
         $column = 'E';
         foreach ($syntheses as $synthesis) {
             if ($synthesis->getEntries()->count() === 1) {
+//                $start = microtime(true);
                 $this->writeSynthesisRows($synthesis, $sheet, $column);
+//                dump(microtime(true) - $start);
                 $column = $this->incrementColumn($column, 2);
             }
         }
@@ -99,6 +103,9 @@ class AutodiagEntriesExport extends AbstractExport
             $this->writeUserRelativeData($synthesis, $column, $sheet);
 
             $this->writeSynthesisItem($item, $sheet, $column, $row);
+            $sheet->setCellValue(sprintf('%s%s', $column, self::STARTING_ROW), 'Réponse');
+            $sheet->setCellValue(sprintf('%s%s', $this->incrementColumn($column), self::STARTING_ROW), 'Valeur');
+
         }
     }
 
@@ -111,8 +118,6 @@ class AutodiagEntriesExport extends AbstractExport
             $sheet->setCellValue(sprintf('%s%s', 'C', $row), $attribute->label);
             $sheet->setCellValue(sprintf('%s%s', 'D', $row), $attribute->weight);
 
-            $sheet->setCellValue(sprintf('%s%s', $column, self::STARTING_ROW), 'Réponse');
-            $sheet->setCellValue(sprintf('%s%s', $this->incrementColumn($column), self::STARTING_ROW), 'Valeur');
 
             $sheet->setCellValue(sprintf('%s%s', $column, $row), $attribute->responseText);
             $sheet->setCellValue(sprintf('%s%s', $this->incrementColumn($column), $row), $attribute->responseValue);
@@ -130,14 +135,14 @@ class AutodiagEntriesExport extends AbstractExport
     {
         $values = [];
         $x = 'A';
-        while ($x != 'AAAA') {
+        while ($x != 'AAA') {
             $values[] = $x++;
         }
         $values[] = $x;
 
         $found = array_search($column, $values);
         if (false !== $found) {
-            $key = array_search($column, $values) + $nb;
+            $key = $found + $nb;
             if (array_key_exists($key, $values)) {
                 return $values[$key];
             }
@@ -234,10 +239,10 @@ class AutodiagEntriesExport extends AbstractExport
         }
 
         $startColumn = 'A';
-        do {
-            $sheet->getColumnDimension($startColumn)->setAutoSize(true);
-            $startColumn = $this->incrementColumn($startColumn);
-        } while ($startColumn !== $maxColumn);
+//        do {
+//            $sheet->getColumnDimension($startColumn)->setAutoSize(true);
+//            $startColumn = $this->incrementColumn($startColumn);
+//        } while ($startColumn !== $maxColumn);
 
         $sheet->getRowDimension(self::STARTING_ROW)->setRowHeight(30);
     }

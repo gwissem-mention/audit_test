@@ -70,7 +70,7 @@ class ResultItemBuilder
         if (null === $this->responses) {
             $this->responses = $this->valueRepository->getFullValuesByEntry(
                 $synthesis->getAutodiag()->getId(),
-                $synthesis->getEntries()->first()
+                $synthesis->getEntries()->first()->getId()
             );
         }
 
