@@ -38,9 +38,9 @@ class ScoreCalculatorCommand extends ContainerAwareCommand
             $this->getContainer()->get('autodiag.score_calculator')->computeSynthesisScore($synthesis, false);
 
             if ($i++ % 100 === 0) {
-//                $em->flush();
+                $em->flush();
             }
         }
-//        $em->flush();
+        $em->flush();
     }
 }
