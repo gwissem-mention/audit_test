@@ -113,6 +113,6 @@ class FactureGrid extends Grid implements GridInterface
      */
     public function setMassActions()
     {
-
+        $this->addMassAction( new Action\ActionMass('Exporter les paiements', 'HopitalNumeriquePaiementBundle:Facture:exportPaymentsMass') );
     }
 }

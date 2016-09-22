@@ -38,6 +38,53 @@ class FactureManager extends BaseManager
     }
 
     /**
+     * @param array $paymentIds
+     * @param $charset
+     *
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
+    public function getCsvExport(array $paymentIds, $charset)
+    {
+        $payments = $this->findBy(['id' => $paymentIds]);
+
+        $cols = [
+            'Numéro de facture',
+            'Nom',
+            'Prénom',
+            'E-mail',
+            'Région',
+            'Etablissement',
+            'Total',
+            'Payée',
+            'Annulée',
+        ];
+        $datas = [];
+
+        /** @var Facture $payment */
+        foreach ($payments as $payment) {
+            $datas[] = [
+                $payment->getId(),
+                $payment->getUser()->getNom(),
+                $payment->getUser()->getPrenom(),
+                $payment->getUser()->getEmail(),
+                $payment->getUser()->getRegion()->getLibelle(),
+                $payment->getUser()->getEtablissementRattachementSanteString(),
+                $payment->getTotal(),
+                $payment->isPayee() ? 'Payée' : 'Non payée',
+                $payment->isAnnulee() ? 'Annulée' : '',
+            ];
+        }
+
+        return $this->exportCsv
+        (
+            array_values($cols),
+            $datas,
+            'export-session-evaluations.csv',
+            $charset
+        );
+    }
+
+    /**
      * Créer l'objet facture pour l'user connecté avec la liste d'interventions/formations sélectionnées
      *
      * @param User    $user          L'utilisateur connecté
