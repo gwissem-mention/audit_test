@@ -40,6 +40,7 @@ class SurveyExport extends AbstractExport
     {
         $this->addRow($sheet, [
             'code_chapitre',
+            'ordre_chapitre',
             'libelle_chapitre',
             'code_chapitre_enfant',
             'libelle_chapitre_enfant',
@@ -54,6 +55,7 @@ class SurveyExport extends AbstractExport
     {
         $this->addRow($sheet, [
             'code_question',
+            'ordre_question',
             'code_chapitre',
             'texte_avant',
             'libelle_question',
@@ -72,11 +74,13 @@ class SurveyExport extends AbstractExport
 
         if (null === $chapter->getParent()) {
             $chapterData[] = $chapter->getCode();
+            $chapterData[] = $chapter->getOrder();
             $chapterData[] = $chapter->getLabel();
             $chapterData[] = null;
             $chapterData[] = null;
         } else {
             $chapterData[] = $chapter->getParent()->getCode();
+            $chapterData[] = $chapter->getOrder();
             $chapterData[] = $chapter->getParent()->getLabel();
             $chapterData[] = $chapter->getCode();
             $chapterData[] = $chapter->getLabel();
@@ -95,6 +99,7 @@ class SurveyExport extends AbstractExport
 
         $data = [
             'code_question' => $attribute->getCode(),
+            'ordre_question' => $attribute->getOrder(),
             'text_avant' => $attribute->getDescription(),
             'libelle_question' => $attribute->getLabel(),
             'format_reponse' => $attribute->getType(),
@@ -123,6 +128,7 @@ class SurveyExport extends AbstractExport
 
         $this->addRow($sheet, [
             $data['code_question'],
+            $data['ordre_question'],
             array_key_exists('code_chapitre', $data) ? $data['code_chapitre'] : '',
             $data['text_avant'],
             $data['libelle_question'],
