@@ -18,6 +18,7 @@ use HopitalNumerique\AutodiagBundle\Repository\ScoreRepository;
 use HopitalNumerique\AutodiagBundle\Service\Algorithm\ReferenceAlgorithm;
 use \HopitalNumerique\AutodiagBundle\Service\Algorithm\Score as Algorithm;
 use HopitalNumerique\AutodiagBundle\Service\Attribute\AttributeBuilderProvider;
+use HopitalNumerique\AutodiagBundle\Service\Attribute\PresetableAttributeBuilderInterface;
 use HopitalNumerique\AutodiagBundle\Service\Synthesis\Completion;
 
 /**
@@ -246,21 +247,23 @@ class RestitutionCalculator
         $responseText = $attribute['option_label'];
 
         if (null === $responseText && null !== $attribute['value_value']) {
-            $preset = $builder->getPreset($synthesis->getAutodiag());
+            if ($builder instanceof PresetableAttributeBuilderInterface) {
+                $preset = $builder->getPreset($synthesis->getAutodiag());
 
-            if (null !== $preset) {
-                $preset = $preset->getPreset();
-                $response = $builder->transform($attribute['value_value']);
+                if (null !== $preset) {
+                    $preset = $preset->getPreset();
+                    $response = $builder->transform($attribute['value_value']);
 
-                $responseText = [];
-                foreach ($response as $key => $value) {
-                    if (array_key_exists($key, $preset) && array_key_exists($value, $preset[$key])) {
-                        $responseText[] = $preset[$key][$value];
-                    } else {
-                        $responseText[] = null;
+                    $responseText = [];
+                    foreach ($response as $key => $value) {
+                        if (array_key_exists($key, $preset) && array_key_exists($value, $preset[$key])) {
+                            $responseText[] = $preset[$key][$value];
+                        } else {
+                            $responseText[] = null;
+                        }
                     }
+                    $responseText = implode(' - ', $responseText);
                 }
-                $responseText = implode(' - ', $responseText);
             }
         }
 

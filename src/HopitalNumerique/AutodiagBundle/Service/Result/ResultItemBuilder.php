@@ -2,11 +2,10 @@
 namespace HopitalNumerique\AutodiagBundle\Service\Result;
 
 use HopitalNumerique\AutodiagBundle\Entity\Autodiag\Container;
-use HopitalNumerique\AutodiagBundle\Entity\AutodiagEntry;
 use HopitalNumerique\AutodiagBundle\Entity\Synthesis;
 use HopitalNumerique\AutodiagBundle\Model\Result\Item;
 use HopitalNumerique\AutodiagBundle\Model\Result\ItemAttribute;
-use HopitalNumerique\AutodiagBundle\Repository\Autodiag\Attribute\WeightRepository;
+use HopitalNumerique\AutodiagBundle\Repository\AutodiagEntry\ValueRepository;
 use HopitalNumerique\AutodiagBundle\Service\Attribute\AttributeBuilderProvider;
 use HopitalNumerique\AutodiagBundle\Service\Attribute\PresetableAttributeBuilderInterface;
 use HopitalNumerique\AutodiagBundle\Service\Synthesis\Completion;
@@ -24,21 +23,22 @@ class ResultItemBuilder
     protected $attributeBuilder;
 
     /**
-     * @var WeightRepository
+     * @var ValueRepository
      */
-    protected $weightRepository;
+    protected $valueRepository;
 
-    public function __construct(Completion $completion, AttributeBuilderProvider $attributeBuilder, WeightRepository $weightRepository)
+    protected $responses = null;
+
+    public function __construct(Completion $completion, AttributeBuilderProvider $attributeBuilder, ValueRepository $valueRepository)
     {
         $this->completion = $completion;
         $this->attributeBuilder = $attributeBuilder;
-        $this->weightRepository = $weightRepository;
+        $this->valueRepository = $valueRepository;
     }
 
     public function build(Container $container, Synthesis $synthesis)
     {
         $resultItem = new Item();
-//        $weights = $this->weightRepository->getWeightByContainerIndexedByAttributeId($container);
 
         $resultItem->setLabel($container->getLabel());
 
@@ -46,63 +46,15 @@ class ResultItemBuilder
         $resultItem->setNumberOfAnswers($this->completion->getAnswersCount($synthesis, $container));
 
         $colorationInversed = 0;
-//        foreach ($container->getAttributes() as $attribute) {
-//
-//            $itemAttribute = new ItemAttribute($attribute->getLabel());
-//            $itemAttribute->setColorationInversed($attribute->isColorationInversed());
-//            $itemAttribute->setAttributeId($attribute->getId());
-//            if (isset($weights[$attribute->getId()])) {
-//                $itemAttribute->setWeight($weights[$attribute->getId()]);
-//            }
-//            $resultItem->addAttribute($itemAttribute);
-//
-//            $colorationInversed += $attribute->isColorationInversed() ? 1 : -1;
-//
-//            $builder = $this->attributeBuilder->getBuilder($attribute->getType());
-//
-//            if ($builder instanceof PresetableAttributeBuilderInterface) {
-//                $options = $builder->getPreset($synthesis->getAutodiag())->getPreset();
-//            } else {
-//                $attributeOptions = $attribute->getOptions();
-//                $options = [];
-//                foreach ($attributeOptions as $option) {
-//                    $options[$option->getValue()] = $option->getLabel();
-//                }
-//            }
-//
-//            foreach ($synthesis->getEntries() as $entry) {
-//                /** @var AutodiagEntry $entry*/
-//                foreach ($entry->getValues() as $entryValue) {
-//                    if ($entryValue->getAttribute()->getId() === $attribute->getId()) {
-//                        $response = $builder->transform($entryValue->getValue());
-//                        if (is_array($response)) {
-//
-//                            $responseValue = array_sum($response) / count($response);
-//                            foreach ($response as $code => &$value) {
-//                                if (null === $value) {
-//                                    $value = " - ";
-//                                } else {
-//                                    $value = isset($options[$code]) ? $options[$code][$value] : $value;
-//                                }
-//                            }
-//                            $response = implode(' - ', $response);
-//                        } else {
-//                            $responseValue = $response;
-//                            if (isset($options[$response])) {
-//                                $response = $options[$response];
-//                            } elseif (null === $response) {
-//                                $response = "-";
-//                            }
-//                        }
-//
-//                        $itemAttribute->setResponse(
-//                            $responseValue,
-//                            $response
-//                        );
-//                    }
-//                }
-//            }
-//        }
+        foreach ($this->getResponses($synthesis, $container) as $attribute) {
+
+            $colorationInversed += $attribute['colorationInversed'] ? 1 : -1;
+
+            if ($synthesis->getEntries()->count() === 1) {
+                $this->computeResultItemAttribute($resultItem, $synthesis, $attribute);
+            }
+        }
+        $resultItem->setColorationInversed($colorationInversed > 0);
 
         foreach ($container->getChilds() as $child) {
             $resultItem->addChildren(
@@ -111,5 +63,58 @@ class ResultItemBuilder
         }
 
         return $resultItem;
+    }
+
+    protected function getResponses(Synthesis $synthesis, Container $container)
+    {
+        if (null === $this->responses) {
+            $this->responses = $this->valueRepository->getFullValuesByEntry(
+                $synthesis->getAutodiag()->getId(),
+                $synthesis->getEntries()->first()
+            );
+        }
+
+        foreach ($this->responses as $response) {
+            if (in_array($container->getId(), $response['container_id'])) {
+                yield $response;
+            }
+        }
+    }
+
+    protected function computeResultItemAttribute(Item $item, Synthesis $synthesis, array $attribute)
+    {
+        $builder = $this->attributeBuilder->getBuilder($attribute['type']);
+
+        $itemAttribute = new ItemAttribute($attribute['attribute_label']);
+        $itemAttribute->setColorationInversed($attribute['colorationInversed']);
+        $item->addAttribute($itemAttribute);
+
+        $responseText = $attribute['option_label'];
+
+        if (null === $responseText && null !== $attribute['value_value']) {
+            if ($builder instanceof PresetableAttributeBuilderInterface) {
+                $preset = $builder->getPreset($synthesis->getAutodiag());
+
+                if (null !== $preset) {
+                    $preset = $preset->getPreset();
+                    $response = $builder->transform($attribute['value_value']);
+
+                    $responseText = [];
+                    foreach ($response as $key => $value) {
+                        if (array_key_exists($key, $preset) && array_key_exists($value, $preset[$key])) {
+                            $responseText[] = $preset[$key][$value];
+                        } else {
+                            $responseText[] = null;
+                        }
+                    }
+                    $responseText = implode(' - ', $responseText);
+                }
+            }
+        }
+
+        $itemAttribute->setResponse(
+            $builder->computeScore($attribute['value_value']),
+            $responseText ?: '-'
+        );
     }
 }
