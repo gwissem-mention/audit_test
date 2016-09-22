@@ -56,9 +56,9 @@ class AutodiagEntryGrid extends Grid implements GridInterface
             new TextColumn('etablissement', 'Établissement')
         );
 
-        $this->addColonne(
-            new TextColumn('remplissage', 'Remplissage')
-        );
+//        $this->addColonne(
+//            new TextColumn('remplissage', 'Remplissage')
+//        );
 
         $this->addColonne(
             new DateColumn('created_at', 'Création')

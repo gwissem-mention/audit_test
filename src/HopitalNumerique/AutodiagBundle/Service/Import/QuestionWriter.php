@@ -107,6 +107,8 @@ class QuestionWriter implements WriterInterface, ProgressAwareInterface
                 $attribute->setColored(false);
             }
 
+            $attribute->setOrder($item['ordre_question']);
+
             $this->handleOptions($attribute, $item[self::COLUMN_OPTIONS]);
             $chapterValid = $this->handleChapter($attribute, $item[self::COLUMN_CHAPTER], $item[self::COLUMN_CHAPTER_WEIGHT]);
             $this->handleCategories($attribute, $item[self::COLUMN_CATEGORIES]);
@@ -351,6 +353,7 @@ class QuestionWriter implements WriterInterface, ProgressAwareInterface
      * @param Attribute $attribute
      * @param $code
      * @param $weight
+     * @return bool
      */
     protected function handleChapter(Attribute $attribute, $code, $weight)
     {
@@ -380,7 +383,8 @@ class QuestionWriter implements WriterInterface, ProgressAwareInterface
      * Handle attribute categories and their weight
      *
      * @param Attribute $attribute
-     * @param $categoriesData
+     * @param $data
+     * @return bool
      */
     protected function handleCategories(Attribute $attribute, $data)
     {
@@ -499,9 +503,10 @@ class QuestionWriter implements WriterInterface, ProgressAwareInterface
     protected function validateRow($item)
     {
         return
-            count($item) === 10
+            count($item) === 11
             && count(array_intersect_key($item, [
                 "code_question" => true,
+                "ordre_question" => true,
                 "code_chapitre" => true,
                 "texte_avant" => true,
                 "libelle_question" => true,
@@ -511,7 +516,7 @@ class QuestionWriter implements WriterInterface, ProgressAwareInterface
                 "infobulle_question" => true,
                 "ponderation_categorie" => true,
                 "ponderation_chapitre" => true,
-            ])) === 10;
+            ])) === 11;
     }
     protected function validate($item)
     {

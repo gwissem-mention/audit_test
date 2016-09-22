@@ -53,6 +53,15 @@ abstract class Container
     private $label;
 
     /**
+     * Order
+     *
+     * @var float
+     *
+     * @ORM\Column(name="position", type="float", nullable=true)
+     */
+    private $order;
+
+    /**
      * @var Container
      *
      * @ORM\ManyToOne(targetEntity="HopitalNumerique\AutodiagBundle\Entity\Autodiag\Container")
@@ -136,6 +145,29 @@ abstract class Container
     }
 
     /**
+     * Get order
+     *
+     * @return int
+     */
+    public function getOrder()
+    {
+        return $this->order;
+    }
+
+    /**
+     * Set order
+     *
+     * @param $order
+     * @return $this
+     */
+    public function setOrder($order)
+    {
+        $this->order = $order;
+
+        return $this;
+    }
+
+    /**
      * Get parent
      * @return Container
      */
@@ -190,16 +222,11 @@ abstract class Container
             $attributes[] = $weighted->getAttribute();
         }
 
-        return $attributes;
-    }
+        usort($attributes, function (Attribute $a, Attribute $b) {
+            return $a->getOrder() > $b->getOrder();
+        });
 
-    public function getNestedContainerIds()
-    {
-        $ids = [$this->getId()];
-        foreach ($this->getChilds() as $child) {
-            $ids = array_merge($ids, $child->getNestedContainerIds());
-        }
-        return $ids;
+        return $attributes;
     }
 
     public function getNestedAttributes()
@@ -214,6 +241,15 @@ abstract class Container
         }
 
         return $attributes;
+    }
+
+    public function getNestedContainerIds()
+    {
+        $ids = [$this->getId()];
+        foreach ($this->getChilds() as $child) {
+            $ids = array_merge($ids, $child->getNestedContainerIds());
+        }
+        return $ids;
     }
 
     public function getChilds()

@@ -30,7 +30,6 @@ class ScoreCalculatorCommand extends ContainerAwareCommand
         }
 
         $em = $this->getContainer()->get('doctrine.orm.entity_manager');
-//        $em->beginTransaction();
         $i = 0;
         foreach ($syntheses as $synthesis) {
             $output->writeln(
@@ -39,10 +38,9 @@ class ScoreCalculatorCommand extends ContainerAwareCommand
             $this->getContainer()->get('autodiag.score_calculator')->computeSynthesisScore($synthesis, false);
 
             if ($i++ % 100 === 0) {
-                $em->flush();
+//                $em->flush();
             }
         }
-        $em->flush();
-//        $em->commit();
+//        $em->flush();
     }
 }

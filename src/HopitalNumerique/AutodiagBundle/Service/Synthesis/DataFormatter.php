@@ -9,7 +9,7 @@ use HopitalNumerique\UserBundle\Entity\User;
 /**
  * Formatte les données des synthèses pour l'affichage dans la partie Mon Compte
  */
-class DataFormer
+class DataFormatter
 {
     /**
      * @var EntityManager
@@ -19,7 +19,7 @@ class DataFormer
     protected $completion;
 
     /**
-     * DataFormer constructor.
+     * DataFormatter constructor.
      * @param EntityManager $manager
      * @param Completion $completion
      */

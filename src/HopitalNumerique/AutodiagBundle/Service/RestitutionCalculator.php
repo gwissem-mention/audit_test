@@ -12,11 +12,9 @@ use HopitalNumerique\AutodiagBundle\Model\Result\ItemAttribute;
 use HopitalNumerique\AutodiagBundle\Model\Result\Score;
 use HopitalNumerique\AutodiagBundle\Repository\Autodiag\AttributeRepository;
 use HopitalNumerique\AutodiagBundle\Repository\AutodiagEntry\ValueRepository;
-use HopitalNumerique\AutodiagBundle\Repository\AutodiagEntryRepository;
 use HopitalNumerique\AutodiagBundle\Repository\RestitutionRepository;
 use HopitalNumerique\AutodiagBundle\Repository\ScoreRepository;
 use HopitalNumerique\AutodiagBundle\Service\Algorithm\ReferenceAlgorithm;
-use \HopitalNumerique\AutodiagBundle\Service\Algorithm\Score as Algorithm;
 use HopitalNumerique\AutodiagBundle\Service\Attribute\AttributeBuilderProvider;
 use HopitalNumerique\AutodiagBundle\Service\Attribute\PresetableAttributeBuilderInterface;
 use HopitalNumerique\AutodiagBundle\Service\Synthesis\Completion;
@@ -69,10 +67,7 @@ class RestitutionCalculator
 
     /**
      * RestitutionCalculator constructor.
-     * @param Algorithm $algorithm
      * @param AttributeBuilderProvider $attributeBuilder
-     * @param AutodiagEntryRepository $entryRepository
-     * @param ValueRepository $valueRepository
      * @param RestitutionRepository $restitutionRepository
      * @param Completion $completion
      * @param ScoreRepository $scoreRepository
@@ -152,7 +147,6 @@ class RestitutionCalculator
         $containers = $item->getContainers();
         foreach ($containers as $container) {
             /** @var Container $container */
-
             $resultItem = $this->computeItemContainer($container, $synthesis, $references);
 
             foreach ($references as $reference) {
@@ -184,7 +178,6 @@ class RestitutionCalculator
         if (!array_key_exists($cacheKey, $this->items)) {
 
             $score = $this->getContainerSynthesisScore($synthesis, $container->getId());
-
             $resultItem = new ResultItem();
             $resultItem->setLabel($container->getLabel());
             $resultItem->setScore(
@@ -201,13 +194,13 @@ class RestitutionCalculator
 
             // Traitement des questions / réponses
             $colorationInversed = 0;
-
             foreach ($this->getResponses($synthesis, $container) as $attribute) {
 
                 $colorationInversed += $attribute['colorationInversed'] ? 1 : -1;
 
                 if ($synthesis->getEntries()->count() === 1) {
                     $this->computeResultItemAttribute($resultItem, $synthesis, $attribute);
+
                 }
             }
             $resultItem->setColorationInversed($colorationInversed > 0);
@@ -230,7 +223,6 @@ class RestitutionCalculator
 
             $this->items[$cacheKey] = $resultItem;
         }
-
 
         return $this->items[$cacheKey];
     }
@@ -289,7 +281,7 @@ class RestitutionCalculator
     {
         $cacheKey = implode('-', [
             $reference->getValue(),
-            $container->getCode(),
+            $container->getId(),
         ]);
 
         if (!array_key_exists($cacheKey, $this->references)) {
@@ -332,29 +324,6 @@ class RestitutionCalculator
         return $this->allScores[$container->getId()];
     }
 
-    /**
-     * Get all entries for Autodiag
-     *
-     * @param Autodiag $autodiag
-     * @param Container $container
-     * @return mixed
-     */
-    protected function getAutodiagEntriesByContainer(Autodiag $autodiag, Container $container)
-    {
-        $cacheKey = implode('-', [
-            $autodiag->getId(),
-            $container->getId(),
-        ]);
-
-        if (!array_key_exists($cacheKey, $this->entriesByAutodiag)) {
-            $this->entriesByAutodiag[$cacheKey] = $this->valueRepository->getAllOriginalValuesByAutodiagAndContainer(
-                $container
-            );
-        }
-
-        return $this->entriesByAutodiag[$cacheKey];
-    }
-
     protected function getResponses(Synthesis $synthesis, Container $container)
     {
         if (null === $this->responses) {
@@ -384,7 +353,7 @@ class RestitutionCalculator
 
         $closest = null;
         foreach ($plans as $plan) {
-            if ($score < $plan->getValue()) {
+            if ($score <= $plan->getValue()) {
                 if (null === $closest || $plan->getValue() < $closest->getValue()) {
                     $closest = $plan;
                 }

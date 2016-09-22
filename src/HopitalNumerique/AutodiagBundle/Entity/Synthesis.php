@@ -94,7 +94,7 @@ class Synthesis
      *
      * @ORM\Column(type="float")
      */
-    private $completion;
+    private $completion = 0;
 
     private function __construct(Autodiag $autodiag, User $user = null)
     {

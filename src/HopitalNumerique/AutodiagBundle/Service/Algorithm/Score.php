@@ -113,12 +113,12 @@ class Score
 
     protected function getCacheKey(Autodiag $autodiag, Container $container, array $entries)
     {
-        return sha1(
-            'SCORE__'
+        return 'SCORE__'
             . $autodiag->getId()
             . $container->getId()
-            . implode('-', array_keys($entries))
-            . rand(0, 10000)
-        );
+            . implode('-', array_map(function (AutodiagEntry $entry) {
+                return $entry->getId();
+            }, $entries))
+        ;
     }
 }

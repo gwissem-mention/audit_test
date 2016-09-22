@@ -23,7 +23,7 @@ class Completion
 
     protected $completion = [];
     protected $answersCount = [];
-    protected $autodiagAttributesCount = null;
+    protected $autodiagAttributesCount = [];
 
     /**
      * Completion constructor.
@@ -43,25 +43,25 @@ class Completion
 
     public function getGlobalCompletion(Synthesis $synthesis)
     {
-
         if (!array_key_exists($synthesis->getId(), $this->completion)) {
             $completion = [];
             $autodiag = $synthesis->getAutodiag();
-
-            $values = $this->valueRepository->getSynthesisValues($synthesis);
-
             foreach ($autodiag->getAttributes() as $attribute) {
                 /** @var Attribute $attribute */
 
                 $builder = $this->attributeBuilder->getBuilder($attribute->getType());
                 $completion[$attribute->getId()] = false;
-                foreach ($values as $value) {
-                    /** @var AutodiagEntry\Value $value */
+                foreach ($synthesis->getEntries() as $entry) {
+                    /** @var AutodiagEntry $entry */
 
-                    $isEmpty = $builder->isEmpty($value['value']);
-                    if ($value['attribute_id'] === $attribute->getId() && !$isEmpty) {
-                        $completion[$attribute->getId()] = true;
-                        break;
+                    foreach ($entry->getValues() as $value) {
+                        /** @var AutodiagEntry\Value $value */
+
+                        $isEmpty = $builder->isEmpty($value->getValue());
+                        if ($value->getAttribute()->getId() === $attribute->getId() && !$isEmpty) {
+                            $completion[$attribute->getId()] = true;
+                            break 2;
+                        }
                     }
                 }
             }
@@ -85,13 +85,16 @@ class Completion
 
     public function getAttributesCount(Container $container)
     {
-        if (null === $this->autodiagAttributesCount) {
-            $this->autodiagAttributesCount = $this->attributeRepository->countForAutodiag($container->getAutodiag());
+        $autodiagId = $container->getAutodiag()->getId();
+        if (!array_key_exists($autodiagId, $this->autodiagAttributesCount)) {
+            $this->autodiagAttributesCount[$autodiagId] = $this->attributeRepository->countForAutodiag(
+                $container->getAutodiag()
+            );
         }
 
         return array_sum(
             array_intersect_key(
-                $this->autodiagAttributesCount,
+                $this->autodiagAttributesCount[$autodiagId],
                 array_flip($container->getNestedContainerIds())
             )
         );

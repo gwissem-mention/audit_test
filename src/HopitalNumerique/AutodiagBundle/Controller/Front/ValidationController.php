@@ -64,8 +64,8 @@ class ValidationController extends Controller
         $synthesis->setShares(new ArrayCollection());
         $this->getDoctrine()->getManager()->flush();
 
-        return $this->redirectToRoute('hopitalnumerique_autodiag_validation_index', [
-            'synthesis' => $synthesis->getId(),
+        return $this->redirectToRoute('hopitalnumerique_autodiag_entry_edit', [
+            'entry' => $synthesis->getEntries()->first()->getId(),
         ]);
     }
 }

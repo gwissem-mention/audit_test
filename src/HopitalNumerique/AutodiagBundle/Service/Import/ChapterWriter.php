@@ -95,6 +95,8 @@ class ChapterWriter implements WriterInterface, ProgressAwareInterface
                 $chapter->setLabel($item['libelle_chapitre']);
             }
 
+            $chapter->setOrder($item['ordre_chapitre']);
+
             $this->handleActionPlan($chapter, $item);
 
             $violations = $this->validator->validate($chapter);
@@ -109,7 +111,6 @@ class ChapterWriter implements WriterInterface, ProgressAwareInterface
                 return;
             }
 
-            $this->progress->addMessage('', $chapter, 'chapter_updated');
             $this->progress->addSuccess($item);
         } else {
             $this->progress->addError('ad.import.chapter.incorrect_row_format');
@@ -180,7 +181,7 @@ class ChapterWriter implements WriterInterface, ProgressAwareInterface
 
     protected function handleActionPlan(Chapter $chapter, $item)
     {
-        $actions = preg_split("/\\r\\n|\\r|\\n/", $item['plan_action']);
+        $actions = null === $item['plan_action'] ? [] : preg_split("/\\r\\n|\\r|\\n/", $item['plan_action']);
         array_walk($actions, function (&$element) {
             $element = explode("::", $element);
         });
@@ -234,7 +235,6 @@ class ChapterWriter implements WriterInterface, ProgressAwareInterface
                 $this->manager->remove($actionPlan);
             }
         }
-
     }
 
     /**
@@ -251,7 +251,7 @@ class ChapterWriter implements WriterInterface, ProgressAwareInterface
     protected function validate($item)
     {
         return
-            count($item) === 8
+            count($item) === 9
             && count(array_intersect_key($item, [
                 'code_chapitre' => true,
                 'code_chapitre_enfant' => true,
@@ -261,6 +261,7 @@ class ChapterWriter implements WriterInterface, ProgressAwareInterface
                 'texte_avant' => true,
                 'texte_apres' => true,
                 'plan_action' => true,
-            ])) === 8;
+                'ordre_chapitre' => true,
+            ])) === 9;
     }
 }

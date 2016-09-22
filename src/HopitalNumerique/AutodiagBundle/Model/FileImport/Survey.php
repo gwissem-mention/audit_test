@@ -33,9 +33,9 @@ class Survey extends AutodiagFileImport
             $context->buildViolation('ad.autodiag.import.survey.sheet_not_found.chapters')
                 ->addViolation();
         } else {
-            $headers = $sheet->rangeToArray('A1:H1');
+            $headers = $sheet->rangeToArray('A1:I1');
             $headers = $headers[0];
-            if (count($headers) !== 8
+            if (count($headers) !== 9
                 || count(array_intersect_key($headers, [
                     'code_chapitre',
                     'code_chapitre_enfant',
@@ -45,7 +45,8 @@ class Survey extends AutodiagFileImport
                     'texte_avant',
                     'texte_apres',
                     'plan_action',
-                ])) !== 8
+                    'ordre_chapitre',
+                ])) !== 9
             ) {
                 $context->buildViolation('ad.autodiag.import.survey.incorrect_columns.chapters')
                     ->addViolation();
@@ -57,21 +58,22 @@ class Survey extends AutodiagFileImport
             $context->buildViolation('ad.autodiag.import.survey.sheet_not_found.questions')
                 ->addViolation();
         } else {
-            $headers = $sheet->rangeToArray('A1:J1');
+            $headers = $sheet->rangeToArray('A1:K1');
             $headers = $headers[0];
-            if (count($headers) !== 10
+            if (count($headers) !== 11
                 || count(array_intersect($headers, [
-                    "code_question",
-                    "code_chapitre",
-                    "texte_avant",
-                    "libelle_question",
-                    "format_reponse",
-                    "items_reponse",
-                    "colorer_reponse",
-                    "infobulle_question",
-                    "ponderation_categorie",
-                    "ponderation_chapitre",
-                ])) !== 10
+                    'code_question',
+                    'code_chapitre',
+                    'texte_avant',
+                    'libelle_question',
+                    'format_reponse',
+                    'items_reponse',
+                    'colorer_reponse',
+                    'infobulle_question',
+                    'ponderation_categorie',
+                    'ponderation_chapitre',
+                    'ordre_question',
+                ])) !== 11
             ) {
                 $context->buildViolation('ad.autodiag.import.survey.incorrect_columns.questions')
                     ->addViolation();

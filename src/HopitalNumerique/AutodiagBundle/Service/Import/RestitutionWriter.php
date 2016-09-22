@@ -186,7 +186,7 @@ class RestitutionWriter implements WriterInterface, ProgressAwareInterface
             }
         }
 
-        if ($restitutionItem->getContainers()->count() > 0) {
+        if (count($restitutionItem->getContainers()) > 0) {
             $this->manager->persist($restitutionItem);
             return $restitutionItem;
         }

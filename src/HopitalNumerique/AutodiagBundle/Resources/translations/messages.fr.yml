@@ -87,7 +87,7 @@ ad:
         lines:
             count: "{0}Aucune ligne n'a été importée|{1}%count% ligne à été importée|]1,Inf[%count% lignes ont été importées"
         chapter:
-            updated: "{0}Aucunchapitre n'a été mis à jour|{1}%count% chapitre à été mis à jour|]1,Inf[%count% chapitres ont été mis à jour"
+            updated: "{0}Aucun chapitre n'a été mis à jour|{1}%count% chapitre a été mis à jour|]1,Inf[%count% chapitres ont été mis à jour"
             missing_parent_code: Le code chapitre est manquant.
             incorrect_row_format: Format de ligne incorrect.
             has_violations: Le fichier contiens des erreurs, veuillez les corriger avant de le soumettre à nouveau.

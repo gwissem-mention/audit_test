@@ -80,7 +80,7 @@ class ScoreCalculator
         );
 
         if ($flush) {
-            $this->entityManager->flush();
+//            $this->entityManager->flush();
         }
     }
 
@@ -116,7 +116,7 @@ class ScoreCalculator
             );
         }
 
-        $this->entityManager->flush();
+//        $this->entityManager->flush();
     }
 
     protected function computeScoreRecursive(Synthesis $synthesis, Container $container, $values)

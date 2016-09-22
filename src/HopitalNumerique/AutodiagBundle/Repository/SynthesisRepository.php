@@ -86,7 +86,6 @@ class SynthesisRepository extends EntityRepository
         return $qb->getQuery()->getResult();
     }
 
-//'GROUP_CONCAT(DISTINCT conceptParent.libelle SEPARATOR \',\') AS parentLibelles',
     public function getDatasForGrid(Autodiag $autodiag)
     {
         $qb = $this->createQueryBuilder('synthesis');

@@ -6,7 +6,6 @@ use Doctrine\ORM\AbstractQuery;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\Query\Expr\Join;
 use HopitalNumerique\AutodiagBundle\Entity\Autodiag\Attribute\Weight;
-use HopitalNumerique\AutodiagBundle\Entity\Autodiag\Container;
 use HopitalNumerique\AutodiagBundle\Entity\AutodiagEntry;
 use HopitalNumerique\AutodiagBundle\Entity\Synthesis;
 
@@ -175,13 +174,6 @@ class ValueRepository extends EntityRepository
                 'synthesis_id' => $synthesis->getId(),
             ])
         ;
-
-        $p = $qb->getQuery()->getOneOrNullResult(AbstractQuery::HYDRATE_SINGLE_SCALAR);
-        if ($p > 100) {
-            dump($synthesis->getId());
-            dump($synthesis->getAutodiag()->getId());
-            die;
-        }
 
         return floor($qb->getQuery()->getOneOrNullResult(AbstractQuery::HYDRATE_SINGLE_SCALAR));
     }

@@ -8,7 +8,7 @@ use HopitalNumerique\AutodiagBundle\Service\Synthesis\SynthesisRemover;
 use HopitalNumerique\DomaineBundle\Entity\Domaine;
 use HopitalNumerique\UserBundle\Entity\User;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use HopitalNumerique\AutodiagBundle\Service\Synthesis\DataFormer;
+use HopitalNumerique\AutodiagBundle\Service\Synthesis\DataFormatter;
 use Symfony\Component\Config\Definition\Exception\Exception;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\HttpException;
@@ -37,8 +37,8 @@ class AccountController extends Controller
             }
         }
 
-        $dataFormer = $this->get('autodiag.synthesis.dataformer');
-        $datasForSyntheses = $dataFormer->getSynthesesByAutodiag($currentUser, $domain);
+        $dataFormatter = $this->get('autodiag.synthesis.dataformatter');
+        $datasForSyntheses = $dataFormatter->getSynthesesByAutodiag($currentUser, $domain);
 
         if ($request->isXmlHttpRequest()) {
             return $this->render('HopitalNumeriqueAutodiagBundle:Account/partials:autodiag_list.html.twig', array(
