@@ -94,29 +94,7 @@ class DefaultController extends Controller
             }
         }
 
-        //Bloc Paiements
-        /*$factures = $this->get('hopitalnumerique_paiement.manager.facture')->findAll();
-        $firstJanuary = new \DateTime( '01-01-' . date('Y') );
-        foreach($factures as $facture){
-            if( $facture->isPayee() && $facture->getDatePaiement() >= $firstJanuary )
-                $blocPaiements['janvier'] += $facture->getTotal();
-
-            if( !$facture->isPayee() )
-                $blocPaiements['apayer'] += $facture->getTotal();
-        }
-
-        //get interventions + formations => montant en attente de paiement
-        $interventions = $this->get('hopitalnumerique_intervention.manager.intervention_demande')->getForFactures();
-        $formations    = $this->get('hopitalnumerique_module.manager.inscription')->getForFactures();
-        $datas         = $this->get('hopitalnumerique_paiement.manager.remboursement')->calculPrice( $interventions, $formations );
-
-        foreach($datas as $data)
-        {
-            $blocPaiements['attente'] += $data->total['prix'];
-        }*/
-
         $blocPaiements = $this->get('hn.admin.payment_grid_block')->getBlockDatas();
-
 
         //Contributions Forum Experts
         $date = new \DateTime();
