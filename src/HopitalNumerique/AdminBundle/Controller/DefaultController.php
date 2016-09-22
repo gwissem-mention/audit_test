@@ -95,7 +95,7 @@ class DefaultController extends Controller
         }
 
         //Bloc Paiements
-        $factures = $this->get('hopitalnumerique_paiement.manager.facture')->findAll();
+        /*$factures = $this->get('hopitalnumerique_paiement.manager.facture')->findAll();
         $firstJanuary = new \DateTime( '01-01-' . date('Y') );
         foreach($factures as $facture){
             if( $facture->isPayee() && $facture->getDatePaiement() >= $firstJanuary )
@@ -113,7 +113,10 @@ class DefaultController extends Controller
         foreach($datas as $data)
         {
             $blocPaiements['attente'] += $data->total['prix'];
-        }
+        }*/
+
+        $blocPaiements = $this->get('hn.admin.payment_grid_block')->getBlockDatas();
+
 
         //Contributions Forum Experts
         $date = new \DateTime();
@@ -134,7 +137,7 @@ class DefaultController extends Controller
         }
 
         return $this->render('HopitalNumeriqueAdminBundle:Default:index.html.twig', array(
-            'anneeEnCours' => $anneeEnCours,
+            'anneeEnCours'      => $anneeEnCours,
             'userConf'          => $userConf,
             'blocUser'          => $blocUser,
             'blocObjets'        => $blocObjets,

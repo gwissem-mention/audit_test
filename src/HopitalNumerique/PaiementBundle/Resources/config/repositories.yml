@@ -1,0 +1,5 @@
+services:
+    hn.paiement.repository.facture:
+        class: HopitalNumerique\PaiementBundle\Repository\FactureRepository
+        factory: ['@doctrine.orm.default_entity_manager', getRepository]
+        arguments: ['HopitalNumeriquePaiementBundle:Facture']
