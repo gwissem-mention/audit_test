@@ -8,7 +8,9 @@ use HopitalNumerique\AutodiagBundle\Entity\Restitution\Item as RestitutionItem;
 use HopitalNumerique\AutodiagBundle\Model\Result\Item as ResultItem;
 use HopitalNumerique\AutodiagBundle\Entity\Synthesis;
 use HopitalNumerique\AutodiagBundle\Model\Result\ItemActionPlan;
+use HopitalNumerique\AutodiagBundle\Model\Result\ItemAttribute;
 use HopitalNumerique\AutodiagBundle\Model\Result\Score;
+use HopitalNumerique\AutodiagBundle\Repository\Autodiag\AttributeRepository;
 use HopitalNumerique\AutodiagBundle\Repository\AutodiagEntry\ValueRepository;
 use HopitalNumerique\AutodiagBundle\Repository\AutodiagEntryRepository;
 use HopitalNumerique\AutodiagBundle\Repository\RestitutionRepository;
@@ -26,19 +28,9 @@ use HopitalNumerique\AutodiagBundle\Service\Synthesis\Completion;
 class RestitutionCalculator
 {
     /**
-     * @var Algorithm
-     */
-    protected $algorithm;
-
-    /**
      * @var AttributeBuilderProvider
      */
     protected $attributeBuilder;
-
-    /**
-     * @var AutodiagEntryRepository
-     */
-    protected $entryRepository;
 
     /**
      * @var ValueRepository
@@ -56,6 +48,11 @@ class RestitutionCalculator
     protected $scoreRepository;
 
     /**
+     * @var AttributeRepository
+     */
+    protected $attributeRepository;
+
+    /**
      * @var Completion
      */
     protected $completion;
@@ -67,6 +64,7 @@ class RestitutionCalculator
     protected $synthesisScores = null;
     protected $allScores = [];
     protected $autodiagAttributesCount = null;
+    protected $responses = null;
 
     /**
      * RestitutionCalculator constructor.
@@ -80,21 +78,19 @@ class RestitutionCalculator
      * @TODO Injecter un algorithm factory qui connaitrais tous les algo possible via un compileur pass
      */
     public function __construct(
-        Algorithm $algorithm,
         AttributeBuilderProvider $attributeBuilder,
-        AutodiagEntryRepository $entryRepository,
         ValueRepository $valueRepository,
         RestitutionRepository $restitutionRepository,
         Completion $completion,
-        ScoreRepository $scoreRepository
+        ScoreRepository $scoreRepository,
+        AttributeRepository $attributeRepository
     ) {
-        $this->algorithm = $algorithm;
         $this->attributeBuilder = $attributeBuilder;
-        $this->entryRepository = $entryRepository;
         $this->valueRepository = $valueRepository;
         $this->restitutionRepository = $restitutionRepository;
         $this->completion = $completion;
         $this->scoreRepository = $scoreRepository;
+        $this->attributeRepository = $attributeRepository;
     }
 
     public function compute(Synthesis $synthesis)
@@ -204,68 +200,17 @@ class RestitutionCalculator
 
             // Traitement des questions / réponses
             $colorationInversed = 0;
-//            foreach ($container->getAttributes() as $attribute) {
-//
-//                $colorationInversed += $attribute->isColorationInversed() ? 1 : -1;
-//
-//                /** @var Autodiag\Attribute $attribute */
-//                $builder = $this->attributeBuilder->getBuilder($attribute->getType());
-//
-//                $itemAttribute = new ItemAttribute($attribute->getLabel());
-//                $itemAttribute->setColorationInversed($attribute->isColorationInversed());
-//                $resultItem->addAttribute($itemAttribute);
-//
-//                if ($builder instanceof PresetableAttributeBuilderInterface) {
-//                    $options = $builder->getPreset($synthesis->getAutodiag())->getPreset();
-//                } else {
-//                    $attributeOptions = $attribute->getOptions();
-//                    $options = [];
-//                    foreach ($attributeOptions as $option) {
-//                        $options[$option->getValue()] = $option->getLabel();
-//                    }
-//                }
-//
-//                foreach ($synthesis->getEntries() as $entry) {
-//                    /** @var AutodiagEntry $entry*/
-//                    foreach ($entry->getValues() as $entryValue) {
-//                        if ($entryValue->getAttribute()->getId() === $attribute->getId()) {
-//                            $response = $builder->transform($entryValue->getValue());
-//                            if (is_array($response)) {
-//
-//                                $responseValue = array_sum($response) / count($response);
-//                                foreach ($response as $code => &$value) {
-//                                    if (null === $value) {
-//                                        $value = " - ";
-//                                    } else {
-//                                        $value = isset($options[$code]) ? $options[$code][$value] : $value;
-//                                    }
-//                                }
-//                                $response = implode(' - ', $response);
-//                            } else {
-//                                $responseValue = $response;
-//                                if (isset($options[$response])) {
-//                                    $response = $options[$response];
-//                                } elseif (null === $response) {
-//                                    $response = "-";
-//                                }
-//                            }
-//
-//                            $itemAttribute->setResponse(
-//                                $responseValue,
-//                                $response
-//                            );
-//                        }
-//                    }
-//                }
-//
-//                if (isset($responseValue)) {
-//                    $actionPlan = $this->getAttributeActionPlan($synthesis->getAutodiag(), $attribute, $responseValue);
-//                    if ($actionPlan) {
-//                        $itemAttribute->setActionPlan($actionPlan);
-//                    }
-//                }
-//            }
+
+            foreach ($this->getResponses($synthesis, $container) as $attribute) {
+
+                $colorationInversed += $attribute['colorationInversed'] ? 1 : -1;
+
+                if ($synthesis->getEntries()->count() === 1) {
+                    $this->computeResultItemAttribute($resultItem, $synthesis, $attribute);
+                }
+            }
             $resultItem->setColorationInversed($colorationInversed > 0);
+
 
             if (count($references) > 0) {
                 foreach ($references as $reference) {
@@ -287,6 +232,54 @@ class RestitutionCalculator
 
 
         return $this->items[$cacheKey];
+    }
+
+    protected function computeResultItemAttribute(ResultItem $item, Synthesis $synthesis, array $attribute)
+    {
+        /** @var Autodiag\Attribute $attribute */
+        $builder = $this->attributeBuilder->getBuilder($attribute['type']);
+
+        $itemAttribute = new ItemAttribute($attribute['attribute_label']);
+        $itemAttribute->setColorationInversed($attribute['colorationInversed']);
+        $item->addAttribute($itemAttribute);
+
+        $responseText = $attribute['option_label'];
+
+        if (null === $responseText && null !== $attribute['value_value']) {
+            $preset = $builder->getPreset($synthesis->getAutodiag());
+
+            if (null !== $preset) {
+                $preset = $preset->getPreset();
+                $response = $builder->transform($attribute['value_value']);
+
+                $responseText = [];
+                foreach ($response as $key => $value) {
+                    if (array_key_exists($key, $preset) && array_key_exists($value, $preset[$key])) {
+                        $responseText[] = $preset[$key][$value];
+                    } else {
+                        $responseText[] = null;
+                    }
+                }
+                $responseText = implode(' - ', $responseText);
+            }
+        }
+
+        $itemAttribute->setResponse(
+            $builder->computeScore($attribute['value_value']),
+            $responseText ?: '-'
+        );
+
+        if (null !== $itemAttribute->responseValue) {
+            $actionPlan = $this->getAttributeActionPlan(
+                $synthesis->getAutodiag(),
+                $attribute['attribute_id'],
+                $itemAttribute->responseValue
+            );
+
+            if ($actionPlan) {
+                $itemAttribute->setActionPlan($actionPlan);
+            }
+        }
     }
 
     protected function getReferenceScore(Autodiag\Reference $reference, Container $container)
@@ -337,56 +330,6 @@ class RestitutionCalculator
     }
 
     /**
-     * Get all entries that have answered all container attributes
-     *
-     * @param Container $container
-     * @return array
-     */
-    protected function getCompleteEntriesForContainer(Container $container)
-    {
-        $cacheKey = implode('-', [
-            $container->getCode(),
-        ]);
-
-        if (!array_key_exists($cacheKey, $this->completeEntriesByContainer)) {
-
-            $completed = [];
-            $autodiag = $container->getAutodiag();
-            $allEntries = $this->getAutodiagEntriesByContainer($autodiag, $container);
-            $containerAttributes = $container->getNestedAttributes();
-
-            foreach ($allEntries as $entry) {
-                $complete = true;
-
-                foreach ($containerAttributes as $attribute) {
-                    /** @var Autodiag\Attribute $attribute */
-                    $builder = $this->attributeBuilder->getBuilder($attribute->getType());
-                    $attributeFound = false;
-
-                    foreach ($entry as $value) {
-                        if ($value['attribute_id'] == $attribute->getId()) {
-                            if ($builder->isEmpty($value['value'])) {
-                                $complete = false;
-                            }
-                            $attributeFound = true;
-                        }
-                    }
-
-                    $complete = $complete && $attributeFound;
-                }
-
-                if ($complete) {
-                    $completed[] = $entry;
-                }
-            }
-
-            $this->completeEntriesByContainer[$cacheKey] = $completed;
-        }
-
-        return $this->completeEntriesByContainer[$cacheKey];
-    }
-
-    /**
      * Get all entries for Autodiag
      *
      * @param Autodiag $autodiag
@@ -407,6 +350,22 @@ class RestitutionCalculator
         }
 
         return $this->entriesByAutodiag[$cacheKey];
+    }
+
+    protected function getResponses(Synthesis $synthesis, Container $container)
+    {
+        if (null === $this->responses) {
+            $this->responses = $this->valueRepository->getFullValuesByEntry(
+                $synthesis->getAutodiag()->getId(),
+                $synthesis->getEntries()->first()
+            );
+        }
+
+        foreach ($this->responses as $response) {
+            if (in_array($container->getId(), $response['container_id'])) {
+                yield $response;
+            }
+        }
     }
 
     /**
@@ -453,10 +412,10 @@ class RestitutionCalculator
         return $this->findActionPlan($plans->toArray(), $score);
     }
 
-    protected function getAttributeActionPlan(Autodiag $autodiag, Autodiag\Attribute $attribute, $score)
+    protected function getAttributeActionPlan(Autodiag $autodiag, $attributeId, $score)
     {
-        $plans = $autodiag->getActionPlans()->filter(function (Autodiag\ActionPlan $actionPlan) use ($attribute) {
-            return $actionPlan->getAttribute() == $attribute;
+        $plans = $autodiag->getActionPlans()->filter(function (Autodiag\ActionPlan $actionPlan) use ($attributeId) {
+            return null !== $actionPlan->getAttribute() && $actionPlan->getAttribute()->getId() == $attributeId;
         });
 
         return $this->findActionPlan($plans->toArray(), $score);

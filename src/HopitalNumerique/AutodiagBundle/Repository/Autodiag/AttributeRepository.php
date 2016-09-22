@@ -62,4 +62,38 @@ class AttributeRepository extends EntityRepository
 
         return $data;
     }
+
+    public function getAutodiagAttributesGroupedByContainer(Autodiag $autodiag)
+    {
+        $qb = $this->createQueryBuilder('attribute');
+        $qb
+            ->select('attribute as att', 'options', 'group_concat(distinct container.id) as container_id')
+            ->join(Attribute\Weight::class, 'weight', Join::WITH, 'weight.attribute = attribute.id')
+            ->join('weight.container', 'container')
+            ->leftJoin('attribute.options', 'options')
+            ->where('attribute.autodiag = :autodiag_id')
+            ->groupBy('options.value')
+            ->setParameters([
+                'autodiag_id' => $autodiag->getId(),
+            ]);
+
+        $results = $qb->getQuery()->getResult();
+
+        $data = [];
+        foreach ($results as $result) {
+
+            $ids = explode(',', $result['container_id']);
+            foreach ($ids as $id) {
+                if (!isset($data[$id])) {
+                    $data[$id] = [];
+                }
+                $data[$id][] = $result['att'];
+            }
+
+
+
+        }
+
+        return $data;
+    }
 }

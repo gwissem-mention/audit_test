@@ -126,13 +126,12 @@ services:
     autodiag.restitution.calculator:
         class: HopitalNumerique\AutodiagBundle\Service\RestitutionCalculator
         arguments:
-            - '@autodiag.algorithm.score'
             - '@autodiag.attribute_builder_provider'
-            - '@autodiag.repository.autodiagentry'
             - '@autodiag.repository.autodiagentryvalue'
             - '@autodiag.repository.restitution'
             - '@autodiag.synthesis.completion'
             - '@autodiag.repository.score'
+            - '@autodiag.repository.attribute'
 
     autodiag.score_calculator:
         class: HopitalNumerique\AutodiagBundle\Service\Score\ScoreCalculator

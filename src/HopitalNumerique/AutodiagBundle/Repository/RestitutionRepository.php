@@ -28,8 +28,8 @@ class RestitutionRepository extends EntityRepository
                 'references'
             )
             ->leftJoin('restitution.categories', 'categories')
-            ->leftJoin('categories.items', 'items')
-            ->leftJoin('items.containers', 'containers')
+            ->join('categories.items', 'items')
+            ->join('items.containers', 'containers')
             ->leftJoin('items.references', 'references')
             ->where('restitution.id = :id')
             ->setParameter('id', $autodiag->getRestitution()->getId())
