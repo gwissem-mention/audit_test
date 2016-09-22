@@ -110,25 +110,25 @@ class RestitutionItemExport
     {
         $visible = false;
 
-        if (null !== $item->getActionPlan()) {
+        if (null !== $item->getActionPlan() && $item->getActionPlan()->isVisible()) {
             $visible = true;
         }
 
         foreach ($item->getAttributes() as $attribute) {
-            if (null !== $attribute->getActionPlan()) {
+            if (null !== $attribute->getActionPlan() && $attribute->getActionPlan()->isVisible()) {
                 $visible = true;
                 break;
             }
         }
 
         foreach ($item->getChildrens() as $children) {
-            if (null !== $children->getActionPlan()) {
+            if (null !== $children->getActionPlan() && $children->getActionPlan()->isVisible()) {
                 $visible = true;
                 break;
             }
 
             foreach ($children->getAttributes() as $attribute) {
-                if (null !== $attribute->getActionPlan()) {
+                if (null !== $attribute->getActionPlan() && $attribute->getActionPlan()->isVisible()) {
                     $visible = true;
                     break;
                 }
@@ -144,18 +144,18 @@ class RestitutionItemExport
             $parent ? $item->getLabel() : '',
             '',
             '',
-            $item->getActionPlan() ? $item->getActionPlan()->getDescription() : ''
+            $item->getActionPlan() && $item->getActionPlan()->isVisible() ? $item->getActionPlan()->getDescription() : ''
         ]);
 
         foreach ($item->getAttributes() as $attribute) {
-            if (null !== $attribute->getActionPlan()) {
+            if (null !== $attribute->getActionPlan() && $attribute->getActionPlan()->isVisible()) {
                 $writer->addRow(
                     [
                         $parent ? $parent->getLabel() : $item->getLabel(),
                         $parent ? $item->getLabel() : '',
                         $attribute->label,
                         $attribute->responseText,
-                        $attribute->getActionPlan() ? $attribute->getActionPlan()->getDescription() : ''
+                        $attribute->getActionPlan() && $attribute->getActionPlan()->isVisible() ? $attribute->getActionPlan()->getDescription() : ''
                     ]
                 );
             }

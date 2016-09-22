@@ -418,7 +418,9 @@ class RestitutionCalculator
 
         $closest = null;
         foreach ($plans as $plan) {
-            if ($score <= $plan->getValue()) {
+            // -1 correspond à une réponse de type "Non concerné"
+            // donc on n'affiche pas de plan d'action pour cette réponse
+            if ($score <= $plan->getValue() && $score != '-1') {
                 if (null === $closest || $plan->getValue() < $closest->getValue()) {
                     $closest = $plan;
                 }
