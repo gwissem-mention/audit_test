@@ -4,10 +4,10 @@
         {% if pdf is not defined %}
             <div class="exports pull-right">
                 <a class="btn btn-primary" href="{{ path('hopitalnumerique_autodiag_restitution_export', {'synthesis': synthesis.id, "restitutionItem": restitution.id, "type": "ods"}) }}">
-                    Téléchager le plan d'action (ODS)
+                    Télécharger le plan d'action (ODS)
                 </a>
                 <a class="btn btn-primary" href="{{ path('hopitalnumerique_autodiag_restitution_export', {'synthesis': synthesis.id, "restitutionItem": restitution.id, "type": "xlsx"}) }}">
-                    Téléchager le plan d'action (XLSX)
+                    Télécharger le plan d'action (XLSX)
                 </a>
             </div>
         {% endif %}

@@ -90,7 +90,5 @@ class RestitutionController extends Controller
             $this->getUser(),
             $type
         );
-
-
     }
 }
