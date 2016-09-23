@@ -81,7 +81,6 @@ class AttributeRepository extends EntityRepository
 
         $data = [];
         foreach ($results as $result) {
-
             $ids = explode(',', $result['container_id']);
             foreach ($ids as $id) {
                 if (!isset($data[$id])) {
@@ -89,11 +88,28 @@ class AttributeRepository extends EntityRepository
                 }
                 $data[$id][] = $result['att'];
             }
-
-
-
         }
 
         return $data;
+    }
+
+    public function getMinAndMaxForAutodiagByAttributes(Autodiag $autodiag)
+    {
+        $qb = $this->createQueryBuilder('attribute', 'attribute.id');
+        $qb
+            ->select(
+                'attribute.id',
+                'MAX(options.value) as maximum',
+                'MIN(options.value) as minimum'
+            )
+            ->leftJoin('attribute.options', 'options', Join::WITH, 'options.value != \'-1\'')
+            ->join('attribute.autodiag', 'autodiag')
+            ->where('autodiag.id = :autodiag_id')
+            ->groupBy('attribute.id')
+            ->setParameters([
+                'autodiag_id' => $autodiag->getId(),
+            ]);
+
+        return $qb->getQuery()->getArrayResult();
     }
 }

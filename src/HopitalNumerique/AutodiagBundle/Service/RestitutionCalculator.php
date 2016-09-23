@@ -59,12 +59,11 @@ class RestitutionCalculator
 
     protected $items = [];
     protected $references = [];
-    protected $completeEntriesByContainer = [];
-    protected $entriesByAutodiag = [];
     protected $synthesisScores = null;
     protected $allScores = [];
     protected $autodiagAttributesCount = null;
     protected $responses = null;
+    protected $minAndMaxForAutodiagAttributes = null;
 
     /**
      * RestitutionCalculator constructor.
@@ -185,7 +184,6 @@ class RestitutionCalculator
         );
 
         if (!array_key_exists($cacheKey, $this->items)) {
-
             $score = $this->getContainerSynthesisScore($synthesis, $container->getId());
             $resultItem = new ResultItem();
             $resultItem->setLabel($container->getLabel());
@@ -204,12 +202,10 @@ class RestitutionCalculator
             // Traitement des questions / réponses
             $colorationInversed = 0;
             foreach ($this->getResponses($synthesis, $container) as $attribute) {
-
                 $colorationInversed += $attribute['colorationInversed'] ? 1 : -1;
 
                 if ($synthesis->getEntries()->count() === 1) {
                     $this->computeResultItemAttribute($resultItem, $synthesis, $attribute);
-
                 }
             }
             $resultItem->setColorationInversed($colorationInversed > 0);
@@ -238,7 +234,6 @@ class RestitutionCalculator
 
     protected function computeResultItemAttribute(ResultItem $item, Synthesis $synthesis, array $attribute)
     {
-        /** @var Autodiag\Attribute $attribute */
         $builder = $this->attributeBuilder->getBuilder($attribute['type']);
 
         $itemAttribute = new ItemAttribute($attribute['attribute_label']);
@@ -284,6 +279,15 @@ class RestitutionCalculator
                 $itemAttribute->setActionPlan($actionPlan);
             }
         }
+
+        $score =
+            $this->calculateScore(
+                $itemAttribute->responseValue,
+                $this->getMinAndMaxForAutodiagAttributes($synthesis->getAutodiag(), $attribute)
+            )
+        ;
+
+        $itemAttribute->score = $score;
     }
 
     protected function getReferenceScore(Autodiag\Reference $reference, Container $container)
@@ -294,7 +298,6 @@ class RestitutionCalculator
         ]);
 
         if (!array_key_exists($cacheKey, $this->references)) {
-
             $referenceScores = $this->getContainerScores($container);
 
             $score = null;
@@ -322,6 +325,28 @@ class RestitutionCalculator
         return array_key_exists($containerId, $this->synthesisScores)
             ? $this->synthesisScores[$containerId]
             : null;
+    }
+
+    protected function getMinAndMaxForAutodiagAttributes(Autodiag $autodiag, array $attribute)
+    {
+        if ($this->minAndMaxForAutodiagAttributes == null) {
+            $this->minAndMaxForAutodiagAttributes =
+                $this
+                    ->attributeRepository
+                    ->getMinAndMaxForAutodiagByAttributes($autodiag)
+            ;
+        }
+
+        if ($this->minAndMaxForAutodiagAttributes[$attribute['attribute_id']]['minimum'] == null
+            && $this->minAndMaxForAutodiagAttributes[$attribute['attribute_id']]['maximum'] == null) {
+            $builder = $this->attributeBuilder->getBuilder($attribute['type']);
+            if ($builder instanceof PresetableAttributeBuilderInterface) {
+                $this->minAndMaxForAutodiagAttributes[$attribute['attribute_id']]['minimum'] = $builder->getPresetMinScore($autodiag);
+                $this->minAndMaxForAutodiagAttributes[$attribute['attribute_id']]['maximum'] = $builder->getPresetMaxScore($autodiag);
+            }
+        }
+
+        return $this->minAndMaxForAutodiagAttributes[$attribute['attribute_id']];
     }
 
     protected function getContainerScores(Container $container)
@@ -409,5 +434,25 @@ class RestitutionCalculator
         return $autodiag->getId()
         . $container->getId()
         . $synthesis->getId();
+    }
+
+    /**
+     * Calcule le score d'une valeur en fonction des valeurs min et max
+     *
+     * @param $value
+     * @param $minAndMax
+     * @return float
+     */
+    protected function calculateScore($value, $minAndMax)
+    {
+        if ($value === null) {
+            return null;
+        }
+
+        $a = ($minAndMax['maximum'] - $minAndMax['minimum']) / 100;
+        $b = $minAndMax['maximum'];
+        $x = ($value - $b) / $a;
+
+        return 100 + $x;
     }
 }

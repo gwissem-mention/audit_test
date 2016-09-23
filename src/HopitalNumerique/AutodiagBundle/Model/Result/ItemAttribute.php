@@ -9,6 +9,8 @@ class ItemAttribute
     public $responseText;
     public $responseValue;
 
+    public $score;
+
     public $colored;
     public $colorationInversed = false;
 
