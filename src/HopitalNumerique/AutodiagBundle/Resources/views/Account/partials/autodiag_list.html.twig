@@ -22,12 +22,16 @@
                             <tr>
                                 <td>{{ synthesis.name }}</td>
                                 <td>{{ synthesis.updated_at|date('d/m/Y') }}</td>
-                                <td>{{ synthesis.completion }}%</td>
                                 <td>
-                                    {% if synthesis.entryId is not null %}
-                                        <a href="{{ path('hopitalnumerique_autodiag_entry_edit', {'entry': synthesis.entryId}) }}" class="btn btn-success" title="{{ 'ad.account.action.continue'|trans }}"><i class="fa fa-arrow-right"></i></a>
-                                    {% endif %}
-                                    <a href="{{ path('hopitalnumerique_autodiag_account_delete_synthesis', {'synthesis': synthesis.id}) }}" class="btn btn-danger delete-synthesis" title="{{ 'ad.account.action.delete'|trans }}"><i class="fa fa-trash-o"></i></a>
+                                    {{ synthesis.completion ~ "%" }}
+                                </td>
+                                <td>
+                                    <div {% if synthesis.computing %}data-score-polling="{{ synthesis.id }}"{% endif %}>
+                                        {% if synthesis.entryId is not null %}
+                                            <a href="{{ path('hopitalnumerique_autodiag_entry_edit', {'entry': synthesis.entryId}) }}" class="btn btn-success" title="{{ 'ad.account.action.continue'|trans }}"><i class="fa fa-arrow-right"></i></a>
+                                        {% endif %}
+                                        <a href="{{ path('hopitalnumerique_autodiag_account_delete_synthesis', {'synthesis': synthesis.id}) }}" class="btn btn-danger delete-synthesis" title="{{ 'ad.account.action.delete'|trans }}"><i class="fa fa-trash-o"></i></a>
+                                    </div>
                                 </td>
                             </tr>
                         {% endfor %}
@@ -111,6 +115,13 @@
         {% endif %}
 
         <script>
+            $(function(){
+                var pollingUrl = "{{ path('hopitalnumerique_autodiag_synthesis_polling') }}";
+                var polling = new ScorePolling({
+                    url: pollingUrl
+                });
+            });
+
             $(function(){
                 $('#create-synthesis-btn').click(function(){
                     if ($('#syntheses-form input[type=checkbox]:checked').length < 2) {

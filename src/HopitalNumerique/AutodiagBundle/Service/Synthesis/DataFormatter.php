@@ -65,6 +65,7 @@ class DataFormatter
                     'entryId' => count($synth->getEntries()) == 1 ? $synth->getEntries()[0]->getId() : null,
                     'synth' => $synth,
                     'name' => $synth->getName(),
+                    'computing' => $synth->isComputing(),
                     'updated_at' => $synth->getUpdatedAt(),
                     'completion' => $synth->getCompletion(),
                 ];
@@ -86,6 +87,7 @@ class DataFormatter
                     'validated_at' => $synth->getValidatedAt(),
                     'user' => $synth->getUser(),
                     'entries' => $synth->getEntries(),
+                    'computing' => $synth->isComputing(),
                     'share' => array_map(function ($share) {
                         return $share->getPrenom() . ' ' . $share->getNom();
                     }, $synth->getShares()->toArray()),

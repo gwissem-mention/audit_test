@@ -58,6 +58,8 @@ class ScoreCalculatorCommand extends ContainerAwareCommand
                 'autodiag' => $autodiag,
             ]);
 
+            $this->getContainer()->get('autodiag.repository.synthesis')->markAsComputingByAutodiag($autodiag);
+
             $breaked = false;
             foreach ($syntheses as $synthesis) {
 

@@ -109,4 +109,35 @@ class SynthesisRepository extends EntityRepository
 
         return $qb;
     }
+
+    public function markAsComputingByAutodiag(Autodiag $autodiag)
+    {
+        $qb = $this->getEntityManager()->createQueryBuilder();
+        $qb
+            ->update('HopitalNumeriqueAutodiagBundle:Synthesis', 'synthesis')
+            ->set('synthesis.computeBeginning', time())
+            ->where('synthesis.autodiag = :autodiag_id')
+            ->setParameter('autodiag_id', $autodiag->getId())
+        ;
+        $qb->getQuery()->execute();
+    }
+
+    public function getScorePolling($synthesis)
+    {
+        $qb = $this->createQueryBuilder('synthesis');
+        $qb
+            ->select('synthesis.id')
+            ->where(
+                $qb->expr()->isNotNull('synthesis.computeBeginning')
+            )
+            ->andWhere(
+                $qb->expr()->in('synthesis.id', $synthesis)
+            );
+
+        $result = $qb->getQuery()->getArrayResult();
+        foreach ($result as &$one) {
+            $one = $one['id'];
+        }
+        return $result;
+    }
 }

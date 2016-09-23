@@ -6,6 +6,7 @@ use HopitalNumerique\AutodiagBundle\Entity\Autodiag;
 use HopitalNumerique\AutodiagBundle\Entity\AutodiagEntry;
 use HopitalNumerique\AutodiagBundle\Form\Type\SynthesisType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 
 class SynthesisController extends Controller
@@ -32,5 +33,35 @@ class SynthesisController extends Controller
         }
 
         return $this->createAccessDeniedException();
+    }
+
+
+    public function scorePollingAction(Request $request)
+    {
+
+        $syntheses = $request->query->get('syntheses');
+
+        $start = time();
+        $limit = $start + 20;
+
+        while (true) {
+
+            $result = $this->get('autodiag.repository.synthesis')->getScorePolling($syntheses);
+
+            if (count($result) !== count($syntheses)) {
+                return new JsonResponse(
+                    $result
+                );
+            }
+
+            if (time() >= $limit) {
+                return new JsonResponse(
+                    $syntheses
+                );
+            }
+
+
+            usleep(1000);
+        }
     }
 }
