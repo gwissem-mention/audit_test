@@ -571,8 +571,14 @@ class InterventionDemandeRepository extends EntityRepository
                 'interventionEtat.libelle AS interventionEtatLibelle',
                 
                 'CONCAT(cmsi.nom, \' \', cmsi.prenom) AS cmsi_nom',
+                'cmsiEtablissement.nom AS cmsiEtablissementNom',
+                'cmsiEtablissement.finess AS cmsiEtablissementFiness',
+
                 'CONCAT(ambassadeur.nom, \' \', ambassadeur.prenom) AS ambassadeur_nom',
+                'ambassadeurEtablissement.nom AS ambassadeurEtablissementNom',
+                'ambassadeurEtablissement.finess AS ambassadeurEtablissementFiness',
                 'ambassadeurRegion.libelle AS ambassadeurRegionLibelle',
+
                 'referent.id AS referentId',
                 'CONCAT(referent.nom, \' \', referent.prenom) AS referent_nom',
                 'referentEtablissement.nom AS referentEtablissementNom',
@@ -595,8 +601,10 @@ class InterventionDemandeRepository extends EntityRepository
             ->innerJoin('interventionDemande.interventionEtat', 'interventionEtat')
             // CMSI
             ->innerJoin('interventionDemande.cmsi', 'cmsi')
+                ->leftJoin('cmsi.etablissementRattachementSante', 'cmsiEtablissement')
             // Ambassadeur
             ->innerJoin('interventionDemande.ambassadeur', 'ambassadeur')
+                ->leftJoin('ambassadeur.etablissementRattachementSante', 'ambassadeurEtablissement')
                 ->leftJoin('ambassadeur.region', 'ambassadeurRegion')
             // Référent
             ->innerJoin('interventionDemande.referent', 'referent')

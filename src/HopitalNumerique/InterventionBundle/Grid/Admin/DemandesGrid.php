@@ -91,9 +91,29 @@ class DemandesGrid extends DemandesAbstractGrid
         $this->addColonne($colonneInterventionEtatLibelle);
 
         $colonneCmsiInformations = new Column\TextColumn('cmsi_nom', 'CMSI');
+        $colonneCmsiInformations->manipulateRenderCell(function($value, \APY\DataGridBundle\Grid\Row $row) {
+            if (
+                !empty($row->getField('cmsiEtablissementNom')) &&
+                !empty($row->getField('cmsiEtablissementFiness'))
+            ) {
+                return sprintf('%s (%s - %s)', $value, $row->getField('cmsiEtablissementNom'), $row->getField('cmsiEtablissementFiness'));
+            }
+
+            return $value;
+        });
         $this->addColonne($colonneCmsiInformations);
 
         $colonneAmbassadeurInformations = new Column\TextColumn('ambassadeur_nom', 'Ambassadeur');
+        $colonneAmbassadeurInformations->manipulateRenderCell(function($value, \APY\DataGridBundle\Grid\Row $row) {
+            if (
+                !empty($row->getField('ambassadeurEtablissementNom')) &&
+                !empty($row->getField('ambassadeurEtablissementFiness'))
+            ) {
+                return sprintf('%s (%s - %s)', $value, $row->getField('ambassadeurEtablissementNom'), $row->getField('ambassadeurEtablissementFiness'));
+            }
+
+            return $value;
+        });
         $this->addColonne($colonneAmbassadeurInformations);
 
         $colonneIdDemandeur = new Column\TextColumn('referentId', '');
