@@ -4,6 +4,9 @@ namespace HopitalNumerique\AutodiagBundle\Model\Result;
 
 class Item
 {
+    const ITEM_PRIORITY_QUESTIONNAIRE = 'questionnaire';
+    const ITEM_PRIORITY_PRIORISE = 'priorisé';
+
     protected $label;
 
     /**

@@ -7,6 +7,7 @@ use HopitalNumerique\AutodiagBundle\Entity\Restitution\Category;
 use HopitalNumerique\AutodiagBundle\Entity\Restitution\Item as RestitutionItem;
 use HopitalNumerique\AutodiagBundle\Model\Result\Item as ResultItem;
 use HopitalNumerique\AutodiagBundle\Entity\Synthesis;
+use HopitalNumerique\AutodiagBundle\Model\Result\Item;
 use HopitalNumerique\AutodiagBundle\Model\Result\ItemActionPlan;
 use HopitalNumerique\AutodiagBundle\Model\Result\ItemAttribute;
 use HopitalNumerique\AutodiagBundle\Model\Result\Score;
@@ -154,6 +155,14 @@ class RestitutionCalculator
             }
 
             $result['items'][] = $resultItem;
+        }
+
+        if ($item->getPriority() === Item::ITEM_PRIORITY_PRIORISE) {
+            usort($result['items'], function (Item $a, Item $b) {
+                return $b->getScore()->getValue() === null
+                    ? 1
+                    : $a->getScore()->getValue() > $b->getScore()->getValue();
+            });
         }
 
         return $result;
