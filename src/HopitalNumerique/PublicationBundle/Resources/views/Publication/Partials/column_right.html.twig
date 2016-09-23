@@ -1,12 +1,19 @@
-<div id="column-right">
+{% if
+    (contenu is defined and contenu is not sameas(false)) or
+    (productionsLiees|length > 0 or parcoursGuides|length > 0 or topicRelated|length > 0 or userRelated|length > 0) or
+    (objet.domaines|length > 1)
+%}
 
-    {% if productionsLiees|length > 0 or parcoursGuides|length > 0 or topicRelated|length > 0 or userRelated|length > 0 %}
-        <div class="column-right-container">
-            {% include 'HopitalNumeriquePublicationBundle:Publication:Partials/productions_liees.html.twig' %}
-            {#{% include 'HopitalNumeriquePublicationBundle:Publication:Partials/parcours_guides.html.twig' %}#}
-        </div>
-    {% endif %}
+    <div id="column-right">
 
-    {% include 'HopitalNumeriquePublicationBundle:Publication:Partials/autres_domaines.html.twig' %}
-</div>
+        {% if productionsLiees|length > 0 or parcoursGuides|length > 0 or topicRelated|length > 0 or userRelated|length > 0 %}
+            <div class="column-right-container">
+                {% include 'HopitalNumeriquePublicationBundle:Publication:Partials/productions_liees.html.twig' %}
+                {#{% include 'HopitalNumeriquePublicationBundle:Publication:Partials/parcours_guides.html.twig' %}#}
+            </div>
+        {% endif %}
 
+        {% include 'HopitalNumeriquePublicationBundle:Publication:Partials/autres_domaines.html.twig' %}
+    </div>
+
+{% endif %}
