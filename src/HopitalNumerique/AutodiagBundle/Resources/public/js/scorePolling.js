@@ -76,13 +76,6 @@ ScorePolling.prototype = {
                 instance.request();
             }
         });
-
-        // xhr.complete(function () {
-        //     console.log('complete : ' + instance.syntheses.length);
-        //     if (instance.syntheses.length > 0) {
-        //         instance.request();
-        //     }
-        // });
     },
 
     done: function (id)

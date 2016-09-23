@@ -85,11 +85,13 @@
                                         {% endif %}
                                     </td>
                                     <td>
-                                        <a href="{{ path('hopitalnumerique_autodiag_restitution_index', {'synthesis': synthesis.id}) }}" class="btn btn-success" title="{{ 'ad.account.action.results'|trans }}"><i class="fa fa-bar-chart-o"></i></a>
-                                        {% if synthesis.user == user and synthesis.entries|length <= 1 %}
-                                            <a href="{{ path('hopitalnumerique_autodiag_unvalidate', {'synthesis': synthesis.id}) }}" class="btn btn-warning" title="{{ 'ad.account.action.reopen'|trans }}"><i class="fa fa-arrow-up"></i></a>
-                                        {% endif %}
-                                        <a href="{{ path('hopitalnumerique_autodiag_account_delete_synthesis', {'synthesis': synthesis.id}) }}" class="btn btn-danger delete-synthesis" title="{{ 'ad.account.action.delete'|trans }}"><i class="fa fa-trash-o"></i></a>
+                                        <div {% if synthesis.computing %}data-score-polling="{{ synthesis.id }}"{% endif %}>
+                                            <a href="{{ path('hopitalnumerique_autodiag_restitution_index', {'synthesis': synthesis.id}) }}" class="btn btn-success" title="{{ 'ad.account.action.results'|trans }}"><i class="fa fa-bar-chart-o"></i></a>
+                                            {% if synthesis.user == user and synthesis.entries|length <= 1 %}
+                                                <a href="{{ path('hopitalnumerique_autodiag_unvalidate', {'synthesis': synthesis.id}) }}" class="btn btn-warning" title="{{ 'ad.account.action.reopen'|trans }}"><i class="fa fa-arrow-up"></i></a>
+                                            {% endif %}
+                                            <a href="{{ path('hopitalnumerique_autodiag_account_delete_synthesis', {'synthesis': synthesis.id}) }}" class="btn btn-danger delete-synthesis" title="{{ 'ad.account.action.delete'|trans }}"><i class="fa fa-trash-o"></i></a>
+                                        </div>
                                     </td>
                                 </tr>
                             {% endfor %}
