@@ -1,3 +1,6 @@
+imports:
+    - { resource: repositories.yml }
+
 parameters:
     #Options
     hopital_numerique_paiement.options:parameters:

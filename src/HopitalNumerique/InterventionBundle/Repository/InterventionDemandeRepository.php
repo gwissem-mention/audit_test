@@ -17,6 +17,17 @@ use Doctrine\ORM\Query\Expr\Join;
  */
 class InterventionDemandeRepository extends EntityRepository
 {
+    /** @var array */
+    private $adminGridInterventionStatus;
+
+    /**
+     * @param $adminGridInterventionStatus
+     */
+    public function setAdminGridInterventionStatus($adminGridInterventionStatus)
+    {
+        $this->adminGridInterventionStatus = $adminGridInterventionStatus;
+    }
+
     /**
      * Retourne la liste des interventions de l'utilisateur
      *
@@ -778,5 +789,23 @@ class InterventionDemandeRepository extends EntityRepository
         ;
         
         return $requete->getQuery()->getResult();
+    }
+
+    /**
+     * @return integer
+     */
+    public function getAmountOfInterventionWithoutBill()
+    {
+        $qb = $this->_em->createQueryBuilder();
+        $qb
+            ->select('SUM(i.total)')
+            ->from('HopitalNumeriqueInterventionBundle:InterventionDemande', 'i')
+            ->leftJoin('i.facture', 'f')
+            ->where('f.id IS NULL')
+            ->andWhere('i.interventionEtat IN (:status)')
+            ->setParameter('status', $this->adminGridInterventionStatus)
+        ;
+
+        return $qb->getQuery()->getSingleScalarResult();
     }
 }

@@ -975,7 +975,7 @@ class MailManager extends BaseManager
         $options = $this->getAllOptions($options);
 
         $mailExpediteur = $this->replaceContent($mail->getExpediteurMail(), null, $options);
-        $nameExpediteur = $this->replaceContent($mail->getExpediteurName(), null, $options);
+        $nameExpediteur = str_replace('nodevoContactDomaineCurrent', $options['subjectDomaine'], $this->replaceContent($mail->getExpediteurName(), null, $options));
 
         //prepare content
         $body    = $this->replaceContent($mail->getBody(), $user, $options);

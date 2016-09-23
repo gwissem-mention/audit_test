@@ -21,6 +21,18 @@ class FactureController extends Controller
         return $grid->render('HopitalNumeriquePaiementBundle:Facture:index.html.twig');
     }
 
+    public function exportPaymentsMassAction($primaryKeys, $allPrimaryKeys)
+    {
+        if ($allPrimaryKeys == 1) {
+            $rawDatas = $this->get('hopitalnumerique_paiement.grid.facture')->getRawData();
+            foreach ($rawDatas as $data) {
+                $primaryKeys[] = $data['id'];
+            }
+        }
+
+        return $this->get('hopitalnumerique_paiement.manager.facture')->getCsvExport($primaryKeys, $this->container->getParameter('kernel.charset'));
+    }
+
     /**
      * Paye la facture et redirige l'admin sur la vue liste
      *

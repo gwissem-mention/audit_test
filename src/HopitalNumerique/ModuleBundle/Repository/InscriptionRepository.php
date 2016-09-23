@@ -14,6 +14,17 @@ use HopitalNumerique\DomaineBundle\Entity\Domaine;
  */
 class InscriptionRepository extends EntityRepository
 {
+    /** @var array $adminGridSessionStatus */
+    private $adminGridSessionStatus;
+
+    /**
+     * @param $sessionStatus
+     */
+    public function setAdminGridSessionStatus($sessionStatus)
+    {
+        $this->adminGridSessionStatus = $sessionStatus;
+    }
+
     /**
      * Récupère les données du grid sous forme de tableau correctement formaté
      *
@@ -246,5 +257,23 @@ class InscriptionRepository extends EntityRepository
         ;
 
         return intval($queryBuilder->getQuery()->getSingleScalarResult());
+    }
+
+    /**
+     * @return integer
+     */
+    public function getAmountOfSessionWithoutBill()
+    {
+        $qb = $this->_em->createQueryBuilder();
+        $qb
+            ->select('SUM(i.total)')
+            ->from('HopitalNumeriqueModuleBundle:Inscription', 'i')
+            ->leftJoin('i.facture', 'f')
+            ->where('f.id IS NULL')
+            ->andWhere('i.etatParticipation IN (:status)')
+            ->setParameter('status', $this->adminGridSessionStatus)
+        ;
+
+        return $qb->getQuery()->getSingleScalarResult();
     }
 }

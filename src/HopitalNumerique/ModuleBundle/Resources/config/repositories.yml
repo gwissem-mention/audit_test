@@ -1,0 +1,7 @@
+services:
+    hn.module.repository.inscription:
+        class: HopitalNumerique\ModuleBundle\Repository\InscriptionRepository
+        factory: ['@doctrine.orm.default_entity_manager', getRepository]
+        arguments: ['HopitalNumeriqueModuleBundle:Inscription']
+        calls:
+            - ["setAdminGridSessionStatus", ["%admin_grid_session_status%"]]
