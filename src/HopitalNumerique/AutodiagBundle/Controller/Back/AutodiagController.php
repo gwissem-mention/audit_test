@@ -108,6 +108,8 @@ class AutodiagController extends Controller
                     $this->get('autodiag.import.question')
                 );
 
+                $this->get('autodiag.score_calculator')->defetAutodiagScore($autodiag);
+
                 $this->addFlash('success', $this->get('translator')->trans('ad.import.success'));
             } catch (\Exception $e) {
                 $this->addFlash('danger', $this->get('translator')->trans('ad.import.errors.generic'));

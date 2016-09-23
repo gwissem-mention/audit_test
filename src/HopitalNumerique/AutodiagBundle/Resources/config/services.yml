@@ -141,6 +141,7 @@ services:
             - '@autodiag.repository.score'
             - '@autodiag.synthesis.completion'
             - '@doctrine.orm.entity_manager'
+            - '%kernel.root_dir%'
 
     autodiag.algorithm.score:
         class: HopitalNumerique\AutodiagBundle\Service\Algorithm\Score

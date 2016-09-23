@@ -44,11 +44,11 @@ class SynthesisRepository extends EntityRepository
     {
         $qb = $this->getEntityManager()->createQueryBuilder();
         $qb
-            ->select('synthesis', 'entries', 'values')
+            ->select('synthesis', 'entries')
             ->from('HopitalNumeriqueAutodiagBundle:Synthesis', 'synthesis')
             ->leftJoin('synthesis.shares', 'shares', Join::WITH, 'shares = :user')
             ->leftJoin('synthesis.entries', 'entries')
-            ->leftJoin('entries.values', 'values')
+//            ->leftJoin('entries.values', 'values')
             ->orWhere('synthesis.user = :user')
             ->orWhere('shares.id IS NOT NULL')
             ->setParameter('user', $user)

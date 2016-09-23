@@ -167,6 +167,13 @@ class Autodiag
      */
     private $references;
 
+    /**
+     * @var integer
+     *
+     * @ORM\Column(type="integer", nullable=true)
+     */
+    private $computeBeginning;
+
     public function __construct()
     {
         $this->domaines = new ArrayCollection();
@@ -528,5 +535,26 @@ class Autodiag
     public function getReferences()
     {
         return $this->references;
+    }
+
+    public function setComputing()
+    {
+        $this->computeBeginning = time();
+        return $this->computeBeginning;
+    }
+
+    public function isComputing()
+    {
+        return $this->computeBeginning !== null;
+    }
+
+    public function getComputeBeginning()
+    {
+        return $this->computeBeginning;
+    }
+
+    public function stopComputing()
+    {
+        $this->computeBeginning = null;
     }
 }

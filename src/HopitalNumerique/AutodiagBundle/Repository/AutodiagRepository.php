@@ -3,6 +3,7 @@
 namespace HopitalNumerique\AutodiagBundle\Repository;
 
 use Doctrine\Common\Collections\Collection;
+use Doctrine\ORM\AbstractQuery;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\Query\Expr\Join;
 use HopitalNumerique\AutodiagBundle\Entity\Autodiag;
@@ -98,5 +99,17 @@ class AutodiagRepository extends EntityRepository
         }
 
         return $qb->getQuery()->getResult();
+    }
+
+    public function getComputeBeginning($autodiagId)
+    {
+        $qb = $this->createQueryBuilder('autodiag');
+        $qb
+            ->select('autodiag.computeBeginning')
+            ->where('autodiag.id = :autodiag_id')
+            ->setParameter('autodiag_id', $autodiagId);
+
+        return $qb->getQuery()->getOneOrNullResult(AbstractQuery::HYDRATE_SINGLE_SCALAR);
+
     }
 }

@@ -2,9 +2,12 @@
 
 namespace HopitalNumerique\AutodiagBundle\Command;
 
+use HopitalNumerique\AutodiagBundle\Entity\Autodiag;
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Input\InputArgument;
+use Symfony\Component\Console\Input\InputDefinition;
 use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
 class ScoreCalculatorCommand extends ContainerAwareCommand
@@ -14,33 +17,72 @@ class ScoreCalculatorCommand extends ContainerAwareCommand
         $this
             ->setName('autodiag:score:compute')
             ->setDescription('Compute all entry scores')
-            ->addArgument('synthesis', InputArgument::OPTIONAL, 'Synthesis ID')
+            ->setDefinition(
+                new InputDefinition([
+                    new InputOption('autodiag', 'a', InputOption::VALUE_OPTIONAL),
+                    new InputOption('synthesis', 'sy', InputOption::VALUE_OPTIONAL),
+                ])
+            )
         ;
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $synthesis = $input->getArgument('synthesis');
-        if (null === $synthesis) {
-            $syntheses = $this->getContainer()->get('autodiag.repository.synthesis')->findAll();
-        } else {
-            $syntheses = [
-                $this->getContainer()->get('autodiag.repository.synthesis')->find($synthesis)
+        $options = $input->getOptions();
+
+        $synthesis = $options['synthesis'];
+        if (null !== $synthesis) {
+            $this->getContainer()->get('autodiag.score_calculator')->computeSynthesisScore($synthesis);
+            return true;
+        }
+
+
+        $autodiag = $options['autodiag'];
+        if (null !== $autodiag) {
+            $autodiags = [
+                $this->getContainer()->get('autodiag.repository.autodiag')->find($autodiag)
             ];
+        } else {
+            $autodiags = $this->getContainer()->get('autodiag.repository.autodiag')->findAll();
         }
 
         $em = $this->getContainer()->get('doctrine.orm.entity_manager');
-        $i = 0;
-        foreach ($syntheses as $synthesis) {
-            $output->writeln(
-                sprintf('Computing score for synthesis "%s".', $synthesis->getName())
-            );
-            $this->getContainer()->get('autodiag.score_calculator')->computeSynthesisScore($synthesis, false);
 
-            if ($i++ % 100 === 0) {
+        foreach ($autodiags as $autodiag) {
+            /** @var Autodiag $autodiag */
+
+            $computingBeginning = $autodiag->setComputing();
+            $em->flush();
+
+            $syntheses = $this->getContainer()->get('autodiag.repository.synthesis')->findBy([
+                'autodiag' => $autodiag,
+            ]);
+
+            $breaked = false;
+            foreach ($syntheses as $synthesis) {
+
+                $computing = $this->getContainer()->get('autodiag.repository.autodiag')->getComputeBeginning(
+                    $autodiag->getId()
+                );
+
+                if ($computing != $computingBeginning) {
+                    $breaked = true;
+                    break;
+                }
+
+                $output->writeln(
+                    sprintf('Computing score for synthesis "%s".', $synthesis->getName())
+                );
+                $this->getContainer()->get('autodiag.score_calculator')->computeSynthesisScore($synthesis);
+
+            }
+
+            if (!$breaked) {
+                $autodiag->stopComputing();
                 $em->flush();
             }
         }
-        $em->flush();
+
+        return true;
     }
 }

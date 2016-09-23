@@ -53,9 +53,7 @@ class AutodiagEntriesExport extends AbstractExport
         $column = 'E';
         foreach ($syntheses as $synthesis) {
             if ($synthesis->getEntries()->count() === 1) {
-//                $start = microtime(true);
                 $this->writeSynthesisRows($synthesis, $sheet, $column);
-//                dump(microtime(true) - $start);
                 $column = $this->incrementColumn($column, 2);
             }
         }

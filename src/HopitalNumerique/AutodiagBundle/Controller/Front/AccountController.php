@@ -113,6 +113,8 @@ class AccountController extends Controller
             $newSynthesis->setName($form->get('synthesis-name'));
             $this->getDoctrine()->getManager()->persist($newSynthesis);
             $this->getDoctrine()->getManager()->flush();
+
+            $this->get('autodiag.score_calculator')->deferSynthesisScore($newSynthesis);
         }
 
         $this->addFlash('success', $this->get('translator')->trans('ad.synthesis.generator.success'));

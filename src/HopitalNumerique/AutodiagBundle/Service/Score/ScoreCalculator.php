@@ -4,12 +4,15 @@ namespace HopitalNumerique\AutodiagBundle\Service\Score;
 
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityRepository;
+use HopitalNumerique\AutodiagBundle\Entity\Autodiag;
 use HopitalNumerique\AutodiagBundle\Entity\Autodiag\Container;
 use HopitalNumerique\AutodiagBundle\Entity\AutodiagEntry;
 use HopitalNumerique\AutodiagBundle\Entity\Synthesis;
 use HopitalNumerique\AutodiagBundle\Repository\AutodiagEntry\ValueRepository;
 use HopitalNumerique\AutodiagBundle\Service\Algorithm\Score;
+use HopitalNumerique\AutodiagBundle\Service\Locker;
 use HopitalNumerique\AutodiagBundle\Service\Synthesis\Completion;
+use Symfony\Component\Process\Process;
 
 class ScoreCalculator
 {
@@ -38,22 +41,34 @@ class ScoreCalculator
      */
     protected $entityManager;
 
+    protected $rootDir;
+
     public function __construct(
         Score $algorithm,
         ValueRepository $valueRepository,
         EntityRepository $scoreRepository,
         Completion $completion,
-        EntityManager $entityManager
+        EntityManager $entityManager,
+        $rootDir
     ) {
         $this->algorithm = $algorithm;
         $this->valueRepository = $valueRepository;
         $this->scoreRepository = $scoreRepository;
         $this->completion = $completion;
         $this->entityManager = $entityManager;
+        $this->rootDir = $rootDir;
     }
 
-    public function computeSynthesisScore(Synthesis $synthesis, $flush = true)
+    public function computeSynthesisScore(Synthesis $synthesis)
     {
+//        if ($synthesis->isComputing()) {
+//            throw new \Exception('Already computing');
+//        }
+
+        $synthesis->setComputing();
+        $this->entityManager->flush($synthesis);
+
+
         $autodiag = $synthesis->getAutodiag();
         $containers = $autodiag->getContainers();
 
@@ -79,9 +94,9 @@ class ScoreCalculator
             $this->completion->getCompletionRate($synthesis)
         );
 
-        if ($flush) {
-            $this->entityManager->flush();
-        }
+        $synthesis->stopComputing();
+        $this->entityManager->flush($synthesis);
+
     }
 
     /**
@@ -132,5 +147,23 @@ class ScoreCalculator
             }
             $parent = $parent->getParent();
         }
+    }
+
+    public function defetAutodiagScore(Autodiag $autodiag)
+    {
+        $appPath = $this->rootDir . '/console';
+
+        $autodiagId = $autodiag->getId();
+        $process = new Process("php $appPath autodiag:score:compute --autodiag=$autodiagId");
+        $process->start();
+    }
+
+    public function deferSynthesisScore(Synthesis $synthesis)
+    {
+        $appPath = $this->rootDir . '/console';
+
+        $synthesisId = $synthesis->getId();
+        $process = new Process("php $appPath autodiag:score:compute --synthesis=$synthesisId");
+        $process->start();
     }
 }

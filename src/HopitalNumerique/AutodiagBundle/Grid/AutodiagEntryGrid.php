@@ -161,6 +161,7 @@ class AutodiagEntryGrid extends Grid implements GridInterface
                         ]);
 
                         try {
+                            $this->_container->get('doctrine.orm.entity_manager')->beginTransaction();
                             $newSynthesis = $this->_container->get('autodiag.synthesis.generator')->generateSynthesis(
                                 $this->autodiag,
                                 $syntheses,
@@ -169,6 +170,7 @@ class AutodiagEntryGrid extends Grid implements GridInterface
                             $this->_container->get('doctrine.orm.entity_manager')->persist($newSynthesis);
                             $this->_container->get('session')->getFlashBag()->add('info', 'La synthèse à bien été créée.');
                         } catch (\Exception $e) {
+                            $this->_container->get('doctrine.orm.entity_manager')->rollback();
                             if ($e->getCode() == SynthesisGenerator::NEED_AT_LEAST_2) {
                                 $this->_container->get('session')->getFlashBag()->add(
                                     'danger',
@@ -185,6 +187,11 @@ class AutodiagEntryGrid extends Grid implements GridInterface
                         }
 
                         $this->_container->get('doctrine.orm.entity_manager')->flush();
+
+                        $this->_container->get('doctrine.orm.entity_manager')->commit();
+                        if (isset($newSynthesis)) {
+                            $this->_container->get('autodiag.score_calculator')->deferSynthesisScore($newSynthesis);
+                        }
 
                     }
                 )

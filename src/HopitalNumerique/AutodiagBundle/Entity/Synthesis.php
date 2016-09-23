@@ -96,6 +96,13 @@ class Synthesis
      */
     private $completion = 0;
 
+    /**
+     * @var integer
+     *
+     * @ORM\Column(type="integer", nullable=true)
+     */
+    private $computeBeginning;
+
     private function __construct(Autodiag $autodiag, User $user = null)
     {
         $this->entries = new ArrayCollection();
@@ -381,5 +388,24 @@ class Synthesis
     {
         $this->completion = $completion;
     }
-}
 
+    public function setComputing()
+    {
+        $this->computeBeginning = time();
+    }
+
+    public function isComputing()
+    {
+        return $this->computeBeginning !== null;
+    }
+
+    public function getComputeBeginning()
+    {
+        return $this->computeBeginning;
+    }
+
+    public function stopComputing()
+    {
+        $this->computeBeginning = null;
+    }
+}

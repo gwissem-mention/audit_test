@@ -18,8 +18,8 @@ class SynthesisGenerator
      * @param Autodiag $autodiag
      * @param $syntheses
      * @param User $user
-     *
      * @return Synthesis
+     * @throws \Exception
      */
     public function generateSynthesis(Autodiag $autodiag, $syntheses, User $user)
     {
@@ -42,7 +42,6 @@ class SynthesisGenerator
             }
 
             $syntheseEntries = $synthesis->getEntries();
-
             /** @var AutodiagEntry $entry */
             foreach ($syntheseEntries as $entry) {
                 if ($entry->isCopy()) {
