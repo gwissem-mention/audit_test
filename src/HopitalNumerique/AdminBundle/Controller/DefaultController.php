@@ -1,6 +1,8 @@
 <?php
 namespace HopitalNumerique\AdminBundle\Controller;
 
+use HopitalNumerique\UserBundle\Entity\Contractualisation;
+use HopitalNumerique\UserBundle\Entity\User;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -35,7 +37,7 @@ class DefaultController extends Controller
             'totalInscriptionsAnneePrecedente' => $this->container->get('hopitalnumerique_module.manager.inscription')->getCountForYear($anneeEnCours - 1, $currentDomaine),
             'totalParticipantsAnneeEnCours' => $this->container->get('hopitalnumerique_module.manager.inscription')->getUsersCountForYear($anneeEnCours, $currentDomaine),
             'totalParticipantsAnneePrecedente' => $this->container->get('hopitalnumerique_module.manager.inscription')->getUsersCountForYear($anneeEnCours - 1, $currentDomaine),
-            'totalSessionsRisquees' => $this->container->get('hopitalnumerique_module.manager.session')->getSessionsRisqueesCount()
+            'totalSessionsRisquees' => $this->container->get('hopitalnumerique_module.manager.session')->getSessionsRisqueesCount(),
         );
         $blocPaiements     = array( 'apayer' => 0, 'attente' => 0, 'janvier' => 0 );
 
@@ -122,7 +124,7 @@ class DefaultController extends Controller
             'blocForum'         => $blocForum,
             'blocInterventions' => $blocInterventions,
             'blocSessions'      => $blocSessions,
-            'blocPaiements'     => $blocPaiements
+            'blocPaiements'     => $blocPaiements,
         ));
     }
 
@@ -213,7 +215,7 @@ class DefaultController extends Controller
             'top5-points-dur'           => array(),
             'bottom5-points-dur'        => array(),
             'top5-productions'          => array(),
-            'bottom5-productions'       => array()
+            'bottom5-productions'       => array(),
         );
 
         //Bloc "Publication" + TOP + BOTTOM
@@ -343,9 +345,9 @@ class DefaultController extends Controller
             'expCandidats'       => 0,
             'experts'            => 0,
             'expCandidatsRecues' => 0,
-            'contribution'       => 0
+            'contribution'       => 0,
         );
-
+        /** @var User[] $users */
         $users          = $this->get('hopitalnumerique_user.manager.user')->findUsersByDomaine(1);
         $blocUser['nb'] = count($users);
 
@@ -375,8 +377,22 @@ class DefaultController extends Controller
             elseif( $user->hasRoleAmbassadeur() ){
                 $blocUser['ambassadeurs']++;
 
-                if( count($user->getContractualisations()) == 0)
+                if (count($user->getContractualisations()) === 0) {
                     $blocUser['conventions']++;
+                } else {
+                    /** @var Contractualisation[] $contractualisations */
+                    $contractualisations = $user->getContractualisations()->toArray();
+
+                    foreach ($contractualisations as $contractualisation) {
+                        if (
+                            !$contractualisation->getArchiver() &&
+                            $contractualisation->getDateRenouvellement() <= new \DateTime()
+                        ) {
+                            $blocUser['conventions']++;
+                            break;
+                        }
+                    }
+                }
             }
             elseif( $user->hasRoleExpert() )
                 $blocUser['experts']++;
