@@ -75,9 +75,10 @@ ad:
             multiple_result_treatment: Paramètres de traitement de plusieurs résultats
         path:
             fill: Remplir le questionnaire
-            results: Voir les résultats
-            validate: Valider mes résultats
-            share: Partager les résultats
+            results: Voir mon résultat
+            validate: Valider mon résultat
+            share: Partager mon résultat
+            disabled_share: Pour partager un résultat, vous devez d'abord le valider
 
     autodiagentry:
         outofdate: L'autodiagnostic a été mis à jour par l'ANAP depuis votre dernière visite
@@ -140,6 +141,8 @@ ad:
         colored: Coloré
         tooltip: Infobulle
         options: Options
+        comment:
+            add: Ajouter un commentaire à votre réponse
 
     category:
         code: Code
@@ -180,7 +183,7 @@ ad:
             next: Chapitre suivant
             prev: Chapitre précédent
         chapter:
-            not_concerned: Non concerné
+            not_concerned: Je ne suis pas concerné par ce chapitre
         restitution_demand:
             title: Validation de l'autodiagnositc
             description: |

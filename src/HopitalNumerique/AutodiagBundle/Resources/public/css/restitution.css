@@ -13,6 +13,12 @@
 }
 #restitution .restitution-header .identity .title {
     font-size: 24px;
+    margin-bottom: 15px;
+}
+
+#restitution .restitution-header .identity .name {
+    font-size: 18px;
+    font-weight: normal;
 }
 
 #restitution .restitution-header .loggedout-warning {

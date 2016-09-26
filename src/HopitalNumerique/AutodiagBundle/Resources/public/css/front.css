@@ -21,6 +21,8 @@
 
     float: left;
     position: relative;
+
+    font-size: 16px;
 }
 
 #autodiag-path ul li:before {
@@ -67,6 +69,10 @@
     border-left-color: #c5c5c5;
 }
 
+#autodiag-path a {
+    color: #333;
+}
+
 #autodiag-path a.disabled, #autodiag-path span.disabled {
     color: #c8c8c8;
     cursor: default;
@@ -80,6 +86,14 @@
 */
 #autodiag-entry .autodiag-title h1 {
     font-size: 24px;
+    font-weight: bold;
+    text-align: center;
+}
+
+#autodiag-entry .synthesis-name h2 {
+    font-size: 18px;
+    text-align: center;
+    margin-bottom: 20px;
 }
 
 #synthesisCreate {
@@ -143,6 +157,10 @@
     color: #777;
 }
 
+#autodiag-entry #summary .title a{
+    color: #777;
+}
+
 #autodiag-entry #summary ul li {
     border-top: 1px solid #f0f0f0;
     position: relative;
@@ -157,7 +175,7 @@
 }
 
 #autodiag-entry #summary ul li.active > .title {
-    color: #6B339B;
+    /*color: #6B339B;*/
     font-weight: bold;
 }
 
@@ -167,7 +185,7 @@
 }
 
 #autodiag-entry #summary .results a {
-    color: #6B339B;
+    /*color: #6B339B;*/
     font-weight: bold;
 }
 
@@ -247,6 +265,7 @@
 .chapter .chapter-label span {
     font-weight: bold;
     font-size: 20px;
+    color: #d60030;
 }
 
 .chapter .chapter-label .not-concerned {
@@ -266,7 +285,8 @@
 
 
 .attribute .attribute-label {
-    margin-bottom :5px
+    margin-bottom :5px;
+    font-weight: bold;
 }
 
 .attribute .attribute-label .attribute-tooltip {
@@ -314,4 +334,16 @@
 
 .attribute .attribute-mood .fa-smile-o {
     color: #b4dc00;
+}
+
+.checkboxCustom .control-label {
+    font-weight: normal;
+    margin-left: -50px;
+}
+
+@media (max-width: 992px) {
+    .checkboxCustom .control-label {
+        margin-left: 5px;
+        top: -20px;
+    }
 }
