@@ -49,6 +49,7 @@ class FactureManager extends BaseManager
 
         $cols = [
             'Numéro de facture',
+            'Date',
             'Nom',
             'Prénom',
             'E-mail',
@@ -64,6 +65,7 @@ class FactureManager extends BaseManager
         foreach ($payments as $payment) {
             $datas[] = [
                 $payment->getId(),
+                $payment->getDateCreation()->format('d/m/Y'),
                 $payment->getUser()->getNom(),
                 $payment->getUser()->getPrenom(),
                 $payment->getUser()->getEmail(),

@@ -264,11 +264,11 @@
 
                             <div class="panel-body">
                                 <ol>
-                                    <li><b>{{ blocPaiements['payedPreviousYear']|number_format(2, ',', ' ') }} &euro;</b> : payé en {{ "now"|date('Y')-1 }}</li>
-                                    <li><b>{{ blocPaiements['payedCurrentYear']|number_format(2, ',', ' ') }} &euro;</b> : payé en {{ "now"|date('Y') }}</li>
-                                    <li><b>{{ blocPaiements['waitingPayment']|number_format(2, ',', ' ') }} &euro;</b> : factures en attente de paiement</li>
-                                    <li><b>{{ blocPaiements['waintingPaymentCurrentYear']|number_format(2, ',', ' ') }} &euro;</b> : dont factures {{ "now"|date('Y') }}</li>
-                                    <li><b>{{ blocPaiements['waitingBillCreation']|number_format(2, ',', ' ') }} &euro;</b> : en attente d'émission de facture</li>
+                                    <li><b>{{ blocPaiements['payedPreviousYear']|number_format(0, ',', ' ') }} &euro;</b> : payé en {{ "now"|date('Y')-1 }}</li>
+                                    <li><b>{{ blocPaiements['payedCurrentYear']|number_format(0, ',', ' ') }} &euro;</b> : payé en {{ "now"|date('Y') }}</li>
+                                    <li><b>{{ blocPaiements['waitingPayment']|number_format(0, ',', ' ') }} &euro;</b> : factures en attente de paiement</li>
+                                    <li><b>{{ blocPaiements['waintingPaymentCurrentYear']|number_format(0, ',', ' ') }} &euro;</b> : dont factures {{ "now"|date('Y') }}</li>
+                                    <li><b>{{ blocPaiements['waitingBillCreation']|number_format(0, ',', ' ') }} &euro;</b> : en attente d'émission de facture</li>
                                 </ol>
                             </div>
                         </div>
