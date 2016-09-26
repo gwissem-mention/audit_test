@@ -15,8 +15,9 @@ class RestitutionController extends Controller
             ->getFullyLoadedSynthesis($synthesis);
 
         $autodiag = $synthesis->getAutodiag();
+        $restitution = $this->get('autodiag.repository.restitution')->getForAutodiag($autodiag);
 
-        if (null === $autodiag->getRestitution() || null == $autodiag->getAlgorithm()) {
+        if (null === $restitution || null == $autodiag->getAlgorithm()) {
             return $this->render('HopitalNumeriqueAutodiagBundle:Restitution:empty.html.twig', [
                 'synthesis' => $synthesis,
             ]);
@@ -34,8 +35,6 @@ class RestitutionController extends Controller
                 'autodiag' => $autodiag->getId()
             ]);
         }
-
-        $restitution = $this->get('autodiag.repository.restitution')->getForAutodiag($autodiag);
 
         $calculator = $this->get('autodiag.restitution.calculator');
         $resultItems = $calculator->compute($synthesis);
