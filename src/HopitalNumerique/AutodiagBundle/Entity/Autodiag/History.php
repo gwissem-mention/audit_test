@@ -63,34 +63,42 @@ class History
     private $dateTime;
 
     /**
+     * @var boolean
+     *
+     * @ORM\Column(type="boolean")
+     */
+    private $notify;
+
+    /**
      * History constructor.
      * @param Autodiag $autodiag
      * @param User $user
      */
-    private function __construct(Autodiag $autodiag, User $user)
+    private function __construct(Autodiag $autodiag, User $user, $notify)
     {
         $this->autodiag = $autodiag;
         $this->username = $user->getPrenom() . ' ' . $user->getNom();
         $this->dateTime = new \DateTime();
+        $this->notify = $notify;
     }
 
-    public static function createSurveyImport(Autodiag $autodiag, User $user)
+    public static function createSurveyImport(Autodiag $autodiag, User $user, $notify)
     {
-        $history = new self($autodiag, $user);
+        $history = new self($autodiag, $user, $notify);
         $history->setType(self::HISTORY_ENTRY_SURVEY);
         return $history;
     }
 
-    public static function createAlgorithmImport(Autodiag $autodiag, User $user)
+    public static function createAlgorithmImport(Autodiag $autodiag, User $user, $notify)
     {
-        $history = new self($autodiag, $user);
+        $history = new self($autodiag, $user, $notify);
         $history->setType(self::HISTORY_ENTRY_ALGORITHM);
         return $history;
     }
 
-    public static function createRestitutionImport(Autodiag $autodiag, User $user)
+    public static function createRestitutionImport(Autodiag $autodiag, User $user, $notify)
     {
-        $history = new self($autodiag, $user);
+        $history = new self($autodiag, $user, $notify);
         $history->setType(self::HISTORY_ENTRY_RESTITUTION);
         return $history;
     }
@@ -144,6 +152,26 @@ class History
     public function setType($type)
     {
         $this->type = $type;
+
+        return $this;
+    }
+
+    /**
+     * @return boolean
+     */
+    public function isNotify()
+    {
+        return $this->notify;
+    }
+
+    /**
+     * @param $notify
+     *
+     * @return $this
+     */
+    public function setNotify($notify)
+    {
+        $this->notify = $notify;
 
         return $this;
     }

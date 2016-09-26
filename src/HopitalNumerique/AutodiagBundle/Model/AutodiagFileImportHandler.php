@@ -60,7 +60,7 @@ class AutodiagFileImportHandler
      * @param DataImporter $chapterImporter
      * @param DataImporter $questionImporter
      */
-    public function handleSurveyImport(AutodiagFileImport $model, DataImporter $chapterImporter, DataImporter $questionImporter)
+    public function handleSurveyImport(AutodiagFileImport $model, DataImporter $chapterImporter, DataImporter $questionImporter, $isNotified)
     {
         $autodiag = $model->getAutodiag();
         if (null !== $model->getFile()) {
@@ -81,7 +81,7 @@ class AutodiagFileImportHandler
             if (!$chapterProgress->hasErrors() && !$questionProgress->hasErrors()) {
                 // Save history
                 $user = $this->tokenStorage->getToken()->getUser();
-                $history = History::createSurveyImport($this->manager->find('HopitalNumeriqueAutodiagBundle:Autodiag', $autodiag->getId()), $user);
+                $history = History::createSurveyImport($this->manager->find('HopitalNumeriqueAutodiagBundle:Autodiag', $autodiag->getId()), $user, $isNotified);
                 $this->manager->persist($history);
             }
         }

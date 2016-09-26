@@ -28,3 +28,14 @@
     color: #a94442;
     background-color: #f2dede;
 }
+
+.notify-import {
+    position: relative;
+    padding-left: 20px;
+}
+
+.notify-icon {
+    position: absolute;
+    left: 0px;
+    top: 3px;
+}
