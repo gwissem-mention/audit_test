@@ -22,6 +22,11 @@ class RestitutionController extends Controller
             ]);
         }
 
+        // Redirection si calcul en cours
+        if ($synthesis->isComputing()) {
+            return $this->redirectToRoute('hopitalnumerique_autodiag_account_index');
+        }
+
         if (!$this->isGranted('read', $synthesis)) {
             $this->addFlash('danger', $this->get('translator')->trans('ad.synthesis.restitution.forbidden'));
 

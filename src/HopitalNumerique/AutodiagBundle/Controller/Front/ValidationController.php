@@ -26,6 +26,11 @@ class ValidationController extends Controller
             ]);
         }
 
+        // Redirection si calcul en cours
+        if ($synthesis->isComputing()) {
+            return $this->redirectToRoute('hopitalnumerique_autodiag_account_index');
+        }
+
         return $this->render('HopitalNumeriqueAutodiagBundle:Validation:index.html.twig', [
             'synthesis' => $synthesis,
         ]);

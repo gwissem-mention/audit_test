@@ -29,6 +29,11 @@ class ShareController extends Controller
             ]);
         }
 
+        // Redirection si calcul en cours
+        if ($synthesis->isComputing()) {
+            return $this->redirectToRoute('hopitalnumerique_autodiag_account_index');
+        }
+
         $form = $this->createForm(ShareType::class);
         $form->handleRequest($request);
 
