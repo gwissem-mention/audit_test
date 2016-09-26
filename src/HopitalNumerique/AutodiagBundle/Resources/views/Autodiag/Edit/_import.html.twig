@@ -14,12 +14,12 @@
                 {% block repport %}{% endblock %}
             </div>
         </div>
-        <div class="col-md-4">
+        <div class="col-md-4 import-history">
             <h3>Historique des imports</h3>
             {% for change in history %}
-                <div class="notify-import">
+                <div>
                     {% if change.notify %}
-                        <i class="fa fa-volume-up notify-icon" title="{{ 'ad.autodiag.import.notified_update'|trans }}" aria-hidden="true"></i>
+                        <i class="fa fa-volume-up" title="{{ 'ad.autodiag.import.notified_update'|trans }}" aria-hidden="true"></i>
                     {% endif %}
                     {{ 'ad.autodiag.history.last_modified'|trans({
                         '%date%': change.dateTime|date('d/m/Y'),

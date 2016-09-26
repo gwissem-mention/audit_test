@@ -187,15 +187,16 @@ ad:
             not_concerned: Non concerné
             not_concerned_title: Je ne suis pas concerné par ce chapitre
         restitution_demand:
-            title: Validation de l'autodiagnositc
+            title: Voir le résultat de mon autodiagnositc
             description: |
                 {0}Autodiagnostic terminé
                 |{1}Il vous reste à répondre encore à une question.
                 |]1,Inf[Il vous reste à répondre encore à %count% questions.
             additionnal: Vous pouvez facilement identifier les chapitres non complets en consultant le taux de remplissage à coté de chaque chapitre dans le menu de gauche.
             back: Continuer l'autodiagnostic
-            continue: Accéder quand même aux résultats
+            continue: Accéder quand même au résultat
         validation_demand:
+            title: Validation de l'autodiagnostic
             continue: Accéder quand même à la validation
 
     back:
