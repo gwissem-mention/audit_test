@@ -396,7 +396,7 @@ class Synthesis
 
     public function isComputing()
     {
-        return $this->computeBeginning !== null;
+        return $this->computeBeginning !== null && $this->computeBeginning + (12 * 60 * 60) > time();
     }
 
     public function getComputeBeginning()
