@@ -74,10 +74,10 @@ ad:
             generique: Informations génériques
             multiple_result_treatment: Paramètres de traitement de plusieurs résultats
         path:
-            fill: Remplir le questionnaire
-            results: Voir mon résultat
-            validate: Valider mon résultat
-            share: Partager mon résultat
+            fill: 1. Remplir le questionnaire
+            results: 2. Voir mon résultat
+            validate: 3. Valider mon résultat
+            share: 4. Partager mon résultat
             disabled_share: Pour partager un résultat, vous devez d'abord le valider
 
     autodiagentry:
@@ -183,7 +183,8 @@ ad:
             next: Chapitre suivant
             prev: Chapitre précédent
         chapter:
-            not_concerned: Je ne suis pas concerné par ce chapitre
+            not_concerned: Non concerné
+            not_concerned_title: Je ne suis pas concerné par ce chapitre
         restitution_demand:
             title: Validation de l'autodiagnositc
             description: |
