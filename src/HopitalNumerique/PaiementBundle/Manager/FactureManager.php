@@ -81,7 +81,7 @@ class FactureManager extends BaseManager
         (
             array_values($cols),
             $datas,
-            'export-session-evaluations.csv',
+            'export-liste-factures.csv',
             $charset
         );
     }
