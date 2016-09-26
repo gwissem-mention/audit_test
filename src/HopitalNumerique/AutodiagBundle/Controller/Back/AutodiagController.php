@@ -13,6 +13,7 @@ use HopitalNumerique\AutodiagBundle\Grid\AutodiagGrid;
 use HopitalNumerique\AutodiagBundle\Model\FileImport\Algorithm;
 use HopitalNumerique\AutodiagBundle\Model\FileImport\Restitution;
 use HopitalNumerique\AutodiagBundle\Model\FileImport\Survey;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 
