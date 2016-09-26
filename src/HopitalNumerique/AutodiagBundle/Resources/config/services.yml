@@ -122,6 +122,7 @@ services:
             - '@autodiag.synthesis.completion'
             - '@autodiag.attribute_builder_provider'
             - '@autodiag.repository.autodiagentryvalue'
+            - '@autodiag.repository.attribute'
 
     autodiag.restitution.calculator:
         class: HopitalNumerique\AutodiagBundle\Service\RestitutionCalculator

@@ -1,10 +1,12 @@
 <?php
 namespace HopitalNumerique\AutodiagBundle\Service\Result;
 
+use HopitalNumerique\AutodiagBundle\Entity\Autodiag;
 use HopitalNumerique\AutodiagBundle\Entity\Autodiag\Container;
 use HopitalNumerique\AutodiagBundle\Entity\Synthesis;
 use HopitalNumerique\AutodiagBundle\Model\Result\Item;
 use HopitalNumerique\AutodiagBundle\Model\Result\ItemAttribute;
+use HopitalNumerique\AutodiagBundle\Repository\Autodiag\AttributeRepository;
 use HopitalNumerique\AutodiagBundle\Repository\AutodiagEntry\ValueRepository;
 use HopitalNumerique\AutodiagBundle\Service\Attribute\AttributeBuilderProvider;
 use HopitalNumerique\AutodiagBundle\Service\Attribute\PresetableAttributeBuilderInterface;
@@ -27,13 +29,20 @@ class ResultItemBuilder
      */
     protected $valueRepository;
 
-    protected $responses = null;
+    /**
+     * @var AttributeRepository
+     */
+    protected $attributeRepository;
 
-    public function __construct(Completion $completion, AttributeBuilderProvider $attributeBuilder, ValueRepository $valueRepository)
+    protected $responses = null;
+    protected $minAndMaxForAutodiagAttributes = null;
+
+    public function __construct(Completion $completion, AttributeBuilderProvider $attributeBuilder, ValueRepository $valueRepository, AttributeRepository $attributeRepository)
     {
         $this->completion = $completion;
         $this->attributeBuilder = $attributeBuilder;
         $this->valueRepository = $valueRepository;
+        $this->attributeRepository = $attributeRepository;
     }
 
     public function build(Container $container, Synthesis $synthesis)
@@ -116,5 +125,63 @@ class ResultItemBuilder
             $builder->computeScore($attribute['value_value']),
             $responseText ?: '-'
         );
+
+        $score =
+            $this->calculateScore(
+                $itemAttribute->responseValue,
+                $this->getMinAndMaxForAutodiagAttributes($synthesis->getAutodiag(), $attribute)
+            )
+        ;
+
+        $itemAttribute->score = $score;
+    }
+
+    /**
+     * Retourne la valeur minimale et maximale des réponses de l'attribut (pour l'autodiag en paramètre)
+     *
+     * @param Autodiag $autodiag
+     * @param array $attribute
+     * @return mixed
+     */
+    public function getMinAndMaxForAutodiagAttributes(Autodiag $autodiag, array $attribute)
+    {
+        if ($this->minAndMaxForAutodiagAttributes == null) {
+            $this->minAndMaxForAutodiagAttributes =
+                $this
+                    ->attributeRepository
+                    ->getMinAndMaxForAutodiagByAttributes($autodiag)
+            ;
+        }
+
+        if ($this->minAndMaxForAutodiagAttributes[$attribute['attribute_id']]['minimum'] == null
+            && $this->minAndMaxForAutodiagAttributes[$attribute['attribute_id']]['maximum'] == null) {
+            $builder = $this->attributeBuilder->getBuilder($attribute['type']);
+            if ($builder instanceof PresetableAttributeBuilderInterface) {
+                $this->minAndMaxForAutodiagAttributes[$attribute['attribute_id']]['minimum'] = $builder->getPresetMinScore($autodiag);
+                $this->minAndMaxForAutodiagAttributes[$attribute['attribute_id']]['maximum'] = $builder->getPresetMaxScore($autodiag);
+            }
+        }
+
+        return $this->minAndMaxForAutodiagAttributes[$attribute['attribute_id']];
+    }
+
+    /**
+     * Calcule le score d'une valeur en fonction des valeurs min et max
+     *
+     * @param $value
+     * @param $minAndMax
+     * @return float
+     */
+    public function calculateScore($value, $minAndMax)
+    {
+        if ($value === null) {
+            return null;
+        }
+
+        $a = ($minAndMax['maximum'] - $minAndMax['minimum']) / 100;
+        $b = $minAndMax['maximum'];
+        $x = ($value - $b) / $a;
+
+        return 100 + $x;
     }
 }

@@ -16,3 +16,15 @@
 .reponses table {
     margin-top: 10px;
 }
+
+.attribute .attribute-mood .fa-frown-o {
+    color: #c82f5b;
+}
+
+.attribute .attribute-mood .fa-meh-o {
+    color: #e88824;
+}
+
+.attribute .attribute-mood .fa-smile-o {
+    color: #b4dc00;
+}

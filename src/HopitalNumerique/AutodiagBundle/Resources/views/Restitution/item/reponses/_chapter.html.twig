@@ -10,7 +10,7 @@
             <td>{{ attribute.label }}</td>
             <td>{{ attribute.responseText }}</td>
             <td class="attribute">
-                {% if attribute.score is not null and attribute.responseText != '-' and attribute.colored != false %}
+                {% if attribute.score is not null and attribute.responseText != '-' and attribute.colored != false and attribute.responseValue != -1 %}
                     <div class="attribute-mood">
                         {% if attribute.colorationInversed %}
                             {% if attribute.score < 100/3 %}

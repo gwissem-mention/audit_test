@@ -327,6 +327,13 @@ class RestitutionCalculator
             : null;
     }
 
+    /**
+     * Retourne la valeur minimale et maximale des réponses de l'attribut (pour l'autodiag en paramètre)
+     *
+     * @param Autodiag $autodiag
+     * @param array $attribute
+     * @return mixed
+     */
     protected function getMinAndMaxForAutodiagAttributes(Autodiag $autodiag, array $attribute)
     {
         if ($this->minAndMaxForAutodiagAttributes == null) {
