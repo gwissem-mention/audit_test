@@ -36,17 +36,13 @@ cldroit:
 	rm -rf app/cache/*;
 	rm -rf app/logs/*;
 	php app/console cache:clear;
-	chmod -R 777 app/cache;
-	chmod -R 777 app/logs;
 	php app/console assets:install --symlink --relative;
 	php app/console a:d;
 
 cache-prod:
 	rm -rf app/cache/*;
 	rm -rf app/logs/*;
-	chmod -R 777 app/cache app/logs;
 	php -d memory_limit=-1 app/console c:cl --env=prod;
-	chmod -R 777 app/cache app/logs;
 
 install-prod:
 	rm -rf app/cache/*
@@ -60,13 +56,9 @@ maj-prod:
 	git pull;
 	rm -rf app/cache/*;
 	rm -rf app/logs/*;
-	chmod -R 777 app/cache app/logs;
 	php app/console fos:js-routing:dump
 	php -d memory_limit=-1 app/console c:cl --env=prod;
-	chmod -R 777 app/cache app/logs;
 	php -d memory_limit=-1 app/console d:s:u --dump-sql;
 	php -d memory_limit=-1 app/console d:s:u --force
 	php -d memory_limit=-1 app/console a:i --env=prod;
-	chmod -R 777 app/cache app/logs;
 	php -d memory_limit=-1 app/console a:d --env=prod;
-	chmod -R 777 app/cache app/logs;

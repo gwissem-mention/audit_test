@@ -672,7 +672,7 @@ class ResultatManager extends BaseManager
             foreach($questions as $question)
             {
                 //check If Question != texte
-                if( $question->getType()->getId() != 417 )
+                if($question->getType()!= null && $question->getType()->getId() != 417 )
                 {
                     //get parent chapitre ID
                     $chapitreParentId = null;
@@ -1133,7 +1133,7 @@ class ResultatManager extends BaseManager
             $rep->order           = $question->getOrder();
             $rep->lien            = $question->getLien();
             $rep->descriptionLien = $question->getDescriptionLien();
-            $rep->type            = $question->getType()->getId();
+            $rep->type            = ($question->getType() != null) ? $question->getType()->getId() : null;
             $rep->colored         = $question->getColored();
             $rep->options         = explode( '<br />', nl2br( $question->getOptions() ) );
 
