@@ -44,6 +44,11 @@ class RadioBuilder extends AbstractBuilder
 
     public function computeScore($data)
     {
+        $data = $this->transform($data);
+        if (null === $data || $data == "-1") {
+            return null;
+        }
+
         return (float) $data;
     }
 
