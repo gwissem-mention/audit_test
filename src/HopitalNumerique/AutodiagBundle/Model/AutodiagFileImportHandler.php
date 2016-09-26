@@ -156,7 +156,7 @@ class AutodiagFileImportHandler
 
             // Save history
             $user = $this->tokenStorage->getToken()->getUser();
-            $history = History::createAlgorithmImport($autodiag, $user);
+            $history = History::createAlgorithmImport($autodiag, $user, $model->getNotifyUpdate());
             $this->manager->persist($history);
         }
 
@@ -182,7 +182,7 @@ class AutodiagFileImportHandler
 
             // Save history
             $user = $this->tokenStorage->getToken()->getUser();
-            $history = History::createRestitutionImport($autodiag, $user);
+            $history = History::createRestitutionImport($autodiag, $user, $model->getNotifyUpdate());
             $this->manager->persist($history);
         }
 
