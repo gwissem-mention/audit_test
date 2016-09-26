@@ -21,7 +21,7 @@ class SynthesisRepository extends EntityRepository
         $qb = $this->createQueryBuilder('synthesis');
         $qb
             ->addSelect('autodiag', 'user', 'entries_user', 'entries')
-            ->join('synthesis.user', 'user')
+            ->leftJoin('synthesis.user', 'user')
             ->leftJoin('synthesis.autodiag', 'autodiag')
             ->leftJoin('synthesis.entries', 'entries')
             ->leftJoin('entries.user', 'entries_user')
