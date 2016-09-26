@@ -20,9 +20,13 @@ class QuestionWriter implements WriterInterface, ProgressAwareInterface
     const COLUMN_OPTIONS = "items_reponse";
     const COLUMN_CHAPTER = "code_chapitre";
     const COLUMN_CHAPTER_WEIGHT = "ponderation_chapitre";
-    const COLUMN_CATEGORIES = "ponderation_categorie";
+    const COLUMN_CATEGORIES = "ponderation_categories";
     const COLUMN_TYPE = "format_reponse";
     const COLUMN_COLORED = "colorer_reponse";
+    const COLUMN_ATTRIBUTE_LABEL = "libelle_question";
+    const COLUMN_ATTRIBUTE_DESCRIPTION = "texte_avant";
+    const COLUMN_ATTRIBUTE_ORDER = "ordre_question";
+    const COLUMN_ATTRIBUTE_TOOLTIP = "infobulle_question";
 
 
     /** @var EntityManager */
@@ -50,11 +54,10 @@ class QuestionWriter implements WriterInterface, ProgressAwareInterface
     protected $actionPlans = [];
 
     protected $mapping = [
-        'texte_avant' => 'description',
-        'libelle_question' => 'label',
-        'format_reponse' => 'type',
-//        'colorer_reponse' => 'colored',
-        'infobulle_question' => 'tooltip',
+        self::COLUMN_ATTRIBUTE_DESCRIPTION => 'description',
+        self::COLUMN_ATTRIBUTE_LABEL => 'label',
+        self::COLUMN_TYPE => 'type',
+        self::COLUMN_ATTRIBUTE_TOOLTIP => 'tooltip',
     ];
 
     public function __construct(EntityManager $manager, Autodiag $autodiag, AttributeBuilderProvider $attributesProvider, ValidatorInterface $validator)
@@ -107,7 +110,7 @@ class QuestionWriter implements WriterInterface, ProgressAwareInterface
                 $attribute->setColored(false);
             }
 
-            $attribute->setOrder($item['ordre_question']);
+            $attribute->setOrder($item[self::COLUMN_ATTRIBUTE_ORDER]);
 
             $this->handleOptions($attribute, $item[self::COLUMN_OPTIONS]);
             $chapterValid = $this->handleChapter($attribute, $item[self::COLUMN_CHAPTER], $item[self::COLUMN_CHAPTER_WEIGHT]);
@@ -505,17 +508,17 @@ class QuestionWriter implements WriterInterface, ProgressAwareInterface
         return
             count($item) === 11
             && count(array_intersect_key($item, [
-                "code_question" => true,
-                "ordre_question" => true,
-                "code_chapitre" => true,
-                "texte_avant" => true,
-                "libelle_question" => true,
-                "format_reponse" => true,
-                "items_reponse" => true,
-                "colorer_reponse" => true,
-                "infobulle_question" => true,
-                "ponderation_categorie" => true,
-                "ponderation_chapitre" => true,
+                self::COLUMN_CODE => true,
+                self::COLUMN_ATTRIBUTE_ORDER => true,
+                self::COLUMN_CHAPTER => true,
+                self::COLUMN_ATTRIBUTE_DESCRIPTION => true,
+                self::COLUMN_ATTRIBUTE_LABEL => true,
+                self::COLUMN_TYPE => true,
+                self::COLUMN_OPTIONS => true,
+                self::COLUMN_COLORED => true,
+                self::COLUMN_ATTRIBUTE_TOOLTIP => true,
+                self::COLUMN_CATEGORIES => true,
+                self::COLUMN_CHAPTER_WEIGHT => true,
             ])) === 11;
     }
     protected function validate($item)

@@ -36,7 +36,7 @@ class Survey extends AutodiagFileImport
             $headers = $sheet->rangeToArray('A1:I1');
             $headers = $headers[0];
             if (count($headers) !== 9
-                || count(array_intersect_key($headers, [
+                || count(array_intersect($headers, [
                     'code_chapitre',
                     'code_chapitre_enfant',
                     'libelle_chapitre',
@@ -70,7 +70,7 @@ class Survey extends AutodiagFileImport
                     'items_reponse',
                     'colorer_reponse',
                     'infobulle_question',
-                    'ponderation_categorie',
+                    'ponderation_categories',
                     'ponderation_chapitre',
                     'ordre_question',
                 ])) !== 11

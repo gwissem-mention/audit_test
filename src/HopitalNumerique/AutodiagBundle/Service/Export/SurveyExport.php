@@ -63,7 +63,7 @@ class SurveyExport extends AbstractExport
             'items_reponse',
             'colorer_reponse',
             'infobulle_question',
-            'ponderation_categorie',
+            'ponderation_categories',
             'ponderation_chapitre',
         ]);
     }
