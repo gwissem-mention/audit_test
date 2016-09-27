@@ -206,6 +206,7 @@ class ValueRepository extends EntityRepository
             ->join('attribute.autodiag', 'autodiag')
             ->leftJoin('autodiag.presets', 'presets')
             ->groupBy('attribute.id')
+            ->orderBy('attribute.order', 'ASC')
             ->where('autodiag.id = :autodiag_id')
             ->setParameters([
                 'entry_id' => $entryId,
