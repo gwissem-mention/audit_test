@@ -5,12 +5,14 @@
 
         {% block navigation %}
             {% include "@HopitalNumeriqueAutodiag/_navigation.html.twig" with {
-                "step": "restitution",
-                "autodiag": synthesis.autodiag,
-                "synthesis": synthesis,
-                "entry" : synthesis.entries|length > 1 ? null : synthesis.entries.first
+            "step": "restitution",
+            "autodiag": synthesis.autodiag,
+            "synthesis": synthesis,
+            "entry" : synthesis.entries|length > 1 ? null : synthesis.entries.first
             } %}
         {% endblock %}
+
+        {% set entry = synthesis.entries|length > 1 ? null : synthesis.entries.first %}
 
         <div class="restitution-header">
             <div class="update-at">
@@ -21,6 +23,27 @@
                 <div class="title">{{ synthesis.autodiag.title }}</div>
                 <div class="name">{{ synthesis.name }}</div>
             </div>
+
+            {% if pdf is not defined %}
+                <div class="links pull-right">
+                    <a class="btn btn-default" href="{{ path("hopitalnumerique_autodiag_restitution_pdf", {"synthesis": synthesis.id}) }}" target="_blank" title="{{ 'ad.restitution.export_pdf'|trans }}">
+                        <i class="fa fa-print" aria-hidden="true"></i>
+                    </a>
+                </div>
+                <div class="links pull-left">
+                    {% if entry is not null and entry.id is not null and entry.validatedAt is null %}
+                        <a class="btn btn-default" href="{% if entry is not null and entry.id is not null %}{{ path('hopitalnumerique_autodiag_entry_edit', {"entry": entry.id}) }}{% else %}#{% endif %}" title="{{ 'ad.restitution.survey_back'|trans }}">
+                            <i class="fa fa-reply" aria-hidden="true"></i>
+                        </a>
+                    {% endif %}
+                    <a class="btn btn-default" href="{{ path("hopitalnumerique_autodiag_entry_add", {"autodiag": synthesis.autodiag.id}) }}" title="{{ 'ad.restitution.start_new'|trans }}">
+                        <i class="fa fa-file-text-o" aria-hidden="true"></i>
+                    </a>
+                </div>
+            {% endif %}
+
+            <div class="clearfix"></div>
+
 
             <div class="pull-left">
                 {% if not app.user %}
@@ -43,17 +66,6 @@
                     </div>
                 {% endif %}
             </div>
-
-            {% if pdf is not defined %}
-                <div class="links pull-right">
-                    <a class="btn btn-success btn-block" href="{{ path("hopitalnumerique_autodiag_restitution_pdf", {"synthesis": synthesis.id}) }}">
-                        {{ "ad.restitution.export_pdf"|trans }}
-                    </a>
-                    <a class="btn btn-success btn-block" href="{{ path("hopitalnumerique_autodiag_entry_add", {"autodiag": synthesis.autodiag.id}) }}">
-                        {{ "ad.restitution.start_new"|trans }}
-                    </a>
-                </div>
-            {% endif %}
 
             <div class="clearfix"></div>
 

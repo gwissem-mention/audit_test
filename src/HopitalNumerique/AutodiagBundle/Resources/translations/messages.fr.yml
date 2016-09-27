@@ -162,7 +162,9 @@ ad:
         loggedout-warning-validate: Pour pouvoir valider vos résultats vous devez vous
         synthesis: Synthèse des autodiagnistics suivants
         start_new: Commencer un nouvel autodiagnostic
-        export_pdf: Télécharger les résultats en PDF
+        start_new: Commencer un nouvel autodiagnostic
+        export_pdf: Télécharger mon résultat en PDF
+        survey_back: Retourner au questionnaire
         not_concerned: Aucune restitution; vous n'êtes pas concerné par cette section.
 
     validation:

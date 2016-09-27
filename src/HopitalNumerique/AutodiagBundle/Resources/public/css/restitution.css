@@ -34,9 +34,9 @@
     padding-right: 10px;
 }
 
-/*#restitution .items-wrapper {*/
-    /*page-break-after: always;*/
-/*}*/
+#restitution .restitution-header .links {
+    margin-top: -70px;
+}
 
 #restitution .item-row {
     display: -webkit-box;
@@ -421,4 +421,17 @@
 
 #restitution .plan_action tr.root {
      font-weight: bold;
+}
+
+#restitution .nav-tabs > li.active > a,
+#restitution .nav-tabs > li.active > a:hover,
+#restitution .nav-tabs > li.active > a:focus {
+    color: #555;
+    font-weight: bold;
+    background-color: #eee;
+}
+
+#restitution .nav-tabs > li > a {
+    color: #555;
+    font-weight: bold;
 }
