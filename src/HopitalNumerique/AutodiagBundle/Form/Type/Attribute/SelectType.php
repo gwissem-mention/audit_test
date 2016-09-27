@@ -21,7 +21,7 @@ class SelectType extends AttributeType
             'choices_as_values' => true,
             'expanded' => false,
             'multiple' => false,
-            'empty_value' => '-',
+            'empty_value' => ' ',
         ]);
     }
 

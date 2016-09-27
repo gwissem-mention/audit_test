@@ -40,7 +40,6 @@ class ValueType extends AbstractType
                 ->add('comment', TextareaType::class)
             ;
         });
-
     }
 
     /**

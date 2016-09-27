@@ -21,7 +21,7 @@
 
 {% macro select(type, preset, value) %}
     <select id="value_value" name="value[value][{{ type }}]" required="required" class="form-control">
-        <option value="">-</option>
+        <option value=""> </option>
         {% if preset is not null %}
             {% for presetValue, label in preset.preset[type] %}
                 <option value="{{ presetValue }}" {{ value is not null and value[type] is not null and value[type] == presetValue ? "selected" : "" }}>

@@ -265,7 +265,7 @@ class RestitutionCalculator
 
         $itemAttribute->setResponse(
             $builder->computeScore($attribute['value_value']),
-            $responseText ?: '-'
+            $responseText ?: null !== $attribute['entry_id'] ? 'Non concerné' : ''
         );
 
         if (null !== $itemAttribute->responseValue) {
