@@ -1,5 +1,10 @@
+{% if in_progress is not defined %}
+    {% set in_progress = true %}
+{% endif %}
+
 <div class="container-fluid">
 
+    {% if in_progress %}
     <h2>{{ 'ad.account.in_progress'|trans }}</h2>
     <div class="row-fluid">
         <div class="col-md-12">
@@ -41,6 +46,7 @@
             </table>
         </div>
     </div>
+    {% endif %}
 
     <form action="{{ path('hopitalnumerique_autodiag_account_generate_synthesis') }}" method="post" id="syntheses-form">
         <h2>{{ 'ad.account.valid'|trans }}</h2>
@@ -123,18 +129,6 @@
                     url: pollingUrl
                 });
             });
-
-            $(function(){
-                $('#create-synthesis-btn').click(function(){
-                    if ($('#syntheses-form input[type=checkbox]:checked').length < 2) {
-                        alert($(this).data('errormessage'));
-
-                        return false;
-                    }
-
-                    $('body').nodevoLoader().start();
-                });
-            })
         </script>
 
     </form>

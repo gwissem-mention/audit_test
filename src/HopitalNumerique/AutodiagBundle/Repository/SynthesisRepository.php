@@ -66,6 +66,41 @@ class SynthesisRepository extends EntityRepository
     }
 
     /**
+     * Retourne les synthèses de l'utilisateur et les synthèses qui lui ont été partagées
+     * pour l'autodiag passé en paramètre (et éventuellement le domaine)
+     *
+     * @param User $user
+     * @param Domaine|null $domain
+     * @param Autodiag $autodiag
+     * @return array
+     */
+    public function findByUserAndAutodiag(User $user, Autodiag $autodiag, Domaine $domain = null)
+    {
+        $qb = $this->getEntityManager()->createQueryBuilder();
+        $qb
+            ->select('synthesis', 'entries')
+            ->from('HopitalNumeriqueAutodiagBundle:Synthesis', 'synthesis')
+            ->leftJoin('synthesis.shares', 'shares', Join::WITH, 'shares = :user')
+            ->leftJoin('synthesis.entries', 'entries')
+            ->orWhere('synthesis.user = :user')
+            ->orWhere('shares.id IS NOT NULL')
+            ->andWhere('synthesis.autodiag = :autodiag')
+            ->setParameter('user', $user)
+            ->setParameter('autodiag', $autodiag)
+        ;
+
+        if ($domain != null) {
+            $qb
+                ->join('synthesis.autodiag', 'autodiag')
+                ->join('autodiag.domaines', 'domaines', Join::WITH, 'domaines = :domain')
+                ->setParameter('domain', $domain)
+            ;
+        }
+
+        return $qb->getQuery()->getResult();
+    }
+
+    /**
      * Retourne les synthèses qui contiennent l'entry en paramètre
      *
      * @param AutodiagEntry $entry

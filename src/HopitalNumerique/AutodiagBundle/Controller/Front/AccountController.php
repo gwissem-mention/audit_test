@@ -38,7 +38,7 @@ class AccountController extends Controller
         }
 
         $dataFormatter = $this->get('autodiag.synthesis.dataformatter');
-        $datasForSyntheses = $dataFormatter->getSynthesesByAutodiag($currentUser, $domain);
+        $datasForSyntheses = $dataFormatter->getSynthesesOrderByAutodiag($currentUser, $domain);
 
         if ($request->isXmlHttpRequest()) {
             return $this->render('HopitalNumeriqueAutodiagBundle:Account/partials:autodiag_list.html.twig', array(
@@ -67,13 +67,13 @@ class AccountController extends Controller
         if (count($form->get('synthesis-choice')) > 1) {
             $this->addFlash('danger', $this->get('translator')->trans('ad.synthesis.generator.error.more_than_one_ad'));
 
-            return $this->redirectToRoute('hopitalnumerique_autodiag_account_index');
+            return $this->redirect($request->headers->get('referer'));
         }
 
         if ($form->get('synthesis-name') == "") {
             $this->addFlash('danger', $this->get('translator')->trans('ad.synthesis.generator.error.empty_name'));
 
-            return $this->redirectToRoute('hopitalnumerique_autodiag_account_index');
+            return $this->redirect($request->headers->get('referer'));
         }
 
         $autodiagId = key($form->get('synthesis-choice'));
@@ -106,7 +106,7 @@ class AccountController extends Controller
                 $this->addFlash('danger', $this->get('translator')->trans('ad.synthesis.generator.error.general'));
             }
 
-            return $this->redirectToRoute('hopitalnumerique_autodiag_account_index');
+            return $this->redirect($request->headers->get('referer'));
         }
 
         if (isset($newSynthesis)) {
@@ -119,7 +119,7 @@ class AccountController extends Controller
 
         $this->addFlash('success', $this->get('translator')->trans('ad.synthesis.generator.success'));
 
-        return $this->redirectToRoute('hopitalnumerique_autodiag_account_index');
+        return $this->redirect($request->headers->get('referer'));
     }
 
     /**
@@ -127,7 +127,7 @@ class AccountController extends Controller
      *
      * @return \Symfony\Component\HttpFoundation\RedirectResponse
      */
-    public function deleteAction(Synthesis $synthesis)
+    public function deleteAction(Request $request, Synthesis $synthesis)
     {
         $user = $this->getUser();
 
@@ -147,7 +147,7 @@ class AccountController extends Controller
             $this->addFlash('danger', $this->get('translator')->trans('ad.synthesis.delete.error'));
         }
 
-        return $this->redirectToRoute('hopitalnumerique_autodiag_account_index');
+        return $this->redirect($request->headers->get('referer'));
     }
 
 }

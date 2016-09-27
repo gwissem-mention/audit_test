@@ -177,6 +177,12 @@ ad:
         linkDescription: Description du lien
         visible: Visible
 
+    share:
+        share_result: Partager mon résultat
+        share_with: Partager mon résultat avec :
+        shared_with: Mon résultat est partagé avec :
+        compare_results: Faire une synthèse de mes résultats
+
     front:
         new_entry: Nouvel autodiagnostic
         instruction_title: Instructions de l'autodiagnostic

@@ -43,20 +43,6 @@
 
     <script>
         $('[data-toggle="tooltip"]').tooltip();
-
-        $(function(){
-            $('#domain-choice').change(function(){
-                var $synthesesContent = $('#syntheses-content');
-
-                var loader = $synthesesContent.nodevoLoader().start();
-
-                $.get($(this).find('option:selected').data('url'), null, function(data) {
-                        loader.finished();
-                        $synthesesContent.html(data);
-                    }
-                );
-            });
-        })
     </script>
 
 {% endblock %}

@@ -5,6 +5,7 @@ namespace HopitalNumerique\AutodiagBundle\Controller\Front;
 use HopitalNumerique\AutodiagBundle\Entity\Synthesis;
 use HopitalNumerique\AutodiagBundle\Form\Type\ShareType;
 use HopitalNumerique\AutodiagBundle\Service\Share;
+use HopitalNumerique\DomaineBundle\Entity\Domaine;
 use HopitalNumerique\UserBundle\Entity\User;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
@@ -16,12 +17,16 @@ class ShareController extends Controller
      * @param $synthesis
      * @return \Symfony\Component\HttpFoundation\RedirectResponse|\Symfony\Component\HttpFoundation\Response
      */
-    public function indexAction(Request $request, $synthesis)
+    public function indexAction(Request $request, Synthesis $synthesis, Domaine $domain = null)
     {
         $synthesis = $this->getDoctrine()->getManager()->getRepository('HopitalNumeriqueAutodiagBundle:Synthesis')
             ->getFullyLoadedSynthesis($synthesis);
 
         $autodiag = $synthesis->getAutodiag();
+
+        /** @var User $user */
+        $user = $this->getUser();
+        $domainesUser = $user->getDomaines();
 
         if (!$this->isGranted('share', $synthesis)) {
             return $this->redirectToRoute('hopitalnumerique_autodiag_entry_add', [
@@ -54,9 +59,24 @@ class ShareController extends Controller
             ]);
         }
 
+        if ($request->isXmlHttpRequest()) {
+            return $this->render('HopitalNumeriqueAutodiagBundle:Account/partials:autodiag_list.html.twig', array(
+                'datasForSyntheses' =>
+                    $this->get('autodiag.synthesis.dataformatter')->getSynthesesByAutodiag($user, $autodiag, $domain),
+                'user' => $user,
+                'in_progress' => false,
+            ));
+        }
+
         return $this->render('HopitalNumeriqueAutodiagBundle:Share:index.html.twig', [
             'synthesis' => $synthesis,
             'form' => $form->createView(),
+            'datasForSyntheses' =>
+                $this->get('autodiag.synthesis.dataformatter')->getSynthesesByAutodiag($user, $autodiag, $domain),
+            'user' => $user,
+            'in_progress' => false,
+            'domainesUser' => $domainesUser,
+            'currentDomain' => $domain,
         ]);
     }
 

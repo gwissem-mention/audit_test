@@ -14,3 +14,47 @@
 #share .share-header .title {
     font-size: 24px;
 }
+
+#share thead tr {
+    color:#FFFFFF;
+    text-transform:uppercase;
+    font-size: 11px;
+}
+
+#share thead tr a {
+    color:#FFFFFF;
+    font-size: 11px
+}
+
+#share thead th {
+    background-color:#6F3596;
+    vertical-align: middle;
+    text-align: center;
+}
+#share th,
+#share table.table td {
+    border: 1px solid #ddd;
+    padding: 4px;
+    text-align: center;
+}
+
+#share i.maj::after {
+    content: "(MÀJ)";
+    color: #8c8c8c;
+    font-style: normal;
+    font-size: 12px;
+    cursor: pointer;
+}
+
+#share .row-account {
+    display: inline-block;
+    margin: 0;
+}
+
+#share .form-control {
+    display: inline-block;
+}
+
+#share .synthesis-creation {
+    margin-bottom: 20px;
+}

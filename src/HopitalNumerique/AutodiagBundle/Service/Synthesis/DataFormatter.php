@@ -3,6 +3,7 @@
 namespace HopitalNumerique\AutodiagBundle\Service\Synthesis;
 
 use Doctrine\ORM\EntityManager;
+use HopitalNumerique\AutodiagBundle\Entity\Autodiag;
 use HopitalNumerique\DomaineBundle\Entity\Domaine;
 use HopitalNumerique\UserBundle\Entity\User;
 
@@ -30,19 +31,48 @@ class DataFormatter
     }
 
     /**
+     * Retourne les synthèses ordonnées par autodiag
+     *
+     * @param User $user
+     * @param Domaine|null $domaine
+     * @return array
+     */
+    public function getSynthesesOrderByAutodiag(User $user, Domaine $domaine = null)
+    {
+        $synthesisRepository = $this->manager->getRepository('HopitalNumeriqueAutodiagBundle:Synthesis');
+
+        $syntheses = $synthesisRepository->findByUser($user, $domaine);
+
+        return $this->formatteSyntheses($syntheses);
+    }
+
+    /**
+     * Retourne les synthèses formattées pour un autodiag
+     *
+     * @param User $user
+     * @param Autodiag $autodiag
+     * @param Domaine|null $domaine
+     * @return array
+     */
+    public function getSynthesesByAutodiag(User $user, Autodiag $autodiag, Domaine $domaine = null)
+    {
+        $synthesisRepository = $this->manager->getRepository('HopitalNumeriqueAutodiagBundle:Synthesis');
+
+        $syntheses = $synthesisRepository->findByUserAndAutodiag($user, $autodiag, $domaine);
+
+        return $this->formatteSyntheses($syntheses);
+    }
+
+    /**
      * Retourne un tableau composé de deux sous tableaux,
      * le premier contient les infos à afficher pour les synthèses non-validées
      * le second contient les infos à afficher pour les synthèses validées (avec les syntèses partagées)
      *
-     * @param User $user
+     * @param array $syntheses
      * @return array
      */
-    public function getSynthesesByAutodiag(User $user, Domaine $domain = null)
+    public function formatteSyntheses(array $syntheses)
     {
-        $synthesisRepository = $this->manager->getRepository('HopitalNumeriqueAutodiagBundle:Synthesis');
-
-        $syntheses = $synthesisRepository->findByUser($user, $domain);
-
         $currentSynthesesByAutodiag = [];
         $validSynthesesByAutodiag = [];
 

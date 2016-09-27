@@ -1,5 +1,14 @@
 {% extends 'HopitalNumeriqueAutodiagBundle::layout.html.twig' %}
 
+{% block javascripts %}
+    {{parent()}}
+    {% javascripts output="compiled/hopitalnumerique-autodiag-share.js"
+    "bundles/hopitalnumeriqueautodiag/js/account.js"
+    %}
+    <script type="text/javascript" src="{{ asset_url }}"></script>
+    {% endjavascripts %}
+{% endblock %}
+
 {% block body %}
     <div id="share">
 
@@ -18,23 +27,22 @@
         </div>
 
         <div class="content">
+            <h1>{{ 'ad.share.share_result'|trans }}</h1>
             <p>
                 {{'Module_autodiagnostic_share'|nodevoTexteDynamique(domaineCurrent.id)|raw|nl2br}}
             </p>
-
-
             <div class="row">
                 <div class="col-md-6">
                     {{ form_start(form) }}
                         <div class="row">
-                            {{ form_row(form.shares, {"label": "Partager mes résultats avec :"}) }}
+                            {{ form_row(form.shares, {"label": 'ad.share.share_with'|trans}) }}
                         </div>
                         <input type="submit" value="Partager" class="btn btn-success" />
                     {{ form_end(form) }}
                 </div>
                 <div class="col-md-6">
                     <div class="shares">
-                        <span>Mes résultats sont partagés avec :</span>
+                        <span>{{ 'ad.share.shared_with'|trans }}</span>
                         <ul>
                             {% for share in synthesis.shares %}
                                 <li>
@@ -52,9 +60,32 @@
                 </div>
             </div>
 
+            <br>
+            <h1>{{ 'ad.share.compare_results'|trans }}</h1>
+            <p>
+                {{'Module_autodiagnostic_compare'|nodevoTexteDynamique(domaineCurrent.id)|raw|nl2br}}
+            </p>
+            <div class="domain-choice">
+                <div class="row-account">
+                    <p>{{ 'ad.account.domain_selection'|trans }}</p>
+                </div>
+                <div class="row-account">
+                    <select id="domain-choice">
+                        <option data-url="{{ path('hopitalnumerique_autodiag_share_index', {'synthesis': synthesis.id}) }}">{{ 'ad.account.domain_all'|trans }}</option>
+                        {% for domaine in domainesUser %}
+                            <option data-url="{{ path('hopitalnumerique_autodiag_share_index_domain', {'synthesis': synthesis.id, 'domain': domaine.id}) }}"{% if currentDomain is not null and currentDomain.id == domaine.id %} selected{% endif %}>{{ domaine.nom }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+            <div id="syntheses-content">
+                {% include '@HopitalNumeriqueAutodiag/Account/partials/autodiag_list.html.twig' with {'datasForSyntheses': datasForSyntheses, 'user': user} %}
+            </div>
         </div>
     </div>
 
+    <script>
+        $('[data-toggle="tooltip"]').tooltip();
+    </script>
+
 {% endblock %}
-
-

@@ -40,7 +40,7 @@
                 </a>
             {% else %}
                 <span class="disabled">
-                    {% if entry.validatedAt is null %}{{ "ad.autodiag.path.validate"|trans }}{% else %}{{ 'ad.autodiag.path.unvalidate'|trans }}{% endif %}
+                    {{ "ad.autodiag.path.unvalidate"|trans }}
                 </span>
             {% endif %}
         </li>
