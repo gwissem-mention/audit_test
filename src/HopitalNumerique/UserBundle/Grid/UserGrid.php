@@ -1,4 +1,4 @@
-<?php 
+<?php
 namespace HopitalNumerique\UserBundle\Grid;
 
 use Nodevo\GridBundle\Grid\Grid;
@@ -16,14 +16,15 @@ class UserGrid extends Grid implements GridInterface
     	   'ROLE_AMBASSADEUR_7',
            'ROLE_EXPERT_6'
     );
-    
+
     /**
     * Set la config propre au Grid User (Source + config par défaut)
     */
     public function setConfig()
     {
-        $this->setSource( 'hopitalnumerique_user.manager.user' );
-        $this->setSourceType( self::SOURCE_TYPE_MANAGER );
+        $this->setSource('hopitalnumerique_user.manager.user');
+        $this->setSourceType(self::SOURCE_TYPE_MANAGER);
+        $this->setSourceCondition('user', $this->_container->get('security.token_storage')->getToken()->getUser());
         $this->setNoDataMessage('Aucun utilisateur à afficher.');
         $this->setButtonSize(49);
     }
@@ -86,7 +87,7 @@ class UserGrid extends Grid implements GridInterface
         $this->addColonne($pseudonymeColonne);
 
         $this->addColonne( new Column\NumberColumn('idUser', 'ID') );
-        $this->addColonne( new Column\DateColumn('dateInscription', 'Date d\'inscription') );                      
+        $this->addColonne( new Column\DateColumn('dateInscription', 'Date d\'inscription') );
         $this->addColonne( new Column\NumberColumn('nbVisites', 'Visites') );
         $this->addColonne( new Column\TextColumn('nom', 'Nom') );
         $this->addColonne( new Column\TextColumn('prenom', 'Prénom') );
@@ -114,7 +115,7 @@ class UserGrid extends Grid implements GridInterface
 
         $domaineColumn = new Column\TextColumn('domaines', 'Domaine(s) associé(s)');
         $this->addColonne( $domaineColumn );
-        
+
         $contractualisationColumn = new Column\TextColumn('contra', 'À jour');
         $contractualisationColumn->setSize( 75 );
         $contractualisationColumn->setAlign('center');
@@ -187,6 +188,6 @@ class UserGrid extends Grid implements GridInterface
         $this->addMassAction( new Action\ActionMass('Activer','HopitalNumeriqueUserBundle:User:activerMass') );
         $this->addMassAction( new Action\ActionMass('Désactiver','HopitalNumeriqueUserBundle:User:desactiverMass') );
         $this->addMassAction( new Action\ActionMass('Envoyer un mail','HopitalNumeriqueUserBundle:User:envoyerMailMass') );
-        
+
     }
 }
