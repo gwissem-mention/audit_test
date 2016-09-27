@@ -163,7 +163,7 @@ class ValueRepository extends EntityRepository
     {
         $qb = $this->getEntityManager()->createQueryBuilder();
         $qb
-            ->select('count(distinct val.attribute) * 100 / count(distinct attribute.id)')
+            ->select('count(syntheses.id) * 100 / count(distinct attribute.id)')
             ->from('HopitalNumeriqueAutodiagBundle:Autodiag\Attribute', 'attribute')
             ->leftJoin(AutodiagEntry\Value::class, 'val', Join::WITH, 'val.attribute = attribute.id AND val.valid = TRUE')
             ->leftJoin('val.entry', 'entry')
