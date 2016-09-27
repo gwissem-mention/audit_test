@@ -36,15 +36,15 @@
                         data-demand="{{ path('hopitalnumerique_autodiag_entry_restitution_validation_demand', {"entry": entry.id, "target": "validation"}) }}"
                     {% endif %}
                 >
-                    {{ "ad.autodiag.path.validate"|trans }}
+                    {% if entry.validatedAt is null %}{{ "ad.autodiag.path.validate"|trans }}{% else %}{{ 'ad.autodiag.path.unvalidate'|trans }}{% endif %}
                 </a>
             {% else %}
                 <span class="disabled">
-                    {{ "ad.autodiag.path.validate"|trans }}
+                    {% if entry.validatedAt is null %}{{ "ad.autodiag.path.validate"|trans }}{% else %}{{ 'ad.autodiag.path.unvalidate'|trans }}{% endif %}
                 </span>
             {% endif %}
         </li>
-        <li class="{{ step == "share" ? 'active' : '' }}">
+        <li class="share {{ step == "share" ? 'active' : '' }}">
             {% if synthesis.validatedAt is not null %}
                 <a href="{{ path('hopitalnumerique_autodiag_share_index', {"synthesis": synthesis.id}) }}">
                     {{ "ad.autodiag.path.share"|trans }}

@@ -78,7 +78,8 @@ ad:
             fill: 1. Remplir le questionnaire
             results: 2. Voir mon résultat
             validate: 3. Valider mon résultat
-            share: 4. Partager mon résultat
+            unvalidate: 3. Dévérouiller le questionnaire
+            share: 4. Partager ou comparer mes résultats
             disabled_share: Pour partager un résultat, vous devez d'abord le valider
 
     autodiagentry:
@@ -169,7 +170,7 @@ ad:
 
     validation:
         validate: Valider mes résultats
-        unvalidate: Ré-ouvrir cet autodiagnostic
+        unvalidate: Dévérouiller le questionnaire
 
     actionplan:
         description: Description

@@ -53,7 +53,7 @@ div.homepage  {
 }
 #header #logoHn {
     margin-top: 0px;
-    display: block;#logoAnap
+    display: block;/*#logoAnap*/
     float: left;
     margin-right: 30px;
 }

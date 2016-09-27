@@ -14,7 +14,7 @@
     text-align: center;
     margin: auto;
 
-    width: 25%;
+    width: 20%;
     height: 50px;
     line-height: 50px;
     background: #e2e2e2;
@@ -23,6 +23,15 @@
     position: relative;
 
     font-size: 16px;
+    padding-left: 30px;
+}
+
+#autodiag-path ul li.validation {
+    width: 27%;
+}
+
+#autodiag-path ul li.share {
+    width: 33%;
 }
 
 #autodiag-path ul li:before {
