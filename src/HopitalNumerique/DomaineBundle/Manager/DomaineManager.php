@@ -27,7 +27,7 @@ class DomaineManager extends BaseManager
         }
         return $domainesForGrid;
     }
-    
+
     public function getDomainesUserConnected($idUser) {
     	return $this->getRepository()->getDomainesUserConnectedForForm($idUser)->getQuery()->getResult();
     }
@@ -42,12 +42,9 @@ class DomaineManager extends BaseManager
         $domaines = $this->findAll();
         $domaineByUser = array();
 
-        foreach ($domaines as $domaine) 
-        {
-            foreach ($domaine->getUsers() as $user) 
-            {
-                if(!array_key_exists($user->getId(), $domaineByUser))
-                {
+        foreach ($domaines as $domaine) {
+            foreach ($domaine->getUsers() as $user) {
+                if (!array_key_exists($user->getId(), $domaineByUser)) {
                     $domaineByUser[$user->getId()] = array(
                         'url' => '',
                         'id'  => array()
@@ -73,7 +70,7 @@ class DomaineManager extends BaseManager
 
         $domaines = $this->findAll();
 
-        foreach ($domaines as $domaine) 
+        foreach ($domaines as $domaine)
         {
             $domaineOrdered[$domaine->getId()] = $domaine;
         }

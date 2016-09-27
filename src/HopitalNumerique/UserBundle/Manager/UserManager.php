@@ -39,7 +39,6 @@ class UserManager extends BaseManager
      */
     public function getDatasForGrid( \StdClass $condition = null )
     {
-        $userConnected = $this->getUserConnected();
         $users = $this->getRepository()->getDatasForGrid( $condition )->getQuery()->getResult();
         $usersForGrid = array();
 
@@ -57,33 +56,8 @@ class UserManager extends BaseManager
 
         $refusCandidature = $this->_managerRefusCandidature->getRefusCandidatureByQuestionnaire();
 
-        $domainesByUsers = $this->_managerDomaine->getDomainesByUsers();
-
         //Pour chaque utilisateur, set la contractualisation à jour
-        foreach ($users as $user)
-        {
-            if (array_key_exists($user['id'], $domainesByUsers)) {
-                //Filtre uniquement si l'utilisateur connecté à un domaine, sinon on affiche toujours tout le monde
-                if(!empty($userConnected->getDomainesId()))
-                {
-                    $notInArray = true;
-                    $domainesIdUserConnected = $userConnected->getDomainesId();
-
-                    foreach ($domainesIdUserConnected as $idDomaineUserConnected)
-                    {
-                        if(in_array($idDomaineUserConnected, $domainesByUsers[$user['id']]['id']))
-                        {
-                            $notInArray = false;
-                            break;
-                        }
-                    }
-
-                    if($notInArray)
-                    {
-                        continue;
-                    }
-                }
-            }
+        foreach ($users as $user) {
 
             //Récupération des questionnaires rempli par l'utilisateur courant
             $questionnairesByUser = array_key_exists($user['id'], $questionnaireByUser) ? $questionnaireByUser[$user['id']] : array();
@@ -103,9 +77,6 @@ class UserManager extends BaseManager
             $dateCourante = new \DateTime($user['contra']);
             $dateCourante->add($interval);
             $user['contra'] = ('' != $user['contra']) ? ($dateCourante >= $aujourdHui) : false;
-
-            //Gestion du domaine
-            $user['domaines'] = array_key_exists($user['id'], $domainesByUsers) ? $domainesByUsers[$user['id']]['url'] : '';
 
             unset($user["alreadyBeExpert"]);
             unset($user["alreadyBeAmbassadeur"]);
