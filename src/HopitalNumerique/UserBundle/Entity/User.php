@@ -234,14 +234,13 @@ class User extends BaseUser
 
     /**
      * @var string
-     * @Assert\NotBlank(message="Le nom ne peut pas être vide.")
      * @Assert\Length(
      *      min = "1",
      *      max = "50",
      *      minMessage="Il doit y avoir au moins {{ limit }} caractères dans le nom.",
      *      maxMessage="Il doit y avoir au maximum {{ limit }} caractères dans le nom."
      * )
-     * @Nodevo\Javascript(class="validate[required,minSize[1],maxSize[50]]")
+     * @Nodevo\Javascript(class="validate[minSize[1],maxSize[50]]")
      * @ORM\Column(name="usr_nom", type="string", length=50, options = {"comment" = "Nom de l utilisateur"})
      * @Gedmo\Versioned
      */
@@ -249,14 +248,13 @@ class User extends BaseUser
 
     /**
      * @var string
-     * @Assert\NotBlank(message="Le prénom ne peut pas être vide.")
      * @Assert\Length(
      *      min = "1",
      *      max = "50",
      *      minMessage="Il doit y avoir au moins {{ limit }} caractères dans le prénom.",
      *      maxMessage="Il doit y avoir au maximum {{ limit }} caractères dans le prénom."
      * )
-     * @Nodevo\Javascript(class="validate[required,minSize[1],maxSize[50]]")
+     * @Nodevo\Javascript(class="validate[minSize[1],maxSize[50]]")
      * @ORM\Column(name="usr_prenom", type="string", length=50, options = {"comment" = "Prénom de l utilisateur"})
      * @Gedmo\Versioned
      */
