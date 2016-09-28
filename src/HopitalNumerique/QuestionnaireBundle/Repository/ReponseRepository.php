@@ -18,7 +18,11 @@ class ReponseRepository extends EntityRepository
     /**
      * Récupère les réponses pour l'utilisateur en fonction du questionnaire passés en param
      *
-     * @return array
+     * @param $idQuestionnaire
+     * @param $idUser
+     * @param Occurrence|null $occurrence
+     * @param null $paramId
+     * @return \Doctrine\ORM\Query
      */
     public function reponsesByQuestionnaireByUser( $idQuestionnaire, $idUser, Occurrence $occurrence = null, $paramId = null)
     {
@@ -27,21 +31,20 @@ class ReponseRepository extends EntityRepository
             ->from('\HopitalNumerique\QuestionnaireBundle\Entity\Reponse', 'reponse')
             ->leftJoin('reponse.question', 'question')
             ->leftJoin('reponse.user', 'user')
-            ->where( 'user.id = :idUser')
-            ->setParameter('idUser', $idUser );
+            ->where('user.id = :idUser')
+            ->setParameter('idUser', $idUser);
 
-            if ($paramId != null) {
-                $qb->andWhere('reponse.paramId = :paramId')
-                    ->setParameter('paramId', $paramId);
-            }
+        if ($paramId != null) {
+            $qb->andWhere('reponse.paramId = :paramId')
+                ->setParameter('paramId', $paramId);
+        }
 
-            $qb->leftJoin('reponse.reference', 'reference')
+        $qb->leftJoin('reponse.reference', 'reference')
             ->innerJoin('question.questionnaire', 'questionnaire', 'WITH', 'questionnaire.id = :idQuestionnaire')
-            ->setParameter('idQuestionnaire', $idQuestionnaire )
+            ->setParameter('idQuestionnaire', $idQuestionnaire)
             ->leftJoin('question.typeQuestion', 'typeQuestion');
 
-        if (null !== $occurrence)
-        {
+        if (null !== $occurrence) {
             $qb
                 ->andWhere('reponse.occurrence = :occurrence')
                 ->setParameter('occurrence', $occurrence)
@@ -54,49 +57,54 @@ class ReponseRepository extends EntityRepository
     /**
      * Récupère les réponses du questionnaire passés en param
      *
-     * @return array
+     * @param $idQuestionnaire
+     * @param null $paramId
+     * @return \Doctrine\ORM\Query
      */
-    public function reponsesByQuestionnaire( $idQuestionnaire, $paramId = null)
+    public function reponsesByQuestionnaire($idQuestionnaire, $paramId = null)
     {
         $qb = $this->_em->createQueryBuilder();
         $qb->select('reponse')
             ->from('\HopitalNumerique\QuestionnaireBundle\Entity\Reponse', 'reponse')
             ->leftJoin('reponse.question', 'question');
 
-            if ($paramId != null) {
-                $qb->andWhere('reponse.paramId = :paramId')
-                    ->setParameter('paramId', $paramId);
-            }
+        if ($paramId != null) {
+            $qb->andWhere('reponse.paramId = :paramId')
+                ->setParameter('paramId', $paramId);
+        }
 
-            $qb->leftJoin('reponse.reference', 'reference')
+        $qb->leftJoin('reponse.reference', 'reference')
             ->innerJoin('question.questionnaire', 'questionnaire', 'WITH', 'questionnaire.id = :idQuestionnaire')
-            ->setParameter('idQuestionnaire', $idQuestionnaire )
+            ->setParameter('idQuestionnaire', $idQuestionnaire)
             ->leftJoin('question.typeQuestion', 'typeQuestion');
 
         return $qb->getQuery();
     }
 
     /**
-     * Récupère les réponses pour l'utilisateur en fonction du questionnaire passés en param pour les questions de type 'file'
+     * Récupère les réponses pour l'utilisateur en fonction du questionnaire passés en param
+     * pour les questions de type 'file'
      *
-     * @return array
+     * @param $idQuestionnaire
+     * @param $idUser
+     * @param Occurrence|null $occurrence
+     * @return \Doctrine\ORM\Query
      */
-    public function reponsesByQuestionnaireByUserByFileQuestion( $idQuestionnaire, $idUser, Occurrence $occurrence = null )
+    public function reponsesByQuestionnaireByUserByFileQuestion($idQuestionnaire, $idUser, Occurrence $occurrence = null)
     {
         $qb = $this->_em->createQueryBuilder();
         $qb->select('reponse')
             ->from('\HopitalNumerique\QuestionnaireBundle\Entity\Reponse', 'reponse')
             ->leftJoin('reponse.question', 'question')
             ->leftJoin('reponse.user', 'user')
-            ->where( 'user.id = :idUser')
-            ->setParameter('idUser', $idUser )
+            ->where('user.id = :idUser')
+            ->setParameter('idUser', $idUser)
             ->innerJoin('question.questionnaire', 'questionnaire', 'WITH', 'questionnaire.id = :idQuestionnaire')
-            ->setParameter('idQuestionnaire', $idQuestionnaire )
+            ->setParameter('idQuestionnaire', $idQuestionnaire)
             ->innerJoin('question.typeQuestion', 'typeQuestion', 'WITH', 'typeQuestion.libelle = :libTypeQuestion')
-            ->setParameter('libTypeQuestion', 'file' );
+            ->setParameter('libTypeQuestion', 'file');
 
-        if (null !== $occurrence)
-        {
+        if (null !== $occurrence) {
             $qb
                 ->andWhere('reponse.occurrence = :occurrence')
                 ->setParameter('occurrence', $occurrence)
@@ -109,16 +117,17 @@ class ReponseRepository extends EntityRepository
     /**
      * Récupère les réponses du questionnaire passés en param
      *
-     * @return array
+     * @param $idQuestionnaire
+     * @return \Doctrine\ORM\Query
      */
-    public function getReponsesForQuestionnaireOrderByUser( $idQuestionnaire )
+    public function getReponsesForQuestionnaireOrderByUser($idQuestionnaire)
     {
         $qb = $this->_em->createQueryBuilder();
         $qb->select('reponse')
             ->from('\HopitalNumerique\QuestionnaireBundle\Entity\Reponse', 'reponse')
             ->leftJoin('reponse.question', 'question')
             ->innerJoin('question.questionnaire', 'questionnaire', 'WITH', 'questionnaire.id = :idQuestionnaire')
-            ->setParameter('idQuestionnaire', $idQuestionnaire );
+            ->setParameter('idQuestionnaire', $idQuestionnaire);
 
         return $qb->getQuery();
     }
@@ -128,8 +137,7 @@ class ReponseRepository extends EntityRepository
      *
      * @param int $idExpert      Identifiant du questionnaire expert
      * @param int $idAmbassadeur Identifiant du questionnaire ambassadeur
-     *
-     * @return array Tableau sous la forme array(utilisateur => array(questionnaireId))
+     * @return \Doctrine\ORM\Query
      */
     public function reponseExiste($idExpert, $idAmbassadeur)
     {
@@ -139,12 +147,12 @@ class ReponseRepository extends EntityRepository
             ->leftJoin('reponse.question', 'question')
             ->leftJoin('reponse.user', 'user')
             ->leftJoin('question.questionnaire', 'questionnaire')
-                // ->where('questionnaire.id = :expertId OR questionnaire.id = :ambassadeurId')
-                // ->setParameters(array(
-                //         'expertId'      => $idExpert,
-                //         'ambassadeurId' => $idAmbassadeur
-                //     )
-                // )
+            // ->where('questionnaire.id = :expertId OR questionnaire.id = :ambassadeurId')
+            // ->setParameters(array(
+            //         'expertId'      => $idExpert,
+            //         'ambassadeurId' => $idAmbassadeur
+            //     )
+            // )
             ->groupBy('user.id, questionnaire.id');
 
         return $qb->getQuery();

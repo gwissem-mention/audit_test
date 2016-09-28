@@ -217,7 +217,7 @@ class AutodiagController extends Controller
 
         $questionnaireReponses = null;
 
-        if ($autodiag->getQuestionnaire()) {
+        if ($autodiag->getQuestionnaire() && $entry->getUser()) {
             $questionnaireReponses = $this
                 ->get('hopitalnumerique_questionnaire.manager.reponse')
                 ->reponsesByQuestionnaireByUser(
