@@ -5,51 +5,53 @@
 <div class="container-fluid">
 
     {% if in_progress %}
-    <h2>{{ 'ad.account.in_progress'|trans }}</h2>
-    <div class="row-fluid">
-        <div class="col-md-12">
-            <table class="table table-striped table-hover">
-                <thead>
-                <tr>
-                    <th>{{ 'ad.account.table.name'|trans }}</th>
-                    <th>{{ 'ad.account.table.last_save_date'|trans }}</th>
-                    <th>{{ 'ad.account.table.filling'|trans }}</th>
-                    <th class="actions-column"></th>
-                </tr>
-                </thead>
-                <tbody>
-                {% if datasForSyntheses.currentSyntheses is empty %}
-                    <tr><td colspan="4" class="autodiag-title">{{ 'ad.account.table.none'|trans }}</td></tr>
-                {% else %}
-                    {% for autodiag in datasForSyntheses.currentSyntheses %}
-                        <tr><td colspan="4" class="autodiag-title">{{ autodiag.name }}{% if autodiag.updated %} <i class="attribute-tooltip maj" data-toggle="tooltip" title="{{ 'ad.account.autodiag.updated'|trans }}"></i>{% endif %}</td></tr>
-                        {% for synthesis in autodiag.syntheses %}
-                            <tr>
-                                <td>{{ synthesis.name }}</td>
-                                <td>{{ synthesis.updated_at|date('d/m/Y') }}</td>
-                                <td>
-                                    {{ synthesis.completion ~ "%" }}
-                                </td>
-                                <td>
-                                    <div {% if synthesis.computing %}data-score-polling="{{ synthesis.id }}"{% endif %}>
-                                        {% if synthesis.entryId is not null %}
-                                            <a href="{{ path('hopitalnumerique_autodiag_entry_edit', {'entry': synthesis.entryId}) }}" class="btn btn-success" title="{{ 'ad.account.action.continue'|trans }}"><i class="fa fa-arrow-right"></i></a>
-                                        {% endif %}
-                                        <a href="{{ path('hopitalnumerique_autodiag_account_delete_synthesis', {'synthesis': synthesis.id}) }}" class="btn btn-danger delete-synthesis" title="{{ 'ad.account.action.delete'|trans }}"><i class="fa fa-trash-o"></i></a>
-                                    </div>
-                                </td>
-                            </tr>
+        <h2>{{ 'ad.account.in_progress'|trans }}</h2>
+        <div class="row-fluid">
+            <div class="col-md-12">
+                <table class="table table-striped table-hover">
+                    <thead>
+                    <tr>
+                        <th>{{ 'ad.account.table.name'|trans }}</th>
+                        <th>{{ 'ad.account.table.last_save_date'|trans }}</th>
+                        <th>{{ 'ad.account.table.filling'|trans }}</th>
+                        <th class="actions-column"></th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% if datasForSyntheses.currentSyntheses is empty %}
+                        <tr><td colspan="4" class="autodiag-title">{{ 'ad.account.table.none'|trans }}</td></tr>
+                    {% else %}
+                        {% for autodiag in datasForSyntheses.currentSyntheses %}
+                            <tr><td colspan="4" class="autodiag-title">{{ autodiag.name }}{% if autodiag.updated %} <i class="attribute-tooltip maj" data-toggle="tooltip" title="{{ 'ad.account.autodiag.updated'|trans }}"></i>{% endif %}</td></tr>
+                            {% for synthesis in autodiag.syntheses %}
+                                <tr>
+                                    <td>{{ synthesis.name }}</td>
+                                    <td>{{ synthesis.updated_at|date('d/m/Y') }}</td>
+                                    <td>
+                                        {{ synthesis.completion ~ "%" }}
+                                    </td>
+                                    <td>
+                                        <div {% if synthesis.computing %}data-score-polling="{{ synthesis.id }}"{% endif %}>
+                                            {% if synthesis.entryId is not null %}
+                                                <a href="{{ path('hopitalnumerique_autodiag_entry_edit', {'entry': synthesis.entryId}) }}" class="btn btn-success" title="{{ 'ad.account.action.continue'|trans }}"><i class="fa fa-arrow-right"></i></a>
+                                            {% endif %}
+                                            <a href="{{ path('hopitalnumerique_autodiag_account_delete_synthesis', {'synthesis': synthesis.id}) }}" class="btn btn-danger delete-synthesis" title="{{ 'ad.account.action.delete'|trans }}"><i class="fa fa-trash-o"></i></a>
+                                        </div>
+                                    </td>
+                                </tr>
+                            {% endfor %}
                         {% endfor %}
-                    {% endfor %}
-                {% endif %}
-                </tbody>
-            </table>
+                    {% endif %}
+                    </tbody>
+                </table>
+            </div>
         </div>
-    </div>
     {% endif %}
 
     <form action="{{ path('hopitalnumerique_autodiag_account_generate_synthesis') }}" method="post" id="syntheses-form">
-        <h2>{{ 'ad.account.valid'|trans }}</h2>
+        {% if in_progress %}
+            <h2>{{ 'ad.account.valid'|trans }}</h2>
+        {% endif %}
         <div class="row-fluid">
             <div class="col-md-12">
                 <table class="table table-striped table-hover">

@@ -15,6 +15,10 @@
     font-size: 24px;
 }
 
+#share table {
+    margin-top: 20px;
+}
+
 #share thead tr {
     color:#FFFFFF;
     text-transform:uppercase;
@@ -56,5 +60,17 @@
 }
 
 #share .synthesis-creation {
+    margin-bottom: 20px;
+}
+
+#share h1 {
+    font-size: 20px;
+    color: #d60030;
+    margin: 20px 0 5px 0;
+}
+
+#share .mysep {
+    width: 85px;
+    height: 4px;
     margin-bottom: 20px;
 }
