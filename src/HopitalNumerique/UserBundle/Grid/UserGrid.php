@@ -12,11 +12,6 @@ use APY\DataGridBundle\Grid\Row;
  */
 class UserGrid extends Grid implements GridInterface
 {
-    private $_arrayRolesDateContractualisation = array(
-        'ROLE_AMBASSADEUR_7',
-        'ROLE_EXPERT_6'
-    );
-
     /**
      * Set la config propre au Grid User (Source + config par défaut)
      */
@@ -73,9 +68,6 @@ class UserGrid extends Grid implements GridInterface
     {
         $roles = $this->_container->get('nodevo_role.manager.role')->getRolesAsArray();
 
-        //Récupération des roles
-        $arrayRolesDateContractualisation = $this->_arrayRolesDateContractualisation;
-
         //Retirer username et pseudonymeForum des filtres
         $usernameColonne = new Column\DateColumn('username', 'Username');
         $usernameColonne->setVisible(false);
@@ -121,15 +113,9 @@ class UserGrid extends Grid implements GridInterface
         $contractualisationColumn->setAlign('center');
         $contractualisationColumn->setFilterType('select');
         $contractualisationColumn->setSelectFrom('values');
-        $contractualisationColumn->setValues([0 => 'Non', 1 => 'Oui']);
+        $contractualisationColumn->setValues(['true' => 'Oui', 'false' => 'Non']);
         $contractualisationColumn->setOperatorsVisible(false);
-        //Affichage de l'icone uniquement si le role fait parti de $arrayRolesDateContractualisation
-        $contractualisationColumn->manipulateRenderCell(
-            function ($value, Row $row) use ($arrayRolesDateContractualisation) {
-                $roles = $row->getField('roles');
-                return in_array(reset($roles), $arrayRolesDateContractualisation, true) ? ($value ? 'true' : 'false') : null;
-            }
-        );
+        $contractualisationColumn->setDefaultOperator(\APY\DataGridBundle\Grid\Column\Column::OPERATOR_EQ);
         $this->addColonne($contractualisationColumn);
 
         $expertColumn = new Column\BooleanColumn('expert', 'Candidat expert');
