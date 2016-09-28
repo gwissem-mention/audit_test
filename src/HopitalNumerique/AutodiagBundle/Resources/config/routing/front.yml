@@ -84,3 +84,7 @@ hopitalnumerique_autodiag_account_generate_synthesis:
 hopitalnumerique_autodiag_account_delete_synthesis:
     path:     compte-hn/autodiagnostic/delete-synthesis/{synthesis}
     defaults: { _controller: HopitalNumeriqueAutodiagBundle:Front/Account:delete}
+
+hopitalnumerique_autodiag_account_delete_synthesis_share:
+    path:     compte-hn/autodiagnostic/delete-synthesis/{synthesis}/{currentSynthesisId}
+    defaults: { _controller: HopitalNumeriqueAutodiagBundle:Front/Account:delete}

@@ -45,7 +45,6 @@ class SynthesisController extends Controller
         $limit = $start + 20;
 
         while (true) {
-
             $result = $this->get('autodiag.repository.synthesis')->getScorePolling($syntheses);
 
             if (count($result) !== count($syntheses)) {

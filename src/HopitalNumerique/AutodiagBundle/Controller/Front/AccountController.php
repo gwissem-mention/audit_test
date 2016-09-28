@@ -78,7 +78,7 @@ class AccountController extends Controller
 
         $autodiagId = key($form->get('synthesis-choice'));
         $autodiag = $this->getDoctrine()->getRepository('HopitalNumeriqueAutodiagBundle:Autodiag')->findOneBy([
-                'id' => $autodiagId,
+            'id' => $autodiagId,
         ]);
 
         $synthesisRepository = $this->getDoctrine()->getRepository('HopitalNumeriqueAutodiagBundle:Synthesis');
@@ -123,18 +123,21 @@ class AccountController extends Controller
     }
 
     /**
+     * @param Request $request
      * @param Synthesis $synthesis
+     * @param int $currentSynthesisId Id de la synthèse si suppression effectuée depuis la page de partage
      *
      * @return \Symfony\Component\HttpFoundation\RedirectResponse
      */
-    public function deleteAction(Request $request, Synthesis $synthesis)
+    public function deleteAction(Request $request, Synthesis $synthesis, $currentSynthesisId = null)
     {
         $user = $this->getUser();
+        $synthesisId = $synthesis->getId();
 
         if (!$this->isGranted('delete', $synthesis)) {
             $this->addFlash('danger', $this->get('translator')->trans('ad.synthesis.delete.forbidden'));
 
-            return $this->redirectToRoute('hopitalnumerique_autodiag_account_index');
+            return $this->redirect($request->headers->get('referer'));
         }
 
         $removeState = $this->get('autodiag.synthesis.remover')->removeSynthesis($synthesis, $user);
@@ -145,6 +148,12 @@ class AccountController extends Controller
             $this->addFlash('success', $this->get('translator')->trans('ad.synthesis.share.delete'));
         } else {
             $this->addFlash('danger', $this->get('translator')->trans('ad.synthesis.delete.error'));
+        }
+
+        // Si on supprime la synthèse courante depuis la page de partage
+        // on redirige vers la page mon compte pour éviter les 404
+        if ($currentSynthesisId == $synthesisId) {
+            return $this->redirectToRoute('hopitalnumerique_autodiag_account_index');
         }
 
         return $this->redirect($request->headers->get('referer'));

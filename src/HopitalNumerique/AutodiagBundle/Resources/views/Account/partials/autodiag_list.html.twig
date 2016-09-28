@@ -98,7 +98,11 @@
                                             {% if synthesis.user == user and synthesis.entries|length <= 1 %}
                                                 <a href="{{ path('hopitalnumerique_autodiag_unvalidate', {'synthesis': synthesis.id}) }}" class="btn btn-warning" title="{{ 'ad.account.action.reopen'|trans }}"><i class="fa fa-arrow-up"></i></a>
                                             {% endif %}
-                                            <a href="{{ path('hopitalnumerique_autodiag_account_delete_synthesis', {'synthesis': synthesis.id}) }}" class="btn btn-danger delete-synthesis" title="{{ 'ad.account.action.delete'|trans }}"><i class="fa fa-trash-o"></i></a>
+                                            {% if currentSynthesisId is defined %}
+                                                <a href="{{ path('hopitalnumerique_autodiag_account_delete_synthesis_share', {'synthesis': synthesis.id, 'currentSynthesisId': currentSynthesisId}) }}" class="btn btn-danger delete-synthesis" title="{{ 'ad.account.action.delete'|trans }}"><i class="fa fa-trash-o"></i></a>
+                                            {% else %}
+                                                <a href="{{ path('hopitalnumerique_autodiag_account_delete_synthesis', {'synthesis': synthesis.id}) }}" class="btn btn-danger delete-synthesis" title="{{ 'ad.account.action.delete'|trans }}"><i class="fa fa-trash-o"></i></a>
+                                            {% endif %}
                                         </div>
                                     </td>
                                 </tr>

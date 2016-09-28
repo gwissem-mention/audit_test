@@ -81,7 +81,7 @@
                 </div>
             </div>
             <div id="syntheses-content">
-                {% include '@HopitalNumeriqueAutodiag/Account/partials/autodiag_list.html.twig' with {'datasForSyntheses': datasForSyntheses, 'user': user} %}
+                {% include '@HopitalNumeriqueAutodiag/Account/partials/autodiag_list.html.twig' with {'datasForSyntheses': datasForSyntheses, 'user': user, 'currentSynthesisId': synthesis.id} %}
             </div>
         </div>
     </div>
