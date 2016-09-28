@@ -318,7 +318,15 @@
                 </div>
                 {% if not groupe.hasAnimateur(user) and not user.hasRoleAdmin %}
                     <div class="actif">
-                        <a onclick="CommunautePratique_User.ActiveInscriptionGroupe({{ groupe.id }}, {{ user.id }});" title="Activer / désactiver l utilisateur"> {{ user.isActifInGroupe(groupe) ? "<em class='fa fa-times-circle orange'></em>" : "<em class='fa fa-check-circle green'> </em>"  }}</a>
+                        {% if user.isActifInGroupe(groupe) %}
+                            <a onclick="CommunautePratique_User.ActiveInscriptionGroupe({{ groupe.id }}, {{ user.id }});" title="Désactiver l utilisateur">
+                                <em class='fa fa-check-circle green'></em>
+                            </a>
+                        {% else %}
+                            <a onclick="CommunautePratique_User.ActiveInscriptionGroupe({{ groupe.id }}, {{ user.id }});" title="Activer l utilisateur">
+                                <em class='fa fa-times-circle orange'> </em>
+                            </a>
+                        {% endif %}
                     </div>
                 {% endif %}
             </div>
