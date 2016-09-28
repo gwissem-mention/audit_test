@@ -22,8 +22,14 @@ class UserRepository extends EntityRepository
      *
      * @return qb
      */
-    public function getDatasForGrid()
+    public function getDatasForGrid($conditions)
     {
+        /** @var User $currentUser */
+        $currentUser = $conditions->value;
+        $domainesId = $currentUser->getDomaines()->map(function (Domaine $domaine) {
+            return $domaine->getId();
+        });
+
         $qb = $this->_em->createQueryBuilder();
         $qb->select('user.id,
                         user.dateInscription,
@@ -40,7 +46,8 @@ class UserRepository extends EntityRepository
                         refEtat.libelle as etat,
                         user.lock,
                         min(contractualisation.dateRenouvellement) as contra,
-                        user.nbVisites
+                        user.nbVisites,
+                        GROUP_CONCAT(user_domaines.nom SEPARATOR \' - \') as domaines
             ')
             ->from('HopitalNumeriqueUserBundle:User', 'user')
             ->leftJoin('user.etat','refEtat')
@@ -50,9 +57,13 @@ class UserRepository extends EntityRepository
                     $qb->expr()->eq('contractualisation.archiver', 0),
                     $qb->expr()->isNull('contractualisation.id')
                 ))
-            ->groupBy('user')
+            ->join('user.domaines', 'user_domaines', Join::WITH, 'user_domaines.id IN (:domaines_ids)')
+            ->groupBy('user.id')
             ->orderBy('user.dateInscription', 'DESC')
-            ->addOrderBy('user.username');
+            ->addOrderBy('user.username')
+        ->setParameters([
+            'domaines_ids' => $domainesId
+        ]);
 
         return $qb;
     }
