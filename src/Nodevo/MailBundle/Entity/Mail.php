@@ -22,6 +22,10 @@ class Mail
      * @var integer ID du courriel de recommandation à un ami
      */
     const MAIL_RECOMMANDATION_AMI_ID = 63;
+    /**
+     * @var integer ID du courriel de partage des résultats d'autodiag
+     */
+    const MAIL_SHARE_AUTODIAG_RESULT_ID = 68;
 
 
     /**

@@ -165,8 +165,13 @@ ad:
         start_new: Commencer un nouvel autodiagnostic
         start_new: Commencer un nouvel autodiagnostic
         export_pdf: Télécharger mon résultat en PDF
+        send_email: Envoyer mon résultat par e-mail
         survey_back: Retourner au questionnaire
         not_concerned: Aucune restitution; vous n'êtes pas concerné par cette section.
+        mail:
+            send: Envoyer
+            not_found: L'e-mail recherché n'exsite pas.
+            success: Votre e-mail de partage a bien été envoyé.
 
     validation:
         validate: Valider mes résultats

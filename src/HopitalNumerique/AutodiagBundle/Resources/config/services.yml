@@ -189,3 +189,9 @@ services:
             class: HopitalNumerique\AutodiagBundle\Service\Export\RestitutionItemExport
             arguments:
                 - '@autodiag.restitution.calculator'
+
+    autodiag.restitution.pdf_generator:
+                class: HopitalNumerique\AutodiagBundle\Service\RestitutionPdfGenerator
+                arguments:
+                    - '@templating'
+                    - '@knp_snappy.pdf'

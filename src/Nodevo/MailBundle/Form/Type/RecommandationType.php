@@ -44,8 +44,11 @@ class RecommandationType extends AbstractType
          */
         $url = $options['url'];
 
+        if ($builder->getAction() == null) {
+            $builder->setAction($this->router->generate('nodevo_mail_recommandation_popin'));
+        }
+
         $builder
-            ->setAction($this->router->generate('nodevo_mail_recommandation_popin'))
             ->add('destinataire', 'email', [
                 'attr' => [
                     'maxlength' => 255,
