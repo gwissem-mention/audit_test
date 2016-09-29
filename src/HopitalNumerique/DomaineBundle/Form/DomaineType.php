@@ -97,6 +97,15 @@ class DomaineType extends AbstractType
                         return $qb;
                     }
                 ])
+                ->add('communautePratiqueForumCategory', 'genemu_jqueryselect2_entity', [
+                    'class' => 'HopitalNumerique\ForumBundle\Entity\Category',
+                    'group_by' => 'forum',
+                    'property' => 'name',
+                    'multiple' => false,
+                    'required' => false,
+                    'label' => 'Catégorie de forum pour la communauté de pratique',
+                    'empty_value' => ' - ',
+                ])
             ;
         }
     }
