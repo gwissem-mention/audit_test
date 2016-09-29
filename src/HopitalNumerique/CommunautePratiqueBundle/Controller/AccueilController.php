@@ -1,6 +1,7 @@
 <?php
 namespace HopitalNumerique\CommunautePratiqueBundle\Controller;
 
+use HopitalNumerique\DomaineBundle\Entity\Domaine;
 use Symfony\Component\HttpFoundation\Request;
 use HopitalNumerique\ReferenceBundle\Entity\Reference;
 use HopitalNumerique\ForumBundle\Entity\Forum;
@@ -41,15 +42,24 @@ class AccueilController extends \Symfony\Bundle\FrameworkBundle\Controller\Contr
             );
         }
 
+        /** @var Domaine $domaine */
         $domaine = $this->container->get('hopitalnumerique_domaine.manager.domaine')
             ->findOneById($request->getSession()->get('domaineId'));
-        $forum = $this->container->get('hopitalnumerique_forum.manager.forum')
-            ->findOneById(Forum::FORUM_PUBLIC_ID);
         $groupeUserEnCour = $this->container->get('hopitalnumerique_communautepratique.manager.groupe')
                     ->findEnCoursByUser($domaine, $this->getUser());
         $groupeUserAVenir = $this->container->get('hopitalnumerique_communautepratique.manager.groupe')
                     ->findNonDemarresByUser($domaine, $this->getUser());
         $groupeUser = array_merge($groupeUserEnCour, $groupeUserAVenir);
+
+        $forum = null;
+        $topics = null;
+        $forumCategory = $domaine->getCommunautePratiqueForumCategory();
+        if ($forumCategory) {
+            $forum = $forumCategory->getForum();
+            $topics = $this->container->get('hopitalnumerique_forum.manager.topic')
+                ->getLastTopicsForumEpingle($forum->getId(), 4, $forumCategory->getId() ?: null);
+        }
+
         return $this->render(
             'HopitalNumeriqueCommunautePratiqueBundle:Accueil:index.html.twig',
             array(
@@ -68,8 +78,7 @@ class AccueilController extends \Symfony\Bundle\FrameworkBundle\Controller\Contr
                     ->findCommunautePratiqueMembresCount(),
                 'membres' => $this->getMembresAuHasard(),
                 'forum' => $forum,
-                'forumLastTopics' => $this->container->get('hopitalnumerique_forum.manager.topic')
-                    ->getLastTopicsForumEpingle($forum->getId(), 4, Forum::FORUM_COMMUNAUTE_DE_PRATIQUES_ID)
+                'forumLastTopics' => $topics,
             )
         );
     }

@@ -1,6 +1,7 @@
 <?php
 namespace HopitalNumerique\CommunautePratiqueBundle\Controller;
 
+use HopitalNumerique\DomaineBundle\Entity\Domaine;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use HopitalNumerique\CommunautePratiqueBundle\Entity\Groupe;
@@ -26,30 +27,32 @@ class UserController extends \Symfony\Bundle\FrameworkBundle\Controller\Controll
         }
         $rechercheForm = $this->createForm('hopitalnumerique_communautepratiquebundle_user_recherche');
 
-		if ($request->request->has('resetFiltres')) {
-			$this->container->get('hopitalnumerique_communautepratique.dependency_injection.annuaire')
-				->removeFiltres();
-			return $this->redirect($this->generateUrl('hopitalnumerique_communautepratique_user_list'));
+        if ($request->request->has('resetFiltres')) {
+            $this->container->get('hopitalnumerique_communautepratique.dependency_injection.annuaire')
+                ->removeFiltres();
+            return $this->redirect($this->generateUrl('hopitalnumerique_communautepratique_user_list'));
 
-		} else {
-	        $this->container->get('hopitalnumerique_communautepratique.dependency_injection.annuaire')
-	            ->setFiltres($request);
-	        $rechercheForm->handleRequest($request);
-		}
+        } else {
+            $this->container->get('hopitalnumerique_communautepratique.dependency_injection.annuaire')
+                ->setFiltres($request);
+            $rechercheForm->handleRequest($request);
+        }
 
-		$domaine = $this->container->get('hopitalnumerique_domaine.manager.domaine')
-		->findOneById($request->getSession()->get('domaineId'));
+        /** @var Domaine $domaine */
+        $domaine = $this->container->get('hopitalnumerique_domaine.manager.domaine')
+            ->findOneById($request->getSession()->get('domaineId'));
 
         return $this->render('HopitalNumeriqueCommunautePratiqueBundle:User:list.html.twig', array(
             'rechercheForm' => $rechercheForm->createView(),
             'pagerFantaMembres' => $this->container
                 ->get('hopitalnumerique_communautepratique.dependency_injection.annuaire')->getPagerfantaUsers($page, ($membreId) ? $membreId : null),
-			'groupesTermines' => $this->container->get('hopitalnumerique_communautepratique.manager.groupe')
-        		->findTermines($domaine),
-			'groupesNonDemarres' => $this->container->get('hopitalnumerique_communautepratique.manager.groupe')
-        		->findNonDemarres($domaine),
-			'groupesEnCours' => $this->container->get('hopitalnumerique_communautepratique.manager.groupe')
-				->findEnCours($domaine)
+            'groupesTermines' => $this->container->get('hopitalnumerique_communautepratique.manager.groupe')
+                ->findTermines($domaine),
+            'groupesNonDemarres' => $this->container->get('hopitalnumerique_communautepratique.manager.groupe')
+                ->findNonDemarres($domaine),
+            'groupesEnCours' => $this->container->get('hopitalnumerique_communautepratique.manager.groupe')
+                ->findEnCours($domaine),
+            'forumCategory' => $domaine->getCommunautePratiqueForumCategory(),
         ));
     }
 
@@ -92,12 +95,12 @@ class UserController extends \Symfony\Bundle\FrameworkBundle\Controller\Controll
             'pagerFantaMembres' => $this->container
                 ->get('hopitalnumerique_communautepratique.dependency_injection.annuaire')
                 ->getPagerfantaUsersByGroupe($groupe, $page),
-			'groupesTermines' => $this->container->get('hopitalnumerique_communautepratique.manager.groupe')
-        		->findTermines($domaine),
-			'groupesNonDemarres' => $this->container->get('hopitalnumerique_communautepratique.manager.groupe')
-        		->findNonDemarres($domaine),
-			'groupesEnCours' => $this->container->get('hopitalnumerique_communautepratique.manager.groupe')
-        		->findEnCours($domaine)
+            'groupesTermines' => $this->container->get('hopitalnumerique_communautepratique.manager.groupe')
+                ->findTermines($domaine),
+            'groupesNonDemarres' => $this->container->get('hopitalnumerique_communautepratique.manager.groupe')
+                ->findNonDemarres($domaine),
+            'groupesEnCours' => $this->container->get('hopitalnumerique_communautepratique.manager.groupe')
+                ->findEnCours($domaine)
         ));
     }
 
