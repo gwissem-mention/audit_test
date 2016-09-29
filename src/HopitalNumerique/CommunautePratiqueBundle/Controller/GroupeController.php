@@ -45,19 +45,36 @@ class GroupeController extends \Symfony\Bundle\FrameworkBundle\Controller\Contro
     {
         $user = $this->get('security.token_storage')->getToken()->getUser();
 
+        $currentDomaine = $this->get('hopitalnumerique_domaine.dependency_injection.current_domaine')->get();
+        $cpArticle = null;
+        if ($currentDomaine) {
+            $cpArticle = $currentDomaine->getCommunautePratiqueArticle();
+        }
+
         if ("anon." != $user) {
 
-            if ($this->container->get('hopitalnumerique_communautepratique.dependency_injection.inscription')->hasInformationManquante($user)
-                || !$user->isInscritCommunautePratique()) {
-                $this->container->get('session')->getFlashBag()->add('warning', 'Vous devez rejoindre la communauté de pratique avant de pouvoir rejoindre un groupe.');
-                return $this->redirect($this->generateUrl('hopital_numerique_publication_publication_article', [
-                    'id' => 1000,
-                    'categorie' => "article",
-                    'alias' => "la-communaute-de-pratique"
-                ]));
+            $inscription = $this->container->get('hopitalnumerique_communautepratique.dependency_injection.inscription');
+
+            if ($inscription->hasInformationManquante($user) || !$user->isInscritCommunautePratique()) {
+                $this->container->get('session')->getFlashBag()->add(
+                    'warning',
+                    'Vous devez rejoindre la communauté de pratique avant de pouvoir rejoindre un groupe.'
+                );
+
+                if (null !== $cpArticle) {
+                    return $this->redirect(
+                        $this->generateUrl('hopital_numerique_publication_publication_article', [
+                            'id' => $cpArticle->getId(),
+                            'categorie' => "article",
+                            'alias' => $cpArticle->getAlias(),
+                        ])
+                    );
+                }
+                return $this->redirect($this->generateUrl('hopital_numerique_homepage'));
             }
 
-            if (!$this->container->get('hopitalnumerique_communautepratique.dependency_injection.security')->canAccessGroupe($groupe)) {
+            $security = $this->container->get('hopitalnumerique_communautepratique.dependency_injection.security');
+            if (!$security->canAccessGroupe($groupe)) {
                 if (!$user->hasCommunautePratiqueGroupe($groupe)) {
                     return $this->redirect($this->generateUrl('hopitalnumerique_communautepratique_groupe_inscrit', [
                         'groupe' => $groupe->getId()
@@ -65,17 +82,24 @@ class GroupeController extends \Symfony\Bundle\FrameworkBundle\Controller\Contro
                 }
 
                 if (!$user->isActifInGroupe($groupe)) {
-                    $this->container->get('session')->getFlashBag()->add('success', 'Votre inscription sera activée prochainement par un animateur. Vous recevrez un mail de confirmation.');
+                    $this->container->get('session')->getFlashBag()->add(
+                        'success',
+                        'Votre inscription sera activée prochainement par un animateur. Vous recevrez un mail de confirmation.'
+                    );
                     return $this->redirect($this->generateUrl('hopitalnumerique_communautepratique_accueil_index'));
                 }
             }
-        }
-        else {
-            return $this->redirect($this->generateUrl('hopital_numerique_publication_publication_article', [
-                'id' => 1000,
-                'categorie' => "article",
-                'alias' => "la-communaute-de-pratique"
-            ]));
+        } else {
+            if (null !== $cpArticle) {
+                return $this->redirect(
+                    $this->generateUrl('hopital_numerique_publication_publication_article', [
+                        'id' => $cpArticle->getId(),
+                        'categorie' => "article",
+                        'alias' => $cpArticle->getAlias(),
+                    ])
+                );
+            }
+            return $this->redirect($this->generateUrl('hopital_numerique_homepage'));
         }
 
         return $this->render(

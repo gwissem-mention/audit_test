@@ -340,13 +340,22 @@ class PublicationController extends Controller
             $this->container->get('hopitalnumerique_core.dependency_injection.entity')->getEntityId($objet),
             [$this->container->get('hopitalnumerique_domaine.dependency_injection.current_domaine')->get()]
         );
+
+
+        $isCommunautePratiqueArticle = false;
+        $currentDomaine = $this->get('hopitalnumerique_domaine.dependency_injection.current_domaine')->get();
+        if ($currentDomaine && $article = $currentDomaine->getCommunautePratiqueArticle()) {
+            $isCommunautePratiqueArticle = $article->getId() === $objet->getId();
+        }
+
         //render
         return $this->render('HopitalNumeriquePublicationBundle:Publication:articles.html.twig', array(
             'objet'      => $objet,
             'meta'       => $this->get('hopitalnumerique_recherche.manager.search')->getMetas($references, $objet->getResume() ),
             'menu'       => $item ? $item->getMenu()->getAlias() : null,
             'categories' => $categories,
-            'types'      => $types
+            'types'      => $types,
+            'is_communaute_pratique' => $isCommunautePratiqueArticle,
         ));
     }
 
