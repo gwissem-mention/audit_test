@@ -52,7 +52,7 @@
                 {% form_theme form 'NodevoAdminBundle::form.html.twig' %}
                 {{ form_start(form) }}
                     {{ form_errors(form) }}
-                    
+
                     {# Formulaire : #}
                     {{ form_row(form.nom) }}
                     {{ form_row(form.url) }}
@@ -99,12 +99,14 @@
                             {{ form_errors(form.referenceRoot) }}
                         </div>
                     {% endif %}
-                    
+
+                    {{ form_row(form.communautePratiqueArticle) }}
+
 
                 {{ form_end(form) }}
             </div>
         </div>
-        
+
         <input type="hidden" id="getObjets" value="{{path('hopitalnumerique_objet_objet_getObjets')}}" />
         <input type="hidden" id="getOutils" value="{{path('hopitalnumerique_autodiag_get_outils')}}" />
         <input type="hidden" id="getQuestionnaires" value="{{path('hopitalnumerique_questionnaire_get_questionnaires')}}" />

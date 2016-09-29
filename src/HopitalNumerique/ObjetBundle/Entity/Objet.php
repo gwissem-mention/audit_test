@@ -29,12 +29,6 @@ class Objet implements RoutedItemInterface
     const FICHIER_EDIT = 3;
 
     /**
-     * @var ID de l'article de la communauté de pratique.
-     */
-    const ARTICLE_COMMUNAUTE_PRATIQUE_ID = 1000;
-
-
-    /**
      * @var integer
      *
      * @ORM\Column(name="obj_id", type="integer", options = {"comment" = "ID de l objet"})

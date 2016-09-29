@@ -27,3 +27,9 @@ services:
             - { proximity: 2, prev_message: '&laquo;', next_message: '&raquo;' }
         public: false
         tags: [{ name: pagerfanta.view, alias: hopitalnumerique_communautepratique }]
+
+    communautepratique_router:
+        class: HopitalNumerique\CommunautePratiqueBundle\Service\Router
+        arguments:
+            - '@hopitalnumerique_domaine.dependency_injection.current_domaine'
+            - '@router'

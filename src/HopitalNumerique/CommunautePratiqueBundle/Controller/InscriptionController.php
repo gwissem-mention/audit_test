@@ -15,7 +15,7 @@ class InscriptionController extends \Symfony\Bundle\FrameworkBundle\Controller\C
     public function ajaxInscritAction()
     {
         $user = $this->getUser();
-        
+
         if (null !== $user && !$this->container
             ->get('hopitalnumerique_communautepratique.dependency_injection.inscription')
             ->hasInformationManquante($user)) {
@@ -24,44 +24,32 @@ class InscriptionController extends \Symfony\Bundle\FrameworkBundle\Controller\C
                 $this->container->get('hopitalnumerique_user.manager.user')->save($user);
                 $this->get('session')->getFlashBag()->add('success', 'L\'inscription à la communauté de pratique a été confirmée.');
             }
-            
+
             return new JsonResponse(array(
                 'url' => $this->generateUrl('hopitalnumerique_communautepratique_accueil_index')
             ));
         } else {
             $this->get('session')->getFlashBag()->add('danger', 'L\'inscription à la communauté de pratique a échouée. Veuillez vérifier vos informations.');
+
             return new JsonResponse(array(
-                'url' => $this->generateUrl('hopital_numerique_publication_publication_article', 
-                    array(
-                        'categorie' => 'article', 
-                        'id' => 1000, 
-                        'alias' => 'la-communaute-de-pratiques')
-                )
+                'url' => $this->get('communautepratique_router')->getUrl()
             ));
         }
     }
-    
+
     /**
      * Désinscrit l'utilisateur connecté.
      */
     public function ajaxDesinscritAction()
     {
         $user = $this->getUser();
-        
+
         if (null !== $user) {
             $this->container->get('hopitalnumerique_user.manager.user')->desinscritCommunautePratique($user);
             $this->get('session')->getFlashBag()->add('success', 'Vous avez bien quitté la communauté. Vous pouvez vous y ré-inscrire à tout moment, merci de votre participation !');
-            
-            $articleCommunautePratique = $this->container->get('hopitalnumerique_objet.manager.objet')
-                ->findOneById(Objet::ARTICLE_COMMUNAUTE_PRATIQUE_ID);
+
             return new JsonResponse(array(
-                'url' => $this->generateUrl(
-                    'hopital_numerique_publication_publication_article',
-                    array(
-                        'categorie' => 'article', 'id' => $articleCommunautePratique->getId(),
-                        'alias' => $articleCommunautePratique->getAlias()
-                    )
-                )
+                'url' => $this->get('communautepratique_router')->getUrl()
             ));
         } else {
             $this->get('session')->getFlashBag()

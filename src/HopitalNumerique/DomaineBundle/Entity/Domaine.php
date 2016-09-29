@@ -4,6 +4,7 @@ namespace HopitalNumerique\DomaineBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use APY\DataGridBundle\Grid\Mapping as GRID;
+use HopitalNumerique\ObjetBundle\Entity\Objet;
 use Symfony\Component\Validator\Constraints as Assert;
 
 //Tools
@@ -64,16 +65,16 @@ class Domaine
     /**
      * @Assert\File(
      *     maxSize = "10M",
-     *     mimeTypes = { 
-     *         "image/gif", 
-     *         "image/jpeg", 
+     *     mimeTypes = {
+     *         "image/gif",
+     *         "image/jpeg",
      *         "image/png",
      *     },
      *     mimeTypesMessage = "Choisissez un fichier valide (IMAGE)"
      * )
      */
     public $file;
-    
+
     /**
      * @var string
      *
@@ -91,7 +92,7 @@ class Domaine
     /**
      * @ORM\ManyToOne(targetEntity="Template", cascade={"persist"})
      * @ORM\JoinColumn(name="temp_id", referencedColumnName="temp_id")
-     * 
+     *
      * @GRID\Column(field="template.nom", options = {"comment" = "Type de template à utiliser sur le domaine"})
      */
     protected $template;
@@ -149,10 +150,10 @@ class Domaine
      * )
      */
     protected $forums;
-    
+
     /**
      * @var \Doctrine\Common\Collections\Collection
-     * 
+     *
      * @ORM\OneToMany(targetEntity="HopitalNumerique\CommunautePratiqueBundle\Entity\Groupe", mappedBy="domaine")
      */
     protected $communautePratiqueGroupes;
@@ -164,7 +165,15 @@ class Domaine
      * @ORM\Column(name="url_titre", type="text", nullable=true)
      */
     protected $urlTitre;
-    
+
+    /**
+     * @var Objet
+     *
+     * @ORM\ManyToOne(targetEntity="HopitalNumerique\ObjetBundle\Entity\Objet")
+     * @ORM\JoinColumn(name="communaute_pratique_article", referencedColumnName="obj_id")
+     */
+    protected $communautePratiqueArticle = null;
+
     /**
      * Constructor
      */
@@ -181,7 +190,7 @@ class Domaine
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
@@ -204,7 +213,7 @@ class Domaine
     /**
      * Get url
      *
-     * @return string 
+     * @return string
      */
     public function getUrl()
     {
@@ -220,10 +229,10 @@ class Domaine
     public function setUrlTitre($urlTitre)
     {
     	$this->urlTitre = $urlTitre;
-    
+
     	return $this;
     }
-    
+
     /**
      * Get url
      *
@@ -233,7 +242,7 @@ class Domaine
     {
     	return $this->urlTitre;
     }
-    
+
     /**
      * Set adresseMailContact
      *
@@ -250,7 +259,7 @@ class Domaine
     /**
      * Get adresseMailContact
      *
-     * @return string 
+     * @return string
      */
     public function getAdresseMailContact()
     {
@@ -273,7 +282,7 @@ class Domaine
     /**
      * Get template
      *
-     * @return \HopitalNumerique\DomaineBundle\Entity\Template 
+     * @return \HopitalNumerique\DomaineBundle\Entity\Template
      */
     public function getTemplate()
     {
@@ -330,7 +339,7 @@ class Domaine
     /**
      * Get users
      *
-     * @return \Doctrine\Common\Collections\Collection 
+     * @return \Doctrine\Common\Collections\Collection
      */
     public function getUsers()
     {
@@ -363,7 +372,7 @@ class Domaine
     /**
      * Get references
      *
-     * @return \Doctrine\Common\Collections\Collection 
+     * @return \Doctrine\Common\Collections\Collection
      */
     public function getReferences()
     {
@@ -396,7 +405,7 @@ class Domaine
     /**
      * Get objets
      *
-     * @return \Doctrine\Common\Collections\Collection 
+     * @return \Doctrine\Common\Collections\Collection
      */
     public function getObjets()
     {
@@ -453,7 +462,7 @@ class Domaine
     /**
      * Get nom
      *
-     * @return string 
+     * @return string
      */
     public function getNom()
     {
@@ -476,7 +485,7 @@ class Domaine
     /**
      * Get dateLastUpdate
      *
-     * @return \DateTime 
+     * @return \DateTime
      */
     public function getDateLastUpdate()
     {
@@ -485,7 +494,7 @@ class Domaine
     // ----------------------------------------
     // --- Gestion de l'upload des fichiers ---
     // ----------------------------------------
-    
+
     /**
      * Set path
      *
@@ -496,12 +505,12 @@ class Domaine
     {
         if( is_null($path) && file_exists($this->getAbsolutePath()) )
             unlink($this->getAbsolutePath());
-    
+
         $this->path = $path;
-    
+
         return $this;
     }
-    
+
     /**
      * Get path
      *
@@ -511,28 +520,28 @@ class Domaine
     {
         return $this->path;
     }
-    
+
     public function getAbsolutePath()
     {
         return null === $this->path ? null : $this->getUploadRootDir().'/'.$this->path;
     }
-    
+
     public function getWebPath()
     {
         return null === $this->path ? null : $this->getUploadDir().'/'.$this->path;
     }
-    
+
     public function getUploadRootDir()
     {
         // le chemin absolu du répertoire où les documents uploadés doivent être sauvegardés
         return __WEB_DIRECTORY__.'/'.$this->getUploadDir();
     }
-    
+
     public function getUploadDir()
     {
         return 'medias/Domaines';
     }
-    
+
     /**
      * @ORM\PrePersist()
      * @ORM\PreUpdate()
@@ -550,7 +559,7 @@ class Domaine
             $this->path = round(microtime(true) * 1000) . '_' . $nomFichier . '.png';
         }
     }
-    
+
     /**
      * @ORM\PostPersist()
      * @ORM\PostUpdate()
@@ -559,23 +568,23 @@ class Domaine
     {
         if (null === $this->file)
             return;
-    
+
         // s'il y a une erreur lors du déplacement du fichier, une exception
         // va automatiquement être lancée par la méthode move(). Cela va empêcher
         // proprement l'entité d'être persistée dans la base de données si
         // erreur il y a
         $this->file->move($this->getUploadRootDir(), $this->path);
-    
+
         unset($this->file);
     }
-    
+
     /**
      * @ORM\PostRemove()
      */
     public function removeUpload()
     {
         $file = $this->getAbsolutePath();
-    
+
         if (file_exists($file) )
             unlink($file);
     }
@@ -596,7 +605,7 @@ class Domaine
     /**
      * Get description
      *
-     * @return string 
+     * @return string
      */
     public function getDescription()
     {
@@ -629,7 +638,7 @@ class Domaine
     /**
      * Get requetes
      *
-     * @return \Doctrine\Common\Collections\Collection 
+     * @return \Doctrine\Common\Collections\Collection
      */
     public function getRequetes()
     {
@@ -662,7 +671,7 @@ class Domaine
     /**
      * Get forums
      *
-     * @return \Doctrine\Common\Collections\Collection 
+     * @return \Doctrine\Common\Collections\Collection
      */
     public function getForums()
     {
@@ -685,7 +694,7 @@ class Domaine
     /**
      * Get googleAnalytics
      *
-     * @return string 
+     * @return string
      */
     public function getGoogleAnalytics()
     {
@@ -708,7 +717,7 @@ class Domaine
     /**
      * Get homepage
      *
-     * @return string 
+     * @return string
      */
     public function getHomepage()
     {
@@ -741,14 +750,14 @@ class Domaine
     /**
      * Get communautePratiqueGroupes
      *
-     * @return \Doctrine\Common\Collections\Collection 
+     * @return \Doctrine\Common\Collections\Collection
      */
     public function getCommunautePratiqueGroupes()
     {
         return $this->communautePratiqueGroupes;
     }
-    
-    
+
+
     /**
      * @return string
      */
@@ -780,5 +789,21 @@ class Domaine
     public function equals(Domaine $domaine)
     {
         return ($this->id === $domaine->getId());
+    }
+
+    /**
+     * @return Objet
+     */
+    public function getCommunautePratiqueArticle()
+    {
+        return $this->communautePratiqueArticle;
+    }
+
+    /**
+     * @param Objet $communautePratiqueArticle
+     */
+    public function setCommunautePratiqueArticle($communautePratiqueArticle)
+    {
+        $this->communautePratiqueArticle = $communautePratiqueArticle;
     }
 }
