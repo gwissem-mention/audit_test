@@ -166,6 +166,19 @@ class User extends BaseUser
      */
     const ETAT_INACTIF_ID = 4;
 
+    /**
+     * Tableau des rôles pour lesquels on vérifie si les users sont à jour ou pas
+     *
+     * @return array
+     */
+    public static function getRolesContractualisationUpToDate()
+    {
+        return array(
+            'ROLE_AMBASSADEUR_7',
+            'ROLE_EXPERT_6'
+        );
+    }
+
 
     /**
      * @ORM\Column(name="usr_id", type="integer", options = {"comment" = "ID de l utilisateur"})
@@ -2516,4 +2529,42 @@ class User extends BaseUser
     }
 
     /* --> */
+
+    /**
+     * On vérifie que la date de renouvellement de la dernière contractualisation n'est pas dépassée
+     *
+     * @return null|string
+     */
+    public function getUpToDate()
+    {
+        $interval    = new \DateInterval('P1M');
+        $interval->m = -1;
+        $dateCourante = $this->getDateLastContractualisation();
+        if (null !== $dateCourante) {
+            $dateCourante->add($interval);
+        }
+        $aujourdHui = new \DateTime('now');
+
+        if (in_array(reset($this->roles), User::getRolesContractualisationUpToDate())) {
+            return null !== $this->contractualisations ? $dateCourante >= $aujourdHui ? 'Oui' : 'Non' : 'Non';
+        } else {
+            return null;
+        }
+    }
+
+    /**
+     * Retourne la date de renouvellement de la dernière contractualisation enregistrée pour l'utilisateur
+     *
+     * @return \DateTime|null
+     */
+    public function getDateLastContractualisation()
+    {
+        $lastDateContractualisation = null;
+        /** @var Contractualisation $contractualisation */
+        foreach ($this->contractualisations as $contractualisation) {
+            $lastDateContractualisation = $contractualisation->getDateRenouvellement();
+        }
+
+        return $lastDateContractualisation;
+    }
 }

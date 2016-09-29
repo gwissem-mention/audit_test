@@ -31,14 +31,6 @@ class UserManager extends BaseManager
     protected $managerDomaine;
     protected $options;
 
-    /**
-     * @var array $arrayRolesDateContractualisation Rôles pour lesquels on vérifie le fla 'à jour'
-     */
-    private $arrayRolesDateContractualisation = array(
-        'ROLE_AMBASSADEUR_7',
-        'ROLE_EXPERT_6'
-    );
-
     public function __construct(
         $managerUser,
         $securityContext,
@@ -112,7 +104,7 @@ class UserManager extends BaseManager
             $dateCourante = new \DateTime($user['contra']);
             $dateCourante->add($interval);
 
-            if (in_array(reset($user['roles']), $this->arrayRolesDateContractualisation)) {
+            if (in_array(reset($user['roles']), User::getRolesContractualisationUpToDate())) {
                 $user['contra'] = null !== $user['contra'] ? $dateCourante >= $aujourdHui ? 'true' : 'false' : 'false';
             } else {
                 $user['contra'] = null;
