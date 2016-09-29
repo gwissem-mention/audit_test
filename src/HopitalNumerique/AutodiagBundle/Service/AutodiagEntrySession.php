@@ -49,6 +49,11 @@ class AutodiagEntrySession
         });
     }
 
+    public function getAll()
+    {
+        return $this->entries;
+    }
+
     public function remove(AutodiagEntry $entry)
     {
         $this->entries->removeElement($entry);
@@ -83,5 +88,14 @@ class AutodiagEntrySession
                 return $entry->getId();
             })->getValues()
         );
+    }
+
+    public function exist()
+    {
+        if ($this->session->get(AutodiagEntrySession::SESSION_KEY)) {
+            return true;
+        }
+
+        return false;
     }
 }

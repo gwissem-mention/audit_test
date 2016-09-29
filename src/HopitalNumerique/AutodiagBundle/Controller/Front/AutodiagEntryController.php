@@ -52,17 +52,6 @@ class AutodiagEntryController extends Controller
             ]);
         }
 
-        // Assigne l'utilisateur courrant à l'autodiag entry courrant
-        // On supprime l'entry de la session
-        if ($this->getUser() && null === $entry->getUser()) {
-            $manager = $this->getDoctrine()->getManager();
-            $entry->setUser($this->getUser());
-            $manager->persist($entry);
-            $manager->flush();
-
-            $this->get('autodiag.entry.session')->remove($entry);
-        }
-
         if ($entry->getSynthesis()->isValidated()) {
             return $this->redirectToRoute('hopitalnumerique_autodiag_restitution_index', [
                 'synthesis' => $entry->getSynthesis()->getId(),
