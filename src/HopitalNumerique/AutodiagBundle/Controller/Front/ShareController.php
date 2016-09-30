@@ -7,6 +7,7 @@ use HopitalNumerique\AutodiagBundle\Form\Type\ShareType;
 use HopitalNumerique\AutodiagBundle\Service\Share;
 use HopitalNumerique\DomaineBundle\Entity\Domaine;
 use HopitalNumerique\UserBundle\Entity\User;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -26,9 +27,8 @@ class ShareController extends Controller
 
         /** @var User $user */
         $user = $this->getUser();
-        $domainesUser = $user->getDomaines();
 
-        if (!$this->isGranted('share', $synthesis)) {
+        if (!$user instanceof User || !$this->isGranted('share', $synthesis)) {
             return $this->redirectToRoute('hopitalnumerique_autodiag_entry_add', [
                 'autodiag' => $autodiag->getId()
             ]);
@@ -75,7 +75,7 @@ class ShareController extends Controller
                 $this->get('autodiag.synthesis.dataformatter')->getSynthesesByAutodiag($user, $autodiag, $domain),
             'user' => $user,
             'in_progress' => false,
-            'domainesUser' => $domainesUser,
+            'domainesUser' => $user->getDomaines(),
             'currentDomain' => $domain,
         ]);
     }
