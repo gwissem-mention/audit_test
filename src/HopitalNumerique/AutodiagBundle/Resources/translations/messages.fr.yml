@@ -184,7 +184,7 @@ ad:
 
     share:
         share_result: Partager mon résultat
-        share_with: Partager mon résultat avec :
+        share_with: Partager mon résultat %autodiag% - %synthesis% avec :
         shared_with: Mon résultat est partagé avec :
         compare_results: Faire une synthèse de mes résultats
 

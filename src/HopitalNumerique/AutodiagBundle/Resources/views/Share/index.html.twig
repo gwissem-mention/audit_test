@@ -19,13 +19,6 @@
             "entry" : synthesis.entries|length > 1 ? null : synthesis.entries.first
         } %}
 
-        <div class="share-header">
-            <div class="identity">
-                <div class="title">{{ synthesis.autodiag.title }}</div>
-                <div class="name">{{ synthesis.name }}</div>
-            </div>
-        </div>
-
         <div class="content">
             <h1>{{ 'ad.share.share_result'|trans }}</h1>
             <div class="mysep background-rose"></div>
@@ -36,7 +29,7 @@
                 <div class="col-md-6">
                     {{ form_start(form) }}
                         <div class="row">
-                            {{ form_row(form.shares, {"label": 'ad.share.share_with'|trans}) }}
+                            {{ form_row(form.shares, {"label": 'ad.share.share_with'|trans({'%autodiag%': synthesis.autodiag.title, '%synthesis%': synthesis.name})}) }}
                         </div>
                         <input type="submit" value="Partager" class="btn btn-success" />
                     {{ form_end(form) }}
