@@ -446,7 +446,7 @@ class UserManager extends BaseManager
      */
     public function findCommunautePratiqueMembresCount()
     {
-        return $this->getRepository()->findCommunautePratiqueMembresCount();
+        return $this->getRepository()->findCommunautePratiqueMembresCount($this->currentDomaine->get());
     }
 
     /**

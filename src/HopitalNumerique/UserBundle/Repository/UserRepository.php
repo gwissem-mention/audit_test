@@ -754,12 +754,14 @@ class UserRepository extends EntityRepository
      *
      * @return integer Total
      */
-    public function findCommunautePratiqueMembresCount()
+    public function findCommunautePratiqueMembresCount(Domaine $domaine)
     {
         $query = $this->createQueryBuilder('user');
 
         $query
             ->select('COUNT(user)')
+            ->join('user.domaines', 'domaine', Join::WITH, 'domaine.id = :domaine_id')
+            ->setParameter('domaine_id', $domaine->geTId())
             ->where('user.inscritCommunautePratique = :inscritCommunautePratique')
             ->setParameter('inscritCommunautePratique', true)
             ->andWhere('user.etat = :etat')
