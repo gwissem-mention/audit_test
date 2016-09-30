@@ -2,6 +2,7 @@
 namespace HopitalNumerique\UserBundle\Manager;
 
 use HopitalNumerique\CommunautePratiqueBundle\Entity\Groupe;
+use HopitalNumerique\DomaineBundle\DependencyInjection\CurrentDomaine;
 use HopitalNumerique\DomaineBundle\Manager\DomaineManager;
 use HopitalNumerique\PaiementBundle\Manager\RemboursementManager;
 use Nodevo\ToolsBundle\Manager\Manager as BaseManager;
@@ -29,15 +30,11 @@ class UserManager extends BaseManager
 
     /** @var DomaineManager */
     protected $managerDomaine;
-    protected $options;
 
-    /**
-     * @var array $arrayRolesDateContractualisation Rôles pour lesquels on vérifie le fla 'à jour'
-     */
-    private $arrayRolesDateContractualisation = array(
-        'ROLE_AMBASSADEUR_7',
-        'ROLE_EXPERT_6'
-    );
+    /** @var CurrentDomaine  */
+    protected $currentDomaine;
+
+    protected $options;
 
     public function __construct(
         $managerUser,
@@ -45,7 +42,8 @@ class UserManager extends BaseManager
         $managerReponse,
         $managerRefusCandidature,
         DomaineManager $managerDomaine,
-        RemboursementManager $remboursementManager
+        RemboursementManager $remboursementManager,
+        CurrentDomaine $currentDomaine
     ) {
         parent::__construct($managerUser);
         $this->securityContext = $securityContext;
@@ -54,6 +52,7 @@ class UserManager extends BaseManager
         $this->managerRefusCandidature = $managerRefusCandidature;
         $this->managerDomaine          = $managerDomaine;
         $this->remboursementManager = $remboursementManager;
+        $this->currentDomaine = $currentDomaine;
         $this->options                 = array();
     }
 
@@ -112,7 +111,7 @@ class UserManager extends BaseManager
             $dateCourante = new \DateTime($user['contra']);
             $dateCourante->add($interval);
 
-            if (in_array(reset($user['roles']), $this->arrayRolesDateContractualisation)) {
+            if (in_array(reset($user['roles']), User::getRolesContractualisationUpToDate())) {
                 $user['contra'] = null !== $user['contra'] ? $dateCourante >= $aujourdHui ? 'true' : 'false' : 'false';
             } else {
                 $user['contra'] = null;
@@ -436,7 +435,8 @@ class UserManager extends BaseManager
      */
     public function findCommunautePratiqueRandomMembres($nombreMembres, Reference $civilite = null, array $ignores = null)
     {
-        return $this->getRepository()->findCommunautePratiqueRandomMembres($nombreMembres, $civilite, $ignores);
+        $domaine = $this->currentDomaine->get();
+        return $this->getRepository()->findCommunautePratiqueRandomMembres($domaine, $nombreMembres, $civilite, $ignores);
     }
 
     /**

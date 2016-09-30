@@ -4,6 +4,7 @@ namespace HopitalNumerique\DomaineBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use APY\DataGridBundle\Grid\Mapping as GRID;
+use HopitalNumerique\ForumBundle\Entity\Category;
 use HopitalNumerique\ObjetBundle\Entity\Objet;
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -173,6 +174,13 @@ class Domaine
      * @ORM\JoinColumn(name="communaute_pratique_article", referencedColumnName="obj_id")
      */
     protected $communautePratiqueArticle = null;
+
+    /**
+     * @var Category
+     *
+     * @ORM\ManyToOne(targetEntity="HopitalNumerique\ForumBundle\Entity\Category")
+     */
+    protected $communautePratiqueForumCategory = null;
 
     /**
      * Constructor
@@ -805,5 +813,21 @@ class Domaine
     public function setCommunautePratiqueArticle($communautePratiqueArticle)
     {
         $this->communautePratiqueArticle = $communautePratiqueArticle;
+    }
+
+    /**
+     * @return Category
+     */
+    public function getCommunautePratiqueForumCategory()
+    {
+        return $this->communautePratiqueForumCategory;
+    }
+
+    /**
+     * @param Objet $communautePratiqueForumCategory
+     */
+    public function setCommunautePratiqueForumCategory($communautePratiqueForumCategory)
+    {
+        $this->communautePratiqueForumCategory = $communautePratiqueForumCategory;
     }
 }
