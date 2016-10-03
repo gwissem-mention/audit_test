@@ -40,6 +40,6 @@ class Router
             ]);
         }
 
-        return $this->generate('hopital_numerique_homepage');
+        return $this->router->generate('hopital_numerique_homepage');
     }
 }
