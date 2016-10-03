@@ -20,25 +20,8 @@ class AccueilController extends \Symfony\Bundle\FrameworkBundle\Controller\Contr
             ->canAccessCommunautePratique();
 
         if (!$allowed) {
-            $redirectPublication = $this->get('hopitalnumerique_objet.manager.objet')->findOneBy(array(
-                'alias' => 'la-communaute-de-pratiques'
-            ));
-
-            if (null !== $redirectPublication) {
-                return $this->redirect(
-                    $this->generateUrl(
-                        'hopital_numerique_publication_publication_article',
-                        array(
-                            'categorie' => 'article',
-                            'id' => $redirectPublication->getId(),
-                            'alias' => $redirectPublication->getAlias(),
-                        )
-                    )
-                );
-            }
-
             return $this->redirect(
-                $this->generateUrl('hopital_numerique_account_homepage')
+                $this->get('communautepratique_router')->getUrl()
             );
         }
 
