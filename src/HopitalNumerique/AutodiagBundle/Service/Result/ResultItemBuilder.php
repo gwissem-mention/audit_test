@@ -49,7 +49,7 @@ class ResultItemBuilder
     {
         $resultItem = new Item();
 
-        $resultItem->setLabel($container->getLabel());
+        $resultItem->setLabel($container->getExtendedLabel());
 
         $resultItem->setNumberOfQuestions($this->completion->getAttributesCount($container));
         $resultItem->setNumberOfAnswers($this->completion->getAnswersCount($synthesis, $container));

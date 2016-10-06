@@ -186,7 +186,7 @@ class RestitutionCalculator
         if (!array_key_exists($cacheKey, $this->items)) {
             $score = $this->getContainerSynthesisScore($synthesis, $container->getId());
             $resultItem = new ResultItem();
-            $resultItem->setLabel($container->getLabel());
+            $resultItem->setLabel($container->getExtendedLabel());
             $resultItem->setScore(
                 new Score($score, 'Mon score')
             );

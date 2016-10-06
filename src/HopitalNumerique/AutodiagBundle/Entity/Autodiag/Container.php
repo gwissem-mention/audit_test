@@ -131,6 +131,11 @@ abstract class Container
         return $this->label;
     }
 
+    public function getExtendedLabel()
+    {
+        return sprintf('%s. %s', $this->code, $this->label);
+    }
+
     /**
      * Set label
      *
