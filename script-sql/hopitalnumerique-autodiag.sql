@@ -29,7 +29,7 @@ VALUES (@edit_id, 1, 'Afficher', 'hopitalnumerique_autodiag_edit_result_show_ent
 
 -- ACL Ressource
 INSERT INTO core_ressource (res_nom, res_pattern, res_order, res_type)
-VALUES ('BackOffice - Autodiagnostics', '/^\\/admin\/autodiag/', 1, 1);
+VALUES ('BackOffice - Autodiagnostics', '/^\\/admin\\/autodiag/', 1, 1);
 
 -- Ajouter le menu Mes autodiagnostics dans Mon compte FO
 INSERT INTO `core_menu_item` (`itm_id`, `itm_parent`, `mnu_menu`, `itm_name`, `itm_route`, `itm_route_parameters`, `itm_route_absolute`, `itm_uri`, `itm_icon`, `itm_display`, `itm_display_children`, `itm_role`, `itm_order`)
