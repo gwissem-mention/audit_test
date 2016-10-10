@@ -236,7 +236,9 @@ class RestitutionCalculator
     {
         $builder = $this->attributeBuilder->getBuilder($attribute['type']);
 
-        $itemAttribute = new ItemAttribute($attribute['attribute_label']);
+        $itemAttribute = new ItemAttribute(
+            sprintf('%s. %s', $attribute['code'], $attribute['attribute_label'])
+        );
         $itemAttribute->setColorationInversed($attribute['colorationInversed']);
         $item->addAttribute($itemAttribute);
 

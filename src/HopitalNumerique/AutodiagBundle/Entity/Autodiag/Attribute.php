@@ -206,6 +206,11 @@ class Attribute
         return $this;
     }
 
+    public function getExtendedLabel()
+    {
+        return sprintf('%s. %s', $this->code, $this->label);
+    }
+
     /**
      * Get type
      *
