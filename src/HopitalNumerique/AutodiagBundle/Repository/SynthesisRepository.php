@@ -51,6 +51,7 @@ class SynthesisRepository extends EntityRepository
 //            ->leftJoin('entries.values', 'values')
             ->orWhere('synthesis.user = :user')
             ->orWhere('shares.id IS NOT NULL')
+            ->orderBy('synthesis.updatedAt', 'desc')
             ->setParameter('user', $user)
         ;
 
