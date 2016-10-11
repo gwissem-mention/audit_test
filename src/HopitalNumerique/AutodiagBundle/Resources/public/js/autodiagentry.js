@@ -1,12 +1,13 @@
-var AutodiagEntry = function(element, entry) {
+var AutodiagEntry = function(element, entry, options) {
     this.element = element;
     this.entry = entry;
     this.summary = undefined;
     this.chapters = {};
 
-    this.options = {
-        saveDelay: 500
-    };
+    this.options = $.extend({
+        saveDelay: 500,
+        attribute_save_error_msg: ''
+    }, options);
 
     this.init();
 };
@@ -138,6 +139,7 @@ AutodiagEntry.prototype = {
 
     submitAttributeForm: function(attribute)
     {
+        var instance = this;
         var form = attribute.element.find('form');
         if (this.entry !== null) {
             $.ajax({
@@ -151,7 +153,14 @@ AutodiagEntry.prototype = {
                 data: form.serialize(),
                 method: 'POST',
                 dataType: 'json'
+            }).fail(function () {
+                instance.notifyError(instance.options.attribute_save_error_msg)
             });
         }
+    },
+
+    notifyError: function(message)
+    {
+        alert(message);
     }
 };

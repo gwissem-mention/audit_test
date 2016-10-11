@@ -195,6 +195,7 @@ ad:
         entry:
             name: Nom de votre autodiagnostic
             save: Sauvegarder
+            attribute_save_error: Une erreur est survenue, votre réponse n'a pas été enregistrée.
         navigation:
             next: Chapitre suivant
             prev: Chapitre précédent

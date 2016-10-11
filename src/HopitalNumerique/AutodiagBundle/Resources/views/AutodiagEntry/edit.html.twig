@@ -110,7 +110,10 @@
 
     <script type="text/javascript">
         var entry = {{ entry.id ? entry.id : 'null' }};
-        var autodiag = new AutodiagEntry($('#autodiag-entry'), entry);
+        var attributeSaveErrorMessage = "{{ 'ad.front.entry.attribute_save_error'|trans|raw }}"
+        var autodiag = new AutodiagEntry($('#autodiag-entry'), entry, {
+            "attribute_save_error_msg": attributeSaveErrorMessage
+        });
         new AutodiagNavigation($('#autodiag-path'));
         autodiagNavigation.setAutodiag(autodiag);
     </script>
