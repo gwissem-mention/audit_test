@@ -185,6 +185,7 @@ ad:
     share:
         share_result: Partager mon résultat
         share_with: Partager mon résultat %autodiag% - %synthesis% avec :
+        shares_placeholder: example@mail.fr
         shared_with: Mon résultat est partagé avec :
         compare_results: Faire une synthèse de mes résultats
 

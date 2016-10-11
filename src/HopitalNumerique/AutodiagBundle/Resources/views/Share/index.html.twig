@@ -29,7 +29,12 @@
                 <div class="col-md-6">
                     {{ form_start(form) }}
                         <div class="row">
-                            {{ form_row(form.shares, {"label": 'ad.share.share_with'|trans({'%autodiag%': synthesis.autodiag.title, '%synthesis%': synthesis.name})}) }}
+                            {{ form_row(form.shares, {
+                                "label": 'ad.share.share_with'|trans({'%autodiag%': synthesis.autodiag.title, '%synthesis%': synthesis.name}),
+                                "attr": {
+                                    "placeholder": "ad.share.shares_placeholder"|trans
+                                }
+                            }) }}
                         </div>
                         <input type="submit" value="Partager" class="btn btn-success" />
                     {{ form_end(form) }}
