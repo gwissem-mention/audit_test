@@ -18,7 +18,8 @@ class PublicationController extends \Symfony\Bundle\FrameworkBundle\Controller\C
         if (!$this->container->get('hopitalnumerique_communautepratique.dependency_injection.security')
             ->canAccessCommunautePratique()) {
             $this->addFlash('warning', 'Vous devez être connecté à la communauté de pratique pour lire ses productions.');
-            return $this->redirect($this->generateUrl('hopital_numerique_publication_publication_article', array('categorie' => 'article', 'id' => 1000, 'alias' => 'la-communaute-de-pratiques')));
+
+            return $this->redirect($this->get('communautepratique_router')->getUrl());
         }
 
         $groupes = $this->container->get('hopitalnumerique_communautepratique.manager.groupe')
@@ -27,7 +28,7 @@ class PublicationController extends \Symfony\Bundle\FrameworkBundle\Controller\C
         $groupesPager = new Pagerfanta($groupesAdapter);
         $groupesPager->setMaxPerPage(2);
         $groupesPager->setCurrentPage($page);
-        
+
         return $this->render(
             'HopitalNumeriqueCommunautePratiqueBundle:Publication:list.html.twig',
             array(
@@ -45,6 +46,7 @@ class PublicationController extends \Symfony\Bundle\FrameworkBundle\Controller\C
         return $this->render(
             'HopitalNumeriqueCommunautePratiqueBundle:Publication:listByGroupe.html.twig',
             array(
+                'communautePratiqueUrl' => $this->get('communautepratique_router')->getUrl(),
                 'groupe' => $groupe,
                 'groupes' => $this->container->get('hopitalnumerique_communautepratique.manager.groupe')
                     ->findWithPublications()

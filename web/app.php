@@ -1,4 +1,5 @@
 <?php
+umask(0000);
 
 //die("Site en maintenance, la plateforme sera rétablie dans 5 minutes.");
 

@@ -122,7 +122,11 @@ Hn_RechercheBundle_Referencement_Filter_Exalead.processSearchValidating = functi
         || (Hn_RechercheBundle_Referencement.getChosenElements().size() > 0)
     );
 
-    $('#search-text-button, #empty-search-text-button').prop('disabled', !canSearch);
+    if (searchedText.length) {
+        $('#search-text-button, #empty-search-text-button').show();
+    } else {
+        $('#search-text-button, #empty-search-text-button').hide();
+    }
 
     return (searchedText.length > 1);
 };

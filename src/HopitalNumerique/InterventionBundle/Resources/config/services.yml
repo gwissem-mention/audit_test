@@ -2,6 +2,7 @@ imports:
     - { resource: managers.yml }
     - { resource: formulaires.yml }
     - { resource: grids.yml }
+    - { resource: repositories.yml }
 
 parameters:
     hopitalnumerique_intervention.service.demande.etat_type_derniere_demande.class: HopitalNumerique\InterventionBundle\DependencyInjection\Demande\EtatTypeDerniereDemande

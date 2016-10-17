@@ -17,6 +17,17 @@ use Doctrine\ORM\Query\Expr\Join;
  */
 class InterventionDemandeRepository extends EntityRepository
 {
+    /** @var array */
+    private $adminGridInterventionStatus;
+
+    /**
+     * @param $adminGridInterventionStatus
+     */
+    public function setAdminGridInterventionStatus($adminGridInterventionStatus)
+    {
+        $this->adminGridInterventionStatus = $adminGridInterventionStatus;
+    }
+
     /**
      * Retourne la liste des interventions de l'utilisateur
      *
@@ -560,8 +571,14 @@ class InterventionDemandeRepository extends EntityRepository
                 'interventionEtat.libelle AS interventionEtatLibelle',
                 
                 'CONCAT(cmsi.nom, \' \', cmsi.prenom) AS cmsi_nom',
+                'cmsiEtablissement.nom AS cmsiEtablissementNom',
+                'cmsiEtablissement.finess AS cmsiEtablissementFiness',
+
                 'CONCAT(ambassadeur.nom, \' \', ambassadeur.prenom) AS ambassadeur_nom',
+                'ambassadeurEtablissement.nom AS ambassadeurEtablissementNom',
+                'ambassadeurEtablissement.finess AS ambassadeurEtablissementFiness',
                 'ambassadeurRegion.libelle AS ambassadeurRegionLibelle',
+
                 'referent.id AS referentId',
                 'CONCAT(referent.nom, \' \', referent.prenom) AS referent_nom',
                 'referentEtablissement.nom AS referentEtablissementNom',
@@ -584,8 +601,10 @@ class InterventionDemandeRepository extends EntityRepository
             ->innerJoin('interventionDemande.interventionEtat', 'interventionEtat')
             // CMSI
             ->innerJoin('interventionDemande.cmsi', 'cmsi')
+                ->leftJoin('cmsi.etablissementRattachementSante', 'cmsiEtablissement')
             // Ambassadeur
             ->innerJoin('interventionDemande.ambassadeur', 'ambassadeur')
+                ->leftJoin('ambassadeur.etablissementRattachementSante', 'ambassadeurEtablissement')
                 ->leftJoin('ambassadeur.region', 'ambassadeurRegion')
             // Référent
             ->innerJoin('interventionDemande.referent', 'referent')
@@ -778,5 +797,23 @@ class InterventionDemandeRepository extends EntityRepository
         ;
         
         return $requete->getQuery()->getResult();
+    }
+
+    /**
+     * @return integer
+     */
+    public function getAmountOfInterventionWithoutBill()
+    {
+        $qb = $this->_em->createQueryBuilder();
+        $qb
+            ->select('SUM(i.total)')
+            ->from('HopitalNumeriqueInterventionBundle:InterventionDemande', 'i')
+            ->leftJoin('i.facture', 'f')
+            ->where('f.id IS NULL')
+            ->andWhere('i.interventionEtat IN (:status)')
+            ->setParameter('status', $this->adminGridInterventionStatus)
+        ;
+
+        return $qb->getQuery()->getSingleScalarResult();
     }
 }

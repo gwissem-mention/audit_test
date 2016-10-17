@@ -3,6 +3,7 @@ namespace HopitalNumerique\CommunautePratiqueBundle\Twig\Extension;
 
 use HopitalNumerique\CommunautePratiqueBundle\DependencyInjection\Inscription;
 use HopitalNumerique\CommunautePratiqueBundle\DependencyInjection\Security;
+use HopitalNumerique\CommunautePratiqueBundle\Service\Router;
 use HopitalNumerique\UserBundle\Entity\User;
 use HopitalNumerique\CommunautePratiqueBundle\Entity\Commentaire;
 use HopitalNumerique\CommunautePratiqueBundle\Entity\Fiche;
@@ -22,14 +23,20 @@ class FilterExtension extends \Twig_Extension
      */
     private $securityService;
 
+    /**
+     * @var Router
+     */
+    private $communautePratiqueRouter;
+
 
     /**
      * Constructeur.
      */
-    public function __construct(Inscription $inscriptionService, Security $securityService)
+    public function __construct(Inscription $inscriptionService, Security $securityService, Router $communautePratiqueRouter)
     {
         $this->inscriptionService = $inscriptionService;
         $this->securityService = $securityService;
+        $this->communautePratiqueRouter = $communautePratiqueRouter;
     }
 
 
@@ -46,6 +53,15 @@ class FilterExtension extends \Twig_Extension
             'communautePratiqueCanEdit' => new \Twig_Filter_Method($this, 'canEdit'),
             'communautePratiqueCanDelete' => new \Twig_Filter_Method($this, 'canDelete')
         );
+    }
+
+    public function getFunctions()
+    {
+        return [
+            new \Twig_SimpleFunction('communaute_pratique_article_url', function () {
+                return $this->communautePratiqueRouter->getUrl();
+            }),
+        ];
     }
 
 

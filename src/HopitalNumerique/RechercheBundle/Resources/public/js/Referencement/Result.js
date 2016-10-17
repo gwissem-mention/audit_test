@@ -117,7 +117,6 @@ Hn_RechercheBundle_Referencement.activeSearch = function()
 Hn_RechercheBundle_Referencement.desactiveSearch = function()
 {
     Hn_RechercheBundle_Referencement.IS_SEARCHING = true;
-    $('#search-text-button, #empty-search-text-button').prop('disabled', true);
     Hn_RechercheBundle_Referencement.AJAX_LOADER = $('.results-bloc').data('loader') !== undefined
         ? $('.results-bloc').data('loader')
         : $('.results-bloc').nodevoLoader();

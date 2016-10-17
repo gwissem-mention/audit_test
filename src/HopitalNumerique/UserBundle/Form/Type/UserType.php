@@ -83,14 +83,14 @@ class UserType extends AbstractType
         $builder
             ->add('nom', 'text', array(
                 'max_length' => $this->_constraints['nom']['maxlength'],
-                'required'   => true,
+                'required'   => false,
                 'label'      => 'Nom',
                 'attr'       => array('class' => $this->_constraints['nom']['class'] )
             ))
 
             ->add('prenom', 'text', array(
                 'max_length' => $this->_constraints['prenom']['maxlength'],
-                'required'   => true,
+                'required'   => false,
                 'label'      => 'Prénom',
                 'attr'       => array('class' => $this->_constraints['prenom']['class'] )
             ));

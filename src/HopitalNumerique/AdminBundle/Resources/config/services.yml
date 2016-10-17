@@ -1,0 +1,7 @@
+services:
+    hn.admin.payment_grid_block:
+        class: HopitalNumerique\AdminBundle\Service\PaymentGridBlock
+        arguments:
+            - "@hn.paiement.repository.facture"
+            - "@hn.module.repository.inscription"
+            - "@hn.intervention.repository.demande"

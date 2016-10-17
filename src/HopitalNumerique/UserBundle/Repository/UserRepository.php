@@ -716,12 +716,14 @@ class UserRepository extends EntityRepository
      * @param array<\HopitalNumerique\UserBundle\Entity\User>    $ignores       (optionnel) Liste d'utilisateurs à ignorer
      * @return array<\HopitalNumerique\UserBundle\Entity\User> Utilisateurs
      */
-    public function findCommunautePratiqueRandomMembres($nombreMembres, Reference $civilite = null, array $ignores = null)
+    public function findCommunautePratiqueRandomMembres(Domaine $domaine, $nombreMembres, Reference $civilite = null, array $ignores = null)
     {
         $query = $this->createQueryBuilder('user');
 
         $query
             ->select('user', 'RAND() AS HIDDEN rand')
+            ->join('user.domaines', 'domaine', Join::WITH, 'domaine.id = :domaine_id')
+                ->setParameter('domaine_id', $domaine->geTId())
             ->andWhere('user.inscritCommunautePratique = :inscritCommunautePratique')
             ->setParameter('inscritCommunautePratique', true)
             ->andWhere('user.etat = :etat')
@@ -752,12 +754,14 @@ class UserRepository extends EntityRepository
      *
      * @return integer Total
      */
-    public function findCommunautePratiqueMembresCount()
+    public function findCommunautePratiqueMembresCount(Domaine $domaine)
     {
         $query = $this->createQueryBuilder('user');
 
         $query
             ->select('COUNT(user)')
+            ->join('user.domaines', 'domaine', Join::WITH, 'domaine.id = :domaine_id')
+            ->setParameter('domaine_id', $domaine->geTId())
             ->where('user.inscritCommunautePratique = :inscritCommunautePratique')
             ->setParameter('inscritCommunautePratique', true)
             ->andWhere('user.etat = :etat')

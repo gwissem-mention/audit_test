@@ -166,6 +166,19 @@ class User extends BaseUser
      */
     const ETAT_INACTIF_ID = 4;
 
+    /**
+     * Tableau des rôles pour lesquels on vérifie si les users sont à jour ou pas
+     *
+     * @return array
+     */
+    public static function getRolesContractualisationUpToDate()
+    {
+        return array(
+            'ROLE_AMBASSADEUR_7',
+            'ROLE_EXPERT_6'
+        );
+    }
+
 
     /**
      * @ORM\Column(name="usr_id", type="integer", options = {"comment" = "ID de l utilisateur"})
@@ -234,14 +247,13 @@ class User extends BaseUser
 
     /**
      * @var string
-     * @Assert\NotBlank(message="Le nom ne peut pas être vide.")
      * @Assert\Length(
      *      min = "1",
      *      max = "50",
      *      minMessage="Il doit y avoir au moins {{ limit }} caractères dans le nom.",
      *      maxMessage="Il doit y avoir au maximum {{ limit }} caractères dans le nom."
      * )
-     * @Nodevo\Javascript(class="validate[required,minSize[1],maxSize[50]]")
+     * @Nodevo\Javascript(class="validate[minSize[1],maxSize[50]]")
      * @ORM\Column(name="usr_nom", type="string", length=50, options = {"comment" = "Nom de l utilisateur"})
      * @Gedmo\Versioned
      */
@@ -249,14 +261,13 @@ class User extends BaseUser
 
     /**
      * @var string
-     * @Assert\NotBlank(message="Le prénom ne peut pas être vide.")
      * @Assert\Length(
      *      min = "1",
      *      max = "50",
      *      minMessage="Il doit y avoir au moins {{ limit }} caractères dans le prénom.",
      *      maxMessage="Il doit y avoir au maximum {{ limit }} caractères dans le prénom."
      * )
-     * @Nodevo\Javascript(class="validate[required,minSize[1],maxSize[50]]")
+     * @Nodevo\Javascript(class="validate[minSize[1],maxSize[50]]")
      * @ORM\Column(name="usr_prenom", type="string", length=50, options = {"comment" = "Prénom de l utilisateur"})
      * @Gedmo\Versioned
      */
@@ -2513,4 +2524,42 @@ class User extends BaseUser
     }
 
     /* --> */
+
+    /**
+     * On vérifie que la date de renouvellement de la dernière contractualisation n'est pas dépassée
+     *
+     * @return null|string
+     */
+    public function getUpToDate()
+    {
+        $interval    = new \DateInterval('P1M');
+        $interval->m = -1;
+        $dateCourante = $this->getDateLastContractualisation();
+        if (null !== $dateCourante) {
+            $dateCourante->add($interval);
+        }
+        $aujourdHui = new \DateTime('now');
+
+        if (in_array(reset($this->roles), User::getRolesContractualisationUpToDate())) {
+            return null !== $this->contractualisations ? $dateCourante >= $aujourdHui ? 'Oui' : 'Non' : 'Non';
+        } else {
+            return null;
+        }
+    }
+
+    /**
+     * Retourne la date de renouvellement de la dernière contractualisation enregistrée pour l'utilisateur
+     *
+     * @return \DateTime|null
+     */
+    public function getDateLastContractualisation()
+    {
+        $lastDateContractualisation = null;
+        /** @var Contractualisation $contractualisation */
+        foreach ($this->contractualisations as $contractualisation) {
+            $lastDateContractualisation = $contractualisation->getDateRenouvellement();
+        }
+
+        return $lastDateContractualisation;
+    }
 }

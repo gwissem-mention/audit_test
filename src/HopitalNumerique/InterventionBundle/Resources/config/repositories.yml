@@ -1,0 +1,7 @@
+services:
+    hn.intervention.repository.demande:
+        class: HopitalNumerique\InterventionBundle\Repository\InterventionDemandeRepository
+        factory: ['@doctrine.orm.default_entity_manager', getRepository]
+        arguments: ['HopitalNumeriqueInterventionBundle:InterventionDemande']
+        calls:
+            - ["setAdminGridInterventionStatus", ["%admin_grid_intervention_status%"]]

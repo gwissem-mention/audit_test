@@ -1,6 +1,8 @@
 <?php
 namespace HopitalNumerique\UserBundle\Manager;
 
+use HopitalNumerique\CommunautePratiqueBundle\Entity\Groupe;
+use HopitalNumerique\DomaineBundle\DependencyInjection\CurrentDomaine;
 use HopitalNumerique\DomaineBundle\Manager\DomaineManager;
 use HopitalNumerique\PaiementBundle\Manager\RemboursementManager;
 use Nodevo\ToolsBundle\Manager\Manager as BaseManager;
@@ -8,28 +10,50 @@ use Doctrine\Common\Collections\Collection;
 use HopitalNumerique\UserBundle\Entity\User;
 use HopitalNumerique\ReferenceBundle\Entity\Reference;
 use HopitalNumerique\DomaineBundle\Entity\Domaine;
+use Symfony\Component\Security\Core\SecurityContext;
 
 class UserManager extends BaseManager
 {
     protected $class = '\HopitalNumerique\UserBundle\Entity\User';
-    protected $_securityContext;
-    protected $_managerReponse;
-    protected $_managerRefusCandidature;
+    /**
+     * @var SecurityContext $securityContext
+     */
+    protected $securityContext;
+    /**
+     * @var \HopitalNumerique\QuestionnaireBundle\Manager\ReponseManager $managerReponse
+     */
+    protected $managerReponse;
+    /**
+     * @var RefusCandidatureManager $managerRefusCandidature
+     */
+    protected $managerRefusCandidature;
 
     /** @var DomaineManager */
-    protected $_managerDomaine;
-    protected $_options;
+    protected $managerDomaine;
 
-    public function __construct($managerUser, $securityContext, $managerReponse, $managerRefusCandidature, DomaineManager $managerDomaine, RemboursementManager $remboursementManager)
-    {
+    /** @var CurrentDomaine  */
+    protected $currentDomaine;
+
+    protected $options;
+
+    public function __construct(
+        $managerUser,
+        $securityContext,
+        $managerReponse,
+        $managerRefusCandidature,
+        DomaineManager $managerDomaine,
+        RemboursementManager $remboursementManager,
+        CurrentDomaine $currentDomaine
+    ) {
         parent::__construct($managerUser);
-        $this->_securityContext = $securityContext;
+        $this->securityContext = $securityContext;
         //Récupération des managers Réponses et Questionnaire
-        $this->_managerReponse          = $managerReponse;
-        $this->_managerRefusCandidature = $managerRefusCandidature;
-        $this->_managerDomaine          = $managerDomaine;
+        $this->managerReponse          = $managerReponse;
+        $this->managerRefusCandidature = $managerRefusCandidature;
+        $this->managerDomaine          = $managerDomaine;
         $this->remboursementManager = $remboursementManager;
-        $this->_options                 = array();
+        $this->currentDomaine = $currentDomaine;
+        $this->options                 = array();
     }
 
     /**
@@ -37,16 +61,16 @@ class UserManager extends BaseManager
      *
      * @return array
      */
-    public function getDatasForGrid( \StdClass $condition = null )
+    public function getDatasForGrid(\StdClass $condition = null)
     {
-        $users = $this->getRepository()->getDatasForGrid( $condition )->getQuery()->getResult();
+        $users = $this->getRepository()->getDatasForGrid($condition)->getQuery()->getResult();
         $usersForGrid = array();
 
         $idExpert      = 1;
         $idAmbassadeur = 2;
 
         //Récupération des questionnaires et users
-        $questionnaireByUser = $this->_managerReponse->reponseExiste($idExpert, $idAmbassadeur);
+        $questionnaireByUser = $this->managerReponse->reponseExiste($idExpert, $idAmbassadeur);
 
         $aujourdHui = new \DateTime('now');
 
@@ -54,29 +78,44 @@ class UserManager extends BaseManager
         $interval    = new \DateInterval('P1M');
         $interval->m = -1;
 
-        $refusCandidature = $this->_managerRefusCandidature->getRefusCandidatureByQuestionnaire();
+        $refusCandidature = $this->managerRefusCandidature->getRefusCandidatureByQuestionnaire();
 
         //Pour chaque utilisateur, set la contractualisation à jour
         foreach ($users as $user) {
-
             //Récupération des questionnaires rempli par l'utilisateur courant
-            $questionnairesByUser = array_key_exists($user['id'], $questionnaireByUser) ? $questionnaireByUser[$user['id']] : array();
+            $questionnairesByUser =
+                array_key_exists($user['id'], $questionnaireByUser) ? $questionnaireByUser[$user['id']] : array();
 
-            //Récupèration d'un booléen : Vérification de réponses pour le questionnaire expert, que son role n'est pas expert et que sa candidature n'a pas encore été refusé
+            //Récupèration d'un booléen : Vérification de réponses pour le questionnaire expert,
+            //que son role n'est pas expert et que sa candidature n'a pas encore été refusé
             $user['expert'] = (in_array($idExpert, $questionnairesByUser)
-                                        && !in_array('ROLE_EXPERT_6', $user["roles"])
-                                        && !$this->_managerRefusCandidature->refusExisteByUserByQuestionnaire($user['id'], $idExpert, $refusCandidature)
-                                        && !$user["alreadyBeExpert"]);
+                && !in_array('ROLE_EXPERT_6', $user["roles"])
+                && !$this->managerRefusCandidature->refusExisteByUserByQuestionnaire(
+                    $user['id'],
+                    $idExpert,
+                    $refusCandidature
+                )
+                && !$user["alreadyBeExpert"]);
 
-            //Récupèration d'un booléen : Vérification de réponses pour le questionnaire ambassadeur, que son role n'est pas expert et que sa candidature n'a pas encore été refusé
+            //Récupèration d'un booléen : Vérification de réponses pour le questionnaire ambassadeur,
+            //que son role n'est pas expert et que sa candidature n'a pas encore été refusé
             $user['ambassadeur'] = (in_array($idAmbassadeur, $questionnairesByUser)
-                                        && !in_array('ROLE_AMBASSADEUR_7', $user["roles"])
-                                        && !$this->_managerRefusCandidature->refusExisteByUserByQuestionnaire($user['id'], $idAmbassadeur, $refusCandidature)
-                                        && !$user["alreadyBeAmbassadeur"]);
+                && !in_array('ROLE_AMBASSADEUR_7', $user["roles"])
+                && !$this->managerRefusCandidature->refusExisteByUserByQuestionnaire(
+                    $user['id'],
+                    $idAmbassadeur,
+                    $refusCandidature
+                )
+                && !$user["alreadyBeAmbassadeur"]);
 
             $dateCourante = new \DateTime($user['contra']);
             $dateCourante->add($interval);
-            $user['contra'] = ('' != $user['contra']) ? ($dateCourante >= $aujourdHui) : false;
+
+            if (in_array(reset($user['roles']), User::getRolesContractualisationUpToDate())) {
+                $user['contra'] = null !== $user['contra'] ? $dateCourante >= $aujourdHui ? 'true' : 'false' : 'false';
+            } else {
+                $user['contra'] = null;
+            }
 
             unset($user["alreadyBeExpert"]);
             unset($user["alreadyBeAmbassadeur"]);
@@ -93,9 +132,9 @@ class UserManager extends BaseManager
      *
      * @return array
      */
-    public function getEtablissementForGrid( $condition = null )
+    public function getEtablissementForGrid($condition = null)
     {
-        return $this->getRepository()->getEtablissementForGrid( $condition )->getQuery()->getResult();
+        return $this->getRepository()->getEtablissementForGrid($condition)->getQuery()->getResult();
     }
 
     /**
@@ -103,9 +142,9 @@ class UserManager extends BaseManager
      *
      * @return array
      */
-    public function getEtablissementForExport( $ids )
+    public function getEtablissementForExport($ids)
     {
-        return $this->getRepository()->getEtablissementForExport( $ids )->getQuery()->getResult();
+        return $this->getRepository()->getEtablissementForExport($ids)->getQuery()->getResult();
     }
 
     /**
@@ -116,12 +155,12 @@ class UserManager extends BaseManager
      *
      * @return empty
      */
-    public function toogleState( $users, $ref )
+    public function toogleState($users, $ref)
     {
-        foreach($users as $user) {
-            $user->setEtat( $ref );
-            $user->setEnabled( ($ref->getId() == 3 ? 1 : 0) );
-            $this->_em->persist( $user );
+        foreach ($users as $user) {
+            $user->setEtat($ref);
+            $user->setEnabled(($ref->getId() == 3 ? 1 : 0));
+            $this->_em->persist($user);
         }
 
         //save
@@ -135,9 +174,9 @@ class UserManager extends BaseManager
      *
      * @return boolean
      */
-    public function userExistForRoleDirection( $user )
+    public function userExistForRoleDirection($user)
     {
-        return $this->getRepository()->userExistForRoleDirection( $user )->getQuery()->getOneOrNullResult();
+        return $this->getRepository()->userExistForRoleDirection($user)->getQuery()->getOneOrNullResult();
     }
 
     /**
@@ -148,9 +187,9 @@ class UserManager extends BaseManager
      *
      * @return array
      */
-    public function getAmbassadeursByRegionAndDomaine( $region, $domaine = null )
+    public function getAmbassadeursByRegionAndDomaine($region, $domaine = null)
     {
-        return $this->getRepository()->getAmbassadeursByRegionAndDomaine( $region, $domaine )->getQuery()->getResult();
+        return $this->getRepository()->getAmbassadeursByRegionAndDomaine($region, $domaine)->getQuery()->getResult();
     }
 
     /**
@@ -161,9 +200,9 @@ class UserManager extends BaseManager
      *
      * @return array
      */
-    public function getAmbassadeursByRegionAndProduction( $region, $objet )
+    public function getAmbassadeursByRegionAndProduction($region, $objet)
     {
-        return $this->getRepository()->getAmbassadeursByRegionAndProduction( $region, $objet )->getQuery()->getResult();
+        return $this->getRepository()->getAmbassadeursByRegionAndProduction($region, $objet)->getQuery()->getResult();
     }
 
     /**
@@ -185,7 +224,7 @@ class UserManager extends BaseManager
      *
      * @return array
      */
-    public function findUsersByRole( $role )
+    public function findUsersByRole($role)
     {
         return $this->getRepository()->findUsersByRole($role)->getQuery()->getResult();
     }
@@ -208,7 +247,7 @@ class UserManager extends BaseManager
      *
      * @return array
      */
-    public function findUsersByDomaine( $idDomaine )
+    public function findUsersByDomaine($idDomaine)
     {
         return $this->getRepository()->findUsersByDomaine($idDomaine)->getQuery()->getResult();
     }
@@ -232,7 +271,7 @@ class UserManager extends BaseManager
      *
      * @return array
      */
-    public function findUsersByRoleAndRegion( $idregion, $role )
+    public function findUsersByRoleAndRegion($idregion, $role)
     {
         return $this->getRepository()->findUsersByRoleAndRegion($idregion, $role)->getQuery()->getOneOrNullResult();
     }
@@ -320,9 +359,9 @@ class UserManager extends BaseManager
      *
      * @return result
      */
-    public function getUsersByQuestionnaire( $idQuestionnaire )
+    public function getUsersByQuestionnaire($idQuestionnaire)
     {
-        return $this->getRepository()->getUsersByQuestionnaire( $idQuestionnaire )->getQuery()->getResult();
+        return $this->getRepository()->getUsersByQuestionnaire($idQuestionnaire)->getQuery()->getResult();
     }
 
     /**
@@ -330,7 +369,7 @@ class UserManager extends BaseManager
      */
     public function getUserConnected()
     {
-        return $this->_securityContext->getToken()->getUser();
+        return $this->securityContext->getToken()->getUser();
     }
 
     /**
@@ -344,16 +383,16 @@ class UserManager extends BaseManager
     }
 
     /**
-    * Récupère le nombre d'établissements connectés
-    *
-    * @return int
-    */
+     * Récupère le nombre d'établissements connectés
+     *
+     * @return int
+     */
     public function getNbEtablissements(Domaine $domaine = null)
     {
         return $this->getRepository()->getNbEtablissements($domaine);
     }
 
-  	/**
+    /**
      * Retourne des membres de la communauté de pratique.
      *
      * @param \HopitalNumerique\UserBundle\Manager\Domaine $domaine Domaine
@@ -367,10 +406,10 @@ class UserManager extends BaseManager
     /**
      * Retourne la QueryBuilder avec les membres de la communauté de pratique.
      *
-     * @param \HopitalNumerique\CommunautePratiqueBundle\Entity\Groupe $groupe (optionnel) Groupe des membres
+     * @param Groupe $groupe (optionnel) Groupe des membres
      * @return \Doctrine\ORM\QueryBuilder QueryBuilder
      */
-    public function getCommunautePratiqueMembresQueryBuilder(\HopitalNumerique\CommunautePratiqueBundle\Entity\Groupe $groupe = null, Domaine $domaine = null, $membreId = null)
+    public function getCommunautePratiqueMembresQueryBuilder(Groupe $groupe = null, Domaine $domaine = null, $membreId = null)
     {
         return $this->getRepository()->getCommunautePratiqueMembresQueryBuilder($groupe, $domaine, $membreId);
     }
@@ -381,7 +420,7 @@ class UserManager extends BaseManager
      * @param \HopitalNumerique\CommunautePratiqueBundle\Entity\Groupe $groupe Groupe
      * @return array<\HopitalNumerique\UserBundle\Entity\User> Utilisateurs
      */
-    public function findCommunautePratiqueMembresNotInGroupe(\HopitalNumerique\CommunautePratiqueBundle\Entity\Groupe $groupe)
+    public function findCommunautePratiqueMembresNotInGroupe(Groupe $groupe)
     {
         return $this->getRepository()->findCommunautePratiqueMembresNotInGroupe($groupe);
     }
@@ -389,14 +428,15 @@ class UserManager extends BaseManager
     /**
      * Retourne des membres de la communauté de pratique au hasard.
      *
-     * @param integer                                            $nombreMembres Nombre de membres à retourner
-     * @param \HopitalNumerique\ReferenceBundle\Entity\Reference $civilite      (optionnel) Civilité
-     * @param array<\HopitalNumerique\UserBundle\Entity\User>    $ignores       (optionnel) Liste d'utilisateurs à ignorer
+     * @param integer                                         $nombreMembres Nombre de membres à retourner
+     * @param Reference                                       $civilite      (optionnel) Civilité
+     * @param array<\HopitalNumerique\UserBundle\Entity\User> $ignores       (optionnel) Liste d'utilisateurs à ignorer
      * @return array<\HopitalNumerique\UserBundle\Entity\User> Utilisateurs
      */
     public function findCommunautePratiqueRandomMembres($nombreMembres, Reference $civilite = null, array $ignores = null)
     {
-        return $this->getRepository()->findCommunautePratiqueRandomMembres($nombreMembres, $civilite, $ignores);
+        $domaine = $this->currentDomaine->get();
+        return $this->getRepository()->findCommunautePratiqueRandomMembres($domaine, $nombreMembres, $civilite, $ignores);
     }
 
     /**
@@ -406,7 +446,7 @@ class UserManager extends BaseManager
      */
     public function findCommunautePratiqueMembresCount()
     {
-        return $this->getRepository()->findCommunautePratiqueMembresCount();
+        return $this->getRepository()->findCommunautePratiqueMembresCount($this->currentDomaine->get());
     }
 
     /**

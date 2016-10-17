@@ -4,6 +4,7 @@
  */
 namespace HopitalNumerique\InterventionBundle\Grid\Admin;
 
+use HopitalNumerique\InterventionBundle\Entity\InterventionDemande;
 use HopitalNumerique\InterventionBundle\Grid\DemandesAbstractGrid;
 use Nodevo\GridBundle\Grid\Column;
 use Nodevo\GridBundle\Grid\Action;
@@ -23,7 +24,19 @@ class DemandesGrid extends DemandesAbstractGrid
         // Pour éviter que le second bouton passe au-dessous du premier
         $this->setButtonSize(43);
 
-        $this->ignoreColonnes(array('interventionInitiateurId', 'nombreDemandesRegroupees', 'nombreDemandesPrincipales', 'ambassadeurRegionLibelle', 'referentRegionLibelle', 'cmsiDateChoixLibelle', 'ambassadeurDateChoixLibelle'));
+        $this->ignoreColonnes(
+            [
+                'interventionInitiateurId',
+                'nombreDemandesRegroupees',
+                'nombreDemandesPrincipales',
+                'ambassadeurRegionLibelle',
+                'referentRegionLibelle',
+                'cmsiDateChoixLibelle',
+                'ambassadeurDateChoixLibelle',
+                'referentEtablissementFiness',
+                'referentEtablissementNom',
+            ]
+        );
     }
 
     public function setDefaultFiltreFromController($filtre)
@@ -78,9 +91,29 @@ class DemandesGrid extends DemandesAbstractGrid
         $this->addColonne($colonneInterventionEtatLibelle);
 
         $colonneCmsiInformations = new Column\TextColumn('cmsi_nom', 'CMSI');
+        $colonneCmsiInformations->manipulateRenderCell(function($value, \APY\DataGridBundle\Grid\Row $row) {
+            if (
+                !empty($row->getField('cmsiEtablissementNom')) &&
+                !empty($row->getField('cmsiEtablissementFiness'))
+            ) {
+                return sprintf('%s (%s - %s)', $value, $row->getField('cmsiEtablissementNom'), $row->getField('cmsiEtablissementFiness'));
+            }
+
+            return $value;
+        });
         $this->addColonne($colonneCmsiInformations);
 
         $colonneAmbassadeurInformations = new Column\TextColumn('ambassadeur_nom', 'Ambassadeur');
+        $colonneAmbassadeurInformations->manipulateRenderCell(function($value, \APY\DataGridBundle\Grid\Row $row) {
+            if (
+                !empty($row->getField('ambassadeurEtablissementNom')) &&
+                !empty($row->getField('ambassadeurEtablissementFiness'))
+            ) {
+                return sprintf('%s (%s - %s)', $value, $row->getField('ambassadeurEtablissementNom'), $row->getField('ambassadeurEtablissementFiness'));
+            }
+
+            return $value;
+        });
         $this->addColonne($colonneAmbassadeurInformations);
 
         $colonneIdDemandeur = new Column\TextColumn('referentId', '');
@@ -88,13 +121,17 @@ class DemandesGrid extends DemandesAbstractGrid
         $this->addColonne($colonneIdDemandeur);
 
         $colonneDemandeurInformations = new Column\TextColumn('referent_nom', 'Demandeur');
+        $colonneDemandeurInformations->manipulateRenderCell(function($value, \APY\DataGridBundle\Grid\Row $row) {
+            if (
+                !empty($row->getField('referentEtablissementNom')) &&
+                !empty($row->getField('referentEtablissementFiness'))
+            ) {
+                return sprintf('%s (%s - %s)', $value, $row->getField('referentEtablissementNom'), $row->getField('referentEtablissementFiness'));
+            }
+
+            return $value;
+        });
         $this->addColonne($colonneDemandeurInformations);
-
-        $colonneDemandeurEtablissement = new Column\TextColumn('referentEtablissementNom', 'Établissement');
-        $this->addColonne($colonneDemandeurEtablissement);
-
-        $colonneDemandeurEtablissementFiness = new Column\TextColumn('referentEtablissementFiness', 'FINESS');
-        $this->addColonne($colonneDemandeurEtablissementFiness);
 
         $colonneObjetsInformations = new Column\TextColumn('objetsInformations', 'Objets');
         $colonneObjetsInformations->setFilterable(false)->setSortable(false);

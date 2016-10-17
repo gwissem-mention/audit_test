@@ -41,7 +41,14 @@ services:
     #--Manager
     hopitalnumerique_user.manager.user:
         class: %hopitalnumerique_user.manager.user.class%
-        arguments: ["@doctrine.orm.entity_manager", "@security.context" , "@hopitalnumerique_questionnaire.manager.reponse",  "@hopitalnumerique_user.manager.refus_candidature", "@hopitalnumerique_domaine.manager.domaine", '@hopitalnumerique_paiement.manager.remboursement']
+        arguments:
+            - "@doctrine.orm.entity_manager"
+            - "@security.context"
+            - "@hopitalnumerique_questionnaire.manager.reponse"
+            - "@hopitalnumerique_user.manager.refus_candidature"
+            - "@hopitalnumerique_domaine.manager.domaine"
+            - '@hopitalnumerique_paiement.manager.remboursement'
+            - '@hopitalnumerique_domaine.dependency_injection.current_domaine'
     #--Type
     hopitalnumerique_user.form.type.user:
         class: %hopitalnumerique_user.form.type.user%

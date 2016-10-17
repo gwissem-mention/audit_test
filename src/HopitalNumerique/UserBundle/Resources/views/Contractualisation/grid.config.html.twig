@@ -1,7 +1,11 @@
 {% use 'NodevoGridBundle::grid.config.html.twig' %}
 
 {% block grid_column_contra_cell %}
-    <span class="grid_contractualisation_{{ value }}" >{{value}}</span>
+    {% if value == 'Non' %}
+        <span class="grid_contractualisation_false" >false</span>
+    {% elseif value == 'Oui' %}
+        <span class="grid_contractualisation_true" >true</span>
+    {% endif %}
 {% endblock grid_column_contra_cell %}
 
 {% block grid_column_lock_cell %}

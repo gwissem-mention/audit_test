@@ -253,7 +253,7 @@
                         </div>
                     </li>
 
-                    {#<li data-row="{{userConf['paiements']['row']}}" data-col="{{userConf['paiements']['col']}}" data-sizex="1" data-sizey="1" data-id="paiements" >
+                    <li data-row="{{userConf['paiements']['row']}}" data-col="{{userConf['paiements']['col']}}" data-sizex="1" data-sizey="1" data-id="paiements" >
                         <div class="panel panel-midnightblue">
                             <div class="panel-heading">
                                 <h3 class="panel-title"><i class="fa fa-credit-card"></i>Paiements</h3>
@@ -264,13 +264,15 @@
 
                             <div class="panel-body">
                                 <ol>
-                                    <li>Montant factures émises à payer : {{blocPaiements['apayer']}} €</li>
-                                    <li>Montant en attente d'émission facture : {{blocPaiements['attente']}} €</li>
-                                    <li>Montant payé depuis le 1er janvier : {{blocPaiements['janvier']}} €</li>
+                                    <li><b>{{ blocPaiements['payedPreviousYear']|number_format(0, ',', ' ') }} &euro;</b> : payé en {{ "now"|date('Y')-1 }}</li>
+                                    <li><b>{{ blocPaiements['payedCurrentYear']|number_format(0, ',', ' ') }} &euro;</b> : payé en {{ "now"|date('Y') }}</li>
+                                    <li><b>{{ blocPaiements['waitingPayment']|number_format(0, ',', ' ') }} &euro;</b> : factures en attente de paiement</li>
+                                    <li><b>{{ blocPaiements['waintingPaymentCurrentYear']|number_format(0, ',', ' ') }} &euro;</b> : dont factures {{ "now"|date('Y') }}</li>
+                                    <li><b>{{ blocPaiements['waitingBillCreation']|number_format(0, ',', ' ') }} &euro;</b> : en attente d'émission de facture</li>
                                 </ol>
                             </div>
                         </div>
-                    </li>#}
+                    </li>
 
                     {% for name,datas in blocForum %}
                         <li data-row="{{userConf[ name ]['row']}}" data-col="{{userConf[ name ]['col']}}" data-sizex="1" data-sizey="1" data-id="{{ name }}" >

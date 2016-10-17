@@ -13,7 +13,7 @@
     %}
         <link rel="stylesheet" href="{{ asset_url }}" />
     {% endstylesheets %}
-    
+
     <link rel="stylesheet" href="{{ asset('bundles/hopitalnumeriquepublication/css/style-print.css') }}" type="text/css" media="print" />
 {% endblock %}
 
@@ -96,11 +96,11 @@
                 <div class="row col-md-12">
                     {{objet.resume|glossaire_add(objet)|parsePublication|raw}}
                 </div>
-                
-                {% if 1000 == objet.id %} {# Article La communauté de pratique #}
+
+                {% if is_communaute_pratique %} {# Article La communauté de pratique #}
                     {% include 'HopitalNumeriqueCommunautePratiqueBundle:include:Article.html.twig' %}
                 {% endif %}
-                
+
             </div>
             <div class="clearfix"></div>
         </div>
