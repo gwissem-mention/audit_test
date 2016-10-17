@@ -1,0 +1,32 @@
+#validation .validation-header {
+    font-weight: bold;
+    font-size: 20px;
+    text-align: center;
+    margin: 20px 0;
+}
+
+#validation .validation-header .title {
+    font-size: 24px;
+}
+
+#validation .buttons {
+    text-align: center;
+}
+
+.loggedout-warning {
+    max-width: 350px;
+    background-color: #f9b1b1;
+    padding: 8px 14px;
+    border-radius: 4px;
+    margin: auto;
+}
+
+#validation .validation-header .identity .title {
+    font-size: 24px;
+    margin-bottom: 15px;
+}
+
+#validation .validation-header .identity .name {
+    font-size: 18px;
+    font-weight: normal;
+}

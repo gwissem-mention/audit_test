@@ -1,0 +1,46 @@
+{% extends 'HopitalNumeriqueAutodiagBundle:Restitution:layout.html.twig' %}
+
+{% set pdf = true %}
+
+{% block navigation %}{% endblock %}
+
+{% block restitution_content %}
+    {% for category in restitution.categories %}
+        <div class="category" style="width: 1024px;">
+            <h3>{{ category.label }}</h3>
+
+            <div>
+                <p class="category-description">
+                    {{ category.description }}
+                </p>
+
+                <div class="items-wrapper">
+
+                    <div class="item-row pdf">
+                        {% set currentRow = category.items.first.row %}
+                        {% for item in category.items %}
+                            {% if item.row != currentRow %}
+                                {% set currentRow = item.row %}
+                                </div>
+                                <div class="item-row pdf">
+                            {% endif %}
+
+                            <div class="item" data-row="{{ item.row }}" data-column="{{ item.column }}" data-item-type="{{ item.type }}">
+                                {% include ("@HopitalNumeriqueAutodiag/Restitution/item/_" ~ item.type ~ ".html.twig") ignore missing with {
+                                'restitution': item,
+                                'result': result[item.id]
+                                } %}
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        {% if not loop.last %}
+            <div style="page-break-after: always;"></div>
+        {% endif %}
+    {% endfor %}
+
+{% endblock %}
+

@@ -1,6 +1,8 @@
-<?php 
+<?php
 namespace Nodevo\GridBundle\Grid;
 
+use APY\DataGridBundle\Grid\Action\MassAction;
+use APY\DataGridBundle\Grid\Action\RowActionInterface;
 use APY\DataGridBundle\Grid\Column;
 use APY\DataGridBundle\Grid\Source;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -71,7 +73,7 @@ abstract class Grid implements GridInterface
     /**
      * Met en place toute la config et retourne l'objet grid
      *
-     * @return Response
+     * @return Response A Response instance
      */
     public function render( $vue, $params = array() )
     {
@@ -98,11 +100,11 @@ abstract class Grid implements GridInterface
     //////////////////////////////////////////////////////////
     //              COLUMNS AND ACTIONS                     //
     //////////////////////////////////////////////////////////
-    
+
         /**
          * Ajoute un action button
          *
-         * @param RowAction $button Boutton d'action
+         * @param RowActionInterface $button Boutton d'action
          */
         protected function addActionButton( $button )
         {
@@ -112,7 +114,7 @@ abstract class Grid implements GridInterface
         /**
          * Ajoute une colonne visible dans le grid
          *
-         * @param Column $colonne Colonne
+         * @param Column\Column $colonne Colonne
          */
         protected function addColonne( $colonne )
         {
@@ -132,7 +134,7 @@ abstract class Grid implements GridInterface
     //////////////////////////////////////////////////////////
     //                    CONFIG                            //
     //////////////////////////////////////////////////////////
-    
+
         /**
          * Affiche la colonne ID
          *
@@ -214,7 +216,7 @@ abstract class Grid implements GridInterface
         {
             $this->_persistence = $persistence;
         }
-        
+
         /**
          * Set les limits de pagination
          *
@@ -306,7 +308,7 @@ abstract class Grid implements GridInterface
     //////////////////////////////////////////////////////////
     //             PRIVATE INITIALISATION                   //
     //////////////////////////////////////////////////////////
-    
+
         /**
          * Initialise la configuration par rapport à la classe
          */
@@ -330,7 +332,7 @@ abstract class Grid implements GridInterface
             //Message lorsque filtrer no Results
             $this->_grid->setNoResultMessage( $this->_noResultMessage );
 
-            //Active la persistence 
+            //Active la persistence
             $this->_grid->setPersistence( $this->_persistence );
         }
 
@@ -398,7 +400,7 @@ abstract class Grid implements GridInterface
                         $datas = array();
 
                     $source = new Source\Vector( $datas, $this->_colonnes );
-                    
+
                     $source->setId('id');
                     break;
 
@@ -478,27 +480,27 @@ abstract class Grid implements GridInterface
             //Création d'un tableau ayant pour clé le véritable id de l'item
             foreach ($datas as $key => $data)
                 $datasById[$data['id']] = $data;
-            
+
             //Tri + affichage '|---' (affiché X fois selon la profondeur du fils) devant le nom si l'élément est un fils (TODO : récursivité à faire !)
             foreach ($datas as $key => $data)
             {
                 if(NULL !== $data[$this->_fieldParentRecursive])
                     $datas = $this->gestionAffichageSousItems( $key, $datas, $datasById, $datasById[$data['id']] );
             }
-            
+
             return $this->regroupementParentEnfant($datas);
         }
 
         /**
          * Fonction récursive permettant d'ajouter le préfixe '|---' le nombre de fois qu'il y a de parent pour un item donné
-         * 
+         *
          * @param int $key          Clé de l'index courant
          * @param array $datas      Tableau des données à modifier
          * @param array $datasById  Tableau des permettant de recupérer un item en fonction de son Id
          * @param array $parentData Tableau contenant les données de l'item parent de l'item courant
          */
         private function gestionAffichageSousItems( $key, $datas, $datasById, $parentData )
-        {    
+        {
             if( NULL != $parentData[$this->_fieldParentRecursive])
             {
                 $datas[$key][$this->_fieldLabelRecursive] = '|--- ' . $datas[$key][$this->_fieldLabelRecursive];
@@ -506,13 +508,13 @@ abstract class Grid implements GridInterface
                 $parentData = array_key_exists($this->_fieldParentRecursive,$parentData)  && array_key_exists($parentData[$this->_fieldParentRecursive], $datasById)? $datasById[$parentData[$this->_fieldParentRecursive]] : null;
                 $datas      = $this->gestionAffichageSousItems( $key, $datas, $datasById, $parentData );
             }
-            
+
             return $datas;
         }
-        
+
         /**
          * Fonction permettant de regrouper les parents/enfants ensemble.
-         * 
+         *
          * @param array $datas      Tableau des données à regrouper
          * @return array            Tableau des données regroupées
          */
@@ -520,20 +522,20 @@ abstract class Grid implements GridInterface
         {
             //Récupère l'ensemble des données dans un ArrayCollection
             $datasArrayCollection = new ArrayCollection( $datas );
-            
+
             //Récupère que les éléments qui ont des parents
             $criteria = Criteria::create()->where(Criteria::expr()->eq($this->_fieldParentRecursive, null) );
             $parents  = $datasArrayCollection->matching( $criteria )->toArray();
-            
+
             return $this->rangeEnfants($parents, $datasArrayCollection );
         }
-        
+
         /**
          * Fonction récursive permettant de trier tout les niveaux d'enfants et les regrouper
-         * 
+         *
          * @param array           $items                Tableau d'un niveau de parent/enfant
          * @param ArrayCollection $datasArrayCollection Tableau de l'ensemble des données permettant de faire de tri ou récupération de groupe d'enfant d'un parent donné
-         * 
+         *
          * @return array Tableau du niveau parent/enfant courant trié
          */
         private function rangeEnfants( $items, $datasArrayCollection)
@@ -551,7 +553,7 @@ abstract class Grid implements GridInterface
                 //range les éléments
                 $tab = array_merge( $tab, $this->rangeEnfants($enfants, $datasArrayCollection) );
             }
-            
+
             return $tab;
         }
 }

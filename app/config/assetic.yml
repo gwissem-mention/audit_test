@@ -32,14 +32,13 @@ assetic:
         - HopitalNumeriqueFaqBundle
         - HopitalNumeriqueStatBundle
         - HopitalNumeriquePaiementBundle
-        - HopitalNumeriqueAutodiagBundle
-        - HopitalNumeriqueImportExcelBundle
         - HopitalNumeriqueForumBundle
         - HopitalNumeriqueFlashBundle
         - HopitalNumeriqueReportBundle
         - HopitalNumeriqueDomaineBundle
         - HopitalNumeriqueCommunautePratiqueBundle
         - HopitalNumeriqueAideBundle
+        - HopitalNumeriqueAutodiagBundle
         - CCDNForumForumBundle
         - FOSUserBundle
     filters:
@@ -72,7 +71,7 @@ assetic:
                 - 'bundles/hopitalnumeriqueaccount/js/InformationsManquantes.js'
         #-->
         #JS
-        bbcode_js: 
+        bbcode_js:
             inputs:
                 - '%kernel.root_dir%/../vendor/codeconsortium/ccdn-component-bb-code/src/CCDNComponent/BBCode/Resources/public/js/jquery.bbeditor.js'
             filters : [ ?yui_js ]

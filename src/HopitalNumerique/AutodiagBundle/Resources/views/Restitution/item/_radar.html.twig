@@ -1,0 +1,34 @@
+<div class="item-inner">
+    <div class="radar">
+        <div id="{{ restitution.id ~ restitution.type }}"></div>
+
+        <div class="remplissage">
+            <table class="table table-bordered table-striped">
+                <thead>
+                    <tr>
+                        <th>Catégorie</th>
+                        <th>Remplissage</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for item in result.items %}
+                        <tr>
+                            <td>{{ item.label }}</td>
+                            <td>{{ (item.numberOfAnswers / item.numberOfQuestions * 100)|round }} %</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    (function () {
+        var options = {{ result_radar_data(result)|raw }};
+        options.exporting.buttons.contextButton.onclick = function () {
+            this.exportChart();
+        };
+        $('#{{ restitution.id ~ restitution.type}}').highcharts(options);
+    })();
+</script>

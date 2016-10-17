@@ -1,0 +1,45 @@
+{% extends "@HopitalNumeriqueAutodiag/Autodiag/edit.html.twig" %}
+
+{% block edit_content %}
+
+
+    {% form_theme form 'NodevoAdminBundle::form.html.twig' %}
+    {{ form_start(form) }}
+
+    <div>
+        <h2>{{ "ad.autodiag.edit.generique"|trans }}</h2>
+        <div>
+            {{ form_row(form.autodiag.title) }}
+            {{ form_row(form.autodiag.domaines, {"attr": {"class": "select2"}}) }}
+            {{ form_row(form.autodiag.questionnaire) }}
+            {{ form_row(form.autodiag.instructions, {"attr": {"class": "tinyMceBasic"}}) }}
+            {{ form_row(form.autodiag.partialResultsAuthorized) }}
+        </div>
+    </div>
+
+    {% for preset in form.presets %}
+        <div class="preset">
+            <div class="preset-title">
+                <h2>{{ ("ad.autodiag.preset_value." ~ preset.vars.data.type)|trans }}</h2>
+            </div>
+
+            <div class="preset-childs">
+                {{ form_errors(preset) }}
+                {% for child in preset %}
+                    {{ form_widget(child) }}
+                {% endfor %}
+            </div>
+        </div>
+    {% endfor %}
+
+    <div>
+        <h2>{{ "ad.autodiag.edit.multiple_result_treatment"|trans }}</h2>
+        <div>
+            {{ form_row(form.autodiag.synthesisAuthorized) }}
+        </div>
+    </div>
+
+    {{ form_row(form._token) }}
+    {{ form_end(form) }}
+
+{% endblock %}

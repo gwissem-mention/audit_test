@@ -1,0 +1,26 @@
+{% extends "@HopitalNumeriqueAutodiag/Autodiag/Edit/_import.html.twig" %}
+
+{% block toolbarButton %}
+    {{ parent() }}
+    <a class="btn btn-default" href="{{ path('hopitalnumerique_autodiag_export_survey', {"id": model.id}) }}" title="Exporter"><i class="fa fa-upload"></i></a>
+    <a class="btn btn-default" href="{{ path('hopitalnumerique_autodiag_export_survey_layout', {"id": model.id}) }}" title="Gabarit"><i class="fa fa-file-text-o"></i></a>
+{% endblock %}
+
+{% block repport %}
+
+    <div class="repports-container">
+        {% if chapterProgress is not null %}
+            <div class="repport">
+                <h3>Rapport import chapitre</h3>
+                {% include "@HopitalNumeriqueAutodiag/Autodiag/Edit/_repport.html.twig" with {"progress": chapterProgress} %}
+            </div>
+        {% endif %}
+
+        {% if questionProgress is not null %}
+            <div class="repport">
+                <h3>Rapport import question</h3>
+                {% include "@HopitalNumeriqueAutodiag/Autodiag/Edit/_repport.html.twig" with {"progress": questionProgress} %}
+            </div>
+        {% endif %}
+    </div>
+{% endblock %}

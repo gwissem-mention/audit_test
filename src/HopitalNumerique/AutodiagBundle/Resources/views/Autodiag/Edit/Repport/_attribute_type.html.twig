@@ -1,0 +1,8 @@
+<li class="list-group-item">
+    Ligne {{ message.index }} :
+    {% if message.context.format_reponse is null %}
+        Le type est manquant
+    {% else %}
+        {{ message.context.format_reponse }}
+    {% endif %}
+</li>

@@ -106,6 +106,7 @@ class UserGrid extends Grid implements GridInterface
         $this->addColonne($roleColumn);
 
         $domaineColumn = new Column\TextColumn('domaines', 'Domaine(s) associé(s)');
+
         $this->addColonne($domaineColumn);
 
         $contractualisationColumn = new Column\TextColumn('contra', 'À jour');

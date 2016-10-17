@@ -1,0 +1,45 @@
+<span class="chapter-title">
+    {{ resultItem.label }}
+    <i>Nombre de réponses : {{ resultItem.numberOfAnswers }} / {{ resultItem.numberOfQuestions }}</i>
+</span>
+
+
+<table class="table table-bordered">
+    {% for attribute in resultItem.attributes %}
+        <tr>
+            <td>{{ attribute.label }}</td>
+            <td>{{ attribute.responseText }}</td>
+            <td class="attribute">
+                {% if attribute.score is not null and attribute.responseText != '-' and attribute.colored != false and attribute.responseValue != -1 %}
+                    <div class="attribute-mood">
+                        {% if attribute.colorationInversed %}
+                            {% if attribute.score < 100/3 %}
+                                <i class="fa fa-smile-o fa-2x"></i>
+                            {% elseif attribute.score < 100/3*2 %}
+                                <i class="fa fa-meh-o fa-2x"></i>
+                            {% else %}
+                                <i class="fa fa-frown-o fa-2x"></i>
+                            {% endif %}
+                        {% else %}
+                            {% if attribute.score < 100/3 %}
+                                <i class="fa fa-frown-o fa-2x"></i>
+                            {% elseif attribute.score < 100/3*2 %}
+                                <i class="fa fa-meh-o fa-2x"></i>
+                            {% else %}
+                                <i class="fa fa-smile-o fa-2x"></i>
+                            {% endif %}
+                        {% endif %}
+                    </div>
+                {% endif %}
+            </td>
+        </tr>
+    {% endfor %}
+</table>
+
+<ul>
+    {% for child in resultItem.childrens %}
+        <li>
+            {{ include('@HopitalNumeriqueAutodiag/Restitution/item/reponses/_chapter.html.twig', {"resultItem": child}) }}
+        </li>
+    {% endfor %}
+</ul>

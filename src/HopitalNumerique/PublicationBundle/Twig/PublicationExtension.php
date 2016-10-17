@@ -59,7 +59,7 @@ class PublicationExtension extends \Twig_Extension
             foreach($matches[1] as $key => $value)
             {
 
-                // Pour éviter les liens dans les liens 
+                // Pour éviter les liens dans les liens
                 $matches[3][$key] = $this->toascii($matches[3][$key]);
 
                 switch($value){
@@ -133,7 +133,7 @@ class PublicationExtension extends \Twig_Extension
                         else
                             $target = "";
                         if($outil)
-                            $replacement = '<a href="/autodiagnostic/outil/'. $outil->getId() . '-' . $outil->getAlias() .'" '.$target.'>' . $matches[3][$key] . '</a>';
+                            $replacement = '<a href="/autodiagnostic/'. $outil->getId()  .'" '.$target.'>' . $matches[3][$key] . '</a>';
                         else
                             $replacement = "<a href=\"javascript:alert('Cet outil n\'existe pas')\" ".$target.">" . $matches[3][$key] . ' </a>';
 
@@ -250,7 +250,7 @@ class PublicationExtension extends \Twig_Extension
      */
     private function getManagerOutil()
     {
-        return $this->container->get('hopitalnumerique_autodiag.manager.outil');
+        return $this->container->get('autodiag.repository.autodiag');
     }
 
     /**

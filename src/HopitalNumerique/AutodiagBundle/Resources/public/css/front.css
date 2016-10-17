@@ -1,178 +1,359 @@
-.qtip.qtip-bootstrap{border:1px solid #333;}
-.qtip .qtip-content span{color:#333;font-size:10px}
-
-/* Autodiag : partie questionnaire */
-    #autodiag{margin-top: 20px; position: relative}
-    #autodiag h1{ margin: 0px; float:left; font-size:30px;}
-    #autodiag .options{display: inline;float: right;position: relative;top: 0px;right: 0; margin-bottom: 10px;}
-    #autodiag #remarque{width: 100%; margin: 20px 0;}
-    #autodiag #instructions{ margin: 5px 0 20px 0;}
-
-/* Colonne left */
-    #autodiag p.titre{color: #777777; font-size: 18px; font-weight: normal; margin-bottom: 20px }
-
-    /* Sous-menu */
-        #autodiag #chapitres a { color:#777; }
-        #autodiag #chapitres a:hover { text-decoration:none; }
-        #autodiag #chapitres ul{list-style:none;margin-bottom:0px;padding:0; }
-        #autodiag #chapitres ul.stepy-header { margin-bottom: 20px; }
-        #autodiag #chapitres ul li{border-top:1px solid #f0f0f0; background: url('../img/puce.png') no-repeat left center; padding-left: 15px }
-        #autodiag #chapitres ul li div{padding:5px 0; cursor:pointer;}
-        #autodiag #chapitres ul li div p{margin:0;  color:#777777; font-size: 14px; width: 90%; }
-        #autodiag #chapitres ul li div .text-muted, #autodiag #chapitres ul li div .text-success, #autodiag #chapitres ul li div .text-warning, #autodiag #chapitres ul li div .text-danger{font-size:10px;float: right;font-weight: bold;}
-        #autodiag #chapitres ul li.stepy-active div,#autodiag #chapitres ul li:hover div{color:#d60030;}
-        #autodiag .avancement-global span{font-size:10px;}
-        .progress-bar[aria-valuenow="0"] { min-width: 30px; color: #777; background-color: transparent; background-image: none; -webkit-box-shadow: none; box-shadow: none; }
-
-/* Colonne right */
-    #autodiag .sous-chapitre p{padding-left:10px;}
-    #autodiag .content{background-color: #f8f8f8; padding-bottom: 20px}
-    #autodiag .content .emptyChapter{margin-top:10px;}
-    #autodiag .content .chapitreNonConcerne{margin-top:10px; margin-right:10px;}
-    #autodiag .content form{clear:both;}
-    #autodiag .content h2{color:#d60030; text-transform: uppercase;}
-    #autodiag .content h2.prev{font-size: 24px; color:#de0d4d;}
-    #autodiag .content h3{color:#d60030; margin-bottom: 10px; font-size: 18px; padding-left:10px;}
-    #autodiag .content h3.prev{font-size: 20px; color:#de0d4d;}
-    #autodiag .content h3 .chapitreNonConcerne{cursor: pointer}
-    #autodiag .content .level1{font-size: 14px}
-    #autodiag .content .level2{font-size: 13px; margin: 0 0 0 12px;}
-    #autodiag .content .badge-primary{background-color:#d60030; font-size:9px; padding:3px 6px; vertical-align: top; margin-top:2px}
-    #autodiag .content div.remarques-toggle{color:#d60030; cursor: pointer; margin-top: 7px}
-    #autodiag .content .radio{float: left; margin-right: 30px;}
-    #autodiag .content .saveBtns{ float:right;margin: 20px auto;}
-    #autodiag .content .saveBtns .btn{ text-align: center}
-    #autodiag .content .sous-chapitre label{padding-left:40px;}
-    #autodiag .content .sous-chapitre .radio label{padding-left:5px;}
-    #autodiag .content .radios{ border: 1px solid #CCCCCC; padding: 0 0 10px 10px; }
-    #autodiag .content .qOptions{padding-left: 0}
-    #autodiag .content .icon{margin-top: 5px}
-    #autodiag .content .icon .fa-smile-o{color:#B4DC00}
-    #autodiag .content .icon .fa-frown-o {color:#C82F5B}
-    #autodiag .content .icon .fa-meh-o{color:#E88824}
-
-    #autodiag .stepy-navigator{}
-    #autodiag .stepy-navigator .button-back,
-    #autodiag .stepy-navigator .button-next
-        { display: inline-block; margin-bottom: 0; text-align: center; vertical-align: middle; cursor: pointer; border: 1px solid #ccc; white-space: nowrap; padding: 6px 12px; font-size: 14px; border-radius: 4px; color: #333; background-color: #fff; text-shadow: 0 1px 0 #fff; }
-    #autodiag .stepy-navigator .button-back{float:left;}
-    #autodiag .stepy-navigator .button-next{float:right;}
-    #autodiag .stepy-navigator .button-back:hover,
-    #autodiag .stepy-navigator .button-next:hover
-        { background-color: #e0e0e0; color: #333; border-color: #adadad; text-decoration: none; }
-
-/* Autodiag : partie résultats */
-    #resultats .print{margin-top: 25px}
-    #resultats h2{ font-size: 18px; font-weight: bold; display: block; padding: 15px 20px; margin: 17px 0; width: 100%; cursor:pointer;}
-    #resultats h2.closed{background: #F6F6F6 url('../img/close.png') no-repeat 98% center;}
-    #resultats h2.open{background: #F6F6F6 url('../img/open.png') no-repeat 98% center;}
-
-    /* Chapitres */
-        #resultats #chapitres h3{ text-transform: uppercase;}
-        #resultats #chapitres h3.prev{font-size: 24px; color:#de0d4d;}
-        #resultats #chapitres h4{ font-size: 18px}
-        #resultats #chapitres h4.prev{font-size: 20px; color:#de0d4d;}
-        #resultats #chapitres .synthese{font-style: italic; font-size: 12px}
-        #resultats #chapitres .question{font-weight: bold; margin-bottom: 0}
-        #resultats #chapitres .sous-chapitre .question{padding-left:40px;}
-        #resultats #chapitres #table-analyse td, #table-analyse th {font-size: 11px;}
-
-    /* Graphiques */
-        #resultats #graphiques h3 {margin-top: 0px;}
-        #resultats #graphiques .panel .panel-heading{padding:7px 15px; height: 35px}
-        #resultats #graphiques .panel .panel-heading h3.panel-title{margin-bottom: 0; font-size: 14px; float: left; font-weight: bold}
-        #resultats #graphiques .panel .panel-heading .options{float:right;}
-        #resultats #graphiques .panel .panel-heading .options img{margin-bottom: 4px; margin-left:5px;}
-        #resultats #graphiques .panel .panel-body{height: 65px; margin :0}
-        #resultats #graphiques .panel .progress{position: relative; height: 30px; margin-bottom: 0; overflow: visible;}
-        #resultats #graphiques .panel .progress .progress-bar{color:#000000 !important; font-weight: bold!important}
-        #resultats #graphiques .panel .progress .progress-bar-danger{background:#f2dede !important; }
-        #resultats #graphiques .panel .progress .progress-bar-warning{background:#fcf8e3 !important; }
-        #resultats #graphiques .panel .progress .progress-bar-success{background:#dff0d8 !important; }
-        #resultats #graphiques .panel .taux-remplissage{ font-size: 10px;}
-        #resultats #graphiques .panel .cursor{ width:0; height:0; border:8px solid transparent; border-bottom:16px solid #888; position: absolute; bottom: 0; margin-left:-11px;}
-        #resultats #graphiques .panel .cursor-min{ border-bottom:8px solid #a00;}
-        #resultats #graphiques .panel .cursor-max{ border-bottom:12px solid #080;}
-        #resultats #graphiques .panel .cursor-value{ position: absolute; bottom: -14px; margin-left:-11px; font-size: 10px}
-        #resultats #graphiques .panel h3.toPrint{display: none}
-        #resultats #graphiques #radarChart{min-width: 400px; max-width: 900px; margin: 0 auto; height: 750px;}
-        #resultats #graphiques #chaptersNonConcernes{margin-top:15px}
-        #resultats #graphiques .tableContainer{overflow: hidden; overflow-x:auto;}
-        #resultats #graphiques .table .vertical-align{vertical-align: middle}
-        #resultats #graphiques .table .reverse{cursor:pointer;}
-        #resultats #taux-remplissage-radar tbody tr td{font-size: 11px;}
-        
-    /* Process */
-    #resultats #process_bloc {}
-        #resultats #process_bloc .panel {}
-            #resultats #process_bloc .panel .panel-heading { margin:20px 0px 0px 0px; }
-                #resultats #process_bloc h4 {background:white;font-size:15px;font-weight:bold;height:40px;line-height:16px;overflow:hidden;padding:10px 0}
-            #resultats #process_bloc .panel .panel-body { height:auto;margin:0}
-                #resultats #process_bloc .panel .panel-body .col-md-4 { background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAIAAAACCAIAAAD91JpzAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAA2hpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuMy1jMDExIDY2LjE0NTY2MSwgMjAxMi8wMi8wNi0xNDo1NjoyNyAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wTU09Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9tbS8iIHhtbG5zOnN0UmVmPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvc1R5cGUvUmVzb3VyY2VSZWYjIiB4bWxuczp4bXA9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC8iIHhtcE1NOk9yaWdpbmFsRG9jdW1lbnRJRD0ieG1wLmRpZDowMTgwMTE3NDA3MjA2ODExOEE2REUyRjI1NjIyNDM1OSIgeG1wTU06RG9jdW1lbnRJRD0ieG1wLmRpZDpBMEI0NjdGMDM3NzAxMUU0Qjk1NUI1NTA3OTEwQkMwMSIgeG1wTU06SW5zdGFuY2VJRD0ieG1wLmlpZDpBMEI0NjdFRjM3NzAxMUU0Qjk1NUI1NTA3OTEwQkMwMSIgeG1wOkNyZWF0b3JUb29sPSJBZG9iZSBQaG90b3Nob3AgQ1M2IChNYWNpbnRvc2gpIj4gPHhtcE1NOkRlcml2ZWRGcm9tIHN0UmVmOmluc3RhbmNlSUQ9InhtcC5paWQ6MDE4MDExNzQwNzIwNjgxMThBNkRFMkYyNTYyMjQzNTkiIHN0UmVmOmRvY3VtZW50SUQ9InhtcC5kaWQ6MDE4MDExNzQwNzIwNjgxMThBNkRFMkYyNTYyMjQzNTkiLz4gPC9yZGY6RGVzY3JpcHRpb24+IDwvcmRmOlJERj4gPC94OnhtcG1ldGE+IDw/eHBhY2tldCBlbmQ9InIiPz4gm5NaAAAAFUlEQVR42mJ89+4dAwMDEwMYAAQYACGiAs7y8RrRAAAAAElFTkSuQmCC');background-repeat: repeat-y;background-position: center; } 
-                #resultats #process_bloc .panel .panel-body .col-md-4:nth-child(3n+1) { clear:both; }
-                    #resultats #process_bloc .chapitres { font-size:13px;margin:6px 0px;padding:0;text-align:center; }
-                        #resultats #process_bloc .chapitres div.resultat { background-color:#eee;margin:8px 0px;padding:8px 0px; }
-                        #resultats #process_bloc .chapitres div.resultat_faible { background-color:#f2dede; }
-                        #resultats #process_bloc .chapitres div.resultat_moyen { background-color:#fcf8e3; }
-                        #resultats #process_bloc .chapitres div.resultat_fort { background-color:#dff0d8; }
-        
-    /* Réponses */
-        #resultats #reponses h3{ text-transform: uppercase;}
-        #resultats #reponses h3.prev{font-size: 24px; color:#de0d4d;}
-        #resultats #reponses h4{ font-size: 18px}
-        #resultats #reponses h4.prev{font-size: 20px; color:#de0d4d;}
-
-/* Partie Compte HN */
-    .create{margin-right: 18px;margin-top: 10px;}
-    .autodiagTable thead tr { color:#FFFFFF;text-transform:uppercase; font-size: 12px}
-    .autodiagTable thead tr a { color:#FFFFFF; font-size: 12px }
-    .autodiagTable thead th { background-color:#6F3596; vertical-align: middle }
-    .autodiagTable th, .autodiagTable td { border: 1px solid #ddd;padding:4px; }
-    #tableau-de-bord .content .panel .onglets{height: 50px; margin: 0 0 0 20px;}
-    #tableau-de-bord .content .panel .onglets ul{list-style: none;padding-left: 0;}
-    #tableau-de-bord .content .panel .onglets .onglet{height: 50px;background-color: #ffffff; cursor: pointer;}
-    #tableau-de-bord .content .panel .onglets .onglet:hover{background-color: #FAFAFA;}
-    #tableau-de-bord .content .panel .onglets .onglet.active{height: 50px;background-color: #F8F8F8;}
-    #tableau-de-bord .content .panel .onglets .onglet.active:hover{background-color: #F3F3F3;}
-    #tableau-de-bord .content .panel .onglets .onglet        .domaine {width: 100%; margin-top: 17px; text-align: center; font-size: 12px; font-weight: bold; text-transform: uppercase;}
-    #tableau-de-bord .content .panel .onglets .onglet.active .domaine{color:#D60030;}
-
-/* Partie liste des autodiag */
-    #autodiag-liste p.intro{margin-bottom: 20px}
-    #autodiag-liste .panel-heading{color:#703695;cursor: pointer; font-weight: bold}
-    #autodiag-liste .panel-heading.closed{background: #F6F6F6 url('../img/close.png') no-repeat 98% center;}
-    #autodiag-liste .panel-heading.open{background: #F6F6F6 url('../img/open.png') no-repeat 98% center;}
-
-@media screen and (max-width: 991px) {
-    #autodiag h1{ float: none; clear: both; margin-bottom: 15px}
-    #autodiag .content h2{margin-top: 0}
-    #autodiag .blockLeft{margin-bottom: 20px}
-    #autodiag .content .sous-chapitre label{padding-left: 15px}
-    #autodiag .content div.remarques-toggle{margin:7px 5px 0 0}
-    #autodiag .content .icon {margin:5px 0 0 20px}
+/**
+/**
+* Autodiag PATH
+*/
+#autodiag-path ul {
+    list-style: none;
+    margin: 20px 0 0 0;
+    padding: 0;
+    overflow: hidden;
+    border-radius: 4px;
 }
 
-#chapitres a.btn{margin-top:5px;}
-#table-analyse{margin-top:15px;}
-table.tableau-question-reponse{width:100%;}
-table.tableau-question-reponse td{border:solid #000 1px;padding:5px;}
+#autodiag-path ul li {
+    text-align: center;
+    margin: auto;
 
-#tableau_resultats th.chapitre-parent {
-    background-color: #e6e6e6;
+    width: 20%;
+    height: 50px;
+    line-height: 50px;
+    background: #e2e2e2;
+
+    float: left;
+    position: relative;
+
+    font-size: 16px;
+    padding-left: 30px;
 }
 
-#tableau_resultats th.chapitre-parent ~ td.text-center{
+#autodiag-path ul li.validation {
+    width: 27%;
+}
+
+#autodiag-path ul li.share {
+    width: 33%;
+}
+
+#autodiag-path ul li:before {
+    content: ' ';
+    display: block;
+
+    z-index: 1;
+    position: absolute;
+    left: 100%;
+    width: 0;
+    height: 0;
+    top: 50%;
+    margin-top: -50px;
+
+    margin-left: 1px;
+
+    border-top: 50px solid transparent;
+    border-bottom: 50px solid transparent;
+    border-left: 30px solid #fff;
+}
+
+#autodiag-path ul li:after {
+    content: ' ';
+    display: block;
+
+    z-index: 2;
+    position: absolute;
+    left: 100%;
+    width: 0;
+    height: 0;
+    top: 50%;
+    margin-top: -50px;
+
+    border-top: 50px solid transparent;
+    border-bottom: 50px solid transparent;
+    border-left: 30px solid #e2e2e2;
+}
+
+#autodiag-path ul li.active {
+    background: #c5c5c5;
+}
+
+#autodiag-path ul li.active:after {
+    border-left-color: #c5c5c5;
+}
+
+#autodiag-path a {
+    color: #333;
+}
+
+#autodiag-path a.disabled, #autodiag-path span.disabled {
+    color: #c8c8c8;
+    cursor: default;
+}
+#autodiag-path a.disabled:hover {
+    text-decoration: none;
+}
+
+/**
+* COMMON
+*/
+#autodiag-entry .autodiag-title h1 {
+    font-size: 24px;
+    font-weight: bold;
+    text-align: center;
+}
+
+#autodiag-entry .synthesis-name h2 {
+    font-size: 18px;
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+#synthesisCreate {
+    display: none;
+}
+
+.autodiag-popin h3 {
+    font-size: 20px;
+    color: #d60030;
+    margin: 0 0 5px 0;
+}
+
+#synthesisCreate .instructions .title {
+    margin-bottom: 5px;
+    background-image: url('../../hopitalnumeriquepublication/img/panel.png');
+    background-repeat: no-repeat;
+    cursor: pointer;
+    height: 25px;
+    font-size: 20px;
+    color: #d60030;
+}
+
+#synthesisCreate .instructions .instruction-content {
+    display: none;
+}
+
+.autodiag-popin .mysep {
+    width: 85px;
+    height: 4px;
+    margin-bottom: 10px;
+}
+
+#synthesisCreate .instructions.closed .title {
+    background-position: right -5px;
+}
+
+#synthesisCreate .instructions.open .title {
+    background-position: right -38px;
+}
+
+#instructions {
+    margin-top: 20px;
+}
+
+#instructions a {
+    display: block;
+}
+
+#instructions-container {
+    display: none;
+    width: 80%;
+}
+
+/**
+*   SUMMARY
+*/
+#autodiag-entry #summary ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    color: #777;
+}
+
+#autodiag-entry #summary .title a{
+    color: #777;
+}
+
+#autodiag-entry #summary ul li {
+    border-top: 1px solid #f0f0f0;
+    position: relative;
+}
+
+#autodiag-entry #summary ul li li {
+    display: none;
+}
+
+#autodiag-entry #summary ul li.active li {
+    display: block;
+}
+
+#autodiag-entry #summary ul li.active > .title {
+    /*color: #6B339B;*/
     font-weight: bold;
 }
 
-.highcharts-tooltip tspan[dx="0"] {
-  display: block!important;
+#autodiag-entry #summary .results {
+    display: none;
+    text-align: center;
 }
 
-#ongletResultatDomaineAutodiag {
-	margin-top: 20px;	
+#autodiag-entry #summary .results a {
+    /*color: #6B339B;*/
+    font-weight: bold;
 }
 
-.span-title {
-	margin: 0px 0px 20px; 
+#autodiag-entry #summary .title {
+    margin: 4px 0;
+    padding-left: 20px;
+    padding-right: 20px;
+    position: relative;
+    cursor: pointer;
+}
+
+#autodiag-entry #summary .title:before {
+    content: ' ';
+    display: block;
+    position: absolute;
+
+    top: 50%;
+    margin-top: -3px;
+    left: 0;
+
+    border-top: 1px solid #6B339B;
+    border-right: 1px solid #6B339B;
+    width: 6px;
+    height: 6px;
+    transform: rotate(45deg);
+}
+
+#autodiag-entry #summary .progression {
+    position: absolute;
+    right: 0;
+    top: 4px;
+}
+
+#autodiag-entry #summary .progression .red {
+    color: #c82f5b;
+}
+#autodiag-entry #summary .progression .orange {
+    color: #e88824;
+}
+
+#autodiag-entry #summary .progression i {
+    color: #b4dc00;
+}
+
+#autodiag-entry #summary ul li ul .title {
+    padding-left: 40px;
+}
+
+#autodiag-entry #summary .progress {
+    margin-top: 20px;
+}
+
+@media screen and (max-width: 991px) {
+    #autodiag-entry #summary {
+        padding-top: 0 !important;
+    }
+}
+
+
+/**
+* Chapters
+*/
+.chapters .chapter {
+    background: #f8f8f8;
+    padding: 20px;
+}
+
+.chapters > .chapter {
+    display: none;
+}
+
+.chapter .chapter-title {
+    font-weight: bold;
+    font-size: 24px;
+    color: #d60030;
+}
+
+.chapter .chapter-label span {
+    font-weight: bold;
+    font-size: 20px;
+    color: #d60030;
+}
+
+.chapter .chapter-label .not-concerned {
+    cursor: pointer;
+}
+
+.chapters .navigation {
+    margin-top: 20px;
+}
+
+/**
+* Attribute
+*/
+.attribute .attribute-value {
+    margin-bottom: 10px
+}
+
+
+.attribute .attribute-label {
+    margin-bottom :5px;
+    font-weight: bold;
+}
+
+.attribute .attribute-label .attribute-tooltip {
+    cursor: pointer;
+}
+
+.attribute .attribute-comment {
+    display: none;
+    margin: 10px 0;
+}
+
+.attribute .attribute-value .widget {
+    float: left;
+    width: 90%;
+}
+.attribute .attribute-value .tools {
+    float: right;
+    width: 10%;
+    text-align: right;
+    min-height: 34px;
+}
+
+.attribute .attribute-value .tools .comment-button {
+    cursor: pointer;
+    color: #d60030;
+}
+
+.attribute .tools > * {
+    display: inline-block;
+    margin: 0 4px;
+    vertical-align: middle;
+}
+
+.attribute .attribute-mood .fa {
+    transition: 0.5s color;
+}
+
+.attribute .attribute-mood .fa-frown-o {
+    color: #c82f5b;
+}
+
+.attribute .attribute-mood .fa-meh-o {
+    color: #e88824;
+}
+
+.attribute .attribute-mood .fa-smile-o {
+    color: #b4dc00;
+}
+
+.checkboxCustom .control-label {
+    font-weight: normal;
+    margin-left: -50px;
+}
+
+@media (max-width: 992px) {
+    .checkboxCustom .control-label {
+        margin-left: 5px;
+        top: -20px;
+    }
 }

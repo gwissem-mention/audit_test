@@ -1,0 +1,50 @@
+{% extends 'HopitalNumeriqueAutodiagBundle::layout.html.twig' %}
+
+{% block body %}
+    <div id="validation">
+
+        {% include "@HopitalNumeriqueAutodiag/_navigation.html.twig" with {
+            "step": "validation",
+            "autodiag": synthesis.autodiag,
+            "synthesis": synthesis,
+            "entry" : synthesis.entries|length > 1 ? null : synthesis.entries.first
+        } %}
+
+        <div class="validation-header">
+            <div class="identity">
+                <div class="title">{{ synthesis.autodiag.title }}</div>
+                <div class="name">{{ synthesis.name }}</div>
+            </div>
+        </div>
+
+        <div class="content">
+            <p>
+                {{'Module_autodiagnostic_validation'|nodevoTexteDynamique(domaineCurrent.id)|raw|nl2br}}
+            </p>
+
+            <div class="buttons">
+                {% if not app.user %}
+                    <div class="loggedout-warning">
+                        <div>{{ "ad.restitution.loggedout-warning"|trans }}</div>
+                        <div>
+                            {{ "ad.restitution.loggedout-warning-validate"|trans }}
+                            <a href="{{ path('account_login') }}">connecter</a>
+                            ou
+                            <a href="{{ path('hopital_numerique_user_inscription') }}">créer un compte</a>.
+                        </div>
+                    </div>
+                {% else %}
+                    {% if synthesis.validatedAt is not null %}
+                        <a href="{{ path('hopitalnumerique_autodiag_unvalidate', {"synthesis": synthesis.id}) }}" class="btn btn-success">{{ "ad.validation.unvalidate"|trans }}</a>
+                    {% else %}
+                        <a href="{{ path('hopitalnumerique_autodiag_validate', {"synthesis": synthesis.id}) }}" class="btn btn-success">{{ "ad.validation.validate"|trans }}</a>
+                    {% endif %}
+                {% endif %}
+            </div>
+
+        </div>
+    </div>
+
+{% endblock %}
+
+

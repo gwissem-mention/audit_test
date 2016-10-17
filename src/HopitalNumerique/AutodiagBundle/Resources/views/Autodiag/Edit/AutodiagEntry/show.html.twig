@@ -1,0 +1,61 @@
+{% extends "@HopitalNumeriqueAutodiag/Autodiag/edit.html.twig" %}
+
+{% block stylesheets %}
+    {{parent()}}
+    {% stylesheets output="compiled/hopitalnumerique-back-results-response.css" filter="cssrewrite, ?yui_css"
+    'bundles/hopitalnumeriqueautodiag/css/results.css'
+    %}
+    <link rel="stylesheet" href="{{ asset_url }}" />
+    {% endstylesheets %}
+{% endblock %}
+
+{% block toolbarButton %}
+    <a class="btn btn-default" href="{{ path('hopitalnumerique_autodiag_edit_entries', {"id": model.id}) }}" title="Retour à la liste"><i class="fa fa-reply"></i></a>
+{% endblock %}
+
+
+{% block edit_content %}
+
+    <h2>
+        {% if entry.user is not null %}
+            Réponse de {{ entry.user.prenom }} {{ entry.user.nom }}
+        {% else %}
+            Réponse anonyme
+        {% endif %}
+    </h2>
+
+    {% if questionnaire is not null %}
+        <h3>Réponses du questionnaire préalable</h3>
+
+        <div>
+            <table class="table table-bordered">
+                <tbody>
+                {% for reponse in questionnaire %}
+                    <tr>
+                        <td>
+                            {{ reponse.question.libelle }}
+                        </td>
+                        <td>
+                            {{ reponse.reponse|raw }}
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+
+        </div>
+
+    {% endif %}
+
+    <h3>Réponses de l'autodiagnostic</h3>
+
+    <div class="reponses">
+        <ul>
+            {% for item in items %}
+                <li>
+                    {{ include('@HopitalNumeriqueAutodiag/Restitution/item/reponses/_chapter.html.twig', {"resultItem": item}) }}
+                </li>
+            {% endfor %}
+        </ul>
+    </div>
+{% endblock %}

@@ -1,0 +1,39 @@
+services:
+    autodiag.import.chapter:
+        class: Nodevo\Component\Import\DataImporter
+        arguments: ['@autodiag.import.chapter.reader']
+
+    autodiag.import.chapter.reader:
+        class: Nodevo\Component\Import\Reader\ExcelFileReader
+        arguments: ['chapitres']
+        public: false
+
+
+
+    autodiag.import.question:
+        class: Nodevo\Component\Import\DataImporter
+        arguments: ['@autodiag.import.question.reader']
+
+    autodiag.import.question.reader:
+        class: Nodevo\Component\Import\Reader\ExcelFileReader
+        arguments: ['questions']
+        public: false
+
+
+    autodiag.import.algorithm:
+        class: Nodevo\Component\Import\DataImporter
+        arguments: ['@autodiag.import.algorithm.reader']
+
+    autodiag.import.algorithm.reader:
+        class: Nodevo\Component\Import\Reader\ExcelFileReader
+        arguments: ['algorithme']
+        public: false
+
+    autodiag.import.restitution:
+        class: Nodevo\Component\Import\DataImporter
+        arguments: ['@autodiag.import.restitution.reader']
+
+    autodiag.import.restitution.reader:
+        class: Nodevo\Component\Import\Reader\ExcelFileReader
+        arguments: ['resultat']
+        public: false

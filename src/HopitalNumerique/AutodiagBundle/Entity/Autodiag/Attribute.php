@@ -1,0 +1,388 @@
+<?php
+
+namespace HopitalNumerique\AutodiagBundle\Entity\Autodiag;
+
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
+use Doctrine\ORM\Mapping as ORM;
+use HopitalNumerique\AutodiagBundle\Entity\Autodiag;
+use HopitalNumerique\AutodiagBundle\Entity\Autodiag\Attribute\Option;
+use Symfony\Component\Validator\Constraints as Assert;
+
+/**
+ * Attribute
+ *
+ * @ORM\Table(name="ad_autodiag_attribute")
+ * @ORM\Entity(repositoryClass="HopitalNumerique\AutodiagBundle\Repository\Autodiag\AttributeRepository")
+ */
+class Attribute
+{
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="id", type="integer")
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="AUTO")
+     */
+    private $id;
+
+    /**
+     * @var string
+     * @ORM\Column(type="string", length=255)
+     * @Assert\NotBlank()
+     * @Assert\Length(max="255")
+     */
+    private $code;
+
+    /**
+     * Text before question
+     *
+     * @var string
+     * @ORM\Column(type="text", nullable=true)
+     */
+    private $description;
+
+    /**
+     * Attribute label
+     *
+     * @var string
+     * @ORM\Column(type="string", length=512)
+     * @Assert\NotBlank()
+     * @Assert\Length(max="512")
+     */
+    private $label;
+
+    /**
+     * Attribute type
+     *
+     * @var int
+     * @ORM\Column(type="string", length=50)
+     * @Assert\NotBlank()
+     * @Assert\Length(max="50")
+     */
+    private $type;
+
+    /**
+     * Colored attribute
+     *
+     * @var boolean
+     * @ORM\Column(type="boolean")
+     * @Assert\NotNull()
+     */
+    private $colored;
+
+    /**
+     * Inverse colored attribute
+     *
+     * @var boolean
+     * @ORM\Column(type="boolean")
+     */
+    private $colorationInversed = false;
+
+    /**
+     * Tooltip
+     *
+     * @var string
+     * @ORM\Column(type="text", nullable=true)
+     */
+    private $tooltip;
+
+    /**
+     * Order
+     *
+     * @var float
+     * @ORM\Column(name="position", type="float", nullable=true)
+     */
+    private $order;
+
+    /**
+     * Question options
+     *
+     * @var Collection
+     * @ORM\OneToMany(
+     *     targetEntity="HopitalNumerique\AutodiagBundle\Entity\Autodiag\Attribute\Option",
+     *     mappedBy="attribute",
+     *     cascade={"persist", "remove", "detach"},
+     *     orphanRemoval=true,
+     *     fetch="EAGER"
+     * )
+     * @Assert\Valid()
+     */
+    private $options;
+
+    /**
+     * @var Autodiag
+     * @ORM\ManyToOne(targetEntity="HopitalNumerique\AutodiagBundle\Entity\Autodiag", inversedBy="attributes")
+     * @ORM\JoinColumn(name="autodiag_id", referencedColumnName="id", onDelete="CASCADE")
+     */
+    private $autodiag;
+
+    public function __construct()
+    {
+        $this->options = new ArrayCollection();
+    }
+
+    /**
+     * Get id
+     *
+     * @return integer
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    public function setId($id)
+    {
+        $this->id = $id;
+    }
+
+    /**
+     * Get code
+     *
+     * @return string
+     */
+    public function getCode()
+    {
+        return $this->code;
+    }
+
+    /**
+     * Set code
+     *
+     * @param string $code
+     * @return Attribute
+     */
+    public function setCode($code)
+    {
+        $this->code = $code;
+
+        return $this;
+    }
+
+    /**
+     * Get description
+     *
+     * @return string
+     */
+    public function getDescription()
+    {
+        return $this->description;
+    }
+
+    /**
+     * Set description
+     *
+     * @param string $description
+     * @return Attribute
+     */
+    public function setDescription($description)
+    {
+        $this->description = $description;
+
+        return $this;
+    }
+
+    /**
+     * Get label
+     *
+     * @return string
+     */
+    public function getLabel()
+    {
+        return $this->label;
+    }
+
+    /**
+     * Set label
+     *
+     * @param string $label
+     * @return Attribute
+     */
+    public function setLabel($label)
+    {
+        $this->label = $label;
+
+        return $this;
+    }
+
+    public function getExtendedLabel()
+    {
+        return sprintf('%s. %s', $this->code, $this->label);
+    }
+
+    /**
+     * Get type
+     *
+     * @return int
+     */
+    public function getType()
+    {
+        return $this->type;
+    }
+
+    /**
+     * Set type
+     *
+     * @param int $type
+     * @return Attribute
+     */
+    public function setType($type)
+    {
+        $this->type = $type;
+
+        return $this;
+    }
+
+    /**
+     * Get is colored
+     *
+     * @return boolean
+     */
+    public function isColored()
+    {
+        return $this->colored;
+    }
+
+    /**
+     * Set is colored
+     *
+     * @param boolean $colored
+     * @return Attribute
+     */
+    public function setColored($colored)
+    {
+        $this->colored = (bool) $colored;
+
+        return $this;
+    }
+
+    /**
+     * @return boolean
+     */
+    public function isColorationInversed()
+    {
+        return $this->colorationInversed;
+    }
+
+    /**
+     * @param boolean $colorationInversed
+     * @return Attribute
+     */
+    public function setColorationInversed($colorationInversed)
+    {
+        $this->colorationInversed = $colorationInversed;
+        return $this;
+    }
+
+    /**
+     * Get tooltip content
+     *
+     * @return string
+     */
+    public function getTooltip()
+    {
+        return $this->tooltip;
+    }
+
+    /**
+     * Set tooltip content
+     *
+     * @param string $tooltip
+     * @return Attribute
+     */
+    public function setTooltip($tooltip)
+    {
+        $this->tooltip = $tooltip;
+
+        return $this;
+    }
+
+    /**
+     * Get order
+     *
+     * @return integer
+     */
+    public function getOrder()
+    {
+        return $this->order;
+    }
+
+    /**
+     * Set order
+     *
+     * @param $order
+     * @return $this
+     */
+    public function setOrder($order)
+    {
+        $this->order = $order;
+
+        return $this;
+    }
+
+    /**
+     * Get options
+     *
+     * @return Collection
+     */
+    public function getOptions()
+    {
+        return $this->options;
+    }
+
+    public function setOptions($options)
+    {
+        $this->options = $options;
+    }
+
+    /**
+     * Add option
+     *
+     * @param Option $option
+     * @return Attribute
+     */
+    public function addOption(Option $option)
+    {
+        $this->options->add($option);
+
+        return $this;
+    }
+
+    /**
+     * Remove option
+     *
+     * @param Option $option
+     * @return Attribute
+     */
+    public function removeOption(Option $option)
+    {
+        $this->options->removeElement($option);
+
+        return $this;
+    }
+
+    /**
+     * Get model
+     *
+     * @return Autodiag
+     */
+    public function getAutodiag()
+    {
+        return $this->autodiag;
+    }
+
+    /**
+     * Set Model
+     *
+     * @param Autodiag $autodiag
+     * @return Attribute
+     */
+    public function setAutodiag(Autodiag $autodiag)
+    {
+        $this->autodiag = $autodiag;
+
+        return $this;
+    }
+}
+

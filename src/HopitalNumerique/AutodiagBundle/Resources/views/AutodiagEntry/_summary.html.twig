@@ -1,0 +1,34 @@
+<div id="summary">
+    <h3>Sommaire</h3>
+    <ul>
+        {% if autodiag.questionnaire is not null and app.user %}
+            <li>
+                <div class="title">
+                    <a href="{{ path('hopitalnumerique_questionnaire_edit_front_gestionnaire', {
+                        "id": autodiag.questionnaire.id,
+                        "redirectReferer": true
+                    }) }}">
+                        {{ 'ad.autodiag.questionnaire'|trans }}
+                    </a>
+                </div>
+            </li>
+        {% endif %}
+
+        {% for chapter in autodiag.chapters %}
+            {% include "@HopitalNumeriqueAutodiag/AutodiagEntry/summary/_item.html.twig" with {"chapter": chapter} %}
+        {% endfor %}
+    </ul>
+
+    <div class="progress progress-striped">
+        <div class="progress-bar progress-bar-danger"></div>
+    </div>
+
+    {% if entry.synthesis.id is not null %}
+        <div class="results">
+            <a href="{{ path("hopitalnumerique_autodiag_restitution_index", {"synthesis": entry.synthesis.id}) }}">
+                Votre questionnaire est finalisé ! <br />
+                Vous pouvez désormais consulter les résultats
+            </a>
+        </div>
+    {% endif %}
+</div>

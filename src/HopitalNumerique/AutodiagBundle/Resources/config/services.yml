@@ -1,130 +1,197 @@
-parameters:
-    #Options
-    hopital_numerique_autodiag.options:parameters:
-    #Outils
-    hopitalnumerique_autodiag.manager.outil.class: HopitalNumerique\AutodiagBundle\Manager\OutilManager
-    hopitalnumerique_autodiag.grid.outil.class: HopitalNumerique\AutodiagBundle\Grid\OutilGrid
-    hopitalnumerique_autodiag.form.outil.class: HopitalNumerique\AutodiagBundle\Form\OutilType
-    #Categories
-    hopitalnumerique_autodiag.manager.categorie.class: HopitalNumerique\AutodiagBundle\Manager\CategorieManager
-    hopitalnumerique_autodiag.grid.categorie.class: HopitalNumerique\AutodiagBundle\Grid\CategorieGrid
-    hopitalnumerique_autodiag.form.categorie.class: HopitalNumerique\AutodiagBundle\Form\CategorieType
-    #Chapitres
-    hopitalnumerique_autodiag.manager.chapitre.class: HopitalNumerique\AutodiagBundle\Manager\ChapitreManager
-    hopitalnumerique_autodiag.form.chapitre.class: HopitalNumerique\AutodiagBundle\Form\ChapitreType
-    #Questions
-    hopitalnumerique_autodiag.manager.question.class: HopitalNumerique\AutodiagBundle\Manager\QuestionManager
-    hopitalnumerique_autodiag.form.question.class: HopitalNumerique\AutodiagBundle\Form\QuestionType
-    #Références
-    hopitalnumerique_autodiag.manager.refchapitre.class: HopitalNumerique\AutodiagBundle\Manager\RefChapitreManager
-    hopitalnumerique_autodiag.manager.refquestion.class: HopitalNumerique\AutodiagBundle\Manager\RefQuestionManager
-    #Resultat
-    hopitalnumerique_autodiag.manager.resultat.class: HopitalNumerique\AutodiagBundle\Manager\ResultatManager
-    hopitalnumerique_autodiag.grid.resultat.class: HopitalNumerique\AutodiagBundle\Grid\ResultatGrid
-    #Reponse
-    hopitalnumerique_autodiag.manager.reponse.class: HopitalNumerique\AutodiagBundle\Manager\ReponseManager
-    #Process
-    hopitalnumerique_autodiag.manager.process.class: HopitalNumerique\AutodiagBundle\Manager\ProcessManager
-    hopitalnumerique_autodiag.form.process.class: HopitalNumerique\AutodiagBundle\Form\ProcessType
-    #ProcessChapitre
-    hopitalnumerique_autodiag.manager.process_chapitre.class: HopitalNumerique\AutodiagBundle\Manager\ProcessChapitreManager
-    #Twig
-    hopitalnumerique_autodiag.twig.autodiag.class: HopitalNumerique\AutodiagBundle\Twig\AutodiagExtension
+imports:
+    - { resource: attribute/builder.yml }
+    - { resource: import.yml }
+    - { resource: events.yml }
 
 services:
-    #Outils
-    hopitalnumerique_autodiag.manager.outil:
-        class: %hopitalnumerique_autodiag.manager.outil.class%
-        arguments: ["@doctrine.orm.entity_manager", "@hopitalnumerique_user.manager.user"]
-
-    hopitalnumerique_autodiag.grid.outil:
-        class: %hopitalnumerique_autodiag.grid.outil.class%
-        arguments: ["@service_container",]
-
-    hopitalnumerique_autodiag.form.outil:
-        class: %hopitalnumerique_autodiag.form.outil.class%
-        arguments: ["@hopitalnumerique_autodiag.manager.outil", "@validator", "@hopitalnumerique_autodiag.manager.process", "@hopitalnumerique_autodiag.manager.chapitre", "@hopitalnumerique_questionnaire.manager.questionnaire", "@hopitalnumerique_user.manager.user", "@hopitalnumerique_reference.manager.reference"]
+    autodiag.form.model_preset:
+        class: HopitalNumerique\AutodiagBundle\Form\Type\Autodiag\PresetType
+        arguments: ['@autodiag.attribute_builder_provider']
         tags:
-            - { name: form.type, alias: hopitalnumerique_autodiag_outil }
+            - { name: form.type }
 
-    #Categories
-    hopitalnumerique_autodiag.manager.categorie:
-        class: %hopitalnumerique_autodiag.manager.categorie.class%
-        arguments: ["@doctrine.orm.entity_manager"]
-
-    hopitalnumerique_autodiag.grid.categorie:
-        class: %hopitalnumerique_autodiag.grid.categorie.class%
-        arguments: ["@service_container"]
-
-    hopitalnumerique_autodiag.form.categorie:
-        class: %hopitalnumerique_autodiag.form.categorie.class%
-        arguments: ["@hopitalnumerique_autodiag.manager.categorie", "@validator"]
+    autodiag.form.autodiag_update:
+        class: HopitalNumerique\AutodiagBundle\Form\Type\Autodiag\AutodiagUpdateType
+        arguments: ['@autodiag.attribute_builder_provider']
         tags:
-            - { name: form.type, alias: hopitalnumerique_autodiag_categorie }
+            - { name: form.type }
 
-    #Chapitres
-    hopitalnumerique_autodiag.manager.chapitre:
-        class: %hopitalnumerique_autodiag.manager.chapitre.class%
-        arguments: ["@doctrine.orm.entity_manager", "@hopitalnumerique_autodiag.manager.resultat", "@hopitalnumerique_user.manager.user", "@hopitalnumerique_reference.manager.reference"]
+    autodiag.history.reader:
+        class: HopitalNumerique\AutodiagBundle\Service\Autodiag\HistoryReader
+        arguments:
+            - '@doctrine.orm.entity_manager'
 
-    hopitalnumerique_autodiag.form.chapitre:
-        class: %hopitalnumerique_autodiag.form.chapitre.class%
-        arguments: ["@hopitalnumerique_autodiag.manager.chapitre", "@validator"]
+    autodiag.import.handler:
+        class: HopitalNumerique\AutodiagBundle\Model\AutodiagFileImportHandler
+        arguments:
+            - '@doctrine.orm.entity_manager'
+            - '@session'
+            - '@autodiag.attribute_builder_provider'
+            - '@security.token_storage'
+            - '@validator'
+
+    autodiag.form.autodiagentry.value:
+        class: HopitalNumerique\AutodiagBundle\Form\Type\AutodiagEntry\ValueType
+        arguments: ['@autodiag.attribute_builder_provider']
         tags:
-            - { name: form.type, alias: hopitalnumerique_autodiag_chapitre }
+            - { name: form.type }
 
-    #Questions
-    hopitalnumerique_autodiag.manager.question:
-        class: %hopitalnumerique_autodiag.manager.question.class%
-        arguments: ["@doctrine.orm.entity_manager", "@hopitalnumerique_user.manager.user", "@hopitalnumerique_reference.manager.reference"]
+    autodiag.entry.session:
+        class: HopitalNumerique\AutodiagBundle\Service\AutodiagEntrySession
+        arguments:
+            - '@autodiag.repository.autodiagentry'
+            - '@session'
 
-    hopitalnumerique_autodiag.form.question:
-        class: %hopitalnumerique_autodiag.form.question.class%
-        arguments: ["@hopitalnumerique_autodiag.manager.question", "@validator"]
+    autodiag.repository.autodiagentry:
+        class: HopitalNumerique\AutodiagBundle\Repository\AutodiagEntryRepository
+        factory: ["@doctrine.orm.entity_manager", "getRepository"]
+        arguments:
+            - 'HopitalNumeriqueAutodiagBundle:AutodiagEntry'
+
+    autodiag.repository.autodiagentryvalue:
+        class: HopitalNumerique\AutodiagBundle\Repository\AutodiagEntryRepository
+        factory: ["@doctrine.orm.entity_manager", "getRepository"]
+        arguments:
+            - 'HopitalNumeriqueAutodiagBundle:AutodiagEntry\Value'
+
+    autodiag.repository.restitution:
+        class: HopitalNumerique\AutodiagBundle\Repository\RestitutionRepository
+        factory: ["@doctrine.orm.entity_manager", "getRepository"]
+        arguments:
+            - 'HopitalNumeriqueAutodiagBundle:Restitution'
+
+    autodiag.repository.synthesis:
+        class: HopitalNumerique\AutodiagBundle\Repository\SynthesisRepository
+        factory: ["@doctrine.orm.entity_manager", "getRepository"]
+        arguments:
+            - 'HopitalNumeriqueAutodiagBundle:Synthesis'
+
+    autodiag.repository.autodiag:
+        class: HopitalNumerique\AutodiagBundle\Repository\AutodiagRepository
+        factory: ["@doctrine.orm.entity_manager", "getRepository"]
+        arguments:
+            - 'HopitalNumeriqueAutodiagBundle:Autodiag'
+
+    autodiag.repository.attribute:
+        class: HopitalNumerique\AutodiagBundle\Repository\AutodiagRepository
+        factory: ["@doctrine.orm.entity_manager", "getRepository"]
+        arguments:
+            - 'HopitalNumeriqueAutodiagBundle:Autodiag\Attribute'
+
+    autodiag.repository.weight:
+        class: HopitalNumerique\AutodiagBundle\Repository\Autodiag\Attribute\WeightRepository
+        factory: ["@doctrine.orm.entity_manager", "getRepository"]
+        arguments:
+            - 'HopitalNumeriqueAutodiagBundle:Autodiag\Attribute\Weight'
+
+    autodiag.repository.container:
+        class: HopitalNumerique\AutodiagBundle\Repository\Autodiag\ContainerRepository
+        factory: ["@doctrine.orm.entity_manager", "getRepository"]
+        arguments:
+            - 'HopitalNumeriqueAutodiagBundle:Autodiag\Container'
+
+    autodiag.repository.score:
+        class: HopitalNumerique\AutodiagBundle\Repository\Autodiag\ContainerRepository
+        factory: ["@doctrine.orm.entity_manager", "getRepository"]
+        arguments:
+            - 'HopitalNumeriqueAutodiagBundle:Score'
+
+    autodiag.autodiagentry_voter:
+        class: HopitalNumerique\AutodiagBundle\Security\AutodiagEntryVoter
+        arguments: ['@autodiag.entry.session']
         tags:
-            - { name: form.type, alias: hopitalnumerique_autodiag_question }
+            - { name: security.voter }
+        public: false
 
-    #References
-    hopitalnumerique_autodiag.manager.refchapitre:
-        class: %hopitalnumerique_autodiag.manager.refchapitre.class%
-        arguments: ["@doctrine.orm.entity_manager"]
-
-    hopitalnumerique_autodiag.manager.refquestion:
-        class: %hopitalnumerique_autodiag.manager.refquestion.class%
-        arguments: ["@doctrine.orm.entity_manager"]
-
-    #Resultat
-    hopitalnumerique_autodiag.manager.resultat:
-        class: %hopitalnumerique_autodiag.manager.resultat.class%
-        arguments: ["@doctrine.orm.entity_manager", "@hopitalnumerique_autodiag.manager.outil"]
-
-    hopitalnumerique_autodiag.grid.resultat:
-        class: %hopitalnumerique_autodiag.grid.resultat.class%
-        arguments: ["@service_container"]
-
-    #Reponse
-    hopitalnumerique_autodiag.manager.reponse:
-        class: %hopitalnumerique_autodiag.manager.reponse.class%
-        arguments: ["@doctrine.orm.entity_manager", "@hopitalnumerique_autodiag.manager.resultat", "@hopitalnumerique_autodiag.manager.question"]
-
-    #Process
-    hopitalnumerique_autodiag.manager.process:
-        class: %hopitalnumerique_autodiag.manager.process.class%
-        arguments: ["@doctrine.orm.entity_manager", "@hopitalnumerique_autodiag.manager.chapitre", "@hopitalnumerique_autodiag.manager.resultat"]
-    hopitalnumerique_autodiag.form.process:
-        class: %hopitalnumerique_autodiag.form.process.class%
-        arguments: ["@hopitalnumerique_autodiag.manager.process", "@validator", "@hopitalnumerique_autodiag.manager.chapitre"]
+    autodiag.synthesis_voter:
+        class: HopitalNumerique\AutodiagBundle\Security\SynthesisVoter
+        arguments: ['@autodiag.entry.session']
         tags:
-            - { name: form.type, alias: hopitalnumerique_autodiag_process }
+            - { name: security.voter }
+        public: false
 
-    #ProcessChapitre
-    hopitalnumerique_autodiag.manager.process_chapitre:
-        class: %hopitalnumerique_autodiag.manager.process_chapitre.class%
-        arguments: ["@doctrine.orm.entity_manager"]
-
-    #Extension Twig
-    hopitalnumerique_autodiag.twig.autodiag_extension:
-        class: %hopitalnumerique_autodiag.twig.autodiag.class%
-        arguments : ["@service_container"]
+    autodiag.twig_restitution_extension:
+        class: HopitalNumerique\AutodiagBundle\Twig\RestitutionExtension
+        public: false
         tags:
             - { name: twig.extension }
+
+    autodiag.result.builder:
+        class: HopitalNumerique\AutodiagBundle\Service\Result\ResultItemBuilder
+        arguments:
+            - '@autodiag.synthesis.completion'
+            - '@autodiag.attribute_builder_provider'
+            - '@autodiag.repository.autodiagentryvalue'
+            - '@autodiag.repository.attribute'
+
+    autodiag.restitution.calculator:
+        class: HopitalNumerique\AutodiagBundle\Service\RestitutionCalculator
+        arguments:
+            - '@autodiag.attribute_builder_provider'
+            - '@autodiag.repository.autodiagentryvalue'
+            - '@autodiag.repository.restitution'
+            - '@autodiag.synthesis.completion'
+            - '@autodiag.repository.score'
+            - '@autodiag.repository.attribute'
+
+    autodiag.score_calculator:
+        class: HopitalNumerique\AutodiagBundle\Service\Score\ScoreCalculator
+        arguments:
+            - '@autodiag.algorithm.score'
+            - '@autodiag.repository.autodiagentryvalue'
+            - '@autodiag.repository.score'
+            - '@autodiag.synthesis.completion'
+            - '@doctrine.orm.entity_manager'
+            - '%kernel.root_dir%'
+
+    autodiag.algorithm.score:
+        class: HopitalNumerique\AutodiagBundle\Service\Algorithm\Score
+        arguments: ['@doctrine.orm.entity_manager', '@autodiag.attribute_builder_provider']
+
+    autodiag.synthesis.completion:
+        class: HopitalNumerique\AutodiagBundle\Service\Synthesis\Completion
+        arguments:
+            - '@autodiag.attribute_builder_provider'
+            - '@autodiag.repository.autodiagentryvalue'
+            - '@autodiag.repository.attribute'
+
+    autodiag.synthesis.dataformatter:
+        class: HopitalNumerique\AutodiagBundle\Service\Synthesis\DataFormatter
+        arguments:
+            - '@doctrine.orm.entity_manager'
+            - '@autodiag.synthesis.completion'
+
+    autodiag.synthesis.share:
+        class: HopitalNumerique\AutodiagBundle\Service\Share
+        arguments: ['@doctrine.orm.entity_manager']
+
+    autodiag.synthesis.generator:
+        class: HopitalNumerique\AutodiagBundle\Service\Synthesis\SynthesisGenerator
+
+    autodiag.synthesis.remover:
+        class: HopitalNumerique\AutodiagBundle\Service\Synthesis\SynthesisRemover
+        arguments:
+            - '@doctrine.orm.entity_manager'
+            - '@autodiag.repository.synthesis'
+
+    autodiag.entries.grid:
+        class: HopitalNumerique\AutodiagBundle\Grid\AutodiagEntryGrid
+        arguments: ['@service_container']
+
+    autodiag.entries.export:
+        class: HopitalNumerique\AutodiagBundle\Service\Export\AutodiagEntriesExport
+        arguments:
+            - '@doctrine.orm.entity_manager'
+            - '@autodiag.result.builder'
+            - '@autodiag.synthesis.completion'
+
+    autodiag.restitution_item.export:
+            class: HopitalNumerique\AutodiagBundle\Service\Export\RestitutionItemExport
+            arguments:
+                - '@autodiag.restitution.calculator'
+
+    autodiag.restitution.pdf_generator:
+                class: HopitalNumerique\AutodiagBundle\Service\RestitutionPdfGenerator
+                arguments:
+                    - '@templating'
+                    - '@knp_snappy.pdf'

@@ -1,0 +1,14 @@
+<li class="summary-item" data-chapter="{{ chapter.id }}">
+    <div class="title">{{ chapter.extendedLabel }}</div>
+    <div class="progression">
+        <span class="value"></span>
+    </div>
+    {% set childs = chapter.childs %}
+    {% if childs|length > 0 %}
+        <ul>
+            {% for child in chapter.childs %}
+                {% include "@HopitalNumeriqueAutodiag/AutodiagEntry/summary/_item.html.twig" with {"chapter": child} %}
+            {% endfor %}
+        </ul>
+    {% endif %}
+</li>

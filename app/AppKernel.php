@@ -59,7 +59,6 @@ class AppKernel extends Kernel
             new HopitalNumerique\FaqBundle\HopitalNumeriqueFaqBundle(),
             new HopitalNumerique\ModuleBundle\HopitalNumeriqueModuleBundle(),
             new HopitalNumerique\PaiementBundle\HopitalNumeriquePaiementBundle(),
-            new HopitalNumerique\AutodiagBundle\HopitalNumeriqueAutodiagBundle(),
             new HopitalNumerique\ForumBundle\HopitalNumeriqueForumBundle(),
             new HopitalNumerique\FlashBundle\HopitalNumeriqueFlashBundle(),
             new HopitalNumerique\DomaineBundle\HopitalNumeriqueDomaineBundle(),
@@ -67,7 +66,6 @@ class AppKernel extends Kernel
             new HopitalNumerique\AideBundle\HopitalNumeriqueAideBundle(),
             new HopitalNumerique\StatBundle\HopitalNumeriqueStatBundle(),
             new HopitalNumerique\ReportBundle\HopitalNumeriqueReportBundle(),
-            new HopitalNumerique\ImportExcelBundle\HopitalNumeriqueImportExcelBundle(),
             new Liuggio\ExcelBundle\LiuggioExcelBundle(),
             new Nodevo\CookieBundle\NodevoCookieBundle(),
             new Nodevo\FormBundle\NodevoFormBundle(),
@@ -78,7 +76,8 @@ class AppKernel extends Kernel
             new HopitalNumerique\CommunautePratiqueBundle\HopitalNumeriqueCommunautePratiqueBundle(),
             new Widop\HttpAdapterBundle\WidopHttpAdapterBundle(),
             new Ivory\GoogleMapBundle\IvoryGoogleMapBundle(),
-            new Ivory\CKEditorBundle\IvoryCKEditorBundle()
+            new Ivory\CKEditorBundle\IvoryCKEditorBundle(),
+            new HopitalNumerique\AutodiagBundle\HopitalNumeriqueAutodiagBundle(),
         );
 
         if (in_array($this->getEnvironment(), array('dev', 'test'))) {

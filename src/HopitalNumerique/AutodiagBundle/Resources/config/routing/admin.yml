@@ -1,0 +1,62 @@
+hopitalnumerique_autodiag_get_outils:
+    path: /admin/getOutils
+    defaults: { _controller: HopitalNumeriqueAutodiagBundle:Back/Autodiag:autodiagPlugins }
+
+hopitalnumerique_autodiag_list:
+    path:     /autodiag
+    defaults: { _controller: HopitalNumeriqueAutodiagBundle:Back/Autodiag:list }
+
+hopitalnumerique_autodiag_create:
+    path:     /autodiag/create
+    defaults: { _controller: HopitalNumeriqueAutodiagBundle:Back/Autodiag:create }
+
+hopitalnumerique_autodiag_edit:
+    path:     /autodiag/edit/{id}
+    defaults: { _controller: HopitalNumeriqueAutodiagBundle:Back/Autodiag:edit }
+
+
+hopitalnumerique_autodiag_edit_survey:
+    path:     /autodiag/edit/{id}/survey
+    defaults: { _controller: HopitalNumeriqueAutodiagBundle:Back/Autodiag:surveyEdit }
+
+hopitalnumerique_autodiag_export_survey:
+    path:     /autodiag/edit/{id}/survey/export
+    defaults: { _controller: HopitalNumeriqueAutodiagBundle:Back/Export:survey }
+
+hopitalnumerique_autodiag_export_survey_layout:
+    path:     /autodiag/edit/survey/export
+    defaults: { _controller: HopitalNumeriqueAutodiagBundle:Back/Export:surveyLayout }
+
+
+hopitalnumerique_autodiag_edit_algorithm:
+    path:     /autodiag/edit/{id}/algorithm
+    defaults: { _controller: HopitalNumeriqueAutodiagBundle:Back/Autodiag:algorithmEdit }
+
+hopitalnumerique_autodiag_export_algorithm:
+    path:     /autodiag/edit/{id}/algorithm/export
+    defaults: { _controller: HopitalNumeriqueAutodiagBundle:Back/Export:algorithm }
+
+hopitalnumerique_autodiag_export_algorithm_layout:
+    path:     /autodiag/edit/algorithm/export
+    defaults: { _controller: HopitalNumeriqueAutodiagBundle:Back/Export:algorithmLayout }
+
+
+hopitalnumerique_autodiag_edit_restitution:
+    path:     /autodiag/edit/{id}/restitution
+    defaults: { _controller: HopitalNumeriqueAutodiagBundle:Back/Autodiag:restitutionEdit }
+
+hopitalnumerique_autodiag_edit_entries:
+    path:     /autodiag/edit/{id}/reponses
+    defaults: { _controller: HopitalNumeriqueAutodiagBundle:Back/Autodiag:autodiagEntries }
+
+hopitalnumerique_autodiag_export_restitution:
+    path:     /autodiag/edit/{id}/restitution/export
+    defaults: { _controller: HopitalNumeriqueAutodiagBundle:Back/Export:restitution }
+
+hopitalnumerique_autodiag_export_restitution_layout:
+    path:     /autodiag/edit/restitution/export
+    defaults: { _controller: HopitalNumeriqueAutodiagBundle:Back/Export:restitutionLayout }
+
+hopitalnumerique_autodiag_edit_result_show_entry:
+    path: autodiag/edit/reponses/show/{entry}
+    defaults: { _controller: HopitalNumeriqueAutodiagBundle:Back/Autodiag:autodiagEntryShow }

@@ -1,0 +1,28 @@
+<div class="attribute" data-attribute="{{ attribute.id }}" {% if attribute.colored %}data-mood{% endif %} {% if attribute.colorationInversed %}data-inverse-mood{% endif %}>
+    {% if forms[attribute.id] is defined  %}
+
+
+        <div class="row">
+
+            {% if attribute.description is not null %}
+                <div class="col-md-12 attribute-description">
+                    <p>
+                        {{ attribute.description }}
+                    </p>
+                </div>
+            {% endif %}
+
+            <div class="col-md-12 attribute-label">
+                {% if attribute.tooltip is not empty %}
+                    <i class="attribute-tooltip fa fa-question-circle" data-toggle="tooltip" title="{{ attribute.tooltip }}"></i>
+                {% endif %}
+                {{ attribute.extendedLabel }}
+            </div>
+
+            <div class="col-md-12">
+                {{ forms[attribute.id]|raw }}
+            </div>
+
+        </div>
+    {% endif %}
+</div>

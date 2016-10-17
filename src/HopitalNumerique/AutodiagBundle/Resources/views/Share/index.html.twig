@@ -1,0 +1,91 @@
+{% extends 'HopitalNumeriqueAutodiagBundle::layout.html.twig' %}
+
+{% block javascripts %}
+    {{parent()}}
+    {% javascripts output="compiled/hopitalnumerique-autodiag-share.js"
+    "bundles/hopitalnumeriqueautodiag/js/account.js"
+    %}
+    <script type="text/javascript" src="{{ asset_url }}"></script>
+    {% endjavascripts %}
+{% endblock %}
+
+{% block body %}
+    <div id="share">
+
+        {% include "@HopitalNumeriqueAutodiag/_navigation.html.twig" with {
+            "step": "share",
+            "autodiag": synthesis.autodiag,
+            "synthesis": synthesis,
+            "entry" : synthesis.entries|length > 1 ? null : synthesis.entries.first
+        } %}
+
+        <div class="content">
+            <h1>{{ 'ad.share.share_result'|trans }}</h1>
+            <div class="mysep background-rose"></div>
+            <p>
+                {{'Module_autodiagnostic_share'|nodevoTexteDynamique(domaineCurrent.id)|raw|nl2br}}
+            </p>
+            <div class="row">
+                <div class="col-md-6">
+                    {{ form_start(form) }}
+                        <div class="row">
+                            {{ form_row(form.shares, {
+                                "label": 'ad.share.share_with'|trans({'%autodiag%': synthesis.autodiag.title, '%synthesis%': synthesis.name}),
+                                "attr": {
+                                    "placeholder": "ad.share.shares_placeholder"|trans
+                                }
+                            }) }}
+                        </div>
+                        <input type="submit" value="Partager" class="btn btn-success" />
+                    {{ form_end(form) }}
+                </div>
+                <div class="col-md-6">
+                    <div class="shares">
+                        <span>{{ 'ad.share.shared_with'|trans }}</span>
+                        <ul>
+                            {% for share in synthesis.shares %}
+                                <li>
+                                    <span>{{ share.nom }} {{ share.prenom }}</span>
+                                    <a href="{{ path('hopitalnumerique_autodiag_share_delete', {
+                                        "synthesis": synthesis.id,
+                                        "user": share.id
+                                    }) }}">
+                                        <i class="fa fa-times"></i>
+                                    </a>
+                                </li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <br>
+            <h1>{{ 'ad.share.compare_results'|trans }}</h1>
+            <div class="mysep background-rose"></div>
+            <p>
+                {{'Module_autodiagnostic_compare'|nodevoTexteDynamique(domaineCurrent.id)|raw|nl2br}}
+            </p>
+            <div class="domain-choice">
+                <div class="row-account">
+                    <p>{{ 'ad.account.domain_selection'|trans }}</p>
+                </div>
+                <div class="row-account">
+                    <select id="domain-choice">
+                        <option data-url="{{ path('hopitalnumerique_autodiag_share_index', {'synthesis': synthesis.id}) }}">{{ 'ad.account.domain_all'|trans }}</option>
+                        {% for domaine in domainesUser %}
+                            <option data-url="{{ path('hopitalnumerique_autodiag_share_index_domain', {'synthesis': synthesis.id, 'domain': domaine.id}) }}"{% if currentDomain is not null and currentDomain.id == domaine.id %} selected{% endif %}>{{ domaine.nom }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+            <div id="syntheses-content">
+                {% include '@HopitalNumeriqueAutodiag/Account/partials/autodiag_list.html.twig' with {'datasForSyntheses': datasForSyntheses, 'user': user, 'currentSynthesisId': synthesis.id} %}
+            </div>
+        </div>
+    </div>
+
+    <script>
+        $('[data-toggle="tooltip"]').tooltip();
+    </script>
+
+{% endblock %}

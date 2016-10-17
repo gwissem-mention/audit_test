@@ -26,7 +26,7 @@ class LoginHandler implements AuthenticationSuccessHandlerInterface
     protected $_domaineManager;
     protected $_aclManager;
     
-    public function __construct(Router $router, $securityContext, RequeteSession $requeteSession, AclManager $aclManager, UserManager $userManager, DomaineManager $domaineManager )
+    public function __construct(Router $router, $securityContext, RequeteSession $requeteSession, AclManager $aclManager, UserManager $userManager, DomaineManager $domaineManager)
     {
         $this->router           = $router;
         $this->_securityContext = $securityContext;
@@ -42,14 +42,12 @@ class LoginHandler implements AuthenticationSuccessHandlerInterface
         $domaineCurrentId = $request->getSession()->get('domaineId');
 
         //On récupère l'utilisateur qui est connecté
-        if(!is_null($this->_securityContext->getToken()))
-        {
+        if (!is_null($this->_securityContext->getToken())) {
             $user = $this->_securityContext->getToken()->getUser();
         }
 
         //Si l'utilisateur n'a pas accès au BackOffice et qu'il n'a pas encore ce domaine on lui assigne
-        if($this->_aclManager->checkAuthorization($this->router->generate('hopital_numerique_admin_homepage' ), $user) == -1 && !in_array($domaineCurrentId, $user->getDomainesId()))
-        {
+        if ($this->_aclManager->checkAuthorization($this->router->generate('hopital_numerique_admin_homepage' ), $user) == -1 && !in_array($domaineCurrentId, $user->getDomainesId())) {
             //Récupération de l'entité
             $domaineCurrent = $this->_domaineManager->findOneById($domaineCurrentId);
             
@@ -65,9 +63,8 @@ class LoginHandler implements AuthenticationSuccessHandlerInterface
             return new RedirectResponse($this->router->generate('hopital_numerique_recherche_homepage'));
         }
 
-        if(!is_null($urlParameter) && $urlParameter !== "")     
-        {   
-            return new RedirectResponse($urlParameter);     
+        if (!is_null($urlParameter) && $urlParameter !== "") {
+            return new RedirectResponse($urlParameter);
         }
 
         $urlFirewall = $request->getSession()->get('_security.frontoffice_connecte.target_path');

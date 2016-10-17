@@ -45,9 +45,16 @@
             {% else %}
                 {% set label_attr = label_attr|merge({'class': (label_attr.class|default('col-md-3 control-label'))|trim}) %}
             {% endif %}
-            {% if label is empty %}
-                {% set label = name|humanize %}
-            {% endif %}
+            {% if label is empty -%}
+                {%- if label_format is not empty -%}
+                    {% set label = label_format|replace({
+                    '%name%': name,
+                    '%id%': id,
+                    }) %}
+                {%- else -%}
+                    {% set label = name|humanize %}
+                {%- endif -%}
+            {%- endif -%}
             <label{% for attrname, attrvalue in label_attr %} {{ attrname }}="{{ attrvalue }}"{% endfor %}>
             {{ label|trans({}, translation_domain) }}
             {% if required %}
@@ -67,7 +74,7 @@
     {%- if required %} required="required"{% endif -%}
     {%- if max_length %} maxlength="{{ max_length }}"{% endif -%}
     {%- if pattern %} pattern="{{ pattern }}"{% endif -%}
-    
+
     {% set classAdded = false %}
 
     {%- for attrname, attrvalue in attr -%}

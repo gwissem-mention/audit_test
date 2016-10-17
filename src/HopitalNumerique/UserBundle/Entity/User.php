@@ -610,11 +610,6 @@ class User extends BaseUser
     protected $interventionDemandesDirecteur;
 
     /**
-     * @ORM\OneToMany(targetEntity="\HopitalNumerique\AutodiagBundle\Entity\Outil", mappedBy="dernierImportUser", cascade={"persist", "remove" })
-     */
-    protected $autodiagsImportes;
-
-    /**
     * @ORM\Column(name="usr_last_ip_connection", type="text", options = {"comment" = "IP de la dernière connexion de l'utilisateur"}, nullable=true)
     */
     protected $ipLastConnection;

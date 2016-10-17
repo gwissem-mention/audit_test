@@ -20,7 +20,7 @@
                 'bundles/nodevoadmin/plugins/nodevoLoader/nodevoLoader.css'
                 'bundles/hopitalnumeriquecore/css/Templates/2/layout.css'
             %}
-                <link rel="stylesheet" href="{{ asset_url }}" />
+                <link rel="stylesheet" href="{{ absolute_url(asset_url) }}" />
             {% endstylesheets %}
         {% endblock %}
 
@@ -36,7 +36,7 @@
                 'bundles/hopitalnumeriquecore/js/recherche.js'
                 'bundles/nodevoadmin/plugins/nodevoLoader/nodevoLoader.js'
             %}
-                <script type="text/javascript" src="{{ asset_url }}"></script>
+                <script type="text/javascript" src="{{ absolute_url(asset_url) }}"></script>
             {% endjavascripts %}
         {% endblock %}
 

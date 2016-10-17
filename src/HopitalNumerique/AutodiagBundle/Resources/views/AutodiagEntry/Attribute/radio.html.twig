@@ -1,0 +1,23 @@
+{% extends '@HopitalNumeriqueAutodiag/AutodiagEntry/Attribute/base.html.twig' %}
+
+{% block form_content %}
+    <div id="value_value">
+
+        {% for option in attribute.options %}
+            <div class="row checkboxCustom">
+                <div class="col-md-1">
+                    <input type="radio" class="validate[required]" id="value_value_{{ loop.index }}" name="value[value]" required="required" value="{{ option.value }}"
+                        {{ value is not null and value == option.value ? "checked" : "" }}
+                    />
+                </div>
+                <div class="col-md-11">
+                    <label for="value_value_{{ loop.index }}" class="col-md-11 control-label required">
+                        {{ option.label }}
+                        {#<span style="color:red;font-size:10px" title="Ce champ est requis">*</span>#}
+                    </label>
+                </div>
+            </div>
+        {% endfor %}
+
+    </div>
+{% endblock %}

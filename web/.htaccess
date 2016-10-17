@@ -4,7 +4,7 @@ Redirect permanent /admin$ http://www.monhopitalnumerique.fr/admin/
 # mod_rewrite). Additionally, this reduces the matching process for the
 # start page (path "/") because otherwise Apache will apply the rewriting rules
 # to each configured DirectoryIndex file (e.g. index.php, index.html, index.pl).
-DirectoryIndex app.php
+DirectoryIndex app_dev.php
 
 <IfModule mod_rewrite.c>
     RewriteEngine On
@@ -39,7 +39,7 @@ DirectoryIndex app.php
     RewriteRule .? - [L]
 
     # Rewrite all other queries to the front controller.
-    RewriteRule .? %{ENV:BASE}/app.php [L]
+    RewriteRule .? %{ENV:BASE}/app_dev.php [L]
 </IfModule>
 
 <IfModule !mod_rewrite.c>
@@ -47,7 +47,7 @@ DirectoryIndex app.php
         # When mod_rewrite is not available, we instruct a temporary redirect of
         # the start page to the front controller explicitly so that the website
         # and the generated links can still be used.
-        RedirectMatch 302 ^/$ /app.php/
+        RedirectMatch 302 ^/$ /app_dev.php/
         # RedirectTemp cannot be used instead
     </IfModule>
 </IfModule>
@@ -88,3 +88,9 @@ ExpiresByType application/x-shockwave-flash "access plus 60 days"
 <FilesMatch "\\.(ico|jpe?g|png|gif|swf|gz|ttf)$">
     Header set Cache-Control "max-age=2592000, public"
 </FilesMatch>
+
+# Memory limit
+php_value memory_limit 256M
+
+# 301 refonte autodiag
+RewriteRule ^autodiagnostic/outil/([0-9]+)(/)?$ /autodiagnostic/$1 [L,R=301]

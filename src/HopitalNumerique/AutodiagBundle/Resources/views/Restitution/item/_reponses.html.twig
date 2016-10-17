@@ -1,0 +1,13 @@
+{% if synthesis.entries|length == 1 %}
+    <div class="item-inner">
+        <div class="reponses">
+            <ul>
+                {% for item in result.items %}
+                    <li>
+                        {{ include('@HopitalNumeriqueAutodiag/Restitution/item/reponses/_chapter.html.twig', {"resultItem": item}) }}
+                    </li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+{% endif %}

@@ -161,7 +161,7 @@ class ObjetController extends Controller
     {
         //Récupération de l'entité en fonction du paramètre
         $objet  = $this->get('hopitalnumerique_objet.manager.objet')->findOneBy( array( 'id' => $id) );
-        $outils = $this->get('hopitalnumerique_autodiag.manager.outil')->findBy( array( 'id' => $objet->getAutodiags() ));
+        $outils = $this->get('autodiag.repository.autodiag')->findBy( array( 'id' => $objet->getAutodiags() ));
 
         //get History
         $em   = $this->getDoctrine()->getManager();
@@ -469,7 +469,7 @@ class ObjetController extends Controller
                     foreach ($consultations as $consultation)
                     {
                         $user = $consultation->getUser();
-                        
+
                         if(!$user || !$user->getNotficationRequete())
                         {
                             continue;
@@ -481,7 +481,7 @@ class ObjetController extends Controller
                         );
                         $mails[] = $this->get('nodevo_mail.manager.mail')->sendNotificationRequete($user, $options );
                     }
-                    
+
                     foreach ($mails as $mail)
                     {
                         $this->get('mailer')->send($mail);

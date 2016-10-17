@@ -1,0 +1,14 @@
+<div class="item-inner">
+    <div class="score-type">
+
+        {% for data in result.items if data.score.value is not null %}
+            <div class="score-widget-wrapper">
+                <div class="score-widget">
+                    <div class="score-value">{{ data.score.value }}%</div>
+                    <div class="score-label">{{ data.label }}</div>
+                </div>
+            </div>
+        {% endfor %}
+
+    </div>
+</div>

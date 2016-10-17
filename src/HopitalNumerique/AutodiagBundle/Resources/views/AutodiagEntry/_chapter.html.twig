@@ -1,0 +1,38 @@
+<div class="chapter" data-chapter="{{ chapter.id }}">
+    <div class="chapter-title">
+        {{ chapter.title }}
+    </div>
+
+    <div class="chapter-desc">
+        <p>
+            {{ chapter.description | raw }}
+        </p>
+    </div>
+
+    <div class="chapter-label">
+        <span>{{ chapter.extendedLabel }}</span>
+        <div class="not-concerned pull-right" title="{{ 'ad.front.chapter.not_concerned_title'|trans }}">
+            <i class="fa fa-ban"></i>
+            {{ "ad.front.chapter.not_concerned"|trans }}
+        </div>
+    </div>
+
+    <div class="chapter-additionnal">
+        <p>
+            {{ chapter.additionalDescription | raw }}
+        </p>
+    </div>
+
+    <div class="attributes">
+
+        {% for attribute in chapter.attributes %}
+            {% include "@HopitalNumeriqueAutodiag/AutodiagEntry/chapter/_attribute.html.twig" with {'attribute': attribute} %}
+        {% endfor %}
+    </div>
+
+    <div class="childs">
+        {% for child in chapter.childs %}
+            {% include "@HopitalNumeriqueAutodiag/AutodiagEntry/_chapter.html.twig" with {'chapter': child} %}
+        {% endfor %}
+    </div>
+</div>

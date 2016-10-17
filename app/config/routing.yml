@@ -1,12 +1,12 @@
+hopital_numerique_autodiag:
+    resource: "@HopitalNumeriqueAutodiagBundle/Resources/config/routing.yml"
+    prefix:   /
+
 fos_js_routing:
     resource: "@FOSJsRoutingBundle/Resources/config/routing/routing.xml"
 
 _liip_imagine:
     resource: '@LiipImagineBundle/Resources/config/routing.xml'
-
-hopital_numerique_import_excel:
-    resource: "@HopitalNumeriqueImportExcelBundle/Resources/config/routing.yml"
-    prefix:   /
 
 hopital_numerique_report:
     resource: "@HopitalNumeriqueReportBundle/Resources/config/routing.yml"
@@ -145,10 +145,6 @@ hopital_numerique_questionnaire:
 
 hopital_numerique_paiement:
     resource: "@HopitalNumeriquePaiementBundle/Resources/config/routing.yml"
-    prefix:   /
-
-hopital_numerique_autodiag:
-    resource: "@HopitalNumeriqueAutodiagBundle/Resources/config/routing.yml"
     prefix:   /
 
 hopital_numerique_flash:

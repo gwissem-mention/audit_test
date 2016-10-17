@@ -1,0 +1,34 @@
+{% extends pdf is not defined ? ('HopitalNumeriqueCoreBundle:Templates:' ~ templateCurrentId ~ '/layout.html.twig') : ('HopitalNumeriqueCoreBundle:Templates:' ~ templateCurrentId ~ '/layout_sans_gabarit.html.twig') %}
+
+{% block stylesheets %}
+    {{parent()}}
+
+    {% stylesheets output="compiled/hopitalnumerique-autodiag-front.css" filter="cssrewrite, ?yui_css"
+        'bundles/hopitalnumeriqueautodiag/css/front.css'
+        'bundles/hopitalnumeriqueautodiag/css/restitution.css'
+        'bundles/hopitalnumeriqueautodiag/css/validation.css'
+        'bundles/hopitalnumeriqueautodiag/css/shares.css'
+    %}
+        <link rel="stylesheet" href="{{ absolute_url(asset_url) }}" />
+    {% endstylesheets %}
+{% endblock %}
+
+{% block javascripts %}
+    {{parent()}}
+
+    {% javascripts output="compiled/hopitalnumerique-autodiag-front.js"
+        '@highcharts_js'
+        'bundles/hopitalnumeriqueautodiag/js/navigation.js'
+        'bundles/hopitalnumeriqueautodiag/js/autodiagentry.js'
+        'bundles/hopitalnumeriqueautodiag/js/AutodiagEntry/summary.js'
+        'bundles/hopitalnumeriqueautodiag/js/AutodiagEntry/chapter.js'
+        'bundles/hopitalnumeriqueautodiag/js/AutodiagEntry/attribute.js'
+        'bundles/hopitalnumeriqueautodiag/js/restitution.js'
+        'bundles/hopitalnumeriqueautodiag/js/Restitution/jauge.js'
+        'bundles/hopitalnumeriqueautodiag/js/scorePolling.js'
+    %}
+        <script type="text/javascript" src="{{ absolute_url(asset_url) }}"></script>
+    {% endjavascripts %}
+{% endblock %}
+
+{% block body %}{% endblock %}

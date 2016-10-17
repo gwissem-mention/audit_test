@@ -1,0 +1,25 @@
+{% if entry.id is not null %}
+    <form action="{{ path('hopitalnumerique_autodiag_entry_attribute_save', {"entry": entry.id, "attribute": attribute.id}) }}">
+{% else %}
+    <form action="#">
+{% endif %}
+
+    <div class="attribute-value">
+        <div class="widget">
+            {% block form_content %}{% endblock %}
+        </div>
+
+        <div class="tools">
+            <div class="attribute-mood"></div>
+            <i title="{{ 'ad.attribute.comment.add'|trans }}" class="comment-button fa fa-comment tool-comment"></i>
+        </div>
+
+        <div class="clearfix"></div>
+    </div>
+
+    <div class="attribute-comment">
+        <textarea name="value[comment]" class="form-control">{{ comment }}</textarea>
+    </div>
+
+    <input type="hidden" name="_token" value="{{ token }}" />
+</form>

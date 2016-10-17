@@ -9,7 +9,7 @@ hopitalnumerique_questionnaire_list:
 hopitalnumerique_questionnaire_index:
     pattern:  /admin/questionnaire/gestion/index
     defaults: { _controller: "HopitalNumeriqueQuestionnaireBundle:Questionnaire:indexQuestionnaire"}
-    requirements: 
+    requirements:
         _method: GET|POST
 #---Ajout
 hopitalnumerique_questionnaire_add_questionnaire:
@@ -39,14 +39,15 @@ hopitalnumerique_questionnaire_get_questionnaires:
     defaults: { _controller: "HopitalNumeriqueQuestionnaireBundle:Questionnaire:getQuestionnaires" }
 #---Front-office
 hopitalnumerique_questionnaire_edit_front_gestionnaire:
-    pattern:  /questionnaire/edit/{id}
-    defaults: { _controller: "HopitalNumeriqueQuestionnaireBundle:Questionnaire:editFrontGestionnaire", id: 1 }
-    requirements: 
+    pattern:  /questionnaire/edit/{id}/{redirectReferer}
+    defaults: { _controller: "HopitalNumeriqueQuestionnaireBundle:Questionnaire:editFrontGestionnaire", id: 1, redirectReferer: false }
+    requirements:
         id: \d+
+
 hopitalnumerique_questionnaire_edit_front_gestionnaire_occurrence:
     pattern:  /questionnaire/edit/{questionnaire}/occ/{occurrence}
     defaults: { _controller: "HopitalNumeriqueQuestionnaireBundle:Questionnaire:editFrontGestionnaireOccurrence" }
-    requirements: 
+    requirements:
         questionnaire: \d+
         occurrence: \d+
 
@@ -55,7 +56,7 @@ hopitalnumerique_questionnaire_edit:
     pattern:  /admin/questionnaire/edit/{user}/{questionnaire}
     defaults: { _controller: "HopitalNumeriqueQuestionnaireBundle:Questionnaire:edit", user: 1, questionnaire: 1 }
     requirements:
-        user: \d+  
+        user: \d+
         questionnaire: \d+
 
 # Front-office
@@ -63,7 +64,7 @@ hopitalnumerique_questionnaire_edit_front:
     pattern:  /compte-hn/questionnaire/edit/{user}/{questionnaire}/{occurrence}
     defaults: { _controller: "HopitalNumeriqueQuestionnaireBundle:Questionnaire:editFront", user: 1, questionnaire: 1, occurrence: null }
     requirements:
-        user: \d+  
+        user: \d+
         questionnaire: \d+
 
 #Question
@@ -71,8 +72,8 @@ hopitalnumerique_questionnaire_edit_front:
 hopitalnumerique_questionnaire_question_index:
     pattern:  /admin/questionnaire/{id}/question/index
     defaults: { _controller: "HopitalNumeriqueQuestionnaireBundle:Question:index", id: 1}
-    requirements: 
-        id: \d+  
+    requirements:
+        id: \d+
         _method: GET|POST
 #---Add
 hopitalnumerique_questionnaire_question_add:
@@ -84,29 +85,29 @@ hopitalnumerique_questionnaire_question_add:
 hopitalnumerique_questionnaire_question_save:
     pattern:  /admin/questionnaire/question/{id}/save.{_format}
     defaults: { _controller: "HopitalNumeriqueQuestionnaireBundle:Question:save", id: 1, _format: json}
-    requirements: 
-        id: \d+  
+    requirements:
+        id: \d+
         _method: GET|POST
 #---Edition
 hopitalnumerique_questionnaire_question_edition:
     pattern:  /admin/questionnaire/question/edit/{id}/view
     defaults: { _controller: "HopitalNumeriqueQuestionnaireBundle:Question:editView", id: 1}
-    requirements: 
-        id: \d+  
+    requirements:
+        id: \d+
         _method: GET|POST
 #---Delete
 hopitalnumerique_questionnaire_question_delete:
     pattern:  /admin/questionnaire/question/delete/{id}.{_format}
     defaults: { _controller: "HopitalNumeriqueQuestionnaireBundle:Question:delete", _format: json }
-    requirements: 
+    requirements:
         id: \d+
         _method: POST|DELETE
 #---Reorder
 hopitalnumerique_questionnaire_question_reorder:
     pattern:  /admin/questionnaire/question/reorder.{_format}
     defaults: { _controller: "HopitalNumeriqueQuestionnaireBundle:Question:reorder", id: 1, _format: json}
-    requirements: 
-        id: \d+  
+    requirements:
+        id: \d+
         _method: GET|POST
 
 #Réponse
@@ -114,13 +115,13 @@ hopitalnumerique_reponse_download:
     pattern: /admin/reponse/download/{reponse}
     defaults: { _controller: "HopitalNumeriqueQuestionnaireBundle:Reponse:dowloadReponse" }
     requirements:
-        reponse: \d+ 
+        reponse: \d+
 
 hopitalnumerique_reponse_deleteAll:
     pattern: /admin/reponse/deleteAll/{user}/{questionnaire}.{_format}
     defaults: { _controller: "HopitalNumeriqueQuestionnaireBundle:Reponse:deleteAll", _format: json}
     requirements:
-        user: \d+ 
+        user: \d+
         questionnaire: \d+
 
 hopitalnumerique_reponse_deleteAllByQuestionnaire:

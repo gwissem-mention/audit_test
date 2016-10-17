@@ -1,0 +1,36 @@
+<div class="item-inner">
+    <div class="plan_action">
+
+        {% if pdf is not defined %}
+            <div class="exports pull-right">
+                <a class="btn btn-primary" href="{{ path('hopitalnumerique_autodiag_restitution_export', {'synthesis': synthesis.id, "restitutionItem": restitution.id, "type": "ods"}) }}">
+                    Télécharger le plan d'action (ODS)
+                </a>
+                <a class="btn btn-primary" href="{{ path('hopitalnumerique_autodiag_restitution_export', {'synthesis': synthesis.id, "restitutionItem": restitution.id, "type": "xlsx"}) }}">
+                    Télécharger le plan d'action (XLSX)
+                </a>
+            </div>
+        {% endif %}
+
+        <table class="table table-striped table-bordered">
+            <thead>
+                <tr>
+                    <th></th>
+                    <th>Réponse</th>
+                    <th>Plan d'action</th>
+                    <th>Lien</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for data in result.items %}
+                    {% include "@HopitalNumeriqueAutodiag/Restitution/item/planAction/_container.html.twig" with {"container": data } %}
+                {% endfor %}
+                <tr class="empty-data">
+                    <td colspan="4">
+                        Aucun plan d'action
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>

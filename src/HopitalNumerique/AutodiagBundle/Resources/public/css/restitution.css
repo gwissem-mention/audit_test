@@ -1,0 +1,437 @@
+#restitution {
+
+}
+
+#restitution .restitution-header {
+    margin: 20px 0;
+}
+
+#restitution .restitution-header .identity {
+    text-align: center;
+    font-weight: bold;
+    font-size: 20px;
+}
+#restitution .restitution-header .identity .title {
+    font-size: 24px;
+    margin-bottom: 15px;
+}
+
+#restitution .restitution-header .identity .name {
+    font-size: 18px;
+    font-weight: normal;
+}
+
+#restitution .restitution-header .loggedout-warning {
+    max-width: 350px;
+    background-color: #f9b1b1;
+    padding: 8px 14px;
+    border-radius: 4px;
+    margin: 10px 0;
+}
+
+#restitution .restitution-header .btn {
+    padding-left: 10px;
+    padding-right: 10px;
+}
+
+#restitution .restitution-header .links {
+    margin-top: -70px;
+}
+
+#restitution .item-row {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: -webkit-flex;
+    display: flex;
+
+    -webkit-flex-wrap: wrap;
+    -ms-flex-wrap: wrap;
+    flex-wrap: wrap;
+}
+
+#restitution .item-row.pdf {
+    display: block;
+}
+
+#restitution .item-row > .item {
+    width: 100%;
+    overflow: auto;
+}
+
+#restitution .item-row > .item > .item-inner {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: -webkit-flex;
+    display: flex;
+    /*margin: auto;*/
+    /*-webkit-box-pack: center;*/
+    /*-ms-flex-pack: center;*/
+    /*justify-content: center;*/
+    padding: 20px;
+    margin: 20px;
+    box-shadow: 4px 4px 12px 1px #CECECE;
+}
+#restitution .item-row > .item > .item-inner > * {
+    width: 100%;
+    overflow: auto;
+}
+
+#restitution .item .low {
+    background: #f2dede;
+}
+#restitution .item .middle {
+    background: #fcf8e3;
+}
+#restitution .item .high {
+    background: #dff0d8;
+}
+
+#restitution .category-description {
+    padding: 20px 20px 0 20px;
+}
+
+/**
+* JAUGE
+*/
+#restitution .jauge {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: -webkit-flex;
+    display: flex;
+    -ms-flex-wrap: wrap;
+    -webkit-flex-wrap: wrap;
+    flex-wrap: wrap;
+}
+
+#restitution .item-row.pdf .jauge {
+    display: block;
+}
+
+#restitution .item-row.pdf .jauge-container-wrapper {
+    width: 100%;
+}
+
+#restitution .jauge-container-wrapper {
+    padding: 20px;
+
+    flex-grow: 1;
+    flex-basis: 50%;
+}
+
+#restitution .jauge-container {
+    background: #f5f5f5;
+}
+
+#restitution .jauge-container .header {
+    height: 40px;
+    line-height: 32px;
+    padding: 4px 20px;
+    background: #f1eeee;
+    position: relative;
+}
+
+#restitution .jauge-container .header .title {
+    width: 70%;
+}
+
+#restitution .jauge-container .header .header-right {
+    position: absolute;
+    right: 20px;
+    bottom: 4px;
+    min-width: 30%;
+    text-align: right;
+}
+
+#restitution .jauge-container .header .score {
+    font-size: 12px;
+}
+
+#restitution .jauge-container .content {
+    padding: 20px;
+}
+
+#restitution .item.jauge-widget {
+    height: 40px;
+    position: relative;
+}
+#restitution .item.jauge-widget .step {
+    float: left;
+    width: 33.3333%;
+    height: 100%;
+    line-height: 40px;
+    text-align: center;
+}
+#restitution .item.jauge-widget.inversed .step {
+    float: right;
+}
+
+#restitution .item.jauge-widget .score {
+    position: absolute;
+    bottom: -5px;
+    left: 0;
+    transition: 0.4s left;
+
+    width: 0;
+    height: 0;
+    border-left: 10px solid transparent;
+    border-right: 10px solid transparent;
+    border-bottom: 20px solid #7A38A2;
+    margin-left: -10px;
+
+    z-index: 100;
+}
+#restitution .item.jauge-widget .score.reference {
+    border-bottom-color: #888;
+    z-index: 1;
+}
+
+#restitution .jauge-container .completion-wrapper {
+    display: inline-block;
+    margin-left: 6px;
+    width: 18px;
+}
+
+#restitution .jauge-container .completion {
+    /*vertical-align: bottom;*/
+    position: relative;
+    height: 13px;
+    display: block;
+
+}
+
+#restitution .jauge-container .completion .completion-bar {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+
+    background-color: #888;
+    width: 4px;
+    height: 100%;
+}
+#restitution .jauge-container .completion .completion-bar.active {
+    background-color: #7A38A2;
+}
+
+
+/**
+* Processus
+*/
+#restitution .processus {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: -webkit-flex;
+    display: flex;
+    -ms-flex-wrap: wrap;
+    -webkit-flex-wrap: wrap;
+    flex-wrap: wrap;
+}
+
+#restitution .processus-wrapper {
+    -webkit-box-flex: 1;
+    -ms-box-flex: 1;
+    flex: 1;
+    min-width: 33%;
+    padding: 20px;
+}
+
+.processus .processus-item {
+    background-image: url(data:image/gif;base64,R0lGODlhAQABAIAAAAUEBAAAACwAAAAAAQABAAACAkQBADs=);
+    background-position: top center;
+    background-repeat: repeat-y;
+}
+
+.processus .processus-line {
+    height: 30px;
+    line-height: 30px;
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.processus .processus-line.head {
+    background: #fff;
+    font-weight: bold;
+}
+
+/**
+* TABLEAU
+*/
+#restitution .tableau {
+    margin: auto;
+}
+
+#restitution .tableau table {
+    margin-bottom: 0;
+}
+#restitution .tableau td, #restitution .tableau th {
+    text-align: center;
+}
+
+#restitution .tableau tr.root {
+    font-weight: bold;
+}
+
+#restitution .tableau tr.children td.container-label {
+    text-indent: 20px;
+}
+
+#restitution .tableau td.container-label {
+    text-align: left;
+}
+
+
+/**
+* SCORE
+*/
+#restitution .score-type {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: -webkit-flex;
+    display: flex;
+    -ms-flex-wrap: wrap;
+    -webkit-flex-wrap: wrap;
+    flex-wrap: wrap;
+}
+
+#restitution .score-widget-wrapper {
+    -webkit-box-flex: 1;
+    -ms-box-flex: 1;
+    flex: 1;
+    padding: 20px;
+    min-width: 180px;
+}
+
+#restitution .score-widget {
+    box-shadow: 4px 4px 12px 1px #CECECE;
+    text-align: center;
+    padding: 10px;
+    /*height: 100%;*/
+}
+
+#restitution .score-widget .score-value {
+    padding: 20px 0;
+    font-weight: bold;
+    font-size: 24px;
+}
+#restitution .score-widget .score-label {
+    padding-bottom: 20px;
+    font-size: 18px;
+}
+
+/**
+* METEO
+*/
+#restitution .meteo-type {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: -webkit-flex;
+    display: flex;
+    -ms-flex-wrap: wrap;
+    -webkit-flex-wrap: wrap;
+    flex-wrap: wrap;
+}
+
+#restitution .item-row.pdf .meteo-type {
+    display: block;
+}
+
+#restitution .meteo-widget-wrapper {
+    -webkit-box-flex: 1;
+    -ms-box-flex: 1;
+    flex: 1;
+    padding: 20px;
+    min-width: 180px;
+}
+
+#restitution .item-row.pdf .meteo-widget-wrapper {
+    width: 100%;
+}
+
+#restitution .meteo-widget {
+    text-align: center;
+    /*height: 100%;*/
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: -webkit-flex;
+    display: flex;
+    flex-direction: column;
+    -webkit-box-pack: end;
+    -ms-flex-pack: end;
+    justify-content: flex-end;
+}
+
+#restitution .item-row.pdf .meteo-widget {
+    display: block;
+}
+
+#restitution .meteo-widget .meteo-value {
+    padding: 20px 0;
+}
+#restitution .meteo-widget .meteo-label {
+    font-size: 18px;
+    flex-grow: 1;
+}
+
+/**
+* Reponse
+*/
+#restitution .reponses ul {
+    padding: 0;
+    margin: 0;
+    list-style-type: none;
+}
+
+#restitution .reponses ul ul {
+    padding-left: 20px;
+    margin: 0;
+}
+
+#restitution .reponses .chapter-title {
+    font-weight: bold;
+}
+#restitution .reponses .chapter-title i {
+    font-weight: normal;
+    font-size: 11px;
+}
+#restitution .reponses table {
+    margin-top: 10px;
+}
+#restitution .reponses table .mood {
+    width: 60px;
+    text-align: center;
+}
+
+/**
+* Plan d'action
+*/
+#restitution .plan_action .exports {
+    margin-bottom: 20px;
+}
+
+#restitution .plan_action tr.attribute td:first-child {
+    text-indent: 20px;
+}
+
+#restitution .plan_action tr.children td:first-child {
+    text-indent: 20px;
+}
+
+#restitution .plan_action tr.children.attribute td:first-child {
+    text-indent: 40px;
+}
+
+#restitution .plan_action tr.root {
+     font-weight: bold;
+}
+
+#restitution .nav-tabs > li.active > a,
+#restitution .nav-tabs > li.active > a:hover,
+#restitution .nav-tabs > li.active > a:focus {
+    color: #555;
+    font-weight: bold;
+    background-color: #eee;
+}
+
+#restitution .nav-tabs > li > a {
+    color: #555;
+    font-weight: bold;
+}

@@ -1,0 +1,94 @@
+hopitalnumerique_autodiag_entry_add:
+    path:     /autodiagnostic/{autodiag}
+    defaults: { _controller: HopitalNumeriqueAutodiagBundle:Front/AutodiagEntry:add }
+
+hopitalnumerique_autodiag_entry_edit:
+    path:     /autodiagnostic/edit/{entry}
+    defaults: { _controller: HopitalNumeriqueAutodiagBundle:Front/AutodiagEntry:edit }
+
+hopitalnumerique_autodiag_entry_attribute_save:
+    path:     /autodiagnostic/save/{entry}/{attribute}
+    defaults: { _controller: HopitalNumeriqueAutodiagBundle:Front/AutodiagEntry:ajaxAttributeSave }
+
+hopitalnumerique_autodiag_entry_chapter_notconcerned:
+    path:     /autodiagnostic/edit/{entry}/setchapternotconcerned/{chapter}
+    defaults: { _controller: HopitalNumeriqueAutodiagBundle:Front/AutodiagEntry:ajaxChapterNotConcerned }
+
+hopitalnumerique_autodiag_entry_restitution_validation_demand:
+    path:     /autodiagnostic/edit/{entry}/demand/{target}
+    defaults: { _controller: HopitalNumeriqueAutodiagBundle:Front/AutodiagEntry:restitutionOrValidationDemand }
+
+hopitalnumerique_autodiag_synthesis_savenew:
+    path: /autodiagnostic/{autodiag}/synthese/save
+    methods: ["POST"]
+    defaults: { _controller: HopitalNumeriqueAutodiagBundle:Front/Synthesis:saveNew }
+
+hopitalnumerique_autodiag_synthesis_polling:
+    path: /autodiagnostic/synthese/polling
+    methods: ["GET"]
+    defaults: { _controller: HopitalNumeriqueAutodiagBundle:Front/Synthesis:scorePolling }
+
+hopitalnumerique_autodiag_restitution_index:
+    path:     /autodiagnostic/restitution/{synthesis}
+    defaults: { _controller: HopitalNumeriqueAutodiagBundle:Front/Restitution:index }
+
+hopitalnumerique_autodiag_restitution_pdf:
+    path:     /autodiagnostic/restitution/{synthesis}/pdf
+    defaults: { _controller: HopitalNumeriqueAutodiagBundle:Front/Restitution:index, pdf: true }
+
+hopitalnumerique_autodiag_restitution_export:
+    path:     /autodiagnostic/restitution/{synthesis}/export/{restitutionItem}/{type}
+    defaults: { _controller: HopitalNumeriqueAutodiagBundle:Front/Restitution:exportItem }
+    requirements:
+        type: "xlsx|ods"
+
+hopitalnumerique_autodiag_restitution_send_result:
+    path:     /autodiagnostic/restitution/result/mail/{synthesis}
+    defaults: { _controller: HopitalNumeriqueAutodiagBundle:Front/Restitution:sendResult }
+
+hopitalnumerique_autodiag_validation_index:
+    path:     /autodiagnostic/validation/{synthesis}
+    defaults: { _controller: HopitalNumeriqueAutodiagBundle:Front/Validation:index }
+
+hopitalnumerique_autodiag_validate:
+    path:     /autodiagnostic/validation/{synthesis}/validate
+    defaults: { _controller: HopitalNumeriqueAutodiagBundle:Front/Validation:validate }
+
+hopitalnumerique_autodiag_unvalidate:
+    path:     /autodiagnostic/validation/{synthesis}/unvalidate
+    defaults: { _controller: HopitalNumeriqueAutodiagBundle:Front/Validation:unvalidate }
+
+
+hopitalnumerique_autodiag_share_index:
+    path:     /autodiagnostic/share/{synthesis}
+    defaults: { _controller: HopitalNumeriqueAutodiagBundle:Front/Share:index }
+
+hopitalnumerique_autodiag_share_index_domain:
+    path:     /autodiagnostic/share/{synthesis}/{domain}
+    defaults: { _controller: HopitalNumeriqueAutodiagBundle:Front/Share:index }
+
+hopitalnumerique_autodiag_share_delete:
+    path:     /autodiagnostic/share/{synthesis}/{user}
+    defaults: { _controller: HopitalNumeriqueAutodiagBundle:Front/Share:delete }
+
+hopitalnumerique_autodiag_account_index:
+    path:     compte-hn/autodiagnostic
+    defaults: { _controller: HopitalNumeriqueAutodiagBundle:Front/Account:index }
+
+hopitalnumerique_autodiag_account_index_domain:
+    path:     compte-hn/autodiagnostic/{domain}
+    defaults: { _controller: HopitalNumeriqueAutodiagBundle:Front/Account:index }
+    requirements:
+            domain: \d+
+
+hopitalnumerique_autodiag_account_generate_synthesis:
+    path:     compte-hn/autodiagnostic/generate-synthesis
+    defaults: { _controller: HopitalNumeriqueAutodiagBundle:Front/Account:generateSynthesis }
+
+hopitalnumerique_autodiag_account_delete_synthesis:
+    path:     compte-hn/autodiagnostic/delete-synthesis/{synthesis}
+    defaults: { _controller: HopitalNumeriqueAutodiagBundle:Front/Account:delete}
+
+hopitalnumerique_autodiag_account_delete_synthesis_share:
+    path:     compte-hn/autodiagnostic/delete-synthesis/{synthesis}/{currentSynthesisId}
+    defaults: { _controller: HopitalNumeriqueAutodiagBundle:Front/Account:delete}

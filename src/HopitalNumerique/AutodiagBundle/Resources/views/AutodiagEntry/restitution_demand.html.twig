@@ -1,0 +1,26 @@
+<div class="autodiag-popin">
+    {% if target == "restitution" %}
+        <h3>{{ 'ad.front.restitution_demand.title'|trans }}</h3>
+    {% elseif target == "validation" %}
+        <h3>{{ 'ad.front.validation_demand.title'|trans }}</h3>
+    {% endif %}
+    <div class="mysep background-rose"></div>
+    <p>
+        {{ 'ad.front.restitution_demand.description'|transchoice(left) }}
+        <br />
+        {{ 'ad.front.restitution_demand.additionnal'|trans }}
+    </p>
+    <div>
+        <a href="#" onclick="$.fancybox.close();" class="btn btn-primary pull-left"><i class="fa fa-arrow-left" aria-hidden="true"></i> {{ 'ad.front.restitution_demand.back'|trans }}</a>
+    </div>
+
+    {% if autodiag.partialResultsAuthorized %}
+        <div>
+            {% if target == "restitution" %}
+                <a href="{{ path("hopitalnumerique_autodiag_restitution_index", {"synthesis": synthesis.id}) }}" class="btn btn-success pull-right"><i class="fa fa-bar-chart-o"></i> {{ 'ad.front.restitution_demand.continue'|trans }}</a>
+            {% elseif target == "validation" %}
+                <a href="{{ path("hopitalnumerique_autodiag_validation_index", {"synthesis": synthesis.id}) }}" class="btn btn-success pull-right"><i class="fa fa-check" aria-hidden="true"></i> {{ 'ad.front.validation_demand.continue'|trans }}</a>
+            {% endif %}
+        </div>
+    {% endif %}
+</div>

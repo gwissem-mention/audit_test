@@ -1,0 +1,37 @@
+<div class="item-inner">
+    <div class="meteo-type">
+
+        {% for data in result.items if data.score.value is not null %}
+            <div class="meteo-widget-wrapper">
+                <div class="meteo-widget">
+                    <div class="meteo-label">{{ data.label }}</div>
+                    <div class="meteo-value">
+
+                        {% if data.colorationInversed %}
+                            {% if data.score.value < 33 %}
+                                <img src="{{ absolute_url(asset('bundles/hopitalnumeriqueautodiag/images/meteo/soleil.png')) }}" alt="soleil" />
+                            {% elseif data.score.value < 66 %}
+                                <img src="{{ absolute_url(asset('bundles/hopitalnumeriqueautodiag/images/meteo/nuage.png')) }}" alt="nuage" />
+                            {% else %}
+                                <img src="{{ absolute_url(asset('bundles/hopitalnumeriqueautodiag/images/meteo/pluie.png')) }}" alt="pluie" />
+                            {% endif %}
+                        {% else %}
+                            {% if data.score.value < 33 %}
+                                <img src="{{ absolute_url(asset('bundles/hopitalnumeriqueautodiag/images/meteo/pluie.png')) }}" alt="pluie" />
+                            {% elseif data.score.value < 66 %}
+                                <img src="{{ absolute_url(asset('bundles/hopitalnumeriqueautodiag/images/meteo/nuage.png')) }}" alt="nuage" />
+                            {% else %}
+                                <img src="{{ absolute_url(asset('bundles/hopitalnumeriqueautodiag/images/meteo/soleil.png')) }}" alt="soleil" />
+                            {% endif %}
+                        {% endif %}
+
+                    </div>
+                    <div class="meteo-score">
+                        {{ data.score.value }} / 100
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+
+    </div>
+</div>

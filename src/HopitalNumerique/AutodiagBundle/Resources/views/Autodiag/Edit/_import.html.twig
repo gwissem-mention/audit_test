@@ -1,0 +1,34 @@
+{% extends "@HopitalNumeriqueAutodiag/Autodiag/edit.html.twig" %}
+
+{% block edit_content %}
+
+    <div class="row">
+        <div class="col-md-8">
+            <div>
+                {% form_theme form 'NodevoAdminBundle::form.html.twig' %}
+                {{ form_start(form) }}
+                {{ form_widget(form) }}
+                {{ form_end(form) }}
+            </div>
+            <div class="repport">
+                {% block repport %}{% endblock %}
+            </div>
+        </div>
+        <div class="col-md-4 import-history">
+            <h3>Historique des imports</h3>
+            {% for change in history %}
+                <div>
+                    {% if change.notify %}
+                        <i class="fa fa-volume-up" title="{{ 'ad.autodiag.import.notified_update'|trans }}" aria-hidden="true"></i>
+                    {% endif %}
+                    {{ 'ad.autodiag.history.last_modified'|trans({
+                        '%date%': change.dateTime|date('d/m/Y'),
+                        '%time%': change.dateTime|date('H\\hi'),
+                        '%username%': change.username
+                    }) }}
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+
+{% endblock %}

@@ -1,0 +1,121 @@
+{% extends 'HopitalNumeriqueAutodiagBundle::layout.html.twig' %}
+
+{% block body %}
+
+    {% include "@HopitalNumeriqueAutodiag/_navigation.html.twig" with {
+        "step": "fill",
+        "autodiag": autodiag,
+        "synthesis": entry.synthesis
+    } %}
+
+    {% if synthesisCreateForm is not null %}
+        <div id="synthesisCreate" class="autodiag-popin">
+            <h3>{{ "ad.front.new_entry"|trans }}</h3>
+            <div class="mysep background-rose"></div>
+
+            <p>
+                Vous pouvez retrouver tous vos autodiagnostics en cours ou validés sur la page <a href="{{ path("hopitalnumerique_autodiag_account_index") }}">Mon compte > Autodiagnostics</a>.
+                <br />
+                Si vous désirez commencer un nouvel autodiagnostic renseignez un nom et cliquez sur le bouton "Sauvegarder".
+            </p>
+
+            {{ form_start(synthesisCreateForm) }}
+
+            {{ form_row(synthesisCreateForm.name, {"label": "ad.front.entry.name"}) }}
+
+            {% if autodiag.instructions %}
+                <div class="instructions closed">
+                    <div class="title">{{ "ad.front.instruction_title"|trans }}</div>
+                    <div class="mysep background-rose"></div>
+                    <div class="instruction-content">
+                        {{ autodiag.instructions|raw }}
+                    </div>
+                </div>
+            {% endif %}
+
+            <script type="text/javascript">
+                $('#synthesisCreate .instructions').click(function() {
+                    $('.instruction-content').slideToggle();
+                    if ($(this).hasClass('closed')) {
+                        $(this).removeClass('closed').addClass('open');
+                    } else {
+                        $(this).removeClass('open').addClass('closed');
+                    }
+                });
+            </script>
+
+            <input class="btn btn-success pull-right" type="submit" value="{{ "ad.front.entry.save"|trans }}" />
+
+            {{ form_end(synthesisCreateForm) }}
+        </div>
+    {% endif %}
+
+    <div id="autodiag-entry" class="row">
+        <div class="col-md-3">
+            {% if autodiag.instructions is not null %}
+                <div id="instructions">
+                    <a href="#instructions-container" class="fancybox btn btn-default">{{ "ad.autodiag.instructions"|trans }}</a>
+                    <div id="instructions-container">
+                        {% include '@HopitalNumeriqueAutodiag/AutodiagEntry/_instructions.html.twig' %}
+                    </div>
+                </div>
+            {% endif %}
+
+            {% include "@HopitalNumeriqueAutodiag/AutodiagEntry/_summary.html.twig" %}
+        </div>
+        <div class="col-md-9">
+
+            <div class="autodiag-title">
+                <h1>
+                    {{ autodiag.title }}
+                </h1>
+            </div>
+            <div class="synthesis-name">
+                <h2>
+                    {{ entry.synthesis.name }}
+                    {% if autodiag.publicUpdatedDate > entry.updatedAt %}
+                        - {{ 'ad.autodiagentry.outofdate'|trans }}
+                    {% endif %}
+                </h2>
+            </div>
+
+            <div class="desc">
+                <p>
+                    Lorem ipsum dolor sit amet, consectetur adipisicing elit. Aliquam amet animi commodi explicabo facilis fuga incidunt itaque iure laborum, magnam maiores porro quam, quidem sed, sequi similique voluptatem voluptatibus voluptatum!
+                </p>
+            </div>
+
+            <div class="chapters">
+                {% for chapter in autodiag.chapters %}
+                    {% include "@HopitalNumeriqueAutodiag/AutodiagEntry/_chapter.html.twig" with {'chapter': chapter} %}
+                {% endfor %}
+
+                <div class="navigation row">
+                    <div class="col-md-6">
+                        <button class="prev btn btn-default">
+                            {{ "ad.front.navigation.prev"|trans }}
+                        </button>
+                    </div>
+
+                    <div class="col-md-6 text-right">
+                        <button class="next btn btn-default">
+                            {{ "ad.front.navigation.next"|trans }}
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <script type="text/javascript">
+        var entry = {{ entry.id ? entry.id : 'null' }};
+        var attributeSaveErrorMessage = "{{ 'ad.front.entry.attribute_save_error'|trans|raw }}"
+        var autodiag = new AutodiagEntry($('#autodiag-entry'), entry, {
+            "attribute_save_error_msg": attributeSaveErrorMessage
+        });
+        new AutodiagNavigation($('#autodiag-path'));
+        autodiagNavigation.setAutodiag(autodiag);
+    </script>
+
+{% endblock %}
