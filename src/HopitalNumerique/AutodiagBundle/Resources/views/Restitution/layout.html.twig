@@ -25,6 +25,10 @@
             </div>
 
             {% if pdf is not defined %}
+                {% set routes = {
+                    "edit": noLayout ? "hopitalnumerique_autodiag_entry_edit_no_layout" : "hopitalnumerique_autodiag_entry_edit",
+                    "add": noLayout ? "hopitalnumerique_autodiag_entry_add_no_layout" : "hopitalnumerique_autodiag_entry_add"
+                } %}
                 <div class="links pull-right">
                     <a class="btn btn-default" href="{{ path("hopitalnumerique_autodiag_restitution_pdf", {"synthesis": synthesis.id}) }}" target="_blank" title="{{ 'ad.restitution.export_pdf'|trans }}">
                         <i class="fa fa-download" aria-hidden="true"></i>
@@ -35,11 +39,11 @@
                 </div>
                 <div class="links pull-left">
                     {% if entry is not null and entry.id is not null and entry.validatedAt is null %}
-                        <a class="btn btn-default" href="{% if entry is not null and entry.id is not null %}{{ path('hopitalnumerique_autodiag_entry_edit', {"entry": entry.id}) }}{% else %}#{% endif %}" title="{{ 'ad.restitution.survey_back'|trans }}">
+                        <a class="btn btn-default" href="{% if entry is not null and entry.id is not null %}{{ path(routes.edit, {"entry": entry.id}) }}{% else %}#{% endif %}" title="{{ 'ad.restitution.survey_back'|trans }}">
                             <i class="fa fa-reply" aria-hidden="true"></i>
                         </a>
                     {% endif %}
-                    <a class="btn btn-default" href="{{ path("hopitalnumerique_autodiag_entry_add", {"autodiag": synthesis.autodiag.id}) }}" title="{{ 'ad.restitution.start_new'|trans }}">
+                    <a class="btn btn-default" href="{{ path(routes.add, {"autodiag": synthesis.autodiag.id}) }}" title="{{ 'ad.restitution.start_new'|trans }}">
                         <i class="fa fa-file-text-o" aria-hidden="true"></i>
                     </a>
                 </div>

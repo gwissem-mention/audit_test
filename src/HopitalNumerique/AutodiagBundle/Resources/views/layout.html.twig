@@ -1,4 +1,4 @@
-{% extends pdf is not defined ? ('HopitalNumeriqueCoreBundle:Templates:' ~ templateCurrentId ~ '/layout.html.twig') : ('HopitalNumeriqueCoreBundle:Templates:' ~ templateCurrentId ~ '/layout_sans_gabarit.html.twig') %}
+{% extends noLayout == true ? ('HopitalNumeriqueCoreBundle:Templates:' ~ templateCurrentId ~ '/layout_sans_gabarit.html.twig') : ('HopitalNumeriqueCoreBundle:Templates:' ~ templateCurrentId ~ '/layout.html.twig') %}
 
 {% block stylesheets %}
     {{parent()}}

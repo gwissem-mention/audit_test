@@ -5,15 +5,17 @@ namespace HopitalNumerique\AutodiagBundle\Controller\Front;
 use Doctrine\Common\Collections\ArrayCollection;
 use HopitalNumerique\AutodiagBundle\Entity\Synthesis;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 
 class ValidationController extends Controller
 {
     /**
      * @param $synthesis
+     * @param bool $noLayout
      * @return \Symfony\Component\HttpFoundation\RedirectResponse|\Symfony\Component\HttpFoundation\Response
      */
-    public function indexAction($synthesis)
+    public function indexAction($synthesis, $noLayout = false)
     {
         $synthesis = $this->getDoctrine()->getManager()->getRepository('HopitalNumeriqueAutodiagBundle:Synthesis')
             ->getFullyLoadedSynthesis($synthesis);
@@ -33,6 +35,7 @@ class ValidationController extends Controller
 
         return $this->render('HopitalNumeriqueAutodiagBundle:Validation:index.html.twig', [
             'synthesis' => $synthesis,
+            'noLayout' => $noLayout,
         ]);
     }
 
@@ -40,7 +43,7 @@ class ValidationController extends Controller
      * @param Synthesis $synthesis
      * @return \Symfony\Component\HttpFoundation\RedirectResponse
      */
-    public function validateAction(Synthesis $synthesis)
+    public function validateAction(Request $request, Synthesis $synthesis)
     {
         if (!$this->isGranted('validate', $synthesis)) {
             throw new AccessDeniedHttpException();
@@ -49,16 +52,22 @@ class ValidationController extends Controller
         $synthesis->validate();
         $this->getDoctrine()->getManager()->flush();
 
-        return $this->redirectToRoute('hopitalnumerique_autodiag_share_index', [
-            'synthesis' => $synthesis->getId(),
-        ]);
+        return $this->redirectToRoute(
+            true === $request->query->getBoolean('noLayout', false)
+                ? 'hopitalnumerique_autodiag_share_index_no_layout'
+                : 'hopitalnumerique_autodiag_share_index',
+            [
+                'synthesis' => $synthesis->getId(),
+            ]
+        );
     }
 
     /**
+     * @param Request $request
      * @param Synthesis $synthesis
      * @return \Symfony\Component\HttpFoundation\RedirectResponse
      */
-    public function unvalidateAction(Synthesis $synthesis)
+    public function unvalidateAction(Request $request, Synthesis $synthesis)
     {
         if (!$this->isGranted('validate', $synthesis)) {
             throw new AccessDeniedHttpException();
@@ -69,8 +78,13 @@ class ValidationController extends Controller
         $synthesis->setShares(new ArrayCollection());
         $this->getDoctrine()->getManager()->flush();
 
-        return $this->redirectToRoute('hopitalnumerique_autodiag_entry_edit', [
-            'entry' => $synthesis->getEntries()->first()->getId(),
-        ]);
+        return $this->redirectToRoute(
+            true === $request->query->getBoolean('noLayout', false)
+                ? 'hopitalnumerique_autodiag_entry_edit_no_layout'
+                : 'hopitalnumerique_autodiag_entry_edit',
+            [
+                'entry' => $synthesis->getEntries()->first()->getId(),
+            ]
+        );
     }
 }

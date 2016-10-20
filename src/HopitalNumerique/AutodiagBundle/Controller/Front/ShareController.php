@@ -18,7 +18,7 @@ class ShareController extends Controller
      * @param $synthesis
      * @return \Symfony\Component\HttpFoundation\RedirectResponse|\Symfony\Component\HttpFoundation\Response
      */
-    public function indexAction(Request $request, Synthesis $synthesis, Domaine $domain = null)
+    public function indexAction(Request $request, Synthesis $synthesis, Domaine $domain = null, $noLayout = false)
     {
         $synthesis = $this->getDoctrine()->getManager()->getRepository('HopitalNumeriqueAutodiagBundle:Synthesis')
             ->getFullyLoadedSynthesis($synthesis);
@@ -54,9 +54,12 @@ class ShareController extends Controller
             }
 
             $this->getDoctrine()->getManager()->flush();
-            return $this->redirectToRoute('hopitalnumerique_autodiag_share_index', [
-                'synthesis' => $synthesis->getId()
-            ]);
+            return $this->redirectToRoute(
+                $noLayout ? 'hopitalnumerique_autodiag_share_index_no_layout' : 'hopitalnumerique_autodiag_share_index',
+                [
+                    'synthesis' => $synthesis->getId()
+                ]
+            );
         }
 
         if ($request->isXmlHttpRequest()) {
@@ -77,6 +80,7 @@ class ShareController extends Controller
             'in_progress' => false,
             'domainesUser' => $user->getDomaines(),
             'currentDomain' => $domain,
+            'noLayout' => $noLayout,
         ]);
     }
 

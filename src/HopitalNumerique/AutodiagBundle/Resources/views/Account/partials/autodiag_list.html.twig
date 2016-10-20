@@ -2,6 +2,13 @@
     {% set in_progress = true %}
 {% endif %}
 
+{% set noLayout = noLayout|default(false) %}
+
+{% set routes = {
+    "edit": noLayout ? "hopitalnumerique_autodiag_entry_edit_no_layout" : "hopitalnumerique_autodiag_entry_edit",
+    "restitution": noLayout ? "hopitalnumerique_autodiag_restitution_index_no_layout" : "hopitalnumerique_autodiag_restitution_index"
+} %}
+
 <div class="container-fluid">
 
     {% if in_progress %}
@@ -33,7 +40,7 @@
                                     <td>
                                         <div {% if synthesis.computing %}data-score-polling="{{ synthesis.id }}"{% endif %}>
                                             {% if synthesis.entryId is not null %}
-                                                <a href="{{ path('hopitalnumerique_autodiag_entry_edit', {'entry': synthesis.entryId}) }}" class="btn btn-success" title="{{ 'ad.account.action.continue'|trans }}"><i class="fa fa-arrow-right"></i></a>
+                                                <a href="{{ path(routes.edit, {'entry': synthesis.entryId}) }}" class="btn btn-success" title="{{ 'ad.account.action.continue'|trans }}"><i class="fa fa-arrow-right"></i></a>
                                             {% endif %}
                                             <a href="{{ path('hopitalnumerique_autodiag_account_delete_synthesis', {'synthesis': synthesis.id}) }}" class="btn btn-danger delete-synthesis" title="{{ 'ad.account.action.delete'|trans }}"><i class="fa fa-trash-o"></i></a>
                                         </div>
@@ -94,9 +101,9 @@
                                     </td>
                                     <td>
                                         <div {% if synthesis.computing %}data-score-polling="{{ synthesis.id }}"{% endif %}>
-                                            <a href="{{ path('hopitalnumerique_autodiag_restitution_index', {'synthesis': synthesis.id}) }}" class="btn btn-success" title="{{ 'ad.account.action.results'|trans }}"><i class="fa fa-bar-chart-o"></i></a>
+                                            <a href="{{ path(routes.restitution, {'synthesis': synthesis.id}) }}" class="btn btn-success" title="{{ 'ad.account.action.results'|trans }}"><i class="fa fa-bar-chart-o"></i></a>
                                             {% if synthesis.user == user and synthesis.entries|length <= 1 %}
-                                                <a href="{{ path('hopitalnumerique_autodiag_unvalidate', {'synthesis': synthesis.id}) }}" class="btn btn-warning" title="{{ 'ad.account.action.reopen'|trans }}"><i class="fa fa-arrow-up"></i></a>
+                                                <a href="{{ path('hopitalnumerique_autodiag_unvalidate', {'synthesis': synthesis.id, "noLayout": noLayout}) }}" class="btn btn-warning" title="{{ 'ad.account.action.reopen'|trans }}"><i class="fa fa-arrow-up"></i></a>
                                             {% endif %}
                                             {% if currentSynthesisId is defined %}
                                                 <a href="{{ path('hopitalnumerique_autodiag_account_delete_synthesis_share', {'synthesis': synthesis.id, 'currentSynthesisId': currentSynthesisId}) }}" class="btn btn-danger delete-synthesis" title="{{ 'ad.account.action.delete'|trans }}"><i class="fa fa-trash-o"></i></a>

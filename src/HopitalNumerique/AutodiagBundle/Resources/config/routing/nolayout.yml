@@ -1,0 +1,24 @@
+hopitalnumerique_autodiag_entry_add_no_layout:
+    path:     /{autodiag}
+    defaults: { _controller: HopitalNumeriqueAutodiagBundle:Front/AutodiagEntry:add }
+
+hopitalnumerique_autodiag_entry_edit_no_layout:
+    path:     /edit/{entry}
+    defaults: { _controller: HopitalNumeriqueAutodiagBundle:Front/AutodiagEntry:edit }
+
+hopitalnumerique_autodiag_restitution_index_no_layout:
+    path:     /restitution/{synthesis}
+    defaults: { _controller: HopitalNumeriqueAutodiagBundle:Front/Restitution:index }
+
+hopitalnumerique_autodiag_synthesis_savenew_no_layout:
+    path: /{autodiag}/synthese/save
+    methods: ["POST"]
+    defaults: { _controller: HopitalNumeriqueAutodiagBundle:Front/Synthesis:saveNew }
+
+hopitalnumerique_autodiag_validation_index_no_layout:
+    path:     /validation/{synthesis}
+    defaults: { _controller: HopitalNumeriqueAutodiagBundle:Front/Validation:index }
+
+hopitalnumerique_autodiag_share_index_no_layout:
+    path:     /share/{synthesis}
+    defaults: { _controller: HopitalNumeriqueAutodiagBundle:Front/Share:index }

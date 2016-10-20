@@ -35,9 +35,9 @@
                     </div>
                 {% else %}
                     {% if synthesis.validatedAt is not null %}
-                        <a href="{{ path('hopitalnumerique_autodiag_unvalidate', {"synthesis": synthesis.id}) }}" class="btn btn-success">{{ "ad.validation.unvalidate"|trans }}</a>
+                        <a href="{{ path('hopitalnumerique_autodiag_unvalidate', {"synthesis": synthesis.id, "noLayout": noLayout}) }}" class="btn btn-success">{{ "ad.validation.unvalidate"|trans }}</a>
                     {% else %}
-                        <a href="{{ path('hopitalnumerique_autodiag_validate', {"synthesis": synthesis.id}) }}" class="btn btn-success">{{ "ad.validation.validate"|trans }}</a>
+                        <a href="{{ path('hopitalnumerique_autodiag_validate', {"synthesis": synthesis.id, "noLayout": noLayout}) }}" class="btn btn-success">{{ "ad.validation.validate"|trans }}</a>
                     {% endif %}
                 {% endif %}
             </div>
