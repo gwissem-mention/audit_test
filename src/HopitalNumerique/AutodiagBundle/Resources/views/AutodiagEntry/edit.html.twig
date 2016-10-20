@@ -2,6 +2,13 @@
 
 {% block body %}
 
+    {# Handle backward Compatibility for external ANAP app (Chir Ambu) #}
+    <script src="{{ asset("bundles/hopitalnumeriqueautodiag/js/BCChapterMapping.js") }}"></script>
+    <script>
+        BCChapterMapping.map({{ autodiag.id }})
+    </script>
+    {# END BC #}
+
     {% include "@HopitalNumeriqueAutodiag/_navigation.html.twig" with {
         "step": "fill",
         "autodiag": autodiag,
