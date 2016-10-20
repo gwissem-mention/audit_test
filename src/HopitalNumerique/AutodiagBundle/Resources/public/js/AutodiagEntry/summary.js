@@ -4,7 +4,8 @@ var Summary = function(element, autodiag, options) {
 
     this.options = $.extend({
         previous: undefined,
-        next: undefined
+        next: undefined,
+        sticky: false,
     }, options);
 
     this.elementOffsetTop = this.element.offset().top;
@@ -59,7 +60,9 @@ Summary.prototype = {
     bindEvents: function()
     {
         $('.title', this.element).on('click', {instance: this}, this.onTitleSelection);
-        $(window).scroll($.proxy(this.onWindowScroll, this));
+        if (this.options.sticky) {
+            $(window).scroll($.proxy(this.onWindowScroll, this));
+        }
     },
 
     onWindowScroll: function()
