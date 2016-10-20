@@ -36,6 +36,7 @@ AutodiagEntry.prototype = {
                 $.fancybox({
                     content: $('#synthesisCreate'),
                     minWidth: '80%',
+                    topRatio: 0.2,
                     afterClose: function() {
                         history.back();
                     }
