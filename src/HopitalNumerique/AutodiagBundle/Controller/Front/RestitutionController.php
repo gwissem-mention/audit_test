@@ -12,7 +12,7 @@ use Symfony\Component\HttpFoundation\Request;
 
 class RestitutionController extends Controller
 {
-    public function indexAction($synthesis, $pdf = false)
+    public function indexAction($synthesis, $pdf = false, $noLayout = false)
     {
         $synthesis = $this->getDoctrine()->getManager()->getRepository('HopitalNumeriqueAutodiagBundle:Synthesis')
             ->getFullyLoadedSynthesis($synthesis);
@@ -56,6 +56,7 @@ class RestitutionController extends Controller
             'synthesis' => $synthesis,
             'restitution' => $restitution,
             'result' => $resultItems,
+            'noLayout' => $noLayout,
         ]);
     }
 

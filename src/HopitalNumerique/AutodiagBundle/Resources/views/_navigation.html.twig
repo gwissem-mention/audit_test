@@ -1,4 +1,10 @@
 {% set step = step|default('fill') %}
+{% set routes = {
+    "entry": noLayout ? "hopitalnumerique_autodiag_entry_edit_no_layout" : "hopitalnumerique_autodiag_entry_edit",
+    "restitution": noLayout ? "hopitalnumerique_autodiag_restitution_index_no_layout" : "hopitalnumerique_autodiag_restitution_index",
+    "validation": noLayout ? "hopitalnumerique_autodiag_validation_index_no_layout" : "hopitalnumerique_autodiag_validation_index",
+    "share" : noLayout ? "hopitalnumerique_autodiag_share_index_no_layout" : "hopitalnumerique_autodiag_share_index"
+} %}
 
 <div id="autodiag-path" data-step="{{ step }}">
     <ul>
@@ -8,16 +14,16 @@
                     {{ "ad.autodiag.path.fill"|trans }}
                 </span>
             {% else %}
-                <a href="{% if entry is not null and entry.id is not null %}{{ path('hopitalnumerique_autodiag_entry_edit', {"entry": entry.id}) }}{% else %}#{% endif %}">
+                <a href="{% if entry is not null and entry.id is not null %}{{ path(routes.entry, {"entry": entry.id}) }}{% else %}#{% endif %}">
                     {{ "ad.autodiag.path.fill"|trans }}
                 </a>
             {% endif %}
         </li>
         <li class="restitution {{ step == "restitution" ? 'active' : '' }}">
             {% if synthesis.id is not null %}
-                <a href="{{ path('hopitalnumerique_autodiag_restitution_index', {"synthesis": synthesis.id}) }}"
+                <a href="{{ path(routes.restitution, {"synthesis": synthesis.id}) }}"
                         {% if entry is not null and entry.id is not null %}
-                            data-demand="{{ path('hopitalnumerique_autodiag_entry_restitution_validation_demand', {"entry": entry.id, "target": "restitution"}) }}"
+                            data-demand="{{ path("hopitalnumerique_autodiag_entry_restitution_validation_demand", {"entry": entry.id, "target": "restitution", "noLayout": noLayout}) }}"
                         {% endif %}
                 >
                     {{ "ad.autodiag.path.results"|trans }}
@@ -31,9 +37,9 @@
         </li>
         <li class="validation {{ step == "validation" ? 'active' : '' }}">
             {% if synthesis.id is not null and synthesis.entries|length < 2 %}
-                <a href="{{ path('hopitalnumerique_autodiag_validation_index', {"synthesis": synthesis.id}) }}"
+                <a href="{{ path(routes.validation, {"synthesis": synthesis.id}) }}"
                     {% if entry is not null and entry.id is not null %}
-                        data-demand="{{ path('hopitalnumerique_autodiag_entry_restitution_validation_demand', {"entry": entry.id, "target": "validation"}) }}"
+                        data-demand="{{ path("hopitalnumerique_autodiag_entry_restitution_validation_demand", {"entry": entry.id, "target": "validation", "noLayout": noLayout}) }}"
                     {% endif %}
                 >
                     {% if entry.validatedAt is null %}{{ "ad.autodiag.path.validate"|trans }}{% else %}{{ 'ad.autodiag.path.unvalidate'|trans }}{% endif %}
@@ -46,7 +52,7 @@
         </li>
         <li class="share {{ step == "share" ? 'active' : '' }}">
             {% if synthesis.validatedAt is not null %}
-                <a href="{{ path('hopitalnumerique_autodiag_share_index', {"synthesis": synthesis.id}) }}">
+                <a href="{{ path(routes.share, {"synthesis": synthesis.id}) }}">
                     {{ "ad.autodiag.path.share"|trans }}
                 </a>
             {% else %}

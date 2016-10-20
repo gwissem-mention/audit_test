@@ -1,3 +1,8 @@
+hopitalnumerique_autodiag_nolayout:
+    resource: '@HopitalNumeriqueAutodiagBundle/Resources/config/routing/nolayout.yml'
+    prefix: /autodiagnostic-no-layout
+    defaults: { noLayout: true }
+
 hopitalnumerique_autodiag_entry_add:
     path:     /autodiagnostic/{autodiag}
     defaults: { _controller: HopitalNumeriqueAutodiagBundle:Front/AutodiagEntry:add }

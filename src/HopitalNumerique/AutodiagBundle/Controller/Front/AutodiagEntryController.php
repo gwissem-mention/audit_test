@@ -23,39 +23,55 @@ class AutodiagEntryController extends Controller
      * })
      *
      * @param Autodiag $autodiag
-     * @return \Symfony\Component\HttpFoundation\Response
+     * @param bool $noLayout
+     * @return Response
      */
-    public function addAction(Autodiag $autodiag)
+    public function addAction(Autodiag $autodiag, $noLayout = false)
     {
         $entry = $this->get('autodiag.entry.session')->get($autodiag)->first();
         if (false !== $entry && $entry->getId()) {
-            return $this->redirectToRoute('hopitalnumerique_autodiag_entry_edit', [
-                'entry' => $entry->getId()
-            ]);
+            return $this->redirectToRoute(
+                true === $noLayout
+                    ? 'hopitalnumerique_autodiag_entry_edit_no_layout'
+                    : 'hopitalnumerique_autodiag_entry_edit',
+                [
+                    'entry' => $entry->getId()
+                ]
+            );
         }
 
         $entry = AutodiagEntry::create($autodiag, $this->getUser());
-        return $this->editAction($entry);
+        return $this->editAction($entry, $noLayout);
     }
 
     /**
      * @param AutodiagEntry $entry
      * @return \Symfony\Component\HttpFoundation\RedirectResponse|\Symfony\Component\HttpFoundation\Response
      */
-    public function editAction(AutodiagEntry $entry)
+    public function editAction(AutodiagEntry $entry, $noLayout = false)
     {
         $autodiag = $entry->getSynthesis()->getAutodiag();
 
         if (!$this->isGranted('edit', $entry)) {
-            return $this->redirectToRoute('hopitalnumerique_autodiag_entry_add', [
-                'autodiag' => $autodiag->getId()
-            ]);
+            return $this->redirectToRoute(
+                true === $noLayout
+                    ? 'hopitalnumerique_autodiag_entry_add_no_layout'
+                    : 'hopitalnumerique_autodiag_entry_add',
+                [
+                    'autodiag' => $autodiag->getId()
+                ]
+            );
         }
 
         if ($entry->getSynthesis()->isValidated()) {
-            return $this->redirectToRoute('hopitalnumerique_autodiag_restitution_index', [
-                'synthesis' => $entry->getSynthesis()->getId(),
-            ]);
+            return $this->redirectToRoute(
+                $noLayout
+                    ? 'hopitalnumerique_autodiag_restitution_index_no_layout'
+                    : 'hopitalnumerique_autodiag_restitution_index',
+                [
+                    'synthesis' => $entry->getSynthesis()->getId(),
+                ]
+            );
         }
 
         $autodiag = $this->getDoctrine()->getRepository('HopitalNumeriqueAutodiagBundle:Autodiag')
@@ -81,9 +97,14 @@ class AutodiagEntryController extends Controller
         $synthesisCreateForm = null;
         if (null === $entry->getId()) {
             $synthesisCreateForm = $this->createForm(SynthesisType::class, $entry->getSynthesis(), [
-                'action' => $this->generateUrl('hopitalnumerique_autodiag_synthesis_savenew', [
-                    'autodiag' => $autodiag->getId()
-                ])
+                'action' => $this->generateUrl(
+                    $noLayout
+                        ? 'hopitalnumerique_autodiag_synthesis_savenew_no_layout'
+                        : 'hopitalnumerique_autodiag_synthesis_savenew',
+                    [
+                        'autodiag' => $autodiag->getId()
+                    ]
+                )
             ])->createView();
         }
 
@@ -92,6 +113,7 @@ class AutodiagEntryController extends Controller
             'entry' => $entry,
             'forms' => $forms,
             'synthesisCreateForm' => $synthesisCreateForm,
+            'noLayout' => $noLayout,
         ]);
     }
 
@@ -197,7 +219,7 @@ class AutodiagEntryController extends Controller
      * @param AutodiagEntry $entry
      * @return Response
      */
-    public function restitutionOrValidationDemandAction(AutodiagEntry $entry, $target)
+    public function restitutionOrValidationDemandAction(Request $request, AutodiagEntry $entry, $target)
     {
         $response = new Response();
         $repo = $this->getDoctrine()->getManager()->getRepository('HopitalNumeriqueAutodiagBundle:Autodiag\Attribute');
@@ -216,17 +238,25 @@ class AutodiagEntryController extends Controller
 
         $total = count($repo->getAttributesHavingChapter($autodiag));
 
-//        $this->get('autodiag.synthesis.completion')->getGlobalCompletion($entry->getSynthesis());
-
         if ($filled == $total) {
             if ($target == "restitution") {
-                $path = $this->generateUrl('hopitalnumerique_autodiag_restitution_index', [
-                    'synthesis' => $entry->getSynthesis()->getId()
-                ]);
+                $path = $this->generateUrl(
+                    true === $request->query->getBoolean('noLayout', false)
+                        ? 'hopitalnumerique_autodiag_restitution_index_no_layout'
+                        : 'hopitalnumerique_autodiag_restitution_index',
+                    [
+                        'synthesis' => $entry->getSynthesis()->getId()
+                    ]
+                );
             } else {
-                $path = $this->generateUrl('hopitalnumerique_autodiag_validation_index', [
-                    'synthesis' => $entry->getSynthesis()->getId()
-                ]);
+                $path = $this->generateUrl(
+                    true === $request->query->getBoolean('noLayout', false)
+                        ? 'hopitalnumerique_autodiag_validation_index_no_layout'
+                        : 'hopitalnumerique_autodiag_validation_index',
+                    [
+                        'synthesis' => $entry->getSynthesis()->getId()
+                    ]
+                );
             }
             $response->headers->set('RESTITUTION_REDIRECT', $path);
         } else {
@@ -235,7 +265,8 @@ class AutodiagEntryController extends Controller
                     'left' => $total - $filled,
                     'autodiag' => $autodiag,
                     'synthesis' => $entry->getSynthesis(),
-                    'target' => $target
+                    'target' => $target,
+                    'noLayout' => true === $request->query->getBoolean('noLayout', false),
                 ])
             );
         }

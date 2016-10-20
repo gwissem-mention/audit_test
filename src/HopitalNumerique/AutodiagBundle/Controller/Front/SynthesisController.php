@@ -11,7 +11,7 @@ use Symfony\Component\HttpFoundation\Request;
 
 class SynthesisController extends Controller
 {
-    public function saveNewAction(Request $request, Autodiag $autodiag)
+    public function saveNewAction(Request $request, Autodiag $autodiag, $noLayout = false)
     {
         $entry = AutodiagEntry::create($autodiag, $this->getUser());
         $synthesis = $entry->getSynthesis();
@@ -27,9 +27,11 @@ class SynthesisController extends Controller
                 $this->get('autodiag.entry.session')->add($entry);
             }
 
-            return $this->redirectToRoute('hopitalnumerique_autodiag_entry_edit', [
-                'entry' => $synthesis->getEntries()->first()->getId()
-            ]);
+            return $this->redirectToRoute(
+                $noLayout ? 'hopitalnumerique_autodiag_entry_edit_no_layout' : 'hopitalnumerique_autodiag_entry_edit',
+                [
+                    'entry' => $synthesis->getEntries()->first()->getId()
+                ]);
         }
 
         return $this->createAccessDeniedException();
