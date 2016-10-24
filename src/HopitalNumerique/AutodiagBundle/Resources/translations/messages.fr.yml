@@ -16,6 +16,8 @@ ad:
             validate: Valider l'autodiagnostic
             results: Résultats
             reopen: Dévalider l'autodiagnostic
+            pdf: Télécharger le résultat en PDF
+            share: Partager
         domain_selection: Sélectionnez votre domaine :
         domain_all: Tous les domaines
         synthesis:
