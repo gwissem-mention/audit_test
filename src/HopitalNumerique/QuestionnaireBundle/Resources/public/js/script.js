@@ -1,7 +1,10 @@
 $(document).ready(function() {
     
     $('input.question-type-date').datepicker({
-        dateFormat:'dd-mm-yy'
+        dateFormat:'yy-m-d',
+        changeYear: true,
+        changeMonth: true,
+        yearRange: '1900:c+10'
     });
 
     //Select2
