@@ -1,6 +1,7 @@
 <?php
 namespace Nodevo\MailBundle\Manager;
 
+use HopitalNumerique\ObjetBundle\Entity\Objet;
 use Nodevo\MailBundle\Entity\Mail;
 use Nodevo\ToolsBundle\Manager\Manager as BaseManager;
 use Doctrine\ORM\EntityManager;
@@ -69,7 +70,7 @@ class MailManager extends BaseManager
      */
     private $courrielRegistreManager;
 
-    private $_optionsMail = array();
+    private $_optionsMail = [];
 
     /**
      * @var \HopitalNumerique\UserBundle\Entity\User|null Utilisateur connecté
@@ -80,27 +81,27 @@ class MailManager extends BaseManager
      * Constructeur du manager, on lui passe l'entity Manager de doctrine, un booléen si on peut ajouter des mails
      *
      * @param EntityManager $em Entity      Manager de Doctrine
-     * @param Array         $options        Tableau d'options
+     * @param Array $options Tableau d'options
      */
-    public function __construct(EntityManager $em, \Swift_Mailer $mailer, \Twig_Environment $twig, $router, SecurityContextInterface $securityContext ,RequestStack $requestStack, $session, DomaineManager $domaineManager, UserManager $userManager, ReferenceManager $referenceManager, ActiviteExpertManager $activiteExpertManager, CourrielRegistreManager $courrielRegistreManager, $options = array())
+    public function __construct(EntityManager $em, \Swift_Mailer $mailer, \Twig_Environment $twig, $router, SecurityContextInterface $securityContext, RequestStack $requestStack, $session, DomaineManager $domaineManager, UserManager $userManager, ReferenceManager $referenceManager, ActiviteExpertManager $activiteExpertManager, CourrielRegistreManager $courrielRegistreManager, $options = [])
     {
         parent::__construct($em);
 
         $this->mailer = $mailer;
 
-        $this->_twig               = $twig;
-        $this->_router             = $router;
-        $this->_requestStack       = $requestStack;
-        $this->_allowAdd           = isset($options['allowAdd'])          ? $options['allowAdd']          : true;
-        $this->_allowDelete        = isset($options['allowDelete'])       ? $options['allowDelete']       : true;
-        $this->_expediteurEnCopie  = isset($options['expediteurEnCopie']) ? $options['expediteurEnCopie'] : false;
-        $this->_nomExpediteur      = isset($options['nomExpediteur'])     ? $options['nomExpediteur']     : '';
-        $this->_mailExpediteur     = isset($options['mailExpediteur'])    ? $options['mailExpediteur']    : '';
-        $this->_destinataire       = isset($options['destinataire'])      ? $options['destinataire']      : '';
+        $this->_twig = $twig;
+        $this->_router = $router;
+        $this->_requestStack = $requestStack;
+        $this->_allowAdd = isset($options['allowAdd']) ? $options['allowAdd'] : true;
+        $this->_allowDelete = isset($options['allowDelete']) ? $options['allowDelete'] : true;
+        $this->_expediteurEnCopie = isset($options['expediteurEnCopie']) ? $options['expediteurEnCopie'] : false;
+        $this->_nomExpediteur = isset($options['nomExpediteur']) ? $options['nomExpediteur'] : '';
+        $this->_mailExpediteur = isset($options['mailExpediteur']) ? $options['mailExpediteur'] : '';
+        $this->_destinataire = isset($options['destinataire']) ? $options['destinataire'] : '';
 
-        $this->_session        = $session;
+        $this->_session = $session;
         $this->_domaineManager = $domaineManager;
-        $this->_userManager    = $userManager;
+        $this->_userManager = $userManager;
         $this->referenceManager = $referenceManager;
         $this->activiteExpertManager = $activiteExpertManager;
         $this->courrielRegistreManager = $courrielRegistreManager;
@@ -159,9 +160,10 @@ class MailManager extends BaseManager
     public function sendAjoutUserMail($user, $options)
     {
         $mail = $this->findOneById(2);
-        $url = $this->_router->generate('fos_user_registration_confirm', array('token' => $user->getConfirmationToken()), true);
+        $url = $this->_router->generate('fos_user_registration_confirm', ['token' => $user->getConfirmationToken()], true);
         $options['url'] = $url;
         $check = 0;
+
         return $this->generationMail($user, $mail, $options, $check);
     }
 
@@ -196,7 +198,7 @@ class MailManager extends BaseManager
     /**
      * Envoi un mail de confirmation de candidature ambassadeur
      *
-     * @param User  $user    Utilisateur qui recevras l'email
+     * @param User $user Utilisateur qui recevras l'email
      * @param array $options Variables à remplacer dans le template : '%nomDansLeTemplate' => valeurDeRemplacement
      *
      * @return Swift_Message
@@ -211,7 +213,7 @@ class MailManager extends BaseManager
     /**
      * Envoi un mail des réponses+question d'un questionnaire rempli par un utilisateur (différent des autres envoie de mail)
      *
-     * @param array $user    Utilisateurs qui recevras l'email (tableau configuré en config.yml/parameters.yml)
+     * @param array $user Utilisateurs qui recevras l'email (tableau configuré en config.yml/parameters.yml)
      * @param array $options Variables à remplacer dans le template : '%nomDansLeTemplate' => valeurDeRemplacement
      *
      * @return Swift_Message
@@ -221,22 +223,21 @@ class MailManager extends BaseManager
         $mail = $this->findOneById(28);
 
         //tableau de SwiftMessage a envoyé
-        $mailsToSend = array();
+        $mailsToSend = [];
 
-        foreach ($users as $recepteurMail => $recepteurName)
-        {
-            $options["u"]  = $recepteurName;
+        foreach ($users as $recepteurMail => $recepteurName) {
+            $options["u"] = $recepteurName;
             $options = $this->getAllOptions($options);
 
             //prepare content
-            $content        = $this->replaceContent($mail->getBody(), NULL , $options);
-            $expediteurMail = $this->replaceContent($mail->getExpediteurMail(), NULL, $options);
-            $expediteurName = $this->replaceContent($mail->getExpediteurName(), NULL, $options);
-            $content        = $this->replaceContent($mail->getBody(), NULL, $options);
-            $from           = array($expediteurMail => $expediteurName );
-            $subject        = $this->replaceContent($mail->getObjet(), null, $options);
+            $content = $this->replaceContent($mail->getBody(), null, $options);
+            $expediteurMail = $this->replaceContent($mail->getExpediteurMail(), null, $options);
+            $expediteurName = $this->replaceContent($mail->getExpediteurName(), null, $options);
+            $content = $this->replaceContent($mail->getBody(), null, $options);
+            $from = [$expediteurMail => $expediteurName];
+            $subject = $this->replaceContent($mail->getObjet(), null, $options);
 
-            $mailsToSend[] = $this->sendMail( $subject, $from, array($recepteurMail => $recepteurName), $content, $this->getMailDomaine());
+            $mailsToSend[] = $this->sendMail($subject, $from, [$recepteurMail => $recepteurName], $content, $this->getMailDomaine());
         }
 
         return $mailsToSend;
@@ -271,15 +272,16 @@ class MailManager extends BaseManager
         $mailValidation = $this->generationMail($user, $mail);
 
         if (!is_null($CMSI)) {
-            $mailValidation->setCc(array($CMSI->getEmail() => $CMSI->getNomPrenom()));
+            $mailValidation->setCc([$CMSI->getEmail() => $CMSI->getNomPrenom()]);
         }
+
         return $mailValidation;
     }
 
     /**
      * Envoi un mail de refus de candidature expert
      *
-     * @param User  $user    Utilisateur qui recevras l'email
+     * @param User $user Utilisateur qui recevras l'email
      * @param array $options Variables à remplacer dans le template : 'nomDansLeTemplate' => valeurDeRemplacement
      *
      * @return Swift_Message
@@ -294,7 +296,7 @@ class MailManager extends BaseManager
     /**
      * Envoi un mail de validation de candidature ambassadeur
      *
-     * @param User  $user    Utilisateur qui recevras l'email
+     * @param User $user Utilisateur qui recevras l'email
      * @param array $options Variables à remplacer dans le template : 'nomDansLeTemplate' => valeurDeRemplacement
      * @param User $CMSI CMSI qui recevras l'email en copie
      *
@@ -307,15 +309,16 @@ class MailManager extends BaseManager
         $mailRefus = $this->generationMail($user, $mail, $options);
 
         if (!is_null($CMSI)) {
-            $mailRefus->setCc(array($CMSI->getEmail() => $CMSI->getNomPrenom()));
+            $mailRefus->setCc([$CMSI->getEmail() => $CMSI->getNomPrenom()]);
         }
+
         return $mailRefus;
     }
 
     /**
      * Envoi un mail de recréation du mot de passe
      *
-     * @param User  $user    Utilisateur qui recevras l'email
+     * @param User $user Utilisateur qui recevras l'email
      * @param array $options Variables à remplacer dans le template : 'nomDansLeTemplate' => valeurDeRemplacement
      *
      * @return Swift_Message
@@ -330,7 +333,7 @@ class MailManager extends BaseManager
     /**
      * Envoi un mail de notification de la requete
      *
-     * @param User  $user    Utilisateur qui recevras l'email
+     * @param User $user Utilisateur qui recevras l'email
      * @param array $options Variables à remplacer dans le template : '%nomDansLeTemplate' => valeurDeRemplacement
      *
      * @return Swift_Message
@@ -345,7 +348,7 @@ class MailManager extends BaseManager
     /**
      * Envoi un mail d'acceptation de l'inscription à une session d'un module
      *
-     * @param User  $user    Utilisateur qui recevras l'email
+     * @param User $user Utilisateur qui recevras l'email
      * @param array $options Variables à remplacer dans le template : '%nomDansLeTemplate' => valeurDeRemplacement
      *
      * @return Swift_Message
@@ -353,13 +356,14 @@ class MailManager extends BaseManager
     public function sendAcceptationInscriptionMail($user, $options)
     {
         $mail = $this->findOneById(31);
+
         return $this->generationMail($user, $mail, $options);
     }
 
     /**
      * Envoi un mail de refus de l'inscription à une session d'un module
      *
-     * @param User  $user    Utilisateur qui recevras l'email
+     * @param User $user Utilisateur qui recevras l'email
      * @param array $options Variables à remplacer dans le template : '%nomDansLeTemplate' => valeurDeRemplacement
      *
      * @return Swift_Message
@@ -383,13 +387,13 @@ class MailManager extends BaseManager
     {
         $mail = $this->findOneById(31);
 
-        $toSend = array();
+        $toSend = [];
         foreach ($inscriptions as $key => $inscription) {
             if ($inscription->getSession()->getModule()->getMailConfirmationInscription()) {
-                $toSend[] = $this->generationMail($inscription->getUser(), $mail, array(
-                    'date'    => $inscription->getSession()->getDateSession()->format('d/m/Y'),
-                    'module'  => $inscription->getSession()->getModule()->getTitre()
-                ));
+                $toSend[] = $this->generationMail($inscription->getUser(), $mail, [
+                    'date'   => $inscription->getSession()->getDateSession()->format('d/m/Y'),
+                    'module' => $inscription->getSession()->getModule()->getTitre(),
+                ]);
             }
         }
 
@@ -408,14 +412,14 @@ class MailManager extends BaseManager
     {
         $mail = $this->findOneById(32);
 
-        $toSend = array();
+        $toSend = [];
         foreach ($inscriptions as $key => $inscription) {
             if ($inscription->getSession()->getModule()->getMailRefusInscription()) {
-                $toSend[] = $this->generationMail($inscription->getUser(), $mail, array(
+                $toSend[] = $this->generationMail($inscription->getUser(), $mail, [
                     'date'      => $inscription->getSession()->getDateSession()->format('d/m/Y'),
                     'module'    => $inscription->getSession()->getModule()->getTitre(),
-                    'textRefus' => $options['textRefus']
-                ));
+                    'textRefus' => $options['textRefus'],
+                ]);
             }
         }
 
@@ -434,18 +438,18 @@ class MailManager extends BaseManager
     {
         $mail = $this->findOneById(35);
 
-        $toSend = array();
+        $toSend = [];
         foreach ($inscriptions as $key => $inscription) {
             if ($inscription->getSession()->getModule()->getMailRappelEvalution()) {
-                $mailTemp = $this->generationMail($inscription->getUser(), $mail, array(
+                $mailTemp = $this->generationMail($inscription->getUser(), $mail, [
                     'date'      => $inscription->getSession()->getDateSession()->format('d/m/Y'),
                     'module'    => $inscription->getSession()->getModule()->getTitre(),
-                    'texteMail' => $inscription->getSession()->getTextMailRappel()
-                ));
+                    'texteMail' => $inscription->getSession()->getTextMailRappel(),
+                ]);
 
-                if(!is_null($inscription->getSession()->getAbsolutePath()) && trim($inscription->getSession()->getAbsolutePath()) !== "") {
+                if (!is_null($inscription->getSession()->getAbsolutePath()) && trim($inscription->getSession()->getAbsolutePath()) !== "") {
                     $mailTemp->attach(\Swift_Attachment::fromPath($inscription->getSession()->getAbsolutePath()), "application/octet-stream");
-                } elseif(!is_null($inscription->getSession()->getModule()->getAbsolutePath()) && trim($inscription->getSession()->getModule()->getAbsolutePath()) !== "") {
+                } elseif (!is_null($inscription->getSession()->getModule()->getAbsolutePath()) && trim($inscription->getSession()->getModule()->getAbsolutePath()) !== "") {
                     $mailTemp->attach(\Swift_Attachment::fromPath($inscription->getSession()->getModule()->getAbsolutePath()), "application/octet-stream");
                 }
 
@@ -460,7 +464,7 @@ class MailManager extends BaseManager
      * Envoie un mail pour acceder au formulaire d'évaluation à une session d'un module
      *
      * @param Inscriptions $inscriptions
-     * @param array        $options      Variables à remplacer dans le template : '%nomDansLeTemplate' => valeurDeRemplacement
+     * @param array $options Variables à remplacer dans le template : '%nomDansLeTemplate' => valeurDeRemplacement
      *
      * @return Swift_Message
      */
@@ -468,7 +472,7 @@ class MailManager extends BaseManager
     {
         $mail = $this->findOneById(33);
 
-        $toSend = array();
+        $toSend = [];
 
         // Récupération du domaine de la session
         $domaines = $inscriptions[0]->getSession()->getModule()->getDomaines();
@@ -476,14 +480,14 @@ class MailManager extends BaseManager
 
         foreach ($inscriptions as $key => $inscription) {
             if ($inscription->getSession()->getModule()->getMailAlerteEvaluation()) {
-                $mailGenere = $this->generationMail($inscription->getUser(), $mail, array(
-                    'date'    => $inscription->getSession()->getDateSession()->format('d/m/Y'),
-                    'module'  => $inscription->getSession()->getModule()->getTitre(),
-                    'url'     => '<a href="'. $this->_requestStack->getCurrentRequest()->getUriForPath( $this->_router->generate( 'hopitalnumerique_module_evaluation_form_front', array(
-                            'id' => $inscription->getSession()->getId()
-                        ))) .'" target="_blank" >'. $domaine->getNom() .'</a>'
+                $mailGenere = $this->generationMail($inscription->getUser(), $mail, [
+                    'date'   => $inscription->getSession()->getDateSession()->format('d/m/Y'),
+                    'module' => $inscription->getSession()->getModule()->getTitre(),
+                    'url'    => '<a href="' . $this->_requestStack->getCurrentRequest()->getUriForPath($this->_router->generate('hopitalnumerique_module_evaluation_form_front', [
+                            'id' => $inscription->getSession()->getId(),
+                        ])) . '" target="_blank" >' . $domaine->getNom() . '</a>',
 
-                ));
+                ]);
                 $mailGenere->setFrom($domaine->getAdresseMailContact());
                 $objet = str_replace('%subjectDomaine', $domaine->getNom(), $mail->getObjet());
                 $mailGenere->SetSubject($objet);
@@ -518,13 +522,14 @@ class MailManager extends BaseManager
     public function sendInscriptionSession($user, $options)
     {
         $mail = $this->findOneById(34);
+
         return $this->generationMail($user, $mail, $options);
     }
 
     /**
      * Envoie un mail pour notifier le changement de domaine
      *
-     * @param User  $user    Utilisateur qui recevras l'email
+     * @param User $user Utilisateur qui recevras l'email
      * @param array $options Variables à remplacer dans le template : 'nomDansLeTemplate' => valeurDeRemplacement
      *
      * @return Swift_Message
@@ -548,10 +553,10 @@ class MailManager extends BaseManager
     {
 
         //Création du lien dans le mail
-        $options['lienversmessage'] = '<a href="'. $this->_requestStack->getCurrentRequest()->getUriForPath($this->_router->generate( 'ccdn_forum_user_topic_show', array(
+        $options['lienversmessage'] = '<a href="' . $this->_requestStack->getCurrentRequest()->getUriForPath($this->_router->generate('ccdn_forum_user_topic_show', [
                 'forumName' => $options['forum'],
-                'topicId'    => $topicId
-            ))) .'" target="_blank" >Nouveau message</a>';
+                'topicId'   => $topicId,
+            ])) . '" target="_blank" >Nouveau message</a>';
 
         $mail = $this->findOneById(36);
 
@@ -571,10 +576,10 @@ class MailManager extends BaseManager
         $mail = $this->findOneById(51);
 
         //Création du lien dans le mail
-        $options['lienversmessage'] = '<a href="'. $this->_requestStack->getCurrentRequest()->getUriForPath( $this->_router->generate( 'ccdn_forum_user_topic_show', array(
+        $options['lienversmessage'] = '<a href="' . $this->_requestStack->getCurrentRequest()->getUriForPath($this->_router->generate('ccdn_forum_user_topic_show', [
                 'forumName' => $options['forum'],
-                'topicId'    => $topicId
-            ))) .'" target="_blank" >Nouveau message</a>';
+                'topicId'   => $topicId,
+            ])) . '" target="_blank" >Nouveau message</a>';
 
         $domaine = $this->_domaineManager->findOneById($this->_session->get('domaineId'));
         $destinataire = $domaine->getAdresseMailContact();
@@ -585,12 +590,12 @@ class MailManager extends BaseManager
 
         //prepare content
         $content = $this->replaceContent($mail->getBody(), null, $options);
-        $from    = array($mailExpediteur => $nameExpediteur );
-        $cci     = $this->_expediteurEnCopie ? array_merge($this->getMailDomaine(), $from ) : $this->getMailDomaine();
-        $cci     = ($mail->getId() === 1 || $mail->getId() === 2) ? false : $cci;
+        $from = [$mailExpediteur => $nameExpediteur];
+        $cci = $this->_expediteurEnCopie ? array_merge($this->getMailDomaine(), $from) : $this->getMailDomaine();
+        $cci = ($mail->getId() === 1 || $mail->getId() === 2) ? false : $cci;
         $subject = $this->replaceContent($mail->getObjet(), null, $options);
 
-        $mailToSend = $this->sendMail($subject, $from, array($destinataire), $content, $this->getMailDomaine());
+        $mailToSend = $this->sendMail($subject, $from, [$destinataire], $content, $this->getMailDomaine());
 
         return $mailToSend;
     }
@@ -609,25 +614,25 @@ class MailManager extends BaseManager
         $mail = $this->findOneById(40);
 
         //tableau de SwiftMessage a envoyé
-        $mailsToSend = array();
+        $mailsToSend = [];
 
         foreach ($users as $recepteurMail) {
             $recepteurName = $recepteurMail;
 
-            $options["nomdestinataire"]  = $recepteurName;
+            $options["nomdestinataire"] = $recepteurName;
             $options["maildestinataire"] = $recepteurMail;
-            $options["u"]  = $recepteurName;
+            $options["u"] = $recepteurName;
             $options = $this->getAllOptions($options);
 
             //prepare content
-            $content        = $this->replaceContent($mail->getBody(), null, $options);
+            $content = $this->replaceContent($mail->getBody(), null, $options);
             $expediteurMail = $this->replaceContent($mail->getExpediteurMail(), null, $options);
             $expediteurName = $this->replaceContent($mail->getExpediteurName(), null, $options);
-            $content        = $this->replaceContent($mail->getBody(), null, $options);
-            $from           = array($expediteurMail => $expediteurName);
-            $subject        = $this->replaceContent($mail->getObjet(), null, $options);
+            $content = $this->replaceContent($mail->getBody(), null, $options);
+            $from = [$expediteurMail => $expediteurName];
+            $subject = $this->replaceContent($mail->getObjet(), null, $options);
 
-            $mailsToSend[] = $this->sendMail($subject, $from, array($recepteurMail => $recepteurName), $content, $this->getMailDomaine());
+            $mailsToSend[] = $this->sendMail($subject, $from, [$recepteurMail => $recepteurName], $content, $this->getMailDomaine());
         }
 
         return $mailsToSend;
@@ -636,7 +641,7 @@ class MailManager extends BaseManager
     /**
      * Envoie un mail de contact (différent des autres envois de mail)
      *
-     * @param array $user    Utilisateurs qui recevront l'email (tableau configuré en config.yml)
+     * @param array $user Utilisateurs qui recevront l'email (tableau configuré en config.yml)
      * @param array $options Variables à remplacer dans le template : '%nomDansLeTemplate' => valeurDeRemplacement
      *
      * @return Swift_Message[]
@@ -646,22 +651,22 @@ class MailManager extends BaseManager
         $mail = $this->findOneById(30);
 
         //tableau de SwiftMessage a envoyé
-        $mailsToSend = array();
+        $mailsToSend = [];
 
         foreach ($users as $recepteurMail => $recepteurName) {
-            $options["nomdestinataire"]  = $recepteurName;
+            $options["nomdestinataire"] = $recepteurName;
             $options["maildestinataire"] = $recepteurMail;
             $options = $this->getAllOptions($options);
 
             //prepare content
-            $content        = $this->replaceContent($mail->getBody(), null , $options);
+            $content = $this->replaceContent($mail->getBody(), null, $options);
             $expediteurMail = $this->replaceContent($mail->getExpediteurMail(), null, $options);
             $expediteurName = $this->replaceContent($mail->getExpediteurName(), null, $options);
-            $content        = $this->replaceContent($mail->getBody(), null, $options);
-            $from           = array($expediteurMail => $expediteurName );
-            $subject        = $this->replaceContent($mail->getObjet(), null, $options);
+            $content = $this->replaceContent($mail->getBody(), null, $options);
+            $from = [$expediteurMail => $expediteurName];
+            $subject = $this->replaceContent($mail->getObjet(), null, $options);
 
-            $mailsToSend[] = $this->sendMail($subject, $from, array($recepteurMail => $recepteurName), $content, $this->getMailDomaine());
+            $mailsToSend[] = $this->sendMail($subject, $from, [$recepteurMail => $recepteurName], $content, $this->getMailDomaine());
         }
 
         return $mailsToSend;
@@ -670,7 +675,7 @@ class MailManager extends BaseManager
     /**
      * Envoie un mail de partage de résultat d'autodiag (différent des autres envois de mail)
      *
-     * @param array                                            $options  Variables à remplacer dans le template : '%nomDansLeTemplate' => valeurDeRemplacement
+     * @param array $options Variables à remplacer dans le template : '%nomDansLeTemplate' => valeurDeRemplacement
      * @param \HopitalNumerique\AutodiagBundle\Entity\Resultat $resultat Résultat à partager
      *
      * @return Swift_Message
@@ -683,22 +688,22 @@ class MailManager extends BaseManager
             return null;
         }
 
-        $user                      = $resultat->getUser();
-        $options["nomexpediteur"]  = $user->getPrenom() . ' ' . $user->getNom();
+        $user = $resultat->getUser();
+        $options["nomexpediteur"] = $user->getPrenom() . ' ' . $user->getNom();
         $options["mailexpediteur"] = $user->getEmail();
-        $destinataire              = $options["destinataire"];
-        $options                   = $this->getAllOptions($options);
+        $destinataire = $options["destinataire"];
+        $options = $this->getAllOptions($options);
 
         //prepare content
-        $content        = $this->replaceContent($mail->getBody(), null , $options);
+        $content = $this->replaceContent($mail->getBody(), null, $options);
         $expediteurMail = $this->replaceContent($mail->getExpediteurMail(), null, $options);
         $expediteurName = $this->replaceContent($mail->getExpediteurName(), null, $options);
-        $content        = $this->replaceContent($mail->getBody(), null, $options);
+        $content = $this->replaceContent($mail->getBody(), null, $options);
 
-        $from           = array($expediteurMail => $expediteurName );
-        $subject        = $this->replaceContent($mail->getObjet(), $resultat->getUser(), $options);
+        $from = [$expediteurMail => $expediteurName];
+        $subject = $this->replaceContent($mail->getObjet(), $resultat->getUser(), $options);
 
-        $mail = $this->sendMail($subject, $from, array($destinataire), $content, $this->getMailDomaine());
+        $mail = $this->sendMail($subject, $from, [$destinataire], $content, $this->getMailDomaine());
 
         $fileName = __ROOT_DIRECTORY__ . '/files/autodiag/' . $resultat->getPdf();
 
@@ -712,7 +717,7 @@ class MailManager extends BaseManager
     /**
      * Envoie un mail de contact (différent des autres envois de mail)
      *
-     * @param array $user    Utilisateurs qui recevras l'email (tableau configuré en config.yml)
+     * @param array $user Utilisateurs qui recevras l'email (tableau configuré en config.yml)
      * @param array $options Variables à remplacer dans le template : '%nomDansLeTemplate' => valeurDeRemplacement
      *
      * @return Swift_Message
@@ -722,22 +727,22 @@ class MailManager extends BaseManager
         $mail = $this->findOneById(42);
 
         //tableau de SwiftMessage a envoyé
-        $mailsToSend = array();
+        $mailsToSend = [];
 
         foreach ($users as $recepteurMail => $recepteurName) {
-            $options["nomdestinataire"]  = $recepteurName;
+            $options["nomdestinataire"] = $recepteurName;
             $options["maildestinataire"] = $recepteurMail;
             $options = $this->getAllOptions($options);
 
             //prepare content
-            $content        = $this->replaceContent($mail->getBody(), null, $options);
+            $content = $this->replaceContent($mail->getBody(), null, $options);
             $expediteurMail = $this->replaceContent($mail->getExpediteurMail(), null, $options);
             $expediteurName = $this->replaceContent($mail->getExpediteurName(), null, $options);
-            $content        = $this->replaceContent($mail->getBody(), null, $options);
-            $from           = array($expediteurMail => $expediteurName );
-            $subject        = $this->replaceContent($mail->getObjet(), null, $options);
+            $content = $this->replaceContent($mail->getBody(), null, $options);
+            $from = [$expediteurMail => $expediteurName];
+            $subject = $this->replaceContent($mail->getObjet(), null, $options);
 
-            $mailsToSend[] = $this->sendMail($subject, $from, array($recepteurMail => $recepteurName), $content, $this->getMailDomaine());
+            $mailsToSend[] = $this->sendMail($subject, $from, [$recepteurMail => $recepteurName], $content, $this->getMailDomaine());
         }
 
         return $mailsToSend;
@@ -746,7 +751,7 @@ class MailManager extends BaseManager
     /**
      * Envoie un mail des réponses+questions d'un questionnaire rempli par un utilisateur (différent des autres envois de mail)
      *
-     * @param array $user    Utilisateurs qui recevras l'email (tableau configuré en config.yml/parameters.yml)
+     * @param array $user Utilisateurs qui recevras l'email (tableau configuré en config.yml/parameters.yml)
      * @param array $options Variables à remplacer dans le template : '%nomDansLeTemplate' => valeurDeRemplacement
      *
      * @return Swift_Message
@@ -756,21 +761,21 @@ class MailManager extends BaseManager
         $mail = $this->findOneById(37);
 
         //tableau de SwiftMessage a envoyé
-        $mailsToSend = array();
+        $mailsToSend = [];
 
         foreach ($users as $recepteurMail => $recepteurName) {
-            $options["u"]  = $recepteurName;
+            $options["u"] = $recepteurName;
             $options = $this->getAllOptions($options);
 
             //prepare content
-            $content        = $this->replaceContent($mail->getBody(), null, $options);
+            $content = $this->replaceContent($mail->getBody(), null, $options);
             $expediteurMail = $this->replaceContent($mail->getExpediteurMail(), null, $options);
             $expediteurName = $this->replaceContent($mail->getExpediteurName(), null, $options);
-            $content        = $this->replaceContent($mail->getBody(), null, $options);
-            $from           = array($expediteurMail => $expediteurName );
-            $subject        = $this->replaceContent($mail->getObjet(), null, $options);
+            $content = $this->replaceContent($mail->getBody(), null, $options);
+            $from = [$expediteurMail => $expediteurName];
+            $subject = $this->replaceContent($mail->getObjet(), null, $options);
 
-            $mailsToSend[] = $this->sendMail($subject, $from, array($recepteurMail => $recepteurName), $content, $this->getMailDomaine());
+            $mailsToSend[] = $this->sendMail($subject, $from, [$recepteurMail => $recepteurName], $content, $this->getMailDomaine());
         }
 
         return $mailsToSend;
@@ -779,8 +784,8 @@ class MailManager extends BaseManager
     /**
      * Retourne un email de test
      *
-     * @param integer $id   ID du mail
-     * @param User    $user Utilisateur destinataire
+     * @param integer $id ID du mail
+     * @param User $user Utilisateur destinataire
      *
      * @return Swift_Message
      */
@@ -790,15 +795,15 @@ class MailManager extends BaseManager
 
         // on remplace les champs par les valeurs récupérées si les champs sont vides
         $this->_mailExpediteur = ($this->_mailExpediteur == '') ? $mail->getExpediteurMail() : $this->_mailExpediteur;
-        $this->_nomExpediteur  = ($this->_nomExpediteur == '')  ? $mail->getExpediteurName() : $this->_nomExpediteur;
-        $this->_destinataire   = ($this->_destinataire == '')   ? $user->getEmail()          : $this->_destinataire;
+        $this->_nomExpediteur = ($this->_nomExpediteur == '') ? $mail->getExpediteurName() : $this->_nomExpediteur;
+        $this->_destinataire = ($this->_destinataire == '') ? $user->getEmail() : $this->_destinataire;
 
-        $options = $this->getAllOptions(array($this->_mailExpediteur => $this->_nomExpediteur));
+        $options = $this->getAllOptions([$this->_mailExpediteur => $this->_nomExpediteur]);
 
         $expediteurMail = $this->replaceContent($this->_mailExpediteur, null, $options);
         $expediteurName = $this->replaceContent($this->_nomExpediteur, null, $options);
 
-        $from = array($expediteurMail => $expediteurName );
+        $from = [$expediteurMail => $expediteurName];
 
         //return test email
         return $this->sendMail($mail->getObjet(), $from, $this->_destinataire, $mail->getBody());
@@ -807,21 +812,19 @@ class MailManager extends BaseManager
     /**
      * Envoie le courriel de partage d'un autodiagnostic.
      *
-     * @param array $user    Utilisateurs qui recevras l'email (tableau configuré en config.yml)
+     * @param array $user Utilisateurs qui recevras l'email (tableau configuré en config.yml)
      * @param array $options Variables à remplacer dans le template : '%nomDansLeTemplate' => valeurDeRemplacement
      */
     public function sendPartageAutodiagnostic(User $partageur, User $destinataire, Outil $autodiagnostic)
     {
         $mail = $this->findOneById(43);
 
-        $courrielDestinataires = array
-        (
-            array($destinataire->getEmail() => $destinataire->getAppellation())
-        );
-        $options = array
-        (
-            'autodiagnostic' => $autodiagnostic->getTitle()
-        );
+        $courrielDestinataires = [
+            [$destinataire->getEmail() => $destinataire->getAppellation()],
+        ];
+        $options = [
+            'autodiagnostic' => $autodiagnostic->getTitle(),
+        ];
         $options = $this->getAllOptions($options);
 
         foreach ($courrielDestinataires as $courrielDestinataire) {
@@ -852,7 +855,7 @@ class MailManager extends BaseManager
         $message =
             $this->generationMail(null, $courriel)
                 ->setTo($destinataireAdresseElectronique)
-                ->attach(\Swift_Attachment::fromPath('medias'.DIRECTORY_SEPARATOR.'ActiviteExperts'.DIRECTORY_SEPARATOR.$contratModele->getLibelle()))
+                ->attach(\Swift_Attachment::fromPath('medias' . DIRECTORY_SEPARATOR . 'ActiviteExperts' . DIRECTORY_SEPARATOR . $contratModele->getLibelle()))
                 ->attach($csvFile)
         ;
 
@@ -882,7 +885,7 @@ class MailManager extends BaseManager
         $message =
             $this->generationMail(null, $courriel)
                 ->setTo($destinataireAdresseElectronique)
-                ->attach(\Swift_Attachment::fromPath('medias'.DIRECTORY_SEPARATOR.'ActiviteExperts'.DIRECTORY_SEPARATOR.$paiementModele->getLibelle()))
+                ->attach(\Swift_Attachment::fromPath('medias' . DIRECTORY_SEPARATOR . 'ActiviteExperts' . DIRECTORY_SEPARATOR . $paiementModele->getLibelle()))
                 ->attach($csvFile)
         ;
 
@@ -916,11 +919,11 @@ class MailManager extends BaseManager
     {
         $domaine = $this->_domaineManager->findOneById($this->_session->get('domaineId'));
 
-        $this->_optionsMail = array(
-            'subjectDomaine' => $this->getDomaineSubjet(),
+        $this->_optionsMail = [
+            'subjectDomaine'            => $this->getDomaineSubjet(),
             'mailContactDomaineCurrent' => $domaine->getAdresseMailContact(),
-            'nomContactDomaineCurrent' => $domaine->getNom(),
-        );
+            'nomContactDomaineCurrent'  => $domaine->getNom(),
+        ];
 
 
         return $this;
@@ -934,6 +937,7 @@ class MailManager extends BaseManager
     private function getDomaineSubjet()
     {
         $chaine = new \Nodevo\ToolsBundle\Tools\Chaine(is_null($this->_domaineManager->findOneById($this->_session->get('domaineId'))) ? 'Hopital Numérique' : $this->_domaineManager->findOneById($this->_session->get('domaineId'))->getNom());
+
         return str_replace(' ', '', strtoupper($chaine->supprimeAccents()));
     }
 
@@ -941,12 +945,12 @@ class MailManager extends BaseManager
      * Génération du mail avec le template NodevoMailBundle::template.mail.html.twig + envoie à l'user
      *
      * @param \HopitalNumerique\UserBundle\Entity\User $user
-     * @param \Nodevo\MailBundle\Entity\Mail           $mail
-     * @param array                                    $options Variables à remplacer dans le template : '%nomDansLeTemplate' => valeurDeRemplacement
+     * @param \Nodevo\MailBundle\Entity\Mail $mail
+     * @param array $options Variables à remplacer dans le template : '%nomDansLeTemplate' => valeurDeRemplacement
      *
      * @return Swift_Message objet \Swift pour l'envoie du mail
      */
-    private function generationMail($user, $mail, $options = array(), $check = 0)
+    private function generationMail($user, $mail, $options = [], $check = 0)
     {
         $options = $this->getAllOptions($options);
 
@@ -954,11 +958,11 @@ class MailManager extends BaseManager
         $nameExpediteur = str_replace('nodevoContactDomaineCurrent', $options['subjectDomaine'], $this->replaceContent($mail->getExpediteurName(), null, $options));
 
         //prepare content
-        $body    = $this->replaceContent($mail->getBody(), $user, $options);
-        $from    = array($mailExpediteur => $nameExpediteur );
+        $body = $this->replaceContent($mail->getBody(), $user, $options);
+        $from = [$mailExpediteur => $nameExpediteur];
 
         if ($mail->getId() !== 1 && $mail->getId() !== 2) {
-            $cci = $this->_expediteurEnCopie ? array_merge($this->getMailDomaine(), $from ) : array($this->getMailDomaine());
+            $cci = $this->_expediteurEnCopie ? array_merge($this->getMailDomaine(), $from) : [$this->getMailDomaine()];
 
             if (null !== $user && $user instanceof User) {
                 $regionReferentEmail = $this->getReferentRegionEmailForMailAndDestinataire($mail, $user);
@@ -979,8 +983,8 @@ class MailManager extends BaseManager
      * Remplace les variables du mail par les vraies valeurs
      *
      * @param string $content Contenu Templaté du mail
-     * @param User   $user    User qui recevras l'email
-     * @param array  $options Variables à remplacer dans le template : '%nomDansLeTemplate' => valeurDeRemplacement
+     * @param User $user User qui recevras l'email
+     * @param array $options Variables à remplacer dans le template : '%nomDansLeTemplate' => valeurDeRemplacement
      *
      * @return string
      */
@@ -1005,7 +1009,7 @@ class MailManager extends BaseManager
             $content = str_replace('%p', $user->getPlainPassword(), $content);
         }
 
-        $content = str_replace('%s', '<a href="'. $this->_requestStack->getCurrentRequest()->getUriForPath($this->_router->generate('hopital_numerique_homepage')) .'" target="_blank" >'. $this->_domaineManager->findOneById($this->_session->get('domaineId'))->getNom() .'</a>', $content);
+        $content = str_replace('%s', '<a href="' . $this->_requestStack->getCurrentRequest()->getUriForPath($this->_router->generate('hopital_numerique_homepage')) . '" target="_blank" >' . $this->_domaineManager->findOneById($this->_session->get('domaineId'))->getNom() . '</a>', $content);
 
         return $content;
     }
@@ -1013,10 +1017,10 @@ class MailManager extends BaseManager
     /**
      * Envoi un mail
      *
-     * @param string $subject      Sujet du mail
-     * @param string $from         Expéditeur
+     * @param string $subject Sujet du mail
+     * @param string $from Expéditeur
      * @param string $destinataire Destinataire
-     * @param string $body         Contenu du mail
+     * @param string $body Contenu du mail
      * @param string|array $bcc Copie(s) cachée(s)
      * @return \Swift_Message
      */
@@ -1025,7 +1029,7 @@ class MailManager extends BaseManager
         $body = quoted_printable_decode($body);
 
         if (null !== $destinataire) {
-            $user_mail = $this->_userManager->findOneBy(array("email" => $destinataire));
+            $user_mail = $this->_userManager->findOneBy(["email" => $destinataire]);
 
             if (($user_mail != null && !$user_mail->isActif()) || $check != 0) {
                 return \Swift_Message::newInstance();
@@ -1033,23 +1037,23 @@ class MailManager extends BaseManager
         }
 
         //prepare content HTML
-        $bodyHtml = str_replace(array("\r\n","\n"), '<br />', $body);
+        $bodyHtml = str_replace(["\r\n", "\n"], '<br />', $body);
         $template = $this->_twig->loadTemplate("NodevoMailBundle::template.mail.html.twig");
-        $bodyHtml = $template->render(array("content" => $bodyHtml));
+        $bodyHtml = $template->render(["content" => $bodyHtml]);
 
         //prepare content TEXT
         $pattern = '/<a[^>]+href=([\'"])(.+?)\1[^>]*>(.*)<\/a>/i';
         if (preg_match_all($pattern, $body, $matches)) {
             foreach ($matches[1] as $key => $value) {
-                $body = str_replace($matches[0][$key], '(' . $matches[2][$key] . ')' . $matches[3][$key] , $body);
+                $body = str_replace($matches[0][$key], '(' . $matches[2][$key] . ')' . $matches[3][$key], $body);
             }
         }
         $template = $this->_twig->loadTemplate("NodevoMailBundle::template.mail.txt.twig");
-        $bodyTxt  = $template->render(array("content" => strip_tags($body) ));
+        $bodyTxt = $template->render(["content" => strip_tags($body)]);
 
         //prepare Mail
         $mail = \Swift_Message::newInstance()
-            ->setSubject($this->replaceContent($subject, null, array()))
+            ->setSubject($this->replaceContent($subject, null, []))
             ->setFrom($from)
             ->setBody($bodyTxt)
             ->addPart($bodyHtml, 'text/html')
@@ -1089,7 +1093,7 @@ class MailManager extends BaseManager
         $courriel = $this->findOneById(67);
         $courriel->setExpediteurMail($expediteur->getEmail());
         $courriel->setExpediteurName($expediteur->getNom());
-        $content = $this->replaceContent($courriel->getBody(), $expediteur, array('nomGroupe' => $nomGroupe));
+        $content = $this->replaceContent($courriel->getBody(), $expediteur, ['nomGroupe' => $nomGroupe]);
         $courriel->setBody($content);
         $message = $this->generationMail($expediteur, $courriel);
 
@@ -1103,7 +1107,7 @@ class MailManager extends BaseManager
     {
         $courriel = $this->findOneById(65);
 
-        $content = $this->replaceContent($courriel->getBody(), $user, array());
+        $content = $this->replaceContent($courriel->getBody(), $user, []);
         $courriel->setBody($content);
 
         $message = $this->generationMail(null, $courriel);
@@ -1121,10 +1125,10 @@ class MailManager extends BaseManager
         $content = $this->replaceContent(
             $courriel->getBody(),
             null,
-            array(
+            [
                 'nomGroupe' => $nomGroupe,
-                'urlGroupe' => $urlGroupe
-            )
+                'urlGroupe' => $urlGroupe,
+            ]
         );
         $courriel->setBody($content);
 
@@ -1151,5 +1155,34 @@ class MailManager extends BaseManager
         $message->attach(\Swift_Attachment::newInstance($pdf, 'resultat.pdf'));
 
         $this->mailer->send($message);
+    }
+
+    /**
+     * @param Objet $objet
+     * @param $url
+     */
+    public function sendAlertePublicationCommentaireMail(Objet $objet, $url)
+    {
+        /** @var Mail $courriel */
+        $courriel = $this->findOneById(Mail::MAIL_ALERTE_PUBLICATION_COMMENTAIRE);
+
+        foreach ($objet->getDomaines() as $domaine) {
+            $destinataire = $domaine->getAdresseMailContact();
+
+            $content = $this->replaceContent(
+                $courriel->getBody(),
+                null,
+                [
+                    'nomPublication' => $objet->getTitre(),
+                    'urlPublication' => $url,
+                ]
+            );
+
+            $courriel->setBody($content);
+            $message = $this->generationMail(null, $courriel);
+            $message->setTo($destinataire);
+
+            $this->mailer->send($message);
+        }
     }
 }
