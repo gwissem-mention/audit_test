@@ -49,7 +49,12 @@ class ValidationController extends Controller
             throw new AccessDeniedHttpException();
         }
 
-        $synthesis->validate();
+        $validate = $synthesis->validate();
+        if (false === $validate) {
+            $this->addFlash('error', $this->get('translator')->trans('ad.validation.error'));
+            return $this->redirect($request->headers->get('referer'));
+        }
+
         $this->getDoctrine()->getManager()->flush();
 
         $this->addFlash('success', $this->get('translator')->trans('ad.validation.success'));

@@ -19,7 +19,7 @@ class SelectChoiceLoader implements ChoiceLoaderInterface
         $choices = [];
         foreach ($this->options as $option) {
             /** @var Attribute\Option $option */
-            $choices[$option->getLabel()] = $option->getValue();
+            $choices[$option->getLabel()] = (string) $option->getValue();
         }
 
         return new ArrayChoiceList($choices, $value);
