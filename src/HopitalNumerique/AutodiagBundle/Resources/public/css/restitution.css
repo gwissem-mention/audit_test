@@ -435,3 +435,21 @@
     color: #555;
     font-weight: bold;
 }
+
+
+#restitution.restitution-pdf h3 {
+    font-size: 18px;
+    font-weight: bold;
+    padding: 15px 20px;
+    margin: 17px 0;
+    width: 100%;
+    background: #f6f6f6;
+}
+
+#restitution.restitution-pdf table tr {
+    page-break-inside: avoid !important;
+}
+
+#restitution.restitution-pdf .reponses li {
+    page-break-inside: avoid !important;
+}

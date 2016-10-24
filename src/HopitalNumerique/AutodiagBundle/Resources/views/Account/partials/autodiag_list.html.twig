@@ -112,16 +112,28 @@
                                     </td>
                                     <td width="30%">
                                         <div {% if synthesis.computing %}data-score-polling="{{ synthesis.id }}"{% endif %} class="btn-group btn-sm">
-                                            <a href="{{ path(routes.restitution, {'synthesis': synthesis.id}) }}" class="btn btn-success" title="{{ 'ad.account.action.results'|trans }}"><i class="fa fa-bar-chart-o"></i></a>
-                                            <a href="{{ path('hopitalnumerique_autodiag_restitution_pdf', {'synthesis': synthesis.id}) }}" target="_blank" class="btn btn-success" title="{{ 'ad.account.action.pdf'|trans }}"><i class="fa fa-download"></i></a>
-                                            <a href="{{ path(routes.share, {'synthesis': synthesis.id}) }}" class="btn btn-success" title="{{ 'ad.account.action.share'|trans }}"><i class="fa fa-share"></i></a>
                                             {% if synthesis.user == user and synthesis.entries|length <= 1 %}
-                                                <a href="{{ path('hopitalnumerique_autodiag_unvalidate', {'synthesis': synthesis.id, "noLayout": noLayout}) }}" class="btn btn-warning" title="{{ 'ad.account.action.reopen'|trans }}"><i class="fa fa-arrow-up"></i></a>
+                                                <a href="{{ path('hopitalnumerique_autodiag_unvalidate', {'synthesis': synthesis.id, "noLayout": noLayout}) }}" class="btn btn-warning" title="{{ 'ad.account.action.reopen'|trans }}">
+                                                    <i class="fa fa-arrow-up"></i>
+                                                </a>
                                             {% endif %}
+                                            <a href="{{ path(routes.share, {'synthesis': synthesis.id}) }}" class="btn btn-info" title="{{ 'ad.account.action.share'|trans }}">
+                                                <i class="fa fa-exchange"></i>
+                                            </a>
+                                            <a href="{{ path('hopitalnumerique_autodiag_restitution_pdf', {'synthesis': synthesis.id}) }}" target="_blank" class="btn btn-success" title="{{ 'ad.account.action.pdf'|trans }}">
+                                                <i class="fa fa-download"></i>
+                                            </a>
+                                            <a href="{{ path(routes.restitution, {'synthesis': synthesis.id}) }}" class="btn btn-warning" title="{{ 'ad.account.action.results'|trans }}">
+                                                <i class="fa fa-bar-chart-o"></i>
+                                            </a>
                                             {% if currentSynthesisId is defined %}
-                                                <a href="{{ path('hopitalnumerique_autodiag_account_delete_synthesis_share', {'synthesis': synthesis.id, 'currentSynthesisId': currentSynthesisId}) }}" class="btn btn-danger delete-synthesis" title="{{ 'ad.account.action.delete'|trans }}"><i class="fa fa-trash-o"></i></a>
+                                                <a href="{{ path('hopitalnumerique_autodiag_account_delete_synthesis_share', {'synthesis': synthesis.id, 'currentSynthesisId': currentSynthesisId}) }}" class="btn btn-danger delete-synthesis" title="{{ 'ad.account.action.delete'|trans }}">
+                                                    <i class="fa fa-trash-o"></i>
+                                                </a>
                                             {% else %}
-                                                <a href="{{ path('hopitalnumerique_autodiag_account_delete_synthesis', {'synthesis': synthesis.id}) }}" class="btn btn-danger delete-synthesis" title="{{ 'ad.account.action.delete'|trans }}"><i class="fa fa-trash-o"></i></a>
+                                                <a href="{{ path('hopitalnumerique_autodiag_account_delete_synthesis', {'synthesis': synthesis.id}) }}" class="btn btn-danger delete-synthesis" title="{{ 'ad.account.action.delete'|trans }}">
+                                                    <i class="fa fa-trash-o"></i>
+                                                </a>
                                             {% endif %}
                                         </div>
                                     </td>
