@@ -38,7 +38,7 @@
                                         {{ synthesis.completion ~ "%" }}
                                     </td>
                                     <td>
-                                        <div {% if synthesis.computing %}data-score-polling="{{ synthesis.id }}"{% endif %}>
+                                        <div {% if synthesis.computing %}data-score-polling="{{ synthesis.id }}"{% endif %} class="btn-group">
                                             {% if synthesis.entryId is not null %}
                                                 <a href="{{ path(routes.edit, {'entry': synthesis.entryId}) }}" class="btn btn-success" title="{{ 'ad.account.action.continue'|trans }}"><i class="fa fa-arrow-right"></i></a>
                                             {% endif %}
@@ -109,9 +109,10 @@
                                             -
                                         {% endif %}
                                     </td>
-                                    <td>
-                                        <div {% if synthesis.computing %}data-score-polling="{{ synthesis.id }}"{% endif %}>
+                                    <td width="25%">
+                                        <div {% if synthesis.computing %}data-score-polling="{{ synthesis.id }}"{% endif %} class="btn-group">
                                             <a href="{{ path(routes.restitution, {'synthesis': synthesis.id}) }}" class="btn btn-success" title="{{ 'ad.account.action.results'|trans }}"><i class="fa fa-bar-chart-o"></i></a>
+                                            <a href="{{ path('hopitalnumerique_autodiag_restitution_pdf', {'synthesis': synthesis.id}) }}" class="btn btn-success" title="{{ 'ad.account.action.results'|trans }}"><i class="fa fa-download"></i></a>
                                             {% if synthesis.user == user and synthesis.entries|length <= 1 %}
                                                 <a href="{{ path('hopitalnumerique_autodiag_unvalidate', {'synthesis': synthesis.id, "noLayout": noLayout}) }}" class="btn btn-warning" title="{{ 'ad.account.action.reopen'|trans }}"><i class="fa fa-arrow-up"></i></a>
                                             {% endif %}
