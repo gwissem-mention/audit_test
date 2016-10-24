@@ -351,29 +351,36 @@ class Objet implements RoutedItemInterface
      */
     private $communautePratiqueGroupe;
 
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="obj_associated_productions", type="boolean", options = {"comment" = "Afficher les productions associées pour l'objet ?"})
+     */
+    private $associatedProductions;
 
     /**
      * Initialisation de l'entitée (valeurs par défaut)
      */
     public function __construct()
     {
-        $this->dateCreation  = new \DateTime();
-        $this->nbVue         = 0;
-        $this->commentaires  = true;
-        $this->notes         = true;
-        $this->btnSociaux    = true;
-        $this->isInfraDoc    = false;
-        $this->isArticle     = false;
-        $this->lock          = false;
-        $this->vignette      = array();
-        $this->autodiags     = array();
-        $this->objets        = array();
-        $this->referencement = array();
-        $this->roles         = array();
-        $this->types         = array();
-        $this->ambassadeurs  = array();
-        $this->modules       = array();
-        $this->maitriseUsers = array();
+        $this->dateCreation          = new \DateTime();
+        $this->nbVue                 = 0;
+        $this->commentaires          = true;
+        $this->notes                 = true;
+        $this->btnSociaux            = true;
+        $this->associatedProductions = true;
+        $this->isInfraDoc            = false;
+        $this->isArticle             = false;
+        $this->lock                  = false;
+        $this->vignette              = [];
+        $this->autodiags             = [];
+        $this->objets                = [];
+        $this->referencement         = [];
+        $this->roles                 = [];
+        $this->types                 = [];
+        $this->ambassadeurs          = [];
+        $this->modules               = [];
+        $this->maitriseUsers         = [];
     }
 
 
@@ -487,8 +494,8 @@ class Objet implements RoutedItemInterface
      */
     public function setPath($path)
     {
-        if( is_null($path) && file_exists($this->getAbsolutePath( self::FICHIER_1 )) )
-            unlink($this->getAbsolutePath( self::FICHIER_1 ));
+        if (is_null($path) && file_exists($this->getAbsolutePath(self::FICHIER_1)))
+            unlink($this->getAbsolutePath(self::FICHIER_1));
 
         $this->path = $path;
 
@@ -513,8 +520,8 @@ class Objet implements RoutedItemInterface
      */
     public function setPath2($path2)
     {
-        if( is_null($path2) && file_exists($this->getAbsolutePath( self::FICHIER_2 )) )
-            unlink($this->getAbsolutePath( self::FICHIER_2 ));
+        if (is_null($path2) && file_exists($this->getAbsolutePath(self::FICHIER_2)))
+            unlink($this->getAbsolutePath(self::FICHIER_2));
 
         $this->path2 = $path2;
 
@@ -724,6 +731,7 @@ class Objet implements RoutedItemInterface
     public function setNbVue($nbVue)
     {
         $this->nbVue = $nbVue;
+
         return $this;
     }
 
@@ -744,7 +752,7 @@ class Objet implements RoutedItemInterface
      */
     public function setLockedBy($lockedBy)
     {
-        if( $lockedBy instanceof \HopitalNumerique\UserBundle\Entity\User )
+        if ($lockedBy instanceof \HopitalNumerique\UserBundle\Entity\User)
             $this->lockedBy = $lockedBy;
         else
             $this->lockedBy = null;
@@ -896,6 +904,7 @@ class Objet implements RoutedItemInterface
     public function setAutodiags(array $autodiags)
     {
         $this->autodiags = $autodiags;
+
         return $this;
     }
 
@@ -907,6 +916,7 @@ class Objet implements RoutedItemInterface
     public function addAutodiag($autodiag)
     {
         $this->autodiags[] = $autodiag;
+
         return $this;
     }
 
@@ -928,6 +938,7 @@ class Objet implements RoutedItemInterface
     public function setReferencement(array $referencement)
     {
         $this->referencement = $referencement;
+
         return $this;
     }
 
@@ -939,6 +950,7 @@ class Objet implements RoutedItemInterface
     public function addReferencement($referencement)
     {
         $this->referencement[] = $referencement;
+
         return $this;
     }
 
@@ -972,8 +984,7 @@ class Objet implements RoutedItemInterface
      */
     public function removeAmbassadeurs($ambassadeurs)
     {
-        foreach ($ambassadeurs as $ambassadeur)
-        {
+        foreach ($ambassadeurs as $ambassadeur) {
             $this->ambassadeurs->removeElement($ambassadeur);
         }
     }
@@ -1167,9 +1178,8 @@ class Objet implements RoutedItemInterface
      */
     public function getContenuById($id)
     {
-        foreach ($this->contenus as $contenu)
-        {
-            if($contenu->getId() === $id)
+        foreach ($this->contenus as $contenu) {
+            if ($contenu->getId() === $id)
                 return $contenu;
         }
 
@@ -1183,23 +1193,23 @@ class Objet implements RoutedItemInterface
      *
      * @return [type]
      */
-    public function getAbsolutePath( $type )
+    public function getAbsolutePath($type)
     {
         $result = null;
 
         switch ($type) {
             case self::FICHIER_1:
-                if( !is_null($this->path) )
+                if (!is_null($this->path))
                     $result = $this->path;
                 break;
 
             case self::FICHIER_2:
-                if( !is_null($this->path2) )
+                if (!is_null($this->path2))
                     $result = $this->path2;
                 break;
         }
 
-        if( is_null($result) )
+        if (is_null($result))
             return null;
 
         return $this->getUploadRootDir() . '/' . $result;
@@ -1212,34 +1222,30 @@ class Objet implements RoutedItemInterface
      *
      * @return [type]
      */
-    public function getWebPath( $type = null )
+    public function getWebPath($type = null)
     {
         $result = null;
 
-        if(is_null($type))
-        {
-            if( !is_null($this->path) )
-            {
+        if (is_null($type)) {
+            if (!is_null($this->path)) {
                 $result = $this->path;
             }
-        }
-        else
-        {
+        } else {
             switch ($type) {
                 case self::FICHIER_1:
-                    if( !is_null($this->path) )
+                    if (!is_null($this->path))
                         $result = $this->path;
                     break;
 
                 case self::FICHIER_2:
-                    if( !is_null($this->path2) )
+                    if (!is_null($this->path2))
                         $result = $this->path2;
                     break;
             }
         }
 
 
-        if( is_null($result) )
+        if (is_null($result))
             return null;
 
         return $this->getUploadDir() . '/' . $result;
@@ -1248,7 +1254,7 @@ class Objet implements RoutedItemInterface
     /**
      * Fonction qui renvoie le type mime de la piece jointe 1 ou 2
      */
-    public function getTypeMime( $type )
+    public function getTypeMime($type)
     {
         $result = null;
 
@@ -1262,7 +1268,7 @@ class Objet implements RoutedItemInterface
                 break;
         }
 
-        if( !$result || is_null($result) )
+        if (!$result || is_null($result))
             return "";
 
         return substr($result, strrpos($result, ".") + 1);
@@ -1271,7 +1277,7 @@ class Objet implements RoutedItemInterface
     public function getUploadRootDir()
     {
         // le chemin absolu du répertoire où les documents uploadés doivent être sauvegardés
-        return __WEB_DIRECTORY__.'/'.$this->getUploadDir();
+        return __WEB_DIRECTORY__ . '/' . $this->getUploadDir();
     }
 
     public function getUploadDir()
@@ -1285,18 +1291,18 @@ class Objet implements RoutedItemInterface
      */
     public function preUpload()
     {
-        if (null !== $this->file){
+        if (null !== $this->file) {
             //delete Old File
-            if ( file_exists($this->getAbsolutePath( self::FICHIER_1 )) )
-                unlink($this->getAbsolutePath( self::FICHIER_1 ));
+            if (file_exists($this->getAbsolutePath(self::FICHIER_1)))
+                unlink($this->getAbsolutePath(self::FICHIER_1));
 
             $this->path = $this->file->getClientOriginalName();
         }
 
-        if (null !== $this->file2){
+        if (null !== $this->file2) {
             //delete Old File
-            if ( file_exists($this->getAbsolutePath( self::FICHIER_2 )) )
-                unlink($this->getAbsolutePath( self::FICHIER_2 ));
+            if (file_exists($this->getAbsolutePath(self::FICHIER_2)))
+                unlink($this->getAbsolutePath(self::FICHIER_2));
 
             $this->path2 = $this->file2->getClientOriginalName();
         }
@@ -1308,19 +1314,19 @@ class Objet implements RoutedItemInterface
      */
     public function upload()
     {
-        if ( null === $this->file && null === $this->file2 )
+        if (null === $this->file && null === $this->file2)
             return;
 
         // s'il y a une erreur lors du déplacement du fichier, une exception
         // va automatiquement être lancée par la méthode move(). Cela va empêcher
         // proprement l'entité d'être persistée dans la base de données si erreur il y a
 
-        if ( null !== $this->file ){
+        if (null !== $this->file) {
             $this->file->move($this->getUploadRootDir(), $this->path);
             unset($this->file);
         }
 
-        if ( null !== $this->file2 ){
+        if (null !== $this->file2) {
             $this->file2->move($this->getUploadRootDir(), $this->path2);
             unset($this->file2);
         }
@@ -1331,10 +1337,10 @@ class Objet implements RoutedItemInterface
      */
     public function removeUpload()
     {
-        if ( $file = $this->getAbsolutePath( self::FICHIER_1 ) && file_exists( $this->getAbsolutePath( self::FICHIER_1 ) ) )
+        if ($file = $this->getAbsolutePath(self::FICHIER_1) && file_exists($this->getAbsolutePath(self::FICHIER_1)))
             unlink($file);
 
-        if ( $file2 = $this->getAbsolutePath( self::FICHIER_2 ) && file_exists( $this->getAbsolutePath( self::FICHIER_2 ) ) )
+        if ($file2 = $this->getAbsolutePath(self::FICHIER_2) && file_exists($this->getAbsolutePath(self::FICHIER_2)))
             unlink($file2);
     }
 
@@ -1631,15 +1637,13 @@ class Objet implements RoutedItemInterface
      */
     public function getDomainesId()
     {
-        $domainesId = array();
+        $domainesId = [];
 
-        if(is_null($this->domaines))
-        {
+        if (is_null($this->domaines)) {
             return $domainesId;
         }
 
-        foreach ($this->domaines as $domaine)
-        {
+        foreach ($this->domaines as $domaine) {
             $domainesId[] = $domaine->getId();
         }
 
@@ -1753,7 +1757,7 @@ class Objet implements RoutedItemInterface
 
     public function getFeedItemPubDate()
     {
-        return is_null($this->dateModification) ? $this->dateCreation : $this->dateModification ;
+        return is_null($this->dateModification) ? $this->dateCreation : $this->dateModification;
     }
 
     public function getFeedItemRouteName()
@@ -1763,10 +1767,10 @@ class Objet implements RoutedItemInterface
 
     public function getFeedItemRouteParameters()
     {
-        return array(
+        return [
             'id'    => $this->id,
-            'alias' => $this->alias
-        );
+            'alias' => $this->alias,
+        ];
     }
 
     public function getFeedItemUrlAnchor()
@@ -1871,9 +1875,30 @@ class Objet implements RoutedItemInterface
     {
         if (false !== strpos($this->resume, '<!-- pagebreak -->')) {
             $resumeExplode = explode('<!-- pagebreak -->', $this->resume);
+
             return html_entity_decode(strip_tags($resumeExplode[0]), 2 | 0, 'UTF-8');
         }
 
         return $this->resume;
+    }
+
+    /**
+     * @return boolean
+     */
+    public function isAssociatedProductions()
+    {
+        return $this->associatedProductions;
+    }
+
+    /**
+     * @param $associatedProductions
+     *
+     * @return Objet $this
+     */
+    public function setAssociatedProductions($associatedProductions)
+    {
+        $this->associatedProductions = $associatedProductions;
+
+        return $this;
     }
 }

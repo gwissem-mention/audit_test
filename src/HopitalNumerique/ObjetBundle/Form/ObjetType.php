@@ -180,6 +180,14 @@ class ObjetType extends AbstractType
                 ),
                 'attr'       => array( 'class'=> 'checkbox' )
             ))
+            ->add('associatedProductions', 'checkbox', array(
+                'required'   => false,
+                'label'      => 'Afficher les productions associées',
+                'label_attr' => array(
+                    'class' => 'col-md-7 control-label'
+                ),
+                'attr'       => array( 'class'=> 'checkbox' )
+            ))
             ->add('publicationPlusConsulte', 'checkbox', array(
                 'required'   => false,
                 'label'      => 'Afficher dans les plus consultées',
