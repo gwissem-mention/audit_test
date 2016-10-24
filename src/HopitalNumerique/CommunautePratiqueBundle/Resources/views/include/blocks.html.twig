@@ -314,16 +314,16 @@
             {% if canDeleteMembre %}
             <div class="action-fiche-user">
                 <div class="delete">
-                    <a onclick="CommunautePratique_User.desinscritGroupe({{ groupe.id }}, {{ user.id }});" title="Désinscrire l utilisateur"><em class="fa fa-times-circle"></em></a>
+                    <a onclick="CommunautePratique_User.desinscritGroupe({{ groupe.id }}, {{ user.id }});" title="Désinscrire l'utilisateur"><em class="fa fa-times-circle"></em></a>
                 </div>
                 {% if not groupe.hasAnimateur(user) and not user.hasRoleAdmin %}
                     <div class="actif">
                         {% if user.isActifInGroupe(groupe) %}
-                            <a onclick="CommunautePratique_User.ActiveInscriptionGroupe({{ groupe.id }}, {{ user.id }});" title="Désactiver l utilisateur">
+                            <a onclick="CommunautePratique_User.ActiveInscriptionGroupe({{ groupe.id }}, {{ user.id }});" title="Cette personne est bien membre du groupe. Cliquez pour la sortir du groupe">
                                 <em class='fa fa-check-circle green'></em>
                             </a>
                         {% else %}
-                            <a onclick="CommunautePratique_User.ActiveInscriptionGroupe({{ groupe.id }}, {{ user.id }});" title="Activer l utilisateur">
+                            <a onclick="CommunautePratique_User.ActiveInscriptionGroupe({{ groupe.id }}, {{ user.id }});" title="Cette personne n'est pas encore membre du groupe. Cliquez pour la faire entrer dans le groupe">
                                 <em class='fa fa-times-circle orange'> </em>
                             </a>
                         {% endif %}
