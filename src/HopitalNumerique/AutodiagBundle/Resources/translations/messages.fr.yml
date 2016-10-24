@@ -14,7 +14,7 @@ ad:
             continue: Continuer
             delete: Supprimer
             results: Résultats
-            reopen: Reprendre
+            reopen: Dévalider l'autodiagnostic
         domain_selection: Sélectionnez votre domaine :
         domain_all: Tous les domaines
         synthesis:
