@@ -42,6 +42,9 @@ class RestitutionPdfGenerator
             'result' => $resultItems,
         ]);
 
+        $now = (new \DateTime())->format('d/m/Y');
+        $name = $synthesis->getName();
+
         $options = array(
             'encoding'         => 'UTF-8',
             'javascript-delay' => 1000,
@@ -55,6 +58,7 @@ class RestitutionPdfGenerator
             'header-font-size' => '10',
             'footer-spacing'   => '10',
             'page-width' => '1024px',
+            'header-left' => "$name - $now",
             'footer-html'      => '<p style="font-size:10px;text-align:center;color:#999"> &copy; ANAP<br>Ces contenus extraits de l\'ANAP sont diffus&eacute;s gratuitement.<br>Toutefois, leur utilisation ou citation est soumise &agrave; l\'inscription de la mention suivante : "&copy; ANAP"</p>'
         );
 
