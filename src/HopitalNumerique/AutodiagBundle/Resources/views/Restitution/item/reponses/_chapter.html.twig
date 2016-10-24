@@ -10,7 +10,7 @@
             <td>{{ attribute.label }}</td>
             <td>
                 {{ attribute.responseText }}
-                {% if attribute.comment is not null %}
+                {% if attribute.comment is not null and attribute.comment|length > 0 %}
                     - <i class="small">{{ attribute.comment }}</i>
                 {% endif %}
             </td>
