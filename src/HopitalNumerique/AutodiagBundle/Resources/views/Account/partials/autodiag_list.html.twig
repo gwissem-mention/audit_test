@@ -42,6 +42,16 @@
                                             {% if synthesis.entryId is not null %}
                                                 <a href="{{ path(routes.edit, {'entry': synthesis.entryId}) }}" class="btn btn-success" title="{{ 'ad.account.action.continue'|trans }}"><i class="fa fa-arrow-right"></i></a>
                                             {% endif %}
+
+                                            {% if is_granted('validate', synthesis.synth) and synthesis.synth.canValidate %}
+                                                <a href="{{ path('hopitalnumerique_autodiag_validate', {'synthesis': synthesis.id, "noLayout": noLayout}) }}"
+                                                    class="btn btn-warning"
+                                                    title="{{ 'ad.account.action.validate'|trans }}"
+                                                >
+                                                    <i class="fa fa fa-arrow-down"></i>
+                                                </a>
+                                            {% endif %}
+
                                             <a href="{{ path('hopitalnumerique_autodiag_account_delete_synthesis', {'synthesis': synthesis.id}) }}" class="btn btn-danger delete-synthesis" title="{{ 'ad.account.action.delete'|trans }}"><i class="fa fa-trash-o"></i></a>
                                         </div>
                                     </td>

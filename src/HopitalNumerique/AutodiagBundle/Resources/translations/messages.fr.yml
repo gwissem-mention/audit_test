@@ -13,6 +13,7 @@ ad:
         action:
             continue: Continuer
             delete: Supprimer
+            validate: Valider l'autodiagnostic
             results: Résultats
             reopen: Dévalider l'autodiagnostic
         domain_selection: Sélectionnez votre domaine :

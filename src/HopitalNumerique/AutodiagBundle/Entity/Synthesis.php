@@ -196,13 +196,22 @@ class Synthesis
         return $this->validatedAt !== null;
     }
 
+    public function canValidate()
+    {
+        return $this->getAutodiag()->isPartialResultsAuthorized() === true || $this->getCompletion() === 100;
+    }
+
     /**
      * Validate
      *
-     * @return $this
+     * @return $this|false
      */
     public function validate()
     {
+        if (!$this->canValidate()) {
+            return false;
+        }
+
         $validatedAt = new \DateTime();
         $this->validatedAt = $validatedAt;
         foreach ($this->getEntries() as $entry) {
