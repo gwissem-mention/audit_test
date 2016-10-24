@@ -52,6 +52,8 @@ class ValidationController extends Controller
         $synthesis->validate();
         $this->getDoctrine()->getManager()->flush();
 
+        $this->addFlash('success', $this->get('translator')->trans('ad.validation.success'));
+
         return $this->redirectToRoute(
             true === $request->query->getBoolean('noLayout', false)
                 ? 'hopitalnumerique_autodiag_share_index_no_layout'

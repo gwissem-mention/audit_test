@@ -179,6 +179,7 @@ ad:
     validation:
         validate: Valider mes résultats
         unvalidate: Dévérouiller le questionnaire
+        success: L'autodiagnostic a bien été validé.
 
     actionplan:
         description: Description
