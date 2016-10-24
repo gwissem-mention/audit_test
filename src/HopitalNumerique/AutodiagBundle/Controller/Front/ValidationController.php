@@ -40,10 +40,12 @@ class ValidationController extends Controller
     }
 
     /**
+     * @param Request $request
      * @param Synthesis $synthesis
+     * @param bool $referer
      * @return \Symfony\Component\HttpFoundation\RedirectResponse
      */
-    public function validateAction(Request $request, Synthesis $synthesis)
+    public function validateAction(Request $request, Synthesis $synthesis, $referer = false)
     {
         if (!$this->isGranted('validate', $synthesis)) {
             throw new AccessDeniedHttpException();
@@ -59,6 +61,10 @@ class ValidationController extends Controller
 
         $this->addFlash('success', $this->get('translator')->trans('ad.validation.success'));
 
+        if (false !== $referer) {
+            return $this->redirect($request->headers->get('referer'));
+        }
+
         return $this->redirectToRoute(
             true === $request->query->getBoolean('noLayout', false)
                 ? 'hopitalnumerique_autodiag_share_index_no_layout'
@@ -72,9 +78,10 @@ class ValidationController extends Controller
     /**
      * @param Request $request
      * @param Synthesis $synthesis
+     * @param bool $referer
      * @return \Symfony\Component\HttpFoundation\RedirectResponse
      */
-    public function unvalidateAction(Request $request, Synthesis $synthesis)
+    public function unvalidateAction(Request $request, Synthesis $synthesis, $referer = false)
     {
         if (!$this->isGranted('validate', $synthesis)) {
             throw new AccessDeniedHttpException();
@@ -84,6 +91,12 @@ class ValidationController extends Controller
         // On supprime tous les partages si la synthèse est dévalidée
         $synthesis->setShares(new ArrayCollection());
         $this->getDoctrine()->getManager()->flush();
+
+        $this->addFlash('success', $this->get('translator')->trans('ad.validation.unvalidate_success'));
+
+        if (false !== $referer) {
+            return $this->redirect($request->headers->get('referer'));
+        }
 
         return $this->redirectToRoute(
             true === $request->query->getBoolean('noLayout', false)

@@ -180,6 +180,8 @@ ad:
         validate: Valider mes résultats
         unvalidate: Dévérouiller le questionnaire
         success: L'autodiagnostic a bien été validé.
+        unvalidate_success: L'autodiagnostic a bien été dévalidé.
+        error: Vous ne pouvez pas valider cet autodiagnostic.
 
     actionplan:
         description: Description

@@ -56,12 +56,12 @@ hopitalnumerique_autodiag_validation_index:
     defaults: { _controller: HopitalNumeriqueAutodiagBundle:Front/Validation:index }
 
 hopitalnumerique_autodiag_validate:
-    path:     /autodiagnostic/validation/{synthesis}/validate
-    defaults: { _controller: HopitalNumeriqueAutodiagBundle:Front/Validation:validate }
+    path:     /autodiagnostic/validation/{synthesis}/validate/{referer}
+    defaults: { _controller: HopitalNumeriqueAutodiagBundle:Front/Validation:validate, referer: false }
 
 hopitalnumerique_autodiag_unvalidate:
-    path:     /autodiagnostic/validation/{synthesis}/unvalidate
-    defaults: { _controller: HopitalNumeriqueAutodiagBundle:Front/Validation:unvalidate }
+    path:     /autodiagnostic/validation/{synthesis}/unvalidate/{referer}
+    defaults: { _controller: HopitalNumeriqueAutodiagBundle:Front/Validation:unvalidate, referer: false }
 
 
 hopitalnumerique_autodiag_share_index:

@@ -1,6 +1,7 @@
 <?php
 namespace Nodevo\MailBundle\Manager;
 
+use HopitalNumerique\DomaineBundle\Entity\Domaine;
 use HopitalNumerique\ObjetBundle\Entity\Objet;
 use Nodevo\MailBundle\Entity\Mail;
 use Nodevo\ToolsBundle\Manager\Manager as BaseManager;
@@ -1163,23 +1164,26 @@ class MailManager extends BaseManager
      */
     public function sendAlertePublicationCommentaireMail(Objet $objet, $url)
     {
-        /** @var Mail $courriel */
         $courriel = $this->findOneById(Mail::MAIL_ALERTE_PUBLICATION_COMMENTAIRE);
 
+        /** @var Domaine $domaine */
         foreach ($objet->getDomaines() as $domaine) {
+            /** @var Mail $courriel */
+            $currentCourriel = clone($courriel);
+
             $destinataire = $domaine->getAdresseMailContact();
 
             $content = $this->replaceContent(
-                $courriel->getBody(),
+                $currentCourriel->getBody(),
                 null,
                 [
                     'nomPublication' => $objet->getTitre(),
-                    'urlPublication' => $url,
+                    'urlPublication' => $domaine->getUrl() . $url,
                 ]
             );
 
-            $courriel->setBody($content);
-            $message = $this->generationMail(null, $courriel);
+            $currentCourriel->setBody($content);
+            $message = $this->generationMail(null, $currentCourriel);
             $message->setTo($destinataire);
 
             $this->mailer->send($message);

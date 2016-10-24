@@ -45,7 +45,7 @@
                                             {% endif %}
 
                                             {% if is_granted('validate', synthesis.synth) and synthesis.synth.canValidate %}
-                                                <a href="{{ path('hopitalnumerique_autodiag_validate', {'synthesis': synthesis.id, "noLayout": noLayout}) }}"
+                                                <a href="{{ path('hopitalnumerique_autodiag_validate', {'synthesis': synthesis.id, "referer": true, "noLayout": noLayout}) }}"
                                                     class="btn btn-warning"
                                                     title="{{ 'ad.account.action.validate'|trans }}"
                                                 >
@@ -113,7 +113,7 @@
                                     <td width="30%">
                                         <div {% if synthesis.computing %}data-score-polling="{{ synthesis.id }}"{% endif %} class="btn-group btn-sm">
                                             {% if synthesis.user == user and synthesis.entries|length <= 1 %}
-                                                <a href="{{ path('hopitalnumerique_autodiag_unvalidate', {'synthesis': synthesis.id, "noLayout": noLayout}) }}" class="btn btn-warning" title="{{ 'ad.account.action.reopen'|trans }}">
+                                                <a href="{{ path('hopitalnumerique_autodiag_unvalidate', {'synthesis': synthesis.id, "referer": true, "noLayout": noLayout}) }}" class="btn btn-warning" title="{{ 'ad.account.action.reopen'|trans }}">
                                                     <i class="fa fa-arrow-up"></i>
                                                 </a>
                                             {% endif %}

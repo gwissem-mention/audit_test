@@ -40,10 +40,20 @@ class CommentaireController extends Controller
             $infraDoc = $this->get('hopitalnumerique_objet.manager.contenu')->findOneBy(['id' => $idInfraDoc]);
             $objet = $infraDoc->getObjet();
             $commentaire->setContenu($infraDoc);
+            $publicationPath = $this->generateUrl('hopital_numerique_publication_publication_contenu', [
+                'id' => $objet->getId(),
+                'alias' => $objet->getAlias(),
+                'idc' => $idInfraDoc,
+                'aliasc' => $infraDoc->getAlias(),
+            ]);
         } //Ou un objet
         else {
             $idObjet = $request->request->get('objetId');
             $objet = $this->get('hopitalnumerique_objet.manager.objet')->findOneBy(['id' => $idObjet]);
+            $publicationPath = $this->generateUrl('hopital_numerique_publication_publication_objet', [
+                'id' => $objet->getId(),
+                'alias' => $objet->getAlias(),
+            ]);
         }
         $user = $this->getUser();
 
@@ -58,10 +68,9 @@ class CommentaireController extends Controller
 
         $this
             ->get('nodevo_mail.manager.mail')
-            ->sendAlertePublicationCommentaireMail($objet, $request->headers->get('referer'))
+            ->sendAlertePublicationCommentaireMail($objet, $publicationPath)
         ;
 
-        //return new Response('{"success":true}', 200);
         return $this->render('HopitalNumeriquePublicationBundle:Publication:Partials/commentaire.html.twig', [
             'commentaire' => $commentaire,
         ]);
