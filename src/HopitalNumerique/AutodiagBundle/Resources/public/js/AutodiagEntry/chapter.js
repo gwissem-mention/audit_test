@@ -56,7 +56,6 @@ Chapter.prototype = {
             for (var j in this.childrens[i].attributes) {
                 total++;
                 filled += this.childrens[i].attributes[j].isFilled() ? 1 : 0;
-                console.log(filled);
             }
         }
 
@@ -146,7 +145,6 @@ Chapter.prototype = {
         }
 
         this.completionChanged();
-        // this.callbacks.onCompletionChange.fire();
         this.callbacks.onNotConcerned.fire(this);
     },
 

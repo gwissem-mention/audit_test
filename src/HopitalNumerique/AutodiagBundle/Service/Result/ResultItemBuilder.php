@@ -47,6 +47,8 @@ class ResultItemBuilder
 
     public function build(Container $container, Synthesis $synthesis)
     {
+        $this->responses = null;
+
         $resultItem = new Item();
 
         $resultItem->setLabel($container->getExtendedLabel());
@@ -97,6 +99,7 @@ class ResultItemBuilder
         $itemAttribute = new ItemAttribute(
             sprintf('%s. %s', $attribute['code'], $attribute['attribute_label'])
         );
+        $itemAttribute->comment = $attribute['value_comment'];
         $itemAttribute->setColorationInversed($attribute['colorationInversed']);
         $item->addAttribute($itemAttribute);
 

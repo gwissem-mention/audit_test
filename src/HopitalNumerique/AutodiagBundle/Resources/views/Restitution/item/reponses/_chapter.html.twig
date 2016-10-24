@@ -8,7 +8,12 @@
     {% for attribute in resultItem.attributes %}
         <tr>
             <td>{{ attribute.label }}</td>
-            <td>{{ attribute.responseText }}</td>
+            <td>
+                {{ attribute.responseText }}
+                {% if attribute.comment is not null %}
+                    - <span class="small">{{ attribute.comment }}</span>
+                {% endif %}
+            </td>
             <td class="attribute">
                 {% if attribute.score is not null and attribute.responseText != '-' and attribute.colored != false and attribute.responseValue != -1 %}
                     <div class="attribute-mood">

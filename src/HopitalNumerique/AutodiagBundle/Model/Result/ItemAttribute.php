@@ -8,6 +8,7 @@ class ItemAttribute
 
     public $responseText;
     public $responseValue;
+    public $comment;
 
     public $score;
 

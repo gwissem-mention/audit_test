@@ -185,7 +185,7 @@ class ValueRepository extends EntityRepository
         $qb
             ->from('HopitalNumeriqueAutodiagBundle:Autodiag\Attribute', 'attribute')
             ->select(
-                'val.id as value_id, val.value as value_value',
+                'val.id as value_id, val.value as value_value, val.comment as value_comment',
                 'entry.id as entry_id',
                 'attribute.id as attribute_id, attribute.code, attribute.label as attribute_label,
                     attribute.type, attribute.colored, attribute.colorationInversed',
