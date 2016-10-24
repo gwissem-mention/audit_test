@@ -39,15 +39,7 @@ Chapter.prototype = {
     {
         var instance = this;
         attribute.onChange(function() {
-            instance.callbacks.onCompletionChange.fire(
-                instance.getCompletion()
-            );
-
-            if (instance.parent !== undefined) {
-                instance.parent.callbacks.onCompletionChange.fire(
-                    instance.parent.getCompletion()
-                );
-            }
+            instance.completionChanged();
         });
     },
 
@@ -64,6 +56,7 @@ Chapter.prototype = {
             for (var j in this.childrens[i].attributes) {
                 total++;
                 filled += this.childrens[i].attributes[j].isFilled() ? 1 : 0;
+                console.log(filled);
             }
         }
 
@@ -152,12 +145,21 @@ Chapter.prototype = {
             this.childrens[j].setNotConcerned();
         }
 
-        this.callbacks.onCompletionChange.fire();
+        this.completionChanged();
+        // this.callbacks.onCompletionChange.fire();
         this.callbacks.onNotConcerned.fire(this);
     },
 
     onNotConcerned: function(callback)
     {
         this.callbacks.onNotConcerned.add(callback);
+    },
+
+    completionChanged: function()
+    {
+        this.callbacks.onCompletionChange.fire(this.getCompletion());
+        if (this.parent !== undefined) {
+            this.parent.completionChanged();
+        }
     }
 };
