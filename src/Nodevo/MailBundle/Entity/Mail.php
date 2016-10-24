@@ -18,14 +18,12 @@ use Nodevo\ToolsBundle\Validator\Constraints as Nodevo;
  */
 class Mail
 {
-    /**
-     * @var integer ID du courriel de recommandation à un ami
-     */
+    /** @var integer ID du courriel de recommandation à un ami */
     const MAIL_RECOMMANDATION_AMI_ID = 63;
-    /**
-     * @var integer ID du courriel de partage des résultats d'autodiag
-     */
+    /** @var integer ID du courriel de partage des résultats d'autodiag */
     const MAIL_SHARE_AUTODIAG_RESULT_ID = 68;
+    /** @var integer ID du courriel d'alerte de publication d'un commentaire */
+    const MAIL_ALERTE_PUBLICATION_COMMENTAIRE = 69;
 
 
     /**
@@ -117,13 +115,13 @@ class Mail
 
     public function __construct()
     {
-        $this->params = array();
+        $this->params = [];
     }
 
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
@@ -146,7 +144,7 @@ class Mail
     /**
      * Get objet
      *
-     * @return string 
+     * @return string
      */
     public function getObjet()
     {
@@ -169,7 +167,7 @@ class Mail
     /**
      * Get description
      *
-     * @return string 
+     * @return string
      */
     public function getDescription()
     {
@@ -192,7 +190,7 @@ class Mail
     /**
      * Get expediteurMail
      *
-     * @return string 
+     * @return string
      */
     public function getExpediteurMail()
     {
@@ -215,7 +213,7 @@ class Mail
     /**
      * Get expediteurName
      *
-     * @return string 
+     * @return string
      */
     public function getExpediteurName()
     {
@@ -238,7 +236,7 @@ class Mail
     /**
      * Get body
      *
-     * @return string 
+     * @return string
      */
     public function getBody()
     {
@@ -254,7 +252,7 @@ class Mail
     {
         return $this->params;
     }
-    
+
     /**
      * Set params
      *

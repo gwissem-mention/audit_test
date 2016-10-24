@@ -54,7 +54,7 @@ class AutodiagEntriesExport extends AbstractExport
         foreach ($syntheses as $synthesis) {
             if ($synthesis->getEntries()->count() === 1) {
                 $this->writeSynthesisRows($synthesis, $sheet, $column);
-                $column = $this->incrementColumn($column, 2);
+                $column = $this->incrementColumn($column, 3);
             }
         }
 
@@ -103,7 +103,7 @@ class AutodiagEntriesExport extends AbstractExport
             $this->writeSynthesisItem($item, $sheet, $column, $row);
             $sheet->setCellValue(sprintf('%s%s', $column, self::STARTING_ROW), 'Réponse');
             $sheet->setCellValue(sprintf('%s%s', $this->incrementColumn($column), self::STARTING_ROW), 'Valeur');
-
+            $sheet->setCellValue(sprintf('%s%s', $this->incrementColumn($column, 2), self::STARTING_ROW), 'Commentaire');
         }
     }
 
@@ -116,9 +116,9 @@ class AutodiagEntriesExport extends AbstractExport
             $sheet->setCellValue(sprintf('%s%s', 'C', $row), $attribute->label);
             $sheet->setCellValue(sprintf('%s%s', 'D', $row), $attribute->weight);
 
-
             $sheet->setCellValue(sprintf('%s%s', $column, $row), $attribute->responseText);
             $sheet->setCellValue(sprintf('%s%s', $this->incrementColumn($column), $row), $attribute->responseValue);
+            $sheet->setCellValue(sprintf('%s%s', $this->incrementColumn($column, 2), $row), $attribute->comment);
 
             $row++;
         }

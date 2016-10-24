@@ -6,7 +6,8 @@
 
 {% set routes = {
     "edit": noLayout ? "hopitalnumerique_autodiag_entry_edit_no_layout" : "hopitalnumerique_autodiag_entry_edit",
-    "restitution": noLayout ? "hopitalnumerique_autodiag_restitution_index_no_layout" : "hopitalnumerique_autodiag_restitution_index"
+    "restitution": noLayout ? "hopitalnumerique_autodiag_restitution_index_no_layout" : "hopitalnumerique_autodiag_restitution_index",
+    "share": noLayout ? "hopitalnumerique_autodiag_share_index_no_layout" : "hopitalnumerique_autodiag_share_index"
 } %}
 
 <div class="container-fluid">
@@ -38,10 +39,20 @@
                                         {{ synthesis.completion ~ "%" }}
                                     </td>
                                     <td>
-                                        <div {% if synthesis.computing %}data-score-polling="{{ synthesis.id }}"{% endif %}>
+                                        <div {% if synthesis.computing %}data-score-polling="{{ synthesis.id }}"{% endif %} class="btn-group">
                                             {% if synthesis.entryId is not null %}
                                                 <a href="{{ path(routes.edit, {'entry': synthesis.entryId}) }}" class="btn btn-success" title="{{ 'ad.account.action.continue'|trans }}"><i class="fa fa-arrow-right"></i></a>
                                             {% endif %}
+
+                                            {% if is_granted('validate', synthesis.synth) and synthesis.synth.canValidate %}
+                                                <a href="{{ path('hopitalnumerique_autodiag_validate', {'synthesis': synthesis.id, "noLayout": noLayout}) }}"
+                                                    class="btn btn-warning"
+                                                    title="{{ 'ad.account.action.validate'|trans }}"
+                                                >
+                                                    <i class="fa fa fa-arrow-down"></i>
+                                                </a>
+                                            {% endif %}
+
                                             <a href="{{ path('hopitalnumerique_autodiag_account_delete_synthesis', {'synthesis': synthesis.id}) }}" class="btn btn-danger delete-synthesis" title="{{ 'ad.account.action.delete'|trans }}"><i class="fa fa-trash-o"></i></a>
                                         </div>
                                     </td>
@@ -99,9 +110,11 @@
                                             -
                                         {% endif %}
                                     </td>
-                                    <td>
-                                        <div {% if synthesis.computing %}data-score-polling="{{ synthesis.id }}"{% endif %}>
+                                    <td width="30%">
+                                        <div {% if synthesis.computing %}data-score-polling="{{ synthesis.id }}"{% endif %} class="btn-group btn-sm">
                                             <a href="{{ path(routes.restitution, {'synthesis': synthesis.id}) }}" class="btn btn-success" title="{{ 'ad.account.action.results'|trans }}"><i class="fa fa-bar-chart-o"></i></a>
+                                            <a href="{{ path('hopitalnumerique_autodiag_restitution_pdf', {'synthesis': synthesis.id}) }}" class="btn btn-success" title="{{ 'ad.account.action.pdf'|trans }}"><i class="fa fa-download"></i></a>
+                                            <a href="{{ path(routes.share, {'synthesis': synthesis.id}) }}" class="btn btn-success" title="{{ 'ad.account.action.share'|trans }}"><i class="fa fa-share"></i></a>
                                             {% if synthesis.user == user and synthesis.entries|length <= 1 %}
                                                 <a href="{{ path('hopitalnumerique_autodiag_unvalidate', {'synthesis': synthesis.id, "noLayout": noLayout}) }}" class="btn btn-warning" title="{{ 'ad.account.action.reopen'|trans }}"><i class="fa fa-arrow-up"></i></a>
                                             {% endif %}

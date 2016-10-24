@@ -13,8 +13,11 @@ ad:
         action:
             continue: Continuer
             delete: Supprimer
+            validate: Valider l'autodiagnostic
             results: Résultats
-            reopen: Reprendre
+            reopen: Dévalider l'autodiagnostic
+            pdf: Télécharger le résultat en PDF
+            share: Partager
         domain_selection: Sélectionnez votre domaine :
         domain_all: Tous les domaines
         synthesis:
@@ -176,6 +179,7 @@ ad:
     validation:
         validate: Valider mes résultats
         unvalidate: Dévérouiller le questionnaire
+        success: L'autodiagnostic a bien été validé.
 
     actionplan:
         description: Description

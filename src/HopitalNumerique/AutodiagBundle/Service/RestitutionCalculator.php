@@ -239,6 +239,7 @@ class RestitutionCalculator
         $itemAttribute = new ItemAttribute(
             sprintf('%s. %s', $attribute['code'], $attribute['attribute_label'])
         );
+        $itemAttribute->comment = $attribute['value_comment'];
         $itemAttribute->setColorationInversed($attribute['colorationInversed']);
         $item->addAttribute($itemAttribute);
 

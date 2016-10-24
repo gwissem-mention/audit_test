@@ -236,6 +236,18 @@
                                 </div>
 
                                 <div class="form-group">
+                                    {{ form_label(form.associatedProductions) }}
+                                    <div class="col-md-5">
+                                        {{ form_widget(form.associatedProductions) }}
+                                    </div>
+                                    <div class="col-md-5 col-md-offset-7">
+                                        <div class="help-block">
+                                            {{ form_errors(form.associatedProductions) }}
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
                                     {{ form_label(form.commentaires) }}
                                     <div class="col-md-5">
                                         {{ form_widget(form.commentaires) }}

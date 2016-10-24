@@ -39,15 +39,7 @@ Chapter.prototype = {
     {
         var instance = this;
         attribute.onChange(function() {
-            instance.callbacks.onCompletionChange.fire(
-                instance.getCompletion()
-            );
-
-            if (instance.parent !== undefined) {
-                instance.parent.callbacks.onCompletionChange.fire(
-                    instance.parent.getCompletion()
-                );
-            }
+            instance.completionChanged();
         });
     },
 
@@ -152,12 +144,20 @@ Chapter.prototype = {
             this.childrens[j].setNotConcerned();
         }
 
-        this.callbacks.onCompletionChange.fire();
+        this.completionChanged();
         this.callbacks.onNotConcerned.fire(this);
     },
 
     onNotConcerned: function(callback)
     {
         this.callbacks.onNotConcerned.add(callback);
+    },
+
+    completionChanged: function()
+    {
+        this.callbacks.onCompletionChange.fire(this.getCompletion());
+        if (this.parent !== undefined) {
+            this.parent.completionChanged();
+        }
     }
 };
