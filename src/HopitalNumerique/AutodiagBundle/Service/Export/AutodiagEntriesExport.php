@@ -36,7 +36,7 @@ class AutodiagEntriesExport extends AbstractExport
      */
     public function exportList($syntheses)
     {
-        ini_set('max_execution_time', '200s');
+        ini_set('max_execution_time', '1000s');
 
         if (!is_array($syntheses) || count($syntheses) === 0) {
             throw new \Exception('Syntheses must be an array of Synthesis');
