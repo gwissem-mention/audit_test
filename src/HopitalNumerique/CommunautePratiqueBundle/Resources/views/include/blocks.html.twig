@@ -340,6 +340,13 @@
                         <a onclick="Contact_Popup.display({'{{ user.email }}':'{{ user.prenomNom }}'}, '{{ path(app.request.get('_route'), app.request.get('_route_params')) }}');"  title="Entrer en contact avec {{ user.appellation }}"><em class="icon icon-email5"></em> <span class="no-link">{{ user.prenomNom }}</span></a>
                     {% endif %}
                 </div>
+                <div class="region">
+                    {{ user.region ? user.region.libelle : '' }}
+                    {% if user.etablissementRattachementSante is not null and user.region.libelle != '' and user.etablissementRattachementSante.codePostal != '' %}
+                        -
+                    {% endif %}
+                    {{ user.etablissementRattachementSante ? user.etablissementRattachementSante.codePostal : '' }}
+                </div>
                 {% if groupe is not null and groupe.hasAnimateur(user) %}
                     <div class="animateur">
                         <em class="fa icon-speaker15"></em>
@@ -351,11 +358,21 @@
                 <span >
                     <i class="fa fa-info-circle" aria-hidden="true"></i> <a href="mailto:{{ user.email }}">Envoyer un e-mail</a>
                     </br>
-                    <i class="fa fa-phone"></i> {{ user.telephoneDirect != '' ? user.telephoneDirect : 'Téléphone non renseigné' }}
+                    <i class="fa fa-phone"></i> {% if user.telephoneDirect != '' or user.telephonePortable != '' %}{{ user.telephoneDirect != '' ? user.telephoneDirect : '' }}{{ user.telephoneDirect != '' and user.telephonePortable != '' ? ', ' : '' }}{{ user.telephonePortable != '' ? user.telephonePortable : '' }}{% else %}Téléphone non renseigné{% endif %}
                 </span>
             </div>
-            <div class="type">
+            <div class="etablissement">
                 <em class="icon icon-hospital11"></em>
+                <div class="contenu">
+                    {% if user.etablissementRattachementSante is not null %}
+                        {{ user.etablissementRattachementSante.nom }}
+                    {% else %}
+                        {{ user.autreStructureRattachementSante != '' ? user.autreStructureRattachementSante : 'Nom d\'établissement non renseigné' }}
+                    {% endif %}
+                </div>
+            </div>
+            <div class="type">
+                <em class="icon icon-medical55"></em>
                 <div class="contenu">
                     {{ user.statutEtablissementSante is not null ? user.statutEtablissementSante.libelle : 'Type d\'établissement non renseigné' }}
                     {% if user.typeActivite|length > 0 -%}
@@ -368,7 +385,7 @@
             <div class="fonction">
                 <em class="icon icon-users149"></em>
                 <div class="contenu">
-                    {{ user.fonctionDansEtablissementSante != '' ? user.fonctionDansEtablissementSante : 'Fonction non renseignée' }}
+                    {{ user.fonctionDansEtablissementSante != '' ? user.fonctionDansEtablissementSante : user.fonctionDansEtablissementSanteReferencement is not null ? user.fonctionDansEtablissementSanteReferencement.libelle : 'Fonction non renseignée' }}
                 </div>
             </div>
             <div class="liens">

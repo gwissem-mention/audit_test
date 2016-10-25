@@ -11,7 +11,7 @@
     .communaute-de-pratiques-annuaire-users .pagination { margin: 0 0 30px 0; }
 
 /* Bloc d'un utilisateur */
-.communaute-de-pratiques-bloc-user { background-color: #f6f6f6;margin: 0 0 30px 0;padding: 15px; height:297px;}
+.communaute-de-pratiques-bloc-user { background-color: #f6f6f6;margin: 0 0 30px 0;padding: 15px; height:360px;}
     .communaute-de-pratiques-bloc-user .action-fiche-user {float:right;}
     .communaute-de-pratiques-bloc-user .delete {margin: 0 0 0 2px; }
     .communaute-de-pratiques-bloc-user .actif  {margin: 0 0 0 2px; }
@@ -19,13 +19,14 @@
     .communaute-de-pratiques-bloc-user .actif .orange {color: #FF9933 }
     .communaute-de-pratiques-bloc-user .identite { height:65px;overflow: hidden; }
         .communaute-de-pratiques-bloc-user .illustration { float: left;margin: 0 6px 0 0; }
-        .communaute-de-pratiques-bloc-user .nom { font-size: 14px;font-weight: bold; }
-            .communaute-de-pratiques-bloc-user .nom .icon { color: #d60030;font-size: 15px;vertical-align: middle; }
+        .communaute-de-pratiques-bloc-user .nom { font-size: 12px;font-weight: bold; }
+            .communaute-de-pratiques-bloc-user .nom .icon { color: #d60030;font-size: 12px;vertical-align: middle; }
+        .communaute-de-pratiques-bloc-user .region { font-size: 10px; }
         .communaute-de-pratiques-bloc-user .animateur { font-size: 12px; }
             .communaute-de-pratiques-bloc-user .animateur .icon { color: #d60030;vertical-align: middle; }
-    .communaute-de-pratiques-bloc-user .type, .communaute-de-pratiques-bloc-user .fonction { clear: left;color: #777;line-height: 15px;overflow: hidden;padding: 0 8px; }
-        .communaute-de-pratiques-bloc-user .type .icon, .communaute-de-pratiques-bloc-user .fonction .icon { float: left;display: block;float: left;font-size: 34px;padding: 12px 0 0;width: 48px; }
-        .communaute-de-pratiques-bloc-user .type .contenu, .communaute-de-pratiques-bloc-user .fonction .contenu { align-items: center;-webkit-align-items: center;display: flex;height: 55px;margin: 0 0 0 48px; }
+    .communaute-de-pratiques-bloc-user .type, .communaute-de-pratiques-bloc-user .fonction, .communaute-de-pratiques-bloc-user .etablissement { clear: left;color: #777;line-height: 15px;overflow: hidden;padding: 0 6px; }
+        .communaute-de-pratiques-bloc-user .type .icon, .communaute-de-pratiques-bloc-user .fonction .icon, .communaute-de-pratiques-bloc-user .etablissement .icon { float: left;display: block;float: left;font-size: 30px;padding: 8px 0 0;width: 48px; }
+        .communaute-de-pratiques-bloc-user .type .contenu, .communaute-de-pratiques-bloc-user .fonction .contenu, .communaute-de-pratiques-bloc-user .etablissement .contenu { align-items: center;-webkit-align-items: center;display: flex;height: 55px;margin: 0 0 0 38px; }
     .communaute-de-pratiques-bloc-user .liens { font-size: 12px;padding: 8px;text-align: center; }
         .communaute-de-pratiques-bloc-user .liens a, .communaute-de-pratiques-bloc-user .liens span { display: block;margin: 2px 0 0 0;padding: 4px 0; }
         .communaute-de-pratiques-bloc-user .liens .informations { background-color: #d60030; }
