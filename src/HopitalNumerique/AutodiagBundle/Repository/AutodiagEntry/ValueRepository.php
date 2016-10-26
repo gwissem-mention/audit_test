@@ -43,68 +43,6 @@ class ValueRepository extends EntityRepository
         return $qb->getQuery()->getResult();
     }
 
-    /**
-     * @deprecated
-     */
-    public function getAllOriginalValuesByAutodiagAndContainer(Container $container)
-    {
-        $conn = $this->getEntityManager()->getConnection();
-        $sql = "
-            SELECT
-                attribute.id AS attribute_id,
-                attribute.type AS attribute_type,
-                entry_value.value AS value,
-                entry.id AS entry_id,
-                attribute.type AS type,
-                weight.weight as weight,
-                weight.container_id as container_id,
-                MAX(opt.option_value) as highest,
-                MIN(opt.option_value) as lowest
-            FROM ad_entry_value entry_value
-            INNER JOIN ad_entry entry ON entry_value.autodiagentry_id = entry.id
-            INNER JOIN ad_autodiag_attribute attribute ON entry_value.attribute_id = attribute.id
-            INNER JOIN ad_autodiag_attribute_weight weight ON weight.attribute_id = attribute.id
-            LEFT JOIN ad_autodiag_attribute_option opt ON opt.attribute_id = attribute.id AND opt.option_value <> '-1'
-            WHERE entry.copy = 0
-            AND weight.container_id IN (" . implode(',', $container->getNestedContainerIds()) . ")
-            AND entry.copy = 0
-            GROUP BY entry_value.id
-        ";
-
-        $stmt = $conn->query($sql);
-        $data = [];
-        while ($row = $stmt->fetch()) {
-            if (!isset($data[$row['entry_id']])) {
-                $data[$row['entry_id']] = [];
-            }
-
-            $data[$row['entry_id']][] = $row;
-        }
-        return $data;
-    }
-
-    /**
-     * @deprecated
-     */
-    public function getSynthesisValues(Synthesis $synthesis)
-    {
-        $qb = $this->createQueryBuilder('v');
-        $qb
-            ->select(
-                'attribute.id as attribute_id',
-                'v.value'
-            )
-            ->join('v.attribute', 'attribute')
-            ->join('v.entry', 'entry')
-            ->join('entry.syntheses', 'syntheses')
-            ->where('syntheses.id = :synthesis_id')
-            ->groupBy('v.id')
-            ->setParameter('synthesis_id', $synthesis->getId())
-        ;
-
-        return $qb->getQuery()->getArrayResult();
-    }
-
     public function getSynthesisValuesForAlgorithm(Synthesis $synthesis)
     {
         $qb = $this->createQueryBuilder('v');
@@ -221,5 +159,42 @@ class ValueRepository extends EntityRepository
         });
 
         return $results;
+    }
+
+    /**
+     * Get entry values intersection from $synthesis, between $synthesis and $reference
+     *
+     * @param Synthesis $synthesis
+     * @param Synthesis $reference
+     * @return array
+     */
+    public function findAttributeIdsIntersection(Synthesis $synthesis, Synthesis $reference)
+    {
+        $qb = $this->createQueryBuilder('v');
+        $qb
+            ->select('attribute.id')
+            ->join('v.attribute', 'attribute')
+            ->join('v.entry', 'entry')
+            ->join('entry.syntheses', 'synthesis')
+
+            ->join(Synthesis::class, 'reference', Join::WITH, 'reference.id = :reference_id')
+            ->join('reference.entries', 'reference_entry')
+            ->join('reference_entry.values', 'values', Join::WITH, 'values.attribute = v.attribute')
+
+            ->where('synthesis.id = :synthesis_id')
+            ->setParameters([
+                'synthesis_id' => $synthesis->getId(),
+                'reference_id' => $reference->getId(),
+            ])
+        ;
+
+        $data = $qb->getQuery()->getResult();
+        $result = [];
+
+        array_walk($data, function ($element) use (&$result) {
+             $result[$element['id']] = true;
+        });
+
+        return $result;
     }
 }

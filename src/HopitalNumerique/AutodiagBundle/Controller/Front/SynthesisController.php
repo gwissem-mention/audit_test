@@ -4,10 +4,13 @@ namespace HopitalNumerique\AutodiagBundle\Controller\Front;
 
 use HopitalNumerique\AutodiagBundle\Entity\Autodiag;
 use HopitalNumerique\AutodiagBundle\Entity\AutodiagEntry;
+use HopitalNumerique\AutodiagBundle\Form\Type\Synthesis\CompareType;
 use HopitalNumerique\AutodiagBundle\Form\Type\SynthesisType;
+use HopitalNumerique\AutodiagBundle\Model\Synthesis\CompareCommand;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 
 class SynthesisController extends Controller
 {
@@ -61,8 +64,38 @@ class SynthesisController extends Controller
                 );
             }
 
-
             usleep(1000);
         }
+
+        return null;
+    }
+
+    public function compareAction(Request $request)
+    {
+        $response = new Response();
+
+        $compareCommand = new CompareCommand();
+        $compareForm = $this->createForm(CompareType::class, $compareCommand, [
+            'user' => $this->getUser(),
+        ]);
+
+        $compareForm->handleRequest($request);
+        if ($compareForm->isSubmitted() && $compareForm->isValid()) {
+            $path = $this->generateUrl('hopitalnumerique_autodiag_compare_index', [
+                'reference' => $compareCommand->reference->getId(),
+                'synthesis' => $compareCommand->synthesis->getId(),
+            ]);
+
+            $response->headers->set('REDIRECT', $path);
+            return $response;
+        }
+
+        $response->setContent(
+            $this->renderView('@HopitalNumeriqueAutodiag/Account/partials/_compare.html.twig', [
+                'form' => $compareForm->createView(),
+            ])
+        );
+
+        return $response;
     }
 }
