@@ -47,7 +47,7 @@ class UserController extends \Symfony\Bundle\FrameworkBundle\Controller\Controll
 
         $usersCDP = $this
             ->getDoctrine()->getRepository('HopitalNumeriqueUserBundle:User')
-            ->getCommunautePratiqueMembresQueryBuilder(null, null, null)->getQuery()->getResult()
+            ->getCommunautePratiqueMembresQueryBuilder(null, $domaine, null)->getQuery()->getResult()
         ;
 
         return $this->render('HopitalNumeriqueCommunautePratiqueBundle:User:list.html.twig', [
@@ -102,7 +102,7 @@ class UserController extends \Symfony\Bundle\FrameworkBundle\Controller\Controll
 
         $usersCDP = $this
             ->getDoctrine()->getRepository('HopitalNumeriqueUserBundle:User')
-            ->getCommunautePratiqueMembresQueryBuilder(null, null, null)->getQuery()->getResult()
+            ->getCommunautePratiqueMembresQueryBuilder(null, $domaine, null)->getQuery()->getResult()
         ;
 
         return $this->render('HopitalNumeriqueCommunautePratiqueBundle:User:listByGroupe.html.twig', [

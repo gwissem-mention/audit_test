@@ -334,10 +334,10 @@
             <div class="identite">
                 {% for member in activeMembers if member['idUser'] == user.id %}
                     <div class="illustration infobulle" data-toggle="tooltip" data-html="true" title="
-                            Nombre de visites: {{ member['nbVisite'] }}<br />
-                            Nombre de notes: {{ member['nbNote'] }}<br />
-                            Nombre de posts: {{ member['nbPost'] }}<br />
-                            Nombre de commentaires: {{ member['nbComment'] }}
+                            Nombre de visites sur la plateforme : {{ member['nbVisite'] }}<br />
+                            Nombre de posts renseignés sur les forums : {{ member['nbPost'] }}<br />
+                            Nombre de commentaires sur les publications : {{ member['nbComment'] }}<br />
+                            Nombre de notation sur les publications : {{ member['nbNote'] }}<br />
                     ">
                         <div class="communaute-de-pratiques-avatar-red-circle" style="background-image: url('{{ asset(user.avatarWebPath) }}');"></div>
                     </div>
