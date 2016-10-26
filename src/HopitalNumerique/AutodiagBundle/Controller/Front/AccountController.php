@@ -3,6 +3,8 @@
 namespace HopitalNumerique\AutodiagBundle\Controller\Front;
 
 use HopitalNumerique\AutodiagBundle\Entity\Synthesis;
+use HopitalNumerique\AutodiagBundle\Form\Type\Synthesis\CompareType;
+use HopitalNumerique\AutodiagBundle\Model\Synthesis\CompareCommand;
 use HopitalNumerique\AutodiagBundle\Service\Synthesis\SynthesisGenerator;
 use HopitalNumerique\AutodiagBundle\Service\Synthesis\SynthesisRemover;
 use HopitalNumerique\DomaineBundle\Entity\Domaine;
@@ -37,6 +39,10 @@ class AccountController extends Controller
             }
         }
 
+        $comparisonForm = $this->createForm( CompareType::class, new CompareCommand(), [
+            'user' => $this->getUser(),
+        ]);
+
         $dataFormatter = $this->get('autodiag.synthesis.dataformatter');
         $datasForSyntheses = $dataFormatter->getSynthesesOrderByAutodiag($currentUser, $domain);
 
@@ -52,6 +58,7 @@ class AccountController extends Controller
             'domainesUser' => $domainesUser,
             'user' => $currentUser,
             'currentDomain' => $domain,
+            'comparisonForm' => $comparisonForm->createView(),
         ));
     }
 

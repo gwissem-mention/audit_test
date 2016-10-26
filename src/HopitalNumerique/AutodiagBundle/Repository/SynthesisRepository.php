@@ -42,26 +42,10 @@ class SynthesisRepository extends EntityRepository
      */
     public function findByUser(User $user, Domaine $domain = null)
     {
-        $qb = $this->getEntityManager()->createQueryBuilder();
+        $qb = $this->createByUserQueryBuilder($user, $domain);
         $qb
-            ->select('synthesis', 'entries')
-            ->from('HopitalNumeriqueAutodiagBundle:Synthesis', 'synthesis')
-            ->leftJoin('synthesis.shares', 'shares', Join::WITH, 'shares = :user')
-            ->leftJoin('synthesis.entries', 'entries')
-//            ->leftJoin('entries.values', 'values')
-            ->orWhere('synthesis.user = :user')
-            ->orWhere('shares.id IS NOT NULL')
             ->orderBy('synthesis.updatedAt', 'desc')
-            ->setParameter('user', $user)
         ;
-
-        if ($domain != null) {
-            $qb
-                ->join('synthesis.autodiag', 'autodiag')
-                ->join('autodiag.domaines', 'domaines', Join::WITH, 'domaines = :domain')
-                ->setParameter('domain', $domain)
-            ;
-        }
 
         return $qb->getQuery()->getResult();
     }
@@ -77,24 +61,36 @@ class SynthesisRepository extends EntityRepository
      */
     public function findByUserAndAutodiag(User $user, Autodiag $autodiag, Domaine $domain = null)
     {
-        $qb = $this->getEntityManager()->createQueryBuilder();
+        $qb = $this->createByUserQueryBuilder($user, $domain);
         $qb
-            ->select('synthesis', 'entries')
-            ->from('HopitalNumeriqueAutodiagBundle:Synthesis', 'synthesis')
-            ->leftJoin('synthesis.shares', 'shares', Join::WITH, 'shares = :user')
-            ->leftJoin('synthesis.entries', 'entries')
-            ->orWhere('synthesis.user = :user')
-            ->orWhere('shares.id IS NOT NULL')
             ->andWhere('synthesis.autodiag = :autodiag')
-            ->setParameter('user', $user)
             ->setParameter('autodiag', $autodiag)
         ;
 
-        if ($domain != null) {
+        return $qb->getQuery()->getResult();
+    }
+
+    public function findComparableForUser(User $user, Synthesis $reference = null)
+    {
+        $qb = $this->createByUserQueryBuilder($user);
+        $qb
+            ->andWhere(
+                $qb->expr()->isNotNull('synthesis.validatedAt')
+            )
+            ->andWhere(
+                $qb->expr()->eq('autodiag.comparisonAuthorized', true)
+            )
+            ->groupBy('synthesis.id')
+            ->having('count(entries) = 1')
+            ->orderBy('synthesis.updatedAt', 'desc')
+        ;
+
+        if (null !== $reference) {
             $qb
-                ->join('synthesis.autodiag', 'autodiag')
-                ->join('autodiag.domaines', 'domaines', Join::WITH, 'domaines = :domain')
-                ->setParameter('domain', $domain)
+                ->andWhere('autodiag = :autodiag_id')
+                ->setParameter('autodiag_id', $reference->getAutodiag()->getId())
+                ->andWhere('synthesis.id != :reference_id')
+                ->setParameter('reference_id', $reference->getId())
             ;
         }
 
@@ -191,9 +187,32 @@ class SynthesisRepository extends EntityRepository
             ->where('s.id in (:ids)')
             ->groupBy('s.id')
             ->having('count(entries.id) = 1')
-            ->setParameter('ids', $ids)
-        ;
+            ->setParameter('ids', $ids);
 
         return $qb->getQuery()->getResult();
+    }
+
+    protected function createByUserQueryBuilder(User $user, Domaine $domain = null)
+    {
+        $qb = $this->getEntityManager()->createQueryBuilder();
+        $qb
+            ->select('synthesis', 'entries')
+            ->from('HopitalNumeriqueAutodiagBundle:Synthesis', 'synthesis')
+            ->join('synthesis.autodiag', 'autodiag')
+            ->leftJoin('synthesis.shares', 'shares', Join::WITH, 'shares = :user')
+            ->leftJoin('synthesis.entries', 'entries')
+            ->orWhere('synthesis.user = :user')
+            ->orWhere('shares.id IS NOT NULL')
+            ->setParameter('user', $user)
+        ;
+
+        if ($domain != null) {
+            $qb
+                ->join('autodiag.domaines', 'domaines', Join::WITH, 'domaines = :domain')
+                ->setParameter('domain', $domain)
+            ;
+        }
+
+        return $qb;
     }
 }

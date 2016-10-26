@@ -133,20 +133,22 @@ class Synthesis
      * @param Autodiag $autodiag
      * @param Synthesis[] $syntheses
      * @return Synthesis
+     *
+     * @deprecated
      */
     public static function createFromSynthesis(Autodiag $autodiag, $syntheses)
     {
-        $synthesis = new self($autodiag);
+        $new = new self($autodiag);
 
         foreach ($syntheses as $synthesis) {
             foreach ($synthesis->getEntries() as $entry) {
-                $synthesis->addEntry(
+                $new->addEntry(
                     clone($entry)
                 );
             }
         }
 
-        return $synthesis;
+        return $new;
     }
 
     /**
@@ -198,7 +200,10 @@ class Synthesis
 
     public function canValidate()
     {
-        return $this->getAutodiag()->isPartialResultsAuthorized() === true || $this->getCompletion() == 100;
+        return $this->getAutodiag()->isPartialResultsAuthorized() === true
+            || $this->getCompletion() == 100
+            || count($this->getEntries()) > 1
+        ;
     }
 
     /**
@@ -416,5 +421,10 @@ class Synthesis
     public function stopComputing()
     {
         $this->computeBeginning = null;
+    }
+
+    public function __clone()
+    {
+        $this->id = null;
     }
 }

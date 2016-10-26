@@ -159,4 +159,9 @@ class Value
 
         return $this;
     }
+
+    public function __clone()
+    {
+        $this->id = null;
+    }
 }

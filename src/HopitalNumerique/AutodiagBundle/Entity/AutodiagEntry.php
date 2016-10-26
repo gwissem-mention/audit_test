@@ -170,6 +170,15 @@ class AutodiagEntry
         $this->values->add($value);
     }
 
+    public function removeValue($value)
+    {
+        if ($this->values->contains($value)) {
+            $this->values->removeElement($value);
+        }
+
+        return $this;
+    }
+
     /**
      * @return User
      */
