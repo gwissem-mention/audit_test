@@ -33,3 +33,9 @@ services:
         arguments:
             - '@hopitalnumerique_domaine.dependency_injection.current_domaine'
             - '@router'
+
+    hopitalnumerique_communautepratique.repository.commentaire:
+        class: HopitalNumerique\CommunautePratiqueBundle\Repository\CommentaireRepository
+        factory: ["@doctrine.orm.entity_manager", "getRepository"]
+        arguments:
+            - 'HopitalNumerique\CommunautePratiqueBundle\Entity\Commentaire'

@@ -187,3 +187,10 @@ services:
     hopitalnumerique_user.dependency_injection.connected_user:
         class: 'HopitalNumerique\UserBundle\DependencyInjection\ConnectedUser'
         arguments: ['@security.token_storage']
+
+    hopitalnumerique_user.service.active_member_calculator:
+        class: 'HopitalNumerique\UserBundle\Service\ActiveMemberCalculator'
+        arguments:
+            - "@hopitalnumerique_objet.repository.commentaire"
+            - "@hopitalnumerique_objet.repository.note"
+            - "@ccdn_forum_forum.repository.post"

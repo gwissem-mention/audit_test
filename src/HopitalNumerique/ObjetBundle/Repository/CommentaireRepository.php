@@ -23,10 +23,11 @@ class CommentaireRepository extends EntityRepository
 
         $qb->select('comm.id, comm.dateCreation, comm.texte, comm.publier, objet.id as objId, objet.titre as objTitre, contenu.id as contId, contenu.titre as contTitre, user.nom as userNom, user.prenom as userPrenom')
             ->from('HopitalNumeriqueObjetBundle:Commentaire', 'comm')
-            ->leftJoin('comm.objet','objet')
-            ->leftJoin('comm.contenu','contenu')
-            ->leftJoin('comm.user','user');
-            
+            ->leftJoin('comm.objet', 'objet')
+            ->leftJoin('comm.contenu', 'contenu')
+            ->leftJoin('comm.user', 'user')
+        ;
+
         return $qb;
     }
 
@@ -37,17 +38,38 @@ class CommentaireRepository extends EntityRepository
      *
      * @return QueryBuilder
      */
-    public function findCommentaireByDomaine( $idDomaine )
+    public function findCommentaireByDomaine($idDomaine)
     {
         $qb = $this->_em->createQueryBuilder();
-    
+
         $qb->select('comm')
             ->from('HopitalNumeriqueObjetBundle:Commentaire', 'comm')
             ->leftJoin('comm.objet', 'objet')
             ->leftJoin('objet.domaines', 'domaine')
             ->where('domaine.id = :idDomaine')
-            ->setParameter('idDomaine', $idDomaine);
+            ->setParameter('idDomaine', $idDomaine)
+        ;
 
         return $qb;
+    }
+
+    public function countGroupByUser()
+    {
+        $qb = $this->_em->createQueryBuilder();
+
+        $qb->select('count(c) as nbComment, u.id as idUser')
+            ->from('HopitalNumeriqueObjetBundle:Commentaire', 'c')
+            ->join('c.user', 'u')
+            ->groupBy('u')
+        ;
+
+        $results = $qb->getQuery()->getResult();
+
+        foreach ($results as $key => $result) {
+            $results[$result['idUser']] = intval($result['nbComment']);
+            unset($results[$key]);
+        }
+
+        return $results;
     }
 }

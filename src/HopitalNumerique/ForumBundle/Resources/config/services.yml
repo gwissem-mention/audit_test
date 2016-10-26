@@ -68,4 +68,3 @@ services:
         arguments: ["@ccdn_forum_forum.model.post", "@nodevo_mail.manager.mail", "@hopitalnumerique_user.manager.user", "@mailer"]
         tags:
             - { name: 'kernel.event_subscriber' }
-

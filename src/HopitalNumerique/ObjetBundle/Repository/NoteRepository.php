@@ -14,61 +14,61 @@ use HopitalNumerique\ObjetBundle\Entity\Objet;
 class NoteRepository extends EntityRepository
 {
     /**
-     * Récupère la moyenne des 
+     * Récupère la moyenne des
      *
      * @return QueryBuilder
      */
-    public function getMoyenneNoteByObjet( $idObjet, $isContenu )
+    public function getMoyenneNoteByObjet($idObjet, $isContenu)
     {
         $qb = $this->_em->createQueryBuilder();
         $qb->select('avg(note.note)')
-            ->from('HopitalNumeriqueObjetBundle:Note', 'note');
-        if($isContenu)
-        {
-            $qb->leftJoin('note.contenu','contenu')
-               ->where('contenu.id = :contenuId')
-               ->setParameter('contenuId', $idObjet );
+            ->from('HopitalNumeriqueObjetBundle:Note', 'note')
+        ;
+        if ($isContenu) {
+            $qb->leftJoin('note.contenu', 'contenu')
+                ->where('contenu.id = :contenuId')
+                ->setParameter('contenuId', $idObjet)
+            ;
+        } else {
+            $qb->leftJoin('note.objet', 'objet')
+                ->where('objet.id = :objetId')
+                ->setParameter('objetId', $idObjet)
+                ->leftJoin('note.contenu', 'contenu')
+                ->andWhere($qb->expr()->isNull('contenu.id'))
+            ;
         }
-        else
-        {
-            $qb->leftJoin('note.objet','objet')
-               ->where('objet.id = :objetId')
-               ->setParameter('objetId', $idObjet )
-               ->leftJoin('note.contenu','contenu')
-               ->andWhere($qb->expr()->isNull('contenu.id'));
-        }
-        
+
         return $qb;
     }
 
     /**
-     * Récupère le nombre de notes de l'objet passé en param 
+     * Récupère le nombre de notes de l'objet passé en param
      *
      * @return QueryBuilder
      */
-    public function countNbNoteByObjet( $idObjet, $isContenu )
+    public function countNbNoteByObjet($idObjet, $isContenu)
     {
         $qb = $this->_em->createQueryBuilder();
         $qb->select('count(note.note)')
-            ->from('HopitalNumeriqueObjetBundle:Note', 'note');
-        if($isContenu)
-        {
-            $qb->leftJoin('note.contenu','contenu')
-               ->where('contenu.id = :contenuId')
-               ->setParameter('contenuId', $idObjet );
+            ->from('HopitalNumeriqueObjetBundle:Note', 'note')
+        ;
+        if ($isContenu) {
+            $qb->leftJoin('note.contenu', 'contenu')
+                ->where('contenu.id = :contenuId')
+                ->setParameter('contenuId', $idObjet)
+            ;
+        } else {
+            $qb->leftJoin('note.objet', 'objet')
+                ->where('objet.id = :objetId')
+                ->setParameter('objetId', $idObjet)
+                ->leftJoin('note.contenu', 'contenu')
+                ->andWhere($qb->expr()->isNull('contenu.id'))
+            ;
         }
-        else
-        {
-            $qb->leftJoin('note.objet','objet')
-               ->where('objet.id = :objetId')
-               ->setParameter('objetId', $idObjet )
-               ->leftJoin('note.contenu','contenu')
-               ->andWhere($qb->expr()->isNull('contenu.id'));
-        }
-        
+
         return $qb;
     }
-    
+
     /**
      * Retourne la liste des notes étant assigné au domaine
      *
@@ -76,17 +76,38 @@ class NoteRepository extends EntityRepository
      *
      * @return QueryBuilder
      */
-    public function findNoteByDomaine( $idDomaine )
+    public function findNoteByDomaine($idDomaine)
     {
         $qb = $this->_em->createQueryBuilder();
-    
+
         $qb->select('note')
             ->from('HopitalNumeriqueObjetBundle:Note', 'note')
             ->leftJoin('note.objet', 'objet')
             ->leftJoin('objet.domaines', 'domaine')
             ->where('domaine.id = :idDomaine')
-            ->setParameter('idDomaine', $idDomaine);
+            ->setParameter('idDomaine', $idDomaine)
+        ;
 
         return $qb;
+    }
+
+    public function countGroupByUser()
+    {
+        $qb = $this->_em->createQueryBuilder();
+
+        $qb->select('count(n) as nbNote, u.id as idUser')
+            ->from('HopitalNumeriqueObjetBundle:Note', 'n')
+            ->join('n.user', 'u')
+            ->groupBy('u')
+        ;
+
+        $results = $qb->getQuery()->getResult();
+
+        foreach ($results as $key => $result) {
+            $results[$result['idUser']] = intval($result['nbNote']);
+            unset($results[$key]);
+        }
+
+        return $results;
     }
 }
