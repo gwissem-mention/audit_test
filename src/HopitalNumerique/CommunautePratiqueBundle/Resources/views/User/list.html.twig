@@ -56,7 +56,7 @@
 
                 {% for membre in pagerFantaMembres.currentPageResults %}
                     <div class="col-md-3 col-sm-6">
-                        {{ communaute_pratique.display_bloc_membre(membre, null, false, groupesTermines, groupesNonDemarres, groupesEnCours) }}
+                        {{ communaute_pratique.display_bloc_membre(membre, null, false, groupesTermines, groupesNonDemarres, groupesEnCours, activeMembers) }}
                     </div>
                 {% endfor %}
 

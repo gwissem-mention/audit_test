@@ -19,7 +19,7 @@ class Annuaire
      * @var integer Nombre d'éléments à afficher par page
      */
     const NOMBRE_ELEMENTS_PAR_PAGE = 12;
- 
+
     /**
      * @var string Libellé du filtre Nomination
      */
@@ -49,7 +49,7 @@ class Annuaire
     /**
      * @var string Valeur des filtres
      */
-    private static $FILTRES = array();
+    private static $FILTRES = [];
 
 
     /**
@@ -83,13 +83,13 @@ class Annuaire
 
     /**
      * Retourne les membres à afficher.
-     * 
+     *
      * @param integer $page Numéro de page
      * @return array<\HopitalNumerique\UserBundle\Entity\User> Membres
      */
     public function getPagerfantaUsers($page, $membreId = null)
     {
-        $usersQueryBuilder = $this->userManager->getCommunautePratiqueMembresQueryBuilder(null,null,$membreId);
+        $usersQueryBuilder = $this->userManager->getCommunautePratiqueMembresQueryBuilder(null, null, $membreId);
         $adapter = new DoctrineORMAdapter($this->applyFiltersInQueryBuilder($usersQueryBuilder));
         $pagerFanta = new Pagerfanta($adapter);
         $pagerFanta->setMaxPerPage(self::NOMBRE_ELEMENTS_PAR_PAGE);
@@ -102,7 +102,7 @@ class Annuaire
      * Retourne les membres d'un groupe à afficher.
      *
      * @param \HopitalNumerique\CommunautePratiqueBundle\Entity\Groupe $groupe Groupe
-     * @param integer                                                  $page   Numéro de page
+     * @param integer $page Numéro de page
      * @return array<\HopitalNumerique\UserBundle\Entity\User> Membres
      */
     public function getPagerfantaUsersByGroupe(Groupe $groupe, $page)
@@ -119,32 +119,29 @@ class Annuaire
 
     /**
      * Applique les filtres sur la requête de récupération des membres.
-     * 
+     *
      * @param \HopitalNumerique\CommunautePratiqueBundle\DependencyInjection\QueryBuilder $query QueryBuilder
      */
     private function applyFiltersInQueryBuilder(QueryBuilder &$queryBuilder)
     {
-        foreach ($this->getFiltres() as $filtreLibelle => $filtreValeur)
-        {
-            if (null !== $filtreValeur)
-            {
-                switch ($filtreLibelle)
-                {
+        foreach ($this->getFiltres() as $filtreLibelle => $filtreValeur) {
+            if (null !== $filtreValeur) {
+                switch ($filtreLibelle) {
                     case self::FILTRE_NOMINATION_LABEL:
                         $queryBuilder
-                            ->andWhere( $queryBuilder->expr()->orX( $queryBuilder->expr()->like('user.nom', ':'.$filtreLibelle), $queryBuilder->expr()->like('user.prenom', ':'.$filtreLibelle), $queryBuilder->expr()->like('user.email', ':'.$filtreLibelle) ) )
-                            ->setParameter($filtreLibelle, '%'.$filtreValeur.'%')
+                            ->andWhere($queryBuilder->expr()->orX($queryBuilder->expr()->like('user.nom', ':' . $filtreLibelle), $queryBuilder->expr()->like('user.prenom', ':' . $filtreLibelle), $queryBuilder->expr()->like('user.email', ':' . $filtreLibelle)))
+                            ->setParameter($filtreLibelle, '%' . $filtreValeur . '%')
                         ;
                         break;
                     case self::FILTRE_ACTIVITE_TYPE_LABEL:
                         $queryBuilder
-                            ->andWhere( $queryBuilder->expr()->in( $filtreLibelle, ':'.$filtreLibelle ) )
+                            ->andWhere($queryBuilder->expr()->in($filtreLibelle, ':' . $filtreLibelle))
                             ->setParameter($filtreLibelle, $filtreValeur)
                         ;
                         break;
                     default:
                         $queryBuilder
-                            ->andWhere( $queryBuilder->expr()->in( 'user.'.$filtreLibelle, ':'.$filtreLibelle ) )
+                            ->andWhere($queryBuilder->expr()->in('user.' . $filtreLibelle, ':' . $filtreLibelle))
                             ->setParameter($filtreLibelle, $filtreValeur)
                         ;
                 }
@@ -157,111 +154,105 @@ class Annuaire
 
     /**
      * Initialise les filtres via la session.
-     * 
+     *
      * @return void
      */
     private function initFiltres()
     {
-        foreach ($this->getFiltreLibelles() as $filtreLibelle)
-        {
+        foreach ($this->getFiltreLibelles() as $filtreLibelle) {
             self::$FILTRES[$filtreLibelle] = $this->getFiltreSession($filtreLibelle);
         }
     }
 
     /**
      * Retourne la liste de tous les libellés de filtre.
-     * 
+     *
      * @return array<string> Libellés
      */
     private function getFiltreLibelles()
     {
-        return array(
+        return [
             self::FILTRE_NOMINATION_LABEL,
             self::FILTRE_ES_PROFIL_LABEL,
             self::FILTRE_REGION_LABEL,
             self::FILTRE_ES_TYPE_LABEL,
-            self::FILTRE_ACTIVITE_TYPE_LABEL
-        );
+            self::FILTRE_ACTIVITE_TYPE_LABEL,
+        ];
     }
 
     /**
      * Retourne les valeurs de filtre.
-     * 
+     *
      * @return array<string, mixed> Filtres
      */
     public function getFiltres()
     {
-        $filtres = array();
-        
-        foreach (self::$FILTRES as $filtreLibelle => $filtreValeur)
-        {
-            switch ($filtreLibelle)
-            {
+        $filtres = [];
+
+        foreach (self::$FILTRES as $filtreLibelle => $filtreValeur) {
+            switch ($filtreLibelle) {
                 case self::FILTRE_ES_PROFIL_LABEL:
                 case self::FILTRE_REGION_LABEL:
                 case self::FILTRE_ES_TYPE_LABEL:
                 case self::FILTRE_ACTIVITE_TYPE_LABEL:
-                    $filtres[$filtreLibelle] = (null !== $filtreValeur && ( count($filtreValeur) > 0 ) ? $this->referenceManager->findBy(array('id' => $filtreValeur)) : null);
+                    $filtres[$filtreLibelle] = (null !== $filtreValeur && (count($filtreValeur) > 0) ? $this->referenceManager->findBy(['id' => $filtreValeur]) : null);
                     break;
                 default:
                     $filtres[$filtreLibelle] = $filtreValeur;
             }
         }
-        
+
         return $filtres;
     }
-    
+
     /**
      * Retourne la valeur d'un filtre.
-     * 
+     *
      * @param string $filtreLibelle Libellé du filtre
      * @return mixed Valeur
      */
     public function getFiltre($filtreLibelle)
     {
-        switch ($filtreLibelle)
-        {
+        switch ($filtreLibelle) {
             case self::FILTRE_ES_PROFIL_LABEL:
             case self::FILTRE_REGION_LABEL:
             case self::FILTRE_ES_TYPE_LABEL:
             case self::FILTRE_ACTIVITE_TYPE_LABEL:
-                return (null !== self::$FILTRES[$filtreLibelle] && ( count(self::$FILTRES[$filtreLibelle]) > 0 ) ? $this->referenceManager->findBy(array('id' => self::$FILTRES[$filtreLibelle])) : null);
+                return (null !== self::$FILTRES[$filtreLibelle] && (count(self::$FILTRES[$filtreLibelle]) > 0) ? $this->referenceManager->findBy(['id' => self::$FILTRES[$filtreLibelle]]) : null);
         }
-        
+
         return self::$FILTRES[$filtreLibelle];
     }
 
     /**
      * Applique les filtres à l'annuaire et les conserve.
-     * 
+     *
      * @param \Symfony\Component\HttpFoundation\Request $request Request
      */
     public function setFiltres(Request $request)
     {
-        if ($request->request->has('hopitalnumerique_communautepratiquebundle_user_recherche'))
-        {
-            foreach ($this->getFiltreLibelles() as $filtreLibelle)
-            {
+        if ($request->request->has('hopitalnumerique_communautepratiquebundle_user_recherche')) {
+            foreach ($this->getFiltreLibelles() as $filtreLibelle) {
                 $this->setFiltre($filtreLibelle, $request->request->get('hopitalnumerique_communautepratiquebundle_user_recherche'));
             }
         }
     }
-	/**
- 	* Supprime les filtres en session 
- 	*/
-	public function removeFiltres()
-	{
-		foreach ($this->getFiltreLibelles() as $filtreLibelle)
-		{
-			$this->session->remove('cp-annuaire-'.$filtreLibelle);
-		}
-	}
+
+    /**
+     * Supprime les filtres en session
+     */
+    public function removeFiltres()
+    {
+        foreach ($this->getFiltreLibelles() as $filtreLibelle) {
+            $this->session->remove('cp-annuaire-' . $filtreLibelle);
+        }
+    }
 
     /**
      * Initialise un filtre.
-     * 
+     *
      * @param string $filtreLibelle Libellé du filtre
-     * @param array  $requestPost   Request
+     * @param array $requestPost Request
      */
     private function setFiltre($filtreLibelle, array $requestPost)
     {
@@ -272,24 +263,24 @@ class Annuaire
 
     /**
      * Retourne la valeur du filtre enregistré en session.
-     * 
+     *
      * @param string $filtreLibelle Libellé du filtre
      * @return mixed Valeur du filtre
      */
     private function getFiltreSession($filtreLibelle)
     {
-        return $this->session->get('cp-annuaire-'.$filtreLibelle, null);
+        return $this->session->get('cp-annuaire-' . $filtreLibelle, null);
     }
 
     /**
      * Enregistre en session le filtre.
-     * 
+     *
      * @param string $filtreLibelle Libellé du filtre
      */
     private function saveFiltreSession($filtreLibelle)
     {
-        $this->session->set('cp-annuaire-'.$filtreLibelle, self::$FILTRES[$filtreLibelle]);
+        $this->session->set('cp-annuaire-' . $filtreLibelle, self::$FILTRES[$filtreLibelle]);
     }
-    
-    
+
+
 }

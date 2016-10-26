@@ -35,7 +35,7 @@
                         Nombre de contributeurs : {{ groupe.users|length }}
                     {% else %}
                         Places restantes
-                        <br><strong>{{ groupe.nombrePlacesRestantes }} sur {{ groupe.nombreParticipantsMaximum }}</strong>
+                        <br /><strong>{{ groupe.nombrePlacesRestantes }} sur {{ groupe.nombreParticipantsMaximum }}</strong>
                     {% endif %}
                 </p>
                 <div class="places-progression hidden-xs" id="places-progression-barre-{{ groupe.id }}"{% if date('now') >= groupe.dateDemarrage %} style="visibility: hidden;"{% endif %}><div class="contenu"></div></div>
@@ -100,7 +100,7 @@
     <div class="invite">
         <a onclick="Contact_Popup.invite('{{ path( app.request.get('_route'), app.request.get('_route_params') ) }}', '{{ idGroupe }}');">
             <em class="icon-users149"></em>
-            Inviter d'autres<br> personnes
+            Inviter d'autres<br /> personnes
         </a>
     </div>
 {% endmacro %}
@@ -114,7 +114,7 @@
     <div class="contact">
         <a onclick="Contact_Popup.display({{ groupe.animateurEmailsJson }}, '{{ path( app.request.get('_route'), app.request.get('_route_params') ) }}');">
             <em class="icon-help9"></em>
-            Envoyer un message<br>{{ groupe.animateurs|length > 1 ? 'aux ' : 'à l\'' }}animateur{{ groupe.animateurs|length > 1 ? 's' : '' }} du groupe
+            Envoyer un message<br />{{ groupe.animateurs|length > 1 ? 'aux ' : 'à l\'' }}animateur{{ groupe.animateurs|length > 1 ? 's' : '' }} du groupe
         </a>
     </div>
 {% endmacro %}
@@ -309,7 +309,10 @@
  # @param \HopitalNumerique\CommunautePratiqueBundle\Entity\Groupe groupe          Groupe
  # @param boolean                                                  canDeleteMembre VRAI si le membre peut être désinscrit (dans ce cas, le groupe doit être précisé)
  #}
-{% macro display_bloc_membre(user, groupe, canDeleteMembre, groupesTermines, groupesNonDemarres, groupesEnCours) %}
+{% macro display_bloc_membre(user, groupe, canDeleteMembre, groupesTermines, groupesNonDemarres, groupesEnCours, activeMembers) %}
+        <script>
+            $('[data-toggle="tooltip"]').tooltip();
+        </script>
         <div class="communaute-de-pratiques-bloc-user">
             {% if canDeleteMembre %}
             <div class="action-fiche-user">
@@ -332,7 +335,19 @@
             </div>
             {% endif %}
             <div class="identite">
-                <div class="illustration"><div class="communaute-de-pratiques-avatar" style="background-image: url('{{ asset(user.avatarWebPath) }}');"></div></div>
+                {% for member in activeMembers if member['idUser'] == user.id %}
+                    <div class="illustration infobulle" data-toggle="tooltip" data-html="true" title="
+                            Nombre de visites: {{ member['nbVisite'] }}<br />
+                            Nombre de notes: {{ member['nbNote'] }}<br />
+                            Nombre de posts: {{ member['nbPost'] }}<br />
+                            Nombre de commentaires: {{ member['nbComment'] }}
+                    ">
+                        <div class="communaute-de-pratiques-avatar-red-circle" style="background-image: url('{{ asset(user.avatarWebPath) }}');"></div>
+                    </div>
+                {% else %}
+                    <div class="illustration"><div class="communaute-de-pratiques-avatar" style="background-image: url('{{ asset(user.avatarWebPath) }}');"></div></div>
+                {% endfor %}
+
                 <div class="nom">
                     {% if app.user.id == user.id %}
                         <a target="_blank" href="{{ path('hopital_numerique_user_informations_personnelles') }}"><em class="icon icon-settings48"></em> <span class="no-link">{{ user.prenomNom }}</span></a>
@@ -355,12 +370,23 @@
                 {% endif %}
             </div>
             <div class="contact">
-                <span >
+                <span>
                     <i class="fa fa-info-circle" aria-hidden="true"></i> <a href="mailto:{{ user.email }}">Envoyer un e-mail</a>
-                    </br>
+                    <br />
                     <i class="fa fa-phone"></i> {% if user.telephoneDirect != '' or user.telephonePortable != '' %}{{ user.telephoneDirect != '' ? user.telephoneDirect : '' }}{{ user.telephoneDirect != '' and user.telephonePortable != '' ? ', ' : '' }}{{ user.telephonePortable != '' ? user.telephonePortable : '' }}{% else %}Téléphone non renseigné{% endif %}
                 </span>
+                <br />
+                {% if user.hasRoleAmbassadeur or user.hasRoleExpert %}
+                    {% if user.hasRoleAmbassadeur %}
+                        <a href="{{ path('hopital_numerique_intervention_demande_nouveau', {'ambassadeur': user.id}) }}">Ambassadeur Hôpital Numérique</a>
+                    {% elseif user.hasRoleExpert %}
+                        <a href="{{ path('hopitalnumerique_expert_front_expert') }}">Expert Hôpital Numérique</a>
+                    {% endif %}
+                {% else %}
+                    <br />
+                {% endif %}
             </div>
+
             <div class="etablissement">
                 <em class="icon icon-hospital11"></em>
                 <div class="contenu">
@@ -396,20 +422,22 @@
                 {% endif %}
                 <div class="groupe">
                     {% if user.communautePratiqueGroupes|length > 0 %}
-                         <div class="infobulle" >Participations aux groupes
-                            <div class="groupeContent">
-                                {% if groupesTermines|length == 0 and groupesNonDemarres|length == 0 and groupesEnCours|length == 0 %}
+                        <div class="infobulle" data-toggle="tooltip" data-html="true" title="
+                        <div class='groupeContent'>
+                         {% if groupesTermines|length == 0 and groupesNonDemarres|length == 0 and groupesEnCours|length == 0 %}
 
                                     <p>Aucune participation à un groupe pour l'instant.</p>
 
                                 {% else %}
-                                    <p><strong>{{ user.appellation }} a participé aux groupes thématiques suivants :</strong></p>
+                                    <p><strong>{{ user.appellation }} a participé aux groupes thématiques suivants
+                                            :</strong></p>
                                     {% if groupesTermines|length > 0 %}
                                         <ul>
                                             {%- for groupe in groupesTermines -%}
                                                 {%- for userGroupe in groupe.users -%}
-                                                    {%- if userGroupe.id == user.id  -%}
-                                                        <li>{{ groupe }}, du {{ groupe.dateDemarrage|date('d/m/Y') }} au {{ groupe.dateFin|date('d/m/Y') }}</li>
+                                                    {%- if userGroupe.id == user.id -%}
+                                                        <li>{{ groupe }}, du {{ groupe.dateDemarrage|date('d/m/Y') }}
+                                                            au {{ groupe.dateFin|date('d/m/Y') }}</li>
                                                     {%- endif -%}
                                                 {%- endfor -%}
                                             {%- endfor -%}
@@ -420,22 +448,26 @@
                                         <ul>
                                             {%- for groupe in groupesNonDemarres -%}
                                                 {%- for userGroupe in groupe.users -%}
-                                                    {%- if userGroupe.id == user.id  -%}
-                                                        <li>{{ groupe }}, du {{ groupe.dateDemarrage|date('d/m/Y') }} au {{ groupe.dateFin|date('d/m/Y') }}</li>
+                                                    {%- if userGroupe.id == user.id -%}
+                                                        <li>{{ groupe }}, du {{ groupe.dateDemarrage|date('d/m/Y') }}
+                                                            au {{ groupe.dateFin|date('d/m/Y') }}</li>
                                                     {%- endif -%}
                                                 {%- endfor -%}
                                             {%- endfor -%}
                                             {%- for groupe in groupesEnCours -%}
                                                 {%- for userGroupe in groupe.users -%}
-                                                    {%- if userGroupe.id == user.id  -%}
-                                                        <li>{{ groupe }}, du {{ groupe.dateDemarrage|date('d/m/Y') }} au {{ groupe.dateFin|date('d/m/Y') }}</li>
+                                                    {%- if userGroupe.id == user.id -%}
+                                                        <li>{{ groupe }}, du {{ groupe.dateDemarrage|date('d/m/Y') }}
+                                                            au {{ groupe.dateFin|date('d/m/Y') }}</li>
                                                     {%- endif -%}
                                                 {%- endfor -%}
                                             {%- endfor -%}
                                         </ul>
                                     {% endif %}
                                 {% endif %}
-                            </div>
+                                </div>
+                        ">
+                            Participations aux groupes
                         </div>
                     {% endif %}
                 </div>

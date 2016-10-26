@@ -15,19 +15,19 @@ class PostRepository extends CCDNPostRepository
     /**
      *
      * @access public
-     * @param  int                                $topicId
+     * @param  int $topicId
      * @return \CCDNForum\ForumBundle\Entity\Post
      */
     public function getLastPostForTopicById($topicId)
     {
-        if (null == $topicId || ! is_numeric($topicId) || $topicId == 0) {
+        if (null == $topicId || !is_numeric($topicId) || $topicId == 0) {
             throw new \Exception('Topic id "' . $topicId . '" is invalid!');
         }
-    
-        $params = array(':topicId' => $topicId, ':deleted' => false);
-    
-        $qb = $this->createSelectQuery(array('p', 't'));
-    
+
+        $params = [':topicId' => $topicId, ':deleted' => false];
+
+        $qb = $this->createSelectQuery(['p', 't']);
+
         $qb
             ->innerJoin('p.topic', 't', Expr\Join::WITH, 't.isDeleted = :deleted')
             ->where(
@@ -37,9 +37,28 @@ class PostRepository extends CCDNPostRepository
             ->orderBy('p.createdDate', 'DESC')
             ->setMaxResults(1)
         ;
-        
+
         $dernierPost = $this->gateway->findPost($qb, $params);
 
         return $dernierPost;
+    }
+
+    public function countGroupByUser()
+    {
+        $qb = $this->gateway->createSelectQuery();
+
+        $qb->select('count(p.id) as nbPost, u.id as idUser')
+            ->join('p.createdBy', 'u')
+            ->groupBy('u')
+        ;
+
+        $results = $qb->getQuery()->getResult();
+
+        foreach ($results as $key => $result) {
+            $results[$result['idUser']] = intval($result['nbPost']);
+            unset($results[$key]);
+        }
+
+        return $results;
     }
 }

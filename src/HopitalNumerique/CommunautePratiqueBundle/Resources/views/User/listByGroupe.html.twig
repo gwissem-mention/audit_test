@@ -55,7 +55,7 @@
             {% for membre in pagerFantaMembres.currentPageResults %}
                 {% if membre.isActifInGroupe(groupe) or canDeleteMembre or groupe.hasAnimateur(membre) %}
                     <div class="col-md-3 col-sm-6">
-                        {{ communaute_pratique.display_bloc_membre(membre, groupe, canDeleteMembre, groupesTermines, groupesNonDemarres, groupesEnCours) }}
+                        {{ communaute_pratique.display_bloc_membre(membre, groupe, canDeleteMembre, groupesTermines, groupesNonDemarres, groupesEnCours, activeMembers) }}
                     </div>
                 {% endif %}
             {% endfor %}
