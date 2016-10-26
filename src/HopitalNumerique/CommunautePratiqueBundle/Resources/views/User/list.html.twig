@@ -13,9 +13,12 @@
 
 {% block communaute_pratique_actions %}
     {{ parent() }}
-    <div class="lien">
-        <a target="_blank" href="{{ path('hopital_numerique_user_informations_personnelles') }}">Mise à jour de mes informations personnelles <em class="icon icon-settings48"></em></a>
-    </div>
+        <div class="contact">
+            <a target="_blank" href="{{ path('hopital_numerique_user_informations_personnelles') }}">
+                <em class="icon icon-settings48"></em>
+                Mise à jour de mes </br> informations personnelles
+            </a>
+        </div>
     {{ communaute_pratique.display_action_contact_invitation() }}
 {% endblock %}
 

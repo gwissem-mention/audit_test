@@ -310,9 +310,6 @@
  # @param boolean                                                  canDeleteMembre VRAI si le membre peut être désinscrit (dans ce cas, le groupe doit être précisé)
  #}
 {% macro display_bloc_membre(user, groupe, canDeleteMembre, groupesTermines, groupesNonDemarres, groupesEnCours, activeMembers) %}
-        <script>
-            $('[data-toggle="tooltip"]').tooltip();
-        </script>
         <div class="communaute-de-pratiques-bloc-user">
             {% if canDeleteMembre %}
             <div class="action-fiche-user">
