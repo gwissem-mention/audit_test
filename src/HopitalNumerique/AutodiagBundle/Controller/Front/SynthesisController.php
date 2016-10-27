@@ -13,10 +13,6 @@ class SynthesisController extends Controller
 {
     public function saveNewAction(Request $request, Autodiag $autodiag, $noLayout = false)
     {
-        if (!in_array(@$_SERVER['REMOTE_ADDR'], array('127.0.0.1', '109.26.138.14'))) {
-            die('Les autodiagnostics sont en maintenance');
-        }
-
         $entry = AutodiagEntry::create($autodiag, $this->getUser());
         $synthesis = $entry->getSynthesis();
 
@@ -45,10 +41,6 @@ class SynthesisController extends Controller
 
     public function scorePollingAction(Request $request)
     {
-        if (!in_array(@$_SERVER['REMOTE_ADDR'], array('127.0.0.1', '109.26.138.14'))) {
-            die('Les autodiagnostics sont en maintenance');
-        }
-
         $syntheses = $request->query->get('syntheses');
 
         $start = time();

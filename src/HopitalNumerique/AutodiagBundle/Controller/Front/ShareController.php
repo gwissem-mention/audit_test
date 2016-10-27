@@ -20,10 +20,6 @@ class ShareController extends Controller
      */
     public function indexAction(Request $request, Synthesis $synthesis, Domaine $domain = null, $noLayout = false)
     {
-        if (!in_array(@$_SERVER['REMOTE_ADDR'], array('127.0.0.1', '109.26.138.14'))) {
-            die('Les autodiagnostics sont en maintenance');
-        }
-
         $synthesis = $this->getDoctrine()->getManager()->getRepository('HopitalNumeriqueAutodiagBundle:Synthesis')
             ->getFullyLoadedSynthesis($synthesis);
 
@@ -95,10 +91,6 @@ class ShareController extends Controller
      */
     public function deleteAction(Synthesis $synthesis, User $user)
     {
-        if (!in_array(@$_SERVER['REMOTE_ADDR'], array('127.0.0.1', '109.26.138.14'))) {
-            die('Les autodiagnostics sont en maintenance');
-        }
-
         // L'utilisateur doit avoir les droits sur chaque entry de la synthèse
         foreach ($synthesis->getEntries() as $entry) {
             if (!$this->isGranted('edit', $entry)) {
