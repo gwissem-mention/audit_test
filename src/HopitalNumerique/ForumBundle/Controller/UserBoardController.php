@@ -2,6 +2,8 @@
 namespace HopitalNumerique\ForumBundle\Controller;
 
 use CCDNForum\ForumBundle\Controller\UserBoardController as BaseUserBoardController;
+use Symfony\Component\Finder\Exception\AccessDeniedException;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 
 class UserBoardController extends BaseUserBoardController
 {
@@ -16,7 +18,22 @@ class UserBoardController extends BaseUserBoardController
     {
         $this->isFound($forum = $this->getForumModel()->findOneForumByName($forumName));
         $this->isFound($board = $this->getBoardModel()->findOneBoardByIdWithCategory($boardId));
-        $this->isAuthorised($this->getAuthorizer()->canShowBoard($board, $forum));
+
+        if (!$this->getAuthorizer()->canShowBoard($board, $forum)) {
+            if ($this->getUser() === 'anon.') {
+                $redirectUrl = $this->container->get('router')
+                    ->generate('ccdn_forum_user_board_show', ['boardId' => $boardId])
+                ;
+                $redirectUrl = rtrim(strtr(base64_encode($redirectUrl), '+/', '-_'), '=');
+                $url = $this->container->get('router')->generate('account_login', ['urlToRedirect' => $redirectUrl]);
+
+                return new RedirectResponse($url, 302);
+            } else {
+                throw new AccessDeniedException();
+            }
+        }
+
+
         $itemsPerPage = $this->getPageHelper()->getTopicsPerPageOnBoards();
         $stickyTopics = $this->getTopicModel()->findAllTopicsStickiedByBoardId($boardId, true);
         $topicsPager = $this->getTopicModel()->findAllTopicsPaginatedByBoardId($boardId, $this->getQuery('page', 1), $itemsPerPage, true);
