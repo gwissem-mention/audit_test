@@ -64,13 +64,17 @@ CommunautePratique_Commentaire.callTinyMce = function(element)
         theme        : "modern",
         theme_url    : '/bundles/nodevotools/js/tinymce/themes/modern/theme.min.js',
         skin_url     : '/bundles/nodevotools/js/tinymce/skins/lightgray',
-        plugins      : 'link communautePratiqueDocument publicationDomaine',
+        plugins      : 'paste link communautePratiqueDocument publicationDomaine',
         height       : 120,
         menubar      : false,
         content_css  : '/bundles/nodevotools/css/wysiwyg.css',
         toolbar1     : 'bold | underline | italic | link | communautePratiqueDocument | publicationDomaine',
         relative_urls: false,
-        statusbar    : false
+        statusbar    : false,
+        paste_auto_cleanup_on_paste   : true,
+        paste_remove_styles           : true,
+        paste_remove_styles_if_webkit : true,
+        paste_strip_class_attributes  : true
     });
 };
 

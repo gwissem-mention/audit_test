@@ -5,6 +5,7 @@ $(document).ready(function() {
     tinymce.PluginManager.load('importcss', '/bundles/nodevotools/js/tinymce/plugins/importcss/plugin.min.js');
     tinymce.PluginManager.load('image', '/bundles/nodevotools/js/tinymce/plugins/image/plugin.min.js');
     tinymce.PluginManager.load('link', '/bundles/nodevotools/js/tinymce/plugins/link/plugin.min.js');
+    tinymce.PluginManager.load('paste', '/bundles/nodevotools/js/tinymce/plugins/paste/plugin.min.js');
     tinymce.PluginManager.load('media', '/bundles/nodevotools/js/tinymce/plugins/media/plugin.min.js');
     tinymce.PluginManager.load('textcolor', '/bundles/nodevotools/js/plugins/text-color/plugin.min.js');
     tinymce.PluginManager.load('publication', '/bundles/hopitalnumeriqueobjet/js/publication/plugin.min.js');
