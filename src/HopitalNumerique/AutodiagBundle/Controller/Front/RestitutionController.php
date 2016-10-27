@@ -14,10 +14,6 @@ class RestitutionController extends Controller
 {
     public function indexAction($synthesis, $pdf = false, $noLayout = false)
     {
-        if (!in_array(@$_SERVER['REMOTE_ADDR'], array('127.0.0.1', '109.26.138.14'))) {
-            die('Les autodiagnostics sont en maintenance');
-        }
-
         $synthesis = $this->getDoctrine()->getManager()->getRepository('HopitalNumeriqueAutodiagBundle:Synthesis')
             ->getFullyLoadedSynthesis($synthesis);
 
@@ -66,11 +62,7 @@ class RestitutionController extends Controller
 
     public function exportItemAction(Synthesis $synthesis, Item $restitutionItem, $type)
     {
-        if (!in_array(@$_SERVER['REMOTE_ADDR'], array('127.0.0.1', '109.26.138.14'))) {
-            die('Les autodiagnostics sont en maintenance');
-        }
-
-        if (!$this->isGranted('read', $synthesis)) {
+       if (!$this->isGranted('read', $synthesis)) {
             $this->addFlash('danger', $this->get('translator')->trans('ad.synthesis.restitution.forbidden'));
 
             return $this->redirectToRoute('hopitalnumerique_autodiag_entry_add', [
@@ -88,10 +80,6 @@ class RestitutionController extends Controller
 
     public function sendResultAction(Request $request, Synthesis $synthesis)
     {
-        if (!in_array(@$_SERVER['REMOTE_ADDR'], array('127.0.0.1', '109.26.138.14'))) {
-            die('Les autodiagnostics sont en maintenance');
-        }
-
         if (!$this->isGranted('read', $synthesis)) {
             $this->addFlash('danger', $this->get('translator')->trans('ad.synthesis.restitution.forbidden'));
 

@@ -28,10 +28,6 @@ class AutodiagEntryController extends Controller
      */
     public function addAction(Autodiag $autodiag, $noLayout = false)
     {
-        if (!in_array(@$_SERVER['REMOTE_ADDR'], array('127.0.0.1', '109.26.138.14'))) {
-            die('Les autodiagnostics sont en maintenance');
-        }
-
         $entry = $this->get('autodiag.entry.session')->get($autodiag)->first();
         if (false !== $entry && $entry->getId()) {
             return $this->redirectToRoute(
@@ -54,10 +50,6 @@ class AutodiagEntryController extends Controller
      */
     public function editAction(AutodiagEntry $entry, $noLayout = false)
     {
-        if (!in_array(@$_SERVER['REMOTE_ADDR'], array('127.0.0.1', '109.26.138.14'))) {
-            die('Les autodiagnostics sont en maintenance');
-        }
-
         $autodiag = $entry->getSynthesis()->getAutodiag();
 
         if (!$this->isGranted('edit', $entry)) {
@@ -136,10 +128,6 @@ class AutodiagEntryController extends Controller
      */
     public function ajaxAttributeSaveAction(Request $request, AutodiagEntry $entry, Autodiag\Attribute $attribute)
     {
-        if (!in_array(@$_SERVER['REMOTE_ADDR'], array('127.0.0.1', '109.26.138.14'))) {
-            die('Les autodiagnostics sont en maintenance');
-        }
-
         $this->denyAccessUnlessGranted('edit', $entry);
 
         $entryValue = $this->getDoctrine()->getRepository('HopitalNumeriqueAutodiagBundle:AutodiagEntry\Value')
@@ -197,10 +185,6 @@ class AutodiagEntryController extends Controller
      */
     public function ajaxChapterNotConcernedAction(AutodiagEntry $entry, Autodiag\Container\Chapter $chapter)
     {
-        if (!in_array(@$_SERVER['REMOTE_ADDR'], array('127.0.0.1', '109.26.138.14'))) {
-            die('Les autodiagnostics sont en maintenance');
-        }
-
         $this->denyAccessUnlessGranted('edit', $entry);
 
         $values = [];
@@ -237,10 +221,6 @@ class AutodiagEntryController extends Controller
      */
     public function restitutionOrValidationDemandAction(Request $request, AutodiagEntry $entry, $target)
     {
-        if (!in_array(@$_SERVER['REMOTE_ADDR'], array('127.0.0.1', '109.26.138.14'))) {
-            die('Les autodiagnostics sont en maintenance');
-        }
-
         $response = new Response();
         $repo = $this->getDoctrine()->getManager()->getRepository('HopitalNumeriqueAutodiagBundle:Autodiag\Attribute');
         $autodiag = $entry->getSynthesis()->getAutodiag();
