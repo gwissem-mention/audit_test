@@ -60,7 +60,7 @@ class UserController extends \Symfony\Bundle\FrameworkBundle\Controller\Controll
                 ->findNonDemarres($domaine),
             'groupesEnCours'     => $this->container->get('hopitalnumerique_communautepratique.manager.groupe')
                 ->findEnCours($domaine),
-            'forumCategory'      => $domaine->getCommunautePratiqueForumCategory(),
+            'forumCategory'      => $domaine->getCommunautePratiqueForumCategories()->first(),
             'activeMembers'     => $this->get('hopitalnumerique_user.service.active_member_calculator')->getActiveMembers($usersCDP),
         ]);
     }
