@@ -13,6 +13,10 @@ class SynthesisController extends Controller
 {
     public function saveNewAction(Request $request, Autodiag $autodiag, $noLayout = false)
     {
+        if (!in_array(@$_SERVER['REMOTE_ADDR'], array('127.0.0.1', '109.26.138.14'))) {
+            die('Les autodiagnostics sont en maintenance');
+        }
+
         $entry = AutodiagEntry::create($autodiag, $this->getUser());
         $synthesis = $entry->getSynthesis();
 
@@ -31,7 +35,8 @@ class SynthesisController extends Controller
                 $noLayout ? 'hopitalnumerique_autodiag_entry_edit_no_layout' : 'hopitalnumerique_autodiag_entry_edit',
                 [
                     'entry' => $synthesis->getEntries()->first()->getId()
-                ]);
+                ]
+            );
         }
 
         return $this->createAccessDeniedException();
@@ -40,6 +45,9 @@ class SynthesisController extends Controller
 
     public function scorePollingAction(Request $request)
     {
+        if (!in_array(@$_SERVER['REMOTE_ADDR'], array('127.0.0.1', '109.26.138.14'))) {
+            die('Les autodiagnostics sont en maintenance');
+        }
 
         $syntheses = $request->query->get('syntheses');
 
@@ -60,7 +68,6 @@ class SynthesisController extends Controller
                     $syntheses
                 );
             }
-
 
             usleep(1000);
         }

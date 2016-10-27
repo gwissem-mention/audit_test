@@ -11,64 +11,77 @@ use HopitalNumerique\ForumBundle\Entity\Forum;
  */
 class TopicRepository extends EntityRepository
 {
-  /**
-   * Récupère les derniers topics commentés par type de forum
-   *
-   * @return  QueryBuilder
-   */
-  public function getLastTopicsForum($id, $limit = null) {
-    $qb = $this->_em->createQueryBuilder();
+    /**
+     * Récupère les derniers topics commentés par type de forum
+     *
+     * @param $id
+     * @param null $limit
+     *
+     * @return \Doctrine\ORM\QueryBuilder
+     */
+    public function getLastTopicsForum($id, $limit = null)
+    {
+        $qb = $this->_em->createQueryBuilder();
 
-    $qb->select('topic')
-       ->from('\HopitalNumerique\ForumBundle\Entity\Topic', 'topic')
-       ->innerJoin('topic.lastPost', 'post')
-       ->innerJoin('topic.board', 'board')
-       ->innerJoin('board.category', 'cat')
-       ->innerJoin('cat.forum', 'forum', Join::WITH, 'forum.id = :idForum')
-       ->setParameter('idForum', $id)
-       ->groupBy('topic.id')
-       ->orderBy('post.createdDate', 'DESC');
+        $qb->select('topic')
+            ->from('\HopitalNumerique\ForumBundle\Entity\Topic', 'topic')
+            ->innerJoin('topic.lastPost', 'post')
+            ->innerJoin('topic.board', 'board')
+            ->innerJoin('board.category', 'cat')
+            ->innerJoin('cat.forum', 'forum', Join::WITH, 'forum.id = :idForum')
+            ->setParameter('idForum', $id)
+            ->groupBy('topic.id')
+            ->orderBy('post.createdDate', 'DESC')
+        ;
 
-    if($limit != null) {
-      $qb->setMaxResults($limit);
+        if ($limit != null) {
+            $qb->setMaxResults($limit);
+        }
+
+        return $qb;
     }
 
-    return $qb;
-  }
+    /**
+     * Récupère les derniers topics commentés par type de forum
+     *
+     * @param $id
+     * @param null $limit
+     * @param $epingle
+     * @param $idCat
+     *
+     * @return \Doctrine\ORM\QueryBuilder
+     */
+    public function getLastTopicsForumEpingle($id, $limit = null, $epingle, $idCat)
+    {
+        $qb = $this->_em->createQueryBuilder();
 
-  /**
-   * Récupère les derniers topics commentés par type de forum
-   *
-   * @return  QueryBuilder
-   */
-  public function getLastTopicsForumEpingle($id, $limit = null, $epingle, $idCat) {
-  	$qb = $this->_em->createQueryBuilder();
-  
-  	$qb->select('topic')
-  	->from('\HopitalNumerique\ForumBundle\Entity\Topic', 'topic')
-  	->innerJoin('topic.lastPost', 'post')
-  	->innerJoin('topic.board', 'board')
-  	->innerJoin('board.category', 'cat')
-  	->innerJoin('cat.forum', 'forum', Join::WITH, 'forum.id = :idForum')
-  	->andWhere('cat.id = :idCategorie')
-  	->andWhere('topic.isSticky = :sticky')
-  	->setParameter('idForum', $id)
-  	->setParameter('sticky', $epingle)
-  	->setParameter('idCategorie', $idCat)
-  	->groupBy('topic.id')
-  	->orderBy('post.createdDate', 'DESC');
-  
-  	if($limit != null) {
-  		$qb->setMaxResults($limit);
-  	}
-  
-  	return $qb;
-  }
-  
+        $qb->select('topic')
+            ->from('\HopitalNumerique\ForumBundle\Entity\Topic', 'topic')
+            ->innerJoin('topic.lastPost', 'post')
+            ->innerJoin('topic.board', 'board')
+            ->innerJoin('board.category', 'cat')
+            ->innerJoin('cat.forum', 'forum', Join::WITH, 'forum.id = :idForum')
+            ->andWhere('cat.id = :idCategorie')
+            ->andWhere('topic.isSticky = :sticky')
+            ->setParameter('idForum', $id)
+            ->setParameter('sticky', $epingle)
+            ->setParameter('idCategorie', $idCat)
+            ->groupBy('topic.id')
+            ->orderBy('post.createdDate', 'DESC')
+        ;
+
+        if ($limit != null) {
+            $qb->setMaxResults($limit);
+        }
+
+        return $qb;
+    }
+
     /**
      * Retourne les topics d'un forum.
      *
      * @param \HopitalNumerique\ForumBundle\Entity\Forum $forum Forum
+     *
      * @return array<\HopitalNumerique\ForumBundle\Entity\Topic> Topics
      */
     public function findByForum(Forum $forum)
@@ -76,7 +89,7 @@ class TopicRepository extends EntityRepository
         $query = $this->createQueryBuilder('topic');
 
         $query
-            ->addSelect(array('board', 'category'))
+            ->addSelect(['board', 'category'])
             ->innerJoin('topic.board', 'board')
             ->innerJoin('board.category', 'category', Join::WITH, 'category.forum = :forum')
             ->setParameter('forum', $forum)
@@ -92,6 +105,7 @@ class TopicRepository extends EntityRepository
      * Retourne le nombre de fils d'un forum.
      *
      * @param integer $forumId ID du forum
+     *
      * @return integer Nombre
      */
     public function getCountForForum($forumId)

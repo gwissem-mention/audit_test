@@ -31,8 +31,8 @@ class TopicManager extends BaseManager
     {
         parent::__construct($entityManager);
 
-        $this->_userManager      = $userManager;
-        $this->_domaineManager   = $domaineManager;
+        $this->_userManager = $userManager;
+        $this->_domaineManager = $domaineManager;
         $this->_referenceManager = $referenceManager;
     }
 
@@ -46,18 +46,19 @@ class TopicManager extends BaseManager
      */
     private function getChilds(&$retour, $elem)
     {
-        if( isset( $elem['childs'] ) && count($elem['childs']) ){
-            $childs = array();
-            foreach( $elem["childs"] as $key => $one ){
-                $childs[ $one ] = $retour[ $one ];
-                $petitsEnfants  = $this->getChilds($retour, $childs[ $one ]);
-                if( $petitsEnfants ){
-                    $childs[ $one ]['childs'] = $petitsEnfants;
-                    unset( $retour[ $one ] );
+        if (isset($elem['childs']) && count($elem['childs'])) {
+            $childs = [];
+            foreach ($elem["childs"] as $key => $one) {
+                $childs[$one] = $retour[$one];
+                $petitsEnfants = $this->getChilds($retour, $childs[$one]);
+                if ($petitsEnfants) {
+                    $childs[$one]['childs'] = $petitsEnfants;
+                    unset($retour[$one]);
                 } else {
-                    unset( $retour[ $one ] );
+                    unset($retour[$one]);
                 }
             }
+
             return $childs;
         } else {
             return false;
@@ -72,8 +73,9 @@ class TopicManager extends BaseManager
      *
      * @return \HopitalNumerique\ForumBundle\Entity\Topic[] Liste des topics
      */
-    public function getLastTopicsForum($id, $limit = null) {
-      return $this->getRepository()->getLastTopicsForum($id, $limit)->getQuery()->getResult();
+    public function getLastTopicsForum($id, $limit = null)
+    {
+        return $this->getRepository()->getLastTopicsForum($id, $limit)->getQuery()->getResult();
     }
 
     /**
@@ -86,17 +88,18 @@ class TopicManager extends BaseManager
      *
      * @return \HopitalNumerique\ForumBundle\Entity\Topic[] Liste des topics
      */
-    public function getLastTopicsForumEpingle($id, $limit = null, $idCat) {
-    	$topicEpingle = $this->getRepository()->getLastTopicsForumEpingle($id, $limit, true, $idCat)->getQuery()->getResult();
-    	
-    	if ($limit > count($topicEpingle)) {
-    		$topic = $this->getRepository()->getLastTopicsForumEpingle($id, $limit - count($topicEpingle),false , $idCat)->getQuery()->getResult();
-    		$topicEpingle = array_merge($topicEpingle, $topic);
-    	}
+    public function getLastTopicsForumEpingle($id, $limit = null, $idCat)
+    {
+        $topicEpingle = $this->getRepository()->getLastTopicsForumEpingle($id, $limit, true, $idCat)->getQuery()->getResult();
 
-    	return $topicEpingle;
+        if ($limit > count($topicEpingle)) {
+            $topic = $this->getRepository()->getLastTopicsForumEpingle($id, $limit - count($topicEpingle), false, $idCat)->getQuery()->getResult();
+            $topicEpingle = array_merge($topicEpingle, $topic);
+        }
+
+        return $topicEpingle;
     }
-    
+
     /**
      * Retourne les topics d'un forum.
      *
@@ -117,5 +120,41 @@ class TopicManager extends BaseManager
     public function getCountForForum($forumId)
     {
         return $this->getRepository()->getCountForForum($forumId);
+    }
+
+    /**
+     * Retourne un tableau de topics ordonné par date de création du dernier post
+     *
+     * @param array $topicsByCategories Tableau des topics groupés par catégorie
+     *
+     * @return array
+     */
+    public function formatTopics($topicsByCategories)
+    {
+        $topics = [];
+
+        foreach ($topicsByCategories as $topicsByCategory) {
+            if (count($topicsByCategory) > 0) {
+                foreach ($topicsByCategory['topics'] as $value) {
+                    $topics[] = [
+                        'topic'      => $value,
+                        'categoryId' => $topicsByCategory['categoryId'],
+                        'forumName'  => $topicsByCategory['forumName'],
+                    ];
+                }
+            }
+        }
+
+        usort($topics, function ($a, $b) {
+            if ($a['topic']->isSticky()) {
+                return false;
+            } elseif ($b['topic']->isSticky()) {
+                return true;
+            }
+
+            return $a['topic']->getLastPost()->getCreatedDate() < $b['topic']->getLastPost()->getCreatedDate();
+        });
+
+        return array_slice($topics, 0, 4);
     }
 }

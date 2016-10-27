@@ -17,6 +17,10 @@ class ValidationController extends Controller
      */
     public function indexAction($synthesis, $noLayout = false)
     {
+        if (!in_array(@$_SERVER['REMOTE_ADDR'], array('127.0.0.1', '109.26.138.14'))) {
+            die('Les autodiagnostics sont en maintenance');
+        }
+
         $synthesis = $this->getDoctrine()->getManager()->getRepository('HopitalNumeriqueAutodiagBundle:Synthesis')
             ->getFullyLoadedSynthesis($synthesis);
 
@@ -47,6 +51,10 @@ class ValidationController extends Controller
      */
     public function validateAction(Request $request, Synthesis $synthesis, $referer = false)
     {
+        if (!in_array(@$_SERVER['REMOTE_ADDR'], array('127.0.0.1', '109.26.138.14'))) {
+            die('Les autodiagnostics sont en maintenance');
+        }
+
         if (!$this->isGranted('validate', $synthesis)) {
             throw new AccessDeniedHttpException();
         }
@@ -83,6 +91,10 @@ class ValidationController extends Controller
      */
     public function unvalidateAction(Request $request, Synthesis $synthesis, $referer = false)
     {
+        if (!in_array(@$_SERVER['REMOTE_ADDR'], array('127.0.0.1', '109.26.138.14'))) {
+            die('Les autodiagnostics sont en maintenance');
+        }
+
         if (!$this->isGranted('validate', $synthesis)) {
             throw new AccessDeniedHttpException();
         }

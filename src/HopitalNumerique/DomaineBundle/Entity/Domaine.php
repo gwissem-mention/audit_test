@@ -2,6 +2,7 @@
 
 namespace HopitalNumerique\DomaineBundle\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use APY\DataGridBundle\Grid\Mapping as GRID;
 use HopitalNumerique\ForumBundle\Entity\Category;
@@ -178,20 +179,25 @@ class Domaine
     /**
      * @var Category
      *
-     * @ORM\ManyToOne(targetEntity="HopitalNumerique\ForumBundle\Entity\Category")
+     * @ORM\ManyToMany(targetEntity="HopitalNumerique\ForumBundle\Entity\Category")
+     * @ORM\JoinTable(name="hn_forum_category_domaine",
+     *      joinColumns={@ORM\JoinColumn(name="domaine_id", referencedColumnName="dom_id")},
+     *      inverseJoinColumns={@ORM\JoinColumn(name="category_id", referencedColumnName="id")}
+     *      )
      */
-    protected $communautePratiqueForumCategory = null;
+    protected $communautePratiqueForumCategories;
 
     /**
      * Constructor
      */
     public function __construct()
     {
-        $this->users      = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->references = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->objets     = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->contenus = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->communautePratiqueGroupes = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->users      = new ArrayCollection();
+        $this->references = new ArrayCollection();
+        $this->objets     = new ArrayCollection();
+        $this->contenus = new ArrayCollection();
+        $this->communautePratiqueGroupes = new ArrayCollection();
+        $this->communautePratiqueForumCategories = new ArrayCollection();
     }
 
 
@@ -816,18 +822,26 @@ class Domaine
     }
 
     /**
-     * @return Category
+     * @return ArrayCollection Category[]
      */
-    public function getCommunautePratiqueForumCategory()
+    public function getCommunautePratiqueForumCategories()
     {
-        return $this->communautePratiqueForumCategory;
+        return $this->communautePratiqueForumCategories;
     }
 
     /**
-     * @param Objet $communautePratiqueForumCategory
+     * @param Category $category
      */
-    public function setCommunautePratiqueForumCategory($communautePratiqueForumCategory)
+    public function addCommunautePratiqueForumCategories(Category $category)
     {
-        $this->communautePratiqueForumCategory = $communautePratiqueForumCategory;
+        $this->communautePratiqueForumCategories->add($category);
+    }
+
+    /**
+     * @param Category $category
+     */
+    public function removeCommunautePratiqueForumCategories(Category $category)
+    {
+        $this->communautePratiqueForumCategories->remove($category);
     }
 }

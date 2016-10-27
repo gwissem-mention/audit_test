@@ -133,7 +133,7 @@ class AutodiagEntriesExport extends AbstractExport
     {
         $values = [];
         $x = 'A';
-        while ($x != 'AAA') {
+        while ($x != 'AAAA') {
             $values[] = $x++;
         }
         $values[] = $x;

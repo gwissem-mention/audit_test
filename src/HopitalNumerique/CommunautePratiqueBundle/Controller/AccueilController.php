@@ -17,7 +17,8 @@ class AccueilController extends \Symfony\Bundle\FrameworkBundle\Controller\Contr
     public function indexAction(Request $request)
     {
         $allowed = $this->container->get('hopitalnumerique_communautepratique.dependency_injection.security')
-            ->canAccessCommunautePratique();
+            ->canAccessCommunautePratique()
+        ;
 
         if (!$allowed) {
             return $this->redirect(
@@ -27,42 +28,50 @@ class AccueilController extends \Symfony\Bundle\FrameworkBundle\Controller\Contr
 
         /** @var Domaine $domaine */
         $domaine = $this->container->get('hopitalnumerique_domaine.manager.domaine')
-            ->findOneById($request->getSession()->get('domaineId'));
+            ->findOneById($request->getSession()->get('domaineId'))
+        ;
         $groupeUserEnCour = $this->container->get('hopitalnumerique_communautepratique.manager.groupe')
-                    ->findEnCoursByUser($domaine, $this->getUser());
+            ->findEnCoursByUser($domaine, $this->getUser())
+        ;
         $groupeUserAVenir = $this->container->get('hopitalnumerique_communautepratique.manager.groupe')
-                    ->findNonDemarresByUser($domaine, $this->getUser());
+            ->findNonDemarresByUser($domaine, $this->getUser())
+        ;
         $groupeUser = array_merge($groupeUserEnCour, $groupeUserAVenir);
 
-        $forum = null;
-        $topics = null;
-        $forumCategory = $domaine->getCommunautePratiqueForumCategory();
-        if ($forumCategory) {
-            $forum = $forumCategory->getForum();
-            $topics = $this->container->get('hopitalnumerique_forum.manager.topic')
-                ->getLastTopicsForumEpingle($forum->getId(), 4, $forumCategory->getId() ?: null);
+        $topicsByCategories = [];
+        $forumCategories = $domaine->getCommunautePratiqueForumCategories();
+        if (count($forumCategories) > 0) {
+            foreach ($forumCategories as $category) {
+                $topicsByCategories[] = [
+                    'topics'      => $this->container
+                        ->get('hopitalnumerique_forum.manager.topic')
+                        ->getLastTopicsForumEpingle($category->getForum()->getId(), 4, $category->getId() ?: null),
+                    'categoryId' => $category->getId(),
+                    'forumName'   => $category->getForum()->getName(),
+                ];
+            }
         }
 
         return $this->render(
             'HopitalNumeriqueCommunautePratiqueBundle:Accueil:index.html.twig',
-            array(
-                'groupes' => (count($this->getUser()->getCommunautePratiqueAnimateurGroupes()) > 0
-                    || $this->getUser()->hasRoleAdmin() || $this->getUser()->hasRoleAdminHn()
+            [
+                'groupes'            => (count($this->getUser()->getCommunautePratiqueAnimateurGroupes()) > 0
+                || $this->getUser()->hasRoleAdmin() || $this->getUser()->hasRoleAdminHn()
                     ? ($this->container->get('hopitalnumerique_communautepratique.manager.groupe')
                         ->findNonFermes($domaine, ($this->getUser()->hasRoleAdmin() || $this->getUser()->hasRoleAdminHn() ? null : $this->getUser())))
-                    : array()),
-                'actualites' => $this->container->get('hopitalnumerique_objet.manager.objet')
+                    : []),
+                'actualites'         => $this->container->get('hopitalnumerique_objet.manager.objet')
                     ->getArticlesForCategorie($this->container->get('hopitalnumerique_reference.manager.reference')
                         ->findOneById(Reference::ARTICLE_CATEGORIE_COMMUNAUTE_DE_PRATIQUES_ID), $domaine),
-                'groupesEnVedette' => $this->container->get('hopitalnumerique_communautepratique.manager.groupe')
+                'groupesEnVedette'   => $this->container->get('hopitalnumerique_communautepratique.manager.groupe')
                     ->findNonFermes($domaine, null, true),
                 'userGroupesEnCours' => $groupeUser,
-                'totalMembres' => $this->container->get('hopitalnumerique_user.manager.user')
+                'totalMembres'       => $this->container->get('hopitalnumerique_user.manager.user')
                     ->findCommunautePratiqueMembresCount(),
-                'membres' => $this->getMembresAuHasard(),
-                'forum' => $forum,
-                'forumLastTopics' => $topics,
-            )
+                'membres'            => $this->getMembresAuHasard(),
+                'forumLastTopics'    => $this->get('hopitalnumerique_forum.manager.topic')
+                    ->formatTopics($topicsByCategories),
+            ]
         );
     }
 

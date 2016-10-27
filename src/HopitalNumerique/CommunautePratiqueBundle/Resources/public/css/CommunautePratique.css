@@ -259,6 +259,7 @@ ul.communaute-de-pratiques-mes-groupes { list-style-type: none;margin: 0;padding
         .communaute-de-pratiques-tableau-de-bord .forum { font-size: 13px; margin-bottom: 20px;}
             .communaute-de-pratiques-tableau-de-bord .panel-body { padding: 30px; }
             .communaute-de-pratiques-tableau-de-bord .forum h3 { font-size: 14px;margin: 0 0 4px; }
+            .communaute-de-pratiques-tableau-de-bord .forum .salon-access { font-size: 10px; margin-left: 2px; }
 
 /* Page des groupes */
 #communaute-pratiques-groupes {}

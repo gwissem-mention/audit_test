@@ -62,6 +62,10 @@ class AccountController extends Controller
      */
     public function generateSynthesisAction(Request $request)
     {
+        if (!in_array(@$_SERVER['REMOTE_ADDR'], array('127.0.0.1', '109.26.138.14'))) {
+            die('Les autodiagnostics sont en maintenance');
+        }
+        
         $form = $request->request;
 
         if (count($form->get('synthesis-choice')) > 1) {
@@ -131,6 +135,10 @@ class AccountController extends Controller
      */
     public function deleteAction(Request $request, Synthesis $synthesis, $currentSynthesisId = null)
     {
+        if (!in_array(@$_SERVER['REMOTE_ADDR'], array('127.0.0.1', '109.26.138.14'))) {
+            die('Les autodiagnostics sont en maintenance');
+        }
+
         $user = $this->getUser();
         $synthesisId = $synthesis->getId();
 

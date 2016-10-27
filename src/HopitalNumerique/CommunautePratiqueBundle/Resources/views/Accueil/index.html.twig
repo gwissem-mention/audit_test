@@ -160,27 +160,28 @@
             </div>
             <div class="col-md-6">
                 <!-- Block forum CDP !-->
-                {% if forum %}
+                {% if forumLastTopics|length > 0 %}
                     <div class="panel panel-communaute-de-pratiques" id="panel-communaute-de-pratiques-forums">
                         <div class="panel-heading">
-                            <h2 class="lien-titre"><a href="{{- path('ccdn_forum_user_category_show', {'categoryId': 13, 'forumName': forum.name}) -}}"><em class="icon icon-chat27"></em> Échanger avec toute la communauté</a></h2>
+                            <h2 class="lien-titre">
+                                <em class="icon icon-chat27"></em> Échanger avec toute la communauté
+                            </h2>
                         </div>
                         <div class="panel-body">
-
                             <div class="row">
                                 {%- for topic in forumLastTopics -%}
                                     <div class="col-md-12">
                                         <div class="forum">
-                                            <h3><a href="{{ path('ccdn_forum_user_topic_show', { forumName:topic.board.category.forum.name, topicId:topic.firstPost.topic.id }) }}"><strong>{{ topic.firstPost.topic.title }}</strong></a></h3>
-                                            {{ topic.firstPost.body|replace({'\"[': '' , ']\"': ''})|truncate(250) }} <a href="{{ path('ccdn_forum_user_topic_show', { forumName:topic.board.category.forum.name, topicId:topic.firstPost.topic.id }) }}">En savoir plus</a>
+                                            <h3>
+                                                <a href="{{ path('ccdn_forum_user_topic_show', { forumName:topic['topic'].board.category.forum.name, topicId:topic['topic'].firstPost.topic.id }) }}"><strong>{{ topic['topic'].firstPost.topic.title }}</strong></a>
+                                                <a href="{{- path('ccdn_forum_user_category_show', {'categoryId': topic['categoryId'], 'forumName': topic['forumName']}) -}}" class="salon-access"><em class="fa fa-angle-double-right"></em> Accéder au salon</a>
+                                            </h3>
+                                            {{ topic['topic'].firstPost.body|replace({'\"[': '' , ']\"': ''})|truncate(250) }}
+                                            <a href="{{ path('ccdn_forum_user_topic_show', { forumName:topic['topic'].board.category.forum.name, topicId:topic['topic'].firstPost.topic.id }) }}">En savoir plus</a>
                                         </div>
                                     </div>
                                 {%- endfor -%}
                             </div>
-                            <nav class="lien">
-                                <a href="{{- path('ccdn_forum_user_category_show', {'categoryId': 13, 'forumName': forum.name}) -}}"><em class="fa fa-angle-double-right"></em> &nbsp; Accéder au salon</a>
-                            </nav>
-
                         </div>
                     </div>
                 {% endif %}
