@@ -78,7 +78,11 @@
     </head>
 
     <body>
-
+        <div style="position: absolute; top: 20px; right: 20px;">
+            <div style="margin-right: 5px;" onclick="print();" class="btn btn-sm btn-default" title="Imprimer cette page"><i class="fa fa-print"></i></div>
+            <a href="{{path('hopitalnumerique_objet_objet_feed_rss')}}" class="pull-right btn btn-sm btn-default btnrss" title="Flux RSS"><i class="fa fa-rss"></i></a>
+        </div>
+    
         <div id="synthese-ajax" >
             <img src="{{asset('bundles/hopitalnumeriquecore/img/anap.jpg')}}" alt="ANAP" id="logoAnap" />
 
@@ -96,13 +100,6 @@
                 {% else %}
                     Vous n'avez pas les droits nécessaires pour accéder à cette publication.
                 {% endif %}
-            </div>
-
-            <div class="footer" >
-                <div class="pull-right" style="margin:0 20px 20px 0">
-                    <div onclick="print();" class="btn-info btn btnprint">Imprimer</div>
-                    <a href="{{path('hopitalnumerique_objet_objet_feed_rss')}}" class="pull-right btn btn-sm btn-default btnrss"><i class="fa fa-rss"></i></a>
-                </div>
             </div>
 
             <div class="clearfix"></div>
