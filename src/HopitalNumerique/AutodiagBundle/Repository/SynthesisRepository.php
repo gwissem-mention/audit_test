@@ -176,4 +176,24 @@ class SynthesisRepository extends EntityRepository
         }
         return $result;
     }
+
+    /**
+     * Find syntheses with only one entry
+     *
+     * @param $ids
+     * @return array
+     */
+    public function findSimpleByIds($ids)
+    {
+        $qb = $this->createQueryBuilder('s');
+        $qb
+            ->join('s.entries', 'entries')
+            ->where('s.id in (:ids)')
+            ->groupBy('s.id')
+            ->having('count(entries.id) = 1')
+            ->setParameter('ids', $ids)
+        ;
+
+        return $qb->getQuery()->getResult();
+    }
 }

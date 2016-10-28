@@ -2,12 +2,12 @@
 namespace HopitalNumerique\ForumBundle\Controller;
 
 use CCDNForum\ForumBundle\Controller\UserTopicController as UserTopicControllerCCDN;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use HopitalNumerique\ForumBundle\Entity\Board;
-use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
@@ -21,6 +21,8 @@ use Symfony\Component\Security\Core\User\UserInterface;
  */
 class UserTopicController extends UserTopicControllerCCDN
 {
+    use ForumControllerAuthorizationCheckerTrait;
+
     /**
      *
      * @access public
@@ -32,20 +34,7 @@ class UserTopicController extends UserTopicControllerCCDN
     {
         $this->isFound($forum = $this->getForumModel()->findOneForumByName($forumName));
         $this->isFound($topic = $this->getTopicModel()->findOneTopicByIdWithBoardAndCategory($topicId, true));
-
-        if (!$this->getAuthorizer()->canShowTopic($topic, $forum)) {
-            if ($this->getUser() === 'anon.') {
-                $redirectUrl = $this->container->get('router')
-                    ->generate('ccdn_forum_user_topic_show', ['topicId' => $topicId])
-                ;
-                $redirectUrl = rtrim(strtr(base64_encode($redirectUrl), '+/', '-_'), '=');
-                $url = $this->container->get('router')->generate('account_login', ['urlToRedirect' => $redirectUrl]);
-
-                return new RedirectResponse($url, 302);
-            } else {
-                throw new AccessDeniedException();
-            }
-        }
+        $this->isAuthorised($this->getAuthorizer()->canShowTopic($topic, $forum));
 
         $postsPager = $this->getPostModel()
             ->findAllPostsPaginatedByTopicId(
@@ -114,6 +103,17 @@ class UserTopicController extends UserTopicControllerCCDN
             $this->container->get('session')
                 ->getFlashBag()->add('warning', 'Vous devez vous identifier pour créer un fil de discussion.')
             ;
+
+            $urlToRedirect = $this->getContainer()->get('router')->generate(
+                $this->getContainer()->get('request')->attributes->get('_route'),
+                $this->getContainer()->get('request')->attributes->get('_route_params')
+            );
+
+            $urlToRedirect = rtrim(strtr(base64_encode($urlToRedirect), '+/', '-_'), '=');
+
+            return new RedirectResponse($this->container->get('router')
+                ->generate('hopitalnumerique_forum_quick_signup', ['urlToRedirect' => $urlToRedirect]), 302)
+                ;
         }
 
         //-->
@@ -142,6 +142,17 @@ class UserTopicController extends UserTopicControllerCCDN
             $this->container->get('session')
                 ->getFlashBag()->add('warning', 'Vous devez vous identifier pour poster une réponse.')
             ;
+
+            $urlToRedirect = $this->getContainer()->get('router')->generate(
+                $this->getContainer()->get('request')->attributes->get('_route'),
+                $this->getContainer()->get('request')->attributes->get('_route_params')
+            );
+
+            $urlToRedirect = rtrim(strtr(base64_encode($urlToRedirect), '+/', '-_'), '=');
+
+            return new RedirectResponse($this->container->get('router')
+                ->generate('hopitalnumerique_forum_quick_signup', ['urlToRedirect' => $urlToRedirect]), 302)
+                ;
         }
 
         //-->
@@ -242,5 +253,13 @@ class UserTopicController extends UserTopicControllerCCDN
         }
 
         return $subscription->isSubscribed();
+    }
+
+    /**
+     * @return ContainerInterface
+     */
+    public function getContainer()
+    {
+        return $this->container;
     }
 }

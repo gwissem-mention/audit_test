@@ -3,6 +3,7 @@ namespace HopitalNumerique\ForumBundle\Controller;
 
 use CCDNForum\ForumBundle\Component\Dispatcher\Event\AdminForumResponseEvent;
 use CCDNForum\ForumBundle\Component\Dispatcher\ForumEvents;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
@@ -19,6 +20,8 @@ use Symfony\Component\Security\Core\Exception\AccessDeniedException;
  */
 class AdminForumController extends \CCDNForum\ForumBundle\Controller\AdminForumBaseController
 {
+    use ForumControllerAuthorizationCheckerTrait;
+
     /**
      *
      * @access public
@@ -205,5 +208,13 @@ class AdminForumController extends \CCDNForum\ForumBundle\Controller\AdminForumB
         $this->dispatch(ForumEvents::ADMIN_FORUM_DELETE_RESPONSE, new AdminForumResponseEvent($this->getRequest(), $response, $formHandler->getForm()->getData()));
 
         return $response;
+    }
+
+    /**
+     * @return ContainerInterface
+     */
+    public function getContainer()
+    {
+        return $this->container;
     }
 }

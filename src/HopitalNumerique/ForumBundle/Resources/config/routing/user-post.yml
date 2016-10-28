@@ -3,11 +3,11 @@
 #
 ccdn_forum_user_post_show:
     pattern: /{postId}
-    defaults: { _controller: CCDNForumForumBundle:UserPost:show, _locale: fr, forumName: Public }
+    defaults: { _controller: HopitalNumeriqueForumBundle:UserPost:show, _locale: fr, forumName: Public }
 
 ccdn_forum_user_post_edit:
     pattern: /{postId}/edit
-    defaults: { _controller: CCDNForumForumBundle:UserPost:edit, _locale: fr, forumName: Public }
+    defaults: { _controller: HopitalNumeriqueForumBundle:UserPost:edit, _locale: fr, forumName: Public }
 
 ccdn_forum_user_post_edit_process:
     pattern: /{postId}/edit/process
@@ -15,11 +15,11 @@ ccdn_forum_user_post_edit_process:
 
 ccdn_forum_user_post_delete:
     pattern: /{postId}/delete
-    defaults: { _controller: CCDNForumForumBundle:UserPost:delete, _locale: fr, forumName: Public }
+    defaults: { _controller: HopitalNumeriqueForumBundle:UserPost:delete, _locale: fr, forumName: Public }
 
 ccdn_forum_user_post_delete_process:
     pattern: /{postId}/delete/process
-    defaults: { _controller: CCDNForumForumBundle:UserPost:deleteProcess, _locale: fr, forumName: Public }
+    defaults: { _controller: HopitalNumeriqueForumBundle:UserPost:deleteProcess, _locale: fr, forumName: Public }
 
 ccdn_forum_user_post_download:
     pattern: /post/{post}/telecharge

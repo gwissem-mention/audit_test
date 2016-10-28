@@ -15,9 +15,10 @@ class ReferenceController extends Controller
     /**
      * Epingle le board
      *
-     * @param  Int  idTopic
-     *
+     * @param Topic $topic
      * @return Response
+     * @internal param idTopic $Int
+     *
      */
     public function topicPinAction(Topic $topic)
     {
@@ -26,7 +27,7 @@ class ReferenceController extends Controller
         $topic->setStickiedDate(new \DateTime());
         $this->container->get('hopitalnumerique_forum.manager.topic')->save($topic);
 
-        $response = json_encode(array('success' => $topic->isSticky() ));
+        $response = json_encode(['success' => $topic->isSticky()]);
 
         return new Response($response, 200);
     }

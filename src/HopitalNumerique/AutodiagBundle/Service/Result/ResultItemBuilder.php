@@ -34,7 +34,7 @@ class ResultItemBuilder
      */
     protected $attributeRepository;
 
-    protected $responses = null;
+    protected $responses = [];
     protected $minAndMaxForAutodiagAttributes = null;
 
     public function __construct(Completion $completion, AttributeBuilderProvider $attributeBuilder, ValueRepository $valueRepository, AttributeRepository $attributeRepository)
@@ -47,8 +47,6 @@ class ResultItemBuilder
 
     public function build(Container $container, Synthesis $synthesis)
     {
-        $this->responses = null;
-
         $resultItem = new Item();
 
         $resultItem->setLabel($container->getExtendedLabel());
@@ -78,14 +76,14 @@ class ResultItemBuilder
 
     protected function getResponses(Synthesis $synthesis, Container $container)
     {
-        if (null === $this->responses) {
-            $this->responses = $this->valueRepository->getFullValuesByEntry(
+        if (!array_key_exists($synthesis->getId(), $this->responses)) {
+            $this->responses[$synthesis->getId()] = $this->valueRepository->getFullValuesByEntry(
                 $synthesis->getAutodiag()->getId(),
                 $synthesis->getEntries()->first()->getId()
             );
         }
 
-        foreach ($this->responses as $response) {
+        foreach ($this->responses[$synthesis->getId()] as $response) {
             if (in_array($container->getId(), $response['container_id'])) {
                 yield $response;
             }

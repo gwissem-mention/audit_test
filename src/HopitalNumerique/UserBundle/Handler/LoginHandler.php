@@ -50,7 +50,7 @@ class LoginHandler implements AuthenticationSuccessHandlerInterface
         if ($this->_aclManager->checkAuthorization($this->router->generate('hopital_numerique_admin_homepage' ), $user) == -1 && !in_array($domaineCurrentId, $user->getDomainesId())) {
             //Récupération de l'entité
             $domaineCurrent = $this->_domaineManager->findOneById($domaineCurrentId);
-            
+
             $userDomaines   = $user->getDomaines();
             $userDomaines[] = $domaineCurrent;
 

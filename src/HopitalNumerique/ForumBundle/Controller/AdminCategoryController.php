@@ -16,6 +16,7 @@ namespace HopitalNumerique\ForumBundle\Controller;
 use CCDNForum\ForumBundle\Component\Dispatcher\ForumEvents;
 use CCDNForum\ForumBundle\Component\Dispatcher\Event\AdminCategoryEvent;
 use CCDNForum\ForumBundle\Component\Dispatcher\Event\AdminCategoryResponseEvent;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
 /**
@@ -31,6 +32,8 @@ use Symfony\Component\Security\Core\Exception\AccessDeniedException;
  */
 class AdminCategoryController extends \CCDNForum\ForumBundle\Controller\AdminCategoryBaseController
 {
+    use ForumControllerAuthorizationCheckerTrait;
+
     /**
      *
      * @access public
@@ -251,5 +254,13 @@ class AdminCategoryController extends \CCDNForum\ForumBundle\Controller\AdminCat
         $this->dispatch(ForumEvents::ADMIN_CATEGORY_REORDER_RESPONSE, new AdminCategoryResponseEvent($this->getRequest(), $response, $category));
 
         return $response;
+    }
+
+    /**
+     * @return ContainerInterface
+     */
+    public function getContainer()
+    {
+        return $this->container;
     }
 }

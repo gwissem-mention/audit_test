@@ -13,19 +13,16 @@ class CronController extends Controller
      */
     public function cronAction($id)
     {
-        if ($id == '34QHWURJYILOLP24FKGMEROX2EZFQSOSUXVRT')
-        {
+        if ($id == '34QHWURJYILOLP24FKGMEROX2EZFQSOSUXVRT') {
             //---Topic
             //Récupération de tout les topics supprimé de manière soft
-            $topics = $this->get('hopitalnumerique_forum.manager.topic')->findBy(array('isDeleted' => true));
+            $topics = $this->get('hopitalnumerique_forum.manager.topic')->findBy(['isDeleted' => true]);
 
             //Suppression des posts liés aux topics à delete
-            $postsToDelete = array();
-            $topicToDelete = array();
-            foreach ($topics as $topic) 
-            {
-                foreach ($topic->getPosts() as $post) 
-                {
+            $postsToDelete = [];
+            $topicToDelete = [];
+            foreach ($topics as $topic) {
+                foreach ($topic->getPosts() as $post) {
                     $postsToDelete[$post->getId()] = $post;
                     $this->get('hopitalnumerique_forum.service.logger.cronlogger')->addLog('Post ' . $post->getId() . ' supprimé.');
                 }
@@ -38,15 +35,13 @@ class CronController extends Controller
 
             //---Post
             //Récupération de tout les posts supprimé de manière soft
-            $posts = $this->get('hopitalnumerique_forum.manager.post')->findBy(array('isDeleted' => true));
+            $posts = $this->get('hopitalnumerique_forum.manager.post')->findBy(['isDeleted' => true]);
             //Suppression des topics si il n'y a plus de posts de dedans
-            $topicsTemp = array();
-            foreach ($posts as $post) 
-            {
-                $topicTemp    = $post->getTopic();
+            $topicsTemp = [];
+            foreach ($posts as $post) {
+                $topicTemp = $post->getTopic();
                 //Dans le cas où le topic a déjà été supprimé
-                if(is_null($topicTemp))
-                {
+                if (is_null($topicTemp)) {
                     continue;
                 }
                 $topicsTemp[$topicTemp->getId()] = $topicTemp;
@@ -56,10 +51,8 @@ class CronController extends Controller
             //Suppression des posts
             $this->get('hopitalnumerique_forum.manager.post')->delete($posts);
 
-            foreach ($topicsTemp as $topic) 
-            {
-                if (count($topic->getPosts()) == 0 && !array_key_exists($topic->getId(), $topicToDelete))
-                {
+            foreach ($topicsTemp as $topic) {
+                if (count($topic->getPosts()) == 0 && !array_key_exists($topic->getId(), $topicToDelete)) {
                     $topicToDelete[] = $topic;
                     $this->get('hopitalnumerique_forum.service.logger.cronlogger')->addLog('Topic ' . $topic->getId() . ' - ' . $topic->getTitle() . ' supprimé.');
                 }
@@ -72,9 +65,9 @@ class CronController extends Controller
             //Suppression des topics pour finir
             $this->get('hopitalnumerique_forum.manager.topic')->delete($topicToDelete);
 
-            return new Response($this->get('hopitalnumerique_forum.service.logger.cronlogger')->getHtml().'<p>Fin du traitement : OK.</p>');
+            return new Response($this->get('hopitalnumerique_forum.service.logger.cronlogger')->getHtml() . '<p>Fin du traitement : OK.</p>');
         }
-        
+
         return new Response('Clef invalide.');
     }
 }

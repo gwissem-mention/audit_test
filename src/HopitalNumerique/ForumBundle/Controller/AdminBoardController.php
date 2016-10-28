@@ -16,6 +16,7 @@ namespace HopitalNumerique\ForumBundle\Controller;
 use CCDNForum\ForumBundle\Component\Dispatcher\ForumEvents;
 use CCDNForum\ForumBundle\Component\Dispatcher\Event\AdminBoardEvent;
 use CCDNForum\ForumBundle\Component\Dispatcher\Event\AdminBoardResponseEvent;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
 /**
@@ -31,6 +32,8 @@ use Symfony\Component\Security\Core\Exception\AccessDeniedException;
  */
 class AdminBoardController extends \CCDNForum\ForumBundle\Controller\AdminBoardBaseController
 {
+    use ForumControllerAuthorizationCheckerTrait;
+
     /**
      *
      * @access public
@@ -251,5 +254,13 @@ class AdminBoardController extends \CCDNForum\ForumBundle\Controller\AdminBoardB
         $this->dispatch(ForumEvents::ADMIN_BOARD_REORDER_RESPONSE, new AdminBoardResponseEvent($this->getRequest(), $response, $board));
 
         return $response;
+    }
+
+    /**
+     * @return ContainerInterface
+     */
+    public function getContainer()
+    {
+        return $this->container;
     }
 }

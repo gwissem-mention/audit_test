@@ -12,7 +12,7 @@ hopitalnumerique_forum_charte_utilisation_download_pdf:
 
 ccdn_forum_user_topic_create:
     pattern: /create/for-board/{boardId}
-    defaults: { _controller: CCDNForumForumBundle:UserTopic:create, _locale: fr, forumName: Public }
+    defaults: { _controller: HopitalNumeriqueForumBundle:UserTopic:create, _locale: fr, forumName: Public }
 
 ccdn_forum_user_topic_create_process:
     pattern: /create/for-board/{boardId}/process
@@ -20,7 +20,7 @@ ccdn_forum_user_topic_create_process:
 
 ccdn_forum_user_topic_reply:
     pattern: /{topicId}/reply
-    defaults: { _controller: CCDNForumForumBundle:UserTopic:reply, _locale: fr, forumName: Public }
+    defaults: { _controller: HopitalNumeriqueForumBundle:UserTopic:reply, _locale: fr, forumName: Public }
 
 ccdn_forum_user_topic_reply_process:
     pattern: /{topicId}/reply/process
@@ -28,7 +28,7 @@ ccdn_forum_user_topic_reply_process:
 
 hopitalnumerique_forum_post_move:
     pattern: /{topicId}/move
-    defaults: { _controller: CCDNForumForumBundle:UserTopic:deplacerTopic, _locale: fr, forumName: Public }
+    defaults: { _controller: HopitalNumeriqueForumBundle:UserTopic:deplacerTopic, _locale: fr, forumName: Public }
 
 #Reference
 hopitalnumerique_forum_reference_topic:
