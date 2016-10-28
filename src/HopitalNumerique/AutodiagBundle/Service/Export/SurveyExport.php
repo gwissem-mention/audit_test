@@ -103,7 +103,7 @@ class SurveyExport extends AbstractExport
             'text_avant' => $attribute->getDescription(),
             'libelle_question' => $attribute->getLabel(),
             'format_reponse' => $attribute->getType(),
-            'colorer_reponse' => $attribute->isColored() ? '1' : '-1',
+            'colorer_reponse' => $attribute->isColored() ? ($attribute->isColorationInversed() ? '-1' : '1') : '0',
             'infobulle_question' => $attribute->getTooltip(),
         ];
 
