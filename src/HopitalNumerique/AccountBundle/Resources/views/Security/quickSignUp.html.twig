@@ -1,0 +1,32 @@
+{% extends 'HopitalNumeriqueCoreBundle:Templates:' ~ templateCurrentId ~ '/layout.html.twig' %}
+
+{# Référencement #}
+{% block title %}{{ parent() }} - Connexion{% endblock %}
+{% block metadesc %}Connectez-vous à votre compte "{{ domaineCurrent.nom }}" pour accéder aux outils proposés par l'ANAP{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    {% javascripts output="compiled/hopitalnumerique-account-security-login.js"
+    'bundles/hopitalnumeriqueuser/js/User/login_frontoffice.js' %}
+    <script type="text/javascript" src="{{ asset_url }}"></script>
+    {% endjavascripts %}
+{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    {% stylesheets output="compiled/hopitalnumerique-account-security-login.css" filter="cssrewrite, ?yui_css"
+    'bundles/hopitalnumeriqueaccount/css/login.css' %}
+    <link rel="stylesheet" href="{{ asset_url }}"/>
+    {% endstylesheets %}
+{% endblock %}
+
+{% block body %}
+    <div class="panel-body">
+        <div class="col-md-6">
+            {% include 'HopitalNumeriqueAccountBundle:include:login.html.twig' with { 'size':'small', 'title':'Connexion', 'displayInscription':false } %}
+        </div>
+        <div class="col-md-6">
+            {{ render(controller('HopitalNumeriqueAccountBundle:Inscription:popin', { 'urlRedirection':app.request.uri })) }}
+        </div>
+    </div>
+{% endblock %}

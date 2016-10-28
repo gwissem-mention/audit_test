@@ -59,7 +59,11 @@ class InscriptionController extends Controller
                 }
             }
 
-            return $this->redirect($inscriptionForm->get('urlRedirection')->getData());
+            if ($this->container->get('session')->has('urlToRedirect')) {
+                return $this->redirect($this->container->get('session')->get('urlToRedirect'));
+            } else {
+                return $this->redirect($inscriptionForm->get('urlRedirection')->getData());
+            }
         }
 
         return $this->render('HopitalNumeriqueAccountBundle:Inscription:popin.html.twig', [

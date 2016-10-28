@@ -6,10 +6,12 @@ use CCDNForum\ForumBundle\Controller\UserSubscriptionController as CCDNUserSubsc
 use CCDNForum\ForumBundle\Component\Dispatcher\ForumEvents;
 use CCDNForum\ForumBundle\Component\Dispatcher\Event\UserTopicEvent;
 use HopitalNumerique\ForumBundle\Entity\Board;
+use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 
 /**
  * UserSubscriptionController
- * 
+ *
  * @category CCDNForum
  * @package  ForumBundle
  *
@@ -19,10 +21,12 @@ use HopitalNumerique\ForumBundle\Entity\Board;
  */
 class UserSubscriptionController extends CCDNUserSubscriptionController
 {
+    use ForumControllerAuthorizationCheckerTrait;
+
     /**
      *
      * @access public
-     * @param  string         $forumName
+     * @param  string $forumName
      * @return RenderResponse
      */
     public function indexAction($forumName)
@@ -39,24 +43,22 @@ class UserSubscriptionController extends CCDNUserSubscriptionController
         $filter = $this->getQuery('filter', 'all');
         // Use this for the sidebar counters
         $subscriptionForums = $this->getSubscriptionModel()->findAllSubscriptionsForUserById($this->getUser()->getId(), true);
-        $forumsSubscribed = array();
-        $totalForumsSubscribed = array('count_read' => 0, 'count_unread' => 0, 'count_total' => 0);
-        foreach ($subscriptionForums as $subscription) 
-        {
-            if( $subscription->isSubscribed() )
-            {
+        $forumsSubscribed = [];
+        $totalForumsSubscribed = ['count_read' => 0, 'count_unread' => 0, 'count_total' => 0];
+        foreach ($subscriptionForums as $subscription) {
+            if ($subscription->isSubscribed()) {
                 $forumSubscribed = $subscription->getForum();
 
                 if ($forumSubscribed) {
                     $forumSubscribedId = $forumSubscribed->getId();
 
-                    if (! array_key_exists($forumSubscribedId, $forumsSubscribed)) {
-                        $forumsSubscribed[$forumSubscribedId] = array(
-                            'forum' => $forumSubscribed,
-                            'count_read' => 0,
+                    if (!array_key_exists($forumSubscribedId, $forumsSubscribed)) {
+                        $forumsSubscribed[$forumSubscribedId] = [
+                            'forum'        => $forumSubscribed,
+                            'count_read'   => 0,
                             'count_unread' => 0,
-                            'count_total' => 0,
-                        );
+                            'count_total'  => 0,
+                        ];
                     }
 
                     $forumsSubscribed[$forumSubscribedId]['count_total']++;
@@ -95,55 +97,56 @@ class UserSubscriptionController extends CCDNUserSubscriptionController
             $subscriptionPager = $this->getSubscriptionModel()->findAllSubscriptionsPaginatedForUserByIdAndForumById($forum->getId(), $this->getUser()->getId(), $page, $itemsPerPage, $filter, true);
         }
 
-        return $this->renderResponse('CCDNForumForumBundle:User:Subscription/show.html.', array(
-            'forum' => $forum,
-            'forumName' => $forumName,
-            'subscribed_forums' => $forumsSubscribed,
+        return $this->renderResponse('CCDNForumForumBundle:User:Subscription/show.html.', [
+            'forum'                   => $forum,
+            'forumName'               => $forumName,
+            'subscribed_forums'       => $forumsSubscribed,
             'total_subscribed_forums' => $totalForumsSubscribed,
-            'filter' => $filter,
-            'pager' => $subscriptionPager,
-            'posts_per_page' => $this->container->getParameter('ccdn_forum_forum.topic.user.show.posts_per_page')
-        ));
+            'filter'                  => $filter,
+            'pager'                   => $subscriptionPager,
+            'posts_per_page'          => $this->container->getParameter('ccdn_forum_forum.topic.user.show.posts_per_page'),
+        ]);
     }
-    
+
     /**
      *
      * @access public
-     * @param  string           $forumName
+     * @param  string $forumName
      * @param  \HopitalNumerique\ForumBundle\Entity\Board $board
      * @return RedirectResponse
      */
     public function subscribeBoardAction($forumName, Board $board)
     {
         $this->isAuthorised('ROLE_USER');
-    
+
         if ($forumName != '~') {
             $this->isFound($forum = $this->getForumModel()->findOneForumByName($forumName));
         } else {
             $forum = null;
         }
-    
+
         $this->isAuthorised($this->getAuthorizer()->canSubscribeToBoard($board, $forum));
         $this->getSubscriptionModel()->subscribeBoard($board, $this->getUser())->flush();
+
         // Suppression du dispatch car seulement pour un topic
 
-        return $this->redirectResponse($this->path('ccdn_forum_user_board_show', array(
+        return $this->redirectResponse($this->path('ccdn_forum_user_board_show', [
             'forumName' => $forumName,
-            'boardId' => $board->getId()
-        )));
+            'boardId'   => $board->getId(),
+        ]));
     }
-    
+
     /**
      *
      * @access public
-     * @param  string           $forumName
+     * @param  string $forumName
      * @param  \HopitalNumerique\ForumBundle\Entity\Board $board
      * @return RedirectResponse
      */
     public function unsubscribeBoardAction($forumName, Board $board)
     {
         $this->isAuthorised('ROLE_USER');
-    
+
         if ($forumName != '~') {
             $this->isFound($forum = $this->getForumModel()->findOneForumByName($forumName));
         } else {
@@ -153,11 +156,20 @@ class UserSubscriptionController extends CCDNUserSubscriptionController
         $subscription = $this->getSubscriptionModel()->findOneSubscriptionForBoardAndUser($board, $this->getUser());
         $this->isAuthorised($this->getAuthorizer()->canUnsubscribeFromBoard($board, $forum, $subscription));
         $this->getSubscriptionModel()->unsubscribeBoard($board, $this->getUser())->flush();
+
         // Suppression du dispatch car seulement pour un topic
 
-        return $this->redirectResponse($this->path('ccdn_forum_user_board_show', array(
+        return $this->redirectResponse($this->path('ccdn_forum_user_board_show', [
             'forumName' => $forumName,
-            'boardId' => $board->getId()
-        )));
+            'boardId'   => $board->getId(),
+        ]));
+    }
+
+    /**
+     * @return ContainerInterface
+     */
+    public function getContainer()
+    {
+        return $this->container;
     }
 }

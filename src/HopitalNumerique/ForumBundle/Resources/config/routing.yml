@@ -58,3 +58,7 @@ HopitalNumeriqueForumBundle-User-Subscription:
 hopitalnumerique_forum_cron:
     pattern:  /cron-forum/{id}
     defaults: { _controller: HopitalNumeriqueForumBundle:Cron:cron}
+
+hopitalnumerique_forum_quick_signup:
+    pattern: /quick-sign-up/{urlToRedirect}
+    defaults: { _controller: HopitalNumeriqueUserBundle:Security:quickSignUp, urlToRedirect:'' }

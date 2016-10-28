@@ -2,11 +2,13 @@
 namespace HopitalNumerique\ForumBundle\Controller;
 
 use CCDNForum\ForumBundle\Controller\UserBoardController as BaseUserBoardController;
-use Symfony\Component\Finder\Exception\AccessDeniedException;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 
 class UserBoardController extends BaseUserBoardController
 {
+    use ForumControllerAuthorizationCheckerTrait;
+
     /**
      *
      * @access public
@@ -18,21 +20,7 @@ class UserBoardController extends BaseUserBoardController
     {
         $this->isFound($forum = $this->getForumModel()->findOneForumByName($forumName));
         $this->isFound($board = $this->getBoardModel()->findOneBoardByIdWithCategory($boardId));
-
-        if (!$this->getAuthorizer()->canShowBoard($board, $forum)) {
-            if ($this->getUser() === 'anon.') {
-                $redirectUrl = $this->container->get('router')
-                    ->generate('ccdn_forum_user_board_show', ['boardId' => $boardId])
-                ;
-                $redirectUrl = rtrim(strtr(base64_encode($redirectUrl), '+/', '-_'), '=');
-                $url = $this->container->get('router')->generate('account_login', ['urlToRedirect' => $redirectUrl]);
-
-                return new RedirectResponse($url, 302);
-            } else {
-                throw new AccessDeniedException();
-            }
-        }
-
+        $this->isAuthorised($this->getAuthorizer()->canShowBoard($board, $forum));
 
         $itemsPerPage = $this->getPageHelper()->getTopicsPerPageOnBoards();
         $stickyTopics = $this->getTopicModel()->findAllTopicsStickiedByBoardId($boardId, true);
@@ -56,5 +44,13 @@ class UserBoardController extends BaseUserBoardController
             'posts_per_page' => $this->container->getParameter('ccdn_forum_forum.topic.user.show.posts_per_page'), // for working out last page per topic.
             'sticky_topics'  => $stickyTopics,
         ]);
+    }
+
+    /**
+     * @return ContainerInterface
+     */
+    public function getContainer()
+    {
+        return $this->container;
     }
 }
