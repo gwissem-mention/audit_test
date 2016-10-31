@@ -317,6 +317,11 @@
     font-size: 18px;
 }
 
+#restitution .score-widget .score-value .score-compared {
+    display: flex;
+    justify-content: space-around;
+}
+
 /**
 * METEO
 */

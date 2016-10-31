@@ -39,6 +39,7 @@ class IntersectionBuilder
         $attributeIds = $this->valueRepository->findAttributeIdsIntersection($synthesis, $reference);
 
         $intersection = Synthesis::create($synthesis->getAutodiag(), $synthesis->getUser());
+        $intersection->setName($synthesis->getName());
         foreach ($synthesis->getEntries() as $entry) {
             /** @var AutodiagEntry $clonedEntry */
             $clonedEntry = clone($entry);

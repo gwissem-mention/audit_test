@@ -1,0 +1,55 @@
+
+<ul class="nav nav-tabs" role="tablist">
+    {% for category in restitution.categories if category.items|length > 0 %}
+        <li role="presentation" class="{{ loop.first ? 'active' : '' }}">
+            <a href="#{{ category.id }}" aria-controls="home" role="tab" data-toggle="tab">
+                {{ category.label }}
+            </a>
+        </li>
+    {% endfor %}
+</ul>
+
+<div class="tab-content">
+    {% for category in restitution.categories if category.items|length > 0 %}
+        <div role="tabpanel" class="tab-pane category {{ loop.first ? 'active' : '' }}" id="{{ category.id }}">
+            <p class="category-description">
+                {{ category.description }}
+            </p>
+
+            <div class="items-wrapper">
+
+                <div class="item-row">
+                    {% set currentRow = category.items.first.row %}
+                    {% for item in category.items %}
+                    {% if item.row != currentRow %}
+                    {% set currentRow = item.row %}
+                </div>
+                <div class="item-row">
+                    {% endif %}
+
+                    <div class="item" data-row="{{ item.row }}" data-column="{{ item.column }}" data-item-type="{{ item.type }}">
+                        {% include ("@HopitalNumeriqueAutodiag/Restitution/item/_" ~ item.type ~ ".html.twig") ignore missing with {
+                        'restitution': item,
+                        'result': result[item.id]
+                        } %}
+                    </div>
+
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    {% endfor %}
+</div>
+
+<script>
+    $('.item-row').each(function() {
+        var cols = $(this).find('[data-row][data-column]');
+        cols.css('width', (100 / cols.length) + "%");
+    });
+
+    $('a[data-toggle="tab"]').on('shown.bs.tab', function() {
+        $(window).trigger('resize');
+    });
+
+    $(window).trigger('resize');
+</script>

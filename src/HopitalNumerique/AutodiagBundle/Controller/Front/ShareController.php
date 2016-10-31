@@ -4,6 +4,8 @@ namespace HopitalNumerique\AutodiagBundle\Controller\Front;
 
 use HopitalNumerique\AutodiagBundle\Entity\Synthesis;
 use HopitalNumerique\AutodiagBundle\Form\Type\ShareType;
+use HopitalNumerique\AutodiagBundle\Form\Type\Synthesis\CompareType;
+use HopitalNumerique\AutodiagBundle\Model\Synthesis\CompareCommand;
 use HopitalNumerique\AutodiagBundle\Service\Share;
 use HopitalNumerique\DomaineBundle\Entity\Domaine;
 use HopitalNumerique\UserBundle\Entity\User;
@@ -71,6 +73,10 @@ class ShareController extends Controller
             ));
         }
 
+        $comparisonForm = $this->createForm( CompareType::class, new CompareCommand(), [
+            'user' => $this->getUser(),
+        ]);
+
         return $this->render('HopitalNumeriqueAutodiagBundle:Share:index.html.twig', [
             'synthesis' => $synthesis,
             'form' => $form->createView(),
@@ -81,6 +87,7 @@ class ShareController extends Controller
             'domainesUser' => $user->getDomaines(),
             'currentDomain' => $domain,
             'noLayout' => $noLayout,
+            'comparisonForm' => $comparisonForm->createView(),
         ]);
     }
 

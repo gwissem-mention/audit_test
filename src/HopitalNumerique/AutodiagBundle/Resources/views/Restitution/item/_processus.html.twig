@@ -8,7 +8,14 @@
                     <div class="processus-line head" data-value="{{ data.score.value }}">{{ data.label }}</div>
                     {% for child in data.childrens %}
                         {% if child.score.value is not null %}
-                            <div class="processus-line {{- tools.cssClass(child.score.value, child.colorationInversed) -}}">{{ child.label }}</div>
+                            <div class="processus-line {{- tools.cssClass(child.score.value, child.colorationInversed) -}}">
+                                {{ child.label }}
+
+                                {% if child.score.variation is defined %}
+                                    <div class="compare-score-variation" data-variation="{{ child.score.variation }}">{{ child.score.variation }}%</div>
+                                {% endif %}
+
+                            </div>
                         {% endif %}
                     {% endfor %}
                 </div>
