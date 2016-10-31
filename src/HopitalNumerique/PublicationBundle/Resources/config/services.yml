@@ -17,3 +17,13 @@ services:
     hopitalnumerique_publication.service.logger.cronlogger:
         class: "%hopitalnumerique_publication.service.logger.cronlogger.class%"
         arguments: ["@logger", "@session"]
+
+    hopitalnumerique_publication.grid.suggestion:
+        class: 'HopitalNumerique\PublicationBundle\Grid\SuggestionGrid'
+        arguments: ["@service_container"]
+
+    hopitalnumerique_publication.repository.suggestion:
+        class: HopitalNumerique\PublicationBundle\Repository\SuggestionRepository
+        factory: ["@doctrine.orm.entity_manager", "getRepository"]
+        arguments:
+            - 'HopitalNumeriquePublicationBundle:Suggestion'

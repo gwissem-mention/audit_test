@@ -103,3 +103,14 @@ hopital_numerique_publication_front_export:
     defaults: { _controller: "HopitalNumeriqueObjetBundle:Export:export", id:1 }
     requirements:
         id: \d+
+
+#Suggestion
+hopitalnumerique_suggestion_back_index:
+    path: /admin/suggestion
+    defaults: { _controller: "HopitalNumeriquePublicationBundle:Back/Suggestion:index" }
+
+hopitalnumerique_suggestion_back_edit:
+    path: /admin/suggestion/edit/{id}
+    defaults: { _controller: "HopitalNumeriquePublicationBundle:Back/Suggestion:edit" }
+    requirements:
+        id: \d+
