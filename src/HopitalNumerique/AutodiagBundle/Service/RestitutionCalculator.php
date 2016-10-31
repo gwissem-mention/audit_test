@@ -59,18 +59,21 @@ class RestitutionCalculator
 
     protected $items = [];
     protected $references = [];
-    protected $synthesisScores = null;
+    protected $synthesisScores = [];
     protected $allScores = [];
     protected $autodiagAttributesCount = null;
     protected $responses = null;
     protected $minAndMaxForAutodiagAttributes = null;
+    protected $resultItemCreatedCallback;
 
     /**
      * RestitutionCalculator constructor.
      * @param AttributeBuilderProvider $attributeBuilder
+     * @param ValueRepository $valueRepository
      * @param RestitutionRepository $restitutionRepository
      * @param Completion $completion
      * @param ScoreRepository $scoreRepository
+     * @param AttributeRepository $attributeRepository
      * @TODO Injecter un algorithm factory qui connaitrais tous les algo possible via un compileur pass
      */
     public function __construct(
@@ -175,7 +178,7 @@ class RestitutionCalculator
      * @param $references
      * @return ResultItem
      */
-    protected function computeItemContainer(Container $container, Synthesis $synthesis, $references)
+    public function computeItemContainer(Container $container, Synthesis $synthesis, $references = [])
     {
         $cacheKey = $this->getCacheKey(
             $container->getAutodiag(),
@@ -224,6 +227,11 @@ class RestitutionCalculator
                 $resultItem->addChildren(
                     $this->computeItemContainer($child, $synthesis, $references)
                 );
+            }
+
+
+            if (is_callable($this->resultItemCreatedCallback)) {
+                call_user_func($this->resultItemCreatedCallback, $resultItem, $container);
             }
 
             $this->items[$cacheKey] = $resultItem;
@@ -319,14 +327,14 @@ class RestitutionCalculator
         return $this->references[$cacheKey];
     }
 
-    protected function getContainerSynthesisScore(Synthesis $synthesis, $containerId)
+    public function getContainerSynthesisScore(Synthesis $synthesis, $containerId)
     {
-        if (null === $this->synthesisScores) {
-            $this->synthesisScores = $this->scoreRepository->getScores($synthesis);
+        if (!array_key_exists($synthesis->getId(), $this->synthesisScores)) {
+            $this->synthesisScores[$synthesis->getId()] = $this->scoreRepository->getScores($synthesis);
         }
 
-        return array_key_exists($containerId, $this->synthesisScores)
-            ? $this->synthesisScores[$containerId]
+        return array_key_exists($containerId, $this->synthesisScores[$synthesis->getId()])
+            ? $this->synthesisScores[$synthesis->getId()][$containerId]
             : null;
     }
 
@@ -464,5 +472,10 @@ class RestitutionCalculator
         $x = ($value - $b) / $a;
 
         return 100 + $x;
+    }
+
+    public function setResultItemCreatedCallback($callback)
+    {
+        $this->resultItemCreatedCallback = $callback;
     }
 }

@@ -1,6 +1,7 @@
 <?php
 namespace HopitalNumerique\AutodiagBundle\Twig;
 
+use HopitalNumerique\AutodiagBundle\Model\Result\ComparedScore;
 use HopitalNumerique\AutodiagBundle\Model\Result\Item;
 
 class RestitutionExtension extends \Twig_Extension
@@ -88,6 +89,18 @@ class RestitutionExtension extends \Twig_Extension
 
                 $data['series'][$code]['data'][] = $reference->getValue();
             }
+
+            if ($item->getScore() instanceof ComparedScore) {
+                if (!isset($data['series']['compare'])) {
+                    $data['series']['compare'] = [
+                        'name' => $item->getScore()->getReference()->getLabel(),
+                        'data' => [],
+                        'color' => $item->getScore()->getReference()->getColor(),
+                    ];
+                }
+
+                $data['series']['compare']['data'][] = $item->getScore()->getReference()->getValue();
+            }
         }
 
         $data['series'] = array_values($data['series']);
@@ -173,6 +186,18 @@ class RestitutionExtension extends \Twig_Extension
                 }
 
                 $data['series'][$code]['data'][] = $reference->getValue();
+            }
+
+            if ($item->getScore() instanceof ComparedScore) {
+                if (!isset($data['series']['compare'])) {
+                    $data['series']['compare'] = [
+                        'name' => $item->getScore()->getReference()->getLabel(),
+                        'data' => [],
+                        'color' => $item->getScore()->getReference()->getColor(),
+                    ];
+                }
+
+                $data['series']['compare']['data'][] = $item->getScore()->getReference()->getValue();
             }
         }
 

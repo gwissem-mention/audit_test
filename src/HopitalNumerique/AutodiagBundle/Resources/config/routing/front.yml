@@ -107,3 +107,8 @@ hopitalnumerique_autodiag_compare_index:
     path: /autodiagnostic/comparaison/{compare}
     methods: ["GET"]
     defaults: { _controller: HopitalNumeriqueAutodiagBundle:Front/Compare:index }
+
+hopitalnumerique_autodiag_compare_pdf:
+    path: /autodiagnostic/comparaison/{compare}/pdf
+    methods: ["GET"]
+    defaults: { _controller: HopitalNumeriqueAutodiagBundle:Front/Compare:index, pdf: true }

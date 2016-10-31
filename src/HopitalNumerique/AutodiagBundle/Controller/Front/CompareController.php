@@ -6,6 +6,7 @@ use HopitalNumerique\AutodiagBundle\Entity\Compare;
 use HopitalNumerique\AutodiagBundle\Entity\Synthesis;
 use HopitalNumerique\AutodiagBundle\Form\Type\Synthesis\CompareType;
 use HopitalNumerique\AutodiagBundle\Model\Synthesis\CompareCommand;
+use HopitalNumerique\AutodiagBundle\Service\Compare\CompareRestitutionCalculator;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -14,10 +15,21 @@ class CompareController extends Controller
 {
     public function indexAction(Compare $compare)
     {
-        dump($compare);die;
+        $comparator = new CompareRestitutionCalculator(
+            $this->get('autodiag.restitution.calculator'),
+            $this->get('autodiag.repository.restitution')
+        );
+        $result = $comparator->compute($compare);
 
+        $autodiag = $compare->getSynthesis()->getAutodiag();
+        $restitution = $this->get('autodiag.repository.restitution')->getForAutodiag($autodiag);
 
-        return new Response('TODO');
+        return $this->render('HopitalNumeriqueAutodiagBundle:Compare:index.html.twig', [
+            'compare' => $compare,
+            'restitution' => $restitution,
+            'result' => $result,
+            'noLayout' => false,
+        ]);
     }
 
     public function createCompareAction(Request $request)

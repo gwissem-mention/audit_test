@@ -39,6 +39,12 @@ class Compare
     private $reference;
 
     /**
+     * @var \DateTime
+     * @ORM\Column(type="date")
+     */
+    private $createdAt;
+
+    /**
      * Compare constructor.
      * @param Synthesis $synthesis
      * @param Synthesis $reference
@@ -47,6 +53,7 @@ class Compare
     {
         $this->synthesis = $synthesis;
         $this->reference = $reference;
+        $this->createdAt = new \DateTime();
     }
 
     /**
@@ -71,5 +78,13 @@ class Compare
     public function getReference()
     {
         return $this->reference;
+    }
+
+    /**
+     * @return \DateTime
+     */
+    public function getCreatedAt()
+    {
+        return $this->createdAt;
     }
 }

@@ -25,6 +25,9 @@
                             {% endif %}
                         {% endif %}
 
+                        {% if data.score.variation is defined %}
+                            <div class="compare-score-variation" data-variation="{{ data.score.variation }}">{{ data.score.variation }}%</div>
+                        {% endif %}
                     </div>
                     <div class="meteo-score">
                         {{ data.score.value }} / 100
