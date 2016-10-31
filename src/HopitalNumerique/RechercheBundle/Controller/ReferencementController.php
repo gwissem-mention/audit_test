@@ -40,15 +40,15 @@ class ReferencementController extends Controller
         }
 
         return $this->render('HopitalNumeriqueRechercheBundle:Referencement:index.html.twig', [
-            'referencesTree' => $referencesTree,
-            'requete' => $this->container->get('hopitalnumerique_recherche.dependency_injection.referencement.requete_session')->getRequete(),
-            'categoriesProperties' => $this->container->get('hopitalnumerique_recherche.doctrine.referencement.category')->getCategoriesProperties(),
-            'choosenReferenceIds' => $choosenReferenceIds,
-            'entityTypeIds' => $this->container->get('hopitalnumerique_recherche.dependency_injection.referencement.requete_session')->getEntityTypeIds(),
+            'referencesTree'         => $referencesTree,
+            'requete'                => $this->container->get('hopitalnumerique_recherche.dependency_injection.referencement.requete_session')->getRequete(),
+            'categoriesProperties'   => $this->container->get('hopitalnumerique_recherche.doctrine.referencement.category')->getCategoriesProperties(),
+            'choosenReferenceIds'    => $choosenReferenceIds,
+            'entityTypeIds'          => $this->container->get('hopitalnumerique_recherche.dependency_injection.referencement.requete_session')->getEntityTypeIds(),
             'publicationCategoryIds' => $this->container->get('hopitalnumerique_recherche.dependency_injection.referencement.requete_session')->getPublicationCategoryIds(),
-            'searchedText' => $this->container->get('hopitalnumerique_recherche.dependency_injection.referencement.requete_session')->getSearchedText(),
-            'domaines' => $this->container->get('hopitalnumerique_domaine.manager.domaine')->getAllArray(),
-            'exaleadIsActivated' => $this->container->get('hopitalnumerique_recherche.manager.search')->getActivationExalead()
+            'searchedText'           => $this->container->get('hopitalnumerique_recherche.dependency_injection.referencement.requete_session')->getSearchedText(),
+            'domaines'               => $this->container->get('hopitalnumerique_domaine.manager.domaine')->getAllArray(),
+            'exaleadIsActivated'     => $this->container->get('hopitalnumerique_recherche.manager.search')->getActivationExalead(),
         ]);
     }
 
@@ -92,8 +92,8 @@ class ReferencementController extends Controller
         }
 
         return new JsonResponse([
-            'results' => $entitiesPropertiesByGroup,
-            'foundWords' => $foundWords
+            'results'    => $entitiesPropertiesByGroup,
+            'foundWords' => $foundWords,
         ]);
     }
 
@@ -111,13 +111,13 @@ class ReferencementController extends Controller
             foreach ($entities as $entity) {
                 $entityId = $this->container->get('hopitalnumerique_core.dependency_injection.entity')->getEntityId($entity);
                 $entitiesByType[$entityType][$entityId]['viewHtml'] = $this->renderView('HopitalNumeriqueRechercheBundle:Referencement:view_entity.html.twig', [
-                    'category' => $this->container->get('hopitalnumerique_core.dependency_injection.entity')->getCategoryByEntity($entity),
-                    'title' => $this->container->get('hopitalnumerique_core.dependency_injection.entity')->getTitleByEntity($entity),
-                    'subtitle' => $this->container->get('hopitalnumerique_core.dependency_injection.entity')->getSubtitleByEntity($entity),
-                    'url' => $this->container->get('hopitalnumerique_core.dependency_injection.entity')->getFrontUrlByEntity($entity),
-                    'description' => $this->container->get('hopitalnumerique_core.dependency_injection.entity')->getDescriptionByEntity($entity),
+                    'category'         => $this->container->get('hopitalnumerique_core.dependency_injection.entity')->getCategoryByEntity($entity),
+                    'title'            => $this->container->get('hopitalnumerique_core.dependency_injection.entity')->getTitleByEntity($entity),
+                    'subtitle'         => $this->container->get('hopitalnumerique_core.dependency_injection.entity')->getSubtitleByEntity($entity),
+                    'url'              => $this->container->get('hopitalnumerique_core.dependency_injection.entity')->getFrontUrlByEntity($entity),
+                    'description'      => $this->container->get('hopitalnumerique_core.dependency_injection.entity')->getDescriptionByEntity($entity),
                     'pertinenceNiveau' => $entitiesPropertiesById[$entityId]['pertinenceNiveau'],
-                    'source' => $this->container->get('hopitalnumerique_core.dependency_injection.entity')->getSourceByEntity($entity),
+                    'source'           => $this->container->get('hopitalnumerique_core.dependency_injection.entity')->getSourceByEntity($entity),
                 ]);
             }
         }

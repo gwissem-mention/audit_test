@@ -53,3 +53,9 @@ parameters:
 
     admin_grid_session_status: [411]
     admin_grid_intervention_status: [21, 22, 23]
+
+    ref_forum_topic_id: 1995
+    ref_ambassadeur_id: 1996
+    ref_recherche_parcours_id: 1997
+    ref_com_pratique_id: 1998
+    ref_expression_besoin_reponse_id: 1999
