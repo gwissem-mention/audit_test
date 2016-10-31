@@ -83,8 +83,8 @@ class Synthesis
      * @ORM\ManyToMany(targetEntity="HopitalNumerique\UserBundle\Entity\User")
      * @ORM\JoinTable(
      *     name="ad_synthesis_share",
-     *     joinColumns={@ORM\JoinColumn(name="synthesis_id", referencedColumnName="id")},
-     *     inverseJoinColumns={@ORM\JoinColumn(name="user_id", referencedColumnName="usr_id")}
+     *     joinColumns={@ORM\JoinColumn(name="synthesis_id", referencedColumnName="id", onDelete="CASCADE")},
+     *     inverseJoinColumns={@ORM\JoinColumn(name="user_id", referencedColumnName="usr_id", onDelete="CASCADE")}
      * )
      */
     private $shares;
@@ -102,6 +102,13 @@ class Synthesis
      * @ORM\Column(type="integer", nullable=true)
      */
     private $computeBeginning;
+
+    /**
+     * @var Synthesis
+     * @ORM\ManyToOne(targetEntity="Synthesis")
+     * @ORM\JoinColumn(name="created_from", referencedColumnName="id", nullable=true)
+     */
+    private $createdFrom = null;
 
     private function __construct(Autodiag $autodiag, User $user = null)
     {
@@ -421,6 +428,26 @@ class Synthesis
     public function stopComputing()
     {
         $this->computeBeginning = null;
+    }
+
+    /**
+     * @return Synthesis|null
+     */
+    public function getCreatedFrom()
+    {
+        return $this->createdFrom;
+    }
+
+    /**
+     * @param mixed $createdFrom
+     *
+     * @return Synthesis
+     */
+    public function setCreatedFrom(Synthesis $createdFrom)
+    {
+        $this->createdFrom = $createdFrom;
+
+        return $this;
     }
 
     public function __clone()

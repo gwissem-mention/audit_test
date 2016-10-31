@@ -96,6 +96,12 @@ services:
         arguments:
             - 'HopitalNumeriqueAutodiagBundle:Score'
 
+    autodiag.repository.compare:
+        class: HopitalNumerique\AutodiagBundle\Repository\CompareRepository
+        factory: ["@doctrine.orm.entity_manager", "getRepository"]
+        arguments:
+            - 'HopitalNumeriqueAutodiagBundle:Compare'
+
     autodiag.autodiagentry_voter:
         class: HopitalNumerique\AutodiagBundle\Security\AutodiagEntryVoter
         arguments: ['@autodiag.entry.session']
@@ -206,3 +212,11 @@ services:
         class: HopitalNumerique\AutodiagBundle\Service\Synthesis\IntersectionBuilder
         arguments:
             - '@autodiag.repository.autodiagentryvalue'
+
+    autodiag.synthesis.comparison_builder:
+        class: HopitalNumerique\AutodiagBundle\Service\Compare\ComparisonBuilder
+        arguments:
+            - '@autodiag.synthesis.intersection_builder'
+            - '@autodiag.score_calculator'
+            - '@autodiag.repository.compare'
+            - '@doctrine.orm.entity_manager'
