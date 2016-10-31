@@ -32,6 +32,7 @@ class ScoreCalculatorCommand extends ContainerAwareCommand
 
         $synthesis = $options['synthesis'];
         if (null !== $synthesis) {
+            $synthesis = $this->getContainer()->get('autodiag.repository.synthesis')->find($synthesis);
             $this->getContainer()->get('autodiag.score_calculator')->computeSynthesisScore($synthesis);
             return true;
         }

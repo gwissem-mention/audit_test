@@ -101,9 +101,9 @@ hopitalnumerique_autodiag_account_delete_synthesis_share:
 hopitalnumerique_autodiag_synthesis_compare:
     path: /autodiagnostic/synthese/compare
     methods: ["POST"]
-    defaults: { _controller: HopitalNumeriqueAutodiagBundle:Front/Synthesis:compare }
+    defaults: { _controller: HopitalNumeriqueAutodiagBundle:Front/Compare:createCompare }
 
 hopitalnumerique_autodiag_compare_index:
-    path: /autodiagnostic/comparaison/{synthesis}/{reference}
+    path: /autodiagnostic/comparaison/{compare}
     methods: ["GET"]
     defaults: { _controller: HopitalNumeriqueAutodiagBundle:Front/Compare:index }

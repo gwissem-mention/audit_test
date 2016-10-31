@@ -2,6 +2,7 @@
 
 namespace HopitalNumerique\AutodiagBundle\Service\Synthesis;
 
+use HopitalNumerique\AutodiagBundle\Entity\AutodiagEntry;
 use HopitalNumerique\AutodiagBundle\Entity\Synthesis;
 use HopitalNumerique\AutodiagBundle\Repository\AutodiagEntry\ValueRepository;
 
@@ -39,6 +40,7 @@ class IntersectionBuilder
 
         $intersection = Synthesis::create($synthesis->getAutodiag(), $synthesis->getUser());
         foreach ($synthesis->getEntries() as $entry) {
+            /** @var AutodiagEntry $clonedEntry */
             $clonedEntry = clone($entry);
             foreach ($clonedEntry->getValues() as $value) {
                 if (!array_key_exists($value->getAttribute()->getId(), $attributeIds)) {
@@ -47,7 +49,10 @@ class IntersectionBuilder
             }
 
             $intersection->addEntry($clonedEntry);
+            $clonedEntry->addSynthesis($intersection);
         }
+
+        $intersection->setCreatedFrom($synthesis);
 
         return $intersection;
     }
