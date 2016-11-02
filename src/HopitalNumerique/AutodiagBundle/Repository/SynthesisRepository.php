@@ -70,29 +70,37 @@ class SynthesisRepository extends EntityRepository
         return $qb->getQuery()->getResult();
     }
 
-    public function findComparableForUser(User $user, Synthesis $reference = null)
+    /**
+     * Find comparable syntheses for user and by domaine
+     *
+     * @param User $user
+     * @param Domaine|null $domaine
+     * @return array
+     */
+    public function findComparable(User $user, Domaine $domaine = null)
     {
-        $qb = $this->createByUserQueryBuilder($user);
-        $qb
-            ->andWhere(
-                $qb->expr()->isNotNull('synthesis.validatedAt')
-            )
-            ->andWhere(
-                $qb->expr()->eq('autodiag.comparisonAuthorized', true)
-            )
-            ->groupBy('synthesis.id')
-            ->having('count(entries) = 1')
-            ->orderBy('synthesis.updatedAt', 'desc')
-        ;
+        $qb = $this->createComparableQueryBuilder($user, $domaine);
 
-        if (null !== $reference) {
-            $qb
-                ->andWhere('autodiag = :autodiag_id')
-                ->setParameter('autodiag_id', $reference->getAutodiag()->getId())
-                ->andWhere('synthesis.id != :reference_id')
-                ->setParameter('reference_id', $reference->getId())
-            ;
-        }
+        return $qb->getQuery()->getResult();
+    }
+
+    /**
+     * Find syntheses comparable to $reference
+     *
+     * @param Synthesis $reference
+     * @param User $user
+     * @param Domaine|null $domaine
+     * @return array
+     */
+    public function findComparableWith(Synthesis $reference, User $user, Domaine $domaine = null)
+    {
+        $qb = $this->createComparableQueryBuilder($user, $domaine);
+        $qb
+            ->andWhere('autodiag = :autodiag_id')
+            ->setParameter('autodiag_id', $reference->getAutodiag()->getId())
+            ->andWhere('synthesis.id != :reference_id')
+            ->setParameter('reference_id', $reference->getId())
+        ;
 
         return $qb->getQuery()->getResult();
     }
@@ -193,6 +201,24 @@ class SynthesisRepository extends EntityRepository
                 ->setParameter('domain', $domain)
             ;
         }
+
+        return $qb;
+    }
+
+    protected function createComparableQueryBuilder(User $user, Domaine $domaine = null)
+    {
+        $qb = $this->createByUserQueryBuilder($user, $domaine);
+        $qb
+            ->andWhere(
+                $qb->expr()->isNotNull('synthesis.validatedAt')
+            )
+            ->andWhere(
+                $qb->expr()->eq('autodiag.comparisonAuthorized', true)
+            )
+            ->groupBy('synthesis.id')
+            ->having('count(entries) = 1')
+            ->orderBy('synthesis.updatedAt', 'desc')
+        ;
 
         return $qb;
     }

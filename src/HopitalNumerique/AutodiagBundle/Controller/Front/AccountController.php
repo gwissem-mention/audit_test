@@ -39,8 +39,9 @@ class AccountController extends Controller
             }
         }
 
-        $comparisonForm = $this->createForm( CompareType::class, new CompareCommand(), [
+        $comparisonForm = $this->createForm(CompareType::class, new CompareCommand(), [
             'user' => $this->getUser(),
+            'domaine' => $domain,
         ]);
 
         $dataFormatter = $this->get('autodiag.synthesis.dataformatter');

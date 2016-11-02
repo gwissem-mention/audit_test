@@ -64,18 +64,20 @@ class ShareController extends Controller
             );
         }
 
+        $comparisonForm = $this->createForm(CompareType::class, new CompareCommand(), [
+            'user' => $this->getUser(),
+            'domaine' => $domain,
+        ]);
+
         if ($request->isXmlHttpRequest()) {
             return $this->render('HopitalNumeriqueAutodiagBundle:Account/partials:autodiag_list.html.twig', array(
                 'datasForSyntheses' =>
                     $this->get('autodiag.synthesis.dataformatter')->getSynthesesByAutodiag($user, $autodiag, $domain),
                 'user' => $user,
                 'in_progress' => false,
+                'comparisonForm' => $comparisonForm->createView(),
             ));
         }
-
-        $comparisonForm = $this->createForm( CompareType::class, new CompareCommand(), [
-            'user' => $this->getUser(),
-        ]);
 
         return $this->render('HopitalNumeriqueAutodiagBundle:Share:index.html.twig', [
             'synthesis' => $synthesis,
