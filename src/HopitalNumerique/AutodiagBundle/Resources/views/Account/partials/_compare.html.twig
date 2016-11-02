@@ -1,19 +1,23 @@
-<div id="compare" class="panel panel-primary">
+<div class="row-fluid">
+    <div class="col-md-12">
+        <div id="compare" class="panel panel-primary">
 
-    <div class="panel-heading"><h4 class="panel-title">Comparer deux autodiagnistics</h4></div>
-    <div class="panel-body">
-        {{ form_start(form) }}
-        {{ form_widget(form) }}
-        <div class="col-md-12">
-            <button type="submit" class="btn btn-primary pull-right">
-                Comparer
-            </button>
+            <div class="panel-heading"><h4 class="panel-title">Comparer deux autodiagnistics</h4></div>
+            <div class="panel-body">
+                {{ form_start(form) }}
+                {{ form_widget(form) }}
+                <div class="col-md-12">
+                    <button type="submit" class="btn btn-primary pull-right">
+                        Comparer
+                    </button>
+                </div>
+                {{ form_end(form) }}
+            </div>
+
         </div>
-        {{ form_end(form) }}
     </div>
-
-
 </div>
+
 
 
 <script>
