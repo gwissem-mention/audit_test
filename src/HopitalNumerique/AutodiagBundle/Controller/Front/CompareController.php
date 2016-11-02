@@ -13,7 +13,7 @@ use Symfony\Component\HttpFoundation\Response;
 
 class CompareController extends Controller
 {
-    public function indexAction(Compare $compare)
+    public function indexAction(Compare $compare, $pdf = false)
     {
         $comparator = new CompareRestitutionCalculator(
             $this->get('autodiag.restitution.calculator'),
@@ -23,6 +23,15 @@ class CompareController extends Controller
 
         $autodiag = $compare->getSynthesis()->getAutodiag();
         $restitution = $this->get('autodiag.repository.restitution')->getForAutodiag($autodiag);
+
+        if ($pdf) {
+            return new Response(
+                $this->get('autodiag.restitution.pdf_generator')->comparePdfGenerator($compare, $restitution, $result),
+                200,
+                ['Content-Type' => 'application/pdf']
+            );
+        }
+
 
         return $this->render('HopitalNumeriqueAutodiagBundle:Compare:index.html.twig', [
             'compare' => $compare,
