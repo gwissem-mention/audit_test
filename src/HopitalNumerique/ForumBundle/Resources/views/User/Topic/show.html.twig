@@ -40,6 +40,7 @@
         <a class="btn btn-danger pull-right" rel="nofollow" href="{{- path('ccdn_forum_user_topic_reply', {'forumName': forumName, 'topicId': topic.getId }) -}}">
             {{- 'link.topic.reply' | trans({}, ForumBundle.translation ) -}}
         </a>
+        <a class="btn btn-sm btn-default fancybox fancybox.ajax pull-right" style="margin: 2px 5px 0 0" href="{{ path('nodevo_mail_recommandation_topic') }}" title="Recommander à un ami"><i class="fa fa-envelope"></i></a>
     </section>
 
     {{- knp_pagination_render(pager) -}}
