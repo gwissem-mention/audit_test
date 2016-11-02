@@ -4,6 +4,7 @@ namespace HopitalNumerique\AutodiagBundle\Form\Type\Synthesis;
 
 use HopitalNumerique\AutodiagBundle\Entity\Synthesis;
 use HopitalNumerique\AutodiagBundle\Repository\SynthesisRepository;
+use HopitalNumerique\DomaineBundle\Entity\Domaine;
 use HopitalNumerique\UserBundle\Entity\User;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
@@ -25,6 +26,7 @@ class CompareType extends AbstractType
     /**
      * ComparisonType constructor.
      * @param SynthesisRepository $synthesisRepository
+     * @param RouterInterface $router
      */
     public function __construct(SynthesisRepository $synthesisRepository, RouterInterface $router)
     {
@@ -44,7 +46,7 @@ class CompareType extends AbstractType
                 'class' => Synthesis::class,
                 'label' => 'ad.compare.reference',
                 'choice_label' => 'name',
-                'choices' => $this->synthesisRepository->findComparableForUser($options['user']),
+                'choices' => $this->synthesisRepository->findComparable($options['user'], $options['domaine']),
                 'group_by' => function ($val) {
                     if ($val instanceof Synthesis) {
                         return $val->getAutodiag()->getTitle();
@@ -58,9 +60,10 @@ class CompareType extends AbstractType
         $addSynthesisType = function (FormInterface $form, Synthesis $reference = null) use ($options) {
             $choices = [];
             if (null !== $reference) {
-                $choices = $this->synthesisRepository->findComparableForUser(
+                $choices = $this->synthesisRepository->findComparableWith(
+                    $reference,
                     $options['user'],
-                    $reference
+                    $options['domaine']
                 );
             }
 
@@ -105,12 +108,15 @@ class CompareType extends AbstractType
         $resolver->setDefaults([
             'data_class' => 'HopitalNumerique\AutodiagBundle\Model\Synthesis\CompareCommand',
             'label_format' => 'ad.comparison.%name%',
+            'domaine' => null,
             'action' => $this->router->generate('hopitalnumerique_autodiag_synthesis_compare'),
         ]);
 
         $resolver->setDefined('user');
         $resolver->addAllowedTypes('user', User::class);
-
         $resolver->setRequired(['user']);
+
+        $resolver->setDefined('domaine');
+        $resolver->addAllowedTypes('user', Domaine::class);
     }
 }

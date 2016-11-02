@@ -21,7 +21,7 @@ class AutodiagEntriesExport extends AbstractExport
 
     const STARTING_ROW = 8;
 
-    public function __construct(ObjectManager $manager, ResultItemBuilder $resultItemBuilder, Completion $completion)
+    public function __construct(ObjectManager $manager, ExportableResultItemBuilder $resultItemBuilder, Completion $completion)
     {
         parent::__construct($manager);
 
@@ -36,7 +36,9 @@ class AutodiagEntriesExport extends AbstractExport
      */
     public function exportList($syntheses)
     {
+//dump(round(memory_get_usage()/1048576, 2) . 'mb');
         ini_set('max_execution_time', '1000s');
+        $start = microtime(true);
 
         if (!is_array($syntheses) || count($syntheses) === 0) {
             throw new \Exception('Syntheses must be an array of Synthesis');
@@ -50,6 +52,8 @@ class AutodiagEntriesExport extends AbstractExport
 
         $this->writeHeader($sheet);
 
+        $this->resultItemBuilder->prepareResponses($autodiag, $syntheses);
+
         $column = 'E';
         foreach ($syntheses as $synthesis) {
             if ($synthesis->getEntries()->count() === 1) {
@@ -59,7 +63,7 @@ class AutodiagEntriesExport extends AbstractExport
         }
 
         $this->applyStyle($sheet, $column);
-
+dump(microtime(true) - $start);die;
         return $this->getFileResponse($excel, $autodiag->getTitle(), 'resultat');
 
     }

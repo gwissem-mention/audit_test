@@ -130,6 +130,14 @@ services:
             - '@autodiag.repository.autodiagentryvalue'
             - '@autodiag.repository.attribute'
 
+    autodiag.result.exportable_builder:
+        class: HopitalNumerique\AutodiagBundle\Service\Export\ExportableResultItemBuilder
+        arguments:
+            - '@autodiag.synthesis.completion'
+            - '@autodiag.attribute_builder_provider'
+            - '@autodiag.repository.autodiagentryvalue'
+            - '@autodiag.repository.attribute'
+
     autodiag.restitution.calculator:
         class: HopitalNumerique\AutodiagBundle\Service\RestitutionCalculator
         arguments:
@@ -188,7 +196,7 @@ services:
         class: HopitalNumerique\AutodiagBundle\Service\Export\AutodiagEntriesExport
         arguments:
             - '@doctrine.orm.entity_manager'
-            - '@autodiag.result.builder'
+            - '@autodiag.result.exportable_builder'
             - '@autodiag.synthesis.completion'
 
     autodiag.restitution_item.export:

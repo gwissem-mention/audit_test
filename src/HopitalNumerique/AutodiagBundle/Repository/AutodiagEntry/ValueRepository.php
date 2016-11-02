@@ -116,7 +116,6 @@ class ValueRepository extends EntityRepository
         return floor($qb->getQuery()->getOneOrNullResult(AbstractQuery::HYDRATE_SINGLE_SCALAR));
     }
 
-
     public function getFullValuesByEntry($autodiagId, $entryId)
     {
         $qb = $this->getEntityManager()->createQueryBuilder();
@@ -196,5 +195,49 @@ class ValueRepository extends EntityRepository
         });
 
         return $result;
+    }
+
+    public function getFullValues($autodiagId, $entries)
+    {
+        $qb = $this->getEntityManager()->createQueryBuilder();
+        $qb
+            ->from('HopitalNumeriqueAutodiagBundle:Autodiag\Attribute', 'attribute')
+            ->select(
+                'val.id as value_id, val.value as value_value, val.comment as value_comment',
+                'entry.id as entry_id',
+                'attribute.id as attribute_id, attribute.code, attribute.label as attribute_label,
+                    attribute.type, attribute.colored, attribute.colorationInversed',
+                'options.value as option_value, options.label as option_label',
+                'presets.preset',
+                'group_concat(container.id) as container_id'
+            )
+            ->leftJoin(
+                AutodiagEntry\Value::class,
+                'val',
+                Join::WITH,
+                'val.attribute = attribute.id AND val.entry IN (:entries_id)'
+            )
+            ->leftJoin('val.entry', 'entry')
+            ->join(Weight::class, 'weight', Join::WITH, 'weight.attribute = attribute.id')
+            ->join('weight.container', 'container')
+            ->leftJoin('attribute.options', 'options', Join::WITH, 'options.value = val.value')
+            ->join('attribute.autodiag', 'autodiag')
+            ->leftJoin('autodiag.presets', 'presets')
+            ->groupBy('attribute.id')
+            ->addGroupBy('entry.id')
+            ->where('autodiag.id = :autodiag_id')
+            ->setParameters([
+                'entries_id' => implode(', ', $entries),
+                'autodiag_id' => $autodiagId,
+            ])
+        ;
+
+        $results = $qb->getQuery()->getArrayResult();
+
+        array_walk($results, function (&$result) {
+            $result['container_id'] = explode(',', $result['container_id']);
+        });
+
+        return $results;
     }
 }
