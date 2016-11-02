@@ -66,7 +66,14 @@ services:
 
     hopitalnumerique_recherche.doctrine.referencement.category:
         class: 'HopitalNumerique\RechercheBundle\Doctrine\Referencement\Category'
-        arguments: ['@hopitalnumerique_domaine.dependency_injection.current_domaine', '@hopitalnumerique_reference.manager.reference']
+        arguments:
+            - '@hopitalnumerique_domaine.dependency_injection.current_domaine'
+            - '@hopitalnumerique_reference.manager.reference'
+            - '%ref_forum_topic_id%'
+            - '%ref_ambassadeur_id%'
+            - '%ref_recherche_parcours_id%'
+            - '%ref_com_pratique_id%'
+            - '%ref_expression_besoin_reponse_id%'
 
     hopitalnumerique_recherche.doctrine.referencement.modulation:
         class: 'HopitalNumerique\RechercheBundle\Doctrine\Referencement\Modulation'

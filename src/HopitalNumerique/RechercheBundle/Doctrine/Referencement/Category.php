@@ -26,14 +26,29 @@ class Category
      */
     private $referenceManager;
 
+    private $refForumTopicId;
+
+    private $refAmbassadeurId;
+
+    private $refRechercheParcoursId;
+
+    private $refComPratiqueId;
+
+    private $refExpressionBesoinReponseId;
 
     /**
      * Constructeur.
      */
-    public function __construct(CurrentDomaine $currentDomaine, ReferenceManager $referenceManager)
+    public function __construct(CurrentDomaine $currentDomaine, ReferenceManager $referenceManager, $refForumTopicId, $refAmbassadeurId, $refRechercheParcoursId, $refComPratiqueId, $refExpressionBesoinReponseId)
     {
         $this->currentDomaine = $currentDomaine;
         $this->referenceManager = $referenceManager;
+        $this->referenceManager = $referenceManager;
+        $this->refForumTopicId = $refForumTopicId;
+        $this->refAmbassadeurId = $refAmbassadeurId;
+        $this->refRechercheParcoursId = $refRechercheParcoursId;
+        $this->refComPratiqueId = $refComPratiqueId;
+        $this->refExpressionBesoinReponseId = $refExpressionBesoinReponseId;
     }
 
 
@@ -51,30 +66,39 @@ class Category
             $categoriesProperties[] = [
                 'id' => 'pc-'.$productionCategory->getId(),
                 'referenceId' => $productionCategory->getId(),
-                'libelle' => $productionCategory->getLibelle()
+                'libelle' => $productionCategory->getLibelle(),
+                'order' => $productionCategory->getOrder()
             ];
         }
 
         $categoriesProperties[] = [
             'id' => 't-'.Entity::ENTITY_TYPE_FORUM_TOPIC,
             'entityType' => Entity::ENTITY_TYPE_FORUM_TOPIC,
-            'libelle' => Entity::CATEGORY_FORUM_TOPIC_LABEL
+            'libelle' => $this->referenceManager->findOneById($this->refForumTopicId)->getLibelle(),
+            'order' => $this->referenceManager->findOneById($this->refForumTopicId)->getOrder()
         ];
         $categoriesProperties[] = [
             'id' => 't-'.Entity::ENTITY_TYPE_AMBASSADEUR,
             'entityType' => Entity::ENTITY_TYPE_AMBASSADEUR,
-            'libelle' => Entity::CATEGORY_AMBASSADEUR_LABEL
+            'libelle' => $this->referenceManager->findOneById($this->refAmbassadeurId)->getLibelle(),
+            'order' => $this->referenceManager->findOneById($this->refAmbassadeurId)->getOrder()
         ];
         $categoriesProperties[] = [
             'id' => 't-'.Entity::ENTITY_TYPE_RECHERCHE_PARCOURS,
             'entityType' => Entity::ENTITY_TYPE_RECHERCHE_PARCOURS,
-            'libelle' => Entity::CATEGORY_RECHERCHE_PARCOURS_LABEL
+            'libelle' => $this->referenceManager->findOneById($this->refRechercheParcoursId)->getLibelle(),
+            'order' => $this->referenceManager->findOneById($this->refRechercheParcoursId)->getOrder()
         ];
         $categoriesProperties[] = [
             'id' => 't-'.Entity::ENTITY_TYPE_COMMUNAUTE_PRATIQUES_GROUPE,
             'entityType' => Entity::ENTITY_TYPE_COMMUNAUTE_PRATIQUES_GROUPE,
-            'libelle' => Entity::CATEGORY_COMMUNAUTE_PRATIQUES_GROUPE_LABEL
+            'libelle' => $this->referenceManager->findOneById($this->refComPratiqueId)->getLibelle(),
+            'order' => $this->referenceManager->findOneById($this->refComPratiqueId)->getOrder()
         ];
+
+        usort($categoriesProperties, function ($a, $b) {
+            return $a['order'] > $b['order'];
+        });
 
         return $categoriesProperties;
     }

@@ -3,7 +3,24 @@ parameters:
 services:
     hopitalnumerique_core.dependency_injection.entity:
         class: 'HopitalNumerique\CoreBundle\DependencyInjection\Entity'
-        arguments: ['@router', '@hopitalnumerique_domaine.dependency_injection.current_domaine', '@hopitalnumerique_user.manager.user', '@hopitalnumerique_objet.manager.objet', '@hopitalnumerique_objet.manager.contenu', '@hopitalnumerique_forum.manager.topic', '@hopitalnumerique_domaine.manager.domaine', '@hopitalnumerique_recherche_parcours.manager.recherche_parcours', '@hopitalnumerique_communautepratique.manager.groupe', '@hopitalnumerique_recherche.manager.expbesoinreponses', '@nodevo_textedynamique.manager.code']
+        arguments:
+        - '@router'
+        - '@hopitalnumerique_domaine.dependency_injection.current_domaine'
+        - '@hopitalnumerique_user.manager.user'
+        - '@hopitalnumerique_objet.manager.objet'
+        - '@hopitalnumerique_objet.manager.contenu'
+        - '@hopitalnumerique_forum.manager.topic'
+        - '@hopitalnumerique_domaine.manager.domaine'
+        - '@hopitalnumerique_recherche_parcours.manager.recherche_parcours'
+        - '@hopitalnumerique_communautepratique.manager.groupe'
+        - '@hopitalnumerique_recherche.manager.expbesoinreponses'
+        - '@nodevo_textedynamique.manager.code'
+        - '@hopitalnumerique_reference.manager.reference'
+        - '%ref_forum_topic_id%'
+        - '%ref_ambassadeur_id%'
+        - '%ref_recherche_parcours_id%'
+        - '%ref_com_pratique_id%'
+        - '%ref_expression_besoin_reponse_id%'
 
     hopitalnumerique_core.pagerfanta.view:
         class: Pagerfanta\View\OptionableView

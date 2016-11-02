@@ -14,6 +14,7 @@ use HopitalNumerique\ObjetBundle\Manager\ContenuManager;
 use HopitalNumerique\ObjetBundle\Manager\ObjetManager;
 use HopitalNumerique\RechercheBundle\Manager\ExpBesoinReponsesManager;
 use HopitalNumerique\RechercheParcoursBundle\Manager\RechercheParcoursManager;
+use HopitalNumerique\ReferenceBundle\Manager\ReferenceManager;
 use Nodevo\TexteDynamiqueBundle\Manager\CodeManager as TexteDynamiqueCodeManager;
 use HopitalNumerique\UserBundle\Entity\User;
 use HopitalNumerique\UserBundle\Manager\UserManager;
@@ -59,31 +60,15 @@ class Entity
      */
     const ENTITY_TYPE_EXPRESSION_BESOIN_REPONSE = 7;
 
-    /**
-     * @var string Nom de la catégorie du fil de forum
-     */
-    const CATEGORY_FORUM_TOPIC_LABEL = 'Fil de forum';
+    private $refForumTopicId;
 
-    /**
-     * @var string Nom de la catégorie de l'ambassadeur
-     */
-    const CATEGORY_AMBASSADEUR_LABEL = 'Personne ressource';
+    private $refAmbassadeurId;
 
-    /**
-     * @var string Nom de la catégorie de la démarche
-     */
-    const CATEGORY_RECHERCHE_PARCOURS_LABEL = 'Démarche';
+    private $refRechercheParcoursId;
 
-    /**
-     * @var string Nom de la catégorie du groupe de la communauté de pratique
-     */
-    const CATEGORY_COMMUNAUTE_PRATIQUES_GROUPE_LABEL = 'Groupe en cours de la communauté de pratique';
+    private $refComPratiqueId;
 
-    /**
-     * @var string Recherche aidée
-     */
-    const CATEGORY_EXPRESSION_BESOIN_REPONSE_LABEL = 'Réponse';
-
+    private $refExpressionBesoinReponseId;
 
     /**
      * @var \Symfony\Component\Routing\RouterInterface Router
@@ -140,12 +125,35 @@ class Entity
      */
     private $texteDynamiqueCodeManager;
 
+    /**
+     * @var ReferenceManager $referenceManager
+     */
+    private $referenceManager;
+
 
     /**
      * Constructeur.
      */
-    public function __construct(RouterInterface $router, CurrentDomaine $currentDomaine, UserManager $userManager, ObjetManager $objetManager, ContenuManager $contenuManager, TopicManager $forumTopicManager, DomaineManager $domaineManager, RechercheParcoursManager $rechercheParcoursManager, CommunautePratiqueGroupeManager $communautePratiqueGroupeManager, ExpBesoinReponsesManager $expressionBesoinReponseManager, TexteDynamiqueCodeManager $texteDynamiqueCodeManager)
-    {
+    public function __construct(
+        RouterInterface $router,
+        CurrentDomaine $currentDomaine,
+        UserManager $userManager,
+        ObjetManager $objetManager,
+        ContenuManager $contenuManager,
+        TopicManager $forumTopicManager,
+        DomaineManager $domaineManager,
+        RechercheParcoursManager $rechercheParcoursManager,
+        CommunautePratiqueGroupeManager $communautePratiqueGroupeManager,
+        ExpBesoinReponsesManager $expressionBesoinReponseManager,
+        TexteDynamiqueCodeManager $texteDynamiqueCodeManager,
+        ReferenceManager $referenceManager,
+        $refForumTopicId,
+        $refAmbassadeurId,
+        $refRechercheParcoursId,
+        $refComPratiqueId,
+        $refExpressionBesoinReponseId
+
+    ) {
         $this->router = $router;
         $this->currentDomaine = $currentDomaine;
         $this->userManager = $userManager;
@@ -157,6 +165,12 @@ class Entity
         $this->communautePratiqueGroupeManager = $communautePratiqueGroupeManager;
         $this->expressionBesoinReponseManager = $expressionBesoinReponseManager;
         $this->texteDynamiqueCodeManager = $texteDynamiqueCodeManager;
+        $this->referenceManager = $referenceManager;
+        $this->refForumTopicId = $refForumTopicId;
+        $this->refAmbassadeurId = $refAmbassadeurId;
+        $this->refRechercheParcoursId = $refRechercheParcoursId;
+        $this->refComPratiqueId = $refComPratiqueId;
+        $this->refExpressionBesoinReponseId = $refExpressionBesoinReponseId;
     }
 
 
@@ -165,6 +179,7 @@ class Entity
      *
      * @param object $entity Entité
      * @return int|null Type
+     * @throws \Exception
      */
     public function getEntityType($entity)
     {
@@ -199,7 +214,8 @@ class Entity
      * Retourne l'ID de l'objet.
      *
      * @param object $entity Entité
-     * @return integer ID
+     * @return int ID
+     * @throws \Exception
      */
     public function getEntityId($entity)
     {
@@ -235,9 +251,10 @@ class Entity
     /**
      * Retourne l'entité selon son type et son ID.
      *
-     * @param integer        $type Type
-     * @param array<integer> $ids  IDs des entités
-     * @return array<object> Entités
+     * @param integer $type Type
+     * @param array $ids <integer> $ids  IDs des entités
+     * @return array <object> Entités
+     * @throws \Exception
      */
     public function getEntitiesByTypeAndIds($type, array $ids)
     {
@@ -267,7 +284,8 @@ class Entity
      * Retourne les dommaines d'une entité.
      *
      * @param object $entity Entité
-     * @return array<\HopitalNumerique\DomaineBundle\Entity\Domaine> Domaines
+     * @return array <\HopitalNumerique\DomaineBundle\Entity\Domaine> Domaines
+     * @throws \Exception
      */
     public function getDomainesByEntity($entity)
     {
@@ -502,15 +520,15 @@ class Entity
                 $categories = $entity->getTypeLabels();
                 break;
             case self::ENTITY_TYPE_FORUM_TOPIC:
-                return self::CATEGORY_FORUM_TOPIC_LABEL;
+                return $this->referenceManager->findOneById($this->refForumTopicId)->getLibelle();
             case self::ENTITY_TYPE_AMBASSADEUR:
-                return self::CATEGORY_AMBASSADEUR_LABEL;
+                return $this->referenceManager->findOneById($this->refAmbassadeurId)->getLibelle();
             case self::ENTITY_TYPE_RECHERCHE_PARCOURS:
-                return self::CATEGORY_RECHERCHE_PARCOURS_LABEL;
+                return $this->referenceManager->findOneById($this->refRechercheParcoursId)->getLibelle();
             case self::ENTITY_TYPE_COMMUNAUTE_PRATIQUES_GROUPE:
-                return self::CATEGORY_COMMUNAUTE_PRATIQUES_GROUPE_LABEL;
+                return $this->referenceManager->findOneById($this->refComPratiqueId)->getLibelle();
             case self::ENTITY_TYPE_EXPRESSION_BESOIN_REPONSE:
-                return self::CATEGORY_EXPRESSION_BESOIN_REPONSE_LABEL;
+                return $this->referenceManager->findOneById($this->refExpressionBesoinReponseId)->getLibelle();
         }
 
         return implode(' &diams; ', $categories);

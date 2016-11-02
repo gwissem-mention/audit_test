@@ -38,28 +38,37 @@ class RequeteController extends Controller
             foreach ($requete->getEntityTypeIds() as $entityTypeId) {
                 switch ($entityTypeId) {
                     case Entity::ENTITY_TYPE_FORUM_TOPIC:
-                        $filtreCategoryLabels[] = Entity::CATEGORY_FORUM_TOPIC_LABEL;
+                        $filtreCategoryLabels[] = $this->get('hopitalnumerique_reference.manager.reference')
+                            ->findOneById($this->container->getParameter('ref_forum_topic_id'))
+                        ;
                         break;
                     case Entity::ENTITY_TYPE_AMBASSADEUR:
-                        $filtreCategoryLabels[] = Entity::CATEGORY_AMBASSADEUR_LABEL;
+                        $filtreCategoryLabels[] = $this->get('hopitalnumerique_reference.manager.reference')
+                            ->findOneById($this->container->getParameter('ref_ambassadeur_id'))
+                        ;
                         break;
                     case Entity::ENTITY_TYPE_RECHERCHE_PARCOURS:
-                        $filtreCategoryLabels[] = Entity::CATEGORY_RECHERCHE_PARCOURS_LABEL;
+                        $filtreCategoryLabels[] = $this->get('hopitalnumerique_reference.manager.reference')
+                            ->findOneById($this->container->getParameter('ref_recherche_parcours_id'))
+                        ;
                         break;
                     case Entity::ENTITY_TYPE_COMMUNAUTE_PRATIQUES_GROUPE:
-                        $filtreCategoryLabels[] = Entity::CATEGORY_COMMUNAUTE_PRATIQUES_GROUPE_LABEL;
+                        $filtreCategoryLabels[] = $this->get('hopitalnumerique_reference.manager.reference')
+                            ->findOneById($this->container->getParameter('ref_com_pratique_id'))
+                        ;
                         break;
                 }
             }
         }
-        foreach ($this->container->get('hopitalnumerique_reference.manager.reference')->findBy(['id' => $requete->getPublicationCategoryIds()]) as $publicationCategory) {
+        foreach ($this->container->get('hopitalnumerique_reference.manager.reference')
+                     ->findBy(['id' => $requete->getPublicationCategoryIds()]) as $publicationCategory) {
             $filtreCategoryLabels[] = $publicationCategory->getLibelle();
         }
 
         return $this->render('HopitalNumeriqueRechercheBundle:Referencement\Requete:popin_detail.html.twig', [
-            'referencesTree' => $referencesTree,
-            'requete' => $requete,
-            'filtreCategoryLabels' => $filtreCategoryLabels
+            'referencesTree'       => $referencesTree,
+            'requete'              => $requete,
+            'filtreCategoryLabels' => $filtreCategoryLabels,
         ]);
     }
 
@@ -80,8 +89,8 @@ class RequeteController extends Controller
         }
 
         return $this->render('HopitalNumeriqueRechercheBundle:Referencement\Requete:popin_save.html.twig', [
-            'requete' => $requete,
-            'requeteForm' => (null !== $requeteForm ? $requeteForm->createView() : null)
+            'requete'     => $requete,
+            'requeteForm' => (null !== $requeteForm ? $requeteForm->createView() : null),
         ]);
     }
 
