@@ -18,6 +18,7 @@
 
     {% javascripts output="compiled/hopitalnumerique-autodiag-front.js"
         '@highcharts_js'
+        '@gauge'
         'bundles/hopitalnumeriqueautodiag/js/navigation.js'
         'bundles/hopitalnumeriqueautodiag/js/autodiagentry.js'
         'bundles/hopitalnumeriqueautodiag/js/AutodiagEntry/summary.js'
@@ -26,6 +27,7 @@
         'bundles/hopitalnumeriqueautodiag/js/restitution.js'
         'bundles/hopitalnumeriqueautodiag/js/Restitution/jauge.js'
         'bundles/hopitalnumeriqueautodiag/js/scorePolling.js'
+        'bundles/hopitalnumeriqueautodiag/js/Restitution/variation.js'
     %}
         <script type="text/javascript" src="{{ absolute_url(asset_url) }}"></script>
     {% endjavascripts %}
