@@ -99,7 +99,7 @@ class ResultItemBuilder
         $itemAttribute = new ItemAttribute(
             sprintf('%s. %s', $attribute['code'], $attribute['attribute_label'])
         );
-        $itemAttribute->comment = $attribute['value_comment'];
+        $itemAttribute->attributeId = $attribute['attribute_id'];
         $itemAttribute->setColorationInversed($attribute['colorationInversed']);
         $item->addAttribute($itemAttribute);
 
@@ -128,17 +128,18 @@ class ResultItemBuilder
 
         $itemAttribute->setResponse(
             $builder->computeScore($attribute['value_value']),
-            $responseText === null && $attribute['entry_id'] !== null ? 'Non concerné' : $responseText
+            $responseText === null && $attribute['entry_id'] !== null ? 'Non concerné' : $responseText,
+            $attribute['value_comment']
         );
 
         $score =
             $this->calculateScore(
-                $itemAttribute->responseValue,
+                $itemAttribute->response->getValue(),
                 $this->getMinAndMaxForAutodiagAttributes($synthesis->getAutodiag(), $attribute)
             )
         ;
 
-        $itemAttribute->score = $score;
+        $itemAttribute->response->setScore($score);
     }
 
     /**

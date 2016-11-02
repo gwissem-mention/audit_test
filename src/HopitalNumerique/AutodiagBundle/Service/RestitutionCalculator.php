@@ -62,7 +62,7 @@ class RestitutionCalculator
     protected $synthesisScores = [];
     protected $allScores = [];
     protected $autodiagAttributesCount = null;
-    protected $responses = null;
+    protected $responses = [];
     protected $minAndMaxForAutodiagAttributes = null;
     protected $resultItemCreatedCallback;
 
@@ -240,14 +240,14 @@ class RestitutionCalculator
         return $this->items[$cacheKey];
     }
 
-    protected function computeResultItemAttribute(ResultItem $item, Synthesis $synthesis, array $attribute)
+    public function computeResultItemAttribute(ResultItem $item, Synthesis $synthesis, array $attribute)
     {
         $builder = $this->attributeBuilder->getBuilder($attribute['type']);
 
         $itemAttribute = new ItemAttribute(
             sprintf('%s. %s', $attribute['code'], $attribute['attribute_label'])
         );
-        $itemAttribute->comment = $attribute['value_comment'];
+        $itemAttribute->attributeId = $attribute['attribute_id'];
         $itemAttribute->setColorationInversed($attribute['colorationInversed']);
         $item->addAttribute($itemAttribute);
 
@@ -276,14 +276,15 @@ class RestitutionCalculator
 
         $itemAttribute->setResponse(
             $builder->computeScore($attribute['value_value']),
-            $responseText === null && $attribute['entry_id'] !== null ? 'Non concerné' : $responseText
+            $responseText === null && $attribute['entry_id'] !== null ? 'Non concerné' : $responseText,
+            $attribute['value_comment']
         );
 
-        if (null !== $itemAttribute->responseValue) {
+        if (null !== $itemAttribute->response->getValue()) {
             $actionPlan = $this->getAttributeActionPlan(
                 $synthesis->getAutodiag(),
                 $attribute['attribute_id'],
-                $itemAttribute->responseValue
+                $itemAttribute->response->getValue()
             );
 
             if ($actionPlan) {
@@ -293,12 +294,12 @@ class RestitutionCalculator
 
         $score =
             $this->calculateScore(
-                $itemAttribute->responseValue,
+                $itemAttribute->response->getValue(),
                 $this->getMinAndMaxForAutodiagAttributes($synthesis->getAutodiag(), $attribute)
             )
         ;
 
-        $itemAttribute->score = $score;
+        $itemAttribute->response->setScore($score);
     }
 
     protected function getReferenceScore(Autodiag\Reference $reference, Container $container)
@@ -376,16 +377,16 @@ class RestitutionCalculator
         return $this->allScores[$container->getId()];
     }
 
-    protected function getResponses(Synthesis $synthesis, Container $container)
+    public function getResponses(Synthesis $synthesis, Container $container)
     {
-        if (null === $this->responses) {
-            $this->responses = $this->valueRepository->getFullValuesByEntry(
+        if (!array_key_exists($synthesis->getId(), $this->responses)) {
+            $this->responses[$synthesis->getId()] = $this->valueRepository->getFullValuesByEntry(
                 $synthesis->getAutodiag()->getId(),
                 $synthesis->getEntries()->first()->getId()
             );
         }
 
-        foreach ($this->responses as $response) {
+        foreach ($this->responses[$synthesis->getId()] as $response) {
             if (in_array($container->getId(), $response['container_id'])) {
                 yield $response;
             }

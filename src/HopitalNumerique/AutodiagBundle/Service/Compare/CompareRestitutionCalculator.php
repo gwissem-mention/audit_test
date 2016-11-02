@@ -7,7 +7,9 @@ use HopitalNumerique\AutodiagBundle\Entity\Compare;
 use HopitalNumerique\AutodiagBundle\Entity\Restitution\Category;
 use HopitalNumerique\AutodiagBundle\Entity\Restitution\Item;
 use HopitalNumerique\AutodiagBundle\Model\Result\ComparedItem;
+use HopitalNumerique\AutodiagBundle\Model\Result\ComparedItemResponse;
 use HopitalNumerique\AutodiagBundle\Model\Result\ComparedScore;
+use HopitalNumerique\AutodiagBundle\Model\Result\ItemResponse;
 use HopitalNumerique\AutodiagBundle\Model\Result\Score;
 use HopitalNumerique\AutodiagBundle\Repository\RestitutionRepository;
 use HopitalNumerique\AutodiagBundle\Service\RestitutionCalculator;
@@ -86,6 +88,29 @@ class CompareRestitutionCalculator
         );
 
         $item->setScore($comparedScore);
+
+        foreach ($this->restitutionCalculator->getResponses($compare->getReference(), $container) as $response) {
+            foreach ($item->getAttributes() as $itemAttribute) {
+                if ($itemAttribute->attributeId == $response['attribute_id']) {
+                    $itemResponse = new ComparedItemResponse(
+                        $itemAttribute->response->getValue(),
+                        $itemAttribute->response->getText(),
+                        $itemAttribute->response->getComment(),
+                        $itemAttribute->response->getScore()
+                    );
+
+                    if (null !== $itemAttribute->response->getActionPlan()) {
+                        $itemResponse->setActionPlan($itemAttribute->response->getActionPlan());
+                    }
+
+                    $tempResultItem = new ResultItem();
+                    $this->restitutionCalculator->computeResultItemAttribute($tempResultItem, $compare->getReference(), $response);
+                    $itemResponse->setReference($tempResultItem->getAttributes()[0]->response);
+
+                    $itemAttribute->response = $itemResponse;
+                }
+            }
+        }
 
         return $item;
     }
