@@ -42,6 +42,7 @@ class CompareType extends AbstractType
             ->add('reference', EntityType::class, [
                 'empty_value' => '-',
                 'class' => Synthesis::class,
+                'label' => 'ad.compare.reference',
                 'choice_label' => 'name',
                 'choices' => $this->synthesisRepository->findComparableForUser($options['user']),
                 'group_by' => function ($val) {
@@ -66,6 +67,7 @@ class CompareType extends AbstractType
             $form->add('synthesis', EntityType::class, [
                 'empty_value' => '-',
                 'class' => Synthesis::class,
+                'label' => 'ad.compare.synthesis',
                 'choice_label' => 'name',
                 'choices' => $choices,
                 'group_by' => function ($val) {

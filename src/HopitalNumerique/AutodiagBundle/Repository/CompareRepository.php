@@ -4,6 +4,7 @@ namespace HopitalNumerique\AutodiagBundle\Repository;
 
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\Query\Expr\Join;
+use HopitalNumerique\AutodiagBundle\Entity\Compare;
 use HopitalNumerique\AutodiagBundle\Entity\Synthesis;
 
 class CompareRepository extends EntityRepository
@@ -21,5 +22,29 @@ class CompareRepository extends EntityRepository
         ;
 
         return $qb->getQuery()->getOneOrNullResult();
+    }
+
+    /**
+     * @param Synthesis $synthesis
+     * @return Compare[]
+     */
+    public function findRelatedToSynthesis(Synthesis $synthesis)
+    {
+        $qb = $this->createQueryBuilder('compare');
+        $qb
+            ->join('compare.synthesis', 'synthesis')
+            ->join('compare.reference', 'reference')
+            ->where(
+                $qb->expr()->orX(
+                    'synthesis.createdFrom = :synthesis_id',
+                    'reference.createdFrom = :synthesis_id'
+                )
+            )
+            ->setParameters([
+                'synthesis_id' => $synthesis->getId(),
+            ])
+        ;
+
+        return $qb->getQuery()->getResult();
     }
 }
