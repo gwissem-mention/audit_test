@@ -24,6 +24,8 @@ class Mail
     const MAIL_SHARE_AUTODIAG_RESULT_ID = 68;
     /** @var integer ID du courriel d'alerte de publication d'un commentaire */
     const MAIL_ALERTE_PUBLICATION_COMMENTAIRE = 69;
+    /** @var integer ID du courriel de recommandation à un ami */
+    const MAIL_RECOMMANDATION_TOPIC_ID = 70;
 
 
     /**
