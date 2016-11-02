@@ -7,7 +7,9 @@ use HopitalNumerique\DomaineBundle\Entity\Domaine;
 use HopitalNumerique\ReferenceBundle\Entity\Reference;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
+use Symfony\Component\Form\Extension\Core\Type\FileType;
+use Symfony\Component\Form\Extension\Core\Type\HiddenType;
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
@@ -21,43 +23,55 @@ class SuggestionType extends AbstractType
     {
         $builder
             ->add('title', null, [
-                'attr'       => array('class' => 'validate[required,max[255]]')
+                'attr' => ['class' => 'validate[required,max[255]]'],
+                'label' => 'Titre',
             ])
-            ->add('creationDate', 'date', [
+            ->add('creationDate', 'genemu_jquerydate', [
                 'widget' => 'single_text',
+                'label' => 'Date à laquelle la suggestion a été postée',
             ])
             ->add('domains', EntityType::class, [
-                'class' => Domaine::class,
-                'required' => true,
-                'multiple' => true,
+                'class'       => Domaine::class,
+                'multiple'    => true,
                 'empty_value' => ' - ',
-//                'query_builder' => function (EntityRepository $er) use ($options) {
-//                    return $er->getDomainesUserConnectedForForm($options['user']->getId());
-//                },
-                'attr' => [
-                    'class' => 'select2 validate[required,minSize[3],maxSize[255]]'
-                ]
+                'attr'        => [
+                    'class' => 'select2 validate[required,minSize[3],maxSize[255]]',
+                ],
+                'label' => 'Domaine(s) associé(s)',
             ])
             ->add('state', EntityType::class, [
-                'class' => Reference::class,
+                'class'         => Reference::class,
                 'query_builder' => function (EntityRepository $er) {
                     return $er->createQueryBuilder('reference')
                         ->where("reference.code = 'ETAT_SUGGESTION'");
                 },
+                'label' => 'État',
             ])
+            ->add('synthesis', TextareaType::class, [
+                'required' => false,
+                'attr'     => ['class' => 'tinyMce'],
+                'label' => 'Synthèse',
+            ])
+            ->add('summary', TextareaType::class, [
+                'attr' => ['class' => 'tinyMce'],
+                'label' => 'Résumé',
+            ])
+            ->add('link', null, [
+                'required' => false,
+                'label' => 'Source (si externe)',
+            ])
+            ->add('file', FileType::class, array(
+                'required' => false,
+                'label'    => 'Fichier'
+            ))
+            ->add('path', HiddenType::class)
         ;
     }
 
     public function configureOptions(OptionsResolver $resolver)
     {
-//        $resolver->setDefaults([
-//            'data_class' => 'HopitalNumerique\PublicationBundle\Entity\Suggestion',
-//            'label_format' => 'ad.autodiag.%name%',
-//            'edit' => false,
-//        ]);
-//
-//        $resolver->setRequired(['user', 'edit']);
-//        $resolver->setAllowedTypes('user', User::class);
-//        $resolver->setAllowedTypes('edit', 'boolean');
+        $resolver->setDefaults(array(
+            'data_class' => 'HopitalNumerique\PublicationBundle\Entity\Suggestion',
+        ));
     }
 }

@@ -6,6 +6,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use HopitalNumerique\DomaineBundle\Entity\Domaine;
 use HopitalNumerique\ReferenceBundle\Entity\Reference;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
@@ -13,6 +14,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  *
  * @ORM\Table(name="hn_suggestion")
  * @ORM\Entity(repositoryClass="HopitalNumerique\PublicationBundle\Repository\SuggestionRepository")
+ * @ORM\HasLifecycleCallbacks
  */
 class Suggestion
 {
@@ -44,6 +46,13 @@ class Suggestion
      * @ORM\Column(type="datetime")
      */
     private $creationDate;
+
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(type="datetime")
+     */
+    private $updatedAt;
 
     /**
      * @var string
@@ -94,6 +103,22 @@ class Suggestion
      * )
      */
     private $domains;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $path;
+
+    /**
+     * @var UploadedFile
+     *
+     * @Assert\File(
+     *     maxSize = "100M"
+     * )
+     */
+    private $file;
 
     public function __construct()
     {
@@ -249,7 +274,7 @@ class Suggestion
     }
 
     /**
-     * @return \HopitalNumerique\DomaineBundle\Entity\Domaine[]
+     * @return ArrayCollection \HopitalNumerique\DomaineBundle\Entity\Domaine
      */
     public function getDomains()
     {
@@ -266,6 +291,156 @@ class Suggestion
         $this->domains[] = $domaine;
 
         return $this;
+    }
+
+    /**
+     * @param UploadedFile $file
+     *
+     * @return $this
+     */
+    public function setFile($file)
+    {
+        $this->file = $file;
+
+        $this->updatedAt = new \DateTime('now');
+
+        return $this;
+    }
+
+    /**
+     * @return UploadedFile
+     */
+    public function getFile()
+    {
+        return $this->file;
+    }
+
+    /**
+     * @param string $path
+     *
+     * @return Suggestion
+     */
+    public function setPath($path)
+    {
+        if (is_null($path) && file_exists($this->getAbsolutePath())) {
+            unlink($this->getAbsolutePath());
+        }
+
+        $this->path = $path;
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getPath()
+    {
+        return $this->path;
+    }
+
+    /**
+     * @return null|string
+     */
+    public function getAbsolutePath()
+    {
+        $result = null;
+
+        if (!is_null($this->path)) {
+            $result = $this->path;
+        }
+
+        if (is_null($result)) {
+            return null;
+        }
+
+        return $this->getUploadRootDir() . '/' . $result;
+    }
+
+    /**
+     * @return null|string
+     */
+    public function getWebPath()
+    {
+        $result = null;
+
+        if (!is_null($this->path)) {
+            $result = $this->path;
+        }
+
+        if (is_null($result)) {
+            return null;
+        }
+
+        return $this->getUploadDir() . '/' . $result;
+    }
+
+    /**
+     * @return string
+     */
+    public function getTypeMime()
+    {
+        $result = $this->path;
+
+        if (!$result || is_null($result)) {
+            return "";
+        }
+
+        return substr($result, strrpos($result, ".") + 1);
+    }
+
+    /**
+     * @return string
+     */
+    public function getUploadRootDir()
+    {
+        return __WEB_DIRECTORY__ . '/' . $this->getUploadDir();
+    }
+
+    public function getUploadDir()
+    {
+        return 'medias/Suggestions/Fichiers';
+    }
+
+    /**
+     * @ORM\PrePersist()
+     * @ORM\PreUpdate()
+     */
+    public function preUpload()
+    {
+        if (null !== $this->file) {
+            if (file_exists($this->getAbsolutePath())) {
+                unlink($this->getAbsolutePath());
+            }
+
+            $this->path = $this->file->getClientOriginalName();
+        }
+    }
+
+    /**
+     * @ORM\PostPersist()
+     * @ORM\PostUpdate()
+     */
+    public function upload()
+    {
+        if (null === $this->file) {
+            return;
+        }
+
+        if (null !== $this->file) {
+            $this->file->move($this->getUploadRootDir(), $this->path);
+            unset($this->file);
+        }
+    }
+
+    /**
+     * @ORM\PostRemove()
+     */
+    public function removeUpload()
+    {
+        if ($this->getAbsolutePath() && file_exists($this->getAbsolutePath())) {
+            unlink($this->getAbsolutePath());
+        }
     }
 
 }

@@ -114,3 +114,11 @@ hopitalnumerique_suggestion_back_edit:
     defaults: { _controller: "HopitalNumeriquePublicationBundle:Back/Suggestion:edit" }
     requirements:
         id: \d+
+
+hopitalnumerique_suggestion_back_delete:
+    path: /admin/suggestion/delete/{suggestion}
+    defaults: { _controller: "HopitalNumeriquePublicationBundle:Back/Suggestion:delete" }
+
+hopitalnumerique_suggestion_back_isFileExist:
+    path:  /admin/suggestion/isFileExist
+    defaults: { _controller: "HopitalNumeriquePublicationBundle:Back/Suggestion:isFileExist" }

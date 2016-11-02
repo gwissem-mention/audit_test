@@ -16,6 +16,7 @@ services:
         - '@hopitalnumerique_recherche.manager.expbesoinreponses'
         - '@nodevo_textedynamique.manager.code'
         - '@hopitalnumerique_reference.manager.reference'
+        - '@hopitalnumerique_publication.repository.suggestion'
         - '%ref_forum_topic_id%'
         - '%ref_ambassadeur_id%'
         - '%ref_recherche_parcours_id%'
