@@ -6,11 +6,8 @@ class ItemAttribute
 {
     public $label;
 
-    public $responseText;
-    public $responseValue;
-    public $comment;
-
-    public $score;
+    /** @var ItemResponse */
+    public $response;
 
     public $colored;
     public $colorationInversed = false;
@@ -19,31 +16,16 @@ class ItemAttribute
 
     public $attributeId;
 
-    /**
-     * @var ItemActionPlan
-     */
-    protected $actionPlan;
-
     public function __construct($label, $colored = true)
     {
         $this->label = $label;
         $this->colored = $colored;
     }
 
-    public function setResponse($value, $text)
+    public function setResponse($responseValue, $responseText, $comment = null, $score = null)
     {
-        $this->responseValue = $value;
-        $this->responseText = $text;
-    }
-
-    public function setRestponseValue($value)
-    {
-        $this->responseValue = $value;
-    }
-
-    public function setResponseText($value)
-    {
-        $this->responseText = $value;
+        $response = new ItemResponse($responseValue, $responseText, $comment, $score);
+        $this->response = $response;
     }
 
     public function isColorationInversed()
@@ -68,11 +50,17 @@ class ItemAttribute
 
     public function setActionPlan(ItemActionPlan $actionPlan)
     {
-        $this->actionPlan = $actionPlan;
+        if (null !== $this->response) {
+            $this->response->setActionPlan($actionPlan);
+        }
     }
 
     public function getActionPlan()
     {
-        return $this->actionPlan;
+        if (null === $this->response) {
+            return null;
+        }
+
+        return $this->response->getActionPlan();
     }
 }
