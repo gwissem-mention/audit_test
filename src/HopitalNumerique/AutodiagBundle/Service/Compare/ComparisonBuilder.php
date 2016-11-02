@@ -61,8 +61,8 @@ class ComparisonBuilder
         $this->entityManager->persist($referenceCopy);
         $this->entityManager->flush();
 
-        $this->scoreCalculator->deferSynthesisScore($synthesisCopy);
-        $this->scoreCalculator->deferSynthesisScore($referenceCopy);
+        $this->scoreCalculator->computeSynthesisScore($synthesisCopy);
+        $this->scoreCalculator->computeSynthesisScore($referenceCopy);
 
         $compare = new Compare($synthesisCopy, $referenceCopy);
 
