@@ -254,3 +254,6 @@ assetic:
             inputs:
                 - '%kernel.root_dir%/Resources/components/jstree/dist/themes/default/style.min.css'
                 - 'bundles/hopitalnumeriquecore/css/redefinitions/jstree.css'
+        gauge:
+            inputs:
+                - "%kernel.root_dir%/Resources/components/bernii/gauge.js/dist/gauge.min.js"

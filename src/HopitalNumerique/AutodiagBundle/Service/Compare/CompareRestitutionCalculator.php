@@ -58,6 +58,7 @@ class CompareRestitutionCalculator
 
     /**
      * Alter original computed score to add reference score
+     * @Todo : find better solution than this callback. Class RestitutionCalculator should be exploded as reusable services
      *
      * @param ResultItem $item
      * @param Container $container
@@ -84,7 +85,7 @@ class CompareRestitutionCalculator
         );
 
         $comparedScore->setVariation(
-            $referenceScore->getValue() * 100 / $comparedScore->getValue()
+            $comparedScore->getValue() - $referenceScore->getValue()
         );
 
         $item->setScore($comparedScore);
