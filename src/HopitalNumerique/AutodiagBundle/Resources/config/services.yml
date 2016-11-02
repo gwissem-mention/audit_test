@@ -213,7 +213,13 @@ services:
         arguments:
             - '@autodiag.repository.autodiagentryvalue'
 
-    autodiag.synthesis.comparison_builder:
+    autodiag.compare.cleaner:
+        class: HopitalNumerique\AutodiagBundle\Service\Compare\ComparisonCleaner
+        arguments:
+            - '@autodiag.repository.compare'
+            - '@doctrine.orm.entity_manager'
+
+    autodiag.compare.builder:
         class: HopitalNumerique\AutodiagBundle\Service\Compare\ComparisonBuilder
         arguments:
             - '@autodiag.synthesis.intersection_builder'

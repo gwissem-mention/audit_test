@@ -4,6 +4,8 @@ namespace HopitalNumerique\AutodiagBundle\Controller\Front;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use HopitalNumerique\AutodiagBundle\Entity\Synthesis;
+use HopitalNumerique\AutodiagBundle\Event\SynthesisEvent;
+use HopitalNumerique\AutodiagBundle\Events;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
@@ -91,6 +93,11 @@ class ValidationController extends Controller
         // On supprime tous les partages si la synthèse est dévalidée
         $synthesis->setShares(new ArrayCollection());
         $this->getDoctrine()->getManager()->flush();
+
+        $this->get('event_dispatcher')->dispatch(
+            Events::SYNTHESIS_UNVALIDATED,
+            new SynthesisEvent($synthesis)
+        );
 
         $this->addFlash('success', $this->get('translator')->trans('ad.validation.unvalidate_success'));
 

@@ -228,3 +228,7 @@ ad:
             add: Ajout autodiagnostic
         add_button: Ajout autodiagnostic
         saved: Autodiagnostic enregistré.
+
+    compare:
+        reference: Comparer le résultat (le plus récent)
+        synthesis: Avec le résultat (le plus ancien)

@@ -10,7 +10,13 @@ namespace HopitalNumerique\AutodiagBundle;
 final class Events
 {
     /**
-     * This events occurs when an entry is updated (entry values have changed)
+     * This event occurs when an entry is updated (entry values have changed)
      */
     const ENTRY_UPDATED = 'entry.updated';
+
+    /**
+     * This event occurs when a Synthesis is unvalidated
+     * The event listener method receives a HopitalNumerique\AutodiagBundle\Event\SynthesisEvent
+     */
+    const SYNTHESIS_UNVALIDATED = 'synthesis.unvalidated';
 }
