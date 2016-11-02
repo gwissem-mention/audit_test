@@ -21,7 +21,8 @@
             <div class="identity">
                 <div class="title">{{ compare.synthesis.autodiag.title }}</div>
                 <div class="name">
-                    Comparaison de {{ compare.synthesis.name }} avec {{ compare.reference.name }}
+                    Comparaison du résultat "{{ compare.synthesis.name }}" ({{ compare.synthesis.validatedAt|date('d/m/Y') }})
+                    par rapport au résultat "{{ compare.reference.name }}" ({{ compare.reference.validatedAt|date('d/m/Y') }})
                 </div>
             </div>
 

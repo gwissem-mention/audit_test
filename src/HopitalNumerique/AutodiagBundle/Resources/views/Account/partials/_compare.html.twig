@@ -24,6 +24,7 @@
 
         $reference.change(function() {
             var $form = $(this).closest('form');
+            var loader = $form.parent().nodevoLoader().start();
             var data = {};
             data[$reference.attr('name')] = $reference.val();
             // Submit data via AJAX to the form's action path.
@@ -32,6 +33,7 @@
                 type: $form.attr('method'),
                 data : data,
                 success: function(html) {
+                    loader.finished();
                     $('#compare_synthesis').replaceWith(
                         $(html).find('#compare_synthesis')
                     );
@@ -42,6 +44,8 @@
         $form.submit(function(e) {
             e.preventDefault();
 
+            var loader = $('button[type="submit"]', this).nodevoLoader().start();
+
             var xhr = $.ajax({
                 url : $(this).attr('action'),
                 type: $(this).attr('method'),
@@ -49,6 +53,7 @@
             });
 
             xhr.complete(function(response) {
+                loader.finished();
                 var redirect = response.getResponseHeader('REDIRECT');
                 console.log(redirect);
                 if (null !== redirect) {

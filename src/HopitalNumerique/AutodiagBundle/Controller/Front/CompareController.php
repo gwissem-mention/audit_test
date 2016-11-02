@@ -15,14 +15,28 @@ class CompareController extends Controller
 {
     public function indexAction(Compare $compare, $pdf = false)
     {
+        $autodiag = $compare->getSynthesis()->getAutodiag();
+        $restitution = $this->get('autodiag.repository.restitution')->getForAutodiag($autodiag);
+
+        if (null === $restitution || null == $autodiag->getAlgorithm()) {
+            return $this->render('HopitalNumeriqueAutodiagBundle:Restitution:empty.html.twig', [
+                'synthesis' => $compare->getSynthesis(),
+            ]);
+        }
+
+        if (!$this->isGranted('read', $compare->getSynthesis()) || !$this->isGranted('read', $compare->getReference())) {
+            $this->addFlash('danger', $this->get('translator')->trans('ad.synthesis.restitution.forbidden'));
+
+            return $this->redirectToRoute('hopitalnumerique_autodiag_entry_add', [
+                'autodiag' => $autodiag->getId()
+            ]);
+        }
+
         $comparator = new CompareRestitutionCalculator(
             $this->get('autodiag.restitution.calculator'),
             $this->get('autodiag.repository.restitution')
         );
         $result = $comparator->compute($compare);
-
-        $autodiag = $compare->getSynthesis()->getAutodiag();
-        $restitution = $this->get('autodiag.repository.restitution')->getForAutodiag($autodiag);
 
         if ($pdf) {
             return new Response(
