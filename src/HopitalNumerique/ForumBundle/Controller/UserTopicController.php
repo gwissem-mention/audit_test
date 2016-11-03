@@ -32,6 +32,24 @@ class UserTopicController extends UserTopicControllerCCDN
      */
     public function showAction($forumName, $topicId)
     {
+        $references = $this->container->get('hopitalnumerique_reference.manager.entity_has_reference')->findBy(array(
+            'entityType' => 3,
+            'entityId' => $topicId
+        ));
+        $referenceId = '';
+        $i = 0;
+        $len = count($references);
+        if (!empty($references)) {
+            foreach ($references as $reference) {
+                if ($i == 0) {
+                    $separator = ',';
+                } else if ($i == $len - 1) {
+                    $separator = '';
+                }
+                $referenceId = $referenceId.$reference->getReference()->getId().$separator;
+                $i++;
+            }
+        }
         $this->isFound($forum = $this->getForumModel()->findOneForumByName($forumName));
         $this->isFound($topic = $this->getTopicModel()->findOneTopicByIdWithBoardAndCategory($topicId, true));
         $this->isAuthorised($this->getAuthorizer()->canShowTopic($topic, $forum));
@@ -84,6 +102,8 @@ class UserTopicController extends UserTopicControllerCCDN
             'subscription_count'  => $subscriberCount,
             'isSubscriptionBoard' => $this->isSubscriptionBoard($topic->getBoard()),
             'boards'              => $boards,
+            'references'          => $references,
+            'referenceId'         => $referenceId
         ]);
 
         return $response;
