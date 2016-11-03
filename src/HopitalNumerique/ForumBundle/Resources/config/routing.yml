@@ -62,3 +62,7 @@ hopitalnumerique_forum_cron:
 hopitalnumerique_forum_quick_signup:
     pattern: /quick-sign-up/{urlToRedirect}
     defaults: { _controller: HopitalNumeriqueUserBundle:Security:quickSignUp, urlToRedirect:'' }
+
+hopitalnumerique_forum_check:
+    pattern:  /check-forum/{objet}
+    defaults: { _controller: HopitalNumeriqueForumBundle:CheckTopic:Check}
