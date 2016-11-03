@@ -5,6 +5,12 @@
 %}
 
     <div id="column-right">
+        {% if app.user %}
+            <div class="column-right-container" style="margin-bottom: 10px;">
+                {% include 'HopitalNumeriquePublicationBundle:Publication:Partials/topic_related.html.twig' %}
+                {#{% include 'HopitalNumeriquePublicationBundle:Publication:Partials/parcours_guides.html.twig' %}#}
+            </div>
+        {% endif %}
         {% if objet.associatedProductions == true %}
             {% if productionsLiees|length > 0 or parcoursGuides|length > 0 or topicRelated|length > 0 or userRelated|length > 0 %}
                 <div class="column-right-container">
