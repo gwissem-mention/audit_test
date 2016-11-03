@@ -41,7 +41,8 @@ class GlossaireExtension extends \Twig_Extension
     public function getFilters()
     {
         return [
-            'glossaire_add' => new \Twig_Filter_Method($this, 'add')
+            'glossaire_add' => new \Twig_Filter_Method($this, 'add'),
+            'glossaire_list' => new \Twig_Filter_Method($this, 'listGlossaire')
         ];
     }
 
@@ -59,7 +60,7 @@ class GlossaireExtension extends \Twig_Extension
             $entity,
             $this->currentDomaine->get()
         );
-
+        $testString = array();
         if (count($glossaireReferences) > 0) {
             $text = $this->convertBadPortionsToAsciiHtml($text);
             foreach ($glossaireReferences as $glossaireReference) {
@@ -67,14 +68,21 @@ class GlossaireExtension extends \Twig_Extension
                 preg_match_all($wordSearchPattern, $text, $wordSearchPatternMatches);
 
                 foreach ($wordSearchPatternMatches[0] as $wordSearchPatternMatch) {
-                    $html =
-                        '¬<a class="fancybox fancybox.ajax" href="'.$this->router->generate('hopitalnumerique_reference_glossaire_popin', ['glossaireReference' => $glossaireReference->getId()]).'¬"><acronym class="glosstool" data-html="true" title="¬'.
-                        (('' != $glossaireReference->getDescriptionCourte()) ? $this->convertToAsciiHtml($glossaireReference->getDescriptionCourte())  : '').
-                        '¬">¬' . $this->convertToAsciiHtml(substr($wordSearchPatternMatch, 1, -1)) . '</acronym></a>'
-                    ;
+                    if (!in_array($glossaireReference->getLibelle(), $testString)) {
+                        $html =
+                            '¬<a class="fancybox fancybox.ajax" href="'.$this->router->generate(
+                                'hopitalnumerique_reference_glossaire_popin',
+                                ['glossaireReference' => $glossaireReference->getId()]
+                            ).'¬"><acronym class="glosstool" data-html="true" title="¬'.
+                            (('' != $glossaireReference->getDescriptionCourte()) ? $this->convertToAsciiHtml(
+                                $glossaireReference->getDescriptionCourte()
+                            ) : '').
+                            '¬">¬'.$this->convertToAsciiHtml(substr($wordSearchPatternMatch, 1, -1)).'</acronym></a>';
 
-                    $html = substr($wordSearchPatternMatch, 0, 1) . $html . substr($wordSearchPatternMatch, -1);
-                    $text = str_replace($wordSearchPatternMatch, $html, $text);
+                        $html = substr($wordSearchPatternMatch, 0, 1).$html.substr($wordSearchPatternMatch, -1);
+                        $text = str_replace($wordSearchPatternMatch, $html, $text);
+                        $testString[] = $glossaireReference->getLibelle();
+                    }
                 }
             }
 
@@ -90,6 +98,41 @@ class GlossaireExtension extends \Twig_Extension
         }
 
         return $text;
+    }
+
+    public function listGlossaire($text, $entity)
+    {
+        $glossaireReferences = $this->glossaireReader->getGlossaireReferencesByEntityAndDomaine(
+            $entity,
+            $this->currentDomaine->get()
+        );
+        $list = array();
+        $testString = array();
+        if (count($glossaireReferences) > 0) {
+            $text = $this->convertBadPortionsToAsciiHtml($text);
+            foreach ($glossaireReferences as $glossaireReference) {
+                $wordSearchPattern = '/[\;\<\>\,\"\(\)\'\& ]{1,1}'.$glossaireReference->getSigleHtmlForGlossaire().'[\;\<\>\,\"\(\)\'\.\& ]{1,1}/'.($glossaireReference->isCasseSensible() ? '' : 'i');
+                preg_match_all($wordSearchPattern, $text, $wordSearchPatternMatches);
+
+                foreach ($wordSearchPatternMatches[0] as $wordSearchPatternMatch) {
+                    $html =
+                        '¬<a class="fancybox fancybox.ajax" href="'.$this->router->generate('hopitalnumerique_reference_glossaire_popin', ['glossaireReference' => $glossaireReference->getId()]).'¬"><acronym class="glosstool" data-html="true" title="¬'.
+                        (('' != $glossaireReference->getDescriptionCourte()) ? $this->convertToAsciiHtml($glossaireReference->getDescriptionCourte())  : '').
+                        '¬">¬' . $this->convertToAsciiHtml(substr($wordSearchPatternMatch, 1, -1)) . '</acronym></a>'
+                    ;
+
+
+                    $html = substr($wordSearchPatternMatch, 0, 1) . $html . substr($wordSearchPatternMatch, -1);
+                    $html = str_replace(array('¬',',','\''), '', $html);
+                    if (!in_array($glossaireReference->getLibelle(), $testString)) {
+                        $list[$glossaireReference->getLibelle()] = $html;
+                        $testString[] = $glossaireReference->getLibelle();
+                    }
+                }
+            }
+        }
+        ksort($list);
+        return $list;
     }
 
     /**
