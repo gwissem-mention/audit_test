@@ -63,6 +63,10 @@ class Reference
      */
     const CATEGORIE_OBJET_TEMOIGNAGE_ID = 176;
 
+    /**
+     * @var integer ID de l'ETAT_SUGGESTION Demande
+     */
+    const ETAT_SUGGESTION_DEMANDE_ID = 2005;
 
     /**
      * @var integer

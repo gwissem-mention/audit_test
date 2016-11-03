@@ -5,6 +5,7 @@ use HopitalNumerique\CoreBundle\DependencyInjection\Entity;
 use HopitalNumerique\PublicationBundle\Entity\Suggestion;
 use HopitalNumerique\PublicationBundle\Form\Type\SuggestionType;
 
+use HopitalNumerique\ReferenceBundle\Entity\Reference;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -27,7 +28,11 @@ class SuggestionController extends Controller
         if ($form->isSubmitted() && $form->isValid()) {
             $suggestion->addDomain($this->get('hopitalnumerique_domaine.dependency_injection.current_domaine')->get());
             $suggestion->setCreationDate(new \DateTime('now'));
-            $suggestion->setState($this->get('hopitalnumerique_reference.manager.reference')->findOneById(2005));
+            $suggestion->setState(
+                $this->get('doctrine.orm.entity_manager')
+                    ->getReference(Reference::class, Reference::ETAT_SUGGESTION_DEMANDE_ID)
+            );
+            $suggestion->setUser($this->getUser());
 
             $this->getDoctrine()->getManager()->persist($suggestion);
             $this->getDoctrine()->getManager()->flush();
@@ -49,10 +54,16 @@ class SuggestionController extends Controller
 
     /**
      * @param Suggestion $suggestion
+     *
      * @return \Symfony\Component\HttpFoundation\RedirectResponse|\Symfony\Component\HttpFoundation\Response
      */
     public function editAction(Suggestion $suggestion)
     {
+        if ($suggestion->getUser() != $this->getUser()) {
+            $this->addFlash('danger', 'Vous n\'avez pas la permission d\'accéder à cette suggestion.');
+
+            return $this->redirectToRoute('hopitalnumerique_suggestion_front_add');
+        }
         $form = $this->createForm(SuggestionType::class, $suggestion);
 
         return $this->render('HopitalNumeriquePublicationBundle:Suggestion:add.html.twig', [

@@ -474,7 +474,7 @@ class ReferenceManager extends BaseManager
     }
 
     /**
-     * Retour le libelle de la catégorie 176
+     * Retour la catégorie Retour d'expérience, témoignage
      *
      * @return \HopitalNumerique\ReferenceBundle\Entity\Reference Retour d'expérience, témoignage
      */
@@ -482,10 +482,6 @@ class ReferenceManager extends BaseManager
     {
         return $this->findOneById(Reference::CATEGORIE_OBJET_TEMOIGNAGE_ID);
     }
-
-
-
-
 
 
     /**
