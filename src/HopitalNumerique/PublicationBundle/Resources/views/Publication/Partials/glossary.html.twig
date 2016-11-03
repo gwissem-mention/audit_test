@@ -1,0 +1,18 @@
+<div class="recherche-referencement" id="productions_liees">
+    <h2>Glossaire</h2>
+    <div class="clearfix"></div>
+    <div class="mysep background-rose"></div>
+    <div class="results-bloc">
+        <div class="clearfix" style="margin-bottom: 10px"></div>
+        {% if contenu.contenu is defined %}
+            {% for glossary in contenu.contenu|parsePublication|glossaire_list(contenu) %}
+                {{ glossary|raw }}<br>
+            {% endfor %}
+        {% elseif objet.resume is defined %}
+            {% for glossary in objet.resume|parsePublication|glossaire_list(objet) %}
+                {{ glossary|raw }}<br>
+            {% endfor %}
+        {% endif %}
+    </div>
+</div>
+<div class="clearfix"></div>
