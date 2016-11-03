@@ -35,11 +35,9 @@ class SuggestionController extends Controller
 
             //@TODO: Id de la référence pas en dur
             if ($suggestion->getState()->getId() == 2006) {
-                $objet = $this->get('hopitalnumerique_publication.service.suggestion_converter')
+                $this->get('hopitalnumerique_publication.service.suggestion_converter')
                     ->suggestionConverter($suggestion)
                 ;
-
-                $entityManager->persist($objet);
             }
 
             $entityManager->persist($suggestion);
@@ -60,6 +58,11 @@ class SuggestionController extends Controller
         ]);
     }
 
+    /**
+     * @param Suggestion $suggestion
+     *
+     * @return Response
+     */
     public function deleteAction(Suggestion $suggestion)
     {
         $entityManager = $this->getDoctrine()->getManager();
@@ -68,9 +71,12 @@ class SuggestionController extends Controller
 
         $this->get('session')->getFlashBag()->add('info', 'Suppression effectuée avec succès.');
 
-        return $this->redirectToRoute('hopitalnumerique_suggestion_back_index');
+        return new Response('{"success":true, "url" : "' . $this->generateUrl('hopitalnumerique_suggestion_back_index') . '"}', 200);
     }
 
+    /**
+     * @return Response
+     */
     public function isFileExistAction()
     {
         $fileName = $this->get('request')->request->get('fileName');

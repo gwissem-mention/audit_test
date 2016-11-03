@@ -50,7 +50,7 @@ class Suggestion
     /**
      * @var \DateTime
      *
-     * @ORM\Column(type="datetime")
+     * @ORM\Column(type="datetime", nullable=true)
      */
     private $updatedAt;
 
@@ -71,16 +71,9 @@ class Suggestion
     private $synthesis;
 
     /**
-     * @var array
-     *
-     * @ORM\Column(type="array")
-     */
-    private $referencing;
-
-    /**
      * @var string
      *
-     * @ORM\Column(type="string")
+     * @ORM\Column(type="string", nullable=true)
      */
     private $link;
 
@@ -209,26 +202,6 @@ class Suggestion
     public function setSynthesis($synthesis)
     {
         $this->synthesis = $synthesis;
-
-        return $this;
-    }
-
-    /**
-     * @return array
-     */
-    public function getReferencing()
-    {
-        return $this->referencing;
-    }
-
-    /**
-     * @param array $referencing
-     *
-     * @return $this
-     */
-    public function setReferencing($referencing)
-    {
-        $this->referencing = $referencing;
 
         return $this;
     }

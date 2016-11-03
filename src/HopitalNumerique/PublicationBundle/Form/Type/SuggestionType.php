@@ -29,6 +29,7 @@ class SuggestionType extends AbstractType
             ->add('creationDate', 'genemu_jquerydate', [
                 'widget' => 'single_text',
                 'label' => 'Date à laquelle la suggestion a été postée',
+                'read_only' => true,
             ])
             ->add('domains', EntityType::class, [
                 'class'       => Domaine::class,

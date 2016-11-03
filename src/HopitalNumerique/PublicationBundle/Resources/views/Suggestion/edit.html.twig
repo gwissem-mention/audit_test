@@ -16,7 +16,8 @@
 {% block javascripts %}
     {{parent()}}
     {% javascripts output="compiled/hopitalnumerique-publication-suggestion-edit.js"
-        'bundles/hopitalnumeriquepublication/js/script.js'
+    'bundles/hopitalnumeriquepublication/js/script.js'
+    'bundles/hopitalnumeriquepublication/js/customTinyMCE.js'
     %}
     <script type="text/javascript" src="{{ asset_url }}"></script>
     {% endjavascripts %}
@@ -72,7 +73,6 @@
                         <p class="text-muted text-left"><strong>Note référencement :</strong> {% for commonDomain in commonDomainsWithUser %} &nbsp; {{ commonDomain }} : {{ referencement_note(suggestion, commonDomain) }}{% endfor %}</p>
                     </div>
                 </div>
-
 
                 {{ form_row(form._token) }}
                 {{ form_end(form) }}
