@@ -15,7 +15,6 @@
             <a class="btn btn-danger pull-right" rel="nofollow" href="{{- path('ccdn_forum_user_topic_reply', {'forumName': forumName, 'topicId': topic.getId }) -}}">
                 {{- 'link.topic.reply' | trans({}, ForumBundle.translation ) -}}
             </a>
-            <a class="btn btn-sm btn-default fancybox fancybox.ajax pull-right" style="margin: 2px 5px 0 0" href="{{ path('nodevo_mail_recommandation_topic') }}" title="Recommander à un ami"><i class="fa fa-envelope"></i></a>
 
             {% if isSubscriptionBoard is not defined or isSubscriptionBoard == false %}
                 {%- if canSubscribeToTopic(topic, forum, (subscription is defined ? subscription : null)) -%}
@@ -31,6 +30,7 @@
                 {%- endif -%}
             {%- endif -%}
 
+            <a class="btn btn-sm btn-default fancybox fancybox.ajax pull-right" style="margin: 2px 5px 0 0" href="{{ path('nodevo_mail_recommandation_topic') }}" title="Recommander à un ami"><i class="fa fa-envelope"></i></a>
 
             {%- if is_granted('ROLE_ADMINISTRATEUR_1') or is_granted("ROLE_ADMINISTRATEUR_DU_DOMAINE_HN_107") -%}
                 <div class="btn-group">
