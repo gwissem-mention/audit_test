@@ -8,7 +8,6 @@
         {% if app.user %}
             <div class="column-right-container" style="margin-bottom: 10px;">
                 {% include 'HopitalNumeriquePublicationBundle:Publication:Partials/topic_related.html.twig' %}
-                {#{% include 'HopitalNumeriquePublicationBundle:Publication:Partials/parcours_guides.html.twig' %}#}
             </div>
         {% endif %}
         {% if objet.associatedProductions == true %}
@@ -18,6 +17,11 @@
                     {#{% include 'HopitalNumeriquePublicationBundle:Publication:Partials/parcours_guides.html.twig' %}#}
                 </div>
             {% endif %}
+        {% endif %}
+        {% if contenu.contenu is defined and contenu.contenu|parsePublication|glossaire_list(contenu) is not empty or objet.resume is defined and objet.resume|parsePublication|glossaire_list(objet) is not empty %}
+            <div class="column-right-container" style="margin-top: 10px;">
+                {% include 'HopitalNumeriquePublicationBundle:Publication:Partials/glossary.html.twig' %}
+            </div>
         {% endif %}
 
         {% include 'HopitalNumeriquePublicationBundle:Publication:Partials/autres_domaines.html.twig' %}
