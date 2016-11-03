@@ -112,4 +112,28 @@ class AttributeRepository extends EntityRepository
 
         return $qb->getQuery()->getArrayResult();
     }
+
+    public function getAttributesWithChapter(Autodiag $autodiag)
+    {
+        $qb = $this->createQueryBuilder('attribute', 'attribute.id');
+        $qb
+            ->select(
+                'attribute.id',
+                'attribute.label as attribute_label',
+                'parent.label as chapter_parent',
+                'container.label as chapter',
+                'weight.weight'
+            )
+            ->join(Attribute\Weight::class, 'weight', Join::WITH, 'weight.attribute = attribute.id')
+            ->join('weight.container', 'container', Join::WITH, $qb->expr()->isInstanceOf('container', Autodiag\Container\Chapter::class))
+            ->leftJoin('container.parent', 'parent')
+            ->join('attribute.autodiag', 'autodiag')
+            ->where('autodiag.id = :autodiag_id')
+            ->orderBy('attribute.order', 'ASC')
+            ->setParameters([
+                'autodiag_id' => $autodiag->getId(),
+            ]);
+        ;
+        return $qb->getQuery()->getArrayResult();
+    }
 }

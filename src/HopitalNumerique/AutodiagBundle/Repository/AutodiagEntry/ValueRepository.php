@@ -160,6 +160,33 @@ class ValueRepository extends EntityRepository
         return $results;
     }
 
+    public function getFullValues($synthesisIds)
+    {
+        $qb = $this->createQueryBuilder('val');
+        $qb
+            ->select(
+                'attribute.id as attribute_id',
+                'val.value as value_value',
+                'val.comment as value_comment',
+                'options.label as value_label'
+            )
+            ->join('val.entry', 'entry')
+            ->join('entry.syntheses', 'syntheses', Join::WITH, $qb->expr()->eq('syntheses.id', $synthesisIds))
+            ->join('val.attribute', 'attribute')
+            ->leftJoin('attribute.options', 'options', Join::WITH, 'options.value = val.value')
+        ;
+
+        $results = $qb->getQuery()->getResult();
+        $data = [];
+        foreach ($results as $result) {
+            $data[$result['attribute_id']] = $result;
+        }
+
+        unset($results);
+
+        return $data;
+    }
+
     /**
      * Get entry values intersection from $synthesis, between $synthesis and $reference
      *
@@ -191,53 +218,9 @@ class ValueRepository extends EntityRepository
         $result = [];
 
         array_walk($data, function ($element) use (&$result) {
-             $result[$element['id']] = true;
+            $result[$element['id']] = true;
         });
 
         return $result;
-    }
-
-    public function getFullValues($autodiagId, $entries)
-    {
-        $qb = $this->getEntityManager()->createQueryBuilder();
-        $qb
-            ->from('HopitalNumeriqueAutodiagBundle:Autodiag\Attribute', 'attribute')
-            ->select(
-                'val.id as value_id, val.value as value_value, val.comment as value_comment',
-                'entry.id as entry_id',
-                'attribute.id as attribute_id, attribute.code, attribute.label as attribute_label,
-                    attribute.type, attribute.colored, attribute.colorationInversed',
-                'options.value as option_value, options.label as option_label',
-                'presets.preset',
-                'group_concat(container.id) as container_id'
-            )
-            ->leftJoin(
-                AutodiagEntry\Value::class,
-                'val',
-                Join::WITH,
-                'val.attribute = attribute.id AND val.entry IN (:entries_id)'
-            )
-            ->leftJoin('val.entry', 'entry')
-            ->join(Weight::class, 'weight', Join::WITH, 'weight.attribute = attribute.id')
-            ->join('weight.container', 'container')
-            ->leftJoin('attribute.options', 'options', Join::WITH, 'options.value = val.value')
-            ->join('attribute.autodiag', 'autodiag')
-            ->leftJoin('autodiag.presets', 'presets')
-            ->groupBy('attribute.id')
-            ->addGroupBy('entry.id')
-            ->where('autodiag.id = :autodiag_id')
-            ->setParameters([
-                'entries_id' => implode(', ', $entries),
-                'autodiag_id' => $autodiagId,
-            ])
-        ;
-
-        $results = $qb->getQuery()->getArrayResult();
-
-        array_walk($results, function (&$result) {
-            $result['container_id'] = explode(',', $result['container_id']);
-        });
-
-        return $results;
     }
 }

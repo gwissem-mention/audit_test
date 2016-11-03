@@ -3,6 +3,7 @@
 namespace HopitalNumerique\AutodiagBundle\Repository;
 
 use Doctrine\ORM\EntityRepository;
+use Doctrine\ORM\Query;
 use Doctrine\ORM\Query\Expr\Join;
 use HopitalNumerique\AutodiagBundle\Entity\Autodiag;
 use HopitalNumerique\AutodiagBundle\Entity\AutodiagEntry;
@@ -198,6 +199,48 @@ class SynthesisRepository extends EntityRepository
             ->setParameter('ids', $ids);
 
         return $qb->getQuery()->getResult();
+    }
+
+    /**
+     * Find syntheses ids with only one entry
+     *
+     * @param $ids
+     * @return array
+     */
+    public function findSimpleIdsByIds($ids)
+    {
+        $qb = $this->createQueryBuilder('s', 's.id');
+        $qb
+            ->select('s.id')
+            ->join('s.entries', 'entries')
+            ->where('s.id in (:ids)')
+            ->groupBy('s.id')
+            ->having('count(entries.id) = 1')
+            ->setParameter('ids', $ids);
+
+        return array_keys($qb->getQuery()->getArrayResult());
+    }
+
+    public function getSynthesisDetailsForExport($synthesisId)
+    {
+        $qb = $this->createQueryBuilder('s');
+        $qb
+            ->select(
+                'CONCAT(user.prenom, \' \', user.nom) as fullname',
+                'etab.nom as etablissement',
+                'user.autreStructureRattachementSante as autre_etablissement',
+                's.name',
+                's.createdAt',
+                's.updatedAt',
+                's.validatedAt',
+                's.completion'
+            )
+            ->join('s.user', 'user')
+            ->leftJoin('user.etablissementRattachementSante', 'etab')
+            ->where('s.id = :id')
+            ->setParameter('id', $synthesisId);
+
+        return $qb->getQuery()->getOneOrNullResult(Query::HYDRATE_ARRAY);
     }
 
     protected function createByUserQueryBuilder(User $user, Domaine $domain = null)

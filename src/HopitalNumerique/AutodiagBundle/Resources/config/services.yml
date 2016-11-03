@@ -73,7 +73,7 @@ services:
             - 'HopitalNumeriqueAutodiagBundle:Autodiag'
 
     autodiag.repository.attribute:
-        class: HopitalNumerique\AutodiagBundle\Repository\AutodiagRepository
+        class: HopitalNumerique\AutodiagBundle\Repository\Autodiag\AttributeRepository
         factory: ["@doctrine.orm.entity_manager", "getRepository"]
         arguments:
             - 'HopitalNumeriqueAutodiagBundle:Autodiag\Attribute'
@@ -196,7 +196,9 @@ services:
         class: HopitalNumerique\AutodiagBundle\Service\Export\AutodiagEntriesExport
         arguments:
             - '@doctrine.orm.entity_manager'
-            - '@autodiag.result.exportable_builder'
+            - '@autodiag.repository.synthesis'
+            - '@autodiag.repository.attribute'
+            - '@autodiag.repository.autodiagentryvalue'
             - '@autodiag.synthesis.completion'
 
     autodiag.restitution_item.export:
