@@ -30,6 +30,11 @@
                 {%- endif -%}
             {%- endif -%}
 
+            {% if references is not empty %}
+                <a class="btn btn-warning pull-right" href="{{ path('hopital_numerique_recherche_homepage_requete_generator', {'refs' : referenceId }) }}">
+                    {{- 'link.topic.view' | trans({}, ForumBundle.translation ) -}}
+                </a>
+            {% endif %}
             <a class="btn btn-sm btn-default fancybox fancybox.ajax pull-right" style="margin: 2px 5px 0 0" href="{{ path('nodevo_mail_recommandation_topic') }}" title="Recommander à un ami"><i class="fa fa-envelope"></i></a>
 
             {%- if is_granted('ROLE_ADMINISTRATEUR_1') or is_granted("ROLE_ADMINISTRATEUR_DU_DOMAINE_HN_107") -%}
