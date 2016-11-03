@@ -1,11 +1,65 @@
 <?php
 namespace HopitalNumerique\PublicationBundle\Controller\Front;
 
+use HopitalNumerique\CoreBundle\DependencyInjection\Entity;
+use HopitalNumerique\PublicationBundle\Entity\Suggestion;
+use HopitalNumerique\PublicationBundle\Form\Type\SuggestionType;
+
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\Request;
 
 class SuggestionController extends Controller
 {
-    public function indexAction()
+    /**
+     * @param Request $request
+     *
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
+    public function addAction(Request $request)
     {
+        /** @var Suggestion $suggestion */
+        $suggestion = new Suggestion();
+
+        $form = $this->createForm(SuggestionType::class, $suggestion);
+
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $suggestion->addDomain($this->get('hopitalnumerique_domaine.dependency_injection.current_domaine')->get());
+            $suggestion->setCreationDate(new \DateTime('now'));
+            $suggestion->setState($this->get('hopitalnumerique_reference.manager.reference')->findOneById(2005));
+
+            $this->getDoctrine()->getManager()->persist($suggestion);
+            $this->getDoctrine()->getManager()->flush();
+
+            $this->addFlash('warning', 'Pour terminer votre suggestion, veuillez indiquer son référencement');
+
+            return $this->redirectToRoute('hopitalnumerique_suggestion_front_edit', [
+                'suggestion' => $suggestion->getId(),
+            ]);
+        }
+
+        return $this->render('HopitalNumeriquePublicationBundle:Suggestion:add.html.twig', [
+            'form' => $form->createView(),
+            'suggestion' => $suggestion,
+            'commonDomainsWithUser' => $this->container->get('hopitalnumerique_core.dependency_injection.entity')
+                ->getEntityDomainesCommunsWithUser($suggestion, $this->getUser()),
+        ]);
+    }
+
+    /**
+     * @param Suggestion $suggestion
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse|\Symfony\Component\HttpFoundation\Response
+     */
+    public function editAction(Suggestion $suggestion)
+    {
+        $form = $this->createForm(SuggestionType::class, $suggestion);
+
+        return $this->render('HopitalNumeriquePublicationBundle:Suggestion:add.html.twig', [
+            'form' => $form->createView(),
+            'suggestion' => $suggestion,
+            'commonDomainsWithUser' => $this->container->get('hopitalnumerique_core.dependency_injection.entity')
+                ->getEntityDomainesCommunsWithUser($suggestion, $this->getUser()),
+        ]);
     }
 }

@@ -105,6 +105,14 @@ hopital_numerique_publication_front_export:
         id: \d+
 
 #Suggestion
+hopitalnumerique_suggestion_front_add:
+    path: /suggestion/add
+    defaults: { _controller: "HopitalNumeriquePublicationBundle:Front/Suggestion:add" }
+
+hopitalnumerique_suggestion_front_edit:
+    path: /suggestion/edit/{suggestion}
+    defaults: { _controller: "HopitalNumeriquePublicationBundle:Front/Suggestion:edit" }
+
 hopitalnumerique_suggestion_back_index:
     path: /admin/suggestion
     defaults: { _controller: "HopitalNumeriquePublicationBundle:Back/Suggestion:index" }

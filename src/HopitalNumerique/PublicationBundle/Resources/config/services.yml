@@ -32,4 +32,7 @@ services:
         class: 'HopitalNumerique\PublicationBundle\Service\SuggestionConverter'
         arguments:
             - '@hopitalnumerique_reference.manager.reference'
+            - '@hopitalnumerique_reference.manager.entity_has_reference'
+            - '@hopitalnumerique_objet.manager.objet'
             - '@filesystem'
+            - '@doctrine.orm.entity_manager'
