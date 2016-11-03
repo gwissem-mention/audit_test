@@ -20,7 +20,7 @@
             {% endif %}
         </li>
         <li class="restitution {{ step == "restitution" ? 'active' : '' }}">
-            {% if synthesis.id is not null %}
+            {% if synthesis is not null and synthesis.id is not null %}
                 <a href="{{ path(routes.restitution, {"synthesis": synthesis.id}) }}"
                         {% if entry is not null and entry.id is not null %}
                             data-demand="{{ path("hopitalnumerique_autodiag_entry_restitution_validation_demand", {"entry": entry.id, "target": "restitution", "noLayout": noLayout}) }}"
@@ -36,7 +36,7 @@
 
         </li>
         <li class="validation {{ step == "validation" ? 'active' : '' }}">
-            {% if synthesis.id is not null and synthesis.entries|length < 2 %}
+            {% if synthesis is not null and synthesis.id is not null and synthesis.entries|length < 2 %}
                 <a href="{{ path(routes.validation, {"synthesis": synthesis.id}) }}"
                     {% if entry is not null and entry.id is not null %}
                         data-demand="{{ path("hopitalnumerique_autodiag_entry_restitution_validation_demand", {"entry": entry.id, "target": "validation", "noLayout": noLayout}) }}"
@@ -51,7 +51,7 @@
             {% endif %}
         </li>
         <li class="share {{ step == "share" ? 'active' : '' }}">
-            {% if synthesis.validatedAt is not null %}
+            {% if synthesis is not null and synthesis.validatedAt is not null %}
                 <a href="{{ path(routes.share, {"synthesis": synthesis.id}) }}">
                     {{ "ad.autodiag.path.share"|trans }}
                 </a>

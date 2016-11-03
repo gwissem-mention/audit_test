@@ -1,0 +1,96 @@
+{% extends 'HopitalNumeriqueAutodiagBundle::layout.html.twig' %}
+
+{% set noLayout = true %}
+{% set pdf = true %}
+{% set synthesis = compare.synthesis %}
+
+{% block body %}
+    <div id="restitution" class="restitution-pdf">
+
+        <img src="{{ absolute_url(asset('bundles/hopitalnumeriquemodule/img/logo.jpg')) }}" alt="Logo" width="200px">
+
+        <div class="restitution-header">
+            <div class="update-at">
+                Le {{ compare.createdAt|date('d/m/Y') }}
+            </div>
+
+            <div class="identity">
+                <div class="title">{{ compare.synthesis.autodiag.title }}</div>
+                <div class="name">
+                    Comparaison de {{ compare.synthesis.name }} avec {{ compare.reference.name }}
+                </div>
+            </div>
+
+            <div class="pull-left">
+                {% if not app.user %}
+                    <div class="loggedout-warning">
+                        <div>{{ "ad.restitution.loggedout-warning"|trans }}</div>
+                        <a href="{{ path('account_login') }}">Connexion</a>
+                        ou
+                        <a href="{{ path('hopital_numerique_user_inscription') }}">Créer un compte</a>
+                    </div>
+                {% endif %}
+            </div>
+
+            <div class="clearfix"></div>
+
+        </div>
+
+        <div class="content">
+            {% for category in restitution.categories %}
+                <div class="category" style="width: 1024px;">
+                    <h3 class="violet">{{ category.label }}</h3>
+
+                    <div>
+                        <p class="category-description">
+                            {{ category.description }}
+                        </p>
+
+                        <div class="items-wrapper">
+
+                            <div class="item-row pdf">
+                                {% set currentRow = category.items.first.row %}
+                                {% for item in category.items %}
+                                {% if item.row != currentRow %}
+                                {% set currentRow = item.row %}
+                            </div>
+                            <div class="item-row pdf">
+                                {% endif %}
+
+                                {#<div class="item" data-row="{{ item.row }}" data-column="{{ item.column }}" data-item-type="{{ item.type }}">#}
+                                {% include ("@HopitalNumeriqueAutodiag/Restitution/item/_" ~ item.type ~ ".html.twig") ignore missing with {
+                                'restitution': item,
+                                'result': result[item.id]
+                                } %}
+                                {#</div>#}
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                {% if not loop.last %}
+                    <div style="page-break-after: always;"></div>
+                {% endif %}
+            {% endfor %}
+        </div>
+    </div>
+
+    <script type="text/javascript">
+
+        var restitution = new AutodiagRestitution($('#restitution'));
+        restitution.addHandler('jauge', 'Jauge');
+        restitution.initItems();
+
+
+        $(function() {
+            $('.plan_action').each(function() {
+                if ($('table tr', this).length > 2) {
+                    $('.empty-data', this).hide();
+                }
+            });
+        });
+    </script>
+
+{% endblock %}
+

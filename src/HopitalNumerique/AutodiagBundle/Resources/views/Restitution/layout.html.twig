@@ -3,16 +3,16 @@
 {% block body %}
     <div id="restitution">
 
+        {% set entry = synthesis.entries|length > 1 ? null : synthesis.entries.first %}
+
         {% block navigation %}
             {% include "@HopitalNumeriqueAutodiag/_navigation.html.twig" with {
             "step": "restitution",
             "autodiag": synthesis.autodiag,
             "synthesis": synthesis,
-            "entry" : synthesis.entries|length > 1 ? null : synthesis.entries.first
+            "entry" : entry
             } %}
         {% endblock %}
-
-        {% set entry = synthesis.entries|length > 1 ? null : synthesis.entries.first %}
 
         <div class="restitution-header">
             <div class="update-at">

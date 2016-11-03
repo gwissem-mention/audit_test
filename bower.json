@@ -36,8 +36,9 @@
     "slick.js": "*",
     "jquery.mosaicflow": "0.2.5",
     "canvg-gabelerner": "*",
-    "jquery-file-upload" : "9.11.*",
-    "blueimp-tmpl" : "2.5.*",
-    "jstree":"3.2.*"
+    "jquery-file-upload": "9.11.*",
+    "blueimp-tmpl": "2.5.*",
+    "jstree": "3.2.*",
+    "bernii/gauge.js": "gauge.js#^1.2.1"
   }
 }

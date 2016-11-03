@@ -56,6 +56,7 @@ ad:
         instructions: Instructions
         partialResultsAuthorized: Autoriser la consultation et validation des résultats pour les questionnaires incomplets
         synthesisAuthorized: Autoriser la création de synthèses
+        comparisonAuthorized: Autoriser la comparaison
         preset_value:
             criticite: Criticité de risque
             maitrise: Maîtrise de risque
@@ -227,3 +228,7 @@ ad:
             add: Ajout autodiagnostic
         add_button: Ajout autodiagnostic
         saved: Autodiagnostic enregistré.
+
+    compare:
+        reference: Comparer le résultat (le plus récent)
+        synthesis: Avec le résultat (le plus ancien)

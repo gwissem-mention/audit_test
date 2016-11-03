@@ -1,3 +1,5 @@
+{% import _self as tools %}
+
 <li>
     <span class="chapter-title">
         {{ resultItem.label }}
@@ -10,34 +12,26 @@
             <tr>
                 <td>{{ attribute.label }}</td>
                 <td>
-                    {{ attribute.responseText }}
-                    {% if attribute.comment is not null and attribute.comment|length > 0 %}
-                        - <i class="small">{{ attribute.comment }}</i>
+                    {{ attribute.response.text }}
+                    {% if attribute.response.comment is not null and attribute.response.comment|length > 0 %}
+                        - <i class="small">{{ attribute.response.comment }}</i>
                     {% endif %}
                 </td>
                 <td class="attribute">
-                    {% if attribute.score is not null and attribute.responseText != '-' and attribute.colored != false and attribute.responseValue != -1 %}
-                        <div class="attribute-mood">
-                            {% if attribute.colorationInversed %}
-                                {% if attribute.score < 100/3 %}
-                                    <i class="fa fa-smile-o fa-2x"></i>
-                                {% elseif attribute.score < 100/3*2 %}
-                                    <i class="fa fa-meh-o fa-2x"></i>
-                                {% else %}
-                                    <i class="fa fa-frown-o fa-2x"></i>
-                                {% endif %}
-                            {% else %}
-                                {% if attribute.score < 100/3 %}
-                                    <i class="fa fa-frown-o fa-2x"></i>
-                                {% elseif attribute.score < 100/3*2 %}
-                                    <i class="fa fa-meh-o fa-2x"></i>
-                                {% else %}
-                                    <i class="fa fa-smile-o fa-2x"></i>
-                                {% endif %}
-                            {% endif %}
-                        </div>
-                    {% endif %}
+                    {{ tools.mood(attribute, attribute.response) }}
                 </td>
+                {% if attribute.response.reference is defined %}
+                    <td>
+                        {{ attribute.response.reference.text }}
+                        {% if attribute.response.reference.comment is not null and attribute.response.reference.comment|length > 0 %}
+                            - <i class="small">{{ attribute.response.reference.comment }}</i>
+                        {% endif %}
+                    </td>
+
+                    <td class="attribute">
+                        {{ tools.mood(attribute, attribute.response.reference) }}
+                    </td>
+                {% endif %}
             </tr>
         {% endfor %}
     </table>
@@ -48,3 +42,30 @@
         {% endfor %}
     </ul>
 </li>
+
+
+{% macro mood(attribute, response) %}
+    {% spaceless %}
+        {% if response.score is not null and response.text != '-' and attribute.colored != false and response.value != -1 %}
+            <div class="attribute-mood">
+                {% if attribute.colorationInversed %}
+                    {% if response.score < 100/3 %}
+                        <i class="fa fa-smile-o fa-2x"></i>
+                    {% elseif response.score < 100/3*2 %}
+                        <i class="fa fa-meh-o fa-2x"></i>
+                    {% else %}
+                        <i class="fa fa-frown-o fa-2x"></i>
+                    {% endif %}
+                {% else %}
+                    {% if response.score < 100/3 %}
+                        <i class="fa fa-frown-o fa-2x"></i>
+                    {% elseif response.score < 100/3*2 %}
+                        <i class="fa fa-meh-o fa-2x"></i>
+                    {% else %}
+                        <i class="fa fa-smile-o fa-2x"></i>
+                    {% endif %}
+                {% endif %}
+            </div>
+        {% endif %}
+    {% endspaceless %}
+{% endmacro %}

@@ -4,7 +4,17 @@
         {% for data in result.items if data.score.value is not null %}
             <div class="score-widget-wrapper">
                 <div class="score-widget">
-                    <div class="score-value">{{ data.score.value }}%</div>
+                    <div class="score-value">
+                        {% if data.score.reference is defined %}
+                            <div class="score-compared">
+                                <div class="score-value-reference">{{ data.score.reference.value }}%</div>
+                                <div class="compare-score-variation" data-variation="{{ data.score.variation }}"></div>
+                                <div class="score-value-synthesis">{{ data.score.value }}%</div>
+                            </div>
+                        {% else %}
+                            {{ data.score.value }}%
+                        {% endif %}
+                    </div>
                     <div class="score-label">{{ data.label }}</div>
                 </div>
             </div>

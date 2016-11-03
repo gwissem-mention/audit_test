@@ -56,3 +56,7 @@ i.maj::after {
     font-size: 12px;
     cursor: pointer;
 }
+
+#syntheses-content #compare {
+    margin-bottom: 15px;
+}

@@ -3,6 +3,7 @@
 namespace HopitalNumerique\AutodiagBundle\Repository;
 
 use Doctrine\ORM\EntityRepository;
+use Doctrine\ORM\Query;
 use Doctrine\ORM\Query\Expr\Join;
 use HopitalNumerique\AutodiagBundle\Entity\Autodiag;
 use HopitalNumerique\AutodiagBundle\Entity\AutodiagEntry;
@@ -42,26 +43,10 @@ class SynthesisRepository extends EntityRepository
      */
     public function findByUser(User $user, Domaine $domain = null)
     {
-        $qb = $this->getEntityManager()->createQueryBuilder();
+        $qb = $this->createByUserQueryBuilder($user, $domain);
         $qb
-            ->select('synthesis', 'entries')
-            ->from('HopitalNumeriqueAutodiagBundle:Synthesis', 'synthesis')
-            ->leftJoin('synthesis.shares', 'shares', Join::WITH, 'shares = :user')
-            ->leftJoin('synthesis.entries', 'entries')
-//            ->leftJoin('entries.values', 'values')
-            ->orWhere('synthesis.user = :user')
-            ->orWhere('shares.id IS NOT NULL')
             ->orderBy('synthesis.updatedAt', 'desc')
-            ->setParameter('user', $user)
         ;
-
-        if ($domain != null) {
-            $qb
-                ->join('synthesis.autodiag', 'autodiag')
-                ->join('autodiag.domaines', 'domaines', Join::WITH, 'domaines = :domain')
-                ->setParameter('domain', $domain)
-            ;
-        }
 
         return $qb->getQuery()->getResult();
     }
@@ -77,26 +62,46 @@ class SynthesisRepository extends EntityRepository
      */
     public function findByUserAndAutodiag(User $user, Autodiag $autodiag, Domaine $domain = null)
     {
-        $qb = $this->getEntityManager()->createQueryBuilder();
+        $qb = $this->createByUserQueryBuilder($user, $domain);
         $qb
-            ->select('synthesis', 'entries')
-            ->from('HopitalNumeriqueAutodiagBundle:Synthesis', 'synthesis')
-            ->leftJoin('synthesis.shares', 'shares', Join::WITH, 'shares = :user')
-            ->leftJoin('synthesis.entries', 'entries')
-            ->orWhere('synthesis.user = :user')
-            ->orWhere('shares.id IS NOT NULL')
             ->andWhere('synthesis.autodiag = :autodiag')
-            ->setParameter('user', $user)
             ->setParameter('autodiag', $autodiag)
         ;
 
-        if ($domain != null) {
-            $qb
-                ->join('synthesis.autodiag', 'autodiag')
-                ->join('autodiag.domaines', 'domaines', Join::WITH, 'domaines = :domain')
-                ->setParameter('domain', $domain)
-            ;
-        }
+        return $qb->getQuery()->getResult();
+    }
+
+    /**
+     * Find comparable syntheses for user and by domaine
+     *
+     * @param User $user
+     * @param Domaine|null $domaine
+     * @return array
+     */
+    public function findComparable(User $user, Domaine $domaine = null)
+    {
+        $qb = $this->createComparableQueryBuilder($user, $domaine);
+
+        return $qb->getQuery()->getResult();
+    }
+
+    /**
+     * Find syntheses comparable to $reference
+     *
+     * @param Synthesis $reference
+     * @param User $user
+     * @param Domaine|null $domaine
+     * @return array
+     */
+    public function findComparableWith(Synthesis $reference, User $user, Domaine $domaine = null)
+    {
+        $qb = $this->createComparableQueryBuilder($user, $domaine);
+        $qb
+            ->andWhere('autodiag = :autodiag_id')
+            ->setParameter('autodiag_id', $reference->getAutodiag()->getId())
+            ->andWhere('synthesis.id != :reference_id')
+            ->setParameter('reference_id', $reference->getId())
+        ;
 
         return $qb->getQuery()->getResult();
     }
@@ -191,9 +196,92 @@ class SynthesisRepository extends EntityRepository
             ->where('s.id in (:ids)')
             ->groupBy('s.id')
             ->having('count(entries.id) = 1')
-            ->setParameter('ids', $ids)
-        ;
+            ->setParameter('ids', $ids);
 
         return $qb->getQuery()->getResult();
+    }
+
+    /**
+     * Find syntheses ids with only one entry
+     *
+     * @param $ids
+     * @return array
+     */
+    public function findSimpleIdsByIds($ids)
+    {
+        $qb = $this->createQueryBuilder('s', 's.id');
+        $qb
+            ->select('s.id')
+            ->join('s.entries', 'entries')
+            ->where('s.id in (:ids)')
+            ->groupBy('s.id')
+            ->having('count(entries.id) = 1')
+            ->setParameter('ids', $ids);
+
+        return array_keys($qb->getQuery()->getArrayResult());
+    }
+
+    public function getSynthesisDetailsForExport($synthesisId)
+    {
+        $qb = $this->createQueryBuilder('s');
+        $qb
+            ->select(
+                'CONCAT(user.prenom, \' \', user.nom) as fullname',
+                'etab.nom as etablissement',
+                'user.autreStructureRattachementSante as autre_etablissement',
+                's.name',
+                's.createdAt',
+                's.updatedAt',
+                's.validatedAt',
+                's.completion'
+            )
+            ->join('s.user', 'user')
+            ->leftJoin('user.etablissementRattachementSante', 'etab')
+            ->where('s.id = :id')
+            ->setParameter('id', $synthesisId);
+
+        return $qb->getQuery()->getOneOrNullResult(Query::HYDRATE_ARRAY);
+    }
+
+    protected function createByUserQueryBuilder(User $user, Domaine $domain = null)
+    {
+        $qb = $this->getEntityManager()->createQueryBuilder();
+        $qb
+            ->select('synthesis', 'entries')
+            ->from('HopitalNumeriqueAutodiagBundle:Synthesis', 'synthesis')
+            ->join('synthesis.autodiag', 'autodiag')
+            ->leftJoin('synthesis.shares', 'shares', Join::WITH, 'shares = :user')
+            ->leftJoin('synthesis.entries', 'entries')
+            ->orWhere('synthesis.user = :user')
+            ->orWhere('shares.id IS NOT NULL')
+            ->setParameter('user', $user)
+        ;
+
+        if ($domain != null) {
+            $qb
+                ->join('autodiag.domaines', 'domaines', Join::WITH, 'domaines = :domain')
+                ->setParameter('domain', $domain)
+            ;
+        }
+
+        return $qb;
+    }
+
+    protected function createComparableQueryBuilder(User $user, Domaine $domaine = null)
+    {
+        $qb = $this->createByUserQueryBuilder($user, $domaine);
+        $qb
+            ->andWhere(
+                $qb->expr()->isNotNull('synthesis.validatedAt')
+            )
+            ->andWhere(
+                $qb->expr()->eq('autodiag.comparisonAuthorized', true)
+            )
+            ->groupBy('synthesis.id')
+            ->having('count(entries) = 1')
+            ->orderBy('synthesis.updatedAt', 'desc')
+        ;
+
+        return $qb;
     }
 }

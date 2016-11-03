@@ -2,71 +2,81 @@
 namespace HopitalNumerique\AutodiagBundle\Service\Export;
 
 use Doctrine\Common\Persistence\ObjectManager;
+use HopitalNumerique\AutodiagBundle\Entity\Autodiag;
 use HopitalNumerique\AutodiagBundle\Entity\Synthesis;
-use HopitalNumerique\AutodiagBundle\Model\Result\Item;
+use HopitalNumerique\AutodiagBundle\Repository\Autodiag\AttributeRepository;
+use HopitalNumerique\AutodiagBundle\Repository\AutodiagEntry\ValueRepository;
+use HopitalNumerique\AutodiagBundle\Repository\SynthesisRepository;
 use HopitalNumerique\AutodiagBundle\Service\Result\ResultItemBuilder;
 use HopitalNumerique\AutodiagBundle\Service\Synthesis\Completion;
+use Nodevo\ToolsBundle\Tools\Chaine;
+use Symfony\Component\HttpFoundation\StreamedResponse;
 
 class AutodiagEntriesExport extends AbstractExport
 {
+    const HEADER_HORIZONTAL_OFFSET = 7;
+
     /**
      * @var ResultItemBuilder
      */
     protected $resultItemBuilder;
 
     /**
+     * @var SynthesisRepository
+     */
+    protected $synthsisRepository;
+
+    /**
+     * @var AttributeRepository
+     */
+    protected $attributeRepository;
+
+    /**
+     * @var ValueRepository
+     */
+    protected $valueRepository;
+
+    /**
      * @var Completion
      */
     protected $completion;
 
-    const STARTING_ROW = 8;
+    private $attributes;
 
-    public function __construct(ObjectManager $manager, ResultItemBuilder $resultItemBuilder, Completion $completion)
+    public function __construct(ObjectManager $manager, SynthesisRepository $synthesisRepository, AttributeRepository $attributeRepository, ValueRepository $valueRepository, Completion $completion)
     {
         parent::__construct($manager);
 
-        $this->resultItemBuilder = $resultItemBuilder;
+        $this->synthsisRepository = $synthesisRepository;
+        $this->attributeRepository = $attributeRepository;
+        $this->valueRepository = $valueRepository;
         $this->completion = $completion;
     }
 
     /**
+     * @param Autodiag $autodiag
      * @param Synthesis[] $syntheses
-     * @return \Symfony\Component\HttpFoundation\BinaryFileResponse
-     * @throws \Exception
+     * @return StreamedResponse
      */
-    public function exportList($syntheses)
+    public function exportList(Autodiag $autodiag, $syntheses)
     {
-        ini_set('max_execution_time', '1000s');
+        $response =  new StreamedResponse(function () use ($autodiag, $syntheses) {
+            $handle = fopen('php://output', 'r+');
+            $this->attributes = $this->writeAttributes($handle, $autodiag);
+            $this->writeHeader($handle);
+            $this->writeSyntheses($handle, $syntheses);
+        });
 
-        if (!is_array($syntheses) || count($syntheses) === 0) {
-            throw new \Exception('Syntheses must be an array of Synthesis');
-        }
-
-        $autodiag = current($syntheses);
-        $autodiag = $autodiag->getAutodiag();
-
-        $excel = new \PHPExcel();
-        $sheet = $excel->getActiveSheet();
-
-        $this->writeHeader($sheet);
-
-        $column = 'E';
-        foreach ($syntheses as $synthesis) {
-            if ($synthesis->getEntries()->count() === 1) {
-                $this->writeSynthesisRows($synthesis, $sheet, $column);
-                $column = $this->incrementColumn($column, 3);
-            }
-        }
-
-        $this->applyStyle($sheet, $column);
-
-        return $this->getFileResponse($excel, $autodiag->getTitle(), 'resultat');
+        $title = new Chaine($autodiag->getTitle());
+        $response->headers->set('Content-Type', 'application/force-download');
+        $response->headers->set('Content-Disposition','attachment; filename="' . 'resultat_' .  $title->minifie() . '.csv' . '"');
+        return $response;
 
     }
 
-    protected function writeHeader(\PHPExcel_Worksheet $sheet)
+    protected function writeHeader($handle)
     {
-        $cells = [
+        $head = [
             'Nom de l\'utilisateur',
             'Établissement',
             'Date de création',
@@ -76,172 +86,84 @@ class AutodiagEntriesExport extends AbstractExport
             'Nom donné par l\'utilisateur'
         ];
 
-        foreach ($cells as $cell) {
-            $this->addRow($sheet, [
-                '',
-                '',
-                $cell,
-            ]);
-        }
-
-        $this->addRow($sheet, [
-            'Chapitre',
-            'Sous-chapitre',
-            'Question',
-            'Pondération',
-        ]);
+        $this->writeRow($handle, $head);
     }
 
-    protected function writeSynthesisRows(Synthesis $synthesis, \PHPExcel_Worksheet $sheet, $column)
+    protected function writeAttributes($handle, Autodiag $autodiag)
     {
-        $row = self::STARTING_ROW + 1;
-        foreach ($synthesis->getAutodiag()->getChapters() as $chapter) {
-            $item = $this->resultItemBuilder->build($chapter, $synthesis);
+        $attributes = $this->attributeRepository->getAttributesWithChapter($autodiag);
 
-            $this->writeUserRelativeData($synthesis, $column, $sheet);
-
-            $this->writeSynthesisItem($item, $sheet, $column, $row);
-            $sheet->setCellValue(sprintf('%s%s', $column, self::STARTING_ROW), 'Réponse');
-            $sheet->setCellValue(sprintf('%s%s', $this->incrementColumn($column), self::STARTING_ROW), 'Valeur');
-            $sheet->setCellValue(sprintf('%s%s', $this->incrementColumn($column, 2), self::STARTING_ROW), 'Commentaire');
-        }
-    }
-
-    protected function writeSynthesisItem(Item $item, \PHPExcel_Worksheet $sheet, $column, &$row, Item $parent = null)
-    {
-        foreach ($item->getAttributes() as $attribute) {
-
-            $sheet->setCellValue(sprintf('%s%s', 'A', $row), $parent ? $parent->getLabel() : $item->getLabel());
-            $sheet->setCellValue(sprintf('%s%s', 'B', $row), $parent ? $item->getLabel() : '');
-            $sheet->setCellValue(sprintf('%s%s', 'C', $row), $attribute->label);
-            $sheet->setCellValue(sprintf('%s%s', 'D', $row), $attribute->weight);
-
-            $sheet->setCellValue(sprintf('%s%s', $column, $row), $attribute->responseText);
-            $sheet->setCellValue(sprintf('%s%s', $this->incrementColumn($column), $row), $attribute->responseValue);
-            $sheet->setCellValue(sprintf('%s%s', $this->incrementColumn($column, 2), $row), $attribute->comment);
-
-            $row++;
-        }
-
-
-        foreach ($item->getChildrens() as $child) {
-            $this->writeSynthesisItem($child, $sheet, $column, $row, $item);
-        }
-    }
-
-    protected function incrementColumn($column, $nb = 1)
-    {
-        $values = [];
-        $x = 'A';
-        while ($x != 'AAAA') {
-            $values[] = $x++;
-        }
-        $values[] = $x;
-
-        $found = array_search($column, $values);
-        if (false !== $found) {
-            $key = $found + $nb;
-            if (array_key_exists($key, $values)) {
-                return $values[$key];
-            }
-        }
-        return $column;
-    }
-
-    protected function writeUserRelativeData(Synthesis $synthesis, $column, \PHPExcel_Worksheet $sheet)
-    {
-        if ($synthesis->getUser()) {
-            $sheet->setCellValue(
-                sprintf('%s%s', $column, 1),
-                sprintf('%s %s', $synthesis->getUser()->getPrenom(), $synthesis->getUser()->getPrenom())
-            );
-        } else {
-            $sheet->setCellValue(sprintf('%s%s', $column, 1), 'Anonyme');
-        }
-
-        if ($synthesis->getUser()) {
-            $etab = $synthesis->getUser()->getEtablissementRattachementSante();
-            if (null === $etab) {
-                $etab = $synthesis->getUser()->getAutreStructureRattachementSante();
-            } else {
-                $etab = $etab->getNom();
-            }
-
-            if (null !== $etab) {
-                $sheet->setCellValue(
-                    sprintf('%s%s', $column, 2),
-                    $etab
-                );
-            }
-        }
-
-        $sheet->setCellValue(sprintf('%s%s', $column, 3), $synthesis->getCreatedAt()->format('d/m/Y'));
-        $sheet->setCellValue(sprintf('%s%s', $column, 4), $synthesis->getUpdatedAt()->format('d/m/Y'));
-
-        $sheet->setCellValue(
-            sprintf('%s%s', $column, 5),
-            $synthesis->getValidatedAt() ? $synthesis->getValidatedAt()->format('d/m/Y') : ''
-        );
-
-        $sheet->setCellValue(
-            sprintf('%s%s', $column, 6),
-            sprintf('%s%%', $synthesis->getCompletion())
-        );
-
-        $sheet->setCellValue(
-            sprintf('%s%s', $column, 7),
-            $synthesis->getName()
-        );
-    }
-
-    protected function applyStyle(\PHPExcel_Worksheet $sheet, $maxColumn)
-    {
-        $style = [
-            'font' => [
-                'size' => 18,
-                'bold' => true,
-                'color' => [
-                    'rgb' => 'ffffff'
-                ]
-            ],
-            'fill' => [
-                'type' => \PHPExcel_Style_Fill::FILL_SOLID,
-                'startcolor' => [
-                    'rgb' => 'ff0000'
-                ]
-            ]
+        $fields = [
+            'chapter_parent' => 'Chapitre',
+            'chapter' => 'Sous chapitre',
+            'attribute_label' => 'Question',
+            'weight' => 'Pondération',
         ];
-        $sheet->getStyle('C1:C' . (self::STARTING_ROW - 1))->applyFromArray($style);
 
-        $sheet->getStyle(
-            sprintf('%s%s:%s%s', 'A', self::STARTING_ROW, $this->incrementColumn($maxColumn, -1), self::STARTING_ROW)
-        )
-            ->applyFromArray($style);
-
-        $sheet->getStyle(
-            'A1:' .
-            $sheet->getHighestColumn() .
-            $sheet->getHighestRow()
-        )->applyFromArray([
-            'borders' => array(
-                'allborders' => array(
-                    'style' => \PHPExcel_Style_Border::BORDER_THIN,
-                    'color' => array('rgb' => '000000'),
-                ),
-            ),
-        ]);
-
-        for ($i = 1; $i < self::STARTING_ROW; $i++) {
-            $sheet->mergeCells(sprintf('%s%s:%s%s', 'C', $i, 'D', $i));
-            $sheet->getRowDimension($i)->setRowHeight(30);
+        foreach ($fields as $field => $title) {
+            $this->writeRow(
+                $handle,
+                array_merge(
+                    array_fill(0, self::HEADER_HORIZONTAL_OFFSET -1, ''),
+                    [$title],
+                    array_map(function ($row) use ($field) {
+                        return $row[$field];
+                    }, $attributes)
+                )
+            );
         }
 
-        $startColumn = 'A';
-//        do {
-//            $sheet->getColumnDimension($startColumn)->setAutoSize(true);
-//            $startColumn = $this->incrementColumn($startColumn);
-//        } while ($startColumn !== $maxColumn);
-
-        $sheet->getRowDimension(self::STARTING_ROW)->setRowHeight(30);
+        return $attributes;
     }
+
+    protected function writeSyntheses($handle, $synthesisIds)
+    {
+
+        foreach ($synthesisIds as $id) {
+            $values = $this->valueRepository->getFullValues($id);
+
+            $output = $this->getSynthesisDetails($id);
+
+            foreach ($this->attributes as $attribute) {
+                if (isset($values[$attribute['id']])) {
+                    $output = array_merge($output, [
+                        $values[$attribute['id']]['value_label'],
+                        $values[$attribute['id']]['value_value'],
+                        $values[$attribute['id']]['value_comment'],
+                    ]);
+                } else {
+                    $output = array_merge($output, array_fill(0, 3, ''));
+                }
+            }
+            $this->writeRow($handle, $output);
+        }
+    }
+
+    protected function getSynthesisDetails($id)
+    {
+        $details = $this->synthsisRepository->getSynthesisDetailsForExport($id);
+
+        if (null === $details) {
+            return array_fill(0, self::HEADER_HORIZONTAL_OFFSET, '');
+        }
+
+        return [
+            $details['fullname'],
+            $details['etablissement'] ?: $details['autre_etablissement'],
+            null !== $details['createdAt'] ? $details['createdAt']->format('d/m/Y') : '',
+            null !== $details['updatedAt'] ? $details['updatedAt']->format('d/m/Y') : '',
+            null !== $details['validatedAt'] ? $details['validatedAt']->format('d/m/Y') : '',
+            $details['completion'],
+            $details['name'],
+        ];
+    }
+
+    protected function writeRow($handle, $data)
+    {
+        fputcsv(
+            $handle,
+            $data
+        );
+    }
+
 }

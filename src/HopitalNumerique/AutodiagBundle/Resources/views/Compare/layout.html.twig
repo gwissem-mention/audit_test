@@ -1,0 +1,97 @@
+{% extends 'HopitalNumeriqueAutodiagBundle::layout.html.twig' %}
+
+{% block body %}
+    <div id="restitution">
+
+        {% set synthesis = compare.synthesis %}
+
+        {% block navigation %}
+            {% include "@HopitalNumeriqueAutodiag/_navigation.html.twig" with {
+            "step": "restitution",
+            "autodiag": compare.synthesis.autodiag,
+            "synthesis": null
+            } %}
+        {% endblock %}
+
+        <div class="restitution-header">
+            <div class="update-at">
+                Le {{ compare.createdAt|date('d/m/Y') }}
+            </div>
+
+            <div class="identity">
+                <div class="title">{{ compare.synthesis.autodiag.title }}</div>
+                <div class="name">
+                    Comparaison du résultat "{{ compare.synthesis.name }}" ({{ compare.synthesis.validatedAt|date('d/m/Y') }})
+                    par rapport au résultat "{{ compare.reference.name }}" ({{ compare.reference.validatedAt|date('d/m/Y') }})
+                </div>
+            </div>
+
+            {% if pdf is not defined %}
+                {% set routes = {
+                    "add": noLayout ? "hopitalnumerique_autodiag_entry_add_no_layout" : "hopitalnumerique_autodiag_entry_add"
+                } %}
+                <div class="links pull-right">
+                    <a class="btn btn-default" href="{{ path("hopitalnumerique_autodiag_compare_pdf", {"compare": compare.id}) }}" target="_blank" title="{{ 'ad.restitution.export_pdf'|trans }}">
+                        <i class="fa fa-download" aria-hidden="true"></i>
+                    </a>
+                </div>
+                <div class="links pull-left">
+                    <a class="btn btn-default" href="{{ path(routes.add, {"autodiag": compare.synthesis.autodiag.id}) }}" title="{{ 'ad.restitution.start_new'|trans }}">
+                        <i class="fa fa-file-text-o" aria-hidden="true"></i>
+                    </a>
+                </div>
+            {% endif %}
+
+            <div class="clearfix"></div>
+
+
+            <div class="pull-left">
+                {% if not app.user %}
+                    <div class="loggedout-warning">
+                        <div>{{ "ad.restitution.loggedout-warning"|trans }}</div>
+                        <a href="{{ path('account_login') }}">Connexion</a>
+                        ou
+                        <a href="{{ path('hopital_numerique_user_inscription') }}">Créer un compte</a>
+                    </div>
+                {% endif %}
+
+                {#{% if synthesis.entries|length > 1 %}#}
+                    {#<div class="synthesis">#}
+                        {#<span>{{ "ad.restitution.synthesis"|trans }} : </span>#}
+                        {#<ul>#}
+                            {#{% for entry in synthesis.entries %}#}
+                                {#<li>{{ entry.name }} ({{ entry.user.prenom }} {{ entry.user.nom }}) - {{ entry.validatedAt|date('d/m/Y') }}</li>#}
+                            {#{% endfor %}#}
+                        {#</ul>#}
+                    {#</div>#}
+                {#{% endif %}#}
+            </div>
+
+            <div class="clearfix"></div>
+
+        </div>
+
+        <div class="content">
+            {% block restitution_content %}{% endblock %}
+        </div>
+    </div>
+
+    <script type="text/javascript">
+
+        var restitution = new AutodiagRestitution($('#restitution'));
+        restitution.addHandler('jauge', 'Jauge');
+        restitution.initItems();
+
+
+        $(function() {
+            $('.plan_action').each(function() {
+                if ($('table tr', this).length > 2) {
+                    $('.empty-data', this).hide();
+                }
+            });
+        });
+    </script>
+
+{% endblock %}
+
+

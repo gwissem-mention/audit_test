@@ -49,7 +49,7 @@ services:
             - 'HopitalNumeriqueAutodiagBundle:AutodiagEntry'
 
     autodiag.repository.autodiagentryvalue:
-        class: HopitalNumerique\AutodiagBundle\Repository\AutodiagEntryRepository
+        class: HopitalNumerique\AutodiagBundle\Repository\AutodiagEntry\ValueRepository
         factory: ["@doctrine.orm.entity_manager", "getRepository"]
         arguments:
             - 'HopitalNumeriqueAutodiagBundle:AutodiagEntry\Value'
@@ -73,7 +73,7 @@ services:
             - 'HopitalNumeriqueAutodiagBundle:Autodiag'
 
     autodiag.repository.attribute:
-        class: HopitalNumerique\AutodiagBundle\Repository\AutodiagRepository
+        class: HopitalNumerique\AutodiagBundle\Repository\Autodiag\AttributeRepository
         factory: ["@doctrine.orm.entity_manager", "getRepository"]
         arguments:
             - 'HopitalNumeriqueAutodiagBundle:Autodiag\Attribute'
@@ -95,6 +95,12 @@ services:
         factory: ["@doctrine.orm.entity_manager", "getRepository"]
         arguments:
             - 'HopitalNumeriqueAutodiagBundle:Score'
+
+    autodiag.repository.compare:
+        class: HopitalNumerique\AutodiagBundle\Repository\CompareRepository
+        factory: ["@doctrine.orm.entity_manager", "getRepository"]
+        arguments:
+            - 'HopitalNumeriqueAutodiagBundle:Compare'
 
     autodiag.autodiagentry_voter:
         class: HopitalNumerique\AutodiagBundle\Security\AutodiagEntryVoter
@@ -118,6 +124,14 @@ services:
 
     autodiag.result.builder:
         class: HopitalNumerique\AutodiagBundle\Service\Result\ResultItemBuilder
+        arguments:
+            - '@autodiag.synthesis.completion'
+            - '@autodiag.attribute_builder_provider'
+            - '@autodiag.repository.autodiagentryvalue'
+            - '@autodiag.repository.attribute'
+
+    autodiag.result.exportable_builder:
+        class: HopitalNumerique\AutodiagBundle\Service\Export\ExportableResultItemBuilder
         arguments:
             - '@autodiag.synthesis.completion'
             - '@autodiag.attribute_builder_provider'
@@ -182,7 +196,9 @@ services:
         class: HopitalNumerique\AutodiagBundle\Service\Export\AutodiagEntriesExport
         arguments:
             - '@doctrine.orm.entity_manager'
-            - '@autodiag.result.builder'
+            - '@autodiag.repository.synthesis'
+            - '@autodiag.repository.attribute'
+            - '@autodiag.repository.autodiagentryvalue'
             - '@autodiag.synthesis.completion'
 
     autodiag.restitution_item.export:
@@ -195,3 +211,28 @@ services:
                 arguments:
                     - '@templating'
                     - '@knp_snappy.pdf'
+
+    autodiag.form.synthesis.comparison:
+        class: HopitalNumerique\AutodiagBundle\Form\Type\Synthesis\CompareType
+        arguments: ['@autodiag.repository.synthesis', '@router']
+        tags:
+            - { name: form.type }
+
+    autodiag.synthesis.intersection_builder:
+        class: HopitalNumerique\AutodiagBundle\Service\Synthesis\IntersectionBuilder
+        arguments:
+            - '@autodiag.repository.autodiagentryvalue'
+
+    autodiag.compare.cleaner:
+        class: HopitalNumerique\AutodiagBundle\Service\Compare\ComparisonCleaner
+        arguments:
+            - '@autodiag.repository.compare'
+            - '@doctrine.orm.entity_manager'
+
+    autodiag.compare.builder:
+        class: HopitalNumerique\AutodiagBundle\Service\Compare\ComparisonBuilder
+        arguments:
+            - '@autodiag.synthesis.intersection_builder'
+            - '@autodiag.score_calculator'
+            - '@autodiag.repository.compare'
+            - '@doctrine.orm.entity_manager'

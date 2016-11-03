@@ -30,6 +30,7 @@ class AutodiagType extends AbstractType
             ])
             ->add('instructions')
             ->add('partialResultsAuthorized')
+            ->add('comparisonAuthorized')
             ->add('synthesisAuthorized')
             ->add('domaines', EntityType::class, [
                 'class' => 'HopitalNumeriqueDomaineBundle:Domaine',

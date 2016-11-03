@@ -208,16 +208,22 @@ class AutodiagEntryGrid extends Grid implements GridInterface
                     }
                 }
 
-                $syntheses = $this->_container->get('autodiag.repository.synthesis')->findSimpleByIds($ids);
-
-                if (!is_array($syntheses) || count($syntheses) === 0) {
+                if (count($ids) === 0) {
                     $this->_container->get('session')->getFlashBag()->add('danger', "Veuillez séléctionner au moins une ligne.");
                     return false;
                 }
 
+                $syntheses = $this->_container->get('autodiag.repository.synthesis')->findSimpleIdsByIds($ids);
+
+                if (!is_array($syntheses) || count($syntheses) === 0) {
+                    $this->_container->get('session')->getFlashBag()->add('danger', "Veuillez séléctionner au moins un résultat non synthèse.");
+                    return false;
+                }
+
                 try {
-                    return $this->_container->get('autodiag.entries.export')->exportList($syntheses);
+                    return $this->_container->get('autodiag.entries.export')->exportList($this->autodiag, $syntheses);
                 } catch (\Exception $e) {
+                    dump($e);die;
                     $this->_container->get('session')->getFlashBag()->add('danger', "Une erreur est survenue.");
                 }
             })

@@ -11,7 +11,9 @@ var AutodiagRestitution = function(element, options) {
 AutodiagRestitution.prototype = {
     init: function()
     {
-
+        $('.compare-score-variation').each(function() {
+            new Variation($(this));
+        })
     },
 
     initItems: function ()

@@ -59,6 +59,13 @@ class Autodiag
     private $partialResultsAuthorized;
 
     /**
+     * @var boolean
+     *
+     * @ORM\Column(type="boolean")
+     */
+    private $comparisonAuthorized = true;
+
+    /**
      * Autorize synthesis
      *
      * @var boolean
@@ -257,6 +264,26 @@ class Autodiag
     public function setPartialResultsAuthorized($partialResultsAuthorized)
     {
         $this->partialResultsAuthorized = $partialResultsAuthorized;
+
+        return $this;
+    }
+
+    /**
+     * @return boolean
+     */
+    public function isComparisonAuthorized()
+    {
+        return $this->comparisonAuthorized;
+    }
+
+    /**
+     * @param boolean $comparisonAuthorized
+     *
+     * @return Autodiag
+     */
+    public function setComparisonAuthorized($comparisonAuthorized)
+    {
+        $this->comparisonAuthorized = $comparisonAuthorized;
 
         return $this;
     }
