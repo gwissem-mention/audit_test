@@ -111,6 +111,7 @@ link:
         change_board:                  "Changer le thème"
         sticky:                        "Épingler le fil de discussion"
         unsticky:                      "Desépingler le fil de discussion"
+        view:                          "Voir les contenus sur ce sujet"
     post:
         quote:                         "Citer"
         delete:                        "Supprimer"
