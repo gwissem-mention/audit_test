@@ -58,6 +58,11 @@ class Reference
      */
     const CATEGORIE_OBJET_POINT_DUR_ID = 184;
 
+    /**
+     * @var integer ID de Retour d'expérience, témoignage
+     */
+    const CATEGORIE_OBJET_TEMOIGNAGE_ID = 176;
+
 
     /**
      * @var integer
