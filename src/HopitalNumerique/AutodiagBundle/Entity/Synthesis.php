@@ -198,7 +198,10 @@ class Synthesis
 
     public function canValidate()
     {
-        return $this->getAutodiag()->isPartialResultsAuthorized() === true || $this->getCompletion() == 100;
+        return $this->getAutodiag()->isPartialResultsAuthorized() === true
+        || $this->getCompletion() == 100
+        || count($this->getEntries()) > 1
+            ;
     }
 
     /**
