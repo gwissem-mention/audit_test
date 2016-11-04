@@ -12,6 +12,7 @@ use HopitalNumerique\AutodiagBundle\Repository\AutodiagEntry\ValueRepository;
 use HopitalNumerique\AutodiagBundle\Service\Algorithm\Score;
 use HopitalNumerique\AutodiagBundle\Service\Locker;
 use HopitalNumerique\AutodiagBundle\Service\Synthesis\Completion;
+use Symfony\Component\Process\PhpExecutableFinder;
 use Symfony\Component\Process\Process;
 
 class ScoreCalculator
@@ -43,6 +44,13 @@ class ScoreCalculator
 
     protected $rootDir;
 
+    /**
+     * Php executable path
+     *
+     * @var false|string
+     */
+    private $phpPath;
+
     public function __construct(
         Score $algorithm,
         ValueRepository $valueRepository,
@@ -57,6 +65,9 @@ class ScoreCalculator
         $this->completion = $completion;
         $this->entityManager = $entityManager;
         $this->rootDir = $rootDir;
+
+        $phpFinder = new PhpExecutableFinder();
+        $this->phpPath = $phpFinder->find();
     }
 
     public function computeSynthesisScore(Synthesis $synthesis)
@@ -154,7 +165,7 @@ class ScoreCalculator
         $appPath = $this->rootDir . '/console';
 
         $autodiagId = $autodiag->getId();
-        $process = new Process("php $appPath autodiag:score:compute --autodiag=$autodiagId");
+        $process = new Process("$this->phpPath $appPath autodiag:score:compute --autodiag=$autodiagId");
         $process->start();
     }
 
@@ -163,7 +174,7 @@ class ScoreCalculator
         $appPath = $this->rootDir . '/console';
 
         $synthesisId = $synthesis->getId();
-        $process = new Process("php $appPath autodiag:score:compute --synthesis=$synthesisId");
+        $process = new Process("$this->phpPath $appPath autodiag:score:compute --synthesis=$synthesisId");
         $process->start();
     }
 }
