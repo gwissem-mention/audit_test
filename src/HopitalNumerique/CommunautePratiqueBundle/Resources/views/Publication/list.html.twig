@@ -1,6 +1,11 @@
 {% extends 'HopitalNumeriqueCommunautePratiqueBundle::layout.html.twig' %}
 
 {% block title_communaute_pratique %}Publications issues des groupes de travail{% endblock %}
+{% block add_suggestion %}
+    {% if app.user %}
+        <a style="margin-top:24px;margin-left: 10px; display: inline-block;" href="{{ path('hopitalnumerique_suggestion_front_add') }}">Proposer une ressource</a>
+    {% endif %}
+{% endblock %}
 
 {% block communaute_pratique_breadcrumbs_communautedepratiques %}<li><a href="{{ path('hopitalnumerique_communautepratique_accueil_index') }}">Communauté de pratique</a></li>{% endblock %}
 
@@ -14,7 +19,7 @@
         {%- for groupe in groupesPager.currentPageResults -%}
             {{ communaute_pratique.display_panel_publications(groupe) }}
         {%- else -%}
-            <p class="text-center">Aucune production référencée.</br></br></p>
+            <p class="text-center">Aucune production référencée.<br><br></p>
         {%- endfor -%}
     </div>
 

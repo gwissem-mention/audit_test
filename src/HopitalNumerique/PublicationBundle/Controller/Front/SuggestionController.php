@@ -18,6 +18,12 @@ class SuggestionController extends Controller
      */
     public function addAction(Request $request)
     {
+        if ('anon.' !== $this->getUser()) {
+            $this->addFlash('danger', 'Vous devez être connecté pour proposer une suggestion');
+
+            return $this->redirectToRoute('hopital_numerique_homepage');
+        }
+
         /** @var Suggestion $suggestion */
         $suggestion = new Suggestion();
 
