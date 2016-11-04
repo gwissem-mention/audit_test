@@ -150,6 +150,9 @@
             <div class="col-md-8">
 
                 <div class="filtres-bloc">
+                    {% if app.user %}
+                        <a class="pull-right" href="{{ path('hopitalnumerique_suggestion_front_add') }}">Proposer une ressource</a>
+                    {% endif %}
                     <h1>Ma recherche <span id="results-count"></span></h1>
                     <div id="filtres-actions">
                         {%- if requete is not null -%}

@@ -1,4 +1,26 @@
 $(document).ready(function() {
+    $('.deleteUploadedFile').on('click',function(){
+        // $(this).hide();
+        $('.uploadedFile').hide();
+        $('.inputUpload').show();
+        // $('#' + $(this).data('path') ) .val('');
+    });
+
+    $('#suggestion_file').on('change', function() {
+        $.ajax({
+            url  : $('#suggestion-exist-file-url').val(),
+            data : {
+                fileName : $(this).val()
+            },
+            type     : 'POST',
+            dataType : 'json',
+            success  : function( data ){
+                if( data.success )
+                    apprise('Attention, ce nom de fichier existe déjà, il sera donc écrasé.')
+            }
+        });
+    });
+
     var IS_PDF = ('1' == $('body').attr('data-is-pdf'));
 
     /* Gestion de l'ouverture/fermeture du sommaire et de la liste des ambassadeurs */

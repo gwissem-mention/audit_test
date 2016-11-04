@@ -103,3 +103,30 @@ hopital_numerique_publication_front_export:
     defaults: { _controller: "HopitalNumeriqueObjetBundle:Export:export", id:1 }
     requirements:
         id: \d+
+
+#Suggestion
+hopitalnumerique_suggestion_front_add:
+    path: /suggestion/add
+    defaults: { _controller: "HopitalNumeriquePublicationBundle:Front/Suggestion:add" }
+
+hopitalnumerique_suggestion_front_edit:
+    path: /suggestion/edit/{suggestion}
+    defaults: { _controller: "HopitalNumeriquePublicationBundle:Front/Suggestion:edit" }
+
+hopitalnumerique_suggestion_back_index:
+    path: /admin/suggestion
+    defaults: { _controller: "HopitalNumeriquePublicationBundle:Back/Suggestion:index" }
+
+hopitalnumerique_suggestion_back_edit:
+    path: /admin/suggestion/edit/{id}
+    defaults: { _controller: "HopitalNumeriquePublicationBundle:Back/Suggestion:edit", id:1 }
+    requirements:
+        id: \d+
+
+hopitalnumerique_suggestion_back_delete:
+    path: /admin/suggestion/delete/{suggestion}
+    defaults: { _controller: "HopitalNumeriquePublicationBundle:Back/Suggestion:delete" }
+
+hopitalnumerique_suggestion_back_isFileExist:
+    path:  /admin/suggestion/isFileExist
+    defaults: { _controller: "HopitalNumeriquePublicationBundle:Back/Suggestion:isFileExist" }

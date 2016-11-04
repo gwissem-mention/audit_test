@@ -12,6 +12,7 @@ use HopitalNumerique\ObjetBundle\Entity\Contenu;
 use HopitalNumerique\ObjetBundle\Entity\Objet;
 use HopitalNumerique\ObjetBundle\Manager\ContenuManager;
 use HopitalNumerique\ObjetBundle\Manager\ObjetManager;
+use HopitalNumerique\PublicationBundle\Repository\SuggestionRepository;
 use HopitalNumerique\RechercheBundle\Manager\ExpBesoinReponsesManager;
 use HopitalNumerique\RechercheParcoursBundle\Manager\RechercheParcoursManager;
 use HopitalNumerique\ReferenceBundle\Manager\ReferenceManager;
@@ -59,6 +60,11 @@ class Entity
      * @var int Type Groupe de la communauté de pratique
      */
     const ENTITY_TYPE_EXPRESSION_BESOIN_REPONSE = 7;
+
+    /**
+     * @var int Type Suggestion
+     */
+    const ENTITY_TYPE_SUGGESTION = 8;
 
     private $refForumTopicId;
 
@@ -130,6 +136,11 @@ class Entity
      */
     private $referenceManager;
 
+    /**
+     * @var SuggestionRepository $suggestionRepository
+     */
+    private $suggestionRepository;
+
 
     /**
      * Constructeur.
@@ -147,12 +158,12 @@ class Entity
         ExpBesoinReponsesManager $expressionBesoinReponseManager,
         TexteDynamiqueCodeManager $texteDynamiqueCodeManager,
         ReferenceManager $referenceManager,
+        SuggestionRepository $suggestionRepository,
         $refForumTopicId,
         $refAmbassadeurId,
         $refRechercheParcoursId,
         $refComPratiqueId,
         $refExpressionBesoinReponseId
-
     ) {
         $this->router = $router;
         $this->currentDomaine = $currentDomaine;
@@ -166,6 +177,7 @@ class Entity
         $this->expressionBesoinReponseManager = $expressionBesoinReponseManager;
         $this->texteDynamiqueCodeManager = $texteDynamiqueCodeManager;
         $this->referenceManager = $referenceManager;
+        $this->suggestionRepository = $suggestionRepository;
         $this->refForumTopicId = $refForumTopicId;
         $this->refAmbassadeurId = $refAmbassadeurId;
         $this->refRechercheParcoursId = $refRechercheParcoursId;
@@ -205,6 +217,8 @@ class Entity
                 return self::ENTITY_TYPE_COMMUNAUTE_PRATIQUES_GROUPE;
             case 'HopitalNumerique\RechercheBundle\Entity\ExpBesoinReponses':
                 return self::ENTITY_TYPE_EXPRESSION_BESOIN_REPONSE;
+            case 'HopitalNumerique\PublicationBundle\Entity\Suggestion':
+                return self::ENTITY_TYPE_SUGGESTION;
         }
 
         return null;
@@ -273,6 +287,8 @@ class Entity
                 return $this->communautePratiqueGroupeManager->findBy(['id' => $ids]);
             case self::ENTITY_TYPE_EXPRESSION_BESOIN_REPONSE:
                 return $this->expressionBesoinReponseManager->findBy(['id' => $ids]);
+            case self::ENTITY_TYPE_SUGGESTION:
+                return $this->suggestionRepository->findBy(['id' => $ids]);
         }
 
         throw new \Exception('Type "'.$type.'" introuvable.');
@@ -312,6 +328,8 @@ class Entity
                 return $this->getDomainesByEntity($entity->getRecherchesParcoursGestion());
             case self::ENTITY_TYPE_EXPRESSION_BESOIN_REPONSE:
                 return $this->getDomainesByEntity($entity->getQuestion()->getExpBesoinGestion());
+            case self::ENTITY_TYPE_SUGGESTION:
+                return $entity->getDomains();
         }
 
         throw new \Exception('Domaines non trouvés pour l\'entité.');
@@ -451,6 +469,9 @@ class Entity
                 break;
             case self::ENTITY_TYPE_EXPRESSION_BESOIN_REPONSE:
                 $title = $entity->getLibelle();
+                break;
+            case self::ENTITY_TYPE_SUGGESTION:
+                $title = $entity->getTitle();
         }
 
         if (null !== $title && null !== $truncateCaractersCount && strlen($title) > $truncateCaractersCount) {
@@ -563,6 +584,9 @@ class Entity
                 break;
             case self::ENTITY_TYPE_COMMUNAUTE_PRATIQUES_GROUPE:
                 $description = $entity->getDescriptionCourte();
+                break;
+            case self::ENTITY_TYPE_SUGGESTION:
+                $description = $entity->getSummary();
         }
 
         if (null !== $description) {
@@ -612,6 +636,8 @@ class Entity
                 return $this->router->generate('hopital_numerique_recherche_parcours_details_index_front', ['id' => $entityId]);
             case self::ENTITY_TYPE_COMMUNAUTE_PRATIQUES_GROUPE:
                 return $this->router->generate('hopitalnumerique_communautepratique_groupe_view', ['groupe' => $entityId]);
+            case self::ENTITY_TYPE_SUGGESTION:
+                return$this->router->generate('hopitalnumerique_suggestion_back_edit', ['id' => $entityId]);
         }
 
         return null;

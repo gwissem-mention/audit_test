@@ -106,12 +106,18 @@ class AutodiagEntriesExport extends AbstractExport
                 array_merge(
                     array_fill(0, self::HEADER_HORIZONTAL_OFFSET -1, ''),
                     [$title],
-                    array_map(function ($row) use ($field) {
-                        return $row[$field];
-                    }, $attributes)
+                    call_user_func_array('array_merge', array_map(function ($row) use ($field) {
+                        return [
+                            $row[$field],
+                            $field == 'attribute_label' ? 'Valeur' : '',
+                            $field == 'attribute_label' ? 'Commentaire' : '',
+                        ];
+                    }, $attributes))
                 )
             );
         }
+
+
 
         return $attributes;
     }

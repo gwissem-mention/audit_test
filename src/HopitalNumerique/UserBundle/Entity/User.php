@@ -1387,6 +1387,23 @@ class User extends BaseUser
     }
 
     /**
+     * Retourne le nom de l'établissement de l'utilisateur
+     * (celui de la liste ou celui qu'il a saisi)
+     *
+     * @return string
+     */
+    public function getNomEtablissement()
+    {
+        if ($this->getEtablissementRattachementSanteString() != null) {
+            return $this->getEtablissementRattachementSanteString();
+        } elseif ($this->getAutreStructureRattachementSante() != null) {
+            return $this->getAutreStructureRattachementSante();
+        } else {
+            return 'Aucun établissement de rattachement';
+        }
+    }
+
+    /**
      * Set autreStructureRattachementSante
      *
      * @param string $autreStructureRattachementSante

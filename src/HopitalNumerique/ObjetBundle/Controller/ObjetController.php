@@ -2,6 +2,7 @@
 
 namespace HopitalNumerique\ObjetBundle\Controller;
 
+use HopitalNumerique\ObjetBundle\Entity\Objet;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -185,14 +186,21 @@ class ObjetController extends Controller
      */
     public function deleteAction($id)
     {
+        /** @var Objet $objet */
         $objet = $this->get('hopitalnumerique_objet.manager.objet')->findOneBy(['id' => $id]);
+
+        if ($objet->isArticle()) {
+            $filtre = "Article";
+        } else {
+            $filtre = "publication";
+        }
 
         //Suppression de l'entitée
         $this->get('hopitalnumerique_objet.manager.objet')->delete($objet);
 
         $this->get('session')->getFlashBag()->add('info', 'Suppression effectuée avec succès.');
 
-        return new Response ('{"success":true, "url" : "' . $this->generateUrl('hopitalnumerique_objet_objet_filtre', ['filtre' => $filtre]) . '"}', 200);
+        return new Response('{"success":true, "url" : "' . $this->generateUrl('hopitalnumerique_objet_objet_filtre', ['filtre' => $filtre]) . '"}', 200);
     }
 
     /**
