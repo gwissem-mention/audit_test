@@ -6,6 +6,7 @@ use HopitalNumerique\PublicationBundle\Entity\Suggestion;
 use HopitalNumerique\PublicationBundle\Form\Type\SuggestionType;
 
 use HopitalNumerique\ReferenceBundle\Entity\Reference;
+use HopitalNumerique\UserBundle\Entity\User;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -18,7 +19,7 @@ class SuggestionController extends Controller
      */
     public function addAction(Request $request)
     {
-        if ('anon.' !== $this->getUser()) {
+        if (!$this->getUser() instanceof User) {
             $this->addFlash('danger', 'Vous devez être connecté pour proposer une suggestion');
 
             return $this->redirectToRoute('hopital_numerique_homepage');
