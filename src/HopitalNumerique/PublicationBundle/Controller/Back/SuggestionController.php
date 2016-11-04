@@ -3,6 +3,7 @@ namespace HopitalNumerique\PublicationBundle\Controller\Back;
 
 use HopitalNumerique\PublicationBundle\Entity\Suggestion;
 use HopitalNumerique\PublicationBundle\Form\Type\SuggestionType;
+use HopitalNumerique\ReferenceBundle\Entity\Reference;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -33,8 +34,7 @@ class SuggestionController extends Controller
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager = $this->getDoctrine()->getManager();
 
-            //@TODO: Id de la référence pas en dur
-            if ($suggestion->getState()->getId() == 2006) {
+            if ($suggestion->getState()->getId() == Reference::ETAT_SUGGESTION_VALIDE_ID) {
                 $this->get('hopitalnumerique_publication.service.suggestion_converter')
                     ->suggestionConverter($suggestion)
                 ;
@@ -71,7 +71,7 @@ class SuggestionController extends Controller
 
         $this->get('session')->getFlashBag()->add('info', 'Suppression effectuée avec succès.');
 
-        return new Response('{"success":true, "url" : "' . $this->generateUrl('hopitalnumerique_suggestion_back_index') . '"}', 200);
+        return $this->redirectToRoute('hopitalnumerique_suggestion_back_index');
     }
 
     /**

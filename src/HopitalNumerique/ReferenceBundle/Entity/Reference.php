@@ -69,6 +69,11 @@ class Reference
     const ETAT_SUGGESTION_DEMANDE_ID = 2005;
 
     /**
+     * @var integer ID de l'ETAT_SUGGESTION Validé
+     */
+    const ETAT_SUGGESTION_VALIDE_ID = 2006;
+
+    /**
      * @var integer
      *
      * @ORM\Column(name="ref_id", type="integer", options = {"comment" = "ID de la référence"})

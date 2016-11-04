@@ -28,7 +28,7 @@
 
     <div onclick="$('form').submit();" class="btn btn-default" title="Enregistrer"><i class="fa fa-check"></i></div>
     <div onclick="$('#do').val('save-close');$('form').submit();" class="btn btn-default" title="Enregistrer et Fermer"><i class="fa fa-save"></i></div>
-    <div onclick='deleteWithConfirm("{{ path('hopitalnumerique_suggestion_back_delete', {'suggestion': suggestion.id}) }}");' class="btn btn-default" title="Supprimer"><i class="fa fa-trash-o"></i></div>
+    <a href="{{ path('hopitalnumerique_suggestion_back_delete', {'suggestion': suggestion.id}) }}"class="btn btn-default" onclick="if(window.confirm('Attention, cette opération est irréversible, êtes-vous sur de vouloir continuer ?')){return true;}else{return false;}" title="Supprimer"><i class="fa fa-trash-o"></i></a>
 {% endblock %}
 
 {% block body %}

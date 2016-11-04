@@ -47,6 +47,7 @@ class SuggestionType extends AbstractType
                         ->where("reference.code = 'ETAT_SUGGESTION'");
                 },
                 'label' => 'État',
+                'choice_label' => 'libelle',
             ])
             ->add('synthesis', TextareaType::class, [
                 'required' => false,

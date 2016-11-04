@@ -119,7 +119,7 @@ hopitalnumerique_suggestion_back_index:
 
 hopitalnumerique_suggestion_back_edit:
     path: /admin/suggestion/edit/{id}
-    defaults: { _controller: "HopitalNumeriquePublicationBundle:Back/Suggestion:edit" }
+    defaults: { _controller: "HopitalNumeriquePublicationBundle:Back/Suggestion:edit", id:1 }
     requirements:
         id: \d+
 
