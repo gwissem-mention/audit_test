@@ -1,6 +1,7 @@
 <?php
 namespace HopitalNumerique\RechercheBundle\Controller;
 
+use HopitalNumerique\RechercheBundle\Entity\Requete;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -40,6 +41,7 @@ class ReferencementController extends Controller
         }
 
         return $this->render('HopitalNumeriqueRechercheBundle:Referencement:index.html.twig', [
+            'recherches'             => $this->getDoctrine()->getRepository(Requete::class)->findBy(['user' => $this->getUser()]),
             'referencesTree'         => $referencesTree,
             'requete'                => $this->container->get('hopitalnumerique_recherche.dependency_injection.referencement.requete_session')->getRequete(),
             'categoriesProperties'   => $this->container->get('hopitalnumerique_recherche.doctrine.referencement.category')->getCategoriesProperties(),

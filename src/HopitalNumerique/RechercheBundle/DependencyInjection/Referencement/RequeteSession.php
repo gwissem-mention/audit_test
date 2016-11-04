@@ -7,6 +7,7 @@ use HopitalNumerique\RechercheBundle\Entity\Requete;
 use HopitalNumerique\RechercheBundle\Manager\RequeteManager;
 use HopitalNumerique\ReferenceBundle\DependencyInjection\Reference\Tree as ReferenceTree;
 use HopitalNumerique\ReferenceBundle\Manager\ReferenceManager;
+use HopitalNumerique\StatBundle\Entity\StatRecherche;
 use HopitalNumerique\StatBundle\Manager\StatRechercheManager;
 use HopitalNumerique\UserBundle\DependencyInjection\ConnectedUser;
 use HopitalNumerique\UserBundle\Entity\User;
@@ -88,8 +89,16 @@ class RequeteSession
     /**
      * Constructeur.
      */
-    public function __construct(SessionInterface $session, ConnectedUser $connectedUser, CurrentDomaine $currentDomaine, ReferenceTree $referenceTree, ReferencementModulation $referencementModulation, ReferenceManager $referenceManager, RequeteManager $requeteManager, StatRechercheManager $statRechercheManager)
-    {
+    public function __construct(
+        SessionInterface $session,
+        ConnectedUser $connectedUser,
+        CurrentDomaine $currentDomaine,
+        ReferenceTree $referenceTree,
+        ReferencementModulation $referencementModulation,
+        ReferenceManager $referenceManager,
+        RequeteManager $requeteManager,
+        StatRechercheManager $statRechercheManager
+    ) {
         $this->session = $session;
         $this->connectedUser = $connectedUser;
         $this->referenceTree = $referenceTree;
@@ -115,7 +124,7 @@ class RequeteSession
     /**
      * Enregistre les références en session.
      *
-     * @param array<integer> $referenceIds IDs des références
+     * @param array <integer> $referenceIds IDs des références
      */
     public function setReferenceIds(array $referenceIds)
     {
@@ -162,7 +171,7 @@ class RequeteSession
     /**
      * Enregistre les types d'entité en session.
      *
-     * @param array<integer> $entityTypeIds IDs des types d'entité
+     * @param array <integer> $entityTypeIds IDs des types d'entité
      */
     public function setEntityTypeIds(array $entityTypeIds = null)
     {
@@ -198,7 +207,7 @@ class RequeteSession
     /**
      * Enregistre les catégories de publication en session.
      *
-     * @param array<integer> $publicationCategoryIds IDs
+     * @param array <integer> $publicationCategoryIds IDs
      */
     public function setPublicationCategoryIds(array $publicationCategoryIds = null)
     {
@@ -316,8 +325,9 @@ class RequeteSession
             $referenceIds = $this->getReferenceIds();
 
             if (count($referenceIds) > 0) {
+                /** @var Requete $requete */
                 $requete = $this->requeteManager->createEmpty();
-                $requete->setNom('Ma requête du '.date('d/m/Y à H:i'));
+                $requete->setNom('Ma requête du ' . date('d/m/Y à H:i'));
                 $requete->setIsDefault(false);
                 $requete->setUser($requeteUser);
                 $requete->setDomaine($this->domaine);
@@ -331,6 +341,9 @@ class RequeteSession
      */
     public function saveRequete(Requete $requete)
     {
+        if ($requete->getNom() == "") {
+            $requete->setNom('Ma requête du ' . date("d/m/Y") . ' à ' . date('G:i'));
+        }
         $requete->setRefs($this->getReferenceIds());
         $requete->setCategPointDur($this->getCategoryFilters());
         $requete->setRechercheTextuelle($this->getSearchedText());
@@ -346,12 +359,15 @@ class RequeteSession
      */
     public function saveStatistique($resultsCount)
     {
+        /** @var StatRecherche $statRecherche */
         $statRecherche = $this->statRechercheManager->createEmpty();
 
         $referencesTree = $this->referenceTree->getOrderedReferences(null, null, [$this->domaine], true);
         $referenceIds = $this->getReferenceIds();
         $categoryFilters = $this->getCategoryFilters();
-        $modulatedReferenceIds = $this->referencementModulation->getModulatedReferenceIds($referenceIds, $referencesTree);
+        $modulatedReferenceIds = $this->referencementModulation
+            ->getModulatedReferenceIds($referenceIds, $referencesTree)
+        ;
         $modulatedReferences = $this->referenceManager->findBy(['id' => $modulatedReferenceIds]);
 
         $statRecherche->setUser($this->connectedUser->get());
