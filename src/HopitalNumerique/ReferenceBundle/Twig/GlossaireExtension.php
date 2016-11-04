@@ -80,7 +80,7 @@ class GlossaireExtension extends \Twig_Extension
                             '¬">¬'.$this->convertToAsciiHtml(substr($wordSearchPatternMatch, 1, -1)).'</acronym></a>';
 
                         $html = substr($wordSearchPatternMatch, 0, 1).$html.substr($wordSearchPatternMatch, -1);
-                        $text = str_replace($wordSearchPatternMatch, $html, $text);
+                        $text = $this->str_replace_first($wordSearchPatternMatch, $html, $text);
                         $testString[] = $glossaireReference->getLibelle();
                     }
                 }
@@ -123,7 +123,7 @@ class GlossaireExtension extends \Twig_Extension
 
 
                     $html = substr($wordSearchPatternMatch, 0, 1) . $html . substr($wordSearchPatternMatch, -1);
-                    $html = str_replace(array('¬',',','\''), '', $html);
+                    $html = str_replace(array('¬',',','\'',')','(','.'), '', $html);
                     if (!in_array($glossaireReference->getLibelle(), $testString)) {
                         $list[$glossaireReference->getLibelle()] = $html;
                         $testString[] = $glossaireReference->getLibelle();
@@ -176,6 +176,13 @@ class GlossaireExtension extends \Twig_Extension
         }
 
         return $text;
+    }
+
+    private function str_replace_first($from, $to, $subject)
+    {
+        $from = '/'.preg_quote($from, '/').'/';
+
+        return preg_replace($from, $to, $subject, 1);
     }
 
 
