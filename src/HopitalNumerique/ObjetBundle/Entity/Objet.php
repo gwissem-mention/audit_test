@@ -1337,11 +1337,11 @@ class Objet implements RoutedItemInterface
      */
     public function removeUpload()
     {
-        if ($file = $this->getAbsolutePath(self::FICHIER_1) && file_exists($this->getAbsolutePath(self::FICHIER_1)))
-            unlink($file);
+        if ($this->getAbsolutePath(self::FICHIER_1) && file_exists($this->getAbsolutePath(self::FICHIER_1)))
+            unlink($this->getAbsolutePath(self::FICHIER_1));
 
-        if ($file2 = $this->getAbsolutePath(self::FICHIER_2) && file_exists($this->getAbsolutePath(self::FICHIER_2)))
-            unlink($file2);
+        if ($this->getAbsolutePath(self::FICHIER_2) && file_exists($this->getAbsolutePath(self::FICHIER_2)))
+            unlink($this->getAbsolutePath(self::FICHIER_2));
     }
 
     /**

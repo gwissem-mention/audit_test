@@ -17,3 +17,22 @@ services:
     hopitalnumerique_publication.service.logger.cronlogger:
         class: "%hopitalnumerique_publication.service.logger.cronlogger.class%"
         arguments: ["@logger", "@session"]
+
+    hopitalnumerique_publication.grid.suggestion:
+        class: 'HopitalNumerique\PublicationBundle\Grid\SuggestionGrid'
+        arguments: ["@service_container"]
+
+    hopitalnumerique_publication.repository.suggestion:
+        class: HopitalNumerique\PublicationBundle\Repository\SuggestionRepository
+        factory: ["@doctrine.orm.entity_manager", "getRepository"]
+        arguments:
+            - 'HopitalNumeriquePublicationBundle:Suggestion'
+
+    hopitalnumerique_publication.service.suggestion_converter:
+        class: 'HopitalNumerique\PublicationBundle\Service\SuggestionConverter'
+        arguments:
+            - '@hopitalnumerique_reference.manager.reference'
+            - '@hopitalnumerique_reference.manager.entity_has_reference'
+            - '@hopitalnumerique_objet.manager.objet'
+            - '@filesystem'
+            - '@doctrine.orm.entity_manager'

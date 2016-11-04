@@ -774,13 +774,18 @@ class Groupe
      */
     public function getUsersWithoutAnimateurs()
     {
-    	$collection = array();
-    	foreach ($this->users as $user) {
-    		if (!$this->hasAnimateur($user)) {
-    			$collection[$user->getId()] = $user;
-    		}
-    	}
-    	return $collection;
+        if (is_null($this->users)) {
+            return [];
+        }
+
+        $collection = [];
+        foreach ($this->users as $user) {
+            if (!$this->hasAnimateur($user)) {
+                $collection[$user->getId()] = $user;
+            }
+        }
+
+        return $collection;
     }
 
     /**

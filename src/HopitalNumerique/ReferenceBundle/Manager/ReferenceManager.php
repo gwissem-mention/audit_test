@@ -473,11 +473,15 @@ class ReferenceManager extends BaseManager
         return $this->findOneById(Reference::STATUT_ACTIF_ID);
     }
 
-
-
-
-
-
+    /**
+     * Retour la catégorie Retour d'expérience, témoignage
+     *
+     * @return \HopitalNumerique\ReferenceBundle\Entity\Reference Retour d'expérience, témoignage
+     */
+    public function getCategorieTemoignage()
+    {
+        return $this->findOneById(Reference::CATEGORIE_OBJET_TEMOIGNAGE_ID);
+    }
 
 
     /**
