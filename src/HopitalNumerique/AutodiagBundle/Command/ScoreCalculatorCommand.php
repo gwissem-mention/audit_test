@@ -3,6 +3,7 @@
 namespace HopitalNumerique\AutodiagBundle\Command;
 
 use HopitalNumerique\AutodiagBundle\Entity\Autodiag;
+use HopitalNumerique\AutodiagBundle\Entity\Synthesis;
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputDefinition;
@@ -32,7 +33,10 @@ class ScoreCalculatorCommand extends ContainerAwareCommand
 
         $synthesis = $options['synthesis'];
         if (null !== $synthesis) {
-            $this->getContainer()->get('autodiag.score_calculator')->computeSynthesisScore($synthesis);
+            $synthesis = $this->getContainer()->get('autodiag.repository.synthesis')->find($synthesis);
+            if ($synthesis) {
+                $this->getContainer()->get('autodiag.score_calculator')->computeSynthesisScore($synthesis);
+            }
             return true;
         }
 
