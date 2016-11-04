@@ -1,3 +1,9 @@
+$(document).ready(function() {
+    $('#research-list').change( function() {
+        location.href = $(this).val();
+    });
+});
+
 Hn_RechercheBundle_Referencement.saveSessionTimer;
 
 /**
@@ -57,8 +63,10 @@ Hn_RechercheBundle_Referencement.processFilterButtonsActivating = function()
 
     if (canActivate && !filterButtonsVisible) {
         $('#filtres-actions').slideDown();
+        $('#request-buttons').slideDown();
     } else if (!canActivate && filterButtonsVisible) {
         $('#filtres-actions').slideUp();
+        $('#request-buttons').slideUp();
     }
 };
 
@@ -78,6 +86,7 @@ Hn_RechercheBundle_Referencement.removeFilters = function()
                 method: 'POST'
             });
             $('#filtres-actions #search-name').hide();
+            $('#request-buttons').hide();
         }
     });
 };

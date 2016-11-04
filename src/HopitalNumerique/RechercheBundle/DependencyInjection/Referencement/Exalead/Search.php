@@ -80,7 +80,8 @@ class Search
                     $hitUrl = (string)$hit->attributes()->url;
                     $hitUrlExplode = explode('=', $hitUrl);
                     $properties = [
-                        'entityId' => intval(substr($hitUrlExplode[1], 0, -1))
+                        'entityId' => intval(substr($hitUrlExplode[1], 0, -1)),
+                        'score' => intval($hit->attributes()->score)
                     ];
 
                     // YRO 10/02/2015 : les occurrences réellement trouvées dans les contenus
@@ -187,12 +188,26 @@ class Search
                     $this->objetsProperties[$i] = $objetProperties;
                     //$this->objetsProperties[$i]['title'] = $objet['title'];
                     $this->objetsProperties[$i]['description'] = $objet['description'];
+                    $this->objetsProperties[$i]['pertinenceNiveau'] = $this->getScore($objet['score']);
                     break;
                 }
             }
         }
 
         return $this->objetsProperties;
+    }
+
+    private function getScore($score)
+    {
+        if ($score <= 333) {
+            $value = 3;
+        } elseif ($score >= 333 and $score <= 666) {
+            $value = 2;
+        } elseif ($score >= 666) {
+            $value = 1;
+        }
+
+        return $value;
     }
 
     /**
