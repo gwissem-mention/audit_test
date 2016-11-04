@@ -109,7 +109,7 @@ class Suggestion
      * @var UploadedFile
      *
      * @Assert\File(
-     *     maxSize = "100M"
+     *     maxSize = "10M"
      * )
      */
     private $file;
