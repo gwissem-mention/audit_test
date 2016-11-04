@@ -117,6 +117,6 @@ class CompareType extends AbstractType
         $resolver->setRequired(['user']);
 
         $resolver->setDefined('domaine');
-        $resolver->addAllowedTypes('domaine', Domaine::class);
+        $resolver->addAllowedTypes('domaine', ['null', Domaine::class]);
     }
 }
