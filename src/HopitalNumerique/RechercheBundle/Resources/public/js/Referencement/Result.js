@@ -132,9 +132,10 @@ Hn_RechercheBundle_Referencement.desactiveSearch = function()
 Hn_RechercheBundle_Referencement.getEntityBlocHtml = function(entityProperties)
 {
     var html = '';
-
+console.log(entityProperties);
     html += '<div class="category">' + entityProperties['categoryLabels'] + '</div>';
-    html += '<h3 class="title"><a href="' + entityProperties['url'] + '">';
+    html += '<h3 class="title test"><a href="' + entityProperties['url'] + '">';
+        html += '<em class="pertinence-niveau-' + entityProperties['pertinenceNiveau'] + '"></em>'
         html += entityProperties['title'];
         if (undefined != entityProperties['subtitle']) {
             html += '<span class="subtitle"><em class="fa fa-share fa-flip-vertical"></em> ' + entityProperties['subtitle'] + '</span>';
