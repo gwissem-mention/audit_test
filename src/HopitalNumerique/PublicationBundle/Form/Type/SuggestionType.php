@@ -60,11 +60,12 @@ class SuggestionType extends AbstractType
             ])
             ->add('link', null, [
                 'required' => false,
-                'label' => 'Source (si externe)',
+                'label' => 'Lien web',
+                'attr' => ['class' => 'validate[custom[url]]'],
             ])
             ->add('file', FileType::class, array(
                 'required' => false,
-                'label'    => 'Fichier'
+                'label'    => 'ou fichier'
             ))
             ->add('path', HiddenType::class)
         ;

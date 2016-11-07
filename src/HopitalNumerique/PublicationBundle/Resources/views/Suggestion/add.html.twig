@@ -36,6 +36,10 @@
 
 {% block headerTitle %}Suggérer une ressource{% endblock %}
 
+{% block headerDesc %}
+    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum purus lectus, hendrerit non dui sit amet, posuere dapibus nibh. Donec non felis posuere, dictum libero ut, iaculis tellus. In volutpat felis et malesuada posuere. Ut facilisis consectetur varius. Duis aliquam, libero a accumsan mattis, felis quam faucibus ligula.</p>
+{% endblock %}
+
 {% block content%}
     <div id="form_edit_user">
         <div id="form_edit_informations_personnelles">
@@ -65,7 +69,7 @@
                 {{ form_row(form.file) }}
 
                 <div class="col-md-12">
-                    <div onclick="$('form').submit();" class="btn btn-primary pull-right" title="Accéder au référencement"> Accéder au référencement</div>
+                    <div onclick="$('form').submit();" class="btn btn-primary pull-right" title="Accéder au référenentcem">Proposer cette ressource et accéder au référencement</div>
                 </div>
                 {{ form_row(form._token) }}
             {%  endif %}
