@@ -75,6 +75,10 @@ class Suggestion
      * @var string
      *
      * @ORM\Column(type="string", nullable=true)
+     * @Assert\Expression(
+     *     "null !== this.getLink() || null !== this.getPath() || null !== this.getFile()",
+     *     message="Veuillez renseigner un lien ou un fichier joint"
+     * )
      */
     private $link;
 
@@ -110,6 +114,10 @@ class Suggestion
      *
      * @Assert\File(
      *     maxSize = "10M"
+     * )
+     * @Assert\Expression(
+     *     "null !== this.getFile() || null !== this.getLink()",
+     *     message="Veuillez renseigner un lien ou un fichier joint"
      * )
      */
     private $file;
