@@ -27,7 +27,11 @@ class SuggestionGrid extends Grid implements GridInterface
         $this->addColonne(new Column\NumberColumn('suggestionId', 'ID'));
         $this->addColonne(new Column\TextColumn('title', 'Titre'));
         $this->addColonne(new Column\DateColumn('creationDate', 'Date à laquelle la ressource a été proposée'));
-        $this->addColonne(new Column\TextColumn('stateLabel', 'État'));
+        $this->addColonne(
+            (new Column\TextColumn('stateLabel', 'État'))
+                ->setFilterType('select')
+                ->setOperatorsVisible(false)
+        );
         $this->addColonne(new Column\TextColumn('domainsName', 'Domaine(s)'));
     }
 
