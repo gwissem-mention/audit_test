@@ -4,6 +4,7 @@ var ScorePolling = function (options) {
 
     this.syntheses = [];
 
+    this.start = (new Date()).getTime();
     this.init();
 };
 
@@ -33,7 +34,9 @@ ScorePolling.prototype = {
 
     request: function ()
     {
-        console.log('request', this.syntheses);
+        if (this.isTimedOut()) {
+            return;
+        }
 
         var instance = this;
         var xhr = $.ajax({
@@ -70,8 +73,6 @@ ScorePolling.prototype = {
                 }
             }
 
-            console.log(instance.syntheses.length);
-
             if (instance.syntheses.length > 0) {
                 instance.request();
             }
@@ -84,5 +85,10 @@ ScorePolling.prototype = {
         var el = $('[data-score-polling="' + id + '"]');
         el.html(el.data('content'));
         el.removeAttr('data-score-polling');
+    },
+
+    isTimedOut: function ()
+    {
+        return (new Date()).getTime() - this.start > 10 * 60 * 1000;
     }
 };
