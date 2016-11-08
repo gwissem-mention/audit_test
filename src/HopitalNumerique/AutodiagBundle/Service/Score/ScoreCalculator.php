@@ -165,7 +165,7 @@ class ScoreCalculator
         $appPath = $this->rootDir . '/console';
 
         $autodiagId = $autodiag->getId();
-        $process = new Process("$this->phpPath $appPath autodiag:score:compute --autodiag=$autodiagId");
+        $process = new Process("nohup $this->phpPath $appPath autodiag:score:compute --autodiag=$autodiagId &");
         $process->start();
     }
 
@@ -174,7 +174,7 @@ class ScoreCalculator
         $appPath = $this->rootDir . '/console';
 
         $synthesisId = $synthesis->getId();
-        $process = new Process("$this->phpPath $appPath autodiag:score:compute --synthesis=$synthesisId");
+        $process = new Process("nohup $this->phpPath $appPath autodiag:score:compute --synthesis=$synthesisId &");
         $process->start();
     }
 }
