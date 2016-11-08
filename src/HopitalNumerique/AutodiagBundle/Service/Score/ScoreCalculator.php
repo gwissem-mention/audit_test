@@ -101,7 +101,7 @@ class ScoreCalculator
         );
 
         $synthesis->stopComputing();
-        $this->entityManager->flush($synthesis);
+        $this->entityManager->flush();
 
     }
 
@@ -169,7 +169,7 @@ class ScoreCalculator
         $appPath = $this->rootDir . '/console';
 
         $synthesis->setComputing();
-        $this->entityManager->flush();
+        $this->entityManager->flush($synthesis);
 
         $synthesisId = $synthesis->getId();
         $process = new Process("nohup $this->phpPath $appPath autodiag:score:compute --synthesis=$synthesisId &");
