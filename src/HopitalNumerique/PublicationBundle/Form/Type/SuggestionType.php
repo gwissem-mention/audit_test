@@ -65,7 +65,7 @@ class SuggestionType extends AbstractType
             ])
             ->add('file', FileType::class, array(
                 'required' => false,
-                'label'    => 'ou fichier'
+                'label'    => 'ou fichier (max 10Mo)'
             ))
             ->add('path', HiddenType::class)
         ;
