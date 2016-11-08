@@ -16,9 +16,16 @@ services:
             tags:
                 - { name: kernel.event_listener, event: security.interactive_login, method: onSecurityInteractiveLogin }
 
-    autodiag.compare.listener:
+    autodiag.compare_listener:
         class: HopitalNumerique\AutodiagBundle\EventListener\CompareListener
         arguments:
             - '@autodiag.compare.cleaner'
         tags:
             - { name: kernel.event_subscriber, event: synthesis.unvalidated }
+
+    autodiag.min_and_max_synthesis_score_listener:
+        class: HopitalNumerique\AutodiagBundle\EventListener\BoundaryScoreListener
+        arguments:
+            - '@autodiag.score_boundary_calculator'
+        tags:
+            - { name: kernel.event_listener, event: synthesis.generated, method: onSynthesisGenerated }

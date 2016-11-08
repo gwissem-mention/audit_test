@@ -158,6 +158,12 @@ services:
             - '@doctrine.orm.entity_manager'
             - '%kernel.root_dir%'
 
+    autodiag.score_boundary_calculator:
+        class: HopitalNumerique\AutodiagBundle\Service\Score\BoundaryCalculator
+        arguments:
+            - '@doctrine.orm.entity_manager'
+            - '@autodiag.repository.score'
+
     autodiag.algorithm.score:
         class: HopitalNumerique\AutodiagBundle\Service\Algorithm\Score
         arguments: ['@doctrine.orm.entity_manager', '@autodiag.attribute_builder_provider']
@@ -181,6 +187,8 @@ services:
 
     autodiag.synthesis.generator:
         class: HopitalNumerique\AutodiagBundle\Service\Synthesis\SynthesisGenerator
+        arguments:
+            - '@event_dispatcher'
 
     autodiag.synthesis.remover:
         class: HopitalNumerique\AutodiagBundle\Service\Synthesis\SynthesisRemover

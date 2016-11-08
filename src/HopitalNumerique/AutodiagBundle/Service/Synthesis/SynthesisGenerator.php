@@ -5,14 +5,27 @@ namespace HopitalNumerique\AutodiagBundle\Service\Synthesis;
 use HopitalNumerique\AutodiagBundle\Entity\Autodiag;
 use HopitalNumerique\AutodiagBundle\Entity\AutodiagEntry;
 use HopitalNumerique\AutodiagBundle\Entity\Synthesis;
+use HopitalNumerique\AutodiagBundle\Event\SynthesisGeneratedEvent;
+use HopitalNumerique\AutodiagBundle\Events;
 use HopitalNumerique\UserBundle\Entity\User;
 use Symfony\Component\Config\Definition\Exception\Exception;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 class SynthesisGenerator
 {
     const SYNTHESIS_NOT_ALLOWED = 1;
     const NEED_AT_LEAST_2 = 2;
     const SYNTHESIS_NOT_VALIDATED = 3;
+
+    /**
+     * @var EventDispatcherInterface
+     */
+    protected $eventDispatcher;
+
+    public function __construct(EventDispatcherInterface $eventDispatcher)
+    {
+        $this->eventDispatcher = $eventDispatcher;
+    }
 
     /**
      * @param Autodiag $autodiag
@@ -61,6 +74,9 @@ class SynthesisGenerator
 
         $newSynthesis->setUser($user);
         $newSynthesis->validate();
+
+        $event = new SynthesisGeneratedEvent($newSynthesis, $syntheses);
+        $this->eventDispatcher->dispatch(Events::SYNTHESIS_GENERATED, $event);
 
         return $newSynthesis;
     }

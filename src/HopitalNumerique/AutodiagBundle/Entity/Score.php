@@ -40,9 +40,23 @@ class Score
     private $score;
 
     /**
+     * @var float
+     *
+     * @ORM\Column(type="float", nullable=true)
+     */
+    private $min;
+
+    /**
+     * @var float
+     *
+     * @ORM\Column(type="float", nullable=true)
+     */
+    private $max;
+
+    /**
      * @var boolean
      *
-     * @ORM\Column(type="boolean")
+     * @ORM\Column(type="boolean", nullable=true)
      */
     private $complete;
 
@@ -70,6 +84,46 @@ class Score
     public function setScore($score)
     {
         $this->score = $score;
+    }
+
+    /**
+     * @return float
+     */
+    public function getMin()
+    {
+        return $this->min;
+    }
+
+    /**
+     * @param float $min
+     *
+     * @return Score
+     */
+    public function setMin($min)
+    {
+        $this->min = $min;
+
+        return $this;
+    }
+
+    /**
+     * @return float
+     */
+    public function getMax()
+    {
+        return $this->max;
+    }
+
+    /**
+     * @param float $max
+     *
+     * @return Score
+     */
+    public function setMax($max)
+    {
+        $this->max = $max;
+
+        return $this;
     }
 
     /**

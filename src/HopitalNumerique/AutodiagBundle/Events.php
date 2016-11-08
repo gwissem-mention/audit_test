@@ -15,6 +15,12 @@ final class Events
     const ENTRY_UPDATED = 'entry.updated';
 
     /**
+     * This event occurs when a synthesis is generator from others syntheses
+     * THe event listerner method receives a HopitalNumerique\AutodiagBundle\Event\SynthesisEvent
+     */
+    const SYNTHESIS_GENERATED = 'synthesis.generated';
+
+    /**
      * This event occurs when a Synthesis is unvalidated
      * The event listener method receives a HopitalNumerique\AutodiagBundle\Event\SynthesisEvent
      */
