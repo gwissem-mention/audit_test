@@ -72,13 +72,8 @@ class ScoreCalculator
 
     public function computeSynthesisScore(Synthesis $synthesis)
     {
-//        if ($synthesis->isComputing()) {
-//            throw new \Exception('Already computing');
-//        }
-
         $synthesis->setComputing();
         $this->entityManager->flush($synthesis);
-
 
         $autodiag = $synthesis->getAutodiag();
         $containers = $autodiag->getContainers();
@@ -172,6 +167,9 @@ class ScoreCalculator
     public function deferSynthesisScore(Synthesis $synthesis)
     {
         $appPath = $this->rootDir . '/console';
+
+        $synthesis->setComputing();
+        $this->entityManager->flush();
 
         $synthesisId = $synthesis->getId();
         $process = new Process("nohup $this->phpPath $appPath autodiag:score:compute --synthesis=$synthesisId &");
