@@ -86,8 +86,8 @@ class ScoreRepository extends EntityRepository
         $qb = $this->createQueryBuilder('score');
         $qb
             ->select(
-                'MIN(score.score) as min_score',
-                'MAX(score.score) as max_score'
+                'MIN(score.min) as min_score',
+                'MAX(score.max) as max_score'
             )
             ->where(
                 $qb->expr()->eq('score.container', $container->getId())

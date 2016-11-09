@@ -62,6 +62,9 @@ class Score
 
     /**
      * Score constructor.
+     * @param Container $container
+     * @param Synthesis $synthesis
+     * @param null $score
      */
     public function __construct(Container $container, Synthesis $synthesis, $score = null)
     {
