@@ -24,11 +24,11 @@
                             <div class="step high">Fort</div>
 
                             {% if jaugeData.score.value is not null %}
-                                <div class="score" data-value="{{ jaugeData.score.value }}" data-label="{{ jaugeData.score.label }}" ></div>
+                                <div class="score" data-value="{{ jaugeData.score.value }}" data-label="{{ jaugeData.score.label }}" data-color="{{ jaugeData.score.color }}"></div>
                             {% endif %}
 
                             {% if jaugeData.score.reference is defined %}
-                                <div class="score" data-value="{{ jaugeData.score.reference.value }}" data-label="{{ jaugeData.score.reference.label }}" ></div>
+                                <div class="score" data-value="{{ jaugeData.score.reference.value }}" data-label="{{ jaugeData.score.reference.label }}" data-color="{{ jaugeData.score.reference.color }}"></div>
                             {% endif %}
 
                             {% for score in jaugeData.references %}

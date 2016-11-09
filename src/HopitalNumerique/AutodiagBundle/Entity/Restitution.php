@@ -25,6 +25,24 @@ class Restitution
     private $id;
 
     /**
+     * Score label
+     *
+     * @var string
+     *
+     * @ORM\Column(name="score_label", type="string", nullable=true)
+     */
+    private $scoreLabel;
+
+    /**
+     * Score color
+     *
+     * @var integer
+     *
+     * @ORM\Column(name="score_color", type="string", length=50, nullable=true)
+     */
+    private $scoreColor;
+
+    /**
      * @var Collection
      *
      * @ORM\OneToMany(
@@ -82,5 +100,44 @@ class Restitution
 
         return $this;
     }
-}
 
+    /**
+     * @return string
+     */
+    public function getScoreLabel()
+    {
+        return $this->scoreLabel;
+    }
+
+    /**
+     * @param string $scoreLabel
+     *
+     * @return Restitution
+     */
+    public function setScoreLabel($scoreLabel)
+    {
+        $this->scoreLabel = $scoreLabel;
+
+        return $this;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getScoreColor()
+    {
+        return $this->scoreColor;
+    }
+
+    /**
+     * @param mixed $scoreColor
+     *
+     * @return Restitution
+     */
+    public function setScoreColor($scoreColor)
+    {
+        $this->scoreColor = $scoreColor;
+
+        return $this;
+    }
+}

@@ -3,6 +3,7 @@
 namespace HopitalNumerique\AutodiagBundle\Model\FileImport;
 
 use HopitalNumerique\AutodiagBundle\Model\AutodiagFileImport;
+use HopitalNumerique\AutodiagBundle\Service\Import\AlgorithmWriter;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Validator\Context\ExecutionContextInterface;
 
@@ -38,7 +39,9 @@ class Algorithm extends AutodiagFileImport
 
             if (count($headers) !== 31
                 || count(array_intersect($headers, [
-                    'algorithme',
+                    AlgorithmWriter::COLUMN_ALGORITHM,
+                    AlgorithmWriter::COLUMN_SCORE_COLOR,
+                    AlgorithmWriter::COLUMN_SCORE_LABEL,
                     'libelle_valeur_reference_1',
                     'calcul_valeur_reference_1',
                     'couleur_reference_1',

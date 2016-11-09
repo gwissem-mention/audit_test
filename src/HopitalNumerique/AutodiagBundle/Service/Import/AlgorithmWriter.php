@@ -5,6 +5,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\EntityManager;
 use HopitalNumerique\AutodiagBundle\Entity\Autodiag;
 use HopitalNumerique\AutodiagBundle\Entity\Autodiag\Attribute;
+use HopitalNumerique\AutodiagBundle\Entity\Restitution;
 use HopitalNumerique\AutodiagBundle\Service\Attribute\AttributeBuilderProvider;
 use Nodevo\Component\Import\Progress\ProgressAwareInterface;
 use Nodevo\Component\Import\Progress\ProgressAwareTrait;
@@ -16,6 +17,8 @@ class AlgorithmWriter implements WriterInterface, ProgressAwareInterface
     use ProgressAwareTrait;
 
     const COLUMN_ALGORITHM = "algorithme";
+    const COLUMN_SCORE_COLOR = "couleur_mon_score";
+    const COLUMN_SCORE_LABEL = "libelle_mon_score";
 
     /** @var EntityManager */
     protected $manager;
@@ -31,7 +34,12 @@ class AlgorithmWriter implements WriterInterface, ProgressAwareInterface
 
     public function prepare()
     {
-
+        $restitution = $this->autodiag->getRestitution();
+        if (null === $restitution) {
+            $restitution = new Restitution();
+            $this->autodiag->setRestitution($restitution);
+        }
+        $this->manager->flush();
     }
 
     public function write($item)
@@ -40,7 +48,11 @@ class AlgorithmWriter implements WriterInterface, ProgressAwareInterface
 
             $this->autodiag->setAlgorithm($item[self::COLUMN_ALGORITHM]);
 
-            $currentColumn = 1;
+            $restitution = $this->autodiag->getRestitution();
+            $restitution->setScoreColor($item[self::COLUMN_SCORE_COLOR]);
+            $restitution->setScoreLabel($item[self::COLUMN_SCORE_LABEL]);
+
+            $currentColumn = 3;
             $referenceNumber = 1;
             $importedReferences = [];
             while ($currentColumn + 3 <= count($item)) {
@@ -101,7 +113,7 @@ class AlgorithmWriter implements WriterInterface, ProgressAwareInterface
     protected function validate($item)
     {
         return
-            count($item) >= 1
+            count($item) >= 3
             && in_array($item[self::COLUMN_ALGORITHM], [
                 'moyenne'
             ])

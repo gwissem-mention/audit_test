@@ -3,6 +3,7 @@ namespace HopitalNumerique\AutodiagBundle\Service;
 
 use HopitalNumerique\AutodiagBundle\Entity\Autodiag;
 use HopitalNumerique\AutodiagBundle\Entity\Autodiag\Container;
+use HopitalNumerique\AutodiagBundle\Entity\Restitution;
 use HopitalNumerique\AutodiagBundle\Entity\Restitution\Category;
 use HopitalNumerique\AutodiagBundle\Entity\Restitution\Item as RestitutionItem;
 use HopitalNumerique\AutodiagBundle\Model\Autodiag\SynthesisReference;
@@ -58,6 +59,9 @@ class RestitutionCalculator
      */
     protected $completion;
 
+    /** @var Restitution */
+    private $restitution;
+
     protected $items = [];
     protected $references = [];
     protected $synthesisScores = [];
@@ -97,11 +101,11 @@ class RestitutionCalculator
     {
         $autodiag = $synthesis->getAutodiag();
 
-        $restitution = $this->restitutionRepository->getForAutodiag($autodiag);
+        $this->restitution = $this->restitutionRepository->getForAutodiag($autodiag);
 
         $result = [];
 
-        foreach ($restitution->getCategories() as $category) {
+        foreach ($this->restitution->getCategories() as $category) {
             /** @var Category $category */
             foreach ($category->getItems() as $item) {
                 /** @var RestitutionItem $item */
@@ -192,7 +196,7 @@ class RestitutionCalculator
             $resultItem = new ResultItem();
             $resultItem->setLabel($container->getExtendedLabel());
             $resultItem->setScore(
-                new Score($score, 'Mon score')
+                new Score($score, $this->restitution->getScoreLabel(), null, $this->restitution->getScoreColor())
             );
 
             $resultItem->setNumberOfQuestions($this->completion->getAttributesCount($container));

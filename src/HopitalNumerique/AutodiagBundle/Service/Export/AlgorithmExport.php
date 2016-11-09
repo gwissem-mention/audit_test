@@ -2,6 +2,7 @@
 namespace HopitalNumerique\AutodiagBundle\Service\Export;
 
 use HopitalNumerique\AutodiagBundle\Entity\Autodiag;
+use HopitalNumerique\AutodiagBundle\Service\Import\AlgorithmWriter;
 
 class AlgorithmExport extends AbstractExport
 {
@@ -16,8 +17,11 @@ class AlgorithmExport extends AbstractExport
         $this->writeHeader($sheet);
 
         $row = [
-            $autodiag->getAlgorithm()
+            $autodiag->getAlgorithm(),
+            $autodiag->getRestitution()->getScoreColor(),
+            $autodiag->getRestitution()->getScoreLabel(),
         ];
+
         $references = $autodiag->getReferences();
         $referencesKeyed = [];
         foreach ($references as $reference) {
@@ -41,7 +45,11 @@ class AlgorithmExport extends AbstractExport
 
     protected function writeHeader(\PHPExcel_Worksheet $sheet)
     {
-        $data = ['algorithme'];
+        $data = [
+            AlgorithmWriter::COLUMN_ALGORITHM,
+            AlgorithmWriter::COLUMN_SCORE_COLOR,
+            AlgorithmWriter::COLUMN_SCORE_LABEL,
+        ];
         for ($i = 1; $i <= $this->referencesCount; $i++) {
             $data = array_merge($data, [
                 'libelle_valeur_reference_' . $i,
