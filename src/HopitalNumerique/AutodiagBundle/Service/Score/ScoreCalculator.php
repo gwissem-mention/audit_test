@@ -112,6 +112,7 @@ class ScoreCalculator
     public function computeEntryScoreForContainers(AutodiagEntry $entry, $containers)
     {
         $syntheses = $entry->getSyntheses();
+        $countSyntheses = count($syntheses);
 
         foreach ($syntheses as $synthesis) {
             $values = $this->valueRepository->getSynthesisValuesForAlgorithm($synthesis);
@@ -129,6 +130,12 @@ class ScoreCalculator
                     }
                     $existingScore->setScore($score->getScore());
                     $existingScore->setComplete($this->completion->isComplete($synthesis, $container));
+
+                    // Dans le cas d'une synthèse d'une seule entry, on set le min et max
+                    if ($countSyntheses === 1) {
+                        $existingScore->setMin($score->getScore());
+                        $existingScore->setMax($score->getScore());
+                    }
                 }
             }
 

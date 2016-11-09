@@ -7,6 +7,7 @@ use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\Query\Expr\Join;
 use HopitalNumerique\AutodiagBundle\Entity\Autodiag\Attribute;
 use HopitalNumerique\AutodiagBundle\Entity\Autodiag\Container;
+use HopitalNumerique\AutodiagBundle\Entity\Synthesis;
 
 class ScoreRepository extends EntityRepository
 {
@@ -32,7 +33,11 @@ class ScoreRepository extends EntityRepository
         $result = $qb->getQuery()->getArrayResult();
         $data = [];
         foreach ($result as $score) {
-            $data[$score['id']] = $score['score'];
+            $data[$score['id']] = [
+                'score' => $score['score'],
+                'min' => $score['min_score'],
+                'max' => $score['max_score'],
+            ];
         }
         return $data;
     }
@@ -41,7 +46,7 @@ class ScoreRepository extends EntityRepository
     {
         $qb = $this->createQueryBuilder('score');
         $qb
-            ->select('score.score')
+            ->select('score.score', 'score.min as min_score', 'score.max as max_score')
             ->where('score.synthesis = :synthesis_id')
             ->setParameter('synthesis_id', $synthesisId)
         ;
@@ -49,6 +54,8 @@ class ScoreRepository extends EntityRepository
     }
 
     /**
+     * Get score for references
+     *
      * @param Container $container
      * @return array
      */
@@ -72,5 +79,26 @@ class ScoreRepository extends EntityRepository
         return array_map(function ($score) {
             return $score['score'];
         }, $result);
+    }
+
+    public function getBoundariesFromSyntheses(Container $container, $synthesesIds)
+    {
+        $qb = $this->createQueryBuilder('score');
+        $qb
+            ->select(
+                'MIN(score.min) as min_score',
+                'MAX(score.max) as max_score'
+            )
+            ->where(
+                $qb->expr()->eq('score.container', $container->getId())
+            )
+            ->andWhere(
+                $qb->expr()->in('score.synthesis', $synthesesIds)
+            )
+        ;
+
+        $result = $qb->getQuery()->getOneOrNullResult(AbstractQuery::HYDRATE_ARRAY);
+
+        return $result;
     }
 }

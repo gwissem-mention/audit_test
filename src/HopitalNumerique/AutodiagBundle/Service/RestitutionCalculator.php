@@ -5,6 +5,7 @@ use HopitalNumerique\AutodiagBundle\Entity\Autodiag;
 use HopitalNumerique\AutodiagBundle\Entity\Autodiag\Container;
 use HopitalNumerique\AutodiagBundle\Entity\Restitution\Category;
 use HopitalNumerique\AutodiagBundle\Entity\Restitution\Item as RestitutionItem;
+use HopitalNumerique\AutodiagBundle\Model\Autodiag\SynthesisReference;
 use HopitalNumerique\AutodiagBundle\Model\Result\Item as ResultItem;
 use HopitalNumerique\AutodiagBundle\Entity\Synthesis;
 use HopitalNumerique\AutodiagBundle\Model\Result\Item;
@@ -142,8 +143,8 @@ class RestitutionCalculator
         // max de la synthèse
         if ($synthesis->getEntries()->count() > 1) {
             $references = [
-                (new Autodiag\Reference('min', $synthesis->getAutodiag()))->setValue('min')->setLabel('Minimum'),
-                (new Autodiag\Reference('max', $synthesis->getAutodiag()))->setValue('max')->setLabel('Maximum'),
+                SynthesisReference::create($synthesis, 'min')->setValue('min')->setLabel('Minimum'),
+                SynthesisReference::create($synthesis, 'max')->setValue('max')->setLabel('Maximum'),
             ];
         }
 
@@ -310,17 +311,30 @@ class RestitutionCalculator
         ]);
 
         if (!array_key_exists($cacheKey, $this->references)) {
-            $referenceScores = $this->getContainerScores($container);
 
             $score = null;
-            if (count($referenceScores) > 0) {
+
+            if ($reference instanceof SynthesisReference) {
+
                 $score = new Score(
-                    ReferenceAlgorithm::compute($reference, $referenceScores),
+                    $this->getContainerSynthesisScore($reference->getSynthesis(), $container->getId(), $reference->getNumber()),
                     $reference->getLabel(),
                     $reference->getNumber(),
                     $reference->getColor()
                 );
+            } else {
+                $referenceScores = $this->getContainerScores($container);
+                if (count($referenceScores) > 0) {
+                    $score = new Score(
+                        ReferenceAlgorithm::compute($reference, $referenceScores),
+                        $reference->getLabel(),
+                        $reference->getNumber(),
+                        $reference->getColor()
+                    );
+                }
             }
+
+
 
             $this->references[$cacheKey] = $score;
         }
@@ -328,14 +342,14 @@ class RestitutionCalculator
         return $this->references[$cacheKey];
     }
 
-    public function getContainerSynthesisScore(Synthesis $synthesis, $containerId)
+    public function getContainerSynthesisScore(Synthesis $synthesis, $containerId, $type = 'score')
     {
         if (!array_key_exists($synthesis->getId(), $this->synthesisScores)) {
             $this->synthesisScores[$synthesis->getId()] = $this->scoreRepository->getScores($synthesis);
         }
 
         return array_key_exists($containerId, $this->synthesisScores[$synthesis->getId()])
-            ? $this->synthesisScores[$synthesis->getId()][$containerId]
+            ? $this->synthesisScores[$synthesis->getId()][$containerId][$type]
             : null;
     }
 
