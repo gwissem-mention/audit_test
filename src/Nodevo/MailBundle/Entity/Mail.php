@@ -27,6 +27,11 @@ class Mail
     /** @var integer ID du courriel de recommandation à un ami */
     const MAIL_RECOMMANDATION_TOPIC_ID = 70;
 
+    /** ID e-mail de nouveau commentaire sur un groupe de la communauté de pratique */
+    const MAIL_CM_COMMENTAIRE_GROUPE = 71;
+
+    /** ID e-mail de nouveau commentaire sur une fiche de la communauté de pratique */
+    const MAIL_CM_COMMENTAIRE_FICHE = 72;
 
     /**
      * @var integer

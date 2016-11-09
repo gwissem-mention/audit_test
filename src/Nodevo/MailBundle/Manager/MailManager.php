@@ -1,12 +1,16 @@
 <?php
 namespace Nodevo\MailBundle\Manager;
 
+use HopitalNumerique\CommunautePratiqueBundle\Entity\Commentaire;
+use HopitalNumerique\CommunautePratiqueBundle\Entity\Fiche;
+use HopitalNumerique\CommunautePratiqueBundle\Entity\Groupe;
 use HopitalNumerique\DomaineBundle\Entity\Domaine;
 use HopitalNumerique\ObjetBundle\Entity\Objet;
 use Nodevo\MailBundle\Entity\Mail;
 use Nodevo\ToolsBundle\Manager\Manager as BaseManager;
 use Doctrine\ORM\EntityManager;
 use Symfony\Component\HttpFoundation\RequestStack;
+use Symfony\Component\Routing\RouterInterface;
 use Symfony\Component\Security\Core\SecurityContextInterface;
 use HopitalNumerique\ExpertBundle\Entity\ActiviteExpert;
 use HopitalNumerique\ExpertBundle\Entity\CourrielRegistre;
@@ -49,6 +53,10 @@ class MailManager extends BaseManager
      * @var array() Tableau clé: Nom affiché => valeur : Adresse mail
      */
     private $_mailAnap = '';
+
+    /**
+     * @var RouterInterface
+     */
     private $_router;
     private $_requestStack;
 
@@ -1185,6 +1193,62 @@ class MailManager extends BaseManager
             $currentCourriel->setBody($content);
             $message = $this->generationMail(null, $currentCourriel);
             $message->setTo($destinataire);
+
+            $this->mailer->send($message);
+        }
+    }
+
+    /**
+     * Envoi un e-mail de notification lors du dépôt de commentaire sur la communauté de pratique
+     *
+     * @param Commentaire $commentaire
+     * @return bool
+     */
+    public function sendCMCommentaireMail(Commentaire $commentaire)
+    {
+        $group = $commentaire->getGroupe();
+        // Commentaire groupe
+        if (null !== $group) {
+            /** @var Groupe $group */
+            $courriel = $this->findOneById(Mail::MAIL_CM_COMMENTAIRE_GROUPE);
+            $parameters = [
+                'nomGroupe' => $group->getTitre(),
+                'urlGroupe' => $this->_router->generate('hopitalnumerique_communautepratique_groupe_view', [
+                    'groupe' => $group->getId(),
+                ], RouterInterface::ABSOLUTE_URL),
+            ];
+            // Commentaire fiche
+        } elseif (null !== $fiche = $commentaire->getFiche()) {
+            /** @var Fiche $fiche */
+            $courriel = $this->findOneById(Mail::MAIL_CM_COMMENTAIRE_FICHE);
+            $group = $commentaire->getFiche()->getGroupe();
+            $parameters = [
+                'nomFiche' => $fiche->getQuestionPosee(),
+                'urlFiche' => $this->_router->generate('hopitalnumerique_communautepratique_fiche_view', [
+                    'fiche' => $fiche->getId(),
+                ], RouterInterface::ABSOLUTE_URL),
+            ];
+        } else {
+            return false;
+        }
+
+        foreach ($group->getUsers() as $recipient) {
+
+            /** @var User $recipient*/
+            $currentCourriel = clone($courriel);
+
+            $content = $this->replaceContent(
+                $currentCourriel->getBody(),
+                null,
+                array_merge($parameters, [
+                    'nomUtilisateur' => $commentaire->getUser()->getNom(),
+                    'prenomUtilisateur' => $commentaire->getUser()->getPrenom(),
+                ])
+            );
+
+            $currentCourriel->setBody($content);
+            $message = $this->generationMail(null, $currentCourriel);
+            $message->setTo($recipient->getEmail());
 
             $this->mailer->send($message);
         }
