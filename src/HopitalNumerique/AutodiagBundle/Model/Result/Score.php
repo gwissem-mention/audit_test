@@ -38,7 +38,7 @@ class Score
      */
     public function getLabel()
     {
-        return $this->label;
+        return $this->label ?: 'Score';
     }
 
     /**

@@ -8,7 +8,7 @@
                         <div class="title pull-left">{{ jaugeData.label }}</div>
                         <div class="header-right">
                             <span class="score">
-                                Score : {{ jaugeData.score.value is not null ? jaugeData.score.value : '-' }} / 100
+                                {{ jaugeData.score.label }} : {{ jaugeData.score.value is not null ? jaugeData.score.value : '-' }} / 100
                             </span>
                             <span class="completion-wrapper">
                                 {% set completion = (jaugeData.numberOfAnswers / jaugeData.numberOfQuestions * 100) | round %}

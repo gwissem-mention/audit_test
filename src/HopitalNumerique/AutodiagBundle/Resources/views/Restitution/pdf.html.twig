@@ -59,18 +59,18 @@
                             <div class="item-row pdf">
                                 {% set currentRow = category.items.first.row %}
                                 {% for item in category.items %}
-                                {% if item.row != currentRow %}
-                                {% set currentRow = item.row %}
-                            </div>
-                            <div class="item-row pdf">
-                                {% endif %}
+                                    {% if item.row != currentRow %}
+                                        {% set currentRow = item.row %}
+                                        </div>
+                                        <div class="item-row pdf">
+                                    {% endif %}
 
-                                {#<div class="item" data-row="{{ item.row }}" data-column="{{ item.column }}" data-item-type="{{ item.type }}">#}
-                                    {% include ("@HopitalNumeriqueAutodiag/Restitution/item/_" ~ item.type ~ ".html.twig") ignore missing with {
-                                    'restitution': item,
-                                    'result': result[item.id]
-                                    } %}
-                                {#</div>#}
+                                    <div data-item-type="{{ item.type }}">
+                                        {% include ("@HopitalNumeriqueAutodiag/Restitution/item/_" ~ item.type ~ ".html.twig") ignore missing with {
+                                        'restitution': item,
+                                        'result': result[item.id]
+                                        } %}
+                                    </div>
                                 {% endfor %}
                             </div>
                         </div>
@@ -89,7 +89,6 @@
         var restitution = new AutodiagRestitution($('#restitution'));
         restitution.addHandler('jauge', 'Jauge');
         restitution.initItems();
-
 
         $(function() {
             $('.plan_action').each(function() {

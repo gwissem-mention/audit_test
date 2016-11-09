@@ -1,3 +1,5 @@
+{% set scoreHeadLabel = result.items.0 is defined ? result.items.0.score.label : "Score" %}
+
 <div class="item-inner">
     <div class="tableau">
         <table class="table table-striped table-bordered">
@@ -5,7 +7,7 @@
                 <tr>
                     <th></th>
                     <th>Nombre de réponses</th>
-                    <th>Score</th>
+                    <th>{{ scoreHeadLabel }}</th>
                     {% if compare is defined %}
                         <th>{{ compare.reference.name }}</th>
                         <th>Variation</th>
