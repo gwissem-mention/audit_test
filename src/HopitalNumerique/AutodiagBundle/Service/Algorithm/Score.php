@@ -3,14 +3,11 @@
 namespace HopitalNumerique\AutodiagBundle\Service\Algorithm;
 
 use Doctrine\ORM\EntityManager;
-use HopitalNumerique\AutodiagBundle\Entity\Autodiag;
 use HopitalNumerique\AutodiagBundle\Entity\Autodiag\Container;
-use HopitalNumerique\AutodiagBundle\Entity\AutodiagEntry;
-use HopitalNumerique\AutodiagBundle\Entity\Synthesis;
 use HopitalNumerique\AutodiagBundle\Service\Attribute\AttributeBuilderProvider;
 use HopitalNumerique\AutodiagBundle\Service\Attribute\PresetableAttributeBuilderInterface;
 
-class Score
+class Score implements AlgorithmInterface
 {
     /**
      * @var EntityManager

@@ -21,7 +21,7 @@ class BoundaryScoreListener
 
     public function onSynthesisGenerated(SynthesisGeneratedEvent $event)
     {
-        $this->boundaryCalculator->computeBoundaries(
+        $this->boundaryCalculator->guessBoundaries(
             $event->getSynthesis(),
             $event->getSource()
         );

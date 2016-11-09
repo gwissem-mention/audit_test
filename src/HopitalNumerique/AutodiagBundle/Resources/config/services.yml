@@ -91,7 +91,7 @@ services:
             - 'HopitalNumeriqueAutodiagBundle:Autodiag\Container'
 
     autodiag.repository.score:
-        class: HopitalNumerique\AutodiagBundle\Repository\Autodiag\ContainerRepository
+        class: HopitalNumerique\AutodiagBundle\Repository\ScoreRepository
         factory: ["@doctrine.orm.entity_manager", "getRepository"]
         arguments:
             - 'HopitalNumeriqueAutodiagBundle:Score'
@@ -163,6 +163,8 @@ services:
         arguments:
             - '@doctrine.orm.entity_manager'
             - '@autodiag.repository.score'
+            - '@autodiag.repository.autodiagentryvalue'
+            - '@autodiag.algorithm.score'
 
     autodiag.algorithm.score:
         class: HopitalNumerique\AutodiagBundle\Service\Algorithm\Score

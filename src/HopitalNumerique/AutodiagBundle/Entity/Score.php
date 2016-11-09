@@ -42,14 +42,14 @@ class Score
     /**
      * @var float
      *
-     * @ORM\Column(type="float", nullable=true)
+     * @ORM\Column(name="score_min", type="float", nullable=true)
      */
     private $min;
 
     /**
      * @var float
      *
-     * @ORM\Column(type="float", nullable=true)
+     * @ORM\Column(name="score_max", type="float", nullable=true)
      */
     private $max;
 

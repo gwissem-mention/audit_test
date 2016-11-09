@@ -3,14 +3,13 @@
 namespace HopitalNumerique\AutodiagBundle\Service\Score;
 
 use Doctrine\ORM\EntityManager;
-use Doctrine\ORM\EntityRepository;
 use HopitalNumerique\AutodiagBundle\Entity\Autodiag;
 use HopitalNumerique\AutodiagBundle\Entity\Autodiag\Container;
 use HopitalNumerique\AutodiagBundle\Entity\AutodiagEntry;
 use HopitalNumerique\AutodiagBundle\Entity\Synthesis;
 use HopitalNumerique\AutodiagBundle\Repository\AutodiagEntry\ValueRepository;
+use HopitalNumerique\AutodiagBundle\Repository\ScoreRepository;
 use HopitalNumerique\AutodiagBundle\Service\Algorithm\Score;
-use HopitalNumerique\AutodiagBundle\Service\Locker;
 use HopitalNumerique\AutodiagBundle\Service\Synthesis\Completion;
 use Symfony\Component\Process\PhpExecutableFinder;
 use Symfony\Component\Process\Process;
@@ -28,7 +27,7 @@ class ScoreCalculator
     protected $valueRepository;
 
     /**
-     * @var EntityRepository
+     * @var ScoreRepository
      */
     protected $scoreRepository;
 
@@ -54,7 +53,7 @@ class ScoreCalculator
     public function __construct(
         Score $algorithm,
         ValueRepository $valueRepository,
-        EntityRepository $scoreRepository,
+        ScoreRepository $scoreRepository,
         Completion $completion,
         EntityManager $entityManager,
         $rootDir

@@ -3,9 +3,7 @@
 namespace HopitalNumerique\AutodiagBundle\Command;
 
 use HopitalNumerique\AutodiagBundle\Entity\Autodiag;
-use HopitalNumerique\AutodiagBundle\Entity\Synthesis;
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
-use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputDefinition;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
@@ -22,6 +20,7 @@ class ScoreCalculatorCommand extends ContainerAwareCommand
                 new InputDefinition([
                     new InputOption('autodiag', 'a', InputOption::VALUE_OPTIONAL),
                     new InputOption('synthesis', 'sy', InputOption::VALUE_OPTIONAL),
+                    new InputOption('boundaries', 'b'),
                 ])
             )
         ;
@@ -37,6 +36,10 @@ class ScoreCalculatorCommand extends ContainerAwareCommand
 
             if ($synthesis) {
                 $this->getContainer()->get('autodiag.score_calculator')->computeSynthesisScore($synthesis);
+
+                if (true === $options['boundaries']) {
+                    $this->getContainer()->get('autodiag.score_boundary_calculator')->computeBoundaries($synthesis);
+                }
             }
             return true;
         }

@@ -43,30 +43,25 @@ class ValueRepository extends EntityRepository
         return $qb->getQuery()->getResult();
     }
 
+    /**
+     * Get all values formatted for AlgorithmInterface
+     *
+     * @param Synthesis $synthesis
+     * @return array
+     */
     public function getSynthesisValuesForAlgorithm(Synthesis $synthesis)
     {
-        $qb = $this->createQueryBuilder('v');
+        $qb = $this->createSynthesisValuesForAlgorithmQueryBuilder($synthesis);
+
+        return $qb->getQuery()->getArrayResult();
+    }
+
+    public function getSynthesisEntryValuesForAlgorithm(Synthesis $synthesis, AutodiagEntry $entry)
+    {
+        $qb = $this->createSynthesisValuesForAlgorithmQueryBuilder($synthesis);
         $qb
-            ->select(
-                'container.id as container_id',
-                'attribute.id as attribute_id',
-                'attribute.type as type',
-                'container_weight.weight as weight',
-                'MAX(options.value) as highest',
-                'MIN(options.value) as lowest',
-                'v.value'
-            )
-            ->join('v.entry', 'entry')
-            ->join('entry.syntheses', 'syntheses')
-            ->join('v.attribute', 'attribute')
-            ->leftJoin('attribute.options', 'options', Join::WITH, 'options.value != \'-1\'')
-            ->join(Weight::class, 'container_weight', Join::WITH, 'container_weight.attribute = attribute.id')
-            ->join('container_weight.container', 'container')
-            ->where('syntheses.id = :synthesis_id')
-            ->groupBy('attribute.id')
-            ->addGroupBy('container.id')
-            ->addGroupBy('v.id')
-            ->setParameter('synthesis_id', $synthesis->getId())
+            ->andWhere('entry.id = :entry_id')
+            ->setParameter('entry_id', $entry->getId())
         ;
 
         return $qb->getQuery()->getArrayResult();
@@ -222,5 +217,34 @@ class ValueRepository extends EntityRepository
         });
 
         return $result;
+    }
+
+    public function createSynthesisValuesForAlgorithmQueryBuilder(Synthesis $synthesis)
+    {
+        $qb = $this->createQueryBuilder('v');
+        $qb
+            ->select(
+                'container.id as container_id',
+                'attribute.id as attribute_id',
+                'attribute.type as type',
+                'container_weight.weight as weight',
+                'MAX(options.value) as highest',
+                'MIN(options.value) as lowest',
+                'v.value'
+            )
+            ->join('v.entry', 'entry')
+            ->join('entry.syntheses', 'syntheses')
+            ->join('v.attribute', 'attribute')
+            ->leftJoin('attribute.options', 'options', Join::WITH, 'options.value != \'-1\'')
+            ->join(Weight::class, 'container_weight', Join::WITH, 'container_weight.attribute = attribute.id')
+            ->join('container_weight.container', 'container')
+            ->where('syntheses.id = :synthesis_id')
+            ->groupBy('attribute.id')
+            ->addGroupBy('container.id')
+            ->addGroupBy('v.id')
+            ->setParameter('synthesis_id', $synthesis->getId())
+        ;
+
+        return $qb;
     }
 }
