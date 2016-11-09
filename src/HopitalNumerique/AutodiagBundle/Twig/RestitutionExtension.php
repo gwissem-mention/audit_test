@@ -76,7 +76,7 @@ class RestitutionExtension extends \Twig_Extension
 
             $data['series']['score']['name'] = $item->getScore()->getLabel();
             $data['series']['score']['data'][] = $item->getScore()->getValue();
-            $data['series']['score']['color'][] = $item->getScore()->getColor();
+            $data['series']['score']['color'] = $item->getScore()->getColor();
 
             foreach ($item->getReferences() as $reference) {
                 $code = $reference->getCode();
@@ -176,7 +176,7 @@ class RestitutionExtension extends \Twig_Extension
 
             $data['series']['score']['name'] = $item->getScore()->getLabel();
             $data['series']['score']['data'][] = $item->getScore()->getValue();
-            $data['series']['score']['color'][] = $item->getScore()->getColor();
+            $data['series']['score']['color'] = $item->getScore()->getColor();
 
             foreach ($item->getReferences() as $reference) {
                 $code = $reference->getCode();
