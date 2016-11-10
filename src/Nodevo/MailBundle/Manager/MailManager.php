@@ -1233,6 +1233,9 @@ class MailManager extends BaseManager
         }
 
         foreach ($group->getUsers() as $recipient) {
+            
+            if(!$recipient->isActifInGroupe($group) && !$group->hasAnimateur($recipient) && !$recipient->hasRoleAdmin() && !$recipient->hasRoleAdminHn())
+                continue;
 
             /** @var User $recipient*/
             $currentCourriel = clone($courriel);
