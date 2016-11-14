@@ -168,6 +168,9 @@ class InscriptionController extends Controller
     
         //Suppression de l'entitée
         $this->get('hopitalnumerique_module.manager.inscription')->save( $inscription );
+
+        $class = 'HopitalNumerique\ModuleBundle\Entity\Module';
+        $this->container->get('hopitalnumerique_core.log')->logger('desinscription', $inscription->getSession()->getModule(), $inscription->getSession()->getModule()->getTitre(), $class, $inscription->getUser());
     
         $this->get('session')->getFlashBag()->add('info', 'L\'inscription de ' . $inscription->getUser()->getAppellation() . ' est annulée.');
     
@@ -221,8 +224,11 @@ class InscriptionController extends Controller
                 $this->get('hopitalnumerique_module.manager.inscription')->save($inscription);
                 
                 // On envoi une 'flash' pour indiquer à l'utilisateur que l'entité est ajoutée
-                $this->get('session')->getFlashBag()->add( ($new ? 'success' : 'info') , 'Inscription ' . ($new ? 'ajoutée.' : 'mise à jour.') ); 
-                
+                $this->get('session')->getFlashBag()->add( ($new ? 'success' : 'info') , 'Inscription ' . ($new ? 'ajoutée.' : 'mise à jour.') );
+
+                $class = 'HopitalNumerique\ModuleBundle\Entity\Module';
+                $this->container->get('hopitalnumerique_core.log')->logger('inscription', $inscription->getSession()->getModule(), $inscription->getSession()->getModule()->getTitre(), $class, $inscription->getUser());
+
                 //on redirige vers la page index ou la page edit selon le bouton utilisé
                 $do = $request->request->get('do');
                 return $this->redirect( ($do == 'save-close' ? $this->generateUrl('hopitalnumerique_module_module_session_inscription', array('id' => $inscription->getSession()->getId())) : $this->generateUrl('hopitalnumerique_module_module_session_inscription_edit', array( 'id' => $inscription->getId() ) ) ) );

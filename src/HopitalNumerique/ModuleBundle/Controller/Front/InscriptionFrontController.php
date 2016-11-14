@@ -47,6 +47,10 @@ class InscriptionFrontController extends Controller
                             'module'    => $inscription->getSession()->getModule()->getTitre()
                         ));
                 $this->get('mailer')->send($mail);
+
+                $class = 'HopitalNumerique\ModuleBundle\Entity\Module';
+
+                $this->container->get('hopitalnumerique_core.log')->logger('inscription', $inscription->getSession()->getModule(), $inscription->getSession()->getModule()->getTitre(), $class, $this->getUser());
             }
             
             $this->get('hopitalnumerique_module.manager.inscription')->save($inscription);
@@ -181,6 +185,10 @@ class InscriptionFrontController extends Controller
             $this->get('hopitalnumerique_module.manager.inscription')->toogleEtatEvaluation( array($inscription), $this->get('hopitalnumerique_reference.manager.reference')->findOneBy( array( 'id' => 430) ) );   
             
             $this->get('session')->getFlashBag()->add( ('success') , 'Votre inscription à la session "'. $inscription->getSession()->getModule()->getTitre() .'" été annulée.' );
+
+            $class = 'HopitalNumerique\ModuleBundle\Entity\Module';
+
+            $this->container->get('hopitalnumerique_core.log')->logger('desinscription', $inscription->getSession()->getModule(), $inscription->getSession()->getModule()->getTitre(), $class, $this->getUser());
         }
         else
         {
