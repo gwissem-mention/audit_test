@@ -2,6 +2,7 @@
 
 namespace HopitalNumerique\AutodiagBundle\Controller\Front;
 
+use Gedmo\Loggable\Entity\LogEntry;
 use HopitalNumerique\AutodiagBundle\Entity\Synthesis;
 use HopitalNumerique\AutodiagBundle\Form\Type\ShareType;
 use HopitalNumerique\AutodiagBundle\Form\Type\Synthesis\CompareType;
@@ -47,7 +48,7 @@ class ShareController extends Controller
         if ($form->isSubmitted() && $form->isValid()) {
             $share = $this->get('autodiag.synthesis.share');
             $notFounds = $share->shareFromString($synthesis, $form->get('shares')->getData());
-
+            $em = $this->getDoctrine()->getManager();
             if (!empty($notFounds)) {
                 $this->addFlash(
                     'danger',
@@ -55,7 +56,7 @@ class ShareController extends Controller
                 );
             }
 
-            $this->getDoctrine()->getManager()->flush();
+            $em->flush();
             return $this->redirectToRoute(
                 $noLayout ? 'hopitalnumerique_autodiag_share_index_no_layout' : 'hopitalnumerique_autodiag_share_index',
                 [
