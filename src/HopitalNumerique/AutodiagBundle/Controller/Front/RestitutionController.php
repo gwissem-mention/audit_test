@@ -48,6 +48,7 @@ class RestitutionController extends Controller
                 200,
                 array(
                     'Content-Type'        => 'application/pdf',
+                    'Content-Disposition' => 'filename="export.pdf"'
                 )
             );
         }
