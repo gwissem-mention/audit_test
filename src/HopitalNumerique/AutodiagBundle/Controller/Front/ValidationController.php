@@ -4,9 +4,12 @@ namespace HopitalNumerique\AutodiagBundle\Controller\Front;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use HopitalNumerique\AutodiagBundle\Entity\Synthesis;
+use HopitalNumerique\AutodiagBundle\Event\DataEvent;
 use HopitalNumerique\AutodiagBundle\Event\SynthesisEvent;
+use HopitalNumerique\AutodiagBundle\EventListener\LogListener;
 use HopitalNumerique\AutodiagBundle\Events;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\EventDispatcher\EventDispatcher;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 
@@ -53,11 +56,15 @@ class ValidationController extends Controller
             throw new AccessDeniedHttpException();
         }
 
-        $validate = $synthesis->validate();
+        $validate = $synthesis->validate($this->getUser());
         if (false === $validate) {
             $this->addFlash('error', $this->get('translator')->trans('ad.validation.error'));
             return $this->redirect($request->headers->get('referer'));
         }
+
+        $dispatcher = $this->get('event_dispatcher');
+        $event = new SynthesisEvent($synthesis);
+        $dispatcher->dispatch(Events::SYNTHESIS_VALIDATED, $event);
 
         $this->getDoctrine()->getManager()->flush();
 
