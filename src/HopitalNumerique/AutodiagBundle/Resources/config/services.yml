@@ -185,7 +185,9 @@ services:
 
     autodiag.synthesis.share:
         class: HopitalNumerique\AutodiagBundle\Service\Share
-        arguments: ['@doctrine.orm.entity_manager']
+        arguments:
+            - '@doctrine.orm.entity_manager'
+            - '@event_dispatcher'
 
     autodiag.synthesis.generator:
         class: HopitalNumerique\AutodiagBundle\Service\Synthesis\SynthesisGenerator
