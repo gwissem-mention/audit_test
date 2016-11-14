@@ -1,7 +1,7 @@
 {% if logs %}
     <div class="panel panel-default gray">
         <a data-toggle="collapse" data-parent="#accordion" href="#collapseHistorique" class="collapsed" id="historique_collapse">
-            <div class="panel-heading"><h4>Historique</h4></div>
+            <div class="panel-heading"><h4>Historique Fiche</h4></div>
         </a>
         <div id="collapseHistorique" class="collapse" style="height: 0px;">
             <div class="panel-body">
@@ -38,3 +38,58 @@
         </div>
     </div>
 {% endif %}
+
+<div class="panel panel-default gray">
+    <a data-toggle="collapse" data-parent="#accordion" href="#collapseHistoriqueDivers" class="collapsed" id="historique_collapse">
+        <div class="panel-heading"><h4>Historique Divers</h4></div>
+    </a>
+    <div id="collapseHistoriqueDivers" class="collapse" style="height: 0px;">
+        <div class="panel-body">
+            <div class="col-md-12">
+                {% if logsSynthesis is not empty %}
+                    <h5>Autodiagnostics</h5>
+                    <table class="table table-bordered table-striped">
+                        <thead>
+                        <tr>
+                            <th width="100px">Type</th>
+                            <th width="130px">Date</th>
+                            <th width="200px">Nom Autodiagnostic</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for logSynthesis in logsSynthesis if logSynthesis is not empty %}
+                            <tr>
+                                <td>{{ logSynthesis.action|getFrenchAction }}</td>
+                                <td>{{logSynthesis.loggedAt|date('d/m/Y H:i')}}</td>
+                                <td>{{ logSynthesis.data.name }}</td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                {% endif %}
+                {% if logsModule is not empty %}
+                    <h5>Formation</h5>
+                    <table class="table table-bordered table-striped">
+                        <thead>
+                        <tr>
+                            <th width="100px">Type</th>
+                            <th width="130px">Date</th>
+                            <th width="200px">Nom Formation</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for logModule in logsModule if logModule is not empty %}
+                            <tr>
+                                <td>{{ logModule.action|getFrenchAction }}</td>
+                                <td>{{logModule.loggedAt|date('d/m/Y H:i')}}</td>
+                                <td>{{ logModule.data.name }}</td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+
