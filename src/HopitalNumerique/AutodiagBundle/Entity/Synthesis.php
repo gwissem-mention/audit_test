@@ -6,12 +6,14 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use HopitalNumerique\UserBundle\Entity\User;
+use Gedmo\Mapping\Annotation as Gedmo;
 
 /**
  * Synthesis
  *
  * @ORM\Table(name="ad_synthesis")
  * @ORM\Entity(repositoryClass="HopitalNumerique\AutodiagBundle\Repository\SynthesisRepository")
+ * @Gedmo\Loggable
  */
 class Synthesis
 {
@@ -28,6 +30,7 @@ class Synthesis
      * @var string
      *
      * @ORM\Column(type="string")
+     * @Gedmo\Versioned
      */
     private $name;
 
@@ -86,6 +89,7 @@ class Synthesis
      *     joinColumns={@ORM\JoinColumn(name="synthesis_id", referencedColumnName="id", onDelete="CASCADE")},
      *     inverseJoinColumns={@ORM\JoinColumn(name="user_id", referencedColumnName="usr_id", onDelete="CASCADE")}
      * )
+     *
      */
     private $shares;
 
