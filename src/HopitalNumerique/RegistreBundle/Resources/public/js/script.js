@@ -32,9 +32,9 @@ function selectionnerToutesRegions()
 
     // Nouvelles régions
     var regions = ['bretagne', 'paysdelaloire', 'centrevaldeloire', 'iledefrance',
-                    'provencealpescotedazur', 'corse', 'normandie', 'aquitainelimousinpoitoucharentes',
-                    'languedocroussillonmidipyrenees', 'hautsdefrance', 'auvergnerhonealpes',
-                    'bourgognefranchecomte', 'alsacechampagneardennelorraine', 'martinique',
+                    'provencealpescotedazur', 'corse', 'normandie', 'nouvelleaquitaine',
+                    'occitanie', 'hautsdefrance', 'auvergnerhonealpes',
+                    'bourgognefranchecomte', 'grandest', 'martinique',
                     'reunion', 'guyane', 'guadeloupe', 'martinique', 'mayotte'];
     
     var regionJSON = JSON.stringify(regions);
