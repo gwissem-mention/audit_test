@@ -1,0 +1,9 @@
+services:
+    log.generator:
+        class: HopitalNumerique\CoreBundle\EventListener\LogListener
+        arguments:
+            - '@doctrine'
+            - '@service_container'
+            - '@security.token_storage'
+        tags:
+            - { name: kernel.event_subscriber }
