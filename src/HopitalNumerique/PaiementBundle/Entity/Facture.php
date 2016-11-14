@@ -4,12 +4,14 @@ namespace HopitalNumerique\PaiementBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use APY\DataGridBundle\Grid\Mapping as GRID;
+use Gedmo\Mapping\Annotation as Gedmo;
 
 /**
  * Facture
  *
  * @ORM\Table(name="hn_facture")
  * @ORM\Entity(repositoryClass="HopitalNumerique\PaiementBundle\Repository\FactureRepository")
+ * @Gedmo\Loggable
  */
 class Facture
 {
@@ -28,6 +30,7 @@ class Facture
      * @GRID\Column(visible=false)
      *
      * @ORM\Column(name="fac_name", type="string", options = {"comment" = "Nom de la facture"}, nullable=true)
+     * @Gedmo\Versioned
      */
     private $name;
 
