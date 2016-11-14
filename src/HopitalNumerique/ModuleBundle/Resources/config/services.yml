@@ -68,7 +68,7 @@ services:
     #--Manager
     hopitalnumerique_module.manager.inscription:
         class: %hopitalnumerique_module.manager.inscription.class%
-        arguments: ["@doctrine.orm.entity_manager", "@hopitalnumerique_user.manager.user"]
+        arguments: ["@doctrine.orm.entity_manager", "@hopitalnumerique_user.manager.user", "@service_container"]
 
     #--Grid
     #Inscription
