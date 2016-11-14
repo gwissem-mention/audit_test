@@ -2,8 +2,12 @@
 namespace HopitalNumerique\AutodiagBundle\Service;
 
 use Doctrine\ORM\EntityManager;
+use HopitalNumerique\AutodiagBundle\Event\DataEvent;
+use HopitalNumerique\AutodiagBundle\Event\SynthesisEvent;
+use HopitalNumerique\AutodiagBundle\Events;
 use HopitalNumerique\AutodiagBundle\Entity\Synthesis;
 use HopitalNumerique\UserBundle\Entity\User;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 class Share
 {
@@ -11,12 +15,18 @@ class Share
     protected $manager;
 
     /**
+     * @var EventDispatcherInterface
+     */
+    protected $eventDispatcher;
+
+    /**
      * Share constructor.
      * @param $manager
      */
-    public function __construct(EntityManager $manager)
+    public function __construct(EntityManager $manager, EventDispatcherInterface $eventDispatcher)
     {
         $this->manager = $manager;
+        $this->eventDispatcher = $eventDispatcher;
     }
 
     /**
@@ -30,7 +40,6 @@ class Share
     {
         $userRepository = $this->manager->getRepository(User::class);
         $notFounds = [];
-
         $emails = explode(',', $string);
         foreach ($emails as $email) {
             $email = trim($email);
@@ -41,6 +50,9 @@ class Share
                 $notFounds[] = $email;
             }
         }
+
+        $event = new SynthesisEvent($synthesis);
+        $this->eventDispatcher->dispatch(Events::SYNTHESIS_SHARED, $event);
 
         return $notFounds;
     }
