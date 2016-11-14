@@ -5,6 +5,7 @@ use HopitalNumerique\DomaineBundle\Entity\Domaine;
 use Nodevo\ToolsBundle\Manager\Manager as BaseManager;
 use Doctrine\ORM\EntityManager;
 use HopitalNumerique\UserBundle\Manager\UserManager;
+use Symfony\Component\DependencyInjection\ContainerInterface as Container;
 
 
 /**
@@ -28,11 +29,12 @@ class InscriptionManager extends BaseManager
      * @param \Doctrine\ORM\EntityManager $em EntityManager
      * @param \HopitalNumerique\UserBundle\Manager\UserManager $userManager UserManager
      */
-    public function __construct(EntityManager $em, UserManager $userManager)
+    public function __construct(EntityManager $em, UserManager $userManager, Container $container)
     {
         parent::__construct($em);
 
         $this->_userManager = $userManager;
+        $this->container = $container;
     }
 
     /**
@@ -200,6 +202,17 @@ class InscriptionManager extends BaseManager
         {
             $inscription->setEtatEvaluation( $ref );
             $this->_em->persist( $inscription );
+
+            if ($ref->getLibelle() == 'Évaluée') {
+                $action = 'evaluate';
+            } elseif ($ref->getLibelle() == 'NA') {
+                $action = 'desinscription';
+            }
+
+            if (isset($action)) {
+                $class = 'HopitalNumerique\ModuleBundle\Entity\Module';
+                $this->container->get('hopitalnumerique_core.log')->logger($action, $inscription->getSession()->getModule(), $inscription->getSession()->getModule()->getTitre(), $class, $inscription->getUser());
+            }
         }
 
         //save
