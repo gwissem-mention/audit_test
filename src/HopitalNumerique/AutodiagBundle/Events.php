@@ -25,4 +25,7 @@ final class Events
      * The event listener method receives a HopitalNumerique\AutodiagBundle\Event\SynthesisEvent
      */
     const SYNTHESIS_UNVALIDATED = 'synthesis.unvalidated';
+    const SYNTHESIS_VALIDATED = 'synthesis.validated';
+
+    const SYNTHESIS_SHARED = 'synthesis.shared';
 }
