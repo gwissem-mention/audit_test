@@ -276,8 +276,20 @@ class UserController extends Controller
         $repo = $em->getRepository('Gedmo\Loggable\Entity\LogEntry');
         $logs = $repo->getLogEntries($user);
 
+        $logsSynthesis = $repo->findBy(array(
+            'username' => $user->getUsername(),
+            'objectClass' => 'HopitalNumerique\AutodiagBundle\Entity\Synthesis'
+        ));
+
+        $logsModule = $repo->findBy(array(
+            'username' => $user->getUsername(),
+            'objectClass' => 'HopitalNumerique\ModuleBundle\Entity\Module'
+        ));
+
         return $this->render('HopitalNumeriqueUserBundle:User:historique.html.twig', array(
-            'logs' => $logs
+            'logs' => $logs,
+            'logsSynthesis' => $logsSynthesis,
+            'logsModule' => $logsModule
         ));
     }
 
