@@ -37,7 +37,8 @@ class UserExtension extends \Twig_Extension
     {
         return array(
             'informationsManquantes'  => new \Twig_Filter_Method($this, 'informationsManquantes'),
-            'formateHistoryValueUser' => new \Twig_Filter_Method($this, 'formateHistoryValueUser')
+            'formateHistoryValueUser' => new \Twig_Filter_Method($this, 'formateHistoryValueUser'),
+            'getFrenchAction' => new \Twig_Filter_Method($this, 'getFrenchAction')
         );
     }
 
@@ -49,6 +50,26 @@ class UserExtension extends \Twig_Extension
         return [
             'csrf_token' => new \Twig_Function_Method($this, 'getCsrfToken')
         ];
+    }
+
+    public function getFrenchAction($data)
+    {
+        $value = array(
+            'create' => 'Création',
+            'update' => 'Modification',
+            'share' => 'Partage',
+            'validate' => 'Validation',
+            'unvalida' => 'Annulation validation',
+            'inscript' => 'Inscription',
+            'desinscr' => 'Déinscription',
+            'evaluate' => 'Évalué'
+        );
+
+        if (array_key_exists($data, $value)) {
+            $frenchValue = $value[$data];
+        }
+
+        return $frenchValue;
     }
 
     /**
