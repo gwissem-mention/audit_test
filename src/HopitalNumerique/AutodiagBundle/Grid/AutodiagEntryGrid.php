@@ -41,10 +41,6 @@ class AutodiagEntryGrid extends Grid implements GridInterface
     public function setColumns()
     {
         $this->addColonne(
-            (new NumberColumn('id', 'ID'))->setVisible(false)
-        );
-
-        $this->addColonne(
             new TextColumn('name', 'Nom')
         );
 
@@ -53,7 +49,15 @@ class AutodiagEntryGrid extends Grid implements GridInterface
         );
 
         $this->addColonne(
+            new TextColumn('user_id', 'Id Utilisateur')
+        );
+
+        $this->addColonne(
             new TextColumn('etablissement', 'Établissement')
+        );
+
+        $this->addColonne(
+            new TextColumn('region', 'Région')
         );
 
         $this->addColonne(
@@ -250,6 +254,8 @@ class AutodiagEntryGrid extends Grid implements GridInterface
                 })->toArray();
             }
 
+            $user = $synthesis->getUser();
+
             $entryId = $synthesis->getEntries()->count() > 0 && $synthesis->getEntries()->count() < 2
                 ? $synthesis->getEntries()->first()->getId()
                 : null;
@@ -257,12 +263,14 @@ class AutodiagEntryGrid extends Grid implements GridInterface
             $data[] = [
                 'id' => $synthesis->getId(),
                 'name' => $synthesis->getName(),
-                'user' => $synthesis->getUser() !== null
-                    ? sprintf('%s %s', $synthesis->getUser()->getPrenom(), $synthesis->getUser()->getNom())
+                'user' => $user !== null
+                    ? sprintf('%s %s', $user->getPrenom(), $user->getNom())
                     : 'Anonyme',
-                'etablissement' => null !== $synthesis->getUser() && null !== $synthesis->getUser()->getEtablissementRattachementSante()
-                    ? $synthesis->getUser()->getEtablissementRattachementSante()->getNom()
+                'user_id' => $user !== null ? $user->getId() : '',
+                'etablissement' => null !== $user && null !== $user->getEtablissementRattachementSante()
+                    ? $user->getEtablissementRattachementSante()->getNom()
                     : '',
+                'region' => null !== $user && null !== $user->getRegion() ? $user->getRegion()->getLibelle() : '-',
                 'remplissage' => sprintf('%d%%', $synthesis->getCompletion()),
                 'created_at' => $synthesis->getCreatedAt(),
                 'updated_at' => $synthesis->getUpdatedAt(),

@@ -56,7 +56,7 @@
 
 {# --------------------------------------------------- grid_exports ------------------------------------------------- #}
 {% block grid_exports %}
-    <div class="exports btn-group pull-right ">
+    <div class="exports btn-group">
         {% spaceless %}
 
             {% for key, export in grid.exports %}
@@ -339,9 +339,15 @@ function {{ grid.hash }}_markAll(select)
         <form id="{{ grid.hash }}" action="{{ grid.routeUrl }}" method="post">
             <div class="grid_header">
                 <div class="total">{{grid.totalCount}} lignes</div>
-                {% if grid.massActions|length > 0 %}
-                    {{ grid_actions(grid) }}
-                {% endif %}
+                <div class="grid_all_actions">
+                    {% if grid.massActions|length > 0 %}
+                        {{ grid_actions(grid) }}
+                    {% endif %}
+
+                    {% if grid.exports|length > 0 %}
+                        {{ grid_exports(grid) }}
+                    {% endif %}
+                </div>
             </div>
             <div class="grid_body">
             <table class="table table-striped table-bordered">
@@ -367,9 +373,6 @@ function {{ grid.hash }}_markAll(select)
                 {% endblock grid_pager_results_perpage %}
             {% else %}
                 <div class="total">{{grid.totalCount}} lignes</div>
-            {% endif %}
-            {% if grid.exports|length > 0 %}
-                {{ grid_exports(grid) }}
             {% endif %}
             {% if grid.tweaks|length > 0 %}
                 {{ grid_tweaks(grid) }}
