@@ -52,7 +52,7 @@
         "doctrine/doctrine-fixtures-bundle"            : "~2.2",
         "beberlei/DoctrineExtensions"                  : "1.0.*",
         "codeconsortium/ccdn-forum-bundle"             : "dev-master",
-        "nodevo/gestionnaire-media"                    : "v1.5",
+        "nodevo/gestionnaire-media"                    : "v1.6",
         "nodevo/gestion-cookie-bundle"                 : "1.0",
         "stof/doctrine-extensions-bundle"              : "~1.1@dev",
         "codeconsortium/ccdn-component-bb-code"        : "2.0.*",
