@@ -44,6 +44,7 @@ parameters:
 
     #Extensions autorisées dans le gestionnaire de media
     nodevo_gestionnaire_media.moxie_manager.extensions_autorisees: jpg,jpeg,png,gif,html,htm,txt,docx,doc,zip,pdf,xls,xlsx,ppt,pptx,ods,odt,xlsm
+    nodevo_gestionnaire_media.moxie_manager.wwwroot: null
 
     #Activation des réseaux sociaux
     activateRsxSociaux : false
