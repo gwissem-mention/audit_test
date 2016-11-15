@@ -23,6 +23,8 @@ abstract class Grid implements GridInterface
     const SOURCE_TYPE_MANAGER  = 4;
 
     //config
+
+    /** @var \APY\DataGridBundle\Grid\Grid  */
     protected $_grid                 = null;
     /**
      * @var \Symfony\Component\DependencyInjection\ContainerInterface Container
