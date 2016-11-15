@@ -483,6 +483,15 @@ class Reference
     }
 
     /**
+     * @deprecated Should not be used, fallback for old behavior
+     * @return Reference|null
+     */
+    public function getParent()
+    {
+        return $this->getFirstParent();
+    }
+
+    /**
      * Get first parent
      *
      * @return \HopitalNumerique\ReferenceBundle\Entity\Reference|null First parent
