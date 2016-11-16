@@ -53,6 +53,10 @@ class AutodiagEntryGrid extends Grid implements GridInterface
         );
 
         $this->addColonne(
+            new TextColumn('user_email', 'Email utilisateur')
+        );
+
+        $this->addColonne(
             new TextColumn('etablissement', 'Établissement')
         );
 
@@ -267,6 +271,7 @@ class AutodiagEntryGrid extends Grid implements GridInterface
                     ? sprintf('%s %s', $user->getPrenom(), $user->getNom())
                     : 'Anonyme',
                 'user_id' => $user !== null ? $user->getId() : '',
+                'user_email' => $user !== null ? $user->getEmail() : '',
                 'etablissement' => null !== $user && null !== $user->getEtablissementRattachementSante()
                     ? $user->getEtablissementRattachementSante()->getNom()
                     : '',
