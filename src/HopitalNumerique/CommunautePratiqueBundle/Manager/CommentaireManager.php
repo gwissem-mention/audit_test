@@ -40,8 +40,13 @@ class CommentaireManager extends \Nodevo\ToolsBundle\Manager\Manager
      */
     public function save($commentaire)
     {
-        parent::save($commentaire);
+        // Envoi le mail uniquement si crÃation
+        $sendmail = (null !== $commentaire->getId()) ? false : true;
 
-        $this->mailManager->sendCMCommentaireMail($commentaire);
+        parent::save($commentaire);
+        
+        if($sendmail) {
+            $this->mailManager->sendCMCommentaireMail($commentaire);
+        }
     }
 }
