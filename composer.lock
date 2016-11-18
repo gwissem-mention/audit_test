@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "cd9547405d1c4f1006b1751f1d886aef",
-    "content-hash": "8b92551d3b2070e3e7a659ca468345c5",
+    "hash": "cc078edd12de4ed2001b1507d07c68c3",
+    "content-hash": "d2d40e7afb877e7fa134a5a2e95e7cd2",
     "packages": [
         {
             "name": "apy/datagrid-bundle",
@@ -2777,12 +2777,12 @@
         },
         {
             "name": "nodevo/gestionnaire-media",
-            "version": "1.6",
+            "version": "1.7",
             "target-dir": "Nodevo/GestionnaireMediaBundle",
             "source": {
                 "type": "git",
                 "url": "ssh://git@bitbucket.org:22/nodevo/web_symfony_bdl_moxiemanager.git",
-                "reference": "af7ff9d52f9c96f25fae132f15eab7a10ed44054"
+                "reference": "7a770976bb12d58a30645994d550258b73d92c66"
             },
             "require": {
                 "php": ">=5.3.2"
@@ -2805,7 +2805,7 @@
                 "moxie",
                 "moxiemanager"
             ],
-            "time": "2016-11-15 10:09:56"
+            "time": "2016-11-18 08:39:16"
         },
         {
             "name": "pagerfanta/pagerfanta",
