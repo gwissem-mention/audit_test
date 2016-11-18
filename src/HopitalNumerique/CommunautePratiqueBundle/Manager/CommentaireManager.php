@@ -40,7 +40,7 @@ class CommentaireManager extends \Nodevo\ToolsBundle\Manager\Manager
      */
     public function save($commentaire)
     {
-//        parent::save($commentaire);
+        parent::save($commentaire);
 
         $this->mailManager->sendCMCommentaireMail($commentaire);
     }
