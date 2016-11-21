@@ -320,7 +320,7 @@ class Search
                     if ($exaleadEntityProperties['entityId'] == $entityProperties['entityId'] && $exaleadEntityProperties['entityType'] == $entityProperties['entityType']) {
                         //$exaleadEntitiesPropertiesByGroup[$group][$i]['title'] = $entityProperties['title'];
                         //$exaleadEntitiesPropertiesByGroup[$group][$i]['subtitle'] = $entityProperties['subtitle'];
-                        $exaleadEntitiesPropertiesByGroup[$group][$i]['pertinenceNiveau'] = $entityProperties['pertinenceNiveau'];
+                        $exaleadEntitiesPropertiesByGroup[$group][$i]['pertinenceNiveau'] = $exaleadEntityProperties['pertinenceNiveau'];
                         $exaleadEntitiesPropertiesByGroup[$group][$i]['categoryIds'] = $entityProperties['categoryIds'];
                         /*if (array_key_exists('categoryLabels', $entityProperties)) {
                             $exaleadEntitiesPropertiesByGroup[$group][$i]['categoryLabels'] = $entityProperties['categoryLabels'];
