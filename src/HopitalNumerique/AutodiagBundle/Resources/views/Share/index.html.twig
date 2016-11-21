@@ -59,22 +59,23 @@
                 </div>
             </div>
 
+            {% if canCompare %}
+                <div id="compare">
+                    <div class="title">
+                        <h1>{{ 'ad.compare.title'|trans }}</h1>
+                        <div class="mysep background-rose"></div>
+                    </div>
 
-            <div id="compare">
-                <div class="title">
-                    <h1>{{ 'ad.compare.title'|trans }}</h1>
-                    <div class="mysep background-rose"></div>
+                    <p>
+                        {{'Module_autodiagnostic_compare'|nodevoTexteDynamique(domaineCurrent.id)|raw|nl2br}}
+                    </p>
+
+                    {% include 'HopitalNumeriqueAutodiagBundle:Compare:_form.html.twig' with {'form': comparisonForm, domainChooserSelector: '#compare select.domain-choice'} %}
+                    <script>
+                        new CompareForm($('#compare'));
+                    </script>
                 </div>
-
-                <p>
-                    {{'Module_autodiagnostic_compare'|nodevoTexteDynamique(domaineCurrent.id)|raw|nl2br}}
-                </p>
-
-                {% include 'HopitalNumeriqueAutodiagBundle:Compare:_form.html.twig' with {'form': comparisonForm, domainChooserSelector: '#compare select.domain-choice'} %}
-                <script>
-                    new CompareForm($('#compare'));
-                </script>
-            </div>
+            {% endif %}
 
 
             <br>

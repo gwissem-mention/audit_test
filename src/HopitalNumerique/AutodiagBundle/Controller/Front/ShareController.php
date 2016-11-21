@@ -65,11 +65,21 @@ class ShareController extends Controller
             );
         }
 
-        $comparisonForm = $this->createForm(CompareType::class, new CompareCommand($synthesis), [
-            'user' => $this->getUser(),
-            'domaine' => $domain,
-            'autodiag' => $autodiag,
-        ]);
+        $canCompare = $this->get('autodiag.repository.synthesis')
+            ->hasComparableForAutodiag($this->getUser(), $autodiag);
+
+        $comparisonForm = null;
+        if ($canCompare) {
+            $comparisonForm = $this->createForm(
+                CompareType::class,
+                new CompareCommand($synthesis),
+                [
+                    'user' => $this->getUser(),
+                    'domaine' => $domain,
+                    'autodiag' => $autodiag,
+                ]
+            );
+        }
 
         if ($request->isXmlHttpRequest()) {
             return $this->render('HopitalNumeriqueAutodiagBundle:Account/partials:autodiag_list.html.twig', array(
@@ -77,7 +87,8 @@ class ShareController extends Controller
                     $this->get('autodiag.synthesis.dataformatter')->getSynthesesByAutodiag($user, $autodiag, $domain),
                 'user' => $user,
                 'in_progress' => false,
-                'comparisonForm' => $comparisonForm->createView(),
+                'comparisonForm' => $comparisonForm ? $comparisonForm->createView() : null,
+                'canCompare' => $canCompare,
             ));
         }
 
@@ -91,7 +102,8 @@ class ShareController extends Controller
             'domainesUser' => $user->getDomaines(),
             'currentDomain' => $domain,
             'noLayout' => $noLayout,
-            'comparisonForm' => $comparisonForm->createView(),
+            'comparisonForm' => $comparisonForm ? $comparisonForm->createView() : null,
+            'canCompare' => $canCompare,
         ]);
     }
 

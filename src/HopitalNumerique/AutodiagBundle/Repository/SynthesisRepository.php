@@ -107,6 +107,19 @@ class SynthesisRepository extends EntityRepository
     }
 
     /**
+     * Check if there is more than one comparable Synthesis for autodiag and user
+     *
+     * @param User $user
+     * @param Autodiag $autodiag
+     * @return bool
+     */
+    public function hasComparableForAutodiag(User $user, Autodiag $autodiag)
+    {
+        $qb = $this->createComparableQueryBuilder($user, null, $autodiag);
+        return count($qb->getQuery()->getArrayResult()) > 1;
+    }
+
+    /**
      * Retourne les synthèses qui contiennent l'entry en paramètre
      *
      * @param AutodiagEntry $entry
