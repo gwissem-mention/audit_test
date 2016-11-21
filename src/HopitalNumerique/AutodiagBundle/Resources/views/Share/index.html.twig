@@ -70,23 +70,9 @@
                     {{'Module_autodiagnostic_compare'|nodevoTexteDynamique(domaineCurrent.id)|raw|nl2br}}
                 </p>
 
-                <div class="domain-choice">
-                    <div class="row-account">
-                        <p>{{ 'ad.account.domain_selection'|trans }}</p>
-                    </div>
-                    <div class="row-account">
-                        <select class="domain-choice">
-                            <option data-url="{{ path('hopitalnumerique_autodiag_synthesis_compare_form') }}">{{ 'ad.account.domain_all'|trans }}</option>
-                            {% for domaine in domainesUser %}
-                                <option data-url="{{ path('hopitalnumerique_autodiag_synthesis_compare_form', {'domain': domaine.id}) }}"{% if currentDomain is not null and currentDomain.id == domaine.id %} selected{% endif %}>{{ domaine.nom }}</option>
-                            {% endfor %}
-                        </select>
-                    </div>
-                </div>
-
                 {% include 'HopitalNumeriqueAutodiagBundle:Compare:_form.html.twig' with {'form': comparisonForm, domainChooserSelector: '#compare select.domain-choice'} %}
                 <script>
-                    new CompareForm($('#compare'), $('#compare select.domain-choice'));
+                    new CompareForm($('#compare'));
                 </script>
             </div>
 

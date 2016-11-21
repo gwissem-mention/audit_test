@@ -2,6 +2,7 @@
 
 namespace HopitalNumerique\AutodiagBundle\Form\Type\Synthesis;
 
+use HopitalNumerique\AutodiagBundle\Entity\Autodiag;
 use HopitalNumerique\AutodiagBundle\Entity\Synthesis;
 use HopitalNumerique\AutodiagBundle\Repository\SynthesisRepository;
 use HopitalNumerique\DomaineBundle\Entity\Domaine;
@@ -46,7 +47,7 @@ class CompareType extends AbstractType
                 'class' => Synthesis::class,
                 'label' => 'ad.compare.reference',
                 'choice_label' => 'name',
-                'choices' => $this->synthesisRepository->findComparable($options['user'], $options['domaine']),
+                'choices' => $this->synthesisRepository->findComparable($options['user'], $options['domaine'], $options['autodiag']),
                 'group_by' => function ($val) {
                     if ($val instanceof Synthesis) {
                         return $val->getAutodiag()->getTitle();
@@ -109,6 +110,7 @@ class CompareType extends AbstractType
             'data_class' => 'HopitalNumerique\AutodiagBundle\Model\Synthesis\CompareCommand',
             'label_format' => 'ad.comparison.%name%',
             'domaine' => null,
+            'autodiag' => null,
             'action' => $this->router->generate('hopitalnumerique_autodiag_synthesis_compare'),
         ]);
 
@@ -118,5 +120,8 @@ class CompareType extends AbstractType
 
         $resolver->setDefined('domaine');
         $resolver->addAllowedTypes('domaine', ['null', Domaine::class]);
+
+        $resolver->setDefined('autodiag');
+        $resolver->addAllowedTypes('autodiag', ['null', Autodiag::class]);
     }
 }

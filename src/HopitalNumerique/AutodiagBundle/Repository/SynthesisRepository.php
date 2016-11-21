@@ -78,9 +78,9 @@ class SynthesisRepository extends EntityRepository
      * @param Domaine|null $domaine
      * @return array
      */
-    public function findComparable(User $user, Domaine $domaine = null)
+    public function findComparable(User $user, Domaine $domaine = null, Autodiag $autodiag = null)
     {
-        $qb = $this->createComparableQueryBuilder($user, $domaine);
+        $qb = $this->createComparableQueryBuilder($user, $domaine, $autodiag);
 
         return $qb->getQuery()->getResult();
     }
@@ -243,7 +243,7 @@ class SynthesisRepository extends EntityRepository
         return $qb->getQuery()->getOneOrNullResult(Query::HYDRATE_ARRAY);
     }
 
-    protected function createByUserQueryBuilder(User $user, Domaine $domain = null)
+    protected function createByUserQueryBuilder(User $user, Domaine $domain = null, Autodiag $autodiag = null)
     {
         $qb = $this->getEntityManager()->createQueryBuilder();
         $qb
@@ -264,12 +264,19 @@ class SynthesisRepository extends EntityRepository
             ;
         }
 
+        if ($autodiag != null) {
+            $qb
+                ->andWhere('autodiag.id = :autodiag_id')
+                ->setParameter('autodiag_id', $autodiag->getId())
+            ;
+        }
+
         return $qb;
     }
 
-    protected function createComparableQueryBuilder(User $user, Domaine $domaine = null)
+    protected function createComparableQueryBuilder(User $user, Domaine $domaine = null, Autodiag $autodiag = null)
     {
-        $qb = $this->createByUserQueryBuilder($user, $domaine);
+        $qb = $this->createByUserQueryBuilder($user, $domaine, $autodiag);
         $qb
             ->andWhere(
                 $qb->expr()->isNotNull('synthesis.validatedAt')

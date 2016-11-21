@@ -65,9 +65,10 @@ class ShareController extends Controller
             );
         }
 
-        $comparisonForm = $this->createForm(CompareType::class, new CompareCommand(), [
+        $comparisonForm = $this->createForm(CompareType::class, new CompareCommand($synthesis), [
             'user' => $this->getUser(),
             'domaine' => $domain,
+            'autodiag' => $autodiag,
         ]);
 
         if ($request->isXmlHttpRequest()) {
