@@ -227,10 +227,11 @@
                 </div>
                 <div class="col-md-4">
                     <div class="clearfix"></div>
+                    {% if user.statutEtablissementSante is not null %}
                     <div class="type">
                         <em class="icon icon-hospital11"></em>
                         <div class="contenu">
-                            {{ user.statutEtablissementSante is not null ? user.statutEtablissementSante.libelle : 'Type d\'établissement non renseigné' }}
+                            {{ user.statutEtablissementSante.libelle }}
                             {% if user.typeActivite|length > 0 -%}
                                 &nbsp;({% for activite in user.typeActivite -%}
                                     {{ (loop.first ? '' : ', ')~(activite.libelle) }}
@@ -238,14 +239,17 @@
                             {%- endif -%}
                         </div>
                     </div>
+                    {% endif %}
                 </div>
                 <div class="col-md-4">
+                   {% if user.fonctionDansEtablissementSante != '' %}
                     <div class="fonction">
                         <em class="icon icon-users149"></em>
                         <div class="contenu">
-                            {{ user.fonctionDansEtablissementSante != '' ? user.fonctionDansEtablissementSante : 'Fonction non renseignée' }}
+                            {{ user.fonctionDansEtablissementSante }}
                         </div>
                     </div>
+                    {% endif %}
                 </div>
             </div>
         </div>
@@ -369,8 +373,10 @@
             <div class="contact">
                 <span>
                     <i class="fa fa-info-circle" aria-hidden="true"></i> <a href="mailto:{{ user.email }}">Envoyer un e-mail</a>
-                    <br />
-                    <i class="fa fa-phone"></i> {% if user.telephoneDirect != '' or user.telephonePortable != '' %}{{ user.telephoneDirect != '' ? user.telephoneDirect : '' }}{{ user.telephoneDirect != '' and user.telephonePortable != '' ? ', ' : '' }}{{ user.telephonePortable != '' ? user.telephonePortable : '' }}{% else %}Téléphone non renseigné{% endif %}
+                    {% if user.telephoneDirect != '' or user.telephonePortable != '' %}
+                        <br />
+                        <i class="fa fa-phone"></i> {{ user.telephoneDirect != '' ? user.telephoneDirect : '' }}{{ user.telephoneDirect != '' and user.telephonePortable != '' ? ', ' : '' }}{{ user.telephonePortable != '' ? user.telephonePortable : '' }}
+                    {% endif %}
                 </span>
                 <br />
                 {% if user.hasRoleAmbassadeur or user.hasRoleExpert %}
@@ -384,20 +390,24 @@
                 {% endif %}
             </div>
 
+            {% if user.etablissementRattachementSante is not null or user.autreStructureRattachementSante != '' %}
             <div class="etablissement">
                 <em class="icon icon-hospital11"></em>
                 <div class="contenu">
                     {% if user.etablissementRattachementSante is not null %}
                         {{ user.etablissementRattachementSante.nom }}
-                    {% else %}
-                        {{ user.autreStructureRattachementSante != '' ? user.autreStructureRattachementSante : 'Nom d\'établissement non renseigné' }}
+                    {% elseif user.autreStructureRattachementSante != '' %}
+                        {{ user.autreStructureRattachementSante }}
                     {% endif %}
                 </div>
             </div>
+            {% endif %}
+
+            {% if user.statutEtablissementSante is not null %}
             <div class="type">
                 <em class="icon icon-medical55"></em>
                 <div class="contenu">
-                    {{ user.statutEtablissementSante is not null ? user.statutEtablissementSante.libelle : 'Type d\'établissement non renseigné' }}
+                    {{ user.statutEtablissementSante.libelle }}
                     {% if user.typeActivite|length > 0 -%}
                         <br>({% for activite in user.typeActivite -%}
                             {{ (loop.first ? '' : ', ')~(activite.libelle) }}
@@ -405,12 +415,21 @@
                     {%- endif -%}
                 </div>
             </div>
+            {% endif %}
+
+            {% if user.fonctionDansEtablissementSante != '' or user.fonctionDansEtablissementSanteReferencement is not null %}
             <div class="fonction">
                 <em class="icon icon-users149"></em>
                 <div class="contenu">
-                    {{ user.fonctionDansEtablissementSante != '' ? user.fonctionDansEtablissementSante : user.fonctionDansEtablissementSanteReferencement is not null ? user.fonctionDansEtablissementSanteReferencement.libelle : 'Fonction non renseignée' }}
+                    {% if user.fonctionDansEtablissementSante != '' %}
+                        {{ user.fonctionDansEtablissementSante }}
+                    {% elseif user.fonctionDansEtablissementSanteReferencement is not null %}
+                        {{ user.fonctionDansEtablissementSanteReferencement.libelle }}
+                    {% endif %}
                 </div>
             </div>
+            {% endif %}
+
             <div class="liens">
                 {% if groupe is not null %}
                     <div class="informations">
