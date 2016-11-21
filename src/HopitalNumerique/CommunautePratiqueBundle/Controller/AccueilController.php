@@ -43,11 +43,12 @@ class AccueilController extends \Symfony\Bundle\FrameworkBundle\Controller\Contr
         if (count($forumCategories) > 0) {
             foreach ($forumCategories as $category) {
                 $topicsByCategories[] = [
-                    'topics'      => $this->container
+                    'topics'       => $this->container
                         ->get('hopitalnumerique_forum.manager.topic')
                         ->getLastTopicsForumEpingle($category->getForum()->getId(), 4, $category->getId() ?: null),
-                    'categoryId' => $category->getId(),
-                    'forumName'   => $category->getForum()->getName(),
+                    'categoryId'   => $category->getId(),
+                    'categoryName' => $category->getName(),
+                    'forumName'    => $category->getForum()->getName(),
                 ];
             }
         }

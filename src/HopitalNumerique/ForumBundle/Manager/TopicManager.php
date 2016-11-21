@@ -137,9 +137,10 @@ class TopicManager extends BaseManager
             if (count($topicsByCategory) > 0) {
                 foreach ($topicsByCategory['topics'] as $value) {
                     $topics[] = [
-                        'topic'      => $value,
-                        'categoryId' => $topicsByCategory['categoryId'],
-                        'forumName'  => $topicsByCategory['forumName'],
+                        'topic'        => $value,
+                        'categoryId'   => $topicsByCategory['categoryId'],
+                        'categoryName' => $topicsByCategory['categoryName'],
+                        'forumName'    => $topicsByCategory['forumName'],
                     ];
                 }
             }
