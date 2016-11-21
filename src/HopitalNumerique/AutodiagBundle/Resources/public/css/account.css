@@ -58,5 +58,26 @@ i.maj::after {
 }
 
 #syntheses-content #compare {
+    margin-top: 0;
     margin-bottom: 15px;
+}
+
+#syntheses-content #compare .panel-heading {
+    background: #6F3596;
+}
+
+#syntheses-content h2 {
+    font-size: 20px !important;
+    margin: 20px 0 5px 0 !important;
+    padding-bottom: 0 !important;
+    color: #d60030 !important;
+    text-transform: none !important;
+    font-weight: normal !important;
+}
+
+#syntheses-content .mysep {
+    width: 85px;
+    height: 4px;
+    margin-bottom: 20px;
+    margin-left: 20px;
 }
