@@ -70,7 +70,9 @@
         <h2>{{ 'ad.account.valid'|trans }}</h2>
     {% endif %}
 
-    {% include '@HopitalNumeriqueAutodiag/Account/partials/_compare.html.twig' with {'form': comparisonForm} %}
+    {% if compare is defined and compare == true %}
+        {% include '@HopitalNumeriqueAutodiag/Account/partials/_compare.html.twig' with {'form': comparisonForm} %}
+    {% endif %}
 
     <form action="{{ path('hopitalnumerique_autodiag_account_generate_synthesis') }}" method="post" id="syntheses-form">
 

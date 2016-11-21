@@ -2,79 +2,15 @@
     <div class="col-md-12">
         <div id="compare" class="panel panel-primary">
 
-            <div class="panel-heading"><h4 class="panel-title">Comparer deux autodiagnistics</h4></div>
+            <div class="panel-heading"><h4 class="panel-title">{{ "ad.compare.title"|trans }}</h4></div>
             <div class="panel-body">
-                {{ form_start(form) }}
-                {{ form_widget(form) }}
-                <div class="col-md-12">
-                    <button type="submit" class="btn btn-primary pull-right">
-                        Comparer
-                    </button>
-                </div>
-                {{ form_end(form) }}
+                {% include 'HopitalNumeriqueAutodiagBundle:Compare:_form.html.twig' with {'form': form} %}
             </div>
 
         </div>
     </div>
 </div>
 
-
-
 <script>
-
-    var bindFormEvents = function() {
-        var $form = $('#compare form');
-        var $reference = $('#compare_reference');
-
-        $reference.change(function() {
-            var $form = $(this).closest('form');
-            var loader = $form.parent().nodevoLoader().start();
-            var data = {};
-            data[$reference.attr('name')] = $reference.val();
-            // Submit data via AJAX to the form's action path.
-            $.ajax({
-                url : $form.attr('action'),
-                type: $form.attr('method'),
-                data : data,
-                success: function(html) {
-                    loader.finished();
-                    $('#compare_synthesis').replaceWith(
-                        $(html).find('#compare_synthesis')
-                    );
-                }
-            });
-        });
-
-        $form.submit(function(e) {
-            e.preventDefault();
-
-            var loader = $('button[type="submit"]', this).nodevoLoader().start();
-
-            var xhr = $.ajax({
-                url : $(this).attr('action'),
-                type: $(this).attr('method'),
-                data : $(this).serialize()
-            });
-
-            xhr.complete(function(response) {
-                loader.finished();
-                var redirect = response.getResponseHeader('REDIRECT');
-                console.log(redirect);
-                if (null !== redirect) {
-                    window.location.href = redirect;
-                    return;
-                } else {
-                    $form.html($(response.responseText).find('form'));
-                    bindFormEvents();
-                }
-            });
-        });
-
-        if ($reference.val().length > 0) {
-            $reference.trigger('change');
-        }
-    };
-
-    bindFormEvents();
-
+    new CompareForm($('#compare'));
 </script>

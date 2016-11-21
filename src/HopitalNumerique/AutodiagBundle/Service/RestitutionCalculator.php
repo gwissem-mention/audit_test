@@ -101,11 +101,9 @@ class RestitutionCalculator
     {
         $autodiag = $synthesis->getAutodiag();
 
-        $this->restitution = $this->restitutionRepository->getForAutodiag($autodiag);
-
         $result = [];
 
-        foreach ($this->restitution->getCategories() as $category) {
+        foreach ($this->getRestitution($autodiag)->getCategories() as $category) {
             /** @var Category $category */
             foreach ($category->getItems() as $item) {
                 /** @var RestitutionItem $item */
@@ -196,7 +194,12 @@ class RestitutionCalculator
             $resultItem = new ResultItem();
             $resultItem->setLabel($container->getExtendedLabel());
             $resultItem->setScore(
-                new Score($score, $this->restitution->getScoreLabel(), null, $this->restitution->getScoreColor())
+                new Score(
+                    $score,
+                    $this->getRestitution($container->getAutodiag())->getScoreLabel(),
+                    null,
+                    $this->getRestitution($container->getAutodiag())->getScoreColor()
+                )
             );
 
             $resultItem->setNumberOfQuestions($this->completion->getAttributesCount($container));
@@ -491,6 +494,15 @@ class RestitutionCalculator
         $x = ($value - $b) / $a;
 
         return 100 + $x;
+    }
+
+    protected function getRestitution(Autodiag $autodiag)
+    {
+        if (null === $this->restitution) {
+            $this->restitution = $this->restitutionRepository->getForAutodiag($autodiag);
+        }
+
+        return $this->restitution;
     }
 
     public function setResultItemCreatedCallback($callback)

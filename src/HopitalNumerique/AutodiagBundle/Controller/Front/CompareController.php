@@ -7,6 +7,7 @@ use HopitalNumerique\AutodiagBundle\Entity\Synthesis;
 use HopitalNumerique\AutodiagBundle\Form\Type\Synthesis\CompareType;
 use HopitalNumerique\AutodiagBundle\Model\Synthesis\CompareCommand;
 use HopitalNumerique\AutodiagBundle\Service\Compare\CompareRestitutionCalculator;
+use HopitalNumerique\DomaineBundle\Entity\Domaine;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -90,5 +91,17 @@ class CompareController extends Controller
         );
 
         return $response;
+    }
+
+    public function formAction(Domaine $domain = null)
+    {
+        $comparisonForm = $this->createForm(CompareType::class, new CompareCommand(), [
+            'user' => $this->getUser(),
+            'domaine' => $domain,
+        ]);
+
+        return $this->render('HopitalNumeriqueAutodiagBundle:Compare:_form.html.twig', [
+            'form' => $comparisonForm->createView(),
+        ]);
     }
 }

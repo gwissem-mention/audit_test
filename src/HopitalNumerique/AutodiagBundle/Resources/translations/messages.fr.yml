@@ -194,7 +194,7 @@ ad:
         share_with: Partager mon résultat "%autodiag% - %synthesis%" avec :
         shares_placeholder: example@mail.fr
         shared_with: Mon résultat est partagé avec :
-        compare_results: Faire une synthèse de mes résultats
+        synthesis_results: Faire une synthèse de mes résultats
 
     front:
         new_entry: Nouvel autodiagnostic
@@ -230,5 +230,7 @@ ad:
         saved: Autodiagnostic enregistré.
 
     compare:
+        title: Comparer mes résultats
+        action: Comparer
         reference: Comparer le résultat (le plus récent)
         synthesis: Avec le résultat (le plus ancien)

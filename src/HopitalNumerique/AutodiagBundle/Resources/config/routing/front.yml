@@ -98,6 +98,11 @@ hopitalnumerique_autodiag_account_delete_synthesis_share:
     path:     compte-hn/autodiagnostic/delete-synthesis/{synthesis}/{currentSynthesisId}
     defaults: { _controller: HopitalNumeriqueAutodiagBundle:Front/Account:delete}
 
+hopitalnumerique_autodiag_synthesis_compare_form:
+    path: /autodiagnostic/compare/form/{domain}
+    methods: ["GET"]
+    defaults: { _controller: HopitalNumeriqueAutodiagBundle:Front/Compare:form, domain: null }
+
 hopitalnumerique_autodiag_synthesis_compare:
     path: /autodiagnostic/synthese/compare
     methods: ["POST"]
