@@ -1,6 +1,15 @@
 jQuery(document).ready(function() {
     //bind de Validation Engine
     $('form.toValidate').validationEngine();
+
+    $('.select-moveForm').select2();
+    $('.move-btn').click(function () {
+        if ($('.moveForm.form-' + $(this).attr('data-post-id')).is(":visible")) {
+            $('.moveForm.form-' + $(this).attr('data-post-id')).slideUp();
+        } else {
+            $('.moveForm.form-' + $(this).attr('data-post-id')).slideDown();
+        }
+    })
 });
 
 $(function() {
@@ -58,6 +67,7 @@ function manageCollapse(element, way)
     $(element).find('i').toggleClass('fa-arrow-down fa-arrow-right');
 }
 
+// Déplace un fil de discussion vers un autre board
 function transfertPost( url ){
     var loader     = $('#transfertDuTopic').nodevoLoader().start();
 
@@ -71,6 +81,21 @@ function transfertPost( url ){
         success  : function( data ){
            loader.finished();
            window.location = data.url;
+        }
+    });
+}
+
+// Déplace un post vers un autre fil de discussion
+function movePost(url, postId) {
+    $.ajax({
+        url: url,
+        data: {
+            topic: $("#transfert-post-" + postId).val()
+        },
+        type: 'POST',
+        dataType: 'json',
+        success: function (data) {
+            window.location = data.url;
         }
     });
 }

@@ -30,3 +30,7 @@ ccdn_forum_user_post_activation_enattente:
     pattern: /post/{post}/activation
     defaults: { _controller: HopitalNumeriqueForumBundle:UserPost:activierPostEnAttente, _locale: fr, forumName: Public }
     methods: GET
+
+ccdn_forum_user_post_move:
+    pattern: /{post}/move
+    defaults: { _controller: HopitalNumeriqueForumBundle:UserPost:move, _locale: fr, forumName: Public }
