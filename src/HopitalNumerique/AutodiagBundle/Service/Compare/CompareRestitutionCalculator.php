@@ -70,7 +70,7 @@ class CompareRestitutionCalculator
         $score = $item->getScore();
         $comparedScore = new ComparedScore(
             $score->getValue(),
-            $score->getLabel(),
+            $compare->getSynthesis()->getName(),
             $score->getCode(),
             $score->getColor()
         );
