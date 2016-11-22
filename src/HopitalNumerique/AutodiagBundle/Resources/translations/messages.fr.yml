@@ -232,5 +232,5 @@ ad:
     compare:
         title: Comparer mes résultats
         action: Comparer
-        reference: Comparer le résultat (le plus récent)
-        synthesis: Avec le résultat (le plus ancien)
+        reference: Avec le résultat (le plus ancien)
+        synthesis: Comparer le résultat (le plus récent)
