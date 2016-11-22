@@ -42,10 +42,10 @@ class CompareType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('reference', EntityType::class, [
+            ->add('synthesis', EntityType::class, [
                 'empty_value' => '-',
                 'class' => Synthesis::class,
-                'label' => 'ad.compare.reference',
+                'label' => 'ad.compare.synthesis',
                 'choice_label' => 'name',
                 'choices' => $this->synthesisRepository->findComparable($options['user'], $options['domaine'], $options['autodiag']),
                 'group_by' => function ($val) {
@@ -68,10 +68,10 @@ class CompareType extends AbstractType
                 );
             }
 
-            $form->add('synthesis', EntityType::class, [
+            $form->add('reference', EntityType::class, [
                 'empty_value' => '-',
                 'class' => Synthesis::class,
-                'label' => 'ad.compare.synthesis',
+                'label' => 'ad.compare.reference',
                 'choice_label' => 'name',
                 'choices' => $choices,
                 'group_by' => function ($val) {
@@ -92,7 +92,7 @@ class CompareType extends AbstractType
             }
         );
 
-        $builder->get('reference')->addEventListener(
+        $builder->get('synthesis')->addEventListener(
             FormEvents::POST_SUBMIT,
             function (FormEvent $event) use ($addSynthesisType) {
                 $reference = $event->getForm()->getData();

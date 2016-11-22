@@ -1,6 +1,7 @@
 <div class="compare-wrapper">
     {{ form_start(form) }}
-    {{ form_widget(form) }}
+    {{ form_row(form.synthesis) }}
+    {{ form_row(form.reference) }}
     <div class="col-md-12">
         <button type="submit" class="btn btn-primary pull-right">
             {{ "ad.compare.action"|trans }}

@@ -7,12 +7,10 @@
                 <tr>
                     <th></th>
                     <th>Nombre de réponses</th>
+                    <th>{{ scoreHeadLabel }}</th>
                     {% if compare is defined %}
                         <th>{{ compare.reference.name }}</th>
-                        <th>{{ scoreHeadLabel }}</th>
                         <th>Variation</th>
-                    {% else %}
-                        <th>{{ scoreHeadLabel }}</th>
                     {% endif %}
                     {% for code, reference in result.references %}
                         <th>{{ reference }}</th>

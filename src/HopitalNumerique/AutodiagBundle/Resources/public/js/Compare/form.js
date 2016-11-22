@@ -19,7 +19,7 @@ CompareForm.prototype = {
     {
         var instance = this;
         var $form = this.getForm();
-        var $reference = $('#compare_reference', this.element);
+        var $reference = $('#compare_synthesis', this.element);
 
         $reference.change(function() {
             instance.onReferenceChanged();
@@ -47,7 +47,7 @@ CompareForm.prototype = {
     onReferenceChanged: function()
     {
         var $form = this.getForm();
-        var $reference = $('#compare_reference', this.element);
+        var $reference = $('#compare_synthesis', this.element);
         var loader = $form.parent().nodevoLoader().start();
         var data = {};
 
@@ -59,8 +59,8 @@ CompareForm.prototype = {
             data : data,
             success: function(html) {
                 loader.finished();
-                $('#compare_synthesis').replaceWith(
-                    $(html).find('#compare_synthesis')
+                $('#compare_reference').replaceWith(
+                    $(html).find('#compare_reference')
                 );
             }
         });
