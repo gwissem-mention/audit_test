@@ -267,6 +267,7 @@ class SynthesisRepository extends EntityRepository
             ->leftJoin('synthesis.entries', 'entries')
             ->orWhere('synthesis.user = :user')
             ->orWhere('shares.id IS NOT NULL')
+            ->andWhere('synthesis.createdFrom IS NULL')
             ->setParameter('user', $user)
         ;
 
