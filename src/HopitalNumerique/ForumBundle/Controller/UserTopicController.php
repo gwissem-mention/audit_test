@@ -85,9 +85,6 @@ class UserTopicController extends UserTopicControllerCCDN
         foreach ($domainesDuForum as $domaine) {
             $domainesIds[] = $domaine->getId();
         }
-        $refsPonderees = $this->container->get('hopitalnumerique_reference.manager.reference')
-            ->getReferencesPonderees($domainesIds)
-        ;
 
         $subscriberCount = $this->getSubscriptionModel()->countSubscriptionsForTopicById($topicId);
         $this->getTopicModel()->incrementViewCounter($topic);

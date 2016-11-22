@@ -27,11 +27,40 @@
 
     {% if post.isDeleted == false %}
         <div class="col-md-12">
-            <article class="row panel {{ panel }} clearfix" {%- if post.id %} id="{{- post.getBody |slice(0,24) -}}"{#id="post_{{- post.getId -}}"#}{%- endif -%}>
+            <article class="row panel {{ panel }} clearfix" {%- if post.id %} id="{{- post.getBody |slice(0,24) -}}"{%- endif -%}>
 
                 <header class="panel-heading">
                     {%- include 'CCDNForumForumBundle:User:Post/Partial/item_post_head.html.twig' with {'post': post } -%}
                 </header>
+
+                <div class="moveForm form-{{ post.id }}">
+                    <div class="row" style="margin:15px 5px;">
+
+                        <div class="col-md-2">
+                            <label for="transfert-topic" class="control-label" style="padding-top:5px; font-size: 13px;">Transférer vers :</label>
+                        </div>
+                        <div class="col-md-8">
+                            <select name="transfert-post-{{ post.id }}" id="transfert-post-{{ post.id }}" class="form-control select-moveForm">
+                                {%- for forumCaracteristics in boards -%}
+                                    {%- for categoryCaracteristics in forumCaracteristics.categories -%}
+                                        {%- for board in categoryCaracteristics.boards if board.topics|length > 1 -%}
+                                        <optgroup label="{{ forumCaracteristics.forum }} - {{ board }}">
+                                            {% for topic in board.topics %}
+                                                <option value="{{ topic.id }}">{{ topic }}</option>
+                                            {%- endfor -%}
+                                        </optgroup>
+                                        {% endfor %}
+                                    {%- endfor -%}
+                                {%- endfor -%}
+                            </select>
+                        </div>
+
+                        <div class="col-md-2">
+                            <div onclick="movePost('{{ path('ccdn_forum_user_post_move', {'post' : post.id}) }}', {{ post.id }})" class="btn btn-success btn-block" title="">Transfert</div>
+                        </div>
+                        <div class="clearfix"></div>
+                    </div>
+                </div>
 
                 <div class="panel-body">
                     {%- include 'CCDNForumForumBundle:User:Post/Partial/item_post_body.html.twig' with {'post': post } -%}

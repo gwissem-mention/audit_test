@@ -4,6 +4,8 @@ namespace HopitalNumerique\ForumBundle\Controller;
 use CCDNForum\ForumBundle\Controller\UserPostController as UserPostControllerBase;
 use HopitalNumerique\ForumBundle\Entity\Post;
 use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Request;
 
 class UserPostController extends UserPostControllerBase
 {
@@ -60,6 +62,56 @@ class UserPostController extends UserPostControllerBase
         $this->container->get('session')->getFlashBag()->add('danger', 'Fichier introuvable.');
 
         return $this->redirectResponse($this->path('ccdn_forum_user_topic_show', ['topicId' => $post->getTopic()->getId()]));
+    }
+
+    /**
+     * @param Request $request
+     * @param Post $post
+     *
+     * @return JsonResponse
+     */
+    public function moveAction(Request $request, Post $post)
+    {
+        $ancienTopic = $post->getTopic()->getId();
+        $topicId = $request->request->get('topic');
+
+        // On vérifie que le post à déplacer ne soit pas le premier du fil
+        if ($post->getTopic()->getFirstPost()->getId() != $post->getId()) {
+            // On vérifie que l'utilisateur a le droit de déplacer le post
+            if ($this->isGranted('ROLE_ADMINISTRATEUR_1')
+                || $this->isGranted('ROLE_ADMINISTRATEUR_DU_DOMAINE_HN_107'
+                    || $this->isGranted('ROLE_ADMINISTRATEUR_DE_DOMAINE_106'))
+            ) {
+                $entityManager = $this->container->get('doctrine.orm.entity_manager');
+
+                $newTopic = $this->container->get('ccdn_forum_forum.repository.topic')->findOneTopicByIdWithPosts($topicId);
+                $post->setTopic($newTopic);
+                $post->setCreatedDate(new \DateTime());
+                $post->setEditedDate(new \DateTime());
+                $entityManager->persist($post);
+                $entityManager->flush();
+
+                $this->container->get('session')->getFlashBag()->add('success', 'Le post a bien été déplacé.');
+
+                return new JsonResponse([
+                    'success' => true,
+                    'url'     => $this->getRouter()->generate('ccdn_forum_user_topic_show', [
+                        'topicId' => $topicId,
+                    ]),
+                ], 200);
+            } else {
+                $this->container->get('session')->getFlashBag()->add('danger', 'Vous ne pouvez pas déplacer le premier post d\'un fil de discussion.');
+            }
+        } else {
+            $this->container->get('session')->getFlashBag()->add('danger', 'Vous ne pouvez pas déplacer le premier post d\'un fil de discussion.');
+        }
+
+        return new JsonResponse([
+            'success' => false,
+            'url'     => $this->getRouter()->generate('ccdn_forum_user_topic_show', [
+                'topicId' => $ancienTopic,
+            ]),
+        ], 200);
     }
 
     /**

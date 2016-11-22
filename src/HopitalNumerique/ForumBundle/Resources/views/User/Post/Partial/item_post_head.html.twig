@@ -24,7 +24,6 @@
                 </span>
             </h4>
         </div>
-
         <div class="col-md-5 pull-right text-right">
             {% if post.id and not post.isDeleted %}
                 <!--
@@ -71,6 +70,15 @@
                                  href="{{- path('ccdn_forum_user_post_edit', {'forumName': forumName, 'postId': post.getId }) -}}">
                                     <i class="fa fa-pencil"></i>
                                     {{- 'link.edit' | trans({}, ForumBundle.translation ) -}}
+                                </a>
+                            </li>
+                        {%- endif -%}
+
+                        {%- if is_granted('ROLE_ADMINISTRATEUR_1') or is_granted("ROLE_ADMINISTRATEUR_DU_DOMAINE_HN_107") or is_granted("ROLE_ADMINISTRATEUR_DE_DOMAINE_106") -%}
+                            <li>
+                                <a rel="nofollow" class="move-btn" data-post-id="{{ post.id }}">
+                                    <i class="fa fa-pencil"></i>
+                                    Déplacer
                                 </a>
                             </li>
                         {%- endif -%}
