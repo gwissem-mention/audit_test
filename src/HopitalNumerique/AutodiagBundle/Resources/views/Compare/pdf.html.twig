@@ -1,5 +1,6 @@
 {% extends 'HopitalNumeriqueAutodiagBundle::layout.html.twig' %}
 
+{% set templateCurrentId = 2 %}
 {% set noLayout = true %}
 {% set pdf = true %}
 {% set synthesis = compare.synthesis %}
@@ -57,12 +58,12 @@
                             <div class="item-row pdf">
                                 {% endif %}
 
-                                {#<div class="item" data-row="{{ item.row }}" data-column="{{ item.column }}" data-item-type="{{ item.type }}">#}
-                                {% include ("@HopitalNumeriqueAutodiag/Restitution/item/_" ~ item.type ~ ".html.twig") ignore missing with {
-                                'restitution': item,
-                                'result': result[item.id]
-                                } %}
-                                {#</div>#}
+                                <div data-item-type="{{ item.type }}">
+                                    {% include ("@HopitalNumeriqueAutodiag/Restitution/item/_" ~ item.type ~ ".html.twig") ignore missing with {
+                                    'restitution': item,
+                                    'result': result[item.id]
+                                    } %}
+                                </div>
                                 {% endfor %}
                             </div>
                         </div>
