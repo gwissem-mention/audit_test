@@ -168,17 +168,22 @@ class AutodiagEntryGrid extends Grid implements GridInterface
                             'id' => $ids
                         ]);
 
+                        $em = $this->_container->get('doctrine.orm.entity_manager');
+
                         try {
-                            $this->_container->get('doctrine.orm.entity_manager')->beginTransaction();
+                            $em->beginTransaction();
                             $newSynthesis = $this->_container->get('autodiag.synthesis.generator')->generateSynthesis(
                                 $this->autodiag,
                                 $syntheses,
                                 $this->_container->get('security.token_storage')->getToken()->getUser()
                             );
-                            $this->_container->get('doctrine.orm.entity_manager')->persist($newSynthesis);
+                            $em->persist($newSynthesis);
+                            $em->flush();
+                            $em->commit();
+
                             $this->_container->get('session')->getFlashBag()->add('info', 'La synthèse à bien été créée.');
                         } catch (\Exception $e) {
-                            $this->_container->get('doctrine.orm.entity_manager')->rollback();
+                            $em->rollback();
                             if ($e->getCode() == SynthesisGenerator::NEED_AT_LEAST_2) {
                                 $this->_container->get('session')->getFlashBag()->add(
                                     'danger',
@@ -194,9 +199,6 @@ class AutodiagEntryGrid extends Grid implements GridInterface
                             }
                         }
 
-                        $this->_container->get('doctrine.orm.entity_manager')->flush();
-
-                        $this->_container->get('doctrine.orm.entity_manager')->commit();
                         if (isset($newSynthesis)) {
                             $this->_container->get('autodiag.score_calculator')->deferSynthesisScore($newSynthesis);
                         }
