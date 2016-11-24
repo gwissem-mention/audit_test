@@ -148,7 +148,11 @@ class AccountController extends Controller
             return $this->redirect($request->headers->get('referer'));
         }
 
-        $removeState = $this->get('autodiag.synthesis.remover')->removeSynthesis($synthesis, $user);
+        if ($synthesis->getUser() === $this->getUser()) {
+            $removeState = $this->get('autodiag.synthesis.remover')->removeSynthesis($synthesis, $user);
+        } else {
+            $removeState = $this->get('autodiag.synthesis.remover')->removeShare($synthesis, $user);
+        }
 
         if ($removeState == SynthesisRemover::SYNTHESIS_REMOVED) {
             $this->addFlash('success', $this->get('translator')->trans('ad.synthesis.delete.succes'));

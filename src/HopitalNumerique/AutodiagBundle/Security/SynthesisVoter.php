@@ -28,7 +28,7 @@ class SynthesisVoter extends Voter
 
     protected function supports($attribute, $subject)
     {
-        if (!in_array($attribute, array(self::READ, self::SHARE, self::VALIDATE))) {
+        if (!in_array($attribute, array(self::READ, self::SHARE, self::VALIDATE, self::DELETE))) {
             return false;
         }
 
@@ -60,8 +60,9 @@ class SynthesisVoter extends Voter
                 return $this->canValidate($synthesis, $user);
                 break;
             case self::READ:
-            case self::DELETE:
                 return $this->canRead($synthesis, $user);
+            case self::DELETE:
+                return $this->canRemove($synthesis, $user);
                 break;
         }
 
@@ -127,6 +128,28 @@ class SynthesisVoter extends Voter
                 }
             }
         }
+
+        return false;
+    }
+
+    public function canRemove(Synthesis $synthesis, $user)
+    {
+        if ($user instanceof User) {
+            /** @var $user User */
+            if ($user->hasRoleAdmin() || $user->hasRoleAdminHn() || $user->hasRoleAdminDomaine() || $user->hasRoleAdminAutodiag()) {
+                return true;
+            }
+        }
+
+        if ($synthesis->getUser() === $user || $this->autodiagEntrySession->has($synthesis->getEntries()->first())) {
+            return true;
+        }
+
+//        foreach ($synthesis->getShares() as $share) {
+//            if ($share === $user) {
+//                return true;
+//            }
+//        }
 
         return false;
     }

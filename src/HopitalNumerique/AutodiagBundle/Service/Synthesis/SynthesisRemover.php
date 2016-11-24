@@ -7,6 +7,7 @@ use HopitalNumerique\AutodiagBundle\Entity\AutodiagEntry;
 use HopitalNumerique\AutodiagBundle\Entity\Synthesis;
 use HopitalNumerique\AutodiagBundle\Repository\SynthesisRepository;
 use HopitalNumerique\UserBundle\Entity\User;
+use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 
 class SynthesisRemover
 {
@@ -20,14 +21,20 @@ class SynthesisRemover
      */
     protected $synthesisRepository;
 
+    /**
+     * @var AuthorizationCheckerInterface
+     */
+    protected $authorizationChecker;
+
     const SYNTHESIS_REMOVED = 1;
     const SHARE_REMOVED = 2;
     const SHARE_NOT_FOUND = 3;
 
-    public function __construct(EntityManager $entityManager, SynthesisRepository $synthesisRepository)
+    public function __construct(EntityManager $entityManager, SynthesisRepository $synthesisRepository, AuthorizationCheckerInterface $authorizationChecker)
     {
         $this->entityManager = $entityManager;
         $this->synthesisRepository = $synthesisRepository;
+        $this->authorizationChecker = $authorizationChecker;
     }
 
     /**
@@ -39,27 +46,8 @@ class SynthesisRemover
      */
     public function removeSynthesis(Synthesis $synthesis, User $user)
     {
-        $found = false;
-
         // Si la synthèse n'appartient pas à l'utilisateur
-        if ($synthesis->getUser() != $user && !$user->isGranted('ROLE_ADMINISTRATEUR_1')) {
-            foreach ($synthesis->getShares() as $share) {
-                if ($share == $user) {
-                    $synthesis->removeShare($user);
-                    $found = true;
-                    break;
-                }
-            }
-
-            if ($found) {
-                $this->entityManager->flush();
-
-                return SynthesisRemover::SHARE_REMOVED;
-            } else {
-                return SynthesisRemover::SHARE_NOT_FOUND;
-            }
-        } // Si la synthèse appartient à l'utilisateur
-        else {
+        if ($this->authorizationChecker->isGranted('delete', $synthesis)) {
             $this->entityManager->remove($synthesis);
 
             // Si les entries d'une synthèse ne sont pas utilisées par d'autres synthèses on les supprime
@@ -78,6 +66,32 @@ class SynthesisRemover
 
             return SynthesisRemover::SYNTHESIS_REMOVED;
         }
+
+        return null;
+    }
+
+    public function removeShare(Synthesis $synthesis, User $user)
+    {
+        $found = false;
+        // Can read but not delete = delete share
+        if ($this->authorizationChecker->isGranted('read', $synthesis)) {
+            foreach ($synthesis->getShares() as $share) {
+                if ($share == $user) {
+                    $synthesis->removeShare($user);
+                    $found = true;
+                    break;
+                }
+            }
+
+            if ($found) {
+                $this->entityManager->flush();
+
+                return SynthesisRemover::SHARE_REMOVED;
+            }
+
+            return SynthesisRemover::SHARE_NOT_FOUND;
+        }
+
+        return null;
     }
 }
-

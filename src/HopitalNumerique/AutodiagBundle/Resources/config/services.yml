@@ -199,6 +199,7 @@ services:
         arguments:
             - '@doctrine.orm.entity_manager'
             - '@autodiag.repository.synthesis'
+            - '@security.authorization_checker'
 
     autodiag.entries.grid:
         class: HopitalNumerique\AutodiagBundle\Grid\AutodiagEntryGrid

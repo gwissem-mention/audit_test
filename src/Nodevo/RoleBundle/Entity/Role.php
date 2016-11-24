@@ -28,6 +28,8 @@ class Role implements RoleInterface
     public static $ROLE_EXPERT_LABEL      = 'ROLE_EXPERT_6';
     public static $ROLE_ENREGISTRE_LABEL  = 'ROLE_ENREGISTRE_9';
     public static $ROLE_ADMIN_HN_LABEL  = 'ROLE_ADMINISTRATEUR_DU_DOMAINE_HN_107';
+    public static $ROLE_ADMIN_DOMAINE = 'ROLE_ADMINISTRATEUR_DE_DOMAINE_106';
+    public static $ROLE_ADMIN_AUTODIAG = 'ROLE_ADMINISTRATEUR_AUTODIAGS_108';
 
     /**
      * @var integer
@@ -87,7 +89,7 @@ class Role implements RoleInterface
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
@@ -111,7 +113,7 @@ class Role implements RoleInterface
     /**
      * Get name
      *
-     * @return string 
+     * @return string
      */
     public function getName()
     {
@@ -127,7 +129,7 @@ class Role implements RoleInterface
     {
         return $this->role;
     }
-    
+
     /**
      * Set role
      *
@@ -137,7 +139,7 @@ class Role implements RoleInterface
     {
         $this->role = $role;
     }
-    
+
     /**
      * Set initial
      *
@@ -155,7 +157,7 @@ class Role implements RoleInterface
     /**
      * Get initial
      *
-     * @return boolean 
+     * @return boolean
      */
     public function getInitial()
     {
@@ -179,7 +181,7 @@ class Role implements RoleInterface
     /**
      * Get etat
      *
-     * @return \HopitalNumerique\ReferenceBundle\Entity\Reference 
+     * @return \HopitalNumerique\ReferenceBundle\Entity\Reference
      */
     public function getEtat()
     {
