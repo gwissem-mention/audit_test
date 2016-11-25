@@ -8,6 +8,7 @@ use HopitalNumerique\AutodiagBundle\Entity\Synthesis;
 use HopitalNumerique\AutodiagBundle\Repository\CompareRepository;
 use HopitalNumerique\AutodiagBundle\Service\Score\ScoreCalculator;
 use HopitalNumerique\AutodiagBundle\Service\Synthesis\IntersectionBuilder;
+use HopitalNumerique\UserBundle\Entity\User;
 
 class ComparisonBuilder
 {
@@ -45,7 +46,7 @@ class ComparisonBuilder
      * @param Synthesis $reference
      * @return Compare
      */
-    public function build(Synthesis $synthesis, Synthesis $reference)
+    public function build(User $user, Synthesis $synthesis, Synthesis $reference)
     {
         $compare = $this->compareRepository->findFromOrigin($synthesis, $reference);
 
@@ -53,8 +54,8 @@ class ComparisonBuilder
             return $compare;
         }
 
-        $synthesisCopy = $this->intersectionBuilder->build($synthesis, $reference);
-        $referenceCopy = $this->intersectionBuilder->build($reference, $synthesis);
+        $synthesisCopy = $this->intersectionBuilder->build($user, $synthesis, $reference);
+        $referenceCopy = $this->intersectionBuilder->build($user, $reference, $synthesis);
 
         // Must persist copies to compute there scores
         $this->entityManager->persist($synthesisCopy);

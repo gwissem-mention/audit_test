@@ -5,6 +5,7 @@ namespace HopitalNumerique\AutodiagBundle\Service\Synthesis;
 use HopitalNumerique\AutodiagBundle\Entity\AutodiagEntry;
 use HopitalNumerique\AutodiagBundle\Entity\Synthesis;
 use HopitalNumerique\AutodiagBundle\Repository\AutodiagEntry\ValueRepository;
+use HopitalNumerique\UserBundle\Entity\User;
 
 /**
  * Handle intersection creation betwheen two syntheses
@@ -30,15 +31,16 @@ class IntersectionBuilder
      * Create new Synthesis from $synthesis, only with entryValues of common answered autodiag attributes
      * between $synthesis and $reference
      *
+     * @param User $user
      * @param Synthesis $synthesis
      * @param Synthesis $reference
      * @return Synthesis
      */
-    public function build(Synthesis $synthesis, Synthesis $reference)
+    public function build(User $user, Synthesis $synthesis, Synthesis $reference)
     {
         $attributeIds = $this->valueRepository->findAttributeIdsIntersection($synthesis, $reference);
 
-        $intersection = Synthesis::create($synthesis->getAutodiag(), $synthesis->getUser());
+        $intersection = Synthesis::create($synthesis->getAutodiag(), $user);
         $intersection->setName($synthesis->getName());
         foreach ($synthesis->getEntries() as $entry) {
             /** @var AutodiagEntry $clonedEntry */

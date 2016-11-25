@@ -145,12 +145,6 @@ class SynthesisVoter extends Voter
             return true;
         }
 
-//        foreach ($synthesis->getShares() as $share) {
-//            if ($share === $user) {
-//                return true;
-//            }
-//        }
-
         return false;
     }
 }

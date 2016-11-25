@@ -69,6 +69,7 @@ class CompareController extends Controller
         if ($compareForm->isSubmitted() && $compareForm->isValid()) {
 
             $compare = $this->get('autodiag.compare.builder')->build(
+                $this->getUser(),
                 $compareCommand->synthesis,
                 $compareCommand->reference
             );
