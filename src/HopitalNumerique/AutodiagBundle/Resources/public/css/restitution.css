@@ -474,6 +474,11 @@
 }
 
 
+#restitution.restitution-pdf .logo {
+    width: 1024px;
+    text-align: right;
+}
+
 #restitution.restitution-pdf h3 {
     font-size: 18px;
     font-weight: bold;

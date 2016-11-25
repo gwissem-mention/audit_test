@@ -77,7 +77,9 @@ class CompareRestitutionCalculator
 
         $referenceScore = new Score(
             $this->restitutionCalculator->getContainerSynthesisScore($compare->getReference(), $container->getId()),
-            $compare->getReference()->getName()
+            $compare->getReference()->getName(),
+            null,
+            $score->getColor()
         );
 
         $comparedScore->setReference(

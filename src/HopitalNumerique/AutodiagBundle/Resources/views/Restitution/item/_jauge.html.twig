@@ -6,15 +6,17 @@
                 <div class="jauge-container">
                     <div class="header">
                         <div class="title pull-left">{{ jaugeData.label }}</div>
-                        <div class="header-right">
-                            <span class="score">
-                                {{ jaugeData.score.label }} : {{ jaugeData.score.value is not null ? jaugeData.score.value : '-' }} / 100
-                            </span>
-                            <span class="completion-wrapper">
-                                {% set completion = (jaugeData.numberOfAnswers / jaugeData.numberOfQuestions * 100) | round %}
-                                <span class="completion" data-title="Remplissage : {{ completion }}%" data-value="{{ completion }}"></span>
-                            </span>
-                        </div>
+                        {% if jaugeData.score.reference is not defined %}
+                            <div class="header-right">
+                                <span class="score">
+                                    {{ jaugeData.score.label }} : {{ jaugeData.score.value is not null ? jaugeData.score.value : '-' }} / 100
+                                </span>
+                                <span class="completion-wrapper">
+                                    {% set completion = (jaugeData.numberOfAnswers / jaugeData.numberOfQuestions * 100) | round %}
+                                    <span class="completion" data-title="Remplissage : {{ completion }}%" data-value="{{ completion }}"></span>
+                                </span>
+                            </div>
+                        {% endif %}
                     </div>
 
                     <div class="content">
