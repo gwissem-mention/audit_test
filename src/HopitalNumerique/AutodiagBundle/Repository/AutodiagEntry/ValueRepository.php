@@ -96,19 +96,28 @@ class ValueRepository extends EntityRepository
     {
         $qb = $this->getEntityManager()->createQueryBuilder();
         $qb
-            ->select('count(syntheses.id) * 100 / count(distinct attribute.id)')
+            ->select('count(attribute.id)')
             ->from('HopitalNumeriqueAutodiagBundle:Autodiag\Attribute', 'attribute')
-            ->leftJoin(AutodiagEntry\Value::class, 'val', Join::WITH, 'val.attribute = attribute.id AND val.valid = TRUE')
-            ->leftJoin('val.entry', 'entry')
-            ->leftJoin('entry.syntheses', 'syntheses', Join::WITH, 'syntheses.id = :synthesis_id')
             ->where('attribute.autodiag = :autodiag_id')
             ->setParameters([
                 'autodiag_id' => $synthesis->getAutodiag()->getId(),
+            ])
+        ;
+        $attributes = (int) $qb->getQuery()->getOneOrNullResult(AbstractQuery::HYDRATE_SINGLE_SCALAR);
+
+        $qb = $this->createQueryBuilder('val');
+        $qb
+            ->select('count(distinct val.attribute)')
+            ->join('val.entry', 'entry')
+            ->join('entry.syntheses', 'synthesis')
+            ->where('synthesis.id = :synthesis_id')
+            ->setParameters([
                 'synthesis_id' => $synthesis->getId(),
             ])
         ;
+        $distinctValues = (int) $qb->getQuery()->getOneOrNullResult(AbstractQuery::HYDRATE_SINGLE_SCALAR);
 
-        return floor($qb->getQuery()->getOneOrNullResult(AbstractQuery::HYDRATE_SINGLE_SCALAR));
+        return floor($distinctValues * 100 / $attributes);
     }
 
     public function getFullValuesByEntry($autodiagId, $entryId)
