@@ -91,8 +91,15 @@ class BoundaryCalculator
             foreach ($entriesValues as $entryValues) {
                 $scores[] = $this->algorithm->getScore($container, $entryValues);
             }
-            $min = call_user_func_array('min', $scores);
-            $max = call_user_func_array('max', $scores);
+
+            if (empty($scores)) {
+                $min = $max = null;
+            } elseif (count($scores) === 1) {
+                $min = $max = current($scores);
+            } else {
+                $min = call_user_func_array('min', $scores);
+                $max = call_user_func_array('max', $scores);
+            }
 
             if (null !== $min || null !== $max) {
                 $score = $this->scoreRepository->findOneBy([
