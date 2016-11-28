@@ -356,6 +356,7 @@ h3{font-size: 20px}
 
     /* Description + titre */
     .panel-midnightblue .panel-heading{background-color: #f5f5f5;}
+    .referencement-popin .panel-heading{background-color: #34495e;}
     #expression-du-besoin {padding:0 15px;height: auto;height: 337px;}
     #expression-du-besoin .aide {background-color:#F4F4F4;height: auto;height: 337px; display:flex}
     #expression-du-besoin .aide .aide-presentation .entete {margin: 25px 15px 0 15px;}

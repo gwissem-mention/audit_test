@@ -49,17 +49,12 @@
             <div class="background-violet"></div>
             {% if suggestion.id is not null %}
                 <div class="form-group">
-                    <label class="control-label col-md-3">
-                        Référence
-                    </label>
-                    <div class="col-md-6 control-label">
-                        <a href="{{path('hopitalnumerique_reference_referencement_popin', { 'entityType':8, 'entityId':suggestion.id })}}" class="open-popin-referencement edit btn btn-xs btn-primary fancybox.ajax pull-right" style="margin-left: 5px"><i class="fa fa-cog"></i></a>
-                        <p class="text-muted text-left"><strong>Note référencement :</strong> {% for commonDomain in commonDomainsWithUser %} &nbsp; {{ commonDomain }} : {{ referencement_note(suggestion, commonDomain) }}{% endfor %}</p>
-                    </div>
+                    <label class="control-label">Pour terminer votre suggestion, veuillez d'abord référencer votre ressource puis cliquer sur le bouton "Proposer ma suggestion"</label><br />
+                    <a href="{{path('hopitalnumerique_reference_referencement_popin', { 'entityType':8, 'entityId':suggestion.id })}}" class="open-popin-referencement edit btn btn-primary fancybox.ajax" style="margin-left: 5px">Référencer ma ressource</a>
                 </div>
 
                 <div class="col-md-12">
-                    <a href="{{ path('hopitalnumerique_suggestion_front_add') }}" style="margin-top: 30px" class="btn btn-success pull-right" title="Valider ma suggestion"><i class="fa fa-check"></i> Valider ma suggestion</a>
+                    <a href="{{ path('hopitalnumerique_suggestion_front_validate') }}" style="margin-top: 30px" class="btn btn-success pull-right" title="Valider ma suggestion">Proposer ma suggestion</a>
                 </div>
             {%  else %}
                 {{ form_row(form.title) }}
@@ -69,7 +64,7 @@
                 {{ form_row(form.file) }}
 
                 <div class="col-md-12">
-                    <div onclick="$('form').submit();" class="btn btn-primary pull-right" title="Accéder au référenentcem">Proposer cette ressource et accéder au référencement</div>
+                    <div onclick="$('form').submit();" class="btn btn-primary pull-right" title="Accéder au référencement">Proposer cette ressource et accéder au référencement</div>
                 </div>
                 {{ form_row(form._token) }}
             {%  endif %}

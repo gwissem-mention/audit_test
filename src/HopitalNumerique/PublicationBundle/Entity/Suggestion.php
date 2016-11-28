@@ -77,7 +77,8 @@ class Suggestion
      * @ORM\Column(type="string", nullable=true)
      * @Assert\Expression(
      *     "null !== this.getLink() || null !== this.getPath() || null !== this.getFile()",
-     *     message="Veuillez renseigner un lien ou un fichier joint"
+     *     message="Veuillez renseigner un lien ou un fichier joint",
+     *     groups={"front_add"}
      * )
      */
     private $link;
@@ -117,7 +118,8 @@ class Suggestion
      * )
      * @Assert\Expression(
      *     "null !== this.getFile() || null !== this.getLink()",
-     *     message="Veuillez renseigner un lien ou un fichier joint"
+     *     message="Veuillez renseigner un lien ou un fichier joint",
+     *     groups={"front_add"}
      * )
      */
     private $file;
@@ -403,7 +405,7 @@ class Suggestion
                 unlink($this->getAbsolutePath());
             }
 
-            $this->path = $this->file->getClientOriginalName();
+            $this->path = time() . $this->file->getClientOriginalName();
         }
     }
 
@@ -430,7 +432,11 @@ class Suggestion
     {
         if ($this->getAbsolutePath() && file_exists($this->getAbsolutePath())) {
             unlink($this->getAbsolutePath());
+
+            $this->path = null;
         }
+
+        return $this;
     }
 
     /**

@@ -28,7 +28,7 @@ class SuggestionController extends Controller
         /** @var Suggestion $suggestion */
         $suggestion = new Suggestion();
 
-        $form = $this->createForm(SuggestionType::class, $suggestion);
+        $form = $this->createForm(SuggestionType::class, $suggestion, ['validation_groups' => ['front_add']]);
 
         $form->handleRequest($request);
 
@@ -43,8 +43,6 @@ class SuggestionController extends Controller
 
             $this->getDoctrine()->getManager()->persist($suggestion);
             $this->getDoctrine()->getManager()->flush();
-
-            $this->addFlash('warning', 'Pour terminer votre suggestion, veuillez indiquer son référencement');
 
             return $this->redirectToRoute('hopitalnumerique_suggestion_front_edit', [
                 'suggestion' => $suggestion->getId(),
@@ -71,13 +69,19 @@ class SuggestionController extends Controller
 
             return $this->redirectToRoute('hopitalnumerique_suggestion_front_add');
         }
-        $form = $this->createForm(SuggestionType::class, $suggestion);
+
+        $form = $this->createForm(SuggestionType::class, $suggestion, ['validation_groups' => ['front_add']]);
 
         return $this->render('HopitalNumeriquePublicationBundle:Suggestion:add.html.twig', [
             'form' => $form->createView(),
             'suggestion' => $suggestion,
-            'commonDomainsWithUser' => $this->container->get('hopitalnumerique_core.dependency_injection.entity')
-                ->getEntityDomainesCommunsWithUser($suggestion, $this->getUser()),
         ]);
+    }
+
+    public function validateAction()
+    {
+        $this->addFlash('success', 'Merci pour votre participation !');
+
+        return $this->redirectToRoute('hopitalnumerique_suggestion_front_add');
     }
 }

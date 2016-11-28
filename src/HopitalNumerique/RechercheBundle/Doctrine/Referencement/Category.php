@@ -71,30 +71,34 @@ class Category
             ];
         }
 
-        $categoriesProperties[] = [
-            'id' => 't-'.Entity::ENTITY_TYPE_FORUM_TOPIC,
-            'entityType' => Entity::ENTITY_TYPE_FORUM_TOPIC,
-            'libelle' => $this->referenceManager->findOneById($this->refForumTopicId)->getLibelle(),
-            'order' => $this->referenceManager->findOneById($this->refForumTopicId)->getOrder()
-        ];
-        $categoriesProperties[] = [
-            'id' => 't-'.Entity::ENTITY_TYPE_AMBASSADEUR,
-            'entityType' => Entity::ENTITY_TYPE_AMBASSADEUR,
-            'libelle' => $this->referenceManager->findOneById($this->refAmbassadeurId)->getLibelle(),
-            'order' => $this->referenceManager->findOneById($this->refAmbassadeurId)->getOrder()
-        ];
-        $categoriesProperties[] = [
-            'id' => 't-'.Entity::ENTITY_TYPE_RECHERCHE_PARCOURS,
-            'entityType' => Entity::ENTITY_TYPE_RECHERCHE_PARCOURS,
-            'libelle' => $this->referenceManager->findOneById($this->refRechercheParcoursId)->getLibelle(),
-            'order' => $this->referenceManager->findOneById($this->refRechercheParcoursId)->getOrder()
-        ];
-        $categoriesProperties[] = [
-            'id' => 't-'.Entity::ENTITY_TYPE_COMMUNAUTE_PRATIQUES_GROUPE,
-            'entityType' => Entity::ENTITY_TYPE_COMMUNAUTE_PRATIQUES_GROUPE,
-            'libelle' => $this->referenceManager->findOneById($this->refComPratiqueId)->getLibelle(),
-            'order' => $this->referenceManager->findOneById($this->refComPratiqueId)->getOrder()
-        ];
+        $reference = $this->referenceManager->findOneById($this->refForumTopicId);
+
+        if (!is_null($reference)) {
+            $categoriesProperties[] = [
+                'id' => 't-'.Entity::ENTITY_TYPE_FORUM_TOPIC,
+                'entityType' => Entity::ENTITY_TYPE_FORUM_TOPIC,
+                'libelle' => $this->referenceManager->findOneById($this->refForumTopicId)->getLibelle(),
+                'order' => $this->referenceManager->findOneById($this->refForumTopicId)->getOrder()
+            ];
+            $categoriesProperties[] = [
+                'id' => 't-'.Entity::ENTITY_TYPE_AMBASSADEUR,
+                'entityType' => Entity::ENTITY_TYPE_AMBASSADEUR,
+                'libelle' => $this->referenceManager->findOneById($this->refAmbassadeurId)->getLibelle(),
+                'order' => $this->referenceManager->findOneById($this->refAmbassadeurId)->getOrder()
+            ];
+            $categoriesProperties[] = [
+                'id' => 't-'.Entity::ENTITY_TYPE_RECHERCHE_PARCOURS,
+                'entityType' => Entity::ENTITY_TYPE_RECHERCHE_PARCOURS,
+                'libelle' => $this->referenceManager->findOneById($this->refRechercheParcoursId)->getLibelle(),
+                'order' => $this->referenceManager->findOneById($this->refRechercheParcoursId)->getOrder()
+            ];
+            $categoriesProperties[] = [
+                'id' => 't-'.Entity::ENTITY_TYPE_COMMUNAUTE_PRATIQUES_GROUPE,
+                'entityType' => Entity::ENTITY_TYPE_COMMUNAUTE_PRATIQUES_GROUPE,
+                'libelle' => $this->referenceManager->findOneById($this->refComPratiqueId)->getLibelle(),
+                'order' => $this->referenceManager->findOneById($this->refComPratiqueId)->getOrder()
+            ];
+        }
 
         usort($categoriesProperties, function ($a, $b) {
             return $a['order'] > $b['order'];

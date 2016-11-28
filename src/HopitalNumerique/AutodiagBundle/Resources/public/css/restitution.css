@@ -155,7 +155,7 @@
 }
 
 #restitution .jauge-container .header {
-    height: 40px;
+    min-height: 40px;
     line-height: 32px;
     padding: 4px 20px;
     background: #f1eeee;
@@ -163,13 +163,10 @@
 }
 
 #restitution .jauge-container .header .title {
-    width: 70%;
+    /*width: 70%;*/
 }
 
 #restitution .jauge-container .header .header-right {
-    position: absolute;
-    right: 20px;
-    bottom: 4px;
     min-width: 30%;
     text-align: right;
 }
