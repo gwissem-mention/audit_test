@@ -10,7 +10,6 @@ class SuggestionRepository extends EntityRepository
         $qb = $this->createQueryBuilder('suggestion');
         $qb
             ->select(
-                "suggestion.id suggestionId",
                 "suggestion.id id",
                 "suggestion.creationDate",
                 "suggestion.title",

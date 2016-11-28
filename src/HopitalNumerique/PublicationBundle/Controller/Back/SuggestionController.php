@@ -32,6 +32,10 @@ class SuggestionController extends Controller
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            if (null == $suggestion->getFile()) {
+                $suggestion = $suggestion->removeUpload();
+            }
+
             $entityManager = $this->getDoctrine()->getManager();
 
             if ($suggestion->getState()->getId() == Reference::ETAT_SUGGESTION_VALIDE_ID) {

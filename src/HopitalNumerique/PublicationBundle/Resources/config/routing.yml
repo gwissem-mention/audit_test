@@ -113,6 +113,10 @@ hopitalnumerique_suggestion_front_edit:
     path: /suggestion/edit/{suggestion}
     defaults: { _controller: "HopitalNumeriquePublicationBundle:Front/Suggestion:edit" }
 
+hopitalnumerique_suggestion_front_validate:
+    path: /suggestion/validate
+    defaults: { _controller: "HopitalNumeriquePublicationBundle:Front/Suggestion:validate" }
+
 hopitalnumerique_suggestion_back_index:
     path: /admin/suggestion
     defaults: { _controller: "HopitalNumeriquePublicationBundle:Back/Suggestion:index" }
