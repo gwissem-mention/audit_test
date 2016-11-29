@@ -51,7 +51,7 @@ class LogListener implements EventSubscriberInterface
 
         $class = 'HopitalNumerique\AutodiagBundle\Entity\Synthesis';
 
-        $service =  $this->container->get('hopitalnumerique_core.log')->Logger($action, $synthesis, $synthesis->getName(), $class, $user);
+        $this->container->get('hopitalnumerique_core.log')->Logger($action, $synthesis, $synthesis->getName(), $class, $user);
 
     }
 }
