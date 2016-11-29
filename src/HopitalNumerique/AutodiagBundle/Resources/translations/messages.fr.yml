@@ -26,7 +26,7 @@ ad:
             shared_by: Partagé par
             create:
                 label: Nom de la synthèse :
-                button: Créer une syntèse des autodiagnostics sélectionnés
+                button: Créer une synthèse des autodiagnostics sélectionnés
         autodiag:
             updated: L'autodiagnostic a été mis à jour par l'ANAP depuis votre dernière visite
 
