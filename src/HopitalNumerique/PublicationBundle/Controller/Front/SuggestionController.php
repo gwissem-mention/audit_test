@@ -80,8 +80,8 @@ class SuggestionController extends Controller
 
     public function validateAction()
     {
-        $this->addFlash('success', 'Merci pour votre participation !');
+        $this->addFlash('success', 'Merci de nous avoir suggéré une ressources pour enrichir le Centre de ressources de l\'ANAP. Cette proposition sera étudiée par l\'ANAP avant que sa mise en ligne ne soit validée.');
 
-        return $this->redirectToRoute('hopitalnumerique_suggestion_front_add');
+        return $this->redirectToRoute('hopital_numerique_recherche_homepage');
     }
 }
