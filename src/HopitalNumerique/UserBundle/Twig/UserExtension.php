@@ -62,9 +62,12 @@ class UserExtension extends \Twig_Extension
             'unvalida' => 'Annulation validation',
             'inscript' => 'Inscription',
             'desinscr' => 'Déinscription',
-            'evaluate' => 'Évalué'
+            'evaluate' => 'Évalué',
+            'accept' => 'Accepté',
+            'request' => 'Demande'
         );
 
+        $frenchValue = $data;
         if (array_key_exists($data, $value)) {
             $frenchValue = $value[$data];
         }
