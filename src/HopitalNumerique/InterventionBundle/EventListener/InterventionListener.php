@@ -1,53 +1,109 @@
 <?php
 
-namespace AppBundle\EventSubscriber;
+namespace HopitalNumerique\InterventionBundle\EventListener;
 
-use AppBundle\Entity\Transaction;
-use AppBundle\Event\BottleEvent;
-use AppBundle\Events;
+use HopitalNumerique\AutodiagBundle\Event\InterventionEvent;
+use HopitalNumerique\InterventionBundle\Entity\InterventionDemande;
+use HopitalNumerique\InterventionBundle\Event\InterventionDemandeEvent;
+use HopitalNumerique\InterventionBundle\Events;
 use Doctrine\Bundle\DoctrineBundle\Registry as Doctrine;
+use Symfony\Component\DependencyInjection\ContainerInterface as Container;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorage;
 
-class TransactionSubscriber implements EventSubscriberInterface
+class InterventionListener implements EventSubscriberInterface
 {
 
+    protected $container;
     /**
      * EntryListener constructor.
      * @param Doctrine $doctrine
+     * @param Container $container
+     * @param TokenStorage $security
      */
-    public function __construct(Doctrine $doctrine)
+    public function __construct(Doctrine $doctrine, Container $container, TokenStorage $security)
     {
         $this->doctrine = $doctrine;
+        $this->container = $container;
+        $this->security = $security;
     }
 
     public static function getSubscribedEvents()
     {
         return array(
-            Events::BOTTLE_CREATE => 'addTransaction',
-            Events::BOTTLE_UPDATE => 'updateTransaction',
-            Events::BOTTLE_LEAVE => 'leaveTransaction',
+            Events::INTERVENTION_REQUEST => 'requestIntervention',
+            Events::INTERVENTION_ACCEPT => 'acceptIntervention',
+            Events::INTERVENTION_EVALUATION => 'evaluationIntervention',
+            Events::INTERVENTION_EVALUATION_FRONT => 'evaluationInterventionFront',
         );
     }
 
-    public function addTransaction(BottleEvent $event)
-    { //dump($event->getBottle());die;
-        $transaction = new Transaction();
-        $transaction->setType('E');
-        $transaction->setBottle($event->getBottle());
-        $transaction->setDestination($event->getBottle()->getLocation());
-        $em = $this->doctrine->getEntityManager();
-        $em->persist($transaction);
-        $em->flush();
+    public function requestIntervention(InterventionDemandeEvent $intervention)
+    {
+        $action = 'request';
+        $class = 'HopitalNumerique\InterventionBundle\Entity\InterventionDemande';
+        $ambassador = $intervention->getInterventionDemande()->getAmbassadeur()->getNom() . ' ' . $intervention->getInterventionDemande()->getAmbassadeur()->getPrenom();
+
+
+        $this->container->get('hopitalnumerique_core.log')->Logger(
+            $action,
+            $intervention->getInterventionDemande(),
+            $ambassador,
+            $class,
+            $intervention->getInterventionDemande()->getReferent()
+        );
     }
 
-    public function updateTransaction(BottleEvent $event)
+    public function acceptIntervention(InterventionDemandeEvent $intervention)
     {
-        dump('test');
+        $action = 'accept';
+        $class = 'HopitalNumerique\InterventionBundle\Entity\InterventionDemande';
+        $ambassador = $intervention->getInterventionDemande()->getAmbassadeur()->getNom() . ' ' . $intervention->getInterventionDemande()->getAmbassadeur()->getPrenom();
+
+        $this->container->get('hopitalnumerique_core.log')->Logger(
+            $action,
+            $intervention->getInterventionDemande(),
+            $ambassador,
+            $class,
+            $intervention->getInterventionDemande()->getReferent()
+        );
     }
 
-    public function leaveTransaction(BottleEvent $event)
+    public function evaluationIntervention(InterventionDemandeEvent $intervention)
     {
-        dump('leave');
+        if (!empty($intervention->getInterventionDemande()->getEvaluationEtat()) && !empty($intervention->getOldInterventionDemande()->getEvaluationEtat())) {
+            if ($intervention->getInterventionDemande()->getEvaluationEtat()->getId() != $intervention->getOldInterventionDemande()->getEvaluationEtat()->getId() && $intervention->getInterventionDemande()->getEvaluationEtat()->getId() == $this->container->getParameter('id_reference_evaluate')) {
+
+                $action = 'evaluate';
+                $class = 'HopitalNumerique\InterventionBundle\Entity\InterventionDemande';
+                $ambassador = $intervention->getInterventionDemande()->getAmbassadeur()->getNom() . ' ' . $intervention->getInterventionDemande()->getAmbassadeur()->getPrenom();
+
+
+                $this->container->get('hopitalnumerique_core.log')->Logger(
+                    $action,
+                    $intervention->getInterventionDemande(),
+                    $ambassador,
+                    $class,
+                    $intervention->getInterventionDemande()->getReferent()
+                );
+            }
+        }
+    }
+
+    public function evaluationInterventionFront(InterventionDemandeEvent $intervention)
+    {
+
+        $action = 'evaluate';
+        $class = 'HopitalNumerique\InterventionBundle\Entity\InterventionDemande';
+        $ambassador = $intervention->getInterventionDemande()->getAmbassadeur()->getNom() . ' ' . $intervention->getInterventionDemande()->getAmbassadeur()->getPrenom();
+
+
+        $this->container->get('hopitalnumerique_core.log')->Logger(
+            $action,
+            $intervention->getInterventionDemande(),
+            $ambassador,
+            $class,
+            $intervention->getInterventionDemande()->getReferent()
+        );
     }
 }

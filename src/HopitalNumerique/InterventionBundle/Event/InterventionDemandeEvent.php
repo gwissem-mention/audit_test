@@ -1,27 +1,34 @@
 <?php
 
-namespace HopitalNumerique\AutodiagBundle\Event;
+namespace HopitalNumerique\InterventionBundle\Event;
 
 use HopitalNumerique\InterventionBundle\Entity\InterventionDemande;
 use Symfony\Component\EventDispatcher\Event;
 
-class InterventionEvent extends Event
+class InterventionDemandeEvent extends Event
 {
     /**
      * @var InterventionDemande
      */
     protected $intervention;
+    protected $oldIntervention;
 
-    public function __construct(InterventionDemande $intervention)
+    public function __construct(InterventionDemande $intervention, InterventionDemande $oldIntervention = null)
     {
         $this->intervention = $intervention;
+        $this->oldIntervention = $oldIntervention;
     }
 
     /**
      * @return InterventionDemande
      */
-    public function getSynthesis()
+    public function getInterventionDemande()
     {
         return $this->intervention;
+    }
+
+    public function getOldInterventionDemande()
+    {
+        return $this->oldIntervention;
     }
 }
