@@ -39,8 +39,8 @@
             <div class="col-md-10">
                 <a class="btn btn-sm btn-default" href="{{path('hopital_numerique_recherche_homepage')}}" title="Retour à ma recherche"><i class="fa fa-reply"></i></a>
                 <a class="btn btn-sm btn-default" href="{{path('hopital_numerique_recherche_homepage_requete_generator')}}" title="Nouvelle recherche"><i class="fa fa-search"></i></a>
-                {% if app.user %}
-                    <a href="{{ path('hopitalnumerique_suggestion_front_add') }}">Proposer une ressource</a>
+                {% if app.user and false %}
+                    <a style="margin-left: 5px;" href="{{ path('hopitalnumerique_suggestion_front_add') }}">Vous connaissez une ressource qui n'apparait pas dans les résultats ? Proposez-nous de l'ajouter</a>
                 {% endif %}
             </div>
             <div class="col-md-2">

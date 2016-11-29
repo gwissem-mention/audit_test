@@ -2,6 +2,8 @@ $(document).ready(function() {
     $('#research-list').change( function() {
         location.href = $(this).val();
     });
+
+    $('.request-button').tooltip();
 });
 
 Hn_RechercheBundle_Referencement.saveSessionTimer;
@@ -12,6 +14,8 @@ Hn_RechercheBundle_Referencement.saveSessionTimer;
 Hn_RechercheBundle_Referencement.initReferenceFilters = function()
 {
     $('.filtres-bloc .references ul').empty();
+    $('.filtres-bloc .references').hide();
+    $('.request-button').css({ display: 'none' });
 
     var chosenReferenceIds = Hn_RechercheBundle_Referencement.getChosenReferenceIds();
     for (var i in chosenReferenceIds) {
@@ -28,6 +32,8 @@ Hn_RechercheBundle_Referencement.initReferenceFilters = function()
             html: true
         });
 
+        $('.filtres-bloc .references').show();
+        $('.request-button').show();
         $('.filtres-bloc .references ul').append(filter);
     }
 
@@ -63,10 +69,10 @@ Hn_RechercheBundle_Referencement.processFilterButtonsActivating = function()
 
     if (canActivate && !filterButtonsVisible) {
         $('#filtres-actions').slideDown();
-        $('#request-buttons').slideDown();
+        $('.request-button').fadeIn();
     } else if (!canActivate && filterButtonsVisible) {
         $('#filtres-actions').slideUp();
-        $('#request-buttons').slideUp();
+        $('.request-button').fadeOut();
     }
 };
 
@@ -86,7 +92,7 @@ Hn_RechercheBundle_Referencement.removeFilters = function()
                 method: 'POST'
             });
             $('#filtres-actions #search-name').hide();
-            $('#request-buttons').hide();
+            $('.request-button').hide();
         }
     });
 };
