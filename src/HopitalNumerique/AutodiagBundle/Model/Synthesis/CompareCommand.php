@@ -24,9 +24,9 @@ class CompareCommand
      * @param Synthesis $reference
      * @param Synthesis $synthesis
      */
-    public function __construct(Synthesis $reference = null, Synthesis $synthesis = null)
+    public function __construct(Synthesis $synthesis = null, Synthesis $reference = null)
     {
-        $this->reference = $reference;
         $this->synthesis = $synthesis;
+        $this->reference = $reference;
     }
 }
