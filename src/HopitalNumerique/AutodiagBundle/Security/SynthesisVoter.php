@@ -104,7 +104,15 @@ class SynthesisVoter extends Voter
      */
     public function canShare(Synthesis $synthesis, $user)
     {
-        return ($synthesis->getUser() === $user && $synthesis->getValidatedAt() != null);
+        if ($synthesis->getUser() === $user && $synthesis->getValidatedAt() != null) {
+            return true;
+        }
+
+        foreach ($synthesis->getShares() as $share) {
+            if ($share === $user) {
+                return true;
+            }
+        }
     }
 
     /**
