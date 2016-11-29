@@ -1,0 +1,9 @@
+services:
+    intervention.listener:
+        class: HopitalNumerique\InterventionBundle\EventListener\InterventionListener
+        arguments:
+            - '@doctrine'
+            - '@service_container'
+            - '@security.token_storage'
+        tags:
+            - { name: kernel.event_subscriber }
