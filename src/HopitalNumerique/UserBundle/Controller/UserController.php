@@ -286,10 +286,16 @@ class UserController extends Controller
             'objectClass' => 'HopitalNumerique\ModuleBundle\Entity\Module'
         ));
 
+        $logsIntervention = $repo->findBy(array(
+            'username' => $user->getUsername(),
+            'objectClass' => 'HopitalNumerique\InterventionBundle\Entity\InterventionDemande'
+        ));
+
         return $this->render('HopitalNumeriqueUserBundle:User:historique.html.twig', array(
             'logs' => $logs,
             'logsSynthesis' => $logsSynthesis,
-            'logsModule' => $logsModule
+            'logsModule' => $logsModule,
+            'logsIntervention' => $logsIntervention
         ));
     }
 
