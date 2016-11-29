@@ -25,7 +25,7 @@
                         <td>{{ data.score.value is not null ? data.score.value : '-' }}/100</td>
                         {% if data.score.reference is defined %}
                             <td>{{ data.score.reference.value is not null ? data.score.reference.value : '-' }}/100</td>
-                            <td>{{ data.score.variation }}%</td>
+                            <td>{{ data.score.variation > 0 ? '+' ~ data.score.variation : data.score.variation }}%</td>
                         {% endif %}
 
                         {% for code, reference in result.references %}
@@ -43,7 +43,7 @@
                             <td>{{ children.score.value is not null ? children.score.value : '-' }}/100</td>
                             {% if children.score.reference is defined %}
                                 <td>{{ children.score.reference.value is not null ? children.score.reference.value : '-' }}/100</td>
-                                <td>{{ children.score.variation }}%</td>
+                                <td>{{ children.score.variation > 0 ? '+' ~ children.score.variation : children.score.variation }}%</td>
                             {% endif %}
 
                             {% for code, reference in result.references %}

@@ -2,8 +2,8 @@
 
 {% block title_communaute_pratique %}Publications issues des groupes de travail{% endblock %}
 {% block add_suggestion %}
-    {% if app.user %}
-        <a style="margin-top:24px;margin-left: 10px; display: inline-block;" href="{{ path('hopitalnumerique_suggestion_front_add') }}">Proposer une ressource</a>
+    {% if app.user and false %}
+        <a style="margin-top:24px;margin-left: 10px; display: inline-block;" href="{{ path('hopitalnumerique_suggestion_front_add') }}">Vous connaissez une ressource qui n'apparait pas dans les résultats ? Proposez-nous de l'ajouter</a>
     {% endif %}
 {% endblock %}
 

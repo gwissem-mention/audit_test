@@ -150,23 +150,16 @@
             <div class="col-md-8">
 
                 <div class="filtres-bloc">
-                    {% if app.user %}
-                        <a class="pull-right" href="{{ path('hopitalnumerique_suggestion_front_add') }}">Proposer une ressource</a>
-                    {% endif %}
-                    <h1>Ma recherche <span id="results-count"></span></h1>
-                    <div id="filtres-actions">
-                        {% if recherches|length > 0 %}
+                    {% if recherches|length > 0 %}
                         <select id="research-list" title="reasearch-list">
                             <option value="#">Mes recherches enregistrées</option>
                             {% for recherche in recherches %}
-                                <option value="{{ path('hopitalnumerique_recherche_referencement_requete_view', {'requete': recherche.id}) }}">{{ recherche.nom }}</option>
+                                <option {% if requete.id is defined and recherche.id == requete.id %}selected{% endif %} value="{{ path('hopitalnumerique_recherche_referencement_requete_view', {'requete': recherche.id}) }}">{{ recherche.nom }}</option>
                             {% endfor %}
                         </select>
-                        {% endif %}
-                        {%- if requete is not null -%}
-                            <div id="search-name">{{ requete }}</div>
-                        {%- endif -%}
-                    </div>
+                    {% endif %}
+                    <h1>Ma recherche <span id="results-count"></span></h1>
+                    <div id="filtres-actions"></div>
                     <div id="filtres-info">
                         <p>Ici seront placés les critères de recherche que vous aurez sélectionnés dans le menu à gauche. Pour voir le détail d'un critère, cliquer le critère ou le chevron. Pour sélectionner un critère, cliquer le signe + ou double-cliquer le critère.</p>
                         <p>La recherche textuelle fonctionne sur les titres, les résumés et les synthèses des productions.</p>
@@ -174,12 +167,10 @@
                     </div>
                     <nav class="references">
                         <div class="row">
-                            <div class="col-md-8">
+                            <div class="col-md-12">
+                                <button class="btn btn-danger request-button" style="margin-right: 4px;" onclick="Hn_RechercheBundle_Referencement.removeFilters();" title="Commencer une nouvelle recherche"><i class="fa fa-times"></i></button>
                                 <ul></ul>
-                            </div>
-                            <div id="request-buttons" style="display:none" class="col-md-4">
-                                <button class="btn btn-xs btn-success" style="width: 215px;margin-bottom:5px;" onclick="Hn_RechercheBundle_Referencement.saveFilters();">Enregistrer ma recherche</button>
-                                <button class="btn btn-xs btn-danger" style="width: 215px;"  onclick="Hn_RechercheBundle_Referencement.removeFilters();">Commencer une nouvelle recherche</button>
+                                <button class="btn btn-success request-button" style="margin-left: 4px;" onclick="Hn_RechercheBundle_Referencement.saveFilters();">Enregistrer</button>
                             </div>
                         </div>
                     </nav>
@@ -251,9 +242,14 @@
                             <h2><span class="title">{{ groupTitle }}</span> (<span id="results-{{ groupId }}-count"></span> résultats)</h2>
                             <div id="results-{{ groupId }}"></div>
                             <div class="buttons">
+                                {% if app.user and false %}
+                                    <div class="pull-left suggest-link">
+                                        <a class="pull-left" href="{{ path('hopitalnumerique_suggestion_front_add') }}">Vous connaissez une ressource qui n'apparait pas dans les résultats ?<br />Proposez-nous de l'ajouter</a>
+                                    </div>
+                                {% endif %}
+                                    <button type="button" disabled id="results-{{ groupId }}-less-button" class="btn btn-xs btn-danger more-less-results" onclick="Hn_RechercheBundle_Referencement.displayLessResults('{{ groupId }}');"><em class="fa fa-angle-double-up"></em> &nbsp; Moins de résultats</button>
+                                    <button type="button" disabled id="results-{{ groupId }}-more-button" class="btn btn-xs btn-primary more-less-results" onclick="Hn_RechercheBundle_Referencement.displayMoreResults('{{ groupId }}');"><em class="fa fa-angle-double-down"></em> &nbsp; Plus de résultats</button>
                                 <div class="ajax-loader"></div>
-                                <button type="button" disabled id="results-{{ groupId }}-less-button" class="btn btn-xs btn-danger" onclick="Hn_RechercheBundle_Referencement.displayLessResults('{{ groupId }}');"><em class="fa fa-angle-double-up"></em> &nbsp; Moins de résultats</button>
-                                <button type="button" disabled id="results-{{ groupId }}-more-button" class="btn btn-xs btn-primary" onclick="Hn_RechercheBundle_Referencement.displayMoreResults('{{ groupId }}');"><em class="fa fa-angle-double-down"></em> &nbsp; Plus de résultats</button>
                             </div>
                         </div>
                     {%- endfor -%}
