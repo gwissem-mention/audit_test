@@ -715,6 +715,17 @@ class QuestionnaireController extends Controller
                 }
 
                 $this->get('session')->getFlashBag()->add(($new ? 'success' : 'info'), 'Formulaire enregistré.');
+                
+                $action = 'validate';
+                $class = 'HopitalNumerique\QuestionnaireBundle\Entity\Questionnaire';
+
+                $this->container->get('hopitalnumerique_core.log')->Logger(
+                    $action,
+                    $questionnaire,
+                    $questionnaire->getNom(),
+                    $class,
+                    $this->getUser()
+                );
 
                 //Sauvegarde / Sauvegarde + quitte
                 $do = $request->request->get('do');
