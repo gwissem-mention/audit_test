@@ -6,6 +6,8 @@
  */
 namespace HopitalNumerique\InterventionBundle\Controller;
 
+use HopitalNumerique\InterventionBundle\Event\InterventionDemandeEvent;
+use HopitalNumerique\InterventionBundle\Events;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Response;
 use HopitalNumerique\InterventionBundle\Entity\InterventionDemande;
@@ -31,6 +33,10 @@ class EtatController extends Controller
             
             if ($this->get('hopitalnumerique_intervention.manager.intervention_demande')->changeEtat($interventionDemande, $interventionEtat, $messageJustificationChangementEtat))
             {
+                $dispatcher = $this->get('event_dispatcher');
+                $intervention = new InterventionDemandeEvent($interventionDemande);
+                $dispatcher->dispatch(Events::INTERVENTION_ACCEPT, $intervention);
+
                 $this->get('session')->getFlashBag()->add('success', 'L\'état de la demande d\'intervention a été modifié.');
                 return new Response(1);
             }

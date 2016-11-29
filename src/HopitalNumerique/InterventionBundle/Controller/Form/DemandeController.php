@@ -8,6 +8,8 @@ namespace HopitalNumerique\InterventionBundle\Controller\Form;
 
 use HopitalNumerique\InterventionBundle\Entity\InterventionDemande;
 use HopitalNumerique\InterventionBundle\Entity\InterventionEtat;
+use HopitalNumerique\InterventionBundle\Event\InterventionDemandeEvent;
+use HopitalNumerique\InterventionBundle\Events;
 use HopitalNumerique\UserBundle\Entity\User;
 use HopitalNumerique\ObjetBundle\Entity\Objet;
 
@@ -123,6 +125,10 @@ class DemandeController extends \HopitalNumerique\InterventionBundle\Controller\
             $this->interventionDemande->setDirecteur($this->get('hopitalnumerique_user.manager.user')->getDirecteur(array('etablissementRattachementSante' => $this->interventionDemande->getReferent()->getEtablissementRattachementSante(), 'enabled' => true)));
         }
         $this->get('hopitalnumerique_intervention.manager.interventiondemande')->save($this->interventionDemande);
+
+        $dispatcher = $this->get('event_dispatcher');
+        $intervention = new InterventionDemandeEvent($this->interventionDemande);
+        $dispatcher->dispatch(Events::INTERVENTION_REQUEST, $intervention);
 
         return true;
     }

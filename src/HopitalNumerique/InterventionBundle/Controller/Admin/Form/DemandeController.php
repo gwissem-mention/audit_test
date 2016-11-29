@@ -6,6 +6,8 @@
  */
 namespace HopitalNumerique\InterventionBundle\Controller\Admin\Form;
 
+use HopitalNumerique\InterventionBundle\Event\InterventionDemandeEvent;
+use HopitalNumerique\InterventionBundle\Events;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Response;
 use HopitalNumerique\InterventionBundle\Entity\InterventionDemande;
@@ -76,6 +78,10 @@ class DemandeController extends Controller
                 $this->interventionDemande->setCmsiDateChoix(new \DateTime());
                 
                 $this->get('hopitalnumerique_intervention.manager.interventiondemande')->save($this->interventionDemande);
+
+                $dispatcher = $this->get('event_dispatcher');
+                $intervention = new InterventionDemandeEvent($this->interventionDemande);
+                $dispatcher->dispatch(Events::INTERVENTION_REQUEST, $intervention);
                 
                 // Message Flash
                 $this->get('session')->getFlashBag()->add('success', 'La demande d\'intervention a été créée.');
@@ -104,10 +110,15 @@ class DemandeController extends Controller
     public function editAction(InterventionDemande $id)
     {
         $this->interventionDemande = $id;
-
+        $oldIntervention = clone($id);
         $interventionDemandeFormulaire = $this->createForm('hopitalnumerique_interventionbundle_interventiondemande_edition_admin', $this->interventionDemande, array('interventionDemande' => $this->interventionDemande));
+
         if ($this->gereEnvoiFormulaireDemandeEdition($interventionDemandeFormulaire))
         {
+            $dispatcher = $this->get('event_dispatcher');
+            $intervention = new InterventionDemandeEvent($this->interventionDemande, $oldIntervention);
+            $dispatcher->dispatch(Events::INTERVENTION_EVALUATION, $intervention);
+
             $do = $this->container->get('request')->request->get('do');
 
             return $this->redirect($do == 'save-close' ? $this->generateUrl('hopital_numerique_intervention_admin_liste') : $this->generateUrl('hopital_numerique_intervention_admin_demande_edit', array('id' => $this->interventionDemande->getId())));
@@ -138,6 +149,11 @@ class DemandeController extends Controller
                 // YRO 09/02/2015 : si le champ "etat actuel" a été modifié, on envoi les mails conséquents
                 if( $this->get('hopitalnumerique_intervention.manager.interventiondemande')->isEtatActuelUpdated($this->interventionDemande) )
                 {
+                    if ($this->interventionDemande->getInterventionEtat()->getId() == $this->container->getParameter('id_reference_accept_by_embassador')) {
+                        $dispatcher = $this->get('event_dispatcher');
+                        $intervention = new InterventionDemandeEvent($this->interventionDemande);
+                        $dispatcher->dispatch(Events::INTERVENTION_ACCEPT, $intervention);
+                    }
                     $this->gereEnvoiMailChangementEtat($this->interventionDemande);
                 }
                 if (!is_null($this->interventionDemande->getEvaluationEtat()) && $this->interventionDemande->getEvaluationEtat()->getId() === InterventionEvaluationEtat::getInterventionEvaluationEtatEvalueId())

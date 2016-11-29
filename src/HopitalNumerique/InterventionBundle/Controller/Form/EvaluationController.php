@@ -9,6 +9,8 @@ namespace HopitalNumerique\InterventionBundle\Controller\Form;
 use HopitalNumerique\InterventionBundle\Entity\InterventionEvaluation;
 
 use HopitalNumerique\InterventionBundle\Entity\InterventionDemande;
+use HopitalNumerique\InterventionBundle\Event\InterventionDemandeEvent;
+use HopitalNumerique\InterventionBundle\Events;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
 /**
@@ -183,6 +185,10 @@ class EvaluationController extends Controller
 
             //Mise à jour/création des réponses
             $this->get('hopitalnumerique_questionnaire.manager.reponse')->save($reponses);
+            
+            $dispatcher = $this->get('event_dispatcher');
+            $intervention = new InterventionDemandeEvent($interventionDemande);
+            $dispatcher->dispatch(Events::INTERVENTION_EVALUATION_FRONT, $intervention);
 
             return $this->redirect($this->generateUrl($this->routeRedirectionSucces));
         }

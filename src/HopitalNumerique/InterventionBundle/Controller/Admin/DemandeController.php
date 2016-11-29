@@ -8,6 +8,8 @@ namespace HopitalNumerique\InterventionBundle\Controller\Admin;
 
 use HopitalNumerique\InterventionBundle\Entity\InterventionDemande;
 use HopitalNumerique\InterventionBundle\Entity\InterventionEvaluationEtat;
+use HopitalNumerique\InterventionBundle\Event\InterventionDemandeEvent;
+use HopitalNumerique\InterventionBundle\Events;
 
 /**
  * Contrôleur des demandes d'intervention pour la console administrative.
@@ -135,6 +137,10 @@ class DemandeController extends \HopitalNumerique\InterventionBundle\Controller\
                 
                 $this->get('hopitalnumerique_intervention.manager.intervention_demande')->changeEtat($interventionDemande, $this->container->get('hopitalnumerique_intervention.manager.intervention_etat')->getInterventionEtatTermine());
                 $this->get('hopitalnumerique_intervention.manager.intervention_demande')->changeEvaluationEtat($interventionDemande, $this->container->get('hopitalnumerique_intervention.manager.intervention_evaluation_etat')->getInterventionEvaluationEtatEvalue());
+
+                $dispatcher = $this->get('event_dispatcher');
+                $intervention = new InterventionDemandeEvent($interventionDemande);
+                $dispatcher->dispatch(Events::INTERVENTION_EVALUATION_FRONT, $intervention);
             }
         }
         
