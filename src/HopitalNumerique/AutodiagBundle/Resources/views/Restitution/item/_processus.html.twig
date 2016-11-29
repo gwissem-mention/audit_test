@@ -9,7 +9,7 @@
                     {% for child in data.childrens %}
                         {% if child.score.value is not null %}
                             <div class="processus-line {{- tools.cssClass(child.score.value, child.colorationInversed) -}}">
-                                {{ child.label }}
+                                <span>{{ child.label }}</span>
 
                                 {% if child.score.variation is defined %}
                                     <div class="compare-score-variation" data-variation="{{ child.score.variation }}"></div>
