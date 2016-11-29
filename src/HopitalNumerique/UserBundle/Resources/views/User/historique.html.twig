@@ -88,6 +88,27 @@
                         </tbody>
                     </table>
                 {% endif %}
+                {% if logsIntervention is not empty %}
+                    <h5>Intervention</h5>
+                    <table class="table table-bordered table-striped">
+                        <thead>
+                        <tr>
+                            <th width="100px">Type</th>
+                            <th width="130px">Date</th>
+                            <th width="200px">Nom de l'ambassadeur</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for logIntervention in logsIntervention if logIntervention is not empty %}
+                            <tr>
+                                <td>{{ logIntervention.action|getFrenchAction }}</td>
+                                <td>{{ logIntervention.loggedAt|date('d/m/Y H:i')}}</td>
+                                <td>{{ logIntervention.data.name }}</td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                {% endif %}
             </div>
         </div>
     </div>
