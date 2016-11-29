@@ -16,6 +16,10 @@ class Log
 
     public function Logger($action, $object, $title, $class, $user)
     {
+        $value = 'name';
+        if ($class == 'HopitalNumerique\UserBundle\Entity\User') {
+            $value = 'roles';
+        }
         $em = $this->doctrine->getManager();
 
         $log = new LogEntry();
@@ -24,7 +28,7 @@ class Log
         $log->setObjectId($object->getId());
         $log->setObjectClass($class);
         $log->setVersion(1);
-        $log->setData(array('name' => $title));
+        $log->setData(array($value => $title));
         $log->setUsername($user->getUsername());
         $em->persist($log);
         $em->flush();
