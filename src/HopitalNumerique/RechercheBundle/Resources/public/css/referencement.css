@@ -1,4 +1,9 @@
 .recherche-referencement { margin: 15px 15px 0 15px; }
+    .recherche-referencement #research-list { float: right; }
+    .recherche-referencement .more-less-results { margin-top: 15px; }
+    .recherche-referencement .suggest-link { margin-bottom: 20px; }
+    .recherche-referencement .suggest-link a { text-align: left; }
+    .recherche-referencement .request-button { padding: 3px 12px; float: left; margin-top: 5px; }
     .recherche-referencement #contexte-container {}
         .recherche-referencement #contexte-container #contexte-button { border-radius: 0;font-size: 16px;margin: 0 0 15px 0;background-color: #fff;text-transform: uppercase;color: #d60030;font-weight: bold;border-color: #D60030;}
         .recherche-referencement #contexte-container .modal {}
@@ -32,7 +37,7 @@
         .recherche-referencement .filtres-bloc #filtres-info { background-color: #f8f8f8;border: 2px dashed #bfbfbf;border-radius: 10px;color: #999;margin: 10px 0; }
             .recherche-referencement .filtres-bloc #filtres-info p { margin: 15px;padding: 0; }
         .recherche-referencement .filtres-bloc .references { margin: 10px 0; }
-            .recherche-referencement .filtres-bloc .references ul { list-style-type: none;margin: 0;padding: 0; }
+            .recherche-referencement .filtres-bloc .references ul { list-style-type: none;margin: 0;padding: 0; display: inline; }
                 .recherche-referencement .filtres-bloc .references ul li { background-color: #fff;border-radius: 4px;box-shadow: 3px 3px 5px 0 rgba(50, 50, 50, 0.75);float: left;margin: 4px;padding: 4px;white-space: nowrap; }
                     .recherche-referencement .filtres-bloc .references ul li .remove { color: #000;cursor: pointer;padding: 0 3px; }
                     .recherche-referencement .filtres-bloc .references ul li .remove:hover { color: #d60030;text-decoration: none; }

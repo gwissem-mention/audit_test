@@ -67,8 +67,8 @@
         </div>
 
         <div class="resultats-points-durs">
-            {% if app.user %}
-                <a class="pull-left" style="display: block; margin-top: 30px; width: 160px;" href="{{ path('hopitalnumerique_suggestion_front_add') }}">Proposer une ressource</a>
+            {% if app.user and false %}
+                <a style="display: block; margin-top: 30px;" href="{{ path('hopitalnumerique_suggestion_front_add') }}">Vous connaissez une ressource qui n'apparait pas dans les résultats ? Proposez-nous de l'ajouter</a>
             {% endif %}
             <input type="hidden" id="app-user" value="{% if app.user %}{{app.user.id}}{% else %}0{% endif %}" />
             <input type="hidden" id="etape-selected" value="{{etapesSelected.id}}" />
