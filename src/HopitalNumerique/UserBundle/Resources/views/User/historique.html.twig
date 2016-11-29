@@ -109,6 +109,48 @@
                         </tbody>
                     </table>
                 {% endif %}
+                {% if logsFacturation is not empty %}
+                    <h5>Facturation</h5>
+                    <table class="table table-bordered table-striped">
+                        <thead>
+                        <tr>
+                            <th width="100px">Type</th>
+                            <th width="130px">Date</th>
+                            <th width="200px">ID de la facture</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for logFacturation in logsFacturation if logFacturation is not empty %}
+                            <tr>
+                                <td>{{ logFacturation.action|getFrenchAction }}</td>
+                                <td>{{ logFacturation.loggedAt|date('d/m/Y H:i')}}</td>
+                                <td>{{ logFacturation.objectId }}</td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                {% endif %}
+                {% if logsQuestionnaire is not empty %}
+                    <h5>Questionnaire</h5>
+                    <table class="table table-bordered table-striped">
+                        <thead>
+                        <tr>
+                            <th width="100px">Type</th>
+                            <th width="130px">Date</th>
+                            <th width="200px">Nom du questionnaire</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for logQuestionnaire in logsQuestionnaire if logQuestionnaire is not empty %}
+                            <tr>
+                                <td>{{ logQuestionnaire.action|getFrenchAction }}</td>
+                                <td>{{ logQuestionnaire.loggedAt|date('d/m/Y H:i')}}</td>
+                                <td>{{ logQuestionnaire.data.name }}</td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                {% endif %}
             </div>
         </div>
     </div>

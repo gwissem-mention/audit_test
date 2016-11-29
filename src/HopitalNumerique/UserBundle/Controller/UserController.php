@@ -291,11 +291,24 @@ class UserController extends Controller
             'objectClass' => 'HopitalNumerique\InterventionBundle\Entity\InterventionDemande'
         ));
 
+        $logsFacturation = $repo->findBy(array(
+            'username' => $user->getUsername(),
+            'objectClass' => 'HopitalNumerique\PaiementBundle\Entity\Facture',
+            'action' => 'create'
+        ));
+
+        $logsQuestionnaire = $repo->findBy(array(
+            'username' => $user->getUsername(),
+            'objectClass' => 'HopitalNumerique\QuestionnaireBundle\Entity\Questionnaire',
+        ));
+
         return $this->render('HopitalNumeriqueUserBundle:User:historique.html.twig', array(
             'logs' => $logs,
             'logsSynthesis' => $logsSynthesis,
             'logsModule' => $logsModule,
-            'logsIntervention' => $logsIntervention
+            'logsIntervention' => $logsIntervention,
+            'logsFacturation' => $logsFacturation,
+            'logsQuestionnaire' => $logsQuestionnaire
         ));
     }
 
@@ -853,8 +866,10 @@ class UserController extends Controller
      */
     private function renderForm( $formName, $user, $view, $options = array() )
     {
+        $oldUser = clone($user);
         //Création du formulaire via le service
         $form = $this->createForm( $formName, $user);
+
 
         //Si on est en FO dans informations personelles, on affiche pas le mot de passe. Il est géré dans un autre formulaire
         if($this->_informationsPersonnelles)
@@ -940,6 +955,19 @@ class UserController extends Controller
                         //--FO--
                         $mail = $this->get('nodevo_mail.manager.mail')->sendAjoutUserMail($user, array());
                         $this->get('mailer')->send($mail);
+                    }
+                } else {
+                    if ($oldUser->getRoles()[0] != $form->get("roles")->getData()->getRole()) {
+                        $action = 'update';
+                        $class = 'HopitalNumerique\UserBundle\Entity\User';
+
+                        $this->container->get('hopitalnumerique_core.log')->Logger(
+                            $action,
+                            $user,
+                            $form->get("roles")->getData()->getName(),
+                            $class,
+                            $this->getUser()
+                        );
                     }
                 }
 
