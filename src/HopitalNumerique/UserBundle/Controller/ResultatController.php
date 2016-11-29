@@ -1,6 +1,7 @@
 <?php
 namespace HopitalNumerique\UserBundle\Controller;
 
+use HopitalNumerique\AutodiagBundle\Entity\Synthesis;
 use HopitalNumerique\UserBundle\Entity\User;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
@@ -9,14 +10,33 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
  */
 class ResultatController extends Controller
 {
-    public function indexAction( User $user )
+    /**
+     * @param User $user
+     *
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
+    public function indexAction(User $user)
     {
-        $resultats = $this->get('hopitalnumerique_autodiag.manager.resultat')->findBy( array('user'=>$user) );
+        $syntheses = $this->get('autodiag.repository.synthesis')->findBy(['user' => $user->getId()]);
+        $shareNamesBySynthesis = [];
 
-        return $this->render( 'HopitalNumeriqueUserBundle:Resultat:index.html.twig' , array(
-            'user'      => $user,
-            'options'   => $this->get('hopitalnumerique_user.gestion_affichage_onglet')->getOptions($user),
-            'resultats' => $resultats
-        ));
+        /** @var Synthesis $synthesis */
+        foreach ($syntheses as $synthesis) {
+            /** @var User $user */
+            foreach ($synthesis->getShares() as $user) {
+                if (!isset($shareNamesBySynthesis[$synthesis->getId()])) {
+                    $shareNamesBySynthesis[$synthesis->getId()] = [];
+                }
+
+                $shareNamesBySynthesis[$synthesis->getId()][] = $user->getNomPrenom();
+            }
+        }
+
+        return $this->render('HopitalNumeriqueUserBundle:Resultat:index.html.twig', [
+            'user'                  => $user,
+            'options'               => $this->get('hopitalnumerique_user.gestion_affichage_onglet')->getOptions($user),
+            'results'               => $syntheses,
+            'shareNamesBySynthesis' => $shareNamesBySynthesis,
+        ]);
     }
 }
