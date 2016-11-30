@@ -164,7 +164,7 @@ ad:
         type: type_restitution
         empty: Il n'y a pas encore de mode de restitution pour cet autodiagnostic.
         loggedout-warning: Attention, vous n'êtes pas connecté, vos résultats seront perdus à la fermeture du navigateur.
-        loggedout-warning-validate: Pour pouvoir valider vos résultats vous devez vous
+        loggedout-warning-validate: Pour pouvoir valider vos résultats vous devez vous connecter ou créer un compte.
         synthesis: Synthèse des autodiagnistics suivants
         start_new: Commencer un nouvel autodiagnostic
         start_new: Commencer un nouvel autodiagnostic

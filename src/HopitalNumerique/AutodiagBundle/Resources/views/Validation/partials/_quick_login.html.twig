@@ -1,0 +1,12 @@
+<aside class="communaute-de-pratiques-blocs">
+    <div class="row">
+        <div class="panel-body">
+            <div class="col-md-6">
+                {% include 'HopitalNumeriqueAccountBundle:include:login.html.twig' with { 'size':'small', 'title':'Connexion', 'displayInscription':false } %}
+            </div>
+            <div class="col-md-6">
+                {{ render(controller('HopitalNumeriqueAccountBundle:Inscription:popin', { 'urlRedirection':app.request.uri })) }}
+            </div>
+        </div>
+    </div>
+</aside>

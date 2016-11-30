@@ -122,7 +122,7 @@ class ErreursController extends Controller
      */
     public function exportCSVAction(Request $request)
     {
-        $resultat = $this->getAllUrlObjets();
+        $resultats = $this->getAllUrlObjets();
 
         //Colonnes communes
         $colonnes = [
@@ -135,7 +135,7 @@ class ErreursController extends Controller
         ];
 
         $kernelCharset = $this->container->getParameter('kernel.charset');
-        $datas = $this->get('hopitalnumerique_stat.manager.errorurl')->getDatasForExport($resultat);
+        $datas = $this->get('hopitalnumerique_stat.manager.errorurl')->getDatasForExport($resultats);
 
         return $this->get('hopitalnumerique_stat.manager.errorurl')->exportCsv($colonnes, $datas, 'export-erreurs-url.csv', $kernelCharset);
     }
