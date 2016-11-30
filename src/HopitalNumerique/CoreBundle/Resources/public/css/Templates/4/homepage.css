@@ -53,7 +53,7 @@ div.homepage  {
 }
 #header #logoHn {
     margin-top: 0px;
-    display: block;#logoAnap
+    display: block;
     float: left;
     margin-right: 30px;
 }
@@ -638,8 +638,8 @@ div.homepage  {
 #footer .menu-footer{ width:100%; margin:0 auto; list-style: none; padding:0; display: inline-block; text-align: center;}
 #footer .menu-footer li{display: inline-block; text-align: center;}
 #footer .menu-footer li a{color:#fff; display: block; padding:0 6px; text-transform: uppercase; border-right: 1px solid #fff}
-#footer .menu-footer li.last a{border :0;}a
-#footer .reporting{width:265px;cursor: pointer; text-transform: uppercase;margin:10px auto;display:block;margin-bottom: 0px;}
+#footer .menu-footer li.last a{border :0;}
+#footer a.reporting{width:265px;cursor: pointer; text-transform: uppercase;margin:10px auto;display:block;margin-bottom: 0px;}
 
 /* BODY */
 #homepage {
