@@ -14,10 +14,13 @@ class SuggestionRepository extends EntityRepository
                 "suggestion.creationDate",
                 "suggestion.title",
                 "GROUP_CONCAT(domains.nom SEPARATOR ' - ') domainsName",
-                "state.libelle stateLabel"
+                "state.libelle stateLabel",
+                "suggestion.stateChangeDate",
+                "CONCAT(CONCAT(stateChangeAuthor.prenom, ' '), stateChangeAuthor.nom) stateChangeAuthorName"
             )
             ->leftJoin('suggestion.domains', 'domains')
             ->leftJoin('suggestion.state', 'state')
+            ->leftJoin('suggestion.stateChangeAuthor', 'stateChangeAuthor')
             ->addOrderBy('suggestion.creationDate', 'DESC')
             ->groupBy('suggestion.id')
         ;

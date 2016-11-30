@@ -132,6 +132,21 @@ class Suggestion
      */
     private $user;
 
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(type="datetime", nullable=true)
+     */
+    private $stateChangeDate;
+
+    /**
+     * @var User
+     *
+     * @ORM\ManyToOne(targetEntity="\HopitalNumerique\UserBundle\Entity\User", cascade={"persist"})
+     * @ORM\JoinColumn(name="stateChangeAuthor", referencedColumnName="usr_id")
+     */
+    private $stateChangeAuthor;
+
     public function __construct()
     {
         $this->creationDate = new \DateTime();
@@ -458,4 +473,46 @@ class Suggestion
     {
         return $this->user;
     }
+
+    /**
+     * @param \DateTime $stateChangeDate
+     *
+     * @return $this
+     */
+    public function setStateChangeDate($stateChangeDate)
+    {
+        $this->stateChangeDate = $stateChangeDate;
+
+        return $this;
+    }
+
+    /**
+     * @return \DateTime
+     */
+    public function getStateChangeDate()
+    {
+        return $this->stateChangeDate;
+    }
+
+    /**
+     * @param User $stateChangeAuthor
+     *
+     * @return $this
+     */
+    public function setStateChangeAuthor($stateChangeAuthor)
+    {
+        $this->stateChangeAuthor = $stateChangeAuthor;
+
+        return $this;
+    }
+
+    /**
+     * @return User
+     */
+    public function getStateChangeAuthor()
+    {
+        return $this->stateChangeAuthor;
+    }
+
+
 }
