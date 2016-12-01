@@ -4,6 +4,7 @@ namespace HopitalNumerique\ReferenceBundle\Repository;
 
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\Query\Expr;
+use Doctrine\ORM\QueryBuilder;
 use HopitalNumerique\ReferenceBundle\Entity\Reference;
 
 /**
@@ -16,18 +17,19 @@ class ReferenceRepository extends EntityRepository
      *
      * @return array
      */
-    public function getArbo( $unlockedOnly = false, $fromDictionnaire = false, $fromRecherche = false, $domaineIds = array(), $actif = Reference::STATUT_ACTIF_ID )
+    public function getArbo($unlockedOnly = false, $fromDictionnaire = false, $fromRecherche = false, $domaineIds = [], $actif = Reference::STATUT_ACTIF_ID)
     {
         $qb = $this->_em->createQueryBuilder();
         $qb->select('ref.id, ref.libelle, ref.code, par.id as parent, ref.order')
             ->from('HopitalNumeriqueReferenceBundle:Reference', 'ref')
-            ->leftJoin('ref.parents','par');
+            ->leftJoin('ref.parents', 'par')
+        ;
 
-        if(count($domaineIds) !== 0)
-        {
+        if (count($domaineIds) !== 0) {
             $qb->leftJoin('ref.domaines', 'domaine')
                 ->andWhere('domaine.id IN (:domainesId)')
-                ->setParameter('domainesId', $domaineIds);
+                ->setParameter('domainesId', $domaineIds)
+            ;
         }
 
         if (null !== $actif) {
@@ -37,18 +39,15 @@ class ReferenceRepository extends EntityRepository
             ;
         }
 
-        if( $unlockedOnly )
-        {
+        if ($unlockedOnly) {
             $qb->andWhere('ref.lock = 0');
         }
 
-        if( $fromDictionnaire )
-        {
+        if ($fromDictionnaire) {
             $qb->andWhere('ref.reference = 1');
         }
 
-        if( $fromRecherche )
-        {
+        if ($fromRecherche) {
             $qb->andWhere('ref.inRecherche = 1');
         }
 
@@ -60,7 +59,7 @@ class ReferenceRepository extends EntityRepository
     /**
      * Récupère les données du grid sous forme de tableau correctement formaté
      *
-     * @return Query Builder
+     * @return QueryBuilder
      */
     public function getDatasForGrid($domainesIds, $condition = null)
     {
@@ -73,16 +72,16 @@ class ReferenceRepository extends EntityRepository
                 'domaine'
             )
             ->from('HopitalNumeriqueReferenceBundle:Reference', 'ref')
-            ->leftJoin('ref.etat','refEtat')
-            ->leftJoin('ref.parents','refParent')
+            ->leftJoin('ref.etat', 'refEtat')
+            ->leftJoin('ref.parents', 'refParent')
             ->leftJoin('ref.domaines', 'domaine')
-                ->where($qb->expr()->orX(
-                    $qb->expr()->in('domaine.id', ':domainesId'),
-                    $qb->expr()->isNull('domaine.id')
-                ))
-                ->setParameter('domainesId', $domainesIds)
-            ->groupBy('ref.id')
-            ->orderBy('ref.libelle');
+            ->where($qb->expr()->orX(
+                $qb->expr()->in('domaine.id', ':domainesId'),
+                $qb->expr()->isNull('domaine.id')
+            ))
+            ->setParameter('domainesId', $domainesIds)
+            ->orderBy('ref.libelle')
+        ;
 
         return $qb;
     }
@@ -92,7 +91,7 @@ class ReferenceRepository extends EntityRepository
      *
      * @return QueryBuilder
      */
-    public function getDatasForExport( $ids )
+    public function getDatasForExport($ids)
     {
         $qb = $this->_em->createQueryBuilder();
         $qb
@@ -136,20 +135,21 @@ class ReferenceRepository extends EntityRepository
         $qb = $this->_em->createQueryBuilder();
         $qb->select('ref')
             ->from('HopitalNumeriqueReferenceBundle:Reference', 'ref')
-            ->leftJoin('ref.domaines','domaine')
-                ->where($qb->expr()->isNotNull('domaine.id'))
-            ->orderBy('domaine.nom');
+            ->leftJoin('ref.domaines', 'domaine')
+            ->where($qb->expr()->isNotNull('domaine.id'))
+            ->orderBy('domaine.nom')
+        ;
 
         return $qb;
     }
 
-    public function getReferencesUserConnectedForForm( $userId )
+    public function getReferencesUserConnectedForForm($userId)
     {
         $qb = $this->_em->createQueryBuilder();
         $qb->select('ref')
             ->from('HopitalNumeriqueReferenceBundle:Reference', 'ref')
-            ->leftJoin('ref.domaines','domaine')
-            ->leftJoin('domaine.users','user')
+            ->leftJoin('ref.domaines', 'domaine')
+            ->leftJoin('domaine.users', 'user')
             ->where($qb->expr()->orX(
                 $qb->expr()->eq('user.id', ':userId'),
                 $qb->expr()->isNull('domaine.id')
@@ -157,7 +157,8 @@ class ReferenceRepository extends EntityRepository
             ->setParameter('userId', $userId)
             ->andWhere('ref.reference = 1')
             ->andWhere('ref.inRecherche = 1')
-            ->orderBy('ref.order', 'ASC');
+            ->orderBy('ref.order', 'ASC')
+        ;
 
         return $qb;
     }
@@ -169,11 +170,12 @@ class ReferenceRepository extends EntityRepository
             ->from('HopitalNumeriqueReferenceBundle:Reference', 'ref')
             ->innerJoin('ref.domaines', 'domaine', Expr\Join::WITH, 'domaine.id = :idDomaine')
             ->innerJoin('ref.parents', 'par', Expr\Join::WITH, 'par.id = :idParent')
-            ->setParameters(array(
+            ->setParameters([
                 'idDomaine' => $idDomaine,
                 'idParent'  => $idParent,
-            ))
-            ->orderBy('ref.order');
+            ])
+            ->orderBy('ref.order')
+        ;
 
         return $qb;
     }
@@ -190,13 +192,14 @@ class ReferenceRepository extends EntityRepository
         $qb->select('ref')
             ->from('HopitalNumeriqueReferenceBundle:Reference', 'ref')
             ->leftJoin('ref.domaines', 'domaine')
-                ->where($qb->expr()->orX(
-                    $qb->expr()->in('domaine.id', ':domainesId'),
-                    $qb->expr()->isNull('domaine.id')
-                ))
-                ->setParameter('domainesId', $domainesQuestionnaireId)
+            ->where($qb->expr()->orX(
+                $qb->expr()->in('domaine.id', ':domainesId'),
+                $qb->expr()->isNull('domaine.id')
+            ))
+            ->setParameter('domainesId', $domainesQuestionnaireId)
             ->groupBy('ref.code')
-            ->orderBy('ref.code');
+            ->orderBy('ref.code')
+        ;
 
         return $qb;
     }
@@ -242,7 +245,7 @@ class ReferenceRepository extends EntityRepository
             ->from('HopitalNumeriqueReferenceBundle:Reference', 'ref')
             ->andWhere('ref.code = :code')
             ->setParameter('code', $code)
-            ->orderBy('ref.order','ASC')
+            ->orderBy('ref.order', 'ASC')
         ;
 
         if (null !== $actif) {
@@ -257,7 +260,6 @@ class ReferenceRepository extends EntityRepository
                 ->innerJoin('ref.parents', 'parent', Expr\Join::WITH, 'parent.id = :parent')
                 ->setParameter('parent', $parent)
             ;
-
         }
 
         return $qb->getQuery()->getResult();
@@ -266,13 +268,13 @@ class ReferenceRepository extends EntityRepository
     /**
      * Retourne les références selon des domaines.
      *
-     * @param array<\HopitalNumerique\DomaineBundle\Entity\Domaine> $domaines    Domaines
-     * @param boolean|null                                          $actif       Actif
-     * @param boolean|null                                          $lock        Lock
-     * @param boolean|null                                          $parentable  Parentable
-     * @param boolean                                               $reference   Reference
-     * @param boolean                                               $inRecherche InRecherche ?
-     * @param boolean                                               $inGlossaire InGlossaire ?
+     * @param array <\HopitalNumerique\DomaineBundle\Entity\Domaine> $domaines    Domaines
+     * @param boolean|null $actif Actif
+     * @param boolean|null $lock Lock
+     * @param boolean|null $parentable Parentable
+     * @param boolean $reference Reference
+     * @param boolean $inRecherche InRecherche ?
+     * @param boolean $inGlossaire InGlossaire ?
      * @return array<\HopitalNumerique\ReferenceBundle\Entity\Reference> Références
      */
     public function findByDomaines($domaines, $actif, $lock, $parentable, $reference, $inRecherche, $inGlossaire)
@@ -293,8 +295,8 @@ class ReferenceRepository extends EntityRepository
                 $qb->expr()->eq('reference.allDomaines', ':allDomaines')
             ))
             ->setParameters([
-                'domaines' => $domaines,
-                'allDomaines' => true
+                'domaines'    => $domaines,
+                'allDomaines' => true,
             ])
             ->orderBy('reference.order', 'ASC')
         ;
@@ -331,7 +333,7 @@ class ReferenceRepository extends EntityRepository
 
         return $qb->getQuery()->getResult();
     }
-    
+
     /**
      * Récupère les domaines en fonction de la référence
      *
@@ -344,7 +346,8 @@ class ReferenceRepository extends EntityRepository
             ->from('HopitalNumeriqueReferenceBundle:Reference', 'reference')
             ->join('reference.domaines', 'dom')
             ->where('reference.id = :idReference')
-            ->setParameter('idReference', $idReference);
+            ->setParameter('idReference', $idReference)
+        ;
 
         return $qb->getQuery()->getResult();
     }
