@@ -451,9 +451,9 @@ class ReferenceManager extends BaseManager
      * @param boolean $inGlossaire InGlossaire ?
      * @return array<\HopitalNumerique\ReferenceBundle\Entity\Reference> Références
      */
-    public function findByDomaines($domaines = null, $actif = null, $lock = null, $parentable = null, $reference = null, $inRecherche = null, $inGlossaire = null)
+    public function findByDomaines($domaines = null, $actif = null, $lock = null, $parentable = null, $reference = null, $inRecherche = null, $inGlossaire = null, $resultsInArray = false)
     {
-        return $this->getRepository()->findByDomaines($domaines, $actif, $lock, $parentable, $reference, $inRecherche, $inGlossaire);
+        return $this->getRepository()->findByDomaines($domaines, $actif, $lock, $parentable, $reference, $inRecherche, $inGlossaire, $resultsInArray);
     }
 
     /**
@@ -562,6 +562,37 @@ class ReferenceManager extends BaseManager
         }
     }
 
+    /*public function createTree(&$list, $parent)
+    {
+        $tree = [];
+        foreach ($parent as $k => $l) {
+            if (isset($list[$l['id']])) {
+                $l['children'] = $this->createTree($list, $list[$l['id']]);
+            }
+            $tree[] = $l;
+        }
+
+        return $tree;
+    }*/
+
+    /*public function buildTree(array &$elements, $parentId = 0) {
+
+        $branch = array();
+
+        foreach ($elements as &$element) {
+
+            if ($element['parent'] == $parentId) {
+                $children = $this->buildTree($elements, $element['id']);
+                if ($children) {
+                    $element['children'] = $children;
+                }
+                $branch[$element['id']] = $element;
+                unset($element);
+            }
+        }
+        return $branch;
+    }*/
+
     /**
      * Fonction récursive qui parcourt l'ensemble des références en ajoutant l'element et recherchant les éventuels enfants
      *
@@ -573,7 +604,87 @@ class ReferenceManager extends BaseManager
      */
     private function getArboRecursive(ArrayCollection $items, $elements, $tab)
     {
-        foreach ($elements as $element) {
+        $parents = [];
+        foreach ($items as $item) {
+            if ($item['parent'] == null) {
+                $parents[$item['id']] = [
+                    'id' => $item['id'],
+                    'libelle' => $item['libelle'],
+                    'code' => $item['code'],
+                    'children' => [],
+                ];
+                $items->removeElement($item);
+            }
+        }
+
+        foreach ($items as $item) {
+            foreach ($parents as &$parent) {
+                if ($item['parent'] == $parent['id']) {
+                    $parents[$item['parent']]['children'][] = [
+                        'id' => $item['id'],
+                        'libelle' => $item['libelle'],
+                        'code' => $item['code'],
+                        'children' => [],
+                    ];
+                    $items->removeElement($item);
+                }
+            }
+        }
+
+        return $parents;
+//        $test = [];
+//        $itemsTest = $items->getValues();
+//
+//        foreach ($elements as $element) {
+//            $test[] = $this->buildTree($itemsTest, $element['id']);
+//        }
+//
+//        dump($test);die;
+
+        /*$arr = $items;
+
+        $new = [];
+        foreach ($arr as $a) {
+            $new[$a['parent']][] = $a;
+        }
+
+        $tree = $this->createTree($new, [$arr[0]]);
+
+        return $tree;*/
+
+
+        /*$parents = [];
+
+//        dump($items);die;
+        foreach ($items as $item) {
+            if (!isset($parents[$item['id']]) && $item['parent'] == null) {
+                $parents[$item['id']] = [
+                    'libelle' => $item['libelle'],
+                    'code' => $item['code'],
+                    'id' => $item['id'],
+                    'childs' => [],
+                ];
+            }
+
+            if ($item['parent'] != null) {
+                if (!isset($parents[$item['parent']])) {
+                    $parents[$item['parent']] = [];
+                }
+
+                $parents[$item['parent']]['childs'][] = $item;
+            }
+        }
+
+        dump($parents);die;
+
+        foreach ($parents as $key => $parent) {
+            dump($parent, $key);
+        }die;
+
+        return $parents;*/
+
+
+        /*foreach ($elements as $element) {
             //construction de l'element current
             $id = $element['id'];
             $item = new \stdClass;
@@ -591,7 +702,7 @@ class ReferenceManager extends BaseManager
         }
 
         //return big table
-        return $tab;
+        return $tab;*/
     }
 
     /**
@@ -605,12 +716,12 @@ class ReferenceManager extends BaseManager
     {
         $retour = [];
         foreach ($arbo as $key => $ref) {
-            $retour[$ref->code][$key]['libelle'] = $ref->libelle;
-            $retour[$ref->code][$key]['id'] = $ref->id;
-            if ($ref->childs) {
-                $retour[$ref->code][$key]['childs'] = $this->formatArbo($ref->childs);
+            $retour[$ref['code']][$key]['libelle'] = $ref['libelle'];
+            $retour[$ref['code']][$key]['id'] = $ref['id'];
+            if ($ref['children']) {
+                $retour[$ref['code']][$key]['childs'] = $this->formatArbo($ref['children']);
             } else {
-                $retour[$ref->code][$key]['childs'] = false;
+                $retour[$ref['code']][$key]['childs'] = false;
             }
         }
 

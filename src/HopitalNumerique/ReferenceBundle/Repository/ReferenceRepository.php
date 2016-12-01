@@ -277,7 +277,7 @@ class ReferenceRepository extends EntityRepository
      * @param boolean $inGlossaire InGlossaire ?
      * @return array<\HopitalNumerique\ReferenceBundle\Entity\Reference> Références
      */
-    public function findByDomaines($domaines, $actif, $lock, $parentable, $reference, $inRecherche, $inGlossaire)
+    public function findByDomaines($domaines, $actif, $lock, $parentable, $reference, $inRecherche, $inGlossaire, $resultsInArray = false)
     {
         if (0 === count($domaines)) {
             return [];
@@ -286,7 +286,11 @@ class ReferenceRepository extends EntityRepository
         $qb = $this->createQueryBuilder('reference');
 
         $qb
-            ->select('reference, referenceParent, allDomaines')
+            ->select('
+                reference,
+                referenceParent,
+                allDomaines
+            ')
             ->leftJoin('reference.parents', 'referenceParent')
             ->leftJoin('reference.domaines', 'allDomaines')
             ->leftJoin('reference.domaines', 'domaine')
@@ -331,7 +335,11 @@ class ReferenceRepository extends EntityRepository
             ;
         }
 
-        return $qb->getQuery()->getResult();
+        if ($resultsInArray == true) {
+            return $qb->getQuery()->getArrayResult();
+        } else {
+            return $qb->getQuery()->getResult();
+        }
     }
 
     /**

@@ -28,17 +28,12 @@ class ReferenceController extends Controller
      */
     public function sitemapAction()
     {
-        $references = $this->get('hopitalnumerique_reference.manager.reference')->getArboFormat();
-        $domainesOrderedByReference = $this->get('hopitalnumerique_reference.manager.reference')
-            ->getDomainesOrderedByReference()
-        ;
-
         $referenceTree = $this->container->get('hopitalnumerique_reference.dependency_injection.reference.tree');
 
+        $orderedRef = $referenceTree->getOrderedReferences(null, null, $this->getUser()->getDomaines());
+
         return $this->render('HopitalNumeriqueReferenceBundle:Reference:sitemap.html.twig', [
-            'references'                 => $references,
-            'orderedReferences' => $referenceTree->getOrderedReferences(null, null, $this->getUser()->getDomaines()),
-            'domainesOrderedByReference' => $domainesOrderedByReference,
+            'orderedReferences' => $orderedRef,
         ]);
     }
 
@@ -252,6 +247,7 @@ class ReferenceController extends Controller
                 [$reference->getId()]
             )
         ;
+
         $this->container->get('hopitalnumerique_reference.doctrine.reference.domaine_udpater')
             ->setInitialReference($reference)
         ;
@@ -285,6 +281,7 @@ class ReferenceController extends Controller
                         ]
                     )
                     ;
+
                     $reference->setParent($parent);
 
                     // Mise à jour du/des domaine(s) sur l'ensemble de l'arbre d'héritage des parents
@@ -328,7 +325,7 @@ class ReferenceController extends Controller
                         // (suppression d'un domaine lors de la sauvegarde n'étant plus chez aucun enfant)
                         $daddy->setDomaines([]);
 
-                        // Récupération des domaines du parent courant pour éviter la dupplication de domaine sur une entité
+                        // Récupération des domaines du parent courant pour éviter la duplication de domaine sur une entité
                         $daddyDomainesId = $daddy->getDomainesId();
                         if (count($childsDomaines) !== 0) {
                             foreach ($childsDomaines as $domaine) {
