@@ -28,17 +28,12 @@ class ReferenceController extends Controller
      */
     public function sitemapAction()
     {
-        $references = $this->get('hopitalnumerique_reference.manager.reference')->getArboFormat();
-        $domainesOrderedByReference = $this->get('hopitalnumerique_reference.manager.reference')
-            ->getDomainesOrderedByReference()
-        ;
-
         $referenceTree = $this->container->get('hopitalnumerique_reference.dependency_injection.reference.tree');
 
+        $orderedRef = $referenceTree->getOrderedReferences(null, null, $this->getUser()->getDomaines());
+
         return $this->render('HopitalNumeriqueReferenceBundle:Reference:sitemap.html.twig', [
-            'references'                 => $references,
-            'orderedReferences' => $referenceTree->getOrderedReferences(null, null, $this->getUser()->getDomaines()),
-            'domainesOrderedByReference' => $domainesOrderedByReference,
+            'orderedReferences' => $orderedRef,
         ]);
     }
 
@@ -246,28 +241,37 @@ class ReferenceController extends Controller
      */
     private function renderForm(Reference $reference)
     {
-        $referenceTreeOptions = $this->container->get('hopitalnumerique_reference.dependency_injection.reference.tree')
-            ->getOptions(
-                $this->getUser()->getDomaines(),
-                [$reference->getId()]
-            )
-        ;
+        $referenceTreeOptions = [];
+
+        if ($reference->getLock() != true) {
+            $referenceTreeOptions = $this->container->get('hopitalnumerique_reference.dependency_injection.reference.tree')
+                ->getOptions(
+                    $this->getUser()->getDomaines(),
+                    [$reference->getId()]
+                )
+            ;
+        }
+
         $this->container->get('hopitalnumerique_reference.doctrine.reference.domaine_udpater')
             ->setInitialReference($reference)
         ;
 
-        //Création du formulaire via le service
-        $form = $this->createForm('hopitalnumerique_reference_reference', $reference);
+
+        if ($reference->getLock()) {
+            $form = $this->createForm('hopitalnumerique_reference_reference_locked', $reference);
+        } else {
+            $form = $this->createForm('hopitalnumerique_reference_reference', $reference);
+        }
 
         $request = $this->get('request');
+        $form->handleRequest($request);
 
         // Si l'utilisateur soumet le formulaire
-        if ('POST' == $request->getMethod()) {
-            //get uploaded form datas (used to manipulate parent next)
+        if ($form->isSubmitted()) {
+            // get uploaded form datas (used to manipulate parent next)
             $formDatas = $request->request->get('hopitalnumerique_reference_reference');
 
             // On bind les données du form
-            $form->handleRequest($request);
             $this->container->get('hopitalnumerique_reference.doctrine.reference.domaine_udpater')
                 ->updateDomaines($reference)
             ;
@@ -283,8 +287,8 @@ class ReferenceController extends Controller
                         [
                             'id' => $formDatas['parent'],
                         ]
-                    )
-                    ;
+                    );
+
                     $reference->setParent($parent);
 
                     // Mise à jour du/des domaine(s) sur l'ensemble de l'arbre d'héritage des parents
@@ -328,7 +332,7 @@ class ReferenceController extends Controller
                         // (suppression d'un domaine lors de la sauvegarde n'étant plus chez aucun enfant)
                         $daddy->setDomaines([]);
 
-                        // Récupération des domaines du parent courant pour éviter la dupplication de domaine sur une entité
+                        // Récupération des domaines du parent courant pour éviter la duplication de domaine sur une entité
                         $daddyDomainesId = $daddy->getDomainesId();
                         if (count($childsDomaines) !== 0) {
                             foreach ($childsDomaines as $domaine) {
@@ -369,11 +373,11 @@ class ReferenceController extends Controller
                     $do == 'save-close'
                         ? $this->generateUrl('hopitalnumerique_reference_reference')
                         : $this->generateUrl(
-                        'hopitalnumerique_reference_reference_edit',
-                        [
-                            'id' => $reference->getId(),
-                        ]
-                    )
+                            'hopitalnumerique_reference_reference_edit',
+                            [
+                                'id' => $reference->getId(),
+                            ]
+                        )
                 );
             }
         }
