@@ -18,9 +18,9 @@ class ReferenceGrid extends Grid implements GridInterface
      */
     public function setConfig()
     {
-        $this->setSource( 'hopitalnumerique_reference.manager.reference' );
-        $this->setSourceType( self::SOURCE_TYPE_MANAGER );
-        $this->setFilterIdColumn( false );
+        $this->setSource('hopitalnumerique_reference.manager.reference');
+        $this->setSourceType(self::SOURCE_TYPE_MANAGER);
+        $this->setFilterIdColumn(false);
         $this->setButtonSize(44);
     }
 
@@ -59,12 +59,12 @@ class ReferenceGrid extends Grid implements GridInterface
 
         $this->addColonne(new Column\TextColumn('code', 'Code'));
 
-        $lockedColumn = new Column\BooleanColumn('locked', 'Vérouillé');
+        $lockedColumn = new Column\BooleanColumn('locked', 'Verrouillé');
         $lockedColumn->setSize(100);
         $this->addColonne($lockedColumn);
 
         /* Colonnes inactives */
-        $this->addColonne( new Column\BlankColumn('idParent') );
+        $this->addColonne(new Column\BlankColumn('idParent'));
     }
 
     /**
@@ -72,8 +72,8 @@ class ReferenceGrid extends Grid implements GridInterface
      */
     public function setActionsButtons()
     {
-        $this->addActionButton( new Action\ShowButton('hopitalnumerique_reference_reference_show') );
-        $this->addActionButton( new Action\EditButton('hopitalnumerique_reference_reference_edit') );
+        $this->addActionButton(new Action\ShowButton('hopitalnumerique_reference_reference_show'));
+        $this->addActionButton(new Action\EditButton('hopitalnumerique_reference_reference_edit'));
     }
 
     /**
@@ -81,7 +81,7 @@ class ReferenceGrid extends Grid implements GridInterface
      */
     public function setMassActions()
     {
-        $this->addMassAction( new Action\ActionMass('Export CSV', 'HopitalNumeriqueReferenceBundle:Reference:exportCsv') );
-        $this->addMassAction( new Action\ActionMass('Supprimer', 'HopitalNumeriqueReferenceBundle:Reference:deleteMass') );
+        $this->addMassAction(new Action\ActionMass('Export CSV', 'HopitalNumeriqueReferenceBundle:Reference:exportCsv'));
+        $this->addMassAction(new Action\ActionMass('Supprimer', 'HopitalNumeriqueReferenceBundle:Reference:deleteMass'));
     }
 }
