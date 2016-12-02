@@ -273,7 +273,7 @@ class Reference
      */
     public function __construct()
     {
-        $this->lock  = false;
+        $this->lock = false;
         $this->order = 1;
         $this->inRecherche = false;
         $this->domaines = new ArrayCollection();
@@ -408,16 +408,17 @@ class Reference
     /**
      * Retourne le niveau de profondeur de l'élément
      *
-     * @param integer   $currentLevel Niveau de profondeur actuel
-     * @param Reference $ref          Profondeur concernée
+     * @param integer $currentLevel Niveau de profondeur actuel
+     * @param Reference $ref Profondeur concernée
      *
      * @return integer
      */
-    private function getLevel( $currentLevel, Reference $ref )
+    private function getLevel($currentLevel, Reference $ref)
     {
         $currentLevel++;
-        if( $ref->getParent() )
-            $currentLevel = $this->getLevel( $currentLevel, $ref->getParent() );
+        if ($ref->getParent()) {
+            $currentLevel = $this->getLevel($currentLevel, $ref->getParent());
+        }
 
         return $currentLevel;
     }
@@ -572,7 +573,7 @@ class Reference
     /**
      * Add domaines
      *
-     * @param array<\HopitalNumerique\DomaineBundle\Entity\Domaine> $domaines Domaines
+     * @param array <\HopitalNumerique\DomaineBundle\Entity\Domaine> $domaines Domaines
      * @return Reference
      */
     public function addDomaines($domaines)
@@ -621,10 +622,9 @@ class Reference
      */
     public function getDomainesId()
     {
-        $domainesId = array();
+        $domainesId = [];
 
-        foreach ($this->domaines as $domaine)
-        {
+        foreach ($this->domaines as $domaine) {
             $domainesId[] = $domaine->getId();
         }
 
@@ -682,7 +682,7 @@ class Reference
     /**
      * Retourne si la référence possède l'un des domaines.
      *
-     * @param array<\HopitalNumerique\DomaineBundle\Entity\Domaine> $domaines Domaines
+     * @param array <\HopitalNumerique\DomaineBundle\Entity\Domaine> $domaines Domaines
      */
     public function hasAtLeastOneDomaine($domaines)
     {
@@ -1064,7 +1064,7 @@ class Reference
      */
     public function getImageUploadDir()
     {
-        return 'media'.DIRECTORY_SEPARATOR.'referentiel';
+        return 'media' . DIRECTORY_SEPARATOR . 'referentiel';
     }
 
     /**
@@ -1083,7 +1083,7 @@ class Reference
     public function getImageUrl()
     {
         if (null !== $this->image) {
-            return '/'.str_replace(DIRECTORY_SEPARATOR, '/', $this->getImageUploadDir()).'/'.$this->image;
+            return '/' . str_replace(DIRECTORY_SEPARATOR, '/', $this->getImageUploadDir()) . '/' . $this->image;
         }
 
         return null;

@@ -11,6 +11,11 @@ services:
         tags:
             - { name: form.type, alias: hopitalnumerique_reference_reference }
 
+    hopitalnumerique_reference.form.reference_locked:
+        class: 'HopitalNumerique\ReferenceBundle\Form\Type\ReferenceLockedType'
+        tags:
+            - { name: form.type, alias: hopitalnumerique_reference_reference_locked }
+
     hopitalnumerique_reference.form.type.synonyme:
         class: 'HopitalNumerique\ReferenceBundle\Form\Type\SynonymeType'
         arguments: ['@hopitalnumerique_reference.manager.synonyme']

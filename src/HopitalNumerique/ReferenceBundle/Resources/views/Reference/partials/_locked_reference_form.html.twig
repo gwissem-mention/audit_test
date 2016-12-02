@@ -1,0 +1,12 @@
+{{ form_start(form, { 'attr':{'class':'toValidate'} }) }}
+
+    <p style="color: #AA0000">Ce concept est verrouillé, vous ne pouvez modifier que le libellé</p>
+
+    {%- if app.user.hasRoleAdmin -%}
+
+        <h2>Paramètres du concept</h2>
+        {{ form_row(form.libelle) }}
+
+{%- endif -%}
+
+{{ form_end(form) }}

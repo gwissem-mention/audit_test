@@ -68,8 +68,7 @@ class Tree
         foreach ($orderedReferences as $referenceParemeters) {
             $referenceId = $referenceParemeters['reference']['id'];
             if (!in_array($referenceId, $forbiddenReferenceIds)) { // Éviter qu'un parent soit lui-même un des ses enfants (boucles infinies)
-
-                $domaineNoms = [];
+                $domaineLibelles = [];
                 foreach ($referenceParemeters['reference']['domaines'] as $domaine) {
                     $domaineLibelles[] = $domaine['nom'];
                 }
@@ -77,7 +76,7 @@ class Tree
                 $forbiddenReferenceIds[] = $referenceId;
                 $jsTreeOptionsDataPart[] = [
                     'id' => $referenceId,
-                    'text' => $referenceParemeters['reference']['libelle'].(count($referenceParemeters['reference']['domaines']) > 0 ? ' <em><small>- '.implode(' ; ', $domaineNoms).'</small></em>' : ''),
+                    'text' => $referenceParemeters['reference']['libelle'].(count($referenceParemeters['reference']['domaines']) > 0 ? ' <em><small>- '.implode(' ; ', $domaineLibelles).'</small></em>' : ''),
                     'children' => $this->getTreeOptionsDataPart($referenceParemeters['enfants'], $forbiddenReferenceIds)
                 ];
             }

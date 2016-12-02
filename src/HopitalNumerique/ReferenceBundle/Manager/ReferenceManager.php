@@ -109,6 +109,7 @@ class ReferenceManager extends BaseManager
         foreach ($references as $reference) {
             $object = [];
             $object['idReference'] = $object['id'] = $reference->getId();
+            $object['locked'] = $reference->getLock();
             $object['libelle'] = $reference->getLibelle();
             $object['domainesNom'] = '';
             $object['reference'] = $reference->isReference();
@@ -562,37 +563,6 @@ class ReferenceManager extends BaseManager
         }
     }
 
-    /*public function createTree(&$list, $parent)
-    {
-        $tree = [];
-        foreach ($parent as $k => $l) {
-            if (isset($list[$l['id']])) {
-                $l['children'] = $this->createTree($list, $list[$l['id']]);
-            }
-            $tree[] = $l;
-        }
-
-        return $tree;
-    }*/
-
-    /*public function buildTree(array &$elements, $parentId = 0) {
-
-        $branch = array();
-
-        foreach ($elements as &$element) {
-
-            if ($element['parent'] == $parentId) {
-                $children = $this->buildTree($elements, $element['id']);
-                if ($children) {
-                    $element['children'] = $children;
-                }
-                $branch[$element['id']] = $element;
-                unset($element);
-            }
-        }
-        return $branch;
-    }*/
-
     /**
      * Fonction récursive qui parcourt l'ensemble des références en ajoutant l'element et recherchant les éventuels enfants
      *
@@ -632,77 +602,6 @@ class ReferenceManager extends BaseManager
         }
 
         return $parents;
-//        $test = [];
-//        $itemsTest = $items->getValues();
-//
-//        foreach ($elements as $element) {
-//            $test[] = $this->buildTree($itemsTest, $element['id']);
-//        }
-//
-//        dump($test);die;
-
-        /*$arr = $items;
-
-        $new = [];
-        foreach ($arr as $a) {
-            $new[$a['parent']][] = $a;
-        }
-
-        $tree = $this->createTree($new, [$arr[0]]);
-
-        return $tree;*/
-
-
-        /*$parents = [];
-
-//        dump($items);die;
-        foreach ($items as $item) {
-            if (!isset($parents[$item['id']]) && $item['parent'] == null) {
-                $parents[$item['id']] = [
-                    'libelle' => $item['libelle'],
-                    'code' => $item['code'],
-                    'id' => $item['id'],
-                    'childs' => [],
-                ];
-            }
-
-            if ($item['parent'] != null) {
-                if (!isset($parents[$item['parent']])) {
-                    $parents[$item['parent']] = [];
-                }
-
-                $parents[$item['parent']]['childs'][] = $item;
-            }
-        }
-
-        dump($parents);die;
-
-        foreach ($parents as $key => $parent) {
-            dump($parent, $key);
-        }die;
-
-        return $parents;*/
-
-
-        /*foreach ($elements as $element) {
-            //construction de l'element current
-            $id = $element['id'];
-            $item = new \stdClass;
-            $item->libelle = $element['libelle'];
-            $item->code = $element['code'];
-            $item->id = $id;
-
-            //add childs : filter items with current element
-            $criteria = Criteria::create()->where(Criteria::expr()->eq("parent", $id))->orderBy(["order" => Criteria::ASC]);
-            $childs = $items->matching($criteria);
-            $item->childs = $this->getArboRecursive($items, $childs, []);
-
-            //add current item to big table
-            $tab[] = $item;
-        }
-
-        //return big table
-        return $tab;*/
     }
 
     /**

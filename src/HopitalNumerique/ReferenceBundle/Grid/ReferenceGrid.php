@@ -59,6 +59,10 @@ class ReferenceGrid extends Grid implements GridInterface
 
         $this->addColonne(new Column\TextColumn('code', 'Code'));
 
+        $lockedColumn = new Column\BooleanColumn('locked', 'Vérouillé');
+        $lockedColumn->setSize(100);
+        $this->addColonne($lockedColumn);
+
         /* Colonnes inactives */
         $this->addColonne( new Column\BlankColumn('idParent') );
     }
