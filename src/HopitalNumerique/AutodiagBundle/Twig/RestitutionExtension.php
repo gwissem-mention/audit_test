@@ -48,12 +48,6 @@ class RestitutionExtension extends \Twig_Extension
                 'shared' => true,
                 'pointFormat' => '<span style="color:{series.color}">{series.name}: <b>{point.y:,.0f}</b><br/>',
             ],
-            'legend' => [
-                'align' => 'right',
-                'verticalAlign' => 'top',
-                'y' => 70,
-                'layout' => 'vertical',
-            ],
             'credits' => [
                 'enabled' => false,
             ],
