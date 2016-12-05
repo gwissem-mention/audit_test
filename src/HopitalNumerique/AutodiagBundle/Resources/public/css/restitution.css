@@ -497,3 +497,7 @@
 #restitution.restitution-pdf .reponses li {
     page-break-inside: avoid !important;
 }
+
+#restitution.restitution-pdf svg .exporting-button {
+    display: none;
+}

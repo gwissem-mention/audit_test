@@ -20,6 +20,9 @@ class RestitutionExtension extends \Twig_Extension
      */
     public function getRadarHighChartData($result)
     {
+        $themeButton = new \stdClass();
+        $themeButton->class = "exporting-button";
+
         $data = [
             'chart' => [
                 'polar' => true,
@@ -59,6 +62,7 @@ class RestitutionExtension extends \Twig_Extension
                     'contextButton' => [
                         'text' => 'Télécharger le graphique',
                         'menuItems' => null,
+                        'theme' => $themeButton,
                     ],
                 ],
             ],
@@ -115,6 +119,9 @@ class RestitutionExtension extends \Twig_Extension
      */
     public function getHistogrammeHighChartData($result)
     {
+        $themeButton = new \stdClass();
+        $themeButton->class = "exporting-button";
+
         $data = [
             'chart' => [
                 'type' => 'bar'
@@ -138,16 +145,6 @@ class RestitutionExtension extends \Twig_Extension
                     'overflow' => 'justify',
                 ]
             ],
-            'legend' => [
-                'align' => 'right',
-                'verticalAlign' => 'top',
-                'x' => -40,
-                'y' => 80,
-                'layout' => 'vertical',
-                'floating' => true,
-                'borderWidth' => 1,
-                'shadow' => true,
-            ],
             'credits' => [
                 'enabled' => false,
             ],
@@ -162,6 +159,7 @@ class RestitutionExtension extends \Twig_Extension
                     'contextButton' => [
                         'text' => 'Télécharger le graphique',
                         'menuItems' => null,
+                        'theme' => $themeButton,
 //                        'onclick' => "function () {
 //                            this.exportChart();
 //                        }"
