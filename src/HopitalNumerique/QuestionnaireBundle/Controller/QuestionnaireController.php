@@ -186,6 +186,12 @@ class QuestionnaireController extends Controller
      */
     public function editFrontGestionnaireOccurrenceAction(HopiQuestionnaire $questionnaire, Occurrence $occurrence = null)
     {
+
+        $currentDomain = $this->get('hopitalnumerique_domaine.dependency_injection.current_domaine')->get();
+        if (!$questionnaire->getDomaines()->contains($currentDomain)) {
+            throw $this->createNotFoundException();
+        }
+
         //On récupère l'utilisateur qui est connecté
         $user = $this->get('security.context')->getToken()->getUser();
 
@@ -715,7 +721,7 @@ class QuestionnaireController extends Controller
                 }
 
                 $this->get('session')->getFlashBag()->add(($new ? 'success' : 'info'), 'Formulaire enregistré.');
-                
+
                 $action = 'validate';
                 $class = 'HopitalNumerique\QuestionnaireBundle\Entity\Questionnaire';
 
