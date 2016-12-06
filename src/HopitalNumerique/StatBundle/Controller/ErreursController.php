@@ -126,12 +126,13 @@ class ErreursController extends Controller
 
         //Colonnes communes
         $colonnes = [
+            'domaines' => 'Domaines',
             'type'       => 'Type du lien',
-            'idObjet'    => 'Id de la publication',
+            'idObjet'    => 'id',
             'titreObjet' => 'Titre de la publication',
-            'infradoc'   => 'Infradoc ?',
+            'infradoc'   => 'Infradoc',
             'url'        => 'Url',
-            'valide'     => 'Valide',
+            'valide'     => 'Etat',
         ];
 
         $kernelCharset = $this->container->getParameter('kernel.charset');

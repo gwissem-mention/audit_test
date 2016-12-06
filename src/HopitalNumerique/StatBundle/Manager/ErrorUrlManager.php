@@ -2,6 +2,7 @@
 
 namespace HopitalNumerique\StatBundle\Manager;
 
+use HopitalNumerique\DomaineBundle\Entity\Domaine;
 use Nodevo\ToolsBundle\Manager\Manager as BaseManager;
 
 /**
@@ -54,6 +55,19 @@ class ErrorUrlManager extends BaseManager
                     //Parcours les urls de l'objet courants
                     foreach ($objetOrContenu as $urlObjetUrl) {
                         $row = [];
+
+                        $row['domaines'] = '';
+                        if (isset($donneesTab['objets'][$keyObjetUrl])) {
+                            $row['domaines'] = implode(
+                                ', ',
+                                array_map(
+                                    function (Domaine $domaine) {
+                                        return $domaine->getNom();
+                                    },
+                                    $donneesTab['objets'][$keyObjetUrl]->getDomaines()->toArray()
+                                )
+                            );
+                        }
 
                         $row['type'] = ucfirst($keyURL);
                         $row['idObjet'] = $keyObjetUrl;
