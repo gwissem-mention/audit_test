@@ -133,6 +133,13 @@ class RestitutionController extends Controller
         );
     }
 
+    /**
+     * Redirect to sign in/up page with back redirection
+     *
+     * @param \HopitalNumerique\AutodiagBundle\Entity\Synthesis $synthesis
+     * @param bool $signUp
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse
+     */
     public function signInAction(Synthesis $synthesis, $signUp = false)
     {
         $this->get('session')->set(
