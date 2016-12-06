@@ -132,4 +132,20 @@ class RestitutionController extends Controller
             )
         );
     }
+
+    public function signInAction(Synthesis $synthesis, $signUp = false)
+    {
+        $this->get('session')->set(
+            'urlToRedirect',
+            $this->generateUrl('hopitalnumerique_autodiag_restitution_index', [
+                'synthesis' => $synthesis->getId(),
+            ])
+        );
+
+        if ($signUp) {
+            return $this->redirectToRoute('hopital_numerique_user_inscription');
+        }
+
+        return $this->redirectToRoute('account_login');
+    }
 }

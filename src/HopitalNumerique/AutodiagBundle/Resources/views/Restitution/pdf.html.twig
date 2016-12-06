@@ -22,15 +22,6 @@
             </div>
 
             <div class="pull-left">
-                {% if not app.user %}
-                    <div class="loggedout-warning">
-                        <div>{{ "ad.restitution.loggedout-warning"|trans }}</div>
-                        <a href="{{ path('account_login') }}">Connexion</a>
-                        ou
-                        <a href="{{ path('hopital_numerique_user_inscription') }}">Créer un compte</a>
-                    </div>
-                {% endif %}
-
                 {% if synthesis.entries|length > 1 %}
                     <div class="synthesis">
                         <span>{{ "ad.restitution.synthesis"|trans }} : </span>

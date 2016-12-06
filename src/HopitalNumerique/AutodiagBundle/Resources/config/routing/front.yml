@@ -51,6 +51,11 @@ hopitalnumerique_autodiag_restitution_send_result:
     path:     /autodiagnostic/restitution/result/mail/{synthesis}
     defaults: { _controller: HopitalNumeriqueAutodiagBundle:Front/Restitution:sendResult }
 
+hopitalnumerique_autodiag_restitution_signIn:
+    path:     /autodiagnostic/restitution/signIn/{synthesis}/{signUp}
+    methods: ["GET"]
+    defaults: { _controller: HopitalNumeriqueAutodiagBundle:Front/Restitution:signIn, signUp: false }
+
 hopitalnumerique_autodiag_validation_index:
     path:     /autodiagnostic/validation/{synthesis}
     defaults: { _controller: HopitalNumeriqueAutodiagBundle:Front/Validation:index }
