@@ -242,7 +242,7 @@
                             <h2><span class="title">{{ groupTitle }}</span> (<span id="results-{{ groupId }}-count"></span> résultats)</h2>
                             <div id="results-{{ groupId }}"></div>
                             <div class="buttons">
-                                {% if app.user and false %}
+                                {% if app.user %}
                                     <div class="pull-left suggest-link">
                                         <a class="pull-left" href="{{ path('hopitalnumerique_suggestion_front_add') }}">Vous connaissez une ressource qui n'apparait pas dans les résultats ?<br />Proposez-nous de l'ajouter</a>
                                     </div>
