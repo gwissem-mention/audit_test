@@ -114,13 +114,11 @@ class ShareController extends Controller
      */
     public function deleteAction(Synthesis $synthesis, User $user)
     {
-        // L'utilisateur doit avoir les droits sur chaque entry de la synthèse
-        foreach ($synthesis->getEntries() as $entry) {
-            if (!$this->isGranted('edit', $entry)) {
-                return $this->redirectToRoute('hopitalnumerique_autodiag_entry_add', [
-                    'autodiag' => $synthesis->getAutodiag()->getId()
-                ]);
-            }
+        // L'utilisateur doit avoir les droits de suppression sur la synthèse
+        if (!$this->isGranted('delete', $synthesis)) {
+            return $this->redirectToRoute('hopitalnumerique_autodiag_entry_add', [
+                'autodiag' => $synthesis->getAutodiag()->getId()
+            ]);
         }
 
         $synthesis->removeShare($user);

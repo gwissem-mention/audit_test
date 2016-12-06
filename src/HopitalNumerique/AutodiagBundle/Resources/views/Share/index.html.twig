@@ -46,12 +46,14 @@
                             {% for share in synthesis.shares %}
                                 <li>
                                     <span>{{ share.nom }} {{ share.prenom }}</span>
-                                    <a href="{{ path('hopitalnumerique_autodiag_share_delete', {
-                                        "synthesis": synthesis.id,
-                                        "user": share.id
-                                    }) }}">
-                                        <i class="fa fa-times"></i>
-                                    </a>
+                                    {% if is_granted('delete', synthesis) %}
+                                        <a href="{{ path('hopitalnumerique_autodiag_share_delete', {
+                                            "synthesis": synthesis.id,
+                                            "user": share.id
+                                        }) }}">
+                                            <i class="fa fa-times"></i>
+                                        </a>
+                                    {% endif %}
                                 </li>
                             {% endfor %}
                         </ul>
