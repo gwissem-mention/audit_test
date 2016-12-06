@@ -945,7 +945,7 @@ class UserController extends Controller
                         $this->get('mailer')->send($mail);
                     }
                 } else {
-                    if ($oldUser->getRoles()[0] != $form->get("roles")->getData()->getRole()) {
+                    if ($form->has('roles') && $oldUser->getRoles()[0] != $form->get("roles")->getData()->getRole()) {
                         $action = 'update';
                         $class = 'HopitalNumerique\UserBundle\Entity\User';
 
