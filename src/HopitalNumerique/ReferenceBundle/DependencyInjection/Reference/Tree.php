@@ -104,7 +104,7 @@ class Tree
             }
             $references = $this->referenceManager->findBy($referencesConditions, ['order' => 'ASC']);
         } else {
-            $references = $this->referenceManager->findByDomaines($domaines, true, false, $parentable, null, $inRecherche, null, false);
+            $references = $this->referenceManager->findByDomaines($domaines, true, false, $parentable, null, $inRecherche, null, true);
         }
 
         // 3 - 30

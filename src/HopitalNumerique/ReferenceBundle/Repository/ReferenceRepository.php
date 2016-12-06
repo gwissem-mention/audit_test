@@ -289,11 +289,13 @@ class ReferenceRepository extends EntityRepository
             ->select('
                 reference,
                 referenceParent,
-                allDomaines
+                allDomaines,
+                domainesDisplay
             ')
             ->leftJoin('reference.parents', 'referenceParent')
             ->leftJoin('reference.domaines', 'allDomaines')
             ->leftJoin('reference.domaines', 'domaine')
+            ->leftJoin('reference.domainesDisplay', 'domainesDisplay')
             ->where($qb->expr()->orX(
                 $qb->expr()->in('domaine.id', ':domaines'),
                 $qb->expr()->eq('reference.allDomaines', ':allDomaines')
@@ -336,7 +338,18 @@ class ReferenceRepository extends EntityRepository
         }
 
         if ($resultsInArray == true) {
-            return $qb->getQuery()->getArrayResult();
+            $result = $qb->getQuery()->getArrayResult();
+            array_walk($result, function (&$reference) {
+                $reference['domainesId'] = array_map(function ($domaine) {
+                    return $domaine['id'];
+                }, $reference['domaines']);
+
+                $reference['domainesDisplayId'] = array_map(function ($domaine) {
+                    return $domaine['id'];
+                }, $reference['domainesDisplay']);
+            });
+
+            return $result;
         } else {
             return $qb->getQuery()->getResult();
         }
