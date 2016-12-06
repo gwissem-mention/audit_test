@@ -104,7 +104,7 @@ class Tree
             }
             $references = $this->referenceManager->findBy($referencesConditions, ['order' => 'ASC']);
         } else {
-            $references = $this->referenceManager->findByDomaines($domaines, true, false, $parentable, null, $inRecherche, null, true);
+            $references = $this->referenceManager->findByDomaines($domaines, true, false, $parentable, null, $inRecherche, null, false);
         }
 
         // 3 - 30
@@ -136,8 +136,9 @@ class Tree
             } else {
                 if ($referenceParent != null) {
                     $hasParent = false;
+                    $referenceParentId = $referenceParent instanceof Reference ? $referenceParent->getId() : $referenceParent['id'];
                     foreach ($reference['parents'] as $parent) {
-                        if ($parent['id'] == $referenceParent['id']) {
+                        if ($parent['id'] == $referenceParentId) {
                             $hasParent = true;
                             continue;
                         }
