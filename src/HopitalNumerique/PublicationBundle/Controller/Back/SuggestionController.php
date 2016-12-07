@@ -54,6 +54,7 @@ class SuggestionController extends Controller
             if ($request->get('do') === 'save-close') {
                 return $this->redirectToRoute('hopitalnumerique_suggestion_back_index');
             } elseif (isset($object) && null != $object) {
+                return $this->redirectToRoute('hopitalnumerique_objet_objet_edit', array('id' => $object->getId()));
             }
         }
 
