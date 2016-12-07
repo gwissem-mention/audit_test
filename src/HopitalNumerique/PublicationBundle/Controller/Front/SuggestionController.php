@@ -28,7 +28,7 @@ class SuggestionController extends Controller
         /** @var Suggestion $suggestion */
         $suggestion = new Suggestion();
 
-        $form = $this->createForm(SuggestionType::class, $suggestion, ['validation_groups' => ['front_add']]);
+        $form = $this->createForm(SuggestionType::class, $suggestion, ['validation_groups' => ['Default', 'front_add']]);
 
         $form->handleRequest($request);
 

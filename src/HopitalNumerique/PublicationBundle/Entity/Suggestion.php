@@ -147,10 +147,18 @@ class Suggestion
      */
     private $stateChangeAuthor;
 
+     /**
+     * @var boolean
+     *
+     * @ORM\Column(name="alreadyCreated", type="boolean")
+     */
+    private $alreadyCreated;
+
     public function __construct()
     {
         $this->creationDate = new \DateTime();
         $this->domains = new ArrayCollection();
+        $this->alreadyCreated = false;
     }
 
     /**
@@ -514,5 +522,28 @@ class Suggestion
         return $this->stateChangeAuthor;
     }
 
+    /**
+     * Set alreadyCreated
+
+     *
+     * @param boolean $alreadyCreated
+     * @return Objet
+     */
+    public function setAlreadyCreated($created)
+    {
+        $this->alreadyCreated = $created;
+
+        return $this;
+    }
+
+    /**
+     * Get alreadyCreated
+     *
+     * @return boolean
+     */
+    public function isAlreadyCreated()
+    {
+        return $this->alreadyCreated;
+    }
 
 }

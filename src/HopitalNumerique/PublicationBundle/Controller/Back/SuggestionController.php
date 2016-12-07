@@ -27,8 +27,9 @@ class SuggestionController extends Controller
      */
     public function editAction(Request $request, Suggestion $suggestion)
     {
-        $form = $this->createForm(SuggestionType::class, $suggestion);
-
+        
+        $form = $this->createForm(SuggestionType::class, $suggestion, ['validation_groups' => ['Default', 'front_add']]);
+     
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
@@ -38,10 +39,11 @@ class SuggestionController extends Controller
 
             $entityManager = $this->getDoctrine()->getManager();
 
-            if ($suggestion->getState()->getId() == Reference::ETAT_SUGGESTION_VALIDE_ID) {
-                $this->get('hopitalnumerique_publication.service.suggestion_converter')
+            if ($suggestion->getState()->getId() == Reference::ETAT_SUGGESTION_VALIDE_ID && !$suggestion->isAlreadyCreated() ) {
+                $object = $this->get('hopitalnumerique_publication.service.suggestion_converter')
                     ->suggestionConverter($suggestion)
                 ;
+                $suggestion->setAlreadyCreated(true);
             }
 
             $entityManager->persist($suggestion);
@@ -51,6 +53,7 @@ class SuggestionController extends Controller
 
             if ($request->get('do') === 'save-close') {
                 return $this->redirectToRoute('hopitalnumerique_suggestion_back_index');
+            } elseif (isset($object) && null != $object) {
             }
         }
 
