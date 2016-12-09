@@ -1,5 +1,6 @@
 imports:
     - { resource: repositories.yml}
+    - { resource: services/events.yml}
 
 parameters:
     #Options

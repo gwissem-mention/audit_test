@@ -1,0 +1,7 @@
+services:
+    module.inscription.subscriber:
+        class: HopitalNumerique\ModuleBundle\EventListener\InscriptionLoggerSubscriber
+        arguments:
+            - '@hopitalnumerique_core.log'
+        tags:
+            - { name: doctrine.event_subscriber }

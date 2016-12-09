@@ -3,13 +3,14 @@
 namespace HopitalNumerique\ModuleBundle\Controller\Back;
 
 
+use HopitalNumerique\ModuleBundle\Entity\Module;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 
 /**
  * Inscription controller.
- * 
+ *
  * @author Gaetan MELCHILSEN
  * @copyright Nodevo
  */
@@ -31,7 +32,7 @@ class InscriptionController extends Controller
 
     /**
      * Affiche la liste des Inscriptions.
-     * 
+     *
      * @author Gaetan MELCHILSEN
      * @copyright Nodevo
      */
@@ -44,7 +45,7 @@ class InscriptionController extends Controller
 
     /**
      * Affiche le formulaire d'ajout de Inscriptions.
-     * 
+     *
      * @author Gaetan MELCHILSEN
      * @copyright Nodevo
      */
@@ -62,7 +63,7 @@ class InscriptionController extends Controller
      * Affiche le formulaire d'édition de Inscriptions.
      *
      * @param integer $id Id de Inscriptions.
-     * 
+     *
      * @author Gaetan MELCHILSEN
      * @copyright Nodevo
      */
@@ -73,10 +74,10 @@ class InscriptionController extends Controller
 
     /**
      * Suppresion d'un Inscriptions.
-     * 
+     *
      * @param integer $id Id de Inscription.
      * METHOD = POST|DELETE
-     * 
+     *
      * @author Gaetan MELCHILSEN
      * @copyright Nodevo
      */
@@ -93,17 +94,17 @@ class InscriptionController extends Controller
 
         return new Response('{"success":true, "url" : "'. $url .'"}', 200);
     }
-    
+
     /**
      * Passe l'état de l'inscription à 'acceptée'
-     * 
+     *
      * @author Gaetan MELCHILSEN
      * @copyright Nodevo
      */
     public function accepterInscriptionAction(\HopitalNumerique\ModuleBundle\Entity\Inscription $inscription)
     {
         $refRefuse = $this->get('hopitalnumerique_reference.manager.reference')->findOneBy( array('id'=> 407) );
-        
+
         $inscription->setEtatInscription($refRefuse);
 
         if($inscription->getSession()->getModule()->getMailConfirmationInscription())
@@ -115,25 +116,25 @@ class InscriptionController extends Controller
                     ));
             $this->get('mailer')->send($mail);
         }
-        
+
         //Suppression de l'entitée
         $this->get('hopitalnumerique_module.manager.inscription')->save( $inscription );
-    
+
         $this->get('session')->getFlashBag()->add('info', 'L\'inscription de ' . $inscription->getUser()->getAppellation() . ' est acceptée.');
-    
+
         return $this->redirect( $this->generateUrl('hopitalnumerique_module_module_session_inscription', array('id' => $inscription->getSession()->getId())) );
     }
-    
+
     /**
      * Passe l'état de l'inscription à 'refusée'
-     * 
+     *
      * @author Gaetan MELCHILSEN
      * @copyright Nodevo
      */
     public function refuserInscriptionAction(\HopitalNumerique\ModuleBundle\Entity\Inscription $inscription)
     {
         $refRefuse = $this->get('hopitalnumerique_reference.manager.reference')->findOneBy( array('id'=> 408) );
-    
+
         $inscription->setEtatInscription($refRefuse);
 
         if($inscription->getSession()->getModule()->getMailRefusInscription())
@@ -148,32 +149,29 @@ class InscriptionController extends Controller
 
         //Suppression de l'entitée
         $this->get('hopitalnumerique_module.manager.inscription')->save( $inscription );
-    
+
         $this->get('session')->getFlashBag()->add('info', 'L\'inscription de ' . $inscription->getUser()->getAppellation() . ' est refusée.');
-    
+
         return $this->redirect( $this->generateUrl('hopitalnumerique_module_module_session_inscription', array('id' => $inscription->getSession()->getId())) );
     }
-    
+
     /**
      * Passe l'état de l'inscription à 'annulée'
-     * 
+     *
      * @author Gaetan MELCHILSEN
      * @copyright Nodevo
      */
     public function annulerInscriptionAction(\HopitalNumerique\ModuleBundle\Entity\Inscription $inscription)
     {
         $refAnnule = $this->get('hopitalnumerique_reference.manager.reference')->findOneBy( array('id'=> 409) );
-    
+
         $inscription->setEtatInscription($refAnnule);
-    
+
         //Suppression de l'entitée
         $this->get('hopitalnumerique_module.manager.inscription')->save( $inscription );
 
-        $class = 'HopitalNumerique\ModuleBundle\Entity\Module';
-        $this->container->get('hopitalnumerique_core.log')->logger('desinscription', $inscription->getSession()->getModule(), $inscription->getSession()->getModule()->getTitre(), $class, $inscription->getUser());
-    
         $this->get('session')->getFlashBag()->add('info', 'L\'inscription de ' . $inscription->getUser()->getAppellation() . ' est annulée.');
-    
+
         return $this->redirect( $this->generateUrl('hopitalnumerique_module_module_session_inscription', array('id' => $inscription->getSession()->getId())) );
     }
 
@@ -185,7 +183,7 @@ class InscriptionController extends Controller
      * @param string        $view           Chemin de la vue ou sera rendu le formulaire
      *
      * @return Form | redirect
-     * 
+     *
      * @author Gaetan MELCHILSEN
      * @copyright Nodevo
      */
@@ -193,7 +191,7 @@ class InscriptionController extends Controller
     {
         //On passe un tableau des id de roles autorisé pour pouvoir filtrer les utilisateurs dans le formulaire
         $roleNames = array();
-        foreach ($inscription->getSession()->getRestrictionAcces() as $role) 
+        foreach ($inscription->getSession()->getRestrictionAcces() as $role)
         {
             $roleNames[] = $role->getRole();
         }
@@ -201,17 +199,17 @@ class InscriptionController extends Controller
         $label_attr = array(
             'roleNames' => $roleNames
         );
-    
+
         //Création du formulaire via le service
         $form = $this->createForm( $formName, $inscription, array(
             'label_attr' => $label_attr
         ));
 
         $request = $this->get('request');
-        
+
         // Si l'utilisateur soumet le formulaire
         if ('POST' == $request->getMethod()) {
-            
+
             // On bind les données du form
             $form->handleRequest($request);
 
@@ -222,12 +220,9 @@ class InscriptionController extends Controller
 
                 //On utilise notre Manager pour gérer la sauvegarde de l'objet
                 $this->get('hopitalnumerique_module.manager.inscription')->save($inscription);
-                
+
                 // On envoi une 'flash' pour indiquer à l'utilisateur que l'entité est ajoutée
                 $this->get('session')->getFlashBag()->add( ($new ? 'success' : 'info') , 'Inscription ' . ($new ? 'ajoutée.' : 'mise à jour.') );
-
-                $class = 'HopitalNumerique\ModuleBundle\Entity\Module';
-                $this->container->get('hopitalnumerique_core.log')->logger('inscription', $inscription->getSession()->getModule(), $inscription->getSession()->getModule()->getTitre(), $class, $inscription->getUser());
 
                 //on redirige vers la page index ou la page edit selon le bouton utilisé
                 $do = $request->request->get('do');
