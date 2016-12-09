@@ -1,13 +1,11 @@
 <?php
 /**
  * Contrôleur des formulaires de demandes d'intervention dans l'administration.
- * 
+ *
  * @author Rémi Leclerc <rleclerc@nodevo.com>
  */
 namespace HopitalNumerique\InterventionBundle\Controller\Admin\Form;
 
-use HopitalNumerique\InterventionBundle\Event\InterventionDemandeEvent;
-use HopitalNumerique\InterventionBundle\Events;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Response;
 use HopitalNumerique\InterventionBundle\Entity\InterventionDemande;
@@ -76,23 +74,19 @@ class DemandeController extends Controller
                 $this->interventionDemande->setCmsi($cmsi);
                 //-->
                 $this->interventionDemande->setCmsiDateChoix(new \DateTime());
-                
+
                 $this->get('hopitalnumerique_intervention.manager.interventiondemande')->save($this->interventionDemande);
 
-                $dispatcher = $this->get('event_dispatcher');
-                $intervention = new InterventionDemandeEvent($this->interventionDemande);
-                $dispatcher->dispatch(Events::INTERVENTION_REQUEST, $intervention);
-                
                 // Message Flash
                 $this->get('session')->getFlashBag()->add('success', 'La demande d\'intervention a été créée.');
-                
+
                 // Envoi des courriels
                 $this->container->get('hopitalnumerique_intervention.manager.intervention_courriel')->envoiCourrielDemandeAcceptationAmbassadeur($this->interventionDemande->getAmbassadeur(), $this->generateUrl('hopital_numerique_intervention_demande_voir', array('id' => $this->interventionDemande->getId()), true));
                 $this->container->get('hopitalnumerique_intervention.manager.intervention_courriel')->envoiCourrielAlerteReferent($this->interventionDemande->getReferent());
-                
+
                 return true;
             }
-            else 
+            else
             {
                 $this->get('session')->getFlashBag()->add('danger', 'Le formulaire n\'est pas valide.');
             }
@@ -100,7 +94,7 @@ class DemandeController extends Controller
 
         return false;
     }
-    
+
     /**
      * Édition d'une demande d'intervention.
      *
@@ -115,10 +109,6 @@ class DemandeController extends Controller
 
         if ($this->gereEnvoiFormulaireDemandeEdition($interventionDemandeFormulaire))
         {
-            $dispatcher = $this->get('event_dispatcher');
-            $intervention = new InterventionDemandeEvent($this->interventionDemande, $oldIntervention);
-            $dispatcher->dispatch(Events::INTERVENTION_EVALUATION, $intervention);
-
             $do = $this->container->get('request')->request->get('do');
 
             return $this->redirect($do == 'save-close' ? $this->generateUrl('hopital_numerique_intervention_admin_liste') : $this->generateUrl('hopital_numerique_intervention_admin_demande_edit', array('id' => $this->interventionDemande->getId())));
@@ -143,23 +133,23 @@ class DemandeController extends Controller
         if ($this->get('request')->isMethod('POST'))
         {
             $interventionDemandeFormulaire->bind($this->get('request'));
-    
+
             if ($interventionDemandeFormulaire->isValid())
             {
                 // YRO 09/02/2015 : si le champ "etat actuel" a été modifié, on envoi les mails conséquents
                 if( $this->get('hopitalnumerique_intervention.manager.interventiondemande')->isEtatActuelUpdated($this->interventionDemande) )
                 {
-                    if ($this->interventionDemande->getInterventionEtat()->getId() == $this->container->getParameter('id_reference_accept_by_embassador')) {
-                        $dispatcher = $this->get('event_dispatcher');
-                        $intervention = new InterventionDemandeEvent($this->interventionDemande);
-                        $dispatcher->dispatch(Events::INTERVENTION_ACCEPT, $intervention);
-                    }
+//                    if ($this->interventionDemande->getInterventionEtat()->getId() == $this->container->getParameter('id_reference_accept_by_embassador')) {
+//                        $dispatcher = $this->get('event_dispatcher');
+//                        $intervention = new InterventionDemandeEvent($this->interventionDemande);
+//                        $dispatcher->dispatch(Events::INTERVENTION_ACCEPT, $intervention);
+//                    }
                     $this->gereEnvoiMailChangementEtat($this->interventionDemande);
                 }
                 if (!is_null($this->interventionDemande->getEvaluationEtat()) && $this->interventionDemande->getEvaluationEtat()->getId() === InterventionEvaluationEtat::getInterventionEvaluationEtatEvalueId())
                 {
                     $this->interventionDemande->setRemboursementEtat( $this->get('hopitalnumerique_reference.manager.reference')->findOneBy(array('id' => 5)) );
-                    
+
                     $this->get('hopitalnumerique_intervention.manager.intervention_demande')->changeEtat($this->interventionDemande, $this->container->get('hopitalnumerique_intervention.manager.intervention_etat')->getInterventionEtatTermine());
                     $this->get('hopitalnumerique_intervention.manager.intervention_demande')->changeEvaluationEtat($this->interventionDemande, $this->container->get('hopitalnumerique_intervention.manager.intervention_evaluation_etat')->getInterventionEvaluationEtatEvalue());
                 }
@@ -167,12 +157,12 @@ class DemandeController extends Controller
                 $this->get('session')->getFlashBag()->add('success', 'La demande d\'intervention a été modifiée.');
                 return true;
             }
-            else 
+            else
             {
                 $this->get('session')->getFlashBag()->add('danger', 'Le formulaire n\'est pas valide.');
             }
         }
-        
+
         return false;
     }
 
@@ -186,15 +176,15 @@ class DemandeController extends Controller
         $interventionDemande = $id;
         $this->container->get('hopitalnumerique_intervention.manager.intervention_demande')->delete($interventionDemande);
         $this->container->get('session')->getFlashBag()->add('info', 'Suppression effectuée avec succès.');
-    
+
         $reponseJson = json_encode(array(
             'success' => true,
             'url' => $this->generateUrl('hopital_numerique_intervention_admin_liste')
         ));
-    
+
         return new Response($reponseJson);
     }
-    
+
     /**
      * Gère l'envoi des mails conséquents au changement d'état de la demande d'intervention
      *

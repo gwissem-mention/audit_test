@@ -1,15 +1,13 @@
 <?php
 /**
  * Contrôleur des demandes d'intervention pour la console administrative.
- * 
+ *
  * @author Rémi Leclerc <rleclerc@nodevo.com>
  */
 namespace HopitalNumerique\InterventionBundle\Controller\Admin;
 
 use HopitalNumerique\InterventionBundle\Entity\InterventionDemande;
 use HopitalNumerique\InterventionBundle\Entity\InterventionEvaluationEtat;
-use HopitalNumerique\InterventionBundle\Event\InterventionDemandeEvent;
-use HopitalNumerique\InterventionBundle\Events;
 
 /**
  * Contrôleur des demandes d'intervention pour la console administrative.
@@ -33,7 +31,7 @@ class DemandeController extends \HopitalNumerique\InterventionBundle\Controller\
             $this->getVueParametresVoir($interventionDemande)
         );
     }
-    
+
     /**
      * Action pour la visualisation d'une liste de demandes d'intervention.
      *
@@ -50,7 +48,7 @@ class DemandeController extends \HopitalNumerique\InterventionBundle\Controller\
 
         return $gridDemandes->render('HopitalNumeriqueInterventionBundle:Admin/Demande:liste.html.twig');
     }
-    
+
     /**
      * Action pour la liste des demandes d'intervention.
      *
@@ -59,7 +57,7 @@ class DemandeController extends \HopitalNumerique\InterventionBundle\Controller\
     public function gridDemandesAction()
     {
         $interventionDemandesGrille = $this->get('hopitalnumerique_intervention.grid.admin.intervention_demandes');
-    
+
         return $interventionDemandesGrille->render('HopitalNumeriqueInterventionBundle:Grid:Admin/demandes.html.twig');
     }
     /**
@@ -71,27 +69,27 @@ class DemandeController extends \HopitalNumerique\InterventionBundle\Controller\
     public function gridSupprimeMassAction(array $primaryKeys)
     {
         $utilisateurConnecte = $this->get('security.context')->getToken()->getUser();
-        
+
         if ($this->container->get('nodevo_acl.manager.acl')->checkAuthorization($this->generateUrl('hopital_numerique_intervention_admin_demande_delete', array('id' => 0)), $utilisateurConnecte) != -1)
         {
             $interventionDemandes = $this->container->get('hopitalnumerique_intervention.manager.intervention_demande')->findBy(array('id' => $primaryKeys));
             $this->container->get('hopitalnumerique_intervention.manager.intervention_demande')->delete($interventionDemandes);
-            
+
             $this->get('session')->getFlashBag()->add('info', 'Suppression effectuée avec succès.');
         }
         else
         {
             $this->get('session')->getFlashBag()->add('warning', 'Vous ne possédez pas les droits nécessaires pour supprimer des interventions.');
         }
-        
+
         return $this->redirect( $this->generateUrl('hopital_numerique_intervention_admin_liste'));
     }
-    
+
     /**
      * Export de masse des demandes d'intervention.
      *
      * @param array $primaryKeys    ID des lignes sélectionnées
-     * @param boolean $allPrimaryKeys 
+     * @param boolean $allPrimaryKeys
      *
      * @return Redirect
      */
@@ -104,15 +102,15 @@ class DemandeController extends \HopitalNumerique\InterventionBundle\Controller\
                 $primaryKeys[] = $data->getId();
             }
         }
-        
+
         return $this->get('hopitalnumerique_intervention.manager.intervention_demande')->getExportCsv($primaryKeys, $this->container->getParameter('kernel.charset'));
     }
-    
+
     /**
      * Evaluer en masse les demandes d'intervention.
      *
      * @param array $primaryKeys    ID des lignes sélectionnées
-     * @param boolean $allPrimaryKeys 
+     * @param boolean $allPrimaryKeys
      *
      * @return Redirect
      */
@@ -129,21 +127,17 @@ class DemandeController extends \HopitalNumerique\InterventionBundle\Controller\
         $interventionDemandes = $this->get('hopitalnumerique_intervention.manager.intervention_demande')->findBy(array('id' => $primaryKeys));
 
         //Lance les workflow de chaque passage à évaluer
-        foreach ($interventionDemandes as $interventionDemande) 
+        foreach ($interventionDemandes as $interventionDemande)
         {
             if (is_null($interventionDemande->getEvaluationEtat()) || $interventionDemande->getEvaluationEtat()->getId() !== InterventionEvaluationEtat::getInterventionEvaluationEtatEvalueId())
             {
                 $interventionDemande->setRemboursementEtat( $this->get('hopitalnumerique_reference.manager.reference')->findOneBy(array('id' => 5)) );
-                
+
                 $this->get('hopitalnumerique_intervention.manager.intervention_demande')->changeEtat($interventionDemande, $this->container->get('hopitalnumerique_intervention.manager.intervention_etat')->getInterventionEtatTermine());
                 $this->get('hopitalnumerique_intervention.manager.intervention_demande')->changeEvaluationEtat($interventionDemande, $this->container->get('hopitalnumerique_intervention.manager.intervention_evaluation_etat')->getInterventionEvaluationEtatEvalue());
-
-                $dispatcher = $this->get('event_dispatcher');
-                $intervention = new InterventionDemandeEvent($interventionDemande);
-                $dispatcher->dispatch(Events::INTERVENTION_EVALUATION_FRONT, $intervention);
             }
         }
-        
+
         return $this->redirect( $this->generateUrl('hopital_numerique_intervention_admin_liste') );
     }
 }

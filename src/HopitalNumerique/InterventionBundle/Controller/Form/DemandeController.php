@@ -1,15 +1,13 @@
 <?php
 /**
  * Contrôleur des formulaires de demandes d'intervention.
- * 
+ *
  * @author Rémi Leclerc <rleclerc@nodevo.com>
  */
 namespace HopitalNumerique\InterventionBundle\Controller\Form;
 
 use HopitalNumerique\InterventionBundle\Entity\InterventionDemande;
 use HopitalNumerique\InterventionBundle\Entity\InterventionEtat;
-use HopitalNumerique\InterventionBundle\Event\InterventionDemandeEvent;
-use HopitalNumerique\InterventionBundle\Events;
 use HopitalNumerique\UserBundle\Entity\User;
 use HopitalNumerique\ObjetBundle\Entity\Objet;
 
@@ -30,7 +28,7 @@ class DemandeController extends \HopitalNumerique\InterventionBundle\Controller\
 
     /**
      * Action pour la création d'une nouvelle demande d'intervention.
-     * 
+     *
      * @param \HopitalNumerique\UserBundle\Entity\User $ambassadeur L'ambassadeur de la demande d'intervention
      * @return \Symfony\Component\HttpFoundation\Response La vue du formulaire de création d'une demande d'intervention
      */
@@ -66,7 +64,7 @@ class DemandeController extends \HopitalNumerique\InterventionBundle\Controller\
 
     /**
      * Gère l'enregistrement des données du formulaire de création d'une demande d'intervention.
-     * 
+     *
      * @param \Symfony\Component\Form\Form $interventionDemandeFormulaire Formulaire de la demande d'intervention
      * @return boolean VRAI ssi le formulaire est validé
      */
@@ -93,7 +91,7 @@ class DemandeController extends \HopitalNumerique\InterventionBundle\Controller\
 
     /**
      * Enregistre une nouvelle demande d'intervention après soumission du formulaire.
-     * 
+     *
      * @return boolean VRAI ssi la demande est enregistrée
      */
     private function enregistreNouvelleDemande()
@@ -120,15 +118,11 @@ class DemandeController extends \HopitalNumerique\InterventionBundle\Controller\
         }
 
         $this->interventionDemande->setCmsi($cmsi);
-        
+
         if ($this->interventionDemande->getReferent()->getEtablissementRattachementSante() != null) {
             $this->interventionDemande->setDirecteur($this->get('hopitalnumerique_user.manager.user')->getDirecteur(array('etablissementRattachementSante' => $this->interventionDemande->getReferent()->getEtablissementRattachementSante(), 'enabled' => true)));
         }
         $this->get('hopitalnumerique_intervention.manager.interventiondemande')->save($this->interventionDemande);
-
-        $dispatcher = $this->get('event_dispatcher');
-        $intervention = new InterventionDemandeEvent($this->interventionDemande);
-        $dispatcher->dispatch(Events::INTERVENTION_REQUEST, $intervention);
 
         return true;
     }
@@ -200,7 +194,7 @@ class DemandeController extends \HopitalNumerique\InterventionBundle\Controller\
         if ($this->get('request')->isMethod('POST'))
         {
             $interventionDemandeFormulaire->bind($this->get('request'));
-    
+
             if ($interventionDemandeFormulaire->isValid())
             {
                 $this->get('hopitalnumerique_intervention.manager.interventiondemande')->save($this->interventionDemande);

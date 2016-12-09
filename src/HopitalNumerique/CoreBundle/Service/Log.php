@@ -2,11 +2,15 @@
 namespace HopitalNumerique\CoreBundle\Service;
 
 use Doctrine\Bundle\DoctrineBundle\Registry as Doctrine;
+use Doctrine\ORM\EntityManager;
 use Gedmo\Loggable\Entity\LogEntry;
 
 
 class Log
 {
+
+    /** @var array */
+    private $logs;
 
     public function __construct(Doctrine $doctrine)
     {
@@ -20,7 +24,6 @@ class Log
         if ($class == 'HopitalNumerique\UserBundle\Entity\User') {
             $value = 'roles';
         }
-        $em = $this->doctrine->getManager();
 
         $log = new LogEntry();
         $log->setAction($action);
@@ -30,9 +33,23 @@ class Log
         $log->setVersion(1);
         $log->setData(array($value => $title));
         $log->setUsername($user->getUsername());
-        $em->persist($log);
-        $em->flush();
+
+        $this->logs[] = $log;
 
         return $log;
+    }
+
+    public function persistLogs()
+    {
+        if (!empty($this->logs)) {
+            /** @var EntityManager $em */
+            $em = $this->doctrine->getManager();
+
+            foreach ($this->logs as $log) {
+                $em->persist($log);
+            }
+
+            $em->flush();
+        }
     }
 }

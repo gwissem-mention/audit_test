@@ -1,9 +1,7 @@
 services:
-    intervention.listener:
-        class: HopitalNumerique\InterventionBundle\EventListener\InterventionListener
+    intervention.subscriber:
+        class: HopitalNumerique\InterventionBundle\EventListener\InterventionSubscriber
         arguments:
-            - '@doctrine'
-            - '@service_container'
-            - '@security.token_storage'
+            - '@hopitalnumerique_core.log'
         tags:
-            - { name: kernel.event_subscriber }
+            - { name: doctrine.event_subscriber }

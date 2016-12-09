@@ -33,7 +33,7 @@
                             {% endfor %}
                         </tbody>
                     </table>
-                </div>  
+                </div>
             </div>
         </div>
     </div>
@@ -61,7 +61,7 @@
                             <tr>
                                 <td>{{ logSynthesis.action|getFrenchAction }}</td>
                                 <td>{{logSynthesis.loggedAt|date('d/m/Y H:i')}}</td>
-                                <td>{{ logSynthesis.data.name }}</td>
+                                <td>{{ logSynthesis.data is not null ? logSynthesis.data.name : '' }}</td>
                             </tr>
                         {% endfor %}
                         </tbody>
