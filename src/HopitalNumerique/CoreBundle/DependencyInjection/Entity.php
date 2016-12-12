@@ -1,4 +1,5 @@
 <?php
+
 namespace HopitalNumerique\CoreBundle\DependencyInjection;
 
 use Doctrine\Common\Collections\ArrayCollection;
@@ -132,15 +133,14 @@ class Entity
     private $texteDynamiqueCodeManager;
 
     /**
-     * @var ReferenceManager $referenceManager
+     * @var ReferenceManager
      */
     private $referenceManager;
 
     /**
-     * @var SuggestionRepository $suggestionRepository
+     * @var SuggestionRepository
      */
     private $suggestionRepository;
-
 
     /**
      * Constructeur.
@@ -185,18 +185,19 @@ class Entity
         $this->refExpressionBesoinReponseId = $refExpressionBesoinReponseId;
     }
 
-
     /**
      * Retourne le type d'entité d'un objet.
      *
      * @param object $entity Entité
+     *
      * @return int|null Type
+     *
      * @throws \Exception
      */
     public function getEntityType($entity)
     {
         if (!is_object($entity)) {
-            throw new \Exception('L\'entité n\'est pas un objet (type "'.gettype($entity).'" trouvé).');
+            throw new \Exception('L\'entité n\'est pas un objet (type "' . gettype($entity) . '" trouvé).');
         }
 
         switch (get_class($entity)) {
@@ -228,13 +229,15 @@ class Entity
      * Retourne l'ID de l'objet.
      *
      * @param object $entity Entité
+     *
      * @return int ID
+     *
      * @throws \Exception
      */
     public function getEntityId($entity)
     {
         if (!is_object($entity)) {
-            throw new \Exception('L\'entité n\'est pas un objet (type "'.gettype($entity).'" trouvé).');
+            throw new \Exception('L\'entité n\'est pas un objet (type "' . gettype($entity) . '" trouvé).');
         }
 
         if (!method_exists($entity, 'getId')) {
@@ -247,8 +250,9 @@ class Entity
     /**
      * Retourne l'entité selon son type et son ID.
      *
-     * @param integer $type Type
-     * @param integer $id   ID
+     * @param int $type Type
+     * @param int $id   ID
+     *
      * @return object|null Entité
      */
     public function getEntityByTypeAndId($type, $id)
@@ -265,9 +269,11 @@ class Entity
     /**
      * Retourne l'entité selon son type et son ID.
      *
-     * @param integer $type Type
-     * @param array $ids <integer> $ids  IDs des entités
+     * @param int   $type Type
+     * @param array $ids  <integer> $ids  IDs des entités
+     *
      * @return array <object> Entités
+     *
      * @throws \Exception
      */
     public function getEntitiesByTypeAndIds($type, array $ids)
@@ -291,16 +297,18 @@ class Entity
                 return $this->suggestionRepository->findBy(['id' => $ids]);
         }
 
-        throw new \Exception('Type "'.$type.'" introuvable.');
+        throw new \Exception('Type "' . $type . '" introuvable.');
     }
 
-
     //<-- Domaines
+
     /**
      * Retourne les dommaines d'une entité.
      *
      * @param object $entity Entité
+     *
      * @return array <\HopitalNumerique\DomaineBundle\Entity\Domaine> Domaines
+     *
      * @throws \Exception
      */
     public function getDomainesByEntity($entity)
@@ -310,12 +318,14 @@ class Entity
             if (0 === count($entity->getDomaines()) && $entity instanceof Contenu) {
                 return $this->getDomainesByEntity($entity->getObjet());
             }
+
             return $entity->getDomaines();
         }
         if (method_exists($entity, 'getDomaine')) {
             if (null === $entity->getDomaine()) {
                 return [];
             }
+
             return [$entity->getDomaine()];
         }
 
@@ -340,7 +350,8 @@ class Entity
      *
      * @param object                                         $entity  Entité
      * @param \HopitalNumerique\DomaineBundle\Entity\Domaine $domaine Domaine
-     * @return boolean Si a domaine
+     *
+     * @return bool Si a domaine
      */
     public function entityHasDomaine($entity, Domaine $domaine)
     {
@@ -358,6 +369,7 @@ class Entity
      *
      * @param object                                   $entity Entité
      * @param \HopitalNumerique\UserBundle\Entity\User $user   User
+     *
      * @return array<\HopitalNumerique\DomaineBundle\Entity\Domaine> Domaines
      */
     public function getEntityDomainesCommunsWithUser($entity, User $user = null)
@@ -374,6 +386,7 @@ class Entity
      *
      * @param array<\HopitalNumerique\DomaineBundle\Entity\Domaine> $domaines Domaines
      * @param \HopitalNumerique\UserBundle\Entity\User              $user     User
+     *
      * @return array<\HopitalNumerique\DomaineBundle\Entity\Domaine> Domaines
      */
     public function getDomainesCommunsWithUser($domaines, User $user)
@@ -388,7 +401,6 @@ class Entity
             }
         }
 
-
         return $domainesCommuns;
     }
 
@@ -399,6 +411,7 @@ class Entity
      * @param array<\HopitalNumerique\DomaineBundle\Entity\Domaine> $allInitialDomaines Tous les domaines de l'entité (mais si invisible à l'utilisateur)
      * @param array<\HopitalNumerique\DomaineBundle\Entity\Domaine> $userChosenDomaines Tous les domaines choisis par l'utilisateur
      * @param \HopitalNumerique\UserBundle\Entity\User              $user               Utilisateur
+     *
      * @return array<\HopitalNumerique\DomaineBundle\Entity\Domaine> Domaines de l'entité
      */
     public function processSubmitedDomaines($allInitialDomaines, $userChosenDomaines, User $user)
@@ -436,14 +449,15 @@ class Entity
 
         return $domaines;
     }
-    //-->
 
+    //-->
 
     /**
      * Retourne le libellé de l'entité.
      *
-     * @param object       $entity                 Entité
-     * @param integer|null $truncateCaractersCount Nombre de caractères à afficher
+     * @param object   $entity                 Entité
+     * @param int|null $truncateCaractersCount Nombre de caractères à afficher
+     *
      * @return string Libellé
      */
     public function getTitleByEntity($entity, $truncateCaractersCount = null)
@@ -475,7 +489,7 @@ class Entity
         }
 
         if (null !== $title && null !== $truncateCaractersCount && strlen($title) > $truncateCaractersCount) {
-            $title = '<span title="'.$title.'">'.substr($title, 0, $truncateCaractersCount).'...</span>';
+            $title = '<span title="' . $title . '">' . substr($title, 0, $truncateCaractersCount) . '...</span>';
         }
 
         return $title;
@@ -485,13 +499,14 @@ class Entity
      * Retourne le sous-titre de l'entité.
      *
      * @param object $entity Entité
+     *
      * @return string Sous-titre
      */
     public function getSubtitleByEntity($entity)
     {
         switch ($this->getEntityType($entity)) {
             case self::ENTITY_TYPE_CONTENU:
-                return $this->contenuManager->getPrefix($entity).' '.$entity->getTitre();
+                return $this->contenuManager->getPrefix($entity) . ' ' . $entity->getTitre();
         }
 
         return null;
@@ -501,6 +516,7 @@ class Entity
      * Retourne les ID de catégorie de l'entité.
      *
      * @param object $entity Entité
+     *
      * @return array<integer> IDs
      */
     public function getCategoryIdsByEntity($entity)
@@ -524,6 +540,7 @@ class Entity
      * Retourne la catégorie de l'entité.
      *
      * @param object $entity Entité
+     *
      * @return string|null Catégorie
      */
     public function getCategoryByEntity($entity)
@@ -558,8 +575,9 @@ class Entity
     /**
      * Retourne la description de l'entité.
      *
-     * @param object       $entity                 Entité
-     * @param integer|null $truncateCaractersCount Nombre de caractères à afficher
+     * @param object   $entity                 Entité
+     * @param int|null $truncateCaractersCount Nombre de caractères à afficher
+     *
      * @return string|null Description
      */
     public function getDescriptionByEntity($entity, $truncateCaractersCount = 255)
@@ -595,7 +613,7 @@ class Entity
             if (null !== $truncateCaractersCount && strlen($description) > $truncateCaractersCount) {
                 $description = substr($description, 0, $truncateCaractersCount);
                 if (strrpos($description, ' ') > 0) {
-                    $description = substr($description, 0, strrpos($description, ' ')).'...';
+                    $description = substr($description, 0, strrpos($description, ' ')) . '...';
                 }
             }
 
@@ -607,12 +625,13 @@ class Entity
         return $description;
     }
 
-
     //<-- URL
+
     /**
      * Retourne l'URL de la page de l'entité.
      *
      * @param object $entity Entité
+     *
      * @return string|null URL
      */
     public function getFrontUrlByEntity($entity)
@@ -628,10 +647,10 @@ class Entity
                 return $this->router->generate('ccdn_forum_user_topic_show', ['topicId' => $entityId, 'forumName' => $entity->getBoard()->getCategory()->getForum()->getName()]);
             case self::ENTITY_TYPE_AMBASSADEUR:
                 $parameters = json_encode([
-                    $entity->getEmail() => $entity->getPrenom() . ' ' . $entity->getNom()
+                    $entity->getEmail() => $entity->getPrenom() . ' ' . $entity->getNom(),
                 ]);
+
                 return 'javascript:Contact_Popup.display(' . $parameters . ', window.location.href);';
-                return $this->router->generate('hopital_numerique_intervention_demande_nouveau', ['ambassadeur' => $entityId]);
             case self::ENTITY_TYPE_RECHERCHE_PARCOURS:
                 return $this->router->generate('hopital_numerique_recherche_parcours_details_index_front', ['id' => $entityId]);
             case self::ENTITY_TYPE_COMMUNAUTE_PRATIQUES_GROUPE:
@@ -644,10 +663,12 @@ class Entity
     }
 
     //<-- URL
+
     /**
      * Retourne l'URL de la page de l'entité.
      *
      * @param object $entity Entité
+     *
      * @return string|null URL
      */
     public function getSourceByEntity($entity)
@@ -674,6 +695,7 @@ class Entity
      * Retourne l'URL de la page gérant le référencement de l'entité.
      *
      * @param object $entity Entité
+     *
      * @return string|null URL
      */
     public function getMangementUrlByEntity($entity)
@@ -681,16 +703,17 @@ class Entity
         if ($entity instanceof Contenu) {
             return $this->router->generate('hopitalnumerique_objet_objet_edit', [
                 'id' => $entity->getObjet()->getId(),
-                'infra' => 1
+                'infra' => 1,
             ]);
         }
         if ($entity instanceof Objet) {
             return $this->router->generate('hopitalnumerique_objet_objet_edit', [
-                'id' => $entity->getId()
+                'id' => $entity->getId(),
             ]);
         }
 
         return null;
     }
+
     //-->
 }
