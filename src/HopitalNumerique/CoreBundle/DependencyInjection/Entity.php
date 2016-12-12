@@ -656,7 +656,7 @@ class Entity
             case self::ENTITY_TYPE_OBJET:
                 return $entity->getSource();
             case self::ENTITY_TYPE_CONTENU:
-                return null;
+                return $entity->getObjet()->getSource();
             case self::ENTITY_TYPE_FORUM_TOPIC:
                 return null;
             case self::ENTITY_TYPE_AMBASSADEUR:
