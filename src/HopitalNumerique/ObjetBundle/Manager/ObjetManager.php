@@ -2,6 +2,9 @@
 
 namespace HopitalNumerique\ObjetBundle\Manager;
 
+use HopitalNumerique\ObjetBundle\Entity\Objet;
+use HopitalNumerique\ObjetBundle\Repository\ObjetRepository;
+use HopitalNumerique\ReferenceBundle\Doctrine\Referencement\NoteReader;
 use Nodevo\ToolsBundle\Manager\Manager as BaseManager;
 use Doctrine\ORM\EntityManager;
 use Nodevo\ToolsBundle\Tools\Chaine;
@@ -17,15 +20,15 @@ use Symfony\Component\HttpFoundation\Session\Session;
 class ObjetManager extends BaseManager
 {
     protected $class = 'HopitalNumerique\ObjetBundle\Entity\Objet';
-    protected $_contenuManager;
-    protected $_noteManager;
-    protected $_userManager;
-    protected $_referenceManager;
+    protected $contenuManager;
+    protected $noteManager;
+    protected $userManager;
+    protected $referenceManager;
 
     /**
      * @var \Symfony\Component\HttpFoundation\Session\Session Session
      */
-    private $_session;
+    private $session;
 
     /**
      * Construct.
@@ -39,26 +42,29 @@ class ObjetManager extends BaseManager
     {
         parent::__construct($em);
 
-        $this->_contenuManager = $contenuManager;
-        $this->_noteManager = $noteManager;
-        $this->_session = $session;
-        $this->_userManager = $userManager;
-        $this->_referenceManager = $referenceManager;
+        $this->contenuManager = $contenuManager;
+        $this->noteManager = $noteManager;
+        $this->session = $session;
+        $this->userManager = $userManager;
+        $this->referenceManager = $referenceManager;
     }
 
     /**
      * Override : Récupère les données pour le grid sous forme de tableau.
      *
+     * @param \StdClass $condition
+     *
      * @return array
      */
     public function getDatasForGrid(\StdClass $condition = null)
     {
-        $domainesIds = $this->_userManager->getUserConnected()->getDomainesId();
+        $domainesIds = $this->userManager->getUserConnected()->getDomainesId();
         $productions = $this->getRepository()->getDatasForGrid($domainesIds, $condition)->getQuery()->getResult();
 
         $results = [];
 
         foreach ($productions as $production) {
+            /** @var Objet $production */
             $object = [];
             $object['idReference'] = $object['id'] = $production->getId();
             $object['titre'] = $production->getTitre();
@@ -76,7 +82,10 @@ class ObjetManager extends BaseManager
             $object['dateModification'] = $production->getDateModification();
 
             foreach ($production->getDomaines() as $domaine) {
-                $object['domainesNom'] = $object['domainesNom'] === '' ? $domaine->getNom() : $object['domainesNom'] . ' ; ' . $domaine->getNom();
+                $object['domainesNom'] = $object['domainesNom'] === ''
+                    ? $domaine->getNom()
+                    : $object['domainesNom'] . ' ; ' . $domaine->getNom()
+                ;
             }
 
             foreach ($production->getTypeLabels() as $type) {
@@ -130,14 +139,20 @@ class ObjetManager extends BaseManager
     /**
      * Récupère les objets pour l'export.
      *
+     * @param $ids
+     * @param $refsPonderees
+     * @param NoteReader $noteReader
+     *
      * @return array
      */
-    public function getDatasForExport($ids, $refsPonderees, $noteReader)
+    public function getDatasForExport($ids, $refsPonderees, NoteReader $noteReader)
     {
         $objets = $this->getRepository()->getDatasForExport($ids)->getQuery()->getResult();
         $results = [];
 
         foreach ($objets as $objet) {
+            /** @var Objet $objet */
+
             $row = [];
 
             //simple stuff
@@ -157,8 +172,15 @@ class ObjetManager extends BaseManager
             $row['dateParution'] = $objet->getDateParution();
 
             //quelques Dates
-            $row['dateCreation'] = !is_null($objet->getDateCreation()) ? $objet->getDateCreation()->format('d/m/Y') : '';
-            $row['dateModification'] = !is_null($objet->getDateModification()) ? $objet->getDateModification()->format('d/m/Y') : '';
+            $row['dateCreation'] = !is_null($objet->getDateCreation())
+                ? $objet->getDateCreation()->format('d/m/Y')
+                : ''
+            ;
+
+            $row['dateModification'] = !is_null($objet->getDateModification())
+                ? $objet->getDateModification()->format('d/m/Y')
+                : ''
+            ;
 
             //handle Productions liées
             $row['objets'] = json_encode($objet->getObjets());
@@ -166,6 +188,7 @@ class ObjetManager extends BaseManager
             //handle Roles
             $roles = $objet->getRoles();
             $row['roles'] = [];
+
             foreach ($roles as $role) {
                 $row['roles'][] = $role->getName();
             }
@@ -185,7 +208,10 @@ class ObjetManager extends BaseManager
             //handle note referencement
             $row['note'] = [];
             foreach ($domaines as $domaine) {
-                $row['note'][] = $domaine->getNom() . ':' . $noteReader->getNoteByEntityAndDomaineForAffichage($objet, $domaine);
+                $row['note'][] = $domaine->getNom()
+                    . ':'
+                    . $noteReader->getNoteByEntityAndDomaineForAffichage($objet, $domaine)
+                ;
             }
             $row['note'] = implode('|', $row['note']);
 
@@ -219,8 +245,8 @@ class ObjetManager extends BaseManager
             $row['idParent'] = $row['idC'] = $row['titreC'] = $row['aliasC'] = $row['orderC'] = $row['contenuC'] = $row['dateCreationC'] = $row['dateModificationC'] = $row['nbVueC'] = $row['noteC'] = $row['noteMoyenneC'] = $row['nombreNoteC'] = '';
 
             //Récupération + Calcul note moyenne
-            $row['noteMoyenne'] = number_format($this->_noteManager->getMoyenneNoteByObjet($objet->getId(), false), 2);
-            $row['nombreNote'] = $this->_noteManager->countNbNoteByObjet($objet->getId(), false);
+            $row['noteMoyenne'] = number_format($this->noteManager->getMoyenneNoteByObjet($objet->getId(), false), 2);
+            $row['nombreNote'] = $this->noteManager->countNbNoteByObjet($objet->getId(), false);
 
             //Fichier modifiable
             $row['referentAnap'] = is_null($objet->getFichierModifiable()) ? '' : $objet->getFichierModifiable()->getReferentAnap();
@@ -271,8 +297,8 @@ class ObjetManager extends BaseManager
                         $rowInfradoc['dateModificationC'] = !is_null($contenu->getDateModification()) ? $contenu->getDateModification()->format('d/m/Y') : '';
                         $rowInfradoc['nbVueC'] = $contenu->getNbVue();
                         $rowInfradoc['noteC'] = null; //number_format($this->getNoteReferencement($contenu->getReferences(), $refsPonderees), 0);
-                        $rowInfradoc['noteMoyenneC'] = number_format($this->_noteManager->getMoyenneNoteByObjet($contenu->getId(), true), 2);
-                        $rowInfradoc['nombreNoteC'] = $this->_noteManager->countNbNoteByObjet($contenu->getId(), true);
+                        $rowInfradoc['noteMoyenneC'] = number_format($this->noteManager->getMoyenneNoteByObjet($contenu->getId(), true), 2);
+                        $rowInfradoc['nombreNoteC'] = $this->noteManager->countNbNoteByObjet($contenu->getId(), true);
 
                         // Récupération des commentaires du contenu
                         $rowInfradoc['commentairesAssocies'] = '';
@@ -470,7 +496,7 @@ class ObjetManager extends BaseManager
     {
         //on teste si le rôle de l'user connecté ne fait pas parti de la liste des restriction de l'objet
         if (is_null($objet)) {
-            $this->_session->getFlashBag()->add('danger', 'Vous tentez de rejoindre une page qui n\'existe plus.');
+            $this->session->getFlashBag()->add('danger', 'Vous tentez de rejoindre une page qui n\'existe plus.');
 
             return false;
         }
@@ -540,7 +566,7 @@ class ObjetManager extends BaseManager
         }
 
         //get Contenus
-        $datas = $this->_contenuManager->getArboForObjet($ids);
+        $datas = $this->contenuManager->getArboForObjet($ids);
         $contenus = [];
         foreach ($datas as $one) {
             if ($one->objet != null) {
@@ -766,7 +792,7 @@ class ObjetManager extends BaseManager
                 $element->titre = $objet->getTitre();
                 $element->isObjet = 1;
             } elseif ($tab[0] == 'INFRADOC') {
-                $contenu = $this->_contenuManager->findOneBy(['id' => $tab[1]]);
+                $contenu = $this->contenuManager->findOneBy(['id' => $tab[1]]);
                 $element->titre = '|--' . $contenu->getTitre();
                 $element->isObjet = 0;
             } elseif ($tab[0] == 'ARTICLE') {
@@ -976,7 +1002,7 @@ class ObjetManager extends BaseManager
         }
 
             //get Contenus
-            $datas = $this->_contenuManager->getArboForObjet($ids);
+            $datas = $this->contenuManager->getArboForObjet($ids);
         $contenus = [];
         foreach ($datas as $one) {
             if ($one->objet != null) {
@@ -1028,9 +1054,17 @@ class ObjetManager extends BaseManager
     public function getObjetsByTypesAndDomaine($types, $idDomaine = null)
     {
         if (is_null($idDomaine)) {
-            $idDomaine = $this->_session->get('domaineId');
+            $idDomaine = $this->session->get('domaineId');
         }
 
         return $this->getRepository()->getObjetsByTypesAndDomaine($types, $idDomaine);
+    }
+
+    /**
+     * @return ObjetRepository
+     */
+    protected function getRepository()
+    {
+        return $this->_em->getRepository(Objet::class);
     }
 }

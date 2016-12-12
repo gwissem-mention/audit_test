@@ -3,6 +3,7 @@
 namespace HopitalNumerique\ObjetBundle\Repository;
 
 use Doctrine\ORM\EntityRepository;
+use Doctrine\ORM\QueryBuilder;
 use HopitalNumerique\DomaineBundle\Entity\Domaine;
 use HopitalNumerique\ReferenceBundle\Entity\Reference;
 use Doctrine\ORM\Query\Expr;
@@ -18,7 +19,7 @@ class ObjetRepository extends EntityRepository
      * @param array $domainesIds Tableau d'id de domaines autorisés pour l'utilisateur connecté
      * @param [type] $condition   [description]
      *
-     * @return array
+     * @return QueryBuilder
      */
     public function getDatasForGrid( $domainesIds, $condition = null)
     {
@@ -74,7 +75,7 @@ class ObjetRepository extends EntityRepository
     /**
      * Récupère les objets pour l'export
      *
-     * @return array
+     * @return QueryBuilder
      */
     public function getDatasForExport( $ids )
     {
