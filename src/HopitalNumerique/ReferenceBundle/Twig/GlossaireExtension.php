@@ -70,14 +70,14 @@ class GlossaireExtension extends \Twig_Extension
                 foreach ($wordSearchPatternMatches[0] as $wordSearchPatternMatch) {
                     if (!in_array($glossaireReference->getLibelle(), $testString)) {
                         $html =
-                            '¬<a class="fancybox fancybox.ajax" href="'.$this->router->generate(
+                            '<a class="fancybox fancybox.ajax" href="'.$this->router->generate(
                                 'hopitalnumerique_reference_glossaire_popin',
                                 ['glossaireReference' => $glossaireReference->getId()]
-                            ).'¬"><acronym class="glosstool" data-html="true" title="¬'.
+                            ).'"><acronym class="glosstool" data-html="true" title="'.
                             (('' != $glossaireReference->getDescriptionCourte()) ? $this->convertToAsciiHtml(
                                 $glossaireReference->getDescriptionCourte()
                             ) : '').
-                            '¬">¬'.$this->convertToAsciiHtml(substr($wordSearchPatternMatch, 1, -1)).'</acronym></a>';
+                            '">'.$this->convertToAsciiHtml(substr($wordSearchPatternMatch, 1, -1)).'</acronym></a>';
 
                         $html = substr($wordSearchPatternMatch, 0, 1).$html.substr($wordSearchPatternMatch, -1);
                         $text = $this->str_replace_first($wordSearchPatternMatch, $html, $text);
@@ -87,7 +87,6 @@ class GlossaireExtension extends \Twig_Extension
             }
 
             // Revert bad portion to HTML
-            $text = str_replace('¬', '', $text);
             foreach ($this->badPortionsConverted as $portion) {
                 $text = str_replace(
                     $portion,
@@ -106,6 +105,7 @@ class GlossaireExtension extends \Twig_Extension
             $entity,
             $this->currentDomaine->get()
         );
+
         $list = array();
         $testString = array();
         if (count($glossaireReferences) > 0) {
@@ -116,14 +116,12 @@ class GlossaireExtension extends \Twig_Extension
 
                 foreach ($wordSearchPatternMatches[0] as $wordSearchPatternMatch) {
                     $html =
-                        '¬<a class="fancybox fancybox.ajax" href="'.$this->router->generate('hopitalnumerique_reference_glossaire_popin', ['glossaireReference' => $glossaireReference->getId()]).'¬"><acronym class="glosstool" data-html="true" title="¬'.
+                        '<a class="fancybox fancybox.ajax" href="'.$this->router->generate('hopitalnumerique_reference_glossaire_popin', ['glossaireReference' => $glossaireReference->getId()]).'"><acronym class="glosstool" data-html="true" title="'.
                         (('' != $glossaireReference->getDescriptionCourte()) ? $this->convertToAsciiHtml($glossaireReference->getDescriptionCourte())  : '').
-                        '¬">¬' . $this->convertToAsciiHtml(substr($wordSearchPatternMatch, 1, -1)) . '</acronym></a>'
+                        '">' . $this->convertToAsciiHtml(substr($wordSearchPatternMatch, 1, -1)) . '</acronym></a>'
                     ;
 
-
-                    $html = substr($wordSearchPatternMatch, 0, 1) . $html . substr($wordSearchPatternMatch, -1);
-                    $html = str_replace(array('¬',',','\'',')','(','.'), '', $html);
+                    $html = str_replace(array(',','\'',')','('), '', $html);
                     if (!in_array($glossaireReference->getLibelle(), $testString)) {
                         $list[$glossaireReference->getLibelle()] = $html;
                         $testString[] = $glossaireReference->getLibelle();
