@@ -65,32 +65,40 @@ class ReferencementController extends Controller
         $foundWords = [];
         $resultFilters = [];
 
-        $this->container->get('hopitalnumerique_recherche.doctrine.referencement.reader')->setIsSearchedText(null !== $exaleadSearchedText);
+        $reader = $this->container->get(
+            'hopitalnumerique_recherche.doctrine.referencement.reader'
+        );
+
+        $reader->setIsSearchedText(null !== $exaleadSearchedText);
+
         if (null !== $exaleadSearchedText) { // Recherche Exalead
             $groupedReferenceIds = $request->request->get('references', null);
-            $this->container->get('hopitalnumerique_recherche.dependency_injection.referencement.exalead.search')->setText($exaleadSearchedText);
-            $resultFilters['objetIds'] = $this->container->get('hopitalnumerique_recherche.dependency_injection.referencement.exalead.search')->getObjetIds();
-            $resultFilters['contenuIds'] = $this->container->get('hopitalnumerique_recherche.dependency_injection.referencement.exalead.search')->getContenuIds();
+            $exaleadSearch = $this->container->get(
+                'hopitalnumerique_recherche.dependency_injection.referencement.exalead.search'
+            );
+            $exaleadSearch->setText($exaleadSearchedText);
+            $resultFilters['objetIds'] = $exaleadSearch->getObjetIds();
+            $resultFilters['contenuIds'] = $exaleadSearch->getContenuIds();
 
             // Si autre filtre qu'Exalead
             if ((null !== $groupedReferenceIds && count($groupedReferenceIds) > 0) || (null !== $publicationCategoryIds && count($publicationCategoryIds) > 0)) {
-                $exaleadEntitiesPropertiesByGroup = $this->container->get('hopitalnumerique_recherche.dependency_injection.referencement.exalead.search')->getEntitiesPropertiesByGroup();
-                $dbEntitiesPropertiesByGroup = $this->container->get('hopitalnumerique_recherche.doctrine.referencement.reader')->getEntitiesPropertiesByReferenceIdsByGroup($groupedReferenceIds, $entityTypeIds, $publicationCategoryIds, $resultFilters);
+                $exaleadEntitiesPropertiesByGroup = $exaleadSearch->getEntitiesPropertiesByGroup();
+                $dbEntitiesPropertiesByGroup = $reader->getEntitiesPropertiesByReferenceIdsByGroup($groupedReferenceIds, $entityTypeIds, $publicationCategoryIds, $resultFilters);
 
                 if ((null !== $groupedReferenceIds && count($groupedReferenceIds) > 0)) { // Cas où on a au moins une référence
-                    $exaleadEntitiesPropertiesByGroup = $this->container->get('hopitalnumerique_recherche.dependency_injection.referencement.exalead.search')->mergeEntitiesPropertiesByGroup($exaleadEntitiesPropertiesByGroup, $dbEntitiesPropertiesByGroup, true);
+                    $exaleadEntitiesPropertiesByGroup = $exaleadSearch->mergeEntitiesPropertiesByGroup($exaleadEntitiesPropertiesByGroup, $dbEntitiesPropertiesByGroup, true);
                 } else { // Pas de référence, filtrer uniquement Exalead sur ses catégories
-                    $exaleadEntitiesPropertiesByGroup = $this->container->get('hopitalnumerique_recherche.dependency_injection.referencement.exalead.search')->mergeEntitiesPropertiesByGroup($exaleadEntitiesPropertiesByGroup, $dbEntitiesPropertiesByGroup, false);
-                    $exaleadEntitiesPropertiesByGroup = $this->container->get('hopitalnumerique_recherche.dependency_injection.referencement.exalead.search')->deleteOthersCategoriesFromEntitiesPropertiesByGroup($exaleadEntitiesPropertiesByGroup, $publicationCategoryIds);
+                    $exaleadEntitiesPropertiesByGroup = $exaleadSearch->mergeEntitiesPropertiesByGroup($exaleadEntitiesPropertiesByGroup, $dbEntitiesPropertiesByGroup, false);
+                    $exaleadEntitiesPropertiesByGroup = $exaleadSearch->deleteOthersCategoriesFromEntitiesPropertiesByGroup($exaleadEntitiesPropertiesByGroup, $publicationCategoryIds);
                 }
                 $entitiesPropertiesByGroup = $exaleadEntitiesPropertiesByGroup;
             } else {
-                $entitiesPropertiesByGroup = $this->container->get('hopitalnumerique_recherche.dependency_injection.referencement.exalead.search')->getEntitiesPropertiesByGroup();
+                $entitiesPropertiesByGroup = $exaleadSearch->getEntitiesPropertiesByGroup();
             }
-            $foundWords = $this->container->get('hopitalnumerique_recherche.dependency_injection.referencement.exalead.search')->getFoundWords();
+            $foundWords = $exaleadSearch->getFoundWords();
         } else {
             $groupedReferenceIds = $request->request->get('references', []);
-            $entitiesPropertiesByGroup = $this->container->get('hopitalnumerique_recherche.doctrine.referencement.reader')->getEntitiesPropertiesByReferenceIdsByGroup($groupedReferenceIds, $entityTypeIds, $publicationCategoryIds, $resultFilters);
+            $entitiesPropertiesByGroup = $reader->getEntitiesPropertiesByReferenceIdsByGroup($groupedReferenceIds, $entityTypeIds, $publicationCategoryIds, $resultFilters);
         }
 
         return new JsonResponse([
