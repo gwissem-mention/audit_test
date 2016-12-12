@@ -553,6 +553,7 @@ class ObjetManager extends BaseManager
     /**
      * Retourne l'arbo Objets -> contenus.
      *
+     * @param Reference[] $types
      * @return array
      */
     public function getObjetsAndContenuArbo($types = null)
@@ -560,6 +561,7 @@ class ObjetManager extends BaseManager
         //@todo Vérif pour remplacer $this->findAll() qui pourrait générer des centaines de requêtes
         //get objets and IDS
         $objets = is_null($types) ? $this->getObjets() : $this->getObjetsByTypes($types);
+
         $ids = [];
         foreach ($objets as $one) {
             $ids[] = $one->getId();
@@ -574,6 +576,8 @@ class ObjetManager extends BaseManager
             }
         }
 
+        $results = [];
+
         //formate datas
         foreach ($objets as $one) {
             //Traitement pour Article
@@ -582,10 +586,7 @@ class ObjetManager extends BaseManager
                     'text' => $one->getTitre(),
                     'value' => 'ARTICLE:' . $one->getId(),
                 ];
-            }
-
-            //Traitement pour Publication et Infradoc
-            else {
+            } else { //Traitement pour Publication et Infradoc
                 $results[] = [
                     'text' => $one->getTitre(),
                     'value' => 'PUBLICATION:' . $one->getId(),

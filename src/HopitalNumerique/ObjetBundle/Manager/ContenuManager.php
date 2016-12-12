@@ -2,6 +2,7 @@
 
 namespace HopitalNumerique\ObjetBundle\Manager;
 
+use HopitalNumerique\ObjetBundle\Entity\Contenu;
 use Nodevo\ToolsBundle\Manager\Manager as BaseManager;
 use Nodevo\ToolsBundle\Tools\Chaine;
 
@@ -29,7 +30,7 @@ class ContenuManager extends BaseManager
     private $_session;
 
     /**
-     * Construct 
+     * Construct
      *
      * @param EntityManager  $em              Entity Mangager de doctrine
      *
@@ -59,16 +60,38 @@ class ContenuManager extends BaseManager
      *
      * @return array
      */
-    public function getArboForObjet( $id, $domaineIds = array() )
+    public function getArboForObjet($id, $domaineIds = array())
     {
-        $datas = new ArrayCollection( $this->getRepository()->getArboForObjet( $id, $domaineIds )->getQuery()->getResult() );
+        $originalDatas = $this->getRepository()->getArboForObjet($id, $domaineIds)->getQuery()->getResult();
 
-        //Récupère uniquement les premiers parents
-        $criteria = Criteria::create()->where(Criteria::expr()->eq("parent", null) );
-        $parents  = $datas->matching( $criteria );
-        
-        //call recursive function to handle all datas
-        return $this->getArboRecursive($datas, $parents, array(), '' );
+        $contents = [];
+
+        foreach ($originalDatas as $content) {
+            /** @var Contenu $content */
+            $item = new \stdClass();
+            $item->entity = $content;
+            $item->titre = $content->getTitre();
+            $item->alias = $content->getAlias();
+            $item->id = $content->getId();
+            $item->nbVue = $content->getNbVue();
+            $item->hasContent = $content->getContenu() == '' ? false : true;
+            $item->order = $content->getOrder();
+            $item->objet = $content->getParent()  === null ? $content->getObjet()->getId() : null;
+            $item->childs = [];
+
+            $contents[$item->entity->getId()] = $item;
+        }
+
+        $root = [];
+        foreach ($contents as $data) {
+            if (null !== $data->entity->getParent()) {
+                $contents[$data->entity->getParent()->getId()]->childs[] = $data;
+            } else {
+                $root[$data->entity->getId()] = $data;
+            }
+        }
+
+        return $root;
     }
 
     /**
@@ -147,7 +170,7 @@ class ContenuManager extends BaseManager
             }
             $elem['titre'] = $titre;
         }
-        
+
         // clean elements sans titre
         $parents = $this->cleanSansTitre($parents);
         $this->saveContenusCSV($objet, $parents);
@@ -161,7 +184,7 @@ class ContenuManager extends BaseManager
     public function getPrecedent( $contenus, $contenu )
     {
         reset($contenus);
-        while ( current($contenus) !== false && current($contenus)->getId() !== $contenu->getId() ) next($contenus);        
+        while ( current($contenus) !== false && current($contenus)->getId() !== $contenu->getId() ) next($contenus);
         return prev($contenus) == false ? null : current($contenus);
     }
 
@@ -173,7 +196,7 @@ class ContenuManager extends BaseManager
         reset($contenus);
         while ( current($contenus) !== false && current($contenus)->getId() !== $contenu->getId() ) next($contenus);
         return next($contenus) == false ? null : current($contenus);
-    }   
+    }
 
     /**
      * Retourne la liste des contenus qui ont un contenu non vide, triés par ordre (ex : Chapitre 1 - Chapitre 1.1 - Chapitre 1.2 - Chapitre 2 - Chapitre 2.1)
@@ -198,7 +221,7 @@ class ContenuManager extends BaseManager
         $elements = array_filter( $elements, function($item) {
             return $item->getContenu() != "";
         });
-        
+
         return $elements;
     }
 
@@ -221,20 +244,6 @@ class ContenuManager extends BaseManager
         return $order;
     }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     /**
      * Retourne le prefix du contenu
      *
@@ -249,53 +258,13 @@ class ContenuManager extends BaseManager
         {
             return $prefix;
         }
-        
+
         $prefix = $contenu->getOrder() . '.' . $prefix;
 
         if( !is_null($contenu->getParent()) )
             $prefix = $this->getPrefixRecursif($contenu->getParent(), $prefix);
-        
+
         return $prefix;
-    }
-
-    /**
-     * Fonction récursive qui parcourt l'ensemble des références en ajoutant l'element et recherchant les éventuels enfants
-     *
-     * @param ArrayCollection $items    Données d'origine
-     * @param array           $elements Tableau d'élements à ajouter
-     * @param array           $tab      Tableau de données vide à remplir puis retourner
-     *
-     * @return array
-     */
-    private function getArboRecursive( ArrayCollection $items, $elements, $tab, $numeroChapitre )
-    {
-        foreach($elements as $element)
-        {
-            //creation du mero de chapitre
-            $chapitre = $numeroChapitre . $element->getOrder() . '.';
-
-            //construction de l'element current
-            $item             = new \stdClass;
-            $item->entity = $element;
-            $item->titre      = $element->getTitre();
-            $item->alias      = $element->getAlias();
-            $item->id         = $element->getId();
-            $item->nbVue      = $element->getNbVue();
-            $item->order      = $chapitre;
-            $item->hasContent = $element->getContenu() == ''   ? false : true;
-            $item->objet      = $element->getParent()  == null ? $element->getObjet()->getId() : NULL;
-
-            //add childs : filter items with current element
-            $criteria     = Criteria::create()->where(Criteria::expr()->eq("parent", $element ))->orderBy( array( "order" => Criteria::ASC ) );
-            $childs       = $items->matching( $criteria );
-            $item->childs = $this->getArboRecursive($items, $childs, array(), $chapitre );
-
-            //add current item to big table
-            $tab[] = $item;
-        }
-
-        //return big table
-        return $tab;
     }
 
     /**
@@ -325,13 +294,13 @@ class ContenuManager extends BaseManager
         } else
             return false;
     }
-    
+
     /**
      * Fonction qui renvoie uniquement les éléments du tableau ayant l'index "titre" qui existe, de manière récursive
-     * 
+     *
      * @param array $elements
-     * 
-     * @return array 
+     *
+     * @return array
      */
     private function cleanSansTitre($elements)
     {
@@ -339,23 +308,23 @@ class ContenuManager extends BaseManager
         foreach( $elements as $cle => $elem ){
             if( isset($elem['childs']) )
                 $elem['childs'] = $this->cleanSansTitre( $elem['childs'] );
-            
+
             if( isset($elem['titre']) )
                 $retour[$cle] = $elem;
         }
 
         return $retour;
     }
-    
+
     /**
      * Fonctionne qui sauvegarde tous les éléments du sommaire
-     * 
+     *
      * @param type $objet
      * @param type $contenus
      * @param type $objects
      * @param type $parent
      * @param boolean doit-on sauvegarder $objects
-     * 
+     *
      * @return void
      */
     private function saveContenusCSV($objet, $contenus, &$objects = array(), $parent = null, $save = true)
@@ -371,15 +340,15 @@ class ContenuManager extends BaseManager
 
             if( $parent )
                 $contenu->setParent($parent);
-            
+
             $objects[] = $contenu;
             if( isset($content['childs']) )
                 $this->saveContenusCSV($objet, $content['childs'], $objects, $contenu, false);
         }
-        
+
         if( $save )
             $this->save($objects);
-    }    
+    }
 
     /**
      * Fonction pour trier les contenus récursivement
@@ -389,11 +358,11 @@ class ContenuManager extends BaseManager
         $elements[] = $parent;
 
         $childs = array_filter( $contenus->toArray(), function($item) use ($parent) {
-            return $item->getParent() == $parent;            
+            return $item->getParent() == $parent;
         });
 
         foreach ($childs as $key => $child) {
              $this->sortContenusRescursively( $child, $elements, $contenus );
-        } 
+        }
     }
 }

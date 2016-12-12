@@ -15,19 +15,21 @@
     </div>
 {% endif %}
 
-{% macro buildTree(contenu, objet) %}
+{% macro buildTree(contenu, objet, chapter) %}
     {% import _self as mySelf %}
     <li data-has-children="{{ contenu.childs ? '1' : '0' }}">
         {% if contenu.childs %}
             <a class="toggle-children" data-contenu="{{ contenu.id }}"><em class="fa fa-plus-circle"></em></a>
         {% endif %}
-        {% set name = contenu.order ~ ' ' ~ contenu.titre %}
+        {% set name = chapter ~ contenu.order ~ '. ' ~ contenu.titre %}
         {% set name = '<span title="' ~ name ~ '">' ~ name|truncate(30) ~ '</span>' %}
-        <a href="{{path('hopital_numerique_publication_publication_contenu', {'id':objet.id,'alias':objet.alias,'idc':contenu.id,'aliasc':contenu.alias})}}" >{{ name|raw }}</a>
+        <a href="{{path('hopital_numerique_publication_publication_contenu', {'id':objet.id,'alias':objet.alias,'idc':contenu.id,'aliasc':contenu.alias})}}" >
+            {{ name|raw }}
+        </a>
         {% if contenu.childs %}
             <ul data-contenu="{{ contenu.id }}">
                 {% for child in contenu.childs %}
-                    {{ mySelf.buildTree(child, objet) }}
+                    {{ mySelf.buildTree(child, objet, contenu.order ~ '.') }}
                 {% endfor %}
             </ul>
         {% endif %}
