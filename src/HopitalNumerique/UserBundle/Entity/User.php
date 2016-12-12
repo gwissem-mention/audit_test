@@ -3,24 +3,21 @@
 namespace HopitalNumerique\UserBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-use Doctrine\Common\Collections\ArrayCollection;
 use FOS\UserBundle\Model\User as BaseUser;
 use Nodevo\RoleBundle\Entity\Role;
 use HopitalNumerique\ReferenceBundle\Entity\Reference;
 use HopitalNumerique\CommunautePratiqueBundle\Entity\Inscription;
-
 //Asserts Stuff
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Nodevo\ToolsBundle\Validator\Constraints as Nodevo;
 use APY\DataGridBundle\Grid\Mapping as GRID;
 use Gedmo\Mapping\Annotation as Gedmo;
-
 //Tools
-use \Nodevo\ToolsBundle\Tools\Chaine;
+use Nodevo\ToolsBundle\Tools\Chaine;
 
 /**
- * User
+ * User.
  *
  * @ORM\Table("core_user")
  * @ORM\Entity(repositoryClass="HopitalNumerique\UserBundle\Repository\UserRepository")
@@ -157,17 +154,17 @@ use \Nodevo\ToolsBundle\Tools\Chaine;
 class User extends BaseUser
 {
     /**
-     * @var integer ID de l'état Actif
+     * @var int ID de l'état Actif
      */
     const ETAT_ACTIF_ID = 3;
 
     /**
-     * @var integer ID de l'état Inactif
+     * @var int ID de l'état Inactif
      */
     const ETAT_INACTIF_ID = 4;
 
     /**
-     * Tableau des rôles pour lesquels on vérifie si les users sont à jour ou pas
+     * Tableau des rôles pour lesquels on vérifie si les users sont à jour ou pas.
      *
      * @return array
      */
@@ -178,7 +175,6 @@ class User extends BaseUser
             'ROLE_EXPERT_6',
         ];
     }
-
 
     /**
      * @ORM\Column(name="usr_id", type="integer", options = {"comment" = "ID de l utilisateur"})
@@ -272,7 +268,7 @@ class User extends BaseUser
     protected $prenom;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="usr_nb_visite", type="integer", options = {"comment" = "Nombre de fois où un user est connecté"})
      */
@@ -491,14 +487,14 @@ class User extends BaseUser
     protected $contractualisations;
 
     /**
-     * @var boolean
+     * @var bool
      *
      * @ORM\Column(name="usr_lock", type="boolean", options = {"comment" = "L utilisateur est-il verrouillé ?"})
      */
     protected $lock;
 
     /**
-     * @var boolean
+     * @var bool
      *
      * @ORM\Column(name="usr_archiver", type="boolean", options = {"comment" = "L utilisateur est-il archivé ?"})
      * @Gedmo\Versioned
@@ -630,21 +626,21 @@ class User extends BaseUser
     protected $biographie;
 
     /**
-     * @var boolean
+     * @var bool
      *
      * @ORM\Column(name="usr_already_be_ambassadeur", type="boolean", options = {"comment" = "A deja ete ambassadeur ?"})
      */
     protected $alreadyBeAmbassadeur;
 
     /**
-     * @var boolean
+     * @var bool
      *
      * @ORM\Column(name="usr_already_be_expert", type="boolean", options = {"comment" = "A deja ete expert ?"})
      */
     protected $alreadyBeExpert;
 
     /**
-     * @var boolean
+     * @var bool
      *
      * @ORM\Column(name="usr_notification_requete", type="boolean", options = {"comment" = "L utilisateur est notifie par mail des maj des publications ?"})
      */
@@ -653,7 +649,7 @@ class User extends BaseUser
     /* <-- Communauté de pratique */
 
     /**
-     * @var boolean
+     * @var bool
      *
      * @Assert\NotNull()
      * @ORM\Column(name="usr_inscrit_communaute_pratique", type="boolean", options={"default"=false,"comment"="Indique si l utilisateur est inscrit à la communauté de pratiques"})
@@ -671,8 +667,6 @@ class User extends BaseUser
      */
     private $groupeInscription;
 
-    /**
-     */
     private $communautePratiqueGroupes;
 
     /**
@@ -699,9 +693,8 @@ class User extends BaseUser
      */
     private $inscriptions;
 
-
     /**
-     * Constructor
+     * Constructor.
      */
     public function __construct()
     {
@@ -727,7 +720,6 @@ class User extends BaseUser
         $this->typeActivite = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
-
     public function getConfirmationToken()
     {
         return $this->confirmationToken;
@@ -742,13 +734,13 @@ class User extends BaseUser
 
     public function __toString()
     {
-        return (string)$this->id;
+        return (string) $this->id;
     }
 
     /**
-     * Get id
+     * Get id.
      *
-     * @return integer
+     * @return int
      */
     public function getId()
     {
@@ -756,9 +748,10 @@ class User extends BaseUser
     }
 
     /**
-     * Set dateInscription
+     * Set dateInscription.
      *
      * @param \DateTime $dateInscription
+     *
      * @return User
      */
     public function setDateInscription($dateInscription)
@@ -769,7 +762,7 @@ class User extends BaseUser
     }
 
     /**
-     * Get dateInscription
+     * Get dateInscription.
      *
      * @return \DateTime
      */
@@ -779,7 +772,7 @@ class User extends BaseUser
     }
 
     /**
-     * Get dateInscription string
+     * Get dateInscription string.
      *
      * @return string
      */
@@ -789,7 +782,7 @@ class User extends BaseUser
     }
 
     /**
-     * Get lastLogin string
+     * Get lastLogin string.
      *
      * @return string
      */
@@ -799,7 +792,7 @@ class User extends BaseUser
     }
 
     /**
-     * Get pseudonymeForum
+     * Get pseudonymeForum.
      *
      * @return string $pseudonymeForum
      */
@@ -809,7 +802,7 @@ class User extends BaseUser
     }
 
     /**
-     * Set pseudonymeForum
+     * Set pseudonymeForum.
      *
      * @param string $pseudonymeForum
      */
@@ -819,7 +812,7 @@ class User extends BaseUser
     }
 
     /**
-     * Get nom
+     * Get nom.
      *
      * @return string $nom
      */
@@ -829,7 +822,7 @@ class User extends BaseUser
     }
 
     /**
-     * Set nom
+     * Set nom.
      *
      * @param string $nom
      */
@@ -839,7 +832,7 @@ class User extends BaseUser
     }
 
     /**
-     * Get prenom
+     * Get prenom.
      *
      * @return string $prenom
      */
@@ -849,7 +842,7 @@ class User extends BaseUser
     }
 
     /**
-     * Set prenom
+     * Set prenom.
      *
      * @param string $prenom
      */
@@ -859,7 +852,7 @@ class User extends BaseUser
     }
 
     /**
-     * Set email
+     * Set email.
      *
      * @param string $email
      */
@@ -871,9 +864,9 @@ class User extends BaseUser
     }
 
     /**
-     * Get nbVisites
+     * Get nbVisites.
      *
-     * @return integer $nbVisites
+     * @return int $nbVisites
      */
     public function getNbVisites()
     {
@@ -881,17 +874,17 @@ class User extends BaseUser
     }
 
     /**
-     * Add nbVisites
+     * Add nbVisites.
      *
-     * @param integer $nbVisites
+     * @param int $nbVisites
      */
     public function addNbVisites()
     {
-        $this->nbVisites++;
+        ++$this->nbVisites;
     }
 
     /**
-     * Get region
+     * Get region.
      *
      * @return \HopitalNumerique\ReferenceBundle\Entity\Reference $region
      */
@@ -901,7 +894,7 @@ class User extends BaseUser
     }
 
     /**
-     * Set region
+     * Set region.
      *
      * @param \HopitalNumerique\ReferenceBundle\Entity\Reference $region
      */
@@ -915,9 +908,10 @@ class User extends BaseUser
     }
 
     /**
-     * Add rattachementRegions
+     * Add rattachementRegions.
      *
      * @param \HopitalNumerique\ReferenceBundle\Entity\Reference $rattachementRegions
+     *
      * @return User
      */
     public function addRattachementRegion(\HopitalNumerique\ReferenceBundle\Entity\Reference $rattachementRegions)
@@ -928,7 +922,7 @@ class User extends BaseUser
     }
 
     /**
-     * Remove rattachementRegions
+     * Remove rattachementRegions.
      *
      * @param \HopitalNumerique\ReferenceBundle\Entity\Reference $rattachementRegions
      */
@@ -938,7 +932,7 @@ class User extends BaseUser
     }
 
     /**
-     * Get rattachementRegions
+     * Get rattachementRegions.
      *
      * @return \Doctrine\Common\Collections\Collection
      */
@@ -966,9 +960,9 @@ class User extends BaseUser
     /*--- Gestion domaine ---*/
 
     /**
-     * Get domaine
+     * Get domaine.
      *
-     * @return String $domaine
+     * @return string $domaine
      */
     public function getDomainesString()
     {
@@ -986,7 +980,7 @@ class User extends BaseUser
     }
 
     /**
-     * Get les ids des domaines concerné par l'user
+     * Get les ids des domaines concerné par l'user.
      *
      * @return array[integer]
      */
@@ -1006,9 +1000,10 @@ class User extends BaseUser
     }
 
     /**
-     * Add domaine
+     * Add domaine.
      *
      * @param \HopitalNumerique\DomaineBundle\Entity\Domaine $domaine
+     *
      * @return Resultat
      */
     public function addDomaine(\HopitalNumerique\DomaineBundle\Entity\Domaine $domaine)
@@ -1019,7 +1014,7 @@ class User extends BaseUser
     }
 
     /**
-     * Remove domaine
+     * Remove domaine.
      *
      * @param \HopitalNumerique\DomaineBundle\Entity\Domaine $domaine
      */
@@ -1029,9 +1024,10 @@ class User extends BaseUser
     }
 
     /**
-     * Set domaines
+     * Set domaines.
      *
      * @param \Doctrine\Common\Collections\Collection $domaines
+     *
      * @return Domaine
      */
     public function setDomaines($domaines)
@@ -1042,7 +1038,7 @@ class User extends BaseUser
     }
 
     /**
-     * Get domaines
+     * Get domaines.
      *
      * @return \Doctrine\Common\Collections\Collection
      */
@@ -1055,7 +1051,8 @@ class User extends BaseUser
      * Retourne si l'utilisateur possède ce domaine.
      *
      * @param \HopitalNumerique\DomaineBundle\Entity\Domaine $domaine Domaine
-     * @return boolean Si domaine
+     *
+     * @return bool Si domaine
      */
     public function hasDomaine(\HopitalNumerique\DomaineBundle\Entity\Domaine $domaine)
     {
@@ -1071,7 +1068,7 @@ class User extends BaseUser
     /*-- Fin gestion domaine --*/
 
     /**
-     * Get département
+     * Get département.
      *
      * @return \HopitalNumerique\DomaineBundle\Entity\Domaine $departement
      */
@@ -1081,7 +1078,7 @@ class User extends BaseUser
     }
 
     /**
-     * Set département
+     * Set département.
      *
      * @param \HopitalNumerique\ReferenceBundle\Entity\Reference $departement
      */
@@ -1095,7 +1092,7 @@ class User extends BaseUser
     }
 
     /**
-     * Get etat
+     * Get etat.
      *
      * @return \HopitalNumerique\ReferenceBundle\Entity\Reference $etat
      */
@@ -1105,7 +1102,7 @@ class User extends BaseUser
     }
 
     /**
-     * Set etat
+     * Set etat.
      *
      * @param \HopitalNumerique\ReferenceBundle\Entity\Reference $etat
      */
@@ -1119,7 +1116,7 @@ class User extends BaseUser
     }
 
     /**
-     * Get titre
+     * Get titre.
      *
      * @return \HopitalNumerique\ReferenceBundle\Entity\Reference $titre
      */
@@ -1129,7 +1126,7 @@ class User extends BaseUser
     }
 
     /**
-     * Set titre
+     * Set titre.
      *
      * @param \HopitalNumerique\ReferenceBundle\Entity\Reference $titre
      */
@@ -1143,7 +1140,7 @@ class User extends BaseUser
     }
 
     /**
-     * Get civilite
+     * Get civilite.
      *
      * @return \HopitalNumerique\ReferenceBundle\Entity\Reference $civilite
      */
@@ -1153,7 +1150,7 @@ class User extends BaseUser
     }
 
     /**
-     * Set civilite
+     * Set civilite.
      *
      * @param \HopitalNumerique\ReferenceBundle\Entity\Reference $civilite
      */
@@ -1167,7 +1164,7 @@ class User extends BaseUser
     }
 
     /**
-     * Get telephoneDirect
+     * Get telephoneDirect.
      *
      * @return string $telephoneDirect
      */
@@ -1177,7 +1174,7 @@ class User extends BaseUser
     }
 
     /**
-     * Set telephoneDirect
+     * Set telephoneDirect.
      *
      * @param string $telephoneDirect
      */
@@ -1187,7 +1184,7 @@ class User extends BaseUser
     }
 
     /**
-     * Get telephonePortable
+     * Get telephonePortable.
      *
      * @return string $telephonePortable
      */
@@ -1197,7 +1194,7 @@ class User extends BaseUser
     }
 
     /**
-     * Set telephonePortable
+     * Set telephonePortable.
      *
      * @param string $telephonePortable
      */
@@ -1207,7 +1204,7 @@ class User extends BaseUser
     }
 
     /**
-     * Get contactAutre
+     * Get contactAutre.
      *
      * @return string $contactAutre
      */
@@ -1217,7 +1214,7 @@ class User extends BaseUser
     }
 
     /**
-     * Set contactAutre
+     * Set contactAutre.
      *
      * @param string $contactAutre
      */
@@ -1227,7 +1224,7 @@ class User extends BaseUser
     }
 
     /**
-     * Set typeActivite
+     * Set typeActivite.
      *
      * @param array <\HopitalNumerique\ReferenceBundle\Entity\Reference> $activiteTypes
      */
@@ -1243,7 +1240,7 @@ class User extends BaseUser
     }
 
     /**
-     * Set typeActivite
+     * Set typeActivite.
      *
      * @param \HopitalNumerique\ReferenceBundle\Entity\Reference $typeActivite
      */
@@ -1257,7 +1254,7 @@ class User extends BaseUser
     }
 
     /**
-     * Add typeActivite
+     * Add typeActivite.
      *
      * @param \HopitalNumerique\ReferenceBundle\Entity\Reference $typeActivite
      */
@@ -1269,7 +1266,7 @@ class User extends BaseUser
     }
 
     /**
-     * Get typeActivite
+     * Get typeActivite.
      *
      * @return \HopitalNumerique\ReferenceBundle\Entity\Reference $typeActivite
      */
@@ -1282,7 +1279,8 @@ class User extends BaseUser
      * Retourne si l'utilisateur possède tel type d'activité.
      *
      * @param \HopitalNumerique\ReferenceBundle\Entity\Reference $activiteType Type d'activité
-     * @return boolean Si possède
+     *
+     * @return bool Si possède
      */
     public function hasTypeActivite(Reference $activiteType)
     {
@@ -1299,7 +1297,8 @@ class User extends BaseUser
      * Retourne si l'utilisateur possède exactement ces types d'activité.
      *
      * @param array <\HopitalNumerique\ReferenceBundle\Entity\Reference> $activiteTypes Types d'activité
-     * @return boolean Si possède
+     *
+     * @return bool Si possède
      */
     public function equalsTypeActivite(array $activiteTypes)
     {
@@ -1317,7 +1316,7 @@ class User extends BaseUser
     }
 
     /**
-     * Set statutEtablissementSante
+     * Set statutEtablissementSante.
      *
      * @param \HopitalNumerique\ReferenceBundle\Entity\Reference $statutEtablissementSante
      */
@@ -1331,7 +1330,7 @@ class User extends BaseUser
     }
 
     /**
-     * Get statutEtablissementSante
+     * Get statutEtablissementSante.
      *
      * @return \HopitalNumerique\ReferenceBundle\Entity\Reference $statutEtablissementSante
      */
@@ -1341,7 +1340,7 @@ class User extends BaseUser
     }
 
     /**
-     * Get etablissementRattachementSante
+     * Get etablissementRattachementSante.
      *
      * @return string $etablissementRattachementSante
      */
@@ -1351,7 +1350,7 @@ class User extends BaseUser
     }
 
     /**
-     * Get etablissementRattachementSanteString
+     * Get etablissementRattachementSanteString.
      *
      * @return string $etablissementRattachementSante
      */
@@ -1363,7 +1362,7 @@ class User extends BaseUser
     }
 
     /**
-     * Set etablissementRattachementSante
+     * Set etablissementRattachementSante.
      *
      * @param string $etablissementRattachementSante
      */
@@ -1377,7 +1376,7 @@ class User extends BaseUser
     }
 
     /**
-     * Get autreStructureRattachementSante
+     * Get autreStructureRattachementSante.
      *
      * @return string $autreStructureRattachementSante
      */
@@ -1388,7 +1387,7 @@ class User extends BaseUser
 
     /**
      * Retourne le nom de l'établissement de l'utilisateur
-     * (celui de la liste ou celui qu'il a saisi)
+     * (celui de la liste ou celui qu'il a saisi).
      *
      * @return string
      */
@@ -1404,7 +1403,7 @@ class User extends BaseUser
     }
 
     /**
-     * Set autreStructureRattachementSante
+     * Set autreStructureRattachementSante.
      *
      * @param string $autreStructureRattachementSante
      */
@@ -1414,7 +1413,7 @@ class User extends BaseUser
     }
 
     /**
-     * Get fonctionDansEtablissementSante
+     * Get fonctionDansEtablissementSante.
      *
      * @return string $fonctionDansEtablissementSante
      */
@@ -1424,7 +1423,7 @@ class User extends BaseUser
     }
 
     /**
-     * Set fonctionDansEtablissementSante
+     * Set fonctionDansEtablissementSante.
      *
      * @param string $fonctionDansEtablissementSante
      */
@@ -1434,7 +1433,7 @@ class User extends BaseUser
     }
 
     /**
-     * Set fonctionDansEtablissementSanteReferencement
+     * Set fonctionDansEtablissementSanteReferencement.
      *
      * @param \HopitalNumerique\ReferenceBundle\Entity\Reference $fonctionDansEtablissementSanteReferencement
      */
@@ -1448,7 +1447,7 @@ class User extends BaseUser
     }
 
     /**
-     * Get fonctionDansEtablissementSanteReferencement
+     * Get fonctionDansEtablissementSanteReferencement.
      *
      * @return \HopitalNumerique\ReferenceBundle\Entity\Reference $fonctionDansEtablissementSanteReferencement
      */
@@ -1458,7 +1457,7 @@ class User extends BaseUser
     }
 
     /**
-     * Set profilEtablissementSante
+     * Set profilEtablissementSante.
      *
      * @param \HopitalNumerique\ReferenceBundle\Entity\Reference $profilEtablissementSante
      */
@@ -1472,7 +1471,7 @@ class User extends BaseUser
     }
 
     /**
-     * Get profilEtablissementSante
+     * Get profilEtablissementSante.
      *
      * @return \HopitalNumerique\ReferenceBundle\Entity\Reference $profilEtablissementSante
      */
@@ -1482,7 +1481,7 @@ class User extends BaseUser
     }
 
     /**
-     * Get nomStructure
+     * Get nomStructure.
      *
      * @return string $nomStructure
      */
@@ -1492,7 +1491,7 @@ class User extends BaseUser
     }
 
     /**
-     * Set nomStructure
+     * Set nomStructure.
      *
      * @param string $nomStructure
      */
@@ -1502,7 +1501,7 @@ class User extends BaseUser
     }
 
     /**
-     * Get fonctionStructure
+     * Get fonctionStructure.
      *
      * @return string $fonctionStructure
      */
@@ -1512,7 +1511,7 @@ class User extends BaseUser
     }
 
     /**
-     * Set fonctionStructure
+     * Set fonctionStructure.
      *
      * @param string $fonctionStructure
      */
@@ -1522,9 +1521,9 @@ class User extends BaseUser
     }
 
     /**
-     * Get lock
+     * Get lock.
      *
-     * @return boolean $lock
+     * @return bool $lock
      */
     public function getLock()
     {
@@ -1532,9 +1531,9 @@ class User extends BaseUser
     }
 
     /**
-     * Set lock
+     * Set lock.
      *
-     * @param boolean $lock
+     * @param bool $lock
      */
     public function setLock($lock)
     {
@@ -1542,9 +1541,9 @@ class User extends BaseUser
     }
 
     /**
-     * Get notficationRequete
+     * Get notficationRequete.
      *
-     * @return boolean $notficationRequete
+     * @return bool $notficationRequete
      */
     public function getNotficationRequete()
     {
@@ -1552,9 +1551,9 @@ class User extends BaseUser
     }
 
     /**
-     * Set notficationRequete
+     * Set notficationRequete.
      *
-     * @param boolean $notficationRequete
+     * @param bool $notficationRequete
      */
     public function setNotficationRequete($notficationRequete)
     {
@@ -1562,9 +1561,9 @@ class User extends BaseUser
     }
 
     /**
-     * Get archiver
+     * Get archiver.
      *
-     * @return boolean $archiver
+     * @return bool $archiver
      */
     public function getArchiver()
     {
@@ -1572,9 +1571,9 @@ class User extends BaseUser
     }
 
     /**
-     * Set archiver
+     * Set archiver.
      *
-     * @param boolean $archiver
+     * @param bool $archiver
      */
     public function setArchiver($archiver)
     {
@@ -1582,9 +1581,9 @@ class User extends BaseUser
     }
 
     /**
-     * Get alreadyBeAmbassadeur
+     * Get alreadyBeAmbassadeur.
      *
-     * @return boolean $alreadyBeAmbassadeur
+     * @return bool $alreadyBeAmbassadeur
      */
     public function getAlreadyBeAmbassadeur()
     {
@@ -1592,9 +1591,9 @@ class User extends BaseUser
     }
 
     /**
-     * Set alreadyBeAmbassadeur
+     * Set alreadyBeAmbassadeur.
      *
-     * @param boolean $alreadyBeAmbassadeur
+     * @param bool $alreadyBeAmbassadeur
      */
     public function setAlreadyBeAmbassadeur($alreadyBeAmbassadeur)
     {
@@ -1602,9 +1601,9 @@ class User extends BaseUser
     }
 
     /**
-     * Get alreadyBeExpert
+     * Get alreadyBeExpert.
      *
-     * @return boolean $alreadyBeExpert
+     * @return bool $alreadyBeExpert
      */
     public function getAlreadyBeExpert()
     {
@@ -1612,9 +1611,9 @@ class User extends BaseUser
     }
 
     /**
-     * Set alreadyBeExpert
+     * Set alreadyBeExpert.
      *
-     * @param boolean $alreadyBeExpert
+     * @param bool $alreadyBeExpert
      */
     public function setAlreadyBeExpert($alreadyBeExpert)
     {
@@ -1622,9 +1621,10 @@ class User extends BaseUser
     }
 
     /**
-     * Add Contractualisation
+     * Add Contractualisation.
      *
      * @param \HopitalNumerique\UserBundle\Entity\Contractualisation $contractualisations
+     *
      * @return User
      */
     public function addContractualisation(\HopitalNumerique\UserBundle\Entity\Contractualisation $contractualisations)
@@ -1635,7 +1635,7 @@ class User extends BaseUser
     }
 
     /**
-     * Remove Contractualisation
+     * Remove Contractualisation.
      *
      * @param \HopitalNumerique\UserBundle\Entity\Contractualisation $contractualisations
      */
@@ -1645,7 +1645,7 @@ class User extends BaseUser
     }
 
     /**
-     * Get contractualisations
+     * Get contractualisations.
      *
      * @return \Doctrine\Common\Collections\Collection
      */
@@ -1655,7 +1655,7 @@ class User extends BaseUser
     }
 
     /**
-     * Get objets
+     * Get objets.
      *
      * @return \Doctrine\Common\Collections\Collection
      */
@@ -1667,9 +1667,10 @@ class User extends BaseUser
     // ^ -------- Gestion questionnaire  -------- ^
 
     /**
-     * Add reponses
+     * Add reponses.
      *
      * @param \HopitalNumerique\QuestionnaireBundle\Entity\Reponse $reponses
+     *
      * @return User
      */
     public function addReponse(\HopitalNumerique\QuestionnaireBundle\Entity\Reponse $reponses)
@@ -1680,7 +1681,7 @@ class User extends BaseUser
     }
 
     /**
-     * Remove reponses
+     * Remove reponses.
      *
      * @param \HopitalNumerique\QuestionnaireBundle\Entity\Reponse $reponses
      */
@@ -1690,7 +1691,7 @@ class User extends BaseUser
     }
 
     /**
-     * Get reponses
+     * Get reponses.
      *
      * @return \Doctrine\Common\Collections\Collection
      */
@@ -1700,9 +1701,10 @@ class User extends BaseUser
     }
 
     /**
-     * Add questionnaireOccurrences
+     * Add questionnaireOccurrences.
      *
      * @param \HopitalNumerique\QuestionnaireBundle\Entity\Occurrence $questionnaireOccurrences
+     *
      * @return User
      */
     public function addQuestionnaireOccurrence(\HopitalNumerique\QuestionnaireBundle\Entity\Occurrence $questionnaireOccurrences)
@@ -1713,7 +1715,7 @@ class User extends BaseUser
     }
 
     /**
-     * Remove questionnaireOccurrences
+     * Remove questionnaireOccurrences.
      *
      * @param \HopitalNumerique\QuestionnaireBundle\Entity\Occurrence $questionnaireOccurrences
      */
@@ -1723,7 +1725,7 @@ class User extends BaseUser
     }
 
     /**
-     * Get questionnaireOccurrences
+     * Get questionnaireOccurrences.
      *
      * @return \Doctrine\Common\Collections\Collection
      */
@@ -1741,11 +1743,11 @@ class User extends BaseUser
 
     public function setTermsAccepted($termsAccepted)
     {
-        $this->termsAccepted = (Boolean)$termsAccepted;
+        $this->termsAccepted = (bool) $termsAccepted;
     }
 
     /**
-     * Retourne le prénom puis le nom
+     * Retourne le prénom puis le nom.
      *
      * @return string
      */
@@ -1755,7 +1757,7 @@ class User extends BaseUser
     }
 
     /**
-     * Retourne le nom puis le prénom
+     * Retourne le nom puis le prénom.
      *
      * @return string
      */
@@ -1767,7 +1769,7 @@ class User extends BaseUser
     /**
      * Retourne si l'utilisateur a le rôle Admin ou pas.
      *
-     * @return boolean VRAI si admin
+     * @return bool VRAI si admin
      */
     public function hasRoleAdmin()
     {
@@ -1792,7 +1794,7 @@ class User extends BaseUser
     /**
      * Retourne si l'utilisateur a le rôle CMSI ou pas.
      *
-     * @return boolean VRAI ssi l'utilisateur a le rôle CMSI
+     * @return bool VRAI ssi l'utilisateur a le rôle CMSI
      */
     public function hasRoleCmsi()
     {
@@ -1802,7 +1804,7 @@ class User extends BaseUser
     /**
      * Retourne si l'utilisateur a le rôle ES - Direction générale ou pas.
      *
-     * @return boolean VRAI ssi l'utilisateur a le rôle ES - Direction générale
+     * @return bool VRAI ssi l'utilisateur a le rôle ES - Direction générale
      */
     public function hasRoleDirecteur()
     {
@@ -1812,7 +1814,7 @@ class User extends BaseUser
     /**
      * Retourne si l'utilisateur a le rôle ambassadeur ou pas.
      *
-     * @return boolean VRAI ssi l'utilisateur a le rôle ambassadeur
+     * @return bool VRAI ssi l'utilisateur a le rôle ambassadeur
      */
     public function hasRoleAmbassadeur()
     {
@@ -1822,7 +1824,7 @@ class User extends BaseUser
     /**
      * Retourne si l'utilisateur a le rôle ES ou pas.
      *
-     * @return boolean VRAI ssi l'utilisateur a le rôle es
+     * @return bool VRAI ssi l'utilisateur a le rôle es
      */
     public function hasRoleEs()
     {
@@ -1832,7 +1834,7 @@ class User extends BaseUser
     /**
      * Retourne si l'utilisateur a le rôle Expert ou pas.
      *
-     * @return boolean VRAI ssi l'utilisateur a le rôle expert
+     * @return bool VRAI ssi l'utilisateur a le rôle expert
      */
     public function hasRoleExpert()
     {
@@ -1840,9 +1842,10 @@ class User extends BaseUser
     }
 
     /**
-     * Add ConnaissancesAmbassadeur
+     * Add ConnaissancesAmbassadeur.
      *
      * @param \HopitalNumerique\UserBundle\Entity\ConnaissanceAmbassadeur $contractualisations
+     *
      * @return User
      */
     public function addConnaissancesAmbassadeur(\HopitalNumerique\UserBundle\Entity\ConnaissanceAmbassadeur $connaissanceAmbassadeur)
@@ -1853,7 +1856,7 @@ class User extends BaseUser
     }
 
     /**
-     * Remove ConnaissancesAmbassadeur
+     * Remove ConnaissancesAmbassadeur.
      *
      * @param \HopitalNumerique\UserBundle\Entity\ConnaissanceAmbassadeur $connaissanceAmbassadeur
      */
@@ -1863,7 +1866,7 @@ class User extends BaseUser
     }
 
     /**
-     * Get connaissanceAmbassadeur
+     * Get connaissanceAmbassadeur.
      *
      * @return \Doctrine\Common\Collections\Collection
      */
@@ -1873,9 +1876,9 @@ class User extends BaseUser
     }
 
     /**
-     * Get connaissanceAmbassadeurString
+     * Get connaissanceAmbassadeurString.
      *
-     * @return String liste des connaissances
+     * @return string liste des connaissances
      */
     public function getConnaissancesAmbassadeursString()
     {
@@ -1886,9 +1889,7 @@ class User extends BaseUser
         }
 
         foreach ($this->connaissancesAmbassadeurs as $ambassadeur) {
-
             if ($ambassadeur->getDomaine()) {
-
                 $ambassadeurString .= ($ambassadeurString != '' ? ' | ' : ' ') . $ambassadeur->getDomaine()->getLibelle();
             }
         }
@@ -1897,7 +1898,7 @@ class User extends BaseUser
     }
 
     /**
-     * Get connaissancesAmbassadeursSI
+     * Get connaissancesAmbassadeursSI.
      *
      * @return \Doctrine\Common\Collections\Collection
      */
@@ -1919,10 +1920,10 @@ class User extends BaseUser
         //Découpage du prénom sur le tiret
         $tempsPrenom = explode('-', $prenom);
         //Unsset de la variable
-        $prenom = "";
+        $prenom = '';
         //Pour chaque bout on met une MAJ sur la première lettre de chaque mot, si il y en plusieurs c'est qu'il y avait un -
         foreach ($tempsPrenom as $key => $tempPrenom) {
-            $prenom .= ("" !== $prenom) ? ('-' . ucwords($tempPrenom)) : ucwords($tempPrenom);
+            $prenom .= ('' !== $prenom) ? ('-' . ucwords($tempPrenom)) : ucwords($tempPrenom);
         }
 
         // ----Mise en majuscule du nom
@@ -1934,15 +1935,15 @@ class User extends BaseUser
     /**
      * Retourne si l'utilisateur est actif.
      *
-     * @return boolean VRAI ssi l'utilisateur est actif.
+     * @return bool vRAI ssi l'utilisateur est actif
      */
     public function isActif()
     {
-        return ($this->etat != null && $this->etat->getId() == self::ETAT_ACTIF_ID);
+        return $this->etat != null && $this->etat->getId() == self::ETAT_ACTIF_ID;
     }
 
     /**
-     * Get email
+     * Get email.
      *
      * @return string $email
      */
@@ -1952,7 +1953,7 @@ class User extends BaseUser
     }
 
     /**
-     * Get role
+     * Get role.
      *
      * @return string
      */
@@ -1975,7 +1976,7 @@ class User extends BaseUser
     }
 
     /**
-     * Get raisonDesinscription
+     * Get raisonDesinscription.
      *
      * @return string $raisonDesinscription
      */
@@ -1985,7 +1986,7 @@ class User extends BaseUser
     }
 
     /**
-     * Set raisonDesinscription
+     * Set raisonDesinscription.
      *
      * @param string $raisonDesinscription
      */
@@ -1995,7 +1996,7 @@ class User extends BaseUser
     }
 
     /**
-     * Get remarque
+     * Get remarque.
      *
      * @return string $remarque
      */
@@ -2005,7 +2006,7 @@ class User extends BaseUser
     }
 
     /**
-     * Set remarque
+     * Set remarque.
      *
      * @param string $remarque
      */
@@ -2017,7 +2018,7 @@ class User extends BaseUser
     }
 
     /**
-     * Get biographie
+     * Get biographie.
      *
      * @return string $biographie
      */
@@ -2027,7 +2028,7 @@ class User extends BaseUser
     }
 
     /**
-     * Set biographie
+     * Set biographie.
      *
      * @param string $biographie
      */
@@ -2039,7 +2040,7 @@ class User extends BaseUser
     }
 
     /**
-     * Get dateLastUpdate
+     * Get dateLastUpdate.
      *
      * @return DateTime $dateLastUpdate
      */
@@ -2049,7 +2050,7 @@ class User extends BaseUser
     }
 
     /**
-     * Set dateLastUpdate
+     * Set dateLastUpdate.
      *
      * @param DateTime $dateLastUpdate
      */
@@ -2061,7 +2062,7 @@ class User extends BaseUser
     }
 
     /**
-     * Get dashboardFront
+     * Get dashboardFront.
      *
      * @return string $dashboardFront
      */
@@ -2071,7 +2072,7 @@ class User extends BaseUser
     }
 
     /**
-     * Set dashboardFront
+     * Set dashboardFront.
      *
      * @param string $dashboardFront
      */
@@ -2083,7 +2084,7 @@ class User extends BaseUser
     }
 
     /**
-     * Get dashboardBack
+     * Get dashboardBack.
      *
      * @return string $dashboardBack
      */
@@ -2093,7 +2094,7 @@ class User extends BaseUser
     }
 
     /**
-     * Set dashboardBack
+     * Set dashboardBack.
      *
      * @param string $dashboardBack
      */
@@ -2114,9 +2115,10 @@ class User extends BaseUser
     // ----------------------------------------
 
     /**
-     * Set path
+     * Set path.
      *
      * @param string $path
+     *
      * @return Contractualisation
      */
     public function setPath($path)
@@ -2131,7 +2133,7 @@ class User extends BaseUser
     }
 
     /**
-     * Get path
+     * Get path.
      *
      * @return string
      */
@@ -2212,7 +2214,8 @@ class User extends BaseUser
     }
 
     /**
-     * Get Last ip connection
+     * Get Last ip connection.
+     *
      * @return string
      */
     public function getIpLastConnection()
@@ -2221,8 +2224,10 @@ class User extends BaseUser
     }
 
     /**
-     * Set Last ip Connection
+     * Set Last ip Connection.
+     *
      * @param string $ip
+     *
      * @return string
      */
     public function setIpLastConnection($ip)
@@ -2235,9 +2240,9 @@ class User extends BaseUser
     /* <-- Communauté de pratique */
 
     /**
-     * Get inscritCommunautePratique
+     * Get inscritCommunautePratique.
      *
-     * @return boolean $inscritCommunautePratique
+     * @return bool $inscritCommunautePratique
      */
     public function isInscritCommunautePratique()
     {
@@ -2245,9 +2250,9 @@ class User extends BaseUser
     }
 
     /**
-     * Set inscritCommunautePratique
+     * Set inscritCommunautePratique.
      *
-     * @param boolean $inscritCommunautePratique
+     * @param bool $inscritCommunautePratique
      */
     public function setInscritCommunautePratique($inscritCommunautePratique)
     {
@@ -2255,9 +2260,10 @@ class User extends BaseUser
     }
 
     /**
-     * Add communautePratiqueGroupe
+     * Add communautePratiqueGroupe.
      *
      * @param \HopitalNumerique\CommunautePratiqueBundle\Entity\Groupe $communautePratiqueGroupe
+     *
      * @return User
      */
     public function addCommunautePratiqueAnimateurGroupe(\HopitalNumerique\CommunautePratiqueBundle\Entity\Groupe $communautePratiqueGroupe)
@@ -2268,9 +2274,10 @@ class User extends BaseUser
     }
 
     /**
-     * Add groupeInscription
+     * Add groupeInscription.
      *
      * @param \HopitalNumerique\CommunautePratiqueBundle\Entity\Inscription $groupeInscription
+     *
      * @return User
      */
     public function addCommunautePratiqueAnimateurGroupeInscription(\HopitalNumerique\CommunautePratiqueBundle\Entity\Inscription $groupeInscription)
@@ -2282,7 +2289,7 @@ class User extends BaseUser
     }
 
     /**
-     * Remove communautePratiqueGroupes
+     * Remove communautePratiqueGroupes.
      *
      * @param \HopitalNumerique\CommunautePratiqueBundle\Entity\Groupe $communautePratiqueGroupes
      */
@@ -2292,7 +2299,7 @@ class User extends BaseUser
     }
 
     /**
-     * Remove groupeInscription
+     * Remove groupeInscription.
      *
      * @param \HopitalNumerique\CommunautePratiqueBundle\Entity\Inscription $groupeInscription
      */
@@ -2303,7 +2310,7 @@ class User extends BaseUser
     }
 
     /**
-     * Get communautePratiqueGroupes
+     * Get communautePratiqueGroupes.
      *
      * @return \Doctrine\Common\Collections\Collection
      */
@@ -2313,9 +2320,10 @@ class User extends BaseUser
     }
 
     /**
-     * Add communautePratiqueGroupe
+     * Add communautePratiqueGroupe.
      *
      * @param \HopitalNumerique\CommunautePratiqueBundle\Entity\Groupe $communautePratiqueGroupe
+     *
      * @return User
      */
     public function addCommunautePratiqueGroupe(\HopitalNumerique\CommunautePratiqueBundle\Entity\Groupe $communautePratiqueGroupe)
@@ -2326,9 +2334,10 @@ class User extends BaseUser
     }
 
     /**
-     * Add groupeInscription
+     * Add groupeInscription.
      *
      * @param \HopitalNumerique\CommunautePratiqueBundle\Entity\Inscription $groupeInscription
+     *
      * @return User
      */
     public function addCommunautePratiqueGroupeInscription(\HopitalNumerique\CommunautePratiqueBundle\Entity\inscription $groupeInscription)
@@ -2339,9 +2348,10 @@ class User extends BaseUser
     }
 
     /**
-     * is Actif in groupe
+     * is Actif in groupe.
      *
      * @param \HopitalNumerique\CommunautePratiqueBundle\Entity\Inscription $groupeInscription
+     *
      * @return User
      */
     public function isActifInGroupe(\HopitalNumerique\CommunautePratiqueBundle\Entity\Groupe $groupe)
@@ -2350,9 +2360,10 @@ class User extends BaseUser
     }
 
     /**
-     * is Actif in groupe
+     * is Actif in groupe.
      *
      * @param \HopitalNumerique\CommunautePratiqueBundle\Entity\Inscription $groupeInscription
+     *
      * @return User
      */
     public function isActifGroupeInscription(\HopitalNumerique\CommunautePratiqueBundle\Entity\inscription $groupeInscription)
@@ -2367,7 +2378,7 @@ class User extends BaseUser
     }
 
     /**
-     * Remove communautePratiqueGroupes
+     * Remove communautePratiqueGroupes.
      *
      * @param \HopitalNumerique\CommunautePratiqueBundle\Entity\Groupe $communautePratiqueGroupes
      */
@@ -2377,7 +2388,7 @@ class User extends BaseUser
     }
 
     /**
-     * Remove groupeInscription
+     * Remove groupeInscription.
      *
      * @param \HopitalNumerique\CommunautePratiqueBundle\Entity\Inscription $groupeInscription
      */
@@ -2391,7 +2402,8 @@ class User extends BaseUser
      * Has communautePratiqueGroupe ?
      *
      * @param \HopitalNumerique\CommunautePratiqueBundle\Entity\Groupe $communautePratiqueGroupe
-     * @return boolean
+     *
+     * @return bool
      */
     public function hasCommunautePratiqueGroupe(\HopitalNumerique\CommunautePratiqueBundle\Entity\Groupe $communautePratiqueGroupe)
     {
@@ -2402,7 +2414,8 @@ class User extends BaseUser
      * Has $groupeInscription ?
      *
      * @param \HopitalNumerique\CommunautePratiqueBundle\Entity\Inscription $groupeInscription
-     * @return boolean
+     *
+     * @return bool
      */
     public function hasCommunautePratiqueGroupeInscription(\HopitalNumerique\CommunautePratiqueBundle\Entity\Inscription $groupeInscription)
     {
@@ -2416,7 +2429,7 @@ class User extends BaseUser
     }
 
     /**
-     * Get communautePratiqueGroupes
+     * Get communautePratiqueGroupes.
      *
      * @return \Doctrine\Common\Collections\Collection
      */
@@ -2430,7 +2443,7 @@ class User extends BaseUser
     }
 
     /**
-     * Get groupeInscription
+     * Get groupeInscription.
      *
      * @return \Doctrine\Common\Collections\Collection
      */
@@ -2440,9 +2453,10 @@ class User extends BaseUser
     }
 
     /**
-     * Add communautePratiqueDocument
+     * Add communautePratiqueDocument.
      *
      * @param \HopitalNumerique\CommunautePratiqueBundle\Entity\Document $communautePratiqueDocument
+     *
      * @return User
      */
     public function addCommunautePratiqueDocument(\HopitalNumerique\CommunautePratiqueBundle\Entity\Document $communautePratiqueDocument)
@@ -2453,7 +2467,7 @@ class User extends BaseUser
     }
 
     /**
-     * Remove communautePratiqueDocuments
+     * Remove communautePratiqueDocuments.
      *
      * @param \HopitalNumerique\CommunautePratiqueBundle\Entity\Document $communautePratiqueDocument
      */
@@ -2463,7 +2477,7 @@ class User extends BaseUser
     }
 
     /**
-     * Get communautePratiqueDocuments
+     * Get communautePratiqueDocuments.
      *
      * @return \Doctrine\Common\Collections\Collection
      */
@@ -2473,9 +2487,10 @@ class User extends BaseUser
     }
 
     /**
-     * Add communautePratiqueFiche
+     * Add communautePratiqueFiche.
      *
      * @param \HopitalNumerique\CommunautePratiqueBundle\Entity\Fiche $communautePratiqueFiche
+     *
      * @return User
      */
     public function addCommunautePratiqueFiche(\HopitalNumerique\CommunautePratiqueBundle\Entity\Fiche $communautePratiqueFiche)
@@ -2486,7 +2501,7 @@ class User extends BaseUser
     }
 
     /**
-     * Remove communautePratiqueFiches
+     * Remove communautePratiqueFiches.
      *
      * @param \HopitalNumerique\CommunautePratiqueBundle\Entity\Fiche $communautePratiqueFiche
      */
@@ -2496,7 +2511,7 @@ class User extends BaseUser
     }
 
     /**
-     * Get communautePratiqueFiches
+     * Get communautePratiqueFiches.
      *
      * @return \Doctrine\Common\Collections\Collection
      */
@@ -2506,9 +2521,10 @@ class User extends BaseUser
     }
 
     /**
-     * Add communautePratiqueCommentaire
+     * Add communautePratiqueCommentaire.
      *
      * @param \HopitalNumerique\CommunautePratiqueBundle\Entity\Commentaire $communautePratiqueCommentaire
+     *
      * @return User
      */
     public function addCommunautePratiqueCommentaire(\HopitalNumerique\CommunautePratiqueBundle\Entity\Commentaire $communautePratiqueCommentaire)
@@ -2519,7 +2535,7 @@ class User extends BaseUser
     }
 
     /**
-     * Remove communautePratiqueCommentaires
+     * Remove communautePratiqueCommentaires.
      *
      * @param \HopitalNumerique\CommunautePratiqueBundle\Entity\Commentaire $communautePratiqueCommentaire
      */
@@ -2529,7 +2545,7 @@ class User extends BaseUser
     }
 
     /**
-     * Get communautePratiqueCommentaires
+     * Get communautePratiqueCommentaires.
      *
      * @return \Doctrine\Common\Collections\Collection
      */
@@ -2540,18 +2556,17 @@ class User extends BaseUser
 
     /* --> */
 
-
     /**
      * Equals.
      *
      * @param \HopitalNumerique\UserBundle\Entity\User $user User
-     * @return boolean Si égalité
+     *
+     * @return bool Si égalité
      */
     public function equals(User $user)
     {
-        return ($this->id === $user->getId());
+        return $this->id === $user->getId();
     }
-
 
     /* <-- Avatar */
 
@@ -2576,7 +2591,7 @@ class User extends BaseUser
     /* --> */
 
     /**
-     * On vérifie que la date de renouvellement de la dernière contractualisation n'est pas dépassée
+     * On vérifie que la date de renouvellement de la dernière contractualisation n'est pas dépassée.
      *
      * @return null|string
      */
@@ -2590,7 +2605,7 @@ class User extends BaseUser
         }
         $aujourdHui = new \DateTime('now');
 
-        if (in_array(reset($this->roles), User::getRolesContractualisationUpToDate())) {
+        if (in_array(reset($this->roles), self::getRolesContractualisationUpToDate())) {
             return null !== $this->contractualisations ? $dateCourante >= $aujourdHui ? 'Oui' : 'Non' : 'Non';
         } else {
             return null;
@@ -2598,7 +2613,7 @@ class User extends BaseUser
     }
 
     /**
-     * Retourne la date de renouvellement de la dernière contractualisation enregistrée pour l'utilisateur
+     * Retourne la date de renouvellement de la dernière contractualisation enregistrée pour l'utilisateur.
      *
      * @return \DateTime|null
      */
