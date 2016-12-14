@@ -74,9 +74,9 @@ class UserManager extends BaseManager
 
         $aujourdHui = new \DateTime('now');
 
-        //On enlève un mois à la date courante pour prévenir 1mois à l'avance
-        $interval    = new \DateInterval('P1M');
-        $interval->m = -1;
+        //On enlève 45 jours à la date courante pour prévenir 45 jours mois à l'avance
+        $interval = new \DateInterval('P45D');
+//        $interval->m = -1;
 
         $refusCandidature = $this->managerRefusCandidature->getRefusCandidatureByQuestionnaire();
 
