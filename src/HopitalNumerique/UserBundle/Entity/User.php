@@ -2598,7 +2598,6 @@ class User extends BaseUser
     public function getUpToDate()
     {
         $interval = new \DateInterval('P45D');
-        $interval->m = -1;
         $dateCourante = $this->getDateLastContractualisation();
         if (null !== $dateCourante) {
             $dateCourante->add($interval);
