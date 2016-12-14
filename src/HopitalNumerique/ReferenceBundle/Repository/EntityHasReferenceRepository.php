@@ -164,7 +164,12 @@ class EntityHasReferenceRepository extends EntityRepository
             )
             ->andWhere($qb->expr()->orX($qb->expr()->isNull('objet.id'), $qb->expr()->eq('objetDomaine.id', ':domaine')))
             ->leftJoin('objet.etat', 'etat')
-            ->andWhere('etat.id = :active_state')
+            ->andWhere(
+                $qb->expr()->orX(
+                    'etat.id IS NULL',
+                    'etat.id = :active_state'
+                )
+            )
                 ->setParameter(':active_state', 3)
             ->leftJoin('objet.listeNotes', 'objetNote')
             //-->
