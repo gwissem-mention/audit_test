@@ -50,13 +50,9 @@ class UserRepository extends EntityRepository
                         GROUP_CONCAT(user_domaines.nom SEPARATOR \' - \') as domaines
             ')
             ->from('HopitalNumeriqueUserBundle:User', 'user')
-            ->leftJoin('user.etat','refEtat')
-            ->leftJoin('user.region','refRegion')
-            ->leftJoin('user.contractualisations', 'contractualisation')
-                ->where($qb->expr()->orX(
-                    $qb->expr()->eq('contractualisation.archiver', 0),
-                    $qb->expr()->isNull('contractualisation.id')
-                ))
+            ->leftJoin('user.etat', 'refEtat')
+            ->leftJoin('user.region', 'refRegion')
+            ->leftJoin('user.contractualisations', 'contractualisation', Join::WITH, 'contractualisation.archiver = 0')
             ->join('user.domaines', 'user_domaines', Join::WITH, 'user_domaines.id IN (:domaines_ids)')
             ->groupBy('user.id')
             ->orderBy('user.dateInscription', 'DESC')

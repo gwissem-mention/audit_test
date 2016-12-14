@@ -536,7 +536,7 @@ class UserController extends Controller
             'remarque'                           => 'Remarque pour la gestion',
             'domainesString'                     => 'Domaine(s) concerné(s)',
             'ipLastConnection'                   => 'Dernière ip de connexion',
-            'upToDate'                           => 'À jour',
+            'UpToDateToString'                   => 'À jour',
         ];
 
         $kernelCharset = $this->container->getParameter('kernel.charset');

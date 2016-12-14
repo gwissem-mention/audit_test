@@ -363,22 +363,6 @@ class DefaultController extends Controller
                 $blocUser['es']++;
             } elseif ($user->hasRoleAmbassadeur()) {
                 $blocUser['ambassadeurs']++;
-
-                if (count($user->getContractualisations()) === 0) {
-                    $blocUser['conventions']++;
-                } else {
-                    /** @var Contractualisation[] $contractualisations */
-                    $contractualisations = $user->getContractualisations()->toArray();
-
-                    foreach ($contractualisations as $contractualisation) {
-                        if (!$contractualisation->getArchiver() &&
-                            $contractualisation->getDateRenouvellement() <= new \DateTime()
-                        ) {
-                            $blocUser['conventions']++;
-                            break;
-                        }
-                    }
-                }
             } elseif ($user->hasRoleExpert()) {
                 $blocUser['experts']++;
             }

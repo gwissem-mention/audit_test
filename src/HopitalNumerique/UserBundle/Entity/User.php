@@ -2595,20 +2595,36 @@ class User extends BaseUser
      *
      * @return null|string
      */
-    public function getUpToDate()
+    public function isUpToDate()
     {
-        $interval = new \DateInterval('P45D');
-        $dateCourante = $this->getDateLastContractualisation();
-        if (null !== $dateCourante) {
-            $dateCourante->add($interval);
+        if (0 === count(array_intersect($this->roles, self::getRolesContractualisationUpToDate()))) {
+            return true;
         }
-        $aujourdHui = new \DateTime('now');
 
-        if (in_array(reset($this->roles), self::getRolesContractualisationUpToDate())) {
-            return null !== $this->contractualisations ? $dateCourante >= $aujourdHui ? 'Oui' : 'Non' : 'Non';
-        } else {
-            return null;
+        if (0 === $this->getContractualisations()->count()) {
+            return false;
         }
+
+        $dateLimit = (new \DateTime('now'))->add(new \DateInterval('P45D'));
+        $archive = 0;
+
+        /** @var Contractualisation $contractualisation */
+        foreach ($this->getContractualisations() as $contractualisation) {
+            $dateRenew = $contractualisation->getDateRenouvellement();
+
+            if (true === $contractualisation->getArchiver()) {
+                $archive++;
+            } elseif ($dateRenew <= $dateLimit) {
+                return false;
+            }
+        }
+
+        return $archive === count($this->getContractualisations()) ? false : true;
+    }
+
+    public function getUpToDateToString()
+    {
+        return $this->isUpToDate() ? 'Oui' : 'Non';
     }
 
     /**

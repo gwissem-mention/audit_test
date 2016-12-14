@@ -73,10 +73,7 @@ class UserManager extends BaseManager
         $questionnaireByUser = $this->managerReponse->reponseExiste($idExpert, $idAmbassadeur);
 
         $aujourdHui = new \DateTime('now');
-
-        //On enlève 45 jours à la date courante pour prévenir 45 jours mois à l'avance
-        $interval = new \DateInterval('P45D');
-//        $interval->m = -1;
+        $contractLimitDate = $aujourdHui->add(new \DateInterval('P45D'));
 
         $refusCandidature = $this->managerRefusCandidature->getRefusCandidatureByQuestionnaire();
 
@@ -108,11 +105,10 @@ class UserManager extends BaseManager
                 )
                 && !$user["alreadyBeAmbassadeur"]);
 
-            $dateCourante = new \DateTime($user['contra']);
-            $dateCourante->add($interval);
+            $contractDate = new \DateTime($user['contra']);
 
             if (in_array(reset($user['roles']), User::getRolesContractualisationUpToDate())) {
-                $user['contra'] = null !== $user['contra'] ? $dateCourante >= $aujourdHui ? 'true' : 'false' : 'false';
+                $user['contra'] = null !== $user['contra'] ? $contractDate <= $contractLimitDate ? 'true' : 'false' : 'false';
             } else {
                 $user['contra'] = null;
             }
