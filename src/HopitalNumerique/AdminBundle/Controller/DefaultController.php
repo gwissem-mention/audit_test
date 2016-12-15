@@ -344,7 +344,7 @@ class DefaultController extends Controller
         $refusCandidature = $this->get('hopitalnumerique_user.manager.refus_candidature')->getRefusCandidatureByQuestionnaire();
 
         //get contractualisation stuff
-        $blocUser['conventions'] = $this->get('hopitalnumerique_user.manager.contractualisation')->getContractualisationsARenouveler();
+        $blocUser['conventions'] = $this->get('hopitalnumerique_user.manager.contractualisation')->getContractualisationsARenouvelerForAmbassador();
 
         foreach ($users as $user) {
             //Ne pas prendre en compte les utilisateurs inactifs

@@ -51,6 +51,33 @@ class ContractualisationRepository extends EntityRepository
         return $qb;
     }
 
+    public function countExpiredContractForAmbassador()
+    {
+        $in45Days = new \DateTime();
+        $in45Days->add(new \DateInterval('P45D'));
+
+        $qb = $this->_em->createQueryBuilder();
+        $qb
+            ->select('count(distinct user.id)')
+            ->from('HopitalNumeriqueUserBundle:User', 'user')
+            ->leftJoin('user.contractualisations', 'con', Join::WITH, 'con.archiver = 0')
+            ->andWhere(
+                $qb->expr()->orX(
+                    'con.dateRenouvellement <= :in45Days',
+                    'con.id IS NULL'
+                )
+            )
+            ->andWhere(
+                $qb->expr()->like('user.roles', $qb->expr()->literal("%ROLE_AMBASSADEUR_7%"))
+            )
+            ->setParameters([
+                'in45Days' => $in45Days,
+            ])
+        ;
+
+        return $qb->getQuery()->getSingleScalarResult();
+    }
+
     /**
      * Récupère les contractualisations pour un utilisateur donné
      *
