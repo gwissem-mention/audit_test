@@ -242,17 +242,20 @@
                             <h2><span class="title">{{ groupTitle }}</span> (<span id="results-{{ groupId }}-count"></span> résultats)</h2>
                             <div id="results-{{ groupId }}"></div>
                             <div class="buttons">
-                                {% if app.user %}
-                                    <div class="pull-left suggest-link">
-                                        <a class="pull-left" href="{{ path('hopitalnumerique_suggestion_front_add') }}">Vous connaissez une ressource qui n'apparait pas dans les résultats ?<br />Proposez-nous de l'ajouter</a>
-                                    </div>
-                                {% endif %}
-                                    <button type="button" disabled id="results-{{ groupId }}-less-button" class="btn btn-xs btn-danger more-less-results" onclick="Hn_RechercheBundle_Referencement.displayLessResults('{{ groupId }}');"><em class="fa fa-angle-double-up"></em> &nbsp; Moins de résultats</button>
-                                    <button type="button" disabled id="results-{{ groupId }}-more-button" class="btn btn-xs btn-primary more-less-results" onclick="Hn_RechercheBundle_Referencement.displayMoreResults('{{ groupId }}');"><em class="fa fa-angle-double-down"></em> &nbsp; Plus de résultats</button>
+                                <button type="button" disabled id="results-{{ groupId }}-less-button" class="btn btn-xs btn-danger more-less-results" onclick="Hn_RechercheBundle_Referencement.displayLessResults('{{ groupId }}');"><em class="fa fa-angle-double-up"></em> &nbsp; Moins de résultats</button>
+                                <button type="button" disabled id="results-{{ groupId }}-more-button" class="btn btn-xs btn-primary more-less-results" onclick="Hn_RechercheBundle_Referencement.displayMoreResults('{{ groupId }}');"><em class="fa fa-angle-double-down"></em> &nbsp; Plus de résultats</button>
                                 <div class="ajax-loader"></div>
                             </div>
                         </div>
                     {%- endfor -%}
+
+                    {% if app.user %}
+                        <div class="pull-left suggest-link">
+                            <p>
+                                <a class="pull-left" href="{{ path('hopitalnumerique_suggestion_front_add') }}">Vous connaissez une ressource qui n'apparaît pas dans les résultats ? Proposez-nous de l'ajouter</a>
+                            </p>
+                        </div>
+                    {% endif %}
                 </div>
             </div>
         </div>
