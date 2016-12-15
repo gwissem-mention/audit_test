@@ -352,10 +352,8 @@ class DefaultController extends Controller
                 continue;
             }
 
-            // Si l'utilisateur s'est connecté il y a moins de 6 mois
-            if ($user->getLastLogin() != null
-                && date_diff($user->getLastLogin(), new \DateTime())->days < 6*30
-            ) {
+            // Si l'utilisateur s'est connecté il y a moins de 1 an
+            if ($user->getLastLogin() !== null && $user->getLastLogin()->diff(new \DateTime())->y < 1) {
                 $blocUser['actif']++;
             }
 

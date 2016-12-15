@@ -43,7 +43,7 @@
                             <div class="panel-body">
                                 <ol>
                                     <li><a href="{{path('hopital_numerique_user_homepage_filtre', {'filtre' : 'Utilisateur-hopital-numerique'})}}"><strong>{{blocUser['nb']}}</strong> comptes</a></li>
-                                    <li><a href="{{path('hopital_numerique_user_homepage_filtre', {'filtre' : 'Utilisateur-actif'})}}"><strong>{{blocUser['actif']}}</strong> comptes actifs</a></li>
+                                    <li><a href="{{path('hopital_numerique_user_homepage_filtre', {'filtre' : 'Utilisateur-actif'})}}"><strong>{{blocUser['actif']}}</strong> comptes actifs (12 derniers mois)</a></li>
                                     <li><strong>{{blocUser['es']}}</strong> comptes de type ES</li>
                                     <li><strong>{{ blocUser['nb'] - blocUser['es'] }}</strong> compte de type "Autres ES"</li>
                                 </ol>
@@ -150,7 +150,7 @@
                             </div>
                         </div>
                     </li>
-                    
+
                     <li data-row="{{userConf['top5-productions']['row']}}" data-col="{{userConf['top5-productions']['col']}}" data-sizex="1" data-sizey="1" data-id="top5-productions" >
                         <div class="panel panel-midnightblue">
                             <div class="panel-heading">
@@ -169,7 +169,7 @@
                             </div>
                         </div>
                     </li>
-            
+
                     <li data-row="{{userConf['bottom5-productions']['row']}}" data-col="{{userConf['bottom5-productions']['col']}}" data-sizex="1" data-sizey="1" data-id="bottom5-productions" >
                         <div class="panel panel-midnightblue">
                             <div class="panel-heading">
