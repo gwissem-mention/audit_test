@@ -69,7 +69,7 @@
             <h4 class="gris" >
                 {{types}}{% if objet.source is not null and objet.source != '' %} <span class="text-muted">({{objet.source}})</span>{% endif %}
                 {% if objet.communautePratiqueGroupe is not null %}
-                    - <a class="gris" href="{{ path('hopitalnumerique_communautepratique_publication_list') }}">(Contenu élaboré dans le cadre du groupe {{ objet.communautePratiqueGroupe.titre }} de la communauté de pratique)</a>
+                    - <a class="gris cdp-group" href="{{ path('hopitalnumerique_communautepratique_publication_list') }}">Contenu élaboré dans le cadre du groupe ({{ objet.communautePratiqueGroupe.titre }}) de la communauté de pratique</a>
                 {% endif %}
             </h4>
         </div>

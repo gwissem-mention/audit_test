@@ -63,6 +63,7 @@
     #publication .titre-infradoc-pdf {display: none;}
     #publication table {margin: 0 20px 20px 0;}
     #publication table td {padding: 5px;}
+    #publication .cdp-group { font-style: italic; }
 
     /* Résultats */
     #publication #resultats{ margin-top: 20px; }
