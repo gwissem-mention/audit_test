@@ -107,8 +107,8 @@ class UserManager extends BaseManager
 
             $contractDate = new \DateTime($user['contra']);
 
-            if (in_array(reset($user['roles']), User::getRolesContractualisationUpToDate())) {
-                $user['contra'] = null !== $user['contra'] ? $contractDate <= $contractLimitDate ? 'true' : 'false' : 'false';
+            if (count(array_intersect($user['roles'], User::getRolesContractualisationUpToDate())) > 0) {
+                $user['contra'] = $contractDate <= $contractLimitDate ? 'false' : 'true';
             } else {
                 $user['contra'] = null;
             }
