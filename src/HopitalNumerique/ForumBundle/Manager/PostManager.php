@@ -33,6 +33,9 @@ class PostManager extends BaseManager
         {
             //Récupération du topic du post à supprimer
             $topic = $post->getTopic();
+            if (null === $topic) { 
+                continue;
+            }
             $isLastPostTopic = is_null($topic->getLastPost()) ? false : $topic->getLastPost()->getId() === $post->getId();
             //Récupération du board du post à supprimer
             $board = $topic->getBoard();
