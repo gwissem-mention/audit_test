@@ -28,7 +28,7 @@ class SuggestionController extends Controller
         /** @var Suggestion $suggestion */
         $suggestion = new Suggestion();
 
-        $form = $this->createForm(SuggestionType::class, $suggestion, ['validation_groups' => ['front_add']]);
+        $form = $this->createForm(SuggestionType::class, $suggestion, ['validation_groups' => ['Default', 'front_add']]);
 
         $form->handleRequest($request);
 
@@ -80,8 +80,8 @@ class SuggestionController extends Controller
 
     public function validateAction()
     {
-        $this->addFlash('success', 'Merci pour votre participation !');
+        $this->addFlash('success', 'Merci de nous avoir suggéré une ressources pour enrichir le Centre de ressources de l\'ANAP. Cette proposition sera étudiée par l\'ANAP avant que sa mise en ligne ne soit validée.');
 
-        return $this->redirectToRoute('hopitalnumerique_suggestion_front_add');
+        return $this->redirectToRoute('hopital_numerique_recherche_homepage');
     }
 }

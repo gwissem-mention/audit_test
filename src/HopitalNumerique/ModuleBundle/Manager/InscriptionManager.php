@@ -202,17 +202,6 @@ class InscriptionManager extends BaseManager
         {
             $inscription->setEtatEvaluation( $ref );
             $this->_em->persist( $inscription );
-
-            if ($ref->getLibelle() == 'Évaluée') {
-                $action = 'evaluate';
-            } elseif ($ref->getLibelle() == 'NA') {
-                $action = 'desinscription';
-            }
-
-            if (isset($action)) {
-                $class = 'HopitalNumerique\ModuleBundle\Entity\Module';
-                $this->container->get('hopitalnumerique_core.log')->logger($action, $inscription->getSession()->getModule(), $inscription->getSession()->getModule()->getTitre(), $class, $inscription->getUser());
-            }
         }
 
         //save

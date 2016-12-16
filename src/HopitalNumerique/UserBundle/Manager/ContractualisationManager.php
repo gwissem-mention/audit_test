@@ -10,7 +10,7 @@ use Nodevo\ToolsBundle\Manager\Manager as BaseManager;
 class ContractualisationManager extends BaseManager
 {
     protected $class = 'HopitalNumerique\UserBundle\Entity\Contractualisation';
-    
+
     /**
      * Récupère le nombre de contractualisation à renouveler depuis 45jours
      *
@@ -19,6 +19,16 @@ class ContractualisationManager extends BaseManager
     public function getContractualisationsARenouveler()
     {
         return $this->getRepository()->getContractualisationsARenouveler()->getQuery()->getSingleScalarResult();
+    }
+
+    /**
+     * Récupère le nombre d'ambassadeur dont la contractualisation est à renouveler
+     *
+     * @return array
+     */
+    public function getContractualisationsARenouvelerForAmbassador()
+    {
+        return $this->getRepository()->countExpiredContractForAmbassador();
     }
 
     /**

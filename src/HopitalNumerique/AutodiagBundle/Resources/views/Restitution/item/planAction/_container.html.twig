@@ -37,7 +37,7 @@
     {% for attribute in container.attributes if attribute.actionPlan is not null and attribute.actionPlan.visible %}
         <tr class="attribute {% if isChild is defined %}children{% endif %}">
             <td>{{ attribute.label }}</td>
-            <td>{{ attribute.responseText }}</td>
+            <td>{{ attribute.response.text }}</td>
             <td>{{ attribute.actionPlan.description }}</td>
             <td>
                 <a target="_blank" href="{{ attribute.actionPlan.link }}">{{ attribute.actionPlan.linkDescription }}</a>

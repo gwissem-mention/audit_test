@@ -264,7 +264,7 @@ class Objet implements RoutedItemInterface
     protected $roles;
 
     /**
-     * @ORM\ManyToMany(targetEntity="\HopitalNumerique\ReferenceBundle\Entity\Reference", fetch="EAGER")
+     * @ORM\ManyToMany(targetEntity="\HopitalNumerique\ReferenceBundle\Entity\Reference")
      * @ORM\JoinTable(name="hn_objet_type",
      *      joinColumns={ @ORM\JoinColumn(name="obj_id", referencedColumnName="obj_id", onDelete="CASCADE")},
      *      inverseJoinColumns={ @ORM\JoinColumn(name="ref_id", referencedColumnName="ref_id", onDelete="CASCADE")}

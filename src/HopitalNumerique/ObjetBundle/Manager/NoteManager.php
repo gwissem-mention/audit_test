@@ -16,7 +16,7 @@ class NoteManager extends BaseManager
     /**
      * Retourne la note moyenne d'un objet
      *
-     * @param nt $idObjet Identifiant de l'objet ou contenu passé en param
+     * @param int $idObjet Identifiant de l'objet ou contenu passé en param
      *
      * @return Double valeur arrondi de la moyenne des notes de l'objet passé en param
      */

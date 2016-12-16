@@ -1,0 +1,7 @@
+services:
+    intervention.subscriber:
+        class: HopitalNumerique\InterventionBundle\EventListener\InterventionSubscriber
+        arguments:
+            - '@hopitalnumerique_core.log'
+        tags:
+            - { name: doctrine.event_subscriber }

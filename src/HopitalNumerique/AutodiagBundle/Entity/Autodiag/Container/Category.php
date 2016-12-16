@@ -13,5 +13,8 @@ use HopitalNumerique\AutodiagBundle\Entity\Autodiag\Container;
  */
 class Category extends Container
 {
-
+    public function getExtendedLabel()
+    {
+        return $this->getLabel();
+    }
 }

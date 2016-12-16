@@ -3,6 +3,7 @@
 namespace HopitalNumerique\ObjetBundle\Repository;
 
 use Doctrine\ORM\EntityRepository;
+use Doctrine\ORM\QueryBuilder;
 use HopitalNumerique\DomaineBundle\Entity\Domaine;
 use HopitalNumerique\ReferenceBundle\Entity\Reference;
 use Doctrine\ORM\Query\Expr;
@@ -18,7 +19,7 @@ class ObjetRepository extends EntityRepository
      * @param array $domainesIds Tableau d'id de domaines autorisés pour l'utilisateur connecté
      * @param [type] $condition   [description]
      *
-     * @return array
+     * @return QueryBuilder
      */
     public function getDatasForGrid( $domainesIds, $condition = null)
     {
@@ -60,9 +61,13 @@ class ObjetRepository extends EntityRepository
      */
     public function getObjets()
     {
-        $qb = $this->_em->createQueryBuilder ();
-        $qb->select ( 'obj' )->from ( 'HopitalNumeriqueObjetBundle:Objet', 'obj' )->leftJoin ( 'obj.contenus', 'contenus' );
-        $qb->orderBy ( 'obj.titre', 'ASC' );
+        $qb = $this->createQueryBuilder('obj');
+        $qb
+            ->select('obj', 'contenus')
+            ->leftJoin('obj.contenus', 'contenus')
+            ->join('obj.etat', 'etat')
+            ->orderBy('obj.titre', 'ASC')
+        ;
 
         return $qb;
     }
@@ -70,7 +75,7 @@ class ObjetRepository extends EntityRepository
     /**
      * Récupère les objets pour l'export
      *
-     * @return array
+     * @return QueryBuilder
      */
     public function getDatasForExport( $ids )
     {

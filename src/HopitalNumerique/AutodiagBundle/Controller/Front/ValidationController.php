@@ -8,6 +8,7 @@ use HopitalNumerique\AutodiagBundle\Event\DataEvent;
 use HopitalNumerique\AutodiagBundle\Event\SynthesisEvent;
 use HopitalNumerique\AutodiagBundle\EventListener\LogListener;
 use HopitalNumerique\AutodiagBundle\Events;
+use HopitalNumerique\UserBundle\Entity\User;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\EventDispatcher\EventDispatcher;
 use Symfony\Component\HttpFoundation\Request;
@@ -23,13 +24,14 @@ class ValidationController extends Controller
     public function indexAction($synthesis, $noLayout = false)
     {
         $synthesis = $this->getDoctrine()->getManager()->getRepository('HopitalNumeriqueAutodiagBundle:Synthesis')
-            ->getFullyLoadedSynthesis($synthesis);
+            ->getFullyLoadedSynthesis($synthesis)
+        ;
 
         $autodiag = $synthesis->getAutodiag();
 
         if (!$this->isGranted('read', $synthesis)) {
             return $this->redirectToRoute('hopitalnumerique_autodiag_entry_add', [
-                'autodiag' => $autodiag->getId()
+                'autodiag' => $autodiag->getId(),
             ]);
         }
 
@@ -38,9 +40,16 @@ class ValidationController extends Controller
             return $this->redirectToRoute('hopitalnumerique_autodiag_account_index');
         }
 
+        if ($this->getUser() instanceof User == false) {
+            $this->get('session')->set(
+                'urlToRedirect',
+                $this->generateUrl('hopitalnumerique_autodiag_validation_index', ['synthesis' => $synthesis->getId()])
+            );
+        }
+
         return $this->render('HopitalNumeriqueAutodiagBundle:Validation:index.html.twig', [
-            'synthesis' => $synthesis,
-            'noLayout' => $noLayout,
+            'synthesis'     => $synthesis,
+            'noLayout'      => $noLayout,
         ]);
     }
 
@@ -59,6 +68,7 @@ class ValidationController extends Controller
         $validate = $synthesis->validate($this->getUser());
         if (false === $validate) {
             $this->addFlash('error', $this->get('translator')->trans('ad.validation.error'));
+
             return $this->redirect($request->headers->get('referer'));
         }
 
@@ -104,7 +114,8 @@ class ValidationController extends Controller
         $this->get('event_dispatcher')->dispatch(
             Events::SYNTHESIS_UNVALIDATED,
             new SynthesisEvent($synthesis)
-        );
+        )
+        ;
 
         $this->addFlash('success', $this->get('translator')->trans('ad.validation.unvalidate_success'));
 

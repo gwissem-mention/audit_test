@@ -100,8 +100,12 @@
                         </div>
                     {% endif %}
 
-                    {{ form_row(form.communautePratiqueArticle) }}
-                    {{ form_row(form.communautePratiqueForumCategories) }}
+                    {% if form.communautePratiqueArticle is defined %}
+                        {{ form_row(form.communautePratiqueArticle) }}
+                    {% endif %}
+                    {% if form.communautePratiqueArticle is defined %}
+                        {{ form_row(form.communautePratiqueArticle) }}
+                    {% endif %}
 
 
                 {{ form_end(form) }}

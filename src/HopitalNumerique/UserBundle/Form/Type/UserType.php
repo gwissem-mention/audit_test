@@ -19,7 +19,7 @@ use HopitalNumerique\ReferenceBundle\Manager\ReferenceManager;
 
 class UserType extends AbstractType
 {
-    private $_constraints = array();
+    private $_constraints = [];
     private $_managerRole;
     private $_securityContext;
     private $_userManager;
@@ -39,7 +39,8 @@ class UserType extends AbstractType
         UserManager $userManager,
         ReferenceManager $referenceManager,
         EtablissementManager $etablissementManager
-    ) {
+    )
+    {
         $this->_constraints = $manager->getConstraints($validator);
         $this->_managerRole = $managerRole;
         $this->_securityContext = $securityContext;
@@ -50,20 +51,20 @@ class UserType extends AbstractType
 
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
-        $resolver->setDefaults(array(
-                'data_class'      => 'HopitalNumerique\UserBundle\Entity\User',
-                'csrf_protection' => false,
-                'csrf_field_name' => '_token',
-                // une clé unique pour aider à la génération du jeton secret
-                'intention'       => 'task_item',
-        ));
+        $resolver->setDefaults([
+            'data_class'      => 'HopitalNumerique\UserBundle\Entity\User',
+            'csrf_protection' => false,
+            'csrf_field_name' => '_token',
+            // une clé unique pour aider à la génération du jeton secret
+            'intention'       => 'task_item',
+        ]);
     }
 
     /**
      * Ajout des éléments dans le formulaire, spécifie les labels, les widgets utilisés ainsi que l'obligation
      *
      * @param  FormBuilderInterface $builder Le builder contient les champs du formulaire
-     * @param  array                $options Data passée au formulaire
+     * @param  array $options Data passée au formulaire
      *
      * @return void
      */
@@ -73,286 +74,280 @@ class UserType extends AbstractType
         $roles = $datas->getRoles();
         $connectedUser = $this->_userManager->getUserConnected();
 
-        $builder->add('pseudonymeForum', 'text', array(
-                'max_length' => $this->_constraints['pseudonymeForum']['maxlength'],
-                'required'   => false,
-                'label'      => 'Pseudonyme pour le forum',
-                'attr'       => array('class' => $this->_constraints['pseudonymeForum']['class'] )
-            ));
+        $builder->add('pseudonymeForum', 'text', [
+            'max_length' => $this->_constraints['pseudonymeForum']['maxlength'],
+            'required'   => false,
+            'label'      => 'Pseudonyme pour le forum',
+            'attr'       => ['class' => $this->_constraints['pseudonymeForum']['class']],
+        ]);
 
         $builder
-            ->add('nom', 'text', array(
+            ->add('nom', 'text', [
                 'max_length' => $this->_constraints['nom']['maxlength'],
                 'required'   => true,
                 'label'      => 'Nom',
-                'attr'       => array('class' => $this->_constraints['nom']['class'] )
-            ))
-
-            ->add('prenom', 'text', array(
+                'attr'       => ['class' => $this->_constraints['nom']['class']],
+            ])
+            ->add('prenom', 'text', [
                 'max_length' => $this->_constraints['prenom']['maxlength'],
                 'required'   => true,
                 'label'      => 'Prénom',
-                'attr'       => array('class' => $this->_constraints['prenom']['class'] )
-            ));
+                'attr'       => ['class' => $this->_constraints['prenom']['class']],
+            ])
+        ;
 
-            if( is_null($datas->getId()) ) {
-                $builder
-                ->add('plainPassword', 'text', array(
-                        'required' => false,
-                        'label'    => 'Mot de passe',
-                        'disabled' => true,
-                        'attr'     => array('placeholder' => 'Le mot de passe sera généré automatiquement')
-                ));
-            }else {
-                $builder
-                ->add('plainPassword', 'repeated', array(
-                        'type'           => 'password',
-                        'invalid_message' => 'Ces deux champs doivent être identiques.',
-                        'required'       => true,
-                        'first_options'  => array('label' => 'Mot de passe', 'attr' => array('autocomplete' => 'off') ),
-                        'second_options' => array('label' => 'Confirmer le mot de passe', 'attr' => array('autocomplete' => 'off'))
-                ));
-            }
+        if (is_null($datas->getId())) {
+            $builder
+                ->add('plainPassword', 'text', [
+                    'required' => false,
+                    'label'    => 'Mot de passe',
+                    'disabled' => true,
+                    'attr'     => ['placeholder' => 'Le mot de passe sera généré automatiquement'],
+                ]);
+        } else {
+            $builder
+                ->add('plainPassword', 'repeated', [
+                    'type'            => 'password',
+                    'invalid_message' => 'Ces deux champs doivent être identiques.',
+                    'required'        => true,
+                    'first_options'   => ['label' => 'Mot de passe', 'attr' => ['autocomplete' => 'off']],
+                    'second_options'  => ['label' => 'Confirmer le mot de passe', 'attr' => ['autocomplete' => 'off']],
+                ]);
+        }
 
-            $builder->add('email', 'email', array(
-                'max_length' => $this->_constraints['email']['maxlength'],
-                'required'   => true,
-                'label'      => 'Adresse email',
-                'attr'       => array(
-                                        'autocomplete' => 'off',
-                                        'class'        => $this->_constraints['email']['class']
-                                    )
-            ))
-
-            ->add('civilite', 'entity', array(
-                    'class'         => 'HopitalNumeriqueReferenceBundle:Reference',
-                    'choices'       => $this->referenceManager->findByCode('CIVILITE'),
-                    'property'      => 'libelle',
-                    'required'      => true,
-                    'label'         => 'Civilite',
-                    'empty_value'   => ' - ',
-                    'attr'          => array('class' => $this->_constraints['civilite']['class'] ),
-            ))
-
-            ->add('titre', 'entity', array(
-                    'class'         => 'HopitalNumeriqueReferenceBundle:Reference',
-                    'choices'       => $this->referenceManager->findByCode('TITRE'),
-                    'property'      => 'libelle',
-                    'required'      => false,
-                    'label'         => 'Titre',
-                    'empty_value'   => ' - ',
-                    'attr'          => array(),
-            ))
-
-            ->add('telephoneDirect', 'text', array(
+        $builder->add('email', 'email', [
+            'max_length' => $this->_constraints['email']['maxlength'],
+            'required'   => true,
+            'label'      => 'Adresse email',
+            'attr'       => [
+                'autocomplete' => 'off',
+                'class'        => $this->_constraints['email']['class'],
+            ],
+        ])
+            ->add('civilite', 'entity', [
+                'class'       => 'HopitalNumeriqueReferenceBundle:Reference',
+                'choices'     => $this->referenceManager->findByCode('CIVILITE'),
+                'property'    => 'libelle',
+                'required'    => true,
+                'label'       => 'Civilite',
+                'empty_value' => ' - ',
+                'attr'        => ['class' => $this->_constraints['civilite']['class']],
+            ])
+            ->add('titre', 'entity', [
+                'class'       => 'HopitalNumeriqueReferenceBundle:Reference',
+                'choices'     => $this->referenceManager->findByCode('TITRE'),
+                'property'    => 'libelle',
+                'required'    => false,
+                'label'       => 'Titre',
+                'empty_value' => ' - ',
+                'attr'        => [],
+            ])
+            ->add('telephoneDirect', 'text', [
                 'max_length' => $this->_constraints['telephoneDirect']['maxlength'],
                 'required'   => false,
                 'label'      => 'Téléphone direct',
-                'attr'       => array(
-                                        'class'     => $this->_constraints['telephoneDirect']['class'],
-                                        'data-mask' => $this->_constraints['telephoneDirect']['mask']
-                                    )
-            ))
+                'attr'       => [
+                    'class'     => $this->_constraints['telephoneDirect']['class'],
+                    'data-mask' => $this->_constraints['telephoneDirect']['mask'],
+                ],
+            ])
+            ->add('telephonePortable', 'text', [
+                'max_length' => $this->_constraints['telephonePortable']['maxlength'],
+                'required'   => false,
+                'label'      => 'Téléphone portable',
+                'attr'       => [
+                    'class'     => $this->_constraints['telephonePortable']['class'],
+                    'data-mask' => $this->_constraints['telephonePortable']['mask'],
+                ],
+            ])
+        ;
 
-            ->add('telephonePortable', 'text', array(
-                    'max_length' => $this->_constraints['telephonePortable']['maxlength'],
-                    'required'   => false,
-                    'label'      => 'Téléphone portable',
-                    'attr'       => array(
-                                        'class'     => $this->_constraints['telephonePortable']['class'],
-                                        'data-mask' => $this->_constraints['telephonePortable']['mask']
-                                    )
-            ));
 
+        //Si il y a un utilisateur connecté nous sommes en BO ou dans informations perso
+        if ($this->_securityContext->isGranted('ROLE_USER')) {
+            $builder->add('roles', 'entity', [
+                'class'         => 'NodevoRoleBundle:Role',
+                'property'      => 'name',
+                'required'      => true,
+                'label'         => 'Groupe associé',
+                'mapped'        => false,
+                'empty_value'   => ' - ',
+                'attr'          => ['class' => 'validate[required]'],
+                'query_builder' => function (EntityRepository $er) {
+                    $qb = $er->createQueryBuilder('ro')
+                        ->where('ro.etat != :etat')
+                        ->setParameter('etat', 4)
+                    ;
 
-            //Si il y a un utilisateur connecté nous sommes en BO ou dans informations perso
-            if($this->_securityContext->isGranted('ROLE_USER'))
-            {
-                $builder->add('roles', 'entity', array(
-                        'class'         => 'NodevoRoleBundle:Role',
-                        'property'      => 'name',
-                        'required'      => true,
-                        'label'         => 'Groupe associé',
-                        'mapped'        => false,
-                        'empty_value'   => ' - ',
-                        'attr'          => array('class'=>'validate[required]'),
-                        'query_builder' => function(EntityRepository $er) {
-                            $qb = $er->createQueryBuilder('ro')
-                                      ->where('ro.etat != :etat')
-                                      ->setParameter('etat', 4);
+                    if (!$this->_securityContext->isGranted('ROLE_ADMINISTRATEUR_1')) {
+                        $qb->andWhere('ro.id NOT IN (:rolesAdmins)')
+                            ->setParameter('rolesAdmins', [1, 106])
+                        ;
+                    }
 
-                            if(!$this->_securityContext->isGranted('ROLE_ADMINISTRATEUR_1'))
-                            {
-                                $qb->andWhere('ro.id NOT IN (:rolesAdmins)')
-                                    ->setParameter('rolesAdmins' , array(1, 106));
-                            }
+                    $qb->orderBy('ro.name');
 
-                            $qb->orderBy('ro.name');
+                    return $qb;
+                },
+                'data'          => $this->_managerRole->findOneBy(['role' => $roles[0]]),
+            ])
+                ->add('domaines', 'entity', [
+                    'class'         => 'HopitalNumeriqueDomaineBundle:Domaine',
+                    'property'      => 'nom',
+                    'required'      => true,
+                    'multiple'      => true,
+                    'label'         => 'Domaine(s) concerné(s)',
+                    'empty_value'   => ' - ',
+                    'attr'          => ['class' => 'validate[required]'],
+                    'query_builder' => function (EntityRepository $er) use ($connectedUser) {
+                        if ($this->_securityContext->isGranted('ROLE_ADMINISTRATEUR_1')) {
+                            return $er->createQueryBuilder('dom')->orderBy('dom.nom');
+                        } else {
+                            return $er->getDomainesUserConnectedForForm($connectedUser->getId());
+                        }
+                    },
+                ])
+                ->add('remarque', 'textarea', [
+                    'required' => false,
+                    'label'    => 'Remarque pour la gestion',
+                ])
+                ->add('biographie', 'textarea', [
+                    'required' => false,
+                    'label'    => 'Biographie',
+                    'attr'     => [
+                        'rows' => 8,
+                    ],
+                ])
+                ->add('raisonDesinscription', 'textarea', [
+                    'required' => false,
+                    'label'    => 'Raison de la désinscription',
+                ])
+                ->add('file', 'file', [
+                    'required' => false,
+                    'label'    => 'Photo de profil',
+                ])
+                ->add('path', 'hidden')
+            ;
+        }
 
-                            return $qb;
-                        },
-                        'data' => $this->_managerRole->findOneBy( array('role'=>$roles[0]) )
-                    ))
-                    ->add('domaines', 'entity', array(
-                            'class'       => 'HopitalNumeriqueDomaineBundle:Domaine',
-                            'property'    => 'nom',
-                            'required'    => true,
-                            'multiple'    => true,
-                            'label'       => 'Domaine(s) concerné(s)',
-                            'empty_value' => ' - ',
-                            'attr'          => array('class'=>'validate[required]'),
-                            'query_builder' => function(EntityRepository $er) use ($connectedUser) {
-                                if($this->_securityContext->isGranted('ROLE_ADMINISTRATEUR_1'))
-                                {
-                                    return $er->createQueryBuilder('dom')->orderBy('dom.nom');
-                                }
-                                else
-                                {
-                                    return $er->getDomainesUserConnectedForForm($connectedUser->getId());
-                                }
-                            }
-                    ))
-                    ->add('remarque', 'textarea', array(
-                        'required'   => false,
-                        'label'      => 'Remarque pour la gestion'
-                    ))
-                    ->add('biographie', 'textarea', array(
-                        'required'   => false,
-                        'label'      => 'Biographie',
-                        'attr'       => array(
-                            'rows' => 8
-                        )
-                    ))
-                    ->add('raisonDesinscription', 'textarea', array(
-                        'required'   => false,
-                        'label'      => 'Raison de la désinscription'
-                    ))
-                    ->add('file', 'file', array(
-                        'required' => false,
-                        'label'    => 'Photo de profil'
-                    ))
-                    ->add('path', 'hidden');
-            }
-
-            //Si il y a un utilisateur connecté nous sommes en BO et que le role est CMSI
-            if( !($this->_securityContext->isGranted('ROLE_ARS_CMSI_4')) )
-            {
-                $builder->add('region', 'entity', array(
-                        'class'       => 'HopitalNumeriqueReferenceBundle:Reference',
-                        'choices'       => $this->referenceManager->findByCode('REGION'),
-                        'property'    => 'libelle',
-                        'required'    => false,
-                        'label'       => 'Région',
-                        'empty_value' => ' - ',
-                ))
-
-                ->add('departement', 'entity', array(
-                        'class'       => 'HopitalNumeriqueReferenceBundle:Reference',
-                        'choices'       => $this->referenceManager->findByCode('DEPARTEMENT'),
-                        'property'    => 'libelle',
-                        'required'    => false,
-                        'label'       => 'Département',
-                        'empty_value' => ' - ',
-                        'attr'        => array(),
-                ));
-            }
-
-            $builder->add('etat', 'entity', array(
+        //Si il y a un utilisateur connecté nous sommes en BO et que le role est CMSI
+        if (!($this->_securityContext->isGranted('ROLE_ARS_CMSI_4'))) {
+            $builder->add('region', 'entity', [
                 'class'       => 'HopitalNumeriqueReferenceBundle:Reference',
-                'choices'       => $this->referenceManager->findByCode('ETAT'),
-                'property'    => 'libelle',
-                'required'    => true,
-                'label'       => 'Etat',
-                'attr'        => array('class' => $this->_constraints['etat']['class'] ),
-            ));
-
-            $builder->add('inscritCommunautePratique', 'checkbox', array(
-                'label' => 'Membre de la communauté de pratique'
-            ));
-
-            $builder->add('contactAutre', 'textarea', array(
-                    'required'   => false,
-                    'label'      => 'Contact autre',
-                    'attr'       => array()
-            ));
-
-            if ($builder->getData()->hasRoleAmbassadeur()) {
-                $builder
-                    ->add('rattachementRegions', 'entity', array(
-                        'class' => 'HopitalNumeriqueReferenceBundle:Reference',
-                        'label' => 'Régions de rattachement',
-                        'multiple' => true,
-                        'expanded' => false,
-                        'query_builder' => function (EntityRepository $er) {
-                            return $er->createQueryBuilder('ref')
-                                ->where('ref.code = :etat')
-                                ->setParameter('etat', 'REGION')
-                                ->orderBy('ref.order', 'ASC')
-                            ;
-                        },
-                        'property' => 'libelle',
-                        'attr' => array(
-                            'size' => 8
-                        )
-                    ))
-                ;
-            }
-
-            // ^ -------- Onglet : Vous êtes un établissement de santé -------- ^
-
-            $builder->add('statutEtablissementSante', 'entity', array(
-                'class'       => 'HopitalNumeriqueReferenceBundle:Reference',
-                'choices'       => $this->referenceManager->findByCode('CONTEXTE_TYPE_ES'),
+                'choices'     => $this->referenceManager->findByCode('REGION'),
                 'property'    => 'libelle',
                 'required'    => false,
-                'label'       => 'Type d\'établissement',
+                'label'       => 'Région',
                 'empty_value' => ' - ',
-                'attr'        => array('class' => 'etablissement_sante'),
-            ));
+            ])
+                ->add('departement', 'entity', [
+                    'class'       => 'HopitalNumeriqueReferenceBundle:Reference',
+                    'choices'     => $this->referenceManager->findByCode('DEPARTEMENT'),
+                    'property'    => 'libelle',
+                    'required'    => false,
+                    'label'       => 'Département',
+                    'empty_value' => ' - ',
+                    'attr'        => [],
+                ])
+            ;
+        }
 
-            $etablissementRattachementSanteModifier = function (FormInterface $form, $data) {
-                $form->add('etablissementRattachementSante', 'choice', array(
-                    'multiple'      => false,
-                    'required'      => false,
-                    'label'         => 'Etablissement de rattachement',
-                    'empty_value'   => ' - ',
-                    'attr'        => array('class' => 'etablissement_sante'),
-                    'choices' => $data,
-                    'choices_as_values' => true,
-                    'choice_value' => 'id',
-                    'choice_label' => 'nom',
-                ));
-            };
+        $builder->add('etat', 'entity', [
+            'class'    => 'HopitalNumeriqueReferenceBundle:Reference',
+            'choices'  => $this->referenceManager->findByCode('ETAT'),
+            'property' => 'libelle',
+            'required' => true,
+            'label'    => 'Etat',
+            'attr'     => ['class' => $this->_constraints['etat']['class']],
+        ]);
 
-            $builder->addEventListener(
-                FormEvents::PRE_SET_DATA,
-                function (FormEvent $event) use ($etablissementRattachementSanteModifier) {
-                    /** @var User $data */
-                    $data = $event->getData();
-                    $form = $event->getForm();
+        $builder->add('inscritCommunautePratique', 'checkbox', [
+            'label' => 'Membre de la communauté de pratique',
+        ]);
 
-                    $list = $this->etablissementManager->findBy(array(
-                        'departement'   => $data->getDepartement(),
-                        'typeOrganisme' => $data->getStatutEtablissementSante()
-                    ));
-                    $etablissementRattachementSanteModifier($form, $list);
-                }
-            );
+        $builder->add('contactAutre', 'textarea', [
+            'required' => false,
+            'label'    => 'Contact autre',
+            'attr'     => [],
+        ]);
 
-            $builder->get('statutEtablissementSante')->addEventListener(
-                FormEvents::POST_SUBMIT,
-                function (FormEvent $event) use ($etablissementRattachementSanteModifier) {
-                    $form = $event->getForm()->getParent();
-                    $status = $event->getForm()->getData();
+        if ($builder->getData()->hasRoleAmbassadeur()) {
+            $builder
+                ->add('rattachementRegions', 'entity', [
+                    'class'         => 'HopitalNumeriqueReferenceBundle:Reference',
+                    'label'         => 'Régions de rattachement',
+                    'multiple'      => true,
+                    'expanded'      => false,
+                    'query_builder' => function (EntityRepository $er) {
+                        return $er->createQueryBuilder('ref')
+                            ->where('ref.code = :etat')
+                            ->setParameter('etat', 'REGION')
+                            ->orderBy('ref.order', 'ASC')
+                            ;
+                    },
+                    'property'      => 'libelle',
+                    'attr'          => [
+                        'size' => 8,
+                    ],
+                ]);
+        }
 
-                    $list = $this->etablissementManager->findBy(array(
-                        'departement'   => $event->getForm()->getParent()->get('departement')->getData(),
-                        'typeOrganisme' => $status
-                    ));
+        // ^ -------- Onglet : Vous êtes un établissement de santé -------- ^
 
-                    $etablissementRattachementSanteModifier($form, $list);
-                }
-            );
+        $builder->add('statutEtablissementSante', 'entity', [
+            'class'       => 'HopitalNumeriqueReferenceBundle:Reference',
+            'choices'     => $this->referenceManager->findByCode('CONTEXTE_TYPE_ES'),
+            'property'    => 'libelle',
+            'required'    => false,
+            'label'       => 'Type d\'établissement',
+            'empty_value' => ' - ',
+            'attr'        => ['class' => 'etablissement_sante'],
+        ]);
+
+        $etablissementRattachementSanteModifier = function (FormInterface $form, $data) {
+            $form->add('etablissementRattachementSante', 'choice', [
+                'multiple'          => false,
+                'required'          => false,
+                'label'             => 'Etablissement de rattachement',
+                'empty_value'       => ' - ',
+                'attr'              => ['class' => 'etablissement_sante'],
+                'choices'           => $data,
+                'choices_as_values' => true,
+                'choice_value'      => 'id',
+                'choice_label'      => 'nom',
+            ]);
+        };
+
+        $builder->addEventListener(
+            FormEvents::PRE_SET_DATA,
+            function (FormEvent $event) use ($etablissementRattachementSanteModifier) {
+                /** @var User $data */
+                $data = $event->getData();
+                $form = $event->getForm();
+
+                $list = $this->etablissementManager->findBy([
+                    'departement'   => $data->getDepartement(),
+                    'typeOrganisme' => $data->getStatutEtablissementSante(),
+                ]);
+                $etablissementRattachementSanteModifier($form, $list);
+            }
+        );
+
+        $builder->get('statutEtablissementSante')->addEventListener(
+            FormEvents::POST_SUBMIT,
+            function (FormEvent $event) use ($etablissementRattachementSanteModifier) {
+                $form = $event->getForm()->getParent();
+                $status = $event->getForm()->getData();
+
+                $list = $this->etablissementManager->findBy([
+                    'departement'   => $event->getForm()->getParent()->get('departement')->getData(),
+                    'typeOrganisme' => $status,
+                ]);
+
+                $etablissementRattachementSanteModifier($form, $list);
+            }
+        )
+        ;
 
 //            ->add('etablissementRattachementSante', 'genemu_jqueryselect2_entity', array(
 //                    'class'         => 'HopitalNumeriqueEtablissementBundle:Etablissement',
@@ -365,83 +360,78 @@ class UserType extends AbstractType
 //            ))
 
 
-            $builder->add('autreStructureRattachementSante', 'text', array(
-                    'max_length' => $this->_constraints['autreStructureRattachementSante']['maxlength'],
-                    'required'   => false,
-                    'label'      => 'Nom de votre établissement si non disponible dans la liste précédente',
-                    'attr'       => array('class' => $this->_constraints['autreStructureRattachementSante']['class'] . ' etablissement_sante' )
-            ))
+        $builder->add('autreStructureRattachementSante', 'text', [
+            'max_length' => $this->_constraints['autreStructureRattachementSante']['maxlength'],
+            'required'   => false,
+            'label'      => 'Nom de votre établissement si non disponible dans la liste précédente',
+            'attr'       => ['class' => $this->_constraints['autreStructureRattachementSante']['class'] . ' etablissement_sante'],
+        ])
+            ->add('fonctionDansEtablissementSante', 'text', [
+                'max_length' => $this->_constraints['fonctionDansEtablissementSante']['maxlength'],
+                'required'   => false,
+                'label'      => 'Libellé fonction',
+                'attr'       => ['class' => $this->_constraints['fonctionDansEtablissementSante']['class'] . ' etablissement_sante'],
+            ])
+            ->add('fonctionDansEtablissementSanteReferencement', 'entity', [
+                'class'       => 'HopitalNumeriqueReferenceBundle:Reference',
+                'choices'     => $this->referenceManager->findByCode('CONTEXTE_FONCTION_INTERNAUTE'),
+                'property'    => 'libelle',
+                'required'    => false,
+                'label'       => 'Fonction',
+                'empty_value' => ' - ',
+                'attr'        => ['class' => 'etablissement_sante'],
+            ])
+            ->add('typeActivite', 'entity', [
+                'class'       => 'HopitalNumeriqueReferenceBundle:Reference',
+                'choices'     => $this->referenceManager->findByCode('CONTEXTE_SPECIALITE_ES'),
+                'property'    => 'libelle',
+                'required'    => false,
+                'expanded'    => true,
+                'multiple'    => true,
+                'label'       => 'Type activité',
+                'empty_value' => ' - ',
+                'attr'        => ['class' => 'etablissement_sante'],
+            ])
+            ->add('profilEtablissementSante', 'entity', [
+                'class'       => 'HopitalNumeriqueReferenceBundle:Reference',
+                'choices'     => $this->referenceManager->findByCode('CONTEXTE_METIER_INTERNAUTE'),
+                'property'    => 'libelle',
+                'required'    => false,
+                'label'       => 'Profil',
+                'empty_value' => ' - ',
+                'attr'        => ['class' => 'etablissement_sante'],
+            ])
+        ;
 
+        // v -------- Onglet : Vous êtes un établissement de santé -------- v
 
-            ->add('fonctionDansEtablissementSante', 'text', array(
-                    'max_length' => $this->_constraints['fonctionDansEtablissementSante']['maxlength'],
-                    'required'   => false,
-                    'label'      => 'Libellé fonction',
-                    'attr'       => array('class' => $this->_constraints['fonctionDansEtablissementSante']['class'] . ' etablissement_sante' )
-            ))
+        // ^ -------- Onglet : Vous êtes une structure autre qu'un établissement de santé  -------- ^
 
-            ->add('fonctionDansEtablissementSanteReferencement', 'entity', array(
-                    'class'       => 'HopitalNumeriqueReferenceBundle:Reference',
-                    'choices'       => $this->referenceManager->findByCode('CONTEXTE_FONCTION_INTERNAUTE'),
-                    'property'    => 'libelle',
-                    'required'    => false,
-                    'label'       => 'Fonction',
-                    'empty_value' => ' - ',
-                    'attr'        => array('class' => 'etablissement_sante'),
-            ))
+        $builder->add('nomStructure', 'text', [
+            'max_length' => $this->_constraints['nomStructure']['maxlength'],
+            'required'   => false,
+            'label'      => 'Nom de la structure',
+            'attr'       => ['class' => $this->_constraints['nomStructure']['class'] . ' autre_structure'],
+        ])
+            ->add('fonctionStructure', 'text', [
+                'max_length' => $this->_constraints['fonctionStructure']['maxlength'],
+                'required'   => false,
+                'label'      => 'Fonction dans la structure',
+                'attr'       => ['class' => $this->_constraints['fonctionStructure']['class'] . ' autre_structure'],
+            ])
+        ;
 
-            ->add('typeActivite', 'entity', array(
-                    'class'       => 'HopitalNumeriqueReferenceBundle:Reference',
-                    'choices'       => $this->referenceManager->findByCode('CONTEXTE_SPECIALITE_ES'),
-                    'property'    => 'libelle',
-                    'required'    => false,
-                    'multiple'    => true,
-                    'label'       => 'Type activité',
-                    'empty_value' => ' - ',
-                    'attr'        => array('class' => 'etablissement_sante'),
-            ))
+        // v -------- Onglet : Vous êtes une structure autre qu'un établissement de santé  -------- v
 
-            ->add('profilEtablissementSante', 'entity', array(
-                    'class'       => 'HopitalNumeriqueReferenceBundle:Reference',
-                    'choices'       => $this->referenceManager->findByCode('CONTEXTE_METIER_INTERNAUTE'),
-                    'property'    => 'libelle',
-                    'required'    => false,
-                    'label'       => 'Profil',
-                    'empty_value' => ' - ',
-                    'attr'        => array('class' => 'etablissement_sante'),
-            ))
-            ;
-
-            // v -------- Onglet : Vous êtes un établissement de santé -------- v
-
-            // ^ -------- Onglet : Vous êtes une structure autre qu'un établissement de santé  -------- ^
-
-            $builder->add('nomStructure', 'text', array(
-                    'max_length' => $this->_constraints['nomStructure']['maxlength'],
-                    'required'   => false,
-                    'label'      => 'Nom de la structure',
-                    'attr'       => array('class' => $this->_constraints['nomStructure']['class'] . ' autre_structure' )
-            ))
-
-            ->add('fonctionStructure', 'text', array(
-                    'max_length' => $this->_constraints['fonctionStructure']['maxlength'],
-                    'required'   => false,
-                    'label'      => 'Fonction dans la structure',
-                    'attr'       => array('class' => $this->_constraints['fonctionStructure']['class'] . ' autre_structure' )
-            ))
-            ;
-
-            // v -------- Onglet : Vous êtes une structure autre qu'un établissement de santé  -------- v
-
-            // Conditions générales d'utilisation - Uniquement en FO = Si l'utilisateur n'est pas connecté
-            if(!$this->_securityContext->isGranted('ROLE_USER'))
-                $builder->add('termsAccepted', 'checkbox', array(
-                        'required'   => true,
-                        'label'      => 'J\'accepte les conditions générales d\'utilisation de la plateforme',
-                        'label_attr' => array('class' => 'conditonsGenerales'),
-                        'attr'       => array('class' => $this->_constraints['termsAccepted']['class'] . ' checkbox')
-                ));
-
+        // Conditions générales d'utilisation - Uniquement en FO = Si l'utilisateur n'est pas connecté
+        if (!$this->_securityContext->isGranted('ROLE_USER')) {
+            $builder->add('termsAccepted', 'checkbox', [
+                'required'   => true,
+                'label'      => 'J\'accepte les conditions générales d\'utilisation de la plateforme',
+                'label_attr' => ['class' => 'conditonsGenerales'],
+                'attr'       => ['class' => $this->_constraints['termsAccepted']['class'] . ' checkbox'],
+            ]);
+        }
     }
 
     /**

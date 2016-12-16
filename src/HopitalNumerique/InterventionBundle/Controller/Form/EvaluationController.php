@@ -1,7 +1,7 @@
 <?php
 /**
  * Contrôleur des formulaires d'évaluation des demandes d'intervention.
- * 
+ *
  * @author Rémi Leclerc <rleclerc@nodevo.com>
  */
 namespace HopitalNumerique\InterventionBundle\Controller\Form;
@@ -34,10 +34,10 @@ class EvaluationController extends Controller
     public function nouveauAction(InterventionDemande $interventionDemande)
     {
         $utilisateurConnecte = $this->get('security.context')->getToken()->getUser();
-    
+
         if ($this->container->get('hopitalnumerique_intervention.manager.intervention_evaluation')->utilisateurPeutEvaluer($interventionDemande, $utilisateurConnecte)) {
             $questionnaire = $this->get('hopitalnumerique_questionnaire.manager.questionnaire')->findOneById(InterventionEvaluation::getEvaluationQuestionnaireId());
-    
+
             return $this->render('HopitalNumeriqueInterventionBundle:Evaluation/Form:nouveau.html.twig', array(
                 'interventionDemande'=> $interventionDemande,
                 'etablissements' => $this->get('hopitalnumerique_intervention.manager.intervention_demande')->findEtablissementsRattachesEtRegroupes($interventionDemande),
@@ -48,11 +48,11 @@ class EvaluationController extends Controller
                 )
             ));
         }
-    
+
         $this->get('session')->getFlashBag()->add('danger', 'Vous n\'êtes pas autorisé à créer cette évaluation.');
         return $this->redirect($this->generateUrl('hopital_numerique_homepage'));
     }
-    
+
     /**
      * Génération dynamique du questionnaire en chargeant les réponses de l'utilisateur passés en param, ajout d'une route de redirection quand tout s'est bien passé
      *
@@ -89,7 +89,7 @@ class EvaluationController extends Controller
         $interventionDemande = $options['interventionDemande'];
         $user                = $interventionDemande->getReferent();
         $readOnly            = (!$interventionDemande->evaluationEtatEstAEvaluer() || !$this->container->get('hopitalnumerique_intervention.manager.intervention_evaluation')->utilisateurPeutEvaluer($interventionDemande, $this->utilisateurConnecte));
-    
+
         //Création du formulaire via le service
         $form = $this->createForm('nodevo_questionnaire_questionnaire', $questionnaire, array(
             'label_attr' => array(
@@ -127,11 +127,11 @@ class EvaluationController extends Controller
             {
                 //Récupération de l'id de la question, la clé est sous la forme : "type_id_alias"
                 $arrayParamKey = explode('_', $key);
-                
+
                 //Le tableau de arrayParamKey : 0 => type du champ - 1 => Id de la question - 2+=> alias du champ
                 $typeParam  = isset($arrayParamKey) && array_key_exists(0, $arrayParamKey)  ? $arrayParamKey[0] : '';
                 $idQuestion = isset($arrayParamKey) && array_key_exists(1, $arrayParamKey)  ? $arrayParamKey[1] : 0;
-                
+
                 // Ids des objets choisis
                 if ($key == 'interventionobjets_26_evaluation_productions')
                 {
@@ -144,7 +144,7 @@ class EvaluationController extends Controller
                 {
                     continue;
                 }
-                
+
                 $question = $this->get('hopitalnumerique_questionnaire.manager.question')->findOneBy(array('id' => $idQuestion));
 
                 //récupération de la réponse courante
@@ -157,11 +157,11 @@ class EvaluationController extends Controller
                     $reponse->setUser($user);
                     $reponse->setQuestion($question);
                     $reponse->setParamId($interventionDemande->getId());
-                    
+
                 }
                 //Mode ajout + édition : set la nouvelle réponse
                 $reponse->setReponse($param);
-                
+
                 if ('entity' === $typeParam)
                 {
                     $reponse->setReference($this->get('hopitalnumerique_reference.manager.reference')->findOneBy(array('id' => $param)));
@@ -173,12 +173,12 @@ class EvaluationController extends Controller
 
             /* ADD QSO : 23/04/2014 : met à jour le statut remboursement */
             $interventionDemande->setRemboursementEtat( $this->get('hopitalnumerique_reference.manager.reference')->findOneBy(array('id' => 5)) );
-            
+
             $this->get('hopitalnumerique_intervention.manager.intervention_demande')->changeEtat($interventionDemande, $this->container->get('hopitalnumerique_intervention.manager.intervention_etat')->getInterventionEtatTermine());
             $this->get('hopitalnumerique_intervention.manager.intervention_demande')->changeEvaluationEtat($interventionDemande, $this->container->get('hopitalnumerique_intervention.manager.intervention_evaluation_etat')->getInterventionEvaluationEtatEvalue());
 
             $this->get('hopitalnumerique_intervention.manager.intervention_courriel')->envoiCourrielEvaluationRemplie($interventionDemande->getCmsi(), $interventionDemande->getAmbassadeur(), $this->generateUrl('hopital_numerique_intervention_evaluation_voir', array('interventionDemande' => $interventionDemande->getId()), true));
-            
+
             $this->get('session')->getFlashBag()->add('success', 'Votre évaluation a été enregistrée, merci.');
 
             //Mise à jour/création des réponses
@@ -186,7 +186,7 @@ class EvaluationController extends Controller
 
             return $this->redirect($this->generateUrl($this->routeRedirectionSucces));
         }
-        
+
         return $this->redirect($this->generateUrl('hopital_numerique_intervention_demande_liste'));
     }
 }

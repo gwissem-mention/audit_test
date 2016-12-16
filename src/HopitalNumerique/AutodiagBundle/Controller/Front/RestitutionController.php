@@ -132,4 +132,27 @@ class RestitutionController extends Controller
             )
         );
     }
+
+    /**
+     * Redirect to sign in/up page with back redirection
+     *
+     * @param \HopitalNumerique\AutodiagBundle\Entity\Synthesis $synthesis
+     * @param bool $signUp
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse
+     */
+    public function signInAction(Synthesis $synthesis, $signUp = false)
+    {
+        $this->get('session')->set(
+            'urlToRedirect',
+            $this->generateUrl('hopitalnumerique_autodiag_restitution_index', [
+                'synthesis' => $synthesis->getId(),
+            ])
+        );
+
+        if ($signUp) {
+            return $this->redirectToRoute('hopital_numerique_user_inscription');
+        }
+
+        return $this->redirectToRoute('account_login');
+    }
 }

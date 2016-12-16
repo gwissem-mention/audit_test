@@ -13,11 +13,10 @@ class ErreursController extends Controller
      */
     public function cronAction($id)
     {
-        if ($id == 'SPTR6D7U5QFH4YMH5VVAXEWMTJ4XPCQBKGJR92E3')
-        {
+        if ($id == 'SPTR6D7U5QFH4YMH5VVAXEWMTJ4XPCQBKGJR92E3') {
             set_time_limit(36000);
             $resultats = $this->getAllUrlObjets();
-            $domaines = $this->get('hopitalnumerique_domaine.manager.domaine')->findBy(array(), array('nom' => 'ASC'));
+            $domaines = $this->get('hopitalnumerique_domaine.manager.domaine')->findBy([], ['nom' => 'ASC']);
 
             foreach ($domaines as $domaineExistant) {
                 foreach ($resultats['urls'] as $categorieNom => $categsUrl) {
@@ -26,7 +25,7 @@ class ErreursController extends Controller
                         foreach ($urls as $keyObjetOrContenu => $objetOrContenu) {
                             //Parcourt du tableau des url des categs
                             foreach ($objetOrContenu as $url) {
-                                $objet  = $this->get('hopitalnumerique_objet.manager.objet')->findOneBy( array( 'id' => $objetId ) );
+                                $objet = $this->get('hopitalnumerique_objet.manager.objet')->findOneBy(['id' => $objetId]);
 
                                 if ($objet != null) {
                                     $domainesObjet = $objet->getDomaines();
@@ -36,7 +35,8 @@ class ErreursController extends Controller
                                         if ($domaineObjet->getId() === $domaineExistant->getId()) {
 
                                             if (strpos($url, 'http') === false &&
-                                                strpos($url, 'www.') === false){
+                                                strpos($url, 'www.') === false
+                                            ) {
                                                 $url = $domaineObjet->getUrl() . $url;
                                             }
 
@@ -44,7 +44,7 @@ class ErreursController extends Controller
                                             $isOk = true;
 
                                             $handle = curl_init(str_replace(' ', '%20', $url));
-                                            curl_setopt($handle, CURLOPT_RETURNTRANSFER, TRUE);
+                                            curl_setopt($handle, CURLOPT_RETURNTRANSFER, true);
 
                                             /* Get the HTML or whatever is linked in $url. */
                                             $response = curl_exec($handle);
@@ -55,7 +55,7 @@ class ErreursController extends Controller
                                                 $isOk = false;
                                             }
 
-                                            $this->get('hopitalnumerique_forum.service.logger.cronlogger')->addLog('Url ' . $url . ($isOk ? ' valide' : ' non valide.').' - code '.$httpCode);
+                                            $this->get('hopitalnumerique_forum.service.logger.cronlogger')->addLog('Url ' . $url . ($isOk ? ' valide' : ' non valide.') . ' - code ' . $httpCode);
 
                                             curl_close($handle);
 
@@ -75,7 +75,7 @@ class ErreursController extends Controller
             }
 
 
-            return new Response($this->get('hopitalnumerique_forum.service.logger.cronlogger')->getHtml().'<p>Fin du traitement : OK.</p>');
+            return new Response($this->get('hopitalnumerique_forum.service.logger.cronlogger')->getHtml() . '<p>Fin du traitement : OK.</p>');
         }
 
         return new Response('Clef invalide.');
@@ -87,135 +87,131 @@ class ErreursController extends Controller
      * @author Gaetan MELCHILSEN
      * @copyright Nodevo™
      */
-    public function indexAction( )
+    public function indexAction()
     {
-        return $this->render('HopitalNumeriqueStatBundle:Back:partials/Erreurs/bloc.html.twig', array());
+        return $this->render('HopitalNumeriqueStatBundle:Back:partials/Erreurs/bloc.html.twig', []);
     }
 
     /**
      * Génération du tableau à exporter
      *
-     * @param  Symfony\Component\HttpFoundation\Request  $request
+     * @param  Request $request
      *
      * @return View
      */
-    public function generateTableauAction( Request $request )
+    public function generateTableauAction(Request $request)
     {
         $resultats = $this->getAllUrlObjets();
 
-        $domaines = $this->get('hopitalnumerique_domaine.manager.domaine')->findBy(array(), array('nom' => 'ASC'));
+        $domaines = $this->get('hopitalnumerique_domaine.manager.domaine')->findBy([], ['nom' => 'ASC']);
 
-        return $this->render('HopitalNumeriqueStatBundle:Back:partials/Erreurs/tableau.html.twig', array(
-            'urls'   => $resultats['urls'],
-            'objets' => $resultats['objets'],
+        return $this->render('HopitalNumeriqueStatBundle:Back:partials/Erreurs/tableau.html.twig', [
+            'urls'     => $resultats['urls'],
+            'objets'   => $resultats['objets'],
             'domaines' => $domaines,
-            'oksByUrl'      => $resultats['oksByUrl']
-        ));
+            'oksByUrl' => $resultats['oksByUrl'],
+        ]);
     }
 
     /**
      * Génération du tableau à exporter
      *
-     * @param  Symfony\Component\HttpFoundation\Request  $request
+     * @param  Request $request
      *
      * @return View
      */
-    public function exportCSVAction( Request $request )
+    public function exportCSVAction(Request $request)
     {
-        $resultat = $this->getAllUrlObjets();
+        $resultats = $this->getAllUrlObjets();
 
         //Colonnes communes
-        $colonnes = array(
+        $colonnes = [
+            'domaines' => 'Domaines',
             'type'       => 'Type du lien',
-            'idObjet'    => 'Id de la publication',
+            'idObjet'    => 'id',
             'titreObjet' => 'Titre de la publication',
-            'infradoc'   => 'Infradoc ?',
+            'infradoc'   => 'Infradoc',
             'url'        => 'Url',
-            'valide'     => 'Valide',
-        );
+            'valide'     => 'Etat',
+        ];
 
         $kernelCharset = $this->container->getParameter('kernel.charset');
-        $datas         = $this->get('hopitalnumerique_stat.manager.errorurl')->getDatasForExport( $resultat );
+        $datas = $this->get('hopitalnumerique_stat.manager.errorurl')->getDatasForExport($resultats);
 
-        return $this->get('hopitalnumerique_stat.manager.errorurl')->exportCsv( $colonnes, $datas, 'export-erreurs-url.csv', $kernelCharset );
+        return $this->get('hopitalnumerique_stat.manager.errorurl')->exportCsv($colonnes, $datas, 'export-erreurs-url.csv', $kernelCharset);
     }
 
     /**
      * Génération du tableau à exporter
      *
-     * @param  Symfony\Component\HttpFoundation\Request  $request
+     * @param  Symfony\Component\HttpFoundation\Request $request
      *
      * @return View
      */
-    public function curlAction( Request $request )
+    public function curlAction(Request $request)
     {
         //Récupération de la requete
-        $url    = $request->request->get('url');
+        $url = $request->request->get('url');
 
         $handle = curl_init(str_replace(' ', '%20', $url));
-        curl_setopt($handle,  CURLOPT_RETURNTRANSFER, TRUE);
+        curl_setopt($handle, CURLOPT_RETURNTRANSFER, true);
 
         /* Get the HTML or whatever is linked in $url. */
         $response = curl_exec($handle);
 
         /* Check for not 200 */
         $httpCode = curl_getinfo($handle, CURLINFO_HTTP_CODE);
-        if($httpCode >= 400 || $httpCode === 0)
-        {
+        if ($httpCode >= 400 || $httpCode === 0) {
             curl_close($handle);
+
             return new Response('{"success":false}', 200);
         }
 
         curl_close($handle);
+
         return new Response('{"success":true}', 200);
     }
 
     /**
      * Génération du tableau à exporter
      *
-     * @param  Symfony\Component\HttpFoundation\Request  $request
+     * @param  Symfony\Component\HttpFoundation\Request $request
      *
      * @return View
      */
-    public function curlWithBaseAction( Request $request )
+    public function curlWithBaseAction(Request $request)
     {
         //Récupération de la requete
-        $url    = $request->request->get('url');
+        $url = $request->request->get('url');
 
-        $errorUrl = $this->get('hopitalnumerique_stat.manager.errorurl')->findOneBy(array('url' => $url));
+        $errorUrl = $this->get('hopitalnumerique_stat.manager.errorurl')->findOneBy(['url' => $url]);
 
-        if(is_null($errorUrl))
-        {
+        if (is_null($errorUrl)) {
             $handle = curl_init(str_replace(' ', '%20', $url));
-            curl_setopt($handle,  CURLOPT_RETURNTRANSFER, TRUE);
+            curl_setopt($handle, CURLOPT_RETURNTRANSFER, true);
 
             /* Get the HTML or whatever is linked in $url. */
             $response = curl_exec($handle);
 
             /* Check for not 200 */
             $httpCode = curl_getinfo($handle, CURLINFO_HTTP_CODE);
-            if($httpCode >= 400 || $httpCode === 0)
-            {
+            if ($httpCode >= 400 || $httpCode === 0) {
                 curl_close($handle);
+
                 return new Response('{"success":false}', 200);
             }
 
             curl_close($handle);
+
             return new Response('{"success":true}', 200);
-        }
-        else
-        {
-            if($errorUrl->getOk())
-            {
+        } else {
+            if ($errorUrl->getOk()) {
                 return new Response('{"success":true}', 200);
-            }
-            else
-            {
+            } else {
                 return new Response('{"success":false}', 200);
             }
         }
     }
-
 
 
     /**
@@ -225,79 +221,78 @@ class ErreursController extends Controller
      */
     private function getAllUrlObjets()
     {
-        $urls = array(
-            'PUBLICATION'   => array(),
-            'INFRADOC'      => array(),
-            'ARTICLE'       => array(),
-            'AUTODIAG'      => array(),
-            'QUESTIONNAIRE' => array(),
-            'URL'           => array(),
-            'FICHIER'       => array()
-        );
+        $urls = [
+            'PUBLICATION'   => [],
+            'INFRADOC'      => [],
+            'ARTICLE'       => [],
+            'AUTODIAG'      => [],
+            'QUESTIONNAIRE' => [],
+            'URL'           => [],
+            'FICHIER'       => [],
+        ];
 
         $objets = $this->get('hopitalnumerique_objet.manager.objet')->findAll();
-        $objetsArray = array();
+        $objetsArray = [];
 
-        foreach ($objets as $key => $objet)
-        {
-            $urls                         = $this->getUrlByObjet($objet, $urls);
+        foreach ($objets as $key => $objet) {
+            $urls = $this->getUrlByObjet($objet, $urls);
             $objetsArray[$objet->getId()] = $objet;
         }
 
-        return array(
-            'urls'   => $urls,
-            'objets' => $objetsArray,
-            'oksByUrl' => $this->get('hopitalnumerique_stat.manager.errorurl')->getOksByUrl()
-        );
+        return [
+            'urls'     => $urls,
+            'objets'   => $objetsArray,
+            'oksByUrl' => $this->get('hopitalnumerique_stat.manager.errorurl')->getOksByUrl(),
+        ];
     }
 
     /**
      * Pour un objet, parse les différents textes de ce dernier pour trouver les urls
      *
      * @param HopitalNumeriqueObjetBundleEntityObjet $objet Objet à parser
-     * @param array                                  $urls  Tableau contenant les urls déjà trouvée
+     * @param array $urls Tableau contenant les urls déjà trouvée
      *
      * @return array Tableau contenant les urls déjà trouvée
      */
-    private function getUrlByObjet( \HopitalNumerique\ObjetBundle\Entity\Objet $objet, $urls )
+    private function getUrlByObjet(\HopitalNumerique\ObjetBundle\Entity\Objet $objet, $urls)
     {
         if (null !== $objet->getPath()) {
             foreach ($objet->getDomaines() as $domaine) {
-                $url = $domaine->getUrl().'/'.$objet->getWebPath(1);
+                $url = $domaine->getUrl() . '/' . $objet->getWebPath(1);
                 $urls['FICHIER'][$objet->getId()]['objet'][] = $url;
             }
         }
         if (null !== $objet->getPath2()) {
             foreach ($objet->getDomaines() as $domaine) {
-                $url = $domaine->getUrl().'/'.$objet->getWebPath(2);
+                $url = $domaine->getUrl() . '/' . $objet->getWebPath(2);
                 $urls['FICHIER'][$objet->getId()]['objet'][] = $url;
             }
         }
 
-        $res = array( $objet->getId() => array() );
+        $res = [$objet->getId() => []];
 
         $urls = $this->recuperationLien($objet->getSynthese(), $objet->getId(), $urls);
         $urls = $this->recuperationLien($objet->getResume(), $objet->getId(), $urls);
 
-        foreach ($objet->getContenus() as $key => $contenu)
-        {
+        foreach ($objet->getContenus() as $key => $contenu) {
             $urls = $this->recuperationLien($contenu->getContenu(), $objet->getId(), $urls, true, $contenu->getId());
         }
+
         return $urls;
     }
 
     /**
      * Récupération des liens internes des articles/objet/contenu..
      *
-     * @param string    $texte      Texte à vérifier
-     * @param int       $idObjet    Identifiant de l'objet courant, pour savoir d'où vient l'url
-     * @param array     $urls       Tableau contenant les urls déjà trouvée
-     * @param boolean   $isContenu  Est un lien venant d'un contenu
-     * @param int       $idContenu  Identifiant du contenu
+     * @param string $texte Texte à vérifier
+     * @param int $idObjet Identifiant de l'objet courant, pour savoir d'où vient l'url
+     * @param array $urls Tableau contenant les urls déjà trouvée
+     * @param boolean $isContenu Est un lien venant d'un contenu
+     * @param int $idContenu Identifiant du contenu
      *
      * @return array Tableau contenant les urls déjà trouvée
      */
-    private function recuperationLien($texte, $idObjet, $urls, $isContenu = false , $idContenu = 0)
+    private function recuperationLien($texte, $idObjet, $urls, $isContenu = false, $idContenu = 0)
     {
         //Récupération des urls complètes
         // The Regular Expression filter
@@ -305,22 +300,20 @@ class ErreursController extends Controller
 
         // Check if there is a url in the text
         preg_match_all($reg_exUrl, $texte, $matchesURLTemp);
-        if(count($matchesURLTemp[0]) > 0 )
-        {
+        if (count($matchesURLTemp[0]) > 0) {
             $matchesURL = $matchesURLTemp[0];
-            foreach ($matchesURL as $matcheURL)
-            {
-                if(!array_key_exists($idObjet, $urls['URL']))
-                {
-                    $urls['URL'][$idObjet] = array(
-                        'objet'    => array(),
-                        $idContenu => array()
-                    );
+            foreach ($matchesURL as $matcheURL) {
+                if (!array_key_exists($idObjet, $urls['URL'])) {
+                    $urls['URL'][$idObjet] = [
+                        'objet'    => [],
+                        $idContenu => [],
+                    ];
                 }
-                if($isContenu)
+                if ($isContenu) {
                     $urls['URL'][$idObjet][$idContenu][] = trim($matcheURL, '"');
-                else
+                } else {
                     $urls['URL'][$idObjet]['objet'][] = trim($matcheURL, '"');
+                }
             }
         }
 
@@ -331,101 +324,94 @@ class ErreursController extends Controller
         // matches[0] tableau des chaines completes trouvée
         // matches[1] tableau des chaines avant les : trouvé
         // matches[2] tableau des ID après les : trouvé
-        if(is_array($matches[1]))
-        {
-            foreach($matches[1] as $key => $value)
-            {
-                switch($value){
+        if (is_array($matches[1])) {
+            foreach ($matches[1] as $key => $value) {
+                switch ($value) {
                     case 'PUBLICATION':
                         //cas Objet
-                        $objet  = $this->get('hopitalnumerique_objet.manager.objet')->findOneBy( array( 'id' => $matches[2][$key] ) );
-                        if($objet)
-                        {
-                            if(!array_key_exists($idObjet, $urls['PUBLICATION']))
-                            {
+                        $objet = $this->get('hopitalnumerique_objet.manager.objet')->findOneBy(['id' => $matches[2][$key]]);
+                        if ($objet) {
+                            if (!array_key_exists($idObjet, $urls['PUBLICATION'])) {
                                 //Tableau
-                                $urls['PUBLICATION'][$idObjet] = array(
-                                    'objet'   => array(),
-                                    $idContenu => array()
-                                );
+                                $urls['PUBLICATION'][$idObjet] = [
+                                    'objet'    => [],
+                                    $idContenu => [],
+                                ];
                             }
-                            if($isContenu)
+                            if ($isContenu) {
                                 $urls['PUBLICATION'][$idObjet][$idContenu][$objet->getId()] = '/publication/' . $matches[2][$key] . '-' . $objet->getAlias();
-                            else
+                            } else {
                                 $urls['PUBLICATION'][$idObjet]['objet'][$objet->getId()] = '/publication/' . $matches[2][$key] . '-' . $objet->getAlias();
+                            }
                         }
                         break;
                     case 'INFRADOC':
                         //cas contenu
-                        $contenu = $this->get('hopitalnumerique_objet.manager.contenu')->findOneBy( array( 'id' => $matches[2][$key] ) );
-                        if( $contenu )
-                        {
-                            if(!array_key_exists($idObjet, $urls['INFRADOC']))
-                            {
-                                $urls['INFRADOC'][$idObjet] = array(
-                                    'objet'   => array(),
-                                    $idContenu => array()
-                                );
+                        $contenu = $this->get('hopitalnumerique_objet.manager.contenu')->findOneBy(['id' => $matches[2][$key]]);
+                        if ($contenu) {
+                            if (!array_key_exists($idObjet, $urls['INFRADOC'])) {
+                                $urls['INFRADOC'][$idObjet] = [
+                                    'objet'    => [],
+                                    $idContenu => [],
+                                ];
                             }
-                            $objet  = $contenu->getObjet();
-                            if($isContenu)
-                                $urls['INFRADOC'][$idObjet][$idContenu][$contenu->getId()] = '/publication/'. $objet->getId().'-' . $objet->getAlias() . '/'.$matches[2][$key].'-'.$contenu->getAlias();
-                            else
-                                $urls['INFRADOC'][$idObjet]['objet'][$contenu->getId()] = '/publication/'. $objet->getId().'-' . $objet->getAlias() . '/'.$matches[2][$key].'-'.$contenu->getAlias();
+                            $objet = $contenu->getObjet();
+                            if ($isContenu) {
+                                $urls['INFRADOC'][$idObjet][$idContenu][$contenu->getId()] = '/publication/' . $objet->getId() . '-' . $objet->getAlias() . '/' . $matches[2][$key] . '-' . $contenu->getAlias();
+                            } else {
+                                $urls['INFRADOC'][$idObjet]['objet'][$contenu->getId()] = '/publication/' . $objet->getId() . '-' . $objet->getAlias() . '/' . $matches[2][$key] . '-' . $contenu->getAlias();
+                            }
                         }
                         break;
                     case 'ARTICLE':
                         //cas Objet
-                        $objet  = $this->get('hopitalnumerique_objet.manager.objet')->findOneBy( array( 'id' => $matches[2][$key] ) );
-                        if($objet)
-                        {
-                            if(!array_key_exists($idObjet, $urls['ARTICLE']))
-                            {
-                                $urls['ARTICLE'][$idObjet] = array(
-                                    'objet'   => array(),
-                                    $idContenu => array()
-                                );
+                        $objet = $this->get('hopitalnumerique_objet.manager.objet')->findOneBy(['id' => $matches[2][$key]]);
+                        if ($objet) {
+                            if (!array_key_exists($idObjet, $urls['ARTICLE'])) {
+                                $urls['ARTICLE'][$idObjet] = [
+                                    'objet'    => [],
+                                    $idContenu => [],
+                                ];
                             }
-                            if($isContenu)
-                                $urls['ARTICLE'][$idObjet][$idContenu][$objet->getId()] = '/publication/article/'.$matches[2][$key].'-' . $objet->getAlias();
-                            else
-                                $urls['ARTICLE'][$idObjet]['objet'][$objet->getId()] = '/publication/article/'.$matches[2][$key].'-' . $objet->getAlias();
+                            if ($isContenu) {
+                                $urls['ARTICLE'][$idObjet][$idContenu][$objet->getId()] = '/publication/article/' . $matches[2][$key] . '-' . $objet->getAlias();
+                            } else {
+                                $urls['ARTICLE'][$idObjet]['objet'][$objet->getId()] = '/publication/article/' . $matches[2][$key] . '-' . $objet->getAlias();
+                            }
                         }
                         break;
                     case 'AUTODIAG':
                         //cas Outil
-                        $outil  = $this->get('autodiag.repository.autodiag')->findOneBy( array( 'id' => $matches[2][$key] ) );
-                        if($outil)
-                        {
-                            if(!array_key_exists($idObjet, $urls['AUTODIAG']))
-                            {
-                                $urls['AUTODIAG'][$idObjet] = array(
-                                    'objet'   => array(),
-                                    $idContenu => array()
-                                );
+                        $outil = $this->get('autodiag.repository.autodiag')->findOneBy(['id' => $matches[2][$key]]);
+                        if ($outil) {
+                            if (!array_key_exists($idObjet, $urls['AUTODIAG'])) {
+                                $urls['AUTODIAG'][$idObjet] = [
+                                    'objet'    => [],
+                                    $idContenu => [],
+                                ];
                             }
-                            if($isContenu)
-                                $urls['AUTODIAG'][$idObjet][$idContenu][$outil->getId()] = '/autodiagnostic/'.$outil->getId();
-                            else
-                                $urls['AUTODIAG'][$idObjet]['objet'][$outil->getId()] = '/autodiagnostic/'.$outil->getId();
+                            if ($isContenu) {
+                                $urls['AUTODIAG'][$idObjet][$idContenu][$outil->getId()] = '/autodiagnostic/' . $outil->getId();
+                            } else {
+                                $urls['AUTODIAG'][$idObjet]['objet'][$outil->getId()] = '/autodiagnostic/' . $outil->getId();
+                            }
                         }
                         break;
                     case 'QUESTIONNAIRE':
                         //cas Questionnaire
-                        $questionnaire  = $this->get('hopitalnumerique_questionnaire.manager.questionnaire')->findOneBy( array( 'id' => $matches[2][$key] ) );
-                        if($questionnaire)
-                        {
-                            if(!array_key_exists($idObjet, $urls['QUESTIONNAIRE']))
-                            {
-                                $urls['QUESTIONNAIRE'][$idObjet] = array(
-                                    'objet'   => array(),
-                                    $idContenu => array()
-                                );
+                        $questionnaire = $this->get('hopitalnumerique_questionnaire.manager.questionnaire')->findOneBy(['id' => $matches[2][$key]]);
+                        if ($questionnaire) {
+                            if (!array_key_exists($idObjet, $urls['QUESTIONNAIRE'])) {
+                                $urls['QUESTIONNAIRE'][$idObjet] = [
+                                    'objet'    => [],
+                                    $idContenu => [],
+                                ];
                             }
-                            if($isContenu)
-                                $urls['QUESTIONNAIRE'][$idObjet][$idContenu][$questionnaire->getId()] = '/questionnaire/edit/'. $questionnaire->getId();
-                            else
-                                $urls['QUESTIONNAIRE'][$idObjet]['objet'][$questionnaire->getId()] = '/questionnaire/edit/'. $questionnaire->getId();
+                            if ($isContenu) {
+                                $urls['QUESTIONNAIRE'][$idObjet][$idContenu][$questionnaire->getId()] = '/questionnaire/edit/' . $questionnaire->getId();
+                            } else {
+                                $urls['QUESTIONNAIRE'][$idObjet]['objet'][$questionnaire->getId()] = '/questionnaire/edit/' . $questionnaire->getId();
+                            }
                         }
                         break;
                 }
@@ -440,14 +426,14 @@ class ErreursController extends Controller
      */
     private function toascii($string)
     {
-        if(!empty($string)){
+        if (!empty($string)) {
             $tempo = utf8_decode($string);
             $string = '';
-            foreach (str_split($tempo) as $obj)
-            {
+            foreach (str_split($tempo) as $obj) {
                 $string .= '&#' . ord($obj) . ';';
             }
         }
+
         return $string;
     }
 }

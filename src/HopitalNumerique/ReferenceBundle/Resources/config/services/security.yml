@@ -1,0 +1,6 @@
+services:
+    hn.reference.reference_voter:
+        class: HopitalNumerique\ReferenceBundle\Security\ReferenceVoter
+        tags:
+            - { name: security.voter }
+        public: false

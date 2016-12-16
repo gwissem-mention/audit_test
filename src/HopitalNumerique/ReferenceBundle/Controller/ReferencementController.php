@@ -23,6 +23,11 @@ class ReferencementController extends Controller
     public function popinAction($entityType, $entityId)
     {
         $entity = $this->container->get('hopitalnumerique_core.dependency_injection.entity')->getEntityByTypeAndId($entityType, $entityId);
+
+        if (!$this->isGranted('reference', $entity)) {
+            throw $this->createAccessDeniedException();
+        }
+
         if (null === $entity) {
             throw new \Exception('Entité non trouvée pour TYPE = "' . $entityType . '" et ID = "' . $entityId . '".');
         }
@@ -64,6 +69,11 @@ class ReferencementController extends Controller
         $entitiesHaveReferencesParameters = $request->request->get('entitiesHaveReferencesParameters');
 
         $entity = $this->container->get('hopitalnumerique_core.dependency_injection.entity')->getEntityByTypeAndId($entityType, $entityId);
+
+        if (!$this->isGranted('reference', $entity)) {
+            throw $this->createAccessDeniedException();
+        }
+
         $referencesDomainesToDelete = $this->getDomainesToDeleteForNoteSaving($entity);
         $references = $this->container->get('hopitalnumerique_reference.manager.entity_has_reference')->findByEntityTypeAndEntityIdAndDomaines($entityType, $entityId, $referencesDomainesToDelete);
         $this->container->get('hopitalnumerique_reference.manager.entity_has_reference')->delete($references);

@@ -95,7 +95,7 @@ class SynthesisVoter extends Voter
     }
 
     /**
-     * Peut partager si l'utilisateur possède la synthèse
+     * Peut partager si l'utilisateur possède la synthèse ou est dans les partages de la synthèse,
      * et si la synthèse est validée
      *
      * @param Synthesis $synthesis
@@ -113,6 +113,8 @@ class SynthesisVoter extends Voter
                 return true;
             }
         }
+
+        return false;
     }
 
     /**

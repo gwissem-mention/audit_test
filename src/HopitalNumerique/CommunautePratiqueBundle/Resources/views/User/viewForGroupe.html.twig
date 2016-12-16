@@ -35,7 +35,11 @@
                                     {{ reponse.question.libelle }}
                                 </div>
                                 <div class="reponse col-md-8">
-                                    {{ reponse.reponse }}
+                                    {% for reference in reponse.referenceMulitple if reponse.referenceMulitple|length > 0 %}
+                                        {{ reference.libelle }}<br />
+                                    {% else %}
+                                        {{ reponse.reponse }}
+                                    {% endfor %}
                                 </div>
                             </div>
                         {%- endfor -%}

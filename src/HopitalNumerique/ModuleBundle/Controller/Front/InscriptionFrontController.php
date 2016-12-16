@@ -3,6 +3,7 @@
 namespace HopitalNumerique\ModuleBundle\Controller\Front;
 
 use HopitalNumerique\ModuleBundle\Entity\Inscription;
+use HopitalNumerique\ModuleBundle\Entity\Module;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -33,10 +34,10 @@ class InscriptionFrontController extends Controller
 
         $request = $this->get('request');
 
-        if ( $form->handleRequest($request)->isValid() ) 
+        if ( $form->handleRequest($request)->isValid() )
         {
             $refAccepte = $this->get('hopitalnumerique_reference.manager.reference')->findOneBy( array('id'=> 407) );
-        
+
             $inscription->setEtatInscription($refAccepte);
 
             if($inscription->getSession()->getModule()->getMailConfirmationInscription())
@@ -47,12 +48,8 @@ class InscriptionFrontController extends Controller
                             'module'    => $inscription->getSession()->getModule()->getTitre()
                         ));
                 $this->get('mailer')->send($mail);
-
-                $class = 'HopitalNumerique\ModuleBundle\Entity\Module';
-
-                $this->container->get('hopitalnumerique_core.log')->logger('inscription', $inscription->getSession()->getModule(), $inscription->getSession()->getModule()->getTitre(), $class, $this->getUser());
             }
-            
+
             $this->get('hopitalnumerique_module.manager.inscription')->save($inscription);
 
             // On envoi une 'flash' pour indiquer à l'utilisateur que le fichier n'existe pas: suppression manuelle sur le serveur
@@ -146,7 +143,7 @@ class InscriptionFrontController extends Controller
         );
 
         //Pour chaque session, on parcourt les inscriptions pour les lister
-        foreach ($session->getInscriptions() as $inscription) 
+        foreach ($session->getInscriptions() as $inscription)
         {
             //On prend uniquement les "a participé"
             if($inscription->getEtatParticipation()->getId() === 411)
@@ -164,7 +161,7 @@ class InscriptionFrontController extends Controller
                 $row[6] = $user->getTelephonePortable();
                 $row[7] = $user->getEmail();
 
-                $datas[] = $row;   
+                $datas[] = $row;
             }
         }
 
@@ -182,13 +179,9 @@ class InscriptionFrontController extends Controller
         {
             $this->get('hopitalnumerique_module.manager.inscription')->toogleEtatInscription( array($inscription), $this->get('hopitalnumerique_reference.manager.reference')->findOneBy( array( 'id' => 409) ) );
             $this->get('hopitalnumerique_module.manager.inscription')->toogleEtatParticipation( array($inscription), $this->get('hopitalnumerique_reference.manager.reference')->findOneBy( array( 'id' => 412) ) );
-            $this->get('hopitalnumerique_module.manager.inscription')->toogleEtatEvaluation( array($inscription), $this->get('hopitalnumerique_reference.manager.reference')->findOneBy( array( 'id' => 430) ) );   
-            
+            $this->get('hopitalnumerique_module.manager.inscription')->toogleEtatEvaluation( array($inscription), $this->get('hopitalnumerique_reference.manager.reference')->findOneBy( array( 'id' => 430) ) );
+
             $this->get('session')->getFlashBag()->add( ('success') , 'Votre inscription à la session "'. $inscription->getSession()->getModule()->getTitre() .'" été annulée.' );
-
-            $class = 'HopitalNumerique\ModuleBundle\Entity\Module';
-
-            $this->container->get('hopitalnumerique_core.log')->logger('desinscription', $inscription->getSession()->getModule(), $inscription->getSession()->getModule()->getTitre(), $class, $this->getUser());
         }
         else
         {

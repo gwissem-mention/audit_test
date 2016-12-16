@@ -12,9 +12,6 @@ use Nodevo\GridBundle\Grid\Action;
  */
 class SuggestionGrid extends Grid implements GridInterface
 {
-    /**
-     * Définie la config spécifique au grid Objet.
-     */
     public function setConfig()
     {
         $this->setSource('hopitalnumerique_publication.repository.suggestion');
@@ -32,6 +29,8 @@ class SuggestionGrid extends Grid implements GridInterface
                 ->setOperatorsVisible(false)
         );
         $this->addColonne(new Column\TextColumn('domainsName', 'Domaine(s)'));
+        $this->addColonne(new Column\DateColumn('stateChangeDate', "Date du dernier changement d'état", 'd/m/Y H:i:s'));
+        $this->addColonne(new Column\TextColumn('stateChangeAuthorName', "Auteur du dernier changement d'état"));
     }
 
     public function setActionsButtons()

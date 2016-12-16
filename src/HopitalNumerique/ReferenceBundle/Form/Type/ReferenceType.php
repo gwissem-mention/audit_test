@@ -81,10 +81,6 @@ class ReferenceType extends AbstractType
      */
     private function buildFormPartConcept(FormBuilderInterface $builder, array $options)
     {
-        $parentAttr = [];
-        if ($options['data']->getLock()) {
-            $parentAttr['disabled'] = 'disabled';
-        }
         $referenceId = $options['data']->getId();
 
         $builder
@@ -126,7 +122,6 @@ class ReferenceType extends AbstractType
                 'multiple' => true,
                 'required' => false,
                 'label' => 'Parents',
-                'attr' => $parentAttr,
                 'query_builder' => function (EntityRepository $er) use ($referenceId) {
                     $qb = $er->createQueryBuilder('ref')
                         ->andWhere('ref.lock = 0')

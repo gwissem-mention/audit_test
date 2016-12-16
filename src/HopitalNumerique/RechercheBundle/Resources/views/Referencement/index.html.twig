@@ -126,13 +126,13 @@
                 {% macro buildTreePart(referencesTreePart, level) -%}
                     {% if referencesTreePart.reference.id != 222 %}
                         {% import _self as mySelf %}
-                        <li data-libelle="{{ referencesTreePart.reference.libelleForReference }}" data-reference="{{ referencesTreePart.reference.id }}" data-chosen="false" data-level="{{ level }}" data-domaines="{{ referencesTreePart.reference.domainesDisplayId|join(',') }}">
+                        <li data-libelle="{{ referencesTreePart.reference.referenceLibelle ?: referencesTreePart.reference.libelle }}" data-reference="{{ referencesTreePart.reference.id }}" data-chosen="false" data-level="{{ level }}" data-domaines="{{ referencesTreePart.reference.domainesDisplayId|join(',') }}">
                             <a class="reference">
                                 <span class="add"><i class="fa fa-plus-circle"></i></span>
                                 {%- if referencesTreePart.enfants|length > 0 -%}
                                     <span class="toggle"><i class="fa fa-chevron-right"></i></span>
                                 {%- endif -%}
-                                {{ referencesTreePart.reference.libelleForReference }}
+                                {{ referencesTreePart.reference.referenceLibelle ?: referencesTreePart.reference.libelle }}
                             </a>
 
                             {%- if referencesTreePart.enfants|length > 0 -%}
@@ -236,21 +236,34 @@
                     <div id="no-result-bloc">
                         Il n'y a pas encore de ressource correspondant à cette recherche.
                         Pour être informé d'une nouvelle publication sur ce sujet, enregistrez votre recherche.
+
+                        {% if app.user %}
+                            <div class="suggest-link">
+                                <p>
+                                    <a href="{{ path('hopitalnumerique_suggestion_front_add') }}">Vous connaissez une ressource qui n'apparaît pas dans les résultats ? Proposez-nous de l'ajouter</a>
+                                </p>
+                            </div>
+                        {% endif %}
                     </div>
                     {%- for groupId, groupTitle in { 'points-durs':'Points durs', 'productions':'Productions' } -%}
                         <div class="results-group-bloc" id="results-{{ groupId }}-bloc">
                             <h2><span class="title">{{ groupTitle }}</span> (<span id="results-{{ groupId }}-count"></span> résultats)</h2>
                             <div id="results-{{ groupId }}"></div>
                             <div class="buttons">
-                                {% if app.user and false %}
-                                    <div class="pull-left suggest-link">
-                                        <a class="pull-left" href="{{ path('hopitalnumerique_suggestion_front_add') }}">Vous connaissez une ressource qui n'apparait pas dans les résultats ?<br />Proposez-nous de l'ajouter</a>
-                                    </div>
-                                {% endif %}
-                                    <button type="button" disabled id="results-{{ groupId }}-less-button" class="btn btn-xs btn-danger more-less-results" onclick="Hn_RechercheBundle_Referencement.displayLessResults('{{ groupId }}');"><em class="fa fa-angle-double-up"></em> &nbsp; Moins de résultats</button>
-                                    <button type="button" disabled id="results-{{ groupId }}-more-button" class="btn btn-xs btn-primary more-less-results" onclick="Hn_RechercheBundle_Referencement.displayMoreResults('{{ groupId }}');"><em class="fa fa-angle-double-down"></em> &nbsp; Plus de résultats</button>
+                                <button type="button" disabled id="results-{{ groupId }}-less-button" class="btn btn-xs btn-danger more-less-results" onclick="Hn_RechercheBundle_Referencement.displayLessResults('{{ groupId }}');"><em class="fa fa-angle-double-up"></em> &nbsp; Moins de résultats</button>
+                                <button type="button" disabled id="results-{{ groupId }}-more-button" class="btn btn-xs btn-primary more-less-results" onclick="Hn_RechercheBundle_Referencement.displayMoreResults('{{ groupId }}');"><em class="fa fa-angle-double-down"></em> &nbsp; Plus de résultats</button>
                                 <div class="ajax-loader"></div>
                             </div>
+
+                            {% if loop.last %}
+                                {% if app.user %}
+                                    <div class="suggest-link">
+                                        <p>
+                                            <a href="{{ path('hopitalnumerique_suggestion_front_add') }}">Vous connaissez une ressource qui n'apparaît pas dans les résultats ? Proposez-nous de l'ajouter</a>
+                                        </p>
+                                    </div>
+                                {% endif %}
+                            {% endif %}
                         </div>
                     {%- endfor -%}
                 </div>

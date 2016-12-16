@@ -36,3 +36,11 @@ services:
             - '@hopitalnumerique_objet.manager.objet'
             - '@filesystem'
             - '@doctrine.orm.entity_manager'
+
+    hopitalnumerique_publication.form.suggestion:
+        class: 'HopitalNumerique\PublicationBundle\Form\Type\SuggestionType'
+        arguments:
+            - '@security.token_storage'
+            - '@doctrine.orm.entity_manager'
+        tags:
+            - { name: form.type }

@@ -63,6 +63,7 @@
     #publication .titre-infradoc-pdf {display: none;}
     #publication table {margin: 0 20px 20px 0;}
     #publication table td {padding: 5px;}
+    #publication .cdp-group { font-style: italic; }
 
     /* Résultats */
     #publication #resultats{ margin-top: 20px; }
@@ -130,6 +131,7 @@
     #publication #publication-resume h5{color: #d60030;font-size: 14px;font-style: italic;font-weight: normal; margin: 15px 0 10px 75px; font-weight: bold;}
     #publication #publication-resume h6{color: #d60030;font-size: 14px;font-style: italic;font-weight: normal; margin: 15px 0 10px 100px; font-weight: bold;}
 	#publication #publication-resume iframe{ margin-right: 15px;}
+	#publication #publication-resume ul { overflow: hidden; }
 
     /* Bloc Productions associés */
     #publication #productions-associes{ margin-top: 30px; }

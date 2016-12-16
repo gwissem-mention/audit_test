@@ -17,8 +17,8 @@ use Symfony\Component\HttpFoundation\Session\Session;
  */
 class ReferenceManager extends BaseManager
 {
-    protected $class       = 'HopitalNumerique\ReferenceBundle\Entity\Reference';
-    private $_tabReferences = array();
+    protected $class = 'HopitalNumerique\ReferenceBundle\Entity\Reference';
+    private $_tabReferences = [];
     private $_session;
     protected $_userManager;
 
@@ -32,30 +32,30 @@ class ReferenceManager extends BaseManager
     {
         parent::__construct($entityManager);
 
-        $this->_session     = $session;
+        $this->_session = $session;
         $this->_userManager = $userManager;
     }
 
     /**
      * Formate et retourne l'arborescence des références
      *
-     * @param  boolean $unlockedOnly     Retourne que les éléments non vérouillés
+     * @param  boolean $unlockedOnly Retourne que les éléments non vérouillés
      * @param  boolean $fromDictionnaire Retourne que les éléments présent dans le dictionnaire
-     * @param  boolean $fromRecherche    Retourne que les éléments présent dans la recherche
+     * @param  boolean $fromRecherche Retourne que les éléments présent dans la recherche
      *
      * @return array
      */
-    public function getArbo( $unlockedOnly = false, $fromDictionnaire = false, $fromRecherche = false, $domaineIds = array() )
+    public function getArbo($unlockedOnly = false, $fromDictionnaire = false, $fromRecherche = false, $domaineIds = [])
     {
         //get All References, and convert to ArrayCollection
-        $datas = new ArrayCollection( $this->getRepository()->getArbo( $unlockedOnly, $fromDictionnaire, $fromRecherche, $domaineIds ) );
+        $datas = new ArrayCollection($this->getRepository()->getArbo($unlockedOnly, $fromDictionnaire, $fromRecherche, $domaineIds));
 
         //Récupère uniquement les premiers parents
-        $criteria = Criteria::create()->where(Criteria::expr()->eq("parent", null) );
-        $parents  = $datas->matching( $criteria );
+        $criteria = Criteria::create()->where(Criteria::expr()->eq("parent", null));
+        $parents = $datas->matching($criteria);
 
         //call recursive function to handle all datas
-        return $this->getArboRecursive($datas, $parents, array() );
+        return $this->getArboRecursive($datas, $parents, []);
     }
 
     /**
@@ -65,31 +65,32 @@ class ReferenceManager extends BaseManager
      *
      * @return [type]
      */
-    public function getArboFromAReference( Reference $reference )
+    public function getArboFromAReference(Reference $reference)
     {
         //get All References, and convert to ArrayCollection
-        $datas = new ArrayCollection( $this->getRepository()->getArbo( false, false, false ) );
+        $datas = new ArrayCollection($this->getRepository()->getArbo(false, false, false));
 
         //Récupère uniquement les premiers parents
-        $criteria = Criteria::create()->where( Criteria::expr()->eq("id", $reference->getId() ) );
-        $parents  = $datas->matching( $criteria );
+        $criteria = Criteria::create()->where(Criteria::expr()->eq("id", $reference->getId()));
+        $parents = $datas->matching($criteria);
 
         //call recursive function to handle all datas
-        return $this->getArboRecursive($datas, $parents, array() );
+        return $this->getArboRecursive($datas, $parents, []);
     }
 
     /**
      * Retourne l'arbo formatée
      *
-     * @param  boolean $unlockedOnly     Retourne que les éléments non vérouillés
+     * @param  boolean $unlockedOnly Retourne que les éléments non vérouillés
      * @param  boolean $fromDictionnaire Retourne que les éléments présent dans le dictionnaire
-     * @param  boolean $fromRecherche    Retourne que les éléments présent dans la recherche
+     * @param  boolean $fromRecherche Retourne que les éléments présent dans la recherche
      *
      * @return array
      */
-    public function getArboFormat( $unlockedOnly = false, $fromDictionnaire = false, $fromRecherche = false , $domaineIds = array() )
+    public function getArboFormat($unlockedOnly = false, $fromDictionnaire = false, $fromRecherche = false, $domaineIds = [])
     {
-        $arbo = $this->getArbo($unlockedOnly, $fromDictionnaire, $fromRecherche, $domaineIds );
+        $arbo = $this->getArbo($unlockedOnly, $fromDictionnaire, $fromRecherche, $domaineIds);
+
         return $this->formatArbo($arbo);
     }
 
@@ -98,17 +99,17 @@ class ReferenceManager extends BaseManager
      *
      * @return array
      */
-    public function getDatasForGrid( \StdClass $condition = null )
+    public function getDatasForGrid(\StdClass $condition = null)
     {
         $domainesIds = $this->_userManager->getUserConnected()->getDomainesId();
-        $references = $this->getRepository()->getDatasForGrid( $domainesIds, $condition )->getQuery()->getResult();
+        $references = $this->getRepository()->getDatasForGrid($domainesIds, $condition)->getQuery()->getResult();
 
-        $results = array();
+        $results = [];
 
-        foreach($references as $reference) 
-        {
-            $object = array();
+        foreach ($references as $reference) {
+            $object = [];
             $object['idReference'] = $object['id'] = $reference->getId();
+            $object['locked'] = $reference->getLock();
             $object['libelle'] = $reference->getLibelle();
             $object['domainesNom'] = '';
             $object['reference'] = $reference->isReference();
@@ -118,9 +119,12 @@ class ReferenceManager extends BaseManager
             $object['code'] = $reference->getCode();
             $object['idParent'] = $reference->getParentIds();
 
-            foreach ($reference->getDomaines() as $domaine)
-            {
-                $object['domainesNom'] = $object['domainesNom'] === '' ? $domaine->getNom() : $object['domainesNom'] . ' ; ' . $domaine->getNom();
+            foreach ($reference->getDomaines() as $domaine) {
+                $object['domainesNom'] =
+                    $object['domainesNom'] === ''
+                        ? $domaine->getNom()
+                        : $object['domainesNom'] . ' - ' . $domaine->getNom()
+                ;
             }
             if ($reference->isAllDomaines()) {
                 $object['domainesNom'] = 'Tous';
@@ -139,7 +143,7 @@ class ReferenceManager extends BaseManager
      */
     public function getDatasForExport($ids)
     {
-        $referencesForExport = array();
+        $referencesForExport = [];
 
         $references = $this->getRepository()->getDatasForExport($ids)->getQuery()->getResult();
 
@@ -173,16 +177,13 @@ class ReferenceManager extends BaseManager
      */
     public function getDomainesOrderedByReference()
     {
-        $references                 = $this->getRepository()->getReferencesWithDomaine()->getQuery()->getResult();
-        $domainesOrderedByReference = array();
+        $references = $this->getRepository()->getReferencesWithDomaine()->getQuery()->getResult();
+        $domainesOrderedByReference = [];
 
-        foreach ($references as $reference)
-        {
-            foreach ($reference->getDomaines() as $domaine)
-            {
-                if(!array_key_exists($reference->getId(), $domainesOrderedByReference))
-                {
-                    $domainesOrderedByReference[$reference->getId()] = array();
+        foreach ($references as $reference) {
+            foreach ($reference->getDomaines() as $domaine) {
+                if (!array_key_exists($reference->getId(), $domainesOrderedByReference)) {
+                    $domainesOrderedByReference[$reference->getId()] = [];
                 }
 
                 $domainesOrderedByReference[$reference->getId()][] = $domaine;
@@ -199,14 +200,15 @@ class ReferenceManager extends BaseManager
      *
      * @return array
      */
-    public function reorder( $options )
+    public function reorder($options)
     {
-        $this->reorderChilds( $this->getArbo( true ) );
-        $orderedOptions = array();
+        $this->reorderChilds($this->getArbo(true));
+        $orderedOptions = [];
 
-        foreach($this->_tabReferences as $orderedElement) {
-            if( isset($options[ $orderedElement ]) )
-                $orderedOptions[ $orderedElement ] = $options[ $orderedElement ];
+        foreach ($this->_tabReferences as $orderedElement) {
+            if (isset($options[$orderedElement])) {
+                $orderedOptions[$orderedElement] = $options[$orderedElement];
+            }
         }
 
         return $orderedOptions;
@@ -217,27 +219,29 @@ class ReferenceManager extends BaseManager
      *
      * @param $referentiel \HopitalNumerique\ReferenceBundle\Entity\Reference Référentiel à mettre à jour
      */
-    public function updateOrder( Reference $referentiel )
+    public function updateOrder(Reference $referentiel)
     {
 
         //get All References
-        $datas = new ArrayCollection($this->getRepository()->findBy(array('lock'=>0)));
+        $datas = new ArrayCollection($this->getRepository()->findBy(['lock' => 0]));
 
         //Récupération des réferentiels
         $criteria = Criteria::create()
-                                    ->where(Criteria::expr()->eq("parent", $referentiel->getParent()))
-                                    ->andWhere(Criteria::expr()->gte("order", $referentiel->getOrder()))
-                                    ->orderBy( array("order" => Criteria::ASC) );
-        $childs = $datas->matching( $criteria );
+            ->where(Criteria::expr()->eq("parent", $referentiel->getParent()))
+            ->andWhere(Criteria::expr()->gte("order", $referentiel->getOrder()))
+            ->orderBy(["order" => Criteria::ASC])
+        ;
+        $childs = $datas->matching($criteria);
 
         //On décale les référentiels dont l'order est supérieur ou égal au référentiel courant
         $newOrder = $referentiel->getOrder();
         foreach ($childs as $referentielAModifier) {
-            if ($referentielAModifier === $referentiel)
+            if ($referentielAModifier === $referentiel) {
                 continue;
+            }
 
             $newOrder++;
-            $referentielAModifier->setOrder( $newOrder );
+            $referentielAModifier->setOrder($newOrder);
             $this->save($referentielAModifier);
         }
     }
@@ -249,7 +253,7 @@ class ReferenceManager extends BaseManager
      */
     public function getRefsForGestionObjets()
     {
-        $this->convertAsFlatArray( $this->getArbo(false, true), 1, array() );
+        $this->convertAsFlatArray($this->getArbo(false, true), 1, []);
 
         return $this->_tabReferences;
     }
@@ -261,28 +265,27 @@ class ReferenceManager extends BaseManager
      *
      * @return Array
      */
-    public function getDomainesForUser ( $user )
+    public function getDomainesForUser($user)
     {
         $results = $this->findByCode('PERIMETRE_FONCTIONNEL_DOMAINES_FONCTIONNELS');
 
-        $domaines = array(
-            'ids'      => array(),
-            'domaines' => array()
-        );
+        $domaines = [
+            'ids'      => [],
+            'domaines' => [],
+        ];
         foreach ($results as $result) {
             if (count($result->getParents()) > 0) {
                 $parentId = $result->getParentIds()[0];
 
-                if(!array_key_exists($parentId, $domaines['domaines']))
-                {
-                    $domaines['domaines'][$parentId] = array();
+                if (!array_key_exists($parentId, $domaines['domaines'])) {
+                    $domaines['domaines'][$parentId] = [];
                 }
 
-                $tmp           = new \stdClass;
-                $tmp->id       = $result->getId();
-                $tmp->libelle  = $result->getLibelle();
-                $tmp->code     = $result->getCode();
-                $tmp->parent   = $result->getParents()[0]->getLibelle();
+                $tmp = new \stdClass;
+                $tmp->id = $result->getId();
+                $tmp->libelle = $result->getLibelle();
+                $tmp->code = $result->getCode();
+                $tmp->parent = $result->getParents()[0]->getLibelle();
                 $tmp->selected = false;
 
                 $domaines['domaines'][$parentId][] = $tmp;
@@ -298,56 +301,50 @@ class ReferenceManager extends BaseManager
      *
      * @return array
      */
-    public function getReferencesPonderees( $domaineIds = array() )
+    public function getReferencesPonderees($domaineIds = [])
     {
-        $references = $this->getArboFormat( false, false, true, $domaineIds);
+        $references = $this->getArboFormat(false, false, true, $domaineIds);
 
-        if(!array_key_exists('CATEGORIES_RECHERCHE', $references))
-        {
-            return array();
+        if (!array_key_exists('CATEGORIES_RECHERCHE', $references)) {
+            return [];
         }
 
         $references = $references['CATEGORIES_RECHERCHE'];
-        $results    = array();
+        $results = [];
 
-        foreach($references as &$reference)
-        {
+        foreach ($references as &$reference) {
             $reference['poids'] = 100;
 
-            if( $reference['childs'] )
-            {
-                $keys        = array_keys($reference['childs']);
-                $childs      = $reference['childs'][$keys[0]];
+            if ($reference['childs']) {
+                $keys = array_keys($reference['childs']);
+                $childs = $reference['childs'][$keys[0]];
                 $childWeight = 100 / count($childs);
 
-                foreach($childs as &$child)
-                {
+                foreach ($childs as &$child) {
                     $child['poids'] = $childWeight;
-                    if( $child['childs'] )
-                    {
-                        $keys             = array_keys($child['childs']);
-                        $smallChilds      = $child['childs'][$keys[0]];
+                    if ($child['childs']) {
+                        $keys = array_keys($child['childs']);
+                        $smallChilds = $child['childs'][$keys[0]];
                         $smallChildWeight = $childWeight / count($smallChilds);
 
-                        foreach ($smallChilds as &$smallChild)
-                        {
+                        foreach ($smallChilds as &$smallChild) {
                             $smallChild['poids'] = $smallChildWeight;
-                            if( $smallChild['childs'] )
-                            {
-                                $keys                  = array_keys($smallChild['childs']);
-                                $verySmallChilds       = $smallChild['childs'][$keys[0]];
+                            if ($smallChild['childs']) {
+                                $keys = array_keys($smallChild['childs']);
+                                $verySmallChilds = $smallChild['childs'][$keys[0]];
                                 $verySmallChildsWeight = $smallChildWeight / count($verySmallChilds);
 
-                                foreach($verySmallChilds as &$verySmallChild)
-                                {
-                                    $verySmallChild['poids']          = $verySmallChildsWeight;
-                                    $results[ $verySmallChild['id'] ] = $verySmallChild;
+                                foreach ($verySmallChilds as &$verySmallChild) {
+                                    $verySmallChild['poids'] = $verySmallChildsWeight;
+                                    $results[$verySmallChild['id']] = $verySmallChild;
                                 }
-                            }else
-                                $results[ $smallChild['id'] ] = $smallChild;
+                            } else {
+                                $results[$smallChild['id']] = $smallChild;
+                            }
                         }
-                    }else
-                        $results[ $child['id'] ] = $child;
+                    } else {
+                        $results[$child['id']] = $child;
+                    }
                 }
             }
         }
@@ -360,16 +357,13 @@ class ReferenceManager extends BaseManager
         return $this->getRepository()->getRefsByDomaineByParent($idParent, $idDomaine)->getQuery()->getResult();
     }
 
-    public function delete( $references )
+    public function delete($references)
     {
-        try
-        {
+        try {
             parent::delete($references);
-            $this->_session->getFlashBag()->add('info', 'Suppression effectuée avec succès.' );
-        }
-        catch (\Exception $e)
-        {
-            $this->_session->getFlashBag()->add('danger', 'Cette référence semble avoir une ou plusieurs liaison(s). Vous ne pouvez pas la supprimer.' );
+            $this->_session->getFlashBag()->add('info', 'Suppression effectuée avec succès.');
+        } catch (\Exception $e) {
+            $this->_session->getFlashBag()->add('danger', 'Cette référence semble avoir une ou plusieurs liaison(s). Vous ne pouvez pas la supprimer.');
         }
     }
 
@@ -436,7 +430,7 @@ class ReferenceManager extends BaseManager
     /**
      * Retourne un code selon son code.
      *
-     * @param string  $code    Code
+     * @param string $code Code
      * @param boolean $isActif Actif
      * @return \HopitalNumerique\ReferenceBundle\Entity\Reference Référence
      */
@@ -450,17 +444,17 @@ class ReferenceManager extends BaseManager
     /**
      * Retourne les références selon des domaines.
      *
-     * @param array<\HopitalNumerique\DomaineBundle\Entity\Domaine> $domaines    Domaines
-     * @param boolean                                               $lock        Lock
-     * @param boolean                                               $parentable  Parentable
-     * @param boolean                                               $reference   Reference
-     * @param boolean                                               $inRecherche InRecherche ?
-     * @param boolean                                               $inGlossaire InGlossaire ?
+     * @param array <\HopitalNumerique\DomaineBundle\Entity\Domaine> $domaines    Domaines
+     * @param boolean $lock Lock
+     * @param boolean $parentable Parentable
+     * @param boolean $reference Reference
+     * @param boolean $inRecherche InRecherche ?
+     * @param boolean $inGlossaire InGlossaire ?
      * @return array<\HopitalNumerique\ReferenceBundle\Entity\Reference> Références
      */
-    public function findByDomaines($domaines = null, $actif = null, $lock = null, $parentable = null, $reference = null, $inRecherche = null, $inGlossaire = null)
+    public function findByDomaines($domaines = null, $actif = null, $lock = null, $parentable = null, $reference = null, $inRecherche = null, $inGlossaire = null, $resultsInArray = false)
     {
-        return $this->getRepository()->findByDomaines($domaines, $actif, $lock, $parentable, $reference, $inRecherche, $inGlossaire);
+        return $this->getRepository()->findByDomaines($domaines, $actif, $lock, $parentable, $reference, $inRecherche, $inGlossaire, $resultsInArray);
     }
 
     /**
@@ -488,60 +482,60 @@ class ReferenceManager extends BaseManager
      * Converti l'arbo sous forme de tableau unique avec l'arbo représentée dans le nom de l'élément
      * On remplis ici un tableau global, pour écomiser des ressources via un array_merge et conserver les cléfs
      *
-     * @param array   $childs Liste des éléments à ajouter au tableau
-     * @param integer $level  Level de profondeur
+     * @param array $childs Liste des éléments à ajouter au tableau
+     * @param integer $level Level de profondeur
      *
      * @return array
      */
-    private function convertAsFlatArray( $childs, $level, $parent )
+    private function convertAsFlatArray($childs, $level, $parent)
     {
         //affiche le level sous forme de |--
         $sep = '';
-        if( $level > 1 ) {
-            for( $i = 2; $i <= $level; $i++ )
+        if ($level > 1) {
+            for ($i = 2; $i <= $level; $i++) {
                 $sep .= '|----';
+            }
             $sep .= ' ';
         }
 
         //create Child Ids table : permet de lister les ID de tous les enfants de l'élément : selection récursive des références
-        $childsIds = array();
+        $childsIds = [];
 
         //pour chaque element, on le transforme on objet simple avec son niveau de profondeur affiché dans le nom
-        foreach($childs as $child)
-        {
+        foreach ($childs as $child) {
             //populate childsIds
             $childsIds[] = $child->id;
 
             //create object
-            $ref           = new \stdClass;
-            $ref->id       = $child->id;
-            $ref->nom      = $sep . $child->code . ' - ' . $child->libelle;
-            $ref->libelle  = $sep . $child->libelle;
+            $ref = new \stdClass;
+            $ref->id = $child->id;
+            $ref->nom = $sep . $child->code . ' - ' . $child->libelle;
+            $ref->libelle = $sep . $child->libelle;
             $ref->selected = false;
-            $ref->primary  = false;
-            $ref->childs   = null;
-            $ref->parents  = json_encode($parent);
-            $ref->level    = $level;
+            $ref->primary = false;
+            $ref->childs = null;
+            $ref->parents = json_encode($parent);
+            $ref->level = $level;
 
             //add element parent first
-            $this->_tabReferences[ $child->id ] = $ref;
+            $this->_tabReferences[$child->id] = $ref;
 
             //if childs
-            if ( !empty($child->childs) ){
+            if (!empty($child->childs)) {
                 //met à jour le tab parent
-                $tmp   = $parent;
+                $tmp = $parent;
                 $tmp[] = $child->id;
 
                 //on met à jour sa liste d'enfants
-                $newChilds = $this->convertAsFlatArray( $child->childs, $level + 1, $tmp );
+                $newChilds = $this->convertAsFlatArray($child->childs, $level + 1, $tmp);
 
                 //récupère temporairement l'élément que l'on vien d'ajouter
-                $tmp = $this->_tabReferences[ $child->id ];
-                $tmp->childs   = json_encode( $newChilds );
-                $tmp->nbChilds = count( $newChilds );
+                $tmp = $this->_tabReferences[$child->id];
+                $tmp->childs = json_encode($newChilds);
+                $tmp->nbChilds = count($newChilds);
 
                 //on remet l'élément parent à sa place
-                $this->_tabReferences[ $child->id ] = $tmp;
+                $this->_tabReferences[$child->id] = $tmp;
 
                 //merge les enfants
                 $childsIds = array_merge($childsIds, $newChilds);
@@ -554,51 +548,60 @@ class ReferenceManager extends BaseManager
     /**
      *  Retourne la liste des enfants de manière récursive
      *
-     *  @param array  $childs Liste des elements à parcourir
+     * @param array $childs Liste des elements à parcourir
      *
-     *  @return empty
+     * @return empty
      */
-    private function reorderChilds( $childs )
+    private function reorderChilds($childs)
     {
-        foreach($childs as $child)
-        {
-            $this->_tabReferences[ '0' . $child->id ] = $child->id;
+        foreach ($childs as $child) {
+            $this->_tabReferences['0' . $child->id] = $child->id;
 
-            if ( !empty($child->childs) )
-                $this->reorderChilds( $child->childs );
+            if (!empty($child->childs)) {
+                $this->reorderChilds($child->childs);
+            }
         }
     }
 
     /**
      * Fonction récursive qui parcourt l'ensemble des références en ajoutant l'element et recherchant les éventuels enfants
      *
-     * @param ArrayCollection $items    Données d'origine
-     * @param array           $elements Tableau d'élements à ajouter
-     * @param array           $tab      Tableau de données vide à remplir puis retourner
+     * @param ArrayCollection $items Données d'origine
+     * @param array $elements Tableau d'élements à ajouter
+     * @param array $tab Tableau de données vide à remplir puis retourner
      *
      * @return array
      */
-    private function getArboRecursive( ArrayCollection $items, $elements, $tab)
+    private function getArboRecursive(ArrayCollection $items, $elements, $tab)
     {
-        foreach($elements as $element) {
-            //construction de l'element current
-            $id = $element['id'];
-            $item          = new \stdClass;
-            $item->libelle = $element['libelle'];
-            $item->code    = $element['code'];
-            $item->id      = $id;
-
-            //add childs : filter items with current element
-            $criteria     = Criteria::create()->where(Criteria::expr()->eq("parent", $id))->orderBy(array("order"=>Criteria::ASC));
-            $childs       = $items->matching( $criteria );
-            $item->childs = $this->getArboRecursive($items, $childs, array() );
-
-            //add current item to big table
-            $tab[] = $item;
+        $parents = [];
+        foreach ($items as $item) {
+            if ($item['parent'] == null) {
+                $parents[$item['id']] = [
+                    'id' => $item['id'],
+                    'libelle' => $item['libelle'],
+                    'code' => $item['code'],
+                    'children' => [],
+                ];
+                $items->removeElement($item);
+            }
         }
 
-        //return big table
-        return $tab;
+        foreach ($items as $item) {
+            foreach ($parents as &$parent) {
+                if ($item['parent'] == $parent['id']) {
+                    $parents[$item['parent']]['children'][] = [
+                        'id' => $item['id'],
+                        'libelle' => $item['libelle'],
+                        'code' => $item['code'],
+                        'children' => [],
+                    ];
+                    $items->removeElement($item);
+                }
+            }
+        }
+
+        return $parents;
     }
 
     /**
@@ -610,16 +613,17 @@ class ReferenceManager extends BaseManager
      */
     private function formatArbo($arbo)
     {
-        $retour = array();
-        foreach( $arbo as $key => $ref ){
-            $retour[ $ref->code ][ $key ]['libelle'] = $ref->libelle;
-            $retour[ $ref->code ][ $key ]['id']      = $ref->id;
-            if( $ref->childs ){
-                $retour[ $ref->code ][ $key ]['childs'] = $this->formatArbo( $ref->childs );
+        $retour = [];
+        foreach ($arbo as $key => $ref) {
+            $retour[$ref['code']][$key]['libelle'] = $ref['libelle'];
+            $retour[$ref['code']][$key]['id'] = $ref['id'];
+            if ($ref['children']) {
+                $retour[$ref['code']][$key]['childs'] = $this->formatArbo($ref['children']);
             } else {
-                $retour[ $ref->code ][ $key ]['childs'] = false;
+                $retour[$ref['code']][$key]['childs'] = false;
             }
         }
+
         return $retour;
     }
 
@@ -632,19 +636,19 @@ class ReferenceManager extends BaseManager
     {
         $res = $this->getRepository()->getDomainesByReference($idReference)[0];
         $domaines = $res->getDomaines()->getValues();
-        $domaineResult = array();
+        $domaineResult = [];
         foreach ($domaines as $domaine) {
             $domaineResult[$domaine->getId()] = $domaine;
         }
-        
+
         return $domaineResult;
     }
 
-    
+
     /**
      * Retourne la référence root commune entre plusieurs domaines.
      *
-     * @param array<\HopitalNumerique\DomaineBundle\Entity\Domaine> $domaines Domaines
+     * @param array <\HopitalNumerique\DomaineBundle\Entity\Domaine> $domaines Domaines
      * @return \HopitalNumerique\ReferenceBundle\Entity\Reference|null Root
      */
     public function getReferenceRootCommun($domaines)
@@ -662,7 +666,7 @@ class ReferenceManager extends BaseManager
             }
             $referenceRoot = $domaine->getReferenceRoot();
         }
-        
+
         return $referenceRoot;
     }
 }

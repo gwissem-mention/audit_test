@@ -1,6 +1,7 @@
 <?php
 namespace HopitalNumerique\ReferenceBundle\DependencyInjection\Reference;
 
+use HopitalNumerique\DomaineBundle\Entity\Domaine;
 use HopitalNumerique\ReferenceBundle\Entity\Reference;
 use HopitalNumerique\ReferenceBundle\Manager\ReferenceManager;
 
@@ -17,6 +18,7 @@ class Tree
 
     /**
      * Constructeur.
+     * @param ReferenceManager $referenceManager
      */
     public function __construct(ReferenceManager $referenceManager)
     {
@@ -27,8 +29,8 @@ class Tree
     /**
      * Retourne les options permettant la création de l'arbre.
      *
-     * @param array<\HopitalNumerique\DomaineBundle\Entity\Domaine> $domaines              Domaines
-     * @param array<integer>                                        $forbiddenReferenceIds ID des références à ne pas afficher
+     * @param Domaine[] $domaines
+     * @param array<integer> $forbiddenReferenceIds ID des références à ne pas afficher
      * @return array Options
      */
     public function getOptions($domaines, $forbiddenReferenceIds = [])
@@ -36,6 +38,7 @@ class Tree
         $references = $this->getOrderedReferences(null, true, $domaines);
 
         $jsTreeOptionsData = $this->getTreeOptionsDataPart($references, $forbiddenReferenceIds);
+
         $jsTreeOptions = [
             'core' => [
                 'data' => $jsTreeOptionsData
@@ -63,12 +66,17 @@ class Tree
         $jsTreeOptionsDataPart = [];
 
         foreach ($orderedReferences as $referenceParemeters) {
-            $referenceId = $referenceParemeters['reference']->getId();
+            $referenceId = $referenceParemeters['reference']['id'];
             if (!in_array($referenceId, $forbiddenReferenceIds)) { // Éviter qu'un parent soit lui-même un des ses enfants (boucles infinies)
+                $domaineLibelles = [];
+                foreach ($referenceParemeters['reference']['domaines'] as $domaine) {
+                    $domaineLibelles[] = $domaine['nom'];
+                }
+
                 $forbiddenReferenceIds[] = $referenceId;
                 $jsTreeOptionsDataPart[] = [
                     'id' => $referenceId,
-                    'text' => $referenceParemeters['reference']->getLibelle().(count($referenceParemeters['reference']->getDomaines()) > 0 ? ' <em><small>- '.implode(' ; ', $referenceParemeters['reference']->getDomaineNoms()).'</small></em>' : ''),
+                    'text' => $referenceParemeters['reference']['libelle'].(count($referenceParemeters['reference']['domaines']) > 0 ? ' <em><small>- '.implode(' ; ', $domaineLibelles).'</small></em>' : ''),
                     'children' => $this->getTreeOptionsDataPart($referenceParemeters['enfants'], $forbiddenReferenceIds)
                 ];
             }
@@ -96,9 +104,10 @@ class Tree
             }
             $references = $this->referenceManager->findBy($referencesConditions, ['order' => 'ASC']);
         } else {
-            $references = $this->referenceManager->findByDomaines($domaines, true, false, $parentable, null, $inRecherche);
+            $references = $this->referenceManager->findByDomaines($domaines, true, false, $parentable, null, $inRecherche, null, true);
         }
 
+        // 3 - 30
         return $this->getOrderedReferencesTreePart($references, $referenceRoot);
     }
 
@@ -110,18 +119,38 @@ class Tree
      * @param \HopitalNumerique\ReferenceBundle\Entity\Reference\Reference $referenceParent Référence parente
      * @return array Arbre
      */
-    public function getOrderedReferencesTreePart($references, Reference $referenceParent = null)
+    public function getOrderedReferencesTreePart($references, $referenceParent = null)
     {
         $referencesSubTree = [];
 
         foreach ($references as $i => $reference) {
-            if ((null === $referenceParent && 0 === count($reference->getParents())) || (null !== $referenceParent && $reference->hasParent($referenceParent))) {
-                //unset($references[$i]); // À décommenter uniquement si on passe une référence (pour éviter les doublons)
-                $referencesSubTreeNode = [
-                    'reference' => $reference,
-                    'enfants' => $this->getOrderedReferencesTreePart($references, $reference)
-                ];
-                $referencesSubTree[] = $referencesSubTreeNode;
+            if ($reference instanceof Reference) {
+                if ((null === $referenceParent && 0 === count($reference->getParents())) || (null !== $referenceParent && $reference->hasParent($referenceParent))) {
+                    //unset($references[$i]); // À décommenter uniquement si on passe une référence (pour éviter les doublons)
+                    $referencesSubTreeNode = [
+                        'reference' => $reference,
+                        'enfants' => $this->getOrderedReferencesTreePart($references, $reference)
+                    ];
+                    $referencesSubTree[] = $referencesSubTreeNode;
+                }
+            } else {
+                if ($referenceParent != null) {
+                    $hasParent = false;
+                    $referenceParentId = $referenceParent instanceof Reference ? $referenceParent->getId() : $referenceParent['id'];
+                    foreach ($reference['parents'] as $parent) {
+                        if ($parent['id'] == $referenceParentId) {
+                            $hasParent = true;
+                            continue;
+                        }
+                    }
+                }
+                if ((null === $referenceParent && 0 === count($reference['parents'])) || (null !== $referenceParent && $hasParent)) {
+                    $referencesSubTreeNode = [
+                        'reference' => $reference,
+                        'enfants' => $this->getOrderedReferencesTreePart($references, $reference)
+                    ];
+                    $referencesSubTree[] = $referencesSubTreeNode;
+                }
             }
         }
 

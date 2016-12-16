@@ -20,6 +20,15 @@
     {% endjavascripts %}
 {% endblock %}
 
+{% block stylesheets %}
+    {{parent()}}
+    {% stylesheets output="compiled/hopitalnumerique-user-user-edit.css" filter="cssrewrite, ?yui_css"
+    'bundles/hopitalnumeriqueuser/css/custom-form-field.css'
+    %}
+    <link rel="stylesheet" href="{{ asset_url }}" />
+    {% endstylesheets %}
+{% endblock %}
+
 {% block toolbarButton %}
     <a href="{{path('hopital_numerique_user_homepage')}}" class="btn btn-default" title="Retour à la liste"><i class="fa fa-reply"></i></a>
     <div onclick="sauvegardeFormulaire();" class="btn btn-default" title="Enregistrer"><i class="fa fa-check"></i></div>
@@ -165,7 +174,7 @@
                                 <a data-toggle="collapse" data-parent="#accordion" href="#collapseOne" class="" id="etablissement_sante_collapse">
                                     <div class="panel-heading panel-default"><h4>Vous êtes un établissement de santé</h4></div>
                                 </a>
-                                <div id="collapseOne" class="panel-collapse in" style="height: auto;">
+                                <div id="collapseOne" class="in" style="height: auto;">
                                     <div class="panel-body">
                                         {{ form_row(form.statutEtablissementSante) }}
                                         {{ form_row(form.etablissementRattachementSante) }}
@@ -176,6 +185,7 @@
                                     </div>
                                 </div>
                             </div>
+
                             {# Zone autre qu'un établissement de santé #}
                             <div class="panel panel-default gray" id="autre_etablissement_sante">
                                 <a data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" class="collapsed" id="autre_etablissement_sante_collapse">

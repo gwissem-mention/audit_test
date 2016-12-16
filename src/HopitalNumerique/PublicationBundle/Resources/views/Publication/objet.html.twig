@@ -39,9 +39,6 @@
             <div class="col-md-10">
                 <a class="btn btn-sm btn-default" href="{{path('hopital_numerique_recherche_homepage')}}" title="Retour à ma recherche"><i class="fa fa-reply"></i></a>
                 <a class="btn btn-sm btn-default" href="{{path('hopital_numerique_recherche_homepage_requete_generator')}}" title="Nouvelle recherche"><i class="fa fa-search"></i></a>
-                {% if app.user and false %}
-                    <a style="margin-left: 5px;" href="{{ path('hopitalnumerique_suggestion_front_add') }}">Vous connaissez une ressource qui n'apparait pas dans les résultats ? Proposez-nous de l'ajouter</a>
-                {% endif %}
             </div>
             <div class="col-md-2">
                 <div class="text-right">
@@ -69,7 +66,7 @@
             <h4 class="gris" >
                 {{types}}{% if objet.source is not null and objet.source != '' %} <span class="text-muted">({{objet.source}})</span>{% endif %}
                 {% if objet.communautePratiqueGroupe is not null %}
-                    - <a href="{{ path('hopitalnumerique_communautepratique_publication_list') }}">Contenu élaboré dans le cadre du groupe {{ objet.communautePratiqueGroupe.titre }} de la communauté de pratique</a>
+                    - <a class="gris cdp-group" href="{{ path('hopitalnumerique_communautepratique_publication_list') }}">Contenu élaboré dans le cadre du groupe ({{ objet.communautePratiqueGroupe.titre }}) de la communauté de pratique</a>
                 {% endif %}
             </h4>
         </div>

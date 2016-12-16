@@ -35,6 +35,8 @@ services:
         tags: [{ name: pagerfanta.view, alias: hopitalnumerique }]
 
     hopitalnumerique_core.log:
-            class: HopitalNumerique\CoreBundle\Service\Log
-            arguments:
-                 - '@doctrine'
+        class: HopitalNumerique\CoreBundle\Service\Log
+        arguments:
+             - '@doctrine'
+        tags:
+            - { name: 'kernel.event_listener', event: 'kernel.terminate', method: persistLogs }

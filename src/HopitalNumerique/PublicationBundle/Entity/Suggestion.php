@@ -132,10 +132,33 @@ class Suggestion
      */
     private $user;
 
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(type="datetime", nullable=true)
+     */
+    private $stateChangeDate;
+
+    /**
+     * @var User
+     *
+     * @ORM\ManyToOne(targetEntity="\HopitalNumerique\UserBundle\Entity\User", cascade={"persist"})
+     * @ORM\JoinColumn(name="stateChangeAuthor", referencedColumnName="usr_id")
+     */
+    private $stateChangeAuthor;
+
+     /**
+     * @var boolean
+     *
+     * @ORM\Column(name="alreadyCreated", type="boolean")
+     */
+    private $alreadyCreated;
+
     public function __construct()
     {
         $this->creationDate = new \DateTime();
         $this->domains = new ArrayCollection();
+        $this->alreadyCreated = false;
     }
 
     /**
@@ -458,4 +481,69 @@ class Suggestion
     {
         return $this->user;
     }
+
+    /**
+     * @param \DateTime $stateChangeDate
+     *
+     * @return $this
+     */
+    public function setStateChangeDate($stateChangeDate)
+    {
+        $this->stateChangeDate = $stateChangeDate;
+
+        return $this;
+    }
+
+    /**
+     * @return \DateTime
+     */
+    public function getStateChangeDate()
+    {
+        return $this->stateChangeDate;
+    }
+
+    /**
+     * @param User $stateChangeAuthor
+     *
+     * @return $this
+     */
+    public function setStateChangeAuthor($stateChangeAuthor)
+    {
+        $this->stateChangeAuthor = $stateChangeAuthor;
+
+        return $this;
+    }
+
+    /**
+     * @return User
+     */
+    public function getStateChangeAuthor()
+    {
+        return $this->stateChangeAuthor;
+    }
+
+    /**
+     * Set alreadyCreated
+
+     *
+     * @param boolean $alreadyCreated
+     * @return Objet
+     */
+    public function setAlreadyCreated($created)
+    {
+        $this->alreadyCreated = $created;
+
+        return $this;
+    }
+
+    /**
+     * Get alreadyCreated
+     *
+     * @return boolean
+     */
+    public function isAlreadyCreated()
+    {
+        return $this->alreadyCreated;
+    }
+
 }

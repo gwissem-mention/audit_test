@@ -56,9 +56,9 @@
                 {% if not app.user %}
                     <div class="loggedout-warning">
                         <div>{{ "ad.restitution.loggedout-warning"|trans }}</div>
-                        <a href="{{ path('account_login') }}">Connexion</a>
+                        <a href="{{ path('hopitalnumerique_autodiag_restitution_signIn', {"synthesis": synthesis.id}) }}">Connexion</a>
                         ou
-                        <a href="{{ path('hopital_numerique_user_inscription') }}">Créer un compte</a>
+                        <a href="{{ path('hopitalnumerique_autodiag_restitution_signIn', {"synthesis": synthesis.id, "signUp": true}) }}">Créer un compte</a>
                     </div>
                 {% endif %}
 

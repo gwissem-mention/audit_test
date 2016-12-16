@@ -233,7 +233,6 @@ class AutodiagEntryGrid extends Grid implements GridInterface
                 try {
                     return $this->_container->get('autodiag.entries.export')->exportList($this->autodiag, $syntheses);
                 } catch (\Exception $e) {
-                    dump($e);die;
                     $this->_container->get('session')->getFlashBag()->add('danger', "Une erreur est survenue.");
                 }
             })
