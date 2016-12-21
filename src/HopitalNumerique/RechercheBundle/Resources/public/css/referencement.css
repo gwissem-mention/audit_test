@@ -1,7 +1,7 @@
 .recherche-referencement { margin: 15px 15px 0 15px; }
     .recherche-referencement #research-list { float: right; }
     .recherche-referencement .more-less-results { margin-top: 15px; }
-    .recherche-referencement .suggest-link { margin-bottom: 20px; clear: both; }
+    .recherche-referencement .suggest-link { margin-bottom: 20px; clear: both; font-weight: bold; }
     .recherche-referencement .suggest-link a { text-align: left; }
     .recherche-referencement .request-button { padding: 3px 12px; float: left; margin-top: 5px; }
     .recherche-referencement #contexte-container {}

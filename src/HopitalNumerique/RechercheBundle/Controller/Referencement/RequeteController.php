@@ -115,7 +115,7 @@ class RequeteController extends Controller
 
         if ($requeteForm->isValid()) {
             $this->container->get('hopitalnumerique_recherche.dependency_injection.referencement.requete_session')->saveRequete($requete);
-            $this->addFlash('success', 'Requête enregistrée.');
+            $this->addFlash('success', 'Recherche enregistrée.');
         }
 
         return $this->redirectToRoute('hopital_numerique_recherche_homepage');

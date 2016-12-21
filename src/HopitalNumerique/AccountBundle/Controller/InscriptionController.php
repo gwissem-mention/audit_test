@@ -15,6 +15,9 @@ class InscriptionController extends Controller
 {
     /**
      * Popin simple d'inscription.
+     * @param Request $request
+     * @param string $urlRedirection
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse|Response
      */
     public function popinAction(Request $request, $urlRedirection = '')
     {
@@ -26,7 +29,7 @@ class InscriptionController extends Controller
         $this->completeUser($request, $user);
 
         $inscriptionForm = $this->createForm(InscriptionType::class, $user, [
-            'url_redirection' => $urlRedirection
+            'url_redirection' => $urlRedirection,
         ]);
         $inscriptionForm->handleRequest($request);
 
@@ -40,7 +43,7 @@ class InscriptionController extends Controller
                 $this->container->get('hopitalnumerique_user.manager.user')->save($user);
 
                 if ($this->container->get('hopitalnumerique_recherche.dependency_injection.referencement.requete_session')->isWantToSaveRequete()) {
-                    $this->container->get('hopitalnumerique_recherche.dependency_injection.referencement.requete_session')->saveAsNewRequete($user);
+                    $this->container->get('hopitalnumerique_recherche.dependency_injection.referencement.requete_session')->setAnonymousUser(true);
                 }
 
                 // Connexion automatique
@@ -67,7 +70,7 @@ class InscriptionController extends Controller
         }
 
         return $this->render('HopitalNumeriqueAccountBundle:Inscription:popin.html.twig', [
-            'inscriptionForm' => $inscriptionForm->createView()
+            'inscriptionForm' => $inscriptionForm->createView(),
         ]);
     }
 
@@ -75,7 +78,7 @@ class InscriptionController extends Controller
      * Complète l'utilisateur nouveau avec des valeurs obligatoires par défaut.
      *
      * @param \Symfony\Component\HttpFoundation\Request $request Request
-     * @param \HopitalNumerique\UserBundle\Entity\User  $user    User
+     * @param \HopitalNumerique\UserBundle\Entity\User $user User
      */
     private function completeUser(Request $request, User &$user)
     {
@@ -83,7 +86,7 @@ class InscriptionController extends Controller
 
         $user->setDateInscription(new \DateTime());
         $user->setDateLastUpdate(new \DateTime());
-        $user->setPlainPassword(str_shuffle($passwordTool->generate(3, 'ABCDEFGHIJKLMNOPQRSTUVWXYZ').$passwordTool->generate(3, 'abcdefghijklmnopqrstuvwyyz').$passwordTool->generate(2, '1234567890')));
+        $user->setPlainPassword(str_shuffle($passwordTool->generate(3, 'ABCDEFGHIJKLMNOPQRSTUVWXYZ') . $passwordTool->generate(3, 'abcdefghijklmnopqrstuvwyyz') . $passwordTool->generate(2, '1234567890')));
         $user->setCivilite($this->container->get('hopitalnumerique_reference.manager.reference')->findOneById(Reference::CIVILITE_MONSIEUR_ID));
         $user->setNom(' ');
         $user->setPrenom(' ');

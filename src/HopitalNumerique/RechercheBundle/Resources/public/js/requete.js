@@ -45,7 +45,7 @@ function deleteWithConfirm( path )
  */
 function editRequete( path )
 {
-    apprise('Nouveau nom de la requête', {'input':true,'textOk':'Mettre à jour','textCancel':'Annuler'}, function(r) {
+    apprise('Nouveau nom de la recherche', {'input':true,'textOk':'Mettre à jour','textCancel':'Annuler'}, function(r) {
         if( r ){
             $.ajax({
                 url  : path,
