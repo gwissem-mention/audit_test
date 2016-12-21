@@ -1,6 +1,7 @@
 <?php
 namespace HopitalNumerique\RechercheBundle\Controller;
 
+use HopitalNumerique\RechercheBundle\DependencyInjection\Referencement\RequeteSession;
 use HopitalNumerique\RechercheBundle\Entity\Requete;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -13,25 +14,42 @@ class ReferencementController extends Controller
 {
     /**
      * Recherche avancée.
+     *
+     * @param Request $request
+     * @return \Symfony\Component\HttpFoundation\Response
      */
     public function indexAction(Request $request)
     {
+        /** @var RequeteSession $requeteSession */
+        $requeteSession = $this->get('hopitalnumerique_recherche.dependency_injection.referencement.requete_session');
+        $openRequeteSavingPopin = false;
+
+        // If the user asked to save his search while he was not logged in
+        if ($this->get('session')->get(RequeteSession::SESSION_WANT_SAVE_REQUETE)
+            && $requeteSession->isAnonymousUser()
+        ) {
+            $requeteSession->setWantToSaveRequete(false);
+            $requeteSession->setAnonymousUser(false);
+
+            $openRequeteSavingPopin = true;
+        }
+
         $request->getSession()->set('urlToRedirect', $request->getUri());
-        $this->container->get('hopitalnumerique_recherche.dependency_injection.referencement.requete_session')->setWantToSaveRequete(false);
+        $requeteSession->setWantToSaveRequete(false);
         $currentDomaine = $this->container->get('hopitalnumerique_domaine.dependency_injection.current_domaine')->get();
         $referencesTree = $this->container->get('hopitalnumerique_reference.dependency_injection.reference.tree')->getOrderedReferences($currentDomaine->getReferenceRoot(), null, [$currentDomaine], true);
 
         if ($request->request->has('references')) {
             $choosenReferenceIds = $request->request->get('references');
         } else {
-            $choosenReferenceIds = $this->container->get('hopitalnumerique_recherche.dependency_injection.referencement.requete_session')->getReferenceIds();
+            $choosenReferenceIds = $requeteSession->getReferenceIds();
 
-            if (count($choosenReferenceIds) === 0 && !$this->container->get('hopitalnumerique_recherche.dependency_injection.referencement.requete_session')->hasSearchedText()) {
+            if (count($choosenReferenceIds) === 0 && !$requeteSession->hasSearchedText()) {
                 if (null !== $this->getUser()) {
                     $requeteDefault = $this->container->get('hopitalnumerique_recherche.manager.requete')->findDefaultByUser($this->getUser());
                     if (null !== $requeteDefault) {
-                        $this->container->get('hopitalnumerique_recherche.dependency_injection.referencement.requete_session')->setRequete($requeteDefault);
-                        $choosenReferenceIds = $this->container->get('hopitalnumerique_recherche.dependency_injection.referencement.requete_session')->getReferenceIds();
+                        $requeteSession->setRequete($requeteDefault);
+                        $choosenReferenceIds = $requeteSession->getReferenceIds();
                     }
                 }
                 if (count($choosenReferenceIds) === 0) {
@@ -43,19 +61,24 @@ class ReferencementController extends Controller
         return $this->render('HopitalNumeriqueRechercheBundle:Referencement:index.html.twig', [
             'recherches'             => $this->getDoctrine()->getRepository(Requete::class)->findBy(['user' => $this->getUser()]),
             'referencesTree'         => $referencesTree,
-            'requete'                => $this->container->get('hopitalnumerique_recherche.dependency_injection.referencement.requete_session')->getRequete(),
+            'requete'                => $requeteSession->getRequete(),
             'categoriesProperties'   => $this->container->get('hopitalnumerique_recherche.doctrine.referencement.category')->getCategoriesProperties(),
             'choosenReferenceIds'    => $choosenReferenceIds,
-            'entityTypeIds'          => $this->container->get('hopitalnumerique_recherche.dependency_injection.referencement.requete_session')->getEntityTypeIds(),
-            'publicationCategoryIds' => $this->container->get('hopitalnumerique_recherche.dependency_injection.referencement.requete_session')->getPublicationCategoryIds(),
-            'searchedText'           => $this->container->get('hopitalnumerique_recherche.dependency_injection.referencement.requete_session')->getSearchedText(),
+            'entityTypeIds'          => $requeteSession->getEntityTypeIds(),
+            'publicationCategoryIds' => $requeteSession->getPublicationCategoryIds(),
+            'searchedText'           => $requeteSession->getSearchedText(),
             'domaines'               => $this->container->get('hopitalnumerique_domaine.manager.domaine')->getAllArray(),
             'exaleadIsActivated'     => $this->container->get('hopitalnumerique_recherche.manager.search')->getActivationExalead(),
+            'openRequeteSavingPopin' => $openRequeteSavingPopin,
         ]);
     }
 
     /**
      * Retourne les entités trouvées selon les références choisies.
+     *
+     * @param Request $request
+     *
+     * @return JsonResponse
      */
     public function jsonEntitiesByReferencesAction(Request $request)
     {
@@ -109,6 +132,10 @@ class ReferencementController extends Controller
 
     /**
      * Retourne les entités résultats.
+     *
+     * @param Request $request
+     *
+     * @return JsonResponse
      */
     public function jsonEntitiesAction(Request $request)
     {
@@ -118,17 +145,20 @@ class ReferencementController extends Controller
             $entityIds = array_keys($entitiesPropertiesById);
 
             $entities = $this->container->get('hopitalnumerique_core.dependency_injection.entity')->getEntitiesByTypeAndIds($entityType, $entityIds);
+            $dependencyInjectionEntity = $this->get('hopitalnumerique_core.dependency_injection.entity');
             foreach ($entities as $entity) {
                 $entityId = $this->container->get('hopitalnumerique_core.dependency_injection.entity')->getEntityId($entity);
-                $entitiesByType[$entityType][$entityId]['viewHtml'] = $this->renderView('HopitalNumeriqueRechercheBundle:Referencement:view_entity.html.twig', [
-                    'category'         => $this->container->get('hopitalnumerique_core.dependency_injection.entity')->getCategoryByEntity($entity),
-                    'title'            => $this->container->get('hopitalnumerique_core.dependency_injection.entity')->getTitleByEntity($entity),
-                    'subtitle'         => $this->container->get('hopitalnumerique_core.dependency_injection.entity')->getSubtitleByEntity($entity),
-                    'url'              => $this->container->get('hopitalnumerique_core.dependency_injection.entity')->getFrontUrlByEntity($entity),
-                    'description'      => $this->container->get('hopitalnumerique_core.dependency_injection.entity')->getDescriptionByEntity($entity),
-                    'pertinenceNiveau' => $entitiesPropertiesById[$entityId]['pertinenceNiveau'],
-                    'source'           => $this->container->get('hopitalnumerique_core.dependency_injection.entity')->getSourceByEntity($entity),
-                ]);
+                $entitiesByType[$entityType][$entityId]['viewHtml'] =
+                    $this->renderView('HopitalNumeriqueRechercheBundle:Referencement:view_entity.html.twig', [
+                            'category'         => $dependencyInjectionEntity->getCategoryByEntity($entity),
+                            'title'            => $dependencyInjectionEntity->getTitleByEntity($entity),
+                            'subtitle'         => $dependencyInjectionEntity->getSubtitleByEntity($entity),
+                            'url'              => $dependencyInjectionEntity->getFrontUrlByEntity($entity),
+                            'description'      => $dependencyInjectionEntity->getDescriptionByEntity($entity),
+                            'pertinenceNiveau' => $entitiesPropertiesById[$entityId]['pertinenceNiveau'],
+                            'source'           => $dependencyInjectionEntity->getSourceByEntity($entity),
+                        ]
+                    );
             }
         }
 

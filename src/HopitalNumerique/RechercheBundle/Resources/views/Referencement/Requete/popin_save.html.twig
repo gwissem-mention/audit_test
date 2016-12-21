@@ -1,19 +1,19 @@
 {% extends 'HopitalNumeriqueCoreBundle::popup.html.twig' %}
 
 {% block title %}
-    Enregistrement de votre requête
+    Enregistrement de ma recherche
 {% endblock %}
 
 {% block body %}
     {%- if app.user is not null -%}
         {{ form_start(requeteForm) }}
             <div class="form-group">
-                {{ form_widget(requeteForm.nom) }}
+                {{ form_widget(requeteForm.nom, { 'attr': {'placeholder': 'Ma recherche du ' ~ "now"|date('d/m/Y à H:i')} }) }}
             </div>
             <div class="text-right">
-                <button type="submit" name="save-as-new" class="btn btn-md btn-success">Enregistrer{{ requete.id is not null ? ' comme nouvelle requête' : '' }}</button>
+                <button type="submit" name="save-as-new" class="btn btn-md btn-success">Enregistrer{{ requete.id is not null ? ' comme nouvelle recherche' : '' }}</button>
                 {% if requete.id is not null %}
-                    <button type="submit" name="save" class="btn btn-md btn-success">Mettre à jour la requête courante</button>
+                    <button type="submit" name="save" class="btn btn-md btn-success">Mettre à jour la recherche actuelle</button>
                 {% endif %}
             </div>
         {{ form_end(requeteForm) }}

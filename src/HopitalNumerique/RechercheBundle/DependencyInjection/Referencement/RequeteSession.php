@@ -43,6 +43,8 @@ class RequeteSession
      */
     const SESSION_WANT_SAVE_REQUETE = 'hnrecherche_referencement_requete_wantsave';
 
+    const SESSION_ANONYMOUS_USER = 'hnrecherche_referencement_requete_anonymous';
+
 
     /**
      * @var \Symfony\Component\HttpFoundation\Session\SessionInterface Session
@@ -327,7 +329,7 @@ class RequeteSession
             if (count($referenceIds) > 0) {
                 /** @var Requete $requete */
                 $requete = $this->requeteManager->createEmpty();
-                $requete->setNom('Ma requête du ' . date('d/m/Y à H:i'));
+                $requete->setNom('Ma recherche du ' . date('d/m/Y à H:i'));
                 $requete->setIsDefault(false);
                 $requete->setUser($requeteUser);
                 $requete->setDomaine($this->domaine);
@@ -342,7 +344,7 @@ class RequeteSession
     public function saveRequete(Requete $requete)
     {
         if ($requete->getNom() == "") {
-            $requete->setNom('Ma requête du ' . date("d/m/Y") . ' à ' . date('G:i'));
+            $requete->setNom('Ma recherche du ' . date("d/m/Y") . ' à ' . date('G:i'));
         }
         $requete->setRefs($this->getReferenceIds());
         $requete->setCategPointDur($this->getCategoryFilters());
@@ -382,5 +384,18 @@ class RequeteSession
         }
 
         $this->statRechercheManager->save($statRecherche);
+    }
+
+    /**
+     * @param bool $isAnonymous
+     */
+    public function setAnonymousUser($isAnonymous)
+    {
+        $this->session->set(self::SESSION_ANONYMOUS_USER, $isAnonymous);
+    }
+
+    public function isAnonymousUser()
+    {
+        return $this->session->get(self::SESSION_ANONYMOUS_USER);
     }
 }

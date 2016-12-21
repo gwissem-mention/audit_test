@@ -36,6 +36,9 @@
             Hn_RechercheBundle_Referencement_Filter_Exalead.setSearchedText('{{ searchedText }}');
             Hn_RechercheBundle_Referencement.initReferenceFilters();
             Hn_RechercheBundle_Referencement_Filter_Category.initFilterCategoriesSelect();
+            {% if openRequeteSavingPopin is defined and openRequeteSavingPopin == true %}
+                Hn_RechercheBundle_Referencement.saveFilters();
+            {% endif %}
         });
     </script>
 {%- endblock %}

@@ -25,20 +25,26 @@ class LoginHandler implements AuthenticationSuccessHandlerInterface
     protected $_userManager;
     protected $_domaineManager;
     protected $_aclManager;
-    
-    public function __construct(Router $router, $securityContext, RequeteSession $requeteSession, AclManager $aclManager, UserManager $userManager, DomaineManager $domaineManager)
-    {
-        $this->router           = $router;
+
+    public function __construct(
+        Router $router,
+        $securityContext,
+        RequeteSession $requeteSession,
+        AclManager $aclManager,
+        UserManager $userManager,
+        DomaineManager $domaineManager
+    ) {
+        $this->router = $router;
         $this->_securityContext = $securityContext;
         $this->requeteSession = $requeteSession;
-        $this->_userManager     = $userManager;
-        $this->_domaineManager  = $domaineManager;
-        $this->_aclManager      = $aclManager;
+        $this->_userManager = $userManager;
+        $this->_domaineManager = $domaineManager;
+        $this->_aclManager = $aclManager;
     }
-    
+
     public function onAuthenticationSuccess(Request $request, TokenInterface $token)
     {
-        $urlParameter     = $request->getSession()->get('urlToRedirect');
+        $urlParameter = $request->getSession()->get('urlToRedirect');
         $domaineCurrentId = $request->getSession()->get('domaineId');
 
         //On récupère l'utilisateur qui est connecté
@@ -47,11 +53,13 @@ class LoginHandler implements AuthenticationSuccessHandlerInterface
         }
 
         //Si l'utilisateur n'a pas accès au BackOffice et qu'il n'a pas encore ce domaine on lui assigne
-        if ($this->_aclManager->checkAuthorization($this->router->generate('hopital_numerique_admin_homepage' ), $user) == -1 && !in_array($domaineCurrentId, $user->getDomainesId())) {
+        if ($this->_aclManager->checkAuthorization($this->router->generate('hopital_numerique_admin_homepage'), $user) == -1
+            && !in_array($domaineCurrentId, $user->getDomainesId())
+        ) {
             //Récupération de l'entité
             $domaineCurrent = $this->_domaineManager->findOneById($domaineCurrentId);
 
-            $userDomaines   = $user->getDomaines();
+            $userDomaines = $user->getDomaines();
             $userDomaines[] = $domaineCurrent;
 
             $user->setDomaines($userDomaines);
@@ -59,8 +67,7 @@ class LoginHandler implements AuthenticationSuccessHandlerInterface
         }
 
         if ($this->requeteSession->isWantToSaveRequete()) {
-            $this->requeteSession->saveAsNewRequete($user);
-            return new RedirectResponse($this->router->generate('hopital_numerique_recherche_homepage'));
+            $this->requeteSession->setAnonymousUser(true);
         }
 
         if (!is_null($urlParameter) && $urlParameter !== "") {
@@ -69,7 +76,7 @@ class LoginHandler implements AuthenticationSuccessHandlerInterface
 
         $urlFirewall = $request->getSession()->get('_security.frontoffice_connecte.target_path');
 
-        return new RedirectResponse(is_null($urlFirewall) || $urlFirewall == "" ? $this->router->generate('hopital_numerique_homepage' ) : $urlFirewall);
+        return new RedirectResponse(is_null($urlFirewall) || $urlFirewall == "" ? $this->router->generate('hopital_numerique_homepage') : $urlFirewall);
     }
-    
+
 }
