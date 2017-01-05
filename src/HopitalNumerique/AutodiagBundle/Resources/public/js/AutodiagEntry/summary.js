@@ -79,10 +79,10 @@ Summary.prototype = {
             var chapterId = $(this).closest('li').data('chapter');
             var current = $(this);
             $(this).html(
-                instance.getCompletionHtml(instance.autodiag.chapters[chapterId].getCompletion())
+                instance.getCompletionHtml(instance.autodiag.getChapterById(chapterId).getCompletion())
             );
 
-            instance.autodiag.chapters[chapterId].onCompletionChange(function (completion) {
+            instance.autodiag.getChapterById(chapterId).onCompletionChange(function (completion) {
                 current.html(instance.getCompletionHtml(completion));
                 instance.handleGlobalCompletion();
             })

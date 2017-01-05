@@ -7,7 +7,7 @@
             {% if attribute.description is not null %}
                 <div class="col-md-12 attribute-description">
                     <p>
-                        {{ attribute.description }}
+                        {{ attribute.description|raw }}
                     </p>
                 </div>
             {% endif %}
