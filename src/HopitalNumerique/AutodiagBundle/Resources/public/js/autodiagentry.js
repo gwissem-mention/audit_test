@@ -2,7 +2,7 @@ var AutodiagEntry = function(element, entry, options) {
     this.element = element;
     this.entry = entry;
     this.summary = undefined;
-    this.chapters = {};
+    this.chapters = [];
 
     this.options = $.extend({
         saveDelay: 500,
@@ -59,12 +59,13 @@ AutodiagEntry.prototype = {
         var instance = this;
         $('.chapter[data-chapter]', this.element).each(function() {
             var id = $(this).data('chapter');
-            instance.chapters[id] = new Chapter(id, $(this));
-            for (var attribute in instance.chapters[id].attributes) {
+            var chapter = new Chapter(id, $(this));
+            for (var attribute in chapter.attributes) {
                 instance.bindAttributeSave(
-                    instance.chapters[id].attributes[attribute]
+                    chapter.attributes[attribute]
                 );
             }
+            instance.chapters.push(chapter);
         });
 
         for (var i in this.chapters) {
@@ -72,7 +73,9 @@ AutodiagEntry.prototype = {
             var chapter = this.chapters[i].getElement();
             while (chapter.parents('.chapter[data-chapter]').length > 0) {
                 this.chapters[i].setParent(
-                    this.chapters[chapter.parents('.chapter[data-chapter]').data('chapter')]
+                    this.getChapterById(
+                        chapter.parents('.chapter[data-chapter]').data('chapter')
+                    )
                 );
                 chapter = chapter.parents('.chapter[data-chapter]');
             }
@@ -104,7 +107,7 @@ AutodiagEntry.prototype = {
 
     showChapter: function(id, scrollTo)
     {
-        var chapter = this.chapters[id];
+        var chapter = this.getChapterById(id);
         for (var i in this.chapters) {
             this.chapters[i].hide();
         }
@@ -158,6 +161,17 @@ AutodiagEntry.prototype = {
                 instance.notifyError(instance.options.attribute_save_error_msg)
             });
         }
+    },
+
+    getChapterById: function(chapterId)
+    {
+        for (var i in this.chapters) {
+            if (this.chapters[i].id === parseInt(chapterId)) {
+                return this.chapters[i];
+            }
+        }
+
+        return null;
     },
 
     notifyError: function(message)
