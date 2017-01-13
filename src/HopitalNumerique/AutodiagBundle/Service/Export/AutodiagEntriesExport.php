@@ -168,7 +168,8 @@ class AutodiagEntriesExport extends AbstractExport
     {
         fputcsv(
             $handle,
-            $data
+            $data,
+            ';'
         );
     }
 
