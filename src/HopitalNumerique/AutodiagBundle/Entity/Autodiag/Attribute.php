@@ -234,7 +234,7 @@ class Attribute
 
     public function getExtendedLabel()
     {
-        return sprintf('%s. %s', $this->code, $this->label);
+        return sprintf('%s. %s', $this->number, $this->label);
     }
 
     /**

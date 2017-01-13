@@ -95,7 +95,7 @@ class ResultItemBuilder
         $builder = $this->attributeBuilder->getBuilder($attribute['type']);
 
         $itemAttribute = new ItemAttribute(
-            sprintf('%s. %s', $attribute['code'], $attribute['attribute_label'])
+            sprintf('%s. %s', $attribute['number'], $attribute['attribute_label'])
         );
         $itemAttribute->attributeId = $attribute['attribute_id'];
         $itemAttribute->setColorationInversed($attribute['colorationInversed']);
