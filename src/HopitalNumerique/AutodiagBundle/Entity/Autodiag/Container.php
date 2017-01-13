@@ -42,6 +42,15 @@ abstract class Container
     private $code;
 
     /**
+     * Number
+     *
+     * @var string
+     *
+     * @ORM\Column(type="string", length=255)
+     */
+    private $number;
+
+    /**
      * Label
      *
      * @var string
@@ -118,6 +127,30 @@ abstract class Container
     public function setCode($code)
     {
         $this->code = $code;
+        return $this;
+    }
+
+    /**
+     * Get Number
+     *
+     * @return string
+     */
+    public function getNumber()
+    {
+        return $this->number;
+    }
+
+    /**
+     * Set Number
+     *
+     * @param string $number
+     *
+     * @return Container
+     */
+    public function setNumber($number)
+    {
+        $this->number = $number;
+
         return $this;
     }
 

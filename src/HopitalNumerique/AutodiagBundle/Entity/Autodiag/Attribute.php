@@ -35,6 +35,12 @@ class Attribute
     private $code;
 
     /**
+     * @var string
+     * @ORM\Column(type="string", length=255)
+     */
+    private $number;
+
+    /**
      * Text before question
      *
      * @var string
@@ -156,6 +162,26 @@ class Attribute
     public function setCode($code)
     {
         $this->code = $code;
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getNumber()
+    {
+        return $this->number;
+    }
+
+    /**
+     * @param string $number
+     *
+     * @return Attribute
+     */
+    public function setNumber($number)
+    {
+        $this->number = $number;
 
         return $this;
     }

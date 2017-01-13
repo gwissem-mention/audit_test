@@ -4,6 +4,7 @@ namespace HopitalNumerique\AutodiagBundle\Service\Import;
 use Doctrine\ORM\EntityManager;
 use HopitalNumerique\AutodiagBundle\Entity\Autodiag;
 use HopitalNumerique\AutodiagBundle\Entity\Autodiag\Container\Chapter;
+use HopitalNumerique\AutodiagBundle\Model\FileImport\ChapterColumnsDefinition;
 use Nodevo\Component\Import\Progress\ProgressAwareInterface;
 use Nodevo\Component\Import\Progress\ProgressAwareTrait;
 use Nodevo\Component\Import\Writer\WriterInterface;
@@ -28,9 +29,10 @@ class ChapterWriter implements WriterInterface, ProgressAwareInterface
     protected $importedChapterCodes = [];
 
     protected $mapping = [
-        'titre_avant' => 'title',
-        'texte_avant' => 'description',
-        'texte_apres' => 'additionalDescription',
+        ChapterColumnsDefinition::TITLE => 'title',
+        ChapterColumnsDefinition::DESCRIPTION => 'description',
+        ChapterColumnsDefinition::NUMBER => 'number',
+        ChapterColumnsDefinition::ADDITIONAL_DESCRIPTION => 'additionalDescription',
     ];
 
     public function __construct(EntityManager $manager, Autodiag $autodiag, ValidatorInterface $validator)
@@ -50,8 +52,8 @@ class ChapterWriter implements WriterInterface, ProgressAwareInterface
         if ($this->validate($item)) {
             $parentChapter = null;
 
-            if (isset($item['code_chapitre_enfant'])) {
-                if (!isset($item['code_chapitre'])) {
+            if (isset($item[ChapterColumnsDefinition::CHILD_CODE])) {
+                if (!isset($item[ChapterColumnsDefinition::CODE])) {
                     $this->progress->addMessage(
                         'ad.import.chapter.missing_parent_code',
                         null,
@@ -60,12 +62,12 @@ class ChapterWriter implements WriterInterface, ProgressAwareInterface
                     );
                     return;
                 }
-                $parentCode = (string)$item['code_chapitre'];
-                $chapterCode = (string)$item['code_chapitre_enfant'];
+                $parentCode = (string)$item[ChapterColumnsDefinition::CODE];
+                $chapterCode = (string)$item[ChapterColumnsDefinition::CHILD_CODE];
 
                 $parentChapter = $this->getChapter($parentCode);
             } else {
-                $chapterCode = (string)$item['code_chapitre'];
+                $chapterCode = (string)$item[ChapterColumnsDefinition::CODE];
             }
 
             if (array_key_exists($chapterCode, $this->importedChapterCodes)) {
@@ -89,13 +91,13 @@ class ChapterWriter implements WriterInterface, ProgressAwareInterface
 
             if ($parentChapter) {
                 $chapter->setParent($parentChapter);
-                $chapter->setLabel($item['libelle_chapitre_enfant']);
+                $chapter->setLabel($item[ChapterColumnsDefinition::CHILD_LABEL]);
             } else {
                 $chapter->setParent();
-                $chapter->setLabel($item['libelle_chapitre']);
+                $chapter->setLabel($item[ChapterColumnsDefinition::LABEL]);
             }
 
-            $chapter->setOrder($item['ordre_chapitre']);
+            $chapter->setOrder($item[ChapterColumnsDefinition::ORDER]);
 
             $this->handleActionPlan($chapter, $item);
 
@@ -181,7 +183,7 @@ class ChapterWriter implements WriterInterface, ProgressAwareInterface
 
     protected function handleActionPlan(Chapter $chapter, $item)
     {
-        $actions = null === $item['plan_action'] ? [] : preg_split("/\\r\\n|\\r|\\n/", $item['plan_action']);
+        $actions = null === $item[ChapterColumnsDefinition::ACTION_PLAN] ? [] : preg_split("/\\r\\n|\\r|\\n/", $item[ChapterColumnsDefinition::ACTION_PLAN]);
         array_walk($actions, function (&$element) {
             $element = explode("::", $element);
         });
@@ -251,17 +253,9 @@ class ChapterWriter implements WriterInterface, ProgressAwareInterface
     protected function validate($item)
     {
         return
-            count($item) === 9
-            && count(array_intersect_key($item, [
-                'code_chapitre' => true,
-                'code_chapitre_enfant' => true,
-                'libelle_chapitre' => true,
-                'libelle_chapitre_enfant' => true,
-                'titre_avant' => true,
-                'texte_avant' => true,
-                'texte_apres' => true,
-                'plan_action' => true,
-                'ordre_chapitre' => true,
-            ])) === 9;
+            count($item) === count(ChapterColumnsDefinition::getColumns())
+            && count(
+                array_intersect_key(array_keys($item), ChapterColumnsDefinition::getColumns())
+            ) === count(ChapterColumnsDefinition::getColumns());
     }
 }

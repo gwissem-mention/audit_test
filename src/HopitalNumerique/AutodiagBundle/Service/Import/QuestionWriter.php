@@ -5,6 +5,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\EntityManager;
 use HopitalNumerique\AutodiagBundle\Entity\Autodiag;
 use HopitalNumerique\AutodiagBundle\Entity\Autodiag\Attribute;
+use HopitalNumerique\AutodiagBundle\Model\FileImport\AttributeColumnsDefinition;
 use HopitalNumerique\AutodiagBundle\Service\Attribute\AttributeBuilderProvider;
 use Nodevo\Component\Import\Progress\ProgressAwareInterface;
 use Nodevo\Component\Import\Progress\ProgressAwareTrait;
@@ -15,19 +16,6 @@ use Symfony\Component\Validator\Validator\ValidatorInterface;
 class QuestionWriter implements WriterInterface, ProgressAwareInterface
 {
     use ProgressAwareTrait;
-
-    const COLUMN_CODE = "code_question";
-    const COLUMN_OPTIONS = "items_reponse";
-    const COLUMN_CHAPTER = "code_chapitre";
-    const COLUMN_CHAPTER_WEIGHT = "ponderation_chapitre";
-    const COLUMN_CATEGORIES = "ponderation_categories";
-    const COLUMN_TYPE = "format_reponse";
-    const COLUMN_COLORED = "colorer_reponse";
-    const COLUMN_ATTRIBUTE_LABEL = "libelle_question";
-    const COLUMN_ATTRIBUTE_DESCRIPTION = "texte_avant";
-    const COLUMN_ATTRIBUTE_ORDER = "ordre_question";
-    const COLUMN_ATTRIBUTE_TOOLTIP = "infobulle_question";
-
 
     /** @var EntityManager */
     protected $manager;
@@ -54,10 +42,11 @@ class QuestionWriter implements WriterInterface, ProgressAwareInterface
     protected $actionPlans = [];
 
     protected $mapping = [
-        self::COLUMN_ATTRIBUTE_DESCRIPTION => 'description',
-        self::COLUMN_ATTRIBUTE_LABEL => 'label',
-        self::COLUMN_TYPE => 'type',
-        self::COLUMN_ATTRIBUTE_TOOLTIP => 'tooltip',
+        AttributeColumnsDefinition::DESCRIPTION => 'description',
+        AttributeColumnsDefinition::LABEL => 'label',
+        AttributeColumnsDefinition::TYPE => 'type',
+        AttributeColumnsDefinition::TOOLTIP => 'tooltip',
+        AttributeColumnsDefinition::NUMBER => 'number',
     ];
 
     public function __construct(EntityManager $manager, Autodiag $autodiag, AttributeBuilderProvider $attributesProvider, ValidatorInterface $validator)
@@ -81,12 +70,12 @@ class QuestionWriter implements WriterInterface, ProgressAwareInterface
         $this->actionPlans = [];
 
         if ($this->validateRow($item)) {
-            $attribute = $this->getAttribute($item[self::COLUMN_CODE]);
+            $attribute = $this->getAttribute($item[AttributeColumnsDefinition::CODE]);
 
             if (isset($this->attributes[$attribute->getCode()])) {
                 $this->progress->addMessage(
                     '',
-                    $attribute->getCode(),
+                    $attribute->getCode() ?: '',
                     'attribute_exists'
                 );
                 return;
@@ -100,21 +89,21 @@ class QuestionWriter implements WriterInterface, ProgressAwareInterface
                 }
             }
 
-            if ($item[self::COLUMN_COLORED] == "1") {
+            if ($item[AttributeColumnsDefinition::COLORED] == "1") {
                 $attribute->setColored(true);
                 $attribute->setColorationInversed(false);
-            } elseif ($item[self::COLUMN_COLORED] == "-1") {
+            } elseif ($item[AttributeColumnsDefinition::COLORED] == "-1") {
                 $attribute->setColored(true);
                 $attribute->setColorationInversed(true);
             } else {
                 $attribute->setColored(false);
             }
 
-            $attribute->setOrder($item[self::COLUMN_ATTRIBUTE_ORDER]);
+            $attribute->setOrder($item[AttributeColumnsDefinition::ORDER]);
 
-            $this->handleOptions($attribute, $item[self::COLUMN_OPTIONS]);
-            $chapterValid = $this->handleChapter($attribute, $item[self::COLUMN_CHAPTER], $item[self::COLUMN_CHAPTER_WEIGHT]);
-            $this->handleCategories($attribute, $item[self::COLUMN_CATEGORIES]);
+            $this->handleOptions($attribute, $item[AttributeColumnsDefinition::OPTIONS]);
+            $chapterValid = $this->handleChapter($attribute, $item[AttributeColumnsDefinition::CHAPTER], $item[AttributeColumnsDefinition::CHAPTER_WEIGHT]);
+            $this->handleCategories($attribute, $item[AttributeColumnsDefinition::CATEGORY_WEIGHT]);
 
             $this->manager->persist($attribute);
 
@@ -506,31 +495,21 @@ class QuestionWriter implements WriterInterface, ProgressAwareInterface
     protected function validateRow($item)
     {
         return
-            count($item) === 11
-            && count(array_intersect_key($item, [
-                self::COLUMN_CODE => true,
-                self::COLUMN_ATTRIBUTE_ORDER => true,
-                self::COLUMN_CHAPTER => true,
-                self::COLUMN_ATTRIBUTE_DESCRIPTION => true,
-                self::COLUMN_ATTRIBUTE_LABEL => true,
-                self::COLUMN_TYPE => true,
-                self::COLUMN_OPTIONS => true,
-                self::COLUMN_COLORED => true,
-                self::COLUMN_ATTRIBUTE_TOOLTIP => true,
-                self::COLUMN_CATEGORIES => true,
-                self::COLUMN_CHAPTER_WEIGHT => true,
-            ])) === 11;
+            count($item) === count(AttributeColumnsDefinition::getColumns())
+            && count(
+                array_intersect_key(array_keys($item), AttributeColumnsDefinition::getColumns())
+            ) === count(AttributeColumnsDefinition::getColumns());
     }
     protected function validate($item)
     {
         // Valide le type
-        if (isset($item[self::COLUMN_TYPE]) && !in_array($item[self::COLUMN_TYPE], $this->attributeTypesAvailable)) {
+        if (isset($item[AttributeColumnsDefinition::TYPE]) && !in_array($item[AttributeColumnsDefinition::TYPE], $this->attributeTypesAvailable)) {
             $this->progress->addMessage('', $item, 'attribute_type');
             return false;
         }
 
-        if (isset($item[self::COLUMN_COLORED]) && !in_array($item[self::COLUMN_COLORED], ["1", "-1", "0"])) {
-            $this->progress->addMessage('', $item[self::COLUMN_COLORED] ?: '', 'attribute_colored');
+        if (isset($item[AttributeColumnsDefinition::COLORED]) && !in_array($item[AttributeColumnsDefinition::COLORED], ["1", "-1", "0"])) {
+            $this->progress->addMessage('', $item[AttributeColumnsDefinition::COLORED] ?: '', 'attribute_colored');
             return false;
         }
 

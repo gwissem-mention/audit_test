@@ -5,6 +5,8 @@ use HopitalNumerique\AutodiagBundle\Entity\Autodiag;
 use HopitalNumerique\AutodiagBundle\Entity\Autodiag\Container\Chapter;
 use HopitalNumerique\AutodiagBundle\Entity\Autodiag\Attribute;
 use HopitalNumerique\AutodiagBundle\Entity\Autodiag\Attribute\Weight;
+use HopitalNumerique\AutodiagBundle\Model\FileImport\AttributeColumnsDefinition;
+use HopitalNumerique\AutodiagBundle\Model\FileImport\ChapterColumnsDefinition;
 
 class SurveyExport extends AbstractExport
 {
@@ -38,34 +40,12 @@ class SurveyExport extends AbstractExport
 
     private function writeChapterHeaders(\PHPExcel_Worksheet $sheet)
     {
-        $this->addRow($sheet, [
-            'code_chapitre',
-            'ordre_chapitre',
-            'libelle_chapitre',
-            'code_chapitre_enfant',
-            'libelle_chapitre_enfant',
-            'titre_avant',
-            'texte_avant',
-            'texte_apres',
-            'plan_action',
-        ]);
+        $this->addRow($sheet, ChapterColumnsDefinition::getColumns());
     }
 
     private function writeQuestionsHeaders(\PHPExcel_Worksheet $sheet)
     {
-        $this->addRow($sheet, [
-            'code_question',
-            'ordre_question',
-            'code_chapitre',
-            'texte_avant',
-            'libelle_question',
-            'format_reponse',
-            'items_reponse',
-            'colorer_reponse',
-            'infobulle_question',
-            'ponderation_categories',
-            'ponderation_chapitre',
-        ]);
+        $this->addRow($sheet, AttributeColumnsDefinition::getColumns());
     }
 
     private function writeChapterRow(\PHPExcel_Worksheet $sheet, Autodiag\Container\Chapter $chapter)
@@ -86,6 +66,7 @@ class SurveyExport extends AbstractExport
             $chapterData[] = $chapter->getLabel();
         }
 
+        $chapterData[] = $chapter->getNumber();
         $chapterData[] = $chapter->getTitle();
         $chapterData[] = $chapter->getDescription();
         $chapterData[] = $chapter->getAdditionalDescription();
@@ -98,27 +79,28 @@ class SurveyExport extends AbstractExport
         $weights = $this->manager->getRepository(Attribute::class)->getAttributeContainersWeight($attribute);
 
         $data = [
-            'code_question' => $attribute->getCode(),
-            'ordre_question' => $attribute->getOrder(),
-            'text_avant' => $attribute->getDescription(),
-            'libelle_question' => $attribute->getLabel(),
-            'format_reponse' => $attribute->getType(),
-            'colorer_reponse' => $attribute->isColored() ? ($attribute->isColorationInversed() ? '-1' : '1') : '0',
-            'infobulle_question' => $attribute->getTooltip(),
+            AttributeColumnsDefinition::CODE => $attribute->getCode(),
+            AttributeColumnsDefinition::ORDER => $attribute->getOrder(),
+            AttributeColumnsDefinition::DESCRIPTION => $attribute->getDescription(),
+            AttributeColumnsDefinition::NUMBER => $attribute->getNumber(),
+            AttributeColumnsDefinition::LABEL => $attribute->getLabel(),
+            AttributeColumnsDefinition::TYPE => $attribute->getType(),
+            AttributeColumnsDefinition::COLORED => $attribute->isColored() ? ($attribute->isColorationInversed() ? '-1' : '1') : '0',
+            AttributeColumnsDefinition::TOOLTIP => $attribute->getTooltip(),
         ];
 
         $categoryData = [];
         foreach ($weights as $weight) {
             /** @var Weight $weight */
             if ($weight->getContainer() instanceof Autodiag\Container\Chapter) {
-                $data['code_chapitre'] = $weight->getContainer()->getCode();
-                $data['ponderation_chapitre'] = $weight->getWeight();
+                $data[AttributeColumnsDefinition::CHAPTER] = $weight->getContainer()->getCode();
+                $data[AttributeColumnsDefinition::CHAPTER_WEIGHT] = $weight->getWeight();
             } elseif ($weight->getContainer() instanceof Autodiag\Container\Category) {
                 $categoryData[] = [$weight->getContainer()->getCode(), $weight->getWeight()];
             }
         }
 
-        $data['poderation_categorie'] = implode("\n", array_map(function ($element) {
+        $data[AttributeColumnsDefinition::CATEGORY_WEIGHT] = implode("\n", array_map(function ($element) {
             return implode("::", $element);
         }, $categoryData));
 
@@ -127,17 +109,18 @@ class SurveyExport extends AbstractExport
         }, $attribute->getOptions()->toArray()));
 
         $this->addRow($sheet, [
-            $data['code_question'],
-            $data['ordre_question'],
-            array_key_exists('code_chapitre', $data) ? $data['code_chapitre'] : '',
-            $data['text_avant'],
-            $data['libelle_question'],
-            $data['format_reponse'],
+            $data[AttributeColumnsDefinition::CODE],
+            $data[AttributeColumnsDefinition::ORDER],
+            array_key_exists(AttributeColumnsDefinition::CHAPTER, $data) ? $data[AttributeColumnsDefinition::CHAPTER] : '',
+            $data[AttributeColumnsDefinition::DESCRIPTION],
+            $data[AttributeColumnsDefinition::NUMBER],
+            $data[AttributeColumnsDefinition::LABEL],
+            $data[AttributeColumnsDefinition::TYPE],
             $options,
-            $data['colorer_reponse'],
-            $data['infobulle_question'],
-            $data['poderation_categorie'],
-            array_key_exists('ponderation_chapitre', $data) ? $data['ponderation_chapitre'] : '',
+            $data[AttributeColumnsDefinition::COLORED],
+            $data[AttributeColumnsDefinition::TOOLTIP],
+            $data[AttributeColumnsDefinition::CATEGORY_WEIGHT],
+            array_key_exists(AttributeColumnsDefinition::CHAPTER_WEIGHT, $data) ? $data[AttributeColumnsDefinition::CHAPTER_WEIGHT] : '',
         ]);
     }
 }
