@@ -5,15 +5,15 @@ namespace HopitalNumerique\AutodiagBundle\Model\FileImport;
 final class ChapterColumnsDefinition
 {
     const CODE = 'code_chapitre';
-    const CHILD_CODE = 'code_chapitre_enfant';
+    const ORDER = 'ordre_chapitre';
     const LABEL = 'libelle_chapitre';
+    const CHILD_CODE = 'code_chapitre_enfant';
     const CHILD_LABEL = 'libelle_chapitre_enfant';
     const NUMBER = 'numero_chapitre';
     const TITLE = 'titre_avant';
     const DESCRIPTION = 'texte_avant';
     const ADDITIONAL_DESCRIPTION = 'texte_apres';
     const ACTION_PLAN = 'plan_action';
-    const ORDER = 'ordre_chapitre';
 
     /**
      * Get columns for import and export
