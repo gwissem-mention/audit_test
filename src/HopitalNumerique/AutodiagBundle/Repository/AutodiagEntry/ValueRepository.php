@@ -128,7 +128,7 @@ class ValueRepository extends EntityRepository
             ->select(
                 'val.id as value_id, val.value as value_value, val.comment as value_comment',
                 'entry.id as entry_id',
-                'attribute.id as attribute_id, attribute.code, attribute.label as attribute_label,
+                'attribute.id as attribute_id, attribute.code, attribute.number, attribute.label as attribute_label,
                     attribute.type, attribute.colored, attribute.colorationInversed',
                 'options.value as option_value, options.label as option_label',
                 'presets.preset',

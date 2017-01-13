@@ -35,6 +35,12 @@ class Attribute
     private $code;
 
     /**
+     * @var string
+     * @ORM\Column(type="string", length=255)
+     */
+    private $number;
+
+    /**
      * Text before question
      *
      * @var string
@@ -161,6 +167,26 @@ class Attribute
     }
 
     /**
+     * @return string
+     */
+    public function getNumber()
+    {
+        return $this->number;
+    }
+
+    /**
+     * @param string $number
+     *
+     * @return Attribute
+     */
+    public function setNumber($number)
+    {
+        $this->number = $number;
+
+        return $this;
+    }
+
+    /**
      * Get description
      *
      * @return string
@@ -208,7 +234,7 @@ class Attribute
 
     public function getExtendedLabel()
     {
-        return sprintf('%s. %s', $this->code, $this->label);
+        return sprintf('%s. %s', $this->number, $this->label);
     }
 
     /**

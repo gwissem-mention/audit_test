@@ -42,6 +42,15 @@ abstract class Container
     private $code;
 
     /**
+     * Number
+     *
+     * @var string
+     *
+     * @ORM\Column(type="string", length=255)
+     */
+    private $number;
+
+    /**
      * Label
      *
      * @var string
@@ -122,6 +131,30 @@ abstract class Container
     }
 
     /**
+     * Get Number
+     *
+     * @return string
+     */
+    public function getNumber()
+    {
+        return $this->number;
+    }
+
+    /**
+     * Set Number
+     *
+     * @param string $number
+     *
+     * @return Container
+     */
+    public function setNumber($number)
+    {
+        $this->number = $number;
+
+        return $this;
+    }
+
+    /**
      * Get label
      *
      * @return mixed
@@ -133,7 +166,7 @@ abstract class Container
 
     public function getExtendedLabel()
     {
-        return sprintf('%s. %s', $this->code, $this->label);
+        return sprintf('%s. %s', $this->number, $this->label);
     }
 
     /**

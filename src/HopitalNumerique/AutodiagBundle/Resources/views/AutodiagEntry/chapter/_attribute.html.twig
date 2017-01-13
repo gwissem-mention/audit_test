@@ -1,7 +1,6 @@
 <div class="attribute" data-attribute="{{ attribute.id }}" {% if attribute.colored %}data-mood{% endif %} {% if attribute.colorationInversed %}data-inverse-mood{% endif %}>
     {% if forms[attribute.id] is defined  %}
 
-
         <div class="row">
 
             {% if attribute.description is not null %}
