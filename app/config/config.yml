@@ -115,6 +115,7 @@ fos_user:
     registration:
         confirmation:
             enabled: true
+    user_default_route: hopital_numerique_homepage
 
 #KNP Menu Bundle
 knp_menu:
