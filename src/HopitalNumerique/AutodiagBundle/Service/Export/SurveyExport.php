@@ -63,7 +63,7 @@ class SurveyExport extends AbstractExport
         } else {
             $chapterData[] = $chapter->getParent()->getCode();
             $chapterData[] = $chapter->getOrder();
-            $chapterData[] = null;
+            $chapterData[] = $chapter->getParent()->getNumber();
             $chapterData[] = $chapter->getParent()->getLabel();
             $chapterData[] = $chapter->getCode();
             $chapterData[] = $chapter->getNumber();
@@ -114,9 +114,9 @@ class SurveyExport extends AbstractExport
         $this->addRow($sheet, [
             $data[AttributeColumnsDefinition::CODE],
             $data[AttributeColumnsDefinition::ORDER],
-            $data[AttributeColumnsDefinition::NUMBER],
             array_key_exists(AttributeColumnsDefinition::CHAPTER, $data) ? $data[AttributeColumnsDefinition::CHAPTER] : '',
             $data[AttributeColumnsDefinition::DESCRIPTION],
+            $data[AttributeColumnsDefinition::NUMBER],
             $data[AttributeColumnsDefinition::LABEL],
             $data[AttributeColumnsDefinition::TYPE],
             $options,
