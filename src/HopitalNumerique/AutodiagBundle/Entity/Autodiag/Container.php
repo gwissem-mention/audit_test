@@ -166,7 +166,7 @@ abstract class Container
 
     public function getExtendedLabel()
     {
-        if ("" === $this->number) {
+        if (null == $this->number) {
             return $this->label;
         } else {
             return sprintf('%s. %s', $this->number, $this->label);
