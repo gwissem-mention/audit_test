@@ -121,6 +121,7 @@ class SynthesisVoter extends Voter
      * Peut accéder en lecture si l'utilisateur possède la synthèse
      * ou si l'utilisateur a l'entry de la synthèse en session
      * ou si l'utilisateur est dans la liste de partages de la synthèse
+     * ou si l'utilisateur est admin
      *
      * @param Synthesis $synthesis
      * @param $user
@@ -128,6 +129,13 @@ class SynthesisVoter extends Voter
      */
     public function canRead(Synthesis $synthesis, $user)
     {
+        if ($user instanceof User) {
+            /** @var $user User */
+            if ($user->hasRoleAdmin() || $user->hasRoleAdminHn() || $user->hasRoleAdminDomaine() || $user->hasRoleAdminAutodiag()) {
+                return true;
+            }
+        }
+
         if ($synthesis->getUser() === $user
             || $this->autodiagEntrySession->has($synthesis->getEntries()->first())) {
             return true;
