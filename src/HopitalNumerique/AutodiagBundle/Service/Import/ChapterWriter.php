@@ -31,7 +31,6 @@ class ChapterWriter implements WriterInterface, ProgressAwareInterface
     protected $mapping = [
         ChapterColumnsDefinition::TITLE => 'title',
         ChapterColumnsDefinition::DESCRIPTION => 'description',
-        ChapterColumnsDefinition::NUMBER => 'number',
         ChapterColumnsDefinition::ADDITIONAL_DESCRIPTION => 'additionalDescription',
     ];
 
@@ -92,9 +91,11 @@ class ChapterWriter implements WriterInterface, ProgressAwareInterface
             if ($parentChapter) {
                 $chapter->setParent($parentChapter);
                 $chapter->setLabel($item[ChapterColumnsDefinition::CHILD_LABEL]);
+                $chapter->setNumber($item[ChapterColumnsDefinition::CHILD_NUMBER]);
             } else {
                 $chapter->setParent();
                 $chapter->setLabel($item[ChapterColumnsDefinition::LABEL]);
+                $chapter->setNumber($item[ChapterColumnsDefinition::NUMBER]);
             }
 
             $chapter->setOrder($item[ChapterColumnsDefinition::ORDER]);

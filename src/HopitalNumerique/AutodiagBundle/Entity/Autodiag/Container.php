@@ -46,7 +46,7 @@ abstract class Container
      *
      * @var string
      *
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(type="string", length=255, nullable=true)
      */
     private $number;
 
@@ -166,7 +166,11 @@ abstract class Container
 
     public function getExtendedLabel()
     {
-        return sprintf('%s. %s', $this->number, $this->label);
+        if ("" === $this->number) {
+            return $this->label;
+        } else {
+            return sprintf('%s. %s', $this->number, $this->label);
+        }
     }
 
     /**
