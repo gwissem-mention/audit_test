@@ -2605,6 +2605,7 @@ class User extends BaseUser
             return false;
         }
 
+
         $dateLimit = (new \DateTime('now'))->add(new \DateInterval('P45D'));
         $archive = 0;
 
@@ -2614,7 +2615,7 @@ class User extends BaseUser
 
             if (true === $contractualisation->getArchiver()) {
                 $archive++;
-            } elseif ($dateRenew <= $dateLimit) {
+            } elseif ($dateRenew <= $dateLimit && $dateRenew != null) {
                 return false;
             }
         }
