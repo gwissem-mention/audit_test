@@ -15,7 +15,7 @@
     .communaute-de-pratiques-bloc-user .action-fiche-user {float:right;}
     .communaute-de-pratiques-bloc-user .delete {margin: 0 0 0 2px; }
     .communaute-de-pratiques-bloc-user .actif  {margin: 0 0 0 2px; }
-    .communaute-de-pratiques-bloc-user .active-member  {margin: 0 0 0 2px; }
+    .communaute-de-pratiques-bloc-user .active-member  {margin: 0 0 0 2px; cursor: help; }
     .communaute-de-pratiques-bloc-user .active-member .yellow {color: #FFD700; }
     .communaute-de-pratiques-bloc-user .actif .green {color: #439943 }
     .communaute-de-pratiques-bloc-user .actif .orange {color: #FF9933 }
