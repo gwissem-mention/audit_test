@@ -90,9 +90,9 @@ ad:
         outofdate: L'autodiagnostic a été mis à jour par l'ANAP depuis votre dernière visite
 
     import:
-        success: Le fichier d'import à bien été traité.
+        success: Le fichier d'import a bien été traité.
         lines:
-            count: "{0}Aucune ligne n'a été importée|{1}%count% ligne à été importée|]1,Inf[%count% lignes ont été importées"
+            count: "{0}Aucune ligne n'a été importée|{1}%count% ligne a été importée|]1,Inf[%count% lignes ont été importées"
         chapter:
             updated: "{0}Aucun chapitre n'a été mis à jour|{1}%count% chapitre a été mis à jour|]1,Inf[%count% chapitres ont été mis à jour"
             missing_parent_code: Le code chapitre est manquant.
@@ -104,7 +104,7 @@ ad:
             incorrect_row_format: Format de ligne incorrect.
         errors:
             generic: Une erreur technique est survenue, veuillez réessayer ultérieurement.
-            count: "{0}Aucune erreur|{1}Une erreur à été trouvée|]1,Inf[%count% erreurs ont été trouvées"
+            count: "{0}Aucune erreur|{1}Une erreur a été trouvée|]1,Inf[%count% erreurs ont été trouvées"
         message:
             missing_parent_code: Codes chapitre parent manquant
             chapter_updated: Chapitres mis à jour
@@ -131,6 +131,7 @@ ad:
             chapter: Chapitre
             category: Catégorie
             attribute: Question
+            restitution: Restitution
 
     chapter:
         code: Code
@@ -165,7 +166,7 @@ ad:
         empty: Il n'y a pas encore de mode de restitution pour cet autodiagnostic.
         loggedout-warning: Attention, vous n'êtes pas connecté, vos résultats seront perdus à la fermeture du navigateur.
         loggedout-warning-validate: Pour pouvoir valider vos résultats vous devez vous connecter ou créer un compte.
-        synthesis: Synthèse des autodiagnistics suivants
+        synthesis: Synthèse des autodiagnostics suivants
         start_new: Commencer un nouvel autodiagnostic
         start_new: Commencer un nouvel autodiagnostic
         export_pdf: Télécharger mon résultat en PDF
