@@ -18,6 +18,13 @@ class ActiveMemberCalculator
     /** @var PostRepository $postRepository */
     protected $postRepository;
 
+    /**
+     * ActiveMemberCalculator constructor.
+     *
+     * @param CommentaireRepository $commentaireRepository
+     * @param NoteRepository        $noteRepository
+     * @param PostRepository        $postRepository
+     */
     public function __construct(
         CommentaireRepository $commentaireRepository,
         NoteRepository $noteRepository,
@@ -28,6 +35,11 @@ class ActiveMemberCalculator
         $this->postRepository = $postRepository;
     }
 
+    /**
+     * @param $users
+     *
+     * @return array
+     */
     public function getActiveMembers($users)
     {
         $activeMembers = [];
@@ -60,6 +72,12 @@ class ActiveMemberCalculator
         // Garde 1/5 des meilleurs scores
         $activeMembers = array_slice($activeMembers, -ceil(count($activeMembers) / 5));
 
-        return $activeMembers;
+        // Change la clé du tableau pour qu'elle corresponde à l'id de l'utilisateur
+        $activeMembersWithNewKey = [];
+        foreach ($activeMembers as $activeMember) {
+            $activeMembersWithNewKey[$activeMember['idUser']] = $activeMember;
+        }
+
+        return $activeMembersWithNewKey;
     }
 }

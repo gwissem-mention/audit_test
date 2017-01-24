@@ -53,6 +53,9 @@ class CommentaireRepository extends EntityRepository
         return $qb;
     }
 
+    /**
+     * @return array
+     */
     public function countGroupByUser()
     {
         $qb = $this->_em->createQueryBuilder();
@@ -60,7 +63,7 @@ class CommentaireRepository extends EntityRepository
         $qb->select('count(c) as nbComment, u.id as idUser')
             ->from('HopitalNumeriqueObjetBundle:Commentaire', 'c')
             ->join('c.user', 'u')
-            ->groupBy('u')
+            ->groupBy('u.id')
         ;
 
         $results = $qb->getQuery()->getResult();

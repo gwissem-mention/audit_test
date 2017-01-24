@@ -43,13 +43,16 @@ class PostRepository extends CCDNPostRepository
         return $dernierPost;
     }
 
+    /**
+     * @return array
+     */
     public function countGroupByUser()
     {
         $qb = $this->gateway->createSelectQuery();
 
         $qb->select('count(p.id) as nbPost, u.id as idUser')
             ->join('p.createdBy', 'u')
-            ->groupBy('u')
+            ->groupBy('u.id')
         ;
 
         $results = $qb->getQuery()->getResult();
