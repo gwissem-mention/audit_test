@@ -15,14 +15,16 @@ use HopitalNumerique\AutodiagBundle\Model\FileImport\Restitution;
 use HopitalNumerique\AutodiagBundle\Model\FileImport\Survey;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 
 class AutodiagController extends Controller
 {
     /**
      * Grid that list autodiag Models
      *
-     * @return \Symfony\Component\HttpFoundation\Response
+     * @return Response
      */
     public function listAction()
     {
@@ -31,6 +33,11 @@ class AutodiagController extends Controller
         return $grid->render('@HopitalNumeriqueAutodiag/Autodiag/list.html.twig');
     }
 
+    /**
+     * @param Request $request
+     *
+     * @return RedirectResponse|Response
+     */
     public function createAction(Request $request)
     {
         return $this->editAction($request, new Autodiag());
@@ -41,7 +48,8 @@ class AutodiagController extends Controller
      *
      * @param Request $request
      * @param Autodiag $autodiag
-     * @return \Symfony\Component\HttpFoundation\RedirectResponse|\Symfony\Component\HttpFoundation\Response
+     *
+     * @return RedirectResponse|Response
      */
     public function editAction(Request $request, Autodiag $autodiag)
     {
@@ -57,7 +65,7 @@ class AutodiagController extends Controller
 
         $form = $this->createForm(AutodiagUpdateType::class, $domain, [
             'user' => $this->getUser(),
-            'edit' => $autodiag->getId() !== null,
+            'edit' => false,
         ]);
 
         $form->handleRequest($request);
@@ -90,7 +98,8 @@ class AutodiagController extends Controller
      *
      * @param Request $request
      * @param Autodiag $autodiag
-     * @return \Symfony\Component\HttpFoundation\RedirectResponse|\Symfony\Component\HttpFoundation\Response
+     *
+     * @return RedirectResponse|Response
      * @throws \Exception
      */
     public function surveyEditAction(Request $request, Autodiag $autodiag)
@@ -134,7 +143,8 @@ class AutodiagController extends Controller
      * @param Autodiag $autodiag
      *
      * @ParamConverter()
-     * @return \Symfony\Component\HttpFoundation\RedirectResponse|\Symfony\Component\HttpFoundation\Response
+     *
+     * @return RedirectResponse|Response
      */
     public function algorithmEditAction(Request $request, Autodiag $autodiag)
     {
@@ -165,7 +175,7 @@ class AutodiagController extends Controller
      *
      * @ParamConverter("autodiag")
      *
-     * @return \Symfony\Component\HttpFoundation\RedirectResponse|\Symfony\Component\HttpFoundation\Response
+     * @return RedirectResponse|Response
      */
     public function restitutionEditAction(Request $request, Autodiag $autodiag)
     {
@@ -191,6 +201,11 @@ class AutodiagController extends Controller
         ]);
     }
 
+    /**
+     * @param Autodiag $autodiag
+     *
+     * @return Response
+     */
     public function autodiagEntriesAction(Autodiag $autodiag)
     {
         $grid = $this->get('autodiag.entries.grid');
@@ -201,6 +216,11 @@ class AutodiagController extends Controller
         ]);
     }
 
+    /**
+     * @param AutodiagEntry $entry
+     *
+     * @return Response
+     */
     public function autodiagEntryShowAction(AutodiagEntry $entry)
     {
         /** @var Synthesis $synthesis */
@@ -235,9 +255,10 @@ class AutodiagController extends Controller
         ]);
     }
 
-
     /**
      * Action appelée dans le plugin "Outil" pour tinymce
+     *
+     * @return Response
      */
     public function autodiagPluginsAction()
     {

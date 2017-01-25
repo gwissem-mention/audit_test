@@ -2,8 +2,18 @@
 
 namespace HopitalNumerique\UserBundle\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use FOS\UserBundle\Model\User as BaseUser;
+use HopitalNumerique\CommunautePratiqueBundle\Entity\Commentaire;
+use HopitalNumerique\CommunautePratiqueBundle\Entity\Document;
+use HopitalNumerique\CommunautePratiqueBundle\Entity\Fiche;
+use HopitalNumerique\CommunautePratiqueBundle\Entity\Groupe;
+use HopitalNumerique\DomaineBundle\Entity\Domaine;
+use HopitalNumerique\EtablissementBundle\Entity\Etablissement;
+use HopitalNumerique\QuestionnaireBundle\Entity\Occurrence;
+use HopitalNumerique\QuestionnaireBundle\Entity\Reponse;
 use Nodevo\RoleBundle\Entity\Role;
 use HopitalNumerique\ReferenceBundle\Entity\Reference;
 use HopitalNumerique\CommunautePratiqueBundle\Entity\Inscription;
@@ -507,7 +517,7 @@ class User extends BaseUser
     protected $reponses;
 
     /**
-     * @var \Doctrine\Common\Collections\ArrayCollection
+     * @var ArrayCollection
      *
      * @ORM\OneToMany(targetEntity="HopitalNumerique\QuestionnaireBundle\Entity\Occurrence", mappedBy="user")
      */
@@ -662,7 +672,7 @@ class User extends BaseUser
     private $communautePratiqueAnimateurGroupes;
 
     /**
-     * @var \Doctrine\Common\Collections\Collection
+     * @var Collection
      * @ORM\OneToMany(targetEntity="HopitalNumerique\CommunautePratiqueBundle\Entity\Inscription", mappedBy="user", cascade={"persist", "remove"})
      */
     private $groupeInscription;
@@ -687,7 +697,7 @@ class User extends BaseUser
     /* --> */
 
     /**
-     * @var \Doctrine\Common\Collections\Collection
+     * @var Collection
      *
      * @ORM\OneToMany(targetEntity="HopitalNumerique\ModuleBundle\Entity\Inscription", mappedBy="user")
      */
@@ -700,11 +710,11 @@ class User extends BaseUser
     {
         parent::__construct();
 
-        $this->objets = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->communautePratiqueGroupes = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->groupeInscription = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->communautePratiqueDocuments = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->communautePratiqueFiches = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->objets = new ArrayCollection();
+        $this->communautePratiqueGroupes = new ArrayCollection();
+        $this->groupeInscription = new ArrayCollection();
+        $this->communautePratiqueDocuments = new ArrayCollection();
+        $this->communautePratiqueFiches = new ArrayCollection();
         $this->username = '';
         $this->pseudonymeForum = '';
         $this->enabled = 1;
@@ -717,7 +727,7 @@ class User extends BaseUser
         $this->notficationRequete = true;
         $this->inscritCommunautePratique = false;
         $this->previousAdmin = false;
-        $this->typeActivite = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->typeActivite = new ArrayCollection();
     }
 
     public function getConfirmationToken()
@@ -886,7 +896,7 @@ class User extends BaseUser
     /**
      * Get region.
      *
-     * @return \HopitalNumerique\ReferenceBundle\Entity\Reference $region
+     * @return Reference $region
      */
     public function getRegion()
     {
@@ -896,11 +906,11 @@ class User extends BaseUser
     /**
      * Set region.
      *
-     * @param \HopitalNumerique\ReferenceBundle\Entity\Reference $region
+     * @param Reference $region
      */
     public function setRegion($region)
     {
-        if ($region instanceof \HopitalNumerique\ReferenceBundle\Entity\Reference) {
+        if ($region instanceof Reference) {
             $this->region = $region;
         } else {
             $this->region = null;
@@ -910,11 +920,11 @@ class User extends BaseUser
     /**
      * Add rattachementRegions.
      *
-     * @param \HopitalNumerique\ReferenceBundle\Entity\Reference $rattachementRegions
+     * @param Reference $rattachementRegions
      *
      * @return User
      */
-    public function addRattachementRegion(\HopitalNumerique\ReferenceBundle\Entity\Reference $rattachementRegions)
+    public function addRattachementRegion(Reference $rattachementRegions)
     {
         $this->rattachementRegions[] = $rattachementRegions;
 
@@ -924,9 +934,9 @@ class User extends BaseUser
     /**
      * Remove rattachementRegions.
      *
-     * @param \HopitalNumerique\ReferenceBundle\Entity\Reference $rattachementRegions
+     * @param Reference $rattachementRegions
      */
-    public function removeRattachementRegion(\HopitalNumerique\ReferenceBundle\Entity\Reference $rattachementRegions)
+    public function removeRattachementRegion(Reference $rattachementRegions)
     {
         $this->rattachementRegions->removeElement($rattachementRegions);
     }
@@ -934,7 +944,7 @@ class User extends BaseUser
     /**
      * Get rattachementRegions.
      *
-     * @return \Doctrine\Common\Collections\Collection
+     * @return Collection
      */
     public function getRattachementRegions()
     {
@@ -944,9 +954,11 @@ class User extends BaseUser
     /**
      * Has rattachementRegions ?
      *
-     * @param \HopitalNumerique\ReferenceBundle\Entity\Reference $rattachementRegion
+     * @param Reference $rattachementRegion
+     *
+     * @return bool
      */
-    public function hasRattachementRegion(\HopitalNumerique\ReferenceBundle\Entity\Reference $rattachementRegion)
+    public function hasRattachementRegion(Reference $rattachementRegion)
     {
         foreach ($this->rattachementRegions as $region) {
             if ($region->getId() === $rattachementRegion->getId()) {
@@ -1002,11 +1014,11 @@ class User extends BaseUser
     /**
      * Add domaine.
      *
-     * @param \HopitalNumerique\DomaineBundle\Entity\Domaine $domaine
+     * @param Domaine $domaine
      *
-     * @return Resultat
+     * @return User
      */
-    public function addDomaine(\HopitalNumerique\DomaineBundle\Entity\Domaine $domaine)
+    public function addDomaine(Domaine $domaine)
     {
         $this->domaines[] = $domaine;
 
@@ -1016,9 +1028,9 @@ class User extends BaseUser
     /**
      * Remove domaine.
      *
-     * @param \HopitalNumerique\DomaineBundle\Entity\Domaine $domaine
+     * @param Domaine $domaine
      */
-    public function removeDomaine(\HopitalNumerique\DomaineBundle\Entity\Domaine $domaine)
+    public function removeDomaine(Domaine $domaine)
     {
         $this->domaines->removeElement($domaine);
     }
@@ -1026,7 +1038,7 @@ class User extends BaseUser
     /**
      * Set domaines.
      *
-     * @param \Doctrine\Common\Collections\Collection $domaines
+     * @param Collection $domaines
      *
      * @return Domaine
      */
@@ -1040,7 +1052,7 @@ class User extends BaseUser
     /**
      * Get domaines.
      *
-     * @return \Doctrine\Common\Collections\Collection
+     * @return Collection
      */
     public function getDomaines()
     {
@@ -1050,11 +1062,11 @@ class User extends BaseUser
     /**
      * Retourne si l'utilisateur possède ce domaine.
      *
-     * @param \HopitalNumerique\DomaineBundle\Entity\Domaine $domaine Domaine
+     * @param Domaine $domaine Domaine
      *
      * @return bool Si domaine
      */
-    public function hasDomaine(\HopitalNumerique\DomaineBundle\Entity\Domaine $domaine)
+    public function hasDomaine(Domaine $domaine)
     {
         foreach ($this->domaines as $userDomaine) {
             if ($userDomaine->getId() === $domaine->getId()) {
@@ -1070,7 +1082,7 @@ class User extends BaseUser
     /**
      * Get département.
      *
-     * @return \HopitalNumerique\DomaineBundle\Entity\Domaine $departement
+     * @return Domaine $departement
      */
     public function getDepartement()
     {
@@ -1080,11 +1092,11 @@ class User extends BaseUser
     /**
      * Set département.
      *
-     * @param \HopitalNumerique\ReferenceBundle\Entity\Reference $departement
+     * @param Reference $departement
      */
     public function setDepartement($departement)
     {
-        if ($departement instanceof \HopitalNumerique\ReferenceBundle\Entity\Reference) {
+        if ($departement instanceof Reference) {
             $this->departement = $departement;
         } else {
             $this->departement = null;
@@ -1094,7 +1106,7 @@ class User extends BaseUser
     /**
      * Get etat.
      *
-     * @return \HopitalNumerique\ReferenceBundle\Entity\Reference $etat
+     * @return Reference $etat
      */
     public function getEtat()
     {
@@ -1104,11 +1116,11 @@ class User extends BaseUser
     /**
      * Set etat.
      *
-     * @param \HopitalNumerique\ReferenceBundle\Entity\Reference $etat
+     * @param Reference $etat
      */
     public function setEtat($etat)
     {
-        if ($etat instanceof \HopitalNumerique\ReferenceBundle\Entity\Reference) {
+        if ($etat instanceof Reference) {
             $this->etat = $etat;
         } else {
             $this->etat = null;
@@ -1118,7 +1130,7 @@ class User extends BaseUser
     /**
      * Get titre.
      *
-     * @return \HopitalNumerique\ReferenceBundle\Entity\Reference $titre
+     * @return Reference $titre
      */
     public function getTitre()
     {
@@ -1128,11 +1140,11 @@ class User extends BaseUser
     /**
      * Set titre.
      *
-     * @param \HopitalNumerique\ReferenceBundle\Entity\Reference $titre
+     * @param Reference $titre
      */
     public function setTitre($titre)
     {
-        if ($titre instanceof \HopitalNumerique\ReferenceBundle\Entity\Reference) {
+        if ($titre instanceof Reference) {
             $this->titre = $titre;
         } else {
             $this->titre = null;
@@ -1142,7 +1154,7 @@ class User extends BaseUser
     /**
      * Get civilite.
      *
-     * @return \HopitalNumerique\ReferenceBundle\Entity\Reference $civilite
+     * @return Reference $civilite
      */
     public function getCivilite()
     {
@@ -1152,11 +1164,11 @@ class User extends BaseUser
     /**
      * Set civilite.
      *
-     * @param \HopitalNumerique\ReferenceBundle\Entity\Reference $civilite
+     * @param Reference $civilite
      */
     public function setCivilite($civilite)
     {
-        if ($civilite instanceof \HopitalNumerique\ReferenceBundle\Entity\Reference) {
+        if ($civilite instanceof Reference) {
             $this->civilite = $civilite;
         } else {
             $this->civilite = null;
@@ -1227,10 +1239,12 @@ class User extends BaseUser
      * Set typeActivite.
      *
      * @param array <\HopitalNumerique\ReferenceBundle\Entity\Reference> $activiteTypes
+     *
+     * @return $this
      */
     public function setTypeActivites($activiteTypes)
     {
-        $this->typeActivite = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->typeActivite = new ArrayCollection();
 
         foreach ($activiteTypes as $activiteType) {
             $this->addTypeActivite($activiteType);
@@ -1242,11 +1256,11 @@ class User extends BaseUser
     /**
      * Set typeActivite.
      *
-     * @param \HopitalNumerique\ReferenceBundle\Entity\Reference $typeActivite
+     * @param Reference $typeActivite
      */
     public function setTypeActivite($typeActivite = null)
     {
-        if ($typeActivite instanceof \HopitalNumerique\ReferenceBundle\Entity\Reference) {
+        if ($typeActivite instanceof Reference) {
             $this->typeActivite = $typeActivite;
         } else {
             $this->typeActivite = null;
@@ -1256,7 +1270,9 @@ class User extends BaseUser
     /**
      * Add typeActivite.
      *
-     * @param \HopitalNumerique\ReferenceBundle\Entity\Reference $typeActivite
+     * @param Reference $typeActivite
+     *
+     * @return User
      */
     public function addTypeActivite(Reference $typeActivite)
     {
@@ -1268,7 +1284,7 @@ class User extends BaseUser
     /**
      * Get typeActivite.
      *
-     * @return \HopitalNumerique\ReferenceBundle\Entity\Reference $typeActivite
+     * @return Reference $typeActivite
      */
     public function getTypeActivite()
     {
@@ -1278,7 +1294,7 @@ class User extends BaseUser
     /**
      * Retourne si l'utilisateur possède tel type d'activité.
      *
-     * @param \HopitalNumerique\ReferenceBundle\Entity\Reference $activiteType Type d'activité
+     * @param Reference $activiteType Type d'activité
      *
      * @return bool Si possède
      */
@@ -1318,11 +1334,11 @@ class User extends BaseUser
     /**
      * Set statutEtablissementSante.
      *
-     * @param \HopitalNumerique\ReferenceBundle\Entity\Reference $statutEtablissementSante
+     * @param Reference $statutEtablissementSante
      */
     public function setStatutEtablissementSante($statutEtablissementSante)
     {
-        if ($statutEtablissementSante instanceof \HopitalNumerique\ReferenceBundle\Entity\Reference) {
+        if ($statutEtablissementSante instanceof Reference) {
             $this->statutEtablissementSante = $statutEtablissementSante;
         } else {
             $this->statutEtablissementSante = null;
@@ -1332,7 +1348,7 @@ class User extends BaseUser
     /**
      * Get statutEtablissementSante.
      *
-     * @return \HopitalNumerique\ReferenceBundle\Entity\Reference $statutEtablissementSante
+     * @return Reference $statutEtablissementSante
      */
     public function getStatutEtablissementSante()
     {
@@ -1368,7 +1384,7 @@ class User extends BaseUser
      */
     public function setEtablissementRattachementSante($etablissementRattachementSante)
     {
-        if ($etablissementRattachementSante instanceof \HopitalNumerique\EtablissementBundle\Entity\Etablissement) {
+        if ($etablissementRattachementSante instanceof Etablissement) {
             $this->etablissementRattachementSante = $etablissementRattachementSante;
         } else {
             $this->etablissementRattachementSante = null;
@@ -1435,11 +1451,11 @@ class User extends BaseUser
     /**
      * Set fonctionDansEtablissementSanteReferencement.
      *
-     * @param \HopitalNumerique\ReferenceBundle\Entity\Reference $fonctionDansEtablissementSanteReferencement
+     * @param Reference $fonctionDansEtablissementSanteReferencement
      */
     public function setFonctionDansEtablissementSanteReferencement($fonctionDansEtablissementSanteReferencement)
     {
-        if ($fonctionDansEtablissementSanteReferencement instanceof \HopitalNumerique\ReferenceBundle\Entity\Reference) {
+        if ($fonctionDansEtablissementSanteReferencement instanceof Reference) {
             $this->fonctionDansEtablissementSanteReferencement = $fonctionDansEtablissementSanteReferencement;
         } else {
             $this->fonctionDansEtablissementSanteReferencement = null;
@@ -1449,7 +1465,7 @@ class User extends BaseUser
     /**
      * Get fonctionDansEtablissementSanteReferencement.
      *
-     * @return \HopitalNumerique\ReferenceBundle\Entity\Reference $fonctionDansEtablissementSanteReferencement
+     * @return Reference $fonctionDansEtablissementSanteReferencement
      */
     public function getFonctionDansEtablissementSanteReferencement()
     {
@@ -1459,11 +1475,11 @@ class User extends BaseUser
     /**
      * Set profilEtablissementSante.
      *
-     * @param \HopitalNumerique\ReferenceBundle\Entity\Reference $profilEtablissementSante
+     * @param Reference $profilEtablissementSante
      */
     public function setProfilEtablissementSante($profilEtablissementSante)
     {
-        if ($profilEtablissementSante instanceof \HopitalNumerique\ReferenceBundle\Entity\Reference) {
+        if ($profilEtablissementSante instanceof Reference) {
             $this->profilEtablissementSante = $profilEtablissementSante;
         } else {
             $this->profilEtablissementSante = null;
@@ -1473,7 +1489,7 @@ class User extends BaseUser
     /**
      * Get profilEtablissementSante.
      *
-     * @return \HopitalNumerique\ReferenceBundle\Entity\Reference $profilEtablissementSante
+     * @return Reference $profilEtablissementSante
      */
     public function getProfilEtablissementSante()
     {
@@ -1623,11 +1639,11 @@ class User extends BaseUser
     /**
      * Add Contractualisation.
      *
-     * @param \HopitalNumerique\UserBundle\Entity\Contractualisation $contractualisations
+     * @param Contractualisation $contractualisations
      *
      * @return User
      */
-    public function addContractualisation(\HopitalNumerique\UserBundle\Entity\Contractualisation $contractualisations)
+    public function addContractualisation(Contractualisation $contractualisations)
     {
         $this->contractualisations[] = $contractualisations;
 
@@ -1637,9 +1653,9 @@ class User extends BaseUser
     /**
      * Remove Contractualisation.
      *
-     * @param \HopitalNumerique\UserBundle\Entity\Contractualisation $contractualisations
+     * @param Contractualisation $contractualisations
      */
-    public function removeContractualisation(\HopitalNumerique\UserBundle\Entity\Contractualisation $contractualisations)
+    public function removeContractualisation(Contractualisation $contractualisations)
     {
         $this->contractualisations->removeElement($contractualisations);
     }
@@ -1647,7 +1663,7 @@ class User extends BaseUser
     /**
      * Get contractualisations.
      *
-     * @return \Doctrine\Common\Collections\Collection
+     * @return Collection
      */
     public function getContractualisations()
     {
@@ -1657,7 +1673,7 @@ class User extends BaseUser
     /**
      * Get objets.
      *
-     * @return \Doctrine\Common\Collections\Collection
+     * @return Collection
      */
     public function getObjets()
     {
@@ -1669,11 +1685,11 @@ class User extends BaseUser
     /**
      * Add reponses.
      *
-     * @param \HopitalNumerique\QuestionnaireBundle\Entity\Reponse $reponses
+     * @param Reponse $reponses
      *
      * @return User
      */
-    public function addReponse(\HopitalNumerique\QuestionnaireBundle\Entity\Reponse $reponses)
+    public function addReponse(Reponse $reponses)
     {
         $this->reponses[] = $reponses;
 
@@ -1683,9 +1699,9 @@ class User extends BaseUser
     /**
      * Remove reponses.
      *
-     * @param \HopitalNumerique\QuestionnaireBundle\Entity\Reponse $reponses
+     * @param Reponse $reponses
      */
-    public function removeReponse(\HopitalNumerique\QuestionnaireBundle\Entity\Reponse $reponses)
+    public function removeReponse(Reponse $reponses)
     {
         $this->reponses->removeElement($reponses);
     }
@@ -1693,7 +1709,7 @@ class User extends BaseUser
     /**
      * Get reponses.
      *
-     * @return \Doctrine\Common\Collections\Collection
+     * @return Collection
      */
     public function getReponses()
     {
@@ -1703,11 +1719,11 @@ class User extends BaseUser
     /**
      * Add questionnaireOccurrences.
      *
-     * @param \HopitalNumerique\QuestionnaireBundle\Entity\Occurrence $questionnaireOccurrences
+     * @param Occurrence $questionnaireOccurrences
      *
      * @return User
      */
-    public function addQuestionnaireOccurrence(\HopitalNumerique\QuestionnaireBundle\Entity\Occurrence $questionnaireOccurrences)
+    public function addQuestionnaireOccurrence(Occurrence $questionnaireOccurrences)
     {
         $this->questionnaireOccurrences[] = $questionnaireOccurrences;
 
@@ -1717,9 +1733,9 @@ class User extends BaseUser
     /**
      * Remove questionnaireOccurrences.
      *
-     * @param \HopitalNumerique\QuestionnaireBundle\Entity\Occurrence $questionnaireOccurrences
+     * @param Occurrence $questionnaireOccurrences
      */
-    public function removeQuestionnaireOccurrence(\HopitalNumerique\QuestionnaireBundle\Entity\Occurrence $questionnaireOccurrences)
+    public function removeQuestionnaireOccurrence(Occurrence $questionnaireOccurrences)
     {
         $this->questionnaireOccurrences->removeElement($questionnaireOccurrences);
     }
@@ -1727,7 +1743,7 @@ class User extends BaseUser
     /**
      * Get questionnaireOccurrences.
      *
-     * @return \Doctrine\Common\Collections\Collection
+     * @return Collection
      */
     public function getQuestionnaireOccurrences()
     {
@@ -1844,11 +1860,11 @@ class User extends BaseUser
     /**
      * Add ConnaissancesAmbassadeur.
      *
-     * @param \HopitalNumerique\UserBundle\Entity\ConnaissanceAmbassadeur $contractualisations
+     * @param ConnaissanceAmbassadeur $contractualisations
      *
      * @return User
      */
-    public function addConnaissancesAmbassadeur(\HopitalNumerique\UserBundle\Entity\ConnaissanceAmbassadeur $connaissanceAmbassadeur)
+    public function addConnaissancesAmbassadeur(ConnaissanceAmbassadeur $connaissanceAmbassadeur)
     {
         $this->connaissancesAmbassadeurs[] = $connaissanceAmbassadeur;
 
@@ -1858,9 +1874,9 @@ class User extends BaseUser
     /**
      * Remove ConnaissancesAmbassadeur.
      *
-     * @param \HopitalNumerique\UserBundle\Entity\ConnaissanceAmbassadeur $connaissanceAmbassadeur
+     * @param ConnaissanceAmbassadeur $connaissanceAmbassadeur
      */
-    public function removeConnaissancesAmbassadeur(\HopitalNumerique\UserBundle\Entity\ConnaissanceAmbassadeur $connaissanceAmbassadeur)
+    public function removeConnaissancesAmbassadeur(ConnaissanceAmbassadeur $connaissanceAmbassadeur)
     {
         $this->connaissancesAmbassadeurs->removeElement($connaissanceAmbassadeur);
     }
@@ -1868,7 +1884,7 @@ class User extends BaseUser
     /**
      * Get connaissanceAmbassadeur.
      *
-     * @return \Doctrine\Common\Collections\Collection
+     * @return Collection
      */
     public function getConnaissancesAmbassadeurs()
     {
@@ -1900,7 +1916,7 @@ class User extends BaseUser
     /**
      * Get connaissancesAmbassadeursSI.
      *
-     * @return \Doctrine\Common\Collections\Collection
+     * @return Collection
      */
     public function getConnaissancesAmbassadeursSI()
     {
@@ -2009,6 +2025,8 @@ class User extends BaseUser
      * Set remarque.
      *
      * @param string $remarque
+     *
+     * @return User
      */
     public function setRemarque($remarque)
     {
@@ -2031,6 +2049,8 @@ class User extends BaseUser
      * Set biographie.
      *
      * @param string $biographie
+     *
+     * @return User
      */
     public function setBiographie($biographie)
     {
@@ -2042,7 +2062,7 @@ class User extends BaseUser
     /**
      * Get dateLastUpdate.
      *
-     * @return DateTime $dateLastUpdate
+     * @return \DateTime $dateLastUpdate
      */
     public function getDateLastUpdate()
     {
@@ -2053,6 +2073,8 @@ class User extends BaseUser
      * Set dateLastUpdate.
      *
      * @param DateTime $dateLastUpdate
+     *
+     * @return User
      */
     public function setDateLastUpdate($dateLastUpdate)
     {
@@ -2075,6 +2097,8 @@ class User extends BaseUser
      * Set dashboardFront.
      *
      * @param string $dashboardFront
+     *
+     * @return User
      */
     public function setDashboardFront($dashboardFront)
     {
@@ -2097,6 +2121,8 @@ class User extends BaseUser
      * Set dashboardBack.
      *
      * @param string $dashboardBack
+     *
+     * @return User
      */
     public function setDashboardBack($dashboardBack)
     {
@@ -2119,7 +2145,7 @@ class User extends BaseUser
      *
      * @param string $path
      *
-     * @return Contractualisation
+     * @return User
      */
     public function setPath($path)
     {
@@ -2262,11 +2288,11 @@ class User extends BaseUser
     /**
      * Add communautePratiqueGroupe.
      *
-     * @param \HopitalNumerique\CommunautePratiqueBundle\Entity\Groupe $communautePratiqueGroupe
+     * @param Groupe $communautePratiqueGroupe
      *
      * @return User
      */
-    public function addCommunautePratiqueAnimateurGroupe(\HopitalNumerique\CommunautePratiqueBundle\Entity\Groupe $communautePratiqueGroupe)
+    public function addCommunautePratiqueAnimateurGroupe(Groupe $communautePratiqueGroupe)
     {
         $this->addCommunautePratiqueAnimateurGroupeInscription(new Inscription($communautePratiqueGroupe, $this));
 
@@ -2276,11 +2302,11 @@ class User extends BaseUser
     /**
      * Add groupeInscription.
      *
-     * @param \HopitalNumerique\CommunautePratiqueBundle\Entity\Inscription $groupeInscription
+     * @param Inscription $groupeInscription
      *
      * @return User
      */
-    public function addCommunautePratiqueAnimateurGroupeInscription(\HopitalNumerique\CommunautePratiqueBundle\Entity\Inscription $groupeInscription)
+    public function addCommunautePratiqueAnimateurGroupeInscription(Inscription $groupeInscription)
     {
         $groupeInscription->getgroupe->addAnimateur($this);
         $this->communautePratiqueAnimateurGroupes[] = $groupeInscription->getGroupe();
@@ -2291,9 +2317,9 @@ class User extends BaseUser
     /**
      * Remove communautePratiqueGroupes.
      *
-     * @param \HopitalNumerique\CommunautePratiqueBundle\Entity\Groupe $communautePratiqueGroupes
+     * @param Groupe $communautePratiqueGroupes
      */
-    public function removeCommunautePratiqueAnimateurGroupe(\HopitalNumerique\CommunautePratiqueBundle\Entity\Groupe $communautePratiqueGroupes)
+    public function removeCommunautePratiqueAnimateurGroupe(Groupe $communautePratiqueGroupes)
     {
         $this->removeCommunautePratiqueAnimateurGroupeInscription(new Inscription($communautePratiqueGroupes, $this));
     }
@@ -2301,9 +2327,9 @@ class User extends BaseUser
     /**
      * Remove groupeInscription.
      *
-     * @param \HopitalNumerique\CommunautePratiqueBundle\Entity\Inscription $groupeInscription
+     * @param Inscription $groupeInscription
      */
-    public function removeCommunautePratiqueAnimateurGroupeInscription(\HopitalNumerique\CommunautePratiqueBundle\Entity\Inscription $groupeInscription)
+    public function removeCommunautePratiqueAnimateurGroupeInscription(Inscription $groupeInscription)
     {
         $this->communautePratiqueAnimateurGroupes->removeElement($groupeInscription->getGroupe());
         $groupeInscription->getGroupe()->removeAnimateur($this);
@@ -2312,7 +2338,7 @@ class User extends BaseUser
     /**
      * Get communautePratiqueGroupes.
      *
-     * @return \Doctrine\Common\Collections\Collection
+     * @return Collection
      */
     public function getCommunautePratiqueAnimateurGroupes()
     {
@@ -2322,11 +2348,11 @@ class User extends BaseUser
     /**
      * Add communautePratiqueGroupe.
      *
-     * @param \HopitalNumerique\CommunautePratiqueBundle\Entity\Groupe $communautePratiqueGroupe
+     * @param Groupe $communautePratiqueGroupe
      *
      * @return User
      */
-    public function addCommunautePratiqueGroupe(\HopitalNumerique\CommunautePratiqueBundle\Entity\Groupe $communautePratiqueGroupe)
+    public function addCommunautePratiqueGroupe(Groupe $communautePratiqueGroupe)
     {
         $this->addCommunautePratiqueGroupeInscription(new Inscription($communautePratiqueGroupe, $this));
 
@@ -2336,11 +2362,11 @@ class User extends BaseUser
     /**
      * Add groupeInscription.
      *
-     * @param \HopitalNumerique\CommunautePratiqueBundle\Entity\Inscription $groupeInscription
+     * @param Inscription $groupeInscription
      *
      * @return User
      */
-    public function addCommunautePratiqueGroupeInscription(\HopitalNumerique\CommunautePratiqueBundle\Entity\inscription $groupeInscription)
+    public function addCommunautePratiqueGroupeInscription(Inscription $groupeInscription)
     {
         $this->groupeInscription[] = $groupeInscription;
 
@@ -2350,11 +2376,11 @@ class User extends BaseUser
     /**
      * is Actif in groupe.
      *
-     * @param \HopitalNumerique\CommunautePratiqueBundle\Entity\Inscription $groupeInscription
+     * @param Inscription $groupeInscription
      *
      * @return User
      */
-    public function isActifInGroupe(\HopitalNumerique\CommunautePratiqueBundle\Entity\Groupe $groupe)
+    public function isActifInGroupe(Groupe $groupe)
     {
         return $this->isActifGroupeInscription(new Inscription($groupe, $this));
     }
@@ -2362,11 +2388,11 @@ class User extends BaseUser
     /**
      * is Actif in groupe.
      *
-     * @param \HopitalNumerique\CommunautePratiqueBundle\Entity\Inscription $groupeInscription
+     * @param Inscription $groupeInscription
      *
      * @return User
      */
-    public function isActifGroupeInscription(\HopitalNumerique\CommunautePratiqueBundle\Entity\inscription $groupeInscription)
+    public function isActifGroupeInscription(Inscription $groupeInscription)
     {
         foreach ($this->groupeInscription->getValues() as $inscrit) {
             if ($inscrit->getGroupe()->getId() == $groupeInscription->getGroupe()->getId()) {
@@ -2380,9 +2406,9 @@ class User extends BaseUser
     /**
      * Remove communautePratiqueGroupes.
      *
-     * @param \HopitalNumerique\CommunautePratiqueBundle\Entity\Groupe $communautePratiqueGroupes
+     * @param Groupe $communautePratiqueGroupes
      */
-    public function removeCommunautePratiqueGroupe(\HopitalNumerique\CommunautePratiqueBundle\Entity\Groupe $communautePratiqueGroupes)
+    public function removeCommunautePratiqueGroupe(Groupe $communautePratiqueGroupes)
     {
         $this->removeCommunautePratiqueGroupeInscription(new Inscription($communautePratiqueGroupes, $this));
     }
@@ -2390,9 +2416,9 @@ class User extends BaseUser
     /**
      * Remove groupeInscription.
      *
-     * @param \HopitalNumerique\CommunautePratiqueBundle\Entity\Inscription $groupeInscription
+     * @param Inscription $groupeInscription
      */
-    public function removeCommunautePratiqueGroupeInscription(\HopitalNumerique\CommunautePratiqueBundle\Entity\Inscription $groupeInscription)
+    public function removeCommunautePratiqueGroupeInscription(Inscription $groupeInscription)
     {
         $this->groupeInscription->removeElement($groupeInscription);
         $groupeInscription->getGroupe()->removeUser($this);
@@ -2401,11 +2427,11 @@ class User extends BaseUser
     /**
      * Has communautePratiqueGroupe ?
      *
-     * @param \HopitalNumerique\CommunautePratiqueBundle\Entity\Groupe $communautePratiqueGroupe
+     * @param Groupe $communautePratiqueGroupe
      *
      * @return bool
      */
-    public function hasCommunautePratiqueGroupe(\HopitalNumerique\CommunautePratiqueBundle\Entity\Groupe $communautePratiqueGroupe)
+    public function hasCommunautePratiqueGroupe(Groupe $communautePratiqueGroupe)
     {
         return $this->hasCommunautePratiqueGroupeInscription(new Inscription($communautePratiqueGroupe, $this));
     }
@@ -2413,11 +2439,11 @@ class User extends BaseUser
     /**
      * Has $groupeInscription ?
      *
-     * @param \HopitalNumerique\CommunautePratiqueBundle\Entity\Inscription $groupeInscription
+     * @param Inscription $groupeInscription
      *
      * @return bool
      */
-    public function hasCommunautePratiqueGroupeInscription(\HopitalNumerique\CommunautePratiqueBundle\Entity\Inscription $groupeInscription)
+    public function hasCommunautePratiqueGroupeInscription(Inscription $groupeInscription)
     {
         foreach ($this->groupeInscription->getValues() as $inscrit) {
             if ($inscrit->getGroupe()->getId() == $groupeInscription->getGroupe()->getId()) {
@@ -2431,7 +2457,7 @@ class User extends BaseUser
     /**
      * Get communautePratiqueGroupes.
      *
-     * @return \Doctrine\Common\Collections\Collection
+     * @return Collection
      */
     public function getCommunautePratiqueGroupes()
     {
@@ -2445,7 +2471,7 @@ class User extends BaseUser
     /**
      * Get groupeInscription.
      *
-     * @return \Doctrine\Common\Collections\Collection
+     * @return Collection
      */
     public function getGroupeInscription()
     {
@@ -2455,11 +2481,11 @@ class User extends BaseUser
     /**
      * Add communautePratiqueDocument.
      *
-     * @param \HopitalNumerique\CommunautePratiqueBundle\Entity\Document $communautePratiqueDocument
+     * @param Document $communautePratiqueDocument
      *
      * @return User
      */
-    public function addCommunautePratiqueDocument(\HopitalNumerique\CommunautePratiqueBundle\Entity\Document $communautePratiqueDocument)
+    public function addCommunautePratiqueDocument(Document $communautePratiqueDocument)
     {
         $this->communautePratiqueDocuments[] = $communautePratiqueDocument;
 
@@ -2469,9 +2495,9 @@ class User extends BaseUser
     /**
      * Remove communautePratiqueDocuments.
      *
-     * @param \HopitalNumerique\CommunautePratiqueBundle\Entity\Document $communautePratiqueDocument
+     * @param Document $communautePratiqueDocument
      */
-    public function removeCommunautePratiqueDocument(\HopitalNumerique\CommunautePratiqueBundle\Entity\Document $communautePratiqueDocument)
+    public function removeCommunautePratiqueDocument(Document $communautePratiqueDocument)
     {
         $this->communautePratiqueDocuments->removeElement($communautePratiqueDocument);
     }
@@ -2479,7 +2505,7 @@ class User extends BaseUser
     /**
      * Get communautePratiqueDocuments.
      *
-     * @return \Doctrine\Common\Collections\Collection
+     * @return Collection
      */
     public function getCommunautePratiqueDocuments()
     {
@@ -2489,11 +2515,11 @@ class User extends BaseUser
     /**
      * Add communautePratiqueFiche.
      *
-     * @param \HopitalNumerique\CommunautePratiqueBundle\Entity\Fiche $communautePratiqueFiche
+     * @param Fiche $communautePratiqueFiche
      *
      * @return User
      */
-    public function addCommunautePratiqueFiche(\HopitalNumerique\CommunautePratiqueBundle\Entity\Fiche $communautePratiqueFiche)
+    public function addCommunautePratiqueFiche(Fiche $communautePratiqueFiche)
     {
         $this->communautePratiqueFiches[] = $communautePratiqueFiche;
 
@@ -2503,9 +2529,9 @@ class User extends BaseUser
     /**
      * Remove communautePratiqueFiches.
      *
-     * @param \HopitalNumerique\CommunautePratiqueBundle\Entity\Fiche $communautePratiqueFiche
+     * @param Fiche $communautePratiqueFiche
      */
-    public function removeCommunautePratiqueFiche(\HopitalNumerique\CommunautePratiqueBundle\Entity\Fiche $communautePratiqueFiche)
+    public function removeCommunautePratiqueFiche(Fiche $communautePratiqueFiche)
     {
         $this->communautePratiqueFiches->removeElement($communautePratiqueFiche);
     }
@@ -2513,7 +2539,7 @@ class User extends BaseUser
     /**
      * Get communautePratiqueFiches.
      *
-     * @return \Doctrine\Common\Collections\Collection
+     * @return Collection
      */
     public function getCommunautePratiqueFiches()
     {
@@ -2523,11 +2549,11 @@ class User extends BaseUser
     /**
      * Add communautePratiqueCommentaire.
      *
-     * @param \HopitalNumerique\CommunautePratiqueBundle\Entity\Commentaire $communautePratiqueCommentaire
+     * @param Commentaire $communautePratiqueCommentaire
      *
      * @return User
      */
-    public function addCommunautePratiqueCommentaire(\HopitalNumerique\CommunautePratiqueBundle\Entity\Commentaire $communautePratiqueCommentaire)
+    public function addCommunautePratiqueCommentaire(Commentaire $communautePratiqueCommentaire)
     {
         $this->communautePratiqueCommentaires[] = $communautePratiqueCommentaire;
 
@@ -2537,9 +2563,9 @@ class User extends BaseUser
     /**
      * Remove communautePratiqueCommentaires.
      *
-     * @param \HopitalNumerique\CommunautePratiqueBundle\Entity\Commentaire $communautePratiqueCommentaire
+     * @param Commentaire $communautePratiqueCommentaire
      */
-    public function removeCommunautePratiqueCommentaire(\HopitalNumerique\CommunautePratiqueBundle\Entity\Commentaire $communautePratiqueCommentaire)
+    public function removeCommunautePratiqueCommentaire(Commentaire $communautePratiqueCommentaire)
     {
         $this->communautePratiqueCommentaires->removeElement($communautePratiqueCommentaire);
     }
@@ -2547,7 +2573,7 @@ class User extends BaseUser
     /**
      * Get communautePratiqueCommentaires.
      *
-     * @return \Doctrine\Common\Collections\Collection
+     * @return Collection
      */
     public function getCommunautePratiqueCommentaires()
     {
@@ -2614,7 +2640,7 @@ class User extends BaseUser
 
             if (true === $contractualisation->getArchiver()) {
                 $archive++;
-            } elseif ($dateRenew <= $dateLimit) {
+            } elseif ($dateRenew <= $dateLimit && $dateRenew != null) {
                 return false;
             }
         }

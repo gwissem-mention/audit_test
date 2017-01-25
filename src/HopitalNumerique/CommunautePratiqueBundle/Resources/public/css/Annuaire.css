@@ -15,6 +15,8 @@
     .communaute-de-pratiques-bloc-user .action-fiche-user {float:right;}
     .communaute-de-pratiques-bloc-user .delete {margin: 0 0 0 2px; }
     .communaute-de-pratiques-bloc-user .actif  {margin: 0 0 0 2px; }
+    .communaute-de-pratiques-bloc-user .active-member  {margin: 0 0 0 2px; cursor: help; }
+    .communaute-de-pratiques-bloc-user .active-member .yellow {color: #FFD700; }
     .communaute-de-pratiques-bloc-user .actif .green {color: #439943 }
     .communaute-de-pratiques-bloc-user .actif .orange {color: #FF9933 }
     .communaute-de-pratiques-bloc-user .identite { height:65px;overflow: hidden; }
@@ -41,25 +43,13 @@
     .communaute-de-pratiques-user-add .column { line-height: 30px;padding: 7px 0; }
 
 /* Tooltip de l'annuaire */
-.groupeContent {
-    text-align: left;
-    width: 400px;
-}
+.groupeContent { text-align: left; width: 400px; }
 
-.tooltip-inner {
-    max-width: 400px;
-}
+.tooltip-inner { min-width: 300px; padding: 10px; }
 
-.infobulle {
-  margin-top:5px;
-  padding: 4px;
-  cursor: help;
-}
+.infobulle { margin-top:5px; padding: 4px; cursor: help; }
 
-.resultats-nombre {
-	float:right;
-	margin-top:7px;
-}
+.resultats-nombre { float:right; margin-top:7px; }
 
 .communaute-de-pratiques-bloc-user .contact {font-size:10px; margin-bottom:5px;}
 .communaute-de-pratiques-bloc-user .ambassadeur-expert {font-size:10px; margin-bottom:5px;}

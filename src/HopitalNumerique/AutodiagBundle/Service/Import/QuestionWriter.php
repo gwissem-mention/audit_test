@@ -303,7 +303,6 @@ class QuestionWriter implements WriterInterface, ProgressAwareInterface
             $this->actionPlans[] = $object;
             return true;
         } elseif (count($data) > 2) {
-
             if (count($data) !== 6) {
                 $this->progress->addMessage('', implode(' - ', $data), 'attribute_actionplan_invalid');
                 return false;
@@ -383,7 +382,6 @@ class QuestionWriter implements WriterInterface, ProgressAwareInterface
         $categoriesData = $this->parseMultiline($data);
 
         foreach ($categoriesData as $categoryData) {
-
             if (count($categoryData) !== 2) {
                 $this->progress->addMessage(
                     '',

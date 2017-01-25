@@ -91,6 +91,9 @@ class NoteRepository extends EntityRepository
         return $qb;
     }
 
+    /**
+     * @return array
+     */
     public function countGroupByUser()
     {
         $qb = $this->_em->createQueryBuilder();
@@ -98,7 +101,7 @@ class NoteRepository extends EntityRepository
         $qb->select('count(n) as nbNote, u.id as idUser')
             ->from('HopitalNumeriqueObjetBundle:Note', 'n')
             ->join('n.user', 'u')
-            ->groupBy('u')
+            ->groupBy('u.id')
         ;
 
         $results = $qb->getQuery()->getResult();

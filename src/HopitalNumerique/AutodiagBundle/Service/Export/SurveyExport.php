@@ -55,18 +55,21 @@ class SurveyExport extends AbstractExport
         if (null === $chapter->getParent()) {
             $chapterData[] = $chapter->getCode();
             $chapterData[] = $chapter->getOrder();
+            $chapterData[] = $chapter->getNumber();
             $chapterData[] = $chapter->getLabel();
+            $chapterData[] = null;
             $chapterData[] = null;
             $chapterData[] = null;
         } else {
             $chapterData[] = $chapter->getParent()->getCode();
             $chapterData[] = $chapter->getOrder();
+            $chapterData[] = $chapter->getParent()->getNumber();
             $chapterData[] = $chapter->getParent()->getLabel();
             $chapterData[] = $chapter->getCode();
+            $chapterData[] = $chapter->getNumber();
             $chapterData[] = $chapter->getLabel();
         }
 
-        $chapterData[] = $chapter->getNumber();
         $chapterData[] = $chapter->getTitle();
         $chapterData[] = $chapter->getDescription();
         $chapterData[] = $chapter->getAdditionalDescription();

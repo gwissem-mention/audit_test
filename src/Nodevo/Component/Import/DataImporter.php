@@ -80,7 +80,6 @@ class DataImporter
         }
 
         foreach ($iterator as $key => $data) {
-
             $this->progress->setCurrentIndex($key);
             $this->progress->setCurrentItem($data);
 
@@ -99,5 +98,4 @@ class DataImporter
 
         return $this->progress;
     }
-
 }

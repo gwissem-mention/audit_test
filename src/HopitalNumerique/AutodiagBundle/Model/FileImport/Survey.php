@@ -32,7 +32,7 @@ class Survey extends AutodiagFileImport
             $context->buildViolation('ad.autodiag.import.survey.sheet_not_found.chapters')
                 ->addViolation();
         } else {
-            $headers = $sheet->rangeToArray('A1:J1');
+            $headers = $sheet->rangeToArray('A1:K1');
             $headers = $headers[0];
 
             $columnsCount = count(ChapterColumnsDefinition::getColumns());

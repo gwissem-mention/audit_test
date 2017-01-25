@@ -156,6 +156,7 @@ class SynthesisRepository extends EntityRepository
             ->leftJoin('synthesis.shares', 'shares')
             ->leftJoin('synthesis.entries', 'entries')
             ->where('synthesis.autodiag = :autodiag')
+            ->andWhere('synthesis.createdFrom IS NULL')
             ->setParameters([
                 'autodiag' => $autodiag->getId()
             ])

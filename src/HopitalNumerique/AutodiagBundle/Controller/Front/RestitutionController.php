@@ -20,6 +20,7 @@ class RestitutionController extends Controller
         $autodiag = $synthesis->getAutodiag();
         $restitution = $this->get('autodiag.repository.restitution')->getForAutodiag($autodiag);
 
+
         if (null === $restitution || null == $autodiag->getAlgorithm()) {
             return $this->render('HopitalNumeriqueAutodiagBundle:Restitution:empty.html.twig', [
                 'synthesis' => $synthesis,
@@ -64,11 +65,11 @@ class RestitutionController extends Controller
 
     public function exportItemAction(Synthesis $synthesis, Item $restitutionItem, $type)
     {
-       if (!$this->isGranted('read', $synthesis)) {
+        if (!$this->isGranted('read', $synthesis)) {
             $this->addFlash('danger', $this->get('translator')->trans('ad.synthesis.restitution.forbidden'));
 
             return $this->redirectToRoute('hopitalnumerique_autodiag_entry_add', [
-                'autodiag' => $synthesis->getAutodiag()->getId()
+                'autodiag' => $synthesis->getAutodiag()->getId(),
             ]);
         }
 

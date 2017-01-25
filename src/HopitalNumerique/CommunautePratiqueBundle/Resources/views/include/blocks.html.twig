@@ -315,40 +315,43 @@
  #}
 {% macro display_bloc_membre(user, groupe, canDeleteMembre, groupesTermines, groupesNonDemarres, groupesEnCours, activeMembers) %}
         <div class="communaute-de-pratiques-bloc-user">
-            {% if canDeleteMembre %}
+            {% if canDeleteMembre or activeMembers[user.id] is defined %}
             <div class="action-fiche-user">
-                <div class="delete">
-                    <a onclick="CommunautePratique_User.desinscritGroupe({{ groupe.id }}, {{ user.id }});" title="Désinscrire l'utilisateur"><em class="fa fa-times-circle"></em></a>
-                </div>
-                {% if not groupe.hasAnimateur(user) and not user.hasRoleAdmin %}
-                    <div class="actif">
-                        {% if user.isActifInGroupe(groupe) %}
-                            <a onclick="CommunautePratique_User.ActiveInscriptionGroupe({{ groupe.id }}, {{ user.id }});" title="Cette personne est bien membre du groupe. Cliquez pour la sortir du groupe">
-                                <em class='fa fa-check-circle green'></em>
-                            </a>
-                        {% else %}
-                            <a onclick="CommunautePratique_User.ActiveInscriptionGroupe({{ groupe.id }}, {{ user.id }});" title="Cette personne n'est pas encore membre du groupe. Cliquez pour la faire entrer dans le groupe">
-                                <em class='fa fa-times-circle orange'> </em>
-                            </a>
-                        {% endif %}
+                {% if activeMembers[user.id] is defined %}
+                    <div class="active-member">
+                        <div style="" data-toggle="tooltip" data-html="true" title="
+                                Nombre de visites sur la plateforme : {{ activeMembers[user.id]['nbVisite'] }}<br />
+                                Nombre de posts renseignés sur les forums : {{ activeMembers[user.id]['nbPost'] }}<br />
+                                Nombre de commentaires sur les publications : {{ activeMembers[user.id]['nbComment'] }}<br />
+                                Nombre de notations sur les publications : {{ activeMembers[user.id]['nbNote'] }}<br />
+                        ">
+                            <em class="fa fa-star yellow"></em>
+                        </div>
                     </div>
+                {% endif %}
+                {% if canDeleteMembre %}
+                    <div class="delete">
+                        <a onclick="CommunautePratique_User.desinscritGroupe({{ groupe.id }}, {{ user.id }});" title="Désinscrire l'utilisateur"><em class="fa fa-times-circle"></em></a>
+                    </div>
+
+                    {% if not groupe.hasAnimateur(user) and not user.hasRoleAdmin %}
+                        <div class="actif">
+                            {% if user.isActifInGroupe(groupe) %}
+                                <a onclick="CommunautePratique_User.ActiveInscriptionGroupe({{ groupe.id }}, {{ user.id }});" title="Cette personne est bien membre du groupe. Cliquez pour la sortir du groupe">
+                                    <em class='fa fa-check-circle green'></em>
+                                </a>
+                            {% else %}
+                                <a onclick="CommunautePratique_User.ActiveInscriptionGroupe({{ groupe.id }}, {{ user.id }});" title="Cette personne n'est pas encore membre du groupe. Cliquez pour la faire entrer dans le groupe">
+                                    <em class='fa fa-times-circle orange'> </em>
+                                </a>
+                            {% endif %}
+                        </div>
+                    {% endif %}
                 {% endif %}
             </div>
             {% endif %}
             <div class="identite">
-                {% for member in activeMembers if member['idUser'] == user.id %}
-                    <div class="illustration infobulle" data-toggle="tooltip" data-html="true" title="
-                            Nombre de visites sur la plateforme : {{ member['nbVisite'] }}<br />
-                            Nombre de posts renseignés sur les forums : {{ member['nbPost'] }}<br />
-                            Nombre de commentaires sur les publications : {{ member['nbComment'] }}<br />
-                            Nombre de notation sur les publications : {{ member['nbNote'] }}<br />
-                    ">
-                        <div class="communaute-de-pratiques-avatar-red-circle" style="background-image: url('{{ asset(user.avatarWebPath) }}');"></div>
-                    </div>
-                {% else %}
-                    <div class="illustration"><div class="communaute-de-pratiques-avatar" style="background-image: url('{{ asset(user.avatarWebPath) }}');"></div></div>
-                {% endfor %}
-
+                <div class="illustration"><div class="communaute-de-pratiques-avatar" style="background-image: url('{{ asset(user.avatarWebPath) }}');"></div></div>
                 <div class="nom">
                     {% if app.user.id == user.id %}
                         <a target="_blank" href="{{ path('hopital_numerique_user_informations_personnelles') }}"><em class="icon icon-settings48"></em> <span class="no-link">{{ user.prenomNom }}</span></a>

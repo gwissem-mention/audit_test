@@ -4,8 +4,10 @@ namespace HopitalNumerique\PublicationBundle\Controller;
 
 use HopitalNumerique\CoreBundle\DependencyInjection\Entity;
 use HopitalNumerique\DomaineBundle\Entity\Domaine;
+use HopitalNumerique\ObjetBundle\Entity\Contenu;
 use HopitalNumerique\ObjetBundle\Entity\Objet;
 use HopitalNumerique\ReferenceBundle\Entity\EntityHasReference;
+use HopitalNumerique\UserBundle\Entity\User;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -31,9 +33,12 @@ class PublicationController extends Controller
         }
 
         //objet visualisation
-        if (!$this->get('security.context')->isGranted('ROLE_ADMINISTRATEUR_1')) {
+        if (!$this->isGranted('ROLE_ADMINISTRATEUR_1')
+            && 'true' !== $request->getSession()->get('view-object-' . $objet->getId())
+        ) {
             $objet->setNbVue(($objet->getNbVue() + 1));
             $this->get('hopitalnumerique_objet.manager.objet')->save($objet);
+            $request->getSession()->set('view-object-' . $objet->getId(), 'true');
         }
 
         //Si l'user connecté à le rôle requis pour voir l'objet
@@ -88,7 +93,9 @@ class PublicationController extends Controller
 
         $userRelated = $reader->getRelatedObjectsByType($objet, Entity::ENTITY_TYPE_AMBASSADEUR);
         shuffle($userRelated);
-        $topicRelated = (Domaine::DOMAINE_HOPITAL_NUMERIQUE_ID == $this->container->get('hopitalnumerique_domaine.dependency_injection.current_domaine')->get()->getId() ? $reader->getRelatedObjectsByType($objet, Entity::ENTITY_TYPE_FORUM_TOPIC) : []);
+        $topicRelated = (Domaine::DOMAINE_HOPITAL_NUMERIQUE_ID == $this->container->get(
+            'hopitalnumerique_domaine.dependency_injection.current_domaine'
+        )->get()->getId() ? $reader->getRelatedObjectsByType($objet, Entity::ENTITY_TYPE_FORUM_TOPIC) : []);
         shuffle($topicRelated);
 
         //render
@@ -110,8 +117,14 @@ class PublicationController extends Controller
 
     /**
      * PDF.
+     *
+     * @param $entityType
+     * @param $entityId
+     *
+     * @return Response
+     * @throws \Exception
      */
-    public function pdfAction(Request $request, $entityType, $entityId)
+    public function pdfAction($entityType, $entityId)
     {
         if (Entity::ENTITY_TYPE_OBJET == $entityType) {
             $objet = $this->container->get('hopitalnumerique_objet.manager.objet')->findOneById($entityId);
@@ -169,8 +182,13 @@ class PublicationController extends Controller
     /**
      * Contenu Action
      *
-     * @param $id ID de l'objet
-     * @param $idc ID du contenu
+     * @param Request $request
+     * @param         $id  ID de l'objet
+     * @param null    $alias
+     * @param         $idc ID du contenu
+     * @param null    $aliasc
+     *
+     * @return Response
      */
     public function contenuAction(Request $request, $id, $alias = null, $idc, $aliasc = null)
     {
@@ -186,9 +204,20 @@ class PublicationController extends Controller
         //Si l'user connecté à le rôle requis pour voir l'objet
         if ($this->checkAuthorization($objet) === false) {
             if (is_null($alias)) {
-                $urlPublication = $this->generateUrl('hopital_numerique_publication_publication_contenu_without_alias', ['id' => $id, 'idc' => $idc]);
+                $urlPublication = $this->generateUrl(
+                    'hopital_numerique_publication_publication_contenu_without_alias',
+                    [
+                        'id' => $id,
+                        'idc' => $idc
+                    ]
+                );
             } else {
-                $urlPublication = $this->generateUrl('hopital_numerique_publication_publication_contenu', ['id' => $id, 'idc' => $idc, 'alias' => $alias, 'aliasc' => $aliasc]);
+                $urlPublication = $this->generateUrl('hopital_numerique_publication_publication_contenu', [
+                    'id'     => $id,
+                    'idc'    => $idc,
+                    'alias'  => $alias,
+                    'aliasc' => $aliasc,
+                ]);
             }
             $urlPublication = rtrim(strtr(base64_encode($urlPublication), '+/', '-_'), '=');
 
@@ -197,14 +226,18 @@ class PublicationController extends Controller
         }
 
         //on récupère le contenu
+        /** @var Contenu $contenu */
         $contenu = $this->get('hopitalnumerique_objet.manager.contenu')->findOneBy(['id' => $idc]);
 
         $prefix = $this->get('hopitalnumerique_objet.manager.contenu')->getPrefix($contenu);
 
         //objet visualisation
-        if (!$this->get('security.context')->isGranted('ROLE_ADMINISTRATEUR_1')) {
+        if (!$this->isGranted('ROLE_ADMINISTRATEUR_1')
+            && 'true' !== $request->getSession()->get('view-content-' . $contenu->getId())
+        ) {
             $contenu->setNbVue(($contenu->getNbVue() + 1));
             $this->get('hopitalnumerique_objet.manager.contenu')->save($contenu);
+            $request->getSession()->set('view-content-' . $contenu->getId(), 'true');
         }
 
         //set Consultation entry
@@ -366,7 +399,7 @@ class PublicationController extends Controller
         $objet = $this->get('hopitalnumerique_objet.manager.objet')->findOneBy(['id' => $id]);
 
         //test si l'user connecté à le rôle requis pour voir la synthèse
-        $user = $this->get('security.context')->getToken()->getUser();
+        $user = $this->getUser();
         $role = $this->get('nodevo_role.manager.role')->getUserRole($user);
         $params = [];
         if ($this->get('hopitalnumerique_objet.manager.objet')->checkAccessToObjet($role, $objet))
@@ -385,13 +418,14 @@ class PublicationController extends Controller
      */
     private function getType($objet)
     {
-        $type = [];
+        $type  = [];
         $types = $objet->getTypes();
 
         foreach ($types as $one) {
             $parent = $one->getFirstParent();
-            if (!is_null($parent) && $parent->getId() == 175)
+            if (!is_null($parent) && $parent->getId() == 175) {
                 $type[] = $one->getLibelle();
+            }
         }
         //reformatte proprement les types
         $type = implode(' ♦ ', $type);
@@ -418,13 +452,13 @@ class PublicationController extends Controller
 
             //switch Objet / Infra-doc
             if ($tab[0] == 'PUBLICATION') {
-                $objet = $this->get('hopitalnumerique_objet.manager.objet')->findOneBy(['id' => $tab[1]]);
+                $objet   = $this->get('hopitalnumerique_objet.manager.objet')->findOneBy(['id' => $tab[1]]);
                 $contenu = false;
-            } else if ($tab[0] == 'INFRADOC') {
+            } elseif ($tab[0] == 'INFRADOC') {
                 $contenu = $this->get('hopitalnumerique_objet.manager.contenu')->findOneBy(['id' => $tab[1]]);
-                $objet = $contenu->getObjet();
-            } else if ($tab[0] == 'ARTICLE') {
-                $objet = $this->get('hopitalnumerique_objet.manager.objet')->findOneBy(['id' => $tab[1]]);
+                $objet   = $contenu->getObjet();
+            } elseif ($tab[0] == 'ARTICLE') {
+                $objet   = $this->get('hopitalnumerique_objet.manager.objet')->findOneBy(['id' => $tab[1]]);
                 $contenu = false;
             }
 
@@ -467,7 +501,7 @@ class PublicationController extends Controller
         $domaineId = $request->getSession()->get('domaineId');
 
         //update status updated + new
-        $user = $this->get('security.context')->getToken()->getUser();
+        $user = $this->getUser();
         $productions = $this->get('hopitalnumerique_objet.manager.consultation')->updateProductionsWithConnectedUser($domaineId, $productions, $user);
 
         return $productions;
@@ -483,8 +517,8 @@ class PublicationController extends Controller
     private function getAmbassadeursConcernes($objet)
     {
         //get connected user and his region
-        $user = $this->get('security.context')->getToken()->getUser();
-        $region = $user === 'anon.' ? false : $user->getRegion();
+        $user = $this->getUser();
+        $region = $user instanceof User ? $user->getRegion() : false;
 
         return $this->get('hopitalnumerique_user.manager.user')->getAmbassadeursByRegionAndProduction($region, $objet);
     }
