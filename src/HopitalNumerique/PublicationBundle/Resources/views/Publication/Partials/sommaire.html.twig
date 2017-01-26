@@ -17,7 +17,7 @@
 
 {% macro buildTree(contenu, objet, chapter) %}
     {% import _self as mySelf %}
-    <li data-has-children="{{ contenu.childs ? '1' : '0' }}">
+    <li data-has-children="{{ contenu.childs ? '1' : '0' }}" data-content="{{ contenu.id }}">
         {% if contenu.childs %}
             <a class="toggle-children" data-contenu="{{ contenu.id }}"><em class="fa fa-plus-circle"></em></a>
         {% endif %}

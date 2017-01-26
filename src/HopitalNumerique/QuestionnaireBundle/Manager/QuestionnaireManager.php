@@ -2,6 +2,8 @@
 
 namespace HopitalNumerique\QuestionnaireBundle\Manager;
 
+use HopitalNumerique\EtablissementBundle\Entity\Etablissement;
+use HopitalNumerique\EtablissementBundle\Manager\EtablissementManager;
 use Nodevo\ToolsBundle\Manager\Manager as BaseManager;
 use Doctrine\ORM\EntityManager;
 use HopitalNumerique\UserBundle\Manager\UserManager;
@@ -28,13 +30,19 @@ class QuestionnaireManager extends BaseManager
     protected $_mailReponses = [];
     protected $_managerReponse;
     protected $_userManager;
+    protected $etablissementManager;
 
     /**
-     * Constructeur du manager
+     * QuestionnaireManager constructor.
      *
-     * @param EntityManager $em Entity Manager de Doctrine
+     * @param EntityManager        $em
+     * @param OccurrenceManager    $occurrenceManager
+     * @param                      $managerReponse
+     * @param UserManager          $userManager
+     * @param EtablissementManager $etablissementManager
+     * @param array                $options
      */
-    public function __construct(EntityManager $em, OccurrenceManager $occurrenceManager, $managerReponse, UserManager $userManager, $options = [])
+    public function __construct(EntityManager $em, OccurrenceManager $occurrenceManager, $managerReponse, UserManager $userManager, EtablissementManager $etablissementManager, $options = [])
     {
         parent::__construct($em);
         $this->_questionnaireArray = isset($options['idRoles']) ? $options['idRoles'] : [];
@@ -43,6 +51,7 @@ class QuestionnaireManager extends BaseManager
         $this->occurrenceManager = $occurrenceManager;
         $this->_managerReponse = $managerReponse;
         $this->_userManager = $userManager;
+        $this->etablissementManager = $etablissementManager;
     }
 
     /**
@@ -226,7 +235,7 @@ class QuestionnaireManager extends BaseManager
         $questionnaire = $this->findOneBy(['id' => $idQuestionnaire]);
 
         //prepare colonnes
-        $colonnes = ['id' => 'id_utilisateur', 'occurrence' => 'Titre de l\'occurrence', 'user' => 'Prénom et Nom de l\'utilisateur', 'date_saisie' => 'Date de saisie'];
+        $colonnes = ['id' => 'id_utilisateur', 'occurrence' => 'Titre de l\'occurrence', 'user' => 'Prénom et Nom de l\'utilisateur', 'user_region' => 'Région de l\'utilisateur', 'date_saisie' => 'Date de saisie'];
         $emptyRow = ['id' => ''];
         $questions = $questionnaire->getQuestions();
         foreach ($questions as $question) {
@@ -255,6 +264,7 @@ class QuestionnaireManager extends BaseManager
                 $reponsesIndexes = array_keys($reponses);
                 $row['occurrence'] = (count($reponses) > 0 ? (null !== $reponses[$reponsesIndexes[0]]->getOccurrence() ? $reponses[$reponsesIndexes[0]]->getOccurrence()->getLibelle() : '') : '');
                 $row['user'] = $user->getPrenomNom();
+                $row['user_region'] = $user->getRegion() == null ? '' : $user->getRegion()->getLibelle();
                 $row['date_saisie'] = count($reponses) > 0 ? (null !== $reponses[$reponsesIndexes[0]]->getDateCreation() ? $reponses[$reponsesIndexes[0]]->getDateCreation()->format('d-m-Y H:i:s') : '') : '';
 
                 foreach ($reponses as $reponse) {
@@ -320,7 +330,12 @@ class QuestionnaireManager extends BaseManager
                                 $row[$field] = ('1' == $reponse->getReponse() ? 'Oui' : 'Non');
                                 break;
                             default:
-                                $row[$field] = $reponse->getReponse();
+                                if ($reponse->getQuestion()->getAlias() == 'etablissement') {
+                                    $etablissementReponse = $this->etablissementManager->findOneBy(['id' => $reponse->getReponse()]);
+                                    $row[$field] = ($etablissementReponse instanceof Etablissement) ? $etablissementReponse->getNom() : "";
+                                } else {
+                                    $row[$field] = $reponse->getReponse();
+                                }
                                 break;
                         }
                     }
