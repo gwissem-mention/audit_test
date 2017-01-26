@@ -320,10 +320,11 @@
                 {% if activeMembers[user.id] is defined %}
                     <div class="active-member">
                         <div style="" data-toggle="tooltip" data-html="true" title="
-                                Nombre de visites sur la plateforme : {{ activeMembers[user.id]['nbVisite'] }}<br />
-                                Nombre de posts renseignés sur les forums : {{ activeMembers[user.id]['nbPost'] }}<br />
-                                Nombre de commentaires sur les publications : {{ activeMembers[user.id]['nbComment'] }}<br />
-                                Nombre de notations sur les publications : {{ activeMembers[user.id]['nbNote'] }}<br />
+                                <b>Utilisateur parmi les plus actifs :</b><br />
+                                {% if activeMembers[user.id]['nbVisite'] != 0 %}Nombre de visites sur la plateforme : {{ activeMembers[user.id]['nbVisite'] }}<br />{% endif %}
+                                {% if activeMembers[user.id]['nbPost'] != 0 %}Nombre de posts renseignés sur les forums : {{ activeMembers[user.id]['nbPost'] }}<br />{% endif %}
+                                {% if activeMembers[user.id]['nbComment'] != 0 %}Nombre de commentaires sur les publications : {{ activeMembers[user.id]['nbComment'] }}<br />{% endif %}
+                                {% if activeMembers[user.id]['nbNote'] != 0 %}Nombre de notations sur les publications : {{ activeMembers[user.id]['nbNote'] }}<br />{% endif %}
                         ">
                             <em class="fa fa-star yellow"></em>
                         </div>
