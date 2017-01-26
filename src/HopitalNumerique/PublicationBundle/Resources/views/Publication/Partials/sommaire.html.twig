@@ -29,7 +29,7 @@
         {% if contenu.childs %}
             <ul data-contenu="{{ contenu.id }}">
                 {% for child in contenu.childs %}
-                    {{ mySelf.buildTree(child, objet, contenu.order ~ '.') }}
+                    {{ mySelf.buildTree(child, objet, chapter ~ contenu.order ~ '.') }}
                 {% endfor %}
             </ul>
         {% endif %}
