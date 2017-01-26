@@ -21,6 +21,9 @@ $(document).ready(function() {
         });
     });
 
+    var contenuId = $('#current-content-id').attr('data-current-id');
+    $('[data-content="' + contenuId + '"]').parents('ul').slideDown();
+
     var IS_PDF = ('1' == $('body').attr('data-is-pdf'));
 
     /* Gestion de l'ouverture/fermeture du sommaire et de la liste des ambassadeurs */

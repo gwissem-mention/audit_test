@@ -73,6 +73,7 @@
 
         {# Cas Contenu #}
         {% if contenu is defined %}
+            <div id="current-content-id" data-current-id="{{ contenu.id }}"></div>
             <div class="col-md-12">
                 <h1 class="violet"><a href="{{path('hopital_numerique_publication_publication_objet', {'id':objet.id,'alias':objet.alias})}}">{{objet.titre}}</a></h1>
             </div>
