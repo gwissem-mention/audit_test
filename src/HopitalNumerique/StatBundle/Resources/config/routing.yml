@@ -3,69 +3,7 @@ hopital_numerique_stat_show:
     pattern: /admin/statistiques/show
     defaults: { _controller: HopitalNumeriqueStatBundle:Stats:show}
 
-#-Item requete
-hopital_numerique_stat_item_requete_generate_tableau:
-    pattern: /admin/statistiques/show/itemRequete/generate
-    defaults: { _controller: HopitalNumeriqueStatBundle:ItemRequete:generateTableau}
-
-hopital_numerique_stat_item_requete_export_csv:
-    pattern: /admin/statistiques/show/itemRequete/exportCSV
-    defaults: { _controller: HopitalNumeriqueStatBundle:ItemRequete:exportCSV}
-
-hopital_numerique_stat_forum_export_csv:
-    pattern: /admin/statistiques/show/forum/exportCSV
-    defaults: { _controller: HopitalNumeriqueStatBundle:Forum:exportCSV}
-
-#-Item requete - Productions
-hopital_numerique_stat_item_production_generate_tableau:
-    pattern: /admin/statistiques/show/itemProduction/generate
-    defaults: { _controller: HopitalNumeriqueStatBundle:ItemRequete:generateTableauProduction}
-
-hopital_numerique_stat_item_production_export_csv:
-    pattern: /admin/statistiques/show/itemProduction/exportCSV
-    defaults: { _controller: HopitalNumeriqueStatBundle:ItemRequete:exportCSVProduction}
-
-#-Requete fantome
-hopital_numerique_stat_requete_fantome_generate_tableau:
-    pattern: /admin/statistiques/show/requeteFantome/generate
-    defaults: { _controller: HopitalNumeriqueStatBundle:RequeteFantome:generateTableau}
-
 #-Erreurs
-hopital_numerique_stat_erreurs_curl:
-    pattern: /admin/statistiques/show/erreurs
-    defaults: { _controller: HopitalNumeriqueStatBundle:Erreurs:curl}
-
-hopital_numerique_stat_erreurs_export_csv:
-    pattern: /admin/statistiques/show/erreurs/exportCSV
-    defaults: { _controller: HopitalNumeriqueStatBundle:Erreurs:exportCSV}
-
-hopital_numerique_stat_erreurs_curl_with_base:
-    pattern: /admin/statistiques/show/erreursWithBase
-    defaults: { _controller: HopitalNumeriqueStatBundle:Erreurs:curlWithBase}
-
-hopital_numerique_stat_erreurs_curl_generate_tableau:
-    pattern: /admin/statistiques/show/erreurs/generate
-    defaults: { _controller: HopitalNumeriqueStatBundle:Erreurs:generateTableau}
-#---CRON
-hopital_numerique_stat_erreurs_cron:
-    pattern:  /cron-quotidien/erreurs-url/{id}
-    defaults: { _controller: HopitalNumeriqueStatBundle:Erreurs:cron}
-
-#-Stats clic
-hopital_numerique_stat_stat_clic_generate_tableau:
-    pattern: /admin/statistiques/show/statClic/generate
-    defaults: { _controller: HopitalNumeriqueStatBundle:StatClic:generateTableau}
-
-#-Stats forum
-hopital_numerique_stat_stat_forum_generate_tableau:
-    pattern: /admin/statistiques/show/forum/generate
-    defaults: { _controller: HopitalNumeriqueStatBundle:Forum:generateTableau}
-
-#-Recherche Parcours
-hopital_numerique_stat_recherche_parcours_generate_tableau:
-    pattern: /admin/statistiques/show/rechercheParcours/generate
-    defaults: { _controller: HopitalNumeriqueStatBundle:RechercheParcours:generateTableau}
-
-hopital_numerique_stat_recherche_parcours_export_csv:
-    pattern: /admin/statistiques/show/rechercheParcours/exportCSV
-    defaults: { _controller: HopitalNumeriqueStatBundle:RechercheParcours:exportCSV}
+hopital_numerique_stat_erreurs_export:
+    pattern: /admin/statistiques/show/url_errors/export
+    defaults: { _controller: HopitalNumeriqueStatBundle:Erreurs:export}

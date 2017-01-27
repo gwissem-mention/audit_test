@@ -3,19 +3,22 @@
 namespace HopitalNumerique\StatBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use HopitalNumerique\DomaineBundle\Entity\Domaine;
+use HopitalNumerique\ObjetBundle\Entity\Contenu;
+use HopitalNumerique\ObjetBundle\Entity\Objet;
 
 /**
  * ErrorUrl
  *
- * @ORM\Table(name="hn_statistiques_erreurs_url")
- * @ORM\Entity
+ * @ORM\Table(name="hn_statistics_error_url")
+ * @ORM\Entity(repositoryClass="HopitalNumerique\StatBundle\Repository\ErrorUrlRepository")
  */
 class ErrorUrl
 {
     /**
      * @var integer
      *
-     * @ORM\Column(name="sturl_id", type="integer")
+     * @ORM\Column(type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
      */
@@ -24,36 +27,57 @@ class ErrorUrl
     /**
      * @var string
      *
-     * @ORM\Column(name="sturl_url", type="string", length=1024)
+     * @ORM\Column(name="checked_url", type="string", length=1024)
      */
-    private $url;
+    private $checkedUrl;
 
     /**
      * @var boolean
      *
-     * @ORM\Column(name="sturl_ok", type="boolean")
+     * @ORM\Column(type="boolean")
      */
-    private $ok;
+    private $state;
 
     /**
      * @var integer
      *
-     * @ORM\Column(name="sturl_code", type="smallint", nullable=true)
+     * @ORM\Column(type="smallint", nullable=true)
      */
     private $code;
 
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="sturl_dateDernierCheck", type="datetime", nullable=true)
+     * @ORM\Column(name="last_check_date", type="datetime", nullable=true)
      */
-    private $dateDernierCheck;
-
+    private $lastCheckDate;
 
     /**
-     * Get id
+     * @var Objet
      *
-     * @return integer 
+     * @ORM\ManyToOne(targetEntity="HopitalNumerique\ObjetBundle\Entity\Objet")
+     * @ORM\JoinColumn(referencedColumnName="obj_id")
+     */
+    private $object;
+
+    /**
+     * @var Contenu
+     *
+     * @ORM\ManyToOne(targetEntity="HopitalNumerique\ObjetBundle\Entity\Contenu")
+     * @ORM\JoinColumn(referencedColumnName="con_id", nullable=true)
+     */
+    private $content;
+
+    /**
+     * @var Domaine
+     *
+     * @ORM\ManyToOne(targetEntity="HopitalNumerique\DomaineBundle\Entity\Domaine")
+     * @ORM\JoinColumn(referencedColumnName="dom_id")
+     */
+    private $domain;
+
+    /**
+     * @return int
      */
     public function getId()
     {
@@ -61,55 +85,68 @@ class ErrorUrl
     }
 
     /**
-     * Set url
+     * @param int $id
      *
-     * @param string $url
      * @return ErrorUrl
      */
-    public function setUrl($url)
+    public function setId($id)
     {
-        $this->url = $url;
+        $this->id = $id;
 
         return $this;
     }
 
     /**
-     * Get url
-     *
-     * @return string 
+     * @return string
      */
-    public function getUrl()
+    public function getCheckedUrl()
     {
-        return $this->url;
+        return $this->checkedUrl;
     }
 
     /**
-     * Set ok
+     * @param string $checkedUrl
      *
-     * @param boolean $ok
      * @return ErrorUrl
      */
-    public function setOk($ok)
+    public function setCheckedUrl($checkedUrl)
     {
-        $this->ok = $ok;
+        $this->checkedUrl = $checkedUrl;
 
         return $this;
     }
 
     /**
-     * Get ok
-     *
-     * @return boolean 
+     * @return bool
      */
-    public function getOk()
+    public function getState()
     {
-        return $this->ok;
+        return $this->state;
     }
 
     /**
-     * Set code
+     * @param bool $state
      *
-     * @param integer $code
+     * @return ErrorUrl
+     */
+    public function setState($state)
+    {
+        $this->state = $state;
+
+        return $this;
+    }
+
+    /**
+     * @return int
+     */
+    public function getCode()
+    {
+        return $this->code;
+    }
+
+    /**
+     * @param int $code
+     *
      * @return ErrorUrl
      */
     public function setCode($code)
@@ -120,35 +157,82 @@ class ErrorUrl
     }
 
     /**
-     * Get code
-     *
-     * @return integer
+     * @return \DateTime
      */
-    public function getCode()
+    public function getLastCheckDate()
     {
-        return $this->code;
+        return $this->lastCheckDate;
     }
 
     /**
-     * Set dateDernierCheck
+     * @param \DateTime $lastCheckDate
      *
-     * @param \DateTime $dateDernierCheck
      * @return ErrorUrl
      */
-    public function setDateDernierCheck($dateDernierCheck)
+    public function setLastCheckDate($lastCheckDate)
     {
-        $this->dateDernierCheck = $dateDernierCheck;
+        $this->lastCheckDate = $lastCheckDate;
 
         return $this;
     }
 
     /**
-     * Get dateDernierCheck
-     *
-     * @return \DateTime 
+     * @return Objet
      */
-    public function getDateDernierCheck()
+    public function getObject()
     {
-        return $this->dateDernierCheck;
+        return $this->object;
+    }
+
+    /**
+     * @param Objet $object
+     *
+     * @return ErrorUrl
+     */
+    public function setObject($object)
+    {
+        $this->object = $object;
+
+        return $this;
+    }
+
+    /**
+     * @return Contenu
+     */
+    public function getContent()
+    {
+        return $this->content;
+    }
+
+    /**
+     * @param Contenu $content
+     *
+     * @return ErrorUrl
+     */
+    public function setContent($content)
+    {
+        $this->content = $content;
+
+        return $this;
+    }
+
+    /**
+     * @return Domaine
+     */
+    public function getDomain()
+    {
+        return $this->domain;
+    }
+
+    /**
+     * @param Domaine $domain
+     *
+     * @return ErrorUrl
+     */
+    public function setDomain($domain)
+    {
+        $this->domain = $domain;
+
+        return $this;
     }
 }

@@ -2,13 +2,12 @@
 namespace HopitalNumerique\RechercheBundle\DependencyInjection\Referencement;
 
 use HopitalNumerique\DomaineBundle\DependencyInjection\CurrentDomaine;
+use HopitalNumerique\DomaineBundle\Entity\Domaine;
 use HopitalNumerique\RechercheBundle\Doctrine\Referencement\Modulation as ReferencementModulation;
 use HopitalNumerique\RechercheBundle\Entity\Requete;
 use HopitalNumerique\RechercheBundle\Manager\RequeteManager;
 use HopitalNumerique\ReferenceBundle\DependencyInjection\Reference\Tree as ReferenceTree;
 use HopitalNumerique\ReferenceBundle\Manager\ReferenceManager;
-use HopitalNumerique\StatBundle\Entity\StatRecherche;
-use HopitalNumerique\StatBundle\Manager\StatRechercheManager;
 use HopitalNumerique\UserBundle\DependencyInjection\ConnectedUser;
 use HopitalNumerique\UserBundle\Entity\User;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
@@ -77,13 +76,7 @@ class RequeteSession
     private $requeteManager;
 
     /**
-     * @var \HopitalNumerique\StatBundle\Manager\StatRechercheManager StatRechercheManager
-     */
-    private $statRechercheManager;
-
-
-    /**
-     * @var \HopitalNumerique\DomaineBundle\Entity\Domaine Domaine courant
+     * @var Domaine Domaine courant
      */
     private $domaine;
 
@@ -98,8 +91,7 @@ class RequeteSession
         ReferenceTree $referenceTree,
         ReferencementModulation $referencementModulation,
         ReferenceManager $referenceManager,
-        RequeteManager $requeteManager,
-        StatRechercheManager $statRechercheManager
+        RequeteManager $requeteManager
     ) {
         $this->session = $session;
         $this->connectedUser = $connectedUser;
@@ -107,7 +99,6 @@ class RequeteSession
         $this->referencementModulation = $referencementModulation;
         $this->referenceManager = $referenceManager;
         $this->requeteManager = $requeteManager;
-        $this->statRechercheManager = $statRechercheManager;
 
         $this->domaine = $currentDomaine->get();
     }
@@ -259,7 +250,7 @@ class RequeteSession
     /**
      * Retourne la requête.
      *
-     * @return \HopitalNumerique\RechercheBundle\Entity\Requete|null Requête
+     * @return Requete|null Requête
      */
     public function getRequete()
     {
@@ -275,7 +266,7 @@ class RequeteSession
     /**
      * Enregistre la requête en session.
      *
-     * @param \HopitalNumerique\RechercheBundle\Entity\Requete $requete Requête
+     * @param Requete $requete Requête
      */
     public function setRequete(Requete $requete)
     {
@@ -351,39 +342,6 @@ class RequeteSession
         $requete->setRechercheTextuelle($this->getSearchedText());
         $this->requeteManager->save($requete);
         $this->setRequete($requete);
-    }
-
-
-    /**
-     * Sauvegarde la statistique de cette requête.
-     *
-     * @param int $resultsCount Nombre de résultats
-     */
-    public function saveStatistique($resultsCount)
-    {
-        /** @var StatRecherche $statRecherche */
-        $statRecherche = $this->statRechercheManager->createEmpty();
-
-        $referencesTree = $this->referenceTree->getOrderedReferences(null, null, [$this->domaine], true);
-        $referenceIds = $this->getReferenceIds();
-        $categoryFilters = $this->getCategoryFilters();
-        $modulatedReferenceIds = $this->referencementModulation
-            ->getModulatedReferenceIds($referenceIds, $referencesTree)
-        ;
-        $modulatedReferences = $this->referenceManager->findBy(['id' => $modulatedReferenceIds]);
-
-        $statRecherche->setUser($this->connectedUser->get());
-        $statRecherche->setReferences($modulatedReferences);
-        $statRecherche->setDate(new \DateTime());
-        $statRecherche->setNbResultats($resultsCount);
-        $statRecherche->setRequete(json_encode($referenceIds));
-        $statRecherche->setIsRequeteSaved(null !== $this->getRequete());
-        $statRecherche->setCategPointDur(count($categoryFilters) > 0 ? json_encode($categoryFilters) : '');
-        if (!$this->connectedUser->is()) {
-            $statRecherche->setSessionId(session_id());
-        }
-
-        $this->statRechercheManager->save($statRecherche);
     }
 
     /**
