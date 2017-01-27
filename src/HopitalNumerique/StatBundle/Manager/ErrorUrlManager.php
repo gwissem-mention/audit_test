@@ -2,7 +2,7 @@
 
 namespace HopitalNumerique\StatBundle\Manager;
 
-use HopitalNumerique\DomaineBundle\Entity\Domaine;
+use HopitalNumerique\StatBundle\Entity\ErrorUrl;
 use Nodevo\ToolsBundle\Manager\Manager as BaseManager;
 
 /**
@@ -13,159 +13,40 @@ class ErrorUrlManager extends BaseManager
     protected $class = 'HopitalNumerique\StatBundle\Entity\ErrorUrl';
 
     /**
-     * Retourne l'entité trouvée ou en créé une
+     * @param $url
      *
-     * @param string $url URL testée
-     *
-     * @return array(StatRecherche)
+     * @return ErrorUrl
      */
-    public function existeErrorByUrl($url)
+    public function existErrorByUrl($url)
     {
-        $errorUrl = is_null($this->findOneBy(['url' => $url])) ? $this->createEmpty() : $this->findOneBy(['url' => $url]);
+        /** @var ErrorUrl $errorUrl */
+        $errorUrl = is_null($this->findOneBy(['checkedUrl' => $url]))
+            ? $this->createEmpty()
+            : $this->findOneBy(
+                ['checkedUrl' => $url]
+            );
 
-        $errorUrl->setDateDernierCheck(new \DateTime());
         if (is_null($errorUrl->getId()) || $errorUrl->getId() == 0) {
-            $errorUrl->setUrl($url);
+            $errorUrl->setCheckedUrl($url);
         }
 
         return $errorUrl;
     }
 
-
     /**
-     * Récupère les url pour l'export
-     *
      * @return array
      */
-    public function getDatasForExport($donneesTab)
-    {
-        $results = [];
-        $errorsUrl = $this->findAll();
-        $errorsUrlByUrl = [];
-        foreach ($errorsUrl as $errorUrl) {
-            $errorsUrlByUrl[$errorUrl->getUrl()] = $errorUrl;
-        }
-
-        //Boucle sur les différentes catégories (Publication, Infradoc, Article ...)
-        foreach ($donneesTab['urls'] as $keyURL => $url) {
-            //Parmis les catégories, boucle sur les objets
-            foreach ($url as $keyObjetUrl => $objetUrl) {
-                //Parcours l'ensemble des objets et contenu
-                foreach ($objetUrl as $keyObjetOrContenu => $objetOrContenu) {
-                    //Parcours les urls de l'objet courants
-                    foreach ($objetOrContenu as $urlObjetUrl) {
-                        $row = [];
-
-                        $row['domaines'] = '';
-                        if (isset($donneesTab['objets'][$keyObjetUrl])) {
-                            $row['domaines'] = implode(
-                                ', ',
-                                array_map(
-                                    function (Domaine $domaine) {
-                                        return $domaine->getNom();
-                                    },
-                                    $donneesTab['objets'][$keyObjetUrl]->getDomaines()->toArray()
-                                )
-                            );
-                        }
-
-                        $row['type'] = ucfirst($keyURL);
-                        $row['idObjet'] = $keyObjetUrl;
-                        $row['titreObjet'] = $donneesTab['objets'][$keyObjetUrl]->getTitre();
-                        //$row['infradoc'] = ($keyObjetOrContenu != 'objet') ?  (is_null($donneesTab['objets'][$keyObjetUrl]->getContenuById($keyObjetOrContenu)) ? '' : ( $donneesTab['objets'][$keyObjetUrl]->getContenuById($keyObjetOrContenu)->getOrder() . ' ' .  $donneesTab['objets'][$keyObjetUrl]->getContenuById($keyObjetOrContenu)->getTitre() ) : '';
-                        $row['url'] = $urlObjetUrl;
-                        $row['valide'] = (array_key_exists($urlObjetUrl, $errorsUrlByUrl)) ? ($errorsUrlByUrl[$urlObjetUrl]->getOk() ? 'Valide' : 'Non valide') : 'A vérifier';
-
-                        if ($keyObjetOrContenu != 'objet') {
-                            if (!is_null($donneesTab['objets'][$keyObjetUrl]->getContenuById($keyObjetOrContenu))) {
-                                $row['infradoc'] = $donneesTab['objets'][$keyObjetUrl]->getContenuById($keyObjetOrContenu)->getOrder() . ' ' . $donneesTab['objets'][$keyObjetUrl]->getContenuById($keyObjetOrContenu)->getTitre();
-                            } else {
-                                $row['infradoc'] = '';
-                            }
-                        } else {
-                            $row['infradoc'] = '';
-                        }
-
-                        //add row To Results
-                        $results[] = $row;
-                    }
-                }
-            }
-        }
-
-        return $results;
-    }
-
-    /**
-     * Récupère les url pour l'export des liens de l'autodiag
-     *
-     * @return array
-     */
-    public function getDatasForExportAutodiag($donneesTab)
-    {
-        $results = [];
-        $errorsUrl = $this->findAll();
-        $errorsUrlByUrl = [];
-        foreach ($errorsUrl as $errorUrl) {
-            $errorsUrlByUrl[$errorUrl->getUrl()] = $errorUrl;
-        }
-
-        //Boucle sur les différentes catégories
-        foreach ($donneesTab['urls'] as $idChapitre => $arrayUrls) {
-            //Parmis les catégories, boucle sur les objets
-            foreach ($arrayUrls as $typeUrl => $urls) {
-                //Parcours l'ensemble des objets et contenu
-                foreach ($urls as $id => $url) {
-                    $row = [];
-
-                    $row['id'] = $donneesTab['chapitres'][$idChapitre]->getOutil()->getId();
-                    $row['titre'] = $donneesTab['chapitres'][$idChapitre]->getOutil()->getTitle();
-                    $row['chapitre'] = $donneesTab['chapitres'][$idChapitre]->getTitle();
-                    $row['question'] = "questions" === $typeUrl ? $donneesTab['chapitres'][$idChapitre]->getQuestionsById()[$id]->getTexte() : '-';
-                    $row['url'] = $url;
-                    $row['valide'] = (array_key_exists($url, $errorsUrlByUrl)) ? ($errorsUrlByUrl[$url]->getOk() ? 'Valide' : 'Non valide') : 'A vérifier';
-
-                    //add row To Results
-                    $results[] = $row;
-
-                }
-            }
-        }
-
-        return $results;
-    }
-
-    /**
-     * Récupère l'état de l'url
-     *
-     * @return array
-     */
-    public function getOksByUrl()
+    public function getStateByUrl()
     {
         $errorUrls = $this->getRepository()->findAll();
 
-        $oks = [];
+        $states = [];
 
+        /** @var ErrorUrl $errorUrl */
         foreach ($errorUrls as $errorUrl) {
-            $oks[$errorUrl->getUrl()] = $errorUrl->getOk();
+            $states[$errorUrl->getCheckedUrl()] = $errorUrl->getState();
         }
 
-        return $oks;
-    }
-
-    /**
-     * Retourne toutes les erreurs par URL.
-     *
-     * @return array<string, \HopitalNumerique\StatBundle\Entity\ErrorUrl> Erreurs
-     */
-    public function findAllGroupedByUrl()
-    {
-        $erreurUrlsByUrl = [];
-
-        foreach ($this->findAll() as $erreurUrl) {
-            $erreurUrlsByUrl[$erreurUrl->getUrl()] = $erreurUrl;
-        }
-
-        return $erreurUrlsByUrl;
+        return $states;
     }
 }

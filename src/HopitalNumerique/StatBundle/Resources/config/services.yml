@@ -1,29 +1,27 @@
-parameters:
-    hopitalnumerique_stat.manager.statrecherche.class: HopitalNumerique\StatBundle\Manager\StatRechercheManager
-    hopitalnumerique_stat.manager.stattelechargement.class: HopitalNumerique\StatBundle\Manager\StatTelechargementManager
-    hopitalnumerique_stat.manager.errorurl.class: HopitalNumerique\StatBundle\Manager\ErrorUrlManager
-    #Listener
-    hopitalnumerique_stat.event.listenerstat.class: HopitalNumerique\StatBundle\Event\ListenerStat
-    #CronLogger
-    hopitalnumerique_stat.logger.cronlogger.class: HopitalNumerique\StatBundle\DependencyInjection\Logger\CronLogger
-
 services:
-    hopitalnumerique_stat.manager.statrecherche:
-        class: %hopitalnumerique_stat.manager.statrecherche.class%
-        arguments: ["@doctrine.orm.entity_manager", "@hopitalnumerique_reference.manager.reference", "@security.context"]
-    hopitalnumerique_stat.manager.stattelechargement:
-        class: %hopitalnumerique_stat.manager.stattelechargement.class%
-        arguments: ["@doctrine.orm.entity_manager", "@security.context"]
-    #Listener
-    hopitalnumerique_stat.manager.listenerstat.downloadsuccess:
-        class: %hopitalnumerique_stat.event.listenerstat.class%
-        arguments: ['@hopitalnumerique_stat.manager.stattelechargement']
-        tags:
-            - { name: kernel.event_listener, event: objet_download_success, method: objetDownloadSuccess }
-    #Cronlogger
-    hopitalnumerique_stat.logger.cronlogger:
-        class: "%hopitalnumerique_stat.logger.cronlogger.class%"
-        arguments: ["@logger", "@session"]
-    hopitalnumerique_stat.manager.errorurl:
-        class: %hopitalnumerique_stat.manager.errorurl.class%
-        arguments: ["@doctrine.orm.entity_manager"]
+    stat.manager.error:
+        class: HopitalNumerique\StatBundle\Manager\ErrorUrlManager
+        arguments:
+            - "@doctrine.orm.entity_manager"
+
+    stat.repository.error:
+            class: HopitalNumerique\StatBundle\Repository\ErrorUrlRepository
+            factory: ["@doctrine.orm.entity_manager", "getRepository"]
+            arguments:
+                - 'HopitalNumeriqueStatBundle:ErrorUrl'
+
+    stat.service.url_checker:
+        class: HopitalNumerique\StatBundle\Service\UrlChecker
+        arguments:
+            - "@hopitalnumerique_objet.manager.objet"
+            - "@hopitalnumerique_objet.manager.contenu"
+            - "@stat.repository.error"
+            - "@hopitalnumerique_domaine.manager.domaine"
+            - "@stat.manager.error"
+            - "@autodiag.repository.autodiag"
+            - "@hopitalnumerique_questionnaire.manager.questionnaire"
+
+    stat.service.url_exporter:
+            class: HopitalNumerique\StatBundle\Service\ErrorUrlExporter
+            arguments:
+                - "@stat.repository.error"

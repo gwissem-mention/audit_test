@@ -62,7 +62,6 @@ services:
             - '@hopitalnumerique_recherche.doctrine.referencement.modulation'
             - '@hopitalnumerique_reference.manager.reference'
             - '@hopitalnumerique_recherche.manager.requete'
-            - '@hopitalnumerique_stat.manager.statrecherche'
 
     hopitalnumerique_recherche.doctrine.referencement.category:
         class: 'HopitalNumerique\RechercheBundle\Doctrine\Referencement\Category'

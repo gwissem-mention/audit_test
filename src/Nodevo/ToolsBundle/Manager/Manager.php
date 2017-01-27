@@ -204,15 +204,12 @@ abstract class Manager
         return $entitiesById;
     }
 
-
     /**
      * Enregistre l'entitée
      *
-     * @param Entity|array $entity L'entitée
-     *
-     * @return empty
+     * @param $entity
      */
-    public function save( $entity )
+    public function save($entity)
     {
         $this->persist($entity);
 
@@ -221,11 +218,13 @@ abstract class Manager
 
     public function persist($entity)
     {
-        if( is_array($entity) ){
-            foreach( $entity as $one )
-                $this->_em->persist( $one );
-        }else
-            $this->_em->persist( $entity );
+        if (is_array($entity)) {
+            foreach ($entity as $one) {
+                $this->_em->persist($one);
+            }
+        } else {
+            $this->_em->persist($entity);
+        }
     }
 
     public function flush()
