@@ -363,8 +363,10 @@ class EntityHasReferenceRepository extends EntityRepository
                 'entityHasReference.entityType',
                 'entityHasReference.entityId',
                 'COUNT(DISTINCT(entityHasReference.reference)) AS referencesCount',
-                'SUM(DISTINCT(entityHasReference.primary)) AS primarySum'
+                'SUM(DISTINCT(entityHasReference.primary)) AS primarySum',
+                'reference.id AS referenceId'
             )
+            ->leftJoin('entityHasReference.reference', 'reference')
         ;
 
         if (null !== $groupedReferences) {
@@ -395,13 +397,13 @@ class EntityHasReferenceRepository extends EntityRepository
 
         //<-- Références matchées
         $qb
-            ->andWhere($qb->expr()->in('entityHasReference.reference', (count($referenceIds) > 0 ? $referenceIds : [0])))
+            ->andWhere(
+                $qb->expr()->in('entityHasReference.reference', (count($referenceIds) > 0 ? $referenceIds : [0]))
+            )
         ;
         //-->
 
-        $qb
-            ->groupBy('entityHasReference.entityType', 'entityHasReference.entityId')
-        ;
+        $qb->groupBy('entityHasReference.entityType', 'entityHasReference.entityId');
 
         return $qb->getQuery()->getResult();
     }
