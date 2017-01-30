@@ -9,6 +9,7 @@ use HopitalNumerique\AutodiagBundle\Service\Import\ChapterWriter;
 use HopitalNumerique\AutodiagBundle\Service\Import\QuestionWriter;
 use HopitalNumerique\AutodiagBundle\Service\Import\RestitutionWriter;
 use Nodevo\Component\Import\DataImporter;
+use Symfony\Bundle\FrameworkBundle\Translation\Translator;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
@@ -31,14 +32,18 @@ class AutodiagFileImportHandler
     /** @var ValidatorInterface */
     protected $validator;
 
+    protected $translator;
+
     /**
      * Handler constructor
      *
-     * @param EntityManager $em
-     * @param SessionInterface $session
+     * @param EntityManager            $em
+     * @param SessionInterface         $session
      * @param AttributeBuilderProvider $attributeBuilder
-     * @param TokenStorageInterface $tokenStorage
-     * @param ValidatorInterface $validator
+     * @param TokenStorageInterface    $tokenStorage
+     * @param ValidatorInterface       $validator
+     * @param Translator               $translator
+     *
      * @internal param ContainerInterface $container
      */
     public function __construct(
@@ -46,13 +51,15 @@ class AutodiagFileImportHandler
         SessionInterface $session,
         AttributeBuilderProvider $attributeBuilder,
         TokenStorageInterface $tokenStorage,
-        ValidatorInterface $validator
+        ValidatorInterface $validator,
+        Translator $translator
     ) {
         $this->manager = $em;
         $this->session = $session;
         $this->attributeBuilder = $attributeBuilder;
         $this->tokenStorage = $tokenStorage;
         $this->validator = $validator;
+        $this->translator = $translator;
     }
 
     /**
@@ -73,7 +80,7 @@ class AutodiagFileImportHandler
 
             // Import questions
             $questionImporter->setWriter(
-                new QuestionWriter($this->manager, $autodiag, $this->attributeBuilder, $this->validator)
+                new QuestionWriter($this->manager, $autodiag, $this->attributeBuilder, $this->validator, $this->translator)
             );
             $questionProgress = $questionImporter->import($model->getFile());
             $this->session->set('survey_import_progress_question', $questionProgress);

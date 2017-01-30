@@ -29,6 +29,7 @@ services:
             - '@autodiag.attribute_builder_provider'
             - '@security.token_storage'
             - '@validator'
+            - '@translator.default'
 
     autodiag.form.autodiagentry.value:
         class: HopitalNumerique\AutodiagBundle\Form\Type\AutodiagEntry\ValueType
