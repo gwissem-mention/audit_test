@@ -2,10 +2,18 @@
 
 namespace HopitalNumerique\ObjetBundle\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use HopitalNumerique\CommunautePratiqueBundle\Entity\Groupe;
+use HopitalNumerique\DomaineBundle\Entity\Domaine;
+use HopitalNumerique\ModuleBundle\Entity\Module;
+use HopitalNumerique\RechercheParcoursBundle\Entity\MaitriseUser;
 use HopitalNumerique\ReferenceBundle\Entity\Reference;
 
 //Asserts Stuff
+use HopitalNumerique\UserBundle\Entity\User;
+use Nodevo\RoleBundle\Entity\Role;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Nodevo\ToolsBundle\Validator\Constraints as Nodevo;
@@ -222,7 +230,7 @@ class Objet implements RoutedItemInterface
      * @var array
      *
      * @Gedmo\Versioned
-     * @ORM\Column(name="obj_referencement", type="array", options = {"comment" = "Copie du référencement pour l historique"})
+     * @ORM\Column(name="obj_referencement", type="array", options = {"comment" = "Copie du référencement pour l'historique"})
      */
     private $referencement;
 
@@ -269,7 +277,10 @@ class Objet implements RoutedItemInterface
      *      joinColumns={ @ORM\JoinColumn(name="obj_id", referencedColumnName="obj_id", onDelete="CASCADE")},
      *      inverseJoinColumns={ @ORM\JoinColumn(name="ref_id", referencedColumnName="ref_id", onDelete="CASCADE")}
      * )
-     * @Assert\NotBlank(message="Merci de choisir un type au minimum.")
+     * @Assert\Count(
+     *     min = "1",
+     *     minMessage = "Merci de choisir un type au minimum."
+     * )
      */
     protected $types;
 
@@ -342,6 +353,10 @@ class Objet implements RoutedItemInterface
      *      joinColumns={ @ORM\JoinColumn(name="obj_id", referencedColumnName="obj_id", onDelete="CASCADE")},
      *      inverseJoinColumns={ @ORM\JoinColumn(name="dom_id", referencedColumnName="dom_id", onDelete="CASCADE")}
      * )
+     * @Assert\Count(
+     *     min = "1",
+     *     minMessage = "Merci de choisir un domaine au minimum."
+     * )
      */
     protected $domaines;
 
@@ -381,12 +396,11 @@ class Objet implements RoutedItemInterface
         $this->ambassadeurs          = [];
         $this->modules               = [];
         $this->maitriseUsers         = [];
+        $this->domaines              = [];
     }
 
 
     /**
-     * Get id
-     *
      * @return integer
      */
     public function getId()
@@ -395,9 +409,8 @@ class Objet implements RoutedItemInterface
     }
 
     /**
-     * Set titre
-     *
      * @param string $titre
+     *
      * @return Objet
      */
     public function setTitre($titre)
@@ -408,8 +421,6 @@ class Objet implements RoutedItemInterface
     }
 
     /**
-     * Get titre
-     *
      * @return string
      */
     public function getTitre()
@@ -418,9 +429,8 @@ class Objet implements RoutedItemInterface
     }
 
     /**
-     * Set alias
-     *
      * @param string $alias
+     *
      * @return Objet
      */
     public function setAlias($alias)
@@ -431,8 +441,6 @@ class Objet implements RoutedItemInterface
     }
 
     /**
-     * Get alias
-     *
      * @return string
      */
     public function getAlias()
@@ -441,9 +449,8 @@ class Objet implements RoutedItemInterface
     }
 
     /**
-     * Set synthese
-     *
      * @param string $synthese
+     *
      * @return Objet
      */
     public function setSynthese($synthese)
@@ -454,8 +461,6 @@ class Objet implements RoutedItemInterface
     }
 
     /**
-     * Get synthese
-     *
      * @return string
      */
     public function getSynthese()
@@ -464,9 +469,8 @@ class Objet implements RoutedItemInterface
     }
 
     /**
-     * Set resume
-     *
      * @param string $resume
+     *
      * @return Objet
      */
     public function setResume($resume)
@@ -477,8 +481,6 @@ class Objet implements RoutedItemInterface
     }
 
     /**
-     * Get resume
-     *
      * @return string
      */
     public function getResume()
@@ -487,15 +489,15 @@ class Objet implements RoutedItemInterface
     }
 
     /**
-     * Set path
-     *
      * @param string $path
+     *
      * @return Objet
      */
     public function setPath($path)
     {
-        if (is_null($path) && file_exists($this->getAbsolutePath(self::FICHIER_1)))
+        if (is_null($path) && file_exists($this->getAbsolutePath(self::FICHIER_1))) {
             unlink($this->getAbsolutePath(self::FICHIER_1));
+        }
 
         $this->path = $path;
 
@@ -503,8 +505,6 @@ class Objet implements RoutedItemInterface
     }
 
     /**
-     * Get path
-     *
      * @return string
      */
     public function getPath()
@@ -513,15 +513,15 @@ class Objet implements RoutedItemInterface
     }
 
     /**
-     * Set path2
-     *
      * @param string $path2
+     *
      * @return Objet
      */
     public function setPath2($path2)
     {
-        if (is_null($path2) && file_exists($this->getAbsolutePath(self::FICHIER_2)))
+        if (is_null($path2) && file_exists($this->getAbsolutePath(self::FICHIER_2))) {
             unlink($this->getAbsolutePath(self::FICHIER_2));
+        }
 
         $this->path2 = $path2;
 
@@ -529,8 +529,6 @@ class Objet implements RoutedItemInterface
     }
 
     /**
-     * Get path2
-     *
      * @return string
      */
     public function getPath2()
@@ -539,9 +537,8 @@ class Objet implements RoutedItemInterface
     }
 
     /**
-     * Set commentaires
-     *
      * @param boolean $commentaires
+     *
      * @return Objet
      */
     public function setCommentaires($commentaires)
@@ -552,8 +549,6 @@ class Objet implements RoutedItemInterface
     }
 
     /**
-     * Get commentaires
-     *
      * @return boolean
      */
     public function getCommentaires()
@@ -562,9 +557,8 @@ class Objet implements RoutedItemInterface
     }
 
     /**
-     * Set notes
-     *
      * @param boolean $notes
+     *
      * @return Objet
      */
     public function setNotes($notes)
@@ -575,8 +569,6 @@ class Objet implements RoutedItemInterface
     }
 
     /**
-     * Get notes
-     *
      * @return boolean
      */
     public function getNotes()
@@ -585,9 +577,8 @@ class Objet implements RoutedItemInterface
     }
 
     /**
-     * Set dateCreation
-     *
      * @param \DateTime $dateCreation
+     *
      * @return Objet
      */
     public function setDateCreation($dateCreation)
@@ -598,8 +589,6 @@ class Objet implements RoutedItemInterface
     }
 
     /**
-     * Get dateCreation
-     *
      * @return \DateTime
      */
     public function getDateCreation()
@@ -608,9 +597,8 @@ class Objet implements RoutedItemInterface
     }
 
     /**
-     * Set dateModification
-     *
      * @param \DateTime $dateModification
+     *
      * @return Objet
      */
     public function setDateModification($dateModification)
@@ -621,8 +609,6 @@ class Objet implements RoutedItemInterface
     }
 
     /**
-     * Get dateModification
-     *
      * @return \DateTime
      */
     public function getDateModification()
@@ -631,8 +617,6 @@ class Objet implements RoutedItemInterface
     }
 
     /**
-     * Get lock
-     *
      * @return boolean $lock
      */
     public function getLock()
@@ -641,8 +625,6 @@ class Objet implements RoutedItemInterface
     }
 
     /**
-     * Set lock
-     *
      * @param boolean $lock
      */
     public function setLock($lock)
@@ -651,9 +633,8 @@ class Objet implements RoutedItemInterface
     }
 
     /**
-     * Set isInfraDoc
-     *
      * @param boolean $isInfraDoc
+     *
      * @return Objet
      */
     public function setInfraDoc($isInfraDoc)
@@ -664,8 +645,6 @@ class Objet implements RoutedItemInterface
     }
 
     /**
-     * Get isInfraDoc
-     *
      * @return boolean
      */
     public function isInfraDoc()
@@ -674,8 +653,6 @@ class Objet implements RoutedItemInterface
     }
 
     /**
-     * Get isArticle
-     *
      * @return boolean $isArticle
      */
     public function isArticle()
@@ -684,8 +661,6 @@ class Objet implements RoutedItemInterface
     }
 
     /**
-     * Set isArticle
-     *
      * @param boolean $isArticle
      */
     public function setArticle($isArticle)
@@ -694,8 +669,6 @@ class Objet implements RoutedItemInterface
     }
 
     /**
-     * Get vignette
-     *
      * @return string $vignette
      */
     public function getVignette()
@@ -704,8 +677,6 @@ class Objet implements RoutedItemInterface
     }
 
     /**
-     * Set vignette
-     *
      * @param string $vignette
      */
     public function setVignette($vignette)
@@ -714,8 +685,6 @@ class Objet implements RoutedItemInterface
     }
 
     /**
-     * Get nbVue
-     *
      * @return integer $nbVue
      */
     public function getNbVue()
@@ -724,9 +693,9 @@ class Objet implements RoutedItemInterface
     }
 
     /**
-     * Set nbVue
-     *
      * @param integer $nbVue
+     *
+     * @return Objet
      */
     public function setNbVue($nbVue)
     {
@@ -738,7 +707,7 @@ class Objet implements RoutedItemInterface
     /**
      * Get lockedBy
      *
-     * @return \HopitalNumerique\UserBundle\Entity\User $lockedBy
+     * @return User $lockedBy
      */
     public function getLockedBy()
     {
@@ -746,22 +715,19 @@ class Objet implements RoutedItemInterface
     }
 
     /**
-     * Set lockedBy
-     *
-     * @param \HopitalNumerique\UserBundle\Entity\User $lockedBy
+     * @param User $lockedBy
      */
     public function setLockedBy($lockedBy)
     {
-        if ($lockedBy instanceof \HopitalNumerique\UserBundle\Entity\User)
+        if ($lockedBy instanceof User) {
             $this->lockedBy = $lockedBy;
-        else
+        } else {
             $this->lockedBy = null;
+        }
     }
 
     /**
-     * Get etat
-     *
-     * @return \HopitalNumerique\ReferenceBundle\Entity\Reference $etat
+     * @return Reference $etat
      */
     public function getEtat()
     {
@@ -769,22 +735,19 @@ class Objet implements RoutedItemInterface
     }
 
     /**
-     * Set etat
-     *
-     * @param \HopitalNumerique\ReferenceBundle\Entity\Reference $etat
+     * @param Reference $etat
      */
-    public function setEtat(\HopitalNumerique\ReferenceBundle\Entity\Reference $etat)
+    public function setEtat(Reference $etat)
     {
         $this->etat = $etat;
     }
 
     /**
-     * Add role
+     * @param Role $role
      *
-     * @param \Nodevo\RoleBundle\Entity\Role $role
      * @return Objet
      */
-    public function addRole(\Nodevo\RoleBundle\Entity\Role $role)
+    public function addRole(Role $role)
     {
         $this->roles[] = $role;
 
@@ -792,9 +755,7 @@ class Objet implements RoutedItemInterface
     }
 
     /**
-     * Remove role
-     *
-     * @param \Nodevo\RoleBundle\Entity\Role $role
+     * @param Role $role
      */
     public function removeRole($role)
     {
@@ -802,9 +763,8 @@ class Objet implements RoutedItemInterface
     }
 
     /**
-     * Set roles
+     * @param array|Collection $roles
      *
-     * @param \Doctrine\Common\Collections\Collection $roles
      * @return Objet
      */
     public function setRoles(array $roles)
@@ -815,9 +775,7 @@ class Objet implements RoutedItemInterface
     }
 
     /**
-     * Get roles
-     *
-     * @return \Doctrine\Common\Collections\Collection
+     * @return array|Collection
      */
     public function getRoles()
     {
@@ -825,12 +783,11 @@ class Objet implements RoutedItemInterface
     }
 
     /**
-     * Add type
+     * @param Reference $type
      *
-     * @param \HopitalNumerique\ReferenceBundle\Entity\Reference $type
      * @return Objet
      */
-    public function addType(\HopitalNumerique\ReferenceBundle\Entity\Reference $type)
+    public function addType(Reference $type)
     {
         $this->types[] = $type;
 
@@ -838,19 +795,16 @@ class Objet implements RoutedItemInterface
     }
 
     /**
-     * Remove type
-     *
-     * @param \HopitalNumerique\ReferenceBundle\Entity\Reference $type
+     * @param Reference $type
      */
-    public function removeType(\HopitalNumerique\ReferenceBundle\Entity\Reference $type)
+    public function removeType(Reference $type)
     {
         $this->types->removeElement($type);
     }
 
     /**
-     * Set types
+     * @param array|Collection $types
      *
-     * @param \Doctrine\Common\Collections\Collection $types
      * @return Objet
      */
     public function setTypes(array $types)
@@ -861,9 +815,7 @@ class Objet implements RoutedItemInterface
     }
 
     /**
-     * Get types
-     *
-     * @return \Doctrine\Common\Collections\Collection
+     * @return array|Collection
      */
     public function getTypes()
     {
@@ -871,8 +823,6 @@ class Objet implements RoutedItemInterface
     }
 
     /**
-     * Get types ID
-     *
      * @return array<integer>
      */
     public function getTypeIds()
@@ -887,8 +837,6 @@ class Objet implements RoutedItemInterface
     }
 
     /**
-     * Get autodiags
-     *
      * @return array $autodiags
      */
     public function getAutodiags()
@@ -897,9 +845,9 @@ class Objet implements RoutedItemInterface
     }
 
     /**
-     * Set autodiags
-     *
      * @param array $autodiags
+     *
+     * @return Objet
      */
     public function setAutodiags(array $autodiags)
     {
@@ -909,9 +857,9 @@ class Objet implements RoutedItemInterface
     }
 
     /**
-     * add autodiag
-     *
      * @param integer $autodiag
+     *
+     * @return Objet
      */
     public function addAutodiag($autodiag)
     {
@@ -921,8 +869,6 @@ class Objet implements RoutedItemInterface
     }
 
     /**
-     * Get referencement
-     *
      * @return array $referencement
      */
     public function getReferencement()
@@ -931,9 +877,9 @@ class Objet implements RoutedItemInterface
     }
 
     /**
-     * Set referencement
-     *
      * @param array $referencement
+     *
+     * @return Objet
      */
     public function setReferencement(array $referencement)
     {
@@ -943,9 +889,9 @@ class Objet implements RoutedItemInterface
     }
 
     /**
-     * add referencement
-     *
      * @param string $referencement
+     *
+     * @return $this
      */
     public function addReferencement($referencement)
     {
@@ -955,12 +901,11 @@ class Objet implements RoutedItemInterface
     }
 
     /**
-     * Add ambassadeur
+     * @param User $ambassadeur
      *
-     * @param \HopitalNumerique\UserBundle\Entity\User $ambassadeur
      * @return Objet
      */
-    public function addAmbassadeur(\HopitalNumerique\UserBundle\Entity\User $ambassadeur)
+    public function addAmbassadeur(User $ambassadeur)
     {
         $this->ambassadeurs[] = $ambassadeur;
 
@@ -968,19 +913,17 @@ class Objet implements RoutedItemInterface
     }
 
     /**
-     * Remove ambassadeur
-     *
-     * @param \HopitalNumerique\UserBundle\Entity\User $ambassadeur
+     * @param User $ambassadeur
      */
-    public function removeAmbassadeur(\HopitalNumerique\UserBundle\Entity\User $ambassadeur)
+    public function removeAmbassadeur(User $ambassadeur)
     {
         $this->ambassadeurs->removeElement($ambassadeur);
     }
 
     /**
-     * Remove ambassadeurs
+     * @param $ambassadeurs
      *
-     * @param \HopitalNumerique\UserBundle\Entity\User $ambassadeur
+     * @internal param \HopitalNumerique\UserBundle\Entity\User $ambassadeur
      */
     public function removeAmbassadeurs($ambassadeurs)
     {
@@ -990,9 +933,8 @@ class Objet implements RoutedItemInterface
     }
 
     /**
-     * Set ambassadeurs
+     * @param array $ambassadeurs
      *
-     * @param \Doctrine\Common\Collections\Collection $ambassadeurs
      * @return Objet
      */
     public function setAmbassadeurs(array $ambassadeurs)
@@ -1003,9 +945,7 @@ class Objet implements RoutedItemInterface
     }
 
     /**
-     * Get ambassadeurs
-     *
-     * @return \Doctrine\Common\Collections\Collection
+     * @return Collection
      */
     public function getAmbassadeurs()
     {
@@ -1013,9 +953,7 @@ class Objet implements RoutedItemInterface
     }
 
     /**
-     * Get roles
-     *
-     * @return \Doctrine\Common\Collections\Collection
+     * @return Collection
      */
     public function getMaitriseUsers()
     {
@@ -1023,9 +961,8 @@ class Objet implements RoutedItemInterface
     }
 
     /**
-     * Add objet
+     * @param Objet $objet
      *
-     * @param \HopitalNumerique\ObjetBundle\Entity\Objet $objet
      * @return Objet
      */
     public function addObjet($objet)
@@ -1036,19 +973,16 @@ class Objet implements RoutedItemInterface
     }
 
     /**
-     * Remove objet
-     *
-     * @param \HopitalNumerique\ObjetBundle\Entity\Objet $objet
+     * @param Objet $objet
      */
-    public function removeObjet(\HopitalNumerique\ObjetBundle\Entity\Objet $objet)
+    public function removeObjet(Objet $objet)
     {
         $this->objets->removeElement($objet);
     }
 
     /**
-     * Set objets
+     * @param array|Collection $objets
      *
-     * @param \Doctrine\Common\Collections\Collection $objets
      * @return Objet
      */
     public function setObjets(array $objets)
@@ -1059,9 +993,7 @@ class Objet implements RoutedItemInterface
     }
 
     /**
-     * Get objets
-     *
-     * @return \Doctrine\Common\Collections\Collection
+     * @return array|Collection
      */
     public function getObjets()
     {
@@ -1069,9 +1001,7 @@ class Objet implements RoutedItemInterface
     }
 
     /**
-     * Get consultations
-     *
-     * @return \Doctrine\Common\Collections\ArrayCollection $consultations
+     * @return ArrayCollection $consultations
      */
     public function getConsultations()
     {
@@ -1079,12 +1009,11 @@ class Objet implements RoutedItemInterface
     }
 
     /**
-     * Set consultations
+     * @param ArrayCollection $consultations
      *
-     * @param \Doctrine\Common\Collections\ArrayCollection $consultations
      * @return Objet
      */
-    public function setConsultations(\Doctrine\Common\Collections\ArrayCollection $consultations)
+    public function setConsultations(ArrayCollection $consultations)
     {
         $this->consultations = $consultations;
 
@@ -1092,9 +1021,7 @@ class Objet implements RoutedItemInterface
     }
 
     /**
-     * Get listeCommentaires
-     *
-     * @return \Doctrine\Common\Collections\ArrayCollection $listeCommentaires
+     * @return ArrayCollection $listeCommentaires
      */
     public function getListeCommentaires()
     {
@@ -1102,12 +1029,11 @@ class Objet implements RoutedItemInterface
     }
 
     /**
-     * Set listeCommentaires
+     * @param ArrayCollection $listeCommentaires
      *
-     * @param \Doctrine\Common\Collections\ArrayCollection $listeCommentaires
      * @return Objet
      */
-    public function setListeCommentaires(\Doctrine\Common\Collections\ArrayCollection $listeCommentaires)
+    public function setListeCommentaires(ArrayCollection $listeCommentaires)
     {
         $this->listeCommentaires = $listeCommentaires;
 
@@ -1115,9 +1041,7 @@ class Objet implements RoutedItemInterface
     }
 
     /**
-     * Get listeNotes
-     *
-     * @return \Doctrine\Common\Collections\ArrayCollection $listeNotes
+     * @return ArrayCollection $listeNotes
      */
     public function getListeNotes()
     {
@@ -1125,8 +1049,6 @@ class Objet implements RoutedItemInterface
     }
 
     /**
-     * Get listeNotes JSONifié
-     *
      * @return JSON $listeNotes
      */
     public function getListeNotesJSON()
@@ -1135,12 +1057,11 @@ class Objet implements RoutedItemInterface
     }
 
     /**
-     * Set listeNotes
+     * @param ArrayCollection $listeNotes
      *
-     * @param \Doctrine\Common\Collections\ArrayCollection $listeNotes
      * @return Objet
      */
-    public function setListeNotes(\Doctrine\Common\Collections\ArrayCollection $listeNotes)
+    public function setListeNotes(ArrayCollection $listeNotes)
     {
         $this->listeNotes = $listeNotes;
 
@@ -1148,9 +1069,7 @@ class Objet implements RoutedItemInterface
     }
 
     /**
-     * Get contenus
-     *
-     * @return \Doctrine\Common\Collections\ArrayCollection $contenus
+     * @return ArrayCollection $contenus
      */
     public function getContenus()
     {
@@ -1158,12 +1077,11 @@ class Objet implements RoutedItemInterface
     }
 
     /**
-     * Set contenus
+     * @param ArrayCollection $contenus
      *
-     * @param \Doctrine\Common\Collections\ArrayCollection $contenus
      * @return Objet
      */
-    public function setContenus(\Doctrine\Common\Collections\ArrayCollection $contenus)
+    public function setContenus(ArrayCollection $contenus)
     {
         $this->contenus = $contenus;
 
@@ -1171,27 +1089,25 @@ class Objet implements RoutedItemInterface
     }
 
     /**
-     * Get a contenu by id ou null si pas trouvé
-     *
      * @param int $id
+     *
      * @return Contenu|null $contenu
      */
     public function getContenuById($id)
     {
         foreach ($this->contenus as $contenu) {
-            if ($contenu->getId() === $id)
+            if ($contenu->getId() === $id) {
                 return $contenu;
+            }
         }
 
         return null;
     }
 
     /**
-     * [getAbsolutePath description]
+     * @param $type
      *
-     * @param  [type] $type [description]
-     *
-     * @return [type]
+     * @return null|string
      */
     public function getAbsolutePath($type)
     {
@@ -1199,28 +1115,29 @@ class Objet implements RoutedItemInterface
 
         switch ($type) {
             case self::FICHIER_1:
-                if (!is_null($this->path))
+                if (!is_null($this->path)) {
                     $result = $this->path;
+                }
                 break;
 
             case self::FICHIER_2:
-                if (!is_null($this->path2))
+                if (!is_null($this->path2)) {
                     $result = $this->path2;
+                }
                 break;
         }
 
-        if (is_null($result))
+        if (is_null($result)) {
             return null;
+        }
 
-        return $this->getUploadRootDir() . '/' . $result;
+        return $this->getUploadRootDir().'/'.$result;
     }
 
     /**
-     * [getWebPath description]
+     * @param null $type
      *
-     * @param  [type] $type [description]
-     *
-     * @return [type]
+     * @return null|string
      */
     public function getWebPath($type = null)
     {
@@ -1233,20 +1150,23 @@ class Objet implements RoutedItemInterface
         } else {
             switch ($type) {
                 case self::FICHIER_1:
-                    if (!is_null($this->path))
+                    if (!is_null($this->path)) {
                         $result = $this->path;
+                    }
                     break;
 
                 case self::FICHIER_2:
-                    if (!is_null($this->path2))
+                    if (!is_null($this->path2)) {
                         $result = $this->path2;
+                    }
                     break;
             }
         }
 
 
-        if (is_null($result))
+        if (is_null($result)) {
             return null;
+        }
 
         return $this->getUploadDir() . '/' . $result;
     }
@@ -1268,8 +1188,9 @@ class Objet implements RoutedItemInterface
                 break;
         }
 
-        if (!$result || is_null($result))
+        if (!$result || is_null($result)) {
             return "";
+        }
 
         return substr($result, strrpos($result, ".") + 1);
     }
@@ -1293,16 +1214,18 @@ class Objet implements RoutedItemInterface
     {
         if (null !== $this->file) {
             //delete Old File
-            if (file_exists($this->getAbsolutePath(self::FICHIER_1)))
+            if (file_exists($this->getAbsolutePath(self::FICHIER_1))) {
                 unlink($this->getAbsolutePath(self::FICHIER_1));
+            }
 
             $this->path = $this->file->getClientOriginalName();
         }
 
         if (null !== $this->file2) {
             //delete Old File
-            if (file_exists($this->getAbsolutePath(self::FICHIER_2)))
+            if (file_exists($this->getAbsolutePath(self::FICHIER_2))) {
                 unlink($this->getAbsolutePath(self::FICHIER_2));
+            }
 
             $this->path2 = $this->file2->getClientOriginalName();
         }
@@ -1314,8 +1237,9 @@ class Objet implements RoutedItemInterface
      */
     public function upload()
     {
-        if (null === $this->file && null === $this->file2)
+        if (null === $this->file && null === $this->file2) {
             return;
+        }
 
         // s'il y a une erreur lors du déplacement du fichier, une exception
         // va automatiquement être lancée par la méthode move(). Cela va empêcher
@@ -1337,17 +1261,18 @@ class Objet implements RoutedItemInterface
      */
     public function removeUpload()
     {
-        if ($this->getAbsolutePath(self::FICHIER_1) && file_exists($this->getAbsolutePath(self::FICHIER_1)))
+        if ($this->getAbsolutePath(self::FICHIER_1) && file_exists($this->getAbsolutePath(self::FICHIER_1))) {
             unlink($this->getAbsolutePath(self::FICHIER_1));
+        }
 
-        if ($this->getAbsolutePath(self::FICHIER_2) && file_exists($this->getAbsolutePath(self::FICHIER_2)))
+        if ($this->getAbsolutePath(self::FICHIER_2) && file_exists($this->getAbsolutePath(self::FICHIER_2))) {
             unlink($this->getAbsolutePath(self::FICHIER_2));
+        }
     }
 
     /**
-     * Set dateParution
-     *
      * @param String $dateParution
+     *
      * @return Objet
      */
     public function setDateParution($dateParution)
@@ -1358,8 +1283,6 @@ class Objet implements RoutedItemInterface
     }
 
     /**
-     * Get dateParution
-     *
      * @return \String
      */
     public function getDateParution()
@@ -1368,9 +1291,8 @@ class Objet implements RoutedItemInterface
     }
 
     /**
-     * Set isInfraDoc
-     *
      * @param boolean $isInfraDoc
+     *
      * @return Objet
      */
     public function setIsInfraDoc($isInfraDoc)
@@ -1381,8 +1303,6 @@ class Objet implements RoutedItemInterface
     }
 
     /**
-     * Get isInfraDoc
-     *
      * @return boolean
      */
     public function getIsInfraDoc()
@@ -1391,9 +1311,8 @@ class Objet implements RoutedItemInterface
     }
 
     /**
-     * Set isArticle
-     *
      * @param boolean $isArticle
+     *
      * @return Objet
      */
     public function setIsArticle($isArticle)
@@ -1404,8 +1323,6 @@ class Objet implements RoutedItemInterface
     }
 
     /**
-     * Get isArticle
-     *
      * @return boolean
      */
     public function getIsArticle()
@@ -1414,12 +1331,11 @@ class Objet implements RoutedItemInterface
     }
 
     /**
-     * Add consultations
+     * @param Consultation $consultations
      *
-     * @param \HopitalNumerique\ObjetBundle\Entity\Consultation $consultations
      * @return Objet
      */
-    public function addConsultation(\HopitalNumerique\ObjetBundle\Entity\Consultation $consultations)
+    public function addConsultation(Consultation $consultations)
     {
         $this->consultations[] = $consultations;
 
@@ -1427,22 +1343,19 @@ class Objet implements RoutedItemInterface
     }
 
     /**
-     * Remove consultations
-     *
-     * @param \HopitalNumerique\ObjetBundle\Entity\Consultation $consultations
+     * @param Consultation $consultations
      */
-    public function removeConsultation(\HopitalNumerique\ObjetBundle\Entity\Consultation $consultations)
+    public function removeConsultation(Consultation $consultations)
     {
         $this->consultations->removeElement($consultations);
     }
 
     /**
-     * Add listeCommentaires
+     * @param Commentaire $listeCommentaires
      *
-     * @param \HopitalNumerique\ObjetBundle\Entity\Commentaire $listeCommentaires
      * @return Objet
      */
-    public function addListeCommentaire(\HopitalNumerique\ObjetBundle\Entity\Commentaire $listeCommentaires)
+    public function addListeCommentaire(Commentaire $listeCommentaires)
     {
         $this->listeCommentaires[] = $listeCommentaires;
 
@@ -1450,22 +1363,19 @@ class Objet implements RoutedItemInterface
     }
 
     /**
-     * Remove listeCommentaires
-     *
-     * @param \HopitalNumerique\ObjetBundle\Entity\Commentaire $listeCommentaires
+     * @param Commentaire $listeCommentaires
      */
-    public function removeListeCommentaire(\HopitalNumerique\ObjetBundle\Entity\Commentaire $listeCommentaires)
+    public function removeListeCommentaire(Commentaire $listeCommentaires)
     {
         $this->listeCommentaires->removeElement($listeCommentaires);
     }
 
     /**
-     * Add listeNotes
+     * @param Note $listeNotes
      *
-     * @param \HopitalNumerique\ObjetBundle\Entity\Note $listeNotes
      * @return Objet
      */
-    public function addListeNote(\HopitalNumerique\ObjetBundle\Entity\Note $listeNotes)
+    public function addListeNote(Note $listeNotes)
     {
         $this->listeNotes[] = $listeNotes;
 
@@ -1473,65 +1383,57 @@ class Objet implements RoutedItemInterface
     }
 
     /**
-     * Remove listeNotes
-     *
-     * @param \HopitalNumerique\ObjetBundle\Entity\Note $listeNotes
+     * @param Note $listeNotes
      */
-    public function removeListeNote(\HopitalNumerique\ObjetBundle\Entity\Note $listeNotes)
+    public function removeListeNote(Note $listeNotes)
     {
         $this->listeNotes->removeElement($listeNotes);
     }
 
     /**
-     * Add contenus
+     * @param Contenu $contenu
      *
-     * @param \HopitalNumerique\ObjetBundle\Entity\Contenu $contenus
      * @return Objet
      */
-    public function addContenus(\HopitalNumerique\ObjetBundle\Entity\Contenu $contenus)
+    public function addContenus(Contenu $contenu)
     {
-        $this->contenus[] = $contenus;
+        $this->contenus[] = $contenu;
 
         return $this;
     }
 
     /**
-     * Remove contenus
-     *
-     * @param \HopitalNumerique\ObjetBundle\Entity\Contenu $contenus
+     * @param Contenu $contenu
      */
-    public function removeContenus(\HopitalNumerique\ObjetBundle\Entity\Contenu $contenus)
+    public function removeContenus(Contenu $contenu)
     {
-        $this->contenus->removeElement($contenus);
+        $this->contenus->removeElement($contenu);
     }
 
     /**
-     * Add modules
+     * @param Module $module
      *
-     * @param \HopitalNumerique\ModuleBundle\Entity\Module $modules
      * @return Objet
      */
-    public function addModule(\HopitalNumerique\ModuleBundle\Entity\Module $modules)
+    public function addModule(Module $module)
     {
-        $this->modules[] = $modules;
+        $this->modules[] = $module;
 
         return $this;
     }
 
     /**
-     * Remove modules
-     *
-     * @param \HopitalNumerique\ModuleBundle\Entity\Module $modules
+     * @param Module $module
      */
-    public function removeModule(\HopitalNumerique\ModuleBundle\Entity\Module $modules)
+    public function removeModule(Module $module)
     {
-        $this->modules->removeElement($modules);
+        $this->modules->removeElement($module);
     }
 
     /**
      * Get modules
      *
-     * @return \Doctrine\Common\Collections\Collection
+     * @return Collection
      */
     public function getModules()
     {
@@ -1539,35 +1441,31 @@ class Objet implements RoutedItemInterface
     }
 
     /**
-     * Add maitriseUsers
+     * @param MaitriseUser $maitriseUser
      *
-     * @param \HopitalNumerique\RechercheParcoursBundle\Entity\MaitriseUser $maitriseUsers
      * @return Objet
      */
-    public function addMaitriseUser(\HopitalNumerique\RechercheParcoursBundle\Entity\MaitriseUser $maitriseUsers)
+    public function addMaitriseUser(MaitriseUser $maitriseUser)
     {
-        $this->maitriseUsers[] = $maitriseUsers;
+        $this->maitriseUsers[] = $maitriseUser;
 
         return $this;
     }
 
     /**
-     * Remove maitriseUsers
-     *
-     * @param \HopitalNumerique\RechercheParcoursBundle\Entity\MaitriseUser $maitriseUsers
+     * @param MaitriseUser $maitriseUser
      */
-    public function removeMaitriseUser(\HopitalNumerique\RechercheParcoursBundle\Entity\MaitriseUser $maitriseUsers)
+    public function removeMaitriseUser(MaitriseUser $maitriseUser)
     {
-        $this->maitriseUsers->removeElement($maitriseUsers);
+        $this->maitriseUsers->removeElement($maitriseUser);
     }
 
     /**
-     * Set fichierModifiable
+     * @param FichierModifiable $fichierModifiable
      *
-     * @param \HopitalNumerique\ObjetBundle\Entity\FichierModifiable $fichierModifiable
      * @return Objet
      */
-    public function setFichierModifiable(\HopitalNumerique\ObjetBundle\Entity\FichierModifiable $fichierModifiable = null)
+    public function setFichierModifiable(FichierModifiable $fichierModifiable = null)
     {
         $this->fichierModifiable = $fichierModifiable;
 
@@ -1575,9 +1473,7 @@ class Objet implements RoutedItemInterface
     }
 
     /**
-     * Get fichierModifiable
-     *
-     * @return \HopitalNumerique\ObjetBundle\Entity\FichierModifiable
+     * @return FichierModifiable
      */
     public function getFichierModifiable()
     {
@@ -1585,32 +1481,28 @@ class Objet implements RoutedItemInterface
     }
 
     /**
-     * Add domaines
+     * @param Domaine $domaine
      *
-     * @param \HopitalNumerique\DomaineBundle\Entity\Domaine $domaines
      * @return Objet
      */
-    public function addDomaine(\HopitalNumerique\DomaineBundle\Entity\Domaine $domaines)
+    public function addDomaine(Domaine $domaine)
     {
-        $this->domaines[] = $domaines;
+        $this->domaines[] = $domaine;
 
         return $this;
     }
 
     /**
-     * Remove domaines
-     *
-     * @param \HopitalNumerique\DomaineBundle\Entity\Domaine $domaines
+     * @param Domaine $domaine
      */
-    public function removeDomaine(\HopitalNumerique\DomaineBundle\Entity\Domaine $domaines)
+    public function removeDomaine(Domaine $domaine)
     {
-        $this->domaines->removeElement($domaines);
+        $this->domaines->removeElement($domaine);
     }
 
     /**
-     * Set domaines
+     * @param Collection $domaines
      *
-     * @param \Doctrine\Common\Collections\Collection $domaines
      * @return Domaine
      */
     public function setDomaines($domaines)
@@ -1621,9 +1513,7 @@ class Objet implements RoutedItemInterface
     }
 
     /**
-     * Get domaines
-     *
-     * @return \Doctrine\Common\Collections\Collection
+     * @return Collection
      */
     public function getDomaines()
     {
@@ -1651,12 +1541,11 @@ class Objet implements RoutedItemInterface
     }
 
     /**
-     * Set communautePratiqueGroupe
+     * @param Groupe $communautePratiqueGroupe
      *
-     * @param \HopitalNumerique\CommunautePratiqueBundle\Entity\Groupe $communautePratiqueGroupe
      * @return Objet
      */
-    public function setCommunautePratiqueGroupe(\HopitalNumerique\CommunautePratiqueBundle\Entity\Groupe $communautePratiqueGroupe = null)
+    public function setCommunautePratiqueGroupe(Groupe $communautePratiqueGroupe = null)
     {
         $this->communautePratiqueGroupe = $communautePratiqueGroupe;
 
@@ -1664,9 +1553,7 @@ class Objet implements RoutedItemInterface
     }
 
     /**
-     * Get communautePratiqueGroupe
-     *
-     * @return \HopitalNumerique\CommunautePratiqueBundle\Entity\Groupe
+     * @return Groupe
      */
     public function getCommunautePratiqueGroupe()
     {
@@ -1674,9 +1561,8 @@ class Objet implements RoutedItemInterface
     }
 
     /**
-     * Set alaune
-     *
      * @param boolean $alaune
+     *
      * @return Objet
      */
     public function setAlaune($alaune)
@@ -1687,8 +1573,6 @@ class Objet implements RoutedItemInterface
     }
 
     /**
-     * Get alaune
-     *
      * @return boolean
      */
     public function getAlaune()
@@ -1697,9 +1581,8 @@ class Objet implements RoutedItemInterface
     }
 
     /**
-     * Set publicationPlusConsulte
-     *
      * @param boolean $publicationPlusConsulte
+     *
      * @return Objet
      */
     public function setPublicationPlusConsulte($publicationPlusConsulte)
@@ -1710,8 +1593,6 @@ class Objet implements RoutedItemInterface
     }
 
     /**
-     * Get publicationPlusConsulte
-     *
      * @return boolean
      */
     public function getPublicationPlusConsulte()
@@ -1720,9 +1601,8 @@ class Objet implements RoutedItemInterface
     }
 
     /**
-     * Set btnSociaux
-     *
      * @param boolean $btnSociaux
+     *
      * @return Objet
      */
     public function setBtnSociaux($btnSociaux)
@@ -1733,8 +1613,6 @@ class Objet implements RoutedItemInterface
     }
 
     /**
-     * Get btnSociaux
-     *
      * @return boolean
      */
     public function getBtnSociaux()
@@ -1780,12 +1658,11 @@ class Objet implements RoutedItemInterface
 
 
     /**
-     * Set cibleDiffusion
+     * @param Reference $cibleDiffusion
      *
-     * @param \HopitalNumerique\ReferenceBundle\Entity\Reference $cibleDiffusion
      * @return Objet
      */
-    public function setCibleDiffusion(\HopitalNumerique\ReferenceBundle\Entity\Reference $cibleDiffusion = null)
+    public function setCibleDiffusion(Reference $cibleDiffusion = null)
     {
         $this->cibleDiffusion = $cibleDiffusion;
 
@@ -1793,9 +1670,7 @@ class Objet implements RoutedItemInterface
     }
 
     /**
-     * Get cibleDiffusion
-     *
-     * @return \HopitalNumerique\ReferenceBundle\Entity\Reference
+     * @return Reference
      */
     public function getCibleDiffusion()
     {
@@ -1803,9 +1678,8 @@ class Objet implements RoutedItemInterface
     }
 
     /**
-     * Set source
-     *
      * @param string $source
+     *
      * @return Objet
      */
     public function setSource($source)
@@ -1816,8 +1690,6 @@ class Objet implements RoutedItemInterface
     }
 
     /**
-     * Get source
-     *
      * @return string
      */
     public function getSource()
@@ -1835,8 +1707,6 @@ class Objet implements RoutedItemInterface
 
 
     /**
-     * Retourne si l'objet est un point dur.
-     *
      * @return boolean Si point dur
      */
     public function isPointDur()
