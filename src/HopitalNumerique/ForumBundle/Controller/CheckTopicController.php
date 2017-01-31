@@ -2,47 +2,48 @@
 
 namespace HopitalNumerique\ForumBundle\Controller;
 
-use HopitalNumerique\ForumBundle\Entity\Post;
+use HopitalNumerique\ForumBundle\Entity\Board;
+use HopitalNumerique\ForumBundle\Entity\Forum;
 use HopitalNumerique\ForumBundle\Entity\Topic;
 use HopitalNumerique\ObjetBundle\Entity\Objet;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 
 class CheckTopicController extends Controller
 {
-
-
-    public function CheckAction($objet)
+    /**
+     * @param Objet $objet
+     *
+     * @return RedirectResponse
+     */
+    public function checkAction(Objet $objet)
     {
-        $topic = $this->container->get('hopitalnumerique_forum.manager.topic')->findOneBy(array(
-            'title' => $objet
+        /** @var Topic $topic */
+        $topic = $this->get('hopitalnumerique_forum.manager.topic')->findOneBy(array(
+            'title' => $objet->getTitre()
         ));
-        $board = $this->container->get('hopitalnumerique_forum.manager.board')->findOneBy(array(
+
+        /** @var Board $board */
+        $board = $this->get('hopitalnumerique_forum.manager.board')->findOneBy(array(
             'id' => $this->getParameter('ref_board_create_topic')
         ));
+
+        /** @var Forum $forum */
+        $forum = $this->get('hopitalnumerique_forum.manager.forum')->findOneBy(array(
+            'id' => $this->getParameter('ref_forum_create_topic')
+        ));
+
         if ($topic == null) {
-
-            $topic = new Topic();
-            $post = new Post();
-
-            $post->setCreatedBy($this->getUser());
-            $post->setBody('Venez discuter de ce sujet: '.$objet);
-            $post->setCreatedDate(\DateTime::createFromFormat('d-m-Y H:i:s', date('d-m-Y H:i:s')));
-            $topic->setBoard($board);
-            $topic->setTitle($objet);
-            $topic->setFirstPost($post);
-            $topic->setLastPost($post);
-            $post->setTopic($topic);
-            $em = $this->getDoctrine()->getManager();
-
-            $em->persist($topic);
-            $em->flush();
-
-            return $this->redirectToRoute('ccdn_forum_user_topic_show', array('topicId' => $topic->getId()));
-
+            return $this->redirectToRoute(
+                'hopital_numerique_forum_user_topic_create',
+                [
+                    'forum' => $forum->getId(),
+                    'board' => $board->getId(),
+                    'objet' => $objet->getId()
+                ]
+            );
         } else {
             return $this->redirectToRoute('ccdn_forum_user_topic_show', array('topicId' => $topic->getId()));
         }
     }
-
 }

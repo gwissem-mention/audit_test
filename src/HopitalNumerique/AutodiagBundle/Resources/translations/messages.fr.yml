@@ -102,6 +102,7 @@ ad:
         attribute:
             code_already_exists: L'attribut avec le code "%code%" existe déjà dans le fichier.
             incorrect_row_format: Format de ligne incorrect.
+            incorrect_items_reponse: 'Veuillez vérifier les indices de la colonne items_reponse (code : %code%)'
         errors:
             generic: Une erreur technique est survenue, veuillez réessayer ultérieurement.
             count: "{0}Aucune erreur|{1}Une erreur a été trouvée|]1,Inf[%count% erreurs ont été trouvées"

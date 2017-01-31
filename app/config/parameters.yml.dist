@@ -61,4 +61,5 @@ parameters:
     ref_com_pratique_id: 1998
     ref_expression_besoin_reponse_id: 1999
 
-    ref_board_create_topic: 8
+    ref_board_create_topic: 29
+    ref_forum_create_topic: 1

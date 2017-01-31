@@ -6,8 +6,9 @@
         <div class="category">
             FIL DE FORUM
         </div>
+
         <h3 class="title">
-            <a href="{{ path('hopitalnumerique_forum_check', {'objet': objet }) }}">
+            <a href="{{  path('hopitalnumerique_forum_check', {'objet': objet.id }) }}">
                 {{objet.titre}}
             </a>
         </h3>

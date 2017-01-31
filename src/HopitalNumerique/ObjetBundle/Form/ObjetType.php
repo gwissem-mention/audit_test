@@ -231,13 +231,13 @@ class ObjetType extends AbstractType
             ->add('domaines', 'entity', array(
                 'class'       => 'HopitalNumeriqueDomaineBundle:Domaine',
                 'property'    => 'nom',
-                'required'    => false,
+                'required'    => true,
                 'multiple'    => true,
                 'label'       => 'Domaine(s) associé(s)',
                 'empty_value' => ' - ',
-                'query_builder' => function(EntityRepository $er) use ($connectedUser){
+                'query_builder' => function (EntityRepository $er) use ($connectedUser) {
                     return $er->getDomainesUserConnectedForForm($connectedUser->getId());
-                }
+                },
             ))
             ->add('modified', 'hidden', array(
                 'mapped'   => false

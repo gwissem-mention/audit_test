@@ -2,8 +2,10 @@
 
 namespace HopitalNumerique\ObjetBundle\Controller;
 
+use HopitalNumerique\ObjetBundle\Entity\Contenu;
 use HopitalNumerique\ObjetBundle\Entity\Objet;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use \Nodevo\ToolsBundle\Tools\Chaine;
@@ -28,7 +30,6 @@ class ObjetController extends Controller
      */
     public function treeIndexAction()
     {
-
         $objets = $this->get('hopitalnumerique_objet.manager.objet')->getObjets();
 
         return $this->render('HopitalNumeriqueObjetBundle:Index:index.html.twig', [
@@ -56,6 +57,12 @@ class ObjetController extends Controller
 
     /**
      * Action Annuler, on dévérouille l'objet et on redirige vers l'index
+     *
+     * @param $id
+     * @param $message
+     * @param $filtre
+     *
+     * @return RedirectResponse
      */
     public function cancelWithFiltreAction($id, $message, $filtre)
     {
@@ -78,14 +85,15 @@ class ObjetController extends Controller
 
     /**
      * Action Annuler, on dévérouille l'objet et on redirige vers l'index
+     *
+     * @param $id
+     * @param $message
+     *
+     * @return RedirectResponse
      */
     public function cancelAction($id, $message)
     {
         $objet = $this->get('hopitalnumerique_objet.manager.objet')->findOneBy(['id' => $id]);
-
-        //On récupère l'user connecté et son role
-        $user = $this->get('security.context')->getToken()->getUser();
-
 
         $this->get('hopitalnumerique_objet.manager.objet')->unlock($objet);
 
@@ -99,29 +107,49 @@ class ObjetController extends Controller
 
     /**
      * Affiche le formulaire d'ajout de Objet.
+     *
+     * @param $type
+     *
+     * @return RedirectResponse|Response
      */
     public function addAction($type)
     {
+        /** @var Objet $objet */
         $objet = $this->get('hopitalnumerique_objet.manager.objet')->createEmpty();
 
         if ($type == 2) {
             $objet->setArticle(true);
         }
 
+        $currentDomaine = $this->get('hopitalnumerique_domaine.dependency_injection.current_domaine')->get();
+
+        $objet->addDomaine($currentDomaine);
+
         $options = [
             'toRef' => 0,
             'note'  => 0,
         ];
 
-        return $this->renderForm('hopitalnumerique_objet_objet', $objet, 'HopitalNumeriqueObjetBundle:Objet:edit.html.twig', $options);
+        return $this->renderForm(
+            'hopitalnumerique_objet_objet',
+            $objet,
+            'HopitalNumeriqueObjetBundle:Objet:edit.html.twig',
+            $options
+        );
     }
 
     /**
      * Affiche le formulaire d'édition de Objet.
+     *
+     * @param $id
+     * @param $infra
+     * @param $toRef
+     *
+     * @return RedirectResponse|Response
      */
     public function editAction($id, $infra, $toRef)
     {
-        //Récupération de l'entité passée en paramètre
+        /** @var Objet $objet */
         $objet = $this->get('hopitalnumerique_objet.manager.objet')->findOneBy(['id' => $id]);
 
         if (is_null($objet)) {
@@ -130,40 +158,59 @@ class ObjetController extends Controller
             return $this->redirect($this->generateUrl('hopitalnumerique_objet_objet'));
         }
 
-        $user = $this->get('security.context')->getToken()->getUser();
+        $user = $this->getUser();
 
         // l'objet est locked, on redirige vers la home page
         if ($objet->getLock() && $objet->getLockedBy() && $objet->getLockedBy() != $user) {
-            $this->get('session')->getFlashBag()->add('warning', 'Cet objet est en cours d\'édition par ' . $objet->getLockedBy()->getEmail() . ', il n\'est donc pas accessible pour le moment.');
+            $this->get('session')->getFlashBag()->add(
+                'warning',
+                'Cet objet est en cours d\'édition par '
+                .$objet->getLockedBy()->getEmail()
+                .', il n\'est donc pas accessible pour le moment.'
+            );
 
             return $this->redirect($this->generateUrl('hopitalnumerique_objet_objet'));
         }
 
         $objet = $this->get('hopitalnumerique_objet.manager.objet')->lock($objet, $user);
         //get Contenus
-        $this->get('hopitalnumerique_objet.manager.contenu')->setRefPonderees($this->get('hopitalnumerique_reference.manager.reference')->getReferencesPonderees($objet->getDomainesId()));
+        $this->get('hopitalnumerique_objet.manager.contenu')->setRefPonderees(
+            $this->get('hopitalnumerique_reference.manager.reference')->getReferencesPonderees($objet->getDomainesId())
+        );
         $contenus = $this->get('hopitalnumerique_objet.manager.contenu')->getArboForObjet($id, $objet->getDomainesId());
 
         //build Productions liées
-        $productions = $this->get('hopitalnumerique_objet.manager.objet')->formatteProductionsLiees($objet->getObjets());
+        $productions = $this->get('hopitalnumerique_objet.manager.objet')->formatteProductionsLiees(
+            $objet->getObjets()
+        );
 
         $options = [
             'contenus'                => $contenus,
             'infra'                   => $infra,
             'toRef'                   => $toRef,
             'productions'             => $productions,
-            'domainesCommunsWithUser' => $this->container->get('hopitalnumerique_core.dependency_injection.entity')->getEntityDomainesCommunsWithUser($objet, $user),
+            'domainesCommunsWithUser' => $this->container->get('hopitalnumerique_core.dependency_injection.entity')
+                                                         ->getEntityDomainesCommunsWithUser($objet, $user),
         ];
 
-        return $this->renderForm('hopitalnumerique_objet_objet', $objet, 'HopitalNumeriqueObjetBundle:Objet:edit.html.twig', $options);
+        return $this->renderForm(
+            'hopitalnumerique_objet_objet',
+            $objet,
+            'HopitalNumeriqueObjetBundle:Objet:edit.html.twig',
+            $options
+        );
     }
 
     /**
      * Affiche le Objet en fonction de son ID passé en paramètre.
+     *
+     * @param $id
+     *
+     * @return Response
      */
     public function showAction($id)
     {
-        //Récupération de l'entité en fonction du paramètre
+        /** @var Objet $objet */
         $objet = $this->get('hopitalnumerique_objet.manager.objet')->findOneBy(['id' => $id]);
         $outils = $this->get('autodiag.repository.autodiag')->findBy(['id' => $objet->getAutodiags()]);
 
@@ -181,8 +228,11 @@ class ObjetController extends Controller
 
     /**
      * Suppresion d'un Objet.
-     *
      * METHOD = POST|DELETE
+     *
+     * @param $id
+     *
+     * @return Response
      */
     public function deleteAction($id)
     {
@@ -200,16 +250,22 @@ class ObjetController extends Controller
 
         $this->get('session')->getFlashBag()->add('info', 'Suppression effectuée avec succès.');
 
-        return new Response('{"success":true, "url" : "' . $this->generateUrl('hopitalnumerique_objet_objet_filtre', ['filtre' => $filtre]) . '"}', 200);
+        return new Response(
+            '{"success":true, "url" : "'.$this->generateUrl(
+                'hopitalnumerique_objet_objet_filtre',
+                ['filtre' => $filtre]
+            ).'"}',
+            200
+        );
     }
 
     /**
      * Suppression de masse des objets
      *
-     * @param array $primaryKeys ID des lignes sélectionnées
-     * @param array $allPrimaryKeys allPrimaryKeys ???
+     * @param array $primaryKeys Id des lignes sélectionnées
+     * @param array $allPrimaryKeys
      *
-     * @return Redirect
+     * @return RedirectResponse
      */
     public function deleteMassAction($primaryKeys, $allPrimaryKeys)
     {
@@ -228,7 +284,10 @@ class ObjetController extends Controller
             $this->get('hopitalnumerique_objet.manager.objet')->delete($objets);
             $this->get('session')->getFlashBag()->add('info', 'Suppression effectuée avec succès.');
         } catch (\Exception $e) {
-            $this->get('session')->getFlashBag()->add('danger', 'Suppression impossible, l\' objet est actuellement lié et ne peut pas être supprimé.');
+            $this->get('session')->getFlashBag()->add(
+                'danger',
+                'Suppression impossible, l\' objet est actuellement lié et ne peut pas être supprimé.'
+            );
         }
 
         return $this->redirect($this->generateUrl('hopitalnumerique_objet_objet'));
@@ -288,7 +347,9 @@ class ObjetController extends Controller
             $types = $this->get('hopitalnumerique_reference.manager.reference')->findBy(['code' => 'CATEGORIE_OBJET']);
             $arbo = $this->get('hopitalnumerique_objet.manager.objet')->getObjetsAndContenuArbo($types);
         } else {
-            $types = $this->get('hopitalnumerique_reference.manager.reference')->findBy(['code' => 'CATEGORIE_ARTICLE']);
+            $types = $this->get('hopitalnumerique_reference.manager.reference')->findBy(
+                ['code' => 'CATEGORIE_ARTICLE']
+            );
             $arbo = $this->get('hopitalnumerique_objet.manager.objet')->getArticlesArbo($types);
         }
 
@@ -307,6 +368,7 @@ class ObjetController extends Controller
 
         if (isset($publication[0]) && isset($publication[1])) {
             if ($publication[0] === 'PUBLICATION') {
+                /** @var Objet $objet */
                 $objet = $this->get('hopitalnumerique_objet.manager.objet')->findOneBy(['id' => $publication[1]]);
 
                 //set URL to select
@@ -315,8 +377,8 @@ class ObjetController extends Controller
                 //set params for URL
                 $result['id'] = $objet->getId();
                 $result['alias'] = $objet->getAlias();
-
-            } else if ($publication[0] === 'INFRADOC') {
+            } elseif ($publication[0] === 'INFRADOC') {
+                /** @var Contenu $contenu */
                 $contenu = $this->get('hopitalnumerique_objet.manager.contenu')->findOneBy(['id' => $publication[1]]);
 
                 //set URL to select
@@ -327,14 +389,16 @@ class ObjetController extends Controller
                 $result['alias'] = $contenu->getObjet()->getAlias();
                 $result['idc'] = $contenu->getId();
                 $result['aliasc'] = $contenu->getAlias();
-            } else if ($publication[0] === 'ARTICLE') {
+            } elseif ($publication[0] === 'ARTICLE') {
+                /** @var Objet $objet */
                 $objet = $this->get('hopitalnumerique_objet.manager.objet')->findOneBy(['id' => $publication[1]]);
                 $types = $objet->getTypes();
                 $type = $types[0];
                 $categorie = '';
 
-                if ($parent = $type->getParent())
-                    $categorie .= $parent->getLibelle() . '-';
+                if ($parent = $type->getParent()) {
+                    $categorie .= $parent->getLibelle().'-';
+                }
                 $categorie .= $type->getLibelle();
 
                 //clean categ
@@ -347,11 +411,12 @@ class ObjetController extends Controller
                 $result['id'] = $objet->getId();
                 $result['alias'] = $objet->getAlias();
                 $result['categorie'] = $tool->minifie();
-
-            } else
+            } else {
                 $result['success'] = false;
-        } else
+            }
+        } else {
             $result['success'] = false;
+        }
 
         return new Response(json_encode($result), 200);
     }
@@ -359,11 +424,15 @@ class ObjetController extends Controller
     /**
      * Generate the article feed (RSS)
      *
+     * @param Request $request
+     *
      * @return Response XML Feed
      */
     public function feedAction(Request $request)
     {
-        $domaine = $this->container->get('hopitalnumerique_domaine.manager.domaine')->findOneById($request->getSession()->get('domaineId', 1));
+        $domaine = $this->container->get('hopitalnumerique_domaine.manager.domaine')->findOneById(
+            $request->getSession()->get('domaineId', 1)
+        );
         $actualites = $this->get('hopitalnumerique_objet.manager.objet')->getObjetsForRSS($domaine);
 
         $feed = $this->get('eko_feed.feed.manager')->get('objet');
@@ -375,6 +444,13 @@ class ObjetController extends Controller
 
     /**
      * Effectue le render du formulaire Objet.
+     *
+     * @param       $formName
+     * @param Objet $objet
+     * @param       $view
+     * @param array $options
+     *
+     * @return RedirectResponse|Response
      */
     private function renderForm($formName, $objet, $view, $options = [])
     {
@@ -385,7 +461,6 @@ class ObjetController extends Controller
 
         // Si l'utilisateur soumet le formulaire
         if ('POST' == $request->getMethod()) {
-
             // On bind les données du form
             $form->handleRequest($request);
 
@@ -403,7 +478,8 @@ class ObjetController extends Controller
                     'toRef'                   => isset($options['toRef']) ? $options['toRef'] : false,
                     'note'                    => isset($options['note']) ? $options['note'] : 0,
                     'productions'             => isset($options['productions']) ? $options['productions'] : [],
-                    'domainesCommunsWithUser' => isset($options['domainesCommunsWithUser']) ? $options['domainesCommunsWithUser'] : [],
+                    'domainesCommunsWithUser' => isset($options['domainesCommunsWithUser'])
+                        ? $options['domainesCommunsWithUser'] : [],
                 ]);
             }
 
@@ -428,16 +504,14 @@ class ObjetController extends Controller
                         'toRef'                   => isset($options['toRef']) ? $options['toRef'] : false,
                         'note'                    => isset($options['note']) ? $options['note'] : 0,
                         'productions'             => isset($options['productions']) ? $options['productions'] : [],
-                        'domainesCommunsWithUser' => isset($options['domainesCommunsWithUser']) ? $options['domainesCommunsWithUser'] : [],
+                        'domainesCommunsWithUser' => isset($options['domainesCommunsWithUser'])
+                            ? $options['domainesCommunsWithUser'] : [],
                     ]);
                 }
 
                 //Object security isArticle = false
                 if (is_null($objet->isArticle())) {
                     $objet->setArticle(false);
-                } elseif (!in_array(1, $objet->getDomainesId())) {
-                    $domaines = $this->get('hopitalnumerique_domaine.manager.domaine')->findBy(['id' => 1]);
-                    $objet->setDomaines($domaines);
                 }
 
                 //Met à jour la date de modification
@@ -446,13 +520,16 @@ class ObjetController extends Controller
                     $objet->setDateModification(new \DateTime());
 
                     //Récupération des consultations
-                    $consultations = $this->get('hopitalnumerique_objet.manager.consultation')->getConultationsByObjet($objet);
+                    $consultations = $this->get('hopitalnumerique_objet.manager.consultation')->getConultationsByObjet(
+                        $objet
+                    );
 
                     $mails = [];
 
                     if (count($objet->getDomaines()) != 1) {
                         if (in_array(1, $objet->getDomainesId())) {
-                            $domaineUrl = $this->get('hopitalnumerique_domaine.manager.domaine')->findOneBy(['id' => 1])->getUrl();
+                            $domaineUrl = $this->get('hopitalnumerique_domaine.manager.domaine')->findOneBy(['id' => 1])
+                                               ->getUrl();
                         }
                     } else {
                         $domaineUrl = $objet->getDomaines()[0]->getUrl();
@@ -467,7 +544,13 @@ class ObjetController extends Controller
 
                         $options = [
                             'titrepublication' => $objet->getTitre(),
-                            'lienpublication'  => '<a href="' . $domaineUrl . $this->generateUrl('hopital_numerique_publication_publication_objet', ['id' => $objet->getId(), 'alias' => $objet->getAlias()]) . '" >Lien vers la publication</a>',
+                            'lienpublication'  => '<a href="'.$domaineUrl.$this->generateUrl(
+                                'hopital_numerique_publication_publication_objet',
+                                [
+                                    'id' => $objet->getId(),
+                                    'alias' => $objet->getAlias()
+                                ]
+                            ).'" >Lien vers la publication</a>',
                         ];
                         $mails[] = $this->get('nodevo_mail.manager.mail')->sendNotificationRequete($user, $options);
                     }
@@ -484,33 +567,55 @@ class ObjetController extends Controller
                 $this->get('hopitalnumerique_reference.doctrine.glossaire.parse')->parseAndSaveEntity($objet);
 
                 // On envoi une 'flash' pour indiquer à l'utilisateur que l'entité est ajoutée
-                if ($do == "save-auto")
+                if ($do == "save-auto") {
                     $this->get('session')->getFlashBag()->add('info', 'Objet sauvegardé automatiquement.');
-                else
-                    $this->get('session')->getFlashBag()->add(($new ? 'success' : 'info'), 'Objet ' . ($new ? 'ajouté.' : 'mis à jour.'));
+                } else {
+                    $this->get('session')->getFlashBag()->add(
+                        ($new ? 'success' : 'info'),
+                        'Objet '.($new ? 'ajouté.' : 'mis à jour.')
+                    );
+                }
 
                 // On redirige vers la home page
                 if ($objet->isArticle()) {
-                    return $this->redirect(($do == 'save-close' ? $this->generateUrl('hopitalnumerique_objet_objet_filtre', ['filtre' => 'Article']) : $this->generateUrl('hopitalnumerique_objet_objet_edit', [
-                        'id' => $objet->getId(),
-                    ])));
+                    return $this->redirect(
+                        ($do == 'save-close'
+                            ? $this->generateUrl('hopitalnumerique_objet_objet_filtre', ['filtre' => 'Article'])
+                            : $this->generateUrl(
+                                'hopitalnumerique_objet_objet_edit',
+                                [
+                                    'id' => $objet->getId(),
+                                ]
+                            ))
+                    );
                 }
 
-                return $this->redirect(($do == 'save-close' ? $this->generateUrl('hopitalnumerique_objet_objet_filtre', ['filtre' => 'publication']) : $this->generateUrl('hopitalnumerique_objet_objet_edit', [
-                    'id' => $objet->getId(),
-                ])));
+                return $this->redirect(
+                    ($do == 'save-close'
+                        ? $this->generateUrl('hopitalnumerique_objet_objet_filtre', ['filtre' => 'publication'])
+                        : $this->generateUrl(
+                            'hopitalnumerique_objet_objet_edit',
+                            [
+                                'id' => $objet->getId(),
+                            ]
+                        ))
+                );
             }
         }
 
-        return $this->render($view, [
-            'form'                    => $form->createView(),
-            'objet'                   => $objet,
-            'contenus'                => isset($options['contenus']) ? $options['contenus'] : [],
-            'infra'                   => isset($options['infra']) ? $options['infra'] : false,
-            'toRef'                   => isset($options['toRef']) ? $options['toRef'] : false,
-            'note'                    => isset($options['note']) ? $options['note'] : 0,
-            'productions'             => isset($options['productions']) ? $options['productions'] : [],
-            'domainesCommunsWithUser' => isset($options['domainesCommunsWithUser']) ? $options['domainesCommunsWithUser'] : [],
-        ]);
+        return $this->render(
+            $view,
+            [
+                'form'                    => $form->createView(),
+                'objet'                   => $objet,
+                'contenus'                => isset($options['contenus']) ? $options['contenus'] : [],
+                'infra'                   => isset($options['infra']) ? $options['infra'] : false,
+                'toRef'                   => isset($options['toRef']) ? $options['toRef'] : false,
+                'note'                    => isset($options['note']) ? $options['note'] : 0,
+                'productions'             => isset($options['productions']) ? $options['productions'] : [],
+                'domainesCommunsWithUser' => isset($options['domainesCommunsWithUser'])
+                    ? $options['domainesCommunsWithUser'] : [],
+            ]
+        );
     }
 }

@@ -10,6 +10,7 @@ use HopitalNumerique\AutodiagBundle\Service\Attribute\AttributeBuilderProvider;
 use Nodevo\Component\Import\Progress\ProgressAwareInterface;
 use Nodevo\Component\Import\Progress\ProgressAwareTrait;
 use Nodevo\Component\Import\Writer\WriterInterface;
+use Symfony\Bundle\FrameworkBundle\Translation\Translator;
 use Symfony\Component\PropertyAccess\PropertyAccessor;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
@@ -49,12 +50,16 @@ class QuestionWriter implements WriterInterface, ProgressAwareInterface
         AttributeColumnsDefinition::NUMBER => 'number',
     ];
 
-    public function __construct(EntityManager $manager, Autodiag $autodiag, AttributeBuilderProvider $attributesProvider, ValidatorInterface $validator)
+    /** @var Translator $translator */
+    protected $translator;
+
+    public function __construct(EntityManager $manager, Autodiag $autodiag, AttributeBuilderProvider $attributesProvider, ValidatorInterface $validator, Translator $translator)
     {
         $this->manager = $manager;
         $this->autodiag = $autodiag;
         $this->attributesProvider = $attributesProvider;
         $this->validator = $validator;
+        $this->translator = $translator;
 
         $this->attributeTypesAvailable = $this->attributesProvider->getBuildersName();
     }
@@ -80,6 +85,7 @@ class QuestionWriter implements WriterInterface, ProgressAwareInterface
                 );
                 return;
             }
+
             $this->attributes[$attribute->getCode()] = $attribute;
 
             $propertyAccessor = new PropertyAccessor();
@@ -245,16 +251,25 @@ class QuestionWriter implements WriterInterface, ProgressAwareInterface
      * Handle attribute options
      *
      * @param Attribute $attribute
-     * @param $options
+     * @param           $options
+     *
      * @return bool
+     * @throws \Exception
      */
     protected function handleOptions(Attribute $attribute, $options)
     {
         $collection = new ArrayCollection();
         $optionsArray = $this->parseMultiline($options);
 
-        foreach ($optionsArray as $data) {
+        $unique = count(array_unique(array_map(function ($element) {
+            return $element[0];
+        }, $optionsArray))) === count($optionsArray);
 
+        if (!$unique) {
+            throw new \Exception($this->translator->trans('ad.import.attribute.incorrect_items_reponse', ['%code%' => $attribute->getCode()]));
+        }
+
+        foreach ($optionsArray as $data) {
             if (count($data) < 2) {
                 $this->progress->addMessage(
                     '',

@@ -35,6 +35,11 @@ hopital_numerique_publication_publication_article:
     requirements:
         id: \d+
 
+hopital_numerique_forum_user_topic_create:
+    path: /publication/create-topic/{forum}/{board}/{objet}
+    defaults: { _controller: "HopitalNumeriquePublicationBundle:Publication:createTopic", forumName: default }
+
+
 #Actualités
 hopital_numerique_publication_actualite:
     pattern:  /actualites/{page}
