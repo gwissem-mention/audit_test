@@ -235,7 +235,14 @@ class QuestionnaireManager extends BaseManager
         $questionnaire = $this->findOneBy(['id' => $idQuestionnaire]);
 
         //prepare colonnes
-        $colonnes = ['id' => 'id_utilisateur', 'occurrence' => 'Titre de l\'occurrence', 'user' => 'Prénom et Nom de l\'utilisateur', 'user_region' => 'Région de l\'utilisateur', 'date_saisie' => 'Date de saisie'];
+        $colonnes = [
+            'id'          => 'id_utilisateur',
+            'occurrence'  => 'Titre de l\'occurrence',
+            'user'        => 'Prénom et Nom de l\'utilisateur',
+            'user_email'  => 'Email de l\'utilisateur',
+            'user_region' => 'Région de l\'utilisateur',
+            'date_saisie' => 'Date de saisie',
+        ];
         $emptyRow = ['id' => ''];
         $questions = $questionnaire->getQuestions();
         foreach ($questions as $question) {
@@ -264,6 +271,7 @@ class QuestionnaireManager extends BaseManager
                 $reponsesIndexes = array_keys($reponses);
                 $row['occurrence'] = (count($reponses) > 0 ? (null !== $reponses[$reponsesIndexes[0]]->getOccurrence() ? $reponses[$reponsesIndexes[0]]->getOccurrence()->getLibelle() : '') : '');
                 $row['user'] = $user->getPrenomNom();
+                $row['user_email'] = $user->getEmail();
                 $row['user_region'] = $user->getRegion() == null ? '' : $user->getRegion()->getLibelle();
                 $row['date_saisie'] = count($reponses) > 0 ? (null !== $reponses[$reponsesIndexes[0]]->getDateCreation() ? $reponses[$reponsesIndexes[0]]->getDateCreation()->format('d-m-Y H:i:s') : '') : '';
 
