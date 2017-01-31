@@ -2,24 +2,33 @@
 
 namespace HopitalNumerique\PublicationBundle\Controller;
 
+use CCDNForum\ForumBundle\Component\Dispatcher\Event\UserTopicResponseEvent;
+use CCDNForum\ForumBundle\Component\Dispatcher\ForumEvents;
 use HopitalNumerique\CoreBundle\DependencyInjection\Entity;
 use HopitalNumerique\DomaineBundle\Entity\Domaine;
+use HopitalNumerique\ForumBundle\Entity\Board;
+use HopitalNumerique\ForumBundle\Entity\Forum;
 use HopitalNumerique\ObjetBundle\Entity\Contenu;
 use HopitalNumerique\ObjetBundle\Entity\Objet;
 use HopitalNumerique\ReferenceBundle\Entity\EntityHasReference;
 use HopitalNumerique\UserBundle\Entity\User;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
+use Symfony\Component\Security\Core\Exception\AccessDeniedException;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 
 class PublicationController extends Controller
 {
     /**
      * Objet Action. Ajout ?pdf=1 pour la vue PDF.
+     *
      * @param Request $request
-     * @param Objet $objet
-     * @return \Symfony\Component\HttpFoundation\RedirectResponse|Response
+     * @param Objet   $objet
+     *
+     * @return RedirectResponse|Response
      * @throws \Exception
      */
     public function objetAction(Request $request, Objet $objet)
@@ -549,5 +558,58 @@ class PublicationController extends Controller
         }
 
         return true;
+    }
+
+    /**
+     * @Security("has_role('ROLE_USER')")
+     *
+     * @param Request $request
+     * @param Forum   $forum
+     * @param Board   $board
+     * @param Objet   $objet
+     *
+     * @return mixed
+     */
+    public function createTopicAction(Request $request, Forum $forum, Board $board, Objet $objet)
+    {
+        $canCreateTopic = $this->get('ccdn_forum_forum.component.security.authorizer')->canCreateTopicOnBoard(
+            $board,
+            $forum
+        );
+
+        if ($canCreateTopic) {
+            $formHandler = $this->get('ccdn_forum_forum.form.handler.topic_create');
+
+            $formHandler->setForum($forum);
+            $formHandler->setBoard($board);
+            $formHandler->setUser($this->getUser());
+            $formHandler->setRequest($request);
+
+            $form = $formHandler->getForm();
+            $data = $form->getData();
+            $data->getTopic()->setTitle($objet->getTitre());
+
+            $form->setData($data);
+
+            $response = $this->render('@CCDNForumForum/User/Topic/create.html.twig', array(
+                'crumbs' => $this->get('ccdn_forum_forum.component.crumb_builder')->addUserTopicCreate($forum, $board),
+                'forum' => $forum,
+                'forumName' => $forum->getName(),
+                'board' => $board,
+                'preview' => $form->getData(),
+                'form' => $form->createView(),
+            ));
+
+            $eventDispatcher = $this->get('event_dispatcher');
+
+            $eventDispatcher->dispatch(
+                ForumEvents::USER_TOPIC_CREATE_RESPONSE,
+                new UserTopicResponseEvent($request, $response, $form->getData()->getTopic())
+            );
+
+            return $response;
+        } else {
+            throw new AccessDeniedException('You do not have permission to use this resource.');
+        }
     }
 }
