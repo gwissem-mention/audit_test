@@ -55,34 +55,41 @@ class ProductionLiee
     {
         $formattedProductionsLiees = [];
 
-        if (null !== $entity->getObjets()) {
-            foreach ($entity->getObjets() as $productionLieeString) {
-                $productionLieeStringExplode = explode(':', $productionLieeString);
-                $productionLieeType = $productionLieeStringExplode[0];
-                $entityId = intval($productionLieeStringExplode[1]);
+        foreach ($this->objetManager->getProductionsLiees($entity) as $entity) {
+            $formattedProductionsLiees[] = $this->formatProductionsLiees($entity);
+        }
 
-                switch ($productionLieeType) {
-                    case 'PUBLICATION':
-                    case 'ARTICLE':
-                        $entity = $this->objetManager->findOneById($entityId);
-                        break;
-                    case 'INFRADOC':
-                        $entity = $this->contenuManager->findOneById($entityId);
-                        break;
-                    default:
-                        continue;
-                }
+        foreach ($entity->getObjets() as $productionLieeString) {
+            $productionLieeStringExplode = explode(':', $productionLieeString);
+            $productionLieeType = $productionLieeStringExplode[0];
+            $entityId = intval($productionLieeStringExplode[1]);
 
-                $formattedProductionsLiees[] = [
-                    'title' => $this->entity->getTitleByEntity($entity, self::TITLE_MAXLENGTH),
-                    'subtitle' => $this->entity->getSubtitleByEntity($entity),
-                    'category' => $this->entity->getCategoryByEntity($entity),
-                    'description' => null,
-                    'url' => $this->entity->getFrontUrlByEntity($entity)
-                ];
+            switch ($productionLieeType) {
+                case 'PUBLICATION':
+                case 'ARTICLE':
+                    $entity = $this->objetManager->findOneById($entityId);
+                    break;
+                case 'INFRADOC':
+                    $entity = $this->contenuManager->findOneById($entityId);
+                    break;
+                default:
+                    continue;
             }
+
+            $formattedProductionsLiees[] = $this->formatProductionsLiees($entity);
         }
 
         return $formattedProductionsLiees;
+    }
+
+    private function formatProductionsLiees($entity)
+    {
+        return [
+            'title' => $this->entity->getTitleByEntity($entity, self::TITLE_MAXLENGTH),
+            'subtitle' => $this->entity->getSubtitleByEntity($entity),
+            'category' => $this->entity->getCategoryByEntity($entity),
+            'description' => null,
+            'url' => $this->entity->getFrontUrlByEntity($entity)
+        ];
     }
 }

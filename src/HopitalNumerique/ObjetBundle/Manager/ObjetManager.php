@@ -767,6 +767,11 @@ class ObjetManager extends BaseManager
         return $note;
     }
 
+    public function getProductionsLiees(Objet $objet)
+    {
+        return $this->getRepository()->getProductionsLiees($objet);
+    }
+
     /**
      * Formatte les productions pour l'affichage des productions liées.
      *

@@ -5,6 +5,7 @@ namespace HopitalNumerique\ObjetBundle\Repository;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\QueryBuilder;
 use HopitalNumerique\DomaineBundle\Entity\Domaine;
+use HopitalNumerique\ObjetBundle\Entity\Objet;
 use HopitalNumerique\ReferenceBundle\Entity\Reference;
 use Doctrine\ORM\Query\Expr;
 
@@ -13,6 +14,17 @@ use Doctrine\ORM\Query\Expr;
  */
 class ObjetRepository extends EntityRepository
 {
+
+    public function getProductionsLiees(Objet $objet)
+    {
+        return $this->createQueryBuilder('o')
+            ->orWhere('o.objets LIKE :objetId')->setParameter('objetId', sprintf('%%PUBLICATION:%d"%%', $objet->getId()))
+            ->orWhere('o.objets LIKE :objetId2')->setParameter('objetId2', sprintf('%%ARTICLE:%d"%%', $objet->getId()))
+            ->getQuery()->getResult()
+        ;
+    }
+
+
     /**
      * Récupère les données du grid sous forme de tableau correctement formaté
      *
