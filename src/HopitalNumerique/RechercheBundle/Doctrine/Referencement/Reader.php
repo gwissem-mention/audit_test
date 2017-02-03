@@ -73,6 +73,8 @@ class Reader
      */
     private $isSearchedText = false;
 
+    private $selectedReferences = [];
+
 
     /**
      * Constructor.
@@ -111,7 +113,7 @@ class Reader
      * @param array               $resultFilters          Filtres à appliquer
      * @return array Entités
      */
-    public function getEntitiesPropertiesByReferenceIds(array $groupedReferenceIds = null, array $entityTypeIds = null, array $publicationCategoryIds = null, $resultFilters = [])
+    public function getEntitiesPropertiesByReferenceIds(array $groupedReferenceIds = null, array $entityTypeIds = null, array $publicationCategoryIds = null, $resultFilters = [], $selectedReferences = [])
     {
         $currentDomaine = $this->currentDomaine->get();
 
@@ -123,6 +125,8 @@ class Reader
             $publicationCategoryIds,
             $resultFilters
         );
+
+        $this->selectedReferences = $selectedReferences;
 
         if (!$this->isSearchedText) {
             usort($entitiesProperties, [$this, 'orderEntitiesProperties']);
@@ -136,6 +140,8 @@ class Reader
      *
      * @param array $entityProperties1 EntityProperties 1
      * @param array $entityProperties2 EntityProperties 2
+     *
+     * @return int
      */
     private function orderEntitiesProperties($entityProperties1, $entityProperties2)
     {
@@ -144,6 +150,20 @@ class Reader
         }
         if (intval($entityProperties1['primarySum']) < intval($entityProperties2['primarySum'])) {
             return 1;
+        }
+
+        if (intval($entityProperties1['primarySum']) == intval($entityProperties2['primarySum'])) {
+            if (in_array($entityProperties1['referenceId'], $this->selectedReferences)
+                && !in_array($entityProperties2['referenceId'], $this->selectedReferences)
+            ) {
+                return -1;
+            }
+
+            if (in_array($entityProperties2['referenceId'], $this->selectedReferences)
+                && !in_array($entityProperties1['referenceId'], $this->selectedReferences)
+            ) {
+                return 1;
+            }
         }
 
         if (intval($entityProperties1['referencesCount']) > intval($entityProperties2['referencesCount'])) {
@@ -198,6 +218,13 @@ class Reader
         }
         //->
 
+        $selectedReferences = [];
+        foreach ($groupedReferenceIds as $groupedReferenceId) {
+            foreach ($groupedReferenceId as $referenceId) {
+                $selectedReferences[] = $referenceId;
+            }
+        }
+
         $referencesTree = $this->referencement->getReferencesTree([$this->currentDomaine->get()], null, $this->currentDomaine->get()->getReferenceRoot());
         $referenceIds = $this->modulation->getModulatedReferenceIds(
             $this->referencement->getReferenceIdsByGroupedReferenceIds($groupedReferenceIds),
@@ -206,7 +233,7 @@ class Reader
 
         $groupedReferenceIds = $this->referencement->getReferenceIdsKeyedByGroup($referenceIds, $referencesTree);
 
-        $entitiesProperties = $this->getEntitiesPropertiesByReferenceIds($groupedReferenceIds, $entityTypeIds, $publicationCategoryIds, $resultFilters);
+        $entitiesProperties = $this->getEntitiesPropertiesByReferenceIds($groupedReferenceIds, $entityTypeIds, $publicationCategoryIds, $resultFilters, $selectedReferences);
 
         foreach ($entitiesProperties as $entityProperties) {
             $entityPropertiesByGroup = [
@@ -342,14 +369,6 @@ class Reader
                         'pertinenceNiveau' => $entitiesProperties[$entityId]['pertinenceNiveau']
                     ];
                     $entitiesPropertiesKeyedByGroup[$group][] = $entityProperties;
-                    /*$entitiesPropertiesKeyedByGroup[$group][$entityId]['entityId'] = $entityId;
-                    $entitiesPropertiesKeyedByGroup[$group][$entityId]['entityType'] = $entityType;
-                    $entitiesPropertiesKeyedByGroup[$group][$entityId]['title'] = $this->entity->getTitleByEntity($entity);
-                    $entitiesPropertiesKeyedByGroup[$group][$entityId]['subtitle'] = $this->entity->getSubtitleByEntity($entity);
-                    $entitiesPropertiesKeyedByGroup[$group][$entityId]['url'] = $this->entity->getFrontUrlByEntity($entity);
-                    $entitiesPropertiesKeyedByGroup[$group][$entityId]['description'] = $this->entity->getDescriptionByEntity($entity);
-                    $entitiesPropertiesKeyedByGroup[$group][$entityId]['category'] = $this->entity->getCategoryByEntity($entity);
-                    $entitiesPropertiesKeyedByGroup[$group][$entityId]['pertinenceNiveau'] = $entitiesProperties[$entityId]['pertinenceNiveau'];*/
                 }
             }
         }
