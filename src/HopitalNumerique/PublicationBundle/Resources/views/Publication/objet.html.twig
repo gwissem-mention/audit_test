@@ -156,19 +156,7 @@
                     {%- if contenu.children|length > 0 -%}
                         <div class="sous-chapitres-container">
                             <h3 class="title">Sous-chapitres :</h3>
-                            <ul>
-                                {%- for contenuChild in contenu.children -%}
-                                    <li>
-                                        {%- if contenuChild.hasContenu -%}
-                                            <a href="{{path('hopital_numerique_publication_publication_contenu', {'id':contenuChild.objet.id,'alias':contenuChild.objet.alias,'idc':contenuChild.id,'aliasc':contenuChild.alias})}}">
-                                        {%- endif -%}
-                                        {{ contenuChild.prefix }} {{ contenuChild }}
-                                        {%- if contenuChild.hasContenu -%}
-                                            </a>
-                                        {%- endif -%}
-                                    </li>
-                                {%- endfor -%}
-                            </ul>
+                            {{ _self.sousChapitres(contenu) }}
                         </div>
                     {%- endif -%}
 
@@ -382,6 +370,26 @@
         </div>
     {% endif %}
 {% endblock %}
+
+{% macro sousChapitres(contenu) %}
+    <ul>
+        {%- for contenuChild in contenu.children -%}
+            <li>
+                {%- if contenuChild.hasContenu -%}
+                    <a href="{{path('hopital_numerique_publication_publication_contenu', {'id':contenuChild.objet.id,'alias':contenuChild.objet.alias,'idc':contenuChild.id,'aliasc':contenuChild.alias})}}">
+                        {{ contenuChild.prefix }} {{ contenuChild }}
+                    </a>
+                {% else %}
+                    {{ contenuChild.prefix }} {{ contenuChild }}
+                {%- endif -%}
+
+                {%- if contenuChild.children|length > 0 -%}
+                    {{ _self.sousChapitres(contenuChild) }}
+                {%- endif -%}
+            </li>
+        {%- endfor -%}
+    </ul>
+{% endmacro %}
 
 {% macro buildCarousel(objet, objets, contenu, emptyMessage, key, objetsOrder) %}
     <div id="{{key}}-slides" class="results carousel slide" data-ride="carousel" >
