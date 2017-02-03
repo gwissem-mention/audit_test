@@ -146,11 +146,14 @@ class EntityHasReferenceManager extends BaseManager
     {
         $entityHaveReferenceProperties['referencesCount'] = 0;
         $entityHaveReferenceProperties['primarySum'] = 0;
+        $entityHaveReferenceProperties['referenceId'] = null;
 
         foreach ($entitiesMatchProperties as $existingEntityMatchProperties) {
             if ($existingEntityMatchProperties['entityType'] == $entityHaveReferenceProperties['entityType'] && $existingEntityMatchProperties['entityId'] == $entityHaveReferenceProperties['entityId']) {
                 $entityHaveReferenceProperties['referencesCount'] = $existingEntityMatchProperties['referencesCount'];
                 $entityHaveReferenceProperties['primarySum'] = $existingEntityMatchProperties['primarySum'];
+                $entityHaveReferenceProperties['primarySum'] = $existingEntityMatchProperties['primarySum'];
+                $entityHaveReferenceProperties['referenceId'] = $existingEntityMatchProperties['referenceId'];
             }
         }
 
