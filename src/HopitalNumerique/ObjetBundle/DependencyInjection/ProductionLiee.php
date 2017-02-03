@@ -2,6 +2,7 @@
 namespace HopitalNumerique\ObjetBundle\DependencyInjection;
 
 use HopitalNumerique\CoreBundle\DependencyInjection\Entity;
+use HopitalNumerique\ObjetBundle\Entity\Objet;
 use HopitalNumerique\ObjetBundle\Manager\ContenuManager;
 use HopitalNumerique\ObjetBundle\Manager\ObjetManager;
 
@@ -55,28 +56,32 @@ class ProductionLiee
     {
         $formattedProductionsLiees = [];
 
-        foreach ($this->objetManager->getProductionsLiees($entity) as $entity) {
-            $formattedProductionsLiees[] = $this->formatProductionsLiees($entity);
+        if ($entity instanceof Objet) {
+            foreach ($this->objetManager->getProductionsLiees($entity) as $one) {
+                $formattedProductionsLiees[] = $this->formatProductionsLiees($one);
+            }
         }
 
-        foreach ($entity->getObjets() as $productionLieeString) {
-            $productionLieeStringExplode = explode(':', $productionLieeString);
-            $productionLieeType = $productionLieeStringExplode[0];
-            $entityId = intval($productionLieeStringExplode[1]);
+        if (!is_null($entity->getObjets())) {
+            foreach ($entity->getObjets() as $productionLieeString) {
+                $productionLieeStringExplode = explode(':', $productionLieeString);
+                $productionLieeType = $productionLieeStringExplode[0];
+                $entityId = intval($productionLieeStringExplode[1]);
 
-            switch ($productionLieeType) {
-                case 'PUBLICATION':
-                case 'ARTICLE':
-                    $entity = $this->objetManager->findOneById($entityId);
-                    break;
-                case 'INFRADOC':
-                    $entity = $this->contenuManager->findOneById($entityId);
-                    break;
-                default:
-                    continue;
+                switch ($productionLieeType) {
+                    case 'PUBLICATION':
+                    case 'ARTICLE':
+                        $entity = $this->objetManager->findOneById($entityId);
+                        break;
+                    case 'INFRADOC':
+                        $entity = $this->contenuManager->findOneById($entityId);
+                        break;
+                    default:
+                        continue;
+                }
+
+                $formattedProductionsLiees[] = $this->formatProductionsLiees($entity);
             }
-
-            $formattedProductionsLiees[] = $this->formatProductionsLiees($entity);
         }
 
         return $formattedProductionsLiees;
