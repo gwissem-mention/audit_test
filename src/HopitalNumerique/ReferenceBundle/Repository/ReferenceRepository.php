@@ -98,6 +98,7 @@ class ReferenceRepository extends EntityRepository
             ->select(
                 'ref.id',
                 'ref.libelle',
+                'ref.sigle',
                 'ref.code',
                 'ref.order',
                 'ref.reference',
