@@ -32,6 +32,7 @@ class ReferenceGrid extends Grid implements GridInterface
         $this->addColonne(new Column\NumberColumn('idReference', 'ID'));
 
         $this->addColonne(new Column\TextColumn('libelle', 'Libellé du concept'));
+        $this->addColonne(new Column\TextColumn('sigle', 'Sigle'));
 
         $domaineColumn = new Column\TextColumn('domainesNom', 'Domaine(s)');
         $domaineColumn->setSize(150);

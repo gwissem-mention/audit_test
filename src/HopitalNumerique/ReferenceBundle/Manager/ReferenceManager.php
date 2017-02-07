@@ -111,6 +111,7 @@ class ReferenceManager extends BaseManager
             $object['idReference'] = $object['id'] = $reference->getId();
             $object['locked'] = $reference->getLock();
             $object['libelle'] = $reference->getLibelle();
+            $object['sigle'] = $reference->getSigle();
             $object['domainesNom'] = '';
             $object['reference'] = $reference->isReference();
             $object['inRecherche'] = $reference->isInRecherche();

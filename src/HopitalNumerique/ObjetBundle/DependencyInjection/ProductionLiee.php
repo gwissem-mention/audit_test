@@ -2,6 +2,7 @@
 namespace HopitalNumerique\ObjetBundle\DependencyInjection;
 
 use HopitalNumerique\CoreBundle\DependencyInjection\Entity;
+use HopitalNumerique\ObjetBundle\Entity\Objet;
 use HopitalNumerique\ObjetBundle\Manager\ContenuManager;
 use HopitalNumerique\ObjetBundle\Manager\ObjetManager;
 
@@ -55,7 +56,13 @@ class ProductionLiee
     {
         $formattedProductionsLiees = [];
 
-        if (null !== $entity->getObjets()) {
+        if ($entity instanceof Objet) {
+            foreach ($this->objetManager->getProductionsLiees($entity) as $one) {
+                $formattedProductionsLiees[] = $this->formatProductionsLiees($one);
+            }
+        }
+
+        if (!is_null($entity->getObjets())) {
             foreach ($entity->getObjets() as $productionLieeString) {
                 $productionLieeStringExplode = explode(':', $productionLieeString);
                 $productionLieeType = $productionLieeStringExplode[0];
@@ -73,16 +80,21 @@ class ProductionLiee
                         continue;
                 }
 
-                $formattedProductionsLiees[] = [
-                    'title' => $this->entity->getTitleByEntity($entity, self::TITLE_MAXLENGTH),
-                    'subtitle' => $this->entity->getSubtitleByEntity($entity),
-                    'category' => $this->entity->getCategoryByEntity($entity),
-                    'description' => null,
-                    'url' => $this->entity->getFrontUrlByEntity($entity)
-                ];
+                $formattedProductionsLiees[] = $this->formatProductionsLiees($entity);
             }
         }
 
         return $formattedProductionsLiees;
+    }
+
+    private function formatProductionsLiees($entity)
+    {
+        return [
+            'title' => $this->entity->getTitleByEntity($entity, self::TITLE_MAXLENGTH),
+            'subtitle' => $this->entity->getSubtitleByEntity($entity),
+            'category' => $this->entity->getCategoryByEntity($entity),
+            'description' => null,
+            'url' => $this->entity->getFrontUrlByEntity($entity)
+        ];
     }
 }

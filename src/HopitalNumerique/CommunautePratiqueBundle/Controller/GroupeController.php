@@ -158,7 +158,7 @@ class GroupeController extends \Symfony\Bundle\FrameworkBundle\Controller\Contro
                 foreach ($groupe->getAnimateurs()->getValues() as $animateur) {
                     $destinataires[$animateur->getNom()] = $animateur->getEmail();
                 }
-                $this->get('nodevo_mail.manager.mail')->sendAlerteInscriptionMail($destinataires, $user);
+                $this->get('nodevo_mail.manager.mail')->sendAlerteInscriptionMail($destinataires, $user, $groupe);
             }
         }
 

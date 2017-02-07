@@ -210,6 +210,7 @@ class ReferenceController extends Controller
         $colonnes = [
             'id'                      => 'id',
             'libelle'                 => 'Libellé du concept',
+            'sigle'                   => 'Sigle',
             'domaineNoms'             => 'Domaine(s)',
             'reference'               => 'Est une référence',
             'referenceLibelle'        => 'Libellé de la référence',
