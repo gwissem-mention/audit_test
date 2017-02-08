@@ -152,21 +152,21 @@
                     <div id="publication-resume">
                         {{contenu.contenu|parsePublication|glossaire_add(contenu)|raw}}
                     </div>
-
-                    {%- if contenu.children|length > 0 -%}
-                        <div class="sous-chapitres-container">
-                            <h3 class="title">Sous-chapitres :</h3>
-                            {{ _self.sousChapitres(contenu) }}
-                        </div>
-                    {%- endif -%}
-
                 </div>
 
                 {% if is_pdf %}
                     {% include 'HopitalNumeriquePublicationBundle:Publication:Partials/column_right.html.twig' %}
                 {% endif %}
             </div>
-        {# Cas Objet #}
+
+            {%- if contenu.children|length > 0 -%}
+                <div class="sous-chapitres-container">
+                    <h3 class="title">Sous-chapitres :</h3>
+                    {{ _self.sousChapitres(contenu) }}
+                </div>
+            {%- endif -%}
+
+            {# Cas Objet #}
         {% else %}
             <div class="col-md-12">
                 <h1 class="violet">{{objet.titre}}</h1>

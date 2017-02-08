@@ -23,9 +23,15 @@
         {% endif %}
         {% set name = chapter ~ contenu.order ~ '. ' ~ contenu.titre %}
         {% set name = '<span title="' ~ name ~ '">' ~ name|truncate(30) ~ '</span>' %}
-        <a href="{{path('hopital_numerique_publication_publication_contenu', {'id':objet.id,'alias':objet.alias,'idc':contenu.id,'aliasc':contenu.alias})}}" >
+
+        {% if contenu.hasContent %}
+            <a href="{{path('hopital_numerique_publication_publication_contenu', {'id':objet.id,'alias':objet.alias,'idc':contenu.id,'aliasc':contenu.alias})}}" >
+                {{ name|raw }}
+            </a>
+        {% else %}
             {{ name|raw }}
-        </a>
+        {% endif %}
+
         {% if contenu.childs %}
             <ul data-contenu="{{ contenu.id }}">
                 {% for child in contenu.childs %}
