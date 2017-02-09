@@ -46,7 +46,7 @@ class NodeLoader implements LoaderInterface
 
         //get security ACL
         $aclManager = $this->container->get('nodevo_acl.manager.acl');
-        $securityResult = !is_null($uri) && $uri != 'javascript:;'
+        $securityResult = !is_null($uri) && $uri != 'javascript:;' && 0 !== strpos($uri, 'http://')
             ? $aclManager->checkAuthorization($uri, $this->security->getToken()->getUser())
             : null;
 
