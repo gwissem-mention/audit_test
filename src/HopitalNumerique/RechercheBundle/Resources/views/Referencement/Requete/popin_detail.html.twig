@@ -14,6 +14,27 @@
 {% endblock %}
 
 {% block body %}
+
+
+    <div class="row">
+        <div class="col-md-6">
+            <h2>Critères</h2>
+            <ul>
+                {% for reference in references %}
+                    <li>
+                        {{ reference.libelle }}
+                    </li>
+                {% endfor %}
+            </ul>
+        </div>
+
+        <div class="col-md-6">
+            <h2>Recherche textuelle</h2>
+            {{ requete.rechercheTextuelle|default('Aucun terme renseigné') }}
+        </div>
+    </div>
+
+
     {% import _self as mySelf %}
     <div id="requete-popin-detail-references-container">
         <ul>
