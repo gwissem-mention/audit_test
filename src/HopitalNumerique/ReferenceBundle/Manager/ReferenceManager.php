@@ -36,6 +36,11 @@ class ReferenceManager extends BaseManager
         $this->_userManager = $userManager;
     }
 
+    public function getAllIndexedById()
+    {
+        return $this->getRepository()->getAllIndexedById();
+    }
+
     /**
      * Formate et retourne l'arborescence des références
      *

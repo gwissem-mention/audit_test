@@ -12,6 +12,14 @@ use HopitalNumerique\ReferenceBundle\Entity\Reference;
  */
 class ReferenceRepository extends EntityRepository
 {
+
+    public function getAllIndexedById()
+    {
+        return $this->createQueryBuilder('r', 'r.id')
+            ->getQuery()->getResult()
+        ;
+    }
+
     /**
      * Récupère tous les items de l'arborescence référence dans le bon ordre
      *

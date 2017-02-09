@@ -65,9 +65,19 @@ class RequeteController extends Controller
             $filtreCategoryLabels[] = $publicationCategory->getLibelle();
         }
 
+        $allReferences = $this->container->get('hopitalnumerique_reference.manager.reference')->getAllIndexedById();
+
+        $references = [];
+        foreach ($requete->getRefs() as $reference) {
+            if (isset($allReferences[$reference])) {
+                $references[] = $allReferences[$reference];
+            }
+        }
+
         return $this->render('HopitalNumeriqueRechercheBundle:Referencement\Requete:popin_detail.html.twig', [
             'referencesTree'       => $referencesTree,
             'requete'              => $requete,
+            'references'           => $references,
             'filtreCategoryLabels' => $filtreCategoryLabels,
         ]);
     }
