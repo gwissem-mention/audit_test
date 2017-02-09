@@ -585,6 +585,9 @@ class Entity
         $description = null;
 
         switch ($this->getEntityType($entity)) {
+            case self::ENTITY_TYPE_FORUM_TOPIC:
+                $description = $entity->getFirstPost()->getBody();
+                break;
             case self::ENTITY_TYPE_OBJET:
                 $description = $entity->getResume();
                 break;
