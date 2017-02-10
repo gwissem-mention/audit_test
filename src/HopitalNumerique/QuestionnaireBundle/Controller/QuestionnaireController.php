@@ -688,9 +688,10 @@ class QuestionnaireController extends Controller
                             $candidat .= '<li><strong>Fonction dans l\'établissement</strong> : ' . (trim($user->getFonctionDansEtablissementSante()) === '' ? '-' : $user->getFonctionDansEtablissementSante()) . '</li>';
                             $candidat .= '</ul>';
 
-                            //Récupération de l'adresse mail en parameter.yml
-                            $adressesMails = $this->get('hopitalnumerique_questionnaire.manager.questionnaire')->getMailReponses();
-
+                            //Récupération de l'adresse ml du domaine
+                            $domain = $this->get('hopitalnumerique_domaine.dependency_injection.current_domaine')->get();
+                            $adressesMails[$domain->getAdresseMailContact()] = $domain->getNom();
+                            
                             //Set des variables du gabarit du mail
                             $variablesTemplate = [
                                 'nomQuestionnaire' => $questionnaire->getNom(),
