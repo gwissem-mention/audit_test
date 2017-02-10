@@ -4,6 +4,7 @@ namespace HopitalNumerique\CommunautePratiqueBundle\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use HopitalNumerique\CommunautePratiqueBundle\Entity\Groupe;
 use HopitalNumerique\UserBundle\Entity\User;
+use Symfony\Component\Routing\RouterInterface;
 
 /**
  * Contrôleur concernant les groupes de la communauté de pratique.
@@ -43,6 +44,7 @@ class GroupeController extends \Symfony\Bundle\FrameworkBundle\Controller\Contro
      */
     public function viewAction(Groupe $groupe)
     {
+        /** @var User $user */
         $user = $this->get('security.token_storage')->getToken()->getUser();
 
         $currentDomaine = $this->get('hopitalnumerique_domaine.dependency_injection.current_domaine')->get();
@@ -90,16 +92,22 @@ class GroupeController extends \Symfony\Bundle\FrameworkBundle\Controller\Contro
                 }
             }
         } else {
-            if (null !== $cpArticle) {
-                return $this->redirect(
-                    $this->generateUrl('hopital_numerique_publication_publication_article', [
-                        'id' => $cpArticle->getId(),
-                        'categorie' => "article",
-                        'alias' => $cpArticle->getAlias(),
-                    ])
-                );
-            }
-            return $this->redirect($this->generateUrl('hopital_numerique_homepage'));
+            return $this->redirect(
+                $this->generateUrl(
+                    'account_login',
+                    [
+                        'urlToRedirect' => base64_encode(
+                            $this->generateUrl(
+                                'hopitalnumerique_communautepratique_groupe_view',
+                                [
+                                    'groupe' => $groupe->getId(),
+                                ],
+                                RouterInterface::ABSOLUTE_PATH
+                            )
+                        ),
+                    ]
+                )
+            );
         }
 
         return $this->render(
