@@ -67,8 +67,11 @@ class UrlChecker
         $results = $this->getAllUrlObjects();
         $domains = $this->domainManager->findAll();
 
+        $urlsChecked = [];
+
         /** @var Domaine $domain */
         foreach ($domains as $domain) {
+            $urlsChecked[$domain->getId()] = [];
             foreach ($results['urls'] as $categoryName => $categoryUrls) {
                 foreach ($categoryUrls as $objectId => $objectUrls) {
                     foreach ($objectUrls as $contentId => $urls) {
@@ -88,6 +91,10 @@ class UrlChecker
                                             $url = $domainObject->getUrl() . $url;
                                         }
 
+                                        if (isset($urlsChecked[$domain->getId()][$url])) {
+                                            continue;
+                                        }
+
                                         $state = true;
                                         $handle = curl_init(str_replace(' ', '%20', $url));
                                         curl_setopt($handle, CURLOPT_RETURNTRANSFER, true);
@@ -98,10 +105,12 @@ class UrlChecker
                                             $state = false;
                                         }
 
+                                        $urlsChecked[$domain->getId()][$url] = $state;
+
                                         curl_close($handle);
 
                                         /** @var ErrorUrl $errorUrl */
-                                        $errorUrl = $this->errorUrlManager->existErrorByUrl($url);
+                                        $errorUrl = $this->errorUrlManager->existErrorByUrl($url, $domain);
                                         $errorUrl->setLastCheckDate(new \DateTime());
                                         $errorUrl->setState($state);
                                         $errorUrl->setCode($httpCode);

@@ -2,6 +2,7 @@
 
 namespace HopitalNumerique\StatBundle\Manager;
 
+use HopitalNumerique\DomaineBundle\Entity\Domaine;
 use HopitalNumerique\StatBundle\Entity\ErrorUrl;
 use Nodevo\ToolsBundle\Manager\Manager as BaseManager;
 
@@ -13,14 +14,18 @@ class ErrorUrlManager extends BaseManager
     protected $class = 'HopitalNumerique\StatBundle\Entity\ErrorUrl';
 
     /**
-     * @param $url
+     * @param $url string
+     * @param Domaine $domain
      *
      * @return ErrorUrl
      */
-    public function existErrorByUrl($url)
+    public function existErrorByUrl($url, Domaine $domain)
     {
         /** @var ErrorUrl $errorUrl */
-        $errorUrl = is_null($this->findOneBy(['checkedUrl' => $url]))
+        $errorUrl = is_null($this->findOneBy([
+            'checkedUrl' => $url,
+            'domain' => $domain
+        ]))
             ? $this->createEmpty()
             : $this->findOneBy(
                 ['checkedUrl' => $url]
