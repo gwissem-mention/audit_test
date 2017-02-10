@@ -661,13 +661,14 @@ class ObjetManager extends BaseManager
      *
      * @return array
      */
-    public function getActualitesByCategorie($categories, $role, $limit = 0, $order = ['champ' => 'obj.dateModification', 'tri' => 'DESC'])
+    public function getActualitesByCategorie($categories, $role, $limit = 0, $order = ['champ' => 'obj.dateModification', 'tri' => 'DESC'], Domaine $domain = null)
     {
         $articles = $this->getObjetsByTypes($categories, $limit, $order);
         $actualites = [];
 
+        /** @var Objet $article */
         foreach ($articles as $article) {
-            if ($this->checkAccessToObjet($role, $article)) {
+            if ($this->checkAccessToObjet($role, $article) && (is_null($domain) || $article->getDomaines()->contains($domain))) {
                 $actu = new \stdClass();
 
                 $actu->id = $article->getId();
@@ -699,15 +700,18 @@ class ObjetManager extends BaseManager
      * Retourne les catégories qui ont des articles.
      *
      * @param array $allCategories Liste des catégories
+     * @param Domaine|null $domain
      *
      * @return array
      */
-    public function getCategoriesWithArticles($allCategories)
+    public function getCategoriesWithArticles($allCategories, Domaine $domain = null)
     {
         $categories = [];
+        /** @var Reference $one */
         foreach ($allCategories as $one) {
             $articles = $this->getObjetsByTypes([$one]);
-            if (count($articles) > 0) {
+
+            if (count($articles) > 0 && (is_null($domain) || $one->getDomaines()->contains($domain))) {
                 $categ = new \stdClass();
                 $categ->id = $one->getId();
                 $categ->libelle = $one->getLibelle();

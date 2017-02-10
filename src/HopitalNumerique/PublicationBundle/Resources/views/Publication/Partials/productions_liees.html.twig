@@ -18,6 +18,7 @@
             {%- endfor -%}
 
             {%- for topic in topicRelated -%}
+                {% set hideTopicDescription = true %}
                 {% include 'HopitalNumeriqueRechercheBundle:Referencement:view_entity.html.twig' with topic %}
             {%- endfor -%}
 

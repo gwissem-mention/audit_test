@@ -22,7 +22,15 @@ class ActualiteController extends Controller
         $allCategories = $this->get('hopitalnumerique_reference.manager.reference')->findByParent($this->get('hopitalnumerique_reference.manager.reference')->findOneById(188));
         $user          = $this->get('security.context')->getToken()->getUser();
         $role          = $this->get('nodevo_role.manager.role')->getUserRole($user);
-        $actualites    = $this->get('hopitalnumerique_objet.manager.objet')->getActualitesByCategorie( $allCategories, $role );
+        $actualites    = $this->get('hopitalnumerique_objet.manager.objet')
+            ->getActualitesByCategorie(
+                $allCategories,
+                $role,
+                0,
+                ['champ' => 'obj.dateModification', 'tri' => 'DESC'],
+                $this->get('hopitalnumerique_domaine.dependency_injection.current_domaine')->get()
+            )
+        ;
 
         $actualitesAdapter = new ArrayAdapter($actualites);
         $actualitesPager = new Pagerfanta($actualitesAdapter);
@@ -45,7 +53,15 @@ class ActualiteController extends Controller
         $allCategories = $this->get('hopitalnumerique_reference.manager.reference')->findByParent($this->get('hopitalnumerique_reference.manager.reference')->findOneById(570));
         $user          = $this->get('security.context')->getToken()->getUser();
         $role          = $this->get('nodevo_role.manager.role')->getUserRole($user);
-        $actualites    = $this->get('hopitalnumerique_objet.manager.objet')->getActualitesByCategorie( $allCategories, $role );
+        $actualites    = $this->get('hopitalnumerique_objet.manager.objet')
+            ->getActualitesByCategorie(
+                $allCategories,
+                $role,
+                0,
+                ['champ' => 'obj.dateModification', 'tri' => 'DESC'],
+                $this->get('hopitalnumerique_domaine.dependency_injection.current_domaine')->get()
+            )
+        ;
 
         $actualitesAdapter = new ArrayAdapter($actualites);
         $actualitesPager = new Pagerfanta($actualitesAdapter);
@@ -68,7 +84,15 @@ class ActualiteController extends Controller
         $categories = $this->get('hopitalnumerique_reference.manager.reference')->findBy( array( 'id' => $id) );
         $user       = $this->get('security.context')->getToken()->getUser();
         $role       = $this->get('nodevo_role.manager.role')->getUserRole($user);
-        $actualites = $this->get('hopitalnumerique_objet.manager.objet')->getActualitesByCategorie( $categories, $role );
+        $actualites = $this->get('hopitalnumerique_objet.manager.objet')
+            ->getActualitesByCategorie(
+                $categories,
+                $role,
+                0,
+                ['champ' => 'obj.dateModification', 'tri' => 'DESC'],
+                $this->get('hopitalnumerique_domaine.dependency_injection.current_domaine')->get()
+            )
+        ;
 
         $actualitesAdapter = new ArrayAdapter($actualites);
         $actualitesPager = new Pagerfanta($actualitesAdapter);
@@ -95,7 +119,13 @@ class ActualiteController extends Controller
         }
 
         //Show categ with articles only
-        $categories = $this->get('hopitalnumerique_objet.manager.objet')->getCategoriesWithArticles( $allCategories );
+        $categories = $this
+            ->get('hopitalnumerique_objet.manager.objet')
+            ->getCategoriesWithArticles(
+                $allCategories,
+                $this->get('hopitalnumerique_domaine.dependency_injection.current_domaine')->get()
+            )
+        ;
 
         //render
         return $this->render('HopitalNumeriquePublicationBundle:Actualite:actualites.html.twig', array(

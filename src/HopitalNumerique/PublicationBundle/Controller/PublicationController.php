@@ -386,6 +386,9 @@ class PublicationController extends Controller
         $isCommunautePratiqueArticle = false;
         $currentDomaine = $this->get('hopitalnumerique_domaine.dependency_injection.current_domaine')->get();
         if ($currentDomaine && $article = $currentDomaine->getCommunautePratiqueArticle()) {
+            $urlToRedirect = base64_encode($this->generateUrl('hopitalnumerique_communautepratique_accueil_index', []));
+            $request->getSession()->set('urlToRedirect', base64_decode(str_pad(strtr($urlToRedirect, '-_', '+/'), strlen($urlToRedirect) % 4, '=', STR_PAD_RIGHT)));
+
             $isCommunautePratiqueArticle = $article->getId() === $objet->getId();
         }
 
