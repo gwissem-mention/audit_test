@@ -47,7 +47,7 @@ class UserRepository extends EntityRepository
                         user.lock,
                         min(contractualisation.dateRenouvellement) as contra,
                         user.nbVisites,
-                        GROUP_CONCAT(user_domaines.nom SEPARATOR \' - \') as domaines
+                        GROUP_CONCAT(DISTINCT user_domaines.nom SEPARATOR \' - \') as domaines
             ')
             ->from('HopitalNumeriqueUserBundle:User', 'user')
             ->leftJoin('user.etat', 'refEtat')
