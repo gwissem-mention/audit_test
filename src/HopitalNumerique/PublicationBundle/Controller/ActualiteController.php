@@ -109,13 +109,21 @@ class ActualiteController extends Controller
 
     /**
      * Partial render : bloc liste des actualités colonne left
+     *
+     * @param null $type
+     *
+     * @return \Symfony\Component\HttpFoundation\Response
      */
     public function actualitesAction($type = null)
     {
-        if('ambassadeur' === $type) {
-            $allCategories = $this->get('hopitalnumerique_reference.manager.reference')->findByParent($this->get('hopitalnumerique_reference.manager.reference')->findOneById(570));
+        if ('ambassadeur' === $type) {
+            $allCategories = $this->get('hopitalnumerique_reference.manager.reference')->findByParent(
+                $this->get('hopitalnumerique_reference.manager.reference')->findOneById(570)
+            );
         } else {
-            $allCategories = $this->get('hopitalnumerique_reference.manager.reference')->findByParent($this->get('hopitalnumerique_reference.manager.reference')->findOneById(188));
+            $allCategories = $this->get('hopitalnumerique_reference.manager.reference')->findByParent(
+                $this->get('hopitalnumerique_reference.manager.reference')->findOneById(188)
+            );
         }
 
         //Show categ with articles only
@@ -128,9 +136,9 @@ class ActualiteController extends Controller
         ;
 
         //render
-        return $this->render('HopitalNumeriquePublicationBundle:Actualite:actualites.html.twig', array(
+        return $this->render('HopitalNumeriquePublicationBundle:Actualite:actualites.html.twig', [
             'categories' => $categories,
             'type'       => $type
-        ));
+        ]);
     }
 }

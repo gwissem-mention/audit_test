@@ -91,20 +91,18 @@ class RoleManager extends BaseManager
     }
 
     /**
-     * Retourne le Role du user
-     *
-     * @param $user Utilisateur : soit une string, soit un objet FOS\UserBundle\Entity\User
+     * @param User|null $user
      *
      * @return string
      */
     public function getUserRole($user)
     {
-        if ($user === 'anon.') {
-            $role = 'ROLE_ANONYME_10';
-        } else {
+        if ($user instanceof User) {
             //on récupère le rôle de l'user connecté
             $roles = $user->getRoles();
             $role  = $roles[0];
+        } else {
+            $role = 'ROLE_ANONYME_10';
         }
 
         return $role;
@@ -133,10 +131,11 @@ class RoleManager extends BaseManager
     }
 
     /**
-     * Retourne les Role d'un utilisateur.
+     * Retourne les Roles d'un utilisateur
      *
-     * @param \Nodevo\RoleBundle\Manager\User $user User
-     * @return array<\Nodevo\RoleBundle\Entity\Role> Rôles
+     * @param User $user
+     *
+     * @return Role[]
      */
     public function findByUser(User $user)
     {
