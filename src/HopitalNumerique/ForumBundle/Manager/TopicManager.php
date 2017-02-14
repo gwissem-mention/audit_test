@@ -4,8 +4,8 @@ namespace HopitalNumerique\ForumBundle\Manager;
 
 use Doctrine\ORM\EntityManager;
 use HopitalNumerique\ForumBundle\Entity\Forum;
+use HopitalNumerique\ForumBundle\Entity\Topic;
 use Nodevo\ToolsBundle\Manager\Manager as BaseManager;
-use Symfony\Component\Validator\Constraints\Null;
 
 use HopitalNumerique\UserBundle\Manager\UserManager;
 use HopitalNumerique\DomaineBundle\Manager\DomaineManager;
@@ -22,27 +22,31 @@ class TopicManager extends BaseManager
     protected $_referenceManager;
 
     /**
-     * Constructeur du manager gérant les références
+     * TopicManager constructor.
      *
-     * @param \Doctrine\ORM\EntityManager $entityManager EntityManager
-     * @return void
+     * @param EntityManager    $entityManager
+     * @param UserManager      $userManager
+     * @param DomaineManager   $domaineManager
+     * @param ReferenceManager $referenceManager
      */
-    public function __construct(EntityManager $entityManager, UserManager $userManager, DomaineManager $domaineManager, ReferenceManager $referenceManager)
-    {
+    public function __construct(
+        EntityManager $entityManager,
+        UserManager $userManager,
+        DomaineManager $domaineManager,
+        ReferenceManager $referenceManager
+    ) {
         parent::__construct($entityManager);
 
-        $this->_userManager = $userManager;
-        $this->_domaineManager = $domaineManager;
+        $this->_userManager      = $userManager;
+        $this->_domaineManager   = $domaineManager;
         $this->_referenceManager = $referenceManager;
     }
 
     /**
-     * [getChilds description]
+     * @param $retour
+     * @param $elem
      *
-     * @param  [type] $retour [description]
-     * @param  [type] $elem   [description]
-     *
-     * @return [type]
+     * @return array|bool
      */
     private function getChilds(&$retour, $elem)
     {
@@ -71,29 +75,35 @@ class TopicManager extends BaseManager
      * @param $id int
      * @param $limit int
      *
-     * @return \HopitalNumerique\ForumBundle\Entity\Topic[] Liste des topics
+     * @return Topic[] Liste des topics
      */
-    public function getLastTopicsForum($id, $limit = null)
+    public function getLastTopicsForum($id, $limit = null, $role = null)
     {
-        return $this->getRepository()->getLastTopicsForum($id, $limit)->getQuery()->getResult();
+        return $this->getRepository()->getLastTopicsForum($id, $limit, $role)->getQuery()->getResult();
     }
 
     /**
      * Récupère les derniers topics commentés par type de forum et affiche les epinglés en premier
      * si le nombre d'epinglés est inferieur a la limit alors on recupere les non epinglés
      *
-     * @param $id int
-     * @param $limit int
-     * @param $epingle boolean
+     * @param $id
+     * @param $limit
+     * @param $idCat
      *
-     * @return \HopitalNumerique\ForumBundle\Entity\Topic[] Liste des topics
+     * @return Topic[] Liste des topics
      */
     public function getLastTopicsForumEpingle($id, $limit = null, $idCat)
     {
-        $topicEpingle = $this->getRepository()->getLastTopicsForumEpingle($id, $limit, true, $idCat)->getQuery()->getResult();
+        $topicEpingle = $this->getRepository()->getLastTopicsForumEpingle($id, $limit, true, $idCat)->getQuery()
+                             ->getResult();
 
         if ($limit > count($topicEpingle)) {
-            $topic = $this->getRepository()->getLastTopicsForumEpingle($id, $limit - count($topicEpingle), false, $idCat)->getQuery()->getResult();
+            $topic        = $this->getRepository()->getLastTopicsForumEpingle(
+                $id,
+                $limit - count($topicEpingle),
+                false,
+                $idCat
+            )->getQuery()->getResult();
             $topicEpingle = array_merge($topicEpingle, $topic);
         }
 

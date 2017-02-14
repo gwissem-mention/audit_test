@@ -4,7 +4,9 @@ namespace HopitalNumerique\ForumBundle\Repository;
 
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\Query\Expr\Join;
+use Doctrine\ORM\QueryBuilder;
 use HopitalNumerique\ForumBundle\Entity\Forum;
+use HopitalNumerique\ForumBundle\Entity\Topic;
 
 /**
  * TopicRepository
@@ -14,12 +16,12 @@ class TopicRepository extends EntityRepository
     /**
      * Récupère les derniers topics commentés par type de forum
      *
-     * @param $id
-     * @param null $limit
+     * @param        $id
+     * @param null   $limit
      *
-     * @return \Doctrine\ORM\QueryBuilder
+     * @return QueryBuilder
      */
-    public function getLastTopicsForum($id, $limit = null)
+    public function getLastTopicsForum($id, $limit = null, $role = null)
     {
         $qb = $this->_em->createQueryBuilder();
 
@@ -30,6 +32,16 @@ class TopicRepository extends EntityRepository
             ->innerJoin('board.category', 'cat')
             ->innerJoin('cat.forum', 'forum', Join::WITH, 'forum.id = :idForum')
             ->setParameter('idForum', $id)
+        ;
+
+        if (!is_null($role)) {
+            $qb
+                ->andWhere('board.readAuthorisedRoles LIKE :role')
+                ->setParameter('role', '%' . $role . '%')
+            ;
+        }
+
+        $qb
             ->groupBy('topic.id')
             ->orderBy('post.createdDate', 'DESC')
         ;
@@ -49,7 +61,7 @@ class TopicRepository extends EntityRepository
      * @param $epingle
      * @param $idCat
      *
-     * @return \Doctrine\ORM\QueryBuilder
+     * @return QueryBuilder
      */
     public function getLastTopicsForumEpingle($id, $limit = null, $epingle, $idCat)
     {
@@ -80,9 +92,9 @@ class TopicRepository extends EntityRepository
     /**
      * Retourne les topics d'un forum.
      *
-     * @param \HopitalNumerique\ForumBundle\Entity\Forum $forum Forum
+     * @param Forum $forum Forum
      *
-     * @return array<\HopitalNumerique\ForumBundle\Entity\Topic> Topics
+     * @return Topic[] Topics
      */
     public function findByForum(Forum $forum)
     {
