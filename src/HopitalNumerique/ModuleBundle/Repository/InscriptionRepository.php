@@ -206,11 +206,9 @@ class InscriptionRepository extends EntityRepository
                 $queryBuilder->expr()->lt('session.dateSession', ':anneeSuivanteDernierJour')
             ))
             ->andWhere($queryBuilder->expr()->eq('inscription.etatInscription', ':etatInscriptionAccepte'))
-            ->andWhere($queryBuilder->expr()->eq('inscription.etatParticipation', ':etatParticipationParticipe'))
             ->setParameters(array(
                 'domaine' => $domaine,
                 'etatInscriptionAccepte' => 407, // Accepté
-                'etatParticipationParticipe' => 411, // A participé
                 'anneeCourantePremierJour' => $anneeCourantePremierJour,
                 'anneeSuivanteDernierJour' => $anneeSuivanteDernierJour
             ))
@@ -240,17 +238,15 @@ class InscriptionRepository extends EntityRepository
             ->from('HopitalNumeriqueUserBundle:User', 'user')
             ->innerJoin('user.inscriptions', 'inscription')
             ->innerJoin('inscription.session', 'session', Expr\Join::WITH, $queryBuilder->expr()->andX(
-                $queryBuilder->expr()->gte('session.dateSession', ':anneeCourantePremierJour'),
-                $queryBuilder->expr()->lt('session.dateSession', ':anneeSuivanteDernierJour')
+                $queryBuilder->expr()->gte('inscription.dateInscription', ':anneeCourantePremierJour'),
+                $queryBuilder->expr()->lt('inscription.dateInscription', ':anneeSuivanteDernierJour')
             ))
             ->innerJoin('session.module', 'module')
             ->innerJoin('module.domaines', 'domaine', Expr\Join::WITH, $queryBuilder->expr()->eq('domaine.id', ':domaine'))
             ->where($queryBuilder->expr()->eq('inscription.etatInscription', ':etatInscriptionAccepte'))
-            ->andWhere($queryBuilder->expr()->eq('inscription.etatParticipation', ':etatParticipationParticipe'))
             ->setParameters(array(
                 'domaine' => $domaine,
                 'etatInscriptionAccepte' => 407, // Accepté
-                'etatParticipationParticipe' => 411, // A participé
                 'anneeCourantePremierJour' => $anneeCourantePremierJour,
                 'anneeSuivanteDernierJour' => $anneeSuivanteDernierJour
             ))
