@@ -32,6 +32,7 @@
         {% set currentPath = path(app.request.attributes.get('_route'), app.request.attributes.get('_route_params')) %}
         {% set root = knp_menu_get(aliasMenuTemplateCurrent) %}
         {% set parent = null %}
+        {% set tmp = render(controller("HopitalNumeriquePublicationBundle:Actualite:actualites", { 'types' : types } )) %}
 
         {% for item in root %}
             {% if currentPath == item.uri %}
@@ -51,7 +52,7 @@
             {% endfor %}
         {% endfor %}
 
-        {% if parent is not null %}
+        {% if parent is not null and tmp != "" %}
             <div class="col-md-3">
                 {% set menu = root[parent] %}
                 {{ knp_menu_render(menu, {'currentClass': 'active','breadcrumb' : 'no', 'ancestorClass':'active','template':'HopitalNumeriqueCoreBundle::menu.html.twig'}) }}
@@ -59,7 +60,7 @@
             </div>
         {% endif %}
 
-        <div class="col-md-{% if parent is null %}12{% else %}9{% endif %}">
+        <div class="col-md-{% if parent is null and tmp != "" %}12{% else %}9{% endif %}">
             {% if types != 'Article' %}
                 <div class="col-md-12">
                     <h4 class="categorie gris" >{{types}}</h4>
