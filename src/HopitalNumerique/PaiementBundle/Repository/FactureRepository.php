@@ -48,7 +48,7 @@ class FactureRepository extends EntityRepository
             ->from('HopitalNumeriquePaiementBundle:Facture', 'f')
             ->where('f.payee = 1')
             ->andWhere('f.annulee = 0')
-            ->andWhere('f.dateCreation BETWEEN :startDate AND :endDate')
+            ->andWhere('f.datePaiement BETWEEN :startDate AND :endDate')
             ->setParameter('startDate', new \DateTime(sprintf('00-00-%d 00:00:00', $year)))
             ->setParameter('endDate', new \DateTime(sprintf('31-12-%d 23:59:59', $year)))
         ;
