@@ -39,6 +39,6 @@
     "jquery-file-upload": "9.11.*",
     "blueimp-tmpl": "2.5.*",
     "jstree": "3.2.*",
-    "bernii/gauge.js": "^1.2.1"
+    "gauge.js": "^1.2.1"
   }
 }

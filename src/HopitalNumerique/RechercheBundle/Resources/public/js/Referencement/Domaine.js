@@ -79,7 +79,7 @@ Hn_RechercheBundle_Referencement.displayDomaineResults = function()
                             },
                             false
                         );
-                    domaineResultsHtml.push('<a href="' + domaineLink + '" target="_blank">' + Hn_DomaineBundle_Domaine.getNomById(domaineId) + '</a>');
+                    domaineResultsHtml.push('<a href="' + domaineLink + '">' + Hn_DomaineBundle_Domaine.getNomById(domaineId) + '</a>');
                 }
             }
         });

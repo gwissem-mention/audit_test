@@ -69,7 +69,7 @@ class GlossaireExtension extends \Twig_Extension
                 foreach ($wordSearchPatternMatches[0] as $wordSearchPatternMatch) {
                     if (!in_array($glossaireReference->getLibelle(), $testString)) {
                         $html =
-                            '<a class="fancybox fancybox.ajax" href="' . $this->router->generate(
+                            '<a class="acronym fancybox fancybox.ajax" href="' . $this->router->generate(
                                 'hopitalnumerique_reference_glossaire_popin',
                                 ['glossaireReference' => $glossaireReference->getId()]
                             ) . '"><acronym class="glosstool" data-html="true" title="' .
@@ -115,7 +115,7 @@ class GlossaireExtension extends \Twig_Extension
 
                 foreach ($wordSearchPatternMatches[0] as $wordSearchPatternMatch) {
                     $html =
-                        '<a class="fancybox fancybox.ajax" href="' . $this->router->generate('hopitalnumerique_reference_glossaire_popin', ['glossaireReference' => $glossaireReference->getId()]) . '"><acronym class="glosstool" data-html="true" title="' .
+                        '<a class="acronym fancybox fancybox.ajax" href="' . $this->router->generate('hopitalnumerique_reference_glossaire_popin', ['glossaireReference' => $glossaireReference->getId()]) . '"><acronym class="glosstool" data-html="true" title="' .
                         (('' != $glossaireReference->getDescriptionCourte()) ? $this->convertToAsciiHtml($glossaireReference->getDescriptionCourte()) : '') .
                         '">' . $this->convertToAsciiHtml(substr($wordSearchPatternMatch, 1, -1)) . '</acronym></a>'
                     ;
