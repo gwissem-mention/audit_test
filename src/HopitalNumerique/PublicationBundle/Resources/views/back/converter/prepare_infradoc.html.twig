@@ -1,0 +1,76 @@
+{% import _self as tools %}
+{% form_theme form 'form_div_layout.html.twig' %}
+
+
+<div id="converter-prepare-infradoc">
+
+    {{ form_start(form) }}
+
+    <div class="panel">
+        <h3>Chapitres trouvés dans votre document</h3>
+
+
+        {% for child in form.childrens %}
+            {{ tools.renderNode(child) }}
+        {% endfor %}
+    </div>
+
+    {% if form.medias|length > 0 %}
+        <div class="panel">
+            <h3>Images trouvées dans votre document</h3>
+            <table class="table">
+                {% for media in form.medias %}
+                    <tr>
+                        <td>
+                            <img src="{{ asset(media.vars.public_path) }}" alt="" width="100" />
+                        </td>
+                        <td>
+                            {{ form_widget(media.name, {"attr": {"placeholder": media.vars.placeholder, "class": "form-control"}}) }}
+                        </td>
+                    </tr>
+                {% endfor %}
+            </table>
+        </div>
+    {% endif %}
+
+    <div class="row">
+        <div class="col-md-12">
+            <br />
+            <button id="submit-prepare-form" class="btn btn-success pull-right" type="submit">Générer les infra-documents</button>
+        </div>
+    </div>
+
+
+    {{ form_widget(form._token) }}
+    {{ form_end(form, {render_rest: false}) }}
+</div>
+
+{% macro renderNode(node) %}
+    {% import _self as tools %}
+    <div class="node-wrapper">
+        <div class="node">
+            <div class="node-title" title="{{ node.vars.value.title }}">
+                {{ node.vars.value.title }}
+            </div>
+            <div class="node-actions">
+                <div class="node-action exclude">
+                    {{ form_label(node.excluded) }}
+                    {{ form_widget(node.excluded) }}
+                </div>
+
+                {% if node.squashIn is defined %}
+                    <div class="node-action squash">
+                        {{ form_label(node.squashIn) }}
+                        {{ form_widget(node.squashIn) }}
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+
+        <div class="childrens">
+            {% for children in node.childrens %}
+                {{ tools.renderNode(children) }}
+            {% endfor %}
+        </div>
+    </div>
+{% endmacro %}

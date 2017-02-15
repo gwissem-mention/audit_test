@@ -1,3 +1,7 @@
+hopital_numerique_publication_converter:
+    resource: 'routing/converter.yml'
+    prefix: /admin
+
 #Publications
 hopital_numerique_publication_synthese:
     pattern:  /publication/synthese/{id}

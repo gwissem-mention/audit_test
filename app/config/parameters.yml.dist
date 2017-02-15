@@ -63,3 +63,6 @@ parameters:
 
     ref_board_create_topic: 29
     ref_forum_create_topic: 1
+
+    pandoc_path: '/usr/local/opt/pandoc/bin/pandoc'
+    pandoc_working_dir: '%kernel.root_dir%/../files/pandoc'

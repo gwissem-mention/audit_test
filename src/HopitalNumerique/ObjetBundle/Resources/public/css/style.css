@@ -40,7 +40,7 @@ input[type="date"]{min-width: 145px}
     #infra #sommaire {border-bottom: 1px solid #e6e7e8; padding-bottom: 20px;margin-bottom: 20px;}
     #edition-infradox.well{margin-bottom: 0;}
     #edition-infradox .panel-body{border:1px solid #d2d3d6;}
-    
+
 #index p.intro{margin-bottom: 20px}
 #index .panel-heading{color:#703695;cursor: pointer; font-weight: bold}
 #index .panel-heading.closed{background: #F6F6F6 url('../images/close.png') no-repeat 98% center;}
@@ -52,4 +52,71 @@ input[type="date"]{min-width: 145px}
 
 .select2-dropdown {
     z-index: 10000;
+}
+
+#converter-upload-wrapper > a.btn {
+    margin-bottom: 10px;
+}
+
+#converter-prepare-infradoc {
+    margin-bottom: 10px;
+}
+
+#converter-prepare-infradoc .node-wrapper .node-wrapper {
+    padding-left: 20px;
+}
+
+#converter-prepare-infradoc .node-wrapper .node {
+    min-height: 28px;
+    background: #f4f4f4;
+    border: 1px solid #dcdcdc;
+    margin: 4px 0;
+    padding: 0 6px;
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: -webkit-flex;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+#converter-prepare-infradoc .node-wrapper .node .node-title {
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+    max-width: 500px;
+}
+
+#converter-prepare-infradoc .node-wrapper .node-actions {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: -webkit-flex;
+    display: flex;
+
+    flex-shrink: 0;
+}
+
+#converter-prepare-infradoc .node-wrapper .node-actions .node-action {
+    margin: 0 6px;
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: -webkit-flex;
+    display: flex;
+
+    align-items: center;
+}
+
+#converter-prepare-infradoc .node-wrapper .node-actions .node-action input[type=checkbox] {
+    margin: 0 0 0 6px;
+}
+
+#converter-prepare-infradoc .node-wrapper .node label {
+    margin: 0;
+}
+
+#converter-upload-form-wrapper form {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: -webkit-flex;
+    display: flex;
 }

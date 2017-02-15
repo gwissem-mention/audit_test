@@ -1,3 +1,6 @@
+imports:
+    - { resource: commandHandlers.yml }
+
 parameters:
     hopitalnumerique_publication.twig.publication.class: HopitalNumerique\PublicationBundle\Twig\PublicationExtension
     #Options
@@ -113,3 +116,68 @@ services:
             - "@hopitalnumerique_objet.dependency_injection.production_liee"
         tags:
             - { name: resource.relation_finder }
+
+    hopitalnumerique_publication.media_uploader:
+        class: HopitalNumerique\PublicationBundle\Service\Converter\MediaUploader
+        arguments:
+            - '%kernel.root_dir%/../web/'
+            - 'medias/Objets/Import/'
+
+    hopitalnumerique_publication.content_generator:
+        class: HopitalNumerique\PublicationBundle\Service\Converter\ContentGenerator
+        arguments:
+            - '@hopitalnumerique_publication.node.parser'
+            - '@doctrine.orm.entity_manager'
+            - '@hopitalnumerique_publication.content.target_blank'
+            - '@hopitalnumerique_publication.media_uploader'
+
+
+    hopitalnumerique_publication.node.parser:
+        class: HopitalNumerique\PublicationBundle\Service\Converter\Node\NodeParser
+
+    hopitalnumerique_publication.node.empty_tag_cleaner:
+        class: HopitalNumerique\PublicationBundle\Service\Converter\Node\Parser\EmptyTagCleaner
+        public: false
+        tags:
+            - { name: converter.node_parser, priority: 99 }
+
+    hopitalnumerique_publication.node.image_renamer:
+        class: HopitalNumerique\PublicationBundle\Service\Converter\Node\Parser\ImageRenamer
+        public: false
+        calls:
+            - [setMediaUploader, ['@hopitalnumerique_publication.media_uploader']]
+        tags:
+            - { name: converter.node_parser, priority: 99 }
+
+    hopitalnumerique_publication.node.tag_remover:
+        class: HopitalNumerique\PublicationBundle\Service\Converter\Node\Parser\TagRemover
+        public: false
+        tags:
+            - { name: converter.node_parser, priority: 90 }
+
+    hopitalnumerique_publication.node.customer_attributes:
+        class: HopitalNumerique\PublicationBundle\Service\Converter\Node\Parser\CustomAttributes
+        public: false
+        tags:
+            - { name: converter.node_parser }
+
+    hopitalnumerique_publication.node.tag_switcher:
+            class: HopitalNumerique\PublicationBundle\Service\Converter\Node\Parser\TagSwitcher
+            public: false
+            tags:
+                - { name: converter.node_parser, priority: 80 }
+
+    hopitalnumerique_publication.pandoc:
+        class: HopitalNumerique\PublicationBundle\Service\Converter\Extractor\Pandoc
+        arguments:
+            - '%pandoc_path%'
+            - '%pandoc_working_dir%'
+
+    hopitalnumerique_publication.content.target_blank:
+        class: HopitalNumerique\PublicationBundle\Service\Converter\Content\TargetBlank
+
+    hopitalnumerique_publication.repository.document:
+        class: HopitalNumerique\PublicationBundle\Repository\Converter\DocumentRepository
+        factory: ["@doctrine.orm.entity_manager", "getRepository"]
+        arguments:
+            - 'HopitalNumeriquePublicationBundle:Converter\Document'

@@ -2,7 +2,6 @@
 
 namespace HopitalNumerique\CoreBundle\Controller;
 
-use HopitalNumerique\UserBundle\Entity\User;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;

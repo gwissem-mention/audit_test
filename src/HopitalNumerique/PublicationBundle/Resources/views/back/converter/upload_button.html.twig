@@ -1,0 +1,16 @@
+<div id="converter-upload-wrapper">
+    <a class="btn btn-primary" title="Importer un document" href="{{ path('hopital_numerique_publication_converter_upload', {'infradoc': objet.id}) }}" >
+        <i class="fa fa-file-word-o"></i>
+    </a>
+    <div class="placeholder"></div>
+</div>
+
+
+<script>
+    new WordConverter(
+        $('#converter-upload-wrapper a'),
+        $('#converter-upload-wrapper .placeholder'),
+        "{{ path('hopital_numerique_publication_converter_upload', {'infradoc': objet.id}) }}",
+        "{{ path('hopital_numerique_publication_converter_prepare', {'infradoc': objet.id}) }}"
+    );
+</script>

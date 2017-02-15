@@ -1549,7 +1549,7 @@ class Objet implements RoutedItemInterface
     }
 
     /**
-     * @return ArrayCollection|array
+     * @return ArrayCollection|Domaine[]
      */
     public function getDomaines()
     {
