@@ -30,6 +30,10 @@ class RechercheType extends AbstractType
 
     /**
      * Constructeur.
+     *
+     * @param RouterInterface  $router
+     * @param Annuaire         $annuaireService
+     * @param ReferenceManager $referenceManager
      */
     public function __construct(RouterInterface $router, Annuaire $annuaireService, ReferenceManager $referenceManager)
     {
@@ -45,47 +49,64 @@ class RechercheType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->setAction($this->router->generate('hopitalnumerique_communautepratique_user_list'))
-            ->add('id', 'hidden', array(
-            		'attr' => array(
-            				'placeholder' => 'Rechercher un id'
-            		)
-            ))
-            ->add('nom', 'text', array(
-                'data' => $this->annuaireService->getFiltre(Annuaire::FILTRE_NOMINATION_LABEL),
-                'attr' => array(
-                    'placeholder' => 'Rechercher un nom, un prénom'
-                )
-            ))
-            ->add('profilEtablissementSante', 'entity', array(
-                'class' => 'HopitalNumeriqueReferenceBundle:Reference',
-                'property' => 'libelle',
-                'choices' => $this->referenceManager->findEtablissementSanteProfils(),
-                'data' => $this->annuaireService->getFiltre(Annuaire::FILTRE_ES_PROFIL_LABEL),
-                'multiple' => true
-            ))
-            ->add('region', 'entity', array(
-                'class' => 'HopitalNumeriqueReferenceBundle:Reference',
-                'property' => 'libelle',
-                'choices' => $this->referenceManager->findRegions(),
-                'data' => $this->annuaireService->getFiltre(Annuaire::FILTRE_REGION_LABEL),
-                'multiple' => true
-            ))
-            ->add('statutEtablissementSante', 'entity', array(
-                'class' => 'HopitalNumeriqueReferenceBundle:Reference',
-                'property' => 'libelle',
-                'choices' => $this->referenceManager->findEtablissementSanteTypes(),
-                'data' => $this->annuaireService->getFiltre(Annuaire::FILTRE_ES_TYPE_LABEL),
-                'multiple' => true
-            ))
-            ->add('typeActivite', 'entity', array(
-                'class' => 'HopitalNumeriqueReferenceBundle:Reference',
-                'property' => 'libelle',
-                'choices' => $this->referenceManager->findActiviteTypes(),
-                'data' => $this->annuaireService->getFiltre(Annuaire::FILTRE_ACTIVITE_TYPE_LABEL),
-                'multiple' => true
-            ))
-        ;
+            ->setAction($this->router->generate('hopitalnumerique_communautepratique_user_list'))->add(
+                'id',
+                'hidden',
+                [
+                    'attr' => [
+                        'placeholder' => 'Rechercher un id',
+                    ],
+                ]
+            )->add(
+                'nom',
+                'text',
+                [
+                    'data' => $this->annuaireService->getFiltre(Annuaire::FILTRE_NOMINATION_LABEL),
+                    'attr' => [
+                        'placeholder' => 'Rechercher un nom, un prénom',
+                    ],
+                ]
+            )->add(
+                'profilEtablissementSante',
+                'entity',
+                [
+                    'class'    => 'HopitalNumeriqueReferenceBundle:Reference',
+                    'property' => 'libelle',
+                    'choices'  => $this->referenceManager->findEtablissementSanteProfils(),
+                    'data'     => $this->annuaireService->getFiltre(Annuaire::FILTRE_ES_PROFIL_LABEL),
+                    'multiple' => true,
+                ]
+            )->add(
+                'region',
+                'entity',
+                [
+                    'class'    => 'HopitalNumeriqueReferenceBundle:Reference',
+                    'property' => 'libelle',
+                    'choices'  => $this->referenceManager->findRegions(),
+                    'data'     => $this->annuaireService->getFiltre(Annuaire::FILTRE_REGION_LABEL),
+                    'multiple' => true,
+                ]
+            )->add(
+                'statutEtablissementSante',
+                'entity',
+                [
+                    'class'    => 'HopitalNumeriqueReferenceBundle:Reference',
+                    'property' => 'libelle',
+                    'choices'  => $this->referenceManager->findEtablissementSanteTypes(),
+                    'data'     => $this->annuaireService->getFiltre(Annuaire::FILTRE_ES_TYPE_LABEL),
+                    'multiple' => true,
+                ]
+            )->add(
+                'typeActivite',
+                'entity',
+                [
+                    'class'    => 'HopitalNumeriqueReferenceBundle:Reference',
+                    'property' => 'libelle',
+                    'choices'  => $this->referenceManager->findActiviteTypes(),
+                    'data'     => $this->annuaireService->getFiltre(Annuaire::FILTRE_ACTIVITE_TYPE_LABEL),
+                    'multiple' => true,
+                ]
+            );
     }
 
     /**
