@@ -369,7 +369,7 @@ class Objet implements RoutedItemInterface
     /**
      * @var boolean
      *
-     * @ORM\Column(name="obj_associated_productions", type="boolean", options = {"comment" = "Afficher les productions associées pour l'objet ?"})
+     * @ORM\Column(name="obj_associated_productions", type="boolean", options = {"comment" = "Afficher les ressources associées pour l'objet ?"})
      */
     private $associatedProductions;
 

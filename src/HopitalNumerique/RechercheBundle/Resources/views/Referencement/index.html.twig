@@ -218,7 +218,7 @@
                             </div>
                             <div class="col-md-6" id="entity-categories-container">
                                 <select id="entity-categories" size="5">
-                                    <option value="">Filtrer par type de production</option>
+                                    <option value="">Filtrer par type de ressources</option>
                                     {%- for categoryProperties in categoriesProperties -%}
                                         <option value="{{ categoryProperties.id }}"{% if categoryProperties.entityType is defined and categoryProperties.entityType is not null %} data-entity-type="{{ categoryProperties.entityType }}"{% endif %}{% if categoryProperties.referenceId is defined and categoryProperties.referenceId is not null %} data-reference="{{ categoryProperties.referenceId }}"{% endif %}>
                                             {{ categoryProperties.libelle }}

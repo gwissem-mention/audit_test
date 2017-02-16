@@ -182,7 +182,7 @@ class ObjetType extends AbstractType
             ))
             ->add('associatedProductions', 'checkbox', array(
                 'required'   => false,
-                'label'      => 'Afficher les productions associées',
+                'label'      => 'Afficher les ressources associées',
                 'label_attr' => array(
                     'class' => 'col-md-7 control-label'
                 ),

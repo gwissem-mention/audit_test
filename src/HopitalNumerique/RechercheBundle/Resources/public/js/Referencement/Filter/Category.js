@@ -23,7 +23,7 @@ Hn_RechercheBundle_Referencement_Filter_Category.init = function()
 Hn_RechercheBundle_Referencement_Filter_Category.initFilterCategoriesSelect = function()
 {
     $('#entity-categories').multiselect({
-        nonSelectedText: 'Filtrer par type de production ',
+        nonSelectedText: 'Filtrer par type de ressources',
         buttonContainer: '<div class="btn-group" />',
         numberDisplayed: 1,
         buttonWidth: '100%',
