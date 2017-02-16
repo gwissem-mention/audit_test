@@ -340,7 +340,7 @@ class Objet implements RoutedItemInterface
     public $file2;
 
     /**
-     * @var integer
+     * @var FichierModifiable
      *
      * @ORM\OneToOne(targetEntity="FichierModifiable", inversedBy="objet")
      * @ORM\JoinColumn(name="ofm_id", referencedColumnName="ofm_id")
@@ -1404,10 +1404,18 @@ class Objet implements RoutedItemInterface
 
     /**
      * @param Contenu $contenu
+     *
+     * @return $this
      */
     public function removeContenus(Contenu $contenu)
     {
-        $this->contenus->removeElement($contenu);
+        $contenuIndex = array_search($contenu, $this->contenus);
+
+        if ($contenuIndex) {
+            unset($this->contenus[$contenuIndex]);
+        }
+
+        return $this;
     }
 
     /**
@@ -1424,16 +1432,24 @@ class Objet implements RoutedItemInterface
 
     /**
      * @param Module $module
+     *
+     * @return $this
      */
     public function removeModule(Module $module)
     {
-        $this->modules->removeElement($module);
+        $moduleIndex = array_search($module, $this->modules);
+
+        if ($moduleIndex) {
+            unset($this->modules[$moduleIndex]);
+        }
+
+        return $this;
     }
 
     /**
      * Get modules
      *
-     * @return Collection
+     * @return array
      */
     public function getModules()
     {
@@ -1494,16 +1510,24 @@ class Objet implements RoutedItemInterface
 
     /**
      * @param Domaine $domaine
+     *
+     * @return $this
      */
     public function removeDomaine(Domaine $domaine)
     {
-        $this->domaines->removeElement($domaine);
+        $domainIndex = array_search($domaine, $this->domaines);
+
+        if ($domainIndex) {
+            unset($this->domaines[$domainIndex]);
+        }
+
+        return $this;
     }
 
     /**
      * @param Collection $domaines
      *
-     * @return Domaine
+     * @return Objet
      */
     public function setDomaines($domaines)
     {
@@ -1513,7 +1537,7 @@ class Objet implements RoutedItemInterface
     }
 
     /**
-     * @return Collection
+     * @return array
      */
     public function getDomaines()
     {
