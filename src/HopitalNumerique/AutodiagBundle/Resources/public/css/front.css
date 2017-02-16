@@ -177,6 +177,7 @@
 
 #autodiag-entry #summary ul li li {
     display: none;
+    font-size: 12px;
 }
 
 #autodiag-entry #summary ul li.active li {
@@ -276,6 +277,10 @@
     font-weight: bold;
     font-size: 20px;
     color: #d60030;
+}
+
+.chapter .chapter .chapter-label span {
+    font-size: 17px;
 }
 
 .chapter .chapter-label .not-concerned {
