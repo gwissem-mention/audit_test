@@ -333,11 +333,25 @@ class Objet implements RoutedItemInterface
     public $file;
 
     /**
+     * @var integer
+     *
+     * @ORM\Column(name="obj_download_count_1", type="integer", options = {"comment" = "Nombre de téléchargements du fichier 1"})
+     */
+    protected $downloadCountFile1;
+
+    /**
      * @Assert\File(
      *     maxSize = "100M"
      * )
      */
     public $file2;
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="obj_download_count_2", type="integer", options = {"comment" = "Nombre de téléchargements du fichier 2"})
+     */
+    protected $downloadCountFile2;
 
     /**
      * @var FichierModifiable
@@ -380,6 +394,8 @@ class Objet implements RoutedItemInterface
     {
         $this->dateCreation          = new \DateTime();
         $this->nbVue                 = 0;
+        $this->downloadCountFile1    = 0;
+        $this->downloadCountFile2    = 0;
         $this->commentaires          = true;
         $this->notes                 = true;
         $this->btnSociaux            = true;
@@ -1792,6 +1808,42 @@ class Objet implements RoutedItemInterface
     public function setAssociatedProductions($associatedProductions)
     {
         $this->associatedProductions = $associatedProductions;
+
+        return $this;
+    }
+
+    /**
+     * @return int
+     */
+    public function getDownloadCountFile1()
+    {
+        return $this->downloadCountFile1;
+    }
+
+    /**
+     * @return $this
+     */
+    public function incrementDownloadFile1()
+    {
+        $this->downloadCountFile1++;
+
+        return $this;
+    }
+
+    /**
+     * @return int
+     */
+    public function getDownloadCountFile2()
+    {
+        return $this->downloadCountFile2;
+    }
+
+    /**
+     * @return $this
+     */
+    public function incrementDownloadFile2()
+    {
+        $this->downloadCountFile2++;
 
         return $this;
     }

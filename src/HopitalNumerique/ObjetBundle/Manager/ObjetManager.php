@@ -5,6 +5,7 @@ namespace HopitalNumerique\ObjetBundle\Manager;
 use HopitalNumerique\ObjetBundle\Entity\Objet;
 use HopitalNumerique\ObjetBundle\Repository\ObjetRepository;
 use HopitalNumerique\ReferenceBundle\Doctrine\Referencement\NoteReader;
+use HopitalNumerique\UserBundle\Entity\User;
 use Nodevo\ToolsBundle\Manager\Manager as BaseManager;
 use Doctrine\ORM\EntityManager;
 use Nodevo\ToolsBundle\Tools\Chaine;
@@ -26,20 +27,28 @@ class ObjetManager extends BaseManager
     protected $referenceManager;
 
     /**
-     * @var \Symfony\Component\HttpFoundation\Session\Session Session
+     * @var Session Session
      */
     private $session;
 
     /**
      * Construct.
      *
-     * @param EntityManager                                     $em             Entity Mangager de doctrine
-     * @param ContenuManager                                    $contenuManager ContenuManager
-     * @param NoteManager                                       $noteManager    NoteManager
-     * @param \Symfony\Component\HttpFoundation\Session\Session $session        Le service session de Symfony
+     * @param EntityManager    $em             Entity Mangager de doctrine
+     * @param ContenuManager   $contenuManager ContenuManager
+     * @param NoteManager      $noteManager    NoteManager
+     * @param Session          $session        Le service session de Symfony
+     * @param UserManager      $userManager
+     * @param ReferenceManager $referenceManager
      */
-    public function __construct(EntityManager $em, ContenuManager $contenuManager, NoteManager $noteManager, Session $session, UserManager $userManager, ReferenceManager $referenceManager)
-    {
+    public function __construct(
+        EntityManager $em,
+        ContenuManager $contenuManager,
+        NoteManager $noteManager,
+        Session $session,
+        UserManager $userManager,
+        ReferenceManager $referenceManager
+    ) {
         parent::__construct($em);
 
         $this->contenuManager = $contenuManager;
@@ -170,6 +179,8 @@ class ObjetManager extends BaseManager
             $row['fichier2'] = $objet->getPath2();
             $row['vignette'] = $objet->getVignette();
             $row['dateParution'] = $objet->getDateParution();
+            $row['downloadCount1'] = $objet->getDownloadCountFile1();
+            $row['downloadCount2'] = $objet->getDownloadCountFile2();
 
             //quelques Dates
             $row['dateCreation'] = !is_null($objet->getDateCreation())
@@ -242,17 +253,29 @@ class ObjetManager extends BaseManager
             $row['noteMoyenne'] /= $row['nombreUserMaitrise'] != 0 ? $row['nombreUserMaitrise'] : 1;
 
             //set empty values for objet (infra doc)
-            $row['idParent'] = $row['idC'] = $row['titreC'] = $row['aliasC'] = $row['orderC'] = $row['contenuC'] = $row['dateCreationC'] = $row['dateModificationC'] = $row['nbVueC'] = $row['noteC'] = $row['noteMoyenneC'] = $row['nombreNoteC'] = '';
+            $row['idParent']
+                = $row['idC']
+                = $row['titreC']
+                = $row['aliasC']
+                = $row['orderC']
+                = $row['contenuC']
+                = $row['dateCreationC']
+                = $row['dateModificationC']
+                = $row['nbVueC'] = $row['noteC'] = $row['noteMoyenneC'] = $row['nombreNoteC'] = '';
 
             //Récupération + Calcul note moyenne
             $row['noteMoyenne'] = number_format($this->noteManager->getMoyenneNoteByObjet($objet->getId(), false), 2);
             $row['nombreNote'] = $this->noteManager->countNbNoteByObjet($objet->getId(), false);
 
             //Fichier modifiable
-            $row['referentAnap'] = is_null($objet->getFichierModifiable()) ? '' : $objet->getFichierModifiable()->getReferentAnap();
-            $row['sourceDocument'] = is_null($objet->getFichierModifiable()) ? '' : $objet->getFichierModifiable()->getSourceDocument();
-            $row['commentairesFichier'] = is_null($objet->getFichierModifiable()) ? '' : $objet->getFichierModifiable()->getCommentaires();
-            $row['pathEdit'] = is_null($objet->getFichierModifiable()) ? '' : $objet->getFichierModifiable()->getPathEdit();
+            $row['referentAnap']        = is_null($objet->getFichierModifiable()) ? ''
+                : $objet->getFichierModifiable()->getReferentAnap();
+            $row['sourceDocument']      = is_null($objet->getFichierModifiable()) ? ''
+                : $objet->getFichierModifiable()->getSourceDocument();
+            $row['commentairesFichier'] = is_null($objet->getFichierModifiable()) ? ''
+                : $objet->getFichierModifiable()->getCommentaires();
+            $row['pathEdit']            = is_null($objet->getFichierModifiable()) ? ''
+                : $objet->getFichierModifiable()->getPathEdit();
 
             $row['module'] = '';
             foreach ($objet->getModules() as $module) {
@@ -260,7 +283,8 @@ class ObjetManager extends BaseManager
             }
 
             // Cible de diffusion
-            $row['cibleDiffusion'] = is_null($objet->getCibleDiffusion()) ? '' : $objet->getCibleDiffusion()->getLibelle();
+            $row['cibleDiffusion'] = is_null($objet->getCibleDiffusion()) ? ''
+                : $objet->getCibleDiffusion()->getLibelle();
 
             // Récupération des commentaires de l'objet
             $row['commentairesAssocies'] = '';
@@ -282,23 +306,53 @@ class ObjetManager extends BaseManager
                     foreach ($contenus as $contenu) {
                         $rowInfradoc = [];
 
-                        $rowInfradoc['id'] = $rowInfradoc['idParent'] = $rowInfradoc['titre'] = $rowInfradoc['alias'] = $rowInfradoc['synthese'] = $rowInfradoc['resume'] = $rowInfradoc['commentaires'] = $rowInfradoc['notes'] = $rowInfradoc['type'] = $rowInfradoc['nbVue'] = $rowInfradoc['etat'] = '';
-                        $rowInfradoc['dateCreation'] = $rowInfradoc['dateParution'] = $rowInfradoc['dateModification'] = $rowInfradoc['roles'] = $rowInfradoc['domaines'] = $rowInfradoc['types'] = $rowInfradoc['ambassadeurs'] = '';
-                        $rowInfradoc['fichier1'] = $rowInfradoc['fichier2'] = $rowInfradoc['vignette'] = $rowInfradoc['note'] = $rowInfradoc['objets'] = $rowInfradoc['noteMoyenne'] = $rowInfradoc['nombreNote'] = $row['nombreUserMaitrise'] = '';
-                        $rowInfradoc['referentAnap'] = $rowInfradoc['sourceDocument'] = $rowInfradoc['commentairesFichier'] = $rowInfradoc['pathEdit'] = $rowInfradoc['module'] = '';
+                        $rowInfradoc['id']
+                            = $rowInfradoc['idParent']
+                            = $rowInfradoc['titre']
+                            = $rowInfradoc['alias']
+                            = $rowInfradoc['synthese']
+                            = $rowInfradoc['resume']
+                            = $rowInfradoc['commentaires']
+                            = $rowInfradoc['notes']
+                            = $rowInfradoc['type'] = $rowInfradoc['nbVue'] = $rowInfradoc['etat'] = '';
+                        $rowInfradoc['dateCreation']
+                            = $rowInfradoc['dateParution']
+                            = $rowInfradoc['dateModification']
+                            = $rowInfradoc['roles']
+                            = $rowInfradoc['domaines'] = $rowInfradoc['types'] = $rowInfradoc['ambassadeurs'] = '';
+                        $rowInfradoc['fichier1']
+                            = $rowInfradoc['fichier2']
+                            = $rowInfradoc['vignette']
+                            = $rowInfradoc['note']
+                            = $rowInfradoc['objets']
+                            =
+                        $rowInfradoc['noteMoyenne'] = $rowInfradoc['nombreNote'] = $row['nombreUserMaitrise'] = '';
+                        $rowInfradoc['referentAnap']
+                            = $rowInfradoc['sourceDocument']
+                            =
+                        $rowInfradoc['commentairesFichier'] = $rowInfradoc['pathEdit'] = $rowInfradoc['module'] = '';
 
                         //Infra doc values
-                        $rowInfradoc['idParent'] = $objet->getId();
-                        $rowInfradoc['idC'] = $contenu->getId();
-                        $rowInfradoc['titreC'] = $contenu->getTitre();
-                        $rowInfradoc['aliasC'] = $contenu->getAlias();
-                        $rowInfradoc['orderC'] = $contenu->getOrder();
-                        $rowInfradoc['dateCreationC'] = !is_null($contenu->getDateCreation()) ? $contenu->getDateCreation()->format('d/m/Y') : '';
-                        $rowInfradoc['dateModificationC'] = !is_null($contenu->getDateModification()) ? $contenu->getDateModification()->format('d/m/Y') : '';
-                        $rowInfradoc['nbVueC'] = $contenu->getNbVue();
-                        $rowInfradoc['noteC'] = null; //number_format($this->getNoteReferencement($contenu->getReferences(), $refsPonderees), 0);
-                        $rowInfradoc['noteMoyenneC'] = number_format($this->noteManager->getMoyenneNoteByObjet($contenu->getId(), true), 2);
-                        $rowInfradoc['nombreNoteC'] = $this->noteManager->countNbNoteByObjet($contenu->getId(), true);
+                        $rowInfradoc['idParent']          = $objet->getId();
+                        $rowInfradoc['idC']               = $contenu->getId();
+                        $rowInfradoc['titreC']            = $contenu->getTitre();
+                        $rowInfradoc['aliasC']            = $contenu->getAlias();
+                        $rowInfradoc['orderC']            = $contenu->getOrder();
+                        $rowInfradoc['dateCreationC']     = !is_null($contenu->getDateCreation())
+                            ? $contenu->getDateCreation()->format('d/m/Y') : '';
+                        $rowInfradoc['dateModificationC'] = !is_null($contenu->getDateModification())
+                            ? $contenu->getDateModification()->format('d/m/Y') : '';
+                        $rowInfradoc['nbVueC']            = $contenu->getNbVue();
+                        $rowInfradoc['noteC']
+                                                          = null;
+                        $rowInfradoc['noteMoyenneC']      = number_format(
+                            $this->noteManager->getMoyenneNoteByObjet($contenu->getId(), true),
+                            2
+                        );
+                        $rowInfradoc['nombreNoteC']       = $this->noteManager->countNbNoteByObjet(
+                            $contenu->getId(),
+                            true
+                        );
 
                         // Récupération des commentaires du contenu
                         $rowInfradoc['commentairesAssocies'] = '';
@@ -322,6 +376,8 @@ class ObjetManager extends BaseManager
      * Retourne la liste des objets selon le/les types.
      *
      * @param array $types Les types à filtrer
+     * @param int   $limit
+     * @param array $order
      *
      * @return array
      */
@@ -333,7 +389,7 @@ class ObjetManager extends BaseManager
     /**
      * Retourne la liste des objets selon le/les types et trié par nombre de vu.
      *
-     * @param array $types Les types à filtrer
+     * @param int $limit
      *
      * @return array
      */
@@ -352,6 +408,8 @@ class ObjetManager extends BaseManager
 
     /**
      * Récupère les données du grid sous forme de tableau correctement formaté.
+     *
+     * @param null $condition
      *
      * @return array
      */
@@ -384,8 +442,6 @@ class ObjetManager extends BaseManager
      * Dévérouille un objet en accès.
      *
      * @param Objet $objet Objet concerné
-     *
-     * @return empty
      */
     public function unlock($objet)
     {
@@ -401,6 +457,8 @@ class ObjetManager extends BaseManager
      * Retourne la liste des objets pour un ambassadeur donné.
      *
      * @param int $idUser Id de l'ambassadeur
+     *
+     * @return array
      */
     public function getObjetsByAmbassadeur($idUser)
     {
@@ -637,12 +695,15 @@ class ObjetManager extends BaseManager
     /**
      * Retorune l'arbo des articles.
      *
+     * @param $types
+     *
      * @return array
      */
     public function getArticlesArbo($types)
     {
         //get objets
         $objets = $this->getObjetsByTypes($types);
+        $results = [];
 
         //formate datas
         foreach ($objets as $one) {
@@ -657,24 +718,41 @@ class ObjetManager extends BaseManager
     /**
      * Retourne la liste des actualités des catégories passées en paramètre.
      *
-     * @param array $categories Les catégories
+     * @param array   $categories Les catégories
+     *
+     * @param         $role
+     * @param int     $limit
+     * @param array   $order
+     * @param Domaine $domain
      *
      * @return array
      */
-    public function getActualitesByCategorie($categories, $role, $limit = 0, $order = ['champ' => 'obj.dateModification', 'tri' => 'DESC'], Domaine $domain = null)
-    {
+    public function getActualitesByCategorie(
+        $categories,
+        $role,
+        $limit = 0,
+        $order = ['champ' => 'obj.dateModification', 'tri' => 'DESC'],
+        Domaine $domain = null
+    ) {
         $articles = $this->getObjetsByTypes($categories, $limit, $order);
         $actualites = [];
 
         /** @var Objet $article */
         foreach ($articles as $article) {
-            if ($this->checkAccessToObjet($role, $article) && (is_null($domain) || $article->getDomaines()->contains($domain))) {
+            if ($this->checkAccessToObjet($role, $article)
+                && (is_null($domain)
+                    || $article->getDomaines()->contains(
+                        $domain
+                    )
+                )
+            ) {
                 $actu = new \stdClass();
 
                 $actu->id = $article->getId();
                 $actu->titre = $article->getTitre();
                 $actu->alias = $article->getAlias();
-                $actu->date = (is_null($article->getDateModification())) ? $article->getDateCreation() : $article->getDateModification();
+                $actu->date = (is_null($article->getDateModification())) ? $article->getDateCreation()
+                    : $article->getDateModification();
                 $actu->image = $article->getVignette() ? $article->getVignette() : false;
 
                 //resume
@@ -728,7 +806,7 @@ class ObjetManager extends BaseManager
     /**
      * Retourne l'objet article pour la page d'accueil.
      *
-     * @return stdClass
+     * @return \stdClass
      */
     public function getArticleHome()
     {
@@ -820,10 +898,10 @@ class ObjetManager extends BaseManager
     /**
      * Retourne les articles d'une catégorie.
      *
-     * @param \HopitalNumerique\ObjetBundle\Manager\Reference $categorie Catégorie
-     * @param \HopitalNumerique\DomaineBundle\Entity\Domaine  $domaine   Domaine
+     * @param Reference $categorie Catégorie
+     * @param Domaine   $domaine   Domaine
      *
-     * @return array<\HopitalNumerique\ObjetBundle\Entity\Objet> Articles
+     * @return array <\HopitalNumerique\ObjetBundle\Entity\Objet> Articles
      */
     public function getArticlesForCategorie(Reference $categorie, Domaine $domaine)
     {
@@ -833,10 +911,10 @@ class ObjetManager extends BaseManager
     /**
      * Retourne le dernier article d'une catégorie.
      *
-     * @param \HopitalNumerique\ObjetBundle\Manager\Reference $categorie Catégorie
-     * @param \HopitalNumerique\DomaineBundle\Entity\Domaine  $domaine   Domaine
+     * @param Reference $categorie Catégorie
+     * @param Domaine   $domaine   Domaine
      *
-     * @return \HopitalNumerique\ObjetBundle\Entity\Objet Dernier article
+     * @return Objet Dernier article
      */
     public function getLastArticleForCategorie(Reference $categorie, Domaine $domaine)
     {
@@ -846,7 +924,7 @@ class ObjetManager extends BaseManager
     /**
      * Retourne les infradocs d'un domaine.
      *
-     * @param \HopitalNumerique\DomaineBundle\Entity\Domaine $domaine Domaine
+     * @param Domaine $domaine Domaine
      *
      * @return array<\HopitalNumerique\ObjetBundle\Entity\Objet> Infradocs
      */
@@ -885,9 +963,9 @@ class ObjetManager extends BaseManager
     /**
      * Ajoute les enfants de $objet dans $return, formatées en fonction de $level.
      *
-     * @param array    $return
-     * @param stdClass $objet
-     * @param int      $level
+     * @param array     $return
+     * @param \stdClass $objet
+     * @param int       $level
      */
     private function getObjetsChilds(&$return, $objet, $level = 1)
     {
@@ -956,9 +1034,8 @@ class ObjetManager extends BaseManager
     /**
      * Enregistre l'entitée.
      *
-     * @param Entity|array $entity L'entitée
+     * @param $entity
      *
-     * @return empty
      */
     public function save($entity)
     {
@@ -982,6 +1059,10 @@ class ObjetManager extends BaseManager
 
     /**
      * Set le champ A la une à false pour tous les contenus.
+     *
+     * @param $id
+     *
+     * @return array
      */
     public function setAllAlaUneFalse($id)
     {
@@ -991,7 +1072,7 @@ class ObjetManager extends BaseManager
     /**
      * Retourne l'article à la une.
      *
-     * @return \HopitalNumerique\ObjetBundle\Entity\Objet[]
+     * @return Objet[]
      */
     public function getArticleAlaUne()
     {
@@ -1001,7 +1082,7 @@ class ObjetManager extends BaseManager
     /**
      * Retourne les articles du domaine.
      *
-     * @return \HopitalNumerique\ObjetBundle\Entity\Objet[]
+     * @return Objet[]
      */
     public function getObjetByDomaine()
     {
@@ -1020,35 +1101,36 @@ class ObjetManager extends BaseManager
             }
         }
 
-            //formate datas
-            foreach ($objets as $one) {
-                //Traitement pour Article
-                if ($one->isArticle()) {
-                    $results[] = [
-                            'text' => $one->getTitre(),
-                            'value' => 'ARTICLE:' . $one->getId(),
-                    ];
+        $results = [];
+
+        //formate datas
+        foreach ($objets as $one) {
+            //Traitement pour Article
+            if ($one->isArticle()) {
+                $results[] = [
+                    'text'  => $one->getTitre(),
+                    'value' => 'ARTICLE:' . $one->getId(),
+                ];
+            } //Traitement pour Publication et Infradoc
+            else {
+                $results[] = [
+                    'text'  => $one->getTitre(),
+                    'value' => 'PUBLICATION:' . $one->getId(),
+                ];
+
+                if (!isset($contenus[$one->getId()]) || count($contenus[$one->getId()]) <= 0) {
+                    continue;
                 }
-                //Traitement pour Publication et Infradoc
-                else {
+
+                foreach ($contenus[$one->getId()] as $content) {
                     $results[] = [
-                            'text' => $one->getTitre(),
-                            'value' => 'PUBLICATION:' . $one->getId(),
+                        'text'  => '|--' . $content->titre,
+                        'value' => 'INFRADOC:' . $content->id,
                     ];
-
-                    if (!isset($contenus[$one->getId()]) || count($contenus[$one->getId()]) <= 0) {
-                        continue;
-                    }
-
-                    foreach ($contenus[$one->getId()] as $content) {
-                        $results[] = [
-                                    'text' => '|--' . $content->titre,
-                                    'value' => 'INFRADOC:' . $content->id,
-                            ];
-                        $this->getObjetsChilds($results, $content, 2);
-                    }
+                    $this->getObjetsChilds($results, $content, 2);
                 }
             }
+        }
 
         return $results;
     }
@@ -1056,10 +1138,10 @@ class ObjetManager extends BaseManager
     /**
      * Retourne les objets des types données et du domaine.
      *
-     * @param array Types
-     * @param int domaine
+     * @param array $types
+     * @param int $idDomaine
      *
-     * @return \HopitalNumerique\ObjetBundle\Entity\Objet[]
+     * @return Objet[]
      */
     public function getObjetsByTypesAndDomaine($types, $idDomaine = null)
     {
