@@ -333,6 +333,13 @@ class Objet implements RoutedItemInterface
     public $file;
 
     /**
+     * @var integer
+     *
+     * @ORM\Column(name="obj_download_count_1", type="integer", options = {"comment" = "Nombre de téléchargements du fichier 1"})
+     */
+    protected $downloadCountFile1;
+
+    /**
      * @Assert\File(
      *     maxSize = "100M"
      * )
@@ -341,6 +348,13 @@ class Objet implements RoutedItemInterface
 
     /**
      * @var integer
+     *
+     * @ORM\Column(name="obj_download_count_2", type="integer", options = {"comment" = "Nombre de téléchargements du fichier 2"})
+     */
+    protected $downloadCountFile2;
+
+    /**
+     * @var FichierModifiable
      *
      * @ORM\OneToOne(targetEntity="FichierModifiable", inversedBy="objet")
      * @ORM\JoinColumn(name="ofm_id", referencedColumnName="ofm_id")
@@ -369,7 +383,7 @@ class Objet implements RoutedItemInterface
     /**
      * @var boolean
      *
-     * @ORM\Column(name="obj_associated_productions", type="boolean", options = {"comment" = "Afficher les productions associées pour l'objet ?"})
+     * @ORM\Column(name="obj_associated_productions", type="boolean", options = {"comment" = "Afficher les ressources associées pour l'objet ?"})
      */
     private $associatedProductions;
 
@@ -380,6 +394,8 @@ class Objet implements RoutedItemInterface
     {
         $this->dateCreation          = new \DateTime();
         $this->nbVue                 = 0;
+        $this->downloadCountFile1    = 0;
+        $this->downloadCountFile2    = 0;
         $this->commentaires          = true;
         $this->notes                 = true;
         $this->btnSociaux            = true;
@@ -1404,10 +1420,18 @@ class Objet implements RoutedItemInterface
 
     /**
      * @param Contenu $contenu
+     *
+     * @return $this
      */
     public function removeContenus(Contenu $contenu)
     {
-        $this->contenus->removeElement($contenu);
+        $contenuIndex = array_search($contenu, $this->contenus);
+
+        if ($contenuIndex) {
+            unset($this->contenus[$contenuIndex]);
+        }
+
+        return $this;
     }
 
     /**
@@ -1424,16 +1448,24 @@ class Objet implements RoutedItemInterface
 
     /**
      * @param Module $module
+     *
+     * @return $this
      */
     public function removeModule(Module $module)
     {
-        $this->modules->removeElement($module);
+        $moduleIndex = array_search($module, $this->modules);
+
+        if ($moduleIndex) {
+            unset($this->modules[$moduleIndex]);
+        }
+
+        return $this;
     }
 
     /**
      * Get modules
      *
-     * @return Collection
+     * @return array
      */
     public function getModules()
     {
@@ -1494,16 +1526,24 @@ class Objet implements RoutedItemInterface
 
     /**
      * @param Domaine $domaine
+     *
+     * @return $this
      */
     public function removeDomaine(Domaine $domaine)
     {
-        $this->domaines->removeElement($domaine);
+        $domainIndex = array_search($domaine, $this->domaines);
+
+        if ($domainIndex) {
+            unset($this->domaines[$domainIndex]);
+        }
+
+        return $this;
     }
 
     /**
      * @param Collection $domaines
      *
-     * @return Domaine
+     * @return Objet
      */
     public function setDomaines($domaines)
     {
@@ -1513,7 +1553,7 @@ class Objet implements RoutedItemInterface
     }
 
     /**
-     * @return Collection
+     * @return array
      */
     public function getDomaines()
     {
@@ -1768,6 +1808,42 @@ class Objet implements RoutedItemInterface
     public function setAssociatedProductions($associatedProductions)
     {
         $this->associatedProductions = $associatedProductions;
+
+        return $this;
+    }
+
+    /**
+     * @return int
+     */
+    public function getDownloadCountFile1()
+    {
+        return $this->downloadCountFile1;
+    }
+
+    /**
+     * @return $this
+     */
+    public function incrementDownloadFile1()
+    {
+        $this->downloadCountFile1++;
+
+        return $this;
+    }
+
+    /**
+     * @return int
+     */
+    public function getDownloadCountFile2()
+    {
+        return $this->downloadCountFile2;
+    }
+
+    /**
+     * @return $this
+     */
+    public function incrementDownloadFile2()
+    {
+        $this->downloadCountFile2++;
 
         return $this;
     }

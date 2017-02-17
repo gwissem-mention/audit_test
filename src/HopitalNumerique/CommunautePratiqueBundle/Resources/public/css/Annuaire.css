@@ -45,7 +45,7 @@
 /* Tooltip de l'annuaire */
 .groupeContent { text-align: left; width: 400px; }
 
-.tooltip-inner { min-width: 300px; padding: 10px; }
+.tooltip-inner { min-width: 420px; padding: 10px; }
 
 .infobulle { margin-top:5px; padding: 4px; cursor: help; }
 

@@ -67,7 +67,9 @@ $(document).ready(function() {
         }
     });
 
-    $('form.toValidate').validationEngine();
+    if( $('form.toValidate').length > 0) {
+        $('form.toValidate').validationEngine();
+    }
 });
 // Permet la recherche textuelle depuis l'input généré du wysiwyg
 function rechercheTexte()
