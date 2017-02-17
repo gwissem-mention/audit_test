@@ -74,6 +74,22 @@ class SurveyExport extends AbstractExport
         $chapterData[] = $chapter->getDescription();
         $chapterData[] = $chapter->getAdditionalDescription();
 
+        $actionPlans = array_map(function (Autodiag\ActionPlan $actionPlan) use ($chapter) {
+            if ($chapter === $actionPlan->getContainer()) {
+                return $actionPlan->getValue() . '::' . $actionPlan->isVisible() . '::' . $actionPlan->getDescription()
+                       . '::' . $actionPlan->getLink() . '::' . $actionPlan->getLinkDescription()
+                ;
+            }
+
+            return null;
+        }, $chapter->getAutodiag()->getActionPlans()->toArray());
+
+        $actionPlans = implode("\n", array_filter($actionPlans, function ($var) {
+            return $var != null;
+        }));
+
+        $chapterData[] = $actionPlans;
+
         $this->addRow($sheet, $chapterData);
     }
 
@@ -107,7 +123,29 @@ class SurveyExport extends AbstractExport
             return implode("::", $element);
         }, $categoryData));
 
-        $options = implode("\n", array_map(function (Attribute\Option $option) {
+        $actionPlans = [];
+        foreach ($attribute->getAutodiag()->getActionPlans() as $actionPlan) {
+            if ($actionPlan->getAttribute() === $attribute) {
+                $actionPlans[] = $actionPlan;
+            }
+        }
+
+        $options = implode("\n", array_map(function (Attribute\Option $option) use ($actionPlans) {
+            $i = 0;
+
+            while ($i<count($actionPlans)) {
+                /** @var Autodiag\ActionPlan $actionPlan */
+                $actionPlan = $actionPlans[$i];
+                if ($actionPlans[$i]->getValue() === $option->getValue()) {
+                    return $option->getValue() . '::' . $option->getLabel() .'::' . $actionPlan->isVisible() . '::'
+                           . $actionPlan->getDescription() . '::' . $actionPlan->getLink()
+                           . '::' . $actionPlan->getLinkDescription()
+                    ;
+                }
+
+                $i++;
+            }
+
             return $option->getValue() . '::' . $option->getLabel();
         }, $attribute->getOptions()->toArray()));
 
