@@ -2,8 +2,12 @@
 
 namespace HopitalNumerique\ObjetBundle\Controller;
 
+use HopitalNumerique\DomaineBundle\Entity\Domaine;
+use HopitalNumerique\ObjetBundle\Entity\Consultation;
 use HopitalNumerique\ObjetBundle\Entity\Contenu;
 use HopitalNumerique\ObjetBundle\Entity\Objet;
+use HopitalNumerique\ObjetBundle\Model\Report;
+use HopitalNumerique\ReferenceBundle\Entity\Reference;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -17,6 +21,8 @@ class ObjetController extends Controller
 {
     /**
      * Affiche la liste des Objet.
+     *
+     * @return Response
      */
     public function indexAction()
     {
@@ -27,6 +33,8 @@ class ObjetController extends Controller
 
     /**
      * Affiche la liste des Objet sous fomes d'arbre.
+     *
+     * @return Response
      */
     public function treeIndexAction()
     {
@@ -39,7 +47,9 @@ class ObjetController extends Controller
 
     /**
      * Affiche la liste des Objet.
+     *
      * @param null $filtre
+     *
      * @return Response
      */
     public function indexFiltreAction($filtre = null)
@@ -340,6 +350,10 @@ class ObjetController extends Controller
 
     /**
      * POPIN : liste des publication (utilisé dans le menu item)
+     *
+     * @param $articles
+     *
+     * @return Response
      */
     public function getPublicationsAction($articles)
     {
@@ -396,6 +410,7 @@ class ObjetController extends Controller
                 $type = $types[0];
                 $categorie = '';
 
+                /** @var Reference $parent */
                 if ($parent = $type->getParent()) {
                     $categorie .= $parent->getLibelle().'-';
                 }
@@ -528,13 +543,16 @@ class ObjetController extends Controller
 
                     if (count($objet->getDomaines()) != 1) {
                         if (in_array(1, $objet->getDomainesId())) {
-                            $domaineUrl = $this->get('hopitalnumerique_domaine.manager.domaine')->findOneBy(['id' => 1])
-                                               ->getUrl();
+                            $domaineUrl = $this->get('hopitalnumerique_domaine.manager.domaine')
+                                ->findOneBy(['id' => 1])
+                                ->getUrl()
+                            ;
                         }
                     } else {
                         $domaineUrl = $objet->getDomaines()[0]->getUrl();
                     }
 
+                    /** @var Consultation $consultation */
                     foreach ($consultations as $consultation) {
                         $user = $consultation->getUser();
 
@@ -548,7 +566,7 @@ class ObjetController extends Controller
                                 'hopital_numerique_publication_publication_objet',
                                 [
                                     'id' => $objet->getId(),
-                                    'alias' => $objet->getAlias()
+                                    'alias' => $objet->getAlias(),
                                 ]
                             ).'" >Lien vers la publication</a>',
                         ];
@@ -616,6 +634,32 @@ class ObjetController extends Controller
                 'domainesCommunsWithUser' => isset($options['domainesCommunsWithUser'])
                     ? $options['domainesCommunsWithUser'] : [],
             ]
+        );
+    }
+
+    /**
+     * @param Objet $object
+     *
+     * @return Response
+     */
+    public function reportPopinAction(Objet $object)
+    {
+        $report = new Report();
+        $report = $report->buildReport($object);
+
+        return $this->render('@HopitalNumeriqueObjet/Objet/report.html.twig', [
+            'report' => $report,
+        ]);
+    }
+
+    public function exportReportAction($primaryKeys, $allPrimaryKeys)
+    {
+        $kernelCharset = $this->container->getParameter('kernel.charset');
+
+        return $this->get('hopitalnumerique_objet.service.report_export')->export(
+            $primaryKeys,
+            $allPrimaryKeys,
+            $kernelCharset
         );
     }
 }

@@ -57,6 +57,12 @@ hopitalnumerique_objet_objet_delete:
     requirements: 
         id: \d+
 
+hopitalnumerique_objet_objet_reportPopin:
+    path: /objet/report/{object}
+    defaults: { _controller: "HopitalNumeriqueObjetBundle:Objet:reportPopin" }
+    requirements:
+        id: \d+
+
 #Partie Link
 hopitalnumerique_objet_objet_addLink:
     pattern:  /objet/addLink/{id}

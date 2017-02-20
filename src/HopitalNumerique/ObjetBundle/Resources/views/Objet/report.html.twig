@@ -1,0 +1,70 @@
+{% block body %}
+    <div class="col-sm-12">
+        <div class="panel panel-midnightblue">
+            <div class="panel-heading">
+                <h4>
+                    Rapport de la publication <em>{{ report.objectLabel }}</em>
+                </h4>
+            </div>
+
+            <div class="panel-body">
+                <span>Liens</span>
+
+                <ul>
+                    {% for link in report.links %}
+                        <li>{{ link['href'] }} - {{ link['text'] }}</li>
+                    {% endfor %}
+                </ul>
+
+                <span>Images</span>
+
+                <ul>
+                    {% for image in report.images %}
+                        <li>{{ image['name'] }} - {{ image['alt'] }}</li>
+                    {% endfor %}
+                </ul>
+
+                <span>Notes de bas de page</span>
+
+                <ul>
+                    {% for footnote in report.footnotes %}
+                        <li>{{ footnote }}</li>
+                    {% endfor %}
+                </ul>
+
+
+                <span>Nombre de tableaux :</span> {{ report.tableCount }}
+
+                {% for child in report.children %}
+                    <h3>{{ child.contentLabel }}</h3>
+                    <span>Liens</span>
+
+                    <ul>
+                        {% for link in child.links %}
+                            <li>{{ link['href'] }} - {{ link['text'] }}</li>
+                        {% endfor %}
+                    </ul>
+
+                    <span>Images</span>
+
+                    <ul>
+                        {% for image in child.images %}
+                            <li>{{ image['name'] }} - {{ image['alt'] }}</li>
+                        {% endfor %}
+                    </ul>
+
+                    <span>Notes de bas de page</span>
+
+                    <ul>
+                        {% for footnote in child.footnotes %}
+                            <li>{{ footnote }}</li>
+                        {% endfor %}
+                    </ul>
+
+
+                    <span>Nombre de tableaux :</span> {{ child.tableCount }}
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+{% endblock %}

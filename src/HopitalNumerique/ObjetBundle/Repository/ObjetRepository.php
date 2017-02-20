@@ -3,6 +3,7 @@
 namespace HopitalNumerique\ObjetBundle\Repository;
 
 use Doctrine\ORM\EntityRepository;
+use Doctrine\ORM\Query;
 use Doctrine\ORM\QueryBuilder;
 use HopitalNumerique\DomaineBundle\Entity\Domaine;
 use HopitalNumerique\ObjetBundle\Entity\Objet;
@@ -14,16 +15,36 @@ use Doctrine\ORM\Query\Expr;
  */
 class ObjetRepository extends EntityRepository
 {
+    public function findByIds($ids)
+    {
+        $qb = $this->_em->createQueryBuilder();
 
+        $qb
+            ->select('object')
+            ->from('HopitalNumeriqueObjetBundle:Objet', 'object')
+            ->where('object.id IN (:ids)')
+            ->setParameter('ids', $ids)
+        ;
+
+        return $qb->getQuery()->getResult();
+    }
+
+    /**
+     * @param Objet $objet
+     *
+     * @return Objet[]
+     */
     public function getProductionsLiees(Objet $objet)
     {
         return $this->createQueryBuilder('o')
-            ->orWhere('o.objets LIKE :objetId')->setParameter('objetId', sprintf('%%PUBLICATION:%d"%%', $objet->getId()))
-            ->orWhere('o.objets LIKE :objetId2')->setParameter('objetId2', sprintf('%%ARTICLE:%d"%%', $objet->getId()))
-            ->getQuery()->getResult()
+            ->orWhere('o.objets LIKE :objetId')
+            ->setParameter('objetId', sprintf('%%PUBLICATION:%d"%%', $objet->getId()))
+            ->orWhere('o.objets LIKE :objetId2')
+            ->setParameter('objetId2', sprintf('%%ARTICLE:%d"%%', $objet->getId()))
+            ->getQuery()
+            ->getResult()
         ;
     }
-
 
     /**
      * Récupère les données du grid sous forme de tableau correctement formaté
@@ -33,7 +54,7 @@ class ObjetRepository extends EntityRepository
      *
      * @return QueryBuilder
      */
-    public function getDatasForGrid( $domainesIds, $condition = null)
+    public function getDatasForGrid($domainesIds, $condition = null)
     {
         $qb = $this->_em->createQueryBuilder();
 
@@ -48,11 +69,11 @@ class ObjetRepository extends EntityRepository
                 'domaine'
             )
             ->from('HopitalNumeriqueObjetBundle:Objet', 'obj')
-            ->leftJoin('obj.etat','refEtat')
-            ->leftJoin('obj.types','refTypes')
-            ->leftJoin('obj.cibleDiffusion','cibleDiffusion')
-            ->leftJoin('obj.lockedBy','user')
-            ->leftJoin('obj.listeNotes','notes')
+            ->leftJoin('obj.etat', 'refEtat')
+            ->leftJoin('obj.types', 'refTypes')
+            ->leftJoin('obj.cibleDiffusion', 'cibleDiffusion')
+            ->leftJoin('obj.lockedBy', 'user')
+            ->leftJoin('obj.listeNotes', 'notes')
             ->leftJoin('obj.domaines', 'domaine')
                 ->where($qb->expr()->orX(
                     $qb->expr()->in('domaine.id', ':domainesId'),
@@ -87,9 +108,11 @@ class ObjetRepository extends EntityRepository
     /**
      * Récupère les objets pour l'export
      *
+     * @param $ids
+     *
      * @return QueryBuilder
      */
-    public function getDatasForExport( $ids )
+    public function getDatasForExport($ids)
     {
         $qb = $this->_em->createQueryBuilder();
 
@@ -118,23 +141,27 @@ class ObjetRepository extends EntityRepository
     /**
      * Récupère les données du grid pour un ambassadeur sous forme de tableau correctement formaté
      *
+     * @param $idAmbassadeur
+     *
      * @return QueryBuilder
      */
-    public function getDatasForGridAmbassadeur( $idAmbassadeur )
+    public function getDatasForGridAmbassadeur($idAmbassadeur)
     {
         $qb = $this->_em->createQueryBuilder();
         $qb->select('obj.id, obj.titre, refTypes.libelle as types, refUser.id as user')
             ->from('HopitalNumeriqueObjetBundle:Objet', 'obj')
-            ->leftJoin('obj.types','refTypes')
-            ->leftJoin('obj.ambassadeurs','refUser')
+            ->leftJoin('obj.types', 'refTypes')
+            ->leftJoin('obj.ambassadeurs', 'refUser')
             ->where('refUser.id = :idAmbassadeur')
-            ->setParameter('idAmbassadeur', $idAmbassadeur->value );
+            ->setParameter('idAmbassadeur', $idAmbassadeur->value);
 
         return $qb;
     }
 
     /**
      * Récupère les objets pour le flux RSS
+     *
+     * @param Domaine $domaine
      *
      * @return QueryBuilder
      */
@@ -177,17 +204,19 @@ class ObjetRepository extends EntityRepository
     /**
      * Récupère les objets pour un ambassadeur passé en param
      *
+     * @param $idAmbassadeur
+     *
      * @return QueryBuilder
      */
-    public function getObjetsByAmbassadeur( $idAmbassadeur )
+    public function getObjetsByAmbassadeur($idAmbassadeur)
     {
         $qb = $this->_em->createQueryBuilder();
         $qb->select('obj')
             ->from('HopitalNumeriqueObjetBundle:Objet', 'obj')
-            ->leftJoin('obj.types','refTypes')
-            ->leftJoin('obj.ambassadeurs','refUser')
+            ->leftJoin('obj.types', 'refTypes')
+            ->leftJoin('obj.ambassadeurs', 'refUser')
             ->where('refUser.id = :idAmbassadeur')
-            ->setParameter('idAmbassadeur', $idAmbassadeur );
+            ->setParameter('idAmbassadeur', $idAmbassadeur);
 
         return $qb;
     }
@@ -199,18 +228,19 @@ class ObjetRepository extends EntityRepository
      *
      * @return QueryBuilder
      */
-    public function getObjetsByTypes( $types, $limit = 0, $order )
+    public function getObjetsByTypes($types, $limit = 0, $order)
     {
         $qb = $this->_em->createQueryBuilder();
         $qb->select('obj')
             ->from('HopitalNumeriqueObjetBundle:Objet', 'obj')
-            ->leftJoin('obj.types','refTypes')
-            ->where('refTypes.id IN (:types)','obj.etat = 3')
+            ->leftJoin('obj.types', 'refTypes')
+            ->where('refTypes.id IN (:types)', 'obj.etat = 3')
             ->orderBy($order['champ'], $order['tri'])
-            ->setParameter('types', $types );
+            ->setParameter('types', $types);
 
-        if( $limit !== 0 )
+        if ($limit !== 0) {
             $qb->setMaxResults($limit);
+        }
 
         return $qb;
     }
@@ -218,28 +248,29 @@ class ObjetRepository extends EntityRepository
     /**
      * Retourne la liste des objets selon le/les types et trié par nombre de vues
      *
-     * @param array $types Les types à filtrer
+     * @param int $limit
      *
      * @return QueryBuilder
      */
-    public function getObjetsByNbVue( $limit = 0 )
+    public function getObjetsByNbVue($limit = 0)
     {
-      $qb = $this->_em->createQueryBuilder();
-      $qb->select('obj')
-         ->from('HopitalNumeriqueObjetBundle:Objet', 'obj')
-         ->leftJoin('obj.types','refTypes')
-         ->where('obj.etat = 3')
-         ->andWhere('obj.publicationPlusConsulte = :true')
-         ->setParameters(
-            array(
-                'true'  => true
-         ))
-         ->orderBy('obj.nbVue', 'DESC');
+        $qb = $this->_em->createQueryBuilder();
+        $qb->select('obj')
+            ->from('HopitalNumeriqueObjetBundle:Objet', 'obj')
+            ->leftJoin('obj.types', 'refTypes')
+            ->where('obj.etat = 3')
+            ->andWhere('obj.publicationPlusConsulte = :true')
+            ->setParameters([
+                    'true' => true,
+            ])
+            ->orderBy('obj.nbVue', 'DESC')
+        ;
 
-      if( $limit !== 0 )
-        $qb->setMaxResults($limit);
+        if ($limit !== 0) {
+            $qb->setMaxResults($limit);
+        }
 
-      return $qb;
+        return $qb;
     }
 
     /**
@@ -250,12 +281,15 @@ class ObjetRepository extends EntityRepository
         $qb = $this->_em->createQueryBuilder();
         $qb->select('obj')
             ->from('HopitalNumeriqueObjetBundle:Objet', 'obj')
-            ->leftJoin('obj.types','refTypes')
-            ->innerJoin('refTypes.parents','refTypesParent')
-            ->innerJoin('obj.etat','etat')
-            ->where('refTypesParent.id = :idParent')->setParameter('idParent', 175 )
-            ->andWhere('etat.id = :idActif')->setParameter('idActif', 3 )
-            ->orderBy('obj.alias', 'ASC');
+            ->leftJoin('obj.types', 'refTypes')
+            ->innerJoin('refTypes.parents', 'refTypesParent')
+            ->innerJoin('obj.etat', 'etat')
+            ->where('refTypesParent.id = :idParent')
+            ->setParameter('idParent', 175)
+            ->andWhere('etat.id = :idActif')
+            ->setParameter('idActif', 3)
+            ->orderBy('obj.alias', 'ASC')
+        ;
 
         return $qb;
     }
@@ -268,10 +302,10 @@ class ObjetRepository extends EntityRepository
         $qb = $this->_em->createQueryBuilder();
         $qb->select('obj.id, obj.nbVue, obj.titre, refType.id as typeId, parentType.id as parentId, refEtat.id as etat, obj.dateCreation')
             ->from('HopitalNumeriqueObjetBundle:Objet', 'obj')
-            ->innerJoin('obj.types','refType')
-            ->leftJoin('obj.etat','refEtat')
-            ->leftJoin('refType.parents','parentType')
-            ->leftJoin('obj.domaines','domaine')
+            ->innerJoin('obj.types', 'refType')
+            ->leftJoin('obj.etat', 'refEtat')
+            ->leftJoin('refType.parents', 'parentType')
+            ->leftJoin('obj.domaines', 'domaine')
             ->where('domaine.id = :idDomaine')
             ->setParameter('idDomaine', 1)
             ->groupBy('obj.id')
@@ -283,33 +317,43 @@ class ObjetRepository extends EntityRepository
   /**
    * Set toute la colone A la une à false
    */
-  public function setAllAlaUneFalse($id) {
-    $qb = $this->_em->createQueryBuilder();
-    $qb->update()
-      ->from('HopitalNumeriqueObjetBundle:Objet', 'obj')
-      ->set('obj.alaune', '0')
-      ->where('obj.id != :id')
-      ->setParameter('id', $id);
-    return $qb;
-  }
+    public function setAllAlaUneFalse($id)
+    {
+        $qb = $this->_em->createQueryBuilder();
+        $qb
+            ->update()
+            ->from('HopitalNumeriqueObjetBundle:Objet', 'obj')
+            ->set('obj.alaune', '0')
+            ->where('obj.id != :id')
+            ->setParameter('id', $id)
+        ;
+
+        return $qb;
+    }
 
   /**
    * Retourne l'article à la une
    */
-  public function getArticleAlaUne() {
-    $qb = $this->_em->createQueryBuilder();
-    $qb->select('obj')
-      ->from('HopitalNumeriqueObjetBundle:Objet', 'obj')
-      ->where('obj.alaune = 1');
-    return $qb;
-  }
+    public function getArticleAlaUne()
+    {
+        $qb = $this->_em->createQueryBuilder();
+        $qb
+            ->select('obj')
+            ->from('HopitalNumeriqueObjetBundle:Objet', 'obj')
+            ->where('obj.alaune = 1')
+        ;
+
+        return $qb;
+    }
 
     /**
      * Retourne les articles d'une catégorie.
      *
-     * @param \HopitalNumerique\ObjetBundle\Manager\Reference $categorie Catégorie
-     * @param \HopitalNumerique\DomaineBundle\Entity\Domaine  $domaine   Domaine
-     * @return array<\HopitalNumerique\ObjetBundle\Entity\Objet> Articles
+     *
+     * @param Reference $categorie
+     * @param Domaine   $domaine
+     *
+     * @return Objet[] Articles
      */
     public function getArticlesForCategorie(Reference $categorie, Domaine $domaine)
     {
@@ -319,9 +363,10 @@ class ObjetRepository extends EntityRepository
     /**
      * Retourne les articles d'une catégorie.
      *
-     * @param \HopitalNumerique\ObjetBundle\Manager\Reference $categorie Catégorie
-     * @param \HopitalNumerique\DomaineBundle\Entity\Domaine  $domaine   Domaine
-     * @return array<\HopitalNumerique\ObjetBundle\Entity\Objet> Articles
+     * @param Reference $categorie
+     * @param Domaine   $domaine
+     *
+     * @return QueryBuilder
      */
     public function getArticlesForCategorieQueryBuilder(Reference $categorie, Domaine $domaine)
     {
@@ -344,10 +389,10 @@ class ObjetRepository extends EntityRepository
     }
 
     /**
-     * Retourne le dernier article d'une catégorie.
+     * @param Reference $categorie
+     * @param Domaine   $domaine
      *
-     * @param \HopitalNumerique\ObjetBundle\Manager\Reference $categorie Catégorie
-     * @return \HopitalNumerique\ObjetBundle\Entity\Objet Dernier article
+     * @return Objet
      */
     public function getLastArticleForCategorie(Reference $categorie, Domaine $domaine)
     {
@@ -361,22 +406,30 @@ class ObjetRepository extends EntityRepository
     /**
      * Retourne les objets du domaine.
      *
-     * @return query
+     * @return QueryBuilder
      */
-    public function getObjetByDomaine() {
-
-		$domaine = $this->getEntityManager()->getRepository('HopitalNumeriqueDomaineBundle:Domaine')->getDomaineFromHttpHost($_SERVER["SERVER_NAME"])->getQuery()->getOneOrNullResult();
+    public function getObjetByDomaine()
+    {
+        /** @var Domaine $domaine */
+        $domaine = $this
+            ->getEntityManager()
+            ->getRepository('HopitalNumeriqueDomaineBundle:Domaine')
+            ->getDomaineFromHttpHost($_SERVER["SERVER_NAME"])
+            ->getQuery()
+            ->getOneOrNullResult()
+        ;
 
         $qb = $this->_em->createQueryBuilder();
-        $qb->select('obj')
+        $qb
+            ->select('obj')
             ->from('HopitalNumeriqueObjetBundle:Objet', 'obj')
-            ->innerJoin('obj.types','refType')
-            ->leftJoin('obj.etat','refEtat')
-            ->leftJoin('refType.parents','parentType')
-            ->leftJoin('obj.domaines','domaine')
-                ->where('domaine.id = :idDomaine')
-                ->setParameter('idDomaine', ($domaine) ? $domaine->getId() : 1)
-            ;
+            ->innerJoin('obj.types', 'refType')
+            ->leftJoin('obj.etat', 'refEtat')
+            ->leftJoin('refType.parents', 'parentType')
+            ->leftJoin('obj.domaines', 'domaine')
+            ->where('domaine.id = :idDomaine')
+            ->setParameter('idDomaine', ($domaine) ? $domaine->getId() : 1)
+        ;
 
         return $qb;
     }
@@ -384,8 +437,9 @@ class ObjetRepository extends EntityRepository
     /**
      * Retourne les infradocs d'un domaine.
      *
-     * @param \HopitalNumerique\DomaineBundle\Entity\Domaine $domaine Domaine
-     * @return array<\HopitalNumerique\ObjetBundle\Entity\Objet> Infradocs
+     * @param Domaine $domaine
+     *
+     * @return Objet[]
      */
     public function getInfradocs(Domaine $domaine)
     {
@@ -406,51 +460,66 @@ class ObjetRepository extends EntityRepository
 
 
     /**
-   * Retourne les publications par domaine et compétences de l'ambassadeur.
-   *
-   * @param array \HopitalNumerique\DomaineBundle\Entity\Domaine $domaine
-   *          Domaine
-   * @param array type
-   * @param int id de l'ambassadeur
-   * @return array<\HopitalNumerique\ObjetBundle\Entity\Objet> Objet
-   */
-  public function getObjetsByTypeAmbassadeursAndDomaines ($types, $id, $domaines) {
-    $qb = $this->_em->createQueryBuilder ();
-    $qb->select ( 'obj.id, obj.titre, ambassadeur.id as amb_id' )
-        ->from ( 'HopitalNumeriqueObjetBundle:Objet', 'obj' )
-        ->leftJoin ( 'obj.types', 'refTypes' )
-        ->Join ('obj.domaines', 'dom', Expr\Join::WITH, $qb->expr ()->in ( 'dom', ':domaine' ) )
-        ->leftJoin ('obj.ambassadeurs', 'ambassadeur')
-        ->where ( 'refTypes.id IN (:types)', 'obj.etat = 3' )
-        ->andWhere ( $qb->expr ()->orx ( $qb->expr ()->isNull ( 'obj.dateDebutPublication' ), $qb->expr ()->lte ( 'obj.dateDebutPublication', ':today' ) ), $qb->expr ()->orx ( $qb->expr ()->isNull ( 'obj.dateFinPublication' ), $qb->expr ()->gte ( 'obj.dateFinPublication', ':today' ) ) )
-        ->groupBy ('obj.id')
-        ->having ('ambassadeur.id != :id')
-        ->setParameter ('id', $id)
-        ->setParameter ('domaine', $domaines)
-        ->setParameter ( 'today', new \DateTime () )
-        ->setParameter ( 'types', $types );
+     * Retourne les publications par domaine et compétences de l'ambassadeur.
+     *
+     * @param $types
+     * @param $id
+     * @param $domaines
+     *
+     * @return Objet[]
+     */
+    public function getObjetsByTypeAmbassadeursAndDomaines($types, $id, $domaines)
+    {
+        $qb = $this->_em->createQueryBuilder();
+        $qb
+            ->select('obj.id, obj.titre, ambassadeur.id as amb_id')
+            ->from('HopitalNumeriqueObjetBundle:Objet', 'obj')
+            ->leftJoin('obj.types', 'refTypes')
+            ->Join('obj.domaines', 'dom', Expr\Join::WITH, $qb->expr()->in('dom', ':domaine'))
+            ->leftJoin('obj.ambassadeurs', 'ambassadeur')->where('refTypes.id IN (:types)', 'obj.etat = 3')
+            ->andWhere(
+                $qb->expr()->orx(
+                    $qb->expr()->isNull('obj.dateDebutPublication'),
+                    $qb->expr()->lte('obj.dateDebutPublication', ':today')
+                ),
+                $qb->expr()->orx(
+                    $qb->expr()->isNull('obj.dateFinPublication'),
+                    $qb->expr()->gte('obj.dateFinPublication', ':today')
+                )
+            )
+            ->groupBy('obj.id')
+            ->having('ambassadeur.id != :id')
+            ->setParameter('id', $id)
+            ->setParameter('domaine', $domaines)
+            ->setParameter('today', new \DateTime())
+            ->setParameter('types', $types);
 
-    return $qb->getQuery ()->getResult (\Doctrine\ORM\Query::HYDRATE_OBJECT);
-  }
+        return $qb->getQuery()->getResult(Query::HYDRATE_OBJECT);
+    }
 
-  /**
-   * Retourne les publications par domaine et type.
-   *
-   * @param array type
-   * @param int id du domaine
-   * @return array<\HopitalNumerique\ObjetBundle\Entity\Objet> Objet
-   */
-  public function getObjetsByTypesAndDomaine ($types, $domaine) {
-    $qb = $this->_em->createQueryBuilder ();
-    $qb->select ( 'obj' )
-        ->from ( 'HopitalNumeriqueObjetBundle:Objet', 'obj' )
-        ->leftJoin ( 'obj.types', 'refTypes' )
-        ->leftJoin ('obj.domaines', 'dom')
-        ->where ( 'refTypes.id IN (:types)', 'obj.etat = 3' )
-        ->groupBy ('obj.id')
-        ->andWhere ('dom.id = :idDomaine')
-        ->setParameter ('idDomaine', $domaine)
-        ->setParameter ( 'types', $types );
-    return $qb->getQuery()->getResult();
-  }
+    /**
+     * Retourne les publications par domaine et type.
+     *
+     * @param $types
+     * @param $domaine
+     *
+     * @return Objet[]
+     */
+    public function getObjetsByTypesAndDomaine($types, $domaine)
+    {
+        $qb = $this->_em->createQueryBuilder();
+        $qb
+            ->select('obj')
+            ->from('HopitalNumeriqueObjetBundle:Objet', 'obj')
+            ->leftJoin('obj.types', 'refTypes')
+            ->leftJoin('obj.domaines', 'dom')
+            ->where('refTypes.id IN (:types)', 'obj.etat = 3')
+            ->groupBy('obj.id')
+            ->andWhere('dom.id = :idDomaine')
+            ->setParameter('idDomaine', $domaine)
+            ->setParameter('types', $types)
+        ;
+
+        return $qb->getQuery()->getResult();
+    }
 }

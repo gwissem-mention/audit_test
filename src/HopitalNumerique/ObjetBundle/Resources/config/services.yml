@@ -14,6 +14,18 @@ parameters:
     hopitalnumerique_objet.manager.form.Objetmanagerform.class: HopitalNumerique\ObjetBundle\Manager\Form\ObjetManagerForm
 
 services:
+    hopitalnumerique_objet.service.report_export:
+        class: HopitalNumerique\ObjetBundle\Service\Export\ReportExport
+        arguments:
+            - "@hopitalnumerique_objet.repository.objet"
+            - "@hopitalnumerique_objet.manager.objet"
+
+    #repositories
+    hopitalnumerique_objet.repository.objet:
+        class: HopitalNumerique\ObjetBundle\Repository\ObjetRepository
+        factory: ["@doctrine.orm.entity_manager", "getRepository"]
+        arguments:
+            - 'HopitalNumeriqueObjetBundle:Objet'
     #managers
     hopitalnumerique_objet.manager.objet:
         class: %hopitalnumerique_objet.manager.objet.class%
