@@ -84,7 +84,8 @@ class Report
 
     private function findLinks($string)
     {
-        $crawler = new Crawler($string);
+        $crawler = new Crawler();
+        $crawler->addHtmlContent($string);
 
         $links = $crawler->filter('a')->each(function (Crawler $node) {
             return ['href' => $node->attr('href'), 'text' => $node->text()];
@@ -95,7 +96,8 @@ class Report
 
     private function findImages($string)
     {
-        $crawler = new Crawler($string);
+        $crawler = new Crawler();
+        $crawler->addHtmlContent($string);
 
         $images = $crawler->filter('img')->each(function (Crawler $node) {
             return ['alt' => $node->attr('alt'), 'src' => $node->attr('src')];
@@ -105,7 +107,12 @@ class Report
 
         foreach ($images as &$image) {
             preg_match_all($pattern, $image['src'], $out, PREG_SET_ORDER);
-            $image['name'] = $out[0][0];
+
+            $image['name'] = "";
+
+            if (count($out) > 0) {
+                $image['name'] = $out[0][0];
+            }
         }
 
         return $images;
@@ -113,7 +120,8 @@ class Report
 
     private function findFootnotes($string)
     {
-        $crawler = new Crawler($string);
+        $crawler = new Crawler();
+        $crawler->addHtmlContent($string);
 
         $footnotes = $crawler->filter('span[class="note_bas_de_page"]')->each(function (Crawler $node) {
             return $node->text();
@@ -124,7 +132,8 @@ class Report
 
     private function findTables($string)
     {
-        $crawler = new Crawler($string);
+        $crawler = new Crawler();
+        $crawler->addHtmlContent($string);
 
         $tables = $crawler->filter('table')->each(function (Crawler $node) {
             return $node->text();
