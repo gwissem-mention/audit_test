@@ -120,6 +120,10 @@ hopitalnumerique_objet_contenu_reorder:
     pattern:  /objet/contenu/reorder
     defaults: { _controller: "HopitalNumeriqueObjetBundle:Contenu:reorder" }
 
+hopitalnumerique_objet_infradoc_related_production:
+    path: /objet/contenu/form/{content}/related-productions
+    defaults: { _controller: "HopitalNumeriqueObjetBundle:Contenu:relatedProduction" }
+
 #---Commentaire
 hopitalnumerique_objet_admin_commentaire:
     pattern:  /objet/commentaire
