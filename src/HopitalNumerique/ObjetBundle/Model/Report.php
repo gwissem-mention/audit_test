@@ -40,6 +40,13 @@ class Report
         $this->domains = new ArrayCollection();
     }
 
+    /**
+     * Builds the report (and all his children) corresponding to the object
+     *
+     * @param Objet $object
+     *
+     * @return Report
+     */
     public function buildReport(Objet $object)
     {
         $this->objectId = $object->getId();
@@ -65,6 +72,13 @@ class Report
         return $this;
     }
 
+    /**
+     * Builds the report corresponding to the content
+     *
+     * @param Contenu $content
+     *
+     * @return Report
+     */
     private function buildContentReport(Contenu $content)
     {
         $contentReport = new Report();
@@ -82,6 +96,11 @@ class Report
         return $contentReport;
     }
 
+    /**
+     * @param $string
+     *
+     * @return array
+     */
     private function findLinks($string)
     {
         $crawler = new Crawler();
@@ -94,6 +113,11 @@ class Report
         return $links;
     }
 
+    /**
+     * @param $string
+     *
+     * @return array
+     */
     private function findImages($string)
     {
         $crawler = new Crawler();
@@ -118,6 +142,11 @@ class Report
         return $images;
     }
 
+    /**
+     * @param $string
+     *
+     * @return array
+     */
     private function findFootnotes($string)
     {
         $crawler = new Crawler();
@@ -130,6 +159,11 @@ class Report
         return $footnotes;
     }
 
+    /**
+     * @param $string
+     *
+     * @return array
+     */
     private function findTables($string)
     {
         $crawler = new Crawler();

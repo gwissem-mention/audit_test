@@ -652,6 +652,12 @@ class ObjetController extends Controller
         ]);
     }
 
+    /**
+     * @param $primaryKeys
+     * @param $allPrimaryKeys
+     *
+     * @return Response
+     */
     public function exportReportAction($primaryKeys, $allPrimaryKeys)
     {
         $kernelCharset = $this->container->getParameter('kernel.charset');

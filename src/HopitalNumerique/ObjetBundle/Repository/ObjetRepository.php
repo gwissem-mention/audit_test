@@ -15,6 +15,13 @@ use Doctrine\ORM\Query\Expr;
  */
 class ObjetRepository extends EntityRepository
 {
+    /**
+     * Returns the list of objects corresponding to ids
+     *
+     * @param $ids
+     *
+     * @return array
+     */
     public function findByIds($ids)
     {
         $qb = $this->_em->createQueryBuilder();
