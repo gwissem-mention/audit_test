@@ -8,61 +8,75 @@
             </div>
 
             <div class="panel-body">
-                <span>Liens</span>
-
-                <ul>
-                    {% for link in report.links %}
-                        <li>{{ link['href'] }} - {{ link['text'] }}</li>
-                    {% endfor %}
-                </ul>
-
-                <span>Images</span>
-
-                <ul>
-                    {% for image in report.images %}
-                        <li>{{ image['name'] }} - {{ image['alt'] }}</li>
-                    {% endfor %}
-                </ul>
-
-                <span>Notes de bas de page</span>
-
-                <ul>
-                    {% for footnote in report.footnotes %}
-                        <li>{{ footnote }}</li>
-                    {% endfor %}
-                </ul>
-
-
-                <span>Nombre de tableaux :</span> {{ report.tableCount }}
-
-                {% for child in report.children %}
-                    <h3>{{ child.contentLabel }}</h3>
-                    <span>Liens</span>
-
+                {% if report.links|length > 0 %}
+                    <span>Liens :</span>
                     <ul>
-                        {% for link in child.links %}
-                            <li>{{ link['href'] }} - {{ link['text'] }}</li>
+                        {% for link in report.links %}
+                            <li><strong>{{ link['href'] }}</strong> - <em>{{ link['text'] }}</em></li>
                         {% endfor %}
                     </ul>
+                {% endif %}
 
-                    <span>Images</span>
-
+                {% if report.images|length > 0 %}
+                    <span>Images :</span>
                     <ul>
-                        {% for image in child.images %}
-                            <li>{{ image['name'] }} - {{ image['alt'] }}</li>
+                        {% for image in report.images %}
+                            <li><strong>{{ image['name'] }}</strong> - <em>{{ image['alt'] }}</em></li>
                         {% endfor %}
                     </ul>
+                {% endif %}
 
-                    <span>Notes de bas de page</span>
-
+                {% if report.footnotes|length > 0 %}
+                    <span>Notes de bas de page :</span>
                     <ul>
-                        {% for footnote in child.footnotes %}
+                        {% for footnote in report.footnotes %}
                             <li>{{ footnote }}</li>
                         {% endfor %}
                     </ul>
+                {% endif %}
 
+                {% if report.tableCount > 0 %}
+                    <span>Nombre de tableaux :</span> {{ report.tableCount }}
+                {% endif %}
 
-                    <span>Nombre de tableaux :</span> {{ child.tableCount }}
+                {% if report.children|length > 0 %}
+                    <div style="border-bottom: 1px solid #4d4d4d; margin-top: 30px;"></div>
+                {% endif %}
+
+                {% for child in report.children %}
+                    <div style="margin: 20px 0 20px 40px;">
+                        <h4 style="color: #34495e; font-weight: bold;">{{ child.contentLabel }}</h4>
+                        {% if child.links|length > 0 %}
+                            <span>Liens :</span>
+                            <ul>
+                                {% for link in child.links %}
+                                    <li><strong>{{ link['href'] }}</strong> - <em>{{ link['text'] }}</em></li>
+                                {% endfor %}
+                            </ul>
+                        {% endif %}
+
+                        {% if child.images|length > 0 %}
+                            <span>Images :</span>
+                            <ul>
+                                {% for image in child.images %}
+                                    <li><strong>{{ image['name'] }}</strong> - <em>{{ image['alt'] }}</em></li>
+                                {% endfor %}
+                            </ul>
+                        {% endif %}
+
+                        {% if child.footnotes|length > 0 %}
+                            <span>Notes de bas de page :</span>
+                            <ul>
+                                {% for footnote in child.footnotes %}
+                                    <li>{{ footnote }}</li>
+                                {% endfor %}
+                            </ul>
+                        {% endif %}
+
+                        {% if child.tableCount > 0 %}
+                            <span>Nombre de tableaux :</span> {{ child.tableCount }}
+                        {% endif %}
+                    </div>
                 {% endfor %}
             </div>
         </div>
