@@ -2,6 +2,9 @@
 
 namespace HopitalNumerique\ReferenceBundle\Controller;
 
+use HopitalNumerique\ReferenceBundle\Domain\Command\SwitchReferenceCommand;
+use HopitalNumerique\ReferenceBundle\Form\Type\SwitchReferenceCommandType;
+use HopitalNumerique\ReferenceBundle\Form\Type\SwitchReferenceType;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
@@ -387,6 +390,37 @@ class ReferenceController extends Controller
             'form'                 => $form->createView(),
             'reference'            => $reference,
             'referenceTreeOptions' => json_encode($referenceTreeOptions),
+        ]);
+    }
+
+    public function replaceAction(Request $request)
+    {
+        $switchReferenceCommand = new SwitchReferenceCommand();
+
+        $form = $this->createForm(SwitchReferenceType::class, $switchReferenceCommand, [
+            'action' => $this->generateUrl('hopitalnumerique_reference_reference_replace'),
+        ]);
+
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            try {
+                $this->get('hopitalnumerique_reference.handler.switch_reference')->handle($switchReferenceCommand);
+
+                $this->addFlash(
+                    'success',
+                    'Les objets de la référence ' . $switchReferenceCommand->currentReference
+                    . ' ont bien été ajouté à la référence ' . $switchReferenceCommand->targetReference
+                );
+            } catch (\Exception $exception) {
+                $this->addFlash('danger', $exception->getMessage());
+            }
+
+            return $this->redirectToRoute('hopitalnumerique_reference_reference');
+        }
+
+        return $this->render('@HopitalNumeriqueReference/Reference/replace.html.twig', [
+            'form' => $form->createView(),
         ]);
     }
 }

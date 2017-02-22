@@ -44,7 +44,7 @@ class EntityHasReference
     private $entityType;
 
     /**
-     * @var \HopitalNumerique\ReferenceBundle\Entity\Reference
+     * @var Reference
      *
      * @ORM\ManyToOne(targetEntity="Reference")
      * @ORM\JoinColumn(name="ref_id", referencedColumnName="ref_id", nullable=false, onDelete="CASCADE")
@@ -120,11 +120,11 @@ class EntityHasReference
     /**
      * Set reference
      *
-     * @param \HopitalNumerique\ReferenceBundle\Entity\Reference $reference
+     * @param Reference $reference
      *
      * @return EntityHasReference
      */
-    public function setReference(\HopitalNumerique\ReferenceBundle\Entity\Reference $reference = null)
+    public function setReference(Reference $reference = null)
     {
         $this->reference = $reference;
 
@@ -134,7 +134,7 @@ class EntityHasReference
     /**
      * Get reference
      *
-     * @return \HopitalNumerique\ReferenceBundle\Entity\Reference
+     * @return Reference
      */
     public function getReference()
     {
