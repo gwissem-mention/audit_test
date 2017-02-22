@@ -3,8 +3,8 @@
 namespace HopitalNumerique\ReferenceBundle\Controller;
 
 use HopitalNumerique\ReferenceBundle\Domain\Command\SwitchReferenceCommand;
-use HopitalNumerique\ReferenceBundle\Form\Type\SwitchReferenceCommandType;
 use HopitalNumerique\ReferenceBundle\Form\Type\SwitchReferenceType;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
@@ -42,6 +42,8 @@ class ReferenceController extends Controller
 
     /**
      * Affiche le formulaire d'ajout de Reference.
+     *
+     * @return RedirectResponse|Response
      */
     public function addAction()
     {
@@ -52,8 +54,10 @@ class ReferenceController extends Controller
 
     /**
      * Affiche le formulaire d'édition de Reference.
+     *
      * @param $id
-     * @return Form|redirect|\Symfony\Component\HttpFoundation\RedirectResponse
+     *
+     * @return RedirectResponse|Response
      */
     public function editAction($id)
     {
@@ -69,8 +73,10 @@ class ReferenceController extends Controller
 
     /**
      * Sauvegarde les paramètres des activités d'expert
+     *
      * @param Request $request
      * @param Reference $reference
+     *
      * @return Response
      * @throws \Exception
      */
@@ -103,7 +109,9 @@ class ReferenceController extends Controller
 
     /**
      * Affiche le Reference en fonction de son ID passé en paramètre.
+     *
      * @param $id
+     *
      * @return Response
      */
     public function showAction($id)
@@ -123,8 +131,11 @@ class ReferenceController extends Controller
 
     /**
      * Suppression d'un Reference.
-     *
      * METHOD = POST|DELETE
+     *
+     * @param $id
+     *
+     * @return Response
      */
     public function deleteAction($id)
     {
@@ -156,7 +167,10 @@ class ReferenceController extends Controller
             }
         }
 
-        return new Response('{"success":true, "url" : "' . $this->generateUrl('hopitalnumerique_reference_reference') . '"}', 200);
+        return new Response(
+            '{"success":true, "url" : "' . $this->generateUrl('hopitalnumerique_reference_reference') . '"}',
+            200
+        );
     }
 
     /**
@@ -165,7 +179,7 @@ class ReferenceController extends Controller
      * @param array $primaryKeys ID des lignes sélectionnées
      * @param array $allPrimaryKeys allPrimaryKeys ???
      *
-     * @return \Symfony\Component\HttpFoundation\RedirectResponse
+     * @return RedirectResponse
      */
     public function deleteMassAction($primaryKeys, $allPrimaryKeys)
     {
@@ -241,19 +255,19 @@ class ReferenceController extends Controller
      * @param $reference
      * @internal param Reference $item Entité Référence
      *
-     * @return \Symfony\Component\HttpFoundation\RedirectResponse|Response
+     * @return RedirectResponse|Response
      */
     private function renderForm(Reference $reference)
     {
         $referenceTreeOptions = [];
 
         if ($reference->getLock() != true) {
-            $referenceTreeOptions = $this->container->get('hopitalnumerique_reference.dependency_injection.reference.tree')
-                ->getOptions(
-                    $this->getUser()->getDomaines(),
-                    [$reference->getId()]
-                )
-            ;
+            $referenceTreeOptions = $this->container->get(
+                'hopitalnumerique_reference.dependency_injection.reference.tree'
+            )->getOptions(
+                $this->getUser()->getDomaines(),
+                [$reference->getId()]
+            );
         }
 
         $this->container->get('hopitalnumerique_reference.doctrine.reference.domaine_udpater')
@@ -336,7 +350,8 @@ class ReferenceController extends Controller
                         // (suppression d'un domaine lors de la sauvegarde n'étant plus chez aucun enfant)
                         $daddy->setDomaines([]);
 
-                        // Récupération des domaines du parent courant pour éviter la duplication de domaine sur une entité
+                        // Récupération des domaines du parent courant
+                        // pour éviter la duplication de domaine sur une entité
                         $daddyDomainesId = $daddy->getDomainesId();
                         if (count($childsDomaines) !== 0) {
                             foreach ($childsDomaines as $domaine) {
@@ -393,6 +408,11 @@ class ReferenceController extends Controller
         ]);
     }
 
+    /**
+     * @param Request $request
+     *
+     * @return RedirectResponse|Response
+     */
     public function replaceAction(Request $request)
     {
         $switchReferenceCommand = new SwitchReferenceCommand();
@@ -416,7 +436,7 @@ class ReferenceController extends Controller
                 $this->addFlash('danger', $exception->getMessage());
             }
 
-            return $this->redirectToRoute('hopitalnumerique_reference_reference');
+            return $this->redirect($request->headers->get('referer'));
         }
 
         return $this->render('@HopitalNumeriqueReference/Reference/replace.html.twig', [

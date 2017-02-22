@@ -13,8 +13,8 @@ class SwitchReferenceType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('currentReference', IntegerType::class)
-            ->add('targetReference', IntegerType::class)
+            ->add('currentReference', IntegerType::class, ['attr' => ['class' => 'validate[required]']])
+            ->add('targetReference', IntegerType::class, ['attr' => ['class' => 'validate[required]']])
             ->add('keepHistory', CheckboxType::class, ['required' => false])
         ;
     }

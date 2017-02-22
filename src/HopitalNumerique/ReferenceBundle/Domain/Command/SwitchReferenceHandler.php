@@ -33,6 +33,8 @@ class SwitchReferenceHandler
 
     /**
      * @param SwitchReferenceCommand $switchReferenceCommand
+     *
+     * @throws \LogicException
      */
     public function handle(SwitchReferenceCommand $switchReferenceCommand)
     {

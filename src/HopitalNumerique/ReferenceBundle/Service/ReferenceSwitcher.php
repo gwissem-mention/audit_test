@@ -26,6 +26,14 @@ class ReferenceSwitcher
      */
     private $searchStatRepository;
 
+
+    /**
+     * ReferenceSwitcher constructor.
+     *
+     * @param EntityManager                $entityManager
+     * @param EntityHasReferenceRepository $entityHasReferenceRepository
+     * @param StatRechercheRepository      $statRechercheRepository
+     */
     public function __construct(
         EntityManager $entityManager,
         EntityHasReferenceRepository $entityHasReferenceRepository,
@@ -53,7 +61,6 @@ class ReferenceSwitcher
             ;
         });
 
-        $entityHasReferencesToBeAdded = [];
         $this->entityManager->beginTransaction();
 
         try {
@@ -68,8 +75,6 @@ class ReferenceSwitcher
                 $this->entityManager->persist($newEntityHasReference);
                 $this->entityManager->flush($newEntityHasReference);
                 $this->entityManager->detach($newEntityHasReference);
-
-                $entityHasReferencesToBeAdded[] = $newEntityHasReference;
             }
 
             $this->entityManager->commit();
