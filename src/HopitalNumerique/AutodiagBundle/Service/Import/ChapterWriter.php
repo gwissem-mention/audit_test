@@ -211,8 +211,8 @@ class ChapterWriter implements WriterInterface, ProgressAwareInterface
 
             $object->setVisible((bool)$action[1]);
             $object->setDescription(isset($action[2]) ? $action[2] : null);
-            $object->setLinkDescription(isset($action[3]) ? $action[3]: null);
-            $object->setLink(isset($action[4]) ? $action[4] : null);
+            $object->setLink(isset($action[3]) ? $action[3] : null);
+            $object->setLinkDescription(isset($action[4]) ? $action[4]: null);
 
             $updatedActions[$object->getId()] = true;
 
