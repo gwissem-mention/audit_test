@@ -319,12 +319,12 @@
             <div class="action-fiche-user">
                 {% if activeMembers[user.id] is defined %}
                     <div class="active-member">
-                        <div style="" data-toggle="tooltip" data-html="true" title="
+                        <div style="" data-toggle="tooltip" data-placement="left" data-html="true" title="
                                 <b>Utilisateur parmi les plus actifs :</b><br />
-                                {% if activeMembers[user.id]['nbVisite'] != 0 %}Nombre de visites sur la plateforme : {{ activeMembers[user.id]['nbVisite'] }}<br />{% endif %}
-                                {% if activeMembers[user.id]['nbPost'] != 0 %}Nombre de posts renseignés sur les forums : {{ activeMembers[user.id]['nbPost'] }}<br />{% endif %}
-                                {% if activeMembers[user.id]['nbComment'] != 0 %}Nombre de commentaires sur les publications : {{ activeMembers[user.id]['nbComment'] }}<br />{% endif %}
-                                {% if activeMembers[user.id]['nbNote'] != 0 %}Nombre de notations sur les publications : {{ activeMembers[user.id]['nbNote'] }}<br />{% endif %}
+                                {% if activeMembers[user.id]['nbVisite'] != 0 %}Nombre&nbsp;de&nbsp;visites&nbsp;sur&nbsp;la&nbsp;plateforme&nbsp;:&nbsp;{{ activeMembers[user.id]['nbVisite'] }}<br />{% endif %}
+                                {% if activeMembers[user.id]['nbPost'] != 0 %}Nombre&nbsp;de&nbsp;posts&nbsp;renseignés&nbsp;sur&nbsp;les&nbsp;forums&nbsp;:&nbsp;{{ activeMembers[user.id]['nbPost'] }}<br />{% endif %}
+                                {% if activeMembers[user.id]['nbComment'] != 0 %}Nombre&nbsp;de&nbsp;commentaires&nbsp;sur&nbsp;les&nbsp;publications&nbsp;:&nbsp;{{ activeMembers[user.id]['nbComment'] }}<br />{% endif %}
+                                {% if activeMembers[user.id]['nbNote'] != 0 %}Nombre&nbsp;de&nbsp;notations&nbsp;sur&nbsp;les&nbsp;publications&nbsp;:&nbsp;{{ activeMembers[user.id]['nbNote'] }}<br />{% endif %}
                         ">
                             <em class="fa fa-star yellow"></em>
                         </div>
