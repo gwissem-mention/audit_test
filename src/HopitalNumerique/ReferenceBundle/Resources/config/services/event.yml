@@ -1,0 +1,5 @@
+services:
+    reference.reference_listener:
+        class: HopitalNumerique\ReferenceBundle\EventListener\ReferenceListener
+        tags:
+            - { name: doctrine.event_listener, event: preRemove }
