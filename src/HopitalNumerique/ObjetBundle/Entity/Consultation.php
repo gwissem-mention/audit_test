@@ -2,6 +2,8 @@
 namespace HopitalNumerique\ObjetBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use HopitalNumerique\DomaineBundle\Entity\Domaine;
+use HopitalNumerique\UserBundle\Entity\User;
 
 /**
  * Consultation
@@ -21,7 +23,7 @@ class Consultation
     private $id;
     
     /**
-     * @var integer
+     * @var User
      *
      * @ORM\ManyToOne(targetEntity="\HopitalNumerique\UserBundle\Entity\User")
      * @ORM\JoinColumn(name="usr_id", referencedColumnName="usr_id", onDelete="CASCADE")
@@ -29,7 +31,7 @@ class Consultation
     private $user;
     
     /**
-     * @var integer
+     * @var Objet
      *
      * @ORM\ManyToOne(targetEntity="Objet", inversedBy="consultations")
      * @ORM\JoinColumn(name="obj_id", referencedColumnName="obj_id", onDelete="CASCADE")
@@ -37,7 +39,7 @@ class Consultation
     private $objet;
 
     /**
-     * @var integer
+     * @var Contenu
      *
      * @ORM\ManyToOne(targetEntity="Contenu", inversedBy="consultations")
      * @ORM\JoinColumn(name="con_id", referencedColumnName="con_id", onDelete="CASCADE", nullable=true)
@@ -53,7 +55,7 @@ class Consultation
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="cln_date_last_consulted", type="datetime", options = {"comment" = "Date de dernière consultation de l objet par l user"})
+     * @ORM\Column(name="cln_date_last_consulted", type="datetime")
      */
     private $dateLastConsulted;
 
@@ -72,7 +74,7 @@ class Consultation
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
@@ -94,7 +96,7 @@ class Consultation
      *
      * @param Objet $objet
      */
-    public function setObjet(\HopitalNumerique\ObjetBundle\Entity\Objet $objet)
+    public function setObjet(Objet $objet)
     {
         $this->objet = $objet;
     }
@@ -102,7 +104,7 @@ class Consultation
     /**
      * Get contenu
      *
-     * @return \HopitalNumerique\ObjetBundle\Entity\Contenu $contenu
+     * @return Contenu $contenu
      */
     public function getContenu()
     {
@@ -112,9 +114,9 @@ class Consultation
     /**
      * Set contenu
      *
-     * @param \HopitalNumerique\ObjetBundle\Entity\Contenu $contenu
+     * @param Contenu $contenu
      */
-    public function setContenu(\HopitalNumerique\ObjetBundle\Entity\Contenu $contenu)
+    public function setContenu(Contenu $contenu)
     {
         $this->contenu = $contenu;
     }
@@ -122,7 +124,7 @@ class Consultation
     /**
      * Get user
      *
-     * @return \HopitalNumerique\UserBundle\Entity\User $user
+     * @return User $user
      */
     public function getUser()
     {
@@ -132,9 +134,9 @@ class Consultation
     /**
      * Set user
      *
-     * @param \HopitalNumerique\UserBundle\Entity\User $user
+     * @param User $user
      */
-    public function setUser(\HopitalNumerique\UserBundle\Entity\User $user)
+    public function setUser(User $user)
     {
         $this->user = $user;
     }
@@ -142,7 +144,7 @@ class Consultation
     /**
      * Get dateLastConsulted
      *
-     * @return DateTime $dateLastConsulted
+     * @return \DateTime $dateLastConsulted
      */
     public function getDateLastConsulted()
     {
@@ -152,7 +154,7 @@ class Consultation
     /**
      * Set dateLastConsulted
      *
-     * @param DateTime $dateLastConsulted
+     * @param \DateTime $dateLastConsulted
      */
     public function setDateLastConsulted($dateLastConsulted)
     {
@@ -162,10 +164,11 @@ class Consultation
     /**
      * Set domaine
      *
-     * @param \HopitalNumerique\DomaineBundle\Entity\Domaine $domaine
+     * @param Domaine $domaine
+     *
      * @return Consultation
      */
-    public function setDomaine(\HopitalNumerique\DomaineBundle\Entity\Domaine $domaine = null)
+    public function setDomaine(Domaine $domaine = null)
     {
         $this->domaine = $domaine;
 
@@ -175,7 +178,7 @@ class Consultation
     /**
      * Get domaine
      *
-     * @return \HopitalNumerique\DomaineBundle\Entity\Domaine 
+     * @return Domaine
      */
     public function getDomaine()
     {
@@ -186,13 +189,14 @@ class Consultation
      * Set sessionId
      *
      * @param string $sessionId
-     * @return StatRecherche
+     *
+     * @return Consultation
      */
     public function setSessionId($sessionId)
     {
-    	$this->sessionId = $sessionId;
-    
-    	return $this;
+        $this->sessionId = $sessionId;
+
+        return $this;
     }
     
     /**
@@ -202,6 +206,6 @@ class Consultation
      */
     public function getsessionId()
     {
-    	return $this->sessionId;
+        return $this->sessionId;
     }
 }
