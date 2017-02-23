@@ -5,6 +5,7 @@ imports:
     - { resource: 'services/twig.yml' }
     - { resource: 'services/repository.yml' }
     - { resource: 'services/command_handler.yml' }
+    - { resource: 'services/event.yml' }
 
 services:
     hopitalnumerique_reference.grid.reference:
