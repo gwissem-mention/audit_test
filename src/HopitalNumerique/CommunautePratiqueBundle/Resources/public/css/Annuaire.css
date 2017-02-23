@@ -43,12 +43,9 @@
     .communaute-de-pratiques-user-add .column { line-height: 30px;padding: 7px 0; }
 
 /* Tooltip de l'annuaire */
-.groupeContent { text-align: left; width: 400px; }
-
-.tooltip-inner { min-width: 420px; padding: 10px; }
-
+.groupeContent { text-align: left; }
+.tooltip-inner { padding: 10px; max-width: 500px; }
 .infobulle { margin-top:5px; padding: 4px; cursor: help; }
-
 .resultats-nombre { float:right; margin-top:7px; }
 
 .communaute-de-pratiques-bloc-user .contact {font-size:10px; margin-bottom:5px;}
