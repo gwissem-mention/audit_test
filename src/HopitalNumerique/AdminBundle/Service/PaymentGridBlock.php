@@ -18,15 +18,15 @@ class PaymentGridBlock
     /**
      * PaymentGridBlock constructor.
      *
-     * @param FactureRepository $factureRepository
-     * @param InscriptionRepository $inscriptionRepository
+     * @param FactureRepository             $factureRepository
+     * @param InscriptionRepository         $inscriptionRepository
+     * @param InterventionDemandeRepository $interventionDemandeRepository
      */
     public function __construct(
         FactureRepository $factureRepository,
         InscriptionRepository $inscriptionRepository,
         InterventionDemandeRepository $interventionDemandeRepository
-    )
-    {
+    ) {
         $this->factureRepository             = $factureRepository;
         $this->inscriptionRepository         = $inscriptionRepository;
         $this->interventionDemandeRepository = $interventionDemandeRepository;
@@ -39,7 +39,8 @@ class PaymentGridBlock
             'payedCurrentYear'           => $this->factureRepository->getTotalAmountForYear(date('Y')),
             'waitingPayment'             => $this->factureRepository->getTotalNotPayedAmountForYear(),
             'waintingPaymentCurrentYear' => $this->factureRepository->getTotalNotPayedAmountForYear(date('Y')),
-            'waitingBillCreation'        => $this->inscriptionRepository->getAmountOfSessionWithoutBill() + $this->interventionDemandeRepository->getAmountOfInterventionWithoutBill(),
+            'waitingBillCreation'        => $this->inscriptionRepository->getAmountOfSessionWithoutBill() +
+                                            $this->interventionDemandeRepository->getAmountOfInterventionWithoutBill(),
         ];
 
         return $paymentsDatas;
