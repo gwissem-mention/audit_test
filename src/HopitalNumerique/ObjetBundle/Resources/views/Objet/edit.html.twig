@@ -42,6 +42,7 @@
         {% else %}
             <a class="btn btn-default" href="{{ path('hopitalnumerique_objet_objet_cancel_with_filtre', { 'id': objet.id, 'message':0 , 'filtre':"publication" }) }}" title="Retour à la liste"><i class="fa fa-reply"></i></a>
         {% endif %}
+        <a class="btn btn-default fancy-aide fancybox fancybox.ajax" href="{{ path('hopitalnumerique_objet_objet_reportPopin', { 'object': objet.id }) }}" target="_blank" title="Afficher le rapport"><i class="fa fa-search"></i></a>
         <a class="btn btn-default" href="{{ path('hopital_numerique_publication_publication_objet', { 'id': objet.id }) }}" target="_blank" title="Prévisualiser"><i class="fa fa-eye"></i></a>
     {% elseif objet.isArticle %}
         <a class="btn btn-default" href="{{ path('hopitalnumerique_objet_objet_filtre', { 'filtre': 'Article' }) }}" title="Retour à la liste"><i class="fa fa-reply"></i></a>
@@ -61,7 +62,7 @@
             <div class="panel-heading">
                 <h4>Informations</h4>
                 <div class="options">
-                    <ul class="nav nav-tabs">
+                    <ul class="nav nav-tabs" id="object-tab">
                         <li {% if not infra %}class="active"{% endif %}><a href="#objet" data-toggle="tab">Publication</a></li>
                         {% if objet.id and not objet.isArticle() %}
                             <li class="{% if infra %}active{% endif %}"><a href="#infra" data-toggle="tab">Infra-documentaire</a></li>
@@ -426,7 +427,7 @@
     <li class="dd-item dd3-item" data-id="{{contenu.id}}" id="contenu-{{contenu.id}}" >
         <div class="dd-handle dd3-handle"></div>
         <div class="dd3-content">
-            <a data-url="{{path('hopitalnumerique_objet_contenu_form', {'id':contenu.id})}}" href="javascript:selectChapitre({{contenu.id}}, '{{path('hopitalnumerique_objet_contenu_form', {'id':contenu.id})}}')" title="{{contenu.titre}}">{{contenu.order ~ ' ' ~ contenu.titre|truncate(50)}}</a>
+            <a id="{{ 'tree-item-' ~ contenu.id }}" data-order="{{ contenu.order }}" data-url="{{path('hopitalnumerique_objet_contenu_form', {'id':contenu.id})}}" href="javascript:selectChapitre({{contenu.id}}, '{{path('hopitalnumerique_objet_contenu_form', {'id':contenu.id})}}')" title="{{contenu.titre}}">{{contenu.order ~ ' ' ~ contenu.titre|truncate(50)}}</a>
             <p class="text-muted pull-right">{{contenu.nbVue}} vues - <span title="{% for domaineCommunWithUser in domaines_communs_with_user(contenu.entity, app.user) %} {{ domaineCommunWithUser }} : {{ referencement_note(contenu.entity, domaineCommunWithUser) }} {% endfor %}">Survoler pour afficher les scores</span></p>
         </div>
         <div class="dd3-actions">

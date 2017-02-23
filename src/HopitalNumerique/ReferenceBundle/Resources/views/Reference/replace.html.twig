@@ -1,0 +1,23 @@
+{% block body %}
+    <style>input[type=checkbox] { width: 15px; margin-top: -6px; }</style>
+    <div class="col-sm-12">
+        <div class="panel panel-midnightblue">
+            <div class="panel-heading">
+                <h4>
+                    Ajouter une référence
+                </h4>
+            </div>
+
+            <div class="panel-body">
+                {{ form_start(form) }}
+                    {{ form_row(form.currentReference, {'label':'Référence actuelle'}) }}
+                    {{ form_row(form.targetReference, {'label':'Référence à ajouter'}) }}
+                    {{ form_row(form.keepHistory, {'label':'Appliquer aussi aux traces de l\'historique'}) }}
+
+                    <input type="submit" value="Ajouter" class="btn btn-success pull-right">
+
+                {{ form_end(form) }}
+            </div>
+        </div>
+    </div>
+{% endblock %}

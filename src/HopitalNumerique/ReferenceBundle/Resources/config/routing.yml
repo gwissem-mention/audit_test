@@ -31,3 +31,7 @@ hopitalnumerique_reference_reference_delete:
 hopitalnumerique_reference_reference_save_ajax:
     pattern:  /reference/save-ajax/{id}
     defaults: { _controller: HopitalNumeriqueReferenceBundle:Reference:saveReferenceAjax }
+
+hopitalnumerique_reference_reference_replace:
+    path: /reference/replace
+    defaults: { _controller: "HopitalNumeriqueReferenceBundle:Reference:replace" }

@@ -57,6 +57,12 @@ hopitalnumerique_objet_objet_delete:
     requirements: 
         id: \d+
 
+hopitalnumerique_objet_objet_reportPopin:
+    path: /objet/report/{object}
+    defaults: { _controller: "HopitalNumeriqueObjetBundle:Objet:reportPopin" }
+    requirements:
+        id: \d+
+
 #Partie Link
 hopitalnumerique_objet_objet_addLink:
     pattern:  /objet/addLink/{id}
@@ -119,6 +125,10 @@ hopitalnumerique_objet_contenu_upload:
 hopitalnumerique_objet_contenu_reorder:
     pattern:  /objet/contenu/reorder
     defaults: { _controller: "HopitalNumeriqueObjetBundle:Contenu:reorder" }
+
+hopitalnumerique_objet_infradoc_related_production:
+    path: /objet/contenu/form/{content}/related-productions
+    defaults: { _controller: "HopitalNumeriqueObjetBundle:Contenu:relatedProduction" }
 
 #---Commentaire
 hopitalnumerique_objet_admin_commentaire:

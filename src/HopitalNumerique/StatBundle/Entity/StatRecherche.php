@@ -2,7 +2,11 @@
 
 namespace HopitalNumerique\StatBundle\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use HopitalNumerique\ReferenceBundle\Entity\Reference;
+use HopitalNumerique\UserBundle\Entity\User;
 
 /**
  * StatRecherche
@@ -37,7 +41,7 @@ class StatRecherche
 
     /**
      * @var string
-     * 
+     *
      * @ORM\Column(name="stat_requete", type="text")
      */
     protected $requete;
@@ -51,7 +55,7 @@ class StatRecherche
 
     /**
      * @var integer
-     * 
+     *
      * @ORM\ManyToMany(targetEntity="\HopitalNumerique\ReferenceBundle\Entity\Reference")
      * @ORM\JoinTable(name="hn_statistiques_recherche_requete",
      *      joinColumns={ @ORM\JoinColumn(name="stat_id", referencedColumnName="stat_id", onDelete="CASCADE")},
@@ -68,7 +72,7 @@ class StatRecherche
     private $categPointDur;
 
     /**
-     * @var integer
+     * @var User
      *
      * @ORM\ManyToOne(targetEntity="\HopitalNumerique\UserBundle\Entity\User")
      * @ORM\JoinColumn(name="usr_id", referencedColumnName="usr_id", nullable=true, onDelete="CASCADE")
@@ -87,13 +91,13 @@ class StatRecherche
      */
     public function __construct()
     {
-        $this->references = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->references = new ArrayCollection();
     }
 
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
@@ -116,7 +120,7 @@ class StatRecherche
     /**
      * Get date
      *
-     * @return \DateTime 
+     * @return \DateTime
      */
     public function getDate()
     {
@@ -126,10 +130,10 @@ class StatRecherche
     /**
      * Add references
      *
-     * @param \HopitalNumerique\ReferenceBundle\Entity\Reference $references
+     * @param Reference $references
      * @return StatRecherche
      */
-    public function addReference(\HopitalNumerique\ReferenceBundle\Entity\Reference $references)
+    public function addReference(Reference $references)
     {
         $this->references[] = $references;
 
@@ -139,9 +143,9 @@ class StatRecherche
     /**
      * Remove references
      *
-     * @param \HopitalNumerique\ReferenceBundle\Entity\Reference $references
+     * @param Reference $references
      */
-    public function removeReference(\HopitalNumerique\ReferenceBundle\Entity\Reference $references)
+    public function removeReference(Reference $references)
     {
         $this->references->removeElement($references);
     }
@@ -149,7 +153,7 @@ class StatRecherche
     /**
      * Get references
      *
-     * @return \Doctrine\Common\Collections\Collection 
+     * @return Collection
      */
     public function getReferences()
     {
@@ -159,7 +163,8 @@ class StatRecherche
     /**
      * Set references
      *
-     * @param array(Reference) $references
+     * @param Reference[] $references
+     *
      * @return StatRecherche
      */
     public function setReferences($references)
@@ -172,10 +177,11 @@ class StatRecherche
     /**
      * Set user
      *
-     * @param \HopitalNumerique\UserBundle\Entity\User $user
+     * @param User $user
+     *
      * @return StatRecherche
      */
-    public function setUser(\HopitalNumerique\UserBundle\Entity\User $user = null)
+    public function setUser(User $user = null)
     {
         $this->user = $user;
 
@@ -185,7 +191,7 @@ class StatRecherche
     /**
      * Get user
      *
-     * @return \HopitalNumerique\UserBundle\Entity\User 
+     * @return User
      */
     public function getUser()
     {
@@ -208,7 +214,7 @@ class StatRecherche
     /**
      * Get nbResultats
      *
-     * @return integer 
+     * @return integer
      */
     public function getNbResultats()
     {
@@ -231,7 +237,7 @@ class StatRecherche
     /**
      * Get requete
      *
-     * @return string 
+     * @return string
      */
     public function getRequete()
     {
@@ -254,7 +260,7 @@ class StatRecherche
     /**
      * Get isRequeteSaved
      *
-     * @return boolean 
+     * @return boolean
      */
     public function getIsRequeteSaved()
     {
@@ -277,7 +283,7 @@ class StatRecherche
     /**
      * Get categPointDur
      *
-     * @return string 
+     * @return string
      */
     public function getCategPointDur()
     {
@@ -288,13 +294,14 @@ class StatRecherche
      * Set sessionId
      *
      * @param string $sessionId
+     *
      * @return StatRecherche
      */
     public function setSessionId($sessionId)
     {
-    	$this->sessionId = $sessionId;
-    
-    	return $this;
+        $this->sessionId = $sessionId;
+
+        return $this;
     }
     
     /**
@@ -304,6 +311,6 @@ class StatRecherche
      */
     public function getsessionId()
     {
-    	return $this->sessionId;
+        return $this->sessionId;
     }
 }

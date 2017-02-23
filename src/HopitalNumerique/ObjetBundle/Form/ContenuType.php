@@ -2,42 +2,60 @@
 namespace HopitalNumerique\ObjetBundle\Form;
 
 use Doctrine\ORM\EntityRepository;
+use HopitalNumerique\ObjetBundle\Entity\Contenu;
 use HopitalNumerique\ObjetBundle\Manager\ObjetManager;
+use HopitalNumerique\UserBundle\Entity\User;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\HiddenType;
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
 class ContenuType extends AbstractType
 {
-    private $_constraints = array();
+    private $constraints = [];
 
     /**
-     * @var \HopitalNumerique\ObjetBundle\Manager\ObjetManager ObjetManager
+     * @var ObjetManager ObjetManager
      */
     private $objetManager;
 
 
+    /**
+     * ContenuType constructor.
+     *
+     * @param              $manager
+     * @param              $validator
+     * @param ObjetManager $objetManager
+     */
     public function __construct($manager, $validator, ObjetManager $objetManager)
     {
-        $this->_constraints = $manager->getConstraints( $validator );
+        $this->constraints  = $manager->getConstraints($validator);
         $this->objetManager = $objetManager;
     }
 
+    /**
+     * @param FormBuilderInterface $builder
+     * @param array                $options
+     */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         /**
-         * @var \HopitalNumerique\ObjetBundle\Entity\Contenu
+         * @var Contenu
          */
         $contenu = $builder->getData();
         
         /**
-         * @var \HopitalNumerique\UserBundle\Entity\User
+         * @var User
          */
         $user = $options['user'];
 
         $objetsOptions = [
             'mapped' => false,
-            'choices' => $this->objetManager->getObjetsAndContenuForFormTypeChoices(),
+            'choices' => [],
             'label' => 'Productions liées',
             'multiple' => true,
             'attr' => [
@@ -49,28 +67,34 @@ class ContenuType extends AbstractType
         }
 
         $builder
-            ->add('titre', 'text', array(
-                'max_length' => $this->_constraints['titre']['maxlength'],
-                'required'   => true, 
+            ->add('titre', TextType::class, [
+                'max_length' => $this->constraints['titre']['maxlength'],
+                'required'   => true,
                 'label'      => 'Titre',
-                'attr'       => array('class' => $this->_constraints['titre']['class'] )
-            ))
-            ->add('alias', 'text', array(
-                'max_length' => $this->_constraints['alias']['maxlength'],
-                'required'   => false, 
+                'attr'       => [
+                        'class' => $this->constraints['titre']['class']
+                    ],
+            ])
+            ->add('alias', TextType::class, [
+                'max_length' => $this->constraints['alias']['maxlength'],
+                'required'   => false,
                 'label'      => 'Alias',
-                'attr'       => array('class' => $this->_constraints['alias']['class'] )
-            ))
-            ->add('contenu', 'textarea', array(
+                'attr'       => [
+                    'class' => $this->constraints['alias']['class']
+                ],
+            ])
+            ->add('contenu', TextareaType::class, [
                 'required' => true,
                 'label'    => 'Contenu',
-                'attr'     => array('class' => $this->_constraints['contenu']['class'] )
-            ))
-            ->add('modified', 'hidden', array(
-                'mapped' => false
-            ))
-            ->add('objets', 'choice', $objetsOptions)
-            ->add('domaines', 'entity', [
+                'attr'     => [
+                    'class' => $this->constraints['contenu']['class']
+                ],
+            ])
+            ->add('modified', HiddenType::class, [
+                'mapped' => false,
+            ])
+            ->add('objets', ChoiceType::class, $objetsOptions)
+            ->add('domaines', EntityType::class, [
                 'class' => 'HopitalNumerique\DomaineBundle\Entity\Domaine',
                 'choices' => $user->getDomaines(),
                 'label' => 'Domaines',
@@ -79,7 +103,7 @@ class ContenuType extends AbstractType
                     'class' => 'select2'
                 ]
             ])
-            ->add('types', 'entity', [
+            ->add('types', EntityType::class, [
                 'class' => 'HopitalNumeriqueReferenceBundle:Reference',
                 'property' => 'libelle',
                 'required' => false,
@@ -104,20 +128,25 @@ class ContenuType extends AbstractType
     }
 
 
+    /**
+     * @param OptionsResolverInterface $resolver
+     */
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
         $resolver
-            ->setDefaults(array(
-                'data_class' => 'HopitalNumerique\ObjetBundle\Entity\Contenu'
-            ))
-            ->setRequired(['domaine', 'user'])
-            ->setAllowedTypes([
+            ->setDefaults([
+                'data_class' => 'HopitalNumerique\ObjetBundle\Entity\Contenu',
+            ])
+            ->setRequired(['domaine', 'user'])->setAllowedTypes([
                 'domaine' => 'HopitalNumerique\DomaineBundle\Entity\Domaine',
-                'user' => 'HopitalNumerique\UserBundle\Entity\User'
+                'user'    => 'HopitalNumerique\UserBundle\Entity\User',
             ])
         ;
     }
 
+    /**
+     * @return string
+     */
     public function getName()
     {
         return 'hopitalnumerique_objet_contenu';

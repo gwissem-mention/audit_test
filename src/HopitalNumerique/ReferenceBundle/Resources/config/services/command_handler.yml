@@ -1,0 +1,6 @@
+services:
+    hopitalnumerique_reference.handler.switch_reference:
+        class: 'HopitalNumerique\ReferenceBundle\Domain\Command\SwitchReferenceHandler'
+        arguments:
+            - "@hopitalnumerique_reference.repository.reference"
+            - "@hopitalnumerique_reference.service.reference_switcher"

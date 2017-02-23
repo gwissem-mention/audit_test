@@ -8,4 +8,10 @@ $(document).ready(function() {
     $('.fancybox').fancybox();
 
     $('.select2').select2();
+
+    $(".fancybox").fancybox({
+        afterShow: function() {
+            $("form").validationEngine({promptPosition : "topRight:-100"});
+        }
+    });
 });

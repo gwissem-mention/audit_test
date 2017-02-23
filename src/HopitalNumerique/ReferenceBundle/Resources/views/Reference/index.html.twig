@@ -20,6 +20,7 @@
 {% endblock %}
 
 {% block toolbarButton %}
+    <a href="{{ path('hopitalnumerique_reference_reference_replace') }}" class="btn btn-default fancybox fancybox.ajax" title="Ajouter une référence"><i class="fa fa-exchange"></i></a>
     {% if app.user|checkAuthorization( path('hopitalnumerique_reference_reference_add') ) and app.user.hasRoleAdmin %}
         <a class="btn btn-default" href="{{ path('hopitalnumerique_reference_reference_add') }}" title="Ajouter un concept"><i class="fa fa-plus"></i></a>
     {% endif %}

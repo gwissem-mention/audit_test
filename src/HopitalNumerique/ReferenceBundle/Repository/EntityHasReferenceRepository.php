@@ -407,4 +407,23 @@ class EntityHasReferenceRepository extends EntityRepository
 
         return $qb->getQuery()->getResult();
     }
+
+    /**
+     * @param Reference $reference
+     *
+     * @return array
+     */
+    public function findByReference(Reference $reference)
+    {
+        $qb = $this->createQueryBuilder('entity_has_reference');
+
+        $qb
+            ->select('entity_has_reference.entityId', 'entity_has_reference.entityType', 'entity_has_reference.primary')
+            ->leftJoin('entity_has_reference.reference', 'reference')
+            ->andWhere('reference.id = :referenceId')
+            ->setParameter('referenceId', $reference->getId())
+        ;
+
+        return $qb->getQuery()->getArrayResult();
+    }
 }
