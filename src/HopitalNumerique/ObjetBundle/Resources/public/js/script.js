@@ -59,7 +59,7 @@ $(document).ready(function() {
             type     : 'POST',
             dataType : 'json',
             success  : function( data ){
-                
+
             }
         });
     });
@@ -76,7 +76,7 @@ $(document).ready(function() {
             type     : 'POST',
             dataType : 'json',
             success  : function( data ){
-                
+
             }
         });
     });
@@ -122,6 +122,15 @@ $(document).ready(function() {
 
     //bind de Validation Engine
     $('form.toValidate').validationEngine();
+
+    // Keeps current tab active when reloading page
+    $('a[data-toggle="tab"]').on('show.bs.tab', function(e) {
+        localStorage.setItem('activeTab', $(e.target).attr('href'));
+    });
+    var activeTab = localStorage.getItem('activeTab');
+    if(activeTab){
+        $('#object-tab').find('a[href="' + activeTab + '"]').tab('show');
+    }
 });
 
 $(window).load(function(){
@@ -149,9 +158,34 @@ function selectChapitre( id, url )
             $('#edition-infradox .infradoc').val( id );
             loader.finished();
             $('.select2').select2();
+            fillRelatedProductionsList(url);
         }
     });
+}
 
+function fillRelatedProductionsList(url) {
+    var loader = $('#s2id_hopitalnumerique_objet_contenu_objets').nodevoLoader().start();
+    var relatedProdList = $('#hopitalnumerique_objet_contenu_objets');
+    var preselectedValues = $.parseJSON(relatedProdList.attr('data-preselected-values'));
+
+    $.ajax({
+        url: url + '/related-productions',
+        type: 'POST',
+        dataType: 'json',
+        success: function (json) {
+            $.each(json, function(index, value) {
+                if (preselectedValues.indexOf(index) != -1) {
+                    relatedProdList.append('<option value="'+ index +'" selected="selected">'+ value +'</option>');
+                } else {
+                    relatedProdList.append('<option value="'+ index +'">'+ value +'</option>');
+                }
+            });
+            relatedProdList.select2("destroy");
+
+            relatedProdList.select2();
+            loader.finished();
+        }
+    });
 }
 
 //met un loader sur le formulaire et sauvegarde automatiquement le formulaire objet
@@ -167,26 +201,29 @@ function saveAutomatique()
 function saveContenu()
 {
     idContenu = $('#contenu-id').val();
+    treeItem = "#tree-item-" + idContenu;
+    itemOrder = $(treeItem).data('order');
     var loader = $('#edition-infradox').nodevoLoader().start();
 
     $.ajax({
         url  : $('#save-contenu-url').val(),
         data : {
-            id      : idContenu,
-            titre   : $('#hopitalnumerique_objet_contenu_titre').val(),
-            alias   : $('#hopitalnumerique_objet_contenu_alias').val(),
-            notify  : $('#hopitalnumerique_objet_contenu_modified').val(),
-            contenu : tinyMCE.get('hopitalnumerique_objet_contenu_contenu').getContent(),
-            types: $('#hopitalnumerique_objet_contenu_types').val(),
-            objets: $('#hopitalnumerique_objet_contenu_objets').val(),
-            domaines: $('#hopitalnumerique_objet_contenu_domaines').val()
+            id       : idContenu,
+            titre    : $('#hopitalnumerique_objet_contenu_titre').val(),
+            alias    : $('#hopitalnumerique_objet_contenu_alias').val(),
+            notify   : $('#hopitalnumerique_objet_contenu_modified').val(),
+            contenu  : tinyMCE.get('hopitalnumerique_objet_contenu_contenu').getContent(),
+            types    : $('#hopitalnumerique_objet_contenu_types').val(),
+            objets   : $('#hopitalnumerique_objet_contenu_objets').val(),
+            domaines : $('#hopitalnumerique_objet_contenu_domaines').val()
         },
         type     : 'POST',
         dataType : 'json',
         success  : function( data ){
             if( data.success ){
                 selectChapitre( idContenu, $('#contenu-' + idContenu + ' > .dd3-content a').data('url'));
-                $('#contenu-' + idContenu + ' > .dd3-content a').html( data.titre );
+                $('#contenu-' + idContenu + ' > .dd3-content a').html(itemOrder + ' ' + data.titre);
+                console.log(data.contenu);
             }else{
                 if(data.alias)
                     $('.errorAlias .help-block p').html('L\'alias doit être unique.');
@@ -294,13 +331,13 @@ function updateNbChilds()
         parentLevel     = $(this).data('level');
         nbChecked = 0;
         nbChildsDirect = 0;
-        
+
         if( childs.length > 0 ) {
             $.each(childs,function(key, val){
 
                 if ( $('.ref-'+val+' .checkbox').prop('checked') && $('.ref-'+val).data('level') == parentLevel + 1 )
                     nbChecked++
-                
+
                 if ( $('.ref-'+val).data('level') == parentLevel + 1 )
                     nbChildsDirect++
             });
