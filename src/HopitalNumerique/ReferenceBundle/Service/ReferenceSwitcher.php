@@ -55,17 +55,23 @@ class ReferenceSwitcher
         $currentEntityHasReferences = $this->entityHasReferenceRepository->findByReference($currentReference);
         $targetEntityHasReferences = $this->entityHasReferenceRepository->findByReference($targetReference);
 
-        $test = array_udiff($currentEntityHasReferences, $targetEntityHasReferences, function ($a, $b) {
-            return $a['entityId'] === $b['entityId']
-                && $a['entityType'] === $a['entityType']
-            ;
-        });
+        $entitiesHasRefToBeAdded = array_udiff(
+            $currentEntityHasReferences,
+            $targetEntityHasReferences,
+            function ($a, $b) {
+                if ($a['entityId'] . '-' . $a['entityType'] === $b['entityId'] . '-' . $b['entityType']) {
+                    return 0;
+                }
+
+                return $a['entityId'] . '-' . $a['entityType'] > $b['entityId'] . '-' . $b['entityType'] ? 1 : -1;
+            }
+        );
 
         $this->entityManager->beginTransaction();
 
         try {
             /** @var EntityHasReference $currentEntityHasReference */
-            foreach ($test as $currentEntityHasReference) {
+            foreach ($entitiesHasRefToBeAdded as $currentEntityHasReference) {
                 $newEntityHasReference = new EntityHasReference();
                 $newEntityHasReference->setReference($targetReference);
                 $newEntityHasReference->setEntityId($currentEntityHasReference['entityId']);
