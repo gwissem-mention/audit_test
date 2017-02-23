@@ -1,0 +1,12 @@
+services:
+    hopitalnumerique_reference.repository.reference:
+        class: 'HopitalNumerique\ReferenceBundle\Repository\ReferenceRepository'
+        factory: ["@doctrine.orm.entity_manager", "getRepository"]
+        arguments:
+            - 'HopitalNumeriqueReferenceBundle:Reference'
+
+    hopitalnumerique_reference.repository.entity_has_reference:
+        class: 'HopitalNumerique\ReferenceBundle\Repository\EntityHasReferenceRepository'
+        factory: ["@doctrine.orm.entity_manager", "getRepository"]
+        arguments:
+            - 'HopitalNumeriqueReferenceBundle:EntityHasReference'

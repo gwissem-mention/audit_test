@@ -25,3 +25,9 @@ services:
             class: HopitalNumerique\StatBundle\Service\ErrorUrlExporter
             arguments:
                 - "@stat.repository.error"
+
+    stat.repository.search:
+        class: 'HopitalNumerique\StatBundle\Repository\StatRechercheRepository'
+        factory: ['@doctrine.orm.entity_manager', 'getRepository']
+        arguments:
+            - 'HopitalNumeriqueStatBundle:StatRecherche'
