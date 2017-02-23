@@ -429,9 +429,9 @@ class ReferenceController extends Controller
 
                 $this->addFlash(
                     'success',
-                    'La référence ' . $switchReferenceCommand->currentReference
+                    'La référence ' . $switchReferenceCommand->targetReference
                     . ' a bien été ajoutée aux objets référencés sur la référence '
-                    . $switchReferenceCommand->targetReference
+                    . $switchReferenceCommand->currentReference
                 );
             } catch (\Exception $exception) {
                 $this->addFlash('danger', $exception->getMessage());
