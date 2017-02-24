@@ -102,20 +102,35 @@
                 {%- endfor -%}
                 {% macro buildContextTreePart(referencesTreePart, level, referenceParentId) -%}
                     {% import _self as mySelf %}
-                    <li data-libelle="{{ referencesTreePart.reference.libelle }}" data-reference="{{ referencesTreePart.reference.id }}" data-level="{{ level }}" data-chosen="false" data-domaines="{{ referencesTreePart.reference.domainesId|join(',') }}">
-                        {%- if level > 2 -%}
-                            <label><input name="ref-{{ referenceParentId }}" type="{{ referenceParentId == '271' ? 'checkbox' : 'radio' }}"> {{ referencesTreePart.reference.libelle }}</label>
-                        {%- else -%}
-                            <div><strong>{{ referencesTreePart.reference.libelle }}</strong></div>
-                        {%- endif -%}
-                        {%- if referencesTreePart.enfants|length > 0 -%}
-                            <ul>
-                                {%- for referenceEnfantTree in referencesTreePart.enfants -%}
-                                    {{ mySelf.buildContextTreePart(referenceEnfantTree, level + 1, referencesTreePart.reference.id) }}
-                                {%- endfor -%}
-                            </ul>
-                        {%- endif -%}
-                    </li>
+                    {% if referenceParentId == 266 %}
+                        <option name="ref-{{ referencesTreePart.reference.id }}" value="{{ referencesTreePart.reference.id }}" data-libelle="{{ referencesTreePart.reference.libelle }}" data-reference="{{ referencesTreePart.reference.id }}" data-level="{{ level }}" data-chosen="false" data-domaines="{{ referencesTreePart.reference.domainesId|join(',') }}">
+                            {{ referencesTreePart.reference.libelle }}
+                        </option>
+                    {% else %}
+                            <li data-libelle="{{ referencesTreePart.reference.libelle }}" data-reference="{{ referencesTreePart.reference.id }}" data-level="{{ level }}" data-chosen="false" data-domaines="{{ referencesTreePart.reference.domainesId|join(',') }}">
+                            {%- if level > 2 -%}
+                                <label><input name="ref-{{ referenceParentId }}" type="{{ referenceParentId == '271' ? 'checkbox' : 'radio' }}"> {{ referencesTreePart.reference.libelle }}</label>
+                            {%- else -%}
+                                <div><strong>{{ referencesTreePart.reference.libelle }}</strong></div>
+                            {%- endif -%}
+                            {%- if referencesTreePart.enfants|length > 0 -%}
+                                {%- if referencesTreePart.reference.id == 266 -%}
+                                    <select title="select-institution-type" style="margin: 5px 0 10px 0;">
+                                        <option value="-1" data-reference="-1">-</option>
+                                        {%- for referenceEnfantTree in referencesTreePart.enfants -%}
+                                            {{ mySelf.buildContextTreePart(referenceEnfantTree, level + 1, referencesTreePart.reference.id) }}
+                                        {%- endfor -%}
+                                    </select>
+                                {%- else -%}
+                                    <ul>
+                                        {%- for referenceEnfantTree in referencesTreePart.enfants -%}
+                                            {{ mySelf.buildContextTreePart(referenceEnfantTree, level + 1, referencesTreePart.reference.id) }}
+                                        {%- endfor -%}
+                                    </ul>
+                                {%- endif -%}
+                            {%- endif -%}
+                        </li>
+                    {% endif %}
                 {%- endmacro %}
 
                 <nav class="references-bloc">
