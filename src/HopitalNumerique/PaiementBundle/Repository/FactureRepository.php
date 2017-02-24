@@ -3,6 +3,7 @@
 namespace HopitalNumerique\PaiementBundle\Repository;
 
 use Doctrine\ORM\EntityRepository;
+use Doctrine\ORM\QueryBuilder;
 
 /**
  * FactureRepository
@@ -32,6 +33,7 @@ class FactureRepository extends EntityRepository
             ->setParameter('user', $user)
             ->orderBy('fac.dateCreation', 'DESC')
         ;
+
         return $qb;
     }
 
@@ -49,7 +51,7 @@ class FactureRepository extends EntityRepository
             ->where('f.payee = 1')
             ->andWhere('f.annulee = 0')
             ->andWhere('f.datePaiement BETWEEN :startDate AND :endDate')
-            ->setParameter('startDate', new \DateTime(sprintf('00-00-%d 00:00:00', $year)))
+            ->setParameter('startDate', new \DateTime(sprintf('01-01-%d 00:00:00', $year)))
             ->setParameter('endDate', new \DateTime(sprintf('31-12-%d 23:59:59', $year)))
         ;
 
@@ -74,13 +76,11 @@ class FactureRepository extends EntityRepository
         if (!is_null($year)) {
             $qb
                 ->andWhere('f.dateCreation BETWEEN :startDate AND :endDate')
-                ->setParameter('startDate', new \DateTime(sprintf('00-00-%d 00:00:00', $year)))
+                ->setParameter('startDate', new \DateTime(sprintf('01-01-%d 00:00:00', $year)))
                 ->setParameter('endDate', new \DateTime(sprintf('31-12-%d 23:59:59', $year)))
             ;
         }
 
         return $qb->getQuery()->getSingleScalarResult();
     }
-
-
 }
