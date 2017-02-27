@@ -1,4 +1,5 @@
 <?php
+
 namespace HopitalNumerique\ObjetBundle\Form;
 
 use Doctrine\ORM\EntityRepository;
@@ -23,7 +24,6 @@ class ContenuType extends AbstractType
      */
     private $objetManager;
 
-
     /**
      * ContenuType constructor.
      *
@@ -33,7 +33,7 @@ class ContenuType extends AbstractType
      */
     public function __construct($manager, $validator, ObjetManager $objetManager)
     {
-        $this->constraints  = $manager->getConstraints($validator);
+        $this->constraints = $manager->getConstraints($validator);
         $this->objetManager = $objetManager;
     }
 
@@ -47,7 +47,7 @@ class ContenuType extends AbstractType
          * @var Contenu
          */
         $contenu = $builder->getData();
-        
+
         /**
          * @var User
          */
@@ -59,8 +59,8 @@ class ContenuType extends AbstractType
             'label' => 'Productions liées',
             'multiple' => true,
             'attr' => [
-                'class' => 'select2'
-            ]
+                'class' => 'select2',
+            ],
         ];
         if (null !== $builder->getData()->getObjets()) {
             $objetsOptions['data'] = $builder->getData()->getObjets()->toArray();
@@ -69,25 +69,25 @@ class ContenuType extends AbstractType
         $builder
             ->add('titre', TextType::class, [
                 'max_length' => $this->constraints['titre']['maxlength'],
-                'required'   => true,
-                'label'      => 'Titre',
-                'attr'       => [
-                        'class' => $this->constraints['titre']['class']
+                'required' => true,
+                'label' => 'Titre',
+                'attr' => [
+                        'class' => $this->constraints['titre']['class'],
                     ],
             ])
             ->add('alias', TextType::class, [
                 'max_length' => $this->constraints['alias']['maxlength'],
-                'required'   => false,
-                'label'      => 'Alias',
-                'attr'       => [
-                    'class' => $this->constraints['alias']['class']
+                'required' => false,
+                'label' => 'Alias',
+                'attr' => [
+                    'class' => $this->constraints['alias']['class'],
                 ],
             ])
             ->add('contenu', TextareaType::class, [
                 'required' => true,
-                'label'    => 'Contenu',
-                'attr'     => [
-                    'class' => $this->constraints['contenu']['class']
+                'label' => 'Contenu',
+                'attr' => [
+                    'class' => $this->constraints['contenu']['class'],
                 ],
             ])
             ->add('modified', HiddenType::class, [
@@ -100,8 +100,8 @@ class ContenuType extends AbstractType
                 'label' => 'Domaines',
                 'multiple' => true,
                 'attr' => [
-                    'class' => 'select2'
-                ]
+                    'class' => 'select2',
+                ],
             ])
             ->add('types', EntityType::class, [
                 'class' => 'HopitalNumeriqueReferenceBundle:Reference',
@@ -118,15 +118,15 @@ class ContenuType extends AbstractType
                            ->setParameter('objet', 'CATEGORIE_OBJET');
                     }
                     $qb->orderBy('ref.order', 'ASC');
+
                     return $qb;
                 },
                 'attr' => [
-                    'class' => 'select2'
-                ]
+                    'class' => 'select2',
+                ],
             ])
         ;
     }
-
 
     /**
      * @param OptionsResolverInterface $resolver
@@ -139,7 +139,7 @@ class ContenuType extends AbstractType
             ])
             ->setRequired(['domaine', 'user'])->setAllowedTypes([
                 'domaine' => 'HopitalNumerique\DomaineBundle\Entity\Domaine',
-                'user'    => 'HopitalNumerique\UserBundle\Entity\User',
+                'user' => 'HopitalNumerique\UserBundle\Entity\User',
             ])
         ;
     }

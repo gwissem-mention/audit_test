@@ -24,7 +24,7 @@ class AutodiagEntryVoter extends Voter
 
     protected function supports($attribute, $subject)
     {
-        if (!in_array($attribute, array(self::EDIT))) {
+        if (!in_array($attribute, [self::EDIT])) {
             return false;
         }
 
@@ -36,9 +36,10 @@ class AutodiagEntryVoter extends Voter
     }
 
     /**
-     * @param string $attribute
-     * @param AutodiagEntry $subject
+     * @param string         $attribute
+     * @param AutodiagEntry  $subject
      * @param TokenInterface $token
+     *
      * @return bool
      */
     protected function voteOnAttribute($attribute, $subject, TokenInterface $token)

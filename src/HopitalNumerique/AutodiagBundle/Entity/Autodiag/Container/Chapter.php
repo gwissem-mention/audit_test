@@ -7,7 +7,7 @@ use HopitalNumerique\AutodiagBundle\Entity\Autodiag\Container;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
- * Chapter
+ * Chapter.
  *
  * @ORM\Table(name="ad_autodiag_container_chapter")
  * @ORM\Entity
@@ -15,7 +15,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 class Chapter extends Container
 {
     /**
-     * Chapter title
+     * Chapter title.
      *
      * @var string
      *
@@ -25,7 +25,7 @@ class Chapter extends Container
     private $title;
 
     /**
-     * Chapter description
+     * Chapter description.
      *
      * @var string
      *
@@ -34,7 +34,7 @@ class Chapter extends Container
     private $description;
 
     /**
-     * Additional description
+     * Additional description.
      *
      * @var string
      *
@@ -43,7 +43,7 @@ class Chapter extends Container
     private $additionalDescription;
 
     /**
-     * Get title
+     * Get title.
      *
      * @return string
      */
@@ -53,9 +53,10 @@ class Chapter extends Container
     }
 
     /**
-     * Set title
+     * Set title.
      *
      * @param string $title
+     *
      * @return $this
      */
     public function setTitle($title)
@@ -66,7 +67,7 @@ class Chapter extends Container
     }
 
     /**
-     * Get description
+     * Get description.
      *
      * @return string
      */
@@ -76,9 +77,10 @@ class Chapter extends Container
     }
 
     /**
-     * Set description
+     * Set description.
      *
      * @param string $description
+     *
      * @return $this
      */
     public function setDescription($description)
@@ -89,7 +91,7 @@ class Chapter extends Container
     }
 
     /**
-     * Get additional description
+     * Get additional description.
      *
      * @return string
      */
@@ -99,8 +101,10 @@ class Chapter extends Container
     }
 
     /**
-     * Set additional description
+     * Set additional description.
+     *
      * @param string $additionalDescription
+     *
      * @return $this
      */
     public function setAdditionalDescription($additionalDescription)
@@ -110,4 +114,3 @@ class Chapter extends Container
         return $this;
     }
 }
-

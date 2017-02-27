@@ -1,4 +1,5 @@
 <?php
+
 namespace HopitalNumerique\AutodiagBundle\Service\Attribute\Builder;
 
 use HopitalNumerique\AutodiagBundle\Form\Type\Attribute\CriticiteType;
@@ -6,15 +7,14 @@ use HopitalNumerique\AutodiagBundle\Form\Type\CsvType;
 use HopitalNumerique\AutodiagBundle\Form\Type\Autodiag\PresetValueType;
 
 /**
- * Criticite attribute builder
+ * Criticite attribute builder.
  *
- * @package HopitalNumerique\AutodiagBundle\Service\Attribute\Builder
  * @author Emmanuel Da Fonseca <edafonseca@nodevo.com>
  */
 class CriticiteBuilder extends AbstractPresetableBuilder
 {
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function getName()
     {
@@ -22,7 +22,7 @@ class CriticiteBuilder extends AbstractPresetableBuilder
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function getTemplateName()
     {
@@ -30,7 +30,7 @@ class CriticiteBuilder extends AbstractPresetableBuilder
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function getPresetForm()
     {
@@ -75,6 +75,7 @@ class CriticiteBuilder extends AbstractPresetableBuilder
         if (!is_array($data) || in_array(null, $data) || in_array(-1, $data)) {
             return null;
         }
+
         return array_sum($data) / count($data);
     }
 
@@ -94,6 +95,7 @@ class CriticiteBuilder extends AbstractPresetableBuilder
         foreach ($data as $value) {
             $empty = $empty || ($value === null);
         }
+
         return $empty;
     }
 }

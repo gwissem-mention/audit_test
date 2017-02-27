@@ -1,4 +1,5 @@
 <?php
+
 namespace HopitalNumerique\ReferenceBundle\Doctrine;
 
 use HopitalNumerique\CoreBundle\DependencyInjection\Entity as ReferencementEntity;
@@ -26,7 +27,6 @@ class ReferencementDeleter
      */
     private $entityHasReferenceManager;
 
-
     /**
      * Constructeur.
      */
@@ -36,7 +36,6 @@ class ReferencementDeleter
         $this->noteDeleter = $noteDeleter;
         $this->entityHasReferenceManager = $entityHasReferenceManager;
     }
-
 
     /**
      * Supprime les éventuelles références de l'ambassadeur si l'utilisateur ne l'est plus.
@@ -69,7 +68,7 @@ class ReferencementDeleter
     {
         $entityHasReferences = $this->entityHasReferenceManager->findBy([
             'entityType' => $entityType,
-            'entityId' => $entityId
+            'entityId' => $entityId,
         ]);
 
         if (count($entityHasReferences) > 0) {

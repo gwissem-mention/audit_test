@@ -14,7 +14,7 @@ class FileImportType extends AbstractType
     {
         $builder
             ->add('file', FileType::class, [
-                'attr' => ['class' => 'validate[required]']
+                'attr' => ['class' => 'validate[required]'],
             ])
             ->add('notify_update', CheckboxType::class, [
                 'required' => false,
@@ -24,9 +24,9 @@ class FileImportType extends AbstractType
 
     public function configureOptions(OptionsResolver $resolver)
     {
-        $resolver->setDefaults(array(
+        $resolver->setDefaults([
             'data_class' => 'HopitalNumerique\AutodiagBundle\Model\AutodiagFileImport',
-            'label_format' => 'ad.autodiag.import.%name%'
-        ));
+            'label_format' => 'ad.autodiag.import.%name%',
+        ]);
     }
 }

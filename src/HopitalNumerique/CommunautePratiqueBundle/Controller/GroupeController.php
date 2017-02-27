@@ -1,4 +1,5 @@
 <?php
+
 namespace HopitalNumerique\CommunautePratiqueBundle\Controller;
 
 use Symfony\Component\HttpFoundation\Request;
@@ -26,16 +27,16 @@ class GroupeController extends \Symfony\Bundle\FrameworkBundle\Controller\Contro
         ->findEnCoursByUser($domaine, $this->getUser());
         $groupeUserAVenir = $this->container->get('hopitalnumerique_communautepratique.manager.groupe')
         ->findNonDemarresByUser($domaine, $this->getUser());
-        $groupeUser = array_merge($groupeUserEnCour,$groupeUserAVenir);
+        $groupeUser = array_merge($groupeUserEnCour, $groupeUserAVenir);
 
         return $this->render(
             'HopitalNumeriqueCommunautePratiqueBundle:Groupe:list.html.twig',
-            array
-            (
+
+            [
                 'groupesNonDemarres' => $this->container->get('hopitalnumerique_communautepratique.manager.groupe')->findNonDemarres($domaine),
                 'groupesEnCours' => $this->container->get('hopitalnumerique_communautepratique.manager.groupe')->findEnCours($domaine),
                 'userGroupesEnCours' => $groupeUser,
-            )
+            ]
         );
     }
 
@@ -53,8 +54,7 @@ class GroupeController extends \Symfony\Bundle\FrameworkBundle\Controller\Contro
             $cpArticle = $currentDomaine->getCommunautePratiqueArticle();
         }
 
-        if ("anon." != $user) {
-
+        if ('anon.' != $user) {
             $inscription = $this->container->get('hopitalnumerique_communautepratique.dependency_injection.inscription');
 
             if ($inscription->hasInformationManquante($user) || !$user->isInscritCommunautePratique()) {
@@ -67,11 +67,12 @@ class GroupeController extends \Symfony\Bundle\FrameworkBundle\Controller\Contro
                     return $this->redirect(
                         $this->generateUrl('hopital_numerique_publication_publication_article', [
                             'id' => $cpArticle->getId(),
-                            'categorie' => "article",
+                            'categorie' => 'article',
                             'alias' => $cpArticle->getAlias(),
                         ])
                     );
                 }
+
                 return $this->redirect($this->generateUrl('hopital_numerique_homepage'));
             }
 
@@ -79,7 +80,7 @@ class GroupeController extends \Symfony\Bundle\FrameworkBundle\Controller\Contro
             if (!$security->canAccessGroupe($groupe)) {
                 if (!$user->hasCommunautePratiqueGroupe($groupe)) {
                     return $this->redirect($this->generateUrl('hopitalnumerique_communautepratique_groupe_inscrit', [
-                        'groupe' => $groupe->getId()
+                        'groupe' => $groupe->getId(),
                     ]));
                 }
 
@@ -88,6 +89,7 @@ class GroupeController extends \Symfony\Bundle\FrameworkBundle\Controller\Contro
                         'success',
                         'Votre inscription sera activée prochainement par un animateur. Vous recevrez un mail de confirmation.'
                     );
+
                     return $this->redirect($this->generateUrl('hopitalnumerique_communautepratique_accueil_index'));
                 }
             }
@@ -112,10 +114,10 @@ class GroupeController extends \Symfony\Bundle\FrameworkBundle\Controller\Contro
 
         return $this->render(
             'HopitalNumeriqueCommunautePratiqueBundle:Groupe:view.html.twig',
-            array
-            (
-                'groupe' => $groupe
-            )
+
+            [
+                'groupe' => $groupe,
+            ]
         );
     }
 
@@ -127,25 +129,25 @@ class GroupeController extends \Symfony\Bundle\FrameworkBundle\Controller\Contro
         if (null === $this->getUser()) {
             return $this->redirect($this->generateUrl(
                 'hopitalnumerique_communautepratique_groupe_view',
-                array('groupe' => $groupe->getId())
+                ['groupe' => $groupe->getId()]
             ));
         }
 
-        return $this->render('HopitalNumeriqueCommunautePratiqueBundle:Groupe:inscrit.html.twig', array(
+        return $this->render('HopitalNumeriqueCommunautePratiqueBundle:Groupe:inscrit.html.twig', [
             'groupe' => $groupe,
-            'questionnaireOptions' => array(
-                'routeRedirect' => json_encode(array(
-                    'quit' => array(
+            'questionnaireOptions' => [
+                'routeRedirect' => json_encode([
+                    'quit' => [
                         'route' => 'hopitalnumerique_communautepratique_groupe_validinscription',
-                        'arguments' => array('groupe' => $groupe->getId())
-                    ),
-                    'sauvegarde' => array(
+                        'arguments' => ['groupe' => $groupe->getId()],
+                    ],
+                    'sauvegarde' => [
                         'route' => 'hopitalnumerique_communautepratique_groupe_validinscription',
-                        'arguments' => array('groupe' => $groupe->getId())
-                    )
-                ))
-            )
-        ));
+                        'arguments' => ['groupe' => $groupe->getId()],
+                    ],
+                ]),
+            ],
+        ]);
     }
 
     /**
@@ -162,15 +164,13 @@ class GroupeController extends \Symfony\Bundle\FrameworkBundle\Controller\Contro
                 $this->container->get('hopitalnumerique_user.manager.user')->save($user);
                 $this->container->get('session')->getFlashBag()->add('success', 'Votre inscription sera activée prochainement par un animateur.');
                 // Envoi du mail d'alert pour les animateurs
-                $destinataires = array();
+                $destinataires = [];
                 foreach ($groupe->getAnimateurs()->getValues() as $animateur) {
                     $destinataires[$animateur->getNom()] = $animateur->getEmail();
                 }
                 $this->get('nodevo_mail.manager.mail')->sendAlerteInscriptionMail($destinataires, $user, $groupe);
             }
         }
-
-
 
         return $this->redirect($this->generateUrl('hopitalnumerique_communautepratique_groupe_list'));
     }
@@ -182,10 +182,10 @@ class GroupeController extends \Symfony\Bundle\FrameworkBundle\Controller\Contro
     {
         return $this->render(
             'HopitalNumeriqueCommunautePratiqueBundle:Groupe:panel_informations.html.twig',
-            array
-            (
-                'groupe' => $groupe
-            )
+
+            [
+                'groupe' => $groupe,
+            ]
         );
     }
 
@@ -199,14 +199,14 @@ class GroupeController extends \Symfony\Bundle\FrameworkBundle\Controller\Contro
 
         return $this->render(
             'HopitalNumeriqueCommunautePratiqueBundle:Groupe:panel_user_groupes.html.twig',
-            array(
+            [
                 'groupesTermines' => $this->container->get('hopitalnumerique_communautepratique.manager.groupe')
                     ->findTerminesByUser($domaine, $user),
                 'groupesNonDemarres' => $this->container->get('hopitalnumerique_communautepratique.manager.groupe')
                     ->findNonDemarresByUser($domaine, $user),
                 'groupesEnCours' => $this->container->get('hopitalnumerique_communautepratique.manager.groupe')
-                    ->findEnCoursByUser($domaine, $user)
-            )
+                    ->findEnCoursByUser($domaine, $user),
+            ]
         );
     }
 }

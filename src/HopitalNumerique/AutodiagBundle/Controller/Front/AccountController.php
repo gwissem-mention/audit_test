@@ -48,19 +48,19 @@ class AccountController extends Controller
         $datasForSyntheses = $dataFormatter->getSynthesesOrderByAutodiag($currentUser, $domain);
 
         if ($request->isXmlHttpRequest()) {
-            return $this->render('HopitalNumeriqueAutodiagBundle:Account/partials:autodiag_list.html.twig', array(
+            return $this->render('HopitalNumeriqueAutodiagBundle:Account/partials:autodiag_list.html.twig', [
                 'datasForSyntheses' => $datasForSyntheses,
                 'user' => $currentUser,
-            ));
+            ]);
         }
 
-        return $this->render('HopitalNumeriqueAutodiagBundle:Account:index.html.twig', array(
+        return $this->render('HopitalNumeriqueAutodiagBundle:Account:index.html.twig', [
             'datasForSyntheses' => $datasForSyntheses,
             'domainesUser' => $domainesUser,
             'user' => $currentUser,
             'currentDomain' => $domain,
             'comparisonForm' => $comparisonForm->createView(),
-        ));
+        ]);
     }
 
     /**
@@ -78,7 +78,7 @@ class AccountController extends Controller
             return $this->redirect($request->headers->get('referer'));
         }
 
-        if ($form->get('synthesis-name') == "") {
+        if ($form->get('synthesis-name') == '') {
             $this->addFlash('danger', $this->get('translator')->trans('ad.synthesis.generator.error.empty_name'));
 
             return $this->redirect($request->headers->get('referer'));
@@ -94,7 +94,7 @@ class AccountController extends Controller
         $syntheses = [];
 
         foreach ($synthesesId as $id) {
-            $synth = $synthesisRepository->findOneBy(array('id' => $id));
+            $synth = $synthesisRepository->findOneBy(['id' => $id]);
             if (!is_null($synth) && $this->isGranted('read', $synth)) {
                 $syntheses[] = $synth;
             }
@@ -131,9 +131,9 @@ class AccountController extends Controller
     }
 
     /**
-     * @param Request $request
+     * @param Request   $request
      * @param Synthesis $synthesis
-     * @param int $currentSynthesisId Id de la synthèse si suppression effectuée depuis la page de partage
+     * @param int       $currentSynthesisId Id de la synthèse si suppression effectuée depuis la page de partage
      *
      * @return \Symfony\Component\HttpFoundation\RedirectResponse
      */
@@ -170,5 +170,4 @@ class AccountController extends Controller
 
         return $this->redirect($request->headers->get('referer'));
     }
-
 }

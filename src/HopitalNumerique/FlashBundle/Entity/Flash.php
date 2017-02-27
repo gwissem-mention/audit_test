@@ -5,7 +5,7 @@ namespace HopitalNumerique\FlashBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * Flash
+ * Flash.
  *
  * @ORM\Table(name="hn_flash")
  * @ORM\Entity(repositoryClass="HopitalNumerique\FlashBundle\Repository\FlashRepository")
@@ -13,7 +13,7 @@ use Doctrine\ORM\Mapping as ORM;
 class Flash
 {
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="fla_id", type="integer", options = {"comment" = "ID du flash message"})
      * @ORM\Id
@@ -36,7 +36,7 @@ class Flash
     private $content;
 
     /**
-     * @var boolean
+     * @var bool
      *
      * @ORM\Column(name="fla_is_published", type="boolean", options = {"comment" = "Le flash message est publie ?"})
      */
@@ -59,19 +59,19 @@ class Flash
     protected $roles;
 
     /**
-     * Initialisation de l'entitée (valeurs par défaut)
+     * Initialisation de l'entitée (valeurs par défaut).
      */
     public function __construct()
     {
-        $this->isPublished  = true;
-        $this->dateCreation = new \DateTime;
-        $this->roles        = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->isPublished = true;
+        $this->dateCreation = new \DateTime();
+        $this->roles = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
-     * Get id
+     * Get id.
      *
-     * @return integer 
+     * @return int
      */
     public function getId()
     {
@@ -79,9 +79,10 @@ class Flash
     }
 
     /**
-     * Set title
+     * Set title.
      *
      * @param string $title
+     *
      * @return Flash
      */
     public function setTitle($title)
@@ -92,9 +93,9 @@ class Flash
     }
 
     /**
-     * Get title
+     * Get title.
      *
-     * @return string 
+     * @return string
      */
     public function getTitle()
     {
@@ -102,9 +103,10 @@ class Flash
     }
 
     /**
-     * Set content
+     * Set content.
      *
      * @param string $content
+     *
      * @return Flash
      */
     public function setContent($content)
@@ -115,9 +117,9 @@ class Flash
     }
 
     /**
-     * Get content
+     * Get content.
      *
-     * @return string 
+     * @return string
      */
     public function getContent()
     {
@@ -125,9 +127,10 @@ class Flash
     }
 
     /**
-     * Set isPublished
+     * Set isPublished.
      *
-     * @param boolean $isPublished
+     * @param bool $isPublished
+     *
      * @return Flash
      */
     public function setPublished($isPublished)
@@ -138,9 +141,9 @@ class Flash
     }
 
     /**
-     * Get isPublished
+     * Get isPublished.
      *
-     * @return boolean 
+     * @return bool
      */
     public function isPublished()
     {
@@ -148,7 +151,7 @@ class Flash
     }
 
     /**
-     * Get dateCreation
+     * Get dateCreation.
      *
      * @return \DateTime $dateCreation
      */
@@ -156,33 +159,35 @@ class Flash
     {
         return $this->dateCreation;
     }
-    
+
     /**
-     * Set dateCreation
+     * Set dateCreation.
      *
      * @param \DateTime $dateCreation
      */
     public function setDateCreation($dateCreation)
     {
         $this->dateCreation = $dateCreation;
+
         return $this;
     }
 
     /**
-     * Add role
+     * Add role.
      *
      * @param \Nodevo\RoleBundle\Entity\Role $role
+     *
      * @return Flash
      */
     public function addRole(\Nodevo\RoleBundle\Entity\Role $role)
     {
         $this->roles[] = $role;
-    
+
         return $this;
     }
 
     /**
-     * Remove role
+     * Remove role.
      *
      * @param \Nodevo\RoleBundle\Entity\Role $role
      */
@@ -192,22 +197,23 @@ class Flash
     }
 
     /**
-     * Set roles
+     * Set roles.
      *
      * @param \Doctrine\Common\Collections\Collection $roles
+     *
      * @return Flash
      */
     public function setRoles(array $roles)
-    {        
+    {
         $this->roles = $roles;
-    
+
         return $this;
     }
 
     /**
-     * Get roles
+     * Get roles.
      *
-     * @return \Doctrine\Common\Collections\Collection 
+     * @return \Doctrine\Common\Collections\Collection
      */
     public function getRoles()
     {

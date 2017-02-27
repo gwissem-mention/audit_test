@@ -1,4 +1,5 @@
 <?php
+
 namespace HopitalNumerique\AccountBundle\Form\Type;
 
 use Symfony\Component\Form\AbstractType;
@@ -13,7 +14,6 @@ class InscriptionType extends AbstractType
      */
     private $router;
 
-
     /**
      * Constructeur.
      */
@@ -22,9 +22,8 @@ class InscriptionType extends AbstractType
         $this->router = $router;
     }
 
-
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
@@ -34,26 +33,26 @@ class InscriptionType extends AbstractType
             ->setAction($this->router->generate('hopitalnumerique_account_inscription_popin'))
             ->add('urlRedirection', 'hidden', [
                 'mapped' => false,
-                'data' => $urlRedirection
+                'data' => $urlRedirection,
             ])
             ->add('email', 'email', [
                 'label' => 'Email',
                 'attr' => [
-                    'data-validation-engine' => 'validate[required,custom[email]]'
-                ]
+                    'data-validation-engine' => 'validate[required,custom[email]]',
+                ],
             ])
         ;
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver
-            ->setDefaults(array(
-                'data_class' => 'HopitalNumerique\UserBundle\Entity\User'
-            ))
+            ->setDefaults([
+                'data_class' => 'HopitalNumerique\UserBundle\Entity\User',
+            ])
             ->setRequired(['url_redirection'])
         ;
     }

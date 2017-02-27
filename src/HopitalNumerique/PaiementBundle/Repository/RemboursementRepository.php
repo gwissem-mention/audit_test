@@ -5,12 +5,12 @@ namespace HopitalNumerique\PaiementBundle\Repository;
 use Doctrine\ORM\EntityRepository;
 
 /**
- * RemboursementRepository
+ * RemboursementRepository.
  */
 class RemboursementRepository extends EntityRepository
 {
     /**
-     * Retourne la liste des remboursements ordonnées par région
+     * Retourne la liste des remboursements ordonnées par région.
      *
      * @return array
      */
@@ -20,6 +20,6 @@ class RemboursementRepository extends EntityRepository
                          ->select('rem')
                          ->from('HopitalNumeriquePaiementBundle:Remboursement', 'rem')
                          ->leftJoin('rem.region', 'region')
-                         ->orderBy('region.libelle','ASC');
+                         ->orderBy('region.libelle', 'ASC');
     }
 }

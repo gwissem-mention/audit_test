@@ -1,4 +1,5 @@
 <?php
+
 namespace HopitalNumerique\ReferenceBundle\Repository;
 
 use Doctrine\ORM\EntityRepository;
@@ -23,9 +24,10 @@ class EntityHasReferenceRepository extends EntityRepository
     /**
      * Retourne les EntityHasReference par type d'entité, ID d'entité et domaines.
      *
-     * @param integer $entityType Type d'entité
-     * @param integer $entityId ID de l'entité
-     * @param array<\HopitalNumerique\DomaineBundle\Entity\Domaine> $domaines Domaines
+     * @param int                                                   $entityType Type d'entité
+     * @param int                                                   $entityId   ID de l'entité
+     * @param array<\HopitalNumerique\DomaineBundle\Entity\Domaine> $domaines   Domaines
+     *
      * @return array<\HopitalNumerique\ReferenceBundle\Entity\EntityHasReference> EntitiesHasReference
      */
     public function findByEntityTypeAndEntityIdAndDomaines($entityType, $entityId, array $domaines)
@@ -52,7 +54,7 @@ class EntityHasReferenceRepository extends EntityRepository
             ->setParameters([
                 'entityType' => $entityType,
                 'entityId' => $entityId,
-                'domaines' => $domaines
+                'domaines' => $domaines,
             ])
         ;
 
@@ -85,6 +87,7 @@ class EntityHasReferenceRepository extends EntityRepository
      * @param array<integer>|null                            $entityTypeIds          ID des types d'entité à récupérer
      * @param array<integer>|null                            $publicationCategoryIds ID des catégories de publications à récupérer
      * @param array                                          $resultFilters          Filtres à appliquer
+     *
      * @return array EntitiesHasReference
      */
     public function getWithNotes(Domaine $domaine, array $groupedReferences = null, array $entityTypeIds = null, array $publicationCategoryIds = null, $resultFilters = [])
@@ -120,20 +123,20 @@ class EntityHasReferenceRepository extends EntityRepository
 
         if (null !== $groupedReferences) {
             // ET pour chaque référence de niveau 1 et OU pour les sous-références
-            for ($i = 0; $i < count($groupedReferences); $i++) {
+            for ($i = 0; $i < count($groupedReferences); ++$i) {
                 $referenceIds = array_merge($referenceIds, $groupedReferences[$i]);
                 $qb
                     ->innerJoin(
                         EntityHasReference::class,
-                        'entityHasReference'.$i,
+                        'entityHasReference' . $i,
                         Expr\Join::WITH,
                         $qb->expr()->andX(
-                            $qb->expr()->eq('entityHasReference.entityType', 'entityHasReference'.$i.'.entityType'),
-                            $qb->expr()->eq('entityHasReference.entityId', 'entityHasReference'.$i.'.entityId'),
-                            $qb->expr()->in('entityHasReference'.$i.'.reference', ':references'.$i)
+                            $qb->expr()->eq('entityHasReference.entityType', 'entityHasReference' . $i . '.entityType'),
+                            $qb->expr()->eq('entityHasReference.entityId', 'entityHasReference' . $i . '.entityId'),
+                            $qb->expr()->in('entityHasReference' . $i . '.reference', ':references' . $i)
                         )
                     )
-                    ->setParameter(':references'.$i, $groupedReferences[$i])
+                    ->setParameter(':references' . $i, $groupedReferences[$i])
                 ;
             }
         }
@@ -331,11 +334,11 @@ class EntityHasReferenceRepository extends EntityRepository
             if (count($resultFilter) > 0) {
                 switch ($resultType) {
                     case 'objetIds':
-                        $resultFiltersConditions[] = 'objet.id IN (:objetIds)';// $qb->expr()->in('objet.id', ':objetIds')->setParameter('objetIds', $resultFilter);
+                        $resultFiltersConditions[] = 'objet.id IN (:objetIds)'; // $qb->expr()->in('objet.id', ':objetIds')->setParameter('objetIds', $resultFilter);
                         $qb->setParameter('objetIds', $resultFilter);
                         break;
                     case 'contenuIds':
-                        $resultFiltersConditions[] = 'contenu.id IN (:contenuIds)';//$qb->expr()->in('contenu.id', ':contenuIds')->setParameter('contenuIds', $resultFilter);
+                        $resultFiltersConditions[] = 'contenu.id IN (:contenuIds)'; //$qb->expr()->in('contenu.id', ':contenuIds')->setParameter('contenuIds', $resultFilter);
                         $qb->setParameter('contenuIds', $resultFilter);
                         break;
                 }
@@ -371,20 +374,20 @@ class EntityHasReferenceRepository extends EntityRepository
 
         if (null !== $groupedReferences) {
             // ET pour chaque référence de niveau 1, OU pour les sous-références
-            for ($i = 0; $i < count($groupedReferences); $i++) {
+            for ($i = 0; $i < count($groupedReferences); ++$i) {
                 $referenceIds = array_merge($referenceIds, $groupedReferences[$i]);
                 $qb
                     ->innerJoin(
                         EntityHasReference::class,
-                        'entityHasReference'.$i,
+                        'entityHasReference' . $i,
                         Expr\Join::WITH,
                         $qb->expr()->andX(
-                            $qb->expr()->eq('entityHasReference.entityType', 'entityHasReference'.$i.'.entityType'),
-                            $qb->expr()->eq('entityHasReference.entityId', 'entityHasReference'.$i.'.entityId'),
-                            $qb->expr()->in('entityHasReference'.$i.'.reference', ':references'.$i)
+                            $qb->expr()->eq('entityHasReference.entityType', 'entityHasReference' . $i . '.entityType'),
+                            $qb->expr()->eq('entityHasReference.entityId', 'entityHasReference' . $i . '.entityId'),
+                            $qb->expr()->in('entityHasReference' . $i . '.reference', ':references' . $i)
                         )
                     )
-                    ->setParameter(':references'.$i, $groupedReferences[$i])
+                    ->setParameter(':references' . $i, $groupedReferences[$i])
                 ;
             }
         }

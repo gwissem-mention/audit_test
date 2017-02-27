@@ -5,7 +5,7 @@ namespace Nodevo\TexteDynamiqueBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * Code
+ * Code.
  *
  * @ORM\Table(name="core_textedynamique_code")
  * @ORM\Entity(repositoryClass="Nodevo\TexteDynamiqueBundle\Repository\CodeRepository")
@@ -13,7 +13,7 @@ use Doctrine\ORM\Mapping as ORM;
 class Code
 {
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="txt_id", type="integer")
      * @ORM\Id
@@ -45,7 +45,7 @@ class Code
     protected $domaines;
 
     /**
-     * Constructor
+     * Constructor.
      */
     public function __construct()
     {
@@ -53,9 +53,9 @@ class Code
     }
 
     /**
-     * Get id
+     * Get id.
      *
-     * @return integer 
+     * @return int
      */
     public function getId()
     {
@@ -63,9 +63,10 @@ class Code
     }
 
     /**
-     * Set code
+     * Set code.
      *
      * @param string $code
+     *
      * @return Code
      */
     public function setCode($code)
@@ -76,9 +77,9 @@ class Code
     }
 
     /**
-     * Get code
+     * Get code.
      *
-     * @return string 
+     * @return string
      */
     public function getCode()
     {
@@ -86,9 +87,10 @@ class Code
     }
 
     /**
-     * Set texte
+     * Set texte.
      *
      * @param string $texte
+     *
      * @return Code
      */
     public function setTexte($texte)
@@ -99,9 +101,9 @@ class Code
     }
 
     /**
-     * Get texte
+     * Get texte.
      *
-     * @return string 
+     * @return string
      */
     public function getTexte()
     {
@@ -109,9 +111,10 @@ class Code
     }
 
     /**
-     * Add domaines
+     * Add domaines.
      *
      * @param \HopitalNumerique\DomaineBundle\Entity\Domaine $domaines
+     *
      * @return Code
      */
     public function addDomaine(\HopitalNumerique\DomaineBundle\Entity\Domaine $domaines)
@@ -122,7 +125,7 @@ class Code
     }
 
     /**
-     * Remove domaines
+     * Remove domaines.
      *
      * @param \HopitalNumerique\DomaineBundle\Entity\Domaine $domaines
      */
@@ -132,9 +135,9 @@ class Code
     }
 
     /**
-     * Get domaines
+     * Get domaines.
      *
-     * @return \Doctrine\Common\Collections\Collection 
+     * @return \Doctrine\Common\Collections\Collection
      */
     public function getDomaines()
     {
@@ -142,11 +145,11 @@ class Code
     }
 
     /**
-     * Set domaines
+     * Set domaines.
      *
      * @return Code
      */
-    public function setDomaines($domaines = array())
+    public function setDomaines($domaines = [])
     {
         $this->domaines = $domaines;
 

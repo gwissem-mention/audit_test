@@ -8,16 +8,15 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
 /**
- * Init reference domain display
+ * Init reference domain display.
  */
 class InitReferenceDomaineDisplayCommand extends ContainerAwareCommand
 {
-
     protected function configure()
     {
         $this
             ->setName('hn:reference:display')
-            ->setDescription("Initialise toutes les références avec leurs domaines visibles par défaut.")
+            ->setDescription('Initialise toutes les références avec leurs domaines visibles par défaut.')
         ;
     }
 

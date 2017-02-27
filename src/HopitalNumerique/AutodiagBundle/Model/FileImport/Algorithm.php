@@ -11,6 +11,7 @@ class Algorithm extends AutodiagFileImport
 {
     /**
      * @Assert\Callback
+     *
      * @param ExecutionContextInterface $context
      */
     public function validateFileContent(ExecutionContextInterface $context)
@@ -25,9 +26,9 @@ class Algorithm extends AutodiagFileImport
         } catch (\Exception $e) {
             $context->buildViolation('ad.autodiag.import.survey.invalid_file_type')
                 ->addViolation();
+
             return;
         }
-
 
         $sheet = $reader->getSheetByName('algorithme');
         if (null === $sheet) {

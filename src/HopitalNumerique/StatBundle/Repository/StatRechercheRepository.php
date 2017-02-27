@@ -9,7 +9,7 @@ class StatRechercheRepository extends EntityRepository
 {
     /**
      * Returns StatRecherche objects that have the current reference in their request
-     * (and do not have the target reference)
+     * (and do not have the target reference).
      *
      * @param Reference $currentReference
      * @param Reference $targetReference

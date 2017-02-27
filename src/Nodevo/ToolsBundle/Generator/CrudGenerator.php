@@ -30,22 +30,22 @@ class CrudGenerator extends Generator
         $dir = $this->bundle->getPath();
 
         //Manager custom stuff
-        $this->filesystem->mkdir($dir.'/Manager');
+        $this->filesystem->mkdir($dir . '/Manager');
         $this->generateManagerClass();
 
         //Grid custom stuff
-        $this->filesystem->mkdir($dir.'/Grid');
+        $this->filesystem->mkdir($dir . '/Grid');
         $this->generateGridClass();
 
         //add Services for Grid, Manager and Form
         $this->generateServices();
-        
+
         //remove Test Folder ... we don't use it for the moment
-        $this->filesystem->remove($dir.'/Tests');
+        $this->filesystem->remove($dir . '/Tests');
     }
 
     /**
-     * Override de la configuration de Sensio : on met toutes les routes dans le fichier du bundle
+     * Override de la configuration de Sensio : on met toutes les routes dans le fichier du bundle.
      */
     protected function generateServices()
     {
@@ -54,25 +54,24 @@ class CrudGenerator extends Generator
             $this->bundle->getPath()
         );
 
-        $this->renderFile('crud/config/services.'.$this->format.'.twig', $target, array(
-            'actions'           => $this->actions,
-            'route_prefix'      => $this->routePrefix,
+        $this->renderFile('crud/config/services.' . $this->format . '.twig', $target, [
+            'actions' => $this->actions,
+            'route_prefix' => $this->routePrefix,
             'route_name_prefix' => $this->routeNamePrefix,
-            'bundle'            => $this->bundle->getName(),
-            'entity'            => $this->entity,
-            'namespace'         => $this->bundle->getNamespace(),
-        ), true);
+            'bundle' => $this->bundle->getName(),
+            'entity' => $this->entity,
+            'namespace' => $this->bundle->getNamespace(),
+        ], true);
     }
 
-
     /**
-     * Generate the Manager Object
+     * Generate the Manager Object.
      */
     protected function generateManagerClass()
     {
-        $dir             = $this->bundle->getPath();
-        $parts           = explode('\\', $this->entity);
-        $entityClass     = array_pop($parts);
+        $dir = $this->bundle->getPath();
+        $parts = explode('\\', $this->entity);
+        $entityClass = array_pop($parts);
         $entityNamespace = implode('\\', $parts);
 
         $target = sprintf(
@@ -82,27 +81,27 @@ class CrudGenerator extends Generator
             $entityClass
         );
 
-        $this->renderFile('crud/manager.php.twig', $target, array(
-            'actions'           => $this->actions,
-            'route_prefix'      => $this->routePrefix,
+        $this->renderFile('crud/manager.php.twig', $target, [
+            'actions' => $this->actions,
+            'route_prefix' => $this->routePrefix,
             'route_name_prefix' => $this->routeNamePrefix,
-            'bundle'            => $this->bundle->getName(),
-            'entity'            => $this->entity,
-            'entity_class'      => $entityClass,
-            'namespace'         => $this->bundle->getNamespace(),
-            'entity_namespace'  => $entityNamespace,
-            'format'            => $this->format,
-        ));
+            'bundle' => $this->bundle->getName(),
+            'entity' => $this->entity,
+            'entity_class' => $entityClass,
+            'namespace' => $this->bundle->getNamespace(),
+            'entity_namespace' => $entityNamespace,
+            'format' => $this->format,
+        ]);
     }
 
     /**
-     * Generate the Grid Object from NodevoGridBundle
+     * Generate the Grid Object from NodevoGridBundle.
      */
     protected function generateGridClass()
     {
-        $dir             = $this->bundle->getPath();
-        $parts           = explode('\\', $this->entity);
-        $entityClass     = array_pop($parts);
+        $dir = $this->bundle->getPath();
+        $parts = explode('\\', $this->entity);
+        $entityClass = array_pop($parts);
         $entityNamespace = implode('\\', $parts);
 
         $target = sprintf(
@@ -112,18 +111,18 @@ class CrudGenerator extends Generator
             $entityClass
         );
 
-        $this->renderFile('crud/grid.php.twig', $target, array(
-            'actions'           => $this->actions,
-            'route_prefix'      => $this->routePrefix,
+        $this->renderFile('crud/grid.php.twig', $target, [
+            'actions' => $this->actions,
+            'route_prefix' => $this->routePrefix,
             'route_name_prefix' => $this->routeNamePrefix,
-            'bundle'            => $this->bundle->getName(),
-            'entity'            => $this->entity,
-            'entity_class'      => $entityClass,
-            'fields'            => $this->metadata->fieldMappings,
-            'namespace'         => $this->bundle->getNamespace(),
-            'entity_namespace'  => $entityNamespace,
-            'format'            => $this->format,
-        ));
+            'bundle' => $this->bundle->getName(),
+            'entity' => $this->entity,
+            'entity_class' => $entityClass,
+            'fields' => $this->metadata->fieldMappings,
+            'namespace' => $this->bundle->getNamespace(),
+            'entity_namespace' => $entityNamespace,
+            'format' => $this->format,
+        ]);
     }
 
     /**
@@ -133,15 +132,15 @@ class CrudGenerator extends Generator
      */
     protected function generateShowView($dir)
     {
-        $this->renderFile('crud/views/show.html.twig.twig', $dir.'/show.html.twig', array(
-            'bundle'            => $this->bundle->getName(),
-            'entity'            => $this->entity,
-            'fields'            => $this->metadata->fieldMappings,
-            'actions'           => $this->actions,
-            'route_prefix'      => $this->routePrefix,
+        $this->renderFile('crud/views/show.html.twig.twig', $dir . '/show.html.twig', [
+            'bundle' => $this->bundle->getName(),
+            'entity' => $this->entity,
+            'fields' => $this->metadata->fieldMappings,
+            'actions' => $this->actions,
+            'route_prefix' => $this->routePrefix,
             'route_name_prefix' => $this->routeNamePrefix,
-            'namespace'         => $this->bundle->getNamespace(),
-        ));
+            'namespace' => $this->bundle->getNamespace(),
+        ]);
     }
 
     /**
@@ -151,16 +150,15 @@ class CrudGenerator extends Generator
      */
     protected function generateEditView($dir)
     {
-        $this->renderFile('crud/views/edit.html.twig.twig', $dir.'/edit.html.twig', array(
-            'route_prefix'      => $this->routePrefix,
+        $this->renderFile('crud/views/edit.html.twig.twig', $dir . '/edit.html.twig', [
+            'route_prefix' => $this->routePrefix,
             'route_name_prefix' => $this->routeNamePrefix,
-            'entity'            => $this->entity,
-            'bundle'            => $this->bundle->getName(),
-            'actions'           => $this->actions,
-            'namespace'         => $this->bundle->getNamespace(),
-        ));
+            'entity' => $this->entity,
+            'bundle' => $this->bundle->getName(),
+            'actions' => $this->actions,
+            'namespace' => $this->bundle->getNamespace(),
+        ]);
     }
-
 
     /**
      * Generates the index.html.twig template in the final bundle.
@@ -169,16 +167,16 @@ class CrudGenerator extends Generator
      */
     protected function generateIndexView($dir)
     {
-        $this->renderFile('crud/views/index.html.twig.twig', $dir.'/index.html.twig', array(
-            'bundle'            => $this->bundle->getName(),
-            'entity'            => $this->entity,
-            'fields'            => $this->metadata->fieldMappings,
-            'actions'           => $this->actions,
-            'record_actions'    => $this->getRecordActions(),
-            'route_prefix'      => $this->routePrefix,
+        $this->renderFile('crud/views/index.html.twig.twig', $dir . '/index.html.twig', [
+            'bundle' => $this->bundle->getName(),
+            'entity' => $this->entity,
+            'fields' => $this->metadata->fieldMappings,
+            'actions' => $this->actions,
+            'record_actions' => $this->getRecordActions(),
+            'route_prefix' => $this->routePrefix,
             'route_name_prefix' => $this->routeNamePrefix,
-            'namespace'         => $this->bundle->getNamespace(),
-        ));
+            'namespace' => $this->bundle->getNamespace(),
+        ]);
     }
 
     /**
@@ -188,15 +186,14 @@ class CrudGenerator extends Generator
      */
     protected function generateNewView($dir)
     {
-        
     }
 
     /**
-     * Override de la configuration de Sensio : on met toutes les routes dans le fichier du bundle
+     * Override de la configuration de Sensio : on met toutes les routes dans le fichier du bundle.
      */
     protected function generateConfiguration()
     {
-        if (!in_array($this->format, array('yml', 'xml', 'php'))) {
+        if (!in_array($this->format, ['yml', 'xml', 'php'])) {
             return;
         }
 
@@ -206,18 +203,18 @@ class CrudGenerator extends Generator
             $this->format
         );
 
-        $this->renderFile('crud/config/routing.'.$this->format.'.twig', $target, array(
-            'actions'           => $this->actions,
-            'route_prefix'      => $this->routePrefix,
+        $this->renderFile('crud/config/routing.' . $this->format . '.twig', $target, [
+            'actions' => $this->actions,
+            'route_prefix' => $this->routePrefix,
             'route_name_prefix' => $this->routeNamePrefix,
-            'bundle'            => $this->bundle->getName(),
-            'entity'            => $this->entity,
-            'namespace'         => $this->bundle->getNamespace(),
-        ), true);
+            'bundle' => $this->bundle->getName(),
+            'entity' => $this->entity,
+            'namespace' => $this->bundle->getNamespace(),
+        ], true);
     }
 
     /**
-     * Override du render File de Sensio : on ajoute une option qui permet de faire un ajout de contenu au lieu d'écraser le fichier
+     * Override du render File de Sensio : on ajoute une option qui permet de faire un ajout de contenu au lieu d'écraser le fichier.
      */
     protected function renderFile($template, $target, $parameters, $append = false)
     {
@@ -225,9 +222,10 @@ class CrudGenerator extends Generator
             mkdir(dirname($target), 0777, true);
         }
 
-        if( !$append )
-            return file_put_contents($target, $this->render($template, $parameters) );
-        else
-            return file_put_contents($target, $this->render($template, $parameters), FILE_APPEND );
+        if (!$append) {
+            return file_put_contents($target, $this->render($template, $parameters));
+        } else {
+            return file_put_contents($target, $this->render($template, $parameters), FILE_APPEND);
+        }
     }
 }

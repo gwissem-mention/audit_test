@@ -18,7 +18,7 @@ final class AttributeColumnsDefinition
     const CHAPTER_WEIGHT = 'ponderation_chapitre';
 
     /**
-     * Get columns for import and export
+     * Get columns for import and export.
      *
      * @return array
      */

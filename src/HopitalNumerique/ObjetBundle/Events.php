@@ -6,12 +6,9 @@ use HopitalNumerique\ObjetBundle\Entity\Objet;
 
 /**
  * Contains all events thrown in the HopitalNumerique\ObjetBundle.
- *
- * @package HopitalNumerique\ObjetBundle
  */
 final class Events
 {
-
     /**
      * L'événement objet_download_success est déclanché lors du téléchargement d'un objet.
      *

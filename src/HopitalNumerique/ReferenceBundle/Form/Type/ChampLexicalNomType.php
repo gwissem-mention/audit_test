@@ -1,4 +1,5 @@
 <?php
+
 namespace HopitalNumerique\ReferenceBundle\Form\Type;
 
 use HopitalNumerique\ReferenceBundle\Manager\ChampLexicalNomManager;
@@ -18,7 +19,6 @@ class ChampLexicalNomType extends AbstractType
      */
     private $champLexicalNomManager;
 
-
     /**
      * {@inheritdoc}
      */
@@ -26,7 +26,6 @@ class ChampLexicalNomType extends AbstractType
     {
         $this->champLexicalNomManager = $champLexicalNomManager;
     }
-
 
     /**
      * {@inheritdoc}
@@ -40,8 +39,8 @@ class ChampLexicalNomType extends AbstractType
                 'read_only' => (null !== $builder->getData()),
                 'attr' => [
                     'maxlength' => 255,
-                    'class' => 'validate[required]'
-                ]
+                    'class' => 'validate[required]',
+                ],
             ])
         ;
         $builder->addEventListener(FormEvents::SUBMIT, function (FormEvent $event) {
@@ -73,7 +72,7 @@ class ChampLexicalNomType extends AbstractType
     {
         $resolver
             ->setDefaults([
-                'data_class' => 'HopitalNumerique\\ReferenceBundle\\Entity\\Reference\\ChampLexicalNom'
+                'data_class' => 'HopitalNumerique\\ReferenceBundle\\Entity\\Reference\\ChampLexicalNom',
             ])
         ;
     }

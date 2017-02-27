@@ -5,9 +5,8 @@ namespace Nodevo\RoleBundle\Repository;
 use Doctrine\ORM\EntityRepository;
 
 /**
- * RoleRepository
+ * RoleRepository.
  */
 class RoleRepository extends EntityRepository
 {
-
 }

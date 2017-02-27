@@ -1,4 +1,5 @@
 <?php
+
 namespace HopitalNumerique\AdminBundle\Controller;
 
 use HopitalNumerique\UserBundle\Entity\Contractualisation;
@@ -7,15 +8,14 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Nodevo\ToolsBundle\Tools\Chaine;
-use Symfony\Component\Validator\Constraints\DateTime;
 
 /**
- * DefaultController
+ * DefaultController.
  */
 class DefaultController extends Controller
 {
     /**
-     * Index Action
+     * Index Action.
      */
     public function indexAction(Request $request)
     {
@@ -33,12 +33,12 @@ class DefaultController extends Controller
         $blocForum = $this->getBlockForum();
         $blocInterventions = ['total' => 0, 'demandees' => 0, 'attente' => 0, 'en-cours' => 0, 'refusees' => 0, 'annulees' => 0];
         $blocSessions = [
-            'next'                             => [],
-            'totalInscriptionsAnneeEnCours'    => $this->container->get('hopitalnumerique_module.manager.inscription')->getCountForYear($anneeEnCours, $currentDomaine),
+            'next' => [],
+            'totalInscriptionsAnneeEnCours' => $this->container->get('hopitalnumerique_module.manager.inscription')->getCountForYear($anneeEnCours, $currentDomaine),
             'totalInscriptionsAnneePrecedente' => $this->container->get('hopitalnumerique_module.manager.inscription')->getCountForYear($anneeEnCours - 1, $currentDomaine),
-            'totalParticipantsAnneeEnCours'    => $this->container->get('hopitalnumerique_module.manager.inscription')->getUsersCountForYear($anneeEnCours, $currentDomaine),
+            'totalParticipantsAnneeEnCours' => $this->container->get('hopitalnumerique_module.manager.inscription')->getUsersCountForYear($anneeEnCours, $currentDomaine),
             'totalParticipantsAnneePrecedente' => $this->container->get('hopitalnumerique_module.manager.inscription')->getUsersCountForYear($anneeEnCours - 1, $currentDomaine),
-            'totalSessionsRisquees'            => $this->container->get('hopitalnumerique_module.manager.session')->getSessionsRisqueesCount(),
+            'totalSessionsRisquees' => $this->container->get('hopitalnumerique_module.manager.session')->getSessionsRisqueesCount(),
         ];
         $blocPaiements = ['apayer' => 0, 'attente' => 0, 'janvier' => 0];
 
@@ -47,21 +47,20 @@ class DefaultController extends Controller
         foreach ($interventions as $intervention) {
             $etat = $intervention->getInterventionEtat()->getId();
 
-            $blocInterventions['total']++;
+            ++$blocInterventions['total'];
 
             if ($etat == 14 || $etat == 17 || $etat == 18 || $etat == 19) {
-                $blocInterventions['demandees']++;
+                ++$blocInterventions['demandees'];
             } elseif ($etat == 15) {
-                $blocInterventions['attente']++;
+                ++$blocInterventions['attente'];
             } elseif ($etat == 21) {
-                $blocInterventions['en-cours']++;
+                ++$blocInterventions['en-cours'];
             } elseif ($etat == 16 || $etat == 20) {
-                $blocInterventions['refusees']++;
+                ++$blocInterventions['refusees'];
             } elseif ($etat == 309) {
-                $blocInterventions['annulees']++;
+                ++$blocInterventions['annulees'];
             }
         }
-
 
         //GME 01/09/15 : Ajout du filtre du domaine pour le compteur des inscriptions
         //Récupération des domaines de l'utilisateur courant
@@ -88,7 +87,7 @@ class DefaultController extends Controller
                     if ($inscription->getEtatParticipation() && $inscription->getEtatParticipation()->getId() == 411
                         && $inscription->getUser()->hasRoleAmbassadeur() && $inscription->getSession()->getModule()->getId() == 6
                     ) {
-                        $blocUser['ambassadeursMAPF']++;
+                        ++$blocUser['ambassadeursMAPF'];
                     }
                 }
             }
@@ -109,28 +108,28 @@ class DefaultController extends Controller
                     $user = $post->getCreatedBy();
 
                     if ($post->getCreatedDate() >= $date && $user->hasRoleExpert()) {
-                        $blocUser['contribution']++;
+                        ++$blocUser['contribution'];
                     }
                 }
             }
         }
 
         return $this->render('HopitalNumeriqueAdminBundle:Default:index.html.twig', [
-            'anneeEnCours'      => $anneeEnCours,
-            'userConf'          => $userConf,
-            'blocUser'          => $blocUser,
-            'blocObjets'        => $blocObjets,
-            'blocForum'         => $blocForum,
+            'anneeEnCours' => $anneeEnCours,
+            'userConf' => $userConf,
+            'blocUser' => $blocUser,
+            'blocObjets' => $blocObjets,
+            'blocForum' => $blocForum,
             'blocInterventions' => $blocInterventions,
-            'blocSessions'      => $blocSessions,
-            'blocPaiements'     => $blocPaiements,
+            'blocSessions' => $blocSessions,
+            'blocPaiements' => $blocPaiements,
         ]);
     }
 
     /**
-     * Enregistre l'ordre des blocks du dashboard admin de l'utilisateur
+     * Enregistre l'ordre des blocks du dashboard admin de l'utilisateur.
      *
-     * @param  Request $request La requete
+     * @param Request $request La requete
      *
      * @return json
      */
@@ -150,9 +149,8 @@ class DefaultController extends Controller
         return new Response('{"success":true}', 200);
     }
 
-
     /**
-     * Retourne les données des blocks forum
+     * Retourne les données des blocks forum.
      *
      * @return array
      */
@@ -174,18 +172,18 @@ class DefaultController extends Controller
                     $topics = $board->getTopics();
                     foreach ($topics as $topic) {
                         if ($topic->getCachedReplyCount() == 0) {
-                            $forumDatas['topics-sans-reponses']++;
+                            ++$forumDatas['topics-sans-reponses'];
                         }
 
                         $lastPost = $topic->getLastPost();
                         if (!is_null($lastPost) && $lastPost->getCreatedDate()->modify('+ 1 month') >= new \DateTime()) {
-                            $forumDatas['topics']++;
+                            ++$forumDatas['topics'];
                         }
 
                         $posts = $topic->getPosts();
                         foreach ($posts as $post) {
                             if ($post->getCreatedDate() >= $since1Month) {
-                                $forumDatas['contributions']++;
+                                ++$forumDatas['contributions'];
                             }
                         }
                     }
@@ -199,23 +197,23 @@ class DefaultController extends Controller
     }
 
     /**
-     * Retourne les informations sur les blocs objets ( points dur, productions, top / bottom)
+     * Retourne les informations sur les blocs objets ( points dur, productions, top / bottom).
      *
      * @return array
      */
     private function getBlockObjets()
     {
         $blocObjets = [
-            'points-durs'               => 0,
-            'productions'               => 0,
+            'points-durs' => 0,
+            'productions' => 0,
             'publications-non-publiees' => 0,
-            'nb-notes'                  => 0,
-            'nb-commentaires'           => 0,
+            'nb-notes' => 0,
+            'nb-commentaires' => 0,
             'pourcent-note-publication' => 0,
-            'top5-points-dur'           => [],
-            'bottom5-points-dur'        => [],
-            'top5-productions'          => [],
-            'bottom5-productions'       => [],
+            'top5-points-dur' => [],
+            'bottom5-points-dur' => [],
+            'top5-productions' => [],
+            'bottom5-productions' => [],
         ];
 
         //Bloc "Publication" + TOP + BOTTOM
@@ -238,12 +236,12 @@ class DefaultController extends Controller
         $commentaires = $this->get('hopitalnumerique_objet.manager.commentaire')->findCommentaireByDomaine(1);
         foreach ($publications as $publication) {
             if ($publication['etat'] == 4) {
-                $blocObjets['publications-non-publiees']++;
+                ++$blocObjets['publications-non-publiees'];
             }
 
             //Points Durs
             if (in_array('184', $publication['types'])) {
-                $blocObjets['points-durs']++;
+                ++$blocObjets['points-durs'];
 
                 //Build Top 5
                 $blocObjets['top5-points-dur'][] = $publication;
@@ -254,7 +252,7 @@ class DefaultController extends Controller
                 }
                 //Productions
             } elseif (in_array('175', $publication['types'])) {
-                $blocObjets['productions']++;
+                ++$blocObjets['productions'];
 
                 //Build Top 5
                 $blocObjets['top5-productions'][] = $publication;
@@ -282,7 +280,7 @@ class DefaultController extends Controller
             $note = 0;
             $nbNote = 0;
             foreach ($arrayNote as $value) {
-                $nbNote++;
+                ++$nbNote;
                 $note += $value;
             }
 
@@ -309,25 +307,25 @@ class DefaultController extends Controller
     }
 
     /**
-     * Retourne les informations sur le block Utilisateurs ( Users + Ambassadeur + Experts )
+     * Retourne les informations sur le block Utilisateurs ( Users + Ambassadeur + Experts ).
      *
      * @return array
      */
     private function getBlockuser()
     {
         $blocUser = [
-            'nb'                 => 0,
-            'actif'              => 0,
-            'es'                 => 0,
-            'ambCandidats'       => 0,
-            'ambassadeurs'       => 0,
-            'ambassadeursMAPF'   => 0,
+            'nb' => 0,
+            'actif' => 0,
+            'es' => 0,
+            'ambCandidats' => 0,
+            'ambassadeurs' => 0,
+            'ambassadeursMAPF' => 0,
             'ambCandidatsRecues' => 0,
-            'conventions'        => 0,
-            'expCandidats'       => 0,
-            'experts'            => 0,
+            'conventions' => 0,
+            'expCandidats' => 0,
+            'experts' => 0,
             'expCandidatsRecues' => 0,
-            'contribution'       => 0,
+            'contribution' => 0,
         ];
         /** @var User[] $users */
         $users = $this->get('hopitalnumerique_user.manager.user')->findUsersByDomaine(1);
@@ -354,15 +352,15 @@ class DefaultController extends Controller
 
             // Si l'utilisateur s'est connecté il y a moins de 1 an
             if ($user->getLastLogin() !== null && $user->getLastLogin()->diff(new \DateTime())->y < 1) {
-                $blocUser['actif']++;
+                ++$blocUser['actif'];
             }
 
             if ($user->hasRoleDirecteur() || $user->hasRoleEs()) {
-                $blocUser['es']++;
+                ++$blocUser['es'];
             } elseif ($user->hasRoleAmbassadeur()) {
-                $blocUser['ambassadeurs']++;
+                ++$blocUser['ambassadeurs'];
             } elseif ($user->hasRoleExpert()) {
-                $blocUser['experts']++;
+                ++$blocUser['experts'];
             }
 
             //Récupération des questionnaires rempli par l'utilisateur courant
@@ -370,32 +368,31 @@ class DefaultController extends Controller
 
             //Récupèration d'un booléen : Vérification de réponses pour le questionnaire expert, que son role n'est pas expert et que sa candidature n'a pas encore été refusé
             if (in_array($idExpert, $questionnairesByUser) && !$user->hasRoleExpert() && !$user->getAlreadyBeExpert() && !$this->get('hopitalnumerique_user.manager.refus_candidature')->refusExisteByUserByQuestionnaire($user->getId(), $idExpert, $refusCandidature)) {
-                $blocUser['expCandidats']++;
+                ++$blocUser['expCandidats'];
             }
 
             //Récupèration d'un booléen : Vérification de réponses pour le questionnaire expert, que son role n'est pas expert et que sa candidature n'a pas encore été refusé
             if (in_array($idAmbassadeur, $questionnairesByUser) && !$user->hasRoleAmbassadeur() && !$user->getAlreadyBeAmbassadeur() && !$this->get('hopitalnumerique_user.manager.refus_candidature')->refusExisteByUserByQuestionnaire($user->getId(), $idAmbassadeur, $refusCandidature)) {
-                $blocUser['ambCandidats']++;
+                ++$blocUser['ambCandidats'];
             }
 
             if (in_array($idExpert, $questionnairesByUser) && !$this->get('hopitalnumerique_user.manager.refus_candidature')->refusExisteByUserByQuestionnaire($user->getId(), $idExpert, $refusCandidature)) {
-                $blocUser['expCandidatsRecues']++;
+                ++$blocUser['expCandidatsRecues'];
             }
 
             if (in_array($idAmbassadeur, $questionnairesByUser) && !$this->get('hopitalnumerique_user.manager.refus_candidature')->refusExisteByUserByQuestionnaire($user->getId(), $idAmbassadeur, $refusCandidature)) {
-                $blocUser['ambCandidatsRecues']++;
+                ++$blocUser['ambCandidatsRecues'];
             }
         }
-
 
         return $blocUser;
     }
 
     /**
-     * Tri le tableau en TOP / FLOP 5
+     * Tri le tableau en TOP / FLOP 5.
      *
-     * @param string $type Top / bottom
-     * @param array $datas Tableau de données
+     * @param string $type  Top / bottom
+     * @param array  $datas Tableau de données
      *
      * @return array
      */
@@ -422,7 +419,7 @@ class DefaultController extends Controller
     }
 
     /**
-     * Construit le tableau du dashboard user
+     * Construit le tableau du dashboard user.
      *
      * @param array $dashboardBack Tableau de la config dashboard
      *
@@ -452,9 +449,9 @@ class DefaultController extends Controller
             $tool = new Chaine($forum->getName());
             $datas['forum-' . $tool->minifie()] = ['row' => $row, 'col' => $col];
 
-            $col++;
+            ++$col;
             if ($col == 4) {
-                $row++;
+                ++$row;
                 $col = 1;
             }
         }

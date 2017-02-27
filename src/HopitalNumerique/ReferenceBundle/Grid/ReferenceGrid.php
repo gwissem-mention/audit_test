@@ -6,7 +6,6 @@ use Nodevo\GridBundle\Grid\Grid;
 use Nodevo\GridBundle\Grid\GridInterface;
 use Nodevo\GridBundle\Grid\Column;
 use Nodevo\GridBundle\Grid\Action;
-use APY\DataGridBundle\Grid\Row;
 
 /**
  * Configuration du grid Reference.
@@ -69,7 +68,7 @@ class ReferenceGrid extends Grid implements GridInterface
     }
 
     /**
-     * Ajoute les boutons d'action
+     * Ajoute les boutons d'action.
      */
     public function setActionsButtons()
     {
@@ -78,7 +77,7 @@ class ReferenceGrid extends Grid implements GridInterface
     }
 
     /**
-     * Ajoute les actions de masses
+     * Ajoute les actions de masses.
      */
     public function setMassActions()
     {

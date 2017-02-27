@@ -1,4 +1,5 @@
 <?php
+
 namespace HopitalNumerique\CommunautePratiqueBundle\DependencyInjection;
 
 use Symfony\Component\Routing\RouterInterface;
@@ -21,7 +22,6 @@ class Commentaire
      */
     private $formFactory;
 
-
     /**
      * Constructeur.
      */
@@ -31,34 +31,34 @@ class Commentaire
         $this->formFactory = $formFactory;
     }
 
-
     /**
      * Retourne le formulaire traité avec le Request.
      *
      * @param \HopitalNumerique\CommunautePratiqueBundle\DependencyInjection\Commentaire $commentaire Commentaire
      * @param \Symfony\Component\HttpFoundation\Request                                  $request     Request
+     *
      * @return \Symfony\Component\Form\FormInterface Formulaire
      */
     public function getForm(CommentaireEntity $commentaire, Request $request)
     {
         if (null !== $commentaire->getFiche()) {
-            $commentaireFormOptions = array(
+            $commentaireFormOptions = [
                 'redirectionRoute' => (null !== $commentaire->getId()
                     ? 'hopitalnumerique_communautepratique_commentaire_edit'
                     : 'hopitalnumerique_communautepratique_commentaire_fichecommentaire_add'),
                 'redirectionRouteParams' => (null !== $commentaire->getId()
-                    ? array('commentaire' => $commentaire->getId())
-                    : array('fiche' => $commentaire->getFiche()->getId()))
-            );
+                    ? ['commentaire' => $commentaire->getId()]
+                    : ['fiche' => $commentaire->getFiche()->getId()]),
+            ];
         } else {
-            $commentaireFormOptions = array(
+            $commentaireFormOptions = [
                 'redirectionRoute' => (null !== $commentaire->getId()
                     ? 'hopitalnumerique_communautepratique_commentaire_edit'
                     : 'hopitalnumerique_communautepratique_commentaire_groupecommentaire_add'),
                 'redirectionRouteParams' => (null !== $commentaire->getId()
-                    ? array('commentaire' => $commentaire->getId())
-                    : array('groupe' => $commentaire->getGroupe()->getId()))
-            );
+                    ? ['commentaire' => $commentaire->getId()]
+                    : ['groupe' => $commentaire->getGroupe()->getId()]),
+            ];
         }
 
         $commentaireForm = $this->formFactory->create(
@@ -81,12 +81,12 @@ class Commentaire
         if (null !== $commentaire->getFiche()) {
             return $this->router->generate(
                 'hopitalnumerique_communautepratique_fiche_view',
-                array('fiche' => $commentaire->getFiche()->getId())
+                ['fiche' => $commentaire->getFiche()->getId()]
             );
         } else {
             return $this->router->generate(
                 'hopitalnumerique_communautepratique_groupe_view',
-                array('groupe' => $commentaire->getGroupe()->getId())
+                ['groupe' => $commentaire->getGroupe()->getId()]
             );
         }
     }

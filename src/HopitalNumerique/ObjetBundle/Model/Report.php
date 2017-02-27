@@ -29,7 +29,6 @@ class Report
 
     public $children;
 
-
     public function __construct()
     {
         $this->links = [];
@@ -41,7 +40,7 @@ class Report
     }
 
     /**
-     * Builds the report (and all his children) corresponding to the object
+     * Builds the report (and all his children) corresponding to the object.
      *
      * @param Objet $object
      *
@@ -73,7 +72,7 @@ class Report
     }
 
     /**
-     * Builds the report corresponding to the content
+     * Builds the report corresponding to the content.
      *
      * @param Contenu $content
      *
@@ -81,7 +80,7 @@ class Report
      */
     private function buildContentReport(Contenu $content)
     {
-        $contentReport = new Report();
+        $contentReport = new self();
         $contentReport->objectId = $content->getObjet()->getId();
         $contentReport->objectLabel = $content->getObjet()->getTitre();
         $contentReport->contentId = $content->getId();
@@ -132,7 +131,7 @@ class Report
         foreach ($images as &$image) {
             preg_match_all($pattern, $image['src'], $out, PREG_SET_ORDER);
 
-            $image['name'] = "";
+            $image['name'] = '';
 
             if (count($out) > 0) {
                 $image['name'] = $out[0][0];

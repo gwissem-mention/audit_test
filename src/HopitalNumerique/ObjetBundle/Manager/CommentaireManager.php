@@ -11,9 +11,8 @@ class CommentaireManager extends BaseManager
 {
     protected $class = 'HopitalNumerique\ObjetBundle\Entity\Commentaire';
 
-
     /**
-     * Override : Récupère les données pour le grid sous forme de tableau
+     * Override : Récupère les données pour le grid sous forme de tableau.
      *
      * @param \StdClass $condition
      *
@@ -21,7 +20,7 @@ class CommentaireManager extends BaseManager
      */
     public function getDatasForGrid(\StdClass $condition = null)
     {
-        $commentaires = array();
+        $commentaires = [];
 
         $results = $this->getRepository()->getDatasForGrid($condition)->getQuery()->getResult();
 
@@ -34,32 +33,30 @@ class CommentaireManager extends BaseManager
             //Découpage du prénom sur le tiret
             $tempsPrenom = explode('-', $prenom);
             //Unsset de la variable
-            $prenom = "";
+            $prenom = '';
             //Pour chaque bout on met une MAJ sur la première lettre de chaque mot, si il y en plusieurs c'est qu'il y avait un -
             foreach ($tempsPrenom as $key => $tempPrenom) {
-                $prenom .= ("" !== $prenom) ? ('-' . ucwords($tempPrenom)) : ucwords($tempPrenom);
+                $prenom .= ('' !== $prenom) ? ('-' . ucwords($tempPrenom)) : ucwords($tempPrenom);
             }
-            
+
             // ----Mise en majuscule du nom
             $nom = strtoupper($result['userNom']);
 
             //Suppression du nom et prenom
             unset($commentaires[$result['id']]['userNom']);
             unset($commentaires[$result['id']]['userPrenom']);
-            
+
             //Ajout de la colonne "Prenom NOM"
-            $commentaires[ $result['id'] ]['nomPrenom'] = $prenom.' '.$nom;
+            $commentaires[$result['id']]['nomPrenom'] = $prenom . ' ' . $nom;
         }
-        
+
         return array_values($commentaires);
     }
 
-
-    
     /**
-     * Passe l'ensemble des commentaires à publier
+     * Passe l'ensemble des commentaires à publier.
      *
-     * @param array     $commentaires Liste des commentaires
+     * @param array $commentaires Liste des commentaires
      */
     public function publierEtatCommentaire($commentaires)
     {
@@ -71,12 +68,10 @@ class CommentaireManager extends BaseManager
         $this->em->flush();
     }
 
-
-    
     /**
-     * Passe l'ensemble des commentaires à dépublier
+     * Passe l'ensemble des commentaires à dépublier.
      *
-     * @param array     $commentaires Liste des commentaires
+     * @param array $commentaires Liste des commentaires
      */
     public function depublierEtatCommentaire($commentaires)
     {

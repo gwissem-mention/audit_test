@@ -70,13 +70,12 @@ class LoginHandler implements AuthenticationSuccessHandlerInterface
             $this->requeteSession->setAnonymousUser(true);
         }
 
-        if (!is_null($urlParameter) && $urlParameter !== "") {
+        if (!is_null($urlParameter) && $urlParameter !== '') {
             return new RedirectResponse($urlParameter);
         }
 
         $urlFirewall = $request->getSession()->get('_security.frontoffice_connecte.target_path');
 
-        return new RedirectResponse(is_null($urlFirewall) || $urlFirewall == "" ? $this->router->generate('hopital_numerique_homepage') : $urlFirewall);
+        return new RedirectResponse(is_null($urlFirewall) || $urlFirewall == '' ? $this->router->generate('hopital_numerique_homepage') : $urlFirewall);
     }
-
 }

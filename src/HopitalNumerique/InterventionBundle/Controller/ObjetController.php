@@ -1,9 +1,10 @@
 <?php
 /**
  * Contrôleur de gestion des objets utilisés pour les interventions.
- * 
+ *
  * @author Rémi Leclerc <rleclerc@nodevo.com>
  */
+
 namespace HopitalNumerique\InterventionBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -18,8 +19,8 @@ class ObjetController extends Controller
      * Action qui renvoie une liste des objets. Les paramètres passables sont :
      * <ul>
      *   <li>ambassadeur : L'ID de l'ambassadeur des objets</li>
-     * </ul>
-     * 
+     * </ul>.
+     *
      * @return \Symfony\Component\HttpFoundation\Response Un objet JSON comprenant la liste des objets
      */
     public function jsonObjetsByAmbassadeurAction(User $ambassadeur)

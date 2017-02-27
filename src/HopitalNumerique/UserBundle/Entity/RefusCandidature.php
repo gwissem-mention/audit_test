@@ -8,7 +8,7 @@ use HopitalNumerique\QuestionnaireBundle\Entity\Questionnaire;
 use APY\DataGridBundle\Grid\Mapping as GRID;
 
 /**
- * RefusCandidature
+ * RefusCandidature.
  *
  * @ORM\Table("hn_user_refus_candidature")
  * @ORM\Entity(repositoryClass="HopitalNumerique\UserBundle\Repository\RefusCandidatureRepository")
@@ -16,33 +16,33 @@ use APY\DataGridBundle\Grid\Mapping as GRID;
 class RefusCandidature
 {
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="urc_id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $id;
-    
+
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\ManyToOne(targetEntity="\HopitalNumerique\UserBundle\Entity\User", inversedBy="refusCandidature")
      * @ORM\JoinColumn(name="usr_id", referencedColumnName="usr_id", onDelete="CASCADE")
      * @GRID\Column(field="user.username")
      */
     private $user;
-    
+
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\ManyToOne(targetEntity="\HopitalNumerique\UserBundle\Entity\User")
      * @ORM\JoinColumn(name="usr_id_orgine_refus", referencedColumnName="usr_id", onDelete="CASCADE")
      */
     private $userOrigineRefus;
-    
+
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\ManyToOne(targetEntity="HopitalNumerique\QuestionnaireBundle\Entity\Questionnaire", inversedBy="refusCandidature")
      * @ORM\JoinColumn(name="qst_id", referencedColumnName="qst_id")
@@ -55,7 +55,7 @@ class RefusCandidature
      * @ORM\Column(name="urc_motif_refus", type="text", options = {"comment" = "Motif de refus de la candidature"})
      */
     private $motifRefus;
-    
+
     /**
      * @var \DateTime
      *
@@ -63,11 +63,10 @@ class RefusCandidature
      */
     private $dateRefus;
 
-
     /**
-     * Get id
+     * Get id.
      *
-     * @return integer 
+     * @return int
      */
     public function getId()
     {
@@ -75,9 +74,10 @@ class RefusCandidature
     }
 
     /**
-     * Set motifRefus
+     * Set motifRefus.
      *
      * @param string $motifRefus
+     *
      * @return RefusCandidature
      */
     public function setMotifRefus($motifRefus)
@@ -88,9 +88,9 @@ class RefusCandidature
     }
 
     /**
-     * Get motifRefus
+     * Get motifRefus.
      *
-     * @return string 
+     * @return string
      */
     public function getMotifRefus()
     {
@@ -98,20 +98,21 @@ class RefusCandidature
     }
 
     /**
-     * Set user
+     * Set user.
      *
      * @param \HopitalNumerique\UserBundle\Entity\User $user
+     *
      * @return RefusCandidature
      */
     public function setUser(\HopitalNumerique\UserBundle\Entity\User $user = null)
     {
         $this->user = $user;
-    
+
         return $this;
     }
-    
+
     /**
-     * Get user
+     * Get user.
      *
      * @return \HopitalNumerique\UserBundle\Entity\User
      */
@@ -121,20 +122,21 @@ class RefusCandidature
     }
 
     /**
-     * Set user
+     * Set user.
      *
      * @param \HopitalNumerique\UserBundle\Entity\User $user
+     *
      * @return RefusCandidature
      */
     public function setUserOrigineRefus(\HopitalNumerique\UserBundle\Entity\User $user = null)
     {
         $this->userOrigineRefus = $user;
-    
+
         return $this;
     }
-    
+
     /**
-     * Get user
+     * Get user.
      *
      * @return \HopitalNumerique\UserBundle\Entity\User
      */
@@ -142,9 +144,9 @@ class RefusCandidature
     {
         return $this->userOrigineRefus;
     }
-    
+
     /**
-     * Get questionnaire
+     * Get questionnaire.
      *
      * @return Questionnaire
      */
@@ -152,35 +154,37 @@ class RefusCandidature
     {
         return $this->questionnaire;
     }
-    
+
     /**
-     * Set ordre
+     * Set ordre.
+     *
      * @param Questionnaire $questionnaire
      *
      * @return RefusCandidature this
      */
-    public function setQuestionnaire( Questionnaire $questionnaire )
+    public function setQuestionnaire(Questionnaire $questionnaire)
     {
         $this->questionnaire = $questionnaire;
-    
+
         return $this;
     }
-    
+
     /**
-     * Set dateRefus
+     * Set dateRefus.
      *
      * @param \DateTime $dateRefus
+     *
      * @return RefusCandidature
      */
     public function setDateRefus($dateRefus)
     {
         $this->dateRefus = $dateRefus;
-    
+
         return $this;
     }
-    
+
     /**
-     * Get dateRefus
+     * Get dateRefus.
      *
      * @return \DateTime
      */
@@ -190,7 +194,7 @@ class RefusCandidature
     }
 
     /**
-     * Get dateRefus string
+     * Get dateRefus string.
      *
      * @return string
      */

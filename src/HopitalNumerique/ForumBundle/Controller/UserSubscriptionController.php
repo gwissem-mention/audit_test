@@ -3,30 +3,25 @@
 namespace HopitalNumerique\ForumBundle\Controller;
 
 use CCDNForum\ForumBundle\Controller\UserSubscriptionController as CCDNUserSubscriptionController;
-use CCDNForum\ForumBundle\Component\Dispatcher\ForumEvents;
-use CCDNForum\ForumBundle\Component\Dispatcher\Event\UserTopicEvent;
 use HopitalNumerique\ForumBundle\Entity\Board;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 
 /**
- * UserSubscriptionController
+ * UserSubscriptionController.
  *
  * @category CCDNForum
- * @package  ForumBundle
  *
  * @author   Gaëtan MELCHILSEN
  * @license  Nodevo
- *
  */
 class UserSubscriptionController extends CCDNUserSubscriptionController
 {
     use ForumControllerAuthorizationCheckerTrait;
 
     /**
+     * @param string $forumName
      *
-     * @access public
-     * @param  string $forumName
      * @return RenderResponse
      */
     public function indexAction($forumName)
@@ -54,35 +49,35 @@ class UserSubscriptionController extends CCDNUserSubscriptionController
 
                     if (!array_key_exists($forumSubscribedId, $forumsSubscribed)) {
                         $forumsSubscribed[$forumSubscribedId] = [
-                            'forum'        => $forumSubscribed,
-                            'count_read'   => 0,
+                            'forum' => $forumSubscribed,
+                            'count_read' => 0,
                             'count_unread' => 0,
-                            'count_total'  => 0,
+                            'count_total' => 0,
                         ];
                     }
 
-                    $forumsSubscribed[$forumSubscribedId]['count_total']++;
+                    ++$forumsSubscribed[$forumSubscribedId]['count_total'];
                     if ($subscription->isRead()) {
-                        $forumsSubscribed[$forumSubscribedId]['count_read']++;
+                        ++$forumsSubscribed[$forumSubscribedId]['count_read'];
                     } else {
-                        $forumsSubscribed[$forumSubscribedId]['count_unread']++;
+                        ++$forumsSubscribed[$forumSubscribedId]['count_unread'];
                     }
 
                     if ($forum) {
                         if ($forum->getId() == $forumSubscribedId) {
-                            $totalForumsSubscribed['count_total']++;
+                            ++$totalForumsSubscribed['count_total'];
                             if ($subscription->isRead()) {
-                                $totalForumsSubscribed['count_read']++;
+                                ++$totalForumsSubscribed['count_read'];
                             } else {
-                                $totalForumsSubscribed['count_unread']++;
+                                ++$totalForumsSubscribed['count_unread'];
                             }
                         }
                     } else {
-                        $totalForumsSubscribed['count_total']++;
+                        ++$totalForumsSubscribed['count_total'];
                         if ($subscription->isRead()) {
-                            $totalForumsSubscribed['count_read']++;
+                            ++$totalForumsSubscribed['count_read'];
                         } else {
-                            $totalForumsSubscribed['count_unread']++;
+                            ++$totalForumsSubscribed['count_unread'];
                         }
                     }
                 }
@@ -98,21 +93,20 @@ class UserSubscriptionController extends CCDNUserSubscriptionController
         }
 
         return $this->renderResponse('CCDNForumForumBundle:User:Subscription/show.html.', [
-            'forum'                   => $forum,
-            'forumName'               => $forumName,
-            'subscribed_forums'       => $forumsSubscribed,
+            'forum' => $forum,
+            'forumName' => $forumName,
+            'subscribed_forums' => $forumsSubscribed,
             'total_subscribed_forums' => $totalForumsSubscribed,
-            'filter'                  => $filter,
-            'pager'                   => $subscriptionPager,
-            'posts_per_page'          => $this->container->getParameter('ccdn_forum_forum.topic.user.show.posts_per_page'),
+            'filter' => $filter,
+            'pager' => $subscriptionPager,
+            'posts_per_page' => $this->container->getParameter('ccdn_forum_forum.topic.user.show.posts_per_page'),
         ]);
     }
 
     /**
+     * @param string                                     $forumName
+     * @param \HopitalNumerique\ForumBundle\Entity\Board $board
      *
-     * @access public
-     * @param  string $forumName
-     * @param  \HopitalNumerique\ForumBundle\Entity\Board $board
      * @return RedirectResponse
      */
     public function subscribeBoardAction($forumName, Board $board)
@@ -132,15 +126,14 @@ class UserSubscriptionController extends CCDNUserSubscriptionController
 
         return $this->redirectResponse($this->path('ccdn_forum_user_board_show', [
             'forumName' => $forumName,
-            'boardId'   => $board->getId(),
+            'boardId' => $board->getId(),
         ]));
     }
 
     /**
+     * @param string                                     $forumName
+     * @param \HopitalNumerique\ForumBundle\Entity\Board $board
      *
-     * @access public
-     * @param  string $forumName
-     * @param  \HopitalNumerique\ForumBundle\Entity\Board $board
      * @return RedirectResponse
      */
     public function unsubscribeBoardAction($forumName, Board $board)
@@ -161,7 +154,7 @@ class UserSubscriptionController extends CCDNUserSubscriptionController
 
         return $this->redirectResponse($this->path('ccdn_forum_user_board_show', [
             'forumName' => $forumName,
-            'boardId'   => $board->getId(),
+            'boardId' => $board->getId(),
         ]));
     }
 

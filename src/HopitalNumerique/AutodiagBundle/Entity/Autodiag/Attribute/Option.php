@@ -7,7 +7,7 @@ use HopitalNumerique\AutodiagBundle\Entity\Autodiag\Attribute;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
- * Option
+ * Option.
  *
  * @ORM\Table(name="ad_autodiag_attribute_option")
  * @ORM\Entity
@@ -57,7 +57,7 @@ class Option
     }
 
     /**
-     * Get value
+     * Get value.
      *
      * @return string
      */
@@ -67,7 +67,7 @@ class Option
     }
 
     /**
-     * Get label
+     * Get label.
      *
      * @return string
      */
@@ -77,9 +77,10 @@ class Option
     }
 
     /**
-     * Set label
+     * Set label.
      *
      * @param string $label
+     *
      * @return $this
      */
     public function setLabel($label)
@@ -89,4 +90,3 @@ class Option
         return $this;
     }
 }
-

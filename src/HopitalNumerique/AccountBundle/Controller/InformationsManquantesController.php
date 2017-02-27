@@ -1,4 +1,5 @@
 <?php
+
 namespace HopitalNumerique\AccountBundle\Controller;
 
 use HopitalNumerique\UserBundle\Form\Type\User\InformationsManquantesType;
@@ -13,7 +14,7 @@ class InformationsManquantesController extends Controller
     public function communautePratiqueAction()
     {
         return $this->render('HopitalNumeriqueAccountBundle:InformationsManquantes:form.html.twig', [
-            'form' => $this->createForm('nodevouser_user_informationsmanquantes', $this->getUser(), ['informations_type' => InformationsManquantesType::TYPE_COMMUNAUTE_PRATIQUE])->createView()
+            'form' => $this->createForm('nodevouser_user_informationsmanquantes', $this->getUser(), ['informations_type' => InformationsManquantesType::TYPE_COMMUNAUTE_PRATIQUE])->createView(),
         ]);
     }
 
@@ -23,14 +24,14 @@ class InformationsManquantesController extends Controller
     public function demandeInterventionAction()
     {
         return $this->render('HopitalNumeriqueAccountBundle:InformationsManquantes:form.html.twig', [
-            'form' => $this->createForm('nodevouser_user_informationsmanquantes', $this->getUser(), ['informations_type' => InformationsManquantesType::TYPE_DEMANDE_INTERVENTION])->createView()
+            'form' => $this->createForm('nodevouser_user_informationsmanquantes', $this->getUser(), ['informations_type' => InformationsManquantesType::TYPE_DEMANDE_INTERVENTION])->createView(),
         ]);
     }
 
     /**
      * Sauvegarde le formulaire.
      *
-     * @param integer $informationsType Type des informations
+     * @param int $informationsType Type des informations
      */
     public function saveAction(Request $request, $informationsType)
     {
@@ -55,6 +56,7 @@ class InformationsManquantesController extends Controller
                     return $this->redirect($this->generateUrl('hopitalnumerique_communautepratique_accueil_index'));
                 } else {
                     $this->get('session')->getFlashBag()->add('danger', 'L\'inscription à la communauté de pratique a échoué.');
+
                     return $this->redirect($this->generateUrl('hopital_numerique_homepage'));
                 }
             }

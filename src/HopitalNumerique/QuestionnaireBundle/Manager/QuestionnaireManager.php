@@ -10,7 +10,6 @@ use HopitalNumerique\UserBundle\Manager\UserManager;
 use HopitalNumerique\QuestionnaireBundle\Entity\Occurrence;
 use HopitalNumerique\UserBundle\Entity\User;
 use HopitalNumerique\QuestionnaireBundle\Entity\Questionnaire;
-use HopitalNumerique\QuestionnaireBundle\Manager\OccurrenceManager;
 use HopitalNumerique\DomaineBundle\Entity\Domaine;
 
 /**
@@ -55,7 +54,7 @@ class QuestionnaireManager extends BaseManager
     }
 
     /**
-     * Override : Récupère les données pour le grid sous forme de tableau
+     * Override : Récupère les données pour le grid sous forme de tableau.
      *
      * @return array
      *
@@ -74,7 +73,7 @@ class QuestionnaireManager extends BaseManager
             if (!array_key_exists($questionnaire['id'], $questionnairesForGrid)) {
                 $questionnairesForGrid[$questionnaire['id']] = $questionnaire;
             } else {
-                $questionnairesForGrid[$questionnaire['id']]['domaineNom'] .= ";" . $questionnaire['domaineNom'];
+                $questionnairesForGrid[$questionnaire['id']]['domaineNom'] .= ';' . $questionnaire['domaineNom'];
             }
         }
 
@@ -82,11 +81,11 @@ class QuestionnaireManager extends BaseManager
     }
 
     /**
-     * [getQuestionsReponses description]
+     * [getQuestionsReponses description].
      *
-     * @param  [type] $idQuestionnaire [description]
-     * @param  [type] $idUser          [description]
-     * @param  [type] $paramId         [description]
+     * @param [type] $idQuestionnaire [description]
+     * @param [type] $idUser          [description]
+     * @param [type] $paramId         [description]
      *
      * @return [type]
      */
@@ -96,9 +95,9 @@ class QuestionnaireManager extends BaseManager
     }
 
     /**
-     * Get les utilisateurs qui ont répondu à ce questionnaire
+     * Get les utilisateurs qui ont répondu à ce questionnaire.
      *
-     * @param  int $idQuestionnaire [description]
+     * @param int $idQuestionnaire [description]
      *
      * @return [type]
      */
@@ -108,7 +107,7 @@ class QuestionnaireManager extends BaseManager
     }
 
     /**
-     * Get les adresses mails dans le config.yml/parameter.yml de l'envoies des mails experts
+     * Get les adresses mails dans le config.yml/parameter.yml de l'envoies des mails experts.
      *
      * @return array( 'adresse' => 'nom' )
      */
@@ -118,7 +117,7 @@ class QuestionnaireManager extends BaseManager
     }
 
     /**
-     * Get les adresses mails dans le config.yml/parameter.yml de l'envoies des réponses
+     * Get les adresses mails dans le config.yml/parameter.yml de l'envoies des réponses.
      *
      * @return array( 'adresse' => 'nom' )
      */
@@ -128,9 +127,10 @@ class QuestionnaireManager extends BaseManager
     }
 
     /**
-     * Id du questionnaire
+     * Id du questionnaire.
      *
      * @param string $label Nom du questionnaire
+     *
      * @return id du questionnaire si il existe, sinon 0
      */
     public function getQuestionnaireId($label)
@@ -143,7 +143,7 @@ class QuestionnaireManager extends BaseManager
     }
 
     /**
-     * Permet l'affichage des labels des questionnaires
+     * Permet l'affichage des labels des questionnaires.
      *
      * @return string
      */
@@ -160,7 +160,7 @@ class QuestionnaireManager extends BaseManager
     }
 
     /**
-     * Renvoie une chaine de caractère correspondant aux données du formulaire soumis
+     * Renvoie une chaine de caractère correspondant aux données du formulaire soumis.
      *
      * @param array(HopitalNumerique\QuestionnaireBundle\Entity\Reponse) $reponses
      *
@@ -178,42 +178,42 @@ class QuestionnaireManager extends BaseManager
                     if (!is_null($reponse->getReference())) {
                         $candidature .= $reponse->getReference()->getLibelle();
                     }
-                    $candidature .= "</li>";
+                    $candidature .= '</li>';
                     break;
                 case 'checkbox':
-                    $candidature .= '<li><strong>' . $reponse->getQuestion()->getLibelle() . '</strong> : ' . ('1' == $reponse->getReponse() ? 'Oui' : 'Non') . "</li>";
+                    $candidature .= '<li><strong>' . $reponse->getQuestion()->getLibelle() . '</strong> : ' . ('1' == $reponse->getReponse() ? 'Oui' : 'Non') . '</li>';
                     break;
                 case 'etablissement':
                     $candidature .= '<li><strong>' . $reponse->getQuestion()->getLibelle() . '</strong> : ';
                     if (!is_null($reponse->getEtablissement())) {
                         $candidature .= $reponse->getEtablissement()->getAppellation();
                     }
-                    $candidature .= "</li>";
+                    $candidature .= '</li>';
                     break;
                 //Gestion très sale, à revoir au moment de la construction du tableau de réponses avec des niveaux d'enfants/parents etc.
                 case 'entitymultiple':
                 case 'entitycheckbox':
                     //Affichage pour une possibilité de plusieurs réponses à cette question
-                    $candidature .= "<li><strong>" . $reponse->getQuestion()->getLibelle() . "</strong> : <ul>";
+                    $candidature .= '<li><strong>' . $reponse->getQuestion()->getLibelle() . '</strong> : <ul>';
                     foreach ($reponse->getReferenceMulitple() as $key => $referenceMultiple) {
-                        $candidature .= "<li>";
+                        $candidature .= '<li>';
                         $candidature .= $referenceMultiple->getLibelle();
-                        $candidature .= "</li>";
+                        $candidature .= '</li>';
                     }
-                    $candidature .= "</ul></li>";
+                    $candidature .= '</ul></li>';
                     break;
                 case 'etablissementmultiple':
                     //Affichage pour une possibilité de plusieurs réponses à cette question
-                    $candidature .= "<li><strong>" . $reponse->getQuestion()->getLibelle() . "</strong> : <ul>";
+                    $candidature .= '<li><strong>' . $reponse->getQuestion()->getLibelle() . '</strong> : <ul>';
                     foreach ($reponse->getEtablissementMulitple() as $key => $etablissementMultiple) {
-                        $candidature .= "<li>";
+                        $candidature .= '<li>';
                         $candidature .= $etablissementMultiple->getAppellation();
-                        $candidature .= "</li>";
+                        $candidature .= '</li>';
                     }
-                    $candidature .= "</ul></li>";
+                    $candidature .= '</ul></li>';
                     break;
                 default:
-                    $candidature .= '<li><strong>' . $reponse->getQuestion()->getLibelle() . '</strong> : ' . $reponse->getReponse() . "</li>";
+                    $candidature .= '<li><strong>' . $reponse->getQuestion()->getLibelle() . '</strong> : ' . $reponse->getReponse() . '</li>';
                     break;
             }
         }
@@ -223,10 +223,10 @@ class QuestionnaireManager extends BaseManager
     }
 
     /**
-     * Créer un tableau formaté pour l'export CSV
+     * Créer un tableau formaté pour l'export CSV.
      *
-     * @param integer $idQuestionnaire ID du questionnaire
-     * @param array $users Liste des utilisateurs
+     * @param int   $idQuestionnaire ID du questionnaire
+     * @param array $users           Liste des utilisateurs
      *
      * @return array
      */
@@ -236,10 +236,10 @@ class QuestionnaireManager extends BaseManager
 
         //prepare colonnes
         $colonnes = [
-            'id'          => 'id_utilisateur',
-            'occurrence'  => 'Titre de l\'occurrence',
-            'user'        => 'Prénom et Nom de l\'utilisateur',
-            'user_email'  => 'Email de l\'utilisateur',
+            'id' => 'id_utilisateur',
+            'occurrence' => 'Titre de l\'occurrence',
+            'user' => 'Prénom et Nom de l\'utilisateur',
+            'user_email' => 'Email de l\'utilisateur',
             'user_region' => 'Région de l\'utilisateur',
             'date_saisie' => 'Date de saisie',
         ];
@@ -298,7 +298,7 @@ class QuestionnaireManager extends BaseManager
                                     $lib = '';
                                     $compteur = 0;
                                     foreach ($reponse->getReferenceMulitple() as $reference) {
-                                        $compteur++;
+                                        ++$compteur;
                                         //Récupération du libellé de la référence + ajout d'un tiret si on est pas à la fin
                                         $lib .= $reference->getLibelle() . ($compteur == count($reponse->getReferenceMulitple()) ? '' : ' - ');
                                     }
@@ -313,7 +313,7 @@ class QuestionnaireManager extends BaseManager
                                     $lib = '';
                                     $compteur = 0;
                                     foreach ($reponse->getEtablissementMulitple() as $etablissement) {
-                                        $compteur++;
+                                        ++$compteur;
                                         $lib .= $etablissement->getNom() . ($compteur == count($reponse->getEtablissementMulitple()) ? '' : ' - ');
                                     }
                                     $row[$field] = $lib;
@@ -327,7 +327,7 @@ class QuestionnaireManager extends BaseManager
                                     $lib = '';
                                     $compteur = 0;
                                     foreach ($reponse->getReferenceMulitple() as $reference) {
-                                        $compteur++;
+                                        ++$compteur;
                                         //Récupération du libellé de la référence + ajout d'un tiret si on est pas à la fin
                                         $lib .= $reference->getLibelle() . ($compteur == count($reponse->getReferenceMulitple()) ? '' : ' - ');
                                     }
@@ -340,7 +340,7 @@ class QuestionnaireManager extends BaseManager
                             default:
                                 if ($reponse->getQuestion()->getAlias() == 'etablissement') {
                                     $etablissementReponse = $this->etablissementManager->findOneBy(['id' => $reponse->getReponse()]);
-                                    $row[$field] = ($etablissementReponse instanceof Etablissement) ? $etablissementReponse->getNom() : "";
+                                    $row[$field] = ($etablissementReponse instanceof Etablissement) ? $etablissementReponse->getNom() : '';
                                 } else {
                                     $row[$field] = $reponse->getReponse();
                                 }
@@ -360,6 +360,7 @@ class QuestionnaireManager extends BaseManager
      * Retourne les questionnaires (avec leurs occurrences) d'un utilisateur.
      *
      * @param \HopitalNumerique\UserBundle\Entity\User $user Utilisateur
+     *
      * @return array<\HopitalNumerique\QuestionnaireBundle\Entity\Questionnaire> Questionnaires
      */
     public function findByUser(User $user)
@@ -371,6 +372,7 @@ class QuestionnaireManager extends BaseManager
      * Retourne les questionnaires d'un domaine.
      *
      * @param \HopitalNumerique\DomaineBundle\Entity\Domaine $domaine Domaine
+     *
      * @return \Doctrine\Common\Collections\Collection Questionnaires
      */
     public function findByDomaine(Domaine $domaine)
@@ -380,7 +382,7 @@ class QuestionnaireManager extends BaseManager
 
     /*
      * Si le questionnaire a été répondu sans que le formulaire fut en occurrence multiple, créé l'occurrence multiple pour ces réponses.
-     * 
+     *
      * @param \HopitalNumerique\QuestionnaireBundle\Entity\Questionnaire $questionnaire Questionnaire
      * @return void
      */
@@ -405,7 +407,6 @@ class QuestionnaireManager extends BaseManager
      * Supprime les occurrences multiples d'un questionnaire (ne conserve que la première créée pour conserver les réponses).
      *
      * @param \HopitalNumerique\QuestionnaireBundle\Entity\Questionnaire $questionnaire Questionnaire
-     * @return void
      */
     public function deleteOccurrencesMultiples(Questionnaire $questionnaire)
     {
@@ -419,9 +420,10 @@ class QuestionnaireManager extends BaseManager
     /**
      * Retourne les questionnaires (avec leurs occurrences) d'un utilisateur pour un domaine avec les dates de création et de dernières modifications.
      *
-     * @param \HopitalNumerique\UserBundle\Entity\User $user Utilisateur
+     * @param \HopitalNumerique\UserBundle\Entity\User       $user    Utilisateur
      * @param \HopitalNumerique\DomaineBundle\Entity\Domaine $domaine Domaine
-     * @param boolean $isLock (optionnel) Filtre sur questionnaire.lock
+     * @param bool                                           $isLock  (optionnel) Filtre sur questionnaire.lock
+     *
      * @return array<\HopitalNumerique\QuestionnaireBundle\Entity\Questionnaire> Questionnaires
      */
     public function findByUserAndDomaineWithDates(User $user, Domaine $domaine, $isLock = null)
@@ -429,7 +431,7 @@ class QuestionnaireManager extends BaseManager
         $questionnaires = $this->getRepository()->findByUserAndDomaineWithDates($user, $domaine, $isLock);
         $occurrences = $this->occurrenceManager->findByUserWithDates($user);
 
-        for ($i = 0; $i < count($questionnaires); $i++) {
+        for ($i = 0; $i < count($questionnaires); ++$i) {
             $questionnaires[$i]['occurrences'] = [];
 
             foreach ($occurrences as $occurrence) {

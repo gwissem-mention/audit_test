@@ -1,4 +1,5 @@
 <?php
+
 namespace HopitalNumerique\UserBundle\DependencyInjection;
 
 use HopitalNumerique\UserBundle\Entity\User;
@@ -15,11 +16,9 @@ class ConnectedUser
     private $tokenStorage;
 
     /**
-     *
      * @var \HopitalNumerique\UserBundle\Entity\User|null User
      */
     private $user = null;
-
 
     /**
      * Constructeur.
@@ -28,7 +27,6 @@ class ConnectedUser
     {
         $this->tokenStorage = $tokenStorage;
     }
-
 
     /**
      * Retourne l'utilisateur connecté.
@@ -49,10 +47,10 @@ class ConnectedUser
     /**
      * Retourne s'il y a un utilisateur connecté.
      *
-     * @return boolean Si connecté
+     * @return bool Si connecté
      */
     public function is()
     {
-        return (null !== $this->get());
+        return null !== $this->get();
     }
 }

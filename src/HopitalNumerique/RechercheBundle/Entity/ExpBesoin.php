@@ -7,7 +7,7 @@ use Nodevo\ToolsBundle\Tools\Systeme;
 use Nodevo\ToolsBundle\Traits\ImageTrait;
 
 /**
- * ExpBesoin
+ * ExpBesoin.
  *
  * @ORM\Table(name="hn_recherche_expbesoin")
  * @ORM\Entity(repositoryClass="HopitalNumerique\RechercheBundle\Repository\ExpBesoinRepository")
@@ -16,9 +16,8 @@ class ExpBesoin
 {
     use ImageTrait;
 
-
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="expb_id", type="integer")
      * @ORM\Id
@@ -33,7 +32,7 @@ class ExpBesoin
     protected $expBesoinGestion;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="expb_order", type="smallint", options = {"comment" = "Ordre de la question"})
      */
@@ -66,7 +65,7 @@ class ExpBesoin
     protected $imageFile;
 
     /**
-     * Liste des inscriptions liées au module
+     * Liste des inscriptions liées au module.
      *
      * @var /HopitalNumerique/RechercheBundle/Entity/ExpBesoinReponses
      *
@@ -75,20 +74,18 @@ class ExpBesoin
      */
     protected $reponses;
 
-
     /**
-     * Constructor
+     * Constructor.
      */
     public function __construct()
     {
         $this->reponses = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
-
     /**
-     * Get id
+     * Get id.
      *
-     * @return integer 
+     * @return int
      */
     public function getId()
     {
@@ -96,30 +93,32 @@ class ExpBesoin
     }
 
     /**
-     * Get order
+     * Get order.
      *
-     * @return integer $order
+     * @return int $order
      */
     public function getOrder()
     {
         return $this->order;
     }
-    
+
     /**
-     * Set order
+     * Set order.
      *
-     * @param integer $order
+     * @param int $order
      */
     public function setOrder($order)
     {
         $this->order = $order;
+
         return $this;
     }
 
     /**
-     * Set libelle
+     * Set libelle.
      *
      * @param string $libelle
+     *
      * @return ExpBesoin
      */
     public function setLibelle($libelle)
@@ -130,9 +129,9 @@ class ExpBesoin
     }
 
     /**
-     * Get libelle
+     * Get libelle.
      *
-     * @return string 
+     * @return string
      */
     public function getLibelle()
     {
@@ -140,20 +139,21 @@ class ExpBesoin
     }
 
     /**
-     * Add reponses
+     * Add reponses.
      *
      * @param \HopitalNumerique\RechercheBundle\Entity\ExpBesoinReponses $reponses
+     *
      * @return Menu
      */
     public function addReponse(\HopitalNumerique\RechercheBundle\Entity\ExpBesoinReponses $reponses)
     {
         $this->reponses[] = $reponses;
-    
+
         return $this;
     }
 
     /**
-     * Remove reponses
+     * Remove reponses.
      *
      * @param \HopitalNumerique\RechercheBundle\Entity\ExpBesoinReponses $reponses
      */
@@ -163,9 +163,9 @@ class ExpBesoin
     }
 
     /**
-     * Get reponses
+     * Get reponses.
      *
-     * @return \Doctrine\Common\Collections\Collection 
+     * @return \Doctrine\Common\Collections\Collection
      */
     public function getReponses()
     {
@@ -173,9 +173,10 @@ class ExpBesoin
     }
 
     /**
-     * Set description
+     * Set description.
      *
      * @param string $description
+     *
      * @return ExpBesoin
      */
     public function setDescription($description)
@@ -186,9 +187,9 @@ class ExpBesoin
     }
 
     /**
-     * Get description
+     * Get description.
      *
-     * @return string 
+     * @return string
      */
     public function getDescription()
     {
@@ -196,9 +197,10 @@ class ExpBesoin
     }
 
     /**
-     * Set expBesoinGestion
+     * Set expBesoinGestion.
      *
      * @param \HopitalNumerique\RechercheBundle\Entity\ExpBesoinGestion $expBesoinGestion
+     *
      * @return ExpBesoin
      */
     public function setExpBesoinGestion(\HopitalNumerique\RechercheBundle\Entity\ExpBesoinGestion $expBesoinGestion = null)
@@ -209,22 +211,21 @@ class ExpBesoin
     }
 
     /**
-     * Get expBesoinGestion
+     * Get expBesoinGestion.
      *
-     * @return \HopitalNumerique\RechercheBundle\Entity\ExpBesoinGestion 
+     * @return \HopitalNumerique\RechercheBundle\Entity\ExpBesoinGestion
      */
     public function getExpBesoinGestion()
     {
         return $this->expBesoinGestion;
     }
 
-
     /**
      * {@inheritdoc}
      */
     public function getImageUploadDir()
     {
-        return 'media'.DIRECTORY_SEPARATOR.'expression-besoin';
+        return 'media' . DIRECTORY_SEPARATOR . 'expression-besoin';
     }
 
     /**
@@ -232,7 +233,7 @@ class ExpBesoin
      */
     public function imageFileIsValid()
     {
-        return (null !== $this->imageFile && $this->imageFile->getClientSize() <= Systeme::getFileUploadMaxSize());
+        return null !== $this->imageFile && $this->imageFile->getClientSize() <= Systeme::getFileUploadMaxSize();
     }
 
     /**
@@ -243,7 +244,7 @@ class ExpBesoin
     public function getImageUrl()
     {
         if (null !== $this->image) {
-            return '/'.str_replace(DIRECTORY_SEPARATOR, '/', $this->getImageUploadDir()).'/'.$this->image;
+            return '/' . str_replace(DIRECTORY_SEPARATOR, '/', $this->getImageUploadDir()) . '/' . $this->image;
         }
 
         return null;

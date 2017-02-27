@@ -28,10 +28,11 @@ class Score implements AlgorithmInterface
     }
 
     /**
-     * Calcul le score
+     * Calcul le score.
      *
      * @param Container $container
-     * @param array $values
+     * @param array     $values
+     *
      * @return float|mixed|null
      */
     public function getScore(Container $container, array $values)
@@ -51,7 +52,7 @@ class Score implements AlgorithmInterface
             $builder = $this->attributeProvider->getBuilder($value['type']);
             $score = $builder->computeScore($value['value']);
 
-            if (null !== $score && $score != "-1") {
+            if (null !== $score && $score != '-1') {
                 $notConcerned = false;
                 if ($builder instanceof PresetableAttributeBuilderInterface) {
                     $attributeMin = $builder->getPresetMinScore($autodiag);
@@ -76,7 +77,7 @@ class Score implements AlgorithmInterface
 
         $result = 0;
         if ($a > 0) {
-            $result =  ($sum - $min) / $a;
+            $result = ($sum - $min) / $a;
         }
 
         return $result;
@@ -88,6 +89,7 @@ class Score implements AlgorithmInterface
         foreach ($container->getChilds() as $child) {
             $ids = array_merge($ids, $this->getContainerIds($child));
         }
+
         return $ids;
     }
 }

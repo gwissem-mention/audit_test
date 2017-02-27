@@ -13,7 +13,7 @@ class AttributeType extends AbstractType
 {
     /**
      * @param FormBuilderInterface $builder
-     * @param array $options
+     * @param array                $options
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
@@ -35,10 +35,10 @@ class AttributeType extends AbstractType
      */
     public function configureOptions(OptionsResolver $resolver)
     {
-        $resolver->setDefaults(array(
+        $resolver->setDefaults([
             'data_class' => null,
             'label_format' => 'ad.autodiag.%name%',
-        ));
+        ]);
 
         $resolver->setRequired([
             'attribute_builder',
@@ -47,11 +47,11 @@ class AttributeType extends AbstractType
         ]);
 
         $resolver->setAllowedTypes('attribute_builder', [
-            AttributeBuilderInterface::class
+            AttributeBuilderInterface::class,
         ]);
 
         $resolver->setAllowedTypes('autodiag', [
-            Autodiag::class
+            Autodiag::class,
         ]);
     }
 }

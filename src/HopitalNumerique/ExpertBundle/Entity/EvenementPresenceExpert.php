@@ -5,7 +5,7 @@ namespace HopitalNumerique\ExpertBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * EvenementPresenceExpert
+ * EvenementPresenceExpert.
  *
  * @ORM\Table(name="hn_expert_evenement_presence_expert")
  * @ORM\Entity
@@ -13,7 +13,7 @@ use Doctrine\ORM\Mapping as ORM;
 class EvenementPresenceExpert
 {
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="evePE_id", type="integer")
      * @ORM\Id
@@ -22,7 +22,7 @@ class EvenementPresenceExpert
     protected $id;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\ManyToOne(targetEntity="EvenementExpert", inversedBy="experts")
      * @ORM\JoinColumn(name="evePE_evenement", referencedColumnName="eveE_id")
@@ -37,12 +37,11 @@ class EvenementPresenceExpert
     protected $date;
 
     /**
-     * @var boolean
+     * @var bool
      *
      * @ORM\Column(name="evePE_present", type="boolean")
      */
     protected $present;
-
 
     /**
      * @ORM\ManyToOne(targetEntity="\HopitalNumerique\UserBundle\Entity\User", cascade={"persist"})
@@ -51,18 +50,18 @@ class EvenementPresenceExpert
     protected $expertConcerne;
 
     /**
-     * Constructor
+     * Constructor.
      */
     public function __construct()
     {
-        $this->present         = false;
+        $this->present = false;
         $this->expertConcernes = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
-     * Get id
+     * Get id.
      *
-     * @return integer 
+     * @return int
      */
     public function getId()
     {
@@ -70,9 +69,10 @@ class EvenementPresenceExpert
     }
 
     /**
-     * Set date
+     * Set date.
      *
      * @param \DateTime $date
+     *
      * @return EvenementPresenceExpert
      */
     public function setDate($date)
@@ -83,9 +83,9 @@ class EvenementPresenceExpert
     }
 
     /**
-     * Get date
+     * Get date.
      *
-     * @return \DateTime 
+     * @return \DateTime
      */
     public function getDate()
     {
@@ -93,9 +93,10 @@ class EvenementPresenceExpert
     }
 
     /**
-     * Set present
+     * Set present.
      *
-     * @param boolean $present
+     * @param bool $present
+     *
      * @return EvenementPresenceExpert
      */
     public function setPresent($present)
@@ -106,9 +107,9 @@ class EvenementPresenceExpert
     }
 
     /**
-     * Get present
+     * Get present.
      *
-     * @return boolean 
+     * @return bool
      */
     public function getPresent()
     {
@@ -116,9 +117,10 @@ class EvenementPresenceExpert
     }
 
     /**
-     * Set evenement
+     * Set evenement.
      *
      * @param \HopitalNumerique\ExpertBundle\Entity\EvenementExpert $evenement
+     *
      * @return EvenementPresenceExpert
      */
     public function setEvenement(\HopitalNumerique\ExpertBundle\Entity\EvenementExpert $evenement = null)
@@ -129,9 +131,9 @@ class EvenementPresenceExpert
     }
 
     /**
-     * Get evenement
+     * Get evenement.
      *
-     * @return \HopitalNumerique\ExpertBundle\Entity\EvenementExpert 
+     * @return \HopitalNumerique\ExpertBundle\Entity\EvenementExpert
      */
     public function getEvenement()
     {
@@ -139,9 +141,10 @@ class EvenementPresenceExpert
     }
 
     /**
-     * Set expertConcerne
+     * Set expertConcerne.
      *
      * @param \HopitalNumerique\UserBundle\Entity\User $expertConcerne
+     *
      * @return EvenementPresenceExpert
      */
     public function setExpertConcerne(\HopitalNumerique\UserBundle\Entity\User $expertConcerne = null)
@@ -152,9 +155,9 @@ class EvenementPresenceExpert
     }
 
     /**
-     * Get expertConcerne
+     * Get expertConcerne.
      *
-     * @return \HopitalNumerique\UserBundle\Entity\User 
+     * @return \HopitalNumerique\UserBundle\Entity\User
      */
     public function getExpertConcerne()
     {

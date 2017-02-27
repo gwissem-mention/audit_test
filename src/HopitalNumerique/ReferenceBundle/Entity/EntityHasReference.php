@@ -1,4 +1,5 @@
 <?php
+
 namespace HopitalNumerique\ReferenceBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
@@ -21,7 +22,7 @@ use Doctrine\ORM\Mapping as ORM;
 class EntityHasReference
 {
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="entref_id", type="integer", options={"unsigned"=true})
      * @ORM\Id()
@@ -30,14 +31,14 @@ class EntityHasReference
     private $id;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="entref_entity_id", type="integer", nullable=false, options={"unsigned"=true})
      */
     private $entityId;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="entref_entity_type", type="smallint", nullable=false)
      */
@@ -52,17 +53,16 @@ class EntityHasReference
     private $reference;
 
     /**
-     * @var boolean
+     * @var bool
      *
      * @ORM\Column(name="entref_primary", type="boolean", nullable=false, options={"default"=false})
      */
     private $primary;
 
-
     /**
-     * Get id
+     * Get id.
      *
-     * @return integer
+     * @return int
      */
     public function getId()
     {
@@ -70,9 +70,9 @@ class EntityHasReference
     }
 
     /**
-     * Set entityId
+     * Set entityId.
      *
-     * @param integer $entityId
+     * @param int $entityId
      *
      * @return EntityHasReference
      */
@@ -84,9 +84,9 @@ class EntityHasReference
     }
 
     /**
-     * Get entityId
+     * Get entityId.
      *
-     * @return integer
+     * @return int
      */
     public function getEntityId()
     {
@@ -94,7 +94,7 @@ class EntityHasReference
     }
 
     /**
-     * Set entityType
+     * Set entityType.
      *
      * @param string $entityType
      *
@@ -108,7 +108,7 @@ class EntityHasReference
     }
 
     /**
-     * Get entityType
+     * Get entityType.
      *
      * @return string
      */
@@ -118,7 +118,7 @@ class EntityHasReference
     }
 
     /**
-     * Set reference
+     * Set reference.
      *
      * @param Reference $reference
      *
@@ -132,7 +132,7 @@ class EntityHasReference
     }
 
     /**
-     * Get reference
+     * Get reference.
      *
      * @return Reference
      */
@@ -142,9 +142,9 @@ class EntityHasReference
     }
 
     /**
-     * Set primary
+     * Set primary.
      *
-     * @param boolean $primary
+     * @param bool $primary
      *
      * @return EntityHasReference
      */
@@ -156,9 +156,9 @@ class EntityHasReference
     }
 
     /**
-     * Get primary
+     * Get primary.
      *
-     * @return boolean
+     * @return bool
      */
     public function isPrimary()
     {

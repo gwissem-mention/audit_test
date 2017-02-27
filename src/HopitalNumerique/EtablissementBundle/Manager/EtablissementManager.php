@@ -10,59 +10,55 @@ class EtablissementManager extends BaseManager
 
     /**
      * Retourne une liste d'établissements regroupée par type d'organisme.
-     * 
+     *
      * @param array $criteres Le filtre applicable
+     *
      * @return array La liste des établissements trouvés regroupée par type d'organisme
      */
     public function getEtablissementsRegroupesParTypeOrganisme(array $criteres = null)
     {
-        $etablissementsRegroupesParTypeOrganisme = array();
-        $etablissements = $this->getRepository()->findBy($criteres, array('typeOrganisme' => 'ASC', 'nom' => 'ASC'));
-        
+        $etablissementsRegroupesParTypeOrganisme = [];
+        $etablissements = $this->getRepository()->findBy($criteres, ['typeOrganisme' => 'ASC', 'nom' => 'ASC']);
+
         $typeOrganismeId = -1;
-        foreach ($etablissements as $etablissement)
-        {
-            if ($etablissement->getTypeOrganisme() == null)
-            {
-                if ($typeOrganismeId == -1)
-                {
+        foreach ($etablissements as $etablissement) {
+            if ($etablissement->getTypeOrganisme() == null) {
+                if ($typeOrganismeId == -1) {
                     $typeOrganismeId = null;
-                    
-                    $etablissementsRegroupesParTypeOrganisme[] = array(
+
+                    $etablissementsRegroupesParTypeOrganisme[] = [
                         'typeOrganisme' => null,
-                        'departements' => array()
-                    );
+                        'departements' => [],
+                    ];
                 }
-            }
-            else if ($etablissement->getTypeOrganisme()->getId() != $typeOrganismeId)
-            {
+            } elseif ($etablissement->getTypeOrganisme()->getId() != $typeOrganismeId) {
                 $typeOrganismeId = $etablissement->getTypeOrganisme()->getId();
-                
-                $etablissementsRegroupesParTypeOrganisme[] = array(
+
+                $etablissementsRegroupesParTypeOrganisme[] = [
                     'typeOrganisme' => $etablissement->getTypeOrganisme(),
-                    'departements' => array()
-                );
+                    'departements' => [],
+                ];
             }
-            
+
             $etablissementsRegroupesParTypeOrganisme[count($etablissementsRegroupesParTypeOrganisme) - 1]['etablissements'][] = $etablissement;
         }
-        
+
         return $etablissementsRegroupesParTypeOrganisme;
     }
 
     /**
-     * Récupère les données pour l'export CSV
+     * Récupère les données pour l'export CSV.
      *
      * @return array
      */
-    public function getDatasForExport( $ids )
+    public function getDatasForExport($ids)
     {
-        return $this->getRepository()->getDatasForExport( $ids )->getQuery()->getResult();
+        return $this->getRepository()->getDatasForExport($ids)->getQuery()->getResult();
     }
 
     // public function delete( $etablissements )
     // {
-    //     try 
+    //     try
     //     {
     //         parent::delete($etablissements);
     //         $this->_session->getFlashBag()->add('info', 'Suppression effectuée avec succès.' );
@@ -72,13 +68,4 @@ class EtablissementManager extends BaseManager
     //         $this->_session->getFlashBag()->add('danger', 'Cet établissement semble être lié à un ou plusieurs utilisateur(s). Vous ne pouvez pas le supprimer.' );
     //     }
     // }
-
-
-
-
-
-
-
-
-
 }

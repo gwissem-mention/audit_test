@@ -9,7 +9,7 @@ use HopitalNumerique\UserBundle\Entity\User;
 use Gedmo\Mapping\Annotation as Gedmo;
 
 /**
- * Synthesis
+ * Synthesis.
  *
  * @ORM\Table(name="ad_synthesis")
  * @ORM\Entity(repositoryClass="HopitalNumerique\AutodiagBundle\Repository\SynthesisRepository")
@@ -18,7 +18,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
 class Synthesis
 {
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
@@ -89,7 +89,6 @@ class Synthesis
      *     joinColumns={@ORM\JoinColumn(name="synthesis_id", referencedColumnName="id", onDelete="CASCADE")},
      *     inverseJoinColumns={@ORM\JoinColumn(name="user_id", referencedColumnName="usr_id", onDelete="CASCADE")}
      * )
-     *
      */
     private $shares;
 
@@ -101,7 +100,7 @@ class Synthesis
     private $completion = 0;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(type="integer", nullable=true)
      */
@@ -126,9 +125,10 @@ class Synthesis
     }
 
     /**
-     * Create new Synthesis
+     * Create new Synthesis.
      *
      * @param Autodiag $autodiag
+     *
      * @return Synthesis
      */
     public static function create(Autodiag $autodiag, User $user = null)
@@ -139,10 +139,11 @@ class Synthesis
     }
 
     /**
-     * Create synthesis from other syntheses
+     * Create synthesis from other syntheses.
      *
-     * @param Autodiag $autodiag
+     * @param Autodiag    $autodiag
      * @param Synthesis[] $syntheses
+     *
      * @return Synthesis
      *
      * @deprecated
@@ -154,7 +155,7 @@ class Synthesis
         foreach ($syntheses as $synthesis) {
             foreach ($synthesis->getEntries() as $entry) {
                 $new->addEntry(
-                    clone($entry)
+                    clone $entry
                 );
             }
         }
@@ -163,9 +164,9 @@ class Synthesis
     }
 
     /**
-     * Get id
+     * Get id.
      *
-     * @return integer
+     * @return int
      */
     public function getId()
     {
@@ -181,7 +182,7 @@ class Synthesis
     }
 
     /**
-     * Get name
+     * Get name.
      *
      * @param string $name
      *
@@ -195,7 +196,7 @@ class Synthesis
     }
 
     /**
-     * Get validation datetime
+     * Get validation datetime.
      *
      * @return \DateTime
      */
@@ -218,7 +219,7 @@ class Synthesis
     }
 
     /**
-     * Validate
+     * Validate.
      *
      * @return $this|false
      */
@@ -240,7 +241,7 @@ class Synthesis
     }
 
     /**
-     * Unvalidate
+     * Unvalidate.
      *
      * @return $this
      */
@@ -287,7 +288,7 @@ class Synthesis
     }
 
     /**
-     * Get Entires
+     * Get Entires.
      *
      * @return Collection
      */
@@ -297,9 +298,10 @@ class Synthesis
     }
 
     /**
-     * Add entry
+     * Add entry.
      *
      * @param AutodiagEntry $entry
+     *
      * @return $this
      */
     public function addEntry(AutodiagEntry $entry)
@@ -316,9 +318,10 @@ class Synthesis
     }
 
     /**
-     * Remove entry
+     * Remove entry.
      *
      * @param AutodiagEntry $entry
+     *
      * @return $this
      */
     public function removeEntry(AutodiagEntry $entry)
@@ -338,6 +341,7 @@ class Synthesis
 
     /**
      * @param User $user
+     *
      * @return $this
      */
     public function setUser(User $user)
@@ -348,7 +352,7 @@ class Synthesis
     }
 
     /**
-     * Get shares
+     * Get shares.
      *
      * @return Collection
      */
@@ -358,9 +362,10 @@ class Synthesis
     }
 
     /**
-     * Set shares
+     * Set shares.
      *
      * @param ArrayCollection $shares
+     *
      * @return $this
      */
     public function setShares(ArrayCollection $shares)
@@ -371,9 +376,10 @@ class Synthesis
     }
 
     /**
-     * Add share
+     * Add share.
      *
      * @param User $user
+     *
      * @return $this
      */
     public function addShare(User $user)
@@ -386,9 +392,10 @@ class Synthesis
     }
 
     /**
-     * Remove share
+     * Remove share.
      *
      * @param User $user
+     *
      * @return $this
      */
     public function removeShare(User $user)

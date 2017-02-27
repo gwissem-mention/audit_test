@@ -5,7 +5,7 @@ namespace HopitalNumerique\UserBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * ConnaissanceSIAmbassadeur
+ * ConnaissanceSIAmbassadeur.
  *
  * @ORM\Table(name="core_user_connaissances_ambassadeur_SI")
  * @ORM\Entity(repositoryClass="HopitalNumerique\UserBundle\Repository\ConnaissanceAmbassadeurSIRepository")
@@ -13,7 +13,7 @@ use Doctrine\ORM\Mapping as ORM;
 class ConnaissanceAmbassadeurSI
 {
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
@@ -46,11 +46,10 @@ class ConnaissanceAmbassadeurSI
      */
     protected $connaissance;
 
-
     /**
-     * Get id
+     * Get id.
      *
-     * @return integer 
+     * @return int
      */
     public function getId()
     {
@@ -58,9 +57,10 @@ class ConnaissanceAmbassadeurSI
     }
 
     /**
-     * Set commentaire
+     * Set commentaire.
      *
      * @param string $commentaire
+     *
      * @return ConnaissanceAmbassadeur
      */
     public function setCommentaire($commentaire)
@@ -71,9 +71,9 @@ class ConnaissanceAmbassadeurSI
     }
 
     /**
-     * Get commentaire
+     * Get commentaire.
      *
-     * @return string 
+     * @return string
      */
     public function getCommentaire()
     {
@@ -81,9 +81,10 @@ class ConnaissanceAmbassadeurSI
     }
 
     /**
-     * Set domaine
+     * Set domaine.
      *
      * @param \HopitalNumerique\ReferenceBundle\Entity\Reference $domaine
+     *
      * @return ConnaissanceAmbassadeur
      */
     public function setDomaine(\HopitalNumerique\ReferenceBundle\Entity\Reference $domaine = null)
@@ -94,9 +95,9 @@ class ConnaissanceAmbassadeurSI
     }
 
     /**
-     * Get domaine
+     * Get domaine.
      *
-     * @return \HopitalNumerique\ReferenceBundle\Entity\Reference 
+     * @return \HopitalNumerique\ReferenceBundle\Entity\Reference
      */
     public function getDomaine()
     {
@@ -104,9 +105,10 @@ class ConnaissanceAmbassadeurSI
     }
 
     /**
-     * Set user
+     * Set user.
      *
      * @param \HopitalNumerique\UserBundle\Entity\User $user
+     *
      * @return ConnaissanceAmbassadeur
      */
     public function setUser(\HopitalNumerique\UserBundle\Entity\User $user = null)
@@ -117,9 +119,9 @@ class ConnaissanceAmbassadeurSI
     }
 
     /**
-     * Get user
+     * Get user.
      *
-     * @return \HopitalNumerique\UserBundle\Entity\User 
+     * @return \HopitalNumerique\UserBundle\Entity\User
      */
     public function getUser()
     {
@@ -127,9 +129,10 @@ class ConnaissanceAmbassadeurSI
     }
 
     /**
-     * Set connaissance
+     * Set connaissance.
      *
      * @param \HopitalNumerique\ReferenceBundle\Entity\Reference $connaissance
+     *
      * @return ConnaissanceAmbassadeur
      */
     public function setConnaissance(\HopitalNumerique\ReferenceBundle\Entity\Reference $connaissance = null)
@@ -140,9 +143,9 @@ class ConnaissanceAmbassadeurSI
     }
 
     /**
-     * Get connaissance
+     * Get connaissance.
      *
-     * @return \HopitalNumerique\ReferenceBundle\Entity\Reference 
+     * @return \HopitalNumerique\ReferenceBundle\Entity\Reference
      */
     public function getConnaissance()
     {

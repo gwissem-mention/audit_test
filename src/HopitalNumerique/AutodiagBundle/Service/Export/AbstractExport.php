@@ -1,4 +1,5 @@
 <?php
+
 namespace HopitalNumerique\AutodiagBundle\Service\Export;
 
 use Doctrine\Common\Persistence\ObjectManager;
@@ -10,11 +11,11 @@ abstract class AbstractExport
 {
     protected $row = 1;
 
-
     protected $manager;
 
     /**
      * SurveyExport constructor.
+     *
      * @param ObjectManager $manager
      */
     public function __construct(ObjectManager $manager)
@@ -33,6 +34,7 @@ abstract class AbstractExport
         $sheet = $excel->createSheet();
         $sheet->setTitle($title);
         $sheet->setCodeName($title);
+
         return $sheet;
     }
 
@@ -41,15 +43,16 @@ abstract class AbstractExport
         $col = 'A';
         foreach ($row as $cell) {
             $sheet->setCellValue($col . $this->row, $cell);
-            $col++;
+            ++$col;
         }
-        $this->row++;
+        ++$this->row;
     }
 
     /**
-     * Get Excel writer
+     * Get Excel writer.
      *
      * @param \PHPExcel $excel
+     *
      * @return \PHPExcel_Writer_Excel2007
      */
     protected function getWriter($excel)
@@ -69,6 +72,7 @@ abstract class AbstractExport
             ResponseHeaderBag::DISPOSITION_ATTACHMENT,
             $prefix . '_' . $title->minifie() . '.xlsx'
         );
+
         return $response;
     }
 }

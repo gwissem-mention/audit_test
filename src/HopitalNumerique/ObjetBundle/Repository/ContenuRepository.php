@@ -5,35 +5,31 @@ namespace HopitalNumerique\ObjetBundle\Repository;
 use Doctrine\ORM\EntityRepository;
 
 /**
- * ContenuRepository
+ * ContenuRepository.
  */
 class ContenuRepository extends EntityRepository
 {
     /**
-     * Retourne tous les elements de contenu pour l'objet $id
+     * Retourne tous les elements de contenu pour l'objet $id.
      *
-     * @param integer|array $id ID de(s) l'objet(s)
+     * @param int|array $id ID de(s) l'objet(s)
      *
      * @return array
      */
-    public function getArboForObjet( $id, $domaineIds = array() )
+    public function getArboForObjet($id, $domaineIds = [])
     {
         $qb = $this->_em->createQueryBuilder()
                         ->select('con')
                         ->from('\HopitalNumerique\ObjetBundle\Entity\Contenu', 'con')
-                        ->leftJoin('con.objet','obj');
+                        ->leftJoin('con.objet', 'obj');
 
-        if( is_array($id) )
-        {
+        if (is_array($id)) {
             $qb->where('obj.id IN (:id)');
-        }
-        else
-        {
+        } else {
             $qb->where('obj.id = :id');
         }
 
-        if(count($domaineIds) !== 0)
-        {
+        if (count($domaineIds) !== 0) {
             $qb->leftJoin('obj.domaines', 'domaine')
                 ->andWhere('domaine.id IN (:domainesId)')
                 ->setParameter('domainesId', $domaineIds);
@@ -46,11 +42,11 @@ class ContenuRepository extends EntityRepository
     }
 
     /**
-     * Retourne le nombre des contenus ayant le même alias
+     * Retourne le nombre des contenus ayant le même alias.
      *
      * @param Contenu $contenu Objet contenu
      *
-     * @return integer
+     * @return int
      */
     public function countAlias($contenu)
     {
@@ -59,28 +55,28 @@ class ContenuRepository extends EntityRepository
         return $this->_em->createQueryBuilder()
                          ->select('count(con)')
                          ->from('\HopitalNumerique\ObjetBundle\Entity\Contenu', 'con')
-                         ->leftJoin('con.objet','obj')
-                         ->andWhere('obj.id = :objet','con.id != :id')
+                         ->leftJoin('con.objet', 'obj')
+                         ->andWhere('obj.id = :objet', 'con.id != :id')
                          ->andWhere('con.alias = :alias')
-                         ->setParameter('objet', $objet->getId() )
-                         ->setParameter('id', $contenu->getId() )
-                         ->setParameter('alias', $contenu->getAlias() );
+                         ->setParameter('objet', $objet->getId())
+                         ->setParameter('id', $contenu->getId())
+                         ->setParameter('alias', $contenu->getAlias());
     }
 
     /**
-     * Compte le nombre de contenu parents lié à l'objet
+     * Compte le nombre de contenu parents lié à l'objet.
      *
      * @param Objet $objet Objet
      *
-     * @return integer
+     * @return int
      */
-    public function countContenu( $objet )
+    public function countContenu($objet)
     {
         return $this->_em->createQueryBuilder()
                          ->select('count(con)')
                          ->from('\HopitalNumerique\ObjetBundle\Entity\Contenu', 'con')
-                         ->leftJoin('con.objet','obj')
+                         ->leftJoin('con.objet', 'obj')
                          ->andWhere('obj.id = :objet', 'con.parent IS NULL')
-                         ->setParameter('objet', $objet->getId() );
+                         ->setParameter('objet', $objet->getId());
     }
 }

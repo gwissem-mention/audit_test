@@ -1,4 +1,5 @@
 <?php
+
 namespace Nodevo\Component\Import\Iterator\File;
 
 class KeyedCsvFileIterator extends \IteratorIterator

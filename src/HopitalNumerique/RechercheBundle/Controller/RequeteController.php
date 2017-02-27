@@ -9,7 +9,7 @@ use Symfony\Component\HttpFoundation\Response;
 class RequeteController extends Controller
 {
     /**
-     * Affichage de la liste des requêtes de l'utilisateur connecté
+     * Affichage de la liste des requêtes de l'utilisateur connecté.
      *
      * @param Request $request
      * @param $indexVue
@@ -24,7 +24,7 @@ class RequeteController extends Controller
 
         //get requetes
         $requetes = $this->get('hopitalnumerique_recherche.manager.requete')->findBy([
-            'user'    => $user,
+            'user' => $user,
             'domaine' => $domaineId,
         ])
         ;
@@ -34,7 +34,7 @@ class RequeteController extends Controller
 
         if ($indexVue) {
             return $this->render('HopitalNumeriqueRechercheBundle:Requete:index.html.twig', [
-                'requetes'      => $requetes,
+                'requetes' => $requetes,
                 'consultations' => $consultations,
             ]);
         } else {
@@ -45,9 +45,9 @@ class RequeteController extends Controller
     }
 
     /**
-     * Delete d'une requete (AJAX)
+     * Delete d'une requete (AJAX).
      *
-     * @param integer $id ID de la requete à supprimer
+     * @param int $id ID de la requete à supprimer
      *
      * @return Response
      */
@@ -76,9 +76,9 @@ class RequeteController extends Controller
     }
 
     /**
-     * Edition du nom d'une requete (AJAX)
+     * Edition du nom d'une requete (AJAX).
      *
-     * @param integer $id ID de la requete à mettre à jour
+     * @param int $id ID de la requete à mettre à jour
      *
      * @return Response
      */
@@ -97,9 +97,9 @@ class RequeteController extends Controller
     }
 
     /**
-     * Toggle Default d'une requete (AJAX)
+     * Toggle Default d'une requete (AJAX).
      *
-     * @param integer $id ID de la requete à toggle
+     * @param int $id ID de la requete à toggle
      *
      * @return Response
      */

@@ -2,13 +2,10 @@
 
 namespace HopitalNumerique\AutodiagBundle\Entity;
 
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
-use HopitalNumerique\AutodiagBundle\Entity\Restitution\Category;
 
 /**
- * Restitution
+ * Restitution.
  *
  * @ORM\Table(name="ad_compare")
  * @ORM\Entity(repositoryClass="HopitalNumerique\AutodiagBundle\Repository\CompareRepository")
@@ -16,7 +13,7 @@ use HopitalNumerique\AutodiagBundle\Entity\Restitution\Category;
 class Compare
 {
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
@@ -46,6 +43,7 @@ class Compare
 
     /**
      * Compare constructor.
+     *
      * @param Synthesis $synthesis
      * @param Synthesis $reference
      */

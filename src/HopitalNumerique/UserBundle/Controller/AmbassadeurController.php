@@ -1,4 +1,5 @@
 <?php
+
 namespace HopitalNumerique\UserBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -6,7 +7,7 @@ use Symfony\Component\HttpFoundation\Response;
 use HopitalNumerique\UserBundle\Entity\User as HopiUser;
 
 /**
- * Controller des abassadeurs
+ * Controller des abassadeurs.
  *
  * @author Gaetan MELCHILSEN
  * @copyright Nodevo
@@ -14,10 +15,11 @@ use HopitalNumerique\UserBundle\Entity\User as HopiUser;
 class AmbassadeurController extends Controller
 {
     //---- Front Office ------
+
     /**
-     * Affichage du formulaire d'utilisateur
+     * Affichage du formulaire d'utilisateur.
      *
-     * @param integer $id Identifiant de l'utilisateur
+     * @param int $id Identifiant de l'utilisateur
      */
     public function editFrontAction()
     {
@@ -36,16 +38,16 @@ class AmbassadeurController extends Controller
         $readOnly = (in_array('ROLE_AMBASSADEUR_7', $user->getRoles()) || !empty($reponses));
 
         return $this->render('HopitalNumeriqueUserBundle:Ambassadeur/Front:edit.html.twig', [
-            'questionnaire'    => $questionnaire,
-            'user'             => $user,
+            'questionnaire' => $questionnaire,
+            'user' => $user,
             'optionRenderForm' => [
-                'showAllQuestions'   => false,
-                'readOnly'           => $readOnly,
-                'envoieDeMail'       => true,
+                'showAllQuestions' => false,
+                'readOnly' => $readOnly,
+                'envoieDeMail' => true,
                 'themeQuestionnaire' => $themeQuestionnaire,
-                'routeRedirect'      => json_encode([
+                'routeRedirect' => json_encode([
                     'quit' => [
-                        'route'     => 'hopitalnumerique_user_ambassadeur_front_edit',
+                        'route' => 'hopitalnumerique_user_ambassadeur_front_edit',
                         'arguments' => [],
                     ],
                 ]),
@@ -54,10 +56,11 @@ class AmbassadeurController extends Controller
     }
 
     //---- Back Office ------
+
     /**
-     * Affichage du formulaire d'utilisateur
+     * Affichage du formulaire d'utilisateur.
      *
-     * @param integer $id Identifiant de l'utilisateur
+     * @param int $id Identifiant de l'utilisateur
      */
     public function editAction(HopiUser $user)
     {
@@ -66,18 +69,18 @@ class AmbassadeurController extends Controller
         $questionnaire = $this->get('hopitalnumerique_questionnaire.manager.questionnaire')->findOneBy(['id' => $idQuestionnaireExpert]);
 
         return $this->render('HopitalNumeriqueUserBundle:Ambassadeur:edit.html.twig', [
-            'questionnaire'    => $questionnaire,
-            'user'             => $user,
-            'options'          => $this->get('hopitalnumerique_user.gestion_affichage_onglet')->getOptions($user),
+            'questionnaire' => $questionnaire,
+            'user' => $user,
+            'options' => $this->get('hopitalnumerique_user.gestion_affichage_onglet')->getOptions($user),
             'optionRenderForm' => [
-                'envoieDeMail'  => false,
+                'envoieDeMail' => false,
                 'routeRedirect' => json_encode([
-                    'quit'       => [
-                        'route'     => 'hopital_numerique_user_homepage',
+                    'quit' => [
+                        'route' => 'hopital_numerique_user_homepage',
                         'arguments' => [],
                     ],
                     'sauvegarde' => [
-                        'route'     => 'hopitalnumerique_user_ambassadeur_edit',
+                        'route' => 'hopitalnumerique_user_ambassadeur_edit',
                         'arguments' => [
                             'id' => $user->getId(),
                         ],
@@ -88,9 +91,9 @@ class AmbassadeurController extends Controller
     }
 
     /**
-     * Affichage de la fiche des réponses au questionnaire ambassadeur d'un utilisateur
+     * Affichage de la fiche des réponses au questionnaire ambassadeur d'un utilisateur.
      *
-     * @param integer $idUser ID de l'utilisateur
+     * @param int $idUser ID de l'utilisateur
      */
     public function showAction($idUser)
     {
@@ -101,15 +104,15 @@ class AmbassadeurController extends Controller
         $reponses = $this->get('hopitalnumerique_questionnaire.manager.reponse')->reponsesByQuestionnaireByUser($idQuestionnaireAmbassadeur, $idUser);
 
         return $this->render('HopitalNumeriqueUserBundle:Ambassadeur:show.html.twig', [
-            'reponses'       => $reponses,
+            'reponses' => $reponses,
             'nombreReponses' => count($reponses),
         ]);
     }
 
     /**
-     * Affichage de la liste des objets d'un utilisateur
+     * Affichage de la liste des objets d'un utilisateur.
      *
-     * @param integer $idUser ID de l'utilisateur
+     * @param int $idUser ID de l'utilisateur
      */
     public function listeObjetsAction($idUser)
     {
@@ -117,15 +120,15 @@ class AmbassadeurController extends Controller
         $objets = $this->get('hopitalnumerique_objet.manager.objet')->getObjetsByAmbassadeur($idUser);
 
         return $this->render('HopitalNumeriqueUserBundle:Ambassadeur:liste_objets.html.twig', [
-            'objets'       => $objets,
+            'objets' => $objets,
             'nombreObjets' => count($objets),
         ]);
     }
 
     /**
-     * Affiche la liste des objets maitrisés par l'ambassadeur
+     * Affiche la liste des objets maitrisés par l'ambassadeur.
      *
-     * @param integer $id ID de l'ambassadeur
+     * @param int $id ID de l'ambassadeur
      *
      * @return Response
      */
@@ -138,15 +141,15 @@ class AmbassadeurController extends Controller
         $grid->setSourceCondition('ambassadeur', $id);
 
         return $grid->render('HopitalNumeriqueUserBundle:Ambassadeur:objets.html.twig', [
-            'user'    => $user,
+            'user' => $user,
             'options' => $this->get('hopitalnumerique_user.gestion_affichage_onglet')->getOptions($user),
         ]);
     }
 
     /**
-     * Supprime le lien objet => ambassadeur
+     * Supprime le lien objet => ambassadeur.
      *
-     * @param int $id ID de l'objet
+     * @param int $id   ID de l'objet
      * @param int $user ID de l'user
      */
     public function deleteObjetAction($id, $user)
@@ -163,9 +166,9 @@ class AmbassadeurController extends Controller
     }
 
     /**
-     * Fancybox d'ajout d'objet à l'utilisateur
+     * Fancybox d'ajout d'objet à l'utilisateur.
      *
-     * @param integer $id ID de l'ambassadeur
+     * @param int $id ID de l'ambassadeur
      */
     public function addObjetAction($id)
     {
@@ -175,13 +178,13 @@ class AmbassadeurController extends Controller
         $objets = $this->get('hopitalnumerique_objet.manager.objet')->getObjetsNonMaitrisesByDomaine($id, $types, $domaines);
 
         return $this->render('HopitalNumeriqueUserBundle:Ambassadeur:add_objet.html.twig', [
-            'objets'      => $objets,
+            'objets' => $objets,
             'ambassadeur' => $id,
         ]);
     }
 
     /**
-     * Sauvegarde AJAX de la liaison objet + ambassadeur
+     * Sauvegarde AJAX de la liaison objet + ambassadeur.
      */
     public function saveObjetAction()
     {
@@ -206,7 +209,7 @@ class AmbassadeurController extends Controller
     }
 
     /**
-     * Validation de la candidature de l'utilisateur pour le questionnaire
+     * Validation de la candidature de l'utilisateur pour le questionnaire.
      *
      * @param int $user
      */
@@ -238,7 +241,7 @@ class AmbassadeurController extends Controller
     }
 
     /**
-     * Refus de la candidature de l'utilisateur pour le questionnaire
+     * Refus de la candidature de l'utilisateur pour le questionnaire.
      *
      * @param int $idUser
      * @param int $idQuestionnaire
@@ -277,7 +280,7 @@ class AmbassadeurController extends Controller
     }
 
     /**
-     * POP-IN de message de refus
+     * POP-IN de message de refus.
      */
     public function messageRefusCandidatureAction()
     {
@@ -285,9 +288,9 @@ class AmbassadeurController extends Controller
     }
 
     /**
-     * Page de gestion des domaines fonctionnels de l'user
+     * Page de gestion des domaines fonctionnels de l'user.
      *
-     * @param integer $id ID de l'user
+     * @param int $id ID de l'user
      *
      * @return View
      */
@@ -303,16 +306,16 @@ class AmbassadeurController extends Controller
         $connaissanceReferentiels = $this->get('hopitalnumerique_reference.manager.reference')->findBy(['code' => 'CONNAISSANCES_AMBASSADEUR'], ['order' => 'ASC']);
 
         return $this->render('HopitalNumeriqueUserBundle:Ambassadeur:domaines-fonctionnels.html.twig', [
-            'user'                     => $user,
-            'options'                  => $this->get('hopitalnumerique_user.gestion_affichage_onglet')->getOptions($user),
-            'domaines'                 => $domaines['domaines'],
+            'user' => $user,
+            'options' => $this->get('hopitalnumerique_user.gestion_affichage_onglet')->getOptions($user),
+            'domaines' => $domaines['domaines'],
             'connaissanceAmbassadeurs' => $connaissanceAmbassadeurs,
             'connaissanceReferentiels' => $connaissanceReferentiels,
         ]);
     }
 
     /**
-     * Sauvegarde AJAX de la liaison domaine + ambassadeur
+     * Sauvegarde AJAX de la liaison domaine + ambassadeur.
      */
     public function saveDomaineAction()
     {
@@ -322,7 +325,7 @@ class AmbassadeurController extends Controller
 
         //Problème avec les clés en JS : si on créé la clé 200, on va avoir un tableau de 201 entrée avec les entrées de 0 à 199 vides.
         foreach ($domaines as $key => $value) {
-            if ($value === "") {
+            if ($value === '') {
                 unset($domaines[$key]);
             }
         }
@@ -360,11 +363,10 @@ class AmbassadeurController extends Controller
         return new Response('{"success":true, "url" : "' . $this->generateUrl('hopitalnumerique_user_ambassadeur_domainesFonctionnels', ['id' => $id]) . '"}', 200);
     }
 
-
     /**
-     * Page de gestion des domaines fonctionnels de l'user
+     * Page de gestion des domaines fonctionnels de l'user.
      *
-     * @param integer $id ID de l'user
+     * @param int $id ID de l'user
      *
      * @return View
      */
@@ -384,7 +386,7 @@ class AmbassadeurController extends Controller
                     if (!array_key_exists($parent->getId(), $affichageDomaines)) {
                         $affichageDomaines[$parent->getId()] = [
                             'libelle' => $parent->getLibelle(),
-                            'fils'    => [],
+                            'fils' => [],
                         ];
                     }
                 }
@@ -394,7 +396,7 @@ class AmbassadeurController extends Controller
                 if (!array_key_exists($domaine->getId(), $affichageDomaines)) {
                     $affichageDomaines[$domaine->getId()] = [
                         'libelle' => '',
-                        'fils'    => [],
+                        'fils' => [],
                     ];
                 }
                 $affichageDomaines[$domaine->getId()]['fils'][] = $domaine;
@@ -407,17 +409,17 @@ class AmbassadeurController extends Controller
         $connaissanceReferentiels = $this->get('hopitalnumerique_reference.manager.reference')->findBy(['code' => 'CONNAISSANCES_AMBASSADEUR'], ['order' => 'ASC']);
 
         return $this->render('HopitalNumeriqueUserBundle:Ambassadeur:connaissancesSI.html.twig', [
-            'user'                     => $user,
-            'options'                  => $this->get('hopitalnumerique_user.gestion_affichage_onglet')->getOptions($user),
-            'domaines'                 => $domaines,
-            'affichageDomaines'        => $affichageDomaines,
+            'user' => $user,
+            'options' => $this->get('hopitalnumerique_user.gestion_affichage_onglet')->getOptions($user),
+            'domaines' => $domaines,
+            'affichageDomaines' => $affichageDomaines,
             'connaissanceAmbassadeurs' => $connaissanceAmbassadeurs,
             'connaissanceReferentiels' => $connaissanceReferentiels,
         ]);
     }
 
     /**
-     * Sauvegarde AJAX de la liaison domaine + ambassadeur
+     * Sauvegarde AJAX de la liaison domaine + ambassadeur.
      */
     public function saveConnaissancesSIAction()
     {
@@ -427,7 +429,7 @@ class AmbassadeurController extends Controller
 
         //Problème avec les clés en JS : si on créé la clé 200, on va avoir un tableau de 201 entrée avec les entrées de 0 à 199 vides.
         foreach ($domaines as $key => $value) {
-            if ($value === "") {
+            if ($value === '') {
                 unset($domaines[$key]);
             }
         }
@@ -466,9 +468,9 @@ class AmbassadeurController extends Controller
     }
 
     /**
-     * Liste des domaines de l'user : Fiche
+     * Liste des domaines de l'user : Fiche.
      *
-     * @param integer $idUser ID de l'utilisateur
+     * @param int $idUser ID de l'utilisateur
      */
     public function listeDomainesAction($idUser)
     {

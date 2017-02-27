@@ -9,5 +9,5 @@ class HopitalNumeriqueFaqBundle extends Bundle
     public function getParent()
     {
         return 'NodevoFaqBundle';
-    }  
+    }
 }

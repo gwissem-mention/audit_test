@@ -18,50 +18,45 @@ class ModuleManager extends BaseManager
     protected $_userManager;
 
     /**
-     * Constructeur du manager
+     * Constructeur du manager.
      *
      * @param EntityManager $em Entity Manager de Doctrine
      */
-    public function __construct( EntityManager $em, UserManager $userManager)
+    public function __construct(EntityManager $em, UserManager $userManager)
     {
         parent::__construct($em);
         $this->_userManager = $userManager;
     }
 
     /**
-     * Override : Récupère les données pour le grid sous forme de tableau
+     * Override : Récupère les données pour le grid sous forme de tableau.
      *
      * @return array
      *
      * @author Gaetan MELCHILSEN
      * @copyright Nodevo
      */
-    public function getDatasForGrid( \StdClass $condition = null )
+    public function getDatasForGrid(\StdClass $condition = null)
     {
-        $modulesForGrid = array();
+        $modulesForGrid = [];
 
         $domainesIds = $this->_userManager->getUserConnected()->getDomainesId();
 
-        $modules = $this->getRepository()->getDatasForGrid( $domainesIds, $condition )->getQuery()->getResult();
+        $modules = $this->getRepository()->getDatasForGrid($domainesIds, $condition)->getQuery()->getResult();
 
-        foreach ($modules as $module)
-        {
-            if(!array_key_exists($module['id'], $modulesForGrid))
-            {
+        foreach ($modules as $module) {
+            if (!array_key_exists($module['id'], $modulesForGrid)) {
                 $modulesForGrid[$module['id']] = $module;
-            }
-            else
-            {
-                $modulesForGrid[$module['id']]['domaineNom'] .= " ; " . $module['domaineNom'];
+            } else {
+                $modulesForGrid[$module['id']]['domaineNom'] .= ' ; ' . $module['domaineNom'];
             }
 
-            if(!empty($module['formateurNom']) && !empty($module['formateurPrenom']))
-            {
-              $modulesForGrid[$module['id']]['formateur'] = $module['formateurNom'] . ' ' . $module['formateurPrenom'];
+            if (!empty($module['formateurNom']) && !empty($module['formateurPrenom'])) {
+                $modulesForGrid[$module['id']]['formateur'] = $module['formateurNom'] . ' ' . $module['formateurPrenom'];
             }
-
         }
-        return $this->rearangeForProduction( array_values($modulesForGrid) );
+
+        return $this->rearangeForProduction(array_values($modulesForGrid));
     }
 
     public function getAllInscriptionsBySessionsActivesNonPasseesByModules()
@@ -69,17 +64,13 @@ class ModuleManager extends BaseManager
         return $this->getRepository()->getAllInscriptionsBySessionsActivesNonPasseesByModules()->getQuery()->getResult();
     }
 
-
     public function getModuleActifForDomaine($domaineId)
     {
         return $this->getRepository()->getModuleActifForDomaine($domaineId)->getQuery()->getResult();
     }
 
-
-
-
     /**
-     * Réarrange les objets pour afficher correctement les types
+     * Réarrange les objets pour afficher correctement les types.
      *
      * @param array $results Les résultats de la requete
      *
@@ -88,16 +79,16 @@ class ModuleManager extends BaseManager
      * @author Gaetan MELCHILSEN
      * @copyright Nodevo
      */
-    private function rearangeForProduction( $results )
+    private function rearangeForProduction($results)
     {
-        $objets  = array();
+        $objets = [];
 
-        foreach($results as $result)
-        {
-            if( isset( $objets[ $result['id'] ] ) )
-                $objets[ $result['id'] ]['prod_titre'] .= ', ' . $result['prod_titre'];
-            else
-                $objets[ $result['id'] ] = $result;
+        foreach ($results as $result) {
+            if (isset($objets[$result['id']])) {
+                $objets[$result['id']]['prod_titre'] .= ', ' . $result['prod_titre'];
+            } else {
+                $objets[$result['id']] = $result;
+            }
         }
 
         return array_values($objets);

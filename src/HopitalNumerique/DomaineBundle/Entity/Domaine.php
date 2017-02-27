@@ -8,12 +8,11 @@ use APY\DataGridBundle\Grid\Mapping as GRID;
 use HopitalNumerique\ForumBundle\Entity\Category;
 use HopitalNumerique\ObjetBundle\Entity\Objet;
 use Symfony\Component\Validator\Constraints as Assert;
-
 //Tools
-use \Nodevo\ToolsBundle\Tools\Chaine;
+use Nodevo\ToolsBundle\Tools\Chaine;
 
 /**
- * Domaine
+ * Domaine.
  *
  * @ORM\Table(name="hn_domaine")
  * @ORM\Entity(repositoryClass="HopitalNumerique\DomaineBundle\Repository\DomaineRepository")
@@ -22,13 +21,12 @@ use \Nodevo\ToolsBundle\Tools\Chaine;
 class Domaine
 {
     /**
-     * @var integer ID du domaine HN
+     * @var int ID du domaine HN
      */
     const DOMAINE_HOPITAL_NUMERIQUE_ID = 1;
 
-
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="dom_id", type="integer")
      * @ORM\Id
@@ -160,7 +158,6 @@ class Domaine
      */
     protected $communautePratiqueGroupes;
 
-
     /**
      * @var string
      *
@@ -188,23 +185,22 @@ class Domaine
     protected $communautePratiqueForumCategories;
 
     /**
-     * Constructor
+     * Constructor.
      */
     public function __construct()
     {
-        $this->users      = new ArrayCollection();
+        $this->users = new ArrayCollection();
         $this->references = new ArrayCollection();
-        $this->objets     = new ArrayCollection();
+        $this->objets = new ArrayCollection();
         $this->contenus = new ArrayCollection();
         $this->communautePratiqueGroupes = new ArrayCollection();
         $this->communautePratiqueForumCategories = new ArrayCollection();
     }
 
-
     /**
-     * Get id
+     * Get id.
      *
-     * @return integer
+     * @return int
      */
     public function getId()
     {
@@ -212,9 +208,10 @@ class Domaine
     }
 
     /**
-     * Set url
+     * Set url.
      *
      * @param string $url
+     *
      * @return Domaine
      */
     public function setUrl($url)
@@ -225,7 +222,7 @@ class Domaine
     }
 
     /**
-     * Get url
+     * Get url.
      *
      * @return string
      */
@@ -235,32 +232,34 @@ class Domaine
     }
 
     /**
-     * Set url
+     * Set url.
      *
      * @param string $url
+     *
      * @return Domaine
      */
     public function setUrlTitre($urlTitre)
     {
-    	$this->urlTitre = $urlTitre;
+        $this->urlTitre = $urlTitre;
 
-    	return $this;
+        return $this;
     }
 
     /**
-     * Get url
+     * Get url.
      *
      * @return string
      */
     public function getUrlTitre()
     {
-    	return $this->urlTitre;
+        return $this->urlTitre;
     }
 
     /**
-     * Set adresseMailContact
+     * Set adresseMailContact.
      *
      * @param string $adresseMailContact
+     *
      * @return Domaine
      */
     public function setAdresseMailContact($adresseMailContact)
@@ -271,7 +270,7 @@ class Domaine
     }
 
     /**
-     * Get adresseMailContact
+     * Get adresseMailContact.
      *
      * @return string
      */
@@ -281,9 +280,10 @@ class Domaine
     }
 
     /**
-     * Set template
+     * Set template.
      *
      * @param \HopitalNumerique\DomaineBundle\Entity\Template $template
+     *
      * @return Domaine
      */
     public function setTemplate(\HopitalNumerique\DomaineBundle\Entity\Template $template)
@@ -294,7 +294,7 @@ class Domaine
     }
 
     /**
-     * Get template
+     * Get template.
      *
      * @return \HopitalNumerique\DomaineBundle\Entity\Template
      */
@@ -304,7 +304,7 @@ class Domaine
     }
 
     /**
-     * Set referenceRoot
+     * Set referenceRoot.
      *
      * @param \HopitalNumerique\ReferenceBundle\Entity\Reference $referenceRoot
      *
@@ -318,7 +318,7 @@ class Domaine
     }
 
     /**
-     * Get referenceRoot
+     * Get referenceRoot.
      *
      * @return \HopitalNumerique\ReferenceBundle\Entity\Reference
      */
@@ -328,9 +328,10 @@ class Domaine
     }
 
     /**
-     * Add users
+     * Add users.
      *
      * @param \HopitalNumerique\UserBundle\Entity\User $users
+     *
      * @return Domaine
      */
     public function addUser(\HopitalNumerique\UserBundle\Entity\User $users)
@@ -341,7 +342,7 @@ class Domaine
     }
 
     /**
-     * Remove users
+     * Remove users.
      *
      * @param \HopitalNumerique\UserBundle\Entity\User $users
      */
@@ -351,7 +352,7 @@ class Domaine
     }
 
     /**
-     * Get users
+     * Get users.
      *
      * @return \Doctrine\Common\Collections\Collection
      */
@@ -361,9 +362,10 @@ class Domaine
     }
 
     /**
-     * Add references
+     * Add references.
      *
      * @param \HopitalNumerique\ReferenceBundle\Entity\Reference $references
+     *
      * @return Domaine
      */
     public function addReference(\HopitalNumerique\ReferenceBundle\Entity\Reference $references)
@@ -374,7 +376,7 @@ class Domaine
     }
 
     /**
-     * Remove references
+     * Remove references.
      *
      * @param \HopitalNumerique\ReferenceBundle\Entity\Reference $references
      */
@@ -384,7 +386,7 @@ class Domaine
     }
 
     /**
-     * Get references
+     * Get references.
      *
      * @return \Doctrine\Common\Collections\Collection
      */
@@ -394,9 +396,10 @@ class Domaine
     }
 
     /**
-     * Add objets
+     * Add objets.
      *
      * @param \HopitalNumerique\ObjetBundle\Entity\Objet $objets
+     *
      * @return Domaine
      */
     public function addObjet(\HopitalNumerique\ObjetBundle\Entity\Objet $objets)
@@ -407,7 +410,7 @@ class Domaine
     }
 
     /**
-     * Remove objets
+     * Remove objets.
      *
      * @param \HopitalNumerique\ObjetBundle\Entity\Objet $objets
      */
@@ -417,7 +420,7 @@ class Domaine
     }
 
     /**
-     * Get objets
+     * Get objets.
      *
      * @return \Doctrine\Common\Collections\Collection
      */
@@ -427,7 +430,7 @@ class Domaine
     }
 
     /**
-     * Add contenus
+     * Add contenus.
      *
      * @param \HopitalNumerique\ObjetBundle\Entity\Contenu $contenus
      *
@@ -441,7 +444,7 @@ class Domaine
     }
 
     /**
-     * Remove contenus
+     * Remove contenus.
      *
      * @param \HopitalNumerique\ObjetBundle\Entity\Contenu $contenus
      */
@@ -451,7 +454,7 @@ class Domaine
     }
 
     /**
-     * Get contenus
+     * Get contenus.
      *
      * @return \Doctrine\Common\Collections\Collection
      */
@@ -461,9 +464,10 @@ class Domaine
     }
 
     /**
-     * Set nom
+     * Set nom.
      *
      * @param string $nom
+     *
      * @return Domaine
      */
     public function setNom($nom)
@@ -474,7 +478,7 @@ class Domaine
     }
 
     /**
-     * Get nom
+     * Get nom.
      *
      * @return string
      */
@@ -484,9 +488,10 @@ class Domaine
     }
 
     /**
-     * Set dateLastUpdate
+     * Set dateLastUpdate.
      *
      * @param \DateTime $dateLastUpdate
+     *
      * @return Domaine
      */
     public function setDateLastUpdate($dateLastUpdate)
@@ -497,7 +502,7 @@ class Domaine
     }
 
     /**
-     * Get dateLastUpdate
+     * Get dateLastUpdate.
      *
      * @return \DateTime
      */
@@ -505,20 +510,23 @@ class Domaine
     {
         return $this->dateLastUpdate;
     }
+
     // ----------------------------------------
     // --- Gestion de l'upload des fichiers ---
     // ----------------------------------------
 
     /**
-     * Set path
+     * Set path.
      *
      * @param string $path
+     *
      * @return Domaine
      */
     public function setPath($path)
     {
-        if( is_null($path) && file_exists($this->getAbsolutePath()) )
+        if (is_null($path) && file_exists($this->getAbsolutePath())) {
             unlink($this->getAbsolutePath());
+        }
 
         $this->path = $path;
 
@@ -526,7 +534,7 @@ class Domaine
     }
 
     /**
-     * Get path
+     * Get path.
      *
      * @return string
      */
@@ -537,18 +545,18 @@ class Domaine
 
     public function getAbsolutePath()
     {
-        return null === $this->path ? null : $this->getUploadRootDir().'/'.$this->path;
+        return null === $this->path ? null : $this->getUploadRootDir() . '/' . $this->path;
     }
 
     public function getWebPath()
     {
-        return null === $this->path ? null : $this->getUploadDir().'/'.$this->path;
+        return null === $this->path ? null : $this->getUploadDir() . '/' . $this->path;
     }
 
     public function getUploadRootDir()
     {
         // le chemin absolu du répertoire où les documents uploadés doivent être sauvegardés
-        return __WEB_DIRECTORY__.'/'.$this->getUploadDir();
+        return __WEB_DIRECTORY__ . '/' . $this->getUploadDir();
     }
 
     public function getUploadDir()
@@ -562,12 +570,13 @@ class Domaine
      */
     public function preUpload()
     {
-        if (null !== $this->file){
+        if (null !== $this->file) {
             //delete Old File
-            if ( file_exists($this->getAbsolutePath()) )
+            if (file_exists($this->getAbsolutePath())) {
                 unlink($this->getAbsolutePath());
+            }
 
-            $tool = new Chaine( $this->getNom() );
+            $tool = new Chaine($this->getNom());
             $nomFichier = $tool->minifie();
 
             $this->path = round(microtime(true) * 1000) . '_' . $nomFichier . '.png';
@@ -580,8 +589,9 @@ class Domaine
      */
     public function upload()
     {
-        if (null === $this->file)
+        if (null === $this->file) {
             return;
+        }
 
         // s'il y a une erreur lors du déplacement du fichier, une exception
         // va automatiquement être lancée par la méthode move(). Cela va empêcher
@@ -599,14 +609,16 @@ class Domaine
     {
         $file = $this->getAbsolutePath();
 
-        if (file_exists($file) )
+        if (file_exists($file)) {
             unlink($file);
+        }
     }
 
     /**
-     * Set description
+     * Set description.
      *
      * @param string $description
+     *
      * @return Domaine
      */
     public function setDescription($description)
@@ -617,7 +629,7 @@ class Domaine
     }
 
     /**
-     * Get description
+     * Get description.
      *
      * @return string
      */
@@ -627,9 +639,10 @@ class Domaine
     }
 
     /**
-     * Add requetes
+     * Add requetes.
      *
      * @param \HopitalNumerique\RechercheBundle\Entity\Requete $requetes
+     *
      * @return Domaine
      */
     public function addRequete(\HopitalNumerique\RechercheBundle\Entity\Requete $requetes)
@@ -640,7 +653,7 @@ class Domaine
     }
 
     /**
-     * Remove requetes
+     * Remove requetes.
      *
      * @param \HopitalNumerique\RechercheBundle\Entity\Requete $requetes
      */
@@ -650,7 +663,7 @@ class Domaine
     }
 
     /**
-     * Get requetes
+     * Get requetes.
      *
      * @return \Doctrine\Common\Collections\Collection
      */
@@ -660,9 +673,10 @@ class Domaine
     }
 
     /**
-     * Add forums
+     * Add forums.
      *
      * @param \HopitalNumerique\ForumBundle\Entity\Forum $forums
+     *
      * @return Domaine
      */
     public function addForum(\HopitalNumerique\ForumBundle\Entity\Forum $forums)
@@ -673,7 +687,7 @@ class Domaine
     }
 
     /**
-     * Remove forums
+     * Remove forums.
      *
      * @param \HopitalNumerique\ForumBundle\Entity\Forum $forums
      */
@@ -683,7 +697,7 @@ class Domaine
     }
 
     /**
-     * Get forums
+     * Get forums.
      *
      * @return \Doctrine\Common\Collections\Collection
      */
@@ -693,9 +707,10 @@ class Domaine
     }
 
     /**
-     * Set googleAnalytics
+     * Set googleAnalytics.
      *
      * @param string $googleAnalytics
+     *
      * @return Domaine
      */
     public function setGoogleAnalytics($googleAnalytics)
@@ -706,7 +721,7 @@ class Domaine
     }
 
     /**
-     * Get googleAnalytics
+     * Get googleAnalytics.
      *
      * @return string
      */
@@ -716,9 +731,10 @@ class Domaine
     }
 
     /**
-     * Set homepage
+     * Set homepage.
      *
      * @param string $homepage
+     *
      * @return Domaine
      */
     public function setHomepage($homepage)
@@ -729,7 +745,7 @@ class Domaine
     }
 
     /**
-     * Get homepage
+     * Get homepage.
      *
      * @return string
      */
@@ -739,9 +755,10 @@ class Domaine
     }
 
     /**
-     * Add communautePratiqueGroupes
+     * Add communautePratiqueGroupes.
      *
      * @param \HopitalNumerique\CommunautePratiqueBundle\Entity\Groupe $communautePratiqueGroupes
+     *
      * @return Domaine
      */
     public function addCommunautePratiqueGroupe(\HopitalNumerique\CommunautePratiqueBundle\Entity\Groupe $communautePratiqueGroupes)
@@ -752,7 +769,7 @@ class Domaine
     }
 
     /**
-     * Remove communautePratiqueGroupes
+     * Remove communautePratiqueGroupes.
      *
      * @param \HopitalNumerique\CommunautePratiqueBundle\Entity\Groupe $communautePratiqueGroupes
      */
@@ -762,7 +779,7 @@ class Domaine
     }
 
     /**
-     * Get communautePratiqueGroupes
+     * Get communautePratiqueGroupes.
      *
      * @return \Doctrine\Common\Collections\Collection
      */
@@ -770,7 +787,6 @@ class Domaine
     {
         return $this->communautePratiqueGroupes;
     }
-
 
     /**
      * @return string
@@ -790,7 +806,7 @@ class Domaine
         return [
             'id' => $this->id,
             'nom' => $this->nom,
-            'url' => $this->url
+            'url' => $this->url,
         ];
     }
 
@@ -798,11 +814,12 @@ class Domaine
      * Retourne l'égalité entre deux domaines.
      *
      * @param \HopitalNumerique\ReferenceBundle\Entity\Domaine $domaine Autre domaine
-     * @return boolean Si égalité
+     *
+     * @return bool Si égalité
      */
     public function equals(Domaine $domaine)
     {
-        return ($this->id === $domaine->getId());
+        return $this->id === $domaine->getId();
     }
 
     /**

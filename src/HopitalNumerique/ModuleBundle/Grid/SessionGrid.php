@@ -20,8 +20,8 @@ class SessionGrid extends Grid implements GridInterface
      */
     public function setConfig()
     {
-        $this->setSource( 'hopitalnumerique_module.manager.session' );
-        $this->setSourceType( self::SOURCE_TYPE_MANAGER );
+        $this->setSource('hopitalnumerique_module.manager.session');
+        $this->setSourceType(self::SOURCE_TYPE_MANAGER);
         $this->setNoDataMessage('- Aucune session planifiée -');
     }
 
@@ -30,92 +30,91 @@ class SessionGrid extends Grid implements GridInterface
      */
     public function setColumns()
     {
-        $etatArrays = array(
-            "Actif" => "Actif",
-            "Inactif" => "Inactif",
-            "Annulé" => "Annulé"
-        );
+        $etatArrays = [
+            'Actif' => 'Actif',
+            'Inactif' => 'Inactif',
+            'Annulé' => 'Annulé',
+        ];
 
         $dateOuvertureInscriptionColumn = new Column\DateColumn('dateOuvertureInscription', 'Date d\'ouverture des inscriptions');
-        $dateOuvertureInscriptionColumn->setSize( 150 );
-        $this->addColonne( $dateOuvertureInscriptionColumn );
+        $dateOuvertureInscriptionColumn->setSize(150);
+        $this->addColonne($dateOuvertureInscriptionColumn);
 
         $dateFermetureInscriptionColumn = new Column\DateColumn('dateFermetureInscription', 'Date de clôture des inscriptions');
-        $dateFermetureInscriptionColumn->setSize( 150 );
-        $this->addColonne( $dateFermetureInscriptionColumn );
+        $dateFermetureInscriptionColumn->setSize(150);
+        $this->addColonne($dateFermetureInscriptionColumn);
 
         $dateSessionColumn = new Column\DateColumn('dateSession', 'Date de début de la session');
-        $dateSessionColumn->setSize( 150 );
-        $this->addColonne( $dateSessionColumn );
+        $dateSessionColumn->setSize(150);
+        $this->addColonne($dateSessionColumn);
 
         $dureeColumn = new Column\TextColumn('duree', 'Durée de la session');
-        $this->addColonne( $dureeColumn );
+        $this->addColonne($dureeColumn);
 
         $horaireColumn = new Column\TextColumn('horaires', 'Horaires');
-        $this->addColonne( $horaireColumn );
+        $this->addColonne($horaireColumn);
 
         $nbInscritsColumn = new Column\TextColumn('nbInscrits', 'Nombres d\'inscrits');
-        $this->addColonne( $nbInscritsColumn );
+        $this->addColonne($nbInscritsColumn);
 
         $nbInscritsEnAttenteColumn = new Column\TextColumn('nbInscritsEnAttente', 'Nombres d\'inscrits en attente');
-        $this->addColonne( $nbInscritsEnAttenteColumn );
+        $this->addColonne($nbInscritsEnAttenteColumn);
 
         $nbInscritsColumn = new Column\TextColumn('placeRestantes', 'Nombres de places restantes');
-        $this->addColonne( $nbInscritsColumn );
+        $this->addColonne($nbInscritsColumn);
 
         $etatColumn = new Column\TextColumn('etat', 'Etat');
-        $etatColumn->setSize( 140 );
+        $etatColumn->setSize(140);
         $etatColumn->setFilterType('select');
-        $etatColumn->setOperatorsVisible( false );
-        $etatColumn->setSelectFrom("values");
+        $etatColumn->setOperatorsVisible(false);
+        $etatColumn->setSelectFrom('values');
         $etatColumn->setValues($etatArrays);
-        $etatColumn->setDefaultOperator( \APY\DataGridBundle\Grid\Column\Column::OPERATOR_EQ );
-        $this->addColonne( $etatColumn );
+        $etatColumn->setDefaultOperator(\APY\DataGridBundle\Grid\Column\Column::OPERATOR_EQ);
+        $this->addColonne($etatColumn);
 
         $archiverColumn = new Column\BooleanColumn('archiver', 'Archivée');
-        $archiverColumn->setSize( 70 );
+        $archiverColumn->setSize(70);
         $archiverColumn->setFilterType('select');
-        $archiverColumn->setOperatorsVisible( false );
-        $archiverColumn->setDefaultOperator( \APY\DataGridBundle\Grid\Column\Column::OPERATOR_EQ );
-        $this->addColonne( $archiverColumn );
+        $archiverColumn->setOperatorsVisible(false);
+        $archiverColumn->setDefaultOperator(\APY\DataGridBundle\Grid\Column\Column::OPERATOR_EQ);
+        $this->addColonne($archiverColumn);
     }
 
     /**
-     * Ajoute les boutons d'action
+     * Ajoute les boutons d'action.
      */
     public function setActionsButtons()
     {
-        $this->addActionButton( new Action\ShowButton( 'hopitalnumerique_module_module_session_show' ) );
+        $this->addActionButton(new Action\ShowButton('hopitalnumerique_module_module_session_show'));
 
         $actionListeInscrits = new Action\ShowButton('hopitalnumerique_module_module_session_inscription');
-        $actionListeInscrits->setAttributes( array(
-                'class'=>'btn btn-primary fa fa-users',
+        $actionListeInscrits->setAttributes([
+                'class' => 'btn btn-primary fa fa-users',
                 'title' => 'Afficher les inscrits',
-        ));
-        $this->addActionButton( $actionListeInscrits );
+        ]);
+        $this->addActionButton($actionListeInscrits);
 
-        $this->addActionButton( new Action\EditButton( 'hopitalnumerique_module_module_session_edit' ) );
+        $this->addActionButton(new Action\EditButton('hopitalnumerique_module_module_session_edit'));
 
         //--------- GME 16/06 : Cadenas lock/unlock -------
         //Custom Unlock button : Affiche le bouton déverrouiller si la ligne est verrouillée
-        $unlockButton = new Action\LockButton( 'hopitalnumerique_module_module_session_archiver' );
-        $unlockButton->setAttributes( array('class'=>'btn btn-warning fa fa-unlock','title' => 'Déverrouiller') );
-        $unlockButton->manipulateRender(function($action, \APY\DataGridBundle\Grid\Row  $row) {
+        $unlockButton = new Action\LockButton('hopitalnumerique_module_module_session_archiver');
+        $unlockButton->setAttributes(['class' => 'btn btn-warning fa fa-unlock', 'title' => 'Déverrouiller']);
+        $unlockButton->manipulateRender(function ($action, \APY\DataGridBundle\Grid\Row  $row) {
             return $row->getField('archiver') ? $action : null;
         });
-        $this->addActionButton( $unlockButton );
+        $this->addActionButton($unlockButton);
 
         //Custom lock button : Affiche le bouton verrouiller si la ligne est déverrouillée
-        $lockButton = new Action\LockButton( 'hopitalnumerique_module_module_session_archiver' );
-        $lockButton->setAttributes( array('class'=>'btn btn-warning fa fa-lock','title' => 'Verrouiller') );
-        $lockButton->manipulateRender(function($action, \APY\DataGridBundle\Grid\Row  $row) {
+        $lockButton = new Action\LockButton('hopitalnumerique_module_module_session_archiver');
+        $lockButton->setAttributes(['class' => 'btn btn-warning fa fa-lock', 'title' => 'Verrouiller']);
+        $lockButton->manipulateRender(function ($action, \APY\DataGridBundle\Grid\Row  $row) {
             return $row->getField('archiver') ? null : $action;
         });
-        $this->addActionButton( $lockButton );
+        $this->addActionButton($lockButton);
         //--------- GME 16/06 : Cadenas lock/unlock -------
 
         //$this->addActionButton( new Action\DeleteButton( 'hopitalnumerique_module_module_session_delete' ) );
-
     }
 
     /**
@@ -123,6 +122,6 @@ class SessionGrid extends Grid implements GridInterface
      */
     public function setMassActions()
     {
-        $this->addMassAction( new Action\ActionMass('Supprimer', 'HopitalNumeriqueModuleBundle:Back/Session:deleteMass') );
+        $this->addMassAction(new Action\ActionMass('Supprimer', 'HopitalNumeriqueModuleBundle:Back/Session:deleteMass'));
     }
 }

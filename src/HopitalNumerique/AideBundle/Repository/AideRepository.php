@@ -6,13 +6,12 @@ use Doctrine\ORM\EntityRepository;
 use HopitalNumerique\AideBundle\Entity\Aide;
 
 /**
- * AideRepository
+ * AideRepository.
  */
 class AideRepository extends EntityRepository
 {
-
     /**
-     * Récupère les données du grid sous forme de tableau correctement formaté
+     * Récupère les données du grid sous forme de tableau correctement formaté.
      *
      * @return Query Builder
      */

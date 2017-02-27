@@ -2,30 +2,27 @@
 
 namespace Nodevo\FormBundle\Form\JQuery\Type;
 
-use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\FormInterface;
-use Symfony\Component\Form\FormView;
 use Symfony\Component\OptionsResolver\Options;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 use Genemu\Bundle\FormBundle\Form\JQuery\Type\DateType as BaseDateType;
 
 /**
- * DateType
+ * DateType.
  *
  * @author Olivier Chauvel <olivier@generation-multiple.com>
  */
 class DateType extends BaseDateType
 {
-	private $options;
+    private $options;
 
-	/**
-     * Constructs
+    /**
+     * Constructs.
      *
      * @param array $options
      */
     public function __construct(array $options)
     {
-    	parent::__construct($options);
+        parent::__construct($options);
         $this->options = $options;
     }
 
@@ -37,15 +34,15 @@ class DateType extends BaseDateType
         $configs = $this->options;
 
         $resolver
-            ->setDefaults(array(
+            ->setDefaults([
                 'culture' => 'fr',
                 'widget' => 'choice',
-                'years'  => range(date('Y') - 5, date('Y') + 5),
-                'configs' => array(
+                'years' => range(date('Y') - 5, date('Y') + 5),
+                'configs' => [
                     'dateFormat' => null,
-                ),
-            ))
-            ->setNormalizers(array(
+                ],
+            ])
+            ->setNormalizers([
                 'configs' => function (Options $options, $value) use ($configs) {
                     $result = array_merge($configs, $value);
                     if ('single_text' !== $options['widget'] || isset($result['buttonImage'])) {
@@ -53,7 +50,7 @@ class DateType extends BaseDateType
                     }
 
                     return $result;
-                }
-            ));
+                },
+            ]);
     }
 }

@@ -8,9 +8,9 @@ use Symfony\Component\HttpFoundation\Response;
 class ItemController extends Controller
 {
     /**
-     * Liste des items dans le menu
+     * Liste des items dans le menu.
      *
-     * @param integer $id Id du menu
+     * @param int $id Id du menu
      *
      * @return Vue en liste de tous les liens du menu $id
      */
@@ -20,68 +20,54 @@ class ItemController extends Controller
         $grid = $this->get('nodevo_menu.grid.item');
         $grid->setSourceCondition('menu', $id);
 
-        return $grid->render('NodevoMenuBundle:Item:index.html.twig', array('menu' => $menu ));
+        return $grid->render('NodevoMenuBundle:Item:index.html.twig', ['menu' => $menu]);
     }
 
     /**
-     * Affiche le formulaire d'ajout de liens de menu
+     * Affiche le formulaire d'ajout de liens de menu.
      */
     public function addAction($id)
     {
         $item = $this->get('nodevo_menu.manager.item')->createEmpty();
         $menu = $this->get('nodevo_menu.manager.menu')->findOneById($id);
-        $item->setMenu( $menu );
+        $item->setMenu($menu);
 
-        return $this->renderForm('nodevo_menu_item', $item, 'NodevoMenuBundle:Item:edit.html.twig' );
+        return $this->renderForm('nodevo_menu_item', $item, 'NodevoMenuBundle:Item:edit.html.twig');
     }
 
     /**
-     * Affichage du formulaire de lien de menu
-     * 
+     * Affichage du formulaire de lien de menu.
+     *
      * @param intger $id Identifiant du lien de menu
      */
-    public function editAction( $id )
+    public function editAction($id)
     {
-        $item = $this->get('nodevo_menu.manager.item')->findOneBy( array('id' => $id) );
+        $item = $this->get('nodevo_menu.manager.item')->findOneBy(['id' => $id]);
 
-        return $this->renderForm('nodevo_menu_item', $item, 'NodevoMenuBundle:Item:edit.html.twig' );
+        return $this->renderForm('nodevo_menu_item', $item, 'NodevoMenuBundle:Item:edit.html.twig');
     }
 
     /**
-     * Suppression d'un utilisateur
+     * Suppression d'un utilisateur.
      *
-     * @param integer $id ID de l'utilisateur
+     * @param int $id ID de l'utilisateur
      */
-    public function deleteAction( $id )
+    public function deleteAction($id)
     {
-        $item = $this->get('nodevo_menu.manager.item')->findOneBy( array('id' => $id) );
+        $item = $this->get('nodevo_menu.manager.item')->findOneBy(['id' => $id]);
         $menu = $item->getMenu();
 
         //Suppression de l'item
-        $this->get('nodevo_menu.manager.item')->delete( $item );
-        $this->get('nodevo_menu.manager.menu')->refreshTree( $menu );
+        $this->get('nodevo_menu.manager.item')->delete($item);
+        $this->get('nodevo_menu.manager.menu')->refreshTree($menu);
 
-        $this->get('session')->getFlashBag()->add('info', 'Suppression effectuée avec succès.' );
+        $this->get('session')->getFlashBag()->add('info', 'Suppression effectuée avec succès.');
 
-        return new Response('{"success":true, "url" : "'.$this->generateUrl('nodevo_menu_item', array('id'=>$menu->getId())).'"}', 200);
+        return new Response('{"success":true, "url" : "' . $this->generateUrl('nodevo_menu_item', ['id' => $menu->getId()]) . '"}', 200);
     }
 
-
-
-
-
-
-
-        
-
-
-  
-    
-
-
-
     /**
-     * Effectue le render du formulaire Item
+     * Effectue le render du formulaire Item.
      *
      * @param string $formName Nom du service associé au formulaire
      * @param Item   $item     Entité item
@@ -89,68 +75,68 @@ class ItemController extends Controller
      *
      * @return Form | redirect
      */
-    private function renderForm( $formName, $item, $view )
+    private function renderForm($formName, $item, $view)
     {
         //Création du formulaire via le service
-        $form = $this->createForm( $formName, $item);
+        $form = $this->createForm($formName, $item);
 
         $request = $this->get('request');
-        
+
         // Si l'utilisateur soumet le formulaire
         if ('POST' == $request->getMethod()) {
-            
             // On bind les données du form
             $form->handleRequest($request);
 
             //si le formulaire est valide
-            if ($form->isValid()) {   
-                
+            if ($form->isValid()) {
                 //test ajout ou edition
                 $new = is_null($item->getId()) ? true : false;
 
                 //on manipule les paramètres de la route
-                $item->setRouteParameters( $this->getPostRouteParametres( $request ) );
+                $item->setRouteParameters($this->getPostRouteParametres($request));
 
                 // On utilise notre Manager pour gérer la sauvegarde de l'objet
                 $this->get('nodevo_menu.manager.item')->save($item);
-                $this->get('nodevo_menu.manager.item')->updateOrder( $item );
+                $this->get('nodevo_menu.manager.item')->updateOrder($item);
 
                 // Menu
-                $this->get('nodevo_menu.manager.menu')->getTree( $item->getMenu(), true );
+                $this->get('nodevo_menu.manager.menu')->getTree($item->getMenu(), true);
 
                 // On envoi une 'flash' pour indiquer à l'utilisateur que l'entité est ajoutée
-                $this->get('session')->getFlashBag()->add( ($new ? 'success' : 'info') , 'Element ' . ($new ? 'ajouté.' : 'mis à jour.') ); 
-                
+                $this->get('session')->getFlashBag()->add(($new ? 'success' : 'info'), 'Element ' . ($new ? 'ajouté.' : 'mis à jour.'));
+
                 $do = $request->request->get('do');
 
-                if( $do == "save-close" )
-                    $url = $this->generateUrl('nodevo_menu_item', array('id' => $item->getMenu()->getId()) );
-                else
-                    $url = $this->generateUrl('nodevo_menu_item_edit', array('id' => $item->getId()) );
+                if ($do == 'save-close') {
+                    $url = $this->generateUrl('nodevo_menu_item', ['id' => $item->getMenu()->getId()]);
+                } else {
+                    $url = $this->generateUrl('nodevo_menu_item_edit', ['id' => $item->getId()]);
+                }
 
-                return $this->redirect( $url );
+                return $this->redirect($url);
             }
         }
 
-        return $this->render( $view , array(
+        return $this->render($view, [
             'form' => $form->createView(),
-            'item' => $item
-        ));
+            'item' => $item,
+        ]);
     }
 
     /**
      * Retourne les paramètres de route saisis par l'utilisateur lors de l'édition d'un lien de menu.
-     * 
+     *
      * @return array Tableau associatif NomParametre => ValeurParametre
      */
-    private function getPostRouteParametres( $request )
+    private function getPostRouteParametres($request)
     {
-        $datas           = $request->request->get('nodevo_menu_item');
-        $routeParameters = isset($datas['routeParameters']) ? $datas['routeParameters'] : array();
-        $params          = array();
+        $datas = $request->request->get('nodevo_menu_item');
+        $routeParameters = isset($datas['routeParameters']) ? $datas['routeParameters'] : [];
+        $params = [];
 
-        foreach($routeParameters as $key => $val)
-            $params[ str_replace('routeParameters_', '', $key) ] = $val;
+        foreach ($routeParameters as $key => $val) {
+            $params[str_replace('routeParameters_', '', $key)] = $val;
+        }
 
         return json_encode($params);
     }

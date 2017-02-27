@@ -1,4 +1,5 @@
 <?php
+
 namespace HopitalNumerique\CommunautePratiqueBundle\Controller;
 
 use HopitalNumerique\CommunautePratiqueBundle\Entity\Groupe;
@@ -31,10 +32,10 @@ class PublicationController extends \Symfony\Bundle\FrameworkBundle\Controller\C
 
         return $this->render(
             'HopitalNumeriqueCommunautePratiqueBundle:Publication:list.html.twig',
-            array(
+            [
                 'groupesPager' => $groupesPager,
-                'groupes' => $groupes
-            )
+                'groupes' => $groupes,
+            ]
         );
     }
 
@@ -45,12 +46,12 @@ class PublicationController extends \Symfony\Bundle\FrameworkBundle\Controller\C
     {
         return $this->render(
             'HopitalNumeriqueCommunautePratiqueBundle:Publication:listByGroupe.html.twig',
-            array(
+            [
                 'communautePratiqueUrl' => $this->get('communautepratique_router')->getUrl(),
                 'groupe' => $groupe,
                 'groupes' => $this->container->get('hopitalnumerique_communautepratique.manager.groupe')
-                    ->findWithPublications()
-            )
+                    ->findWithPublications(),
+            ]
         );
     }
 }

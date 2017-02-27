@@ -43,9 +43,8 @@ class SuggestionConverter
         $this->entityManager = $entityManager;
     }
 
-
     /**
-     * Converts a Suggestion entity to an Objet entity
+     * Converts a Suggestion entity to an Objet entity.
      *
      * @param Suggestion $suggestion
      *
@@ -108,13 +107,12 @@ class SuggestionConverter
         $ind = 1;
 
         while (count($this->objetManager->findBy(['alias' => $uniqueAlias])) > 0) {
-            $ind++;
+            ++$ind;
             $uniqueAlias = $alias . '-' . $ind;
         }
 
         return $uniqueAlias;
     }
-
 
     private function slugify($text)
     {

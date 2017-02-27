@@ -15,6 +15,7 @@ class SynthesisRepository extends EntityRepository
 {
     /**
      * @param $id
+     *
      * @return Synthesis|null
      */
     public function getFullyLoadedSynthesis($id)
@@ -28,7 +29,7 @@ class SynthesisRepository extends EntityRepository
             ->leftJoin('entries.user', 'entries_user')
             ->where('synthesis.id = :id')
             ->setParameters([
-                'id' => $id
+                'id' => $id,
             ])
         ;
 
@@ -36,9 +37,10 @@ class SynthesisRepository extends EntityRepository
     }
 
     /**
-     * Retourne les synthèses de l'utilisateur et les synthèses qui lui ont été partagées
+     * Retourne les synthèses de l'utilisateur et les synthèses qui lui ont été partagées.
      *
      * @param User $user
+     *
      * @return array
      */
     public function findByUser(User $user, Domaine $domain = null)
@@ -53,11 +55,12 @@ class SynthesisRepository extends EntityRepository
 
     /**
      * Retourne les synthèses de l'utilisateur et les synthèses qui lui ont été partagées
-     * pour l'autodiag passé en paramètre (et éventuellement le domaine)
+     * pour l'autodiag passé en paramètre (et éventuellement le domaine).
      *
-     * @param User $user
+     * @param User         $user
      * @param Domaine|null $domain
-     * @param Autodiag $autodiag
+     * @param Autodiag     $autodiag
+     *
      * @return array
      */
     public function findByUserAndAutodiag(User $user, Autodiag $autodiag, Domaine $domain = null)
@@ -72,10 +75,11 @@ class SynthesisRepository extends EntityRepository
     }
 
     /**
-     * Find comparable syntheses for user and by domaine
+     * Find comparable syntheses for user and by domaine.
      *
-     * @param User $user
+     * @param User         $user
      * @param Domaine|null $domaine
+     *
      * @return array
      */
     public function findComparable(User $user, Domaine $domaine = null, Autodiag $autodiag = null)
@@ -86,11 +90,12 @@ class SynthesisRepository extends EntityRepository
     }
 
     /**
-     * Find syntheses comparable to $reference
+     * Find syntheses comparable to $reference.
      *
-     * @param Synthesis $reference
-     * @param User $user
+     * @param Synthesis    $reference
+     * @param User         $user
      * @param Domaine|null $domaine
+     *
      * @return array
      */
     public function findComparableWith(Synthesis $reference, User $user, Domaine $domaine = null)
@@ -107,22 +112,25 @@ class SynthesisRepository extends EntityRepository
     }
 
     /**
-     * Check if there is more than one comparable Synthesis for autodiag and user
+     * Check if there is more than one comparable Synthesis for autodiag and user.
      *
-     * @param User $user
+     * @param User     $user
      * @param Autodiag $autodiag
+     *
      * @return bool
      */
     public function hasComparableForAutodiag(User $user, Autodiag $autodiag)
     {
         $qb = $this->createComparableQueryBuilder($user, null, $autodiag);
+
         return count($qb->getQuery()->getArrayResult()) > 1;
     }
 
     /**
-     * Retourne les synthèses qui contiennent l'entry en paramètre
+     * Retourne les synthèses qui contiennent l'entry en paramètre.
      *
      * @param AutodiagEntry $entry
+     *
      * @return array
      */
     public function findSynthesesByEntry(AutodiagEntry $entry)
@@ -145,11 +153,11 @@ class SynthesisRepository extends EntityRepository
         $qb = $this->createQueryBuilder('synthesis');
         $qb
             ->select(
-                "synthesis",
-                "user",
-                "etablissement",
-                "shares",
-                "entries"
+                'synthesis',
+                'user',
+                'etablissement',
+                'shares',
+                'entries'
             )
             ->leftJoin('synthesis.user', 'user')
             ->leftJoin('user.etablissementRattachementSante', 'etablissement')
@@ -158,7 +166,7 @@ class SynthesisRepository extends EntityRepository
             ->where('synthesis.autodiag = :autodiag')
             ->andWhere('synthesis.createdFrom IS NULL')
             ->setParameters([
-                'autodiag' => $autodiag->getId()
+                'autodiag' => $autodiag->getId(),
             ])
         ;
 
@@ -193,13 +201,15 @@ class SynthesisRepository extends EntityRepository
         foreach ($result as &$one) {
             $one = $one['id'];
         }
+
         return $result;
     }
 
     /**
-     * Find syntheses with only one entry
+     * Find syntheses with only one entry.
      *
      * @param $ids
+     *
      * @return array
      */
     public function findSimpleByIds($ids)
@@ -216,9 +226,10 @@ class SynthesisRepository extends EntityRepository
     }
 
     /**
-     * Find syntheses ids with only one entry
+     * Find syntheses ids with only one entry.
      *
      * @param $ids
+     *
      * @return array
      */
     public function findSimpleIdsByIds($ids)

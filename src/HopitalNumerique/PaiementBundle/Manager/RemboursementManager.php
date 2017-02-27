@@ -18,7 +18,6 @@ class RemboursementManager extends BaseManager
      */
     private $forfaitTransportService;
 
-
     /**
      * Constructeur.
      */
@@ -28,29 +27,28 @@ class RemboursementManager extends BaseManager
         $this->forfaitTransportService = $forfaitTransportService;
     }
 
-
     /**
-     * Remet en forme les données pour le tableau de suivi des paiements
+     * Remet en forme les données pour le tableau de suivi des paiements.
      *
      * @param array $interventions Les interventions
      * @param array $formations    Les formations
      *
      * @return array
      */
-    public function calculPrice( $interventions, $formations )
+    public function calculPrice($interventions, $formations)
     {
         //build Table Remboursement
         $prix = $this->getPrixRemboursements();
 
         //build Array for Table front
-        $results = array();
+        $results = [];
 
         //Manage interventions
         foreach ($interventions as $intervention) {
-            $row = new \StdClass;
-            
+            $row = new \StdClass();
+
             //build Referent + etablissement
-            $referent      = $intervention->getReferent();
+            $referent = $intervention->getReferent();
             $etablissement = $referent->getEtablissementRattachementSante() ? $referent->getEtablissementRattachementSante()->getNom() : $referent->getAutreStructureRattachementSante();
 
             if (null === $intervention->getReferent()->getEtablissementRattachementSante() || null === $intervention->getAmbassadeur()->getEtablissementRattachementSante()) {
@@ -63,59 +61,53 @@ class RemboursementManager extends BaseManager
             }
 
             //build objet
-            $row->id       = $intervention->getId();
-            $row->date     = $intervention->getDateCreation();
+            $row->id = $intervention->getId();
+            $row->date = $intervention->getDateCreation();
             $row->referent = $referent->getPrenomNom();
-            $row->etab     = $etablissement;
-            $row->type     = 'Intervention : ' . $intervention->getInterventionType()->getLibelle();
-            $row->discr    = 'intervention';
+            $row->etab = $etablissement;
+            $row->type = 'Intervention : ' . $intervention->getInterventionType()->getLibelle();
+            $row->discr = 'intervention';
 
             //calcul total
             $ambassadeurRegion = (null === $intervention->getAmbassadeur()->getRegion() ? '0' : $intervention->getAmbassadeur()->getRegion()->getId());
-            $row->total        = array('prix' => $prix['interventions'][$ambassadeurRegion]['total'] + $forfaitTransport);
-            
+            $row->total = ['prix' => $prix['interventions'][$ambassadeurRegion]['total'] + $forfaitTransport];
+
             $results[] = $row;
         }
 
         //Manage fomartions (inscriptions to sessions)
         $lastInscription = null;
-        foreach ($formations as $formation) 
-        {
-            if( is_null($formation->getUser()) 
-                || is_null($formation->getUser()->getRegion()) 
+        foreach ($formations as $formation) {
+            if (is_null($formation->getUser())
+                || is_null($formation->getUser()->getRegion())
                 || !array_key_exists($formation->getUser()->getRegion()->getId(), $prix['formations'])
-            )
-            {
+            ) {
                 continue;
             }
 
-            $row = new \StdClass;
+            $row = new \StdClass();
 
             //build objet
-            $row->id       = $formation->getId();
-            $row->date     = $formation->getSession()->getDateSession();
+            $row->id = $formation->getId();
+            $row->date = $formation->getSession()->getDateSession();
             $row->referent = '-';
-            $row->etab     = '-';
-            $row->type     = 'Module : ' . $formation->getSession()->getModule()->getTitre();
-            $row->discr    = 'formation';
-            $row->total    = array(
-                'prix'          => $prix['formations'][$formation->getUser()->getRegion()->getId()],
+            $row->etab = '-';
+            $row->type = 'Module : ' . $formation->getSession()->getModule()->getTitre();
+            $row->discr = 'formation';
+            $row->total = [
+                'prix' => $prix['formations'][$formation->getUser()->getRegion()->getId()],
                 'hasSupplement' => true,
-            );
+            ];
 
-            if(is_null($lastInscription))
-            {
+            if (is_null($lastInscription)) {
                 $lastInscription = $formation;
-            }
-            else
-            {
+            } else {
                 //Test si la date de la session courante et celle de la session d'avant (s'il y en a une) sont consécutives.
-                if(intval($formation->getSession()->getDateSession()->diff($lastInscription->getSession()->getDateSession())->days) == 1
+                if (intval($formation->getSession()->getDateSession()->diff($lastInscription->getSession()->getDateSession())->days) == 1
                     // Ou si il y a un écart de 2 jours mais que la session précedente à durée plus d'une journée
-                    || (intval($formation->getSession()->getDateSession()->diff($lastInscription->getSession()->getDateSession())->days) == 2 
-                            && $lastInscription->getSession()->getDuree()->getId() > 401) )
-                {
-                    $row->total['prix']          = 140;
+                    || (intval($formation->getSession()->getDateSession()->diff($lastInscription->getSession()->getDateSession())->days) == 2
+                            && $lastInscription->getSession()->getDuree()->getId() > 401)) {
+                    $row->total['prix'] = 140;
                     $row->total['hasSupplement'] = false;
                 }
                 $lastInscription = $formation;
@@ -123,11 +115,10 @@ class RemboursementManager extends BaseManager
 
             //TODO : sortir le 140
             //Ajout de 140€ si la durée de la session est supérieur à 1jour (max 2 jour en base)
-            if( $formation->getSession()->getDuree()->getId() > 401 )
-            {
+            if ($formation->getSession()->getDuree()->getId() > 401) {
                 $row->total['prix'] += 140;
             }
-            
+
             $results[] = $row;
         }
 
@@ -135,26 +126,26 @@ class RemboursementManager extends BaseManager
     }
 
     /**
-     * Retorune un tableau contenant les prix des interventions / formations
+     * Retorune un tableau contenant les prix des interventions / formations.
      *
      * @return array
      */
     private function getPrixRemboursements()
     {
         $remboursements = $this->findAll();
-        $prix           = array();
-        foreach($remboursements as $remboursement) {
+        $prix = [];
+        foreach ($remboursements as $remboursement) {
             $total = intval($remboursement->getRepas() + $remboursement->getGestion());
 
-            $prix['interventions'][ $remboursement->getRegion()->getId() ]['total']        = $total;
-            $prix['formations'][ $remboursement->getRegion()->getId() ]                    = is_null($remboursement->getSupplement()) ? null : intval($total + $remboursement->getSupplement());
+            $prix['interventions'][$remboursement->getRegion()->getId()]['total'] = $total;
+            $prix['formations'][$remboursement->getRegion()->getId()] = is_null($remboursement->getSupplement()) ? null : intval($total + $remboursement->getSupplement());
         }
 
         return $prix;
     }
 
     /**
-     * Retourne la liste des remboursements ordonnées par région
+     * Retourne la liste des remboursements ordonnées par région.
      *
      * @return array
      */

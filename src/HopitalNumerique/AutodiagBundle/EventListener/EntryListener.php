@@ -2,7 +2,6 @@
 
 namespace HopitalNumerique\AutodiagBundle\EventListener;
 
-use HopitalNumerique\AutodiagBundle\Entity\AutodiagEntry;
 use HopitalNumerique\AutodiagBundle\Entity\AutodiagEntry\Value;
 use HopitalNumerique\AutodiagBundle\Event\EntryUpdatedEvent;
 use HopitalNumerique\AutodiagBundle\Repository\Autodiag\ContainerRepository;
@@ -17,15 +16,15 @@ class EntryListener
 
     /**
      * EntryListener constructor.
+     *
      * @param ContainerRepository $containerRepository
-     * @param ScoreCalculator $calculator
+     * @param ScoreCalculator     $calculator
      */
     public function __construct(ContainerRepository $containerRepository, ScoreCalculator $calculator)
     {
         $this->containerRepository = $containerRepository;
         $this->calculator = $calculator;
     }
-
 
     public function onEntryUpdated(EntryUpdatedEvent $event)
     {

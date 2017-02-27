@@ -1,4 +1,5 @@
 <?php
+
 namespace HopitalNumerique\ObjetBundle\DependencyInjection;
 
 use HopitalNumerique\CoreBundle\DependencyInjection\Entity;
@@ -12,15 +13,14 @@ use HopitalNumerique\ObjetBundle\Manager\ObjetManager;
 class ProductionLiee
 {
     /**
-     * @var integer Nombre de caractères max pour le titre
+     * @var int Nombre de caractères max pour le titre
      */
     const TITLE_MAXLENGTH = 100;
 
     /**
-     * @var integer Nombre de caractères max pour la description
+     * @var int Nombre de caractères max pour la description
      */
     const DESCRIPTION_MAXLENGTH = 100;
-
 
     /**
      * @var \HopitalNumerique\CoreBundle\DependencyInjection\Entity Entity
@@ -37,7 +37,6 @@ class ProductionLiee
      */
     private $contenuManager;
 
-
     /**
      * Constructeur.
      */
@@ -47,7 +46,6 @@ class ProductionLiee
         $this->objetManager = $objetManager;
         $this->contenuManager = $contenuManager;
     }
-
 
     /**
      * Reprise de formatteProductionsLiees().
@@ -94,7 +92,7 @@ class ProductionLiee
             'subtitle' => $this->entity->getSubtitleByEntity($entity),
             'category' => $this->entity->getCategoryByEntity($entity),
             'description' => null,
-            'url' => $this->entity->getFrontUrlByEntity($entity)
+            'url' => $this->entity->getFrontUrlByEntity($entity),
         ];
     }
 }

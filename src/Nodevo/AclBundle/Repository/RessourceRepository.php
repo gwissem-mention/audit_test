@@ -5,9 +5,8 @@ namespace Nodevo\AclBundle\Repository;
 use Doctrine\ORM\EntityRepository;
 
 /**
- * RessourceRepository
+ * RessourceRepository.
  */
 class RessourceRepository extends EntityRepository
 {
-    
 }

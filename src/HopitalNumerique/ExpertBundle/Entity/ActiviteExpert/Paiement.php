@@ -1,4 +1,5 @@
 <?php
+
 namespace HopitalNumerique\ExpertBundle\Entity\ActiviteExpert;
 
 use Doctrine\ORM\Mapping as ORM;
@@ -15,7 +16,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 class Paiement
 {
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="eap_id", type="integer", nullable=false, options={"unsigned"=true})
      * @ORM\Id()
@@ -36,7 +37,7 @@ class Paiement
     private $expert;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="eap_vacations_count", type="smallint", nullable=false, options={"unsigned"=true})
      * @Assert\Range(
@@ -46,11 +47,10 @@ class Paiement
      */
     private $vacationsCount;
 
-
     /**
-     * Get id
+     * Get id.
      *
-     * @return integer
+     * @return int
      */
     public function getId()
     {
@@ -58,7 +58,7 @@ class Paiement
     }
 
     /**
-     * Set vacationsCount
+     * Set vacationsCount.
      *
      * @param string $vacationsCount
      *
@@ -72,7 +72,7 @@ class Paiement
     }
 
     /**
-     * Get vacationsCount
+     * Get vacationsCount.
      *
      * @return string
      */
@@ -82,7 +82,7 @@ class Paiement
     }
 
     /**
-     * Set activiteExpert
+     * Set activiteExpert.
      *
      * @param \HopitalNumerique\ExpertBundle\Entity\ActiviteExpert $activiteExpert
      *
@@ -96,7 +96,7 @@ class Paiement
     }
 
     /**
-     * Get activiteExpert
+     * Get activiteExpert.
      *
      * @return \HopitalNumerique\ExpertBundle\Entity\ActiviteExpert
      */
@@ -106,7 +106,7 @@ class Paiement
     }
 
     /**
-     * Set expert
+     * Set expert.
      *
      * @param \HopitalNumerique\UserBundle\Entity\User $expert
      *
@@ -120,7 +120,7 @@ class Paiement
     }
 
     /**
-     * Get expert
+     * Get expert.
      *
      * @return \HopitalNumerique\UserBundle\Entity\User
      */

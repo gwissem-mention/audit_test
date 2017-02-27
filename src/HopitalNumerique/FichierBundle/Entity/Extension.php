@@ -1,4 +1,5 @@
 <?php
+
 namespace HopitalNumerique\FichierBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
@@ -13,7 +14,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 class Extension
 {
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="ext_id", type="smallint", nullable=false, options={"unsigned":true})
      * @ORM\Id()
@@ -38,11 +39,10 @@ class Extension
      */
     private $fichierType;
 
-
     /**
-     * Get id
+     * Get id.
      *
-     * @return integer 
+     * @return int
      */
     public function getId()
     {
@@ -50,9 +50,10 @@ class Extension
     }
 
     /**
-     * Set valeur
+     * Set valeur.
      *
      * @param string $valeur
+     *
      * @return Extension
      */
     public function setValeur($valeur)
@@ -63,9 +64,9 @@ class Extension
     }
 
     /**
-     * Get valeur
+     * Get valeur.
      *
-     * @return string 
+     * @return string
      */
     public function getValeur()
     {
@@ -73,9 +74,10 @@ class Extension
     }
 
     /**
-     * Set fichierType
+     * Set fichierType.
      *
      * @param \HopitalNumerique\FichierBundle\Entity\FichierType $fichierType
+     *
      * @return Extension
      */
     public function setFichierType(\HopitalNumerique\FichierBundle\Entity\FichierType $fichierType)
@@ -86,9 +88,9 @@ class Extension
     }
 
     /**
-     * Get fichierType
+     * Get fichierType.
      *
-     * @return \HopitalNumerique\FichierBundle\Entity\FichierType 
+     * @return \HopitalNumerique\FichierBundle\Entity\FichierType
      */
     public function getFichierType()
     {

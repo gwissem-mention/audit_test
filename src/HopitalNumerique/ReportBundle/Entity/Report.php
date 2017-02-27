@@ -4,13 +4,12 @@ namespace HopitalNumerique\ReportBundle\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
-
 //Asserts Stuff
 use Symfony\Component\Validator\Constraints as Assert;
 use Nodevo\ToolsBundle\Validator\Constraints as Nodevo;
 
 /**
- * Report
+ * Report.
  *
  * @ORM\Table(name="hn_report")
  * @ORM\Entity(repositoryClass="HopitalNumerique\ReportBundle\Repository\ReportRepository")
@@ -18,7 +17,7 @@ use Nodevo\ToolsBundle\Validator\Constraints as Nodevo;
 class Report
 {
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
@@ -65,10 +64,10 @@ class Report
     protected $user;
 
     /**
-    * @var boolean
-    *
-    * @ORM\Column(name="archive", type="boolean", length=255)
-    */
+     * @var bool
+     *
+     * @ORM\Column(name="archive", type="boolean", length=255)
+     */
     protected $archive;
 
     /**
@@ -82,28 +81,26 @@ class Report
 
     public function __construct()
     {
-        $this->date    = new \DateTime();
+        $this->date = new \DateTime();
         $this->archive = false;
         $this->domaines = new ArrayCollection();
     }
 
-
     /**
-     * Get id
+     * Get id.
      *
-     * @return integer 
+     * @return int
      */
     public function getId()
     {
         return $this->id;
     }
 
-    
-
     /**
-     * Set date
+     * Set date.
      *
      * @param \DateTime $date
+     *
      * @return Report
      */
     public function setDate($date)
@@ -114,9 +111,9 @@ class Report
     }
 
     /**
-     * Get date
+     * Get date.
      *
-     * @return \DateTime 
+     * @return \DateTime
      */
     public function getDate()
     {
@@ -124,9 +121,10 @@ class Report
     }
 
     /**
-     * Set url
+     * Set url.
      *
      * @param string $url
+     *
      * @return Report
      */
     public function setUrl($url)
@@ -137,9 +135,9 @@ class Report
     }
 
     /**
-     * Get url
+     * Get url.
      *
-     * @return string 
+     * @return string
      */
     public function getUrl()
     {
@@ -147,9 +145,10 @@ class Report
     }
 
     /**
-     * Set observations
+     * Set observations.
      *
      * @param string $observations
+     *
      * @return Report
      */
     public function setObservations($observations)
@@ -160,9 +159,9 @@ class Report
     }
 
     /**
-     * Get observations
+     * Get observations.
      *
-     * @return string 
+     * @return string
      */
     public function getObservations()
     {
@@ -170,9 +169,10 @@ class Report
     }
 
     /**
-     * Set userAgent
+     * Set userAgent.
      *
      * @param string $userAgent
+     *
      * @return Report
      */
     public function setUserAgent($userAgent)
@@ -183,9 +183,9 @@ class Report
     }
 
     /**
-     * Get userAgent
+     * Get userAgent.
      *
-     * @return string 
+     * @return string
      */
     public function getUserAgent()
     {
@@ -193,9 +193,10 @@ class Report
     }
 
     /**
-     * Set archive
+     * Set archive.
      *
-     * @param boolean $archive
+     * @param bool $archive
+     *
      * @return Report
      */
     public function setArchive($archive)
@@ -206,9 +207,9 @@ class Report
     }
 
     /**
-     * Get archive
+     * Get archive.
      *
-     * @return boolean 
+     * @return bool
      */
     public function getArchive()
     {
@@ -216,9 +217,10 @@ class Report
     }
 
     /**
-     * Set user
+     * Set user.
      *
      * @param \HopitalNumerique\UserBundle\Entity\User $user
+     *
      * @return Report
      */
     public function setUser(\HopitalNumerique\UserBundle\Entity\User $user = null)
@@ -229,9 +231,9 @@ class Report
     }
 
     /**
-     * Get user
+     * Get user.
      *
-     * @return \HopitalNumerique\UserBundle\Entity\User 
+     * @return \HopitalNumerique\UserBundle\Entity\User
      */
     public function getUser()
     {
@@ -239,9 +241,10 @@ class Report
     }
 
     /**
-     * Set one domaine and delete other
+     * Set one domaine and delete other.
      *
      * @param \HopitalNumerique\DomaineBundle\Entity\Domaine $domaine
+     *
      * @return Report
      */
     public function setDomaine(\HopitalNumerique\DomaineBundle\Entity\Domaine $domaine)
@@ -253,9 +256,10 @@ class Report
     }
 
     /**
-     * Add domaines
+     * Add domaines.
      *
      * @param \HopitalNumerique\DomaineBundle\Entity\Domaine $domaines
+     *
      * @return Report
      */
     public function addDomaine(\HopitalNumerique\DomaineBundle\Entity\Domaine $domaines)
@@ -266,7 +270,7 @@ class Report
     }
 
     /**
-     * Remove domaines
+     * Remove domaines.
      *
      * @param \HopitalNumerique\DomaineBundle\Entity\Domaine $domaines
      */
@@ -276,9 +280,9 @@ class Report
     }
 
     /**
-     * Get domaines
+     * Get domaines.
      *
-     * @return \Doctrine\Common\Collections\Collection 
+     * @return \Doctrine\Common\Collections\Collection
      */
     public function getDomaines()
     {

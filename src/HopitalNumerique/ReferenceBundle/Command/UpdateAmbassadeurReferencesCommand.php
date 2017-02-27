@@ -11,11 +11,10 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
 /**
- * Update ambassadeur references
+ * Update ambassadeur references.
  */
 class UpdateAmbassadeurReferencesCommand extends ContainerAwareCommand
 {
-
     private $profile = [
         283 => 283, // Administratif
         284 => 284, // Informatique
@@ -46,7 +45,7 @@ class UpdateAmbassadeurReferencesCommand extends ContainerAwareCommand
     {
         $this
             ->setName('hn:reference:ambassadeur')
-            ->setDescription("Met à jour les références des ambassadeurs en fonction de leurs données personnelles")
+            ->setDescription('Met à jour les références des ambassadeurs en fonction de leurs données personnelles')
         ;
     }
 
@@ -105,7 +104,7 @@ class UpdateAmbassadeurReferencesCommand extends ContainerAwareCommand
                 ->findOneBy([
                     'entityType' => Entity::ENTITY_TYPE_AMBASSADEUR,
                     'entityId' => $ambassadeur->getId(),
-                    'reference' => $this->profile[$profileId]
+                    'reference' => $this->profile[$profileId],
                 ]);
 
             if (null === $profileReference) {
@@ -116,8 +115,10 @@ class UpdateAmbassadeurReferencesCommand extends ContainerAwareCommand
                 $profileReference->setReference($this->profile[$profileId]);
                 $profileReference->setPrimary(true);
             }
+
             return $profileReference;
         }
+
         return null;
     }
 
@@ -141,7 +142,7 @@ class UpdateAmbassadeurReferencesCommand extends ContainerAwareCommand
                 ->findOneBy([
                     'entityType' => Entity::ENTITY_TYPE_AMBASSADEUR,
                     'entityId' => $ambassadeur->getId(),
-                    'reference' => $this->typeEtablissement[$typeId]
+                    'reference' => $this->typeEtablissement[$typeId],
                 ]);
 
             if (null === $etablissementReference) {
@@ -152,8 +153,10 @@ class UpdateAmbassadeurReferencesCommand extends ContainerAwareCommand
                 $etablissementReference->setReference($this->typeEtablissement[$typeId]);
                 $etablissementReference->setPrimary(true);
             }
+
             return $etablissementReference;
         }
+
         return null;
     }
 
@@ -170,7 +173,7 @@ class UpdateAmbassadeurReferencesCommand extends ContainerAwareCommand
                     ->findOneBy([
                         'entityType' => Entity::ENTITY_TYPE_AMBASSADEUR,
                         'entityId' => $ambassadeur->getId(),
-                        'reference' => $this->activity[$activityId]
+                        'reference' => $this->activity[$activityId],
                     ]);
 
                 if (null === $etablissementReference) {
@@ -203,7 +206,7 @@ class UpdateAmbassadeurReferencesCommand extends ContainerAwareCommand
                 ->findOneBy([
                     'entityType' => Entity::ENTITY_TYPE_AMBASSADEUR,
                     'entityId' => $ambassadeur->getId(),
-                    'reference' => $this->role[$roleId]
+                    'reference' => $this->role[$roleId],
                 ]);
 
             if (null === $etablissementReference) {
@@ -214,8 +217,10 @@ class UpdateAmbassadeurReferencesCommand extends ContainerAwareCommand
                 $etablissementReference->setReference($this->role[$roleId]);
                 $etablissementReference->setPrimary(true);
             }
+
             return $etablissementReference;
         }
+
         return null;
     }
 

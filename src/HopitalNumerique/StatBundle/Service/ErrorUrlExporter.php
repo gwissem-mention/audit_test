@@ -57,6 +57,7 @@ class ErrorUrlExporter
         $sheet = $excel->createSheet();
         $sheet->setTitle($title);
         $sheet->setCodeName($title);
+
         return $sheet;
     }
 
@@ -69,9 +70,9 @@ class ErrorUrlExporter
         $col = 'A';
         foreach ($row as $cell) {
             $sheet->setCellValue($col . $this->row, $cell);
-            $col++;
+            ++$col;
         }
-        $this->row++;
+        ++$this->row;
     }
 
     /**
@@ -133,9 +134,8 @@ class ErrorUrlExporter
      */
     private function writeErrorUrlRow(\PHPExcel_Worksheet $sheet, ErrorUrl $errorUrl)
     {
-       
-        $http_codes = array(
-            0   => 'Bad Request',
+        $http_codes = [
+            0 => 'Bad Request',
             100 => 'Continue',
             101 => 'Switching Protocols',
             102 => 'Processing',
@@ -190,9 +190,9 @@ class ErrorUrlExporter
             506 => 'Variant Also Negotiates',
             507 => 'Insufficient Storage',
             509 => 'Bandwidth Limit Exceeded',
-            510 => 'Not Extended'
-        );  
- 
+            510 => 'Not Extended',
+        ];
+
         $errorUrlData = [];
 
         $errorUrlData[] = $errorUrl->getDomain()->getNom();
@@ -201,9 +201,9 @@ class ErrorUrlExporter
         if (!is_null($errorUrl->getContent())) {
             $errorUrlData[] = $errorUrl->getContent()->getId();
             $errorUrlData[] = $errorUrl->getContent()->getTitre();
-            $errorUrlData[] = $errorUrl->getDomain()->getUrl().'/publication/'.$errorUrl->getObject()->getId()
-                              .'/'
-                              .$errorUrl->getContent()->getId();
+            $errorUrlData[] = $errorUrl->getDomain()->getUrl() . '/publication/' . $errorUrl->getObject()->getId()
+                              . '/'
+                              . $errorUrl->getContent()->getId();
         } else {
             $errorUrlData[] = null;
             $errorUrlData[] = null;

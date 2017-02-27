@@ -5,16 +5,16 @@ namespace HopitalNumerique\EtablissementBundle\Repository;
 use Doctrine\ORM\EntityRepository;
 
 /**
- * EtablissementRepository
+ * EtablissementRepository.
  */
 class EtablissementRepository extends EntityRepository
 {
     /**
-     * Récupère les données pour l'export CSV
+     * Récupère les données pour l'export CSV.
      *
      * @return QueryBuilder
      */
-    public function getDatasForExport( $ids )
+    public function getDatasForExport($ids)
     {
         $qb = $this->_em->createQueryBuilder();
         $qb->select('etab')
@@ -22,7 +22,7 @@ class EtablissementRepository extends EntityRepository
             ->where('etab.id IN (:ids)')
             ->orderBy('etab.nom')
             ->setParameter('ids', $ids);
-            
+
         return $qb;
     }
 }

@@ -12,7 +12,7 @@ class ContractualisationManager extends BaseManager
     protected $class = 'HopitalNumerique\UserBundle\Entity\Contractualisation';
 
     /**
-     * Récupère le nombre de contractualisation à renouveler depuis 45jours
+     * Récupère le nombre de contractualisation à renouveler depuis 45jours.
      *
      * @return array
      */
@@ -22,7 +22,7 @@ class ContractualisationManager extends BaseManager
     }
 
     /**
-     * Récupère le nombre d'ambassadeur dont la contractualisation est à renouveler
+     * Récupère le nombre d'ambassadeur dont la contractualisation est à renouveler.
      *
      * @return array
      */
@@ -32,12 +32,12 @@ class ContractualisationManager extends BaseManager
     }
 
     /**
-     * Override : Récupère les contractualisations pour un utilisateur donné
+     * Override : Récupère les contractualisations pour un utilisateur donné.
      *
      * @return array
      */
-    public function getContractualisationForGrid( $condition = null )
+    public function getContractualisationForGrid($condition = null)
     {
-        return $this->getRepository()->getContractualisationForGrid( $condition )->getQuery()->getResult();
+        return $this->getRepository()->getContractualisationForGrid($condition)->getQuery()->getResult();
     }
 }

@@ -1,4 +1,5 @@
 <?php
+
 namespace HopitalNumerique\ModuleBundle\Manager;
 
 use HopitalNumerique\DomaineBundle\Entity\Domaine;
@@ -42,7 +43,7 @@ class InscriptionManager extends BaseManager
     }
 
     /**
-     * Override : Récupère les données pour le grid sous forme de tableau
+     * Override : Récupère les données pour le grid sous forme de tableau.
      *
      * @param \StdClass $condition
      *
@@ -50,7 +51,7 @@ class InscriptionManager extends BaseManager
      */
     public function getDatasForGrid(\StdClass $condition = null)
     {
-        $inscriptions = array();
+        $inscriptions = [];
 
         $results = $this->getRepository()->getDatasForGrid($condition)->getQuery()->getResult();
 
@@ -63,10 +64,10 @@ class InscriptionManager extends BaseManager
             //Découpage du prénom sur le tiret
             $tempsPrenom = explode('-', $prenom);
             //Unsset de la variable
-            $prenom = "";
+            $prenom = '';
             //Pour chaque bout on met une MAJ sur la première lettre de chaque mot, si il y en plusieurs c'est qu'il y avait un -
             foreach ($tempsPrenom as $key => $tempPrenom) {
-                $prenom .= ("" !== $prenom) ? ('-' . ucwords($tempPrenom)) : ucwords($tempPrenom);
+                $prenom .= ('' !== $prenom) ? ('-' . ucwords($tempPrenom)) : ucwords($tempPrenom);
             }
 
             // ----Mise en majuscule du nom
@@ -84,7 +85,7 @@ class InscriptionManager extends BaseManager
     }
 
     /**
-     * Override : Récupère les données pour le grid sous forme de tableau
+     * Override : Récupère les données pour le grid sous forme de tableau.
      *
      * @param null $condition
      *
@@ -92,28 +93,28 @@ class InscriptionManager extends BaseManager
      */
     public function getAllDatasForGrid($condition = null)
     {
-        $domainesIds  = $this->_userManager->getUserConnected()->getDomainesId();
+        $domainesIds = $this->_userManager->getUserConnected()->getDomainesId();
         $inscriptions = $this->getRepository()->getAllDatasForGrid($domainesIds, $condition)->getQuery()->getResult();
 
         $result = [];
 
         /**
-         * @var Inscription $inscription
+         * @var Inscription
          */
         foreach ($inscriptions as $key => $inscription) {
             $nomPrenom = $inscription->getUser()->getAppellation();
 
-            $nbInscritsAccepte   = 0;
+            $nbInscritsAccepte = 0;
             $nbInscritsEnAttente = 0;
-            $nbPlacesRestantes   = $inscription->getSession()->getNombrePlaceDisponible();
+            $nbPlacesRestantes = $inscription->getSession()->getNombrePlaceDisponible();
 
             /** @var Inscription $inscriptionDeLaSession */
             foreach ($inscription->getSession()->getInscriptions() as $inscriptionDeLaSession) {
                 if ($inscriptionDeLaSession->getEtatInscription()->getId() === 406) {
-                    $nbInscritsEnAttente++;
+                    ++$nbInscritsEnAttente;
                 } elseif ($inscriptionDeLaSession->getEtatInscription()->getId() === 407) {
-                    $nbInscritsAccepte++;
-                    $nbPlacesRestantes--;
+                    ++$nbInscritsAccepte;
+                    --$nbPlacesRestantes;
                 }
             }
 
@@ -126,26 +127,26 @@ class InscriptionManager extends BaseManager
             }
 
             $result[$key] = [
-                'id'                  => $inscription->getId(),
-                'userId'              => $inscription->getUser()->getId(),
-                'sessionId'           => $inscription->getSession()->getId(),
-                'moduleTitre'         => $inscription->getSession()->getModule()->getTitre(),
-                'dateSession'         => $inscription->getSession()->getDateSession(),
-                'nomPrenom'           => $nomPrenom,
-                'userRegion'          => (!is_null($inscription->getUser()->getRegion())) ? $inscription->getUser()
+                'id' => $inscription->getId(),
+                'userId' => $inscription->getUser()->getId(),
+                'sessionId' => $inscription->getSession()->getId(),
+                'moduleTitre' => $inscription->getSession()->getModule()->getTitre(),
+                'dateSession' => $inscription->getSession()->getDateSession(),
+                'nomPrenom' => $nomPrenom,
+                'userRegion' => (!is_null($inscription->getUser()->getRegion())) ? $inscription->getUser()
                                                                                                         ->getRegion()
                                                                                                         ->getLibelle()
                     : '',
-                'userProfil'          => (!is_null($inscription->getUser()->getProfilEtablissementSante()))
+                'userProfil' => (!is_null($inscription->getUser()->getProfilEtablissementSante()))
                     ? $inscription->getUser()->getProfilEtablissementSante()->getLibelle() : '',
-                'roles'               => $inscription->getUser()->getRoles(),
-                'commentaire'         => $inscription->getCommentaire(),
-                'etatInscription'     => $inscription->getEtatInscription()->getLibelle(),
-                'nbInscrits'          => $nbInscritsAccepte,
+                'roles' => $inscription->getUser()->getRoles(),
+                'commentaire' => $inscription->getCommentaire(),
+                'etatInscription' => $inscription->getEtatInscription()->getLibelle(),
+                'nbInscrits' => $nbInscritsAccepte,
                 'nbInscritsEnAttente' => $nbInscritsEnAttente,
-                'placeRestantes'      => $nbPlacesRestantes . '/' . $inscription->getSession()
+                'placeRestantes' => $nbPlacesRestantes . '/' . $inscription->getSession()
                                                                                 ->getNombrePlaceDisponible(),
-                'domaineNom'          => $domaineNom,
+                'domaineNom' => $domaineNom,
             ];
         }
 
@@ -153,7 +154,7 @@ class InscriptionManager extends BaseManager
     }
 
     /**
-     * Modifie l'état de toutes les inscriptions
+     * Modifie l'état de toutes les inscriptions.
      *
      * @param array     $inscriptions Liste des inscriptions
      * @param Reference $ref          RefStatut à mettre
@@ -170,7 +171,7 @@ class InscriptionManager extends BaseManager
     }
 
     /**
-     * Modifie l'état de toutes les participations
+     * Modifie l'état de toutes les participations.
      *
      * @param array     $inscriptions Liste des inscriptions
      * @param Reference $ref          RefStatut à mettre
@@ -187,7 +188,7 @@ class InscriptionManager extends BaseManager
     }
 
     /**
-     * Modifie l'état de toutes les évaluations
+     * Modifie l'état de toutes les évaluations.
      *
      * @param array     $inscriptions Liste des inscriptions
      * @param Reference $ref          RefStatut à mettre
@@ -203,7 +204,7 @@ class InscriptionManager extends BaseManager
     }
 
     /**
-     * Retourne la liste des inscriptions de l'utilisateur pour la création des factures
+     * Retourne la liste des inscriptions de l'utilisateur pour la création des factures.
      *
      * @param User $user L'utilisateur concerné
      *
@@ -215,7 +216,7 @@ class InscriptionManager extends BaseManager
     }
 
     /**
-     * Retourne la liste des inscriptions pour une facture ordonnée par date de session
+     * Retourne la liste des inscriptions pour une facture ordonnée par date de session.
      *
      * @param Facture $facture Identifiant de la facture
      *
@@ -227,7 +228,7 @@ class InscriptionManager extends BaseManager
     }
 
     /**
-     * Retourne un boolean pour dire si les inscriptions sont ok
+     * Retourne un boolean pour dire si les inscriptions sont ok.
      *
      * @param User $user L'utilisateur concerné
      *
@@ -253,7 +254,7 @@ class InscriptionManager extends BaseManager
     }
 
     /**
-     * Retourne la liste des inscriptions de l'utilisateur
+     * Retourne la liste des inscriptions de l'utilisateur.
      *
      * @param User $user L'utilisateur concerné
      *
@@ -265,28 +266,27 @@ class InscriptionManager extends BaseManager
     }
 
     /**
-     * Créer un tableau formaté pour l'export CSV
+     * Créer un tableau formaté pour l'export CSV.
      *
-     * @param array $modules liste des modules
-     * @param array $users   liste des utilisateurs
+     * @param array $modules     liste des modules
+     * @param array $users       liste des utilisateurs
      * @param       $primaryKeys
      *
      * @return type
      */
     public function buildForExport($modules, $users, $primaryKeys)
     {
-
         $colonnes = [
-            "nom"    => "Nom",
-            "prenom" => "Prénom",
+            'nom' => 'Nom',
+            'prenom' => 'Prénom',
         ];
 
         foreach ($modules as $module) {
-            $colonnes["module" . $module->getId()] = $module->getTitre();
+            $colonnes['module' . $module->getId()] = $module->getTitre();
         }
 
         $inscriptions = $this->getRepository()->getInscriptionsByUser($primaryKeys)->getQuery()->getResult();
-        $donnees      = [];
+        $donnees = [];
         foreach ($inscriptions as $inscription) {
             $donnees[$inscription['userId']][$inscription['moduleId']] = date_format($inscription['date'], 'd/m/Y');
         }
@@ -295,11 +295,11 @@ class InscriptionManager extends BaseManager
         foreach ($users as $user) {
             $row = [];
 
-            $row['nom']    = $user->getNom();
+            $row['nom'] = $user->getNom();
             $row['prenom'] = $user->getPrenom();
             foreach ($modules as $module) {
-                $row["module" . $module->getId()] = isset($donnees[$user->getId()][$module->getId()])
-                    ? $donnees[$user->getId()][$module->getId()] : "";
+                $row['module' . $module->getId()] = isset($donnees[$user->getId()][$module->getId()])
+                    ? $donnees[$user->getId()][$module->getId()] : '';
             }
 
             $datas[] = $row;
@@ -311,7 +311,7 @@ class InscriptionManager extends BaseManager
     /**
      * Retourne le nombre d'inscriptions pour l'année.
      *
-     * @param integer $annee Année
+     * @param int     $annee   Année
      * @param Domaine $domaine
      *
      * @return int Total
@@ -324,7 +324,7 @@ class InscriptionManager extends BaseManager
     /**
      * Retourne le nombre d'utilisateurs uniques inscrits pour l'année.
      *
-     * @param integer $annee Année
+     * @param int     $annee   Année
      * @param Domaine $domaine
      *
      * @return int Total

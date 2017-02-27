@@ -4,13 +4,10 @@ namespace HopitalNumerique\AutodiagBundle\Controller\Front;
 
 use HopitalNumerique\AutodiagBundle\Entity\Autodiag;
 use HopitalNumerique\AutodiagBundle\Entity\AutodiagEntry;
-use HopitalNumerique\AutodiagBundle\Form\Type\Synthesis\CompareType;
 use HopitalNumerique\AutodiagBundle\Form\Type\SynthesisType;
-use HopitalNumerique\AutodiagBundle\Model\Synthesis\CompareCommand;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
 
 class SynthesisController extends Controller
 {
@@ -33,14 +30,13 @@ class SynthesisController extends Controller
             return $this->redirectToRoute(
                 $noLayout ? 'hopitalnumerique_autodiag_entry_edit_no_layout' : 'hopitalnumerique_autodiag_entry_edit',
                 [
-                    'entry' => $synthesis->getEntries()->first()->getId()
+                    'entry' => $synthesis->getEntries()->first()->getId(),
                 ]
             );
         }
 
         return $this->createAccessDeniedException();
     }
-
 
     public function scorePollingAction(Request $request)
     {

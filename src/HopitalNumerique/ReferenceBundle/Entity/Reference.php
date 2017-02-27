@@ -12,7 +12,7 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Nodevo\ToolsBundle\Validator\Constraints as Nodevo;
 
 /**
- * Reference
+ * Reference.
  *
  * @ORM\Table(name="hn_reference")
  * @ORM\Entity(repositoryClass="HopitalNumerique\ReferenceBundle\Repository\ReferenceRepository")
@@ -22,59 +22,58 @@ class Reference
 {
     use ImageTrait;
 
-
     /**
-     * @var integer ID de Monsieur
+     * @var int ID de Monsieur
      */
     const CIVILITE_MONSIEUR_ID = 8;
 
     /**
-     * @var integer ID de Madame
+     * @var int ID de Madame
      */
     const CIVILITE_MADAME_ID = 9;
 
     /**
-     * @var integer ID de la catégorie d'article de la communauté de partiques
+     * @var int ID de la catégorie d'article de la communauté de partiques
      */
     const ARTICLE_CATEGORIE_COMMUNAUTE_DE_PRATIQUES_ID = 800;
 
     /**
-     * @var integer
+     * @var int
      */
     const STATUT_ACTIF_ID = 3;
 
     /**
-     * @var integer
+     * @var int
      */
     const STATUT_INACTIF_ID = 4;
 
     /**
-     * @var integer ID de production
+     * @var int ID de production
      */
     const CATEGORIE_OBJET_PRODUCTION_ID = 175;
 
     /**
-     * @var integer ID de point dur
+     * @var int ID de point dur
      */
     const CATEGORIE_OBJET_POINT_DUR_ID = 184;
 
     /**
-     * @var integer ID de Retour d'expérience, témoignage
+     * @var int ID de Retour d'expérience, témoignage
      */
     const CATEGORIE_OBJET_TEMOIGNAGE_ID = 176;
 
     /**
-     * @var integer ID de l'ETAT_SUGGESTION Demande
+     * @var int ID de l'ETAT_SUGGESTION Demande
      */
     const ETAT_SUGGESTION_DEMANDE_ID = 2005;
 
     /**
-     * @var integer ID de l'ETAT_SUGGESTION Validé
+     * @var int ID de l'ETAT_SUGGESTION Validé
      */
     const ETAT_SUGGESTION_VALIDE_ID = 2006;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="ref_id", type="integer", options = {"comment" = "ID de la référence"})
      * @ORM\Id
@@ -110,7 +109,7 @@ class Reference
     protected $etat;
 
     /**
-     * @var boolean
+     * @var bool
      *
      * @ORM\Column(name="ref_lock", type="boolean", options = {"comment" = "Référence verrouillée ?"})
      */
@@ -193,14 +192,14 @@ class Reference
     private $champLexicalNoms;
 
     /**
-     * @var boolean
+     * @var bool
      *
      * @ORM\Column(name="ref_reference", type="boolean", nullable=false, options={"comment"="Est une référence ?", "default"=false})
      */
     private $reference;
 
     /**
-     * @var boolean
+     * @var bool
      *
      * @ORM\Column(name="ref_in_recherche", type="boolean", nullable=false, options={"comment"="Présente dans la recherche ?", "default"=false})
      */
@@ -214,7 +213,7 @@ class Reference
     private $referenceLibelle;
 
     /**
-     * @var boolean
+     * @var bool
      *
      * @ORM\Column(name="ref_in_glossaire", type="boolean", nullable=false, options={"comment"="Présente dans le glossaire ?", "default"=false})
      */
@@ -242,7 +241,7 @@ class Reference
     private $descriptionCourte;
 
     /**
-     * @var boolean
+     * @var bool
      *
      * @ORM\Column(name="ref_casse_sensible", type="boolean", nullable=false, options={"default"=false})
      */
@@ -267,7 +266,6 @@ class Reference
      */
     protected $domainesDisplay;
 
-
     /**
      * Constructeur.
      */
@@ -285,11 +283,10 @@ class Reference
         $this->domainesDisplay = new ArrayCollection();
     }
 
-
     /**
-     * Get id
+     * Get id.
      *
-     * @return integer
+     * @return int
      */
     public function getId()
     {
@@ -297,9 +294,10 @@ class Reference
     }
 
     /**
-     * Set libelle
+     * Set libelle.
      *
      * @param string $libelle
+     *
      * @return Reference
      */
     public function setLibelle($libelle)
@@ -310,7 +308,7 @@ class Reference
     }
 
     /**
-     * Get libelle
+     * Get libelle.
      *
      * @return string
      */
@@ -320,9 +318,10 @@ class Reference
     }
 
     /**
-     * Set code
+     * Set code.
      *
      * @param string $code
+     *
      * @return Reference
      */
     public function setCode($code)
@@ -333,7 +332,7 @@ class Reference
     }
 
     /**
-     * Get code
+     * Get code.
      *
      * @return string
      */
@@ -343,9 +342,10 @@ class Reference
     }
 
     /**
-     * Set etat
+     * Set etat.
      *
      * @param Reference $etat
+     *
      * @return Reference
      */
     public function setEtat(Reference $etat)
@@ -356,7 +356,7 @@ class Reference
     }
 
     /**
-     * Get etat
+     * Get etat.
      *
      * @return Reference
      */
@@ -366,9 +366,9 @@ class Reference
     }
 
     /**
-     * Get lock
+     * Get lock.
      *
-     * @return boolean $lock
+     * @return bool $lock
      */
     public function getLock()
     {
@@ -376,9 +376,9 @@ class Reference
     }
 
     /**
-     * Set lock
+     * Set lock.
      *
-     * @param boolean $lock
+     * @param bool $lock
      */
     public function setLock($lock)
     {
@@ -386,7 +386,7 @@ class Reference
     }
 
     /**
-     * Get order
+     * Get order.
      *
      * @return float $order
      */
@@ -396,7 +396,7 @@ class Reference
     }
 
     /**
-     * Set order
+     * Set order.
      *
      * @param float $order
      */
@@ -406,16 +406,16 @@ class Reference
     }
 
     /**
-     * Retourne le niveau de profondeur de l'élément
+     * Retourne le niveau de profondeur de l'élément.
      *
-     * @param integer $currentLevel Niveau de profondeur actuel
-     * @param Reference $ref Profondeur concernée
+     * @param int       $currentLevel Niveau de profondeur actuel
+     * @param Reference $ref          Profondeur concernée
      *
-     * @return integer
+     * @return int
      */
     private function getLevel($currentLevel, Reference $ref)
     {
-        $currentLevel++;
+        ++$currentLevel;
         if ($ref->getParent()) {
             $currentLevel = $this->getLevel($currentLevel, $ref->getParent());
         }
@@ -426,7 +426,7 @@ class Reference
     /**
      * Retourne l'ID pour le statut actif.
      *
-     * @return integer ID pour le statut actif
+     * @return int ID pour le statut actif
      */
     public static function getStatutActifId()
     {
@@ -434,7 +434,7 @@ class Reference
     }
 
     /**
-     * Add parent
+     * Add parent.
      *
      * @param \HopitalNumerique\ReferenceBundle\Entity\Reference $parent
      *
@@ -448,7 +448,7 @@ class Reference
     }
 
     /**
-     * Remove parent
+     * Remove parent.
      *
      * @param \HopitalNumerique\ReferenceBundle\Entity\Reference $parent
      */
@@ -458,7 +458,7 @@ class Reference
     }
 
     /**
-     * Get parents
+     * Get parents.
      *
      * @return \Doctrine\Common\Collections\Collection
      */
@@ -468,7 +468,7 @@ class Reference
     }
 
     /**
-     * Get ID des parents
+     * Get ID des parents.
      *
      * @return \Doctrine\Common\Collections\Collection
      */
@@ -485,6 +485,7 @@ class Reference
 
     /**
      * @deprecated Should not be used, fallback for old behavior
+     *
      * @return Reference|null
      */
     public function getParent()
@@ -493,7 +494,7 @@ class Reference
     }
 
     /**
-     * Get first parent
+     * Get first parent.
      *
      * @return \HopitalNumerique\ReferenceBundle\Entity\Reference|null First parent
      */
@@ -510,7 +511,8 @@ class Reference
      * Retourne si la référence à tel parent.
      *
      * @param \HopitalNumerique\ReferenceBundle\Entity\Reference $referenceParent Parent
-     * @return boolean Si a parent
+     *
+     * @return bool Si a parent
      */
     public function hasParent(Reference $referenceParent)
     {
@@ -524,7 +526,7 @@ class Reference
     }
 
     /**
-     * Add enfant
+     * Add enfant.
      *
      * @param \HopitalNumerique\ReferenceBundle\Entity\Reference $enfant
      *
@@ -538,7 +540,7 @@ class Reference
     }
 
     /**
-     * Remove enfant
+     * Remove enfant.
      *
      * @param \HopitalNumerique\ReferenceBundle\Entity\Reference $enfant
      */
@@ -548,7 +550,7 @@ class Reference
     }
 
     /**
-     * Get enfants
+     * Get enfants.
      *
      * @return \Doctrine\Common\Collections\Collection
      */
@@ -558,9 +560,10 @@ class Reference
     }
 
     /**
-     * Add domaines
+     * Add domaines.
      *
      * @param \HopitalNumerique\DomaineBundle\Entity\Domaine $domaine
+     *
      * @return Reference
      */
     public function addDomaine(\HopitalNumerique\DomaineBundle\Entity\Domaine $domaine)
@@ -571,9 +574,10 @@ class Reference
     }
 
     /**
-     * Add domaines
+     * Add domaines.
      *
      * @param array <\HopitalNumerique\DomaineBundle\Entity\Domaine> $domaines Domaines
+     *
      * @return Reference
      */
     public function addDomaines($domaines)
@@ -586,7 +590,7 @@ class Reference
     }
 
     /**
-     * Remove domaines
+     * Remove domaines.
      *
      * @param \HopitalNumerique\DomaineBundle\Entity\Domaine $domaine
      */
@@ -594,7 +598,6 @@ class Reference
     {
         $this->removeDomainesDisplay($domaine);
         $this->domaines->removeElement($domaine);
-
     }
 
     /**
@@ -606,7 +609,7 @@ class Reference
     }
 
     /**
-     * Get domaines
+     * Get domaines.
      *
      * @return \Doctrine\Common\Collections\Collection
      */
@@ -616,7 +619,7 @@ class Reference
     }
 
     /**
-     * Get les ids des domaines concerné par l'user
+     * Get les ids des domaines concerné par l'user.
      *
      * @return array[integer]
      */
@@ -648,7 +651,7 @@ class Reference
     }
 
     /**
-     * set domaines
+     * set domaines.
      *
      * @return Reference
      */
@@ -696,9 +699,9 @@ class Reference
     }
 
     /**
-     * Set allDomaines
+     * Set allDomaines.
      *
-     * @param boolean $allDomaines
+     * @param bool $allDomaines
      *
      * @return Reference
      */
@@ -710,9 +713,9 @@ class Reference
     }
 
     /**
-     * Get allDomaines
+     * Get allDomaines.
      *
-     * @return boolean
+     * @return bool
      */
     public function isAllDomaines()
     {
@@ -720,7 +723,7 @@ class Reference
     }
 
     /**
-     * Add synonyme
+     * Add synonyme.
      *
      * @param \HopitalNumerique\ReferenceBundle\Entity\Reference\Synonyme $synonyme
      *
@@ -736,7 +739,7 @@ class Reference
     }
 
     /**
-     * Remove synonyme
+     * Remove synonyme.
      *
      * @param \HopitalNumerique\ReferenceBundle\Entity\Reference\Synonyme $synonyme
      */
@@ -746,7 +749,7 @@ class Reference
     }
 
     /**
-     * Get synonymes
+     * Get synonymes.
      *
      * @return \Doctrine\Common\Collections\Collection
      */
@@ -759,7 +762,8 @@ class Reference
      * Retourne si la référence possède déjà tel synonyme.
      *
      * @param \HopitalNumerique\ReferenceBundle\Entity\Reference\Synonyme $synonyme Synonyme
-     * @return boolean si existant
+     *
+     * @return bool si existant
      */
     public function hasSynonyme(\HopitalNumerique\ReferenceBundle\Entity\Reference\Synonyme $synonyme)
     {
@@ -773,7 +777,7 @@ class Reference
     }
 
     /**
-     * Add champLexicalNom
+     * Add champLexicalNom.
      *
      * @param \HopitalNumerique\ReferenceBundle\Entity\Reference\ChampLexicalNom $champLexicalNom
      *
@@ -789,7 +793,7 @@ class Reference
     }
 
     /**
-     * Remove champLexicalNom
+     * Remove champLexicalNom.
      *
      * @param \HopitalNumerique\ReferenceBundle\Entity\Reference\ChampLexicalNom $champLexicalNom
      */
@@ -799,7 +803,7 @@ class Reference
     }
 
     /**
-     * Get champLexicalNoms
+     * Get champLexicalNoms.
      *
      * @return \Doctrine\Common\Collections\Collection
      */
@@ -812,7 +816,8 @@ class Reference
      * Retourne si la référence possède déjà tel champLexicalNom.
      *
      * @param \HopitalNumerique\ReferenceBundle\Entity\Reference\ChampLexicalNom $champLexicalNom ChampLexicalNom
-     * @return boolean si existant
+     *
+     * @return bool si existant
      */
     public function hasChampLexicalNom(\HopitalNumerique\ReferenceBundle\Entity\Reference\ChampLexicalNom $champLexicalNom)
     {
@@ -826,9 +831,9 @@ class Reference
     }
 
     /**
-     * Set reference
+     * Set reference.
      *
-     * @param boolean $reference
+     * @param bool $reference
      *
      * @return Reference
      */
@@ -840,9 +845,9 @@ class Reference
     }
 
     /**
-     * Get reference
+     * Get reference.
      *
-     * @return boolean
+     * @return bool
      */
     public function isReference()
     {
@@ -850,9 +855,9 @@ class Reference
     }
 
     /**
-     * Set inRecherche
+     * Set inRecherche.
      *
-     * @param boolean $inRecherche
+     * @param bool $inRecherche
      *
      * @return Reference
      */
@@ -864,9 +869,9 @@ class Reference
     }
 
     /**
-     * Get inRecherche
+     * Get inRecherche.
      *
-     * @return boolean
+     * @return bool
      */
     public function isInRecherche()
     {
@@ -874,7 +879,7 @@ class Reference
     }
 
     /**
-     * Set referenceLibelle
+     * Set referenceLibelle.
      *
      * @param string $referenceLibelle
      *
@@ -888,7 +893,7 @@ class Reference
     }
 
     /**
-     * Get referenceLibelle
+     * Get referenceLibelle.
      *
      * @return string
      */
@@ -898,9 +903,9 @@ class Reference
     }
 
     /**
-     * Set inGlossaire
+     * Set inGlossaire.
      *
-     * @param boolean $inGlossaire
+     * @param bool $inGlossaire
      *
      * @return Reference
      */
@@ -912,9 +917,9 @@ class Reference
     }
 
     /**
-     * Get inGlossaire
+     * Get inGlossaire.
      *
-     * @return boolean
+     * @return bool
      */
     public function isInGlossaire()
     {
@@ -922,7 +927,7 @@ class Reference
     }
 
     /**
-     * Set sigle
+     * Set sigle.
      *
      * @param string $sigle
      *
@@ -936,7 +941,7 @@ class Reference
     }
 
     /**
-     * Get sigle
+     * Get sigle.
      *
      * @return string
      */
@@ -946,7 +951,7 @@ class Reference
     }
 
     /**
-     * Set glossaireLibelle
+     * Set glossaireLibelle.
      *
      * @param string $glossaireLibelle
      *
@@ -960,7 +965,7 @@ class Reference
     }
 
     /**
-     * Get glossaireLibelle
+     * Get glossaireLibelle.
      *
      * @return string
      */
@@ -970,7 +975,7 @@ class Reference
     }
 
     /**
-     * Set descriptionCourte
+     * Set descriptionCourte.
      *
      * @param string $descriptionCourte
      *
@@ -984,7 +989,7 @@ class Reference
     }
 
     /**
-     * Get descriptionCourte
+     * Get descriptionCourte.
      *
      * @return string
      */
@@ -994,7 +999,7 @@ class Reference
     }
 
     /**
-     * Set descriptionLongue
+     * Set descriptionLongue.
      *
      * @param string $descriptionLongue
      *
@@ -1008,7 +1013,7 @@ class Reference
     }
 
     /**
-     * Get descriptionLongue
+     * Get descriptionLongue.
      *
      * @return string
      */
@@ -1018,9 +1023,9 @@ class Reference
     }
 
     /**
-     * Set casseSensible
+     * Set casseSensible.
      *
-     * @param boolean $casseSensible
+     * @param bool $casseSensible
      *
      * @return Reference
      */
@@ -1032,15 +1037,14 @@ class Reference
     }
 
     /**
-     * Get casseSensible
+     * Get casseSensible.
      *
-     * @return boolean
+     * @return bool
      */
     public function isCasseSensible()
     {
         return $this->casseSensible;
     }
-
 
     public function __toString()
     {
@@ -1051,13 +1055,13 @@ class Reference
      * Retourne l'égalité entre deux références.
      *
      * @param \HopitalNumerique\ReferenceBundle\Entity\Reference $reference Autre référence
-     * @return boolean Si égalité
+     *
+     * @return bool Si égalité
      */
     public function equals(Reference $reference)
     {
-        return ($this->id === $reference->getId());
+        return $this->id === $reference->getId();
     }
-
 
     /**
      * {@inheritdoc}
@@ -1072,7 +1076,7 @@ class Reference
      */
     public function imageFileIsValid()
     {
-        return (null !== $this->imageFile && $this->imageFile->getClientSize() <= Systeme::getFileUploadMaxSize());
+        return null !== $this->imageFile && $this->imageFile->getClientSize() <= Systeme::getFileUploadMaxSize();
     }
 
     /**
@@ -1096,7 +1100,7 @@ class Reference
      */
     public function getLibelleForReference()
     {
-        return ('' != $this->referenceLibelle ? $this->referenceLibelle : $this->libelle);
+        return '' != $this->referenceLibelle ? $this->referenceLibelle : $this->libelle;
     }
 
     /**
@@ -1106,7 +1110,7 @@ class Reference
      */
     public function getSigleForGlossaire()
     {
-        return (null !== $this->sigle ? $this->sigle : (null !== $this->glossaireLibelle ? $this->glossaireLibelle : $this->libelle));
+        return null !== $this->sigle ? $this->sigle : (null !== $this->glossaireLibelle ? $this->glossaireLibelle : $this->libelle);
     }
 
     /**
@@ -1142,5 +1146,4 @@ class Reference
             return $domaine->getId();
         });
     }
-
 }

@@ -1,4 +1,5 @@
 <?php
+
 namespace Nodevo\Component\Import\Iterator\File;
 
 class KeyedExcelFileIterator implements \Iterator
@@ -66,7 +67,7 @@ class KeyedExcelFileIterator implements \Iterator
 
     public function next()
     {
-        $this->currentRow++;
+        ++$this->currentRow;
     }
 
     public function key()

@@ -6,7 +6,6 @@ use Symfony\Component\Security\Core\SecurityContext;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use FOS\UserBundle\FOSUserEvents;
 use FOS\UserBundle\Event\UserEvent as UserEventFos;
-use HopitalNumerique\UserBundle\Manager\UserEvent;
 
 class LoginManager implements EventSubscriberInterface
 {
@@ -14,7 +13,7 @@ class LoginManager implements EventSubscriberInterface
     private $securityContext;
 
     /**
-     * Constructor
+     * Constructor.
      *
      * @param SecurityContext $securityContext
      */
@@ -24,24 +23,24 @@ class LoginManager implements EventSubscriberInterface
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public static function getSubscribedEvents()
     {
-        return array(
-            FOSUserEvents::SECURITY_IMPLICIT_LOGIN  => 'onSecurityImplicitLogin',
-            FOSUserEvents::REGISTRATION_COMPLETED   => 'onRegistrationCompleted'
-        );
+        return [
+            FOSUserEvents::SECURITY_IMPLICIT_LOGIN => 'onSecurityImplicitLogin',
+            FOSUserEvents::REGISTRATION_COMPLETED => 'onRegistrationCompleted',
+        ];
     }
 
     /**
-     * [onSecurityImplicitLogin description]
+     * [onSecurityImplicitLogin description].
      *
-     * @param  FOS\UserBundle\Event\UserEvent $event [description]
+     * @param FOS\UserBundle\Event\UserEvent $event [description]
      *
      * @return [type]
      */
-    public function onSecurityImplicitLogin( UserEventFos $event)
+    public function onSecurityImplicitLogin(UserEventFos $event)
     {
         $user = $event->getUser();
 
@@ -52,9 +51,9 @@ class LoginManager implements EventSubscriberInterface
     }
 
     /**
-     * [onSecurityInteractivelogin description]
+     * [onSecurityInteractivelogin description].
      *
-     * @param  \Symfony\Component\Security\Http\Event\InteractiveLoginEvent $event [description]
+     * @param \Symfony\Component\Security\Http\Event\InteractiveLoginEvent $event [description]
      *
      * @return [type]
      */

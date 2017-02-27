@@ -8,13 +8,12 @@ use Doctrine\ORM\Mapping as ORM;
 use HopitalNumerique\AutodiagBundle\Entity\Autodiag\ActionPlan;
 use HopitalNumerique\AutodiagBundle\Entity\Autodiag\Container;
 use HopitalNumerique\AutodiagBundle\Entity\Autodiag\Container\Chapter;
-use HopitalNumerique\AutodiagBundle\Entity\Autodiag\Preset;
 use HopitalNumerique\DomaineBundle\Entity\Domaine;
 use HopitalNumerique\QuestionnaireBundle\Entity\Questionnaire;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
- * Gabarit d'autodiag
+ * Gabarit d'autodiag.
  *
  * @ORM\Table(name="ad_autodiag")
  * @ORM\Entity(repositoryClass="HopitalNumerique\AutodiagBundle\Repository\AutodiagRepository")
@@ -22,7 +21,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 class Autodiag
 {
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
@@ -31,7 +30,7 @@ class Autodiag
     private $id;
 
     /**
-     * Autodiag title
+     * Autodiag title.
      *
      * @var string
      * @ORM\Column(type="string", length=255)
@@ -41,7 +40,7 @@ class Autodiag
     private $title;
 
     /**
-     * Autodiag instructions
+     * Autodiag instructions.
      *
      * @var string
      *
@@ -52,30 +51,30 @@ class Autodiag
     /**
      * Authorize to show results if all questions aren't answered.
      *
-     * @var boolean
+     * @var bool
      *
      * @ORM\Column(type="boolean")
      */
     private $partialResultsAuthorized;
 
     /**
-     * @var boolean
+     * @var bool
      *
      * @ORM\Column(type="boolean")
      */
     private $comparisonAuthorized = true;
 
     /**
-     * Autorize synthesis
+     * Autorize synthesis.
      *
-     * @var boolean
+     * @var bool
      *
      * @ORM\Column(type="boolean")
      */
     private $synthesisAuthorized;
 
     /**
-     * Public update date
+     * Public update date.
      *
      * @var \DateTime
      *
@@ -84,7 +83,7 @@ class Autodiag
     private $publicUpdatedDate;
 
     /**
-     * Creation date and time
+     * Creation date and time.
      *
      * @var \DateTime
      *
@@ -93,7 +92,7 @@ class Autodiag
     private $createdAt;
 
     /**
-     * Autodiag algorithm
+     * Autodiag algorithm.
      *
      * @var string
      *
@@ -176,7 +175,7 @@ class Autodiag
     private $references;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(type="integer", nullable=true)
      */
@@ -191,9 +190,9 @@ class Autodiag
     }
 
     /**
-     * Get id
+     * Get id.
      *
-     * @return integer
+     * @return int
      */
     public function getId()
     {
@@ -201,7 +200,7 @@ class Autodiag
     }
 
     /**
-     * Get title
+     * Get title.
      *
      * @return string
      */
@@ -211,9 +210,10 @@ class Autodiag
     }
 
     /**
-     * Set title
+     * Set title.
      *
      * @param string $title
+     *
      * @return $this
      */
     public function setTitle($title)
@@ -224,7 +224,7 @@ class Autodiag
     }
 
     /**
-     * Get instructions
+     * Get instructions.
      *
      * @return string
      */
@@ -234,9 +234,10 @@ class Autodiag
     }
 
     /**
-     * Set instructions
+     * Set instructions.
      *
      * @param string $instructions
+     *
      * @return $this
      */
     public function setInstructions($instructions)
@@ -247,9 +248,9 @@ class Autodiag
     }
 
     /**
-     * Is show results if all questions aren't answered authorized
+     * Is show results if all questions aren't answered authorized.
      *
-     * @return boolean
+     * @return bool
      */
     public function isPartialResultsAuthorized()
     {
@@ -257,9 +258,10 @@ class Autodiag
     }
 
     /**
-     * Set partial results authorization
+     * Set partial results authorization.
      *
-     * @param boolean $partialResultsAuthorized
+     * @param bool $partialResultsAuthorized
+     *
      * @return $this
      */
     public function setPartialResultsAuthorized($partialResultsAuthorized)
@@ -270,7 +272,7 @@ class Autodiag
     }
 
     /**
-     * @return boolean
+     * @return bool
      */
     public function isComparisonAuthorized()
     {
@@ -278,7 +280,7 @@ class Autodiag
     }
 
     /**
-     * @param boolean $comparisonAuthorized
+     * @param bool $comparisonAuthorized
      *
      * @return Autodiag
      */
@@ -290,9 +292,9 @@ class Autodiag
     }
 
     /**
-     * Is synthesis authorized
+     * Is synthesis authorized.
      *
-     * @return boolean
+     * @return bool
      */
     public function isSynthesisAuthorized()
     {
@@ -300,9 +302,10 @@ class Autodiag
     }
 
     /**
-     * Set synthesis authorization
+     * Set synthesis authorization.
      *
-     * @param boolean $synthesisAuthorized
+     * @param bool $synthesisAuthorized
+     *
      * @return $this
      */
     public function setSynthesisAuthorized($synthesisAuthorized)
@@ -313,7 +316,7 @@ class Autodiag
     }
 
     /**
-     * Get public updated date
+     * Get public updated date.
      *
      * @return \DateTime
      */
@@ -323,9 +326,10 @@ class Autodiag
     }
 
     /**
-     * Set public updated date
+     * Set public updated date.
      *
      * @param \DateTime $publicUpdatedDate
+     *
      * @return $this
      */
     public function setPublicUpdatedDate(\DateTime $publicUpdatedDate)
@@ -336,7 +340,7 @@ class Autodiag
     }
 
     /**
-     * Get creation datetime
+     * Get creation datetime.
      *
      * @return \DateTime
      */
@@ -346,9 +350,10 @@ class Autodiag
     }
 
     /**
-     * Set creation datetime
+     * Set creation datetime.
      *
      * @param \DateTime $createdAt
+     *
      * @return $this
      */
     public function setCreatedAt(\DateTime $createdAt)
@@ -368,6 +373,7 @@ class Autodiag
 
     /**
      * @param string $algorithm
+     *
      * @return $this
      */
     public function setAlgorithm($algorithm)
@@ -378,7 +384,7 @@ class Autodiag
     }
 
     /**
-     * Get Domaine
+     * Get Domaine.
      *
      * @return Collection
      */
@@ -388,9 +394,10 @@ class Autodiag
     }
 
     /**
-     * Add domaine
+     * Add domaine.
      *
      * @param Domaine $domaine
+     *
      * @return $this
      */
     public function addDomaine(Domaine $domaine)
@@ -401,9 +408,10 @@ class Autodiag
     }
 
     /**
-     * Remove domaine
+     * Remove domaine.
      *
      * @param Domaine $domaine
+     *
      * @return $this
      */
     public function removeDomaine(Domaine $domaine)
@@ -416,11 +424,12 @@ class Autodiag
     public function setDomaines(Collection $domaines)
     {
         $this->domaines = $domaines;
+
         return $this;
     }
 
     /**
-     * Get prior questionnaire
+     * Get prior questionnaire.
      *
      * @return Questionnaire
      */
@@ -430,14 +439,16 @@ class Autodiag
     }
 
     /**
-     * Set prior questionnaire
+     * Set prior questionnaire.
      *
      * @param Questionnaire $questionnaire
+     *
      * @return $this
      */
     public function setQuestionnaire($questionnaire = null)
     {
         $this->questionnaire = $questionnaire;
+
         return $this;
     }
 
@@ -447,7 +458,7 @@ class Autodiag
     }
 
     /**
-     * Get chapters
+     * Get chapters.
      *
      * @return Collection
      */
@@ -459,9 +470,10 @@ class Autodiag
     }
 
     /**
-     * Add chapter
+     * Add chapter.
      *
      * @param Chapter $chapter
+     *
      * @return $this
      */
     public function addChapter(Chapter $chapter)
@@ -473,9 +485,10 @@ class Autodiag
     }
 
     /**
-     * Remove chapter
+     * Remove chapter.
      *
      * @param Chapter $chapter
+     *
      * @return $this
      */
     public function removeChapter(Chapter $chapter)
@@ -486,7 +499,7 @@ class Autodiag
     }
 
     /**
-     * Get presets
+     * Get presets.
      *
      * @return Collection
      */
@@ -505,6 +518,7 @@ class Autodiag
 
     /**
      * @param Restitution $restitution
+     *
      * @return $this
      */
     public function setRestitution(Restitution $restitution)
@@ -520,7 +534,7 @@ class Autodiag
     }
 
     /**
-     * Get ActionPlans
+     * Get ActionPlans.
      *
      * @return Collection
      */
@@ -530,9 +544,10 @@ class Autodiag
     }
 
     /**
-     * Add ActionPlan
+     * Add ActionPlan.
      *
      * @param ActionPlan $actionPlan
+     *
      * @return $this
      */
     public function addActionPlan(ActionPlan $actionPlan)
@@ -543,9 +558,10 @@ class Autodiag
     }
 
     /**
-     * Remove actionPlan
+     * Remove actionPlan.
      *
      * @param ActionPlan $actionPlan
+     *
      * @return $this
      */
     public function removeActionPlan(ActionPlan $actionPlan)
@@ -556,7 +572,7 @@ class Autodiag
     }
 
     /**
-     * Get references
+     * Get references.
      *
      * @return Collection
      */
@@ -568,6 +584,7 @@ class Autodiag
     public function setComputing()
     {
         $this->computeBeginning = time();
+
         return $this->computeBeginning;
     }
 

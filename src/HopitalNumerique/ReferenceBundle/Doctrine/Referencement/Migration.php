@@ -1,4 +1,5 @@
 <?php
+
 namespace HopitalNumerique\ReferenceBundle\Doctrine\Referencement;
 
 use Doctrine\DBAL\Driver\Connection;
@@ -15,7 +16,6 @@ use Symfony\Bridge\Doctrine\RegistryInterface;
 class Migration
 {
     /**
-     *
      * @var \Symfony\Bridge\Doctrine\RegistryInterface Doctrine
      */
     private $doctrine;
@@ -30,12 +30,10 @@ class Migration
      */
     private $entityHasReferenceManager;
 
-
     /**
      * @var array<\HopitalNumerique\ReferenceBundle\Entity\Reference> Toutes les références
      */
     private static $REFERENCES_BY_ID = [];
-
 
     /**
      * Constructeur.
@@ -58,7 +56,6 @@ class Migration
             self::$REFERENCES_BY_ID[$reference->getId()] = $reference;
         }
     }
-
 
     /**
      * Migre toutes les liaisons avec les références.
@@ -96,7 +93,7 @@ class Migration
             $reference = self::$REFERENCES_BY_ID[$referenceId];
             $referencesEntities[$entityId][] = [
                 'reference' => $reference,
-                'primary' => $primary
+                'primary' => $primary,
             ];
         }
 
@@ -113,7 +110,7 @@ class Migration
             $this->deleteReferencesParents($referencesEntities);
         }
     }
-    
+
     private function deleteReferencesParents(&$referencesEntities)
     {
         $referenceParentIds = $this->getReferencesParentIdsFromReferencesEntities($referencesEntities);

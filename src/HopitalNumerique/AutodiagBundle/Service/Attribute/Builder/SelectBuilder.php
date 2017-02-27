@@ -1,18 +1,18 @@
 <?php
+
 namespace HopitalNumerique\AutodiagBundle\Service\Attribute\Builder;
 
 use HopitalNumerique\AutodiagBundle\Form\Type\Attribute\SelectType;
 
 /**
- * Select attribute builder
+ * Select attribute builder.
  *
- * @package HopitalNumerique\AutodiagBundle\Service\Attribute\Builder
  * @author Emmanuel Da Fonseca <edafonseca@nodevo.com>
  */
 class SelectBuilder extends AbstractBuilder
 {
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function getName()
     {
@@ -20,7 +20,7 @@ class SelectBuilder extends AbstractBuilder
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function getTemplateName()
     {

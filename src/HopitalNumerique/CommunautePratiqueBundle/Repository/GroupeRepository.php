@@ -1,4 +1,5 @@
 <?php
+
 namespace HopitalNumerique\CommunautePratiqueBundle\Repository;
 
 use Doctrine\ORM\PersistentCollection;
@@ -16,7 +17,8 @@ class GroupeRepository extends \Doctrine\ORM\EntityRepository
      *
      * @param \HopitalNumerique\DomaineBundle\Entity\Domaine $domaine Domaine
      * @param \HopitalNumerique\UserBundle\Entity\User       $user    Utilisateur
-     * @param boolean                                        $isActif (optionnel) Si les groupes doivent être actifs ou non actifs
+     * @param bool                                           $isActif (optionnel) Si les groupes doivent être actifs ou non actifs
+     *
      * @return array<\HopitalNumerique\CommunautePratiqueBundle\Entity\Groupe> Groupes non démarrés
      */
     public function findNonDemarres(Domaine $domaine, User $user = null, $isActif = null)
@@ -57,7 +59,8 @@ class GroupeRepository extends \Doctrine\ORM\EntityRepository
      *
      * @param \HopitalNumerique\DomaineBundle\Entity\Domaine $domaine Domaine
      * @param \HopitalNumerique\UserBundle\Entity\User       $user    Utilisateur
-     * @param boolean                                        $isActif (optionnel) Si les groupes doivent être actifs ou non actifs
+     * @param bool                                           $isActif (optionnel) Si les groupes doivent être actifs ou non actifs
+     *
      * @return array<\HopitalNumerique\CommunautePratiqueBundle\Entity\Groupe> Groupes en cours
      */
     public function findEnCours(Domaine $domaine, User $user = null, $isActif = null)
@@ -99,7 +102,8 @@ class GroupeRepository extends \Doctrine\ORM\EntityRepository
      *
      * @param \HopitalNumerique\DomaineBundle\Entity\Domaine $domaine Domaine
      * @param \HopitalNumerique\UserBundle\Entity\User       $user    Utilisateur
-     * @param boolean                                        $isActif (optionnel) Si les groupes doivent être actifs ou non actifs
+     * @param bool                                           $isActif (optionnel) Si les groupes doivent être actifs ou non actifs
+     *
      * @return array<\HopitalNumerique\CommunautePratiqueBundle\Entity\Groupe> Groupes en cours
      */
     public function findTermines(Domaine $domaine, User $user = null, $isActif = null)
@@ -140,9 +144,10 @@ class GroupeRepository extends \Doctrine\ORM\EntityRepository
      *
      * @param \HopitalNumerique\DomaineBundle\Entity\Domaine $domaine               Domaine
      * @param \HopitalNumerique\UserBundle\Entity\User       $user                  Utilisateur
-     * @param boolean                                        $enVedette             (optionnel) En vedette
-     * @param boolean                                        $isActif               (optionnel) Si les groupes doivent être actifs ou non actifs
-     * @param boolean                                        $dateInscriptionPassee (optionnel) Si la date d'inscription doit être passée ou pas
+     * @param bool                                           $enVedette             (optionnel) En vedette
+     * @param bool                                           $isActif               (optionnel) Si les groupes doivent être actifs ou non actifs
+     * @param bool                                           $dateInscriptionPassee (optionnel) Si la date d'inscription doit être passée ou pas
+     *
      * @return array<\HopitalNumerique\CommunautePratiqueBundle\Entity\Groupe> Groupes non fermés
      */
     public function findNonFermes(Domaine $domaine, User $user = null, $enVedette = null, $isActif = null, $dateInscriptionPassee = null)
@@ -190,17 +195,17 @@ class GroupeRepository extends \Doctrine\ORM\EntityRepository
             ;
         }
         if (null !== $dateInscriptionPassee) {
-            $query->andWhere('groupe.dateInscriptionOuverture '.($dateInscriptionPassee ? '<=' : '>').' :aujourdhui');
+            $query->andWhere('groupe.dateInscriptionOuverture ' . ($dateInscriptionPassee ? '<=' : '>') . ' :aujourdhui');
         }
 
         return $query->getQuery()->getResult();
     }
 
-
     /**
      * Retourne la QueryBuilder des groupes ayant des publications.
      *
-     * @param boolean $isActif (optionnel) Si les groupes doivent être actifs ou non actifs
+     * @param bool $isActif (optionnel) Si les groupes doivent être actifs ou non actifs
+     *
      * @return \Doctrine\ORM\QueryBuilder QueryBuilder
      */
     public function findWithPublicationsQueryBuilder($isActif = null)
@@ -222,11 +227,11 @@ class GroupeRepository extends \Doctrine\ORM\EntityRepository
         return $query;
     }
 
-
     /**
      * Retourne les données pour le grid.
      *
      * @param array<\HopitalNumerique\DomaineBundle\Entity\Domaine> $domaines Domaines
+     *
      * @return array Données
      */
     public function getGridData(PersistentCollection $domaines)
@@ -234,8 +239,7 @@ class GroupeRepository extends \Doctrine\ORM\EntityRepository
         $query = $this->createQueryBuilder('groupe');
 
         $query
-            ->select
-            (
+            ->select(
                 'groupe.id AS id',
                 'groupe.titre AS titre',
                 'groupe.dateInscriptionOuverture AS dateInscriptionOuverture',

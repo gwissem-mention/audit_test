@@ -1,4 +1,5 @@
 <?php
+
 namespace HopitalNumerique\RechercheParcoursBundle\Controller;
 
 use HopitalNumerique\CoreBundle\DependencyInjection\Entity;
@@ -15,62 +16,61 @@ class RechercheParcoursDetailsController extends Controller
     public function indexAction(RechercheParcours $rechercheParcours)
     {
         //Récupération des étapes déjà sélectionnées sur la recherche de parcours
-        $etapesSelected = array();
-        foreach ($rechercheParcours->getRecherchesParcoursDetails() as $detail) 
-        {
+        $etapesSelected = [];
+        foreach ($rechercheParcours->getRecherchesParcoursDetails() as $detail) {
             $etapesSelected[] = $detail->getReference()->getId();
         }
 
         //Création du tableau des étapes pour lié un détail
         $etapes = $rechercheParcours->getRecherchesParcoursGestion()->getReferencesVentilations();
 
-        return $this->render('HopitalNumeriqueRechercheParcoursBundle:RechercheParcoursDetails:index.html.twig', array(
-                'etapes'            => $etapes,
-                'etapesSelected'    => $etapesSelected,
-                'rechercheParcours' => $rechercheParcours
-            ));
+        return $this->render('HopitalNumeriqueRechercheParcoursBundle:RechercheParcoursDetails:index.html.twig', [
+                'etapes' => $etapes,
+                'etapesSelected' => $etapesSelected,
+                'rechercheParcours' => $rechercheParcours,
+            ]);
     }
 
     public function addAction(Request $request, RechercheParcours $rechercheParcours)
     {
         //Récupération de l'id de l'étape sélectionnée dans la select
         $etapeId = $request->request->get('etape');
-        $etape   = $this->get('hopitalnumerique_reference.manager.reference')->findOneBy( array( 'id' => $etapeId) );
+        $etape = $this->get('hopitalnumerique_reference.manager.reference')->findOneBy(['id' => $etapeId]);
 
         //créer du détails
         $detail = $this->get('hopitalnumerique_recherche_parcours.manager.recherche_parcours_details')->createEmpty();
 
         $libelle = $request->request->get('libelle');
         //Calcul de l'ordre
-        $order   = $this->get('hopitalnumerique_recherche_parcours.manager.recherche_parcours_details')->countDetails() + 1;
+        $order = $this->get('hopitalnumerique_recherche_parcours.manager.recherche_parcours_details')->countDetails() + 1;
 
-        $detail->setOrder( $order );
-        $detail->setReference( $etape );
+        $detail->setOrder($order);
+        $detail->setReference($etape);
         $detail->setDescription('');
         $detail->setRechercheParcours($rechercheParcours);
 
         //save
-        $this->get('hopitalnumerique_recherche_parcours.manager.recherche_parcours_details')->save( $detail );
+        $this->get('hopitalnumerique_recherche_parcours.manager.recherche_parcours_details')->save($detail);
 
-        return $this->render('HopitalNumeriqueRechercheParcoursBundle:RechercheParcoursDetails:add.html.twig', array(
+        return $this->render('HopitalNumeriqueRechercheParcoursBundle:RechercheParcoursDetails:add.html.twig', [
                 'details' => $detail,
-        ));  
+        ]);
     }
 
     public function deleteAction(Request $request)
     {
         //Récupération des données envoyées par la requete AJAX
         $idDetails = $request->request->get('id');
-        $details   = $this->get('hopitalnumerique_recherche_parcours.manager.recherche_parcours_details')->findOneBy(array('id' => $idDetails));
-        $refLibelle   = $details->getReference()->getLibelle();
-        $refId        = $details->getReference()->getId();
+        $details = $this->get('hopitalnumerique_recherche_parcours.manager.recherche_parcours_details')->findOneBy(['id' => $idDetails]);
+        $refLibelle = $details->getReference()->getLibelle();
+        $refId = $details->getReference()->getId();
 
         //save
-        $this->get('hopitalnumerique_recherche_parcours.manager.recherche_parcours_details')->delete( $details );
+        $this->get('hopitalnumerique_recherche_parcours.manager.recherche_parcours_details')->delete($details);
 
-        $reponse = json_encode(array("success" => true, "refLibelle" => $refLibelle, "refId" => $refId));
+        $reponse = json_encode(['success' => true, 'refLibelle' => $refLibelle, 'refId' => $refId]);
 
-        return new Response($reponse, 200); 
+        return new Response($reponse, 200);
     }
 
     public function reorderAction()
@@ -79,40 +79,40 @@ class RechercheParcoursDetailsController extends Controller
         $datas = $this->get('request')->request->get('datas');
 
         //execute reorder
-        $this->get('hopitalnumerique_recherche_parcours.manager.recherche_parcours_details')->reorder( $datas, null );
+        $this->get('hopitalnumerique_recherche_parcours.manager.recherche_parcours_details')->reorder($datas, null);
         $this->getDoctrine()->getManager()->flush();
 
         //return success.true si le fichier existe deja
-        return new Response('{"success":true}', 200);    
+        return new Response('{"success":true}', 200);
     }
 
     /**
-     * [editFancyAction description]
+     * [editFancyAction description].
      *
-     * @param  RechercheParcoursDetails  $rechercheParcoursDetails [description]
+     * @param RechercheParcoursDetails $rechercheParcoursDetails [description]
      *
      * @return Fancy
      */
-    public function editFancyAction( RechercheParcoursDetails $rechercheParcoursDetails )
-    {   
-        return $this->render('HopitalNumeriqueRechercheParcoursBundle:RechercheParcoursDetails:edit.html.twig', array(
-            'rechercheParcoursDetails' => $rechercheParcoursDetails
-        ));
+    public function editFancyAction(RechercheParcoursDetails $rechercheParcoursDetails)
+    {
+        return $this->render('HopitalNumeriqueRechercheParcoursBundle:RechercheParcoursDetails:edit.html.twig', [
+            'rechercheParcoursDetails' => $rechercheParcoursDetails,
+        ]);
     }
 
     /**
-     * [editSaveAction description]
+     * [editSaveAction description].
      *
-     * @param  RechercheParcoursDetails  $rechercheParcoursDetails [description]
+     * @param RechercheParcoursDetails $rechercheParcoursDetails [description]
      *
      * @return Response
      */
-    public function editSaveAction( Request $request, RechercheParcoursDetails $rechercheParcoursDetails )
+    public function editSaveAction(Request $request, RechercheParcoursDetails $rechercheParcoursDetails)
     {
         $rechercheParcoursDetails->setDescription($request->request->get('description'));
-        $rechercheParcoursDetails->setShowChildren($request->request->get('showChild') == "true");
+        $rechercheParcoursDetails->setShowChildren($request->request->get('showChild') == 'true');
 
-        $this->get('hopitalnumerique_recherche_parcours.manager.recherche_parcours_details')->save( $rechercheParcoursDetails );
+        $this->get('hopitalnumerique_recherche_parcours.manager.recherche_parcours_details')->save($rechercheParcoursDetails);
 
         return new Response('{"success":true}', 200);
     }
@@ -120,12 +120,12 @@ class RechercheParcoursDetailsController extends Controller
     // ----------- FRONT --------------
 
     /**
-     * Index du front Action
+     * Index du front Action.
      *
-     * @param int     $id      Identifiant de la recherche par parcours
-     * @param string  $alias   Alias de l'identifiant par parcours
-     * @param int     $idEtape Identifiant de l'étape sélectionnée si il y en a une, sinon -1
-     * @param string  $etape   Alias de l'étape sélectionné
+     * @param int    $id      Identifiant de la recherche par parcours
+     * @param string $alias   Alias de l'identifiant par parcours
+     * @param int    $idEtape Identifiant de l'étape sélectionnée si il y en a une, sinon -1
+     * @param string $etape   Alias de l'étape sélectionné
      *
      * @return [type]
      */
@@ -136,22 +136,21 @@ class RechercheParcoursDetailsController extends Controller
         $domaineId = $domaine->getId();
 
         //Récup!ère la recherche par parcours passé en param
-        $rechercheParcours   = $this->get('hopitalnumerique_recherche_parcours.manager.recherche_parcours')->findOneBy( array( 'id' => $id ) );
+        $rechercheParcours = $this->get('hopitalnumerique_recherche_parcours.manager.recherche_parcours')->findOneBy(['id' => $id]);
 
         //On récupère l'user connecté et son rôle
         $user = $this->get('security.context')->getToken()->getUser();
         $role = $this->get('nodevo_role.manager.role')->getUserRole($user);
 
         //Vérifie si une étape a été spécifiée ou récupère la première étape de la recherche par parcours sélectionnée.
-        if($idEtape !== 0 
-            && in_array($idEtape, $rechercheParcours->getRecherchesParcoursDetailsIds()))
-        {
-            $rechercheParcoursDetails = $this->get('hopitalnumerique_recherche_parcours.manager.recherche_parcours_details')->findOneBy( array( 'id' => $idEtape ));
+        if ($idEtape !== 0
+            && in_array($idEtape, $rechercheParcours->getRecherchesParcoursDetailsIds())) {
+            $rechercheParcoursDetails = $this->get('hopitalnumerique_recherche_parcours.manager.recherche_parcours_details')->findOneBy(['id' => $idEtape]);
 
             $referencesLieesIds = array_merge(
                 [
                     $rechercheParcours->getReference()->getId(),
-                    $rechercheParcoursDetails->getReference()->getId()
+                    $rechercheParcoursDetails->getReference()->getId(),
                 ],
                 $this->container->get('hopitalnumerique_account.doctrine.reference.contexte')->getReferenceIds()
             );
@@ -166,8 +165,8 @@ class RechercheParcoursDetailsController extends Controller
             }
 
             //Récupération des références + Tri pour l'affichage des points dur
-            $referenceRechercheParcours = $this->get('hopitalnumerique_reference.manager.reference')->findOneBy(array('id' => intval($rechercheParcours->getReference()->getId())));
-            $referenceRechercheParcoursDetails = $this->get('hopitalnumerique_reference.manager.reference')->findOneBy(array('id' => intval($rechercheParcoursDetails->getReference()->getId())));
+            $referenceRechercheParcours = $this->get('hopitalnumerique_reference.manager.reference')->findOneBy(['id' => intval($rechercheParcours->getReference()->getId())]);
+            $referenceRechercheParcoursDetails = $this->get('hopitalnumerique_reference.manager.reference')->findOneBy(['id' => intval($rechercheParcoursDetails->getReference()->getId())]);
 
             $refChilds = $this->get('hopitalnumerique_reference.manager.reference')->getRefsByDomaineByParent(
                 intval($rechercheParcoursDetails->getReference()->getId()),
@@ -180,9 +179,9 @@ class RechercheParcoursDetailsController extends Controller
                 if (is_null($idRefEtapeChild)) {
                     $refChildSelected = $refChilds[0];
                 } else {
-                    $refChildSelected = $this->get('hopitalnumerique_reference.manager.reference')->findOneBy(array(
-                        'id' => intval($idRefEtapeChild)
-                    ));
+                    $refChildSelected = $this->get('hopitalnumerique_reference.manager.reference')->findOneBy([
+                        'id' => intval($idRefEtapeChild),
+                    ]);
                 }
             }
 
@@ -207,7 +206,7 @@ class RechercheParcoursDetailsController extends Controller
                             $note = $this->get('hopitalnumerique_recherche_parcours.manager.matrise_user')->createEmpty();
                             $note->setRechercheParcoursDetails($rechercheParcoursDetails);
                             $note->setPourcentageMaitrise(0);
-                            $note->setObjet($this->get('hopitalnumerique_objet.manager.objet')->findOneBy(array('id' => $entityProperties['entityId'])));
+                            $note->setObjet($this->get('hopitalnumerique_objet.manager.objet')->findOneBy(['id' => $entityProperties['entityId']]));
                             $note->setUser($user);
 
                             $this->get('hopitalnumerique_recherche_parcours.manager.matrise_user')->save($note);
@@ -221,7 +220,7 @@ class RechercheParcoursDetailsController extends Controller
                 //Dans le cas où des points-dur ont une date dépassée, changement de groupe de restriction ou passé inactif
                 $notes = $this->get('hopitalnumerique_recherche_parcours.manager.matrise_user')->removeNotesNotInEntities($notes, $entitiesPropertiesKeyedByGroup);
 
-                $notesJSON = array();
+                $notesJSON = [];
                 //Set d'un tableau de note en JSOn pour le chargement des slides
                 foreach ($notes as $key => $note) {
                     $notesJSON[$key] = $note->getPourcentageMaitrise();
@@ -231,73 +230,61 @@ class RechercheParcoursDetailsController extends Controller
                 $notesMoyenneParEtape = $this->get('hopitalnumerique_recherche_parcours.manager.matrise_user')->getAverage($rechercheParcours, $user);
             } //Mode non connecté : pas de notes
             else {
-                $notes = array();
-                $notesJSON = json_encode(array('id' => 0));
-                $notesMoyenneParEtape = array();
+                $notes = [];
+                $notesJSON = json_encode(['id' => 0]);
+                $notesMoyenneParEtape = [];
             }
 
-            return $this->render('HopitalNumeriqueRechercheParcoursBundle:RechercheParcoursDetails:Front/index.html.twig', array(
-                'rechercheParcours'    => $rechercheParcours,
-                'etapesSelected'       => $rechercheParcoursDetails,
-                'notes'                => $notes,
-                'notesJSON'            => json_encode($notesJSON),
+            return $this->render('HopitalNumeriqueRechercheParcoursBundle:RechercheParcoursDetails:Front/index.html.twig', [
+                'rechercheParcours' => $rechercheParcours,
+                'etapesSelected' => $rechercheParcoursDetails,
+                'notes' => $notes,
+                'notesJSON' => json_encode($notesJSON),
                 'notesMoyenneParEtape' => $notesMoyenneParEtape,
-                'refChilds'            => $refChilds,
-                'refChildSelected'     => $refChildSelected,
-                'entitiesPropertiesKeyedByGroup' => $entitiesPropertiesKeyedByGroup
-            ));
-        }
-        else
-        {
+                'refChilds' => $refChilds,
+                'refChildSelected' => $refChildSelected,
+                'entitiesPropertiesKeyedByGroup' => $entitiesPropertiesKeyedByGroup,
+            ]);
+        } else {
             //Si aucune étape n'est spécifiée et pas d'user connecté on affiche la premier qu'on trouve pour cette recherche par parcours
-            if('anon.' === $user)
-            {
+            if ('anon.' === $user) {
                 $etapes = $rechercheParcours->getRecherchesParcoursDetails();
             }
             //Si un utilisateur est connecté on cherche la premiere qui n'a pas une moyenne de 100%
-            else
-            {
+            else {
                 $idEtapeMoyenne = 0;
                 //Récupération de la note moyenne par étapes dans un tableau (étapeId => moyenne arrondie à l'entier)
-                $notesMoyenneParEtape = $this->get('hopitalnumerique_recherche_parcours.manager.matrise_user')->getAverage( $rechercheParcours, $user );
-                foreach ($notesMoyenneParEtape as $key => $noteMoyenne)
-                {
+                $notesMoyenneParEtape = $this->get('hopitalnumerique_recherche_parcours.manager.matrise_user')->getAverage($rechercheParcours, $user);
+                foreach ($notesMoyenneParEtape as $key => $noteMoyenne) {
                     //Récupération de la premiere note pas à 100%
-                    if($noteMoyenne !== 100)
-                    {
+                    if ($noteMoyenne !== 100) {
                         $idEtapeMoyenne = $key;
                         break;
-                    }
-                    else
-                    {
+                    } else {
                         $idEtapeMoyenne = $idEtapeMoyenne === 0 ? $key : $idEtapeMoyenne;
                     }
                 }
-                $etapes = $this->get('hopitalnumerique_recherche_parcours.manager.recherche_parcours_details')->findBy( array( 'id' => $idEtapeMoyenne ));
-                $etapes = empty($etapes) ? $rechercheParcours->getRecherchesParcoursDetails() : $etapes; 
-            
+                $etapes = $this->get('hopitalnumerique_recherche_parcours.manager.recherche_parcours_details')->findBy(['id' => $idEtapeMoyenne]);
+                $etapes = empty($etapes) ? $rechercheParcours->getRecherchesParcoursDetails() : $etapes;
             }
 
             //Si il y a bien des étapes à la recherche par parcours on récupère la 1ere
-            if( !is_null($etapes)
+            if (!is_null($etapes)
                 && isset($etapes)
                 && !empty($etapes)
-                && !is_null($etapes[0]) )
-            {
-                $idEtape      = $etapes[0]->getId();
-                $tool         = new Chaine( $etapes[0]->getReference()->getLibelle() );
+                && !is_null($etapes[0])) {
+                $idEtape = $etapes[0]->getId();
+                $tool = new Chaine($etapes[0]->getReference()->getLibelle());
                 $etapeLibelle = $tool->minifie();
 
-                return $this->redirect( $this->generateUrl('hopital_numerique_recherche_parcours_details_index_front', array('id' => intval($id), 'alias' => $alias, 'idEtape' => $idEtape, 'etape' => $etapeLibelle) ) );
-                
+                return $this->redirect($this->generateUrl('hopital_numerique_recherche_parcours_details_index_front', ['id' => intval($id), 'alias' => $alias, 'idEtape' => $idEtape, 'etape' => $etapeLibelle]));
             }
             //Sinon on retourne sur la sélection de la recherche par parcours + message à l'utilisateur
-            else
-            {
-                $this->get('session')->getFlashBag()->add( 'danger' , 'Il n\'existe aucune étape pour cette rubrique.');
-                return $this->redirect( $this->generateUrl('hopital_numerique_recherche_parcours_homepage_front', array('id' => $rechercheParcours->getRecherchesParcoursGestion()->getId()) ) );
+            else {
+                $this->get('session')->getFlashBag()->add('danger', 'Il n\'existe aucune étape pour cette rubrique.');
+
+                return $this->redirect($this->generateUrl('hopital_numerique_recherche_parcours_homepage_front', ['id' => $rechercheParcours->getRecherchesParcoursGestion()->getId()]));
             }
         }
     }
-
 }

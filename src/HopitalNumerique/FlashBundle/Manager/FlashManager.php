@@ -12,12 +12,12 @@ class FlashManager extends BaseManager
     protected $class = 'HopitalNumerique\FlashBundle\Entity\Flash';
 
     /**
-     * Récupère les messages visibles par l'utilisateur
+     * Récupère les messages visibles par l'utilisateur.
      *
      * @return array
      */
-    public function getMessagesForUser( $user )
+    public function getMessagesForUser($user)
     {
-        return $this->getRepository()->getMessagesForUser( $user )->getQuery()->getResult();
+        return $this->getRepository()->getMessagesForUser($user)->getQuery()->getResult();
     }
 }

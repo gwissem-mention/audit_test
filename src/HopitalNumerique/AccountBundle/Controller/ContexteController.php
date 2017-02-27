@@ -1,4 +1,5 @@
 <?php
+
 namespace HopitalNumerique\AccountBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -16,7 +17,7 @@ class ContexteController extends Controller
         $response = [
             'success' => true,
             'save' => false,
-            'urlRedirection' => null
+            'urlRedirection' => null,
         ];
 
         if (null !== $this->getUser()) { // Connecté, on modifie le compte avec les éléments du contexte choisis

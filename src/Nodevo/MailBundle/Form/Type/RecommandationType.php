@@ -1,4 +1,5 @@
 <?php
+
 namespace Nodevo\MailBundle\Form\Type;
 
 use Symfony\Component\Form\AbstractType;
@@ -16,7 +17,6 @@ class RecommandationType extends AbstractType
      */
     private $router;
 
-
     /**
      * Constructeur.
      */
@@ -24,7 +24,6 @@ class RecommandationType extends AbstractType
     {
         $this->router = $router;
     }
-
 
     /**
      * {@inheritdoc}
@@ -53,24 +52,24 @@ class RecommandationType extends AbstractType
                 'attr' => [
                     'maxlength' => 255,
                     'class' => 'validate[required,custom[email]]',
-                    'data-prompt-position' => 'bottomLeft'
-                ]
+                    'data-prompt-position' => 'bottomLeft',
+                ],
             ])
             ->add('expediteur', 'email', [
                 'data' => (null !== $expediteur ? $expediteur->getEmail() : ''),
                 'attr' => [
                     'maxlength' => 255,
                     'class' => 'validate[required,custom[email]]',
-                    'data-prompt-position' => 'bottomLeft'
-                ]
+                    'data-prompt-position' => 'bottomLeft',
+                ],
             ])
             ->add('objet', 'text', [
                 'data' => $recommandationMail->getObjet(),
                 'attr' => [
                     'maxlength' => 255,
                     'class' => 'validate[required]',
-                    'data-prompt-position' => 'bottomLeft'
-                ]
+                    'data-prompt-position' => 'bottomLeft',
+                ],
             ])
             ->add('message', 'textarea', [
                 'data' => str_replace(
@@ -81,15 +80,14 @@ class RecommandationType extends AbstractType
                 'attr' => [
                     'rows' => 10,
                     'class' => 'validate[required]',
-                    'data-prompt-position' => 'bottomLeft'
-                ]
+                    'data-prompt-position' => 'bottomLeft',
+                ],
             ])
             ->add('url', 'hidden', [
-                'data' => $url
+                'data' => $url,
             ])
         ;
     }
-
 
     /**
      * {@inheritdoc}
@@ -99,7 +97,7 @@ class RecommandationType extends AbstractType
         $optionsResolver
             ->setRequired(['mail', 'expediteur', 'url'])
             ->setAllowedTypes([
-                'mail' => '\Nodevo\MailBundle\Entity\Mail'
+                'mail' => '\Nodevo\MailBundle\Entity\Mail',
             ])
         ;
     }

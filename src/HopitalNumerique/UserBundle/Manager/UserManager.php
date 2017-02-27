@@ -1,4 +1,5 @@
 <?php
+
 namespace HopitalNumerique\UserBundle\Manager;
 
 use HopitalNumerique\CommunautePratiqueBundle\Entity\Groupe;
@@ -16,22 +17,22 @@ class UserManager extends BaseManager
 {
     protected $class = '\HopitalNumerique\UserBundle\Entity\User';
     /**
-     * @var SecurityContext $securityContext
+     * @var SecurityContext
      */
     protected $securityContext;
     /**
-     * @var \HopitalNumerique\QuestionnaireBundle\Manager\ReponseManager $managerReponse
+     * @var \HopitalNumerique\QuestionnaireBundle\Manager\ReponseManager
      */
     protected $managerReponse;
     /**
-     * @var RefusCandidatureManager $managerRefusCandidature
+     * @var RefusCandidatureManager
      */
     protected $managerRefusCandidature;
 
     /** @var DomaineManager */
     protected $managerDomaine;
 
-    /** @var CurrentDomaine  */
+    /** @var CurrentDomaine */
     protected $currentDomaine;
 
     protected $options;
@@ -48,16 +49,16 @@ class UserManager extends BaseManager
         parent::__construct($managerUser);
         $this->securityContext = $securityContext;
         //Récupération des managers Réponses et Questionnaire
-        $this->managerReponse          = $managerReponse;
+        $this->managerReponse = $managerReponse;
         $this->managerRefusCandidature = $managerRefusCandidature;
-        $this->managerDomaine          = $managerDomaine;
+        $this->managerDomaine = $managerDomaine;
         $this->remboursementManager = $remboursementManager;
         $this->currentDomaine = $currentDomaine;
-        $this->options                 = array();
+        $this->options = [];
     }
 
     /**
-     * Override : Récupère les données pour le grid sous forme de tableau
+     * Override : Récupère les données pour le grid sous forme de tableau.
      *
      * @param \StdClass $condition
      *
@@ -66,9 +67,9 @@ class UserManager extends BaseManager
     public function getDatasForGrid(\StdClass $condition = null)
     {
         $users = $this->getRepository()->getDatasForGrid($condition)->getQuery()->getResult();
-        $usersForGrid = array();
+        $usersForGrid = [];
 
-        $idExpert      = 1;
+        $idExpert = 1;
         $idAmbassadeur = 2;
 
         //Récupération des questionnaires et users
@@ -83,29 +84,29 @@ class UserManager extends BaseManager
         foreach ($users as $user) {
             //Récupération des questionnaires rempli par l'utilisateur courant
             $questionnairesByUser =
-                array_key_exists($user['id'], $questionnaireByUser) ? $questionnaireByUser[$user['id']] : array();
+                array_key_exists($user['id'], $questionnaireByUser) ? $questionnaireByUser[$user['id']] : [];
 
             //Récupèration d'un booléen : Vérification de réponses pour le questionnaire expert,
             //que son role n'est pas expert et que sa candidature n'a pas encore été refusé
             $user['expert'] = (in_array($idExpert, $questionnairesByUser)
-                && !in_array('ROLE_EXPERT_6', $user["roles"])
+                && !in_array('ROLE_EXPERT_6', $user['roles'])
                 && !$this->managerRefusCandidature->refusExisteByUserByQuestionnaire(
                     $user['id'],
                     $idExpert,
                     $refusCandidature
                 )
-                && !$user["alreadyBeExpert"]);
+                && !$user['alreadyBeExpert']);
 
             //Récupèration d'un booléen : Vérification de réponses pour le questionnaire ambassadeur,
             //que son role n'est pas expert et que sa candidature n'a pas encore été refusé
             $user['ambassadeur'] = (in_array($idAmbassadeur, $questionnairesByUser)
-                && !in_array('ROLE_AMBASSADEUR_7', $user["roles"])
+                && !in_array('ROLE_AMBASSADEUR_7', $user['roles'])
                 && !$this->managerRefusCandidature->refusExisteByUserByQuestionnaire(
                     $user['id'],
                     $idAmbassadeur,
                     $refusCandidature
                 )
-                && !$user["alreadyBeAmbassadeur"]);
+                && !$user['alreadyBeAmbassadeur']);
 
             $contractDate = new \DateTime($user['contra']);
 
@@ -115,8 +116,8 @@ class UserManager extends BaseManager
                 $user['contra'] = null;
             }
 
-            unset($user["alreadyBeExpert"]);
-            unset($user["alreadyBeAmbassadeur"]);
+            unset($user['alreadyBeExpert']);
+            unset($user['alreadyBeAmbassadeur']);
             $user['idUser'] = $user['id'];
 
             $usersForGrid[] = $user;
@@ -126,7 +127,7 @@ class UserManager extends BaseManager
     }
 
     /**
-     * Override : Récupère les données Etablissement pour le grid sous forme de tableau
+     * Override : Récupère les données Etablissement pour le grid sous forme de tableau.
      *
      * @return array
      */
@@ -136,7 +137,7 @@ class UserManager extends BaseManager
     }
 
     /**
-     * Técupère les établissements pour l'export CSV
+     * Técupère les établissements pour l'export CSV.
      *
      * @return array
      */
@@ -146,7 +147,7 @@ class UserManager extends BaseManager
     }
 
     /**
-     * Modifie l'état de tous les users
+     * Modifie l'état de tous les users.
      *
      * @param array     $users Liste des utilisateurs
      * @param Reference $ref   RefStatut à mettre
@@ -166,11 +167,11 @@ class UserManager extends BaseManager
     }
 
     /**
-     * On cherche a savoir si un user existe avec le role et la région de l'user modifié
+     * On cherche a savoir si un user existe avec le role et la région de l'user modifié.
      *
      * @param User $user L'utilisateur modifié
      *
-     * @return boolean
+     * @return bool
      */
     public function userExistForRoleDirection($user)
     {
@@ -178,10 +179,10 @@ class UserManager extends BaseManager
     }
 
     /**
-     * Retourne la liste des ambassadeurs de la région et du domaine
+     * Retourne la liste des ambassadeurs de la région et du domaine.
      *
      * @param Reference $region  La région filtrée
-     * @param integer   $domaine Le domaine fonctionnel
+     * @param int       $domaine Le domaine fonctionnel
      *
      * @return array
      */
@@ -191,7 +192,7 @@ class UserManager extends BaseManager
     }
 
     /**
-     * Retourne la liste des ambassadeurs de la région et de la publication
+     * Retourne la liste des ambassadeurs de la région et de la publication.
      *
      * @param Reference $region La région filtrée
      * @param Objet     $objet  La publication
@@ -204,19 +205,19 @@ class UserManager extends BaseManager
     }
 
     /**
-     * [getUsersGroupeEtablissement description]
+     * [getUsersGroupeEtablissement description].
      *
-     * @param  array  $criteres [description]
+     * @param array $criteres [description]
      *
      * @return [type]
      */
-    public function getUsersGroupeEtablissement($criteres = array())
+    public function getUsersGroupeEtablissement($criteres = [])
     {
         return $this->getRepository()->getUsersGroupeEtablissement($criteres)->getQuery()->getResult();
     }
 
     /**
-     * Retourne la liste des utilisateurs possédant le role demandé
+     * Retourne la liste des utilisateurs possédant le role demandé.
      *
      * @param string $role Le rôle demandé
      *
@@ -231,6 +232,7 @@ class UserManager extends BaseManager
      * Retourne la liste des utilisateurs possédant un des roles demandés.
      *
      * @param array $roles Rôles
+     *
      * @return array<\HopitalNumerique\UserBundle\Entity\User> Users
      */
     public function findUsersByRoles(array $roles)
@@ -239,7 +241,7 @@ class UserManager extends BaseManager
     }
 
     /**
-     * Retourne la liste des utilisateurs étant assigné au domaine
+     * Retourne la liste des utilisateurs étant assigné au domaine.
      *
      * @param int $idDomaine Identifiant du domaine à filtrer
      *
@@ -254,6 +256,7 @@ class UserManager extends BaseManager
      * Retourne les utilisateurs liés à un de ces domaines.
      *
      * @param \Doctrine\Common\Collections\Collection $domaines Domaines
+     *
      * @return array<\HopitalNumerique\UserBundle\Entity\User> Utilisateurs
      */
     public function findByDomaines(Collection $domaines)
@@ -262,10 +265,10 @@ class UserManager extends BaseManager
     }
 
     /**
-     * Retourne le premier utilisateur correspondant au role et à la région demandés
+     * Retourne le premier utilisateur correspondant au role et à la région demandés.
      *
-     * @param string $role      Le rôle demandé
-     * @param int    $idRegion  Region demandée
+     * @param string $role     Le rôle demandé
+     * @param int    $idRegion Region demandée
      *
      * @return array
      */
@@ -278,29 +281,34 @@ class UserManager extends BaseManager
      * Retourne un unique CMSI.
      *
      * @param array $criteres Filtres à appliquer sur la liste
+     *
      * @return \HopitalNumerique\UserBundle\Entity\User|null Un CMSI si trouvé, sinon NIL
      */
-    public function getCmsi(array $criteres = array())
+    public function getCmsi(array $criteres = [])
     {
         return $this->getRepository()->getCmsi($criteres);
     }
+
     /**
      * Retourne un unique directeur.
      *
      * @param array $criteres Filtres à appliquer sur la liste
+     *
      * @return \HopitalNumerique\UserBundle\Entity\User|null Un directeur si trouvé, sinon NIL
      */
     public function getDirecteur(array $criteres)
     {
         return $this->getRepository()->getDirecteur($criteres);
     }
+
     /**
      * Retourne une liste d'ambassadeurs.
      *
      * @param array $criteres Filtres à appliquer sur la liste
+     *
      * @return \HopitalNumerique\UserBundle\Entity\User[] La liste des ambassadeurs
      */
-    public function getAmbassadeurs(array $criteres = array())
+    public function getAmbassadeurs(array $criteres = [])
     {
         return $this->getRepository()->getAmbassadeurs($criteres);
     }
@@ -309,9 +317,10 @@ class UserManager extends BaseManager
      * Retourne une liste des experts.
      *
      * @param array $criteres Filtres à appliquer sur la liste
+     *
      * @return \HopitalNumerique\UserBundle\Entity\User[] La liste des experts
      */
-    public function getExperts(array $criteres = array())
+    public function getExperts(array $criteres = [])
     {
         return $this->getRepository()->getExperts($criteres);
     }
@@ -320,9 +329,10 @@ class UserManager extends BaseManager
      * Retourne une liste d'utilisateurs ES ou Enregistré.
      *
      * @param array $criteres Filtres à appliquer sur la liste
+     *
      * @return \HopitalNumerique\UserBundle\Entity\User[] La liste des utilisateurs
      */
-    public function getESAndEnregistres(array $criteres = array())
+    public function getESAndEnregistres(array $criteres = [])
     {
         return $this->getRepository()->getESAndEnregistres($criteres);
     }
@@ -331,27 +341,28 @@ class UserManager extends BaseManager
      * Retourne une liste d'utilisateurs Admin.
      *
      * @param array $criteres Filtres à appliquer sur la liste
+     *
      * @return \HopitalNumerique\UserBundle\Entity\User[] La liste des utilisateurs
      */
-    public function getAdmins(array $criteres = array())
+    public function getAdmins(array $criteres = [])
     {
         return $this->getRepository()->getAdmins($criteres);
     }
 
-
     /**
-     * Retourne une liste d'utilisateurs CMSI
+     * Retourne une liste d'utilisateurs CMSI.
      *
      * @param array $criteres Filtres à appliquer sur la liste
+     *
      * @return \HopitalNumerique\UserBundle\Entity\User[] La liste des utilisateurs
      */
-    public function getCMSIs(array $criteres = array())
+    public function getCMSIs(array $criteres = [])
     {
         return $this->getRepository()->getCmsis($criteres);
     }
 
     /**
-     * Récupère les utilisateurs ayant répondues au questionnaire passé en paramètre
+     * Récupère les utilisateurs ayant répondues au questionnaire passé en paramètre.
      *
      * @param  int idQuestionnaire Identifiant du questionnaire
      *
@@ -371,7 +382,7 @@ class UserManager extends BaseManager
     }
 
     /**
-     * Récupère tous les utilisateurs (tous les rôles)
+     * Récupère tous les utilisateurs (tous les rôles).
      *
      * @return \HopitalNumerique\UserBundle\Entity\User[] La liste des utilisateurs
      */
@@ -381,7 +392,7 @@ class UserManager extends BaseManager
     }
 
     /**
-     * Récupère le nombre d'établissements connectés
+     * Récupère le nombre d'établissements connectés.
      *
      * @return int
      */
@@ -394,6 +405,7 @@ class UserManager extends BaseManager
      * Retourne des membres de la communauté de pratique.
      *
      * @param \HopitalNumerique\UserBundle\Manager\Domaine $domaine Domaine
+     *
      * @return array<\HopitalNumerique\UserBundle\Entity\User> Utilisateurs
      */
     public function findCommunautePratiqueMembres(Domaine $domaine)
@@ -405,6 +417,7 @@ class UserManager extends BaseManager
      * Retourne la QueryBuilder avec les membres de la communauté de pratique.
      *
      * @param Groupe $groupe (optionnel) Groupe des membres
+     *
      * @return \Doctrine\ORM\QueryBuilder QueryBuilder
      */
     public function getCommunautePratiqueMembresQueryBuilder(Groupe $groupe = null, Domaine $domaine = null, $membreId = null)
@@ -416,6 +429,7 @@ class UserManager extends BaseManager
      * Retourne les membres de la communauté de pratique n'appartenant pas à tel groupe.
      *
      * @param \HopitalNumerique\CommunautePratiqueBundle\Entity\Groupe $groupe Groupe
+     *
      * @return array<\HopitalNumerique\UserBundle\Entity\User> Utilisateurs
      */
     public function findCommunautePratiqueMembresNotInGroupe(Groupe $groupe)
@@ -426,21 +440,23 @@ class UserManager extends BaseManager
     /**
      * Retourne des membres de la communauté de pratique au hasard.
      *
-     * @param integer                                         $nombreMembres Nombre de membres à retourner
+     * @param int                                             $nombreMembres Nombre de membres à retourner
      * @param Reference                                       $civilite      (optionnel) Civilité
      * @param array<\HopitalNumerique\UserBundle\Entity\User> $ignores       (optionnel) Liste d'utilisateurs à ignorer
+     *
      * @return array<\HopitalNumerique\UserBundle\Entity\User> Utilisateurs
      */
     public function findCommunautePratiqueRandomMembres($nombreMembres, Reference $civilite = null, array $ignores = null)
     {
         $domaine = $this->currentDomaine->get();
+
         return $this->getRepository()->findCommunautePratiqueRandomMembres($domaine, $nombreMembres, $civilite, $ignores);
     }
 
     /**
      * Retourne de nombre de membres de la communauté de pratique.
      *
-     * @return integer Total
+     * @return int Total
      */
     public function findCommunautePratiqueMembresCount()
     {
@@ -475,6 +491,7 @@ class UserManager extends BaseManager
      * Retourne le référent d'une région.
      *
      * @param \HopitalNumerique\ReferenceBundle\Entity\Reference $region Région
+     *
      * @return \HopitalNumerique\UserBundle\Entity\User|null Référent
      */
     public function getRegionReferent(Reference $region)

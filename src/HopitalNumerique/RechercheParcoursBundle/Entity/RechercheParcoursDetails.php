@@ -5,7 +5,7 @@ namespace HopitalNumerique\RechercheParcoursBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * RechercheParcoursDetails
+ * RechercheParcoursDetails.
  *
  * @ORM\Table(name="hn_recherche_recherche_parcours_details")
  * @ORM\Entity(repositoryClass="HopitalNumerique\RechercheParcoursBundle\Repository\RechercheParcoursDetailsRepository")
@@ -13,7 +13,7 @@ use Doctrine\ORM\Mapping as ORM;
 class RechercheParcoursDetails
 {
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="rrpd_id", type="integer")
      * @ORM\Id
@@ -22,15 +22,15 @@ class RechercheParcoursDetails
     private $id;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\ManyToOne(targetEntity="RechercheParcours", cascade={"persist"}, inversedBy="recherchesParcoursDetails")
      * @ORM\JoinColumn(name="rrp_id", referencedColumnName="rrp_id", onDelete="CASCADE")
      */
     protected $rechercheParcours;
-    
+
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\ManyToOne(targetEntity="\HopitalNumerique\ReferenceBundle\Entity\Reference")
      * @ORM\JoinColumn(name="ref_id", referencedColumnName="ref_id", onDelete="CASCADE")
@@ -45,19 +45,18 @@ class RechercheParcoursDetails
     protected $description;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="rrpd_order", type="smallint", options = {"comment" = "Ordre du détails de la recherche par parcours."})
      */
     protected $order;
 
     /**
-     * @var boolean
+     * @var bool
      *
      * @ORM\Column(name="rrpd_afficher_enfant", type="boolean", options = {"comment" = "Afficher les enfants de la reference en front"})
      */
     protected $showChildren;
-
 
     /**
      * Constructeur.
@@ -67,11 +66,10 @@ class RechercheParcoursDetails
         $this->showChildren = false;
     }
 
-
     /**
-     * Get id
+     * Get id.
      *
-     * @return integer 
+     * @return int
      */
     public function getId()
     {
@@ -82,16 +80,17 @@ class RechercheParcoursDetails
     {
         return $this->rechercheParcours;
     }
-    
-    public function setRechercheParcours( RechercheParcours $rechercheParcours )
+
+    public function setRechercheParcours(RechercheParcours $rechercheParcours)
     {
         $this->rechercheParcours = $rechercheParcours;
     }
 
     /**
-     * Set description
+     * Set description.
      *
      * @param string $description
+     *
      * @return RechercheParcoursDetails
      */
     public function setDescription($description)
@@ -102,17 +101,17 @@ class RechercheParcoursDetails
     }
 
     /**
-     * Get description
+     * Get description.
      *
-     * @return string 
+     * @return string
      */
     public function getDescription()
     {
         return $this->description;
     }
-    
+
     /**
-     * Get reference
+     * Get reference.
      *
      * @return \HopitalNumerique\ReferenceBundle\Entity\Reference $reference
      */
@@ -120,9 +119,9 @@ class RechercheParcoursDetails
     {
         return $this->reference;
     }
-    
+
     /**
-     * Set reference
+     * Set reference.
      *
      * @param \HopitalNumerique\ReferenceBundle\Entity\Reference $reference
      */
@@ -132,30 +131,32 @@ class RechercheParcoursDetails
     }
 
     /**
-     * Get order
+     * Get order.
      *
-     * @return integer $order
+     * @return int $order
      */
     public function getOrder()
     {
         return $this->order;
     }
-    
+
     /**
-     * Set order
+     * Set order.
      *
-     * @param integer $order
+     * @param int $order
      */
     public function setOrder($order)
     {
         $this->order = $order;
+
         return $this;
     }
 
     /**
-     * Set showChildren
+     * Set showChildren.
      *
-     * @param boolean $showChildren
+     * @param bool $showChildren
+     *
      * @return RechercheParcoursDetails
      */
     public function setShowChildren($showChildren)
@@ -166,9 +167,9 @@ class RechercheParcoursDetails
     }
 
     /**
-     * Get showChildren
+     * Get showChildren.
      *
-     * @return boolean 
+     * @return bool
      */
     public function getShowChildren()
     {

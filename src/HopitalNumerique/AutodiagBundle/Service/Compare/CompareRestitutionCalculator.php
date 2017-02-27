@@ -6,14 +6,12 @@ use HopitalNumerique\AutodiagBundle\Entity\Autodiag\Container;
 use HopitalNumerique\AutodiagBundle\Entity\Compare;
 use HopitalNumerique\AutodiagBundle\Entity\Restitution\Category;
 use HopitalNumerique\AutodiagBundle\Entity\Restitution\Item;
-use HopitalNumerique\AutodiagBundle\Model\Result\ComparedItem;
 use HopitalNumerique\AutodiagBundle\Model\Result\ComparedItemResponse;
 use HopitalNumerique\AutodiagBundle\Model\Result\ComparedScore;
-use HopitalNumerique\AutodiagBundle\Model\Result\ItemResponse;
 use HopitalNumerique\AutodiagBundle\Model\Result\Score;
 use HopitalNumerique\AutodiagBundle\Repository\RestitutionRepository;
 use HopitalNumerique\AutodiagBundle\Service\RestitutionCalculator;
-use \HopitalNumerique\AutodiagBundle\Model\Result\Item as ResultItem;
+use HopitalNumerique\AutodiagBundle\Model\Result\Item as ResultItem;
 
 class CompareRestitutionCalculator
 {
@@ -25,6 +23,7 @@ class CompareRestitutionCalculator
 
     /**
      * CompareRestitutionCalculator constructor.
+     *
      * @param $restitutionCalculator
      */
     public function __construct(RestitutionCalculator $restitutionCalculator, RestitutionRepository $restitutionRepository)
@@ -35,7 +34,6 @@ class CompareRestitutionCalculator
 
     public function compute(Compare $compare)
     {
-
         $this->restitutionCalculator->setResultItemCreatedCallback(function ($item, $container) use ($compare) {
             return $this->updateResultScore($item, $container, $compare);
         });
@@ -48,7 +46,7 @@ class CompareRestitutionCalculator
         foreach ($restitution->getCategories() as $category) {
             /** @var Category $category */
             foreach ($category->getItems() as $item) {
-                /** @var Item $item */
+                /* @var Item $item */
                 $result[$item->getId()] = $this->restitutionCalculator->computeItem($item, $compare->getSynthesis());
             }
         }
@@ -57,12 +55,14 @@ class CompareRestitutionCalculator
     }
 
     /**
-     * Alter original computed score to add reference score
+     * Alter original computed score to add reference score.
+     *
      * @Todo : find better solution than this callback. Class RestitutionCalculator should be exploded as reusable services
      *
      * @param ResultItem $item
-     * @param Container $container
-     * @param Compare $compare
+     * @param Container  $container
+     * @param Compare    $compare
+     *
      * @return ResultItem
      */
     protected function updateResultScore(ResultItem $item, Container $container, Compare $compare)

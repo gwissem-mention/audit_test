@@ -1,4 +1,5 @@
 <?php
+
 namespace HopitalNumerique\RechercheBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
@@ -6,7 +7,7 @@ use Nodevo\ToolsBundle\Tools\Systeme;
 use Nodevo\ToolsBundle\Traits\ImageTrait;
 
 /**
- * ExpBesoinReponses
+ * ExpBesoinReponses.
  *
  * @ORM\Table(name="hn_recherche_expbesoin_reponse")
  * @ORM\Entity(repositoryClass="HopitalNumerique\RechercheBundle\Repository\ExpBesoinReponsesRepository")
@@ -15,9 +16,8 @@ class ExpBesoinReponses
 {
     use ImageTrait;
 
-
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="expbr_id", type="integer")
      * @ORM\Id
@@ -26,7 +26,7 @@ class ExpBesoinReponses
     private $id;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="expb_order", type="smallint", options = {"comment" = "Ordre de la question"})
      */
@@ -38,9 +38,9 @@ class ExpBesoinReponses
      * @ORM\Column(name="expbr_libelle", type="string", length=255)
      */
     protected $libelle;
-    
+
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\ManyToOne(targetEntity="\HopitalNumerique\RechercheBundle\Entity\ExpBesoin")
      * @ORM\JoinColumn(name="expb_id", referencedColumnName="expb_id", nullable=true, onDelete="CASCADE")
@@ -48,7 +48,7 @@ class ExpBesoinReponses
     protected $question;
 
     /**
-     * @var boolean
+     * @var bool
      *
      * @ORM\Column(name="expbr_autreQuestion", type="boolean", options = {"comment" = " ?"})
      */
@@ -65,51 +65,52 @@ class ExpBesoinReponses
      * @var \Symfony\Component\HttpFoundation\File\UploadedFile
      */
     protected $imageFile;
-    
+
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\ManyToOne(targetEntity="\HopitalNumerique\RechercheBundle\Entity\ExpBesoin")
      * @ORM\JoinColumn(name="expb_id_redirection", referencedColumnName="expb_id", nullable=true, onDelete="CASCADE")
      */
     protected $redirigeQuestion;
 
-
     /**
-     * Get id
+     * Get id.
      *
-     * @return integer 
+     * @return int
      */
     public function getId()
     {
         return $this->id;
     }
-    
+
     /**
-     * Get order
+     * Get order.
      *
-     * @return integer $order
+     * @return int $order
      */
     public function getOrder()
     {
         return $this->order;
     }
-    
+
     /**
-     * Set order
+     * Set order.
      *
-     * @param integer $order
+     * @param int $order
      */
     public function setOrder($order)
     {
         $this->order = $order;
+
         return $this;
     }
 
     /**
-     * Set libelle
+     * Set libelle.
      *
      * @param string $libelle
+     *
      * @return ExpBesoin
      */
     public function setLibelle($libelle)
@@ -120,9 +121,9 @@ class ExpBesoinReponses
     }
 
     /**
-     * Get libelle
+     * Get libelle.
      *
-     * @return string 
+     * @return string
      */
     public function getLibelle()
     {
@@ -130,7 +131,7 @@ class ExpBesoinReponses
     }
 
     /**
-     * Get question
+     * Get question.
      *
      * @return \HopitalNumerique\RechercheBundle\Entity\ExpBesoin $question
      */
@@ -138,9 +139,9 @@ class ExpBesoinReponses
     {
         return $this->question;
     }
-    
+
     /**
-     * Set question
+     * Set question.
      *
      * @param \HopitalNumerique\RechercheBundle\Entity\ExpBesoin $question
      */
@@ -150,9 +151,10 @@ class ExpBesoinReponses
     }
 
     /**
-     * Set autreQuestion
+     * Set autreQuestion.
      *
-     * @param boolean $autreQuestion
+     * @param bool $autreQuestion
+     *
      * @return ExpBesoin
      */
     public function setAutreQuestion($autreQuestion)
@@ -163,9 +165,9 @@ class ExpBesoinReponses
     }
 
     /**
-     * Get autreQuestion
+     * Get autreQuestion.
      *
-     * @return boolean 
+     * @return bool
      */
     public function isAutreQuestion()
     {
@@ -173,7 +175,7 @@ class ExpBesoinReponses
     }
 
     /**
-     * Get redirigeQuestion
+     * Get redirigeQuestion.
      *
      * @return \HopitalNumerique\RechercheBundle\Entity\ExpBesoin $question
      */
@@ -181,9 +183,9 @@ class ExpBesoinReponses
     {
         return $this->redirigeQuestion;
     }
-    
+
     /**
-     * Set redirigeQuestion
+     * Set redirigeQuestion.
      *
      * @param \HopitalNumerique\RechercheBundle\Entity\ExpBesoin $question
      */
@@ -192,13 +194,12 @@ class ExpBesoinReponses
         $this->redirigeQuestion = $expBesoin;
     }
 
-
     /**
      * {@inheritdoc}
      */
     public function getImageUploadDir()
     {
-        return 'media'.DIRECTORY_SEPARATOR.'expression-besoin-reponse';
+        return 'media' . DIRECTORY_SEPARATOR . 'expression-besoin-reponse';
     }
 
     /**
@@ -206,7 +207,7 @@ class ExpBesoinReponses
      */
     public function imageFileIsValid()
     {
-        return (null !== $this->imageFile && $this->imageFile->getClientSize() <= Systeme::getFileUploadMaxSize());
+        return null !== $this->imageFile && $this->imageFile->getClientSize() <= Systeme::getFileUploadMaxSize();
     }
 
     /**
@@ -217,7 +218,7 @@ class ExpBesoinReponses
     public function getImageUrl()
     {
         if (null !== $this->image) {
-            return '/'.str_replace(DIRECTORY_SEPARATOR, '/', $this->getImageUploadDir()).'/'.$this->image;
+            return '/' . str_replace(DIRECTORY_SEPARATOR, '/', $this->getImageUploadDir()) . '/' . $this->image;
         }
 
         return null;

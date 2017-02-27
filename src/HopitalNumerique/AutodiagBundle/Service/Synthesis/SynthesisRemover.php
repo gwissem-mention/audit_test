@@ -38,11 +38,12 @@ class SynthesisRemover
     }
 
     /**
-     * Supprime la synthèse et la entries associées
+     * Supprime la synthèse et la entries associées.
      *
      * @param Synthesis $synthesis
-     * @param User $user
-     * @return boolean
+     * @param User      $user
+     *
+     * @return bool
      */
     public function removeSynthesis(Synthesis $synthesis, User $user)
     {
@@ -64,7 +65,7 @@ class SynthesisRemover
 
             $this->entityManager->flush();
 
-            return SynthesisRemover::SYNTHESIS_REMOVED;
+            return self::SYNTHESIS_REMOVED;
         }
 
         return null;
@@ -86,10 +87,10 @@ class SynthesisRemover
             if ($found) {
                 $this->entityManager->flush();
 
-                return SynthesisRemover::SHARE_REMOVED;
+                return self::SHARE_REMOVED;
             }
 
-            return SynthesisRemover::SHARE_NOT_FOUND;
+            return self::SHARE_NOT_FOUND;
         }
 
         return null;

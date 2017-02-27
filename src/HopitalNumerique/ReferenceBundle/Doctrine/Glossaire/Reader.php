@@ -1,4 +1,5 @@
 <?php
+
 namespace HopitalNumerique\ReferenceBundle\Doctrine\Glossaire;
 
 use HopitalNumerique\DomaineBundle\Entity\Domaine;
@@ -28,7 +29,6 @@ class Reader
      */
     private $referenceManager;
 
-
     /**
      * Constructeur.
      */
@@ -39,7 +39,6 @@ class Reader
         $this->referenceManager = $referenceManager;
     }
 
-
     /**
      * Retourne le glossaire complet.
      *
@@ -49,9 +48,9 @@ class Reader
     {
         $glossaireReferences = $this->referenceManager->findBy([
             'inGlossaire' => true,
-            'etat' => $this->referenceManager->getEtatActif()
+            'etat' => $this->referenceManager->getEtatActif(),
         ]);
-        usort($glossaireReferences, array($this, 'order'));
+        usort($glossaireReferences, [$this, 'order']);
 
         return $this->groupGlossaireByLetter($glossaireReferences);
     }
@@ -60,12 +59,13 @@ class Reader
      * Retourne le glossaire selon un domaine.
      *
      * @param \HopitalNumerique\DomaineBundle\Entity\Domaine $domaine Domaine
+     *
      * @return array<\HopitalNumerique\ReferenceBundle\Entity\Reference> Glossaire
      */
     public function getGlossaireGroupedByLetterByDomaine(Domaine $domaine)
     {
         $glossaireReferences = $this->referenceManager->findByDomaines([$domaine], true, null, null, null, null, true);
-        usort($glossaireReferences, array($this, 'order'));
+        usort($glossaireReferences, [$this, 'order']);
 
         return $this->groupGlossaireByLetter($glossaireReferences);
     }
@@ -74,6 +74,7 @@ class Reader
      * Retourne le glossaire trié par lettre.
      *
      * @param array<\HopitalNumerique\ReferenceBundle\Entity\Reference> $glossaireReferences Références
+     *
      * @return array Glossaire
      */
     private function groupGlossaireByLetter(array $glossaireReferences)
@@ -101,22 +102,23 @@ class Reader
      *
      * @param \HopitalNumerique\ReferenceBundle\Entity\Reference $glossaireReference1 Référence 1
      * @param \HopitalNumerique\ReferenceBundle\Entity\Reference $glossaireReference2 Référence 2
-     * @return integer Ordre
+     *
+     * @return int Ordre
      */
     private function order(Reference $glossaireReference1, Reference $glossaireReference2)
     {
         $glossaireReference1Chaine = new Chaine($glossaireReference1->getSigleForGlossaire());
         $glossaireReference2Chaine = new Chaine($glossaireReference2->getSigleForGlossaire());
 
-        return (strcmp($glossaireReference1Chaine->supprimeAccents(), $glossaireReference2Chaine->supprimeAccents()));
+        return strcmp($glossaireReference1Chaine->supprimeAccents(), $glossaireReference2Chaine->supprimeAccents());
     }
-
 
     /**
      * Retourne les références du glossaire pour une entité et un domaine.
      *
      * @param object                                         $entity  Entité
      * @param \HopitalNumerique\DomaineBundle\Entity\Domaine $domaine Domaine
+     *
      * @return array<\HopitalNumerique\ReferenceBundle\Entity\Reference> Références
      */
     public function getGlossaireReferencesByEntityAndDomaine($entity, Domaine $domaine)
@@ -124,7 +126,7 @@ class Reader
         $entityHasGlossaire = $this->entityHasGlossaireManager->findOneBy([
             'entityType' => $this->entity->getEntityType($entity),
             'entityId' => $this->entity->getEntityId($entity),
-            'domaine' => $domaine
+            'domaine' => $domaine,
         ]);
 
         if (null !== $entityHasGlossaire) {

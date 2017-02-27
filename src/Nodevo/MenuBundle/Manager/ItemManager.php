@@ -11,13 +11,13 @@ class ItemManager extends BaseManager
 
     public function __construct(EntityManager $em, $menuManager)
     {
-        $this->em           = $em;
+        $this->em = $em;
         $this->_menuManager = $menuManager;
-        $this->repository   = $this->em->getRepository($this->class);
+        $this->repository = $this->em->getRepository($this->class);
     }
 
     /**
-     * Mise à jour de l'order des items du menu $menu
+     * Mise à jour de l'order des items du menu $menu.
      *
      * @param $item \Nodevo\MenuBundle\Entity\Item Element de menu à mettre à jour
      */
@@ -32,14 +32,14 @@ class ItemManager extends BaseManager
         //On décale les items dont l'order est supérieur ou égal à l'item courant
         $newOrder = $item->getOrder();
         foreach ($items as $itemAModifier) {
-            $newOrder++;
+            ++$newOrder;
             $itemAModifier->setOrder($newOrder);
             $this->save($itemAModifier);
         }
     }
 
     /**
-     * Override : Récupère les données pour le grid sous forme de tableau
+     * Override : Récupère les données pour le grid sous forme de tableau.
      *
      * @param \StdClass $condition
      *

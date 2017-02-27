@@ -3,7 +3,6 @@
 namespace HopitalNumerique\AutodiagBundle\Model;
 
 use Doctrine\ORM\EntityManager;
-use HopitalNumerique\AutodiagBundle\Entity\Synthesis;
 
 class SynthesisFactory
 {

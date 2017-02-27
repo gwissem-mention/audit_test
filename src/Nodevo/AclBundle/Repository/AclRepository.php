@@ -5,12 +5,12 @@ namespace Nodevo\AclBundle\Repository;
 use Doctrine\ORM\EntityRepository;
 
 /**
- * AclRepository
+ * AclRepository.
  */
 class AclRepository extends EntityRepository
 {
     /**
-     * Retourne toute la liste des Acls présentent en base
+     * Retourne toute la liste des Acls présentent en base.
      *
      * @return QueryBuilder
      */

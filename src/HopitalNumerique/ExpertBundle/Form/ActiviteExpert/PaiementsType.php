@@ -1,9 +1,8 @@
 <?php
+
 namespace HopitalNumerique\ExpertBundle\Form\ActiviteExpert;
 
-use HopitalNumerique\ExpertBundle\Entity\ActiviteExpert;
 use HopitalNumerique\ExpertBundle\Entity\ActiviteExpert\Paiement;
-use HopitalNumerique\ExpertBundle\Form\ActiviteExpert\PaiementType;
 use Nodevo\MailBundle\Manager\MailManager;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -21,7 +20,6 @@ class PaiementsType extends AbstractType
      */
     private $mailManager;
 
-
     /**
      * Constructeur.
      */
@@ -30,7 +28,6 @@ class PaiementsType extends AbstractType
         $this->mailManager = $mailManager;
     }
 
-
     /**
      * {@inheritdoc}
      */
@@ -38,14 +35,14 @@ class PaiementsType extends AbstractType
     {
         $builder
             ->add('paiements', 'collection', [
-                'type' => PaiementType::class
+                'type' => PaiementType::class,
             ])
             ->add('adresseElectronique', 'email', [
                 'mapped' => false,
                 'required' => true,
-                'attr' => array(
-                    'class' => 'validate[required,custom[email]]'
-                )
+                'attr' => [
+                    'class' => 'validate[required,custom[email]]',
+                ],
             ])
             ->addEventListener(FormEvents::PRE_SET_DATA, function (FormEvent $event) {
                 $this->initPaiements($event);
@@ -100,17 +97,17 @@ class PaiementsType extends AbstractType
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function configureOptions(OptionsResolver $resolver)
     {
-        $resolver->setDefaults(array(
-            'data_class' => 'HopitalNumerique\ExpertBundle\Entity\ActiviteExpert'
-        ));
+        $resolver->setDefaults([
+            'data_class' => 'HopitalNumerique\ExpertBundle\Entity\ActiviteExpert',
+        ]);
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function getName()
     {

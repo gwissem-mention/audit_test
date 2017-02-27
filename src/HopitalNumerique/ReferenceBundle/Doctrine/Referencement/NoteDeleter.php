@@ -1,4 +1,5 @@
 <?php
+
 namespace HopitalNumerique\ReferenceBundle\Doctrine\Referencement;
 
 use HopitalNumerique\ReferenceBundle\Manager\EntityHasNoteManager;
@@ -13,7 +14,6 @@ class NoteDeleter
      */
     private $entityHasNoteManager;
 
-
     /**
      * Constructeur.
      */
@@ -22,7 +22,6 @@ class NoteDeleter
         $this->entityHasNoteManager = $entityHasNoteManager;
     }
 
-
     /**
      * Supprime les références d'un objet.
      */
@@ -30,7 +29,7 @@ class NoteDeleter
     {
         $entityHasNotes = $this->entityHasNoteManager->findBy([
             'entityType' => $entityType,
-            'entityId' => $entityId
+            'entityId' => $entityId,
         ]);
 
         if (count($entityHasNotes) > 0) {

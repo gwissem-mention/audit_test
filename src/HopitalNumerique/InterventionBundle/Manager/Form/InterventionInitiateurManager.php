@@ -1,9 +1,10 @@
 <?php
 /**
  * Manager pour le formulaire des initiateur de demandes d'intervention.
- * 
+ *
  * @author Rémi Leclerc <rleclerc@nodevo.com>
  */
+
 namespace HopitalNumerique\InterventionBundle\Manager\Form;
 
 /**
@@ -20,7 +21,6 @@ class InterventionInitiateurManager
      * Constructeur du manager gérant les formulaires de demandes d'intervention pour les initiateurs d'intervention.
      *
      * @param \HopitalNumerique\InterventionBundle\Manager\InterventionInitiateurManager $interventionInitiateurManager Manager de InterventionInitiateur
-     * @return void
      */
     public function __construct(\HopitalNumerique\InterventionBundle\Manager\InterventionInitiateurManager $interventionInitiateurManager)
     {

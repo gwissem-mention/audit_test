@@ -1,10 +1,10 @@
 <?php
+
 namespace HopitalNumerique\CommunautePratiqueBundle\Controller;
 
 use HopitalNumerique\DomaineBundle\Entity\Domaine;
 use Symfony\Component\HttpFoundation\Request;
 use HopitalNumerique\ReferenceBundle\Entity\Reference;
-use HopitalNumerique\ForumBundle\Entity\Forum;
 
 /**
  * Accueil de la communauté de pratique.
@@ -43,12 +43,12 @@ class AccueilController extends \Symfony\Bundle\FrameworkBundle\Controller\Contr
         if (count($forumCategories) > 0) {
             foreach ($forumCategories as $category) {
                 $topicsByCategories[] = [
-                    'topics'       => $this->container
+                    'topics' => $this->container
                         ->get('hopitalnumerique_forum.manager.topic')
                         ->getLastTopicsForumEpingle($category->getForum()->getId(), 4, $category->getId() ?: null),
-                    'categoryId'   => $category->getId(),
+                    'categoryId' => $category->getId(),
                     'categoryName' => $category->getName(),
-                    'forumName'    => $category->getForum()->getName(),
+                    'forumName' => $category->getForum()->getName(),
                 ];
             }
         }
@@ -56,21 +56,21 @@ class AccueilController extends \Symfony\Bundle\FrameworkBundle\Controller\Contr
         return $this->render(
             'HopitalNumeriqueCommunautePratiqueBundle:Accueil:index.html.twig',
             [
-                'groupes'            => (count($this->getUser()->getCommunautePratiqueAnimateurGroupes()) > 0
+                'groupes' => (count($this->getUser()->getCommunautePratiqueAnimateurGroupes()) > 0
                 || $this->getUser()->hasRoleAdmin() || $this->getUser()->hasRoleAdminHn()
                     ? ($this->container->get('hopitalnumerique_communautepratique.manager.groupe')
                         ->findNonFermes($domaine, ($this->getUser()->hasRoleAdmin() || $this->getUser()->hasRoleAdminHn() ? null : $this->getUser())))
                     : []),
-                'actualites'         => $this->container->get('hopitalnumerique_objet.manager.objet')
+                'actualites' => $this->container->get('hopitalnumerique_objet.manager.objet')
                     ->getArticlesForCategorie($this->container->get('hopitalnumerique_reference.manager.reference')
                         ->findOneById(Reference::ARTICLE_CATEGORIE_COMMUNAUTE_DE_PRATIQUES_ID), $domaine),
-                'groupesEnVedette'   => $this->container->get('hopitalnumerique_communautepratique.manager.groupe')
+                'groupesEnVedette' => $this->container->get('hopitalnumerique_communautepratique.manager.groupe')
                     ->findNonFermes($domaine, null, true),
                 'userGroupesEnCours' => $groupeUser,
-                'totalMembres'       => $this->container->get('hopitalnumerique_user.manager.user')
+                'totalMembres' => $this->container->get('hopitalnumerique_user.manager.user')
                     ->findCommunautePratiqueMembresCount(),
-                'membres'            => $this->getMembresAuHasard(),
-                'forumLastTopics'    => $this->get('hopitalnumerique_forum.manager.topic')
+                'membres' => $this->getMembresAuHasard(),
+                'forumLastTopics' => $this->get('hopitalnumerique_forum.manager.topic')
                     ->formatTopics($topicsByCategories),
             ]
         );

@@ -1,15 +1,13 @@
 <?php
+
 namespace HopitalNumerique\CommunautePratiqueBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Component\Validator\Constraints as Assert;
-use Gedmo\Mapping\Annotation as Gedmo;
 use HopitalNumerique\UserBundle\Entity\User;
-use HopitalNumerique\CommunautePratiqueBundle\Entity\Groupe;
-use Symfony\Component\Validator\Constraints\Collection;
+
 
 /**
- * Inscription
+ * Inscription.
  *
  * @ORM\Table(name="hn_communautepratique_groupe_user")
  * @ORM\Entity(repositoryClass="HopitalNumerique\CommunautePratiqueBundle\Repository\GroupeInscriptionRepository")
@@ -17,12 +15,12 @@ use Symfony\Component\Validator\Constraints\Collection;
 class Inscription
 {
     /**
-    * @var Groupe
-    *
-    * @ORM\Id
-    * @ORM\ManyToOne(targetEntity="HopitalNumerique\CommunautePratiqueBundle\Entity\Groupe")
-    * @ORM\JoinColumn(name="group_id", referencedColumnName="group_id")
-    */
+     * @var Groupe
+     *
+     * @ORM\Id
+     * @ORM\ManyToOne(targetEntity="HopitalNumerique\CommunautePratiqueBundle\Entity\Groupe")
+     * @ORM\JoinColumn(name="group_id", referencedColumnName="group_id")
+     */
     private $groupe;
 
     /**
@@ -35,9 +33,9 @@ class Inscription
     private $user;
 
     /**
-     * Attribute Actif
+     * Attribute Actif.
      *
-     * @var boolean
+     * @var bool
      *
      * @ORM\Column(type="boolean")
      */
@@ -51,7 +49,7 @@ class Inscription
     }
 
     /**
-     * Get groupe
+     * Get groupe.
      *
      * @return Groupe
      */
@@ -61,18 +59,19 @@ class Inscription
     }
 
     /**
-     * Set groupe
+     * Set groupe.
      *
      * @return Inscription
      */
     public function setGroupe(Groupe $groupe)
     {
         $this->groupe = $groupe;
+
         return $this;
     }
 
     /**
-     * Get user
+     * Get user.
      *
      * @return User
      */
@@ -82,20 +81,21 @@ class Inscription
     }
 
     /**
-     * Set user
+     * Set user.
      *
      * @return Inscription
      */
     public function setUser(User $user)
     {
         $this->user = $user;
+
         return $this;
     }
 
     /**
-     * Get actif
+     * Get actif.
      *
-     * @return Boolean
+     * @return bool
      */
     public function isActif()
     {
@@ -103,13 +103,14 @@ class Inscription
     }
 
     /**
-     * Set actif
+     * Set actif.
      *
      * @return Inscription
      */
     public function setActif($actif)
     {
         $this->actif = $actif;
+
         return $this;
     }
 }

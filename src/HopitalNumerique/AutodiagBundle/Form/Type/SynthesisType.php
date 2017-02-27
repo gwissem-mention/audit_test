@@ -7,16 +7,15 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**
- * ModelType
+ * ModelType.
  *
- * @package HopitalNumerique\AutodiagBundle\Form\Type
  * @author Emmanuel Da Fonseca <edafonseca@nodevo.com>
  */
 class SynthesisType extends AbstractType
 {
     /**
      * @param FormBuilderInterface $builder
-     * @param array $options
+     * @param array                $options
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
@@ -30,9 +29,9 @@ class SynthesisType extends AbstractType
      */
     public function configureOptions(OptionsResolver $resolver)
     {
-        $resolver->setDefaults(array(
+        $resolver->setDefaults([
             'data_class' => 'HopitalNumerique\AutodiagBundle\Entity\Synthesis',
-            'label_format' => 'ad.synthesis.%name%'
-        ));
+            'label_format' => 'ad.synthesis.%name%',
+        ]);
     }
 }

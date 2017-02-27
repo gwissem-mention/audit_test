@@ -5,7 +5,7 @@ namespace HopitalNumerique\DomaineBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * Template
+ * Template.
  *
  * @ORM\Table(name="hn_domaine_template")
  * @ORM\Entity
@@ -13,7 +13,7 @@ use Doctrine\ORM\Mapping as ORM;
 class Template
 {
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="temp_id", type="integer")
      * @ORM\Id
@@ -28,11 +28,10 @@ class Template
      */
     protected $nom;
 
-
     /**
-     * Get id
+     * Get id.
      *
-     * @return integer 
+     * @return int
      */
     public function getId()
     {
@@ -40,9 +39,10 @@ class Template
     }
 
     /**
-     * Set nom
+     * Set nom.
      *
      * @param string $nom
+     *
      * @return Template
      */
     public function setNom($nom)
@@ -53,9 +53,9 @@ class Template
     }
 
     /**
-     * Get nom
+     * Get nom.
      *
-     * @return string 
+     * @return string
      */
     public function getNom()
     {

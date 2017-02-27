@@ -8,9 +8,7 @@ use HopitalNumerique\AutodiagBundle\Repository\AutodiagEntry\ValueRepository;
 use HopitalNumerique\UserBundle\Entity\User;
 
 /**
- * Handle intersection creation betwheen two syntheses
- *
- * @package HopitalNumerique\AutodiagBundle\Service\Synthesis
+ * Handle intersection creation betwheen two syntheses.
  */
 class IntersectionBuilder
 {
@@ -29,11 +27,12 @@ class IntersectionBuilder
 
     /**
      * Create new Synthesis from $synthesis, only with entryValues of common answered autodiag attributes
-     * between $synthesis and $reference
+     * between $synthesis and $reference.
      *
-     * @param User $user
+     * @param User      $user
      * @param Synthesis $synthesis
      * @param Synthesis $reference
+     *
      * @return Synthesis
      */
     public function build(User $user, Synthesis $synthesis, Synthesis $reference)
@@ -44,7 +43,7 @@ class IntersectionBuilder
         $intersection->setName($synthesis->getName());
         foreach ($synthesis->getEntries() as $entry) {
             /** @var AutodiagEntry $clonedEntry */
-            $clonedEntry = clone($entry);
+            $clonedEntry = clone $entry;
             foreach ($clonedEntry->getValues() as $value) {
                 if (!array_key_exists($value->getAttribute()->getId(), $attributeIds)) {
                     $clonedEntry->removeValue($value);

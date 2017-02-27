@@ -10,6 +10,7 @@ class Survey extends AutodiagFileImport
 {
     /**
      * @Assert\Callback
+     *
      * @param ExecutionContextInterface $context
      */
     public function validateFileContent(ExecutionContextInterface $context)
@@ -24,6 +25,7 @@ class Survey extends AutodiagFileImport
         } catch (\Exception $e) {
             $context->buildViolation('ad.autodiag.import.survey.invalid_file_type')
                 ->addViolation();
+
             return;
         }
 

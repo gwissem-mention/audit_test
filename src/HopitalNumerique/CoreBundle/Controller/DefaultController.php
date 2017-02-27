@@ -8,7 +8,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
- * Class DefaultController
+ * Class DefaultController.
  */
 class DefaultController extends Controller
 {
@@ -35,9 +35,9 @@ class DefaultController extends Controller
         );
 
         // Get publications (production)
-        $publications  = $this->get('hopitalnumerique_objet.manager.objet')->getObjetsByNbVue();
+        $publications = $this->get('hopitalnumerique_objet.manager.objet')->getObjetsByNbVue();
 
-        $typeArticleCarrousel = $this->get('hopitalnumerique_reference.manager.reference')->findBy(array('id' => 520 ));
+        $typeArticleCarrousel = $this->get('hopitalnumerique_reference.manager.reference')->findBy(['id' => 520]);
         $articlesALaUne = $this->get('hopitalnumerique_objet.manager.objet')->getObjetsByTypes($typeArticleCarrousel);
 
         // Get nombres comptes créés
@@ -51,25 +51,25 @@ class DefaultController extends Controller
             $usr = $this->getUser();
             switch ($usr->getRole()) {
                 case 'ROLE_AMBASSADEUR_7':
-                    $idForum   = 3;
-                    $forumName = "Ambassadeurs";
+                    $idForum = 3;
+                    $forumName = 'Ambassadeurs';
                     break;
                 case 'ROLE_EXPERT_6':
-                    $idForum   = 2;
-                    $forumName = "Experts";
+                    $idForum = 2;
+                    $forumName = 'Experts';
                     break;
                 case 'ROLE_ARS_CMSI_4':
                 case 'ROLE_ARS_-_CMSI_101':
-                    $idForum   = 4;
-                    $forumName = "CMSI";
+                    $idForum = 4;
+                    $forumName = 'CMSI';
                     break;
                 default:
-                    $idForum   = 1;
-                    $forumName = "Public";
+                    $idForum = 1;
+                    $forumName = 'Public';
             }
         } else {
-            $idForum   = 1;
-            $forumName = "Public";
+            $idForum = 1;
+            $forumName = 'Public';
         }
 
         $topics = $this->get('hopitalnumerique_forum.manager.topic')->getLastTopicsForum($idForum, 3, $role);
@@ -87,15 +87,15 @@ class DefaultController extends Controller
         return $this->render(
             $view,
             [
-                'article'          => $article,
-                'actualites'       => $actualites,
-                'publications'     => $publications,
-                'articlesALaUne'   => $articlesALaUne,
-                'nb_eta'           => $nb_eta,
-                'nb_fils'          => $this->get('hopitalnumerique_forum.manager.topic')->getCountForForum($idForum),
-                'topics'           => $topics,
-                'forumName'        => $forumName,
-                'alaune'           => $alaune,
+                'article' => $article,
+                'actualites' => $actualites,
+                'publications' => $publications,
+                'articlesALaUne' => $articlesALaUne,
+                'nb_eta' => $nb_eta,
+                'nb_fils' => $this->get('hopitalnumerique_forum.manager.topic')->getCountForForum($idForum),
+                'topics' => $topics,
+                'forumName' => $forumName,
+                'alaune' => $alaune,
                 'nb_consultations' => $nb_pub_consultees,
             ]
         );

@@ -16,6 +16,7 @@ class InterventionSubscriber implements EventSubscriber
 
     /**
      * InterventionSubscriber constructor.
+     *
      * @param Log $logger
      */
     public function __construct(Log $logger)
@@ -32,7 +33,7 @@ class InterventionSubscriber implements EventSubscriber
     }
 
     /**
-     * Log intervention demand on prePersist
+     * Log intervention demand on prePersist.
      *
      * @param \Doctrine\ORM\Event\LifecycleEventArgs $args
      */
@@ -50,7 +51,6 @@ class InterventionSubscriber implements EventSubscriber
         $entity = $args->getEntity();
 
         if ($entity instanceof InterventionDemande) {
-
             // Handle accepted state changed
             if ($args->hasChangedField('interventionEtat')) {
                 $acceptedStateIds = [17, 21];

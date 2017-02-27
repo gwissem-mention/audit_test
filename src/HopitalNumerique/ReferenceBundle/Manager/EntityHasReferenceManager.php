@@ -1,4 +1,5 @@
 <?php
+
 namespace HopitalNumerique\ReferenceBundle\Manager;
 
 use HopitalNumerique\CoreBundle\DependencyInjection\Entity;
@@ -21,7 +22,6 @@ class EntityHasReferenceManager extends BaseManager
      */
     private $roleManager;
 
-
     /**
      * Constructeur.
      */
@@ -31,7 +31,6 @@ class EntityHasReferenceManager extends BaseManager
 
         $this->roleManager = $roleManager;
     }
-
 
     /**
      * Retourne un arbre de toutes les EntityHasReference classées par type puis par ID d'entité.
@@ -62,9 +61,10 @@ class EntityHasReferenceManager extends BaseManager
     /**
      * Retourne les EntityHasReference par type d'entité, ID d'entité et domaines.
      *
-     * @param integer $entityType Type d'entité
-     * @param integer $entityId ID de l'entité
-     * @param array<\HopitalNumerique\DomaineBundle\Entity\Domaine> $domaines Domaines
+     * @param int                                                   $entityType Type d'entité
+     * @param int                                                   $entityId   ID de l'entité
+     * @param array<\HopitalNumerique\DomaineBundle\Entity\Domaine> $domaines   Domaines
+     *
      * @return array<\HopitalNumerique\ReferenceBundle\Entity\EntityHasReference> EntitiesHasReference
      */
     public function findByEntityTypeAndEntityIdAndDomaines($entityType, $entityId, $domaines)
@@ -75,12 +75,13 @@ class EntityHasReferenceManager extends BaseManager
     /**
      * Retourne les EntityHasReference avec leur note.
      *
-     * @param \HopitalNumerique\DomaineBundle\Entity\Domaine $domaine Domaine
-     * @param array|null          $groupedReferences      Références
-     * @param \HopitalNumerique\UserBundle\Entity\User       $user    User
-     * @param array<integer>|null $entityTypeIds          ID des types d'entité à récupérer
-     * @param array<integer>|null $publicationCategoryIds ID des catégories de publications à récupérer
-     * @param array               $resultFilters          Filtres à appliquer (objetIds, contenuIds, primary)
+     * @param \HopitalNumerique\DomaineBundle\Entity\Domaine $domaine                Domaine
+     * @param array|null                                     $groupedReferences      Références
+     * @param \HopitalNumerique\UserBundle\Entity\User       $user                   User
+     * @param array<integer>|null                            $entityTypeIds          ID des types d'entité à récupérer
+     * @param array<integer>|null                            $publicationCategoryIds ID des catégories de publications à récupérer
+     * @param array                                          $resultFilters          Filtres à appliquer (objetIds, contenuIds, primary)
+     *
      * @return array EntitiesHasReference
      */
     public function getWithNotes(Domaine $domaine, array $groupedReferences = null, User $user = null, array $entityTypeIds = null, array $publicationCategoryIds = null, $resultFilters = [])
@@ -192,7 +193,7 @@ class EntityHasReferenceManager extends BaseManager
         $referenceIds = [];
         $entityHasReferences = $this->findBy([
             'entityType' => $entityType,
-            'entityId' => $entityId
+            'entityId' => $entityId,
         ]);
 
         foreach ($entityHasReferences as $entityHasReference) {

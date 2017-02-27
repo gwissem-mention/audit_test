@@ -1,4 +1,5 @@
 <?php
+
 namespace HopitalNumerique\RechercheBundle\DependencyInjection\Referencement;
 
 use HopitalNumerique\DomaineBundle\DependencyInjection\CurrentDomaine;
@@ -44,7 +45,6 @@ class RequeteSession
 
     const SESSION_ANONYMOUS_USER = 'hnrecherche_referencement_requete_anonymous';
 
-
     /**
      * @var \Symfony\Component\HttpFoundation\Session\SessionInterface Session
      */
@@ -80,7 +80,6 @@ class RequeteSession
      */
     private $domaine;
 
-
     /**
      * Constructeur.
      */
@@ -103,7 +102,6 @@ class RequeteSession
         $this->domaine = $currentDomaine->get();
     }
 
-
     /**
      * Retourne les IDs des références.
      *
@@ -123,7 +121,6 @@ class RequeteSession
     {
         $this->session->set(self::SESSION_REFERENCES_NAME, $referenceIds);
     }
-
 
     /**
      * Retourne les filtres de catégories.
@@ -217,7 +214,6 @@ class RequeteSession
         $this->setCategoryFilters($categoryFilters);
     }
 
-
     /**
      * Retourne le texte.
      *
@@ -239,13 +235,12 @@ class RequeteSession
     }
 
     /**
-     * @return boolean
+     * @return bool
      */
     public function hasSearchedText()
     {
-        return ('' != $this->getSearchedText());
+        return '' != $this->getSearchedText();
     }
-
 
     /**
      * Retourne la requête.
@@ -290,7 +285,7 @@ class RequeteSession
     /**
      * Spécifie si la requête demande à être sauvegardée (si utilisateur pas encore connecté).
      *
-     * @param boolean $wantSave Sauvegarder ?
+     * @param bool $wantSave Sauvegarder ?
      */
     public function setWantToSaveRequete($wantSave)
     {
@@ -300,7 +295,7 @@ class RequeteSession
     /**
      * Retourne si la requête demande à être sauvegardée.
      *
-     * @return boolean Sauvegarder ?
+     * @return bool Sauvegarder ?
      */
     public function isWantToSaveRequete()
     {
@@ -334,8 +329,8 @@ class RequeteSession
      */
     public function saveRequete(Requete $requete)
     {
-        if ($requete->getNom() == "") {
-            $requete->setNom('Ma recherche du ' . date("d/m/Y") . ' à ' . date('G:i'));
+        if ($requete->getNom() == '') {
+            $requete->setNom('Ma recherche du ' . date('d/m/Y') . ' à ' . date('G:i'));
         }
         $requete->setRefs($this->getReferenceIds());
         $requete->setCategPointDur($this->getCategoryFilters());

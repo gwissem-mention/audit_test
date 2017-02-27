@@ -1,4 +1,5 @@
 <?php
+
 namespace HopitalNumerique\ReferenceBundle\Doctrine\Reference;
 
 use Doctrine\Common\Collections\Collection;
@@ -19,7 +20,6 @@ class DomaineUpdater
      * @var array<\HopitalNumerique\ReferenceBundle\Entity\Reference> Références parentes avant enregistrement
      */
     private $initialParents = null;
-
 
     /**
      * Spécifie la référence avant modification utilisateur.
@@ -52,7 +52,6 @@ class DomaineUpdater
         $this->initialParents = clone $parents;
     }
 
-
     /**
      * Màj les domaines de la référence.
      *
@@ -71,11 +70,11 @@ class DomaineUpdater
         }
     }
 
-
     /**
      * Retourne les parents qui viennent d'être ajouté.
      *
      * @param \HopitalNumerique\ReferenceBundle\Entity\Reference $reference Référence
+     *
      * @return array<\HopitalNumerique\ReferenceBundle\Entity\Reference> Parents juste ajoutés
      */
     private function getNewParents(Reference $reference)
@@ -95,7 +94,8 @@ class DomaineUpdater
      * Retourne si le parent était initialement présent.
      *
      * @param \HopitalNumerique\ReferenceBundle\Entity\Reference $reference Référence
-     * @return boolean Si était présent
+     *
+     * @return bool Si était présent
      */
     private function parentInitiallyPresent(Reference $parent)
     {
@@ -113,18 +113,20 @@ class DomaineUpdater
      *
      * @param \HopitalNumerique\ReferenceBundle\Entity\Reference $reference Référence
      * @param \HopitalNumerique\DomaineBundle\Entity\Domaine     $domaine   Domaine
-     * @return boolean Si a été supprimé
+     *
+     * @return bool Si a été supprimé
      */
     private function domaineHasBeenRemoved(Reference $reference, Domaine $domaine)
     {
-        return ($this->domaineInitiallyPresent($domaine) && !$reference->hasDomaine($domaine));
+        return $this->domaineInitiallyPresent($domaine) && !$reference->hasDomaine($domaine);
     }
 
     /**
      * Retourne si le domaine était initialement présent.
      *
      * @param \HopitalNumerique\DomaineBundle\Entity\Domaine $domaine Domaine
-     * @return boolean Si était présent
+     *
+     * @return bool Si était présent
      */
     private function domaineInitiallyPresent(Domaine $domaine)
     {

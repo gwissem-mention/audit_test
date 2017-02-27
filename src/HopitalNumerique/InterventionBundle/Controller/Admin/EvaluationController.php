@@ -1,9 +1,10 @@
 <?php
 /**
  * Contrôleur des évalutions des demandes d'intervention pour l'administration.
- * 
+ *
  * @author Rémi Leclerc <rleclerc@nodevo.com>
  */
+
 namespace HopitalNumerique\InterventionBundle\Controller\Admin;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -19,18 +20,19 @@ class EvaluationController extends Controller
      * Action qui affiche le formulaire d'évaluation d'intervention rempli.
      *
      * @param \HopitalNumerique\InterventionBundle\Entity\InterventionDemande $interventionDemande La demande d'intervention évaluée
+     *
      * @return \Symfony\Component\HttpFoundation\Response La vue du formulaire
      */
     public function voirAction(InterventionDemande $interventionDemande)
     {
         $questionnaire = $this->get('hopitalnumerique_questionnaire.manager.questionnaire')->findOneById(InterventionEvaluation::getEvaluationQuestionnaireId());
 
-        return $this->render('HopitalNumeriqueInterventionBundle:Admin/Evaluation:voir.html.twig', array(
-            'interventionDemande'=> $interventionDemande,
-            'questionnaire'=> $questionnaire,
-            'optionRenderForm'=> array(
-                'themeQuestionnaire' => 'vertical_readonly'
-            )
-        ));
+        return $this->render('HopitalNumeriqueInterventionBundle:Admin/Evaluation:voir.html.twig', [
+            'interventionDemande' => $interventionDemande,
+            'questionnaire' => $questionnaire,
+            'optionRenderForm' => [
+                'themeQuestionnaire' => 'vertical_readonly',
+            ],
+        ]);
     }
 }

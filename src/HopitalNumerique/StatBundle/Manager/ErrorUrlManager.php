@@ -24,7 +24,7 @@ class ErrorUrlManager extends BaseManager
         /** @var ErrorUrl $errorUrl */
         $errorUrl = is_null($this->findOneBy([
             'checkedUrl' => $url,
-            'domain' => $domain
+            'domain' => $domain,
         ]))
             ? $this->createEmpty()
             : $this->findOneBy(

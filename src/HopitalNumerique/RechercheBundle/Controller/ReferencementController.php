@@ -1,4 +1,5 @@
 <?php
+
 namespace HopitalNumerique\RechercheBundle\Controller;
 
 use HopitalNumerique\RechercheBundle\DependencyInjection\Referencement\RequeteSession;
@@ -16,6 +17,7 @@ class ReferencementController extends Controller
      * Recherche avancée.
      *
      * @param Request $request
+     *
      * @return \Symfony\Component\HttpFoundation\Response
      */
     public function indexAction(Request $request)
@@ -59,16 +61,16 @@ class ReferencementController extends Controller
         }
 
         return $this->render('HopitalNumeriqueRechercheBundle:Referencement:index.html.twig', [
-            'recherches'             => $this->getDoctrine()->getRepository(Requete::class)->findBy(['user' => $this->getUser()]),
-            'referencesTree'         => $referencesTree,
-            'requete'                => $requeteSession->getRequete(),
-            'categoriesProperties'   => $this->container->get('hopitalnumerique_recherche.doctrine.referencement.category')->getCategoriesProperties(),
-            'choosenReferenceIds'    => $choosenReferenceIds,
-            'entityTypeIds'          => $requeteSession->getEntityTypeIds(),
+            'recherches' => $this->getDoctrine()->getRepository(Requete::class)->findBy(['user' => $this->getUser()]),
+            'referencesTree' => $referencesTree,
+            'requete' => $requeteSession->getRequete(),
+            'categoriesProperties' => $this->container->get('hopitalnumerique_recherche.doctrine.referencement.category')->getCategoriesProperties(),
+            'choosenReferenceIds' => $choosenReferenceIds,
+            'entityTypeIds' => $requeteSession->getEntityTypeIds(),
             'publicationCategoryIds' => $requeteSession->getPublicationCategoryIds(),
-            'searchedText'           => $requeteSession->getSearchedText(),
-            'domaines'               => $this->container->get('hopitalnumerique_domaine.manager.domaine')->getAllArray(),
-            'exaleadIsActivated'     => $this->container->get('hopitalnumerique_recherche.manager.search')->getActivationExalead(),
+            'searchedText' => $requeteSession->getSearchedText(),
+            'domaines' => $this->container->get('hopitalnumerique_domaine.manager.domaine')->getAllArray(),
+            'exaleadIsActivated' => $this->container->get('hopitalnumerique_recherche.manager.search')->getActivationExalead(),
             'openRequeteSavingPopin' => $openRequeteSavingPopin,
         ]);
     }
@@ -125,7 +127,7 @@ class ReferencementController extends Controller
         }
 
         return new JsonResponse([
-            'results'    => $entitiesPropertiesByGroup,
+            'results' => $entitiesPropertiesByGroup,
             'foundWords' => $foundWords,
         ]);
     }
@@ -150,13 +152,13 @@ class ReferencementController extends Controller
                 $entityId = $this->container->get('hopitalnumerique_core.dependency_injection.entity')->getEntityId($entity);
                 $entitiesByType[$entityType][$entityId]['viewHtml'] =
                     $this->renderView('HopitalNumeriqueRechercheBundle:Referencement:view_entity.html.twig', [
-                            'category'         => $dependencyInjectionEntity->getCategoryByEntity($entity),
-                            'title'            => $dependencyInjectionEntity->getTitleByEntity($entity),
-                            'subtitle'         => $dependencyInjectionEntity->getSubtitleByEntity($entity),
-                            'url'              => $dependencyInjectionEntity->getFrontUrlByEntity($entity),
-                            'description'      => $dependencyInjectionEntity->getDescriptionByEntity($entity),
+                            'category' => $dependencyInjectionEntity->getCategoryByEntity($entity),
+                            'title' => $dependencyInjectionEntity->getTitleByEntity($entity),
+                            'subtitle' => $dependencyInjectionEntity->getSubtitleByEntity($entity),
+                            'url' => $dependencyInjectionEntity->getFrontUrlByEntity($entity),
+                            'description' => $dependencyInjectionEntity->getDescriptionByEntity($entity),
                             'pertinenceNiveau' => $entitiesPropertiesById[$entityId]['pertinenceNiveau'],
-                            'source'           => $dependencyInjectionEntity->getSourceByEntity($entity),
+                            'source' => $dependencyInjectionEntity->getSourceByEntity($entity),
                         ]
                     );
             }

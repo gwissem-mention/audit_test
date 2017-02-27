@@ -8,22 +8,20 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 class CronController extends Controller
 {
     /**
-     * Cron de mise à jour des autodiag
+     * Cron de mise à jour des autodiag.
      */
     public function generationDomaineAction($id)
     {
-        if ($id == 'QYUVX5X8HADKG5TRB9P43GZQ2TJ74USJBYAZEWWP2CC7MSMRK9')
-        {
-            ini_set("memory_limit","512M");
+        if ($id == 'QYUVX5X8HADKG5TRB9P43GZQ2TJ74USJBYAZEWWP2CC7MSMRK9') {
+            ini_set('memory_limit', '512M');
             ini_set('max_execution_time', 0);
 
-            $domaineHN  = $this->get('hopitalnumerique_domaine.manager.domaine')->findBy(array('id' => 1));
-            $domaineGen = $this->get('hopitalnumerique_domaine.manager.domaine')->findBy(array('id' => 2));
+            $domaineHN = $this->get('hopitalnumerique_domaine.manager.domaine')->findBy(['id' => 1]);
+            $domaineGen = $this->get('hopitalnumerique_domaine.manager.domaine')->findBy(['id' => 2]);
 
             //~~~ Users ~~~
             $users = $this->get('hopitalnumerique_user.manager.user')->findAll();
-            foreach ($users as $user)
-            {
+            foreach ($users as $user) {
                 $user->setDomaines($domaineHN);
             }
 
@@ -31,32 +29,28 @@ class CronController extends Controller
 
             //~~~ Outils ~~~
             $outils = $this->get('autodiag.repository.autodiag')->findAll();
-            foreach ($outils as $outil)
-            {
+            foreach ($outils as $outil) {
                 $outil->setDomaines($outil->getId() === 17 ? $domaineGen : $domaineHN);
             }
             $this->get('doctrine.orm.entity_manager')->flush();
 
             //~~~ Faq ~~~
             $faqs = $this->get('nodevo_faq.manager.faq')->findAll();
-            foreach ($faqs as $faq)
-            {
+            foreach ($faqs as $faq) {
                 $faq->setDomaines($domaineHN);
             }
             $this->get('nodevo_faq.manager.faq')->save($faq);
 
             //~~~ Glossaire ~~~
             $glossaires = $this->get('hopitalnumerique_glossaire.manager.glossaire')->findAll();
-            foreach ($glossaires as $glossaire)
-            {
+            foreach ($glossaires as $glossaire) {
                 $glossaire->setDomaines($domaineHN);
             }
             $this->get('hopitalnumerique_glossaire.manager.glossaire')->save($glossaires);
 
             //~~~ Objet ~~~
             $objets = $this->get('hopitalnumerique_objet.manager.objet')->findAll();
-            foreach ($objets as $objet)
-            {
+            foreach ($objets as $objet) {
                 $objet->setDomaines($domaineHN);
             }
             $this->get('hopitalnumerique_objet.manager.objet')->save($objets);
@@ -71,8 +65,7 @@ class CronController extends Controller
 
             //~~~~ Questionnaire ~~~
             $questionnaires = $this->get('hopitalnumerique_questionnaire.manager.questionnaire')->findAll();
-            foreach ($questionnaires as $questionnaire)
-            {
+            foreach ($questionnaires as $questionnaire) {
                 $questionnaire->setDomaines($domaineHN);
             }
             $this->get('hopitalnumerique_questionnaire.manager.questionnaire')->save($questionnaires);
@@ -87,8 +80,7 @@ class CronController extends Controller
 
             //~~~ Reference ~~~
             $references = $this->get('hopitalnumerique_reference.manager.reference')->findAll();
-            foreach ($references as $reference)
-            {
+            foreach ($references as $reference) {
                 $reference->setDomaines($domaineHN);
             }
             $this->get('hopitalnumerique_reference.manager.reference')->save($references);

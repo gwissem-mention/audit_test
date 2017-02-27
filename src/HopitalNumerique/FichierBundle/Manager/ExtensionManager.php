@@ -1,4 +1,5 @@
 <?php
+
 namespace HopitalNumerique\FichierBundle\Manager;
 
 /**

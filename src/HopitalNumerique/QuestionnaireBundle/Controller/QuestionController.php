@@ -8,13 +8,11 @@ use HopitalNumerique\ReferenceBundle\Entity\Reference;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-
 use HopitalNumerique\QuestionnaireBundle\Entity\Question as HopiQuestion;
-
 use Nodevo\ToolsBundle\Tools\Chaine;
 
 /**
- * Controller des Questionnaire
+ * Controller des Questionnaire.
  *
  * @author Gaetan MELCHILSEN
  * @copyright Nodevo
@@ -30,13 +28,13 @@ class QuestionController extends Controller
     {
         $questionnaire = $this->get('hopitalnumerique_questionnaire.manager.questionnaire')->findOneBy(['id' => $id]);
 
-        return $this->render('HopitalNumeriqueQuestionnaireBundle:Question:index.html.twig', array(
-                'questionnaire' => $questionnaire
-            ));
+        return $this->render('HopitalNumeriqueQuestionnaireBundle:Question:index.html.twig', [
+                'questionnaire' => $questionnaire,
+            ]);
     }
 
     /**
-     * Ajoute une question
+     * Ajoute une question.
      *
      * @param Request $request
      *
@@ -54,13 +52,13 @@ class QuestionController extends Controller
         );
 
         /** @var Question $question */
-        $question        = $this->get('hopitalnumerique_questionnaire.manager.question')->createEmpty();
+        $question = $this->get('hopitalnumerique_questionnaire.manager.question')->createEmpty();
         $idQuestionnaire = trim($request->request->get('idQuestionnaire'));
 
         // Calcul de l'ordre
         $order = $this->get('hopitalnumerique_questionnaire.manager.question')->countQuestions($idQuestionnaire) + 1;
         $titre = trim($request->request->get('titre')) ?: 'Question ' . $order;
-        $tool  = new Chaine($titre);
+        $tool = new Chaine($titre);
 
         $question->setOrdre($order);
         $question->setLibelle($titre);
@@ -73,10 +71,10 @@ class QuestionController extends Controller
 
         $this->get('hopitalnumerique_questionnaire.manager.question')->save($question);
 
-        return $this->render('HopitalNumeriqueQuestionnaireBundle:Question:add.html.twig', array(
+        return $this->render('HopitalNumeriqueQuestionnaireBundle:Question:add.html.twig', [
             'question' => $question,
-            'typeQuestions' => $typeQuestions
-        ));
+            'typeQuestions' => $typeQuestions,
+        ]);
     }
 
     /**
@@ -87,26 +85,26 @@ class QuestionController extends Controller
     public function editViewAction($id)
     {
         /** @var Question $question */
-        $question      = $this->get('hopitalnumerique_questionnaire.manager.question')->findOneBy(['id' => $id]);
+        $question = $this->get('hopitalnumerique_questionnaire.manager.question')->findOneBy(['id' => $id]);
         /** @var TypeQuestion[] $typeQuestions */
         $typeQuestions = $this->get('hopitalnumerique_questionnaire.manager.typequestion')->findBy(
             [],
             ['nom' => 'ASC']
         );
         /** @var Reference[] $references */
-        $references    = $this->get('hopitalnumerique_reference.manager.reference')->getAllRefCode(
+        $references = $this->get('hopitalnumerique_reference.manager.reference')->getAllRefCode(
             $question->getQuestionnaire()
         );
 
-        return $this->render('HopitalNumeriqueQuestionnaireBundle:Question:edit.html.twig', array(
-                'question'      => $question,
+        return $this->render('HopitalNumeriqueQuestionnaireBundle:Question:edit.html.twig', [
+                'question' => $question,
                 'typeQuestions' => $typeQuestions,
-                'references'    => $references
-            ));
+                'references' => $references,
+            ]);
     }
 
     /**
-     * Met à jour l'ordre des différentes questions
+     * Met à jour l'ordre des différentes questions.
      *
      * @return Response
      */
@@ -123,7 +121,7 @@ class QuestionController extends Controller
     }
 
     /**
-     * Edite une question
+     * Edite une question.
      *
      * @param Request $request
      *
@@ -132,10 +130,10 @@ class QuestionController extends Controller
     public function saveAction(Request $request)
     {
         //Récupération des ids passés en data
-        $idQuestion     = $request->request->get('id');
+        $idQuestion = $request->request->get('id');
         $idTypeQuestion = $request->request->get('typeQuestion');
-        $commentaire    = $request->request->get('commentaire_question');
-        $obligatoire    = $request->request->get('obligatoire') === "true" ? true : false;
+        $commentaire = $request->request->get('commentaire_question');
+        $obligatoire = $request->request->get('obligatoire') === 'true' ? true : false;
 
         /** @var Question $question */
         $question = $this->get('hopitalnumerique_questionnaire.manager.question')->findOneBy(['id' => $idQuestion]);
@@ -170,7 +168,7 @@ class QuestionController extends Controller
 
     /**
      * Suppresion d'un chapitre.
-     * METHOD = POST|DELETE
+     * METHOD = POST|DELETE.
      *
      * @param HopiQuestion $question
      *

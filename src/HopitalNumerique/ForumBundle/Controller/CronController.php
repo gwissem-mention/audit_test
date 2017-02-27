@@ -7,9 +7,8 @@ use Symfony\Component\HttpFoundation\Response;
 
 class CronController extends Controller
 {
-
     /**
-     * Cron de suppression des topics
+     * Cron de suppression des topics.
      */
     public function cronAction($id)
     {

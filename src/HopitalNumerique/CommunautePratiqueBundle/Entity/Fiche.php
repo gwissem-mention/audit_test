@@ -1,4 +1,5 @@
 <?php
+
 namespace HopitalNumerique\CommunautePratiqueBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
@@ -14,7 +15,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
 class Fiche
 {
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="fic_id", type="integer", nullable=false, options={"unsigned":true})
      * @ORM\Id()
@@ -81,7 +82,7 @@ class Fiche
     private $resume;
 
     /**
-     * @var boolean
+     * @var bool
      *
      * @ORM\Column(name="fic_resolu", type="boolean", nullable=false, options={"default"=false})
      * @Assert\NotNull()
@@ -115,9 +116,8 @@ class Fiche
      */
     private $commentaires;
 
-
     /**
-     * Constructor
+     * Constructor.
      */
     public function __construct()
     {
@@ -125,11 +125,10 @@ class Fiche
         $this->documents = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
-
     /**
-     * Get id
+     * Get id.
      *
-     * @return integer 
+     * @return int
      */
     public function getId()
     {
@@ -137,9 +136,10 @@ class Fiche
     }
 
     /**
-     * Set groupe
+     * Set groupe.
      *
      * @param \HopitalNumerique\CommunautePratiqueBundle\Entity\Groupe $groupe
+     *
      * @return Fiche
      */
     public function setGroupe(\HopitalNumerique\CommunautePratiqueBundle\Entity\Groupe $groupe)
@@ -150,9 +150,9 @@ class Fiche
     }
 
     /**
-     * Get groupe
+     * Get groupe.
      *
-     * @return \HopitalNumerique\CommunautePratiqueBundle\Entity\Groupe 
+     * @return \HopitalNumerique\CommunautePratiqueBundle\Entity\Groupe
      */
     public function getGroupe()
     {
@@ -160,9 +160,10 @@ class Fiche
     }
 
     /**
-     * Set user
+     * Set user.
      *
      * @param \HopitalNumerique\UserBundle\Entity\User $user
+     *
      * @return Fiche
      */
     public function setUser(\HopitalNumerique\UserBundle\Entity\User $user)
@@ -173,9 +174,9 @@ class Fiche
     }
 
     /**
-     * Get user
+     * Get user.
      *
-     * @return \HopitalNumerique\UserBundle\Entity\User 
+     * @return \HopitalNumerique\UserBundle\Entity\User
      */
     public function getUser()
     {
@@ -183,9 +184,10 @@ class Fiche
     }
 
     /**
-     * Set questionPosee
+     * Set questionPosee.
      *
      * @param string $questionPosee
+     *
      * @return Fiche
      */
     public function setQuestionPosee($questionPosee)
@@ -196,9 +198,9 @@ class Fiche
     }
 
     /**
-     * Get questionPosee
+     * Get questionPosee.
      *
-     * @return string 
+     * @return string
      */
     public function getQuestionPosee()
     {
@@ -206,9 +208,10 @@ class Fiche
     }
 
     /**
-     * Set contexte
+     * Set contexte.
      *
      * @param string $contexte
+     *
      * @return Fiche
      */
     public function setContexte($contexte)
@@ -219,9 +222,9 @@ class Fiche
     }
 
     /**
-     * Get contexte
+     * Get contexte.
      *
-     * @return string 
+     * @return string
      */
     public function getContexte()
     {
@@ -229,9 +232,10 @@ class Fiche
     }
 
     /**
-     * Set description
+     * Set description.
      *
      * @param string $description
+     *
      * @return Fiche
      */
     public function setDescription($description)
@@ -242,9 +246,9 @@ class Fiche
     }
 
     /**
-     * Get description
+     * Get description.
      *
-     * @return string 
+     * @return string
      */
     public function getDescription()
     {
@@ -252,9 +256,10 @@ class Fiche
     }
 
     /**
-     * Set aideAttendue
+     * Set aideAttendue.
      *
      * @param string $aideAttendue
+     *
      * @return Fiche
      */
     public function setAideAttendue($aideAttendue)
@@ -265,9 +270,9 @@ class Fiche
     }
 
     /**
-     * Get aideAttendue
+     * Get aideAttendue.
      *
-     * @return string 
+     * @return string
      */
     public function getAideAttendue()
     {
@@ -275,9 +280,10 @@ class Fiche
     }
 
     /**
-     * Set resume
+     * Set resume.
      *
      * @param string $resume
+     *
      * @return Fiche
      */
     public function setResume($resume)
@@ -288,9 +294,9 @@ class Fiche
     }
 
     /**
-     * Get resume
+     * Get resume.
      *
-     * @return string 
+     * @return string
      */
     public function getResume()
     {
@@ -298,9 +304,10 @@ class Fiche
     }
 
     /**
-     * Set resolu
+     * Set resolu.
      *
-     * @param boolean $resolu
+     * @param bool $resolu
+     *
      * @return Fiche
      */
     public function setResolu($resolu)
@@ -311,9 +318,9 @@ class Fiche
     }
 
     /**
-     * Get resolu
+     * Get resolu.
      *
-     * @return boolean 
+     * @return bool
      */
     public function isResolu()
     {
@@ -321,9 +328,10 @@ class Fiche
     }
 
     /**
-     * Set dateCreation
+     * Set dateCreation.
      *
      * @param \DateTime $dateCreation
+     *
      * @return Fiche
      */
     public function setDateCreation($dateCreation)
@@ -334,9 +342,9 @@ class Fiche
     }
 
     /**
-     * Get dateCreation
+     * Get dateCreation.
      *
-     * @return \DateTime 
+     * @return \DateTime
      */
     public function getDateCreation()
     {
@@ -344,9 +352,10 @@ class Fiche
     }
 
     /**
-     * Add documents
+     * Add documents.
      *
      * @param \HopitalNumerique\CommunautePratiqueBundle\Entity\Document $documents
+     *
      * @return Fiche
      */
     public function addDocument(\HopitalNumerique\CommunautePratiqueBundle\Entity\Document $documents)
@@ -357,7 +366,7 @@ class Fiche
     }
 
     /**
-     * Remove documents
+     * Remove documents.
      *
      * @param \HopitalNumerique\CommunautePratiqueBundle\Entity\Document $documents
      */
@@ -367,9 +376,9 @@ class Fiche
     }
 
     /**
-     * Get documents
+     * Get documents.
      *
-     * @return \Doctrine\Common\Collections\Collection 
+     * @return \Doctrine\Common\Collections\Collection
      */
     public function getDocuments()
     {
@@ -377,9 +386,10 @@ class Fiche
     }
 
     /**
-     * Add commentaires
+     * Add commentaires.
      *
      * @param \HopitalNumerique\CommunautePratiqueBundle\Entity\Commentaire $commentaires
+     *
      * @return Fiche
      */
     public function addCommentaire(\HopitalNumerique\CommunautePratiqueBundle\Entity\Commentaire $commentaires)
@@ -390,7 +400,7 @@ class Fiche
     }
 
     /**
-     * Remove commentaires
+     * Remove commentaires.
      *
      * @param \HopitalNumerique\CommunautePratiqueBundle\Entity\Commentaire $commentaires
      */
@@ -400,7 +410,7 @@ class Fiche
     }
 
     /**
-     * Get commentaires
+     * Get commentaires.
      *
      * @return \Doctrine\Common\Collections\Collection
      */
@@ -408,7 +418,6 @@ class Fiche
     {
         return $this->commentaires;
     }
-
 
     /**
      * @return string
@@ -418,11 +427,10 @@ class Fiche
         return $this->questionPosee;
     }
 
-
     /**
      * Retourne la date de dernière activité de la fiche.
      *
-     * @return \DateTime|NULL Dernière activité
+     * @return \DateTime|null Dernière activité
      */
     public function getDateDerniereActivite()
     {

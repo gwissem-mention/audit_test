@@ -1,4 +1,5 @@
 <?php
+
 namespace HopitalNumerique\InterventionBundle\Manager\Intervention;
 
 use Nodevo\ToolsBundle\Manager\Manager;
@@ -10,19 +11,19 @@ class ForfaitTransportManager extends Manager
 {
     protected $class = 'HopitalNumerique\InterventionBundle\Entity\Intervention\ForfaitTransport';
 
-
     /**
      * {@inheritdoc}
      */
     public function findAll()
     {
-        return $this->findBy(array(), array('distanceMaximum' => 'ASC'));
+        return $this->findBy([], ['distanceMaximum' => 'ASC']);
     }
 
     /**
      * Retourne le ForfaitTransport d'une distance en km.
      *
-     * @param integer $distance Distance
+     * @param int $distance Distance
+     *
      * @return \HopitalNumerique\InterventionBundle\Entity\Intervention\ForfaitTransport|null ForfaitTransport correspondant
      */
     public function getForDistance($distance)

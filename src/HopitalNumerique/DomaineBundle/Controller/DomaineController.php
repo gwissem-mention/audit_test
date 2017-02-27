@@ -27,82 +27,77 @@ class DomaineController extends Controller
     {
         $domaine = $this->get('hopitalnumerique_domaine.manager.domaine')->createEmpty();
 
-        return $this->renderForm('hopitalnumerique_domaine_domaine', $domaine, 'HopitalNumeriqueDomaineBundle:Domaine:edit.html.twig' );
+        return $this->renderForm('hopitalnumerique_domaine_domaine', $domaine, 'HopitalNumeriqueDomaineBundle:Domaine:edit.html.twig');
     }
 
     /**
      * Affiche le formulaire d'édition de Domaine.
      *
-     * @param integer $id Id de Domaine.
+     * @param int $id id de Domaine
      */
-    public function editAction( $id )
+    public function editAction($id)
     {
         //Récupération de l'entité passée en paramètre
-        $domaine = $this->get('hopitalnumerique_domaine.manager.domaine')->findOneBy( array('id' => $id) );
+        $domaine = $this->get('hopitalnumerique_domaine.manager.domaine')->findOneBy(['id' => $id]);
 
         $referenceTreeOptions = $this->container->get('hopitalnumerique_reference.dependency_injection.reference.tree')->getOptions([$domaine]);
 
         return $this->renderForm('hopitalnumerique_domaine_domaine', $domaine, 'HopitalNumeriqueDomaineBundle:Domaine:edit.html.twig', [
-            'referenceTreeOptions' => json_encode($referenceTreeOptions)
+            'referenceTreeOptions' => json_encode($referenceTreeOptions),
         ]);
     }
 
     /**
      * Affiche le Domaine en fonction de son ID passé en paramètre.
-     * 
-     * @param integer $id Id de Domaine.
+     *
+     * @param int $id id de Domaine
      */
-    public function showAction( $id )
+    public function showAction($id)
     {
         //Récupération de l'entité en fonction du paramètre
-        $domaine = $this->get('hopitalnumerique_domaine.manager.domaine')->findOneBy( array( 'id' => $id) );
+        $domaine = $this->get('hopitalnumerique_domaine.manager.domaine')->findOneBy(['id' => $id]);
 
-        return $this->render('HopitalNumeriqueDomaineBundle:Domaine:show.html.twig', array(
+        return $this->render('HopitalNumeriqueDomaineBundle:Domaine:show.html.twig', [
             'domaine' => $domaine,
-        ));
+        ]);
     }
 
     /**
      * Suppresion d'un Domaine.
-     * 
-     * @param integer $id Id de Domaine.
-     * METHOD = POST|DELETE
+     *
+     * @param int $id Id de Domaine.
+     *                METHOD = POST|DELETE
      */
-    public function deleteAction( $id )
+    public function deleteAction($id)
     {
-        $domaine = $this->get('hopitalnumerique_domaine.manager.domaine')->findOneBy( array( 'id' => $id) );
+        $domaine = $this->get('hopitalnumerique_domaine.manager.domaine')->findOneBy(['id' => $id]);
 
         //Suppression de l'entitée
-        $this->get('hopitalnumerique_domaine.manager.domaine')->delete( $domaine );
+        $this->get('hopitalnumerique_domaine.manager.domaine')->delete($domaine);
 
-        $this->get('session')->getFlashBag()->add('info', 'Suppression effectuée avec succès.' );
+        $this->get('session')->getFlashBag()->add('info', 'Suppression effectuée avec succès.');
 
-        return new Response('{"success":true, "url" : "'.$this->generateUrl('hopitalnumerique_domaine_admin_domaine').'"}', 200);
+        return new Response('{"success":true, "url" : "' . $this->generateUrl('hopitalnumerique_domaine_admin_domaine') . '"}', 200);
     }
-
-
-
-
 
     /**
      * Effectue le render du formulaire Domaine.
      *
-     * @param string $formName Nom du service associé au formulaire
-     * @param Domaine   $entity   Entité $domaine
-     * @param string $view     Chemin de la vue ou sera rendu le formulaire
+     * @param string  $formName Nom du service associé au formulaire
+     * @param Domaine $entity   Entité $domaine
+     * @param string  $view     Chemin de la vue ou sera rendu le formulaire
      *
      * @return Form | redirect
      */
-    private function renderForm( $formName, $domaine, $view, $options = [])
+    private function renderForm($formName, $domaine, $view, $options = [])
     {
         //Création du formulaire via le service
-        $form = $this->createForm( $formName, $domaine);
+        $form = $this->createForm($formName, $domaine);
 
         $request = $this->get('request');
-        
+
         // Si l'utilisateur soumet le formulaire
         if ('POST' == $request->getMethod()) {
-            
             // On bind les données du form
             $form->handleRequest($request);
 
@@ -118,27 +113,26 @@ class DomaineController extends Controller
 
                 $admins = $this->get('hopitalnumerique_user.manager.user')->findUsersByRole('ROLE_ADMINISTRATEUR_1');
 
-                if($new)
-                {
-                    foreach ($admins as $key => $admin) 
-                    {
+                if ($new) {
+                    foreach ($admins as $key => $admin) {
                         $admins[$key]->addDomaine($domaine);
                     }
                     $this->get('hopitalnumerique_user.manager.user')->save($admins);
                 }
-                
+
                 // On envoi une 'flash' pour indiquer à l'utilisateur que l'entité est ajoutée
-                $this->get('session')->getFlashBag()->add( ($new ? 'success' : 'info') , 'Domaine ' . ($new ? 'ajouté.' : 'mis à jour.') ); 
-                
+                $this->get('session')->getFlashBag()->add(($new ? 'success' : 'info'), 'Domaine ' . ($new ? 'ajouté.' : 'mis à jour.'));
+
                 //on redirige vers la page index ou la page edit selon le bouton utilisé
                 $do = $request->request->get('do');
-                return $this->redirect( ($do == 'save-close' ? $this->generateUrl('hopitalnumerique_domaine_admin_domaine') : $this->generateUrl('hopitalnumerique_domaine_admin_domaine_edit', array( 'id' => $domaine->getId() ) ) ) );
+
+                return $this->redirect(($do == 'save-close' ? $this->generateUrl('hopitalnumerique_domaine_admin_domaine') : $this->generateUrl('hopitalnumerique_domaine_admin_domaine_edit', ['id' => $domaine->getId()])));
             }
         }
 
         $options['form'] = $form->createView();
         $options['domaine'] = $domaine;
 
-        return $this->render($view , $options);
+        return $this->render($view, $options);
     }
 }

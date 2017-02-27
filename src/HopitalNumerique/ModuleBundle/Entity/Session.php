@@ -3,14 +3,13 @@
 namespace HopitalNumerique\ModuleBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-
 //Asserts Stuff
 use Symfony\Component\Validator\Constraints as Assert;
 use Nodevo\ToolsBundle\Validator\Constraints as Nodevo;
 use APY\DataGridBundle\Grid\Mapping as GRID;
 
 /**
- * Session
+ * Session.
  *
  * @ORM\Table(name="hn_module_session")
  * @ORM\Entity(repositoryClass="HopitalNumerique\ModuleBundle\Repository\SessionRepository")
@@ -22,7 +21,7 @@ use APY\DataGridBundle\Grid\Mapping as GRID;
 class Session
 {
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="ses_id", type="integer")
      * @ORM\Id
@@ -31,7 +30,7 @@ class Session
     protected $id;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\ManyToOne(targetEntity="Module", inversedBy="sessions")
      * @ORM\JoinColumn(name="mod_module", referencedColumnName="mod_id")
@@ -39,7 +38,7 @@ class Session
     protected $module;
 
     /**
-     * Liste des inscriptions liées au module
+     * Liste des inscriptions liées au module.
      *
      * @var /HopitalNumerique/ModuleBundle/Entity/Inscription
      *
@@ -76,7 +75,6 @@ class Session
     protected $dateFermetureInscription;
 
     /**
-     *
      * @Assert\NotBlank(message="La durée ne peut pas être vide.")
      * @Nodevo\Javascript(class="validate[required]")
      *
@@ -117,7 +115,7 @@ class Session
     protected $description;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\ManyToOne(targetEntity="\HopitalNumerique\UserBundle\Entity\User")
      * @ORM\JoinColumn(name="usr_formateur", referencedColumnName="usr_id", nullable=true, onDelete="SET NULL")
@@ -127,7 +125,7 @@ class Session
     protected $formateur;
 
     /**
-     * @var integer
+     * @var int
      *
      * @Nodevo\Javascript(class="validate[custom[integer],min[0]]")
      * @ORM\Column(name="ses_nombrePlaceDisponible", type="integer", nullable=true, options = {"comment" = "Nombre de places disponibles de la session"})
@@ -135,7 +133,7 @@ class Session
     protected $nombrePlaceDisponible;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\ManyToMany(targetEntity="\Nodevo\RoleBundle\Entity\Role")
      * @ORM\JoinTable(name="hn_module_session_rolerestriction",
@@ -149,7 +147,7 @@ class Session
     protected $restrictionAcces;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\ManyToMany(targetEntity="\HopitalNumerique\ReferenceBundle\Entity\Reference")
      * @ORM\JoinTable(name="hn_module_session_connaissances",
@@ -163,7 +161,7 @@ class Session
     protected $connaissances;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\ManyToMany(targetEntity="\HopitalNumerique\ReferenceBundle\Entity\Reference")
      * @ORM\JoinTable(name="hn_module_session_connaissances_metier",
@@ -208,27 +206,27 @@ class Session
     protected $etat;
 
     /**
-     * @var boolean
+     * @var bool
      *
      * @ORM\Column(name="ses_archiver", type="boolean", nullable=true, options = {"comment" = "Session archivé ?"})
      */
     protected $archiver;
 
     /**
-     * Constructor
+     * Constructor.
      */
     public function __construct()
     {
-        $this->archiver                 = false;
+        $this->archiver = false;
         $this->dateOuvertureInscription = new \DateTime();
-        $this->connaissances            = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->connaissancesMetier      = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->connaissances = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->connaissancesMetier = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
-     * Get id
+     * Get id.
      *
-     * @return integer
+     * @return int
      */
     public function getId()
     {
@@ -256,9 +254,10 @@ class Session
     }
 
     /**
-     * Set dateSession
+     * Set dateSession.
      *
      * @param \DateTime $dateSession
+     *
      * @return Session
      */
     public function setDateSession($dateSession)
@@ -269,7 +268,7 @@ class Session
     }
 
     /**
-     * Get dateSession
+     * Get dateSession.
      *
      * @return \DateTime
      */
@@ -279,7 +278,7 @@ class Session
     }
 
     /**
-     * Get dateSession string
+     * Get dateSession string.
      *
      * @return string
      */
@@ -289,9 +288,10 @@ class Session
     }
 
     /**
-     * Set dateOuvertureInscription
+     * Set dateOuvertureInscription.
      *
      * @param \DateTime $dateOuvertureInscription
+     *
      * @return Session
      */
     public function setDateOuvertureInscription($dateOuvertureInscription)
@@ -302,7 +302,7 @@ class Session
     }
 
     /**
-     * Get dateOuvertureInscription
+     * Get dateOuvertureInscription.
      *
      * @return \DateTime
      */
@@ -312,9 +312,10 @@ class Session
     }
 
     /**
-     * Set dateFermetureInscription
+     * Set dateFermetureInscription.
      *
      * @param \DateTime $dateFermetureInscription
+     *
      * @return Session
      */
     public function setDateFermetureInscription($dateFermetureInscription)
@@ -325,7 +326,7 @@ class Session
     }
 
     /**
-     * Get dateFermetureInscription
+     * Get dateFermetureInscription.
      *
      * @return \DateTime
      */
@@ -335,9 +336,10 @@ class Session
     }
 
     /**
-     * Set formateur
+     * Set formateur.
      *
      * @param \HopitalNumerique\UserBundle\Entity\User $formateur
+     *
      * @return Reponse
      */
     public function setFormateur(\HopitalNumerique\UserBundle\Entity\User $formateur = null)
@@ -348,7 +350,7 @@ class Session
     }
 
     /**
-     * Get formateur
+     * Get formateur.
      *
      * @return \HopitalNumerique\UserBundle\Entity\User
      */
@@ -358,7 +360,7 @@ class Session
     }
 
     /**
-     * Get duree
+     * Get duree.
      *
      * @return \HopitalNumerique\ReferenceBundle\Entity\Reference $duree
      */
@@ -368,22 +370,24 @@ class Session
     }
 
     /**
-     * Set duree
+     * Set duree.
      *
      * @param \HopitalNumerique\ReferenceBundle\Entity\Reference $duree
      */
     public function setDuree($duree)
     {
-        if($duree instanceof \HopitalNumerique\ReferenceBundle\Entity\Reference )
+        if ($duree instanceof \HopitalNumerique\ReferenceBundle\Entity\Reference) {
             $this->duree = $duree;
-        else
+        } else {
             $this->duree = null;
+        }
     }
 
     /**
-     * Set horaires
+     * Set horaires.
      *
      * @param string $horaires
+     *
      * @return Session
      */
     public function setHoraires($horaires)
@@ -394,7 +398,7 @@ class Session
     }
 
     /**
-     * Get horaires
+     * Get horaires.
      *
      * @return string
      */
@@ -404,9 +408,10 @@ class Session
     }
 
     /**
-     * Set lieu
+     * Set lieu.
      *
      * @param string $lieu
+     *
      * @return Session
      */
     public function setLieu($lieu)
@@ -417,7 +422,7 @@ class Session
     }
 
     /**
-     * Get lieu
+     * Get lieu.
      *
      * @return string
      */
@@ -427,9 +432,10 @@ class Session
     }
 
     /**
-     * Set textMailRappel
+     * Set textMailRappel.
      *
      * @param string $textMailRappel
+     *
      * @return Session
      */
     public function setTextMailRappel($textMailRappel)
@@ -440,7 +446,7 @@ class Session
     }
 
     /**
-     * Get textMailRappel
+     * Get textMailRappel.
      *
      * @return string
      */
@@ -450,9 +456,10 @@ class Session
     }
 
     /**
-     * Set description
+     * Set description.
      *
      * @param string $description
+     *
      * @return Session
      */
     public function setDescription($description)
@@ -463,7 +470,7 @@ class Session
     }
 
     /**
-     * Get description
+     * Get description.
      *
      * @return string
      */
@@ -473,9 +480,9 @@ class Session
     }
 
     /**
-     * Get archiver
+     * Get archiver.
      *
-     * @return boolean $archiver
+     * @return bool $archiver
      */
     public function getArchiver()
     {
@@ -483,9 +490,9 @@ class Session
     }
 
     /**
-     * Set archiver
+     * Set archiver.
      *
-     * @param boolean $archiver
+     * @param bool $archiver
      */
     public function setArchiver($archiver)
     {
@@ -493,9 +500,10 @@ class Session
     }
 
     /**
-     * Set nombrePlaceDisponible
+     * Set nombrePlaceDisponible.
      *
-     * @param integer $nombrePlaceDisponible
+     * @param int $nombrePlaceDisponible
+     *
      * @return Session
      */
     public function setNombrePlaceDisponible($nombrePlaceDisponible)
@@ -506,9 +514,9 @@ class Session
     }
 
     /**
-     * Get nombrePlaceDisponible
+     * Get nombrePlaceDisponible.
      *
-     * @return integer
+     * @return int
      */
     public function getNombrePlaceDisponible()
     {
@@ -516,9 +524,10 @@ class Session
     }
 
     /**
-     * Add restrictionAcces
+     * Add restrictionAcces.
      *
      * @param \Nodevo\RoleBundle\Entity\Role $role
+     *
      * @return Objet
      */
     public function addRestrictionAcces(\Nodevo\RoleBundle\Entity\Role $role)
@@ -529,7 +538,7 @@ class Session
     }
 
     /**
-     * Remove restrictionAcces
+     * Remove restrictionAcces.
      *
      * @param \Nodevo\RoleBundle\Entity\Role $role
      */
@@ -539,9 +548,10 @@ class Session
     }
 
     /**
-     * Set restrictionsAcces
+     * Set restrictionsAcces.
      *
      * @param \Doctrine\Common\Collections\Collection $restrictionsAcces
+     *
      * @return Objet
      */
     public function setRestrictionAcces($restrictionsAcces)
@@ -552,7 +562,7 @@ class Session
     }
 
     /**
-     * Get restrictionsAcces
+     * Get restrictionsAcces.
      *
      * @return \Doctrine\Common\Collections\Collection
      */
@@ -562,7 +572,7 @@ class Session
     }
 
     /**
-     * Get etat
+     * Get etat.
      *
      * @return \HopitalNumerique\ReferenceBundle\Entity\Reference $etat
      */
@@ -572,7 +582,7 @@ class Session
     }
 
     /**
-     * Get etat
+     * Get etat.
      *
      * @return \HopitalNumerique\ReferenceBundle\Entity\Reference $etat
      */
@@ -582,22 +592,24 @@ class Session
     }
 
     /**
-     * Set etat
+     * Set etat.
      *
      * @param \HopitalNumerique\ReferenceBundle\Entity\Reference $etat
      */
     public function setEtat($etat)
     {
-        if($etat instanceof \HopitalNumerique\ReferenceBundle\Entity\Reference )
+        if ($etat instanceof \HopitalNumerique\ReferenceBundle\Entity\Reference) {
             $this->etat = $etat;
-        else
+        } else {
             $this->etat = null;
+        }
     }
 
     /**
-     * Add inscriptions
+     * Add inscriptions.
      *
      * @param \HopitalNumerique\ModuleBundle\Entity\Inscription $inscriptions
+     *
      * @return Menu
      */
     public function addInscription(\HopitalNumerique\ModuleBundle\Entity\Inscription $inscriptions)
@@ -608,7 +620,7 @@ class Session
     }
 
     /**
-     * Remove inscriptions
+     * Remove inscriptions.
      *
      * @param \HopitalNumerique\ModuleBundle\Entity\Inscription $inscriptions
      */
@@ -618,16 +630,15 @@ class Session
     }
 
     /**
-     * Get inscriptions
+     * Get inscriptions.
      *
      * @return \Doctrine\Common\Collections\Collection
      */
     public function getInscriptions()
     {
-        $inscriptions = array();
+        $inscriptions = [];
 
-        foreach ($this->inscriptions as $inscription)
-        {
+        foreach ($this->inscriptions as $inscription) {
             $inscriptions[$inscription->getDateInscription()->format('dmY') . $inscription->getId()] = $inscription;
         }
 
@@ -637,21 +648,19 @@ class Session
     }
 
     /**
-     * Get inscriptions
+     * Get inscriptions.
      *
      * @return \Doctrine\Common\Collections\Collection
      */
     public function getInscriptionsAccepte()
     {
-        $inscriptionsAcceptees = array();
+        $inscriptionsAcceptees = [];
 
-        foreach ($this->inscriptions as $key => $inscription)
-        {
+        foreach ($this->inscriptions as $key => $inscription) {
             //Récupération de l'état de l'inscription courante
             $etatInscription = $inscription->getEtatInscription();
-            if(407 === $etatInscription->getId())
-            {
-                $inscriptionsAcceptees[$inscription->getUser()->getNom() . " " . $inscription->getUser()->getPrenom()] = $inscription;
+            if (407 === $etatInscription->getId()) {
+                $inscriptionsAcceptees[$inscription->getUser()->getNom() . ' ' . $inscription->getUser()->getPrenom()] = $inscription;
             }
         }
         ksort($inscriptionsAcceptees);
@@ -660,48 +669,48 @@ class Session
     }
 
     /**
-     * Permet de vérifier si l'utilisateur passé en param est inscrit pour cette session
+     * Permet de vérifier si l'utilisateur passé en param est inscrit pour cette session.
      *
      * @param HopitalNumeriqueUserBundleEntityUser $user utilisateur à vérifier
      *
-     * @return boolean Utilisateur passé en param inscrit
+     * @return bool Utilisateur passé en param inscrit
      */
     public function userIsInscrit(\HopitalNumerique\UserBundle\Entity\User $user)
     {
-        if( is_null($user) )
+        if (is_null($user)) {
             return false;
+        }
 
         //Recherche pour chacune des inscriptions à ce module l'utilisateur passé en param
-        foreach ($this->inscriptions as $inscription)
-        {
+        foreach ($this->inscriptions as $inscription) {
             //Si l'utilisateur existe
-            if($inscription->getUser()->getId() === $user->getId())
+            if ($inscription->getUser()->getId() === $user->getId()) {
                 //&& $inscription->isInscrit())
                 return true;
+            }
         }
 
         return false;
     }
 
     /**
-     * Permet de vérifier si l'utilisateur passé en param est inscrit pour cette session
+     * Permet de vérifier si l'utilisateur passé en param est inscrit pour cette session.
      *
      * @param HopitalNumeriqueUserBundleEntityUser $user utilisateur à vérifier
      *
-     * @return boolean Utilisateur passé en param inscrit
+     * @return bool Utilisateur passé en param inscrit
      */
     public function userIsInscritAndAnnule(\HopitalNumerique\UserBundle\Entity\User $user)
     {
-        if( is_null($user) )
+        if (is_null($user)) {
             return false;
+        }
 
         //Recherche pour chacune des inscriptions à ce module l'utilisateur passé en param
-        foreach ($this->inscriptions as $inscription)
-        {
+        foreach ($this->inscriptions as $inscription) {
             //Si l'utilisateur existe
-            if($inscription->getUser()->getId() === $user->getId()
-                && $inscription->getEtatInscription()->getId() === 409)
-            {
+            if ($inscription->getUser()->getId() === $user->getId()
+                && $inscription->getEtatInscription()->getId() === 409) {
                 //&& $inscription->isInscrit())
                 return true;
             }
@@ -715,15 +724,17 @@ class Session
     // ----------------------------------------
 
     /**
-     * Set path
+     * Set path.
      *
      * @param string $path
+     *
      * @return Session
      */
     public function setPath($path)
     {
-        if( is_null($path) && file_exists($this->getAbsolutePath()) )
+        if (is_null($path) && file_exists($this->getAbsolutePath())) {
             unlink($this->getAbsolutePath());
+        }
 
         $this->path = $path;
 
@@ -731,7 +742,7 @@ class Session
     }
 
     /**
-     * Get path
+     * Get path.
      *
      * @return string
      */
@@ -742,18 +753,18 @@ class Session
 
     public function getAbsolutePath()
     {
-        return null === $this->path ? null : $this->getUploadRootDir().'/'.$this->path;
+        return null === $this->path ? null : $this->getUploadRootDir() . '/' . $this->path;
     }
 
     public function getWebPath()
     {
-        return null === $this->path ? null : $this->getUploadDir().'/'.$this->path;
+        return null === $this->path ? null : $this->getUploadDir() . '/' . $this->path;
     }
 
     public function getUploadRootDir()
     {
         // le chemin absolu du répertoire où les documents uploadés doivent être sauvegardés
-        return __ROOT_DIRECTORY__.'/'.$this->getUploadDir();
+        return __ROOT_DIRECTORY__ . '/' . $this->getUploadDir();
     }
 
     public function getUploadDir()
@@ -767,10 +778,11 @@ class Session
      */
     public function preUpload()
     {
-        if (null !== $this->file){
+        if (null !== $this->file) {
             //delete Old File
-            if ( file_exists($this->getAbsolutePath()) )
+            if (file_exists($this->getAbsolutePath())) {
                 unlink($this->getAbsolutePath());
+            }
 
             $this->path = round(microtime(true) * 1000) . '_' . $this->file->getClientOriginalName();
         }
@@ -782,8 +794,9 @@ class Session
      */
     public function upload()
     {
-        if (null === $this->file)
+        if (null === $this->file) {
             return;
+        }
 
         // s'il y a une erreur lors du déplacement du fichier, une exception
         // va automatiquement être lancée par la méthode move(). Cela va empêcher
@@ -801,14 +814,15 @@ class Session
     {
         $file = $this->getAbsolutePath();
 
-        if (file_exists($file) )
+        if (file_exists($file)) {
             unlink($file);
+        }
     }
 
     /**
-     * Set les valeurs du module lié, si il y en a un
+     * Set les valeurs du module lié, si il y en a un.
      *
-     * @return this
+     * @return $this
      */
     public function getDefaultValueFromModule()
     {
@@ -868,9 +882,10 @@ class Session
     }
 
     /**
-     * Add restrictionAcces
+     * Add restrictionAcces.
      *
      * @param \Nodevo\RoleBundle\Entity\Role $restrictionAcces
+     *
      * @return Session
      */
     public function addRestrictionAcce(\Nodevo\RoleBundle\Entity\Role $restrictionAcces)
@@ -881,7 +896,7 @@ class Session
     }
 
     /**
-     * Remove restrictionAcces
+     * Remove restrictionAcces.
      *
      * @param \Nodevo\RoleBundle\Entity\Role $restrictionAcces
      */
@@ -891,9 +906,10 @@ class Session
     }
 
     /**
-     * Add connaissances
+     * Add connaissances.
      *
      * @param \HopitalNumerique\ReferenceBundle\Entity\Reference $connaissances
+     *
      * @return Session
      */
     public function addConnaissance(\HopitalNumerique\ReferenceBundle\Entity\Reference $connaissances)
@@ -904,7 +920,7 @@ class Session
     }
 
     /**
-     * Remove connaissances
+     * Remove connaissances.
      *
      * @param \HopitalNumerique\ReferenceBundle\Entity\Reference $connaissances
      */
@@ -914,7 +930,7 @@ class Session
     }
 
     /**
-     * Get connaissances
+     * Get connaissances.
      *
      * @return \Doctrine\Common\Collections\Collection
      */
@@ -924,7 +940,7 @@ class Session
     }
 
     /**
-     * Set connaissances
+     * Set connaissances.
      *
      * @return Session
      */
@@ -938,13 +954,12 @@ class Session
     public function getConnaissancesByParent()
     {
         $connaissances = $this->connaissances;
-        $connaissancesOrdered = array();
+        $connaissancesOrdered = [];
 
         foreach ($connaissances as $connaissance) {
             foreach ($connaissance->getParents() as $parent) {
-                if(!array_key_exists($parent->getId(), $connaissancesOrdered))
-                {
-                    $connaissancesOrdered[$parent->getId()] = array();
+                if (!array_key_exists($parent->getId(), $connaissancesOrdered)) {
+                    $connaissancesOrdered[$parent->getId()] = [];
                 }
 
                 $connaissancesOrdered[$parent->getId()][] = $connaissance;
@@ -955,10 +970,12 @@ class Session
     }
 
     // Connaissances Métiers
+
     /**
-     * Add connaissancesMetier
+     * Add connaissancesMetier.
      *
      * @param \HopitalNumerique\ReferenceBundle\Entity\Reference $connaissancesMetier
+     *
      * @return Session
      */
     public function addConnaissanceMetier(\HopitalNumerique\ReferenceBundle\Entity\Reference $connaissancesMetier)
@@ -969,7 +986,7 @@ class Session
     }
 
     /**
-     * Remove connaissancesMetier
+     * Remove connaissancesMetier.
      *
      * @param \HopitalNumerique\ReferenceBundle\Entity\Reference $connaissancesMetier
      */
@@ -979,7 +996,7 @@ class Session
     }
 
     /**
-     * Get connaissancesMetier
+     * Get connaissancesMetier.
      *
      * @return \Doctrine\Common\Collections\Collection
      */
@@ -989,7 +1006,7 @@ class Session
     }
 
     /**
-     * Set connaissancesMetier
+     * Set connaissancesMetier.
      *
      * @return Session
      */
@@ -1003,15 +1020,16 @@ class Session
     public function getConnaissancesMetierByParent()
     {
         $connaissancesMetier = $this->connaissancesMetier;
-        $connaissancesMetierOrdered = array();
+        $connaissancesMetierOrdered = [];
 
         foreach ($connaissancesMetier as $connaissanceMetier) {
             if (!array_key_exists($connaissanceMetier->getParent()->getId(), $connaissancesMetierOrdered)) {
-                $connaissancesMetierOrdered[$connaissanceMetier->getParent()->getId()] = array();
+                $connaissancesMetierOrdered[$connaissanceMetier->getParent()->getId()] = [];
             }
 
             $connaissancesMetierOrdered[$connaissanceMetier->getParent()->getId()][] = $connaissanceMetier;
         }
+
         return $connaissancesMetierOrdered;
     }
 }

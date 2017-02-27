@@ -5,7 +5,7 @@ namespace Nodevo\FaqBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * Categorie
+ * Categorie.
  *
  * @ORM\Table(name="core_faq_categorie")
  * @ORM\Entity(repositoryClass="Nodevo\FaqBundle\Repository\CategorieRepository")
@@ -13,7 +13,7 @@ use Doctrine\ORM\Mapping as ORM;
 class Categorie
 {
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="cat_id", type="integer", options = {"comment" = "ID de la catégorie de FAQ"})
      * @ORM\Id
@@ -41,9 +41,9 @@ class Categorie
     }
 
     /**
-     * Get id
+     * Get id.
      *
-     * @return integer 
+     * @return int
      */
     public function getId()
     {
@@ -51,9 +51,10 @@ class Categorie
     }
 
     /**
-     * Set name
+     * Set name.
      *
      * @param string $name
+     *
      * @return Categorie
      */
     public function setName($name)
@@ -64,9 +65,9 @@ class Categorie
     }
 
     /**
-     * Get name
+     * Get name.
      *
-     * @return string 
+     * @return string
      */
     public function getName()
     {
@@ -74,9 +75,10 @@ class Categorie
     }
 
     /**
-     * Set icon
+     * Set icon.
      *
      * @param string $icon
+     *
      * @return Categorie
      */
     public function setIcon($icon)
@@ -87,9 +89,9 @@ class Categorie
     }
 
     /**
-     * Get icon
+     * Get icon.
      *
-     * @return string 
+     * @return string
      */
     public function getIcon()
     {

@@ -1,4 +1,5 @@
 <?php
+
 namespace HopitalNumerique\UserBundle\Form\Type\User;
 
 use HopitalNumerique\EtablissementBundle\Manager\EtablissementManager;
@@ -17,15 +18,14 @@ use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInt
 class InformationsManquantesType extends AbstractType
 {
     /**
-     * @var integer Type Communauté de pratique
+     * @var int Type Communauté de pratique
      */
     const TYPE_COMMUNAUTE_PRATIQUE = 1;
 
     /**
-     * @var integer Type Demande d'intervention d'un ambssadeur
+     * @var int Type Demande d'intervention d'un ambssadeur
      */
     const TYPE_DEMANDE_INTERVENTION = 2;
-
 
     /**
      * @var \Symfony\Component\Routing\RouterInterface Router
@@ -36,7 +36,6 @@ class InformationsManquantesType extends AbstractType
      * @var \HopitalNumerique\ReferenceBundle\Manager\ReferenceManager ReferenceManager
      */
     private $referenceManager;
-
 
     /**
      * @var \HopitalNumerique\UserBundle\Entity\User Utilisateur connecté
@@ -52,10 +51,11 @@ class InformationsManquantesType extends AbstractType
 
     /**
      * Constructeur.
+     *
      * @param TokenStorageInterface $tokenStorage
-     * @param RouterInterface $router
-     * @param RequestStack $requestStack
-     * @param ReferenceManager $referenceManager
+     * @param RouterInterface       $router
+     * @param RequestStack          $requestStack
+     * @param ReferenceManager      $referenceManager
      */
     public function __construct(
         TokenStorageInterface $tokenStorage,
@@ -71,7 +71,6 @@ class InformationsManquantesType extends AbstractType
         $this->request = $requestStack->getCurrentRequest();
         $this->etablissementManager = $etablissementManager;
     }
-
 
     /**
      * {@inheritdoc}
@@ -90,11 +89,11 @@ class InformationsManquantesType extends AbstractType
         $builder
             ->add('informationsType', 'hidden', [
                 'mapped' => false,
-                'data' => $informationsType
+                'data' => $informationsType,
             ])
             ->add('redirection', 'hidden', [
                 'mapped' => false,
-                'data' => $this->request->server->get('REDIRECT_URL')
+                'data' => $this->request->server->get('REDIRECT_URL'),
             ])
         ;
         foreach ($this->buildFields($builder, $informationsType) as $field => $configuration) {
@@ -108,6 +107,7 @@ class InformationsManquantesType extends AbstractType
      * Retourne les champs du formulaire.
      *
      * @param string $informationsType Type des informations
+     *
      * @return array Champs
      */
     private function buildFields(FormBuilderInterface $builder, $informationsType)
@@ -164,8 +164,8 @@ class InformationsManquantesType extends AbstractType
                     'label' => 'user.nomStructure',
                     'required' => false,
                     'attr' => [
-                        'maxlength' => 255
-                    ]
+                        'maxlength' => 255,
+                    ],
                 ]);
             }
         }
@@ -181,15 +181,15 @@ class InformationsManquantesType extends AbstractType
                 'property' => 'libelle',
                 'label' => 'user.fonctionDansEtablissementSanteReferencement',
                 'empty_value' => ' - ',
-                'required' => false
+                'required' => false,
             ]);
 
             $builder->add('fonctionStructure', 'text', [
                 'label' => 'user.fonctionStructure',
                 'required' => false,
                 'attr' => [
-                    'maxlength' => 255
-                ]
+                    'maxlength' => 255,
+                ],
             ]);
         }
 
@@ -237,11 +237,11 @@ class InformationsManquantesType extends AbstractType
     private function buildNomField(FormBuilderInterface $builder)
     {
         $builder->add('nom', 'text', [
-            'required'   => true,
-            'label'      => 'Nom',
+            'required' => true,
+            'label' => 'Nom',
             'attr' => [
-                'data-validation-engine' => 'validate[required]'
-            ]
+                'data-validation-engine' => 'validate[required]',
+            ],
         ]);
     }
 
@@ -253,14 +253,13 @@ class InformationsManquantesType extends AbstractType
     private function buildPrenomField(FormBuilderInterface $builder)
     {
         $builder->add('prenom', 'text', [
-            'required'   => true,
-            'label'      => 'Prénom',
+            'required' => true,
+            'label' => 'Prénom',
             'attr' => [
-                'data-validation-engine' => 'validate[required]'
-            ]
+                'data-validation-engine' => 'validate[required]',
+            ],
         ]);
     }
-
 
     /**
      * Retourne le champ Région.
@@ -274,8 +273,8 @@ class InformationsManquantesType extends AbstractType
             'required' => true,
             'attr' => [
                 'data-validation-engine' => 'validate[required,minSize[14],maxSize[14]],custom[phone]',
-                'data-mask' => '99 99 99 99 99'
-            ]
+                'data-mask' => '99 99 99 99 99',
+            ],
         ]);
     }
 
@@ -294,8 +293,8 @@ class InformationsManquantesType extends AbstractType
             'required' => true,
             'empty_value' => ' - ',
             'attr' => [
-                'data-validation-engine' => 'validate[required]'
-            ]
+                'data-validation-engine' => 'validate[required]',
+            ],
         ]);
     }
 
@@ -314,8 +313,8 @@ class InformationsManquantesType extends AbstractType
             'required' => true,
             'empty_value' => ' - ',
             'attr' => [
-                'data-validation-engine' => 'validate[required]'
-            ]
+                'data-validation-engine' => 'validate[required]',
+            ],
         ]);
     }
 
@@ -331,7 +330,7 @@ class InformationsManquantesType extends AbstractType
             'choices' => $this->referenceManager->findByCode('CONTEXTE_TYPE_ES'),
             'property' => 'libelle',
             'label' => 'user.statutEtablissementSante',
-            'required' => false
+            'required' => false,
         ]);
     }
 
@@ -343,16 +342,16 @@ class InformationsManquantesType extends AbstractType
     private function buildEtablissementRattachementSanteField(FormBuilderInterface $builder)
     {
         $etablissementRattachementSanteModifier = function (FormInterface $form, $data) {
-            $form->add('etablissementRattachementSante', 'choice', array(
-                'required'      => false,
-                'label'         => 'user.etablissementRattachementSante',
-                'empty_value'   => ' - ',
-                'attr'        => array('class' => 'etablissement_sante'),
+            $form->add('etablissementRattachementSante', 'choice', [
+                'required' => false,
+                'label' => 'user.etablissementRattachementSante',
+                'empty_value' => ' - ',
+                'attr' => ['class' => 'etablissement_sante'],
                 'choices' => $data,
                 'choices_as_values' => true,
                 'choice_value' => 'id',
                 'choice_label' => 'nom',
-            ));
+            ]);
         };
 
         $builder->addEventListener(
@@ -362,10 +361,10 @@ class InformationsManquantesType extends AbstractType
                 $data = $event->getData();
                 $form = $event->getForm();
 
-                $list = $this->etablissementManager->findBy(array(
-                    'departement'   => $data->getDepartement(),
-                    'typeOrganisme' => $data->getStatutEtablissementSante()
-                ));
+                $list = $this->etablissementManager->findBy([
+                    'departement' => $data->getDepartement(),
+                    'typeOrganisme' => $data->getStatutEtablissementSante(),
+                ]);
                 $etablissementRattachementSanteModifier($form, $list);
             }
         );
@@ -376,10 +375,10 @@ class InformationsManquantesType extends AbstractType
                 $form = $event->getForm()->getParent();
                 $status = $event->getForm()->getData();
 
-                $list = $this->etablissementManager->findBy(array(
-                    'departement'   => $event->getForm()->getParent()->get('departement')->getData(),
-                    'typeOrganisme' => $status
-                ));
+                $list = $this->etablissementManager->findBy([
+                    'departement' => $event->getForm()->getParent()->get('departement')->getData(),
+                    'typeOrganisme' => $status,
+                ]);
 
                 $etablissementRattachementSanteModifier($form, $list);
             }
@@ -397,8 +396,8 @@ class InformationsManquantesType extends AbstractType
             'label' => 'user.autreStructureRattachementSante',
             'required' => false,
             'attr' => [
-                'maxlength' => 255
-            ]
+                'maxlength' => 255,
+            ],
         ]);
     }
 
@@ -417,11 +416,10 @@ class InformationsManquantesType extends AbstractType
             'required' => true,
             'empty_value' => ' - ',
             'attr' => [
-                'data-validation-engine' => 'validate[required]'
-            ]
+                'data-validation-engine' => 'validate[required]',
+            ],
         ]);
     }
-
 
     /**
      * {@inheritdoc}
@@ -433,11 +431,11 @@ class InformationsManquantesType extends AbstractType
             ->setAllowedValues([
                 'informations_type' => [
                     self::TYPE_COMMUNAUTE_PRATIQUE,
-                    self::TYPE_DEMANDE_INTERVENTION
-                ]
+                    self::TYPE_DEMANDE_INTERVENTION,
+                ],
             ])
             ->setDefaults([
-                'data_class' => 'HopitalNumerique\UserBundle\Entity\User'
+                'data_class' => 'HopitalNumerique\UserBundle\Entity\User',
             ])
         ;
     }

@@ -2639,7 +2639,7 @@ class User extends BaseUser
             $dateRenew = $contractualisation->getDateRenouvellement();
 
             if (true === $contractualisation->getArchiver()) {
-                $archive++;
+                ++$archive;
             } elseif ($dateRenew <= $dateLimit && $dateRenew != null) {
                 return false;
             }

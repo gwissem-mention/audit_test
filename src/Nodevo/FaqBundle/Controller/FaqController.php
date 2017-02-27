@@ -27,113 +27,100 @@ class FaqController extends Controller
     {
         $faq = $this->get('nodevo_faq.manager.faq')->createEmpty();
 
-        return $this->renderForm('nodevo_faq_faq', $faq, 'NodevoFaqBundle:Faq:edit.html.twig' );
+        return $this->renderForm('nodevo_faq_faq', $faq, 'NodevoFaqBundle:Faq:edit.html.twig');
     }
 
     /**
      * Affiche le formulaire d'édition de Faq.
      *
-     * @param integer $id Id de Faq.
+     * @param int $id id de Faq
      */
-    public function editAction( $id )
+    public function editAction($id)
     {
         //Récupération de l'entité passée en paramètre
-        $faq = $this->get('nodevo_faq.manager.faq')->findOneBy( array('id' => $id) );
+        $faq = $this->get('nodevo_faq.manager.faq')->findOneBy(['id' => $id]);
 
-        return $this->renderForm('nodevo_faq_faq', $faq, 'NodevoFaqBundle:Faq:edit.html.twig' );
+        return $this->renderForm('nodevo_faq_faq', $faq, 'NodevoFaqBundle:Faq:edit.html.twig');
     }
 
     /**
      * Affiche le Faq en fonction de son ID passé en paramètre.
-     * 
-     * @param integer $id Id de Faq.
+     *
+     * @param int $id id de Faq
      */
-    public function showAction( $id )
+    public function showAction($id)
     {
         //Récupération de l'entité en fonction du paramètre
-        $faq = $this->get('nodevo_faq.manager.faq')->findOneBy( array( 'id' => $id) );
+        $faq = $this->get('nodevo_faq.manager.faq')->findOneBy(['id' => $id]);
 
-        return $this->render('NodevoFaqBundle:Faq:show.html.twig', array(
+        return $this->render('NodevoFaqBundle:Faq:show.html.twig', [
             'faq' => $faq,
-        ));
+        ]);
     }
 
     /**
      * Suppresion d'un Faq.
-     * 
-     * @param integer $id Id de Faq.
-     * METHOD = POST|DELETE
+     *
+     * @param int $id Id de Faq.
+     *                METHOD = POST|DELETE
      */
-    public function deleteAction( $id )
+    public function deleteAction($id)
     {
-        $faq = $this->get('nodevo_faq.manager.faq')->findOneBy( array( 'id' => $id) );
+        $faq = $this->get('nodevo_faq.manager.faq')->findOneBy(['id' => $id]);
 
         //Suppression de l'entitée
-        $this->get('nodevo_faq.manager.faq')->delete( $faq );
+        $this->get('nodevo_faq.manager.faq')->delete($faq);
 
-        $this->get('session')->getFlashBag()->add('info', 'Suppression effectuée avec succès.' );
+        $this->get('session')->getFlashBag()->add('info', 'Suppression effectuée avec succès.');
 
-        return new Response('{"success":true, "url" : "'.$this->generateUrl('nodevo_faq_faq').'"}', 200);
+        return new Response('{"success":true, "url" : "' . $this->generateUrl('nodevo_faq_faq') . '"}', 200);
     }
 
     /**
-     * Suppression de masse des faq
+     * Suppression de masse des faq.
      *
      * @param array $primaryKeys    ID des lignes sélectionnées
      * @param array $allPrimaryKeys allPrimaryKeys ???
      *
      * @return Redirect
      */
-    public function deleteMassAction( $primaryKeys, $allPrimaryKeys )
+    public function deleteMassAction($primaryKeys, $allPrimaryKeys)
     {
         //get all selected Users
-        if($allPrimaryKeys == 1){
+        if ($allPrimaryKeys == 1) {
             $rawDatas = $this->get('nodevo_faq.grid.faq')->getRawData();
-            foreach($rawDatas as $data)
-            {
+            foreach ($rawDatas as $data) {
                 $primaryKeys[] = $data['id'];
             }
-        }        
+        }
 
-        $faqs = $this->get('nodevo_faq.manager.faq')->findBy( array('id' => $primaryKeys) );
-        
+        $faqs = $this->get('nodevo_faq.manager.faq')->findBy(['id' => $primaryKeys]);
+
         //Suppression de l'etablissement
-        $this->get('nodevo_faq.manager.faq')->delete( $faqs );
-        $this->get('session')->getFlashBag()->add('info', 'Suppression effectuée avec succès.' );
+        $this->get('nodevo_faq.manager.faq')->delete($faqs);
+        $this->get('session')->getFlashBag()->add('info', 'Suppression effectuée avec succès.');
 
-        return $this->redirect( $this->generateUrl('nodevo_faq_faq') );
+        return $this->redirect($this->generateUrl('nodevo_faq_faq'));
     }
-
-
-
-
-
-
-
-
-
-
-
 
     /**
      * Effectue le render du formulaire Faq.
      *
      * @param string $formName Nom du service associé au formulaire
-     * @param Faq   $entity   Entité $faq
+     * @param Faq    $entity   Entité $faq
      * @param string $view     Chemin de la vue ou sera rendu le formulaire
      *
      * @return Form | redirect
      */
-    private function renderForm( $formName, $faq, $view )
+    private function renderForm($formName, $faq, $view)
     {
         //Création du formulaire via le service
-        $form = $this->createForm( $formName, $faq);
+        $form = $this->createForm($formName, $faq);
 
         $request = $this->get('request');
-        
+
         // Si l'utilisateur soumet le formulaire
         if ('POST' == $request->getMethod()) {
-            
             // On bind les données du form
             $form->handleRequest($request);
 
@@ -144,19 +131,20 @@ class FaqController extends Controller
 
                 //On utilise notre Manager pour gérer la sauvegarde de l'objet
                 $this->get('nodevo_faq.manager.faq')->save($faq);
-                
+
                 // On envoi une 'flash' pour indiquer à l'utilisateur que l'entité est ajoutée
-                $this->get('session')->getFlashBag()->add( ($new ? 'success' : 'info') , 'Elément de FAQ ' . ($new ? 'ajouté.' : 'mis à jour.') ); 
-                
+                $this->get('session')->getFlashBag()->add(($new ? 'success' : 'info'), 'Elément de FAQ ' . ($new ? 'ajouté.' : 'mis à jour.'));
+
                 //on redirige vers la page index ou la page edit selon le bouton utilisé
                 $do = $request->request->get('do');
-                return $this->redirect( ($do == 'save-close' ? $this->generateUrl('nodevo_faq_faq') : $this->generateUrl('nodevo_faq_faq_edit', array( 'id' => $faq->getId() ) ) ) );
+
+                return $this->redirect(($do == 'save-close' ? $this->generateUrl('nodevo_faq_faq') : $this->generateUrl('nodevo_faq_faq_edit', ['id' => $faq->getId()])));
             }
         }
 
-        return $this->render( $view , array(
+        return $this->render($view, [
             'form' => $form->createView(),
-            'faq'  => $faq
-        ));
+            'faq' => $faq,
+        ]);
     }
 }

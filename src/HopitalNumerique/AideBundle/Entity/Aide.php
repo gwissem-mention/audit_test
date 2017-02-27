@@ -3,16 +3,13 @@
 namespace HopitalNumerique\AideBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Criteria;
-
 //Asserts Stuff
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Nodevo\ToolsBundle\Validator\Constraints as Nodevo;
 
 /**
- * Aide
+ * Aide.
  *
  * @ORM\Table(name="hn_aide")
  * @ORM\Entity(repositoryClass="HopitalNumerique\AideBundle\Repository\AideRepository")
@@ -20,9 +17,8 @@ use Nodevo\ToolsBundle\Validator\Constraints as Nodevo;
  */
 class Aide
 {
-
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="aide_id", type="integer", options = {"comment" = "ID de l'aide"})
      * @ORM\Id
@@ -53,17 +49,14 @@ class Aide
      */
     protected $libelle;
 
-
     public function __construct()
     {
-
     }
 
-
     /**
-     * Get id
+     * Get id.
      *
-     * @return integer
+     * @return int
      */
     public function getId()
     {
@@ -71,9 +64,10 @@ class Aide
     }
 
     /**
-     * Set route
+     * Set route.
      *
      * @param string $route
+     *
      * @return Aide
      */
     public function setRoute($route)
@@ -84,7 +78,7 @@ class Aide
     }
 
     /**
-     * Get code
+     * Get code.
      *
      * @return string
      */
@@ -94,9 +88,10 @@ class Aide
     }
 
     /**
-     * Set libelle
+     * Set libelle.
      *
      * @param string $libelle
+     *
      * @return Aide
      */
     public function setLibelle($libelle)
@@ -107,7 +102,7 @@ class Aide
     }
 
     /**
-     * Get libelle
+     * Get libelle.
      *
      * @return string
      */

@@ -1,4 +1,5 @@
 <?php
+
 namespace HopitalNumerique\InterventionBundle\Entity\Intervention;
 
 use Doctrine\ORM\Mapping as ORM;
@@ -14,7 +15,7 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 class ForfaitTransport
 {
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="intft_id", type="smallint", nullable=false, options={"unsigned"=true})
      * @ORM\Id()
@@ -23,24 +24,23 @@ class ForfaitTransport
     private $id;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="intft_distance_maximum", type="smallint", nullable=false, options={"unsigned"=true})
      */
     private $distanceMaximum;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="intft_cout", type="smallint", nullable=false, options={"unsigned"=true})
      */
     private $cout;
 
-
     /**
-     * Get id
+     * Get id.
      *
-     * @return integer
+     * @return int
      */
     public function getId()
     {
@@ -48,9 +48,9 @@ class ForfaitTransport
     }
 
     /**
-     * Set distanceMaximum
+     * Set distanceMaximum.
      *
-     * @param integer $distanceMaximum
+     * @param int $distanceMaximum
      *
      * @return ForfaitTransport
      */
@@ -62,9 +62,9 @@ class ForfaitTransport
     }
 
     /**
-     * Get distanceMaximum
+     * Get distanceMaximum.
      *
-     * @return integer
+     * @return int
      */
     public function getDistanceMaximum()
     {
@@ -72,9 +72,9 @@ class ForfaitTransport
     }
 
     /**
-     * Set cout
+     * Set cout.
      *
-     * @param integer $cout
+     * @param int $cout
      *
      * @return ForfaitTransport
      */
@@ -86,9 +86,9 @@ class ForfaitTransport
     }
 
     /**
-     * Get cout
+     * Get cout.
      *
-     * @return integer
+     * @return int
      */
     public function getCout()
     {

@@ -44,7 +44,7 @@ class ScoreCalculator
     protected $rootDir;
 
     /**
-     * Php executable path
+     * Php executable path.
      *
      * @var false|string
      */
@@ -83,7 +83,7 @@ class ScoreCalculator
             foreach ($this->computeScoreRecursive($synthesis, $container, $values) as $score) {
                 $existingScore = $this->scoreRepository->find([
                     'container' => $score->getContainer(),
-                    'synthesis' => $score->getSynthesis()
+                    'synthesis' => $score->getSynthesis(),
                 ]);
 
                 if (null === $existingScore) {
@@ -101,12 +101,11 @@ class ScoreCalculator
 
         $synthesis->stopComputing();
         $this->entityManager->flush();
-
     }
 
     /**
      * @param AutodiagEntry $entry
-     * @param Container[] $containers
+     * @param Container[]   $containers
      */
     public function computeEntryScoreForContainers(AutodiagEntry $entry, $containers)
     {
@@ -120,7 +119,7 @@ class ScoreCalculator
                 foreach ($this->computeScoreRecursive($synthesis, $container, $values) as $score) {
                     $existingScore = $this->scoreRepository->find([
                         'container' => $score->getContainer(),
-                        'synthesis' => $score->getSynthesis()
+                        'synthesis' => $score->getSynthesis(),
                     ]);
 
                     if (null === $existingScore) {

@@ -4,25 +4,24 @@ namespace Nodevo\MenuBundle\Form\Type;
 
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
-
 use Doctrine\ORM\EntityRepository;
 
 class ItemType extends AbstractType
 {
-    private $_constraints = array();
-    private $_routes      = array();
-    private $_allRoutes   = array();
+    private $_constraints = [];
+    private $_routes = [];
+    private $_allRoutes = [];
 
-    public function __construct( $manager, $validator, $router )
+    public function __construct($manager, $validator, $router)
     {
-        $this->_constraints = $manager->getConstraints( $validator );
-        $this->_allRoutes   = $router->getRouteCollection()->all();
+        $this->_constraints = $manager->getConstraints($validator);
+        $this->_allRoutes = $router->getRouteCollection()->all();
 
-        foreach( $this->_allRoutes as $key => $one ) {
-            if ( $key[0] != '_' ) {
-                $splitetKey = explode("_",$key);
-                $groupKey   = (count($splitetKey) >= 2) ? $splitetKey[0]."_".$splitetKey[1] : $key;
-                
+        foreach ($this->_allRoutes as $key => $one) {
+            if ($key[0] != '_') {
+                $splitetKey = explode('_', $key);
+                $groupKey = (count($splitetKey) >= 2) ? $splitetKey[0] . '_' . $splitetKey[1] : $key;
+
                 $this->_routes[$groupKey][$key] = $key . ' - ' . $one->getPath();
             }
         }
@@ -34,110 +33,110 @@ class ItemType extends AbstractType
         $menuId = $datas->getMenu()->getId();
 
         $builder
-            ->add('name', 'text', array(
+            ->add('name', 'text', [
                 'max_length' => $this->_constraints['name']['maxlength'],
-                'required'   => true, 
-                'label'      => 'Nom',
-                'attr'       => array('class' => $this->_constraints['name']['class'] )
-            ))
-            
-            ->add('route', 'choice', array(
-                'choices'     => $this->_routes,
-                'multiple'    => false,
+                'required' => true,
+                'label' => 'Nom',
+                'attr' => ['class' => $this->_constraints['name']['class']],
+            ])
+
+            ->add('route', 'choice', [
+                'choices' => $this->_routes,
+                'multiple' => false,
                 'empty_value' => ' - ',
-                'label'       => 'Route',
-                'required'    => false
-            ));
+                'label' => 'Route',
+                'required' => false,
+            ]);
 
         //Handle Route Parameters
         $route = isset($this->_allRoutes[$datas->getRoute()]) ? $this->_allRoutes[$datas->getRoute()] : null;
-        $builder->add('routeParameters', new ParamsType( $route, $datas->getRouteParameters()), array(
-            'required'   => false, 
-            'label'      => 'Paramètres de la route sélectionnée',
-            'mapped'     => false,
-            'data_class' => null
-        ));
+        $builder->add('routeParameters', new ParamsType($route, $datas->getRouteParameters()), [
+            'required' => false,
+            'label' => 'Paramètres de la route sélectionnée',
+            'mapped' => false,
+            'data_class' => null,
+        ]);
 
         $builder
-            ->add('uri', 'text', array(
+            ->add('uri', 'text', [
                 'max_length' => $this->_constraints['uri']['maxlength'],
-                'required'   => false, 
-                'label'      => 'URI'
-            ))
-
-            ->add('display', 'checkbox', array(
                 'required' => false,
-                'label'    => 'Afficher le lien',
-                'attr'     => array( 'class'=> 'checkbox' )
-            ))
+                'label' => 'URI',
+            ])
 
-            ->add('displayChildren', 'checkbox', array(
+            ->add('display', 'checkbox', [
                 'required' => false,
-                'label'    => 'Elément parent ?',
-                'attr'     => array( 'class'=> 'checkbox' )
-            ))
-            
-            ->add('parent', 'entity', array(
-                'class'       => 'NodevoMenuBundle:Item',
+                'label' => 'Afficher le lien',
+                'attr' => ['class' => 'checkbox'],
+            ])
+
+            ->add('displayChildren', 'checkbox', [
+                'required' => false,
+                'label' => 'Elément parent ?',
+                'attr' => ['class' => 'checkbox'],
+            ])
+
+            ->add('parent', 'entity', [
+                'class' => 'NodevoMenuBundle:Item',
                 'empty_value' => ' - ',
-                'required'    => false,
-                'label'       => 'Fils de l\'item',
-                'query_builder' => function(EntityRepository $er) use ($menuId){
+                'required' => false,
+                'label' => 'Fils de l\'item',
+                'query_builder' => function (EntityRepository $er) use ($menuId) {
                     return $er->createQueryBuilder('item')
                               ->andWhere('item.display = 1')
                               ->leftJoin('item.menu', 'menu')
                                 ->andWhere('menu.id = :idMenu')
                                 ->setParameter('idMenu', $menuId)
                               ->orderBy('item.name');
-                }
-            ))
-            
-            ->add('menu', 'entity', array(
-                'class'       => 'NodevoMenuBundle:Menu',
-                'label'       => 'Menu Associé',
+                },
+            ])
+
+            ->add('menu', 'entity', [
+                'class' => 'NodevoMenuBundle:Menu',
+                'label' => 'Menu Associé',
                 'empty_value' => ' - ',
-                'required'    => true
-            ))
-            
-            ->add('order', 'integer', array(
+                'required' => true,
+            ])
+
+            ->add('order', 'integer', [
                 'label' => 'Ordre d\'affichage',
-                'attr'  => array('class' => $this->_constraints['order']['class'] )
-            ))
-            
-            ->add('selectIcon', 'choice', array(
-                    'label'      => 'Type d\'icône',
-                    'required'   => false,
-                    'mapped'     => false,
-                    'empty_value'=> ' - ',
-                    'choices'    => array(
-                        'fa'   => 'Fontawesome',
-                        'glyphicon' => 'Glyphicon'
-                    )
-            ))
-            
-            ->add('buttonIconGlyph', 'button', array(
-                    'label'     => 'Icône',
-                    'attr'      => array(
-                        'class'          => 'btn btn-success iconpicker',
-                        'role'           => 'iconpicker',
-                        'data-placement' => 'right',
-                        'data-rows'      => 3,
-                        'data-cols'      => 6,
-                        'data-iconset' => 'glyphicon'
-                    )
-            ))
-            ->add('buttonIconFontAwesome', 'button', array(
-                    'label'  => 'Icône',
-                    'attr' => array(
+                'attr' => ['class' => $this->_constraints['order']['class']],
+            ])
+
+            ->add('selectIcon', 'choice', [
+                    'label' => 'Type d\'icône',
+                    'required' => false,
+                    'mapped' => false,
+                    'empty_value' => ' - ',
+                    'choices' => [
+                        'fa' => 'Fontawesome',
+                        'glyphicon' => 'Glyphicon',
+                    ],
+            ])
+
+            ->add('buttonIconGlyph', 'button', [
+                    'label' => 'Icône',
+                    'attr' => [
                         'class' => 'btn btn-success iconpicker',
                         'role' => 'iconpicker',
                         'data-placement' => 'right',
                         'data-rows' => 3,
                         'data-cols' => 6,
-                        'data-iconset' => 'fontawesome'
-                    )
-            ))
-            
+                        'data-iconset' => 'glyphicon',
+                    ],
+            ])
+            ->add('buttonIconFontAwesome', 'button', [
+                    'label' => 'Icône',
+                    'attr' => [
+                        'class' => 'btn btn-success iconpicker',
+                        'role' => 'iconpicker',
+                        'data-placement' => 'right',
+                        'data-rows' => 3,
+                        'data-cols' => 6,
+                        'data-iconset' => 'fontawesome',
+                    ],
+            ])
+
             ->add('icon', 'hidden');
     }
 

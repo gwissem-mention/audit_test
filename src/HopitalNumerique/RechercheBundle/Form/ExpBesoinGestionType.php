@@ -5,9 +5,7 @@ namespace HopitalNumerique\RechercheBundle\Form;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
-
 use HopitalNumerique\UserBundle\Manager\UserManager;
-
 use Doctrine\ORM\EntityRepository;
 
 class ExpBesoinGestionType extends AbstractType
@@ -16,7 +14,7 @@ class ExpBesoinGestionType extends AbstractType
 
     public function __construct($manager, $validator, UserManager $userManager)
     {
-        $this->_constraints = $manager->getConstraints( $validator );
+        $this->_constraints = $manager->getConstraints($validator);
         $this->_userManager = $userManager;
     }
 
@@ -25,30 +23,30 @@ class ExpBesoinGestionType extends AbstractType
         $connectedUser = $this->_userManager->getUserConnected();
 
         $builder
-            ->add('nom', 'text', array(
-                'max_length' => 255, 
-                'required'   => true, 
-                'label'      => 'Nom de la recherche aidée'
-            )) 
-            ->add('domaines', 'entity', array(
-                'class'       => 'HopitalNumeriqueDomaineBundle:Domaine',
-                'property'    => 'nom',
-                'required'    => false,
-                'multiple'    => true,
-                'label'       => 'Domaine(s) associé(s)',
+            ->add('nom', 'text', [
+                'max_length' => 255,
+                'required' => true,
+                'label' => 'Nom de la recherche aidée',
+            ])
+            ->add('domaines', 'entity', [
+                'class' => 'HopitalNumeriqueDomaineBundle:Domaine',
+                'property' => 'nom',
+                'required' => false,
+                'multiple' => true,
+                'label' => 'Domaine(s) associé(s)',
                 'empty_value' => ' - ',
-                'query_builder' => function(EntityRepository $er) use ($connectedUser){
+                'query_builder' => function (EntityRepository $er) use ($connectedUser) {
                     return $er->getDomainesUserConnectedForForm($connectedUser->getId());
-                }
-            ))
+                },
+            ])
           ;
     }
 
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
-        $resolver->setDefaults(array(
-            'data_class' => 'HopitalNumerique\RechercheBundle\Entity\ExpBesoinGestion'
-        ));
+        $resolver->setDefaults([
+            'data_class' => 'HopitalNumerique\RechercheBundle\Entity\ExpBesoinGestion',
+        ]);
     }
 
     public function getName()

@@ -7,7 +7,7 @@ use APY\DataGridBundle\Grid\Mapping as GRID;
 use Gedmo\Mapping\Annotation as Gedmo;
 
 /**
- * Facture
+ * Facture.
  *
  * @ORM\Table(name="hn_facture")
  * @ORM\Entity(repositoryClass="HopitalNumerique\PaiementBundle\Repository\FactureRepository")
@@ -16,7 +16,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
 class Facture
 {
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="fac_id", type="integer", options = {"comment" = "ID de la facture"})
      * @ORM\Id
@@ -95,28 +95,28 @@ class Facture
     private $formations;
 
     /**
-     * @var boolean
+     * @var bool
      *
      * @ORM\Column(name="fac_annulee", type="boolean", options = {"comment" = "Est ce que la facture est annulee"})
      */
     private $annulee;
 
     /**
-     * Initialisation de l'entitée (valeurs par défaut)
+     * Initialisation de l'entitée (valeurs par défaut).
      */
     public function __construct()
     {
-        $this->dateCreation  = new \DateTime();
+        $this->dateCreation = new \DateTime();
         $this->interventions = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->formations    = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->payee         = false;
-        $this->annulee       = false;
+        $this->formations = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->payee = false;
+        $this->annulee = false;
     }
 
     /**
-     * Get id
+     * Get id.
      *
-     * @return integer 
+     * @return int
      */
     public function getId()
     {
@@ -124,7 +124,7 @@ class Facture
     }
 
     /**
-     * Get name
+     * Get name.
      *
      * @return string $name
      */
@@ -132,22 +132,24 @@ class Facture
     {
         return $this->name;
     }
-    
+
     /**
-     * Set name
+     * Set name.
      *
      * @param string $name
      */
     public function setName($name)
     {
         $this->name = $name;
+
         return $this;
     }
-    
+
     /**
-     * Set dateCreation
+     * Set dateCreation.
      *
      * @param \DateTime $dateCreation
+     *
      * @return Facture
      */
     public function setDateCreation($dateCreation)
@@ -158,9 +160,9 @@ class Facture
     }
 
     /**
-     * Get dateCreation
+     * Get dateCreation.
      *
-     * @return \DateTime 
+     * @return \DateTime
      */
     public function getDateCreation()
     {
@@ -168,9 +170,10 @@ class Facture
     }
 
     /**
-     * Set datePaiement
+     * Set datePaiement.
      *
      * @param \DateTime $datePaiement
+     *
      * @return Facture
      */
     public function setDatePaiement($datePaiement)
@@ -181,9 +184,9 @@ class Facture
     }
 
     /**
-     * Get datePaiement
+     * Get datePaiement.
      *
-     * @return \DateTime 
+     * @return \DateTime
      */
     public function getDatePaiement()
     {
@@ -191,7 +194,7 @@ class Facture
     }
 
     /**
-     * Get user
+     * Get user.
      *
      * @return \HopitalNumerique\UserBundle\Entity\User $user
      */
@@ -199,64 +202,67 @@ class Facture
     {
         return $this->user;
     }
-    
+
     /**
-     * Set user
+     * Set user.
      *
      * @param \HopitalNumerique\UserBundle\Entity\User $user
      */
     public function setUser(\HopitalNumerique\UserBundle\Entity\User $user)
     {
         $this->user = $user;
+
         return $this;
     }
 
     /**
-     * Get total
+     * Get total.
      *
-     * @return integer $total
+     * @return int $total
      */
     public function getTotal()
     {
         return $this->total;
     }
-    
+
     /**
-     * Set total
+     * Set total.
      *
-     * @param integer $total
+     * @param int $total
      */
     public function setTotal($total)
     {
         $this->total = $total;
+
         return $this;
     }
 
     /**
-     * Get payee
+     * Get payee.
      *
-     * @return boolean $payee
+     * @return bool $payee
      */
     public function isPayee()
     {
         return $this->payee;
     }
-    
+
     /**
-     * Set payee
+     * Set payee.
      *
-     * @param boolean $payee
+     * @param bool $payee
      */
     public function setPayee($payee)
     {
         $this->payee = $payee;
+
         return $this;
     }
 
     /**
-     * Get annulee
+     * Get annulee.
      *
-     * @return boolean $annulee
+     * @return bool $annulee
      */
     public function isAnnulee()
     {
@@ -264,18 +270,19 @@ class Facture
     }
 
     /**
-     * Set annulee
+     * Set annulee.
      *
-     * @param boolean $annulee
+     * @param bool $annulee
      */
     public function setAnnulee($annulee)
     {
         $this->annulee = $annulee;
+
         return $this;
     }
 
     /**
-     * Set factureAnnulee
+     * Set factureAnnulee.
      *
      * @param \HopitalNumerique\PaiementBundle\Entity\FactureAnnulee $factureAnnulee
      *
@@ -289,7 +296,7 @@ class Facture
     }
 
     /**
-     * Get factureAnnulee
+     * Get factureAnnulee.
      *
      * @return \HopitalNumerique\PaiementBundle\Entity\FactureAnnulee
      */
@@ -297,22 +304,23 @@ class Facture
     {
         return $this->factureAnnulee;
     }
-    
+
     /**
-     * Add intervention
+     * Add intervention.
      *
      * @param \HopitalNumerique\InterventionBundle\Entity\InterventionDemande $intervention
+     *
      * @return Facture
      */
     public function addIntervention(\HopitalNumerique\InterventionBundle\Entity\InterventionDemande $intervention)
     {
         $this->interventions[] = $intervention;
-    
+
         return $this;
     }
 
     /**
-     * Remove intervention
+     * Remove intervention.
      *
      * @param \HopitalNumerique\InterventionBundle\Entity\InterventionDemande $intervention
      */
@@ -335,22 +343,23 @@ class Facture
     }
 
     /**
-     * Set interventions
+     * Set interventions.
      *
      * @param \Doctrine\Common\Collections\Collection $interventions
+     *
      * @return Facture
      */
     public function setInterventions(\Doctrine\Common\Collections\Collection $interventions)
     {
         $this->interventions = $interventions;
-    
+
         return $this;
     }
 
     /**
-     * Get interventions
+     * Get interventions.
      *
-     * @return \Doctrine\Common\Collections\Collection 
+     * @return \Doctrine\Common\Collections\Collection
      */
     public function getInterventions()
     {
@@ -358,20 +367,21 @@ class Facture
     }
 
     /**
-     * Add formation
+     * Add formation.
      *
      * @param \HopitalNumerique\ModuleBundle\Entity\Inscription $formation
+     *
      * @return Facture
      */
     public function addFormation(\HopitalNumerique\ModuleBundle\Entity\Inscription $formation)
     {
         $this->formations[] = $formation;
-    
+
         return $this;
     }
 
     /**
-     * Remove formation
+     * Remove formation.
      *
      * @param \HopitalNumerique\ModuleBundle\Entity\Inscription $formation
      */
@@ -394,28 +404,28 @@ class Facture
     }
 
     /**
-     * Set formations
+     * Set formations.
      *
      * @param \Doctrine\Common\Collections\Collection $formations
+     *
      * @return Facture
      */
     public function setFormations(\Doctrine\Common\Collections\Collection $formations)
     {
         $this->formations = $formations;
-    
+
         return $this;
     }
 
     /**
-     * Get formations
+     * Get formations.
      *
-     * @return \Doctrine\Common\Collections\Collection 
+     * @return \Doctrine\Common\Collections\Collection
      */
     public function getFormations()
     {
         return $this->formations;
     }
-
 
     /**
      * toString.
@@ -427,14 +437,13 @@ class Facture
         return $this->name;
     }
 
-
     /**
      * Retourne si la facture a été annulée.
      *
-     * @return boolean Si annulée
+     * @return bool Si annulée
      */
     public function hasBeenCanceled()
     {
-        return (null !== $this->factureAnnulee);
+        return null !== $this->factureAnnulee;
     }
 }

@@ -4,52 +4,49 @@ namespace Nodevo\ToolsBundle\Command;
 
 use Sensio\Bundle\GeneratorBundle\Command\GenerateDoctrineEntityCommand;
 use Sensio\Bundle\GeneratorBundle\Command\Helper\DialogHelper;
-
 use Nodevo\ToolsBundle\Generator\EntityGenerator;
-
 use Symfony\Component\HttpKernel\Bundle\BundleInterface;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\DependencyInjection\Container;
-
 use Doctrine\DBAL\Types\Type;
 
 class EntityCommand extends GenerateDoctrineEntityCommand
 {
-	protected $generator;
+    protected $generator;
 
-	protected function configure()
-	{
-		parent::configure();
+    protected function configure()
+    {
+        parent::configure();
 
-		$this->setName('nodevo:generate:entity');
+        $this->setName('nodevo:generate:entity');
         $this->setDescription('Création des entités nodevo');
-	}
+    }
 
-	protected function interact(InputInterface $input, OutputInterface $output)
+    protected function interact(InputInterface $input, OutputInterface $output)
     {
         $dialog = $this->getDialogHelper();
         $dialog->writeSection($output, 'Welcome to the Doctrine2 entity generator');
 
         // namespace
-        $output->writeln(array(
+        $output->writeln([
             '',
             'This command helps you generate Doctrine2 entities.',
             '',
             'First, you need to give the entity name you want to generate.',
             'You must use the shortcut notation like <comment>AcmeBlogBundle:Post</comment>.',
-            ''
-        ));
+            '',
+        ]);
 
         $bundleNames = array_keys($this->getContainer()->get('kernel')->getBundles());
 
         while (true) {
-            $entity = $dialog->askAndValidate($output, $dialog->getQuestion('The Entity shortcut name', $input->getOption('entity')), array('Sensio\Bundle\GeneratorBundle\Command\Validators', 'validateEntityName'), false, $input->getOption('entity'), $bundleNames);
+            $entity = $dialog->askAndValidate($output, $dialog->getQuestion('The Entity shortcut name', $input->getOption('entity')), ['Sensio\Bundle\GeneratorBundle\Command\Validators', 'validateEntityName'], false, $input->getOption('entity'), $bundleNames);
 
             list($bundle, $entity) = $this->parseShortcutNotation($entity);
 
             // check reserved words
-            if ($this->getGenerator()->isReservedKeyword($entity)){
+            if ($this->getGenerator()->isReservedKeyword($entity)) {
                 $output->writeln(sprintf('<bg=red> "%s" is a reserved word</>.', $entity));
                 continue;
             }
@@ -57,7 +54,7 @@ class EntityCommand extends GenerateDoctrineEntityCommand
             try {
                 $b = $this->getContainer()->get('kernel')->getBundle($bundle);
 
-                if (!file_exists($b->getPath().'/Entity/'.str_replace('\\', '/', $entity).'.php')) {
+                if (!file_exists($b->getPath() . '/Entity/' . str_replace('\\', '/', $entity) . '.php')) {
                     break;
                 }
 
@@ -66,18 +63,18 @@ class EntityCommand extends GenerateDoctrineEntityCommand
                 $output->writeln(sprintf('<bg=red>Bundle "%s" does not exist.</>', $bundle));
             }
         }
-        $input->setOption('entity', $bundle.':'.$entity);
+        $input->setOption('entity', $bundle . ':' . $entity);
 
         // format
-        $output->writeln(array(
+        $output->writeln([
             '',
             'Determine the format to use for the mapping information.',
             '',
-        ));
+        ]);
 
-        $formats = array('yml', 'xml', 'php', 'annotation');
+        $formats = ['yml', 'xml', 'php', 'annotation'];
 
-        $format = $dialog->askAndValidate($output, $dialog->getQuestion('Configuration format (yml, xml, php, or annotation)', $input->getOption('format')), array('Sensio\Bundle\GeneratorBundle\Command\Validators', 'validateFormat'), false, $input->getOption('format'), $formats);
+        $format = $dialog->askAndValidate($output, $dialog->getQuestion('Configuration format (yml, xml, php, or annotation)', $input->getOption('format')), ['Sensio\Bundle\GeneratorBundle\Command\Validators', 'validateFormat'], false, $input->getOption('format'), $formats);
         $input->setOption('format', $format);
 
         // fields
@@ -87,14 +84,14 @@ class EntityCommand extends GenerateDoctrineEntityCommand
         $input->setOption('with-repository', true);
 
         // summary
-        $output->writeln(array(
+        $output->writeln([
             '',
             $this->getHelper('formatter')->formatBlock('Summary before generation', 'bg=blue;fg=white', true),
             '',
-            sprintf("You are going to generate a \"<info>%s:%s</info>\" Doctrine2 entity", $bundle, $entity),
-            sprintf("using the \"<info>%s</info>\" format.", $format),
+            sprintf('You are going to generate a "<info>%s:%s</info>" Doctrine2 entity', $bundle, $entity),
+            sprintf('using the "<info>%s</info>" format.', $format),
             '',
-        ));
+        ]);
     }
 
     private function parseFields($input)
@@ -103,7 +100,7 @@ class EntityCommand extends GenerateDoctrineEntityCommand
             return $input;
         }
 
-        $fields = array();
+        $fields = [];
         foreach (explode(' ', $input) as $value) {
             $elements = explode(':', $value);
             $name = $elements[0];
@@ -113,7 +110,7 @@ class EntityCommand extends GenerateDoctrineEntityCommand
                 $type = isset($matches[1][0]) ? $matches[1][0] : $type;
                 $length = isset($matches[2][0]) ? $matches[2][0] : null;
 
-                $fields[$name] = array('fieldName' => $name, 'type' => $type, 'length' => $length);
+                $fields[$name] = ['fieldName' => $name, 'type' => $type, 'length' => $length];
             }
         }
 
@@ -123,12 +120,12 @@ class EntityCommand extends GenerateDoctrineEntityCommand
     private function addFields(InputInterface $input, OutputInterface $output, DialogHelper $dialog)
     {
         $fields = $this->parseFields($input->getOption('fields'));
-        $output->writeln(array(
+        $output->writeln([
             '',
             'Instead of starting with a blank entity, you can add some fields now.',
             'Note that the primary key will be added automatically (named <comment>id</comment>).',
             '',
-        ));
+        ]);
         $output->write('<info>Available types:</info> ');
 
         $types = array_keys(Type::getTypesMap());
@@ -161,9 +158,9 @@ class EntityCommand extends GenerateDoctrineEntityCommand
                 return $length;
             }
 
-            $result = filter_var($length, FILTER_VALIDATE_INT, array(
-                'options' => array('min_range' => 1)
-            ));
+            $result = filter_var($length, FILTER_VALIDATE_INT, [
+                'options' => ['min_range' => 1],
+            ]);
 
             if (false === $result) {
                 throw new \InvalidArgumentException(sprintf('Invalid length "%s".', $length));
@@ -181,7 +178,7 @@ class EntityCommand extends GenerateDoctrineEntityCommand
                 }
 
                 // check reserved words
-                if ($generator->isReservedKeyword($name)){
+                if ($generator->isReservedKeyword($name)) {
                     throw new \InvalidArgumentException(sprintf('Name "%s" is a reserved word.', $name));
                 }
 
@@ -206,7 +203,7 @@ class EntityCommand extends GenerateDoctrineEntityCommand
 
             $type = $dialog->askAndValidate($output, $dialog->getQuestion('Field type', $defaultType), $fieldValidator, false, $defaultType, $types);
 
-            $data = array('columnName' => $columnName, 'fieldName' => lcfirst(Container::camelize($columnName)), 'type' => $type);
+            $data = ['columnName' => $columnName, 'fieldName' => lcfirst(Container::camelize($columnName)), 'type' => $type];
 
             if ($type == 'string') {
                 $data['length'] = $dialog->askAndValidate($output, $dialog->getQuestion('Field length', 255), $lengthValidator, false, 255);
@@ -218,8 +215,8 @@ class EntityCommand extends GenerateDoctrineEntityCommand
         return $fields;
     }
 
-	/**
-     * Ajoute le chemin du skeleton de notre ToolsBundle
+    /**
+     * Ajoute le chemin du skeleton de notre ToolsBundle.
      */
     protected function getGenerator(BundleInterface $bundle = null)
     {
@@ -227,16 +224,16 @@ class EntityCommand extends GenerateDoctrineEntityCommand
             $path = $this->getContainer()->get('kernel')->locateResource('@NodevoToolsBundle/Resources/skeleton/');
 
             $this->generator = $this->createGenerator();
-            $skeletonDirs    = array_merge( array($path), $this->getSkeletonDirs($bundle) );
+            $skeletonDirs = array_merge([$path], $this->getSkeletonDirs($bundle));
 
-            $this->generator->setSkeletonDirs( $skeletonDirs );
+            $this->generator->setSkeletonDirs($skeletonDirs);
         }
 
         return $this->generator;
     }
 
     /**
-     * Créer un generator de type Nodevo
+     * Créer un generator de type Nodevo.
      *
      * @return EntityGenerator
      */

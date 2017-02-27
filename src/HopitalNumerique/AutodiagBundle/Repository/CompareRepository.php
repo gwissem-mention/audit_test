@@ -26,6 +26,7 @@ class CompareRepository extends EntityRepository
 
     /**
      * @param Synthesis $synthesis
+     *
      * @return Compare[]
      */
     public function findRelatedToSynthesis(Synthesis $synthesis)

@@ -7,7 +7,7 @@ use HopitalNumerique\AutodiagBundle\Entity\Autodiag;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
- * ActionPlan
+ * ActionPlan.
  *
  * @ORM\Table(name="ad_autodiag_actionplan")
  * @ORM\Entity
@@ -15,7 +15,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 class ActionPlan
 {
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
@@ -50,7 +50,7 @@ class ActionPlan
     private $linkDescription;
 
     /**
-     * @var boolean
+     * @var bool
      * @ORM\Column(type="boolean")
      * @Assert\NotNull()
      */
@@ -81,26 +81,28 @@ class ActionPlan
 
     public static function createForContainer(Autodiag $autodiag, Container $container, $value)
     {
-        $actionPlan = new ActionPlan();
+        $actionPlan = new self();
         $actionPlan->setAutodiag($autodiag);
         $actionPlan->setContainer($container);
         $actionPlan->setValue($value);
+
         return $actionPlan;
     }
 
     public static function createForAttribute(Autodiag $autodiag, Attribute $attribute, $value)
     {
-        $actionPlan = new ActionPlan();
+        $actionPlan = new self();
         $actionPlan->setAutodiag($autodiag);
         $actionPlan->setAttribute($attribute);
         $actionPlan->setValue($value);
+
         return $actionPlan;
     }
 
     /**
-     * Get id
+     * Get id.
      *
-     * @return integer
+     * @return int
      */
     public function getId()
     {
@@ -172,7 +174,7 @@ class ActionPlan
     }
 
     /**
-     * @return boolean
+     * @return bool
      */
     public function isVisible()
     {
@@ -180,7 +182,7 @@ class ActionPlan
     }
 
     /**
-     * @param boolean $visible
+     * @param bool $visible
      */
     public function setVisible($visible)
     {

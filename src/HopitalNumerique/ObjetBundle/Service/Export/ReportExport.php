@@ -12,12 +12,12 @@ use Symfony\Component\HttpFoundation\Response;
 class ReportExport
 {
     /**
-     * @var ObjetRepository $objectRepository
+     * @var ObjetRepository
      */
     private $objectRepository;
 
     /**
-     * @var ObjetManager $objectManager
+     * @var ObjetManager
      */
     private $objectManager;
 
@@ -30,11 +30,11 @@ class ReportExport
     public function __construct(ObjetRepository $objetRepository, ObjetManager $objetManager)
     {
         $this->objectRepository = $objetRepository;
-        $this->objectManager    = $objetManager;
+        $this->objectManager = $objetManager;
     }
 
     /**
-     * Exports the reports of the objects
+     * Exports the reports of the objects.
      *
      * @param $objectIds
      * @param $all
@@ -45,17 +45,17 @@ class ReportExport
     public function export($objectIds, $all, $charset)
     {
         $columns = [
-            'domains'      => 'Domaine(s)',
-            'id'           => 'ID objet',
-            'label'        => 'Libellé de l\'objet',
-            'contentId'    => 'ID de l\'infradoc',
+            'domains' => 'Domaine(s)',
+            'id' => 'ID objet',
+            'label' => 'Libellé de l\'objet',
+            'contentId' => 'ID de l\'infradoc',
             'contentLabel' => 'Libellé de l\'infradoc',
-            'link'         => 'Lien',
-            'linkText'     => 'Nom sur le lien',
-            'imageName'    => 'Nom de l\'image',
-            'imageAlt'     => 'Alt de l\'image',
-            'footnote'     => 'Note de bas de page',
-            'tableCount'   => 'Nombre de tableaux',
+            'link' => 'Lien',
+            'linkText' => 'Nom sur le lien',
+            'imageName' => 'Nom de l\'image',
+            'imageAlt' => 'Alt de l\'image',
+            'footnote' => 'Note de bas de page',
+            'tableCount' => 'Nombre de tableaux',
         ];
 
         if (true == $all) {
@@ -99,7 +99,7 @@ class ReportExport
     }
 
     /**
-     * Builds a default row for the export
+     * Builds a default row for the export.
      *
      * @param Report $report
      *
@@ -107,26 +107,26 @@ class ReportExport
      */
     private function buildRow(Report $report)
     {
-        $row                 = [];
-        $row['domains']      = implode(', ', array_map(function (Domaine $domain) {
+        $row = [];
+        $row['domains'] = implode(', ', array_map(function (Domaine $domain) {
             return $domain->getNom();
         }, $report->domains->toArray()));
-        $row['id']           = $report->objectId;
-        $row['label']        = $report->objectLabel;
-        $row['contentId']    = $report->contentId;
+        $row['id'] = $report->objectId;
+        $row['label'] = $report->objectLabel;
+        $row['contentId'] = $report->contentId;
         $row['contentLabel'] = $report->contentLabel;
-        $row['link']         = null;
-        $row['linkText']     = null;
-        $row['imageName']    = null;
-        $row['imageAlt']     = null;
-        $row['footnote']     = null;
-        $row['tableCount']   = null;
+        $row['link'] = null;
+        $row['linkText'] = null;
+        $row['imageName'] = null;
+        $row['imageAlt'] = null;
+        $row['footnote'] = null;
+        $row['tableCount'] = null;
 
         return $row;
     }
 
     /**
-     * Adds link rows corresponding to the report
+     * Adds link rows corresponding to the report.
      *
      * @param Report $report
      * @param        $data
@@ -138,7 +138,7 @@ class ReportExport
         foreach ($report->links as $link) {
             $row = $this->buildRow($report);
 
-            $row['link']     = $link['href'];
+            $row['link'] = $link['href'];
             $row['linkText'] = $link['text'];
 
             $data[] = $row;
@@ -148,7 +148,7 @@ class ReportExport
     }
 
     /**
-     * Adds image rows corresponding to the report
+     * Adds image rows corresponding to the report.
      *
      * @param Report $report
      * @param        $data
@@ -161,7 +161,7 @@ class ReportExport
             $row = $this->buildRow($report);
 
             $row['imageName'] = $image['name'];
-            $row['imageAlt']  = $image['alt'];
+            $row['imageAlt'] = $image['alt'];
 
             $data[] = $row;
         }
@@ -170,7 +170,7 @@ class ReportExport
     }
 
     /**
-     * Adds footnote rows corresponding to the report
+     * Adds footnote rows corresponding to the report.
      *
      * @param Report $report
      * @param        $data
@@ -191,7 +191,7 @@ class ReportExport
     }
 
     /**
-     * Adds table count row corresponding to the report
+     * Adds table count row corresponding to the report.
      *
      * @param Report $report
      * @param        $data

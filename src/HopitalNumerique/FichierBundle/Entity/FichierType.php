@@ -1,4 +1,5 @@
 <?php
+
 namespace HopitalNumerique\FichierBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
@@ -13,7 +14,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 class FichierType
 {
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="fictyp_id", type="smallint", nullable=false, options={"unsigned":true})
      * @ORM\Id()
@@ -34,20 +35,18 @@ class FichierType
      */
     private $extensions;
 
-
     /**
-     * Constructor
+     * Constructor.
      */
     public function __construct()
     {
         $this->extensions = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
-
     /**
-     * Get id
+     * Get id.
      *
-     * @return integer 
+     * @return int
      */
     public function getId()
     {
@@ -55,9 +54,10 @@ class FichierType
     }
 
     /**
-     * Set libelle
+     * Set libelle.
      *
      * @param string $libelle
+     *
      * @return FichierType
      */
     public function setLibelle($libelle)
@@ -68,9 +68,9 @@ class FichierType
     }
 
     /**
-     * Get libelle
+     * Get libelle.
      *
-     * @return string 
+     * @return string
      */
     public function getLibelle()
     {
@@ -78,9 +78,10 @@ class FichierType
     }
 
     /**
-     * Add extensions
+     * Add extensions.
      *
      * @param \HopitalNumerique\FichierBundle\Entity\Extension $extensions
+     *
      * @return FichierType
      */
     public function addExtension(\HopitalNumerique\FichierBundle\Entity\Extension $extensions)
@@ -91,7 +92,7 @@ class FichierType
     }
 
     /**
-     * Remove extensions
+     * Remove extensions.
      *
      * @param \HopitalNumerique\FichierBundle\Entity\Extension $extensions
      */
@@ -101,15 +102,14 @@ class FichierType
     }
 
     /**
-     * Get extensions
+     * Get extensions.
      *
-     * @return \Doctrine\Common\Collections\Collection 
+     * @return \Doctrine\Common\Collections\Collection
      */
     public function getExtensions()
     {
         return $this->extensions;
     }
-
 
     /**
      * @return string
@@ -119,7 +119,6 @@ class FichierType
         return $this->libelle;
     }
 
-
     /**
      * Retourne juste les valeurs des extensions (pas les entités Doctrine).
      *
@@ -127,7 +126,7 @@ class FichierType
      */
     public function getExtensionValeurs()
     {
-        $extensions = array();
+        $extensions = [];
 
         foreach ($this->extensions as $extension) {
             $extensions[] = $extension->getValeur();

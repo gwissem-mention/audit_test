@@ -3,15 +3,13 @@
 namespace HopitalNumerique\AutodiagBundle\Repository\Autodiag;
 
 use Doctrine\ORM\EntityRepository;
-use HopitalNumerique\AideBundle\Entity\Aide;
 use HopitalNumerique\AutodiagBundle\Entity\Autodiag;
 
 /**
- * HistoryRepository
+ * HistoryRepository.
  */
 class HistoryRepository extends EntityRepository
 {
-
     public function getHistoryByType(Autodiag $autodiag, $type)
     {
         $qb = $this->createQueryBuilder('history');

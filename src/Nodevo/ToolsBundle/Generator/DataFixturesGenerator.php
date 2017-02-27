@@ -8,9 +8,9 @@ use Doctrine\Common\Persistence\Mapping\AbstractClassMetadataFactory;
 
 class DataFixturesGenerator extends Generator
 {
-	protected $filesystem;
+    protected $filesystem;
 
-	/**
+    /**
      * Constructor.
      *
      * @param Filesystem $filesystem A Filesystem instance
@@ -22,74 +22,75 @@ class DataFixturesGenerator extends Generator
 
     public function generate($bundle, $entities, AbstractClassMetadataFactory $metadataFactory, $erase)
     {
-    	$dir = $bundle->getPath();
+        $dir = $bundle->getPath();
 
-    	$generatedFixtures = array();
+        $generatedFixtures = [];
 
-    	foreach ($entities as $entity) {
-    		$doctrineEntity = $entity['entity'];
-    		$shortName 		= $entity['shortName'];
+        foreach ($entities as $entity) {
+            $doctrineEntity = $entity['entity'];
+            $shortName = $entity['shortName'];
 
-    		// Fichier à créer
-	        $target = sprintf(
-	            '%s/DataFixtures/ORM/Load%sData.php',
-	            $dir,
-	            $shortName
-	        );
-	        
-	        if ($this->filesystem->exists($target) && !$erase)
-	        	continue;
+            // Fichier à créer
+            $target = sprintf(
+                '%s/DataFixtures/ORM/Load%sData.php',
+                $dir,
+                $shortName
+            );
 
-    		$columns 				= array();
-    		$identifiersColumns 	= array();
-    		$associationsColumns 	= array();
-
-    		// Récupération des colonnes (nom, type)
-    		foreach ($doctrineEntity->getFieldNames() as $columnName) {
-    			if (in_array($columnName, $doctrineEntity->getIdentifierFieldNames())){
-    				$identifiersColumns[] = array(
-	    				'columnName' => $columnName,
-	    				'propertyName' => ucfirst($columnName),
-	    				'columnType' => $doctrineEntity->getTypeOfField($columnName)
-	    			);
-    			}    			
-    			else {
-	    			$columns[] = array(
-	    				'columnName' => $columnName,
-	    				'propertyName' => ucfirst($columnName),
-	    				'columnType' => $doctrineEntity->getTypeOfField($columnName)
-	    			);	    			
-    			}
-    		}
-   
-   			// Récupération des FOREIGN KEY 
-    		foreach ($doctrineEntity->getAssociationNames() as $association) {
-                if ($doctrineEntity->isAssociationInverseSide($association))
-                    continue;
-
-                $associationsColumns[] = array(
-	    			'columnName' 			=> $association,
-	    			'propertyName' 			=> ucfirst($association),
-	    			'propertyNameCollecion' => substr(ucfirst($association), 0, -1),
-	    			'columnType' 			=> $doctrineEntity->isCollectionValuedAssociation($association),
-	    			'target_entity' 		=> $metadataFactory->getReflectionService()->getClassShortName($doctrineEntity->getAssociationTargetClass($association))
-	    		);
+            if ($this->filesystem->exists($target) && !$erase) {
+                continue;
             }
 
-	    	$this->renderFile('fixtures/fixtures.php.twig', $target, array(
-	            'namespace' 		=> $bundle->getNamespace(),
-	            'entity_namespace' 	=> $doctrineEntity->getName(),
-	            'entity_name' 		=> $shortName,
-	            'data' 				=> $entity['data'],
-	            'columns' 			=> $columns,
-	            'order' 			=> $entity['order'],
-	            'identifiers'		=> $identifiersColumns,
-	            'associations'		=> $associationsColumns
-	        ));
+            $columns = [];
+            $identifiersColumns = [];
+            $associationsColumns = [];
 
-	        $generatedFixtures[] = $target;
-    	}
+            // Récupération des colonnes (nom, type)
+            foreach ($doctrineEntity->getFieldNames() as $columnName) {
+                if (in_array($columnName, $doctrineEntity->getIdentifierFieldNames())) {
+                    $identifiersColumns[] = [
+                        'columnName' => $columnName,
+                        'propertyName' => ucfirst($columnName),
+                        'columnType' => $doctrineEntity->getTypeOfField($columnName),
+                    ];
+                } else {
+                    $columns[] = [
+                        'columnName' => $columnName,
+                        'propertyName' => ucfirst($columnName),
+                        'columnType' => $doctrineEntity->getTypeOfField($columnName),
+                    ];
+                }
+            }
 
-    	return $generatedFixtures;
+            // Récupération des FOREIGN KEY
+            foreach ($doctrineEntity->getAssociationNames() as $association) {
+                if ($doctrineEntity->isAssociationInverseSide($association)) {
+                    continue;
+                }
+
+                $associationsColumns[] = [
+                    'columnName' => $association,
+                    'propertyName' => ucfirst($association),
+                    'propertyNameCollecion' => substr(ucfirst($association), 0, -1),
+                    'columnType' => $doctrineEntity->isCollectionValuedAssociation($association),
+                    'target_entity' => $metadataFactory->getReflectionService()->getClassShortName($doctrineEntity->getAssociationTargetClass($association)),
+                ];
+            }
+
+            $this->renderFile('fixtures/fixtures.php.twig', $target, [
+                'namespace' => $bundle->getNamespace(),
+                'entity_namespace' => $doctrineEntity->getName(),
+                'entity_name' => $shortName,
+                'data' => $entity['data'],
+                'columns' => $columns,
+                'order' => $entity['order'],
+                'identifiers' => $identifiersColumns,
+                'associations' => $associationsColumns,
+            ]);
+
+            $generatedFixtures[] = $target;
+        }
+
+        return $generatedFixtures;
     }
 }

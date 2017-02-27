@@ -1,4 +1,5 @@
 <?php
+
 namespace Nodevo\ToolsBundle\Manager;
 
 use Doctrine\Common\Cache\Cache;
@@ -11,7 +12,7 @@ use Symfony\Component\Validator\Constraints\Length;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 /**
- * Classe de base des Managers de la librairie
+ * Classe de base des Managers de la librairie.
  *
  * @author Quentin SOMAZZI
  * @copyright Nodevo
@@ -23,7 +24,7 @@ abstract class Manager
      * @var \Doctrine\ORM\EntityRepository
      */
     protected $repository = null;
-    protected $class       = null;
+    protected $class = null;
 
     /**
      * @var \Doctrine\Common\Cache\Cache Cache
@@ -31,20 +32,20 @@ abstract class Manager
     protected $cache = null;
 
     /**
-     * Constructeur du manager, on lui passe l'entity Manager de doctrine
+     * Constructeur du manager, on lui passe l'entity Manager de doctrine.
      *
      * @param EntityManager $em Entity Manager de Doctrine
      */
     public function __construct(EntityManager $em)
     {
-        $this->em          = $em;
+        $this->em = $em;
         $this->repository = $this->em->getRepository($this->class);
     }
 
     /**
-     * Retourne sous forme d'entier le nombre d'éléments présent dans la table
+     * Retourne sous forme d'entier le nombre d'éléments présent dans la table.
      *
-     * @return integer
+     * @return int
      */
     public function count()
     {
@@ -55,7 +56,7 @@ abstract class Manager
     }
 
     /**
-     * Retourne un tableau de données préformatées pour le grid
+     * Retourne un tableau de données préformatées pour le grid.
      *
      * @param string|null $condition Condition de filtrage si nécessaire
      *
@@ -74,10 +75,10 @@ abstract class Manager
     }
 
     /**
-     * Retourne la liste des éléments ordonnées sur la champ order par défaut
+     * Retourne la liste des éléments ordonnées sur la champ order par défaut.
      *
-     * @param  string $field Field de tri par défaut
-     * @param  string $type  Type de tri (ADC or DESC)
+     * @param string $field Field de tri par défaut
+     * @param string $type  Type de tri (ADC or DESC)
      *
      * @return array
      */
@@ -90,7 +91,7 @@ abstract class Manager
     }
 
     /**
-     * Retourne les contraintes des validators
+     * Retourne les contraintes des validators.
      *
      * @param ValidatorInterface $validator Validator Symfony
      *
@@ -98,7 +99,7 @@ abstract class Manager
      */
     public function getConstraints(ValidatorInterface $validator)
     {
-        $metadata    = $validator->getMetadataFactory()->getMetadataFor($this->class);
+        $metadata = $validator->getMetadataFactory()->getMetadataFor($this->class);
         $constraints = [];
 
         foreach ($metadata->members as $field) {
@@ -121,7 +122,7 @@ abstract class Manager
     }
 
     /**
-     * Met en place le cache
+     * Met en place le cache.
      *
      * @param Cache $cache Cache
      */
@@ -131,7 +132,7 @@ abstract class Manager
     }
 
     /**
-     * Récupère l'objet cache
+     * Récupère l'objet cache.
      *
      * @return Cache
      */
@@ -141,12 +142,12 @@ abstract class Manager
     }
 
     /**
-     * Retourne la liste des éléments filtrés par le tableau de critères
+     * Retourne la liste des éléments filtrés par le tableau de critères.
      *
      * @param array $criteria Le tableau de critères array('field' => value)
-     * @param array $orderBy Order by
-     * @param integer $limit Limit
-     * @param integer $offset Offset
+     * @param array $orderBy  Order by
+     * @param int   $limit    Limit
+     * @param int   $offset   Offset
      *
      * @return array
      */
@@ -159,15 +160,15 @@ abstract class Manager
      * Retourne la liste des éléments filtrés par le tableau de critères et indexés par leur ID.
      *
      * @param array $criteria Le tableau de critères array('field' => value)
-     * @param array $orderBy Order by
-     * @param integer $limit Limit
-     * @param integer $offset Offset
+     * @param array $orderBy  Order by
+     * @param int   $limit    Limit
+     * @param int   $offset   Offset
      *
      * @return array
      */
     public function findByIndexedById(array $criteria, array $orderBy = null, $limit = null, $offset = null)
     {
-        $entitiesById = array();
+        $entitiesById = [];
 
         foreach ($this->findBy($criteria, $orderBy, $limit, $offset) as $entity) {
             $entitiesById[$entity->getId()] = $entity;
@@ -177,16 +178,16 @@ abstract class Manager
     }
 
     /**
-    * Retourne les objets rôles présents dans le tableau de chaînes $roles
-    *
-    * @param array $roles Tableau de chaînes contenant les noms des roles
-    *
-    * @return array
-    */
+     * Retourne les objets rôles présents dans le tableau de chaînes $roles.
+     *
+     * @param array $roles Tableau de chaînes contenant les noms des roles
+     *
+     * @return array
+     */
     public function findIn(array $roles)
     {
         $allRoles = $this->getRepository()->findAll();
-        $matchingRoles = array();
+        $matchingRoles = [];
 
         foreach ($allRoles as $role) {
             if (in_array($role->getRole(), $roles, true)) {
@@ -206,7 +207,7 @@ abstract class Manager
      */
     public function getEntitiesKeyedById(array $entities)
     {
-        $entitiesById = array();
+        $entitiesById = [];
 
         foreach ($entities as $entity) {
             $entitiesById[$entity->getId()] = $entity;
@@ -216,7 +217,7 @@ abstract class Manager
     }
 
     /**
-     * Enregistre l'entitée
+     * Enregistre l'entitée.
      *
      * @param $entity
      */
@@ -244,7 +245,7 @@ abstract class Manager
     }
 
     /**
-     * Enregistre l'entitée en autorisant le forcage de l'id
+     * Enregistre l'entitée en autorisant le forcage de l'id.
      *
      * @param object $entity
      */
@@ -259,7 +260,7 @@ abstract class Manager
     }
 
     /**
-     * Retourne 1 élément filtré selon les critères
+     * Retourne 1 élément filtré selon les critères.
      *
      * @param array      $criteria
      * @param array|null $orderBy
@@ -272,9 +273,9 @@ abstract class Manager
     }
 
     /**
-     * Retourne un élémént selon son ID
+     * Retourne un élémént selon son ID.
      *
-     * @param integer $id ID de l'élément
+     * @param int $id ID de l'élément
      *
      * @return object
      */
@@ -284,7 +285,7 @@ abstract class Manager
     }
 
     /**
-     * Retourne tous les éléments sans filtres
+     * Retourne tous les éléments sans filtres.
      *
      * @return array
      */
@@ -294,17 +295,17 @@ abstract class Manager
     }
 
     /**
-     * Créer une nouvelle entity vide
+     * Créer une nouvelle entity vide.
      *
      * @return object
      */
     public function createEmpty()
     {
-        return new $this->class;
+        return new $this->class();
     }
 
     /**
-     * Supprime l'entitée
+     * Supprime l'entitée.
      *
      * @param object|array $entity L'entitée ou tableau d'entitée
      */
@@ -322,11 +323,11 @@ abstract class Manager
     }
 
     /**
-     * Export CSV du grid selon les colonnes
+     * Export CSV du grid selon les colonnes.
      *
-     * @param array  $colonnes Liste des colonnes à exporter
-     * @param array  $datas    Tableau de données
-     * @param string $filename Nom du fichier CSV exporté
+     * @param array  $colonnes      Liste des colonnes à exporter
+     * @param array  $datas         Tableau de données
+     * @param string $filename      Nom du fichier CSV exporté
      * @param [type] $kernelCharset [description]
      *
      * @return Response
@@ -334,21 +335,21 @@ abstract class Manager
     public function exportCsv($colonnes, $datas, $filename, $kernelCharset)
     {
         // Array to csv (copy from APY\DataGridBundle\Grid\Export\DSVExport.php)
-        $outstream = fopen("php://temp", 'r+');
+        $outstream = fopen('php://temp', 'r+');
 
         //Ajout de la colonne d'en-têtes
         $firstLine = array_values($colonnes);
         fputcsv($outstream, $firstLine, ';', '"');
 
         //creation du FlatArray pour la conversion en CSV
-        $keys      = array_keys($colonnes);
-        $flatArray = array();
+        $keys = array_keys($colonnes);
+        $flatArray = [];
         foreach ($datas as $data) {
             $ligne = [];
             foreach ($keys as $key) {
                 //cas Tableau
                 if (is_array($data)) {
-                    $val     = array_key_exists($key, $data) ? $data[$key] : '';
+                    $val = array_key_exists($key, $data) ? $data[$key] : '';
                     $ligne[] = is_null($val) ? '' : $val;
                     //Cas Objet
                 } else {
@@ -357,19 +358,19 @@ abstract class Manager
                         //cas des foreign colonnes : on explode sur le ':' et on vérifie la présence d'une valeur
                         $fcts = explode('.', $key);
                         $fct1 = 'get' . ucfirst($fcts[0]);
-                        $tmp  = call_user_func([$data, $fct1]);
+                        $tmp = call_user_func([$data, $fct1]);
                         //si il existe une valeur pour le 1er get, on tente de récupérer le second
                         if ($tmp) {
-                            $fct2    = 'get' . ucfirst($fcts[1]);
-                            $val     = call_user_func([$tmp, $fct2]);
+                            $fct2 = 'get' . ucfirst($fcts[1]);
+                            $val = call_user_func([$tmp, $fct2]);
                             $ligne[] = is_null($val) ? '' : $val;
                         } else {
                             $ligne[] = '';
                         }
                         //simple colonne
                     } else {
-                        $fct     = 'get' . ucfirst($key);
-                        $val     = call_user_func([$data, $fct]);
+                        $fct = 'get' . ucfirst($key);
+                        $val = call_user_func([$data, $fct]);
                         $ligne[] = is_null($val) ? '' : $val;
                     }
                 }
@@ -397,23 +398,23 @@ abstract class Manager
         // Charset and Length
         $charset = 'ISO-8859-1';
         if ($charset != $kernelCharset && function_exists('mb_strlen')) {
-            $content  = mb_convert_encoding($content, $charset, $kernelCharset);
+            $content = mb_convert_encoding($content, $charset, $kernelCharset);
             $filesize = mb_strlen($content, '8bit');
         } else {
             $filesize = strlen($content);
-            $charset  = $kernelCharset;
+            $charset = $kernelCharset;
         }
 
         //build header
-        $headers = array(
-            'Content-Description'       => 'File Transfer',
-            'Content-Type'              => 'text/comma-separated-values',
-            'Content-Disposition'       => sprintf('attachment; filename="%s"', $filename),
+        $headers = [
+            'Content-Description' => 'File Transfer',
+            'Content-Type' => 'text/comma-separated-values',
+            'Content-Disposition' => sprintf('attachment; filename="%s"', $filename),
             'Content-Transfer-Encoding' => 'binary',
-            'Cache-Control'             => 'must-revalidate',
-            'Pragma'                    => 'public',
-            'Content-Length'            => $filesize
-        );
+            'Cache-Control' => 'must-revalidate',
+            'Pragma' => 'public',
+            'Content-Length' => $filesize,
+        ];
 
         //return a Symfony Response
         $response = new Response($content, 200, $headers);
@@ -424,7 +425,7 @@ abstract class Manager
     }
 
     /**
-     * Retourne le repository associé
+     * Retourne le repository associé.
      *
      * @return \Doctrine\ORM\EntityRepository
      */

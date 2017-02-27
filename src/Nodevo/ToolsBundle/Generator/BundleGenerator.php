@@ -26,8 +26,8 @@ class BundleGenerator extends Generator
     {
         parent::generate($namespace, $bundle, $dir, $format, $structure);
 
-        $dir .= '/'.strtr($namespace, '\\', '/');
+        $dir .= '/' . strtr($namespace, '\\', '/');
         //remove Test Folder ... we don't use it for the moment
-        $this->filesystem->remove($dir.'/Tests');
+        $this->filesystem->remove($dir . '/Tests');
     }
 }

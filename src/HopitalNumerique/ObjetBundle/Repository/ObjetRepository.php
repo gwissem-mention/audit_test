@@ -11,12 +11,12 @@ use HopitalNumerique\ReferenceBundle\Entity\Reference;
 use Doctrine\ORM\Query\Expr;
 
 /**
- * ObjetRepository
+ * ObjetRepository.
  */
 class ObjetRepository extends EntityRepository
 {
     /**
-     * Returns the list of objects corresponding to ids
+     * Returns the list of objects corresponding to ids.
      *
      * @param $ids
      *
@@ -54,9 +54,9 @@ class ObjetRepository extends EntityRepository
     }
 
     /**
-     * Récupère les données du grid sous forme de tableau correctement formaté
+     * Récupère les données du grid sous forme de tableau correctement formaté.
      *
-     * @param array $domainesIds Tableau d'id de domaines autorisés pour l'utilisateur connecté
+     * @param array  $domainesIds Tableau d'id de domaines autorisés pour l'utilisateur connecté
      * @param [type] $condition   [description]
      *
      * @return QueryBuilder
@@ -94,7 +94,7 @@ class ObjetRepository extends EntityRepository
     }
 
     /**
-     * Retourne la liste des objets
+     * Retourne la liste des objets.
      *
      *
      * @return QueryBuilder
@@ -113,7 +113,7 @@ class ObjetRepository extends EntityRepository
     }
 
     /**
-     * Récupère les objets pour l'export
+     * Récupère les objets pour l'export.
      *
      * @param $ids
      *
@@ -133,7 +133,7 @@ class ObjetRepository extends EntityRepository
     }
 
     /**
-     * Récupération du nombre de vue total de toutes les publications
+     * Récupération du nombre de vue total de toutes les publications.
      *
      * @return QueryBuilder
      */
@@ -146,7 +146,7 @@ class ObjetRepository extends EntityRepository
     }
 
     /**
-     * Récupère les données du grid pour un ambassadeur sous forme de tableau correctement formaté
+     * Récupère les données du grid pour un ambassadeur sous forme de tableau correctement formaté.
      *
      * @param $idAmbassadeur
      *
@@ -166,7 +166,7 @@ class ObjetRepository extends EntityRepository
     }
 
     /**
-     * Récupère les objets pour le flux RSS
+     * Récupère les objets pour le flux RSS.
      *
      * @param Domaine $domaine
      *
@@ -195,12 +195,12 @@ class ObjetRepository extends EntityRepository
                     $qb->expr()->eq('refType.code', ':code_objet')
                 )
             )
-            ->setParameters(array(
+            ->setParameters([
                 'domaine' => $domaine,
-                'idEtat'      => 3,
+                'idEtat' => 3,
                 'code_artcle' => 'CATEGORIE_ARTICLE',
-                'code_objet'  => 'CATEGORIE_OBJET'
-            ))
+                'code_objet' => 'CATEGORIE_OBJET',
+            ])
             ->orderBy('obj.dateCreation', 'DESC')
             ->setMaxResults(20)
         ;
@@ -209,7 +209,7 @@ class ObjetRepository extends EntityRepository
     }
 
     /**
-     * Récupère les objets pour un ambassadeur passé en param
+     * Récupère les objets pour un ambassadeur passé en param.
      *
      * @param $idAmbassadeur
      *
@@ -229,7 +229,7 @@ class ObjetRepository extends EntityRepository
     }
 
     /**
-     * Retourne la liste des objets selon le/les types
+     * Retourne la liste des objets selon le/les types.
      *
      * @param array $types Les types à filtrer
      *
@@ -253,7 +253,7 @@ class ObjetRepository extends EntityRepository
     }
 
     /**
-     * Retourne la liste des objets selon le/les types et trié par nombre de vues
+     * Retourne la liste des objets selon le/les types et trié par nombre de vues.
      *
      * @param int $limit
      *
@@ -281,7 +281,7 @@ class ObjetRepository extends EntityRepository
     }
 
     /**
-     * Retourne l'ensemble des productions actives
+     * Retourne l'ensemble des productions actives.
      */
     public function getProductionsActive()
     {
@@ -302,7 +302,7 @@ class ObjetRepository extends EntityRepository
     }
 
     /**
-     * Retourne l'ensemble des productions actives
+     * Retourne l'ensemble des productions actives.
      */
     public function getObjetsForDashboard()
     {
@@ -321,9 +321,9 @@ class ObjetRepository extends EntityRepository
         return $qb;
     }
 
-  /**
-   * Set toute la colone A la une à false
-   */
+    /**
+     * Set toute la colone A la une à false.
+     */
     public function setAllAlaUneFalse($id)
     {
         $qb = $this->_em->createQueryBuilder();
@@ -338,9 +338,9 @@ class ObjetRepository extends EntityRepository
         return $qb;
     }
 
-  /**
-   * Retourne l'article à la une
-   */
+    /**
+     * Retourne l'article à la une.
+     */
     public function getArticleAlaUne()
     {
         $qb = $this->_em->createQueryBuilder();
@@ -421,7 +421,7 @@ class ObjetRepository extends EntityRepository
         $domaine = $this
             ->getEntityManager()
             ->getRepository('HopitalNumeriqueDomaineBundle:Domaine')
-            ->getDomaineFromHttpHost($_SERVER["SERVER_NAME"])
+            ->getDomaineFromHttpHost($_SERVER['SERVER_NAME'])
             ->getQuery()
             ->getOneOrNullResult()
         ;
@@ -458,13 +458,12 @@ class ObjetRepository extends EntityRepository
             ->orderBy('objet.titre', 'ASC')
             ->setParameters([
                 'domaine' => $domaine,
-                'infradoc' => true
+                'infradoc' => true,
             ])
         ;
 
         return $qb->getQuery()->getResult();
     }
-
 
     /**
      * Retourne les publications par domaine et compétences de l'ambassadeur.

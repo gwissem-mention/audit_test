@@ -6,8 +6,7 @@ use HopitalNumerique\AutodiagBundle\Entity\Autodiag\Container;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * Class Score
- * @package HopitalNumerique\AutodiagBundle\Entity
+ * Class Score.
  *
  * @ORM\Table(name="ad_score")
  * @ORM\Entity(repositoryClass="HopitalNumerique\AutodiagBundle\Repository\ScoreRepository")
@@ -54,7 +53,7 @@ class Score
     private $max;
 
     /**
-     * @var boolean
+     * @var bool
      *
      * @ORM\Column(type="boolean", nullable=true)
      */
@@ -62,9 +61,10 @@ class Score
 
     /**
      * Score constructor.
+     *
      * @param Container $container
      * @param Synthesis $synthesis
-     * @param null $score
+     * @param null      $score
      */
     public function __construct(Container $container, Synthesis $synthesis, $score = null)
     {
@@ -146,7 +146,7 @@ class Score
     }
 
     /**
-     * @return boolean
+     * @return bool
      */
     public function isComplete()
     {
@@ -154,7 +154,7 @@ class Score
     }
 
     /**
-     * @param boolean $complete
+     * @param bool $complete
      */
     public function setComplete($complete)
     {

@@ -9,39 +9,39 @@ use HopitalNumerique\ModuleBundle\Entity\Session;
 class EvaluationController extends Controller
 {
     /**
-     * Affichage du formulaire d'utilisateur
-     *
-     * @param integer $id Identifiant de l'utilisateur
-     */
-     public function editAction( HopiUser $user, Session $session )
+      * Affichage du formulaire d'utilisateur.
+      *
+      * @param int $id Identifiant de l'utilisateur
+      */
+     public function editAction(HopiUser $user, Session $session)
      {
-        //Récupération du questionnaire de l'expert
+         //Récupération du questionnaire de l'expert
         $idQuestionnaireEvaluationModule = $this->get('hopitalnumerique_questionnaire.manager.questionnaire')->getQuestionnaireId('module-evaluation');
-        $questionnaire = $this->get('hopitalnumerique_questionnaire.manager.questionnaire')->findOneBy( array('id' => $idQuestionnaireEvaluationModule) );
-            
-        return $this->render('HopitalNumeriqueModuleBundle:Back/Evaluation:edit.html.twig',array(
-            'questionnaire'    => $questionnaire,
-            'user'             => $user,
-            'session'          => $session,
-            'optionRenderForm' => array(
+         $questionnaire = $this->get('hopitalnumerique_questionnaire.manager.questionnaire')->findOneBy(['id' => $idQuestionnaireEvaluationModule]);
+
+         return $this->render('HopitalNumeriqueModuleBundle:Back/Evaluation:edit.html.twig', [
+            'questionnaire' => $questionnaire,
+            'user' => $user,
+            'session' => $session,
+            'optionRenderForm' => [
                 'themeQuestionnaire' => 'vertical',
-                'session'            => $session->getId(),
-                'envoieDeMail'       => false,
-                'readOnly'           => false,
-                'routeRedirect'      => json_encode(array(
-                    'quit'              => array(
-                        'route'             => 'hopitalnumerique_module_module',
-                        'arguments'         => array()
-                    ),
-                    'sauvegarde'        => array(
-                        'route'             => 'hopitalnumerique_module_module_session_evaluation_editer',
-                        'arguments'         => array(
-                            'user'                => $user->getId(),
-                            'session'             => $session->getId()
-                        )
-                    )
-                ))
-            )
-        ));
-    }
+                'session' => $session->getId(),
+                'envoieDeMail' => false,
+                'readOnly' => false,
+                'routeRedirect' => json_encode([
+                    'quit' => [
+                        'route' => 'hopitalnumerique_module_module',
+                        'arguments' => [],
+                    ],
+                    'sauvegarde' => [
+                        'route' => 'hopitalnumerique_module_module_session_evaluation_editer',
+                        'arguments' => [
+                            'user' => $user->getId(),
+                            'session' => $session->getId(),
+                        ],
+                    ],
+                ]),
+            ],
+        ]);
+     }
 }

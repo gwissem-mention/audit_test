@@ -1,4 +1,5 @@
 <?php
+
 namespace HopitalNumerique\ReferenceBundle\Entity\Reference;
 
 use Doctrine\ORM\Mapping as ORM;
@@ -13,7 +14,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 class ChampLexicalNom
 {
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="chl_id", type="integer", options={"unsigned"=true})
      * @ORM\Id()
@@ -33,20 +34,18 @@ class ChampLexicalNom
      */
     private $references;
 
-
     /**
-     * Constructor
+     * Constructor.
      */
     public function __construct()
     {
         $this->references = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
-
     /**
-     * Get id
+     * Get id.
      *
-     * @return integer
+     * @return int
      */
     public function getId()
     {
@@ -54,7 +53,7 @@ class ChampLexicalNom
     }
 
     /**
-     * Set libelle
+     * Set libelle.
      *
      * @param string $libelle
      *
@@ -68,7 +67,7 @@ class ChampLexicalNom
     }
 
     /**
-     * Get libelle
+     * Get libelle.
      *
      * @return string
      */
@@ -78,7 +77,7 @@ class ChampLexicalNom
     }
 
     /**
-     * Add reference
+     * Add reference.
      *
      * @param \HopitalNumerique\ReferenceBundle\Entity\Reference $reference
      *
@@ -92,7 +91,7 @@ class ChampLexicalNom
     }
 
     /**
-     * Remove reference
+     * Remove reference.
      *
      * @param \HopitalNumerique\ReferenceBundle\Entity\Reference $reference
      */
@@ -102,7 +101,7 @@ class ChampLexicalNom
     }
 
     /**
-     * Get references
+     * Get references.
      *
      * @return \Doctrine\Common\Collections\Collection
      */
@@ -111,15 +110,15 @@ class ChampLexicalNom
         return $this->references;
     }
 
-
     /**
      * Retourne l'égalité entre deux champLexicalNom.
      *
      * @param \HopitalNumerique\ReferenceBundle\Entity\Reference\ChampLexicalNom $champLexicalNom Autre champLexicalNom
-     * @return boolean Si égalité
+     *
+     * @return bool Si égalité
      */
     public function equals(ChampLexicalNom $champLexicalNom)
     {
-        return ($this->libelle === $champLexicalNom->getLibelle());
+        return $this->libelle === $champLexicalNom->getLibelle();
     }
 }

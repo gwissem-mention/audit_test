@@ -1,4 +1,5 @@
 <?php
+
 namespace HopitalNumerique\ObjetBundle\Manager;
 
 use HopitalNumerique\ObjetBundle\Entity\Consultation;
@@ -18,7 +19,7 @@ class ConsultationManager extends BaseManager
     protected $securityContext;
 
     /**
-     * Construct
+     * Construct.
      *
      * @param EntityManager   $em
      * @param SecurityContext $securityContext
@@ -30,7 +31,7 @@ class ConsultationManager extends BaseManager
     }
 
     /**
-     * Retourne les dernières consultations de l'user $user
+     * Retourne les dernières consultations de l'user $user.
      *
      * @param User $user L'user connecté
      *
@@ -42,7 +43,7 @@ class ConsultationManager extends BaseManager
     }
 
     /**
-     * On met l'objet en consulté (création si première visite, ou update de la date)
+     * On met l'objet en consulté (création si première visite, ou update de la date).
      *
      * @param Objet|Contenu $objet     La publication visitée
      * @param bool          $isContenu Is contenu ?
@@ -80,17 +81,17 @@ class ConsultationManager extends BaseManager
             $consultation = $isContenu
                 ? $this->findOneBy(
                     [
-                        'objet'   => $objet->getObjet(),
+                        'objet' => $objet->getObjet(),
                         'contenu' => $objet,
-                        'user'    => null,
+                        'user' => null,
                         'domaine' => $domaine,
                         'sessionId' => session_id(),
                     ]
                 )
                 : $this->findOneBy(
                     [
-                        'objet'   => $objet,
-                        'user'    => null,
+                        'objet' => $objet,
+                        'user' => null,
                         'contenu' => null,
                         'domaine' => $domaine,
                         'sessionId' => session_id(),
@@ -120,7 +121,7 @@ class ConsultationManager extends BaseManager
     }
 
     /**
-     * Récupère les consultations concernées par l'objet passé en param
+     * Récupère les consultations concernées par l'objet passé en param.
      *
      * @param Objet $objet
      *
@@ -135,7 +136,7 @@ class ConsultationManager extends BaseManager
     }
 
     /**
-     * Met à jour le tableau de productions avec les prod consultées par l'user connecté
+     * Met à jour le tableau de productions avec les prod consultées par l'user connecté.
      *
      * @param $domaineId
      * @param $productions
@@ -150,7 +151,7 @@ class ConsultationManager extends BaseManager
             $dateInscription = $user->getDateInscription();
 
             // get consulted objets and formate them
-            $results   = $this->getLastsConsultations($user, $domaineId);
+            $results = $this->getLastsConsultations($user, $domaineId);
             $consulted = ['objets' => [], 'contenus' => []];
             foreach ($results as $one) {
                 // Cas objet
@@ -170,13 +171,13 @@ class ConsultationManager extends BaseManager
 
             // Parcours des objets retournés par la recherche
             foreach ($productions as &$production) {
-                $id          = $production->id;
+                $id = $production->id;
                 $isConsulted = false;
-                $type        = $production->objet ? 'objets' : 'contenus';
+                $type = $production->objet ? 'objets' : 'contenus';
 
                 // la publication fait partie des publications déjà consultées par l'utilisateur
                 if (isset($consulted[$type][$id])) {
-                    $isConsulted         = true;
+                    $isConsulted = true;
                     $production->updated = $consulted[$type][$id];
                 }
 
@@ -194,7 +195,7 @@ class ConsultationManager extends BaseManager
     }
 
     /**
-     * Get nombre consultations
+     * Get nombre consultations.
      *
      * @return int
      */

@@ -11,22 +11,21 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**
- * ModelType
+ * ModelType.
  *
- * @package HopitalNumerique\AutodiagBundle\Form\Type
  * @author Emmanuel Da Fonseca <edafonseca@nodevo.com>
  */
 class AutodiagType extends AbstractType
 {
     /**
      * @param FormBuilderInterface $builder
-     * @param array $options
+     * @param array                $options
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
             ->add('title', null, [
-                'attr'       => array('class' => 'validate[required,max[255]]')
+                'attr' => ['class' => 'validate[required,max[255]]'],
             ])
             ->add('instructions')
             ->add('partialResultsAuthorized')
@@ -42,8 +41,8 @@ class AutodiagType extends AbstractType
                     return $er->getDomainesUserConnectedForForm($options['user']->getId());
                 },
                 'attr' => [
-                    'class' => 'select2 validate[required,minSize[3],maxSize[255]]'
-                ]
+                    'class' => 'select2 validate[required,minSize[3],maxSize[255]]',
+                ],
             ])
             ->add('questionnaire', EntityType::class, [
                 'class' => Questionnaire::class,

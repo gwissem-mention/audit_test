@@ -11,7 +11,7 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
- * Suggestion
+ * Suggestion.
  *
  * @ORM\Table(name="hn_suggestion")
  * @ORM\Entity(repositoryClass="HopitalNumerique\PublicationBundle\Repository\SuggestionRepository")
@@ -20,7 +20,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 class Suggestion
 {
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
@@ -147,8 +147,8 @@ class Suggestion
      */
     private $stateChangeAuthor;
 
-     /**
-     * @var boolean
+    /**
+     * @var bool
      *
      * @ORM\Column(name="alreadyCreated", type="boolean")
      */
@@ -239,6 +239,7 @@ class Suggestion
 
     /**
      * @param string $synthesis
+     *
      * @return $this
      */
     public function setSynthesis($synthesis)
@@ -398,10 +399,10 @@ class Suggestion
         $result = $this->path;
 
         if (!$result || is_null($result)) {
-            return "";
+            return '';
         }
 
-        return substr($result, strrpos($result, ".") + 1);
+        return substr($result, strrpos($result, '.') + 1);
     }
 
     /**
@@ -523,10 +524,11 @@ class Suggestion
     }
 
     /**
-     * Set alreadyCreated
+     * Set alreadyCreated.
 
      *
-     * @param boolean $alreadyCreated
+     * @param bool $alreadyCreated
+     *
      * @return Objet
      */
     public function setAlreadyCreated($created)
@@ -537,13 +539,12 @@ class Suggestion
     }
 
     /**
-     * Get alreadyCreated
+     * Get alreadyCreated.
      *
-     * @return boolean
+     * @return bool
      */
     public function isAlreadyCreated()
     {
         return $this->alreadyCreated;
     }
-
 }

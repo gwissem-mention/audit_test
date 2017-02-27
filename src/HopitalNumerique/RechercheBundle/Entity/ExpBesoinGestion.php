@@ -5,7 +5,7 @@ namespace HopitalNumerique\RechercheBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * ExpBesoinGestion
+ * ExpBesoinGestion.
  *
  * @ORM\Table(name="hn_recherche_expbesoin_gestionnaire")
  * @ORM\Entity(repositoryClass="HopitalNumerique\RechercheBundle\Repository\ExpBesoinGestionRepository")
@@ -13,7 +13,7 @@ use Doctrine\ORM\Mapping as ORM;
 class ExpBesoinGestion
 {
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="expbg_id", type="integer")
      * @ORM\Id
@@ -42,11 +42,10 @@ class ExpBesoinGestion
      */
     protected $expBesoins;
 
-
     /**
-     * Get id
+     * Get id.
      *
-     * @return integer 
+     * @return int
      */
     public function getId()
     {
@@ -54,9 +53,10 @@ class ExpBesoinGestion
     }
 
     /**
-     * Set nom
+     * Set nom.
      *
      * @param string $nom
+     *
      * @return ExpBesoinGestion
      */
     public function setNom($nom)
@@ -67,16 +67,17 @@ class ExpBesoinGestion
     }
 
     /**
-     * Get nom
+     * Get nom.
      *
-     * @return string 
+     * @return string
      */
     public function getNom()
     {
         return $this->nom;
     }
+
     /**
-     * Constructor
+     * Constructor.
      */
     public function __construct()
     {
@@ -85,9 +86,10 @@ class ExpBesoinGestion
     }
 
     /**
-     * Add domaines
+     * Add domaines.
      *
      * @param \HopitalNumerique\DomaineBundle\Entity\Domaine $domaines
+     *
      * @return ExpBesoinGestion
      */
     public function addDomaine(\HopitalNumerique\DomaineBundle\Entity\Domaine $domaines)
@@ -98,7 +100,7 @@ class ExpBesoinGestion
     }
 
     /**
-     * Remove domaines
+     * Remove domaines.
      *
      * @param \HopitalNumerique\DomaineBundle\Entity\Domaine $domaines
      */
@@ -108,9 +110,9 @@ class ExpBesoinGestion
     }
 
     /**
-     * Get domaines
+     * Get domaines.
      *
-     * @return \Doctrine\Common\Collections\Collection 
+     * @return \Doctrine\Common\Collections\Collection
      */
     public function getDomaines()
     {
@@ -118,16 +120,15 @@ class ExpBesoinGestion
     }
 
     /**
-     * Get les ids des domaines 
+     * Get les ids des domaines.
      *
      * @return array[integer]
      */
     public function getDomainesId()
     {
-        $domainesId = array();
+        $domainesId = [];
 
-        foreach ($this->domaines as $domaine) 
-        {
+        foreach ($this->domaines as $domaine) {
             $domainesId[] = $domaine->getId();
         }
 
@@ -135,9 +136,10 @@ class ExpBesoinGestion
     }
 
     /**
-     * Add expBesoins
+     * Add expBesoins.
      *
      * @param \HopitalNumerique\RechercheBundle\Entity\ExpBesoin $expBesoins
+     *
      * @return ExpBesoinGestion
      */
     public function addExpBesoin(\HopitalNumerique\RechercheBundle\Entity\ExpBesoin $expBesoins)
@@ -148,7 +150,7 @@ class ExpBesoinGestion
     }
 
     /**
-     * Remove expBesoins
+     * Remove expBesoins.
      *
      * @param \HopitalNumerique\RechercheBundle\Entity\ExpBesoin $expBesoins
      */
@@ -158,9 +160,9 @@ class ExpBesoinGestion
     }
 
     /**
-     * Get expBesoins
+     * Get expBesoins.
      *
-     * @return \Doctrine\Common\Collections\Collection 
+     * @return \Doctrine\Common\Collections\Collection
      */
     public function getExpBesoins()
     {

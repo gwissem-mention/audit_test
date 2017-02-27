@@ -26,7 +26,7 @@ class RechercheParcoursGestionType extends AbstractType
 
     public function __construct($manager, $validator, Entity $entity, UserManager $userManager, ReferenceManager $referenceManager)
     {
-        $this->_constraints = $manager->getConstraints( $validator );
+        $this->_constraints = $manager->getConstraints($validator);
         $this->entity = $entity;
         $this->_userManager = $userManager;
         $this->referenceManager = $referenceManager;
@@ -38,73 +38,73 @@ class RechercheParcoursGestionType extends AbstractType
         $isCreation = (null === $builder->getData()->getId());
 
         $builder
-            ->add('nom', 'text', array(
-                'max_length' => 255, 
-                'required'   => true, 
-                'label'      => 'Nom',
-                'attr'        => array('class' => 'validate[required]')
-            ))
-            ->add('domaines', 'entity', array(
-                'class'       => 'HopitalNumeriqueDomaineBundle:Domaine',
-                'property'    => 'nom',
-                'required'    => true,
-                'multiple'    => true,
-                'label'       => 'Domaine(s) associé(s)',
+            ->add('nom', 'text', [
+                'max_length' => 255,
+                'required' => true,
+                'label' => 'Nom',
+                'attr' => ['class' => 'validate[required]'],
+            ])
+            ->add('domaines', 'entity', [
+                'class' => 'HopitalNumeriqueDomaineBundle:Domaine',
+                'property' => 'nom',
+                'required' => true,
+                'multiple' => true,
+                'label' => 'Domaine(s) associé(s)',
                 'empty_value' => ' - ',
-                'query_builder' => function(EntityRepository $er) use ($connectedUser){
+                'query_builder' => function (EntityRepository $er) use ($connectedUser) {
                     return $er->getDomainesUserConnectedForForm($connectedUser->getId());
-                }
-            ))
-            ->add('typePublication', 'genemu_jqueryselect2_entity', array(
-                'class'       => 'HopitalNumeriqueReferenceBundle:Reference',
-                'property'    => 'libelle',
-                'required'    => true,
-                'multiple'    => true,
-                'label'       => 'Type de publication à afficher',
+                },
+            ])
+            ->add('typePublication', 'genemu_jqueryselect2_entity', [
+                'class' => 'HopitalNumeriqueReferenceBundle:Reference',
+                'property' => 'libelle',
+                'required' => true,
+                'multiple' => true,
+                'label' => 'Type de publication à afficher',
                 'empty_value' => ' - ',
-                'query_builder' => function(EntityRepository $er){
+                'query_builder' => function (EntityRepository $er) {
                     return $er->createQueryBuilder('ref')
                         ->leftJoin('ref.parents', 'parent')
                         ->where('ref.code = :code')
                         ->andWhere('parent.id IS NULL')
                         ->setParameter('code', 'CATEGORIE_OBJET');
-                }
-            ))
+                },
+            ])
         ;
         if (!$isCreation) {
             $domaines = $this->entity->getEntityDomainesCommunsWithUser($builder->getData(), $connectedUser);
             $references = $this->referenceManager->findByDomaines($domaines, true, null, null, true);
 
             $builder
-                ->add('referencesParentes', 'genemu_jqueryselect2_entity', array(
-                    'class'       => 'HopitalNumeriqueReferenceBundle:Reference',
+                ->add('referencesParentes', 'genemu_jqueryselect2_entity', [
+                    'class' => 'HopitalNumeriqueReferenceBundle:Reference',
                     'choices' => $references,
-                    'property'    => 'libelle',
-                    'required'    => true,
-                    'multiple'    => true,
-                    'label'       => 'Référence(s) parente(s)',
+                    'property' => 'libelle',
+                    'required' => true,
+                    'multiple' => true,
+                    'label' => 'Référence(s) parente(s)',
                     //'group_by'    => 'parent',
-                    'empty_value' => ' - '
-                ))
-                ->add('referencesVentilations', 'genemu_jqueryselect2_entity', array(
-                    'class'       => 'HopitalNumeriqueReferenceBundle:Reference',
+                    'empty_value' => ' - ',
+                ])
+                ->add('referencesVentilations', 'genemu_jqueryselect2_entity', [
+                    'class' => 'HopitalNumeriqueReferenceBundle:Reference',
                     'choices' => $references,
-                    'property'    => 'libelle',
-                    'required'    => true,
-                    'multiple'    => true,
-                    'label'       => 'Référence(s) de ventilation',
+                    'property' => 'libelle',
+                    'required' => true,
+                    'multiple' => true,
+                    'label' => 'Référence(s) de ventilation',
                     //'group_by'    => 'parent',
-                    'empty_value' => ' - '
-                ))
+                    'empty_value' => ' - ',
+                ])
             ;
         }
     }
 
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
-        $resolver->setDefaults(array(
-            'data_class' => 'HopitalNumerique\RechercheParcoursBundle\Entity\RechercheParcoursGestion'
-        ));
+        $resolver->setDefaults([
+            'data_class' => 'HopitalNumerique\RechercheParcoursBundle\Entity\RechercheParcoursGestion',
+        ]);
     }
 
     public function getName()

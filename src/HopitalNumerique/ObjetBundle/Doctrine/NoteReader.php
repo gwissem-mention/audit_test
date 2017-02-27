@@ -1,4 +1,5 @@
 <?php
+
 namespace HopitalNumerique\ObjetBundle\Doctrine;
 
 use HopitalNumerique\ObjetBundle\Manager\NoteManager;
@@ -22,7 +23,6 @@ class NoteReader
      */
     private $noteManager;
 
-
     /**
      * Constructeur.
      */
@@ -32,13 +32,13 @@ class NoteReader
         $this->noteManager = $noteManager;
     }
 
-
     /**
      * Retourne la note.
      *
      * @param \HopitalNumerique\ObjetBundle\Entity\Objet    $objet Objet
      * @param \HopitalNumerique\UserBundle\Entity\User|null $user  Utilisateur connecté ou NULL si pas connecté
-     * @return integer|null Note
+     *
+     * @return int|null Note
      */
     public function getNoteByObjetAndUser(Objet $objet, User $user = null)
     {
@@ -57,7 +57,8 @@ class NoteReader
      *
      * @param \HopitalNumerique\ObjetBundle\Entity\Contenu  $contenu Contenu
      * @param \HopitalNumerique\UserBundle\Entity\User|null $user    Utilisateur connecté ou NULL si pas connecté
-     * @return integer|null Note
+     *
+     * @return int|null Note
      */
     public function getNoteByContenuAndUser(Contenu $contenu, User $user = null)
     {
@@ -71,17 +72,17 @@ class NoteReader
         return $this->getNoteSessionForContenu($contenu);
     }
 
-
     /**
      * Retourne si une note existe.
      *
      * @param \HopitalNumerique\ObjetBundle\Entity\Objet    $objet Objet
      * @param \HopitalNumerique\UserBundle\Entity\User|null $user  Utilisateur connecté ou NULL si pas connecté
-     * @return boolean Si note
+     *
+     * @return bool Si note
      */
     public function hasNoteForObjetAndUser(Objet $objet, User $user = null)
     {
-        return (null !== $this->getNoteByObjetAndUser($objet, $user));
+        return null !== $this->getNoteByObjetAndUser($objet, $user);
     }
 
     /**
@@ -89,11 +90,12 @@ class NoteReader
      *
      * @param \HopitalNumerique\ObjetBundle\Entity\Contenu  $contenu Contenu
      * @param \HopitalNumerique\UserBundle\Entity\User|null $user    Utilisateur connecté ou NULL si pas connecté
-     * @return boolean Si note
+     *
+     * @return bool Si note
      */
     public function hasNoteForContenuAndUser(Contenu $contenu, User $user = null)
     {
-        return (null !== $this->getNoteByContenuAndUser($contenu, $user));
+        return null !== $this->getNoteByContenuAndUser($contenu, $user);
     }
 
     /**
@@ -101,7 +103,8 @@ class NoteReader
      *
      * @param object                                   $entity Entité (objet ou contenu)
      * @param \HopitalNumerique\UserBundle\Entity\User $user   Utilisateur (null si non connecté)
-     * @return boolean Si peut voter
+     *
+     * @return bool Si peut voter
      */
     public function userCanVote($entity, User $user = null)
     {
@@ -119,12 +122,12 @@ class NoteReader
         return false;
     }
 
-
     /**
      * Retourne la note de l'utilisateur en session.
      *
      * @param \HopitalNumerique\ObjetBundle\Entity\Objet $objet Objet
-     * @return integer|null Note
+     *
+     * @return int|null Note
      */
     private function getNoteSessionForObjet(Objet $objet)
     {
@@ -135,7 +138,8 @@ class NoteReader
      * Retourne la note de l'utilisateur en session.
      *
      * @param \HopitalNumerique\ObjetBundle\Entity\Contenu $contenu Contenu
-     * @return integer|null Note
+     *
+     * @return int|null Note
      */
     private function getNoteSessionForContenu(Contenu $contenu)
     {
@@ -145,15 +149,16 @@ class NoteReader
     /**
      * Retourne la note de l'utilisateur en session.
      *
-     * @param integer $entityType Type d'entité
-     * @param integer $entityId   ID de l'entité
-     * @return integer|null Note
+     * @param int $entityType Type d'entité
+     * @param int $entityId   ID de l'entité
+     *
+     * @return int|null Note
      */
     private function getNoteSessionForEntity($entityType, $entityId)
     {
         $notesSession = $this->session->get(NoteSaver::NOTE_SESSION, null);
         $hasNote = (null !== $notesSession && array_key_exists($entityType, $notesSession) && array_key_exists($entityId, $notesSession[$entityType]));
 
-        return ($hasNote ? intval($notesSession[$entityType][$entityId]) : null);
+        return $hasNote ? intval($notesSession[$entityType][$entityId]) : null;
     }
 }

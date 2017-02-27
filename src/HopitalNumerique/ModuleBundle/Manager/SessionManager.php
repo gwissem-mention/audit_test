@@ -36,169 +36,161 @@ class SessionManager extends BaseManager
     /**
      * Constructeur du manager de Session.
      *
-     * @param \Doctrine\ORM\EntityManager $em EntityManager
-     * @param \HopitalNumerique\QuestionnaireBundle\Manager\ReponseManager $reponseManager ReponseManager
-     * @param \HopitalNumerique\ReferenceBundle\Manager\ReferenceManager $referenceManager ReferenceManager
-     * @param \HopitalNumerique\UserBundle\Manager\UserManager $userManager UserManager
+     * @param \Doctrine\ORM\EntityManager                                  $em               EntityManager
+     * @param \HopitalNumerique\QuestionnaireBundle\Manager\ReponseManager $reponseManager   ReponseManager
+     * @param \HopitalNumerique\ReferenceBundle\Manager\ReferenceManager   $referenceManager ReferenceManager
+     * @param \HopitalNumerique\UserBundle\Manager\UserManager             $userManager      UserManager
      */
     public function __construct(EntityManager $em, ReponseManager $reponseManager, ReferenceManager $referenceManager, UserManager $userManager)
     {
         parent::__construct($em);
 
-        $this->reponseManager   = $reponseManager;
+        $this->reponseManager = $reponseManager;
         $this->referenceManager = $referenceManager;
-        $this->_userManager     = $userManager;
+        $this->_userManager = $userManager;
     }
 
     /**
-     * Override : Récupère les données pour le grid sous forme de tableau
+     * Override : Récupère les données pour le grid sous forme de tableau.
      *
      * @return array
      *
      * @author Gaetan MELCHILSEN
      * @copyright Nodevo
      */
-    public function getDatasForGrid( \StdClass $condition = null )
+    public function getDatasForGrid(\StdClass $condition = null)
     {
-        $sessions = $this->getRepository()->getDatasForGrid( $condition )->getQuery()->getResult();
+        $sessions = $this->getRepository()->getDatasForGrid($condition)->getQuery()->getResult();
 
-        $result = array();
+        $result = [];
 
-        foreach ($sessions as $key => $session)
-        {
-            $nbInscritsAccepte   = 0;
+        foreach ($sessions as $key => $session) {
+            $nbInscritsAccepte = 0;
             $nbInscritsEnAttente = 0;
-            $nbPlacesRestantes   = $session->getNombrePlaceDisponible();
+            $nbPlacesRestantes = $session->getNombrePlaceDisponible();
 
-            foreach ($session->getInscriptions() as $inscription)
-            {
-                if($inscription->getEtatInscription()->getId() === 406)
+            foreach ($session->getInscriptions() as $inscription) {
+                if ($inscription->getEtatInscription()->getId() === 406) {
                     $nbInscritsEnAttente++;
-                elseif($inscription->getEtatInscription()->getId() === 407)
-                {
-                    $nbInscritsAccepte++;
-                    $nbPlacesRestantes--;
+                } elseif ($inscription->getEtatInscription()->getId() === 407) {
+                    ++$nbInscritsAccepte;
+                    --$nbPlacesRestantes;
                 }
             }
 
-            $result[$key] = array(
-                'id'                       => $session->getId(),
+            $result[$key] = [
+                'id' => $session->getId(),
                 'dateOuvertureInscription' => $session->getDateOuvertureInscription(),
                 'dateFermetureInscription' => $session->getDateFermetureInscription(),
-                'dateSession'              => $session->getDateSession(),
-                'duree'                    => $session->getDuree()->getLibelle(),
-                'horaires'                 => $session->getHoraires(),
-                'nbInscrits'               => $nbInscritsAccepte,
-                'nbInscritsEnAttente'      => $nbInscritsEnAttente,
-                'placeRestantes'           => $nbPlacesRestantes . '/' . $session->getNombrePlaceDisponible(),
-                'etat'                     => $session->getEtat()->getLibelle(),
-                'archiver'                 => $session->getArchiver()
-            );
+                'dateSession' => $session->getDateSession(),
+                'duree' => $session->getDuree()->getLibelle(),
+                'horaires' => $session->getHoraires(),
+                'nbInscrits' => $nbInscritsAccepte,
+                'nbInscritsEnAttente' => $nbInscritsEnAttente,
+                'placeRestantes' => $nbPlacesRestantes . '/' . $session->getNombrePlaceDisponible(),
+                'etat' => $session->getEtat()->getLibelle(),
+                'archiver' => $session->getArchiver(),
+            ];
         }
 
         return $result;
     }
 
     /**
-     * Override : Récupère les données pour le grid sous forme de tableau
+     * Override : Récupère les données pour le grid sous forme de tableau.
      *
      * @return array
      *
      * @author Gaetan MELCHILSEN
      * @copyright Nodevo
      */
-    public function getAllDatasForGrid( $condition = null )
+    public function getAllDatasForGrid($condition = null)
     {
-        $domainesIds     = $this->_userManager->getUserConnected()->getDomainesId();
+        $domainesIds = $this->_userManager->getUserConnected()->getDomainesId();
 
-        $sessions = $this->getRepository()->getAllDatasForGrid( $domainesIds, $condition )->getQuery()->getResult();
+        $sessions = $this->getRepository()->getAllDatasForGrid($domainesIds, $condition)->getQuery()->getResult();
 
-        foreach ($sessions as $key => $session)
-        {
-            $nbInscritsAccepte   = 0;
+        foreach ($sessions as $key => $session) {
+            $nbInscritsAccepte = 0;
             $nbInscritsEnAttente = 0;
-            $nbPlacesRestantes   = $session->getNombrePlaceDisponible();
+            $nbPlacesRestantes = $session->getNombrePlaceDisponible();
 
-            foreach ($session->getInscriptions() as $inscription)
-            {
-                if($inscription->getEtatInscription()->getId() === 406)
+            foreach ($session->getInscriptions() as $inscription) {
+                if ($inscription->getEtatInscription()->getId() === 406) {
                     $nbInscritsEnAttente++;
-                elseif($inscription->getEtatInscription()->getId() === 407)
-                {
-                    $nbInscritsAccepte++;
-                    $nbPlacesRestantes--;
+                } elseif ($inscription->getEtatInscription()->getId() === 407) {
+                    ++$nbInscritsAccepte;
+                    --$nbPlacesRestantes;
                 }
             }
 
             $domaineNom = '';
-            foreach ($session->getModule()->getDomaines() as $domaine)
-            {
-                if($domaineNom !== '')
-                {
+            foreach ($session->getModule()->getDomaines() as $domaine) {
+                if ($domaineNom !== '') {
                     $domaineNom .= ' ; ';
                 }
                 $domaineNom .= $domaine->getNom();
             }
 
-            $result[$key] = array(
-                'id'                       => $session->getId(),
-                'moduleTitre'              => $session->getModule()->getTitre(),
+            $result[$key] = [
+                'id' => $session->getId(),
+                'moduleTitre' => $session->getModule()->getTitre(),
                 'dateOuvertureInscription' => $session->getDateOuvertureInscription(),
                 'dateFermetureInscription' => $session->getDateFermetureInscription(),
-                'dateSession'              => $session->getDateSession(),
-                'duree'                    => $session->getDuree()->getLibelle(),
-                'horaires'                 => $session->getHoraires(),
-                'nbInscrits'               => $nbInscritsAccepte,
-                'nbInscritsEnAttente'      => $nbInscritsEnAttente,
-                'placeRestantes'           => $nbPlacesRestantes . '/' . $session->getNombrePlaceDisponible(),
-                'etat'                     => $session->getEtat()->getLibelle(),
-                'archiver'                 => $session->getArchiver(),
-                'formateur'                => $session->getFormateur()->getNomPrenom(),
-                'domaineNom'               => $domaineNom
-            );
+                'dateSession' => $session->getDateSession(),
+                'duree' => $session->getDuree()->getLibelle(),
+                'horaires' => $session->getHoraires(),
+                'nbInscrits' => $nbInscritsAccepte,
+                'nbInscritsEnAttente' => $nbInscritsEnAttente,
+                'placeRestantes' => $nbPlacesRestantes . '/' . $session->getNombrePlaceDisponible(),
+                'etat' => $session->getEtat()->getLibelle(),
+                'archiver' => $session->getArchiver(),
+                'formateur' => $session->getFormateur()->getNomPrenom(),
+                'domaineNom' => $domaineNom,
+            ];
         }
 
         return $result;
     }
 
     /**
-     * Retourne la liste des sessions du domaine courrant étant en court d'inscription et active
+     * Retourne la liste des sessions du domaine courrant étant en court d'inscription et active.
      *
      * @param idDomaine $idDomaine Domaine concerné
      *
      * @return array
      */
-    public function getSessionsInscriptionOuverteModuleDomaine( $idDomaine )
+    public function getSessionsInscriptionOuverteModuleDomaine($idDomaine)
     {
-        return $this->getRepository()->getSessionsInscriptionOuverteModuleDomaine( $idDomaine )->getQuery()->getResult();
+        return $this->getRepository()->getSessionsInscriptionOuverteModuleDomaine($idDomaine)->getQuery()->getResult();
     }
 
     /**
-     * Retourne la liste des sessions du formateur
+     * Retourne la liste des sessions du formateur.
      *
      * @param User $user L'utilisateur concerné
      *
      * @return array
      */
-    public function getSessionsForFormateur( $user )
+    public function getSessionsForFormateur($user)
     {
-        return $this->getRepository()->getSessionsForFormateur( $user )->getQuery()->getResult();
+        return $this->getRepository()->getSessionsForFormateur($user)->getQuery()->getResult();
     }
 
     /**
-     * Retourne la liste des sessions à évaluer pour le dashboard user
+     * Retourne la liste des sessions à évaluer pour le dashboard user.
      *
      * @param User $user L'utilisateur concerné
      *
      * @return array
      */
-    public function getSessionsForDashboard( $user )
+    public function getSessionsForDashboard($user)
     {
-        return $this->getRepository()->getSessionsForDashboard( $user )->getQuery()->getResult();
+        return $this->getRepository()->getSessionsForDashboard($user)->getQuery()->getResult();
     }
 
     /**
-     * Retourne les sessions des 15 prochains jours
+     * Retourne les sessions des 15 prochains jours.
      *
      * @return array
      */
@@ -208,77 +200,71 @@ class SessionManager extends BaseManager
     }
 
     /**
-     * Retourne la liste des sessions ou l'user connecté est formateur
+     * Retourne la liste des sessions ou l'user connecté est formateur.
      *
      * @param User $user L'utilisateur connecté
      *
      * @return array
      */
-    public function getSessionsForFormateurForDashboard( $user )
+    public function getSessionsForFormateurForDashboard($user)
     {
-        $before = $this->getRepository()->getSessionsForFormateur( $user, 'beforeToday', 2 )->getQuery()->getResult();
-        $after  = $this->getRepository()->getSessionsForFormateur( $user, 'afterToday', 2 )->getQuery()->getResult();
+        $before = $this->getRepository()->getSessionsForFormateur($user, 'beforeToday', 2)->getQuery()->getResult();
+        $after = $this->getRepository()->getSessionsForFormateur($user, 'afterToday', 2)->getQuery()->getResult();
 
-        return array('before' => $before, 'after' => $after);
+        return ['before' => $before, 'after' => $after];
     }
 
     /**
      * Retourne les évaluations pour l'export.
      *
-     * @param integer[] $sessionIds Les IDs des sessions à exporter
-     * @param string $charset Encodage du CSV
+     * @param int[]  $sessionIds Les IDs des sessions à exporter
+     * @param string $charset    Encodage du CSV
+     *
      * @return array Données pour l'export
      */
     public function getExportEvaluationsCsv(array $sessionIds, $charset)
     {
-        $sessions = $this->findBy(array('id' => $sessionIds));
+        $sessions = $this->findBy(['id' => $sessionIds]);
 
-
-        $colonnes = array
-        (
+        $colonnes =
+        [
             'Nom du module',
             'Date de session',
             'Participant - ID',
-            'Participant - Nom'
-        );
-        $datas    = array();
+            'Participant - Nom',
+        ];
+        $datas = [];
 
-        foreach ($sessions as $session)
-        {
+        foreach ($sessions as $session) {
             $inscriptions = $session->getInscriptionsAccepte();
-            foreach($inscriptions as $inscription)
-            {
+            foreach ($inscriptions as $inscription) {
                 $hasReponses = false;
-                $user     = $inscription->getUser();
-                $reponses = $this->reponseManager->reponsesByQuestionnaireByUser( 4, $user->getId() , true, null, $session->getId() );
-                $row      = array();
+                $user = $inscription->getUser();
+                $reponses = $this->reponseManager->reponsesByQuestionnaireByUser(4, $user->getId(), true, null, $session->getId());
+                $row = [];
 
-                foreach($reponses as $reponse)
-                {
-                    $question   = $reponse->getQuestion();
+                foreach ($reponses as $reponse) {
+                    $question = $reponse->getQuestion();
                     $idQuestion = $question->getId();
 
                     //ajoute la question si non présente dans les colonnes
-                    if( !isset($colonnes[$idQuestion]) )
+                    if (!isset($colonnes[$idQuestion])) {
                         $colonnes[$idQuestion] = $question->getLibelle();
+                    }
 
                     //handle la réponse
-                    switch($question->getTypeQuestion()->getLibelle())
-                    {
+                    switch ($question->getTypeQuestion()->getLibelle()) {
                         case 'checkbox':
-                            $row[$idQuestion] = ('1' == $reponse->getReponse() ? 'Oui' : 'Non' );
+                            $row[$idQuestion] = ('1' == $reponse->getReponse() ? 'Oui' : 'Non');
                             break;
                         case 'entityradio':
                             $question = $reponse->getQuestion();
 
-                            $referenceReponse = $this->referenceManager->findOneBy( array( 'id' => $reponse->getReponse()) );
+                            $referenceReponse = $this->referenceManager->findOneBy(['id' => $reponse->getReponse()]);
 
-                            if(!is_null($referenceReponse))
-                            {
+                            if (!is_null($referenceReponse)) {
                                 $row[$idQuestion] = $referenceReponse->getLibelle();
-                            }
-                            else
-                            {
+                            } else {
                                 $row[$idQuestion] = 'Non renseigné';
                             }
                             break;
@@ -290,38 +276,33 @@ class SessionManager extends BaseManager
                     $hasReponses = true;
                 }
 
-                if(!$hasReponses)
+                if (!$hasReponses) {
                     continue;
+                }
 
                 ksort($row);
 
-                $tab = array_merge
-                (
-                    array
-                    (
+                $tab = array_merge(
+                    [
                         $session->getModule()->__toString(),
                         (null !== $session->getDateSession() ? $session->getDateSession()->format('d/m/y') : ''),
                         (null !== $inscription->getUser() ? $inscription->getUser()->getId() : ''),
-                        (null !== $inscription->getUser() ? $inscription->getUser()->getAppellation() : '')
-                    ),
+                        (null !== $inscription->getUser() ? $inscription->getUser()->getAppellation() : ''),
+                    ],
                     $row
                 );
                 $datas[] = $tab;
             }
         }
 
-        if(empty($datas))
-        {
-            $colonnes = array(0 => "Aucune donnée");
-            $datas[] = array(0 => "");
+        if (empty($datas)) {
+            $colonnes = [0 => 'Aucune donnée'];
+            $datas[] = [0 => ''];
         }
 
         ksort($colonnes);
 
-
-
-        return $this->exportCsv
-        (
+        return $this->exportCsv(
             array_values($colonnes),
             $datas,
             'export-session-evaluations.csv',
@@ -338,13 +319,14 @@ class SessionManager extends BaseManager
     {
         $dans3mois = new \DateTime();
         $dans3mois->add(new \DateInterval('P3M'));
+
         return $this->getRepository()->getSessionsRisquees(3, $dans3mois)->getQuery()->getResult();
     }
 
     /**
      * Retourne les sessions à risque, càd n'ayant pas assez de participants pour des sessions prochaines.
      *
-     * @return integer Total
+     * @return int Total
      */
     public function getSessionsRisqueesCount()
     {

@@ -1,4 +1,5 @@
 <?php
+
 namespace HopitalNumerique\PaiementBundle\Manager;
 
 use HopitalNumerique\PaiementBundle\Entity\Facture;
@@ -11,11 +12,11 @@ class FactureAnnuleeManager extends BaseManager
 {
     protected $class = 'HopitalNumerique\PaiementBundle\Entity\FactureAnnulee';
 
-
     /**
      * Crée une facture annulée par rapport à une facture classique.
      *
      * @param \HopitalNumerique\PaiementBundle\Entity\Facture $facture Facture originale
+     *
      * @return \HopitalNumerique\PaiementBundle\Entity\FactureAnnulee Nouvelle facture annulée
      */
     public function createByFacture(Facture $facture)

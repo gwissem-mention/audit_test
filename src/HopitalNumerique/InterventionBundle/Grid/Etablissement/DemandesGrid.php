@@ -2,6 +2,7 @@
 /**
  * Configuration du grid des demandes d'intervention pour l'établissement.
  */
+
 namespace HopitalNumerique\InterventionBundle\Grid\Etablissement;
 
 use HopitalNumerique\InterventionBundle\Grid\DemandesAbstractGrid;
@@ -15,7 +16,7 @@ use HopitalNumerique\InterventionBundle\Entity\InterventionEvaluationEtat;
 class DemandesGrid extends DemandesAbstractGrid
 {
     /**
-     * Set la config propre au Grid des demandes d'intervention (Source + config par défaut)
+     * Set la config propre au Grid des demandes d'intervention (Source + config par défaut).
      */
     public function setConfig()
     {
@@ -24,7 +25,7 @@ class DemandesGrid extends DemandesAbstractGrid
     }
 
     /**
-     * Ajoute les colonnes visibles du grid
+     * Ajoute les colonnes visibles du grid.
      */
     public function setColumns()
     {
@@ -33,7 +34,7 @@ class DemandesGrid extends DemandesAbstractGrid
         $colonneInitiateur = new Column\TextColumn('interventionInitiateurId', '');
         $colonneInitiateur->setAlign('center');
         $colonneInitiateur->manipulateRenderCell(
-            function($value, \APY\DataGridBundle\Grid\Row $row) {
+            function ($value, \APY\DataGridBundle\Grid\Row $row) {
                 return DemandesAbstractGrid::renderCellInitiateur($value, $row);
             }
         );
@@ -50,15 +51,16 @@ class DemandesGrid extends DemandesAbstractGrid
             function ($value, \APY\DataGridBundle\Grid\Row $row, \Symfony\Component\Routing\Router $router) {
                 if (intval($row->getField('nombreDemandesPrincipales')) == 0) {
                     if ($row->getField('evaluationEtatId') == InterventionEvaluationEtat::getInterventionEvaluationEtatAEvaluerId()) {
-                        return '<a class="btn btn-warning" title="Évaluer la demande" href="'.$router->generate('hopital_numerique_intervention_evaluation_nouveau', array('interventionDemande' => $row->getField('id'))).'"><span class="fa fa-edit"></span></a>';
-                    } else if ($row->getField('evaluationEtatId') == InterventionEvaluationEtat::getInterventionEvaluationEtatEvalueId()) {
-                        return '<a class="btn btn-success" title="Voir l\'évaluation" href="'.$router->generate('hopital_numerique_intervention_evaluation_voir', array('interventionDemande' => $row->getField('id'))).'"><span class="fa fa-check"></span></a>';
+                        return '<a class="btn btn-warning" title="Évaluer la demande" href="' . $router->generate('hopital_numerique_intervention_evaluation_nouveau', ['interventionDemande' => $row->getField('id')]) . '"><span class="fa fa-edit"></span></a>';
+                    } elseif ($row->getField('evaluationEtatId') == InterventionEvaluationEtat::getInterventionEvaluationEtatEvalueId()) {
+                        return '<a class="btn btn-success" title="Voir l\'évaluation" href="' . $router->generate('hopital_numerique_intervention_evaluation_voir', ['interventionDemande' => $row->getField('id')]) . '"><span class="fa fa-check"></span></a>';
                     }
                 } else {
                     if ($row->getField('evaluationEtatId') == InterventionEvaluationEtat::getInterventionEvaluationEtatEvalueId()) {
                         return '<button disabled class="btn btn-success"><span class="fa fa-check"></span></button>';
                     }
                 }
+
                 return '';
             }
         );
@@ -66,7 +68,7 @@ class DemandesGrid extends DemandesAbstractGrid
     }
 
     /**
-     * Ajoute les boutons d'actions si nécessaire
+     * Ajoute les boutons d'actions si nécessaire.
      */
     public function setActionsButtons()
     {
@@ -74,10 +76,9 @@ class DemandesGrid extends DemandesAbstractGrid
     }
 
     /**
-     * Ajoute les actions de masses
+     * Ajoute les actions de masses.
      */
     public function setMassActions()
     {
-        
     }
 }

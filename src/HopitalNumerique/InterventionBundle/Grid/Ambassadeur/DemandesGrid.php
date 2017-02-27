@@ -2,6 +2,7 @@
 /**
  * Configuration du grid des demandes d'intervention pour l'ambassadeur.
  */
+
 namespace HopitalNumerique\InterventionBundle\Grid\Ambassadeur;
 
 use HopitalNumerique\InterventionBundle\Grid\DemandesAbstractGrid;
@@ -13,7 +14,7 @@ use Nodevo\GridBundle\Grid\Action;
 class DemandesGrid extends DemandesAbstractGrid
 {
     /**
-     * Set la config propre au Grid des demandes d'intervention (Source + config par défaut)
+     * Set la config propre au Grid des demandes d'intervention (Source + config par défaut).
      */
     public function setConfig()
     {
@@ -22,12 +23,12 @@ class DemandesGrid extends DemandesAbstractGrid
     }
 
     /**
-     * Ajoute les colonnes visibles du grid
+     * Ajoute les colonnes visibles du grid.
      */
     public function setColumns()
     {
         parent::setColumns();
-        
+
         $this->addColonneDemandeur();
         $this->addColonneInterventionInitiateurType();
         $this->addColonneDateCreation();
@@ -37,7 +38,7 @@ class DemandesGrid extends DemandesAbstractGrid
     }
 
     /**
-     * Ajoute les boutons d'actions si nécessaire
+     * Ajoute les boutons d'actions si nécessaire.
      */
     public function setActionsButtons()
     {
@@ -45,10 +46,9 @@ class DemandesGrid extends DemandesAbstractGrid
     }
 
     /**
-     * Ajoute les actions de masses
+     * Ajoute les actions de masses.
      */
     public function setMassActions()
     {
-        
     }
 }

@@ -13,27 +13,26 @@ class RechercheParcoursManager extends BaseManager
     protected $class = 'HopitalNumerique\RechercheParcoursBundle\Entity\RechercheParcours';
 
     /**
-     * Met à jour l'ordre de la recherche par parcours
+     * Met à jour l'ordre de la recherche par parcours.
      *
      * @param array  $elements Les éléments
-     * @param Object $parent   L'élément parent | null
+     * @param object $parent   L'élément parent | null
      *
      * @return empty
      */
-    public function reorder( $elements )
+    public function reorder($elements)
     {
         $order = 1;
 
-        foreach($elements as $element) 
-        {
-            $rechercheParcours = $this->findOneBy( array('id' => $element['id']) );
-            $rechercheParcours->setOrder( $order );
-            $order++;
+        foreach ($elements as $element) {
+            $rechercheParcours = $this->findOneBy(['id' => $element['id']]);
+            $rechercheParcours->setOrder($order);
+            ++$order;
         }
     }
 
     /**
-     * Récupération de toutes les instances de rechercheParcours fils de rechercheParcoursGestion passé en param ordonnée par leur id
+     * Récupération de toutes les instances de rechercheParcours fils de rechercheParcoursGestion passé en param ordonnée par leur id.
      *
      * @param RechercheParcoursGestion $rechercheParcoursGestion [description]
      *
@@ -41,12 +40,11 @@ class RechercheParcoursManager extends BaseManager
      */
     public function getRechercheParcoursFils(RechercheParcoursGestion $rechercheParcoursGestion)
     {
-        $results = array();
+        $results = [];
 
-        $rechercheParcours = $this->findBy(array('recherchesParcoursGestion' => $rechercheParcoursGestion));
+        $rechercheParcours = $this->findBy(['recherchesParcoursGestion' => $rechercheParcoursGestion]);
 
-        foreach ($rechercheParcours as $recherche) 
-        {
+        foreach ($rechercheParcours as $recherche) {
             $results[$recherche->getReference()->getId()] = $recherche;
         }
 

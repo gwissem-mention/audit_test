@@ -1,4 +1,5 @@
 <?php
+
 namespace HopitalNumerique\CommunautePratiqueBundle\Grid;
 
 use Nodevo\GridBundle\Grid\Column\TextColumn;
@@ -17,40 +18,38 @@ class GroupeGrid extends \Nodevo\GridBundle\Grid\Grid
      */
     private $user;
 
-
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function __construct(\Symfony\Component\DependencyInjection\ContainerInterface $container)
     {
         parent::__construct($container);
-        
+
         $this->user = $container->get('security.context')->getToken()->getUser();
         if (!($this->user instanceof \HopitalNumerique\UserBundle\Entity\User)) {
             throw new \Exception('Aucun utilisateur connecté.');
         }
     }
 
-
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function setConfig()
     {
         $this->setSource('hopitalnumerique_communautepratique.manager.groupe');
         $this->setSourceType(self::SOURCE_TYPE_MANAGER);
         $this->setFunctionName('getGridData');
-        $this->showIdColumn( true  ); //Affiche la colonne ID; default
-		$this->setFilterIdColumn( true ); //Active la possibilité de filtrer sur la colonne ID
+        $this->showIdColumn(true); //Affiche la colonne ID; default
+        $this->setFilterIdColumn(true); //Active la possibilité de filtrer sur la colonne ID
 
-        $filtre = array(
-            'domaines' => $this->user->getDomaines()
-        );
+        $filtre = [
+            'domaines' => $this->user->getDomaines(),
+        ];
         $this->setSourceCondition('filtre', $filtre);
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function setActionsButtons()
     {
@@ -58,20 +57,19 @@ class GroupeGrid extends \Nodevo\GridBundle\Grid\Grid
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function setMassActions()
     {
         $utilisateurConnecte = $this->_container->get('security.context')->getToken()->getUser();
-        
-        if ($this->_container->get('nodevo_acl.manager.acl')->checkAuthorization($this->_container->get('router')->generate('hopitalnumerique_communautepratique_admin_groupe_deletemass'), $utilisateurConnecte) != -1)
-        {
-            $this->addMassAction( new DeleteMass('HopitalNumeriqueCommunautePratiqueBundle:Admin/Groupe:deleteMass') );
+
+        if ($this->_container->get('nodevo_acl.manager.acl')->checkAuthorization($this->_container->get('router')->generate('hopitalnumerique_communautepratique_admin_groupe_deletemass'), $utilisateurConnecte) != -1) {
+            $this->addMassAction(new DeleteMass('HopitalNumeriqueCommunautePratiqueBundle:Admin/Groupe:deleteMass'));
         }
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function setColumns()
     {
@@ -86,8 +84,6 @@ class GroupeGrid extends \Nodevo\GridBundle\Grid\Grid
 
     /**
      * Ajoute la colonne Domaine.
-     * 
-     * @return void
      */
     private function addDomaineColumn()
     {
@@ -103,8 +99,6 @@ class GroupeGrid extends \Nodevo\GridBundle\Grid\Grid
 
     /**
      * Ajoute la colonne Titre.
-     * 
-     * @return void
      */
     private function addTitreColumn()
     {
@@ -120,8 +114,6 @@ class GroupeGrid extends \Nodevo\GridBundle\Grid\Grid
 
     /**
      * Ajoute la colonne Date d'ouverture des inscriptions.
-     * 
-     * @return void
      */
     private function addDateInscriptionOuvertureColumn()
     {
@@ -137,8 +129,6 @@ class GroupeGrid extends \Nodevo\GridBundle\Grid\Grid
 
     /**
      * Ajoute la colonne Date de démarrage.
-     * 
-     * @return void
      */
     private function addDateDemarrageColumn()
     {
@@ -154,8 +144,6 @@ class GroupeGrid extends \Nodevo\GridBundle\Grid\Grid
 
     /**
      * Ajoute la colonne Date de fin.
-     * 
-     * @return void
      */
     private function addDateFinColumn()
     {
@@ -171,8 +159,6 @@ class GroupeGrid extends \Nodevo\GridBundle\Grid\Grid
 
     /**
      * Ajoute la colonne En vedette.
-     * 
-     * @return void
      */
     private function addVedetteColumn()
     {
@@ -188,8 +174,6 @@ class GroupeGrid extends \Nodevo\GridBundle\Grid\Grid
 
     /**
      * Ajoute la colonne Actif.
-     * 
-     * @return void
      */
     private function addActifColumn()
     {

@@ -7,7 +7,7 @@ use HopitalNumerique\AutodiagBundle\Entity\Autodiag;
 use Nodevo\ToolsBundle\Tools\Chaine;
 
 /**
- * Questionnaire
+ * Questionnaire.
  *
  * @ORM\Table("hn_questionnaire_questionnaire")
  * @ORM\Entity(repositoryClass="HopitalNumerique\QuestionnaireBundle\Repository\QuestionnaireRepository")
@@ -15,7 +15,7 @@ use Nodevo\ToolsBundle\Tools\Chaine;
 class Questionnaire
 {
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="qst_id", type="integer", options = {"comment" = "ID du questionnaire"})
      * @ORM\Id
@@ -31,7 +31,7 @@ class Questionnaire
     private $nom;
 
     /**
-     * @var boolean
+     * @var bool
      *
      * @ORM\Column(name="qst_lock", type="boolean", options = {"comment" = "Verrouillage du questionnaire ?"})
      */
@@ -45,7 +45,7 @@ class Questionnaire
     protected $lien;
 
     /**
-     * @var boolean
+     * @var bool
      *
      * @ORM\Column(name="qst_occurrence_multiple", type="boolean", nullable=false, options={"default"=false, "comment"="Indique si le questionnaire peut être répondu plusieurs fois"})
      */
@@ -90,23 +90,21 @@ class Questionnaire
      */
     protected $communautePratiqueGroupes;
 
-
     /**
-     * Constructor
+     * Constructor.
      */
     public function __construct()
     {
-        $this->questions    = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->questions = new \Doctrine\Common\Collections\ArrayCollection();
         $this->lock = false;
         $this->occurrenceMultiple = false;
         $this->communautePratiqueGroupes = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
-
     /**
-     * Get id
+     * Get id.
      *
-     * @return integer
+     * @return int
      */
     public function getId()
     {
@@ -114,9 +112,10 @@ class Questionnaire
     }
 
     /**
-     * Set nom
+     * Set nom.
      *
      * @param string $nom
+     *
      * @return Questionnaire
      */
     public function setNom($nom)
@@ -127,7 +126,7 @@ class Questionnaire
     }
 
     /**
-     * Get nom
+     * Get nom.
      *
      * @return string
      */
@@ -137,7 +136,7 @@ class Questionnaire
     }
 
     /**
-     * Get nom minifié
+     * Get nom minifié.
      *
      * @return string
      */
@@ -149,9 +148,9 @@ class Questionnaire
     }
 
     /**
-     * Get lock
+     * Get lock.
      *
-     * @return boolean $lock
+     * @return bool $lock
      */
     public function getLock()
     {
@@ -159,9 +158,9 @@ class Questionnaire
     }
 
     /**
-     * Set lock
+     * Set lock.
      *
-     * @param boolean $lock
+     * @param bool $lock
      */
     public function setLock($lock)
     {
@@ -169,9 +168,10 @@ class Questionnaire
     }
 
     /**
-     * Set occurrenceMultiple
+     * Set occurrenceMultiple.
      *
-     * @param boolean $occurrenceMultiple
+     * @param bool $occurrenceMultiple
+     *
      * @return Questionnaire
      */
     public function setOccurrenceMultiple($occurrenceMultiple)
@@ -182,9 +182,9 @@ class Questionnaire
     }
 
     /**
-     * Get occurrenceMultiple
+     * Get occurrenceMultiple.
      *
-     * @return boolean
+     * @return bool
      */
     public function isOccurrenceMultiple()
     {
@@ -192,9 +192,10 @@ class Questionnaire
     }
 
     /**
-     * Add occurrences
+     * Add occurrences.
      *
      * @param \HopitalNumerique\QuestionnaireBundle\Entity\Occurrence $occurrences
+     *
      * @return Questionnaire
      */
     public function addOccurrence(\HopitalNumerique\QuestionnaireBundle\Entity\Occurrence $occurrences)
@@ -205,7 +206,7 @@ class Questionnaire
     }
 
     /**
-     * Remove occurrences
+     * Remove occurrences.
      *
      * @param \HopitalNumerique\QuestionnaireBundle\Entity\Occurrence $occurrences
      */
@@ -215,7 +216,7 @@ class Questionnaire
     }
 
     /**
-     * Get occurrences
+     * Get occurrences.
      *
      * @return \Doctrine\Common\Collections\Collection
      */
@@ -224,11 +225,11 @@ class Questionnaire
         return $this->occurrences;
     }
 
-
     /**
-     * Add questions
+     * Add questions.
      *
      * @param \HopitalNumerique\QuestionnaireBundle\Entity\Question $questions
+     *
      * @return Questionnaire
      */
     public function addQuestion(\HopitalNumerique\QuestionnaireBundle\Entity\Question $questions)
@@ -239,7 +240,7 @@ class Questionnaire
     }
 
     /**
-     * Remove questions
+     * Remove questions.
      *
      * @param \HopitalNumerique\QuestionnaireBundle\Entity\Question $questions
      */
@@ -249,7 +250,7 @@ class Questionnaire
     }
 
     /**
-     * Get questions
+     * Get questions.
      *
      * @return \Doctrine\Common\Collections\Collection
      */
@@ -261,14 +262,13 @@ class Questionnaire
     /**
      * Retourne les ID des questions du questionnaire.
      *
-     * @return integer[] IDs des questions
+     * @return int[] IDs des questions
      */
     public function getQuestionIds()
     {
-        $questionIds = array();
+        $questionIds = [];
 
-        foreach ($this->questions as $question)
-        {
+        foreach ($this->questions as $question) {
             $questionIds[] = $question->getId();
         }
 
@@ -276,9 +276,10 @@ class Questionnaire
     }
 
     /**
-     * Add refusCandidature
+     * Add refusCandidature.
      *
      * @param \HopitalNumerique\UserBundle\Entity\RefusCandidature $refusCandidature
+     *
      * @return Questionnaire
      */
     public function addRefusCandidature(\HopitalNumerique\UserBundle\Entity\RefusCandidature $refusCandidature)
@@ -289,7 +290,7 @@ class Questionnaire
     }
 
     /**
-     * Remove refusCandidature
+     * Remove refusCandidature.
      *
      * @param \HopitalNumerique\UserBundle\Entity\RefusCandidature $refusCandidature
      */
@@ -299,7 +300,7 @@ class Questionnaire
     }
 
     /**
-     * Get refusCandidature
+     * Get refusCandidature.
      *
      * @return \Doctrine\Common\Collections\Collection
      */
@@ -309,9 +310,10 @@ class Questionnaire
     }
 
     /**
-     * Set lien
+     * Set lien.
      *
      * @param string $lien
+     *
      * @return Questionnaire
      */
     public function setLien($lien)
@@ -322,7 +324,7 @@ class Questionnaire
     }
 
     /**
-     * Get lien
+     * Get lien.
      *
      * @return string
      */
@@ -332,9 +334,10 @@ class Questionnaire
     }
 
     /**
-     * Add outil
+     * Add outil.
      *
      * @param Autodiag $outils
+     *
      * @return Questionnaire
      */
     public function addOutil(Autodiag $outils)
@@ -345,7 +348,7 @@ class Questionnaire
     }
 
     /**
-     * Remove outil
+     * Remove outil.
      *
      * @param Autodiag $outils
      */
@@ -355,7 +358,7 @@ class Questionnaire
     }
 
     /**
-     * Get outils
+     * Get outils.
      *
      * @return \Doctrine\Common\Collections\Collection
      */
@@ -365,9 +368,10 @@ class Questionnaire
     }
 
     /**
-     * Add domaines
+     * Add domaines.
      *
      * @param \HopitalNumerique\DomaineBundle\Entity\Domaine $domaines
+     *
      * @return Questionnaire
      */
     public function addDomaine(\HopitalNumerique\DomaineBundle\Entity\Domaine $domaines)
@@ -378,7 +382,7 @@ class Questionnaire
     }
 
     /**
-     * Remove domaines
+     * Remove domaines.
      *
      * @param \HopitalNumerique\DomaineBundle\Entity\Domaine $domaines
      */
@@ -388,9 +392,10 @@ class Questionnaire
     }
 
     /**
-     * Set domaines
+     * Set domaines.
      *
      * @param \Doctrine\Common\Collections\Collection $domaines
+     *
      * @return Domaine
      */
     public function setDomaines($domaines)
@@ -401,7 +406,7 @@ class Questionnaire
     }
 
     /**
-     * Get domaines
+     * Get domaines.
      *
      * @return \Doctrine\Common\Collections\Collection
      */
@@ -409,17 +414,17 @@ class Questionnaire
     {
         return $this->domaines;
     }
+
     /**
-     * Get les ids des domaines concerné par le questionnaire
+     * Get les ids des domaines concerné par le questionnaire.
      *
      * @return array[integer]
      */
     public function getDomainesId()
     {
-        $domainesId = array();
+        $domainesId = [];
 
-        foreach ($this->domaines as $domaine)
-        {
+        foreach ($this->domaines as $domaine) {
             $domainesId[] = $domaine->getId();
         }
 
@@ -427,9 +432,10 @@ class Questionnaire
     }
 
     /**
-     * Add communautePratiqueGroupes
+     * Add communautePratiqueGroupes.
      *
      * @param \HopitalNumerique\CommunautePratiqueBundle\Entity\Groupe $communautePratiqueGroupes
+     *
      * @return Questionnaire
      */
     public function addCommunautePratiqueGroupe(\HopitalNumerique\CommunautePratiqueBundle\Entity\Groupe $communautePratiqueGroupes)
@@ -440,7 +446,7 @@ class Questionnaire
     }
 
     /**
-     * Remove communautePratiqueGroupes
+     * Remove communautePratiqueGroupes.
      *
      * @param \HopitalNumerique\CommunautePratiqueBundle\Entity\Groupe $communautePratiqueGroupes
      */
@@ -450,7 +456,7 @@ class Questionnaire
     }
 
     /**
-     * Get communautePratiqueGroupes
+     * Get communautePratiqueGroupes.
      *
      * @return \Doctrine\Common\Collections\Collection
      */
@@ -458,7 +464,6 @@ class Questionnaire
     {
         return $this->communautePratiqueGroupes;
     }
-
 
     /**
      * @return string

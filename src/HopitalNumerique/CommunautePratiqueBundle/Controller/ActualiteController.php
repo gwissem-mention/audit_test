@@ -1,4 +1,5 @@
 <?php
+
 namespace HopitalNumerique\CommunautePratiqueBundle\Controller;
 
 use Symfony\Component\HttpFoundation\Request;
@@ -34,7 +35,7 @@ class ActualiteController extends \Symfony\Bundle\FrameworkBundle\Controller\Con
      * Affiche la liste des articles d'une catégorie.
      *
      * @param \HopitalNumerique\ReferenceBundle\Entity\Reference $categorie Catégorie
-     * @param integer $page Numéro de page
+     * @param int                                                $page      Numéro de page
      */
     private function renderList(Reference $categorie, $page, Request $request)
     {
@@ -53,11 +54,11 @@ class ActualiteController extends \Symfony\Bundle\FrameworkBundle\Controller\Con
         $actualitesPager->setMaxPerPage(5);
         $actualitesPager->setCurrentPage($page);
 
-        return $this->render('HopitalNumeriqueCommunautePratiqueBundle:Actualite:list.html.twig', array(
+        return $this->render('HopitalNumeriqueCommunautePratiqueBundle:Actualite:list.html.twig', [
             'categorieActualites' => $this->container->get('hopitalnumerique_reference.manager.reference')
                 ->findOneById(Reference::ARTICLE_CATEGORIE_COMMUNAUTE_DE_PRATIQUES_ID),
             'categorie' => $categorie,
-            'actualitesPager' => $actualitesPager
-        ));
+            'actualitesPager' => $actualitesPager,
+        ]);
     }
 }

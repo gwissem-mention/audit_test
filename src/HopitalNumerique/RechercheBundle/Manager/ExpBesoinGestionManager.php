@@ -15,10 +15,9 @@ class ExpBesoinGestionManager extends BaseManager
     protected $_userManager;
 
     /**
-     * Constructeur du manager gérant les références
+     * Constructeur du manager gérant les références.
      *
      * @param \Doctrine\ORM\EntityManager $entityManager EntityManager
-     * @return void
      */
     public function __construct(EntityManager $entityManager, UserManager $userManager)
     {
@@ -28,27 +27,23 @@ class ExpBesoinGestionManager extends BaseManager
     }
 
     /**
-     * Override : Récupère les données pour le grid sous forme de tableau
+     * Override : Récupère les données pour le grid sous forme de tableau.
      *
      * @return array
      */
-    public function getDatasForGrid( \StdClass $condition = null )
+    public function getDatasForGrid(\StdClass $condition = null)
     {
-        $expBesoinGestionsForGrid = array();
+        $expBesoinGestionsForGrid = [];
 
         $domainesIds = $this->_userManager->getUserConnected()->getDomainesId();
 
-        $expBesoinGestions = $this->getRepository()->getDatasForGrid( $domainesIds, $condition )->getQuery()->getResult();
+        $expBesoinGestions = $this->getRepository()->getDatasForGrid($domainesIds, $condition)->getQuery()->getResult();
 
-        foreach ($expBesoinGestions as $expBesoinGestion) 
-        {
-            if(!array_key_exists($expBesoinGestion['id'], $expBesoinGestionsForGrid))
-            {
+        foreach ($expBesoinGestions as $expBesoinGestion) {
+            if (!array_key_exists($expBesoinGestion['id'], $expBesoinGestionsForGrid)) {
                 $expBesoinGestionsForGrid[$expBesoinGestion['id']] = $expBesoinGestion;
-            }
-            else
-            {
-                $expBesoinGestionsForGrid[$expBesoinGestion['id']]['domaineNom'] .= ";" . $expBesoinGestion['domaineNom'];
+            } else {
+                $expBesoinGestionsForGrid[$expBesoinGestion['id']]['domaineNom'] .= ';' . $expBesoinGestion['domaineNom'];
             }
         }
 

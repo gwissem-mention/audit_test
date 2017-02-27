@@ -1,21 +1,16 @@
 <?php
+
 namespace HopitalNumerique\ContactBundle\Form\Type;
 
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
-use Symfony\Component\Form\FormEvents;
-use Symfony\Component\Form\FormEvent;
-use Symfony\Component\Form\FormInterface;
-use Symfony\Component\Security\Core\SecurityContextInterface;
-use HopitalNumerique\UserBundle\Entity\User;
 
 /**
  * Formulaire de contact de la popup.
  */
 class PopupInviteType extends AbstractType
 {
-
     /**
      * Constructeur.
      */
@@ -23,48 +18,48 @@ class PopupInviteType extends AbstractType
     {
     }
 
-
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         /**
          * @var string
          */
-        $urlRedirection = ( isset($options['urlRedirection']) ? $options['urlRedirection'] : array() );
+        $urlRedirection = (isset($options['urlRedirection']) ? $options['urlRedirection'] : []);
 
         $builder
-            ->add('destinataires', 'text', array(
+            ->add('destinataires', 'text', [
                 'label' => 'E-mail des utilisateurs (Séparer les adresses par des virgules)',
-                'attr' => array(
+                'attr' => [
                     'class' => 'validate[required]',
-                    'maxlength' => 250
-                )
-            ))
-            ->add('urlRedirection', 'hidden', array(
-                'data' => $urlRedirection
-            ))
-            ->add('idGroupe', 'hidden', array(
-                'data' => $options['idGroupe']
-            ))
+                    'maxlength' => 250,
+                ],
+            ])
+            ->add('urlRedirection', 'hidden', [
+                'data' => $urlRedirection,
+            ])
+            ->add('idGroupe', 'hidden', [
+                'data' => $options['idGroupe'],
+            ])
         ;
     }
+
     /**
      * {@inheritdoc}
      */
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
         $resolver
-            ->setDefaults(array(
-                'idGroupe' => 0
-            ))
-            ->setOptional(array('urlRedirection'))
+            ->setDefaults([
+                'idGroupe' => 0,
+            ])
+            ->setOptional(['urlRedirection'])
         ;
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function getName()
     {

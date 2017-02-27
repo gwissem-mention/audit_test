@@ -1,4 +1,5 @@
 <?php
+
 namespace HopitalNumerique\CommunautePratiqueBundle\Twig\Extension;
 
 use HopitalNumerique\CommunautePratiqueBundle\DependencyInjection\Inscription;
@@ -28,7 +29,6 @@ class FilterExtension extends \Twig_Extension
      */
     private $communautePratiqueRouter;
 
-
     /**
      * Constructeur.
      */
@@ -39,20 +39,20 @@ class FilterExtension extends \Twig_Extension
         $this->communautePratiqueRouter = $communautePratiqueRouter;
     }
 
-
     /**
-     * (non-PHPdoc)
+     * (non-PHPdoc).
+     *
      * @see Twig_Extension::getFilters()
      */
     public function getFilters()
     {
-        return array
-        (
+        return
+        [
             'communautePratiqueHasInformationManquante' => new \Twig_Filter_Method($this, 'hasInformationManquante'),
             'communautePratiqueGetInformationsManquantes' => new \Twig_Filter_Method($this, 'getInformationsManquantes'),
             'communautePratiqueCanEdit' => new \Twig_Filter_Method($this, 'canEdit'),
-            'communautePratiqueCanDelete' => new \Twig_Filter_Method($this, 'canDelete')
-        );
+            'communautePratiqueCanDelete' => new \Twig_Filter_Method($this, 'canDelete'),
+        ];
     }
 
     public function getFunctions()
@@ -64,12 +64,12 @@ class FilterExtension extends \Twig_Extension
         ];
     }
 
-
     /**
      * Retourne s'il manque une information à l'utilisateur.
      *
      * @param \HopitalNumerique\UserBundle\Entity\User $user Utilisateur
-     * @return boolean VRAI si information manquante
+     *
+     * @return bool VRAI si information manquante
      */
     public function hasInformationManquante(User $user)
     {
@@ -80,6 +80,7 @@ class FilterExtension extends \Twig_Extension
      * Retourne les informations manquantes pour se connecter à la communauté de pratique.
      *
      * @param \HopitalNumerique\UserBundle\Entity\User $user Utilisateur
+     *
      * @return array<string> Informations manquantes
      */
     public function getInformationsManquantes(User $user)
@@ -91,7 +92,8 @@ class FilterExtension extends \Twig_Extension
      * Retourne si un objet peut être édité.
      *
      * @param object $object Entité
-     * @return boolean VRAI si éditable
+     *
+     * @return bool VRAI si éditable
      */
     public function canEdit($object)
     {
@@ -110,7 +112,8 @@ class FilterExtension extends \Twig_Extension
      * Retourne si un objet peut être supprimé.
      *
      * @param object $object Entité
-     * @return boolean VRAI si supprimable
+     *
+     * @return bool VRAI si supprimable
      */
     public function canDelete($object)
     {
@@ -125,9 +128,9 @@ class FilterExtension extends \Twig_Extension
         throw new \Exception('Méthode "communautePratiqueCanDelete" non implémentée pour ce type d\'objet');
     }
 
-
     /**
-     * (non-PHPdoc)
+     * (non-PHPdoc).
+     *
      * @see Twig_ExtensionInterface::getName()
      */
     public function getName()

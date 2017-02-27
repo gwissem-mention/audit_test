@@ -12,20 +12,19 @@ use HopitalNumerique\StatBundle\Repository\StatRechercheRepository;
 class ReferenceSwitcher
 {
     /**
-     * @var EntityManager $entityManager
+     * @var EntityManager
      */
     private $entityManager;
 
     /**
-     * @var EntityHasReferenceRepository $entityHasReferenceRepository
+     * @var EntityHasReferenceRepository
      */
     private $entityHasReferenceRepository;
 
     /**
-     * @var StatRechercheRepository $searchStatRepository
+     * @var StatRechercheRepository
      */
     private $searchStatRepository;
-
 
     /**
      * ReferenceSwitcher constructor.

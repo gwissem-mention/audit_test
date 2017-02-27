@@ -5,7 +5,7 @@ namespace HopitalNumerique\QuestionnaireBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * Question
+ * Question.
  *
  * @ORM\Table("hn_questionnaire_question")
  * @ORM\Entity(repositoryClass="HopitalNumerique\QuestionnaireBundle\Repository\QuestionRepository")
@@ -13,7 +13,7 @@ use Doctrine\ORM\Mapping as ORM;
 class Question
 {
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="que_id", type="integer", options = {"comment" = "ID de la question"})
      * @ORM\Id
@@ -34,7 +34,7 @@ class Question
      * @ORM\Column(name="que_libelle", type="string", length=255, options = {"comment" = "Libellé de la question"})
      */
     protected $libelle;
-    
+
     /**
      * @var string
      *
@@ -43,7 +43,7 @@ class Question
     protected $referenceParamTri;
 
     /**
-     * @var boolean
+     * @var bool
      *
      * @ORM\Column(name="que_obligatoire", type="boolean", options = {"comment" = "La question est-elle obligatoire ?"})
      */
@@ -57,26 +57,26 @@ class Question
     protected $verifJS;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="que_ordre", type="integer", options = {"comment" = "Ordre de la question"})
      */
     protected $ordre;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\ManyToOne(targetEntity="Questionnaire", inversedBy="questions")
      * @ORM\JoinColumn(name="qst_id", referencedColumnName="qst_id")
      */
     protected $questionnaire;
-    
+
     /**
      * @ORM\ManyToOne(targetEntity="\HopitalNumerique\QuestionnaireBundle\Entity\TypeQuestion", cascade={"persist"})
      * @ORM\JoinColumn(name="typ_question", referencedColumnName="typ_id")
      */
     protected $typeQuestion;
-    
+
     /**
      * @ORM\OneToMany(targetEntity="\HopitalNumerique\QuestionnaireBundle\Entity\Reponse", mappedBy="question", cascade={"persist", "remove" })
      */
@@ -88,7 +88,7 @@ class Question
      * @ORM\Column(name="que_commentaire", type="text", nullable=true, options = {"comment" = "Commentaire pour le type commentaire"})
      */
     protected $commentaire;
-    
+
     public function __construct()
     {
         $this->ordre = 0;
@@ -98,9 +98,9 @@ class Question
     }
 
     /**
-     * Get id
+     * Get id.
      *
-     * @return integer 
+     * @return int
      */
     public function getId()
     {
@@ -108,9 +108,10 @@ class Question
     }
 
     /**
-     * Set alias
+     * Set alias.
      *
      * @param string $alias
+     *
      * @return Question
      */
     public function setAlias($alias)
@@ -121,9 +122,9 @@ class Question
     }
 
     /**
-     * Get alias
+     * Get alias.
      *
-     * @return string 
+     * @return string
      */
     public function getAlias()
     {
@@ -131,9 +132,10 @@ class Question
     }
 
     /**
-     * Set libelle
+     * Set libelle.
      *
      * @param string $libelle
+     *
      * @return Question
      */
     public function setLibelle($libelle)
@@ -144,9 +146,9 @@ class Question
     }
 
     /**
-     * Get libelle
+     * Get libelle.
      *
-     * @return string 
+     * @return string
      */
     public function getLibelle()
     {
@@ -154,9 +156,10 @@ class Question
     }
 
     /**
-     * Set obligatoire
+     * Set obligatoire.
      *
-     * @param boolean $obligatoire
+     * @param bool $obligatoire
+     *
      * @return Question
      */
     public function setObligatoire($obligatoire)
@@ -167,9 +170,9 @@ class Question
     }
 
     /**
-     * Get obligatoire
+     * Get obligatoire.
      *
-     * @return boolean 
+     * @return bool
      */
     public function getObligatoire()
     {
@@ -177,9 +180,10 @@ class Question
     }
 
     /**
-     * Set verifJS
+     * Set verifJS.
      *
      * @param string $verifJS
+     *
      * @return Question
      */
     public function setVerifJS($verifJS)
@@ -190,9 +194,9 @@ class Question
     }
 
     /**
-     * Get verifJS
+     * Get verifJS.
      *
-     * @return string 
+     * @return string
      */
     public function getVerifJS()
     {
@@ -200,9 +204,10 @@ class Question
     }
 
     /**
-     * Set ordre
+     * Set ordre.
      *
-     * @param integer $ordre
+     * @param int $ordre
+     *
      * @return Question
      */
     public function setOrdre($ordre)
@@ -213,9 +218,9 @@ class Question
     }
 
     /**
-     * Get ordre
+     * Get ordre.
      *
-     * @return integer 
+     * @return int
      */
     public function getOrdre()
     {
@@ -223,7 +228,7 @@ class Question
     }
 
     /**
-     * Get questionnaire
+     * Get questionnaire.
      *
      * @return Questionnaire
      */
@@ -233,20 +238,21 @@ class Question
     }
 
     /**
-     * Set ordre
+     * Set ordre.
+     *
      * @param Questionnaire $questionnaire
      *
      * @return Question this
      */
-    public function setQuestionnaire( Questionnaire $questionnaire )
+    public function setQuestionnaire(Questionnaire $questionnaire)
     {
         $this->questionnaire = $questionnaire;
-        
+
         return $this;
     }
 
     /**
-     * Get typeQuestion
+     * Get typeQuestion.
      *
      * @return \HopitalNumerique\QuestionnaireBundle\Entity\TypeQuestion $typeQuestion
      */
@@ -254,24 +260,26 @@ class Question
     {
         return $this->typeQuestion;
     }
-    
+
     /**
-     * Set civilite
+     * Set civilite.
      *
      * @param \HopitalNumerique\QuestionnaireBundle\Entity\TypeQuestion $typeQuestion
      */
     public function setTypeQuestion($typeQuestion)
     {
-        if($typeQuestion instanceof \HopitalNumerique\QuestionnaireBundle\Entity\TypeQuestion )
+        if ($typeQuestion instanceof \HopitalNumerique\QuestionnaireBundle\Entity\TypeQuestion) {
             $this->typeQuestion = $typeQuestion;
-        else
+        } else {
             $this->typeQuestion = null;
+        }
     }
-    
+
     /**
-     * Add reponses
+     * Add reponses.
      *
      * @param \HopitalNumerique\QuestionnaireBundle\Entity\Reponse $reponses
+     *
      * @return Question
      */
     public function addReponse(\HopitalNumerique\QuestionnaireBundle\Entity\Reponse $reponses)
@@ -282,7 +290,7 @@ class Question
     }
 
     /**
-     * Remove reponses
+     * Remove reponses.
      *
      * @param \HopitalNumerique\QuestionnaireBundle\Entity\Reponse $reponses
      */
@@ -292,9 +300,9 @@ class Question
     }
 
     /**
-     * Get reponses
+     * Get reponses.
      *
-     * @return \Doctrine\Common\Collections\Collection 
+     * @return \Doctrine\Common\Collections\Collection
      */
     public function getReponses()
     {
@@ -302,9 +310,10 @@ class Question
     }
 
     /**
-     * Set referenceParamTri
+     * Set referenceParamTri.
      *
      * @param string $referenceParamTri
+     *
      * @return Question
      */
     public function setReferenceParamTri($referenceParamTri)
@@ -315,9 +324,9 @@ class Question
     }
 
     /**
-     * Get referenceParamTri
+     * Get referenceParamTri.
      *
-     * @return string 
+     * @return string
      */
     public function getReferenceParamTri()
     {
@@ -325,9 +334,10 @@ class Question
     }
 
     /**
-     * Set commentaire
+     * Set commentaire.
      *
      * @param string $commentaire
+     *
      * @return Question
      */
     public function setCommentaire($commentaire)
@@ -338,9 +348,9 @@ class Question
     }
 
     /**
-     * Get commentaire
+     * Get commentaire.
      *
-     * @return string 
+     * @return string
      */
     public function getCommentaire()
     {

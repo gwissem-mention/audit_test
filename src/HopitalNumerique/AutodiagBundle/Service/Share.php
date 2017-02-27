@@ -1,8 +1,8 @@
 <?php
+
 namespace HopitalNumerique\AutodiagBundle\Service;
 
 use Doctrine\ORM\EntityManager;
-use HopitalNumerique\AutodiagBundle\Event\DataEvent;
 use HopitalNumerique\AutodiagBundle\Event\SynthesisEvent;
 use HopitalNumerique\AutodiagBundle\Events;
 use HopitalNumerique\AutodiagBundle\Entity\Synthesis;
@@ -21,6 +21,7 @@ class Share
 
     /**
      * Share constructor.
+     *
      * @param $manager
      */
     public function __construct(EntityManager $manager, EventDispatcherInterface $eventDispatcher)
@@ -30,10 +31,11 @@ class Share
     }
 
     /**
-     * Share synthesis from a comma separated emails
+     * Share synthesis from a comma separated emails.
      *
      * @param Synthesis $synthesis
      * @param $string
+     *
      * @return array
      */
     public function shareFromString(Synthesis $synthesis, $string)

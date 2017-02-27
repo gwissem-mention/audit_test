@@ -1,4 +1,5 @@
 <?php
+
 namespace HopitalNumerique\AutodiagBundle\Service\Export;
 
 use HopitalNumerique\AutodiagBundle\Entity\Autodiag;
@@ -36,7 +37,7 @@ class RestitutionExport extends AbstractExport
             'ordre_restitution',
         ];
 
-        for ($i = 1; $i <= $this->referencesCount; $i++) {
+        for ($i = 1; $i <= $this->referencesCount; ++$i) {
             $data[] = 'afficher_reference_' . $i;
         }
 
@@ -49,7 +50,6 @@ class RestitutionExport extends AbstractExport
 
         foreach ($categories as $category) {
             /** @var Restitution\Category $category */
-
             foreach ($category->getItems() as $item) {
                 /** @var Restitution\Item $item */
                 $row = [
@@ -79,11 +79,11 @@ class RestitutionExport extends AbstractExport
                 $references = $item->getReferences();
                 $referencesKeyed = [];
                 foreach ($references as $reference) {
-                    /** @var Autodiag\Reference $reference */
+                    /* @var Autodiag\Reference $reference */
                     $referencesKeyed[$reference->getNumber()] = $reference;
                 }
 
-                for ($i = 1; $i <= $this->referencesCount; $i++) {
+                for ($i = 1; $i <= $this->referencesCount; ++$i) {
                     $row[] = isset($referencesKeyed[$i]) ? '1' : '';
                 }
 

@@ -8,7 +8,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Validator\Context\ExecutionContextInterface;
 
 /**
- * Preset attribute options
+ * Preset attribute options.
  *
  * @ORM\Table(name="ad_autodiag_preset")
  * @ORM\Entity
@@ -16,7 +16,7 @@ use Symfony\Component\Validator\Context\ExecutionContextInterface;
 class Preset
 {
     /**
-     * Model
+     * Model.
      *
      * @var Autodiag
      *
@@ -27,7 +27,7 @@ class Preset
     private $autodiag;
 
     /**
-     * Attribute type
+     * Attribute type.
      *
      * @var string
      *
@@ -37,7 +37,7 @@ class Preset
     private $type;
 
     /**
-     * Preset value
+     * Preset value.
      *
      * @var array
      *
@@ -47,6 +47,7 @@ class Preset
 
     /**
      * Preset constructor.
+     *
      * @param Autodiag $autodiag
      * @param $type
      */
@@ -59,7 +60,7 @@ class Preset
     }
 
     /**
-     * Get model
+     * Get model.
      *
      * @return Autodiag
      */
@@ -69,7 +70,7 @@ class Preset
     }
 
     /**
-     * Get attribute type
+     * Get attribute type.
      *
      * @return string
      */
@@ -79,7 +80,7 @@ class Preset
     }
 
     /**
-     * Get preset value
+     * Get preset value.
      *
      * @return array
      */
@@ -89,9 +90,10 @@ class Preset
     }
 
     /**
-     * Set preset value
+     * Set preset value.
      *
      * @param array $preset
+     *
      * @return $this
      */
     public function setPreset($preset)
@@ -111,7 +113,7 @@ class Preset
             $empties = 0;
             foreach ($values as $value) {
                 if (count($value) === 0) {
-                    $empties++;
+                    ++$empties;
                 }
             }
             if ($empties > 0 && $empties < count($values)) {

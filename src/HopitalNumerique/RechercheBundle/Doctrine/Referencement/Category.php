@@ -1,4 +1,5 @@
 <?php
+
 namespace HopitalNumerique\RechercheBundle\Doctrine\Referencement;
 
 use HopitalNumerique\CoreBundle\DependencyInjection\Entity;
@@ -11,10 +12,9 @@ use HopitalNumerique\ReferenceBundle\Manager\ReferenceManager;
 class Category
 {
     /**
-     * @var integer ID de la catégorie parente des références
+     * @var int ID de la catégorie parente des références
      */
     const REFERENCE_CATEGORY_PARENT_ID = 175;
-
 
     /**
      * @var \HopitalNumerique\DomaineBundle\DependencyInjection\CurrentDomaine CurrentDomaine
@@ -51,7 +51,6 @@ class Category
         $this->refExpressionBesoinReponseId = $refExpressionBesoinReponseId;
     }
 
-
     /**
      * Retourne les propriétés des catégories pour le référencement.
      *
@@ -64,10 +63,10 @@ class Category
         $productionCategories = $this->referenceManager->getRefsByDomaineByParent(self::REFERENCE_CATEGORY_PARENT_ID, $this->currentDomaine->get()->getId());
         foreach ($productionCategories as $productionCategory) {
             $categoriesProperties[] = [
-                'id' => 'pc-'.$productionCategory->getId(),
+                'id' => 'pc-' . $productionCategory->getId(),
                 'referenceId' => $productionCategory->getId(),
                 'libelle' => $productionCategory->getLibelle(),
-                'order' => $productionCategory->getOrder()
+                'order' => $productionCategory->getOrder(),
             ];
         }
 
@@ -75,28 +74,28 @@ class Category
 
         if (!is_null($reference)) {
             $categoriesProperties[] = [
-                'id' => 't-'.Entity::ENTITY_TYPE_FORUM_TOPIC,
+                'id' => 't-' . Entity::ENTITY_TYPE_FORUM_TOPIC,
                 'entityType' => Entity::ENTITY_TYPE_FORUM_TOPIC,
                 'libelle' => $this->referenceManager->findOneById($this->refForumTopicId)->getLibelle(),
-                'order' => $this->referenceManager->findOneById($this->refForumTopicId)->getOrder()
+                'order' => $this->referenceManager->findOneById($this->refForumTopicId)->getOrder(),
             ];
             $categoriesProperties[] = [
-                'id' => 't-'.Entity::ENTITY_TYPE_AMBASSADEUR,
+                'id' => 't-' . Entity::ENTITY_TYPE_AMBASSADEUR,
                 'entityType' => Entity::ENTITY_TYPE_AMBASSADEUR,
                 'libelle' => $this->referenceManager->findOneById($this->refAmbassadeurId)->getLibelle(),
-                'order' => $this->referenceManager->findOneById($this->refAmbassadeurId)->getOrder()
+                'order' => $this->referenceManager->findOneById($this->refAmbassadeurId)->getOrder(),
             ];
             $categoriesProperties[] = [
-                'id' => 't-'.Entity::ENTITY_TYPE_RECHERCHE_PARCOURS,
+                'id' => 't-' . Entity::ENTITY_TYPE_RECHERCHE_PARCOURS,
                 'entityType' => Entity::ENTITY_TYPE_RECHERCHE_PARCOURS,
                 'libelle' => $this->referenceManager->findOneById($this->refRechercheParcoursId)->getLibelle(),
-                'order' => $this->referenceManager->findOneById($this->refRechercheParcoursId)->getOrder()
+                'order' => $this->referenceManager->findOneById($this->refRechercheParcoursId)->getOrder(),
             ];
             $categoriesProperties[] = [
-                'id' => 't-'.Entity::ENTITY_TYPE_COMMUNAUTE_PRATIQUES_GROUPE,
+                'id' => 't-' . Entity::ENTITY_TYPE_COMMUNAUTE_PRATIQUES_GROUPE,
                 'entityType' => Entity::ENTITY_TYPE_COMMUNAUTE_PRATIQUES_GROUPE,
                 'libelle' => $this->referenceManager->findOneById($this->refComPratiqueId)->getLibelle(),
-                'order' => $this->referenceManager->findOneById($this->refComPratiqueId)->getOrder()
+                'order' => $this->referenceManager->findOneById($this->refComPratiqueId)->getOrder(),
             ];
         }
 

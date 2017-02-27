@@ -3,15 +3,14 @@
 namespace HopitalNumerique\DomaineBundle\Repository;
 
 use Doctrine\ORM\EntityRepository;
-use Doctrine\ORM\Query\Expr\Join;
 
 /**
- * DomaineRepository
+ * DomaineRepository.
  */
 class DomaineRepository extends EntityRepository
 {
     /**
-     * Récupère les données du grid sous forme de tableau correctement formaté
+     * Récupère les données du grid sous forme de tableau correctement formaté.
      *
      * @return Query Builder
      */
@@ -22,7 +21,7 @@ class DomaineRepository extends EntityRepository
             ->from('HopitalNumeriqueDomaineBundle:Domaine', 'domaine')
             ->leftJoin('domaine.template', 'template')
             ->orderBy('domaine.nom');
-            
+
         return $qb;
     }
 
@@ -31,15 +30,15 @@ class DomaineRepository extends EntityRepository
         $qb = $this->_em->createQueryBuilder();
         $qb->select('domaine')
             ->from('HopitalNumeriqueDomaineBundle:Domaine', 'domaine')
-            ->leftJoin('domaine.users','user')
+            ->leftJoin('domaine.users', 'user')
             ->where('user.id = :idUser')
             ->setParameter('idUser', $idUser);
-            
+
         return $qb;
     }
 
     /**
-     * Retourne le domaine correspondant à l'host passé en parametre
+     * Retourne le domaine correspondant à l'host passé en parametre.
      *
      * @param string $httpHost [description]
      *
@@ -52,13 +51,13 @@ class DomaineRepository extends EntityRepository
             ->from('HopitalNumeriqueDomaineBundle:Domaine', 'domaine')
             ->leftJoin('domaine.template', 'template')
             ->where('domaine.url LIKE :httpHost')
-            ->setParameter('httpHost', ('%' . $httpHost . '%') );
-            
+            ->setParameter('httpHost', ('%' . $httpHost . '%'));
+
         return $qb;
     }
 
     /**
-     * Retourne le(s) domaine(s) du forum passé en param
+     * Retourne le(s) domaine(s) du forum passé en param.
      *
      * @param int $idForum [description]
      *
@@ -71,8 +70,8 @@ class DomaineRepository extends EntityRepository
             ->from('HopitalNumeriqueDomaineBundle:Domaine', 'domaine')
             ->leftJoin('domaine.forums', 'forum')
                 ->where('forum.id = :idForum')
-                ->setParameter('idForum', $idForum );
-            
+                ->setParameter('idForum', $idForum);
+
         return $qb;
     }
 }

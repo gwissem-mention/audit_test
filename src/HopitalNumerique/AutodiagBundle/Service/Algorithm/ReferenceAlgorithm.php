@@ -24,6 +24,7 @@ class ReferenceAlgorithm
 
                 return (float) $reference->getValue();
         }
+
         return null;
     }
 
@@ -36,7 +37,7 @@ class ReferenceAlgorithm
     {
         sort($values);
         $count = count($values);
-        $middleval = floor(($count-1)/2);
+        $middleval = floor(($count - 1) / 2);
         if ($count % 2) {
             $median = $values[$middleval];
         } else {
@@ -44,6 +45,7 @@ class ReferenceAlgorithm
             $high = $values[$middleval + 1];
             $median = (($low + $high) / 2);
         }
+
         return $median;
     }
 

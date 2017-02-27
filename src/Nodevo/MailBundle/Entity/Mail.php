@@ -3,14 +3,13 @@
 namespace Nodevo\MailBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-
 //Asserts Stuff
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Nodevo\ToolsBundle\Validator\Constraints as Nodevo;
 
 /**
- * Mail
+ * Mail.
  *
  * @ORM\Table(name="core_mail")
  * @ORM\Entity(repositoryClass="Nodevo\MailBundle\Repository\MailRepository")
@@ -18,13 +17,13 @@ use Nodevo\ToolsBundle\Validator\Constraints as Nodevo;
  */
 class Mail
 {
-    /** @var integer ID du courriel de recommandation à un ami */
+    /** @var int ID du courriel de recommandation à un ami */
     const MAIL_RECOMMANDATION_AMI_ID = 63;
-    /** @var integer ID du courriel de partage des résultats d'autodiag */
+    /** @var int ID du courriel de partage des résultats d'autodiag */
     const MAIL_SHARE_AUTODIAG_RESULT_ID = 68;
-    /** @var integer ID du courriel d'alerte de publication d'un commentaire */
+    /** @var int ID du courriel d'alerte de publication d'un commentaire */
     const MAIL_ALERTE_PUBLICATION_COMMENTAIRE = 69;
-    /** @var integer ID du courriel de recommandation à un ami */
+    /** @var int ID du courriel de recommandation à un ami */
     const MAIL_RECOMMANDATION_TOPIC_ID = 70;
 
     /** ID e-mail de nouveau commentaire sur un groupe de la communauté de pratique */
@@ -34,7 +33,7 @@ class Mail
     const MAIL_CM_COMMENTAIRE_FICHE = 72;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="mail_id", type="integer", options = {"comment" = "ID du mail"})
      * @ORM\Id
@@ -107,7 +106,7 @@ class Mail
     private $body;
 
     /**
-     * @var boolean
+     * @var bool
      *
      * @ORM\Column(name="mail_notification_region_referent", type="boolean", nullable=false, options={"default"=false,"comment"="Indique si le référent de région est notifié"})
      */
@@ -126,9 +125,9 @@ class Mail
     }
 
     /**
-     * Get id
+     * Get id.
      *
-     * @return integer
+     * @return int
      */
     public function getId()
     {
@@ -136,9 +135,10 @@ class Mail
     }
 
     /**
-     * Set objet
+     * Set objet.
      *
      * @param string $objet
+     *
      * @return Mail
      */
     public function setObjet($objet)
@@ -149,7 +149,7 @@ class Mail
     }
 
     /**
-     * Get objet
+     * Get objet.
      *
      * @return string
      */
@@ -159,9 +159,10 @@ class Mail
     }
 
     /**
-     * Set description
+     * Set description.
      *
      * @param string $description
+     *
      * @return Mail
      */
     public function setDescription($description)
@@ -172,7 +173,7 @@ class Mail
     }
 
     /**
-     * Get description
+     * Get description.
      *
      * @return string
      */
@@ -182,9 +183,10 @@ class Mail
     }
 
     /**
-     * Set expediteurMail
+     * Set expediteurMail.
      *
      * @param string $expediteurMail
+     *
      * @return Mail
      */
     public function setExpediteurMail($expediteurMail)
@@ -195,7 +197,7 @@ class Mail
     }
 
     /**
-     * Get expediteurMail
+     * Get expediteurMail.
      *
      * @return string
      */
@@ -205,9 +207,10 @@ class Mail
     }
 
     /**
-     * Set expediteurName
+     * Set expediteurName.
      *
      * @param string $expediteurName
+     *
      * @return Mail
      */
     public function setExpediteurName($expediteurName)
@@ -218,7 +221,7 @@ class Mail
     }
 
     /**
-     * Get expediteurName
+     * Get expediteurName.
      *
      * @return string
      */
@@ -228,9 +231,10 @@ class Mail
     }
 
     /**
-     * Set body
+     * Set body.
      *
      * @param string $body
+     *
      * @return Mail
      */
     public function setBody($body)
@@ -241,7 +245,7 @@ class Mail
     }
 
     /**
-     * Get body
+     * Get body.
      *
      * @return string
      */
@@ -251,7 +255,7 @@ class Mail
     }
 
     /**
-     * Get params
+     * Get params.
      *
      * @return array $params
      */
@@ -261,7 +265,7 @@ class Mail
     }
 
     /**
-     * Set params
+     * Set params.
      *
      * @param array $params
      */
@@ -271,9 +275,9 @@ class Mail
     }
 
     /**
-     * Set notificationRegionReferent
+     * Set notificationRegionReferent.
      *
-     * @param boolean $notificationRegionReferent
+     * @param bool $notificationRegionReferent
      *
      * @return Mail
      */
@@ -285,9 +289,9 @@ class Mail
     }
 
     /**
-     * Get notificationRegionReferent
+     * Get notificationRegionReferent.
      *
-     * @return boolean
+     * @return bool
      */
     public function isNotificationRegionReferent()
     {

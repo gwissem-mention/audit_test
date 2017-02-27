@@ -1,4 +1,5 @@
 <?php
+
 namespace HopitalNumerique\AutodiagBundle\Service\Attribute\Builder;
 
 use Doctrine\Common\Persistence\ObjectManager;
@@ -9,9 +10,8 @@ use HopitalNumerique\AutodiagBundle\Service\Attribute\PresetableAttributeBuilder
 use Symfony\Component\Form\FormFactoryInterface;
 
 /**
- * Common builder for all Presetable Builders
+ * Common builder for all Presetable Builders.
  *
- * @package HopitalNumerique\AutodiagBundle\Service\Attribute\Builder
  * @author Emmanuel Da Fonseca <edafonseca@nodevo.com>
  */
 abstract class AbstractPresetableBuilder extends AbstractBuilder implements PresetableAttributeBuilderInterface
@@ -21,12 +21,13 @@ abstract class AbstractPresetableBuilder extends AbstractBuilder implements Pres
     /** @var ObjectManager */
     protected $manager;
 
-    /** @var FormFactoryInterface  */
+    /** @var FormFactoryInterface */
     protected $formFactory;
 
     /**
      * AbstractPresetableBuilder constructor.
-     * @param ObjectManager $manager
+     *
+     * @param ObjectManager        $manager
      * @param FormFactoryInterface $formFactory
      */
     public function __construct(ObjectManager $manager, FormFactoryInterface $formFactory)
@@ -36,9 +37,10 @@ abstract class AbstractPresetableBuilder extends AbstractBuilder implements Pres
     }
 
     /**
-     * Check if attribute type has builder for Model
+     * Check if attribute type has builder for Model.
      *
      * @param Autodiag $autodiag
+     *
      * @return bool
      */
     public function hasPreset(Autodiag $autodiag)
@@ -47,9 +49,10 @@ abstract class AbstractPresetableBuilder extends AbstractBuilder implements Pres
     }
 
     /**
-     * Get Preset for Autodiag
+     * Get Preset for Autodiag.
      *
      * @param Autodiag $autodiag
+     *
      * @return Preset|null
      */
     public function getPreset(Autodiag $autodiag)
@@ -71,7 +74,7 @@ abstract class AbstractPresetableBuilder extends AbstractBuilder implements Pres
     }
 
     /**
-     * Set Preset value for Model
+     * Set Preset value for Model.
      *
      * @param Autodiag $autodiag
      * @param $value
@@ -103,6 +106,7 @@ abstract class AbstractPresetableBuilder extends AbstractBuilder implements Pres
         $presets = array_map(function ($element) {
             return min(array_keys($element));
         }, $presets);
+
         return array_sum($presets) / count($presets);
     }
 
@@ -116,6 +120,7 @@ abstract class AbstractPresetableBuilder extends AbstractBuilder implements Pres
         $presets = array_map(function ($element) {
             return max(array_keys($element));
         }, $presets);
+
         return array_sum($presets) / count($presets);
     }
 
@@ -126,20 +131,21 @@ abstract class AbstractPresetableBuilder extends AbstractBuilder implements Pres
         if (null === $entryValue->getValue() && null !== $entryValue->getId()) {
             $value = $presets->getPreset();
             foreach ($value as &$key) {
-                $key = "-1";
+                $key = '-1';
             }
             $entryValue->setValue($this->reverseTransform($value));
         }
 
         return parent::getFormHtml($entryValue, array_merge($viewData, [
-            'preset' => $presets
+            'preset' => $presets,
         ]));
     }
 
     /**
-     * Create Preset object for Model
+     * Create Preset object for Model.
      *
      * @param Autodiag $autodiag
+     *
      * @return Preset
      */
     protected function createPreset(Autodiag $autodiag)

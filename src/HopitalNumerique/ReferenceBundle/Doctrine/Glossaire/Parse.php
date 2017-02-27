@@ -1,4 +1,5 @@
 <?php
+
 namespace HopitalNumerique\ReferenceBundle\Doctrine\Glossaire;
 
 use HopitalNumerique\DomaineBundle\Entity\Domaine;
@@ -45,12 +46,10 @@ class Parse
      */
     private $contenuManager;
 
-
     /**
      * @var array<\HopitalNumerique\ReferenceBundle\Entity\Reference> Glossaire
      */
     private static $GLOSSAIRE_REFERENCES_GROUPED_BY_DOMAINE_ID = null;
-
 
     /**
      * Constructeur.
@@ -97,9 +96,8 @@ class Parse
         $glossaireReference1Length = strlen($glossaireReference1->getSigleForGlossaire());
         $glossaireReference2Length = strlen($glossaireReference2->getSigleForGlossaire());
 
-        return ($glossaireReference1Length > $glossaireReference2Length ? -1 : ($glossaireReference1Length < $glossaireReference2Length ? 1 : 0));
+        return $glossaireReference1Length > $glossaireReference2Length ? -1 : ($glossaireReference1Length < $glossaireReference2Length ? 1 : 0);
     }
-
 
     /**
      * Parse toutes les publications.
@@ -107,7 +105,7 @@ class Parse
     public function parseAndSaveAll()
     {
         $this->parseAndSaveObjets($this->objetManager->findBy([
-            'etat' => $this->referenceManager->getEtatActif()
+            'etat' => $this->referenceManager->getEtatActif(),
         ]));
         $this->parseAndSaveContenus($this->contenuManager->findAll());
     }
@@ -123,7 +121,7 @@ class Parse
 
         foreach ($objets as $objet) {
             foreach ($this->entity->getDomainesByEntity($objet) as $domaine) {
-                $foundSigles = $this->getFoundSiglesByText(self::$GLOSSAIRE_REFERENCES_GROUPED_BY_DOMAINE_ID[$domaine->getId()], strip_tags($objet->getResume()).' '.strip_tags($objet->getSynthese()));
+                $foundSigles = $this->getFoundSiglesByText(self::$GLOSSAIRE_REFERENCES_GROUPED_BY_DOMAINE_ID[$domaine->getId()], strip_tags($objet->getResume()) . ' ' . strip_tags($objet->getSynthese()));
                 $this->saveEntityHasGlossaire(Entity::ENTITY_TYPE_OBJET, $objet->getId(), $domaine, $foundSigles);
             }
         }
@@ -169,19 +167,20 @@ class Parse
      * Retourne la liste des sigles trouvés dans un texte.
      *
      * @param array<\HopitalNumerique\ReferenceBundle\Entity\Reference> $glossaireReferences Références du glossaire à rechercher
-     * @param string $text Texte
+     * @param string                                                    $text                Texte
      */
     private function getFoundSiglesByText(array $glossaireReferences, $text)
     {
         $foundSigles = [];
         /**
          * Positions des sigles trouvés. Si on trouve un autre mot (plus petit) commençant au même endroit, on ne le prend pas.
+         *
          * @todo Fonctionnement repris de l'ancien, l'idéal serait de ne pas prendre le mot s'il est compris dans un autre et non uniquement s'il commence au même endroit.
          */
         $siglePositions = [];
 
         foreach ($glossaireReferences as $glossaireReference) {
-            $siglePattern = '|'.$glossaireReference->getSigleHtmlForGlossaire().'|'.($glossaireReference->isCasseSensible() ? '' : 'i');
+            $siglePattern = '|' . $glossaireReference->getSigleHtmlForGlossaire() . '|' . ($glossaireReference->isCasseSensible() ? '' : 'i');
             preg_match_all($siglePattern, $text, $sigleMatches, PREG_OFFSET_CAPTURE);
 
             foreach ($sigleMatches[0] as $sigleMatch) {
@@ -198,8 +197,8 @@ class Parse
     /**
      * Enregistre en base le glossaire si existant de l'entité.
      *
-     * @param integer                                         $entityType Type d'entité
-     * @param integer                                        $entityId   ID de l'entité
+     * @param int                                            $entityType Type d'entité
+     * @param int                                            $entityId   ID de l'entité
      * @param \HopitalNumerique\DomaineBundle\Entity\Domaine $domaine    Domaine
      * @param array                                          $glossaire  Références trouvées
      */
@@ -208,13 +207,14 @@ class Parse
         $entityHasGlossaire = $this->entityHasGlossaireManager->findOneBy([
             'entityType' => $entityType,
             'entityId' => $entityId,
-            'domaine' => $domaine
+            'domaine' => $domaine,
         ]);
 
         if (0 === count($glossaire)) {
             if (null !== $entityHasGlossaire) {
                 $this->entityHasGlossaireManager->delete($entityHasGlossaire);
             }
+
             return;
         }
 

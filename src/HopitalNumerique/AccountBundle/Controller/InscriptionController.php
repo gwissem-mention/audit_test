@@ -1,4 +1,5 @@
 <?php
+
 namespace HopitalNumerique\AccountBundle\Controller;
 
 use HopitalNumerique\AccountBundle\Form\Type\InscriptionType;
@@ -15,8 +16,10 @@ class InscriptionController extends Controller
 {
     /**
      * Popin simple d'inscription.
+     *
      * @param Request $request
-     * @param string $urlRedirection
+     * @param string  $urlRedirection
+     *
      * @return \Symfony\Component\HttpFoundation\RedirectResponse|Response
      */
     public function popinAction(Request $request, $urlRedirection = '')
@@ -78,7 +81,7 @@ class InscriptionController extends Controller
      * Complète l'utilisateur nouveau avec des valeurs obligatoires par défaut.
      *
      * @param \Symfony\Component\HttpFoundation\Request $request Request
-     * @param \HopitalNumerique\UserBundle\Entity\User $user User
+     * @param \HopitalNumerique\UserBundle\Entity\User  $user    User
      */
     private function completeUser(Request $request, User &$user)
     {

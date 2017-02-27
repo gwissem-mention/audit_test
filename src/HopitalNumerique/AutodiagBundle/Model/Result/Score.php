@@ -1,4 +1,5 @@
 <?php
+
 namespace HopitalNumerique\AutodiagBundle\Model\Result;
 
 class Score
@@ -13,6 +14,7 @@ class Score
 
     /**
      * Score constructor.
+     *
      * @param $code
      * @param $label
      * @param $score
@@ -49,9 +51,6 @@ class Score
         return $this->value;
     }
 
-    /**
-     * @return null
-     */
     public function getColor()
     {
         return $this->color;

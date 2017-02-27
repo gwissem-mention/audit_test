@@ -7,7 +7,7 @@ use HopitalNumerique\AutodiagBundle\Entity\Autodiag\Attribute;
 use HopitalNumerique\AutodiagBundle\Entity\AutodiagEntry;
 
 /**
- * Value
+ * Value.
  *
  * @ORM\Table(name="ad_entry_value")
  * @ORM\Entity(repositoryClass="HopitalNumerique\AutodiagBundle\Repository\AutodiagEntry\ValueRepository")
@@ -15,7 +15,7 @@ use HopitalNumerique\AutodiagBundle\Entity\AutodiagEntry;
 class Value
 {
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
@@ -54,16 +54,16 @@ class Value
     private $comment;
 
     /**
-     * @var boolean
+     * @var bool
      *
      * @ORM\Column(type="boolean")
      */
     private $valid;
 
     /**
-     * Get id
+     * Get id.
      *
-     * @return integer
+     * @return int
      */
     public function getId()
     {
@@ -142,7 +142,7 @@ class Value
     }
 
     /**
-     * @return boolean
+     * @return bool
      */
     public function isValid()
     {
@@ -150,7 +150,8 @@ class Value
     }
 
     /**
-     * @param boolean $valid
+     * @param bool $valid
+     *
      * @return Value
      */
     public function setValid($valid)

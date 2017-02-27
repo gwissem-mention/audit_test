@@ -12,6 +12,7 @@ class BoundaryScoreListener
 
     /**
      * BoundaryScoreListener constructor.
+     *
      * @param BoundaryCalculator $boundaryCalculator
      */
     public function __construct(BoundaryCalculator $boundaryCalculator)

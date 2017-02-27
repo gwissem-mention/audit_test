@@ -1,4 +1,5 @@
 <?php
+
 namespace HopitalNumerique\RechercheBundle\Controller\Referencement;
 
 use HopitalNumerique\CoreBundle\DependencyInjection\Entity;
@@ -75,9 +76,9 @@ class RequeteController extends Controller
         }
 
         return $this->render('HopitalNumeriqueRechercheBundle:Referencement\Requete:popin_detail.html.twig', [
-            'referencesTree'       => $referencesTree,
-            'requete'              => $requete,
-            'references'           => $references,
+            'referencesTree' => $referencesTree,
+            'requete' => $requete,
+            'references' => $references,
             'filtreCategoryLabels' => $filtreCategoryLabels,
         ]);
     }
@@ -99,7 +100,7 @@ class RequeteController extends Controller
         }
 
         return $this->render('HopitalNumeriqueRechercheBundle:Referencement\Requete:popin_save.html.twig', [
-            'requete'     => $requete,
+            'requete' => $requete,
             'requeteForm' => (null !== $requeteForm ? $requeteForm->createView() : null),
         ]);
     }

@@ -1,4 +1,5 @@
 <?php
+
 namespace HopitalNumerique\CommunautePratiqueBundle\Form\Type;
 
 use Symfony\Component\Form\FormBuilderInterface;
@@ -17,7 +18,6 @@ class FicheType extends \Symfony\Component\Form\AbstractType
      */
     private $documentManager;
 
-
     /**
      * Constructeur.
      */
@@ -31,9 +31,8 @@ class FicheType extends \Symfony\Component\Form\AbstractType
         $this->documentManager = $documentManager;
     }
 
-
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
@@ -43,52 +42,52 @@ class FicheType extends \Symfony\Component\Form\AbstractType
         $groupe = $builder->getData()->getGroupe();
 
         $builder
-            ->add('questionPosee', 'text', array(
+            ->add('questionPosee', 'text', [
                 'label' => 'Question posée',
                 'required' => true,
-                'attr' => array(
+                'attr' => [
                     'class' => 'validate[required]',
-                    'maxlength' => 255
-                )
-            ))
-            ->add('contexte', 'textarea', array(
+                    'maxlength' => 255,
+                ],
+            ])
+            ->add('contexte', 'textarea', [
                 'label' => 'Éléments de contexte à prendre en compte',
                 'required' => true,
-                'attr' => array(
+                'attr' => [
                     'class' => 'validate[required]',
-                    'rows' => 4
-                )
-            ))
-            ->add('description', 'textarea', array(
+                    'rows' => 4,
+                ],
+            ])
+            ->add('description', 'textarea', [
                 'label' => 'Description complète du problème',
                 'required' => true,
-                'attr' => array(
+                'attr' => [
                     'class' => 'validate[required]',
-                    'rows' => 4
-                )
-            ))
-            ->add('aideAttendue', 'textarea', array(
+                    'rows' => 4,
+                ],
+            ])
+            ->add('aideAttendue', 'textarea', [
                 'label' => 'Aide attendue',
                 'required' => true,
-                'attr' => array(
+                'attr' => [
                     'class' => 'validate[required]',
-                    'rows' => 4
-                )
-            ))
-            ->add('resume', 'textarea', array(
+                    'rows' => 4,
+                ],
+            ])
+            ->add('resume', 'textarea', [
                 'label' => 'En résumé...',
                 'required' => true,
-                'attr' => array(
+                'attr' => [
                     'class' => 'validate[required]',
-                    'rows' => 4
-                )
-            ))
-            ->add('documents', 'entity', array(
+                    'rows' => 4,
+                ],
+            ])
+            ->add('documents', 'entity', [
                 'class' => 'HopitalNumeriqueCommunautePratiqueBundle:Document',
-                'choices' => $this->documentManager->findBy(array('groupe' => $groupe, 'user' => $builder->getData()->getUser())),
+                'choices' => $this->documentManager->findBy(['groupe' => $groupe, 'user' => $builder->getData()->getUser()]),
                 'multiple' => true,
-                'expanded' => true
-            ))
+                'expanded' => true,
+            ])
         ;
     }
 
@@ -97,13 +96,13 @@ class FicheType extends \Symfony\Component\Form\AbstractType
      */
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
-        $resolver->setDefaults(array(
-            'data_class' => 'HopitalNumerique\CommunautePratiqueBundle\Entity\Fiche'
-        ));
+        $resolver->setDefaults([
+            'data_class' => 'HopitalNumerique\CommunautePratiqueBundle\Entity\Fiche',
+        ]);
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function getName()
     {

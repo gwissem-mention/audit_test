@@ -1,4 +1,5 @@
 <?php
+
 namespace HopitalNumerique\ReferenceBundle\Form\Type;
 
 use HopitalNumerique\UserBundle\Manager\UserManager;
@@ -17,7 +18,7 @@ use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 class ReferenceType extends AbstractType
 {
-    private $constraints = array();
+    private $constraints = [];
     private $userManager;
     /**
      * @var \HopitalNumerique\ReferenceBundle\Manager\ReferenceManager
@@ -41,27 +42,27 @@ class ReferenceType extends AbstractType
 
         if ($connectedUser->hasRoleAdmin()) {
             $builder
-                ->add('domaines', 'entity', array(
-                    'class'       => 'HopitalNumeriqueDomaineBundle:Domaine',
-                    'property'    => 'nom',
-                    'required'    => false,
-                    'multiple'    => true,
-                    'label'       => 'Domaine(s) associé(s)',
+                ->add('domaines', 'entity', [
+                    'class' => 'HopitalNumeriqueDomaineBundle:Domaine',
+                    'property' => 'nom',
+                    'required' => false,
+                    'multiple' => true,
+                    'label' => 'Domaine(s) associé(s)',
                     'empty_value' => ' - ',
                     'query_builder' => function (EntityRepository $er) use ($connectedUser) {
                         return $er->getDomainesUserConnectedForForm($connectedUser->getId());
                     },
                     'attr' => [
-                        'class' => 'select2'
-                    ]
-                ))
+                        'class' => 'select2',
+                    ],
+                ])
             ;
 
             if ($connectedUser->hasRoleAdmin()) {
                 $builder
                     ->add('allDomaines', 'checkbox', [
                         'label' => 'Tous les domaines',
-                        'required' => false
+                        'required' => false,
                     ])
                 ;
             }
@@ -84,22 +85,22 @@ class ReferenceType extends AbstractType
         $referenceId = $options['data']->getId();
 
         $builder
-            ->add('libelle', 'text', array(
+            ->add('libelle', 'text', [
                 'required' => true,
                 'label' => 'Libellé du concept',
                 'attr' => [
                     'maxlength' => 255,
                     'class' => 'validate[required]',
-                    'data-prompt-position' => 'bottomLeft'
-                ]
-            ))
-            ->add('image', 'hidden', [
-                'required' => false
+                    'data-prompt-position' => 'bottomLeft',
+                ],
             ])
-            ->add('imageFile', 'file', array(
+            ->add('image', 'hidden', [
+                'required' => false,
+            ])
+            ->add('imageFile', 'file', [
                 'label' => 'Image',
-                'required' => false
-            ))
+                'required' => false,
+            ])
             ->addEventListener(FormEvents::SUBMIT, function (FormEvent $event) {
                 $this->verifyImage($event->getForm(), $event->getData());
             })
@@ -108,16 +109,16 @@ class ReferenceType extends AbstractType
                 'type' => SynonymeType::class,
                 'by_reference' => false,
                 'allow_add' => true,
-                'allow_delete' => true
+                'allow_delete' => true,
             ])
             ->add('champLexicalNoms', 'collection', [
                 'label' => 'Champ lexical',
                 'type' => ChampLexicalNomType::class,
                 'by_reference' => false,
                 'allow_add' => true,
-                'allow_delete' => true
+                'allow_delete' => true,
             ])
-            ->add('parents', 'entity', array(
+            ->add('parents', 'entity', [
                 'class' => 'HopitalNumeriqueReferenceBundle:Reference',
                 'multiple' => true,
                 'required' => false,
@@ -133,16 +134,16 @@ class ReferenceType extends AbstractType
                     }
 
                     return $qb;
-                }
-            ))
-            ->add('etat', 'entity', array(
-                'class'       => 'HopitalNumeriqueReferenceBundle:Reference',
-                'choices'     => $this->referenceManager->findByCode('ETAT'),
-                'property'    => 'libelle',
-                'required'    => true,
-                'label'       => 'Etat',
-                'attr'        => array('class' => $this->constraints['etat']['class'] ),
-            ))
+                },
+            ])
+            ->add('etat', 'entity', [
+                'class' => 'HopitalNumeriqueReferenceBundle:Reference',
+                'choices' => $this->referenceManager->findByCode('ETAT'),
+                'property' => 'libelle',
+                'required' => true,
+                'label' => 'Etat',
+                'attr' => ['class' => $this->constraints['etat']['class']],
+            ])
         ;
     }
 
@@ -154,23 +155,24 @@ class ReferenceType extends AbstractType
      */
     private function buildFormPartListe(FormBuilderInterface $builder, array $options)
     {
-        $attrCode = array(
-            'maxlength' => 255
-        );
-        if ($options['data']->getLock())
+        $attrCode = [
+            'maxlength' => 255,
+        ];
+        if ($options['data']->getLock()) {
             $attrCode['readonly'] = 'readonly';
+        }
 
         $builder
-            ->add('code', 'text', array(
-                'required'   => false,
-                'label'      => 'Code',
-                'attr'       => $attrCode
-            ))
-            ->add('order', 'number', array(
+            ->add('code', 'text', [
+                'required' => false,
+                'label' => 'Code',
+                'attr' => $attrCode,
+            ])
+            ->add('order', 'number', [
                 'required' => true,
-                'label'    => 'Ordre d\'affichage',
-                'attr'     => array('class' => 'validate[required, custom[numberVirgule]]')
-            ))
+                'label' => 'Ordre d\'affichage',
+                'attr' => ['class' => 'validate[required, custom[numberVirgule]]'],
+            ])
         ;
     }
 
@@ -185,34 +187,34 @@ class ReferenceType extends AbstractType
         $connectedUser = $this->userManager->getUserConnected();
 
         $builder
-            ->add('reference', 'checkbox', array(
+            ->add('reference', 'checkbox', [
                 'required' => false,
-                'label' => 'Est une référence ?'
-            ))
-            ->add('inRecherche', 'checkbox', array(
+                'label' => 'Est une référence ?',
+            ])
+            ->add('inRecherche', 'checkbox', [
                 'required' => false,
-                'label' => 'Présente dans la recherche ?'
-            ))
-            ->add('referenceLibelle', 'text', array(
+                'label' => 'Présente dans la recherche ?',
+            ])
+            ->add('referenceLibelle', 'text', [
                 'required' => false,
                 'label' => 'Libellé de la référence (si différent du libellé du concept)',
                 'attr' => [
-                    'maxlength' => 255
-                ]
-            ))
-            ->add('domainesDisplay', 'entity', array(
-                'class'       => 'HopitalNumeriqueDomaineBundle:Domaine',
-                'property'    => 'nom',
-                'required'    => false,
-                'label'       => 'Afficher un lien pour ces domaines :',
-                'multiple'    => true,
+                    'maxlength' => 255,
+                ],
+            ])
+            ->add('domainesDisplay', 'entity', [
+                'class' => 'HopitalNumeriqueDomaineBundle:Domaine',
+                'property' => 'nom',
+                'required' => false,
+                'label' => 'Afficher un lien pour ces domaines :',
+                'multiple' => true,
                 'query_builder' => function (EntityRepository $er) use ($connectedUser) {
                     return $er->getDomainesUserConnectedForForm($connectedUser->getId());
                 },
                 'attr' => [
-                    'class' => 'select2'
-                ]
-            ))
+                    'class' => 'select2',
+                ],
+            ])
         ;
     }
 
@@ -225,45 +227,44 @@ class ReferenceType extends AbstractType
     private function buildFormPartGlossaire(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('inGlossaire', 'checkbox', array(
+            ->add('inGlossaire', 'checkbox', [
                 'required' => false,
-                'label' => 'Présent dans le glossaire ?'
-            ))
-            ->add('sigle', 'text', array(
+                'label' => 'Présent dans le glossaire ?',
+            ])
+            ->add('sigle', 'text', [
                 'required' => false,
                 'label' => 'Sigle',
                 'attr' => [
-                    'maxlength' => 255
-                ]
-            ))
-            ->add('glossaireLibelle', 'text', array(
+                    'maxlength' => 255,
+                ],
+            ])
+            ->add('glossaireLibelle', 'text', [
                 'required' => false,
                 'label' => 'Libellé dans le glossaire (si différent du libellé du concept)',
                 'attr' => [
-                    'maxlength' => 255
-                ]
-            ))
-            ->add('descriptionCourte', 'textarea', array(
+                    'maxlength' => 255,
+                ],
+            ])
+            ->add('descriptionCourte', 'textarea', [
                 'required' => false,
                 'label' => 'Description courte <span title="Ce champ est requis" style="color:red;font-size:10px">*</span>',
                 'attr' => [
-                    'data-prompt-position' => 'bottomLeft'
-                ]
-            ))
-            ->add('descriptionLongue', 'textarea', array(
+                    'data-prompt-position' => 'bottomLeft',
+                ],
+            ])
+            ->add('descriptionLongue', 'textarea', [
                 'required' => false,
                 'label' => 'Description longue',
                 'attr' => [
-                    'class' => 'tinyMce'
-                ]
-            ))
-            ->add('casseSensible', 'checkbox', array(
+                    'class' => 'tinyMce',
+                ],
+            ])
+            ->add('casseSensible', 'checkbox', [
                 'required' => false,
-                'label' => 'Sensible à la casse ?'
-            ))
+                'label' => 'Sensible à la casse ?',
+            ])
         ;
     }
-
 
     /**
      * Vérifie la validité de l'image.
@@ -274,15 +275,15 @@ class ReferenceType extends AbstractType
     private function verifyImage(FormInterface $form, Reference $reference)
     {
         if (null !== $reference->getImageFile() && !$reference->imageFileIsValid()) {
-            $form->get('imageFile')->addError(new FormError('Veuillez choisir une image inférieure à '.intval(Systeme::getFileUploadMaxSize() / 1024 / 1024).' Mo.'));
+            $form->get('imageFile')->addError(new FormError('Veuillez choisir une image inférieure à ' . intval(Systeme::getFileUploadMaxSize() / 1024 / 1024) . ' Mo.'));
         }
     }
 
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
-        $resolver->setDefaults(array(
-            'data_class' => 'HopitalNumerique\ReferenceBundle\Entity\Reference'
-        ));
+        $resolver->setDefaults([
+            'data_class' => 'HopitalNumerique\ReferenceBundle\Entity\Reference',
+        ]);
     }
 
     public function getName()

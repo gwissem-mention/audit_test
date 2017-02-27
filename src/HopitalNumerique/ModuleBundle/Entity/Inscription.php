@@ -3,23 +3,22 @@
 namespace HopitalNumerique\ModuleBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-
 //Asserts Stuff
 use APY\DataGridBundle\Grid\Mapping as GRID;
 
 /**
- * Inscription
+ * Inscription.
  *
  * @ORM\Table(name="hn_module_session_inscription")
  * @ORM\Entity(repositoryClass="HopitalNumerique\ModuleBundle\Repository\InscriptionRepository")
- * 
+ *
  * @author Gaetan MELCHILSEN
  * @copyright Nodevo
  */
 class Inscription
 {
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="insc_id", type="integer")
      * @ORM\Id
@@ -35,9 +34,9 @@ class Inscription
      * @ORM\OrderBy({"dateSession" = "ASC"})
      */
     protected $session;
-    
+
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\ManyToOne(targetEntity="\HopitalNumerique\UserBundle\Entity\User", inversedBy="inscriptions")
      * @ORM\JoinColumn(name="usr_participant", referencedColumnName="usr_id", nullable=true, onDelete="CASCADE")
@@ -46,23 +45,23 @@ class Inscription
      * @GRID\Column(field="user.nom")
      */
     protected $user;
-    
+
     /**
      * @var string
      *
      * @ORM\Column(name="insc_commentaire", type="text", nullable=true)
      */
     private $commentaire;
-    
+
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="insc_total", type="integer", nullable=true)
      */
     private $total;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="insc_supplement", type="integer", nullable=true)
      */
@@ -82,7 +81,7 @@ class Inscription
      * @GRID\Column(field="etatInscription.libelle")
      */
     protected $etatInscription;
-    
+
     /**
      * @ORM\ManyToOne(targetEntity="\HopitalNumerique\ReferenceBundle\Entity\Reference", cascade={"persist"})
      * @ORM\JoinColumn(name="ref_etat_participation", referencedColumnName="ref_id")
@@ -90,7 +89,7 @@ class Inscription
      * @GRID\Column(field="etatParticipation.libelle")
      */
     protected $etatParticipation;
-    
+
     /**
      * @ORM\ManyToOne(targetEntity="\HopitalNumerique\ReferenceBundle\Entity\Reference", cascade={"persist"})
      * @ORM\JoinColumn(name="ref_etat_evaluation", referencedColumnName="ref_id")
@@ -118,26 +117,25 @@ class Inscription
      */
     private $facturesAnnulees;
 
-
     /**
-     * Constructor
+     * Constructor.
      */
     public function __construct()
     {
-        $this->etatInscription   = 406;
+        $this->etatInscription = 406;
         $this->etatParticipation = 410;
-        $this->etatEvaluation    = 27;
+        $this->etatEvaluation = 27;
         $this->etatRemboursement = null;
-        $this->total             = null;
-        $this->supplement        = null;
-        $this->facture           = null;
-        $this->dateInscription   = new \DateTime();
+        $this->total = null;
+        $this->supplement = null;
+        $this->facture = null;
+        $this->dateInscription = new \DateTime();
     }
-    
+
     /**
-     * Get id
+     * Get id.
      *
-     * @return integer
+     * @return int
      */
     public function getId()
     {
@@ -151,7 +149,7 @@ class Inscription
     {
         return $this->session;
     }
-    
+
     public function getSessionId()
     {
         return $this->session->getId();
@@ -161,11 +159,12 @@ class Inscription
     {
         $this->session = $session;
     }
-    
+
     /**
-     * Set commentaire
+     * Set commentaire.
      *
      * @param string $commentaire
+     *
      * @return Inscription
      */
     public function setCommentaire($commentaire)
@@ -176,59 +175,61 @@ class Inscription
     }
 
     /**
-     * Get commentaire
+     * Get commentaire.
      *
-     * @return string 
+     * @return string
      */
     public function getCommentaire()
     {
         return $this->commentaire;
     }
-    
+
     /**
-     * Get total
+     * Get total.
      *
-     * @return integer $total
+     * @return int $total
      */
     public function getTotal()
     {
         return $this->total;
     }
-    
+
     /**
-     * Set total
+     * Set total.
      *
-     * @param integer $total
+     * @param int $total
      */
     public function setTotal($total)
     {
         $this->total = $total;
+
         return $this;
     }
-    
+
     /**
-     * Get supplement
+     * Get supplement.
      *
-     * @return integer $supplement
+     * @return int $supplement
      */
     public function getSupplement()
     {
         return $this->supplement;
     }
-    
+
     /**
-     * Set supplement
+     * Set supplement.
      *
-     * @param integer $supplement
+     * @param int $supplement
      */
     public function setSupplement($supplement)
     {
         $this->supplement = $supplement;
+
         return $this;
     }
-    
+
     /**
-     * Get dateInscription
+     * Get dateInscription.
      *
      * @return DateTime $dateInscription
      */
@@ -236,20 +237,21 @@ class Inscription
     {
         return $this->dateInscription;
     }
-    
+
     /**
-     * Set dateInscription
+     * Set dateInscription.
      *
      * @param DateTime $dateInscription
      */
     public function setDateInscription($dateInscription)
     {
         $this->dateInscription = $dateInscription;
+
         return $this;
     }
 
     /**
-     * Get dateInscription string
+     * Get dateInscription string.
      *
      * @return string
      */
@@ -259,20 +261,21 @@ class Inscription
     }
 
     /**
-     * Set user
+     * Set user.
      *
      * @param \HopitalNumerique\UserBundle\Entity\User $user
+     *
      * @return Reponse
      */
     public function setUser(\HopitalNumerique\UserBundle\Entity\User $user = null)
     {
         $this->user = $user;
-    
+
         return $this;
     }
-    
+
     /**
-     * Get user
+     * Get user.
      *
      * @return \HopitalNumerique\UserBundle\Entity\User
      */
@@ -280,22 +283,23 @@ class Inscription
     {
         return $this->user;
     }
-    
+
     /**
-     * Set etatInscription
+     * Set etatInscription.
      *
      * @param \HopitalNumerique\ReferenceBundle\Entity\Reference $etatInscription
      */
     public function setEtatInscription($etatInscription)
     {
-        if($etatInscription instanceof \HopitalNumerique\ReferenceBundle\Entity\Reference )
+        if ($etatInscription instanceof \HopitalNumerique\ReferenceBundle\Entity\Reference) {
             $this->etatInscription = $etatInscription;
-        else
+        } else {
             $this->etatInscription = null;
+        }
     }
-    
+
     /**
-     * Get etatInscription
+     * Get etatInscription.
      *
      * @return \HopitalNumerique\ReferenceBundle\Entity\Reference $etatInscription
      */
@@ -303,9 +307,9 @@ class Inscription
     {
         return $this->etatInscription;
     }
-    
+
     /**
-     * Get etatInscription Id
+     * Get etatInscription Id.
      *
      * @return int idEtatInscription
      */
@@ -317,30 +321,33 @@ class Inscription
     /**
      * Inscrit ?
      *
-     * @return boolean Inscrit
+     * @return bool Inscrit
      */
     public function isInscrit()
     {
-        if(407 === $this->etatInscription->getId())
+        if (407 === $this->etatInscription->getId()) {
             return true;
+        }
 
         return false;
     }
-    
+
     /**
-     * Set etatParticipation
+     * Set etatParticipation.
      *
      * @param \HopitalNumerique\ReferenceBundle\Entity\Reference $etatParticipation
      */
     public function setEtatParticipation($etatParticipation)
     {
-        if($etatParticipation instanceof \HopitalNumerique\ReferenceBundle\Entity\Reference )
+        if ($etatParticipation instanceof \HopitalNumerique\ReferenceBundle\Entity\Reference) {
             $this->etatParticipation = $etatParticipation;
-        else
+        } else {
             $this->etatParticipation = null;
+        }
     }
+
     /**
-     * Get etatParticipation
+     * Get etatParticipation.
      *
      * @return \HopitalNumerique\ReferenceBundle\Entity\Reference $etatParticipation
      */
@@ -348,22 +355,23 @@ class Inscription
     {
         return $this->etatParticipation;
     }
-    
+
     /**
-     * Set etatEvaluation
+     * Set etatEvaluation.
      *
      * @param \HopitalNumerique\ReferenceBundle\Entity\Reference $etatEvaluation
      */
     public function setEtatEvaluation($etatEvaluation)
     {
-        if($etatEvaluation instanceof \HopitalNumerique\ReferenceBundle\Entity\Reference )
+        if ($etatEvaluation instanceof \HopitalNumerique\ReferenceBundle\Entity\Reference) {
             $this->etatEvaluation = $etatEvaluation;
-        else
+        } else {
             $this->etatEvaluation = null;
+        }
     }
-    
+
     /**
-     * Get etatEvaluation
+     * Get etatEvaluation.
      *
      * @return \HopitalNumerique\ReferenceBundle\Entity\Reference $etatEvaluation
      */
@@ -373,7 +381,7 @@ class Inscription
     }
 
     /**
-     * Get etatRemboursement
+     * Get etatRemboursement.
      *
      * @return \HopitalNumerique\ReferenceBundle\Entity\Reference $etatRemboursement
      */
@@ -381,20 +389,21 @@ class Inscription
     {
         return $this->etatRemboursement;
     }
-    
+
     /**
-     * Set etatRemboursement
+     * Set etatRemboursement.
      *
      * @param \HopitalNumerique\ReferenceBundle\Entity\Reference $etatRemboursement
      */
     public function setEtatRemboursement(\HopitalNumerique\ReferenceBundle\Entity\Reference $etatRemboursement = null)
     {
         $this->etatRemboursement = $etatRemboursement;
+
         return $this;
     }
 
     /**
-     * Get facture
+     * Get facture.
      *
      * @return \HopitalNumerique\PaiementBundle\Entity\Facture $facture
      */
@@ -402,15 +411,16 @@ class Inscription
     {
         return $this->facture;
     }
-    
+
     /**
-     * Set facture
+     * Set facture.
      *
      * @param \HopitalNumerique\PaiementBundle\Entity\Facture $facture
      */
     public function setFacture(\HopitalNumerique\PaiementBundle\Entity\Facture $facture = null)
     {
         $this->facture = $facture;
+
         return $this;
     }
 }

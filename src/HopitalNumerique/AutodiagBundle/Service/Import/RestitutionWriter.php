@@ -1,28 +1,24 @@
 <?php
+
 namespace HopitalNumerique\AutodiagBundle\Service\Import;
 
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\EntityManager;
 use HopitalNumerique\AutodiagBundle\Entity\Autodiag;
-use HopitalNumerique\AutodiagBundle\Entity\Autodiag\Attribute;
 use HopitalNumerique\AutodiagBundle\Entity\Restitution;
-use HopitalNumerique\AutodiagBundle\Service\Attribute\AttributeBuilderProvider;
 use Nodevo\Component\Import\Progress\ProgressAwareInterface;
 use Nodevo\Component\Import\Progress\ProgressAwareTrait;
 use Nodevo\Component\Import\Writer\WriterInterface;
-use Symfony\Component\PropertyAccess\PropertyAccessor;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 class RestitutionWriter implements WriterInterface, ProgressAwareInterface
 {
     use ProgressAwareTrait;
 
-    const COLUMN_CATEGORY_LABEL = "libelle_onglet";
-    const COLUMN_CATEGORY_DESCRIPTION = "texte_avant";
-    const COLUMN_CATEGORY_ORDER = "ordre_affichage_onglet";
+    const COLUMN_CATEGORY_LABEL = 'libelle_onglet';
+    const COLUMN_CATEGORY_DESCRIPTION = 'texte_avant';
+    const COLUMN_CATEGORY_ORDER = 'ordre_affichage_onglet';
 
-    const COLUMN_ITEM_ORDER = "ordre_affichage_contenu";
+    const COLUMN_ITEM_ORDER = 'ordre_affichage_contenu';
     const COLUMN_ITEM_TYPE = 'type_restitution';
     const COLUMN_ITEM_PRIORITY = 'ordre_restitution';
     const COLUMN_ITEM_SOURCE = 'axe_restitution';
@@ -83,6 +79,7 @@ class RestitutionWriter implements WriterInterface, ProgressAwareInterface
                         'restitution'
                     );
                     $this->manager->detach($restitutionItem);
+
                     return;
                 }
             }
@@ -96,6 +93,7 @@ class RestitutionWriter implements WriterInterface, ProgressAwareInterface
                     'restitution'
                 );
                 $this->manager->detach($category);
+
                 return;
             }
 
@@ -160,16 +158,17 @@ class RestitutionWriter implements WriterInterface, ProgressAwareInterface
                 break;
             default:
                 $this->progress->addMessage('', $item[self::COLUMN_ITEM_SOURCE], 'source_invalid');
+
                 return null;
         }
 
         $position = explode('::', $item[self::COLUMN_ITEM_ORDER]);
 
         if (isset($position[0])) {
-            $restitutionItem->setRow((int)$position[0]);
+            $restitutionItem->setRow((int) $position[0]);
         }
         if (isset($position[1])) {
-            $restitutionItem->setColumn((int)$position[1]);
+            $restitutionItem->setColumn((int) $position[1]);
         }
 
         $identifiers = explode('::', $item[self::COLUMN_ITEM_DATA]);
@@ -177,7 +176,7 @@ class RestitutionWriter implements WriterInterface, ProgressAwareInterface
         foreach ($identifiers as $id) {
             $container = $repository->findOneBy([
                 'autodiag' => $this->autodiag,
-                $field => $id
+                $field => $id,
             ]);
             if (null === $container) {
                 $this->progress->addMessage('', $id, 'container_identifier_notfound');
@@ -188,6 +187,7 @@ class RestitutionWriter implements WriterInterface, ProgressAwareInterface
 
         if (count($restitutionItem->getContainers()) > 0) {
             $this->manager->persist($restitutionItem);
+
             return $restitutionItem;
         }
 
@@ -202,7 +202,7 @@ class RestitutionWriter implements WriterInterface, ProgressAwareInterface
                 $reference = $this->manager->getRepository('HopitalNumeriqueAutodiagBundle:Autodiag\Reference')
                     ->findOneBy([
                         'autodiag' => $this->autodiag,
-                        'number' => $referenceNumber
+                        'number' => $referenceNumber,
                     ]);
 
                 if ($reference) {
@@ -213,9 +213,10 @@ class RestitutionWriter implements WriterInterface, ProgressAwareInterface
     }
 
     /**
-     * Validate item line
+     * Validate item line.
      *
      * @param $item
+     *
      * @return bool
      */
     protected function validate($item)

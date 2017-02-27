@@ -1,4 +1,5 @@
 <?php
+
 namespace HopitalNumerique\CommunautePratiqueBundle\DependencyInjection;
 
 use HopitalNumerique\UserBundle\Entity\User;
@@ -12,22 +13,24 @@ class Inscription
      * Retourne s'il manque une information à l'utilisateur.
      *
      * @param \HopitalNumerique\UserBundle\Entity\User $user Utilisateur
-     * @return boolean VRAI si information manquante
+     *
+     * @return bool VRAI si information manquante
      */
     public function hasInformationManquante(User $user)
     {
-        return ( count($this->getInformationsManquantes($user)) > 0 );
+        return  count($this->getInformationsManquantes($user)) > 0;
     }
 
     /**
      * Retourne les informations manquantes pour se connecter à la communauté de pratique.
      *
      * @param \HopitalNumerique\UserBundle\Entity\User $user Utilisateur
+     *
      * @return array<string> Informations manquantes
      */
     public function getInformationsManquantes(User $user)
     {
-        $informationsManquantes = array();
+        $informationsManquantes = [];
 
         if (empty(trim($user->getNom())) || empty(trim($user->getPrenom()))) {
             $informationsManquantes[] = 'Nom & Prénom';

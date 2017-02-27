@@ -1,4 +1,5 @@
 <?php
+
 namespace HopitalNumerique\RechercheBundle\Doctrine\Referencement;
 
 use HopitalNumerique\ReferenceBundle\DependencyInjection\Reference\Tree as ReferenceTree;
@@ -6,7 +7,7 @@ use HopitalNumerique\ReferenceBundle\DependencyInjection\Referencement;
 use HopitalNumerique\ReferenceBundle\Manager\EntityHasReferenceManager;
 
 /**
- * Classe prenant en compte la modulation des références choisies
+ * Classe prenant en compte la modulation des références choisies.
  */
 class Modulation
 {
@@ -25,7 +26,6 @@ class Modulation
      */
     private $entityHasReferenceManager;
 
-
     /**
      * Constructeur.
      */
@@ -35,7 +35,6 @@ class Modulation
         $this->referenceTree = $referenceTree;
         $this->entityHasReferenceManager = $entityHasReferenceManager;
     }
-
 
     public function getModulatedReferenceIds(array $referenceIds, array $referencesTree)
     {

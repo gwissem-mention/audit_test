@@ -1,4 +1,5 @@
 <?php
+
 namespace HopitalNumerique\ReferenceBundle\Form\Type;
 
 use HopitalNumerique\ReferenceBundle\Manager\SynonymeManager;
@@ -18,7 +19,6 @@ class SynonymeType extends AbstractType
      */
     private $synonymeManager;
 
-
     /**
      * {@inheritdoc}
      */
@@ -26,7 +26,6 @@ class SynonymeType extends AbstractType
     {
         $this->synonymeManager = $synonymeManager;
     }
-
 
     /**
      * {@inheritdoc}
@@ -40,8 +39,8 @@ class SynonymeType extends AbstractType
                 'read_only' => (null !== $builder->getData()),
                 'attr' => [
                     'maxlength' => 255,
-                    'class' => 'validate[required]'
-                ]
+                    'class' => 'validate[required]',
+                ],
             ])
         ;
         $builder->addEventListener(FormEvents::SUBMIT, function (FormEvent $event) {
@@ -73,7 +72,7 @@ class SynonymeType extends AbstractType
     {
         $resolver
             ->setDefaults([
-                'data_class' => 'HopitalNumerique\\ReferenceBundle\\Entity\\Reference\\Synonyme'
+                'data_class' => 'HopitalNumerique\\ReferenceBundle\\Entity\\Reference\\Synonyme',
             ])
         ;
     }

@@ -5,31 +5,31 @@ namespace HopitalNumerique\RechercheBundle\Manager;
 use Nodevo\ToolsBundle\Manager\Manager as BaseManager;
 
 /**
- * Manager de la recherche
+ * Manager de la recherche.
  */
 class SearchManager extends BaseManager
 {
-    private $_production            = 175;
-    private $_ressource             = 183;
-    private $_pointDur              = 184;
-    private $_refsPonderees         = null;
-    private $_ccdnAuthorizer        = null;
-    private $_urlRechercheTextuelle = "";
-    private $_activationExalead     = false;
-    
+    private $_production = 175;
+    private $_ressource = 183;
+    private $_pointDur = 184;
+    private $_refsPonderees = null;
+    private $_ccdnAuthorizer = null;
+    private $_urlRechercheTextuelle = '';
+    private $_activationExalead = false;
+
     /**
-     * Override du contrct d'un manager normal : ce manager n'est lié à aucune entitée
+     * Override du contrct d'un manager normal : ce manager n'est lié à aucune entitée.
      */
-    public function __construct( $ccdnAuthorizer, $options = array() )
+    public function __construct($ccdnAuthorizer, $options = [])
     {
-        $this->_ccdnAuthorizer    = $ccdnAuthorizer;
+        $this->_ccdnAuthorizer = $ccdnAuthorizer;
 
         $this->_urlRechercheTextuelle = isset($options['urlRechercheTextuelle']) ? $options['urlRechercheTextuelle'] : '';
         $this->_activationExalead = isset($options['activationExalead']) ? $options['activationExalead'] : '';
     }
 
     /**
-     * Permet de récuperer les options du parameter.yml
+     * Permet de récuperer les options du parameter.yml.
      *
      * @return [type]
      */
@@ -39,9 +39,9 @@ class SearchManager extends BaseManager
     }
 
     /**
-     * Permet de récuperer les options du parameter.yml
+     * Permet de récuperer les options du parameter.yml.
      *
-     * @return boolean
+     * @return bool
      */
     public function getActivationExalead()
     {
@@ -49,26 +49,26 @@ class SearchManager extends BaseManager
     }
 
     /**
-     * GetMeta (desc+keywords) : for référencement
+     * GetMeta (desc+keywords) : for référencement.
      *
      * @param array  $references Liste des références
      * @param string $desc       Resume|contenu
      *
      * @return array
      */
-    public function getMetas($references, $desc )
+    public function getMetas($references, $desc)
     {
-        $meta = array();
+        $meta = [];
 
         //description
-        $tab          = explode('<!-- pagebreak -->', $desc);
+        $tab = explode('<!-- pagebreak -->', $desc);
         $meta['desc'] = html_entity_decode(strip_tags($tab[0]));
-        $meta['hasPageBreak'] = strpos($desc,'<!-- pagebreak -->') !== false;
+        $meta['hasPageBreak'] = strpos($desc, '<!-- pagebreak -->') !== false;
 
         //keywords
-        $meta['keywords'] = array();
+        $meta['keywords'] = [];
         foreach ($references as $reference) {
-            $ref                = $reference->getReference();
+            $ref = $reference->getReference();
             $meta['keywords'][] = $ref->getLibelle();
         }
 
@@ -76,7 +76,7 @@ class SearchManager extends BaseManager
     }
 
     /**
-     * Formatte les objets issues de la recherche : ne récupére que 10 résultats (autour de l'élément sélectionné)
+     * Formatte les objets issues de la recherche : ne récupére que 10 résultats (autour de l'élément sélectionné).
      *
      * @param array         $objets      Liste des objets
      * @param Objet|Contenu $publication La publication (objet|contenu)
@@ -85,63 +85,69 @@ class SearchManager extends BaseManager
      */
     public function formatForPublication($objets, $publication)
     {
-        $results = array();
-        foreach($objets as $item)
-            $results[ $item['categ'] ][] = $item;
+        $results = [];
+        foreach ($objets as $item) {
+            $results[$item['categ']][] = $item;
+        }
 
-        $tabToReturn = array();
-        foreach($results as $categ) {
-            if( count($categ) > 10 ){
-                $i         = 1;
+        $tabToReturn = [];
+        foreach ($results as $categ) {
+            if (count($categ) > 10) {
+                $i = 1;
                 $maxResult = null;
-                $toAdd     = array();
+                $toAdd = [];
 
                 foreach ($categ as $item) {
                     //objet Found here
-                    if( (array_key_exists('objet', $item) && is_null($item['objet']) && $item['id'] == $publication->getId()) || (array_key_exists('objet', $item) && !is_null($item['objet']) && $item['id'] == $publication->getId()) ) {
-
+                    if ((array_key_exists('objet', $item) && is_null($item['objet']) && $item['id'] == $publication->getId()) || (array_key_exists('objet', $item) && !is_null($item['objet']) && $item['id'] == $publication->getId())) {
                         //si i < 5 : on prend ceux d'avant, et on met à jour le max result
-                        if( $i < 5 ){
+                        if ($i < 5) {
                             $maxResult = $i + (10 - $i);
 
                             //on ajoute tous ceux d'avant
-                            for($j = 1; $j <= $i; $j++)
+                            for ($j = 1; $j <= $i; ++$j) {
                                 $toAdd[] = $categ[$j];
+                            }
                         }
 
                         //si i > 5 : on prend les 5 d'avants, et on met à jour le max result pour prendre les 5 suivants
-                        if( $i >= 5 ){
+                        if ($i >= 5) {
                             $maxResult = $i + 5;
 
                             //on ajoute les 5 d'avant
-                            for($j = ($i-5); $j < $i; $j++)
+                            for ($j = ($i - 5); $j < $i; ++$j) {
                                 $toAdd[] = $categ[$j];
+                            }
                         }
                     //Objet found before
-                    }else if( !is_null($maxResult) ){
-                        if ( $i <= $maxResult )
+                    } elseif (!is_null($maxResult)) {
+                        if ($i <= $maxResult) {
                             $toAdd[] = $item;
+                        }
 
                         //on break une fois 10 atteint
-                        if( $i == $maxResult )
+                        if ($i == $maxResult) {
                             break;
+                        }
                     }
 
-                    $i++;
+                    ++$i;
                 }
 
                 //objet never found
-                if( count($toAdd) != 10 ){
-                    for($i = 0; $i < (10-count($toAdd)); $i++)
+                if (count($toAdd) != 10) {
+                    for ($i = 0; $i < (10 - count($toAdd)); ++$i) {
                         $toAdd[] = $categ[$i];
+                    }
                 }
 
-                $tabToReturn = array_merge( $toAdd, $tabToReturn);
-            }else
-                $tabToReturn = array_merge( $categ, $tabToReturn);
+                $tabToReturn = array_merge($toAdd, $tabToReturn);
+            } else {
+                $tabToReturn = array_merge($categ, $tabToReturn);
+            }
         }
 
-        usort($tabToReturn, array($this, 'sortObjets'));
+        usort($tabToReturn, [$this, 'sortObjets']);
 
         return $tabToReturn;
     }
@@ -154,65 +160,58 @@ class SearchManager extends BaseManager
             return 1;
         }
 
-        return (($objet1['countRef'] > $objet2['countRef']) ? -1 : (($objet1['countRef'] < $objet2['countRef']) ? 1 : 0));
+        return ($objet1['countRef'] > $objet2['countRef']) ? -1 : (($objet1['countRef'] < $objet2['countRef']) ? 1 : 0);
     }
 
-
-
-
-
-
     /**
-     * Calcul la note de la publication/contenu basée sur ses références
+     * Calcul la note de la publication/contenu basée sur ses références.
      *
      * @param array $references Liste des références
      *
-     * @return integer
+     * @return int
      */
-    private function getNoteReferencement( $references )
+    private function getNoteReferencement($references)
     {
         $note = 0;
-        foreach($references as $reference)
-        {
+        foreach ($references as $reference) {
             $id = $reference->getReference()->getId();
 
-            if( isset($this->_refsPonderees[ $id ]) )
-            {
-                $note += $this->_refsPonderees[ $id ]['poids'];
+            if (isset($this->_refsPonderees[$id])) {
+                $note += $this->_refsPonderees[$id]['poids'];
             }
         }
-        
+
         return $note;
     }
 
     /**
-     * Extrait la catégorie et le(s) type(s) de l'objet
+     * Extrait la catégorie et le(s) type(s) de l'objet.
      *
      * @param Objet $objet Entitée objet
      *
      * @return array
      */
-    private function getTypeAndCateg( $objet )
+    private function getTypeAndCateg($objet)
     {
-        $type  = array();
+        $type = [];
         $categ = '';
         $types = $objet->getTypes();
 
         foreach ($types as $one) {
             //pas de parent : check ressource / point dur
-            if( is_null($one->getFirstParent()) ){
-                if( $one->getId() == $this->_ressource ){
-                    $categ  = 'ressource';
+            if (is_null($one->getFirstParent())) {
+                if ($one->getId() == $this->_ressource) {
+                    $categ = 'ressource';
                     $type[] = $one->getLibelle();
-                }elseif($one->getId() == $this->_pointDur ){
-                    $categ  = 'point-dur';
+                } elseif ($one->getId() == $this->_pointDur) {
+                    $categ = 'point-dur';
                     $type[] = $one->getLibelle();
                 }
             //parent : check production / forum
-            }else{
+            } else {
                 $parent = $one->getFirstParent();
-                if( $parent->getId() == $this->_production ){
-                    $categ  = 'production';
+                if ($parent->getId() == $this->_production) {
+                    $categ = 'production';
                     $type[] = $one->getLibelle();
                 }
             }
@@ -220,6 +219,6 @@ class SearchManager extends BaseManager
         //reformatte proprement les types
         $type = implode(' ♦ ', $type);
 
-        return array('categ' => $categ, 'type' => $type );
+        return ['categ' => $categ, 'type' => $type];
     }
 }

@@ -5,11 +5,9 @@ namespace HopitalNumerique\RechercheParcoursBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 use HopitalNumerique\ReferenceBundle\Entity\Reference;
 use Symfony\Component\Validator\Constraints as Assert;
-use Nodevo\ToolsBundle\Validator\Constraints as Nodevo;
-use APY\DataGridBundle\Grid\Mapping as GRID;
 
 /**
- * RechercheParcoursGestion
+ * RechercheParcoursGestion.
  *
  * @ORM\Table(name="hn_recherche_recherche_parcours_gestion")
  * @ORM\Entity(repositoryClass="HopitalNumerique\RechercheParcoursBundle\Repository\RechercheParcoursGestionRepository")
@@ -18,7 +16,7 @@ use APY\DataGridBundle\Grid\Mapping as GRID;
 class RechercheParcoursGestion
 {
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="rrpg_id", type="integer")
      * @ORM\Id
@@ -44,8 +42,8 @@ class RechercheParcoursGestion
     protected $domaines;
 
     /**
-     * @var integer
-     * 
+     * @var int
+     *
      * @ORM\ManyToMany(targetEntity="\HopitalNumerique\ReferenceBundle\Entity\Reference")
      * @ORM\JoinTable(name="hn_recherche_recherche_parcours_gestion_reference_parente",
      *      joinColumns={ @ORM\JoinColumn(name="rrpg_id", referencedColumnName="rrpg_id")},
@@ -56,8 +54,8 @@ class RechercheParcoursGestion
     protected $referencesParentes;
 
     /**
-     * @var integer
-     * 
+     * @var int
+     *
      * @ORM\ManyToMany(targetEntity="\HopitalNumerique\ReferenceBundle\Entity\Reference")
      * @ORM\JoinTable(name="hn_recherche_recherche_parcours_gestion_reference_ventilation",
      *      joinColumns={ @ORM\JoinColumn(name="rrpg_id", referencedColumnName="rrpg_id")},
@@ -68,8 +66,8 @@ class RechercheParcoursGestion
     protected $referencesVentilations;
 
     /**
-     * @var integer
-     * 
+     * @var int
+     *
      * @ORM\ManyToMany(targetEntity="\HopitalNumerique\ReferenceBundle\Entity\Reference")
      * @ORM\JoinTable(name="hn_recherche_recherche_parcours_gestion_type_publication",
      *      joinColumns={ @ORM\JoinColumn(name="rrpg_id", referencedColumnName="rrpg_id")},
@@ -85,7 +83,7 @@ class RechercheParcoursGestion
     protected $rechercheParcours;
 
     /**
-     * Constructor
+     * Constructor.
      */
     public function __construct()
     {
@@ -96,9 +94,9 @@ class RechercheParcoursGestion
     }
 
     /**
-     * Get id
+     * Get id.
      *
-     * @return integer 
+     * @return int
      */
     public function getId()
     {
@@ -106,9 +104,10 @@ class RechercheParcoursGestion
     }
 
     /**
-     * Set nom
+     * Set nom.
      *
      * @param string $nom
+     *
      * @return RechercheParcoursGestion
      */
     public function setNom($nom)
@@ -119,9 +118,9 @@ class RechercheParcoursGestion
     }
 
     /**
-     * Get nom
+     * Get nom.
      *
-     * @return string 
+     * @return string
      */
     public function getNom()
     {
@@ -129,9 +128,10 @@ class RechercheParcoursGestion
     }
 
     /**
-     * Add domaines
+     * Add domaines.
      *
      * @param \HopitalNumerique\DomaineBundle\Entity\Domaine $domaines
+     *
      * @return RechercheParcoursGestion
      */
     public function addDomaine(\HopitalNumerique\DomaineBundle\Entity\Domaine $domaines)
@@ -142,9 +142,10 @@ class RechercheParcoursGestion
     }
 
     /**
-     * Set domaines
+     * Set domaines.
      *
      * @param array<\HopitalNumerique\DomaineBundle\Entity\Domaine> $domaines
+     *
      * @return RechercheParcoursGestion
      */
     public function setDomaines($domaines)
@@ -155,7 +156,7 @@ class RechercheParcoursGestion
     }
 
     /**
-     * Remove domaines
+     * Remove domaines.
      *
      * @param \HopitalNumerique\DomaineBundle\Entity\Domaine $domaines
      */
@@ -165,9 +166,9 @@ class RechercheParcoursGestion
     }
 
     /**
-     * Get domaines
+     * Get domaines.
      *
-     * @return \Doctrine\Common\Collections\Collection 
+     * @return \Doctrine\Common\Collections\Collection
      */
     public function getDomaines()
     {
@@ -175,16 +176,15 @@ class RechercheParcoursGestion
     }
 
     /**
-     * Get les ids des domaines concerné par l'user
+     * Get les ids des domaines concerné par l'user.
      *
      * @return array[integer]
      */
     public function getDomainesId()
     {
-        $domainesId = array();
+        $domainesId = [];
 
-        foreach ($this->domaines as $domaine) 
-        {
+        foreach ($this->domaines as $domaine) {
             $domainesId[] = $domaine->getId();
         }
 
@@ -208,9 +208,10 @@ class RechercheParcoursGestion
     }
 
     /**
-     * Add referencesParentes
+     * Add referencesParentes.
      *
      * @param \HopitalNumerique\ReferenceBundle\Entity\Reference $referencesParentes
+     *
      * @return RechercheParcoursGestion
      */
     public function addReferencesParente(\HopitalNumerique\ReferenceBundle\Entity\Reference $referencesParentes)
@@ -221,7 +222,7 @@ class RechercheParcoursGestion
     }
 
     /**
-     * Remove referencesParentes
+     * Remove referencesParentes.
      *
      * @param \HopitalNumerique\ReferenceBundle\Entity\Reference $referencesParentes
      */
@@ -231,9 +232,9 @@ class RechercheParcoursGestion
     }
 
     /**
-     * Get referencesParentes
+     * Get referencesParentes.
      *
-     * @return \Doctrine\Common\Collections\Collection 
+     * @return \Doctrine\Common\Collections\Collection
      */
     public function getReferencesParentes()
     {
@@ -241,9 +242,10 @@ class RechercheParcoursGestion
     }
 
     /**
-     * Add referencesVentilations
+     * Add referencesVentilations.
      *
      * @param \HopitalNumerique\ReferenceBundle\Entity\Reference $referencesVentilations
+     *
      * @return RechercheParcoursGestion
      */
     public function addReferencesVentilation(\HopitalNumerique\ReferenceBundle\Entity\Reference $referencesVentilations)
@@ -254,7 +256,7 @@ class RechercheParcoursGestion
     }
 
     /**
-     * Remove referencesVentilations
+     * Remove referencesVentilations.
      *
      * @param \HopitalNumerique\ReferenceBundle\Entity\Reference $referencesVentilations
      */
@@ -264,9 +266,9 @@ class RechercheParcoursGestion
     }
 
     /**
-     * Get referencesVentilations
+     * Get referencesVentilations.
      *
-     * @return \Doctrine\Common\Collections\Collection 
+     * @return \Doctrine\Common\Collections\Collection
      */
     public function getReferencesVentilations()
     {
@@ -274,9 +276,10 @@ class RechercheParcoursGestion
     }
 
     /**
-     * Add rechercheParcours
+     * Add rechercheParcours.
      *
      * @param \HopitalNumerique\RechercheParcoursBundle\Entity\RechercheParcours $rechercheParcours
+     *
      * @return RechercheParcoursGestion
      */
     public function addRechercheParcour(\HopitalNumerique\RechercheParcoursBundle\Entity\RechercheParcours $rechercheParcours)
@@ -287,7 +290,7 @@ class RechercheParcoursGestion
     }
 
     /**
-     * Remove rechercheParcours
+     * Remove rechercheParcours.
      *
      * @param \HopitalNumerique\RechercheParcoursBundle\Entity\RechercheParcours $rechercheParcours
      */
@@ -297,9 +300,9 @@ class RechercheParcoursGestion
     }
 
     /**
-     * Get rechercheParcours
+     * Get rechercheParcours.
      *
-     * @return \Doctrine\Common\Collections\Collection 
+     * @return \Doctrine\Common\Collections\Collection
      */
     public function getRechercheParcours()
     {
@@ -307,9 +310,10 @@ class RechercheParcoursGestion
     }
 
     /**
-     * Add typePublication
+     * Add typePublication.
      *
      * @param \HopitalNumerique\ReferenceBundle\Entity\Reference $typePublication
+     *
      * @return RechercheParcoursGestion
      */
     public function addTypePublication(\HopitalNumerique\ReferenceBundle\Entity\Reference $typePublication)
@@ -320,7 +324,7 @@ class RechercheParcoursGestion
     }
 
     /**
-     * Remove typePublication
+     * Remove typePublication.
      *
      * @param \HopitalNumerique\ReferenceBundle\Entity\Reference $typePublication
      */
@@ -330,9 +334,9 @@ class RechercheParcoursGestion
     }
 
     /**
-     * Get typePublication
+     * Get typePublication.
      *
-     * @return \Doctrine\Common\Collections\Collection 
+     * @return \Doctrine\Common\Collections\Collection
      */
     public function getTypePublication()
     {
@@ -340,37 +344,33 @@ class RechercheParcoursGestion
     }
 
     /**
-     * Recupération du type de publication pour un filtre sur les objets
+     * Recupération du type de publication pour un filtre sur les objets.
      *
      * @return [type]
      */
     public function getPublicationString()
     {
-        $name = array();
+        $name = [];
 
-        foreach ($this->typePublication as $typePublication)
-        {
-            switch ($typePublication->getId()) 
-            {
+        foreach ($this->typePublication as $typePublication) {
+            switch ($typePublication->getId()) {
                 case 175:
-                    $name[] = "production";
+                    $name[] = 'production';
                     break;
                 case 183:
-                    $name[] = "ressource";
+                    $name[] = 'ressource';
                     break;
                 case 184:
-                    $name[] = "point-dur";
+                    $name[] = 'point-dur';
                     break;
                 default:
-                    $name[] = "null";
+                    $name[] = 'null';
                     break;
             }
         }
 
-
         return $name;
     }
-
 
     /**
      * @ORM\PreUpdate()
@@ -384,7 +384,7 @@ class RechercheParcoursGestion
     /**
      * Retourne si le parcours possède le type Point dur.
      *
-     * @return boolean Si possède
+     * @return bool Si possède
      */
     public function hasTypePublicationPointDur()
     {
@@ -394,7 +394,7 @@ class RechercheParcoursGestion
     /**
      * Retourne si le parcours possède le type Production.
      *
-     * @return boolean Si possède
+     * @return bool Si possède
      */
     public function hasTypePublicationProduction()
     {
@@ -404,8 +404,9 @@ class RechercheParcoursGestion
     /**
      * Retourne si le parcours possède un type de publication.
      *
-     * @param integer $referenceId ID du type
-     * @return boolean Si possède
+     * @param int $referenceId ID du type
+     *
+     * @return bool Si possède
      */
     private function hasTypePublicationId($referenceId)
     {

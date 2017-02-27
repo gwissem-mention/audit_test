@@ -1,4 +1,5 @@
 <?php
+
 namespace HopitalNumerique\AutodiagBundle\Grid;
 
 use APY\DataGridBundle\Grid\Action\RowAction;
@@ -13,7 +14,6 @@ use Nodevo\GridBundle\Grid\Action\DownloadButton;
 use Nodevo\GridBundle\Grid\Action\ShowButton;
 use Nodevo\GridBundle\Grid\Column\BooleanColumn;
 use Nodevo\GridBundle\Grid\Column\DateColumn;
-use Nodevo\GridBundle\Grid\Column\NumberColumn;
 use Nodevo\GridBundle\Grid\Column\TextColumn;
 use Nodevo\GridBundle\Grid\Grid;
 use Nodevo\GridBundle\Grid\GridInterface;
@@ -99,7 +99,6 @@ class AutodiagEntryGrid extends Grid implements GridInterface
             $downloadAction
         );
 
-
         $showAction = new ShowButton('hopitalnumerique_autodiag_edit_result_show_entry');
 
         $showAction->manipulateRender(function (RowAction $action, Row $row) {
@@ -131,7 +130,7 @@ class AutodiagEntryGrid extends Grid implements GridInterface
                 }
 
                 $syntheses = $this->_container->get('autodiag.repository.synthesis')->findBy([
-                    'id' => $ids
+                    'id' => $ids,
                 ]);
 
                 try {
@@ -144,9 +143,8 @@ class AutodiagEntryGrid extends Grid implements GridInterface
                     } else {
                         throw new \Exception('User not allowed');
                     }
-
                 } catch (\Exception $e) {
-                    $this->_container->get('session')->getFlashBag()->add('danger', "Une erreur est survenue.");
+                    $this->_container->get('session')->getFlashBag()->add('danger', 'Une erreur est survenue.');
                 }
             })
         );
@@ -165,7 +163,7 @@ class AutodiagEntryGrid extends Grid implements GridInterface
                         }
 
                         $syntheses = $this->_container->get('autodiag.repository.synthesis')->findBy([
-                            'id' => $ids
+                            'id' => $ids,
                         ]);
 
                         $em = $this->_container->get('doctrine.orm.entity_manager');
@@ -187,22 +185,21 @@ class AutodiagEntryGrid extends Grid implements GridInterface
                             if ($e->getCode() == SynthesisGenerator::NEED_AT_LEAST_2) {
                                 $this->_container->get('session')->getFlashBag()->add(
                                     'danger',
-                                    "Vous devez sélectionner au moins deux éléments."
+                                    'Vous devez sélectionner au moins deux éléments.'
                                 );
                             } elseif ($e->getCode() == SynthesisGenerator::SYNTHESIS_NOT_VALIDATED) {
                                 $this->_container->get('session')->getFlashBag()->add(
                                     'danger',
-                                    "Tous les autodiagnostics doivent etre validés avant de pouvoir créer une synthèse."
+                                    'Tous les autodiagnostics doivent etre validés avant de pouvoir créer une synthèse.'
                                 );
                             } else {
-                                $this->_container->get('session')->getFlashBag()->add('danger', "Une erreur est survenue.");
+                                $this->_container->get('session')->getFlashBag()->add('danger', 'Une erreur est survenue.');
                             }
                         }
 
                         if (isset($newSynthesis)) {
                             $this->_container->get('autodiag.score_calculator')->deferSynthesisScore($newSynthesis);
                         }
-
                     }
                 )
             );
@@ -219,21 +216,23 @@ class AutodiagEntryGrid extends Grid implements GridInterface
                 }
 
                 if (count($ids) === 0) {
-                    $this->_container->get('session')->getFlashBag()->add('danger', "Veuillez séléctionner au moins une ligne.");
+                    $this->_container->get('session')->getFlashBag()->add('danger', 'Veuillez séléctionner au moins une ligne.');
+
                     return false;
                 }
 
                 $syntheses = $this->_container->get('autodiag.repository.synthesis')->findSimpleIdsByIds($ids);
 
                 if (!is_array($syntheses) || count($syntheses) === 0) {
-                    $this->_container->get('session')->getFlashBag()->add('danger', "Veuillez séléctionner au moins un résultat non synthèse.");
+                    $this->_container->get('session')->getFlashBag()->add('danger', 'Veuillez séléctionner au moins un résultat non synthèse.');
+
                     return false;
                 }
 
                 try {
                     return $this->_container->get('autodiag.entries.export')->exportList($this->autodiag, $syntheses);
                 } catch (\Exception $e) {
-                    $this->_container->get('session')->getFlashBag()->add('danger', "Une erreur est survenue.");
+                    $this->_container->get('session')->getFlashBag()->add('danger', 'Une erreur est survenue.');
                 }
             })
         );
@@ -251,7 +250,6 @@ class AutodiagEntryGrid extends Grid implements GridInterface
         $data = [];
         foreach ($resultSet as $synthesis) {
             /** @var Synthesis $synthesis */
-
             $shares = [];
             if ($synthesis->getShares()->count() > 0) {
                 $shares = $synthesis->getShares()->map(function (User $user) {
@@ -281,7 +279,7 @@ class AutodiagEntryGrid extends Grid implements GridInterface
                 'created_at' => $synthesis->getCreatedAt(),
                 'updated_at' => $synthesis->getUpdatedAt(),
                 'validated_at' => $synthesis->getValidatedAt(),
-                'shares' => implode(", ", $shares),
+                'shares' => implode(', ', $shares),
                 'is_synthesis' => $synthesis->getEntries()->count() > 1,
                 'entry_id' => $entryId,
             ];

@@ -1,4 +1,5 @@
 <?php
+
 namespace HopitalNumerique\RechercheBundle\Doctrine\Referencement;
 
 use HopitalNumerique\CoreBundle\DependencyInjection\Entity;
@@ -67,14 +68,12 @@ class Reader
      */
     private $contenuManager;
 
-
     /**
-     * @var boolean
+     * @var bool
      */
     private $isSearchedText = false;
 
     private $selectedReferences = [];
-
 
     /**
      * Constructor.
@@ -93,16 +92,13 @@ class Reader
         $this->contenuManager = $contenuManager;
     }
 
-
     /**
-     *
-     * @param boolean $isSearchedText
+     * @param bool $isSearchedText
      */
     public function setIsSearchedText($isSearchedText)
     {
         $this->isSearchedText = $isSearchedText;
     }
-
 
     /**
      * Retourne les entités.
@@ -111,6 +107,7 @@ class Reader
      * @param array<integer>|null $entityTypeIds          ID des types d'entité à récupérer
      * @param array<integer>|null $publicationCategoryIds ID des catégories de publications à récupérer
      * @param array               $resultFilters          Filtres à appliquer
+     *
      * @return array Entités
      */
     public function getEntitiesPropertiesByReferenceIds(array $groupedReferenceIds = null, array $entityTypeIds = null, array $publicationCategoryIds = null, $resultFilters = [], $selectedReferences = [])
@@ -197,13 +194,14 @@ class Reader
      * @param array<integer>|null $entityTypeIds          ID des types d'entité à récupérer
      * @param array<integer>|null $publicationCategoryIds ID des catégories de publications à récupérer
      * @param array               $resultFilters          Filtres à appliquer
+     *
      * @return array Entités
      */
     public function getEntitiesPropertiesByReferenceIdsByGroup(array $groupedReferenceIds = null, array $entityTypeIds = null, array $publicationCategoryIds = null, array $resultFilters = [])
     {
         $entitiesPropertiesByGroup = [
             'points-durs' => [],
-            'productions' => []
+            'productions' => [],
         ];
 
         if (null !== $groupedReferenceIds && 0 === count($groupedReferenceIds)) {
@@ -240,7 +238,7 @@ class Reader
                 'entityType' => $entityProperties['entityType'],
                 'entityId' => $entityProperties['entityId'],
                 'pertinenceNiveau' => $this->referencement->getPertinenceNiveauByPrimaryAndNote($entityProperties['primarySum'], $entityProperties['note']),
-                'categoryIds' => []
+                'categoryIds' => [],
             ];
 
             foreach ($entityProperties['objetTypeIds'] as $objetTypeId) {
@@ -271,6 +269,7 @@ class Reader
      * Retourne les entités d'objets.
      *
      * @param array<integer> $objetIds ID des objets
+     *
      * @return array Entités
      */
     public function getEntitiesPropertiesByObjetIds(array $objetIds)
@@ -288,7 +287,7 @@ class Reader
                 'pertinenceNiveau' => null,
                 'pointDur' => $objet->isPointDur(),
                 'categoryIds' => $this->entity->getCategoryIdsByEntity($objet),
-                'categoryLabels' => $this->entity->getCategoryByEntity($objet)
+                'categoryLabels' => $this->entity->getCategoryByEntity($objet),
             ];
         }
 
@@ -299,6 +298,7 @@ class Reader
      * Retourne les entités d'objets.
      *
      * @param array<integer> $contenuIds ID des objets
+     *
      * @return array Entités
      */
     public function getEntitiesPropertiesByContenuIds(array $contenuIds)
@@ -316,7 +316,7 @@ class Reader
                 'pertinenceNiveau' => null,
                 'pointDur' => $contenu->isPointDur(),
                 'categoryIds' => $this->entity->getCategoryIdsByEntity($contenu),
-                'categoryLabels' => $this->entity->getCategoryByEntity($contenu)
+                'categoryLabels' => $this->entity->getCategoryByEntity($contenu),
             ];
         }
 
@@ -328,7 +328,7 @@ class Reader
         $referencesTree = $this->referencement->getReferencesTree([$this->currentDomaine->get()]);
         $entitiesHaveReferences = $this->entityHasReferenceManager->findBy([
             'entityId' => $this->entity->getEntityId($entity),
-            'entityType' => $this->entity->getEntityType($entity)
+            'entityType' => $this->entity->getEntityType($entity),
         ]);
 
         $referenceIds = $this->entityHasReferenceManager->getReferenceIdsForEntitiesHaveReferences($entitiesHaveReferences);
@@ -366,7 +366,7 @@ class Reader
                         'url' => $this->entity->getFrontUrlByEntity($entity),
                         'description' => $this->entity->getDescriptionByEntity($entity),
                         'category' => $this->entity->getCategoryByEntity($entity),
-                        'pertinenceNiveau' => $entitiesProperties[$entityId]['pertinenceNiveau']
+                        'pertinenceNiveau' => $entitiesProperties[$entityId]['pertinenceNiveau'],
                     ];
                     $entitiesPropertiesKeyedByGroup[$group][] = $entityProperties;
                 }

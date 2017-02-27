@@ -8,48 +8,48 @@ use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
 class ReportType extends AbstractType
 {
-    private $_constraints = array();
+    private $_constraints = [];
 
     public function __construct($manager, $validator)
     {
-        $this->_constraints = $manager->getConstraints( $validator );
+        $this->_constraints = $manager->getConstraints($validator);
     }
 
-        /**
+    /**
      * @param FormBuilderInterface $builder
-     * @param array $options
+     * @param array                $options
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('url', 'text', array(
-                        'required'   => true,
-                        'label'      => 'Url',
-                        'attr'       => array(
-                            'class'      => $this->_constraints['observations']['class'],
-                            'readonly'   => 'readonly'
-                            )
-            ))
-            ->add('observations', 'textarea', array(
-                        'required'   => true,
-                        'label'      => 'Observations',
-                        'attr'       => array(
-                            'class'      => $this->_constraints['observations']['class'],
-                            'rows'       => 10,
-                            )
-            ))
-            ->add('userAgent', 'hidden', array())
+            ->add('url', 'text', [
+                        'required' => true,
+                        'label' => 'Url',
+                        'attr' => [
+                            'class' => $this->_constraints['observations']['class'],
+                            'readonly' => 'readonly',
+                            ],
+            ])
+            ->add('observations', 'textarea', [
+                        'required' => true,
+                        'label' => 'Observations',
+                        'attr' => [
+                            'class' => $this->_constraints['observations']['class'],
+                            'rows' => 10,
+                            ],
+            ])
+            ->add('userAgent', 'hidden', [])
         ;
     }
-    
+
     /**
      * @param OptionsResolverInterface $resolver
      */
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
-        $resolver->setDefaults(array(
-            'data_class' => 'HopitalNumerique\ReportBundle\Entity\Report'
-        ));
+        $resolver->setDefaults([
+            'data_class' => 'HopitalNumerique\ReportBundle\Entity\Report',
+        ]);
     }
 
     /**

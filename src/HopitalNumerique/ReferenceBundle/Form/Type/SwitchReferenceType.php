@@ -21,8 +21,8 @@ class SwitchReferenceType extends AbstractType
 
     public function configureOptions(OptionsResolver $optionsResolver)
     {
-        $optionsResolver->setDefaults(array(
-            'data_class' => 'HopitalNumerique\ReferenceBundle\Domain\Command\SwitchReferenceCommand'
-        ));
+        $optionsResolver->setDefaults([
+            'data_class' => 'HopitalNumerique\ReferenceBundle\Domain\Command\SwitchReferenceCommand',
+        ]);
     }
 }

@@ -9,12 +9,12 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 class CompareListener implements EventSubscriberInterface
 {
-
     /** @var ComparisonCleaner */
     protected $comparisonCleaner;
 
     /**
      * EntryListener constructor.
+     *
      * @param ComparisonCleaner $comparisonCleaner
      */
     public function __construct(ComparisonCleaner $comparisonCleaner)

@@ -1,4 +1,5 @@
 <?php
+
 namespace HopitalNumerique\ReferenceBundle\Doctrine\Referencement;
 
 use HopitalNumerique\DomaineBundle\Entity\Domaine;
@@ -41,12 +42,10 @@ class NoteSaver
      */
     private $domaineManager;
 
-
     /**
      * @var array Toutes les EntityHasReference groupés par Type + ID d'entité
      */
     private $entitiesHaveReferencesClassifiedByEntityTypeClassifiedByEntityId = null;
-
 
     /**
      * Constructeur.
@@ -60,8 +59,8 @@ class NoteSaver
         $this->domaineManager = $domaineManager;
     }
 
-
     //<-- Sauvegarde globale
+
     /**
      * Enregistre tous les scores d'un domaine.
      *
@@ -87,10 +86,11 @@ class NoteSaver
             }
         }
     }
+
     //-->
 
-
     //<-- Sauvegarde partielle
+
     /**
      * Enregistre les notes d'une entité.
      *
@@ -102,7 +102,7 @@ class NoteSaver
         $domaines = $this->entityService->getDomainesByEntity($this->entityService->getEntityByTypeAndId($entityType, $entityId));
         $entitiesHasReferences = $this->entityHasReferenceManager->findBy([
             'entityType' => $entityType,
-            'entityId' => $entityId
+            'entityId' => $entityId,
         ]);
 
         foreach ($domaines as $domaine) {
@@ -112,13 +112,14 @@ class NoteSaver
             $this->save($entityType, $entityId, $domaine, $note);
         }
     }
-    //-->
 
+    //-->
 
     /**
      * Ajoute les scores pour chaque référence à l'arbre.
      *
      * @param \HopitalNumerique\DomaineBundle\Entity\Domaine $domaine Domaine
+     *
      * @return array Arbre
      */
     private function getReferencesTreeWithScores(Domaine $domaine)
@@ -153,6 +154,7 @@ class NoteSaver
      *
      * @param array<\HopitalNumerique\ReferenceBundle\Entity\EntityHasReference> $entitiesHasReferences       EntitiesHasReferences
      * @param array                                                              $referencesSubtreeWithScores Arbre des références avec les scores
+     *
      * @return float|null Score
      */
     private function getNoteForEntitiesHaveReferences(array $entitiesHasReferences, array $referencesTreeWithScores)
@@ -178,6 +180,7 @@ class NoteSaver
      * @param \HopitalNumerique\ReferenceBundle\Entity\EntityHasReference $entityHasReference                EntityHasReference
      * @param array                                                       $referencesSubtreeWithScores       Arbre des références avec les scores
      * @param \HopitalNumerique\ReferenceBundle\Entity\Reference|null     $entityHasReferenceReferenceParent Référence parent du EntityHasReference dont il faut récupérer la note
+     *
      * @return float|null Score
      */
     private function getNoteForEntityHasReferenceForEachReferenceParent($referencesTreeWithScores, $entityHasReference, $referenceParent)
@@ -199,6 +202,7 @@ class NoteSaver
      * @param \HopitalNumerique\ReferenceBundle\Entity\Reference|null     $subtreeReferenceParent            Référence parent du sous-arbre
      * @param array                                                       $referencesSubtreeWithScores       Arbre des références avec les scores
      * @param \HopitalNumerique\ReferenceBundle\Entity\Reference|null     $entityHasReferenceReferenceParent Référence parent du EntityHasReference dont il faut récupérer la note
+     *
      * @return float|null Score
      */
     private function getNoteForEntityHasReference(array $referencesSubtreeWithScores, Reference $subtreeReferenceParent = null, EntityHasReference $entityHasReference, Reference $entityHasReferenceReferenceParent = null)
@@ -225,8 +229,8 @@ class NoteSaver
     /**
      * Enregistre en base la note.
      *
-     * @param integer                                        $entityType Type d'entité
-     * @param integer                                        $entityId   ID de l'entité
+     * @param int                                            $entityType Type d'entité
+     * @param int                                            $entityId   ID de l'entité
      * @param \HopitalNumerique\DomaineBundle\Entity\Domaine $domaine    Domaine
      * @param float                                          $note       Note
      */
@@ -235,7 +239,7 @@ class NoteSaver
         $entityHasNote = $this->entityHasNoteManager->findOneBy([
             'entityType' => $entityType,
             'entityId' => $entityId,
-            'domaine' => $domaine
+            'domaine' => $domaine,
         ]);
 
         if (null !== $note) {

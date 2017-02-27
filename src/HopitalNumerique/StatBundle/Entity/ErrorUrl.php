@@ -8,7 +8,7 @@ use HopitalNumerique\ObjetBundle\Entity\Contenu;
 use HopitalNumerique\ObjetBundle\Entity\Objet;
 
 /**
- * ErrorUrl
+ * ErrorUrl.
  *
  * @ORM\Table(name="hn_statistics_error_url")
  * @ORM\Entity(repositoryClass="HopitalNumerique\StatBundle\Repository\ErrorUrlRepository")
@@ -16,7 +16,7 @@ use HopitalNumerique\ObjetBundle\Entity\Objet;
 class ErrorUrl
 {
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(type="integer")
      * @ORM\Id
@@ -32,14 +32,14 @@ class ErrorUrl
     private $checkedUrl;
 
     /**
-     * @var boolean
+     * @var bool
      *
      * @ORM\Column(type="boolean")
      */
     private $state;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(type="smallint", nullable=true)
      */

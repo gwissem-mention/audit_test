@@ -23,7 +23,8 @@ class AutodiagEntryController extends Controller
      * })
      *
      * @param Autodiag $autodiag
-     * @param bool $noLayout
+     * @param bool     $noLayout
+     *
      * @return Response
      */
     public function addAction(Autodiag $autodiag, $noLayout = false)
@@ -35,17 +36,19 @@ class AutodiagEntryController extends Controller
                     ? 'hopitalnumerique_autodiag_entry_edit_no_layout'
                     : 'hopitalnumerique_autodiag_entry_edit',
                 [
-                    'entry' => $entry->getId()
+                    'entry' => $entry->getId(),
                 ]
             );
         }
 
         $entry = AutodiagEntry::create($autodiag, $this->getUser());
+
         return $this->editAction($entry, $noLayout);
     }
 
     /**
      * @param AutodiagEntry $entry
+     *
      * @return \Symfony\Component\HttpFoundation\RedirectResponse|\Symfony\Component\HttpFoundation\Response
      */
     public function editAction(AutodiagEntry $entry, $noLayout = false)
@@ -58,7 +61,7 @@ class AutodiagEntryController extends Controller
                     ? 'hopitalnumerique_autodiag_entry_add_no_layout'
                     : 'hopitalnumerique_autodiag_entry_add',
                 [
-                    'autodiag' => $autodiag->getId()
+                    'autodiag' => $autodiag->getId(),
                 ]
             );
         }
@@ -102,9 +105,9 @@ class AutodiagEntryController extends Controller
                         ? 'hopitalnumerique_autodiag_synthesis_savenew_no_layout'
                         : 'hopitalnumerique_autodiag_synthesis_savenew',
                     [
-                        'autodiag' => $autodiag->getId()
+                        'autodiag' => $autodiag->getId(),
                     ]
-                )
+                ),
             ])->createView();
         }
 
@@ -118,13 +121,13 @@ class AutodiagEntryController extends Controller
     }
 
     /**
-     * @param Request $request
-     * @param AutodiagEntry $entry
+     * @param Request            $request
+     * @param AutodiagEntry      $entry
      * @param Autodiag\Attribute $attribute
+     *
      * @return JsonResponse
      * @ParamConverter("entry")
      * @ParamConverter("attribute")
-     *
      */
     public function ajaxAttributeSaveAction(Request $request, AutodiagEntry $entry, Autodiag\Attribute $attribute)
     {
@@ -133,7 +136,7 @@ class AutodiagEntryController extends Controller
         $entryValue = $this->getDoctrine()->getRepository('HopitalNumeriqueAutodiagBundle:AutodiagEntry\Value')
             ->findOneBy([
                 'entry' => $entry,
-                'attribute' => $attribute
+                'attribute' => $attribute,
             ]);
 
         if (null === $entryValue) {
@@ -173,9 +176,9 @@ class AutodiagEntryController extends Controller
     }
 
     /**
-     * Set all chapter attributes to not concerned value
+     * Set all chapter attributes to not concerned value.
      *
-     * @param AutodiagEntry $entry
+     * @param AutodiagEntry              $entry
      * @param Autodiag\Container\Chapter $chapter
      *
      * @ParamConverter("entry")
@@ -203,7 +206,6 @@ class AutodiagEntryController extends Controller
             $values[] = $entryValue;
         }
 
-
         $manager = $this->getDoctrine()->getManager();
         $manager->persist($entry);
         $manager->flush();
@@ -215,8 +217,10 @@ class AutodiagEntryController extends Controller
     }
 
     /**
-     * Demand for restitution page
+     * Demand for restitution page.
+     *
      * @param AutodiagEntry $entry
+     *
      * @return Response
      */
     public function restitutionOrValidationDemandAction(Request $request, AutodiagEntry $entry, $target)
@@ -232,20 +236,20 @@ class AutodiagEntryController extends Controller
             );
 
             if (!$builder->isEmpty($entryValue->getValue())) {
-                $filled++;
+                ++$filled;
             }
         }
 
         $total = count($repo->getAttributesHavingChapter($autodiag));
 
         if ($filled == $total) {
-            if ($target == "restitution") {
+            if ($target == 'restitution') {
                 $path = $this->generateUrl(
                     true === $request->query->getBoolean('noLayout', false)
                         ? 'hopitalnumerique_autodiag_restitution_index_no_layout'
                         : 'hopitalnumerique_autodiag_restitution_index',
                     [
-                        'synthesis' => $entry->getSynthesis()->getId()
+                        'synthesis' => $entry->getSynthesis()->getId(),
                     ]
                 );
             } else {
@@ -254,14 +258,14 @@ class AutodiagEntryController extends Controller
                         ? 'hopitalnumerique_autodiag_validation_index_no_layout'
                         : 'hopitalnumerique_autodiag_validation_index',
                     [
-                        'synthesis' => $entry->getSynthesis()->getId()
+                        'synthesis' => $entry->getSynthesis()->getId(),
                     ]
                 );
             }
             $response->headers->set('RESTITUTION_REDIRECT', $path);
         } else {
             $response->setContent(
-                $this->renderView("@HopitalNumeriqueAutodiag/AutodiagEntry/restitution_demand.html.twig", [
+                $this->renderView('@HopitalNumeriqueAutodiag/AutodiagEntry/restitution_demand.html.twig', [
                     'left' => $total - $filled,
                     'autodiag' => $autodiag,
                     'synthesis' => $entry->getSynthesis(),

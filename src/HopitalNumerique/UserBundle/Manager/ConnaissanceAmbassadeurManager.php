@@ -14,12 +14,11 @@ class ConnaissanceAmbassadeurManager extends BaseManager
 
     public function getConnaissanceAmbassadersOrderedByDomaine(User $user, $domaineIds)
     {
-        $connaissanceAmbassadeursOrdered = array();
-        $connaissanceAmbassadeurs = $this->findBy(array('user' => $user, 'domaine' => $domaineIds));
-        
-        foreach ($connaissanceAmbassadeurs as $connaissanceAmbassadeur)
-        {
-            $connaissanceAmbassadeursOrdered[$connaissanceAmbassadeur->getDomaine()->getId()] = $connaissanceAmbassadeur; 
+        $connaissanceAmbassadeursOrdered = [];
+        $connaissanceAmbassadeurs = $this->findBy(['user' => $user, 'domaine' => $domaineIds]);
+
+        foreach ($connaissanceAmbassadeurs as $connaissanceAmbassadeur) {
+            $connaissanceAmbassadeursOrdered[$connaissanceAmbassadeur->getDomaine()->getId()] = $connaissanceAmbassadeur;
         }
 
         return $connaissanceAmbassadeursOrdered;

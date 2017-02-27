@@ -1,4 +1,5 @@
 <?php
+
 namespace HopitalNumerique\EtablissementBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -20,121 +21,114 @@ class EtablissementController extends Controller
     }
 
     /**
-     * Affiche le formulaire d'ajout d'établissement
+     * Affiche le formulaire d'ajout d'établissement.
      */
     public function addAction()
     {
         $etablissement = $this->get('hopitalnumerique_etablissement.manager.etablissement')->createEmpty();
 
-        return $this->renderForm('hopitalnumerique_etablissement_etablissement', $etablissement, 'HopitalNumeriqueEtablissementBundle:Etablissement:edit.html.twig' );
+        return $this->renderForm('hopitalnumerique_etablissement_etablissement', $etablissement, 'HopitalNumeriqueEtablissementBundle:Etablissement:edit.html.twig');
     }
-    
+
     /**
-     * Affichage du formulaire d'etablissement
-     * 
+     * Affichage du formulaire d'etablissement.
+     *
      * @param intger $id Identifiant de l'etablissement
      */
-    public function editAction( $id )
+    public function editAction($id)
     {
         //Récupération de l'etablissement passé en param
-        $etablissement = $this->get('hopitalnumerique_etablissement.manager.etablissement')->findOneBy( array('id' => $id) );
+        $etablissement = $this->get('hopitalnumerique_etablissement.manager.etablissement')->findOneBy(['id' => $id]);
 
-        return $this->renderForm('hopitalnumerique_etablissement_etablissement', $etablissement, 'HopitalNumeriqueEtablissementBundle:Etablissement:edit.html.twig' );
+        return $this->renderForm('hopitalnumerique_etablissement_etablissement', $etablissement, 'HopitalNumeriqueEtablissementBundle:Etablissement:edit.html.twig');
     }
 
     /**
-     * Affichage de la fiche d'un etablissement
-     * 
-     * @param integer $id ID de l'etablissement
-     */
-    public function showAction( $id )
-    {
-        //Récupération de l'etablissement passé en param
-        $etablissement = $this->get('hopitalnumerique_etablissement.manager.etablissement')->findOneBy( array('id' => $id) );
-
-        return $this->render('HopitalNumeriqueEtablissementBundle:Etablissement:show.html.twig', array(
-            'etablissement' => $etablissement
-        ));
-    }
-
-    /**
-     * Suppression d'un etablissement
+     * Affichage de la fiche d'un etablissement.
      *
-     * @param integer $id ID de l'etablissement
+     * @param int $id ID de l'etablissement
      */
-    public function deleteAction( $id )
+    public function showAction($id)
     {
-        $etablissement = $this->get('hopitalnumerique_etablissement.manager.etablissement')->findOneBy( array('id' => $id) );
-        
+        //Récupération de l'etablissement passé en param
+        $etablissement = $this->get('hopitalnumerique_etablissement.manager.etablissement')->findOneBy(['id' => $id]);
+
+        return $this->render('HopitalNumeriqueEtablissementBundle:Etablissement:show.html.twig', [
+            'etablissement' => $etablissement,
+        ]);
+    }
+
+    /**
+     * Suppression d'un etablissement.
+     *
+     * @param int $id ID de l'etablissement
+     */
+    public function deleteAction($id)
+    {
+        $etablissement = $this->get('hopitalnumerique_etablissement.manager.etablissement')->findOneBy(['id' => $id]);
+
         //Tentative de suppression si l'établissement n'est lié nul part
-        try
-        {
+        try {
             //Suppression de l'etablissement
-            $this->get('hopitalnumerique_etablissement.manager.etablissement')->delete( $etablissement );
-            $this->get('session')->getFlashBag()->add('info', 'Suppression effectuée avec succès.' );
-        } 
-        catch (\Exception $e)
-        {
+            $this->get('hopitalnumerique_etablissement.manager.etablissement')->delete($etablissement);
+            $this->get('session')->getFlashBag()->add('info', 'Suppression effectuée avec succès.');
+        } catch (\Exception $e) {
             $this->get('session')->getFlashBag()->add('danger', 'Suppression impossible, la référence est actuellement liée et ne peut pas être supprimée.');
         }
 
-        return new Response('{"success":true, "url" : "'.$this->generateUrl('hopitalnumerique_etablissement').'"}', 200);
+        return new Response('{"success":true, "url" : "' . $this->generateUrl('hopitalnumerique_etablissement') . '"}', 200);
     }
 
     /**
-     * Suppression de masse des categories
+     * Suppression de masse des categories.
      *
      * @param array $primaryKeys    ID des lignes sélectionnées
      * @param array $allPrimaryKeys allPrimaryKeys ???
      *
      * @return Redirect
      */
-    public function deleteMassAction( $primaryKeys, $allPrimaryKeys )
+    public function deleteMassAction($primaryKeys, $allPrimaryKeys)
     {
         //get all selected Users
-        if($allPrimaryKeys == 1){
+        if ($allPrimaryKeys == 1) {
             $rawDatas = $this->get('hopitalnumerique_autodiag.grid.categorie')->getRawData();
-            foreach($rawDatas as $data)
-            {
+            foreach ($rawDatas as $data) {
                 $primaryKeys[] = $data['idCat'];
             }
-        }        
+        }
 
-        $etablissements = $this->get('hopitalnumerique_etablissement.manager.etablissement')->findBy( array('id' => $primaryKeys) );
+        $etablissements = $this->get('hopitalnumerique_etablissement.manager.etablissement')->findBy(['id' => $primaryKeys]);
 
         //Tentative de suppression si l'établissement n'est lié nul part
-        try
-        {
+        try {
             //Suppression de l'etablissement
-            $this->get('hopitalnumerique_etablissement.manager.etablissement')->delete( $etablissements );
-            $this->get('session')->getFlashBag()->add('info', 'Suppression effectuée avec succès.' );
-        } 
-        catch (\Exception $e)
-        {
+            $this->get('hopitalnumerique_etablissement.manager.etablissement')->delete($etablissements);
+            $this->get('session')->getFlashBag()->add('info', 'Suppression effectuée avec succès.');
+        } catch (\Exception $e) {
             $this->get('session')->getFlashBag()->add('danger', 'Suppression impossible, la référence est actuellement liée et ne peut pas être supprimée.');
         }
 
-        return $this->redirect( $this->generateUrl('hopitalnumerique_etablissement') );
+        return $this->redirect($this->generateUrl('hopitalnumerique_etablissement'));
     }
 
     /**
-     * Génère la liste des département en fonction de l'id de la région
+     * Génère la liste des département en fonction de l'id de la région.
      */
     public function departementsAction()
     {
-        $id           = $this->get('request')->request->get('id');
+        $id = $this->get('request')->request->get('id');
         $departements = [];
         if ('' != $id) {
             $departements = $this->get('hopitalnumerique_reference.manager.reference')->findByParent($this->get('hopitalnumerique_reference.manager.reference')->findOneById($id));
         }
 
-        return $this->render('HopitalNumeriqueEtablissementBundle:Etablissement:departements.html.twig', array(
-            'departements' => $departements
-        ));
+        return $this->render('HopitalNumeriqueEtablissementBundle:Etablissement:departements.html.twig', [
+            'departements' => $departements,
+        ]);
     }
 
     /**
-     * Gestion du grid des établissements de type 'Autre'
+     * Gestion du grid des établissements de type 'Autre'.
      */
     public function autresAction()
     {
@@ -146,52 +140,35 @@ class EtablissementController extends Controller
     /**
      * Passe l'user à "archivé".
      */
-    public function archiverAction( $id )
+    public function archiverAction($id)
     {
-        $user = $this->get('hopitalnumerique_user.manager.user')->findOneBy( array('id' => $id) );
-        $user->setArchiver( !$user->getArchiver() );
-        $this->get('hopitalnumerique_user.manager.user')->save( $user );
+        $user = $this->get('hopitalnumerique_user.manager.user')->findOneBy(['id' => $id]);
+        $user->setArchiver(!$user->getArchiver());
+        $this->get('hopitalnumerique_user.manager.user')->save($user);
 
-        $this->get('session')->getFlashBag()->add('info', 'L\'utilisateur ' . ($user->getArchiver() ? ' est archivé.' : 'n\' est plus archivé.') );
+        $this->get('session')->getFlashBag()->add('info', 'L\'utilisateur ' . ($user->getArchiver() ? ' est archivé.' : 'n\' est plus archivé.'));
 
-        return $this->redirect( $this->generateUrl('hopitalnumerique_etablissement_autres') );
+        return $this->redirect($this->generateUrl('hopitalnumerique_etablissement_autres'));
     }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     /**
-     * Effectue le render du formulaire Etablissement
+     * Effectue le render du formulaire Etablissement.
      *
-     * @param string        $formName        Nom du service associé au formulaire
-     * @param Etablissement $etablissement   Entité Etablissement
-     * @param string        $view            Chemin de la vue ou sera rendu le formulaire
+     * @param string        $formName      Nom du service associé au formulaire
+     * @param Etablissement $etablissement Entité Etablissement
+     * @param string        $view          Chemin de la vue ou sera rendu le formulaire
      *
      * @return Form | redirect
      */
-    private function renderForm( $formName, $etablissement, $view )
+    private function renderForm($formName, $etablissement, $view)
     {
         //Création du formulaire via le service
-        $form = $this->createForm( $formName, $etablissement);
+        $form = $this->createForm($formName, $etablissement);
 
         $request = $this->get('request');
-        
+
         // Si l'utilisateur soumet le formulaire
         if ('POST' == $request->getMethod()) {
-            
             // On bind les données du form
             $form->handleRequest($request);
 
@@ -202,18 +179,19 @@ class EtablissementController extends Controller
 
                 // On utilise notre Manager pour gérer la sauvegarde de l'objet
                 $this->get('hopitalnumerique_etablissement.manager.etablissement')->save($etablissement);
-                
+
                 // On envoi une 'flash' pour indiquer à l'utilisateur que l'entité est ajoutée
-                $this->get('session')->getFlashBag()->add( ($new ? 'success' : 'info') , 'Etablissement ' . ($new ? 'ajouté.' : 'mis à jour.') ); 
-                
+                $this->get('session')->getFlashBag()->add(($new ? 'success' : 'info'), 'Etablissement ' . ($new ? 'ajouté.' : 'mis à jour.'));
+
                 $do = $request->request->get('do');
-                return $this->redirect( ($do == 'save-close' ? $this->generateUrl('hopitalnumerique_etablissement') : $this->generateUrl('hopitalnumerique_etablissement_edit', array( 'id' => $etablissement->getId() ) ) ) );
+
+                return $this->redirect(($do == 'save-close' ? $this->generateUrl('hopitalnumerique_etablissement') : $this->generateUrl('hopitalnumerique_etablissement_edit', ['id' => $etablissement->getId()])));
             }
         }
 
-        return $this->render( $view , array(
-            'form'          => $form->createView(),
-            'etablissement' => $etablissement
-        ));
+        return $this->render($view, [
+            'form' => $form->createView(),
+            'etablissement' => $etablissement,
+        ]);
     }
 }

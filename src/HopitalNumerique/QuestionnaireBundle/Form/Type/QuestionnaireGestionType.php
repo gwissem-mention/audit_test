@@ -5,9 +5,7 @@ namespace HopitalNumerique\QuestionnaireBundle\Form\Type;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
-
 use HopitalNumerique\UserBundle\Manager\UserManager;
-
 use Doctrine\ORM\EntityRepository;
 
 class QuestionnaireGestionType extends AbstractType
@@ -16,7 +14,7 @@ class QuestionnaireGestionType extends AbstractType
 
     public function __construct($manager, $validator, UserManager $userManager)
     {
-        $this->_constraints = $manager->getConstraints( $validator );
+        $this->_constraints = $manager->getConstraints($validator);
         $this->_userManager = $userManager;
     }
 
@@ -25,41 +23,41 @@ class QuestionnaireGestionType extends AbstractType
         $connectedUser = $this->_userManager->getUserConnected();
 
         $builder
-            ->add('nom', 'text', array(
-                'required'   => true,
-                'label'      => 'Titre du questionnaire',
-                'attr'       => array(
-                    'class'     => 'validate[required]'
-                )
-            ))
-            ->add('lien', 'text', array(
-                'required'   => false,
-                'label'      => 'Lien de redirection'
-            ))
-            ->add('domaines', 'entity', array(
-                'class'       => 'HopitalNumeriqueDomaineBundle:Domaine',
-                'property'    => 'nom',
-                'required'    => false,
-                'multiple'    => true,
-                'label'       => 'Domaine(s) associé(s)',
+            ->add('nom', 'text', [
+                'required' => true,
+                'label' => 'Titre du questionnaire',
+                'attr' => [
+                    'class' => 'validate[required]',
+                ],
+            ])
+            ->add('lien', 'text', [
+                'required' => false,
+                'label' => 'Lien de redirection',
+            ])
+            ->add('domaines', 'entity', [
+                'class' => 'HopitalNumeriqueDomaineBundle:Domaine',
+                'property' => 'nom',
+                'required' => false,
+                'multiple' => true,
+                'label' => 'Domaine(s) associé(s)',
                 'empty_value' => ' - ',
-                'query_builder' => function(EntityRepository $er) use ($connectedUser){
+                'query_builder' => function (EntityRepository $er) use ($connectedUser) {
                     return $er->getDomainesUserConnectedForForm($connectedUser->getId());
-                }
-            ))
-            ->add('occurrenceMultiple', 'checkbox', array(
+                },
+            ])
+            ->add('occurrenceMultiple', 'checkbox', [
                 'label' => 'Questionnaire à occurrences multiples',
                 'required' => false,
-                'attr' => array('class' => 'checkbox')
-            ))
+                'attr' => ['class' => 'checkbox'],
+            ])
         ;
     }
 
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
-        $resolver->setDefaults(array(
-            'data_class' => 'HopitalNumerique\QuestionnaireBundle\Entity\Questionnaire'
-        ));
+        $resolver->setDefaults([
+            'data_class' => 'HopitalNumerique\QuestionnaireBundle\Entity\Questionnaire',
+        ]);
     }
 
     public function getName()

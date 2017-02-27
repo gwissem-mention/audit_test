@@ -3,23 +3,22 @@
 namespace Nodevo\ContactBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-
 //Asserts Stuff
 use Symfony\Component\Validator\Constraints as Assert;
 use Nodevo\ToolsBundle\Validator\Constraints as Nodevo;
 
 /**
- * Contact
- * 
+ * Contact.
+ *
  * @ORM\MappedSuperclass
- * 
+ *
  * @author Gaetan MELCHILSEN
  * @copyright Nodevo
  */
 class Contact
 {
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="contact_id", type="integer")
      * @ORM\Id
@@ -44,7 +43,7 @@ class Contact
 
     /**
      * @var string
-     * 
+     *
      *@Assert\NotBlank(message="Le nom ne peut pas être vide.")
      * @Assert\Length(
      *      min = "1",
@@ -75,7 +74,7 @@ class Contact
 
     /**
      * @var string
-     * 
+     *
      * @Assert\Length(
      *      max = "50",
      *      maxMessage="Il doit y avoir au maximum {{ limit }} caractères dans la ville."
@@ -84,10 +83,10 @@ class Contact
      * @ORM\Column(name="contact_ville", type="string", nullable=true, length=50)
      */
     protected $ville;
-    
+
     /**
      * @var string
-     * 
+     *
      * @Assert\Length(
      *      min = "5",
      *      max = "5",
@@ -121,11 +120,10 @@ class Contact
      */
     protected $message;
 
-
     /**
-     * Get id
+     * Get id.
      *
-     * @return integer 
+     * @return int
      */
     public function getId()
     {
@@ -133,9 +131,10 @@ class Contact
     }
 
     /**
-     * Set prenom
+     * Set prenom.
      *
      * @param string $prenom
+     *
      * @return Contact
      */
     public function setPrenom($prenom)
@@ -146,9 +145,9 @@ class Contact
     }
 
     /**
-     * Get prenom
+     * Get prenom.
      *
-     * @return string 
+     * @return string
      */
     public function getPrenom()
     {
@@ -156,9 +155,10 @@ class Contact
     }
 
     /**
-     * Set nom
+     * Set nom.
      *
      * @param string $nom
+     *
      * @return Contact
      */
     public function setNom($nom)
@@ -169,9 +169,9 @@ class Contact
     }
 
     /**
-     * Get nom
+     * Get nom.
      *
-     * @return string 
+     * @return string
      */
     public function getNom()
     {
@@ -179,9 +179,10 @@ class Contact
     }
 
     /**
-     * Set mail
+     * Set mail.
      *
      * @param string $mail
+     *
      * @return Contact
      */
     public function setMail($mail)
@@ -192,9 +193,9 @@ class Contact
     }
 
     /**
-     * Get mail
+     * Get mail.
      *
-     * @return string 
+     * @return string
      */
     public function getMail()
     {
@@ -202,9 +203,10 @@ class Contact
     }
 
     /**
-     * Set ville
+     * Set ville.
      *
      * @param string $ville
+     *
      * @return Contact
      */
     public function setVille($ville)
@@ -215,19 +217,20 @@ class Contact
     }
 
     /**
-     * Get ville
+     * Get ville.
      *
-     * @return string 
+     * @return string
      */
     public function getVille()
     {
         return $this->ville;
     }
-    
+
     /**
-     * Set telephone
+     * Set telephone.
      *
      * @param string $telephone
+     *
      * @return Contact
      */
     public function setTelephone($telephone)
@@ -238,9 +241,9 @@ class Contact
     }
 
     /**
-     * Get telephone
+     * Get telephone.
      *
-     * @return string 
+     * @return string
      */
     public function getTelephone()
     {
@@ -248,9 +251,10 @@ class Contact
     }
 
     /**
-     * Set message
+     * Set message.
      *
      * @param string $message
+     *
      * @return Contact
      */
     public function setMessage($message)
@@ -261,9 +265,9 @@ class Contact
     }
 
     /**
-     * Get message
+     * Get message.
      *
-     * @return string 
+     * @return string
      */
     public function getMessage()
     {
@@ -271,20 +275,21 @@ class Contact
     }
 
     /**
-     * Set codepostal
+     * Set codepostal.
      *
      * @param string $codepostal
+     *
      * @return Contact
      */
     public function setCodepostal($codepostal)
     {
         $this->codepostal = $codepostal;
-    
+
         return $this;
     }
-    
+
     /**
-     * Get codepostal
+     * Get codepostal.
      *
      * @return string
      */

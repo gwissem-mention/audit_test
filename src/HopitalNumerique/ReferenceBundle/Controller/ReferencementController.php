@@ -1,4 +1,5 @@
 <?php
+
 namespace HopitalNumerique\ReferenceBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -16,8 +17,11 @@ class ReferencementController extends Controller
      *
      * @param $entityType
      * @param $entityId
+     *
      * @return Response
+     *
      * @throws \Exception
+     *
      * @internal param object $entity Entité
      */
     public function popinAction($entityType, $entityId)
@@ -46,8 +50,8 @@ class ReferencementController extends Controller
         );
 
         return $this->render('HopitalNumeriqueReferenceBundle:Referencement:popin.html.twig', [
-            'entityType'     => $entityType,
-            'entityId'       => $entityId,
+            'entityType' => $entityType,
+            'entityId' => $entityId,
             'referencesTree' => $referencesTree,
             'redirectionUrl' => $this->container->get('hopitalnumerique_core.dependency_injection.entity')->getMangementUrlByEntity($entity),
         ]);
@@ -57,8 +61,9 @@ class ReferencementController extends Controller
      * Enregistre les EntityHasReference de la popin.
      *
      * @param Request $request
-     * @param integer $entityType Type d'entité
-     * @param integer $entityId ID de l'entité
+     * @param int     $entityType Type d'entité
+     * @param int     $entityId   ID de l'entité
+     *
      * @return JsonResponse
      */
     public function saveChosenReferencesAction(Request $request, $entityType, $entityId)
@@ -83,8 +88,8 @@ class ReferencementController extends Controller
                 $reference = $this->container->get('hopitalnumerique_reference.manager.reference')->findOneById($entityHasReferenceParameters['referenceId']);
                 $entityHasReference = $this->container->get('hopitalnumerique_reference.manager.entity_has_reference')->findOneBy([
                     'entityType' => $entityType,
-                    'entityId'   => $entityId,
-                    'reference'  => $reference,
+                    'entityId' => $entityId,
+                    'reference' => $reference,
                 ]);
                 if (null === $entityHasReference) {
                     $entityHasReference = $this->container->get('hopitalnumerique_reference.manager.entity_has_reference')->createEmpty();
@@ -111,6 +116,7 @@ class ReferencementController extends Controller
      * Lors de l'enregistrement des références d'une entité, on ré-initialise les références existantes en supprimant celles du domaine de l'utilisateur connecté et celles n'appartenant plus à l'entité.
      *
      * @param object Entité
+     *
      * @return array
      */
     private function getDomainesToDeleteForNoteSaving($entity)
@@ -150,7 +156,9 @@ class ReferencementController extends Controller
 
     /**
      * Cron qui met à jour toutes les notes du référencement.
+     *
      * @param $token
+     *
      * @return Response
      */
     public function cronSaveNotesAction($token)
@@ -169,7 +177,9 @@ class ReferencementController extends Controller
 
     /**
      * Cron qui supprime les entités qui n'existent pas.
+     *
      * @param $token
+     *
      * @return Response
      */
     public function cronRemoveInexistantsAction($token)
@@ -186,7 +196,9 @@ class ReferencementController extends Controller
 
     /**
      * Migre les anciennes données.
+     *
      * @param $token
+     *
      * @return Response
      */
     public function migreAction($token)

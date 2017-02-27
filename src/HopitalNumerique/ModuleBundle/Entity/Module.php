@@ -3,15 +3,13 @@
 namespace HopitalNumerique\ModuleBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-use Doctrine\Common\Collections\ArrayCollection;
-
 //Asserts Stuff
 use Symfony\Component\Validator\Constraints as Assert;
 use Nodevo\ToolsBundle\Validator\Constraints as Nodevo;
 use APY\DataGridBundle\Grid\Mapping as GRID;
 
 /**
- * Module
+ * Module.
  *
  * @ORM\Table(name="hn_module")
  * @ORM\Entity(repositoryClass="HopitalNumerique\ModuleBundle\Repository\ModuleRepository")
@@ -23,7 +21,7 @@ use APY\DataGridBundle\Grid\Mapping as GRID;
 class Module
 {
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="mod_id", type="integer")
      * @ORM\Id
@@ -32,7 +30,7 @@ class Module
     protected $id;
 
     /**
-     * Liste des sessions liées au module
+     * Liste des sessions liées au module.
      *
      * @var /HopitalNumerique/ModuleBundle/Entity/Session
      *
@@ -63,7 +61,7 @@ class Module
     protected $titre;
 
     /**
-     * @var integer
+     * @var int
      *
      * @Assert\NotBlank(message="Les productions ne peuvent pas être vides.")
      * @Nodevo\Javascript(class="validate[required]")
@@ -80,7 +78,7 @@ class Module
     protected $productions;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\ManyToMany(targetEntity="\HopitalNumerique\ReferenceBundle\Entity\Reference")
      * @ORM\JoinTable(name="hn_module_connaissances",
@@ -94,7 +92,7 @@ class Module
     protected $connaissances;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\ManyToMany(targetEntity="\HopitalNumerique\ReferenceBundle\Entity\Reference")
      * @ORM\JoinTable(name="hn_module_connaissances_metier",
@@ -143,7 +141,7 @@ class Module
     protected $description;
 
     /**
-     * @var integer
+     * @var int
      *
      * @Nodevo\Javascript(class="validate[custom[integer],min[0]]")
      * @ORM\Column(name="mod_nombrePlaceDisponible", type="integer", nullable=true, options = {"comment" = "Nombre de places disponibles du module"})
@@ -205,7 +203,7 @@ class Module
     protected $textMailRappel;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\ManyToOne(targetEntity="\HopitalNumerique\UserBundle\Entity\User")
      * @ORM\JoinColumn(name="usr_formateur", referencedColumnName="usr_id", nullable=true, onDelete="SET NULL")
@@ -233,56 +231,55 @@ class Module
     protected $domaines;
 
     /**
-     * @var boolean
+     * @var bool
      *
      * @ORM\Column(name="mod_accuse_inscription", type="boolean")
      */
     protected $mailAccuseInscription;
 
     /**
-     * @var boolean
+     * @var bool
      *
      * @ORM\Column(name="mod_confirmation_inscription", type="boolean")
      */
     protected $mailConfirmationInscription;
 
     /**
-     * @var boolean
+     * @var bool
      *
      * @ORM\Column(name="mod_refus_inscription", type="boolean")
      */
     protected $mailRefusInscription;
 
     /**
-     * @var boolean
+     * @var bool
      *
      * @ORM\Column(name="mod_rappel_evaluation", type="boolean")
      */
     protected $mailRappelEvalution;
 
     /**
-     * @var boolean
+     * @var bool
      *
      * @ORM\Column(name="mod_alerte_evaluation", type="boolean")
      */
     protected $mailAlerteEvaluation;
 
     /**
-     * Constructor
+     * Constructor.
      */
     public function __construct()
     {
-        $this->sessions            = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->productions         = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->connaissances       = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->sessions = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->productions = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->connaissances = new \Doctrine\Common\Collections\ArrayCollection();
         $this->connaissancesMetier = new \Doctrine\Common\Collections\ArrayCollection();
-
     }
 
     /**
-     * Get id
+     * Get id.
      *
-     * @return integer
+     * @return int
      */
     public function getId()
     {
@@ -290,7 +287,7 @@ class Module
     }
 
     /**
-     * Get dateLastUpdate
+     * Get dateLastUpdate.
      *
      * @return DateTime $dateLastUpdate
      */
@@ -300,20 +297,22 @@ class Module
     }
 
     /**
-     * Set dateLastUpdate
+     * Set dateLastUpdate.
      *
      * @param DateTime $dateLastUpdate
      */
     public function setDateLastUpdate($dateLastUpdate)
     {
         $this->dateLastUpdate = $dateLastUpdate;
+
         return $this;
     }
 
     /**
-     * Set titre
+     * Set titre.
      *
      * @param string $titre
+     *
      * @return Module
      */
     public function setTitre($titre)
@@ -324,7 +323,7 @@ class Module
     }
 
     /**
-     * Get titre
+     * Get titre.
      *
      * @return string
      */
@@ -334,9 +333,10 @@ class Module
     }
 
     /**
-     * Add production
+     * Add production.
      *
      * @param \HopitalNumerique\ObjetBundle\Entity\Objet $production
+     *
      * @return Objet
      */
     public function addProduction(\HopitalNumerique\ObjetBundle\Entity\Objet $production)
@@ -347,7 +347,7 @@ class Module
     }
 
     /**
-     * Remove production
+     * Remove production.
      *
      * @param \HopitalNumerique\ObjetBundle\Entity\Objet $production
      */
@@ -357,9 +357,10 @@ class Module
     }
 
     /**
-     * Set productions
+     * Set productions.
      *
      * @param \Doctrine\Common\Collections\Collection $productions
+     *
      * @return Objet
      */
     public function setProductions(array $productions)
@@ -370,7 +371,7 @@ class Module
     }
 
     /**
-     * Get productions
+     * Get productions.
      *
      * @return \Doctrine\Common\Collections\Collection
      */
@@ -380,9 +381,10 @@ class Module
     }
 
     /**
-     * Set horairesType
+     * Set horairesType.
      *
      * @param string $horairesType
+     *
      * @return Module
      */
     public function setHorairesType($horairesType)
@@ -393,7 +395,7 @@ class Module
     }
 
     /**
-     * Get horairesType
+     * Get horairesType.
      *
      * @return string
      */
@@ -403,9 +405,10 @@ class Module
     }
 
     /**
-     * Set lieu
+     * Set lieu.
      *
      * @param string $lieu
+     *
      * @return Module
      */
     public function setLieu($lieu)
@@ -416,7 +419,7 @@ class Module
     }
 
     /**
-     * Get lieu
+     * Get lieu.
      *
      * @return string
      */
@@ -426,9 +429,10 @@ class Module
     }
 
     /**
-     * Set textMailRappel
+     * Set textMailRappel.
      *
      * @param string $textMailRappel
+     *
      * @return Module
      */
     public function setTextMailRappel($textMailRappel)
@@ -439,7 +443,7 @@ class Module
     }
 
     /**
-     * Get textMailRappel
+     * Get textMailRappel.
      *
      * @return string
      */
@@ -449,9 +453,10 @@ class Module
     }
 
     /**
-     * Set description
+     * Set description.
      *
      * @param string $description
+     *
      * @return Module
      */
     public function setDescription($description)
@@ -462,7 +467,7 @@ class Module
     }
 
     /**
-     * Get description
+     * Get description.
      *
      * @return string
      */
@@ -472,9 +477,10 @@ class Module
     }
 
     /**
-     * Set nombrePlaceDisponible
+     * Set nombrePlaceDisponible.
      *
-     * @param integer $nombrePlaceDisponible
+     * @param int $nombrePlaceDisponible
+     *
      * @return Module
      */
     public function setNombrePlaceDisponible($nombrePlaceDisponible)
@@ -485,9 +491,9 @@ class Module
     }
 
     /**
-     * Get nombrePlaceDisponible
+     * Get nombrePlaceDisponible.
      *
-     * @return integer
+     * @return int
      */
     public function getNombrePlaceDisponible()
     {
@@ -495,9 +501,10 @@ class Module
     }
 
     /**
-     * Set prerequis
+     * Set prerequis.
      *
      * @param string $prerequis
+     *
      * @return Module
      */
     public function setPrerequis($prerequis)
@@ -508,7 +515,7 @@ class Module
     }
 
     /**
-     * Get prerequis
+     * Get prerequis.
      *
      * @return string
      */
@@ -518,9 +525,10 @@ class Module
     }
 
     /**
-     * Set formateur
+     * Set formateur.
      *
      * @param \HopitalNumerique\UserBundle\Entity\User $formateur
+     *
      * @return Reponse
      */
     public function setFormateur(\HopitalNumerique\UserBundle\Entity\User $formateur = null)
@@ -531,7 +539,7 @@ class Module
     }
 
     /**
-     * Get formateur
+     * Get formateur.
      *
      * @return \HopitalNumerique\UserBundle\Entity\User
      */
@@ -541,7 +549,7 @@ class Module
     }
 
     /**
-     * Get statut
+     * Get statut.
      *
      * @return \HopitalNumerique\ReferenceBundle\Entity\Reference $statut
      */
@@ -551,20 +559,21 @@ class Module
     }
 
     /**
-     * Set statut
+     * Set statut.
      *
      * @param \HopitalNumerique\ReferenceBundle\Entity\Reference $statut
      */
     public function setStatut($statut)
     {
-        if($statut instanceof \HopitalNumerique\ReferenceBundle\Entity\Reference )
+        if ($statut instanceof \HopitalNumerique\ReferenceBundle\Entity\Reference) {
             $this->statut = $statut;
-        else
+        } else {
             $this->statut = null;
+        }
     }
 
     /**
-     * Get duree
+     * Get duree.
      *
      * @return \HopitalNumerique\ReferenceBundle\Entity\Reference $duree
      */
@@ -574,22 +583,24 @@ class Module
     }
 
     /**
-     * Set duree
+     * Set duree.
      *
      * @param \HopitalNumerique\ReferenceBundle\Entity\Reference $duree
      */
     public function setDuree($duree)
     {
-        if($duree instanceof \HopitalNumerique\ReferenceBundle\Entity\Reference )
+        if ($duree instanceof \HopitalNumerique\ReferenceBundle\Entity\Reference) {
             $this->duree = $duree;
-        else
+        } else {
             $this->duree = null;
+        }
     }
 
     /**
-     * Add sessions
+     * Add sessions.
      *
      * @param \HopitalNumerique\ModuleBundle\Entity\Session $sessions
+     *
      * @return \HopitalNumerique\ModuleBundle\Entity\Module
      */
     public function addSession(\HopitalNumerique\ModuleBundle\Entity\Session $sessions)
@@ -600,7 +611,7 @@ class Module
     }
 
     /**
-     * Remove sessions
+     * Remove sessions.
      *
      * @param \HopitalNumerique\ModuleBundle\Entity\Session $sessions
      */
@@ -610,7 +621,7 @@ class Module
     }
 
     /**
-     * Get sessions
+     * Get sessions.
      *
      * @return \Doctrine\Common\Collections\Collection
      */
@@ -620,43 +631,41 @@ class Module
     }
 
     /**
-     * Get sessions actives
+     * Get sessions actives.
      *
      * @return \Doctrine\Common\Collections\Collection
      */
     public function getSessionsActives()
     {
-        $sessions = array();
+        $sessions = [];
 
-        foreach ($this->sessions as $session)
-        {
-            if(403 === $session->getEtat()->getId())
-            {
+        foreach ($this->sessions as $session) {
+            if (403 === $session->getEtat()->getId()) {
                 $sessions[] = $session;
             }
         }
+
         return $sessions;
     }
 
     /**
-     * Get sessions dont la date d'inscription est en ce moment
+     * Get sessions dont la date d'inscription est en ce moment.
      *
      * @return \Doctrine\Common\Collections\Collection
      */
     public function getSessionsInscriptionsOuvertes()
     {
-        $sessions = array();
+        $sessions = [];
 
-        foreach ($this->sessions as $session)
-        {
-            if($session->getDateOuvertureInscription() <= new \DateTime()
+        foreach ($this->sessions as $session) {
+            if ($session->getDateOuvertureInscription() <= new \DateTime()
                 && $session->getDateFermetureInscription() >= new \DateTime()
                 && $session->getEtat()->getId() === 403
-                && !$session->getArchiver())
-            {
+                && !$session->getArchiver()) {
                 $sessions[] = $session;
             }
         }
+
         return $sessions;
     }
 
@@ -665,15 +674,17 @@ class Module
     // ----------------------------------------
 
     /**
-     * Set path
+     * Set path.
      *
      * @param string $path
+     *
      * @return Contractualisation
      */
     public function setPath($path)
     {
-        if( is_null($path) && file_exists($this->getAbsolutePath()) )
+        if (is_null($path) && file_exists($this->getAbsolutePath())) {
             unlink($this->getAbsolutePath());
+        }
 
         $this->path = $path;
 
@@ -681,7 +692,7 @@ class Module
     }
 
     /**
-     * Get path
+     * Get path.
      *
      * @return string
      */
@@ -692,18 +703,18 @@ class Module
 
     public function getAbsolutePath()
     {
-        return null === $this->path ? null : $this->getUploadRootDir().'/'.$this->path;
+        return null === $this->path ? null : $this->getUploadRootDir() . '/' . $this->path;
     }
 
     public function getWebPath()
     {
-        return null === $this->path ? null : $this->getUploadDir().'/'.$this->path;
+        return null === $this->path ? null : $this->getUploadDir() . '/' . $this->path;
     }
 
     public function getUploadRootDir()
     {
         // le chemin absolu du répertoire où les documents uploadés doivent être sauvegardés
-        return __ROOT_DIRECTORY__.'/'.$this->getUploadDir();
+        return __ROOT_DIRECTORY__ . '/' . $this->getUploadDir();
     }
 
     public function getUploadDir()
@@ -717,10 +728,11 @@ class Module
      */
     public function preUpload()
     {
-        if (null !== $this->file){
+        if (null !== $this->file) {
             //delete Old File
-            if ( file_exists($this->getAbsolutePath()) )
+            if (file_exists($this->getAbsolutePath())) {
                 unlink($this->getAbsolutePath());
+            }
 
             $this->path = round(microtime(true) * 1000) . '_' . $this->file->getClientOriginalName();
         }
@@ -732,8 +744,9 @@ class Module
      */
     public function upload()
     {
-        if (null === $this->file)
+        if (null === $this->file) {
             return;
+        }
 
         // s'il y a une erreur lors du déplacement du fichier, une exception
         // va automatiquement être lancée par la méthode move(). Cela va empêcher
@@ -751,8 +764,9 @@ class Module
     {
         $file = $this->getAbsolutePath();
 
-        if (file_exists($file) )
+        if (file_exists($file)) {
             unlink($file);
+        }
     }
 
     /**
@@ -766,9 +780,10 @@ class Module
     }
 
     /**
-     * Add connaissances
+     * Add connaissances.
      *
      * @param \HopitalNumerique\ReferenceBundle\Entity\Reference $connaissances
+     *
      * @return Module
      */
     public function addConnaissance(\HopitalNumerique\ReferenceBundle\Entity\Reference $connaissances)
@@ -779,7 +794,7 @@ class Module
     }
 
     /**
-     * Remove connaissances
+     * Remove connaissances.
      *
      * @param \HopitalNumerique\ReferenceBundle\Entity\Reference $connaissances
      */
@@ -789,7 +804,7 @@ class Module
     }
 
     /**
-     * Get connaissances
+     * Get connaissances.
      *
      * @return \Doctrine\Common\Collections\Collection
      */
@@ -801,13 +816,11 @@ class Module
     public function getConnaissancesByParent()
     {
         $connaissances = $this->connaissances;
-        $connaissancesOrdered = array();
+        $connaissancesOrdered = [];
 
-        foreach ($connaissances as $connaissance)
-        {
-            if(!array_key_exists($connaissance->getParent()->getId(), $connaissancesOrdered))
-            {
-                $connaissancesOrdered[$connaissance->getParent()->getId()] = array();
+        foreach ($connaissances as $connaissance) {
+            if (!array_key_exists($connaissance->getParent()->getId(), $connaissancesOrdered)) {
+                $connaissancesOrdered[$connaissance->getParent()->getId()] = [];
             }
 
             $connaissancesOrdered[$connaissance->getParent()->getId()][] = $connaissance;
@@ -817,9 +830,10 @@ class Module
     }
 
     /**
-     * Add domaines
+     * Add domaines.
      *
      * @param \HopitalNumerique\DomaineBundle\Entity\Domaine $domaines
+     *
      * @return Module
      */
     public function addDomaine(\HopitalNumerique\DomaineBundle\Entity\Domaine $domaines)
@@ -830,7 +844,7 @@ class Module
     }
 
     /**
-     * Remove domaines
+     * Remove domaines.
      *
      * @param \HopitalNumerique\DomaineBundle\Entity\Domaine $domaines
      */
@@ -840,7 +854,7 @@ class Module
     }
 
     /**
-     * Get domaines
+     * Get domaines.
      *
      * @return \Doctrine\Common\Collections\Collection
      */
@@ -849,18 +863,16 @@ class Module
         return $this->domaines;
     }
 
-
     /**
-     * Get les ids des domaines
+     * Get les ids des domaines.
      *
      * @return array[integer]
      */
     public function getDomainesId()
     {
-        $domainesId = array();
+        $domainesId = [];
 
-        foreach ($this->domaines as $domaine)
-        {
+        foreach ($this->domaines as $domaine) {
             $domainesId[] = $domaine->getId();
         }
 
@@ -868,9 +880,10 @@ class Module
     }
 
     /**
-     * Set mailAccuseInscription
+     * Set mailAccuseInscription.
      *
-     * @param boolean $mailAccuseInscription
+     * @param bool $mailAccuseInscription
+     *
      * @return Module
      */
     public function setMailAccuseInscription($mailAccuseInscription)
@@ -881,9 +894,9 @@ class Module
     }
 
     /**
-     * Get mailAccuseInscription
+     * Get mailAccuseInscription.
      *
-     * @return boolean
+     * @return bool
      */
     public function getMailAccuseInscription()
     {
@@ -891,9 +904,10 @@ class Module
     }
 
     /**
-     * Set mailConfirmationInscription
+     * Set mailConfirmationInscription.
      *
-     * @param boolean $mailConfirmationInscription
+     * @param bool $mailConfirmationInscription
+     *
      * @return Module
      */
     public function setMailConfirmationInscription($mailConfirmationInscription)
@@ -904,9 +918,9 @@ class Module
     }
 
     /**
-     * Get mailConfirmationInscription
+     * Get mailConfirmationInscription.
      *
-     * @return boolean
+     * @return bool
      */
     public function getMailConfirmationInscription()
     {
@@ -914,9 +928,10 @@ class Module
     }
 
     /**
-     * Set mailRefusInscription
+     * Set mailRefusInscription.
      *
-     * @param boolean $mailRefusInscription
+     * @param bool $mailRefusInscription
+     *
      * @return Module
      */
     public function setMailRefusInscription($mailRefusInscription)
@@ -927,9 +942,9 @@ class Module
     }
 
     /**
-     * Get mailRefusInscription
+     * Get mailRefusInscription.
      *
-     * @return boolean
+     * @return bool
      */
     public function getMailRefusInscription()
     {
@@ -937,9 +952,10 @@ class Module
     }
 
     /**
-     * Set mailRappelEvalution
+     * Set mailRappelEvalution.
      *
-     * @param boolean $mailRappelEvalution
+     * @param bool $mailRappelEvalution
+     *
      * @return Module
      */
     public function setMailRappelEvalution($mailRappelEvalution)
@@ -950,9 +966,9 @@ class Module
     }
 
     /**
-     * Get mailRappelEvalution
+     * Get mailRappelEvalution.
      *
-     * @return boolean
+     * @return bool
      */
     public function getMailRappelEvalution()
     {
@@ -960,9 +976,10 @@ class Module
     }
 
     /**
-     * Set mailAlerteEvaluation
+     * Set mailAlerteEvaluation.
      *
-     * @param boolean $mailAlerteEvaluation
+     * @param bool $mailAlerteEvaluation
+     *
      * @return Module
      */
     public function setMailAlerteEvaluation($mailAlerteEvaluation)
@@ -973,9 +990,9 @@ class Module
     }
 
     /**
-     * Get mailAlerteEvaluation
+     * Get mailAlerteEvaluation.
      *
-     * @return boolean
+     * @return bool
      */
     public function getMailAlerteEvaluation()
     {
@@ -983,10 +1000,12 @@ class Module
     }
 
     // Connaissances Métiers
+
     /**
-     * Add connaissancesMetier
+     * Add connaissancesMetier.
      *
      * @param \HopitalNumerique\ReferenceBundle\Entity\Reference $connaissancesMetier
+     *
      * @return Session
      */
     public function addConnaissanceMetier(\HopitalNumerique\ReferenceBundle\Entity\Reference $connaissancesMetier)
@@ -997,7 +1016,7 @@ class Module
     }
 
     /**
-     * Remove connaissancesMetier
+     * Remove connaissancesMetier.
      *
      * @param \HopitalNumerique\ReferenceBundle\Entity\Reference $connaissancesMetier
      */
@@ -1007,7 +1026,7 @@ class Module
     }
 
     /**
-     * Get connaissancesMetier
+     * Get connaissancesMetier.
      *
      * @return \Doctrine\Common\Collections\Collection
      */
@@ -1017,7 +1036,7 @@ class Module
     }
 
     /**
-     * Set connaissancesMetier
+     * Set connaissancesMetier.
      *
      * @return Session
      */
@@ -1031,15 +1050,16 @@ class Module
     public function getConnaissancesMetierByParent()
     {
         $connaissancesMetier = $this->connaissancesMetier;
-        $connaissancesMetierOrdered = array();
+        $connaissancesMetierOrdered = [];
 
         foreach ($connaissancesMetier as $connaissanceMetier) {
             if (!array_key_exists($connaissanceMetier->getParent()->getId(), $connaissancesMetierOrdered)) {
-                $connaissancesMetierOrdered[$connaissanceMetier->getParent()->getId()] = array();
+                $connaissancesMetierOrdered[$connaissanceMetier->getParent()->getId()] = [];
             }
 
             $connaissancesMetierOrdered[$connaissanceMetier->getParent()->getId()][] = $connaissanceMetier;
         }
+
         return $connaissancesMetierOrdered;
     }
 }

@@ -1,4 +1,5 @@
 <?php
+
 namespace HopitalNumerique\AutodiagBundle\Service\Export;
 
 use HopitalNumerique\AutodiagBundle\Entity\Autodiag;
@@ -120,7 +121,7 @@ class SurveyExport extends AbstractExport
         }
 
         $data[AttributeColumnsDefinition::CATEGORY_WEIGHT] = implode("\n", array_map(function ($element) {
-            return implode("::", $element);
+            return implode('::', $element);
         }, $categoryData));
 
         $actionPlans = [];
@@ -133,17 +134,17 @@ class SurveyExport extends AbstractExport
         $options = implode("\n", array_map(function (Attribute\Option $option) use ($actionPlans) {
             $i = 0;
 
-            while ($i<count($actionPlans)) {
+            while ($i < count($actionPlans)) {
                 /** @var Autodiag\ActionPlan $actionPlan */
                 $actionPlan = $actionPlans[$i];
                 if ($actionPlans[$i]->getValue() === $option->getValue()) {
-                    return $option->getValue() . '::' . $option->getLabel() .'::' . $actionPlan->isVisible() . '::'
+                    return $option->getValue() . '::' . $option->getLabel() . '::' . $actionPlan->isVisible() . '::'
                            . $actionPlan->getDescription() . '::' . $actionPlan->getLink()
                            . '::' . $actionPlan->getLinkDescription()
                     ;
                 }
 
-                $i++;
+                ++$i;
             }
 
             return $option->getValue() . '::' . $option->getLabel();

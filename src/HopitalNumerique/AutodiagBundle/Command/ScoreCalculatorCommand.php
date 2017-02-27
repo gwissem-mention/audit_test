@@ -41,14 +41,14 @@ class ScoreCalculatorCommand extends ContainerAwareCommand
                     $this->getContainer()->get('autodiag.score_boundary_calculator')->computeBoundaries($synthesis);
                 }
             }
+
             return true;
         }
-
 
         $autodiag = $options['autodiag'];
         if (null !== $autodiag) {
             $autodiags = [
-                $this->getContainer()->get('autodiag.repository.autodiag')->find($autodiag)
+                $this->getContainer()->get('autodiag.repository.autodiag')->find($autodiag),
             ];
         } else {
             $autodiags = $this->getContainer()->get('autodiag.repository.autodiag')->findAll();
@@ -58,7 +58,6 @@ class ScoreCalculatorCommand extends ContainerAwareCommand
 
         foreach ($autodiags as $autodiag) {
             /** @var Autodiag $autodiag */
-
             $computingBeginning = $autodiag->setComputing();
             $em->flush();
 
@@ -70,7 +69,6 @@ class ScoreCalculatorCommand extends ContainerAwareCommand
 
             $breaked = false;
             foreach ($syntheses as $synthesis) {
-
                 $computing = $this->getContainer()->get('autodiag.repository.autodiag')->getComputeBeginning(
                     $autodiag->getId()
                 );
@@ -84,7 +82,6 @@ class ScoreCalculatorCommand extends ContainerAwareCommand
                     sprintf('Computing score for synthesis "%s".', $synthesis->getName())
                 );
                 $this->getContainer()->get('autodiag.score_calculator')->computeSynthesisScore($synthesis);
-
             }
 
             if (!$breaked) {

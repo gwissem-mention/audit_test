@@ -1,4 +1,5 @@
 <?php
+
 namespace HopitalNumerique\AutodiagBundle\Form\Type\AutodiagEntry;
 
 use HopitalNumerique\AutodiagBundle\Entity\AutodiagEntry\Value;
@@ -21,7 +22,7 @@ class ValueType extends AbstractType
 
     /**
      * @param FormBuilderInterface $builder
-     * @param array $options
+     * @param array                $options
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
@@ -47,12 +48,12 @@ class ValueType extends AbstractType
      */
     public function configureOptions(OptionsResolver $resolver)
     {
-        $resolver->setDefaults(array(
+        $resolver->setDefaults([
             'data_class' => 'HopitalNumerique\AutodiagBundle\Entity\AutodiagEntry\Value',
             'label_format' => 'ad.autodiag.%name%',
             'csrf_protection' => false,
 //            'csrf_field_name' => '_token',
 //            'intention' => 'entry_value_intention',
-        ));
+        ]);
     }
 }

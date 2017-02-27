@@ -1,4 +1,5 @@
 <?php
+
 namespace HopitalNumerique\ReferenceBundle\DependencyInjection\Reference;
 
 use HopitalNumerique\DomaineBundle\Entity\Domaine;
@@ -15,9 +16,9 @@ class Tree
      */
     private $referenceManager;
 
-
     /**
      * Constructeur.
+     *
      * @param ReferenceManager $referenceManager
      */
     public function __construct(ReferenceManager $referenceManager)
@@ -25,12 +26,12 @@ class Tree
         $this->referenceManager = $referenceManager;
     }
 
-
     /**
      * Retourne les options permettant la création de l'arbre.
      *
-     * @param Domaine[] $domaines
+     * @param Domaine[]      $domaines
      * @param array<integer> $forbiddenReferenceIds ID des références à ne pas afficher
+     *
      * @return array Options
      */
     public function getOptions($domaines, $forbiddenReferenceIds = [])
@@ -41,15 +42,15 @@ class Tree
 
         $jsTreeOptions = [
             'core' => [
-                'data' => $jsTreeOptionsData
+                'data' => $jsTreeOptionsData,
             ],
             'checkbox' => [
                 'visible' => true,
-                'three_state' => false
+                'three_state' => false,
             ],
             'plugins' => [
-                'checkbox'
-            ]
+                'checkbox',
+            ],
         ];
 
         return $jsTreeOptions;
@@ -59,6 +60,7 @@ class Tree
      * Retourne les données (paramètre data) des options de l'arbre.
      *
      * @param array<integer> $forbiddenReferenceIds ID des références à ne pas afficher
+     *
      * @return array Data
      */
     private function getTreeOptionsDataPart(array $orderedReferences, $forbiddenReferenceIds = [])
@@ -76,8 +78,8 @@ class Tree
                 $forbiddenReferenceIds[] = $referenceId;
                 $jsTreeOptionsDataPart[] = [
                     'id' => $referenceId,
-                    'text' => $referenceParemeters['reference']['libelle'].(count($referenceParemeters['reference']['domaines']) > 0 ? ' <em><small>- '.implode(' ; ', $domaineLibelles).'</small></em>' : ''),
-                    'children' => $this->getTreeOptionsDataPart($referenceParemeters['enfants'], $forbiddenReferenceIds)
+                    'text' => $referenceParemeters['reference']['libelle'] . (count($referenceParemeters['reference']['domaines']) > 0 ? ' <em><small>- ' . implode(' ; ', $domaineLibelles) . '</small></em>' : ''),
+                    'children' => $this->getTreeOptionsDataPart($referenceParemeters['enfants'], $forbiddenReferenceIds),
                 ];
             }
         }
@@ -88,16 +90,17 @@ class Tree
     /**
      * Retourne les références classées.
      *
-     * @param boolean|null                                               $parentable Parentable
-     * @param array<\HopitalNumerique\DomaineBundle\Entity\Domaine>|null $domaines   Domaines des références
-     * @param boolean|null                                               $inRecherche InRecherche ?
+     * @param bool|null                                                  $parentable  Parentable
+     * @param array<\HopitalNumerique\DomaineBundle\Entity\Domaine>|null $domaines    Domaines des références
+     * @param bool|null                                                  $inRecherche InRecherche ?
+     *
      * @return \Doctrine\Common\Collections\Collection Références
      */
     public function getOrderedReferences(Reference $referenceRoot = null, $parentable = true, $domaines = null, $inRecherche = null)
     {
         if (null === $domaines) {
             $referencesConditions = [
-                'lock' => false
+                'lock' => false,
             ];
             if (null !== $inRecherche) {
                 $referencesConditions['inRecherche'] = $inRecherche;
@@ -115,8 +118,9 @@ class Tree
      * Retourne un arbre de références.
      * Le & pour $references permet d'éviter les doublons qui cassent le fonctionnement à cause d'ID identiques.
      *
-     * @param array<\HopitalNumerique\ReferenceBundle\Entity\Reference\Reference> $references Références à trier
-     * @param \HopitalNumerique\ReferenceBundle\Entity\Reference\Reference $referenceParent Référence parente
+     * @param array<\HopitalNumerique\ReferenceBundle\Entity\Reference\Reference> $references      Références à trier
+     * @param \HopitalNumerique\ReferenceBundle\Entity\Reference\Reference        $referenceParent Référence parente
+     *
      * @return array Arbre
      */
     public function getOrderedReferencesTreePart($references, $referenceParent = null)
@@ -129,7 +133,7 @@ class Tree
                     //unset($references[$i]); // À décommenter uniquement si on passe une référence (pour éviter les doublons)
                     $referencesSubTreeNode = [
                         'reference' => $reference,
-                        'enfants' => $this->getOrderedReferencesTreePart($references, $reference)
+                        'enfants' => $this->getOrderedReferencesTreePart($references, $reference),
                     ];
                     $referencesSubTree[] = $referencesSubTreeNode;
                 }
@@ -147,7 +151,7 @@ class Tree
                 if ((null === $referenceParent && 0 === count($reference['parents'])) || (null !== $referenceParent && $hasParent)) {
                     $referencesSubTreeNode = [
                         'reference' => $reference,
-                        'enfants' => $this->getOrderedReferencesTreePart($references, $reference)
+                        'enfants' => $this->getOrderedReferencesTreePart($references, $reference),
                     ];
                     $referencesSubTree[] = $referencesSubTreeNode;
                 }

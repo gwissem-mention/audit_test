@@ -4,13 +4,10 @@ namespace HopitalNumerique\AutodiagBundle\Controller\Front;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use HopitalNumerique\AutodiagBundle\Entity\Synthesis;
-use HopitalNumerique\AutodiagBundle\Event\DataEvent;
 use HopitalNumerique\AutodiagBundle\Event\SynthesisEvent;
-use HopitalNumerique\AutodiagBundle\EventListener\LogListener;
 use HopitalNumerique\AutodiagBundle\Events;
 use HopitalNumerique\UserBundle\Entity\User;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Symfony\Component\EventDispatcher\EventDispatcher;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 
@@ -19,6 +16,7 @@ class ValidationController extends Controller
     /**
      * @param $synthesis
      * @param bool $noLayout
+     *
      * @return \Symfony\Component\HttpFoundation\RedirectResponse|\Symfony\Component\HttpFoundation\Response
      */
     public function indexAction($synthesis, $noLayout = false)
@@ -48,15 +46,16 @@ class ValidationController extends Controller
         }
 
         return $this->render('HopitalNumeriqueAutodiagBundle:Validation:index.html.twig', [
-            'synthesis'     => $synthesis,
-            'noLayout'      => $noLayout,
+            'synthesis' => $synthesis,
+            'noLayout' => $noLayout,
         ]);
     }
 
     /**
-     * @param Request $request
+     * @param Request   $request
      * @param Synthesis $synthesis
-     * @param bool $referer
+     * @param bool      $referer
+     *
      * @return \Symfony\Component\HttpFoundation\RedirectResponse
      */
     public function validateAction(Request $request, Synthesis $synthesis, $referer = false)
@@ -95,9 +94,10 @@ class ValidationController extends Controller
     }
 
     /**
-     * @param Request $request
+     * @param Request   $request
      * @param Synthesis $synthesis
-     * @param bool $referer
+     * @param bool      $referer
+     *
      * @return \Symfony\Component\HttpFoundation\RedirectResponse
      */
     public function unvalidateAction(Request $request, Synthesis $synthesis, $referer = false)

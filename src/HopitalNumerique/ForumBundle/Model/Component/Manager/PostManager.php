@@ -3,12 +3,10 @@
 namespace HopitalNumerique\ForumBundle\Model\Component\Manager;
 
 use Symfony\Component\Security\Core\User\UserInterface;
-
 use CCDNForum\ForumBundle\Model\Component\Gateway\GatewayInterface;
 use CCDNForum\ForumBundle\Component\Helper\PostLockHelper;
 use CCDNForum\ForumBundle\Entity\Post;
 use CCDNForum\ForumBundle\Model\Component\Manager\PostManager as CCDNPostManager;
-
 use HopitalNumerique\ForumBundle\Manager\PostManager as ClassicPostManager;
 use HopitalNumerique\ForumBundle\Manager\TopicManager as ClassicTopicManager;
 
@@ -18,8 +16,6 @@ class PostManager extends CCDNPostManager
     protected $_topicManager;
 
     /**
-     *
-     * @access public
      * @param \CCDNForum\ForumBundle\Gateway\GatewayInterface        $gateway
      * @param \CCDNForum\ForumBundle\Component\Helper\PostLockHelper $postLockHelper
      */
@@ -28,15 +24,14 @@ class PostManager extends CCDNPostManager
         parent::__construct($gateway, $postLockHelper);
 
         //Récupération des managers custom pour traiter correctement les entités
-        $this->_postManager  = $postManager;
+        $this->_postManager = $postManager;
         $this->_topicManager = $topicManager;
     }
 
     /**
+     * @param \CCDNForum\ForumBundle\Entity\Post                  $post
+     * @param \Symfony\Component\Security\Core\User\UserInterface $user
      *
-     * @access public
-     * @param  \CCDNForum\ForumBundle\Entity\Post                  $post
-     * @param  \Symfony\Component\Security\Core\User\UserInterface $user
      * @return \CCDNForum\ForumBundle\Manager\ManagerInterface
      */
     public function softDelete(Post $post, UserInterface $user)
@@ -45,15 +40,12 @@ class PostManager extends CCDNPostManager
         $topic = $post->getTopic();
         //Suppression du post
         $this->_postManager->delete($post);
-        
-        if(count($topic->getPosts()) == 0)
-        {
+
+        if (count($topic->getPosts()) == 0) {
             $this->_topicManager->delete($topic);
-        }
-        else
-        {
+        } else {
             //Récupération du dernier post après suppression (dans le cas où le post supprimé était le dernier du topic)
-            $lastPostFromTopic = $this->_postManager->findOneBy(array('topic' => $topic->getId()), array('createdDate' => 'DESC') );
+            $lastPostFromTopic = $this->_postManager->findOneBy(['topic' => $topic->getId()], ['createdDate' => 'DESC']);
             $topic->setLastPost($lastPostFromTopic);
             $this->_topicManager->save($topic);
         }

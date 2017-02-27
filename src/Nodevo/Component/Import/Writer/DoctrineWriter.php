@@ -1,4 +1,5 @@
 <?php
+
 namespace Nodevo\Component\Import\Writer;
 
 use Nodevo\Component\Import\Progress\ProgressAwareInterface;
@@ -18,7 +19,6 @@ class DoctrineWriter implements WriterInterface, ProgressAwareInterface
 
     public function prepare()
     {
-
     }
 
     public function write($item)
@@ -29,7 +29,6 @@ class DoctrineWriter implements WriterInterface, ProgressAwareInterface
 
     public function end()
     {
-
     }
 
     public function support($item)

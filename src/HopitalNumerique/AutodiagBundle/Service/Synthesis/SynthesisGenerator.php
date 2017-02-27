@@ -8,7 +8,6 @@ use HopitalNumerique\AutodiagBundle\Entity\Synthesis;
 use HopitalNumerique\AutodiagBundle\Event\SynthesisGeneratedEvent;
 use HopitalNumerique\AutodiagBundle\Events;
 use HopitalNumerique\UserBundle\Entity\User;
-use Symfony\Component\Config\Definition\Exception\Exception;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 class SynthesisGenerator
@@ -31,7 +30,9 @@ class SynthesisGenerator
      * @param Autodiag $autodiag
      * @param $syntheses
      * @param User $user
+     *
      * @return Synthesis
+     *
      * @throws \Exception
      */
     public function generateSynthesis(Autodiag $autodiag, $syntheses, User $user)
@@ -49,7 +50,6 @@ class SynthesisGenerator
         $newEntries = [];
         /** @var \HopitalNumerique\AutodiagBundle\Entity\Synthesis $synthesis */
         foreach ($syntheses as $synthesis) {
-
             if (!$synthesis->isValidated()) {
                 throw new \Exception('Synthesis is not valide', self::SYNTHESIS_NOT_VALIDATED);
             }
@@ -60,7 +60,7 @@ class SynthesisGenerator
                 if ($entry->isCopy()) {
                     $newEntries[] = $entry;
                 } else {
-                    $copy = clone($entry);
+                    $copy = clone $entry;
                     $copy->setCopy(true);
                     $newEntries[] = $copy;
                 }
@@ -81,4 +81,3 @@ class SynthesisGenerator
         return $newSynthesis;
     }
 }
-

@@ -17,7 +17,7 @@ class FlashGrid extends Grid implements GridInterface
      */
     public function setConfig()
     {
-        $this->setSource( 'HopitalNumeriqueFlashBundle:Flash' );
+        $this->setSource('HopitalNumeriqueFlashBundle:Flash');
         $this->setNoDataMessage('Aucun flash message à afficher.');
     }
 
@@ -26,20 +26,20 @@ class FlashGrid extends Grid implements GridInterface
      */
     public function setColumns()
     {
-        $this->addColonne( new Column\TextColumn('title', 'Titre') );
-        $this->addColonne( new Column\TextColumn('content', 'Contenu') );
+        $this->addColonne(new Column\TextColumn('title', 'Titre'));
+        $this->addColonne(new Column\TextColumn('content', 'Contenu'));
 
         $publieColumn = new Column\BooleanColumn('isPublished', 'Publié ?');
-        $publieColumn->setSize( 90 );
-        $this->addColonne( $publieColumn );
+        $publieColumn->setSize(90);
+        $this->addColonne($publieColumn);
     }
 
     /**
-     * Ajoute les boutons d'action
+     * Ajoute les boutons d'action.
      */
     public function setActionsButtons()
     {
-        $this->addActionButton( new Action\EditButton( 'hopitalnumerique_flash_flash_edit' ) );
+        $this->addActionButton(new Action\EditButton('hopitalnumerique_flash_flash_edit'));
         // $this->addActionButton( new Action\DeleteButton( 'hopitalnumerique_flash_flash_delete' ) );
     }
 
@@ -48,6 +48,6 @@ class FlashGrid extends Grid implements GridInterface
      */
     public function setMassActions()
     {
-        $this->addMassAction( new Action\DeleteMass('HopitalNumeriqueFlashBundle:Flash:deleteMass') );
+        $this->addMassAction(new Action\DeleteMass('HopitalNumeriqueFlashBundle:Flash:deleteMass'));
     }
 }

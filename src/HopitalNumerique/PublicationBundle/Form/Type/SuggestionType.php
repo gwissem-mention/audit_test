@@ -29,7 +29,7 @@ class SuggestionType extends AbstractType
     /**
      * SuggestionType constructor.
      *
-     * @param TokenStorage $tokenStorage
+     * @param TokenStorage  $tokenStorage
      * @param EntityManager $entityManager
      */
     public function __construct(TokenStorage $tokenStorage, EntityManager $entityManager)
@@ -40,7 +40,7 @@ class SuggestionType extends AbstractType
 
     /**
      * @param FormBuilderInterface $builder
-     * @param array $options
+     * @param array                $options
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
@@ -55,16 +55,16 @@ class SuggestionType extends AbstractType
                 'read_only' => true,
             ])
             ->add('domains', EntityType::class, [
-                'class'       => Domaine::class,
-                'multiple'    => true,
+                'class' => Domaine::class,
+                'multiple' => true,
                 'empty_value' => ' - ',
-                'attr'        => [
+                'attr' => [
                     'class' => 'select2 validate[required,minSize[3],maxSize[255]]',
                 ],
                 'label' => 'Domaine(s) associé(s)',
             ])
             ->add('state', EntityType::class, [
-                'class'         => Reference::class,
+                'class' => Reference::class,
                 'query_builder' => function (EntityRepository $er) {
                     return $er->createQueryBuilder('reference')
                         ->where("reference.code = 'ETAT_SUGGESTION'");
@@ -74,7 +74,7 @@ class SuggestionType extends AbstractType
             ])
             ->add('synthesis', TextareaType::class, [
                 'required' => false,
-                'attr'     => ['class' => 'tinyMce'],
+                'attr' => ['class' => 'tinyMce'],
                 'label' => 'Synthèse',
             ])
             ->add('summary', TextareaType::class, [
@@ -86,14 +86,14 @@ class SuggestionType extends AbstractType
                 'label' => 'Lien web',
                 'attr' => ['class' => 'validate[custom[url]]'],
             ])
-            ->add('file', FileType::class, array(
+            ->add('file', FileType::class, [
                 'required' => false,
-                'label'    => 'ou fichier (max 10Mo)'
-            ))
+                'label' => 'ou fichier (max 10Mo)',
+            ])
             ->add('path', HiddenType::class)
         ;
 
-        $builder->addEventListener(FormEvents::PRE_SUBMIT, array($this, 'preSubmit'));
+        $builder->addEventListener(FormEvents::PRE_SUBMIT, [$this, 'preSubmit']);
     }
 
     /**
@@ -119,8 +119,8 @@ class SuggestionType extends AbstractType
      */
     public function configureOptions(OptionsResolver $resolver)
     {
-        $resolver->setDefaults(array(
+        $resolver->setDefaults([
             'data_class' => 'HopitalNumerique\PublicationBundle\Entity\Suggestion',
-        ));
+        ]);
     }
 }

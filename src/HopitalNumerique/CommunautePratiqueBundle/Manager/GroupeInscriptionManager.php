@@ -1,4 +1,5 @@
 <?php
+
 namespace HopitalNumerique\CommunautePratiqueBundle\Manager;
 
 use HopitalNumerique\CommunautePratiqueBundle\Entity\Groupe;
@@ -11,11 +12,13 @@ use HopitalNumerique\CommunautePratiqueBundle\Entity\Inscription;
 class GroupeInscriptionManager extends \Nodevo\ToolsBundle\Manager\Manager
 {
     protected $class = 'HopitalNumerique\CommunautePratiqueBundle\Entity\Inscription';
+
     /**
      * Retourne les groupes n'ayant pas encore démarrés.
      *
      * @param \HopitalNumerique\DomaineBundle\Entity\Domaine $domaine Domaine
      * @param \HopitalNumerique\UserBundle\Entity\User       $user    Utilisateur
+     *
      * @return array<\HopitalNumerique\CommunautePratiqueBundle\Entity\Groupe> Groupes non démarrés
      */
     public function getInscription(Groupe $groupe, User $user)

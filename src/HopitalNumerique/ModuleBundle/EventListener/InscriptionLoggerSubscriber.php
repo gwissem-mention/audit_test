@@ -17,6 +17,7 @@ class InscriptionLoggerSubscriber implements EventSubscriber
 
     /**
      * InterventionSubscriber constructor.
+     *
      * @param Log $logger
      */
     public function __construct(Log $logger)
@@ -33,7 +34,7 @@ class InscriptionLoggerSubscriber implements EventSubscriber
     }
 
     /**
-     * Log inscription on prePersist
+     * Log inscription on prePersist.
      *
      * @param \Doctrine\ORM\Event\LifecycleEventArgs $args
      */
@@ -51,7 +52,6 @@ class InscriptionLoggerSubscriber implements EventSubscriber
         $entity = $args->getEntity();
 
         if ($entity instanceof Inscription) {
-
             // Handle désinscription
             if ($args->hasChangedField('etatInscription')) {
                 $validReferenceIds = [409];

@@ -5,14 +5,13 @@ namespace Nodevo\RoleBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\Role\RoleInterface;
 use APY\DataGridBundle\Grid\Mapping as GRID;
-
 //Asserts Stuff
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Nodevo\ToolsBundle\Validator\Constraints as Nodevo;
 
 /**
- * Role
+ * Role.
  *
  * @ORM\Table(name="core_role")
  * @ORM\Entity(repositoryClass="Nodevo\RoleBundle\Repository\RoleRepository")
@@ -20,19 +19,19 @@ use Nodevo\ToolsBundle\Validator\Constraints as Nodevo;
  */
 class Role implements RoleInterface
 {
-    public static $ROLE_ADMIN_LABEL       = 'ROLE_ADMINISTRATEUR_1';
-    public static $ROLE_CMSI_LABEL        = 'ROLE_ARS_CMSI_4';
-    public static $ROLE_DIRECTEUR_LABEL   = 'ROLE_ES_DIRECTION_GENERALE_5';
+    public static $ROLE_ADMIN_LABEL = 'ROLE_ADMINISTRATEUR_1';
+    public static $ROLE_CMSI_LABEL = 'ROLE_ARS_CMSI_4';
+    public static $ROLE_DIRECTEUR_LABEL = 'ROLE_ES_DIRECTION_GENERALE_5';
     public static $ROLE_AMBASSADEUR_LABEL = 'ROLE_AMBASSADEUR_7';
-    public static $ROLE_ES_LABEL          = 'ROLE_ES_8';
-    public static $ROLE_EXPERT_LABEL      = 'ROLE_EXPERT_6';
-    public static $ROLE_ENREGISTRE_LABEL  = 'ROLE_ENREGISTRE_9';
-    public static $ROLE_ADMIN_HN_LABEL  = 'ROLE_ADMINISTRATEUR_DU_DOMAINE_HN_107';
+    public static $ROLE_ES_LABEL = 'ROLE_ES_8';
+    public static $ROLE_EXPERT_LABEL = 'ROLE_EXPERT_6';
+    public static $ROLE_ENREGISTRE_LABEL = 'ROLE_ENREGISTRE_9';
+    public static $ROLE_ADMIN_HN_LABEL = 'ROLE_ADMINISTRATEUR_DU_DOMAINE_HN_107';
     public static $ROLE_ADMIN_DOMAINE = 'ROLE_ADMINISTRATEUR_DE_DOMAINE_106';
     public static $ROLE_ADMIN_AUTODIAG = 'ROLE_ADMINISTRATEUR_AUTODIAGS_108';
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="ro_id", type="integer", options = {"comment" = "ID du groupe"})
      * @ORM\Id
@@ -62,7 +61,7 @@ class Role implements RoleInterface
     protected $role;
 
     /**
-     * @var boolean
+     * @var bool
      *
      * @ORM\Column(name="ro_initial", type="boolean", options = {"comment" = "Le groupe est-il initial ?"})
      */
@@ -87,9 +86,9 @@ class Role implements RoleInterface
     }
 
     /**
-     * Get id
+     * Get id.
      *
-     * @return integer
+     * @return int
      */
     public function getId()
     {
@@ -97,7 +96,7 @@ class Role implements RoleInterface
     }
 
     /**
-     * Set name
+     * Set name.
      *
      * @param string $name
      *
@@ -111,7 +110,7 @@ class Role implements RoleInterface
     }
 
     /**
-     * Get name
+     * Get name.
      *
      * @return string
      */
@@ -121,7 +120,7 @@ class Role implements RoleInterface
     }
 
     /**
-     * Get role
+     * Get role.
      *
      * @return string $role
      */
@@ -131,7 +130,7 @@ class Role implements RoleInterface
     }
 
     /**
-     * Set role
+     * Set role.
      *
      * @param string $role
      */
@@ -141,9 +140,9 @@ class Role implements RoleInterface
     }
 
     /**
-     * Set initial
+     * Set initial.
      *
-     * @param boolean $initial
+     * @param bool $initial
      *
      * @return Role
      */
@@ -155,9 +154,9 @@ class Role implements RoleInterface
     }
 
     /**
-     * Get initial
+     * Get initial.
      *
-     * @return boolean
+     * @return bool
      */
     public function getInitial()
     {
@@ -165,7 +164,7 @@ class Role implements RoleInterface
     }
 
     /**
-     * Set etat
+     * Set etat.
      *
      * @param \HopitalNumerique\ReferenceBundle\Entity\Reference $etat
      *
@@ -179,7 +178,7 @@ class Role implements RoleInterface
     }
 
     /**
-     * Get etat
+     * Get etat.
      *
      * @return \HopitalNumerique\ReferenceBundle\Entity\Reference
      */

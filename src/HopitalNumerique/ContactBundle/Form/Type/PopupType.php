@@ -1,4 +1,5 @@
 <?php
+
 namespace HopitalNumerique\ContactBundle\Form\Type;
 
 use Symfony\Component\Form\AbstractType;
@@ -30,7 +31,6 @@ class PopupType extends AbstractType
      */
     private $user;
 
-
     /**
      * Constructeur.
      */
@@ -42,44 +42,42 @@ class PopupType extends AbstractType
         $this->user = (null !== $securityContext->getToken() ? ($securityContext->getToken()->getUser() instanceof User ? $securityContext->getToken()->getUser() : null) : null);
     }
 
-
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         /**
          * @var array<string, string>
          */
-        $destinataires = ( isset($options['destinataires']) ? $options['destinataires'] : array() );
+        $destinataires = (isset($options['destinataires']) ? $options['destinataires'] : []);
         /**
          * @var string
          */
-        $urlRedirection = ( isset($options['urlRedirection']) ? $options['urlRedirection'] : array() );
+        $urlRedirection = (isset($options['urlRedirection']) ? $options['urlRedirection'] : []);
 
         $builder
-            ->add('destinataires', 'hidden', array(
-                'data' => \json_encode($destinataires)
-            ))
-            ->add('objet', 'text', array(
-                'attr' => array(
+            ->add('destinataires', 'hidden', [
+                'data' => \json_encode($destinataires),
+            ])
+            ->add('objet', 'text', [
+                'attr' => [
                     'class' => 'validate[required]',
-                    'maxlength' => 100
-                )
-            ))
-            ->add('message', 'textarea', array(
-                'attr' => array(
+                    'maxlength' => 100,
+                ],
+            ])
+            ->add('message', 'textarea', [
+                'attr' => [
                     'class' => 'validate[required]',
-                    'rows' => 6
-                )
-            ))
-            ->add('urlRedirection', 'hidden', array(
-                'data' => $urlRedirection
-            ))
+                    'rows' => 6,
+                ],
+            ])
+            ->add('urlRedirection', 'hidden', [
+                'data' => $urlRedirection,
+            ])
         ;
-        
-        $builder->addEventListener(FormEvents::POST_SUBMIT, function(FormEvent $event)
-        {
+
+        $builder->addEventListener(FormEvents::POST_SUBMIT, function (FormEvent $event) {
             $this->postSubmit($event);
         });
     }
@@ -102,8 +100,8 @@ class PopupType extends AbstractType
     private function sendCourriel(FormInterface $form)
     {
         $swiftMessage = \Swift_Message::newInstance();
-        $bodyHtml = $this->twig->loadTemplate('NodevoMailBundle::template.mail.html.twig')->render(array('content' => nl2br($form->get('message')->getData())));
-        $bodyTxt = $this->twig->loadTemplate('NodevoMailBundle::template.mail.txt.twig')->render(array('content' => $form->get('message')->getData()));
+        $bodyHtml = $this->twig->loadTemplate('NodevoMailBundle::template.mail.html.twig')->render(['content' => nl2br($form->get('message')->getData())]);
+        $bodyTxt = $this->twig->loadTemplate('NodevoMailBundle::template.mail.txt.twig')->render(['content' => $form->get('message')->getData()]);
 
         $swiftMessage
             ->setSubject($form->get('objet')->getData())
@@ -124,19 +122,18 @@ class PopupType extends AbstractType
         $this->mailer->send($swiftMessage);
     }
 
-
     /**
      * {@inheritdoc}
      */
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
         $resolver
-            ->setOptional(array('destinataires', 'urlRedirection'))
+            ->setOptional(['destinataires', 'urlRedirection'])
         ;
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function getName()
     {

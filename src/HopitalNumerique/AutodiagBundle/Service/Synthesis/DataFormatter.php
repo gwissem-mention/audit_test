@@ -8,7 +8,7 @@ use HopitalNumerique\DomaineBundle\Entity\Domaine;
 use HopitalNumerique\UserBundle\Entity\User;
 
 /**
- * Formatte les données des synthèses pour l'affichage dans la partie Mon Compte
+ * Formatte les données des synthèses pour l'affichage dans la partie Mon Compte.
  */
 class DataFormatter
 {
@@ -21,8 +21,9 @@ class DataFormatter
 
     /**
      * DataFormatter constructor.
+     *
      * @param EntityManager $manager
-     * @param Completion $completion
+     * @param Completion    $completion
      */
     public function __construct(EntityManager $manager, Completion $completion)
     {
@@ -31,10 +32,11 @@ class DataFormatter
     }
 
     /**
-     * Retourne les synthèses ordonnées par autodiag
+     * Retourne les synthèses ordonnées par autodiag.
      *
-     * @param User $user
+     * @param User         $user
      * @param Domaine|null $domaine
+     *
      * @return array
      */
     public function getSynthesesOrderByAutodiag(User $user, Domaine $domaine = null)
@@ -47,11 +49,12 @@ class DataFormatter
     }
 
     /**
-     * Retourne les synthèses formattées pour un autodiag
+     * Retourne les synthèses formattées pour un autodiag.
      *
-     * @param User $user
-     * @param Autodiag $autodiag
+     * @param User         $user
+     * @param Autodiag     $autodiag
      * @param Domaine|null $domaine
+     *
      * @return array
      */
     public function getSynthesesByAutodiag(User $user, Autodiag $autodiag, Domaine $domaine = null)
@@ -66,9 +69,10 @@ class DataFormatter
     /**
      * Retourne un tableau composé de deux sous tableaux,
      * le premier contient les infos à afficher pour les synthèses non-validées
-     * le second contient les infos à afficher pour les synthèses validées (avec les syntèses partagées)
+     * le second contient les infos à afficher pour les synthèses validées (avec les syntèses partagées).
      *
      * @param array $syntheses
+     *
      * @return array
      */
     public function formatteSyntheses(array $syntheses)

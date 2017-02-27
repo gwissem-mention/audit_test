@@ -4,14 +4,11 @@ namespace HopitalNumerique\ExpertBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use HopitalNumerique\UserBundle\Entity\User;
-
 //Asserts Stuff
-use Symfony\Component\Validator\Constraints as Assert;
-use Nodevo\ToolsBundle\Validator\Constraints as Nodevo;
 use APY\DataGridBundle\Grid\Mapping as GRID;
 
 /**
- * ActiviteExpert
+ * ActiviteExpert.
  *
  * @ORM\Table(name="hn_expert_activite")
  * @ORM\Entity(repositoryClass="HopitalNumerique\ExpertBundle\Repository\ActiviteExpertRepository")
@@ -19,7 +16,7 @@ use APY\DataGridBundle\Grid\Mapping as GRID;
 class ActiviteExpert
 {
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="exp_id", type="integer")
      * @ORM\Id
@@ -28,20 +25,20 @@ class ActiviteExpert
     protected $id;
 
     /**
-     * Liste des événements liés à l'activité
-     * 
+     * Liste des événements liés à l'activité.
+     *
      * @var /HopitalNumerique/ExpertBundle/Entity/EvenementExpert
-     * 
+     *
      * @ORM\OneToMany(targetEntity="EvenementExpert", mappedBy="activite", cascade={"persist", "remove" })
      * @ORM\OrderBy({"date" = "DESC"})
      */
     protected $evenements;
 
     /**
-     * Liste des dates fictives liées à l'activité
-     * 
+     * Liste des dates fictives liées à l'activité.
+     *
      * @var /HopitalNumerique/ExpertBundle/Entity/DateFictiveActiviteExpert
-     * 
+     *
      * @ORM\OneToMany(targetEntity="DateFictiveActiviteExpert", mappedBy="activite", cascade={"remove" })
      * @ORM\OrderBy({"date" = "DESC"})
      */
@@ -69,14 +66,14 @@ class ActiviteExpert
     protected $dateFin;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="exp_nb_vacation_par_expert", type="integer")
      */
     protected $nbVacationParExpert;
 
     /**
-     * @var boolean
+     * @var bool
      *
      * @ORM\Column(name="exp_etat_validation", type="boolean")
      */
@@ -139,9 +136,8 @@ class ActiviteExpert
      */
     private $paiements;
 
-
     /**
-     * Constructor
+     * Constructor.
      */
     public function __construct()
     {
@@ -151,11 +147,10 @@ class ActiviteExpert
         $this->paiements = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
-
     /**
-     * Get id
+     * Get id.
      *
-     * @return integer 
+     * @return int
      */
     public function getId()
     {
@@ -163,9 +158,10 @@ class ActiviteExpert
     }
 
     /**
-     * Set titre
+     * Set titre.
      *
      * @param string $titre
+     *
      * @return ActiviteExpert
      */
     public function setTitre($titre)
@@ -176,9 +172,9 @@ class ActiviteExpert
     }
 
     /**
-     * Get titre
+     * Get titre.
      *
-     * @return string 
+     * @return string
      */
     public function getTitre()
     {
@@ -186,9 +182,10 @@ class ActiviteExpert
     }
 
     /**
-     * Set dateDebut
+     * Set dateDebut.
      *
      * @param \DateTime $dateDebut
+     *
      * @return ActiviteExpert
      */
     public function setDateDebut($dateDebut)
@@ -199,9 +196,9 @@ class ActiviteExpert
     }
 
     /**
-     * Get dateDebut
+     * Get dateDebut.
      *
-     * @return \DateTime 
+     * @return \DateTime
      */
     public function getDateDebut()
     {
@@ -209,9 +206,10 @@ class ActiviteExpert
     }
 
     /**
-     * Set dateFin
+     * Set dateFin.
      *
      * @param \DateTime $dateFin
+     *
      * @return ActiviteExpert
      */
     public function setDateFin($dateFin)
@@ -222,9 +220,9 @@ class ActiviteExpert
     }
 
     /**
-     * Get dateFin
+     * Get dateFin.
      *
-     * @return \DateTime 
+     * @return \DateTime
      */
     public function getDateFin()
     {
@@ -232,9 +230,10 @@ class ActiviteExpert
     }
 
     /**
-     * Set nbVacationParExpert
+     * Set nbVacationParExpert.
      *
-     * @param integer $nbVacationParExpert
+     * @param int $nbVacationParExpert
+     *
      * @return ActiviteExpert
      */
     public function setNbVacationParExpert($nbVacationParExpert)
@@ -245,9 +244,9 @@ class ActiviteExpert
     }
 
     /**
-     * Get nbVacationParExpert
+     * Get nbVacationParExpert.
      *
-     * @return integer 
+     * @return int
      */
     public function getNbVacationParExpert()
     {
@@ -255,9 +254,10 @@ class ActiviteExpert
     }
 
     /**
-     * Set etatValidation
+     * Set etatValidation.
      *
-     * @param boolean $etatValidation
+     * @param bool $etatValidation
+     *
      * @return ActiviteExpert
      */
     public function setEtatValidation($etatValidation)
@@ -268,20 +268,20 @@ class ActiviteExpert
     }
 
     /**
-     * Get etatValidation
+     * Get etatValidation.
      *
-     * @return boolean 
+     * @return bool
      */
     public function getEtatValidation()
     {
         return $this->etatValidation;
     }
 
-
     /**
-     * Set typeActivite
+     * Set typeActivite.
      *
      * @param \HopitalNumerique\ReferenceBundle\Entity\Reference $typeActivite
+     *
      * @return ActiviteExpert
      */
     public function setTypeActivite(\HopitalNumerique\ReferenceBundle\Entity\Reference $typeActivite = null)
@@ -292,9 +292,9 @@ class ActiviteExpert
     }
 
     /**
-     * Get typeActivite
+     * Get typeActivite.
      *
-     * @return \HopitalNumerique\ReferenceBundle\Entity\Reference 
+     * @return \HopitalNumerique\ReferenceBundle\Entity\Reference
      */
     public function getTypeActivite()
     {
@@ -302,9 +302,10 @@ class ActiviteExpert
     }
 
     /**
-     * Add expertConcernes
+     * Add expertConcernes.
      *
      * @param \HopitalNumerique\UserBundle\Entity\User $expertConcernes
+     *
      * @return ActiviteExpert
      */
     public function addExpertConcerne(\HopitalNumerique\UserBundle\Entity\User $expertConcernes)
@@ -315,7 +316,7 @@ class ActiviteExpert
     }
 
     /**
-     * Remove expertConcernes
+     * Remove expertConcernes.
      *
      * @param \HopitalNumerique\UserBundle\Entity\User $expertConcernes
      */
@@ -325,9 +326,9 @@ class ActiviteExpert
     }
 
     /**
-     * Get expertConcernes
+     * Get expertConcernes.
      *
-     * @return \Doctrine\Common\Collections\Collection 
+     * @return \Doctrine\Common\Collections\Collection
      */
     public function getExpertConcernes()
     {
@@ -335,9 +336,10 @@ class ActiviteExpert
     }
 
     /**
-     * Set uniteOeuvreConcerne
+     * Set uniteOeuvreConcerne.
      *
      * @param \HopitalNumerique\ReferenceBundle\Entity\Reference $uniteOeuvreConcerne
+     *
      * @return ActiviteExpert
      */
     public function setUniteOeuvreConcerne(\HopitalNumerique\ReferenceBundle\Entity\Reference $uniteOeuvreConcerne = null)
@@ -348,9 +350,9 @@ class ActiviteExpert
     }
 
     /**
-     * Get uniteOeuvreConcerne
+     * Get uniteOeuvreConcerne.
      *
-     * @return \HopitalNumerique\ReferenceBundle\Entity\Reference 
+     * @return \HopitalNumerique\ReferenceBundle\Entity\Reference
      */
     public function getUniteOeuvreConcerne()
     {
@@ -358,9 +360,10 @@ class ActiviteExpert
     }
 
     /**
-     * Add anapiens
+     * Add anapiens.
      *
      * @param \HopitalNumerique\UserBundle\Entity\User $anapiens
+     *
      * @return ActiviteExpert
      */
     public function addAnapien(\HopitalNumerique\UserBundle\Entity\User $anapiens)
@@ -371,7 +374,7 @@ class ActiviteExpert
     }
 
     /**
-     * Remove anapiens
+     * Remove anapiens.
      *
      * @param \HopitalNumerique\UserBundle\Entity\User $anapiens
      */
@@ -381,9 +384,9 @@ class ActiviteExpert
     }
 
     /**
-     * Get anapiens
+     * Get anapiens.
      *
-     * @return \Doctrine\Common\Collections\Collection 
+     * @return \Doctrine\Common\Collections\Collection
      */
     public function getAnapiens()
     {
@@ -391,9 +394,10 @@ class ActiviteExpert
     }
 
     /**
-     * Set prestataire
+     * Set prestataire.
      *
      * @param \HopitalNumerique\ReferenceBundle\Entity\Reference $prestataire
+     *
      * @return ActiviteExpert
      */
     public function setPrestataire(\HopitalNumerique\ReferenceBundle\Entity\Reference $prestataire = null)
@@ -404,9 +408,9 @@ class ActiviteExpert
     }
 
     /**
-     * Get prestataire
+     * Get prestataire.
      *
-     * @return \HopitalNumerique\ReferenceBundle\Entity\Reference 
+     * @return \HopitalNumerique\ReferenceBundle\Entity\Reference
      */
     public function getPrestataire()
     {
@@ -414,9 +418,10 @@ class ActiviteExpert
     }
 
     /**
-     * Set etat
+     * Set etat.
      *
      * @param \HopitalNumerique\ReferenceBundle\Entity\Reference $etat
+     *
      * @return ActiviteExpert
      */
     public function setEtat(\HopitalNumerique\ReferenceBundle\Entity\Reference $etat = null)
@@ -427,9 +432,9 @@ class ActiviteExpert
     }
 
     /**
-     * Get etat
+     * Get etat.
      *
-     * @return \HopitalNumerique\ReferenceBundle\Entity\Reference 
+     * @return \HopitalNumerique\ReferenceBundle\Entity\Reference
      */
     public function getEtat()
     {
@@ -437,9 +442,10 @@ class ActiviteExpert
     }
 
     /**
-     * Add evenements
+     * Add evenements.
      *
      * @param \HopitalNumerique\ExpertBundle\Entity\EvenementExpert $evenements
+     *
      * @return ActiviteExpert
      */
     public function addEvenement(\HopitalNumerique\ExpertBundle\Entity\EvenementExpert $evenements)
@@ -450,7 +456,7 @@ class ActiviteExpert
     }
 
     /**
-     * Remove evenements
+     * Remove evenements.
      *
      * @param \HopitalNumerique\ExpertBundle\Entity\EvenementExpert $evenements
      */
@@ -460,9 +466,9 @@ class ActiviteExpert
     }
 
     /**
-     * Get evenements
+     * Get evenements.
      *
-     * @return \Doctrine\Common\Collections\Collection 
+     * @return \Doctrine\Common\Collections\Collection
      */
     public function getEvenements()
     {
@@ -470,23 +476,19 @@ class ActiviteExpert
     }
 
     /**
-     * Get evenements
+     * Get evenements.
      *
-     * @return integer
+     * @return int
      */
     public function getMiniNbPresenceEvenements()
     {
         $nbMiniPresence = -1;
 
-        $presenceExpertByActivite = array();
-        foreach ($this->evenements as $evenement) 
-        {
-            foreach ($evenement->getExperts() as $expertPresence)
-            {
-                if($expertPresence->getPresent())
-                {
-                    if(!array_key_exists($expertPresence->getExpertConcerne()->getId(), $presenceExpertByActivite))
-                    {
+        $presenceExpertByActivite = [];
+        foreach ($this->evenements as $evenement) {
+            foreach ($evenement->getExperts() as $expertPresence) {
+                if ($expertPresence->getPresent()) {
+                    if (!array_key_exists($expertPresence->getExpertConcerne()->getId(), $presenceExpertByActivite)) {
                         $presenceExpertByActivite[$expertPresence->getExpertConcerne()->getId()] = 0;
                     }
 
@@ -495,10 +497,8 @@ class ActiviteExpert
             }
         }
 
-        foreach ($presenceExpertByActivite as $nbVacationParExpert) 
-        {
-            if($nbVacationParExpert < $nbMiniPresence || $nbMiniPresence === -1)
-            {
+        foreach ($presenceExpertByActivite as $nbVacationParExpert) {
+            if ($nbVacationParExpert < $nbMiniPresence || $nbMiniPresence === -1) {
                 $nbMiniPresence = $nbVacationParExpert;
             }
         }
@@ -507,9 +507,10 @@ class ActiviteExpert
     }
 
     /**
-     * Add dateFictives
+     * Add dateFictives.
      *
      * @param \HopitalNumerique\ExpertBundle\Entity\EvenementExpert $dateFictives
+     *
      * @return ActiviteExpert
      */
     public function addDateFictive(\HopitalNumerique\ExpertBundle\Entity\EvenementExpert $dateFictives)
@@ -520,7 +521,7 @@ class ActiviteExpert
     }
 
     /**
-     * Remove dateFictives
+     * Remove dateFictives.
      *
      * @param \HopitalNumerique\ExpertBundle\Entity\EvenementExpert $dateFictives
      */
@@ -530,9 +531,9 @@ class ActiviteExpert
     }
 
     /**
-     * Get dateFictives
+     * Get dateFictives.
      *
-     * @return \Doctrine\Common\Collections\Collection 
+     * @return \Doctrine\Common\Collections\Collection
      */
     public function getDateFictives()
     {
@@ -540,7 +541,7 @@ class ActiviteExpert
     }
 
     /**
-     * Add paiement
+     * Add paiement.
      *
      * @param \HopitalNumerique\ExpertBundle\Entity\ActiviteExpert\Paiement $paiement
      *
@@ -554,7 +555,7 @@ class ActiviteExpert
     }
 
     /**
-     * Remove paiement
+     * Remove paiement.
      *
      * @param \HopitalNumerique\ExpertBundle\Entity\ActiviteExpert\Paiement $paiement
      */
@@ -564,7 +565,7 @@ class ActiviteExpert
     }
 
     /**
-     * Get paiements
+     * Get paiements.
      *
      * @return \Doctrine\Common\Collections\Collection
      */
@@ -572,7 +573,6 @@ class ActiviteExpert
     {
         return $this->paiements;
     }
-
 
     /**
      * @return string
@@ -582,12 +582,12 @@ class ActiviteExpert
         return $this->titre;
     }
 
-
     /**
      * Retourne si l'expert est présent.
      *
      * @param \HopitalNumerique\UserBundle\Entity\User $expert Expert
-     * @return boolean Vrai présent
+     *
+     * @return bool Vrai présent
      */
     public function hasExpertConcerne(User $expert)
     {
@@ -604,7 +604,8 @@ class ActiviteExpert
      * Retourne si le paiement d'un expert existe.
      *
      * @param \HopitalNumerique\UserBundle\Entity\User $expert Expert
-     * @return boolean Vrai s'il existe
+     *
+     * @return bool Vrai s'il existe
      */
     public function hasPaiementForExpert(User $expert)
     {

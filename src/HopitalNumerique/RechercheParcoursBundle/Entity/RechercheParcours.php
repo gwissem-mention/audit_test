@@ -5,7 +5,7 @@ namespace HopitalNumerique\RechercheParcoursBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * RechercheParcours
+ * RechercheParcours.
  *
  * @ORM\Table(name="hn_recherche_recherche_parcours")
  * @ORM\Entity(repositoryClass="HopitalNumerique\RechercheParcoursBundle\Repository\RechercheParcoursRepository")
@@ -13,7 +13,7 @@ use Doctrine\ORM\Mapping as ORM;
 class RechercheParcours
 {
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="rrp_id", type="integer")
      * @ORM\Id
@@ -35,7 +35,7 @@ class RechercheParcours
     private $description;
 
     /**
-     * Détails liés à la recherche par parcours
+     * Détails liés à la recherche par parcours.
      *
      * @var /HopitalNumerique/RechercheParcoursBundle/Entity/RechercheParcoursDetails
      *
@@ -43,9 +43,9 @@ class RechercheParcours
      * @ORM\OrderBy({"order" = "ASC"})
      */
     protected $recherchesParcoursDetails;
-    
+
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\ManyToOne(targetEntity="\HopitalNumerique\ReferenceBundle\Entity\Reference")
      * @ORM\JoinColumn(name="ref_id", referencedColumnName="ref_id", onDelete="CASCADE")
@@ -53,26 +53,24 @@ class RechercheParcours
     protected $reference;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="rrp_order", type="smallint", options = {"comment" = "Ordre de la recherche par parcours."})
      */
     protected $order;
 
-
     /**
-     * Constructor
+     * Constructor.
      */
     public function __construct()
     {
         $this->recherchesParcoursDetails = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
-
     /**
-     * Get id
+     * Get id.
      *
-     * @return integer 
+     * @return int
      */
     public function getId()
     {
@@ -80,7 +78,7 @@ class RechercheParcours
     }
 
     /**
-     * Set description
+     * Set description.
      *
      * @param string $description
      *
@@ -94,7 +92,7 @@ class RechercheParcours
     }
 
     /**
-     * Get description
+     * Get description.
      *
      * @return string
      */
@@ -104,20 +102,21 @@ class RechercheParcours
     }
 
     /**
-     * Add rechercheParcoursDetails
+     * Add rechercheParcoursDetails.
      *
      * @param \HopitalNumerique\RechercheParcoursBundle\Entity\RechercheParcoursDetails $rechercheParcoursDetails
+     *
      * @return Menu
      */
     public function addRecherchesParcoursDetail(\HopitalNumerique\RechercheParcoursBundle\Entity\RechercheParcoursDetails $rechercheParcoursDetails)
     {
         $this->recherchesParcoursDetails[] = $rechercheParcoursDetails;
-    
+
         return $this;
     }
 
     /**
-     * Remove rechercheParcoursDetails
+     * Remove rechercheParcoursDetails.
      *
      * @param \HopitalNumerique\RechercheBundle\Entity\RechercheParcoursDetails $rechercheParcoursDetails
      */
@@ -127,9 +126,9 @@ class RechercheParcours
     }
 
     /**
-     * Get recherchesParcoursDetails
+     * Get recherchesParcoursDetails.
      *
-     * @return \Doctrine\Common\Collections\Collection 
+     * @return \Doctrine\Common\Collections\Collection
      */
     public function getRecherchesParcoursDetails()
     {
@@ -137,24 +136,23 @@ class RechercheParcours
     }
 
     /**
-     * Get recherchesParcoursDetails ids
+     * Get recherchesParcoursDetails ids.
      *
-     * @return \Doctrine\Common\Collections\Collection 
+     * @return \Doctrine\Common\Collections\Collection
      */
     public function getRecherchesParcoursDetailsIds()
     {
-        $ids = array();
+        $ids = [];
 
-        foreach ($this->recherchesParcoursDetails as $etape)
-        {
+        foreach ($this->recherchesParcoursDetails as $etape) {
             $ids[] = $etape->getId();
         }
-        
+
         return $ids;
     }
 
     /**
-     * Get reference
+     * Get reference.
      *
      * @return \HopitalNumerique\ReferenceBundle\Entity\Reference $reference
      */
@@ -162,9 +160,9 @@ class RechercheParcours
     {
         return $this->reference;
     }
-    
+
     /**
-     * Set reference
+     * Set reference.
      *
      * @param \HopitalNumerique\ReferenceBundle\Entity\Reference $reference
      */
@@ -174,30 +172,32 @@ class RechercheParcours
     }
 
     /**
-     * Get order
+     * Get order.
      *
-     * @return integer $order
+     * @return int $order
      */
     public function getOrder()
     {
         return $this->order;
     }
-    
+
     /**
-     * Set order
+     * Set order.
      *
-     * @param integer $order
+     * @param int $order
      */
     public function setOrder($order)
     {
         $this->order = $order;
+
         return $this;
     }
 
     /**
-     * Set recherchesParcoursGestion
+     * Set recherchesParcoursGestion.
      *
      * @param \HopitalNumerique\RechercheParcoursBundle\Entity\RechercheParcoursGestion $recherchesParcoursGestion
+     *
      * @return RechercheParcours
      */
     public function setRecherchesParcoursGestion(\HopitalNumerique\RechercheParcoursBundle\Entity\RechercheParcoursGestion $recherchesParcoursGestion = null)
@@ -208,9 +208,9 @@ class RechercheParcours
     }
 
     /**
-     * Get recherchesParcoursGestion
+     * Get recherchesParcoursGestion.
      *
-     * @return \HopitalNumerique\RechercheParcoursBundle\Entity\RechercheParcoursGestion 
+     * @return \HopitalNumerique\RechercheParcoursBundle\Entity\RechercheParcoursGestion
      */
     public function getRecherchesParcoursGestion()
     {

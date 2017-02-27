@@ -5,9 +5,8 @@ namespace Nodevo\MailBundle\Repository;
 use Doctrine\ORM\EntityRepository;
 
 /**
- * MailRepository
+ * MailRepository.
  */
 class MailRepository extends EntityRepository
 {
-
 }

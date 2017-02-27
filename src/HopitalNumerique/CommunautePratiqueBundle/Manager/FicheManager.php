@@ -1,4 +1,5 @@
 <?php
+
 namespace HopitalNumerique\CommunautePratiqueBundle\Manager;
 
 use Nodevo\ToolsBundle\Manager\Manager;

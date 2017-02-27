@@ -14,43 +14,39 @@ class CodeManager extends BaseManager
 {
     protected $class = 'Nodevo\TexteDynamiqueBundle\Entity\Code';
     protected $_userManager;
-        
+
     /**
-     * Constructeur du manager
+     * Constructeur du manager.
      *
      * @param EntityManager $em Entity Manager de Doctrine
      */
-    public function __construct( EntityManager $em, UserManager $userManager )
+    public function __construct(EntityManager $em, UserManager $userManager)
     {
         parent::__construct($em);
         $this->_userManager = $userManager;
     }
 
-     /**
-     * Override : Récupère les données pour le grid sous forme de tableau
+    /**
+     * Override : Récupère les données pour le grid sous forme de tableau.
      *
      * @return array
-     * 
+     *
      * @author Gaetan MELCHILSEN
      * @copyright Nodevo
      */
-    public function getDatasForGrid( \StdClass $condition = null )
+    public function getDatasForGrid(\StdClass $condition = null)
     {
-        $codesForGrid = array();
+        $codesForGrid = [];
 
         $domainesIds = $this->_userManager->getUserConnected()->getDomainesId();
 
-        $codes = $this->getRepository()->getDatasForGrid( $domainesIds, $condition )->getQuery()->getResult();
+        $codes = $this->getRepository()->getDatasForGrid($domainesIds, $condition)->getQuery()->getResult();
 
-        foreach ($codes as $code) 
-        {
-            if(!array_key_exists($code['id'], $codesForGrid))
-            {
+        foreach ($codes as $code) {
+            if (!array_key_exists($code['id'], $codesForGrid)) {
                 $codesForGrid[$code['id']] = $code;
-            }
-            else
-            {
-                $codesForGrid[$code['id']]['domaineNom'] .= ";" . $code['domaineNom'];
+            } else {
+                $codesForGrid[$code['id']]['domaineNom'] .= ';' . $code['domaineNom'];
             }
         }
 
@@ -58,25 +54,22 @@ class CodeManager extends BaseManager
     }
 
     /**
-     * Override : Récupère les données pour le grid sous forme de tableau
+     * Override : Récupère les données pour le grid sous forme de tableau.
      *
      * @return array
-     * 
+     *
      * @author Gaetan MELCHILSEN
      * @copyright Nodevo
      */
     public function getCodesByDomaines($code)
     {
-        $codesOrdered = array();
-        $codes = $this->findBy(array('code' => $code));
+        $codesOrdered = [];
+        $codes = $this->findBy(['code' => $code]);
 
         //Parcourts des codes pour les trier par domaine
-        foreach ($codes as $code) 
-        {
-            foreach ($code->getDomaines() as $domaine) 
-            {
-                if(!array_key_exists($domaine->getId(), $codesOrdered))
-                {
+        foreach ($codes as $code) {
+            foreach ($code->getDomaines() as $domaine) {
+                if (!array_key_exists($domaine->getId(), $codesOrdered)) {
                     $codesOrdered[$domaine->getId()] = '';
                 }
 

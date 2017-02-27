@@ -6,16 +6,13 @@ use CCDNForum\ForumBundle\Model\Component\Repository\PostRepository as CCDNPostR
 use Doctrine\ORM\Query\Expr;
 
 /**
- *
  * @category CCDNForum
- * @package  ForumBundle
  */
 class PostRepository extends CCDNPostRepository
 {
     /**
+     * @param int $topicId
      *
-     * @access public
-     * @param  int $topicId
      * @return \CCDNForum\ForumBundle\Entity\Post
      */
     public function getLastPostForTopicById($topicId)

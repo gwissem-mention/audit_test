@@ -3,7 +3,6 @@
 namespace HopitalNumerique\AutodiagBundle\Event;
 
 use HopitalNumerique\AutodiagBundle\Entity\Synthesis;
-use Symfony\Component\EventDispatcher\Event;
 
 class SynthesisGeneratedEvent extends SynthesisEvent
 {

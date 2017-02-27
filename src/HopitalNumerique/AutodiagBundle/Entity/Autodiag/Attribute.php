@@ -10,7 +10,7 @@ use HopitalNumerique\AutodiagBundle\Entity\Autodiag\Attribute\Option;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
- * Attribute
+ * Attribute.
  *
  * @ORM\Table(name="ad_autodiag_attribute")
  * @ORM\Entity(repositoryClass="HopitalNumerique\AutodiagBundle\Repository\Autodiag\AttributeRepository")
@@ -18,7 +18,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 class Attribute
 {
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
@@ -41,7 +41,7 @@ class Attribute
     private $number;
 
     /**
-     * Text before question
+     * Text before question.
      *
      * @var string
      * @ORM\Column(type="text", nullable=true)
@@ -49,7 +49,7 @@ class Attribute
     private $description;
 
     /**
-     * Attribute label
+     * Attribute label.
      *
      * @var string
      * @ORM\Column(type="string", length=512)
@@ -59,7 +59,7 @@ class Attribute
     private $label;
 
     /**
-     * Attribute type
+     * Attribute type.
      *
      * @var int
      * @ORM\Column(type="string", length=50)
@@ -69,24 +69,24 @@ class Attribute
     private $type;
 
     /**
-     * Colored attribute
+     * Colored attribute.
      *
-     * @var boolean
+     * @var bool
      * @ORM\Column(type="boolean")
      * @Assert\NotNull()
      */
     private $colored;
 
     /**
-     * Inverse colored attribute
+     * Inverse colored attribute.
      *
-     * @var boolean
+     * @var bool
      * @ORM\Column(type="boolean")
      */
     private $colorationInversed = false;
 
     /**
-     * Tooltip
+     * Tooltip.
      *
      * @var string
      * @ORM\Column(type="text", nullable=true)
@@ -94,7 +94,7 @@ class Attribute
     private $tooltip;
 
     /**
-     * Order
+     * Order.
      *
      * @var float
      * @ORM\Column(name="position", type="float", nullable=true)
@@ -102,7 +102,7 @@ class Attribute
     private $order;
 
     /**
-     * Question options
+     * Question options.
      *
      * @var Collection
      * @ORM\OneToMany(
@@ -129,9 +129,9 @@ class Attribute
     }
 
     /**
-     * Get id
+     * Get id.
      *
-     * @return integer
+     * @return int
      */
     public function getId()
     {
@@ -144,7 +144,7 @@ class Attribute
     }
 
     /**
-     * Get code
+     * Get code.
      *
      * @return string
      */
@@ -154,9 +154,10 @@ class Attribute
     }
 
     /**
-     * Set code
+     * Set code.
      *
      * @param string $code
+     *
      * @return Attribute
      */
     public function setCode($code)
@@ -187,7 +188,7 @@ class Attribute
     }
 
     /**
-     * Get description
+     * Get description.
      *
      * @return string
      */
@@ -197,9 +198,10 @@ class Attribute
     }
 
     /**
-     * Set description
+     * Set description.
      *
      * @param string $description
+     *
      * @return Attribute
      */
     public function setDescription($description)
@@ -210,7 +212,7 @@ class Attribute
     }
 
     /**
-     * Get label
+     * Get label.
      *
      * @return string
      */
@@ -220,9 +222,10 @@ class Attribute
     }
 
     /**
-     * Set label
+     * Set label.
      *
      * @param string $label
+     *
      * @return Attribute
      */
     public function setLabel($label)
@@ -242,7 +245,7 @@ class Attribute
     }
 
     /**
-     * Get type
+     * Get type.
      *
      * @return int
      */
@@ -252,9 +255,10 @@ class Attribute
     }
 
     /**
-     * Set type
+     * Set type.
      *
      * @param int $type
+     *
      * @return Attribute
      */
     public function setType($type)
@@ -265,9 +269,9 @@ class Attribute
     }
 
     /**
-     * Get is colored
+     * Get is colored.
      *
-     * @return boolean
+     * @return bool
      */
     public function isColored()
     {
@@ -275,9 +279,10 @@ class Attribute
     }
 
     /**
-     * Set is colored
+     * Set is colored.
      *
-     * @param boolean $colored
+     * @param bool $colored
+     *
      * @return Attribute
      */
     public function setColored($colored)
@@ -288,7 +293,7 @@ class Attribute
     }
 
     /**
-     * @return boolean
+     * @return bool
      */
     public function isColorationInversed()
     {
@@ -296,17 +301,19 @@ class Attribute
     }
 
     /**
-     * @param boolean $colorationInversed
+     * @param bool $colorationInversed
+     *
      * @return Attribute
      */
     public function setColorationInversed($colorationInversed)
     {
         $this->colorationInversed = $colorationInversed;
+
         return $this;
     }
 
     /**
-     * Get tooltip content
+     * Get tooltip content.
      *
      * @return string
      */
@@ -316,9 +323,10 @@ class Attribute
     }
 
     /**
-     * Set tooltip content
+     * Set tooltip content.
      *
      * @param string $tooltip
+     *
      * @return Attribute
      */
     public function setTooltip($tooltip)
@@ -329,9 +337,9 @@ class Attribute
     }
 
     /**
-     * Get order
+     * Get order.
      *
-     * @return integer
+     * @return int
      */
     public function getOrder()
     {
@@ -339,9 +347,10 @@ class Attribute
     }
 
     /**
-     * Set order
+     * Set order.
      *
      * @param $order
+     *
      * @return $this
      */
     public function setOrder($order)
@@ -352,7 +361,7 @@ class Attribute
     }
 
     /**
-     * Get options
+     * Get options.
      *
      * @return Collection
      */
@@ -367,9 +376,10 @@ class Attribute
     }
 
     /**
-     * Add option
+     * Add option.
      *
      * @param Option $option
+     *
      * @return Attribute
      */
     public function addOption(Option $option)
@@ -380,9 +390,10 @@ class Attribute
     }
 
     /**
-     * Remove option
+     * Remove option.
      *
      * @param Option $option
+     *
      * @return Attribute
      */
     public function removeOption(Option $option)
@@ -393,7 +404,7 @@ class Attribute
     }
 
     /**
-     * Get model
+     * Get model.
      *
      * @return Autodiag
      */
@@ -403,9 +414,10 @@ class Attribute
     }
 
     /**
-     * Set Model
+     * Set Model.
      *
      * @param Autodiag $autodiag
+     *
      * @return Attribute
      */
     public function setAutodiag(Autodiag $autodiag)
@@ -415,4 +427,3 @@ class Attribute
         return $this;
     }
 }
-

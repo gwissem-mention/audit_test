@@ -12,7 +12,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use \Nodevo\ToolsBundle\Tools\Chaine;
+use Nodevo\ToolsBundle\Tools\Chaine;
 
 /**
  * Objet controller.
@@ -66,7 +66,7 @@ class ObjetController extends Controller
     }
 
     /**
-     * Action Annuler, on dévérouille l'objet et on redirige vers l'index
+     * Action Annuler, on dévérouille l'objet et on redirige vers l'index.
      *
      * @param $id
      * @param $message
@@ -94,7 +94,7 @@ class ObjetController extends Controller
     }
 
     /**
-     * Action Annuler, on dévérouille l'objet et on redirige vers l'index
+     * Action Annuler, on dévérouille l'objet et on redirige vers l'index.
      *
      * @param $id
      * @param $message
@@ -137,7 +137,7 @@ class ObjetController extends Controller
 
         $options = [
             'toRef' => 0,
-            'note'  => 0,
+            'note' => 0,
         ];
 
         return $this->renderForm(
@@ -175,8 +175,8 @@ class ObjetController extends Controller
             $this->get('session')->getFlashBag()->add(
                 'warning',
                 'Cet objet est en cours d\'édition par '
-                .$objet->getLockedBy()->getEmail()
-                .', il n\'est donc pas accessible pour le moment.'
+                . $objet->getLockedBy()->getEmail()
+                . ', il n\'est donc pas accessible pour le moment.'
             );
 
             return $this->redirect($this->generateUrl('hopitalnumerique_objet_objet'));
@@ -195,10 +195,10 @@ class ObjetController extends Controller
         );
 
         $options = [
-            'contenus'                => $contenus,
-            'infra'                   => $infra,
-            'toRef'                   => $toRef,
-            'productions'             => $productions,
+            'contenus' => $contenus,
+            'infra' => $infra,
+            'toRef' => $toRef,
+            'productions' => $productions,
             'domainesCommunsWithUser' => $this->container->get('hopitalnumerique_core.dependency_injection.entity')
                                                          ->getEntityDomainesCommunsWithUser($objet, $user),
         ];
@@ -230,15 +230,15 @@ class ObjetController extends Controller
         $logs = $repo->getLogEntries($objet);
 
         return $this->render('HopitalNumeriqueObjetBundle:Objet:show.html.twig', [
-            'objet'  => $objet,
+            'objet' => $objet,
             'outils' => $outils,
-            'logs'   => $logs,
+            'logs' => $logs,
         ]);
     }
 
     /**
      * Suppresion d'un Objet.
-     * METHOD = POST|DELETE
+     * METHOD = POST|DELETE.
      *
      * @param $id
      *
@@ -250,9 +250,9 @@ class ObjetController extends Controller
         $objet = $this->get('hopitalnumerique_objet.manager.objet')->findOneBy(['id' => $id]);
 
         if ($objet->isArticle()) {
-            $filtre = "Article";
+            $filtre = 'Article';
         } else {
-            $filtre = "publication";
+            $filtre = 'publication';
         }
 
         //Suppression de l'entitée
@@ -261,18 +261,18 @@ class ObjetController extends Controller
         $this->get('session')->getFlashBag()->add('info', 'Suppression effectuée avec succès.');
 
         return new Response(
-            '{"success":true, "url" : "'.$this->generateUrl(
+            '{"success":true, "url" : "' . $this->generateUrl(
                 'hopitalnumerique_objet_objet_filtre',
                 ['filtre' => $filtre]
-            ).'"}',
+            ) . '"}',
             200
         );
     }
 
     /**
-     * Suppression de masse des objets
+     * Suppression de masse des objets.
      *
-     * @param array $primaryKeys Id des lignes sélectionnées
+     * @param array $primaryKeys    Id des lignes sélectionnées
      * @param array $allPrimaryKeys
      *
      * @return RedirectResponse
@@ -304,7 +304,7 @@ class ObjetController extends Controller
     }
 
     /**
-     * Vérifie l'unicité du nom du fichier
+     * Vérifie l'unicité du nom du fichier.
      *
      * @return Response
      */
@@ -323,7 +323,7 @@ class ObjetController extends Controller
     }
 
     /**
-     * Action appelée dans le plugin "Publication" pour tinymce
+     * Action appelée dans le plugin "Publication" pour tinymce.
      */
     public function getObjetsAction()
     {
@@ -336,7 +336,7 @@ class ObjetController extends Controller
     }
 
     /**
-     * Action appelée dans le plugin "Publication" pour tinymce
+     * Action appelée dans le plugin "Publication" pour tinymce.
      */
     public function getObjetsByDomaineAction()
     {
@@ -349,7 +349,7 @@ class ObjetController extends Controller
     }
 
     /**
-     * POPIN : liste des publication (utilisé dans le menu item)
+     * POPIN : liste des publication (utilisé dans le menu item).
      *
      * @param $articles
      *
@@ -373,7 +373,7 @@ class ObjetController extends Controller
     }
 
     /**
-     * Génère les données requises pour les paramètres de l'url (type publication)
+     * Génère les données requises pour les paramètres de l'url (type publication).
      */
     public function getPublicationDetailsForMenuAction()
     {
@@ -412,7 +412,7 @@ class ObjetController extends Controller
 
                 /** @var Reference $parent */
                 if ($parent = $type->getParent()) {
-                    $categorie .= $parent->getLibelle().'-';
+                    $categorie .= $parent->getLibelle() . '-';
                 }
                 $categorie .= $type->getLibelle();
 
@@ -437,7 +437,7 @@ class ObjetController extends Controller
     }
 
     /**
-     * Generate the article feed (RSS)
+     * Generate the article feed (RSS).
      *
      * @param Request $request
      *
@@ -455,7 +455,6 @@ class ObjetController extends Controller
 
         return new Response($feed->render('rss'));
     }
-
 
     /**
      * Effectue le render du formulaire Objet.
@@ -480,19 +479,19 @@ class ObjetController extends Controller
             $form->handleRequest($request);
 
             //Vérification de la présence rôle et des types
-            $formTypes = $form->get("types")->getData();
+            $formTypes = $form->get('types')->getData();
 
             if (is_null($formTypes)) {
                 $this->get('session')->getFlashBag()->add('danger', 'Veuillez sélectionner un type d\'objet.');
 
                 return $this->render($view, [
-                    'form'                    => $form->createView(),
-                    'objet'                   => $objet,
-                    'contenus'                => isset($options['contenus']) ? $options['contenus'] : [],
-                    'infra'                   => isset($options['infra']) ? $options['infra'] : false,
-                    'toRef'                   => isset($options['toRef']) ? $options['toRef'] : false,
-                    'note'                    => isset($options['note']) ? $options['note'] : 0,
-                    'productions'             => isset($options['productions']) ? $options['productions'] : [],
+                    'form' => $form->createView(),
+                    'objet' => $objet,
+                    'contenus' => isset($options['contenus']) ? $options['contenus'] : [],
+                    'infra' => isset($options['infra']) ? $options['infra'] : false,
+                    'toRef' => isset($options['toRef']) ? $options['toRef'] : false,
+                    'note' => isset($options['note']) ? $options['note'] : 0,
+                    'productions' => isset($options['productions']) ? $options['productions'] : [],
                     'domainesCommunsWithUser' => isset($options['domainesCommunsWithUser'])
                         ? $options['domainesCommunsWithUser'] : [],
                 ]);
@@ -512,13 +511,13 @@ class ObjetController extends Controller
                     $this->get('session')->getFlashBag()->add('danger', 'Cet Alias existe déjà.');
 
                     return $this->render($view, [
-                        'form'                    => $form->createView(),
-                        'objet'                   => $objet,
-                        'contenus'                => isset($options['contenus']) ? $options['contenus'] : [],
-                        'infra'                   => isset($options['infra']) ? $options['infra'] : false,
-                        'toRef'                   => isset($options['toRef']) ? $options['toRef'] : false,
-                        'note'                    => isset($options['note']) ? $options['note'] : 0,
-                        'productions'             => isset($options['productions']) ? $options['productions'] : [],
+                        'form' => $form->createView(),
+                        'objet' => $objet,
+                        'contenus' => isset($options['contenus']) ? $options['contenus'] : [],
+                        'infra' => isset($options['infra']) ? $options['infra'] : false,
+                        'toRef' => isset($options['toRef']) ? $options['toRef'] : false,
+                        'note' => isset($options['note']) ? $options['note'] : 0,
+                        'productions' => isset($options['productions']) ? $options['productions'] : [],
                         'domainesCommunsWithUser' => isset($options['domainesCommunsWithUser'])
                             ? $options['domainesCommunsWithUser'] : [],
                     ]);
@@ -530,8 +529,8 @@ class ObjetController extends Controller
                 }
 
                 //Met à jour la date de modification
-                $notify = $form->get("modified")->getData();
-                if ($notify === "1") {
+                $notify = $form->get('modified')->getData();
+                if ($notify === '1') {
                     $objet->setDateModification(new \DateTime());
 
                     //Récupération des consultations
@@ -562,13 +561,13 @@ class ObjetController extends Controller
 
                         $options = [
                             'titrepublication' => $objet->getTitre(),
-                            'lienpublication'  => '<a href="'.$domaineUrl.$this->generateUrl(
+                            'lienpublication' => '<a href="' . $domaineUrl . $this->generateUrl(
                                 'hopital_numerique_publication_publication_objet',
                                 [
                                     'id' => $objet->getId(),
                                     'alias' => $objet->getAlias(),
                                 ]
-                            ).'" >Lien vers la publication</a>',
+                            ) . '" >Lien vers la publication</a>',
                         ];
                         $mails[] = $this->get('nodevo_mail.manager.mail')->sendNotificationRequete($user, $options);
                     }
@@ -585,12 +584,12 @@ class ObjetController extends Controller
                 $this->get('hopitalnumerique_reference.doctrine.glossaire.parse')->parseAndSaveEntity($objet);
 
                 // On envoi une 'flash' pour indiquer à l'utilisateur que l'entité est ajoutée
-                if ($do == "save-auto") {
+                if ($do == 'save-auto') {
                     $this->get('session')->getFlashBag()->add('info', 'Objet sauvegardé automatiquement.');
                 } else {
                     $this->get('session')->getFlashBag()->add(
                         ($new ? 'success' : 'info'),
-                        'Objet '.($new ? 'ajouté.' : 'mis à jour.')
+                        'Objet ' . ($new ? 'ajouté.' : 'mis à jour.')
                     );
                 }
 
@@ -624,13 +623,13 @@ class ObjetController extends Controller
         return $this->render(
             $view,
             [
-                'form'                    => $form->createView(),
-                'objet'                   => $objet,
-                'contenus'                => isset($options['contenus']) ? $options['contenus'] : [],
-                'infra'                   => isset($options['infra']) ? $options['infra'] : false,
-                'toRef'                   => isset($options['toRef']) ? $options['toRef'] : false,
-                'note'                    => isset($options['note']) ? $options['note'] : 0,
-                'productions'             => isset($options['productions']) ? $options['productions'] : [],
+                'form' => $form->createView(),
+                'objet' => $objet,
+                'contenus' => isset($options['contenus']) ? $options['contenus'] : [],
+                'infra' => isset($options['infra']) ? $options['infra'] : false,
+                'toRef' => isset($options['toRef']) ? $options['toRef'] : false,
+                'note' => isset($options['note']) ? $options['note'] : 0,
+                'productions' => isset($options['productions']) ? $options['productions'] : [],
                 'domainesCommunsWithUser' => isset($options['domainesCommunsWithUser'])
                     ? $options['domainesCommunsWithUser'] : [],
             ]

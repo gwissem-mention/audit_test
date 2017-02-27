@@ -19,43 +19,32 @@ use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 use Doctrine\ORM\EntityRepository;
 
 /**
- *
  * @category CCDNForum
- * @package  ForumBundle
  *
  * @author   Gaëtan MELCHILSEN
  * @license  Nodevo
- *
  */
 class CategoryCreateFormType extends AbstractType
 {
     /**
-     *
-     * @access protected
-     * @var string $categoryClass
+     * @var string
      */
     protected $categoryClass;
 
     /**
-     *
-     * @access protected
-     * @var string $forumClass
+     * @var string
      */
     protected $forumClass;
 
     /**
-     *
-     * @access protected
-     * @var Object $roleHelper
+     * @var object
      */
     protected $roleHelper;
 
     /**
-     *
-     * @access public
      * @param string $categoryClass
      * @param string $forumClass
-     * @param Object $roleHelper
+     * @param object $roleHelper
      */
     public function __construct($categoryClass, $forumClass, $roleHelper)
     {
@@ -65,8 +54,6 @@ class CategoryCreateFormType extends AbstractType
     }
 
     /**
-     *
-     * @access public
      * @param FormBuilderInterface $builder
      * @param array                $options
      */
@@ -74,66 +61,61 @@ class CategoryCreateFormType extends AbstractType
     {
         $builder
             ->add('forum', 'entity',
-                array(
-                    'property'           => 'name',
-                    'class'              => $this->forumClass,
-                    'query_builder'      =>
-                        function (EntityRepository $er) {
-                            return $er
+                [
+                    'property' => 'name',
+                    'class' => $this->forumClass,
+                    'query_builder' => function (EntityRepository $er) {
+                        return $er
                                 ->createQueryBuilder('f')
                             ;
-                        },
-                    'data'               => $options['default_forum'],
-                    'required'           => false,
-                    'label'              => 'forum.label',
+                    },
+                    'data' => $options['default_forum'],
+                    'required' => false,
+                    'label' => 'forum.label',
                     'translation_domain' => 'CCDNForumForumBundle',
-                )
+                ]
             )
             ->add('name', 'text',
-                array(
-                    'label'              => 'category.name-label',
+                [
+                    'label' => 'category.name-label',
                     'translation_domain' => 'CCDNForumForumBundle',
-                    'attr'               => array(
-                        'class' => 'validate[required,minSize[3],maxSize[255]]'
-                    )
-                )
+                    'attr' => [
+                        'class' => 'validate[required,minSize[3],maxSize[255]]',
+                    ],
+                ]
             )
             ->add('readAuthorisedRoles', 'choice',
-                array(
-                    'required'           => false,
-                    'expanded'           => true,
-                    'multiple'           => true,
-                    'choices'            => $options['available_roles'],
-                    'label'              => 'category.roles.board-view-label',
+                [
+                    'required' => false,
+                    'expanded' => true,
+                    'multiple' => true,
+                    'choices' => $options['available_roles'],
+                    'label' => 'category.roles.board-view-label',
                     'translation_domain' => 'CCDNForumForumBundle',
-                )
+                ]
             )
         ;
     }
 
     /**
-     *
-     * @access public
      * @param \Symfony\Component\OptionsResolver\OptionsResolverInterface $resolver
      */
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
-        $resolver->setDefaults(array(
-            'data_class'          => $this->categoryClass,
-            'csrf_protection'     => true,
-            'csrf_field_name'     => '_token',
+        $resolver->setDefaults([
+            'data_class' => $this->categoryClass,
+            'csrf_protection' => true,
+            'csrf_field_name' => '_token',
             // a unique key to help generate the secret token
-            'intention'           => 'forum_category_create_item',
-            'validation_groups'   => array('forum_category_create'),
-            'cascade_validation'  => true,
-            'available_roles'     => $this->roleHelper->getRoleForFormulaire(),
-            'default_forum'       => null
-        ));
+            'intention' => 'forum_category_create_item',
+            'validation_groups' => ['forum_category_create'],
+            'cascade_validation' => true,
+            'available_roles' => $this->roleHelper->getRoleForFormulaire(),
+            'default_forum' => null,
+        ]);
     }
 
     /**
-     *
-     * @access public
      * @return string
      */
     public function getName()

@@ -4,6 +4,7 @@
  *
  * @author Rémi Leclerc <rleclerc@nodevo.com>
  */
+
 namespace HopitalNumerique\InterventionBundle\Manager\Form;
 
 use HopitalNumerique\UserBundle\Entity\User;
@@ -28,8 +29,7 @@ class InterventionDemandeManager
      * Constructeur du manager gérant les formulaires de demandes d'intervention.
      *
      * @param \HopitalNumerique\ReferenceBundle\Manager\ReferenceManager $referenceManager Manager de Reference
-     * @param \HopitalNumerique\ObjetBundle\Manager\ObjetManager $objetManager Manager de Objet
-     * @return void
+     * @param \HopitalNumerique\ObjetBundle\Manager\ObjetManager         $objetManager     Manager de Objet
      */
     public function __construct(ReferenceManager $referenceManager, ObjetManager $objetManager)
     {
@@ -46,6 +46,7 @@ class InterventionDemandeManager
     {
         return $this->referenceManager->findByCode('TYPE_INTERVENTION', true);
     }
+
     /**
      * Retourne la liste des états d'intervention pour les listes de formulaire.
      *
@@ -55,6 +56,7 @@ class InterventionDemandeManager
     {
         return $this->referenceManager->findByCode('ETAT_DEMANDE_INTERVENTION');
     }
+
     /**
      * Retourne la liste des états des évaluations d'intervention pour les listes de formulaire.
      *
@@ -64,6 +66,7 @@ class InterventionDemandeManager
     {
         return $this->referenceManager->findByCode('ETAT_EVALUATION');
     }
+
     /**
      * Retourne la liste des états des remboursements d'intervention pour les listes de formulaire.
      *
@@ -73,6 +76,7 @@ class InterventionDemandeManager
     {
         return $this->referenceManager->findByCode('ETAT_REMBOURSEMENT');
     }
+
     /**
      * Retourne la liste des objets pour les listes de formulaire.
      *
@@ -80,27 +84,24 @@ class InterventionDemandeManager
      */
     public function getObjetsChoices()
     {
-        return $this->objetManager->getObjetsByTypesAndDomaine( array(175, 176, 177, 178, 179, 180, 181, 182), null);
+        return $this->objetManager->getObjetsByTypesAndDomaine([175, 176, 177, 178, 179, 180, 181, 182], null);
     }
+
     /**
      * Retourne la liste des objets pour les listes de formulaire.
      *
      * @param \HopitalNumerique\UserBundle\Entity\User $ambassadeur L'ambassadeur pour le filtre
+     *
      * @return array Liste des objets pour les listes de formulaire
      */
     public function getConnaissancesChoices(User $ambassadeur = null)
     {
-        if(is_null($ambassadeur))
-        {
+        if (is_null($ambassadeur)) {
             return $this->referenceManager->findByCode('PERIMETRE_FONCTIONNEL_DOMAINES_FONCTIONNELS');
-        }
-        else
-        {
-            $connaissances = array();
-            foreach ($ambassadeur->getConnaissancesAmbassadeurs() as $connaissance)
-            {
-                if(!is_null($connaissance->getConnaissance()))
-                {
+        } else {
+            $connaissances = [];
+            foreach ($ambassadeur->getConnaissancesAmbassadeurs() as $connaissance) {
+                if (!is_null($connaissance->getConnaissance())) {
                     $connaissances[] = $connaissance->getDomaine();
                 }
             }
@@ -108,25 +109,22 @@ class InterventionDemandeManager
             return $connaissances;
         }
     }
+
     /**
      * Retourne la liste des objets pour les listes de formulaire.
      *
      * @param \HopitalNumerique\UserBundle\Entity\User $ambassadeur L'ambassadeur pour le filtre
+     *
      * @return array Liste des objets pour les listes de formulaire
      */
     public function getConnaissancesSIChoices(User $ambassadeur = null)
     {
-        if(is_null($ambassadeur))
-        {
-            return $this->referenceManager->findBy(array('code' => 'CONNAISSANCES_AMBASSADEUR_SI'), array('order' => 'ASC'));
-        }
-        else
-        {
-            $connaissancesSI = array();
-            foreach ($ambassadeur->getConnaissancesAmbassadeursSI() as $connaissanceSI)
-            {
-                if(!is_null($connaissanceSI->getConnaissance()))
-                {
+        if (is_null($ambassadeur)) {
+            return $this->referenceManager->findBy(['code' => 'CONNAISSANCES_AMBASSADEUR_SI'], ['order' => 'ASC']);
+        } else {
+            $connaissancesSI = [];
+            foreach ($ambassadeur->getConnaissancesAmbassadeursSI() as $connaissanceSI) {
+                if (!is_null($connaissanceSI->getConnaissance())) {
                     $connaissancesSI[] = $connaissanceSI->getDomaine();
                 }
             }

@@ -33,7 +33,7 @@ class CommentaireController extends Controller
         $commentaire = $this->get('hopitalnumerique_objet.manager.commentaire')->createEmpty();
 
         //récupération de l'objet du commentaire passé en param de la requete
-        $isContenu = $request->request->get('isContenu') === "1";
+        $isContenu = $request->request->get('isContenu') === '1';
         //Si c'est un Infradoc
         if ($isContenu) {
             $idInfraDoc = $request->request->get('objetId');
@@ -79,7 +79,7 @@ class CommentaireController extends Controller
     /**
      * Affiche le formulaire d'édition de Commentaire.
      *
-     * @param integer $id Id de Commentaire.
+     * @param int $id id de Commentaire
      *
      * @return Form|redirect
      */
@@ -94,8 +94,8 @@ class CommentaireController extends Controller
     /**
      * Suppresion d'un Commentaire.
      *
-     * @param integer $id Id de Commentaire.
-     * METHOD = POST|DELETE
+     * @param int $id Id de Commentaire.
+     *                METHOD = POST|DELETE
      *
      * @return Response
      */
@@ -114,8 +114,8 @@ class CommentaireController extends Controller
     /**
      * Publication/déplication d'un Commentaire.
      *
-     * @param integer $id Id de Commentaire.
-     * METHOD = POST|DELETE
+     * @param int $id Id de Commentaire.
+     *                METHOD = POST|DELETE
      *
      * @return Response
      */
@@ -135,13 +135,12 @@ class CommentaireController extends Controller
         return new Response('{"success":true, "url" : "' . $this->generateUrl('hopitalnumerique_objet_admin_commentaire') . '"}', 200);
     }
 
-
     /**
      * Effectue le render du formulaire Commentaire.
      *
-     * @param string $formName Nom du service associé au formulaire
-     * @param Commentaire $entity Entité $commentaire
-     * @param string $view Chemin de la vue ou sera rendu le formulaire
+     * @param string      $formName Nom du service associé au formulaire
+     * @param Commentaire $entity   Entité $commentaire
+     * @param string      $view     Chemin de la vue ou sera rendu le formulaire
      *
      * @return Form | redirect
      */
@@ -176,7 +175,7 @@ class CommentaireController extends Controller
         }
 
         return $this->render($view, [
-            'form'        => $form->createView(),
+            'form' => $form->createView(),
             'commentaire' => $commentaire,
         ]);
     }

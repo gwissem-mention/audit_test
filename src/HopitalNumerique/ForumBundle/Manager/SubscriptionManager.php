@@ -12,13 +12,11 @@ class SubscriptionManager extends BaseManager
     protected $class = 'HopitalNumerique\ForumBundle\Entity\Subscription';
 
     public function deleteSubscriptionByTopicsArray($topics)
-    {   
-        $subscriptionToDelete = array();
+    {
+        $subscriptionToDelete = [];
 
-        foreach ($topics as $topic) 
-        {
-            foreach ($topic->getSubscriptions() as $subscription) 
-            {
+        foreach ($topics as $topic) {
+            foreach ($topic->getSubscriptions() as $subscription) {
                 $subscriptionToDelete[] = $subscription;
             }
         }

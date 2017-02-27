@@ -21,6 +21,7 @@ class CompareCommand
 
     /**
      * ComparisonCommand constructor.
+     *
      * @param Synthesis $reference
      * @param Synthesis $synthesis
      */

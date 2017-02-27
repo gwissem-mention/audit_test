@@ -8,9 +8,8 @@ use CCDNForum\ForumBundle\Component\Crumbs\CrumbBuilder as CCDNCrumbs;
 class CrumbBuilder extends CCDNCrumbs
 {
     /**
+     * @param \CCDNForum\ForumBundle\Entity\Forum $forum
      *
-     * @access public
-     * @param  \CCDNForum\ForumBundle\Entity\Forum                        $forum
      * @return \CCDNForum\ForumBundle\Component\Crumbs\Factory\CrumbTrail
      */
     public function addUserCategoryIndex(Forum $forum = null)
@@ -18,16 +17,15 @@ class CrumbBuilder extends CCDNCrumbs
         return $this->createCrumbTrail()
             ->add(
                 $forum ?
-                    $forum->getName() == 'default' ?  'Index' : $forum->getName()
+                    $forum->getName() == 'default' ? 'Index' : $forum->getName()
                     :
-                    'Index'
-                ,
-                array(
+                    'Index',
+                [
                     'route' => 'ccdn_forum_user_category_index',
-                    'params' => array(
-                        'forumName' => $forum ? $forum->getName() : 'default'
-                    )
-                )
+                    'params' => [
+                        'forumName' => $forum ? $forum->getName() : 'default',
+                    ],
+                ]
             )
         ;
     }
