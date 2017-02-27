@@ -38,6 +38,12 @@ services:
         class: %hopitalnumerique_objet.manager.objet.class%
         arguments: ["@doctrine.orm.entity_manager", "@hopitalnumerique_objet.manager.contenu", "@hopitalnumerique_objet.manager.note", "@session", "@hopitalnumerique_user.manager.user", "@hopitalnumerique_reference.manager.reference"]
 
+    hopitalnumerique_objet.repository.contenu:
+        class: HopitalNumerique\ObjetBundle\Repository\ContenuRepository
+        factory: ["@doctrine.orm.entity_manager", "getRepository"]
+        arguments:
+            - 'HopitalNumeriqueObjetBundle:Contenu'
+
     hopitalnumerique_objet.manager.contenu:
         class: %hopitalnumerique_objet.manager.contenu.class%
         arguments: ["@doctrine.orm.entity_manager", "@hopitalnumerique_user.manager.user", "@hopitalnumerique_reference.manager.reference"]

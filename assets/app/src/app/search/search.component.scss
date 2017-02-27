@@ -1,0 +1,11 @@
+.resultset-wrapper {
+    display: flex;
+
+    .results-wrapper {
+        flex: 1 1 auto;
+    }
+
+    .aggregations-wrapper {
+        flex: 0 0 20%;
+    }
+}

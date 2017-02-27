@@ -53,7 +53,7 @@ class Contenu
     protected $alias;
 
     /**
-     * @var int
+     * @var integer
      *
      * @ORM\Column(name="con_order", type="integer", nullable=true, options = {"comment" = "Ordre du contenu"})
      */
@@ -164,7 +164,7 @@ class Contenu
     /**
      * Get id.
      *
-     * @return int
+     * @return integer
      */
     public function getId()
     {

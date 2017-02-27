@@ -1,0 +1,29 @@
+{% extends 'HopitalNumeriqueCoreBundle:Templates:' ~ templateCurrentId ~ '/layout.html.twig' %}
+
+{% block body -%}
+
+    <br/>
+    <p>
+        Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ducimus ea molestias quaerat? Aperiam maxime quidem reprehenderit sapiente unde ut velit? Cumque fugit, sit. Fuga labore necessitatibus praesentium quae quasi voluptatibus.
+    </p>
+
+    <search-engine>
+        <div class="search-engine-loader">
+            <i class="fa fa-spinner fa-spin"></i>
+        </div>
+    </search-engine>
+
+    <script>
+        sessionStorage.setItem('searchengine', '{{ config|raw }}');
+    </script>
+
+    {% if app.debug %}
+        <script src="{{ searchEngineAppSourcePath }}/polyfills.js"></script>
+        <script src="{{ searchEngineAppSourcePath }}/vendor.js"></script>
+        <script src="{{ searchEngineAppSourcePath }}/app.js"></script>
+    {% else %}
+        <script src="{{ asset('searchengine/polyfills.js') }}"></script>
+        <script src="{{ asset('searchengine/vendor.js') }}"></script>
+        <script src="{{ asset('searchengine/app.js') }}"></script>
+    {% endif %}
+{% endblock %}

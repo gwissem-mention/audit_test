@@ -1,0 +1,13 @@
+{
+    "require": {
+        "silex/silex": "~2.0",
+        "ruflin/elastica": "^5.1",
+        "rpodwika/yaml-config-service-provider": "^1.0"
+    },
+    "autoload": {
+        "psr-0": { "": "src/" }
+    },
+    "require-dev": {
+        "symfony/var-dumper": "^3.2"
+    }
+}

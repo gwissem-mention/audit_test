@@ -1,0 +1,15 @@
+<div class="search-bar">
+    <form id="search-form" action="http://10.0.0.2:9000/search">
+        <div class="search-tags-wrapper">
+            <div class="search-tags">
+                <span class="tag badge" *ngFor="let filter of query.getFilters()" (click)="removeFilter(filter)">
+                    {{filter.label}}
+                    <i class="fa fa-times"></i>
+                </span>
+            </div>
+            <div class="search-input">
+                <input [value]="term" (keyup)="updateTerm($event.target.value)" placeholder="Rechercher" />
+            </div>
+        </div>
+    </form>
+</div>

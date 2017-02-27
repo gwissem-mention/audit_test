@@ -1,0 +1,13 @@
+<main>
+    <query [query]="getQuery()" (queryChanged)="refreshQuery($event)"></query>
+
+    <div class="resultset-wrapper">
+        <div class="results-wrapper">
+            <search-results [mode]="getHotMode()" [resultSet]="getHotResultSet()" [query]="getQuery()"  (queryChanged)="refreshQuery($event)"></search-results>
+            <search-results [resultSet]="getResultSet()" [query]="getQuery()"  (queryChanged)="refreshQuery($event)"></search-results>
+        </div>
+        <div class="aggregations-wrapper">
+            <search-aggregation [resultSet]="getResultSet()" [query]="getQuery()" (queryChanged)="refreshQuery($event)"></search-aggregation>
+        </div>
+    </div>
+</main>

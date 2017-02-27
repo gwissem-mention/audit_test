@@ -1,0 +1,62 @@
+<div id="search-results-container" class="{{mode}}" *ngIf="canShow">
+
+    <h2>
+        <span class="title">{{resultSet.label}}</span>
+        <span [ngPlural]="resultSet.total">
+                <ng-template ngPluralCase="=0">(Aucun résultat)</ng-template>
+                <ng-template ngPluralCase="=1">({{resultSet.total}} résultat)</ng-template>
+                <ng-template ngPluralCase="other">({{resultSet.total}} résultats)</ng-template>
+            </span>
+    </h2>
+
+    <div class="results-wrapper">
+
+        <div *ngFor="let result of results" class="result">
+
+            <div *ngIf="mode != 'lite'" class="type">{{ result.getType() }}</div>
+
+
+            <ng-container *ngIf="result.parent; else noParent">
+                <div class="title">
+                    <span class="title__score">
+                        <score [score]="result.getScore()"></score>
+                    </span>
+                    <a href="{{ result.parent.getLink() }}" *ngIf="result.parent.getLink()" class="title__text" [innerHTML]="result.parent.getTitle()"></a>
+                    <span *ngIf="!result.parent.getLink()" class="title__text" [innerHTML]="result.parent.getTitle()"></span>
+                </div>
+
+                <div class="subtitle">
+                    <i class="fa fa-share fa-flip-vertical"></i>
+                    <a href="{{ result.getLink() }}" class="title__text" *ngIf="result.getLink()" [innerHTML]="result.getTitle()"></a>
+                    <span *ngIf="!result.getLink()" class="title__text" [innerHTML]="result.getTitle()"></span>
+                </div>
+            </ng-container>
+
+            <ng-template #noParent>
+                <div class="title">
+                    <span class="title__score">
+                        <score [score]="result.getScore()"></score>
+                    </span>
+                    <a href="{{ result.getLink() }}" *ngIf="result.getLink()" class="title__text" [innerHTML]="result.getTitle()"></a>
+                    <span *ngIf="!result.getLink()" class="title__text" [innerHTML]="result.getTitle()"></span>
+                </div>
+            </ng-template>
+
+            <div class="content" *ngIf="mode != 'lite'" [innerHTML]="result.getContent()"></div>
+
+        </div>
+
+
+        <div class="text-right">
+            <div *ngIf="canShowLess" (click)="showLess()" class="btn btn-danger btn-xs">
+                <i class="fa fa-angle-double-up"></i>
+                Voir moins
+            </div>
+
+            <div *ngIf="canShowMore" (click)="showMore()" class="btn btn-primary btn-xs">
+                <i class="fa fa-angle-double-down"></i>
+                Voir plus
+            </div>
+        </div>
+    </div>
+</div>

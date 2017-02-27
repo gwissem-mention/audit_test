@@ -1,0 +1,24 @@
+abstract class Result {
+    readonly maxScore: number = 3;
+
+    constructor(protected id: number, protected score: number) {
+    }
+
+    abstract getType(): string;
+
+    abstract getTitle(): string;
+
+    abstract getContent(): string;
+
+    abstract getLink(): string;
+
+    getScore() {
+        return Math.round(this.maxScore * (1 - (1 / Math.log(this.ponderateScore() + Math.E))));
+    }
+
+    private ponderateScore() {
+        return Math.exp(this.score) * 1;
+    }
+}
+
+export default Result;

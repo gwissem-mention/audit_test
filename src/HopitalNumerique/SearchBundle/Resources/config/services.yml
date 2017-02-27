@@ -1,0 +1,12 @@
+parameters:
+    fos_elastica.index_manager.class: HopitalNumerique\SearchBundle\Service\IndexManager
+
+services:
+    hopital_numerique_search.indexer_subscriber:
+        class: HopitalNumerique\SearchBundle\EventListener\IndexerSubscriber
+        tags:
+            - { name: kernel.event_subscriber }
+
+    hopital_numerique_search.config_factory:
+        class: HopitalNumerique\SearchBundle\Service\ConfigFactory
+        arguments: ['@fos_elastica.index_manager', '@hopitalnumerique_domaine.dependency_injection.current_domaine']
