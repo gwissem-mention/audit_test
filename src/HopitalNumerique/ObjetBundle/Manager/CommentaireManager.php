@@ -12,22 +12,22 @@ class CommentaireManager extends BaseManager
     protected $class = 'HopitalNumerique\ObjetBundle\Entity\Commentaire';
 
 
-
     /**
      * Override : Récupère les données pour le grid sous forme de tableau
      *
+     * @param \StdClass $condition
+     *
      * @return array
      */
-    public function getDatasForGrid( \StdClass $condition = null )
+    public function getDatasForGrid(\StdClass $condition = null)
     {
         $commentaires = array();
-        
-        $results = $this->getRepository()->getDatasForGrid( $condition )->getQuery()->getResult();
-        
-        foreach ($results as $key => $result)
-        {
-            $commentaires[ $result['id'] ] = $result;
-            
+
+        $results = $this->getRepository()->getDatasForGrid($condition)->getQuery()->getResult();
+
+        foreach ($results as $key => $result) {
+            $commentaires[$result['id']] = $result;
+
             // ----Traitement pour transformer le prénom "Jean-luc robert" en "Jean-Luc Robert"
             //Récupération du prénom
             $prenom = strtolower($result['userPrenom']);
@@ -36,8 +36,7 @@ class CommentaireManager extends BaseManager
             //Unsset de la variable
             $prenom = "";
             //Pour chaque bout on met une MAJ sur la première lettre de chaque mot, si il y en plusieurs c'est qu'il y avait un -
-            foreach ($tempsPrenom as $key => $tempPrenom)
-            {
+            foreach ($tempsPrenom as $key => $tempPrenom) {
                 $prenom .= ("" !== $prenom) ? ('-' . ucwords($tempPrenom)) : ucwords($tempPrenom);
             }
             
@@ -61,18 +60,15 @@ class CommentaireManager extends BaseManager
      * Passe l'ensemble des commentaires à publier
      *
      * @param array     $commentaires Liste des commentaires
-     *
-     * @return empty
      */
-    public function publierEtatCommentaire( $commentaires )
+    public function publierEtatCommentaire($commentaires)
     {
-        foreach($commentaires as $commentaire) {
-            $commentaire->setPublier( true );
-            $this->_em->persist( $commentaire );
+        foreach ($commentaires as $commentaire) {
+            $commentaire->setPublier(true);
+            $this->em->persist($commentaire);
         }
-    
-        //save
-        $this->_em->flush();
+
+        $this->em->flush();
     }
 
 
@@ -81,23 +77,25 @@ class CommentaireManager extends BaseManager
      * Passe l'ensemble des commentaires à dépublier
      *
      * @param array     $commentaires Liste des commentaires
-     *
-     * @return empty
      */
-    public function depublierEtatCommentaire( $commentaires )
+    public function depublierEtatCommentaire($commentaires)
     {
-        foreach($commentaires as $commentaire) {
-            $commentaire->setPublier( false );
-            $this->_em->persist( $commentaire );
+        foreach ($commentaires as $commentaire) {
+            $commentaire->setPublier(false);
+            $this->em->persist($commentaire);
         }
-    
+
         //save
-        $this->_em->flush();
+        $this->em->flush();
     }
 
-    public function findCommentaireByDomaine( $idDomaine )
+    /**
+     * @param $idDomaine
+     *
+     * @return mixed
+     */
+    public function findCommentaireByDomaine($idDomaine)
     {
         return $this->getRepository()->findCommentaireByDomaine($idDomaine)->getQuery()->getResult();
     }
-
 }

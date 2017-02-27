@@ -61,16 +61,16 @@ class RoleManager extends BaseManager
             $role->setRole($code);
         }
 
-        $this->_em->persist($role);
-        $this->_em->flush();
+        $this->em->persist($role);
+        $this->em->flush();
 
         /**
          * Ajout de l'id en fin de code
          */
         if ($code !== false) {
             $role->setRole($code . $role->getId());
-            $this->_em->persist($role);
-            $this->_em->flush();
+            $this->em->persist($role);
+            $this->em->flush();
         }
     }
 

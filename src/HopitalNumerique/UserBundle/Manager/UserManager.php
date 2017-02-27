@@ -59,6 +59,8 @@ class UserManager extends BaseManager
     /**
      * Override : Récupère les données pour le grid sous forme de tableau
      *
+     * @param \StdClass $condition
+     *
      * @return array
      */
     public function getDatasForGrid(\StdClass $condition = null)
@@ -156,11 +158,11 @@ class UserManager extends BaseManager
         foreach ($users as $user) {
             $user->setEtat($ref);
             $user->setEnabled(($ref->getId() == 3 ? 1 : 0));
-            $this->_em->persist($user);
+            $this->em->persist($user);
         }
 
         //save
-        $this->_em->flush();
+        $this->em->flush();
     }
 
     /**

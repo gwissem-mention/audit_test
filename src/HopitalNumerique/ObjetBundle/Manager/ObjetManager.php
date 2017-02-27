@@ -1045,16 +1045,16 @@ class ObjetManager extends BaseManager
                     $this->setAllAlaUneFalse($one->getId());
                 }
             }
-            $this->_em->persist($one);
+            $this->em->persist($one);
         } else {
             if ($entity->getAlaune() == 1) {
                 $this->setAllAlaUneFalse($entity->getId());
             }
 
-            $this->_em->persist($entity);
+            $this->em->persist($entity);
         }
 
-        $this->_em->flush();
+        $this->em->flush();
     }
 
     /**
@@ -1157,6 +1157,6 @@ class ObjetManager extends BaseManager
      */
     protected function getRepository()
     {
-        return $this->_em->getRepository(Objet::class);
+        return $this->em->getRepository(Objet::class);
     }
 }

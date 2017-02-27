@@ -250,7 +250,7 @@ class Session
         return $this->module->getTitre();
     }
 
-    public function setModule( Module $module )
+    public function setModule(Module $module)
     {
         $this->module = $module;
     }

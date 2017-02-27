@@ -1,11 +1,13 @@
 <?php
 /**
  * Manager pour les demandes d'intervention.
- * 
+ *
  * @author Rémi Leclerc <rleclerc@nodevo.com>
  */
 namespace HopitalNumerique\InterventionBundle\Manager;
 
+use HopitalNumerique\InterventionBundle\Manager\InterventionEvaluationEtatManager;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Core\SecurityContext;
 use Nodevo\ToolsBundle\Manager\Manager as BaseManager;
 use Doctrine\ORM\EntityManager;
@@ -41,15 +43,15 @@ class InterventionDemandeManager extends BaseManager
      */
     private $interventionEtatManager;
     /**
-     * @var \HopitalNumerique\InterventionBundle\Manager\InterventionEvaluationEtatManager Le manager de l'entité InterventionEvaluationEtat
+     * @var InterventionEvaluationEtatManager Le manager de l'entité InterventionEvaluationEtat
      */
     private $interventionEvaluationEtatManager;
     /**
-     * @var \HopitalNumerique\InterventionBundle\Manager\InterventionRegroupementManager Le manager de l'entité InterventionRegroupement
+     * @var InterventionRegroupementManager Le manager de l'entité InterventionRegroupement
      */
     private $interventionRegroupementManager;
     /**
-     * @var \HopitalNumerique\InterventionBundle\Manager\InterventionCourrielManager Le manager de l'entité InterventionCourriel
+     * @var InterventionCourrielManager Le manager de l'entité InterventionCourriel
      */
     private $interventionCourrielManager;
     /**
@@ -74,13 +76,14 @@ class InterventionDemandeManager extends BaseManager
     /**
      * Constructeur du manager gérant les demandes d'intervention.
      *
-     * @param \Doctrine\ORM\EntityManager $entityManager EntityManager
-     * @param \Symfony\Component\Security\Core\SecurityContext $securityContext SecurityContext de l'application
-     * @param \Symfony\Bundle\FrameworkBundle\Routing\Router $router Router de l'application
-     * @param \HopitalNumerique\InterventionBundle\Manager\InterventionEtatManager $interventionEtatManager Le manager de l'entité InterventionEtat
-     * @param \HopitalNumerique\InterventionBundle\Manager\InterventionRegroupementManager $interventionRegroupementManager Le manager de l'entité InterventionRegroupement
-     * @param \HopitalNumerique\InterventionBundle\Manager\InterventionCourrielManager $interventionCourrielManager Le manager de l'entité InterventionCourriel
-     * @return void
+     * @param \Doctrine\ORM\EntityManager                                              $entityManager                   EntityManager
+     * @param \Symfony\Component\Security\Core\SecurityContext                     $securityContext                 SecurityContext de l'application
+     * @param \Symfony\Bundle\FrameworkBundle\Routing\Router                       $router                          Router de l'application
+     * @param \HopitalNumerique\InterventionBundle\Manager\InterventionEtatManager $interventionEtatManager         Le manager de l'entité InterventionEtat
+     * @param InterventionRegroupementManager                                      $interventionRegroupementManager Le manager de l'entité InterventionRegroupement
+     * @param InterventionCourrielManager                                          $interventionCourrielManager     Le manager de l'entité InterventionCourriel
+     *
+*@return void
      */
     public function __construct(EntityManager $entityManager, SecurityContext $securityContext, Router $router, InterventionEtatManager $interventionEtatManager, InterventionEvaluationEtatManager $interventionEvaluationEtatManager, InterventionRegroupementManager $interventionRegroupementManager, InterventionCourrielManager $interventionCourrielManager, QuestionnaireManager $questionnaireManager, ReponseManager $reponseManager, ObjetManager $objetManager)
     {
@@ -201,7 +204,7 @@ class InterventionDemandeManager extends BaseManager
      */
     private function majInterventionEtatsDesInterventionDemandesEnEtatDemandeInitiale()
     {
-        $interventionDemandes = $this->_repository->findByDemandesInitialesAValiderCmsi();
+        $interventionDemandes = $this->repository->findByDemandesInitialesAValiderCmsi();
         
         foreach ($interventionDemandes as $interventionDemande)
         {
@@ -273,7 +276,7 @@ class InterventionDemandeManager extends BaseManager
      */
     private function relanceInterventionDemandesEnAttenteCmsi()
     {
-        $interventionDemandes = $this->_repository->findByEtatAttenteCmsiPourRelance();
+        $interventionDemandes = $this->repository->findByEtatAttenteCmsiPourRelance();
         
         foreach ($interventionDemandes as $interventionDemande)
         {
@@ -289,7 +292,7 @@ class InterventionDemandeManager extends BaseManager
      */
     private function relanceInterventionDemandesAcceptationCmsi()
     {
-        $interventionDemandes = $this->_repository->findByEtatAcceptationCmsiPourRelance();
+        $interventionDemandes = $this->repository->findByEtatAcceptationCmsiPourRelance();
         
         foreach ($interventionDemandes as $interventionDemande)
         {
@@ -306,7 +309,7 @@ class InterventionDemandeManager extends BaseManager
      */
     private function relanceInterventionDemandesRelanceAmbassadeur1()
     {
-        $interventionDemandes = $this->_repository->findByEtatRelanceAmbassadeur1PourRelance();
+        $interventionDemandes = $this->repository->findByEtatRelanceAmbassadeur1PourRelance();
     
         foreach ($interventionDemandes as $interventionDemande)
         {
@@ -323,7 +326,7 @@ class InterventionDemandeManager extends BaseManager
      */
     private function relanceInterventionDemandesRelanceAmbassadeur2()
     {
-        $interventionDemandes = $this->_repository->findByEtatRelanceAmbassadeur2PourRelance();
+        $interventionDemandes = $this->repository->findByEtatRelanceAmbassadeur2PourRelance();
     
         foreach ($interventionDemandes as $interventionDemande)
         {
@@ -350,7 +353,7 @@ class InterventionDemandeManager extends BaseManager
      */
     private function relanceSimpleInterventionDemandesEnAttenteCmsi()
     {
-        $interventionDemandes = $this->_repository->findBy(array('interventionEtat' => $this->interventionEtatManager->getInterventionEtatAttenteCmsi()));
+        $interventionDemandes = $this->repository->findBy(array('interventionEtat' => $this->interventionEtatManager->getInterventionEtatAttenteCmsi()));
         
         foreach ($interventionDemandes as $interventionDemande)
             $this->interventionCourrielManager->envoiCourrielRelanceAttenteCmsi($interventionDemande);
@@ -363,7 +366,7 @@ class InterventionDemandeManager extends BaseManager
      */
     public function getGridDonneesCmsiDemandesNouvelles()
     {
-        $interventionDemandes = $this->_repository->getGridDonneesCmsiDemandesNouvelles($this->utilisateurConnecte);
+        $interventionDemandes = $this->repository->getGridDonneesCmsiDemandesNouvelles($this->utilisateurConnecte);
 
         $interventionDemandes = $this->reorderInterventionDemandeForGrid($interventionDemandes);
 
@@ -376,7 +379,7 @@ class InterventionDemandeManager extends BaseManager
      */
     public function getGridDonneesCmsiDemandesTraitees()
     {
-        $interventionDemandes = $this->_repository->getGridDonneesCmsiDemandesTraitees($this->utilisateurConnecte);
+        $interventionDemandes = $this->repository->getGridDonneesCmsiDemandesTraitees($this->utilisateurConnecte);
 
         $interventionDemandes = $this->reorderInterventionDemandeForGrid($interventionDemandes);
 
@@ -389,7 +392,7 @@ class InterventionDemandeManager extends BaseManager
      */
     public function getGridDonneesDirecteurSuiviDemandes()
     {
-        $interventionDemandes = $this->_repository->getGridDonneesDirecteurSuiviDemandes($this->utilisateurConnecte);
+        $interventionDemandes = $this->repository->getGridDonneesDirecteurSuiviDemandes($this->utilisateurConnecte);
     
         $interventionDemandes = $this->reorderInterventionDemandeForGrid($interventionDemandes);
 
@@ -402,7 +405,7 @@ class InterventionDemandeManager extends BaseManager
      */
     public function getGridDonneesAmbassadeurDemandes()
     {
-        $interventionDemandes = $this->_repository->getGridDonneesAmbassadeurDemandes($this->utilisateurConnecte);
+        $interventionDemandes = $this->repository->getGridDonneesAmbassadeurDemandes($this->utilisateurConnecte);
 
         $interventionDemandes = $this->reorderInterventionDemandeForGrid($interventionDemandes);
 
@@ -416,7 +419,7 @@ class InterventionDemandeManager extends BaseManager
     public function getGridDonneesEtablissementDemandes()
     {
         $referent = $this->utilisateurConnecte;
-        $interventionDemandes = $this->_repository->getGridDonneesEtablissementDemandes($referent);
+        $interventionDemandes = $this->repository->getGridDonneesEtablissementDemandes($referent);
     
         $interventionDemandes = $this->reorderInterventionDemandeForGrid($interventionDemandes);
 
@@ -429,7 +432,7 @@ class InterventionDemandeManager extends BaseManager
      */
     public function getGridDonneesAdminDemandes()
     {
-        $interventionDemandes = $this->_repository->getGridDonneesAdminDemandes();
+        $interventionDemandes = $this->repository->getGridDonneesAdminDemandes();
 
         $interventionDemandes = $this->reorderInterventionDemandeForGrid($interventionDemandes);
 
@@ -444,7 +447,7 @@ class InterventionDemandeManager extends BaseManager
      */
     public function getInterventionsSimilairesParAmbassadeur(InterventionDemande $interventionDemande)
     {
-        return $this->_repository->getInterventionsSimilairesParAmbassadeur($interventionDemande);
+        return $this->repository->getInterventionsSimilairesParAmbassadeur($interventionDemande);
     }
     /**
      * Retourne les demandes d'intervention similaire par rapport aux objets d'une demande d'intervention.
@@ -454,7 +457,7 @@ class InterventionDemandeManager extends BaseManager
      */
     public function getInterventionsSimilairesParObjets(InterventionDemande $interventionDemande)
     {
-        return $this->_repository->getInterventionsSimilairesParObjets($interventionDemande);
+        return $this->repository->getInterventionsSimilairesParObjets($interventionDemande);
     }
     
     /**
@@ -694,7 +697,7 @@ class InterventionDemandeManager extends BaseManager
      */
     public function isEtatActuelUpdated(InterventionDemande $intervention)
     {
-        return $this->_repository->isEtatActuelUpdated($intervention);
+        return $this->repository->isEtatActuelUpdated($intervention);
     }
     
     /**
@@ -710,10 +713,11 @@ class InterventionDemandeManager extends BaseManager
     
     /**
      * Retourne les demandes pour l'export.
-     * 
-     * @param integer[] $allPrimaryKeys Les IDs des demandes à exporter
-     * @param string $charset Encodage du CSV
-     * @return array Données pour l'export
+     *
+     * @param array $allPrimaryKeys
+     * @param       $charset
+     *
+     * @return Response
      */
     public function getExportCsv(array $allPrimaryKeys, $charset)
     {
@@ -871,9 +875,8 @@ class InterventionDemandeManager extends BaseManager
 
             $interventionDemandesExport[] = $interventionDemandeExport;
         }
-        
-        return $this->exportCsv
-        (
+
+        return $this->exportCsv(
             $exportTitres,
             $interventionDemandesExport,
             'export-demandes-intervention.csv',

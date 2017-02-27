@@ -28,7 +28,7 @@ class Inscription
     private $id;
 
     /**
-     * @var integer
+     * @var Session
      *
      * @ORM\ManyToOne(targetEntity="Session", inversedBy="inscriptions")
      * @ORM\JoinColumn(name="ses_session", referencedColumnName="ses_id")
@@ -137,13 +137,16 @@ class Inscription
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
         return $this->id;
     }
 
+    /**
+     * @return Session
+     */
     public function getSession()
     {
         return $this->session;
@@ -153,8 +156,8 @@ class Inscription
     {
         return $this->session->getId();
     }
-    
-    public function setSession( Session $session )
+
+    public function setSession(Session $session)
     {
         $this->session = $session;
     }

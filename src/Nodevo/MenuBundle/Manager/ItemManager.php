@@ -9,11 +9,11 @@ class ItemManager extends BaseManager
 {
     protected $class = '\Nodevo\MenuBundle\Entity\Item';
 
-    public function __construct( EntityManager $em, $menuManager )
+    public function __construct(EntityManager $em, $menuManager)
     {
-        $this->_em          = $em;
+        $this->em           = $em;
         $this->_menuManager = $menuManager;
-        $this->_repository  = $this->_em->getRepository( $this->class );
+        $this->repository   = $this->em->getRepository($this->class);
     }
 
     /**
@@ -24,27 +24,29 @@ class ItemManager extends BaseManager
     public function updateOrder($item)
     {
         //Récupération du menu
-        $menu = $this->_repository->findAllOrderSuperieurByItem($item)->getOneOrNullResult();
-        
+        $menu = $this->repository->findAllOrderSuperieurByItem($item)->getOneOrNullResult();
+
         //Récupération des items du menu si le menu n'est pas vide
-        $items = ($menu != null) ? $menu->getItems() : array();
+        $items = ($menu != null) ? $menu->getItems() : [];
 
         //On décale les items dont l'order est supérieur ou égal à l'item courant
         $newOrder = $item->getOrder();
         foreach ($items as $itemAModifier) {
             $newOrder++;
-            $itemAModifier->setOrder( $newOrder );
+            $itemAModifier->setOrder($newOrder);
             $this->save($itemAModifier);
         }
-    }    
+    }
 
     /**
      * Override : Récupère les données pour le grid sous forme de tableau
      *
+     * @param \StdClass $condition
+     *
      * @return array
      */
-    public function getDatasForGrid( \StdClass $condition = null )
-    {        
-        return $this->getRepository()->getDatasForGrid( $condition );
-    }    
+    public function getDatasForGrid(\StdClass $condition = null)
+    {
+        return $this->getRepository()->getDatasForGrid($condition);
+    }
 }
