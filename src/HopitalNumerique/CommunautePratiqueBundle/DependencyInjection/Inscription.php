@@ -39,7 +39,7 @@ class Inscription
             $informationsManquantes[] = 'Région & département';
         }
         if (null === $user->getEtablissementRattachementSante() && null === $user->getAutreStructureRattachementSante() && null === $user->getNomStructure()) {
-            $informationsManquantes[] = 'Etablissement de rattachement / Nom de votre établissement / Nom de la structure';
+            $informationsManquantes[] = 'Structure de rattachement / Nom de votre établissement / Nom de la structure';
         }
         if (null === $user->getProfilEtablissementSante()) {
             $informationsManquantes[] = 'Profil';

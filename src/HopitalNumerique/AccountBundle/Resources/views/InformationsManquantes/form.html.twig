@@ -9,7 +9,7 @@
     {{ form.profilEtablissementSante is defined ? form_row(form.profilEtablissementSante) : '' }}
 
     {% if form.etablissementRattachementSante is defined or form.autreStructureRattachementSante is defined or form.typeActivite is defined or form.fonctionDansEtablissementSanteReferencement is defined %}
-        <h3>Vous êtes un établissement de santé</h3>
+        <h3>Vous êtes dans une structure de santé (établissement ou service sanitaire ou médico-social)</h3>
         {{ form.statutEtablissementSante is defined ? form_row(form.statutEtablissementSante) : '' }}
         {{ form.etablissementRattachementSante is defined ? form_row(form.etablissementRattachementSante) : '' }}
         {{ form.autreStructureRattachementSante is defined ? form_row(form.autreStructureRattachementSante) : '' }}
@@ -18,7 +18,7 @@
     {% endif %}
 
     {% if form.nomStructure is defined or form.fonctionStructure is defined %}
-        <h3>Vous êtes une structure autre qu'un établissement de santé</h3>
+        <h3>Vous êtes dans une autre structure</h3>
         {{ form.nomStructure is defined ? form_row(form.nomStructure) : '' }}
         {{ form.fonctionStructure is defined ? form_row(form.fonctionStructure) : '' }}
     {% endif %}

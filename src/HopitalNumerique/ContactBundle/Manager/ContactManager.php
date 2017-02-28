@@ -80,9 +80,9 @@ class ContactManager extends NodevoContactManager
         //Département
         $candidature .= is_null($contact->getDepartement()) ? '' : '<li><strong>Département :</strong> ' . $contact->getDepartement()->getLibelle() . '</li>';
         //Type établissement
-        $candidature .= is_null($contact->getStatutEtablissementSante()) ? '' : '<li><strong>Type d\'établissement :</strong> ' . $contact->getStatutEtablissementSante()->getLibelle() . '</li>';
-        //Etablissement de rattachement ou Autre structure si établissement est null
-        $candidature .= is_null($contact->getEtablissementRattachementSante()) ? (is_null($contact->getAutreStructureRattachementSante()) ? '' : '<li><strong>Nom de votre établissement si non disponible dans la liste précédente:</strong> ' . $contact->getAutreStructureRattachementSante() . '</li>') : '<li><strong>Etablissement de rattachement :</strong> ' . $contact->getEtablissementRattachementSante()->getAppellation() . '</li>';
+        $candidature .= is_null($contact->getStatutEtablissementSante()) ? '' : '<li><strong>Type de structure :</strong> ' . $contact->getStatutEtablissementSante()->getLibelle() . '</li>';
+        //Structure de rattachement ou Autre structure si structure est null
+        $candidature .= is_null($contact->getEtablissementRattachementSante()) ? (is_null($contact->getAutreStructureRattachementSante()) ? '' : '<li><strong>Nom de votre structure si non disponible dans la liste précédente :</strong> ' . $contact->getAutreStructureRattachementSante() . '</li>') : '<li><strong>Structure de rattachement :</strong> ' . $contact->getEtablissementRattachementSante()->getAppellation() . '</li>';
         //Fonction structure
         $candidature .= is_null($contact->getFonctionStructure()) ? '' : '<li><strong>Fonction structure :</strong> ' . $contact->getFonctionStructure() . '</li>';
         //Message

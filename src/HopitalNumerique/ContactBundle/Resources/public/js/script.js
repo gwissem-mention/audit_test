@@ -30,9 +30,9 @@ $(document).ready(function() {
         chargementEtablissementRattachement();
     });
     
-    // --- Type d'établissement
+    // --- Type de structure
     
-    //Ajout de la fonction de chargement des entreprises sur le on change des type d'établissement
+    //Ajout de la fonction de chargement des entreprises sur le on change des types de structure
     $('#hopital_numerique_contact_contact_statutEtablissementSante').on('change', function() 
     {
     	chargementEtablissementRattachement();

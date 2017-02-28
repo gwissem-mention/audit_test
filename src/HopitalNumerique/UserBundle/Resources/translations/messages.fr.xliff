@@ -12,7 +12,7 @@
             </trans-unit>
             <trans-unit id="user.etablissementRattachementSante">
                 <source>user.etablissementRattachementSante</source>
-                <target>Etablissement de rattachement</target>
+                <target>Structure de rattachement</target>
             </trans-unit>
             <trans-unit id="user.fonctionDansEtablissementSanteReferencement">
                 <source>user.fonctionDansEtablissementSanteReferencement</source>
@@ -36,7 +36,7 @@
             </trans-unit>
             <trans-unit id="user.statutEtablissementSante">
                 <source>user.statutEtablissementSante</source>
-                <target>Type d'établissement</target>
+                <target>Type de structure</target>
             </trans-unit>
             <trans-unit id="user.telephoneDirect">
                 <source>user.telephoneDirect</source>

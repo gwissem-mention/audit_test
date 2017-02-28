@@ -101,8 +101,8 @@ class UserExtension extends \Twig_Extension
 
         //Obligatoire uniquement pour l'ambassadeur
         if (null === $questionnaire || $questionnaire->getNom() !== 'Expert') {
-            //Si 'etablissement de rattachement' n'est pas renseigné on vérifie le 'autre structure'
-            $resultat['rattachementSante'] = (is_null($user->getEtablissementRattachementSante())) ? (is_null($user->getAutreStructureRattachementSante()) ? ['label' => 'Etablissement de rattachement / Nom de votre établissement si non disponible dans la liste précédente'] : []) : [];
+            //Si 'structure de rattachement' n'est pas renseigné on vérifie le 'autre structure'
+            $resultat['rattachementSante'] = (is_null($user->getEtablissementRattachementSante())) ? (is_null($user->getAutreStructureRattachementSante()) ? ['label' => 'Structure de rattachement / Nom de votre structure si non disponible dans la liste précédente'] : []) : [];
             $resultat['profilEtablissement'] = (is_null($user->getProfilEtablissementSante())) ? ['label' => 'Profil'] : [];
         }
 

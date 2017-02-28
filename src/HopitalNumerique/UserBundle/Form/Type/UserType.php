@@ -289,14 +289,12 @@ class UserType extends AbstractType
                 ]);
         }
 
-        // ^ -------- Onglet : Vous êtes un établissement de santé -------- ^
-
         $builder->add('statutEtablissementSante', 'entity', [
             'class' => 'HopitalNumeriqueReferenceBundle:Reference',
             'choices' => $this->referenceManager->findByCode('CONTEXTE_TYPE_ES'),
             'property' => 'libelle',
             'required' => false,
-            'label' => 'Type d\'établissement',
+            'label' => 'Type de structure',
             'empty_value' => ' - ',
             'attr' => ['class' => 'etablissement_sante'],
         ]);
@@ -305,7 +303,7 @@ class UserType extends AbstractType
             $form->add('etablissementRattachementSante', 'choice', [
                 'multiple' => false,
                 'required' => false,
-                'label' => 'Etablissement de rattachement',
+                'label' => 'Structure de rattachement',
                 'empty_value' => ' - ',
                 'attr' => ['class' => 'etablissement_sante'],
                 'choices' => $data,
@@ -346,20 +344,10 @@ class UserType extends AbstractType
         )
         ;
 
-//            ->add('etablissementRattachementSante', 'genemu_jqueryselect2_entity', array(
-//                    'class'         => 'HopitalNumeriqueEtablissementBundle:Etablissement',
-//                    'property'      => 'usersAffichage',
-//                    'multiple'      => false,
-//                    'required'      => false,
-//                    'label'         => 'Etablissement de rattachement',
-//                    'empty_value'   => ' - ',
-//                    'attr'        => array('class' => 'etablissement_sante')
-//            ))
-
         $builder->add('autreStructureRattachementSante', 'text', [
             'max_length' => $this->_constraints['autreStructureRattachementSante']['maxlength'],
             'required' => false,
-            'label' => 'Nom de votre établissement si non disponible dans la liste précédente',
+            'label' => 'Nom de votre structure si non disponible dans la liste précédente',
             'attr' => ['class' => $this->_constraints['autreStructureRattachementSante']['class'] . ' etablissement_sante'],
         ])
             ->add('fonctionDansEtablissementSante', 'text', [
@@ -384,7 +372,7 @@ class UserType extends AbstractType
                 'required' => false,
                 'expanded' => true,
                 'multiple' => true,
-                'label' => 'Type activité',
+                'label' => 'Type activité (pour les établissements sanitaires)',
                 'empty_value' => ' - ',
                 'attr' => ['class' => 'etablissement_sante'],
             ])
@@ -398,10 +386,6 @@ class UserType extends AbstractType
                 'attr' => ['class' => 'etablissement_sante'],
             ])
         ;
-
-        // v -------- Onglet : Vous êtes un établissement de santé -------- v
-
-        // ^ -------- Onglet : Vous êtes une structure autre qu'un établissement de santé  -------- ^
 
         $builder->add('nomStructure', 'text', [
             'max_length' => $this->_constraints['nomStructure']['maxlength'],
@@ -417,7 +401,7 @@ class UserType extends AbstractType
             ])
         ;
 
-        // v -------- Onglet : Vous êtes une structure autre qu'un établissement de santé  -------- v
+        // v -------- Onglet : Vous êtes dans une autre structure  -------- v
 
         // Conditions générales d'utilisation - Uniquement en FO = Si l'utilisateur n'est pas connecté
         if (!$this->_securityContext->isGranted('ROLE_USER')) {

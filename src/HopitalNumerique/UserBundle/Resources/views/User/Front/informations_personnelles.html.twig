@@ -115,7 +115,7 @@
                         <div class="hide">
 	                {% endif %}
                     <div id="etablissement_sante">
-	                    <h4 class="violet">Vous êtes un établissement de santé</h4>
+	                    <h4 class="violet">Vous êtes dans une structure de santé (établissement ou service sanitaire ou médico-social)</h4>
 	                    {{ form_row(form.statutEtablissementSante) }}
 	                    {{ form_row(form.etablissementRattachementSante) }}
 	                    {{ form_row(form.autreStructureRattachementSante) }}
@@ -125,7 +125,7 @@
                     </div>
 
                     <div id="autre_etablissement_sante">
-	                    <h4 class="violet">Vous êtes une structure autre qu'un établissement de santé</h4>
+	                    <h4 class="violet">Vous êtes dans une autre structure</h4>
 	                    {{ form_row(form.nomStructure) }}
 	                    {{ form_row(form.fonctionStructure) }}
                     </div>

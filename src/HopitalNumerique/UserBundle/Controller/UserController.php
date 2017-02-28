@@ -525,7 +525,7 @@ class UserController extends Controller
             'role' => 'Roles',
             'statutEtablissementSante.libelle' => 'Statut Etablissement Santé',
             'profilEtablissementSante.libelle' => 'Profil Etablissement Santé',
-            'autreStructureRattachementSante' => 'Nom de votre établissement si non disponible dans la liste précédente Santé',
+            'autreStructureRattachementSante' => 'Nom de votre structure si non disponible dans la liste précédente Santé',
             'nomStructure' => 'Nom structure',
             'fonctionStructure' => 'Fonction structure',
             'etablissementRattachementSante.nom' => 'Etablissement rattachement Santé',
@@ -1019,7 +1019,7 @@ class UserController extends Controller
                     }
                 }
 
-                //Cas particulier : 2 utilisateur ES - Direction générale par établissement de rattachement
+                //Cas particulier : 2 utilisateur ES - Direction générale par structure de rattachement
                 if (null != $user->getEtablissementRattachementSante() && $role->getRole() == 'ROLE_ES_DIRECTION_GENERALE_5') {
                     $result = $this->get('hopitalnumerique_user.manager.user')->userExistForRoleDirection($user);
                     if (!is_null($result)) {

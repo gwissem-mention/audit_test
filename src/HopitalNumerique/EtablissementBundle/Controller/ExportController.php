@@ -30,7 +30,7 @@ class ExportController extends Controller
                             'id' => 'id',
                             'nom' => 'Nom',
                             'finess' => 'FINESS Geographique',
-                            'typeOrganisme.libelle' => 'Type d\'établissement',
+                            'typeOrganisme.libelle' => 'Type de structure',
                             'region.libelle' => 'Région',
                             'departement.libelle' => 'Département',
                             'adresse' => 'Adresse',

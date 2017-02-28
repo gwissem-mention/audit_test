@@ -41,7 +41,7 @@ class EtablissementType extends AbstractType
                 'choices' => $this->referenceManager->findByCode('CONTEXTE_TYPE_ES'),
                 'property' => 'libelle',
                 'required' => true,
-                'label' => 'Type d\'établissement',
+                'label' => 'Type de structure',
                 'empty_value' => ' - ',
                 'attr' => ['class' => $this->_constraints['typeOrganisme']['class']],
             ])
