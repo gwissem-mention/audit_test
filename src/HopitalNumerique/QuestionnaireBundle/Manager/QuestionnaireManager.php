@@ -4,6 +4,8 @@ namespace HopitalNumerique\QuestionnaireBundle\Manager;
 
 use HopitalNumerique\EtablissementBundle\Entity\Etablissement;
 use HopitalNumerique\EtablissementBundle\Manager\EtablissementManager;
+use HopitalNumerique\QuestionnaireBundle\Entity\Question;
+use HopitalNumerique\QuestionnaireBundle\Entity\Reponse;
 use Nodevo\ToolsBundle\Manager\Manager as BaseManager;
 use Doctrine\ORM\EntityManager;
 use HopitalNumerique\UserBundle\Manager\UserManager;
@@ -11,6 +13,7 @@ use HopitalNumerique\QuestionnaireBundle\Entity\Occurrence;
 use HopitalNumerique\UserBundle\Entity\User;
 use HopitalNumerique\QuestionnaireBundle\Entity\Questionnaire;
 use HopitalNumerique\DomaineBundle\Entity\Domaine;
+use Symfony\Bundle\FrameworkBundle\Routing\Router;
 
 /**
  * Manager de l'entité Contractualisation.
@@ -20,16 +23,33 @@ class QuestionnaireManager extends BaseManager
     protected $class = 'HopitalNumerique\QuestionnaireBundle\Entity\Questionnaire';
 
     /**
-     * @var \HopitalNumerique\QuestionnaireBundle\Manager\OccurrenceManager OccurrenceManager
+     * @var OccurrenceManager OccurrenceManager
      */
     private $occurrenceManager;
 
-    protected $_questionnaireArray = [];
-    protected $_mailExpertReponses = [];
-    protected $_mailReponses = [];
-    protected $_managerReponse;
-    protected $_userManager;
+    protected $questionnaireArray = [];
+    protected $mailExpertReponses = [];
+    protected $mailReponses = [];
+
+    /**
+     * @var ReponseManager $managerReponse
+     */
+    protected $managerReponse;
+
+    /**
+     * @var UserManager $userManager
+     */
+    protected $userManager;
+
+    /**
+     * @var EtablissementManager
+     */
     protected $etablissementManager;
+
+    /**
+     * @var Router $router
+     */
+    private $router;
 
     /**
      * QuestionnaireManager constructor.
@@ -39,33 +59,44 @@ class QuestionnaireManager extends BaseManager
      * @param                      $managerReponse
      * @param UserManager          $userManager
      * @param EtablissementManager $etablissementManager
+     * @param Router               $router
      * @param array                $options
      */
-    public function __construct(EntityManager $em, OccurrenceManager $occurrenceManager, $managerReponse, UserManager $userManager, EtablissementManager $etablissementManager, $options = [])
-    {
+    public function __construct(
+        EntityManager $em,
+        OccurrenceManager $occurrenceManager,
+        $managerReponse,
+        UserManager $userManager,
+        EtablissementManager $etablissementManager,
+        Router $router,
+        $options = []
+    ) {
         parent::__construct($em);
-        $this->_questionnaireArray = isset($options['idRoles']) ? $options['idRoles'] : [];
-        $this->_mailExpertReponses = isset($options['mailExpertReponses']) ? $options['mailExpertReponses'] : [];
-        $this->_mailReponses = isset($options['mailReponses']) ? $options['mailReponses'] : [];
-        $this->occurrenceManager = $occurrenceManager;
-        $this->_managerReponse = $managerReponse;
-        $this->_userManager = $userManager;
+        $this->questionnaireArray   = isset($options['idRoles']) ? $options['idRoles'] : [];
+        $this->mailExpertReponses   = isset($options['mailExpertReponses']) ? $options['mailExpertReponses'] : [];
+        $this->mailReponses         = isset($options['mailReponses']) ? $options['mailReponses'] : [];
+        $this->occurrenceManager    = $occurrenceManager;
+        $this->managerReponse       = $managerReponse;
+        $this->userManager          = $userManager;
         $this->etablissementManager = $etablissementManager;
+        $this->router               = $router;
     }
 
     /**
      * Override : Récupère les données pour le grid sous forme de tableau.
      *
+     * @param \StdClass $condition
+     *
      * @return array
      *
-     * @author Gaetan MELCHILSEN
+     * @author    Gaetan MELCHILSEN
      * @copyright Nodevo
      */
     public function getDatasForGrid(\StdClass $condition = null)
     {
         $questionnairesForGrid = [];
 
-        $domainesIds = $this->_userManager->getUserConnected()->getDomainesId();
+        $domainesIds = $this->userManager->getUserConnected()->getDomainesId();
 
         $questionnaires = $this->getRepository()->getDatasForGrid($domainesIds, $condition)->getQuery()->getResult();
 
@@ -81,13 +112,12 @@ class QuestionnaireManager extends BaseManager
     }
 
     /**
-     * [getQuestionsReponses description].
+     * @param                 $idQuestionnaire
+     * @param                 $idUser
+     * @param Occurrence|null $occurrence
+     * @param null            $paramId
      *
-     * @param [type] $idQuestionnaire [description]
-     * @param [type] $idUser          [description]
-     * @param [type] $paramId         [description]
-     *
-     * @return [type]
+     * @return mixed
      */
     public function getQuestionsReponses($idQuestionnaire, $idUser, Occurrence $occurrence = null, $paramId = null)
     {
@@ -97,9 +127,9 @@ class QuestionnaireManager extends BaseManager
     /**
      * Get les utilisateurs qui ont répondu à ce questionnaire.
      *
-     * @param int $idQuestionnaire [description]
+     * @param int $idQuestionnaire
      *
-     * @return [type]
+     * @return mixed
      */
     public function getQuestionnaireRepondant($idQuestionnaire)
     {
@@ -113,7 +143,7 @@ class QuestionnaireManager extends BaseManager
      */
     public function getMailExpertReponses()
     {
-        return $this->_mailExpertReponses;
+        return $this->mailExpertReponses;
     }
 
     /**
@@ -123,22 +153,28 @@ class QuestionnaireManager extends BaseManager
      */
     public function getMailReponses()
     {
-        return $this->_mailReponses;
+        return $this->mailReponses;
     }
 
     /**
      * Id du questionnaire.
      *
-     * @param string $label Nom du questionnaire
+     * @param $label
      *
-     * @return id du questionnaire si il existe, sinon 0
+     * @return int id du questionnaire s'il existe, sinon 0
+     * @throws \Exception
      */
     public function getQuestionnaireId($label)
     {
-        if (array_key_exists($label, $this->_questionnaireArray)) {
-            return $this->_questionnaireArray[$label];
+        if (array_key_exists($label, $this->questionnaireArray)) {
+            return $this->questionnaireArray[$label];
         } else {
-            throw new \Exception('Le label \'' . $label . '\' ne correspond à aucun questionnaire dans le QuestionnaireManager. Liste des labels attentu : ' . self::getLabelsQuestionnaire());
+            throw new \Exception(
+                'Le label \''
+                . $label
+                . '\' ne correspond à aucun questionnaire dans le QuestionnaireManager. Liste des labels attentu : '
+                . self::getLabelsQuestionnaire()
+            );
         }
     }
 
@@ -152,7 +188,7 @@ class QuestionnaireManager extends BaseManager
         //Variable de return
         $res = '';
 
-        foreach ($this->_questionnaireArray as $label => $id) {
+        foreach ($this->questionnaireArray as $label => $id) {
             $res .= '\'' . $label . '\' ';
         }
 
@@ -190,7 +226,8 @@ class QuestionnaireManager extends BaseManager
                     }
                     $candidature .= '</li>';
                     break;
-                //Gestion très sale, à revoir au moment de la construction du tableau de réponses avec des niveaux d'enfants/parents etc.
+                // Gestion très sale, à revoir au moment de la construction du
+                // tableau de réponses avec des niveaux d'enfants/parents etc.
                 case 'entitymultiple':
                 case 'entitycheckbox':
                     //Affichage pour une possibilité de plusieurs réponses à cette question
@@ -245,107 +282,138 @@ class QuestionnaireManager extends BaseManager
         ];
         $emptyRow = ['id' => ''];
         $questions = $questionnaire->getQuestions();
+
+        /** @var Question $question */
         foreach ($questions as $question) {
-            if ($question->getTypeQuestion()->getLibelle() != 'file') {
-                $colonnes['question' . $question->getId()] = $question->getLibelle();
-                $emptyRow['question' . $question->getId()] = '';
-            }
+            $colonnes['question' . $question->getId()] = $question->getLibelle();
+            $emptyRow['question' . $question->getId()] = '';
         }
 
         $datas = [];
         foreach ($users as $user) {
             $occurrenceReponses = [];
             if ($questionnaire->isOccurrenceMultiple()) {
-                foreach ($this->occurrenceManager->findBy(['questionnaire' => $questionnaire, 'user' => $user]) as $occurrence) {
-                    $occurrenceReponses[] = $this->_managerReponse->reponsesByQuestionnaireByUser($idQuestionnaire, $user->getId(), true, $occurrence);
+                $occurences = $this->occurrenceManager->findBy(['questionnaire' => $questionnaire, 'user' => $user]);
+                foreach ($occurences as $occurrence) {
+                    $occurrenceReponses[] = $this->managerReponse->reponsesByQuestionnaireByUser(
+                        $idQuestionnaire,
+                        $user->getId(),
+                        true,
+                        $occurrence
+                    );
                 }
             } else {
-                $occurrenceReponses[] = $this->_managerReponse->reponsesByQuestionnaireByUser($idQuestionnaire, $user->getId(), true);
+                $occurrenceReponses[] = $this->managerReponse->reponsesByQuestionnaireByUser(
+                    $idQuestionnaire,
+                    $user->getId(),
+                    true
+                );
             }
 
             foreach ($occurrenceReponses as $reponses) {
-                //prepare user infos
-                $row = array_merge([], $emptyRow); //use this to clone the empty table $emptyRow => make sure we have at least an empty data
+                // prepare user infos
+                // use this to clone the empty table $emptyRow => make sure we have at least an empty data
+                $row = array_merge([], $emptyRow);
                 $row['id'] = $user->getId();
 
                 $reponsesIndexes = array_keys($reponses);
-                $row['occurrence'] = (count($reponses) > 0 ? (null !== $reponses[$reponsesIndexes[0]]->getOccurrence() ? $reponses[$reponsesIndexes[0]]->getOccurrence()->getLibelle() : '') : '');
+                $row['occurrence'] = (count($reponses) > 0 ? (null !== $reponses[$reponsesIndexes[0]]->getOccurrence()
+                    ? $reponses[$reponsesIndexes[0]]->getOccurrence()->getLibelle() : '') : '');
                 $row['user'] = $user->getPrenomNom();
                 $row['user_email'] = $user->getEmail();
                 $row['user_region'] = $user->getRegion() == null ? '' : $user->getRegion()->getLibelle();
-                $row['date_saisie'] = count($reponses) > 0 ? (null !== $reponses[$reponsesIndexes[0]]->getDateCreation() ? $reponses[$reponsesIndexes[0]]->getDateCreation()->format('d-m-Y H:i:s') : '') : '';
+                $row['date_saisie'] = count($reponses) > 0 ? (null !== $reponses[$reponsesIndexes[0]]->getDateCreation()
+                    ? $reponses[$reponsesIndexes[0]]->getDateCreation()->format('d-m-Y H:i:s') : '') : '';
 
+                /** @var Reponse $reponse */
                 foreach ($reponses as $reponse) {
                     $question = $reponse->getQuestion();
 
-                    //on récupère toutes les question sauf les types fichiers
-                    if ($question->getTypeQuestion()->getLibelle() != 'file') {
-                        //identifiant de la question
-                        $field = 'question' . $question->getId();
+                    $field = 'question' . $question->getId();
 
-                        switch ($question->getTypeQuestion()->getLibelle()) {
-                            case 'entity':
-                                $row[$field] = is_null($reponse->getReference()) ? '-' : $reponse->getReference()->getLibelle();
-                                break;
-                            case 'entityradio':
-                                $row[$field] = is_null($reponse->getReference()) ? '-' : $reponse->getReference()->getLibelle();
-                                break;
-                            case 'entitymultiple':
-                                //Si il y a des réponses à exporter on exporte les libellés des références concaténés
-                                if (is_null($reponse->getReferenceMulitple())) {
-                                    $row[$field] = '-';
-                                } else {
-                                    $lib = '';
-                                    $compteur = 0;
-                                    foreach ($reponse->getReferenceMulitple() as $reference) {
-                                        ++$compteur;
-                                        //Récupération du libellé de la référence + ajout d'un tiret si on est pas à la fin
-                                        $lib .= $reference->getLibelle() . ($compteur == count($reponse->getReferenceMulitple()) ? '' : ' - ');
-                                    }
-                                    $row[$field] = $lib;
+                    switch ($question->getTypeQuestion()->getLibelle()) {
+                        case 'file':
+                            $row[$field] = $this->router->generate('hopitalnumerique_reponse_download', [
+                                'reponse' => $reponse->getId(),
+                            ], Router::ABSOLUTE_URL);
+                            break;
+                        case 'entity':
+                            $row[$field] = is_null($reponse->getReference()) ? '-'
+                                : $reponse->getReference()->getLibelle();
+                            break;
+                        case 'entityradio':
+                            $row[$field] = is_null($reponse->getReference()) ? '-'
+                                : $reponse->getReference()->getLibelle();
+                            break;
+                        case 'entitymultiple':
+                            //Si il y a des réponses à exporter on exporte les libellés des références concaténés
+                            if (is_null($reponse->getReferenceMulitple())) {
+                                $row[$field] = '-';
+                            } else {
+                                $lib = '';
+                                $compteur = 0;
+                                foreach ($reponse->getReferenceMulitple() as $reference) {
+                                    ++$compteur;
+                                    // Récupération du libellé de la référence
+                                    // + ajout d'un tiret si on est pas à la fin
+                                    $lib .= $reference->getLibelle()
+                                        . ($compteur == count($reponse->getReferenceMulitple())
+                                        ? '' : ' - ')
+                                    ;
                                 }
-                                break;
-                            case 'etablissementmultiple':
-                                //Si il y a des réponses à exporter on exporte les libellés des références concaténés
-                                if (is_null($reponse->getEtablissementMulitple())) {
-                                    $row[$field] = '-';
-                                } else {
-                                    $lib = '';
-                                    $compteur = 0;
-                                    foreach ($reponse->getEtablissementMulitple() as $etablissement) {
-                                        ++$compteur;
-                                        $lib .= $etablissement->getNom() . ($compteur == count($reponse->getEtablissementMulitple()) ? '' : ' - ');
-                                    }
-                                    $row[$field] = $lib;
+                                $row[$field] = $lib;
+                            }
+                            break;
+                        case 'etablissementmultiple':
+                            //Si il y a des réponses à exporter on exporte les libellés des références concaténés
+                            if (is_null($reponse->getEtablissementMulitple())) {
+                                $row[$field] = '-';
+                            } else {
+                                $lib = '';
+                                $compteur = 0;
+                                foreach ($reponse->getEtablissementMulitple() as $etablissement) {
+                                    ++$compteur;
+                                    $lib .= $etablissement->getNom()
+                                            . ($compteur == count($reponse->getEtablissementMulitple())
+                                            ? '' : ' - ')
+                                    ;
                                 }
-                                break;
-                            case 'entitycheckbox':
-                                //Si il y a des réponses à exporter on exporte les libellés des références concaténés
-                                if (is_null($reponse->getReferenceMulitple())) {
-                                    $row[$field] = '-';
-                                } else {
-                                    $lib = '';
-                                    $compteur = 0;
-                                    foreach ($reponse->getReferenceMulitple() as $reference) {
-                                        ++$compteur;
-                                        //Récupération du libellé de la référence + ajout d'un tiret si on est pas à la fin
-                                        $lib .= $reference->getLibelle() . ($compteur == count($reponse->getReferenceMulitple()) ? '' : ' - ');
-                                    }
-                                    $row[$field] = $lib;
+                                $row[$field] = $lib;
+                            }
+                            break;
+                        case 'entitycheckbox':
+                            //Si il y a des réponses à exporter on exporte les libellés des références concaténés
+                            if (is_null($reponse->getReferenceMulitple())) {
+                                $row[$field] = '-';
+                            } else {
+                                $lib = '';
+                                $compteur = 0;
+                                foreach ($reponse->getReferenceMulitple() as $reference) {
+                                    ++$compteur;
+                                    // Récupération du libellé de la référence
+                                    // + ajout d'un tiret si on est pas à la fin
+                                    $lib .= $reference->getLibelle()
+                                        . ($compteur == count($reponse->getReferenceMulitple())
+                                        ? '' : ' - ')
+                                    ;
                                 }
-                                break;
-                            case 'checkbox':
-                                $row[$field] = ('1' == $reponse->getReponse() ? 'Oui' : 'Non');
-                                break;
-                            default:
-                                if ($reponse->getQuestion()->getAlias() == 'etablissement') {
-                                    $etablissementReponse = $this->etablissementManager->findOneBy(['id' => $reponse->getReponse()]);
-                                    $row[$field] = ($etablissementReponse instanceof Etablissement) ? $etablissementReponse->getNom() : '';
-                                } else {
-                                    $row[$field] = $reponse->getReponse();
-                                }
-                                break;
-                        }
+                                $row[$field] = $lib;
+                            }
+                            break;
+                        case 'checkbox':
+                            $row[$field] = ('1' == $reponse->getReponse() ? 'Oui' : 'Non');
+                            break;
+                        default:
+                            if ($reponse->getQuestion()->getAlias() == 'etablissement') {
+                                $etablissementReponse = $this->etablissementManager->findOneBy(
+                                    ['id' => $reponse->getReponse()]
+                                );
+                                $row[$field]          = ($etablissementReponse instanceof Etablissement)
+                                    ? $etablissementReponse->getNom() : '';
+                            } else {
+                                $row[$field] = $reponse->getReponse();
+                            }
+                            break;
                     }
                 }
 
@@ -359,7 +427,7 @@ class QuestionnaireManager extends BaseManager
     /**
      * Retourne les questionnaires (avec leurs occurrences) d'un utilisateur.
      *
-     * @param \HopitalNumerique\UserBundle\Entity\User $user Utilisateur
+     * @param User $user Utilisateur
      *
      * @return array<\HopitalNumerique\QuestionnaireBundle\Entity\Questionnaire> Questionnaires
      */
@@ -371,7 +439,7 @@ class QuestionnaireManager extends BaseManager
     /**
      * Retourne les questionnaires d'un domaine.
      *
-     * @param \HopitalNumerique\DomaineBundle\Entity\Domaine $domaine Domaine
+     * @param Domaine $domaine Domaine
      *
      * @return \Doctrine\Common\Collections\Collection Questionnaires
      */
@@ -380,37 +448,40 @@ class QuestionnaireManager extends BaseManager
         return $this->getRepository()->findByDomaine($domaine);
     }
 
-    /*
-     * Si le questionnaire a été répondu sans que le formulaire fut en occurrence multiple, créé l'occurrence multiple pour ces réponses.
+    /**
+     * Si le questionnaire a été répondu sans que le formulaire fut en occurrence multiple,
+     * créé l'occurrence multiple pour ces réponses.
      *
-     * @param \HopitalNumerique\QuestionnaireBundle\Entity\Questionnaire $questionnaire Questionnaire
-     * @return void
+     * @param Questionnaire $questionnaire
      */
     public function forceOccurrenceMultiple(Questionnaire $questionnaire)
     {
-        $repondants = $this->_userManager->getUsersByQuestionnaire($questionnaire->getId());
+        $repondants = $this->userManager->getUsersByQuestionnaire($questionnaire->getId());
 
         foreach ($repondants as $repondant) {
-            $occurrence = $this->occurrenceManager->findOneBy(['questionnaire' => $questionnaire, 'user' => $repondant]);
+            $occurrence = $this->occurrenceManager->findOneBy(
+                ['questionnaire' => $questionnaire, 'user' => $repondant]
+            );
 
             if (null === $occurrence) {
                 $occurrence = $this->occurrenceManager->createEmpty();
                 $occurrence->setUser($repondant);
                 $occurrence->setQuestionnaire($questionnaire);
                 $this->occurrenceManager->save($occurrence);
-                $this->_managerReponse->setOccurrenceByQuestionnaireAndUser($occurrence, $questionnaire, $repondant);
+                $this->managerReponse->setOccurrenceByQuestionnaireAndUser($occurrence, $questionnaire, $repondant);
             }
         }
     }
 
     /**
-     * Supprime les occurrences multiples d'un questionnaire (ne conserve que la première créée pour conserver les réponses).
+     * Supprime les occurrences multiples d'un questionnaire
+     * (ne conserve que la première créée pour conserver les réponses).
      *
      * @param \HopitalNumerique\QuestionnaireBundle\Entity\Questionnaire $questionnaire Questionnaire
      */
     public function deleteOccurrencesMultiples(Questionnaire $questionnaire)
     {
-        $repondants = $this->_userManager->getUsersByQuestionnaire($questionnaire->getId());
+        $repondants = $this->userManager->getUsersByQuestionnaire($questionnaire->getId());
 
         foreach ($repondants as $repondant) {
             $this->occurrenceManager->deleteOccurrencesMultiplesByQuestionnaireAndUser($questionnaire, $repondant);
@@ -418,13 +489,14 @@ class QuestionnaireManager extends BaseManager
     }
 
     /**
-     * Retourne les questionnaires (avec leurs occurrences) d'un utilisateur pour un domaine avec les dates de création et de dernières modifications.
+     * Retourne les questionnaires (avec leurs occurrences) d'un utilisateur
+     * pour un domaine avec les dates de création et de dernières modifications.
      *
-     * @param \HopitalNumerique\UserBundle\Entity\User       $user    Utilisateur
-     * @param \HopitalNumerique\DomaineBundle\Entity\Domaine $domaine Domaine
-     * @param bool                                           $isLock  (optionnel) Filtre sur questionnaire.lock
+     * @param User    $user
+     * @param Domaine $domaine
+     * @param bool    $isLock  Filtre sur questionnaire.lock
      *
-     * @return array<\HopitalNumerique\QuestionnaireBundle\Entity\Questionnaire> Questionnaires
+     * @return Questionnaire[]
      */
     public function findByUserAndDomaineWithDates(User $user, Domaine $domaine, $isLock = null)
     {
