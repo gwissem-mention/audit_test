@@ -17,10 +17,21 @@ class ReponseManager extends BaseManager
     /**
      * Récupère les réponses pour l'utilisateur en fonction du questionnaire passés en param.
      *
+     * @param            $idQuestionnaire
+     * @param            $idUser
+     * @param bool       $orderByQuestion
+     * @param Occurrence $occurrence
+     * @param null       $paramId
+     *
      * @return array
      */
-    public function reponsesByQuestionnaireByUser($idQuestionnaire, $idUser, $orderByQuestion = false, Occurrence $occurrence = null, $paramId = null)
-    {
+    public function reponsesByQuestionnaireByUser(
+        $idQuestionnaire,
+        $idUser,
+        $orderByQuestion = false,
+        Occurrence $occurrence = null,
+        $paramId = null
+    ) {
         $reponses = $this
             ->getRepository()
             ->reponsesByQuestionnaireByUser($idQuestionnaire, $idUser, $occurrence, $paramId)
@@ -41,15 +52,32 @@ class ReponseManager extends BaseManager
     }
 
     /**
-     * Récupère les réponses pour l'utilisateur en fonction du questionnaire passés en param pour les questions de type 'file'.
+     * Récupère les réponses pour l'utilisateur en fonction
+     * du questionnaire passés en param pour les questions de type 'file'.
+     *
+     * @param            $idQuestionnaire
+     * @param            $idUser
+     * @param Occurrence $occurrence
      *
      * @return array
      */
-    public function reponsesByQuestionnaireByUserByFileQuestion($idQuestionnaire, $idUser, Occurrence $occurrence = null)
-    {
-        return $this->getRepository()->reponsesByQuestionnaireByUserByFileQuestion($idQuestionnaire, $idUser, $occurrence)->getResult();
+    public function reponsesByQuestionnaireByUserByFileQuestion(
+        $idQuestionnaire,
+        $idUser,
+        Occurrence $occurrence = null
+    ) {
+        return $this->getRepository()->reponsesByQuestionnaireByUserByFileQuestion(
+            $idQuestionnaire,
+            $idUser,
+            $occurrence
+        )->getResult();
     }
 
+    /**
+     * @param $idQuestionnaire
+     *
+     * @return array
+     */
     public function getReponsesForQuestionnaireOrderByUser($idQuestionnaire)
     {
         $reponses = $this->getRepository()->getReponsesForQuestionnaireOrderByUser($idQuestionnaire)->getResult();
@@ -70,7 +98,8 @@ class ReponseManager extends BaseManager
                 case 'checkbox':
                     $valueReponse = ('1' == $reponse->getReponse()) ? 'Oui' : 'Non';
                     break;
-                //Gestion très sale, à revoir au moment de la construction du tableau de réponses avec des niveaux d'enfants/parents etc.
+                // Gestion très sale, à revoir au moment de la construction
+                // du tableau de réponses avec des niveaux d'enfants/parents etc.
                 case 'entitymultiple':
                 case 'entitycheckbox':
                     //Affichage pour une possibilité de plusieurs réponses à cette question
@@ -117,8 +146,6 @@ class ReponseManager extends BaseManager
      *
      * @param int $idUser
      * @param int $idQuestionnaire
-     *
-     * @return empty
      */
     public function deleteAll($idUser, $idQuestionnaire)
     {
@@ -126,7 +153,9 @@ class ReponseManager extends BaseManager
 
         foreach ($reponses as $key => $reponse) {
             if ('file' === $reponse->getQuestion()->getTypeQuestion()->getLibelle()) {
-                $file = $this->getUploadRootDir($reponse->getQuestion()->getQuestionnaire()->getNomMinifie()) . '/' . $reponse->getReponse();
+                $file = $this->getUploadRootDir($reponse->getQuestion()->getQuestionnaire()->getNomMinifie())
+                        . '/'
+                        . $reponse->getReponse();
 
                 if (file_exists($file)) {
                     unlink($file);
@@ -138,12 +167,9 @@ class ReponseManager extends BaseManager
     }
 
     /**
-     * Supprime toutes les réponses pour tout les utilisateurs correspondant au questionnaire passé en paramètre.
+     * Supprime toutes les réponses pour tous les utilisateurs correspondant au questionnaire passé en paramètre.
      *
-     * @param int $idUser
      * @param int $idQuestionnaire
-     *
-     * @return empty
      */
     public function deleteAllByQuestionnaire($idQuestionnaire)
     {
@@ -151,7 +177,9 @@ class ReponseManager extends BaseManager
 
         foreach ($reponses as $key => $reponse) {
             if ('file' === $reponse->getQuestion()->getTypeQuestion()->getLibelle()) {
-                $file = $this->getUploadRootDir($reponse->getQuestion()->getQuestionnaire()->getNomMinifie()) . '/' . $reponse->getReponse();
+                $file = $this->getUploadRootDir($reponse->getQuestion()->getQuestionnaire()->getNomMinifie())
+                        . '/'
+                        . $reponse->getReponse();
 
                 if (file_exists($file)) {
                     unlink($file);
@@ -166,6 +194,8 @@ class ReponseManager extends BaseManager
      * Téléchargement des fichiers attaché au questionnaire expert.
      *
      * @param int $id Id de la réponse du fichier à télécharger
+     *
+     * @return array
      */
     public function download($id)
     {
@@ -184,7 +214,7 @@ class ReponseManager extends BaseManager
     /**
      * Retourne la path de l'endroit où on doit upload un fichier.
      *
-     * @param string $questionnaire
+     * @param $labelQuestionnaire
      *
      * @return string Chemin root du fichier à uploader
      */
@@ -201,12 +231,28 @@ class ReponseManager extends BaseManager
     /**
      * Affecte une occurrence à toutes les réponses d'un questionnaire répondu par un utilisateur.
      *
-     * @param \HopitalNumerique\QuestionnaireBundle\Entity\Occurrence    $occurrence    Occurrence
-     * @param \HopitalNumerique\QuestionnaireBundle\Entity\Questionnaire $questionnaire Questionnaire
-     * @param \HopitalNumerique\UserBundle\Entity\User                   $user          User
+     * @param Occurrence    $occurrence    Occurrence
+     * @param Questionnaire $questionnaire Questionnaire
+     * @param User          $user          User
      */
-    public function setOccurrenceByQuestionnaireAndUser(Occurrence $occurrence, Questionnaire $questionnaire, User $user)
-    {
+    public function setOccurrenceByQuestionnaireAndUser(
+        Occurrence $occurrence,
+        Questionnaire $questionnaire,
+        User $user
+    ) {
         $this->getRepository()->setOccurrenceByQuestionnaireAndUser($occurrence, $questionnaire, $user);
+    }
+
+    /**
+     * @param $surveyLabel
+     * @param $fileName
+     */
+    public function removeResponseFile($surveyLabel, $fileName)
+    {
+        $dir = $this->getUploadRootDir($surveyLabel);
+
+        if (null !== $fileName && file_exists($dir . '/' . $fileName)) {
+            unlink($dir . '/' . $fileName);
+        }
     }
 }

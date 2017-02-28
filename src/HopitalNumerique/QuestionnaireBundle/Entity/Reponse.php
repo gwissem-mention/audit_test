@@ -2,7 +2,11 @@
 
 namespace HopitalNumerique\QuestionnaireBundle\Entity;
 
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use HopitalNumerique\EtablissementBundle\Entity\Etablissement;
+use HopitalNumerique\ReferenceBundle\Entity\Reference;
+use HopitalNumerique\UserBundle\Entity\User;
 
 /**
  * Reponse.
@@ -27,7 +31,7 @@ class Reponse
     private $id;
 
     /**
-     * @var int
+     * @var User
      *
      * @ORM\ManyToOne(targetEntity="\HopitalNumerique\UserBundle\Entity\User", inversedBy="reponses")
      * @ORM\JoinColumn(name="usr_id", referencedColumnName="usr_id", onDelete="CASCADE", nullable=true)
@@ -35,7 +39,7 @@ class Reponse
     private $user;
 
     /**
-     * @var int
+     * @var Question
      *
      * @ORM\ManyToOne(targetEntity="Question", inversedBy="reponses")
      * @ORM\JoinColumn(name="que_id", referencedColumnName="que_id", onDelete="CASCADE")
@@ -45,12 +49,12 @@ class Reponse
     /**
      * @var string
      *
-     * @ORM\Column(name="rep_reponse", type="text", options = {"comment" = "Contenu de la réponse"})
+     * @ORM\Column(name="rep_reponse", type="text", nullable=true, options = {"comment" = "Contenu de la réponse"})
      */
     private $reponse;
 
     /**
-     * @var \HopitalNumerique\QuestionnaireBundle\Entity\Occurrence
+     * @var Occurrence
      *
      * @ORM\ManyToOne(targetEntity="Occurrence", inversedBy="reponses")
      * @ORM\JoinColumn(name="occ_id", referencedColumnName="occ_id", onDelete="CASCADE")
@@ -152,11 +156,11 @@ class Reponse
     /**
      * Set occurrence.
      *
-     * @param \HopitalNumerique\QuestionnaireBundle\Entity\Occurrence $occurrence
+     * @param Occurrence $occurrence
      *
      * @return Reponse
      */
-    public function setOccurrence(\HopitalNumerique\QuestionnaireBundle\Entity\Occurrence $occurrence = null)
+    public function setOccurrence(Occurrence $occurrence = null)
     {
         $this->occurrence = $occurrence;
 
@@ -166,7 +170,7 @@ class Reponse
     /**
      * Get occurrence.
      *
-     * @return \HopitalNumerique\QuestionnaireBundle\Entity\Occurrence
+     * @return Occurrence
      */
     public function getOccurrence()
     {
@@ -176,11 +180,11 @@ class Reponse
     /**
      * Set user.
      *
-     * @param \HopitalNumerique\UserBundle\Entity\User $user
+     * @param User $user
      *
      * @return Reponse
      */
-    public function setUser(\HopitalNumerique\UserBundle\Entity\User $user = null)
+    public function setUser(User $user = null)
     {
         $this->user = $user;
 
@@ -190,7 +194,7 @@ class Reponse
     /**
      * Get user.
      *
-     * @return \HopitalNumerique\UserBundle\Entity\User
+     * @return User
      */
     public function getUser()
     {
@@ -200,11 +204,11 @@ class Reponse
     /**
      * Set question.
      *
-     * @param \HopitalNumerique\QuestionnaireBundle\Entity\Question $question
+     * @param Question $question
      *
      * @return Reponse
      */
-    public function setQuestion(\HopitalNumerique\QuestionnaireBundle\Entity\Question $question = null)
+    public function setQuestion(Question $question = null)
     {
         $this->question = $question;
 
@@ -214,7 +218,7 @@ class Reponse
     /**
      * Get question.
      *
-     * @return \HopitalNumerique\QuestionnaireBundle\Entity\Question
+     * @return Question
      */
     public function getQuestion()
     {
@@ -224,7 +228,7 @@ class Reponse
     /**
      * Get reference.
      *
-     * @return \HopitalNumerique\ReferenceBundle\Entity\Reference $reference
+     * @return Reference $reference
      */
     public function getReference()
     {
@@ -234,25 +238,21 @@ class Reponse
     /**
      * Set reference.
      *
-     * @param \HopitalNumerique\ReferenceBundle\Entity\Reference $reference
+     * @param Reference $reference
      */
     public function setReference($reference)
     {
-        if ($reference instanceof \HopitalNumerique\ReferenceBundle\Entity\Reference) {
-            $this->reference = $reference;
-        } else {
-            $this->reference = null;
-        }
+        $this->reference = $reference instanceof Reference ? $reference : null;
     }
 
     /**
      * Add referenceMulitple.
      *
-     * @param \HopitalNumerique\ReferenceBundle\Entity\Reference $reference
+     * @param Reference $reference
      *
-     * @return Objet
+     * @return Reponse
      */
-    public function addReferenceMulitple(\HopitalNumerique\ReferenceBundle\Entity\Reference $reference)
+    public function addReferenceMulitple(Reference $reference)
     {
         $this->referenceMulitple[] = $reference;
 
@@ -262,9 +262,9 @@ class Reponse
     /**
      * Remove referenceMulitple.
      *
-     * @param \HopitalNumerique\ReferenceBundle\Entity\Reference$reference
+     * @param Reference$reference
      */
-    public function removeReferenceMulitple(\HopitalNumerique\ReferenceBundle\Entity\Reference $reference)
+    public function removeReferenceMulitple(Reference $reference)
     {
         $this->referenceMulitple->removeElement($reference);
     }
@@ -272,9 +272,9 @@ class Reponse
     /**
      * Set referenceMulitple.
      *
-     * @param \Doctrine\Common\Collections\Collection $referenceMulitple
+     * @param Collection $referenceMulitple
      *
-     * @return Objet
+     * @return Reponse
      */
     public function setReferenceMulitple($referenceMulitple)
     {
@@ -286,7 +286,7 @@ class Reponse
     /**
      * Get referenceMulitple.
      *
-     * @return \Doctrine\Common\Collections\Collection
+     * @return Collection
      */
     public function getReferenceMulitple()
     {
@@ -384,11 +384,11 @@ class Reponse
     /**
      * Set etablissement.
      *
-     * @param \HopitalNumerique\EtablissementBundle\Entity\Etablissement $etablissement
+     * @param Etablissement $etablissement
      *
      * @return Reponse
      */
-    public function setEtablissement(\HopitalNumerique\EtablissementBundle\Entity\Etablissement $etablissement = null)
+    public function setEtablissement(Etablissement $etablissement = null)
     {
         $this->etablissement = $etablissement;
 
@@ -398,7 +398,7 @@ class Reponse
     /**
      * Get etablissement.
      *
-     * @return \HopitalNumerique\EtablissementBundle\Entity\Etablissement
+     * @return Etablissement
      */
     public function getEtablissement()
     {
@@ -408,11 +408,11 @@ class Reponse
     /**
      * Add etablissementMulitple.
      *
-     * @param \HopitalNumerique\EtablissementBundle\Entity\Etablissement $etablissementMulitple
+     * @param Etablissement $etablissementMulitple
      *
      * @return Reponse
      */
-    public function addEtablissementMulitple(\HopitalNumerique\EtablissementBundle\Entity\Etablissement $etablissementMulitple)
+    public function addEtablissementMulitple(Etablissement $etablissementMulitple)
     {
         $this->etablissementMulitple[] = $etablissementMulitple;
 
@@ -422,9 +422,9 @@ class Reponse
     /**
      * Remove etablissementMulitple.
      *
-     * @param \HopitalNumerique\EtablissementBundle\Entity\Etablissement $etablissementMulitple
+     * @param Etablissement $etablissementMulitple
      */
-    public function removeEtablissementMulitple(\HopitalNumerique\EtablissementBundle\Entity\Etablissement $etablissementMulitple)
+    public function removeEtablissementMulitple(Etablissement $etablissementMulitple)
     {
         $this->etablissementMulitple->removeElement($etablissementMulitple);
     }
@@ -432,7 +432,7 @@ class Reponse
     /**
      * Get etablissementMulitple.
      *
-     * @return \Doctrine\Common\Collections\Collection
+     * @return Collection
      */
     public function getEtablissementMulitple()
     {
@@ -442,9 +442,9 @@ class Reponse
     /**
      * Set etablissementMulitple.
      *
-     * @param \Doctrine\Common\Collections\Collection $etablissementMulitple
+     * @param Collection $etablissementMulitple
      *
-     * @return Objet
+     * @return Reponse
      */
     public function setEtablissementMulitple($etablissementMulitple)
     {

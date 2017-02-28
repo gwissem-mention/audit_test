@@ -2,6 +2,7 @@
 
 namespace HopitalNumerique\QuestionnaireBundle\Manager;
 
+use HopitalNumerique\QuestionnaireBundle\Entity\Question;
 use Nodevo\ToolsBundle\Manager\Manager as BaseManager;
 use HopitalNumerique\QuestionnaireBundle\Entity\Questionnaire;
 
@@ -18,7 +19,7 @@ class QuestionManager extends BaseManager
      * @param int    $idQuestionnaire
      * @param string $typeQuestion
      *
-     * @return array(\HopitalNumerique\QuestionnaireBundle\Entity\Questions) Tableau des questions de type $typeQuestion
+     * @return Question[] Tableau des questions de type $typeQuestion
      */
     public function getQuestionsByType($idQuestionnaire, $typeQuestion)
     {
@@ -28,16 +29,12 @@ class QuestionManager extends BaseManager
     /**
      * Retourne la path de l'endroit où on doit upload un fichier.
      *
-     * @param string $questionnaire
+     * @param $labelQuestionnaire
      *
      * @return string Chemin root du fichier à uploader
      */
     public function getUploadRootDir($labelQuestionnaire)
     {
-        if (!file_exists(__ROOT_DIRECTORY__ . '/files/' . $labelQuestionnaire)) {
-            return null;
-        }
-
         // le chemin absolu du répertoire où les documents uploadés doivent être sauvegardés
         return __ROOT_DIRECTORY__ . '/files/' . $labelQuestionnaire;
     }
@@ -45,10 +42,10 @@ class QuestionManager extends BaseManager
     /**
      * Retourne une question du questionnaire par rapport à son ID.
      *
-     * @param \HopitalNumerique\QuestionnaireBundle\Entity\Questionnaire $questionnaire Le questionnaire sur lequel récupérer la question
-     * @param int                                                        $questionId    L'ID de la question à récupérer
+     * @param Questionnaire $questionnaire Le questionnaire sur lequel récupérer la question
+     * @param int           $questionId    L'ID de la question à récupérer
      *
-     * @return \HopitalNumerique\QuestionnaireBundle\Entity\Question|null La question de l'ID ou NIL si non trouvé
+     * @return Question|null La question de l'ID ou NIL si non trouvé
      */
     public function getQuestionById(Questionnaire $questionnaire, $questionId)
     {
@@ -76,10 +73,7 @@ class QuestionManager extends BaseManager
     /**
      * Met à jour l'ordre des questions.
      *
-     * @param array  $elements Les éléments
-     * @param object $parent   L'élément parent | null
-     *
-     * @return empty
+     * @param array $elements Les éléments
      */
     public function reorder($elements)
     {

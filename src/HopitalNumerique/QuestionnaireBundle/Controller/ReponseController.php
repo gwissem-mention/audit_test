@@ -6,6 +6,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use HopitalNumerique\UserBundle\Entity\User as HopiUser;
 use HopitalNumerique\QuestionnaireBundle\Entity\Reponse;
 use HopitalNumerique\QuestionnaireBundle\Entity\Questionnaire;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
 
 class ReponseController extends Controller
@@ -13,16 +14,29 @@ class ReponseController extends Controller
     /**
      * Téléchargement des fichiers attaché au questionnaire expert.
      *
-     * @param int $id Id de la réponse du fichier à télécharger
+     * @param Reponse $reponse
+     *
+     * @return RedirectResponse|Response
      */
     public function dowloadReponseAction(Reponse $reponse)
     {
-        if (file_exists($this->get('hopitalnumerique_questionnaire.manager.question')->getUploadRootDir($reponse->getQuestion()->getQuestionnaire()->getNomMinifie()) . '/' . $reponse->getReponse())) {
+        if (file_exists(
+            $this->get('hopitalnumerique_questionnaire.manager.question')->getUploadRootDir(
+                $reponse->getQuestion()->getQuestionnaire()->getNomMinifie()
+            ) . '/' . $reponse->getReponse()
+        )) {
             $option = $this->get('hopitalnumerique_questionnaire.manager.reponse')->download($reponse);
 
-            return $this->get('igorw_file_serve.response_factory')->create($this->get('hopitalnumerique_questionnaire.manager.question')->getUploadRootDir($reponse->getQuestion()->getQuestionnaire()->getNomMinifie()) . '/' . $reponse->getReponse(), 'application/pdf', $option);
+            return $this->get('igorw_file_serve.response_factory')->create(
+                $this->get('hopitalnumerique_questionnaire.manager.question')->getUploadRootDir(
+                    $reponse->getQuestion()->getQuestionnaire()->getNomMinifie()
+                ) . '/' . $reponse->getReponse(),
+                'application/pdf',
+                $option
+            );
         } else {
-            // On envoi une 'flash' pour indiquer à l'utilisateur que le fichier n'existe pas: suppression manuelle sur le serveur
+            // On envoi une 'flash' pour indiquer à l'utilisateur que le fichier n'existe pas :
+            // suppression manuelle sur le serveur
             $this->get('session')->getFlashBag()->add(('danger'), 'Le document n\'existe plus sur le serveur.');
 
             //Si l'url courante contient le mot clé "admin"
@@ -39,43 +53,65 @@ class ReponseController extends Controller
     /**
      * Suppression de toutes les réponses de l'utilisateur pour le questionnaire passé en param.
      *
-     * @param int $idUser
-     * @param int $idQuestionnaire
+     * @param HopiUser      $user
+     * @param Questionnaire $questionnaire
+     *
+     * @return Response
      */
     public function deleteAllAction(HopiUser $user, Questionnaire $questionnaire)
     {
         $routeRedirection = $this->get('request')->request->get('routeRedirection');
         $routeRedirection = json_decode($routeRedirection, true);
 
-        $this->get('hopitalnumerique_questionnaire.manager.reponse')->deleteAll($user->getId(), $questionnaire->getId());
+        $this->get('hopitalnumerique_questionnaire.manager.reponse')->deleteAll(
+            $user->getId(),
+            $questionnaire->getId()
+        );
 
-        $this->get('session')->getFlashBag()->add('success', 'Le questionnaire ' . $questionnaire->getNomMinifie() . ' a été vidé.');
+        $this->get('session')->getFlashBag()->add(
+            'success',
+            'Le questionnaire ' . $questionnaire->getNomMinifie() . ' a été vidé.'
+        );
 
-        return new Response('{"success":true, "url" : "' . $this->generateUrl($routeRedirection['sauvegarde']['route'], $routeRedirection['sauvegarde']['arguments']) . '"}', 200);
+        return new Response(
+            '{"success":true, "url" : "' . $this->generateUrl(
+                $routeRedirection['sauvegarde']['route'],
+                $routeRedirection['sauvegarde']['arguments']
+            ) . '"}',
+            200
+        );
     }
 
     /**
      * Suppression de toutes les réponses de tout les utilisateurs pour le questionnaire passé en param.
      *
-     * @param int $idQuestionnaire
+     * @param Questionnaire $questionnaire
+     *
+     * @return Response
      */
     public function deleteAllByQuestionnaireAction(Questionnaire $questionnaire)
     {
         //Suppression des entitées
         $this->get('hopitalnumerique_questionnaire.manager.reponse')->deleteAllByQuestionnaire($questionnaire->getId());
 
-        $this->get('session')->getFlashBag()->add('success', 'Le questionnaire ' . $questionnaire->getNomMinifie() . ' a été vidé de ses réponses.');
+        $this->get('session')->getFlashBag()->add(
+            'success',
+            'Le questionnaire ' . $questionnaire->getNomMinifie() . ' a été vidé de ses réponses.'
+        );
 
-        return new Response('{"success":true, "url" : "' . $this->generateUrl('hopitalnumerique_questionnaire_index') . '"}', 200);
+        return new Response(
+            '{"success":true, "url" : "' . $this->generateUrl('hopitalnumerique_questionnaire_index') . '"}',
+            200
+        );
     }
 
     /**
      * Suppression de masse des réponses des questionnaires sélectionnés.
      *
-     * @param array $primaryKeys    ID des lignes sélectionnées
-     * @param array $allPrimaryKeys allPrimaryKeys ???
+     * @param array $primaryKeys
+     * @param array $allPrimaryKeys
      *
-     * @return Redirect
+     * @return RedirectResponse
      */
     public function deleteMassAction($primaryKeys, $allPrimaryKeys)
     {
@@ -88,7 +124,7 @@ class ReponseController extends Controller
         }
 
         foreach ($primaryKeys as $idQuestionnaire) {
-            $reponses = $this->get('hopitalnumerique_questionnaire.manager.reponse')->deleteAllByQuestionnaire($idQuestionnaire);
+            $this->get('hopitalnumerique_questionnaire.manager.reponse')->deleteAllByQuestionnaire($idQuestionnaire);
         }
 
         $this->get('session')->getFlashBag()->add('info', 'Suppression des réponses effectuée avec succès.');
