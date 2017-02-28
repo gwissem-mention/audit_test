@@ -1,6 +1,7 @@
 # CCDNForum\ForumBundle\Entity\Post:
 HopitalNumerique\ForumBundle\Entity\Post:
     type: entity
+    repositoryClass: HopitalNumerique\ForumBundle\Repository\PostRepository
     table: hn_forum_post
     id:
         id:
@@ -83,10 +84,3 @@ HopitalNumerique\ForumBundle\Entity\Post:
                 name: fk_unlocked_by_user_id
                 referencedColumnName: usr_id
                 onDelete: CASCADE
-#        attachment:
-#            targetEntity: CCDNComponent\AttachmentBundle\Entity\Attachment
-#            cascade: ["persist"]
-#            joinColumn:
-#                name: fk_attachment_id
-#                referencedColumnName: id
-#                onDelete: SET NULL

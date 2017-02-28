@@ -12,6 +12,9 @@ use Symfony\Component\Security\Core\SecurityContextInterface;
  */
 class Board extends BaseBoard
 {
+    const BOARD_MHN_ID = 46;
+    const BOARD_RSE_ID = 45;
+
     /**
      * @var bool
      */

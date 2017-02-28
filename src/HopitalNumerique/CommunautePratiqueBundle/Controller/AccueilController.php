@@ -3,16 +3,23 @@
 namespace HopitalNumerique\CommunautePratiqueBundle\Controller;
 
 use HopitalNumerique\DomaineBundle\Entity\Domaine;
+use HopitalNumerique\ForumBundle\Entity\Board;
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use HopitalNumerique\ReferenceBundle\Entity\Reference;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  * Accueil de la communauté de pratique.
  */
-class AccueilController extends \Symfony\Bundle\FrameworkBundle\Controller\Controller
+class AccueilController extends Controller
 {
     /**
      * Accueil de la communauté de pratique.
+     *
+     * @param Request $request
+     *
+     * @return Response
      */
     public function indexAction(Request $request)
     {
@@ -53,17 +60,30 @@ class AccueilController extends \Symfony\Bundle\FrameworkBundle\Controller\Contr
             }
         }
 
+        if ($domaine->getId() === 1) {
+            $actualites = $this->get('hopitalnumerique_forum.manager.post')->getFirstPostsFromBoard(
+                Board::BOARD_MHN_ID
+            );
+        } elseif ($domaine->getId() === 7) {
+            $actualites = $this->get('hopitalnumerique_forum.manager.post')->getFirstPostsFromBoard(
+                Board::BOARD_RSE_ID
+            );
+        } else {
+            $actualites = [];
+        }
+
         return $this->render(
             'HopitalNumeriqueCommunautePratiqueBundle:Accueil:index.html.twig',
             [
                 'groupes' => (count($this->getUser()->getCommunautePratiqueAnimateurGroupes()) > 0
                 || $this->getUser()->hasRoleAdmin() || $this->getUser()->hasRoleAdminHn()
                     ? ($this->container->get('hopitalnumerique_communautepratique.manager.groupe')
-                        ->findNonFermes($domaine, ($this->getUser()->hasRoleAdmin() || $this->getUser()->hasRoleAdminHn() ? null : $this->getUser())))
-                    : []),
-                'actualites' => $this->container->get('hopitalnumerique_objet.manager.objet')
-                    ->getArticlesForCategorie($this->container->get('hopitalnumerique_reference.manager.reference')
-                        ->findOneById(Reference::ARTICLE_CATEGORIE_COMMUNAUTE_DE_PRATIQUES_ID), $domaine),
+                        ->findNonFermes($domaine, (
+                            $this->getUser()->hasRoleAdmin()
+                            || $this->getUser()->hasRoleAdminHn() ? null : $this->getUser()
+                        ))
+                    ) : []),
+                'actualites' => $actualites,
                 'groupesEnVedette' => $this->container->get('hopitalnumerique_communautepratique.manager.groupe')
                     ->findNonFermes($domaine, null, true),
                 'userGroupesEnCours' => $groupeUser,

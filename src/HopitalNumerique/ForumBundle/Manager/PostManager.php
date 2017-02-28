@@ -2,6 +2,7 @@
 
 namespace HopitalNumerique\ForumBundle\Manager;
 
+use HopitalNumerique\ForumBundle\Entity\Post;
 use Nodevo\ToolsBundle\Manager\Manager as BaseManager;
 use Doctrine\ORM\EntityManager;
 
@@ -12,35 +13,41 @@ class PostManager extends BaseManager
 {
     protected $class = 'HopitalNumerique\ForumBundle\Entity\Post';
 
-    protected $_managerTopic;
-    protected $_managerBoard;
+    protected $managerTopic;
+    protected $managerBoard;
 
     /**
      * Constructeur du manager.
      *
      * @param EntityManager $em Entity Manager de Doctrine
+     * @param               $managerTopic
+     * @param               $managerBoard
      */
     public function __construct(EntityManager $em, $managerTopic, $managerBoard)
     {
         parent::__construct($em);
-        $this->_managerTopic = $managerTopic;
-        $this->_managerBoard = $managerBoard;
+        $this->managerTopic  = $managerTopic;
+        $this->managerBoard = $managerBoard;
     }
 
     public function delete($posts)
     {
+        /** @var Post $post */
         foreach ($posts as $post) {
             //Récupération du topic du post à supprimer
             $topic = $post->getTopic();
             if (null === $topic) {
                 continue;
             }
-            $isLastPostTopic = is_null($topic->getLastPost()) ? false : $topic->getLastPost()->getId() === $post->getId();
+            $isLastPostTopic = is_null($topic->getLastPost()) ? false
+                : $topic->getLastPost()->getId() === $post->getId();
             //Récupération du board du post à supprimer
             $board = $topic->getBoard();
-            $isLastPostBoard = is_null($board->getLastPost()) ? false : $board->getLastPost()->getId() === $post->getId();
+            $isLastPostBoard = is_null($board->getLastPost()) ? false
+                : $board->getLastPost()->getId() === $post->getId();
 
-            //Vérification si le post courant est le premier post du topic, si c'est le cas il faut supprimer tout les autres posts liés au topic
+            // Vérification si le post courant est le premier post du topic,
+            // si c'est le cas il faut supprimer tout les autres posts liés au topic
             if (is_null($topic->getFirstPost())) {
                 $postsADelete = $topic->getPosts();
 
@@ -69,7 +76,7 @@ class PostManager extends BaseManager
                 }
 
                 $topic->setLastPost($lastPost);
-                $this->_managerTopic->save($topic);
+                $this->managerTopic->save($topic);
             }
 
             //Récupération du dernier post après suppression (dans le cas où le post supprimé était le dernier du topic)
@@ -91,8 +98,20 @@ class PostManager extends BaseManager
                 }
 
                 $board->setLastPost($lastPost);
-                $this->_managerBoard->save($board);
+                $this->managerBoard->save($board);
             }
         }
+    }
+
+    /**
+     * Retrieves the first post of each board topic.
+     *
+     * @param int $boardId
+     *
+     * @return array
+     */
+    public function getFirstPostsFromBoard($boardId)
+    {
+        return $this->getRepository()->getFirstPostsFromBoard($boardId);
     }
 }
