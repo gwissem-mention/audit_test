@@ -41,6 +41,9 @@ AutodiagEntry.prototype = {
                     helpers     : {
                         overlay : {closeClick: false} // prevents closing when clicking OUTSIDE fancybox
                     },
+                    keys : {
+                        close  : null
+                    },
                     afterClose: function() {
                         history.back();
                     }
