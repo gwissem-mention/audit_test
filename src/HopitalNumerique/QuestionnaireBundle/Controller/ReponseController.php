@@ -6,6 +6,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use HopitalNumerique\UserBundle\Entity\User as HopiUser;
 use HopitalNumerique\QuestionnaireBundle\Entity\Reponse;
 use HopitalNumerique\QuestionnaireBundle\Entity\Questionnaire;
+use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -27,11 +28,15 @@ class ReponseController extends Controller
         )) {
             $option = $this->get('hopitalnumerique_questionnaire.manager.reponse')->download($reponse);
 
-            return $this->get('igorw_file_serve.response_factory')->create(
+            $file = new File(
                 $this->get('hopitalnumerique_questionnaire.manager.question')->getUploadRootDir(
                     $reponse->getQuestion()->getQuestionnaire()->getNomMinifie()
-                ) . '/' . $reponse->getReponse(),
-                'application/pdf',
+                ) . '/' . $reponse->getReponse()
+            );
+
+            return $this->get('igorw_file_serve.response_factory')->create(
+                $file->getPathname(),
+                $file->getMimeType(),
                 $option
             );
         } else {

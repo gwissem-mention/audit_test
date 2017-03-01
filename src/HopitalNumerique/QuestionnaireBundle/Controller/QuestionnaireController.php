@@ -580,6 +580,8 @@ class QuestionnaireController extends Controller
                     $occurrence
                 );
 
+                $new = true;
+
                 //Gestion des réponses
                 foreach ($params as $key => $param) {
                     //Récupération de l'id de la question, la clé est sous la forme : "type_id_alias"
