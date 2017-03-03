@@ -2,18 +2,24 @@
 
 {% block file_widget %}
     {% spaceless %}
-	    {% if data is not null or data is not empty %}
+	    {% if (data is not null or data is not empty) and (data.lib is not null and data.lib is not empty) %}
 			<a id="downloadFile{{ id }}" href="{{path('hopitalnumerique_reponse_download', {'reponse':data.id})}}">{{ data.lib }}</a>
 			<input id={{ id }} type="{{ type }}" {{ block('widget_attributes') }} {% if value is not empty %}value="{{ value }}" {% endif %}/>
 			<script>$('#{{ id }}').addClass('inputFile{{ id }}') ;$('.inputFile{{ id }}').hide();</script>
-			<div class="deleteUploadedFile{{ id }} btn btn-danger btn-xs pull-right" >
-                <i class="fa fa-trash-o" onclick="$('.deleteUploadedFile{{ id }}, #downloadFile{{ id }}').hide(); $('.inputFile{{ id }}').show();"></i>
+			<div class="deleteUploadedFile{{ id }} btn btn-danger btn-xs pull-right" onclick="$('.deleteUploadedFile{{ id }}, #downloadFile{{ id }}').hide(); $('.inputFile{{ id }}').show(); $('#{{ id }}-remove').prop('checked', true)">
+                <i class="fa fa-trash-o"></i>
             </div>
         {% else %}
             <input type="{{ type }}" {{ block('widget_attributes') }} {% if value is not empty %}value="{{ value }}" {% endif %}/>
         {% endif %}
     {% endspaceless %}
 {% endblock file_widget %}
+
+{% block _nodevo_questionnaire_questionnaire_remove_file_row %}
+    {% spaceless %}
+        <input type="radio" class="hidden hide" {{ block('widget_attributes') }}{% if value is defined %} value="{{ value }}"{% endif %}{% if checked %} checked="checked"{% endif %}/>
+    {% endspaceless %}
+{% endblock _nodevo_questionnaire_questionnaire_remove_file_row %}
 
 {% block nodevocommentaire_label %}
 {% endblock %}

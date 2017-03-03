@@ -1,7 +1,7 @@
 <?php
+
 namespace HopitalNumerique\CommunautePratiqueBundle\Controller;
 
-use HopitalNumerique\ObjetBundle\Entity\Objet;
 use Symfony\Component\HttpFoundation\JsonResponse;
 
 /**
@@ -25,15 +25,15 @@ class InscriptionController extends \Symfony\Bundle\FrameworkBundle\Controller\C
                 $this->get('session')->getFlashBag()->add('success', 'L\'inscription à la communauté de pratique a été confirmée.');
             }
 
-            return new JsonResponse(array(
-                'url' => $this->generateUrl('hopitalnumerique_communautepratique_accueil_index')
-            ));
+            return new JsonResponse([
+                'url' => $this->generateUrl('hopitalnumerique_communautepratique_accueil_index'),
+            ]);
         } else {
             $this->get('session')->getFlashBag()->add('danger', 'L\'inscription à la communauté de pratique a échouée. Veuillez vérifier vos informations.');
 
-            return new JsonResponse(array(
-                'url' => $this->get('communautepratique_router')->getUrl()
-            ));
+            return new JsonResponse([
+                'url' => $this->get('communautepratique_router')->getUrl(),
+            ]);
         }
     }
 
@@ -48,13 +48,14 @@ class InscriptionController extends \Symfony\Bundle\FrameworkBundle\Controller\C
             $this->container->get('hopitalnumerique_user.manager.user')->desinscritCommunautePratique($user);
             $this->get('session')->getFlashBag()->add('success', 'Vous avez bien quitté la communauté. Vous pouvez vous y ré-inscrire à tout moment, merci de votre participation !');
 
-            return new JsonResponse(array(
-                'url' => $this->get('communautepratique_router')->getUrl()
-            ));
+            return new JsonResponse([
+                'url' => $this->get('communautepratique_router')->getUrl(),
+            ]);
         } else {
             $this->get('session')->getFlashBag()
                 ->add('danger', 'La désinscription de la communauté de pratique a échouée.');
-            return new JsonResponse(array( 'url' => $this->generateUrl('hopital_numerique_homepage') ));
+
+            return new JsonResponse(['url' => $this->generateUrl('hopital_numerique_homepage')]);
         }
     }
 }

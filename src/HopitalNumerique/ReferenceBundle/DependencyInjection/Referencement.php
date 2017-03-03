@@ -1,4 +1,5 @@
 <?php
+
 namespace HopitalNumerique\ReferenceBundle\DependencyInjection;
 
 use HopitalNumerique\ReferenceBundle\DependencyInjection\Reference\Tree as TreeService;
@@ -26,7 +27,6 @@ class Referencement
      */
     private $entityHasReferenceManager;
 
-
     /**
      * Constructeur.
      */
@@ -37,11 +37,11 @@ class Referencement
         $this->entityHasReferenceManager = $entityHasReferenceManager;
     }
 
-
     /**
      * Retourne l'arbre des références pour le référencement.
      *
      * @param array<\HopitalNumerique\DomaineBundle\Entity\Domaine> $domaines Domaines
+     *
      * @return array Arbre
      */
     public function getReferencesTree($domaines, $inRecherche = null, Reference $referenceRoot = null)
@@ -55,8 +55,9 @@ class Referencement
      * Retourne l'arbre des références avec pour chaque référence son EntityHasReference si existant.
      *
      * @param array<\HopitalNumerique\DomaineBundle\Entity\Domaine> $domaines   Domaines
-     * @param integer                                               $entityType Type d'entité
-     * @param integer                                               $entityId   ID de l'entité
+     * @param int                                                   $entityType Type d'entité
+     * @param int                                                   $entityId   ID de l'entité
+     *
      * @return array Arbre
      */
     public function getReferencesTreeWithEntitiesHasReferences($domaines, $entityType, $entityId)
@@ -64,7 +65,7 @@ class Referencement
         $referencesTree = $this->getReferencesTree($domaines, null, $this->referenceManager->getReferenceRootCommun($domaines));
         $entitiesHasReferences = $this->entityHasReferenceManager->findBy([
             'entityType' => $entityType,
-            'entityId' => $entityId
+            'entityId' => $entityId,
         ]);
 
         $this->addEntitiesHasReferencesInReferencesSubtree($referencesTree, $entitiesHasReferences);
@@ -91,6 +92,7 @@ class Referencement
      *
      * @param \HopitalNumerique\ReferenceBundle\Entity\Reference                 $reference             Référence
      * @param array<\HopitalNumerique\ReferenceBundle\Entity\EntityHasReference> $entitiesHasReferences EntitiesHasReferences
+     *
      * @return \HopitalNumerique\ReferenceBundle\Entity\EntityHasReference|null EntityHasReference
      */
     private function getEntityHasReferenceByReference(Reference $reference, array $entitiesHasReferences)
@@ -107,8 +109,9 @@ class Referencement
     /**
      * Retourne le niveau de pertinence d'une entité.
      *
-     * @param boolean $primary Primary
-     * @param float   $note    Note
+     * @param bool  $primary Primary
+     * @param float $note    Note
+     *
      * @return int Niveau
      */
     public function getPertinenceNiveauByPrimaryAndNote($primary, $note)
@@ -124,12 +127,12 @@ class Referencement
         return 3;
     }
 
-
     /**
      * Retourne les IDs de référence groupés par grandes catégories.
      *
      * @param array<integer>                                 $referenceIds IDs des références
      * @param \HopitalNumerique\DomaineBundle\Entity\Domaine $domaine      Domaine
+     *
      * @return array IDs par groupe
      */
     public function getReferenceIdsKeyedByGroup(array $referenceIds, array $referencesTree)
@@ -163,8 +166,10 @@ class Referencement
 
     /**
      * Parmi des IDs de références, retourne ceux présents dans l'arbre de références.
+     *
      * @param array $referenceIds
      * @param array $referencesSubtree
+     *
      * @return array<integer> Ids trouvés
      */
     private function getReferenceIdsInSubtree(array $referenceIds, array $referencesSubtree)

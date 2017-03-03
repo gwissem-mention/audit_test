@@ -9,15 +9,14 @@ use HopitalNumerique\ReferenceBundle\Service\ReferenceSwitcher;
 class SwitchReferenceHandler
 {
     /**
-     * @var ReferenceRepository $referenceRepository
+     * @var ReferenceRepository
      */
     private $referenceRepository;
 
     /**
-     * @var ReferenceSwitcher $referenceSwitcher
+     * @var ReferenceSwitcher
      */
     private $referenceSwitcher;
-
 
     /**
      * SwitchReferenceHandler constructor.

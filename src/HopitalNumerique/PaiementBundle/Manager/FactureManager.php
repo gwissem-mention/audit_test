@@ -3,7 +3,6 @@
 namespace HopitalNumerique\PaiementBundle\Manager;
 
 use Doctrine\ORM\EntityManager;
-use HopitalNumerique\PaiementBundle\Manager\FactureAnnuleeManager;
 use Nodevo\ToolsBundle\Manager\Manager as BaseManager;
 use HopitalNumerique\PaiementBundle\Entity\Facture;
 
@@ -21,9 +20,8 @@ class FactureManager extends BaseManager
      */
     private $factureAnnuleeManager;
 
-
     /**
-     * Contruit le manager
+     * Contruit le manager.
      *
      * @param EntityManager $em L'Entity Manager
      */
@@ -32,8 +30,8 @@ class FactureManager extends BaseManager
         parent::__construct($em);
 
         $this->_interventionManager = $managers[0];
-        $this->_referenceManager    = $managers[1];
-        $this->_formationManager    = $managers[2];
+        $this->_referenceManager = $managers[1];
+        $this->_formationManager = $managers[2];
         $this->factureAnnuleeManager = $factureAnnuleeManager;
     }
 
@@ -77,8 +75,7 @@ class FactureManager extends BaseManager
             ];
         }
 
-        return $this->exportCsv
-        (
+        return $this->exportCsv(
             array_values($cols),
             $datas,
             'export-liste-factures.csv',
@@ -87,12 +84,12 @@ class FactureManager extends BaseManager
     }
 
     /**
-     * Créer l'objet facture pour l'user connecté avec la liste d'interventions/formations sélectionnées
+     * Créer l'objet facture pour l'user connecté avec la liste d'interventions/formations sélectionnées.
      *
-     * @param User    $user          L'utilisateur connecté
-     * @param array   $interventions Liste des interventions sélectionnées
-     * @param array   $formations    Liste des formations sélectionnées
-     * @param integer $supplement    Supplement de la région
+     * @param User  $user          L'utilisateur connecté
+     * @param array $interventions Liste des interventions sélectionnées
+     * @param array $formations    Liste des formations sélectionnées
+     * @param int   $supplement    Supplement de la région
      *
      * @return Facture
      */
@@ -100,68 +97,66 @@ class FactureManager extends BaseManager
     {
         //create object facture
         $facture = $this->createEmpty();
-        $facture->setUser( $user );
+        $facture->setUser($user);
         $this->save($facture);
 
         //prepare ref
-        $statutRemboursement = $this->_referenceManager->findOneBy(array('id'=>6));
+        $statutRemboursement = $this->_referenceManager->findOneBy(['id' => 6]);
 
         //make total
         $total = 0;
 
         //handle interventions
-        if( $interventions ) {
-            foreach($interventions as $id => $prix) {
-                $intervention = $this->_interventionManager->findOneBy( array('id' => $id) );
-                $intervention->setFacture( $facture );
-                $intervention->setRemboursementEtat( $statutRemboursement );
-                $intervention->setTotal( $prix );
-                
-                $facture->addIntervention( $intervention );
+        if ($interventions) {
+            foreach ($interventions as $id => $prix) {
+                $intervention = $this->_interventionManager->findOneBy(['id' => $id]);
+                $intervention->setFacture($facture);
+                $intervention->setRemboursementEtat($statutRemboursement);
+                $intervention->setTotal($prix);
+
+                $facture->addIntervention($intervention);
 
                 $total += $prix;
             }
         }
 
-        if(!is_null($supplement))
-        {
+        if (!is_null($supplement)) {
             //handle formations
-            if( $formations ){
+            if ($formations) {
                 foreach ($formations as $id => $prixSupplement) {
+                    list($prix, $hasSupplement) = explode('_', $prixSupplement);
 
-                    list($prix, $hasSupplement) = explode("_", $prixSupplement);
+                    $formation = $this->_formationManager->findOneBy(['id' => $id]);
+                    $formation->setFacture($facture);
+                    $formation->setEtatRemboursement($statutRemboursement);
+                    $formation->setTotal($prix);
+                    $formation->setSupplement($hasSupplement == 'supp' ? $supplement : 0);
 
-                    $formation = $this->_formationManager->findOneBy( array('id' => $id) );
-                    $formation->setFacture( $facture );
-                    $formation->setEtatRemboursement( $statutRemboursement );
-                    $formation->setTotal( $prix);
-                    $formation->setSupplement( $hasSupplement == 'supp' ? $supplement : 0 );
-                    
-                    $facture->addFormation( $formation );
+                    $facture->addFormation($formation);
 
                     $total += $prix;
                 }
             }
         }
 
-        $facture->setTotal( $total );
+        $facture->setTotal($total);
         $this->save($facture);
-        
+
         return $facture;
     }
 
     /**
-     * Formate les réponses aux question du questionnaire ambassadeur
+     * Formate les réponses aux question du questionnaire ambassadeur.
      *
      * @param array $reponses Les réponses
      *
      * @return array
      */
-    public function formateInfos( $reponses )
+    public function formateInfos($reponses)
     {
-        $infos = array('telDirecteur' => '', 'libelleContact' => '', 'nomContact' => '');
+        $infos = ['telDirecteur' => '', 'libelleContact' => '', 'nomContact' => ''];
 
-        foreach($reponses as $reponse){
+        foreach ($reponses as $reponse) {
             switch ($reponse->getQuestion()->getId()) {
                 case 36:
                     $infos['telDirecteur'] = $reponse->getReponse();
@@ -172,7 +167,7 @@ class FactureManager extends BaseManager
                 case 38:
                     $infos['nomContact'] = $reponse->getReponse();
                     break;
-                
+
                 default:
                     break;
             }
@@ -182,54 +177,55 @@ class FactureManager extends BaseManager
     }
 
     /**
-     * Passe les interventions de la facture au statut payé
+     * Passe les interventions de la facture au statut payé.
      *
      * @param Facture $facture La facture
      *
      * @return empty
      */
-    public function paye( $facture )
+    public function paye($facture)
     {
-        $statutRemboursement = $this->_referenceManager->findOneBy( array( 'id' => 7 ) );
-        $interventions       = $facture->getInterventions()->toArray();
+        $statutRemboursement = $this->_referenceManager->findOneBy(['id' => 7]);
+        $interventions = $facture->getInterventions()->toArray();
 
         //change interventions state
-        foreach ($interventions as &$intervention)
-            $intervention->setRemboursementEtat( $statutRemboursement );
-        
+        foreach ($interventions as &$intervention) {
+            $intervention->setRemboursementEtat($statutRemboursement);
+        }
+
         //change facture state
-        $facture->setPayee( true );
-        $facture->setDatePaiement( new \DateTime() );
+        $facture->setPayee(true);
+        $facture->setDatePaiement(new \DateTime());
 
         //save facture => implicit save interventions
-        $this->save( $facture );
+        $this->save($facture);
     }
 
-
     /**
-     * Passe les interventions de la facture au statut annulée ou activée
+     * Passe les interventions de la facture au statut annulée ou activée.
      *
      * @param Facture $facture La facture
      *
      * @return empty
      */
-    public function changeEtat( $facture )
+    public function changeEtat($facture)
     {
-        if($facture->isAnnulee()){
+        if ($facture->isAnnulee()) {
             $facture->setAnnulee(false);
         } else {
             $facture->setAnnulee(true);
         }
-        $this->save( $facture );
+        $this->save($facture);
+
         return $facture->isAnnulee();
     }
 
     /**
-     * Retourne la liste des factures ordonnées par date
+     * Retourne la liste des factures ordonnées par date.
      *
      * @return array
      */
-    public function getFacturesOrdered( $user, $onlyValid = true )
+    public function getFacturesOrdered($user, $onlyValid = true)
     {
         return $this->getRepository()->getFacturesOrdered($user, $onlyValid)->getQuery()->getResult();
     }
@@ -238,7 +234,8 @@ class FactureManager extends BaseManager
      * Retourne si la facture peut être générée.
      *
      * @param array<\HopitalNumerique\InterventionBundle\Entity\InterventionDemande> $interventionDemandes Demandes d'intervention
-     * @return boolean Vrai si la facture peut être générée
+     *
+     * @return bool Vrai si la facture peut être générée
      */
     public function canGenererFacture(array $interventionDemandes)
     {

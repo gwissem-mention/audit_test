@@ -1,4 +1,5 @@
 <?php
+
 namespace HopitalNumerique\ObjetBundle\Doctrine;
 
 use HopitalNumerique\ObjetBundle\Entity\Contenu;
@@ -17,7 +18,6 @@ class NoteSaver
      */
     const NOTE_SESSION = 'hn_45xg96_note';
 
-
     /**
      * @var \Symfony\Component\HttpFoundation\Session\SessionInterface Session
      */
@@ -33,7 +33,6 @@ class NoteSaver
      */
     private $noteManager;
 
-
     /**
      * Constructeur.
      */
@@ -44,11 +43,10 @@ class NoteSaver
         $this->noteManager = $noteManager;
     }
 
-
     /**
      * Enregistre la note d'un objet.
      *
-     * @param integer                                       $note  Note
+     * @param int                                           $note  Note
      * @param \HopitalNumerique\ObjetBundle\Entity\Objet    $objet Objet
      * @param \HopitalNumerique\UserBundle\Entity\User|null $user  Utilisateur
      */
@@ -57,7 +55,7 @@ class NoteSaver
         $noteEntity = null;
         if (null !== $user) {
             $noteEntity = $this->noteManager->findOneBy(['objet' => $objet, 'user' => $user]);
-        } else if ($this->noteReader->hasNoteForObjetAndUser($objet, $user)) { // Si non connecté, pas d'update
+        } elseif ($this->noteReader->hasNoteForObjetAndUser($objet, $user)) { // Si non connecté, pas d'update
             return;
         }
 
@@ -76,7 +74,7 @@ class NoteSaver
     /**
      * Enregistre la note d'un contenu.
      *
-     * @param integer                                       $note    Note
+     * @param int                                           $note    Note
      * @param \HopitalNumerique\ObjetBundle\Entity\Contenu  $contenu Contenu
      * @param \HopitalNumerique\UserBundle\Entity\User|null $user    Utilisateur
      */
@@ -85,7 +83,7 @@ class NoteSaver
         $noteEntity = null;
         if (null !== $user) {
             $noteEntity = $this->noteManager->findOneBy(['contenu' => $contenu, 'user' => $user]);
-        } else if ($this->noteReader->hasNoteForContenuAndUser($contenu, $user)) { // Si non connecté, pas d'update
+        } elseif ($this->noteReader->hasNoteForContenuAndUser($contenu, $user)) { // Si non connecté, pas d'update
             return;
         }
 
@@ -102,11 +100,10 @@ class NoteSaver
         $this->saveNoteSessionForContenu($note, $contenu);
     }
 
-
     /**
      * Enregistre la note d'un objet en session.
      *
-     * @param integer                                       $note  Note
+     * @param int                                           $note  Note
      * @param \HopitalNumerique\ObjetBundle\Entity\Objet    $objet Objet
      * @param \HopitalNumerique\UserBundle\Entity\User|null $user  Utilisateur
      */
@@ -118,7 +115,7 @@ class NoteSaver
     /**
      * Enregistre la note d'un contenu en session.
      *
-     * @param integer                                       $note    Note
+     * @param int                                           $note    Note
      * @param \HopitalNumerique\ObjetBundle\Entity\Contenu  $contenu Contenu
      * @param \HopitalNumerique\UserBundle\Entity\User|null $user    Utilisateur
      */
@@ -130,9 +127,9 @@ class NoteSaver
     /**
      * Enregistre la note d'une entité en session.
      *
-     * @param integer $note       Note
-     * @param integer $entityType Type d'entité
-     * @param integer $entityId   ID de l'entité
+     * @param int $note       Note
+     * @param int $entityType Type d'entité
+     * @param int $entityId   ID de l'entité
      */
     private function saveNoteSessionForEntity($note, $entityType, $entityId)
     {

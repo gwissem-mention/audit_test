@@ -5,7 +5,7 @@ namespace HopitalNumerique\RechercheBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * StatClic
+ * StatClic.
  *
  * @ORM\Table(name="hn_recherche_expBesoin_statclic")
  * @ORM\Entity(repositoryClass="HopitalNumerique\RechercheBundle\Repository\StatClicRepository")
@@ -13,7 +13,7 @@ use Doctrine\ORM\Mapping as ORM;
 class StatClic
 {
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="rsc_id", type="integer")
      * @ORM\Id
@@ -27,9 +27,9 @@ class StatClic
      * @ORM\Column(name="rsc_dateClic", type="datetime")
      */
     protected $dateClic;
-    
+
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\ManyToOne(targetEntity="\HopitalNumerique\RechercheBundle\Entity\ExpBesoinReponses")
      * @ORM\JoinColumn(name="expbr_id", referencedColumnName="expbr_id", onDelete="CASCADE")
@@ -37,18 +37,17 @@ class StatClic
     protected $reponse;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\ManyToOne(targetEntity="\HopitalNumerique\UserBundle\Entity\User")
      * @ORM\JoinColumn(name="usr_user", referencedColumnName="usr_id", nullable=true, onDelete="CASCADE")
      */
     protected $user;
 
-
     /**
-     * Get id
+     * Get id.
      *
-     * @return integer 
+     * @return int
      */
     public function getId()
     {
@@ -56,9 +55,10 @@ class StatClic
     }
 
     /**
-     * Set dateClic
+     * Set dateClic.
      *
      * @param \DateTime $dateClic
+     *
      * @return StatClic
      */
     public function setDateClic($dateClic)
@@ -69,9 +69,9 @@ class StatClic
     }
 
     /**
-     * Get dateClic
+     * Get dateClic.
      *
-     * @return \DateTime 
+     * @return \DateTime
      */
     public function getDateClic()
     {
@@ -79,20 +79,21 @@ class StatClic
     }
 
     /**
-     * Set user
+     * Set user.
      *
      * @param \HopitalNumerique\UserBundle\Entity\User $user
+     *
      * @return MaitriseUser
      */
     public function setUser(\HopitalNumerique\UserBundle\Entity\User $user = null)
     {
         $this->user = $user;
-    
+
         return $this;
     }
-    
+
     /**
-     * Get user
+     * Get user.
      *
      * @return \HopitalNumerique\UserBundle\Entity\User
      */
@@ -102,9 +103,10 @@ class StatClic
     }
 
     /**
-     * Set reponse
+     * Set reponse.
      *
      * @param \HopitalNumerique\RechercheBundle\Entity\ExpBesoinReponses $reponse
+     *
      * @return StatClic
      */
     public function setReponse(\HopitalNumerique\RechercheBundle\Entity\ExpBesoinReponses $reponse = null)
@@ -115,9 +117,9 @@ class StatClic
     }
 
     /**
-     * Get reponse
+     * Get reponse.
      *
-     * @return \HopitalNumerique\RechercheBundle\Entity\ExpBesoinReponses 
+     * @return \HopitalNumerique\RechercheBundle\Entity\ExpBesoinReponses
      */
     public function getReponse()
     {

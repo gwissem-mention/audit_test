@@ -16,6 +16,7 @@ class ItemResponse
 
     /**
      * ItemResponse constructor.
+     *
      * @param $text
      * @param $value
      * @param $comment
@@ -55,9 +56,6 @@ class ItemResponse
         return $this->text;
     }
 
-    /**
-     * @return null
-     */
     public function getComment()
     {
         return $this->comment;
@@ -75,9 +73,6 @@ class ItemResponse
         return $this;
     }
 
-    /**
-     * @return null
-     */
     public function getScore()
     {
         return $this->score;

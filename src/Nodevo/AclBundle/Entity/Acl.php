@@ -5,7 +5,7 @@ namespace Nodevo\AclBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * Acl
+ * Acl.
  *
  * @ORM\Table(name="core_acl")
  * @ORM\Entity(repositoryClass="Nodevo\AclBundle\Repository\AclRepository")
@@ -27,14 +27,14 @@ class Acl
     protected $ressource;
 
     /**
-     * @var boolean
+     * @var bool
      *
      * @ORM\Column(name="acl_read", type="boolean", options = {"comment" = "Autoriser la lecture"})
      */
     private $read;
 
     /**
-     * @var boolean
+     * @var bool
      *
      * @ORM\Column(name="acl_write", type="boolean", options = {"comment" = "Autoriser l écriture"})
      */
@@ -42,27 +42,28 @@ class Acl
 
     public function __construct()
     {
-        $this->read  = false;
+        $this->read = false;
         $this->write = false;
     }
 
     /**
-     * Set role
+     * Set role.
      *
      * @param $role
+     *
      * @return Acl
      */
     public function setRole(\Nodevo\RoleBundle\Entity\Role $role)
     {
         $this->role = $role;
-    
+
         return $this;
     }
 
     /**
-     * Get role
+     * Get role.
      *
-     * @return \Nodevo\RoleBundle\Entity\Role 
+     * @return \Nodevo\RoleBundle\Entity\Role
      */
     public function getRole()
     {
@@ -70,7 +71,7 @@ class Acl
     }
 
     /**
-     * Get ressource
+     * Get ressource.
      *
      * @return $ressource
      */
@@ -78,31 +79,31 @@ class Acl
     {
         return $this->ressource;
     }
-    
+
     /**
-     * Set ressource
+     * Set ressource.
      *
      * @param Ressource $ressource
      */
-    public function setRessource( Ressource $ressource)
+    public function setRessource(Ressource $ressource)
     {
         $this->ressource = $ressource;
     }
-    
+
     /**
-     * Get read
+     * Get read.
      *
-     * @return boolean $read
+     * @return bool $read
      */
     public function getRead()
     {
         return $this->read;
     }
-    
+
     /**
-     * Set read
+     * Set read.
      *
-     * @param boolean $read
+     * @param bool $read
      */
     public function setRead($read)
     {
@@ -110,22 +111,22 @@ class Acl
     }
 
     /**
-     * Get write
+     * Get write.
      *
-     * @return boolean $write
+     * @return bool $write
      */
     public function getWrite()
     {
         return $this->write;
     }
-    
+
     /**
-     * Set write
+     * Set write.
      *
-     * @param boolean $write
+     * @param bool $write
      */
     public function setWrite($write)
     {
         $this->write = $write;
-    }   
+    }
 }

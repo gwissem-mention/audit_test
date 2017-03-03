@@ -2,6 +2,7 @@
 /**
  * Configuration du grid des demandes d'intervention.
  */
+
 namespace HopitalNumerique\InterventionBundle\Grid;
 
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -17,22 +18,21 @@ use HopitalNumerique\InterventionBundle\Entity\InterventionEvaluationEtat;
 abstract class DemandesAbstractGrid extends Grid implements GridInterface
 {
     protected $utilisateurConnecte;
-    
+
     /**
      * Constructeur du grid des demandes d'intervention.
-     * 
+     *
      * @param \Symfony\Component\DependencyInjection\ContainerInterface $container Conteneur de services de l'application
-     * @return void
      */
     public function __construct(ContainerInterface $container)
     {
         parent::__construct($container);
-        
+
         $this->utilisateurConnecte = $container->get('security.context')->getToken()->getUser();
     }
-    
+
     /**
-     * Set la config propre au Grid des demandes d'intervention (Source + config par défaut)
+     * Set la config propre au Grid des demandes d'intervention (Source + config par défaut).
      */
     public function setConfig()
     {
@@ -42,18 +42,21 @@ abstract class DemandesAbstractGrid extends Grid implements GridInterface
     }
 
     /**
-     * Ajoute les colonnes visibles du grid
+     * Ajoute les colonnes visibles du grid.
      */
     public function setColumns()
     {
         $colonneRegroupements = new Column\TextColumn('nombreRegroupements', '');
         $colonneRegroupements->setFilterable(false)->setSortable(false);
         $colonneRegroupements->manipulateRenderCell(
-            function($value, \APY\DataGridBundle\Grid\Row $row) {
-                if (intval($row->getField('nombreDemandesRegroupees')) > 0)
+            function ($value, \APY\DataGridBundle\Grid\Row $row) {
+                if (intval($row->getField('nombreDemandesRegroupees')) > 0) {
                     return '<img src="/bundles/hopitalnumeriqueintervention/img/regroupement_principale.png" width="16" height="14" title="Demande principale">';
-                if (intval($row->getField('nombreDemandesPrincipales')) > 0)
+                }
+                if (intval($row->getField('nombreDemandesPrincipales')) > 0) {
                     return '<img src="/bundles/hopitalnumeriqueintervention/img/regroupement_groupee.png" width="16" height="14" title="Demande regroupée">';
+                }
+
                 return '';
             }
         );
@@ -61,38 +64,35 @@ abstract class DemandesAbstractGrid extends Grid implements GridInterface
     }
 
     /**
-     * Ajoute les boutons d'actions si nécessaire
+     * Ajoute les boutons d'actions si nécessaire.
      */
     public function setActionsButtons()
     {
-        
     }
 
     /**
-     * Ajoute les actions de masses
+     * Ajoute les actions de masses.
      */
     public function setMassActions()
     {
-        
     }
 
     /**
      * Ignore plusieurs colonne (ne pas afficher dans le filtre).
      *
      * @param string[] $colonneLabels Identifiant des colonnes
-     * @return void
      */
     protected function ignoreColonnes($colonneLabels)
     {
-        foreach ($colonneLabels as $colonneLabel)
+        foreach ($colonneLabels as $colonneLabel) {
             $this->ignoreColonne($colonneLabel);
+        }
     }
 
     /**
      * Ignore une colonne (ne pas afficher dans le filtre).
-     * 
+     *
      * @param string $colonneLabel Identifiant de la colonne
-     * @return void
      */
     private function ignoreColonne($colonneLabel)
     {
@@ -103,14 +103,12 @@ abstract class DemandesAbstractGrid extends Grid implements GridInterface
 
     /**
      * Ajoute la colonne Demandeur.
-     * 
-     * @return void
      */
     protected function addColonneDemandeur()
     {
         $colonneDemandeurInformations = new Column\TextColumn('demandeurInformations', 'Demandeur');
         $colonneDemandeurInformations->manipulateRenderCell(
-            function($value, $row, $router) {
+            function ($value, $row, $router) {
                 return DemandesAbstractGrid::renderCellReferent($value, $row, $router);
             }
         );
@@ -120,8 +118,6 @@ abstract class DemandesAbstractGrid extends Grid implements GridInterface
 
     /**
      * Ajoute la colonne Ambassadeur.
-     *
-     * @return void
      */
     protected function addColonneAmbassadeur()
     {
@@ -132,8 +128,6 @@ abstract class DemandesAbstractGrid extends Grid implements GridInterface
 
     /**
      * Ajoute la colonne InterventionInitiateurType.
-     * 
-     * @return void
      */
     protected function addColonneInterventionInitiateurType()
     {
@@ -144,8 +138,6 @@ abstract class DemandesAbstractGrid extends Grid implements GridInterface
 
     /**
      * Ajoute la colonne DateCreation.
-     * 
-     * @return void
      */
     protected function addColonneDateCreation()
     {
@@ -156,8 +148,6 @@ abstract class DemandesAbstractGrid extends Grid implements GridInterface
 
     /**
      * Ajoute la colonne InterventionEtat.
-     *
-     * @return void
      */
     protected function addColonneInterventionEtat()
     {
@@ -168,15 +158,13 @@ abstract class DemandesAbstractGrid extends Grid implements GridInterface
 
     /**
      * Ajoute la colonne DateChoix.
-     *
-     * @return void
      */
     protected function addColonneDateChoix()
     {
         $colonneDateChoix = new Column\TextColumn('dateChoix', 'Dates');
         $colonneDateChoix->setFilterable(false)->setSortable(false);
         $colonneDateChoix->manipulateRenderCell(
-            function($value, \APY\DataGridBundle\Grid\Row $row) {
+            function ($value, \APY\DataGridBundle\Grid\Row $row) {
                 return DemandesAbstractGrid::renderCellDateChoix($value, $row);
             }
         );
@@ -185,92 +173,85 @@ abstract class DemandesAbstractGrid extends Grid implements GridInterface
 
     /**
      * Ajoute la colonne DateChoix.
-     *
-     * @return void
      */
     protected function addColonneEvaluationAvecEnvoiRelance()
     {
-    	$colonneEvaluation = new Column\TextColumn('evaluationEtatId', 'Éval.');
+        $colonneEvaluation = new Column\TextColumn('evaluationEtatId', 'Éval.');
         $colonneEvaluation->setFilterable(false)->setSortable(false);
         $colonneEvaluation->setAlign('center');
         $colonneEvaluation->manipulateRenderCell(
-            function($value, \APY\DataGridBundle\Grid\Row $row, \Symfony\Component\Routing\Router $router) {
-                if ($row->getField('evaluationEtatId') == InterventionEvaluationEtat::getInterventionEvaluationEtatAEvaluerId())
-                {
-                    return '<button class="btn btn-warning btn-xs" data-evaluation-demande="'.$row->getField('id').'" title="Envoyer une relance"><span class="glyphicon glyphicon-send"></span></button>';
+            function ($value, \APY\DataGridBundle\Grid\Row $row, \Symfony\Component\Routing\Router $router) {
+                if ($row->getField('evaluationEtatId') == InterventionEvaluationEtat::getInterventionEvaluationEtatAEvaluerId()) {
+                    return '<button class="btn btn-warning btn-xs" data-evaluation-demande="' . $row->getField('id') . '" title="Envoyer une relance"><span class="glyphicon glyphicon-send"></span></button>';
+                } elseif ($row->getField('evaluationEtatId') == InterventionEvaluationEtat::getInterventionEvaluationEtatEvalueId()) {
+                    return '<a class="btn btn-info btn-xs" href="' . $router->generate('hopital_numerique_intervention_evaluation_voir', ['interventionDemande' => $row->getField('id')]) . '"><span class="glyphicon glyphicon-eye-open"></span></a>';
                 }
-                elseif ($row->getField('evaluationEtatId') == InterventionEvaluationEtat::getInterventionEvaluationEtatEvalueId())
-                {
-                    return '<a class="btn btn-info btn-xs" href="'.$router->generate('hopital_numerique_intervention_evaluation_voir', array('interventionDemande' => $row->getField('id'))).'"><span class="glyphicon glyphicon-eye-open"></span></a>';
-                }
+
                 return '';
             }
         );
         $this->addColonne($colonneEvaluation);
     }
-    
+
     /**
      * Fonction de rendu de la cellule Référent (ou Demandeur).
-     * 
+     *
      * @return string Le contenu de la cellule Référent
      */
     public static function renderCellReferent($value, $row)
     {
         echo
-            '<strong>'.$row->getField('referent_nom').'</strong>'.
-            ($row->getField('referentEtablissementNom') != null ? '<br>'.$row->getField('referentEtablissementNom').' - '.$row->getField('referentEtablissementFiness') : '').
-            ($row->getField('referentRegionLibelle') != null ? '<br>'.$row->getField('referentRegionLibelle') : '')
+            '<strong>' . $row->getField('referent_nom') . '</strong>' .
+            ($row->getField('referentEtablissementNom') != null ? '<br>' . $row->getField('referentEtablissementNom') . ' - ' . $row->getField('referentEtablissementFiness') : '') .
+            ($row->getField('referentRegionLibelle') != null ? '<br>' . $row->getField('referentRegionLibelle') : '')
         ;
     }
 
     /**
      * Fonction de rendu de la cellule Ambassadeur.
-     * 
+     *
      * @return string Le contenu de la cellule Ambassadeur
      */
     public static function renderCellAmbassadeur($value, $row)
     {
         echo
-            '<strong>'.$row->getField('ambassadeur_nom').'</strong>'.
-            ($row->getField('ambassadeurRegionLibelle') != null ? '<br>'.$row->getField('ambassadeurRegionLibelle') : '')
+            '<strong>' . $row->getField('ambassadeur_nom') . '</strong>' .
+            ($row->getField('ambassadeurRegionLibelle') != null ? '<br>' . $row->getField('ambassadeurRegionLibelle') : '')
         ;
     }
 
     /**
      * Fonction de rendu de la cellule CMSI.
-     * 
+     *
      * @return string Le contenu de la cellule CMSI
      */
     public static function renderCellCmsi($value, $row)
     {
         return
-            '<strong>'.$row->getField('cmsi_nom').'</strong>'
+            '<strong>' . $row->getField('cmsi_nom') . '</strong>'
         ;
     }
 
     /**
      * Fonction de rendu de la cellule Date choix.
-     * 
+     *
      * @return string Le contenu de la cellule Date choix
      */
     public static function renderCellDateChoix($value, $row)
     {
         $dateChoix = '';
-        if ($row->getField('cmsiDateChoixLibelle') != null)
-        {
+        if ($row->getField('cmsiDateChoixLibelle') != null) {
             $dateChoixCmsi = new \DateTime($row->getField('cmsiDateChoixLibelle'));
-            $dateChoix .= '<div><strong>CMSI :</strong> '.$dateChoixCmsi->format('d/m/Y').'</div>';
+            $dateChoix .= '<div><strong>CMSI :</strong> ' . $dateChoixCmsi->format('d/m/Y') . '</div>';
         }
-        if ($row->getField('ambassadeurDateChoixLibelle') != null)
-        {
+        if ($row->getField('ambassadeurDateChoixLibelle') != null) {
             $dateChoixAmbassadeur = new \DateTime($row->getField('ambassadeurDateChoixLibelle'));
-            $dateChoix .= '<div><strong>Ambassadeur :</strong> '.$dateChoixAmbassadeur->format('d/m/Y').'</div>';
+            $dateChoix .= '<div><strong>Ambassadeur :</strong> ' . $dateChoixAmbassadeur->format('d/m/Y') . '</div>';
         }
-        if($row->getField('evaluationEtatId') == InterventionEvaluationEtat::getInterventionEvaluationEtatEvalueId())
-        {
+        if ($row->getField('evaluationEtatId') == InterventionEvaluationEtat::getInterventionEvaluationEtatEvalueId()) {
             //Récupérer la vrai date en fonction des réponses au questionnaire d'évaluation
-            $dateChoixEvaluation = $row->getField('evaluationDateLibelle') === "" ? "Date non communiquée" : (new \DateTime($row->getField('evaluationDateLibelle')))->format('d/m/Y');
-            $dateChoix .= '<div><strong>Évaluation : </strong>'.$dateChoixEvaluation.'</div>';
+            $dateChoixEvaluation = $row->getField('evaluationDateLibelle') === '' ? 'Date non communiquée' : (new \DateTime($row->getField('evaluationDateLibelle')))->format('d/m/Y');
+            $dateChoix .= '<div><strong>Évaluation : </strong>' . $dateChoixEvaluation . '</div>';
         }
         echo $dateChoix;
     }

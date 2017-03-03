@@ -17,40 +17,29 @@ use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Core\SecurityContextInterface;
 
 /**
- *
  * @category CCDNForum
- * @package  ForumBundle
  *
  * @author   Gaëtan MELCHILSEN
  * @license  Nodevo
- *
  */
 class RoleHelper
 {
     /**
-     *
-     * @access protected
-     * @var \Symfony\Component\Security\Core\SecurityContextInterface $securityContext
+     * @var \Symfony\Component\Security\Core\SecurityContextInterface
      */
     protected $securityContext;
 
     /**
-     *
-     * @access protected
-     * @var array $availableRoles
+     * @var array
      */
     protected $availableRoles;
 
     /**
-     *
-     * @access protected
-     * @var array $availableRoleKeys
+     * @var array
      */
     protected $availableRoleKeys;
 
     /**
-     *
-     * @access public
      * @param \Symfony\Component\Security\Core\SecurityContextInterface $securityContext
      */
     public function __construct(SecurityContextInterface $securityContext, \Nodevo\RoleBundle\Manager\RoleManager $managerRole)
@@ -59,9 +48,8 @@ class RoleHelper
 
         // default role is array is empty.
         if (empty($availableRoles)) {
-            foreach ($managerRole->getRolesAsArray() as $code => $name) 
-            {
-                $availableRoles[$code] = array($name);
+            foreach ($managerRole->getRolesAsArray() as $code => $name) {
+                $availableRoles[$code] = [$name];
             }
         }
 
@@ -72,18 +60,15 @@ class RoleHelper
     }
 
     /**
-     *
-     * @access public
-     * @return Array
+     * @return array
      */
     public function getRoleHierarchy()
     {
-        $roles = array();
+        $roles = [];
 
-        foreach ($this->availableRoles as $roleName => $roleSubs)
-        {
+        foreach ($this->availableRoles as $roleName => $roleSubs) {
             $subs = '<ul><li>' . implode('</li><li>', $roleSubs) . '</li></ul>';
-            $roles[$roleName] = '<strong>' . $roleName . '</strong>' . ($subs != '<ul><li>' . $roleName . '</li></ul>' ? "\n" . $subs:'');
+            $roles[$roleName] = '<strong>' . $roleName . '</strong>' . ($subs != '<ul><li>' . $roleName . '</li></ul>' ? "\n" . $subs : '');
         }
 
         return $roles;
@@ -91,10 +76,9 @@ class RoleHelper
 
     public function getRoleForFormulaire()
     {
-        $roles = array();
+        $roles = [];
 
-        foreach ($this->availableRoles as $roleName => $roleSubs)
-        {
+        foreach ($this->availableRoles as $roleName => $roleSubs) {
             $roles[$roleName] = implode('</li><li>', $roleSubs);
         }
 
@@ -102,8 +86,6 @@ class RoleHelper
     }
 
     /**
-     *
-     * @access public
      * @return array $availableRoles
      */
     public function getAvailableRoles()
@@ -112,8 +94,6 @@ class RoleHelper
     }
 
     /**
-     *
-     * @access public
      * @return array $availableRoles
      */
     public function getAvailableRoleKeys()
@@ -122,10 +102,9 @@ class RoleHelper
     }
 
     /**
+     * @param \Symfony\Component\Security\Core\User\UserInterface $user
+     * @param string                                              $role
      *
-     * @access public
-     * @param  \Symfony\Component\Security\Core\User\UserInterface $user
-     * @param  string                                              $role
      * @return bool
      */
     public function hasRole(UserInterface $user, $role)
@@ -142,10 +121,9 @@ class RoleHelper
     }
 
     /**
+     * @param array $userRoles
      *
-     * @access public
-     * @param  array $userRoles
-     * @return int   $highestUsersRoleKey
+     * @return int $highestUsersRoleKey
      */
     public function getUsersHighestRole($usersRoles)
     {
@@ -166,9 +144,8 @@ class RoleHelper
     }
 
     /**
+     * @param array $userRoles
      *
-     * @access public
-     * @param  array  $userRoles
      * @return string $role
      */
     public function getUsersHighestRoleAsName($usersRoles)

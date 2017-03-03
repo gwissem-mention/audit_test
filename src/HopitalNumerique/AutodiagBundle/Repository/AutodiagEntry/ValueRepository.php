@@ -44,9 +44,10 @@ class ValueRepository extends EntityRepository
     }
 
     /**
-     * Get all values formatted for AlgorithmInterface
+     * Get all values formatted for AlgorithmInterface.
      *
      * @param Synthesis $synthesis
+     *
      * @return array
      */
     public function getSynthesisValuesForAlgorithm(Synthesis $synthesis)
@@ -151,7 +152,7 @@ class ValueRepository extends EntityRepository
             ->where('autodiag.id = :autodiag_id')
             ->setParameters([
                 'entry_id' => $entryId,
-                'autodiag_id' => $autodiagId
+                'autodiag_id' => $autodiagId,
             ])
         ;
 
@@ -192,10 +193,11 @@ class ValueRepository extends EntityRepository
     }
 
     /**
-     * Get entry values intersection from $synthesis, between $synthesis and $reference
+     * Get entry values intersection from $synthesis, between $synthesis and $reference.
      *
      * @param Synthesis $synthesis
      * @param Synthesis $reference
+     *
      * @return array
      */
     public function findAttributeIdsIntersection(Synthesis $synthesis, Synthesis $reference)

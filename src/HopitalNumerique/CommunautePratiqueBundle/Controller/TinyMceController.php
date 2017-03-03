@@ -1,4 +1,5 @@
 <?php
+
 namespace HopitalNumerique\CommunautePratiqueBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -21,11 +22,11 @@ class TinyMceController extends Controller
         }
 
         $documents = $this->container->get('hopitalnumerique_communautepratique.manager.document')
-            ->findBy(array('groupe' => $groupe, 'user' => $this->getUser()));
+            ->findBy(['groupe' => $groupe, 'user' => $this->getUser()]);
 
-        return $this->render('HopitalNumeriqueCommunautePratiqueBundle:TinyMce:documents.html.twig', array(
+        return $this->render('HopitalNumeriqueCommunautePratiqueBundle:TinyMce:documents.html.twig', [
             'documents' => $documents,
-            'texteSelectionne' => $request->request->get('texteSelectionne')
-        ));
+            'texteSelectionne' => $request->request->get('texteSelectionne'),
+        ]);
     }
 }

@@ -8,7 +8,7 @@ use Doctrine\ORM\Mapping as ORM;
 use HopitalNumerique\AutodiagBundle\Entity\Restitution\Category;
 
 /**
- * Restitution
+ * Restitution.
  *
  * @ORM\Table(name="ad_restitution")
  * @ORM\Entity(repositoryClass="HopitalNumerique\AutodiagBundle\Repository\RestitutionRepository")
@@ -16,7 +16,7 @@ use HopitalNumerique\AutodiagBundle\Entity\Restitution\Category;
 class Restitution
 {
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
@@ -25,7 +25,7 @@ class Restitution
     private $id;
 
     /**
-     * Score label
+     * Score label.
      *
      * @var string
      *
@@ -34,9 +34,9 @@ class Restitution
     private $scoreLabel;
 
     /**
-     * Score color
+     * Score color.
      *
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="score_color", type="string", length=50, nullable=true)
      */
@@ -61,9 +61,9 @@ class Restitution
     }
 
     /**
-     * Get id
+     * Get id.
      *
-     * @return integer
+     * @return int
      */
     public function getId()
     {
@@ -80,6 +80,7 @@ class Restitution
 
     /**
      * @param Category $category
+     *
      * @return $this
      */
     public function addCategory(Category $category)
@@ -92,6 +93,7 @@ class Restitution
 
     /**
      * @param Category $category
+     *
      * @return $this
      */
     public function removeCategory(Category $category)

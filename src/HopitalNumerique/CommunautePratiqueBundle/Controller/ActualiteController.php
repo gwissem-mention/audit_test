@@ -1,18 +1,28 @@
 <?php
+
 namespace HopitalNumerique\CommunautePratiqueBundle\Controller;
 
+use HopitalNumerique\ForumBundle\Entity\Board;
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use HopitalNumerique\ReferenceBundle\Entity\Reference;
 use Pagerfanta\Adapter\ArrayAdapter;
 use Pagerfanta\Pagerfanta;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  * Contrôleur des actualités de la communauté de pratique.
  */
-class ActualiteController extends \Symfony\Bundle\FrameworkBundle\Controller\Controller
+class ActualiteController extends Controller
 {
     /**
      * Liste des actualités.
+     *
+     * @param         $page
+     * @param Request $request
+     *
+     * @return RedirectResponse|Response
      */
     public function listAction($page, Request $request)
     {
@@ -24,6 +34,12 @@ class ActualiteController extends \Symfony\Bundle\FrameworkBundle\Controller\Con
 
     /**
      * Liste les actualités d'une catégorie.
+     *
+     * @param Reference $categorie
+     * @param           $page
+     * @param Request   $request
+     *
+     * @return RedirectResponse|Response
      */
     public function listByCategorieAction(Reference $categorie, $page, Request $request)
     {
@@ -33,8 +49,11 @@ class ActualiteController extends \Symfony\Bundle\FrameworkBundle\Controller\Con
     /**
      * Affiche la liste des articles d'une catégorie.
      *
-     * @param \HopitalNumerique\ReferenceBundle\Entity\Reference $categorie Catégorie
-     * @param integer $page Numéro de page
+     * @param Reference $categorie Catégorie
+     * @param int       $page      Numéro de page
+     * @param Request   $request
+     *
+     * @return RedirectResponse|Response
      */
     private function renderList(Reference $categorie, $page, Request $request)
     {
@@ -46,18 +65,28 @@ class ActualiteController extends \Symfony\Bundle\FrameworkBundle\Controller\Con
         $domaine = $this->container->get('hopitalnumerique_domaine.manager.domaine')
             ->findOneById($request->getSession()->get('domaineId'));
 
-        $actualites = $this->container->get('hopitalnumerique_objet.manager.objet')
-            ->getArticlesForCategorie($categorie, $domaine);
+        if ($domaine->getId() === 1) {
+            $actualites = $this->get('hopitalnumerique_forum.manager.post')->getFirstPostsFromBoard(
+                Board::BOARD_MHN_ID
+            );
+        } elseif ($domaine->getId() === 7) {
+            $actualites = $this->get('hopitalnumerique_forum.manager.post')->getFirstPostsFromBoard(
+                Board::BOARD_RSE_ID
+            );
+        } else {
+            $actualites = [];
+        }
+
         $actualitesAdapter = new ArrayAdapter($actualites);
         $actualitesPager = new Pagerfanta($actualitesAdapter);
         $actualitesPager->setMaxPerPage(5);
         $actualitesPager->setCurrentPage($page);
 
-        return $this->render('HopitalNumeriqueCommunautePratiqueBundle:Actualite:list.html.twig', array(
+        return $this->render('HopitalNumeriqueCommunautePratiqueBundle:Actualite:list.html.twig', [
             'categorieActualites' => $this->container->get('hopitalnumerique_reference.manager.reference')
                 ->findOneById(Reference::ARTICLE_CATEGORIE_COMMUNAUTE_DE_PRATIQUES_ID),
             'categorie' => $categorie,
-            'actualitesPager' => $actualitesPager
-        ));
+            'actualitesPager' => $actualitesPager,
+        ]);
     }
 }

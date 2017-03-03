@@ -5,7 +5,7 @@ namespace HopitalNumerique\RechercheParcoursBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * MaitriseUser
+ * MaitriseUser.
  *
  * @ORM\Table(name="hn_recherche_maitrise_user")
  * @ORM\Entity(repositoryClass="HopitalNumerique\RechercheParcoursBundle\Repository\MaitriseUserRepository")
@@ -13,7 +13,7 @@ use Doctrine\ORM\Mapping as ORM;
 class MaitriseUser
 {
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="rmu_id", type="integer")
      * @ORM\Id
@@ -29,14 +29,14 @@ class MaitriseUser
     protected $dateMaitrise;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="rmu_pourcentageMaitrise", type="integer", options = {"comment" = "Pourcentage de maitrise du point dur par l utilisateur."})
      */
     protected $pourcentageMaitrise;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\ManyToOne(targetEntity="RechercheParcoursDetails")
      * @ORM\JoinColumn(name="rrpd_id", referencedColumnName="rrpd_id", onDelete="CASCADE")
@@ -50,7 +50,7 @@ class MaitriseUser
     protected $objet;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\ManyToOne(targetEntity="\HopitalNumerique\UserBundle\Entity\User")
      * @ORM\JoinColumn(name="usr_user", referencedColumnName="usr_id", onDelete="CASCADE")
@@ -58,25 +58,25 @@ class MaitriseUser
     protected $user;
 
     /**
-     * @var boolean
+     * @var bool
      *
      * @ORM\Column(name="rmu_non_concerne", type="boolean", options = {"comment" = "Pas concerné par cet objet"})
      */
     protected $nonConcerne;
 
     /**
-     * Initialisation de l'entitée (valeurs par défaut)
+     * Initialisation de l'entitée (valeurs par défaut).
      */
     public function __construct()
     {
-        $this->nonConcerne  = false;
+        $this->nonConcerne = false;
         $this->dateMaitrise = new \DateTime();
     }
 
     /**
-     * Get id
+     * Get id.
      *
-     * @return integer 
+     * @return int
      */
     public function getId()
     {
@@ -87,16 +87,17 @@ class MaitriseUser
     {
         return $this->rechercheParcoursDetails;
     }
-    
-    public function setRechercheParcoursDetails( RechercheParcoursDetails $rechercheParcoursDetails )
+
+    public function setRechercheParcoursDetails(RechercheParcoursDetails $rechercheParcoursDetails)
     {
         $this->rechercheParcoursDetails = $rechercheParcoursDetails;
     }
 
     /**
-     * Set pourcentageMaitrise
+     * Set pourcentageMaitrise.
      *
-     * @param integer $pourcentageMaitrise
+     * @param int $pourcentageMaitrise
+     *
      * @return MaitriseUser
      */
     public function setPourcentageMaitrise($pourcentageMaitrise)
@@ -107,17 +108,17 @@ class MaitriseUser
     }
 
     /**
-     * Get pourcentageMaitrise
+     * Get pourcentageMaitrise.
      *
-     * @return integer 
+     * @return int
      */
     public function getPourcentageMaitrise()
     {
         return $this->pourcentageMaitrise;
     }
-    
+
     /**
-     * Get objet
+     * Get objet.
      *
      * @return Objet $objet
      */
@@ -125,9 +126,9 @@ class MaitriseUser
     {
         return $this->objet;
     }
-    
+
     /**
-     * Set objet
+     * Set objet.
      *
      * @param Objet $objet
      */
@@ -137,20 +138,21 @@ class MaitriseUser
     }
 
     /**
-     * Set user
+     * Set user.
      *
      * @param \HopitalNumerique\UserBundle\Entity\User $user
+     *
      * @return MaitriseUser
      */
     public function setUser(\HopitalNumerique\UserBundle\Entity\User $user = null)
     {
         $this->user = $user;
-    
+
         return $this;
     }
-    
+
     /**
-     * Get user
+     * Get user.
      *
      * @return \HopitalNumerique\UserBundle\Entity\User
      */
@@ -158,10 +160,12 @@ class MaitriseUser
     {
         return $this->user;
     }
+
     /**
-     * Set nonConcerne
+     * Set nonConcerne.
      *
-     * @param boolean $nonConcerne
+     * @param bool $nonConcerne
+     *
      * @return MaitriseUser
      */
     public function setNonConcerne($nonConcerne)
@@ -172,9 +176,9 @@ class MaitriseUser
     }
 
     /**
-     * Get nonConcerne
+     * Get nonConcerne.
      *
-     * @return boolean 
+     * @return bool
      */
     public function getNonConcerne()
     {
@@ -182,9 +186,10 @@ class MaitriseUser
     }
 
     /**
-     * Set dateMaitrise
+     * Set dateMaitrise.
      *
      * @param \DateTime $dateMaitrise
+     *
      * @return MaitriseUser
      */
     public function setDateMaitrise($dateMaitrise)
@@ -195,9 +200,9 @@ class MaitriseUser
     }
 
     /**
-     * Get dateMaitrise
+     * Get dateMaitrise.
      *
-     * @return \DateTime 
+     * @return \DateTime
      */
     public function getDateMaitrise()
     {

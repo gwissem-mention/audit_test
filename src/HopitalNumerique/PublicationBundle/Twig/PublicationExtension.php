@@ -1,4 +1,5 @@
 <?php
+
 namespace HopitalNumerique\PublicationBundle\Twig;
 
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -8,7 +9,7 @@ class PublicationExtension extends \Twig_Extension
     private $container;
 
     /**
-     * Construit l'extension Twig
+     * Construit l'extension Twig.
      */
     public function __construct(ContainerInterface $container)
     {
@@ -16,16 +17,16 @@ class PublicationExtension extends \Twig_Extension
     }
 
     /**
-     * Retourne la liste des filtres custom pour cette extension
+     * Retourne la liste des filtres custom pour cette extension.
      *
      * @return array
      */
     public function getFilters()
     {
-        return array(
+        return [
             'parsePublication' => new \Twig_Filter_Method($this, 'parsePublication'),
             'alignBreadcrumbs' => new \Twig_Filter_Method($this, 'alignBreadcrumbs'),
-        );
+        ];
     }
 
     public function alignBreadcrumbs($breadcrumbs)
@@ -38,13 +39,13 @@ class PublicationExtension extends \Twig_Extension
     }
 
     /**
-     * Parse le contenu pour créer les liens vers les publications
+     * Parse le contenu pour créer les liens vers les publications.
      *
      * @param string $content Contenu
      *
      * @return string
      */
-    public function parsePublication($content, $glossaires = false )
+    public function parsePublication($content, $glossaires = false)
     {
         $domaineUrl = $this->container->get('hopitalnumerique_domaine.dependency_injection.current_domaine')->getUrl();
 
@@ -54,29 +55,27 @@ class PublicationExtension extends \Twig_Extension
         // matches[0] tableau des chaines completes trouvée
         // matches[1] tableau des chaines avant les : trouvé
         // matches[2] tableau des ID après les : trouvé
-        if(is_array($matches[1]))
-        {
-            foreach($matches[1] as $key => $value)
-            {
-
+        if (is_array($matches[1])) {
+            foreach ($matches[1] as $key => $value) {
                 // Pour éviter les liens dans les liens
                 $matches[3][$key] = $this->toascii($matches[3][$key]);
 
-                switch($value){
+                switch ($value) {
                     case 'PUBLICATION':
                         //cas Objet
-                        $objet  = $this->getManagerObjet()->findOneBy( array( 'id' => $matches[2][$key] ) );
-                        if($matches[5][$key] == 1)
+                        $objet = $this->getManagerObjet()->findOneBy(['id' => $matches[2][$key]]);
+                        if ($matches[5][$key] == 1) {
                             $target = 'target="_blank"';
-                        elseif ($matches[5][$key] == 2)
+                        } elseif ($matches[5][$key] == 2) {
                             $target = 'target="_parent"';
-                        else
-                            $target = "";
-                        if($objet){
-                            $label = $matches[3][$key] ? $matches[3][$key] : $this->toascii($objet->getTitre());
-                            $replacement = '<a href="/publication/' . $matches[2][$key] . '-' . $objet->getAlias() . '" '.$target.'>' . $label . '</a>';
                         } else {
-                            $replacement = "<a href=\"javascript:alert('Cette publication n\'existe pas')\" ".$target.">" . $matches[3][$key] . ' </a>';
+                            $target = '';
+                        }
+                        if ($objet) {
+                            $label = $matches[3][$key] ? $matches[3][$key] : $this->toascii($objet->getTitre());
+                            $replacement = '<a href="/publication/' . $matches[2][$key] . '-' . $objet->getAlias() . '" ' . $target . '>' . $label . '</a>';
+                        } else {
+                            $replacement = "<a href=\"javascript:alert('Cette publication n\'existe pas')\" " . $target . '>' . $matches[3][$key] . ' </a>';
                         }
 
                         $pattern = $matches[0][$key];
@@ -85,19 +84,20 @@ class PublicationExtension extends \Twig_Extension
                         break;
                     case 'INFRADOC':
                         //cas contenu
-                        $contenu = $this->getManagerContenu()->findOneBy( array( 'id' => $matches[2][$key] ) );
-                        if($matches[5][$key] == 1)
+                        $contenu = $this->getManagerContenu()->findOneBy(['id' => $matches[2][$key]]);
+                        if ($matches[5][$key] == 1) {
                             $target = 'target="_blank"';
-                        elseif ($matches[5][$key] == 2)
+                        } elseif ($matches[5][$key] == 2) {
                             $target = 'target="_parent"';
-                        else
-                            $target = "";
-                        if( $contenu ){
-                            $objet       = $contenu->getObjet();
-                            $label       = $matches[3][$key] ? $matches[3][$key] : $this->toascii($contenu->getTitre());
-                            $replacement = '<a href="/publication/'.$objet->getId().'-' . $objet->getAlias() . '/'.$matches[2][$key].'-'.$contenu->getAlias().'" '.$target.'>' . $label.'</a>';
                         } else {
-                            $replacement = "<a href=\"javascript:alert('Cet infra-doc n\'existe pas')\" ".$target.">" . $matches[3][$key].'</a>';
+                            $target = '';
+                        }
+                        if ($contenu) {
+                            $objet = $contenu->getObjet();
+                            $label = $matches[3][$key] ? $matches[3][$key] : $this->toascii($contenu->getTitre());
+                            $replacement = '<a href="/publication/' . $objet->getId() . '-' . $objet->getAlias() . '/' . $matches[2][$key] . '-' . $contenu->getAlias() . '" ' . $target . '>' . $label . '</a>';
+                        } else {
+                            $replacement = "<a href=\"javascript:alert('Cet infra-doc n\'existe pas')\" " . $target . '>' . $matches[3][$key] . '</a>';
                         }
 
                         $pattern = $matches[0][$key];
@@ -105,18 +105,19 @@ class PublicationExtension extends \Twig_Extension
                         break;
                     case 'ARTICLE':
                         //cas Objet
-                        $objet  = $this->getManagerObjet()->findOneBy( array( 'id' => $matches[2][$key] ) );
-                        if($matches[5][$key] == 1)
+                        $objet = $this->getManagerObjet()->findOneBy(['id' => $matches[2][$key]]);
+                        if ($matches[5][$key] == 1) {
                             $target = 'target="_blank"';
-                        elseif ($matches[5][$key] == 2)
+                        } elseif ($matches[5][$key] == 2) {
                             $target = 'target="_parent"';
-                        else
-                            $target = "";
-                        if($objet){
-                            $label = $matches[3][$key] ? $matches[3][$key] : $this->toascii($objet->getTitre());
-                            $replacement = '<a href="/publication/article/'.$matches[2][$key].'-' . $objet->getAlias() . '" '.$target.'>' . $label . '</a>';
                         } else {
-                            $replacement = "<a href=\"javascript:alert('Cet article n\'existe pas')\" ".$target.">" . $matches[3][$key] . ' </a>';
+                            $target = '';
+                        }
+                        if ($objet) {
+                            $label = $matches[3][$key] ? $matches[3][$key] : $this->toascii($objet->getTitre());
+                            $replacement = '<a href="/publication/article/' . $matches[2][$key] . '-' . $objet->getAlias() . '" ' . $target . '>' . $label . '</a>';
+                        } else {
+                            $replacement = "<a href=\"javascript:alert('Cet article n\'existe pas')\" " . $target . '>' . $matches[3][$key] . ' </a>';
                         }
 
                         $pattern = $matches[0][$key];
@@ -125,17 +126,19 @@ class PublicationExtension extends \Twig_Extension
                         break;
                     case 'AUTODIAG':
                         //cas Outil
-                        $outil  = $this->getManagerOutil()->findOneBy( array( 'id' => $matches[2][$key] ) );
-                        if($matches[5][$key] == 1)
+                        $outil = $this->getManagerOutil()->findOneBy(['id' => $matches[2][$key]]);
+                        if ($matches[5][$key] == 1) {
                             $target = 'target="_blank"';
-                        elseif ($matches[5][$key] == 2)
+                        } elseif ($matches[5][$key] == 2) {
                             $target = 'target="_parent"';
-                        else
-                            $target = "";
-                        if($outil)
-                            $replacement = '<a href="/autodiagnostic/'. $outil->getId()  .'" '.$target.'>' . $matches[3][$key] . '</a>';
-                        else
-                            $replacement = "<a href=\"javascript:alert('Cet outil n\'existe pas')\" ".$target.">" . $matches[3][$key] . ' </a>';
+                        } else {
+                            $target = '';
+                        }
+                        if ($outil) {
+                            $replacement = '<a href="/autodiagnostic/' . $outil->getId() . '" ' . $target . '>' . $matches[3][$key] . '</a>';
+                        } else {
+                            $replacement = "<a href=\"javascript:alert('Cet outil n\'existe pas')\" " . $target . '>' . $matches[3][$key] . ' </a>';
+                        }
 
                         $pattern = $matches[0][$key];
                         $content = str_replace($pattern, $replacement, $content);
@@ -143,19 +146,20 @@ class PublicationExtension extends \Twig_Extension
                         break;
                     case 'QUESTIONNAIRE':
                         //cas Questionnaire
-                        $questionnaire  = $this->getManagerQuestionnaire()->findOneBy( array( 'id' => $matches[2][$key] ) );
-                        if($matches[5][$key] == 1)
+                        $questionnaire = $this->getManagerQuestionnaire()->findOneBy(['id' => $matches[2][$key]]);
+                        if ($matches[5][$key] == 1) {
                             $target = 'target="_blank"';
-                        elseif ($matches[5][$key] == 2)
+                        } elseif ($matches[5][$key] == 2) {
                             $target = 'target="_parent"';
-                        else
-                            $target = "";
+                        } else {
+                            $target = '';
+                        }
 
                         if ($questionnaire) {
-                            $label       = $matches[3][$key] ? $matches[3][$key] : $this->toascii($questionnaire->getNom());
-                            $replacement = '<a href="/questionnaire/edit/'. $questionnaire->getId() . '" '.$target.'>' . $label . '</a>';
+                            $label = $matches[3][$key] ? $matches[3][$key] : $this->toascii($questionnaire->getNom());
+                            $replacement = '<a href="/questionnaire/edit/' . $questionnaire->getId() . '" ' . $target . '>' . $label . '</a>';
                         } else {
-                            $replacement = "<a href=\"javascript:alert('Ce questionnaire n\'existe pas')\" ".$target.">" . $matches[3][$key] . ' </a>';
+                            $replacement = "<a href=\"javascript:alert('Ce questionnaire n\'existe pas')\" " . $target . '>' . $matches[3][$key] . ' </a>';
                         }
 
                         $pattern = $matches[0][$key];
@@ -164,11 +168,11 @@ class PublicationExtension extends \Twig_Extension
                         break;
                     case 'RECHERCHEAIDEE':
                         //cas Recherche aidée
-                        $rechercheAidee  = $this->getManagerGestionnaireRechercheAidee()->findOneBy( array( 'id' => $matches[2][$key] ) );
+                        $rechercheAidee = $this->getManagerGestionnaireRechercheAidee()->findOneBy(['id' => $matches[2][$key]]);
 
                         if ($rechercheAidee) {
-                            $url = $this->container->get('router')->generate('hopital_numerique_expbesoin_recherche_tinyMCE', array('id' => $rechercheAidee->getId()));
-                            $replacement = '<iframe onLoad="calcHeightIframe();" id="iframe-recherche-tinymce" frameborder=0 src="'.$url.'" width="100%" scrolling="no" height="100%"><p>Votre navigateur ne supporte pas l\'élément iframe</p></iframe>';
+                            $url = $this->container->get('router')->generate('hopital_numerique_expbesoin_recherche_tinyMCE', ['id' => $rechercheAidee->getId()]);
+                            $replacement = '<iframe onLoad="calcHeightIframe();" id="iframe-recherche-tinymce" frameborder=0 src="' . $url . '" width="100%" scrolling="no" height="100%"><p>Votre navigateur ne supporte pas l\'élément iframe</p></iframe>';
                         } else {
                             $replacement = '<span class="label label-danger">Un problème dans l\'affichage de la recherche aidée est survenue.</span>';
                         }
@@ -177,44 +181,44 @@ class PublicationExtension extends \Twig_Extension
                         $content = str_replace($pattern, $replacement, $content);
 
                         break;
-					case 'RECHERCHETEXTE':
-                       	//cas Recherche texte
-                       	$replacement = "<input type='texte' id=\"recherche-texte-generate\" /><button type='button' id=\"search-header-home-generate\">Rechercher</button>";
-						$pattern = $matches[0][$key];
-                       	$content = str_replace($pattern, $replacement, $content);
+                    case 'RECHERCHETEXTE':
+                           //cas Recherche texte
+                           $replacement = "<input type='texte' id=\"recherche-texte-generate\" /><button type='button' id=\"search-header-home-generate\">Rechercher</button>";
+                        $pattern = $matches[0][$key];
+                           $content = str_replace($pattern, $replacement, $content);
 
-                       	break;
+                           break;
                 }
             }
         }
 
         $content = html_entity_decode($content);
         //Remplace un caractère qui n'est pas un espace mais un 'caractère vide' en
-        $content = strtr($content,array(" " =>" "));
+        $content = strtr($content, [' ' => ' ']);
 
         return $content;
     }
 
     /**
-     * to assci
+     * to assci.
      */
     private function toascii($string)
     {
-        if(!empty($string)){
+        if (!empty($string)) {
             $string = str_replace('œ', 'oe', $string);
-            $string = str_replace("’", "'", $string);
+            $string = str_replace('’', "'", $string);
             $tempo = utf8_decode($string);
             $string = '';
-            foreach (str_split($tempo) as $obj)
-            {
+            foreach (str_split($tempo) as $obj) {
                 $string .= '&#' . ord($obj) . ';';
             }
-         }
-         return $string;
+        }
+
+        return $string;
     }
 
     /**
-     * Retourne le manager glossaire
+     * Retourne le manager glossaire.
      *
      * @return GlossaireManager
      */
@@ -224,7 +228,7 @@ class PublicationExtension extends \Twig_Extension
     }
 
     /**
-     * Retourne le manager contenu
+     * Retourne le manager contenu.
      *
      * @return ContenuManager
      */
@@ -234,7 +238,7 @@ class PublicationExtension extends \Twig_Extension
     }
 
     /**
-     * Retourne le manager objet
+     * Retourne le manager objet.
      *
      * @return ObjetManager
      */
@@ -244,7 +248,7 @@ class PublicationExtension extends \Twig_Extension
     }
 
     /**
-     * Retourne le manager outil
+     * Retourne le manager outil.
      *
      * @return OutilManager
      */
@@ -254,7 +258,7 @@ class PublicationExtension extends \Twig_Extension
     }
 
     /**
-     * Retourne le manager questionnaire
+     * Retourne le manager questionnaire.
      *
      * @return QuestionnaireManager
      */
@@ -264,7 +268,7 @@ class PublicationExtension extends \Twig_Extension
     }
 
     /**
-     * Retourne le manager gestionnaire recherche aidee
+     * Retourne le manager gestionnaire recherche aidee.
      *
      * @return ExpBesoinGestionManager
      */
@@ -274,7 +278,7 @@ class PublicationExtension extends \Twig_Extension
     }
 
     /**
-     * Retourne le nom de l'extension : utilisé dans les services
+     * Retourne le nom de l'extension : utilisé dans les services.
      *
      * @return string
      */

@@ -11,11 +11,10 @@ use HopitalNumerique\AutodiagBundle\Entity\Autodiag\Container\Chapter;
 use HopitalNumerique\AutodiagBundle\Entity\Synthesis;
 
 /**
- * HistoryRepository
+ * HistoryRepository.
  */
 class AutodiagRepository extends EntityRepository
 {
-
     public function getFullyLoaded($autodiagId)
     {
         $qb = $this->createQueryBuilder('ad');
@@ -29,7 +28,7 @@ class AutodiagRepository extends EntityRepository
                 $qb->expr()->eq('ad.id', ':autodiagId')
             )
             ->setParameters([
-                'autodiagId' => $autodiagId
+                'autodiagId' => $autodiagId,
             ])
         ;
 
@@ -72,7 +71,7 @@ class AutodiagRepository extends EntityRepository
                 ->leftJoin('synthesis_in_progress.entries', 'entries_in_progress')
             ->groupBy('ad.id')
             ->setParameters([
-                'domaine_ids' => $domainesIds
+                'domaine_ids' => $domainesIds,
             ])
         ;
 
@@ -82,6 +81,7 @@ class AutodiagRepository extends EntityRepository
     /**
      * @param \DateTime|null $start
      * @param \DateTime|null $end
+     *
      * @return Autodiag[]
      */
     public function getAllBetweenDate(\DateTime $start = null, \DateTime $end = null)
@@ -110,6 +110,5 @@ class AutodiagRepository extends EntityRepository
             ->setParameter('autodiag_id', $autodiagId);
 
         return $qb->getQuery()->getOneOrNullResult(AbstractQuery::HYDRATE_SINGLE_SCALAR);
-
     }
 }

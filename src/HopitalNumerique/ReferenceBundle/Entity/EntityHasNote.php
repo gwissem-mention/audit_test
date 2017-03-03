@@ -1,4 +1,5 @@
 <?php
+
 namespace HopitalNumerique\ReferenceBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
@@ -15,13 +16,12 @@ use HopitalNumerique\DomaineBundle\Entity\Domaine;
 class EntityHasNote
 {
     /**
-     * @var integer Score maximal
+     * @var int Score maximal
      */
     const SCORE_GLOBAL = 1000;
 
-
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="entnot_id", type="integer", options={"unsigned"=true})
      * @ORM\Id()
@@ -30,14 +30,14 @@ class EntityHasNote
     private $id;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="entnot_entity_id", type="integer", options={"unsigned"=true})
      */
     private $entityId;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="entnot_entity_type", type="smallint", nullable=false)
      */
@@ -58,11 +58,10 @@ class EntityHasNote
      */
     private $note;
 
-
     /**
-     * Get id
+     * Get id.
      *
-     * @return integer
+     * @return int
      */
     public function getId()
     {
@@ -70,9 +69,9 @@ class EntityHasNote
     }
 
     /**
-     * Set entityId
+     * Set entityId.
      *
-     * @param integer $entityId
+     * @param int $entityId
      *
      * @return EntityHasNote
      */
@@ -84,9 +83,9 @@ class EntityHasNote
     }
 
     /**
-     * Get entityId
+     * Get entityId.
      *
-     * @return integer
+     * @return int
      */
     public function getEntityId()
     {
@@ -94,9 +93,9 @@ class EntityHasNote
     }
 
     /**
-     * Set entityType
+     * Set entityType.
      *
-     * @param integer $entityType
+     * @param int $entityType
      *
      * @return EntityHasNote
      */
@@ -108,9 +107,9 @@ class EntityHasNote
     }
 
     /**
-     * Get entityType
+     * Get entityType.
      *
-     * @return integer
+     * @return int
      */
     public function getEntityType()
     {
@@ -118,7 +117,7 @@ class EntityHasNote
     }
 
     /**
-     * Set domaine
+     * Set domaine.
      *
      * @param \HopitalNumerique\ReferenceBundle\Entity\Domaine $domaine
      *
@@ -132,7 +131,7 @@ class EntityHasNote
     }
 
     /**
-     * Get domaine
+     * Get domaine.
      *
      * @return \HopitalNumerique\ReferenceBundle\Entity\Domaine
      */
@@ -142,7 +141,7 @@ class EntityHasNote
     }
 
     /**
-     * Set note
+     * Set note.
      *
      * @param float $note
      *
@@ -156,7 +155,7 @@ class EntityHasNote
     }
 
     /**
-     * Get note
+     * Get note.
      *
      * @return float
      */

@@ -3,7 +3,6 @@
 namespace HopitalNumerique\UserBundle\Form\Model;
 
 use Symfony\Component\Validator\Constraints as Assert;
-
 use HopitalNumerique\UserBundle\Entity\User;
 
 class Registration
@@ -36,6 +35,6 @@ class Registration
 
     public function setTermsAccepted($termsAccepted)
     {
-        $this->termsAccepted = (Boolean) $termsAccepted;
+        $this->termsAccepted = (bool) $termsAccepted;
     }
 }

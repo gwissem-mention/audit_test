@@ -6,7 +6,7 @@ use Nodevo\AclBundle\Entity\Ressource;
 use Nodevo\ToolsBundle\Manager\Manager as BaseManager;
 
 /**
- * Manager de l'entité Ressource
+ * Manager de l'entité Ressource.
  *
  * @author Quentin SOMAZZI
  */
@@ -17,7 +17,7 @@ class RessourceManager extends BaseManager
     protected $resourceList;
 
     /**
-     * Retourne la liste des ressources qui matchs l'url passée en paramètre
+     * Retourne la liste des ressources qui matchs l'url passée en paramètre.
      *
      * @param string $url Url concernée
      *
@@ -48,6 +48,7 @@ class RessourceManager extends BaseManager
         if (null === $this->resourceList) {
             $this->resourceList = parent::findAll();
         }
+
         return $this->resourceList;
     }
 }

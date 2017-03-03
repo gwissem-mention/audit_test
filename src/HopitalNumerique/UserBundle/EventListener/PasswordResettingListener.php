@@ -1,4 +1,5 @@
 <?php
+
 namespace HopitalNumerique\UserBundle\EventListener;
 
 use FOS\UserBundle\FOSUserEvents;
@@ -8,7 +9,7 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 /**
- * Listener responsible to change the redirection at the end of the password resetting
+ * Listener responsible to change the redirection at the end of the password resetting.
  */
 class PasswordResettingListener implements EventSubscriberInterface
 {
@@ -20,13 +21,13 @@ class PasswordResettingListener implements EventSubscriberInterface
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public static function getSubscribedEvents()
     {
-        return array(
+        return [
             FOSUserEvents::RESETTING_RESET_SUCCESS => 'onPasswordResettingSuccess',
-        );
+        ];
     }
 
     public function onPasswordResettingSuccess(FormEvent $event)

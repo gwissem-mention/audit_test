@@ -1,4 +1,5 @@
 <?php
+
 namespace Nodevo\ToolsBundle\Validator\Constraints;
 
 use Symfony\Component\Validator\Constraint;
@@ -9,5 +10,5 @@ use Symfony\Component\Validator\Constraint;
 class Javascript extends Constraint
 {
     public $class = '';
-    public $mask  = '';
+    public $mask = '';
 }

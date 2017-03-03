@@ -11,61 +11,59 @@ use Symfony\Component\HttpFoundation\Response;
 class InscriptionFrontController extends Controller
 {
     /**
-     * Liste toutes les informations de la session
+     * Liste toutes les informations de la session.
      *
      * @param HopitalNumeriqueModuleBundleEntitySession $session Session à laquelle l'inscription doit etre faite
      *
      * @return [type]
      */
-    public function addAction(Request $request, \HopitalNumerique\ModuleBundle\Entity\Session $session )
+    public function addAction(Request $request, \HopitalNumerique\ModuleBundle\Entity\Session $session)
     {
         //On récupère l'utilisateur qui est connecté
         $user = $this->get('security.context')->getToken()->getUser();
 
         //Création d'une nouvelle inscription
         $inscription = $this->get('hopitalnumerique_module.manager.inscription')->createEmpty();
-        $inscription->setUser( $user );
-        $inscription->setSession( $session );
-        $inscription->setEtatInscription(   $this->get('hopitalnumerique_reference.manager.reference')->findOneBy( array('id' => 406) ) );
-        $inscription->setEtatParticipation( $this->get('hopitalnumerique_reference.manager.reference')->findOneBy( array('id' => 410) ) );
-        $inscription->setEtatEvaluation(    $this->get('hopitalnumerique_reference.manager.reference')->findOneBy( array('id' => 27) ) );
+        $inscription->setUser($user);
+        $inscription->setSession($session);
+        $inscription->setEtatInscription($this->get('hopitalnumerique_reference.manager.reference')->findOneBy(['id' => 406]));
+        $inscription->setEtatParticipation($this->get('hopitalnumerique_reference.manager.reference')->findOneBy(['id' => 410]));
+        $inscription->setEtatEvaluation($this->get('hopitalnumerique_reference.manager.reference')->findOneBy(['id' => 27]));
 
         $form = $this->createForm('hopitalnumerique_module_inscription', $inscription);
 
         $request = $this->get('request');
 
-        if ( $form->handleRequest($request)->isValid() )
-        {
-            $refAccepte = $this->get('hopitalnumerique_reference.manager.reference')->findOneBy( array('id'=> 407) );
+        if ($form->handleRequest($request)->isValid()) {
+            $refAccepte = $this->get('hopitalnumerique_reference.manager.reference')->findOneBy(['id' => 407]);
 
             $inscription->setEtatInscription($refAccepte);
 
-            if($inscription->getSession()->getModule()->getMailConfirmationInscription())
-            {
+            if ($inscription->getSession()->getModule()->getMailConfirmationInscription()) {
                 //Envoyer mail d'acceptation de l'inscription
-                $mail = $this->get('nodevo_mail.manager.mail')->sendAcceptationInscriptionMail($inscription->getUser(),array(
-                            'date'      => $inscription->getSession()->getDateSession()->format('d/m/Y'),
-                            'module'    => $inscription->getSession()->getModule()->getTitre()
-                        ));
+                $mail = $this->get('nodevo_mail.manager.mail')->sendAcceptationInscriptionMail($inscription->getUser(), [
+                            'date' => $inscription->getSession()->getDateSession()->format('d/m/Y'),
+                            'module' => $inscription->getSession()->getModule()->getTitre(),
+                        ]);
                 $this->get('mailer')->send($mail);
             }
 
             $this->get('hopitalnumerique_module.manager.inscription')->save($inscription);
 
             // On envoi une 'flash' pour indiquer à l'utilisateur que le fichier n'existe pas: suppression manuelle sur le serveur
-            $this->get('session')->getFlashBag()->add( ('success') , 'Votre inscription a été prise en compte.' );
+            $this->get('session')->getFlashBag()->add(('success'), 'Votre inscription a été prise en compte.');
 
-            return $this->redirect($this->generateUrl('hopitalnumerique_module_session_informations_front', array( 'id' => $inscription->getSession()->getId() ) ));
+            return $this->redirect($this->generateUrl('hopitalnumerique_module_session_informations_front', ['id' => $inscription->getSession()->getId()]));
         }
 
-        return $this->render('HopitalNumeriqueModuleBundle:Front/Inscription:add.html.twig', array(
-            'form'    => $form->createView(),
-            'session' => $session
-        ));
+        return $this->render('HopitalNumeriqueModuleBundle:Front/Inscription:add.html.twig', [
+            'form' => $form->createView(),
+            'session' => $session,
+        ]);
     }
 
     /**
-     * Compte HN : Affiche la liste des inscriptions de l'utilisateur connecté
+     * Compte HN : Affiche la liste des inscriptions de l'utilisateur connecté.
      *
      * @return view
      */
@@ -75,19 +73,19 @@ class InscriptionFrontController extends Controller
         $user = $this->get('security.context')->getToken()->getUser();
 
         //get all inscriptions
-        $inscriptions = $this->get('hopitalnumerique_module.manager.inscription')->getInscriptionsForUser( $user );
+        $inscriptions = $this->get('hopitalnumerique_module.manager.inscription')->getInscriptionsForUser($user);
 
         //get sessions terminées where user connected == formateur
-        $sessions = $this->get('hopitalnumerique_module.manager.session')->getSessionsForFormateur( $user );
+        $sessions = $this->get('hopitalnumerique_module.manager.session')->getSessionsForFormateur($user);
 
-        return $this->render('HopitalNumeriqueModuleBundle:Front/Inscription:index.html.twig', array(
+        return $this->render('HopitalNumeriqueModuleBundle:Front/Inscription:index.html.twig', [
             'inscriptions' => $inscriptions,
-            'sessions'     => $sessions
-        ));
+            'sessions' => $sessions,
+        ]);
     }
 
     /**
-     * Compte HN : Affiche l'attestation de présence de l'utilisateur connecté
+     * Compte HN : Affiche l'attestation de présence de l'utilisateur connecté.
      *
      * @return view
      */
@@ -96,42 +94,42 @@ class InscriptionFrontController extends Controller
         //On récupère l'utilisateur qui est connecté
         $user = $this->get('security.context')->getToken()->getUser();
 
-        $html = $this->renderView('HopitalNumeriqueModuleBundle:Front/Pdf:attestation-presence.html.twig', array(
+        $html = $this->renderView('HopitalNumeriqueModuleBundle:Front/Pdf:attestation-presence.html.twig', [
             'inscription' => $inscription,
-            'user'        => $user
-        ));
+            'user' => $user,
+        ]);
 
-        $options = array(
+        $options = [
             'margin-bottom' => 10,
-            'margin-left'   => 4,
-            'margin-right'  => 4,
-            'margin-top'    => 10,
-            'encoding'      => 'UTF-8'
-        );
+            'margin-left' => 4,
+            'margin-right' => 4,
+            'margin-top' => 10,
+            'encoding' => 'UTF-8',
+        ];
 
         return new Response(
             $this->get('knp_snappy.pdf')->getOutputFromHtml($html, $options, true),
             200,
-            array(
-                'Content-Type'        => 'application/pdf',
-                'Content-Disposition' => 'attachment; filename="Attestation_presence.pdf"'
-            )
+            [
+                'Content-Type' => 'application/pdf',
+                'Content-Disposition' => 'attachment; filename="Attestation_presence.pdf"',
+            ]
         );
     }
 
     /**
-     * Compte HN : Télécharge la liste des participants de la session de l'inscription
+     * Compte HN : Télécharge la liste des participants de la session de l'inscription.
      *
      * @return view
      */
     public function exportListeParticipantAction(Inscription $inscription)
     {
-        $colonnes = array();
-        $datas    = array();
+        $colonnes = [];
+        $datas = [];
 
         $session = $inscription->getSession();
 
-        $colonnes = array(
+        $colonnes = [
             'Nom',
             'Prénom',
             'Région',
@@ -139,16 +137,14 @@ class InscriptionFrontController extends Controller
             'Fonction',
             'Téléphone direct',
             'Téléphone portable',
-            'Mail'
-        );
+            'Mail',
+        ];
 
         //Pour chaque session, on parcourt les inscriptions pour les lister
-        foreach ($session->getInscriptions() as $inscription)
-        {
+        foreach ($session->getInscriptions() as $inscription) {
             //On prend uniquement les "a participé"
-            if($inscription->getEtatParticipation()->getId() === 411)
-            {
-                $row = array();
+            if ($inscription->getEtatParticipation()->getId() === 411) {
+                $row = [];
 
                 $user = $inscription->getUser();
 
@@ -167,7 +163,7 @@ class InscriptionFrontController extends Controller
 
         $kernelCharset = $this->container->getParameter('kernel.charset');
 
-        return $this->get('hopitalnumerique_module.manager.session')->exportCsv( $colonnes, $datas, 'export-liste-participant-session.csv', $kernelCharset );
+        return $this->get('hopitalnumerique_module.manager.session')->exportCsv($colonnes, $datas, 'export-liste-participant-session.csv', $kernelCharset);
     }
 
     public function annulationInscriptionAction(Inscription $inscription)
@@ -175,17 +171,14 @@ class InscriptionFrontController extends Controller
         //On récupère l'utilisateur qui est connecté
         $user = $this->get('security.context')->getToken()->getUser();
 
-        if($user->getId() === $inscription->getUser()->getId())
-        {
-            $this->get('hopitalnumerique_module.manager.inscription')->toogleEtatInscription( array($inscription), $this->get('hopitalnumerique_reference.manager.reference')->findOneBy( array( 'id' => 409) ) );
-            $this->get('hopitalnumerique_module.manager.inscription')->toogleEtatParticipation( array($inscription), $this->get('hopitalnumerique_reference.manager.reference')->findOneBy( array( 'id' => 412) ) );
-            $this->get('hopitalnumerique_module.manager.inscription')->toogleEtatEvaluation( array($inscription), $this->get('hopitalnumerique_reference.manager.reference')->findOneBy( array( 'id' => 430) ) );
+        if ($user->getId() === $inscription->getUser()->getId()) {
+            $this->get('hopitalnumerique_module.manager.inscription')->toogleEtatInscription([$inscription], $this->get('hopitalnumerique_reference.manager.reference')->findOneBy(['id' => 409]));
+            $this->get('hopitalnumerique_module.manager.inscription')->toogleEtatParticipation([$inscription], $this->get('hopitalnumerique_reference.manager.reference')->findOneBy(['id' => 412]));
+            $this->get('hopitalnumerique_module.manager.inscription')->toogleEtatEvaluation([$inscription], $this->get('hopitalnumerique_reference.manager.reference')->findOneBy(['id' => 430]));
 
-            $this->get('session')->getFlashBag()->add( ('success') , 'Votre inscription à la session "'. $inscription->getSession()->getModule()->getTitre() .'" été annulée.' );
-        }
-        else
-        {
-            $this->get('session')->getFlashBag()->add( ('danger') , 'Vous ne pouvez annuler que les inscriptions vous concernant.' );
+            $this->get('session')->getFlashBag()->add(('success'), 'Votre inscription à la session "' . $inscription->getSession()->getModule()->getTitre() . '" été annulée.');
+        } else {
+            $this->get('session')->getFlashBag()->add(('danger'), 'Vous ne pouvez annuler que les inscriptions vous concernant.');
         }
 
         return new Response('{"success":true}', 200);

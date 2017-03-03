@@ -2,7 +2,6 @@
 
 namespace HopitalNumerique\AutodiagBundle\Controller\Front;
 
-use Gedmo\Loggable\Entity\LogEntry;
 use HopitalNumerique\AutodiagBundle\Entity\Synthesis;
 use HopitalNumerique\AutodiagBundle\Form\Type\ShareType;
 use HopitalNumerique\AutodiagBundle\Form\Type\Synthesis\CompareType;
@@ -10,7 +9,6 @@ use HopitalNumerique\AutodiagBundle\Model\Synthesis\CompareCommand;
 use HopitalNumerique\AutodiagBundle\Service\Share;
 use HopitalNumerique\DomaineBundle\Entity\Domaine;
 use HopitalNumerique\UserBundle\Entity\User;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -19,6 +17,7 @@ class ShareController extends Controller
     /**
      * @param Request $request
      * @param $synthesis
+     *
      * @return \Symfony\Component\HttpFoundation\RedirectResponse|\Symfony\Component\HttpFoundation\Response
      */
     public function indexAction(Request $request, Synthesis $synthesis, Domaine $domain = null, $noLayout = false)
@@ -33,7 +32,7 @@ class ShareController extends Controller
 
         if (!$user instanceof User || !$this->isGranted('share', $synthesis)) {
             return $this->redirectToRoute('hopitalnumerique_autodiag_entry_add', [
-                'autodiag' => $autodiag->getId()
+                'autodiag' => $autodiag->getId(),
             ]);
         }
 
@@ -57,10 +56,11 @@ class ShareController extends Controller
             }
 
             $em->flush();
+
             return $this->redirectToRoute(
                 $noLayout ? 'hopitalnumerique_autodiag_share_index_no_layout' : 'hopitalnumerique_autodiag_share_index',
                 [
-                    'synthesis' => $synthesis->getId()
+                    'synthesis' => $synthesis->getId(),
                 ]
             );
         }
@@ -82,21 +82,19 @@ class ShareController extends Controller
         }
 
         if ($request->isXmlHttpRequest()) {
-            return $this->render('HopitalNumeriqueAutodiagBundle:Account/partials:autodiag_list.html.twig', array(
-                'datasForSyntheses' =>
-                    $this->get('autodiag.synthesis.dataformatter')->getSynthesesByAutodiag($user, $autodiag, $domain),
+            return $this->render('HopitalNumeriqueAutodiagBundle:Account/partials:autodiag_list.html.twig', [
+                'datasForSyntheses' => $this->get('autodiag.synthesis.dataformatter')->getSynthesesByAutodiag($user, $autodiag, $domain),
                 'user' => $user,
                 'in_progress' => false,
                 'comparisonForm' => $comparisonForm ? $comparisonForm->createView() : null,
                 'canCompare' => $canCompare,
-            ));
+            ]);
         }
 
         return $this->render('HopitalNumeriqueAutodiagBundle:Share:index.html.twig', [
             'synthesis' => $synthesis,
             'form' => $form->createView(),
-            'datasForSyntheses' =>
-                $this->get('autodiag.synthesis.dataformatter')->getSynthesesByAutodiag($user, $autodiag, $domain),
+            'datasForSyntheses' => $this->get('autodiag.synthesis.dataformatter')->getSynthesesByAutodiag($user, $autodiag, $domain),
             'user' => $user,
             'in_progress' => false,
             'domainesUser' => $user->getDomaines(),
@@ -109,7 +107,8 @@ class ShareController extends Controller
 
     /**
      * @param Synthesis $synthesis
-     * @param User $user
+     * @param User      $user
+     *
      * @return \Symfony\Component\HttpFoundation\RedirectResponse
      */
     public function deleteAction(Synthesis $synthesis, User $user)
@@ -117,7 +116,7 @@ class ShareController extends Controller
         // L'utilisateur doit avoir les droits de suppression sur la synthèse
         if (!$this->isGranted('delete', $synthesis)) {
             return $this->redirectToRoute('hopitalnumerique_autodiag_entry_add', [
-                'autodiag' => $synthesis->getAutodiag()->getId()
+                'autodiag' => $synthesis->getAutodiag()->getId(),
             ]);
         }
 

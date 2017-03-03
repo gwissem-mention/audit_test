@@ -8,16 +8,15 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
 /**
- * Base Preset value Type
+ * Base Preset value Type.
  *
- * @package HopitalNumerique\AutodiagBundle\Form\Type\Model
  * @author Emmanuel Da Fonseca <edafonseca@nodevo.com>
  */
 class PresetValueType extends AbstractType
 {
     /**
      * @param FormBuilderInterface $builder
-     * @param array $options
+     * @param array                $options
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
@@ -36,9 +35,9 @@ class PresetValueType extends AbstractType
      */
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
-        $resolver->setDefaults(array(
+        $resolver->setDefaults([
             'label_format' => 'ad.autodiag.preset_value.%name%',
-            'auto_initialize' => false
-        ));
+            'auto_initialize' => false,
+        ]);
     }
 }

@@ -1,4 +1,5 @@
 <?php
+
 namespace HopitalNumerique\ForumBundle\Controller;
 
 use CCDNForum\ForumBundle\Controller\UserTopicController as UserTopicControllerCCDN;
@@ -11,31 +12,27 @@ use HopitalNumerique\ForumBundle\Entity\Board;
 use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
- *
  * @category CCDNForum
- * @package  ForumBundle
  *
  * @author   Gaëtan MELCHILSEN
  * @license  Nodevo
- *
  */
 class UserTopicController extends UserTopicControllerCCDN
 {
     use ForumControllerAuthorizationCheckerTrait;
 
     /**
+     * @param string $forumName
+     * @param int    $topicId
      *
-     * @access public
-     * @param  string $forumName
-     * @param  int $topicId
      * @return RedirectResponse|RenderResponse
      */
     public function showAction($forumName, $topicId)
     {
-        $references = $this->container->get('hopitalnumerique_reference.manager.entity_has_reference')->findBy(array(
+        $references = $this->container->get('hopitalnumerique_reference.manager.entity_has_reference')->findBy([
             'entityType' => 3,
-            'entityId' => $topicId
-        ));
+            'entityId' => $topicId,
+        ]);
         $referenceId = '';
         $i = 0;
         $len = count($references);
@@ -43,11 +40,11 @@ class UserTopicController extends UserTopicControllerCCDN
             foreach ($references as $reference) {
                 if ($i == 0) {
                     $separator = ',';
-                } else if ($i == $len - 1) {
+                } elseif ($i == $len - 1) {
                     $separator = '';
                 }
-                $referenceId = $referenceId.$reference->getReference()->getId().$separator;
-                $i++;
+                $referenceId = $referenceId . $reference->getReference()->getId() . $separator;
+                ++$i;
             }
         }
         $this->isFound($forum = $this->getForumModel()->findOneForumByName($forumName));
@@ -90,27 +87,26 @@ class UserTopicController extends UserTopicControllerCCDN
         $this->getTopicModel()->incrementViewCounter($topic);
 
         $response = $this->renderResponse('CCDNForumForumBundle:User:Topic/show.html.', [
-            'crumbs'              => $this->getCrumbs()->addUserTopicShow($forum, $topic),
-            'forum'               => $forum,
-            'topic'               => $topic,
-            'forumName'           => $forumName,
-            'pager'               => $postsPager,
-            'subscription'        => $subscription,
-            'subscription_count'  => $subscriberCount,
+            'crumbs' => $this->getCrumbs()->addUserTopicShow($forum, $topic),
+            'forum' => $forum,
+            'topic' => $topic,
+            'forumName' => $forumName,
+            'pager' => $postsPager,
+            'subscription' => $subscription,
+            'subscription_count' => $subscriberCount,
             'isSubscriptionBoard' => $this->isSubscriptionBoard($topic->getBoard()),
-            'boards'              => $boards,
-            'references'          => $references,
-            'referenceId'         => $referenceId
+            'boards' => $boards,
+            'references' => $references,
+            'referenceId' => $referenceId,
         ]);
 
         return $response;
     }
 
     /**
+     * @param string $forumName
+     * @param int    $boardId
      *
-     * @access public
-     * @param  string $forumName
-     * @param  int $boardId
      * @return RedirectResponse|RenderResponse
      */
     public function createAction($forumName, $boardId)
@@ -146,10 +142,9 @@ class UserTopicController extends UserTopicControllerCCDN
     }
 
     /**
+     * @param string $forumName
+     * @param int    $topicId
      *
-     * @access public
-     * @param  string $forumName
-     * @param  int $topicId
      * @return RedirectResponse|RenderResponse
      */
     public function replyAction($forumName, $topicId)
@@ -185,10 +180,10 @@ class UserTopicController extends UserTopicControllerCCDN
     }
 
     /**
-     * Permet de déplacer un post vers un autre topic
+     * Permet de déplacer un post vers un autre topic.
      *
      * @param Request $request [description]
-     * @param int $postId [description]
+     * @param int     $postId  [description]
      *
      * @return Response
      */
@@ -230,23 +225,23 @@ class UserTopicController extends UserTopicControllerCCDN
 
         return new JsonResponse([
             'success' => true,
-            'url'     => $this->getRouter()->generate('ccdn_forum_user_topic_show', [
-                'topicId'   => $topicId,
+            'url' => $this->getRouter()->generate('ccdn_forum_user_topic_show', [
+                'topicId' => $topicId,
                 'forumName' => $topic->getBoard()->getCategory()->getForum()->getName(),
             ]),
         ], 200);
     }
 
     /**
-     * Retourne le PDF de la charte d'utilisation
+     * Retourne le PDF de la charte d'utilisation.
      */
     public function pdfCharteUtilisationAction(Request $request)
     {
         $fileName = __ROOT_DIRECTORY__ . '/web/medias/Forum/charte_utilisation_forum.pdf';
         $options = [
             'serve_filename' => 'charte_utilisation_forum.pdf',
-            'absolute_path'  => false,
-            'inline'         => false,
+            'absolute_path' => false,
+            'inline' => false,
         ];
 
         return $this->container->get('igorw_file_serve.response_factory')

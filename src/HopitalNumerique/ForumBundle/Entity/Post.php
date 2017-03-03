@@ -5,7 +5,6 @@ namespace HopitalNumerique\ForumBundle\Entity;
 use CCDNForum\ForumBundle\Entity\Post as BasePost;
 
 /**
- * 
  * @author Gaetan MELCHILSEN
  * @copyright Nodevo
  */
@@ -22,19 +21,19 @@ class Post extends BasePost
     private $pieceJointeFile;
 
     /**
-     * @var boolean
+     * @var bool
      */
     private $enAttente;
 
     public function __construct()
     {
         $this->enAttente = false;
-        
+
         parent::__construct();
     }
 
     /**
-     * Get body
+     * Get body.
      *
      * @return string
      */
@@ -44,9 +43,10 @@ class Post extends BasePost
     }
 
     /**
-     * Set enAttente
+     * Set enAttente.
      *
-     * @param boolean $enAttente
+     * @param bool $enAttente
+     *
      * @return Topic
      */
     public function setEnAttente($enAttente)
@@ -57,19 +57,20 @@ class Post extends BasePost
     }
 
     /**
-     * Get enAttente
+     * Get enAttente.
      *
-     * @return boolean 
+     * @return bool
      */
     public function getEnAttente()
     {
         return $this->enAttente;
     }
-    
+
     /**
-     * Set pieceJointe
+     * Set pieceJointe.
      *
      * @param string $pieceJointe
+     *
      * @return Post
      */
     public function setPieceJointe($pieceJointe)
@@ -80,9 +81,9 @@ class Post extends BasePost
     }
 
     /**
-     * Get pieceJointe
+     * Get pieceJointe.
      *
-     * @return string 
+     * @return string
      */
     public function getPieceJointe()
     {
@@ -90,9 +91,9 @@ class Post extends BasePost
     }
 
     /**
-     * Get pieceJointeDir
+     * Get pieceJointeDir.
      *
-     * @return string 
+     * @return string
      */
     public function getPieceJointeDir()
     {
@@ -100,35 +101,37 @@ class Post extends BasePost
     }
 
     /**
-     * Get pieceJointeUrl
+     * Get pieceJointeUrl.
      *
-     * @return string 
+     * @return string
      */
     public function getPieceJointeUrl()
     {
-        return $this->getPieceJointeDir().'/'.$this->pieceJointe;
+        return $this->getPieceJointeDir() . '/' . $this->pieceJointe;
     }
 
     /**
-     * Set pieceJointeFile
+     * Set pieceJointeFile.
      *
      * @param string $pieceJointeFile
+     *
      * @return Post
      */
     public function setPieceJointeFile($pieceJointeFile)
     {
         $this->pieceJointeFile = $pieceJointeFile;
-        
-        if (null !== $this->pieceJointeFile)
+
+        if (null !== $this->pieceJointeFile) {
             $this->uploadPieceJointe();
+        }
 
         return $this;
     }
 
     /**
-     * Get pieceJointeFile
+     * Get pieceJointeFile.
      *
-     * @return string 
+     * @return string
      */
     public function getPieceJointeFile()
     {
@@ -136,32 +139,34 @@ class Post extends BasePost
     }
 
     /**
-     * Get pieceJointeUrl
+     * Get pieceJointeUrl.
      *
-     * @return string 
+     * @return string
      */
     public function uploadPieceJointe()
     {
-        if (null !== $this->pieceJointe && file_exists(__ROOT_DIRECTORY__.'/'.$this->getPieceJointeUrl()))
-            unlink(__ROOT_DIRECTORY__.'/'.$this->getPieceJointeUrl());
-        
+        if (null !== $this->pieceJointe && file_exists(__ROOT_DIRECTORY__ . '/' . $this->getPieceJointeUrl())) {
+            unlink(__ROOT_DIRECTORY__ . '/' . $this->getPieceJointeUrl());
+        }
+
         $aujourdhui = new \DateTime();
-        
+
         $extension = substr($this->pieceJointeFile->getClientOriginalName(), strrpos($this->pieceJointeFile->getClientOriginalName(), '.') + 1);
         $nomSansExtension = substr($this->pieceJointeFile->getClientOriginalName(), 0, strrpos($this->pieceJointeFile->getClientOriginalName(), '.'));
-        $this->pieceJointe = substr($nomSansExtension, 0, 100).'_'.$aujourdhui->getTimestamp().'.'.$extension;
-        $this->pieceJointeFile->move(__ROOT_DIRECTORY__.'/'.$this->getPieceJointeDir(), $this->pieceJointe);
+        $this->pieceJointe = substr($nomSansExtension, 0, 100) . '_' . $aujourdhui->getTimestamp() . '.' . $extension;
+        $this->pieceJointeFile->move(__ROOT_DIRECTORY__ . '/' . $this->getPieceJointeDir(), $this->pieceJointe);
         $this->setPieceJointeFile(null);
     }
-    
+
     /**
      * Supprime la PJ.
      */
     public function deletePieceJointe()
     {
-        if (null !== $this->pieceJointe && file_exists(__ROOT_DIRECTORY__.'/'.$this->getPieceJointeUrl()))
-            unlink(__ROOT_DIRECTORY__.'/'.$this->getPieceJointeUrl());
-        
+        if (null !== $this->pieceJointe && file_exists(__ROOT_DIRECTORY__ . '/' . $this->getPieceJointeUrl())) {
+            unlink(__ROOT_DIRECTORY__ . '/' . $this->getPieceJointeUrl());
+        }
+
         $this->pieceJointe = null;
     }
 }

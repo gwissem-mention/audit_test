@@ -26,9 +26,10 @@ class ComparisonBuilder
 
     /**
      * ComparisonBuilder constructor.
+     *
      * @param IntersectionBuilder $intersectionBuilder
-     * @param ScoreCalculator $scoreCalculator
-     * @param EntityManager $entityManager
+     * @param ScoreCalculator     $scoreCalculator
+     * @param EntityManager       $entityManager
      */
     public function __construct(IntersectionBuilder $intersectionBuilder, ScoreCalculator $scoreCalculator, CompareRepository $compareRepository, EntityManager $entityManager)
     {
@@ -40,10 +41,11 @@ class ComparisonBuilder
 
     /**
      * Build a new comparison. Compute intersection between synthesis and reference, persist them, compute there score
-     * and save the comparison
+     * and save the comparison.
      *
      * @param Synthesis $synthesis
      * @param Synthesis $reference
+     *
      * @return Compare
      */
     public function build(User $user, Synthesis $synthesis, Synthesis $reference)

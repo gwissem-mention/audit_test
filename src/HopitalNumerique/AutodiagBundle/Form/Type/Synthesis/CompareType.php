@@ -26,8 +26,9 @@ class CompareType extends AbstractType
 
     /**
      * ComparisonType constructor.
+     *
      * @param SynthesisRepository $synthesisRepository
-     * @param RouterInterface $router
+     * @param RouterInterface     $router
      */
     public function __construct(SynthesisRepository $synthesisRepository, RouterInterface $router)
     {
@@ -37,7 +38,7 @@ class CompareType extends AbstractType
 
     /**
      * @param FormBuilderInterface $builder
-     * @param array $options
+     * @param array                $options
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {

@@ -5,7 +5,7 @@ namespace HopitalNumerique\StatBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * StatTelechargement
+ * StatTelechargement.
  *
  * @ORM\Table(name="hn_statistiques_telechargement")
  * @ORM\Entity
@@ -13,7 +13,7 @@ use Doctrine\ORM\Mapping as ORM;
 class StatTelechargement
 {
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="stat_id", type="integer")
      * @ORM\Id
@@ -29,7 +29,7 @@ class StatTelechargement
     protected $date;
 
     /**
-     * @var integer
+     * @var int
      * @ORM\ManyToOne(targetEntity="\HopitalNumerique\ObjetBundle\Entity\Objet")
      * @ORM\JoinColumn(name="obj_id", referencedColumnName="obj_id", nullable=true, onDelete="CASCADE")
      * )
@@ -37,7 +37,7 @@ class StatTelechargement
     protected $objet;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\ManyToOne(targetEntity="\HopitalNumerique\UserBundle\Entity\User")
      * @ORM\JoinColumn(name="usr_id", referencedColumnName="usr_id", nullable=true, onDelete="CASCADE")
@@ -59,17 +59,16 @@ class StatTelechargement
     protected $fileName;
 
     /**
-     * Constructor
+     * Constructor.
      */
     public function __construct()
     {
-
     }
 
     /**
-     * Get id
+     * Get id.
      *
-     * @return integer
+     * @return int
      */
     public function getId()
     {
@@ -77,9 +76,10 @@ class StatTelechargement
     }
 
     /**
-     * Set date
+     * Set date.
      *
      * @param \DateTime $date
+     *
      * @return StatTelechargement
      */
     public function setDate($date)
@@ -90,19 +90,21 @@ class StatTelechargement
     }
 
     /**
-     * Set dateNow
+     * Set dateNow.
      *
      * @param \DateTime $date
+     *
      * @return StatTelechargement
      */
     public function setDateNow()
     {
         $this->date = new \DateTime();
+
         return $this;
     }
 
     /**
-     * Get date
+     * Get date.
      *
      * @return \DateTime
      */
@@ -112,7 +114,7 @@ class StatTelechargement
     }
 
     /**
-     * Get references
+     * Get references.
      *
      * @return \Doctrine\Common\Collections\Collection
      */
@@ -122,9 +124,10 @@ class StatTelechargement
     }
 
     /**
-     * Set references
+     * Set references.
      *
      * @param array(Objet) $objets
+     *
      * @return StatTelechargement
      */
     public function setObjet($objet)
@@ -135,9 +138,10 @@ class StatTelechargement
     }
 
     /**
-     * Set user
+     * Set user.
      *
      * @param \HopitalNumerique\UserBundle\Entity\User $user
+     *
      * @return StatTelechargement
      */
     public function setUser(\HopitalNumerique\UserBundle\Entity\User $user = null)
@@ -148,7 +152,7 @@ class StatTelechargement
     }
 
     /**
-     * Get user
+     * Get user.
      *
      * @return \HopitalNumerique\UserBundle\Entity\User
      */
@@ -158,19 +162,21 @@ class StatTelechargement
     }
 
     /**
-     * Set sessionId
+     * Set sessionId.
      *
      * @param string $sessionId
+     *
      * @return StatTelechargement
      */
     public function setSessionId($sessionId)
     {
         $this->sessionId = $sessionId;
+
         return $this;
     }
 
     /**
-     * Get sessionId
+     * Get sessionId.
      *
      * @return string
      */
@@ -180,19 +186,21 @@ class StatTelechargement
     }
 
     /**
-     * Set fileName
+     * Set fileName.
      *
      * @param string $fileName
+     *
      * @return StatTelechargement
      */
     public function setFileName($fileName)
     {
         $this->fileName = $fileName;
+
         return $this;
     }
 
     /**
-     * Get fileName
+     * Get fileName.
      *
      * @return string
      */

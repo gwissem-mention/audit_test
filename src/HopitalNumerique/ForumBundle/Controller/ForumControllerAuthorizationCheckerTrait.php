@@ -7,7 +7,6 @@ use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
 trait ForumControllerAuthorizationCheckerTrait
 {
-
     public function isAuthorised($role)
     {
         try {

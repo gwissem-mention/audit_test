@@ -1,4 +1,5 @@
 <?php
+
 namespace HopitalNumerique\InterventionBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
@@ -12,14 +13,14 @@ use Doctrine\ORM\Mapping as ORM;
 class InterventionRegroupement
 {
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="intervreg_id", type="integer", nullable=false)
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
     private $id;
-    
+
     /**
      * @var \HopitalNumerique\InterventionBundle\Entity\InterventionRegroupementType
      *
@@ -47,19 +48,20 @@ class InterventionRegroupement
     private $interventionDemandeRegroupee;
 
     /**
-     * Get id
+     * Get id.
      *
-     * @return integer
+     * @return int
      */
     public function getId()
     {
         return $this->id;
     }
-    
+
     /**
-     * Set interventionRegroupementType
+     * Set interventionRegroupementType.
      *
      * @param \HopitalNumerique\InterventionBundle\Entity\InterventionRegroupementType $interventionRegroupementType
+     *
      * @return InterventionRegroupement
      */
     public function setInterventionRegroupementType(
@@ -71,9 +73,9 @@ class InterventionRegroupement
     }
 
     /**
-     * Get interventionRegroupementType
+     * Get interventionRegroupementType.
      *
-     * @return \HopitalNumerique\InterventionBundle\Entity\InterventionRegroupementType 
+     * @return \HopitalNumerique\InterventionBundle\Entity\InterventionRegroupementType
      */
     public function getInterventionRegroupementType()
     {
@@ -81,9 +83,10 @@ class InterventionRegroupement
     }
 
     /**
-     * Set interventionDemandePrincipale
+     * Set interventionDemandePrincipale.
      *
      * @param \HopitalNumerique\InterventionBundle\Entity\InterventionDemande $interventionDemandePrincipale
+     *
      * @return InterventionRegroupement
      */
     public function setInterventionDemandePrincipale(
@@ -95,9 +98,9 @@ class InterventionRegroupement
     }
 
     /**
-     * Get interventionDemandePrincipale
+     * Get interventionDemandePrincipale.
      *
-     * @return \HopitalNumerique\InterventionBundle\Entity\InterventionDemande 
+     * @return \HopitalNumerique\InterventionBundle\Entity\InterventionDemande
      */
     public function getInterventionDemandePrincipale()
     {
@@ -105,9 +108,10 @@ class InterventionRegroupement
     }
 
     /**
-     * Set interventionDemandeRegroupee
+     * Set interventionDemandeRegroupee.
      *
      * @param \HopitalNumerique\InterventionBundle\Entity\InterventionDemande $interventionDemandeRegroupee
+     *
      * @return InterventionRegroupement
      */
     public function setInterventionDemandeRegroupee(
@@ -119,9 +123,9 @@ class InterventionRegroupement
     }
 
     /**
-     * Get interventionDemandeRegroupee
+     * Get interventionDemandeRegroupee.
      *
-     * @return \HopitalNumerique\InterventionBundle\Entity\InterventionDemande 
+     * @return \HopitalNumerique\InterventionBundle\Entity\InterventionDemande
      */
     public function getInterventionDemandeRegroupee()
     {

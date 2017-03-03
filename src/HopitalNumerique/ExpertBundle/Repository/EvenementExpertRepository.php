@@ -3,15 +3,14 @@
 namespace HopitalNumerique\ExpertBundle\Repository;
 
 use Doctrine\ORM\EntityRepository;
-use Doctrine\ORM\Query\Expr\Join;
 
 /**
- * EvenementExpertRepository
+ * EvenementExpertRepository.
  */
 class EvenementExpertRepository extends EntityRepository
 {
     /**
-     * Récupère les données du grid sous forme de tableau correctement formaté
+     * Récupère les données du grid sous forme de tableau correctement formaté.
      *
      * @return Query Builder
      */
@@ -25,7 +24,7 @@ class EvenementExpertRepository extends EntityRepository
             ->where('act.id = :activite')
             ->setParameter('activite', $condition->value)
             ->orderBy('eve.date', 'DESC');
-            
+
         return $qb;
     }
 }

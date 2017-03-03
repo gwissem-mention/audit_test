@@ -17,7 +17,7 @@ final class ChapterColumnsDefinition
     const ACTION_PLAN = 'plan_action';
 
     /**
-     * Get columns for import and export
+     * Get columns for import and export.
      *
      * @return array
      */

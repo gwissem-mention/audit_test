@@ -13,18 +13,17 @@ class ActiviteExpertManager extends BaseManager
     protected $class = 'HopitalNumerique\ExpertBundle\Entity\ActiviteExpert';
 
     /**
-     * Override : Récupère les données pour le grid sous forme de tableau
+     * Override : Récupère les données pour le grid sous forme de tableau.
      *
      * @return array
      */
-    public function getDatasForGrid( \StdClass $condition = null )
+    public function getDatasForGrid(\StdClass $condition = null)
     {
-        $activiteExpertsForGrid = array();
+        $activiteExpertsForGrid = [];
 
-        $activiteExperts = $this->getRepository()->getDatasForGrid( $condition )->getQuery()->getResult();
+        $activiteExperts = $this->getRepository()->getDatasForGrid($condition)->getQuery()->getResult();
 
-        foreach ($activiteExperts as $activiteExpert) 
-        {
+        foreach ($activiteExperts as $activiteExpert) {
             $activiteExpert['experts'] = $activiteExpert['expertPrenom'] . ' ' . $activiteExpert['expertNom'];
             $activiteExpert['anapiens'] = $activiteExpert['anapPrenom'] . ' ' . $activiteExpert['anapNom'];
             unset($activiteExpert['expertPrenom']);
@@ -32,19 +31,14 @@ class ActiviteExpertManager extends BaseManager
             unset($activiteExpert['anapPrenom']);
             unset($activiteExpert['anapNom']);
 
-            if(!array_key_exists($activiteExpert['id'], $activiteExpertsForGrid))
-            {
+            if (!array_key_exists($activiteExpert['id'], $activiteExpertsForGrid)) {
                 $activiteExpertsForGrid[$activiteExpert['id']] = $activiteExpert;
-            }
-            else
-            {
-                if((strpos($activiteExpertsForGrid[$activiteExpert['id']]['anapiens'],$activiteExpert['anapiens']) === false))
-                {
-                    $activiteExpertsForGrid[$activiteExpert['id']]['anapiens'] .= ";" . $activiteExpert['anapiens'];
+            } else {
+                if ((strpos($activiteExpertsForGrid[$activiteExpert['id']]['anapiens'], $activiteExpert['anapiens']) === false)) {
+                    $activiteExpertsForGrid[$activiteExpert['id']]['anapiens'] .= ';' . $activiteExpert['anapiens'];
                 }
-                if((strpos($activiteExpertsForGrid[$activiteExpert['id']]['experts'],$activiteExpert['experts']) === false))
-                {
-                    $activiteExpertsForGrid[$activiteExpert['id']]['experts'] .= ";" . $activiteExpert['experts'];
+                if ((strpos($activiteExpertsForGrid[$activiteExpert['id']]['experts'], $activiteExpert['experts']) === false)) {
+                    $activiteExpertsForGrid[$activiteExpert['id']]['experts'] .= ';' . $activiteExpert['experts'];
                 }
             }
         }
@@ -53,7 +47,7 @@ class ActiviteExpertManager extends BaseManager
     }
 
     /**
-     * Récupération de l'ensemble des experts lié à l'activité sous forme de tableau array(id)= prenom NOM
+     * Récupération de l'ensemble des experts lié à l'activité sous forme de tableau array(id)= prenom NOM.
      *
      * @param ActiviteExpert $activiteExpert [description]
      *
@@ -61,18 +55,17 @@ class ActiviteExpertManager extends BaseManager
      */
     public function getExperts(ActiviteExpert $activiteExpert)
     {
-        $experts = array();
+        $experts = [];
 
-        foreach ($activiteExpert->getExpertConcernes() as $expert)
-        {
-            $experts[$expert->getId()] = $expert->getPrenom() . ' ' .strtoupper($expert->getNom()); 
+        foreach ($activiteExpert->getExpertConcernes() as $expert) {
+            $experts[$expert->getId()] = $expert->getPrenom() . ' ' . strtoupper($expert->getNom());
         }
 
         return $experts;
     }
 
     /**
-     * Récupération des experts et de leur vacations pour la facture par Activité
+     * Récupération des experts et de leur vacations pour la facture par Activité.
      *
      * @param ActiviteExpert $activiteExpert [description]
      *
@@ -80,47 +73,40 @@ class ActiviteExpertManager extends BaseManager
      */
     public function getExpertsAndVacationForActivite(ActiviteExpert $activiteExpert)
     {
-        $experts = array();
+        $experts = [];
         $compteurDateFictive = 0;
 
-        foreach ($activiteExpert->getEvenements() as $evenement) 
-        {
-            foreach ($evenement->getExperts() as $expertPresence) 
-            {
-                if(!array_key_exists($expertPresence->getExpertConcerne()->getId(), $experts))
-                {
-                    $experts[$expertPresence->getExpertConcerne()->getId()] = array();
+        foreach ($activiteExpert->getEvenements() as $evenement) {
+            foreach ($evenement->getExperts() as $expertPresence) {
+                if (!array_key_exists($expertPresence->getExpertConcerne()->getId(), $experts)) {
+                    $experts[$expertPresence->getExpertConcerne()->getId()] = [];
                 }
-                if($expertPresence->getPresent())
-                {
-                    $experts[$expertPresence->getExpertConcerne()->getId()][$evenement->getDate()->format('d/m/y')] = array(
-                        'fictive'     => 'false',
-                        'nbVacations' => $evenement->getNbVacation()
-                    );
-                }
-                else
-                {
-                    for ($i=1; $i <= $evenement->getNbVacation(); $i++) {
-                        $experts[$expertPresence->getExpertConcerne()->getId()][$activiteExpert->getDateFictives()[$compteurDateFictive]->getDate()->format('d/m/y')] = array(
-                            'fictive'     => 'true',
-                            'nbVacations' => 1
-                        );
-                        $compteurDateFictive++;
+                if ($expertPresence->getPresent()) {
+                    $experts[$expertPresence->getExpertConcerne()->getId()][$evenement->getDate()->format('d/m/y')] = [
+                        'fictive' => 'false',
+                        'nbVacations' => $evenement->getNbVacation(),
+                    ];
+                } else {
+                    for ($i = 1; $i <= $evenement->getNbVacation(); ++$i) {
+                        $experts[$expertPresence->getExpertConcerne()->getId()][$activiteExpert->getDateFictives()[$compteurDateFictive]->getDate()->format('d/m/y')] = [
+                            'fictive' => 'true',
+                            'nbVacations' => 1,
+                        ];
+                        ++$compteurDateFictive;
                     }
                 }
             }
         }
 
-        foreach ($experts as &$expert) 
-        {
+        foreach ($experts as &$expert) {
             ksort($expert);
         }
 
         return $experts;
     }
-    
+
     /**
-     * Recupération des activités concernant l'expert
+     * Recupération des activités concernant l'expert.
      *
      * @param int $expertId Identifiant de l'expert
      *
@@ -130,9 +116,9 @@ class ActiviteExpertManager extends BaseManager
     {
         return $this->getRepository()->getActivitesForExpert($idExpert)->getQuery()->getResult();
     }
-    
+
     /**
-     * Recupération des activités concernant l'anapien
+     * Recupération des activités concernant l'anapien.
      *
      * @param int $expertId Identifiant de l'anapien
      *
@@ -147,6 +133,7 @@ class ActiviteExpertManager extends BaseManager
      * Retourne le CSV (fichier temporaire) du contrat.
      *
      * @param \HopitalNumerique\ExpertBundle\Entity\ActiviteExpert $activiteExpert Expert
+     *
      * @return string Chemin du fichier CSV
      */
     public function getContratCsv(ActiviteExpert $activiteExpert)
@@ -154,12 +141,12 @@ class ActiviteExpertManager extends BaseManager
         $csvPath = stream_get_meta_data(tmpfile())['uri'];
         $csvFile = fopen($csvPath, 'w+');
 
-        $anapienNoms = array();
+        $anapienNoms = [];
         foreach ($activiteExpert->getAnapiens() as $anapien) {
             $anapienNoms[] = $anapien->getPrenomNom();
         }
 
-        $csvColumns = array(
+        $csvColumns = [
             'Titre',
             'Type d\'activité',
             'Date de début',
@@ -171,12 +158,12 @@ class ActiviteExpertManager extends BaseManager
             'État',
             'Expert concerné - Prénom',
             'Expert concerné - Nom',
-            'Expert concerné - Adresse électronique'
-        );
+            'Expert concerné - Adresse électronique',
+        ];
 
-        $csvData = array();
+        $csvData = [];
         foreach ($activiteExpert->getExpertConcernes() as $expertConcerne) {
-            $csvData[] = array(
+            $csvData[] = [
                 $activiteExpert->getTitre(),
                 $activiteExpert->getTypeActivite(),
                 (null !== $activiteExpert->getDateDebut() ? $activiteExpert->getDateDebut()->format('d/m/Y') : ''),
@@ -188,8 +175,8 @@ class ActiviteExpertManager extends BaseManager
                 $activiteExpert->getEtat(),
                 $expertConcerne->getPrenom(),
                 $expertConcerne->getNom(),
-                $expertConcerne->getEmail()
-            );
+                $expertConcerne->getEmail(),
+            ];
         }
 
         $csvResponse = $this->exportCsv($csvColumns, $csvData, 'activite.csv', 'ISO-8859-1');

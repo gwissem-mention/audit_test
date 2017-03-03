@@ -4,14 +4,13 @@ namespace HopitalNumerique\EtablissementBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use APY\DataGridBundle\Grid\Mapping as GRID;
-
 //Asserts Stuff
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Nodevo\ToolsBundle\Validator\Constraints as Nodevo;
 
 /**
- * Etablissement
+ * Etablissement.
  *
  * @ORM\Table(name="hn_etablissement")
  * @ORM\Entity(repositoryClass="HopitalNumerique\EtablissementBundle\Repository\EtablissementRepository")
@@ -20,7 +19,7 @@ use Nodevo\ToolsBundle\Validator\Constraints as Nodevo;
 class Etablissement
 {
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="eta_id", type="integer", options = {"comment" = "ID de l établissement"})
      * @ORM\Id
@@ -125,30 +124,30 @@ class Etablissement
      * @ORM\Column(name="eta_codepostal", type="string", length=5, options = {"comment" = "Code postal de l établissement"})
      */
     private $codepostal;
-    
 
-    // ^ -------- Utilisateur -------- ^    
+    // ^ -------- Utilisateur -------- ^
 
     /**
      * @ORM\OneToMany(targetEntity="\HopitalNumerique\UserBundle\Entity\User", mappedBy="etablissementRattachementSante", cascade={"persist"})
      */
-    private $usersRattachement;    
+    private $usersRattachement;
 
     /**
-     * Set usersRattachement
+     * Set usersRattachement.
      *
      * @param \HopitalNumerique\UserBundle\Entity\User $usersRattachement
+     *
      * @return Etablissement
      */
     public function setUsersRattachement(\HopitalNumerique\UserBundle\Entity\User $usersRattachement = null)
     {
         $this->usersRattachement = $usersRattachement;
-    
+
         return $this;
     }
-    
+
     /**
-     * Get usersRattachement
+     * Get usersRattachement.
      *
      * @return \HopitalNumerique\UserBundle\Entity\User
      */
@@ -156,23 +155,22 @@ class Etablissement
     {
         return $this->usersRattachement;
     }
-    
-    function getUsersAffichage()
+
+    public function getUsersAffichage()
     {
         return sprintf('%s - %s', $this->nom, $this->finess);
     }
-    
+
     // v -------- Utilisateur  -------- v
 
     public function __construct()
     {
-
     }
-    
+
     /**
-     * Get id
+     * Get id.
      *
-     * @return integer 
+     * @return int
      */
     public function getId()
     {
@@ -180,9 +178,10 @@ class Etablissement
     }
 
     /**
-     * Set nom
+     * Set nom.
      *
      * @param string $nom
+     *
      * @return Etablissement
      */
     public function setNom($nom)
@@ -193,9 +192,9 @@ class Etablissement
     }
 
     /**
-     * Get nom
+     * Get nom.
      *
-     * @return string 
+     * @return string
      */
     public function getNom()
     {
@@ -203,9 +202,10 @@ class Etablissement
     }
 
     /**
-     * Set finess
+     * Set finess.
      *
      * @param string $finess
+     *
      * @return Etablissement
      */
     public function setFiness($finess)
@@ -216,9 +216,9 @@ class Etablissement
     }
 
     /**
-     * Get finess
+     * Get finess.
      *
-     * @return string 
+     * @return string
      */
     public function getFiness()
     {
@@ -226,7 +226,7 @@ class Etablissement
     }
 
     /**
-     * Get typeOrganisme
+     * Get typeOrganisme.
      *
      * @return \HopitalNumerique\ReferenceBundle\Entity\Reference $typeOrganisme
      */
@@ -234,9 +234,9 @@ class Etablissement
     {
         return $this->typeOrganisme;
     }
-    
+
     /**
-     * Set typeOrganisme
+     * Set typeOrganisme.
      *
      * @param \HopitalNumerique\ReferenceBundle\Entity\Reference $typeOrganisme
      */
@@ -244,9 +244,9 @@ class Etablissement
     {
         $this->typeOrganisme = $typeOrganisme;
     }
-    
+
     /**
-     * Get region
+     * Get region.
      *
      * @return \HopitalNumerique\ReferenceBundle\Entity\Reference $region
      */
@@ -254,9 +254,9 @@ class Etablissement
     {
         return $this->region;
     }
-    
+
     /**
-     * Set region
+     * Set region.
      *
      * @param \HopitalNumerique\ReferenceBundle\Entity\Reference $region
      */
@@ -264,9 +264,9 @@ class Etablissement
     {
         $this->region = $region;
     }
-    
+
     /**
-     * Get departement
+     * Get departement.
      *
      * @return \HopitalNumerique\ReferenceBundle\Entity\Reference $departement
      */
@@ -274,9 +274,9 @@ class Etablissement
     {
         return $this->departement;
     }
-    
+
     /**
-     * Set departement
+     * Set departement.
      *
      * @param \HopitalNumerique\ReferenceBundle\Entity\Reference $departement
      */
@@ -286,9 +286,10 @@ class Etablissement
     }
 
     /**
-     * Set adresse
+     * Set adresse.
      *
      * @param string $adresse
+     *
      * @return Etablissement
      */
     public function setAdresse($adresse)
@@ -299,9 +300,9 @@ class Etablissement
     }
 
     /**
-     * Get adresse
+     * Get adresse.
      *
-     * @return string 
+     * @return string
      */
     public function getAdresse()
     {
@@ -309,9 +310,10 @@ class Etablissement
     }
 
     /**
-     * Set ville
+     * Set ville.
      *
      * @param string $ville
+     *
      * @return Etablissement
      */
     public function setVille($ville)
@@ -322,9 +324,9 @@ class Etablissement
     }
 
     /**
-     * Get ville
+     * Get ville.
      *
-     * @return string 
+     * @return string
      */
     public function getVille()
     {
@@ -332,9 +334,10 @@ class Etablissement
     }
 
     /**
-     * Set codepostal
+     * Set codepostal.
      *
      * @param string $codepostal
+     *
      * @return Etablissement
      */
     public function setCodepostal($codepostal)
@@ -345,9 +348,9 @@ class Etablissement
     }
 
     /**
-     * Get codepostal
+     * Get codepostal.
      *
-     * @return string 
+     * @return string
      */
     public function getCodepostal()
     {
@@ -356,18 +359,19 @@ class Etablissement
 
     /**
      * Retourne l'appellation de l'établissement pour l'affichage (nom - FINESS).
-     * 
+     *
      * @return string Appellation de l'établissement
      */
     public function getAppellation()
     {
-        return $this->nom.' - '.$this->finess;
+        return $this->nom . ' - ' . $this->finess;
     }
 
     /**
-     * Add usersRattachement
+     * Add usersRattachement.
      *
      * @param \HopitalNumerique\UserBundle\Entity\User $usersRattachement
+     *
      * @return Etablissement
      */
     public function addUsersRattachement(\HopitalNumerique\UserBundle\Entity\User $usersRattachement)
@@ -378,7 +382,7 @@ class Etablissement
     }
 
     /**
-     * Remove usersRattachement
+     * Remove usersRattachement.
      *
      * @param \HopitalNumerique\UserBundle\Entity\User $usersRattachement
      */

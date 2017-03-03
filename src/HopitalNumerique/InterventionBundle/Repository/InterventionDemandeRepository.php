@@ -1,9 +1,10 @@
 <?php
 /**
- * InterventionDemandeRepository
- * 
+ * InterventionDemandeRepository.
+ *
  * @author Rémi Leclerc <rleclerc@nodevo.com>
  */
+
 namespace HopitalNumerique\InterventionBundle\Repository;
 
 use Doctrine\ORM\EntityRepository;
@@ -13,7 +14,7 @@ use HopitalNumerique\UserBundle\Entity\User;
 use Doctrine\ORM\Query\Expr\Join;
 
 /**
- * InterventionDemandeRepository
+ * InterventionDemandeRepository.
  */
 class InterventionDemandeRepository extends EntityRepository
 {
@@ -29,11 +30,11 @@ class InterventionDemandeRepository extends EntityRepository
     }
 
     /**
-     * Retourne la liste des interventions de l'utilisateur
+     * Retourne la liste des interventions de l'utilisateur.
      *
      * @return QueryBuilder
      */
-    public function getForFactures( $user = null )
+    public function getForFactures($user = null)
     {
         $qb = $this->_em->createQueryBuilder();
         $qb
@@ -56,11 +57,11 @@ class InterventionDemandeRepository extends EntityRepository
     }
 
     /**
-     * Retourne la liste des interventions de l'utilisateur
+     * Retourne la liste des interventions de l'utilisateur.
      *
      * @return QueryBuilder
      */
-    public function getForTotal( $user )
+    public function getForTotal($user)
     {
         return $this->_em->createQueryBuilder()
                          ->select('interventionDemande')
@@ -74,45 +75,47 @@ class InterventionDemandeRepository extends EntityRepository
 
     /**
      * Retourne les demandes d'intervention qui doivent automatiquement être validées par le CMSI.
-     * 
+     *
      * @return \HopitalNumerique\InterventionBundle\Entity\InterventionDemande[] Les demandes d'intervention qui doivent automatiquement être validées par le CMSI
      */
     public function findByDemandesInitialesAValiderCmsi()
     {
         $requete = $this->_em->createQueryBuilder();
-        
+
         $requete
             ->select('interventionDemande')
             ->from('HopitalNumeriqueInterventionBundle:InterventionDemande', 'interventionDemande')
             ->where('interventionDemande.interventionEtat = :interventionEtat')
                 ->setParameter('interventionEtat', InterventionEtat::getInterventionEtatDemandeInitialeId())
-            ->andWhere(':aujourdhui > DATE_ADD(interventionDemande.dateCreation, '.InterventionEtat::$VALIDATION_CMSI_NOMBRE_JOURS.', \'day\')')
+            ->andWhere(':aujourdhui > DATE_ADD(interventionDemande.dateCreation, ' . InterventionEtat::$VALIDATION_CMSI_NOMBRE_JOURS . ', \'day\')')
                 ->setParameter('aujourdhui', new \DateTime())
         ;
 
         return $requete->getQUery()->getResult();
     }
+
     /**
      * Retourne les demandes d'intervention en attente CMSI pour une relance.
-     * 
+     *
      * @return \HopitalNumerique\InterventionBundle\Entity\InterventionDemande[] Les demandes d'intervention qui doivent automatiquement être validées par le CMSI
      */
     public function findByEtatAttenteCmsiPourRelance()
     {
         $requete = $this->_em->createQueryBuilder();
-        
+
         $requete
             ->select('interventionDemande')
             ->from('HopitalNumeriqueInterventionBundle:InterventionDemande', 'interventionDemande')
             ->where('interventionDemande.interventionEtat = :interventionEtat')
                 ->setParameter('interventionEtat', InterventionEtat::getInterventionEtatAttenteCmsiId())
             //->andWhere('(interventionDemande.cmsiDateDerniereRelance IS NOT NULL AND :aujourdhui > DATE_ADD(interventionDemande.cmsiDateDerniereRelance, '.InterventionEtat::$NOTIFICATION_MISE_EN_ATTENTE_CMSI_NOMBRE_JOURS.', \'day\')) OR (interventionDemande.cmsiDateDerniereRelance IS NULL AND :aujourdhui > DATE_ADD(interventionDemande.dateCreation, '.InterventionEtat::$NOTIFICATION_MISE_EN_ATTENTE_CMSI_NOMBRE_JOURS.', \'day\'))')
-            ->andWhere(':aujourdhui > DATE_ADD(interventionDemande.cmsiDateDerniereRelance, '.InterventionEtat::$NOTIFICATION_MISE_EN_ATTENTE_CMSI_NOMBRE_JOURS.', \'day\')')
+            ->andWhere(':aujourdhui > DATE_ADD(interventionDemande.cmsiDateDerniereRelance, ' . InterventionEtat::$NOTIFICATION_MISE_EN_ATTENTE_CMSI_NOMBRE_JOURS . ', \'day\')')
                 ->setParameter('aujourdhui', new \DateTime())
         ;
 
         return $requete->getQUery()->getResult();
     }
+
     /**
      * Retourne les demandes d'intervention acceptée par le CMSI pour une relance.
      *
@@ -125,12 +128,13 @@ class InterventionDemandeRepository extends EntityRepository
             ->from('HopitalNumeriqueInterventionBundle:InterventionDemande', 'interventionDemande')
             ->where('interventionDemande.interventionEtat = :interventionEtat')
                 ->setParameter('interventionEtat', InterventionEtat::getInterventionEtatAcceptationCmsiId())
-                ->andWhere(':aujourdhui > DATE_ADD(interventionDemande.ambassadeurDateDerniereRelance, '.InterventionEtat::$NOTIFICATION_AVANT_RELANCE_AMBASSADEUR_1_NOMBRE_JOURS.', \'day\')')
+                ->andWhere(':aujourdhui > DATE_ADD(interventionDemande.ambassadeurDateDerniereRelance, ' . InterventionEtat::$NOTIFICATION_AVANT_RELANCE_AMBASSADEUR_1_NOMBRE_JOURS . ', \'day\')')
             ->setParameter('aujourdhui', new \DateTime())
         ;
-        
+
         return $requete->getQUery()->getResult();
     }
+
     /**
      * Retourne les demandes d'intervention en relance ambassadeur 1 pour un seconde relance.
      *
@@ -143,12 +147,13 @@ class InterventionDemandeRepository extends EntityRepository
             ->from('HopitalNumeriqueInterventionBundle:InterventionDemande', 'interventionDemande')
             ->where('interventionDemande.interventionEtat = :interventionEtat')
                 ->setParameter('interventionEtat', InterventionEtat::getInterventionEtatAcceptationCmsiRelance1Id())
-            ->andWhere(':aujourdhui > DATE_ADD(interventionDemande.ambassadeurDateDerniereRelance, '.InterventionEtat::$NOTIFICATION_AVANT_RELANCE_AMBASSADEUR_2_NOMBRE_JOURS.', \'day\')')
+            ->andWhere(':aujourdhui > DATE_ADD(interventionDemande.ambassadeurDateDerniereRelance, ' . InterventionEtat::$NOTIFICATION_AVANT_RELANCE_AMBASSADEUR_2_NOMBRE_JOURS . ', \'day\')')
                 ->setParameter('aujourdhui', new \DateTime())
         ;
-    
+
         return $requete->getQUery()->getResult();
     }
+
     /**
      * Retourne les demandes d'intervention en relance ambassadeur 2 pour leur clôture.
      *
@@ -161,18 +166,18 @@ class InterventionDemandeRepository extends EntityRepository
             ->from('HopitalNumeriqueInterventionBundle:InterventionDemande', 'interventionDemande')
             ->where('interventionDemande.interventionEtat = :interventionEtat')
                 ->setParameter('interventionEtat', InterventionEtat::getInterventionEtatAcceptationCmsiRelance2Id())
-            ->andWhere(':aujourdhui > DATE_ADD(interventionDemande.ambassadeurDateDerniereRelance, '.InterventionEtat::$NOTIFICATION_AVANT_RELANCE_AMBASSADEUR_CLOTURE_NOMBRE_JOURS.', \'day\')')
+            ->andWhere(':aujourdhui > DATE_ADD(interventionDemande.ambassadeurDateDerniereRelance, ' . InterventionEtat::$NOTIFICATION_AVANT_RELANCE_AMBASSADEUR_CLOTURE_NOMBRE_JOURS . ', \'day\')')
                 ->setParameter('aujourdhui', new \DateTime())
         ;
-    
+
         return $requete->getQUery()->getResult();
     }
-    
-    
+
     /**
-     * Récupère les données du grid des nouvelles demandes d'intervention pour le CMSI sous forme de tableau correctement formaté
-     * 
+     * Récupère les données du grid des nouvelles demandes d'intervention pour le CMSI sous forme de tableau correctement formaté.
+     *
      * @param \HopitalNumerique\UserBundle\Entity\User $cmsi Le CMSI des demandes d'intervention
+     *
      * @return array
      */
     public function getGridDonneesCmsiDemandesNouvelles(User $cmsi)
@@ -181,7 +186,7 @@ class InterventionDemandeRepository extends EntityRepository
             ->select('IDENTITY(interventionRegroupementIgnore.interventionDemandeRegroupee)')
             ->from('HopitalNumeriqueInterventionBundle:InterventionRegroupement', 'interventionRegroupementIgnore')
             ;
-        
+
         $requete = $this->_em->createQueryBuilder();
         $requete
             ->select(
@@ -231,10 +236,12 @@ class InterventionDemandeRepository extends EntityRepository
 
         return $requete->getQUery()->getResult();
     }
+
     /**
-     * Récupère les données du grid des demandes d'intervention traitées pour le CMSI sous forme de tableau correctement formaté
+     * Récupère les données du grid des demandes d'intervention traitées pour le CMSI sous forme de tableau correctement formaté.
      *
      * @param \HopitalNumerique\UserBundle\Entity\User $cmsi Le CMSI des demandes d'intervention
+     *
      * @return array
      */
     public function getGridDonneesCmsiDemandesTraitees(User $cmsi)
@@ -243,7 +250,7 @@ class InterventionDemandeRepository extends EntityRepository
             ->select('IDENTITY(interventionRegroupementIgnore.interventionDemandeRegroupee)')
             ->from('HopitalNumeriqueInterventionBundle:InterventionRegroupement', 'interventionRegroupementIgnore')
             ;
-        
+
         $requete = $this->_em->createQueryBuilder();
         $requete
             ->select(
@@ -301,16 +308,18 @@ class InterventionDemandeRepository extends EntityRepository
 
         return $requete->getQUery()->getResult();
     }
+
     /**
-     * Récupère les données du grid des suivis de demandes d'intervention pour le directeur sous forme de tableau correctement formaté
+     * Récupère les données du grid des suivis de demandes d'intervention pour le directeur sous forme de tableau correctement formaté.
      *
      * @param \HopitalNumerique\UserBundle\Entity\User $directeur Le directeur des demandes d'intervention
+     *
      * @return array
      */
     public function getGridDonneesDirecteurSuiviDemandes(User $directeur)
     {
         $requete = $this->_em->createQueryBuilder();
-    
+
         $requete
             ->select(
                 'interventionDemande.id AS id',
@@ -345,7 +354,7 @@ class InterventionDemandeRepository extends EntityRepository
             ->innerJoin('interventionDemande.interventionInitiateur', 'interventionInitiateur')
             // État de l'intervention
             ->innerJoin('interventionDemande.interventionEtat', 'interventionEtat')
-                ->andWhere("
+                ->andWhere('
                     interventionEtat.id = :interventionEtatAcceptationCmsi
                     OR interventionEtat.id = :interventionEtatAcceptationCmsiRelance1
                     OR interventionEtat.id = :interventionEtatAcceptationCmsiRelance2
@@ -353,7 +362,7 @@ class InterventionDemandeRepository extends EntityRepository
                     OR interventionEtat.id = :interventionEtatAcceptationAmbassadeur
                     OR interventionEtat.id = :interventionEtatTermine
                     OR interventionEtat.id = :interventionEtatCloture
-                ")
+                ')
                     ->setParameter('interventionEtatAcceptationCmsi', InterventionEtat::getInterventionEtatAcceptationCmsiId())
                     ->setParameter('interventionEtatAcceptationCmsiRelance1', InterventionEtat::getInterventionEtatAcceptationCmsiRelance1Id())
                     ->setParameter('interventionEtatAcceptationCmsiRelance2', InterventionEtat::getInterventionEtatAcceptationCmsiRelance2Id())
@@ -371,13 +380,15 @@ class InterventionDemandeRepository extends EntityRepository
             ->orderBy('interventionDemande.dateCreation', 'DESC')
             ->groupBy('interventionDemande.id')
         ;
-    
+
         return $requete->getQUery()->getResult();
     }
+
     /**
-     * Récupère les données du grid des demandes d'intervention pour l'ambassadeur sous forme de tableau correctement formaté
+     * Récupère les données du grid des demandes d'intervention pour l'ambassadeur sous forme de tableau correctement formaté.
      *
      * @param \HopitalNumerique\UserBundle\Entity\User $ambassadeur L'ambassadeur des demandes d'intervention
+     *
      * @return array
      */
     public function getGridDonneesAmbassadeurDemandes(User $ambassadeur)
@@ -386,7 +397,7 @@ class InterventionDemandeRepository extends EntityRepository
             ->select('IDENTITY(interventionRegroupementIgnore.interventionDemandeRegroupee)')
             ->from('HopitalNumeriqueInterventionBundle:InterventionRegroupement', 'interventionRegroupementIgnore')
             ;
-        
+
         $requete = $this->_em->createQueryBuilder();
 
         $requete
@@ -431,7 +442,7 @@ class InterventionDemandeRepository extends EntityRepository
                     $requeteDemandesGroupees->getDQL()
                 )
             )
-            ->andWhere("
+            ->andWhere('
                 interventionEtat.id = :interventionEtatAcceptationCmsi
                 OR interventionEtat.id = :interventionEtatAcceptationCmsiRelance1
                 OR interventionEtat.id = :interventionEtatAcceptationCmsiRelance2
@@ -439,7 +450,7 @@ class InterventionDemandeRepository extends EntityRepository
                 OR interventionEtat.id = :interventionEtatAcceptationAmbassadeur
                 OR interventionEtat.id = :interventionEtatTermine
                 OR interventionEtat.id = :interventionEtatCloture
-            ")
+            ')
                 ->setParameter('interventionEtatAcceptationCmsi', InterventionEtat::getInterventionEtatAcceptationCmsiId())
                 ->setParameter('interventionEtatAcceptationCmsiRelance1', InterventionEtat::getInterventionEtatAcceptationCmsiRelance1Id())
                 ->setParameter('interventionEtatAcceptationCmsiRelance2', InterventionEtat::getInterventionEtatAcceptationCmsiRelance2Id())
@@ -450,19 +461,21 @@ class InterventionDemandeRepository extends EntityRepository
             ->orderBy('interventionDemande.dateCreation', 'DESC')
             ->groupBy('interventionDemande.id')
         ;
-    
+
         return $requete->getQUery()->getResult();
     }
+
     /**
-     * Récupère les données du grid des demandes d'intervention pour l'établissement sous forme de tableau correctement formaté
+     * Récupère les données du grid des demandes d'intervention pour l'établissement sous forme de tableau correctement formaté.
      *
      * @param \HopitalNumerique\UserBundle\Entity\User $referent Le référent de l'établissement des demandes d'intervention
+     *
      * @return array
      */
     public function getGridDonneesEtablissementDemandes(User $referent)
     {
         $demandesDoublonsIdsAvecMemeDemandePrincipale = $this->getDemandesDoublonsIdsAvecMemeDemandePrincipale($referent);
-        
+
         // Ignorer les demandes groupées pour un même référent
         $requeteDemandesGroupees = $this->_em->createQueryBuilder()
             ->select('IDENTITY(interventionRegroupementIgnore.interventionDemandeRegroupee)')
@@ -512,8 +525,7 @@ class InterventionDemandeRepository extends EntityRepository
                     $requeteDemandesGroupees->getDQL()
                 )
             );
-        if (count($demandesDoublonsIdsAvecMemeDemandePrincipale) > 0)
-        {
+        if (count($demandesDoublonsIdsAvecMemeDemandePrincipale) > 0) {
             $requete->andWhere(
                 $requete->expr()->notIn(
                     'interventionDemande',
@@ -528,16 +540,18 @@ class InterventionDemandeRepository extends EntityRepository
 
         return $requete->getQUery()->getResult();
     }
+
     /**
      * Retourne les IDs des demandes d'intervention doublons (pas le premier résultat trouvé) qui possèdent la même demande d'intervention principale.
      *
      * @param \HopitalNumerique\UserBundle\Entity\User $referent Le référent de l'établissement des demandes d'intervention
-     * @return integer[] Les IDs des demandes doublons avec la même demande principale
+     *
+     * @return int[] Les IDs des demandes doublons avec la même demande principale
      */
     private function getDemandesDoublonsIdsAvecMemeDemandePrincipale(User $referent)
     {
-        $demandesDoublonsAvecMemeDemandePrincipaleIds = array();
-        
+        $demandesDoublonsAvecMemeDemandePrincipaleIds = [];
+
         $requeteDemandesDoublonsAvecMemeDemandePrincipale = $this->_em->createQueryBuilder()
             ->select('IDENTITY(interventionRegroupementDoublonsAvecMemeDemandePrincipale.interventionDemandeRegroupee) AS demandeDoublonId')
             ->from('HopitalNumeriqueInterventionBundle:InterventionRegroupement', 'interventionRegroupementDoublonsAvecMemeDemandePrincipale')
@@ -547,11 +561,13 @@ class InterventionDemandeRepository extends EntityRepository
             ->orderBy('interventionDoublonsDemandeRegroupee.id', 'ASC')
             ->setFirstResult(1)
         ;
-        foreach ($requeteDemandesDoublonsAvecMemeDemandePrincipale->getQuery()->getResult() as $demandeDoublon)
+        foreach ($requeteDemandesDoublonsAvecMemeDemandePrincipale->getQuery()->getResult() as $demandeDoublon) {
             $demandesDoublonsAvecMemeDemandePrincipaleIds[] = $demandeDoublon['demandeDoublonId'];
+        }
 
         return $demandesDoublonsAvecMemeDemandePrincipaleIds;
     }
+
     /**
      * Retourne les données formatées pour la création du grid des demandes d'intervention pour l'administration.
      *
@@ -569,7 +585,7 @@ class InterventionDemandeRepository extends EntityRepository
                 'COUNT(interventionRegroupementPrincipale) AS nombreDemandesPrincipales',
                 'CONCAT(interventionDemande.dateCreation, \'\') AS dateCreationLibelle',
                 'interventionEtat.libelle AS interventionEtatLibelle',
-                
+
                 'CONCAT(cmsi.nom, \' \', cmsi.prenom) AS cmsi_nom',
                 'cmsiEtablissement.nom AS cmsiEtablissementNom',
                 'cmsiEtablissement.finess AS cmsiEtablissementFiness',
@@ -624,22 +640,23 @@ class InterventionDemandeRepository extends EntityRepository
             ->orderBy('interventionDemande.dateCreation', 'DESC')
             ->groupBy('interventionDemande.id')
         ;
-    
+
         return $requete->getQUery()->getResult();
     }
-    
-    
+
     /**
      * Retourne les demandes d'intervention similaire par rapport aux objets d'une demande d'intervention.
      *
      * @param \HopitalNumerique\InterventionBundle\Entity\InterventionDemande $interventionDemande La demande d'intervention dont il faut rechercher les demandes similaires
+     *
      * @return \HopitalNumerique\InterventionBundle\Entity\InterventionDemande[] Les demandes d'intervention similaires par rapport aux objets
      */
     public function getInterventionsSimilairesParObjets(InterventionDemande $interventionDemande)
     {
-        $objetIds = array();
-        foreach ($interventionDemande->getObjets() as $objet)
+        $objetIds = [];
+        foreach ($interventionDemande->getObjets() as $objet) {
             $objetIds[] = $objet->getId();
+        }
 
         $requeteDemandesGroupees = $this->_em->createQueryBuilder()
             ->select('IDENTITY(interventionRegroupement.interventionDemandeRegroupee)')
@@ -649,7 +666,7 @@ class InterventionDemandeRepository extends EntityRepository
             ->select('IDENTITY(interventionRegroupementPrincipal.interventionDemandePrincipale)')
             ->from('HopitalNumeriqueInterventionBundle:InterventionRegroupement', 'interventionRegroupementPrincipal')
         ;
-    
+
         $requete = $this->_em->createQueryBuilder();
         $requete->select('interventionDemande')
             ->from('HopitalNumeriqueInterventionBundle:InterventionDemande', 'interventionDemande')
@@ -673,25 +690,26 @@ class InterventionDemandeRepository extends EntityRepository
                 )
             )
             ->leftJoin('interventionDemande.objets', 'objet');
-        if (count($objetIds) > 0)
-        {
+        if (count($objetIds) > 0) {
             $requete->innerJoin('interventionDemande.objets', 'objetSimilaire')
                 ->andWhere($requete->expr()->in(
                     'objetSimilaire',
                     implode(',', $objetIds)
                 ));
         }
-        $requete->having('COUNT(objet) = '.count($interventionDemande->getObjets()))
+        $requete->having('COUNT(objet) = ' . count($interventionDemande->getObjets()))
             ->orderBy('interventionDemande.dateCreation', 'ASC')
             ->groupBy('interventionDemande')
         ;
-    
+
         return $requete->getQuery()->getResult();
     }
+
     /**
      * Retourne les demandes d'intervention similaire par rapport à l'ambassadeur d'une demande d'intervention.
      *
      * @param \HopitalNumerique\InterventionBundle\Entity\InterventionDemande $interventionDemande La demande d'intervention dont il faut rechercher les demandes similaires
+     *
      * @return \HopitalNumerique\InterventionBundle\Entity\InterventionDemande[] Les demandes d'intervention similaires par rapport à l'ambassadeur
      */
     public function getInterventionsSimilairesParAmbassadeur(InterventionDemande $interventionDemande)
@@ -734,12 +752,13 @@ class InterventionDemandeRepository extends EntityRepository
 
         return $requete->getQuery()->getResult();
     }
-    
+
     /**
-     * Retourne TRUE si le champ "Etat actuel" a été modifié
-     * 
+     * Retourne TRUE si le champ "Etat actuel" a été modifié.
+     *
      * @param \HopitalNumerique\InterventionBundle\Entity\InterventionDemande $intervention l'intervention en question
-     * @return boolean TRUE si le champ "Etat actuel" a été modifié
+     *
+     * @return bool TRUE si le champ "Etat actuel" a été modifié
      */
     public function isEtatActuelUpdated(InterventionDemande $intervention)
     {
@@ -752,22 +771,25 @@ class InterventionDemandeRepository extends EntityRepository
             ->andWhere('interventionEtat.id = :etat')
                 ->setParameter('etat', $intervention->getInterventionEtat()->getId())
         ;
-        return $requete->getQuery()->getOneOrNullResult() ? FALSE : TRUE;
+
+        return $requete->getQuery()->getOneOrNullResult() ? false : true;
     }
 
     /**
      * Retourne toutes les demandes pour l'export.
      *
-     * @param integer[] $allPrimaryKeys Les IDs des demandes à exporter
+     * @param int[] $allPrimaryKeys Les IDs des demandes à exporter
+     *
      * @return \HopitalNumerique\InterventionBundle\Entity\InterventionDemande[] Demandes
      */
     public function findForExport(array $allPrimaryKeys)
     {
-        if (count($allPrimaryKeys) == 0)
-            return array();
-        
+        if (count($allPrimaryKeys) == 0) {
+            return [];
+        }
+
         $requete = $this->createQueryBuilder('demande');
-        
+
         $requete
             ->where($requete->expr()->in(
                 'demande.id',
@@ -795,12 +817,12 @@ class InterventionDemandeRepository extends EntityRepository
             ->addSelect('facture')
             ->orderBy('demande.dateCreation', 'DESC')
         ;
-        
+
         return $requete->getQuery()->getResult();
     }
 
     /**
-     * @return integer
+     * @return int
      */
     public function getAmountOfInterventionWithoutBill()
     {

@@ -1,4 +1,5 @@
 <?php
+
 namespace HopitalNumerique\CommunautePratiqueBundle\Controller\Commentaire;
 
 use HopitalNumerique\CommunautePratiqueBundle\Controller\CommentaireController;

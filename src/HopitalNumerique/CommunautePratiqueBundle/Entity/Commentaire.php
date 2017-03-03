@@ -1,4 +1,5 @@
 <?php
+
 namespace HopitalNumerique\CommunautePratiqueBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
@@ -14,7 +15,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
 class Commentaire
 {
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="com_id", type="integer", nullable=false, options={"unsigned":true})
      * @ORM\Id()
@@ -74,11 +75,10 @@ class Commentaire
      */
     private $fiche;
 
-
     /**
-     * Get id
+     * Get id.
      *
-     * @return integer
+     * @return int
      */
     public function getId()
     {
@@ -86,9 +86,10 @@ class Commentaire
     }
 
     /**
-     * Set message
+     * Set message.
      *
      * @param string $message
+     *
      * @return Commentaire
      */
     public function setMessage($message)
@@ -99,7 +100,7 @@ class Commentaire
     }
 
     /**
-     * Get message
+     * Get message.
      *
      * @return string
      */
@@ -109,9 +110,10 @@ class Commentaire
     }
 
     /**
-     * Set dateCreation
+     * Set dateCreation.
      *
      * @param \DateTime $dateCreation
+     *
      * @return Commentaire
      */
     public function setDateCreation($dateCreation)
@@ -122,7 +124,7 @@ class Commentaire
     }
 
     /**
-     * Get dateCreation
+     * Get dateCreation.
      *
      * @return \DateTime
      */
@@ -132,9 +134,10 @@ class Commentaire
     }
 
     /**
-     * Set dateDerniereModification
+     * Set dateDerniereModification.
      *
      * @param \DateTime $dateDerniereModification
+     *
      * @return Commentaire
      */
     public function setDateDerniereModification($dateDerniereModification)
@@ -145,7 +148,7 @@ class Commentaire
     }
 
     /**
-     * Get dateDerniereModification
+     * Get dateDerniereModification.
      *
      * @return \DateTime
      */
@@ -155,9 +158,10 @@ class Commentaire
     }
 
     /**
-     * Set user
+     * Set user.
      *
      * @param \HopitalNumerique\UserBundle\Entity\User $user
+     *
      * @return Commentaire
      */
     public function setUser(\HopitalNumerique\UserBundle\Entity\User $user)
@@ -168,7 +172,7 @@ class Commentaire
     }
 
     /**
-     * Get user
+     * Get user.
      *
      * @return \HopitalNumerique\UserBundle\Entity\User
      */
@@ -178,9 +182,10 @@ class Commentaire
     }
 
     /**
-     * Set groupe
+     * Set groupe.
      *
      * @param \HopitalNumerique\CommunautePratiqueBundle\Entity\Groupe $groupe
+     *
      * @return Commentaire
      */
     public function setGroupe(\HopitalNumerique\CommunautePratiqueBundle\Entity\Groupe $groupe)
@@ -191,7 +196,7 @@ class Commentaire
     }
 
     /**
-     * Get groupe
+     * Get groupe.
      *
      * @return \HopitalNumerique\CommunautePratiqueBundle\Entity\Groupe
      */
@@ -201,9 +206,10 @@ class Commentaire
     }
 
     /**
-     * Set fiche
+     * Set fiche.
      *
      * @param \HopitalNumerique\CommunautePratiqueBundle\Entity\Fiche $fiche
+     *
      * @return Commentaire
      */
     public function setFiche(\HopitalNumerique\CommunautePratiqueBundle\Entity\Fiche $fiche)
@@ -214,7 +220,7 @@ class Commentaire
     }
 
     /**
-     * Get fiche
+     * Get fiche.
      *
      * @return \HopitalNumerique\CommunautePratiqueBundle\Entity\Fiche
      */

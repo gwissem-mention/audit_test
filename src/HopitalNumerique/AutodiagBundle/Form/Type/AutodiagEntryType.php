@@ -1,4 +1,5 @@
 <?php
+
 namespace HopitalNumerique\AutodiagBundle\Form\Type;
 
 use HopitalNumerique\AutodiagBundle\Form\Type\AutodiagEntry\ValueType;
@@ -9,16 +10,15 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class AutodiagEntryType extends AbstractType
 {
-
     /**
      * @param FormBuilderInterface $builder
-     * @param array $options
+     * @param array                $options
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
             ->add('values', CollectionType::class, [
-                'entry_type' => ValueType::class
+                'entry_type' => ValueType::class,
             ])
         ;
     }
@@ -28,9 +28,9 @@ class AutodiagEntryType extends AbstractType
      */
     public function configureOptions(OptionsResolver $resolver)
     {
-        $resolver->setDefaults(array(
+        $resolver->setDefaults([
             'data_class' => 'HopitalNumerique\AutodiagBundle\Entity\AutodiagEntry',
-            'label_format' => 'ad.autodiag.%name%'
-        ));
+            'label_format' => 'ad.autodiag.%name%',
+        ]);
     }
 }

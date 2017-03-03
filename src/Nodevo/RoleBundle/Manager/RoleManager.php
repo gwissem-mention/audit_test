@@ -7,7 +7,7 @@ use Nodevo\RoleBundle\Entity\Role;
 use Nodevo\ToolsBundle\Manager\Manager as BaseManager;
 
 /**
- * Manager de l'entité Role
+ * Manager de l'entité Role.
  */
 class RoleManager extends BaseManager
 {
@@ -21,7 +21,7 @@ class RoleManager extends BaseManager
     }
 
     /**
-     * Retourne la liste des roles correctement formatés pour la gestion des habilitations
+     * Retourne la liste des roles correctement formatés pour la gestion des habilitations.
      *
      * @param array $datas Liste des roles non formatés
      *
@@ -30,9 +30,9 @@ class RoleManager extends BaseManager
     public function reformateRolesForAcls($datas)
     {
         //prepare returned array
-        $roles              = new \stdClass;
-        $roles->initiaux    = array();
-        $roles->nonInitiaux = array();
+        $roles = new \stdClass();
+        $roles->initiaux = [];
+        $roles->nonInitiaux = [];
 
         //on construit 2 tableau (roles initiaux et roles non initiaux)
         foreach ($datas as $one) {
@@ -47,7 +47,7 @@ class RoleManager extends BaseManager
     }
 
     /**
-     * Override de la fonction save par défaut car on génère le code de l'utilisateur
+     * Override de la fonction save par défaut car on génère le code de l'utilisateur.
      *
      * @param Role $role
      */
@@ -61,30 +61,30 @@ class RoleManager extends BaseManager
             $role->setRole($code);
         }
 
-        $this->_em->persist($role);
-        $this->_em->flush();
+        $this->em->persist($role);
+        $this->em->flush();
 
-        /**
+        /*
          * Ajout de l'id en fin de code
          */
         if ($code !== false) {
             $role->setRole($code . $role->getId());
-            $this->_em->persist($role);
-            $this->_em->flush();
+            $this->em->persist($role);
+            $this->em->flush();
         }
     }
 
     /**
-     * Retourne les roles sous forme de tableau
+     * Retourne les roles sous forme de tableau.
      *
      * @return array
      */
     public function getRolesAsArray()
     {
         $datas = $this->findAll();
-        $roles = array();
+        $roles = [];
         foreach ($datas as $data) {
-            $roles[ $data->getRole() ] = $data->getName();
+            $roles[$data->getRole()] = $data->getName();
         }
 
         return $roles;
@@ -100,7 +100,7 @@ class RoleManager extends BaseManager
         if ($user instanceof User) {
             //on récupère le rôle de l'user connecté
             $roles = $user->getRoles();
-            $role  = $roles[0];
+            $role = $roles[0];
         } else {
             $role = 'ROLE_ANONYME_10';
         }
@@ -109,7 +109,7 @@ class RoleManager extends BaseManager
     }
 
     /**
-     * Retourne un tableau d'entités de roles en fonction du tableau des noms de role passés en param
+     * Retourne un tableau d'entités de roles en fonction du tableau des noms de role passés en param.
      *
      * @param array $nomsRoles Tableaux des noms de roles
      *
@@ -119,7 +119,7 @@ class RoleManager extends BaseManager
     {
         //Récupération de l'ensemble des rôles
         $datas = $this->findAll();
-        $roles = array();
+        $roles = [];
         //Récupération des rôles correspondant aux noms passés en param
         foreach ($datas as $data) {
             if (in_array($data->getRole(), $nomsRoles)) {
@@ -131,7 +131,7 @@ class RoleManager extends BaseManager
     }
 
     /**
-     * Retourne les Roles d'un utilisateur
+     * Retourne les Roles d'un utilisateur.
      *
      * @param User $user
      *
@@ -149,6 +149,7 @@ class RoleManager extends BaseManager
         if (null === $this->roleList) {
             $this->roleList = parent::findAll();
         }
+
         return $this->roleList;
     }
 }

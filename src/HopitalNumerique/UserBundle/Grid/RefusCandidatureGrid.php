@@ -17,8 +17,8 @@ class RefusCandidatureGrid extends Grid implements GridInterface
      */
     public function setConfig()
     {
-        $this->setSource( 'hopitalnumerique_user.manager.refuscandidature' );
-        $this->setSourceType( self::SOURCE_TYPE_MANAGER );
+        $this->setSource('hopitalnumerique_user.manager.refuscandidature');
+        $this->setSourceType(self::SOURCE_TYPE_MANAGER);
         $this->setNoDataMessage('Aucun refus de candidature à afficher.');
         $this->setButtonSize(49);
     }
@@ -33,32 +33,32 @@ class RefusCandidatureGrid extends Grid implements GridInterface
         $this->addColonne($idColumn);
 
         $prenomNomParticipantColumn = new Column\TextColumn('nomPrenom', 'Candidat');
-        $prenomNomParticipantColumn->setSize( 150 );
-        $this->addColonne( $prenomNomParticipantColumn );
-        
-        $regionParticipantColumn = new Column\TextColumn('userRegion', 'Sa région');
-        $regionParticipantColumn->setSize( 150 );
-        $this->addColonne( $regionParticipantColumn );
-        
-        $this->addColonne( new Column\TextColumn('motifRefus', 'Motif du refus') );
+        $prenomNomParticipantColumn->setSize(150);
+        $this->addColonne($prenomNomParticipantColumn);
 
-        $this->addColonne( new Column\DateColumn('dateRefus', 'Date de refus') );
+        $regionParticipantColumn = new Column\TextColumn('userRegion', 'Sa région');
+        $regionParticipantColumn->setSize(150);
+        $this->addColonne($regionParticipantColumn);
+
+        $this->addColonne(new Column\TextColumn('motifRefus', 'Motif du refus'));
+
+        $this->addColonne(new Column\DateColumn('dateRefus', 'Date de refus'));
     }
 
     /**
-     * Ajoute les boutons d'action
+     * Ajoute les boutons d'action.
      */
     public function setActionsButtons()
     {
         $actionFicheParticipant = new Action\ShowButton('hopital_numerique_user_show');
-        $actionFicheParticipant->setAttributes( array(
-                'class'=>'btn btn-primary fa fa-user-md',
+        $actionFicheParticipant->setAttributes([
+                'class' => 'btn btn-primary fa fa-user-md',
                 'title' => 'Fiche de l\'utilisateur',
-                'target' => '_blank'
-        ));
-        $actionFicheParticipant->setRouteParametersMapping(array('userId' => 'id'));
-        $actionFicheParticipant->setRouteParameters(array('userId'));
-        $this->addActionButton( $actionFicheParticipant );
+                'target' => '_blank',
+        ]);
+        $actionFicheParticipant->setRouteParametersMapping(['userId' => 'id']);
+        $actionFicheParticipant->setRouteParameters(['userId']);
+        $this->addActionButton($actionFicheParticipant);
     }
 
     /**
@@ -66,6 +66,6 @@ class RefusCandidatureGrid extends Grid implements GridInterface
      */
     public function setMassActions()
     {
-        $this->addMassAction( new Action\ActionMass('Export CSV - Refus candidature', 'HopitalNumeriqueUserBundle:RefusCandidature:exportCsv') );
+        $this->addMassAction(new Action\ActionMass('Export CSV - Refus candidature', 'HopitalNumeriqueUserBundle:RefusCandidature:exportCsv'));
     }
 }

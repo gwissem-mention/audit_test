@@ -13,19 +13,18 @@ class MaitriseUserManager extends BaseManager
     protected $class = 'HopitalNumerique\RechercheParcoursBundle\Entity\MaitriseUser';
 
     /**
-     * Met à jour l'ordre du détails
+     * Met à jour l'ordre du détails.
      *
      * @param User $user L'utilisateur auquel appartient les notes
      *
      * @return array(HopitalNumerique\RechercheParcoursBundle\Entity\MaitriseUser)
      */
-    public function getAllOrderedByPointDurForParcoursEtape( $user, $idParcoursEtape )
+    public function getAllOrderedByPointDurForParcoursEtape($user, $idParcoursEtape)
     {
-        $notesByPointDur = array();
-        $notes = $this->findBy(array('user' => $user, 'rechercheParcoursDetails' => $idParcoursEtape));
+        $notesByPointDur = [];
+        $notes = $this->findBy(['user' => $user, 'rechercheParcoursDetails' => $idParcoursEtape]);
 
-        foreach ($notes as $note)
-        {
+        foreach ($notes as $note) {
             $notesByPointDur[$note->getObjet()->getId()] = $note;
         }
 
@@ -33,32 +32,28 @@ class MaitriseUserManager extends BaseManager
     }
 
     /**
-     * Récupère les notes pour l'export
+     * Récupère les notes pour l'export.
      *
      * @return array
      */
-    public function getDatasForExport( $donneesTab )
+    public function getDatasForExport($donneesTab)
     {
-        $results = array();
+        $results = [];
 
-        foreach($donneesTab["pointsDur"] as $pointDur) 
-        {
-            $row = array();
+        foreach ($donneesTab['pointsDur'] as $pointDur) {
+            $row = [];
 
             //simple stuff
-            $row['id']           = $pointDur["id"];
-            $row['titre']        = $pointDur["titre"];
+            $row['id'] = $pointDur['id'];
+            $row['titre'] = $pointDur['titre'];
 
             //Parcours les colonnes du filtre typeES ou profil
-            foreach ($donneesTab["entetesTableau"] as $key => $enteteTableau) 
-            {
+            foreach ($donneesTab['entetesTableau'] as $key => $enteteTableau) {
                 $row[$key] = '';
                 //Si il y a des notes pour ce point dur et ce filtre on l'affiche/les affiche
-                if(array_key_exists($pointDur["id"], $donneesTab["notes"])
-                    && array_key_exists($key, $donneesTab["notes"][$pointDur["id"]]))
-                {
-                    foreach ($donneesTab["notes"][$pointDur["id"]][$key] as $categ => $nbNote) 
-                    {
+                if (array_key_exists($pointDur['id'], $donneesTab['notes'])
+                    && array_key_exists($key, $donneesTab['notes'][$pointDur['id']])) {
+                    foreach ($donneesTab['notes'][$pointDur['id']][$key] as $categ => $nbNote) {
                         $row[$key] .= $categ . ':' . $nbNote . '; ';
                     }
                 }
@@ -71,32 +66,29 @@ class MaitriseUserManager extends BaseManager
     }
 
     /**
-     * Récupère les notes pour l'export
+     * Récupère les notes pour l'export.
      *
      * @return array
      */
-    public function getDatasForExportByEtape( $donneesTab )
+    public function getDatasForExportByEtape($donneesTab)
     {
-        $results = array();
+        $results = [];
 
-        foreach($donneesTab["etapes"] as $etape) 
-        {
-            $row = array();
+        foreach ($donneesTab['etapes'] as $etape) {
+            $row = [];
 
             //simple stuff
-            $row['df']           = $etape->getRechercheParcours()->getReference()->getLibelle();
-            $row['id']           = $etape->getId();
-            $row['etape']        = $etape->getReference()->getLibelle();
+            $row['df'] = $etape->getRechercheParcours()->getReference()->getLibelle();
+            $row['id'] = $etape->getId();
+            $row['etape'] = $etape->getReference()->getLibelle();
 
             //Parcours les colonnes du filtre typeES ou profil
-            foreach ($donneesTab["entetesTableau"] as $key => $enteteTableau) 
-            {
+            foreach ($donneesTab['entetesTableau'] as $key => $enteteTableau) {
                 $row[$key] = '';
                 //Si il y a des notes pour ce point dur et ce filtre on l'affiche/les affiche
-                if(array_key_exists($etape->getId(), $donneesTab["notesMoyenneParEtape"])
-                    && array_key_exists($key, $donneesTab["notesMoyenneParEtape"][$etape->getId()]))
-                {
-                    $row[$key] = $donneesTab["notesMoyenneParEtape"][$etape->getId()][$key]['value'] . ' (NbNote : ' . $donneesTab["notesMoyenneParEtape"][$etape->getId()][$key]['nbNote'] . ', NbUser : ' . $donneesTab["notesMoyenneParEtape"][$etape->getId()][$key]['nbUser'] .')'  ;
+                if (array_key_exists($etape->getId(), $donneesTab['notesMoyenneParEtape'])
+                    && array_key_exists($key, $donneesTab['notesMoyenneParEtape'][$etape->getId()])) {
+                    $row[$key] = $donneesTab['notesMoyenneParEtape'][$etape->getId()][$key]['value'] . ' (NbNote : ' . $donneesTab['notesMoyenneParEtape'][$etape->getId()][$key]['nbNote'] . ', NbUser : ' . $donneesTab['notesMoyenneParEtape'][$etape->getId()][$key]['nbUser'] . ')';
                 }
             }
             //add row To Results
@@ -107,23 +99,22 @@ class MaitriseUserManager extends BaseManager
     }
 
     /**
-     * Retourne la moyenne des notes pour les étapes passées en param
+     * Retourne la moyenne des notes pour les étapes passées en param.
      *
      * @param RechercheParcours $rechercheParcours
      *
      * @return array Tableau des moyenne triées par étape
      */
-    public function getAverage( $rechercheParcours, $user )
+    public function getAverage($rechercheParcours, $user)
     {
         $etapesId = $rechercheParcours->getRecherchesParcoursDetailsIds();
 
         //Récupération du tableau des objets maitrisés
-        $objetsMaitrises = $this->getRepository()->getAverage( $etapesId, $user )->getQuery()->getResult();
+        $objetsMaitrises = $this->getRepository()->getAverage($etapesId, $user)->getQuery()->getResult();
 
-        $moyennes = array();
+        $moyennes = [];
         //Cast des moyenne en int arrondi à l'entier
-        foreach ($objetsMaitrises as $key => $etape) 
-        {
+        foreach ($objetsMaitrises as $key => $etape) {
             $moyennes[$etape['etapeId']] = intval($etape['moyenne'], 0);
         }
 
@@ -131,25 +122,24 @@ class MaitriseUserManager extends BaseManager
     }
 
     /**
-     * Retourne la moyenne des notes pour les étapes passées en param
+     * Retourne la moyenne des notes pour les étapes passées en param.
      *
      * @return array Tableau des moyenne triées par étape
      */
-    public function getAverageAllEtapesAllUser( $profilType)
+    public function getAverageAllEtapesAllUser($profilType)
     {
         //Récupération du tableau des objets maitrisés
-        $objetsMaitrises = $this->getRepository()->getAverageAllEtapesAllUser( $profilType )->getQuery()->getResult();
-        
-        $moyennes = array();
+        $objetsMaitrises = $this->getRepository()->getAverageAllEtapesAllUser($profilType)->getQuery()->getResult();
+
+        $moyennes = [];
         //Cast des moyenne en int arrondi à l'entier
-        foreach ($objetsMaitrises as $key => $etape) 
-        {
-            $filtre                               = $etape['filtreId'] == NULL ? 'NC' : $etape['filtreId'];
-            $moyennes[$etape['etapeId']][$filtre] = array(
-                'value'   => intval($etape['moyenne'], 0),
-                'nbNote'  => intval($etape['nbNote'], 0),
-                'nbUser'  => intval($etape['nbUser'], 0)
-            );
+        foreach ($objetsMaitrises as $key => $etape) {
+            $filtre = $etape['filtreId'] == null ? 'NC' : $etape['filtreId'];
+            $moyennes[$etape['etapeId']][$filtre] = [
+                'value' => intval($etape['moyenne'], 0),
+                'nbNote' => intval($etape['nbNote'], 0),
+                'nbUser' => intval($etape['nbUser'], 0),
+            ];
         }
 
         return $moyennes;

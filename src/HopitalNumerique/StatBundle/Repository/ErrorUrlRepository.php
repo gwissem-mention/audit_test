@@ -5,9 +5,7 @@ namespace HopitalNumerique\StatBundle\Repository;
 use Doctrine\ORM\EntityRepository;
 
 /**
- * Class ErrorUrlRepository
- *
- * @package HopitalNumerique\StatBundle\Repository
+ * Class ErrorUrlRepository.
  */
 class ErrorUrlRepository extends EntityRepository
 {

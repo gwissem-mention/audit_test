@@ -4,6 +4,7 @@
  *
  * @author Rémi Leclerc <rleclerc@nodevo.com>
  */
+
 namespace HopitalNumerique\InterventionBundle\Form\InterventionDemande;
 
 use Symfony\Component\Form\FormBuilderInterface;
@@ -22,13 +23,12 @@ class EtablissementType extends InterventionDemandeType
     /**
      * Constructeur du formulaire de demande d'intervention à un établissement.
      *
-     * @param \Symfony\Component\Security\Core\SecurityContext $securityContext SecurityContext de l'application
-     * @param \Symfony\Component\Validator\Validator\LegacyValidator $validator LegacyValidator
-     * @param \HopitalNumerique\InterventionBundle\Manager\InterventionDemandeManager $interventionDemandeManager Manager InterventionDemande
+     * @param \Symfony\Component\Security\Core\SecurityContext                             $securityContext                SecurityContext de l'application
+     * @param \Symfony\Component\Validator\Validator\LegacyValidator                       $validator                      LegacyValidator
+     * @param \HopitalNumerique\InterventionBundle\Manager\InterventionDemandeManager      $interventionDemandeManager     Manager InterventionDemande
      * @param \HopitalNumerique\InterventionBundle\Manager\Form\InterventionDemandeManager $formInterventionDemandeManager Manager Form\InterventionDemande
-     * @param \HopitalNumerique\InterventionBundle\Manager\Form\UserManager $formUserManager Manager Form\User
-     * @param \HopitalNumerique\InterventionBundle\Manager\Form\EtablissementManager $formEtablissementManager Manager Form\Etablissement
-     * @return void
+     * @param \HopitalNumerique\InterventionBundle\Manager\Form\UserManager                $formUserManager                Manager Form\User
+     * @param \HopitalNumerique\InterventionBundle\Manager\Form\EtablissementManager       $formEtablissementManager       Manager Form\Etablissement
      */
     public function __construct(SecurityContext $securityContext, $validator, InterventionDemandeManager $interventionDemandeManager, FormInterventionDemandeManager $formInterventionDemandeManager, FormUserManager $formUserManager, FormEtablissementManager $formEtablissementManager)
     {
@@ -37,7 +37,7 @@ class EtablissementType extends InterventionDemandeType
 
     /**
      * @param FormBuilderInterface $builder
-     * @param array $options
+     * @param array                $options
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {

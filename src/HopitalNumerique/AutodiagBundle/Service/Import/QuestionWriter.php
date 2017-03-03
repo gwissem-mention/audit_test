@@ -1,4 +1,5 @@
 <?php
+
 namespace HopitalNumerique\AutodiagBundle\Service\Import;
 
 use Doctrine\Common\Collections\ArrayCollection;
@@ -66,7 +67,6 @@ class QuestionWriter implements WriterInterface, ProgressAwareInterface
 
     public function prepare()
     {
-
     }
 
     public function write($item)
@@ -83,6 +83,7 @@ class QuestionWriter implements WriterInterface, ProgressAwareInterface
                     $attribute->getCode() ?: '',
                     'attribute_exists'
                 );
+
                 return;
             }
 
@@ -91,14 +92,14 @@ class QuestionWriter implements WriterInterface, ProgressAwareInterface
             $propertyAccessor = new PropertyAccessor();
             foreach ($this->mapping as $key => $property) {
                 if (array_key_exists($key, $item)) {
-                    $propertyAccessor->setValue($attribute, $property, (string)$item[$key]);
+                    $propertyAccessor->setValue($attribute, $property, (string) $item[$key]);
                 }
             }
 
-            if ($item[AttributeColumnsDefinition::COLORED] == "1") {
+            if ($item[AttributeColumnsDefinition::COLORED] == '1') {
                 $attribute->setColored(true);
                 $attribute->setColorationInversed(false);
-            } elseif ($item[AttributeColumnsDefinition::COLORED] == "-1") {
+            } elseif ($item[AttributeColumnsDefinition::COLORED] == '-1') {
                 $attribute->setColored(true);
                 $attribute->setColorationInversed(true);
             } else {
@@ -133,12 +134,13 @@ class QuestionWriter implements WriterInterface, ProgressAwareInterface
                 foreach ($this->actionPlans as $action) {
                     $this->manager->detach($action);
                 }
+
                 return;
             }
 
             $weights = $this->manager->getRepository('HopitalNumeriqueAutodiagBundle:Autodiag\Attribute\Weight')
                 ->findBy([
-                    'attribute' => $attribute
+                    'attribute' => $attribute,
                 ]);
             foreach ($weights as $weight) {
                 if (!in_array($weight, $this->weights)) {
@@ -170,7 +172,7 @@ class QuestionWriter implements WriterInterface, ProgressAwareInterface
 
         $categories = $this->manager->getRepository('HopitalNumeriqueAutodiagBundle:Autodiag\Container\Category')
             ->findBy([
-                'autodiag' => $this->autodiag
+                'autodiag' => $this->autodiag,
             ]);
         foreach ($categories as $category) {
             if (!isset($this->categories[$category->getCode()])) {
@@ -182,9 +184,10 @@ class QuestionWriter implements WriterInterface, ProgressAwareInterface
     }
 
     /**
-     * Get an existing attribute or create a new one
+     * Get an existing attribute or create a new one.
      *
      * @param $code
+     *
      * @return Attribute
      */
     protected function getAttribute($code)
@@ -205,10 +208,11 @@ class QuestionWriter implements WriterInterface, ProgressAwareInterface
     }
 
     /**
-     * Get an existing Option for $attribute or create a new one and append it to $attribute
+     * Get an existing Option for $attribute or create a new one and append it to $attribute.
      *
      * @param Attribute $attribute
      * @param $value
+     *
      * @return Attribute\Option
      */
     protected function getOption(Attribute $attribute, $value)
@@ -228,14 +232,15 @@ class QuestionWriter implements WriterInterface, ProgressAwareInterface
     }
 
     /**
-     * Parse multiline cells (key::value\n...)
+     * Parse multiline cells (key::value\n...).
      *
      * @param $input
+     *
      * @return array
      */
     protected function parseMultiline($input)
     {
-        $lines = preg_split("/\\r\\n|\\r|\\n/", $input);
+        $lines = preg_split('/\\r\\n|\\r|\\n/', $input);
         $options = [];
 
         foreach ($lines as $line) {
@@ -248,12 +253,13 @@ class QuestionWriter implements WriterInterface, ProgressAwareInterface
     }
 
     /**
-     * Handle attribute options
+     * Handle attribute options.
      *
      * @param Attribute $attribute
      * @param           $options
      *
      * @return bool
+     *
      * @throws \Exception
      */
     protected function handleOptions(Attribute $attribute, $options)
@@ -276,6 +282,7 @@ class QuestionWriter implements WriterInterface, ProgressAwareInterface
                     $options ?: '',
                     'attribute_options'
                 );
+
                 return false;
             }
 
@@ -316,10 +323,12 @@ class QuestionWriter implements WriterInterface, ProgressAwareInterface
         if (count($data) <= 2 && null !== $object) {
             $this->manager->remove($object);
             $this->actionPlans[] = $object;
+
             return true;
         } elseif (count($data) > 2) {
             if (count($data) !== 6) {
                 $this->progress->addMessage('', implode(' - ', $data), 'attribute_actionplan_invalid');
+
                 return false;
             }
 
@@ -328,7 +337,7 @@ class QuestionWriter implements WriterInterface, ProgressAwareInterface
                 $this->manager->persist($object);
             }
 
-            $object->setVisible((bool)$data[2]);
+            $object->setVisible((bool) $data[2]);
             $object->setDescription(isset($data[3]) ? $data[3] : null);
             $object->setLink(isset($data[4]) ? $data[4] : null);
             $object->setLinkDescription(isset($data[5]) ? $data[5] : null);
@@ -354,11 +363,12 @@ class QuestionWriter implements WriterInterface, ProgressAwareInterface
     }
 
     /**
-     * Handle attribute chapter and weight
+     * Handle attribute chapter and weight.
      *
      * @param Attribute $attribute
      * @param $code
      * @param $weight
+     *
      * @return bool
      */
     protected function handleChapter(Attribute $attribute, $code, $weight)
@@ -366,12 +376,13 @@ class QuestionWriter implements WriterInterface, ProgressAwareInterface
         $chapter = $this->getChapter($code);
         if (null === $chapter) {
             $this->progress->addMessage('', $code ?: '', 'chapter_notfound');
+
             return false;
         } else {
             $weightObject = $this->manager->getRepository('HopitalNumeriqueAutodiagBundle:Autodiag\Attribute\Weight')
                 ->findOneBy([
                     'attribute' => $attribute,
-                    'container' => $chapter
+                    'container' => $chapter,
                 ]);
 
             if (null == $weightObject) {
@@ -382,14 +393,16 @@ class QuestionWriter implements WriterInterface, ProgressAwareInterface
             $weightObject->setWeight($this->parseFloatValue($weight));
             $this->weights[] = $weightObject;
         }
+
         return true;
     }
 
     /**
-     * Handle attribute categories and their weight
+     * Handle attribute categories and their weight.
      *
      * @param Attribute $attribute
      * @param $data
+     *
      * @return bool
      */
     protected function handleCategories(Attribute $attribute, $data)
@@ -403,6 +416,7 @@ class QuestionWriter implements WriterInterface, ProgressAwareInterface
                     $data ?: '',
                     'attribute_category'
                 );
+
                 return false;
             }
 
@@ -416,7 +430,7 @@ class QuestionWriter implements WriterInterface, ProgressAwareInterface
             $weightObject = $this->manager->getRepository('HopitalNumeriqueAutodiagBundle:Autodiag\Attribute\Weight')
                 ->findOneBy([
                     'attribute' => $attribute,
-                    'container' => $category
+                    'container' => $category,
                 ]);
 
             if (null == $weightObject) {
@@ -430,18 +444,19 @@ class QuestionWriter implements WriterInterface, ProgressAwareInterface
     }
 
     /**
-     * Get existing chapter
+     * Get existing chapter.
      *
      * @param $code
+     *
      * @return mixed
      */
     protected function getChapter($code)
     {
-        if (!array_key_exists((string)$code, $this->chapters)) {
+        if (!array_key_exists((string) $code, $this->chapters)) {
             $chapter = $this->manager->getRepository('HopitalNumeriqueAutodiagBundle:Autodiag\Container\Chapter')
                 ->findOneBy([
                     'autodiag' => $this->autodiag,
-                    'code' => $code
+                    'code' => $code,
                 ]);
 
             $this->chapters[$code] = $chapter;
@@ -451,18 +466,19 @@ class QuestionWriter implements WriterInterface, ProgressAwareInterface
     }
 
     /**
-     * Get existing category
+     * Get existing category.
      *
      * @param $code
+     *
      * @return mixed
      */
     protected function getCategory($code)
     {
-        if (!array_key_exists((string)$code, $this->categories)) {
+        if (!array_key_exists((string) $code, $this->categories)) {
             $category = $this->manager->getRepository('HopitalNumeriqueAutodiagBundle:Autodiag\Container\Category')
                 ->findOneBy([
                     'autodiag' => $this->autodiag,
-                    'code' => $code
+                    'code' => $code,
                 ]);
 
             if (null === $category) {
@@ -482,6 +498,7 @@ class QuestionWriter implements WriterInterface, ProgressAwareInterface
                         'violation',
                         'category'
                     );
+
                     return false;
                 }
 
@@ -500,9 +517,10 @@ class QuestionWriter implements WriterInterface, ProgressAwareInterface
     }
 
     /**
-     * Validate item line
+     * Validate item line.
      *
      * @param $item
+     *
      * @return bool
      */
     protected function validateRow($item)
@@ -513,16 +531,19 @@ class QuestionWriter implements WriterInterface, ProgressAwareInterface
                 array_intersect_key(array_keys($item), AttributeColumnsDefinition::getColumns())
             ) === count(AttributeColumnsDefinition::getColumns());
     }
+
     protected function validate($item)
     {
         // Valide le type
         if (isset($item[AttributeColumnsDefinition::TYPE]) && !in_array($item[AttributeColumnsDefinition::TYPE], $this->attributeTypesAvailable)) {
             $this->progress->addMessage('', $item, 'attribute_type');
+
             return false;
         }
 
-        if (isset($item[AttributeColumnsDefinition::COLORED]) && !in_array($item[AttributeColumnsDefinition::COLORED], ["1", "-1", "0"])) {
+        if (isset($item[AttributeColumnsDefinition::COLORED]) && !in_array($item[AttributeColumnsDefinition::COLORED], ['1', '-1', '0'])) {
             $this->progress->addMessage('', $item[AttributeColumnsDefinition::COLORED] ?: '', 'attribute_colored');
+
             return false;
         }
 
@@ -530,9 +551,10 @@ class QuestionWriter implements WriterInterface, ProgressAwareInterface
     }
 
     /**
-     * Parse CSV float value
+     * Parse CSV float value.
      *
      * @param $value
+     *
      * @return float
      */
     protected function parseFloatValue($value)

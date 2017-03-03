@@ -8,16 +8,15 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**
- * ShareType
+ * ShareType.
  *
- * @package HopitalNumerique\AutodiagBundle\Form\Type
  * @author Emmanuel Da Fonseca <edafonseca@nodevo.com>
  */
 class ShareType extends AbstractType
 {
     /**
      * @param FormBuilderInterface $builder
-     * @param array $options
+     * @param array                $options
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
@@ -31,8 +30,8 @@ class ShareType extends AbstractType
      */
     public function configureOptions(OptionsResolver $resolver)
     {
-        $resolver->setDefaults(array(
-            'label_format' => 'ad.share.%name%'
-        ));
+        $resolver->setDefaults([
+            'label_format' => 'ad.share.%name%',
+        ]);
     }
 }

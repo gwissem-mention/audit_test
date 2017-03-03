@@ -1,4 +1,5 @@
 <?php
+
 namespace HopitalNumerique\RechercheBundle\DependencyInjection\Referencement\Exalead;
 
 use HopitalNumerique\CoreBundle\DependencyInjection\Entity;
@@ -16,7 +17,6 @@ class Search
      */
     private $referencementReader;
 
-
     /**
      * @var \HopitalNumerique\DomaineBundle\Entity\Domaine Domaine
      */
@@ -26,7 +26,6 @@ class Search
      * @var URL du XML d'Exalead
      */
     private $exaleadUrl;
-
 
     /**
      * @var array Résultats
@@ -48,7 +47,6 @@ class Search
      */
     private $contenusProperties = null;
 
-
     /**
      * Constructeur.
      */
@@ -63,7 +61,6 @@ class Search
         $this->foundWords = [];
     }
 
-
     /**
      * Effectue la recherche.
      *
@@ -71,17 +68,17 @@ class Search
      */
     public function setText($searchedText)
     {
-        $xmlUrl = $this->exaleadUrl.urlencode($searchedText.' AND id_domaine').'='.$this->domaine->getId();
+        $xmlUrl = $this->exaleadUrl . urlencode($searchedText . ' AND id_domaine') . '=' . $this->domaine->getId();
         $exaleadXml = simplexml_load_file($xmlUrl);
 
         if (false !== $exaleadXml) {
             if (null !== $exaleadXml->hits->Hit) {
                 foreach ($exaleadXml->hits->Hit as $hit) {
-                    $hitUrl = (string)$hit->attributes()->url;
+                    $hitUrl = (string) $hit->attributes()->url;
                     $hitUrlExplode = explode('=', $hitUrl);
                     $properties = [
                         'entityId' => intval(substr($hitUrlExplode[1], 0, -1)),
-                        'score' => intval($hit->attributes()->score)
+                        'score' => intval($hit->attributes()->score),
                     ];
 
                     // YRO 10/02/2015 : les occurrences réellement trouvées dans les contenus
@@ -167,7 +164,6 @@ class Search
         return $entityIds;
     }
 
-
     /**
      * Retourne les entités objets.
      *
@@ -249,7 +245,7 @@ class Search
     {
         $entitiesPropertiesByGroup = [
             'points-durs' => [],
-            'productions' => []
+            'productions' => [],
         ];
 
         foreach ($this->getObjetsProperties() as $objetProperties) {
@@ -267,8 +263,9 @@ class Search
     /**
      * Retourne les propriétés de l'entité.
      *
-     * @param integer $entityType Type
-     * @param integer $entityId   Id
+     * @param int $entityType Type
+     * @param int $entityId   Id
+     *
      * @return array|null Propriétés
      */
     /*private function getEntityPropertiesByTypeAndId($entityType, $entityId)
@@ -299,6 +296,7 @@ class Search
      * Retourne les propriétés fusionnées avec celles d'Exalead.
      *
      * @param array $entityProperties Entity properties
+     *
      * @return array Propriétés
      */
     /*public function mergeEntityProperties($entityProperties)
@@ -310,7 +308,7 @@ class Search
 
         return $exaleadEntityProperties;
     }*/
-    
+
     public function mergeEntitiesPropertiesByGroup($exaleadEntitiesPropertiesByGroup, $dbEntitiesPropertiesByGroup, $deleteIfNotReferenced = false)
     {
         foreach ($exaleadEntitiesPropertiesByGroup as $group => $exaleadEntitiesProperties) {
@@ -335,6 +333,7 @@ class Search
             }
             $exaleadEntitiesPropertiesByGroup[$group] = array_values($exaleadEntitiesPropertiesByGroup[$group]);
         }
+
         return $exaleadEntitiesPropertiesByGroup;
     }
 

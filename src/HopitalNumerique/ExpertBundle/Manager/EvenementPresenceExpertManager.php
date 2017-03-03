@@ -3,7 +3,6 @@
 namespace HopitalNumerique\ExpertBundle\Manager;
 
 use Nodevo\ToolsBundle\Manager\Manager as BaseManager;
-
 use HopitalNumerique\ExpertBundle\Entity\EvenementExpert;
 
 /**
@@ -14,7 +13,7 @@ class EvenementPresenceExpertManager extends BaseManager
     protected $class = 'HopitalNumerique\ExpertBundle\Entity\EvenementPresenceExpert';
 
     /**
-     * [majExperts description]
+     * [majExperts description].
      *
      * @param EvenementExpert $evenementExpert [description]
      *
@@ -23,14 +22,12 @@ class EvenementPresenceExpertManager extends BaseManager
     public function majExperts(EvenementExpert $evenementExpert)
     {
         //Récupération des experts de l'activité
-        $experts    = $evenementExpert->getActivite()->getExpertConcernes();
-        $presences  = array();
-        $expertsIds = array();
+        $experts = $evenementExpert->getActivite()->getExpertConcernes();
+        $presences = [];
+        $expertsIds = [];
 
-        foreach ($experts as $expert)
-        {
-            if(!in_array($expert->getId(), $evenementExpert->getExpertsIds()))
-            {
+        foreach ($experts as $expert) {
+            if (!in_array($expert->getId(), $evenementExpert->getExpertsIds())) {
                 $presence = $this->createEmpty();
                 $presence->setExpertConcerne($expert);
                 $presence->setEvenement($evenementExpert);
@@ -41,13 +38,10 @@ class EvenementPresenceExpertManager extends BaseManager
             $expertsIds[] = $expert->getId();
         }
 
-        if(!is_null($evenementExpert->getExperts()))
-        {   
+        if (!is_null($evenementExpert->getExperts())) {
             //Retire les experts qui ne sont plus dans l'activité
-            foreach ($evenementExpert->getExperts() as $expertEvenement) 
-            {
-                if(!in_array($expertEvenement->getExpertConcerne()->getId(), $expertsIds))
-                {
+            foreach ($evenementExpert->getExperts() as $expertEvenement) {
+                if (!in_array($expertEvenement->getExpertConcerne()->getId(), $expertsIds)) {
                     $this->delete($expertEvenement);
                 }
             }
@@ -55,5 +49,4 @@ class EvenementPresenceExpertManager extends BaseManager
 
         $this->save($presences);
     }
-
 }

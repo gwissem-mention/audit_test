@@ -8,21 +8,18 @@ use Symfony\Component\Security\Core\User\UserInterface;
 use HopitalNumerique\ForumBundle\Entity\Topic;
 
 /**
- *
  * @category CCDNForum
- * @package  ForumBundle
  */
 class SubscriptionRepository extends CCDNSubscriptionRepository
 {
     /**
+     * @param int $topicId
      *
-     * @access public
-     * @param  int $topicId
      * @return int
      */
     public function countSubscriptionsForTopicById($topicId)
     {
-        if (null == $topicId || ! is_numeric($topicId) || $topicId == 0) {
+        if (null == $topicId || !is_numeric($topicId) || $topicId == 0) {
             throw new \Exception('Topic id "' . $topicId . '" is invalid!');
         }
 
@@ -35,19 +32,18 @@ class SubscriptionRepository extends CCDNSubscriptionRepository
                 )
             );
 
-        return $this->gateway->countSubscriptions($qb, array(':topicId' => $topicId));
+        return $this->gateway->countSubscriptions($qb, [':topicId' => $topicId]);
     }
-    
+
     /**
+     * @param \HopitalNumerique\ForumBundle\Entity\Board          $board
+     * @param \Symfony\Component\Security\Core\User\UserInterface $userId
      *
-     * @access public
-     * @param  \HopitalNumerique\ForumBundle\Entity\Board          $board
-     * @param  \Symfony\Component\Security\Core\User\UserInterface $userId
      * @return \CCDNForum\ForumBundle\Entity\Subscription
      */
     public function findOneSubscriptionForBoardAndUser(Board $board, UserInterface $user)
     {
-        $qb = $this->createSelectQuery(array('s', 'board', 'user'));
+        $qb = $this->createSelectQuery(['s', 'board', 'user']);
 
         $qb
             ->leftJoin('s.board', 'board')
@@ -60,9 +56,9 @@ class SubscriptionRepository extends CCDNSubscriptionRepository
             )
         ;
 
-        return $this->gateway->findSubscription($qb, array(':boardId' => $board->getId(), ':userId' => $user->getId()));
+        return $this->gateway->findSubscription($qb, [':boardId' => $board->getId(), ':userId' => $user->getId()]);
     }
-    
+
     /**
      * Retourne les Subscription à envoyer dès que l'on répond à un topic.
      *
@@ -70,13 +66,13 @@ class SubscriptionRepository extends CCDNSubscriptionRepository
      */
     public function findAllSubscriptionsToSend(Topic $topic)
     {
-        $params = array(
+        $params = [
             ':topicId' => $topic->getId(),
             ':boardId' => $topic->getBoard()->getId(),
-            ':isSubscribed' => true
-        );
-        
-        $qb = $this->createSelectQuery(array('s', 'b2', 't', 'b', 'c', 'f', 'fp', 'fp_author', 'lp', 'lp_author', 't_closedBy', 't_deletedBy', 't_stickiedBy'));
+            ':isSubscribed' => true,
+        ];
+
+        $qb = $this->createSelectQuery(['s', 'b2', 't', 'b', 'c', 'f', 'fp', 'fp_author', 'lp', 'lp_author', 't_closedBy', 't_deletedBy', 't_stickiedBy']);
 
         $qb
             // Rechercher depuis le Topic
@@ -94,7 +90,7 @@ class SubscriptionRepository extends CCDNSubscriptionRepository
 
             // Rechercher depuis le Board
             ->leftJoin('s.board', 'b2')
-            
+
             ->where(
                 $qb->expr()->orX(
                     $qb->expr()->eq('s.board', ':boardId'),
@@ -108,7 +104,7 @@ class SubscriptionRepository extends CCDNSubscriptionRepository
             ->groupBy('s.ownedBy')
             ->setParameters($params)
         ;
-        
+
         return $this->gateway->findSubscriptions($qb, $params);
     }
 }

@@ -1,4 +1,5 @@
 <?php
+
 namespace HopitalNumerique\ReferenceBundle\Controller;
 
 use HopitalNumerique\ReferenceBundle\Entity\Reference;
@@ -19,7 +20,7 @@ class GlossaireController extends Controller
 
         return $this->render('HopitalNumeriqueReferenceBundle:Glossaire:list.html.twig', [
             'glossaire' => $glossaire,
-            'complet' => false
+            'complet' => false,
         ]);
     }
 
@@ -32,13 +33,13 @@ class GlossaireController extends Controller
 
         return $this->render('HopitalNumeriqueReferenceBundle:Glossaire:list.html.twig', [
             'glossaire' => $glossaire,
-            'complet' => true
+            'complet' => true,
         ]);
     }
 
     /**
      * Migre l'ancien glossaire.
-     * /admin/glossaire/migre/troispetitschapeaudepaillaisson
+     * /admin/glossaire/migre/troispetitschapeaudepaillaisson.
      */
     public function migreAction($token)
     {
@@ -72,7 +73,7 @@ class GlossaireController extends Controller
     public function popinAction(Reference $glossaireReference)
     {
         return $this->render('HopitalNumeriqueReferenceBundle:Glossaire:popin.html.twig', [
-            'glossaireReference' => $glossaireReference
+            'glossaireReference' => $glossaireReference,
         ]);
     }
 }

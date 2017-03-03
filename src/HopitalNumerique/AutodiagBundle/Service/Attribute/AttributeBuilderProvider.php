@@ -1,11 +1,11 @@
 <?php
+
 namespace HopitalNumerique\AutodiagBundle\Service\Attribute;
 
 /**
  * AttributeBuilder provider
- * This class contains all available attribute builders, by the CompilerPass
+ * This class contains all available attribute builders, by the CompilerPass.
  *
- * @package HopitalNumerique\AutodiagBundle\Service\Attribute
  * @author Emmanuel Da Fonseca <edafonseca@nodevo.com>
  */
 class AttributeBuilderProvider
@@ -14,7 +14,7 @@ class AttributeBuilderProvider
 
     public function __construct()
     {
-        $this->attributeBuilders = array();
+        $this->attributeBuilders = [];
     }
 
     public function addBuilder(AttributeBuilderInterface $attributeBuilder)
@@ -23,7 +23,7 @@ class AttributeBuilderProvider
     }
 
     /**
-     * Get builder by type
+     * Get builder by type.
      *
      * @param $type
      *

@@ -1,4 +1,5 @@
 <?php
+
 namespace HopitalNumerique\AutodiagBundle\Twig;
 
 use HopitalNumerique\AutodiagBundle\Model\Result\ComparedScore;
@@ -8,25 +9,26 @@ class RestitutionExtension extends \Twig_Extension
 {
     public function getFunctions()
     {
-        return array(
-            new \Twig_SimpleFunction('result_radar_data', array($this, 'getRadarHighChartData')),
-            new \Twig_SimpleFunction('result_histogramme_data', array($this, 'getHistogrammeHighChartData')),
-        );
+        return [
+            new \Twig_SimpleFunction('result_radar_data', [$this, 'getRadarHighChartData']),
+            new \Twig_SimpleFunction('result_histogramme_data', [$this, 'getHistogrammeHighChartData']),
+        ];
     }
 
     /**
      * @param $result
+     *
      * @return string
      */
     public function getRadarHighChartData($result)
     {
         $themeButton = new \stdClass();
-        $themeButton->class = "exporting-button";
+        $themeButton->class = 'exporting-button';
 
         $data = [
             'chart' => [
                 'polar' => true,
-                'type' => 'line'
+                'type' => 'line',
             ],
             'title' => [
                 'text' => false,
@@ -42,7 +44,7 @@ class RestitutionExtension extends \Twig_Extension
             'yAxis' => [
                 'gridLineInterpolation' => 'polygon',
                 'lineWidth' => 0,
-                'min' =>  0,
+                'min' => 0,
             ],
             'tooltip' => [
                 'shared' => true,
@@ -64,12 +66,12 @@ class RestitutionExtension extends \Twig_Extension
                 'score' => [
                     'name' => 'Score',
                     'data' => [],
-                ]
-            ]
+                ],
+            ],
         ];
 
         foreach ($result['items'] as $item) {
-            /** @var Item $item */
+            /* @var Item $item */
             $data['xAxis']['categories'][] = $item->getLabel();
 
             $data['series']['score']['name'] = $item->getScore()->getLabel();
@@ -109,16 +111,17 @@ class RestitutionExtension extends \Twig_Extension
 
     /**
      * @param $result
+     *
      * @return string
      */
     public function getHistogrammeHighChartData($result)
     {
         $themeButton = new \stdClass();
-        $themeButton->class = "exporting-button";
+        $themeButton->class = 'exporting-button';
 
         $data = [
             'chart' => [
-                'type' => 'bar'
+                'type' => 'bar',
             ],
             'title' => [
                 'text' => false,
@@ -126,8 +129,8 @@ class RestitutionExtension extends \Twig_Extension
             'xAxis' => [
                 'categories' => [],
                 'title' => [
-                    'text' => null
-                ]
+                    'text' => null,
+                ],
             ],
             'yAxis' => [
                 'min' => 0,
@@ -137,7 +140,7 @@ class RestitutionExtension extends \Twig_Extension
                 ],
                 'labels' => [
                     'overflow' => 'justify',
-                ]
+                ],
             ],
             'credits' => [
                 'enabled' => false,
@@ -146,7 +149,7 @@ class RestitutionExtension extends \Twig_Extension
                 'score' => [
                     'name' => 'Score',
                     'data' => [],
-                ]
+                ],
             ],
             'exporting' => [
                 'buttons' => [
@@ -163,7 +166,7 @@ class RestitutionExtension extends \Twig_Extension
         ];
 
         foreach ($result['items'] as $item) {
-            /** @var Item $item */
+            /* @var Item $item */
             $data['xAxis']['categories'][] = $item->getLabel();
 
             $data['series']['score']['name'] = $item->getScore()->getLabel();

@@ -1,8 +1,8 @@
 <?php
 
 namespace HopitalNumerique\InterventionBundle\Entity;
+
 use Doctrine\ORM\Mapping as ORM;
-use HopitalNumerique\InterventionBundle\Entity\InterventionRegroupementType;
 
 /**
  * Entité d'un type de regroupement d'intervention.
@@ -13,16 +13,16 @@ use HopitalNumerique\InterventionBundle\Entity\InterventionRegroupementType;
 class InterventionRegroupementType
 {
     /**
-     * @var integer ID du type de regroupement d'intervention Objet similaire
+     * @var int ID du type de regroupement d'intervention Objet similaire
      */
     private static $INTERVENTION_REGROUPEMENT_TYPE_OBJET_ID = 1;
     /**
-     * @var integer ID du type de regroupement d'intervention Ambassadeur
+     * @var int ID du type de regroupement d'intervention Ambassadeur
      */
     private static $INTERVENTION_REGROUPEMENT_TYPE_AMBASSADEUR_ID = 2;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(type="smallint", name="intervregtyp_id", nullable=false, options={"unsigned":true})
      * @ORM\Id
@@ -38,9 +38,9 @@ class InterventionRegroupementType
     private $libelle;
 
     /**
-     * Get id
+     * Get id.
      *
-     * @return string 
+     * @return string
      */
     public function getId()
     {
@@ -48,9 +48,10 @@ class InterventionRegroupementType
     }
 
     /**
-     * Set libelle
+     * Set libelle.
      *
      * @param string $libelle
+     *
      * @return InterventionRegroupementType
      */
     public function setLibelle($libelle)
@@ -61,29 +62,29 @@ class InterventionRegroupementType
     }
 
     /**
-     * Get libelle
+     * Get libelle.
      *
-     * @return string 
+     * @return string
      */
     public function getLibelle()
     {
         return $this->libelle;
     }
 
-    
     /**
      * Retourne l'ID du type de regroupement d'intervention Objet similaire.
      *
-     * @return integer ID du type de regroupement d'intervention Objet similaire
+     * @return int ID du type de regroupement d'intervention Objet similaire
      */
     public static function getInterventionRegroupementTypeObjetId()
     {
         return self::$INTERVENTION_REGROUPEMENT_TYPE_OBJET_ID;
     }
+
     /**
      * Retourne l'ID du type de regroupement d'intervention Ambassadeur.
      *
-     * @return integer ID du type de regroupement d'intervention Ambassadeur
+     * @return int ID du type de regroupement d'intervention Ambassadeur
      */
     public static function getInterventionRegroupementTypeAmbassadeurId()
     {

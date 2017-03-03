@@ -10,48 +10,48 @@ class FichierModifiableType extends AbstractType
 {
     /**
      * @param FormBuilderInterface $builder
-     * @param array $options
+     * @param array                $options
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
 
-            ->add('referentAnap', 'text', array(
+            ->add('referentAnap', 'text', [
                 'max_length' => 255,
-                'required'   => false, 
-                'label'      => 'Réferent Anap',
-                'attr'       => array('class' => 'validate[minsize[1],maxsize[255]]' )
-            ))
+                'required' => false,
+                'label' => 'Réferent Anap',
+                'attr' => ['class' => 'validate[minsize[1],maxsize[255]]'],
+            ])
 
-            ->add('sourceDocument', 'text', array(
+            ->add('sourceDocument', 'text', [
                 'max_length' => 255,
-                'required'   => false, 
-                'label'      => 'Source du document',
-                'attr'       => array('class' => 'validate[minsize[1],maxsize[255]]' )
-            ))
+                'required' => false,
+                'label' => 'Source du document',
+                'attr' => ['class' => 'validate[minsize[1],maxsize[255]]'],
+            ])
 
-            ->add('commentaires', 'textarea', array(
-                'required'   => false, 
-                'label'      => 'Commentaire',
-                'attr'       => array('rows' => 3)
-            ))
+            ->add('commentaires', 'textarea', [
+                'required' => false,
+                'label' => 'Commentaire',
+                'attr' => ['rows' => 3],
+            ])
 
-            ->add('fileEdit', 'file', array(
-                'required' => false, 
-                'label'    => 'Fichier Editable'
-            ))
+            ->add('fileEdit', 'file', [
+                'required' => false,
+                'label' => 'Fichier Editable',
+            ])
             ->add('pathEdit', 'hidden')
         ;
     }
-    
+
     /**
      * @param OptionsResolverInterface $resolver
      */
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
-        $resolver->setDefaults(array(
-            'data_class' => 'HopitalNumerique\ObjetBundle\Entity\FichierModifiable'
-        ));
+        $resolver->setDefaults([
+            'data_class' => 'HopitalNumerique\ObjetBundle\Entity\FichierModifiable',
+        ]);
     }
 
     /**

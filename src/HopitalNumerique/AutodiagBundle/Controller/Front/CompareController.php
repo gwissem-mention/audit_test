@@ -29,7 +29,7 @@ class CompareController extends Controller
             $this->addFlash('danger', $this->get('translator')->trans('ad.synthesis.restitution.forbidden'));
 
             return $this->redirectToRoute('hopitalnumerique_autodiag_entry_add', [
-                'autodiag' => $autodiag->getId()
+                'autodiag' => $autodiag->getId(),
             ]);
         }
 
@@ -46,7 +46,6 @@ class CompareController extends Controller
                 ['Content-Type' => 'application/pdf']
             );
         }
-
 
         return $this->render('HopitalNumeriqueAutodiagBundle:Compare:index.html.twig', [
             'compare' => $compare,
@@ -67,7 +66,6 @@ class CompareController extends Controller
 
         $compareForm->handleRequest($request);
         if ($compareForm->isSubmitted() && $compareForm->isValid()) {
-
             $compare = $this->get('autodiag.compare.builder')->build(
                 $this->getUser(),
                 $compareCommand->synthesis,
@@ -82,6 +80,7 @@ class CompareController extends Controller
             ]);
 
             $response->headers->set('REDIRECT', $path);
+
             return $response;
         }
 

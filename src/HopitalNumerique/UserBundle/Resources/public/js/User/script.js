@@ -48,9 +48,9 @@ $(document).ready(function() {
         chargementEtablissementRattachement();
     });
 
-    // --- Type d'établissement
+    // --- Type de structure
 
-    //Ajout de la fonction de chargement des entreprises sur le on change des type d'établissement
+    //Ajout de la fonction de chargement des entreprises sur le on change des types de structure
     $('#nodevo_user_user_statutEtablissementSante').on('change', function()
     {
     	chargementEtablissementRattachement();

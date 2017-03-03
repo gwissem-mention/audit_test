@@ -1,4 +1,5 @@
 <?php
+
 namespace HopitalNumerique\RechercheBundle\Form\Type;
 
 use Symfony\Component\Form\AbstractType;
@@ -16,7 +17,6 @@ class RequeteType extends AbstractType
      */
     private $router;
 
-
     /**
      * Constructeur.
      */
@@ -24,7 +24,6 @@ class RequeteType extends AbstractType
     {
         $this->router = $router;
     }
-
 
     /**
      * {@inheritdoc}
@@ -36,8 +35,8 @@ class RequeteType extends AbstractType
             ->add('nom', null, [
                 'attr' => [
                     'maxlength' => 128,
-                    'data-validation-engine' => 'validate[required]'
-                ]
+                    'data-validation-engine' => 'validate[required]',
+                ],
             ])
         ;
     }
@@ -48,7 +47,7 @@ class RequeteType extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
-            'data_class' => 'HopitalNumerique\RechercheBundle\Entity\Requete'
+            'data_class' => 'HopitalNumerique\RechercheBundle\Entity\Requete',
         ]);
     }
 

@@ -10,7 +10,7 @@ use HopitalNumerique\AutodiagBundle\Entity\Autodiag\Reference;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
- * Item
+ * Item.
  *
  * @ORM\Table(name="ad_restitution_item")
  * @ORM\Entity
@@ -18,7 +18,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 class Item
 {
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
@@ -97,9 +97,9 @@ class Item
     }
 
     /**
-     * Get id
+     * Get id.
      *
-     * @return integer
+     * @return int
      */
     public function getId()
     {
@@ -173,7 +173,7 @@ class Item
     {
         $containers = (array) $this->containers->getValues();
 
-        usort($containers, function (Container $a, Container$b) {
+        usort($containers, function (Container $a, Container $b) {
             return $a->getOrder() > $b->getOrder();
         });
 
@@ -182,7 +182,9 @@ class Item
 
     /**
      * @param Container $container
+     *
      * @internal param Collection $containers
+     *
      * @return $this
      */
     public function addContainer(Container $container)
@@ -194,6 +196,7 @@ class Item
 
     /**
      * @param Container $container
+     *
      * @return $this
      */
     public function removeContainer(Container $container)
@@ -213,6 +216,7 @@ class Item
 
     /**
      * @param string $priority
+     *
      * @return $this
      */
     public function setPriority($priority)
@@ -232,6 +236,7 @@ class Item
 
     /**
      * @param Category $category
+     *
      * @return $this
      */
     public function setCategory(Category $category)
@@ -251,6 +256,7 @@ class Item
 
     /**
      * @param Reference $reference
+     *
      * @return $this
      */
     public function addReference(Reference $reference)
@@ -262,6 +268,7 @@ class Item
 
     /**
      * @param Reference $reference
+     *
      * @return $this
      */
     public function removeReference(Reference $reference)

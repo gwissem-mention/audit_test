@@ -23,26 +23,19 @@ use Symfony\Component\Validator\Constraints\True;
 use Symfony\Component\Validator\Constraints\NotBlank;
 
 /**
- *
  * @category CCDNForum
- * @package  ForumBundle
  *
  * @author   Gaëtan MELCHILSEN
  * @license  Nodevo
- *
  */
 class BoardDeleteFormType extends AbstractType
 {
     /**
-     *
-     * @access protected
-     * @var string $boardClass
+     * @var string
      */
     protected $boardClass;
 
     /**
-     *
-     * @access public
      * @param string $boardClass
      */
     public function __construct($boardClass)
@@ -51,8 +44,6 @@ class BoardDeleteFormType extends AbstractType
     }
 
     /**
-     *
-     * @access public
      * @param FormBuilderInterface $builder
      * @param array                $options
      */
@@ -64,66 +55,62 @@ class BoardDeleteFormType extends AbstractType
             $confirm = $form->get('confirm_delete')->getData();
 
             if (empty($confirm) || $confirm == false) {
-                $form['confirm_delete']->addError(new FormError("Vous devez cocher ces cases."));
+                $form['confirm_delete']->addError(new FormError('Vous devez cocher ces cases.'));
             }
         };
 
         $builder
             ->add('confirm_delete', 'checkbox',
-                array(
-                    'mapped'             => false,
-                    'required'           => true,
-                    'label'              => 'board.confirm-delete-label',
+                [
+                    'mapped' => false,
+                    'required' => true,
+                    'label' => 'board.confirm-delete-label',
                     'translation_domain' => 'CCDNForumForumBundle',
-                    'attr'               => array(
-                        'class' => 'validate[required]'
-                    ),
-                    'constraints'        => array(
+                    'attr' => [
+                        'class' => 'validate[required]',
+                    ],
+                    'constraints' => [
                         new True(),
-                        new NotBlank()
-                    ),
-                )
+                        new NotBlank(),
+                    ],
+                ]
             )
             ->add('confirm_subordinates', 'checkbox',
-                array(
-                    'mapped'             => false,
-                    'required'           => true,
-                    'label'              => 'board.confirm-delete-subordinates-label',
+                [
+                    'mapped' => false,
+                    'required' => true,
+                    'label' => 'board.confirm-delete-subordinates-label',
                     'translation_domain' => 'CCDNForumForumBundle',
-                    'attr'               => array(
-                        'class' => 'validate[required]'
-                    ),
-                    'constraints'        => array(
+                    'attr' => [
+                        'class' => 'validate[required]',
+                    ],
+                    'constraints' => [
                         new True(),
-                        new NotBlank()
-                    ),
-                )
+                        new NotBlank(),
+                    ],
+                ]
             )
             ->addEventListener(FormEvents::POST_BIND, $trueValidator)
         ;
     }
 
     /**
-     *
-     * @access public
      * @param \Symfony\Component\OptionsResolver\OptionsResolverInterface $resolver
      */
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
-        $resolver->setDefaults(array(
-            'data_class'          => $this->boardClass,
-            'csrf_protection'     => true,
-            'csrf_field_name'     => '_token',
+        $resolver->setDefaults([
+            'data_class' => $this->boardClass,
+            'csrf_protection' => true,
+            'csrf_field_name' => '_token',
             // a unique key to help generate the secret token
-            'intention'           => 'forum_board_delete_item',
-            'validation_groups'   => array('forum_board_delete'),
-            'cascade_validation'  => true,
-        ));
+            'intention' => 'forum_board_delete_item',
+            'validation_groups' => ['forum_board_delete'],
+            'cascade_validation' => true,
+        ]);
     }
 
     /**
-     *
-     * @access public
      * @return string
      */
     public function getName()

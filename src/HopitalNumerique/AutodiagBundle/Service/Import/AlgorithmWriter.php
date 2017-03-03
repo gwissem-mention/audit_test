@@ -1,24 +1,21 @@
 <?php
+
 namespace HopitalNumerique\AutodiagBundle\Service\Import;
 
-use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\EntityManager;
 use HopitalNumerique\AutodiagBundle\Entity\Autodiag;
-use HopitalNumerique\AutodiagBundle\Entity\Autodiag\Attribute;
 use HopitalNumerique\AutodiagBundle\Entity\Restitution;
-use HopitalNumerique\AutodiagBundle\Service\Attribute\AttributeBuilderProvider;
 use Nodevo\Component\Import\Progress\ProgressAwareInterface;
 use Nodevo\Component\Import\Progress\ProgressAwareTrait;
 use Nodevo\Component\Import\Writer\WriterInterface;
-use Symfony\Component\PropertyAccess\PropertyAccessor;
 
 class AlgorithmWriter implements WriterInterface, ProgressAwareInterface
 {
     use ProgressAwareTrait;
 
-    const COLUMN_ALGORITHM = "algorithme";
-    const COLUMN_SCORE_COLOR = "couleur_mon_score";
-    const COLUMN_SCORE_LABEL = "libelle_mon_score";
+    const COLUMN_ALGORITHM = 'algorithme';
+    const COLUMN_SCORE_COLOR = 'couleur_mon_score';
+    const COLUMN_SCORE_LABEL = 'libelle_mon_score';
 
     /** @var EntityManager */
     protected $manager;
@@ -45,7 +42,6 @@ class AlgorithmWriter implements WriterInterface, ProgressAwareInterface
     public function write($item)
     {
         if ($this->validate($item)) {
-
             $this->autodiag->setAlgorithm($item[self::COLUMN_ALGORITHM]);
 
             $restitution = $this->autodiag->getRestitution();
@@ -62,7 +58,7 @@ class AlgorithmWriter implements WriterInterface, ProgressAwareInterface
                         $model = $this->manager->getRepository('HopitalNumeriqueAutodiagBundle:Autodiag\Reference')
                             ->findOneBy([
                                 'autodiag' => $this->autodiag,
-                                'number' => $referenceNumber
+                                'number' => $referenceNumber,
                             ]);
 
                         if (null === $model) {
@@ -79,7 +75,7 @@ class AlgorithmWriter implements WriterInterface, ProgressAwareInterface
                     }
                 }
                 $currentColumn += 3;
-                $referenceNumber++;
+                ++$referenceNumber;
             }
 
             foreach ($this->autodiag->getReferences() as $reference) {
@@ -105,9 +101,10 @@ class AlgorithmWriter implements WriterInterface, ProgressAwareInterface
     }
 
     /**
-     * Validate item line
+     * Validate item line.
      *
      * @param $item
+     *
      * @return bool
      */
     protected function validate($item)
@@ -115,7 +112,7 @@ class AlgorithmWriter implements WriterInterface, ProgressAwareInterface
         return
             count($item) >= 3
             && in_array($item[self::COLUMN_ALGORITHM], [
-                'moyenne'
+                'moyenne',
             ])
         ;
     }
@@ -139,7 +136,6 @@ class AlgorithmWriter implements WriterInterface, ProgressAwareInterface
 
         $value = $reference[1];
         if (!in_array($value, $allowed)) {
-
             preg_match('/[0-9]*[,\.]?[0-9]*/', $value, $matches);
             if (empty($matches)) {
                 return false;

@@ -1,11 +1,11 @@
 <?php
+
 namespace HopitalNumerique\AutodiagBundle\Repository\Autodiag;
 
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\Query\Expr\Join;
 use HopitalNumerique\AutodiagBundle\Entity\Autodiag;
 use HopitalNumerique\AutodiagBundle\Entity\Autodiag\Attribute;
-use HopitalNumerique\AutodiagBundle\Entity\Synthesis;
 
 class AttributeRepository extends EntityRepository
 {
@@ -19,7 +19,7 @@ class AttributeRepository extends EntityRepository
             ->join('weight.attribute', 'attribute')
             ->where('attribute.id = :attribute_id')
             ->setParameters([
-                'attribute_id' => $attribute->getId()
+                'attribute_id' => $attribute->getId(),
             ]);
 
         return $qb->getQuery()->getResult();
@@ -34,7 +34,7 @@ class AttributeRepository extends EntityRepository
             ->groupBy('attribute.id')
             ->where('attribute.autodiag = :autodiag_id')
             ->setParameters([
-                'autodiag_id' => $autodiag->getId()
+                'autodiag_id' => $autodiag->getId(),
             ])
         ;
 
@@ -51,7 +51,7 @@ class AttributeRepository extends EntityRepository
             ->where('container.autodiag = :autodiag_id')
             ->groupBy('container.id')
             ->setParameters([
-                'autodiag_id' => $autodiag->getId()
+                'autodiag_id' => $autodiag->getId(),
             ]);
 
         $result = $qb->getQuery()->getArrayResult();
@@ -133,7 +133,7 @@ class AttributeRepository extends EntityRepository
             ->setParameters([
                 'autodiag_id' => $autodiag->getId(),
             ]);
-        ;
+
         return $qb->getQuery()->getArrayResult();
     }
 }

@@ -8,7 +8,7 @@ use HopitalNumerique\AutodiagBundle\Entity\Autodiag;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
- * Container
+ * Container.
  *
  * @ORM\Table(name="ad_autodiag_container")
  * @ORM\Entity(repositoryClass="HopitalNumerique\AutodiagBundle\Repository\Autodiag\ContainerRepository")
@@ -22,7 +22,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 abstract class Container
 {
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
@@ -31,7 +31,7 @@ abstract class Container
     private $id;
 
     /**
-     * Code
+     * Code.
      *
      * @var string
      *
@@ -42,7 +42,7 @@ abstract class Container
     private $code;
 
     /**
-     * Number
+     * Number.
      *
      * @var string
      *
@@ -51,7 +51,7 @@ abstract class Container
     private $number;
 
     /**
-     * Label
+     * Label.
      *
      * @var string
      *
@@ -62,7 +62,7 @@ abstract class Container
     private $label;
 
     /**
-     * Order
+     * Order.
      *
      * @var float
      *
@@ -98,10 +98,11 @@ abstract class Container
     {
         $this->id = $id;
     }
+
     /**
-     * Get id
+     * Get id.
      *
-     * @return integer
+     * @return int
      */
     public function getId()
     {
@@ -109,7 +110,7 @@ abstract class Container
     }
 
     /**
-     * Get code
+     * Get code.
      *
      * @return mixed
      */
@@ -119,19 +120,21 @@ abstract class Container
     }
 
     /**
-     * Set code
+     * Set code.
      *
      * @param mixed $code
+     *
      * @return $this
      */
     public function setCode($code)
     {
         $this->code = $code;
+
         return $this;
     }
 
     /**
-     * Get Number
+     * Get Number.
      *
      * @return string
      */
@@ -141,7 +144,7 @@ abstract class Container
     }
 
     /**
-     * Set Number
+     * Set Number.
      *
      * @param string $number
      *
@@ -155,7 +158,7 @@ abstract class Container
     }
 
     /**
-     * Get label
+     * Get label.
      *
      * @return mixed
      */
@@ -174,9 +177,10 @@ abstract class Container
     }
 
     /**
-     * Set label
+     * Set label.
      *
      * @param mixed $label
+     *
      * @return $this
      */
     public function setLabel($label)
@@ -187,7 +191,7 @@ abstract class Container
     }
 
     /**
-     * Get order
+     * Get order.
      *
      * @return int
      */
@@ -197,9 +201,10 @@ abstract class Container
     }
 
     /**
-     * Set order
+     * Set order.
      *
      * @param $order
+     *
      * @return $this
      */
     public function setOrder($order)
@@ -210,7 +215,8 @@ abstract class Container
     }
 
     /**
-     * Get parent
+     * Get parent.
+     *
      * @return Container
      */
     public function getParent()
@@ -219,9 +225,10 @@ abstract class Container
     }
 
     /**
-     * Set parent
+     * Set parent.
      *
      * @param Container $parent
+     *
      * @return $this
      */
     public function setParent(Container $parent = null)
@@ -232,7 +239,7 @@ abstract class Container
     }
 
     /**
-     * Get model
+     * Get model.
      *
      * @return Autodiag
      */
@@ -242,9 +249,10 @@ abstract class Container
     }
 
     /**
-     * Set Model
+     * Set Model.
      *
      * @param Autodiag $autodiag
+     *
      * @return $this
      */
     public function setAutodiag(Autodiag $autodiag)
@@ -291,6 +299,7 @@ abstract class Container
         foreach ($this->getChilds() as $child) {
             $ids = array_merge($ids, $child->getNestedContainerIds());
         }
+
         return $ids;
     }
 
@@ -307,6 +316,7 @@ abstract class Container
         foreach ($this->getChilds() as $child) {
             $nb += $child->getTotalNumberOfAttributes();
         }
+
         return $nb;
     }
 }

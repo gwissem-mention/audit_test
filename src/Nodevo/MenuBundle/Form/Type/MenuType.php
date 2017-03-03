@@ -7,41 +7,41 @@ use Symfony\Component\Form\FormBuilderInterface;
 
 class MenuType extends AbstractType
 {
-    private $_constraints = array();
+    private $_constraints = [];
 
     public function __construct($manager, $validator)
     {
-        $this->_constraints = $manager->getConstraints( $validator );
+        $this->_constraints = $manager->getConstraints($validator);
     }
 
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('name', 'text', array(
-                'max_length' => $this->_constraints['name']['maxlength'], 
-                'required'   => true, 
-                'label'      => 'Nom',
-                'attr'       => array('class' => $this->_constraints['name']['class'] )
-            ))
-            ->add('alias', 'text', array(
-                'max_length' => $this->_constraints['name']['maxlength'], 
-                'required'   => true, 
-                'label'      => 'Alias',
-                'attr'       => array('class' => $this->_constraints['alias']['class'] )
-            ))
-            
-            ->add('cssClass', 'text', array(
-                'max_length' => $this->_constraints['cssClass']['maxlength'], 
-                'required'   => false, 
-                'label'      => 'Classe CSS',
-                'attr'       => array('class' => $this->_constraints['cssClass']['class'] )
-            ))
-            ->add('cssId', 'text', array(
-                'max_length' => $this->_constraints['cssId']['maxlength'], 
-                'required'   => false, 
-                'label'      => 'ID CSS',
-                'attr'       => array('class' => $this->_constraints['cssId']['class'] )
-            ));
+            ->add('name', 'text', [
+                'max_length' => $this->_constraints['name']['maxlength'],
+                'required' => true,
+                'label' => 'Nom',
+                'attr' => ['class' => $this->_constraints['name']['class']],
+            ])
+            ->add('alias', 'text', [
+                'max_length' => $this->_constraints['name']['maxlength'],
+                'required' => true,
+                'label' => 'Alias',
+                'attr' => ['class' => $this->_constraints['alias']['class']],
+            ])
+
+            ->add('cssClass', 'text', [
+                'max_length' => $this->_constraints['cssClass']['maxlength'],
+                'required' => false,
+                'label' => 'Classe CSS',
+                'attr' => ['class' => $this->_constraints['cssClass']['class']],
+            ])
+            ->add('cssId', 'text', [
+                'max_length' => $this->_constraints['cssId']['maxlength'],
+                'required' => false,
+                'label' => 'ID CSS',
+                'attr' => ['class' => $this->_constraints['cssId']['class']],
+            ]);
     }
 
     public function getName()

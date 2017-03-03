@@ -18,35 +18,26 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
 /**
- *
  * @category CCDNForum
- * @package  ForumBundle
  *
  * @author   Gaëtan MELCHILSEN
  * @license  Nodevo
- *
  */
 class ForumUpdateFormType extends AbstractType
 {
     /**
-     *
-     * @access protected
-     * @var string $forumClass
+     * @var string
      */
     protected $forumClass;
 
     /**
-     *
-     * @access protected
-     * @var Object $roleHelper
+     * @var object
      */
     protected $roleHelper;
 
     /**
-     *
-     * @access public
      * @param string $forumClass
-     * @param Object $roleHelper
+     * @param object $roleHelper
      */
     public function __construct($forumClass, $roleHelper)
     {
@@ -55,8 +46,6 @@ class ForumUpdateFormType extends AbstractType
     }
 
     /**
-     *
-     * @access public
      * @param FormBuilderInterface $builder
      * @param array                $options
      */
@@ -64,49 +53,45 @@ class ForumUpdateFormType extends AbstractType
     {
         $builder
             ->add('name', 'text',
-                array(
-                    'label'              => 'forum.name-label',
+                [
+                    'label' => 'forum.name-label',
                     'translation_domain' => 'CCDNForumForumBundle',
-                    'attr'               => array(
-                        'class' => 'validate[required,minSize[3],maxSize[255]]'
-                    )
-                )
+                    'attr' => [
+                        'class' => 'validate[required,minSize[3],maxSize[255]]',
+                    ],
+                ]
             )
             ->add('readAuthorisedRoles', 'choice',
-                array(
-                    'required'           => false,
-                    'expanded'           => true,
-                    'multiple'           => true,
-                    'choices'            => $options['available_roles'],
-                    'label'              => 'forum.roles.board-view-label',
+                [
+                    'required' => false,
+                    'expanded' => true,
+                    'multiple' => true,
+                    'choices' => $options['available_roles'],
+                    'label' => 'forum.roles.board-view-label',
                     'translation_domain' => 'CCDNForumForumBundle',
-                )
+                ]
             )
         ;
     }
 
     /**
-     *
-     * @access public
      * @param \Symfony\Component\OptionsResolver\OptionsResolverInterface $resolver
      */
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
-        $resolver->setDefaults(array(
-            'data_class'          => $this->forumClass,
-            'csrf_protection'     => true,
-            'csrf_field_name'     => '_token',
+        $resolver->setDefaults([
+            'data_class' => $this->forumClass,
+            'csrf_protection' => true,
+            'csrf_field_name' => '_token',
             // a unique key to help generate the secret token
-            'intention'           => 'forum_forum_update_item',
-            'validation_groups'   => array('forum_forum_update'),
-            'cascade_validation'  => true,
-            'available_roles'     => $this->roleHelper->getRoleForFormulaire(),
-        ));
+            'intention' => 'forum_forum_update_item',
+            'validation_groups' => ['forum_forum_update'],
+            'cascade_validation' => true,
+            'available_roles' => $this->roleHelper->getRoleForFormulaire(),
+        ]);
     }
 
     /**
-     *
-     * @access public
      * @return string
      */
     public function getName()

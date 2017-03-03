@@ -1,4 +1,5 @@
 <?php
+
 namespace HopitalNumerique\ReferenceBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
@@ -14,7 +15,7 @@ use Doctrine\ORM\Mapping as ORM;
 class EntityHasGlossaire
 {
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="entglo_id", type="integer", options={"unsigned"=true})
      * @ORM\Id()
@@ -23,14 +24,14 @@ class EntityHasGlossaire
     private $id;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="entglo_entity_type", type="smallint", nullable=false)
      */
     private $entityType;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="entglo_entity_id", type="integer", options={"unsigned"=true}, nullable=false)
      */
@@ -51,11 +52,10 @@ class EntityHasGlossaire
      */
     private $references;
 
-
     /**
-     * Get id
+     * Get id.
      *
-     * @return integer
+     * @return int
      */
     public function getId()
     {
@@ -63,9 +63,9 @@ class EntityHasGlossaire
     }
 
     /**
-     * Set entityType
+     * Set entityType.
      *
-     * @param integer $entityType
+     * @param int $entityType
      *
      * @return EntityHasGlossaire
      */
@@ -77,9 +77,9 @@ class EntityHasGlossaire
     }
 
     /**
-     * Get entityType
+     * Get entityType.
      *
-     * @return integer
+     * @return int
      */
     public function getEntityType()
     {
@@ -87,9 +87,9 @@ class EntityHasGlossaire
     }
 
     /**
-     * Set entityId
+     * Set entityId.
      *
-     * @param integer $entityId
+     * @param int $entityId
      *
      * @return EntityHasGlossaire
      */
@@ -101,9 +101,9 @@ class EntityHasGlossaire
     }
 
     /**
-     * Get entityId
+     * Get entityId.
      *
-     * @return integer
+     * @return int
      */
     public function getEntityId()
     {
@@ -111,7 +111,7 @@ class EntityHasGlossaire
     }
 
     /**
-     * Set references
+     * Set references.
      *
      * @param array $references
      *
@@ -125,7 +125,7 @@ class EntityHasGlossaire
     }
 
     /**
-     * Get references
+     * Get references.
      *
      * @return array
      */
@@ -135,7 +135,7 @@ class EntityHasGlossaire
     }
 
     /**
-     * Set domaine
+     * Set domaine.
      *
      * @param \HopitalNumerique\DomaineBundle\Entity\Domaine $domaine
      *
@@ -149,7 +149,7 @@ class EntityHasGlossaire
     }
 
     /**
-     * Get domaine
+     * Get domaine.
      *
      * @return \HopitalNumerique\DomaineBundle\Entity\Domaine
      */

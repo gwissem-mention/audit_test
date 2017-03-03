@@ -1,4 +1,5 @@
 <?php
+
 namespace HopitalNumerique\CommunautePratiqueBundle\Manager;
 
 use Doctrine\ORM\EntityManager;
@@ -22,13 +23,15 @@ class CommentaireManager extends \Nodevo\ToolsBundle\Manager\Manager
     }
 
     /**
-     * Retourne true si le document n'est appelé dans aucun commentaire
-     * @return boolean
+     * Retourne true si le document n'est appelé dans aucun commentaire.
+     *
+     * @return bool
      */
-    public function safeDelete($document) {
-        $result =  $this->getRepository()->safeDelete($document)->getQuery()->getResult();
+    public function safeDelete($document)
+    {
+        $result = $this->getRepository()->safeDelete($document)->getQuery()->getResult();
 
-        if(!empty($result)) {
+        if (!empty($result)) {
             return false;
         }
 
@@ -44,8 +47,8 @@ class CommentaireManager extends \Nodevo\ToolsBundle\Manager\Manager
         $sendmail = (null !== $commentaire->getId()) ? false : true;
 
         parent::save($commentaire);
-        
-        if($sendmail) {
+
+        if ($sendmail) {
             $this->mailManager->sendCMCommentaireMail($commentaire);
         }
     }

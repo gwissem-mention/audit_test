@@ -1,4 +1,5 @@
 <?php
+
 namespace Nodevo\Component\Import\Reader;
 
 use Nodevo\Component\Import\Iterator\File\KeyedExcelFileIterator;
@@ -19,7 +20,9 @@ class ExcelFileReader implements ReaderInterface, ProgressAwareInterface
 
     /**
      * @param File $file
+     *
      * @return KeyedExcelFileIterator|array
+     *
      * @throws \Exception
      */
     public function read($file)
@@ -41,13 +44,16 @@ class ExcelFileReader implements ReaderInterface, ProgressAwareInterface
 
     /**
      * @param File $file
+     *
      * @return \PHPExcel
+     *
      * @throws \PHPExcel_Reader_Exception
      */
     protected function getFileReader(File $file)
     {
         $inputFileType = \PHPExcel_IOFactory::identify($file);
         $objReader = \PHPExcel_IOFactory::createReader($inputFileType);
+
         return $objReader->load($file);
     }
 }

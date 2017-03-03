@@ -19,7 +19,8 @@ class Router
 
     /**
      * CommunautePratique constructor.
-     * @param CurrentDomaine $currentDomaineProvider
+     *
+     * @param CurrentDomaine  $currentDomaineProvider
      * @param RouterInterface $router
      */
     public function __construct(CurrentDomaine $currentDomaineProvider, RouterInterface $router)
@@ -35,7 +36,7 @@ class Router
         if ($currentDomaine && $cpArticle = $currentDomaine->getCommunautePratiqueArticle()) {
             return $this->router->generate('hopital_numerique_publication_publication_article', [
                 'id' => $cpArticle->getId(),
-                'categorie' => "article",
+                'categorie' => 'article',
                 'alias' => $cpArticle->getAlias(),
             ]);
         }

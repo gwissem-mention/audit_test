@@ -1,4 +1,5 @@
 <?php
+
 namespace HopitalNumerique\AutodiagBundle\Repository\Autodiag\Attribute;
 
 use Doctrine\ORM\EntityRepository;
@@ -12,7 +13,7 @@ class WeightRepository extends EntityRepository
         $qb
             ->where('weight.container = :container')
             ->setParameters([
-                'container' => $container->getId()
+                'container' => $container->getId(),
             ]);
 
         $results = $qb->getQuery()->getResult();

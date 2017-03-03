@@ -1,4 +1,5 @@
 <?php
+
 namespace HopitalNumerique\CommunautePratiqueBundle\Form\Type\User;
 
 use Symfony\Component\Form\AbstractType;
@@ -27,7 +28,6 @@ class RechercheType extends AbstractType
      */
     private $referenceManager;
 
-
     /**
      * Constructeur.
      *
@@ -42,9 +42,8 @@ class RechercheType extends AbstractType
         $this->referenceManager = $referenceManager;
     }
 
-
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
@@ -70,47 +69,47 @@ class RechercheType extends AbstractType
                 'profilEtablissementSante',
                 'entity',
                 [
-                    'class'    => 'HopitalNumeriqueReferenceBundle:Reference',
+                    'class' => 'HopitalNumeriqueReferenceBundle:Reference',
                     'property' => 'libelle',
-                    'choices'  => $this->referenceManager->findEtablissementSanteProfils(),
-                    'data'     => $this->annuaireService->getFiltre(Annuaire::FILTRE_ES_PROFIL_LABEL),
+                    'choices' => $this->referenceManager->findEtablissementSanteProfils(),
+                    'data' => $this->annuaireService->getFiltre(Annuaire::FILTRE_ES_PROFIL_LABEL),
                     'multiple' => true,
                 ]
             )->add(
                 'region',
                 'entity',
                 [
-                    'class'    => 'HopitalNumeriqueReferenceBundle:Reference',
+                    'class' => 'HopitalNumeriqueReferenceBundle:Reference',
                     'property' => 'libelle',
-                    'choices'  => $this->referenceManager->findRegions(),
-                    'data'     => $this->annuaireService->getFiltre(Annuaire::FILTRE_REGION_LABEL),
+                    'choices' => $this->referenceManager->findRegions(),
+                    'data' => $this->annuaireService->getFiltre(Annuaire::FILTRE_REGION_LABEL),
                     'multiple' => true,
                 ]
             )->add(
                 'statutEtablissementSante',
                 'entity',
                 [
-                    'class'    => 'HopitalNumeriqueReferenceBundle:Reference',
+                    'class' => 'HopitalNumeriqueReferenceBundle:Reference',
                     'property' => 'libelle',
-                    'choices'  => $this->referenceManager->findEtablissementSanteTypes(),
-                    'data'     => $this->annuaireService->getFiltre(Annuaire::FILTRE_ES_TYPE_LABEL),
+                    'choices' => $this->referenceManager->findEtablissementSanteTypes(),
+                    'data' => $this->annuaireService->getFiltre(Annuaire::FILTRE_ES_TYPE_LABEL),
                     'multiple' => true,
                 ]
             )->add(
                 'typeActivite',
                 'entity',
                 [
-                    'class'    => 'HopitalNumeriqueReferenceBundle:Reference',
+                    'class' => 'HopitalNumeriqueReferenceBundle:Reference',
                     'property' => 'libelle',
-                    'choices'  => $this->referenceManager->findActiviteTypes(),
-                    'data'     => $this->annuaireService->getFiltre(Annuaire::FILTRE_ACTIVITE_TYPE_LABEL),
+                    'choices' => $this->referenceManager->findActiviteTypes(),
+                    'data' => $this->annuaireService->getFiltre(Annuaire::FILTRE_ACTIVITE_TYPE_LABEL),
                     'multiple' => true,
                 ]
             );
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function getName()
     {

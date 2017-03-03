@@ -1,4 +1,5 @@
 <?php
+
 namespace HopitalNumerique\ForumBundle\Controller;
 
 use CCDNForum\ForumBundle\Controller\UserBoardController as BaseUserBoardController;
@@ -10,10 +11,9 @@ class UserBoardController extends BaseUserBoardController
     use ForumControllerAuthorizationCheckerTrait;
 
     /**
+     * @param string $forumName
+     * @param int    $boardId
      *
-     * @access public
-     * @param  string $forumName
-     * @param  int $boardId
      * @return RedirectResponse|RenderResponse
      */
     public function showAction($forumName, $boardId)
@@ -35,14 +35,14 @@ class UserBoardController extends BaseUserBoardController
         }
 
         return $this->renderResponse('CCDNForumForumBundle:User:Board/show.html.', [
-            'crumbs'         => $this->getCrumbs()->addUserBoardShow($forum, $board),
-            'forum'          => $forum,
-            'forumName'      => $forumName,
-            'board'          => $board,
-            'pager'          => $topicsPager,
-            'subscription'   => $subscription,
+            'crumbs' => $this->getCrumbs()->addUserBoardShow($forum, $board),
+            'forum' => $forum,
+            'forumName' => $forumName,
+            'board' => $board,
+            'pager' => $topicsPager,
+            'subscription' => $subscription,
             'posts_per_page' => $this->container->getParameter('ccdn_forum_forum.topic.user.show.posts_per_page'), // for working out last page per topic.
-            'sticky_topics'  => $stickyTopics,
+            'sticky_topics' => $stickyTopics,
         ]);
     }
 

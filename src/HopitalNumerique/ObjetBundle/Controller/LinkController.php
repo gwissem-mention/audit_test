@@ -12,42 +12,43 @@ use Symfony\Component\HttpFoundation\Response;
 class LinkController extends Controller
 {
     /**
-     * Fancybox d'ajout d'objet à l'utilisateur
+     * Fancybox d'ajout d'objet à l'utilisateur.
      */
-    public function addLinkAction( Objet $objet )
+    public function addLinkAction(Objet $objet)
     {
-        $arbo    = $this->get('hopitalnumerique_objet.manager.objet')->getObjetsAndContenuArbo();
-        
-        return $this->render('HopitalNumeriqueObjetBundle:Objet:add_link.html.twig', array(
-            'arbo'    => $arbo,
-            'idObjet' => $objet->getId()
-        ));
+        $arbo = $this->get('hopitalnumerique_objet.manager.objet')->getObjetsAndContenuArbo();
+
+        return $this->render('HopitalNumeriqueObjetBundle:Objet:add_link.html.twig', [
+            'arbo' => $arbo,
+            'idObjet' => $objet->getId(),
+        ]);
     }
 
     /**
-     * Sauvegarde le lien point dur -> objets
+     * Sauvegarde le lien point dur -> objets.
      */
     public function saveLinkAction()
     {
         //get posted vars
-        $id     = $this->get('request')->request->get('idObjet');
+        $id = $this->get('request')->request->get('idObjet');
         $objets = $this->get('request')->request->get('objets');
 
         //bind Objet
-        $pointDur      = $this->get('hopitalnumerique_objet.manager.objet')->findOneBy( array('id' => $id) );
+        $pointDur = $this->get('hopitalnumerique_objet.manager.objet')->findOneBy(['id' => $id]);
         $currentObjets = new \Doctrine\Common\Collections\ArrayCollection($pointDur->getObjets());
 
         //bind objects
-        foreach($objets as $one){
-            if( !$currentObjets->contains($one) )
-                $pointDur->addObjet( $one );
+        foreach ($objets as $one) {
+            if (!$currentObjets->contains($one)) {
+                $pointDur->addObjet($one);
+            }
         }
-        
-        $this->get('hopitalnumerique_objet.manager.objet')->save( $pointDur );
-        
-        $this->get('session')->getFlashBag()->add( 'success' ,  'Les productions ont été liées au point dur.' );
 
-        return new Response('{"success":true, "url" : "'. $this->generateUrl('hopitalnumerique_objet_objet_edit', array('id' => $id)).'"}', 200);
+        $this->get('hopitalnumerique_objet.manager.objet')->save($pointDur);
+
+        $this->get('session')->getFlashBag()->add('success', 'Les productions ont été liées au point dur.');
+
+        return new Response('{"success":true, "url" : "' . $this->generateUrl('hopitalnumerique_objet_objet_edit', ['id' => $id]) . '"}', 200);
     }
 
     /**
@@ -55,44 +56,45 @@ class LinkController extends Controller
      *
      * METHOD = POST|DELETE
      */
-    public function deleteLinkAction( Objet $pointDur, $id, $obj )
+    public function deleteLinkAction(Objet $pointDur, $id, $obj)
     {
         $objets = $pointDur->getObjets();
 
         //$linkName = ($obj == 1 ? 'PUBLICATION' : 'INFRADOC') . ':' . $id;
-        $linkName = ($obj == 1 ? array('PUBLICATION' . ':' . $id , 'ARTICLE' . ':' . $id) : array('INFRADOC' . ':' . $id) ) ;
-        foreach($objets as $key => $objet)
-        {
-            if(in_array($objet, $linkName))
+        $linkName = ($obj == 1 ? ['PUBLICATION' . ':' . $id, 'ARTICLE' . ':' . $id] : ['INFRADOC' . ':' . $id]);
+        foreach ($objets as $key => $objet) {
+            if (in_array($objet, $linkName)) {
                 unset($objets[$key]);
+            }
         }
-        $pointDur->setObjets( $objets );
-        $this->get('hopitalnumerique_objet.manager.objet')->save( $pointDur );
+        $pointDur->setObjets($objets);
+        $this->get('hopitalnumerique_objet.manager.objet')->save($pointDur);
 
-        $this->get('session')->getFlashBag()->add('info', 'Suppression effectuée avec succès.' );
+        $this->get('session')->getFlashBag()->add('info', 'Suppression effectuée avec succès.');
 
-        return new Response('{"success":true, "url" : "'.$this->generateUrl('hopitalnumerique_objet_objet_edit', array('id' => $pointDur->getId())).'"}', 200);
+        return new Response('{"success":true, "url" : "' . $this->generateUrl('hopitalnumerique_objet_objet_edit', ['id' => $pointDur->getId()]) . '"}', 200);
     }
 
     /**
-     * Reordonne les productions
+     * Reordonne les productions.
      *
      * @param Objet $objet L'objet point dur
      *
      * @return Response
      */
-    public function reorderAction( Objet $objet )
+    public function reorderAction(Objet $objet)
     {
         //get datas serialzed
         $datas = $this->get('request')->request->get('datas');
-        
-        $doctrineArray = new \Doctrine\Common\Collections\ArrayCollection();
-        foreach($datas as $one)
-            $doctrineArray->add( $one['id'] );
 
-        $objet->setObjets( $doctrineArray->toArray() );
-        $this->get('hopitalnumerique_objet.manager.objet')->save( $objet );
-        
+        $doctrineArray = new \Doctrine\Common\Collections\ArrayCollection();
+        foreach ($datas as $one) {
+            $doctrineArray->add($one['id']);
+        }
+
+        $objet->setObjets($doctrineArray->toArray());
+        $this->get('hopitalnumerique_objet.manager.objet')->save($objet);
+
         //return success.true si le fichier existe deja
         return new Response('{"success":true}', 200);
     }

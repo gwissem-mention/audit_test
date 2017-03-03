@@ -6,7 +6,7 @@ use Doctrine\ORM\Mapping as ORM;
 use APY\DataGridBundle\Grid\Mapping as GRID;
 
 /**
- * Faq
+ * Faq.
  *
  * @ORM\Table(name="core_faq")
  * @ORM\Entity(repositoryClass="Nodevo\FaqBundle\Repository\FaqRepository")
@@ -14,7 +14,7 @@ use APY\DataGridBundle\Grid\Mapping as GRID;
 class Faq
 {
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="faq_id", type="integer", options = {"comment" = "ID de la question/réponse FAQ"})
      * @ORM\Id
@@ -37,7 +37,7 @@ class Faq
     private $reponse;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="faq_order", type="integer", options = {"comment" = "Ordre de l element"})
      */
@@ -46,7 +46,7 @@ class Faq
     /**
      * @ORM\ManyToOne(targetEntity="Categorie", cascade={"persist"})
      * @ORM\JoinColumn(name="cat_id", referencedColumnName="cat_id", onDelete="CASCADE")
-     * 
+     *
      * @GRID\Column(field="categorie.name", filter="select", selectFrom="source", operatorsVisible=false)
      */
     protected $categorie;
@@ -66,9 +66,9 @@ class Faq
     }
 
     /**
-     * Get id
+     * Get id.
      *
-     * @return integer 
+     * @return int
      */
     public function getId()
     {
@@ -76,9 +76,10 @@ class Faq
     }
 
     /**
-     * Set question
+     * Set question.
      *
      * @param string $question
+     *
      * @return Faq
      */
     public function setQuestion($question)
@@ -89,9 +90,9 @@ class Faq
     }
 
     /**
-     * Get question
+     * Get question.
      *
-     * @return string 
+     * @return string
      */
     public function getQuestion()
     {
@@ -99,9 +100,10 @@ class Faq
     }
 
     /**
-     * Set reponse
+     * Set reponse.
      *
      * @param string $reponse
+     *
      * @return Faq
      */
     public function setReponse($reponse)
@@ -112,9 +114,9 @@ class Faq
     }
 
     /**
-     * Get reponse
+     * Get reponse.
      *
-     * @return string 
+     * @return string
      */
     public function getReponse()
     {
@@ -122,19 +124,19 @@ class Faq
     }
 
     /**
-     * Get order
+     * Get order.
      *
-     * @return integer $order
+     * @return int $order
      */
     public function getOrder()
     {
         return $this->order;
     }
-    
+
     /**
-     * Set order
+     * Set order.
      *
-     * @param integer $order
+     * @param int $order
      */
     public function setOrder($order)
     {
@@ -142,7 +144,7 @@ class Faq
     }
 
     /**
-     * Get categorie
+     * Get categorie.
      *
      * @return Categorie $categorie
      */
@@ -150,9 +152,9 @@ class Faq
     {
         return $this->categorie;
     }
-    
+
     /**
-     * Set categorie
+     * Set categorie.
      *
      * @param Categorie $categorie
      */
@@ -162,9 +164,10 @@ class Faq
     }
 
     /**
-     * Add domaines
+     * Add domaines.
      *
      * @param \HopitalNumerique\DomaineBundle\Entity\Domaine $domaines
+     *
      * @return Faq
      */
     public function addDomaine(\HopitalNumerique\DomaineBundle\Entity\Domaine $domaines)
@@ -175,7 +178,7 @@ class Faq
     }
 
     /**
-     * Remove domaines
+     * Remove domaines.
      *
      * @param \HopitalNumerique\DomaineBundle\Entity\Domaine $domaines
      */
@@ -185,9 +188,9 @@ class Faq
     }
 
     /**
-     * Get domaines
+     * Get domaines.
      *
-     * @return \Doctrine\Common\Collections\Collection 
+     * @return \Doctrine\Common\Collections\Collection
      */
     public function getDomaines()
     {
@@ -195,15 +198,16 @@ class Faq
     }
 
     /**
-     * Set domaines
+     * Set domaines.
      *
      * @param \Doctrine\Common\Collections\Collection $domaines
+     *
      * @return Domaine
      */
     public function setDomaines($domaines)
-    {        
+    {
         $this->domaines = $domaines;
-    
+
         return $this;
     }
 }

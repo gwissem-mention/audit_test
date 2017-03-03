@@ -1,9 +1,10 @@
 <?php
 /**
  * Manager pour le formulaire utilisateur propre aux demandes d'intervention.
- * 
+ *
  * @author Rémi Leclerc <rleclerc@nodevo.com>
  */
+
 namespace HopitalNumerique\InterventionBundle\Manager\Form;
 
 use Symfony\Component\Security\Core\SecurityContext;
@@ -45,13 +46,12 @@ class UserManager
     /**
      * Constructeur du manager gérant les formulaires utilisateurs.
      *
-     * @param \Symfony\Component\Security\Core\SecurityContext $securityContext SecurityContext de l'application
-     * @param \Symfony\Bundle\FrameworkBundle\Routing\Router $router Router de l'application
-     * @param \HopitalNumerique\UserBundle\Manager\UserManager $userManager Le manager de l'entité User
-     * @param \Nodevo\AclBundle\Manager\AclManager $aclManager Le manager de l'entité Acl
-     * @param \HopitalNumerique\ReferenceBundle\Manager\ReferenceManager $referenceManager Manager de Reference
+     * @param \Symfony\Component\Security\Core\SecurityContext                   $securityContext      SecurityContext de l'application
+     * @param \Symfony\Bundle\FrameworkBundle\Routing\Router                     $router               Router de l'application
+     * @param \HopitalNumerique\UserBundle\Manager\UserManager                   $userManager          Le manager de l'entité User
+     * @param \Nodevo\AclBundle\Manager\AclManager                               $aclManager           Le manager de l'entité Acl
+     * @param \HopitalNumerique\ReferenceBundle\Manager\ReferenceManager         $referenceManager     Manager de Reference
      * @param \HopitalNumerique\EtablissementBundle\Manager\EtablissementManager $etablissementManager Manager de Etablissement
-     * @return void
      */
     public function __construct(SecurityContext $securityContext, Router $router, \HopitalNumerique\UserBundle\Manager\UserManager $userManager, AclManager $aclManager, ReferenceManager $referenceManager, EtablissementManager $etablissementManager)
     {
@@ -60,7 +60,7 @@ class UserManager
         $this->aclManager = $aclManager;
         $this->referenceManager = $referenceManager;
         $this->etablissementManager = $etablissementManager;
-        
+
         $securityContext = $securityContext;
         $this->utilisateurConnecte = $securityContext->getToken()->getUser();
     }
@@ -74,6 +74,7 @@ class UserManager
     {
         return $this->referenceManager->findByCode('CIVILITE');
     }
+
     /**
      * Retourne la liste des titres pour les listes de formulaire.
      *
@@ -83,6 +84,7 @@ class UserManager
     {
         return $this->referenceManager->findByCode('TITRE');
     }
+
     /**
      * Retourne la liste des régions pour les listes de formulaire.
      *
@@ -92,6 +94,7 @@ class UserManager
     {
         return $this->referenceManager->findByCode('REGION');
     }
+
     /**
      * Retourne la liste des départements pour les listes de formulaire.
      *
@@ -101,6 +104,7 @@ class UserManager
     {
         return $this->referenceManager->findByCode('DEPARTEMENT');
     }
+
     /**
      * Retourne la liste des établissements pour les listes de formulaire.
      *
@@ -110,6 +114,7 @@ class UserManager
     {
         return $this->etablissementManager->findAll();
     }
+
     /**
      * Retourne la liste des fonctions dans l'établissement de santé pour les listes de formulaire.
      *
@@ -119,6 +124,7 @@ class UserManager
     {
         return $this->referenceManager->findByCode('FONCTION_ES');
     }
+
     /**
      * Retourne la liste des utilisateurs pour les listes de formulaire.
      *
@@ -126,20 +132,25 @@ class UserManager
      */
     public function getUsersChoices()
     {
-        return $this->userManager->findBy(array('enabled' => true));
+        return $this->userManager->findBy(['enabled' => true]);
     }
+
     /**
      * Retourne la liste des ambassadeurs pour les listes de formulaire.
      *
      * @param \HopitalNumerique\ReferenceBundle\Entity\Reference|null $region La région des ambassadeurs
+     *
      * @return array Liste des ambassadeurs pour les listes de formulaire
      */
     public function getAmbassadeursChoices($region = null)
     {
-        if ($region == null)
+        if ($region == null) {
             return $this->userManager->getAmbassadeurs();
+        }
+
         return $this->userManager->getAmbassadeursByRegionAndDomaine($region);
     }
+
     /**
      * Retourne la liste des référents pour les listes de formulaire.
      *
@@ -147,89 +158,92 @@ class UserManager
      */
     public function getReferentsChoices()
     {
-        $referents = array();
+        $referents = [];
         $referents['Administrateur'] = $this->userManager->getAdmins();
         $referents['CMSI'] = $this->userManager->getCmsis();
         $referents['ES et Enregistrés'] = $this->userManager->getESAndEnregistres();
         asort($referents);
+
         return $referents;
     }
-
 
     /**
      * Retourne la liste jsonifiée des utilisateurs.
      *
      * @param array $criteres Le filtre à appliquer sur la liste
+     *
      * @return string La liste des utilisateurs jsonifiée
      */
     public function jsonUsers(array $criteres)
     {
         $users = $this->userManager->findBy($criteres);
-        $usersListeFormatee = array();
+        $usersListeFormatee = [];
 
-        foreach ($users as $user)
-        {
-            $usersListeFormatee[] = array('id' => $user->getId(), 'nom' => $user->getNom(), 'prenom' => $user->getPrenom());
+        foreach ($users as $user) {
+            $usersListeFormatee[] = ['id' => $user->getId(), 'nom' => $user->getNom(), 'prenom' => $user->getPrenom()];
         }
 
         return json_encode($usersListeFormatee);
     }
+
     /**
      * Retourne la liste jsonifiée des référents.
      *
      * @param array $criteres Le filtre à appliquer sur la liste
+     *
      * @return string La liste des utilisateurs jsonifiée
      */
     public function jsonReferents(array $criteres)
     {
         $users = $this->userManager->getESAndEnregistres($criteres);
-        if ($this->ajouteUtilisateurConnecteCommeDemandeur())
+        if ($this->ajouteUtilisateurConnecteCommeDemandeur()) {
             array_unshift($users, $this->utilisateurConnecte);
+        }
 
-        $usersListeFormatee = array();
-        foreach ($users as $user)
-        {
-            $usersListeFormatee[] = array(
+        $usersListeFormatee = [];
+        foreach ($users as $user) {
+            $usersListeFormatee[] = [
                 'id' => $user->getId(),
                 'nom' => $user->getNom(),
                 'prenom' => $user->getPrenom(),
-                'appellation' => $user->getAppellation()
-            );
+                'appellation' => $user->getAppellation(),
+            ];
         }
 
         return json_encode($usersListeFormatee);
     }
+
     /**
      * Retourne la liste jsonifiée des ambassadeurs.
      *
      * @param array $criteres Le filtre à appliquer sur la liste
+     *
      * @return string La liste des utilisateurs jsonifiée
      */
     public function jsonAmbassadeurs(array $criteres)
     {
         $users = $this->userManager->getAmbassadeurs($criteres);
-        $usersListeFormatee = array();
-    
-        foreach ($users as $user)
-        {
-            $usersListeFormatee[] = array(
+        $usersListeFormatee = [];
+
+        foreach ($users as $user) {
+            $usersListeFormatee[] = [
                 'id' => $user->getId(),
                 'nom' => $user->getNom(),
                 'prenom' => $user->getPrenom(),
-                'appellation' => $user->getAppellation()
-            );
+                'appellation' => $user->getAppellation(),
+            ];
         }
-    
+
         return json_encode($usersListeFormatee);
     }
-    
+
     /**
      * Retourne si dans les listes des référents, on ajoute la personne connectée.
-     * 
-     * @return boolean VRAI ssi on ajoute l'utilisateur connecté aux listes de référents
+     *
+     * @return bool VRAI ssi on ajoute l'utilisateur connecté aux listes de référents
      */
     private function ajouteUtilisateurConnecteCommeDemandeur()
     {
-        return ($this->utilisateurConnecte->hasRoleCmsi() || $this->aclManager->checkAuthorization($this->router->generate('hopital_numerique_intervention_admin_demande_nouveau'), $this->utilisateurConnecte));
+        return $this->utilisateurConnecte->hasRoleCmsi() || $this->aclManager->checkAuthorization($this->router->generate('hopital_numerique_intervention_admin_demande_nouveau'), $this->utilisateurConnecte);
     }
 }

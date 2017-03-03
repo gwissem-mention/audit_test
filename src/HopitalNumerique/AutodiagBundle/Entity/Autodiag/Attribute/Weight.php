@@ -7,7 +7,7 @@ use HopitalNumerique\AutodiagBundle\Entity\Autodiag\Attribute;
 use HopitalNumerique\AutodiagBundle\Entity\Autodiag\Container;
 
 /**
- * Weighted
+ * Weighted.
  *
  * @ORM\Table(name="ad_autodiag_attribute_weight")
  * @ORM\Entity(repositoryClass="HopitalNumerique\AutodiagBundle\Repository\Autodiag\Attribute\WeightRepository")
@@ -33,7 +33,7 @@ class Weight
     private $attribute;
 
     /**
-     * Attribute weight by container
+     * Attribute weight by container.
      *
      * @var float
      *
@@ -49,9 +49,10 @@ class Weight
     }
 
     /**
-     * Set weight
+     * Set weight.
      *
      * @param $weight
+     *
      * @return $this
      */
     public function setWeight($weight)
@@ -79,4 +80,3 @@ class Weight
         return $this->container;
     }
 }
-

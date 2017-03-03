@@ -20,64 +20,59 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
 /**
- *
  * @category CCDNForum
- * @package  ForumBundle
  *
  * @author   Reece Fowell <reece@codeconsortium.com>
  * @license  http://opensource.org/licenses/MIT MIT
- * @version  Release: 2.0
- * @link     https://github.com/codeconsortium/CCDNForumForumBundle
  *
+ * @version  Release: 2.0
+ *
+ * @see     https://github.com/codeconsortium/CCDNForumForumBundle
  */
 class AdminCategoryController extends \CCDNForum\ForumBundle\Controller\AdminCategoryBaseController
 {
     use ForumControllerAuthorizationCheckerTrait;
 
     /**
-     *
-     * @access public
      * @return RenderResponse
      */
     public function listAction()
     {
         // TODO : Utiliser la gestion des droits du backoffice
-        if(!$this->getSecurityContext()->getToken()->getUser()->isGranted('ROLE_ADMINISTRATEUR_DU_DOMAINE_HN_107') && !$this->getSecurityContext()->isGranted('ROLE_SUPER_ADMIN')) {
+        if (!$this->getSecurityContext()->getToken()->getUser()->isGranted('ROLE_ADMINISTRATEUR_DU_DOMAINE_HN_107') && !$this->getSecurityContext()->isGranted('ROLE_SUPER_ADMIN')) {
             throw new AccessDeniedException('You do not have permission to use this resource.');
         }
         //$this->isAuthorised('ROLE_SUPER_ADMIN');
         $forumFilter = $this->getQuery('forum_filter', null);
         $forums = $this->getForumModel()->findAllForums();
         $categories = $this->getCategoryModel()->findAllCategoriesForForumById($forumFilter);
-        $response = $this->renderResponse('CCDNForumForumBundle:Admin:/Category/list.html.', array(
+        $response = $this->renderResponse('CCDNForumForumBundle:Admin:/Category/list.html.', [
             'crumbs' => $this->getCrumbs()->addAdminManageCategoriesIndex(),
             'forums' => $forums,
             'forum_filter' => $forumFilter,
             'categories' => $categories,
-        ));
+        ]);
 
         return $response;
     }
 
     /**
-     *
-     * @access public
      * @return RenderResponse
      */
     public function createAction()
     {
         // TODO : Utiliser la gestion des droits du backoffice
-        if(!$this->getSecurityContext()->getToken()->getUser()->isGranted('ROLE_ADMINISTRATEUR_DU_DOMAINE_HN_107') && !$this->getSecurityContext()->isGranted('ROLE_SUPER_ADMIN')) {
+        if (!$this->getSecurityContext()->getToken()->getUser()->isGranted('ROLE_ADMINISTRATEUR_DU_DOMAINE_HN_107') && !$this->getSecurityContext()->isGranted('ROLE_SUPER_ADMIN')) {
             throw new AccessDeniedException('You do not have permission to use this resource.');
         }
         //$this->isAuthorised('ROLE_SUPER_ADMIN');
         $forumFilter = $this->getQuery('forum_filter', null);
         $formHandler = $this->getFormHandlerToCreateCategory($forumFilter);
-        $response = $this->renderResponse('CCDNForumForumBundle:Admin:/Category/create.html.', array(
+        $response = $this->renderResponse('CCDNForumForumBundle:Admin:/Category/create.html.', [
             'crumbs' => $this->getCrumbs()->addAdminManageCategoriesCreate(),
             'form' => $formHandler->getForm()->createView(),
-            'forum_filter' => $forumFilter
-        ));
+            'forum_filter' => $forumFilter,
+        ]);
 
         $this->dispatch(ForumEvents::ADMIN_CATEGORY_CREATE_RESPONSE, new AdminCategoryResponseEvent($this->getRequest(), $response, null));
 
@@ -85,14 +80,12 @@ class AdminCategoryController extends \CCDNForum\ForumBundle\Controller\AdminCat
     }
 
     /**
-     *
-     * @access public
      * @return RenderResponse
      */
     public function createProcessAction()
     {
         // TODO : Utiliser la gestion des droits du backoffice
-        if(!$this->getSecurityContext()->getToken()->getUser()->isGranted('ROLE_ADMINISTRATEUR_DU_DOMAINE_HN_107') && !$this->getSecurityContext()->isGranted('ROLE_SUPER_ADMIN')) {
+        if (!$this->getSecurityContext()->getToken()->getUser()->isGranted('ROLE_ADMINISTRATEUR_DU_DOMAINE_HN_107') && !$this->getSecurityContext()->isGranted('ROLE_SUPER_ADMIN')) {
             throw new AccessDeniedException('You do not have permission to use this resource.');
         }
         //$this->isAuthorised('ROLE_SUPER_ADMIN');
@@ -102,11 +95,11 @@ class AdminCategoryController extends \CCDNForum\ForumBundle\Controller\AdminCat
         if ($formHandler->process()) {
             $response = $this->redirectResponse($this->path('ccdn_forum_admin_category_list', $this->getFilterQueryStrings($formHandler->getForm()->getData())));
         } else {
-            $response = $this->renderResponse('CCDNForumForumBundle:Admin:/Category/create.html.', array(
+            $response = $this->renderResponse('CCDNForumForumBundle:Admin:/Category/create.html.', [
                 'crumbs' => $this->getCrumbs()->addAdminManageCategoriesCreate(),
                 'form' => $formHandler->getForm()->createView(),
-                'forum_filter' => $forumFilter
-            ));
+                'forum_filter' => $forumFilter,
+            ]);
         }
 
         $this->dispatch(ForumEvents::ADMIN_CATEGORY_CREATE_RESPONSE, new AdminCategoryResponseEvent($this->getRequest(), $response, $formHandler->getForm()->getData()));
@@ -115,25 +108,23 @@ class AdminCategoryController extends \CCDNForum\ForumBundle\Controller\AdminCat
     }
 
     /**
-     *
-     * @access public
      * @return RenderResponse
      */
     public function editAction($categoryId)
     {
         // TODO : Utiliser la gestion des droits du backoffice
-        if(!$this->getSecurityContext()->getToken()->getUser()->isGranted('ROLE_ADMINISTRATEUR_DU_DOMAINE_HN_107') && !$this->getSecurityContext()->isGranted('ROLE_SUPER_ADMIN')) {
+        if (!$this->getSecurityContext()->getToken()->getUser()->isGranted('ROLE_ADMINISTRATEUR_DU_DOMAINE_HN_107') && !$this->getSecurityContext()->isGranted('ROLE_SUPER_ADMIN')) {
             throw new AccessDeniedException('You do not have permission to use this resource.');
         }
         //$this->isAuthorised('ROLE_SUPER_ADMIN');
         $this->isFound($category = $this->getCategoryModel()->findOneCategoryById($categoryId));
         $formHandler = $this->getFormHandlerToUpdateCategory($category);
-        $response = $this->renderResponse('CCDNForumForumBundle:Admin:/Category/edit.html.', array(
+        $response = $this->renderResponse('CCDNForumForumBundle:Admin:/Category/edit.html.', [
             'crumbs' => $this->getCrumbs()->addAdminManageCategoriesEdit($category),
             'form' => $formHandler->getForm()->createView(),
             'category' => $category,
-            'forum_filter' => $this->getQuery('forum_filter', null)
-        ));
+            'forum_filter' => $this->getQuery('forum_filter', null),
+        ]);
 
         $this->dispatch(ForumEvents::ADMIN_CATEGORY_EDIT_RESPONSE, new AdminCategoryResponseEvent($this->getRequest(), $response, $formHandler->getForm()->getData()));
 
@@ -141,14 +132,12 @@ class AdminCategoryController extends \CCDNForum\ForumBundle\Controller\AdminCat
     }
 
     /**
-     *
-     * @access public
      * @return RenderResponse
      */
     public function editProcessAction($categoryId)
     {
         // TODO : Utiliser la gestion des droits du backoffice
-        if(!$this->getSecurityContext()->getToken()->getUser()->isGranted('ROLE_ADMINISTRATEUR_DU_DOMAINE_HN_107') && !$this->getSecurityContext()->isGranted('ROLE_SUPER_ADMIN')) {
+        if (!$this->getSecurityContext()->getToken()->getUser()->isGranted('ROLE_ADMINISTRATEUR_DU_DOMAINE_HN_107') && !$this->getSecurityContext()->isGranted('ROLE_SUPER_ADMIN')) {
             throw new AccessDeniedException('You do not have permission to use this resource.');
         }
         //$this->isAuthorised('ROLE_SUPER_ADMIN');
@@ -158,12 +147,12 @@ class AdminCategoryController extends \CCDNForum\ForumBundle\Controller\AdminCat
         if ($formHandler->process()) {
             $response = $this->redirectResponse($this->path('ccdn_forum_admin_category_list', $this->getFilterQueryStrings($formHandler->getForm()->getData())));
         } else {
-            $response = $this->renderResponse('CCDNForumForumBundle:Admin:/Category/edit.html.', array(
+            $response = $this->renderResponse('CCDNForumForumBundle:Admin:/Category/edit.html.', [
                 'crumbs' => $this->getCrumbs()->addAdminManageCategoriesEdit($category),
                 'form' => $formHandler->getForm()->createView(),
                 'category' => $category,
-                'forum_filter' => $this->getQuery('forum_filter', null)
-            ));
+                'forum_filter' => $this->getQuery('forum_filter', null),
+            ]);
         }
 
         $this->dispatch(ForumEvents::ADMIN_CATEGORY_EDIT_RESPONSE, new AdminCategoryResponseEvent($this->getRequest(), $response, $formHandler->getForm()->getData()));
@@ -172,25 +161,23 @@ class AdminCategoryController extends \CCDNForum\ForumBundle\Controller\AdminCat
     }
 
     /**
-     *
-     * @access public
      * @return RenderResponse
      */
     public function deleteAction($categoryId)
     {
         //$this->isAuthorised('ROLE_SUPER_ADMIN');
-        if(!$this->getSecurityContext()->getToken()->getUser()->isGranted('ROLE_ADMINISTRATEUR_DU_DOMAINE_HN_107') && !$this->getSecurityContext()->isGranted('ROLE_SUPER_ADMIN') && !$this->getSecurityContext()->isGranted('ROLE_ADMINISTRATEUR_DE_DOMAINE_106')) {
+        if (!$this->getSecurityContext()->getToken()->getUser()->isGranted('ROLE_ADMINISTRATEUR_DU_DOMAINE_HN_107') && !$this->getSecurityContext()->isGranted('ROLE_SUPER_ADMIN') && !$this->getSecurityContext()->isGranted('ROLE_ADMINISTRATEUR_DE_DOMAINE_106')) {
             throw new AccessDeniedException('You do not have permission to use this resource.');
         }
 
         $this->isFound($category = $this->getCategoryModel()->findOneCategoryById($categoryId));
         $formHandler = $this->getFormHandlerToDeleteCategory($category);
-        $response = $this->renderResponse('CCDNForumForumBundle:Admin:/Category/delete.html.', array(
+        $response = $this->renderResponse('CCDNForumForumBundle:Admin:/Category/delete.html.', [
             'crumbs' => $this->getCrumbs()->addAdminManageCategoriesDelete($category),
             'form' => $formHandler->getForm()->createView(),
             'category' => $category,
-            'forum_filter' => $this->getQuery('forum_filter', null)
-        ));
+            'forum_filter' => $this->getQuery('forum_filter', null),
+        ]);
 
         $this->dispatch(ForumEvents::ADMIN_CATEGORY_DELETE_RESPONSE, new AdminCategoryResponseEvent($this->getRequest(), $response, $formHandler->getForm()->getData()));
 
@@ -198,13 +185,11 @@ class AdminCategoryController extends \CCDNForum\ForumBundle\Controller\AdminCat
     }
 
     /**
-     *
-     * @access public
      * @return RedirectResponse
      */
     public function deleteProcessAction($categoryId)
     {
-        if(!$this->getSecurityContext()->getToken()->getUser()->isGranted('ROLE_ADMINISTRATEUR_DU_DOMAINE_HN_107') && !$this->getSecurityContext()->isGranted('ROLE_SUPER_ADMIN') && !$this->getSecurityContext()->isGranted('ROLE_ADMINISTRATEUR_DE_DOMAINE_106')) {
+        if (!$this->getSecurityContext()->getToken()->getUser()->isGranted('ROLE_ADMINISTRATEUR_DU_DOMAINE_HN_107') && !$this->getSecurityContext()->isGranted('ROLE_SUPER_ADMIN') && !$this->getSecurityContext()->isGranted('ROLE_ADMINISTRATEUR_DE_DOMAINE_106')) {
             throw new AccessDeniedException('You do not have permission to use this resource.');
         }
         $this->isFound($category = $this->getCategoryModel()->findOneCategoryById($categoryId));
@@ -213,12 +198,12 @@ class AdminCategoryController extends \CCDNForum\ForumBundle\Controller\AdminCat
         if ($formHandler->process()) {
             $response = $this->redirectResponse($this->path('ccdn_forum_admin_category_list', $this->getFilterQueryStrings($formHandler->getForm()->getData())));
         } else {
-            $response = $this->renderResponse('CCDNForumForumBundle:Admin:/Category/delete.html.', array(
+            $response = $this->renderResponse('CCDNForumForumBundle:Admin:/Category/delete.html.', [
                 'crumbs' => $this->getCrumbs()->addAdminManageCategoriesDelete($category),
                 'form' => $formHandler->getForm()->createView(),
                 'category' => $category,
-                'forum_filter' => $this->getQuery('forum_filter', null)
-            ));
+                'forum_filter' => $this->getQuery('forum_filter', null),
+            ]);
         }
 
         $this->dispatch(ForumEvents::ADMIN_CATEGORY_DELETE_RESPONSE, new AdminCategoryResponseEvent($this->getRequest(), $response, $formHandler->getForm()->getData()));
@@ -227,20 +212,18 @@ class AdminCategoryController extends \CCDNForum\ForumBundle\Controller\AdminCat
     }
 
     /**
-     *
-     * @access public
      * @return RedirectResponse
      */
     public function reorderAction($categoryId, $direction)
     {
         // TODO : Utiliser la gestion des droits du backoffice
-        if(!$this->getSecurityContext()->getToken()->getUser()->isGranted('ROLE_ADMINISTRATEUR_DU_DOMAINE_HN_107') && !$this->getSecurityContext()->isGranted('ROLE_SUPER_ADMIN')) {
+        if (!$this->getSecurityContext()->getToken()->getUser()->isGranted('ROLE_ADMINISTRATEUR_DU_DOMAINE_HN_107') && !$this->getSecurityContext()->isGranted('ROLE_SUPER_ADMIN')) {
             throw new AccessDeniedException('You do not have permission to use this resource.');
         }
         //$this->isAuthorised('ROLE_SUPER_ADMIN');
         $this->isFound($category = $this->getCategoryModel()->findOneCategoryById($categoryId));
         $this->dispatch(ForumEvents::ADMIN_CATEGORY_REORDER_INITIALISE, new AdminCategoryEvent($this->getRequest(), $category));
-        $params = array();
+        $params = [];
 
         if ($category->getForum()) { // We do not re-order categories not set to a forum.
             $forumFilter = $category->getForum()->getId();

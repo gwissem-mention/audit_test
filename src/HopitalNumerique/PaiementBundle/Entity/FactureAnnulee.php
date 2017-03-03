@@ -1,4 +1,5 @@
 <?php
+
 namespace HopitalNumerique\PaiementBundle\Entity;
 
 use Doctrine\Common\Collections\Collection;
@@ -13,7 +14,7 @@ use Doctrine\ORM\Mapping as ORM;
 class FactureAnnulee
 {
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="facan_id", type="integer", nullable=false, options={"unsigned"=true})
      * @ORM\Id()
@@ -55,9 +56,8 @@ class FactureAnnulee
      */
     private $formations;
 
-
     /**
-     * Constructor
+     * Constructor.
      */
     public function __construct()
     {
@@ -65,11 +65,10 @@ class FactureAnnulee
         $this->formations = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
-
     /**
-     * Get id
+     * Get id.
      *
-     * @return integer
+     * @return int
      */
     public function getId()
     {
@@ -77,7 +76,7 @@ class FactureAnnulee
     }
 
     /**
-     * Set facture
+     * Set facture.
      *
      * @param \HopitalNumerique\PaiementBundle\Entity\Facture $facture
      *
@@ -91,7 +90,7 @@ class FactureAnnulee
     }
 
     /**
-     * Get facture
+     * Get facture.
      *
      * @return \HopitalNumerique\PaiementBundle\Entity\Facture
      */
@@ -101,7 +100,7 @@ class FactureAnnulee
     }
 
     /**
-     * Add intervention
+     * Add intervention.
      *
      * @param \HopitalNumerique\InterventionBundle\Entity\InterventionDemande $intervention
      *
@@ -115,7 +114,7 @@ class FactureAnnulee
     }
 
     /**
-     * Set interventions
+     * Set interventions.
      *
      * @param \Doctrine\Common\Collections\Collection $interventions
      *
@@ -129,7 +128,7 @@ class FactureAnnulee
     }
 
     /**
-     * Remove intervention
+     * Remove intervention.
      *
      * @param \HopitalNumerique\InterventionBundle\Entity\InterventionDemande $intervention
      */
@@ -139,7 +138,7 @@ class FactureAnnulee
     }
 
     /**
-     * Get interventions
+     * Get interventions.
      *
      * @return \Doctrine\Common\Collections\Collection
      */
@@ -149,7 +148,7 @@ class FactureAnnulee
     }
 
     /**
-     * Add formation
+     * Add formation.
      *
      * @param \HopitalNumerique\ModuleBundle\Entity\Inscription $formation
      *
@@ -163,7 +162,7 @@ class FactureAnnulee
     }
 
     /**
-     * Set formations
+     * Set formations.
      *
      * @param \Doctrine\Common\Collections\Collection $formations
      *
@@ -177,7 +176,7 @@ class FactureAnnulee
     }
 
     /**
-     * Remove formation
+     * Remove formation.
      *
      * @param \HopitalNumerique\ModuleBundle\Entity\Inscription $formation
      */
@@ -187,7 +186,7 @@ class FactureAnnulee
     }
 
     /**
-     * Get formations
+     * Get formations.
      *
      * @return \Doctrine\Common\Collections\Collection
      */

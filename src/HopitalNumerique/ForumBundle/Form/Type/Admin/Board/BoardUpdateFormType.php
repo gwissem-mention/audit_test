@@ -19,43 +19,32 @@ use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 use Doctrine\ORM\EntityRepository;
 
 /**
- *
  * @category CCDNForum
- * @package  ForumBundle
  *
  * @author   Gaëtan MELCHILSEN
  * @license  Nodevo
- *
  */
 class BoardUpdateFormType extends AbstractType
 {
     /**
-     *
-     * @access protected
-     * @var string $boardClass
+     * @var string
      */
     protected $boardClass;
 
     /**
-     *
-     * @access protected
-     * @var string $categoryClass
+     * @var string
      */
     protected $categoryClass;
 
     /**
-     *
-     * @access protected
-     * @var Object $roleHelper
+     * @var object
      */
     protected $roleHelper;
 
     /**
-     *
-     * @access public
      * @param string $boardClass
      * @param string $categoryClass
-     * @param Object $roleHelper
+     * @param object $roleHelper
      */
     public function __construct($boardClass, $categoryClass, $roleHelper)
     {
@@ -65,8 +54,6 @@ class BoardUpdateFormType extends AbstractType
     }
 
     /**
-     *
-     * @access public
      * @param FormBuilderInterface $builder
      * @param array                $options
      */
@@ -74,101 +61,96 @@ class BoardUpdateFormType extends AbstractType
     {
         $builder
             ->add('category', 'entity',
-                array(
-                    'property'           => 'name',
-                    'class'              => $this->categoryClass,
-                    'group_by'           => 'forum.name',
-                    'query_builder'      =>
-                        function (EntityRepository $er) {
-                            return $er
+                [
+                    'property' => 'name',
+                    'class' => $this->categoryClass,
+                    'group_by' => 'forum.name',
+                    'query_builder' => function (EntityRepository $er) {
+                        return $er
                                 ->createQueryBuilder('c')
                                 ->leftJoin('c.forum', 'f')
                             ;
-                        },
-                    'required'           => false,
-                    'label'              => 'category.label',
+                    },
+                    'required' => false,
+                    'label' => 'category.label',
                     'translation_domain' => 'CCDNForumForumBundle',
-                )
+                ]
             )
             ->add('name', 'text',
-                array(
-                    'label'              => 'board.name-label',
+                [
+                    'label' => 'board.name-label',
                     'translation_domain' => 'CCDNForumForumBundle',
-                    'attr'               => array(
-                        'class' => 'validate[required,minSize[3],maxSize[255]]'
-                    )
-                )
+                    'attr' => [
+                        'class' => 'validate[required,minSize[3],maxSize[255]]',
+                    ],
+                ]
             )
             ->add('description', 'textarea',
-                array(
-                    'label'              => 'board.description-label',
+                [
+                    'label' => 'board.description-label',
                     'translation_domain' => 'CCDNForumForumBundle',
-                    'attr'               => array(
-                        'class' => 'validate[required,minSize[10],maxSize[255]]'
-                    )
-                )
+                    'attr' => [
+                        'class' => 'validate[required,minSize[10],maxSize[255]]',
+                    ],
+                ]
             )
             ->add('piecesJointesAutorisees', 'checkbox',
-                array(
+                [
                     'label' => 'Autoriser le chargement d\'une pièce jointe ?',
-                    'required' => false
-                )
+                    'required' => false,
+                ]
             )
             ->add('readAuthorisedRoles', 'choice',
-                array(
-                    'required'           => false,
-                    'expanded'           => true,
-                    'multiple'           => true,
-                    'choices'            => $options['available_roles'],
-                    'label'              => 'board.roles.topic-view-label',
+                [
+                    'required' => false,
+                    'expanded' => true,
+                    'multiple' => true,
+                    'choices' => $options['available_roles'],
+                    'label' => 'board.roles.topic-view-label',
                     'translation_domain' => 'CCDNForumForumBundle',
-                )
+                ]
             )
             ->add('topicCreateAuthorisedRoles', 'choice',
-                array(
-                    'required'           => false,
-                    'expanded'           => true,
-                    'multiple'           => true,
-                    'choices'            => $options['available_roles'],
-                    'label'              => 'board.roles.topic-create-label',
+                [
+                    'required' => false,
+                    'expanded' => true,
+                    'multiple' => true,
+                    'choices' => $options['available_roles'],
+                    'label' => 'board.roles.topic-create-label',
                     'translation_domain' => 'CCDNForumForumBundle',
-                )
+                ]
             )
             ->add('topicReplyAuthorisedRoles', 'choice',
-                array(
-                    'required'           => false,
-                    'expanded'           => true,
-                    'multiple'           => true,
-                    'choices'            => $options['available_roles'],
-                    'label'              => 'board.roles.topic-reply-label',
+                [
+                    'required' => false,
+                    'expanded' => true,
+                    'multiple' => true,
+                    'choices' => $options['available_roles'],
+                    'label' => 'board.roles.topic-reply-label',
                     'translation_domain' => 'CCDNForumForumBundle',
-                )
+                ]
             )
         ;
     }
 
     /**
-     *
-     * @access public
      * @param \Symfony\Component\OptionsResolver\OptionsResolverInterface $resolver
      */
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
-        $resolver->setDefaults(array(
-            'data_class'          => $this->boardClass,
-            'csrf_protection'     => true,
-            'csrf_field_name'     => '_token',
+        $resolver->setDefaults([
+            'data_class' => $this->boardClass,
+            'csrf_protection' => true,
+            'csrf_field_name' => '_token',
             // a unique key to help generate the secret token
-            'intention'           => 'forum_board_update_item',
-            'validation_groups'   => array('forum_board_update'),
-            'cascade_validation'  => true,
-            'available_roles'     => $this->roleHelper->getRoleForFormulaire(),
-        ));
+            'intention' => 'forum_board_update_item',
+            'validation_groups' => ['forum_board_update'],
+            'cascade_validation' => true,
+            'available_roles' => $this->roleHelper->getRoleForFormulaire(),
+        ]);
     }
 
     /**
-     *
-     * @access public
      * @return string
      */
     public function getName()

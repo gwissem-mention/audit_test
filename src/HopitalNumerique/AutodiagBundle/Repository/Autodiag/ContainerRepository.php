@@ -7,12 +7,12 @@ use Doctrine\ORM\Query\Expr\Join;
 use HopitalNumerique\AutodiagBundle\Entity\Autodiag\Attribute;
 use HopitalNumerique\AutodiagBundle\Entity\Autodiag\Container\Category;
 use HopitalNumerique\AutodiagBundle\Entity\Autodiag\Container\Chapter;
-use HopitalNumerique\AutodiagBundle\Entity\AutodiagEntry\Value;
 
 class ContainerRepository extends EntityRepository
 {
     /**
      * @param $attributes
+     *
      * @return Chapter[]|Category[]
      */
     public function getConcernedByAttributes($attributes)
@@ -26,6 +26,7 @@ class ContainerRepository extends EntityRepository
                     return $attribute->getId();
                 }, $attributes))
             );
+
         return $qb->getQuery()->getResult();
     }
 }

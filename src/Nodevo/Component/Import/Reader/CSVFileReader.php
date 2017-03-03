@@ -1,4 +1,5 @@
 <?php
+
 namespace Nodevo\Component\Import\Reader;
 
 use Nodevo\Component\Import\Iterator\File\KeyedCsvFileIterator;
@@ -23,7 +24,7 @@ class CSVFileReader implements ReaderInterface, ProgressAwareInterface
     {
         /** @var File $file */
         $file = $file->openFile();
-        $file->setFlags(\SplFileObject::READ_CSV|\SplFileObject::SKIP_EMPTY|\SplFileObject::DROP_NEW_LINE|\SplFileObject::READ_AHEAD);
+        $file->setFlags(\SplFileObject::READ_CSV | \SplFileObject::SKIP_EMPTY | \SplFileObject::DROP_NEW_LINE | \SplFileObject::READ_AHEAD);
         $file->setCsvControl(
             $this->delimiter,
             $this->enclosure

@@ -1,4 +1,5 @@
 <?php
+
 namespace Nodevo\GridBundle\Grid\Action;
 
 use APY\DataGridBundle\Grid\Action\RowAction;
@@ -9,7 +10,7 @@ class FilsButton extends RowAction
     {
         parent::__construct('', $route);
 
-        $this->setRouteParameters( array('id') );
-        $this->setAttributes( array('class'=>'btn btn-success fa fa-list','title' => 'Afficher les enfants') );
+        $this->setRouteParameters(['id']);
+        $this->setAttributes(['class' => 'btn btn-success fa fa-list', 'title' => 'Afficher les enfants']);
     }
 }

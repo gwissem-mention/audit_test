@@ -15,12 +15,12 @@ class MailController extends Controller
      */
     public function indexAction()
     {
-        $grid    = $this->get('nodevo_mail.grid.mail');
+        $grid = $this->get('nodevo_mail.grid.mail');
         $manager = $this->get('nodevo_mail.manager.mail');
 
-        return $grid->render('NodevoMailBundle:Mail:index.html.twig', array(
+        return $grid->render('NodevoMailBundle:Mail:index.html.twig', [
                 'allowAdd' => $manager->isAllowedToAdd(),
-            )
+            ]
         );
     }
 
@@ -31,32 +31,32 @@ class MailController extends Controller
     {
         $mail = $this->get('nodevo_mail.manager.mail')->createEmpty();
 
-        return $this->renderForm('nodevo_mail_mail', $mail, 'NodevoMailBundle:Mail:edit.html.twig' );
+        return $this->renderForm('nodevo_mail_mail', $mail, 'NodevoMailBundle:Mail:edit.html.twig');
     }
 
     /**
      * Affiche le formulaire d'édition de Mail.
      */
-    public function editAction( $id )
+    public function editAction($id)
     {
         //Récupération de l'entité passée en paramètre
-        $mail = $this->get('nodevo_mail.manager.mail')->findOneBy( array('id' => $id) );
+        $mail = $this->get('nodevo_mail.manager.mail')->findOneBy(['id' => $id]);
 
-        return $this->renderForm('nodevo_mail_mail', $mail, 'NodevoMailBundle:Mail:edit.html.twig' );
+        return $this->renderForm('nodevo_mail_mail', $mail, 'NodevoMailBundle:Mail:edit.html.twig');
     }
 
     /**
      * Affiche le Mail en fonction de son ID passé en paramètre.
      */
-    public function showAction( $id )
+    public function showAction($id)
     {
         //Récupération de l'entité en fonction du paramètre
-        $mail = $this->get('nodevo_mail.manager.mail')->findOneBy( array( 'id' => $id) );
+        $mail = $this->get('nodevo_mail.manager.mail')->findOneBy(['id' => $id]);
 
-        return $this->render('NodevoMailBundle:Mail:show.html.twig', array(
-            'mail'        => $mail,
-            'allowDelete' => $this->get('nodevo_mail.manager.mail')->isAllowedToDelete()
-        ));
+        return $this->render('NodevoMailBundle:Mail:show.html.twig', [
+            'mail' => $mail,
+            'allowDelete' => $this->get('nodevo_mail.manager.mail')->isAllowedToDelete(),
+        ]);
     }
 
     /**
@@ -64,46 +64,33 @@ class MailController extends Controller
      *
      * @METHOD = POST|DELETE
      */
-    public function deleteAction( $id )
+    public function deleteAction($id)
     {
-        $mail = $this->get('nodevo_mail.manager.mail')->findOneBy( array( 'id' => $id) );
+        $mail = $this->get('nodevo_mail.manager.mail')->findOneBy(['id' => $id]);
 
         //Suppression de l'entitée
-        $this->get('nodevo_mail.manager.mail')->delete( $mail );
+        $this->get('nodevo_mail.manager.mail')->delete($mail);
 
-        $this->get('session')->getFlashBag()->add('info', 'Suppression effectuée avec succès.' );
+        $this->get('session')->getFlashBag()->add('info', 'Suppression effectuée avec succès.');
 
-        return new Response('{"success":true, "url" : "'.$this->generateUrl('nodevo_mail_mail').'"}', 200);
+        return new Response('{"success":true, "url" : "' . $this->generateUrl('nodevo_mail_mail') . '"}', 200);
     }
 
     /**
      * Test d'envoi d'un Mail.
      */
-    public function sendTestAction( $id )
+    public function sendTestAction($id)
     {
         $user = $this->get('security.context')->getToken()->getUser();
-        $mail = $this->get('nodevo_mail.manager.mail')->sendMessageTest( $id, $user );
+        $mail = $this->get('nodevo_mail.manager.mail')->sendMessageTest($id, $user);
 
         $this->get('mailer')->send($mail);
 
-        $message = 'Message de test envoyé à '.$this->get('nodevo_mail.manager.mail')->getDestinataire();
+        $message = 'Message de test envoyé à ' . $this->get('nodevo_mail.manager.mail')->getDestinataire();
         $this->get('session')->getFlashBag()->add('info', $message);
 
-        return $this->redirect($this->generateUrl('nodevo_mail_mail_show', array( 'id' => $id)));
+        return $this->redirect($this->generateUrl('nodevo_mail_mail_show', ['id' => $id]));
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
 
     /**
      * Effectue le render du formulaire Mail.
@@ -114,16 +101,15 @@ class MailController extends Controller
      *
      * @return Form | redirect
      */
-    private function renderForm( $formName, $mail, $view )
+    private function renderForm($formName, $mail, $view)
     {
         //Création du formulaire via le service
-        $form = $this->createForm( $formName, $mail);
+        $form = $this->createForm($formName, $mail);
 
         $request = $this->get('request');
-        
+
         // Si l'utilisateur soumet le formulaire
         if ('POST' == $request->getMethod()) {
-            
             // On bind les données du form
             $form->handleRequest($request);
 
@@ -134,19 +120,20 @@ class MailController extends Controller
 
                 //On utilise notre Manager pour gérer la sauvegarde de l'objet
                 $this->get('nodevo_mail.manager.mail')->save($mail);
-                
+
                 // On envoi une 'flash' pour indiquer à l'utilisateur que l'entité est ajoutée
-                $this->get('session')->getFlashBag()->add( ($new ? 'success' : 'info') , 'Template d\'e-mail ' . ($new ? 'ajouté.' : 'mis à jour.') ); 
-                
+                $this->get('session')->getFlashBag()->add(($new ? 'success' : 'info'), 'Template d\'e-mail ' . ($new ? 'ajouté.' : 'mis à jour.'));
+
                 $do = $request->request->get('do');
-                return $this->redirect( ( $do == 'save-close' ? $this->generateUrl('nodevo_mail_mail') : $this->generateUrl('nodevo_mail_mail_edit', array( 'id' => $mail->getId() ) ) ) );
+
+                return $this->redirect(($do == 'save-close' ? $this->generateUrl('nodevo_mail_mail') : $this->generateUrl('nodevo_mail_mail_edit', ['id' => $mail->getId()])));
             }
         }
 
-        return $this->render( $view , array(
-            'form'        => $form->createView(),
-            'mail'        => $mail,
-            'allowDelete' => $this->get('nodevo_mail.manager.mail')->isAllowedToDelete()
-        ));
+        return $this->render($view, [
+            'form' => $form->createView(),
+            'mail' => $mail,
+            'allowDelete' => $this->get('nodevo_mail.manager.mail')->isAllowedToDelete(),
+        ]);
     }
 }

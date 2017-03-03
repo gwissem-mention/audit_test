@@ -5,13 +5,12 @@ namespace Nodevo\MenuBundle\Provider;
 use Knp\Menu\FactoryInterface;
 use Knp\Menu\NodeInterface;
 use Knp\Menu\Loader\LoaderInterface;
-
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\Security\Core\SecurityContextInterface;
 use Symfony\Component\Security\Core\Authorization\Voter\VoterInterface;
 
 /**
- * NodeLoader aware of security context
+ * NodeLoader aware of security context.
  */
 class NodeLoader implements LoaderInterface
 {
@@ -25,8 +24,8 @@ class NodeLoader implements LoaderInterface
         SecurityContextInterface $security,
         ContainerInterface $container
     ) {
-        $this->factory   = $factory;
-        $this->security  = $security;
+        $this->factory = $factory;
+        $this->security = $security;
         $this->container = $container;
     }
 
@@ -42,7 +41,7 @@ class NodeLoader implements LoaderInterface
         }
 
         $item = $this->factory->createItem($data->getName(), $data->getOptions());
-        $uri  = $item->getUri();
+        $uri = $item->getUri();
 
         //get security ACL
         $aclManager = $this->container->get('nodevo_acl.manager.acl');
@@ -83,7 +82,7 @@ class NodeLoader implements LoaderInterface
     }
 
     /**
-     * Set class
+     * Set class.
      *
      * @param string $class
      */

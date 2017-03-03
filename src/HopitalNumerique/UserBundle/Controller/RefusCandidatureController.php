@@ -2,7 +2,6 @@
 
 namespace HopitalNumerique\UserBundle\Controller;
 
-
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
 /**
@@ -22,47 +21,48 @@ class RefusCandidatureController extends Controller
 
     /**
      * Affiche le RefusCandidature en fonction de son ID passé en paramètre.
-     * 
-     * @param integer $id Id de RefusCandidature.
+     *
+     * @param int $id id de RefusCandidature
      */
-    public function showAction( $id )
+    public function showAction($id)
     {
         //Récupération de l'entité en fonction du paramètre
-        $refuscandidature = $this->get('hopitalnumerique_user.manager.refuscandidature')->findOneBy( array( 'id' => $id) );
+        $refuscandidature = $this->get('hopitalnumerique_user.manager.refuscandidature')->findOneBy(['id' => $id]);
 
-        return $this->render('HopitalNumeriqueUserBundle:RefusCandidature:show.html.twig', array(
+        return $this->render('HopitalNumeriqueUserBundle:RefusCandidature:show.html.twig', [
             'refuscandidature' => $refuscandidature,
-        ));
+        ]);
     }
 
     /**
-     * Export CSV de la liste des utilisateurs sélectionnés (caractérisation)
+     * Export CSV de la liste des utilisateurs sélectionnés (caractérisation).
      *
      * @param array $primaryKeys    ID des lignes sélectionnées
      * @param array $allPrimaryKeys allPrimaryKeys ???
      */
-    public function exportCsvAction( $primaryKeys, $allPrimaryKeys )
+    public function exportCsvAction($primaryKeys, $allPrimaryKeys)
     {
         //get all selected Users
-        if($allPrimaryKeys == 1){
+        if ($allPrimaryKeys == 1) {
             $rawDatas = $this->get('hopitalnumerique_user.grid.refuscandidature')->getRawData();
-            foreach($rawDatas as $data)
+            foreach ($rawDatas as $data) {
                 $primaryKeys[] = $data['id'];
+            }
         }
-        $refusCandidatures = $this->get('hopitalnumerique_user.manager.refuscandidature')->findBy( array('id' => $primaryKeys) );
+        $refusCandidatures = $this->get('hopitalnumerique_user.manager.refuscandidature')->findBy(['id' => $primaryKeys]);
 
-        $colonnes = array( 
-                            'id'              => 'id',
-                            'user.nom'        => 'Nom',
-                            'user.prenom'     => 'Prénom',
-                            'user.username'   => 'Identifiant (login)',
-                            'user.email'      => 'Adresse e-mail',
-                            'motifRefus'      => 'Motif du refus',
-                            'dateRefusString' => 'Date du refus'
-                        );
+        $colonnes = [
+                            'id' => 'id',
+                            'user.nom' => 'Nom',
+                            'user.prenom' => 'Prénom',
+                            'user.username' => 'Identifiant (login)',
+                            'user.email' => 'Adresse e-mail',
+                            'motifRefus' => 'Motif du refus',
+                            'dateRefusString' => 'Date du refus',
+                        ];
 
         $kernelCharset = $this->container->getParameter('kernel.charset');
 
-        return $this->get('hopitalnumerique_user.manager.refuscandidature')->exportCsv( $colonnes, $refusCandidatures, 'export-refusCandidatures.csv', $kernelCharset );
+        return $this->get('hopitalnumerique_user.manager.refuscandidature')->exportCsv($colonnes, $refusCandidatures, 'export-refusCandidatures.csv', $kernelCharset);
     }
 }

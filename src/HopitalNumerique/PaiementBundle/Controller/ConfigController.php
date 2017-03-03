@@ -11,7 +11,7 @@ use Symfony\Component\HttpFoundation\Request;
 class ConfigController extends Controller
 {
     /**
-     * Page de configuration des prix
+     * Page de configuration des prix.
      */
     public function indexAction()
     {
@@ -20,17 +20,17 @@ class ConfigController extends Controller
             'ROLE_ADMINISTRATEUR_1',
             'ROLE_ANAP_MEMBRES_2',
             'ROLE_ADMINISTRATEUR_DE_DOMAINE_106',
-            'ROLE_ADMINISTRATEUR_DU_DOMAINE_HN_107'
+            'ROLE_ADMINISTRATEUR_DU_DOMAINE_HN_107',
         ]);
 
-        return $this->render('HopitalNumeriquePaiementBundle:Config:index.html.twig', array(
+        return $this->render('HopitalNumeriquePaiementBundle:Config:index.html.twig', [
             'remboursements' => $remboursements,
-            'usersPouvantEtreReferent' => $usersPouvantEtreReferent
-        ));
+            'usersPouvantEtreReferent' => $usersPouvantEtreReferent,
+        ]);
     }
 
     /**
-     * Sauvegarde le tableau de config
+     * Sauvegarde le tableau de config.
      *
      * @param Request $request La requête
      *
@@ -42,23 +42,23 @@ class ConfigController extends Controller
         $remboursements = $request->request->get('remboursement');
 
         //prepare 1 save only
-        $toSave = array();
+        $toSave = [];
 
         //run on each lines
-        foreach($remboursements as $id => $remboursement) {
-            $entity = $this->get('hopitalnumerique_paiement.manager.remboursement')->findOneBy( array( 'id' => $id ) );
+        foreach ($remboursements as $id => $remboursement) {
+            $entity = $this->get('hopitalnumerique_paiement.manager.remboursement')->findOneBy(['id' => $id]);
             $entity->setReferent($this->container->get('hopitalnumerique_user.manager.user')->findOneById(intval($remboursement['referent'])));
-            $entity->setSupplement( trim($remboursement['supplement']) === "" ? NULL : intval($remboursement['supplement']) );
-            $entity->setRepas( intval($remboursement['repas']) );
-            $entity->setGestion( intval($remboursement['gestion']) );
+            $entity->setSupplement(trim($remboursement['supplement']) === '' ? null : intval($remboursement['supplement']));
+            $entity->setRepas(intval($remboursement['repas']));
+            $entity->setGestion(intval($remboursement['gestion']));
 
             $toSave[] = $entity;
         }
         $this->get('hopitalnumerique_paiement.manager.remboursement')->save($toSave);
 
         // On envoi une 'flash' pour indiquer à l'utilisateur la mise à jour
-        $this->get('session')->getFlashBag()->add( 'info' , 'Règles de calcul des remboursements mises à jour.' ); 
+        $this->get('session')->getFlashBag()->add('info', 'Règles de calcul des remboursements mises à jour.');
 
-        return $this->redirect( $this->generateUrl('hopitalnumerique_paiement_config') );
+        return $this->redirect($this->generateUrl('hopitalnumerique_paiement_config'));
     }
 }

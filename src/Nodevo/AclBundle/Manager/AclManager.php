@@ -7,14 +7,12 @@ use Nodevo\RoleBundle\Entity\Role;
 use Nodevo\ToolsBundle\Manager\Manager as BaseManager;
 use Nodevo\AclBundle\Entity\Acl;
 use Nodevo\RoleBundle\Manager\RoleManager;
-
 use Doctrine\ORM\EntityManager;
-
 use Symfony\Component\Security\Core\Authorization\Voter\VoterInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
- * Manager de l'entité Acl
+ * Manager de l'entité Acl.
  *
  * @author Quentin SOMAZZI
  */
@@ -23,34 +21,34 @@ class AclManager extends BaseManager
     protected $class = '\Nodevo\AclBundle\Entity\Acl';
     private $ressourceManager;
     private $roleManager;
-    private $writeWords = array();
+    private $writeWords = [];
 
     protected $aclList;
 
     /**
-     * Construct extension : we need to have the Container here
+     * Construct extension : we need to have the Container here.
      *
-     * @param EntityManager $em Entity Mangager de doctrine
+     * @param EntityManager    $em               Entity Mangager de doctrine
      * @param RessourceManager $ressourceManager Manager des ressources
-     * @param RoleManager $roleManager Manager des roles
-     * @param array $options
+     * @param RoleManager      $roleManager      Manager des roles
+     * @param array            $options
      */
     public function __construct(
         EntityManager $em,
         RessourceManager $ressourceManager,
         RoleManager $roleManager,
-        $options = array()
+        $options = []
     ) {
         parent::__construct($em);
 
         $this->ressourceManager = $ressourceManager;
-        $this->roleManager      = $roleManager;
+        $this->roleManager = $roleManager;
 
         $this->setOptions($options);
     }
 
     /**
-     * Retourne les ACL sous forme de tableau correctement formaté
+     * Retourne les ACL sous forme de tableau correctement formaté.
      *
      * @param array $ressources Liste des ressources
      * @param array $roles      Liste des roles
@@ -62,14 +60,14 @@ class AclManager extends BaseManager
         //default datas : on récupère dans un premier temps TOUTES les acls
         // ( et on authorise ni la lecture, ni l'écriture )
         //sauf pour le Super Admin
-        $acls = array();
+        $acls = [];
         foreach ($ressources as $ressource) {
-            $acls[ $ressource->getId() ] = array();
+            $acls[$ressource->getId()] = [];
 
             foreach ($roles as $role) {
-                $acls[ $ressource->getId() ][ $role->getId() ] = array();
-                $acls[ $ressource->getId() ][ $role->getId() ]['read']  = $role->getId() == 1 ? 1 : 0;
-                $acls[ $ressource->getId() ][ $role->getId() ]['write'] = $role->getId() == 1 ? 1 : 0;
+                $acls[$ressource->getId()][$role->getId()] = [];
+                $acls[$ressource->getId()][$role->getId()]['read'] = $role->getId() == 1 ? 1 : 0;
+                $acls[$ressource->getId()][$role->getId()]['write'] = $role->getId() == 1 ? 1 : 0;
             }
         }
 
@@ -77,20 +75,20 @@ class AclManager extends BaseManager
         // d'écriture selon les données récupérées en base
         $results = $this->getRepository()->getAcls()->getResult();
         foreach ($results as $result) {
-            $acls[ $result['ressource'] ][ $result['role'] ]['read']  = $result['read'];
-            $acls[ $result['ressource'] ][ $result['role'] ]['write'] = $result['write'];
+            $acls[$result['ressource']][$result['role']]['read'] = $result['read'];
+            $acls[$result['ressource']][$result['role']]['write'] = $result['write'];
         }
 
         return $acls;
     }
 
     /**
-     * Met à jour un acl selon le type
+     * Met à jour un acl selon le type.
      *
-     * @param Acl     $acl  Une entrée d'Acl
-     * @param boolean $type Type read = 1, Type write = 2
+     * @param Acl  $acl  Une entrée d'Acl
+     * @param bool $type Type read = 1, Type write = 2
      *
-     * @return boolean
+     * @return bool
      */
     public function update($acl, $type)
     {
@@ -117,15 +115,17 @@ class AclManager extends BaseManager
         }
 
         $this->save($acl);
+
         return $result;
     }
 
     /**
-     * Ajoute une nouvel Acl
+     * Ajoute une nouvel Acl.
      *
      * @param Ressource $ressource La ressource concernée
-     * @param Role $role Le rôle concerné
-     * @param boolean $type Type read = 1, write = 2
+     * @param Role      $role      Le rôle concerné
+     * @param bool      $type      Type read = 1, write = 2
+     *
      * @return bool
      */
     public function addNew($ressource, $role, $type)
@@ -148,10 +148,10 @@ class AclManager extends BaseManager
     }
 
     /**
-     * Fonction qui vérifie si l'url à accès à la route demandée
+     * Fonction qui vérifie si l'url à accès à la route demandée.
      *
-     * @param string  $url  Nom de l'url
-     * @param UserInterface    $user Utilisateur connecté
+     * @param string        $url  Nom de l'url
+     * @param UserInterface $user Utilisateur connecté
      *
      * @return VoterInterface
      */
@@ -167,14 +167,14 @@ class AclManager extends BaseManager
 
         //Récupération des roles par 'role'
         $roles = $this->roleManager->findAll();
-        $rolesByRole = array();
+        $rolesByRole = [];
 
         foreach ($roles as $role) {
             $rolesByRole[$role->getRole()] = $role;
         }
 
         if ($user === 'anon.') {
-            $roles = $this->getRolesOfUser(array('ROLE_ANONYME_10'), $rolesByRole);
+            $roles = $this->getRolesOfUser(['ROLE_ANONYME_10'], $rolesByRole);
         } else {
             $roles = $this->getRolesOfUser($user->getRoles(), $rolesByRole);
         }
@@ -207,7 +207,7 @@ class AclManager extends BaseManager
 
         //check Write access
         $writeWords = array_merge(
-            array('create', 'edit', 'delete', 'modify', 'new', 'update', 'add'),
+            ['create', 'edit', 'delete', 'modify', 'new', 'update', 'add'],
             $this->writeWords
         );
 
@@ -227,11 +227,11 @@ class AclManager extends BaseManager
     public function getAclByRessourceByRole()
     {
         $acls = $this->findAll();
-        $aclsOrdered = array();
+        $aclsOrdered = [];
 
         foreach ($acls as $acl) {
             if (!array_key_exists($acl->getRole()->getId(), $aclsOrdered)) {
-                $aclsOrdered[$acl->getRole()->getId()] = array();
+                $aclsOrdered[$acl->getRole()->getId()] = [];
             }
 
             $aclsOrdered[$acl->getRole()->getId()][$acl->getRessource()->getId()] = $acl;
@@ -242,7 +242,7 @@ class AclManager extends BaseManager
 
     private function getRolesOfUser($rolesOfUsers, $roles)
     {
-        $rolesUsers = array();
+        $rolesUsers = [];
 
         foreach ($rolesOfUsers as $roleUser) {
             if (array_key_exists($roleUser, $roles)) {
@@ -254,16 +254,16 @@ class AclManager extends BaseManager
     }
 
     /**
-     * Gère les options passées en paramètre
+     * Gère les options passées en paramètre.
      *
      * @param array $options Tableau d'options
      */
-    private function setOptions($options = array())
+    private function setOptions($options = [])
     {
         if (isset($options['writeWords']) && is_array($options['writeWords'])) {
             $this->writeWords = $options['writeWords'];
         } else {
-            $this->writeWords = array();
+            $this->writeWords = [];
         }
     }
 
@@ -272,6 +272,7 @@ class AclManager extends BaseManager
         if (null === $this->aclList) {
             $this->aclList = parent::findAll();
         }
-         return $this->aclList;
+
+        return $this->aclList;
     }
 }

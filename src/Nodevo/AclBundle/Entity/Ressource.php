@@ -5,7 +5,7 @@ namespace Nodevo\AclBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * Ressource
+ * Ressource.
  *
  * @ORM\Table(name="core_ressource")
  * @ORM\Entity(repositoryClass="Nodevo\AclBundle\Repository\RessourceRepository")
@@ -13,7 +13,7 @@ use Doctrine\ORM\Mapping as ORM;
 class Ressource
 {
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="res_id", type="integer", options = {"comment" = "ID de la ressource"})
      * @ORM\Id
@@ -36,14 +36,14 @@ class Ressource
     private $pattern;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="res_order", type="integer", options = {"comment" = "Ordre de la ressource"})
      */
     private $order;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="res_type", type="integer", options = {"comment" = "Type de la ressource : 1 multiple, 2 simple", "default" : "1"})
      */
@@ -55,9 +55,9 @@ class Ressource
     }
 
     /**
-     * Get id
+     * Get id.
      *
-     * @return integer 
+     * @return int
      */
     public function getId()
     {
@@ -65,9 +65,10 @@ class Ressource
     }
 
     /**
-     * Set nom
+     * Set nom.
      *
      * @param string $nom
+     *
      * @return Ressource
      */
     public function setNom($nom)
@@ -78,9 +79,9 @@ class Ressource
     }
 
     /**
-     * Get nom
+     * Get nom.
      *
-     * @return string 
+     * @return string
      */
     public function getNom()
     {
@@ -88,7 +89,7 @@ class Ressource
     }
 
     /**
-     * Get pattern
+     * Get pattern.
      *
      * @return string $pattern
      */
@@ -96,46 +97,46 @@ class Ressource
     {
         return $this->pattern;
     }
-    
+
     /**
-     * Set pattern
+     * Set pattern.
      *
      * @param string $pattern
      */
     public function setPattern($pattern)
     {
         $this->pattern = $pattern;
-        
+
         return $this;
     }
 
     /**
-     * Get order
+     * Get order.
      *
-     * @return integer $order
+     * @return int $order
      */
     public function getOrder()
     {
         return $this->order;
     }
-    
+
     /**
-     * Set order
+     * Set order.
      *
-     * @param integer $order
+     * @param int $order
      */
     public function setOrder($order)
     {
         $this->order = $order;
-        
+
         return $this;
     }
 
     /**
-     * Set type
+     * Set type.
      *
-     * @param integer $type
-     * 
+     * @param int $type
+     *
      * @return Ressource
      */
     public function setType($type)
@@ -146,9 +147,9 @@ class Ressource
     }
 
     /**
-     * Get type
+     * Get type.
      *
-     * @return integer 
+     * @return int
      */
     public function getType()
     {

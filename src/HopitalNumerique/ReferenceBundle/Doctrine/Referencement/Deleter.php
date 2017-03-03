@@ -1,8 +1,8 @@
 <?php
+
 namespace HopitalNumerique\ReferenceBundle\Doctrine\Referencement;
 
 use HopitalNumerique\CoreBundle\DependencyInjection\Entity;
-use HopitalNumerique\ReferenceBundle\Doctrine\Referencement\NoteDeleter;
 use HopitalNumerique\ReferenceBundle\Manager\EntityHasReferenceManager;
 
 /**
@@ -25,7 +25,6 @@ class Deleter
      */
     private $entityHasReferenceManager;
 
-
     /**
      * Constructeur.
      */
@@ -35,7 +34,6 @@ class Deleter
         $this->noteDeleter = $noteDeleter;
         $this->entityHasReferenceManager = $entityHasReferenceManager;
     }
-
 
     /**
      * Supprime le référencement correspondant à des entités inexistantes.

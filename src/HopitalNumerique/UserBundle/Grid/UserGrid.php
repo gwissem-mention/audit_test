@@ -1,19 +1,19 @@
 <?php
+
 namespace HopitalNumerique\UserBundle\Grid;
 
 use Nodevo\GridBundle\Grid\Grid;
 use Nodevo\GridBundle\Grid\GridInterface;
 use Nodevo\GridBundle\Grid\Column;
 use Nodevo\GridBundle\Grid\Action;
-use APY\DataGridBundle\Grid\Row;
 
 /**
- * Configuration du Grid User
+ * Configuration du Grid User.
  */
 class UserGrid extends Grid implements GridInterface
 {
     /**
-     * Set la config propre au Grid User (Source + config par défaut)
+     * Set la config propre au Grid User (Source + config par défaut).
      */
     public function setConfig()
     {
@@ -26,7 +26,7 @@ class UserGrid extends Grid implements GridInterface
 
     public function setDefaultFiltreFromController($filtre)
     {
-        $filtres = array();
+        $filtres = [];
 
         $this->setPersistence(false);
 
@@ -47,10 +47,10 @@ class UserGrid extends Grid implements GridInterface
                 $filtres['domaines'] = 'Mon Hôpital Numérique';
                 break;
             case 'Utilisateur-actif':
-                $filtres['etat']      = 'Actif';
-                $filtres['domaines']  = 'Mon Hôpital Numérique';
+                $filtres['etat'] = 'Actif';
+                $filtres['domaines'] = 'Mon Hôpital Numérique';
                 //Not working
-                $filtres['nbVisites'] = array('operator' => 'gt' , 'from' => '0');
+                $filtres['nbVisites'] = ['operator' => 'gt', 'from' => '0'];
                 break;
             //Not working
             case 'Ambassadeur-docs-a-renouvler':
@@ -62,7 +62,7 @@ class UserGrid extends Grid implements GridInterface
     }
 
     /**
-     * Ajoute les colonnes visibles du grid
+     * Ajoute les colonnes visibles du grid.
      */
     public function setColumns()
     {
@@ -85,7 +85,6 @@ class UserGrid extends Grid implements GridInterface
         $this->addColonne(new Column\TextColumn('prenom', 'Prénom'));
         $this->addColonne(new Column\TextColumn('email', 'Adresse e-mail'));
 
-
         $regionColumn = new Column\TextColumn('region', 'Région');
         $regionColumn->setFilterType('select');
         $regionColumn->setSelectFrom('source');
@@ -96,7 +95,7 @@ class UserGrid extends Grid implements GridInterface
         $roleColumn = new Column\ArrayColumn('roles', 'Groupe associé');
         $roleColumn->manipulateRenderCell(
             function ($value, $row, $router) use ($roles) {
-                return array($roles[$value[0]]);
+                return [$roles[$value[0]]];
             }
         );
         $roleColumn->setFilterType('select');
@@ -148,7 +147,7 @@ class UserGrid extends Grid implements GridInterface
     }
 
     /**
-     * Ajoute les boutons d'actions si nécessaire
+     * Ajoute les boutons d'actions si nécessaire.
      */
     public function setActionsButtons()
     {
@@ -158,7 +157,7 @@ class UserGrid extends Grid implements GridInterface
     }
 
     /**
-     * Ajoute les actions de masses
+     * Ajoute les actions de masses.
      */
     public function setMassActions()
     {
@@ -171,10 +170,10 @@ class UserGrid extends Grid implements GridInterface
         $this->addMassAction(new Action\ActionMass('Export CSV - Productions maitrisées', 'HopitalNumeriqueUserBundle:User:exportCsvProductions'));
         $this->addMassAction(new Action\ActionMass('Export CSV - Connaissances métiers', 'HopitalNumeriqueUserBundle:User:exportCsvDomaines'));
         $this->addMassAction(new Action\ActionMass('Export CSV - Connaissances SI', 'HopitalNumeriqueUserBundle:User:exportCsvConnaissancesSI'));
-        $this->addMassAction(new Action\ActionMass('Export CSV - Sessions Ambassadeurs','HopitalNumeriqueUserBundle:User:sessionsMass'));
+        $this->addMassAction(new Action\ActionMass('Export CSV - Sessions Ambassadeurs', 'HopitalNumeriqueUserBundle:User:sessionsMass'));
 
-        $this->addMassAction(new Action\ActionMass('Activer','HopitalNumeriqueUserBundle:User:activerMass'));
-        $this->addMassAction(new Action\ActionMass('Désactiver','HopitalNumeriqueUserBundle:User:desactiverMass'));
-        $this->addMassAction(new Action\ActionMass('Envoyer un mail','HopitalNumeriqueUserBundle:User:envoyerMailMass'));
+        $this->addMassAction(new Action\ActionMass('Activer', 'HopitalNumeriqueUserBundle:User:activerMass'));
+        $this->addMassAction(new Action\ActionMass('Désactiver', 'HopitalNumeriqueUserBundle:User:desactiverMass'));
+        $this->addMassAction(new Action\ActionMass('Envoyer un mail', 'HopitalNumeriqueUserBundle:User:envoyerMailMass'));
     }
 }

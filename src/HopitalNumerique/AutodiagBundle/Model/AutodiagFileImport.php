@@ -1,4 +1,5 @@
 <?php
+
 namespace HopitalNumerique\AutodiagBundle\Model;
 
 use HopitalNumerique\AutodiagBundle\Entity\Autodiag;
@@ -19,7 +20,7 @@ class AutodiagFileImport
     protected $file;
 
     /**
-     * @var boolean
+     * @var bool
      */
     private $notifyUpdate;
 

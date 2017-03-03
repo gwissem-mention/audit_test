@@ -5,9 +5,8 @@ namespace Nodevo\FaqBundle\Repository;
 use Doctrine\ORM\EntityRepository;
 
 /**
- * CategorieRepository
+ * CategorieRepository.
  */
 class CategorieRepository extends EntityRepository
 {
-
 }

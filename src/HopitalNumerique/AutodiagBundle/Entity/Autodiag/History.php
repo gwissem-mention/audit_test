@@ -7,7 +7,7 @@ use HopitalNumerique\AutodiagBundle\Entity\Autodiag;
 use HopitalNumerique\UserBundle\Entity\User;
 
 /**
- * Autodiag history
+ * Autodiag history.
  *
  * @ORM\Table(name="ad_autodiag_history")
  * @ORM\Entity(repositoryClass="HopitalNumerique\AutodiagBundle\Repository\Autodiag\HistoryRepository")
@@ -19,7 +19,7 @@ class History
     const HISTORY_ENTRY_RESTITUTION = 'resitution';
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
@@ -28,7 +28,7 @@ class History
     private $id;
 
     /**
-     * Model
+     * Model.
      *
      * @var Autodiag
      *
@@ -45,16 +45,16 @@ class History
     private $username;
 
     /**
-     * History entry type
+     * History entry type.
      *
-     * @var integer
+     * @var int
      *
      * @ORM\Column(type="string", length=50)
      */
     private $type;
 
     /**
-     * History date and time
+     * History date and time.
      *
      * @var \DateTime
      *
@@ -63,7 +63,7 @@ class History
     private $dateTime;
 
     /**
-     * @var boolean
+     * @var bool
      *
      * @ORM\Column(type="boolean")
      */
@@ -71,8 +71,9 @@ class History
 
     /**
      * History constructor.
+     *
      * @param Autodiag $autodiag
-     * @param User $user
+     * @param User     $user
      */
     private function __construct(Autodiag $autodiag, User $user, $notify)
     {
@@ -86,6 +87,7 @@ class History
     {
         $history = new self($autodiag, $user, $notify);
         $history->setType(self::HISTORY_ENTRY_SURVEY);
+
         return $history;
     }
 
@@ -93,6 +95,7 @@ class History
     {
         $history = new self($autodiag, $user, $notify);
         $history->setType(self::HISTORY_ENTRY_ALGORITHM);
+
         return $history;
     }
 
@@ -100,11 +103,12 @@ class History
     {
         $history = new self($autodiag, $user, $notify);
         $history->setType(self::HISTORY_ENTRY_RESTITUTION);
+
         return $history;
     }
 
     /**
-     * Get model
+     * Get model.
      *
      * @return Autodiag
      */
@@ -114,7 +118,7 @@ class History
     }
 
     /**
-     * Get username
+     * Get username.
      *
      * @return string
      */
@@ -124,7 +128,7 @@ class History
     }
 
     /**
-     * Get entry date and time
+     * Get entry date and time.
      *
      * @return \DateTime
      */
@@ -134,7 +138,7 @@ class History
     }
 
     /**
-     * Get history type
+     * Get history type.
      *
      * @return string
      */
@@ -144,9 +148,10 @@ class History
     }
 
     /**
-     * Set history type
+     * Set history type.
      *
      * @param int $type
+     *
      * @return $this
      */
     public function setType($type)
@@ -157,7 +162,7 @@ class History
     }
 
     /**
-     * @return boolean
+     * @return bool
      */
     public function isNotify()
     {

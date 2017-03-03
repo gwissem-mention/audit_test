@@ -1,4 +1,5 @@
 <?php
+
 namespace HopitalNumerique\AutodiagBundle\Service\Result;
 
 use HopitalNumerique\AutodiagBundle\Entity\Autodiag;
@@ -56,7 +57,6 @@ class ResultItemBuilder
 
         $colorationInversed = 0;
         foreach ($this->getResponses($synthesis, $container) as $attribute) {
-
             $colorationInversed += $attribute['colorationInversed'] ? 1 : -1;
 
             if ($synthesis->getEntries()->count() === 1) {
@@ -146,10 +146,11 @@ class ResultItemBuilder
     }
 
     /**
-     * Retourne la valeur minimale et maximale des réponses de l'attribut (pour l'autodiag en paramètre)
+     * Retourne la valeur minimale et maximale des réponses de l'attribut (pour l'autodiag en paramètre).
      *
      * @param Autodiag $autodiag
-     * @param array $attribute
+     * @param array    $attribute
+     *
      * @return mixed
      */
     public function getMinAndMaxForAutodiagAttributes(Autodiag $autodiag, array $attribute)
@@ -175,10 +176,11 @@ class ResultItemBuilder
     }
 
     /**
-     * Calcule le score d'une valeur en fonction des valeurs min et max
+     * Calcule le score d'une valeur en fonction des valeurs min et max.
      *
      * @param $value
      * @param $minAndMax
+     *
      * @return float
      */
     public function calculateScore($value, $minAndMax)

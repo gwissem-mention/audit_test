@@ -1,4 +1,5 @@
 <?php
+
 namespace Nodevo\Component\Import;
 
 use Nodevo\Component\Import\Processor\ItemProcessorInterface;
@@ -76,6 +77,7 @@ class DataImporter
             $iterator = $this->reader->read($input);
         } catch (\Exception $e) {
             $this->progress->addError($e->getMessage());
+
             return $this->progress;
         }
 

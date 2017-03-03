@@ -1,20 +1,16 @@
 <?php
-namespace HopitalNumerique\ForumBundle\Component\BBCode;
 
+namespace HopitalNumerique\ForumBundle\Component\BBCode;
 
 class TagIntegrator
 {
-    protected $tags = array();
+    protected $tags = [];
 
     public function __construct($tags)
     {
         $this->tags = $tags;
     }
 
-    /**
-     *
-     * @access public
-     */
     public function build()
     {
         return $this->tags;

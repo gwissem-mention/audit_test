@@ -12,24 +12,26 @@ class DomaineManager extends BaseManager
     protected $class = 'HopitalNumerique\DomaineBundle\Entity\Domaine';
 
     /**
-     * Override : Récupère les données pour le grid sous forme de tableau
+     * Override : Récupère les données pour le grid sous forme de tableau.
      *
      * @return array
      */
-    public function getDatasForGrid( \StdClass $condition = null )
+    public function getDatasForGrid(\StdClass $condition = null)
     {
-        $domainesForGrid = array();
-        $domaines = $this->getRepository()->getDatasForGrid( $condition )->getQuery()->getResult();
+        $domainesForGrid = [];
+        $domaines = $this->getRepository()->getDatasForGrid($condition)->getQuery()->getResult();
 
         foreach ($domaines as $domaine) {
             $domaine['idDomaine'] = $domaine['id'];
             $domainesForGrid[] = $domaine;
         }
+
         return $domainesForGrid;
     }
 
-    public function getDomainesUserConnected($idUser) {
-    	return $this->getRepository()->getDomainesUserConnectedForForm($idUser)->getQuery()->getResult();
+    public function getDomainesUserConnected($idUser)
+    {
+        return $this->getRepository()->getDomainesUserConnectedForForm($idUser)->getQuery()->getResult();
     }
 
     public function getDomaineFromHttpHost($httpHost)
@@ -40,18 +42,18 @@ class DomaineManager extends BaseManager
     public function getDomainesByUsers()
     {
         $domaines = $this->findAll();
-        $domaineByUser = array();
+        $domaineByUser = [];
 
         foreach ($domaines as $domaine) {
             foreach ($domaine->getUsers() as $user) {
                 if (!array_key_exists($user->getId(), $domaineByUser)) {
-                    $domaineByUser[$user->getId()] = array(
+                    $domaineByUser[$user->getId()] = [
                         'url' => '',
-                        'id'  => array()
-                    );
+                        'id' => [],
+                    ];
                 }
 
-                $domaineByUser[$user->getId()]['url'] .= ($domaineByUser[$user->getId()]['url'] != '' ?  ' - ' : '') . $domaine->getNom();
+                $domaineByUser[$user->getId()]['url'] .= ($domaineByUser[$user->getId()]['url'] != '' ? ' - ' : '') . $domaine->getNom();
                 $domaineByUser[$user->getId()]['id'][] = $domaine->getId();
             }
         }
@@ -60,18 +62,17 @@ class DomaineManager extends BaseManager
     }
 
     /**
-     * Récupère l'ensemble des domaines trié par id
+     * Récupère l'ensemble des domaines trié par id.
      *
      * @return [type]
      */
     public function getAllDomainesOrdered()
     {
-        $domaineOrdered = array();
+        $domaineOrdered = [];
 
         $domaines = $this->findAll();
 
-        foreach ($domaines as $domaine)
-        {
+        foreach ($domaines as $domaine) {
             $domaineOrdered[$domaine->getId()] = $domaine;
         }
 
@@ -79,7 +80,7 @@ class DomaineManager extends BaseManager
     }
 
     /**
-     * Récupération des domaines correspondant au forum passé en param
+     * Récupération des domaines correspondant au forum passé en param.
      *
      * @param [type] $idForum [description]
      *

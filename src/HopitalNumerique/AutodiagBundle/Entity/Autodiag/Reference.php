@@ -6,7 +6,7 @@ use Doctrine\ORM\Mapping as ORM;
 use HopitalNumerique\AutodiagBundle\Entity\Autodiag;
 
 /**
- * Autodiag reference
+ * Autodiag reference.
  *
  * @ORM\Table(name="ad_autodiag_reference")
  * @ORM\Entity()
@@ -14,7 +14,7 @@ use HopitalNumerique\AutodiagBundle\Entity\Autodiag;
 class Reference
 {
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
@@ -23,7 +23,7 @@ class Reference
     private $id;
 
     /**
-     * Reference number - public identifier
+     * Reference number - public identifier.
      *
      * @var int
      *
@@ -32,7 +32,7 @@ class Reference
     private $number;
 
     /**
-     * Reference label
+     * Reference label.
      *
      * @var string
      *
@@ -41,25 +41,25 @@ class Reference
     private $label;
 
     /**
-     * Reference value
+     * Reference value.
      *
-     * @var integer
+     * @var int
      *
      * @ORM\Column(type="string", length=50)
      */
     private $value;
 
     /**
-     * History entry type
+     * History entry type.
      *
-     * @var integer
+     * @var int
      *
      * @ORM\Column(type="string", length=50)
      */
     private $color;
 
     /**
-     * Model
+     * Model.
      *
      * @var Autodiag
      *
@@ -80,7 +80,8 @@ class Reference
     }
 
     /**
-     * Get ID
+     * Get ID.
+     *
      * @return int
      */
     public function getId()
@@ -89,7 +90,7 @@ class Reference
     }
 
     /**
-     * Get number
+     * Get number.
      *
      * @return int
      */
@@ -99,7 +100,7 @@ class Reference
     }
 
     /**
-     * Get autodiag
+     * Get autodiag.
      *
      * @return Autodiag
      */
@@ -118,6 +119,7 @@ class Reference
 
     /**
      * @param string $label
+     *
      * @return $this
      */
     public function setLabel($label)
@@ -137,6 +139,7 @@ class Reference
 
     /**
      * @param int $value
+     *
      * @return $this
      */
     public function setValue($value)
@@ -156,6 +159,7 @@ class Reference
 
     /**
      * @param int $color
+     *
      * @return $this
      */
     public function setColor($color)

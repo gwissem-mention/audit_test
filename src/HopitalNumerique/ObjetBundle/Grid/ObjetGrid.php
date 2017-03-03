@@ -44,10 +44,10 @@ class ObjetGrid extends Grid implements GridInterface
                 $filtres['types'] = 'Point dur';
                 break;
             case 'Article':
-                $filtres ['isArticle'] = true;
+                $filtres['isArticle'] = true;
                 break;
             case 'publication':
-                $filtres ['isArticle'] = false;
+                $filtres['isArticle'] = false;
                 break;
             case 'production':
                 $filtres['types'] = 'Article';
@@ -105,7 +105,7 @@ class ObjetGrid extends Grid implements GridInterface
     }
 
     /**
-     * Ajoute les boutons d'action
+     * Ajoute les boutons d'action.
      */
     public function setActionsButtons()
     {
@@ -126,7 +126,7 @@ class ObjetGrid extends Grid implements GridInterface
         $this->addActionButton($referencesButton);
 
         $filtre = $this->_defaultFilters;
-        if ("isArticle" == key($filtre)) {
+        if ('isArticle' == key($filtre)) {
             if (reset($filtre)) {
                 $filtre[key($filtre)] = 'Article';
             } else {
@@ -143,7 +143,7 @@ class ObjetGrid extends Grid implements GridInterface
                 [
                     'id',
                     'message' => true,
-                    'filtre'  => reset($filtre),
+                    'filtre' => reset($filtre),
                 ]
             );
         } else {

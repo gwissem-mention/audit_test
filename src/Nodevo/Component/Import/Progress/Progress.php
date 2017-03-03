@@ -1,4 +1,5 @@
 <?php
+
 namespace Nodevo\Component\Import\Progress;
 
 class Progress implements ProgressInterface
@@ -16,7 +17,6 @@ class Progress implements ProgressInterface
 
     public function __construct() //LOGGER
     {
-
     }
 
     public function start()
@@ -43,7 +43,7 @@ class Progress implements ProgressInterface
     {
         $this->success[] = [
             'index' => $this->currentIndex,
-            'context' => $context
+            'context' => $context,
         ];
     }
 
@@ -66,7 +66,7 @@ class Progress implements ProgressInterface
             'message' => $message,
             'context' => $context !== null ? $context : $this->currentItem,
             'index' => $this->currentIndex,
-            'code' => $code
+            'code' => $code,
         ];
     }
 
@@ -100,7 +100,7 @@ class Progress implements ProgressInterface
         return [
             'success',
             'errors',
-            'messages'
+            'messages',
         ];
     }
 }

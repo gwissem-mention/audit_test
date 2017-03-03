@@ -3,10 +3,8 @@
 namespace HopitalNumerique\InterventionBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-use HopitalNumerique\InterventionBundle\Entity\InterventionEtat;
 use Symfony\Component\Validator\Constraints as Assert;
 use Nodevo\ToolsBundle\Validator\Constraints as Nodevo;
-use HopitalNumerique\UserBundle\Entity\User;
 
 /**
  * Entité d'une demande d'intervention.
@@ -31,7 +29,7 @@ use HopitalNumerique\UserBundle\Entity\User;
 class InterventionDemande
 {
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="interv_id", type="integer", nullable=false, options={"unsigned":true})
      * @ORM\Id
@@ -138,7 +136,7 @@ class InterventionDemande
     private $refusMessage;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="interv_total", type="integer", nullable=true)
      */
@@ -314,7 +312,6 @@ class InterventionDemande
      */
     private $connaissancesSI;
 
-
     /**
      * @var \Doctrine\Common\Collections\Collection
      *
@@ -373,23 +370,22 @@ class InterventionDemande
      */
     protected $telephone;
 
-
     /**
-     * Constructor
+     * Constructor.
      */
     public function __construct()
     {
-        $this->ambassadeurs   = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->ambassadeurs = new \Doctrine\Common\Collections\ArrayCollection();
         $this->etablissements = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->objets         = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->facture        = null;
-        $this->total          = null;
+        $this->objets = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->facture = null;
+        $this->total = null;
     }
 
     /**
-     * Get id
+     * Get id.
      *
-     * @return integer
+     * @return int
      */
     public function getId()
     {
@@ -397,9 +393,10 @@ class InterventionDemande
     }
 
     /**
-     * Set dateCreation
+     * Set dateCreation.
      *
      * @param \DateTime $dateCreation
+     *
      * @return InterventionDemande
      */
     public function setDateCreation($dateCreation)
@@ -410,7 +407,7 @@ class InterventionDemande
     }
 
     /**
-     * Get dateCreation
+     * Get dateCreation.
      *
      * @return \DateTime
      */
@@ -420,9 +417,10 @@ class InterventionDemande
     }
 
     /**
-     * Set cmsiDateChoix
+     * Set cmsiDateChoix.
      *
      * @param \DateTime $cmsiDateChoix
+     *
      * @return InterventionDemande
      */
     public function setCmsiDateChoix($cmsiDateChoix)
@@ -433,7 +431,7 @@ class InterventionDemande
     }
 
     /**
-     * Get cmsiDateChoix
+     * Get cmsiDateChoix.
      *
      * @return \DateTime
      */
@@ -443,9 +441,10 @@ class InterventionDemande
     }
 
     /**
-     * Set ambassadeurDateChoix
+     * Set ambassadeurDateChoix.
      *
      * @param \DateTime $ambassadeurDateChoix
+     *
      * @return InterventionDemande
      */
     public function setAmbassadeurDateChoix($ambassadeurDateChoix)
@@ -456,7 +455,7 @@ class InterventionDemande
     }
 
     /**
-     * Get ambassadeurDateChoix
+     * Get ambassadeurDateChoix.
      *
      * @return \DateTime
      */
@@ -465,11 +464,11 @@ class InterventionDemande
         return $this->ambassadeurDateChoix;
     }
 
-
     /**
-     * Set cmsiDateDerniereRelance
+     * Set cmsiDateDerniereRelance.
      *
      * @param \DateTime $cmsiDateDerniereRelance
+     *
      * @return InterventionDemande
      */
     public function setCmsiDateDerniereRelance($cmsiDateDerniereRelance)
@@ -480,7 +479,7 @@ class InterventionDemande
     }
 
     /**
-     * Get cmsiDateDerniereRelance
+     * Get cmsiDateDerniereRelance.
      *
      * @return \DateTime
      */
@@ -490,9 +489,10 @@ class InterventionDemande
     }
 
     /**
-     * Set ambassadeurDateDerniereRelance
+     * Set ambassadeurDateDerniereRelance.
      *
      * @param \DateTime $ambassadeurDateDerniereRelance
+     *
      * @return InterventionDemande
      */
     public function setAmbassadeurDateDerniereRelance($ambassadeurDateDerniereRelance)
@@ -503,7 +503,7 @@ class InterventionDemande
     }
 
     /**
-     * Get ambassadeurDateDerniereRelance
+     * Get ambassadeurDateDerniereRelance.
      *
      * @return \DateTime
      */
@@ -513,9 +513,10 @@ class InterventionDemande
     }
 
     /**
-     * Set autresEtablissements
+     * Set autresEtablissements.
      *
      * @param string $autresEtablissements
+     *
      * @return InterventionDemande
      */
     public function setAutresEtablissements($autresEtablissements)
@@ -526,7 +527,7 @@ class InterventionDemande
     }
 
     /**
-     * Get autresEtablissements
+     * Get autresEtablissements.
      *
      * @return string
      */
@@ -536,9 +537,10 @@ class InterventionDemande
     }
 
     /**
-     * Set description
+     * Set description.
      *
      * @param string $description
+     *
      * @return InterventionDemande
      */
     public function setDescription($description)
@@ -549,7 +551,7 @@ class InterventionDemande
     }
 
     /**
-     * Get description
+     * Get description.
      *
      * @return string
      */
@@ -559,9 +561,10 @@ class InterventionDemande
     }
 
     /**
-     * Set difficulteDescription
+     * Set difficulteDescription.
      *
      * @param string $difficulteDescription
+     *
      * @return InterventionDemande
      */
     public function setDifficulteDescription($difficulteDescription)
@@ -572,7 +575,7 @@ class InterventionDemande
     }
 
     /**
-     * Get difficulteDescription
+     * Get difficulteDescription.
      *
      * @return string
      */
@@ -582,9 +585,10 @@ class InterventionDemande
     }
 
     /**
-     * Set champLibre
+     * Set champLibre.
      *
      * @param string $champLibre
+     *
      * @return InterventionDemande
      */
     public function setChampLibre($champLibre)
@@ -595,7 +599,7 @@ class InterventionDemande
     }
 
     /**
-     * Get champLibre
+     * Get champLibre.
      *
      * @return string
      */
@@ -605,9 +609,10 @@ class InterventionDemande
     }
 
     /**
-     * Set rdvInformations
+     * Set rdvInformations.
      *
      * @param string $rdvInformations
+     *
      * @return InterventionDemande
      */
     public function setRdvInformations($rdvInformations)
@@ -618,7 +623,7 @@ class InterventionDemande
     }
 
     /**
-     * Get rdvInformations
+     * Get rdvInformations.
      *
      * @return string
      */
@@ -628,9 +633,10 @@ class InterventionDemande
     }
 
     /**
-     * Set refusMessage
+     * Set refusMessage.
      *
      * @param string $refusMessage
+     *
      * @return InterventionDemande
      */
     public function setRefusMessage($refusMessage)
@@ -641,7 +647,7 @@ class InterventionDemande
     }
 
     /**
-     * Get refusMessage
+     * Get refusMessage.
      *
      * @return string
      */
@@ -651,9 +657,10 @@ class InterventionDemande
     }
 
     /**
-     * Set cmsiCommentaire
+     * Set cmsiCommentaire.
      *
      * @param string $cmsiCommentaire
+     *
      * @return InterventionDemande
      */
     public function setCmsiCommentaire($cmsiCommentaire)
@@ -664,7 +671,7 @@ class InterventionDemande
     }
 
     /**
-     * Get cmsiCommentaire
+     * Get cmsiCommentaire.
      *
      * @return string
      */
@@ -674,9 +681,10 @@ class InterventionDemande
     }
 
     /**
-     * Set referent
+     * Set referent.
      *
      * @param \HopitalNumerique\UserBundle\Entity\User $referent
+     *
      * @return InterventionDemande
      */
     public function setReferent(\HopitalNumerique\UserBundle\Entity\User $referent = null)
@@ -687,7 +695,7 @@ class InterventionDemande
     }
 
     /**
-     * Get referent
+     * Get referent.
      *
      * @return \HopitalNumerique\UserBundle\Entity\User
      */
@@ -697,9 +705,10 @@ class InterventionDemande
     }
 
     /**
-     * Set ambassadeur
+     * Set ambassadeur.
      *
      * @param \HopitalNumerique\UserBundle\Entity\User $ambassadeur
+     *
      * @return InterventionDemande
      */
     public function setAmbassadeur(\HopitalNumerique\UserBundle\Entity\User $ambassadeur = null)
@@ -710,7 +719,7 @@ class InterventionDemande
     }
 
     /**
-     * Get ambassadeur
+     * Get ambassadeur.
      *
      * @return \HopitalNumerique\UserBundle\Entity\User
      */
@@ -720,9 +729,10 @@ class InterventionDemande
     }
 
     /**
-     * Set cmsi
+     * Set cmsi.
      *
      * @param \HopitalNumerique\UserBundle\Entity\User $cmsi
+     *
      * @return InterventionDemande
      */
     public function setCmsi(\HopitalNumerique\UserBundle\Entity\User $cmsi = null)
@@ -733,7 +743,7 @@ class InterventionDemande
     }
 
     /**
-     * Get cmsi
+     * Get cmsi.
      *
      * @return \HopitalNumerique\UserBundle\Entity\User
      */
@@ -743,9 +753,10 @@ class InterventionDemande
     }
 
     /**
-     * Set directeur
+     * Set directeur.
      *
      * @param \HopitalNumerique\UserBundle\Entity\User $directeur
+     *
      * @return InterventionDemande
      */
     public function setDirecteur(\HopitalNumerique\UserBundle\Entity\User $directeur = null)
@@ -756,7 +767,7 @@ class InterventionDemande
     }
 
     /**
-     * Get directeur
+     * Get directeur.
      *
      * @return \HopitalNumerique\UserBundle\Entity\User
      */
@@ -766,9 +777,10 @@ class InterventionDemande
     }
 
     /**
-     * Set interventionInitiateur
+     * Set interventionInitiateur.
      *
      * @param \HopitalNumerique\InterventionBundle\Entity\InterventionInitiateur $interventionInitiateur
+     *
      * @return InterventionDemande
      */
     public function setInterventionInitiateur(
@@ -780,7 +792,7 @@ class InterventionDemande
     }
 
     /**
-     * Get interventionInitiateur
+     * Get interventionInitiateur.
      *
      * @return \HopitalNumerique\InterventionBundle\Entity\InterventionInitiateur
      */
@@ -790,9 +802,10 @@ class InterventionDemande
     }
 
     /**
-     * Set interventionType
+     * Set interventionType.
      *
      * @param \HopitalNumerique\ReferenceBundle\Entity\Reference $interventionType
+     *
      * @return InterventionDemande
      */
     public function setInterventionType(\HopitalNumerique\ReferenceBundle\Entity\Reference $interventionType = null)
@@ -803,7 +816,7 @@ class InterventionDemande
     }
 
     /**
-     * Get interventionType
+     * Get interventionType.
      *
      * @return \HopitalNumerique\ReferenceBundle\Entity\Reference
      */
@@ -813,9 +826,10 @@ class InterventionDemande
     }
 
     /**
-     * Set interventionEtat
+     * Set interventionEtat.
      *
      * @param \HopitalNumerique\ReferenceBundle\Entity\Reference $interventionEtat
+     *
      * @return InterventionDemande
      */
     public function setInterventionEtat(\HopitalNumerique\ReferenceBundle\Entity\Reference $interventionEtat = null)
@@ -826,7 +840,7 @@ class InterventionDemande
     }
 
     /**
-     * Get interventionEtat
+     * Get interventionEtat.
      *
      * @return \HopitalNumerique\ReferenceBundle\Entity\Reference
      */
@@ -836,9 +850,10 @@ class InterventionDemande
     }
 
     /**
-     * Set evaluationEtat
+     * Set evaluationEtat.
      *
      * @param \HopitalNumerique\ReferenceBundle\Entity\Reference $evaluationEtat
+     *
      * @return InterventionDemande
      */
     public function setEvaluationEtat(\HopitalNumerique\ReferenceBundle\Entity\Reference $evaluationEtat = null)
@@ -849,7 +864,7 @@ class InterventionDemande
     }
 
     /**
-     * Get evaluationEtat
+     * Get evaluationEtat.
      *
      * @return \HopitalNumerique\ReferenceBundle\Entity\Reference
      */
@@ -859,9 +874,10 @@ class InterventionDemande
     }
 
     /**
-     * Set remboursementEtat
+     * Set remboursementEtat.
      *
      * @param \HopitalNumerique\ReferenceBundle\Entity\Reference $remboursementEtat
+     *
      * @return InterventionDemande
      */
     public function setRemboursementEtat(\HopitalNumerique\ReferenceBundle\Entity\Reference $remboursementEtat = null)
@@ -872,7 +888,7 @@ class InterventionDemande
     }
 
     /**
-     * Get remboursementEtat
+     * Get remboursementEtat.
      *
      * @return \HopitalNumerique\ReferenceBundle\Entity\Reference
      */
@@ -882,9 +898,10 @@ class InterventionDemande
     }
 
     /**
-     * Add ambassadeurs
+     * Add ambassadeurs.
      *
      * @param \HopitalNumerique\UserBundle\Entity\User $ambassadeurs
+     *
      * @return InterventionDemande
      */
     public function addAncienAmbassadeur(\HopitalNumerique\UserBundle\Entity\User $ancienAmbassadeur)
@@ -895,7 +912,7 @@ class InterventionDemande
     }
 
     /**
-     * Remove ambassadeurs
+     * Remove ambassadeurs.
      *
      * @param \HopitalNumerique\UserBundle\Entity\User $ambassadeurs
      */
@@ -905,7 +922,7 @@ class InterventionDemande
     }
 
     /**
-     * Get ambassadeurs
+     * Get ambassadeurs.
      *
      * @return \Doctrine\Common\Collections\Collection
      */
@@ -915,9 +932,10 @@ class InterventionDemande
     }
 
     /**
-     * Add etablissements
+     * Add etablissements.
      *
      * @param \HopitalNumerique\EtablissementBundle\Entity\Etablissement $etablissements
+     *
      * @return InterventionDemande
      */
     public function addEtablissement(\HopitalNumerique\EtablissementBundle\Entity\Etablissement $etablissements)
@@ -928,7 +946,7 @@ class InterventionDemande
     }
 
     /**
-     * Remove etablissements
+     * Remove etablissements.
      *
      * @param \HopitalNumerique\EtablissementBundle\Entity\Etablissement $etablissements
      */
@@ -938,7 +956,7 @@ class InterventionDemande
     }
 
     /**
-     * Get etablissements
+     * Get etablissements.
      *
      * @return \Doctrine\Common\Collections\Collection
      */
@@ -948,9 +966,10 @@ class InterventionDemande
     }
 
     /**
-     * Add objets
+     * Add objets.
      *
      * @param \HopitalNumerique\ObjetBundle\Entity\Objet $objets
+     *
      * @return InterventionDemande
      */
     public function addObjet(\HopitalNumerique\ObjetBundle\Entity\Objet $objets)
@@ -961,7 +980,7 @@ class InterventionDemande
     }
 
     /**
-     * Remove objets
+     * Remove objets.
      *
      * @param \HopitalNumerique\ObjetBundle\Entity\Objet $objets
      */
@@ -971,7 +990,7 @@ class InterventionDemande
     }
 
     /**
-     * Get objets
+     * Get objets.
      *
      * @return \Doctrine\Common\Collections\Collection
      */
@@ -981,7 +1000,7 @@ class InterventionDemande
     }
 
     /**
-     * Get InterventionRegroupementsDemandesPrincipales
+     * Get InterventionRegroupementsDemandesPrincipales.
      *
      * @return \HopitalNumerique\InterventionBundle\Entity\InterventionRegroupement
      */
@@ -989,8 +1008,9 @@ class InterventionDemande
     {
         return $this->interventionRegroupementsDemandesPrincipales;
     }
+
     /**
-     * Get InterventionRegroupementsDemandesRegroupees
+     * Get InterventionRegroupementsDemandesRegroupees.
      *
      * @return \HopitalNumerique\InterventionBundle\Entity\InterventionRegroupement
      */
@@ -999,20 +1019,19 @@ class InterventionDemande
         return $this->interventionRegroupementsDemandesRegroupees;
     }
 
-
-
     /**
      * Retourne si la demande d'intervention a déjà eu un ambassadeur.
      *
      * @param \HopitalNumerique\UserBundle\Entity\User $ambassadeur L'ambassadeur à vérifier parmi les anciens
-     * @return boolean VRAI ssi l'ambassadeur avait été relié à cette demande d'intervention
+     *
+     * @return bool VRAI ssi l'ambassadeur avait été relié à cette demande d'intervention
      */
     public function haveAncienAmbassadeur(\HopitalNumerique\UserBundle\Entity\User $ambassadeur)
     {
-        foreach ($this->ancienAmbassadeurs as $ancienAmbassadeur)
-        {
-            if ($ancienAmbassadeur->getId() == $ambassadeur->getId())
+        foreach ($this->ancienAmbassadeurs as $ancienAmbassadeur) {
+            if ($ancienAmbassadeur->getId() == $ambassadeur->getId()) {
                 return true;
+            }
         }
 
         return false;
@@ -1021,45 +1040,47 @@ class InterventionDemande
     /**
      * Retourne si la demande d'intervention a été regroupée (possède donc une demande principale).
      *
-     * @return boolean VRAI ssi la demande d'intervention a été regroupée
+     * @return bool VRAI ssi la demande d'intervention a été regroupée
      */
     public function estDemandeRegroupee()
     {
-        return (count($this->interventionRegroupementsDemandesPrincipales) > 0);
+        return count($this->interventionRegroupementsDemandesPrincipales) > 0;
     }
-
 
     /**
      * Retourne la date butoir pour le refus, validation ou mise en attente de la demande d'intervention par le CMSI.
-     * Si priode modifiée, modifier également dans DemandesNouvellesGrid.php
+     * Si priode modifiée, modifier également dans DemandesNouvellesGrid.php.
      *
      * @return \DateTime|null La date butoir du CMSI
      */
     public function getDateButoirCmsi()
     {
-        if ($this->interventionEtatEstDemandeInitiale())
-        {
+        if ($this->interventionEtatEstDemandeInitiale()) {
             $dateButoir = new \DateTime($dateCreation);
-            $dateButoir->add(new \DateInterval('P'.InterventionEtat::$VALIDATION_CMSI_NOMBRE_JOURS.'D'));
+            $dateButoir->add(new \DateInterval('P' . InterventionEtat::$VALIDATION_CMSI_NOMBRE_JOURS . 'D'));
+
             return $dateButoir;
         }
+
         return null;
     }
 
     /**
      * Retourne la liste des IDs de régions où sont présents les établissements rattachés à cette demande.
      *
-     * @return integer[] IDs des régions où sont présents les établissements rattachés
+     * @return int[] IDs des régions où sont présents les établissements rattachés
      */
     public function getEtablissementsRattachesRegionsIds()
     {
-        $regionsIds = array();
+        $regionsIds = [];
 
-        foreach ($this->getEtablissementsRattachesRegions() as $region)
+        foreach ($this->getEtablissementsRattachesRegions() as $region) {
             $regionsIds[] = $region->getId();
+        }
 
         return $regionsIds;
     }
+
     /**
      * Retourne la liste des régions où sont présents les établissements rattachés à cette demande.
      *
@@ -1067,23 +1088,20 @@ class InterventionDemande
      */
     private function getEtablissementsRattachesRegions()
     {
-        $regions = array();
+        $regions = [];
 
-        foreach ($this->etablissements as $etablissement)
-        {
-            if ($etablissement->getRegion() != null)
-            {
+        foreach ($this->etablissements as $etablissement) {
+            if ($etablissement->getRegion() != null) {
                 $regionDejaPresente = false;
-                foreach ($regions as $region)
-                {
-                    if ($region->getId() == $etablissement->getRegion()->getId())
-                    {
+                foreach ($regions as $region) {
+                    if ($region->getId() == $etablissement->getRegion()->getId()) {
                         $regionDejaPresente = true;
                         break;
                     }
                 }
-                if (!$regionDejaPresente)
+                if (!$regionDejaPresente) {
                     $regions[] = $etablissement->getRegion();
+                }
             }
         }
 
@@ -1093,95 +1111,102 @@ class InterventionDemande
     /**
      * Retourne si l'état de l'intervention est Demande initiale.
      *
-     * @return boolean VRAI ssi l'état de l'intervention est Demande initiale
+     * @return bool VRAI ssi l'état de l'intervention est Demande initiale
      */
     public function interventionEtatEstDemandeInitiale()
     {
-        return ($this->interventionEtat->getId() == InterventionEtat::getInterventionEtatDemandeInitialeId());
+        return $this->interventionEtat->getId() == InterventionEtat::getInterventionEtatDemandeInitialeId();
     }
+
     /**
      * Retourne si l'état de l'intervention est Mise en attente par le CMSI.
      *
-     * @return boolean VRAI ssi l'état de l'intervention est Mise en attente par le CMSI
+     * @return bool VRAI ssi l'état de l'intervention est Mise en attente par le CMSI
      */
     public function interventionEtatEstAttenteCmsi()
     {
-        return ($this->interventionEtat->getId() == InterventionEtat::getInterventionEtatAttenteCmsiId());
+        return $this->interventionEtat->getId() == InterventionEtat::getInterventionEtatAttenteCmsiId();
     }
+
     /**
      * Retourne si l'état de l'intervention est Validé par le CMSI.
      *
-     * @return boolean VRAI ssi l'état de l'intervention est Validé par le CMSI
+     * @return bool VRAI ssi l'état de l'intervention est Validé par le CMSI
      */
     public function interventionEtatEstAcceptationCmsi()
     {
-    	$etat = $this->getInterventionEtat()->getId();
-		if ($etat == InterventionEtat::getInterventionEtatAcceptationCmsiRelance2Id()) {
-	    	return ($this->interventionEtat->getId() == InterventionEtat::getInterventionEtatAcceptationCmsiRelance2Id());
-		} elseif ($etat == InterventionEtat::getInterventionEtatAcceptationCmsiRelance1Id()) {
-			return ($this->interventionEtat->getId() == InterventionEtat::getInterventionEtatAcceptationCmsiRelance1Id());
-		} else {
-			return ($this->interventionEtat->getId() == InterventionEtat::getInterventionEtatAcceptationCmsiId());
-		}
+        $etat = $this->getInterventionEtat()->getId();
+        if ($etat == InterventionEtat::getInterventionEtatAcceptationCmsiRelance2Id()) {
+            return $this->interventionEtat->getId() == InterventionEtat::getInterventionEtatAcceptationCmsiRelance2Id();
+        } elseif ($etat == InterventionEtat::getInterventionEtatAcceptationCmsiRelance1Id()) {
+            return $this->interventionEtat->getId() == InterventionEtat::getInterventionEtatAcceptationCmsiRelance1Id();
+        } else {
+            return $this->interventionEtat->getId() == InterventionEtat::getInterventionEtatAcceptationCmsiId();
+        }
     }
+
     /**
      * Retourne si l'état de l'intervention est Validé par l'ambassadeur.
      *
-     * @return boolean VRAI ssi l'état de l'intervention est Validé par l'ambassadeur
+     * @return bool VRAI ssi l'état de l'intervention est Validé par l'ambassadeur
      */
     public function interventionEtatEstAcceptationAmbassadeur()
     {
-        return ($this->interventionEtat->getId() == InterventionEtat::getInterventionEtatAcceptationAmbassadeurId());
+        return $this->interventionEtat->getId() == InterventionEtat::getInterventionEtatAcceptationAmbassadeurId();
     }
+
     /**
      * Retourne si l'état de l'intervention est Terminé.
      *
-     * @return boolean VRAI ssi l'état de l'intervention est Terminé
+     * @return bool VRAI ssi l'état de l'intervention est Terminé
      */
     public function interventionEtatEstTermine()
     {
-        return ($this->interventionEtat->getId() == InterventionEtat::getInterventionEtatTermineId());
+        return $this->interventionEtat->getId() == InterventionEtat::getInterventionEtatTermineId();
     }
+
     /**
      * Retourne si l'état de l'intervention est Clôturé.
      *
-     * @return boolean VRAI ssi l'état de l'intervention est Clôturé
+     * @return bool VRAI ssi l'état de l'intervention est Clôturé
      */
     public function interventionEtatEstCloture()
     {
-        return ($this->interventionEtat->getId() == InterventionEtat::getInterventionEtatClotureId());
+        return $this->interventionEtat->getId() == InterventionEtat::getInterventionEtatClotureId();
     }
+
     /**
      * Retourne si l'état de l'intervention est Annulé par l'établissement.
      *
-     * @return boolean VRAI ssi l'état de l'intervention est Annulé par l'établissement
+     * @return bool VRAI ssi l'état de l'intervention est Annulé par l'établissement
      */
     public function interventionEtatEstAnnuleEtablissement()
     {
-        return ($this->interventionEtat->getId() == InterventionEtat::getInterventionEtatAnnulationEtablissementId());
+        return $this->interventionEtat->getId() == InterventionEtat::getInterventionEtatAnnulationEtablissementId();
     }
 
     /**
      * Retourne si l'état de l'évaluation est À évaluer.
      *
-     * @return boolean VRAI ssi l'état de l'évaluation est À évaluer
+     * @return bool VRAI ssi l'état de l'évaluation est À évaluer
      */
     public function evaluationEtatEstAEvaluer()
     {
-        return ($this->evaluationEtat != null && $this->evaluationEtat->getId() == InterventionEvaluationEtat::getInterventionEvaluationEtatAEvaluerId());
-    }
-    /**
-     * Retourne si l'état de l'évaluation est Évalué.
-     *
-     * @return boolean VRAI ssi l'état de l'évaluation est Évalué
-     */
-    public function evaluationEtatEstEvalue()
-    {
-        return ($this->evaluationEtat != null && $this->evaluationEtat->getId() == InterventionEvaluationEtat::getInterventionEvaluationEtatEvalueId());
+        return $this->evaluationEtat != null && $this->evaluationEtat->getId() == InterventionEvaluationEtat::getInterventionEvaluationEtatAEvaluerId();
     }
 
     /**
-     * Get facture
+     * Retourne si l'état de l'évaluation est Évalué.
+     *
+     * @return bool VRAI ssi l'état de l'évaluation est Évalué
+     */
+    public function evaluationEtatEstEvalue()
+    {
+        return $this->evaluationEtat != null && $this->evaluationEtat->getId() == InterventionEvaluationEtat::getInterventionEvaluationEtatEvalueId();
+    }
+
+    /**
+     * Get facture.
      *
      * @return \HopitalNumerique\PaiementBundle\Entity\Facture $facture
      */
@@ -1191,20 +1216,21 @@ class InterventionDemande
     }
 
     /**
-     * Set facture
+     * Set facture.
      *
      * @param \HopitalNumerique\PaiementBundle\Entity\Facture $facture
      */
     public function setFacture(\HopitalNumerique\PaiementBundle\Entity\Facture $facture = null)
     {
         $this->facture = $facture;
+
         return $this;
     }
 
     /**
-     * Get total
+     * Get total.
      *
-     * @return integer $total
+     * @return int $total
      */
     public function getTotal()
     {
@@ -1212,18 +1238,19 @@ class InterventionDemande
     }
 
     /**
-     * Set total
+     * Set total.
      *
-     * @param integer $total
+     * @param int $total
      */
     public function setTotal($total)
     {
         $this->total = $total;
+
         return $this;
     }
 
     /**
-     * Get objetsAutres
+     * Get objetsAutres.
      *
      * @return string $objetsAutres
      */
@@ -1233,20 +1260,22 @@ class InterventionDemande
     }
 
     /**
-     * Set objetsAutres
+     * Set objetsAutres.
      *
      * @param string $objetsAutres
      */
     public function setObjetsAutres($objetsAutres)
     {
         $this->objetsAutres = $objetsAutres;
+
         return $this;
     }
 
     /**
-     * Set email
+     * Set email.
      *
      * @param string $email
+     *
      * @return InterventionDemande
      */
     public function setEmail($email)
@@ -1257,7 +1286,7 @@ class InterventionDemande
     }
 
     /**
-     * Get email
+     * Get email.
      *
      * @return string
      */
@@ -1267,9 +1296,10 @@ class InterventionDemande
     }
 
     /**
-     * Set telephone
+     * Set telephone.
      *
      * @param string $telephone
+     *
      * @return InterventionDemande
      */
     public function setTelephone($telephone)
@@ -1280,7 +1310,7 @@ class InterventionDemande
     }
 
     /**
-     * Get telephone
+     * Get telephone.
      *
      * @return string
      */
@@ -1290,9 +1320,10 @@ class InterventionDemande
     }
 
     /**
-     * Add interventionRegroupementsDemandesPrincipales
+     * Add interventionRegroupementsDemandesPrincipales.
      *
      * @param \HopitalNumerique\InterventionBundle\Entity\InterventionRegroupement $interventionRegroupementsDemandesPrincipales
+     *
      * @return InterventionDemande
      */
     public function addInterventionRegroupementsDemandesPrincipale(\HopitalNumerique\InterventionBundle\Entity\InterventionRegroupement $interventionRegroupementsDemandesPrincipales)
@@ -1303,7 +1334,7 @@ class InterventionDemande
     }
 
     /**
-     * Remove interventionRegroupementsDemandesPrincipales
+     * Remove interventionRegroupementsDemandesPrincipales.
      *
      * @param \HopitalNumerique\InterventionBundle\Entity\InterventionRegroupement $interventionRegroupementsDemandesPrincipales
      */
@@ -1313,9 +1344,10 @@ class InterventionDemande
     }
 
     /**
-     * Add interventionRegroupementsDemandesRegroupees
+     * Add interventionRegroupementsDemandesRegroupees.
      *
      * @param \HopitalNumerique\InterventionBundle\Entity\InterventionRegroupement $interventionRegroupementsDemandesRegroupees
+     *
      * @return InterventionDemande
      */
     public function addInterventionRegroupementsDemandesRegroupee(\HopitalNumerique\InterventionBundle\Entity\InterventionRegroupement $interventionRegroupementsDemandesRegroupees)
@@ -1326,7 +1358,7 @@ class InterventionDemande
     }
 
     /**
-     * Remove interventionRegroupementsDemandesRegroupees
+     * Remove interventionRegroupementsDemandesRegroupees.
      *
      * @param \HopitalNumerique\InterventionBundle\Entity\InterventionRegroupement $interventionRegroupementsDemandesRegroupees
      */
@@ -1336,9 +1368,10 @@ class InterventionDemande
     }
 
     /**
-     * Add connaissances
+     * Add connaissances.
      *
      * @param \HopitalNumerique\ReferenceBundle\Entity\Reference $connaissances
+     *
      * @return InterventionDemande
      */
     public function addConnaissance(\HopitalNumerique\ReferenceBundle\Entity\Reference $connaissances)
@@ -1349,7 +1382,7 @@ class InterventionDemande
     }
 
     /**
-     * Remove connaissances
+     * Remove connaissances.
      *
      * @param \HopitalNumerique\ReferenceBundle\Entity\Reference $connaissances
      */
@@ -1359,7 +1392,7 @@ class InterventionDemande
     }
 
     /**
-     * Get connaissances
+     * Get connaissances.
      *
      * @return \Doctrine\Common\Collections\Collection
      */
@@ -1369,9 +1402,9 @@ class InterventionDemande
     }
 
     /**
-     * Get connaissances
+     * Get connaissances.
      *
-     * @return this
+     * @return $this
      */
     public function setConnaissances($connaissances)
     {
@@ -1381,9 +1414,10 @@ class InterventionDemande
     }
 
     /**
-     * Add connaissancesSI
+     * Add connaissancesSI.
      *
      * @param \HopitalNumerique\ReferenceBundle\Entity\Reference $connaissancesSI
+     *
      * @return InterventionDemande
      */
     public function addConnaissancesSI(\HopitalNumerique\ReferenceBundle\Entity\Reference $connaissancesSI)
@@ -1394,7 +1428,7 @@ class InterventionDemande
     }
 
     /**
-     * Remove connaissancesSI
+     * Remove connaissancesSI.
      *
      * @param \HopitalNumerique\ReferenceBundle\Entity\Reference $connaissancesSI
      */
@@ -1404,7 +1438,7 @@ class InterventionDemande
     }
 
     /**
-     * Get connaissancesSI
+     * Get connaissancesSI.
      *
      * @return \Doctrine\Common\Collections\Collection
      */
@@ -1414,9 +1448,9 @@ class InterventionDemande
     }
 
     /**
-     * Get connaissancesSI
+     * Get connaissancesSI.
      *
-     * @return this
+     * @return $this
      */
     public function setConnaissancesSI($connaissancesSI)
     {
@@ -1428,10 +1462,9 @@ class InterventionDemande
     public function getConnaissancesByParent()
     {
         $connaissances = $this->connaissances;
-        $connaissancesOrdered = array();
+        $connaissancesOrdered = [];
 
-        foreach ($connaissances as $connaissance)
-        {
+        foreach ($connaissances as $connaissance) {
             /*if(is_null($connaissance->getParent()))
             {
                 continue;
@@ -1452,18 +1485,15 @@ class InterventionDemande
     public function getConnaissancesSIByParent()
     {
         $connaissancesSI = $this->connaissancesSI;
-        $connaissancesOrdered = array();
+        $connaissancesOrdered = [];
 
-        foreach ($connaissancesSI as $connaissance)
-        {
-            if(is_null($connaissance->getParent()))
-            {
+        foreach ($connaissancesSI as $connaissance) {
+            if (is_null($connaissance->getParent())) {
                 continue;
             }
 
-            if(!array_key_exists($connaissance->getParent()->getId(), $connaissancesOrdered))
-            {
-                $connaissancesOrdered[$connaissance->getParent()->getId()] = array();
+            if (!array_key_exists($connaissance->getParent()->getId(), $connaissancesOrdered)) {
+                $connaissancesOrdered[$connaissance->getParent()->getId()] = [];
             }
 
             $connaissancesOrdered[$connaissance->getParent()->getId()][] = $connaissance;
@@ -1473,9 +1503,10 @@ class InterventionDemande
     }
 
     /**
-     * Set evaluationDate
+     * Set evaluationDate.
      *
      * @param \DateTime $evaluationDate
+     *
      * @return InterventionDemande
      */
     public function setEvaluationDate($evaluationDate)
@@ -1486,7 +1517,7 @@ class InterventionDemande
     }
 
     /**
-     * Get evaluationDate
+     * Get evaluationDate.
      *
      * @return \DateTime
      */
@@ -1496,7 +1527,7 @@ class InterventionDemande
     }
 
     /**
-     * Add facturesAnnulee
+     * Add facturesAnnulee.
      *
      * @param \HopitalNumerique\PaiementBundle\Entity\FactureAnnulee $facturesAnnulee
      *
@@ -1510,7 +1541,7 @@ class InterventionDemande
     }
 
     /**
-     * Remove facturesAnnulee
+     * Remove facturesAnnulee.
      *
      * @param \HopitalNumerique\PaiementBundle\Entity\FactureAnnulee $facturesAnnulee
      */
@@ -1520,7 +1551,7 @@ class InterventionDemande
     }
 
     /**
-     * Get facturesAnnulees
+     * Get facturesAnnulees.
      *
      * @return \Doctrine\Common\Collections\Collection
      */

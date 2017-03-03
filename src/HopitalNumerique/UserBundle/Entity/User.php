@@ -382,8 +382,6 @@ class User extends BaseUser
      */
     protected $connaissancesAmbassadeursSI;
 
-    // ^ -------- Onglet : Vous êtes un établissement de santé -------- ^
-
     /**
      * @ORM\ManyToOne(targetEntity="\HopitalNumerique\ReferenceBundle\Entity\Reference", cascade={"persist"})
      * @ORM\JoinColumn(name="ref_statut_etablissement_sante", referencedColumnName="ref_id")
@@ -413,12 +411,12 @@ class User extends BaseUser
      * @Assert\Length(
      *      min = "1",
      *      max = "255",
-     *      minMessage="Il doit y avoir au moins {{ limit }} caractères dans l'Nom de votre établissement si non disponible dans la liste précédente.",
-     *      maxMessage="Il doit y avoir au maximum {{ limit }} caractères dans l'Nom de votre établissement si non disponible dans la liste précédente."
+     *      minMessage="Il doit y avoir au moins {{ limit }} caractères dans le Nom de votre structure si non disponible dans la liste précédente.",
+     *      maxMessage="Il doit y avoir au maximum {{ limit }} caractères dans le Nom de votre structure si non disponible dans la liste précédente."
      * )
      * @Nodevo\Javascript(class="validate[minSize[1],maxSize[255]]")
      * @Gedmo\Versioned
-     * @ORM\Column(name="usr_autre_rattachement_sante", type="string", length=255, nullable=true, options = {"comment" = "Nom de votre établissement si non disponible dans la liste précédente santé de l utilisateur"})
+     * @ORM\Column(name="usr_autre_rattachement_sante", type="string", length=255, nullable=true, options = {"comment" = "Nom de votre structure si non disponible dans la liste précédente santé de l utilisateur"})
      */
     protected $autreStructureRattachementSante;
 
@@ -428,8 +426,8 @@ class User extends BaseUser
      * @Assert\Length(
      *      min = "3",
      *      max = "255",
-     *      minMessage="Il doit y avoir au moins {{ limit }} caractères dans l'Nom de votre établissement si non disponible dans la liste précédente.",
-     *      maxMessage="Il doit y avoir au maximum {{ limit }} caractères dans l'Nom de votre établissement si non disponible dans la liste précédente."
+     *      minMessage="Il doit y avoir au moins {{ limit }} caractères dans le Nom de votre structure si non disponible dans la liste précédente.",
+     *      maxMessage="Il doit y avoir au maximum {{ limit }} caractères dans le Nom de votre structure si non disponible dans la liste précédente."
      * )
      * @Nodevo\Javascript(class="validate[minSize[3],maxSize[255]]")
      * @Gedmo\Versioned
@@ -449,10 +447,6 @@ class User extends BaseUser
      * @Gedmo\Versioned
      */
     protected $profilEtablissementSante;
-
-    // v -------- Onglet : Vous êtes un établissement de santé -------- v
-
-    // ^ -------- Onglet : Vous êtes une structure autre qu'un établissement de santé  -------- ^
 
     /**
      * @var string
@@ -484,7 +478,7 @@ class User extends BaseUser
      */
     protected $fonctionStructure;
 
-    // v -------- Onglet : Vous êtes une structure autre qu'un établissement de santé  -------- v
+    // v -------- Onglet : Vous êtes dans une autre structure  -------- v
 
     /**
      * @ORM\ManyToMany(targetEntity="\HopitalNumerique\ObjetBundle\Entity\Objet", mappedBy="ambassadeurs")
@@ -1414,7 +1408,7 @@ class User extends BaseUser
         } elseif ($this->getAutreStructureRattachementSante() != null) {
             return $this->getAutreStructureRattachementSante();
         } else {
-            return 'Aucun établissement de rattachement';
+            return 'Aucune structure de rattachement';
         }
     }
 
@@ -2639,7 +2633,7 @@ class User extends BaseUser
             $dateRenew = $contractualisation->getDateRenouvellement();
 
             if (true === $contractualisation->getArchiver()) {
-                $archive++;
+                ++$archive;
             } elseif ($dateRenew <= $dateLimit && $dateRenew != null) {
                 return false;
             }

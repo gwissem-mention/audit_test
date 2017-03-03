@@ -6,15 +6,13 @@ use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\Query\Expr\Join;
 use HopitalNumerique\AutodiagBundle\Entity\Autodiag;
 
-/**
- *
- */
 class RestitutionRepository extends EntityRepository
 {
     /**
-     * Get Autodiag restitution
+     * Get Autodiag restitution.
      *
      * @param Autodiag $autodiag
+     *
      * @return mixed
      */
     public function getForAutodiag(Autodiag $autodiag)

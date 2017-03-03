@@ -8,12 +8,12 @@ use Doctrine\ORM\QueryBuilder;
 use HopitalNumerique\UserBundle\Entity\User;
 
 /**
- * ContractualisationRepository
+ * ContractualisationRepository.
  */
 class ContractualisationRepository extends EntityRepository
 {
     /**
-     * Récupère le nombre de contractualisation à renouveler depuis 45jours
+     * Récupère le nombre de contractualisation à renouveler depuis 45jours.
      *
      * @return QueryBuilder
      */
@@ -68,7 +68,7 @@ class ContractualisationRepository extends EntityRepository
                 )
             )
             ->andWhere(
-                $qb->expr()->like('user.roles', $qb->expr()->literal("%ROLE_AMBASSADEUR_7%"))
+                $qb->expr()->like('user.roles', $qb->expr()->literal('%ROLE_AMBASSADEUR_7%'))
             )
             ->setParameters([
                 'in45Days' => $in45Days,
@@ -79,9 +79,10 @@ class ContractualisationRepository extends EntityRepository
     }
 
     /**
-     * Récupère les contractualisations pour un utilisateur donné
+     * Récupère les contractualisations pour un utilisateur donné.
      *
      * @param null $condition
+     *
      * @return \Doctrine\ORM\QueryBuilder
      */
     public function getContractualisationForGrid($condition = null)

@@ -1,4 +1,5 @@
 <?php
+
 namespace HopitalNumerique\AutodiagBundle\Form\Type\Attribute;
 
 use HopitalNumerique\AutodiagBundle\Entity\Autodiag\Attribute;
@@ -18,7 +19,7 @@ class SelectChoiceLoader implements ChoiceLoaderInterface
     {
         $choices = [];
         foreach ($this->options as $option) {
-            /** @var Attribute\Option $option */
+            /* @var Attribute\Option $option */
             $choices[$option->getLabel()] = (string) $option->getValue();
         }
 
@@ -34,5 +35,4 @@ class SelectChoiceLoader implements ChoiceLoaderInterface
     {
         return $this->loadChoiceList()->getValuesForChoices($choices);
     }
-
 }

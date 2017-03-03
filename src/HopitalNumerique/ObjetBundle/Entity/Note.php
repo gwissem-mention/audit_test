@@ -5,7 +5,7 @@ namespace HopitalNumerique\ObjetBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * Note
+ * Note.
  *
  * @ORM\Table(name="hn_objet_note")
  * @ORM\Entity(repositoryClass="HopitalNumerique\ObjetBundle\Repository\NoteRepository")
@@ -13,7 +13,7 @@ use Doctrine\ORM\Mapping as ORM;
 class Note
 {
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="note_id", type="integer")
      * @ORM\Id
@@ -29,22 +29,22 @@ class Note
     protected $dateNote;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="note_note", type="integer")
      */
     protected $note;
-    
+
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\ManyToOne(targetEntity="Objet", inversedBy="listeNotes")
      * @ORM\JoinColumn(name="obj_id", referencedColumnName="obj_id", onDelete="CASCADE")
      */
     protected $objet;
-    
+
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\ManyToOne(targetEntity="Contenu", inversedBy="listeNotes")
      * @ORM\JoinColumn(name="con_id", referencedColumnName="con_id", onDelete="CASCADE", nullable=true)
@@ -52,18 +52,17 @@ class Note
     protected $contenu;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\ManyToOne(targetEntity="\HopitalNumerique\UserBundle\Entity\User")
      * @ORM\JoinColumn(name="usr_user", referencedColumnName="usr_id", nullable=true, onDelete="CASCADE")
      */
     protected $user;
 
-
     /**
-     * Get id
+     * Get id.
      *
-     * @return integer 
+     * @return int
      */
     public function getId()
     {
@@ -71,9 +70,10 @@ class Note
     }
 
     /**
-     * Set dateNote
+     * Set dateNote.
      *
      * @param \DateTime $dateNote
+     *
      * @return Note
      */
     public function setDateNote($dateNote)
@@ -84,9 +84,9 @@ class Note
     }
 
     /**
-     * Get dateNote
+     * Get dateNote.
      *
-     * @return \DateTime 
+     * @return \DateTime
      */
     public function getDateNote()
     {
@@ -94,9 +94,10 @@ class Note
     }
 
     /**
-     * Set note
+     * Set note.
      *
-     * @param integer $note
+     * @param int $note
+     *
      * @return Note
      */
     public function setNote($note)
@@ -107,29 +108,27 @@ class Note
     }
 
     /**
-     * Get note
+     * Get note.
      *
-     * @return integer 
+     * @return int
      */
     public function getNote()
     {
         return $this->note;
     }
 
-
-
     /**
-     * Get note
+     * Get note.
      *
-     * @return \HopitalNumerique\ObjetBundle\Entity\Objet 
+     * @return \HopitalNumerique\ObjetBundle\Entity\Objet
      */
     public function getObjet()
     {
         return $this->objet;
     }
-    
+
     /**
-     * Set objet
+     * Set objet.
      *
      * @param Objet $objet
      */
@@ -137,9 +136,9 @@ class Note
     {
         $this->objet = $objet;
     }
-    
+
     /**
-     * Get contenu
+     * Get contenu.
      *
      * @return \HopitalNumerique\ObjetBundle\Entity\Contenu $contenu
      */
@@ -147,9 +146,9 @@ class Note
     {
         return $this->contenu;
     }
-    
+
     /**
-     * Set contenu
+     * Set contenu.
      *
      * @param \HopitalNumerique\ObjetBundle\Entity\Contenu $contenu
      */
@@ -159,20 +158,21 @@ class Note
     }
 
     /**
-     * Set user
+     * Set user.
      *
      * @param \HopitalNumerique\UserBundle\Entity\User $user
+     *
      * @return Reponse
      */
     public function setUser(\HopitalNumerique\UserBundle\Entity\User $user = null)
     {
         $this->user = $user;
-    
+
         return $this;
     }
-    
+
     /**
-     * Get user
+     * Get user.
      *
      * @return \HopitalNumerique\UserBundle\Entity\User
      */

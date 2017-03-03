@@ -1,4 +1,5 @@
 <?php
+
 namespace HopitalNumerique\AutodiagBundle\Service\Export;
 
 use HopitalNumerique\AutodiagBundle\Entity\Autodiag;
@@ -25,11 +26,11 @@ class AlgorithmExport extends AbstractExport
         $references = $autodiag->getReferences();
         $referencesKeyed = [];
         foreach ($references as $reference) {
-            /** @var Autodiag\Reference $reference */
+            /* @var Autodiag\Reference $reference */
             $referencesKeyed[$reference->getNumber()] = $reference;
         }
 
-        for ($i = 1; $i <= $this->referencesCount; $i++) {
+        for ($i = 1; $i <= $this->referencesCount; ++$i) {
             if (isset($referencesKeyed[$i])) {
                 $row = array_merge($row, [
                     $referencesKeyed[$i]->getLabel(),
@@ -50,7 +51,7 @@ class AlgorithmExport extends AbstractExport
             AlgorithmWriter::COLUMN_SCORE_COLOR,
             AlgorithmWriter::COLUMN_SCORE_LABEL,
         ];
-        for ($i = 1; $i <= $this->referencesCount; $i++) {
+        for ($i = 1; $i <= $this->referencesCount; ++$i) {
             $data = array_merge($data, [
                 'libelle_valeur_reference_' . $i,
                 'calcul_valeur_reference_' . $i,

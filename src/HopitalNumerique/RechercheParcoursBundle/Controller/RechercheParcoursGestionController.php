@@ -27,103 +27,98 @@ class RechercheParcoursGestionController extends Controller
     {
         $rechercheparcoursgestion = $this->get('hopitalnumerique_rechercheparcours.manager.rechercheparcoursgestion')->createEmpty();
 
-        return $this->renderForm($rechercheparcoursgestion, 'HopitalNumeriqueRechercheParcoursBundle:RechercheParcoursGestion:edit.html.twig' );
+        return $this->renderForm($rechercheparcoursgestion, 'HopitalNumeriqueRechercheParcoursBundle:RechercheParcoursGestion:edit.html.twig');
     }
 
     /**
      * Affiche le formulaire d'édition de RechercheParcoursGestion.
      *
-     * @param integer $id Id de RechercheParcoursGestion.
+     * @param int $id id de RechercheParcoursGestion
      */
-    public function editAction( $id )
+    public function editAction($id)
     {
         //Récupération de l'entité passée en paramètre
-        $rechercheparcoursgestion = $this->get('hopitalnumerique_rechercheparcours.manager.rechercheparcoursgestion')->findOneBy( array('id' => $id) );
+        $rechercheparcoursgestion = $this->get('hopitalnumerique_rechercheparcours.manager.rechercheparcoursgestion')->findOneBy(['id' => $id]);
 
-        return $this->renderForm($rechercheparcoursgestion, 'HopitalNumeriqueRechercheParcoursBundle:RechercheParcoursGestion:edit.html.twig' );
+        return $this->renderForm($rechercheparcoursgestion, 'HopitalNumeriqueRechercheParcoursBundle:RechercheParcoursGestion:edit.html.twig');
     }
 
     /**
      * Affiche le RechercheParcoursGestion en fonction de son ID passé en paramètre.
-     * 
-     * @param integer $id Id de RechercheParcoursGestion.
+     *
+     * @param int $id id de RechercheParcoursGestion
      */
-    public function showAction( $id )
+    public function showAction($id)
     {
         //Récupération de l'entité en fonction du paramètre
-        $rechercheparcoursgestion = $this->get('hopitalnumerique_rechercheparcours.manager.rechercheparcoursgestion')->findOneBy( array( 'id' => $id) );
+        $rechercheparcoursgestion = $this->get('hopitalnumerique_rechercheparcours.manager.rechercheparcoursgestion')->findOneBy(['id' => $id]);
 
-        return $this->render('HopitalNumeriqueRechercheParcoursBundle:RechercheParcoursGestion:show.html.twig', array(
+        return $this->render('HopitalNumeriqueRechercheParcoursBundle:RechercheParcoursGestion:show.html.twig', [
             'rechercheparcoursgestion' => $rechercheparcoursgestion,
-        ));
+        ]);
     }
 
     /**
      * Suppresion d'un RechercheParcoursGestion.
-     * 
-     * @param integer $id Id de RechercheParcoursGestion.
-     * METHOD = POST|DELETE
+     *
+     * @param int $id Id de RechercheParcoursGestion.
+     *                METHOD = POST|DELETE
      */
-    public function deleteAction( $id )
+    public function deleteAction($id)
     {
-        $rechercheparcoursgestion = $this->get('hopitalnumerique_rechercheparcours.manager.rechercheparcoursgestion')->findOneBy( array( 'id' => $id) );
+        $rechercheparcoursgestion = $this->get('hopitalnumerique_rechercheparcours.manager.rechercheparcoursgestion')->findOneBy(['id' => $id]);
 
         //Suppression de l'entitée
-        $this->get('hopitalnumerique_rechercheparcours.manager.rechercheparcoursgestion')->delete( $rechercheparcoursgestion );
+        $this->get('hopitalnumerique_rechercheparcours.manager.rechercheparcoursgestion')->delete($rechercheparcoursgestion);
 
-        $this->get('session')->getFlashBag()->add('info', 'Suppression effectuée avec succès.' );
+        $this->get('session')->getFlashBag()->add('info', 'Suppression effectuée avec succès.');
 
-        return new Response('{"success":true, "url" : "'.$this->generateUrl('hopitalnumerique_rechercheparcours_admin_recherche-par-parcours_gestion').'"}', 200);
+        return new Response('{"success":true, "url" : "' . $this->generateUrl('hopitalnumerique_rechercheparcours_admin_recherche-par-parcours_gestion') . '"}', 200);
     }
 
     /**
-     * Actuib de masse de suppression
+     * Actuib de masse de suppression.
      *
      * @param [type] $primaryKeys    [description]
      * @param [type] $allPrimaryKeys [description]
      *
      * @return [type]
      */
-    public function deleteMassAction( $primaryKeys, $allPrimaryKeys )
+    public function deleteMassAction($primaryKeys, $allPrimaryKeys)
     {
         //get all selected Users
-        if($allPrimaryKeys == 1){
+        if ($allPrimaryKeys == 1) {
             $rawDatas = $this->get('hopitalnumerique_rechercheparcours.manager.rechercheparcoursgestion')->getRawData();
-            foreach($rawDatas as $data)
-            {
+            foreach ($rawDatas as $data) {
                 $primaryKeys[] = $data['id'];
             }
-        }   
+        }
 
-        $rechercheParcoursGestion = $this->get('hopitalnumerique_rechercheparcours.manager.rechercheparcoursgestion')->findBy( array('id' => $primaryKeys) );
+        $rechercheParcoursGestion = $this->get('hopitalnumerique_rechercheparcours.manager.rechercheparcoursgestion')->findBy(['id' => $primaryKeys]);
 
-        $this->get('hopitalnumerique_rechercheparcours.manager.rechercheparcoursgestion')->delete( $rechercheParcoursGestion );
+        $this->get('hopitalnumerique_rechercheparcours.manager.rechercheparcoursgestion')->delete($rechercheParcoursGestion);
 
-        $this->get('session')->getFlashBag()->add('info', 'Suppression effectuée avec succès.' );
+        $this->get('session')->getFlashBag()->add('info', 'Suppression effectuée avec succès.');
 
-        return $this->redirect( $this->generateUrl('hopitalnumerique_rechercheparcours_admin_recherche-par-parcours_gestion') );
+        return $this->redirect($this->generateUrl('hopitalnumerique_rechercheparcours_admin_recherche-par-parcours_gestion'));
     }
-
-
-
-
 
     /**
      * Effectue le render du formulaire RechercheParcoursGestion.
      *
-     * @param RechercheParcoursGestion   $entity   Entité $rechercheparcoursgestion
-     * @param string $view     Chemin de la vue ou sera rendu le formulaire
+     * @param RechercheParcoursGestion $entity Entité $rechercheparcoursgestion
+     * @param string                   $view   Chemin de la vue ou sera rendu le formulaire
      *
      * @return Form | redirect
      */
-    private function renderForm($rechercheparcoursgestion, $view )
+    private function renderForm($rechercheparcoursgestion, $view)
     {
         $isCreation = (null === $rechercheparcoursgestion->getId());
         $rechercheparcoursgestionInitialDomaines = clone $rechercheparcoursgestion->getDomaines();
         $form = $this->createForm('hopitalnumerique_rechercheparcours_rechercheparcoursgestion', $rechercheparcoursgestion);
 
         $request = $this->get('request');
-        
+
         // Si l'utilisateur soumet le formulaire
         if ('POST' == $request->getMethod()) {
             // On bind les données du form
@@ -132,18 +127,17 @@ class RechercheParcoursGestionController extends Controller
             //si le formulaire est valide
             if ($form->isValid()) {
                 if (!$isCreation) {
-                    $referencesParentes    = $form->get('referencesParentes')->getData();
+                    $referencesParentes = $form->get('referencesParentes')->getData();
                     $referencesVentilation = $form->get('referencesVentilations')->getData();
 
                     //Vérif à la mano php pour select2
-                    if(count($referencesParentes) === 0 || count($referencesVentilation) === 0)
-                    {
-                        $this->get('session')->getFlashBag()->add( 'danger', 'Les références sont obligatoires, veuillez remplir ces champs avant de sauvegarder à nouveau.' ); 
+                    if (count($referencesParentes) === 0 || count($referencesVentilation) === 0) {
+                        $this->get('session')->getFlashBag()->add('danger', 'Les références sont obligatoires, veuillez remplir ces champs avant de sauvegarder à nouveau.');
 
-                        return $this->render( $view , array(
-                            'form'             => $form->createView(),
-                            'rechercheparcoursgestion' => $rechercheparcoursgestion
-                        ));
+                        return $this->render($view, [
+                            'form' => $form->createView(),
+                            'rechercheparcoursgestion' => $rechercheparcoursgestion,
+                        ]);
                     }
                 }
 
@@ -152,19 +146,17 @@ class RechercheParcoursGestionController extends Controller
                 //On utilise notre Manager pour gérer la sauvegarde de l'objet
                 $this->get('hopitalnumerique_rechercheparcours.manager.rechercheparcoursgestion')->save($rechercheparcoursgestion);
 
-                $rechercheParcoursFilsNew = array();
-                $rechercheParcoursFils    = $this->get('hopitalnumerique_recherche_parcours.manager.recherche_parcours')->getRechercheParcoursFils($rechercheparcoursgestion);
-                
-                foreach ($rechercheparcoursgestion->getReferencesParentes() as $refParente) 
-                {
-                    if(!array_key_exists($refParente->getId(), $rechercheParcoursFils))
-                    {
+                $rechercheParcoursFilsNew = [];
+                $rechercheParcoursFils = $this->get('hopitalnumerique_recherche_parcours.manager.recherche_parcours')->getRechercheParcoursFils($rechercheparcoursgestion);
+
+                foreach ($rechercheparcoursgestion->getReferencesParentes() as $refParente) {
+                    if (!array_key_exists($refParente->getId(), $rechercheParcoursFils)) {
                         $rechercheParcours = $this->get('hopitalnumerique_recherche_parcours.manager.recherche_parcours')->createEmpty();
                         $rechercheParcours->setReference($refParente);
                         $rechercheParcours->setRecherchesParcoursGestion($rechercheparcoursgestion);
                         $rechercheParcours->setOrder(count($rechercheParcoursFilsNew) + 1);
 
-                        $rechercheParcoursFilsNew[] = $rechercheParcours; 
+                        $rechercheParcoursFilsNew[] = $rechercheParcours;
                     }
                 }
                 //<-- Suppression des RechercheParcours
@@ -185,19 +177,20 @@ class RechercheParcoursGestionController extends Controller
                 //-->
 
                 $this->get('hopitalnumerique_recherche_parcours.manager.recherche_parcours')->save($rechercheParcoursFilsNew);
-                
+
                 // On envoi une 'flash' pour indiquer à l'utilisateur que l'entité est ajoutée
-                $this->get('session')->getFlashBag()->add( ($isCreation ? 'success' : 'info') , 'Gestionnaire de recherche par parcours ' . ($isCreation ? 'ajouté.' : 'mis à jour.') ); 
-                
+                $this->get('session')->getFlashBag()->add(($isCreation ? 'success' : 'info'), 'Gestionnaire de recherche par parcours ' . ($isCreation ? 'ajouté.' : 'mis à jour.'));
+
                 //on redirige vers la page index ou la page edit selon le bouton utilisé
                 $do = $request->request->get('do');
-                return $this->redirect( ($do == 'save-close' ? $this->generateUrl('hopitalnumerique_rechercheparcours_admin_recherche-par-parcours_gestion') : $this->generateUrl('hopitalnumerique_rechercheparcours_admin_recherche-par-parcours_gestion_edit', array( 'id' => $rechercheparcoursgestion->getId() ) ) ) );
+
+                return $this->redirect(($do == 'save-close' ? $this->generateUrl('hopitalnumerique_rechercheparcours_admin_recherche-par-parcours_gestion') : $this->generateUrl('hopitalnumerique_rechercheparcours_admin_recherche-par-parcours_gestion_edit', ['id' => $rechercheparcoursgestion->getId()])));
             }
         }
 
-        return $this->render( $view , array(
-            'form'             => $form->createView(),
-            'rechercheparcoursgestion' => $rechercheparcoursgestion
-        ));
+        return $this->render($view, [
+            'form' => $form->createView(),
+            'rechercheparcoursgestion' => $rechercheparcoursgestion,
+        ]);
     }
 }

@@ -1,4 +1,5 @@
 <?php
+
 namespace HopitalNumerique\RechercheParcoursBundle\DependencyInjection;
 
 use HopitalNumerique\CoreBundle\DependencyInjection\Entity;
@@ -12,15 +13,14 @@ use HopitalNumerique\RechercheParcoursBundle\Manager\RechercheParcoursManager;
 class ParcoursGuideLie
 {
     /**
-     * @var integer Nombre de caractères max pour le titre
+     * @var int Nombre de caractères max pour le titre
      */
     const TITLE_MAXLENGTH = 100;
 
     /**
-     * @var integer Nombre de caractères max pour la description
+     * @var int Nombre de caractères max pour la description
      */
     const DESCRIPTION_MAXLENGTH = 100;
-
 
     /**
      * @var \HopitalNumerique\CoreBundle\DependencyInjection\Entity Entity
@@ -42,7 +42,6 @@ class ParcoursGuideLie
      */
     private $rechercheParcoursManager;
 
-
     /**
      * Constructeur.
      */
@@ -53,7 +52,6 @@ class ParcoursGuideLie
         $this->entityHasReferenceManager = $entityHasReferenceManager;
         $this->rechercheParcoursManager = $rechercheParcoursManager;
     }
-
 
     /**
      * Retourne les parcours guidés formatés.
@@ -74,7 +72,6 @@ class ParcoursGuideLie
         }
         $parcoursGuides = $this->rechercheParcoursManager->findBy(['id' => $parcoursGuideIds]);
 
-
         $formattedParcoursGuides = [];
 
         foreach ($parcoursGuides as $parcoursGuide) {
@@ -86,7 +83,7 @@ class ParcoursGuideLie
                 'subtitle' => $this->entity->getSubtitleByEntity($parcoursGuide),
                 'category' => $this->entity->getCategoryByEntity($parcoursGuide),
                 'description' => $description,
-                'url' => $this->entity->getFrontUrlByEntity($parcoursGuide)
+                'url' => $this->entity->getFrontUrlByEntity($parcoursGuide),
             ];
         }
 

@@ -5,7 +5,7 @@ namespace HopitalNumerique\RechercheBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * Requete
+ * Requete.
  *
  * @ORM\Table(name="hn_requete")
  * @ORM\Entity()
@@ -22,9 +22,8 @@ class Requete
      */
     const CATEGORY_FILTERS_PUBLICATION_CATEGORIES_KEY = '2';
 
-
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="req_id", type="integer")
      * @ORM\Id
@@ -40,7 +39,7 @@ class Requete
     private $nom;
 
     /**
-     * @var boolean
+     * @var bool
      *
      * @ORM\Column(name="req_isDefault", type="boolean", options = {"comment" = "La requete est-elle celle par default ?"})
      */
@@ -94,21 +93,21 @@ class Requete
     protected $domaine;
 
     /**
-     * Initialisation de l'entitée (valeurs par défaut)
+     * Initialisation de l'entitée (valeurs par défaut).
      */
     public function __construct()
     {
-        $this->isDefault      = false;
-        $this->dateDebut      = null;
-        $this->dateFin        = null;
-        $this->refs           = array();
+        $this->isDefault = false;
+        $this->dateDebut = null;
+        $this->dateFin = null;
+        $this->refs = [];
         $this->categPointDur = [];
     }
 
     /**
-     * Get id
+     * Get id.
      *
-     * @return integer 
+     * @return int
      */
     public function getId()
     {
@@ -116,9 +115,10 @@ class Requete
     }
 
     /**
-     * Set nom
+     * Set nom.
      *
      * @param string $nom
+     *
      * @return Requete
      */
     public function setNom($nom)
@@ -129,9 +129,9 @@ class Requete
     }
 
     /**
-     * Get nom
+     * Get nom.
      *
-     * @return string 
+     * @return string
      */
     public function getNom()
     {
@@ -139,9 +139,10 @@ class Requete
     }
 
     /**
-     * Set isDefault
+     * Set isDefault.
      *
-     * @param boolean $isDefault
+     * @param bool $isDefault
+     *
      * @return Requete
      */
     public function setDefault($isDefault)
@@ -152,9 +153,9 @@ class Requete
     }
 
     /**
-     * Get isDefault
+     * Get isDefault.
      *
-     * @return boolean 
+     * @return bool
      */
     public function isDefault()
     {
@@ -162,7 +163,7 @@ class Requete
     }
 
     /**
-     * Get dateDebut
+     * Get dateDebut.
      *
      * @return DateTime $dateDebut
      */
@@ -170,9 +171,9 @@ class Requete
     {
         return $this->dateDebut;
     }
-    
+
     /**
-     * Set dateDebut
+     * Set dateDebut.
      *
      * @param DateTime $dateDebut
      */
@@ -180,9 +181,9 @@ class Requete
     {
         $this->dateDebut = $dateDebut;
     }
-    
+
     /**
-     * Get dateFin
+     * Get dateFin.
      *
      * @return DateTime $dateFin
      */
@@ -190,9 +191,9 @@ class Requete
     {
         return $this->dateFin;
     }
-    
+
     /**
-     * Set dateFin
+     * Set dateFin.
      *
      * @param DateTime $dateFin
      */
@@ -200,11 +201,12 @@ class Requete
     {
         $this->dateFin = $dateFin;
     }
-    
+
     /**
-     * Set refs
+     * Set refs.
      *
      * @param array $refs
+     *
      * @return Requete
      */
     public function setRefs($refs)
@@ -215,9 +217,9 @@ class Requete
     }
 
     /**
-     * Get refs
+     * Get refs.
      *
-     * @return array 
+     * @return array
      */
     public function getRefs()
     {
@@ -225,7 +227,7 @@ class Requete
     }
 
     /**
-     * Get user
+     * Get user.
      *
      * @return \HopitalNumerique\UserBundle\Entity\User $user
      */
@@ -233,9 +235,9 @@ class Requete
     {
         return $this->user;
     }
-    
+
     /**
-     * Set user
+     * Set user.
      *
      * @param \HopitalNumerique\UserBundle\Entity\User $user
      */
@@ -245,9 +247,10 @@ class Requete
     }
 
     /**
-     * Set isDefault
+     * Set isDefault.
      *
-     * @param boolean $isDefault
+     * @param bool $isDefault
+     *
      * @return Requete
      */
     public function setIsDefault($isDefault)
@@ -258,9 +261,9 @@ class Requete
     }
 
     /**
-     * Get isDefault
+     * Get isDefault.
      *
-     * @return boolean 
+     * @return bool
      */
     public function getIsDefault()
     {
@@ -268,9 +271,10 @@ class Requete
     }
 
     /**
-     * Set categPointDur
+     * Set categPointDur.
      *
      * @param string $categPointDur
+     *
      * @return Requete
      */
     public function setCategPointDur($categPointDur)
@@ -281,9 +285,9 @@ class Requete
     }
 
     /**
-     * Get categPointDur
+     * Get categPointDur.
      *
-     * @return string 
+     * @return string
      */
     public function getCategPointDur()
     {
@@ -291,9 +295,10 @@ class Requete
     }
 
     /**
-     * Set rechercheTextuelle
+     * Set rechercheTextuelle.
      *
      * @param string $rechercheTextuelle
+     *
      * @return Requete
      */
     public function setRechercheTextuelle($rechercheTextuelle)
@@ -304,9 +309,9 @@ class Requete
     }
 
     /**
-     * Get rechercheTextuelle
+     * Get rechercheTextuelle.
      *
-     * @return string 
+     * @return string
      */
     public function getRechercheTextuelle()
     {
@@ -314,9 +319,10 @@ class Requete
     }
 
     /**
-     * Set domaine
+     * Set domaine.
      *
      * @param \HopitalNumerique\DomaineBundle\Entity\Domaine $domaine
+     *
      * @return Requete
      */
     public function setDomaine(\HopitalNumerique\DomaineBundle\Entity\Domaine $domaine = null)
@@ -327,15 +333,14 @@ class Requete
     }
 
     /**
-     * Get domaine
+     * Get domaine.
      *
-     * @return \HopitalNumerique\DomaineBundle\Entity\Domaine 
+     * @return \HopitalNumerique\DomaineBundle\Entity\Domaine
      */
     public function getDomaine()
     {
         return $this->domaine;
     }
-
 
     /**
      * @return string
@@ -344,7 +349,6 @@ class Requete
     {
         return $this->nom;
     }
-
 
     /**
      * Retourne les IDs des types d'entité.
@@ -355,8 +359,8 @@ class Requete
     {
         $categoryFilters = $this->getCategPointDur();
 
-        if (array_key_exists(Requete::CATEGORY_FILTERS_ENTITY_TYPES_KEY, $categoryFilters)) {
-            return $categoryFilters[Requete::CATEGORY_FILTERS_ENTITY_TYPES_KEY];
+        if (array_key_exists(self::CATEGORY_FILTERS_ENTITY_TYPES_KEY, $categoryFilters)) {
+            return $categoryFilters[self::CATEGORY_FILTERS_ENTITY_TYPES_KEY];
         }
 
         return null;
@@ -371,8 +375,8 @@ class Requete
     {
         $categoryFilters = $this->getCategPointDur();
 
-        if (array_key_exists(Requete::CATEGORY_FILTERS_PUBLICATION_CATEGORIES_KEY, $categoryFilters)) {
-            return $categoryFilters[Requete::CATEGORY_FILTERS_PUBLICATION_CATEGORIES_KEY];
+        if (array_key_exists(self::CATEGORY_FILTERS_PUBLICATION_CATEGORIES_KEY, $categoryFilters)) {
+            return $categoryFilters[self::CATEGORY_FILTERS_PUBLICATION_CATEGORIES_KEY];
         }
 
         return null;

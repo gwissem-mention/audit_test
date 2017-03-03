@@ -37,20 +37,18 @@ AutodiagEntry.prototype = {
                     content: $('#synthesisCreate'),
                     minWidth: '80%',
                     topRatio: 0.2,
+                    closeBtn: false,
+                    helpers     : {
+                        overlay : {closeClick: false} // prevents closing when clicking OUTSIDE fancybox
+                    },
+                    keys : {
+                        close  : null
+                    },
                     afterClose: function() {
                         history.back();
                     }
                 });
             });
-
-            // var instance = this;
-            // $('form', $('.popin')).submit(function (e) {
-            //     var form = $(this);
-            //     $.post(form.get(0).action, form.serialize(), function(response) {
-            //         instance.entry = response;
-            //         $.fancybox.close();
-            //     });
-            // });
         }
     },
 

@@ -6,7 +6,7 @@ use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\Query\Expr\Join;
 
 /**
- * ModuleRepository
+ * ModuleRepository.
  *
  * @author Gaetan MELCHILSEN
  * @copyright Nodevo
@@ -14,7 +14,7 @@ use Doctrine\ORM\Query\Expr\Join;
 class ModuleRepository extends EntityRepository
 {
     /**
-     * Récupère les données du grid sous forme de tableau correctement formaté
+     * Récupère les données du grid sous forme de tableau correctement formaté.
      *
      * @return array
      *
@@ -27,8 +27,8 @@ class ModuleRepository extends EntityRepository
         $qb->select('mod.id, mod.titre, refEtat.libelle as statut, productions.titre as prod_titre, domaine.nom as domaineNom', 'form.nom as formateurNom, form.prenom as formateurPrenom')
             ->from('HopitalNumeriqueModuleBundle:Module', 'mod')
             ->leftjoin('mod.formateur', 'form')
-            ->leftJoin('mod.statut','refEtat')
-            ->leftJoin('mod.productions','productions')
+            ->leftJoin('mod.statut', 'refEtat')
+            ->leftJoin('mod.productions', 'productions')
             ->leftJoin('mod.domaines', 'domaine')
                 ->where($qb->expr()->orX(
                     $qb->expr()->in('domaine.id', ':domainesId'),
@@ -42,7 +42,7 @@ class ModuleRepository extends EntityRepository
     }
 
     /**
-     * Récupère les modules et leurs sessions actives et leurs inscriptions pas encore passées
+     * Récupère les modules et leurs sessions actives et leurs inscriptions pas encore passées.
      *
      * @return array(Module)
      *
@@ -58,7 +58,7 @@ class ModuleRepository extends EntityRepository
             ->where('refEtat.id = 3')
             ->leftJoin('mod.sessions', 'session', Join::WITH, 'session.etat = 403')
             ->andWhere('session.dateSession >= :today')
-            ->setParameter('today', new \DateTime() )
+            ->setParameter('today', new \DateTime())
             ->leftJoin('session.inscriptions', 'inscription', Join::WITH, 'inscription.etatInscription = 407')
             ->orderBy('mod.titre');
 
@@ -66,7 +66,7 @@ class ModuleRepository extends EntityRepository
     }
 
     /**
-     * Récupère les modules du domaine passé en param
+     * Récupère les modules du domaine passé en param.
      *
      * @return array(Module)
      *
@@ -82,7 +82,7 @@ class ModuleRepository extends EntityRepository
             ->where('refEtat.id = 3')
             ->leftJoin('mod.domaines', 'domaine')
             ->andWhere('domaine.id = :domaineId')
-            ->setParameter('domaineId', $domaineId )
+            ->setParameter('domaineId', $domaineId)
             ->orderBy('mod.titre');
 
         return $qb;

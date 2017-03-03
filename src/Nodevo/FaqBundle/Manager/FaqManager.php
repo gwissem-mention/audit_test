@@ -15,10 +15,9 @@ class FaqManager extends BaseManager
     protected $_userManager;
 
     /**
-     * Constructeur du manager gérant les références
+     * Constructeur du manager gérant les références.
      *
      * @param \Doctrine\ORM\EntityManager $entityManager EntityManager
-     * @return void
      */
     public function __construct(EntityManager $entityManager, UserManager $userManager)
     {
@@ -28,27 +27,23 @@ class FaqManager extends BaseManager
     }
 
     /**
-     * Override : Récupère les données pour le grid sous forme de tableau
+     * Override : Récupère les données pour le grid sous forme de tableau.
      *
      * @return array
      */
-    public function getDatasForGrid( \StdClass $condition = null )
+    public function getDatasForGrid(\StdClass $condition = null)
     {
-        $faqsForGrid = array();
+        $faqsForGrid = [];
 
         $domainesIds = $this->_userManager->getUserConnected()->getDomainesId();
 
-        $faqs = $this->getRepository()->getDatasForGrid( $domainesIds, $condition )->getQuery()->getResult();
+        $faqs = $this->getRepository()->getDatasForGrid($domainesIds, $condition)->getQuery()->getResult();
 
-        foreach ($faqs as $faq) 
-        {
-            if(!array_key_exists($faq['id'], $faqsForGrid))
-            {
+        foreach ($faqs as $faq) {
+            if (!array_key_exists($faq['id'], $faqsForGrid)) {
                 $faqsForGrid[$faq['id']] = $faq;
-            }
-            else
-            {
-                $faqsForGrid[$faq['id']]['domaineNom'] .= ";" . $faq['domaineNom'];
+            } else {
+                $faqsForGrid[$faq['id']]['domaineNom'] .= ';' . $faq['domaineNom'];
             }
         }
 
@@ -56,7 +51,7 @@ class FaqManager extends BaseManager
     }
 
     /**
-     * Récupération des éléments de FAQ pour le domaine passé en param
+     * Récupération des éléments de FAQ pour le domaine passé en param.
      *
      * @param [type] $domaineId [description]
      *
@@ -64,6 +59,6 @@ class FaqManager extends BaseManager
      */
     public function getFaqByDomaine($domaineId)
     {
-        return $this->getRepository()->getFaqByDomaine( $domaineId )->getQuery()->getResult();
+        return $this->getRepository()->getFaqByDomaine($domaineId)->getQuery()->getResult();
     }
 }

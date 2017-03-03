@@ -32,7 +32,7 @@ class BoundaryCalculator
     }
 
     /**
-     * Guess boundaries from source syntheses
+     * Guess boundaries from source syntheses.
      *
      * @param Synthesis $synthesis
      * @param $source
@@ -64,7 +64,7 @@ class BoundaryCalculator
     }
 
     /**
-     * Compute synthesis boundaries from there entries
+     * Compute synthesis boundaries from there entries.
      *
      * @param Synthesis $synthesis
      */

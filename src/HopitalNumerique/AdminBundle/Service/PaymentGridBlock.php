@@ -27,19 +27,19 @@ class PaymentGridBlock
         InscriptionRepository $inscriptionRepository,
         InterventionDemandeRepository $interventionDemandeRepository
     ) {
-        $this->factureRepository             = $factureRepository;
-        $this->inscriptionRepository         = $inscriptionRepository;
+        $this->factureRepository = $factureRepository;
+        $this->inscriptionRepository = $inscriptionRepository;
         $this->interventionDemandeRepository = $interventionDemandeRepository;
     }
 
     public function getBlockDatas()
     {
         $paymentsDatas = [
-            'payedPreviousYear'          => $this->factureRepository->getTotalAmountForYear(date('Y') - 1),
-            'payedCurrentYear'           => $this->factureRepository->getTotalAmountForYear(date('Y')),
-            'waitingPayment'             => $this->factureRepository->getTotalNotPayedAmountForYear(),
+            'payedPreviousYear' => $this->factureRepository->getTotalAmountForYear(date('Y') - 1),
+            'payedCurrentYear' => $this->factureRepository->getTotalAmountForYear(date('Y')),
+            'waitingPayment' => $this->factureRepository->getTotalNotPayedAmountForYear(),
             'waintingPaymentCurrentYear' => $this->factureRepository->getTotalNotPayedAmountForYear(date('Y')),
-            'waitingBillCreation'        => $this->inscriptionRepository->getAmountOfSessionWithoutBill() +
+            'waitingBillCreation' => $this->inscriptionRepository->getAmountOfSessionWithoutBill() +
                                             $this->interventionDemandeRepository->getAmountOfInterventionWithoutBill(),
         ];
 

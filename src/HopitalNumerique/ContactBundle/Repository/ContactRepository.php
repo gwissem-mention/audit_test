@@ -5,7 +5,7 @@ namespace HopitalNumerique\ContactBundle\Repository;
 use Doctrine\ORM\EntityRepository;
 
 /**
- * ContactRepository
+ * ContactRepository.
  *
  * @author Gaetan MELCHILSEN
  * @copyright Nodevo

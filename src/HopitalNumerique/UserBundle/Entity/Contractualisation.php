@@ -4,13 +4,12 @@ namespace HopitalNumerique\UserBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use APY\DataGridBundle\Grid\Mapping as GRID;
-
 //Asserts Stuff
 use Symfony\Component\Validator\Constraints as Assert;
 use Nodevo\ToolsBundle\Validator\Constraints as Nodevo;
 
 /**
- * User
+ * User.
  *
  * @ORM\Table("core_user_contractualisation")
  * @ORM\Entity(repositoryClass="HopitalNumerique\UserBundle\Repository\ContractualisationRepository")
@@ -23,8 +22,8 @@ class Contractualisation
      * @ORM\Id()
      * @ORM\GeneratedValue(strategy="AUTO")
      */
-    protected $id;  
-        
+    protected $id;
+
     /**
      * @Assert\File(
      *     maxSize = "10M",
@@ -34,14 +33,14 @@ class Contractualisation
      * @Nodevo\Javascript(class="validate[required]")
      */
     public $file;
-    
+
     /**
      * @var string
      *
      * @ORM\Column(name="ctn_path", type="string", length=255, nullable=true, options = {"comment" = "Nom du document pdf stocké"})
      */
     protected $path;
-    
+
     /**
      * @var string
      * @Assert\NotBlank(message="Le nom ne peut pas être vide.")
@@ -55,14 +54,14 @@ class Contractualisation
      * @ORM\Column(name="ctn_nom_document", type="string", length=255, options = {"comment" = "Nom du document pdf utilisateur"})
      */
     protected $nomDocument;
-    
+
     /**
-     * @var boolean
-     * 
+     * @var bool
+     *
      * @ORM\Column(name="ctn_archiver", type="boolean", nullable=true, options = {"comment" = "Document archivé ?"})
      */
     protected $archiver;
-    
+
     /**
      * @var \DateTime
      *
@@ -81,7 +80,7 @@ class Contractualisation
     protected $typeDocument;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\ManyToOne(targetEntity="User", inversedBy="contractualisations")
      * @ORM\JoinColumn(name="usr_id", referencedColumnName="usr_id", onDelete="CASCADE")
@@ -89,33 +88,35 @@ class Contractualisation
     private $user;
 
     /**
-     * Get id
+     * Get id.
      *
-     * @return integer 
+     * @return int
      */
     public function getId()
     {
         return $this->id;
     }
-    
+
     /**
-     * Set path
+     * Set path.
      *
      * @param string $path
+     *
      * @return Contractualisation
      */
     public function setPath($path)
     {
-        if( is_null($path) && file_exists($this->getAbsolutePath()) )
+        if (is_null($path) && file_exists($this->getAbsolutePath())) {
             unlink($this->getAbsolutePath());
-    
+        }
+
         $this->path = $path;
-    
+
         return $this;
     }
-    
+
     /**
-     * Get path
+     * Get path.
      *
      * @return string
      */
@@ -125,30 +126,30 @@ class Contractualisation
     }
 
     /**
-     * Get archiver
+     * Get archiver.
      *
-     * @return boolean $archiver
+     * @return bool $archiver
      */
     public function getArchiver()
     {
         return $this->archiver;
     }
-    
+
     /**
-     * Set archiver
+     * Set archiver.
      *
-     * @param boolean $archiver
+     * @param bool $archiver
      */
     public function setArchiver($archiver)
     {
         $this->archiver = $archiver;
     }
-    
-    
+
     /**
-     * Set nomDocument
+     * Set nomDocument.
      *
      * @param string $nomDocument
+     *
      * @return Contractualisation
      */
     public function setNomDocument($nomDocument)
@@ -159,9 +160,9 @@ class Contractualisation
     }
 
     /**
-     * Get nomDocument
+     * Get nomDocument.
      *
-     * @return string 
+     * @return string
      */
     public function getNomDocument()
     {
@@ -169,9 +170,10 @@ class Contractualisation
     }
 
     /**
-     * Set dateRenouvellement
+     * Set dateRenouvellement.
      *
      * @param \DateTime $dateRenouvellement
+     *
      * @return Contractualisation
      */
     public function setDateRenouvellement($dateRenouvellement)
@@ -182,9 +184,9 @@ class Contractualisation
     }
 
     /**
-     * Get dateRenouvellement
+     * Get dateRenouvellement.
      *
-     * @return \DateTime 
+     * @return \DateTime
      */
     public function getDateRenouvellement()
     {
@@ -192,9 +194,10 @@ class Contractualisation
     }
 
     /**
-     * Set typeDocument
+     * Set typeDocument.
      *
      * @param \HopitalNumerique\ReferenceBundle\Entity\Reference $typeDocument
+     *
      * @return Contractualisation
      */
     public function setTypeDocument(\HopitalNumerique\ReferenceBundle\Entity\Reference $typeDocument = null)
@@ -205,9 +208,9 @@ class Contractualisation
     }
 
     /**
-     * Get typeDocument
+     * Get typeDocument.
      *
-     * @return \HopitalNumerique\ReferenceBundle\Entity\Reference 
+     * @return \HopitalNumerique\ReferenceBundle\Entity\Reference
      */
     public function getTypeDocument()
     {
@@ -216,73 +219,77 @@ class Contractualisation
 
     public function getAbsolutePath()
     {
-        return null === $this->path ? null : $this->getUploadRootDir().'/'.$this->path;
+        return null === $this->path ? null : $this->getUploadRootDir() . '/' . $this->path;
     }
-    
+
     public function getWebPath()
     {
-        return null === $this->path ? null : $this->getUploadDir().'/'.$this->path;
+        return null === $this->path ? null : $this->getUploadDir() . '/' . $this->path;
     }
-    
+
     public function getUploadRootDir()
     {
         // le chemin absolu du répertoire où les documents uploadés doivent être sauvegardés
-        return __ROOT_DIRECTORY__.'/'.$this->getUploadDir();
+        return __ROOT_DIRECTORY__ . '/' . $this->getUploadDir();
     }
-    
+
     public function getUploadDir()
     {
         return 'files/contractualisation';
     }
-    
+
     /**
      * @ORM\PrePersist()
      * @ORM\PreUpdate()
      */
     public function preUpload()
     {
-        if (null !== $this->file){
+        if (null !== $this->file) {
             //delete Old File
-            if ( file_exists($this->getAbsolutePath()) )
+            if (file_exists($this->getAbsolutePath())) {
                 unlink($this->getAbsolutePath());
-    
+            }
+
             $this->path = round(microtime(true) * 1000) . '_' . $this->file->getClientOriginalName();
         }
     }
-    
+
     /**
      * @ORM\PostPersist()
      * @ORM\PostUpdate()
      */
     public function upload()
     {
-        if (null === $this->file)
+        if (null === $this->file) {
             return;
-    
+        }
+
         // s'il y a une erreur lors du déplacement du fichier, une exception
         // va automatiquement être lancée par la méthode move(). Cela va empêcher
         // proprement l'entité d'être persistée dans la base de données si
         // erreur il y a
         $this->file->move($this->getUploadRootDir(), $this->path);
-    
+
         unset($this->file);
     }
-    
+
     /**
      * @ORM\PostRemove()
      */
     public function removeUpload()
     {
         $file = $this->getAbsolutePath();
-        
-        if (file_exists($file) )
+
+        if (file_exists($file)) {
             unlink($file);
+        }
     }
 
     /**
-     * Set user
+     * Set user.
      *
      * @param \HopitalNumerique\UserBundle\Entity\User $user
+     *
      * @return Contractualisation
      */
     public function setUser(\HopitalNumerique\UserBundle\Entity\User $user = null)
@@ -293,9 +300,9 @@ class Contractualisation
     }
 
     /**
-     * Get user
+     * Get user.
      *
-     * @return \HopitalNumerique\UserBundle\Entity\User 
+     * @return \HopitalNumerique\UserBundle\Entity\User
      */
     public function getUser()
     {

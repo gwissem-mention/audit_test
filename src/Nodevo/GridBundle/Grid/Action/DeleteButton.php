@@ -1,4 +1,5 @@
 <?php
+
 namespace Nodevo\GridBundle\Grid\Action;
 
 use APY\DataGridBundle\Grid\Action\RowAction;
@@ -9,7 +10,7 @@ class DeleteButton extends RowAction
     {
         parent::__construct('', $route);
 
-        $this->setRouteParameters( array('id') );
-        $this->setAttributes( array('class'=>'btn btn-danger fa fa-trash-o','title' => 'Supprimer') );
+        $this->setRouteParameters(['id']);
+        $this->setAttributes(['class' => 'btn btn-danger fa fa-trash-o', 'title' => 'Supprimer']);
     }
 }

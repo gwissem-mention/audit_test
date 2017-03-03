@@ -4,13 +4,12 @@ namespace HopitalNumerique\ContactBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Nodevo\ContactBundle\Entity\Contact as NodevoContact;
-
 //Asserts Stuff
 use Symfony\Component\Validator\Constraints as Assert;
 use Nodevo\ToolsBundle\Validator\Constraints as Nodevo;
 
 /**
- * Contact
+ * Contact.
  *
  * @author Gaetan MELCHILSEN
  * @copyright Nodevo
@@ -31,7 +30,7 @@ class Contact extends NodevoContact
      * @ORM\Column(name="contact_fonction_strucutre", type="string", length=255, nullable=true, options = {"comment" = "Fonction au sein de la structure"})
      */
     protected $fonctionStructure;
-    
+
     /**
      * @ORM\ManyToOne(targetEntity="\HopitalNumerique\ReferenceBundle\Entity\Reference", cascade={"persist"})
      * @ORM\JoinColumn(name="ref_civilite", referencedColumnName="ref_id")
@@ -39,46 +38,46 @@ class Contact extends NodevoContact
      * @Nodevo\Javascript(class="validate[required]")
      */
     protected $civilite;
-    
+
     /**
      * @ORM\ManyToOne(targetEntity="\HopitalNumerique\ReferenceBundle\Entity\Reference", cascade={"persist"})
      * @ORM\JoinColumn(name="ref_region", referencedColumnName="ref_id", nullable=true)
      */
     protected $region;
-    
+
     /**
      * @ORM\ManyToOne(targetEntity="\HopitalNumerique\ReferenceBundle\Entity\Reference", cascade={"persist"})
      * @ORM\JoinColumn(name="ref_departement", referencedColumnName="ref_id", nullable=true)
      */
     protected $departement;
-    
+
     /**
      * @ORM\ManyToOne(targetEntity="\HopitalNumerique\ReferenceBundle\Entity\Reference", cascade={"persist"})
      * @ORM\JoinColumn(name="ref_statut_etablissement_sante", referencedColumnName="ref_id")
      */
     protected $statutEtablissementSante;
-    
+
     /**
      * @ORM\ManyToOne(targetEntity="\HopitalNumerique\EtablissementBundle\Entity\Etablissement", inversedBy="usersRattachement", cascade={"persist"})
      * @ORM\JoinColumn(name="eta_etablissement_rattachement_sante", referencedColumnName="eta_id")
      */
     protected $etablissementRattachementSante;
-    
+
     /**
      * @var string
      * @Assert\Length(
      *      min = "1",
      *      max = "255",
-     *      minMessage="Il doit y avoir au moins {{ limit }} caractères dans l'Nom de votre établissement si non disponible dans la liste précédente.",
-     *      maxMessage="Il doit y avoir au maximum {{ limit }} caractères dans l'Nom de votre établissement si non disponible dans la liste précédente."
+     *      minMessage="Il doit y avoir au moins {{ limit }} caractères dans le Nom de votre structure si non disponible dans la liste précédente.",
+     *      maxMessage="Il doit y avoir au maximum {{ limit }} caractères dans le Nom de votre structure si non disponible dans la liste précédente."
      * )
      * @Nodevo\Javascript(class="validate[minSize[1],maxSize[255]]")
-     * @ORM\Column(name="usr_autre_rattachement_sante", type="string", length=255, nullable=true, options = {"comment" = "Nom de votre établissement si non disponible dans la liste précédente santé de l utilisateur"})
+     * @ORM\Column(name="usr_autre_rattachement_sante", type="string", length=255, nullable=true, options = {"comment" = "Nom de votre structure si non disponible dans la liste précédente santé de l utilisateur"})
      */
     protected $autreStructureRattachementSante;
 
     /**
-     * Get fonctionStructure
+     * Get fonctionStructure.
      *
      * @return string $fonctionStructure
      */
@@ -86,9 +85,9 @@ class Contact extends NodevoContact
     {
         return $this->fonctionStructure;
     }
-    
+
     /**
-     * Set fonctionStructure
+     * Set fonctionStructure.
      *
      * @param string $fonctionStructure
      */
@@ -96,9 +95,9 @@ class Contact extends NodevoContact
     {
         $this->fonctionStructure = $fonctionStructure;
     }
-    
+
     /**
-     * Get civilite
+     * Get civilite.
      *
      * @return \HopitalNumerique\ReferenceBundle\Entity\Reference $civilite
      */
@@ -106,22 +105,23 @@ class Contact extends NodevoContact
     {
         return $this->civilite;
     }
-    
+
     /**
-     * Set civilite
+     * Set civilite.
      *
      * @param \HopitalNumerique\ReferenceBundle\Entity\Reference $civilite
      */
     public function setCivilite($civilite)
     {
-        if($civilite instanceof \HopitalNumerique\ReferenceBundle\Entity\Reference )
+        if ($civilite instanceof \HopitalNumerique\ReferenceBundle\Entity\Reference) {
             $this->civilite = $civilite;
-        else
+        } else {
             $this->civilite = null;
+        }
     }
-    
+
     /**
-     * Get region
+     * Get region.
      *
      * @return \HopitalNumerique\ReferenceBundle\Entity\Reference $region
      */
@@ -129,22 +129,23 @@ class Contact extends NodevoContact
     {
         return $this->region;
     }
-    
+
     /**
-     * Set region
+     * Set region.
      *
      * @param \HopitalNumerique\ReferenceBundle\Entity\Reference $region
      */
     public function setRegion($region)
     {
-        if($region instanceof \HopitalNumerique\ReferenceBundle\Entity\Reference )
+        if ($region instanceof \HopitalNumerique\ReferenceBundle\Entity\Reference) {
             $this->region = $region;
-        else
+        } else {
             $this->region = null;
+        }
     }
-    
+
     /**
-     * Get département
+     * Get département.
      *
      * @return \HopitalNumerique\ReferenceBundle\Entity\Reference $departement
      */
@@ -152,35 +153,37 @@ class Contact extends NodevoContact
     {
         return $this->departement;
     }
-    
+
     /**
-     * Set département
+     * Set département.
      *
      * @param \HopitalNumerique\ReferenceBundle\Entity\Reference $departement
      */
     public function setDepartement($departement)
     {
-        if($departement instanceof \HopitalNumerique\ReferenceBundle\Entity\Reference )
+        if ($departement instanceof \HopitalNumerique\ReferenceBundle\Entity\Reference) {
             $this->departement = $departement;
-        else
+        } else {
             $this->departement = null;
+        }
     }
-    
+
     /**
-     * Set statutEtablissementSante
+     * Set statutEtablissementSante.
      *
      * @param \HopitalNumerique\ReferenceBundle\Entity\Reference $statutEtablissementSante
      */
     public function setStatutEtablissementSante($statutEtablissementSante)
     {
-        if($statutEtablissementSante instanceof \HopitalNumerique\ReferenceBundle\Entity\Reference )
+        if ($statutEtablissementSante instanceof \HopitalNumerique\ReferenceBundle\Entity\Reference) {
             $this->statutEtablissementSante = $statutEtablissementSante;
-        else
+        } else {
             $this->statutEtablissementSante = null;
+        }
     }
-    
+
     /**
-     * Get statutEtablissementSante
+     * Get statutEtablissementSante.
      *
      * @return \HopitalNumerique\ReferenceBundle\Entity\Reference $statutEtablissementSante
      */
@@ -188,9 +191,9 @@ class Contact extends NodevoContact
     {
         return $this->statutEtablissementSante;
     }
-    
+
     /**
-     * Get etablissementRattachementSante
+     * Get etablissementRattachementSante.
      *
      * @return string $etablissementRattachementSante
      */
@@ -198,22 +201,23 @@ class Contact extends NodevoContact
     {
         return $this->etablissementRattachementSante;
     }
-    
+
     /**
-     * Set etablissementRattachementSante
+     * Set etablissementRattachementSante.
      *
      * @param string $etablissementRattachementSante
      */
     public function setEtablissementRattachementSante($etablissementRattachementSante)
     {
-        if($etablissementRattachementSante instanceof \HopitalNumerique\EtablissementBundle\Entity\Etablissement )
+        if ($etablissementRattachementSante instanceof \HopitalNumerique\EtablissementBundle\Entity\Etablissement) {
             $this->etablissementRattachementSante = $etablissementRattachementSante;
-        else
+        } else {
             $this->etablissementRattachementSante = null;
+        }
     }
-    
+
     /**
-     * Get autreStructureRattachementSante
+     * Get autreStructureRattachementSante.
      *
      * @return string $autreStructureRattachementSante
      */
@@ -221,9 +225,9 @@ class Contact extends NodevoContact
     {
         return $this->autreStructureRattachementSante;
     }
-    
+
     /**
-     * Set autreStructureRattachementSante
+     * Set autreStructureRattachementSante.
      *
      * @param string $autreStructureRattachementSante
      */

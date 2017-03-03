@@ -7,7 +7,7 @@ use Box\Spout\Writer\Style\StyleBuilder;
 use Box\Spout\Writer\WriterFactory;
 use Box\Spout\Writer\WriterInterface;
 use HopitalNumerique\AutodiagBundle\Entity\Restitution\Item;
-use \HopitalNumerique\AutodiagBundle\Model\Result\Item as ResultItem;
+use HopitalNumerique\AutodiagBundle\Model\Result\Item as ResultItem;
 use HopitalNumerique\AutodiagBundle\Entity\Synthesis;
 use HopitalNumerique\AutodiagBundle\Service\RestitutionCalculator;
 use HopitalNumerique\UserBundle\Entity\User;
@@ -51,10 +51,9 @@ class RestitutionItemExport
             ResponseHeaderBag::DISPOSITION_ATTACHMENT,
             $name
         );
+
         return $response;
     }
-
-
 
     protected function writeHeader(WriterInterface $writer, Synthesis $synthesis, User $user)
     {
@@ -68,9 +67,8 @@ class RestitutionItemExport
                 'Autodiagnostic "%s" - "%s"',
                 $synthesis->getAutodiag()->getTitle(),
                 $synthesis->getName()
-            )
+            ),
         ], $style);
-
 
         $style = (new StyleBuilder())
             ->setFontItalic()
@@ -83,9 +81,8 @@ class RestitutionItemExport
                 $now->format('d/m/Y'),
                 $now->format('H:i'),
                 $user->getPrenom() . ' ' . $user->getNom()
-            )
+            ),
         ], $style);
-
 
         $style = (new StyleBuilder())
             ->setFontBold()
@@ -102,7 +99,6 @@ class RestitutionItemExport
             'Acteur',
             'Échéance',
             'État d\'avancement',
-
         ], $style);
     }
 
@@ -144,7 +140,7 @@ class RestitutionItemExport
             $parent ? $item->getLabel() : '',
             '',
             '',
-            $item->getActionPlan() && $item->getActionPlan()->isVisible() ? $item->getActionPlan()->getDescription() : ''
+            $item->getActionPlan() && $item->getActionPlan()->isVisible() ? $item->getActionPlan()->getDescription() : '',
         ]);
 
         foreach ($item->getAttributes() as $attribute) {
@@ -155,7 +151,7 @@ class RestitutionItemExport
                         $parent ? $item->getLabel() : '',
                         $attribute->label,
                         $attribute->responseText,
-                        $attribute->getActionPlan() && $attribute->getActionPlan()->isVisible() ? $attribute->getActionPlan()->getDescription() : ''
+                        $attribute->getActionPlan() && $attribute->getActionPlan()->isVisible() ? $attribute->getActionPlan()->getDescription() : '',
                     ]
                 );
             }

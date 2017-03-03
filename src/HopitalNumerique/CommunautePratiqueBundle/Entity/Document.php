@@ -1,4 +1,5 @@
 <?php
+
 namespace HopitalNumerique\CommunautePratiqueBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
@@ -16,16 +17,15 @@ use Gedmo\Mapping\Annotation as Gedmo;
 class Document
 {
     /**
-     * @var integer Taille maximale du fichier en Mo
+     * @var int Taille maximale du fichier en Mo
      */
     const MAX_SIZE = 10;
-
 
     /**
      * @var array<string, string> Icones des documents par extension de fichier
      */
-    public static $ICONES_BY_EXTENSION = array
-    (
+    public static $ICONES_BY_EXTENSION =
+    [
         'doc' => '<em class="icon-file-doc"></em>',
         'docx' => '<em class="icon-file-docx"></em>',
         'jpg' => '<em class="icon-file-jpg"></em>',
@@ -37,12 +37,11 @@ class Document
         'pptx' => '<em class="icon-pptx"></em>',
         'odt' => '<em class="icon-odt"></em>',
         'odp' => '<em class="icon-odp"></em>',
-        'ods' => '<em class="icon-ods"></em>'
-    );
-
+        'ods' => '<em class="icon-ods"></em>',
+    ];
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="doc_id", type="integer", nullable=false, options={"unsigned":true})
      * @ORM\Id()
@@ -67,7 +66,7 @@ class Document
     private $libelle;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="doc_size", type="integer", nullable=false, options={"comment"="Taille du fichier en octet"})
      * @Assert\NotNull()
@@ -105,7 +104,6 @@ class Document
      */
     private $fiches;
 
-
     /**
      * Constructor.
      */
@@ -114,11 +112,10 @@ class Document
         $this->fiches = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
-
     /**
-     * Get id
+     * Get id.
      *
-     * @return integer 
+     * @return int
      */
     public function getId()
     {
@@ -126,9 +123,10 @@ class Document
     }
 
     /**
-     * Set nom
+     * Set nom.
      *
      * @param string $nom
+     *
      * @return Document
      */
     public function setNom($nom)
@@ -139,9 +137,9 @@ class Document
     }
 
     /**
-     * Get nom
+     * Get nom.
      *
-     * @return string 
+     * @return string
      */
     public function getNom()
     {
@@ -149,9 +147,10 @@ class Document
     }
 
     /**
-     * Set libelle
+     * Set libelle.
      *
      * @param string $libelle
+     *
      * @return Document
      */
     public function setLibelle($libelle)
@@ -162,9 +161,9 @@ class Document
     }
 
     /**
-     * Get libelle
+     * Get libelle.
      *
-     * @return string 
+     * @return string
      */
     public function getLibelle()
     {
@@ -172,9 +171,10 @@ class Document
     }
 
     /**
-     * Set size
+     * Set size.
      *
-     * @param integer $size
+     * @param int $size
+     *
      * @return Document
      */
     public function setSize($size)
@@ -185,9 +185,9 @@ class Document
     }
 
     /**
-     * Get size
+     * Get size.
      *
-     * @return integer 
+     * @return int
      */
     public function getSize()
     {
@@ -195,9 +195,10 @@ class Document
     }
 
     /**
-     * Set dateCreation
+     * Set dateCreation.
      *
      * @param \DateTime $dateCreation
+     *
      * @return Document
      */
     public function setDateCreation($dateCreation)
@@ -208,9 +209,9 @@ class Document
     }
 
     /**
-     * Get dateCreation
+     * Get dateCreation.
      *
-     * @return \DateTime 
+     * @return \DateTime
      */
     public function getDateCreation()
     {
@@ -218,9 +219,10 @@ class Document
     }
 
     /**
-     * Set groupe
+     * Set groupe.
      *
      * @param \HopitalNumerique\CommunautePratiqueBundle\Entity\Groupe $groupe
+     *
      * @return Document
      */
     public function setGroupe(\HopitalNumerique\CommunautePratiqueBundle\Entity\Groupe $groupe)
@@ -231,9 +233,9 @@ class Document
     }
 
     /**
-     * Get groupe
+     * Get groupe.
      *
-     * @return \HopitalNumerique\CommunautePratiqueBundle\Entity\Groupe 
+     * @return \HopitalNumerique\CommunautePratiqueBundle\Entity\Groupe
      */
     public function getGroupe()
     {
@@ -241,9 +243,10 @@ class Document
     }
 
     /**
-     * Set user
+     * Set user.
      *
      * @param \HopitalNumerique\UserBundle\Entity\User $user
+     *
      * @return Document
      */
     public function setUser(\HopitalNumerique\UserBundle\Entity\User $user)
@@ -254,9 +257,9 @@ class Document
     }
 
     /**
-     * Get user
+     * Get user.
      *
-     * @return \HopitalNumerique\UserBundle\Entity\User 
+     * @return \HopitalNumerique\UserBundle\Entity\User
      */
     public function getUser()
     {
@@ -264,9 +267,10 @@ class Document
     }
 
     /**
-     * Add fiches
+     * Add fiches.
      *
      * @param \HopitalNumerique\CommunautePratiqueBundle\Entity\Fiche $fiches
+     *
      * @return Document
      */
     public function addFiche(\HopitalNumerique\CommunautePratiqueBundle\Entity\Fiche $fiches)
@@ -277,7 +281,7 @@ class Document
     }
 
     /**
-     * Remove fiches
+     * Remove fiches.
      *
      * @param \HopitalNumerique\CommunautePratiqueBundle\Entity\Fiche $fiches
      */
@@ -287,15 +291,14 @@ class Document
     }
 
     /**
-     * Get fiches
+     * Get fiches.
      *
-     * @return \Doctrine\Common\Collections\Collection 
+     * @return \Doctrine\Common\Collections\Collection
      */
     public function getFiches()
     {
         return $this->fiches;
     }
-
 
     /**
      * @return string
@@ -305,27 +308,25 @@ class Document
         return $this->libelle;
     }
 
-
     /**
      * Retourne le chemin du dossier.
-     * 
+     *
      * @return string Path
      */
     private function getPath()
     {
-        return 'files'.DIRECTORY_SEPARATOR.'communaute-de-pratiques'.DIRECTORY_SEPARATOR.'documents';
+        return 'files' . DIRECTORY_SEPARATOR . 'communaute-de-pratiques' . DIRECTORY_SEPARATOR . 'documents';
     }
 
     /**
      * Retourne le chemin du fichier.
-     * 
+     *
      * @return string Pathname
      */
     public function getPathname()
     {
-        return $this->getPath().DIRECTORY_SEPARATOR.$this->nom;
+        return $this->getPath() . DIRECTORY_SEPARATOR . $this->nom;
     }
-
 
     /**
      * @ORM\PreRemove()
@@ -340,43 +341,39 @@ class Document
      */
     private function deleteFichier()
     {
-        if ( file_exists( '..'.DIRECTORY_SEPARATOR.$this->getPathname() ) )
-        {
-            unlink('..'.DIRECTORY_SEPARATOR.$this->getPathname());
+        if (file_exists('..' . DIRECTORY_SEPARATOR . $this->getPathname())) {
+            unlink('..' . DIRECTORY_SEPARATOR . $this->getPathname());
         }
     }
-
 
     /**
      * Retourne l'extension du document.
      *
-     * @return string|NULL Extension
+     * @return string|null Extension
      */
     public function getExtension()
     {
         return Fichier::getExtensionFromFile($this->nom);
     }
 
-
     /**
      * Retourne si le document est une image.
      *
-     * @return boolean VRAI si image
+     * @return bool VRAI si image
      */
     public function isImage()
     {
-        return (in_array(Fichier::getExtensionFromFile($this->nom), array('jpg', 'jpeg', 'png', 'gif')));
+        return in_array(Fichier::getExtensionFromFile($this->nom), ['jpg', 'jpeg', 'png', 'gif']);
     }
 
     /**
      * Retourne l'icône du document en HTML.
-     * 
+     *
      * @return string Icône
      */
     public function getIconeHtml()
     {
-        if ( isset( self::$ICONES_BY_EXTENSION[ $this->getExtension() ] ) )
-        {
+        if (isset(self::$ICONES_BY_EXTENSION[$this->getExtension()])) {
             return self::$ICONES_BY_EXTENSION[$this->getExtension()];
         }
 
@@ -385,11 +382,11 @@ class Document
 
     /**
      * Retourne le libellé de la taille.
-     * 
+     *
      * @return string Taille
      */
     public function getSizeLibelle()
     {
-        return ($this->size >= 1024 * 1024 ? number_format( $this->size / ( 1024 * 1024 ), 2, ',', ' ' ).' Mo' : ($this->size >= 1024 ? number_format( $this->size / 1024, 2, ',', ' ' ).' Ko' : $this->size.' o') );
+        return $this->size >= 1024 * 1024 ? number_format($this->size / (1024 * 1024), 2, ',', ' ') . ' Mo' : ($this->size >= 1024 ? number_format($this->size / 1024, 2, ',', ' ') . ' Ko' : $this->size . ' o');
     }
 }

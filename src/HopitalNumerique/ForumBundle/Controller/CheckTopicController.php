@@ -19,19 +19,19 @@ class CheckTopicController extends Controller
     public function checkAction(Objet $objet)
     {
         /** @var Topic $topic */
-        $topic = $this->get('hopitalnumerique_forum.manager.topic')->findOneBy(array(
-            'title' => $objet->getTitre()
-        ));
+        $topic = $this->get('hopitalnumerique_forum.manager.topic')->findOneBy([
+            'title' => $objet->getTitre(),
+        ]);
 
         /** @var Board $board */
-        $board = $this->get('hopitalnumerique_forum.manager.board')->findOneBy(array(
-            'id' => $this->getParameter('ref_board_create_topic')
-        ));
+        $board = $this->get('hopitalnumerique_forum.manager.board')->findOneBy([
+            'id' => $this->getParameter('ref_board_create_topic'),
+        ]);
 
         /** @var Forum $forum */
-        $forum = $this->get('hopitalnumerique_forum.manager.forum')->findOneBy(array(
-            'id' => $this->getParameter('ref_forum_create_topic')
-        ));
+        $forum = $this->get('hopitalnumerique_forum.manager.forum')->findOneBy([
+            'id' => $this->getParameter('ref_forum_create_topic'),
+        ]);
 
         if ($topic == null) {
             return $this->redirectToRoute(
@@ -39,11 +39,11 @@ class CheckTopicController extends Controller
                 [
                     'forum' => $forum->getId(),
                     'board' => $board->getId(),
-                    'objet' => $objet->getId()
+                    'objet' => $objet->getId(),
                 ]
             );
         } else {
-            return $this->redirectToRoute('ccdn_forum_user_topic_show', array('topicId' => $topic->getId()));
+            return $this->redirectToRoute('ccdn_forum_user_topic_show', ['topicId' => $topic->getId()]);
         }
     }
 }

@@ -18,27 +18,19 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
 /**
- *
  * @category CCDNForum
- * @package  ForumBundle
  *
  * @author   Gaëtan MELCHILSEN
  * @license  Nodevo
- *
  */
 class PostUpdateFormType extends AbstractType
 {
     /**
-     *
-     * @access protected
-     * @var string $postClass
+     * @var string
      */
     protected $postClass;
 
-
     /**
-     *
-     * @access public
      * @param string $postClass
      */
     public function __construct($postClass)
@@ -46,10 +38,7 @@ class PostUpdateFormType extends AbstractType
         $this->postClass = $postClass;
     }
 
-
     /**
-     *
-     * @access public
      * @param FormBuilderInterface $builder
      * @param array                $options
      */
@@ -57,60 +46,55 @@ class PostUpdateFormType extends AbstractType
     {
         $builder
             ->add('body', 'bb_editor',
-                array(
-                    'label'              => 'post.body-label',
+                [
+                    'label' => 'post.body-label',
                     'translation_domain' => 'CCDNForumForumBundle',
-                    'attr'               => array(
+                    'attr' => [
                         'class' => 'validate[required,minSize[15]]',
                         'rows' => 8,
-                        'acl_group' => 'default'
-                    )
-                )
+                        'acl_group' => 'default',
+                    ],
+                ]
             )
         ;
-        if ($builder->getData()->getTopic()->getBoard()->isPiecesJointesAutorisees())
-        {
+        if ($builder->getData()->getTopic()->getBoard()->isPiecesJointesAutorisees()) {
             $builder
                 ->add('pieceJointeFile', 'file',
-                    array(
-                        'required'           => false,
-                        'label'              => 'Pièce jointe :'
-                    )
+                    [
+                        'required' => false,
+                        'label' => 'Pièce jointe :',
+                    ]
                 )
             ;
         }
         $builder
             ->add('pieceJointeSuppression', (null !== $builder->getData()->getPieceJointe() ? 'checkbox' : 'hidden'),
-                array(
+                [
                     'required' => false,
                     'mapped' => false,
-                    'label' => 'Supprimer la pièce jointe actuelle ?'
-                )
+                    'label' => 'Supprimer la pièce jointe actuelle ?',
+                ]
             )
         ;
     }
 
     /**
-     *
-     * @access public
      * @param \Symfony\Component\OptionsResolver\OptionsResolverInterface $resolver
      */
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
-        $resolver->setDefaults(array(
-            'data_class'          => $this->postClass,
-            'csrf_protection'     => true,
-            'csrf_field_name'     => '_token',
+        $resolver->setDefaults([
+            'data_class' => $this->postClass,
+            'csrf_protection' => true,
+            'csrf_field_name' => '_token',
             // a unique key to help generate the secret token
-            'intention'           => 'forum_post_update_item',
-            'validation_groups'   => array('forum_post_update'),
-            'cascade_validation'  => true,
-        ));
+            'intention' => 'forum_post_update_item',
+            'validation_groups' => ['forum_post_update'],
+            'cascade_validation' => true,
+        ]);
     }
 
     /**
-     *
-     * @access public
      * @return string
      */
     public function getName()

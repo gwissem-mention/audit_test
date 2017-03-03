@@ -1,10 +1,10 @@
 <?php
+
 namespace Nodevo\ErrorsBundle\Command;
 
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\Console\Output\Output;
 use Symfony\Component\Console\Command\Command;
 
 /**
@@ -18,6 +18,7 @@ class NodevoErrorsExceptionInstallCommand extends Command
     {
         $this->container = $this->getApplication()->getKernel()->getContainer();
     }
+
     /**
      * @see Command
      */
@@ -42,10 +43,10 @@ class NodevoErrorsExceptionInstallCommand extends Command
         $originDir = $this->container->get('kernel')->locateResource('@NodevoErrorsBundle/Resources/views/TwigBundle/');
 
         // Create the bundles directory otherwise symlink will fail.
-        if ( is_dir($originDir) ) {
+        if (is_dir($originDir)) {
             $output->writeln(sprintf('Installation des pages d\'erreurs vers <comment>app/Resources/TwigBundle</comment>'));
 
-            $targetDir = $this->container->getParameter('kernel.root_dir').'/Resources/TwigBundle';
+            $targetDir = $this->container->getParameter('kernel.root_dir') . '/Resources/TwigBundle';
 
             $filesystem->remove($targetDir);
 

@@ -5,7 +5,7 @@ namespace HopitalNumerique\QuestionnaireBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * TypeQuestion
+ * TypeQuestion.
  *
  * @ORM\Table("hn_questionnaire_type_question")
  * @ORM\Entity(repositoryClass="HopitalNumerique\QuestionnaireBundle\Repository\TypeQuestionRepository")
@@ -13,7 +13,7 @@ use Doctrine\ORM\Mapping as ORM;
 class TypeQuestion
 {
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="typ_id", type="integer", options = {"comment" = "ID du type de question"})
      * @ORM\Id
@@ -35,11 +35,10 @@ class TypeQuestion
      */
     private $nom;
 
-
     /**
-     * Get id
+     * Get id.
      *
-     * @return integer 
+     * @return int
      */
     public function getId()
     {
@@ -47,9 +46,10 @@ class TypeQuestion
     }
 
     /**
-     * Set string
+     * Set string.
      *
      * @param string $string
+     *
      * @return TypeQuestion
      */
     public function setString($string)
@@ -60,9 +60,9 @@ class TypeQuestion
     }
 
     /**
-     * Get string
+     * Get string.
      *
-     * @return string 
+     * @return string
      */
     public function getString()
     {
@@ -70,9 +70,10 @@ class TypeQuestion
     }
 
     /**
-     * Set libelle
+     * Set libelle.
      *
      * @param string $libelle
+     *
      * @return TypeQuestion
      */
     public function setLibelle($libelle)
@@ -83,9 +84,9 @@ class TypeQuestion
     }
 
     /**
-     * Get libelle
+     * Get libelle.
      *
-     * @return string 
+     * @return string
      */
     public function getLibelle()
     {
@@ -93,9 +94,10 @@ class TypeQuestion
     }
 
     /**
-     * Set nom
+     * Set nom.
      *
      * @param string $nom
+     *
      * @return TypeQuestion
      */
     public function setNom($nom)
@@ -106,9 +108,9 @@ class TypeQuestion
     }
 
     /**
-     * Get nom
+     * Get nom.
      *
-     * @return string 
+     * @return string
      */
     public function getNom()
     {

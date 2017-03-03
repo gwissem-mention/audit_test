@@ -6,7 +6,6 @@ use Doctrine\ORM\EntityManager;
 use HopitalNumerique\ForumBundle\Entity\Forum;
 use HopitalNumerique\ForumBundle\Entity\Topic;
 use Nodevo\ToolsBundle\Manager\Manager as BaseManager;
-
 use HopitalNumerique\UserBundle\Manager\UserManager;
 use HopitalNumerique\DomaineBundle\Manager\DomaineManager;
 use HopitalNumerique\ReferenceBundle\Manager\ReferenceManager;
@@ -37,8 +36,8 @@ class TopicManager extends BaseManager
     ) {
         parent::__construct($entityManager);
 
-        $this->_userManager      = $userManager;
-        $this->_domaineManager   = $domaineManager;
+        $this->_userManager = $userManager;
+        $this->_domaineManager = $domaineManager;
         $this->_referenceManager = $referenceManager;
     }
 
@@ -52,7 +51,7 @@ class TopicManager extends BaseManager
     {
         if (isset($elem['childs']) && count($elem['childs'])) {
             $childs = [];
-            foreach ($elem["childs"] as $key => $one) {
+            foreach ($elem['childs'] as $key => $one) {
                 $childs[$one] = $retour[$one];
                 $petitsEnfants = $this->getChilds($retour, $childs[$one]);
                 if ($petitsEnfants) {
@@ -70,7 +69,7 @@ class TopicManager extends BaseManager
     }
 
     /**
-     * Récupère les derniers topics commentés par type de forum
+     * Récupère les derniers topics commentés par type de forum.
      *
      * @param $id int
      * @param $limit int
@@ -84,7 +83,7 @@ class TopicManager extends BaseManager
 
     /**
      * Récupère les derniers topics commentés par type de forum et affiche les epinglés en premier
-     * si le nombre d'epinglés est inferieur a la limit alors on recupere les non epinglés
+     * si le nombre d'epinglés est inferieur a la limit alors on recupere les non epinglés.
      *
      * @param $id
      * @param $limit
@@ -98,7 +97,7 @@ class TopicManager extends BaseManager
                              ->getResult();
 
         if ($limit > count($topicEpingle)) {
-            $topic        = $this->getRepository()->getLastTopicsForumEpingle(
+            $topic = $this->getRepository()->getLastTopicsForumEpingle(
                 $id,
                 $limit - count($topicEpingle),
                 false,
@@ -114,6 +113,7 @@ class TopicManager extends BaseManager
      * Retourne les topics d'un forum.
      *
      * @param \HopitalNumerique\ForumBundle\Entity\Forum $forum Forum
+     *
      * @return array<\HopitalNumerique\ForumBundle\Entity\Topic> Topics
      */
     public function findByForum(Forum $forum)
@@ -124,8 +124,9 @@ class TopicManager extends BaseManager
     /**
      * Retourne le nombre de fils d'un forum.
      *
-     * @param integer $forumId ID du forum
-     * @return integer Nombre
+     * @param int $forumId ID du forum
+     *
+     * @return int Nombre
      */
     public function getCountForForum($forumId)
     {
@@ -133,7 +134,7 @@ class TopicManager extends BaseManager
     }
 
     /**
-     * Retourne un tableau de topics ordonné par date de création du dernier post
+     * Retourne un tableau de topics ordonné par date de création du dernier post.
      *
      * @param array $topicsByCategories Tableau des topics groupés par catégorie
      *
@@ -147,10 +148,10 @@ class TopicManager extends BaseManager
             if (count($topicsByCategory) > 0) {
                 foreach ($topicsByCategory['topics'] as $value) {
                     $topics[] = [
-                        'topic'        => $value,
-                        'categoryId'   => $topicsByCategory['categoryId'],
+                        'topic' => $value,
+                        'categoryId' => $topicsByCategory['categoryId'],
                         'categoryName' => $topicsByCategory['categoryName'],
-                        'forumName'    => $topicsByCategory['forumName'],
+                        'forumName' => $topicsByCategory['forumName'],
                     ];
                 }
             }

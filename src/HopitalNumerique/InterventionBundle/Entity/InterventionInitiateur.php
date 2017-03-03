@@ -1,6 +1,7 @@
 <?php
 
 namespace HopitalNumerique\InterventionBundle\Entity;
+
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -16,7 +17,7 @@ class InterventionInitiateur
     private static $INTERVENTION_INITIATEUR_ANAP = 3;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(type="smallint", name="intervinit_id", nullable=false, options={"unsigned":true})
      * @ORM\Id
@@ -32,9 +33,9 @@ class InterventionInitiateur
     private $type;
 
     /**
-     * Get id
+     * Get id.
      *
-     * @return string 
+     * @return string
      */
     public function getId()
     {
@@ -42,9 +43,10 @@ class InterventionInitiateur
     }
 
     /**
-     * Set type
+     * Set type.
      *
      * @param string $type
+     *
      * @return InterventionInitiateur
      */
     public function setType($type)
@@ -55,9 +57,9 @@ class InterventionInitiateur
     }
 
     /**
-     * Get type
+     * Get type.
      *
-     * @return string 
+     * @return string
      */
     public function getType()
     {
@@ -66,26 +68,28 @@ class InterventionInitiateur
 
     /**
      * Returne l'ID du CMSI.
-     * 
-     * @return integer ID du CMSI
+     *
+     * @return int ID du CMSI
      */
     public static function getInterventionInitiateurCmsiId()
     {
         return self::$INTERVENTION_INITIATEUR_CMSI;
     }
+
     /**
      * Returne l'ID de l'établissement.
      *
-     * @return integer ID de l'établissement
+     * @return int ID de l'établissement
      */
     public static function getInterventionInitiateurEtablissementId()
     {
         return self::$INTERVENTION_INITIATEUR_ETABLISSEMENT;
     }
+
     /**
      * Returne l'ID de l'ANAP.
      *
-     * @return integer ID de l'ANAP
+     * @return int ID de l'ANAP
      */
     public static function getInterventionInitiateurAnapId()
     {
@@ -94,7 +98,7 @@ class InterventionInitiateur
 
     /**
      * toString.
-     * 
+     *
      * @return string
      */
     public function __toString()

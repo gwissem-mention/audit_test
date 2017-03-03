@@ -12,8 +12,8 @@ class FaqController extends NodevoController
 
         $elements = $this->get('nodevo_faq.manager.faq')->getFaqByDomaine($domaineId);
 
-        return $this->render('HopitalNumeriqueFaqBundle:Faq:faq.html.twig', array(
-            'elements' => $elements
-        ));
+        return $this->render('HopitalNumeriqueFaqBundle:Faq:faq.html.twig', [
+            'elements' => $elements,
+        ]);
     }
 }

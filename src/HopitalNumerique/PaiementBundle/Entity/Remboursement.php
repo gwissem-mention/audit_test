@@ -5,7 +5,7 @@ namespace HopitalNumerique\PaiementBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * Remboursement
+ * Remboursement.
  *
  * @ORM\Table(name="hn_facture_remboursement")
  * @ORM\Entity(repositoryClass="HopitalNumerique\PaiementBundle\Repository\RemboursementRepository")
@@ -13,7 +13,7 @@ use Doctrine\ORM\Mapping as ORM;
 class Remboursement
 {
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="rem_id", type="integer", options = {"comment" = "ID du remboursement"})
      * @ORM\Id
@@ -22,21 +22,21 @@ class Remboursement
     private $id;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="rem_supplement", type="integer", nullable = true, options = {"comment" = "Forfait formation"})
      */
     private $supplement;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="rem_repas", type="integer", options = {"comment" = "Forfait repas du remboursement"})
      */
     private $repas;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="rem_gestion", type="integer", options = {"comment" = "Frais de gestion administrative du remboursement"})
      */
@@ -56,11 +56,10 @@ class Remboursement
      */
     private $referent;
 
-
     /**
-     * Get id
+     * Get id.
      *
-     * @return integer 
+     * @return int
      */
     public function getId()
     {
@@ -68,9 +67,10 @@ class Remboursement
     }
 
     /**
-     * Set supplement
+     * Set supplement.
      *
-     * @param integer $supplement
+     * @param int $supplement
+     *
      * @return Remboursement
      */
     public function setSupplement($supplement)
@@ -81,9 +81,9 @@ class Remboursement
     }
 
     /**
-     * Get supplement
+     * Get supplement.
      *
-     * @return integer 
+     * @return int
      */
     public function getSupplement()
     {
@@ -91,9 +91,10 @@ class Remboursement
     }
 
     /**
-     * Set repas
+     * Set repas.
      *
-     * @param integer $repas
+     * @param int $repas
+     *
      * @return Remboursement
      */
     public function setRepas($repas)
@@ -104,9 +105,9 @@ class Remboursement
     }
 
     /**
-     * Get repas
+     * Get repas.
      *
-     * @return integer 
+     * @return int
      */
     public function getRepas()
     {
@@ -114,9 +115,10 @@ class Remboursement
     }
 
     /**
-     * Set gestion
+     * Set gestion.
      *
-     * @param integer $gestion
+     * @param int $gestion
+     *
      * @return Remboursement
      */
     public function setGestion($gestion)
@@ -127,9 +129,9 @@ class Remboursement
     }
 
     /**
-     * Get gestion
+     * Get gestion.
      *
-     * @return integer 
+     * @return int
      */
     public function getGestion()
     {
@@ -137,7 +139,7 @@ class Remboursement
     }
 
     /**
-     * Get region
+     * Get region.
      *
      * @return \HopitalNumerique\ReferenceBundle\Entity\Reference $region
      */
@@ -145,9 +147,9 @@ class Remboursement
     {
         return $this->region;
     }
-    
+
     /**
-     * Set region
+     * Set region.
      *
      * @param \HopitalNumerique\ReferenceBundle\Entity\Reference $region
      */
@@ -157,7 +159,7 @@ class Remboursement
     }
 
     /**
-     * Set referent
+     * Set referent.
      *
      * @param \HopitalNumerique\UserBundle\Entity\User $referent
      *
@@ -171,7 +173,7 @@ class Remboursement
     }
 
     /**
-     * Get referent
+     * Get referent.
      *
      * @return \HopitalNumerique\UserBundle\Entity\User
      */

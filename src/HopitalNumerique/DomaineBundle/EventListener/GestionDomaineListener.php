@@ -2,10 +2,7 @@
 
 namespace HopitalNumerique\DomaineBundle\EventListener;
 
-use HopitalNumerique\UserBundle\Event\UserEvent;
 use HopitalNumerique\DomaineBundle\Manager\DomaineManager;
-
-use Nodevo\MailBundle\Manager\MailManager;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpKernel\Event\GetResponseEvent;
 
@@ -30,9 +27,8 @@ class GestionDomaineListener implements EventSubscriberInterface
         $request = $event->getRequest();
         $session = $request->getSession();
 
-        if(is_null($session->get('domaineId'))
-            || is_null($session->get('templateId')))
-        {
+        if (is_null($session->get('domaineId'))
+            || is_null($session->get('templateId'))) {
             $domaine = $this->_managerDomaine->getDomaineFromHttpHost($request->server->get('HTTP_HOST'));
             $session->set('domaineId', is_null($domaine) ? 1 : $domaine->getId());
             $session->set('templateId', is_null($domaine) ? 2 : $domaine->getTemplate()->getId());
@@ -41,8 +37,8 @@ class GestionDomaineListener implements EventSubscriberInterface
 
     public static function getSubscribedEvents()
     {
-        return array(
+        return [
             KernelEvents::REQUEST => 'onKernelRequest',
-        );
+        ];
     }
 }

@@ -18,26 +18,19 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
 /**
- *
  * @category CCDNForum
- * @package  ForumBundle
  *
  * @author   Gaëtan MELCHILSEN
  * @license  Nodevo
- *
  */
 class TopicUpdateFormType extends AbstractType
 {
     /**
-     *
-     * @access protected
-     * @var string $topicClass
+     * @var string
      */
     protected $topicClass;
 
     /**
-     *
-     * @access public
      * @param string $topicClass
      */
     public function __construct($topicClass)
@@ -46,8 +39,6 @@ class TopicUpdateFormType extends AbstractType
     }
 
     /**
-     *
-     * @access public
      * @param FormBuilderInterface $builder
      * @param array                $options
      */
@@ -55,37 +46,33 @@ class TopicUpdateFormType extends AbstractType
     {
         $builder
             ->add('title', null,
-                array(
-                    'label'              => 'topic.title-label',
+                [
+                    'label' => 'topic.title-label',
                     'translation_domain' => 'CCDNForumForumBundle',
-                    'attr'               => array(
-                        'class' => 'validate[required,maxSize[255]]'
-                    )
-                )
+                    'attr' => [
+                        'class' => 'validate[required,maxSize[255]]',
+                    ],
+                ]
             )
         ;
     }
 
     /**
-     *
-     * @access public
      * @param \Symfony\Component\OptionsResolver\OptionsResolverInterface $resolver
      */
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
-        $resolver->setDefaults(array(
-            'data_class'         => $this->topicClass,
-            'csrf_protection'    => true,
-            'csrf_field_name'    => '_token',
+        $resolver->setDefaults([
+            'data_class' => $this->topicClass,
+            'csrf_protection' => true,
+            'csrf_field_name' => '_token',
             // a unique key to help generate the secret token
-            'intention'          => 'forum_topic_update_item',
-            'validation_groups'  => array('forum_topic_custom', 'forum_post_update'),
-        ));
+            'intention' => 'forum_topic_update_item',
+            'validation_groups' => ['forum_topic_custom', 'forum_post_update'],
+        ]);
     }
 
     /**
-     *
-     * @access public
      * @return string
      */
     public function getName()

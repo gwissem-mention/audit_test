@@ -10,6 +10,4 @@ use Nodevo\ToolsBundle\Manager\Manager as BaseManager;
 class TypeQuestionManager extends BaseManager
 {
     protected $class = 'HopitalNumerique\QuestionnaireBundle\Entity\TypeQuestion';
-    
-    
 }

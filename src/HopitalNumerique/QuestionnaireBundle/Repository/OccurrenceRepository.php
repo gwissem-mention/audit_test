@@ -1,4 +1,5 @@
 <?php
+
 namespace HopitalNumerique\QuestionnaireBundle\Repository;
 
 use HopitalNumerique\UserBundle\Entity\User;
@@ -10,8 +11,9 @@ class OccurrenceRepository extends \Doctrine\ORM\EntityRepository
 {
     /**
      * Retourne les occurrences d'un questionnaire d'un utilisateur avec les dates de création et de dernières modifications.
-     * 
-     * @param \HopitalNumerique\UserBundle\Entity\User                   $user          Utilisateur
+     *
+     * @param \HopitalNumerique\UserBundle\Entity\User $user Utilisateur
+     *
      * @return array<\HopitalNumerique\QuestionnaireBundle\Entity\Occurrence> Occurrences
      */
     public function findByUserWithDates(User $user)

@@ -40,6 +40,7 @@ class AutodiagEntrySession
 
     /**
      * @param Autodiag $autodiag
+     *
      * @return \Doctrine\Common\Collections\Collection
      */
     public function get(Autodiag $autodiag)
@@ -71,7 +72,7 @@ class AutodiagEntrySession
         if (count($ids) > 0) {
             $entries = $this->repository->findBy(
                 [
-                    'id' => $ids
+                    'id' => $ids,
                 ]
             );
             foreach ($entries as $entry) {
@@ -92,7 +93,7 @@ class AutodiagEntrySession
 
     public function exist()
     {
-        if ($this->session->get(AutodiagEntrySession::SESSION_KEY)) {
+        if ($this->session->get(self::SESSION_KEY)) {
             return true;
         }
 

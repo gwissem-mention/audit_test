@@ -17,9 +17,9 @@ class ObjetGrid extends Grid implements GridInterface
      */
     public function setConfig()
     {
-        $this->setSource( 'hopitalnumerique_objet.manager.objet' );
+        $this->setSource('hopitalnumerique_objet.manager.objet');
         $this->setFunctionName('getDatasForGridAmbassadeur');
-        $this->setSourceType( self::SOURCE_TYPE_MANAGER );
+        $this->setSourceType(self::SOURCE_TYPE_MANAGER);
         $this->setNoDataMessage('Aucun Objet maîtrisés à afficher.');
     }
 
@@ -28,24 +28,24 @@ class ObjetGrid extends Grid implements GridInterface
      */
     public function setColumns()
     {
-        $this->addColonne( new Column\TextColumn('titre', 'Titre') );
-        $this->addColonne( new Column\TextColumn('types', 'Type de production') );
+        $this->addColonne(new Column\TextColumn('titre', 'Titre'));
+        $this->addColonne(new Column\TextColumn('types', 'Type de production'));
 
         $userColumn = new Column\BlankColumn('user');
         $userColumn->setVisibleForSource(true);
-        $this->addColonne( $userColumn );
+        $this->addColonne($userColumn);
     }
 
     /**
-     * Ajoute les boutons d'action
+     * Ajoute les boutons d'action.
      */
     public function setActionsButtons()
     {
-        $this->addActionButton( new Action\ShowButton( 'hopitalnumerique_objet_objet_show' ) );
-        
-        $deleteButton = new Action\DeleteButton( 'hopitalnumerique_user_ambassadeur_deleteobjet' );
-        $deleteButton->setRouteParameters( array('id', 'user') );
-        $this->addActionButton( $deleteButton );
+        $this->addActionButton(new Action\ShowButton('hopitalnumerique_objet_objet_show'));
+
+        $deleteButton = new Action\DeleteButton('hopitalnumerique_user_ambassadeur_deleteobjet');
+        $deleteButton->setRouteParameters(['id', 'user']);
+        $this->addActionButton($deleteButton);
     }
 
     /**
@@ -53,7 +53,5 @@ class ObjetGrid extends Grid implements GridInterface
      */
     public function setMassActions()
     {
-        
-        
     }
 }

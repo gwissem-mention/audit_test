@@ -1,11 +1,11 @@
 <?php
+
 namespace HopitalNumerique\CommunautePratiqueBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 use Gedmo\Mapping\Annotation as Gedmo;
 use HopitalNumerique\UserBundle\Entity\User;
-use Symfony\Component\Validator\Constraints\Collection;
 use Doctrine\Common\Collections\ArrayCollection;
 
 /**
@@ -17,7 +17,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 class Groupe
 {
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="group_id", type="integer", nullable=false, options={"unsigned":true})
      * @ORM\Id()
@@ -50,7 +50,7 @@ class Groupe
     private $descriptionHtml;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="group_nombre_participants_maximum", type="smallint", nullable=false, options={"unsigned":true})
      * @Assert\NotNull()
@@ -85,7 +85,7 @@ class Groupe
     private $dateFin;
 
     /**
-     * @var boolean
+     * @var bool
      *
      * @ORM\Column(name="group_vedette", type="boolean", nullable=false, options={"default"=false})
      * @Assert\NotNull()
@@ -93,7 +93,7 @@ class Groupe
     private $vedette;
 
     /**
-     * @var boolean
+     * @var bool
      *
      * @ORM\Column(name="group_actif", type="boolean", nullable=false, options={"default"=false})
      * @Assert\NotNull()
@@ -168,26 +168,24 @@ class Groupe
      */
     private $commentaires;
 
-
     /**
-     * Constructor
+     * Constructor.
      */
     public function __construct()
     {
-        $this->fiches       = new ArrayCollection();
-        $this->animateurs   = new ArrayCollection();
+        $this->fiches = new ArrayCollection();
+        $this->animateurs = new ArrayCollection();
         $this->inscriptions = new ArrayCollection();
-        $this->documents    = new ArrayCollection();
+        $this->documents = new ArrayCollection();
         $this->publications = new ArrayCollection();
         $this->commentaires = new ArrayCollection();
-        $this->users        = new ArrayCollection();
+        $this->users = new ArrayCollection();
     }
 
-
     /**
-     * Get id
+     * Get id.
      *
-     * @return integer
+     * @return int
      */
     public function getId()
     {
@@ -195,9 +193,10 @@ class Groupe
     }
 
     /**
-     * Set titre
+     * Set titre.
      *
      * @param string $titre
+     *
      * @return Groupe
      */
     public function setTitre($titre)
@@ -208,7 +207,7 @@ class Groupe
     }
 
     /**
-     * Get titre
+     * Get titre.
      *
      * @return string
      */
@@ -218,9 +217,10 @@ class Groupe
     }
 
     /**
-     * Set descriptionCourte
+     * Set descriptionCourte.
      *
      * @param string $descriptionCourte
+     *
      * @return Groupe
      */
     public function setDescriptionCourte($descriptionCourte)
@@ -231,7 +231,7 @@ class Groupe
     }
 
     /**
-     * Get descriptionCourte
+     * Get descriptionCourte.
      *
      * @return string
      */
@@ -241,9 +241,10 @@ class Groupe
     }
 
     /**
-     * Set descriptionHtml
+     * Set descriptionHtml.
      *
      * @param string $descriptionHtml
+     *
      * @return Groupe
      */
     public function setDescriptionHtml($descriptionHtml)
@@ -254,7 +255,7 @@ class Groupe
     }
 
     /**
-     * Get descriptionHtml
+     * Get descriptionHtml.
      *
      * @return string
      */
@@ -264,9 +265,10 @@ class Groupe
     }
 
     /**
-     * Set nombreParticipantsMaximum
+     * Set nombreParticipantsMaximum.
      *
-     * @param integer $nombreParticipantsMaximum
+     * @param int $nombreParticipantsMaximum
+     *
      * @return Groupe
      */
     public function setNombreParticipantsMaximum($nombreParticipantsMaximum)
@@ -277,9 +279,9 @@ class Groupe
     }
 
     /**
-     * Get nombreParticipantsMaximum
+     * Get nombreParticipantsMaximum.
      *
-     * @return integer
+     * @return int
      */
     public function getNombreParticipantsMaximum()
     {
@@ -287,9 +289,10 @@ class Groupe
     }
 
     /**
-     * Set dateInscriptionOuverture
+     * Set dateInscriptionOuverture.
      *
      * @param \DateTime $dateInscriptionOuverture
+     *
      * @return Groupe
      */
     public function setDateInscriptionOuverture($dateInscriptionOuverture)
@@ -300,7 +303,7 @@ class Groupe
     }
 
     /**
-     * Get dateInscriptionOuverture
+     * Get dateInscriptionOuverture.
      *
      * @return \DateTime
      */
@@ -310,9 +313,10 @@ class Groupe
     }
 
     /**
-     * Set dateDemarrage
+     * Set dateDemarrage.
      *
      * @param \DateTime $dateDemarrage
+     *
      * @return Groupe
      */
     public function setDateDemarrage($dateDemarrage)
@@ -323,7 +327,7 @@ class Groupe
     }
 
     /**
-     * Get dateDemarrage
+     * Get dateDemarrage.
      *
      * @return \DateTime
      */
@@ -333,9 +337,10 @@ class Groupe
     }
 
     /**
-     * Set dateFin
+     * Set dateFin.
      *
      * @param \DateTime $dateFin
+     *
      * @return Groupe
      */
     public function setDateFin($dateFin)
@@ -346,7 +351,7 @@ class Groupe
     }
 
     /**
-     * Get dateFin
+     * Get dateFin.
      *
      * @return \DateTime
      */
@@ -356,9 +361,10 @@ class Groupe
     }
 
     /**
-     * Set vedette
+     * Set vedette.
      *
-     * @param boolean $vedette
+     * @param bool $vedette
+     *
      * @return Groupe
      */
     public function setVedette($vedette)
@@ -369,9 +375,9 @@ class Groupe
     }
 
     /**
-     * Get vedette
+     * Get vedette.
      *
-     * @return boolean
+     * @return bool
      */
     public function getVedette()
     {
@@ -379,9 +385,10 @@ class Groupe
     }
 
     /**
-     * Set actif
+     * Set actif.
      *
-     * @param boolean $actif
+     * @param bool $actif
+     *
      * @return Groupe
      */
     public function setActif($actif)
@@ -392,9 +399,9 @@ class Groupe
     }
 
     /**
-     * Get actif
+     * Get actif.
      *
-     * @return boolean
+     * @return bool
      */
     public function getActif()
     {
@@ -402,9 +409,10 @@ class Groupe
     }
 
     /**
-     * Set domaine
+     * Set domaine.
      *
      * @param \HopitalNumerique\DomaineBundle\Entity\Domaine $domaine
+     *
      * @return Groupe
      */
     public function setDomaine(\HopitalNumerique\DomaineBundle\Entity\Domaine $domaine)
@@ -415,7 +423,7 @@ class Groupe
     }
 
     /**
-     * Get domaine
+     * Get domaine.
      *
      * @return \HopitalNumerique\DomaineBundle\Entity\Domaine
      */
@@ -425,9 +433,10 @@ class Groupe
     }
 
     /**
-     * Set questionnaire
+     * Set questionnaire.
      *
      * @param \HopitalNumerique\QuestionnaireBundle\Entity\Questionnaire $questionnaire
+     *
      * @return Groupe
      */
     public function setQuestionnaire(\HopitalNumerique\QuestionnaireBundle\Entity\Questionnaire $questionnaire)
@@ -438,7 +447,7 @@ class Groupe
     }
 
     /**
-     * Get questionnaire
+     * Get questionnaire.
      *
      * @return \HopitalNumerique\QuestionnaireBundle\Entity\Questionnaire
      */
@@ -448,9 +457,10 @@ class Groupe
     }
 
     /**
-     * Set dateCreation
+     * Set dateCreation.
      *
      * @param \DateTime $dateCreation
+     *
      * @return Groupe
      */
     public function setDateCreation($dateCreation)
@@ -461,7 +471,7 @@ class Groupe
     }
 
     /**
-     * Get dateCreation
+     * Get dateCreation.
      *
      * @return \DateTime
      */
@@ -471,9 +481,10 @@ class Groupe
     }
 
     /**
-     * Add fiches
+     * Add fiches.
      *
      * @param \HopitalNumerique\CommunautePratiqueBundle\Entity\Fiche $fiches
+     *
      * @return Groupe
      */
     public function addFiche(\HopitalNumerique\CommunautePratiqueBundle\Entity\Fiche $fiches)
@@ -484,7 +495,7 @@ class Groupe
     }
 
     /**
-     * Remove fiches
+     * Remove fiches.
      *
      * @param \HopitalNumerique\CommunautePratiqueBundle\Entity\Fiche $fiches
      */
@@ -494,7 +505,7 @@ class Groupe
     }
 
     /**
-     * Get fiches
+     * Get fiches.
      *
      * @return \Doctrine\Common\Collections\Collection
      */
@@ -504,9 +515,10 @@ class Groupe
     }
 
     /**
-     * Add animateur
+     * Add animateur.
      *
      * @param \HopitalNumerique\UserBundle\Entity\User $animateur
+     *
      * @return Groupe
      */
     public function addAnimateur(\HopitalNumerique\UserBundle\Entity\User $animateur)
@@ -521,7 +533,7 @@ class Groupe
     }
 
     /**
-     * Remove animateurs
+     * Remove animateurs.
      *
      * @param \HopitalNumerique\UserBundle\Entity\User $animateurs
      */
@@ -531,7 +543,7 @@ class Groupe
     }
 
     /**
-     * Get animateurs
+     * Get animateurs.
      *
      * @return \Doctrine\Common\Collections\Collection
      */
@@ -541,9 +553,10 @@ class Groupe
     }
 
     /**
-     * Add users
+     * Add users.
      *
      * @param \HopitalNumerique\UserBundle\Entity\User $users
+     *
      * @return Groupe
      */
     public function addUser(\HopitalNumerique\UserBundle\Entity\User $users)
@@ -554,7 +567,7 @@ class Groupe
     }
 
     /**
-     * Remove users
+     * Remove users.
      *
      * @param \HopitalNumerique\UserBundle\Entity\User $users
      */
@@ -569,7 +582,7 @@ class Groupe
     }
 
     /**
-     * Get users
+     * Get users.
      *
      * @return \Doctrine\Common\Collections\Collection
      */
@@ -577,15 +590,17 @@ class Groupe
     {
         $inscrits = new ArrayCollection();
         foreach ($this->getInscriptions() as $inscrit) {
-            $inscrits[] =  $inscrit->getUser();
+            $inscrits[] = $inscrit->getUser();
         }
+
         return $inscrits;
     }
 
     /**
-     * Add inscription
+     * Add inscription.
      *
      * @param \HopitalNumerique\UserBundle\Entity\User $inscription
+     *
      * @return Groupe
      */
     public function addInscription(\HopitalNumerique\CommunautePratiqueBundle\Entity\Inscription $inscription)
@@ -596,7 +611,7 @@ class Groupe
     }
 
     /**
-     * Remove inscription
+     * Remove inscription.
      *
      * @param \HopitalNumerique\UserBundle\Entity\User $inscription
      */
@@ -606,7 +621,7 @@ class Groupe
     }
 
     /**
-     * Get inscriptions
+     * Get inscriptions.
      *
      * @return \Doctrine\Common\Collections\Collection
      */
@@ -616,9 +631,10 @@ class Groupe
     }
 
     /**
-     * Add documents
+     * Add documents.
      *
      * @param \HopitalNumerique\CommunautePratiqueBundle\Entity\Document $documents
+     *
      * @return Groupe
      */
     public function addDocument(\HopitalNumerique\CommunautePratiqueBundle\Entity\Document $documents)
@@ -629,7 +645,7 @@ class Groupe
     }
 
     /**
-     * Remove documents
+     * Remove documents.
      *
      * @param \HopitalNumerique\CommunautePratiqueBundle\Entity\Document $documents
      */
@@ -639,7 +655,7 @@ class Groupe
     }
 
     /**
-     * Get documents
+     * Get documents.
      *
      * @return \Doctrine\Common\Collections\Collection
      */
@@ -649,9 +665,10 @@ class Groupe
     }
 
     /**
-     * Add publications
+     * Add publications.
      *
      * @param \HopitalNumerique\ObjetBundle\Entity\Objet $publications
+     *
      * @return Groupe
      */
     public function addPublication(\HopitalNumerique\ObjetBundle\Entity\Objet $publications)
@@ -662,7 +679,7 @@ class Groupe
     }
 
     /**
-     * Remove publications
+     * Remove publications.
      *
      * @param \HopitalNumerique\ObjetBundle\Entity\Objet $publications
      */
@@ -672,7 +689,7 @@ class Groupe
     }
 
     /**
-     * Get publications
+     * Get publications.
      *
      * @return \Doctrine\Common\Collections\Collection
      */
@@ -682,9 +699,10 @@ class Groupe
     }
 
     /**
-     * Add commentaires
+     * Add commentaires.
      *
      * @param \HopitalNumerique\CommunautePratiqueBundle\Entity\Commentaire $commentaires
+     *
      * @return Groupe
      */
     public function addCommentaire(\HopitalNumerique\CommunautePratiqueBundle\Entity\Commentaire $commentaires)
@@ -695,7 +713,7 @@ class Groupe
     }
 
     /**
-     * Remove commentaires
+     * Remove commentaires.
      *
      * @param \HopitalNumerique\CommunautePratiqueBundle\Entity\Commentaire $commentaires
      */
@@ -705,7 +723,7 @@ class Groupe
     }
 
     /**
-     * Get commentaires
+     * Get commentaires.
      *
      * @return \Doctrine\Common\Collections\Collection
      */
@@ -713,7 +731,6 @@ class Groupe
     {
         return $this->commentaires;
     }
-
 
     /**
      * @return string
@@ -723,38 +740,38 @@ class Groupe
         return $this->titre;
     }
 
-
     /**
      * Retourne si le groupe est entre la date de démarrage et la date de fin.
      *
-     * @return boolean VRAI si en cours
+     * @return bool VRAI si en cours
      */
     public function isEnCours()
     {
         $aujourdhui = new \DateTime();
         $aujourdhui->setTime(0, 0, 0);
 
-        return ($aujourdhui >= $this->dateDemarrage && $aujourdhui <= $this->dateFin);
+        return $aujourdhui >= $this->dateDemarrage && $aujourdhui <= $this->dateFin;
     }
 
     /**
      * Retourne si le groupe est entre la date de démarrage et la date de fin.
      *
-     * @return boolean VRAI si en cours
+     * @return bool VRAI si en cours
      */
     public function isPeriodeInscription()
     {
-    	$aujourdhui = new \DateTime();
-    	$aujourdhui->setTime(0, 0, 0);
+        $aujourdhui = new \DateTime();
+        $aujourdhui->setTime(0, 0, 0);
 
-    	return ($aujourdhui >= $this->dateInscriptionOuverture && $aujourdhui <= $this->dateDemarrage);
+        return $aujourdhui >= $this->dateInscriptionOuverture && $aujourdhui <= $this->dateDemarrage;
     }
 
     /**
      * Retourne si l'utilisateur est animateur du groupe.
      *
      * @param \HopitalNumerique\UserBundle\Entity\User $user Utilisateur
-     * @return boolean VRAI si animateur
+     *
+     * @return bool VRAI si animateur
      */
     public function hasAnimateur(\HopitalNumerique\UserBundle\Entity\User $user)
     {
@@ -792,7 +809,8 @@ class Groupe
      * Retourne si l'utilisateur est membre du groupe.
      *
      * @param \HopitalNumerique\UserBundle\Entity\User $user Utilisateur
-     * @return boolean VRAI si membre
+     *
+     * @return bool VRAI si membre
      */
     public function hasUser(\HopitalNumerique\UserBundle\Entity\User $user)
     {
@@ -810,19 +828,19 @@ class Groupe
     /**
      * Retourne le nombre de places restantes.
      *
-     * @return integer Nombre de places restantes
+     * @return int Nombre de places restantes
      */
     public function getNombrePlacesRestantes()
     {
         $nombrePlacesRestantes = $this->nombreParticipantsMaximum - count($this->users);
 
-        return ($nombrePlacesRestantes > 0 ? $nombrePlacesRestantes : 0);
+        return $nombrePlacesRestantes > 0 ? $nombrePlacesRestantes : 0;
     }
 
     /**
      * Retourne le nombre de jours qu'il reste avant l'ouverture des inscriptions.
      *
-     * @return integer Nombre de jours
+     * @return int Nombre de jours
      */
     public function getNombreJoursRestantsAvantInscriptionOuverture()
     {
@@ -865,7 +883,7 @@ class Groupe
     /**
      * Retourne le total de tous les commentaires, fiches comprises.
      *
-     * @return integer Total des commentaires
+     * @return int Total des commentaires
      */
     public function getTotalCommentaires()
     {
@@ -882,7 +900,8 @@ class Groupe
      * Retourne le total de tous les commentaires d'un utilisateur, fiches comprises.
      *
      * @param \HopitalNumerique\UserBundle\Entity\User $user Utilisateur
-     * @return integer Total des commentaires
+     *
+     * @return int Total des commentaires
      */
     public function getTotalUserCommentaires(User $user)
     {
@@ -890,14 +909,14 @@ class Groupe
 
         foreach ($this->getCommentaires() as $commentaire) {
             if ($commentaire->getUser()->getId() == $user->getId()) {
-                $totalCommentaires++;
+                ++$totalCommentaires;
             }
         }
 
         foreach ($this->fiches as $fiche) {
             foreach ($fiche->getCommentaires() as $commentaire) {
                 if ($commentaire->getUser()->getId() == $user->getId()) {
-                    $totalCommentaires++;
+                    ++$totalCommentaires;
                 }
             }
         }
@@ -909,11 +928,12 @@ class Groupe
      * Retourne les fiches d'un utilisateur.
      *
      * @param \HopitalNumerique\UserBundle\Entity\User $user Utilisateur
+     *
      * @return array<\HopitalNumerique\CommunautePratiqueBundle\Entity\Fiche> Fiches de l'utilisateur
      */
     public function getUserFiches(User $user)
     {
-        $userFiches = array();
+        $userFiches = [];
 
         foreach ($this->fiches as $fiche) {
             if ($fiche->getUser()->getId() == $user->getId()) {
@@ -928,11 +948,12 @@ class Groupe
      * Retourne les documents d'un utilisateur.
      *
      * @param \HopitalNumerique\UserBundle\Entity\User $user Utilisateur
+     *
      * @return array<\HopitalNumerique\CommunautePratiqueBundle\Entity\Document> Documents de l'utilisateur
      */
     public function getUserDocuments(User $user)
     {
-        $userDocuments = array();
+        $userDocuments = [];
 
         foreach ($this->documents as $document) {
             if ($document->getUser()->getId() == $user->getId()) {
@@ -950,13 +971,12 @@ class Groupe
      */
     public function getAnimateurEmailsJson()
     {
-        $animateurs = array();
+        $animateurs = [];
 
-        foreach ($this->animateurs as $animateur)
-        {
-            $animateurs[$animateur->getEmail()] = trim($animateur->getPrenom().' '.$animateur->getNom());
+        foreach ($this->animateurs as $animateur) {
+            $animateurs[$animateur->getEmail()] = trim($animateur->getPrenom() . ' ' . $animateur->getNom());
         }
 
-        return str_replace( '"', '\'', json_encode($animateurs) );
+        return str_replace('"', '\'', json_encode($animateurs));
     }
 }

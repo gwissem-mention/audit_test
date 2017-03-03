@@ -8,11 +8,10 @@ use Doctrine\ORM\QueryBuilder;
 use HopitalNumerique\ReferenceBundle\Entity\Reference;
 
 /**
- * ReferenceRepository
+ * ReferenceRepository.
  */
 class ReferenceRepository extends EntityRepository
 {
-
     public function getAllIndexedById()
     {
         return $this->createQueryBuilder('r', 'r.id')
@@ -21,7 +20,7 @@ class ReferenceRepository extends EntityRepository
     }
 
     /**
-     * Récupère tous les items de l'arborescence référence dans le bon ordre
+     * Récupère tous les items de l'arborescence référence dans le bon ordre.
      *
      * @return array
      */
@@ -65,7 +64,7 @@ class ReferenceRepository extends EntityRepository
     }
 
     /**
-     * Récupère les données du grid sous forme de tableau correctement formaté
+     * Récupère les données du grid sous forme de tableau correctement formaté.
      *
      * @return QueryBuilder
      */
@@ -95,7 +94,7 @@ class ReferenceRepository extends EntityRepository
     }
 
     /**
-     * Récupère les données pour l'export CSV
+     * Récupère les données pour l'export CSV.
      *
      * @return QueryBuilder
      */
@@ -135,7 +134,7 @@ class ReferenceRepository extends EntityRepository
     }
 
     /**
-     * Récupère les références ayant un domaine
+     * Récupère les références ayant un domaine.
      *
      * @return [type]
      */
@@ -181,7 +180,7 @@ class ReferenceRepository extends EntityRepository
             ->innerJoin('ref.parents', 'par', Expr\Join::WITH, 'par.id = :idParent')
             ->setParameters([
                 'idDomaine' => $idDomaine,
-                'idParent'  => $idParent,
+                'idParent' => $idParent,
             ])
             ->orderBy('ref.order')
         ;
@@ -190,7 +189,7 @@ class ReferenceRepository extends EntityRepository
     }
 
     /**
-     * Récupère les différents ref_code des références
+     * Récupère les différents ref_code des références.
      *
      * @return QueryBuilder
      */
@@ -231,7 +230,7 @@ class ReferenceRepository extends EntityRepository
     }
 
     /**
-     * Récupère les références en fonction de leur code
+     * Récupère les références en fonction de leur code.
      *
      * @return array
      */
@@ -241,7 +240,7 @@ class ReferenceRepository extends EntityRepository
     }
 
     /**
-     * Récupère références en fonction du code et de l'id du parent
+     * Récupère références en fonction du code et de l'id du parent.
      *
      * @return array
      */
@@ -278,12 +277,13 @@ class ReferenceRepository extends EntityRepository
      * Retourne les références selon des domaines.
      *
      * @param array <\HopitalNumerique\DomaineBundle\Entity\Domaine> $domaines    Domaines
-     * @param boolean|null $actif Actif
-     * @param boolean|null $lock Lock
-     * @param boolean|null $parentable Parentable
-     * @param boolean $reference Reference
-     * @param boolean $inRecherche InRecherche ?
-     * @param boolean $inGlossaire InGlossaire ?
+     * @param bool|null                                              $actif       Actif
+     * @param bool|null                                              $lock        Lock
+     * @param bool|null                                              $parentable  Parentable
+     * @param bool                                                   $reference   Reference
+     * @param bool                                                   $inRecherche InRecherche ?
+     * @param bool                                                   $inGlossaire InGlossaire ?
+     *
      * @return array<\HopitalNumerique\ReferenceBundle\Entity\Reference> Références
      */
     public function findByDomaines($domaines, $actif, $lock, $parentable, $reference, $inRecherche, $inGlossaire, $resultsInArray = false)
@@ -310,7 +310,7 @@ class ReferenceRepository extends EntityRepository
                 $qb->expr()->eq('reference.allDomaines', ':allDomaines')
             ))
             ->setParameters([
-                'domaines'    => $domaines,
+                'domaines' => $domaines,
                 'allDomaines' => true,
             ])
             ->orderBy('reference.order', 'ASC')
@@ -365,7 +365,7 @@ class ReferenceRepository extends EntityRepository
     }
 
     /**
-     * Récupère les domaines en fonction de la référence
+     * Récupère les domaines en fonction de la référence.
      *
      * @return array
      */

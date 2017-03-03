@@ -1,12 +1,16 @@
 <?php
+
 namespace HopitalNumerique\ModuleBundle\Manager;
 
 use HopitalNumerique\DomaineBundle\Entity\Domaine;
+use HopitalNumerique\ModuleBundle\Entity\Inscription;
+use HopitalNumerique\PaiementBundle\Entity\Facture;
+use HopitalNumerique\ReferenceBundle\Entity\Reference;
+use HopitalNumerique\UserBundle\Entity\User;
 use Nodevo\ToolsBundle\Manager\Manager as BaseManager;
 use Doctrine\ORM\EntityManager;
 use HopitalNumerique\UserBundle\Manager\UserManager;
 use Symfony\Component\DependencyInjection\ContainerInterface as Container;
-
 
 /**
  * Manager de l'entité Inscription.
@@ -26,8 +30,9 @@ class InscriptionManager extends BaseManager
     /**
      * Constructeur du manager de Session.
      *
-     * @param \Doctrine\ORM\EntityManager $em EntityManager
+     * @param \Doctrine\ORM\EntityManager                      $em          EntityManager
      * @param \HopitalNumerique\UserBundle\Manager\UserManager $userManager UserManager
+     * @param Container                                        $container
      */
     public function __construct(EntityManager $em, UserManager $userManager, Container $container)
     {
@@ -38,22 +43,20 @@ class InscriptionManager extends BaseManager
     }
 
     /**
-     * Override : Récupère les données pour le grid sous forme de tableau
+     * Override : Récupère les données pour le grid sous forme de tableau.
+     *
+     * @param \StdClass $condition
      *
      * @return array
-     *
-     * @author Gaetan MELCHILSEN
-     * @copyright Nodevo
      */
-    public function getDatasForGrid( \StdClass $condition = null )
+    public function getDatasForGrid(\StdClass $condition = null)
     {
-        $inscriptions = array();
+        $inscriptions = [];
 
-        $results = $this->getRepository()->getDatasForGrid( $condition )->getQuery()->getResult();
+        $results = $this->getRepository()->getDatasForGrid($condition)->getQuery()->getResult();
 
-        foreach ($results as $key => $result)
-        {
-            $inscriptions[ $result['id'] ] = $result;
+        foreach ($results as $key => $result) {
+            $inscriptions[$result['id']] = $result;
 
             // ----Traitement pour transformer le prénom "Jean-luc robert" en "Jean-Luc Robert"
             //Récupération du prénom
@@ -61,11 +64,10 @@ class InscriptionManager extends BaseManager
             //Découpage du prénom sur le tiret
             $tempsPrenom = explode('-', $prenom);
             //Unsset de la variable
-            $prenom = "";
+            $prenom = '';
             //Pour chaque bout on met une MAJ sur la première lettre de chaque mot, si il y en plusieurs c'est qu'il y avait un -
-            foreach ($tempsPrenom as $key => $tempPrenom)
-            {
-                $prenom .= ("" !== $prenom) ? ('-' . ucwords($tempPrenom)) : ucwords($tempPrenom);
+            foreach ($tempsPrenom as $key => $tempPrenom) {
+                $prenom .= ('' !== $prenom) ? ('-' . ucwords($tempPrenom)) : ucwords($tempPrenom);
             }
 
             // ----Mise en majuscule du nom
@@ -76,181 +78,173 @@ class InscriptionManager extends BaseManager
             unset($inscriptions[$result['id']]['userPrenom']);
 
             //Ajout de la colonne "Prenom NOM"
-            $inscriptions[ $result['id'] ]['nomPrenom'] = $prenom.' '.$nom;
+            $inscriptions[$result['id']]['nomPrenom'] = $prenom . ' ' . $nom;
         }
 
         return array_values($inscriptions);
     }
 
     /**
-     * Override : Récupère les données pour le grid sous forme de tableau
+     * Override : Récupère les données pour le grid sous forme de tableau.
+     *
+     * @param null $condition
      *
      * @return array
-     *
-     * @author Gaetan MELCHILSEN
-     * @copyright Nodevo
      */
-    public function getAllDatasForGrid( $condition = null )
+    public function getAllDatasForGrid($condition = null)
     {
-        $domainesIds     = $this->_userManager->getUserConnected()->getDomainesId();
-        $inscriptions = $this->getRepository()->getAllDatasForGrid( $domainesIds, $condition )->getQuery()->getResult();
+        $domainesIds = $this->_userManager->getUserConnected()->getDomainesId();
+        $inscriptions = $this->getRepository()->getAllDatasForGrid($domainesIds, $condition)->getQuery()->getResult();
 
-        $result = array();
+        $result = [];
 
-        foreach ($inscriptions as $key => $inscription)
-        {
+        /**
+         * @var Inscription
+         */
+        foreach ($inscriptions as $key => $inscription) {
             $nomPrenom = $inscription->getUser()->getAppellation();
 
-            $nbInscritsAccepte   = 0;
+            $nbInscritsAccepte = 0;
             $nbInscritsEnAttente = 0;
-            $nbPlacesRestantes   = $inscription->getSession()->getNombrePlaceDisponible();
+            $nbPlacesRestantes = $inscription->getSession()->getNombrePlaceDisponible();
 
-            foreach ($inscription->getSession()->getInscriptions() as $inscriptionDeLaSession)
-            {
-                if($inscriptionDeLaSession->getEtatInscription()->getId() === 406)
-                    $nbInscritsEnAttente++;
-                elseif($inscriptionDeLaSession->getEtatInscription()->getId() === 407)
-                {
-                    $nbInscritsAccepte++;
-                    $nbPlacesRestantes--;
+            /** @var Inscription $inscriptionDeLaSession */
+            foreach ($inscription->getSession()->getInscriptions() as $inscriptionDeLaSession) {
+                if ($inscriptionDeLaSession->getEtatInscription()->getId() === 406) {
+                    ++$nbInscritsEnAttente;
+                } elseif ($inscriptionDeLaSession->getEtatInscription()->getId() === 407) {
+                    ++$nbInscritsAccepte;
+                    --$nbPlacesRestantes;
                 }
             }
 
             $domaineNom = '';
-            foreach ($inscription->getSession()->getModule()->getDomaines() as $domaine)
-            {
-                if($domaineNom !== '')
-                {
+            foreach ($inscription->getSession()->getModule()->getDomaines() as $domaine) {
+                if ($domaineNom !== '') {
                     $domaineNom .= ' ; ';
                 }
                 $domaineNom .= $domaine->getNom();
             }
 
-            $result[$key] = array(
-                'id'                  => $inscription->getId(),
-                'userId'              => $inscription->getUser()->getId(),
-                'sessionId'           => $inscription->getSession()->getId(),
-                'moduleTitre'         => $inscription->getSession()->getModule()->getTitre(),
-                'dateSession'         => $inscription->getSession()->getDateSession(),
-                'nomPrenom'           => $nomPrenom,
-                'userRegion'          => ( !is_null( $inscription->getUser()->getRegion() ) ) ? $inscription->getUser()->getRegion()->getLibelle() : '',
-                'userProfil'          => ( !is_null( $inscription->getUser()->getProfilEtablissementSante() ) ) ? $inscription->getUser()->getProfilEtablissementSante()->getLibelle() : '',
-                'roles'               => $inscription->getUser()->getRoles(),
-                'commentaire'         => $inscription->getCommentaire(),
-                'etatInscription'     => $inscription->getEtatInscription()->getLibelle(),
-                'nbInscrits'          => $nbInscritsAccepte,
+            $result[$key] = [
+                'id' => $inscription->getId(),
+                'userId' => $inscription->getUser()->getId(),
+                'sessionId' => $inscription->getSession()->getId(),
+                'moduleTitre' => $inscription->getSession()->getModule()->getTitre(),
+                'dateSession' => $inscription->getSession()->getDateSession(),
+                'nomPrenom' => $nomPrenom,
+                'userRegion' => (!is_null($inscription->getUser()->getRegion())) ? $inscription->getUser()
+                                                                                                        ->getRegion()
+                                                                                                        ->getLibelle()
+                    : '',
+                'userProfil' => (!is_null($inscription->getUser()->getProfilEtablissementSante()))
+                    ? $inscription->getUser()->getProfilEtablissementSante()->getLibelle() : '',
+                'roles' => $inscription->getUser()->getRoles(),
+                'commentaire' => $inscription->getCommentaire(),
+                'etatInscription' => $inscription->getEtatInscription()->getLibelle(),
+                'nbInscrits' => $nbInscritsAccepte,
                 'nbInscritsEnAttente' => $nbInscritsEnAttente,
-                'placeRestantes'      => $nbPlacesRestantes . '/' . $inscription->getSession()->getNombrePlaceDisponible(),
-                'domaineNom'          => $domaineNom
-                // 'etatParticipation' => $inscription->getEtatParticipation()->getLibelle(),
-                // 'etatEvaluation'    => $inscription->getEtatEvaluation()->getLibelle(),
-            );
+                'placeRestantes' => $nbPlacesRestantes . '/' . $inscription->getSession()
+                                                                                ->getNombrePlaceDisponible(),
+                'domaineNom' => $domaineNom,
+            ];
         }
 
         return $result;
     }
 
     /**
-     * Modifie l'état de toutes les inscriptions
+     * Modifie l'état de toutes les inscriptions.
      *
      * @param array     $inscriptions Liste des inscriptions
      * @param Reference $ref          RefStatut à mettre
-     *
-     * @return empty
      */
-    public function toogleEtatInscription( $inscriptions, $ref )
+    public function toogleEtatInscription($inscriptions, $ref)
     {
-        foreach($inscriptions as $inscription) {
-            $inscription->setEtatInscription( $ref );
-            $this->_em->persist( $inscription );
+        foreach ($inscriptions as $inscription) {
+            $inscription->setEtatInscription($ref);
+            $this->em->persist($inscription);
         }
 
         //save
-        $this->_em->flush();
+        $this->em->flush();
     }
 
     /**
-     * Modifie l'état de toutes les participations
+     * Modifie l'état de toutes les participations.
      *
      * @param array     $inscriptions Liste des inscriptions
      * @param Reference $ref          RefStatut à mettre
-     *
-     * @return empty
      */
-    public function toogleEtatParticipation( $inscriptions, $ref )
+    public function toogleEtatParticipation($inscriptions, $ref)
     {
-        foreach($inscriptions as $inscription) {
-            $inscription->setEtatParticipation( $ref );
-            $this->_em->persist( $inscription );
+        foreach ($inscriptions as $inscription) {
+            $inscription->setEtatParticipation($ref);
+            $this->em->persist($inscription);
         }
 
         //save
-        $this->_em->flush();
+        $this->em->flush();
     }
 
     /**
-     * Modifie l'état de toutes les évaluations
+     * Modifie l'état de toutes les évaluations.
      *
      * @param array     $inscriptions Liste des inscriptions
      * @param Reference $ref          RefStatut à mettre
-     *
-     * @return empty
      */
-    public function toogleEtatEvaluation( $inscriptions, $ref )
+    public function toogleEtatEvaluation($inscriptions, $ref)
     {
-        foreach($inscriptions as $inscription)
-        {
-            $inscription->setEtatEvaluation( $ref );
-            $this->_em->persist( $inscription );
+        foreach ($inscriptions as $inscription) {
+            $inscription->setEtatEvaluation($ref);
+            $this->em->persist($inscription);
         }
 
-        //save
-        $this->_em->flush();
+        $this->em->flush();
     }
 
     /**
-     * Retourne la liste des inscriptions de l'utilisateur pour la création des factures
+     * Retourne la liste des inscriptions de l'utilisateur pour la création des factures.
      *
      * @param User $user L'utilisateur concerné
      *
      * @return array
      */
-    public function getForFactures( $user = null )
+    public function getForFactures($user = null)
     {
-        return $this->getRepository()->getForFactures( $user )->getQuery()->getResult();
+        return $this->getRepository()->getForFactures($user)->getQuery()->getResult();
     }
 
     /**
-     * Retourne la liste des inscriptions pour une facture ordonnée par date de session
+     * Retourne la liste des inscriptions pour une facture ordonnée par date de session.
      *
      * @param Facture $facture Identifiant de la facture
      *
      * @return array
      */
-    public function getInscriptionsForFactureOrdered( $facture = null )
+    public function getInscriptionsForFactureOrdered($facture = null)
     {
-        return $this->getRepository()->getInscriptionsForFactureOrdered( $facture )->getQuery()->getResult();
+        return $this->getRepository()->getInscriptionsForFactureOrdered($facture)->getQuery()->getResult();
     }
 
     /**
-     * Retourne un boolean pour dire si les inscriptions sont ok
+     * Retourne un boolean pour dire si les inscriptions sont ok.
      *
      * @param User $user L'utilisateur concerné
      *
      * @return array
      */
-    public function allInscriptionsIsOk( $user )
+    public function allInscriptionsIsOk($user)
     {
         //Requete
-        $inscriptions = $this->findBy(array('user' => $user, 'etatParticipation' => 411));
+        $inscriptions = $this->findBy(['user' => $user, 'etatParticipation' => 411]);
 
         //Parcours des résultats
-        foreach ($inscriptions as $inscription)
-        {
+        foreach ($inscriptions as $inscription) {
             //Il faut que TOUTES les inscriptions de l'utilisateur soient "A participé" et "Évaluée"
-            if($inscription->getEtatParticipation()->getId() !== 411
-                || $inscription->getEtatEvaluation()->getId() !== 29)
-            {
+            if ($inscription->getEtatParticipation()->getId() !== 411
+                || $inscription->getEtatEvaluation()->getId() !== 29
+            ) {
                 //Inscriptions non conforme
                 return false;
             }
@@ -260,63 +254,67 @@ class InscriptionManager extends BaseManager
     }
 
     /**
-     * Retourne la liste des inscriptions de l'utilisateur
+     * Retourne la liste des inscriptions de l'utilisateur.
      *
      * @param User $user L'utilisateur concerné
      *
      * @return array
      */
-    public function getInscriptionsForUser( $user )
+    public function getInscriptionsForUser($user)
     {
-        return $this->getRepository()->getInscriptionsForUser( $user )->getQuery()->getResult();
+        return $this->getRepository()->getInscriptionsForUser($user)->getQuery()->getResult();
     }
 
     /**
-     * Créer un tableau formaté pour l'export CSV
+     * Créer un tableau formaté pour l'export CSV.
      *
-     * @param type $modules liste des modules
-     * @param type $users   liste des utilisateurs
+     * @param array $modules     liste des modules
+     * @param array $users       liste des utilisateurs
+     * @param       $primaryKeys
      *
      * @return type
      */
-    public function buildForExport($modules, $users, $primaryKeys){
+    public function buildForExport($modules, $users, $primaryKeys)
+    {
+        $colonnes = [
+            'nom' => 'Nom',
+            'prenom' => 'Prénom',
+        ];
 
-        $colonnes = array(
-            "nom"    => "Nom",
-            "prenom" => "Prénom"
-        );
-        foreach($modules as $module){
-            $colonnes["module" . $module->getId()] = $module->getTitre();
+        foreach ($modules as $module) {
+            $colonnes['module' . $module->getId()] = $module->getTitre();
         }
 
-        $inscriptions = $this->getRepository()->getInscriptionsByUser( $primaryKeys )->getQuery()->getResult();
-        $donnees = array();
-        foreach($inscriptions as $inscription){
-            $donnees[ $inscription['userId'] ][ $inscription['moduleId'] ] = date_format($inscription['date'], 'd/m/Y');
+        $inscriptions = $this->getRepository()->getInscriptionsByUser($primaryKeys)->getQuery()->getResult();
+        $donnees = [];
+        foreach ($inscriptions as $inscription) {
+            $donnees[$inscription['userId']][$inscription['moduleId']] = date_format($inscription['date'], 'd/m/Y');
         }
 
-        $datas = array();
-        foreach($users as $user){
-            $row = array();
+        $datas = [];
+        foreach ($users as $user) {
+            $row = [];
 
-            $row['nom']    = $user->getNom();
+            $row['nom'] = $user->getNom();
             $row['prenom'] = $user->getPrenom();
-            foreach($modules as $module){
-                $row["module" . $module->getId()] = isset($donnees[ $user->getId() ][ $module->getId() ])
-                        ? $donnees[ $user->getId() ][ $module->getId() ] : "";
+            foreach ($modules as $module) {
+                $row['module' . $module->getId()] = isset($donnees[$user->getId()][$module->getId()])
+                    ? $donnees[$user->getId()][$module->getId()] : '';
             }
 
             $datas[] = $row;
         }
 
-        return array('colonnes' => $colonnes, 'datas' => $datas );
+        return ['colonnes' => $colonnes, 'datas' => $datas];
     }
 
     /**
      * Retourne le nombre d'inscriptions pour l'année.
      *
-     * @param integer $annee Année
-     * @return integer Total
+     * @param int     $annee   Année
+     * @param Domaine $domaine
+     *
+     * @return int Total
      */
     public function getCountForYear($annee, Domaine $domaine)
     {
@@ -326,8 +324,10 @@ class InscriptionManager extends BaseManager
     /**
      * Retourne le nombre d'utilisateurs uniques inscrits pour l'année.
      *
-     * @param integer $annee Année
-     * @return integer Total
+     * @param int     $annee   Année
+     * @param Domaine $domaine
+     *
+     * @return int Total
      */
     public function getUsersCountForYear($annee, Domaine $domaine)
     {

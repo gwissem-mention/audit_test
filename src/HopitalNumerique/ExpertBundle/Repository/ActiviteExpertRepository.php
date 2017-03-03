@@ -3,15 +3,14 @@
 namespace HopitalNumerique\ExpertBundle\Repository;
 
 use Doctrine\ORM\EntityRepository;
-use Doctrine\ORM\Query\Expr\Join;
 
 /**
- * ActiviteExpertRepository
+ * ActiviteExpertRepository.
  */
 class ActiviteExpertRepository extends EntityRepository
 {
     /**
-     * Récupère les données du grid sous forme de tableau correctement formaté
+     * Récupère les données du grid sous forme de tableau correctement formaté.
      *
      * @return Query Builder
      */
@@ -44,12 +43,12 @@ class ActiviteExpertRepository extends EntityRepository
             ->addOrderBy('actE.dateFin', 'ASC')
             ->addOrderBy('exp.nom', 'ASC')
             ->addOrderBy('anap.nom', 'ASC');
-            
+
         return $qb;
     }
 
     /**
-     * Recupération des activités concernant l'expert
+     * Recupération des activités concernant l'expert.
      *
      * @param int $expertId Identifiant de l'expert
      *
@@ -64,12 +63,12 @@ class ActiviteExpertRepository extends EntityRepository
                 ->where('exp.id = :idExpert')
                 ->setParameter('idExpert', $idExpert)
             ->orderBy('actE.dateFin', 'DESC');
-            
+
         return $qb;
     }
 
     /**
-     * Recupération des activités concernant l'anapien
+     * Recupération des activités concernant l'anapien.
      *
      * @param int $expertId Identifiant de l'anapien
      *
@@ -84,7 +83,7 @@ class ActiviteExpertRepository extends EntityRepository
                 ->where('anap.id = :idAnapien')
                 ->setParameter('idAnapien', $idAnapien)
             ->orderBy('actE.dateFin', 'DESC');
-            
+
         return $qb;
     }
 }

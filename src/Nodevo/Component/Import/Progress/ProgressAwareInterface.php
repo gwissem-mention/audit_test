@@ -1,4 +1,5 @@
 <?php
+
 namespace Nodevo\Component\Import\Progress;
 
 interface ProgressAwareInterface

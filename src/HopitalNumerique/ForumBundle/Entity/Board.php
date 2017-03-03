@@ -1,4 +1,5 @@
 <?php
+
 namespace HopitalNumerique\ForumBundle\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
@@ -6,22 +7,24 @@ use CCDNForum\ForumBundle\Entity\Board as BaseBoard;
 use Symfony\Component\Security\Core\SecurityContextInterface;
 
 /**
- *
  * @author Gaetan MELCHILSEN
  * @copyright Nodevo
  */
 class Board extends BaseBoard
 {
+    const BOARD_MHN_ID = 46;
+    const BOARD_RSE_ID = 45;
+
     /**
-     * @var boolean
+     * @var bool
      */
     private $piecesJointesAutorisees;
-    
+
     /**
      * @var ArrayCollection
      */
     private $subscriptions;
-    
+
     /**
      * @param SecurityContextInterface $securityContext
      *
@@ -34,7 +37,7 @@ class Board extends BaseBoard
         }
 
         foreach ($this->topicReplyAuthorisedRoles as $role) {
-            if ("anon." === $securityContext->getToken()->getUser()) {
+            if ('anon.' === $securityContext->getToken()->getUser()) {
                 if ('ROLE_ANONYME_10' === $role) {
                     return true;
                 }
@@ -58,7 +61,7 @@ class Board extends BaseBoard
         }
 
         foreach ($this->topicCreateAuthorisedRoles as $role) {
-            if ("anon." === $securityContext->getToken()->getUser()) {
+            if ('anon.' === $securityContext->getToken()->getUser()) {
                 if ('ROLE_ANONYME_10' === $role) {
                     return true;
                 }
@@ -82,7 +85,7 @@ class Board extends BaseBoard
         }
 
         foreach ($this->readAuthorisedRoles as $role) {
-            if ("anon." === $securityContext->getToken()->getUser()) {
+            if ('anon.' === $securityContext->getToken()->getUser()) {
                 if ('ROLE_ANONYME_10' === $role) {
                     return true;
                 }
@@ -93,11 +96,12 @@ class Board extends BaseBoard
 
         return false;
     }
-    
+
     /**
-     * Set piecesJointesAutorisees
+     * Set piecesJointesAutorisees.
      *
-     * @param boolean $piecesJointesAutorisees
+     * @param bool $piecesJointesAutorisees
+     *
      * @return Board
      */
     public function setPiecesJointesAutorisees($piecesJointesAutorisees)
@@ -108,18 +112,17 @@ class Board extends BaseBoard
     }
 
     /**
-     * Get piecesJointesAutorisees
+     * Get piecesJointesAutorisees.
      *
-     * @return boolean 
+     * @return bool
      */
     public function isPiecesJointesAutorisees()
     {
         return $this->piecesJointesAutorisees;
     }
 
-
     /**
-     * Get subscriptions
+     * Get subscriptions.
      *
      * @return ArrayCollection
      */
@@ -127,33 +130,35 @@ class Board extends BaseBoard
     {
         return $this->subscriptions;
     }
-    
+
     /**
-     * Set subscriptions
+     * Set subscriptions.
      *
-     * @param  ArrayCollection $subscriptions
+     * @param ArrayCollection $subscriptions
+     *
      * @return Board
      */
     public function setSubscriptions(ArrayCollection $subscriptions = null)
     {
         $this->subscriptions = $subscriptions;
-    
+
         return $this;
     }
-    
+
     /**
-     * Add topic
+     * Add topic.
      *
-     * @param  Subscription $subscription
+     * @param Subscription $subscription
+     *
      * @return Board
      */
     public function addSubscription(Subscription $subscription)
     {
         $this->subscriptions->add($subscription);
-    
+
         return $this;
     }
-    
+
     /**
      * @param Subscription $subscription
      *
@@ -162,7 +167,7 @@ class Board extends BaseBoard
     public function removeSubscription(Subscription $subscription)
     {
         $this->subscriptions->removeElement($subscription);
-    
+
         return $this;
     }
 }

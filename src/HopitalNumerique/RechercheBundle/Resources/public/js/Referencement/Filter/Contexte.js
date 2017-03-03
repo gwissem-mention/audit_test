@@ -13,6 +13,15 @@ Hn_RechercheBundle_Referencement_Filter_Contexte.valid = function()
 
     $('#contexte-modal [data-chosen="true"]').attr('data-chosen', false);
 
+    var institutionType = ($('select[title="select-institution-type"] option:selected'));
+
+    institutionType.each(function (i, input) {
+        var referenceId = Hn_RechercheBundle_Referencement.getReferenceIdByElement(input);
+        if (referenceId != -1) {
+            $('#contexte-modal [data-reference="' + referenceId + '"]').attr('data-chosen', true);
+        }
+    });
+
     $('#contexte-modal input:checked').each(function(i, input) {
         var referenceId = Hn_RechercheBundle_Referencement.getReferenceIdByElement(input);
         $('#contexte-modal [data-reference="' + referenceId + '"]').attr('data-chosen', true);

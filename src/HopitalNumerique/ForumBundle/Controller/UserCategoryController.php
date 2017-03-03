@@ -1,4 +1,5 @@
 <?php
+
 namespace HopitalNumerique\ForumBundle\Controller;
 
 use CCDNForum\ForumBundle\Controller\UserCategoryController as UserCategoryControllerBase;

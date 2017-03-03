@@ -18,10 +18,10 @@ class RechercheParcoursGestionGrid extends Grid implements GridInterface
     public function setConfig()
     {
         $this->setNoDataMessage('Aucun élément du gestionnaire de recherche par parcours à afficher.');
-        $this->setSource( 'hopitalnumerique_rechercheparcours.manager.rechercheparcoursgestion' );
-        $this->setSourceType( self::SOURCE_TYPE_MANAGER );
-        $this->showIDColumn( false );
-        $this->setFilterIdColumn( false );
+        $this->setSource('hopitalnumerique_rechercheparcours.manager.rechercheparcoursgestion');
+        $this->setSourceType(self::SOURCE_TYPE_MANAGER);
+        $this->showIDColumn(false);
+        $this->setFilterIdColumn(false);
     }
 
     /**
@@ -30,17 +30,17 @@ class RechercheParcoursGestionGrid extends Grid implements GridInterface
     public function setColumns()
     {
         //field, titre, isSortable, size
-        $this->addColonne( new Column\TextColumn('nom', 'Nom') );
-        $this->addColonne( new Column\TextColumn('domaineNom', 'Domaine(s) associé(s)') );
+        $this->addColonne(new Column\TextColumn('nom', 'Nom'));
+        $this->addColonne(new Column\TextColumn('domaineNom', 'Domaine(s) associé(s)'));
     }
 
     /**
-     * Ajoute les boutons d'action
+     * Ajoute les boutons d'action.
      */
     public function setActionsButtons()
     {
-        $this->addActionButton( new Action\EditButton( 'hopitalnumerique_rechercheparcours_admin_recherche-par-parcours_gestion_edit' ) );
-        $this->addActionButton( new Action\FilsButton('hopital_numerique_recherche_parcours_homepage') );
+        $this->addActionButton(new Action\EditButton('hopitalnumerique_rechercheparcours_admin_recherche-par-parcours_gestion_edit'));
+        $this->addActionButton(new Action\FilsButton('hopital_numerique_recherche_parcours_homepage'));
     }
 
     /**
@@ -48,6 +48,6 @@ class RechercheParcoursGestionGrid extends Grid implements GridInterface
      */
     public function setMassActions()
     {
-        $this->addMassAction( new Action\DeleteMass('HopitalNumeriqueRechercheParcoursBundle:RechercheParcoursGestion:deleteMass') );
+        $this->addMassAction(new Action\DeleteMass('HopitalNumeriqueRechercheParcoursBundle:RechercheParcoursGestion:deleteMass'));
     }
 }

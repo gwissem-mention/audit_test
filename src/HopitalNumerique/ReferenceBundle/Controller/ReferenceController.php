@@ -8,7 +8,6 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
-
 use HopitalNumerique\ReferenceBundle\Entity\Reference;
 
 /**
@@ -27,7 +26,7 @@ class ReferenceController extends Controller
     }
 
     /**
-     * Affichage en arborescence
+     * Affichage en arborescence.
      */
     public function sitemapAction()
     {
@@ -72,12 +71,13 @@ class ReferenceController extends Controller
     }
 
     /**
-     * Sauvegarde les paramètres des activités d'expert
+     * Sauvegarde les paramètres des activités d'expert.
      *
-     * @param Request $request
+     * @param Request   $request
      * @param Reference $reference
      *
      * @return Response
+     *
      * @throws \Exception
      */
     public function saveReferenceAjaxAction(Request $request, Reference $reference)
@@ -131,7 +131,7 @@ class ReferenceController extends Controller
 
     /**
      * Suppression d'un Reference.
-     * METHOD = POST|DELETE
+     * METHOD = POST|DELETE.
      *
      * @param $id
      *
@@ -174,9 +174,9 @@ class ReferenceController extends Controller
     }
 
     /**
-     * Suppression de masse des références
+     * Suppression de masse des références.
      *
-     * @param array $primaryKeys ID des lignes sélectionnées
+     * @param array $primaryKeys    ID des lignes sélectionnées
      * @param array $allPrimaryKeys allPrimaryKeys ???
      *
      * @return RedirectResponse
@@ -206,9 +206,9 @@ class ReferenceController extends Controller
     }
 
     /**
-     * Export CSV de la liste des références sélectionnés
+     * Export CSV de la liste des références sélectionnés.
      *
-     * @param array $primaryKeys ID des lignes sélectionnées
+     * @param array $primaryKeys    ID des lignes sélectionnées
      * @param array $allPrimaryKeys allPrimaryKeys ???
      *
      * @return Response
@@ -225,20 +225,20 @@ class ReferenceController extends Controller
         $refs = $this->get('hopitalnumerique_reference.manager.reference')->getDatasForExport($primaryKeys);
 
         $colonnes = [
-            'id'                      => 'id',
-            'libelle'                 => 'Libellé du concept',
-            'sigle'                   => 'Sigle',
-            'domaineNoms'             => 'Domaine(s)',
-            'reference'               => 'Est une référence',
-            'referenceLibelle'        => 'Libellé de la référence',
-            'inGlossaire'             => 'Actif dans le glossaire',
-            'etat'                    => 'Etat',
-            'order'                   => 'Ordre d\'affichage',
-            'inRecherche'             => 'Présent dans la recherche',
-            'code'                    => 'Code',
-            'synonymesLibelle'        => 'Synonymes',
+            'id' => 'id',
+            'libelle' => 'Libellé du concept',
+            'sigle' => 'Sigle',
+            'domaineNoms' => 'Domaine(s)',
+            'reference' => 'Est une référence',
+            'referenceLibelle' => 'Libellé de la référence',
+            'inGlossaire' => 'Actif dans le glossaire',
+            'etat' => 'Etat',
+            'order' => 'Ordre d\'affichage',
+            'inRecherche' => 'Présent dans la recherche',
+            'code' => 'Code',
+            'synonymesLibelle' => 'Synonymes',
             'champLexicalNomsLibelle' => 'Champ lexical',
-            'parentLibelles'          => 'Parents',
+            'parentLibelles' => 'Parents',
         ];
 
         $kernelCharset = $this->container->getParameter('kernel.charset');
@@ -248,11 +248,11 @@ class ReferenceController extends Controller
             ;
     }
 
-
     /**
      * Effectue le render du formulaire Reference.
      *
      * @param $reference
+     *
      * @internal param Reference $item Entité Référence
      *
      * @return RedirectResponse|Response
@@ -273,7 +273,6 @@ class ReferenceController extends Controller
         $this->container->get('hopitalnumerique_reference.doctrine.reference.domaine_udpater')
             ->setInitialReference($reference)
         ;
-
 
         if ($reference->getLock()) {
             $form = $this->createForm('hopitalnumerique_reference_reference_locked', $reference);
@@ -334,7 +333,6 @@ class ReferenceController extends Controller
                                 $childs = [$reference];
                             }
                         }
-
 
                         foreach ($childs as $child) {
                             if (count($child->getDomaines()) !== 0) {
@@ -402,8 +400,8 @@ class ReferenceController extends Controller
         }
 
         return $this->render('HopitalNumeriqueReferenceBundle:Reference:edit.html.twig', [
-            'form'                 => $form->createView(),
-            'reference'            => $reference,
+            'form' => $form->createView(),
+            'reference' => $reference,
             'referenceTreeOptions' => json_encode($referenceTreeOptions),
         ]);
     }

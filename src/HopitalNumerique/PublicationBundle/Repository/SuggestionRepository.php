@@ -1,4 +1,5 @@
 <?php
+
 namespace HopitalNumerique\PublicationBundle\Repository;
 
 use Doctrine\ORM\EntityRepository;
@@ -10,12 +11,12 @@ class SuggestionRepository extends EntityRepository
         $qb = $this->createQueryBuilder('suggestion');
         $qb
             ->select(
-                "suggestion.id id",
-                "suggestion.creationDate",
-                "suggestion.title",
+                'suggestion.id id',
+                'suggestion.creationDate',
+                'suggestion.title',
                 "GROUP_CONCAT(domains.nom SEPARATOR ' - ') domainsName",
-                "state.libelle stateLabel",
-                "suggestion.stateChangeDate",
+                'state.libelle stateLabel',
+                'suggestion.stateChangeDate',
                 "CONCAT(CONCAT(stateChangeAuthor.prenom, ' '), stateChangeAuthor.nom) stateChangeAuthorName"
             )
             ->leftJoin('suggestion.domains', 'domains')

@@ -4,14 +4,13 @@ namespace HopitalNumerique\ObjetBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use HopitalNumerique\ReferenceBundle\Entity\Reference;
-
 //Asserts Stuff
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Nodevo\ToolsBundle\Validator\Constraints as Nodevo;
 
 /**
- * Contenu
+ * Contenu.
  *
  * @ORM\Table(name="hn_objet_contenu")
  * @ORM\Entity(repositoryClass="HopitalNumerique\ObjetBundle\Repository\ContenuRepository")
@@ -20,7 +19,7 @@ use Nodevo\ToolsBundle\Validator\Constraints as Nodevo;
 class Contenu
 {
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="con_id", type="integer", options = {"comment" = "ID du contenu"})
      * @ORM\Id
@@ -54,8 +53,8 @@ class Contenu
     protected $alias;
 
     /**
-     * @var integer
-     * 
+     * @var int
+     *
      * @ORM\Column(name="con_order", type="integer", nullable=true, options = {"comment" = "Ordre du contenu"})
      */
     protected $order;
@@ -92,7 +91,7 @@ class Contenu
      * @ORM\OneToMany(targetEntity="Contenu", mappedBy="parent")
      */
     private $children;
-   
+
     /**
      * @ORM\ManyToOne(targetEntity="Objet", cascade={"persist"}, inversedBy="contenus", fetch="EAGER")
      * @ORM\JoinColumn(name="obj_id", referencedColumnName="obj_id", onDelete="CASCADE")
@@ -114,9 +113,9 @@ class Contenu
     protected $consultations;
 
     /**
-     * @var integer
+     * @var int
      *
-     * @ORM\Column(name="con_nb_vue", type="integer", options = {"comment" = "Nombre de fois où le contenu à été vue"})     
+     * @ORM\Column(name="con_nb_vue", type="integer", options = {"comment" = "Nombre de fois où le contenu à été vue"})
      */
     protected $nbVue;
 
@@ -146,28 +145,26 @@ class Contenu
      */
     private $domaines;
 
-
     /**
-     * Initialisation de l'entitée (valeurs par défaut)
+     * Initialisation de l'entitée (valeurs par défaut).
      */
     public function __construct()
     {
         $this->dateCreation = new \DateTime();
-        $this->titre        = 'Nouveau contenu';
-        $this->alias        = 'nouveau-contenu';
-        $this->contenu      = '';
-        $this->parent       = null;
-        $this->order        = 0;
-        $this->nbVue        = 0;
+        $this->titre = 'Nouveau contenu';
+        $this->alias = 'nouveau-contenu';
+        $this->contenu = '';
+        $this->parent = null;
+        $this->order = 0;
+        $this->nbVue = 0;
         $this->objets = new \Doctrine\Common\Collections\ArrayCollection();
         $this->domaines = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
-
     /**
-     * Get id
+     * Get id.
      *
-     * @return integer 
+     * @return int
      */
     public function getId()
     {
@@ -175,9 +172,10 @@ class Contenu
     }
 
     /**
-     * Set titre
+     * Set titre.
      *
      * @param string $titre
+     *
      * @return Contenu
      */
     public function setTitre($titre)
@@ -188,9 +186,9 @@ class Contenu
     }
 
     /**
-     * Get titre
+     * Get titre.
      *
-     * @return string 
+     * @return string
      */
     public function getTitre()
     {
@@ -198,9 +196,10 @@ class Contenu
     }
 
     /**
-     * Set alias
+     * Set alias.
      *
      * @param string $alias
+     *
      * @return Contenu
      */
     public function setAlias($alias)
@@ -211,9 +210,9 @@ class Contenu
     }
 
     /**
-     * Get alias
+     * Get alias.
      *
-     * @return string 
+     * @return string
      */
     public function getAlias()
     {
@@ -221,9 +220,10 @@ class Contenu
     }
 
     /**
-     * Set contenu
+     * Set contenu.
      *
      * @param string $contenu
+     *
      * @return Contenu
      */
     public function setContenu($contenu)
@@ -234,9 +234,9 @@ class Contenu
     }
 
     /**
-     * Get contenu
+     * Get contenu.
      *
-     * @return string 
+     * @return string
      */
     public function getContenu()
     {
@@ -244,19 +244,19 @@ class Contenu
     }
 
     /**
-     * Get order
+     * Get order.
      *
-     * @return integer $order
+     * @return int $order
      */
     public function getOrder()
     {
         return $this->order;
     }
-    
+
     /**
-     * Set order
+     * Set order.
      *
-     * @param integer $order
+     * @param int $order
      */
     public function setOrder($order)
     {
@@ -264,7 +264,7 @@ class Contenu
     }
 
     /**
-     * Get parent
+     * Get parent.
      *
      * @return Contenu $parent
      */
@@ -272,9 +272,9 @@ class Contenu
     {
         return $this->parent;
     }
-    
+
     /**
-     * Set parent
+     * Set parent.
      *
      * @param Contenu $parent
      */
@@ -284,7 +284,7 @@ class Contenu
     }
 
     /**
-     * Add child
+     * Add child.
      *
      * @param \HopitalNumerique\ObjetBundle\Entity\Contenu $child
      *
@@ -298,7 +298,7 @@ class Contenu
     }
 
     /**
-     * Remove child
+     * Remove child.
      *
      * @param \HopitalNumerique\ObjetBundle\Entity\Contenu $child
      */
@@ -308,7 +308,7 @@ class Contenu
     }
 
     /**
-     * Get children
+     * Get children.
      *
      * @return \Doctrine\Common\Collections\Collection
      */
@@ -316,30 +316,31 @@ class Contenu
     {
         return $this->children;
     }
-    
+
     /**
-     * Get nbVue
+     * Get nbVue.
      *
-     * @return integer $nbVue
+     * @return int $nbVue
      */
     public function getNbVue()
     {
         return $this->nbVue;
     }
-    
+
     /**
-     * Set nbVue
+     * Set nbVue.
      *
-     * @param integer $nbVue
+     * @param int $nbVue
      */
     public function setNbVue($nbVue)
     {
         $this->nbVue = $nbVue;
+
         return $this;
     }
-    
+
     /**
-     * Get objet
+     * Get objet.
      *
      * @return Objet $objet
      */
@@ -347,9 +348,9 @@ class Contenu
     {
         return $this->objet;
     }
-    
+
     /**
-     * Set objet
+     * Set objet.
      *
      * @param Objet $objet
      */
@@ -359,7 +360,7 @@ class Contenu
     }
 
     /**
-     * Add type
+     * Add type.
      *
      * @param \HopitalNumerique\ReferenceBundle\Entity\Reference $type
      *
@@ -373,7 +374,7 @@ class Contenu
     }
 
     /**
-     * Remove type
+     * Remove type.
      *
      * @param \HopitalNumerique\ReferenceBundle\Entity\Reference $type
      */
@@ -393,7 +394,7 @@ class Contenu
     }
 
     /**
-     * Get types
+     * Get types.
      *
      * @return \Doctrine\Common\Collections\Collection
      */
@@ -403,7 +404,7 @@ class Contenu
     }
 
     /**
-     * Get types ID
+     * Get types ID.
      *
      * @return array<integer>
      */
@@ -419,9 +420,10 @@ class Contenu
     }
 
     /**
-     * Set dateCreation
+     * Set dateCreation.
      *
      * @param \DateTime $dateCreation
+     *
      * @return Contenu
      */
     public function setDateCreation($dateCreation)
@@ -432,9 +434,9 @@ class Contenu
     }
 
     /**
-     * Get dateCreation
+     * Get dateCreation.
      *
-     * @return \DateTime 
+     * @return \DateTime
      */
     public function getDateCreation()
     {
@@ -442,9 +444,10 @@ class Contenu
     }
 
     /**
-     * Set dateModification
+     * Set dateModification.
      *
      * @param \DateTime $dateModification
+     *
      * @return Objet
      */
     public function setDateModification($dateModification)
@@ -455,9 +458,9 @@ class Contenu
     }
 
     /**
-     * Get dateModification
+     * Get dateModification.
      *
-     * @return \DateTime 
+     * @return \DateTime
      */
     public function getDateModification()
     {
@@ -465,7 +468,7 @@ class Contenu
     }
 
     /**
-     * Get consultations
+     * Get consultations.
      *
      * @return \Doctrine\Common\Collections\ArrayCollection $consultations
      */
@@ -475,20 +478,21 @@ class Contenu
     }
 
     /**
-     * Set consultations
+     * Set consultations.
      *
      * @param \Doctrine\Common\Collections\ArrayCollection $consultations
+     *
      * @return Objet
      */
     public function setConsultations(\Doctrine\Common\Collections\ArrayCollection $consultations)
-    {        
+    {
         $this->consultations = $consultations;
-    
+
         return $this;
     }
 
     /**
-     * Get listeCommentaires
+     * Get listeCommentaires.
      *
      * @return \Doctrine\Common\Collections\ArrayCollection $listeCommentaires
      */
@@ -498,20 +502,21 @@ class Contenu
     }
 
     /**
-     * Set listeCommentaires
+     * Set listeCommentaires.
      *
      * @param \Doctrine\Common\Collections\ArrayCollection $listeCommentaires
+     *
      * @return Objet
      */
     public function setListeCommentaires(\Doctrine\Common\Collections\ArrayCollection $listeCommentaires)
-    {        
+    {
         $this->listeCommentaires = $listeCommentaires;
-    
+
         return $this;
     }
 
     /**
-     * Get listeNotes
+     * Get listeNotes.
      *
      * @return \Doctrine\Common\Collections\ArrayCollection $listeNotes
      */
@@ -521,20 +526,21 @@ class Contenu
     }
 
     /**
-     * Set listeNotes
+     * Set listeNotes.
      *
      * @param \Doctrine\Common\Collections\ArrayCollection $listeNotes
+     *
      * @return Objet
      */
     public function setListeNotes(\Doctrine\Common\Collections\ArrayCollection $listeNotes)
-    {        
+    {
         $this->listeNotes = $listeNotes;
-    
+
         return $this;
     }
 
     /**
-     * Add objet
+     * Add objet.
      *
      * @param \HopitalNumerique\ObjetBundle\Entity\Objet $objet
      *
@@ -548,7 +554,7 @@ class Contenu
     }
 
     /**
-     * Remove objet
+     * Remove objet.
      *
      * @param \HopitalNumerique\ObjetBundle\Entity\Objet $objet
      */
@@ -568,7 +574,7 @@ class Contenu
     }
 
     /**
-     * Get objets
+     * Get objets.
      *
      * @return \Doctrine\Common\Collections\Collection
      */
@@ -578,7 +584,7 @@ class Contenu
     }
 
     /**
-     * Set objets
+     * Set objets.
      *
      * @param array $objets
      *
@@ -592,7 +598,7 @@ class Contenu
     }
 
     /**
-     * Add domaine
+     * Add domaine.
      *
      * @param \HopitalNumerique\DomaineBundle\Entity\Domaine $domaine
      *
@@ -606,7 +612,7 @@ class Contenu
     }
 
     /**
-     * Remove domaine
+     * Remove domaine.
      *
      * @param \HopitalNumerique\DomaineBundle\Entity\Domaine $domaine
      */
@@ -626,7 +632,7 @@ class Contenu
     }
 
     /**
-     * Get domaines
+     * Get domaines.
      *
      * @return \Doctrine\Common\Collections\Collection
      */
@@ -639,7 +645,8 @@ class Contenu
      * Retourne si le contenu possède ce domaine.
      *
      * @param \HopitalNumerique\DomaineBundle\Entity\Domaine $domaine Domaine
-     * @return boolean Si domaine
+     *
+     * @return bool Si domaine
      */
     public function hasDomaine(\HopitalNumerique\DomaineBundle\Entity\Domaine $domaine)
     {
@@ -652,7 +659,6 @@ class Contenu
         return false;
     }
 
-
     /**
      * @return string
      */
@@ -664,7 +670,7 @@ class Contenu
     /**
      * Retourne si l'objet est un point dur.
      *
-     * @return boolean Si point dur
+     * @return bool Si point dur
      */
     public function isPointDur()
     {
@@ -726,6 +732,7 @@ class Contenu
      *
      * @param \HopitalNumerique\ObjetBundle\Entity\Contenu $contenu Contenu
      * @param string                                       $prefix  Préfixe
+     *
      * @return string Préfixe
      */
     private function getPrefixFromContenu(Contenu $contenu = null, $prefix = '')
@@ -734,16 +741,16 @@ class Contenu
             return $prefix;
         }
 
-        return $this->getPrefixFromContenu($contenu->getParent(), $contenu->getOrder().'.'.$prefix);
+        return $this->getPrefixFromContenu($contenu->getParent(), $contenu->getOrder() . '.' . $prefix);
     }
 
     /**
      * Retourne si le contenu a un... contenu.
      *
-     * @return boolean Si contenu
+     * @return bool Si contenu
      */
     public function hasContenu()
     {
-        return ('' != $this->getContenu());
+        return '' != $this->getContenu();
     }
 }

@@ -34,10 +34,10 @@ class ObjetManager extends BaseManager
     /**
      * Construct.
      *
-     * @param EntityManager    $em             Entity Mangager de doctrine
-     * @param ContenuManager   $contenuManager ContenuManager
-     * @param NoteManager      $noteManager    NoteManager
-     * @param Session          $session        Le service session de Symfony
+     * @param EntityManager    $em               Entity Mangager de doctrine
+     * @param ContenuManager   $contenuManager   ContenuManager
+     * @param NoteManager      $noteManager      NoteManager
+     * @param Session          $session          Le service session de Symfony
      * @param UserManager      $userManager
      * @param ReferenceManager $referenceManager
      */
@@ -161,7 +161,6 @@ class ObjetManager extends BaseManager
 
         foreach ($objets as $objet) {
             /** @var Objet $objet */
-
             $row = [];
 
             //simple stuff
@@ -268,13 +267,13 @@ class ObjetManager extends BaseManager
             $row['nombreNote'] = $this->noteManager->countNbNoteByObjet($objet->getId(), false);
 
             //Fichier modifiable
-            $row['referentAnap']        = is_null($objet->getFichierModifiable()) ? ''
+            $row['referentAnap'] = is_null($objet->getFichierModifiable()) ? ''
                 : $objet->getFichierModifiable()->getReferentAnap();
-            $row['sourceDocument']      = is_null($objet->getFichierModifiable()) ? ''
+            $row['sourceDocument'] = is_null($objet->getFichierModifiable()) ? ''
                 : $objet->getFichierModifiable()->getSourceDocument();
             $row['commentairesFichier'] = is_null($objet->getFichierModifiable()) ? ''
                 : $objet->getFichierModifiable()->getCommentaires();
-            $row['pathEdit']            = is_null($objet->getFichierModifiable()) ? ''
+            $row['pathEdit'] = is_null($objet->getFichierModifiable()) ? ''
                 : $objet->getFichierModifiable()->getPathEdit();
 
             $row['module'] = '';
@@ -333,23 +332,23 @@ class ObjetManager extends BaseManager
                         $rowInfradoc['commentairesFichier'] = $rowInfradoc['pathEdit'] = $rowInfradoc['module'] = '';
 
                         //Infra doc values
-                        $rowInfradoc['idParent']          = $objet->getId();
-                        $rowInfradoc['idC']               = $contenu->getId();
-                        $rowInfradoc['titreC']            = $contenu->getTitre();
-                        $rowInfradoc['aliasC']            = $contenu->getAlias();
-                        $rowInfradoc['orderC']            = $contenu->getOrder();
-                        $rowInfradoc['dateCreationC']     = !is_null($contenu->getDateCreation())
+                        $rowInfradoc['idParent'] = $objet->getId();
+                        $rowInfradoc['idC'] = $contenu->getId();
+                        $rowInfradoc['titreC'] = $contenu->getTitre();
+                        $rowInfradoc['aliasC'] = $contenu->getAlias();
+                        $rowInfradoc['orderC'] = $contenu->getOrder();
+                        $rowInfradoc['dateCreationC'] = !is_null($contenu->getDateCreation())
                             ? $contenu->getDateCreation()->format('d/m/Y') : '';
                         $rowInfradoc['dateModificationC'] = !is_null($contenu->getDateModification())
                             ? $contenu->getDateModification()->format('d/m/Y') : '';
-                        $rowInfradoc['nbVueC']            = $contenu->getNbVue();
+                        $rowInfradoc['nbVueC'] = $contenu->getNbVue();
                         $rowInfradoc['noteC']
                                                           = null;
-                        $rowInfradoc['noteMoyenneC']      = number_format(
+                        $rowInfradoc['noteMoyenneC'] = number_format(
                             $this->noteManager->getMoyenneNoteByObjet($contenu->getId(), true),
                             2
                         );
-                        $rowInfradoc['nombreNoteC']       = $this->noteManager->countNbNoteByObjet(
+                        $rowInfradoc['nombreNoteC'] = $this->noteManager->countNbNoteByObjet(
                             $contenu->getId(),
                             true
                         );
@@ -612,6 +611,7 @@ class ObjetManager extends BaseManager
      * Retourne l'arbo Objets -> contenus.
      *
      * @param Reference[] $types
+     *
      * @return array
      */
     public function getObjetsAndContenuArbo($types = null)
@@ -719,7 +719,6 @@ class ObjetManager extends BaseManager
      * Retourne la liste des actualités des catégories passées en paramètre.
      *
      * @param array   $categories Les catégories
-     *
      * @param         $role
      * @param int     $limit
      * @param array   $order
@@ -777,7 +776,7 @@ class ObjetManager extends BaseManager
     /**
      * Retourne les catégories qui ont des articles.
      *
-     * @param array $allCategories Liste des catégories
+     * @param array        $allCategories Liste des catégories
      * @param Domaine|null $domain
      *
      * @return array
@@ -1035,7 +1034,6 @@ class ObjetManager extends BaseManager
      * Enregistre l'entitée.
      *
      * @param $entity
-     *
      */
     public function save($entity)
     {
@@ -1045,16 +1043,16 @@ class ObjetManager extends BaseManager
                     $this->setAllAlaUneFalse($one->getId());
                 }
             }
-            $this->_em->persist($one);
+            $this->em->persist($one);
         } else {
             if ($entity->getAlaune() == 1) {
                 $this->setAllAlaUneFalse($entity->getId());
             }
 
-            $this->_em->persist($entity);
+            $this->em->persist($entity);
         }
 
-        $this->_em->flush();
+        $this->em->flush();
     }
 
     /**
@@ -1108,13 +1106,13 @@ class ObjetManager extends BaseManager
             //Traitement pour Article
             if ($one->isArticle()) {
                 $results[] = [
-                    'text'  => $one->getTitre(),
+                    'text' => $one->getTitre(),
                     'value' => 'ARTICLE:' . $one->getId(),
                 ];
             } //Traitement pour Publication et Infradoc
             else {
                 $results[] = [
-                    'text'  => $one->getTitre(),
+                    'text' => $one->getTitre(),
                     'value' => 'PUBLICATION:' . $one->getId(),
                 ];
 
@@ -1124,7 +1122,7 @@ class ObjetManager extends BaseManager
 
                 foreach ($contenus[$one->getId()] as $content) {
                     $results[] = [
-                        'text'  => '|--' . $content->titre,
+                        'text' => '|--' . $content->titre,
                         'value' => 'INFRADOC:' . $content->id,
                     ];
                     $this->getObjetsChilds($results, $content, 2);
@@ -1139,7 +1137,7 @@ class ObjetManager extends BaseManager
      * Retourne les objets des types données et du domaine.
      *
      * @param array $types
-     * @param int $idDomaine
+     * @param int   $idDomaine
      *
      * @return Objet[]
      */
@@ -1157,6 +1155,6 @@ class ObjetManager extends BaseManager
      */
     protected function getRepository()
     {
-        return $this->_em->getRepository(Objet::class);
+        return $this->em->getRepository(Objet::class);
     }
 }

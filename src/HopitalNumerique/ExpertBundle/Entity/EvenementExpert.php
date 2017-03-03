@@ -6,7 +6,7 @@ use Doctrine\ORM\Mapping as ORM;
 use APY\DataGridBundle\Grid\Mapping as GRID;
 
 /**
- * EvenementExpert
+ * EvenementExpert.
  *
  * @ORM\Table(name="hn_expert_evenement")
  * @ORM\Entity(repositoryClass="HopitalNumerique\ExpertBundle\Repository\EvenementExpertRepository")
@@ -14,7 +14,7 @@ use APY\DataGridBundle\Grid\Mapping as GRID;
 class EvenementExpert
 {
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="eveE_id", type="integer")
      * @ORM\Id
@@ -23,7 +23,7 @@ class EvenementExpert
     protected $id;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\ManyToOne(targetEntity="ActiviteExpert", inversedBy="evenements")
      * @ORM\JoinColumn(name="eveE_activite", referencedColumnName="exp_id")
@@ -33,13 +33,13 @@ class EvenementExpert
     /**
      * @ORM\ManyToOne(targetEntity="\HopitalNumerique\ReferenceBundle\Entity\Reference", cascade={"persist"})
      * @ORM\JoinColumn(name="ref_nom", referencedColumnName="ref_id")
-     * 
+     *
      * @GRID\Column(field="nom.libelle")
      */
     protected $nom;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="eveE_nb_vacation", type="integer")
      */
@@ -49,22 +49,22 @@ class EvenementExpert
      * @var \DateTime
      *
      * @ORM\Column(name="eveE_date", type="datetime")
-     * 
+     *
      * @GRID\Column(type="datetime", format="d/m/Y")
      */
     protected $date;
 
     /**
-     * Liste des experts lié à l'activité pour gerer leur présence
-     * 
+     * Liste des experts lié à l'activité pour gerer leur présence.
+     *
      * @var /HopitalNumerique/ExpertBundle/Entity/EvenementPresenceExpert
-     * 
+     *
      * @ORM\OneToMany(targetEntity="EvenementPresenceExpert", mappedBy="evenement", cascade={"persist", "remove" })
      */
     protected $experts;
 
     /**
-     * Initialisation de l'entitée (valeurs par défaut)
+     * Initialisation de l'entitée (valeurs par défaut).
      */
     public function __construct()
     {
@@ -72,9 +72,9 @@ class EvenementExpert
     }
 
     /**
-     * Get id
+     * Get id.
      *
-     * @return integer 
+     * @return int
      */
     public function getId()
     {
@@ -82,9 +82,10 @@ class EvenementExpert
     }
 
     /**
-     * Set date
+     * Set date.
      *
      * @param \DateTime $date
+     *
      * @return EvenementExpert
      */
     public function setDate($date)
@@ -95,9 +96,9 @@ class EvenementExpert
     }
 
     /**
-     * Get date
+     * Get date.
      *
-     * @return \DateTime 
+     * @return \DateTime
      */
     public function getDate()
     {
@@ -105,9 +106,10 @@ class EvenementExpert
     }
 
     /**
-     * Set nbVacation
+     * Set nbVacation.
      *
-     * @param integer $nbVacation
+     * @param int $nbVacation
+     *
      * @return EvenementExpert
      */
     public function setNbVacation($nbVacation)
@@ -118,9 +120,9 @@ class EvenementExpert
     }
 
     /**
-     * Get nbVacation
+     * Get nbVacation.
      *
-     * @return integer 
+     * @return int
      */
     public function getNbVacation()
     {
@@ -128,9 +130,10 @@ class EvenementExpert
     }
 
     /**
-     * Set nom
+     * Set nom.
      *
      * @param \HopitalNumerique\ReferenceBundle\Entity\Reference $nom
+     *
      * @return EvenementExpert
      */
     public function setNom(\HopitalNumerique\ReferenceBundle\Entity\Reference $nom = null)
@@ -141,9 +144,9 @@ class EvenementExpert
     }
 
     /**
-     * Get nom
+     * Get nom.
      *
-     * @return \HopitalNumerique\ReferenceBundle\Entity\Reference 
+     * @return \HopitalNumerique\ReferenceBundle\Entity\Reference
      */
     public function getNom()
     {
@@ -151,9 +154,10 @@ class EvenementExpert
     }
 
     /**
-     * Set activite
+     * Set activite.
      *
      * @param \HopitalNumerique\ExpertBundle\Entity\ActiviteExpert $activite
+     *
      * @return EvenementExpert
      */
     public function setActivite(\HopitalNumerique\ExpertBundle\Entity\ActiviteExpert $activite = null)
@@ -164,9 +168,9 @@ class EvenementExpert
     }
 
     /**
-     * Get activite
+     * Get activite.
      *
-     * @return \HopitalNumerique\ExpertBundle\Entity\ActiviteExpert 
+     * @return \HopitalNumerique\ExpertBundle\Entity\ActiviteExpert
      */
     public function getActivite()
     {
@@ -174,9 +178,10 @@ class EvenementExpert
     }
 
     /**
-     * Add experts
+     * Add experts.
      *
      * @param \HopitalNumerique\ExpertBundle\Entity\EvenementPresenceExpert $experts
+     *
      * @return EvenementExpert
      */
     public function addExpert(\HopitalNumerique\ExpertBundle\Entity\EvenementPresenceExpert $experts)
@@ -187,7 +192,7 @@ class EvenementExpert
     }
 
     /**
-     * Remove experts
+     * Remove experts.
      *
      * @param \HopitalNumerique\ExpertBundle\Entity\EvenementPresenceExpert $experts
      */
@@ -197,9 +202,9 @@ class EvenementExpert
     }
 
     /**
-     * Get experts
+     * Get experts.
      *
-     * @return \Doctrine\Common\Collections\Collection 
+     * @return \Doctrine\Common\Collections\Collection
      */
     public function getExperts()
     {
@@ -207,18 +212,16 @@ class EvenementExpert
     }
 
     /**
-     * Get nombre de présents dans les experts
+     * Get nombre de présents dans les experts.
      *
-     * @return integer 
+     * @return int
      */
     public function getExpertsPresents()
     {
         $nbPresents = 0;
 
-        foreach ($this->experts as $expert) 
-        {
-            if(!is_null($expert->getExpertConcerne()) && $expert->getPresent())
-            {
+        foreach ($this->experts as $expert) {
+            if (!is_null($expert->getExpertConcerne()) && $expert->getPresent()) {
                 $nbPresents += $this->nbVacation;
             }
         }
@@ -227,23 +230,20 @@ class EvenementExpert
     }
 
     /**
-     * Get les ids des domaines concerné par l'user
+     * Get les ids des domaines concerné par l'user.
      *
      * @return array[integer]
      */
     public function getExpertsIds()
     {
-        $expertsId = array();
+        $expertsId = [];
 
-        if(is_null($this->experts))
-        {
-            return array();
+        if (is_null($this->experts)) {
+            return [];
         }
 
-        foreach ($this->experts as $expert) 
-        {
-            if(!is_null($expert->getExpertConcerne()))
-            {
+        foreach ($this->experts as $expert) {
+            if (!is_null($expert->getExpertConcerne())) {
                 $expertsId[] = $expert->getExpertConcerne()->getId();
             }
         }

@@ -28,7 +28,7 @@ class SynthesisVoter extends Voter
 
     protected function supports($attribute, $subject)
     {
-        if (!in_array($attribute, array(self::READ, self::SHARE, self::VALIDATE, self::DELETE))) {
+        if (!in_array($attribute, [self::READ, self::SHARE, self::VALIDATE, self::DELETE])) {
             return false;
         }
 
@@ -40,9 +40,10 @@ class SynthesisVoter extends Voter
     }
 
     /**
-     * @param string $attribute
-     * @param Synthesis $subject
+     * @param string         $attribute
+     * @param Synthesis      $subject
      * @param TokenInterface $token
+     *
      * @return bool
      */
     protected function voteOnAttribute($attribute, $subject, TokenInterface $token)
@@ -72,10 +73,11 @@ class SynthesisVoter extends Voter
     /**
      * Peut valider si la synthèse ne possède qu'une seule entry qui n'est pas une copie d'une autre entry
      * et si l'entry est en train d'être créée
-     *    ou si l'entry appartient à l'utilisateur (qui doit être connecté)
+     *    ou si l'entry appartient à l'utilisateur (qui doit être connecté).
      *
      * @param Synthesis $synthesis
      * @param $user
+     *
      * @return bool
      */
     public function canValidate(Synthesis $synthesis, $user)
@@ -96,10 +98,11 @@ class SynthesisVoter extends Voter
 
     /**
      * Peut partager si l'utilisateur possède la synthèse ou est dans les partages de la synthèse,
-     * et si la synthèse est validée
+     * et si la synthèse est validée.
      *
      * @param Synthesis $synthesis
      * @param $user
+     *
      * @return bool
      */
     public function canShare(Synthesis $synthesis, $user)
@@ -121,10 +124,11 @@ class SynthesisVoter extends Voter
      * Peut accéder en lecture si l'utilisateur possède la synthèse
      * ou si l'utilisateur a l'entry de la synthèse en session
      * ou si l'utilisateur est dans la liste de partages de la synthèse
-     * ou si l'utilisateur est admin
+     * ou si l'utilisateur est admin.
      *
      * @param Synthesis $synthesis
      * @param $user
+     *
      * @return bool
      */
     public function canRead(Synthesis $synthesis, $user)

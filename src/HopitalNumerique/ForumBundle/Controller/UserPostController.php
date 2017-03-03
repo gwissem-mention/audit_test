@@ -1,4 +1,5 @@
 <?php
+
 namespace HopitalNumerique\ForumBundle\Controller;
 
 use CCDNForum\ForumBundle\Controller\UserPostController as UserPostControllerBase;
@@ -50,14 +51,13 @@ class UserPostController extends UserPostControllerBase
 
         $options = [
             'serve_filename' => $nomPieceJointe,
-            'absolute_path'  => true,
-            'inline'         => false,
+            'absolute_path' => true,
+            'inline' => false,
         ];
 
         if (file_exists('../' . $post->getPieceJointeUrl())) {
             return $this->container->get('igorw_file_serve.response_factory')->create('../' . $post->getPieceJointeUrl(), 'application/force-download', $options);
         }
-
 
         $this->container->get('session')->getFlashBag()->add('danger', 'Fichier introuvable.');
 
@@ -66,7 +66,7 @@ class UserPostController extends UserPostControllerBase
 
     /**
      * @param Request $request
-     * @param Post $post
+     * @param Post    $post
      *
      * @return JsonResponse
      */
@@ -95,7 +95,7 @@ class UserPostController extends UserPostControllerBase
 
                 return new JsonResponse([
                     'success' => true,
-                    'url'     => $this->getRouter()->generate('ccdn_forum_user_topic_show', [
+                    'url' => $this->getRouter()->generate('ccdn_forum_user_topic_show', [
                         'topicId' => $topicId,
                     ]),
                 ], 200);
@@ -108,7 +108,7 @@ class UserPostController extends UserPostControllerBase
 
         return new JsonResponse([
             'success' => false,
-            'url'     => $this->getRouter()->generate('ccdn_forum_user_topic_show', [
+            'url' => $this->getRouter()->generate('ccdn_forum_user_topic_show', [
                 'topicId' => $ancienTopic,
             ]),
         ], 200);

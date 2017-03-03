@@ -2,6 +2,7 @@
 /**
  * Configuration du grid des nouvelles demandes d'intervention pour le CMSI.
  */
+
 namespace HopitalNumerique\InterventionBundle\Grid\Cmsi;
 
 use HopitalNumerique\InterventionBundle\Grid\DemandesAbstractGrid;
@@ -15,7 +16,7 @@ use HopitalNumerique\InterventionBundle\Entity\InterventionEtat;
 class DemandesNouvellesGrid extends DemandesAbstractGrid
 {
     /**
-     * Set la config propre au Grid des demandes d'intervention (Source + config par défaut)
+     * Set la config propre au Grid des demandes d'intervention (Source + config par défaut).
      */
     public function setConfig()
     {
@@ -24,19 +25,19 @@ class DemandesNouvellesGrid extends DemandesAbstractGrid
     }
 
     /**
-     * Ajoute les colonnes visibles du grid
+     * Ajoute les colonnes visibles du grid.
      */
     public function setColumns()
     {
         parent::setColumns();
-        
+
         $this->addColonneDemandeur();
         $this->addColonneAmbassadeur();
-        
+
         $colonneObjetsInformations = new Column\TextColumn('objetsInformations', 'Objets');
         $colonneObjetsInformations->setFilterable(false)->setSortable(false);
         $this->addColonne($colonneObjetsInformations);
-        
+
         $this->addColonneInterventionEtat();
         $this->addColonneDateCreation();
 
@@ -44,18 +45,17 @@ class DemandesNouvellesGrid extends DemandesAbstractGrid
         $colonneDateButoir->setAlign('center');
         $colonneDateButoir->setFilterable(false)->setSortable(false);
         $colonneDateButoir->manipulateRenderCell(
-            function($value, \APY\DataGridBundle\Grid\Row $row) {
-                if ($row->getField('interventionEtatId') == InterventionEtat::getInterventionEtatDemandeInitialeId())
-                {
+            function ($value, \APY\DataGridBundle\Grid\Row $row) {
+                if ($row->getField('interventionEtatId') == InterventionEtat::getInterventionEtatDemandeInitialeId()) {
                     $dateCreation = $row->getField('dateCreationLibelle');
                     $dateButoir = new \DateTime($dateCreation);
-                    $dateButoir->add(new \DateInterval('P'.InterventionEtat::$VALIDATION_CMSI_NOMBRE_JOURS.'D'));
+                    $dateButoir->add(new \DateInterval('P' . InterventionEtat::$VALIDATION_CMSI_NOMBRE_JOURS . 'D'));
+
                     return $dateButoir->format('d/m/Y');
-                }
-                else if ($row->getField('interventionEtatId') == InterventionEtat::getInterventionEtatAttenteCmsiId())
-                {
+                } elseif ($row->getField('interventionEtatId') == InterventionEtat::getInterventionEtatAttenteCmsiId()) {
                     return 'En attente';
                 }
+
                 return '';
             }
         );
@@ -63,7 +63,7 @@ class DemandesNouvellesGrid extends DemandesAbstractGrid
     }
 
     /**
-     * Ajoute les boutons d'actions si nécessaire
+     * Ajoute les boutons d'actions si nécessaire.
      */
     public function setActionsButtons()
     {
@@ -72,10 +72,9 @@ class DemandesNouvellesGrid extends DemandesAbstractGrid
     }
 
     /**
-     * Ajoute les actions de masses
+     * Ajoute les actions de masses.
      */
     public function setMassActions()
     {
-        
     }
 }

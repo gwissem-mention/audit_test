@@ -3,14 +3,13 @@
 namespace Nodevo\MenuBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-
 //Asserts Stuff
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Nodevo\ToolsBundle\Validator\Constraints as Nodevo;
 
 /**
- * Menu
+ * Menu.
  *
  * @ORM\Table("core_menu")
  * @ORM\Entity(repositoryClass="Nodevo\MenuBundle\Repository\MenuRepository")
@@ -19,7 +18,7 @@ use Nodevo\ToolsBundle\Validator\Constraints as Nodevo;
 class Menu
 {
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="mnu_id", type="integer", options = {"comment" = "ID du menu"})
      * @ORM\Id
@@ -84,7 +83,7 @@ class Menu
     private $cssId;
 
     /**
-     * @var boolean
+     * @var bool
      *
      * @ORM\Column(name="mnu_lock", type="boolean", options = {"comment" = "Verrouillage du menu ?"})
      */
@@ -92,25 +91,24 @@ class Menu
 
     /**
      * @var string
-     *
      */
     private $tree;
 
     /**
-     * Constructor
+     * Constructor.
      */
     public function __construct()
     {
-        $this->items    = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->items = new \Doctrine\Common\Collections\ArrayCollection();
         $this->cssClass = null;
-        $this->cssId    = null;
-        $this->lock     = false;
+        $this->cssId = null;
+        $this->lock = false;
     }
 
     /**
-     * Get id
+     * Get id.
      *
-     * @return integer 
+     * @return int
      */
     public function getId()
     {
@@ -118,22 +116,23 @@ class Menu
     }
 
     /**
-     * Set name
+     * Set name.
      *
      * @param string $name
+     *
      * @return Menu
      */
     public function setName($name)
     {
         $this->name = $name;
-    
+
         return $this;
     }
 
     /**
-     * Get name
+     * Get name.
      *
-     * @return string 
+     * @return string
      */
     public function getName()
     {
@@ -141,22 +140,23 @@ class Menu
     }
 
     /**
-     * Set alias
+     * Set alias.
      *
      * @param string $alias
+     *
      * @return Menu
      */
     public function setAlias($alias)
     {
         $this->alias = $alias;
-    
+
         return $this;
     }
 
     /**
-     * Get alias
+     * Get alias.
      *
-     * @return string 
+     * @return string
      */
     public function getAlias()
     {
@@ -164,20 +164,21 @@ class Menu
     }
 
     /**
-     * Add items
+     * Add items.
      *
      * @param \Nodevo\MenuBundle\Entity\Item $items
+     *
      * @return Menu
      */
     public function addItem(\Nodevo\MenuBundle\Entity\Item $items)
     {
         $this->items[] = $items;
-    
+
         return $this;
     }
 
     /**
-     * Remove items
+     * Remove items.
      *
      * @param \Nodevo\MenuBundle\Entity\Item $items
      */
@@ -187,9 +188,9 @@ class Menu
     }
 
     /**
-     * Get items
+     * Get items.
      *
-     * @return \Doctrine\Common\Collections\Collection 
+     * @return \Doctrine\Common\Collections\Collection
      */
     public function getItems()
     {
@@ -197,7 +198,7 @@ class Menu
     }
 
     /**
-     * Get cssClass
+     * Get cssClass.
      *
      * @return string $cssClass
      */
@@ -205,9 +206,9 @@ class Menu
     {
         return $this->cssClass;
     }
-    
+
     /**
-     * Set cssClass
+     * Set cssClass.
      *
      * @param string $cssClass
      */
@@ -215,9 +216,9 @@ class Menu
     {
         $this->cssClass = $cssClass;
     }
-    
+
     /**
-     * Get cssId
+     * Get cssId.
      *
      * @return string $cssId
      */
@@ -225,9 +226,9 @@ class Menu
     {
         return $this->cssId;
     }
-    
+
     /**
-     * Set cssId
+     * Set cssId.
      *
      * @param string $cssId
      */
@@ -235,36 +236,36 @@ class Menu
     {
         $this->cssId = $cssId;
     }
- 
+
     /**
-     * Get lock
+     * Get lock.
      *
-     * @return boolean $lock
+     * @return bool $lock
      */
     public function getLock()
     {
         return $this->lock;
     }
-    
+
     /**
-     * Set lock
+     * Set lock.
      *
-     * @param boolean $lock
+     * @param bool $lock
      */
     public function setLock($lock)
     {
         $this->lock = $lock;
     }
-    
-    
+
     public function getTree()
     {
         return null === $this->tree ? null : unserialize($this->tree);
     }
 
-    public function setTree( $tree )
+    public function setTree($tree)
     {
         $this->tree = serialize($tree);
+
         return $this;
     }
 

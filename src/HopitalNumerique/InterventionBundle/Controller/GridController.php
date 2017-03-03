@@ -1,9 +1,10 @@
 <?php
 /**
  * Contrôleur des grids des demandes d'intervention.
- * 
+ *
  * @author Rémi Leclerc <rleclerc@nodevo.com>
  */
+
 namespace HopitalNumerique\InterventionBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -24,6 +25,7 @@ class GridController extends Controller
 
         return $interventionDemandesGrille->render('HopitalNumeriqueInterventionBundle:Grid:Cmsi/demandesNouvelles.html.twig');
     }
+
     /**
      * Action pour la liste des demandes d'intervention traitées pour le CMSI.
      *
@@ -35,6 +37,7 @@ class GridController extends Controller
 
         return $interventionDemandesGrille->render('HopitalNumeriqueInterventionBundle:Grid:Cmsi/demandesTraitees.html.twig');
     }
+
     /**
      * Action pour la liste des demandes d'intervention pour le directeur d'établissement.
      *
@@ -43,9 +46,10 @@ class GridController extends Controller
     public function gridDirecteurSuiviDemandesAction()
     {
         $interventionDemandesGrille = $this->get('hopitalnumerique_intervention.grid.directeur.intervention_suivi_demandes');
-    
+
         return $interventionDemandesGrille->render('HopitalNumeriqueInterventionBundle:Grid:Directeur/suiviDemandes.html.twig');
     }
+
     /**
      * Action pour la liste des demandes d'intervention pour l'ambassadeur.
      *
@@ -57,6 +61,7 @@ class GridController extends Controller
 
         return $interventionDemandesGrille->render('HopitalNumeriqueInterventionBundle:Grid:Ambassadeur/demandes.html.twig');
     }
+
     /**
      * Action pour la liste des demandes d'intervention pour l'établissement.
      *
@@ -65,7 +70,7 @@ class GridController extends Controller
     public function gridEtablissementDemandesAction()
     {
         $interventionDemandesGrille = $this->get('hopitalnumerique_intervention.grid.etablissement.intervention_demandes');
-    
+
         return $interventionDemandesGrille->render('HopitalNumeriqueInterventionBundle:Grid:Etablissement/demandes.html.twig');
     }
 }

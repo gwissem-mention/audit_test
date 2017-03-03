@@ -1,4 +1,5 @@
 <?php
+
 namespace HopitalNumerique\AutodiagBundle\Model;
 
 use Doctrine\ORM\EntityManager;
@@ -35,7 +36,7 @@ class AutodiagFileImportHandler
     protected $translator;
 
     /**
-     * Handler constructor
+     * Handler constructor.
      *
      * @param EntityManager            $em
      * @param SessionInterface         $session
@@ -64,8 +65,8 @@ class AutodiagFileImportHandler
 
     /**
      * @param AutodiagFileImport $model
-     * @param DataImporter $chapterImporter
-     * @param DataImporter $questionImporter
+     * @param DataImporter       $chapterImporter
+     * @param DataImporter       $questionImporter
      */
     public function handleSurveyImport(AutodiagFileImport $model, DataImporter $chapterImporter, DataImporter $questionImporter, $isNotified)
     {
@@ -107,6 +108,7 @@ class AutodiagFileImportHandler
         if (null !== $surveyProgress) {
             $this->session->remove('survey_import_progress_chapter');
         }
+
         return $surveyProgress;
     }
 
@@ -119,6 +121,7 @@ class AutodiagFileImportHandler
         if (null !== $questionProgress) {
             $this->session->remove('survey_import_progress_question');
         }
+
         return $questionProgress;
     }
 
@@ -131,6 +134,7 @@ class AutodiagFileImportHandler
         if (null !== $progress) {
             $this->session->remove('algorithm_import_progress');
         }
+
         return $progress;
     }
 
@@ -143,12 +147,13 @@ class AutodiagFileImportHandler
         if (null !== $progress) {
             $this->session->remove('restitution_import_progress');
         }
+
         return $progress;
     }
 
     /**
      * @param AutodiagFileImport $model
-     * @param DataImporter $algorithmImporter
+     * @param DataImporter       $algorithmImporter
      */
     public function handleAlgorithmImport(AutodiagFileImport $model, DataImporter $algorithmImporter)
     {
@@ -174,7 +179,7 @@ class AutodiagFileImportHandler
 
     /**
      * @param AutodiagFileImport $model
-     * @param DataImporter $restitutionImporter
+     * @param DataImporter       $restitutionImporter
      */
     public function handleRestitutionImport(AutodiagFileImport $model, DataImporter $restitutionImporter)
     {

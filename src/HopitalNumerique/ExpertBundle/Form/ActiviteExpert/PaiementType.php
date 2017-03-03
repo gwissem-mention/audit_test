@@ -1,4 +1,5 @@
 <?php
+
 namespace HopitalNumerique\ExpertBundle\Form\ActiviteExpert;
 
 use Symfony\Component\Form\AbstractType;
@@ -17,18 +18,18 @@ class PaiementType extends AbstractType
      * @var \HopitalNumerique\ExpertBundle\Entity\ActiviteExpert\Paiement
      */
     private $paiementInitial;
-    
+
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('vacationsCount', 'number', array(
-                'attr' => array(
-                    'class' => 'validate[required,custom[integer]]'
-                )
-            ))
+            ->add('vacationsCount', 'number', [
+                'attr' => [
+                    'class' => 'validate[required,custom[integer]]',
+                ],
+            ])
             ->addEventListener(FormEvents::PRE_SUBMIT, function (FormEvent $event) {
                 $this->verifyVacationsCount($event);
             })
@@ -61,7 +62,7 @@ class PaiementType extends AbstractType
         $paiementSubmitted = $event->getData();
 
         if (intval($paiementSubmitted->getVacationsCount()) < 0 || intval($paiementSubmitted->getVacationsCount()) > intval($this->paiementInitial->getVacationsCount())) {
-            $event->getForm()->get('vacationsCount')->addError(new FormError('Veuillez choisir un nombre positif, inférieur ou égal à '.$this->paiementInitial->getVacationsCount().'.'));
+            $event->getForm()->get('vacationsCount')->addError(new FormError('Veuillez choisir un nombre positif, inférieur ou égal à ' . $this->paiementInitial->getVacationsCount() . '.'));
         }
 
         if ($event->getForm()->isValid()) {
@@ -71,19 +72,18 @@ class PaiementType extends AbstractType
         }
     }
 
-
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function configureOptions(OptionsResolver $resolver)
     {
-        $resolver->setDefaults(array(
-            'data_class' => 'HopitalNumerique\ExpertBundle\Entity\ActiviteExpert\Paiement'
-        ));
+        $resolver->setDefaults([
+            'data_class' => 'HopitalNumerique\ExpertBundle\Entity\ActiviteExpert\Paiement',
+        ]);
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function getName()
     {

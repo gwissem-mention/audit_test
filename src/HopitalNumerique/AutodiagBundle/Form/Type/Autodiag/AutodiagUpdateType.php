@@ -1,4 +1,5 @@
 <?php
+
 namespace HopitalNumerique\AutodiagBundle\Form\Type\Autodiag;
 
 use HopitalNumerique\AutodiagBundle\Form\Type\AutodiagType;
@@ -9,16 +10,15 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**
- * ModelAdminUpdateType represent the admin form for create and update Model
+ * ModelAdminUpdateType represent the admin form for create and update Model.
  *
- * @package HopitalNumerique\AutodiagBundle\Form\Type\Domain
  * @author Emmanuel Da Fonseca <edafonseca@nodevo.com>
  */
 class AutodiagUpdateType extends AbstractType
 {
     /**
      * @param FormBuilderInterface $builder
-     * @param array $options
+     * @param array                $options
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {

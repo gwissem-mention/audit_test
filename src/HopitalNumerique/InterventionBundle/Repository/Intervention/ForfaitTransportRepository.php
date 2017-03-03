@@ -1,4 +1,5 @@
 <?php
+
 namespace HopitalNumerique\InterventionBundle\Repository\Intervention;
 
 use Doctrine\ORM\EntityRepository;
@@ -11,7 +12,8 @@ class ForfaitTransportRepository extends EntityRepository
     /**
      * Retourne le ForfaitTransport d'une distance en km.
      *
-     * @param integer $distance Distance
+     * @param int $distance Distance
+     *
      * @return \HopitalNumerique\InterventionBundle\Entity\Intervention\ForfaitTransport|null ForfaitTransport correspondant
      */
     public function getForDistance($distance)

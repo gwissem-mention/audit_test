@@ -6,7 +6,7 @@ use Doctrine\ORM\Mapping as ORM;
 use HopitalNumerique\AutodiagBundle\Entity\Autodiag\Container;
 
 /**
- * Category
+ * Category.
  *
  * @ORM\Table(name="ad_autodiag_container_category")
  * @ORM\Entity

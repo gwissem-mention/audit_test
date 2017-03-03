@@ -1,4 +1,5 @@
 <?php
+
 namespace HopitalNumerique\AutodiagBundle\Grid;
 
 use Nodevo\GridBundle\Grid\Action\ActionMass;
@@ -71,7 +72,7 @@ class AutodiagGrid extends Grid implements GridInterface
                 }
 
                 $autodiags = $this->_container->get('autodiag.repository.autodiag')->findBy([
-                    'id' => $ids
+                    'id' => $ids,
                 ]);
 
                 try {
@@ -81,10 +82,9 @@ class AutodiagGrid extends Grid implements GridInterface
                     $this->_container->get('doctrine.orm.entity_manager')->flush();
                     $this->_container->get('session')->getFlashBag()->add('info', 'Suppression effectuée avec succès.');
                 } catch (\Exception $e) {
-                    $this->_container->get('session')->getFlashBag()->add('error', "Une erreur est survenue.");
+                    $this->_container->get('session')->getFlashBag()->add('error', 'Une erreur est survenue.');
                 }
             })
         );
     }
-
 }

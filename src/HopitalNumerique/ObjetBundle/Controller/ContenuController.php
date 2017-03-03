@@ -6,8 +6,7 @@ use HopitalNumerique\ObjetBundle\Entity\Contenu;
 use HopitalNumerique\ObjetBundle\Entity\Objet;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-
-use \Nodevo\ToolsBundle\Tools\Chaine;
+use Nodevo\ToolsBundle\Tools\Chaine;
 
 /**
  * Contenu controller.
@@ -15,7 +14,7 @@ use \Nodevo\ToolsBundle\Tools\Chaine;
 class ContenuController extends Controller
 {
     /**
-     * Ajoute un élément dans le sommaire
+     * Ajoute un élément dans le sommaire.
      *
      * @param $id
      *
@@ -49,7 +48,7 @@ class ContenuController extends Controller
         return $this->render(
             'HopitalNumeriqueObjetBundle:Contenu:add.html.twig',
             [
-                'id'    => $contenu->getId(),
+                'id' => $contenu->getId(),
                 'order' => $order,
             ]
         );
@@ -96,7 +95,7 @@ class ContenuController extends Controller
 
     /**
      * Suppresion d'un Contenu.
-     * METHOD = POST|DELETE
+     * METHOD = POST|DELETE.
      *
      * @param $id
      *
@@ -138,7 +137,7 @@ class ContenuController extends Controller
     }
 
     /**
-     * Reorder les contenus
+     * Reorder les contenus.
      *
      * @return Response
      */
@@ -153,7 +152,7 @@ class ContenuController extends Controller
     }
 
     /**
-     * Fancybox d'upload de CSV
+     * Fancybox d'upload de CSV.
      *
      * @return Response
      */
@@ -163,7 +162,7 @@ class ContenuController extends Controller
     }
 
     /**
-     * Parse le fichier CSV uploadé
+     * Parse le fichier CSV uploadé.
      *
      * @param $id
      *
@@ -175,7 +174,7 @@ class ContenuController extends Controller
         $objet = $this->get('hopitalnumerique_objet.manager.objet')->findOneBy(['id' => $id]);
 
         //get datas
-        $csv    = $this->get('request')->request->get('csv');
+        $csv = $this->get('request')->request->get('csv');
         $result = $this->get('hopitalnumerique_objet.manager.contenu')->parseCsv($csv, $objet);
 
         if ($result) {
@@ -201,9 +200,8 @@ class ContenuController extends Controller
         );
     }
 
-
     /**
-     * Tri de manière récursive les éléments de contenu
+     * Tri de manière récursive les éléments de contenu.
      *
      * @param array        $elements Liste des éléments
      * @param Contenu|null $parent   Parent ou null
@@ -219,7 +217,7 @@ class ContenuController extends Controller
             $contenu->setParent($parent);
 
             $this->get('hopitalnumerique_objet.manager.contenu')->save($contenu);
-            $order++;
+            ++$order;
 
             if (isset($element['children'])) {
                 $this->reorderElements($element['children'], $contenu);
@@ -238,7 +236,7 @@ class ContenuController extends Controller
      */
     private function renderForm($formName, $contenu, $view)
     {
-        $user        = $this->getUser();
+        $user = $this->getUser();
         $formOptions = [
             'user' => $this->getUser(),
         ];
@@ -254,10 +252,10 @@ class ContenuController extends Controller
         // Si l'utilisateur soumet le formulaire
         if ('POST' == $request->getMethod()) {
             //get form Datas
-            $titre   = $request->request->get('titre');
-            $alias   = $request->request->get('alias');
+            $titre = $request->request->get('titre');
+            $alias = $request->request->get('alias');
             $content = $request->request->get('contenu');
-            $notify  = $request->request->get('notify');
+            $notify = $request->request->get('notify');
 
             $types = $this->get('request')->request->get('types');
             if ('' != $types) {
@@ -312,7 +310,7 @@ class ContenuController extends Controller
             $contenu->setTitre($titre);
             $contenu->setContenu($content);
 
-            if ($notify === "1") {
+            if ($notify === '1') {
                 $contenu->setDateModification(new \DateTime());
             }
 
@@ -336,14 +334,14 @@ class ContenuController extends Controller
         return $this->render(
             $view,
             [
-                'form'    => $form->createView(),
+                'form' => $form->createView(),
                 'contenu' => $contenu,
             ]
         );
     }
 
     /**
-     * Returns all related productions for the content form
+     * Returns all related productions for the content form.
      *
      * @return Response
      */

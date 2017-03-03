@@ -8,7 +8,7 @@ use Doctrine\ORM\Mapping as ORM;
 use HopitalNumerique\UserBundle\Entity\User;
 
 /**
- * Autodiag entry - a response to an autodiag
+ * Autodiag entry - a response to an autodiag.
  *
  * @ORM\Table(name="ad_entry")
  * @ORM\Entity(repositoryClass="HopitalNumerique\AutodiagBundle\Repository\AutodiagEntryRepository")
@@ -17,7 +17,7 @@ use HopitalNumerique\UserBundle\Entity\User;
 class AutodiagEntry
 {
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
@@ -100,9 +100,9 @@ class AutodiagEntry
     }
 
     /**
-     * Get id
+     * Get id.
      *
-     * @return integer
+     * @return int
      */
     public function getId()
     {
@@ -140,6 +140,7 @@ class AutodiagEntry
 
     /**
      * @param Synthesis $synthesis
+     *
      * @return $this
      */
     public function addSynthesis(Synthesis $synthesis)
@@ -189,6 +190,7 @@ class AutodiagEntry
 
     /**
      * @param User $user
+     *
      * @return $this
      */
     public function setUser(User $user)
@@ -207,7 +209,7 @@ class AutodiagEntry
     }
 
     /**
-     * Set updatedAt
+     * Set updatedAt.
      *
      * @ORM\PreUpdate
      * @ORM\PrePersist
@@ -219,7 +221,7 @@ class AutodiagEntry
     }
 
     /**
-     * Get validation datetime
+     * Get validation datetime.
      *
      * @return \DateTime
      */
@@ -229,7 +231,7 @@ class AutodiagEntry
     }
 
     /**
-     * Set validation datetime
+     * Set validation datetime.
      *
      * @param \DateTime $validatedAt
      *
@@ -243,7 +245,7 @@ class AutodiagEntry
     }
 
     /**
-     * @return boolean
+     * @return bool
      */
     public function isCopy()
     {
@@ -251,7 +253,7 @@ class AutodiagEntry
     }
 
     /**
-     * @param boolean $copy
+     * @param bool $copy
      */
     public function setCopy($copy)
     {
@@ -265,7 +267,7 @@ class AutodiagEntry
         $originalValues = $this->values;
         $this->values = new ArrayCollection();
         foreach ($originalValues as $value) {
-            $clone = clone($value);
+            $clone = clone $value;
             $clone->setEntry($this);
         }
     }

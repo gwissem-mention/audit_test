@@ -1,4 +1,5 @@
 <?php
+
 namespace HopitalNumerique\CommunautePratiqueBundle\Form\Type\User;
 
 use Symfony\Component\Form\AbstractType;
@@ -16,7 +17,6 @@ class AjoutType extends AbstractType
      */
     private $userManager;
 
-
     /**
      * Constructeur.
      */
@@ -25,9 +25,8 @@ class AjoutType extends AbstractType
         $this->userManager = $userManager;
     }
 
-
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
@@ -37,14 +36,14 @@ class AjoutType extends AbstractType
         $groupe = $options['groupe'];
 
         $builder
-            ->add('user', 'entity', array(
+            ->add('user', 'entity', [
                 'class' => 'HopitalNumeriqueUserBundle:User',
                 'choices' => $this->userManager->findCommunautePratiqueMembresNotInGroupe($groupe),
                 'property' => 'prenomNom',
-                'attr' => array(
-                    'class' => 'select2'
-                )
-            ))
+                'attr' => [
+                    'class' => 'select2',
+                ],
+            ])
         ;
     }
 
@@ -54,16 +53,16 @@ class AjoutType extends AbstractType
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
         $resolver
-            ->setDefaults(array(
-                'validation_groups' => array('form_validation_only')
-            ))
-            ->setRequired(array('groupe'))
-            ->setAllowedTypes(array('groupe' => 'HopitalNumerique\CommunautePratiqueBundle\Entity\Groupe'))
+            ->setDefaults([
+                'validation_groups' => ['form_validation_only'],
+            ])
+            ->setRequired(['groupe'])
+            ->setAllowedTypes(['groupe' => 'HopitalNumerique\CommunautePratiqueBundle\Entity\Groupe'])
         ;
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function getName()
     {

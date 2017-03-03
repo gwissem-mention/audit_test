@@ -1,4 +1,5 @@
 <?php
+
 namespace Nodevo\MailBundle\Controller;
 
 use Nodevo\MailBundle\Entity\Mail;
@@ -24,7 +25,7 @@ class RecommandationController extends Controller
         $recommandationForm = $this->createForm(RecommandationType::class, null, [
             'mail' => $recommandationMail,
             'expediteur' => $this->getUser(),
-            'url' => $request->headers->get('referer')
+            'url' => $request->headers->get('referer'),
         ]);
         $recommandationForm->handleRequest($request);
 
@@ -37,13 +38,14 @@ class RecommandationController extends Controller
             );
             $this->container->get('mailer')->send($recommandationMessage);
             $this->addFlash('success', 'Recommandation envoyée.');
+
             return $this->redirect($recommandationForm->get('url')->getData());
         }
 
         return $this->render(
             'NodevoMailBundle:Recommandation:popin.html.twig',
             [
-                'recommandationForm' => $recommandationForm->createView()
+                'recommandationForm' => $recommandationForm->createView(),
             ]
         );
     }
@@ -58,7 +60,7 @@ class RecommandationController extends Controller
         $recommandationForm = $this->createForm(RecommandationType::class, null, [
             'mail' => $recommandationMail,
             'expediteur' => $this->getUser(),
-            'url' => $request->headers->get('referer')
+            'url' => $request->headers->get('referer'),
         ]);
         $recommandationForm->handleRequest($request);
 
@@ -71,13 +73,14 @@ class RecommandationController extends Controller
             );
             $this->container->get('mailer')->send($recommandationMessage);
             $this->addFlash('success', 'Recommandation envoyée.');
+
             return $this->redirect($recommandationForm->get('url')->getData());
         }
 
         return $this->render(
             'NodevoMailBundle:Recommandation:popin.html.twig',
             [
-                'recommandationForm' => $recommandationForm->createView()
+                'recommandationForm' => $recommandationForm->createView(),
             ]
         );
     }

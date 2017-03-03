@@ -17,9 +17,9 @@ class RestitutionPdfGenerator
     private $generator;
 
     /**
-     * RestitutionPdfGenerator constructor
+     * RestitutionPdfGenerator constructor.
      *
-     * @param TwigEngine $templating
+     * @param TwigEngine        $templating
      * @param LoggableGenerator $generator
      */
     public function __construct(TwigEngine $templating, LoggableGenerator $generator)
@@ -29,9 +29,9 @@ class RestitutionPdfGenerator
     }
 
     /**
-     * @param Synthesis $synthesis
+     * @param Synthesis   $synthesis
      * @param Restitution $restitution
-     * @param array $resultItems
+     * @param array       $resultItems
      *
      * @return string
      */
@@ -45,22 +45,22 @@ class RestitutionPdfGenerator
 
         $name = $synthesis->getName();
 
-        $options = array(
-            'encoding'         => 'UTF-8',
+        $options = [
+            'encoding' => 'UTF-8',
             'javascript-delay' => 1000,
-            'margin-top'       => '15',
-            'margin-bottom'    => '25',
-            'margin-right'     => '15',
-            'margin-left'      => '15',
-            'header-spacing'   => '5',
-            'header-left'      => date('d/m/Y'),
-            'header-right'     => 'Page [page] / [toPage]',
+            'margin-top' => '15',
+            'margin-bottom' => '25',
+            'margin-right' => '15',
+            'margin-left' => '15',
+            'header-spacing' => '5',
+            'header-left' => date('d/m/Y'),
+            'header-right' => 'Page [page] / [toPage]',
             'header-font-size' => '10',
-            'footer-spacing'   => '10',
+            'footer-spacing' => '10',
             'page-width' => '1024px',
             'header-left' => $this->wrapHeader("$name"),
-            'footer-html'      => '<p style="font-size:10px;text-align:center;color:#999"> &copy; ANAP<br>Ces contenus extraits de l\'ANAP sont diffus&eacute;s gratuitement.<br>Toutefois, leur utilisation ou citation est soumise &agrave; l\'inscription de la mention suivante : "&copy; ANAP"</p>'
-        );
+            'footer-html' => '<p style="font-size:10px;text-align:center;color:#999"> &copy; ANAP<br>Ces contenus extraits de l\'ANAP sont diffus&eacute;s gratuitement.<br>Toutefois, leur utilisation ou citation est soumise &agrave; l\'inscription de la mention suivante : "&copy; ANAP"</p>',
+        ];
 
         return $this->generator->getOutputFromHtml($html, $options);
     }
@@ -75,30 +75,31 @@ class RestitutionPdfGenerator
 
         $name = sprintf('%s - %s', $compare->getSynthesis()->getName(), $compare->getReference()->getName());
 
-        $options = array(
-            'encoding'         => 'UTF-8',
+        $options = [
+            'encoding' => 'UTF-8',
             'javascript-delay' => 1000,
-            'margin-top'       => '15',
-            'margin-bottom'    => '25',
-            'margin-right'     => '15',
-            'margin-left'      => '15',
-            'header-spacing'   => '5',
-            'header-left'      => date('d/m/Y'),
-            'header-right'     => 'Page [page] / [toPage]',
+            'margin-top' => '15',
+            'margin-bottom' => '25',
+            'margin-right' => '15',
+            'margin-left' => '15',
+            'header-spacing' => '5',
+            'header-left' => date('d/m/Y'),
+            'header-right' => 'Page [page] / [toPage]',
             'header-font-size' => '10',
-            'footer-spacing'   => '10',
+            'footer-spacing' => '10',
             'page-width' => '1024px',
             'header-left' => $this->wrapHeader("$name"),
-            'footer-html'      => '<p style="font-size:10px;text-align:center;color:#999"> &copy; ANAP<br>Ces contenus extraits de l\'ANAP sont diffus&eacute;s gratuitement.<br>Toutefois, leur utilisation ou citation est soumise &agrave; l\'inscription de la mention suivante : "&copy; ANAP"</p>'
-        );
+            'footer-html' => '<p style="font-size:10px;text-align:center;color:#999"> &copy; ANAP<br>Ces contenus extraits de l\'ANAP sont diffus&eacute;s gratuitement.<br>Toutefois, leur utilisation ou citation est soumise &agrave; l\'inscription de la mention suivante : "&copy; ANAP"</p>',
+        ];
 
         return $this->generator->getOutputFromHtml($html, $options);
     }
 
     /**
-     * Hack to prevent header text to sh*t page number
+     * Hack to prevent header text to sh*t page number.
      *
      * @param $text
+     *
      * @return string
      */
     private function wrapHeader($text)

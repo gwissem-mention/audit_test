@@ -1,15 +1,14 @@
 <?php
+
 namespace HopitalNumerique\AutodiagBundle\Service\Attribute\Builder;
 
-use HopitalNumerique\AutodiagBundle\Entity\Autodiag;
 use HopitalNumerique\AutodiagBundle\Entity\AutodiagEntry\Value;
 use HopitalNumerique\AutodiagBundle\Service\Attribute\AttributeBuilderInterface;
 use Symfony\Component\Security\Csrf\CsrfTokenManager;
 
 /**
- * Class AbstractBuilder
+ * Class AbstractBuilder.
  *
- * @package HopitalNumerique\AutodiagBundle\Service\Attribute\Builder
  * @author Emmanuel Da Fonseca <edafonseca@nodevo.com>
  */
 abstract class AbstractBuilder implements AttributeBuilderInterface

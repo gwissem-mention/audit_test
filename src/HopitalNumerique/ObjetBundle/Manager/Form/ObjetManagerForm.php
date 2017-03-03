@@ -4,6 +4,7 @@
  *
  * @author Guillaume Neveux <gneveux@nodevo.com>
  */
+
 namespace HopitalNumerique\ObjetBundle\Manager\Form;
 
 use HopitalNumerique\ObjetBundle\Manager\ObjetManager;
@@ -14,7 +15,7 @@ use HopitalNumerique\UserBundle\Manager\UserManager;
  */
 class ObjetManagerForm
 {
-  /**
+    /**
    * @var HopitalNumerique\ObjetBundle\Manager\ObjetManager
    */
   private $objetManager;
@@ -24,13 +25,12 @@ class ObjetManagerForm
    */
   private $userManager;
 
-  /**
-   * Constructeur du manager gérant les formulaires utilisateurs.
-   *
-   * @param \Symfony\Component\Security\Core\SecurityContext $securityContext SecurityContext de l'application
-   * @param \HopitalNumerique\UserBundle\Manager\UserManager $userManager Le manager de l'entité User
-   * @return void
-   */
+    /**
+     * Constructeur du manager gérant les formulaires utilisateurs.
+     *
+     * @param \Symfony\Component\Security\Core\SecurityContext $securityContext SecurityContext de l'application
+     * @param \HopitalNumerique\UserBundle\Manager\UserManager $userManager     Le manager de l'entité User
+     */
     public function __construct(ObjetManager $objetManager, UserManager $userManager)
     {
         $this->objetManager = $objetManager;
@@ -44,10 +44,11 @@ class ObjetManagerForm
      */
     public function getConcernesChoices()
     {
-        $referents = array();
+        $referents = [];
         $referents['Ambassadeurs'] = $this->userManager->getAmbassadeurs();
         $referents['Experts'] = $this->userManager->getExperts();
         asort($referents);
+
         return $referents;
     }
 }

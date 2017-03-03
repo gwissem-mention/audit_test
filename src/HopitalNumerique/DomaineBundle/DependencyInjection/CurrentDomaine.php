@@ -1,4 +1,5 @@
 <?php
+
 namespace HopitalNumerique\DomaineBundle\DependencyInjection;
 
 use HopitalNumerique\DomaineBundle\Manager\DomaineManager;
@@ -19,7 +20,6 @@ class CurrentDomaine
      */
     private $domaineManager;
 
-
     /**
      * Constructeur.
      */
@@ -28,7 +28,6 @@ class CurrentDomaine
         $this->session = $session;
         $this->domaineManager = $domaineManager;
     }
-
 
     /**
      * Retourne le domaine courant.

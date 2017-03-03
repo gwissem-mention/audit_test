@@ -21,10 +21,10 @@ class AllSessionGrid extends Grid implements GridInterface
     public function setConfig()
     {
         $this->setFunctionName('getAllDatasForGrid');
-        $this->setSource( 'hopitalnumerique_module.manager.session' );
-        $this->setSourceType( self::SOURCE_TYPE_MANAGER );
+        $this->setSource('hopitalnumerique_module.manager.session');
+        $this->setSourceType(self::SOURCE_TYPE_MANAGER);
         $this->setNoDataMessage('- Aucune session planifiée -');
-        $this->setDefaultFilters( array('archiver' => 'false') );
+        $this->setDefaultFilters(['archiver' => 'false']);
     }
 
     /**
@@ -32,89 +32,87 @@ class AllSessionGrid extends Grid implements GridInterface
      */
     public function setColumns()
     {
-        $etatArrays = array(
-            "Actif" => "Actif",
-            "Inactif" => "Inactif",
-            "Annulé" => "Annulé"
-        );
+        $etatArrays = [
+            'Actif' => 'Actif',
+            'Inactif' => 'Inactif',
+            'Annulé' => 'Annulé',
+        ];
 
         $moduleColumn = new Column\TextColumn('moduleTitre', 'Module');
-        $this->addColonne( $moduleColumn );
+        $this->addColonne($moduleColumn);
 
         $domaineColumn = new Column\TextColumn('domaineNom', 'Domaine(s) associé(s)');
-        $this->addColonne( $domaineColumn );
+        $this->addColonne($domaineColumn);
 
         $formateurColumn = new Column\TextColumn('formateur', 'Animateur');
-        $formateurColumn->setSize( 150 );
+        $formateurColumn->setSize(150);
         $formateurColumn->setFilterType('select');
-        $formateurColumn->setOperatorsVisible( false );
-        $formateurColumn->setDefaultOperator( \APY\DataGridBundle\Grid\Column\Column::OPERATOR_EQ );
-        $this->addColonne( $formateurColumn );
+        $formateurColumn->setOperatorsVisible(false);
+        $formateurColumn->setDefaultOperator(\APY\DataGridBundle\Grid\Column\Column::OPERATOR_EQ);
+        $this->addColonne($formateurColumn);
 
         $dateSessionColumn = new Column\DateColumn('dateSession', 'Date de début de la session');
-        $dateSessionColumn->setSize( 150 );
-        $this->addColonne( $dateSessionColumn );
+        $dateSessionColumn->setSize(150);
+        $this->addColonne($dateSessionColumn);
 
         $dureeColumn = new Column\TextColumn('duree', 'Durée de la session');
-        $this->addColonne( $dureeColumn );
+        $this->addColonne($dureeColumn);
 
         $horaireColumn = new Column\TextColumn('horaires', 'Horaires');
-        $this->addColonne( $horaireColumn );
+        $this->addColonne($horaireColumn);
 
         $nbInscritsColumn = new Column\TextColumn('nbInscrits', 'Nombres d\'inscrits');
-        $this->addColonne( $nbInscritsColumn );
+        $this->addColonne($nbInscritsColumn);
 
         $nbInscritsEnAttenteColumn = new Column\TextColumn('nbInscritsEnAttente', 'Nombres d\'inscrits en attente');
-        $this->addColonne( $nbInscritsEnAttenteColumn );
+        $this->addColonne($nbInscritsEnAttenteColumn);
 
         $nbInscritsColumn = new Column\TextColumn('placeRestantes', 'Nombres de places restantes');
-        $this->addColonne( $nbInscritsColumn );
+        $this->addColonne($nbInscritsColumn);
 
         $archiverColumn = new Column\BooleanColumn('archiver', 'Archivée');
-        $archiverColumn->setSize( 70 );
+        $archiverColumn->setSize(70);
         $archiverColumn->setFilterType('select');
-        $archiverColumn->setOperatorsVisible( false );
-        $archiverColumn->setDefaultOperator( \APY\DataGridBundle\Grid\Column\Column::OPERATOR_EQ );
-        $this->addColonne( $archiverColumn );
+        $archiverColumn->setOperatorsVisible(false);
+        $archiverColumn->setDefaultOperator(\APY\DataGridBundle\Grid\Column\Column::OPERATOR_EQ);
+        $this->addColonne($archiverColumn);
 
         $etatColumn = new Column\TextColumn('etat', 'Etat');
-        $etatColumn->setSize( 60 );
+        $etatColumn->setSize(60);
         $etatColumn->setFilterType('select');
-        $etatColumn->setOperatorsVisible( false );
-        $etatColumn->setSelectFrom("values");
+        $etatColumn->setOperatorsVisible(false);
+        $etatColumn->setSelectFrom('values');
         $etatColumn->setValues($etatArrays);
-        $etatColumn->setDefaultOperator( \APY\DataGridBundle\Grid\Column\Column::OPERATOR_EQ );
-        $this->addColonne( $etatColumn );
+        $etatColumn->setDefaultOperator(\APY\DataGridBundle\Grid\Column\Column::OPERATOR_EQ);
+        $this->addColonne($etatColumn);
 
         $dateOuvertureInscriptionColumn = new Column\DateColumn('dateOuvertureInscription', 'Date d\'ouverture des inscriptions');
         $dateOuvertureInscriptionColumn->setVisible(false);
         $dateOuvertureInscriptionColumn->setFilterable(false);
-        $this->addColonne( $dateOuvertureInscriptionColumn );
-         
+        $this->addColonne($dateOuvertureInscriptionColumn);
+
         $dateFermetureInscriptionColumn = new Column\DateColumn('dateFermetureInscription', 'Date de clôture des inscriptions');
         $dateFermetureInscriptionColumn->setVisible(false);
         $dateFermetureInscriptionColumn->setFilterable(false);
-        $this->addColonne( $dateFermetureInscriptionColumn );
-
+        $this->addColonne($dateFermetureInscriptionColumn);
     }
 
     /**
-     * Ajoute les boutons d'action
+     * Ajoute les boutons d'action.
      */
     public function setActionsButtons()
     {
-        $this->addActionButton( new Action\ShowButton( 'hopitalnumerique_module_module_session_show' ) );
+        $this->addActionButton(new Action\ShowButton('hopitalnumerique_module_module_session_show'));
 
         $actionListeInscrits = new Action\ShowButton('hopitalnumerique_module_module_session_inscription');
-        $actionListeInscrits->setAttributes( array(
-                'class'=>'btn btn-primary fa fa-users',
+        $actionListeInscrits->setAttributes([
+                'class' => 'btn btn-primary fa fa-users',
                 'title' => 'Afficher les inscrits',
-        ));
-        $this->addActionButton( $actionListeInscrits );
+        ]);
+        $this->addActionButton($actionListeInscrits);
 
-        $this->addActionButton( new Action\EditButton( 'hopitalnumerique_module_module_session_edit' ) );
+        $this->addActionButton(new Action\EditButton('hopitalnumerique_module_module_session_edit'));
         // $this->addActionButton( new Action\DeleteButton( 'hopitalnumerique_module_module_session_delete' ) );
-
     }
 
     /**
@@ -122,7 +120,7 @@ class AllSessionGrid extends Grid implements GridInterface
      */
     public function setMassActions()
     {
-        $this->addMassAction( new Action\ActionMass('Exporter les évaluations', 'HopitalNumeriqueModuleBundle:Back/Session:exportEvaluationsMass') );
-        $this->addMassAction( new Action\ActionMass('Supprimer', 'HopitalNumeriqueModuleBundle:Back/Session:deleteMass') );
+        $this->addMassAction(new Action\ActionMass('Exporter les évaluations', 'HopitalNumeriqueModuleBundle:Back/Session:exportEvaluationsMass'));
+        $this->addMassAction(new Action\ActionMass('Supprimer', 'HopitalNumeriqueModuleBundle:Back/Session:deleteMass'));
     }
 }

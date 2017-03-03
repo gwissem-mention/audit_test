@@ -5,7 +5,7 @@ namespace HopitalNumerique\ObjetBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * Commentaire
+ * Commentaire.
  *
  * @ORM\Table(name="hn_objet_commentaire")
  * @ORM\Entity(repositoryClass="HopitalNumerique\ObjetBundle\Repository\CommentaireRepository")
@@ -13,7 +13,7 @@ use Doctrine\ORM\Mapping as ORM;
 class Commentaire
 {
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="comm_id", type="integer")
      * @ORM\Id
@@ -36,22 +36,22 @@ class Commentaire
     protected $texte;
 
     /**
-     * @var boolean
+     * @var bool
      *
      * @ORM\Column(name="comm_publier", type="boolean")
      */
     protected $publier;
-    
+
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\ManyToOne(targetEntity="Objet", inversedBy="listeCommentaires")
      * @ORM\JoinColumn(name="obj_id", referencedColumnName="obj_id", onDelete="CASCADE")
      */
     protected $objet;
-    
+
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\ManyToOne(targetEntity="Contenu", inversedBy="listeCommentaires")
      * @ORM\JoinColumn(name="con_id", referencedColumnName="con_id", onDelete="CASCADE", nullable=true)
@@ -59,18 +59,17 @@ class Commentaire
     protected $contenu;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\ManyToOne(targetEntity="\HopitalNumerique\UserBundle\Entity\User")
      * @ORM\JoinColumn(name="usr_user", referencedColumnName="usr_id", onDelete="CASCADE")
      */
     protected $user;
 
-
     /**
-     * Get id
+     * Get id.
      *
-     * @return integer 
+     * @return int
      */
     public function getId()
     {
@@ -78,9 +77,10 @@ class Commentaire
     }
 
     /**
-     * Set dateCreation
+     * Set dateCreation.
      *
      * @param \DateTime $dateCreation
+     *
      * @return Commentaire
      */
     public function setDateCreation($dateCreation)
@@ -91,9 +91,9 @@ class Commentaire
     }
 
     /**
-     * Get dateCreation
+     * Get dateCreation.
      *
-     * @return \DateTime 
+     * @return \DateTime
      */
     public function getDateCreation()
     {
@@ -101,9 +101,9 @@ class Commentaire
     }
 
     /**
-     * Get dateCreation
+     * Get dateCreation.
      *
-     * @return String 
+     * @return string
      */
     public function getDateCreationString()
     {
@@ -111,9 +111,10 @@ class Commentaire
     }
 
     /**
-     * Set texte
+     * Set texte.
      *
      * @param string $texte
+     *
      * @return Commentaire
      */
     public function setTexte($texte)
@@ -124,9 +125,9 @@ class Commentaire
     }
 
     /**
-     * Get texte
+     * Get texte.
      *
-     * @return string 
+     * @return string
      */
     public function getTexte()
     {
@@ -134,9 +135,10 @@ class Commentaire
     }
 
     /**
-     * Set publier
+     * Set publier.
      *
-     * @param boolean $publier
+     * @param bool $publier
+     *
      * @return Commentaire
      */
     public function setPublier($publier)
@@ -147,17 +149,17 @@ class Commentaire
     }
 
     /**
-     * Get publier
+     * Get publier.
      *
-     * @return boolean 
+     * @return bool
      */
     public function getPublier()
     {
         return $this->publier;
     }
-    
+
     /**
-     * Get objet
+     * Get objet.
      *
      * @return Objet $objet
      */
@@ -165,9 +167,9 @@ class Commentaire
     {
         return $this->objet;
     }
-    
+
     /**
-     * Set objet
+     * Set objet.
      *
      * @param Objet $objet
      */
@@ -175,9 +177,9 @@ class Commentaire
     {
         $this->objet = $objet;
     }
-    
+
     /**
-     * Get contenu
+     * Get contenu.
      *
      * @return \HopitalNumerique\ObjetBundle\Entity\Contenu $contenu
      */
@@ -185,9 +187,9 @@ class Commentaire
     {
         return $this->contenu;
     }
-    
+
     /**
-     * Set contenu
+     * Set contenu.
      *
      * @param \HopitalNumerique\ObjetBundle\Entity\Contenu $contenu
      */
@@ -197,20 +199,21 @@ class Commentaire
     }
 
     /**
-     * Set user
+     * Set user.
      *
      * @param \HopitalNumerique\UserBundle\Entity\User $user
+     *
      * @return Reponse
      */
     public function setUser(\HopitalNumerique\UserBundle\Entity\User $user = null)
     {
         $this->user = $user;
-    
+
         return $this;
     }
-    
+
     /**
-     * Get user
+     * Get user.
      *
      * @return \HopitalNumerique\UserBundle\Entity\User
      */

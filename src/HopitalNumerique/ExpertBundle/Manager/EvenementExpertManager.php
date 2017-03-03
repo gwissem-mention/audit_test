@@ -12,13 +12,12 @@ class EvenementExpertManager extends BaseManager
     protected $class = 'HopitalNumerique\ExpertBundle\Entity\EvenementExpert';
 
     /**
-     * Override : Récupère les données pour le grid sous forme de tableau
+     * Override : Récupère les données pour le grid sous forme de tableau.
      *
      * @return array
      */
-    public function getDatasForGrid( \StdClass $condition = null )
+    public function getDatasForGrid(\StdClass $condition = null)
     {
-        return $this->getRepository()->getDatasForGrid( $condition )->getQuery()->getResult();
-
+        return $this->getRepository()->getDatasForGrid($condition)->getQuery()->getResult();
     }
 }

@@ -1,4 +1,5 @@
 <?php
+
 namespace HopitalNumerique\ReferenceBundle\Doctrine\Referencement;
 
 use HopitalNumerique\DomaineBundle\Entity\Domaine;
@@ -20,7 +21,6 @@ class NoteReader
      */
     private $entityHasNoteManager;
 
-
     /**
      * Constructeur.
      */
@@ -30,12 +30,12 @@ class NoteReader
         $this->entityHasNoteManager = $entityHasNoteManager;
     }
 
-
     /**
      * Retourne la note telle qu'elle peut être affichée.
      *
      * @param object                                         $entity  Entité
      * @param \HopitalNumerique\DomaineBundle\Entity\Domaine $domaine Domaine
+     *
      * @return string Note
      */
     public function getNoteByEntityAndDomaineForAffichage($entity, Domaine $domaine)
@@ -49,9 +49,10 @@ class NoteReader
     /**
      * Retourne la note telle qu'elle peut être affichée.
      *
-     * @param integer                                        $entityType Type d'entité
-     * @param integer                                        $entityId   ID d'entité
+     * @param int                                            $entityType Type d'entité
+     * @param int                                            $entityId   ID d'entité
      * @param \HopitalNumerique\DomaineBundle\Entity\Domaine $domaine    Domaine
+     *
      * @return string Note
      */
     private function getNoteByEntityTypeAndEntityIdAndDomaineForAffichage($entityType, $entityId, Domaine $domaine)
@@ -59,9 +60,9 @@ class NoteReader
         $entityHasNote = $this->entityHasNoteManager->findOneBy([
             'entityType' => $entityType,
             'entityId' => $entityId,
-            'domaine' => $domaine
+            'domaine' => $domaine,
         ]);
 
-        return (null !== $entityHasNote ? intval($entityHasNote->getNote()) : '-');
+        return null !== $entityHasNote ? intval($entityHasNote->getNote()) : '-';
     }
 }

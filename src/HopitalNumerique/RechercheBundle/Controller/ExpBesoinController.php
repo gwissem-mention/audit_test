@@ -7,7 +7,6 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-
 use HopitalNumerique\RechercheBundle\Entity\ExpBesoin;
 use HopitalNumerique\RechercheBundle\Entity\ExpBesoinGestion;
 
@@ -15,12 +14,12 @@ class ExpBesoinController extends Controller
 {
     public function indexAction(ExpBesoinGestion $expBesoinGestion)
     {
-        $expBesoins = $this->get('hopitalnumerique_recherche.manager.expbesoin')->findBy(array('expBesoinGestion' => $expBesoinGestion), array('order' => 'ASC'));
+        $expBesoins = $this->get('hopitalnumerique_recherche.manager.expbesoin')->findBy(['expBesoinGestion' => $expBesoinGestion], ['order' => 'ASC']);
 
-        return $this->render('HopitalNumeriqueRechercheBundle:ExpBesoin:index.html.twig', array(
-                'expBesoins'       => $expBesoins,
-                'expBesoinGestion' => $expBesoinGestion
-            ));
+        return $this->render('HopitalNumeriqueRechercheBundle:ExpBesoin:index.html.twig', [
+                'expBesoins' => $expBesoins,
+                'expBesoinGestion' => $expBesoinGestion,
+            ]);
     }
 
     /**
@@ -51,75 +50,73 @@ class ExpBesoinController extends Controller
 
         return $this->render('HopitalNumeriqueRechercheBundle:ExpBesoin:edit.html.twig', [
             'form' => $form->createView(),
-            'expBesoin' => $expBesoin
+            'expBesoin' => $expBesoin,
         ]);
     }
 
-    public function addQuestionAction(Request $request, ExpBesoinGestion $expBesoinGestion )
+    public function addQuestionAction(Request $request, ExpBesoinGestion $expBesoinGestion)
     {
         //créer un question
         $question = $this->get('hopitalnumerique_recherche.manager.expbesoin')->createEmpty();
 
         //Calcul de l'ordre
         $order = $this->get('hopitalnumerique_recherche.manager.expbesoin')->countQuestions() + 1;
-        $titre = trim($request->request->get('titre')) ? : 'Question '.$order;
+        $titre = trim($request->request->get('titre')) ?: 'Question ' . $order;
 
-        $question->setOrder( $order );
-        $question->setLibelle( $titre );
+        $question->setOrder($order);
+        $question->setLibelle($titre);
         $question->setExpBesoinGestion($expBesoinGestion);
 
         //save
-        $this->get('hopitalnumerique_recherche.manager.expbesoin')->save( $question );
+        $this->get('hopitalnumerique_recherche.manager.expbesoin')->save($question);
 
-        return $this->render('HopitalNumeriqueRechercheBundle:ExpBesoin:add.html.twig', array(
-            'expBesoin' => $question
-        ));
+        return $this->render('HopitalNumeriqueRechercheBundle:ExpBesoin:add.html.twig', [
+            'expBesoin' => $question,
+        ]);
     }
 
-
-    public function descriptionAction( $id )
+    public function descriptionAction($id)
     {
-        $expBesoin  = $this->get('hopitalnumerique_recherche.manager.expbesoin')->findOneBy(array('id' => $id));
+        $expBesoin = $this->get('hopitalnumerique_recherche.manager.expbesoin')->findOneBy(['id' => $id]);
 
-        return $this->render('HopitalNumeriqueRechercheBundle:ExpBesoin:addDescription.html.twig', array(
-            'expBesoin'      => $expBesoin
-        ));
+        return $this->render('HopitalNumeriqueRechercheBundle:ExpBesoin:addDescription.html.twig', [
+            'expBesoin' => $expBesoin,
+        ]);
     }
-
 
     public function descriptionSaveAction(Request $request)
     {
         //Calcul de l'ordre
-        $id          = $request->request->get('id');
+        $id = $request->request->get('id');
         $description = $request->request->get('description');
 
-        $expBesoin  = $this->get('hopitalnumerique_recherche.manager.expbesoin')->findOneBy(array('id' => $id));
+        $expBesoin = $this->get('hopitalnumerique_recherche.manager.expbesoin')->findOneBy(['id' => $id]);
 
-        $expBesoin->setDescription( $description );
+        $expBesoin->setDescription($description);
 
         //save
-        $this->get('hopitalnumerique_recherche.manager.expbesoin')->save( $expBesoin );
+        $this->get('hopitalnumerique_recherche.manager.expbesoin')->save($expBesoin);
 
         return new Response('{"success":true}', 200);
     }
 
     /**
-     * Edite une question
+     * Edite une question.
      */
     public function editQuestionAction(Request $request)
     {
         $idExpBesoin = $request->request->get('id');
         //créer un question
-        $expBesoin = $this->get('hopitalnumerique_recherche.manager.expbesoin')->findOneBy(array('id' => $idExpBesoin));
+        $expBesoin = $this->get('hopitalnumerique_recherche.manager.expbesoin')->findOneBy(['id' => $idExpBesoin]);
 
-        $expBesoin->setLibelle( trim($request->request->get('titre')) ? : 'Question '.$order );
+        $expBesoin->setLibelle(trim($request->request->get('titre')) ?: 'Question ' . $order);
 
         //save
-        $this->get('hopitalnumerique_recherche.manager.expbesoin')->save( $expBesoin );
+        $this->get('hopitalnumerique_recherche.manager.expbesoin')->save($expBesoin);
 
-        return $this->render('HopitalNumeriqueRechercheBundle:ExpBesoin:add.html.twig', array(
-            'expBesoin' => $expBesoin
-        ));
+        return $this->render('HopitalNumeriqueRechercheBundle:ExpBesoin:add.html.twig', [
+            'expBesoin' => $expBesoin,
+        ]);
     }
 
     /**
@@ -127,16 +124,16 @@ class ExpBesoinController extends Controller
      *
      * METHOD = POST|DELETE
      */
-    public function deleteAction( ExpBesoin $expBesoin )
+    public function deleteAction(ExpBesoin $expBesoin)
     {
         //delete
-        $this->get('hopitalnumerique_recherche.manager.expbesoin')->delete( $expBesoin );
+        $this->get('hopitalnumerique_recherche.manager.expbesoin')->delete($expBesoin);
 
         return new Response('{"success":true}', 200);
     }
 
     /**
-     * Met à jour l'ordre des différentes questions
+     * Met à jour l'ordre des différentes questions.
      */
     public function reorderAction()
     {
@@ -144,7 +141,7 @@ class ExpBesoinController extends Controller
         $datas = $this->get('request')->request->get('datas');
 
         //execute reorder
-        $this->get('hopitalnumerique_recherche.manager.expbesoin')->reorder( $datas );
+        $this->get('hopitalnumerique_recherche.manager.expbesoin')->reorder($datas);
         $this->getDoctrine()->getManager()->flush();
 
         return new Response('{"success":true}', 200);
@@ -157,7 +154,7 @@ class ExpBesoinController extends Controller
     {
         $entityHasReferences = $this->container->get('hopitalnumerique_reference.manager.entity_has_reference')->findBy([
             'entityId' => $request->request->getInt('id'),
-            'entityType' => Entity::ENTITY_TYPE_EXPRESSION_BESOIN_REPONSE
+            'entityType' => Entity::ENTITY_TYPE_EXPRESSION_BESOIN_REPONSE,
         ]);
 
         $referenceIds = [];
@@ -171,35 +168,35 @@ class ExpBesoinController extends Controller
         return new JsonResponse(['success' => true]);
     }
 
-
     //**********************
     //**** FRONT OFFICE ****
     //**********************
 
     /**
-     * POPIN : Recherche en Front de l'aide à l'expression du besoin
+     * POPIN : Recherche en Front de l'aide à l'expression du besoin.
      */
     public function rechercheAction(ExpBesoinGestion $expBesoinGestion)
     {
-        $expBesoins = $this->get('hopitalnumerique_recherche.manager.expbesoin')->findBy(array('expBesoinGestion' => $expBesoinGestion), array('order' => 'ASC'));
+        $expBesoins = $this->get('hopitalnumerique_recherche.manager.expbesoin')->findBy(['expBesoinGestion' => $expBesoinGestion], ['order' => 'ASC']);
         $reponses = $this->get('hopitalnumerique_recherche.manager.expbesoinreponses')->getAllReponsesInArrayById();
 
-        return $this->render( 'HopitalNumeriqueRechercheBundle:ExpBesoin:Fancy/fancy_front.html.twig' , array(
+        return $this->render('HopitalNumeriqueRechercheBundle:ExpBesoin:Fancy/fancy_front.html.twig', [
             'expBesoins' => $expBesoins,
-            'reponses'   => $reponses
-        ));
+            'reponses' => $reponses,
+        ]);
     }
+
     /**
-     * POPIN : Recherche en Front de l'aide à l'expression du besoin
+     * POPIN : Recherche en Front de l'aide à l'expression du besoin.
      */
     public function rechercheNoPopinAction(ExpBesoinGestion $expBesoinGestion)
     {
-        $expBesoins = $this->get('hopitalnumerique_recherche.manager.expbesoin')->findBy(array('expBesoinGestion' => $expBesoinGestion), array('order' => 'ASC'));
+        $expBesoins = $this->get('hopitalnumerique_recherche.manager.expbesoin')->findBy(['expBesoinGestion' => $expBesoinGestion], ['order' => 'ASC']);
         $reponses = $this->get('hopitalnumerique_recherche.manager.expbesoinreponses')->getAllReponsesInArrayById();
 
-        return $this->render( 'HopitalNumeriqueRechercheBundle:ExpBesoin:Fancy/nopoppin_front.html.twig' , array(
+        return $this->render('HopitalNumeriqueRechercheBundle:ExpBesoin:Fancy/nopoppin_front.html.twig', [
             'expBesoins' => $expBesoins,
-            'reponses'   => $reponses
-        ));
+            'reponses' => $reponses,
+        ]);
     }
 }

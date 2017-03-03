@@ -9,7 +9,7 @@ use HopitalNumerique\ReferenceBundle\Entity\Reference;
 use HopitalNumerique\UserBundle\Entity\User;
 
 /**
- * StatRecherche
+ * StatRecherche.
  *
  * @ORM\Table(name="hn_statistiques_recherche")
  * @ORM\Entity(repositoryClass="HopitalNumerique\StatBundle\Repository\StatRechercheRepository")
@@ -17,7 +17,7 @@ use HopitalNumerique\UserBundle\Entity\User;
 class StatRecherche
 {
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="stat_id", type="integer")
      * @ORM\Id
@@ -33,7 +33,7 @@ class StatRecherche
     protected $date;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="stat_nombre_resultat", type="smallint", options = {"comment" = "Nombre de résultat"})
      */
@@ -47,14 +47,14 @@ class StatRecherche
     protected $requete;
 
     /**
-     * @var boolean
+     * @var bool
      *
      * @ORM\Column(name="stat_is_requete_saved", type="boolean", options = {"comment" = "Viens d une requete enregistrée en base ?"})
      */
     protected $isRequeteSaved;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\ManyToMany(targetEntity="\HopitalNumerique\ReferenceBundle\Entity\Reference")
      * @ORM\JoinTable(name="hn_statistiques_recherche_requete",
@@ -85,9 +85,9 @@ class StatRecherche
      * @ORM\Column(name="stat_session_id", type="text", nullable=true)
      */
     protected $sessionId;
-    
+
     /**
-     * Constructor
+     * Constructor.
      */
     public function __construct()
     {
@@ -95,9 +95,9 @@ class StatRecherche
     }
 
     /**
-     * Get id
+     * Get id.
      *
-     * @return integer
+     * @return int
      */
     public function getId()
     {
@@ -105,9 +105,10 @@ class StatRecherche
     }
 
     /**
-     * Set date
+     * Set date.
      *
      * @param \DateTime $date
+     *
      * @return StatRecherche
      */
     public function setDate($date)
@@ -118,7 +119,7 @@ class StatRecherche
     }
 
     /**
-     * Get date
+     * Get date.
      *
      * @return \DateTime
      */
@@ -128,9 +129,10 @@ class StatRecherche
     }
 
     /**
-     * Add references
+     * Add references.
      *
      * @param Reference $references
+     *
      * @return StatRecherche
      */
     public function addReference(Reference $references)
@@ -141,7 +143,7 @@ class StatRecherche
     }
 
     /**
-     * Remove references
+     * Remove references.
      *
      * @param Reference $references
      */
@@ -151,7 +153,7 @@ class StatRecherche
     }
 
     /**
-     * Get references
+     * Get references.
      *
      * @return Collection
      */
@@ -161,7 +163,7 @@ class StatRecherche
     }
 
     /**
-     * Set references
+     * Set references.
      *
      * @param Reference[] $references
      *
@@ -175,7 +177,7 @@ class StatRecherche
     }
 
     /**
-     * Set user
+     * Set user.
      *
      * @param User $user
      *
@@ -189,7 +191,7 @@ class StatRecherche
     }
 
     /**
-     * Get user
+     * Get user.
      *
      * @return User
      */
@@ -199,9 +201,10 @@ class StatRecherche
     }
 
     /**
-     * Set nbResultats
+     * Set nbResultats.
      *
-     * @param integer $nbResultats
+     * @param int $nbResultats
+     *
      * @return StatRecherche
      */
     public function setNbResultats($nbResultats)
@@ -212,9 +215,9 @@ class StatRecherche
     }
 
     /**
-     * Get nbResultats
+     * Get nbResultats.
      *
-     * @return integer
+     * @return int
      */
     public function getNbResultats()
     {
@@ -222,9 +225,10 @@ class StatRecherche
     }
 
     /**
-     * Set requete
+     * Set requete.
      *
      * @param string $requete
+     *
      * @return StatRecherche
      */
     public function setRequete($requete)
@@ -235,7 +239,7 @@ class StatRecherche
     }
 
     /**
-     * Get requete
+     * Get requete.
      *
      * @return string
      */
@@ -245,9 +249,10 @@ class StatRecherche
     }
 
     /**
-     * Set isRequeteSaved
+     * Set isRequeteSaved.
      *
-     * @param boolean $isRequeteSaved
+     * @param bool $isRequeteSaved
+     *
      * @return StatRecherche
      */
     public function setIsRequeteSaved($isRequeteSaved)
@@ -258,9 +263,9 @@ class StatRecherche
     }
 
     /**
-     * Get isRequeteSaved
+     * Get isRequeteSaved.
      *
-     * @return boolean
+     * @return bool
      */
     public function getIsRequeteSaved()
     {
@@ -268,9 +273,10 @@ class StatRecherche
     }
 
     /**
-     * Set categPointDur
+     * Set categPointDur.
      *
      * @param string $categPointDur
+     *
      * @return StatRecherche
      */
     public function setCategPointDur($categPointDur)
@@ -281,7 +287,7 @@ class StatRecherche
     }
 
     /**
-     * Get categPointDur
+     * Get categPointDur.
      *
      * @return string
      */
@@ -289,9 +295,9 @@ class StatRecherche
     {
         return $this->categPointDur;
     }
-    
+
     /**
-     * Set sessionId
+     * Set sessionId.
      *
      * @param string $sessionId
      *
@@ -303,9 +309,9 @@ class StatRecherche
 
         return $this;
     }
-    
+
     /**
-     * Get sessionId
+     * Get sessionId.
      *
      * @return string
      */

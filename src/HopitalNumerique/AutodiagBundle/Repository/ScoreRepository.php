@@ -5,7 +5,6 @@ namespace HopitalNumerique\AutodiagBundle\Repository;
 use Doctrine\ORM\AbstractQuery;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\Query\Expr\Join;
-use HopitalNumerique\AutodiagBundle\Entity\Autodiag\Attribute;
 use HopitalNumerique\AutodiagBundle\Entity\Autodiag\Container;
 use HopitalNumerique\AutodiagBundle\Entity\Synthesis;
 
@@ -39,6 +38,7 @@ class ScoreRepository extends EntityRepository
                 'max' => $score['max_score'],
             ];
         }
+
         return $data;
     }
 
@@ -50,13 +50,15 @@ class ScoreRepository extends EntityRepository
             ->where('score.synthesis = :synthesis_id')
             ->setParameter('synthesis_id', $synthesisId)
         ;
+
         return $qb;
     }
 
     /**
-     * Get score for references
+     * Get score for references.
      *
      * @param Container $container
+     *
      * @return array
      */
     public function getReferenceScores(Container $container)

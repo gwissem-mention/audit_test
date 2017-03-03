@@ -1,11 +1,12 @@
 <?php
+
 namespace HopitalNumerique\ExpertBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 
 /**
- * CourrielRegistre
+ * CourrielRegistre.
  *
  * @ORM\Table(name="hn_expert_activite_courriel_registre")
  * @ORM\Entity()
@@ -13,18 +14,17 @@ use Gedmo\Mapping\Annotation as Gedmo;
 class CourrielRegistre
 {
     /**
-     * Numéro du type contrat
+     * Numéro du type contrat.
      */
     const TYPE_CONTRAT = 1;
 
     /**
-     * Numéro du type paiement
+     * Numéro du type paiement.
      */
     const TYPE_PAIEMENT = 2;
 
-
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="coreg_id", type="integer", options={"unsigned"=true})
      * @ORM\Id()
@@ -48,7 +48,7 @@ class CourrielRegistre
     private $user;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="coreg_type_id", type="smallint", nullable=false, options={"unsigned"=true, "comment"="1=contrat,2=paiement"})
      */
@@ -62,11 +62,10 @@ class CourrielRegistre
      */
     private $dateCreation;
 
-
     /**
-     * Get id
+     * Get id.
      *
-     * @return integer
+     * @return int
      */
     public function getId()
     {
@@ -74,7 +73,7 @@ class CourrielRegistre
     }
 
     /**
-     * Set destinataire
+     * Set destinataire.
      *
      * @param string $destinataire
      *
@@ -88,7 +87,7 @@ class CourrielRegistre
     }
 
     /**
-     * Get destinataire
+     * Get destinataire.
      *
      * @return string
      */
@@ -98,7 +97,7 @@ class CourrielRegistre
     }
 
     /**
-     * Set user
+     * Set user.
      *
      * @param \HopitalNumerique\UserBundle\Entity\User $user
      *
@@ -112,7 +111,7 @@ class CourrielRegistre
     }
 
     /**
-     * Get user
+     * Get user.
      *
      * @return \HopitalNumerique\UserBundle\Entity\User
      */
@@ -122,9 +121,9 @@ class CourrielRegistre
     }
 
     /**
-     * Set type
+     * Set type.
      *
-     * @param integer $type
+     * @param int $type
      *
      * @return CourrielRegistre
      */
@@ -136,9 +135,9 @@ class CourrielRegistre
     }
 
     /**
-     * Get type
+     * Get type.
      *
-     * @return integer
+     * @return int
      */
     public function getType()
     {
@@ -146,7 +145,7 @@ class CourrielRegistre
     }
 
     /**
-     * Set dateCreation
+     * Set dateCreation.
      *
      * @param \DateTime $dateCreation
      *
@@ -160,7 +159,7 @@ class CourrielRegistre
     }
 
     /**
-     * Get dateCreation
+     * Get dateCreation.
      *
      * @return \DateTime
      */

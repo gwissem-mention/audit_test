@@ -2,7 +2,6 @@
 
 namespace Nodevo\TexteDynamiqueBundle\Grid;
 
-use APY\DataGridBundle\Grid\Action\DeleteMassAction;
 use Nodevo\GridBundle\Grid\Grid;
 use Nodevo\GridBundle\Grid\GridInterface;
 use Nodevo\GridBundle\Grid\Column;
@@ -44,14 +43,13 @@ class CodeGrid extends Grid implements GridInterface
     }
 
     /**
-     * Ajoute les boutons d'action
+     * Ajoute les boutons d'action.
      */
     public function setActionsButtons()
     {
         $this->addActionButton(
             new Action\EditButton('nodevo_textedynamique_code_edit')
         );
-
     }
 
     /**

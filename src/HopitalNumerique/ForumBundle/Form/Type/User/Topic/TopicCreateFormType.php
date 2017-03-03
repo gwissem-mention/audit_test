@@ -18,27 +18,20 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
 /**
- *
  * @category CCDNForum
- * @package  ForumBundle
  *
  * @author   Gaëtan MELCHILSEN
  * @license  Nodevo
- *
  */
 class TopicCreateFormType extends AbstractType
 {
     /**
-     *
-     * @access protected
-     * @var string $topicClass
+     * @var string
      */
     protected $topicClass;
 
     /**
-     *
-     * @access public
-     * @var string $topicClass
+     * @var string
      */
     public function __construct($topicClass)
     {
@@ -46,55 +39,49 @@ class TopicCreateFormType extends AbstractType
     }
 
     /**
-     *
-     * @access public
      * @param FormBuilderInterface $builder, array $options
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
             ->add('board', 'entity',
-                array(
-                    'property'           => 'name',
-                    'class'              => 'CCDNForumForumBundle:Board',
-                    'choices'            => $options['boards'],
-                    'label'              => 'board.label',
+                [
+                    'property' => 'name',
+                    'class' => 'CCDNForumForumBundle:Board',
+                    'choices' => $options['boards'],
+                    'label' => 'board.label',
                     'translation_domain' => 'CCDNForumForumBundle',
-                )
+                ]
             )
             ->add('title', null,
-                array(
-                    'label'              => 'topic.title-label',
+                [
+                    'label' => 'topic.title-label',
                     'translation_domain' => 'CCDNForumForumBundle',
-                    'attr'               => array(
-                        'class' => 'validate[required,maxSize[255]]'
-                    )
-                )
+                    'attr' => [
+                        'class' => 'validate[required,maxSize[255]]',
+                    ],
+                ]
             )
         ;
     }
 
     /**
-     *
-     * @access public
      * @param \Symfony\Component\OptionsResolver\OptionsResolverInterface $resolver
      */
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
-        $resolver->setDefaults(array(
-            'data_class'         => $this->topicClass,
-            'csrf_protection'    => true,
-            'csrf_field_name'    => '_token',
+        $resolver->setDefaults([
+            'data_class' => $this->topicClass,
+            'csrf_protection' => true,
+            'csrf_field_name' => '_token',
             // a unique key to help generate the secret token
-            'intention'          => 'forum_topic_create_item',
-            'validation_groups'  => array('forum_topic_custom', 'forum_post_create'),
-            'boards'             => array(),
-        ));
+            'intention' => 'forum_topic_create_item',
+            'validation_groups' => ['forum_topic_custom', 'forum_post_create'],
+            'boards' => [],
+        ]);
     }
 
     /**
-     *
-     * @access public
      * @return string
      */
     public function getName()

@@ -15,10 +15,9 @@ class RechercheParcoursGestionManager extends BaseManager
     protected $_userManager;
 
     /**
-     * Constructeur du manager gérant les références
+     * Constructeur du manager gérant les références.
      *
      * @param \Doctrine\ORM\EntityManager $entityManager EntityManager
-     * @return void
      */
     public function __construct(EntityManager $entityManager, UserManager $userManager)
     {
@@ -28,27 +27,23 @@ class RechercheParcoursGestionManager extends BaseManager
     }
 
     /**
-     * Override : Récupère les données pour le grid sous forme de tableau
+     * Override : Récupère les données pour le grid sous forme de tableau.
      *
      * @return array
      */
-    public function getDatasForGrid( \StdClass $condition = null )
+    public function getDatasForGrid(\StdClass $condition = null)
     {
-        $rechercheParcoursGestionsForGrid = array();
+        $rechercheParcoursGestionsForGrid = [];
 
         $domainesIds = $this->_userManager->getUserConnected()->getDomainesId();
 
-        $rechercheParcoursGestions = $this->getRepository()->getDatasForGrid( $domainesIds, $condition )->getQuery()->getResult();
+        $rechercheParcoursGestions = $this->getRepository()->getDatasForGrid($domainesIds, $condition)->getQuery()->getResult();
 
-        foreach ($rechercheParcoursGestions as $rechercheParcoursGestion) 
-        {
-            if(!array_key_exists($rechercheParcoursGestion['id'], $rechercheParcoursGestionsForGrid))
-            {
+        foreach ($rechercheParcoursGestions as $rechercheParcoursGestion) {
+            if (!array_key_exists($rechercheParcoursGestion['id'], $rechercheParcoursGestionsForGrid)) {
                 $rechercheParcoursGestionsForGrid[$rechercheParcoursGestion['id']] = $rechercheParcoursGestion;
-            }
-            else
-            {
-                $rechercheParcoursGestionsForGrid[$rechercheParcoursGestion['id']]['domaineNom'] .= ";" . $rechercheParcoursGestion['domaineNom'];
+            } else {
+                $rechercheParcoursGestionsForGrid[$rechercheParcoursGestion['id']]['domaineNom'] .= ';' . $rechercheParcoursGestion['domaineNom'];
             }
         }
 

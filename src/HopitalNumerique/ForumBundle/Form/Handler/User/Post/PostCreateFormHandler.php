@@ -6,19 +6,14 @@ use CCDNForum\ForumBundle\Component\Dispatcher\ForumEvents;
 use CCDNForum\ForumBundle\Component\Dispatcher\Event\UserPostEvent;
 use CCDNForum\ForumBundle\Component\Dispatcher\Event\UserTopicEvent;
 use CCDNForum\ForumBundle\Entity\Post;
-
 use CCDNForum\ForumBundle\Form\Handler\User\Post\PostCreateFormHandler as BaseHandler;
 
 /**
- *Surcharge pour ajouter des events
- *
+ *Surcharge pour ajouter des events.
  */
 class PostCreateFormHandler extends BaseHandler
 {
     /**
-     *
-     * 
-     * @access protected
      * @param \HopitalNumerique\ForumBundle\Entity\Post $post
      */
     protected function onSuccess(Post $post)

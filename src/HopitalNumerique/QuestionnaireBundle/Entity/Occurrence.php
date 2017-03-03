@@ -1,4 +1,5 @@
 <?php
+
 namespace HopitalNumerique\QuestionnaireBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
@@ -13,14 +14,14 @@ use Symfony\Component\Validator\Constraints as Assert;
 class Occurrence
 {
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="occ_id", type="integer", options={"unsigned"="true"})
      * @ORM\Id()
      * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $id;
-    
+
     /**
      * @var string
      *
@@ -28,15 +29,15 @@ class Occurrence
      * @Assert\NotBlank()
      */
     private $libelle;
-    
+
     /**
      * @var \HopitalNumerique\QuestionnaireBundle\Entity\Questionnaire
-     * 
+     *
      * @ORM\ManyToOne(targetEntity="Questionnaire", inversedBy="occurrences")
      * @ORM\JoinColumn(name="qst_id", referencedColumnName="qst_id", nullable=false, onDelete="CASCADE")
      */
     private $questionnaire;
-    
+
     /**
      * @var \HopitalNumerique\UserBundle\Entity\User
      *
@@ -44,28 +45,26 @@ class Occurrence
      * @ORM\JoinColumn(name="usr_id", referencedColumnName="usr_id", nullable=false, onDelete="CASCADE")
      */
     private $user;
-    
+
     /**
      * @var \Doctrine\Common\Collections\ArrayCollection
-     * 
+     *
      * @ORM\OneToMany(targetEntity="Reponse", mappedBy="occurrence")
      */
     private $reponses;
 
-
     /**
-     * Constructor
+     * Constructor.
      */
     public function __construct()
     {
         $this->reponses = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
-
     /**
-     * Get id
+     * Get id.
      *
-     * @return integer 
+     * @return int
      */
     public function getId()
     {
@@ -73,9 +72,10 @@ class Occurrence
     }
 
     /**
-     * Set libelle
+     * Set libelle.
      *
      * @param string $libelle
+     *
      * @return Occurrence
      */
     public function setLibelle($libelle)
@@ -86,9 +86,9 @@ class Occurrence
     }
 
     /**
-     * Get libelle
+     * Get libelle.
      *
-     * @return string 
+     * @return string
      */
     public function getLibelle()
     {
@@ -96,9 +96,10 @@ class Occurrence
     }
 
     /**
-     * Set questionnaire
+     * Set questionnaire.
      *
      * @param \HopitalNumerique\QuestionnaireBundle\Entity\Questionnaire $questionnaire
+     *
      * @return Occurrence
      */
     public function setQuestionnaire(\HopitalNumerique\QuestionnaireBundle\Entity\Questionnaire $questionnaire)
@@ -109,9 +110,9 @@ class Occurrence
     }
 
     /**
-     * Get questionnaire
+     * Get questionnaire.
      *
-     * @return \HopitalNumerique\QuestionnaireBundle\Entity\Questionnaire 
+     * @return \HopitalNumerique\QuestionnaireBundle\Entity\Questionnaire
      */
     public function getQuestionnaire()
     {
@@ -119,9 +120,10 @@ class Occurrence
     }
 
     /**
-     * Set user
+     * Set user.
      *
      * @param \HopitalNumerique\UserBundle\Entity\User $user
+     *
      * @return Occurrence
      */
     public function setUser(\HopitalNumerique\UserBundle\Entity\User $user)
@@ -132,9 +134,9 @@ class Occurrence
     }
 
     /**
-     * Get user
+     * Get user.
      *
-     * @return \HopitalNumerique\UserBundle\Entity\User 
+     * @return \HopitalNumerique\UserBundle\Entity\User
      */
     public function getUser()
     {
@@ -142,9 +144,10 @@ class Occurrence
     }
 
     /**
-     * Add reponses
+     * Add reponses.
      *
      * @param \HopitalNumerique\QuestionnaireBundle\Entity\Reponse $reponses
+     *
      * @return Occurrence
      */
     public function addReponse(\HopitalNumerique\QuestionnaireBundle\Entity\Reponse $reponses)
@@ -155,7 +158,7 @@ class Occurrence
     }
 
     /**
-     * Remove reponses
+     * Remove reponses.
      *
      * @param \HopitalNumerique\QuestionnaireBundle\Entity\Reponse $reponses
      */
@@ -165,21 +168,20 @@ class Occurrence
     }
 
     /**
-     * Get reponses
+     * Get reponses.
      *
-     * @return \Doctrine\Common\Collections\Collection 
+     * @return \Doctrine\Common\Collections\Collection
      */
     public function getReponses()
     {
         return $this->reponses;
     }
-    
-    
+
     /**
      * @return string
      */
     public function __toString()
     {
-        return ($this->libelle ?: 'Sans titre');
+        return $this->libelle ?: 'Sans titre';
     }
 }

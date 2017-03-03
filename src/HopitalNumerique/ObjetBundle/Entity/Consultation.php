@@ -1,4 +1,5 @@
 <?php
+
 namespace HopitalNumerique\ObjetBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
@@ -6,7 +7,7 @@ use HopitalNumerique\DomaineBundle\Entity\Domaine;
 use HopitalNumerique\UserBundle\Entity\User;
 
 /**
- * Consultation
+ * Consultation.
  *
  * @ORM\Table("hn_objet_consultation")
  * @ORM\Entity(repositoryClass="HopitalNumerique\ObjetBundle\Repository\ConsultationRepository")
@@ -14,14 +15,14 @@ use HopitalNumerique\UserBundle\Entity\User;
 class Consultation
 {
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="cln_id", type="integer", options = {"comment" = "ID de la consultation"})
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $id;
-    
+
     /**
      * @var User
      *
@@ -29,7 +30,7 @@ class Consultation
      * @ORM\JoinColumn(name="usr_id", referencedColumnName="usr_id", onDelete="CASCADE")
      */
     private $user;
-    
+
     /**
      * @var Objet
      *
@@ -65,24 +66,24 @@ class Consultation
      * @ORM\Column(name="obj_session_id", type="text", nullable=true)
      */
     protected $sessionId;
-    
+
     public function __construct()
     {
         $this->dateLastConsulted = new \DateTime();
     }
 
     /**
-     * Get id
+     * Get id.
      *
-     * @return integer
+     * @return int
      */
     public function getId()
     {
         return $this->id;
     }
-    
+
     /**
-     * Get objet
+     * Get objet.
      *
      * @return Objet $objet
      */
@@ -90,9 +91,9 @@ class Consultation
     {
         return $this->objet;
     }
-    
+
     /**
-     * Set objet
+     * Set objet.
      *
      * @param Objet $objet
      */
@@ -102,7 +103,7 @@ class Consultation
     }
 
     /**
-     * Get contenu
+     * Get contenu.
      *
      * @return Contenu $contenu
      */
@@ -110,9 +111,9 @@ class Consultation
     {
         return $this->contenu;
     }
-    
+
     /**
-     * Set contenu
+     * Set contenu.
      *
      * @param Contenu $contenu
      */
@@ -120,9 +121,9 @@ class Consultation
     {
         $this->contenu = $contenu;
     }
-    
+
     /**
-     * Get user
+     * Get user.
      *
      * @return User $user
      */
@@ -130,9 +131,9 @@ class Consultation
     {
         return $this->user;
     }
-    
+
     /**
-     * Set user
+     * Set user.
      *
      * @param User $user
      */
@@ -142,7 +143,7 @@ class Consultation
     }
 
     /**
-     * Get dateLastConsulted
+     * Get dateLastConsulted.
      *
      * @return \DateTime $dateLastConsulted
      */
@@ -150,9 +151,9 @@ class Consultation
     {
         return $this->dateLastConsulted;
     }
-    
+
     /**
-     * Set dateLastConsulted
+     * Set dateLastConsulted.
      *
      * @param \DateTime $dateLastConsulted
      */
@@ -162,7 +163,7 @@ class Consultation
     }
 
     /**
-     * Set domaine
+     * Set domaine.
      *
      * @param Domaine $domaine
      *
@@ -176,7 +177,7 @@ class Consultation
     }
 
     /**
-     * Get domaine
+     * Get domaine.
      *
      * @return Domaine
      */
@@ -184,9 +185,9 @@ class Consultation
     {
         return $this->domaine;
     }
-    
+
     /**
-     * Set sessionId
+     * Set sessionId.
      *
      * @param string $sessionId
      *
@@ -198,9 +199,9 @@ class Consultation
 
         return $this;
     }
-    
+
     /**
-     * Get sessionId
+     * Get sessionId.
      *
      * @return string
      */

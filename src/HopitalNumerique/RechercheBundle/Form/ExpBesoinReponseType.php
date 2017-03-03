@@ -1,4 +1,5 @@
 <?php
+
 namespace HopitalNumerique\RechercheBundle\Form;
 
 use HopitalNumerique\RechercheBundle\Entity\ExpBesoinReponses;
@@ -20,7 +21,6 @@ class ExpBesoinReponseType extends AbstractType
      */
     private $router;
 
-
     /**
      * Constructeur.
      */
@@ -28,7 +28,6 @@ class ExpBesoinReponseType extends AbstractType
     {
         $this->router = $router;
     }
-
 
     /**
      * {@inheritdoc}
@@ -38,12 +37,12 @@ class ExpBesoinReponseType extends AbstractType
         $builder
             ->setAction($this->router->generate('hopitalnumerique_expbesoin_reponse_edit_ajax', ['id' => $builder->getData()->getId()]))
             ->add('image', 'hidden', [
-                'required' => false
+                'required' => false,
             ])
-            ->add('imageFile', 'file', array(
+            ->add('imageFile', 'file', [
                 'label' => 'Image',
-                'required' => false
-            ))
+                'required' => false,
+            ])
         ;
 
         $builder->addEventListener(FormEvents::SUBMIT, function (FormEvent $event) {
@@ -60,10 +59,9 @@ class ExpBesoinReponseType extends AbstractType
     private function verifyImage(FormInterface $form, ExpBesoinReponses $expBesoinReponse)
     {
         if (null !== $expBesoinReponse->getImageFile() && !$expBesoinReponse->imageFileIsValid()) {
-            $form->get('imageFile')->addError(new FormError('Veuillez choisir une image inférieure à '.intval(Systeme::getFileUploadMaxSize() / 1024 / 1024).' Mo.'));
+            $form->get('imageFile')->addError(new FormError('Veuillez choisir une image inférieure à ' . intval(Systeme::getFileUploadMaxSize() / 1024 / 1024) . ' Mo.'));
         }
     }
-
 
     /**
      * {@inheritdoc}
@@ -72,9 +70,9 @@ class ExpBesoinReponseType extends AbstractType
     {
         $resolver
             ->setDefaults(
-                array(
-                    'data_class' => 'HopitalNumerique\RechercheBundle\Entity\ExpBesoinReponses'
-                )
+                [
+                    'data_class' => 'HopitalNumerique\RechercheBundle\Entity\ExpBesoinReponses',
+                ]
             )
         ;
     }

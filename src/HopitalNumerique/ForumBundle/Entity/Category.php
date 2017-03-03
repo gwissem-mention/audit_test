@@ -6,15 +6,14 @@ use CCDNForum\ForumBundle\Entity\Category as BaseCategory;
 use Symfony\Component\Security\Core\SecurityContextInterface;
 
 /**
- *
  * @author Gaetan MELCHILSEN
  * @copyright Nodevo
  */
 class Category extends BaseCategory
 {
     /**
+     * @param SecurityContextInterface $securityContext
      *
-     * @param  SecurityContextInterface $securityContext
      * @return bool
      */
     public function isAuthorisedToRead(SecurityContextInterface $securityContext)
@@ -24,7 +23,7 @@ class Category extends BaseCategory
         }
 
         foreach ($this->readAuthorisedRoles as $role) {
-            if ("anon." === $securityContext->getToken()->getUser()) {
+            if ('anon.' === $securityContext->getToken()->getUser()) {
                 if ('ROLE_ANONYME_10' === $role) {
                     return true;
                 }

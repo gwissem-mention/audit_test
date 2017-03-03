@@ -10,15 +10,14 @@ use HopitalNumerique\DomaineBundle\Entity\Domaine;
 use Doctrine\ORM\Query\Expr;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Query\Expr\Join;
-use Symfony\Component\HttpFoundation\Request;
 
 /**
- * UserRepository
+ * UserRepository.
  */
 class UserRepository extends EntityRepository
 {
     /**
-     * Récupère les données du grid sous forme de tableau correctement formaté
+     * Récupère les données du grid sous forme de tableau correctement formaté.
      *
      * @return qb
      */
@@ -58,14 +57,14 @@ class UserRepository extends EntityRepository
             ->orderBy('user.dateInscription', 'DESC')
             ->addOrderBy('user.username')
         ->setParameters([
-            'domaines_ids' => $domainesId
+            'domaines_ids' => $domainesId,
         ]);
 
         return $qb;
     }
 
     /**
-     * Override : Récupère les données Etablissement pour le grid sous forme de tableau
+     * Override : Récupère les données Etablissement pour le grid sous forme de tableau.
      *
      * @return qb
      */
@@ -82,7 +81,7 @@ class UserRepository extends EntityRepository
 
             ')
             ->from('HopitalNumeriqueUserBundle:User', 'user')
-            ->leftJoin('user.region','refRegion')
+            ->leftJoin('user.region', 'refRegion')
             ->where('user.autreStructureRattachementSante IS NOT NULL')
             ->orderBy('user.username');
 
@@ -90,11 +89,11 @@ class UserRepository extends EntityRepository
     }
 
     /**
-     * Récupère les Etablissement pour l'export
+     * Récupère les Etablissement pour l'export.
      *
      * @return qb
      */
-    public function getEtablissementForExport( $ids )
+    public function getEtablissementForExport($ids)
     {
         $qb = $this->_em->createQueryBuilder();
         $qb->select('user.id,
@@ -106,7 +105,7 @@ class UserRepository extends EntityRepository
                      user.archiver
             ')
             ->from('HopitalNumeriqueUserBundle:User', 'user')
-            ->leftJoin('user.region','refRegion')
+            ->leftJoin('user.region', 'refRegion')
             ->andWhere('user.autreStructureRattachementSante IS NOT NULL', 'user.id IN (:ids)')
             ->orderBy('user.username')
             ->setParameter('ids', $ids);
@@ -115,35 +114,35 @@ class UserRepository extends EntityRepository
     }
 
     /**
-     * On cherche a savoir si un user existe avec le role et la région de l'user modifié
+     * On cherche a savoir si un user existe avec le role et la région de l'user modifié.
      *
      * @param User $user L'utilisateur modifié
      *
      * @return QueryBuilder
      */
-    public function userExistForRoleDirection( $user )
+    public function userExistForRoleDirection($user)
     {
         $qb = $this->_em->createQueryBuilder();
         $qb->select('user')
             ->from('HopitalNumeriqueUserBundle:User', 'user')
             ->andWhere('user.roles LIKE :role', 'user.etablissementRattachementSante IS NOT NULL')
             ->andWhere('user.etablissementRattachementSante = :etablissementRattachementSante', 'user.id != :id')
-            ->setParameter('id', $user->getId() )
+            ->setParameter('id', $user->getId())
             ->setParameter('role', '%ROLE_ES_DIRECTION_GENERALE_5%')
-            ->setParameter('etablissementRattachementSante', $user->getEtablissementRattachementSante() );
+            ->setParameter('etablissementRattachementSante', $user->getEtablissementRattachementSante());
 
         return $qb;
     }
 
     /**
-     * Retourne la liste des ambassadeurs de la région $region
+     * Retourne la liste des ambassadeurs de la région $region.
      *
      * @param Reference $region  La région filtrée
-     * @param integer   $domaine Le domaine
+     * @param int       $domaine Le domaine
      *
      * @return QueryBuilder
      */
-    public function getAmbassadeursByRegionAndDomaine( $region, $domaine )
+    public function getAmbassadeursByRegionAndDomaine($region, $domaine)
     {
         $qb = $this->_em->createQueryBuilder();
         $qb->select('user')
@@ -157,9 +156,9 @@ class UserRepository extends EntityRepository
             ->orderBy('user.nom', 'ASC')
         ;
 
-        if( !is_null($domaine) && $domaine != 0 ){
-            $qb->innerJoin('user.connaissancesAmbassadeurs','domaines',join::WITH, 'domaines.domaine = :domaine')
-                ->setParameter('domaine', $domaine )
+        if (!is_null($domaine) && $domaine != 0) {
+            $qb->innerJoin('user.connaissancesAmbassadeurs', 'domaines', join::WITH, 'domaines.domaine = :domaine')
+                ->setParameter('domaine', $domaine)
                 ->andWhere('domaines.connaissance IS NOT NULL');
         }
 
@@ -175,15 +174,11 @@ class UserRepository extends EntityRepository
             ->andWhere('user.roles LIKE :role')
             ->setParameter('role', '%ROLE_ES_8%');
 
-        foreach ($criteres as $critereChamp => $critereValeur)
-        {
-            if (is_array($critereValeur))
-            {
-                $qb->andWhere('user.'.$critereChamp.' IN ('.implode(',', $critereValeur).')');
-            }
-            else
-            {
-                $qb->andWhere('user.'.$critereChamp.' = :'.$critereChamp)
+        foreach ($criteres as $critereChamp => $critereValeur) {
+            if (is_array($critereValeur)) {
+                $qb->andWhere('user.' . $critereChamp . ' IN (' . implode(',', $critereValeur) . ')');
+            } else {
+                $qb->andWhere('user.' . $critereChamp . ' = :' . $critereChamp)
                     ->setParameter($critereChamp, $critereValeur);
             }
         }
@@ -192,25 +187,25 @@ class UserRepository extends EntityRepository
     }
 
     /**
-     * Retourne la liste des ambassadeurs de la région et de la publication
+     * Retourne la liste des ambassadeurs de la région et de la publication.
      *
      * @param Reference $region La région filtrée
      * @param Objet     $objet  La publication
      *
      * @return QueryBuilder
      */
-    public function getAmbassadeursByRegionAndProduction( $region, $objet )
+    public function getAmbassadeursByRegionAndProduction($region, $objet)
     {
         $qb = $this->_em->createQueryBuilder();
         $qb->select('user')
             ->from('HopitalNumeriqueUserBundle:User', 'user')
-            ->leftJoin('user.objets','objets')
-            ->andWhere('user.roles LIKE :role','user.enabled = 1')
+            ->leftJoin('user.objets', 'objets')
+            ->andWhere('user.roles LIKE :role', 'user.enabled = 1')
             ->andWhere('objets.id = :objet')
-            ->setParameter('objet', $objet )
+            ->setParameter('objet', $objet)
             ->setParameter('role', '%ROLE_AMBASSADEUR_7%');
 
-        if( $region ){
+        if ($region) {
             $qb->andWhere('user.region = :region')
                 ->setParameter('region', $region);
         }
@@ -219,20 +214,20 @@ class UserRepository extends EntityRepository
     }
 
     /**
-     * Retourne la liste des utilisateurs possédant le role demandé
+     * Retourne la liste des utilisateurs possédant le role demandé.
      *
      * @param string $role Le rôle demandé
      *
      * @return QueryBuilder
      */
-    public function findUsersByRole( $role )
+    public function findUsersByRole($role)
     {
         $qb = $this->_em->createQueryBuilder();
 
         $qb->select('user')
             ->from('HopitalNumeriqueUserBundle:User', 'user')
             ->where('user.roles LIKE :role')
-            ->setParameter('role', '%'.$role.'%')
+            ->setParameter('role', '%' . $role . '%')
             ->orderBy('user.nom', 'ASC')
             ->addOrderBy('user.prenom', 'DESC');
 
@@ -240,39 +235,38 @@ class UserRepository extends EntityRepository
     }
 
     /**
-     * Retourne la liste des utilisateurs possédant les roles demandés
+     * Retourne la liste des utilisateurs possédant les roles demandés.
      *
      * @param array $role Le rôle demandé
      *
      * @return QueryBuilder
      */
-    public function findUsersByRoles( $roles )
+    public function findUsersByRoles($roles)
     {
         $qb = $this->_em->createQueryBuilder();
 
         $qb->select('user')
             ->from('HopitalNumeriqueUserBundle:User', 'user');
 
-            foreach ($roles as $key => $role) {
-                $qb->orWhere('user.roles LIKE :role' . $key )
-                    ->setParameter('role'. $key, '%'.$role.'%');
-            }
+        foreach ($roles as $key => $role) {
+            $qb->orWhere('user.roles LIKE :role' . $key)
+                    ->setParameter('role' . $key, '%' . $role . '%');
+        }
 
-            $qb->orderBy('user.nom', 'ASC')
+        $qb->orderBy('user.nom', 'ASC')
                 ->addOrderBy('user.prenom', 'DESC');
-
 
         return $qb;
     }
 
     /**
-     * Retourne la liste des utilisateurs étant assigné au domaine
+     * Retourne la liste des utilisateurs étant assigné au domaine.
      *
      * @param int $idDomaine Identifiant du domaine à filtrer
      *
      * @return QueryBuilder
      */
-    public function findUsersByDomaine( $idDomaine )
+    public function findUsersByDomaine($idDomaine)
     {
         $qb = $this->_em->createQueryBuilder();
 
@@ -289,6 +283,7 @@ class UserRepository extends EntityRepository
      * Retourne les utilisateurs liés à un de ces domaines.
      *
      * @param \Doctrine\Common\Collections\Collection $domaines Domaines
+     *
      * @return array<\HopitalNumerique\UserBundle\Entity\User> Utilisateurs
      */
     public function findByDomaines(Collection $domaines)
@@ -304,21 +299,21 @@ class UserRepository extends EntityRepository
     }
 
     /**
-     * Retourne le premier utilisateur correspondant au role et à la région demandés
+     * Retourne le premier utilisateur correspondant au role et à la région demandés.
      *
-     * @param string $role      Le rôle demandé
-     * @param int    $idRegion  Region demandée
+     * @param string $role     Le rôle demandé
+     * @param int    $idRegion Region demandée
      *
      * @return QueryBuilder
      */
-    public function findUsersByRoleAndRegion( $idRegion, $role )
+    public function findUsersByRoleAndRegion($idRegion, $role)
     {
         $qb = $this->_em->createQueryBuilder();
 
         $qb->select('user')
             ->from('HopitalNumeriqueUserBundle:User', 'user')
             ->where('user.roles LIKE :role')
-            ->setParameter('role', '%'.$role.'%')
+            ->setParameter('role', '%' . $role . '%')
             ->andWhere('user.region = :idRegion')
             ->setParameter('idRegion', $idRegion)
             ->andWhere('user.enabled = 1')
@@ -328,39 +323,45 @@ class UserRepository extends EntityRepository
         return $qb;
     }
 
-
     /**
      * Retourne un unique CMSI.
      *
      * @param array $criteres Filtres à appliquer sur la liste
+     *
      * @return \HopitalNumerique\UserBundle\Entity\User|null Un CMSI si trouvé, sinon NIL
      */
     public function getCmsi(array $criteres)
     {
         return $this->findOneByRole(Role::$ROLE_CMSI_LABEL, $criteres);
     }
+
     /**
      * Retourne un unique directeur.
      *
      * @param array $criteres Filtres à appliquer sur la liste
+     *
      * @return \HopitalNumerique\UserBundle\Entity\User|null Un directeur si trouvé, sinon NIL
      */
     public function getDirecteur(array $criteres)
     {
         return $this->findOneByRole(Role::$ROLE_DIRECTEUR_LABEL, $criteres);
     }
+
     /**
      * Retourne un unique utilisateur en fonction d'un rôle.
      *
-     * @param string $role Label du rôle sur lequel filtrer
-     * @param array $criteres Filtres à appliquer sur la liste
+     * @param string $role     Label du rôle sur lequel filtrer
+     * @param array  $criteres Filtres à appliquer sur la liste
+     *
      * @return \HopitalNumerique\UserBundle\Entity\User Un utilisateur si trouvé, sinon NIL
      */
     private function findOneByRole($role, array $criteres)
     {
         $utilisateurs = $this->findByRole($role, $criteres);
-        if (count($utilisateurs) > 0)
+        if (count($utilisateurs) > 0) {
             return $utilisateurs[0];
+        }
+
         return null;
     }
 
@@ -368,9 +369,10 @@ class UserRepository extends EntityRepository
      * Retourne une liste d'ambassadeurs.
      *
      * @param array $criteres Filtres à appliquer sur la liste
+     *
      * @return \HopitalNumerique\UserBundle\Entity\User[] La liste des ambassadeurs
      */
-    public function getAmbassadeurs(array $criteres = array())
+    public function getAmbassadeurs(array $criteres = [])
     {
         return $this->findByRole(Role::$ROLE_AMBASSADEUR_LABEL, $criteres);
     }
@@ -379,47 +381,56 @@ class UserRepository extends EntityRepository
      * Retourne une liste des experts.
      *
      * @param array $criteres Filtres à appliquer sur la liste
+     *
      * @return \HopitalNumerique\UserBundle\Entity\User[] La liste des experts
      */
-    public function getExperts(array $criteres = array())
+    public function getExperts(array $criteres = [])
     {
         return $this->findByRole(Role::$ROLE_EXPERT_LABEL, $criteres);
     }
+
     /**
      * Retourne une liste d'utilisateurs ES ou Enregistré.
      *
      * @param array $criteres Filtres à appliquer sur la liste
+     *
      * @return \HopitalNumerique\UserBundle\Entity\User[] La liste des utilisateurs
      */
-    public function getESAndEnregistres(array $criteres = array())
+    public function getESAndEnregistres(array $criteres = [])
     {
-        return $this->findByRole(array(Role::$ROLE_ES_LABEL, Role::$ROLE_ENREGISTRE_LABEL), $criteres);
+        return $this->findByRole([Role::$ROLE_ES_LABEL, Role::$ROLE_ENREGISTRE_LABEL], $criteres);
     }
+
     /**
      * Retourne une liste d'utilisateurs Admins.
      *
      * @param array $criteres Filtres à appliquer sur la liste
+     *
      * @return \HopitalNumerique\UserBundle\Entity\User[] La liste des utilisateurs
      */
-    public function getAdmins(array $criteres = array())
+    public function getAdmins(array $criteres = [])
     {
-        return $this->findByRole(array(Role::$ROLE_ADMIN_HN_LABEL, Role::$ROLE_ADMIN_LABEL), $criteres);
+        return $this->findByRole([Role::$ROLE_ADMIN_HN_LABEL, Role::$ROLE_ADMIN_LABEL], $criteres);
     }
+
     /**
-     * Retourne une liste d'utilisateurs Cmsi
+     * Retourne une liste d'utilisateurs Cmsi.
      *
      * @param array $criteres Filtres à appliquer sur la liste
+     *
      * @return \HopitalNumerique\UserBundle\Entity\User[] La liste des utilisateurs
      */
-    public function getcmsis(array $criteres = array())
+    public function getcmsis(array $criteres = [])
     {
-        return $this->findByRole(array(Role::$ROLE_CMSI_LABEL), $criteres);
+        return $this->findByRole([Role::$ROLE_CMSI_LABEL], $criteres);
     }
+
     /**
      * Retourne une liste d'utilisateurs en fonction d'un rôle.
      *
-     * @param string|array $role Label(s) du(es) rôle(s) sur lequel(lesquels) filtrer
-     * @param array $criteres Filtres à appliquer sur la liste
+     * @param string|array $role     Label(s) du(es) rôle(s) sur lequel(lesquels) filtrer
+     * @param array        $criteres Filtres à appliquer sur la liste
+     *
      * @return \HopitalNumerique\UserBundle\Entity\User[] La liste des utilisateurs
      */
     private function findByRole($role, array $criteres)
@@ -431,36 +442,28 @@ class UserRepository extends EntityRepository
             ->from('HopitalNumeriqueUserBundle:User', 'user')
         ;
 
-        if (!is_array($role))
-        {
+        if (!is_array($role)) {
             $requete
-                ->where('user.roles LIKE :role')->setParameter('role', '%'.$role.'%')
+                ->where('user.roles LIKE :role')->setParameter('role', '%' . $role . '%')
             ;
-        }
-        else
-        {
-            for ($i = 0, $count = count($role); $i < $count; $i++)
-            {
+        } else {
+            for ($i = 0, $count = count($role); $i < $count; ++$i) {
                 $requete
-                    ->orWhere('user.roles LIKE :role'.$i)->setParameter('role'.$i, '%'.$role[$i].'%')
+                    ->orWhere('user.roles LIKE :role' . $i)->setParameter('role' . $i, '%' . $role[$i] . '%')
                 ;
             }
         }
 
-        foreach ($criteres as $critereChamp => $critereValeur)
-        {
-            if (is_array($critereValeur))
-            {
+        foreach ($criteres as $critereChamp => $critereValeur) {
+            if (is_array($critereValeur)) {
                 $requete
                     ->andWhere(
-                        $requete->expr()->in('user.'.$critereChamp, $critereValeur)
+                        $requete->expr()->in('user.' . $critereChamp, $critereValeur)
                     )
                 ;
-            }
-            else
-            {
+            } else {
                 $requete
-                    ->andWhere('user.'.$critereChamp.' = :'.$critereChamp)
+                    ->andWhere('user.' . $critereChamp . ' = :' . $critereChamp)
                     ->setParameter($critereChamp, $critereValeur)
                 ;
             }
@@ -474,17 +477,18 @@ class UserRepository extends EntityRepository
         return $requete->getQuery()->getResult();
     }
 
-
     /**
      * Retourne une liste d'utilisateurs en fonction d'un rôle en respectant le retour d'un QB et non d'une liste d'utilisateur
      * ainsi que le public pour l'utilisateur dans des formType.
      *
      * @author gmelchilsen <gmelchilsen@nodevo.com>
-     * @param string|array $role Label(s) du(es) rôle(s) sur lequel(lesquels) filtrer
-     * @param array $criteres Filtres à appliquer sur la liste
+     *
+     * @param string|array $role     Label(s) du(es) rôle(s) sur lequel(lesquels) filtrer
+     * @param array        $criteres Filtres à appliquer sur la liste
+     *
      * @return QueryBuilder
      */
-    public function getUsersByRole($role, array $criteres = array())
+    public function getUsersByRole($role, array $criteres = [])
     {
         $qb = $this->_em->createQueryBuilder();
 
@@ -493,38 +497,30 @@ class UserRepository extends EntityRepository
             ->from('HopitalNumeriqueUserBundle:User', 'user')
         ;
 
-        if (!is_array($role))
-        {
+        if (!is_array($role)) {
             $qb
-                ->where('user.roles LIKE :role')->setParameter('role', '%'.$role.'%')
+                ->where('user.roles LIKE :role')->setParameter('role', '%' . $role . '%')
             ;
-        }
-        else
-        {
+        } else {
             $nbRole = count($role);
 
-            for ($i = 0; $i < $nbRole; $i++)
-            {
+            for ($i = 0; $i < $nbRole; ++$i) {
                 $qb
-                    ->orWhere('user.roles LIKE :role'.$i)->setParameter('role'.$i, '%'.$role[$i].'%')
+                    ->orWhere('user.roles LIKE :role' . $i)->setParameter('role' . $i, '%' . $role[$i] . '%')
                 ;
             }
         }
 
-        foreach ($criteres as $critereChamp => $critereValeur)
-        {
-            if (is_array($critereValeur))
-            {
+        foreach ($criteres as $critereChamp => $critereValeur) {
+            if (is_array($critereValeur)) {
                 $qb
                     ->andWhere(
-                        $qb->expr()->in('user.'.$critereChamp, $critereValeur)
+                        $qb->expr()->in('user.' . $critereChamp, $critereValeur)
                     )
                 ;
-            }
-            else
-            {
+            } else {
                 $qb
-                    ->andWhere('user.'.$critereChamp.' = :'.$critereChamp)
+                    ->andWhere('user.' . $critereChamp . ' = :' . $critereChamp)
                     ->setParameter($critereChamp, $critereValeur)
                 ;
             }
@@ -538,23 +534,22 @@ class UserRepository extends EntityRepository
         return $qb;
     }
 
-
     /**
-     * Récupère les utilisateurs ayant répondues au questionnaire passé en paramètre
+     * Récupère les utilisateurs ayant répondues au questionnaire passé en paramètre.
      *
      * @param  int idQuestionnaire Identifiant du questionnaire
      *
      * @return result
      */
-    public function getUsersByQuestionnaire( $idQuestionnaire )
+    public function getUsersByQuestionnaire($idQuestionnaire)
     {
         $qb = $this->_em->createQueryBuilder();
         $qb->select('user')
             ->from('HopitalNumeriqueUserBundle:User', 'user')
-            ->innerJoin('user.reponses','reponses')
-            ->innerJoin('reponses.question','question')
+            ->innerJoin('user.reponses', 'reponses')
+            ->innerJoin('reponses.question', 'question')
             ->innerJoin('question.questionnaire', 'questionnaire', 'WITH', 'questionnaire.id = :idQuestionnaire')
-            ->setParameter('idQuestionnaire', $idQuestionnaire )
+            ->setParameter('idQuestionnaire', $idQuestionnaire)
             ->groupBy('user')
             ->orderBy('user.nom', 'ASC')
             ->addOrderBy('user.prenom');
@@ -563,7 +558,7 @@ class UserRepository extends EntityRepository
     }
 
     /**
-     * Récupère tous les utilisateurs (tous les rôles)
+     * Récupère tous les utilisateurs (tous les rôles).
      *
      * @return QueryBuilder
      */
@@ -572,13 +567,15 @@ class UserRepository extends EntityRepository
         $qb = $this->_em->createQueryBuilder();
         $qb->select('user')
             ->from('HopitalNumeriqueUserBundle:User', 'user');
+
         return $qb;
     }
 
     /**
-     * Récupère le nombre d'établissements connectés
+     * Récupère le nombre d'établissements connectés.
      *
      * @param Domaine $domaine
+     *
      * @return int
      */
     public function getNbEtablissements(Domaine $domaine = null)
@@ -603,6 +600,7 @@ class UserRepository extends EntityRepository
      * Retourne la QueryBuilder avec les membres de la communauté de pratique.
      *
      * @param \HopitalNumerique\CommunautePratiqueBundle\Entity\Groupe $groupe (optionnel) Groupe des membres
+     *
      * @return \Doctrine\ORM\QueryBuilder QueryBuilder
      */
     public function getCommunautePratiqueMembresQueryBuilder(\HopitalNumerique\CommunautePratiqueBundle\Entity\Groupe $groupe = null, Domaine $domaine = null, $membreId = null)
@@ -639,10 +637,10 @@ class UserRepository extends EntityRepository
         }
 
         if (null !== $membreId) {
-        	$query
+            $query
             ->andWhere('user.id = :membreId')
             ->setParameter('membreId', $membreId)
-        	;
+            ;
         }
 
         return $query;
@@ -652,6 +650,7 @@ class UserRepository extends EntityRepository
      * Retourne la QueryBuilder avec les membres d'un groupe de la communauté de pratique.
      *
      * @param \HopitalNumerique\CommunautePratiqueBundle\Entity\Groupe $groupe Groupe des membres
+     *
      * @return \Doctrine\ORM\QueryBuilder QueryBuilder
      */
     public function getCommunautePratiqueUsersByGroupeQueryBuilder(\HopitalNumerique\CommunautePratiqueBundle\Entity\Groupe $groupe)
@@ -670,6 +669,7 @@ class UserRepository extends EntityRepository
      * Retourne les membres de la communauté de pratique n'appartenant pas à tel groupe.
      *
      * @param \HopitalNumerique\CommunautePratiqueBundle\Entity\Groupe $groupe Groupe
+     *
      * @return array<\HopitalNumerique\UserBundle\Entity\User> Utilisateurs
      */
     public function findCommunautePratiqueMembresNotInGroupe(\HopitalNumerique\CommunautePratiqueBundle\Entity\Groupe $groupe = null)
@@ -678,7 +678,7 @@ class UserRepository extends EntityRepository
 
         $groupeUsers = $this->getCommunautePratiqueUsersByGroupeQueryBuilder($groupe)->getQuery()->getResult();
 
-        $domaine = $this->getEntityManager()->getRepository('HopitalNumeriqueDomaineBundle:Domaine')->getDomaineFromHttpHost($_SERVER["SERVER_NAME"])->getQuery()->getOneOrNullResult();
+        $domaine = $this->getEntityManager()->getRepository('HopitalNumeriqueDomaineBundle:Domaine')->getDomaineFromHttpHost($_SERVER['SERVER_NAME'])->getQuery()->getOneOrNullResult();
 
         $query
             ->leftJoin('user.groupeInscription', 'groupeInscription')
@@ -688,7 +688,7 @@ class UserRepository extends EntityRepository
             ->setParameter('etat', User::ETAT_ACTIF_ID)
             ->leftJoin('user.domaines', 'domaine')
             ->andWhere('domaine.url = :domaine')
-            ->setParameter(':domaine', ($domaine)? $domaine->getUrl(): null)
+            ->setParameter(':domaine', ($domaine) ? $domaine->getUrl() : null)
             ->addOrderBy('user.nom', 'ASC')
             ->addOrderBy('user.prenom', 'ASC')
             ->addOrderBy('user.id', 'ASC')
@@ -707,9 +707,10 @@ class UserRepository extends EntityRepository
     /**
      * Retourne des membres de la communauté de pratique au hasard.
      *
-     * @param integer                                            $nombreMembres Nombre de membres à retourner
+     * @param int                                                $nombreMembres Nombre de membres à retourner
      * @param \HopitalNumerique\ReferenceBundle\Entity\Reference $civilite      (optionnel) Civilité
      * @param array<\HopitalNumerique\UserBundle\Entity\User>    $ignores       (optionnel) Liste d'utilisateurs à ignorer
+     *
      * @return array<\HopitalNumerique\UserBundle\Entity\User> Utilisateurs
      */
     public function findCommunautePratiqueRandomMembres(Domaine $domaine, $nombreMembres, Reference $civilite = null, array $ignores = null)
@@ -748,7 +749,7 @@ class UserRepository extends EntityRepository
     /**
      * Retourne de nombre de membres de la communauté de pratique.
      *
-     * @return integer Total
+     * @return int Total
      */
     public function findCommunautePratiqueMembresCount(Domaine $domaine)
     {

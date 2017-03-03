@@ -9,7 +9,7 @@ use HopitalNumerique\AutodiagBundle\Entity\Restitution;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
- * Category
+ * Category.
  *
  * @ORM\Table(name="ad_restitution_category")
  * @ORM\Entity
@@ -17,7 +17,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 class Category
 {
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
@@ -75,9 +75,9 @@ class Category
     }
 
     /**
-     * Get id
+     * Get id.
      *
-     * @return integer
+     * @return int
      */
     public function getId()
     {
@@ -94,6 +94,7 @@ class Category
 
     /**
      * @param string $label
+     *
      * @return $this
      */
     public function setLabel($label)
@@ -113,6 +114,7 @@ class Category
 
     /**
      * @param string $description
+     *
      * @return $this
      */
     public function setDescription($description)
@@ -148,6 +150,7 @@ class Category
 
     /**
      * @param Restitution $restitution
+     *
      * @return $this
      */
     public function setRestitution(Restitution $restitution)
@@ -167,4 +170,3 @@ class Category
         $this->items->add($item);
     }
 }
-

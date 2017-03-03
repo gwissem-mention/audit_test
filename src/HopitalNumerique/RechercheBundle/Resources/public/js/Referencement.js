@@ -92,7 +92,9 @@ Hn_RechercheBundle_Referencement.getReferenceLibelleById = function(referenceId)
     if ($('.references-bloc [data-reference="' + referenceId + '"]').size() > 0) {
         return $('.references-bloc [data-reference="' + referenceId + '"] a.reference').first().text().trim();
     } else { // Mon contexte
-        return $('#contexte-modal [data-reference="' + referenceId + '"] label').first().text().trim();
+        var $e = $('#contexte-modal [data-reference="' + referenceId + '"]');
+
+        return $e.attr('data-libelle');
     }
 };
 
@@ -307,6 +309,8 @@ Hn_RechercheBundle_Referencement.toggleReferenceChoosing = function(referenceId)
             }
         }
     }
+
+    $('#contexte-modal select option[data-chosen="true"]').attr('selected', true);
 
     Hn_RechercheBundle_Referencement.initReferenceFilters();
 };

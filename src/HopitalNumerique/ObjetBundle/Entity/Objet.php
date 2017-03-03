@@ -10,7 +10,6 @@ use HopitalNumerique\DomaineBundle\Entity\Domaine;
 use HopitalNumerique\ModuleBundle\Entity\Module;
 use HopitalNumerique\RechercheParcoursBundle\Entity\MaitriseUser;
 use HopitalNumerique\ReferenceBundle\Entity\Reference;
-
 //Asserts Stuff
 use HopitalNumerique\UserBundle\Entity\User;
 use Nodevo\RoleBundle\Entity\Role;
@@ -18,11 +17,10 @@ use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Nodevo\ToolsBundle\Validator\Constraints as Nodevo;
 use Gedmo\Mapping\Annotation as Gedmo;
-
 use Eko\FeedBundle\Item\Writer\RoutedItemInterface;
 
 /**
- * Objet
+ * Objet.
  *
  * @ORM\Table(name="hn_objet")
  * @ORM\Entity(repositoryClass="HopitalNumerique\ObjetBundle\Repository\ObjetRepository")
@@ -32,12 +30,12 @@ use Eko\FeedBundle\Item\Writer\RoutedItemInterface;
  */
 class Objet implements RoutedItemInterface
 {
-    const FICHIER_1    = 1;
-    const FICHIER_2    = 2;
+    const FICHIER_1 = 1;
+    const FICHIER_2 = 2;
     const FICHIER_EDIT = 3;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="obj_id", type="integer", options = {"comment" = "ID de l objet"})
      * @ORM\Id
@@ -121,7 +119,7 @@ class Objet implements RoutedItemInterface
     private $path2;
 
     /**
-     * @var boolean
+     * @var bool
      *
      * @Gedmo\Versioned
      * @ORM\Column(name="obj_commentaires", type="boolean", options = {"comment" = "Commentaires autorisés sur l objet ?"})
@@ -129,14 +127,14 @@ class Objet implements RoutedItemInterface
     private $commentaires;
 
     /**
-     * @var boolean
+     * @var bool
      *
      * @ORM\Column(name="obj_btn_sociaux", type="boolean", options = {"comment" = "Boutons des reseaux sociaux autorisés sur l objet ?"})
      */
     private $btnSociaux;
 
     /**
-     * @var boolean
+     * @var bool
      *
      * @Gedmo\Versioned
      * @ORM\Column(name="obj_notes", type="boolean", options = {"comment" = "Notes autorisées sur l objet ?"})
@@ -144,7 +142,7 @@ class Objet implements RoutedItemInterface
     private $notes;
 
     /**
-     * @var boolean
+     * @var bool
      *
      * @Gedmo\Versioned
      * @ORM\Column(name="obj_alaune", type="boolean", options = {"comment" = "A la une ?"})
@@ -175,21 +173,21 @@ class Objet implements RoutedItemInterface
     private $dateModification;
 
     /**
-     * @var boolean
+     * @var bool
      *
      * @ORM\Column(name="obj_lock", type="boolean", options = {"comment" = "Verrouillage de l objet ?"})
      */
     private $lock;
 
     /**
-     * @var boolean
+     * @var bool
      *
      * @ORM\Column(name="obj_publication_plus_consulte", type="boolean", options = {"comment" = "Publication affichee dans les plus consultees ?"})
      */
     private $publicationPlusConsulte;
 
     /**
-     * @var boolean
+     * @var bool
      *
      * @Gedmo\Versioned
      * @ORM\Column(name="obj_isInfraDoc", type="boolean", options = {"comment" = "L objet est de type infradocumentaire ?"})
@@ -197,7 +195,7 @@ class Objet implements RoutedItemInterface
     private $isInfraDoc;
 
     /**
-     * @var boolean
+     * @var bool
      *
      * @Gedmo\Versioned
      * @ORM\Column(name="obj_isArticle", type="boolean", options = {"comment" = "L objet est un article ?"})
@@ -235,7 +233,7 @@ class Objet implements RoutedItemInterface
     private $referencement;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="obj_nb_vue", type="integer", options = {"comment" = "Nombre de fois où lobjet à été vue"})
      */
@@ -319,7 +317,7 @@ class Objet implements RoutedItemInterface
     protected $modules;
 
     /**
-     * Ensemble des notes de maitrise liées à cette publication
+     * Ensemble des notes de maitrise liées à cette publication.
      *
      * @ORM\OneToMany(targetEntity="\HopitalNumerique\RechercheParcoursBundle\Entity\MaitriseUser", mappedBy="objet", cascade={"persist", "remove" })
      */
@@ -333,7 +331,7 @@ class Objet implements RoutedItemInterface
     public $file;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="obj_download_count_1", type="integer", options = {"comment" = "Nombre de téléchargements du fichier 1"})
      */
@@ -347,7 +345,7 @@ class Objet implements RoutedItemInterface
     public $file2;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="obj_download_count_2", type="integer", options = {"comment" = "Nombre de téléchargements du fichier 2"})
      */
@@ -381,43 +379,42 @@ class Objet implements RoutedItemInterface
     private $communautePratiqueGroupe;
 
     /**
-     * @var boolean
+     * @var bool
      *
      * @ORM\Column(name="obj_associated_productions", type="boolean", options = {"comment" = "Afficher les ressources associées pour l'objet ?"})
      */
     private $associatedProductions;
 
     /**
-     * Initialisation de l'entitée (valeurs par défaut)
+     * Initialisation de l'entitée (valeurs par défaut).
      */
     public function __construct()
     {
-        $this->dateCreation          = new \DateTime();
-        $this->nbVue                 = 0;
-        $this->downloadCountFile1    = 0;
-        $this->downloadCountFile2    = 0;
-        $this->commentaires          = true;
-        $this->notes                 = true;
-        $this->btnSociaux            = true;
+        $this->dateCreation = new \DateTime();
+        $this->nbVue = 0;
+        $this->downloadCountFile1 = 0;
+        $this->downloadCountFile2 = 0;
+        $this->commentaires = true;
+        $this->notes = true;
+        $this->btnSociaux = true;
         $this->associatedProductions = true;
-        $this->isInfraDoc            = false;
-        $this->isArticle             = false;
-        $this->lock                  = false;
-        $this->vignette              = [];
-        $this->autodiags             = [];
-        $this->objets                = [];
-        $this->referencement         = [];
-        $this->roles                 = [];
-        $this->types                 = [];
-        $this->ambassadeurs          = [];
-        $this->modules               = [];
-        $this->maitriseUsers         = [];
-        $this->domaines              = [];
+        $this->isInfraDoc = false;
+        $this->isArticle = false;
+        $this->lock = false;
+        $this->vignette = [];
+        $this->autodiags = [];
+        $this->objets = [];
+        $this->referencement = [];
+        $this->roles = [];
+        $this->types = [];
+        $this->ambassadeurs = [];
+        $this->modules = [];
+        $this->maitriseUsers = [];
+        $this->domaines = [];
     }
 
-
     /**
-     * @return integer
+     * @return int
      */
     public function getId()
     {
@@ -553,7 +550,7 @@ class Objet implements RoutedItemInterface
     }
 
     /**
-     * @param boolean $commentaires
+     * @param bool $commentaires
      *
      * @return Objet
      */
@@ -565,7 +562,7 @@ class Objet implements RoutedItemInterface
     }
 
     /**
-     * @return boolean
+     * @return bool
      */
     public function getCommentaires()
     {
@@ -573,7 +570,7 @@ class Objet implements RoutedItemInterface
     }
 
     /**
-     * @param boolean $notes
+     * @param bool $notes
      *
      * @return Objet
      */
@@ -585,7 +582,7 @@ class Objet implements RoutedItemInterface
     }
 
     /**
-     * @return boolean
+     * @return bool
      */
     public function getNotes()
     {
@@ -633,7 +630,7 @@ class Objet implements RoutedItemInterface
     }
 
     /**
-     * @return boolean $lock
+     * @return bool $lock
      */
     public function getLock()
     {
@@ -641,7 +638,7 @@ class Objet implements RoutedItemInterface
     }
 
     /**
-     * @param boolean $lock
+     * @param bool $lock
      */
     public function setLock($lock)
     {
@@ -649,7 +646,7 @@ class Objet implements RoutedItemInterface
     }
 
     /**
-     * @param boolean $isInfraDoc
+     * @param bool $isInfraDoc
      *
      * @return Objet
      */
@@ -661,7 +658,7 @@ class Objet implements RoutedItemInterface
     }
 
     /**
-     * @return boolean
+     * @return bool
      */
     public function isInfraDoc()
     {
@@ -669,7 +666,7 @@ class Objet implements RoutedItemInterface
     }
 
     /**
-     * @return boolean $isArticle
+     * @return bool $isArticle
      */
     public function isArticle()
     {
@@ -677,7 +674,7 @@ class Objet implements RoutedItemInterface
     }
 
     /**
-     * @param boolean $isArticle
+     * @param bool $isArticle
      */
     public function setArticle($isArticle)
     {
@@ -701,7 +698,7 @@ class Objet implements RoutedItemInterface
     }
 
     /**
-     * @return integer $nbVue
+     * @return int $nbVue
      */
     public function getNbVue()
     {
@@ -709,7 +706,7 @@ class Objet implements RoutedItemInterface
     }
 
     /**
-     * @param integer $nbVue
+     * @param int $nbVue
      *
      * @return Objet
      */
@@ -721,7 +718,7 @@ class Objet implements RoutedItemInterface
     }
 
     /**
-     * Get lockedBy
+     * Get lockedBy.
      *
      * @return User $lockedBy
      */
@@ -873,7 +870,7 @@ class Objet implements RoutedItemInterface
     }
 
     /**
-     * @param integer $autodiag
+     * @param int $autodiag
      *
      * @return Objet
      */
@@ -1147,7 +1144,7 @@ class Objet implements RoutedItemInterface
             return null;
         }
 
-        return $this->getUploadRootDir().'/'.$result;
+        return $this->getUploadRootDir() . '/' . $result;
     }
 
     /**
@@ -1179,7 +1176,6 @@ class Objet implements RoutedItemInterface
             }
         }
 
-
         if (is_null($result)) {
             return null;
         }
@@ -1188,7 +1184,7 @@ class Objet implements RoutedItemInterface
     }
 
     /**
-     * Fonction qui renvoie le type mime de la piece jointe 1 ou 2
+     * Fonction qui renvoie le type mime de la piece jointe 1 ou 2.
      */
     public function getTypeMime($type)
     {
@@ -1205,10 +1201,10 @@ class Objet implements RoutedItemInterface
         }
 
         if (!$result || is_null($result)) {
-            return "";
+            return '';
         }
 
-        return substr($result, strrpos($result, ".") + 1);
+        return substr($result, strrpos($result, '.') + 1);
     }
 
     public function getUploadRootDir()
@@ -1287,7 +1283,7 @@ class Objet implements RoutedItemInterface
     }
 
     /**
-     * @param String $dateParution
+     * @param string $dateParution
      *
      * @return Objet
      */
@@ -1307,7 +1303,7 @@ class Objet implements RoutedItemInterface
     }
 
     /**
-     * @param boolean $isInfraDoc
+     * @param bool $isInfraDoc
      *
      * @return Objet
      */
@@ -1319,7 +1315,7 @@ class Objet implements RoutedItemInterface
     }
 
     /**
-     * @return boolean
+     * @return bool
      */
     public function getIsInfraDoc()
     {
@@ -1327,7 +1323,7 @@ class Objet implements RoutedItemInterface
     }
 
     /**
-     * @param boolean $isArticle
+     * @param bool $isArticle
      *
      * @return Objet
      */
@@ -1339,7 +1335,7 @@ class Objet implements RoutedItemInterface
     }
 
     /**
-     * @return boolean
+     * @return bool
      */
     public function getIsArticle()
     {
@@ -1463,7 +1459,7 @@ class Objet implements RoutedItemInterface
     }
 
     /**
-     * Get modules
+     * Get modules.
      *
      * @return array
      */
@@ -1561,7 +1557,7 @@ class Objet implements RoutedItemInterface
     }
 
     /**
-     * Get les ids des domaines concerné par l'user
+     * Get les ids des domaines concerné par l'user.
      *
      * @return array[integer]
      */
@@ -1601,7 +1597,7 @@ class Objet implements RoutedItemInterface
     }
 
     /**
-     * @param boolean $alaune
+     * @param bool $alaune
      *
      * @return Objet
      */
@@ -1613,7 +1609,7 @@ class Objet implements RoutedItemInterface
     }
 
     /**
-     * @return boolean
+     * @return bool
      */
     public function getAlaune()
     {
@@ -1621,7 +1617,7 @@ class Objet implements RoutedItemInterface
     }
 
     /**
-     * @param boolean $publicationPlusConsulte
+     * @param bool $publicationPlusConsulte
      *
      * @return Objet
      */
@@ -1633,7 +1629,7 @@ class Objet implements RoutedItemInterface
     }
 
     /**
-     * @return boolean
+     * @return bool
      */
     public function getPublicationPlusConsulte()
     {
@@ -1641,7 +1637,7 @@ class Objet implements RoutedItemInterface
     }
 
     /**
-     * @param boolean $btnSociaux
+     * @param bool $btnSociaux
      *
      * @return Objet
      */
@@ -1653,13 +1649,12 @@ class Objet implements RoutedItemInterface
     }
 
     /**
-     * @return boolean
+     * @return bool
      */
     public function getBtnSociaux()
     {
         return $this->btnSociaux;
     }
-
 
     // vvvv     Flux RSS      vvvv
 
@@ -1670,7 +1665,7 @@ class Objet implements RoutedItemInterface
 
     public function getFeedItemDescription()
     {
-        return "";//$this->resume;
+        return ''; //$this->resume;
     }
 
     public function getFeedItemPubDate()
@@ -1686,16 +1681,15 @@ class Objet implements RoutedItemInterface
     public function getFeedItemRouteParameters()
     {
         return [
-            'id'    => $this->id,
+            'id' => $this->id,
             'alias' => $this->alias,
         ];
     }
 
     public function getFeedItemUrlAnchor()
     {
-        return "";
+        return '';
     }
-
 
     /**
      * @param Reference $cibleDiffusion
@@ -1745,9 +1739,8 @@ class Objet implements RoutedItemInterface
         return $this->titre;
     }
 
-
     /**
-     * @return boolean Si point dur
+     * @return bool Si point dur
      */
     public function isPointDur()
     {
@@ -1793,7 +1786,7 @@ class Objet implements RoutedItemInterface
     }
 
     /**
-     * @return boolean
+     * @return bool
      */
     public function isAssociatedProductions()
     {
@@ -1825,7 +1818,7 @@ class Objet implements RoutedItemInterface
      */
     public function incrementDownloadFile1()
     {
-        $this->downloadCountFile1++;
+        ++$this->downloadCountFile1;
 
         return $this;
     }
@@ -1843,7 +1836,7 @@ class Objet implements RoutedItemInterface
      */
     public function incrementDownloadFile2()
     {
-        $this->downloadCountFile2++;
+        ++$this->downloadCountFile2;
 
         return $this;
     }

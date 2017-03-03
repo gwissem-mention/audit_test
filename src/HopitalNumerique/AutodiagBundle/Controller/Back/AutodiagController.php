@@ -22,7 +22,7 @@ use Symfony\Component\HttpFoundation\Response;
 class AutodiagController extends Controller
 {
     /**
-     * Grid that list autodiag Models
+     * Grid that list autodiag Models.
      *
      * @return Response
      */
@@ -44,9 +44,9 @@ class AutodiagController extends Controller
     }
 
     /**
-     * Edit autodiag model
+     * Edit autodiag model.
      *
-     * @param Request $request
+     * @param Request  $request
      * @param Autodiag $autodiag
      *
      * @return RedirectResponse|Response
@@ -82,8 +82,9 @@ class AutodiagController extends Controller
             }
 
             $this->addFlash('success', $this->get('translator')->trans('ad.back.saved'));
+
             return $this->redirectToRoute('hopitalnumerique_autodiag_edit', [
-                'id' => $autodiag->getId()
+                'id' => $autodiag->getId(),
             ]);
         }
 
@@ -94,12 +95,13 @@ class AutodiagController extends Controller
     }
 
     /**
-     * Import survey data
+     * Import survey data.
      *
-     * @param Request $request
+     * @param Request  $request
      * @param Autodiag $autodiag
      *
      * @return RedirectResponse|Response
+     *
      * @throws \Exception
      */
     public function surveyEditAction(Request $request, Autodiag $autodiag)
@@ -124,8 +126,9 @@ class AutodiagController extends Controller
             } catch (\Exception $e) {
                 $this->addFlash('danger', $this->get('translator')->trans('ad.import.errors.generic'));
             }
+
             return $this->redirectToRoute('hopitalnumerique_autodiag_edit_survey', [
-                'id' => $autodiag->getId()
+                'id' => $autodiag->getId(),
             ]);
         }
 
@@ -139,7 +142,7 @@ class AutodiagController extends Controller
     }
 
     /**
-     * @param Request $request
+     * @param Request  $request
      * @param Autodiag $autodiag
      *
      * @ParamConverter()
@@ -158,9 +161,10 @@ class AutodiagController extends Controller
             $this->addFlash('success', $this->get('translator')->trans('ad.import.success'));
 
             return $this->redirectToRoute('hopitalnumerique_autodiag_edit_algorithm', [
-                'id' => $autodiag->getId()
+                'id' => $autodiag->getId(),
             ]);
         }
+
         return $this->render('HopitalNumeriqueAutodiagBundle:Autodiag/Edit:algorithm.html.twig', [
             'form' => $form->createView(),
             'model' => $autodiag,
@@ -170,7 +174,7 @@ class AutodiagController extends Controller
     }
 
     /**
-     * @param Request $request
+     * @param Request  $request
      * @param Autodiag $autodiag
      *
      * @ParamConverter("autodiag")
@@ -190,9 +194,10 @@ class AutodiagController extends Controller
             $this->addFlash('success', $this->get('translator')->trans('ad.import.success'));
 
             return $this->redirectToRoute('hopitalnumerique_autodiag_edit_restitution', [
-                'id' => $autodiag->getId()
+                'id' => $autodiag->getId(),
             ]);
         }
+
         return $this->render('@HopitalNumeriqueAutodiag/Autodiag/Edit/resitution.html.twig', [
             'form' => $form->createView(),
             'model' => $autodiag,
@@ -228,7 +233,7 @@ class AutodiagController extends Controller
         /** @var Autodiag $autodiag */
         $autodiag = $synthesis->getAutodiag();
 
-        $items = array();
+        $items = [];
 
         /** @var Autodiag\Container\Chapter $chapter */
         foreach ($autodiag->getChapters() as $chapter) {
@@ -256,7 +261,7 @@ class AutodiagController extends Controller
     }
 
     /**
-     * Action appelée dans le plugin "Outil" pour tinymce
+     * Action appelée dans le plugin "Outil" pour tinymce.
      *
      * @return Response
      */
@@ -264,9 +269,9 @@ class AutodiagController extends Controller
     {
         $autodiags = $this->get('autodiag.repository.autodiag')->findAll();
 
-        return $this->render('HopitalNumeriqueAutodiagBundle:Autodiag:autodiag_plugin.html.twig', array(
+        return $this->render('HopitalNumeriqueAutodiagBundle:Autodiag:autodiag_plugin.html.twig', [
             'outils' => $autodiags,
-            'texte'  => $this->get('request')->request->get('texte')
-        ));
+            'texte' => $this->get('request')->request->get('texte'),
+        ]);
     }
 }

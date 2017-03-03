@@ -2,9 +2,9 @@
 /**
  * Configuration du grid des demandes d'intervention pour l'ambassadeur.
  */
+
 namespace HopitalNumerique\InterventionBundle\Grid\Admin;
 
-use HopitalNumerique\InterventionBundle\Entity\InterventionDemande;
 use HopitalNumerique\InterventionBundle\Grid\DemandesAbstractGrid;
 use Nodevo\GridBundle\Grid\Column;
 use Nodevo\GridBundle\Grid\Action;
@@ -15,7 +15,7 @@ use Nodevo\GridBundle\Grid\Action;
 class DemandesGrid extends DemandesAbstractGrid
 {
     /**
-     * Set la config propre au Grid des demandes d'intervention (Source + config par défaut)
+     * Set la config propre au Grid des demandes d'intervention (Source + config par défaut).
      */
     public function setConfig()
     {
@@ -41,7 +41,7 @@ class DemandesGrid extends DemandesAbstractGrid
 
     public function setDefaultFiltreFromController($filtre)
     {
-        $filtres = array();
+        $filtres = [];
 
         $this->setPersistence(false);
 
@@ -61,7 +61,7 @@ class DemandesGrid extends DemandesAbstractGrid
     }
 
     /**
-     * Ajoute les colonnes visibles du grid
+     * Ajoute les colonnes visibles du grid.
      */
     public function setColumns()
     {
@@ -78,7 +78,7 @@ class DemandesGrid extends DemandesAbstractGrid
         $colonneInterventionInitiateurType->setAlign('center');
         $colonneInterventionInitiateurType->setFilterable(false)->setSortable(false);
         $colonneInterventionInitiateurType->manipulateRenderCell(
-            function($value, \APY\DataGridBundle\Grid\Row $row) {
+            function ($value, \APY\DataGridBundle\Grid\Row $row) {
                 return DemandesAbstractGrid::renderCellInitiateur($value, $row);
             }
         );
@@ -91,7 +91,7 @@ class DemandesGrid extends DemandesAbstractGrid
         $this->addColonne($colonneInterventionEtatLibelle);
 
         $colonneCmsiInformations = new Column\TextColumn('cmsi_nom', 'CMSI');
-        $colonneCmsiInformations->manipulateRenderCell(function($value, \APY\DataGridBundle\Grid\Row $row) {
+        $colonneCmsiInformations->manipulateRenderCell(function ($value, \APY\DataGridBundle\Grid\Row $row) {
             if (
                 !empty($row->getField('cmsiEtablissementNom')) &&
                 !empty($row->getField('cmsiEtablissementFiness'))
@@ -104,7 +104,7 @@ class DemandesGrid extends DemandesAbstractGrid
         $this->addColonne($colonneCmsiInformations);
 
         $colonneAmbassadeurInformations = new Column\TextColumn('ambassadeur_nom', 'Ambassadeur');
-        $colonneAmbassadeurInformations->manipulateRenderCell(function($value, \APY\DataGridBundle\Grid\Row $row) {
+        $colonneAmbassadeurInformations->manipulateRenderCell(function ($value, \APY\DataGridBundle\Grid\Row $row) {
             if (
                 !empty($row->getField('ambassadeurEtablissementNom')) &&
                 !empty($row->getField('ambassadeurEtablissementFiness'))
@@ -121,7 +121,7 @@ class DemandesGrid extends DemandesAbstractGrid
         $this->addColonne($colonneIdDemandeur);
 
         $colonneDemandeurInformations = new Column\TextColumn('referent_nom', 'Demandeur');
-        $colonneDemandeurInformations->manipulateRenderCell(function($value, \APY\DataGridBundle\Grid\Row $row) {
+        $colonneDemandeurInformations->manipulateRenderCell(function ($value, \APY\DataGridBundle\Grid\Row $row) {
             if (
                 !empty($row->getField('referentEtablissementNom')) &&
                 !empty($row->getField('referentEtablissementFiness'))
@@ -139,7 +139,7 @@ class DemandesGrid extends DemandesAbstractGrid
 
         $colonneDateChoix = new Column\TextColumn('dateChoix', 'Date choix');
         $colonneDateChoix->manipulateRenderCell(
-            function($value, \APY\DataGridBundle\Grid\Row $row) {
+            function ($value, \APY\DataGridBundle\Grid\Row $row) {
                 return DemandesAbstractGrid::renderCellDateChoix($value, $row);
             }
         )->setFilterable(false)->setSortable(false);
@@ -163,7 +163,7 @@ class DemandesGrid extends DemandesAbstractGrid
     }
 
     /**
-     * Ajoute les boutons d'actions si nécessaire
+     * Ajoute les boutons d'actions si nécessaire.
      */
     public function setActionsButtons()
     {
@@ -172,18 +172,17 @@ class DemandesGrid extends DemandesAbstractGrid
     }
 
     /**
-     * Ajoute les actions de masses
+     * Ajoute les actions de masses.
      */
     public function setMassActions()
     {
-        $this->addMassAction( new Action\ActionMass('Évaluer','HopitalNumeriqueInterventionBundle:Admin/Demande:evaluationMass') );
-        $this->addMassAction( new Action\ActionMass('Exporter','HopitalNumeriqueInterventionBundle:Admin/Demande:exportMass') );
+        $this->addMassAction(new Action\ActionMass('Évaluer', 'HopitalNumeriqueInterventionBundle:Admin/Demande:evaluationMass'));
+        $this->addMassAction(new Action\ActionMass('Exporter', 'HopitalNumeriqueInterventionBundle:Admin/Demande:exportMass'));
 
         $utilisateurConnecte = $this->_container->get('security.context')->getToken()->getUser();
 
-        if ($this->_container->get('nodevo_acl.manager.acl')->checkAuthorization($this->_container->get('router')->generate('hopital_numerique_intervention_admin_demande_delete', array('id' => 0)), $utilisateurConnecte) != -1)
-        {
-            $this->addMassAction( new Action\DeleteMass('HopitalNumeriqueInterventionBundle:Admin/Demande:gridSupprimeMass') );
+        if ($this->_container->get('nodevo_acl.manager.acl')->checkAuthorization($this->_container->get('router')->generate('hopital_numerique_intervention_admin_demande_delete', ['id' => 0]), $utilisateurConnecte) != -1) {
+            $this->addMassAction(new Action\DeleteMass('HopitalNumeriqueInterventionBundle:Admin/Demande:gridSupprimeMass'));
         }
     }
 }

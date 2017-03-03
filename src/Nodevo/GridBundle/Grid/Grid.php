@@ -1,4 +1,5 @@
 <?php
+
 namespace Nodevo\GridBundle\Grid;
 
 use APY\DataGridBundle\Grid\Action\MassAction;
@@ -10,74 +11,74 @@ use Doctrine\Common\Collections\Criteria;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
- * Classe GRID de Nodevo
+ * Classe GRID de Nodevo.
  *
  * @author Quentin SOMAZZI <qsomazzi@nodevo.com>
  */
 abstract class Grid implements GridInterface
 {
     // Constantes de class
-    const SOURCE_TYPE_ENTITY   = 1;
+    const SOURCE_TYPE_ENTITY = 1;
     const SOURCE_TYPE_DOCUMENT = 2;
-    const SOURCE_TYPE_ARRAY    = 3;
-    const SOURCE_TYPE_MANAGER  = 4;
+    const SOURCE_TYPE_ARRAY = 3;
+    const SOURCE_TYPE_MANAGER = 4;
 
     //config
 
-    /** @var \APY\DataGridBundle\Grid\Grid  */
-    protected $_grid                 = null;
+    /** @var \APY\DataGridBundle\Grid\Grid */
+    protected $_grid = null;
     /**
      * @var \Symfony\Component\DependencyInjection\ContainerInterface Container
      */
-    protected $_container            = null;
-    protected $_source               = null;
-    protected $_sourceType           = self::SOURCE_TYPE_ENTITY;
-    protected $_sourceCondition      = null;
-    protected $_maxResults           = null;
-    protected $_limits               = array(10, 20, 50, 100);
-    protected $_defaultLimit         = 20;
-    protected $_noDataMessage        = ' - Aucun élément à afficher - ';
-    protected $_noResultMessage      = ' - Aucun résultat à afficher - ';
-    protected $_buttonSize           = 42;
+    protected $_container = null;
+    protected $_source = null;
+    protected $_sourceType = self::SOURCE_TYPE_ENTITY;
+    protected $_sourceCondition = null;
+    protected $_maxResults = null;
+    protected $_limits = [10, 20, 50, 100];
+    protected $_defaultLimit = 20;
+    protected $_noDataMessage = ' - Aucun élément à afficher - ';
+    protected $_noResultMessage = ' - Aucun résultat à afficher - ';
+    protected $_buttonSize = 42;
     protected $_fieldParentRecursive = null;
-    protected $_fieldLabelRecursive  = null;
-    protected $_showIdColumn         = false;
-    protected $_filterIdColumn       = false;
-    protected $_functionName         = 'getDatasForGrid';
-    protected $_persistence          = true;
-    protected $_defaultOrder         = false;
-    protected $_defaultOrderColumn   = false;
-    protected $_defaultFilters       = array();
+    protected $_fieldLabelRecursive = null;
+    protected $_showIdColumn = false;
+    protected $_filterIdColumn = false;
+    protected $_functionName = 'getDatasForGrid';
+    protected $_persistence = true;
+    protected $_defaultOrder = false;
+    protected $_defaultOrderColumn = false;
+    protected $_defaultFilters = [];
 
     //colonnes
-    protected $_colonnes         = array();
-    protected $_colonnesVisibles = array();
+    protected $_colonnes = [];
+    protected $_colonnesVisibles = [];
 
     //actions button
-    protected $_buttons = array();
+    protected $_buttons = [];
 
     //mass actions
-    protected $_massActions = array();
+    protected $_massActions = [];
 
     /**
-     * Récupère le service grid et initialise un object Nodevo Grid
+     * Récupère le service grid et initialise un object Nodevo Grid.
      *
      * @param APY\DataGridBundle\Grid $grid L'objet grid APY
      */
-    public function __construct( $container )
+    public function __construct($container)
     {
         $this->_container = $container;
-        $this->_grid      = $this->_container->get('_grid');
+        $this->_grid = $this->_container->get('_grid');
 
         return $this;
     }
 
     /**
-     * Met en place toute la config et retourne l'objet grid
+     * Met en place toute la config et retourne l'objet grid.
      *
      * @return Response A Response instance
      */
-    public function render( $vue, $params = array() )
+    public function render($vue, $params = [])
     {
         //Initialize the grid with the conf
         $this->initConfig();
@@ -86,11 +87,11 @@ abstract class Grid implements GridInterface
         $this->initMassActions();
 
         //return the grid object
-        return $this->_grid->getGridResponse( $vue, $params );
+        return $this->_grid->getGridResponse($vue, $params);
     }
 
     /**
-     * Retourne les données du grid BRUT
+     * Retourne les données du grid BRUT.
      *
      * @return array
      */
@@ -104,31 +105,31 @@ abstract class Grid implements GridInterface
     //////////////////////////////////////////////////////////
 
         /**
-         * Ajoute un action button
+         * Ajoute un action button.
          *
          * @param RowActionInterface $button Boutton d'action
          */
-        protected function addActionButton( $button )
+        protected function addActionButton($button)
         {
             $this->_buttons[] = $button;
         }
 
         /**
-         * Ajoute une colonne visible dans le grid
+         * Ajoute une colonne visible dans le grid.
          *
          * @param Column\Column $colonne Colonne
          */
-        protected function addColonne( $colonne )
+        protected function addColonne($colonne)
         {
             $this->_colonnes[] = $colonne;
         }
 
         /**
-         * Ajoute une action de masse
+         * Ajoute une action de masse.
          *
          * @param MassAction $massAction Mass Action
          */
-        protected function addMassAction( $massAction )
+        protected function addMassAction($massAction)
         {
             $this->_massActions[] = $massAction;
         }
@@ -138,169 +139,169 @@ abstract class Grid implements GridInterface
     //////////////////////////////////////////////////////////
 
         /**
-         * Affiche la colonne ID
+         * Affiche la colonne ID.
          *
-         * @param boolean $show Is ID column showed
+         * @param bool $show Is ID column showed
          */
-        protected function showIdColumn( $show )
+        protected function showIdColumn($show)
         {
             $this->_showIdColumn = $show;
         }
 
         /**
-         * Active le filtre de la colonne ID
+         * Active le filtre de la colonne ID.
          *
-         * @param boolean $filter Is ID column filterable
+         * @param bool $filter Is ID column filterable
          */
-        protected function setFilterIdColumn( $filter )
+        protected function setFilterIdColumn($filter)
         {
             $this->_filterIdColumn = $filter;
         }
 
         /**
-         * Met en place l'affichage récursif du grid
+         * Met en place l'affichage récursif du grid.
          *
          * @param string $fieldParent Field de l'Id parent
          * @param string $fieldLabel  Field label
          */
-        protected function setAffichageRecursif( $fieldParent = 'idParent', $fieldLabel = 'libelle' )
+        protected function setAffichageRecursif($fieldParent = 'idParent', $fieldLabel = 'libelle')
         {
             $this->_fieldParentRecursive = $fieldParent;
-            $this->_fieldLabelRecursive  = $fieldLabel;
+            $this->_fieldLabelRecursive = $fieldLabel;
         }
 
         /**
-         * Définie la taille par défaut des bouttons
+         * Définie la taille par défaut des bouttons.
          *
-         * @param integer $size Taille par défaut
+         * @param int $size Taille par défaut
          */
-        protected function setButtonSize( $size = 42 )
+        protected function setButtonSize($size = 42)
         {
             $this->_buttonSize = $size;
         }
 
         /**
-         * Set le message affiché lorsque aucune donnée n'a été trouvée
+         * Set le message affiché lorsque aucune donnée n'a été trouvée.
          *
          * @param string $message Message affiché
          */
-        protected function setNoDataMessage( $message = ' - Aucun élément à afficher - ')
+        protected function setNoDataMessage($message = ' - Aucun élément à afficher - ')
         {
             $this->_noDataMessage = $message;
         }
 
         /**
-         * Set le message affiché lorsqu'aucune donnée n'a été trouvée après Filtre
+         * Set le message affiché lorsqu'aucune donnée n'a été trouvée après Filtre.
          *
          * @param string $message Message affiché
          */
-        protected function setNoResultMessage( $message = ' - Aucun résultat à afficher - ' )
+        protected function setNoResultMessage($message = ' - Aucun résultat à afficher - ')
         {
             $this->_noResultMessage = $message;
         }
 
         /**
-         * Limite par défaut de la pagination
+         * Limite par défaut de la pagination.
          *
-         * @param integer $default Taille par défault du la pagination
+         * @param int $default Taille par défault du la pagination
          */
-        protected function setDefaultLimit( $default = 10 )
+        protected function setDefaultLimit($default = 10)
         {
             $this->_defaultLimit = $default;
         }
 
         /**
-         * Active la persistence des filtres / tri
+         * Active la persistence des filtres / tri.
          *
-         * @param boolean $persistence Est-ce que l'on conserve les filtres/tri ?
+         * @param bool $persistence Est-ce que l'on conserve les filtres/tri ?
          */
-        protected function setPersistence( $persistence = true )
+        protected function setPersistence($persistence = true)
         {
             $this->_persistence = $persistence;
         }
 
         /**
-         * Set les limits de pagination
+         * Set les limits de pagination.
          *
          * @param array $limits Tableau des limits de la pagination
          */
-        protected function setLimits( $limits = array(10, 20, 50, 100) )
+        protected function setLimits($limits = [10, 20, 50, 100])
         {
             $this->_limits = $limits;
         }
 
         /**
-         * Set le nombre de résultats maximum dans le grid
+         * Set le nombre de résultats maximum dans le grid.
          *
-         * @param integer $maxResults Nombre de résultats maximum
+         * @param int $maxResults Nombre de résultats maximum
          */
-        protected function setMaxResults( $maxResults = 1000 )
+        protected function setMaxResults($maxResults = 1000)
         {
             $this->_maxResults = $maxResults;
         }
 
         /**
-         * Set le type de la source des données
+         * Set le type de la source des données.
          *
-         * @param integer $sourceType Type de la source
+         * @param int $sourceType Type de la source
          */
-        protected function setSourceType( $sourceType = self::SOURCE_TYPE_ENTITY )
+        protected function setSourceType($sourceType = self::SOURCE_TYPE_ENTITY)
         {
             $this->_sourceType = $sourceType;
         }
 
         /**
-         * Set la source du grid (peut importe le type)
+         * Set la source du grid (peut importe le type).
          *
          * @param string|array $source Source du grid (Entity, Document ou Vector)
          */
-        protected function setSource( $source = null )
+        protected function setSource($source = null)
         {
             $this->_source = $source;
         }
 
         /**
-         * Set le nom de la fonction à appeller pour charger le grid
+         * Set le nom de la fonction à appeller pour charger le grid.
          *
          * @param string $name Nom de la fonction à appeller
          */
-        protected function setFunctionName( $name )
+        protected function setFunctionName($name)
         {
             $this->_functionName = $name;
         }
 
         /**
-         * Set l'ordre de tri par défault du grid
+         * Set l'ordre de tri par défault du grid.
          *
          * @param string $column ID de la colonne
          * @param string $order  Sens de tri
          */
-        protected function setDefaultOrder( $column, $order )
+        protected function setDefaultOrder($column, $order)
         {
-            $this->_defaultOrder       = $order;
+            $this->_defaultOrder = $order;
             $this->_defaultOrderColumn = $column;
         }
 
         /**
-         * Set le filtre de tri par défault du grid
+         * Set le filtre de tri par défault du grid.
          *
          * @param array $filters Filtre à appliquer dans le grid
          */
-        protected function setDefaultFilters( $filters = array() )
+        protected function setDefaultFilters($filters = [])
         {
             $this->_defaultFilters = $filters;
         }
 
         /**
          * Set la condition de filtrage sur la source des données du grid (si nécessaire)
-         * => Obligé de la mettre public car le paramètre est passé dans la Request (donc le controller)
+         * => Obligé de la mettre public car le paramètre est passé dans la Request (donc le controller).
          *
          * @param string $field Field concerné par la condition
          * @param string $value Value requise pour le field
          */
-        public function setSourceCondition( $field, $value )
+        public function setSourceCondition($field, $value)
         {
-            $condition = new \stdClass;
+            $condition = new \stdClass();
             $condition->field = $field;
             $condition->value = $value;
 
@@ -312,7 +313,7 @@ abstract class Grid implements GridInterface
     //////////////////////////////////////////////////////////
 
         /**
-         * Initialise la configuration par rapport à la classe
+         * Initialise la configuration par rapport à la classe.
          */
         private function initConfig()
         {
@@ -320,26 +321,26 @@ abstract class Grid implements GridInterface
             $this->setConfig();
 
             //max result
-            $this->_grid->setMaxResults( $this->_maxResults );
+            $this->_grid->setMaxResults($this->_maxResults);
 
             //Pagination
-            $this->_grid->setLimits( $this->_limits );
+            $this->_grid->setLimits($this->_limits);
 
             //Pagination par défaut
-            $this->_grid->setDefaultLimit( $this->_defaultLimit );
+            $this->_grid->setDefaultLimit($this->_defaultLimit);
 
             //Message lorsque vide
-            $this->_grid->setNoDataMessage( $this->_noDataMessage );
+            $this->_grid->setNoDataMessage($this->_noDataMessage);
 
             //Message lorsque filtrer no Results
-            $this->_grid->setNoResultMessage( $this->_noResultMessage );
+            $this->_grid->setNoResultMessage($this->_noResultMessage);
 
             //Active la persistence
-            $this->_grid->setPersistence( $this->_persistence );
+            $this->_grid->setPersistence($this->_persistence);
         }
 
         /**
-         * Initialise les colonnes du grid
+         * Initialise les colonnes du grid.
          */
         private function initColonnes()
         {
@@ -349,90 +350,98 @@ abstract class Grid implements GridInterface
 
             //parcours des colonnes visibles ( colonnes ajoutées par l'utilisateur dans son grid seulement )
             foreach ($this->_colonnes as $one) {
-                if( !($one instanceof \Nodevo\GridBundle\Grid\Column\BlankColumn) )
+                if (!($one instanceof \Nodevo\GridBundle\Grid\Column\BlankColumn)) {
                     $this->_colonnesVisibles[] = $one->getField();
+                }
             }
 
             //Si il y a des boutons d'action, on ajoute la colonne
-            if( count($this->_buttons) > 0 ) {
+            if (count($this->_buttons) > 0) {
                 $this->_colonnesVisibles[] = 'actions';
 
                 //Ajout des actions au grid
                 $actionsColumn = new Column\ActionsColumn('actions', '', $this->_buttons);
-                $actionsColumn->setSize( ((count($this->_buttons) * $this->_buttonSize)) + 23 );
+                $actionsColumn->setSize(((count($this->_buttons) * $this->_buttonSize)) + 23);
                 $this->_colonnes[] = $actionsColumn;
 
-                if($this->_sourceType == self::SOURCE_TYPE_ENTITY)
-                    $this->_grid->addColumn( $actionsColumn );
+                if ($this->_sourceType == self::SOURCE_TYPE_ENTITY) {
+                    $this->_grid->addColumn($actionsColumn);
+                }
             }
 
             //Ajout de la colonne ID
-            $idColumn = new Column\NumberColumn(array('id' => 'id', 'title' => 'ID', 'size' => 50, 'field' => 'id', 'source' => true, 'primary' => true, 'filterable' => $this->_filterIdColumn, 'sortable' =>false));
+            $idColumn = new Column\NumberColumn(['id' => 'id', 'title' => 'ID', 'size' => 50, 'field' => 'id', 'source' => true, 'primary' => true, 'filterable' => $this->_filterIdColumn, 'sortable' => false]);
             array_unshift($this->_colonnes, $idColumn);
 
-            if ( $this->_showIdColumn )
+            if ($this->_showIdColumn) {
                 array_unshift($this->_colonnesVisibles, 'id');
+            }
 
             //met à jour le grid avec les colonnes visibles
-            $this->_grid->setVisibleColumns( $this->_colonnesVisibles );
+            $this->_grid->setVisibleColumns($this->_colonnesVisibles);
         }
 
         /**
-         * Ajoute la source des données en fonction du type de la source $_sourceType
+         * Ajoute la source des données en fonction du type de la source $_sourceType.
          */
         private function initSource()
         {
             switch ($this->_sourceType) {
                 case self::SOURCE_TYPE_DOCUMENT:
-                    $source = new Source\Document( $this->_source );
+                    $source = new Source\Document($this->_source);
                     break;
 
                 //Cas manager : utilsé pour récupérer les entitées avec leurs clé étrangères
                 case self::SOURCE_TYPE_MANAGER:
                     //Edit : we can change the functionName called in the manager : default = getDatasForGrid
-                    $manager = $this->_container->get( $this->_source );
+                    $manager = $this->_container->get($this->_source);
 
                     //Récupération de la fonction a appellée pour la récupération des données du grid
-                    $datas = call_user_func( array($manager, $this->_functionName), $this->_sourceCondition );
+                    $datas = call_user_func([$manager, $this->_functionName], $this->_sourceCondition);
 
-                    if( !empty($datas) && !is_null($datas[0]['id']) ){
-                        if( !is_null($this->_fieldParentRecursive) && !is_null($this->_fieldLabelRecursive) )
-                            $datas = $this->rearengeForRecursive( $datas );
-                    }else
-                        $datas = array();
+                    if (!empty($datas) && !is_null($datas[0]['id'])) {
+                        if (!is_null($this->_fieldParentRecursive) && !is_null($this->_fieldLabelRecursive)) {
+                            $datas = $this->rearengeForRecursive($datas);
+                        }
+                    } else {
+                        $datas = [];
+                    }
 
-                    $source = new Source\Vector( $datas, $this->_colonnes );
+                    $source = new Source\Vector($datas, $this->_colonnes);
 
                     $source->setId('id');
                     break;
 
                 case self::SOURCE_TYPE_ARRAY:
-                    $source = new Source\Vector( $this->_source );
+                    $source = new Source\Vector($this->_source);
                     break;
 
                 case self::SOURCE_TYPE_ENTITY:
                 default:
-                    $source = new Source\Entity( $this->_source );
+                    $source = new Source\Entity($this->_source);
                     break;
             }
 
             $this->_grid->setSource($source);
 
             //Si on est en source Entity : on met à jour les colonnes au lieu de les ajouter
-            if($this->_sourceType == self::SOURCE_TYPE_ENTITY)
+            if ($this->_sourceType == self::SOURCE_TYPE_ENTITY) {
                 $this->manageColumnsForEntitySource();
+            }
 
             //Set the default order
-            if( $this->_defaultOrder != false )
-                $this->_grid->setDefaultOrder( $this->_defaultOrderColumn, $this->_defaultOrder );
+            if ($this->_defaultOrder != false) {
+                $this->_grid->setDefaultOrder($this->_defaultOrderColumn, $this->_defaultOrder);
+            }
 
             //Set the default filter
-            if( count($this->_defaultFilters) > 0 )
-                $this->_grid->setDefaultFilters( $this->_defaultFilters );
+            if (count($this->_defaultFilters) > 0) {
+                $this->_grid->setDefaultFilters($this->_defaultFilters);
+            }
         }
 
         /**
-         * Initialise les actions de masse
+         * Initialise les actions de masse.
          *
          * @return empty
          */
@@ -441,74 +450,74 @@ abstract class Grid implements GridInterface
             //Récupère les mass actions de la config du grid
             $this->setMassActions();
 
-            foreach($this->_massActions as $massAction)
+            foreach ($this->_massActions as $massAction) {
                 $this->_grid->addMassAction($massAction);
+            }
         }
 
         /**
-         * Manage colonne when datas come from an Entity Source
+         * Manage colonne when datas come from an Entity Source.
          *
          * @return empty
          */
         private function manageColumnsForEntitySource()
         {
-            foreach($this->_colonnes as $colonne)
-            {
+            foreach ($this->_colonnes as $colonne) {
                 //get column with ID
-                $column = $this->_grid->getColumn( $colonne->getId() );
+                $column = $this->_grid->getColumn($colonne->getId());
 
                 //repeat the configuration : Bad stuff but we need to do this because columns are already set (by entity) so it's just an update
-                $column->setTitle( $colonne->getTitle() );
-                $column->setSize( $colonne->getSize() );
-                $column->setSortable( $colonne->isSortable() );
-                $column->setAlign( $colonne->getAlign() );
-                $column->setFilterable( $colonne->isFilterable() );
-                $column->setValues( $colonne->getValues() );
-                $column->setFilterType( $colonne->getFilterType() );
-                $column->setSelectFrom( $colonne->getSelectFrom() );
-                $column->setOperatorsVisible( $colonne->getOperatorsVisible() );
+                $column->setTitle($colonne->getTitle());
+                $column->setSize($colonne->getSize());
+                $column->setSortable($colonne->isSortable());
+                $column->setAlign($colonne->getAlign());
+                $column->setFilterable($colonne->isFilterable());
+                $column->setValues($colonne->getValues());
+                $column->setFilterType($colonne->getFilterType());
+                $column->setSelectFrom($colonne->getSelectFrom());
+                $column->setOperatorsVisible($colonne->getOperatorsVisible());
             }
         }
 
         /**
-         * Réarrange les données pour les afficher en mode Récursif
+         * Réarrange les données pour les afficher en mode Récursif.
          *
          * @param array $datas Tableau de données
          *
          * @return array
          */
-        private function rearengeForRecursive( $datas )
+        private function rearengeForRecursive($datas)
         {
             //Création d'un tableau ayant pour clé le véritable id de l'item
-            foreach ($datas as $key => $data)
+            foreach ($datas as $key => $data) {
                 $datasById[$data['id']] = $data;
+            }
 
             //Tri + affichage '|---' (affiché X fois selon la profondeur du fils) devant le nom si l'élément est un fils (TODO : récursivité à faire !)
-            foreach ($datas as $key => $data)
-            {
-                if(NULL !== $data[$this->_fieldParentRecursive])
-                    $datas = $this->gestionAffichageSousItems( $key, $datas, $datasById, $datasById[$data['id']] );
+            foreach ($datas as $key => $data) {
+                if (null !== $data[$this->_fieldParentRecursive]) {
+                    $datas = $this->gestionAffichageSousItems($key, $datas, $datasById, $datasById[$data['id']]);
+                }
             }
 
             return $this->regroupementParentEnfant($datas);
         }
 
         /**
-         * Fonction récursive permettant d'ajouter le préfixe '|---' le nombre de fois qu'il y a de parent pour un item donné
+         * Fonction récursive permettant d'ajouter le préfixe '|---' le nombre de fois qu'il y a de parent pour un item donné.
          *
-         * @param int $key          Clé de l'index courant
+         * @param int   $key        Clé de l'index courant
          * @param array $datas      Tableau des données à modifier
          * @param array $datasById  Tableau des permettant de recupérer un item en fonction de son Id
          * @param array $parentData Tableau contenant les données de l'item parent de l'item courant
          */
-        private function gestionAffichageSousItems( $key, $datas, $datasById, $parentData )
+        private function gestionAffichageSousItems($key, $datas, $datasById, $parentData)
         {
-            if( NULL != $parentData[$this->_fieldParentRecursive])
-            {
+            if (null != $parentData[$this->_fieldParentRecursive]) {
                 $datas[$key][$this->_fieldLabelRecursive] = '|--- ' . $datas[$key][$this->_fieldLabelRecursive];
 
-                $parentData = array_key_exists($this->_fieldParentRecursive,$parentData)  && array_key_exists($parentData[$this->_fieldParentRecursive], $datasById)? $datasById[$parentData[$this->_fieldParentRecursive]] : null;
-                $datas      = $this->gestionAffichageSousItems( $key, $datas, $datasById, $parentData );
+                $parentData = array_key_exists($this->_fieldParentRecursive, $parentData) && array_key_exists($parentData[$this->_fieldParentRecursive], $datasById) ? $datasById[$parentData[$this->_fieldParentRecursive]] : null;
+                $datas = $this->gestionAffichageSousItems($key, $datas, $datasById, $parentData);
             }
 
             return $datas;
@@ -517,43 +526,43 @@ abstract class Grid implements GridInterface
         /**
          * Fonction permettant de regrouper les parents/enfants ensemble.
          *
-         * @param array $datas      Tableau des données à regrouper
-         * @return array            Tableau des données regroupées
+         * @param array $datas Tableau des données à regrouper
+         *
+         * @return array Tableau des données regroupées
          */
-        private function regroupementParentEnfant( $datas )
+        private function regroupementParentEnfant($datas)
         {
             //Récupère l'ensemble des données dans un ArrayCollection
-            $datasArrayCollection = new ArrayCollection( $datas );
+            $datasArrayCollection = new ArrayCollection($datas);
 
             //Récupère que les éléments qui ont des parents
-            $criteria = Criteria::create()->where(Criteria::expr()->eq($this->_fieldParentRecursive, null) );
-            $parents  = $datasArrayCollection->matching( $criteria )->toArray();
+            $criteria = Criteria::create()->where(Criteria::expr()->eq($this->_fieldParentRecursive, null));
+            $parents = $datasArrayCollection->matching($criteria)->toArray();
 
-            return $this->rangeEnfants($parents, $datasArrayCollection );
+            return $this->rangeEnfants($parents, $datasArrayCollection);
         }
 
         /**
-         * Fonction récursive permettant de trier tout les niveaux d'enfants et les regrouper
+         * Fonction récursive permettant de trier tout les niveaux d'enfants et les regrouper.
          *
          * @param array           $items                Tableau d'un niveau de parent/enfant
          * @param ArrayCollection $datasArrayCollection Tableau de l'ensemble des données permettant de faire de tri ou récupération de groupe d'enfant d'un parent donné
          *
          * @return array Tableau du niveau parent/enfant courant trié
          */
-        private function rangeEnfants( $items, $datasArrayCollection)
+        private function rangeEnfants($items, $datasArrayCollection)
         {
-            $tab = array();
+            $tab = [];
 
-            foreach ($items as $key => $enfant)
-            {
+            foreach ($items as $key => $enfant) {
                 $tab[] = $enfant;
 
                 //Récupère que les éléments qui ont des parents
-                $criteria = Criteria::create()->where(Criteria::expr()->eq($this->_fieldParentRecursive, $enfant['id']) );
-                $enfants  = $datasArrayCollection->matching( $criteria )->toArray();
+                $criteria = Criteria::create()->where(Criteria::expr()->eq($this->_fieldParentRecursive, $enfant['id']));
+                $enfants = $datasArrayCollection->matching($criteria)->toArray();
 
                 //range les éléments
-                $tab = array_merge( $tab, $this->rangeEnfants($enfants, $datasArrayCollection) );
+                $tab = array_merge($tab, $this->rangeEnfants($enfants, $datasArrayCollection));
             }
 
             return $tab;

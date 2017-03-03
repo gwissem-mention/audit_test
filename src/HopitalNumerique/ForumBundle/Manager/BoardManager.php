@@ -1,4 +1,5 @@
 <?php
+
 namespace HopitalNumerique\ForumBundle\Manager;
 
 use Nodevo\ToolsBundle\Manager\Manager as BaseManager;
@@ -12,7 +13,7 @@ use CCDNForum\ForumBundle\Model\FrontModel\PostModel;
 class BoardManager extends BaseManager
 {
     protected $class = 'HopitalNumerique\ForumBundle\Entity\Board';
-    
+
     /**
      * @var \CCDNForum\ForumBundle\Model\FrontModel\TopicModel TopicModel
      */
@@ -22,41 +23,36 @@ class BoardManager extends BaseManager
      * @var \CCDNForum\ForumBundle\Model\FrontModel\PostModel PostModel
      */
     private $postModel;
-    
-    
+
     /**
      * Constructeur.
      */
     public function __construct(EntityManager $em, TopicModel $topicModel, PostModel $postModel)
     {
         parent::__construct($em);
-        
+
         $this->topicModel = $topicModel;
         $this->postModel = $postModel;
     }
-    
-    
+
     /**
      * Recalcule les derniers messages de chaque board.
      */
     public function recalculateAllLastMessages()
     {
         $boards = $this->findAll();
-        
-        foreach ($boards as $board)
-        {
-            foreach ($board->getTopics() as $topic)
-            {
+
+        foreach ($boards as $board) {
+            foreach ($board->getTopics() as $topic) {
                 $topicLastPost = $this->postModel->getLastPostForTopicById($topic->getId());
                 $topic->setLastPost($topicLastPost);
                 $this->topicModel->saveTopic($topic);
             }
 
             $boardLastTopic = $this->topicModel->findLastTopicForBoardByIdWithLastPost($board->getId());
-            if (null !== $boardLastTopic)
-            {
+            if (null !== $boardLastTopic) {
                 $boardLastTopicLastPost = $this->postModel->getLastPostForTopicById($boardLastTopic->getId());
-                
+
                 $board->setLastPost($boardLastTopicLastPost);
                 $this->save($board);
             }
@@ -79,7 +75,7 @@ class BoardManager extends BaseManager
             if (null === $forumIdFlag || $forumIdFlag !== $board->getCategory()->getForum()->getId()) {
                 $boardsClassifiedByCategoryAndForum[] = [
                     'forum' => $board->getCategory()->getForum(),
-                    'categories' => []
+                    'categories' => [],
                 ];
                 $forumIdFlag = $board->getCategory()->getForum()->getId();
             }
@@ -87,7 +83,7 @@ class BoardManager extends BaseManager
             if (null === $categoryIdFlag || $categoryIdFlag !== $board->getCategory()->getId()) {
                 $boardsClassifiedByCategoryAndForum[$forumKey]['categories'][] = [
                     'category' => $board->getCategory(),
-                    'boards' => []
+                    'boards' => [],
                 ];
                 $categoryIdFlag = $board->getCategory()->getId();
             }

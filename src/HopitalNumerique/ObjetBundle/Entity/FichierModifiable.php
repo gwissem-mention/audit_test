@@ -5,11 +5,9 @@ namespace HopitalNumerique\ObjetBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 //Asserts Stuff
 use Symfony\Component\Validator\Constraints as Assert;
-use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
-use Nodevo\ToolsBundle\Validator\Constraints as Nodevo;
 
 /**
- * FichierModifiable
+ * FichierModifiable.
  *
  * @ORM\Table(name="hn_objet_fichiermodifiable")
  * @ORM\Entity(repositoryClass="HopitalNumerique\ObjetBundle\Repository\FichierModifiableRepository")
@@ -18,7 +16,7 @@ use Nodevo\ToolsBundle\Validator\Constraints as Nodevo;
 class FichierModifiable
 {
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="ofm_id", type="integer")
      * @ORM\Id
@@ -55,7 +53,7 @@ class FichierModifiable
     private $pathEdit;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\OneToOne(targetEntity="Objet", inversedBy="fichierModifiable")
      * @ORM\JoinColumn(name="obj_id", referencedColumnName="obj_id", onDelete="CASCADE")
@@ -82,9 +80,9 @@ class FichierModifiable
     }
 
     /**
-     * Get id
+     * Get id.
      *
-     * @return integer 
+     * @return int
      */
     public function getId()
     {
@@ -92,9 +90,10 @@ class FichierModifiable
     }
 
     /**
-     * Set referentAnap
+     * Set referentAnap.
      *
      * @param string $referentAnap
+     *
      * @return FichierModifiable
      */
     public function setReferentAnap($referentAnap)
@@ -105,9 +104,9 @@ class FichierModifiable
     }
 
     /**
-     * Get referentAnap
+     * Get referentAnap.
      *
-     * @return string 
+     * @return string
      */
     public function getReferentAnap()
     {
@@ -115,9 +114,10 @@ class FichierModifiable
     }
 
     /**
-     * Set sourceDocument
+     * Set sourceDocument.
      *
      * @param string $sourceDocument
+     *
      * @return FichierModifiable
      */
     public function setSourceDocument($sourceDocument)
@@ -128,9 +128,9 @@ class FichierModifiable
     }
 
     /**
-     * Get sourceDocument
+     * Get sourceDocument.
      *
-     * @return string 
+     * @return string
      */
     public function getSourceDocument()
     {
@@ -138,9 +138,10 @@ class FichierModifiable
     }
 
     /**
-     * Set commentaires
+     * Set commentaires.
      *
      * @param string $commentaires
+     *
      * @return FichierModifiable
      */
     public function setCommentaires($commentaires)
@@ -151,9 +152,9 @@ class FichierModifiable
     }
 
     /**
-     * Get commentaires
+     * Get commentaires.
      *
-     * @return string 
+     * @return string
      */
     public function getCommentaires()
     {
@@ -161,9 +162,10 @@ class FichierModifiable
     }
 
     /**
-     * Set objet
+     * Set objet.
      *
      * @param \HopitalNumerique\ObjetBundle\Entity\Objet $objet
+     *
      * @return FichierModifiable
      */
     public function setObjet(\HopitalNumerique\ObjetBundle\Entity\Objet $objet = null)
@@ -174,9 +176,9 @@ class FichierModifiable
     }
 
     /**
-     * Get objet
+     * Get objet.
      *
-     * @return \HopitalNumerique\ObjetBundle\Entity\Objet 
+     * @return \HopitalNumerique\ObjetBundle\Entity\Objet
      */
     public function getObjet()
     {
@@ -184,15 +186,17 @@ class FichierModifiable
     }
 
     /**
-     * Set pathEdit
+     * Set pathEdit.
      *
      * @param string $pathEdit
+     *
      * @return Objet
      */
     public function setPathEdit($pathEdit)
     {
-        if( is_null($pathEdit) && file_exists($this->getAbsolutePath()) )
+        if (is_null($pathEdit) && file_exists($this->getAbsolutePath())) {
             unlink($this->getAbsolutePath());
+        }
 
         $this->pathEdit = $pathEdit;
 
@@ -200,9 +204,9 @@ class FichierModifiable
     }
 
     /**
-     * Get pathEdit
+     * Get pathEdit.
      *
-     * @return string 
+     * @return string
      */
     public function getPathEdit()
     {
@@ -210,9 +214,9 @@ class FichierModifiable
     }
 
     /**
-     * [getAbsolutePath description]
+     * [getAbsolutePath description].
      *
-     * @param  [type] $type [description]
+     * @param [type] $type [description]
      *
      * @return [type]
      */
@@ -220,19 +224,21 @@ class FichierModifiable
     {
         $result = null;
 
-        if( !is_null($this->pathEdit) )
+        if (!is_null($this->pathEdit)) {
             $result = $this->pathEdit;
+        }
 
-        if( is_null($result) )
+        if (is_null($result)) {
             return null;
+        }
 
         return $this->getUploadRootDir() . '/' . $result;
     }
 
     /**
-     * [getWebPath description]
+     * [getWebPath description].
      *
-     * @param  [type] $type [description]
+     * @param [type] $type [description]
      *
      * @return [type]
      */
@@ -240,35 +246,37 @@ class FichierModifiable
     {
         $result = null;
 
-        
-        if( !is_null($this->pathEdit) )
+        if (!is_null($this->pathEdit)) {
             $result = $this->pathEdit;
+        }
 
-        if( is_null($result) )
+        if (is_null($result)) {
             return null;
+        }
 
         return $this->getUploadDir() . '/' . $result;
     }
-    
+
     /**
-     * Fonction qui renvoie le type mime de la piece jointe 1 ou 2
+     * Fonction qui renvoie le type mime de la piece jointe 1 ou 2.
      */
-    public function getTypeMime( $type )
+    public function getTypeMime($type)
     {
         $result = null;
 
         $result = $this->pathEdit;
 
-        if( !$result || is_null($result) )
-            return "";
-        
-        return substr($result, strrpos($result, ".") + 1);
+        if (!$result || is_null($result)) {
+            return '';
+        }
+
+        return substr($result, strrpos($result, '.') + 1);
     }
 
     public function getUploadRootDir()
     {
         // le chemin absolu du répertoire où les documents uploadés doivent être sauvegardés
-        return __WEB_DIRECTORY__.'/'.$this->getUploadDir();
+        return __WEB_DIRECTORY__ . '/' . $this->getUploadDir();
     }
 
     public function getUploadDir()
@@ -282,10 +290,11 @@ class FichierModifiable
      */
     public function preUpload()
     {
-        if (null !== $this->fileEdit){
+        if (null !== $this->fileEdit) {
             //delete Old File
-            if ( file_exists($this->getAbsolutePath()) )
+            if (file_exists($this->getAbsolutePath())) {
                 unlink($this->getAbsolutePath());
+            }
 
             //$this->pathEdit = $this->fileEdit->getClientOriginalName();
             $this->pathEdit = $this->getObjet()->getId() . '_' . $this->fileEdit->getClientOriginalName();
@@ -298,15 +307,15 @@ class FichierModifiable
      */
     public function upload()
     {
-        if ( null === $this->fileEdit )
+        if (null === $this->fileEdit) {
             return;
-        
+        }
+
         // s'il y a une erreur lors du déplacement du fichier, une exception
         // va automatiquement être lancée par la méthode move(). Cela va empêcher
-        // proprement l'entité d'être persistée dans la base de données si erreur il y a   
+        // proprement l'entité d'être persistée dans la base de données si erreur il y a
 
-        if ( null !== $this->fileEdit )
-        {
+        if (null !== $this->fileEdit) {
             $this->fileEdit->move($this->getUploadRootDir(), $this->pathEdit);
             unset($this->fileEdit);
         }
@@ -317,14 +326,16 @@ class FichierModifiable
      */
     public function removeUpload()
     {
-        if ( $fileEdit = $this->getAbsolutePath() && file_exists( $this->getAbsolutePath() ) )
+        if ($fileEdit = $this->getAbsolutePath() && file_exists($this->getAbsolutePath())) {
             unlink($fileEdit);
+        }
     }
 
     /**
-     * Set dateLastModif
+     * Set dateLastModif.
      *
      * @param \DateTime $dateLastModif
+     *
      * @return FichierModifiable
      */
     public function setDateLastModif($dateLastModif)
@@ -335,9 +346,9 @@ class FichierModifiable
     }
 
     /**
-     * Get dateLastModif
+     * Get dateLastModif.
      *
-     * @return \DateTime 
+     * @return \DateTime
      */
     public function getDateLastModif()
     {

@@ -1,4 +1,5 @@
 <?php
+
 namespace HopitalNumerique\UserBundle\Service;
 
 use CCDNForum\ForumBundle\Model\Component\Repository\PostRepository;
@@ -7,7 +8,7 @@ use HopitalNumerique\ObjetBundle\Repository\NoteRepository;
 use HopitalNumerique\UserBundle\Entity\User;
 
 /**
- * Class ActiveMemberCalculator
+ * Class ActiveMemberCalculator.
  */
 class ActiveMemberCalculator
 {
@@ -55,12 +56,12 @@ class ActiveMemberCalculator
             $score = $nbComment + $nbNote + $nbPost;
 
             $activeMembers[] = [
-                'idUser'    => $user->getId(),
+                'idUser' => $user->getId(),
                 'nbComment' => $nbComment,
-                'nbVisite'  => $user->getNbVisites(),
-                'nbPost'    => $nbPost,
-                'nbNote'    => $nbNote,
-                'score'     => $score,
+                'nbVisite' => $user->getNbVisites(),
+                'nbPost' => $nbPost,
+                'nbNote' => $nbNote,
+                'score' => $score,
             ];
         }
 

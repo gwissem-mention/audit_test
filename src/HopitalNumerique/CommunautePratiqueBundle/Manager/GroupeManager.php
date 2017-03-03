@@ -1,4 +1,5 @@
 <?php
+
 namespace HopitalNumerique\CommunautePratiqueBundle\Manager;
 
 use HopitalNumerique\DomaineBundle\Entity\Domaine;
@@ -13,9 +14,10 @@ class GroupeManager extends \Nodevo\ToolsBundle\Manager\Manager
 
     /**
      * Retourne les groupes n'ayant pas encore démarrés.
-     * 
+     *
      * @param \HopitalNumerique\DomaineBundle\Entity\Domaine $domaine Domaine
      * @param \HopitalNumerique\UserBundle\Entity\User       $user    Utilisateur
+     *
      * @return array<\HopitalNumerique\CommunautePratiqueBundle\Entity\Groupe> Groupes non démarrés
      */
     public function findNonDemarresByUser(Domaine $domaine, User $user)
@@ -25,8 +27,9 @@ class GroupeManager extends \Nodevo\ToolsBundle\Manager\Manager
 
     /**
      * Retourne les groupes n'ayant pas encore démarrés.
-     * 
+     *
      * @param \HopitalNumerique\DomaineBundle\Entity\Domaine $domaine Domaine
+     *
      * @return array<\HopitalNumerique\CommunautePratiqueBundle\Entity\Groupe> Groupes non démarrés
      */
     public function findNonDemarres(Domaine $domaine)
@@ -36,8 +39,9 @@ class GroupeManager extends \Nodevo\ToolsBundle\Manager\Manager
 
     /**
      * Retourne les groupes en cours.
-     * 
+     *
      * @param \HopitalNumerique\DomaineBundle\Entity\Domaine $domaine Domaine
+     *
      * @return array<\HopitalNumerique\CommunautePratiqueBundle\Entity\Groupe> Groupes en cours
      */
     public function findEnCours(Domaine $domaine)
@@ -49,18 +53,20 @@ class GroupeManager extends \Nodevo\ToolsBundle\Manager\Manager
      * Retourne les groupes terminés.
      *
      * @param \HopitalNumerique\DomaineBundle\Entity\Domaine $domaine Domaine
+     *
      * @return array<\HopitalNumerique\CommunautePratiqueBundle\Entity\Groupe> Groupes en cours
      */
     public function findTermines(Domaine $domaine)
     {
-    	return $this->getRepository()->findTermines($domaine, null, true);
+        return $this->getRepository()->findTermines($domaine, null, true);
     }
 
     /**
      * Retourne les groupes en cours.
-     * 
+     *
      * @param \HopitalNumerique\DomaineBundle\Entity\Domaine $domaine Domaine
      * @param \HopitalNumerique\UserBundle\Entity\User       $user    Utilisateur
+     *
      * @return array<\HopitalNumerique\CommunautePratiqueBundle\Entity\Groupe> Groupes en cours
      */
     public function findEnCoursByUser(Domaine $domaine, User $user)
@@ -73,6 +79,7 @@ class GroupeManager extends \Nodevo\ToolsBundle\Manager\Manager
      *
      * @param \HopitalNumerique\DomaineBundle\Entity\Domaine $domaine Domaine
      * @param \HopitalNumerique\UserBundle\Entity\User       $user    Utilisateur
+     *
      * @return array<\HopitalNumerique\CommunautePratiqueBundle\Entity\Groupe> Groupes en cours
      */
     public function findTerminesByUser(Domaine $domaine, User $user)
@@ -85,14 +92,14 @@ class GroupeManager extends \Nodevo\ToolsBundle\Manager\Manager
      *
      * @param \HopitalNumerique\DomaineBundle\Entity\Domaine $domaine   Domaine
      * @param \HopitalNumerique\UserBundle\Entity\User       $user      Utilisateur
-     * @param boolean                                        $enVedette (optionnel) En vedette
+     * @param bool                                           $enVedette (optionnel) En vedette
+     *
      * @return array<\HopitalNumerique\CommunautePratiqueBundle\Entity\Groupe> Groupes non fermés
      */
     public function findNonFermes(Domaine $domaine, User $user = null, $enVedette = null)
     {
         return $this->getRepository()->findNonFermes($domaine, $user, $enVedette, true, true);
     }
-
 
     /**
      * Retourne la QueryBuilder des groupes ayant des publications.
@@ -103,7 +110,6 @@ class GroupeManager extends \Nodevo\ToolsBundle\Manager\Manager
     {
         return $this->getRepository()->findWithPublicationsQueryBuilder(true)->getQuery()->getResult();
     }
-
 
     /**
      * Retourne les données pour le grid.

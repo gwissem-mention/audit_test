@@ -1,4 +1,5 @@
 <?php
+
 namespace HopitalNumerique\AutodiagBundle\Service;
 
 use HopitalNumerique\AutodiagBundle\Entity\Autodiag;
@@ -23,8 +24,8 @@ use HopitalNumerique\AutodiagBundle\Service\Attribute\PresetableAttributeBuilder
 use HopitalNumerique\AutodiagBundle\Service\Synthesis\Completion;
 
 /**
- * Class RestitutionCalculator
- * @package HopitalNumerique\AutodiagBundle\Service
+ * Class RestitutionCalculator.
+ *
  * @TODO Utiliser le ResultItemBuilder pour construire les ResultItem, Attribute, calcul du score etc
  */
 class RestitutionCalculator
@@ -73,12 +74,13 @@ class RestitutionCalculator
 
     /**
      * RestitutionCalculator constructor.
+     *
      * @param AttributeBuilderProvider $attributeBuilder
-     * @param ValueRepository $valueRepository
-     * @param RestitutionRepository $restitutionRepository
-     * @param Completion $completion
-     * @param ScoreRepository $scoreRepository
-     * @param AttributeRepository $attributeRepository
+     * @param ValueRepository          $valueRepository
+     * @param RestitutionRepository    $restitutionRepository
+     * @param Completion               $completion
+     * @param ScoreRepository          $scoreRepository
+     * @param AttributeRepository      $attributeRepository
      * @TODO Injecter un algorithm factory qui connaitrais tous les algo possible via un compileur pass
      */
     public function __construct(
@@ -106,7 +108,7 @@ class RestitutionCalculator
         foreach ($this->getRestitution($autodiag)->getCategories() as $category) {
             /** @var Category $category */
             foreach ($category->getItems() as $item) {
-                /** @var RestitutionItem $item */
+                /* @var RestitutionItem $item */
                 $result[$item->getId()] = $this->computeItem($item, $synthesis);
             }
         }
@@ -127,10 +129,11 @@ class RestitutionCalculator
     }
 
     /**
-     * Traite un item de la page de restitution (représente 1 graphique d'un onglet de la page de resultat)
+     * Traite un item de la page de restitution (représente 1 graphique d'un onglet de la page de resultat).
      *
      * @param RestitutionItem $item
-     * @param Synthesis $synthesis
+     * @param Synthesis       $synthesis
+     *
      * @return array
      */
     public function computeItem(RestitutionItem $item, Synthesis $synthesis)
@@ -174,11 +177,12 @@ class RestitutionCalculator
     }
 
     /**
-     * Traite les données d'un container d'autodiag (chapitre ou catégorie) pour une synthèse donnée
+     * Traite les données d'un container d'autodiag (chapitre ou catégorie) pour une synthèse donnée.
      *
      * @param Container $container
      * @param Synthesis $synthesis
      * @param $references
+     *
      * @return ResultItem
      */
     public function computeItemContainer(Container $container, Synthesis $synthesis, $references = [])
@@ -221,7 +225,6 @@ class RestitutionCalculator
             }
             $resultItem->setColorationInversed($colorationInversed > 0);
 
-
             if (count($references) > 0) {
                 foreach ($references as $reference) {
                     $referenceScore = $this->getReferenceScore($reference, $container);
@@ -236,7 +239,6 @@ class RestitutionCalculator
                     $this->computeItemContainer($child, $synthesis, $references)
                 );
             }
-
 
             if (is_callable($this->resultItemCreatedCallback)) {
                 call_user_func($this->resultItemCreatedCallback, $resultItem, $container);
@@ -323,11 +325,9 @@ class RestitutionCalculator
         ]);
 
         if (!array_key_exists($cacheKey, $this->references)) {
-
             $score = null;
 
             if ($reference instanceof SynthesisReference) {
-
                 $score = new Score(
                     $this->getContainerSynthesisScore($reference->getSynthesis(), $container->getId(), $reference->getNumber()),
                     $reference->getLabel(),
@@ -345,8 +345,6 @@ class RestitutionCalculator
                     );
                 }
             }
-
-
 
             $this->references[$cacheKey] = $score;
         }
@@ -366,10 +364,11 @@ class RestitutionCalculator
     }
 
     /**
-     * Retourne la valeur minimale et maximale des réponses de l'attribut (pour l'autodiag en paramètre)
+     * Retourne la valeur minimale et maximale des réponses de l'attribut (pour l'autodiag en paramètre).
      *
      * @param Autodiag $autodiag
-     * @param array $attribute
+     * @param array    $attribute
+     *
      * @return mixed
      */
     protected function getMinAndMaxForAutodiagAttributes(Autodiag $autodiag, array $attribute)
@@ -422,7 +421,6 @@ class RestitutionCalculator
     /**
      * @param Autodiag\ActionPlan[] $plans
      * @param $score
-     * @return null
      */
     protected function findActionPlan($plans, $score)
     {
@@ -482,10 +480,11 @@ class RestitutionCalculator
     }
 
     /**
-     * Calcule le score d'une valeur en fonction des valeurs min et max
+     * Calcule le score d'une valeur en fonction des valeurs min et max.
      *
      * @param $value
      * @param $minAndMax
+     *
      * @return float
      */
     protected function calculateScore($value, $minAndMax)

@@ -1,4 +1,5 @@
 <?php
+
 namespace Nodevo\RoleBundle\Controller;
 
 use Symfony\Component\HttpFoundation\Response;
@@ -20,77 +21,76 @@ class RoleController extends Controller
     }
 
     /**
-     * Affiche le formulaire d'ajout de role
+     * Affiche le formulaire d'ajout de role.
      */
     public function addAction()
     {
         $role = $this->get('nodevo_role.manager.role')->createEmpty();
 
-        return $this->renderForm('nodevo_role_role', $role, 'NodevoRoleBundle:Role:edit.html.twig' );
+        return $this->renderForm('nodevo_role_role', $role, 'NodevoRoleBundle:Role:edit.html.twig');
     }
 
     /**
-     * Affichage du formulaire de role
-     * 
+     * Affichage du formulaire de role.
+     *
      * @param intger $id Identifiant du role
      */
-    public function editAction( $id )
+    public function editAction($id)
     {
-        $role = $this->get('nodevo_role.manager.role')->findOneBy( array('id' => $id) );
+        $role = $this->get('nodevo_role.manager.role')->findOneBy(['id' => $id]);
 
-        return $this->renderForm('nodevo_role_role', $role, 'NodevoRoleBundle:Role:edit.html.twig' );
+        return $this->renderForm('nodevo_role_role', $role, 'NodevoRoleBundle:Role:edit.html.twig');
     }
 
     /**
-     * Affichage de la fiche d'un role
-     * 
-     * @param integer $id ID du role
-     */
-    public function showAction( $id )
-    {
-        $role = $this->get('nodevo_role.manager.role')->findOneBy( array('id' => $id) );
-
-        return $this->render('NodevoRoleBundle:Role:show.html.twig', array(
-            'role' => $role
-        ));
-    }
-
-    /**
-     * Suppression d'un role
+     * Affichage de la fiche d'un role.
      *
-     * @param integer $id ID du role
+     * @param int $id ID du role
      */
-    public function deleteAction( $id )
+    public function showAction($id)
     {
-        $role = $this->get('nodevo_role.manager.role')->findOneBy( array('id' => $id) );
+        $role = $this->get('nodevo_role.manager.role')->findOneBy(['id' => $id]);
 
-        if( $role->getInitial() ){
-            $this->get('session')->getFlashBag()->add('danger', 'Il est interdit de supprimer un groupe initial.' );
-        }else{
-            $users = $this->get('hopitalnumerique_user.manager.user')->findUsersByRole( $role->getRole() );
-            
-            if(count($users) > 0){
+        return $this->render('NodevoRoleBundle:Role:show.html.twig', [
+            'role' => $role,
+        ]);
+    }
+
+    /**
+     * Suppression d'un role.
+     *
+     * @param int $id ID du role
+     */
+    public function deleteAction($id)
+    {
+        $role = $this->get('nodevo_role.manager.role')->findOneBy(['id' => $id]);
+
+        if ($role->getInitial()) {
+            $this->get('session')->getFlashBag()->add('danger', 'Il est interdit de supprimer un groupe initial.');
+        } else {
+            $users = $this->get('hopitalnumerique_user.manager.user')->findUsersByRole($role->getRole());
+
+            if (count($users) > 0) {
                 $message = 'Ce groupe n\'a pas pu être supprimé car il a encore des utilisateurs associés.';
                 $this->get('session')->getFlashBag()->add('danger', $message);
-            }else{
+            } else {
                 //suppression des acl pour ce role
-                $acls = $this->get('nodevo_acl.manager.acl')->findBy( array('role' => $role) );
-                foreach($acls as $acl)
-                    $this->get('nodevo_acl.manager.acl')->delete( $acl );
+                $acls = $this->get('nodevo_acl.manager.acl')->findBy(['role' => $role]);
+                foreach ($acls as $acl) {
+                    $this->get('nodevo_acl.manager.acl')->delete($acl);
+                }
 
                 //Suppression du role
-                $this->get('nodevo_role.manager.role')->delete( $role );
-                $this->get('session')->getFlashBag()->add('info', 'Suppression effectuée avec succès.' );
+                $this->get('nodevo_role.manager.role')->delete($role);
+                $this->get('session')->getFlashBag()->add('info', 'Suppression effectuée avec succès.');
             }
         }
 
-        return new Response('{"success":true, "url" : "'.$this->generateUrl('nodevo_role_role').'"}', 200);
+        return new Response('{"success":true, "url" : "' . $this->generateUrl('nodevo_role_role') . '"}', 200);
     }
 
-
-
     /**
-     * Effectue le render du formulaire Role
+     * Effectue le render du formulaire Role.
      *
      * @param string $formName Nom du service associé au formulaire
      * @param Role   $role     Entité role
@@ -98,16 +98,15 @@ class RoleController extends Controller
      *
      * @return Form | redirect
      */
-    private function renderForm( $formName, $role, $view )
+    private function renderForm($formName, $role, $view)
     {
         //Création du formulaire via le service
-        $form = $this->createForm( $formName, $role);
+        $form = $this->createForm($formName, $role);
 
         $request = $this->get('request');
-        
+
         // Si l'utilisateur soumet le formulaire
         if ('POST' == $request->getMethod()) {
-            
             // On bind les données du form
             $form->handleRequest($request);
 
@@ -118,20 +117,20 @@ class RoleController extends Controller
 
                 // On utilise notre Manager pour gérer la sauvegarde de l'objet
                 $this->get('nodevo_role.manager.role')->save($role);
-                
+
                 // On envoi une 'flash' pour indiquer à l'utilisateur que l'entité est ajoutée
-                $this->get('session')->getFlashBag()->add( ($new ? 'success' : 'info') , 'Groupe ' . ($new ? 'ajouté.' : 'mis à jour.') ); 
-                
+                $this->get('session')->getFlashBag()->add(($new ? 'success' : 'info'), 'Groupe ' . ($new ? 'ajouté.' : 'mis à jour.'));
+
                 $do = $request->request->get('do');
 
                 // On redirige vers la home page
-                return $this->redirect( ($do == 'save-close' ? $this->generateUrl('nodevo_role_role') : $this->generateUrl('nodevo_role_edit', array( 'id' => $role->getId() ) ) ) );
+                return $this->redirect(($do == 'save-close' ? $this->generateUrl('nodevo_role_role') : $this->generateUrl('nodevo_role_edit', ['id' => $role->getId()])));
             }
         }
 
-        return $this->render( $view , array(
+        return $this->render($view, [
             'form' => $form->createView(),
-            'role' => $role
-        ));
-    }    
+            'role' => $role,
+        ]);
+    }
 }

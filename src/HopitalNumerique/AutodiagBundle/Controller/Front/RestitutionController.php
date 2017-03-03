@@ -20,7 +20,6 @@ class RestitutionController extends Controller
         $autodiag = $synthesis->getAutodiag();
         $restitution = $this->get('autodiag.repository.restitution')->getForAutodiag($autodiag);
 
-
         if (null === $restitution || null == $autodiag->getAlgorithm()) {
             return $this->render('HopitalNumeriqueAutodiagBundle:Restitution:empty.html.twig', [
                 'synthesis' => $synthesis,
@@ -37,7 +36,7 @@ class RestitutionController extends Controller
             $this->addFlash('danger', $this->get('translator')->trans('ad.synthesis.restitution.forbidden'));
 
             return $this->redirectToRoute('hopitalnumerique_autodiag_entry_add', [
-                'autodiag' => $autodiag->getId()
+                'autodiag' => $autodiag->getId(),
             ]);
         }
 
@@ -48,10 +47,10 @@ class RestitutionController extends Controller
             return new Response(
                 $this->get('autodiag.restitution.pdf_generator')->pdfGenerator($synthesis, $restitution, $resultItems),
                 200,
-                array(
-                    'Content-Type'        => 'application/pdf',
-                    'Content-Disposition' => 'filename="export.pdf"'
-                )
+                [
+                    'Content-Type' => 'application/pdf',
+                    'Content-Disposition' => 'filename="export.pdf"',
+                ]
             );
         }
 
@@ -104,7 +103,7 @@ class RestitutionController extends Controller
                 [
                     'synthesis' => $synthesis->getId(),
                 ]
-            )->getTargetUrl()
+            )->getTargetUrl(),
         ]);
         $sendResultForm->handleRequest($request);
 
@@ -123,22 +122,24 @@ class RestitutionController extends Controller
             );
 
             $this->addFlash('success', $this->get('translator')->trans('ad.restitution.mail.success'));
+
             return $this->redirect($sendResultForm->get('url')->getData());
         }
 
         return $this->render(
             '@HopitalNumeriqueAutodiag/Restitution/popin.html.twig',
-            array(
+            [
                 'recommandationForm' => $sendResultForm->createView(),
-            )
+            ]
         );
     }
 
     /**
-     * Redirect to sign in/up page with back redirection
+     * Redirect to sign in/up page with back redirection.
      *
      * @param \HopitalNumerique\AutodiagBundle\Entity\Synthesis $synthesis
-     * @param bool $signUp
+     * @param bool                                              $signUp
+     *
      * @return \Symfony\Component\HttpFoundation\RedirectResponse
      */
     public function signInAction(Synthesis $synthesis, $signUp = false)

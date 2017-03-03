@@ -1,9 +1,10 @@
 <?php
 /**
  * Manager pour les initiateurs des interventions.
- * 
+ *
  * @author Rémi Leclerc <rleclerc@nodevo.com>
  */
+
 namespace HopitalNumerique\InterventionBundle\Manager;
 
 use HopitalNumerique\InterventionBundle\Entity\InterventionInitiateur;
@@ -25,6 +26,7 @@ class InterventionInitiateurManager extends BaseManager
     {
         return $this->getRepository()->findOneById(InterventionInitiateur::getInterventionInitiateurCmsiId());
     }
+
     /**
      * Returne l'établissement.
      *
@@ -34,6 +36,7 @@ class InterventionInitiateurManager extends BaseManager
     {
         return $this->getRepository()->findOneById(InterventionInitiateur::getInterventionInitiateurEtablissementId());
     }
+
     /**
      * Returne l'ANAP.
      *

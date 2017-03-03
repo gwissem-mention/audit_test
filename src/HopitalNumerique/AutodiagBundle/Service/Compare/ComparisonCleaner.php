@@ -16,6 +16,7 @@ class ComparisonCleaner
 
     /**
      * ComparisonCleaner constructor.
+     *
      * @param CompareRepository $compareRepository
      */
     public function __construct(CompareRepository $compareRepository, EntityManager $entityManager)

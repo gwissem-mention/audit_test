@@ -14,6 +14,7 @@ class SynthesisReference extends Reference
     {
         $self = new self($number, $synthesis->getAutodiag());
         $self->synthesis = $synthesis;
+
         return $self;
     }
 

@@ -23,7 +23,7 @@ class UrlChecker
     /** @var ObjetManager $objectManager */
     private $objectManager;
 
-    /** @var  DomaineManager $domainManager */
+    /** @var DomaineManager $domainManager */
     private $domainManager;
 
     /** @var ErrorUrlRepository $errorUrlRepository */
@@ -57,7 +57,7 @@ class UrlChecker
     }
 
     /**
-     * Checks the HTTP code for each URL contained in an object or content
+     * Checks the HTTP code for each URL contained in an object or content.
      *
      * @return bool
      */
@@ -137,27 +137,27 @@ class UrlChecker
     }
 
     /**
-     * Returns all platform URLs grouped by type and object (id)
+     * Returns all platform URLs grouped by type and object (id).
      *
      * @return array
      */
     private function getAllUrlObjects()
     {
         $urls = [
-            'PUBLICATION'   => [],
-            'INFRADOC'      => [],
-            'ARTICLE'       => [],
-            'AUTODIAG'      => [],
+            'PUBLICATION' => [],
+            'INFRADOC' => [],
+            'ARTICLE' => [],
+            'AUTODIAG' => [],
             'QUESTIONNAIRE' => [],
-            'URL'           => [],
-            'FICHIER'       => [],
+            'URL' => [],
+            'FICHIER' => [],
         ];
 
         $objects = $this->objectManager->findAll();
         $objectsArray = [];
 
         /**
-         * @var integer $key
+         * @var int
          * @var Objet $object
          */
         foreach ($objects as $key => $object) {
@@ -166,14 +166,14 @@ class UrlChecker
         }
 
         return [
-            'urls'     => $urls,
-            'objets'   => $objectsArray,
+            'urls' => $urls,
+            'objets' => $objectsArray,
             'oksByUrl' => $this->errorUrlManager->getStateByUrl(),
         ];
     }
 
     /**
-     * Adds all URLs of the current object to the URLs array
+     * Adds all URLs of the current object to the URLs array.
      *
      * @param Objet $object
      * @param       $urls
@@ -224,7 +224,7 @@ class UrlChecker
             foreach ($matchesURL as $matcheURL) {
                 if (!array_key_exists($objectId, $urls['URL'])) {
                     $urls['URL'][$objectId] = [
-                        'objet'    => [],
+                        'objet' => [],
                         $contentId => [],
                     ];
                 }
@@ -252,16 +252,16 @@ class UrlChecker
                             if (!array_key_exists($objectId, $urls['PUBLICATION'])) {
                                 //Tableau
                                 $urls['PUBLICATION'][$objectId] = [
-                                    'objet'    => [],
+                                    'objet' => [],
                                     $contentId => [],
                                 ];
                             }
                             if ($isContent) {
                                 $urls['PUBLICATION'][$objectId][$contentId][$object->getId()]
-                                    = '/publication/'.$matches[2][$key].'-'.$object->getAlias();
+                                    = '/publication/' . $matches[2][$key] . '-' . $object->getAlias();
                             } else {
                                 $urls['PUBLICATION'][$objectId]['objet'][$object->getId()]
-                                    = '/publication/'.$matches[2][$key].'-'.$object->getAlias();
+                                    = '/publication/' . $matches[2][$key] . '-' . $object->getAlias();
                             }
                         }
                         break;
@@ -271,22 +271,22 @@ class UrlChecker
                         if ($content) {
                             if (!array_key_exists($objectId, $urls['INFRADOC'])) {
                                 $urls['INFRADOC'][$objectId] = [
-                                    'objet'    => [],
+                                    'objet' => [],
                                     $contentId => [],
                                 ];
                             }
                             $object = $content->getObjet();
                             if ($isContent) {
                                 $urls['INFRADOC'][$objectId][$contentId][$content->getId()]
-                                    = '/publication/'.$object->getId().'-'.$object->getAlias()
-                                      .'/'
-                                      .$matches[2][$key].'-'.$content->getAlias()
+                                    = '/publication/' . $object->getId() . '-' . $object->getAlias()
+                                      . '/'
+                                      . $matches[2][$key] . '-' . $content->getAlias()
                                 ;
                             } else {
                                 $urls['INFRADOC'][$objectId]['objet'][$content->getId()]
-                                    = '/publication/'.$object->getId().'-'.$object->getAlias()
-                                      .'/'
-                                      .$matches[2][$key].'-'.$content->getAlias()
+                                    = '/publication/' . $object->getId() . '-' . $object->getAlias()
+                                      . '/'
+                                      . $matches[2][$key] . '-' . $content->getAlias()
                                 ;
                             }
                         }
@@ -297,16 +297,16 @@ class UrlChecker
                         if ($object) {
                             if (!array_key_exists($objectId, $urls['ARTICLE'])) {
                                 $urls['ARTICLE'][$objectId] = [
-                                    'objet'    => [],
+                                    'objet' => [],
                                     $contentId => [],
                                 ];
                             }
                             if ($isContent) {
                                 $urls['ARTICLE'][$objectId][$contentId][$object->getId()]
-                                    = '/publication/article/'.$matches[2][$key].'-'.$object->getAlias();
+                                    = '/publication/article/' . $matches[2][$key] . '-' . $object->getAlias();
                             } else {
                                 $urls['ARTICLE'][$objectId]['objet'][$object->getId()]
-                                    = '/publication/article/'.$matches[2][$key].'-'.$object->getAlias();
+                                    = '/publication/article/' . $matches[2][$key] . '-' . $object->getAlias();
                             }
                         }
                         break;
@@ -316,16 +316,16 @@ class UrlChecker
                         if ($outil) {
                             if (!array_key_exists($objectId, $urls['AUTODIAG'])) {
                                 $urls['AUTODIAG'][$objectId] = [
-                                    'objet'    => [],
+                                    'objet' => [],
                                     $contentId => [],
                                 ];
                             }
                             if ($isContent) {
                                 $urls['AUTODIAG'][$objectId][$contentId][$outil->getId()]
-                                    = '/autodiagnostic/'.$outil->getId();
+                                    = '/autodiagnostic/' . $outil->getId();
                             } else {
                                 $urls['AUTODIAG'][$objectId]['objet'][$outil->getId()]
-                                    = '/autodiagnostic/'.$outil->getId();
+                                    = '/autodiagnostic/' . $outil->getId();
                             }
                         }
                         break;
@@ -335,16 +335,16 @@ class UrlChecker
                         if ($questionnaire) {
                             if (!array_key_exists($objectId, $urls['QUESTIONNAIRE'])) {
                                 $urls['QUESTIONNAIRE'][$objectId] = [
-                                    'objet'    => [],
+                                    'objet' => [],
                                     $contentId => [],
                                 ];
                             }
                             if ($isContent) {
                                 $urls['QUESTIONNAIRE'][$objectId][$contentId][$questionnaire->getId()]
-                                    = '/questionnaire/edit/'.$questionnaire->getId();
+                                    = '/questionnaire/edit/' . $questionnaire->getId();
                             } else {
                                 $urls['QUESTIONNAIRE'][$objectId]['objet'][$questionnaire->getId()]
-                                    = '/questionnaire/edit/'.$questionnaire->getId();
+                                    = '/questionnaire/edit/' . $questionnaire->getId();
                             }
                         }
                         break;

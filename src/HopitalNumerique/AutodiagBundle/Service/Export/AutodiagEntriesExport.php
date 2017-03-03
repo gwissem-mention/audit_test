@@ -1,4 +1,5 @@
 <?php
+
 namespace HopitalNumerique\AutodiagBundle\Service\Export;
 
 use Doctrine\Common\Persistence\ObjectManager;
@@ -54,13 +55,14 @@ class AutodiagEntriesExport extends AbstractExport
     }
 
     /**
-     * @param Autodiag $autodiag
+     * @param Autodiag    $autodiag
      * @param Synthesis[] $syntheses
+     *
      * @return StreamedResponse
      */
     public function exportList(Autodiag $autodiag, $syntheses)
     {
-        $response =  new StreamedResponse(function () use ($autodiag, $syntheses) {
+        $response = new StreamedResponse(function () use ($autodiag, $syntheses) {
             $handle = fopen('php://output', 'r+');
             $this->attributes = $this->writeAttributes($handle, $autodiag);
             $this->writeHeader($handle);
@@ -69,9 +71,9 @@ class AutodiagEntriesExport extends AbstractExport
 
         $title = new Chaine($autodiag->getTitle());
         $response->headers->set('Content-Type', 'application/force-download');
-        $response->headers->set('Content-Disposition','attachment; filename="' . 'resultat_' .  $title->minifie() . '.csv' . '"');
-        return $response;
+        $response->headers->set('Content-Disposition', 'attachment; filename="' . 'resultat_' . $title->minifie() . '.csv' . '"');
 
+        return $response;
     }
 
     protected function writeHeader($handle)
@@ -83,7 +85,7 @@ class AutodiagEntriesExport extends AbstractExport
             'Dernier enregistrement',
             'Date de validation',
             'Pourcentage de remplissage',
-            'Nom donné par l\'utilisateur'
+            'Nom donné par l\'utilisateur',
         ];
 
         $this->writeRow($handle, $head);
@@ -104,7 +106,7 @@ class AutodiagEntriesExport extends AbstractExport
             $this->writeRow(
                 $handle,
                 array_merge(
-                    array_fill(0, self::HEADER_HORIZONTAL_OFFSET -1, ''),
+                    array_fill(0, self::HEADER_HORIZONTAL_OFFSET - 1, ''),
                     [$title],
                     call_user_func_array('array_merge', array_map(function ($row) use ($field) {
                         return [
@@ -117,14 +119,11 @@ class AutodiagEntriesExport extends AbstractExport
             );
         }
 
-
-
         return $attributes;
     }
 
     protected function writeSyntheses($handle, $synthesisIds)
     {
-
         foreach ($synthesisIds as $id) {
             $values = $this->valueRepository->getFullValues($id);
 
@@ -172,5 +171,4 @@ class AutodiagEntriesExport extends AbstractExport
             ';'
         );
     }
-
 }

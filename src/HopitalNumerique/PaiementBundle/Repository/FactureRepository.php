@@ -6,12 +6,12 @@ use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\QueryBuilder;
 
 /**
- * FactureRepository
+ * FactureRepository.
  */
 class FactureRepository extends EntityRepository
 {
     /**
-     * Retourne la liste des factures ordonnées par date
+     * Retourne la liste des factures ordonnées par date.
      *
      * @return QueryBuilder
      */
@@ -40,7 +40,7 @@ class FactureRepository extends EntityRepository
     /**
      * @param $year
      *
-     * @return integer
+     * @return int
      */
     public function getTotalAmountForYear($year)
     {
@@ -61,7 +61,7 @@ class FactureRepository extends EntityRepository
     /**
      * @param $year
      *
-     * @return integer
+     * @return int
      */
     public function getTotalNotPayedAmountForYear($year = null)
     {

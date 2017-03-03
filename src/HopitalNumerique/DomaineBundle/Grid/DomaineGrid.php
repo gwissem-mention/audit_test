@@ -18,10 +18,10 @@ class DomaineGrid extends Grid implements GridInterface
     public function setConfig()
     {
         $this->setNoDataMessage('Aucun domaine à afficher.');
-        $this->setSource( 'hopitalnumerique_domaine.manager.domaine' );
-        $this->setSourceType( self::SOURCE_TYPE_MANAGER );
-        $this->showIDColumn( false );
-        $this->setFilterIdColumn( false );
+        $this->setSource('hopitalnumerique_domaine.manager.domaine');
+        $this->setSourceType(self::SOURCE_TYPE_MANAGER);
+        $this->showIDColumn(false);
+        $this->setFilterIdColumn(false);
     }
 
     /**
@@ -30,20 +30,19 @@ class DomaineGrid extends Grid implements GridInterface
     public function setColumns()
     {
         //field, titre, isSortable, size
-        $this->addColonne( new Column\NumberColumn('idDomaine', 'ID') );
-        $this->addColonne( new Column\TextColumn('nom', 'Nom') );
-        $this->addColonne( new Column\TextColumn('url', 'Url') );
-        $this->addColonne( new Column\TextColumn('adresseMailContact', 'Adresse mail de contact') );
-        $this->addColonne( new Column\TextColumn('templateNom', 'Template') );
+        $this->addColonne(new Column\NumberColumn('idDomaine', 'ID'));
+        $this->addColonne(new Column\TextColumn('nom', 'Nom'));
+        $this->addColonne(new Column\TextColumn('url', 'Url'));
+        $this->addColonne(new Column\TextColumn('adresseMailContact', 'Adresse mail de contact'));
+        $this->addColonne(new Column\TextColumn('templateNom', 'Template'));
     }
 
     /**
-     * Ajoute les boutons d'action
+     * Ajoute les boutons d'action.
      */
     public function setActionsButtons()
     {
-        $this->addActionButton( new Action\EditButton( 'hopitalnumerique_domaine_admin_domaine_edit' ) );
-
+        $this->addActionButton(new Action\EditButton('hopitalnumerique_domaine_admin_domaine_edit'));
     }
 
     /**
@@ -51,6 +50,6 @@ class DomaineGrid extends Grid implements GridInterface
      */
     public function setMassActions()
     {
-        $this->addMassAction( new Action\DeleteMass('HopitalNumeriqueDomaineBundle:DomaineMass:deleteMass') );
+        $this->addMassAction(new Action\DeleteMass('HopitalNumeriqueDomaineBundle:DomaineMass:deleteMass'));
     }
 }

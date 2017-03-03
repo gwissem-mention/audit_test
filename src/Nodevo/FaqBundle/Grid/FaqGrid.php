@@ -16,10 +16,10 @@ class FaqGrid extends Grid
      */
     public function setConfig()
     {
-        $this->setSource( 'nodevo_faq.manager.faq' );
-        $this->setSourceType( self::SOURCE_TYPE_MANAGER );
-        $this->showIDColumn( false );
-        $this->setFilterIdColumn( false );
+        $this->setSource('nodevo_faq.manager.faq');
+        $this->setSourceType(self::SOURCE_TYPE_MANAGER);
+        $this->showIDColumn(false);
+        $this->setFilterIdColumn(false);
     }
 
     /**
@@ -29,26 +29,26 @@ class FaqGrid extends Grid
     {
         $categorieColumn = new Column\TextColumn('categorieName', 'Catégorie');
         $categorieColumn->setSize(100);
-        $this->addColonne( $categorieColumn );
+        $this->addColonne($categorieColumn);
 
         $domaineColumn = new Column\TextColumn('domaineNom', 'Domaine(s)');
-        $domaineColumn->setSize( 150 );
-        $this->addColonne( $domaineColumn );
-        
-        $this->addColonne( new Column\TextColumn('question', 'Question') );
-        $this->addColonne( new Column\TextColumn('reponse', 'Reponse') );
+        $domaineColumn->setSize(150);
+        $this->addColonne($domaineColumn);
+
+        $this->addColonne(new Column\TextColumn('question', 'Question'));
+        $this->addColonne(new Column\TextColumn('reponse', 'Reponse'));
 
         /* Colonnes inactives */
-        $this->addColonne( new Column\BlankColumn('order') );
+        $this->addColonne(new Column\BlankColumn('order'));
     }
 
     /**
-     * Ajoute les boutons d'action
+     * Ajoute les boutons d'action.
      */
     public function setActionsButtons()
     {
-        $this->addActionButton( new Action\ShowButton( 'nodevo_faq_faq_show' ) );
-        $this->addActionButton( new Action\EditButton( 'nodevo_faq_faq_edit' ) );
+        $this->addActionButton(new Action\ShowButton('nodevo_faq_faq_show'));
+        $this->addActionButton(new Action\EditButton('nodevo_faq_faq_edit'));
     }
 
     /**
@@ -56,6 +56,6 @@ class FaqGrid extends Grid
      */
     public function setMassActions()
     {
-        $this->addMassAction( new Action\DeleteMass('NodevoFaqBundle:Faq:deleteMass') );
+        $this->addMassAction(new Action\DeleteMass('NodevoFaqBundle:Faq:deleteMass'));
     }
 }

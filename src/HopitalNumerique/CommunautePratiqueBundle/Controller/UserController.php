@@ -1,4 +1,5 @@
 <?php
+
 namespace HopitalNumerique\CommunautePratiqueBundle\Controller;
 
 use HopitalNumerique\DomaineBundle\Entity\Domaine;
@@ -7,8 +8,6 @@ use Symfony\Component\HttpFoundation\Request;
 use HopitalNumerique\CommunautePratiqueBundle\Entity\Groupe;
 use HopitalNumerique\CommunautePratiqueBundle\Entity\Inscription;
 use HopitalNumerique\UserBundle\Entity\User;
-use HopitalNumerique\DomaineBundle\DependencyInjection\CurrentDomaine;
-use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 /**
  * Contrôleur des utilisateurs.
@@ -51,17 +50,17 @@ class UserController extends \Symfony\Bundle\FrameworkBundle\Controller\Controll
         ;
 
         return $this->render('HopitalNumeriqueCommunautePratiqueBundle:User:list.html.twig', [
-            'rechercheForm'      => $rechercheForm->createView(),
-            'pagerFantaMembres'  => $this->container
-                ->get('hopitalnumerique_communautepratique.dependency_injection.annuaire')->getPagerfantaUsers($page, $domaine,($membreId) ? $membreId : null),
-            'groupesTermines'    => $this->container->get('hopitalnumerique_communautepratique.manager.groupe')
+            'rechercheForm' => $rechercheForm->createView(),
+            'pagerFantaMembres' => $this->container
+                ->get('hopitalnumerique_communautepratique.dependency_injection.annuaire')->getPagerfantaUsers($page, $domaine, ($membreId) ? $membreId : null),
+            'groupesTermines' => $this->container->get('hopitalnumerique_communautepratique.manager.groupe')
                 ->findTermines($domaine),
             'groupesNonDemarres' => $this->container->get('hopitalnumerique_communautepratique.manager.groupe')
                 ->findNonDemarres($domaine),
-            'groupesEnCours'     => $this->container->get('hopitalnumerique_communautepratique.manager.groupe')
+            'groupesEnCours' => $this->container->get('hopitalnumerique_communautepratique.manager.groupe')
                 ->findEnCours($domaine),
-            'forumCategory'      => $domaine->getCommunautePratiqueForumCategories()->first(),
-            'activeMembers'     => $this->get('hopitalnumerique_user.service.active_member_calculator')->getActiveMembers($usersCDP),
+            'forumCategory' => $domaine->getCommunautePratiqueForumCategories()->first(),
+            'activeMembers' => $this->get('hopitalnumerique_user.service.active_member_calculator')->getActiveMembers($usersCDP),
         ]);
     }
 
@@ -106,20 +105,20 @@ class UserController extends \Symfony\Bundle\FrameworkBundle\Controller\Controll
         ;
 
         return $this->render('HopitalNumeriqueCommunautePratiqueBundle:User:listByGroupe.html.twig', [
-            'groupe'             => $groupe,
-            'canDeleteMembre'    => $this->container
+            'groupe' => $groupe,
+            'canDeleteMembre' => $this->container
                 ->get('hopitalnumerique_communautepratique.dependency_injection.security')->canDeleteMembre($groupe),
-            'ajoutMembreForm'    => (null !== $ajoutMembreForm ? $ajoutMembreForm->createView() : null),
-            'pagerFantaMembres'  => $this->container
+            'ajoutMembreForm' => (null !== $ajoutMembreForm ? $ajoutMembreForm->createView() : null),
+            'pagerFantaMembres' => $this->container
                 ->get('hopitalnumerique_communautepratique.dependency_injection.annuaire')
                 ->getPagerfantaUsersByGroupe($groupe, $page),
-            'groupesTermines'    => $this->container->get('hopitalnumerique_communautepratique.manager.groupe')
+            'groupesTermines' => $this->container->get('hopitalnumerique_communautepratique.manager.groupe')
                 ->findTermines($domaine),
             'groupesNonDemarres' => $this->container->get('hopitalnumerique_communautepratique.manager.groupe')
                 ->findNonDemarres($domaine),
-            'groupesEnCours'     => $this->container->get('hopitalnumerique_communautepratique.manager.groupe')
+            'groupesEnCours' => $this->container->get('hopitalnumerique_communautepratique.manager.groupe')
                 ->findEnCours($domaine),
-            'activeMembers'      => $this->get('hopitalnumerique_user.service.active_member_calculator')->getActiveMembers($usersCDP),
+            'activeMembers' => $this->get('hopitalnumerique_user.service.active_member_calculator')->getActiveMembers($usersCDP),
         ]);
     }
 
@@ -135,14 +134,14 @@ class UserController extends \Symfony\Bundle\FrameworkBundle\Controller\Controll
         }
 
         return $this->render('HopitalNumeriqueCommunautePratiqueBundle:User:viewForGroupe.html.twig', [
-            'user'                  => $user,
-            'groupe'                => $groupe,
+            'user' => $user,
+            'groupe' => $groupe,
             'questionnaireReponses' => $this->container->get('hopitalnumerique_questionnaire.manager.reponse')
                 ->reponsesByQuestionnaireByUser($groupe->getQuestionnaire()->getId(), $user->getId()),
-            'documents'             => $this->container->get('hopitalnumerique_communautepratique.manager.document')
+            'documents' => $this->container->get('hopitalnumerique_communautepratique.manager.document')
                 ->findBy(['user' => $user, 'groupe' => $groupe]),
-            'fichierTypes'          => $this->container->get('hopitalnumerique_fichier.manager.fichier_type')->findAll(),
-            'fiches'                => $this->container->get('hopitalnumerique_communautepratique.manager.fiche')
+            'fichierTypes' => $this->container->get('hopitalnumerique_fichier.manager.fichier_type')->findAll(),
+            'fiches' => $this->container->get('hopitalnumerique_communautepratique.manager.fiche')
                 ->findBy(['user' => $user, 'groupe' => $groupe]),
         ]);
     }

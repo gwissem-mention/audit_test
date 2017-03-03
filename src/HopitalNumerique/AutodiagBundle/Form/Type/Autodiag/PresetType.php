@@ -12,9 +12,8 @@ use Symfony\Component\Form\FormEvents;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
 /**
- * Field used to dynamically render collection of Preset, by the attributeBuilderProvider
+ * Field used to dynamically render collection of Preset, by the attributeBuilderProvider.
  *
- * @package HopitalNumerique\AutodiagBundle\Form\Type\Model
  * @author Emmanuel Da Fonseca <edafonseca@nodevo.com>
  */
 class PresetType extends AbstractType
@@ -29,7 +28,7 @@ class PresetType extends AbstractType
 
     /**
      * @param FormBuilderInterface $builder
-     * @param array $options
+     * @param array                $options
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
@@ -54,9 +53,9 @@ class PresetType extends AbstractType
      */
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
-        $resolver->setDefaults(array(
+        $resolver->setDefaults([
             'data_class' => 'HopitalNumerique\AutodiagBundle\Entity\Autodiag\Preset',
-            'label_format' => 'ad.autodiag.preset.%name%'
-        ));
+            'label_format' => 'ad.autodiag.preset.%name%',
+        ]);
     }
 }

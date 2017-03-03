@@ -4,8 +4,8 @@ namespace HopitalNumerique\ForumBundle\Entity;
 
 use CCDNForum\ForumBundle\Entity\Forum as BaseForum;
 use Symfony\Component\Security\Core\SecurityContextInterface;
+
 /**
- * 
  * @author Gaetan MELCHILSEN
  * @copyright Nodevo
  */
@@ -20,8 +20,8 @@ class Forum extends BaseForum
     }
 
     /**
+     * @param SecurityContextInterface $securityContext
      *
-     * @param  SecurityContextInterface $securityContext
      * @return bool
      */
     public function isAuthorisedToRead(SecurityContextInterface $securityContext)
@@ -30,16 +30,12 @@ class Forum extends BaseForum
             return true;
         }
 
-        foreach ($this->readAuthorisedRoles as $role) 
-        {
-            if ("anon."  === $securityContext->getToken()->getUser())
-            {
-                if ('ROLE_ANONYME_10' === $role) 
-                {
+        foreach ($this->readAuthorisedRoles as $role) {
+            if ('anon.' === $securityContext->getToken()->getUser()) {
+                if ('ROLE_ANONYME_10' === $role) {
                     return true;
                 }
-            }
-            elseif ($securityContext->isGranted($role)) {
+            } elseif ($securityContext->isGranted($role)) {
                 return true;
             }
         }

@@ -1,4 +1,5 @@
 <?php
+
 namespace HopitalNumerique\ContactBundle\Controller;
 
 use Symfony\Component\HttpFoundation\Request;
@@ -17,20 +18,20 @@ class PopupController extends \Symfony\Bundle\FrameworkBundle\Controller\Control
             throw new \Exception('Les destinataires et l\'URL de redirection doivent être précisés.');
         }
 
-        $contactForm = $this->createForm('hopitalnumerique_contactbundle_popup', null, array(
+        $contactForm = $this->createForm('hopitalnumerique_contactbundle_popup', null, [
             'destinataires' => $request->request->get('destinataires'),
-            'urlRedirection' => $request->request->get('urlRedirection')
-        ));
+            'urlRedirection' => $request->request->get('urlRedirection'),
+        ]);
         if ($request->request->has('objet')) {
             $contactForm->get('objet')->setData($request->request->get('objet'));
         }
 
         return $this->render(
             'HopitalNumeriqueContactBundle:Popup:index.html.twig',
-            array(
+            [
                 'contactForm' => $contactForm->createView(),
-                'destinataires' => $request->request->get('destinataires')
-            )
+                'destinataires' => $request->request->get('destinataires'),
+            ]
         );
     }
 
@@ -43,16 +44,16 @@ class PopupController extends \Symfony\Bundle\FrameworkBundle\Controller\Control
             throw new \Exception('L\'URL de redirection doit être précisée.');
         }
 
-        $inviteForm = $this->createForm('hopitalnumerique_contactbundle_popup_invite', null, array(
+        $inviteForm = $this->createForm('hopitalnumerique_contactbundle_popup_invite', null, [
             'urlRedirection' => $request->request->get('urlRedirection'),
-            'idGroupe' => $request->request->get('idGroupe')
-        ));
+            'idGroupe' => $request->request->get('idGroupe'),
+        ]);
 
         return $this->render(
             'HopitalNumeriqueContactBundle:Popup:invite.html.twig',
-            array(
+            [
                 'inviteForm' => $inviteForm->createView(),
-            )
+            ]
         );
     }
 
@@ -64,20 +65,21 @@ class PopupController extends \Symfony\Bundle\FrameworkBundle\Controller\Control
         $form = $request->request->get('hopitalnumerique_contactbundle_popup_invite');
 
         if (!empty($form['destinataires'])) {
-            $destinataires = explode(",", $form['destinataires']);
+            $destinataires = explode(',', $form['destinataires']);
             $regex = '/^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]{2,}[.][a-zA-Z]{2,3}$/';
             foreach ($destinataires as $destinataire) {
                 if (!preg_match($regex, $destinataire)) {
                     $this->get('session')->getFlashBag()->add('danger', 'Vérifiez le format des adresses e-mail renseignées.');
+
                     return $this->redirect($form['urlRedirection']);
                 }
             }
 
-            $groupe = $this->container->get('hopitalnumerique_communautepratique.manager.groupe')->findOneBy(array('id' => $form['idGroupe']));
+            $groupe = $this->container->get('hopitalnumerique_communautepratique.manager.groupe')->findOneBy(['id' => $form['idGroupe']]);
             if ($groupe) {
                 $nomGroupe = $groupe->getTitre();
             } else {
-                $nomGroupe = "";
+                $nomGroupe = '';
             }
 
             $this->get('nodevo_mail.manager.mail')->sendInvitationMail($this->getUser(), $destinataires, $nomGroupe);

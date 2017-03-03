@@ -1,4 +1,5 @@
 <?php
+
 namespace HopitalNumerique\ReferenceBundle\Doctrine\Glossaire;
 
 use Doctrine\DBAL\Driver\Connection;
@@ -26,28 +27,26 @@ class Migration
      */
     private $domaineManager;
 
-
     /**
      * Tous les domaines.
      *
      * @var array<\HopitalNumerique\DomaineBundle\Entity\Domaine> Domaines
      */
     private static $DOMAINES = null;
-    
+
     /**
      * État actif.
      *
      * @var \HopitalNumerique\ReferenceBundle\Entity\Reference Actif
      */
     private static $ETAT_ACTIF = null;
-    
+
     /**
      * État inactif.
      *
      * @var \HopitalNumerique\ReferenceBundle\Entity\Reference Inactif
      */
     private static $ETAT_INACTIF = null;
-
 
     /**
      * Constructeur.
@@ -69,7 +68,6 @@ class Migration
         self::$ETAT_INACTIF = $this->referenceManager->findOneById(Reference::STATUT_INACTIF_ID);
     }
 
-
     /**
      * Lance la migration.
      */
@@ -88,12 +86,12 @@ class Migration
     {
         $glossaireData = [];
 
-        $sql = "
+        $sql = '
             SELECT *
             FROM hn_glossaire AS glossaire
             LEFT JOIN hn_domaine_gestions_glossaire AS glossaire_domaine ON glossaire.glo_id = glossaire_domaine.glo_id
             ORDER BY glossaire.glo_id ASC
-        ";
+        ';
         $results = $this->databaseConnection->query($sql)->fetchAll();
 
         foreach ($results as $result) {
@@ -116,7 +114,7 @@ class Migration
                     'intitule' => $intitule,
                     'description' => $description,
                     'casseSensible' => $sensitive,
-                    'domaines' => []
+                    'domaines' => [],
                 ];
             }
 

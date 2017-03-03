@@ -1,4 +1,5 @@
 <?php
+
 namespace HopitalNumerique\AccountBundle\Doctrine\Reference;
 
 use HopitalNumerique\ReferenceBundle\Manager\ReferenceManager;
@@ -16,7 +17,6 @@ class Contexte
      * @var string Label de session de la demande de création de compte avec contexte
      */
     const WANT_CREATE_USER_SESSION_LABEL = 'hn_wantcreateuserwithcontexte';
-
 
     /**
      * @var \Symfony\Component\HttpFoundation\Session\SessionInterface Session
@@ -38,7 +38,6 @@ class Contexte
      */
     private $userManager;
 
-
     /**
      * Constructeur.
      */
@@ -49,7 +48,6 @@ class Contexte
         $this->referenceManager = $referenceManager;
         $this->userManager = $userManager;
     }
-
 
     /**
      * Retourne les ID des références du contexte utilisateur.
@@ -78,11 +76,11 @@ class Contexte
         return $userContexteReferenceIds;
     }
 
-
     /**
      * Retourne la référence de la fonction si présente parmi les références.
      *
      * @param array<integer> $referenceIds IDs des références
+     *
      * @return \HopitalNumerique\ReferenceBundle\Entity\Reference|null Référence
      */
     public function getFonctionDansEtablissementSanteReferencementByReferenceIds($referenceIds)
@@ -94,6 +92,7 @@ class Contexte
      * Retourne la référence du profil si présente parmi les références.
      *
      * @param array<integer> $referenceIds IDs des références
+     *
      * @return \HopitalNumerique\ReferenceBundle\Entity\Reference|null Référence
      */
     public function getProfilEtablissementSanteByReferenceIds($referenceIds)
@@ -105,6 +104,7 @@ class Contexte
      * Retourne la référence du statut si présente parmi les références.
      *
      * @param array<integer> $referenceIds IDs des références
+     *
      * @return \HopitalNumerique\ReferenceBundle\Entity\Reference|null Référence
      */
     public function getStatutEtablissementSanteByReferenceIds($referenceIds)
@@ -116,6 +116,7 @@ class Contexte
      * Retourne les références des types d'activité si présente parmi les références.
      *
      * @param array<integer> $referenceIds IDs des références
+     *
      * @return \HopitalNumerique\ReferenceBundle\Entity\Reference|null Référence
      */
     public function getActiviteTypesByReferenceIds($referenceIds)
@@ -128,6 +129,7 @@ class Contexte
      *
      * @param string         $referenceCode Code
      * @param array<integer> $referenceIds  IDs des références
+     *
      * @return \HopitalNumerique\ReferenceBundle\Entity\Reference|null Référence
      */
     private function getReferenceByCodeAndIds($referenceCode, $referenceIds)
@@ -148,6 +150,7 @@ class Contexte
      *
      * @param string         $referenceCode Code
      * @param array<integer> $referenceIds  IDs des références
+     *
      * @return array<\HopitalNumerique\ReferenceBundle\Entity\Reference> Références
      */
     private function getReferencesByCodeAndIds($referenceCode, $referenceIds)
@@ -164,11 +167,11 @@ class Contexte
         return $foundReferences;
     }
 
-
     /**
      * Retourne un nouvel utilisateur avec les champs de contexte pré-remplis.
      *
      * @param array<integer> $referenceIds Contexte
+     *
      * @return \HopitalNumerique\UserBundle\Entity\User Nouvel utilisateur
      */
     public function getNewUserWithContexte(array $referenceIds)
@@ -184,7 +187,8 @@ class Contexte
      * Sauvegarde le contexte d'un utilisateur.
      *
      * @param array<integer> $referenceIds IDs des références
-     * @return boolean Si l'utilisateur a été modifié
+     *
+     * @return bool Si l'utilisateur a été modifié
      */
     public function save(array $referenceIds)
     {
@@ -200,7 +204,6 @@ class Contexte
             }
         }
 
-
         return $userIsModified;
     }
 
@@ -209,7 +212,8 @@ class Contexte
      *
      * @param \HopitalNumerique\UserBundle\Entity\User $user         User
      * @param array<integer>                           $referenceIds Contexte
-     * @return boolean Si l'utilisateur a été modifié
+     *
+     * @return bool Si l'utilisateur a été modifié
      */
     private function fillUserWithContexte(User &$user, array $referenceIds)
     {
@@ -240,7 +244,6 @@ class Contexte
         return $userIsModified;
     }
 
-
     /**
      * Spécifie que l'utilisateur souhaite créer un compte avec le contexte choisi lors de la recherche.
      */
@@ -252,7 +255,7 @@ class Contexte
     /**
      * Retourne si l'utilisateur souhaite créer un compte avec son contexte.
      *
-     * @return boolean Si souhaite compte
+     * @return bool Si souhaite compte
      */
     public function isWantCreateUserWithContext()
     {

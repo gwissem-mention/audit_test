@@ -5,7 +5,7 @@ namespace HopitalNumerique\ExpertBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * DateFictiveActiviteExpert
+ * DateFictiveActiviteExpert.
  *
  * @ORM\Table(name="hn_expert_activite_date_fictive")
  * @ORM\Entity
@@ -13,7 +13,7 @@ use Doctrine\ORM\Mapping as ORM;
 class DateFictiveActiviteExpert
 {
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="eadf_id", type="integer")
      * @ORM\Id
@@ -29,7 +29,7 @@ class DateFictiveActiviteExpert
     protected $date;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\ManyToOne(targetEntity="ActiviteExpert", inversedBy="dateFictives")
      * @ORM\JoinColumn(name="eadf_activite", referencedColumnName="exp_id", onDelete="CASCADE")
@@ -37,9 +37,9 @@ class DateFictiveActiviteExpert
     protected $activite;
 
     /**
-     * Get id
+     * Get id.
      *
-     * @return integer 
+     * @return int
      */
     public function getId()
     {
@@ -47,9 +47,10 @@ class DateFictiveActiviteExpert
     }
 
     /**
-     * Set date
+     * Set date.
      *
      * @param \DateTime $date
+     *
      * @return DateFictiveActiviteExpert
      */
     public function setDate($date)
@@ -60,9 +61,9 @@ class DateFictiveActiviteExpert
     }
 
     /**
-     * Get date
+     * Get date.
      *
-     * @return \DateTime 
+     * @return \DateTime
      */
     public function getDate()
     {
@@ -70,9 +71,10 @@ class DateFictiveActiviteExpert
     }
 
     /**
-     * Set activite
+     * Set activite.
      *
      * @param \HopitalNumerique\ExpertBundle\Entity\ActiviteExpert $activite
+     *
      * @return DateFictiveActiviteExpert
      */
     public function setActivite(\HopitalNumerique\ExpertBundle\Entity\ActiviteExpert $activite = null)
@@ -83,9 +85,9 @@ class DateFictiveActiviteExpert
     }
 
     /**
-     * Get activite
+     * Get activite.
      *
-     * @return \HopitalNumerique\ExpertBundle\Entity\ActiviteExpert 
+     * @return \HopitalNumerique\ExpertBundle\Entity\ActiviteExpert
      */
     public function getActivite()
     {

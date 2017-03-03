@@ -5,7 +5,6 @@ namespace HopitalNumerique\ForumBundle\Entity;
 use CCDNForum\ForumBundle\Entity\Subscription as BaseSubscription;
 
 /**
- * 
  * @author Gaetan MELCHILSEN
  * @copyright Nodevo
  */
@@ -17,7 +16,7 @@ class Subscription extends BaseSubscription
     private $board = null;
 
     /**
-     * Get board
+     * Get board.
      *
      * @return Board
      */
@@ -25,18 +24,18 @@ class Subscription extends BaseSubscription
     {
         return $this->board;
     }
-    
+
     /**
-     * Set board
+     * Set board.
      *
-     * @param  Board        $board
+     * @param Board $board
+     *
      * @return Subscription
      */
     public function setBoard(Board $board = null)
     {
         $this->board = $board;
-    
+
         return $this;
     }
-    
 }

@@ -9,15 +9,15 @@ use HopitalNumerique\ForumBundle\Entity\Forum;
 use HopitalNumerique\ForumBundle\Entity\Topic;
 
 /**
- * TopicRepository
+ * TopicRepository.
  */
 class TopicRepository extends EntityRepository
 {
     /**
-     * Récupère les derniers topics commentés par type de forum
+     * Récupère les derniers topics commentés par type de forum.
      *
-     * @param        $id
-     * @param null   $limit
+     * @param      $id
+     * @param null $limit
      *
      * @return QueryBuilder
      */
@@ -54,7 +54,7 @@ class TopicRepository extends EntityRepository
     }
 
     /**
-     * Récupère les derniers topics commentés par type de forum
+     * Récupère les derniers topics commentés par type de forum.
      *
      * @param $id
      * @param null $limit
@@ -116,9 +116,9 @@ class TopicRepository extends EntityRepository
     /**
      * Retourne le nombre de fils d'un forum.
      *
-     * @param integer $forumId ID du forum
+     * @param int $forumId ID du forum
      *
-     * @return integer Nombre
+     * @return int Nombre
      */
     public function getCountForForum($forumId)
     {

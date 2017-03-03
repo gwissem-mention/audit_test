@@ -127,9 +127,9 @@
                                             or (user.fonctionDansEtablissementSante is defined and user.fonctionDansEtablissementSante is not null) 
                                             or (user.profilEtablissementSante is defined and user.profilEtablissementSante is not null) %}
                                             {# Zone établissement de santé #}
-                                            <div><h4>Vous êtes un établissement de santé</h4></div>                               
+                                            <div><h4>Vous êtes dans une structure de santé (établissement ou service sanitaire ou médico-social)</h4></div>
                                             <div class="form-group">
-                                                <div><strong>Type d'établissement</strong></div>
+                                                <div><strong>Type de structure</strong></div>
                                                 <div>
                                                     {% if user.statutEtablissementSante is defined and user.statutEtablissementSante is not null  %}
                                                         {{user.statutEtablissementSante.libelle}}
@@ -137,7 +137,7 @@
                                                 </div>
                                             </div>
                                             <div class="form-group">
-                                                <div><strong>Etablissement de rattachement</strong></div>
+                                                <div><strong>Structure de rattachement</strong></div>
                                                 <div>
                                                     {% if user.etablissementRattachementSante is defined and user.etablissementRattachementSante is not null  %}
                                                         {{user.etablissementRattachementSante.nom}}
@@ -153,7 +153,7 @@
                                                 </div>
                                             </div>
                                             <div class="form-group">
-                                                <div><strong>Nom de votre établissement si non disponible dans la liste précédente</strong></div>
+                                                <div><strong>Nom de votre structure si non disponible dans la liste précédente</strong></div>
                                                 <div>{{user.autreStructureRattachementSante}}</div>
                                             </div>
                                             <div class="form-group">
@@ -166,7 +166,7 @@
                                         {% if (user.nomStructure is defined and user.nomStructure is not null)
                                            or (user.fonctionStructure is defined and user.fonctionStructure is not null) %}
                                             {# Zone autre qu'un établissement de santé #}
-                                            <h4>Vous êtes une structure autre qu'un établissement de santé</h4>
+                                            <h4>Vous êtes dans une autre structure</h4>
                                             <div class="form-group">
                                                 <div><strong>Nom de la structure</strong></div>
                                                 <div>{{user.nomStructure}}</div>

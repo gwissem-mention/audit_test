@@ -2,21 +2,20 @@
 
 namespace HopitalNumerique\CoreBundle\EventListener;
 
-use Gedmo\Loggable\Entity\LogEntry;
 use Doctrine\Bundle\DoctrineBundle\Registry as Doctrine;
 use HopitalNumerique\AutodiagBundle\Event\SynthesisEvent;
 use HopitalNumerique\AutodiagBundle\Events;
-use HopitalNumerique\AutodiagBundle\Service\Compare\ComparisonCleaner;
 use Symfony\Component\DependencyInjection\ContainerInterface as Container;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorage;
 
 class LogListener implements EventSubscriberInterface
 {
-
     protected $container;
+
     /**
      * EntryListener constructor.
+     *
      * @param Doctrine $doctrine
      */
     public function __construct(Doctrine $doctrine, Container $container, TokenStorage $security)
@@ -52,6 +51,5 @@ class LogListener implements EventSubscriberInterface
         $class = 'HopitalNumerique\AutodiagBundle\Entity\Synthesis';
 
         $this->container->get('hopitalnumerique_core.log')->Logger($action, $synthesis, $synthesis->getName(), $class, $user);
-
     }
 }

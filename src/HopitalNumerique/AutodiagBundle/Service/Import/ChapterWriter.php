@@ -1,4 +1,5 @@
 <?php
+
 namespace HopitalNumerique\AutodiagBundle\Service\Import;
 
 use Doctrine\ORM\EntityManager;
@@ -43,7 +44,6 @@ class ChapterWriter implements WriterInterface, ProgressAwareInterface
 
     public function prepare()
     {
-
     }
 
     public function write($item)
@@ -59,14 +59,15 @@ class ChapterWriter implements WriterInterface, ProgressAwareInterface
                         'missing_parent_code',
                         'error'
                     );
+
                     return;
                 }
-                $parentCode = (string)$item[ChapterColumnsDefinition::CODE];
-                $chapterCode = (string)$item[ChapterColumnsDefinition::CHILD_CODE];
+                $parentCode = (string) $item[ChapterColumnsDefinition::CODE];
+                $chapterCode = (string) $item[ChapterColumnsDefinition::CHILD_CODE];
 
                 $parentChapter = $this->getChapter($parentCode);
             } else {
-                $chapterCode = (string)$item[ChapterColumnsDefinition::CODE];
+                $chapterCode = (string) $item[ChapterColumnsDefinition::CODE];
             }
 
             if (array_key_exists($chapterCode, $this->importedChapterCodes)) {
@@ -75,6 +76,7 @@ class ChapterWriter implements WriterInterface, ProgressAwareInterface
                     $chapterCode,
                     'chapter_exists'
                 );
+
                 return;
             }
             $this->importedChapterCodes[$chapterCode] = true;
@@ -84,7 +86,7 @@ class ChapterWriter implements WriterInterface, ProgressAwareInterface
 
             foreach ($this->mapping as $key => $attribute) {
                 if (array_key_exists($key, $item)) {
-                    $propertyAccessor->setValue($chapter, $attribute, (string)$item[$key]);
+                    $propertyAccessor->setValue($chapter, $attribute, (string) $item[$key]);
                 }
             }
 
@@ -111,6 +113,7 @@ class ChapterWriter implements WriterInterface, ProgressAwareInterface
                     'chapter'
                 );
                 $this->hasViolations = true;
+
                 return;
             }
 
@@ -130,18 +133,18 @@ class ChapterWriter implements WriterInterface, ProgressAwareInterface
         if ($this->hasViolations) {
             $this->manager->clear();
             $this->progress->addError('ad.import.chapter.has_violations');
+
             return;
         }
 
         $toDelete = [];
         foreach ($this->autodiag->getChapters() as $chapter) {
-
-            if (!array_key_exists((string)$chapter->getCode(), $this->importedChapterCodes)) {
+            if (!array_key_exists((string) $chapter->getCode(), $this->importedChapterCodes)) {
                 $toDelete[] = $chapter;
             }
 
             foreach ($chapter->getChilds() as $child) {
-                if (!array_key_exists((string)$child->getCode(), $this->importedChapterCodes)) {
+                if (!array_key_exists((string) $child->getCode(), $this->importedChapterCodes)) {
                     $toDelete[] = $child;
                 }
             }
@@ -164,7 +167,7 @@ class ChapterWriter implements WriterInterface, ProgressAwareInterface
         $chapter = $this->manager->getRepository('HopitalNumeriqueAutodiagBundle:Autodiag\Container\Chapter')
             ->findOneBy([
                 'autodiag' => $this->autodiag,
-                'code' => $code
+                'code' => $code,
             ]);
 
         if (!$chapter instanceof Chapter) {
@@ -184,9 +187,9 @@ class ChapterWriter implements WriterInterface, ProgressAwareInterface
 
     protected function handleActionPlan(Chapter $chapter, $item)
     {
-        $actions = null === $item[ChapterColumnsDefinition::ACTION_PLAN] ? [] : preg_split("/\\r\\n|\\r|\\n/", $item[ChapterColumnsDefinition::ACTION_PLAN]);
+        $actions = null === $item[ChapterColumnsDefinition::ACTION_PLAN] ? [] : preg_split('/\\r\\n|\\r|\\n/', $item[ChapterColumnsDefinition::ACTION_PLAN]);
         array_walk($actions, function (&$element) {
-            $element = explode("::", $element);
+            $element = explode('::', $element);
         });
 
         $updatedActions = [];
@@ -209,10 +212,10 @@ class ChapterWriter implements WriterInterface, ProgressAwareInterface
                 $this->manager->persist($object);
             }
 
-            $object->setVisible((bool)$action[1]);
+            $object->setVisible((bool) $action[1]);
             $object->setDescription(isset($action[2]) ? $action[2] : null);
             $object->setLink(isset($action[3]) ? $action[3] : null);
-            $object->setLinkDescription(isset($action[4]) ? $action[4]: null);
+            $object->setLinkDescription(isset($action[4]) ? $action[4] : null);
 
             $updatedActions[$object->getId()] = true;
 
@@ -241,9 +244,10 @@ class ChapterWriter implements WriterInterface, ProgressAwareInterface
     }
 
     /**
-     * Parse CSV float value
+     * Parse CSV float value.
      *
      * @param $value
+     *
      * @return float
      */
     protected function parseFloatValue($value)

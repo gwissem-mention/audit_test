@@ -10,17 +10,16 @@ use Symfony\Component\Security\Core\SecurityContextInterface;
 use Symfony\Component\Security\Core\Exception\AuthenticationException;
 
 /**
- * {@inheritDoc}
+ * {@inheritdoc}
  */
 class SecurityController extends BaseController
 {
-
-    public function loginCustomAction(Request $request, $urlToRedirect = "")
+    public function loginCustomAction(Request $request, $urlToRedirect = '')
     {
         /** @var $session \Symfony\Component\HttpFoundation\Session\Session */
         $session = $request->getSession();
 
-        if ($urlToRedirect != "") {
+        if ($urlToRedirect != '') {
             $session->set('urlToRedirect', base64_decode(str_pad(strtr($urlToRedirect, '-_', '+/'), strlen($urlToRedirect) % 4, '=', STR_PAD_RIGHT)));
         }
 
@@ -61,13 +60,13 @@ class SecurityController extends BaseController
 
         return $this->renderLogin([
             'last_username' => $lastUsername,
-            'error'         => $error,
-            'csrf_token'    => $csrfToken,
+            'error' => $error,
+            'csrf_token' => $csrfToken,
         ]);
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     protected function renderLogin(array $data)
     {
@@ -90,12 +89,12 @@ class SecurityController extends BaseController
         return new RedirectResponse($this->container->get('router')->generate('hopital_numerique_homepage'));
     }
 
-    public function quickSignUpAction(Request $request, $urlToRedirect = "")
+    public function quickSignUpAction(Request $request, $urlToRedirect = '')
     {
         /** @var $session \Symfony\Component\HttpFoundation\Session\Session */
         $session = $request->getSession();
 
-        if ($urlToRedirect != "") {
+        if ($urlToRedirect != '') {
             $session->set('urlToRedirect', base64_decode(str_pad(strtr($urlToRedirect, '-_', '+/'), strlen($urlToRedirect) % 4, '=', STR_PAD_RIGHT)));
         }
 
@@ -136,8 +135,8 @@ class SecurityController extends BaseController
 
         return $this->renderQuickSignUp([
             'last_username' => $lastUsername,
-            'error'         => $error,
-            'csrf_token'    => $csrfToken,
+            'error' => $error,
+            'csrf_token' => $csrfToken,
         ]);
     }
 

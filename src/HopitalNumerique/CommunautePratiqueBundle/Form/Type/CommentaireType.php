@@ -1,4 +1,5 @@
 <?php
+
 namespace HopitalNumerique\CommunautePratiqueBundle\Form\Type;
 
 use Symfony\Component\Form\FormBuilderInterface;
@@ -15,7 +16,6 @@ class CommentaireType extends \Symfony\Component\Form\AbstractType
      */
     private $router;
 
-
     /**
      * Constructeur.
      */
@@ -24,22 +24,21 @@ class CommentaireType extends \Symfony\Component\Form\AbstractType
         $this->router = $router;
     }
 
-
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder->setAction($this->router->generate($options['redirectionRoute'], $options['redirectionRouteParams']));
 
         $builder
-            ->add('message', 'textarea', array(
+            ->add('message', 'textarea', [
                 'required' => true,
-                'attr' => array(
+                'attr' => [
                     'class' => 'validate[required] tinyMceCode',
-                    'rows' => 4
-                )
-            ))
+                    'rows' => 4,
+                ],
+            ])
         ;
     }
 
@@ -49,17 +48,17 @@ class CommentaireType extends \Symfony\Component\Form\AbstractType
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
         $resolver
-            ->setDefaults(array(
+            ->setDefaults([
                 'data_class' => 'HopitalNumerique\CommunautePratiqueBundle\Entity\Commentaire',
-                'redirectionRouteParams' => array()
-            ))
-            ->setRequired(array('redirectionRoute'))
-            ->setOptional(array('redirectionRouteParams'))
+                'redirectionRouteParams' => [],
+            ])
+            ->setRequired(['redirectionRoute'])
+            ->setOptional(['redirectionRouteParams'])
         ;
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function getName()
     {

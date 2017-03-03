@@ -18,10 +18,10 @@ class ExpBesoinGestionGrid extends Grid implements GridInterface
     public function setConfig()
     {
         $this->setNoDataMessage('Aucun élément du gestionnaire de recherche par parcours à afficher.');
-        $this->setSource( 'hopitalnumerique_recherche.manager.expbesoingestion' );
-        $this->setSourceType( self::SOURCE_TYPE_MANAGER );
-        $this->showIDColumn( false );
-        $this->setFilterIdColumn( false );
+        $this->setSource('hopitalnumerique_recherche.manager.expbesoingestion');
+        $this->setSourceType(self::SOURCE_TYPE_MANAGER);
+        $this->showIDColumn(false);
+        $this->setFilterIdColumn(false);
     }
 
     /**
@@ -30,17 +30,17 @@ class ExpBesoinGestionGrid extends Grid implements GridInterface
     public function setColumns()
     {
         //field, titre, isSortable, size
-        $this->addColonne( new Column\TextColumn('nom', 'Nom') );
-        $this->addColonne( new Column\TextColumn('domaineNom', 'Domaine(s) associé(s)') );
+        $this->addColonne(new Column\TextColumn('nom', 'Nom'));
+        $this->addColonne(new Column\TextColumn('domaineNom', 'Domaine(s) associé(s)'));
     }
 
     /**
-     * Ajoute les boutons d'action
+     * Ajoute les boutons d'action.
      */
     public function setActionsButtons()
     {
-        $this->addActionButton( new Action\EditButton( 'hopitalnumerique_recherche_admin_aide-expression-besoin_gestion_edit' ) );
-        $this->addActionButton( new Action\FilsButton('hopital_numerique_expbesoin_index') );
+        $this->addActionButton(new Action\EditButton('hopitalnumerique_recherche_admin_aide-expression-besoin_gestion_edit'));
+        $this->addActionButton(new Action\FilsButton('hopital_numerique_expbesoin_index'));
     }
 
     /**
@@ -48,6 +48,6 @@ class ExpBesoinGestionGrid extends Grid implements GridInterface
      */
     public function setMassActions()
     {
-        $this->addMassAction( new Action\DeleteMass('HopitalNumeriqueRechercheBundle:ExpBesoinGestion:deleteMass') );
+        $this->addMassAction(new Action\DeleteMass('HopitalNumeriqueRechercheBundle:ExpBesoinGestion:deleteMass'));
     }
 }

@@ -1,4 +1,5 @@
 <?php
+
 namespace HopitalNumerique\CommunautePratiqueBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -21,9 +22,9 @@ class CommentaireController extends Controller
             throw new \Exception('Commentaire non visible.');
         }
 
-        return $this->render('HopitalNumeriqueCommunautePratiqueBundle:Commentaire:block_view.html.twig', array(
-            'commentaire' => $commentaire
-        ));
+        return $this->render('HopitalNumeriqueCommunautePratiqueBundle:Commentaire:block_view.html.twig', [
+            'commentaire' => $commentaire,
+        ]);
     }
 
     /**
@@ -35,8 +36,6 @@ class CommentaireController extends Controller
             ->canAccessCommunautePratique()) {
             throw new \Exception('Commentaire non enregistrable.');
         }
-
-        
     }
 
     /**
@@ -66,10 +65,10 @@ class CommentaireController extends Controller
                 ->getRedirectionUrl($commentaire));
         }
 
-        return $this->render('HopitalNumeriqueCommunautePratiqueBundle:Commentaire:edit.html.twig', array(
+        return $this->render('HopitalNumeriqueCommunautePratiqueBundle:Commentaire:edit.html.twig', [
             'commentaire' => $commentaire,
-            'commentaireForm' => $commentaireForm->createView()
-        ));
+            'commentaireForm' => $commentaireForm->createView(),
+        ]);
     }
 
     /**
@@ -79,11 +78,11 @@ class CommentaireController extends Controller
     {
         if (!$this->container->get('hopitalnumerique_communautepratique.dependency_injection.security')
             ->canDeleteCommentaire($commentaire)) {
-            return new JsonResponse(array('success' => false));
+            return new JsonResponse(['success' => false]);
         }
 
         $this->container->get('hopitalnumerique_communautepratique.manager.commentaire')->delete($commentaire);
 
-        return new JsonResponse(array('success' => true));
+        return new JsonResponse(['success' => true]);
     }
 }

@@ -5,13 +5,12 @@ namespace Nodevo\MenuBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\ORM\PersistentCollection;
 use Doctrine\Common\Collections\Criteria;
-
 //Asserts Stuff
 use Symfony\Component\Validator\Constraints as Assert;
 use Nodevo\ToolsBundle\Validator\Constraints as Nodevo;
 
 /**
- * Menu
+ * Menu.
  *
  * @ORM\Table("core_menu_item")
  * @ORM\Entity(repositoryClass="Nodevo\MenuBundle\Repository\ItemRepository")
@@ -19,7 +18,7 @@ use Nodevo\ToolsBundle\Validator\Constraints as Nodevo;
 class Item
 {
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="itm_id", type="integer", options = {"comment" = "ID du lien"})
      * @ORM\Id
@@ -43,7 +42,7 @@ class Item
 
     /**
      * @var string
-     * 
+     *
      * @ORM\Column(name="itm_route", type="string", length=255, nullable=true, options = {"comment" = "Route associée"})
      */
     private $route;
@@ -56,7 +55,7 @@ class Item
     private $routeParameters;
 
     /**
-     * @var boolean
+     * @var bool
      *
      * @ORM\Column(name="itm_route_absolute", type="boolean", nullable=true, options = {"comment" = "Le lien est-il absolu ?"})
      */
@@ -80,7 +79,7 @@ class Item
     private $icon;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\ManyToOne(targetEntity="Item")
      * @ORM\JoinColumn(name="itm_parent", referencedColumnName="itm_id", nullable=true)
@@ -88,14 +87,14 @@ class Item
     private $parent;
 
     /**
-     * @var boolean
+     * @var bool
      *
      * @ORM\Column(name="itm_display", type="boolean", nullable=true, options = {"comment" = "Afficher le lien ?"})
      */
     private $display;
 
     /**
-     * @var boolean
+     * @var bool
      *
      * @ORM\Column(name="itm_display_children", type="boolean", nullable=false, options = {"comment" = "Afficher les enfants ?"})
      */
@@ -109,7 +108,7 @@ class Item
     private $role;
 
     /**
-     * @var integer
+     * @var int
      * @Assert\NotBlank(message="L'ordre ne peut pas être vide.")
      * @Nodevo\Javascript(class="validate[required]")
      * @ORM\Column(name="itm_order", type="integer", options = {"comment" = "Ordre du lien"})
@@ -117,7 +116,7 @@ class Item
     private $order;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\ManyToOne(targetEntity="Menu", inversedBy="items")
      * @ORM\JoinColumn(name="mnu_menu", referencedColumnName="mnu_id")
@@ -127,15 +126,15 @@ class Item
     public function __construct()
     {
         $this->displayChildren = false;
-        $this->order           = 0;
-        $this->icon            = null;
-        $this->role            = 'IS_AUTHENTICATED_ANONYMOUSLY';
+        $this->order = 0;
+        $this->icon = null;
+        $this->role = 'IS_AUTHENTICATED_ANONYMOUSLY';
     }
-    
+
     /**
-     * Get id
+     * Get id.
      *
-     * @return integer 
+     * @return int
      */
     public function getId()
     {
@@ -143,22 +142,23 @@ class Item
     }
 
     /**
-     * Set name
+     * Set name.
      *
      * @param string $name
+     *
      * @return Menu
      */
     public function setName($name)
     {
         $this->name = $name;
-    
+
         return $this;
     }
 
     /**
-     * Get name
+     * Get name.
      *
-     * @return string 
+     * @return string
      */
     public function getName()
     {
@@ -166,22 +166,23 @@ class Item
     }
 
     /**
-     * Set route
+     * Set route.
      *
      * @param string $route
+     *
      * @return Menu
      */
     public function setRoute($route)
     {
         $this->route = $route;
-    
+
         return $this;
     }
 
     /**
-     * Get route
+     * Get route.
      *
-     * @return string 
+     * @return string
      */
     public function getRoute()
     {
@@ -189,22 +190,23 @@ class Item
     }
 
     /**
-     * Set parent
+     * Set parent.
      *
-     * @param integer $parent
+     * @param int $parent
+     *
      * @return Menu
      */
     public function setParent($parent)
     {
         $this->parent = $parent;
-    
+
         return $this;
     }
 
     /**
-     * Get parent
+     * Get parent.
      *
-     * @return integer 
+     * @return int
      */
     public function getParent()
     {
@@ -212,22 +214,23 @@ class Item
     }
 
     /**
-     * Set role
+     * Set role.
      *
      * @param string $role
+     *
      * @return Menu
      */
     public function setRole($role)
     {
         $this->role = $role;
-    
+
         return $this;
     }
 
     /**
-     * Get role
+     * Get role.
      *
-     * @return string 
+     * @return string
      */
     public function getRole()
     {
@@ -235,7 +238,7 @@ class Item
     }
 
     /**
-     * Get icon
+     * Get icon.
      *
      * @return string $icon
      */
@@ -243,9 +246,9 @@ class Item
     {
         return $this->icon;
     }
-    
+
     /**
-     * Set icon
+     * Set icon.
      *
      * @param string $icon
      */
@@ -255,22 +258,23 @@ class Item
     }
 
     /**
-     * Set uri
+     * Set uri.
      *
      * @param string $uri
+     *
      * @return Item
      */
     public function setUri($uri)
     {
         $this->uri = $uri;
-    
+
         return $this;
     }
 
     /**
-     * Get uri
+     * Get uri.
      *
-     * @return string 
+     * @return string
      */
     public function getUri()
     {
@@ -278,7 +282,7 @@ class Item
     }
 
     /**
-     * Set routeParameters
+     * Set routeParameters.
      *
      * @param string $routeParameters
      *
@@ -292,9 +296,9 @@ class Item
     }
 
     /**
-     * Get routeParameters
+     * Get routeParameters.
      *
-     * @return string 
+     * @return string
      */
     public function getRouteParameters()
     {
@@ -302,9 +306,9 @@ class Item
     }
 
     /**
-     * Set display
+     * Set display.
      *
-     * @param boolean $display
+     * @param bool $display
      *
      * @return Item
      */
@@ -316,19 +320,19 @@ class Item
     }
 
     /**
-     * Get display
+     * Get display.
      *
-     * @return boolean 
+     * @return bool
      */
     public function getDisplay()
     {
         return $this->display;
     }
-    
+
     /**
-     * Set display
+     * Set display.
      *
-     * @param boolean $display
+     * @param bool $display
      *
      * @return Item
      */
@@ -340,9 +344,9 @@ class Item
     }
 
     /**
-     * Set displayChildren
+     * Set displayChildren.
      *
-     * @param boolean $displayChildren
+     * @param bool $displayChildren
      *
      * @return Item
      */
@@ -354,9 +358,9 @@ class Item
     }
 
     /**
-     * Get displayChildren
+     * Get displayChildren.
      *
-     * @return boolean 
+     * @return bool
      */
     public function getDisplayChildren()
     {
@@ -364,9 +368,9 @@ class Item
     }
 
     /**
-     * Set routeAbsolute
+     * Set routeAbsolute.
      *
-     * @param boolean $routeAbsolute
+     * @param bool $routeAbsolute
      *
      * @return Item
      */
@@ -378,9 +382,9 @@ class Item
     }
 
     /**
-     * Set order
+     * Set order.
      *
-     * @return integer 
+     * @return int
      */
     public function setOrder($order)
     {
@@ -390,9 +394,9 @@ class Item
     }
 
     /**
-     * Get order
+     * Get order.
      *
-     * @return integer 
+     * @return int
      */
     public function getOrder()
     {
@@ -400,9 +404,9 @@ class Item
     }
 
     /**
-     * Get routeAbsolute
+     * Get routeAbsolute.
      *
-     * @return boolean 
+     * @return bool
      */
     public function getRouteAbsolute()
     {
@@ -419,21 +423,22 @@ class Item
         return $this->menu->getId();
     }
 
-    public function setMenu( Menu $menu )
+    public function setMenu(Menu $menu)
     {
         $this->menu = $menu;
     }
 
-    public function getChildsFromCollection( PersistentCollection $collection )
+    public function getChildsFromCollection(PersistentCollection $collection)
     {
         $criteria = Criteria::create()
-                                    ->where(Criteria::expr()->eq("parent", $this))
-                                    ->orderBy( array("order" => Criteria::ASC) );
-        return $collection->matching( $criteria );
+                                    ->where(Criteria::expr()->eq('parent', $this))
+                                    ->orderBy(['order' => Criteria::ASC]);
+
+        return $collection->matching($criteria);
     }
 
     public function __toString()
     {
-        return $this->name.'';
+        return $this->name . '';
     }
 }

@@ -2,6 +2,7 @@
 /**
  * Configuration du grid des demandes d'intervention pour le directeur.
  */
+
 namespace HopitalNumerique\InterventionBundle\Grid\Directeur;
 
 use HopitalNumerique\InterventionBundle\Grid\DemandesAbstractGrid;
@@ -13,7 +14,7 @@ use Nodevo\GridBundle\Grid\Action;
 class SuiviDemandesGrid extends DemandesAbstractGrid
 {
     /**
-     * Set la config propre au Grid des demandes d'intervention (Source + config par défaut)
+     * Set la config propre au Grid des demandes d'intervention (Source + config par défaut).
      */
     public function setConfig()
     {
@@ -22,12 +23,12 @@ class SuiviDemandesGrid extends DemandesAbstractGrid
     }
 
     /**
-     * Ajoute les colonnes visibles du grid
+     * Ajoute les colonnes visibles du grid.
      */
     public function setColumns()
     {
         parent::setColumns();
-        
+
         $this->addColonneDemandeur();
         $this->addColonneAmbassadeur();
         $this->addColonneInterventionInitiateurType();
@@ -38,7 +39,7 @@ class SuiviDemandesGrid extends DemandesAbstractGrid
     }
 
     /**
-     * Ajoute les boutons d'actions si nécessaire
+     * Ajoute les boutons d'actions si nécessaire.
      */
     public function setActionsButtons()
     {
@@ -46,10 +47,9 @@ class SuiviDemandesGrid extends DemandesAbstractGrid
     }
 
     /**
-     * Ajoute les actions de masses
+     * Ajoute les actions de masses.
      */
     public function setMassActions()
     {
-        
     }
 }

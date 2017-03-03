@@ -7,7 +7,7 @@ use Knp\Menu\NodeInterface;
 use Knp\Menu\Loader\LoaderInterface;
 
 /**
- * BreadcrumbNodeLoader
+ * BreadcrumbNodeLoader.
  */
 class BreadcrumbNodeLoader implements LoaderInterface
 {
@@ -16,21 +16,21 @@ class BreadcrumbNodeLoader implements LoaderInterface
     private $_rootNode;
 
     /**
-     * [__construct description]
+     * [__construct description].
      *
-     * @param FactoryInterface         $factory   [description]
-     * @param [type]                   $container [description]
-     * @param array                    $options   [description]
+     * @param FactoryInterface $factory   [description]
+     * @param [type]           $container [description]
+     * @param array            $options   [description]
      */
-    public function __construct( FactoryInterface $factory, $container, $options = array() )
+    public function __construct(FactoryInterface $factory, $container, $options = [])
     {
-        $this->_factory   = $factory;
+        $this->_factory = $factory;
         $this->_container = $container;
-        $this->_rootNode  = isset($options['breadcrumbRoot']) ? $options['breadcrumbRoot'] : false;
+        $this->_rootNode = isset($options['breadcrumbRoot']) ? $options['breadcrumbRoot'] : false;
     }
 
     /**
-     * Charge le fil d'ariane
+     * Charge le fil d'ariane.
      *
      * @param array $data Liste des éléments
      *
@@ -41,23 +41,24 @@ class BreadcrumbNodeLoader implements LoaderInterface
         //build Menu
         $menu = $this->_factory->createItem('root');
 
-        if($this->_rootNode)
-            $menu->addChild('Accueil', array('route' => $this->_rootNode ) );
+        if ($this->_rootNode) {
+            $menu->addChild('Accueil', ['route' => $this->_rootNode]);
+        }
 
         //récupère l'arborescence
         $manipulator = new \Knp\Menu\Util\MenuManipulator();
-        $nodesArray = $manipulator->getBreadcrumbsArray( $this->getDatas($data) );
+        $nodesArray = $manipulator->getBreadcrumbsArray($this->getDatas($data));
         $nodesArray = $nodesArray[0]['item'];
 
         //get children
         $childs = array_values($nodesArray->getChildren());
-        $menu = $this->addChild( $menu, $childs );
+        $menu = $this->addChild($menu, $childs);
 
         return $menu;
     }
 
     /**
-     * Récupère l'arbre du Menu
+     * Récupère l'arbre du Menu.
      *
      * @param array $data Liste des éléments
      *
@@ -65,18 +66,17 @@ class BreadcrumbNodeLoader implements LoaderInterface
      */
     public function getDatas($data)
     {
-        if (!$data instanceof NodeInterface)
+        if (!$data instanceof NodeInterface) {
             throw new \InvalidArgumentException(sprintf('Unsupported data. Expected Knp\Menu\NodeInterface but got ', is_object($data) ? get_class($data) : gettype($data)));
-
+        }
         $item = $this->_factory->createItem($data->getName(), $data->getOptions());
 
-        foreach ($data->getChildren() as $childNode)
-        {
-            if( !is_null($element = $this->getDatas($childNode)) )
-            {
+        foreach ($data->getChildren() as $childNode) {
+            if (!is_null($element = $this->getDatas($childNode))) {
                 $options = $childNode->getOptions();
-                if ($options['route'] === $this->_container->get('request')->attributes->get('_route') || $element->getChildren())
-                    $item->addChild( $element );
+                if ($options['route'] === $this->_container->get('request')->attributes->get('_route') || $element->getChildren()) {
+                    $item->addChild($element);
+                }
             }
         }
 
@@ -84,9 +84,9 @@ class BreadcrumbNodeLoader implements LoaderInterface
     }
 
     /**
-     * [supports description]
+     * [supports description].
      *
-     * @param  [type] $data [description]
+     * @param [type] $data [description]
      *
      * @return [type]
      */
@@ -96,33 +96,33 @@ class BreadcrumbNodeLoader implements LoaderInterface
     }
 
     /**
-     * Ajoute l'arbo des enfants du fil d'ariane
+     * Ajoute l'arbo des enfants du fil d'ariane.
      *
      * @param MenutItem $menu   Le menu
      * @param array     $childs Tableau des enfants
      */
-    private function addChild( $menu, $childs )
+    private function addChild($menu, $childs)
     {
-        if( isset($childs[0]) ){
-            $element   = $childs[0];
+        if (isset($childs[0])) {
+            $element = $childs[0];
             $newChilds = array_values($element->getChildren());
-            $options   = array();
+            $options = [];
 
             //remove javascript link
-            if( $element->getUri() != 'javascript:;' )
+            if ($element->getUri() != 'javascript:;') {
                 $options['uri'] = $element->getUri();
-            
+            }
+
             //Test if childs present
-            if( count($newChilds) > 0 )
-            {
-                $menu->addChild( $element->getLabel(), $options );
-                $menu = $this->addChild( $menu, $newChilds );    
-            }else{
+            if (count($newChilds) > 0) {
+                $menu->addChild($element->getLabel(), $options);
+                $menu = $this->addChild($menu, $newChilds);
+            } else {
                 //No Link on Last Element
-                $menu->addChild( $element->getLabel() );
+                $menu->addChild($element->getLabel());
             }
         }
-        
+
         return $menu;
     }
 }

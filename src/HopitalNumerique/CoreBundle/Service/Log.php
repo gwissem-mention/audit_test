@@ -1,14 +1,13 @@
 <?php
+
 namespace HopitalNumerique\CoreBundle\Service;
 
 use Doctrine\Bundle\DoctrineBundle\Registry as Doctrine;
 use Doctrine\ORM\EntityManager;
 use Gedmo\Loggable\Entity\LogEntry;
 
-
 class Log
 {
-
     /** @var array */
     private $logs;
 
@@ -16,7 +15,6 @@ class Log
     {
         $this->doctrine = $doctrine;
     }
-
 
     public function Logger($action, $object, $title, $class, $user)
     {
@@ -31,7 +29,7 @@ class Log
         $log->setObjectId($object->getId());
         $log->setObjectClass($class);
         $log->setVersion(1);
-        $log->setData(array($value => $title));
+        $log->setData([$value => $title]);
         $log->setUsername($user->getUsername());
 
         $this->logs[] = $log;

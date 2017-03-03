@@ -17,8 +17,8 @@ class CommentaireGrid extends Grid implements GridInterface
      */
     public function setConfig()
     {
-        $this->setSource( 'hopitalnumerique_objet.manager.commentaire' );
-        $this->setSourceType( self::SOURCE_TYPE_MANAGER );
+        $this->setSource('hopitalnumerique_objet.manager.commentaire');
+        $this->setSourceType(self::SOURCE_TYPE_MANAGER);
         $this->setNoDataMessage('Aucun commentaire à afficher.');
     }
 
@@ -28,41 +28,40 @@ class CommentaireGrid extends Grid implements GridInterface
     public function setColumns()
     {
         //field, titre, isSortable, size
-        $this->addColonne( new Column\TextColumn('nomPrenom', 'Utilisateur') );
-        $this->addColonne( new Column\TextColumn('texte', 'Texte') );
-        $this->addColonne( new Column\DateColumn('dateCreation', 'Date du commentaire') );
-        $this->addColonne( new Column\TextColumn('objId', 'Objet Id') );
-        $this->addColonne( new Column\TextColumn('objTitre', 'Objet concerné') );
-        $this->addColonne( new Column\TextColumn('contId', 'Infradoc Id') );
-        $this->addColonne( new Column\TextColumn('contTitre', 'Infradoc concerné') );
-        $this->addColonne( new Column\BooleanColumn('publier', 'Publier') );        
+        $this->addColonne(new Column\TextColumn('nomPrenom', 'Utilisateur'));
+        $this->addColonne(new Column\TextColumn('texte', 'Texte'));
+        $this->addColonne(new Column\DateColumn('dateCreation', 'Date du commentaire'));
+        $this->addColonne(new Column\TextColumn('objId', 'Objet Id'));
+        $this->addColonne(new Column\TextColumn('objTitre', 'Objet concerné'));
+        $this->addColonne(new Column\TextColumn('contId', 'Infradoc Id'));
+        $this->addColonne(new Column\TextColumn('contTitre', 'Infradoc concerné'));
+        $this->addColonne(new Column\BooleanColumn('publier', 'Publier'));
     }
 
     /**
-     * Ajoute les boutons d'action
+     * Ajoute les boutons d'action.
      */
     public function setActionsButtons()
     {
-        $this->addActionButton( new Action\EditButton( 'hopitalnumerique_objet_admin_commentaire_edit' ) );
+        $this->addActionButton(new Action\EditButton('hopitalnumerique_objet_admin_commentaire_edit'));
         //--------- GME 14/08 : Cadenas lock/unlock -------
         //Custom Unlock button : Affiche le bouton dévérouillé si la ligne est vérouillée
-        $unlockButton = new Action\LockButton( 'hopitalnumerique_objet_admin_commentaire_toggle_publication' );
-        $unlockButton->setAttributes( array('class'=>'btn btn-warning fa fa-unlock','title' => 'Publier') );
-        $unlockButton->manipulateRender(function($action, \APY\DataGridBundle\Grid\Row  $row) {
+        $unlockButton = new Action\LockButton('hopitalnumerique_objet_admin_commentaire_toggle_publication');
+        $unlockButton->setAttributes(['class' => 'btn btn-warning fa fa-unlock', 'title' => 'Publier']);
+        $unlockButton->manipulateRender(function ($action, \APY\DataGridBundle\Grid\Row  $row) {
             return $row->getField('publier') ? null : $action;
         });
-        $this->addActionButton( $unlockButton );
+        $this->addActionButton($unlockButton);
 
         //Custom Unlock button : Affiche le bouton dévérouillé si la ligne est vérouillée
-        $lockButton = new Action\LockButton( 'hopitalnumerique_objet_admin_commentaire_toggle_publication' );
-        $lockButton->setAttributes( array('class'=>'btn btn-warning fa fa-lock','title' => 'Dépublier') );
-        $lockButton->manipulateRender(function($action, \APY\DataGridBundle\Grid\Row  $row) {
-            return $row->getField('publier') ? $action : null ;
+        $lockButton = new Action\LockButton('hopitalnumerique_objet_admin_commentaire_toggle_publication');
+        $lockButton->setAttributes(['class' => 'btn btn-warning fa fa-lock', 'title' => 'Dépublier']);
+        $lockButton->manipulateRender(function ($action, \APY\DataGridBundle\Grid\Row  $row) {
+            return $row->getField('publier') ? $action : null;
         });
-        $this->addActionButton( $lockButton );
+        $this->addActionButton($lockButton);
         //--------- GME 14/08 : Cadenas lock/unlock -------
         // $this->addActionButton( new Action\DeleteButton( 'hopitalnumerique_objet_admin_commentaire_delete' ) );
-
     }
 
     /**
@@ -70,9 +69,9 @@ class CommentaireGrid extends Grid implements GridInterface
      */
     public function setMassActions()
     {
-        $this->addMassAction( new Action\ActionMass('Export CSV'  ,'HopitalNumeriqueObjetBundle:MassCommentaire:exportCSV') );
-        $this->addMassAction( new Action\ActionMass('Publication - Publier'  ,'HopitalNumeriqueObjetBundle:MassCommentaire:publierMass') );
-        $this->addMassAction( new Action\ActionMass('Publication - Dépublier'  ,'HopitalNumeriqueObjetBundle:MassCommentaire:depublierMass') );
-        $this->addMassAction( new Action\ActionMass('Suppression'  ,'HopitalNumeriqueObjetBundle:MassCommentaire:deleteMass') );
+        $this->addMassAction(new Action\ActionMass('Export CSV', 'HopitalNumeriqueObjetBundle:MassCommentaire:exportCSV'));
+        $this->addMassAction(new Action\ActionMass('Publication - Publier', 'HopitalNumeriqueObjetBundle:MassCommentaire:publierMass'));
+        $this->addMassAction(new Action\ActionMass('Publication - Dépublier', 'HopitalNumeriqueObjetBundle:MassCommentaire:depublierMass'));
+        $this->addMassAction(new Action\ActionMass('Suppression', 'HopitalNumeriqueObjetBundle:MassCommentaire:deleteMass'));
     }
 }
