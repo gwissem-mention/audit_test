@@ -30,7 +30,7 @@ class Item
      * @var string
      * @ORM\Column(type="string")
      * @Assert\NotNull
-     * @Assert\Expression("this.getType() in ['jauge', 'processus', 'radar', 'tableau', 'plan_action', 'histogramme', 'score', 'meteo', 'responses']")
+     * @Assert\Expression("this.getType() in ['jauge', 'processus', 'radar', 'tableau', 'plan_action', 'histogramme', 'score', 'meteo', 'reponses']")
      */
     private $type;
 
