@@ -356,6 +356,8 @@ class ReferenceRepository extends EntityRepository
                 $reference['domainesDisplayId'] = array_map(function ($domaine) {
                     return $domaine['id'];
                 }, $reference['domainesDisplay']);
+
+                $reference['domainesDisplayId'] = array_intersect($reference['domainesId'], $reference['domainesDisplayId']);
             });
 
             return $result;
