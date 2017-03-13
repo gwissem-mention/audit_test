@@ -339,8 +339,8 @@ class QuestionWriter implements WriterInterface, ProgressAwareInterface
 
             $object->setVisible((bool) $data[2]);
             $object->setDescription(isset($data[3]) ? $data[3] : null);
-            $object->setLink(isset($data[4]) ? $data[4] : null);
-            $object->setLinkDescription(isset($data[5]) ? $data[5] : null);
+            $object->setLink(isset($data[5]) ? $data[5] : null);
+            $object->setLinkDescription(isset($data[4]) ? $data[4] : null);
 
             $updatedActions[$object->getId()] = true;
 
