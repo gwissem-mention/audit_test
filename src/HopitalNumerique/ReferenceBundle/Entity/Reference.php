@@ -2,6 +2,7 @@
 
 namespace HopitalNumerique\ReferenceBundle\Entity;
 
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
 use HopitalNumerique\DomaineBundle\Entity\Domaine;
@@ -135,7 +136,7 @@ class Reference
     protected $order;
 
     /**
-     * @var \Doctrine\Common\Collections\Collection
+     * @var Collection
      *
      * @ORM\ManyToMany(targetEntity="Reference", inversedBy="enfants")
      * @ORM\JoinTable(
@@ -147,7 +148,7 @@ class Reference
     protected $parents;
 
     /**
-     * @var \Doctrine\Common\Collections\Collection
+     * @var Collection
      *
      * @ORM\ManyToMany(targetEntity="Reference", mappedBy="parents")
      */
@@ -170,7 +171,7 @@ class Reference
     private $allDomaines;
 
     /**
-     * @var \Doctrine\Common\Collections\Collection
+     * @var Collection
      *
      * @ORM\ManyToMany(targetEntity="\HopitalNumerique\ReferenceBundle\Entity\Reference\Synonyme", cascade={"persist"}, inversedBy="references")
      * @ORM\JoinTable(name="hn_reference_has_synonyme",
@@ -181,7 +182,7 @@ class Reference
     private $synonymes;
 
     /**
-     * @var \Doctrine\Common\Collections\Collection
+     * @var Collection
      *
      * @ORM\ManyToMany(targetEntity="\HopitalNumerique\ReferenceBundle\Entity\Reference\ChampLexicalNom", cascade={"persist"}, inversedBy="references")
      * @ORM\JoinTable(name="hn_reference_has_champ_lexical_nom",
@@ -436,11 +437,11 @@ class Reference
     /**
      * Add parent.
      *
-     * @param \HopitalNumerique\ReferenceBundle\Entity\Reference $parent
+     * @param Reference $parent
      *
      * @return Reference
      */
-    public function addParent(\HopitalNumerique\ReferenceBundle\Entity\Reference $parent)
+    public function addParent(Reference $parent)
     {
         $this->parents[] = $parent;
 
@@ -450,9 +451,9 @@ class Reference
     /**
      * Remove parent.
      *
-     * @param \HopitalNumerique\ReferenceBundle\Entity\Reference $parent
+     * @param Reference $parent
      */
-    public function removeParent(\HopitalNumerique\ReferenceBundle\Entity\Reference $parent)
+    public function removeParent(Reference $parent)
     {
         $this->parents->removeElement($parent);
     }
@@ -460,7 +461,7 @@ class Reference
     /**
      * Get parents.
      *
-     * @return \Doctrine\Common\Collections\Collection
+     * @return Collection
      */
     public function getParents()
     {
@@ -470,7 +471,7 @@ class Reference
     /**
      * Get ID des parents.
      *
-     * @return \Doctrine\Common\Collections\Collection
+     * @return Collection
      */
     public function getParentIds()
     {
@@ -496,7 +497,7 @@ class Reference
     /**
      * Get first parent.
      *
-     * @return \HopitalNumerique\ReferenceBundle\Entity\Reference|null First parent
+     * @return Reference|null First parent
      */
     public function getFirstParent()
     {
@@ -510,7 +511,7 @@ class Reference
     /**
      * Retourne si la référence à tel parent.
      *
-     * @param \HopitalNumerique\ReferenceBundle\Entity\Reference $referenceParent Parent
+     * @param Reference $referenceParent Parent
      *
      * @return bool Si a parent
      */
@@ -528,11 +529,11 @@ class Reference
     /**
      * Add enfant.
      *
-     * @param \HopitalNumerique\ReferenceBundle\Entity\Reference $enfant
+     * @param Reference $enfant
      *
      * @return Reference
      */
-    public function addEnfant(\HopitalNumerique\ReferenceBundle\Entity\Reference $enfant)
+    public function addEnfant(Reference $enfant)
     {
         $this->enfants[] = $enfant;
 
@@ -542,9 +543,9 @@ class Reference
     /**
      * Remove enfant.
      *
-     * @param \HopitalNumerique\ReferenceBundle\Entity\Reference $enfant
+     * @param Reference $enfant
      */
-    public function removeEnfant(\HopitalNumerique\ReferenceBundle\Entity\Reference $enfant)
+    public function removeEnfant(Reference $enfant)
     {
         $this->enfants->removeElement($enfant);
     }
@@ -552,7 +553,7 @@ class Reference
     /**
      * Get enfants.
      *
-     * @return \Doctrine\Common\Collections\Collection
+     * @return Collection
      */
     public function getEnfants()
     {
@@ -562,11 +563,11 @@ class Reference
     /**
      * Add domaines.
      *
-     * @param \HopitalNumerique\DomaineBundle\Entity\Domaine $domaine
+     * @param Domaine $domaine
      *
      * @return Reference
      */
-    public function addDomaine(\HopitalNumerique\DomaineBundle\Entity\Domaine $domaine)
+    public function addDomaine(Domaine $domaine)
     {
         $this->domaines[] = $domaine;
 
@@ -576,7 +577,7 @@ class Reference
     /**
      * Add domaines.
      *
-     * @param array <\HopitalNumerique\DomaineBundle\Entity\Domaine> $domaines Domaines
+     * @param Domaine[] $domaines Domaines
      *
      * @return Reference
      */
@@ -592,9 +593,9 @@ class Reference
     /**
      * Remove domaines.
      *
-     * @param \HopitalNumerique\DomaineBundle\Entity\Domaine $domaine
+     * @param Domaine $domaine
      */
-    public function removeDomaine(\HopitalNumerique\DomaineBundle\Entity\Domaine $domaine)
+    public function removeDomaine(Domaine $domaine)
     {
         $this->removeDomainesDisplay($domaine);
         $this->domaines->removeElement($domaine);
@@ -611,7 +612,7 @@ class Reference
     /**
      * Get domaines.
      *
-     * @return \Doctrine\Common\Collections\Collection
+     * @return Collection
      */
     public function getDomaines()
     {
@@ -665,9 +666,11 @@ class Reference
     /**
      * Retourne si la référence est liée au domaine.
      *
-     * @param \HopitalNumerique\DomaineBundle\Entity\Domaine $domaine Domaine
+     * @param Domaine $domaine Domaine
+     *
+     * @return bool
      */
-    public function hasDomaine(\HopitalNumerique\DomaineBundle\Entity\Domaine $domaine)
+    public function hasDomaine(Domaine $domaine)
     {
         if (true === $this->allDomaines) {
             return true;
@@ -685,7 +688,9 @@ class Reference
     /**
      * Retourne si la référence possède l'un des domaines.
      *
-     * @param array <\HopitalNumerique\DomaineBundle\Entity\Domaine> $domaines Domaines
+     * @param Domaine[] $domaines Domaines
+     *
+     * @return bool
      */
     public function hasAtLeastOneDomaine($domaines)
     {
@@ -725,11 +730,11 @@ class Reference
     /**
      * Add synonyme.
      *
-     * @param \HopitalNumerique\ReferenceBundle\Entity\Reference\Synonyme $synonyme
+     * @param Reference\Synonyme $synonyme
      *
      * @return Reference
      */
-    public function addSynonyme(\HopitalNumerique\ReferenceBundle\Entity\Reference\Synonyme $synonyme)
+    public function addSynonyme(Reference\Synonyme $synonyme)
     {
         if (!$this->hasSynonyme($synonyme)) {
             $this->synonymes[] = $synonyme;
@@ -741,9 +746,9 @@ class Reference
     /**
      * Remove synonyme.
      *
-     * @param \HopitalNumerique\ReferenceBundle\Entity\Reference\Synonyme $synonyme
+     * @param Reference\Synonyme $synonyme
      */
-    public function removeSynonyme(\HopitalNumerique\ReferenceBundle\Entity\Reference\Synonyme $synonyme)
+    public function removeSynonyme(Reference\Synonyme $synonyme)
     {
         $this->synonymes->removeElement($synonyme);
     }
@@ -751,7 +756,7 @@ class Reference
     /**
      * Get synonymes.
      *
-     * @return \Doctrine\Common\Collections\Collection
+     * @return Collection
      */
     public function getSynonymes()
     {
@@ -761,11 +766,11 @@ class Reference
     /**
      * Retourne si la référence possède déjà tel synonyme.
      *
-     * @param \HopitalNumerique\ReferenceBundle\Entity\Reference\Synonyme $synonyme Synonyme
+     * @param Reference\Synonyme $synonyme Synonyme
      *
      * @return bool si existant
      */
-    public function hasSynonyme(\HopitalNumerique\ReferenceBundle\Entity\Reference\Synonyme $synonyme)
+    public function hasSynonyme(Reference\Synonyme $synonyme)
     {
         foreach ($this->synonymes as $synonymeExistant) {
             if ($synonymeExistant->equals($synonyme)) {
@@ -779,11 +784,11 @@ class Reference
     /**
      * Add champLexicalNom.
      *
-     * @param \HopitalNumerique\ReferenceBundle\Entity\Reference\ChampLexicalNom $champLexicalNom
+     * @param Reference\ChampLexicalNom $champLexicalNom
      *
      * @return Reference
      */
-    public function addChampLexicalNom(\HopitalNumerique\ReferenceBundle\Entity\Reference\ChampLexicalNom $champLexicalNom)
+    public function addChampLexicalNom(Reference\ChampLexicalNom $champLexicalNom)
     {
         if (!$this->hasChampLexicalNom($champLexicalNom)) {
             $this->champLexicalNoms[] = $champLexicalNom;
@@ -795,9 +800,9 @@ class Reference
     /**
      * Remove champLexicalNom.
      *
-     * @param \HopitalNumerique\ReferenceBundle\Entity\Reference\ChampLexicalNom $champLexicalNom
+     * @param Reference\ChampLexicalNom $champLexicalNom
      */
-    public function removeChampLexicalNom(\HopitalNumerique\ReferenceBundle\Entity\Reference\ChampLexicalNom $champLexicalNom)
+    public function removeChampLexicalNom(Reference\ChampLexicalNom $champLexicalNom)
     {
         $this->champLexicalNoms->removeElement($champLexicalNom);
     }
@@ -805,7 +810,7 @@ class Reference
     /**
      * Get champLexicalNoms.
      *
-     * @return \Doctrine\Common\Collections\Collection
+     * @return Collection
      */
     public function getChampLexicalNoms()
     {
@@ -815,11 +820,11 @@ class Reference
     /**
      * Retourne si la référence possède déjà tel champLexicalNom.
      *
-     * @param \HopitalNumerique\ReferenceBundle\Entity\Reference\ChampLexicalNom $champLexicalNom ChampLexicalNom
+     * @param Reference\ChampLexicalNom $champLexicalNom ChampLexicalNom
      *
      * @return bool si existant
      */
-    public function hasChampLexicalNom(\HopitalNumerique\ReferenceBundle\Entity\Reference\ChampLexicalNom $champLexicalNom)
+    public function hasChampLexicalNom(Reference\ChampLexicalNom $champLexicalNom)
     {
         foreach ($this->champLexicalNoms as $champLexicalNomExistant) {
             if ($champLexicalNomExistant->equals($champLexicalNom)) {
@@ -1054,7 +1059,7 @@ class Reference
     /**
      * Retourne l'égalité entre deux références.
      *
-     * @param \HopitalNumerique\ReferenceBundle\Entity\Reference $reference Autre référence
+     * @param Reference $reference Autre référence
      *
      * @return bool Si égalité
      */
@@ -1140,6 +1145,9 @@ class Reference
         $this->domainesDisplay->remove($domaine);
     }
 
+    /**
+     * @return Collection
+     */
     public function getDomainesDisplayId()
     {
         return $this->domainesDisplay->map(function (Domaine $domaine) {
