@@ -1,0 +1,27 @@
+<noscript>
+    <div class="container">
+        <div class="row" style="margin-top: 20px;">
+            <div class="col-md-offset-3 col-md-6">
+                <img src="{{ asset('bundles/hopitalnumeriquecore/img/logo-anap.png') }}" alt="Logo ANAP">
+            </div>
+        </div>
+        <div class="row" style="margin-top: 20px;">
+            <div class="col-md-offset-3 col-md-6">
+                Ce site requiert l'activation de javascript pour être utilisé, merci de l'activer.
+            </div>
+        </div>
+    </div>
+    <style>.homepage {display: none}</style>
+</noscript>
+<script>
+    function $buo_f(){
+        var e = document.createElement("script");
+        e.src = "//browser-update.org/update.min.js";
+        document.body.appendChild(e);
+    };
+    try {document.addEventListener("DOMContentLoaded", $buo_f,false)}
+    catch(e){window.attachEvent("onload", $buo_f)}
+</script>
+<style>
+    .buorg { background-color: #d60030 !important; color: #ffffff; }
+</style>
