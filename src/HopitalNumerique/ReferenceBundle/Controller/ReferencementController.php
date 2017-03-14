@@ -15,16 +15,14 @@ class ReferencementController extends Controller
     /**
      * Affiche la fenêtre contenant le référencement d'une entité.
      *
-     * @param $entityType
-     * @param $entityId
+     * @param      $entityType
+     * @param      $entityId
+     * @param bool $redirect
      *
      * @return Response
-     *
      * @throws \Exception
-     *
-     * @internal param object $entity Entité
      */
-    public function popinAction($entityType, $entityId)
+    public function popinAction($entityType, $entityId, $redirect = true)
     {
         $entity = $this->container->get('hopitalnumerique_core.dependency_injection.entity')->getEntityByTypeAndId($entityType, $entityId);
 
@@ -53,7 +51,7 @@ class ReferencementController extends Controller
             'entityType' => $entityType,
             'entityId' => $entityId,
             'referencesTree' => $referencesTree,
-            'redirectionUrl' => $this->container->get('hopitalnumerique_core.dependency_injection.entity')->getMangementUrlByEntity($entity),
+            'redirectionUrl' => $redirect === true ? $this->container->get('hopitalnumerique_core.dependency_injection.entity')->getMangementUrlByEntity($entity) : null,
         ]);
     }
 
