@@ -4,6 +4,7 @@ namespace HopitalNumerique\RechercheBundle\Controller;
 
 use HopitalNumerique\RechercheBundle\DependencyInjection\Referencement\RequeteSession;
 use HopitalNumerique\RechercheBundle\Entity\Requete;
+use HopitalNumerique\UserBundle\Entity\User;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -148,7 +149,12 @@ class ReferencementController extends Controller
         ];
 
         $showCog = false;
-        if (in_array($this->getUser()->getRole(), $rolesAllowedToAccessFrontReferencement)) {
+        if ($this->getUser() instanceof User
+            && in_array(
+                $this->getUser()->getRole(),
+                $rolesAllowedToAccessFrontReferencement
+            )
+        ) {
             $showCog = true;
         }
 

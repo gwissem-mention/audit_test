@@ -41,7 +41,12 @@ class PublicationController extends Controller
         ];
 
         $showCog = false;
-        if (in_array($this->getUser()->getRole(), $rolesAllowedToAccessFrontReferencement)) {
+        if ($this->getUser() instanceof User
+            && in_array(
+                $this->getUser()->getRole(),
+                $rolesAllowedToAccessFrontReferencement
+            )
+        ) {
             $showCog = true;
         }
 
@@ -231,7 +236,12 @@ class PublicationController extends Controller
         ];
 
         $showCog = false;
-        if (in_array($this->getUser()->getRole(), $rolesAllowedToAccessFrontReferencement)) {
+        if ($this->getUser() instanceof User
+            && in_array(
+                $this->getUser()->getRole(),
+                $rolesAllowedToAccessFrontReferencement
+            )
+        ) {
             $showCog = true;
         }
 
