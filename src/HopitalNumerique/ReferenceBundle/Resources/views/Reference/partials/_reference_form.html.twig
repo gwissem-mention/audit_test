@@ -1,55 +1,3 @@
-<script>
-    var $collectionHolder;
-
-    var $addCodeLink = $('<a href="#" class="btn btn-success">Ajouter un code</a>');
-    var $newLinkLi = $('<li></li>').append($addCodeLink);
-
-    jQuery(document).ready(function() {
-        $collectionHolder = $('ul.codes');
-
-        $collectionHolder.append($newLinkLi);
-
-        $collectionHolder.data('index', $collectionHolder.find(':input').length);
-
-        $addCodeLink.on('click', function(e) {
-            e.preventDefault();
-
-            addCodeForm($collectionHolder, $newLinkLi);
-        });
-    });
-
-    function addCodeForm($collectionHolder, $newLinkLi) {
-        var prototype = $collectionHolder.data('prototype');
-
-        var index = $collectionHolder.data('index');
-
-        var newForm = prototype.replace(/__name__/g, index);
-
-        $collectionHolder.data('index', index + 1);
-
-        var $newFormLi = $('<li></li>').append(newForm);
-        $newLinkLi.before($newFormLi);
-
-        addCodeFormDeleteLink($newFormLi);
-    }
-
-    function addCodeFormDeleteLink($codeFormLi) {
-        var $removeFormA = $('<a href="#" class="btn btn-danger"><i class="fa fa-trash-o"></i></a>');
-        $codeFormLi.append($removeFormA);
-
-        $removeFormA.on('click', function(e) {
-            e.preventDefault();
-
-            $codeFormLi.remove();
-        });
-    }
-</script>
-
-<style>
-    .codes { list-style-type: none; padding: 0;}
-    .codes li { margin-bottom: 5px; }
-</style>
-
 {{ form_start(form, { 'attr':{'class':'toValidate'} }) }}
     {%- if app.user.hasRoleAdmin -%}
         {% if form.domaines is defined %}
@@ -112,11 +60,15 @@
         <h2>Paramètres de liste</h2>
 
         <label>Code(s)</label>
-        <ul class="codes" data-prototype="{{ form_widget(form.codes.vars.prototype.label)|e('html_attr') }}">
+        <ul class="row list-unstyled" id="reference_codes_form" data-prototype="{{ form_widget(form.codes.vars.prototype.label)|e }}">
             {% for code in form.codes %}
-                <li>{{ form_widget(code.label) }}</li>
+                <li class="col-lg-3 col-md-4">
+                    <div class="hide">{{ form_widget(code) }}</div>
+                    <input type="text" class="form-control" value="{{ code.vars.data.label }}" disabled>
+                </li>
             {% endfor %}
         </ul>
+        {{ form_widget(form.synonymes) }}
 
         {{ form_row(form.order) }}
 
