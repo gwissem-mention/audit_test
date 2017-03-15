@@ -30,6 +30,14 @@ class ReferenceCode
     private $label;
 
     /**
+     * @var Reference
+     *
+     * @ORM\ManyToOne(targetEntity="HopitalNumerique\ReferenceBundle\Entity\Reference")
+     * @ORM\JoinColumn(name="reference", referencedColumnName="ref_id")
+     */
+    private $reference;
+
+    /**
      * @return int
      */
     public function getId()
@@ -53,6 +61,26 @@ class ReferenceCode
     public function setLabel($label)
     {
         $this->label = $label;
+
+        return $this;
+    }
+
+    /**
+     * @return Reference
+     */
+    public function getReference()
+    {
+        return $this->reference;
+    }
+
+    /**
+     * @param Reference $reference
+     *
+     * @return ReferenceCode
+     */
+    public function setReference($reference)
+    {
+        $this->reference = $reference;
 
         return $this;
     }

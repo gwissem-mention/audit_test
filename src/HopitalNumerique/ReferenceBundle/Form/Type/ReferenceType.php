@@ -2,9 +2,12 @@
 
 namespace HopitalNumerique\ReferenceBundle\Form\Type;
 
+use HopitalNumerique\AutodiagBundle\Form\Type\Attribute\TextType;
 use HopitalNumerique\UserBundle\Manager\UserManager;
 use Nodevo\ToolsBundle\Tools\Systeme;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormError;
 use Symfony\Component\Form\FormEvent;
@@ -77,8 +80,8 @@ class ReferenceType extends AbstractType
     /**
      * Construit la partie Concept du formulaire.
      *
-     * @param \Symfony\Component\Form\FormBuilderInterface $builder Builder
-     * @param array                                        $options Options
+     * @param FormBuilderInterface $builder Builder
+     * @param array                $options Options
      */
     private function buildFormPartConcept(FormBuilderInterface $builder, array $options)
     {
@@ -150,8 +153,8 @@ class ReferenceType extends AbstractType
     /**
      * Construit la partie Liste du formulaire.
      *
-     * @param \Symfony\Component\Form\FormBuilderInterface $builder Builder
-     * @param array                                        $options Options
+     * @param FormBuilderInterface $builder Builder
+     * @param array                $options Options
      */
     private function buildFormPartListe(FormBuilderInterface $builder, array $options)
     {
@@ -168,6 +171,10 @@ class ReferenceType extends AbstractType
                 'label' => 'Code',
                 'attr' => $attrCode,
             ])
+            ->add('codes', CollectionType::class, [
+                'entry_type' => ReferenceCodeType::class,
+                'allow_add' => true,
+            ])
             ->add('order', 'number', [
                 'required' => true,
                 'label' => 'Ordre d\'affichage',
@@ -179,8 +186,8 @@ class ReferenceType extends AbstractType
     /**
      * Construit la partie Référence du formulaire.
      *
-     * @param \Symfony\Component\Form\FormBuilderInterface $builder Builder
-     * @param array                                        $options Options
+     * @param FormBuilderInterface $builder Builder
+     * @param array                $options Options
      */
     private function buildFormPartReference(FormBuilderInterface $builder, array $options)
     {
@@ -221,8 +228,8 @@ class ReferenceType extends AbstractType
     /**
      * Construit la partie Glossaire du formulaire.
      *
-     * @param \Symfony\Component\Form\FormBuilderInterface $builder Builder
-     * @param array                                        $options Options
+     * @param FormBuilderInterface $builder Builder
+     * @param array                $options Options
      */
     private function buildFormPartGlossaire(FormBuilderInterface $builder, array $options)
     {

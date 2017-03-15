@@ -350,6 +350,26 @@ class Reference
     }
 
     /**
+     * @return ArrayCollection
+     */
+    public function getCodes()
+    {
+        return $this->codes;
+    }
+
+    /**
+     * @param ArrayCollection $codes
+     *
+     * @return Reference
+     */
+    public function setCodes($codes)
+    {
+        $this->codes = $codes;
+
+        return $this;
+    }
+
+    /**
      * Set etat.
      *
      * @param Reference $etat
