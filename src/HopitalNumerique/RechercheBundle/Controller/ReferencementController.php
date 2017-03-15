@@ -141,6 +141,17 @@ class ReferencementController extends Controller
      */
     public function jsonEntitiesAction(Request $request)
     {
+        $rolesAllowedToAccessFrontReferencement = [
+            'ROLE_ADMINISTRATEUR_1',
+            'ROLE_ADMINISTRATEUR_DE_DOMAINE_106',
+            'ROLE_ADMINISTRATEUR_DU_DOMAINE_HN_107',
+        ];
+
+        $showCog = false;
+        if (in_array($this->getUser()->getRole(), $rolesAllowedToAccessFrontReferencement)) {
+            $showCog = true;
+        }
+
         $entitiesByType = $request->request->get('entitiesByType');
 
         foreach ($entitiesByType as $entityType => $entitiesPropertiesById) {
@@ -152,6 +163,8 @@ class ReferencementController extends Controller
                 $entityId = $this->container->get('hopitalnumerique_core.dependency_injection.entity')->getEntityId($entity);
                 $entitiesByType[$entityType][$entityId]['viewHtml'] =
                     $this->renderView('HopitalNumeriqueRechercheBundle:Referencement:view_entity.html.twig', [
+                            'id' => $dependencyInjectionEntity->getEntityId($entity),
+                            'type' => $dependencyInjectionEntity->getEntityType($entity),
                             'category' => $dependencyInjectionEntity->getCategoryByEntity($entity),
                             'title' => $dependencyInjectionEntity->getTitleByEntity($entity),
                             'subtitle' => $dependencyInjectionEntity->getSubtitleByEntity($entity),
@@ -159,6 +172,7 @@ class ReferencementController extends Controller
                             'description' => $dependencyInjectionEntity->getDescriptionByEntity($entity),
                             'pertinenceNiveau' => $entitiesPropertiesById[$entityId]['pertinenceNiveau'],
                             'source' => $dependencyInjectionEntity->getSourceByEntity($entity),
+                            'showCog' => $showCog,
                         ]
                     );
             }

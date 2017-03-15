@@ -11,6 +11,8 @@
         'bundles/nodevotools/js/plugins/rateIt/rateit.css'
         'bundles/hopitalnumeriquepublication/css/style.css'
         'bundles/nodevotools/css/wysiwyg.css'
+        'bundles/hopitalnumeriquereference/css/referencement-popin.css'
+        '@jquery_toggles_css'
     %}
         <link rel="stylesheet" href="{{ asset_url }}" />
     {% endstylesheets %}
@@ -24,6 +26,8 @@
     {% javascripts output="compiled/hopitalnumerique-publication-publication-objet.js"
         'bundles/nodevotools/js/plugins/rateIt/jquery.rateit.min.js'
         'bundles/hopitalnumeriquepublication/js/script.js'
+        'bundles/hopitalnumeriquereference/js/Referencement/Popin.js'
+        '@jquery_toggles_js'
     %}
         <script type="text/javascript" src="{{ asset_url }}"></script>
     {% endjavascripts %}
@@ -42,6 +46,9 @@
             </div>
             <div class="col-md-2">
                 <div class="text-right">
+                    {% if showCog is defined and showCog == true %}
+                        <a href="{{path('hopitalnumerique_reference_referencement_popin', { 'entityType':(contenu is defined ? '2' :'1'), 'entityId':objet.id, 'redirect': 'false' })}}" class="open-popin-referencement fancybox.ajax btn btn-sm btn-default" title="Référencer cette publication"><i class="fa fa-cog"></i></a>
+                    {% endif %}
                     <a class="btn btn-sm btn-default" href="{{ path('hopital_numerique_publication_publication_pdf', { 'entityType':(contenu is defined ? '2' :'1'), 'entityId':(contenu is defined ? contenu.id : objet.id) }) }}" title="Imprimer cette page"><i class="fa fa-print"></i></a>
                     {% if objet.getAbsolutePath(1) is not null -%}
                         <a class="btn btn-sm btn-default" href="{{path('hopital_numerique_publication_front_export', {'id':objet.id, 'type': '1'})}}" target="_blank" onclick="ga('send', 'event', 'Traking', 'Téléchargement', '{{path('hopital_numerique_publication_front_export', {'id':objet.id, 'type': '1'})}}');" title="Télécharger la production complète ( PDF )"><i class="fa fa-download"></i></a>

@@ -131,10 +131,6 @@ class ObjetController extends Controller
             $objet->setArticle(true);
         }
 
-        $currentDomaine = $this->get('hopitalnumerique_domaine.dependency_injection.current_domaine')->get();
-
-        $objet->addDomaine($currentDomaine);
-
         $options = [
             'toRef' => 0,
             'note' => 0,

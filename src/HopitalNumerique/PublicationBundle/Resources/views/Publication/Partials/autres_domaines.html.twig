@@ -1,12 +1,13 @@
 {# Cas Contenu #}
+
 {% if contenu is defined and contenu is not sameas(false) %}
-    {% if contenu.realDomaines|length > 1 %}
+    {% if contenu.realDomaines|length > 1 and referencesStringByDomaine|length > 0 %}
         <div class="col-md-12" style="margin-top: 15px;">
             Autres ressources sur
-            {% for domaine in contenu.realDomaines %}
-                {% if not domaineCurrent.equals(domaine) %}
+            {% for domaine in contenu.realDomaines -%}
+                {% if not domaineCurrent.equals(domaine) and referencesStringByDomaine[domaine.id] is defined %}
+                    {{- loop.first ? ', ' : '' -}}
                     <a href="{{ domaine.url }}{{ path('hopital_numerique_recherche_homepage_requete_generator', { 'refs': referencesStringByDomaine[domaine.id] }) }}" target="_blank">{{ domaine }}</a>
-                    {{- not loop.last ? ', ' : '' -}}
                 {%- endif -%}
             {%- endfor -%}
             .
@@ -14,13 +15,13 @@
     {% endif %}
 {# Cas objet #}
 {% else %}
-    {% if objet.domaines|length > 1 %}
+    {% if objet.domaines|length > 1 and referencesStringByDomaine|length > 0 %}
         <div class="col-md-12" style="margin-top: 15px;">
             Autres ressources sur
-            {% for domaine in objet.domaines %}
-                {% if not domaineCurrent.equals(domaine) %}
+            {% for domaine in objet.domaines -%}
+                {% if not domaineCurrent.equals(domaine) and referencesStringByDomaine[domaine.id] is defined %}
+                    {{- loop.first ? ' ,' : '' -}}
                     <a href="{{ domaine.url }}{{ path('hopital_numerique_recherche_homepage_requete_generator', { 'refs': referencesStringByDomaine[domaine.id] }) }}" target="_blank">{{ domaine }}</a>
-                    {{- not loop.last ? ', ' : '' -}}
                 {%- endif -%}
             {%- endfor -%}
             .

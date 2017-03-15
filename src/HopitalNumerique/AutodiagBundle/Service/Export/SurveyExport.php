@@ -78,7 +78,7 @@ class SurveyExport extends AbstractExport
         $actionPlans = array_map(function (Autodiag\ActionPlan $actionPlan) use ($chapter) {
             if ($chapter === $actionPlan->getContainer()) {
                 return $actionPlan->getValue() . '::' . $actionPlan->isVisible() . '::' . $actionPlan->getDescription()
-                       . '::' . $actionPlan->getLink() . '::' . $actionPlan->getLinkDescription()
+                       . '::' . $actionPlan->getLinkDescription() . '::' . $actionPlan->getLink()
                 ;
             }
 
@@ -139,8 +139,8 @@ class SurveyExport extends AbstractExport
                 $actionPlan = $actionPlans[$i];
                 if ($actionPlans[$i]->getValue() === $option->getValue()) {
                     return $option->getValue() . '::' . $option->getLabel() . '::' . $actionPlan->isVisible() . '::'
-                           . $actionPlan->getDescription() . '::' . $actionPlan->getLink()
-                           . '::' . $actionPlan->getLinkDescription()
+                           . $actionPlan->getDescription() . '::' . $actionPlan->getLinkDescription()
+                           . '::' . $actionPlan->getLink()
                     ;
                 }
 

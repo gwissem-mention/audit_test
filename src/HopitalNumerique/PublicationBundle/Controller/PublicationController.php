@@ -34,7 +34,19 @@ class PublicationController extends Controller
      */
     public function objetAction(Request $request, Objet $objet)
     {
+        $rolesAllowedToAccessFrontReferencement = [
+            'ROLE_ADMINISTRATEUR_1',
+            'ROLE_ADMINISTRATEUR_DE_DOMAINE_106',
+            'ROLE_ADMINISTRATEUR_DU_DOMAINE_HN_107',
+        ];
+
+        $showCog = false;
+        if (in_array($this->getUser()->getRole(), $rolesAllowedToAccessFrontReferencement)) {
+            $showCog = true;
+        }
+
         $isPdf = ($request->query->has('pdf') && '1' == $request->query->get('pdf'));
+        /** @var Domaine $domaine */
         $domaine = $this->container->get('hopitalnumerique_domaine.dependency_injection.current_domaine')->get();
         $request->getSession()->set('urlToRedirect', $request->getUri());
 
@@ -93,10 +105,18 @@ class PublicationController extends Controller
                     [$domaine]
                 )
             ;
-            $referenceString = join(',', array_map(function (EntityHasReference $reference) {
-                return $reference->getReference()->getId();
+            $referenceString = join(',', array_map(function (EntityHasReference $reference) use ($domaine) {
+                $displayedDomains = $reference->getReference()->getDomainesDisplayId()->toArray();
+                if (in_array($domaine->getId(), $displayedDomains)) {
+                    return $reference->getReference()->getId();
+                }
+
+                return "";
             }, $domaineReference));
-            $referencesInDomaine[$domaine->getId()] = $referenceString;
+
+            if ($referenceString !== "") {
+                $referencesInDomaine[$domaine->getId()] = $referenceString;
+            }
         }
 
         $reader = $this->get('hopitalnumerique_recherche.doctrine.referencement.reader');
@@ -122,6 +142,7 @@ class PublicationController extends Controller
             'userRelated' => array_slice($userRelated, 0, 3),
             'is_pdf' => $isPdf,
             'referencesStringByDomaine' => $referencesInDomaine,
+            'showCog' => $showCog,
         ]);
     }
 
@@ -203,6 +224,17 @@ class PublicationController extends Controller
      */
     public function contenuAction(Request $request, $id, $alias = null, $idc, $aliasc = null)
     {
+        $rolesAllowedToAccessFrontReferencement = [
+            'ROLE_ADMINISTRATEUR_1',
+            'ROLE_ADMINISTRATEUR_DE_DOMAINE_106',
+            'ROLE_ADMINISTRATEUR_DU_DOMAINE_HN_107',
+        ];
+
+        $showCog = false;
+        if (in_array($this->getUser()->getRole(), $rolesAllowedToAccessFrontReferencement)) {
+            $showCog = true;
+        }
+
         $domaine = $this->container->get('hopitalnumerique_domaine.dependency_injection.current_domaine')->get();
         $request->getSession()->set('urlToRedirect', $request->getUri());
 
@@ -277,7 +309,6 @@ class PublicationController extends Controller
             'label' => $this->get('hopitalnumerique_objet.manager.contenu')->getPrefix($contenu) . ' ' . $contenu->getTitre(),
             'contenu' => $contenu,
         ];
-        $breadCrumbs = '';
 
         while (!is_null($contenuTemp->getParent())) {
             $contenuTemp = $contenuTemp->getParent();
@@ -306,10 +337,18 @@ class PublicationController extends Controller
                     [$domaine]
                 )
             ;
-            $referenceString = join(',', array_map(function (EntityHasReference $reference) {
-                return $reference->getReference()->getId();
+            $referenceString = join(',', array_map(function (EntityHasReference $reference) use ($domaine) {
+                $displayedDomains = $reference->getReference()->getDomainesDisplayId()->toArray();
+                if (in_array($domaine->getId(), $displayedDomains)) {
+                    return $reference->getReference()->getId();
+                }
+
+                return "";
             }, $domaineReference));
-            $referencesInDomaine[$domaine->getId()] = $referenceString;
+
+            if ($referenceString !== "") {
+                $referencesInDomaine[$domaine->getId()] = $referenceString;
+            }
         }
 
         $ambassadeurs = $this->getAmbassadeursConcernes($objet->getId());
@@ -342,6 +381,7 @@ class PublicationController extends Controller
             'userRelated' => array_slice($userRelated, 0, 3),
             'is_pdf' => ($request->query->has('pdf') && '1' == $request->query->get('pdf')),
             'referencesStringByDomaine' => $referencesInDomaine,
+            'showCog' => $showCog,
         ]);
     }
 
