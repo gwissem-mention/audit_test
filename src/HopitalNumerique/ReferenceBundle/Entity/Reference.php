@@ -9,7 +9,6 @@ use HopitalNumerique\DomaineBundle\Entity\Domaine;
 use Nodevo\ToolsBundle\Tools\Systeme;
 use Nodevo\ToolsBundle\Traits\ImageTrait;
 use Symfony\Component\Validator\Constraints as Assert;
-use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Nodevo\ToolsBundle\Validator\Constraints as Nodevo;
 
 /**
@@ -17,7 +16,6 @@ use Nodevo\ToolsBundle\Validator\Constraints as Nodevo;
  *
  * @ORM\Table(name="hn_reference")
  * @ORM\Entity(repositoryClass="HopitalNumerique\ReferenceBundle\Repository\ReferenceRepository")
- * @UniqueEntity(fields={"libelle","code"}, message="Ce libellé pour ce code existe déjà.")
  */
 class Reference
 {
@@ -104,7 +102,7 @@ class Reference
     /**
      * @var ArrayCollection
      *
-     * @ORM\OneToMany(targetEntity="HopitalNumerique\ReferenceBundle\Entity\ReferenceCode", mappedBy="reference")
+     * @ORM\OneToMany(targetEntity="HopitalNumerique\ReferenceBundle\Entity\ReferenceCode", mappedBy="reference" , cascade={"persist"})
      */
     protected $codes;
 
@@ -326,30 +324,6 @@ class Reference
     }
 
     /**
-     * Set code.
-     *
-     * @param string $code
-     *
-     * @return Reference
-     */
-    public function setCode($code)
-    {
-        $this->code = $code;
-
-        return $this;
-    }
-
-    /**
-     * Get code.
-     *
-     * @return string
-     */
-    public function getCode()
-    {
-        return $this->code;
-    }
-
-    /**
      * @return ArrayCollection
      */
     public function getCodes()
@@ -365,6 +339,32 @@ class Reference
     public function setCodes($codes)
     {
         $this->codes = $codes;
+
+        return $this;
+    }
+
+    /**
+     * @param ReferenceCode $code
+     *
+     * @return $this
+     */
+    public function addCode(ReferenceCode $code)
+    {
+        $this->codes->add($code);
+
+        $code->setReference($this);
+
+        return $this;
+    }
+
+    /**
+     * @param ReferenceCode $code
+     *
+     * @return $this
+     */
+    public function removeCode(ReferenceCode $code)
+    {
+        $this->codes->removeElement($code);
 
         return $this;
     }
@@ -1080,7 +1080,13 @@ class Reference
 
     public function __toString()
     {
-        return $this->code . ' - ' . $this->libelle;
+        if ($this->codes->count() > 0) {
+            return implode(' ,', array_map(function (ReferenceCode $referenceCode) {
+                    return $referenceCode->getLabel();
+            }, $this->codes->toArray())) . ' - ' . $this->libelle;
+        }
+
+        return $this->libelle;
     }
 
     /**

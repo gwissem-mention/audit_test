@@ -4,7 +4,9 @@ namespace Nodevo\TexteDynamiqueBundle\Repository;
 
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\Query\Expr;
+use Doctrine\ORM\QueryBuilder;
 use HopitalNumerique\DomaineBundle\Entity\Domaine;
+use Nodevo\TexteDynamiqueBundle\Entity\Code;
 
 /**
  * CodeRepository.
@@ -17,10 +19,10 @@ class CodeRepository extends EntityRepository
     /**
      * Récupère les données du grid sous forme de tableau correctement formaté.
      *
-     * @return array
+     * @param      $domainesIds
+     * @param null $condition
      *
-     * @author Gaetan MELCHILSEN
-     * @copyright Nodevo
+     * @return QueryBuilder
      */
     public function getDatasForGrid($domainesIds, $condition = null)
     {
@@ -40,7 +42,10 @@ class CodeRepository extends EntityRepository
     }
 
     /**
-     * @return \Nodevo\TexteDynamiqueBundle\Entity\Code|null
+     * @param         $code
+     * @param Domaine $domaine
+     *
+     * @return Code|null
      */
     public function findOneByCodeAndDomaine($code, Domaine $domaine)
     {

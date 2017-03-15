@@ -3,29 +3,37 @@
 namespace HopitalNumerique\RechercheParcoursBundle\Form;
 
 use HopitalNumerique\CoreBundle\DependencyInjection\Entity;
+use HopitalNumerique\RechercheParcoursBundle\Entity\RechercheParcoursGestion;
 use HopitalNumerique\ReferenceBundle\Manager\ReferenceManager;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
-use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 use HopitalNumerique\UserBundle\Manager\UserManager;
 use Doctrine\ORM\EntityRepository;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class RechercheParcoursGestionType extends AbstractType
 {
     /**
-     * @var \HopitalNumerique\CoreBundle\DependencyInjection\Entity Entity
+     * @var Entity Entity
      */
     private $entity;
 
     private $_userManager;
 
     /**
-     * @var \HopitalNumerique\ReferenceBundle\Manager\ReferenceManager ReferenceManager
+     * @var ReferenceManager ReferenceManager
      */
     private $referenceManager;
 
-    public function __construct($manager, $validator, Entity $entity, UserManager $userManager, ReferenceManager $referenceManager)
-    {
+    public function __construct(
+        $manager,
+        $validator,
+        Entity $entity,
+        UserManager $userManager,
+        ReferenceManager $referenceManager
+    ) {
         $this->_constraints = $manager->getConstraints($validator);
         $this->entity = $entity;
         $this->_userManager = $userManager;
@@ -38,13 +46,13 @@ class RechercheParcoursGestionType extends AbstractType
         $isCreation = (null === $builder->getData()->getId());
 
         $builder
-            ->add('nom', 'text', [
+            ->add('nom', TextType::class, [
                 'max_length' => 255,
                 'required' => true,
                 'label' => 'Nom',
                 'attr' => ['class' => 'validate[required]'],
             ])
-            ->add('domaines', 'entity', [
+            ->add('domaines', EntityType::class, [
                 'class' => 'HopitalNumeriqueDomaineBundle:Domaine',
                 'property' => 'nom',
                 'required' => true,
@@ -65,7 +73,8 @@ class RechercheParcoursGestionType extends AbstractType
                 'query_builder' => function (EntityRepository $er) {
                     return $er->createQueryBuilder('ref')
                         ->leftJoin('ref.parents', 'parent')
-                        ->where('ref.code = :code')
+                        ->leftJoin('ref.codes', 'codes')
+                        ->where('codes.label = :code')
                         ->andWhere('parent.id IS NULL')
                         ->setParameter('code', 'CATEGORIE_OBJET');
                 },
@@ -100,10 +109,10 @@ class RechercheParcoursGestionType extends AbstractType
         }
     }
 
-    public function setDefaultOptions(OptionsResolverInterface $resolver)
+    public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
-            'data_class' => 'HopitalNumerique\RechercheParcoursBundle\Entity\RechercheParcoursGestion',
+            'data_class' => RechercheParcoursGestion::class,
         ]);
     }
 

@@ -4,11 +4,13 @@ namespace HopitalNumerique\ReferenceBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 /**
  * Class ReferenceCode
  * @ORM\Table(name="hn_reference_code")
  * @ORM\Entity()
+ * @UniqueEntity(fields={"label","reference"}, message="Ce code est déjà assigné à la référence.")
  */
 class ReferenceCode
 {
@@ -32,7 +34,7 @@ class ReferenceCode
     /**
      * @var Reference
      *
-     * @ORM\ManyToOne(targetEntity="HopitalNumerique\ReferenceBundle\Entity\Reference")
+     * @ORM\ManyToOne(targetEntity="HopitalNumerique\ReferenceBundle\Entity\Reference", cascade={"persist"})
      * @ORM\JoinColumn(name="reference", referencedColumnName="ref_id")
      */
     private $reference;

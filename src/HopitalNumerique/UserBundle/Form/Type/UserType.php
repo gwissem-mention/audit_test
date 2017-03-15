@@ -277,10 +277,11 @@ class UserType extends AbstractType
                     'expanded' => false,
                     'query_builder' => function (EntityRepository $er) {
                         return $er->createQueryBuilder('ref')
-                            ->where('ref.code = :etat')
+                            ->leftJoin('ref.codes', 'codes')
+                            ->where('codes.label = :etat')
                             ->setParameter('etat', 'REGION')
                             ->orderBy('ref.order', 'ASC')
-                            ;
+                        ;
                     },
                     'property' => 'libelle',
                     'attr' => [

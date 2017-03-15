@@ -2,9 +2,12 @@
 
 namespace HopitalNumerique\ModuleBundle\Form;
 
+use HopitalNumerique\ModuleBundle\Entity\Inscription;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\FormBuilderInterface;
-use Symfony\Component\OptionsResolver\OptionsResolverInterface;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 use Doctrine\ORM\EntityRepository;
 
 /**
@@ -15,10 +18,11 @@ class AddInscriptionType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $roleNames = (isset($options['label_attr']['roleNames']) && !is_null($options['label_attr']['roleNames'])) ? $options['label_attr']['roleNames'] : [];
+        $roleNames = (isset($options['label_attr']['roleNames']) && !is_null($options['label_attr']['roleNames']))
+            ? $options['label_attr']['roleNames'] : [];
 
         $builder
-            ->add('commentaire', 'textarea', [
+            ->add('commentaire', TextareaType::class, [
                     'required' => false,
                     'label' => 'Informations complémentaires',
                     'attr' => [
@@ -35,7 +39,7 @@ class AddInscriptionType extends AbstractType
                         return $er->getUsersByRole($roleNames);
                     },
             ])
-            ->add('etatInscription', 'entity', [
+            ->add('etatInscription', EntityType::class, [
                     'class' => 'HopitalNumeriqueReferenceBundle:Reference',
                     'property' => 'libelle',
                     'required' => true,
@@ -43,12 +47,14 @@ class AddInscriptionType extends AbstractType
                     'empty_value' => ' - ',
                     'query_builder' => function (EntityRepository $er) {
                         return $er->createQueryBuilder('ref')
-                        ->where('ref.code = :etat')
-                        ->setParameter('etat', 'STATUT_FORMATION')
-                        ->orderBy('ref.order', 'ASC');
+                            ->leftJoin('ref.codes', 'codes')
+                            ->where('codes.label = :etat')
+                            ->setParameter('etat', 'STATUT_FORMATION')
+                            ->orderBy('ref.order', 'ASC')
+                        ;
                     },
             ])
-            ->add('etatParticipation', 'entity', [
+            ->add('etatParticipation', EntityType::class, [
                     'class' => 'HopitalNumeriqueReferenceBundle:Reference',
                     'property' => 'libelle',
                     'required' => true,
@@ -56,18 +62,20 @@ class AddInscriptionType extends AbstractType
                     'empty_value' => ' - ',
                     'query_builder' => function (EntityRepository $er) {
                         return $er->createQueryBuilder('ref')
-                        ->where('ref.code = :etat')
-                        ->setParameter('etat', 'STATUT_PARTICIPATION')
-                        ->orderBy('ref.order', 'ASC');
+                            ->leftJoin('ref.codes', 'codes')
+                            ->where('codes.label = :etat')
+                            ->setParameter('etat', 'STATUT_PARTICIPATION')
+                            ->orderBy('ref.order', 'ASC')
+                        ;
                     },
             ])
             ;
     }
 
-    public function setDefaultOptions(OptionsResolverInterface $resolver)
+    public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
-            'data_class' => 'HopitalNumerique\ModuleBundle\Entity\Inscription',
+            'data_class' => Inscription::class,
         ]);
     }
 

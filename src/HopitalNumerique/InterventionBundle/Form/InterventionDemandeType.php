@@ -1,19 +1,19 @@
 <?php
-/**
- * Formulaire d'une demande d'intervention.
- *
- * @author Rémi Leclerc <rleclerc@nodevo.com>
- */
 
 namespace HopitalNumerique\InterventionBundle\Form;
 
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\Query\Expr;
+use HopitalNumerique\InterventionBundle\Entity\InterventionDemande;
+use HopitalNumerique\InterventionBundle\Manager\InterventionDemandeManager;
+use HopitalNumerique\UserBundle\Entity\User;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Security\Core\SecurityContext;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
-use Symfony\Component\OptionsResolver\OptionsResolverInterface;
-use HopitalNumerique\InterventionBundle\Manager\InterventionDemandeManager;
 use HopitalNumerique\InterventionBundle\Manager\Form\InterventionDemandeManager as FormInterventionDemandeManager;
 use HopitalNumerique\InterventionBundle\Manager\Form\UserManager as FormUserManager;
 use HopitalNumerique\InterventionBundle\Manager\Form\EtablissementManager as FormEtablissementManager;
@@ -28,39 +28,43 @@ abstract class InterventionDemandeType extends AbstractType
      */
     protected $_constraints = [];
     /**
-     * @var \HopitalNumerique\InterventionBundle\Manager\Form\InterventionDemandeManager Manager Form\InterventionDemande
+     * @var FormInterventionDemandeManager Manager Form\InterventionDemande
      */
     protected $formInterventionDemandeManager;
     /**
-     * @var \HopitalNumerique\InterventionBundle\Manager\Form\UserManager Manager Form\User
+     * @var FormUserManager Manager Form\User
      */
     protected $formUserManager;
     /**
-     * @var \HopitalNumerique\InterventionBundle\Manager\Form\EtablissementManager Manager Form\Etablissement
+     * @var FormEtablissementManager Manager Form\Etablissement
      */
     protected $formEtablissementManager;
 
     /**
-     * @var \HopitalNumerique\UserBundle\Entity\User Utilisateur connecté
+     * @var User Utilisateur connecté
      */
     protected $utilisateurConnecte;
-    /**
-     * @var \HopitalNumerique\InterventionBundle\Manager\InterventionDemande La demande d'intervention ouverte
-     */
+
     protected $interventionDemande;
 
     /**
-     * Constructeur du formulaire de demande d'intervention.
+     * InterventionDemandeType constructor.
      *
-     * @param \Symfony\Component\Security\Core\SecurityContext                   $securityContext                SecurityContext de l'application
-     * @param \Symfony\Component\Validator\Validator\LegacyValidator             $validator                      LegacyValidator
-     * @param \Nodevo\InterventionBundle\Manager\InterventionDemandeManager      $interventionDemandeManager     Manager InterventionDemande
-     * @param \Nodevo\InterventionBundle\Manager\Form\InterventionDemandeManager $formInterventionDemandeManager Manager Form\InterventionDemande
-     * @param \Nodevo\InterventionBundle\Manager\Form\UserManager                $formUserManager                Manager Form\User
-     * @param \Nodevo\InterventionBundle\Manager\Form\EtablissementManager       $formEtablissementManager       Manager Form\Etablissement
+     * @param SecurityContext                $securityContext
+     * @param                                $validator
+     * @param InterventionDemandeManager     $interventionDemandeManager
+     * @param FormInterventionDemandeManager $formInterventionDemandeManager
+     * @param FormUserManager                $formUserManager
+     * @param FormEtablissementManager       $formEtablissementManager
      */
-    public function __construct(SecurityContext $securityContext, $validator, InterventionDemandeManager $interventionDemandeManager, FormInterventionDemandeManager $formInterventionDemandeManager, FormUserManager $formUserManager, FormEtablissementManager $formEtablissementManager)
-    {
+    public function __construct(
+        SecurityContext $securityContext,
+        $validator,
+        InterventionDemandeManager $interventionDemandeManager,
+        FormInterventionDemandeManager $formInterventionDemandeManager,
+        FormUserManager $formUserManager,
+        FormEtablissementManager $formEtablissementManager
+    ) {
         $this->_constraints = $interventionDemandeManager->getConstraints($validator);
         $this->formInterventionDemandeManager = $formInterventionDemandeManager;
         $this->formUserManager = $formUserManager;
@@ -78,7 +82,7 @@ abstract class InterventionDemandeType extends AbstractType
         $this->interventionDemande = $options['interventionDemande'];
 
         $builder
-            ->add('ambassadeur', 'entity', [
+            ->add('ambassadeur', EntityType::class, [
                 'choices' => $this->formUserManager->getAmbassadeursChoices($this->utilisateurConnecte->getRegion()),
                 'class' => 'HopitalNumerique\UserBundle\Entity\User',
                 'property' => 'appellation',
@@ -86,7 +90,7 @@ abstract class InterventionDemandeType extends AbstractType
                 'required' => true,
                 'read_only' => true,
             ])
-            ->add('interventionType', 'entity', [
+            ->add('interventionType', EntityType::class, [
                 'choices' => $this->formInterventionDemandeManager->getInterventionTypesChoices(),
                 'class' => 'HopitalNumerique\ReferenceBundle\Entity\Reference',
                 'property' => 'libelle',
@@ -95,7 +99,7 @@ abstract class InterventionDemandeType extends AbstractType
                 'required' => true,
                 'attr' => ['class' => $this->_constraints['interventionType']['class']],
             ])
-            ->add('region', 'entity', [
+            ->add('region', EntityType::class, [
                 'label' => 'Région des établissements',
                 'choices' => $this->formUserManager->getRegionsChoices(),
                 'class' => 'HopitalNumerique\ReferenceBundle\Entity\Reference',
@@ -105,19 +109,19 @@ abstract class InterventionDemandeType extends AbstractType
                 'attr' => ['class' => 'hopitalnumerique_interventionbundle_interventiondemande_region'],
                 'data' => $this->utilisateurConnecte->getRegion(),
             ])
-            ->add('email', 'text', [
+            ->add('email', TextType::class, [
                 'label' => 'Adresse mail',
                 'required' => true,
                 'attr' => ['class' => $this->_constraints['email']['class']],
                 'data' => is_null($options['interventionDemande']->getEmail()) ? $this->utilisateurConnecte->getEmail() : $options['interventionDemande']->getEmail(),
             ])
-            ->add('telephone', 'text', [
+            ->add('telephone', TextType::class, [
                 'label' => 'Téléphone',
                 'required' => true,
                 'attr' => ['class' => $this->_constraints['telephone']['class']],
                 'data' => is_null($options['interventionDemande']->getTelephone()) ? $this->utilisateurConnecte->getTelephoneDirect() : $options['interventionDemande']->getTelephone(),
             ])
-            ->add('etablissements', 'entity', [
+            ->add('etablissements', EntityType::class, [
                 'choices' => $this->formEtablissementManager->getEtablissementsChoices(),
                 'class' => 'HopitalNumerique\EtablissementBundle\Entity\Etablissement',
                 'property' => 'nom',
@@ -126,18 +130,18 @@ abstract class InterventionDemandeType extends AbstractType
                 'required' => false,
                 'attr' => ['class' => 'hopitalnumerique_interventionbundle_interventiondemande_etablissements'],
             ])
-            ->add('referent', 'entity', [
+            ->add('referent', EntityType::class, [
                 'choices' => $this->formUserManager->getReferentsChoices(),
                 'class' => 'HopitalNumerique\UserBundle\Entity\User',
                 'label' => 'Demandeur',
                 'required' => true,
                 'attr' => ['class' => 'hopitalnumerique_interventionbundle_interventiondemande_referent ' . $this->_constraints['referent']['class']],
             ])
-            ->add('autresEtablissements', 'textarea', [
+            ->add('autresEtablissements', TextareaType::class, [
                 'label' => 'Attacher d\'autres établissements à ma demande',
                 'required' => false,
             ])
-            ->add('objets', 'entity', [
+            ->add('objets', EntityType::class, [
                 'choices' => $this->formInterventionDemandeManager->getObjetsChoices(),
                 'label' => 'Ma sollicitation porte sur la/les production(s) ANAP suivante(s)',
                 'class' => 'HopitalNumeriqueObjetBundle:Objet',
@@ -156,7 +160,8 @@ abstract class InterventionDemandeType extends AbstractType
                 //'group_by' => 'parentName',
                 'query_builder' => function (EntityRepository $er) {
                     return $er->createQueryBuilder('ref')
-                        ->where('ref.code = :code')
+                        ->leftJoin('ref.codes', 'codes')
+                        ->where('codes.label = :code')
                         ->leftJoin('ref.etat', 'etat', Expr\Join::WITH, 'etat.id = 3')
                         ->innerJoin('ref.parents', 'parent', Expr\Join::WITH, 'parent.id = :idParent')
                         ->setParameters([
@@ -177,47 +182,46 @@ abstract class InterventionDemandeType extends AbstractType
                 //'group_by' => 'parentName',
                 'query_builder' => function (EntityRepository $er) {
                     return $er->createQueryBuilder('ref')
-                        ->where('ref.code = :code')
+                        ->leftJoin('ref.codes', 'codes')
+                        ->where('codes.label = :code')
                         ->leftJoin('ref.etat', 'etat')
                             ->andWhere('etat.id = 3')
                         ->setParameter('code', 'CONNAISSANCES_AMBASSADEUR_SI')
-                        ->orderBy('ref.order', 'ASC');
+                        ->orderBy('ref.order', 'ASC')
+                    ;
                 },
             ])
-            ->add('objetsAutres', 'textarea', [
+            ->add('objetsAutres', TextareaType::class, [
                 'label' => 'Ma sollicitation porte sur une autre production / un autre thème',
                 'required' => false,
             ])
-            ->add('description', 'textarea', [
+            ->add('description', TextareaType::class, [
                 'label' => 'Description succincte de mon projet',
                 'required' => false,
             ])
-            ->add('difficulteDescription', 'textarea', [
+            ->add('difficulteDescription', TextareaType::class, [
                 'label' => 'Description de ma difficulté',
                 'required' => false,
             ])
-            ->add('champLibre', 'textarea', [
+            ->add('champLibre', TextareaType::class, [
                 'label' => 'Champ libre',
                 'required' => false,
             ])
-            ->add('rdvInformations', 'textarea', [
+            ->add('rdvInformations', TextareaType::class, [
                 'label' => 'Informations pour la prise de rendez-vous (échéance, disponibilités, etc)',
                 'required' => false,
             ])
-            ->add('cmsiCommentaire', 'textarea', [
+            ->add('cmsiCommentaire', TextareaType::class, [
                 'label' => 'Commentaire CMSI',
                 'required' => false,
                 'read_only' => true,
             ]);
     }
 
-    /**
-     * @param OptionsResolverInterface $resolver
-     */
-    public function setDefaultOptions(OptionsResolverInterface $resolver)
+    public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
-            'data_class' => 'HopitalNumerique\InterventionBundle\Entity\InterventionDemande',
+            'data_class' => InterventionDemande::class,
             'interventionDemande' => null,
         ]);
     }

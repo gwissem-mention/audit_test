@@ -235,7 +235,7 @@ class ReferenceController extends Controller
             'etat' => 'Etat',
             'order' => 'Ordre d\'affichage',
             'inRecherche' => 'Présent dans la recherche',
-            'code' => 'Code',
+            'codes' => 'Code(s)',
             'synonymesLibelle' => 'Synonymes',
             'champLexicalNomsLibelle' => 'Champ lexical',
             'parentLibelles' => 'Parents',
