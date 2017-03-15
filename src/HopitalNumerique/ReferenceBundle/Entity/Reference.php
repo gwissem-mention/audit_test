@@ -102,6 +102,13 @@ class Reference
     protected $code;
 
     /**
+     * @var ArrayCollection
+     *
+     * @ORM\OneToMany(targetEntity="HopitalNumerique\ReferenceBundle\Entity\ReferenceCode", mappedBy="reference")
+     */
+    protected $codes;
+
+    /**
      * @Assert\NotBlank(message="Merci de choisir un état")
      * @Nodevo\Javascript(class="validate[required]")
      * @ORM\ManyToOne(targetEntity="Reference", cascade={"persist"})
