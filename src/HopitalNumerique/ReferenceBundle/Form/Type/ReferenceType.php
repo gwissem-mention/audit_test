@@ -172,11 +172,6 @@ class ReferenceType extends AbstractType
         }
 
         $builder
-            //->add('code', TextType::class, [
-            //    'required' => false,
-            //    'label' => 'Code',
-            //    'attr' => $attrCode,
-            //])
             ->add('codes', CollectionType::class, [
                 'entry_type' => ReferenceCodeType::class,
                 'allow_add' => true,

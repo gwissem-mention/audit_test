@@ -157,9 +157,6 @@ class RestitutionExtension extends \Twig_Extension
                         'text' => 'Télécharger le graphique',
                         'menuItems' => null,
                         'theme' => $themeButton,
-//                        'onclick' => "function () {
-//                            this.exportChart();
-//                        }"
                     ],
                 ],
             ],

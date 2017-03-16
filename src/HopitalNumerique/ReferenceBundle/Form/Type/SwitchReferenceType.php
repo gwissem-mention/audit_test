@@ -2,6 +2,7 @@
 
 namespace HopitalNumerique\ReferenceBundle\Form\Type;
 
+use HopitalNumerique\ReferenceBundle\Domain\Command\SwitchReferenceCommand;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
@@ -22,7 +23,7 @@ class SwitchReferenceType extends AbstractType
     public function configureOptions(OptionsResolver $optionsResolver)
     {
         $optionsResolver->setDefaults([
-            'data_class' => 'HopitalNumerique\ReferenceBundle\Domain\Command\SwitchReferenceCommand',
+            'data_class' => SwitchReferenceCommand::class,
         ]);
     }
 }

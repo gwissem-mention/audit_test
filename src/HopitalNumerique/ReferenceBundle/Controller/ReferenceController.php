@@ -121,8 +121,7 @@ class ReferenceController extends Controller
             [
                 'id' => $id,
             ]
-        )
-        ;
+        );
 
         return $this->render('HopitalNumeriqueReferenceBundle:Reference:show.html.twig', [
             'reference' => $reference,
@@ -143,8 +142,7 @@ class ReferenceController extends Controller
             [
                 'id' => $id,
             ]
-        )
-        ;
+        );
 
         if ($reference->getLock()) {
             $this->get('session')->getFlashBag()->add(
@@ -162,8 +160,7 @@ class ReferenceController extends Controller
                 $this->get('session')->getFlashBag()->add(
                     'danger',
                     'Suppression impossible, la référence est actuellement liée et ne peut être supprimée.'
-                )
-                ;
+                );
             }
         }
 
@@ -195,8 +192,7 @@ class ReferenceController extends Controller
             [
                 'id' => $primaryKeys,
             ]
-        )
-        ;
+        );
 
         $this->get('hopitalnumerique_reference.manager.reference')->delete($references);
 
@@ -245,7 +241,7 @@ class ReferenceController extends Controller
 
         return $this->get('hopitalnumerique_user.manager.user')
             ->exportCsv($colonnes, $refs, 'export-references.csv', $kernelCharset)
-            ;
+        ;
     }
 
     /**
@@ -381,8 +377,7 @@ class ReferenceController extends Controller
                 $this->get('session')->getFlashBag()->add(
                     $new ? 'success' : 'info',
                     'Reference ' . ($new ? 'ajoutée.' : 'mise à jour.')
-                )
-                ;
+                );
 
                 $do = $request->request->get('do');
 

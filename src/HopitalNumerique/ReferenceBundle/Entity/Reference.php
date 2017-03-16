@@ -102,7 +102,7 @@ class Reference
     /**
      * @var ArrayCollection
      *
-     * @ORM\OneToMany(targetEntity="HopitalNumerique\ReferenceBundle\Entity\ReferenceCode", mappedBy="reference" , cascade={"persist"})
+     * @ORM\OneToMany(targetEntity="HopitalNumerique\ReferenceBundle\Entity\ReferenceCode", mappedBy="reference", cascade={"persist"}, orphanRemoval=true)
      */
     protected $codes;
 

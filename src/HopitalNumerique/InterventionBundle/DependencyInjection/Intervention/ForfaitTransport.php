@@ -12,17 +12,20 @@ use Ivory\GoogleMap\Services\DistanceMatrix\DistanceMatrix;
 class ForfaitTransport
 {
     /**
-     * @var \Ivory\GoogleMap\Services\DistanceMatrix\DistanceMatrix DistanceMatrix
+     * @var DistanceMatrix DistanceMatrix
      */
     private $distanceMatrix;
 
     /**
-     * @var \HopitalNumerique\InterventionBundle\Manager\Intervention\ForfaitTransportManager ForfaitTransportManager
+     * @var ForfaitTransportManager ForfaitTransportManager
      */
     private $forfaitTransportManager;
 
     /**
      * Constructeur.
+     *
+     * @param DistanceMatrix          $distanceMatrix
+     * @param ForfaitTransportManager $forfaitTransportManager
      */
     public function __construct(DistanceMatrix $distanceMatrix, ForfaitTransportManager $forfaitTransportManager)
     {
@@ -33,14 +36,18 @@ class ForfaitTransport
     /**
      * Retourne la distance (en km) entre 2 codes postaux.
      *
-     * @param string $codePostalDepart  Code postal de départ
-     * @param string $codePostalArrivee Code postal d'arrivée
+     * @param string $codePostalDepart
+     * @param string $codePostalArrivee
      *
-     * @return int Distance
+     * @return int
+     * @throws \Exception
      */
     private function getDistanceBetweenCodesPostaux($codePostalDepart, $codePostalArrivee)
     {
-        $distanceResponse = $this->distanceMatrix->process([$codePostalDepart . ' France'], [$codePostalArrivee . ' France']);
+        $distanceResponse = $this->distanceMatrix->process(
+            [$codePostalDepart . ' France'],
+            [$codePostalArrivee . ' France']
+        );
         if ('OK' == strtoupper($distanceResponse->getStatus())) {
             $distances = $distanceResponse->getRows();
             if (count($distances) > 0 && count($distances[0]->getElements()) > 0) {
@@ -56,9 +63,10 @@ class ForfaitTransport
     /**
      * Retourne le coût selon la distance.
      *
-     * @param int $distance Distance en km
+     * @param int $distance
      *
-     * @return int Coût de l'intervention
+     * @return int
+     * @throws \Exception
      */
     private function getCoutForDistance($distance)
     {
@@ -73,12 +81,19 @@ class ForfaitTransport
     /**
      * Retourne le coût de transport entre 2 établissements.
      *
-     * @param \HopitalNumerique\EtablissementBundle\Entity\Etablissement $etablissement1 Établissement 1
-     * @param \HopitalNumerique\EtablissementBundle\Entity\Etablissement $etablissement2 Établissement 2
+     * @param Etablissement $etablissement1
+     * @param Etablissement $etablissement2
+     *
+     * @return int
      */
-    public function getCoutForDistanceBetweenEtablissements(Etablissement $etablissement1, Etablissement $etablissement2)
-    {
-        $distance = $this->getDistanceBetweenCodesPostaux($etablissement1->getCodepostal(), $etablissement2->getCodepostal()) * 2;
+    public function getCoutForDistanceBetweenEtablissements(
+        Etablissement $etablissement1,
+        Etablissement $etablissement2
+    ) {
+        $distance = $this->getDistanceBetweenCodesPostaux(
+            $etablissement1->getCodepostal(),
+            $etablissement2->getCodepostal()
+        ) * 2;
 
         return $this->getCoutForDistance($distance);
     }
