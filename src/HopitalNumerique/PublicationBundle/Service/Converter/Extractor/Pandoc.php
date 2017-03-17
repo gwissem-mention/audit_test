@@ -96,6 +96,8 @@ class Pandoc implements ConverterInterface
                 '--to',
                 'html5',
                 '--standalone',
+                '--data-dir',
+                $this->mediaDir,
                 '--extract-media',
                 $this->mediaDir,
             ])
