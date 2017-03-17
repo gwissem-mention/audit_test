@@ -47,11 +47,11 @@ class ConvertDocumentHandler
 
     public function handle(ConvertDocumentCommand $command)
     {
-        $publication = $this->objetRepository->findOneById($command->infradocId);
-        $document = $this->documentRepository->createForInfradoc($publication);
+        $publication = $this->objetRepository->findOneById($command->publicationId);
+        $document = $this->documentRepository->createForPublication($publication);
 
         $document->setTree(
-            $this->converter->convert($command->document)
+            $this->converter->convert($command->file)
         );
 
         $this->handleMedias($publication, $document->getTree());
@@ -61,6 +61,8 @@ class ConvertDocumentHandler
 
     private function handleMedias(Objet $publication, NodeInterface $node)
     {
+        // @TODO Dupliquer les fichiers physiques s'ils sont présent dans plusieurs nodes
+
         foreach ($node->getFiles() as $file) {
             $publicPath = $this->mediaUploader->upload($file, $publication);
             Media::createForNode($node, $file->getPathname(), $publicPath);

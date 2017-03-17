@@ -5,7 +5,7 @@ namespace HopitalNumerique\PublicationBundle\Model\Converter\Document;
 use HopitalNumerique\PublicationBundle\Entity\Converter\Document\NodeInterface;
 
 /**
- * Add squash fonctionnality on node
+ * Add squash functionality on node
  *
  * @package HopitalNumerique\PublicationBundle\Model\Converter\Document
  */

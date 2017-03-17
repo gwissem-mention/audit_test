@@ -11,6 +11,12 @@ use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\Process\Exception\ProcessFailedException;
 use Symfony\Component\Process\ProcessBuilder;
 
+/**
+ * Pandoc converter.
+ * Use pandoc binary file to convert docx files to HTML
+ *
+ * @package HopitalNumerique\PublicationBundle\Service\Converter\Extractor
+ */
 class Pandoc implements ConverterInterface
 {
     /**
@@ -18,17 +24,31 @@ class Pandoc implements ConverterInterface
      */
     private $pandocPath;
 
+    /**
+     * Media dir
+     *
+     * @var string
+     */
     private $mediaDir;
 
     /**
-     * Pandoc constructor.
-     * @param MediaUploader $mediaUploader
-     * @param string $pandocPath
+     * Technical pandoc data dir
+     *
+     * @var string|null
      */
-    public function __construct($pandocPath, $mediaDir)
+    private $dataDir;
+
+    /**
+     * Pandoc constructor.
+     *
+     * @param $pandocPath
+     * @param $mediaDir
+     */
+    public function __construct($pandocPath, $mediaDir, $dataDir)
     {
         $this->pandocPath = $pandocPath;
         $this->mediaDir = $mediaDir;
+        $this->dataDir = $dataDir;
     }
 
     /**
@@ -84,26 +104,39 @@ class Pandoc implements ConverterInterface
         return $root;
     }
 
+    /**
+     * Execute pandoc process
+     *
+     * @param File $document
+     * @return string
+     */
     protected function executePandoc(File $document)
     {
         $builder = new ProcessBuilder();
         $builder->setPrefix($this->pandocPath);
-        $process = $builder
-            ->setArguments([
-                $document->getRealPath(),
-                '--from',
-                'docx',
-                '--to',
-                'html5',
-                '--standalone',
+
+        $processArguments = [
+            $document->getRealPath(),
+            '--from',
+            'docx',
+            '--to',
+            'html5',
+            '--standalone',
+            '--extract-media',
+            $this->mediaDir,
+        ];
+
+        if (null !== $this->dataDir) {
+            $processArguments = array_merge($processArguments, [
                 '--data-dir',
-                $this->mediaDir,
-                '--extract-media',
-                $this->mediaDir,
-            ])
+                $this->dataDir,
+            ]);
+        }
+
+        $process = $builder
+            ->setArguments($processArguments)
             ->getProcess()
         ;
-
 
         $process->run();
 
@@ -114,16 +147,34 @@ class Pandoc implements ConverterInterface
         return $process->getOutput();
     }
 
+    /**
+     * Determine html h tag deep
+     *
+     * @param $tag
+     * @return int
+     */
     private function getDeep($tag)
     {
         return (int) substr($tag, -1);
     }
 
+    /**
+     * Determine if a tag is deeper than $deep
+     *
+     * @param $tag
+     * @param $deep
+     * @return bool
+     */
     private function isDeepest($tag, $deep)
     {
         return $this->getDeep($tag) > $deep;
     }
 
+    /**
+     * Rearrange footnotes
+     *
+     * @param NodeInterface $node
+     */
     private function handleFootnotes(NodeInterface $node)
     {
         $footnotes = [];
@@ -196,6 +247,11 @@ class Pandoc implements ConverterInterface
         }
     }
 
+    /**
+     * Extract node images
+     *
+     * @param NodeInterface $node
+     */
     private function extractImages(NodeInterface $node)
     {
         $crawler = new Crawler($node->getContent());

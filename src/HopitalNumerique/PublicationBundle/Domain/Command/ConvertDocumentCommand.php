@@ -23,23 +23,23 @@ class ConvertDocumentCommand
      *     mimeTypesMessage = "Please upload a valid document"
      * )
      */
-    public $document;
+    public $file;
 
     /**
      * @var integer
      */
-    public $infradocId;
+    public $publicationId;
 
     /**
      * ConvertDocumentCommand constructor.
      *
-     * @param $infradocId
-     * @param File $document
+     * @param $publicationId
+     * @param File $file
      */
-    public function __construct($infradocId, $document = null)
+    public function __construct($publicationId, $file = null)
     {
-        $this->infradocId = $infradocId;
-        $this->document = $document;
+        $this->publicationId = $publicationId;
+        $this->file = $file;
     }
 
     /**
@@ -62,16 +62,16 @@ class ConvertDocumentCommand
             'docx'
         ];
 
-        if (in_array($this->document->getMimeType(), $mimeTypes)) {
+        if (in_array($this->file->getMimeType(), $mimeTypes)) {
             return true;
         }
 
-        if (in_array($this->document->getClientOriginalExtension(), $extensions)) {
+        if (in_array($this->file->getClientOriginalExtension(), $extensions)) {
             return true;
         }
 
         $context->buildViolation('Please upload a valid document')
-            ->atPath('document')
+            ->atPath('file')
             ->addViolation();
 
         return false;

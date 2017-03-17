@@ -3,7 +3,7 @@
 namespace HopitalNumerique\PublicationBundle\Model\Converter\Document;
 
 /**
- * Add squash fonctionnality on node
+ * Add exclude functionality on node
  *
  * @package HopitalNumerique\PublicationBundle\Model\Converter\Document
  */

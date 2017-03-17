@@ -165,7 +165,7 @@ var WordConverter;
         },
 
         unloadUploadForm: function () {
-
+            this.viewport.html('');
         },
 
         /**

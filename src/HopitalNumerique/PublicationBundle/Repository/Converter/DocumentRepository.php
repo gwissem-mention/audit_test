@@ -15,18 +15,18 @@ class DocumentRepository extends EntityRepository
     }
 
     /**
-     * Create new Document for infradoc. If Document already exists, return it and delete his tree
+     * Create new Document for publication. If Document already exists, return it and delete his tree
      *
-     * @param Objet $infradoc
+     * @param Objet $publication
      * @return Document
      */
-    public function createForInfradoc(Objet $infradoc)
+    public function createForPublication(Objet $publication)
     {
         /** @var Document $document */
-        $document = $this->findByPublication($infradoc);
+        $document = $this->findByPublication($publication);
 
         if (null === $document) {
-            $document = new Document($infradoc);
+            $document = new Document($publication);
         } elseif (null !== $document->getTree()) {
             $this->_em->remove($document->getTree());
             $document->unsetTree();

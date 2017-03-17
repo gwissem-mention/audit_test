@@ -100,6 +100,13 @@ interface NodeInterface
     public function getDeep();
 
     /**
+     * @param File $file
+     *
+     * @return mixed
+     */
+    public function addFile(File $file);
+
+    /**
      * @param bool $deep
      * @return File[]
      */

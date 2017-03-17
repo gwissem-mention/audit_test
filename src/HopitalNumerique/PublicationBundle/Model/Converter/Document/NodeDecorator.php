@@ -4,6 +4,7 @@ namespace HopitalNumerique\PublicationBundle\Model\Converter\Document;
 
 use HopitalNumerique\PublicationBundle\Entity\Converter\Document\Media;
 use HopitalNumerique\PublicationBundle\Entity\Converter\Document\NodeInterface;
+use Symfony\Component\HttpFoundation\File\File;
 
 abstract class NodeDecorator implements NodeInterface
 {
@@ -100,6 +101,11 @@ abstract class NodeDecorator implements NodeInterface
     public function getDeep()
     {
         return $this->node->getDeep();
+    }
+
+    public function addFile(File $file)
+    {
+        return $this->node->addFile($file);
     }
 
     /**

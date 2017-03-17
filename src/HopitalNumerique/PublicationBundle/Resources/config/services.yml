@@ -172,6 +172,7 @@ services:
         arguments:
             - '%pandoc_path%'
             - '%pandoc_working_dir%'
+            - '%pandoc_data_dir%'
 
     hopitalnumerique_publication.content.target_blank:
         class: HopitalNumerique\PublicationBundle\Service\Converter\Content\TargetBlank

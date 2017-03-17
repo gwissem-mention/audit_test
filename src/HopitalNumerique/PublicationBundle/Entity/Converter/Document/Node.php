@@ -13,7 +13,7 @@ use Symfony\Component\HttpFoundation\File\File;
  * @ORM\Table(name="hn_converter_node")
  * @ORM\Entity()
  */
-class Node implements NodeInterface, SquashableNodeInterface
+class Node implements NodeInterface
 {
     /**
      * @var integer
