@@ -1157,4 +1157,34 @@ class ObjetManager extends BaseManager
     {
         return $this->em->getRepository(Objet::class);
     }
+
+    /**
+     * @param Objet $objet
+     *
+     * @return array
+     */
+    public function getObjectRelationships(Objet $objet)
+    {
+        $objectRelationships = $this->getRepository()->getObjectRelationships();
+
+        $relatedObjectIds = [];
+        $relatedObjects = [];
+        foreach ($objectRelationships as $objectRelationship) {
+            foreach ($objectRelationship['objets'] as $relation) {
+                if (explode(':', $relation)[1] == $objet->getId()) {
+                    $relatedObjectIds[] = $objectRelationship['id'];
+                }
+            }
+        }
+
+        $relatedObjectIds = array_unique($relatedObjectIds);
+
+        foreach ($relatedObjectIds as $objectId) {
+            $relatedObjects[] = $this->getRepository()->findOneBy(
+                ['id' => $objectId]
+            );
+        }
+
+        return $relatedObjects;
+    }
 }

@@ -44,3 +44,64 @@ services:
             - '@doctrine.orm.entity_manager'
         tags:
             - { name: form.type }
+
+    hopitalnumerique_publication.service.relation_finder:
+        class: HopitalNumerique\PublicationBundle\Service\RelationFinder\RelationFinder
+
+    hopitalnumerique_publication.service.destination_content_source_content:
+        class: HopitalNumerique\PublicationBundle\Service\RelationFinder\Finders\DestinationContentToSourceContentFinder
+        arguments:
+            - "@hopitalnumerique_objet.manager.contenu"
+            - "@hopitalnumerique_objet.dependency_injection.production_liee"
+        tags:
+            - { name: resource.relation_finder }
+
+    hopitalnumerique_publication.service.destionation_content_source_object:
+        class: HopitalNumerique\PublicationBundle\Service\RelationFinder\Finders\DestinationContentToSourceObjectFinder
+        arguments:
+            - "@hopitalnumerique_objet.repository.objet"
+            - "@hopitalnumerique_objet.manager.contenu"
+            - "@hopitalnumerique_objet.dependency_injection.production_liee"
+            - "@hopitalnumerique_publication.service.relation_finder"
+        tags:
+            - { name: resource.relation_finder }
+
+    hopitalnumerique_publication.service.destination_object_source_object:
+        class: HopitalNumerique\PublicationBundle\Service\RelationFinder\Finders\DestinationObjectToSourceObjectFinder
+        arguments:
+            - "@hopitalnumerique_objet.manager.objet"
+            - "@hopitalnumerique_objet.dependency_injection.production_liee"
+        tags:
+            - { name: resource.relation_finder }
+
+    hopitalnumerique_publication.service.source_content_destination_content:
+        class: HopitalNumerique\PublicationBundle\Service\RelationFinder\Finders\SourceContentToDestinationContentFinder
+        arguments:
+            - "@hopitalnumerique_objet.manager.contenu"
+            - "@hopitalnumerique_objet.dependency_injection.production_liee"
+        tags:
+            - { name: resource.relation_finder }
+
+    hopitalnumerique_publication.service.source_object_destination_content:
+        class: HopitalNumerique\PublicationBundle\Service\RelationFinder\Finders\SourceObjectToDestinationContentFinder
+        arguments:
+            - "@hopitalnumerique_objet.manager.contenu"
+            - "@hopitalnumerique_objet.dependency_injection.production_liee"
+        tags:
+            - { name: resource.relation_finder }
+
+    hopitalnumerique_publication.service.source_object_destination_object:
+        class: HopitalNumerique\PublicationBundle\Service\RelationFinder\Finders\SourceObjectToDestinationObjectFinder
+        arguments:
+            - "@hopitalnumerique_objet.manager.objet"
+            - "@hopitalnumerique_objet.dependency_injection.production_liee"
+        tags:
+            - { name: resource.relation_finder }
+
+    hopitalnumerique_publication.service.source_content_destination_object:
+        class: HopitalNumerique\PublicationBundle\Service\RelationFinder\Finders\SourceContentToDestinationObjectFinder
+        arguments:
+            - "@hopitalnumerique_objet.manager.contenu"
+            - "@hopitalnumerique_objet.dependency_injection.production_liee"
+        tags:
+            - { name: resource.relation_finder }

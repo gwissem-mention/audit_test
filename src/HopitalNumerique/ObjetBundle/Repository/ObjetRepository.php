@@ -528,4 +528,20 @@ class ObjetRepository extends EntityRepository
 
         return $qb->getQuery()->getResult();
     }
+
+    /**
+     * Returns the 'obj_id' and 'obj_objets' columns for all objects
+     *
+     * @return array
+     */
+    public function getObjectRelationships()
+    {
+        $qb = $this->_em->createQueryBuilder();
+
+        $qb->select('object.id, object.objets')
+            ->from('HopitalNumeriqueObjetBundle:Objet', 'object')
+        ;
+
+        return $qb->getQuery()->getResult();
+    }
 }

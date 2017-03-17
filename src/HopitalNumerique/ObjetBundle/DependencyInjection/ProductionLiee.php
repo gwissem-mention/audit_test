@@ -85,7 +85,7 @@ class ProductionLiee
         return $formattedProductionsLiees;
     }
 
-    private function formatProductionsLiees($entity)
+    public function formatProductionsLiees($entity)
     {
         return [
             'title' => $this->entity->getTitleByEntity($entity, self::TITLE_MAXLENGTH),
