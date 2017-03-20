@@ -8,8 +8,6 @@ use HopitalNumerique\ObjetBundle\Manager\ObjetManager;
 
 /**
  * Class SourceObjectToDestinationObjectFinder
- *
- * A --> B
  */
 class SourceObjectToDestinationObjectFinder implements FinderInterface
 {

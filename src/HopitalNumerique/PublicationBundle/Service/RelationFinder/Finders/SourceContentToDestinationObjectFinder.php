@@ -4,20 +4,17 @@ namespace HopitalNumerique\PublicationBundle\Service\RelationFinder\Finders;
 
 use HopitalNumerique\ObjetBundle\DependencyInjection\ProductionLiee;
 use HopitalNumerique\ObjetBundle\Entity\Contenu;
-use HopitalNumerique\ObjetBundle\Entity\Objet;
-use HopitalNumerique\ObjetBundle\Manager\ContenuManager;
+use HopitalNumerique\ObjetBundle\Repository\ObjetRepository;
 
 /**
  * Class SourceContentToDestinationContentFinder
- *
- * A1 --> B1
  */
 class SourceContentToDestinationObjectFinder implements FinderInterface
 {
     /**
-     * @var ContenuManager
+     * @var ObjetRepository
      */
-    protected $contentManager;
+    protected $objectRepository;
 
     /**
      * @var ProductionLiee
@@ -27,12 +24,14 @@ class SourceContentToDestinationObjectFinder implements FinderInterface
     /**
      * SourceContentToDestinationContentFinder constructor.
      *
-     * @param ContenuManager $contenuManager
-     * @param ProductionLiee $productionLiee
+     * @param ObjetRepository $objetRepository
+     * @param ProductionLiee  $productionLiee
      */
-    public function __construct(ContenuManager $contenuManager, ProductionLiee $productionLiee)
-    {
-        $this->contentManager = $contenuManager;
+    public function __construct(
+        ObjetRepository $objetRepository,
+        ProductionLiee $productionLiee
+    ) {
+        $this->objectRepository = $objetRepository;
         $this->relatedResourceTransformer = $productionLiee;
     }
 
@@ -43,7 +42,7 @@ class SourceContentToDestinationObjectFinder implements FinderInterface
      */
     public function support($data)
     {
-        if ($data instanceof Objet) {
+        if ($data instanceof Contenu) {
             return true;
         }
 
@@ -57,42 +56,24 @@ class SourceContentToDestinationObjectFinder implements FinderInterface
      */
     public function find($data)
     {
-        // Si A1 -> B
-        // A1 voit B
-        // B voit A1
-        // enfants de B voient A1
-        // enfants de A1 voient B
-
-        /** @var Objet $object */
-        $object = $data;
+        /** @var Contenu $content */
+        $content = $data;
 
         $relatedResources = [];
 
-        $contents = $this->contentManager->findAll();
+        foreach ($content->getObjets() as $relatedObjectString) {
+            $relatedObject = explode(':', $relatedObjectString);
+            $relatedObjectType = $relatedObject[0];
+            $relatedObjectId = $relatedObject[1];
 
-        ///** @var Contenu $content */
-        //foreach ($contents as $content) {
-        //    if (!is_null($content->getObjets())) {
-        //        foreach ($content->getObjets() as $relatedObjectString) {
-        //            $relatedObject = explode(':', $relatedObjectString);
-        //            $relatedObjectType = $relatedObject[0];
-        //            $relatedObjectId = $relatedObject[1];
-        //
-        //            if ($relatedObjectType == 'ARTICLE'
-        //                || $relatedObjectType == 'PUBLICATION'
-        //                   && $relatedObjectId == $object->getId()
-        //            ) {
-        //                $relatedResources[] = $this->relatedResourceTransformer->formatProductionsLiees(
-        //                    $this->contentManager->findOneById(
-        //                        $relatedObjectId
-        //                    )
-        //                );
-        //            }
-        //        }
-        //    }
-        //}
-
-        // WIP
+            if ($relatedObjectType == 'ARTICLE' || $relatedObjectType == 'PUBLICATION') {
+                $relatedResources[] = $this->relatedResourceTransformer->formatProductionsLiees(
+                    $this->objectRepository->findOneBy([
+                        'id' => $relatedObjectId,
+                    ])
+                );
+            }
+        }
 
         return $relatedResources;
     }

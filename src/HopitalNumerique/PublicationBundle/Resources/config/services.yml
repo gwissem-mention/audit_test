@@ -101,6 +101,14 @@ services:
     hopitalnumerique_publication.service.source_content_destination_object:
         class: HopitalNumerique\PublicationBundle\Service\RelationFinder\Finders\SourceContentToDestinationObjectFinder
         arguments:
+            - "@hopitalnumerique_objet.repository.objet"
+            - "@hopitalnumerique_objet.dependency_injection.production_liee"
+        tags:
+            - { name: resource.relation_finder }
+
+    hopitalnumerique_publication.service.destination_object_source_content:
+        class: HopitalNumerique\PublicationBundle\Service\RelationFinder\Finders\DestinationObjectToSourceContent
+        arguments:
             - "@hopitalnumerique_objet.manager.contenu"
             - "@hopitalnumerique_objet.dependency_injection.production_liee"
         tags:

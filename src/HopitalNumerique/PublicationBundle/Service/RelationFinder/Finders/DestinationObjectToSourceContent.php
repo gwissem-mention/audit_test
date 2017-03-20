@@ -4,12 +4,13 @@ namespace HopitalNumerique\PublicationBundle\Service\RelationFinder\Finders;
 
 use HopitalNumerique\ObjetBundle\DependencyInjection\ProductionLiee;
 use HopitalNumerique\ObjetBundle\Entity\Contenu;
+use HopitalNumerique\ObjetBundle\Entity\Objet;
 use HopitalNumerique\ObjetBundle\Manager\ContenuManager;
 
 /**
- * Class DestinationContentToSourceContentFinder
+ * Class SourceContentToDestinationContentFinder
  */
-class DestinationContentToSourceContentFinder implements FinderInterface
+class DestinationObjectToSourceContent implements FinderInterface
 {
     /**
      * @var ContenuManager
@@ -22,7 +23,7 @@ class DestinationContentToSourceContentFinder implements FinderInterface
     protected $relatedResourceTransformer;
 
     /**
-     * DestinationContentToSourceContentFinder constructor.
+     * SourceContentToDestinationContentFinder constructor.
      *
      * @param ContenuManager $contenuManager
      * @param ProductionLiee $productionLiee
@@ -40,7 +41,7 @@ class DestinationContentToSourceContentFinder implements FinderInterface
      */
     public function support($data)
     {
-        if ($data instanceof Contenu) {
+        if ($data instanceof Objet) {
             return true;
         }
 
@@ -54,24 +55,29 @@ class DestinationContentToSourceContentFinder implements FinderInterface
      */
     public function find($data)
     {
-        /** @var Contenu $content */
-        $content = $data;
+        /** @var Objet $object */
+        $object = $data;
 
         $relatedResources = [];
 
         $contents = $this->contentManager->findAll();
 
-        /** @var Contenu $contentSource */
-        foreach ($contents as $contentSource) {
-            if (!is_null($contentSource->getObjets())) {
-                foreach ($contentSource->getObjets() as $relatedContentString) {
-                    $relatedContent = explode(':', $relatedContentString);
-                    $relatedContentType = $relatedContent[0];
-                    $relatedContentId = $relatedContent[1];
+        /** @var Contenu $content */
+        foreach ($contents as $content) {
+            if (!is_null($content->getObjets())) {
+                foreach ($content->getObjets() as $relatedObjectString) {
+                    $relatedObject = explode(':', $relatedObjectString);
+                    $relatedObjectType = $relatedObject[0];
+                    $relatedObjectId = $relatedObject[1];
 
-                    if ($relatedContentType == 'INFRADOC' && $relatedContentId == $content->getId()) {
+                    if (($relatedObjectType == 'PUBLICATION'
+                        || $relatedObjectType == 'ARTICLE')
+                           && $relatedObjectId == $object->getId()
+                    ) {
                         $relatedResources[] = $this->relatedResourceTransformer->formatProductionsLiees(
-                            $this->contentManager->findOneById($contentSource->getId())
+                            $this->contentManager->findOneById(
+                                $content->getId()
+                            )
                         );
                     }
                 }

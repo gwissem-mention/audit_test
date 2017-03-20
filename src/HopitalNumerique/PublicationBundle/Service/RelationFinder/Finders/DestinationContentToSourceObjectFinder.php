@@ -11,8 +11,6 @@ use HopitalNumerique\PublicationBundle\Service\RelationFinder\RelationFinder;
 
 /**
  * Class DestinationContentToSourceObjectFinder
- *
- * B1 --> A
  */
 class DestinationContentToSourceObjectFinder implements FinderInterface
 {
