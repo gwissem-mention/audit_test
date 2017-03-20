@@ -108,6 +108,9 @@
                         <button class="next btn btn-default">
                             {{ "ad.front.navigation.next"|trans }}
                         </button>
+                        <a class="show-results btn btn-default" href="{{ path('hopitalnumerique_autodiag_restitution_index', {'synthesis': entry.synthesis.id}) }}">
+                            {{ "ad.front.navigation.results"|trans }}
+                        </a>
                     </div>
                 </div>
             </div>
@@ -123,6 +126,13 @@
         });
         new AutodiagNavigation($('#autodiag-path'));
         autodiagNavigation.setAutodiag(autodiag);
+
+        if ($('li.restitution a').hasClass('disabled')) {
+            $('button.show-results').hide();
+        } else {
+            $('button.show-results').show();
+        }
+
     </script>
 
 {% endblock %}
