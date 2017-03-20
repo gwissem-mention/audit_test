@@ -8,6 +8,8 @@ use HopitalNumerique\ObjetBundle\Manager\ObjetManager;
 
 /**
  * Class SourceObjectToDestinationObjectFinder
+ *
+ * Retrieves objects related with current object (A->B)
  */
 class SourceObjectToDestinationObjectFinder implements FinderInterface
 {

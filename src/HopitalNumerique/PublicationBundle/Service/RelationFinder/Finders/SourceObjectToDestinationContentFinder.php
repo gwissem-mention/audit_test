@@ -8,6 +8,8 @@ use HopitalNumerique\ObjetBundle\Manager\ContenuManager;
 
 /**
  * Class SourceObjectToDestinationContentFinder
+ *
+ * Retrieves contents related with current object (A->B1)
  */
 class SourceObjectToDestinationContentFinder implements FinderInterface
 {

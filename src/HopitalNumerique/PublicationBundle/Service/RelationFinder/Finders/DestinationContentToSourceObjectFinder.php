@@ -11,6 +11,8 @@ use HopitalNumerique\PublicationBundle\Service\RelationFinder\RelationFinder;
 
 /**
  * Class DestinationContentToSourceObjectFinder
+ *
+ * Retrieves objects related with current content (B1->A)
  */
 class DestinationContentToSourceObjectFinder implements FinderInterface
 {
