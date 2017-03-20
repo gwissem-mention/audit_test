@@ -208,6 +208,7 @@ ad:
         navigation:
             next: Chapitre suivant
             prev: Chapitre précédent
+            results: Voir mon résultat
         chapter:
             not_concerned: Non concerné
             not_concerned_title: Je ne suis pas concerné par ce chapitre

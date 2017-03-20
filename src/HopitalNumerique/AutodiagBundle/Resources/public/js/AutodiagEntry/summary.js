@@ -260,8 +260,13 @@ Summary.prototype = {
     {
         if (true === visible) {
             $('.results', this.element).show();
+            $('a.show-results').show();
         } else {
             $('.results', this.element).hide();
+
+            if ($('li.restitution a').hasClass('disabled')) {
+                $('a.show-results').hide();
+            }
         }
 
     }
