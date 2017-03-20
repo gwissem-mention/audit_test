@@ -5,17 +5,20 @@ namespace HopitalNumerique\AutodiagBundle\Repository;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\Query\Expr\Join;
 use HopitalNumerique\AutodiagBundle\Entity\Autodiag;
+use HopitalNumerique\AutodiagBundle\Entity\Restitution\Item;
+use HopitalNumerique\AutodiagBundle\Entity\Synthesis;
 
 class RestitutionRepository extends EntityRepository
 {
     /**
      * Get Autodiag restitution.
      *
-     * @param Autodiag $autodiag
+     * @param Autodiag  $autodiag
+     * @param Synthesis $synthesis
      *
      * @return mixed
      */
-    public function getForAutodiag(Autodiag $autodiag)
+    public function getForAutodiag(Autodiag $autodiag, Synthesis $synthesis = null)
     {
         $qb = $this->createQueryBuilder('restitution');
         $qb
@@ -34,6 +37,13 @@ class RestitutionRepository extends EntityRepository
             ->where('autodiag.id = :id')
             ->setParameter('id', $autodiag->getId())
         ;
+        
+        if (!is_null($synthesis) && $synthesis->getEntries()->count() > 1) {
+            $qb
+                ->andWhere('items.type != :responseType')
+                ->setParameter('responseType', Item::RESPONSE_TYPE)
+            ;
+        }
 
         return $qb->getQuery()->getOneOrNullResult();
     }
