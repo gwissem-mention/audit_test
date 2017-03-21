@@ -31,3 +31,13 @@ services:
         factory: ['@doctrine.orm.entity_manager', 'getRepository']
         arguments:
             - 'HopitalNumeriqueStatBundle:StatRecherche'
+
+    hopitalnumerique_stat.manager.stattelechargement:
+        class: HopitalNumerique\StatBundle\Manager\StatTelechargementManager
+        arguments: ["@doctrine.orm.entity_manager", "@security.context"]
+
+    hopitalnumerique_stat.manager.listenerstat.downloadsuccess:
+        class: HopitalNumerique\StatBundle\Event\ListenerStat
+        arguments: ['@hopitalnumerique_stat.manager.stattelechargement']
+        tags:
+            - { name: kernel.event_listener, event: objet_download_success, method: objetDownloadSuccess }
