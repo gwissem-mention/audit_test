@@ -124,11 +124,10 @@ class ExportController extends Controller
             $user = $this->getUser();
 
             $dispatcher = $this->get('event_dispatcher');
-            //Dispatch sur l'événement objet_download_success
+
             $dispatcher->dispatch(
                 Events::OBJET_DOWNLOAD_SUCCESS,
-                new ObjetEvent($objet, ('anon.' !== $user) ? $user : null),
-                $type
+                new ObjetEvent($objet, ('anon.' !== $user) ? $user : null, $type)
             );
 
             if ($type == 1) {

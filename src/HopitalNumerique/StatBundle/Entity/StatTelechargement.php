@@ -3,6 +3,8 @@
 namespace HopitalNumerique\StatBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use HopitalNumerique\ObjetBundle\Entity\Objet;
+use HopitalNumerique\UserBundle\Entity\User;
 
 /**
  * StatTelechargement.
@@ -29,7 +31,8 @@ class StatTelechargement
     protected $date;
 
     /**
-     * @var int
+     * @var Objet
+     *
      * @ORM\ManyToOne(targetEntity="\HopitalNumerique\ObjetBundle\Entity\Objet")
      * @ORM\JoinColumn(name="obj_id", referencedColumnName="obj_id", nullable=true, onDelete="CASCADE")
      * )
@@ -37,7 +40,7 @@ class StatTelechargement
     protected $objet;
 
     /**
-     * @var int
+     * @var User
      *
      * @ORM\ManyToOne(targetEntity="\HopitalNumerique\UserBundle\Entity\User")
      * @ORM\JoinColumn(name="usr_id", referencedColumnName="usr_id", nullable=true, onDelete="CASCADE")
@@ -92,8 +95,6 @@ class StatTelechargement
     /**
      * Set dateNow.
      *
-     * @param \DateTime $date
-     *
      * @return StatTelechargement
      */
     public function setDateNow()
@@ -116,17 +117,17 @@ class StatTelechargement
     /**
      * Get references.
      *
-     * @return \Doctrine\Common\Collections\Collection
+     * @return Objet
      */
     public function getObjet()
     {
-        return $this->references;
+        return $this->objet;
     }
 
     /**
      * Set references.
      *
-     * @param array(Objet) $objets
+     * @param $objet
      *
      * @return StatTelechargement
      */
@@ -140,11 +141,11 @@ class StatTelechargement
     /**
      * Set user.
      *
-     * @param \HopitalNumerique\UserBundle\Entity\User $user
+     * @param User $user
      *
      * @return StatTelechargement
      */
-    public function setUser(\HopitalNumerique\UserBundle\Entity\User $user = null)
+    public function setUser(User $user = null)
     {
         $this->user = $user;
 
@@ -154,7 +155,7 @@ class StatTelechargement
     /**
      * Get user.
      *
-     * @return \HopitalNumerique\UserBundle\Entity\User
+     * @return User
      */
     public function getUser()
     {

@@ -6,31 +6,50 @@ use HopitalNumerique\UserBundle\Entity\User;
 use HopitalNumerique\ObjetBundle\Entity\Objet;
 use Symfony\Component\EventDispatcher\Event;
 
+/**
+ * Class ObjetEvent
+ */
 class ObjetEvent extends Event
 {
-    protected $_user;
-    protected $_objet;
-    protected $_type;
+    protected $user;
+    protected $objet;
+    protected $type;
 
+    /**
+     * ObjetEvent constructor.
+     *
+     * @param Objet     $objet
+     * @param User|null $user
+     * @param int       $type
+     */
     public function __construct(Objet $objet, User $user = null, $type = 1)
     {
-        $this->_objet = $objet;
-        $this->_user = $user;
-        $this->_type = $type;
+        $this->objet = $objet;
+        $this->user  = $user;
+        $this->type = $type;
     }
 
+    /**
+     * @return User|null
+     */
     public function getUser()
     {
-        return $this->_user;
+        return $this->user;
     }
 
+    /**
+     * @return Objet
+     */
     public function getObjet()
     {
-        return $this->_objet;
+        return $this->objet;
     }
 
+    /**
+     * @return int
+     */
     public function getType()
     {
-        return $this->_type;
+        return $this->type;
     }
 }
