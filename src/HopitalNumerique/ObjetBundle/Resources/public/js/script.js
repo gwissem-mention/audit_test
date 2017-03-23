@@ -1,6 +1,5 @@
 $(document).ready(function() {
-
-
+    
     $('.deleteAllInfradocs').on('click', function(e) {
         var $this = $(this);
         e.preventDefault();
@@ -10,6 +9,16 @@ $(document).ready(function() {
             }
         })
     });
+
+    if (window['wordConverter'] !== undefined) {
+        wordConverter.onPrepareFormLoaded(function() {
+            $('.manualAction').hide();
+        });
+    }
+
+    if( $('#sommaire ol li').length > 0){
+        $('#converter-upload-wrapper').hide();
+    }
 
     //gestion du bouton delete : changement du fichier uploadé
     $('.deleteUploadedFile').on('click',function(){
@@ -52,6 +61,7 @@ $(document).ready(function() {
                         $('.uploadSommaire').hide();
                         $('.deleteAllInfradocs').removeClass('hidden');
                         $('.designForBlank').hide();
+                        $('#converter-upload-wrapper').hide();
                     }
                 }
                 else
@@ -293,6 +303,7 @@ function deleteContenu( id, url )
                             $('.uploadSommaire').show();
                             $('.deleteAllInfradocs').addClass('hidden');
                             $('.designForBlank').show();
+                            $('#converter-upload-wrapper').show();
                         }
                     }
                 }

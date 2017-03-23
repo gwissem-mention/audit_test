@@ -6,6 +6,7 @@ var WordConverter;
         this.uploadFormUrl = uploadFormUrl;
         this.prepareFormUrl = prepareFormUrl;
 
+        this.fileFormWrapper = null;
         this.fileForm = null;
         this.prepareForm = null;
 
@@ -13,6 +14,10 @@ var WordConverter;
             file: 'fa-file-word-o',
             waiting: 'fa-spinner fa-spin',
             submit: 'fa-upload'
+        };
+
+        this.callbacks = {
+            prepareFormLoaded: $.Callbacks()
         };
 
         this.init();
@@ -30,6 +35,7 @@ var WordConverter;
 
         bindEvents: function () {
             this.button.on('click', $.proxy(this.handleFileUploadTrigger, this));
+            $('.options .nav li').click($.proxy(this.unloadUploadForm, this));
         },
 
         /**
@@ -68,6 +74,7 @@ var WordConverter;
                     })
                 ;
 
+                instance.fileFormWrapper = $wrapper;
                 instance.fileForm = $wrapper.find('form').get(0);
 
                 $(instance.fileForm).on('submit', function (e) {
@@ -90,14 +97,16 @@ var WordConverter;
             this.setLoadingState();
 
             var query = $.get(this.prepareFormUrl, function (response) {
-                instance.viewport.html(response);
-                instance.prepareForm = $('form', response).get(0);
-                instance.handlePrepareForm();
+                if (response !== undefined) {
+                    instance.viewport.html(response);
+                    instance.prepareForm = $('form', response).get(0);
+                    instance.handlePrepareForm();
+                }
             });
 
             query.complete(function() {
                 instance.setIdleState();
-            })
+            });
         },
 
         /**
@@ -162,10 +171,17 @@ var WordConverter;
                     }
                 };
             });
+
+            instance.callbacks.prepareFormLoaded.fire();
         },
 
         unloadUploadForm: function () {
-            this.viewport.html('');
+            if (null !== this.fileFormWrapper) {
+                this.fileFormWrapper.remove();
+                this.fileFormWrapper = null;
+                this.fileForm = null;
+                this.setButtonState('file');
+            }
         },
 
         /**
@@ -199,7 +215,7 @@ var WordConverter;
                     if (request.status === 400) {
                         instance.viewport.html('');
                         var response = request.responseJSON;
-                        instance.viewport.append(response.messages.join("\n"));
+                        instance.viewport.append(response.messages.join("\n")).css({"color": "red"});
                     }
                 })
                 .complete(function (request) {
@@ -229,6 +245,10 @@ var WordConverter;
 
         setUploadState: function () {
             this.setButtonState('submit');
+        },
+
+        onPrepareFormLoaded: function (callback) {
+            this.callbacks.prepareFormLoaded.add(callback);
         }
     };
 

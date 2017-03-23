@@ -1,5 +1,5 @@
 {% block body %}
-    <div class="col-sm-12">
+    <div id="report-popin" class="col-sm-12">
         <div class="panel panel-midnightblue">
             <div class="panel-heading">
                 <h4>
@@ -8,6 +8,7 @@
             </div>
 
             <div class="panel-body">
+                <h3>{{ report.objectLabel }}</h3>
                 {% if report.links|length > 0 or report.images|length > 0 or report.footnotes|length > 0 or report.tableCount > 0 %}
                     {% if report.links|length > 0 %}
                         <span>Liens :</span>
@@ -39,17 +40,17 @@
                     {% if report.tableCount > 0 %}
                         <span>Nombre de tableaux :</span> {{ report.tableCount }}
                     {% endif %}
-
-                    {% if report.children|length > 0 %}
-                        <div style="border-bottom: 1px solid #4d4d4d; margin-top: 30px;"></div>
-                    {% endif %}
                 {% else %}
                     Aucune donnée.
                 {% endif %}
 
+                {% if report.children|length > 0 %}
+                    <div class="separator-mark"></div>
+                {% endif %}
+
                 {% for child in report.children %}
-                    <div style="margin: 20px 0 20px 40px;">
-                        <h4 style="color: #34495e; font-weight: bold;">{{ child.contentLabel }}</h4>
+                    <div class="child-block">
+                        <h4>{{ child.contentLabel }}</h4>
                         {% if child.links|length > 0 or child.images|length > 0 or child.footnotes|length > 0 or child.tableCount > 0 %}
                             {% if child.links|length > 0 %}
                                 <span>Liens :</span>

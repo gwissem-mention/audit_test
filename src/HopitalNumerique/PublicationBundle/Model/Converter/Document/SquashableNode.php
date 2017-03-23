@@ -6,8 +6,6 @@ use HopitalNumerique\PublicationBundle\Entity\Converter\Document\NodeInterface;
 
 /**
  * Add squash functionality on node
- *
- * @package HopitalNumerique\PublicationBundle\Model\Converter\Document
  */
 class SquashableNode extends NodeDecorator
 {
@@ -15,7 +13,7 @@ class SquashableNode extends NodeDecorator
     private $squashMap = [];
 
     /**
-     * @return \HopitalNumerique\PublicationBundle\Entity\Converter\Document\NodeInterface
+     * @return NodeInterface
      */
     public function squash()
     {
@@ -33,6 +31,11 @@ class SquashableNode extends NodeDecorator
         return $this;
     }
 
+    /**
+     * @param NodeInterface $node
+     *
+     * @return NodeInterface
+     */
     private function squashNode(NodeInterface $node)
     {
         if (null === $node->getSquashIn()) {
@@ -40,7 +43,11 @@ class SquashableNode extends NodeDecorator
         }
 
         $node->getSquashIn()->setContent(
-            implode("\n", [$node->getSquashIn()->getContent(), $node->getTitle(), $node->getContent()])
+            implode("\n", [
+                $node->getSquashIn()->getContent(),
+                '<h' . $node->getDeep() . '>' . $node->getTitle() . '</h' . $node->getDeep() . '>',
+                $node->getContent(),
+            ])
         );
 
         foreach ($node->getMedias() as $media) {
@@ -58,6 +65,9 @@ class SquashableNode extends NodeDecorator
         return $node;
     }
 
+    /**
+     * @param NodeInterface $node
+     */
     private function buildMap(NodeInterface $node)
     {
         if (null !== $node->getSquashIn()) {
