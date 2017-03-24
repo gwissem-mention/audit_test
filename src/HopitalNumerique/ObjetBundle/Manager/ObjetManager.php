@@ -627,12 +627,12 @@ class ObjetManager extends BaseManager
         //@todo Vérif pour remplacer $this->findAll() qui pourrait générer des centaines de requêtes
         //get objets and IDS
 
-        $objectDomains = $object->getDomaines();
+        $objectDomains = is_null($object) ? [] : $object->getDomaines();
 
         if (is_null($types)) {
-            $objets = $objectDomains->count() > 0 ? $this->getObjets($objectDomains) : $this->getObjets();
+            $objets = count($objectDomains) > 0 ? $this->getObjets($objectDomains) : $this->getObjets();
         } else {
-            $objets = $objectDomains->count() > 0 ? $this->getObjetsByTypes(
+            $objets = count($objectDomains) > 0 ? $this->getObjetsByTypes(
                 $types,
                 0,
                 ['champ' => 'obj.dateModification', 'tri' => 'DESC'],

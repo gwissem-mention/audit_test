@@ -94,7 +94,7 @@ class DestinationContentToSourceObjectFinder implements FinderInterface
 
                     if ($relatedContentType == 'INFRADOC' && $relatedContentId == $content->getId()) {
                         $relatedResources[] = $this->relatedResourceTransformer->formatProductionsLiees(
-                            $this->contentManager->findOneById($relatedContentId)
+                            $this->objectRepository->findOneBy(['id' => $object->getId()])
                         );
                     }
                 }
