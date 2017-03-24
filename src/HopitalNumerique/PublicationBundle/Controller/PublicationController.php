@@ -110,14 +110,17 @@ class PublicationController extends Controller
                     [$domaine]
                 )
             ;
-            $referenceString = join(',', array_map(function (EntityHasReference $reference) use ($domaine) {
+
+            $referencesToImplode = [];
+
+            foreach ($domaineReference as $reference) {
                 $displayedDomains = $reference->getReference()->getDomainesDisplayId()->toArray();
                 if (in_array($domaine->getId(), $displayedDomains)) {
-                    return $reference->getReference()->getId();
+                    $referencesToImplode[] = $reference->getReference()->getId();
                 }
+            }
 
-                return "";
-            }, $domaineReference));
+            $referenceString = implode(',', $referencesToImplode);
 
             if ($referenceString !== "") {
                 $referencesInDomaine[$domaine->getId()] = $referenceString;
