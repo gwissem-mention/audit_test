@@ -398,6 +398,13 @@
                                         </ol>
                                     </div>
                                 </fieldset>
+
+                                {% if relatedObjects|length > 0 %}
+                                    <legend style="margin-top: 20px;">Cette production est également liée depuis</legend>
+                                    {% for relatedObject in relatedObjects %}
+                                        <div><a href="{{ path('hopitalnumerique_objet_objet_edit', {'id': relatedObject.id}) }}">{{ relatedObject.titre }}</a></div>
+                                    {% endfor %}
+                                {% endif %}
                             </div>
                         {% endif %}
                     </div>

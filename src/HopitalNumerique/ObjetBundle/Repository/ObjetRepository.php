@@ -96,10 +96,11 @@ class ObjetRepository extends EntityRepository
     /**
      * Retourne la liste des objets.
      *
+     * @param array $domains
      *
      * @return QueryBuilder
      */
-    public function getObjets()
+    public function getObjets($domains = [])
     {
         $qb = $this->createQueryBuilder('obj');
         $qb
@@ -108,6 +109,14 @@ class ObjetRepository extends EntityRepository
             ->join('obj.etat', 'etat')
             ->orderBy('obj.titre', 'ASC')
         ;
+
+        if (count($domains) > 0) {
+            $qb
+                ->leftJoin('obj.domaines', 'domaines')
+                ->andWhere('domaines IN (:domains)')
+                ->setParameter('domains', $domains)
+            ;
+        }
 
         return $qb;
     }
@@ -233,9 +242,13 @@ class ObjetRepository extends EntityRepository
      *
      * @param array $types Les types à filtrer
      *
+     * @param int   $limit
+     * @param       $order
+     * @param array $domains
+     *
      * @return QueryBuilder
      */
-    public function getObjetsByTypes($types, $limit = 0, $order)
+    public function getObjetsByTypes($types, $limit = 0, $order, $domains = [])
     {
         $qb = $this->_em->createQueryBuilder();
         $qb->select('obj')
@@ -247,6 +260,14 @@ class ObjetRepository extends EntityRepository
 
         if ($limit !== 0) {
             $qb->setMaxResults($limit);
+        }
+
+        if (count($domains) > 0) {
+            $qb
+                ->leftJoin('obj.domaines', 'domaines')
+                ->andWhere('domaines IN (:domains)')
+                ->setParameter('domains', $domains)
+            ;
         }
 
         return $qb;
@@ -524,6 +545,22 @@ class ObjetRepository extends EntityRepository
             ->andWhere('dom.id = :idDomaine')
             ->setParameter('idDomaine', $domaine)
             ->setParameter('types', $types)
+        ;
+
+        return $qb->getQuery()->getResult();
+    }
+
+    /**
+     * Returns the 'obj_id' and 'obj_objets' columns for all objects
+     *
+     * @return array
+     */
+    public function getObjectRelationships()
+    {
+        $qb = $this->_em->createQueryBuilder();
+
+        $qb->select('object.id, object.objets')
+            ->from('HopitalNumeriqueObjetBundle:Objet', 'object')
         ;
 
         return $qb->getQuery()->getResult();
