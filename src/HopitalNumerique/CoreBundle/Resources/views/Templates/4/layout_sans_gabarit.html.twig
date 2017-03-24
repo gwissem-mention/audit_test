@@ -13,12 +13,12 @@
         <link href='http://fonts.googleapis.com/css?family=Viga|Open+Sans:400,700' rel='stylesheet' type='text/css'>
         <link rel="shortcut icon" href="{% if domaineCurrent.id != 1 %}{{ asset('favicon_anap.ico') }}{% else %}{{ asset('favicon.ico') }}{% endif %}" />
         {% block stylesheets %}
-            {% stylesheets output="compiled/hopitalnumerique-core-1.css" filter="cssrewrite, ?yui_css"
+            {% stylesheets output="compiled/hopitalnumerique-core-4-no-layout.css" filter="cssrewrite, ?yui_css"
                 "@bootstrap_css"
                 "@fancybox_css"
                 'bundles/nodevoadmin/css/custom-jquery-ui.min.css'
                 'bundles/nodevoadmin/plugins/nodevoLoader/nodevoLoader.css'
-                'bundles/hopitalnumeriquecore/css/Templates/1/layout.css'
+                'bundles/hopitalnumeriquecore/css/Templates/4/layout.css'
             %}
                 <link rel="stylesheet" href="{{ absolute_url(asset_url) }}" />
             {% endstylesheets %}
@@ -39,6 +39,9 @@
             %}
                 <script type="text/javascript" src="{{ absolute_url(asset_url) }}"></script>
             {% endjavascripts %}
+
+            <script src="{{ absolute_url(asset('bundles/fosjsrouting/js/router.js')) }}"></script>
+            <script src="{{ absolute_url(path('fos_js_routing_js', { callback: 'fos.Router.setData' })) }}"></script>
         {% endblock %}
 
         {% if domaineCurrent.googleAnalytics is not null %}
