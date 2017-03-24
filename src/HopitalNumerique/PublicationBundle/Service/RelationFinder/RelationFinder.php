@@ -21,17 +21,26 @@ class RelationFinder
 {
     protected $finders = [];
 
+    /**
+     * @param FinderInterface $finder
+     */
     public function addFinder(FinderInterface $finder)
     {
         $this->finders[] = $finder;
     }
 
+    /**
+     * @param $data
+     *
+     * @return array
+     */
     public function findRelations($data)
     {
         $relations = [];
+
         foreach ($this->finders as $finder) {
             if ($finder->support($data)) {
-                $relations += $finder->find($data);
+                $relations = array_merge($relations, $finder->find($data));
             }
         }
 

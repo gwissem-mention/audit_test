@@ -123,11 +123,13 @@ class ObjetManager extends BaseManager
     /**
      * Retourne la liste des objets.
      *
+     * @param array $domains
+     *
      * @return array
      */
-    public function getObjets()
+    public function getObjets($domains = [])
     {
-        return $this->getRepository()->getObjets()->getQuery()->getResult();
+        return $this->getRepository()->getObjets($domains)->getQuery()->getResult();
     }
 
     /**
@@ -377,12 +379,17 @@ class ObjetManager extends BaseManager
      * @param array $types Les types à filtrer
      * @param int   $limit
      * @param array $order
+     * @param array $domains
      *
      * @return array
      */
-    public function getObjetsByTypes($types, $limit = 0, $order = ['champ' => 'obj.dateModification', 'tri' => 'DESC'])
-    {
-        return $this->getRepository()->getObjetsByTypes($types, $limit, $order)->getQuery()->getResult();
+    public function getObjetsByTypes(
+        $types,
+        $limit = 0,
+        $order = ['champ' => 'obj.dateModification', 'tri' => 'DESC'],
+        $domains = []
+    ) {
+        return $this->getRepository()->getObjetsByTypes($types, $limit, $order, $domains)->getQuery()->getResult();
     }
 
     /**
@@ -611,14 +618,27 @@ class ObjetManager extends BaseManager
      * Retourne l'arbo Objets -> contenus.
      *
      * @param Reference[] $types
+     * @param Objet|null  $object
      *
      * @return array
      */
-    public function getObjetsAndContenuArbo($types = null)
+    public function getObjetsAndContenuArbo($types = null, Objet $object = null)
     {
         //@todo Vérif pour remplacer $this->findAll() qui pourrait générer des centaines de requêtes
         //get objets and IDS
-        $objets = is_null($types) ? $this->getObjets() : $this->getObjetsByTypes($types);
+
+        $objectDomains = $object->getDomaines();
+
+        if (is_null($types)) {
+            $objets = $objectDomains->count() > 0 ? $this->getObjets($objectDomains) : $this->getObjets();
+        } else {
+            $objets = $objectDomains->count() > 0 ? $this->getObjetsByTypes(
+                $types,
+                0,
+                ['champ' => 'obj.dateModification', 'tri' => 'DESC'],
+                $objectDomains
+            ) : $this->getObjetsByTypes($types);
+        }
 
         $ids = [];
         foreach ($objets as $one) {
