@@ -223,9 +223,6 @@ class QuestionnaireController extends Controller
         HopiQuestionnaire $questionnaire,
         Occurrence $occurrence = null
     ) {
-        // @TODO: Problème de mémoire allouée insufisante sur la prod
-        ini_set('memory_limit', '512M');
-
         $currentDomain = $this->get('hopitalnumerique_domaine.dependency_injection.current_domaine')->get();
         if (!$questionnaire->getDomaines()->contains($currentDomain)) {
             throw $this->createNotFoundException();
