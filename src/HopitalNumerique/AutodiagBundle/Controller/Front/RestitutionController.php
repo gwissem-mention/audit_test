@@ -7,15 +7,28 @@ use HopitalNumerique\AutodiagBundle\Entity\Synthesis;
 use Nodevo\MailBundle\Entity\Mail;
 use Nodevo\MailBundle\Form\Type\RecommandationType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\BinaryFileResponse;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 
+/**
+ * Class RestitutionController
+ */
 class RestitutionController extends Controller
 {
+    /**
+     * @param      $synthesis
+     * @param bool $pdf
+     * @param bool $noLayout
+     *
+     * @return RedirectResponse|Response
+     */
     public function indexAction($synthesis, $pdf = false, $noLayout = false)
     {
         $synthesis = $this->getDoctrine()->getManager()->getRepository('HopitalNumeriqueAutodiagBundle:Synthesis')
-            ->getFullyLoadedSynthesis($synthesis);
+            ->getFullyLoadedSynthesis($synthesis)
+        ;
 
         $autodiag = $synthesis->getAutodiag();
         $restitution = $this->get('autodiag.repository.restitution')->getForAutodiag($autodiag, $synthesis);
@@ -62,6 +75,13 @@ class RestitutionController extends Controller
         ]);
     }
 
+    /**
+     * @param Synthesis $synthesis
+     * @param Item      $restitutionItem
+     * @param           $type
+     *
+     * @return BinaryFileResponse|RedirectResponse
+     */
     public function exportItemAction(Synthesis $synthesis, Item $restitutionItem, $type)
     {
         if (!$this->isGranted('read', $synthesis)) {
@@ -80,6 +100,13 @@ class RestitutionController extends Controller
         );
     }
 
+    /**
+     * @param Request   $request
+     * @param Synthesis $synthesis
+     *
+     * @return RedirectResponse|Response
+     * @throws \Exception
+     */
     public function sendResultAction(Request $request, Synthesis $synthesis)
     {
         if (!$this->isGranted('read', $synthesis)) {
@@ -140,7 +167,7 @@ class RestitutionController extends Controller
      * @param \HopitalNumerique\AutodiagBundle\Entity\Synthesis $synthesis
      * @param bool                                              $signUp
      *
-     * @return \Symfony\Component\HttpFoundation\RedirectResponse
+     * @return RedirectResponse
      */
     public function signInAction(Synthesis $synthesis, $signUp = false)
     {
