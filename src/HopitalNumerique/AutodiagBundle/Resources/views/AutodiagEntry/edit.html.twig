@@ -108,9 +108,11 @@
                         <button class="next btn btn-default">
                             {{ "ad.front.navigation.next"|trans }}
                         </button>
-                        <a class="show-results btn btn-default" href="{{ path('hopitalnumerique_autodiag_restitution_index', {'synthesis': entry.synthesis.id}) }}">
-                            {{ "ad.front.navigation.results"|trans }}
-                        </a>
+                        {% if entry.synthesis.id is defined and entry.synthesis.id != '' %}
+                            <a class="show-results btn btn-default" href="{{ path('hopitalnumerique_autodiag_restitution_index', {'synthesis': entry.synthesis.id}) }}">
+                                {{ "ad.front.navigation.results"|trans }}
+                            </a>
+                        {% endif %}
                     </div>
                 </div>
             </div>
