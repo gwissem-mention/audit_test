@@ -102,7 +102,7 @@ assetic:
             filters : [ ?yui_js ]
         select2_js:
             inputs:
-                - "%kernel.root_dir%/Resources/components/select2/dist/js/select2.min.js"
+                - "%kernel.root_dir%/Resources/components/select2/dist/js/select2.js"
                 - "%kernel.root_dir%/Resources/components/select2/dist/js/i18n/fr.js"
             filters : [ ?yui_js ]
         fancybox_js:
