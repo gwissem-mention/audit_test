@@ -1,0 +1,3 @@
+hopitalnumerique_etablissement_ajax_load:
+    path: /etablissement/load/
+    defaults: { _controller: "HopitalNumeriqueEtablissementBundle:AjaxEtablissement:loadEtablissement" }

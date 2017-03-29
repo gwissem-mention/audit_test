@@ -106,6 +106,10 @@ hopital_numerique_etablissement:
     resource: "@HopitalNumeriqueEtablissementBundle/Resources/config/routing.yml"
     prefix:   /admin
 
+hopital_numerique_ajax_etablissement:
+    resource: "@HopitalNumeriqueEtablissementBundle/Resources/config/routing/etablissement.yml"
+    prefix: /
+
 hopital_numerique_admin:
     resource: "@HopitalNumeriqueAdminBundle/Resources/config/routing.yml"
     prefix:   /
