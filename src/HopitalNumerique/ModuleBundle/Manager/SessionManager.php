@@ -2,6 +2,8 @@
 
 namespace HopitalNumerique\ModuleBundle\Manager;
 
+use HopitalNumerique\ModuleBundle\Entity\Inscription;
+use HopitalNumerique\ModuleBundle\Entity\Session;
 use Nodevo\ToolsBundle\Manager\Manager as BaseManager;
 use Doctrine\ORM\EntityManager;
 use HopitalNumerique\QuestionnaireBundle\Manager\ReponseManager;
@@ -53,10 +55,9 @@ class SessionManager extends BaseManager
     /**
      * Override : Récupère les données pour le grid sous forme de tableau.
      *
-     * @return array
+     * @param \StdClass|null $condition
      *
-     * @author Gaetan MELCHILSEN
-     * @copyright Nodevo
+     * @return array
      */
     public function getDatasForGrid(\StdClass $condition = null)
     {
@@ -64,17 +65,24 @@ class SessionManager extends BaseManager
 
         $result = [];
 
+        /**
+         * @var         $key
+         * @var Session $session
+         */
         foreach ($sessions as $key => $session) {
             $nbInscritsAccepte = 0;
             $nbInscritsEnAttente = 0;
             $nbPlacesRestantes = $session->getNombrePlaceDisponible();
 
+            /** @var Inscription $inscription */
             foreach ($session->getInscriptions() as $inscription) {
-                if ($inscription->getEtatInscription()->getId() === 406) {
-                    $nbInscritsEnAttente++;
-                } elseif ($inscription->getEtatInscription()->getId() === 407) {
-                    ++$nbInscritsAccepte;
-                    --$nbPlacesRestantes;
+                if (!is_null($inscription->getEtatInscription())) {
+                    if ($inscription->getEtatInscription()->getId() === 406) {
+                        $nbInscritsEnAttente++;
+                    } elseif ($inscription->getEtatInscription()->getId() === 407) {
+                        ++$nbInscritsAccepte;
+                        --$nbPlacesRestantes;
+                    }
                 }
             }
 
