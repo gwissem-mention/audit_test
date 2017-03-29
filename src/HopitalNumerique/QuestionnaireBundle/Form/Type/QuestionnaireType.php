@@ -16,6 +16,10 @@ use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\Extension\Core\Type\RadioType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\Form\FormEvent;
+use Symfony\Component\Form\FormEvents;
+use Symfony\Component\Form\FormInterface;
+use Symfony\Component\Form\FormView;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 use Doctrine\ORM\EntityRepository;
 use HopitalNumerique\QuestionnaireBundle\Manager\OccurrenceManager;
@@ -506,13 +510,6 @@ class QuestionnaireType extends AbstractType
                     }
 
                     $objetIdsSelectionnees = [];
-                    $reponses              = $this->_managerReponse->reponsesByQuestionnaireByUser(
-                        $questionnaire->getId(),
-                        $interventionDemande->getReferent()->getId(),
-                        true,
-                        null,
-                        $interventionDemande->getId()
-                    );
                     $reponse               = $this->_managerReponse->findOneBy(
                         [
                             'question' => $question,
@@ -613,59 +610,134 @@ class QuestionnaireType extends AbstractType
                     );
                     break;
                 case 'etablissement':
-                    $builder->add(
-                        $question->getTypeQuestion()->getLibelle()
-                        . '_'
-                        . $question->getId()
-                        . '_'
-                        . $question->getAlias(),
-                        'genemu_jqueryselect2_entity',
-                        [
-                            'class'         => 'HopitalNumeriqueEtablissementBundle:Etablissement',
-                            'property'      => 'appellation',
-                            'required'      => $question->getObligatoire(),
-                            'label'         => $question->getLibelle(),
-                            'mapped'        => false,
-                            'read_only'     => $this->_readOnly,
-                            'disabled'      => $this->_readOnly,
-                            'empty_value'   => ' - ',
-                            'attr'          => $attr,
-                            'query_builder' => function (EntityRepository $er) {
-                                return $er->createQueryBuilder('eta')->orderBy('eta.nom', 'ASC');
-                            },
-                            'data'          => is_null($reponseCourante) ? null : $reponseCourante->getEtablissement(),
-                        ]
+                    $etablissementFormModifier = function (
+                        FormInterface $form,
+                        $full = false
+                    ) use (
+                        $question,
+                        $attr,
+                        $reponseCourante
+                    ) {
+                        $etabAttr = ['class' => 'ajax-select2-list', 'data-url' => '/etablissement/load/'];
+                        $fieldOptions = [
+                            'class'       => 'HopitalNumeriqueEtablissementBundle:Etablissement',
+                            'property'    => 'appellation',
+                            'required'    => $question->getObligatoire(),
+                            'label'       => $question->getLibelle(),
+                            'mapped'      => false,
+                            'read_only'   => $this->_readOnly,
+                            'disabled'    => $this->_readOnly,
+                            'empty_value' => ' - ',
+                            'attr'        => array_merge($attr, $etabAttr),
+                            'data' => is_null($reponseCourante) ? null : $reponseCourante->getEtablissement(),
+                        ];
+
+                        if ($full) {
+                            $fieldOptions = array_merge(
+                                $fieldOptions,
+                                [
+                                   'query_builder' => function (EntityRepository $er) {
+                                        return $er->createQueryBuilder('eta')->orderBy('eta.nom', 'ASC');
+                                   },
+                                ]
+                            );
+                        } else {
+                            $fieldOptions['choices'] = is_null($reponseCourante) ? []
+                                : [$reponseCourante->getEtablissement()]
+                            ;
+                        }
+
+                        $form->add(
+                            $question->getTypeQuestion()->getLibelle()
+                            . '_'
+                            . $question->getId()
+                            . '_'
+                            . $question->getAlias(),
+                            EntityType::class,
+                            $fieldOptions
+                        );
+                    };
+
+                    $builder->addEventListener(
+                        FormEvents::PRE_SET_DATA,
+                        function (FormEvent $event) use ($etablissementFormModifier) {
+                            $etablissementFormModifier($event->getForm());
+                        }
                     );
+
+                    $builder->addEventListener(
+                        FormEvents::PRE_SUBMIT,
+                        function (FormEvent $event) use ($etablissementFormModifier) {
+                            $etablissementFormModifier($event->getForm(), true);
+                        }
+                    );
+
                     break;
                 // Les entity ne sont prévues que pour des entités de Référence
                 // (TODO : mettre en base la class et le property ?)
                 case 'etablissementmultiple':
-                    $attr['class'] = 'select2-multiple-entity';
+                    $etablissementMultipleFormModifier = function (
+                        FormInterface $form,
+                        $full = false
+                    ) use (
+                        $question,
+                        $attr,
+                        $reponseCourante
+                    ) {
+                        $etabAttr = ['class' => 'ajax-select2-list', 'data-url' => '/etablissement/load/'];
+                        $fieldOptions = [
+                            'class'       => 'HopitalNumeriqueEtablissementBundle:Etablissement',
+                            'choice_label'    => 'appellation',
+                            'required'    => $question->getObligatoire(),
+                            'label'       => $question->getLibelle(),
+                            'mapped'      => false,
+                            'multiple'    => true,
+                            'read_only'   => $this->_readOnly,
+                            'disabled'    => $this->_readOnly,
+                            'empty_value' => ' - ',
+                            'attr'        => array_merge($attr, $etabAttr),
+                            'data' => is_null($reponseCourante) ? null : $reponseCourante->getEtablissementMulitple(),
+                        ];
 
-                    $builder->add(
-                        $question->getTypeQuestion()->getLibelle()
-                        . '_'
-                        . $question->getId()
-                        . '_'
-                        . $question->getAlias(),
-                        'genemu_jqueryselect2_entity',
-                        [
-                            'class'         => 'HopitalNumeriqueEtablissementBundle:Etablissement',
-                            'property'      => 'appellation',
-                            'required'      => $question->getObligatoire(),
-                            'label'         => $question->getLibelle(),
-                            'mapped'        => false,
-                            'multiple'      => true,
-                            'read_only'     => $this->_readOnly,
-                            'disabled'      => $this->_readOnly,
-                            'empty_value'   => ' - ',
-                            'attr'          => $attr,
-                            'query_builder' => function (EntityRepository $er) {
-                                return $er->createQueryBuilder('eta')->orderBy('eta.nom', 'ASC');
-                            },
-                            'data'          => is_null($reponseCourante) ? null
-                                : $reponseCourante->getEtablissementMulitple(),
-                        ]
+                        if ($full) {
+                            $fieldOptions = array_merge(
+                                $fieldOptions,
+                                [
+                                    'query_builder' => function (EntityRepository $er) {
+                                        return $er->createQueryBuilder('eta')->orderBy('eta.nom', 'ASC');
+                                    },
+                                ]
+                            );
+                        } else {
+                            $fieldOptions['choices'] = is_null($reponseCourante)
+                                ? []
+                                : $reponseCourante->getEtablissementMulitple()
+                            ;
+                        }
+
+                        $form->add(
+                            $question->getTypeQuestion()->getLibelle()
+                            . '_'
+                            . $question->getId()
+                            . '_'
+                            . $question->getAlias(),
+                            EntityType::class,
+                            $fieldOptions
+                        );
+                    };
+
+                    $builder->addEventListener(
+                        FormEvents::PRE_SET_DATA,
+                        function (FormEvent $event) use ($etablissementMultipleFormModifier) {
+                            $etablissementMultipleFormModifier($event->getForm());
+                        }
+                    );
+
+                    $builder->addEventListener(
+                        FormEvents::PRE_SUBMIT,
+                        function (FormEvent $event) use ($etablissementMultipleFormModifier) {
+                            $etablissementMultipleFormModifier($event->getForm(), true);
+                        }
                     );
                     break;
                 case 'commentaire':
@@ -709,6 +781,28 @@ class QuestionnaireType extends AbstractType
                     break;
             }
         }
+    }
+
+    /**
+     * @param FormView      $view
+     * @param FormInterface $form
+     * @param array         $options
+     */
+    public function buildView(FormView $view, FormInterface $form, array $options)
+    {
+        parent::buildView($view, $form, $options);
+
+        $questions = $form->getData()->getQuestions();
+        $order = [];
+
+        /** @var Question $question */
+        foreach ($questions as $question) {
+            $order[$question->getOrdre()] =
+                $question->getTypeQuestion()->getLibelle() . '_' . $question->getId() . '_' . $question->getAlias()
+            ;
+        }
+
+        $view->vars['order'] = $order;
     }
 
     /**

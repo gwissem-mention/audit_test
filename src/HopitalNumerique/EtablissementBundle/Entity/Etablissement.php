@@ -4,7 +4,8 @@ namespace HopitalNumerique\EtablissementBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use APY\DataGridBundle\Grid\Mapping as GRID;
-//Asserts Stuff
+use HopitalNumerique\ReferenceBundle\Entity\Reference;
+use HopitalNumerique\UserBundle\Entity\User;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Nodevo\ToolsBundle\Validator\Constraints as Nodevo;
@@ -135,11 +136,11 @@ class Etablissement
     /**
      * Set usersRattachement.
      *
-     * @param \HopitalNumerique\UserBundle\Entity\User $usersRattachement
+     * @param User $usersRattachement
      *
      * @return Etablissement
      */
-    public function setUsersRattachement(\HopitalNumerique\UserBundle\Entity\User $usersRattachement = null)
+    public function setUsersRattachement(User $usersRattachement = null)
     {
         $this->usersRattachement = $usersRattachement;
 
@@ -149,7 +150,7 @@ class Etablissement
     /**
      * Get usersRattachement.
      *
-     * @return \HopitalNumerique\UserBundle\Entity\User
+     * @return User
      */
     public function getUsersRattachement()
     {
@@ -228,7 +229,7 @@ class Etablissement
     /**
      * Get typeOrganisme.
      *
-     * @return \HopitalNumerique\ReferenceBundle\Entity\Reference $typeOrganisme
+     * @return Reference $typeOrganisme
      */
     public function getTypeOrganisme()
     {
@@ -238,9 +239,9 @@ class Etablissement
     /**
      * Set typeOrganisme.
      *
-     * @param \HopitalNumerique\ReferenceBundle\Entity\Reference $typeOrganisme
+     * @param Reference $typeOrganisme
      */
-    public function setTypeOrganisme(\HopitalNumerique\ReferenceBundle\Entity\Reference $typeOrganisme)
+    public function setTypeOrganisme(Reference $typeOrganisme)
     {
         $this->typeOrganisme = $typeOrganisme;
     }
@@ -248,7 +249,7 @@ class Etablissement
     /**
      * Get region.
      *
-     * @return \HopitalNumerique\ReferenceBundle\Entity\Reference $region
+     * @return Reference $region
      */
     public function getRegion()
     {
@@ -258,9 +259,9 @@ class Etablissement
     /**
      * Set region.
      *
-     * @param \HopitalNumerique\ReferenceBundle\Entity\Reference $region
+     * @param Reference $region
      */
-    public function setRegion(\HopitalNumerique\ReferenceBundle\Entity\Reference $region)
+    public function setRegion(Reference $region)
     {
         $this->region = $region;
     }
@@ -268,7 +269,7 @@ class Etablissement
     /**
      * Get departement.
      *
-     * @return \HopitalNumerique\ReferenceBundle\Entity\Reference $departement
+     * @return Reference $departement
      */
     public function getDepartement()
     {
@@ -278,9 +279,9 @@ class Etablissement
     /**
      * Set departement.
      *
-     * @param \HopitalNumerique\ReferenceBundle\Entity\Reference $departement
+     * @param Reference $departement
      */
-    public function setDepartement(\HopitalNumerique\ReferenceBundle\Entity\Reference $departement)
+    public function setDepartement(Reference $departement)
     {
         $this->departement = $departement;
     }
@@ -364,17 +365,17 @@ class Etablissement
      */
     public function getAppellation()
     {
-        return $this->nom . ' - ' . $this->finess;
+            return $this->nom . ' - ' . $this->finess . ' - ' . $this->ville;
     }
 
     /**
      * Add usersRattachement.
      *
-     * @param \HopitalNumerique\UserBundle\Entity\User $usersRattachement
+     * @param User $usersRattachement
      *
      * @return Etablissement
      */
-    public function addUsersRattachement(\HopitalNumerique\UserBundle\Entity\User $usersRattachement)
+    public function addUsersRattachement(User $usersRattachement)
     {
         $this->usersRattachement[] = $usersRattachement;
 
@@ -384,9 +385,9 @@ class Etablissement
     /**
      * Remove usersRattachement.
      *
-     * @param \HopitalNumerique\UserBundle\Entity\User $usersRattachement
+     * @param User $usersRattachement
      */
-    public function removeUsersRattachement(\HopitalNumerique\UserBundle\Entity\User $usersRattachement)
+    public function removeUsersRattachement(User $usersRattachement)
     {
         $this->usersRattachement->removeElement($usersRattachement);
     }
