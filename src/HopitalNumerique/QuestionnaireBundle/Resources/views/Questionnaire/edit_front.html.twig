@@ -22,7 +22,7 @@
     {% if not informationsManquantes.ok %}
         <div class="informations_manquantes col-md-12">
             {% for key,informationManquante in informationsManquantes %}
-                {# Affichage de la 'légende' #}         
+                {# Affichage de la 'légende' #}
                 {% if 'ok' == key %}
                     <span class="legende rose">
                         <strong>Certaines données sont nécessaires pour l'étude de votre candidature, veuillez renseigner les <a href="{{path('hopital_numerique_user_informations_personnelles')}}">données personnelles</a> suivantes :</strong>
@@ -51,6 +51,9 @@
             {% if form.occurrence is defined %}
                 {{ form_widget(form.occurrence) }}
             {% endif %}
+            {% for item in form.vars.order %}
+                {{form_row(form[item])}}
+            {% endfor %}
         {{ form_end(form) }}
     {% endif %}
 

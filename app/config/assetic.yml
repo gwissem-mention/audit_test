@@ -102,8 +102,8 @@ assetic:
             filters : [ ?yui_js ]
         select2_js:
             inputs:
-                - "%kernel.root_dir%/Resources/components/select2/select2.min.js"
-                - "%kernel.root_dir%/Resources/components/select2/select2_locale_fr.js"
+                - "%kernel.root_dir%/Resources/components/select2/dist/js/select2.min.js"
+                - "%kernel.root_dir%/Resources/components/select2/dist/js/i18n/fr.js"
             filters : [ ?yui_js ]
         fancybox_js:
             inputs:
@@ -198,8 +198,7 @@ assetic:
                 - "bundles/nodevotools/fonts/font-awesome/css/font-awesome.min.css"
         select2_css:
             inputs:
-                - "%kernel.root_dir%/Resources/components/select2/select2.css"
-                - "%kernel.root_dir%/Resources/components/select2/select2-bootstrap.css"
+                - "%kernel.root_dir%/Resources/components/select2/dist/css/select2.css"
             filters: [ cssembed, ?yui_css ]
         bootstrap_css:
             inputs:
