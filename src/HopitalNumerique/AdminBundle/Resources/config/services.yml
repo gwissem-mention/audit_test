@@ -5,3 +5,10 @@ services:
             - "@hn.paiement.repository.facture"
             - "@hn.module.repository.inscription"
             - "@hn.intervention.repository.demande"
+
+    hn.admin.cdp_grid_block:
+        class: HopitalNumerique\AdminBundle\Service\CDPGridBlock
+        arguments:
+            - '@hopitalnumerique_user.repository.user'
+            - '@hopitalnumerique_communautepratique.repository.commentaire'
+            - '@hopitalnumerique_communautepratique.repository.fiche'

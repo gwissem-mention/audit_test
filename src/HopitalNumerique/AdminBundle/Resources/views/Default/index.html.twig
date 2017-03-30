@@ -274,6 +274,26 @@
                         </div>
                     </li>
 
+                    <li data-row="{{userConf['cdp']['row']}}" data-col="{{userConf['cdp']['col']}}" data-sizex="1" data-sizey="1" data-id="paiements" >
+                        <div class="panel panel-midnightblue">
+                            <div class="panel-heading">
+                                <h3 class="panel-title"><i class="fa fa-credit-card"></i>CDP</h3>
+                                <div class="options">
+                                    <i class="fa fa-arrows"></i>
+                                </div>
+                            </div>
+
+                            <div class="panel-body">
+                                <ol>
+                                    <li><b>{{ blockCDP['members']|number_format(0, ',', ' ') }}</b> membres dans le communauté</li>
+                                    <li><b>{{ blockCDP['GTMembers']|number_format(0, ',', ' ') }}</b> membres dans les GT</li>
+                                    <li><b>{{ blockCDP['pendingRecords']|number_format(0, ',', ' ') }}</b> fiches de problématiques en cours</li>
+                                    <li><b>{{ blockCDP['comments']|number_format(0, ',', ' ') }}</b> commentaires ces 30 derniers jours</li>
+                                </ol>
+                            </div>
+                        </div>
+                    </li>
+
                     {% for name,datas in blocForum %}
                         <li data-row="{{userConf[ name ]['row']}}" data-col="{{userConf[ name ]['col']}}" data-sizex="1" data-sizey="1" data-id="{{ name }}" >
                             <div class="panel panel-midnightblue">
