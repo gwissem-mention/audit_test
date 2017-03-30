@@ -90,7 +90,7 @@
                                 <div class="form-group">
                                     {{ form_label(form.domaines) }}
                                     <div class="col-md-5">
-                                        {{ form_widget(form.domaines) }}
+                                        {{ form_widget(form.domaines, {'attr': {'class': 'select2'}}) }}
                                         {{ form_errors(form.domaines) }}
                                     </div>
                                 </div>

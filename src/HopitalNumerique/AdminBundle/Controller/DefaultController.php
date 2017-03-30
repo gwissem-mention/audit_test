@@ -114,6 +114,8 @@ class DefaultController extends Controller
             }
         }
 
+        $blocCDP = $this->get('hn.admin.cdp_grid_block')->getBlockDatas();
+
         return $this->render('HopitalNumeriqueAdminBundle:Default:index.html.twig', [
             'anneeEnCours' => $anneeEnCours,
             'userConf' => $userConf,
@@ -123,6 +125,7 @@ class DefaultController extends Controller
             'blocInterventions' => $blocInterventions,
             'blocSessions' => $blocSessions,
             'blocPaiements' => $blocPaiements,
+            'blockCDP' => $blocCDP,
         ]);
     }
 
@@ -440,6 +443,7 @@ class DefaultController extends Controller
         $datas['inscriptions'] = ['row' => 4, 'col' => 1];
         $datas['sessions'] = ['row' => 4, 'col' => 2];
         $datas['paiements'] = ['row' => 4, 'col' => 3];
+        $datas['cdp'] = ['row' => 5, 'col' => 3];
 
         //Forum blocs
         $forums = $this->get('ccdn_forum_forum.model.forum')->findAllForums();

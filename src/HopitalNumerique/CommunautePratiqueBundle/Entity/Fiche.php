@@ -9,7 +9,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
 /**
  * Entité Fiche.
  *
- * @ORM\Entity()
+ * @ORM\Entity(repositoryClass="HopitalNumerique\CommunautePratiqueBundle\Repository\FicheRepository")
  * @ORM\Table(name="hn_communautepratique_fiche")
  */
 class Fiche

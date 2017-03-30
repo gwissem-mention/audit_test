@@ -22,4 +22,14 @@ class CommentaireRepository extends \Doctrine\ORM\EntityRepository
 
         return $query;
     }
+
+    public function getLatestCommentsCount()
+    {
+        return $this->createQueryBuilder('c')
+            ->select('COUNT(c.id)')
+            ->andWhere('c.dateCreation >= :date')->setParameter('date', (new \DateTime())->sub(new \DateInterval('P30D')))
+
+            ->getQuery()->getSingleScalarResult()
+        ;
+    }
 }

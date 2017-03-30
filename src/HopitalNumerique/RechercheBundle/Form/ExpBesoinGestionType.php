@@ -2,33 +2,50 @@
 
 namespace HopitalNumerique\RechercheBundle\Form;
 
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
-use Symfony\Component\OptionsResolver\OptionsResolverInterface;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 use HopitalNumerique\UserBundle\Manager\UserManager;
 use Doctrine\ORM\EntityRepository;
 
+/**
+ * Class ExpBesoinGestionType
+ */
 class ExpBesoinGestionType extends AbstractType
 {
-    private $_userManager;
+    private $userManager;
+    private $constraints;
 
+    /**
+     * ExpBesoinGestionType constructor.
+     *
+     * @param             $manager
+     * @param             $validator
+     * @param UserManager $userManager
+     */
     public function __construct($manager, $validator, UserManager $userManager)
     {
-        $this->_constraints = $manager->getConstraints($validator);
-        $this->_userManager = $userManager;
+        $this->constraints = $manager->getConstraints($validator);
+        $this->userManager  = $userManager;
     }
 
+    /**
+     * @param FormBuilderInterface $builder
+     * @param array                $options
+     */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $connectedUser = $this->_userManager->getUserConnected();
+        $connectedUser = $this->userManager->getUserConnected();
 
         $builder
-            ->add('nom', 'text', [
+            ->add('nom', TextType::class, [
                 'max_length' => 255,
                 'required' => true,
                 'label' => 'Nom de la recherche aidée',
             ])
-            ->add('domaines', 'entity', [
+            ->add('domaines', EntityType::class, [
                 'class' => 'HopitalNumeriqueDomaineBundle:Domaine',
                 'property' => 'nom',
                 'required' => false,
@@ -42,13 +59,19 @@ class ExpBesoinGestionType extends AbstractType
           ;
     }
 
-    public function setDefaultOptions(OptionsResolverInterface $resolver)
+    /**
+     * @param OptionsResolver $resolver
+     */
+    public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
             'data_class' => 'HopitalNumerique\RechercheBundle\Entity\ExpBesoinGestion',
         ]);
     }
 
+    /**
+     * @return string
+     */
     public function getName()
     {
         return 'hopitalnumerique_recherche_expbesoingestion';

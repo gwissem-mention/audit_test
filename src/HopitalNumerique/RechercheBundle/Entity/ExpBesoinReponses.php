@@ -133,7 +133,7 @@ class ExpBesoinReponses
     /**
      * Get question.
      *
-     * @return \HopitalNumerique\RechercheBundle\Entity\ExpBesoin $question
+     * @return ExpBesoin $question
      */
     public function getQuestion()
     {
@@ -143,11 +143,17 @@ class ExpBesoinReponses
     /**
      * Set question.
      *
-     * @param \HopitalNumerique\RechercheBundle\Entity\ExpBesoin $question
+     * @param $expBesoin
+     *
+     * @internal param ExpBesoin $question
      */
-    public function setQuestion(\HopitalNumerique\RechercheBundle\Entity\ExpBesoin $expBesoin)
+    public function setQuestion($expBesoin)
     {
-        $this->question = $expBesoin;
+        if ($expBesoin instanceof ExpBesoin) {
+            $this->question = $expBesoin;
+        } else {
+            $this->question = null;
+        }
     }
 
     /**
@@ -177,7 +183,7 @@ class ExpBesoinReponses
     /**
      * Get redirigeQuestion.
      *
-     * @return \HopitalNumerique\RechercheBundle\Entity\ExpBesoin $question
+     * @return ExpBesoin $question
      */
     public function getRedirigeQuestion()
     {
@@ -187,9 +193,9 @@ class ExpBesoinReponses
     /**
      * Set redirigeQuestion.
      *
-     * @param \HopitalNumerique\RechercheBundle\Entity\ExpBesoin $question
+     * @param ExpBesoin $question
      */
-    public function setRedirigeQuestion(\HopitalNumerique\RechercheBundle\Entity\ExpBesoin $expBesoin)
+    public function setRedirigeQuestion(ExpBesoin $expBesoin)
     {
         $this->redirigeQuestion = $expBesoin;
     }

@@ -3,17 +3,28 @@
 namespace HopitalNumerique\RechercheBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use HopitalNumerique\RechercheBundle\Entity\ExpBesoin;
-use HopitalNumerique\RechercheBundle\Entity\ExpBesoinGestion;
 use HopitalNumerique\RechercheBundle\Entity\ExpBesoinReponses;
 
+/**
+ * Class ExpBesoinReponseController
+ */
 class ExpBesoinReponseController extends Controller
 {
+    /**
+     * @param ExpBesoin $expBesoin
+     *
+     * @return Response
+     */
     public function indexAction(ExpBesoin $expBesoin)
     {
-        $expBesoins = $this->get('hopitalnumerique_recherche.manager.expbesoin')->findBy(['expBesoinGestion' => $expBesoin->getExpBesoinGestion()], ['order' => 'ASC']);
+        $expBesoins = $this->get('hopitalnumerique_recherche.manager.expbesoin')->findBy(
+            ['expBesoinGestion' => $expBesoin->getExpBesoinGestion()],
+            ['order' => 'ASC']
+        );
 
         return $this->render('HopitalNumeriqueRechercheBundle:ExpBesoinReponse:index.html.twig', [
                 'expBesoinAll' => $expBesoins,
@@ -21,11 +32,21 @@ class ExpBesoinReponseController extends Controller
             ]);
     }
 
+    /**
+     * @param Request   $request
+     * @param ExpBesoin $expBesoin
+     *
+     * @return Response
+     */
     public function addAction(Request $request, ExpBesoin $expBesoin)
     {
-        $expBesoins = $this->get('hopitalnumerique_recherche.manager.expbesoin')->findBy(['expBesoinGestion' => $expBesoin->getExpBesoinGestion()], ['order' => 'ASC']);
+        $expBesoins = $this->get('hopitalnumerique_recherche.manager.expbesoin')->findBy(
+            ['expBesoinGestion' => $expBesoin->getExpBesoinGestion()],
+            ['order' => 'ASC']
+        );
 
         //créer un question
+        /** @var ExpBesoinReponses $reponse */
         $reponse = $this->get('hopitalnumerique_recherche.manager.expbesoinreponses')->createEmpty();
 
         $libelle = $request->request->get('libelle');
@@ -36,7 +57,9 @@ class ExpBesoinReponseController extends Controller
         //Calcul de l'ordre
         $order = $this->get('hopitalnumerique_recherche.manager.expbesoinreponses')->countReponses($question) + 1;
         $question = $this->get('hopitalnumerique_recherche.manager.expbesoin')->findOneBy(['id' => $question]);
-        $redirigeQuestion = $this->get('hopitalnumerique_recherche.manager.expbesoin')->findOneBy(['id' => $redirigeQuestion]);
+        $redirigeQuestion = $this->get('hopitalnumerique_recherche.manager.expbesoin')->findOneBy(
+            ['id' => $redirigeQuestion]
+        );
 
         $reponse->setOrder($order);
         $reponse->setLibelle($libelle);
@@ -49,25 +72,18 @@ class ExpBesoinReponseController extends Controller
         //save
         $this->get('hopitalnumerique_recherche.manager.expbesoinreponses')->save($reponse);
 
-        $notes = [];
-
-        foreach ($question->getReponses() as $reponseQuestion) {
-            //get ponderations
-            $refsPonderees = $this->container->get('hopitalnumerique_reference.manager.reference')->getReferencesPonderees();
-            $note = is_null($reponseQuestion->getReferences()) ? 0 : $this->container->get('hopitalnumerique_objet.manager.objet')->getNoteReferencement($reponseQuestion->getReferences(), $refsPonderees);
-
-            $notes[$reponseQuestion->getId()] = $note;
-        }
-
-        //return new Response('{"success":true}', 200;
         return $this->render('HopitalNumeriqueRechercheBundle:ExpBesoinReponse:add.html.twig', [
             'reponse' => $reponse,
             'expBesoin' => $question,
             'expBesoinAll' => $expBesoins,
-            'notes' => $notes,
         ]);
     }
 
+    /**
+     * @param Request $request
+     *
+     * @return Response
+     */
     public function editAction(Request $request)
     {
         //Récupération des données envoyées par la requete AJAX
@@ -75,6 +91,8 @@ class ExpBesoinReponseController extends Controller
         $isAutreQuestion = $request->request->get('isAutreQuestion') == 'true' ? true : false;
         //Modification de la réponse
         $reponse = $this->get('hopitalnumerique_recherche.manager.expbesoinreponses')->findOneBy(['id' => $idReponse]);
+
+        $questionId = $reponse->getQuestion()->getId();
 
         if ($isAutreQuestion) {
             //Set la question
@@ -89,14 +107,16 @@ class ExpBesoinReponseController extends Controller
         //save
         $this->get('hopitalnumerique_recherche.manager.expbesoinreponses')->save($reponse);
 
-        return new Response('{"success":true}', 200);
+        return new Response('{"success":true, "questionId: '. $questionId . '}', 200);
     }
 
     /**
      * Édite la réponse (appel AJAX).
      *
-     * @param \Symfony\Component\HttpFoundation\Request                  $request          Request
-     * @param \HopitalNumerique\RechercheBundle\Entity\ExpBesoinReponses $expBesoinReponse Réponse
+     * @param Request           $request          Request
+     * @param ExpBesoinReponses $expBesoinReponse Réponse
+     *
+     * @return RedirectResponse|Response
      */
     public function ajaxEditAction(Request $request, ExpBesoinReponses $expBesoinReponse)
     {
@@ -115,7 +135,10 @@ class ExpBesoinReponseController extends Controller
                 $this->addFlash('success', 'Image enregistrée.');
             }
 
-            return $this->redirectToRoute('hopital_numerique_expbesoin_index', ['id' => $expBesoinReponse->getQuestion()->getExpBesoinGestion()->getId()]);
+            return $this->redirectToRoute(
+                'hopital_numerique_expbesoin_index',
+                ['id' => $expBesoinReponse->getQuestion()->getExpBesoinGestion()->getId()]
+            );
         }
 
         return $this->render('HopitalNumeriqueRechercheBundle:ExpBesoinReponse:ajaxEdit.html.twig', [
@@ -126,33 +149,52 @@ class ExpBesoinReponseController extends Controller
 
     /**
      * Edit libellé d'une réponse.
+     *
+     * @param Request $request
+     *
+     * @return Response
      */
     public function editLibelleAction(Request $request)
     {
         $idReponse = $request->request->get('id');
+
         //créer un question
+
+        /** @var ExpBesoinReponses $reponse */
         $reponse = $this->get('hopitalnumerique_recherche.manager.expbesoinreponses')->findOneBy(['id' => $idReponse]);
 
-        $reponse->setLibelle(trim($request->request->get('titre')) ?: 'Réponse ' . $order);
+        $questionId = $reponse->getQuestion()->getId();
+
+        $reponse->setLibelle(trim($request->request->get('titre')) ?: 'Réponse ' . $reponse->getOrder());
 
         //save
         $this->get('hopitalnumerique_recherche.manager.expbesoinreponses')->save($reponse);
 
-        return new Response('{"success":true}', 200);
+        return new Response('{"success":true, "questionId": '. $questionId . '}', 200);
     }
 
+    /**
+     * @param Request $request
+     *
+     * @return Response
+     */
     public function deleteAction(Request $request)
     {
         //Récupération des données envoyées par la requete AJAX
         $idReponse = $request->request->get('id');
         $reponse = $this->get('hopitalnumerique_recherche.manager.expbesoinreponses')->findOneBy(['id' => $idReponse]);
 
+        $questionId = $reponse->getQuestion()->getId();
+
         //save
         $this->get('hopitalnumerique_recherche.manager.expbesoinreponses')->delete($reponse);
 
-        return new Response('{"success":true}', 200);
+        return new Response('{"success":true, "questionId": '. $questionId . '}', 200);
     }
 
+    /**
+     * @return Response
+     */
     public function reorderAction()
     {
         //get datas serialzed

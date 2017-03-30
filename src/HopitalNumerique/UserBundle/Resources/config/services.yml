@@ -194,3 +194,9 @@ services:
             - "@hopitalnumerique_objet.repository.commentaire"
             - "@hopitalnumerique_objet.repository.note"
             - "@ccdn_forum_forum.repository.post"
+
+    hopitalnumerique_user.repository.user:
+            class: HopitalNumerique\UserBundle\Repository\UserRepository
+            factory: ["@doctrine.orm.entity_manager", "getRepository"]
+            arguments:
+                - 'HopitalNumerique\UserBundle\Entity\User'
