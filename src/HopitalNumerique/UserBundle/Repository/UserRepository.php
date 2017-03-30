@@ -3,6 +3,7 @@
 namespace HopitalNumerique\UserBundle\Repository;
 
 use Doctrine\ORM\EntityRepository;
+use HopitalNumerique\CommunautePratiqueBundle\Entity\Inscription;
 use Nodevo\RoleBundle\Entity\Role;
 use HopitalNumerique\ReferenceBundle\Entity\Reference;
 use HopitalNumerique\UserBundle\Entity\User;
@@ -766,5 +767,26 @@ class UserRepository extends EntityRepository
         ;
 
         return $query->getQuery()->getSingleScalarResult();
+    }
+
+    public function countCDPUsers()
+    {
+        return $this->createQueryBuilder('u')
+            ->select('COUNT(u.id)')
+
+            ->andWhere('u.inscritCommunautePratique = TRUE')
+
+            ->getQuery()->getSingleScalarResult()
+        ;
+    }
+
+    public function countUsersInCDP()
+    {
+        return $this->_em->createQueryBuilder()
+            ->select('COUNT(DISTINCT i.user)')
+            ->from(Inscription::class, 'i')
+
+            ->getQuery()->getSingleScalarResult()
+        ;
     }
 }

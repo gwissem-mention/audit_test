@@ -39,3 +39,9 @@ services:
         factory: ["@doctrine.orm.entity_manager", "getRepository"]
         arguments:
             - 'HopitalNumerique\CommunautePratiqueBundle\Entity\Commentaire'
+
+    hopitalnumerique_communautepratique.repository.fiche:
+        class: HopitalNumerique\CommunautePratiqueBundle\Repository\FicheRepository
+        factory: ["@doctrine.orm.entity_manager", "getRepository"]
+        arguments:
+            - 'HopitalNumerique\CommunautePratiqueBundle\Entity\Fiche'
