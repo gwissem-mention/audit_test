@@ -127,9 +127,24 @@ class ReferencementController extends Controller
             $entitiesPropertiesByGroup = $reader->getEntitiesPropertiesByReferenceIdsByGroup($groupedReferenceIds, $entityTypeIds, $publicationCategoryIds, $resultFilters);
         }
 
+        $rolesAllowedToAccessFrontReferencement = [
+            'ROLE_ADMINISTRATEUR_1',
+            'ROLE_ADMINISTRATEUR_DE_DOMAINE_106',
+            'ROLE_ADMINISTRATEUR_DU_DOMAINE_HN_107',
+        ];
+
+        $showCog = false;
+
+        if ($this->getUser() instanceof User) {
+            if (in_array($this->getUser()->getRole(), $rolesAllowedToAccessFrontReferencement)) {
+                $showCog = true;
+            }
+        }
+
         return new JsonResponse([
             'results' => $entitiesPropertiesByGroup,
             'foundWords' => $foundWords,
+            'showCog' => $showCog,
         ]);
     }
 
