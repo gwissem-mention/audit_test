@@ -5,6 +5,7 @@ namespace HopitalNumerique\ModuleBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 //Asserts Stuff
 use APY\DataGridBundle\Grid\Mapping as GRID;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * Inscription.
@@ -43,6 +44,7 @@ class Inscription
      * @ORM\OrderBy({"nom" = "ASC", "prenom" = "ASC"})
      *
      * @GRID\Column(field="user.nom")
+     * @Assert\NotBlank(message="L'utilisateur ne peut pas être vide.")
      */
     protected $user;
 
@@ -79,6 +81,7 @@ class Inscription
      * @ORM\JoinColumn(name="ref_etat_inscription", referencedColumnName="ref_id")
      *
      * @GRID\Column(field="etatInscription.libelle")
+     * @Assert\NotBlank(message="L'état d'inscription doit être renseigné.")
      */
     protected $etatInscription;
 
@@ -87,6 +90,7 @@ class Inscription
      * @ORM\JoinColumn(name="ref_etat_participation", referencedColumnName="ref_id")
      *
      * @GRID\Column(field="etatParticipation.libelle")
+     * @Assert\NotBlank(message="L'état de participation doit être renseigné.")
      */
     protected $etatParticipation;
 

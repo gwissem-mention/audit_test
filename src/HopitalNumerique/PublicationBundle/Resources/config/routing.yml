@@ -48,10 +48,10 @@ hopital_numerique_publication_actualite:
         page: \d+
 
 hopital_numerique_publication_actualite_ambassadeur:
-    pattern:  /Ambassadeur-actualites/{page}
+    pattern:  /Ambassadeur-actualites
     defaults: { _controller: "HopitalNumeriquePublicationBundle:Actualite:ambassadeur", page:1 }
-    requirements:
-        page: \d+
+#    requirements:
+#        page: \d+
 
 hopital_numerique_publication_actualite_categorie:
     pattern:  /actualites/{id}-{libelle}/{page}
