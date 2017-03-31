@@ -288,7 +288,7 @@ class QuestionnaireType extends AbstractType
                         $question->getTypeQuestion()->getLibelle(),
                         [
                             'class'         => 'HopitalNumeriqueReferenceBundle:Reference',
-                            'property'      => 'libelle',
+                            'choice_label'  => 'libelle',
                             'required'      => $question->getObligatoire(),
                             'label'         => $question->getLibelle(),
                             'mapped'        => false,
@@ -326,7 +326,7 @@ class QuestionnaireType extends AbstractType
                         'genemu_jqueryselect2_entity',
                         [
                             'class'         => 'HopitalNumeriqueReferenceBundle:Reference',
-                            'property'      => 'libelle',
+                            'choice_label'  => 'libelle',
                             'required'      => $question->getObligatoire(),
                             'label'         => $question->getLibelle(),
                             'mapped'        => false,
@@ -365,7 +365,7 @@ class QuestionnaireType extends AbstractType
                         EntityType::class,
                         [
                             'class'         => 'HopitalNumeriqueReferenceBundle:Reference',
-                            'property'      => 'libelle',
+                            'choice_label'  => 'libelle',
                             'required'      => $question->getObligatoire(),
                             'empty_value'   => $question->getObligatoire() ? false : 'Ne se prononce pas',
                             'label'         => $question->getLibelle(),
@@ -403,7 +403,7 @@ class QuestionnaireType extends AbstractType
                         EntityType::class,
                         [
                             'class'         => 'HopitalNumeriqueReferenceBundle:Reference',
-                            'property'      => 'libelle',
+                            'choice_label'  => 'libelle',
                             'required'      => $question->getObligatoire(),
                             'label'         => $question->getLibelle(),
                             'mapped'        => false,
@@ -414,15 +414,13 @@ class QuestionnaireType extends AbstractType
                             'empty_value'   => ' - ',
                             'attr'          => $attr,
                             'query_builder' => function (EntityRepository $er) use ($question) {
-                                return $er->createQueryBuilder('ref')->where('ref.code = :etat')->innerJoin(
-                                    'ref.etat',
-                                    'etat',
-                                    Expr\Join::WITH,
-                                    'ref.etat = :actif'
-                                )->setParameter('actif', Reference::STATUT_ACTIF_ID)->setParameter(
-                                    'etat',
-                                    $question->getReferenceParamTri()
-                                )->orderBy('ref.order', 'ASC');
+                                return $er->createQueryBuilder('ref')
+                                    ->where('ref.code = :etat')
+                                    ->innerJoin('ref.etat', 'etat', Expr\Join::WITH, 'ref.etat = :actif')
+                                    ->setParameter('actif', Reference::STATUT_ACTIF_ID)
+                                    ->setParameter('etat', $question->getReferenceParamTri())
+                                    ->orderBy('ref.order', 'ASC')
+                                ;
                             },
                             'data'          => is_null($reponseCourante) ? null
                                 : $reponseCourante->getReferenceMulitple(),
@@ -620,33 +618,33 @@ class QuestionnaireType extends AbstractType
                     ) {
                         $etabAttr = ['class' => 'ajax-select2-list', 'data-url' => '/etablissement/load/'];
                         $fieldOptions = [
-                            'class'       => 'HopitalNumeriqueEtablissementBundle:Etablissement',
-                            'property'    => 'appellation',
-                            'required'    => $question->getObligatoire(),
-                            'label'       => $question->getLibelle(),
-                            'mapped'      => false,
-                            'read_only'   => $this->_readOnly,
-                            'disabled'    => $this->_readOnly,
-                            'empty_value' => ' - ',
-                            'attr'        => array_merge($attr, $etabAttr),
-                            'data' => is_null($reponseCourante) ? null : $reponseCourante->getEtablissement(),
+                            'class'        => 'HopitalNumeriqueEtablissementBundle:Etablissement',
+                            'choice_label' => 'appellation',
+                            'required'     => $question->getObligatoire(),
+                            'label'        => $question->getLibelle(),
+                            'mapped'       => false,
+                            'read_only'    => $this->_readOnly,
+                            'disabled'     => $this->_readOnly,
+                            'empty_value'  => ' - ',
+                            'attr'         => array_merge($attr, $etabAttr),
+                            'data'         => is_null($reponseCourante) ? null : $reponseCourante->getEtablissement(),
                         ];
 
                         if ($full) {
                             $fieldOptions = array_merge(
                                 $fieldOptions,
                                 [
-                                   'query_builder' => function (EntityRepository $er) {
+                                    'query_builder' => function (EntityRepository $er) {
                                         return $er->createQueryBuilder('eta')->orderBy('eta.nom', 'ASC');
-                                   },
+                                    },
                                 ]
                             );
                         } else {
-                            $fieldOptions['choices'] = is_null($reponseCourante) ? []
+                            $fieldOptions['choices'] = is_null($reponseCourante) || is_null($reponseCourante->getEtablissement())
+                                ? []
                                 : [$reponseCourante->getEtablissement()]
                             ;
                         }
-
                         $form->add(
                             $question->getTypeQuestion()->getLibelle()
                             . '_'
@@ -686,17 +684,17 @@ class QuestionnaireType extends AbstractType
                     ) {
                         $etabAttr = ['class' => 'ajax-select2-list', 'data-url' => '/etablissement/load/'];
                         $fieldOptions = [
-                            'class'       => 'HopitalNumeriqueEtablissementBundle:Etablissement',
-                            'choice_label'    => 'appellation',
-                            'required'    => $question->getObligatoire(),
-                            'label'       => $question->getLibelle(),
-                            'mapped'      => false,
-                            'multiple'    => true,
-                            'read_only'   => $this->_readOnly,
-                            'disabled'    => $this->_readOnly,
-                            'empty_value' => ' - ',
-                            'attr'        => array_merge($attr, $etabAttr),
-                            'data' => is_null($reponseCourante) ? null : $reponseCourante->getEtablissementMulitple(),
+                            'class'        => 'HopitalNumeriqueEtablissementBundle:Etablissement',
+                            'choice_label' => 'appellation',
+                            'required'     => $question->getObligatoire(),
+                            'label'        => $question->getLibelle(),
+                            'mapped'       => false,
+                            'multiple'     => true,
+                            'read_only'    => $this->_readOnly,
+                            'disabled'     => $this->_readOnly,
+                            'empty_value'  => ' - ',
+                            'attr'         => array_merge($attr, $etabAttr),
+                            'data'         => is_null($reponseCourante) ? null : $reponseCourante->getEtablissementMulitple(),
                         ];
 
                         if ($full) {
@@ -709,7 +707,7 @@ class QuestionnaireType extends AbstractType
                                 ]
                             );
                         } else {
-                            $fieldOptions['choices'] = is_null($reponseCourante)
+                            $fieldOptions['choices'] = is_null($reponseCourante) || is_null($reponseCourante->getEtablissement())
                                 ? []
                                 : $reponseCourante->getEtablissementMulitple()
                             ;

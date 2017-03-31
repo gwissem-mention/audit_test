@@ -365,7 +365,7 @@ class Etablissement
      */
     public function getAppellation()
     {
-            return $this->nom . ' - ' . $this->finess . ' - ' . $this->ville;
+        return $this->nom . ' - ' . $this->finess . ' - ' . $this->ville;
     }
 
     /**
