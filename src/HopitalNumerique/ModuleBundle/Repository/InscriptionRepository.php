@@ -5,6 +5,7 @@ namespace HopitalNumerique\ModuleBundle\Repository;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\Query\Expr;
 use HopitalNumerique\DomaineBundle\Entity\Domaine;
+use HopitalNumerique\UserBundle\Entity\User;
 
 /**
  * InscriptionRepository.
@@ -96,10 +97,13 @@ class InscriptionRepository extends EntityRepository
     /**
      * Retourne la liste des inscriptions de l'utilisateur pour la création des factures.
      *
+     * @param User $user
+     *
      * @return QueryBuilder
      */
     public function getForFactures($user = null)
     {
+        /** @var User $user */
         $qb = $this->_em->createQueryBuilder();
 
         $qb
@@ -117,6 +121,12 @@ class InscriptionRepository extends EntityRepository
         if (!is_null($user)) {
             $qb->andWhere('insc.user = :user')
                ->setParameter('user', $user);
+
+            if ($user->isRegionDom()) {
+                $qb->leftJoin('session.module', 'module')
+                    ->andWhere('module.id IS NULL')
+                ;
+            }
         }
 
         return $qb;
