@@ -114,7 +114,7 @@ class DefaultController extends Controller
             }
         }
 
-        $blocCDP = $this->get('hn.admin.cdp_grid_block')->getBlockDatas();
+        $blocCDP = $this->get('hn.admin.cdp_grid_block')->getBlockDatas($this->getUser());
 
         return $this->render('HopitalNumeriqueAdminBundle:Default:index.html.twig', [
             'anneeEnCours' => $anneeEnCours,
