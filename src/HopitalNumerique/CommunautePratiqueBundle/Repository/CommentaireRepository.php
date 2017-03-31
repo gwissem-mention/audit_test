@@ -3,6 +3,7 @@
 namespace HopitalNumerique\CommunautePratiqueBundle\Repository;
 
 use Doctrine\ORM\Query\Expr\Join;
+use HopitalNumerique\DomaineBundle\Entity\Domaine;
 use HopitalNumerique\UserBundle\Entity\Document;
 use HopitalNumerique\UserBundle\Entity\User;
 
@@ -25,13 +26,18 @@ class CommentaireRepository extends \Doctrine\ORM\EntityRepository
         return $query;
     }
 
-    public function getLatestCommentsCount(User $user)
+    /**
+     * @param Domaine $domaine
+     *
+     * @return int
+     */
+    public function getLatestCommentsCount(Domaine $domaine)
     {
         return $this->createQueryBuilder('c')
             ->select('COUNT(c.id)')
             ->join('c.groupe', 'g')
-            ->join('g.domaine', 'd', Join::WITH, 'd.id IN (:domains)')
-            ->setParameter('domains', $user->getDomaines())
+            ->join('g.domaine', 'd', Join::WITH, 'd.id = :domaine')
+            ->setParameter('domaine', $domaine)
             ->andWhere('c.dateCreation >= :date')->setParameter('date', (new \DateTime())->sub(new \DateInterval('P30D')))
 
             ->getQuery()->getSingleScalarResult()
