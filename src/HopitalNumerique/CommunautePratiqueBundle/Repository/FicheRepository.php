@@ -2,6 +2,7 @@
 
 namespace HopitalNumerique\CommunautePratiqueBundle\Repository;
 use Doctrine\ORM\Query\Expr\Join;
+use HopitalNumerique\DomaineBundle\Entity\Domaine;
 use HopitalNumerique\UserBundle\Entity\User;
 
 /**
@@ -10,17 +11,17 @@ use HopitalNumerique\UserBundle\Entity\User;
 class FicheRepository extends \Doctrine\ORM\EntityRepository
 {
     /**
-     * @param User $user
+     * @param Domaine $domain
      *
      * @return int
      */
-    public function countPending(User $user)
+    public function countPending(Domaine $domain)
     {
         return $this->createQueryBuilder('f')
             ->select('COUNT(f.id)')
             ->join('f.groupe', 'g')
-            ->join('g.domaine', 'd', Join::WITH, 'd.id IN (:domains)')
-            ->setParameter('domains', $user->getDomaines())
+            ->join('g.domaine', 'd', Join::WITH, 'd.id = :domaine')
+            ->setParameter('domaine', $domain->getId())
             ->andWhere('f.resolu = FALSE')
 
             ->getQuery()->getSingleScalarResult()

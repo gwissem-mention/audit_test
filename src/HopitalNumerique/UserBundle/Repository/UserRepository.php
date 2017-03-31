@@ -770,16 +770,16 @@ class UserRepository extends EntityRepository
     }
 
     /**
-     * @param User $user
+     * @param Domaine $domain
      *
      * @return integer
      */
-    public function countCDPUsers(User $user)
+    public function countCDPUsers(Domaine $domain)
     {
         return $this->createQueryBuilder('u')
             ->select('COUNT(DISTINCT u.id)')
-            ->join('u.domaines', 'd', Join::WITH, 'd.id IN (:domains)')
-            ->setParameter('domains', $user->getDomaines())
+            ->join('u.domaines', 'd', Join::WITH, 'd.id = :domaine')
+            ->setParameter('domaine', $domain->getId())
             ->andWhere('u.inscritCommunautePratique = TRUE')
 
             ->getQuery()->getSingleScalarResult()
@@ -787,18 +787,18 @@ class UserRepository extends EntityRepository
     }
 
     /**
-     * @param User $user
+     * @param Domaine $domain
      *
      * @return integer
      */
-    public function countUsersInCDP(User $user)
+    public function countUsersInCDP(Domaine $domain)
     {
         return $this->_em->createQueryBuilder()
             ->select('COUNT(DISTINCT i.user)')
             ->from(Inscription::class, 'i')
             ->join('i.user', 'u')
-            ->join('u.domaines', 'd', Join::WITH, 'd.id IN (:domains)')
-            ->setParameter('domains', $user->getDomaines())
+            ->join('u.domaines', 'd', Join::WITH, 'd.id = :domaine')
+            ->setParameter('domaine', $domain->getId())
 
             ->getQuery()->getSingleScalarResult()
         ;
