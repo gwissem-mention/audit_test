@@ -51,17 +51,15 @@ class AutodiagRepository extends EntityRepository
                 'GROUP_CONCAT(DISTINCT domaines.nom SEPARATOR \', \') AS domaines_list',
                 'ad.createdAt',
                 'ad.publicUpdatedDate',
-                'COUNT(DISTINCT entries_valid.id) as nb_entries_valid',
-                'COUNT(DISTINCT entries_in_progress.id) as nb_entries_in_progress'
+                'COUNT(DISTINCT entries_valid_syntheses.id) as nb_entries_valid',
+                'COUNT(DISTINCT entries_in_progress_syntheses.id) as nb_entries_in_progress'
             )
             ->join('ad.domaines', 'domaines', Join::WITH, 'domaines.id IN (:domaine_ids)')
-            ->leftJoin(
-                Synthesis::class,
-                'synthesis_valid',
-                Join::WITH,
-                'synthesis_valid.autodiag = ad.id AND synthesis_valid.validatedAt IS NOT NULL'
-            )
-                ->leftJoin('synthesis_valid.entries', 'entries_valid')
+            ->leftJoin(Synthesis::class,'synthesis_valid', Join::WITH,'synthesis_valid.autodiag = ad.id AND synthesis_valid.validatedAt IS NOT NULL')
+            ->leftJoin('synthesis_valid.entries', 'entries_valid')
+
+            ->leftJoin('entries_valid.syntheses', 'entries_valid_syntheses', Join::WITH, 'entries_valid_syntheses.autodiag=ad.id AND entries_valid_syntheses.validatedAt IS NOT NULL AND entries_valid_syntheses.createdFrom IS NULL')
+
             ->leftJoin(
                 Synthesis::class,
                 'synthesis_in_progress',
@@ -69,6 +67,7 @@ class AutodiagRepository extends EntityRepository
                 'synthesis_in_progress.autodiag = ad.id AND synthesis_in_progress.validatedAt IS NULL'
             )
                 ->leftJoin('synthesis_in_progress.entries', 'entries_in_progress')
+            ->leftJoin('entries_in_progress.syntheses', 'entries_in_progress_syntheses', Join::WITH, 'entries_in_progress_syntheses.autodiag=ad.id AND entries_in_progress_syntheses.validatedAt IS NULL AND entries_in_progress_syntheses.createdFrom IS NULL')
             ->groupBy('ad.id')
             ->setParameters([
                 'domaine_ids' => $domainesIds,
