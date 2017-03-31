@@ -2,6 +2,7 @@
 
 namespace HopitalNumerique\AdminBundle\Service;
 
+use HopitalNumerique\UserBundle\Entity\User;
 use HopitalNumerique\UserBundle\Repository\UserRepository;
 use HopitalNumerique\CommunautePratiqueBundle\Repository\FicheRepository;
 use HopitalNumerique\CommunautePratiqueBundle\Repository\CommentaireRepository;
@@ -30,13 +31,13 @@ class CDPGridBlock
     }
 
 
-    public function getBlockDatas()
+    public function getBlockDatas(User $user)
     {
         $CDPDatas = [
-            'members' => $this->userRepository->countCDPUsers(),
-            'GTMembers' => $this->userRepository->countUsersInCDP(),
-            'pendingRecords' => $this->ficheRepository->countPending(),
-            'comments' => $this->commentaireRepository->getLatestCommentsCount(),
+            'members' => $this->userRepository->countCDPUsers($user),
+            'GTMembers' => $this->userRepository->countUsersInCDP($user),
+            'pendingRecords' => $this->ficheRepository->countPending($user),
+            'comments' => $this->commentaireRepository->getLatestCommentsCount($user),
         ];
 
         return $CDPDatas;
