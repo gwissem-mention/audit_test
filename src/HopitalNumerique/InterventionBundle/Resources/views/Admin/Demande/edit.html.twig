@@ -5,6 +5,7 @@
     {% javascripts output="compiled/hopitalnumerique-intervention-demande-admin-edit.js"
         'bundles/hopitalnumeriqueintervention/js/InterventionDemande/Formulaire.js'
         'bundles/hopitalnumeriqueintervention/js/InterventionDemande/FormulaireEvenement.js'
+        '@HopitalNumeriqueQuestionnaireBundle/Resources/public/js/Front/script.js'
     %}
         <script type="text/javascript" src="{{ asset_url }}"></script>
     {% endjavascripts %}
@@ -42,7 +43,25 @@
                     {% form_theme interventionDemandeFormulaireEdition 'HopitalNumeriqueInterventionBundle:Form:defaut.html.twig' %}
 
                     {{ form_javascript(interventionDemandeFormulaireEdition) }}
-                    {{ form_widget(interventionDemandeFormulaireEdition) }}
+
+                    {{ form_row(interventionDemandeFormulaireEdition.dateCreation) }}
+                    {{ form_row(interventionDemandeFormulaireEdition.interventionInitiateur) }}
+                    {{ form_row(interventionDemandeFormulaireEdition.evaluationEtat) }}
+                    {{ form_row(interventionDemandeFormulaireEdition.ambassadeur) }}
+                    {{ form_row(interventionDemandeFormulaireEdition.interventionType) }}
+                    {{ form_row(interventionDemandeFormulaireEdition.region) }}
+                    {{ form_row(interventionDemandeFormulaireEdition.email) }}
+                    {{ form_row(interventionDemandeFormulaireEdition.telephone) }}
+                    {{ form_row(interventionDemandeFormulaireEdition.etablissements) }}
+                    {{ form_row(interventionDemandeFormulaireEdition.objets) }}
+                    {{ form_row(interventionDemandeFormulaireEdition.connaissances) }}
+                    {{ form_row(interventionDemandeFormulaireEdition.connaissancesSI) }}
+                    {{ form_row(interventionDemandeFormulaireEdition.objetsAutres) }}
+                    {{ form_row(interventionDemandeFormulaireEdition.description) }}
+                    {{ form_row(interventionDemandeFormulaireEdition.difficulteDescription) }}
+                    {{ form_row(interventionDemandeFormulaireEdition.champLibre) }}
+                    {{ form_row(interventionDemandeFormulaireEdition.rdvInformations) }}
+                    {{ form_row(interventionDemandeFormulaireEdition.cmsiCommentaire) }}
 
                 {{ form_end(interventionDemandeFormulaireEdition) }}
             </div>
