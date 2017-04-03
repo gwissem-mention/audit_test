@@ -912,6 +912,14 @@ class User extends BaseUser
     }
 
     /**
+     * @return bool
+     */
+    public function isRegionDom()
+    {
+        return in_array($this->getRegion()->getId(), Reference::DOMRegionsIds());
+    }
+
+    /**
      * Add rattachementRegions.
      *
      * @param Reference $rattachementRegions
