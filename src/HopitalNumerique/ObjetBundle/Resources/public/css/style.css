@@ -43,3 +43,7 @@ input[type="date"]{min-width: 145px}
 #index .panel-parent.closed{background: #F6F6F6 url('../images/close.png') no-repeat 98% center;}
 #index .panel-parent.open{background: #F6F6F6 url('../images/open.png') no-repeat 98% center;}
 #index .panel-children{color:#703695;cursor: pointer; font-weight: bold; padding: 15px;}
+
+.select2-container {
+    z-index: 10000;
+}
