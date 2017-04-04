@@ -92,6 +92,18 @@ abstract class InterventionDemandeType extends AbstractType
     {
         $this->interventionDemande = $options['interventionDemande'];
 
+        $reponseCourante = $builder->getData();
+        $etablissementFieldOptions = [
+            'class'        => 'HopitalNumeriqueEtablissementBundle:Etablissement',
+            'choice_label' => 'appellation',
+            'required'     => false,
+            'label'        => 'Rattacher d\'autres établissements à ma demande, parmi',
+            'multiple'     => true,
+            'empty_value'  => '-',
+            'attr'         => ['class' => 'ajax-select2-list hopitalnumerique_interventionbundle_interventiondemande_etablissements', 'data-url' => '/etablissement/load/'],
+            'data'         => is_null($reponseCourante) ? null : $reponseCourante->getEtablissements(),
+        ];
+
         $builder
             ->add('ambassadeur', EntityType::class, [
                 'choices' => $this->formUserManager->getAmbassadeursChoices($this->utilisateurConnecte->getRegion()),
@@ -136,6 +148,7 @@ abstract class InterventionDemandeType extends AbstractType
                     ? $this->utilisateurConnecte->getTelephoneDirect()
                     : $options['interventionDemande']->getTelephone(),
             ])
+            ->add('etablissements', EntityType::class, $etablissementFieldOptions)
             ->add('referent', EntityType::class, [
                 'choices' => $this->formUserManager->getReferentsChoices(),
                 'class' => 'HopitalNumerique\UserBundle\Entity\User',
@@ -221,28 +234,16 @@ abstract class InterventionDemandeType extends AbstractType
             ])
         ;
 
-        $reponseCourante = $builder->getData();
-
         $etablissementMultipleFormModifier = function (
             FormInterface $form,
             $full = false
         ) use (
-            $reponseCourante
+            $reponseCourante, $etablissementFieldOptions
         ) {
-            $fieldOptions = [
-                'class'        => 'HopitalNumeriqueEtablissementBundle:Etablissement',
-                'choice_label' => 'appellation',
-                'required'     => false,
-                'label'        => 'Rattacher d\'autres établissements à ma demande, parmi',
-                'multiple'     => true,
-                'empty_value'  => '-',
-                'attr'         => ['class' => 'ajax-select2-list', 'data-url' => '/etablissement/load/'],
-                'data'         => is_null($reponseCourante) ? null : $reponseCourante->getEtablissements(),
-            ];
 
             if ($full) {
-                $fieldOptions = array_merge(
-                    $fieldOptions,
+                $etablissementFieldOptions = array_merge(
+                    $etablissementFieldOptions,
                     [
                         'query_builder' => function (EntityRepository $er) {
                             return $er->createQueryBuilder('eta')->orderBy('eta.nom', 'ASC');
@@ -250,13 +251,13 @@ abstract class InterventionDemandeType extends AbstractType
                     ]
                 );
             } else {
-                $fieldOptions['choices'] = is_null($reponseCourante) || is_null($reponseCourante->getEtablissements())
+                $etablissementFieldOptions['choices'] = is_null($reponseCourante) || is_null($reponseCourante->getEtablissements())
                     ? []
                     : $reponseCourante->getEtablissements()
                 ;
             }
 
-            $form->add('etablissements', EntityType::class, $fieldOptions);
+            $form->add('etablissements', EntityType::class, $etablissementFieldOptions);
         };
 
         $builder->addEventListener(
