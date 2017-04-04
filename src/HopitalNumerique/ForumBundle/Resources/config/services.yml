@@ -16,6 +16,7 @@ parameters:
         - '\CCDNComponent\BBCode\Node\Lexeme\Tag\Format\Heading3'
         - '\CCDNComponent\BBCode\Node\Lexeme\Tag\Format\Italic'
         - '\CCDNComponent\BBCode\Node\Lexeme\Tag\Format\Link'
+        - '\CCDNComponent\BBCodeBundle\Tag\Format\ExternalLink'
         - '\CCDNComponent\BBCode\Node\Lexeme\Tag\Format\ListItem'
         - '\CCDNComponent\BBCode\Node\Lexeme\Tag\Format\ListOrdered'
         - '\CCDNComponent\BBCode\Node\Lexeme\Tag\Format\ListUnordered'

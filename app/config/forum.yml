@@ -294,3 +294,7 @@ ccdn_forum_forum:
         title_length:         67
 
 ccdn_component_bb_code:
+    component:
+        engine:
+            table_container:
+                class:                CCDNComponent\BBCodeBundle\Engine\TableContainer
