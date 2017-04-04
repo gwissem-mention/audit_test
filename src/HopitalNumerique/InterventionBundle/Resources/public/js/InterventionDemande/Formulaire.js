@@ -292,7 +292,10 @@ HopitalNumeriqueInterventionBundle_InterventionDemande_Formulaire.initAutresEtab
 
     if (HopitalNumeriqueInterventionBundle_InterventionDemande_Formulaire.AUTRES_ETABLISSEMENTS_INITIAUX_IDS.length > 0)
     {
-        $('select.hopitalnumerique_interventionbundle_interventiondemande_etablissements').select2('val', HopitalNumeriqueInterventionBundle_InterventionDemande_Formulaire.AUTRES_ETABLISSEMENTS_INITIAUX_IDS);
+        for (var i in HopitalNumeriqueInterventionBundle_InterventionDemande_Formulaire.AUTRES_ETABLISSEMENTS_INITIAUX_IDS) {
+            var value = HopitalNumeriqueInterventionBundle_InterventionDemande_Formulaire.AUTRES_ETABLISSEMENTS_INITIAUX_IDS[i];
+            etablissementSelect.find('option[value='+value+']').attr('selected', 'selected');
+        }
         HopitalNumeriqueInterventionBundle_InterventionDemande_Formulaire.AUTRES_ETABLISSEMENTS_INITIAUX_IDS = new Array();
         $(etablissementSelect).trigger('change');
     }
