@@ -63,6 +63,10 @@ class SourceContentToDestinationObjectFinder implements FinderInterface
 
         $relatedResources = [];
 
+        if (is_null($content->getObjets())) {
+            return [];
+        }
+
         foreach ($content->getObjets() as $relatedObjectString) {
             $relatedObject = explode(':', $relatedObjectString);
             $relatedObjectType = $relatedObject[0];
