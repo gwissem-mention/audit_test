@@ -164,7 +164,7 @@ function selectChapitre( id, url )
 }
 
 function fillRelatedProductionsList(url) {
-    var loader = $('#s2id_hopitalnumerique_objet_contenu_objets').nodevoLoader().start();
+    var loader = $('.related-productions').nodevoLoader().start();
     var relatedProdList = $('#hopitalnumerique_objet_contenu_objets');
     var preselectedValues = $.parseJSON(relatedProdList.attr('data-preselected-values'));
 

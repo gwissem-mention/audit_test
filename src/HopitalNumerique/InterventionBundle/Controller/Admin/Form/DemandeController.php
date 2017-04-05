@@ -31,8 +31,6 @@ class DemandeController extends Controller
      */
     public function nouveauAction()
     {
-        // @TODO: Liste ajax pour les productions
-        ini_set('memory_limit', '1024M');
         $this->interventionDemande = new InterventionDemande();
         $this->interventionDemande->setInterventionInitiateur(
             $this->container->get('hopitalnumerique_intervention.manager.intervention_initiateur')

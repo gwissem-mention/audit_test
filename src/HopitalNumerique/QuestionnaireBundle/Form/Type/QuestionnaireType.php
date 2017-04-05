@@ -217,16 +217,8 @@ class QuestionnaireType extends AbstractType
             // il sera surchargé si le champ controle JS est rempli pour la question courante
             $attr = $question->getObligatoire() ? ['class' => 'validate[required]'] : [];
 
-            if (!$options['label_attr']['showAllQuestions']) {
-                //Récupère les classes de la question
-                $classes = explode(' ', $question->getVerifJS());
-                //Vérifie si on doit afficher la question
-                $hide = in_array('hideQuestion', $classes);
-
-                //Si la question est à cacher alors on ne la créée pas
-                if ($hide) {
-                    break;
-                }
+            if (!$options['label_attr']['showAllQuestions'] && $this->isQuestionHidden($question)) {
+                continue;
             }
 
             switch ($question->getTypeQuestion()->getLibelle()) {
@@ -782,6 +774,26 @@ class QuestionnaireType extends AbstractType
     }
 
     /**
+     * @param Question $question
+     *
+     * @return bool
+     */
+    private function isQuestionHidden(Question $question)
+    {
+        //Récupère les classes de la question
+        $classes = explode(' ', $question->getVerifJS());
+        //Vérifie si on doit afficher la question
+        $hide = in_array('hideQuestion', $classes);
+
+        //Si la question est à cacher alors on ne la créée pas
+        if ($hide) {
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
      * @param FormView      $view
      * @param FormInterface $form
      * @param array         $options
@@ -795,6 +807,10 @@ class QuestionnaireType extends AbstractType
 
         /** @var Question $question */
         foreach ($questions as $question) {
+            if ($this->isQuestionHidden($question)) {
+                continue;
+            }
+
             $order[$question->getOrdre()] =
                 $question->getTypeQuestion()->getLibelle() . '_' . $question->getId() . '_' . $question->getAlias()
             ;

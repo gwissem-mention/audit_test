@@ -259,4 +259,5 @@ flash:
 
 #Autres textes brut
 "Enter URL"       : "Entrez un lien"
+"Enter target blank URL"       : "Entrez un lien (s'ouvrira dans un nouvel onglet)"
 "Enter Image URL" : "Entrez le lien d'une image"
