@@ -1,4 +1,16 @@
 $(document).ready(function() {
+
+
+    $('.deleteAllInfradocs').on('click', function(e) {
+        var $this = $(this);
+        e.preventDefault();
+        return apprise('Attention, cette opération est irréversible, êtes-vous sur de vouloir continuer ?', {'verify':true,'textYes':'Oui','textNo':'Non'}, function(r) {
+            if (r) {
+                window.location.href = $this.attr('href');
+            }
+        })
+    });
+
     //gestion du bouton delete : changement du fichier uploadé
     $('.deleteUploadedFile').on('click',function(){
         $(this).hide();
@@ -38,6 +50,7 @@ $(document).ready(function() {
                     //affiche le lien d'upload CSV + la phrase en cas de données vide
                     if( $('#sommaire ol li').length > 0){
                         $('.uploadSommaire').hide();
+                        $('.deleteAllInfradocs').removeClass('hidden');
                         $('.designForBlank').hide();
                     }
                 }
@@ -278,6 +291,7 @@ function deleteContenu( id, url )
                         //affiche le lien d'upload CSV + la phrase en cas de données vide
                         if( $('#sommaire ol li').length == 0){
                             $('.uploadSommaire').show();
+                            $('.deleteAllInfradocs').addClass('hidden');
                             $('.designForBlank').show();
                         }
                     }

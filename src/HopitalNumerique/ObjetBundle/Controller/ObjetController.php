@@ -78,8 +78,7 @@ class ObjetController extends Controller
     {
         $objet = $this->get('hopitalnumerique_objet.manager.objet')->findOneBy([
             'id' => $id,
-        ])
-        ;
+        ]);
 
         $this->get('hopitalnumerique_objet.manager.objet')->unlock($objet);
 
