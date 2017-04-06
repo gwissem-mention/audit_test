@@ -94,6 +94,22 @@ class ContenuController extends Controller
     }
 
     /**
+     * @param Objet $object
+     * 
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse
+     */
+    public function deleteAllForObjectAction(Objet $object)
+    {
+        $object->setInfraDoc(false);
+
+        $this->getDoctrine()->getManager()->flush();
+
+        $this->addFlash('success', 'Les infras-documents ont bien été supprimés.');
+
+        return $this->redirectToRoute('hopitalnumerique_objet_objet_edit', ['id' => $object->getId()]);
+    }
+
+    /**
      * Suppresion d'un Contenu.
      * METHOD = POST|DELETE.
      *
