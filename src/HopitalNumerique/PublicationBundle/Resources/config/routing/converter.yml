@@ -15,3 +15,10 @@ hopital_numerique_publication_converter_generate:
     defaults: { _controller: "HopitalNumeriquePublicationBundle:Back/Converter:generate" }
     requirements:
         document: \d+
+
+hopital_numerique_publication_converter_abort:
+    path: /converter/document/{publicationId}/abort
+    defaults: { _controller: "HopitalNumeriquePublicationBundle:Back/Converter:abort" }
+    methods: [POST]
+    requirements:
+        publicationId: \d+

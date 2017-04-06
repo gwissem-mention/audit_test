@@ -1,7 +1,8 @@
 var WordConverter;
 (function() {
-    WordConverter = function (button, viewport, uploadFormUrl, prepareFormUrl) {
-        this.button = button;
+    WordConverter = function (importBtn, abortBtn, viewport, uploadFormUrl, prepareFormUrl) {
+        this.button = importBtn;
+        this.abortBtn = abortBtn;
         this.viewport = viewport;
         this.uploadFormUrl = uploadFormUrl;
         this.prepareFormUrl = prepareFormUrl;
@@ -17,7 +18,8 @@ var WordConverter;
         };
 
         this.callbacks = {
-            prepareFormLoaded: $.Callbacks()
+            prepareFormLoaded: $.Callbacks(),
+            abortion: $.Callbacks()
         };
 
         this.init();
@@ -35,7 +37,23 @@ var WordConverter;
 
         bindEvents: function () {
             this.button.on('click', $.proxy(this.handleFileUploadTrigger, this));
+            this.abortBtn.on('click', $.proxy(this.abortEvent, this));
             $('.options .nav li').click($.proxy(this.unloadUploadForm, this));
+        },
+
+        abortEvent: function (e) {
+            e.preventDefault();
+            this.cancel();
+        },
+
+        cancel: function () {
+            var instance = this;
+            $.post(instance.abortBtn.attr('href'), null, function () {
+                instance.viewport.html('');
+                instance.abortBtn.hide();
+                instance.callbacks.abortion.fire();
+                isntance.setIdleState();
+            }, 'json');
         },
 
         /**
@@ -80,7 +98,7 @@ var WordConverter;
                 $(instance.fileForm).on('submit', function (e) {
                     e.preventDefault();
                     instance.setButtonState('waiting');
-                    instance.uploadDocumentFile($.proxy(instance.setUploadState, instance));
+                    instance.uploadDocumentFile($.proxy(instance.setIdleState, instance));
                 });
 
                 if (typeof callback === 'function') {
@@ -95,6 +113,7 @@ var WordConverter;
         loadPrepareForm: function() {
             var instance = this;
             this.setLoadingState();
+            instance.abortBtn.hide();
 
             var query = $.get(this.prepareFormUrl, function (response) {
                 if (response !== undefined) {
@@ -172,6 +191,7 @@ var WordConverter;
                 };
             });
 
+            instance.abortBtn.show();
             instance.callbacks.prepareFormLoaded.fire();
         },
 
@@ -180,7 +200,7 @@ var WordConverter;
                 this.fileFormWrapper.remove();
                 this.fileFormWrapper = null;
                 this.fileForm = null;
-                this.setButtonState('file');
+                this.setIdleState();
             }
         },
 
@@ -249,6 +269,10 @@ var WordConverter;
 
         onPrepareFormLoaded: function (callback) {
             this.callbacks.prepareFormLoaded.add(callback);
+        },
+
+        onAbortion: function (callback) {
+            this.callbacks.abortion.add(callback);
         }
     };
 

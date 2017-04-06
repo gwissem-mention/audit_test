@@ -43,4 +43,13 @@ class DocumentRepository extends EntityRepository
     {
         return $this->findOneBy(['publication' => $infradoc]);
     }
+
+    /**
+     * @param Document $document
+     */
+    public function remove(Document $document)
+    {
+        $this->_em->remove($document);
+        $this->_em->flush();
+    }
 }

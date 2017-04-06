@@ -1,7 +1,9 @@
 <?php
 namespace HopitalNumerique\PublicationBundle\Controller\Back;
 
+use Doctrine\ORM\EntityNotFoundException;
 use HopitalNumerique\ObjetBundle\Entity\Objet;
+use HopitalNumerique\PublicationBundle\Domain\Command\AbortDocumentCommand;
 use HopitalNumerique\PublicationBundle\Domain\Command\ConvertDocumentCommand;
 use HopitalNumerique\PublicationBundle\Entity\Converter\Document;
 use HopitalNumerique\PublicationBundle\Form\Type\Converter\DocumentType;
@@ -95,6 +97,24 @@ class ConverterController extends Controller
     public function generateAction(Document $document)
     {
         $this->get('hopitalnumerique_publication.content_generator')->generateFromDocument($document);
+
+        return new JsonResponse();
+    }
+
+    /**
+     * @param integer $publicationId
+     *
+     * @return JsonResponse
+     */
+    public function abortAction($publicationId)
+    {
+        $abortDocumentCommand = new AbortDocumentCommand($publicationId);
+
+        try {
+            $this->get('hopitalnumerique_publication.abort_document_handler')->handle($abortDocumentCommand);
+        } catch (EntityNotFoundException $e) {
+            return new JsonResponse(null, 404);
+        }
 
         return new JsonResponse();
     }
