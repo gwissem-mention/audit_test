@@ -135,6 +135,14 @@ class Media
     }
 
     /**
+     * @return Node
+     */
+    public function getNode()
+    {
+        return $this->node;
+    }
+
+    /**
      * @return bool
      */
     public function isExcluded()

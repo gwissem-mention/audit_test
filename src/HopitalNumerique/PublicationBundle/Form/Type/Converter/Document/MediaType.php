@@ -27,6 +27,7 @@ class MediaType extends AbstractType
     {
         $view->vars['public_path'] = $form->getData()->getPath();
         $view->vars['placeholder'] = pathinfo($form->getData()->getPath())['filename'];
+        $view->vars['nodeName'] = $form->getData()->getNode() ? $form->getData()->getNode()->getTitle() : null;
     }
 
     public function configureOptions(OptionsResolver $resolver)

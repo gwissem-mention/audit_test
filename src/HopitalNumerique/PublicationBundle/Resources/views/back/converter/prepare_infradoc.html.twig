@@ -24,6 +24,11 @@
                         <td>
                             <img src="{{ asset(media.vars.public_path) }}" alt="" width="100" />
                         </td>
+                        <td>
+                            {% if media.vars.nodeName %}
+                                {{ 'form.document.media.found_in'|trans({"%node%": media.vars.nodeName}) }}
+                            {% endif %}
+                        </td>
                         <td class="media-actions">
                             {{ form_widget(media.name, {"attr": {"placeholder": media.vars.placeholder, "class": "form-control"}}) }}
                             <div class="media-action">

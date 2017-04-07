@@ -5,3 +5,4 @@ form:
             squashIn: Inclure dans l'infradoc précédent
         media:
             excluded: Exclure cette image
+            found_in: Trouvé dans "%node%"
