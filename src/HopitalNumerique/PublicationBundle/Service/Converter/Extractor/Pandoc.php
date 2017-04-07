@@ -188,7 +188,7 @@ class Pandoc implements ConverterInterface
         $sectionItemsCrawler = $crawler->filter('.footnotes ol li');
 
         $sectionItemsCrawler->each(function (Crawler $crawler, $i) use (&$footnotes) {
-            $footnotes[$crawler->attr('id')] = $crawler->text();
+            $footnotes[$crawler->attr('id')] = $crawler->html();
             foreach ($crawler as $node) {
                 $node->parentNode->removeChild($node);
             }
