@@ -358,7 +358,17 @@
                                 <a class="btn btn-success reloadContenu" title="Recharger le sommaire" href="{{path('hopitalnumerique_objet_objet_edit',{'id':objet.id,'infra':1})}}" ><i class="fa fa-refresh"></i></a>
                                 <a class="btn btn-warning uploadSommaire fancybox.ajax" style="{% if contenus|length >= 1 %}display:none{% endif %}" title="Uploader un sommaire en CSV" href="{{path('hopitalnumerique_objet_contenu_upload')}}" ><i class="fa fa-upload"></i></a>
 
-                                <fieldset>
+                                {% spaceless %}
+                                    <a
+                                        class="btn btn-danger deleteAllInfradocs{{ contenus|length == 0 ? ' hidden' }}"
+                                        title="Supprimer tous les infras-document"
+                                        href="{{path('hopitalnumerique_objet_contenu_delete_all', {'object': objet.id})}}"
+                                    >
+                                        <i class="fa fa-trash-o"></i>
+                                    </a>
+                                {% endspaceless %}
+
+                                <fieldset class="summary">
                                     <legend>Sommaire</legend>
 
                                     <p class="designForBlank" style="{% if contenus|length >= 1 %}display:none{% endif %}">Cliquez sur le bouton '+' pour ajouter un élément dans votre sommaire.</p>

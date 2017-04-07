@@ -112,6 +112,10 @@ hopitalnumerique_objet_contenu_delete:
     requirements: 
         id: \d+
 
+hopitalnumerique_objet_contenu_delete_all:
+    pattern:  /objet/contenu/delete-all/{object}
+    defaults: { _controller: "HopitalNumeriqueObjetBundle:Contenu:deleteAllForObject" }
+
 hopitalnumerique_objet_contenu_uploadparse:
     pattern:  /objet/contenu/upload/parse/{id}
     defaults: { _controller: "HopitalNumeriqueObjetBundle:Contenu:uploadParse", id:1 }

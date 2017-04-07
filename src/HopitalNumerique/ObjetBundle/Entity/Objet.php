@@ -298,7 +298,7 @@ class Objet implements RoutedItemInterface
     protected $listeNotes;
 
     /**
-     * @ORM\OneToMany(targetEntity="\HopitalNumerique\ObjetBundle\Entity\Contenu", mappedBy="objet", cascade={"persist", "remove" })
+     * @ORM\OneToMany(targetEntity="\HopitalNumerique\ObjetBundle\Entity\Contenu", mappedBy="objet", cascade={"persist", "remove" }, orphanRemoval=true)
      */
     protected $contenus;
 
@@ -652,6 +652,10 @@ class Objet implements RoutedItemInterface
      */
     public function setInfraDoc($isInfraDoc)
     {
+        if (!$isInfraDoc) {
+            $this->getContenus()->clear();
+        }
+
         $this->isInfraDoc = $isInfraDoc;
 
         return $this;
